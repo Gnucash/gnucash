@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 1.8.9\n"
-"POT-Creation-Date: 2013-05-08 22:16+0200\n"
+"POT-Creation-Date: 2014-10-13 00:33+0200\n"
 "PO-Revision-Date: 2005-04-04 10:55-0700\n"
 "Last-Translator: Steven Michael Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -49,7 +49,12 @@ msgstr "Aderesi"
 msgid "account name"
 msgstr "izina rya konti"
 
-#. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts"
+#. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
+#, fuzzy
+msgid "account type: Active"
+msgstr "Aderesi Ubwoko"
+
+#. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
 #, fuzzy
 msgid "account type: Asset"
 msgstr "Aderesi Ubwoko"
@@ -64,7 +69,7 @@ msgstr "Aderesi Ubwoko"
 msgid "account type: currency"
 msgstr "Aderesi Ubwoko Ifaranga"
 
-#. "see: Equity"
+#. "see: Equity, but see also 'account type: Passive'"
 #, fuzzy
 msgid "account type: Equity"
 msgstr "Aderesi Ubwoko"
@@ -79,7 +84,7 @@ msgstr "Aderesi Ubwoko"
 msgid "account type: Income"
 msgstr "Aderesi Ubwoko"
 
-#. "A debt, a financial obligation"
+#. "A debt, a financial obligation, but see also 'account type: Passive'"
 #, fuzzy
 msgid "account type: Liability"
 msgstr "Aderesi Ubwoko"
@@ -92,6 +97,11 @@ msgstr "Aderesi Ubwoko"
 #. "-"
 #, fuzzy
 msgid "account type: Mutual fund"
+msgstr "Aderesi Ubwoko"
+
+#. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugzilla.gnome.org/show_bug.cgi?id=421766"
+#, fuzzy
+msgid "account type: Passive"
 msgstr "Aderesi Ubwoko"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
@@ -752,6 +762,14 @@ msgstr "Kwiyandikisha Ikinyamakuru"
 #, fuzzy
 msgid "reload, to"
 msgstr "Kongera Gutangiza Kuri"
+
+#. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
+msgid "report form: T Account Form"
+msgstr ""
+
+#. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
+msgid "report form: Vertical Form"
+msgstr ""
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"

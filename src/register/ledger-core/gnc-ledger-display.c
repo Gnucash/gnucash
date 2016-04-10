@@ -223,7 +223,7 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplayType ld_type)
     SplitRegisterType reg_type;
 
     if (ld_type == LD_GL)
-        return GENERAL_LEDGER;
+        return GENERAL_JOURNAL;
 
     account_type = xaccAccountGetType (leader);
 
@@ -295,9 +295,9 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplayType ld_type)
     {
         /* If any of the sub-accounts have ACCT_TYPE_STOCK or
          * ACCT_TYPE_MUTUAL types, then we must use the PORTFOLIO_LEDGER
-         * ledger. Otherwise, a plain old GENERAL_LEDGER will do. */
+         * ledger. Otherwise, a plain old GENERAL_JOURNAL will do. */
         gpointer ret;
-        reg_type = GENERAL_LEDGER;
+        reg_type = GENERAL_JOURNAL;
 
         ret = gnc_account_foreach_descendant_until(leader, look_for_portfolio_cb, NULL);
         if (ret) reg_type = PORTFOLIO_LEDGER;
@@ -317,12 +317,12 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplayType ld_type)
 
     case ACCT_TYPE_EQUITY:
     case ACCT_TYPE_TRADING:
-        reg_type = GENERAL_LEDGER;
+        reg_type = GENERAL_JOURNAL;
         break;
 
     default:
         PERR ("unknown account type:%d", account_type);
-        reg_type = GENERAL_LEDGER;
+        reg_type = GENERAL_JOURNAL;
         break;
     }
 
@@ -388,7 +388,7 @@ gnc_ledger_display_subaccounts (Account *account)
     return ld;
 }
 
-/* Opens up a general ledger window. */
+/* Opens up a general journal window. */
 GNCLedgerDisplay *
 gnc_ledger_display_gl (void)
 {
@@ -415,7 +415,10 @@ gnc_ledger_display_gl (void)
 
         tRoot = gnc_book_get_template_root( gnc_get_current_book() );
         al = gnc_account_get_descendants( tRoot );
-        xaccQueryAddAccountMatch( query, al, QOF_GUID_MATCH_NONE, QOF_QUERY_AND );
+
+        if (g_list_length(al) != 0)
+            xaccQueryAddAccountMatch( query, al, QOF_GUID_MATCH_NONE, QOF_QUERY_AND );
+
         g_list_free (al);
         al = NULL;
         tRoot = NULL;
@@ -429,7 +432,7 @@ gnc_ledger_display_gl (void)
                              FALSE, 0,
                              QOF_QUERY_AND);
 
-    ld = gnc_ledger_display_internal (NULL, query, LD_GL, GENERAL_LEDGER,
+    ld = gnc_ledger_display_internal (NULL, query, LD_GL, GENERAL_JOURNAL,
                                       REG_STYLE_JOURNAL, FALSE, FALSE);
     LEAVE("%p", ld);
     return ld;
@@ -681,13 +684,13 @@ gnc_ledger_display_internal (Account *lead_account, Query *q,
 {
     GNCLedgerDisplay *ld;
     gint limit;
-    const char *class;
+    const char *klass;
     GList *splits;
 
     switch (ld_type)
     {
     case LD_SINGLE:
-        class = REGISTER_SINGLE_CM_CLASS;
+        klass = REGISTER_SINGLE_CM_CLASS;
 
         if (reg_type >= NUM_SINGLE_REGISTER_TYPES)
         {
@@ -707,14 +710,14 @@ gnc_ledger_display_internal (Account *lead_account, Query *q,
             q = NULL;
         }
 
-        ld = gnc_find_first_gui_component (class, find_by_leader, lead_account);
+        ld = gnc_find_first_gui_component (klass, find_by_leader, lead_account);
         if (ld)
             return ld;
 
         break;
 
     case LD_SUBACCOUNT:
-        class = REGISTER_SUBACCOUNT_CM_CLASS;
+        klass = REGISTER_SUBACCOUNT_CM_CLASS;
 
         if (!lead_account)
         {
@@ -728,18 +731,18 @@ gnc_ledger_display_internal (Account *lead_account, Query *q,
             q = NULL;
         }
 
-        ld = gnc_find_first_gui_component (class, find_by_leader, lead_account);
+        ld = gnc_find_first_gui_component (klass, find_by_leader, lead_account);
         if (ld)
             return ld;
 
         break;
 
     case LD_GL:
-        class = REGISTER_GL_CM_CLASS;
+        klass = REGISTER_GL_CM_CLASS;
 
         if (!q)
         {
-            PWARN ("general ledger with no query");
+            PWARN ("general journal with no query");
         }
 
         break;
@@ -768,7 +771,7 @@ gnc_ledger_display_internal (Account *lead_account, Query *q,
     else
         gnc_ledger_display_make_query (ld, limit, reg_type);
 
-    ld->component_id = gnc_register_gui_component (class,
+    ld->component_id = gnc_register_gui_component (klass,
                        refresh_handler,
                        close_handler, ld);
 

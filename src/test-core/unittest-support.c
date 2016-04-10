@@ -29,7 +29,7 @@ typedef struct
 {
     gpointer data;
     gboolean called;
-    gchar *msg;
+    char *msg;
 } TestStruct;
 
 static TestStruct tdata;
@@ -41,7 +41,8 @@ test_list_nohit_handler (const char *log_domain, GLogLevelFlags log_level,
                          const gchar *msg, gpointer user_data);
 
 TestErrorStruct*
-test_error_struct_new (gchar *log_domain, GLogLevelFlags log_level, gchar *msg)
+test_error_struct_new (const char *log_domain, GLogLevelFlags log_level,
+                       const char *msg)
 {
     TestErrorStruct *err = g_slice_new0 (TestErrorStruct);
     err->log_domain = g_strdup (log_domain);

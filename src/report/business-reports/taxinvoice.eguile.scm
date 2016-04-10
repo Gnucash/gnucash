@@ -47,15 +47,15 @@
            (currency     (gncInvoiceGetCurrency   opt-invoice))
            (entries      (gncInvoiceGetEntries    opt-invoice))
            (splits      '());'
-           (slots        (qof-book-get-slots book))
-           (coyname      (coy-info slots gnc:*company-name*))
-           (coycontact   (coy-info slots gnc:*company-contact*))
-           (coyaddr      (coy-info slots gnc:*company-addy*))
-           (coyid        (coy-info slots gnc:*company-id*))
-           (coyphone     (coy-info slots gnc:*company-phone*))
-           (coyfax       (coy-info slots gnc:*company-fax*))
-           (coyurl       (coy-info slots gnc:*company-url*))
-           (coyemail     (coy-info slots gnc:*company-email*))
+           (dateformat   (gnc:fancy-date-info book gnc:*fancy-date-format*))
+           (coyname      (gnc:company-info book gnc:*company-name*))
+           (coycontact   (gnc:company-info book gnc:*company-contact*))
+           (coyaddr      (gnc:company-info book gnc:*company-addy*))
+           (coyid        (gnc:company-info book gnc:*company-id*))
+           (coyphone     (gnc:company-info book gnc:*company-phone*))
+           (coyfax       (gnc:company-info book gnc:*company-fax*))
+           (coyurl       (gnc:company-info book gnc:*company-url*))
+           (coyemail     (gnc:company-info book gnc:*company-email*))
            (owneraddr  (gnc:owner-get-address-dep owner))
            (ownername  (gnc:owner-get-name-dep owner))
            (jobnumber  (gncJobGetID (gncOwnerGetJob (gncInvoiceGetOwner  opt-invoice))))
@@ -250,11 +250,13 @@
       <?scm ) (begin ?>
         <tr>
            <td align="right"><?scm:d (nbsp (_ "Invoice Date")) ?>:&nbsp;</td>
-           <td align="right"><?scm:d (gnc-print-date postdate) ?></td>
+           <td align="right"><?scm:d (nbsp (strftime dateformat
+                                            (localtime (car postdate)))) ?></td>
         </tr>
         <tr>
            <td align="right"><?scm:d (nbsp (_ "Due Date")) ?>:&nbsp;</td>
-           <td align="right"><?scm:d (gnc-print-date duedate) ?></td>
+           <td align="right"><?scm:d (nbsp (strftime dateformat
+                                            (localtime (car duedate)))) ?></td>
         </tr> <?scm )) ?>
         <?scm (if (not (string=? billingid "")) (begin ?>
           <tr>

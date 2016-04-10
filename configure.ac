@@ -34,11 +34,11 @@ GNUCASH_NANO_VERSION=0
 #src/backend/dbi/gnc-backend-dbi.c:gnc_dbi_load.
 GNUCASH_RESAVE_VERSION=19920
 # Initialize automake -- make sure we have at least version 1.9 Note:
-# Automake 1.14 issues a ton of warnings about subdir-objects, which
+# Automake 1.14 & 1.15 issue a ton of warnings about subdir-objects, which
 # will become the default in automake 2.0; unfortunately this option
 # is broken and prevents building without passing
 # --disable-dependency-tracking to configure, which make-distcheck
-# doesn't do. See
+# doesn't do. Fixes are in git and expected in Automake-1.16. See
 # http://lists.gnu.org/archive/html/automake/2014-04/msg00002.html and
 # http://debbugs.gnu.org/cgi/bugreport.cgi?bug=13928 for details.
 # In the meantime the best option is to use Automake 1.13 or earlier.
@@ -70,8 +70,8 @@ AM_PROG_CC_C_O
 AC_GNU_SOURCE
 AC_PROG_INTLTOOL
 # Ensure the compiler supports C++ 11:
-AX_CXX_COMPILE_STDCXX_11(ext)
-
+AX_CXX_COMPILE_STDCXX_11(noext)
+AC_PROG_CC_C99
 
 AC_SUBST(GNUCASH_MAJOR_VERSION)
 AC_SUBST(GNUCASH_MINOR_VERSION)
@@ -93,7 +93,13 @@ AC_DEFINE_UNQUOTED(GNUCASH_LATEST_STABLE_SERIES, "$GNUCASH_LATEST_STABLE_SERIES"
     [Most recent stable GnuCash series])
 
 dnl Set of available languages.
-ALL_LINGUAS="ar bg brx ca cs da de doi el en_GB es_NI es eu fa fi fr he hu it ja ko kok kok@latin lt lv nb ne nl pl pt_BR pt ro ru rw sk sv ta tr uk vi zh_CN zh_TW"
+TP_LINGUAS="az ca cs da eu fa ja nl rw sk sr sv tr uk zh_CN"
+dnl already marked as external at TP:
+GC_LINGUAS="ar bg de el en_GB es fi fr gu he hi hu it kn ko lt lv mr nb ne pl pt pt_BR ro ru ta te ur vi zh_TW "
+dnl not marked or no TP team:
+NEW_LINGUAS="as brx doi es_NI kok kok@latin ks mai mni mni@bengali"
+
+ALL_LINGUAS="$TP_LINGUAS $GC_LINGUAS $NEW_LINGUAS"
 
 GETTEXT_PACKAGE=gnucash
 AC_SUBST(GETTEXT_PACKAGE)
@@ -132,9 +138,9 @@ AM_CONDITIONAL([CLANG], [test "x$ac_cv_CLANG" = "xyes"])
 ###--------------------------------------------------------
 ### Begin C++ dependencies
 ###--------------------------------------------------------
-AX_BOOST_BASE([1.48.0], [ac_cv_BOOST=yes], [ac_cv_BOOST=no])
+AX_BOOST_BASE([1.53.0], [ac_cv_BOOST=yes], [ac_cv_BOOST=no])
 if test x$ac_cv_BOOST != xyes; then
-    AC_MSG_ERROR([Boost 1.48.0 or later was not found and is required to build GnuCash])
+    AC_MSG_ERROR([Boost 1.53.0 or later was not found and is required to build GnuCash])
 fi
 ###--------------------------------------------------------
 ### Optionally enable gtkmm plugin (requires c++ compiler)
@@ -179,13 +185,69 @@ AC_PROG_LN_S
 AC_HEADER_STDC
 
 AC_CHECK_HEADERS(limits.h sys/time.h sys/times.h sys/wait.h pow.h)
+oldcflags="$CFLAGS"
+CFLAGS=
+AC_LANG_PUSH([C++])
+oldcxxflags="$CXXFLAGS"
+CXXFLAGS="-Werror -std=c++11 $BOOST_CPPFLAGS"
+AC_MSG_CHECKING([boost/date_time/local_time/custom_time_zone.hpp])
+AC_COMPILE_IFELSE([
+    AC_LANG_SOURCE([
+#include <boost/date_time/local_time/local_time.hpp>
+
+using duration = boost::posix_time::time_duration;
+using time_zone = boost::local_time::custom_time_zone;
+using dst_offsets = boost::local_time::dst_adjustment_offsets;
+using TZ_Ptr = boost::local_time::time_zone_ptr;
+using time_zone_names = boost::local_time::time_zone_names;
+
+struct TTInfo
+{
+int32_t gmtoff;
+uint8_t isdst;
+uint8_t abbrind;
+};
+
+struct TZInfo
+{
+TTInfo info;
+std::string name;
+bool isstd;
+bool isgmt;
+};
+
+static TZ_Ptr
+zone_no_dst(int year, TZInfo *std_info)
+{
+    time_zone_names names(std_info->name, std_info->name, "", "");
+    duration std_off(0, 0, std_info->info.gmtoff);
+    dst_offsets offsets({0, 0, 0}, {0, 0, 0}, {0, 0, 0});
+    boost::local_time::dst_calc_rule_ptr calc_rule(nullptr);
+    TZ_Ptr tz(new time_zone(names, std_off, offsets, calc_rule));
+    return tz;
+}
+
+	 ])],
+	 [AC_MSG_RESULT([yes])],
+	 [AC_MSG_FAILURE([
+Boost Header Fails to compile with C++11. To fix this, open
+date_time/local_time/custom_time_zone.hpp, perhaps as root,
+in your boost include directory (/usr/include/boost in most cases)
+and change line 67 to
+      return (bool) dst_calc_rules_; //if calc_rule is set the tz has dst
+])])
+CXXFLAGS="$oldcxxflags"
+AC_LANG_POP([C++])
+oldldflags="$LDFLAGS"
+LDFLAGS=
 AC_CHECK_FUNCS(stpcpy memcpy timegm towupper)
 AC_CHECK_FUNCS(setenv,,[
   AC_CHECK_FUNCS(putenv,,[
     AC_MSG_ERROR([Must have one of the setenv or putenv functions.])
   ])
 ])
-
+CFLAGS="$oldcflags"
+LDFLAGS="$oldldflags"
 STRUCT_TM_GMTOFF_CHECK
 cflags_save=${CFLAGS}
 CFLAGS="${CFLAGS} -Wall -Werror"
@@ -204,13 +266,13 @@ CFLAGS="${cflags_save}"
 
 # test whether we are building directly from svn/svk/git/bzr
 AC_MSG_CHECKING(if building from an scm managed directory)
-"$srcdir/util/gnc-scm-info" -r "$srcdir" >/dev/null 2>&1
-if test $? = 0 -o "x${BUILDING_FROM_SCM}" = "xyes" ; then
-  BUILDING_FROM_SCM=yes
-  SCM_TYPE=$("$srcdir/util/gnc-scm-info" -t "$srcdir")
-  AC_MSG_RESULT($SCM_TYPE)
+"$srcdir/util/gnc-vcs-info" -r "$srcdir" >/dev/null 2>&1
+if test $? = 0 -o "x${BUILDING_FROM_VCS}" = "xyes" ; then
+  BUILDING_FROM_VCS=yes
+  VCS_TYPE=$("$srcdir/util/gnc-vcs-info" -t "$srcdir")
+  AC_MSG_RESULT($VCS_TYPE)
 
-  if test "x${SCM_TYPE}" = "xgit"; then
+  if test "x${VCS_TYPE}" = "xgit"; then
     AC_MSG_CHECKING(git command to use due to detected git repo)
     # The windows build uses environment variable $GIT_CMD to invoke git (adding git
     # to the PATH in Windows results in a build failure).
@@ -222,33 +284,33 @@ if test $? = 0 -o "x${BUILDING_FROM_SCM}" = "xyes" ; then
   fi
 else
   AC_MSG_RESULT(no)
-  BUILDING_FROM_SCM=no
-  SCM_TYPE=
+  BUILDING_FROM_VCS=no
+  VCS_TYPE=
 
-  # Make sure we've got swig-runtime.h and gnc-scm-info.h
+  # Make sure we've got swig-runtime.h and gnc-vcs-info.h
   AC_CHECK_FILE(${srcdir}/src/swig-runtime.h, [],
     [AC_MSG_ERROR([
 
 It looks like you are NOT building from Subversion, svk, git or bzr
 but I cannot find swig-runtime.h.  Check your PATH and make sure
-we can find gnc-scm-info in your PATH!
+we can find gnc-vcs-info in your PATH!
 Either that or contact gnucash-devel@gnucash.org because
 the tarball you downloaded is broken.
 
     ])])
-  AC_CHECK_FILE(${srcdir}/src/core-utils/gnc-scm-info.h, [],
+  AC_CHECK_FILE(${srcdir}/src/core-utils/gnc-vcs-info.h, [],
     [AC_MSG_ERROR([
 
 It looks like you are NOT building from Subversion, svk, git or bzr
-but I cannot find gnc-scm-info.h.  Check your PATH and make sure
-we can find gnc-scm-info in your PATH!
+but I cannot find gnc-vcs-info.h.  Check your PATH and make sure
+we can find gnc-vcs-info in your PATH!
 Either that or contact gnucash-devel@gnucash.org because
 the tarball you downloaded is broken.
 
     ])])
 fi
-AM_CONDITIONAL(BUILDING_FROM_SCM, test "x$BUILDING_FROM_SCM" = "xyes")
-AC_SUBST(SCM_TYPE)
+AM_CONDITIONAL(BUILDING_FROM_VCS, test "x$BUILDING_FROM_VCS" = "xyes")
+AC_SUBST(VCS_TYPE)
 AC_SUBST(GIT_CMD)
 
 # Build dir adjustments
@@ -258,46 +320,45 @@ AM_CONDITIONAL(GNUCASH_SEPARATE_BUILDDIR, test "x${srcdir}" != "x.")
 AM_BINRELOC
 
 ### --------------------------------------------------------------------------
-### See if we have pkg-config
-
-AC_PATH_PROG(PKG_CONFIG,pkg-config)
-if test "x$PKG_CONFIG" = x; then
-  # @*%&$ Ximian programmers renamed this application
-  AC_PATH_PROG(PKG_CONFIG,pkgconfig)
-  if test "x$PKG_CONFIG" = x; then
-    AC_MSG_ERROR([Could not find the pkg-config (or pkgconfig) program.],)
-  fi
-fi
-
-### --------------------------------------------------------------------------
 ### Glib checks.
 
 # We require glib >= 2.28, released together with gtk-2.24;
-# We first check for other versions due to deprecations.
+# We first check for other versions due to required C standard and deprecations.
+# 2.44 requires C11.
 # 2.36 deprecated g_type_init
 # 2.32 deprecated some gthread functions
-PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.38 gio-2.0 >= 2.25 gthread-2.0 gobject-2.0 gmodule-2.0,
+PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.44 gio-2.0 >= 2.25 gthread-2.0
+                        gobject-2.0 gmodule-2.0,
 [
   AC_DEFINE([HAVE_GLIB_2_38], [1], [Configure leading quote around assertions])
   AC_DEFINE([HAVE_GLIB_2_36], [1], [Configure g_type_init deprecation])
   AC_DEFINE([HAVE_GLIB_2_32], [1], [Configure gthread deprecations])
 ],
 [
-  PKG_CHECK_MODULES(GLIB,
-                        glib-2.0 >= 2.36 gio-2.0 >= 2.25 gthread-2.0 gobject-2.0 gmodule-2.0,
+  PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.38 gio-2.0 >= 2.25 gthread-2.0
+                          gobject-2.0 gmodule-2.0,
   [
+    AC_DEFINE([HAVE_GLIB_2_38], [1], [Configure leading quote around assertions])
     AC_DEFINE([HAVE_GLIB_2_36], [1], [Configure g_type_init deprecation])
     AC_DEFINE([HAVE_GLIB_2_32], [1], [Configure gthread deprecations])
   ],
   [
-    PKG_CHECK_MODULES(GLIB,
-                        glib-2.0 >= 2.32 gio-2.0 >= 2.25 gthread-2.0 gobject-2.0 gmodule-2.0,
-    [
+    PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.36 gio-2.0 >= 2.25 gthread-2.0
+			    gobject-2.0 gmodule-2.0,
+   [
+      AC_DEFINE([HAVE_GLIB_2_36], [1], [Configure g_type_init deprecation])
+      AC_DEFINE([HAVE_GLIB_2_32], [1], [Configure gthread deprecations])
+   ],
+   [
+      PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.32 gio-2.0 >= 2.25 gthread-2.0
+                              gobject-2.0 gmodule-2.0,
+      [
         AC_DEFINE([HAVE_GLIB_2_32], [1], [Configure gthread deprecations])
-    ],
-    [
-	PKG_CHECK_MODULES(GLIB,
-                        glib-2.0 >= 2.28 gio-2.0 >= 2.25 gthread-2.0 gobject-2.0 gmodule-2.0)
+      ],
+      [
+	PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.28 gio-2.0 >= 2.25 gthread-2.0
+	                        gobject-2.0 gmodule-2.0)
+      ])
     ])
   ])
 ])
@@ -325,8 +386,18 @@ AC_TRY_RUN([
 ],[
   AC_MSG_RESULT(assuming yes)
 ])
+dnl Check for redefinition of typedef GListStore, briefly in GLib 2.44.
+dnl Redefinition of typdefs is a C11 feature.
+dnl Note that We use gnu99 or gnu11 because strdup is a gnu extension in gcc.
+CFLAGS="${CFLAGS} -Werror"
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+#include <gio/gio.h>
+])], [ac_cv_cstd=gnu99], [ac_cv_cstd=gnu11])
 CFLAGS="$GNC_OLDCFLAGS"
 LDFLAGS="$GNC_OLDLDFLAGS"
+dnl First remove any existing -std= setting from CFLAGS then add the one we want.
+CFLAGS=`echo ${CFLAGS} | sed -E -e "s,-std=[[a-z0-9]]+,,g"`
+CFLAGS="${CFLAGS} -std=${ac_cv_cstd}"
 
 # Gnucash replaced dlopen/dlsym by the g_module functions; dlsym
 # is needed optionally in one place for BSD linkers, though.
@@ -365,16 +436,19 @@ update to latest  darwin])
     ;;
   darwin*)
     platform=darwin
-    AC_DEFINE(PLATFORM_OSX,1,[Running on OSX, either X11 or Quartz])
+    AC_DEFINE(GNC_PLATFORM_OSX, 1,[Running on OSX, either X11 or Quartz])
+    AC_DEFINE(GNC_PLATFORM_POSIX, 1, [POSIX-compliant OS])
+    AC_DEFINE(GNC_PLATFORM_DARWIN, 1, [Darwin-based OS])
     AC_MSG_RESULT($platform)
     AC_MSG_CHECKING(For GDK-Quartz)
     platform=osx
     _gdk_tgt=`$PKG_CONFIG --variable=target gdk-2.0`
     if test "x$_gdk_tgt" = xquartz; then
       platform=darwin/quartz
+      AC_DEFINE(GNC_PLATFORM_COCOA, 1, [Cocoa/Nexstep/GnuStep framework])
       AC_MSG_RESULT(yes)
       AC_DEFINE(GDK_QUARTZ,,[Using GDK Quartz (not X11)])
-      PKG_CHECK_MODULES([GTK_MAC], gtk-mac-integration,
+      PKG_CHECK_MODULES([GTK_MAC], gtk-mac-integration-gtk2,
                         [_gtk_mac=yes], [_gtk_mac=no])
       if test "x$_gtk_mac" = xyes; then
         GTK_MAC_LIBS="${GTK_MAC_LIBS} -lobjc -framework Cocoa"
@@ -396,6 +470,7 @@ update to latest  darwin])
   mingw*|cygwin*)
     platform=win32
     AC_MSG_RESULT($platform)
+    AC_DEFINE(GNC_PLATFORM_WINDOWS, 1, [Microsoft Windows OS])
     LT_PROG_RC
 
     AC_MSG_CHECKING(for native win32)
@@ -437,6 +512,7 @@ update to latest  darwin])
 
   *)
     platform=linux/other
+    AC_DEFINE(GNC_PLATFORM_POSIX, 1, [POSIX-compliant OS])
     AC_MSG_RESULT($platform)
     ;;
 esac
@@ -466,39 +542,52 @@ AC_CHECK_FUNCS(gethostid link)
 ### --------------------------------------------------------------------------
 ### Guile version checks
 
+GUILE_EFFECTIVE_VERSION=0
 # - check minimum version
 # - determine GUILE_CFLAGS and GUILE_LIBS
-# Note: systems that install both guile 1.8 and guile 2 use different
-#       names for the 1.8 and 2.0 autoconf macros to avoid conflicts.
-#       So the tests below will check for known macro names in the order
-#       that we assume will always result in the proper macros being called
-#       for the guile version that has been detected.
-gnc_have_guile_2=no
-gnc_have_guile_www=no
-PKG_CHECK_MODULES(GUILE,
-                  [guile-1.8 >= 1.8.5],
-                  [m4_ifdef([GUILE1_8_PROGS],
-                            [ GUILE1_8_PROGS ],
-                            [ GUILE_PROGS ])
-                  ], [
-  PKG_CHECK_MODULES(GUILE,
-                  [guile-2.0 >= 2.0.0],
-                  [m4_ifdef([GUILE_PROGS],
-                            [ GUILE_PROGS
-                              gnc_have_guile_2=yes ],
-                            [ AC_MSG_ERROR([ guile 2 is found on your system, but appears
-    to export different autoconf macros than what we expected. Please report this as a bug
-    in GnuCash, so we can fix this for your platform.]) ])
-                  ],
-                  [AC_MSG_ERROR([
-    guile does not appear to be installed correctly, or is not in the
-    correct version range.  Perhaps you have not installed the guile
-    development packages?  Gnucash requires at least version 1.8.5 to build.
-  ])])
-])
 
-AM_CONDITIONAL(GNC_HAVE_GUILE_2, test "${gnc_have_guile_2}" = yes)
+AC_ARG_WITH([guile],
+    AS_HELP_STRING([--with-guile=1.8|2.0|auto],
+                   [which guile version to compile against @<:@default: auto@:>@]),
+    [],
+    [with_guile=auto]
+)
 
+AS_IF([test "$with_guile" = "2.0"],
+      [PKG_CHECK_MODULES(GUILE, [guile-2.0 >= 2.0.0],
+                         [GUILE_EFFECTIVE_VERSION=2.0
+                          AC_PATH_PROG([GUILD], guild)])],
+      [test "$with_guile" = "1.8"],
+      [PKG_CHECK_MODULES(GUILE, [guile-1.8 >= 1.8.5],
+                         [GUILE_EFFECTIVE_VERSION=1.8])],
+      [test "$with_guile" = "auto"],
+      [PKG_CHECK_MODULES(GUILE, [guile-2.0 >= 2.0.0],
+          [GUILE_EFFECTIVE_VERSION=2.0
+           AC_PATH_PROG([GUILD], guild)],
+          [PKG_CHECK_MODULES(GUILE, [guile-1.8 >= 1.8.5],
+                             [GUILE_EFFECTIVE_VERSION=1.8],
+                             [GUILE_EFFECTIVE_VERSION=0])
+          ])],
+      # else
+      [AC_MSG_ERROR([invalid guile version specified])]
+)
+
+AS_IF([test "$GUILE_EFFECTIVE_VERSION" = "0"],
+      [AC_MSG_ERROR([
+       guile does not appear to be installed correctly, or is not in the
+       correct version range.  Perhaps you have not installed the guile
+       development packages?  Gnucash requires at least version 1.8.5 to build.
+       ])]
+)
+
+AM_CONDITIONAL(GNC_HAVE_GUILE_2, [test "$GUILE_EFFECTIVE_VERSION" = "2.0"])
+AC_SUBST(GUILE_EFFECTIVE_VERSION)
+AC_SUBST(GUILE, [`pwd`/gnc-guile])
+
+AC_CHECK_HEADERS(ltdl.h,
+         [],
+         [AC_MSG_ERROR([ltdl.h not found. Perhaps you need to install
+the libtool(-ltdl) development package?])])
 
 ### --------------------------------------------------------------------------
 ### SWIG version checks (only when building from SCM)
@@ -514,16 +603,16 @@ AM_CONDITIONAL(GNC_HAVE_GUILE_2, test "${gnc_have_guile_2}" = yes)
 # with that tarball so we have to prepare the tarball for guile 2
 # compatibility.
 #
-if test "${BUILDING_FROM_SCM}" = yes
+if test "${BUILDING_FROM_VCS}" = yes
 then
     AX_PKG_SWIG(2.0.10, [gnc_have_swig_2_0_10=yes], [gnc_have_swig_2_0_10=no])
 
-    if test "${gnc_have_guile_2}" = yes
+    if test "${GUILE_EFFECTIVE_VERSION}" = "2.0"
     then
         if test "${gnc_have_swig_2_0_10}" = no
         then
             AC_MSG_ERROR([
-    You are building from ${SCM_TYPE} but swig was not found or too old.
+    You are building from ${VCS_TYPE} but swig was not found or too old.
     To build gnucash you need at least swig version 2.0.10.
             ])
         fi
@@ -532,7 +621,7 @@ then
         then
             AX_PKG_SWIG(1.3.31, [],
                 [AC_MSG_ERROR([
-    You are building from ${SCM_TYPE} but swig was not found or too old.
+    You are building from ${VCS_TYPE} but swig was not found or too old.
     To build gnucash with guile 1.8 you need at least swig version 1.3.31.
             ])])
         fi
@@ -637,7 +726,7 @@ then
         if test $? -eq 0; then
           EXTRA_SEARCH_LIBS="$(pkg-config --variable=libdir dbi)/dbd"
         else
-          EXTRA_SEARCH_LIBS="/usr/lib/dbd:/usr/lib64/dbd:${libdir}/dbd"
+          EXTRA_SEARCH_LIBS="/usr/lib/dbd:/usr/lib64/dbd:${libdir}/dbd:${prefix}/lib/dbd"
         fi]]
        )
     case $host_os in
@@ -653,12 +742,14 @@ then
 	 export LIBS="$lt_cv_dlopen_libs $LIBS"
 	 ;;
       esac
-      export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$EXTRA_SEARCH_LIBS"
-      AC_MSG_CHECKING([Looking for at least one supported DBD module])
-      AC_RUN_IFELSE([AC_LANG_PROGRAM([$LDINC],
+    old_ld_library_path="$LD_LIBRARY_PATH"
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$EXTRA_SEARCH_LIBS"
+    AC_MSG_NOTICE([Search Path $LD_LIBRARY_PATH])
+    AC_MSG_CHECKING([Looking for at least one supported DBD module])
+    AC_RUN_IFELSE([AC_LANG_PROGRAM([$LDINC],
 				     [[if (!$lt_cv_dlopen("libdbdsqlite3.$LDEXT"$LDFUNCARGS)) return -1;
 				     ]])],AC_MSG_RESULT([SQLite3]),
-      	AC_RUN_IFELSE([AC_LANG_PROGRAM([$LDINC],
+    	AC_RUN_IFELSE([AC_LANG_PROGRAM([$LDINC],
 				     [[if (!$lt_cv_dlopen("libdbdmysql.$LDEXT"$LDFUNCARGS)) return -1;
 					]])],AC_MSG_RESULT([MySql]),
 	  AC_RUN_IFELSE([AC_LANG_PROGRAM([$LDINC],
@@ -681,6 +772,7 @@ to the configure argument list and run it again.
     LIBDBI_LIBS=-ldbi
     _COMPONENTS="$_COMPONENTS dbi"
     LIBS=$saved_libs
+    export LD_LIBRARY_PATH="$old_ld_library_path"
   else
     AC_MSG_ERROR([
 
@@ -754,11 +846,175 @@ enable_google_profile=no
 AC_ARG_ENABLE( google-profiler,
   [AS_HELP_STRING([--enable-google-profiler], [link in Google Performance Tools profiler; allows enabling profiling by setting $CPUPROFILE=/path/to/logfile.])],
   [AC_MSG_CHECKING([Google PerfTools Profiler])
-   AC_CHECK_LIB([profiler], enable_google_profile=yes)],
-  [AC_MSG_WARN([Google Profiling Enabled but the library wasn\'t found.])
+   AC_CHECK_LIB([profiler], [ProfilerEnable], [enable_google_profile=yes],
+      [AC_MSG_WARN([Google Profiling Enabled but the library was not found.])])
 ])
 AM_CONDITIONAL(WITH_GOOGLE_PROFILER, [test x$enable_google_profile = xyes])
 
+###---------------------------------------------------------------------------
+### Google Test and Mock Support: https://code.google.com/p/googletest/ and
+### https://code.google.com/p/googlemock/
+### ---------------------------------------------------------------------------
+ac_cv_gmock_root=""
+ac_cv_gmock_headers=""
+ac_cv_gtest_root=""
+ac_cv_gtest_headers=""
+ac_cv_gtest_libs=""
+ac_cv_gmock_libs=""
+
+AC_ARG_ENABLE( google-test,
+   [AS_HELP_STRING([--disable-google-test], [do not build the Google Test and Google Mock static libraries and enable C++ Unit Tests])],,[enable_google_test=yes])
+if test x$enable_google_test != xno; then
+   AC_CHECK_LIB([gtest_main], [main],
+      [AC_CHECK_FILES([/usr/src/gmock/gmock-all.cc
+		       /usr/include/gtest/gtest.h
+		       /usr/include/gmock/gmock.h],
+      	[ac_cv_gtest_system_install=yes] [ac_cv_have_gtest_libs=yes],
+	[ac_cv_gtest_system_install=no])],
+      [AC_CHECK_FILES([/usr/src/gtest/src/gtest-all.cc
+		       /usr/src/gtest/gtest-main.cc
+		       /usr/src/gmock/src/gmock-all.cc
+		       /usr/include/gtest/gtest.h
+		       /usr/include/gmock/gmock.h],
+        [ac_cv_gtest_system_install=yes] [ac_cv_have_gtest_libs=no],
+        [ac_cv_gtest_system_install=no])]
+   )
+fi
+if test x$ac_cv_file__usr_include_gmock_gmock_h = xyes -a x$ac_cv_file__usr_include_gtest_gtest_h = xyes; then
+  if test x$ac_cv_file__usr_src_gmock_src_gmock_all_cc = xyes -a x$ac_cv_file__usr_src_gtest_src_gtest_all_cc = xyes; then
+     ac_cv_gtest_system_install=yes
+  elif test "x$ac_cv_have_gtest_libs" = xyes; then
+     ac_cv_gtest_system_install=yes
+  else
+     ac_cv_gtest_system_install=no
+  fi
+fi
+
+AC_ARG_WITH([gtest-root],
+    [AS_HELP_STRING([--with-gtest-root=PATH], [location of the google test sources])],
+    [ac_cv_gtest_root="$with_gtest_root"])
+AC_ARG_WITH([gtest-headers],
+    [AS_HELP_STRING([--with-gtest-headers=PATH], [location of the google test header files if not in gtest-root])],
+    [ac_cv_gtest_headers="$with_gtest_headers"])
+AC_ARG_WITH([gmock-root],
+    [AS_HELP_STRING([--with-gmock-root=PATH], [location of the google mock sources])],
+    [ac_cv_gmock_root="$with_gmock_root"])
+AC_ARG_WITH([gmock-headers],
+    [AS_HELP_STRING([--with-gmock-headers=PATH], [location of the google test header files if not in gmock-root])],
+    [ac_cv_gmock_headers="$with_gmock_headers"])
+
+if test x$enable_google_test = xyes; then
+   AC_MSG_CHECKING([whether Google Test is available])
+   if test -n "$ac_cv_gtest_root" -a -r "$ac_cv_gtest_root/src/gtest-all.cc"; then
+     AC_MSG_WARN([Skipped setting ac_cv_gtest_root, value $ac_cv_gtest_root])
+   else
+      if test -n "${GTEST_ROOT}" -a -r "${GTEST_ROOT}/src/gtest-all.cc"; then
+         ac_cv_gtest_root=${GTEST_ROOT}
+      elif test "x$ac_cv_gtest_system_install" = "xyes"; then
+         ac_cv_gtest_root="/usr/src/gtest"
+      else
+         ac_cv_gtest_root=""
+      fi
+   fi
+   if test -z "$ac_cv_gtest_root" -a -z "$ac_cv_gtest_libs"; then
+      AC_MSG_RESULT([No gtest-root])
+      enable_google_test=no
+   else
+      if test ! -r "$ac_cv_gtest_root/include/gtest/gtest.h"; then
+         if test -n "$ac_cv_gtest_headers" -a -r "$ac_cv_gtest_headers/gtest/gtest.h"; then
+            AC_MSG_WARN([Skipped setting ac_cv_gtest_headers, value $ac_cv_gtest_headers])
+         else
+            if test  -n "${GTEST_HEADERS}" -a -r "${GTEST_HEADERS}/gtest/gtest.h"; then
+               ac_cv_gtest_headers=${GTEST_HEADERS}
+            elif test "x$ac_cv_gtest_system_install" = "xyes"; then
+               ac_cv_gtest_headers="/usr/include"
+            else
+               ac_cv_gtest_headers=""
+            fi
+         fi
+         if test -z "$ac_cv_gtest_headers"; then
+            AC_MSG_RESULT([No gtest-headers])
+            enable_google_test=no
+         fi
+      else
+         ac_cv_gtest_headers=$ac_cv_gtest_root/include
+      fi
+   fi
+
+
+   if test -n "$ac_cv_gmock_root" -a -r "$ac_cv_gmock_root/gmock-all.cc"; then
+      ac_cv_gmock_src_path="$ac_cv_gmock_root"
+      AC_MSG_WARN([Skipped setting ac_cv_gmock_root, value $ac_cv_gmock_root])
+   elif test -n "$ac_cv_gmock_root" -a -r "$ac_cv_gmock_root/src/gmock-all.cc"; then
+      ac_cv_gmock_src_path="$ac_cv_gmock_root/src"
+      AC_MSG_WARN([Skipped setting ac_cv_gmock_root, value $ac_cv_gmock_root])
+   else
+      if test -n "${GMOCK_ROOT}" -a -r "${GMOCK_ROOT}/src/gmock-all.cc"; then
+         ac_cv_gmock_src_path=${GMOCK_ROOT}/src
+      elif test "x$ac_cv_gtest_system_install" = "xyes"; then
+         if test "x$ac_cv_file__usr_src_gmock_src_gmock_all_cc" = xyes; then
+            ac_cv_gmock_src_path="/usr/src/gmock/src"
+	 elif test "x$ac_cv_file__usr_src_gmock_gmock_all_cc" = xyes; then
+	    ac_cv_gmock_src_path="/usr/src/gmock"
+	 else
+	    ac_cv_gmock_src_path=""
+	 fi
+	 ac_cv_gmock_root="/usr/src/gmock"
+      else
+         ac_cv_gmock_root=""
+      fi
+   fi
+   if test -z "$ac_cv_gmock_root"; then
+      AC_MSG_RESULT([No gmock-root])
+      enable_google_test=no
+   else
+      if test ! -r "$ac_cv_gmock_root/include/gmock/gmock.h"; then
+         if test -n "$ac_cv_gmock_headers" -a -r "$ac_cv_gmock_headers/gmock/gmock.h"; then
+            AC_MSG_WARN([Skipped setting ac_cv_gmock_headers, value $ac_cv_gmock_headers])
+         else
+            if test -n "${GMOCK_HEADERS}" -a -r "${GMOCK_HEADERS}/gmock/gmock.h"; then
+               ac_cv_gmock_headers=${GMOCK_HEADERS}
+            elif test "x$ac_cv_gtest_system_install" = "xyes"; then
+               ac_cv_gmock_headers="/usr/include"
+            else
+               ac_cv_gmock_headers=""
+            fi
+         fi
+         if test -z "$ac_cv_gmock_headers"; then
+	    AC_MSG_RESULT([No gmock-headers])
+            enable_google_test=no
+         fi
+      else
+         ac_cv_gmock_headers="$ac_cv_gmock_root/include"
+      fi
+   fi
+   if test "x$enable_google_test" = "xyes"; then
+       AC_MSG_RESULT([Yes])
+   fi
+fi
+
+if test "x$ac_cv_have_gtest_libs" = xyes; then
+   ac_cv_gtest_libs="-lgtest -lgtest_main"
+else
+dnl Google test requires pthreads and this seems the easiest way to check.
+    AX_PTHREAD([
+    ac_cv_gtest_libs="\$(top_builddir)/src/test-core/libgtest.a $PTHREAD_CFLAGS"
+    ],[
+    AC_MSG_WARN(
+      [Disabling GTest because pthreads, which it requires, wasn't found.])
+      dnl Google test requires pthreads and this seems the easiest way to check.
+    enable_google_test="no"
+    ])
+fi
+
+AC_SUBST([GTEST_LIBS], [$ac_cv_gtest_libs])
+AC_SUBST([GTEST_SRC], [$ac_cv_gtest_root])
+AC_SUBST([GTEST_HEADERS], [$ac_cv_gtest_headers])
+AC_SUBST([GMOCK_SRC_PATH], [$ac_cv_gmock_src_path])
+AC_SUBST([GMOCK_SRC], [$ac_cv_gmock_root])
+AC_SUBST([GMOCK_HEADERS], [$ac_cv_gmock_headers])
+AM_CONDITIONAL([WITH_GOOGLE_TEST], [test "x$enable_google_test" = "xyes"])
+AM_CONDITIONAL([GOOGLE_TEST_LIBS], [test "x$ac_cv_have_gtest_libs" == "xyes"])
 ### --------------------------------------------------------------------------
 ### Register2
 AC_ARG_ENABLE( register2,
@@ -1064,7 +1320,7 @@ then
 #Save CFLAGS so that we can put the warnings in AM_CFLAGS
   __cflags="$CFLAGS"
   CFLAGS=
-  GNOME_COMPILE_WARNINGS
+  COMPILE_WARNINGS
   AM_CFLAGS="$CFLAGS"
   CFLAGS="$__cflags"
 
@@ -1084,7 +1340,7 @@ then
   AC_SUBST(GDK_PIXBUF_LIBS)
 
    # checks for goffice
-  PKG_CHECK_MODULES(GOFFICE, libgoffice-0.8 >= 0.7.0, [goffice=1], [AC_MSG_ERROR([Cannot find libgoffice.>= 0.7.0])])
+  PKG_CHECK_MODULES(GOFFICE, libgoffice-0.8 >= 0.7.0 libgoffice-0.8 < 0.9.0, [goffice=1], [AC_MSG_ERROR([Cannot find libgoffice >= 0.7.0 and < 0.9.0])])
   AS_SCRUB_INCLUDE(GOFFICE_CFLAGS)
   AC_SUBST(GOFFICE_CFLAGS)
   AC_SUBST(GOFFICE_LIBS)
@@ -1145,28 +1401,42 @@ then
   AC_SUBST(WEBKIT_CFLAGS)
   AC_SUBST(WEBKIT_LIBS)
 
-  dnl if Mac OSX, also scrub /sw/include
-  dnl GIVEN_CFLAGS=$(echo $GIVEN_CFLAGS | sed -e "s;-I/sw/include ;;" | sed -e "s;-I/sw/include$;;")
-
-  ###-----------------------------------------------------------------------
+    ###-----------------------------------------------------------------------
   ## Find a suitable password store
+  AC_ARG_ENABLE([password-storage],
+                AS_HELP_STRING([--disable-password-storage], [Ignore system wide password stores such as gnome-keyring, libsecret or Apple's keychain]))
 
-  case $host_os in
+  have_password_storage=no
+  if test "x$enable_password_storage" != "xno"
+  then
+    case $host_os in
     darwin*)
+      have_password_storage=yes
       AC_DEFINE(HAVE_OSX_KEYCHAIN,1,[System has an OS X Key chain])
       ;;
     *)
       PKG_CHECK_MODULES(GNOME_KEYRING, gnome-keyring-1 >= "0.6",
-          [AC_DEFINE(HAVE_GNOME_KEYRING,1,[System has gnome-keyring 0.6 or better])],
-          [AC_DEFINE(HAVE_NO_KEYRING,1,[System has no suitable keyring service])])
+          [have_password_storage=yes
+           AC_DEFINE(HAVE_GNOME_KEYRING,1,[System has gnome-keyring 0.6 or better])
+          ],
+          [dummy_not_found=true])
 
       PKG_CHECK_MODULES(LIBSECRET, libsecret-1 >= "0.18",
-          [AC_DEFINE(HAVE_LIBSECRET,1,[System has libsecret 0.18 or better])],
-          [AC_DEFINE(HAVE_NO_LIBSECRET,1,[System has no suitable libsecret service])])
-      AC_SUBST(LIBSECRET_CFLAGS)
-      AC_SUBST(LIBSECRET_LIBS)
+          [have_password_storage=yes
+           AC_DEFINE(HAVE_LIBSECRET,1,[System has libsecret 0.18 or better])
+           AC_SUBST(LIBSECRET_CFLAGS)
+           AC_SUBST(LIBSECRET_LIBS)
+          ],
+          [dummy_not_found=true])
       ;;
-  esac
+    esac
+  fi
+
+  if test "x$have_password_storage" = "xno" && test "x$enable_password_storage" = "xyes"
+  then
+      AC_MSG_ERROR([password storage requested but no suitable backend found. Either gnome-keyring >= 0.6, libsecret >= 0.18 or Apple's keychain are supported])
+  fi
+
 
   ### ----------------------------------------------------------------------
 
@@ -1191,7 +1461,7 @@ then
   AM_CXXFLAGS="${AM_CXXFLAGS} -Wall"
 
 else
-  # GNOME_COMPILE_WARNINGS will add -Wall; no need to set it again.
+  # COMPILE_WARNINGS will add -Wall; no need to set it again.
   # also, only add it for GCC.
   if test ${GCC}x = yesx
   then
@@ -1254,20 +1524,8 @@ then
   AC_DEFINE(GNOME_DISABLE_DEPRECATED,1, [Don't use deprecated gnome functions])
 fi
 
-###-------------------------------------------------------------------------
-### Stuff from Mac OS X Port
-###-------------------------------------------------------------------------
-
 AC_CHECK_FUNCS(pthread_mutex_init)
-case $host_os in
-  darwin*)
-    AC_REPLACE_FUNCS(localtime_r gmtime_r)
-    AC_LIBOBJ(strptime)
-    ;;
-  *)
-    AC_REPLACE_FUNCS(strptime localtime_r gmtime_r)
-    ;;
-esac
+AC_REPLACE_FUNCS(strptime strfmon)
 
 if test x$am_cv_val_LC_MESSAGES = "xno"; then
   LC_MESSAGES_ENUM="LC_ALL"
@@ -1317,15 +1575,14 @@ AC_ARG_ENABLE(python-bindings,
 ### Additional compiler warnings (or not) if we're running GCC
 ###-------------------------------------------------------------------------
 
-# This has to come after AC_PROG_CC _AND_ GNOME_COMPILE_WARNINGS
+
+# This has to come after AC_PROG_CC _AND_ COMPILE_WARNINGS
 AC_LANG([C++])
 AX_CHECK_COMPILE_FLAG([-Wno-deprecated-register],
     [AM_CXXFLAGS="${AM_CXXFLAGS} -Wno-unused -Wno-deprecated-register"],
     [AM_CXXFLAGS="${AM_CXXFLAGS} -Wno-unused"], [-Werror])
 AC_LANG([C])
-AX_CHECK_PREPROC_FLAG([-Wno-non-literal-null-conversion],
-    [AM_CPPFLAGS="${AM_CPPFLAGS} -Wno-non-literal-null-conversion"],
-    [], [-Werror])
+
 AC_MSG_CHECKING(what extra warning flags to pass to the C compiler)
 if test ${GCC}x = yesx
 then
@@ -1335,13 +1592,13 @@ then
   #around to cleaning them up.
   AM_CFLAGS="${AM_CFLAGS} -Wno-unused"
   # other flags...
-  # These next two are included in the GNOME_COMPILE_WARNINGS
+  # These next two are included in the COMPILE_WARNINGS
   #warnFLAGS="${warnFLAGS} -Wmissing-prototypes"
   #warnFLAGS="${warnFLAGS} -Wmissing-declarations"
   #warnFLAGS="${warnFLAGS} -Werror-implicit-function-declaration" # In -Wall
 
   # error-on-warning should not be active in (stable) release tarballs
-  if test "x$BUILDING_FROM_SCM" = "xyes"
+  if test "x$BUILDING_FROM_VCS" = "xyes"
   then
     # This code is from svn/svk/git/bzr, so enable error-on-warning
     error_on_warning_as_default="yes"
@@ -1402,7 +1659,6 @@ chmod u+x ${srcdir}/src/bin/generate-gnc-script
 # the ANSI2KNR-filtering rules.
 LIBOBJS_SEDSCRIPT="s,\.[[^.]]* ,$U&,g;s,\.[[^.]]*\$\$,$U&,"
 AC_SUBST(LIBOBJS_SEDSCRIPT)
-
 # Don't add empty lines in the following macro, they
 # will cause the Windows build to fail if using a git repo as source
 AC_CONFIG_FILES(
@@ -1428,21 +1684,25 @@ AC_CONFIG_FILES(
   accounts/it/Makefile
   accounts/ja/Makefile
   accounts/ko/Makefile
+  accounts/lt/Makefile
   accounts/lv/Makefile
-  accounts/nl/Makefile
   accounts/nb/Makefile
+  accounts/nl/Makefile
   accounts/pl/Makefile
   accounts/pt_BR/Makefile
   accounts/pt_PT/Makefile
   accounts/ru/Makefile
   accounts/sk/Makefile
+  accounts/sv_AX/Makefile
+  accounts/sv_FI/Makefile
   accounts/sv_SE/Makefile
   accounts/tr_TR/Makefile
   accounts/zh_CN/Makefile
+  accounts/zh_HK/Makefile
+  accounts/zh_TW/Makefile
   checks/Makefile
   doc/Makefile
   doc/examples/Makefile
-  intl-scm/Makefile
   lib/Makefile
   lib/libc/Makefile
   lib/stf/Makefile
@@ -1502,6 +1762,7 @@ AC_CONFIG_FILES(
   src/import-export/ofx/test/Makefile
   src/import-export/csv-imp/Makefile
   src/import-export/csv-imp/gschemas/Makefile
+  src/import-export/csv-imp/test/Makefile
   src/import-export/csv-exp/Makefile
   src/import-export/csv-exp/gschemas/Makefile
   src/import-export/log-replay/Makefile
@@ -1567,7 +1828,6 @@ AC_CONFIG_FILES(
   dnl # non-makefiles
   src/bin/gnucash.rc
   src/app-utils/migratable-prefs.xml
-  src/engine/iso-currencies-to-c
   src/gnome/gnucash.desktop.in
   dnl # GSettings schema files
   src/business/business-gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in
@@ -1592,9 +1852,52 @@ AC_CONFIG_FILES(
   ,
   dnl # init-commands go here
 )
+dnl # Shell scripts, to have their shells set
+AC_CONFIG_FILES([src/app-utils/test/test-load-module],
+                [chmod +x src/app-utils/test/test-load-module])
+AC_CONFIG_FILES([src/backend/xml/test/test-real-data.sh],
+                [chmod +x src/backend/xml/test/test-real-data.sh])
+AC_CONFIG_FILES([src/bin/test/test-version],
+                [chmod +x src/bin/test/test-version])
+AC_CONFIG_FILES([src/engine/test/test-create-account],
+                [chmod +x src/engine/test/test-create-account])
+AC_CONFIG_FILES([src/engine/test/test-scm-query-import],
+                [chmod +x src/engine/test/test-scm-query-import])
+AC_CONFIG_FILES([src/gnc-module/test/test-gwrapped-c],
+                [chmod +x src/gnc-module/test/test-gwrapped-c])
+AC_CONFIG_FILES([src/gnc-module/test/test-load-deps],
+                [chmod +x src/gnc-module/test/test-load-deps])
+AC_CONFIG_FILES([src/gnc-module/test/test-load-scm],
+                [chmod +x src/gnc-module/test/test-load-scm])
+AC_CONFIG_FILES([src/gnc-module/test/test-scm-dynload],
+                [chmod +x src/gnc-module/test/test-scm-dynload])
+AC_CONFIG_FILES([src/gnc-module/test/test-scm-init],
+                [chmod +x src/gnc-module/test/test-scm-init])
+AC_CONFIG_FILES([src/gnc-module/test/test-scm-module],
+                [chmod +x src/gnc-module/test/test-scm-module])
+AC_CONFIG_FILES([src/gnc-module/test/test-scm-multi],
+                [chmod +x src/gnc-module/test/test-scm-multi])
+AC_CONFIG_FILES([src/gnome-utils/test/test-load-module],
+                [chmod +x src/gnome-utils/test/test-load-module])
+AC_CONFIG_FILES([src/report/locale-specific/us/test/test-load-module],
+                [src/report/locale-specific/us/test/test-load-module])
+AC_CONFIG_FILES([src/report/report-gnome/test/test-load-module],
+                [chmod +x src/report/report-gnome/test/test-load-module])
+AC_CONFIG_FILES([src/report/report-system/test/test-load-module],
+                [chmod +x src/report/report-system/test/test-load-module])
+AC_CONFIG_FILES([src/report/standard-reports/test/test-load-module],
+                [chmod +x src/report/standard-reports/test/test-load-module])
+AC_CONFIG_FILES([src/report/stylesheets/test/test-load-module],
+                [chmod +x src/report/stylesheets/test/test-load-module])
+AC_CONFIG_FILES([src/report/utility-reports/test/test-load-module],
+                [chmod +x src/report/utility-reports/test/test-load-module])
+AC_CONFIG_FILES([src/tax/us/test/test-load-module],
+                [chmod +x src/tax/us/test/test-load-module])
+
 # A few files need extra actions at creation time
-AC_CONFIG_FILES([src/gnc-test-env], [chmod u+x src/gnc-test-env])
 AC_CONFIG_FILES([src/bin/overrides/gnucash-make-guids], [chmod u+x src/bin/overrides/gnucash-make-guids])
+#Link (copy on Windows) test data files:
+AC_CONFIG_LINKS([src/import-export/csv-imp/test/sample1.csv:src/import-export/csv-imp/test/sample1.csv])
 LDFLAGS="${LDFLAGS} ${NOUNDEF}"
 AC_OUTPUT
 

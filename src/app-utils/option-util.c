@@ -31,7 +31,6 @@
 
 #include "Account.h"
 #include "option-util.h"
-#include "engine-helpers-guile.h"
 #include "glib-helpers.h"
 #include "gnc-guile-utils.h"
 #include "qof.h"
@@ -109,6 +108,13 @@ struct _Getters
     SCM date_option_value_type;
     SCM date_option_value_absolute;
     SCM date_option_value_relative;
+    SCM currency_accounting_option_currency_doc_string;
+    SCM currency_accounting_option_default_currency;
+    SCM currency_accounting_option_policy_doc_string;
+    SCM currency_accounting_option_default_policy;
+    SCM currency_accounting_option_method;
+    SCM currency_accounting_option_book_currency;
+    SCM currency_accounting_option_selected_default_policy;
 };
 
 
@@ -263,6 +269,39 @@ gnc_option_db_find (SCM guile_options)
 }
 
 /* Create an option DB for a particular data type */
+/* For now, this is global, just like when it was in guile.
+   But, it should be make per-book. */
+static GHashTable *kvp_registry = NULL;
+
+static void
+init_table(void)
+{
+    if (!kvp_registry)
+        kvp_registry = g_hash_table_new(g_str_hash, g_str_equal);
+}
+
+
+/*  create a new options object for the requested type */
+static SCM
+gnc_make_kvp_options(QofIdType id_type)
+{
+    GList *list, *p;
+    SCM gnc_new_options = SCM_UNDEFINED;
+    SCM options = SCM_UNDEFINED;
+
+    init_table();
+    list = g_hash_table_lookup(kvp_registry, id_type);
+    gnc_new_options = scm_c_eval_string("gnc:new-options");
+    options = scm_call_0(gnc_new_options);
+
+    for (p = list; p; p = p->next)
+    {
+        SCM generator = p->data;
+        scm_call_1(generator, options);
+    }
+    return options;
+}
+
 GNCOptionDB *
 gnc_option_db_new_for_type(QofIdType id_type)
 {
@@ -274,13 +313,12 @@ gnc_option_db_new_for_type(QofIdType id_type)
 }
 
 void
-gnc_option_db_load_from_kvp(GNCOptionDB* odb, kvp_frame *slots)
+gnc_option_db_load(GNCOptionDB* odb, QofBook *book)
 {
     static SCM kvp_to_scm = SCM_UNDEFINED;
-    static SCM kvp_option_path = SCM_UNDEFINED;
-    SCM scm_slots;
+    SCM scm_book;
 
-    if (!odb || !slots) return;
+    if (!odb || !book) return;
 
     if (kvp_to_scm == SCM_UNDEFINED)
     {
@@ -293,29 +331,19 @@ gnc_option_db_load_from_kvp(GNCOptionDB* odb, kvp_frame *slots)
         }
     }
 
-    if (kvp_option_path == SCM_UNDEFINED)
-    {
-        kvp_option_path = scm_c_eval_string("gnc:*kvp-option-path*");
-        if (kvp_option_path == SCM_UNDEFINED)
-        {
-            PERR ("can't find the option path");
-            return;
-        }
-    }
-    scm_slots = SWIG_NewPointerObj(slots, SWIG_TypeQuery("_p_KvpFrame"), 0);
+    scm_book = SWIG_NewPointerObj(book, SWIG_TypeQuery("_p_QofBook"), 0);
 
-    scm_call_3 (kvp_to_scm, odb->guile_options, scm_slots, kvp_option_path);
+    scm_call_2 (kvp_to_scm, odb->guile_options, scm_book);
 }
 
 void
-gnc_option_db_save_to_kvp(GNCOptionDB* odb, kvp_frame *slots, gboolean clear_kvp)
+gnc_option_db_save(GNCOptionDB* odb, QofBook *book, gboolean clear_all)
 {
     static SCM scm_to_kvp = SCM_UNDEFINED;
-    static SCM kvp_option_path = SCM_UNDEFINED;
-    SCM scm_slots;
-    SCM scm_clear_kvp;
+    SCM scm_book;
+    SCM scm_clear_all;
 
-    if (!odb || !slots) return;
+    if (!odb || !book) return;
 
     if (scm_to_kvp == SCM_UNDEFINED)
     {
@@ -328,19 +356,10 @@ gnc_option_db_save_to_kvp(GNCOptionDB* odb, kvp_frame *slots, gboolean clear_kvp
         }
     }
 
-    if (kvp_option_path == SCM_UNDEFINED)
-    {
-        kvp_option_path = scm_c_eval_string("gnc:*kvp-option-path*");
-        if (kvp_option_path == SCM_UNDEFINED)
-        {
-            PERR ("can't find the option path");
-            return;
-        }
-    }
-    scm_slots = SWIG_NewPointerObj(slots, SWIG_TypeQuery("_p_KvpFrame"), 0);
-    scm_clear_kvp = scm_from_bool (clear_kvp);
+    scm_book = SWIG_NewPointerObj(book, SWIG_TypeQuery("_p_QofBook"), 0);
+    scm_clear_all = scm_from_bool (clear_all);
 
-    scm_call_4 (scm_to_kvp, odb->guile_options, scm_slots, kvp_option_path, scm_clear_kvp);
+    scm_call_3 (scm_to_kvp, odb->guile_options, scm_book, scm_clear_all);
 }
 /********************************************************************\
  * gnc_option_db_destroy                                            *
@@ -577,6 +596,20 @@ initialize_getters(void)
         scm_c_eval_string("gnc:date-option-absolute-time");
     getters.date_option_value_relative =
         scm_c_eval_string("gnc:date-option-relative-time");
+    getters.currency_accounting_option_currency_doc_string =
+        scm_c_eval_string("gnc:currency-accounting-option-get-curr-doc-string");
+    getters.currency_accounting_option_default_currency =
+        scm_c_eval_string("gnc:currency-accounting-option-get-default-curr");
+    getters.currency_accounting_option_policy_doc_string =
+        scm_c_eval_string("gnc:currency-accounting-option-get-policy-doc-string");
+    getters.currency_accounting_option_default_policy =
+        scm_c_eval_string("gnc:currency-accounting-option-get-default-policy");
+    getters.currency_accounting_option_method =
+        scm_c_eval_string("gnc:currency-accounting-option-selected-method");
+    getters.currency_accounting_option_book_currency =
+        scm_c_eval_string("gnc:currency-accounting-option-selected-currency");
+    getters.currency_accounting_option_selected_default_policy =
+        scm_c_eval_string("gnc:currency-accounting-option-selected-policy");
 
     getters_initialized = TRUE;
 }
@@ -653,8 +686,8 @@ gnc_option_sort_tag(GNCOption *option)
 
 /********************************************************************\
  * gnc_option_documentation                                         *
- *   returns the malloc'ed sort tag of the option, or NULL          *
- *   if it can't be retrieved.                                      *
+ *   returns the malloc'ed documentation string of the option, or   *
+ *   NULL if it can't be retrieved.                                 *
  *                                                                  *
  * Args: option - the GNCOption                                     *
  * Returns: malloc'ed char * or NULL                                *
@@ -2634,6 +2667,133 @@ gnc_date_option_value_get_relative (SCM option_value)
     return scm_call_1 (getters.date_option_value_relative, option_value);
 }
 
+/********************************************************************\
+ * gnc_currency_accounting_option_currency_documentation            *
+ *   returns the malloc'ed documentation string for currency        *
+ *   selector of the currency-accounting option, or NULL if it      *
+ *   can't be retrieved.                                            *
+ *                                                                  *
+ * Args: option - the GNCOption                                     *
+ * Returns: malloc'ed char * or NULL                                *
+\********************************************************************/
+char *
+gnc_currency_accounting_option_currency_documentation(GNCOption *option)
+{
+    initialize_getters();
+
+    return gnc_scm_call_1_to_string
+              (getters.currency_accounting_option_currency_doc_string,
+                                     option->guile_option);
+}
+
+
+/********************************************************************\
+ * gnc_currency_accounting_option_get_default_currency              *
+ *   returns the SCM value for the currency-accounting option       *
+ *   default currency.                                              *
+ *                                                                  *
+ * Args: option - the GNCOption                                     *
+ * Returns: SCM value                                               *
+\********************************************************************/
+SCM
+gnc_currency_accounting_option_get_default_currency(GNCOption *option)
+{
+    initialize_getters();
+
+    return scm_call_1
+              (getters.currency_accounting_option_default_currency,
+                                        option->guile_option);
+}
+
+
+/********************************************************************\
+ * gnc_currency_accounting_option_policy_documentation              *
+ *   returns the malloc'ed documentation string for policy          *
+ *   selector of the currency-accounting option, or NULL if it      *
+ *   can't be retrieved.                                            *
+ *                                                                  *
+ * Args: option - the GNCOption                                     *
+ * Returns: malloc'ed char * or NULL                                *
+\********************************************************************/
+char *
+gnc_currency_accounting_option_policy_documentation(GNCOption *option)
+{
+    initialize_getters();
+
+    return gnc_scm_call_1_to_string
+              (getters.currency_accounting_option_policy_doc_string,
+                                     option->guile_option);
+}
+
+
+/********************************************************************\
+ * gnc_currency_accounting_option_get_default_policy                *
+ *   returns the SCM value for the currency-accounting option       *
+ *   default policy.                                                *
+ *                                                                  *
+ * Args: option - the GNCOption                                     *
+ * Returns: SCM value                                               *
+\********************************************************************/
+SCM
+gnc_currency_accounting_option_get_default_policy(GNCOption *option)
+{
+    initialize_getters();
+
+    return scm_call_1
+              (getters.currency_accounting_option_default_policy,
+                                        option->guile_option);
+}
+
+
+/*******************************************************************\
+ * gnc_currency_accounting_option_value_get_method                 *
+ *   get the currency accounting method of the option as a symbol  *
+ *                                                                 *
+ * Args: option_value - option value to get method of              *
+ * Return: SCM value                                               *
+\*******************************************************************/
+SCM
+gnc_currency_accounting_option_value_get_method (SCM option_value)
+{
+    initialize_getters();
+
+    return scm_call_1 (getters.currency_accounting_option_method, option_value);
+}
+
+/*******************************************************************\
+ * gnc_currency_accounting_option_value_get_book_currency          *
+ *   get the book-currency if that is the currency accounting      *
+ *   method of the option as a symbol                              *
+ *                                                                 *
+ * Args: option_value - option value to get method of              *
+ * Return: SCM value                                               *
+\*******************************************************************/
+SCM
+gnc_currency_accounting_option_value_get_book_currency (SCM option_value)
+{
+    initialize_getters();
+
+    return scm_call_1 (getters.currency_accounting_option_book_currency, option_value);
+}
+
+/*******************************************************************\
+ * gnc_currency_accounting_option_value_get_default_policy         *
+ *   get the default policy if book-currency is the currency       *
+ *   accounting  method of the option as a symbol                  *
+ *                                                                 *
+ * Args: option_value - option value to get method of              *
+ * Return: SCM value                                               *
+\*******************************************************************/
+SCM
+gnc_currency_accounting_option_value_get_default_policy (SCM option_value)
+{
+    initialize_getters();
+
+    return scm_call_1
+        (getters.currency_accounting_option_selected_default_policy,
+          option_value);
+}
+
 /*******************************************************************\
  * gnc_option_db_set_option_selectable_by_name                     *
  *   set the sensitivity of the option widget                      *
@@ -2781,17 +2941,6 @@ SCM gnc_dateformat_option_set_value(QofDateFormat format, GNCDateMonthFormat mon
     return value;
 }
 
-/* For now, this is global, just like when it was in guile.
-   But, it should be make per-book. */
-static GHashTable *kvp_registry = NULL;
-
-static void
-init_table(void)
-{
-    if (!kvp_registry)
-        kvp_registry = g_hash_table_new(g_str_hash, g_str_equal);
-}
-
 /*
  * the generator should be a procedure that takes one argument,
  * an options object.  The procedure should fill in the options with
@@ -2806,26 +2955,4 @@ gnc_register_kvp_option_generator(QofIdType id_type, SCM generator)
     list = g_list_prepend(list, generator);
     g_hash_table_insert(kvp_registry, (gpointer) id_type, list);
     scm_gc_protect_object(generator);
-}
-
-
-/*  create a new options object for the requested type */
-SCM
-gnc_make_kvp_options(QofIdType id_type)
-{
-    GList *list, *p;
-    SCM gnc_new_options = SCM_UNDEFINED;
-    SCM options = SCM_UNDEFINED;
-
-    init_table();
-    list = g_hash_table_lookup(kvp_registry, id_type);
-    gnc_new_options = scm_c_eval_string("gnc:new-options");
-    options = scm_call_0(gnc_new_options);
-
-    for (p = list; p; p = p->next)
-    {
-        SCM generator = p->data;
-        scm_call_1(generator, options);
-    }
-    return options;
 }

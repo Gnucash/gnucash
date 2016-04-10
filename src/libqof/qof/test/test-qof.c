@@ -27,7 +27,6 @@
 
 extern void test_suite_qofbook();
 extern void test_suite_qofinstance();
-extern void test_suite_kvp_frame();
 extern void test_suite_qofobject();
 extern void test_suite_qofsession();
 extern void test_suite_gnc_date();
@@ -47,7 +46,6 @@ main (int   argc,
     test_suite_gnc_guid();
     test_suite_qofbook();
     test_suite_qofinstance();
-    test_suite_kvp_frame();
     test_suite_qofobject();
     test_suite_qofsession();
     test_suite_gnc_date();

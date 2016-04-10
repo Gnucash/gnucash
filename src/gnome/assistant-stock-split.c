@@ -32,7 +32,6 @@
 #include "engine-helpers.h"
 #include "dialog-utils.h"
 #include "assistant-stock-split.h"
-#include "assistant-utils.h"
 #include "gnc-amount-edit.h"
 #include "gnc-component-manager.h"
 #include "gnc-currency-edit.h"
@@ -81,7 +80,7 @@ typedef struct
 
 
 /** declarations *******************************************************/
-void     gnc_stock_split_assistant_window_destroy_cb (GtkObject *object, gpointer user_data);
+void     gnc_stock_split_assistant_window_destroy_cb (GtkWidget *object, gpointer user_data);
 void     gnc_stock_split_assistant_prepare           (GtkAssistant  *assistant,
         GtkWidget *page,
         gpointer user_data);
@@ -98,7 +97,7 @@ void     gnc_stock_split_assistant_cancel            (GtkAssistant *gtkassistant
 
 /******* implementations ***********************************************/
 void
-gnc_stock_split_assistant_window_destroy_cb (GtkObject *object, gpointer user_data)
+gnc_stock_split_assistant_window_destroy_cb (GtkWidget *object, gpointer user_data)
 {
     StockSplitInfo *info = user_data;
 
@@ -232,7 +231,10 @@ refresh_details_page (StockSplitInfo *info)
     if (prices)
     {
         /* Use the first existing price */
-        currency = gnc_price_get_currency(prices->data);
+        if (gnc_commodity_equiv (commodity, gnc_price_get_currency(prices->data)))
+            currency = gnc_price_get_commodity(prices->data);
+        else
+            currency = gnc_price_get_currency(prices->data);
     }
     else
     {
@@ -399,8 +401,8 @@ gnc_stock_split_assistant_finish (GtkAssistant *assistant,
         gnc_price_set_commodity (price, xaccAccountGetCommodity (account));
         gnc_price_set_currency (price, gnc_currency_edit_get_currency (ce));
         gnc_price_set_time (price, ts);
-        gnc_price_set_source (price, "user:stock-split");
-        gnc_price_set_typestr (price, "unknown");
+        gnc_price_set_source (price, PRICE_SOURCE_STOCK_SPLIT);
+        gnc_price_set_typestr (price, PRICE_TYPE_UNK);
         gnc_price_set_value (price, amount);
         gnc_price_commit_edit (price);
 
@@ -535,9 +537,6 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
     gnc_builder_add_from_file  (builder , "assistant-stock-split.glade", "Stock Split Assistant");
     window = GTK_WIDGET(gtk_builder_get_object (builder, "Stock Split Assistant"));
     info->window = window;
-
-    /* Set the assistant colors */
-    gnc_assistant_set_colors (GTK_ASSISTANT (info->window));
 
     /* Enable buttons on first, second, fourth and last page. */
     gtk_assistant_set_page_complete (GTK_ASSISTANT (window),

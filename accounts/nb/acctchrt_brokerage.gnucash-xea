@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
      Investment Accounts
@@ -51,7 +51,7 @@
 <gnc:account version="2.0.0">
   <act:name>Bond</act:name>
   <act:id type="new">8196bf0015c25f501338f07a87c512d8</act:id>
-  <act:type>STOCK</act:type>
+  <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>NOK</cmdty:id>
@@ -62,7 +62,7 @@
 <gnc:account version="2.0.0">
   <act:name>Stock</act:name>
   <act:id type="new">7d7db9bed07f21fc0b1f50674702aff0</act:id>
-  <act:type>STOCK</act:type>
+  <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>NOK</cmdty:id>
@@ -73,7 +73,7 @@
 <gnc:account version="2.0.0">
   <act:name>Market Index</act:name>
   <act:id type="new">fe9db8a7eedf2990e9846f634a922143</act:id>
-  <act:type>MUTUAL</act:type>
+  <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>NOK</cmdty:id>
@@ -84,7 +84,7 @@
 <gnc:account version="2.0.0">
   <act:name>Mutual Fund</act:name>
   <act:id type="new">9da28c1aa7789e84bdc8484ba8f527b3</act:id>
-  <act:type>MUTUAL</act:type>
+  <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>NOK</cmdty:id>

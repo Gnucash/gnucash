@@ -75,7 +75,7 @@ void gnc_import_gui_type_cb (GtkWidget *widget, gpointer data);
 // utils
 static gchar *gnc_input_dialog (GtkWidget *parent, const gchar *title, const gchar *msg, const gchar *default_input);
 static void gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar *msg);
-
+static QofLogModule log_module = G_LOG_DOMAIN; //G_LOG_BUSINESS;
 
 BillImportGui *
 gnc_plugin_bi_import_showGUI(void)
@@ -167,7 +167,7 @@ static gchar *
 gnc_plugin_bi_import_getFilename(void)
 {
     // prepare file import dialog
-    gchar *filename;
+    gchar *filename = NULL;
     GList *filters;
     GtkFileFilter *filter;
     filters = NULL;
@@ -264,7 +264,7 @@ gnc_bi_import_gui_destroy_cb (GtkWidget *widget, gpointer data)
 
 void gnc_bi_import_gui_buttonOpen_cb (GtkWidget *widget, gpointer data)
 {
-    gchar *filename;
+    gchar *filename = NULL;
     BillImportGui *gui = data;
 
     filename = gnc_plugin_bi_import_getFilename();
@@ -284,11 +284,12 @@ void gnc_bi_import_gui_filenameChanged_cb (GtkWidget *widget, gpointer data)
 
     // generate preview
     gtk_list_store_clear (gui->store);
-    gnc_bi_import_read_file (filename, gui->regexp->str, gui->store, 10, NULL);
+    gnc_bi_import_read_file (filename, gui->regexp->str, gui->store, 100, NULL);
 
     g_free( filename );
 }
 
+// Semicolon separated
 void gnc_bi_import_gui_option1_cb (GtkWidget *widget, gpointer data)
 {
     BillImportGui *gui = data;
@@ -298,6 +299,7 @@ void gnc_bi_import_gui_option1_cb (GtkWidget *widget, gpointer data)
     gnc_bi_import_gui_filenameChanged_cb (gui->entryFilename, gui);
 }
 
+// Comma separated
 void gnc_bi_import_gui_option2_cb (GtkWidget *widget, gpointer data)
 {
     BillImportGui *gui = data;
@@ -307,28 +309,31 @@ void gnc_bi_import_gui_option2_cb (GtkWidget *widget, gpointer data)
     gnc_bi_import_gui_filenameChanged_cb (gui->entryFilename, gui);
 }
 
+// Semicolon separated with quotes
 void gnc_bi_import_gui_option3_cb (GtkWidget *widget, gpointer data)
 {
     BillImportGui *gui = data;
     if (!gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget) ))
         return;
-    g_string_assign (gui->regexp, "^((?<id>[^\";]*)|\"(?<id>[^\"]*)\");((?<date_opened>[^\";]*)|\"(?<date_opened>[^\"]*)\");((?<owner_id>[^\";]*)|\"(?<owner_id>[^\"]*)\");((?<billing_id>[^\";]*)|\"(?<billing_id>[^\"]*)\");((?<notes>[^\";]*)|\"(?<notes>[^\"]*)\");((?<date>[^\";]*)|\"(?<date>[^\"]*)\");((?<desc>[^\";]*)|\"(?<desc>[^\"]*)\");((?<action>[^\";]*)|\"(?<action>[^\"]*)\");((?<account>[^\";]*)|\"(?<account>[^\"]*)\");((?<quantity>[^\";]*)|\"(?<quantity>[^\"]*)\");((?<price>[^\";]*)|\"(?<price>[^\"]*)\");((?<disc_type>[^\";]*)|\"(?<disc_type>[^\"]*)\");((?<disc_how>[^\";]*)|\"(?<disc_how>[^\"]*)\");((?<discount>[^\";]*)|\"(?<discount>[^\"]*)\");((?<taxable>[^\";]*)|\"(?<taxable>[^\"]*)\");((?<taxincluded>[^\";]*)|\"(?<taxincluded>[^\"]*)\");((?<tax_table>[^\";]*)|\"(?<tax_table>[^\"]*)\");((?<date_posted>[^\";]*)|\"(?<date_posted>[^\"]*)\");((?<due_date>[^\";]*)|\"(?<due_date>[^\"]*)\");((?<account_posted>[^\";]*)|\"(?<account_posted>[^\"]*)\");((?<memo_posted>[^\";]*)|\"(?<memo_posted>[^\"]*)\");((?<accu_splits>[^\";]*)|\"(?<accu_splits>[^\"]*)\")$");
+    g_string_assign (gui->regexp, "^((?<id>[^\";]*)|\"(?<id>[^\"]*)\");((?<date_opened>[^\";]*)|\"(?<date_opened>[^\"]*)\");((?<owner_id>[^\";]*)|\"(?<owner_id>[^\"]*)\");((?<billing_id>[^\";]*)|\"(?<billing_id>[^\"]*)\");((?<notes>[^\";]*)|\"(?<notes>([^\"]|\"\")*)\");((?<date>[^\";]*)|\"(?<date>[^\"]*)\");((?<desc>[^\";]*)|\"(?<desc>([^\"]|\"\")*)\");((?<action>[^\";]*)|\"(?<action>[^\"]*)\");((?<account>[^\";]*)|\"(?<account>[^\"]*)\");((?<quantity>[^\";]*)|\"(?<quantity>[^\"]*)\");((?<price>[^\";]*)|\"(?<price>[^\"]*)\");((?<disc_type>[^\";]*)|\"(?<disc_type>[^\"]*)\");((?<disc_how>[^\";]*)|\"(?<disc_how>[^\"]*)\");((?<discount>[^\";]*)|\"(?<discount>[^\"]*)\");((?<taxable>[^\";]*)|\"(?<taxable>[^\"]*)\");((?<taxincluded>[^\";]*)|\"(?<taxincluded>[^\"]*)\");((?<tax_table>[^\";]*)|\"(?<tax_table>[^\"]*)\");((?<date_posted>[^\";]*)|\"(?<date_posted>[^\"]*)\");((?<due_date>[^\";]*)|\"(?<due_date>[^\"]*)\");((?<account_posted>[^\";]*)|\"(?<account_posted>[^\"]*)\");((?<memo_posted>[^\";]*)|\"(?<memo_posted>[^\"]*)\");((?<accu_splits>[^\";]*)|\"(?<accu_splits>[^\"]*)\")$");
     gnc_bi_import_gui_filenameChanged_cb (gui->entryFilename, gui);
 }
 
+// Comma separated with quote
 void gnc_bi_import_gui_option4_cb (GtkWidget *widget, gpointer data)
 {
     BillImportGui *gui = data;
     if (!gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget) ))
         return;
-    g_string_assign (gui->regexp, "^((?<id>[^\",]*)|\"(?<id>[^\"]*)\"),((?<date_opened>[^\",]*)|\"(?<date_opened>[^\"]*)\"),((?<owner_id>[^\",]*)|\"(?<owner_id>[^\"]*)\"),((?<billing_id>[^\",]*)|\"(?<billing_id>[^\"]*)\"),((?<notes>[^\",]*)|\"(?<notes>[^\"]*)\"),((?<date>[^\",]*)|\"(?<date>[^\"]*)\"),((?<desc>[^\",]*)|\"(?<desc>[^\"]*)\"),((?<action>[^\",]*)|\"(?<action>[^\"]*)\"),((?<account>[^\",]*)|\"(?<account>[^\"]*)\"),((?<quantity>[^\",]*)|\"(?<quantity>[^\"]*)\"),((?<price>[^\",]*)|\"(?<price>[^\"]*)\"),((?<disc_type>[^\",]*)|\"(?<disc_type>[^\"]*)\"),((?<disc_how>[^\",]*)|\"(?<disc_how>[^\"]*)\"),((?<discount>[^\",]*)|\"(?<discount>[^\"]*)\"),((?<taxable>[^\",]*)|\"(?<taxable>[^\"]*)\"),((?<taxincluded>[^\",]*)|\"(?<taxincluded>[^\"]*)\"),((?<tax_table>[^\",]*)|\"(?<tax_table>[^\"]*)\"),((?<date_posted>[^\",]*)|\"(?<date_posted>[^\"]*)\"),((?<due_date>[^\",]*)|\"(?<due_date>[^\"]*)\"),((?<account_posted>[^\",]*)|\"(?<account_posted>[^\"]*)\"),((?<memo_posted>[^\",]*)|\"(?<memo_posted>[^\"]*)\"),((?<accu_splits>[^\",]*)|\"(?<accu_splits>[^\"]*)\")$");
+    g_string_assign (gui->regexp, "^((?<id>[^\",]*)|\"(?<id>[^\"]*)\"),((?<date_opened>[^\",]*)|\"(?<date_opened>[^\"]*)\"),((?<owner_id>[^\",]*)|\"(?<owner_id>[^\"]*)\"),((?<billing_id>[^\",]*)|\"(?<billing_id>[^\"]*)\"),((?<notes>[^\",]*)|\"(?<notes>([^\"]|\"\")*)\"),((?<date>[^\",]*)|\"(?<date>[^\"]*)\"),((?<desc>[^\",]*)|\"(?<desc>([^\"]|\"\")*)\"),((?<action>[^\",]*)|\"(?<action>[^\"]*)\"),((?<account>[^\",]*)|\"(?<account>[^\"]*)\"),((?<quantity>[^\",]*)|\"(?<quantity>[^\"]*)\"),((?<price>[^\",]*)|\"(?<price>[^\"]*)\"),((?<disc_type>[^\",]*)|\"(?<disc_type>[^\"]*)\"),((?<disc_how>[^\",]*)|\"(?<disc_how>[^\"]*)\"),((?<discount>[^\",]*)|\"(?<discount>[^\"]*)\"),((?<taxable>[^\",]*)|\"(?<taxable>[^\"]*)\"),((?<taxincluded>[^\",]*)|\"(?<taxincluded>[^\"]*)\"),((?<tax_table>[^\",]*)|\"(?<tax_table>[^\"]*)\"),((?<date_posted>[^\",]*)|\"(?<date_posted>[^\"]*)\"),((?<due_date>[^\",]*)|\"(?<due_date>[^\"]*)\"),((?<account_posted>[^\",]*)|\"(?<account_posted>[^\"]*)\"),((?<memo_posted>[^\",]*)|\"(?<memo_posted>[^\"]*)\"),((?<accu_splits>[^\",]*)|\"(?<accu_splits>[^\"]*)\")$");
     gnc_bi_import_gui_filenameChanged_cb (gui->entryFilename, gui);
 }
 
+// DIY regex.
 void gnc_bi_import_gui_option5_cb (GtkWidget *widget, gpointer data)
 {
     BillImportGui *gui = data;
-    gchar *temp;
+    gchar *temp = NULL;
     if (!gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget) ))
         return;
     temp = gnc_input_dialog (0, _("Adjust regular expression used for import"), _("This regular expression is used to parse the import file. Modify according to your needs.\n"), gui->regexp->str);
@@ -343,7 +348,7 @@ void gnc_bi_import_gui_option5_cb (GtkWidget *widget, gpointer data)
 void gnc_bi_import_gui_open_mode_cb (GtkWidget *widget, gpointer data)
 {
     BillImportGui *gui = data;
-    const gchar *name;
+    const gchar *name = NULL;
     name = gtk_buildable_get_name(GTK_BUILDABLE(widget));
     if (!gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget) ))
         return;
@@ -359,7 +364,7 @@ void gnc_bi_import_gui_open_mode_cb (GtkWidget *widget, gpointer data)
 void gnc_import_gui_type_cb (GtkWidget *widget, gpointer data)
 {
     BillImportGui *gui = data;
-    const gchar *name;
+    const gchar *name = NULL;
     name = gtk_buildable_get_name(GTK_BUILDABLE(widget));
     if (!gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget) ))
         return;
@@ -391,7 +396,7 @@ gnc_input_dialog (GtkWidget *parent, const gchar *title, const gchar *msg, const
     gint result;
     GtkWidget *view;
     GtkTextBuffer *buffer;
-    gchar *user_input;
+    gchar *user_input = NULL;
     GtkTextIter start, end;
 
     /* Create the widgets */
@@ -400,11 +405,7 @@ gnc_input_dialog (GtkWidget *parent, const gchar *title, const gchar *msg, const
                                           GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
                                           GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
                                           NULL);
-#ifdef HAVE_GTK_2_14
     content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-#else
-    content_area = GTK_DIALOG (dialog)->vbox;
-#endif
 
     // add a label
     label = gtk_label_new (msg);
@@ -461,11 +462,7 @@ gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar *msg)
                                           GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
                                           GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
                                           NULL);
-#ifdef HAVE_GTK_2_14
     content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-#else
-    content_area = GTK_DIALOG (dialog)->vbox;
-#endif
 
     // add a scroll area
     scrolledwindow = gtk_scrolled_window_new (NULL, NULL);

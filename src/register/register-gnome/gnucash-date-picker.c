@@ -119,12 +119,12 @@ gnc_date_picker_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 static void
 gnc_date_picker_class_init (GNCDatePickerClass *date_picker_class)
 {
-    GtkObjectClass  *object_class;
+    GObjectClass  *object_class;
 
     gnc_date_picker_parent_class =
         g_type_class_peek_parent (date_picker_class);
 
-    object_class = GTK_OBJECT_CLASS (date_picker_class);
+    object_class = G_OBJECT_CLASS (date_picker_class);
 
     gnc_date_picker_signals[DATE_SELECTED] =
         g_signal_new("date_selected",

@@ -263,7 +263,7 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
 
     /* --------------------------------------------------------- */
     case INCOME_LEDGER:
-    case GENERAL_LEDGER:
+    case GENERAL_JOURNAL:
     case SEARCH_LEDGER:
     {
         curs = gnc_table_layout_get_cursor (layout,
@@ -556,7 +556,7 @@ gnc_split_register_layout_add_cursors (SplitRegister *reg,
         break;
 
     case INCOME_LEDGER:
-    case GENERAL_LEDGER:
+    case GENERAL_JOURNAL:
     case SEARCH_LEDGER:
         if (reg->is_template)
             num_cols = 8;

@@ -59,7 +59,7 @@
 static QofLogModule log_module = GNC_MOD_GUI;
 
 
-void gnc_prices_dialog_window_destroy_cb (GtkObject *object, gpointer data);
+void gnc_prices_dialog_window_destroy_cb (GtkWidget *object, gpointer data);
 void gnc_prices_dialog_close_cb (GtkDialog *dialog, gpointer data);
 void gnc_prices_dialog_response (GtkDialog *dialog, gint response_id, gpointer data);
 void gnc_prices_dialog_edit_clicked (GtkWidget *widget, gpointer data);
@@ -84,7 +84,7 @@ typedef struct
 
 
 void
-gnc_prices_dialog_window_destroy_cb (GtkObject *object, gpointer data)
+gnc_prices_dialog_window_destroy_cb (GtkWidget *object, gpointer data)
 {
     PricesDialog *pdb_dialog = data;
 
@@ -346,7 +346,7 @@ gnc_prices_dialog_selection_changed (GtkTreeSelection *treeselection,
 
 
 static gboolean
-gnc_price_dialog_filter_ns_func (gnc_commodity_namespace *namespace,
+gnc_price_dialog_filter_ns_func (gnc_commodity_namespace *name_space,
                                  gpointer data)
 {
     PricesDialog *pdb_dialog = data;
@@ -355,12 +355,12 @@ gnc_price_dialog_filter_ns_func (gnc_commodity_namespace *namespace,
     GList *item;
 
     /* Never show the template list */
-    name = gnc_commodity_namespace_get_name (namespace);
+    name = gnc_commodity_namespace_get_name (name_space);
     if (g_strcmp0 (name, "template") == 0)
         return FALSE;
 
     /* See if this namespace has commodities */
-    cm_list = gnc_commodity_namespace_get_commodity_list(namespace);
+    cm_list = gnc_commodity_namespace_get_commodity_list(name_space);
     for (item = cm_list; item; item = g_list_next(item))
     {
 
@@ -511,7 +511,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
 
 
 static gboolean
-show_handler (const char *class, gint component_id,
+show_handler (const char *klass, gint component_id,
               gpointer user_data, gpointer iter_data)
 {
     PricesDialog *pdb_dialog = user_data;

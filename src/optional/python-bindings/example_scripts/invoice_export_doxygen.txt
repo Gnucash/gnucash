@@ -1,0 +1,48 @@
+/**
+\page py_invoice_export Python invoice export
+The goal of these example scripts is to export invoices to 
+LaTeX or other output formats as desired.
+
+\par Files:
+- latex_invoices.py
+ 
+  A first approach which exports invoice data to an .lco file which is subsequently included into the template
+ - Templates:
+  - Invoice.tex
+
+    File derived vom scrlttr2.tex v0.3. by Juergen Fenn.
+
+    rechnung.sty is used to create the table of entries
+
+- gncinvoice_jinja.py
+
+  A second step. Imports jinja2 templates and fills in the invoices values. More flexibility in creating the output files. Output can be anything: LaTeX, HTML, CSV, XML, ...
+
+ - Templates:
+  - Invoice.tex.tmpl
+
+    LaTeX template using rechnung.sty, close to the one used by latex_invoices.py.
+
+  - Invoice_2.tex.tmpl
+
+    LaTeX template using a table to fill in the invoices values. No rechnung.sty required.
+
+- gncinvoicefkt.py
+
+  Some helping functions. Included by latex_invoices.py and gncinvoice_jinja.py.
+
+\par Goals / Issues:
+- How much logic in the template, how much preprocessing in the python script ?
+- Internationalization - currencies, formatting of numbers, templates
+- Providing data of gnucash owner. 
+
+  At the moment this has to be put into the invoices (template/final file) by hand. Access of this data is in KVPs. No support in python-bindings at the moment. c-API to access these values is work in progress. A fork to access these is https://github.com/c-holtermann/gnucash/tree/python-kvp. This is very much work in progress. A discussion can be found in thread http://lists.gnucash.org/pipermail/gnucash-devel/2014-June/037768.html.
+- A jinja2 template mimicking the original html invoices
+
+\par See also:
+- Modules
+ - \ref python_bindings_examples
+ - \ref python_bindings
+- Pages
+ - \ref python_bindings_page
+*/

@@ -176,7 +176,7 @@ delete_cb(GtkWidget *widget, GdkEvent  *event, gpointer data)
 
 
 static void
-destroy_cb(GtkObject *object, gpointer data)
+destroy_cb(GtkWidget *object, gpointer data)
 {
     GNCProgressDialog *progress = data;
 
@@ -196,7 +196,6 @@ static void
 gnc_progress_dialog_create(GtkWidget * parent, GNCProgressDialog *progress)
 {
     GtkWidget *dialog;
-    GtkObject *tdo;
     GtkBuilder *builder;
 
     g_return_if_fail(progress);
@@ -207,15 +206,14 @@ gnc_progress_dialog_create(GtkWidget * parent, GNCProgressDialog *progress)
 
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Progress Dialog"));
     progress->dialog = dialog;
-    tdo = GTK_OBJECT(dialog);
 
     /* parent */
     if (parent != NULL)
         gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(parent));
 
-    g_signal_connect(tdo, "delete_event", G_CALLBACK(delete_cb), progress);
+    g_signal_connect(G_OBJECT(dialog), "delete_event", G_CALLBACK(delete_cb), progress);
 
-    g_signal_connect(tdo, "destroy", G_CALLBACK(destroy_cb), progress);
+    g_signal_connect(G_OBJECT(dialog), "destroy", G_CALLBACK(destroy_cb), progress);
 
     progress->primary_label = GTK_WIDGET(gtk_builder_get_object (builder, "primary_label"));
     gtk_widget_hide(progress->primary_label);

@@ -30,11 +30,14 @@
 
 #ifndef GNC_BACKEND_XML_H_
 #define GNC_BACKEND_XML_H_
-
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 #include "qof.h"
 #include <gmodule.h>
-
 #include "qofbackend-p.h"
+
 
 typedef enum
 {
@@ -83,5 +86,7 @@ void gnc_module_init_backend_xml(void);
 G_MODULE_EXPORT
 void qof_backend_module_init(void);
 #endif
-
+#ifdef __cplusplus
+}
+#endif
 #endif /* GNC_BACKEND_XML_H_ */

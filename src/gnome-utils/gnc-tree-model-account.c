@@ -131,7 +131,7 @@ gnc_tree_model_account_update_color (gpointer gsettings, gchar *key, gpointer us
 /************************************************************/
 
 /** A pointer to the parent class of an account tree model. */
-static GtkObjectClass *parent_class = NULL;
+static GObjectClass *parent_class = NULL;
 
 GType
 gnc_tree_model_account_get_type (void)
@@ -673,19 +673,19 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
     case GNC_TREE_MODEL_ACCOUNT_COL_BALANCE:
         g_value_init (value, G_TYPE_STRING);
         string = gnc_ui_account_get_print_balance(xaccAccountGetBalanceInCurrency,
-                 account, TRUE, &negative);
+                 account, FALSE, &negative);
         g_value_take_string (value, string);
         break;
     case GNC_TREE_MODEL_ACCOUNT_COL_BALANCE_REPORT:
         g_value_init (value, G_TYPE_STRING);
         string = gnc_ui_account_get_print_report_balance(xaccAccountGetBalanceInCurrency,
-                 account, TRUE, &negative);
+                 account, FALSE, &negative);
         g_value_take_string (value, string);
         break;
     case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_BALANCE:
         g_value_init (value, G_TYPE_STRING);
         string = gnc_ui_account_get_print_balance(xaccAccountGetBalanceInCurrency,
-                 account, TRUE, &negative);
+                 account, FALSE, &negative);
         gnc_tree_model_account_set_color(model, negative, value);
         g_free(string);
         break;

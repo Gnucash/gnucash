@@ -29,6 +29,7 @@
 #include "guile-mappings.h"
 
 #include "gnc-commodity.h"
+#include "engine-helpers-guile.h"
 #include "qof.h"
 
 typedef struct gnc_option GNCOption;
@@ -70,11 +71,10 @@ void          gnc_option_db_destroy(GNCOptionDB *odb);
  * in the kvp.
  */
 GNCOptionDB * gnc_option_db_new_for_type(QofIdType id_type);
-void gnc_option_db_load_from_kvp(GNCOptionDB* odb, kvp_frame *slots);
-void gnc_option_db_save_to_kvp(GNCOptionDB* odb, kvp_frame *slots, gboolean clear_kvp);
+void gnc_option_db_load(GNCOptionDB* odb, QofBook *book);
+void gnc_option_db_save(GNCOptionDB* odb, QofBook *book, gboolean clear_all);
 
 void gnc_register_kvp_option_generator(QofIdType id_type, SCM generator);
-SCM gnc_make_kvp_options(QofIdType id_type);
 
 void gnc_option_db_set_ui_callbacks (GNCOptionDB *odb,
                                      GNCOptionGetUIValue get_ui_value,
@@ -250,6 +250,14 @@ char * gnc_option_date_option_get_subtype(GNCOption *option);
 char * gnc_date_option_value_get_type (SCM option_value);
 Timespec gnc_date_option_value_get_absolute (SCM option_value);
 SCM gnc_date_option_value_get_relative (SCM option_value);
+
+char * gnc_currency_accounting_option_currency_documentation(GNCOption *option);
+SCM gnc_currency_accounting_option_get_default_currency(GNCOption *option);
+char * gnc_currency_accounting_option_policy_documentation(GNCOption *option);
+SCM gnc_currency_accounting_option_get_default_policy(GNCOption *option);
+SCM gnc_currency_accounting_option_value_get_method (SCM option_value);
+SCM gnc_currency_accounting_option_value_get_book_currency (SCM option_value);
+SCM gnc_currency_accounting_option_value_get_default_policy (SCM option_value);
 
 void gnc_option_db_set_option_selectable_by_name(SCM guile_options,
         const char *section,

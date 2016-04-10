@@ -30,8 +30,10 @@
 #define GNC_BOOK_SQL_H
 
 #include "gnc-backend-sql.h"
+extern "C"
+{
 #include "qof.h"
-
+}
 void gnc_sql_init_book_handler( void );
 gboolean gnc_sql_save_book( GncSqlBackend* be, QofInstance* inst );
 

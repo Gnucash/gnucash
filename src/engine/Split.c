@@ -26,6 +26,11 @@
 
 #include "config.h"
 
+#include <platform.h>
+#if PLATFORM(WINDOWS)
+#include <windows.h>
+#endif
+
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <stdlib.h>
@@ -87,8 +92,6 @@ enum
     PROP_SX_SHARES,             /* KVP */
     PROP_LOT,                   /* KVP */
     PROP_ONLINE_ACCOUNT,        /* KVP */
-    PROP_LOT_SPLIT,             /* KVP */
-    PROP_PEER_GUID,             /* KVP */
     PROP_GAINS_SPLIT,           /* KVP */
     PROP_GAINS_SOURCE,          /* KVP */
     PROP_RUNTIME_0,
@@ -156,77 +159,69 @@ gnc_split_get_property(GObject         *object,
     split = GNC_SPLIT(object);
     switch (prop_id)
     {
-    case PROP_ACTION:
-        g_value_set_string(value, split->action);
-        break;
-    case PROP_MEMO:
-        g_value_set_string(value, split->memo);
-        break;
-    case PROP_VALUE:
-        g_value_set_boxed(value, &split->value);
-        break;
-    case PROP_AMOUNT:
-        g_value_set_boxed(value, &split->amount);
-        break;
-    case PROP_RECONCILE_DATE:
-        g_value_set_boxed(value, &split->date_reconciled);
-        break;
-    case PROP_TX:
-        g_value_take_object(value, split->parent);
-        break;
-    case PROP_ACCOUNT:
-        g_value_take_object(value, split->acc);
-        break;
-    case PROP_LOT:
-        g_value_take_object(value, split->lot);
-        break;
-    case PROP_SX_CREDIT_FORMULA:
-        key = GNC_SX_ID "/" GNC_SX_CREDIT_FORMULA;
-        qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
-        break;
-    case PROP_SX_CREDIT_NUMERIC:
-        key = GNC_SX_ID "/" GNC_SX_CREDIT_NUMERIC;
-        qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
-        break;
-    case PROP_SX_DEBIT_FORMULA:
-        key = GNC_SX_ID "/" GNC_SX_DEBIT_FORMULA;
-        qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
-        break;
-    case PROP_SX_DEBIT_NUMERIC:
-        key = GNC_SX_ID "/" GNC_SX_DEBIT_NUMERIC;
-        qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
-        break;
-    case PROP_SX_ACCOUNT:
-        key = GNC_SX_ID "/" GNC_SX_ACCOUNT;
-        qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
-        break;
-    case PROP_SX_SHARES:
-        key = GNC_SX_ID "/" GNC_SX_SHARES;
-        qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
-        break;
-    case PROP_ONLINE_ACCOUNT:
-        key = "online_id";
-        qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
-        break;
-    case PROP_LOT_SPLIT:
-        key = "lot-split";
-        qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
-        break;
-    case PROP_PEER_GUID:
-        key = "peer_guid";
-        qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
-        break;
-    case PROP_GAINS_SPLIT:
-        key = "gains-split";
-        qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
-        break;
-    case PROP_GAINS_SOURCE:
-        key = "gains-source";
-        qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
-        break;
-    default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
-        break;
+        case PROP_ACTION:
+            g_value_set_string(value, split->action);
+            break;
+        case PROP_MEMO:
+            g_value_set_string(value, split->memo);
+            break;
+        case PROP_VALUE:
+            g_value_set_boxed(value, &split->value);
+            break;
+        case PROP_AMOUNT:
+            g_value_set_boxed(value, &split->amount);
+            break;
+        case PROP_RECONCILE_DATE:
+            g_value_set_boxed(value, &split->date_reconciled);
+            break;
+        case PROP_TX:
+            g_value_take_object(value, split->parent);
+            break;
+        case PROP_ACCOUNT:
+            g_value_take_object(value, split->acc);
+            break;
+        case PROP_LOT:
+            g_value_take_object(value, split->lot);
+            break;
+        case PROP_SX_CREDIT_FORMULA:
+            key = GNC_SX_ID "/" GNC_SX_CREDIT_FORMULA;
+            qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
+            break;
+        case PROP_SX_CREDIT_NUMERIC:
+            key = GNC_SX_ID "/" GNC_SX_CREDIT_NUMERIC;
+            qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
+            break;
+        case PROP_SX_DEBIT_FORMULA:
+            key = GNC_SX_ID "/" GNC_SX_DEBIT_FORMULA;
+            qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
+            break;
+        case PROP_SX_DEBIT_NUMERIC:
+            key = GNC_SX_ID "/" GNC_SX_DEBIT_NUMERIC;
+            qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
+            break;
+        case PROP_SX_ACCOUNT:
+            key = GNC_SX_ID "/" GNC_SX_ACCOUNT;
+            qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
+            break;
+        case PROP_SX_SHARES:
+            key = GNC_SX_ID "/" GNC_SX_SHARES;
+            qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
+            break;
+        case PROP_ONLINE_ACCOUNT:
+            key = "online_id";
+            qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
+            break;
+        case PROP_GAINS_SPLIT:
+            key = "gains-split";
+            qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
+            break;
+        case PROP_GAINS_SOURCE:
+            key = "gains-source";
+            qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
+            break;
+        default:
+            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+            break;
     }
 }
 
@@ -248,79 +243,71 @@ gnc_split_set_property(GObject         *object,
 
     switch (prop_id)
     {
-    case PROP_ACTION:
-        xaccSplitSetAction(split, g_value_get_string(value));
-        break;
-    case PROP_MEMO:
-        xaccSplitSetMemo(split, g_value_get_string(value));
-        break;
-    case PROP_VALUE:
-        number = g_value_get_boxed(value);
-        xaccSplitSetValue(split, *number);
-        break;
-    case PROP_AMOUNT:
-        number = g_value_get_boxed(value);
-        xaccSplitSetAmount(split, *number);
-        break;
-    case PROP_RECONCILE_DATE:
-        xaccSplitSetDateReconciledTS(split, g_value_get_boxed(value));
-        break;
-    case PROP_TX:
-        xaccSplitSetParent(split, g_value_get_object(value));
-        break;
-    case PROP_ACCOUNT:
-        xaccSplitSetAccount(split, g_value_get_object(value));
-        break;
-    case PROP_LOT:
-        xaccSplitSetLot(split, g_value_get_object(value));
-        break;
-    case PROP_SX_CREDIT_FORMULA:
-        key = GNC_SX_ID "/" GNC_SX_CREDIT_FORMULA;
-        qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
-        break;
-    case PROP_SX_CREDIT_NUMERIC:
-        key = GNC_SX_ID "/" GNC_SX_CREDIT_NUMERIC;
-        qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
-        break;
-    case PROP_SX_DEBIT_FORMULA:
-        key = GNC_SX_ID "/" GNC_SX_DEBIT_FORMULA;
-        qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
-        break;
-    case PROP_SX_DEBIT_NUMERIC:
-        key = GNC_SX_ID "/" GNC_SX_DEBIT_NUMERIC;
-        qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
-        break;
-    case PROP_SX_ACCOUNT:
-        key = GNC_SX_ID "/" GNC_SX_ACCOUNT;
-        qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
-        break;
-    case PROP_SX_SHARES:
-        key = GNC_SX_ID "/" GNC_SX_SHARES;
-        qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
-        break;
-    case PROP_ONLINE_ACCOUNT:
-        key = "online_id";
-        qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
-        break;
-    case PROP_LOT_SPLIT:
-        key = "lot-split";
-        qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
-        break;
-    case PROP_PEER_GUID:
-        key = "peer_guid";
-        qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
-        break;
-    case PROP_GAINS_SPLIT:
-        key = "gains-split";
-        qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
-        break;
-    case PROP_GAINS_SOURCE:
-        key = "gains-source";
-        qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
-        break;
-    default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
-        break;
+        case PROP_ACTION:
+            xaccSplitSetAction(split, g_value_get_string(value));
+            break;
+        case PROP_MEMO:
+            xaccSplitSetMemo(split, g_value_get_string(value));
+            break;
+        case PROP_VALUE:
+            number = g_value_get_boxed(value);
+            xaccSplitSetValue(split, *number);
+            break;
+        case PROP_AMOUNT:
+            number = g_value_get_boxed(value);
+            xaccSplitSetAmount(split, *number);
+            break;
+        case PROP_RECONCILE_DATE:
+            xaccSplitSetDateReconciledTS(split, g_value_get_boxed(value));
+            break;
+        case PROP_TX:
+            xaccSplitSetParent(split, g_value_get_object(value));
+            break;
+        case PROP_ACCOUNT:
+            xaccSplitSetAccount(split, g_value_get_object(value));
+            break;
+        case PROP_LOT:
+            xaccSplitSetLot(split, g_value_get_object(value));
+            break;
+        case PROP_SX_CREDIT_FORMULA:
+            key = GNC_SX_ID "/" GNC_SX_CREDIT_FORMULA;
+            qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
+            break;
+        case PROP_SX_CREDIT_NUMERIC:
+            key = GNC_SX_ID "/" GNC_SX_CREDIT_NUMERIC;
+            qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
+            break;
+        case PROP_SX_DEBIT_FORMULA:
+            key = GNC_SX_ID "/" GNC_SX_DEBIT_FORMULA;
+            qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
+            break;
+        case PROP_SX_DEBIT_NUMERIC:
+            key = GNC_SX_ID "/" GNC_SX_DEBIT_NUMERIC;
+            qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
+            break;
+        case PROP_SX_ACCOUNT:
+            key = GNC_SX_ID "/" GNC_SX_ACCOUNT;
+            qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
+            break;
+        case PROP_SX_SHARES:
+            key = GNC_SX_ID "/" GNC_SX_SHARES;
+            qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
+            break;
+        case PROP_ONLINE_ACCOUNT:
+            key = "online_id";
+            qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
+            break;
+        case PROP_GAINS_SPLIT:
+            key = "gains-split";
+            qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
+            break;
+        case PROP_GAINS_SOURCE:
+            key = "gains-source";
+            qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
+            break;
+        default:
+            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+            break;
     }
 }
 
@@ -335,202 +322,182 @@ gnc_split_class_init(SplitClass* klass)
     gobject_class->get_property = gnc_split_get_property;
 
     g_object_class_install_property
-    (gobject_class,
-     PROP_ACTION,
-     g_param_spec_string("action",
-                         "Action",
-                         "The action is an arbitrary string assigned "
-                         "by the user.  It is intended to be a short "
-                         "string that contains extra information about "
-                         "this split.",
-                         NULL,
-                         G_PARAM_READWRITE));
+        (gobject_class,
+         PROP_ACTION,
+         g_param_spec_string("action",
+                             "Action",
+                             "The action is an arbitrary string assigned "
+                             "by the user.  It is intended to be a short "
+                             "string that contains extra information about "
+                             "this split.",
+                             NULL,
+                             G_PARAM_READWRITE));
 
     g_object_class_install_property
-    (gobject_class,
-     PROP_MEMO,
-     g_param_spec_string("memo",
-                         "Memo",
-                         "The action is an arbitrary string assigned "
-                         "by the user.  It is intended to be a short "
-                         "string that describes the purpose of "
-                         "this split.",
-                         NULL,
-                         G_PARAM_READWRITE));
+        (gobject_class,
+         PROP_MEMO,
+         g_param_spec_string("memo",
+                             "Memo",
+                             "The action is an arbitrary string assigned "
+                             "by the user.  It is intended to be a short "
+                             "string that describes the purpose of "
+                             "this split.",
+                             NULL,
+                             G_PARAM_READWRITE));
 
     g_object_class_install_property
-    (gobject_class,
-     PROP_VALUE,
-     g_param_spec_boxed("value",
-                        "Split Value",
-                        "The value for this split in the common currency. "
-                        "The value and the amount provide enough information to "
-                        "calculate a conversion rate.",
-                        GNC_TYPE_NUMERIC,
-                        G_PARAM_READWRITE));
+        (gobject_class,
+         PROP_VALUE,
+         g_param_spec_boxed("value",
+                            "Split Value",
+                            "The value for this split in the common currency. "
+                            "The value and the amount provide enough information to "
+                            "calculate a conversion rate.",
+                            GNC_TYPE_NUMERIC,
+                            G_PARAM_READWRITE));
 
     g_object_class_install_property
-    (gobject_class,
-     PROP_AMOUNT,
-     g_param_spec_boxed("amount",
-                        "Split Amount",
-                        "The value for this split in the currency of its account. "
-                        "The value and the amount provide enough information to "
-                        "calculate a conversion rate.",
-                        GNC_TYPE_NUMERIC,
-                        G_PARAM_READWRITE));
+        (gobject_class,
+         PROP_AMOUNT,
+         g_param_spec_boxed("amount",
+                            "Split Amount",
+                            "The value for this split in the currency of its account. "
+                            "The value and the amount provide enough information to "
+                            "calculate a conversion rate.",
+                            GNC_TYPE_NUMERIC,
+                            G_PARAM_READWRITE));
 
     g_object_class_install_property
-    (gobject_class,
-     PROP_RECONCILE_DATE,
-     g_param_spec_boxed("reconcile-date",
-                        "Reconcile Date",
-                        "The date this split was reconciled.",
-                        GNC_TYPE_TIMESPEC,
-                        G_PARAM_READWRITE));
+        (gobject_class,
+         PROP_RECONCILE_DATE,
+         g_param_spec_boxed("reconcile-date",
+                            "Reconcile Date",
+                            "The date this split was reconciled.",
+                            GNC_TYPE_TIMESPEC,
+                            G_PARAM_READWRITE));
 
     g_object_class_install_property
-    (gobject_class,
-     PROP_TX,
-     g_param_spec_object ("transaction",
-                          "Transaction",
-                          "The transaction that this split belongs to.",
-                          GNC_TYPE_TRANSACTION,
-                          G_PARAM_READWRITE));
+        (gobject_class,
+         PROP_TX,
+         g_param_spec_object ("transaction",
+                              "Transaction",
+                              "The transaction that this split belongs to.",
+                              GNC_TYPE_TRANSACTION,
+                              G_PARAM_READWRITE));
 
     g_object_class_install_property
-    (gobject_class,
-     PROP_ACCOUNT,
-     g_param_spec_object ("account",
-                          "Account",
-                          "The account that this split belongs to.",
-                          GNC_TYPE_ACCOUNT,
-                          G_PARAM_READWRITE));
+        (gobject_class,
+         PROP_ACCOUNT,
+         g_param_spec_object ("account",
+                              "Account",
+                              "The account that this split belongs to.",
+                              GNC_TYPE_ACCOUNT,
+                              G_PARAM_READWRITE));
 
     g_object_class_install_property
-    (gobject_class,
-     PROP_LOT,
-     g_param_spec_object ("lot",
-                          "Lot",
-                          "The lot that this split belongs to.",
-                          GNC_TYPE_LOT,
-                          G_PARAM_READWRITE));
+        (gobject_class,
+         PROP_LOT,
+         g_param_spec_object ("lot",
+                              "Lot",
+                              "The lot that this split belongs to.",
+                              GNC_TYPE_LOT,
+                              G_PARAM_READWRITE));
 
     g_object_class_install_property
-    (gobject_class,
-     PROP_SX_DEBIT_FORMULA,
-     g_param_spec_string("sx-debit-formula",
-                         "Schedule Transaction Debit Formula",
-                         "The formula used to calculate the actual debit "
-                         "amount when a real split is generated from this "
-                         "SX split.",
-                         NULL,
-                         G_PARAM_READWRITE));
+        (gobject_class,
+         PROP_SX_DEBIT_FORMULA,
+         g_param_spec_string("sx-debit-formula",
+                             "Schedule Transaction Debit Formula",
+                             "The formula used to calculate the actual debit "
+                             "amount when a real split is generated from this "
+                             "SX split.",
+                             NULL,
+                             G_PARAM_READWRITE));
 
     g_object_class_install_property
-    (gobject_class,
-     PROP_SX_DEBIT_NUMERIC,
-     g_param_spec_boxed("sx-debit-numeric",
-                        "Scheduled Transaction Debit Numeric",
-                        "Numeric value to plug into the Debit Formula when a "
-                        "real split is generated from this SX split.",
-                        GNC_TYPE_NUMERIC,
-                        G_PARAM_READWRITE));
-
-     g_object_class_install_property
-    (gobject_class,
-     PROP_SX_CREDIT_FORMULA,
-     g_param_spec_string("sx-credit-formula",
-                         "Schedule Transaction Credit Formula",
-                         "The formula used to calculate the actual credit "
-                         "amount when a real split is generated from this "
-                         "SX split.",
-                         NULL,
-                         G_PARAM_READWRITE));
+        (gobject_class,
+         PROP_SX_DEBIT_NUMERIC,
+         g_param_spec_boxed("sx-debit-numeric",
+                            "Scheduled Transaction Debit Numeric",
+                            "Numeric value to plug into the Debit Formula when a "
+                            "real split is generated from this SX split.",
+                            GNC_TYPE_NUMERIC,
+                            G_PARAM_READWRITE));
 
     g_object_class_install_property
-    (gobject_class,
-     PROP_SX_CREDIT_NUMERIC,
-     g_param_spec_boxed("sx-credit-numeric",
-                        "Scheduled Transaction Credit Numeric",
-                        "Numeric value to plug into the Credit Formula when a "
-                        "real split is generated from this SX split.",
-                        GNC_TYPE_NUMERIC,
-                        G_PARAM_READWRITE));
+        (gobject_class,
+         PROP_SX_CREDIT_FORMULA,
+         g_param_spec_string("sx-credit-formula",
+                             "Schedule Transaction Credit Formula",
+                             "The formula used to calculate the actual credit "
+                             "amount when a real split is generated from this "
+                             "SX split.",
+                             NULL,
+                             G_PARAM_READWRITE));
+
+    g_object_class_install_property
+        (gobject_class,
+         PROP_SX_CREDIT_NUMERIC,
+         g_param_spec_boxed("sx-credit-numeric",
+                            "Scheduled Transaction Credit Numeric",
+                            "Numeric value to plug into the Credit Formula when a "
+                            "real split is generated from this SX split.",
+                            GNC_TYPE_NUMERIC,
+                            G_PARAM_READWRITE));
 /* FIXME: PROP_SX_SHARES should be stored as a gnc_numeric, but the function
  * which uses it, gnc_template_register_save_shares_cell, stores a
  * phony string. This is maintained until backwards compatibility can
  * be established.
  */
     g_object_class_install_property
-    (gobject_class,
-     PROP_SX_SHARES,
-     g_param_spec_string("sx-shares",
-                        "Scheduled Transaction Shares",
-                        "Numeric value of shares to insert in a new split when "
-                        "it's generated from this SX split.",
-                        NULL,
-                        G_PARAM_READWRITE));
-
-     g_object_class_install_property
-    (gobject_class,
-     PROP_SX_ACCOUNT,
-     g_param_spec_boxed("sx-account",
-                        "Scheduled Transaction Account",
-                        "The target account for a scheduled transaction split.",
-                        GNC_TYPE_GUID,
-                        G_PARAM_READWRITE));
+        (gobject_class,
+         PROP_SX_SHARES,
+         g_param_spec_string("sx-shares",
+                             "Scheduled Transaction Shares",
+                             "Numeric value of shares to insert in a new split when "
+                             "it's generated from this SX split.",
+                             NULL,
+                             G_PARAM_READWRITE));
 
     g_object_class_install_property
-    (gobject_class,
-     PROP_ONLINE_ACCOUNT,
-     g_param_spec_string ("online-id",
-                          "Online Account ID",
-                          "The online account which corresponds to this "
-                          "account for OFX/HCBI import",
-                          NULL,
-                          G_PARAM_READWRITE));
+        (gobject_class,
+         PROP_SX_ACCOUNT,
+         g_param_spec_boxed("sx-account",
+                            "Scheduled Transaction Account",
+                            "The target account for a scheduled transaction split.",
+                            GNC_TYPE_GUID,
+                            G_PARAM_READWRITE));
 
     g_object_class_install_property
-    (gobject_class,
-     PROP_LOT_SPLIT,
-     g_param_spec_int64 ("lot-split",
-                         "Lot Split",
-                         "Indicates that the split was divided into two "
-                         "splits in order to balance a lot capital gains "
-                         "transaction. Contains a timestamp of the action.",
-                         G_MININT64, G_MAXINT64, 0,
-                         G_PARAM_READWRITE));
+        (gobject_class,
+         PROP_ONLINE_ACCOUNT,
+         g_param_spec_string ("online-id",
+                              "Online Account ID",
+                              "The online account which corresponds to this "
+                              "account for OFX/HCBI import",
+                              NULL,
+                              G_PARAM_READWRITE));
 
     g_object_class_install_property
-    (gobject_class,
-     PROP_PEER_GUID,
-     g_param_spec_boxed ("peer-guid",
-                          "Peer GUID",
-                          "The other split in the division.",
-                          GNC_TYPE_GUID,
-                          G_PARAM_READWRITE));
+        (gobject_class,
+         PROP_GAINS_SPLIT,
+         g_param_spec_boxed ("gains-split",
+                             "Gains Split",
+                             "The capital gains split associated with this "
+                             "split when this split represents the proceeds "
+                             "from the sale of a commodity inside a Lot.",
+                             GNC_TYPE_GUID,
+                             G_PARAM_READWRITE));
 
     g_object_class_install_property
-    (gobject_class,
-     PROP_GAINS_SPLIT,
-     g_param_spec_boxed ("gains-split",
-                          "Gains Split",
-                          "The capital gains split associated with this "
-                          "split when this split represents the proceeds "
-                          "from the sale of a commodity inside a Lot.",
-                          GNC_TYPE_GUID,
-                          G_PARAM_READWRITE));
-
-    g_object_class_install_property
-    (gobject_class,
-     PROP_GAINS_SOURCE,
-     g_param_spec_boxed ("gains-source",
-                          "Gains Source",
-                          "The source split for which this split this is "
-                          "the gains split. ",
-                          GNC_TYPE_GUID,
-                          G_PARAM_READWRITE));
+        (gobject_class,
+         PROP_GAINS_SOURCE,
+         g_param_spec_boxed ("gains-source",
+                             "Gains Source",
+                             "The source split for which this split this is "
+                             "the gains split. ",
+                             GNC_TYPE_GUID,
+                             G_PARAM_READWRITE));
 }
 
 /********************************************************************\
@@ -566,9 +533,6 @@ xaccSplitReinit(Split * split)
     split->cleared_balance     = gnc_numeric_zero();
     split->reconciled_balance  = gnc_numeric_zero();
 
-    if (split->inst.kvp_data)
-        kvp_frame_delete(split->inst.kvp_data);
-    split->inst.kvp_data = kvp_frame_new();
     qof_instance_set_idata(split, 0);
 
     split->gains = GAINS_STATUS_UNKNOWN;
@@ -620,7 +584,7 @@ xaccDupeSplit (const Split *s)
     split->memo = CACHE_INSERT(s->memo);
     split->action = CACHE_INSERT(s->action);
 
-    split->inst.kvp_data = kvp_frame_copy (s->inst.kvp_data);
+    qof_instance_copy_kvp (QOF_INSTANCE (split), QOF_INSTANCE (s));
 
     split->reconciled = s->reconciled;
     split->date_reconciled = s->date_reconciled;
@@ -670,7 +634,7 @@ xaccSplitCloneNoKvp (const Split *s)
 void
 xaccSplitCopyKvp (const Split *from, Split *to)
 {
-    to->inst.kvp_data = kvp_frame_copy(from->inst.kvp_data);
+    qof_instance_copy_kvp (QOF_INSTANCE (to), QOF_INSTANCE (from));
 }
 
 /*################## Added for Reg2 #################*/
@@ -685,21 +649,21 @@ xaccSplitCopyKvp (const Split *from, Split *to)
 void
 xaccSplitCopyOnto(const Split *from_split, Split *to_split)
 {
-   if (!from_split || !to_split) return;
-   xaccTransBeginEdit (to_split->parent);
+    if (!from_split || !to_split) return;
+    xaccTransBeginEdit (to_split->parent);
 
-   xaccSplitSetMemo(to_split, xaccSplitGetMemo(from_split));
-   xaccSplitSetAction(to_split, xaccSplitGetAction(from_split));
-   xaccSplitSetAmount(to_split, xaccSplitGetAmount(from_split));
-   xaccSplitSetValue(to_split, xaccSplitGetValue(from_split));
-   /* Setting the account is okay here because, even though the from
-      split might not really belong to the account it claims to,
-      setting the account won't cause any event involving from. */
-   xaccSplitSetAccount(to_split, xaccSplitGetAccount(from_split));
-   /* N.B. Don't set parent. */
+    xaccSplitSetMemo(to_split, xaccSplitGetMemo(from_split));
+    xaccSplitSetAction(to_split, xaccSplitGetAction(from_split));
+    xaccSplitSetAmount(to_split, xaccSplitGetAmount(from_split));
+    xaccSplitSetValue(to_split, xaccSplitGetValue(from_split));
+    /* Setting the account is okay here because, even though the from
+       split might not really belong to the account it claims to,
+       setting the account won't cause any event involving from. */
+    xaccSplitSetAccount(to_split, xaccSplitGetAccount(from_split));
+    /* N.B. Don't set parent. */
 
-   qof_instance_set_dirty(QOF_INSTANCE(to_split));
-   xaccTransCommitEdit(to_split->parent);
+    qof_instance_set_dirty(QOF_INSTANCE(to_split));
+    xaccTransCommitEdit(to_split->parent);
 }
 
 /*################## Added for Reg2 #################*/
@@ -722,7 +686,7 @@ xaccSplitDump (const Split *split, const char *tag)
     printf("    Gains:    %p\n", split->gains_split);
     printf("    Memo:     %s\n", split->memo ? split->memo : "(null)");
     printf("    Action:   %s\n", split->action ? split->action : "(null)");
-    printf("    KVP Data: %p\n", split->inst.kvp_data);
+    printf("    KVP Data: %s\n", qof_instance_kvp_as_string (QOF_INSTANCE (split)));
     printf("    Recncld:  %c (date %s)\n", split->reconciled,
            gnc_print_date(split->date_reconciled));
     printf("    Value:    %s\n", gnc_numeric_to_string(split->value));
@@ -765,10 +729,7 @@ xaccFreeSplit (Split *split)
 
     split->date_reconciled.tv_sec = 0;
     split->date_reconciled.tv_nsec = 0;
-    if (split->inst.kvp_data)
-        kvp_frame_delete(split->inst.kvp_data);
-    split->inst.kvp_data = NULL;
-
+    G_OBJECT_CLASS (QOF_INSTANCE_GET_CLASS (&split->inst))->dispose(G_OBJECT (split));
     // Is this right?
     if (split->gains_split) split->gains_split->gains_split = NULL;
     /* qof_instance_release(&split->inst); */
@@ -854,13 +815,13 @@ xaccSplitEqual(const Split *sa, const Split *sb,
         return FALSE;
     }
 
-    if (kvp_frame_compare(sa->inst.kvp_data, sb->inst.kvp_data) != 0)
+    if (qof_instance_compare_kvp (QOF_INSTANCE (sa), QOF_INSTANCE (sb)) != 0)
     {
         char *frame_a;
         char *frame_b;
 
-        frame_a = kvp_frame_to_string (sa->inst.kvp_data);
-        frame_b = kvp_frame_to_string (sb->inst.kvp_data);
+        frame_a = qof_instance_kvp_as_string (QOF_INSTANCE (sa));
+        frame_b = qof_instance_kvp_as_string (QOF_INSTANCE (sb));
 
         PINFO ("kvp frames differ:\n%s\n\nvs\n\n%s", frame_a, frame_b);
 
@@ -1123,7 +1084,8 @@ void
 xaccSplitDetermineGainStatus (Split *split)
 {
     Split *other;
-    KvpValue *val;
+    GValue v = G_VALUE_INIT;
+    GncGUID *guid = NULL;
 
     if (GAINS_STATUS_UNKNOWN != split->gains) return;
 
@@ -1135,8 +1097,10 @@ xaccSplitDetermineGainStatus (Split *split)
         return;
     }
 
-    val = kvp_frame_get_slot (split->inst.kvp_data, "gains-source");
-    if (!val)
+    qof_instance_get_kvp (QOF_INSTANCE (split), "gains-source", &v);
+    if (G_VALUE_HOLDS_BOXED (&v))
+        guid = (GncGUID*)g_value_get_boxed (&v);
+    if (!guid)
     {
         // CHECKME: We leave split->gains_split alone.  Is that correct?
         split->gains = GAINS_STATUS_A_VDIRTY | GAINS_STATUS_DATE_DIRTY;
@@ -1144,10 +1108,10 @@ xaccSplitDetermineGainStatus (Split *split)
     else
     {
         QofCollection *col;
-        col = qof_book_get_collection (qof_instance_get_book(split), GNC_ID_SPLIT);
+        col = qof_book_get_collection (qof_instance_get_book(split),
+				       GNC_ID_SPLIT);
         split->gains = GAINS_STATUS_GAINS;
-        other = (Split *) qof_collection_lookup_entity (col,
-                kvp_value_get_guid (val));
+        other = (Split *) qof_collection_lookup_entity (col, guid);
         split->gains_split = other;
     }
 }
@@ -1265,8 +1229,11 @@ xaccSplitSetAmount (Split *s, gnc_numeric amt)
 
     xaccTransBeginEdit (s->parent);
     if (s->acc)
+    {
         s->amount = gnc_numeric_convert(amt, get_commodity_denom(s),
                                         GNC_HOW_RND_ROUND_HALF_UP);
+        g_assert (gnc_numeric_check (s->amount) == GNC_ERROR_OK);
+    }
     else
         s->amount = amt;
 
@@ -1283,6 +1250,7 @@ qofSplitSetValue (Split *split, gnc_numeric amt)
     g_return_if_fail(split);
     split->value = gnc_numeric_convert(amt,
                                        get_currency_denom(split), GNC_HOW_RND_ROUND_HALF_UP);
+    g_assert(gnc_numeric_check (split->value) != GNC_ERROR_OK);
 }
 
 /* The value of the split in the _transaction's_ currency. */
@@ -1300,7 +1268,8 @@ xaccSplitSetValue (Split *s, gnc_numeric amt)
     xaccTransBeginEdit (s->parent);
     new_val = gnc_numeric_convert(amt, get_currency_denom(s),
                                   GNC_HOW_RND_ROUND_HALF_UP);
-    if (gnc_numeric_check(new_val) == GNC_ERROR_OK)
+    if (gnc_numeric_check(new_val) == GNC_ERROR_OK &&
+        !(gnc_numeric_zero_p (new_val) && !gnc_numeric_zero_p (amt)))
         s->value = new_val;
     else PERR("numeric error %s in converting the split value's denominator with amount %s and denom  %d", gnc_numeric_errorCode_to_string(gnc_numeric_check(new_val)), gnc_numeric_to_string(amt), get_currency_denom(s));
 
@@ -1495,7 +1464,7 @@ xaccSplitDestroy (Split *split)
     acc = split->acc;
     trans = split->parent;
     if (acc && !qof_instance_get_destroying(acc)
-            && xaccTransGetReadOnly(trans))
+        && xaccTransGetReadOnly(trans))
         return FALSE;
 
     xaccTransBeginEdit(trans);
@@ -1528,7 +1497,7 @@ xaccSplitOrder (const Split *sa, const Split *sb)
     /* sort in transaction order, but use split action rather than trans num
      * according to book option */
     action_for_num = qof_book_use_split_action_for_num_field
-                                                        (xaccSplitGetBook (sa));
+        (xaccSplitGetBook (sa));
     if (action_for_num)
         retval = xaccTransOrder_num_action (sa->parent, sa->action,
                                             sb->parent, sb->action);
@@ -1601,40 +1570,18 @@ get_corr_account_split(const Split *sa, const Split **retval)
 {
 
     const Split *current_split;
-    GList *node;
-    gnc_numeric sa_value, current_value;
-    gboolean sa_value_positive, current_value_positive, seen_one = FALSE;
 
     *retval = NULL;
     g_return_val_if_fail(sa, FALSE);
 
-    sa_value = xaccSplitGetValue (sa);
-    sa_value_positive = gnc_numeric_positive_p(sa_value);
+    if (xaccTransCountSplits (sa->parent) > 2)
+        return FALSE;
 
-    for (node = sa->parent->splits; node; node = node->next)
-    {
-        current_split = node->data;
-        if (current_split == sa) continue;
-
-        if (!xaccTransStillHasSplit(sa->parent, current_split)) continue;
-        current_value = xaccSplitGetValue (current_split);
-        current_value_positive = gnc_numeric_positive_p(current_value);
-        if ((sa_value_positive && !current_value_positive) ||
-                (!sa_value_positive && current_value_positive))
-        {
-            if (seen_one)
-            {
-                *retval = NULL;
-                return FALSE;
-            }
-            else
-            {
-                *retval = current_split;
-                seen_one = TRUE;
-            }
-        }
-    }
-    return seen_one;
+    *retval = xaccSplitGetOtherSplit (sa);
+    if (*retval)
+        return TRUE;
+    else
+        return FALSE;
 }
 
 /* TODO: these static consts can be shared. */
@@ -1802,18 +1749,18 @@ qofSplitSetReconcile (Split *split, char recn)
     g_return_if_fail(split);
     switch (recn)
     {
-    case NREC:
-    case CREC:
-    case YREC:
-    case FREC:
-    case VREC:
-        split->reconciled = recn;
-        mark_split (split);
-        xaccAccountRecomputeBalance (split->acc);
-        break;
-    default:
-        PERR("Bad reconciled flag");
-        break;
+        case NREC:
+        case CREC:
+        case YREC:
+        case FREC:
+        case VREC:
+            split->reconciled = recn;
+            mark_split (split);
+            xaccAccountRecomputeBalance (split->acc);
+            break;
+        default:
+            PERR("Bad reconciled flag");
+            break;
     }
 }
 
@@ -1825,19 +1772,19 @@ xaccSplitSetReconcile (Split *split, char recn)
 
     switch (recn)
     {
-    case NREC:
-    case CREC:
-    case YREC:
-    case FREC:
-    case VREC:
-        split->reconciled = recn;
-        mark_split (split);
-        qof_instance_set_dirty(QOF_INSTANCE(split));
-        xaccAccountRecomputeBalance (split->acc);
-        break;
-    default:
-        PERR("Bad reconciled flag");
-        break;
+        case NREC:
+        case CREC:
+        case YREC:
+        case FREC:
+        case VREC:
+            split->reconciled = recn;
+            mark_split (split);
+            qof_instance_set_dirty(QOF_INSTANCE(split));
+            xaccAccountRecomputeBalance (split->acc);
+            break;
+        default:
+            PERR("Bad reconciled flag");
+            break;
     }
     xaccTransCommitEdit(split->parent);
 
@@ -2042,10 +1989,13 @@ xaccSplitGetBook (const Split *split)
 const char *
 xaccSplitGetType(const Split *s)
 {
-    const char *split_type;
+    GValue v = G_VALUE_INIT;
+    const char *split_type = NULL;
 
     if (!s) return NULL;
-    split_type = kvp_frame_get_string(s->inst.kvp_data, "split-type");
+    qof_instance_get_kvp (QOF_INSTANCE (s), "split-type", &v);
+    if (G_VALUE_HOLDS_STRING (&v))
+        split_type = g_value_get_string (&v);
     return split_type ? split_type : "normal";
 }
 
@@ -2054,16 +2004,83 @@ xaccSplitGetType(const Split *s)
 void
 xaccSplitMakeStockSplit(Split *s)
 {
+    GValue v = G_VALUE_INIT;
     xaccTransBeginEdit (s->parent);
 
     s->value = gnc_numeric_zero();
-    kvp_frame_set_str(s->inst.kvp_data, "split-type", "stock-split");
+    g_value_init (&v, G_TYPE_STRING);
+    g_value_set_string (&v, "stock-split");
+    qof_instance_set_kvp (QOF_INSTANCE (s), "split-type", &v);
     SET_GAINS_VDIRTY(s);
     mark_split(s);
     qof_instance_set_dirty(QOF_INSTANCE(s));
     xaccTransCommitEdit(s->parent);
 }
 
+void
+xaccSplitAddPeerSplit (Split *split, const Split *other_split,
+                       time64 timestamp)
+{
+    const GncGUID* guid;
+
+    g_return_if_fail (split != NULL);
+    g_return_if_fail (other_split != NULL);
+
+    guid = qof_instance_get_guid (QOF_INSTANCE (other_split));
+    xaccTransBeginEdit (split->parent);
+    qof_instance_kvp_add_guid (QOF_INSTANCE (split), "lot-split",
+                               timespec_now(), "peer_guid", guid_copy(guid));
+    mark_split (split);
+    qof_instance_set_dirty (QOF_INSTANCE (split));
+    xaccTransCommitEdit (split->parent);
+}
+
+gboolean
+xaccSplitHasPeers (const Split *split)
+{
+    return qof_instance_has_slot (QOF_INSTANCE (split), "lot-split");
+}
+
+gboolean
+xaccSplitIsPeerSplit (const Split *split, const Split *other_split)
+{
+    const GncGUID* guid;
+
+    g_return_val_if_fail (split != NULL, FALSE);
+    g_return_val_if_fail (other_split != NULL, FALSE);
+
+    guid = qof_instance_get_guid (QOF_INSTANCE (other_split));
+    return qof_instance_kvp_has_guid (QOF_INSTANCE (split), "lot-split",
+                                      "peer_guid", guid);
+}
+
+void
+xaccSplitRemovePeerSplit (Split *split, const Split *other_split)
+{
+    const GncGUID* guid;
+
+    g_return_if_fail (split != NULL);
+    g_return_if_fail (other_split != NULL);
+
+    guid = qof_instance_get_guid (QOF_INSTANCE (other_split));
+    xaccTransBeginEdit (split->parent);
+    qof_instance_kvp_remove_guid (QOF_INSTANCE (split), "lot-split",
+                                  "peer_guid", guid);
+    mark_split (split);
+    qof_instance_set_dirty (QOF_INSTANCE (split));
+    xaccTransCommitEdit (split->parent);
+}
+
+void
+xaccSplitMergePeerSplits (Split *split, const Split *other_split)
+{
+    xaccTransBeginEdit (split->parent);
+    qof_instance_kvp_merge_guids (QOF_INSTANCE (split),
+                                  QOF_INSTANCE (other_split), "lot-split");
+    mark_split (split);
+    qof_instance_set_dirty (QOF_INSTANCE (split));
+    xaccTransCommitEdit (split->parent);
+}
 
 /********************************************************************\
 \********************************************************************/
@@ -2084,29 +2101,18 @@ xaccSplitGetOtherSplit (const Split *split)
     Transaction *trans;
     int count, num_splits;
     Split *other = NULL;
-    KvpValue *sva;
+    gboolean lot_split;
     gboolean trading_accts;
 
     if (!split) return NULL;
     trans = split->parent;
     if (!trans) return NULL;
 
-#ifdef OLD_ALGO_HAS_ONLY_TWO_SPLITS
-    Split *s1, *s2;
-    if (g_list_length (trans->splits) != 2) return NULL;
-
-    s1 = g_list_nth_data (trans->splits, 0);
-    s2 = g_list_nth_data (trans->splits, 1);
-
-    if (s1 == split) return s2;
-    return s1;
-#endif
-
     trading_accts = xaccTransUseTradingAccounts (trans);
     num_splits = xaccTransCountSplits(trans);
     count = num_splits;
-    sva = kvp_frame_get_slot (split->inst.kvp_data, "lot-split");
-    if (!sva && !trading_accts && (2 != count)) return NULL;
+    lot_split = qof_instance_has_slot(QOF_INSTANCE (split), "lot-split");
+    if (!lot_split && !trading_accts && (2 != count)) return NULL;
 
     for (i = 0; i < num_splits; i++)
     {
@@ -2116,13 +2122,13 @@ xaccSplitGetOtherSplit (const Split *split)
             --count;
             continue;
         }
-        if (kvp_frame_get_slot (s->inst.kvp_data, "lot-split"))
+        if (qof_instance_has_slot (QOF_INSTANCE (s), "lot-split"))
         {
             --count;
             continue;
         }
         if (trading_accts &&
-                xaccAccountGetType(xaccSplitGetAccount(s)) == ACCT_TYPE_TRADING)
+            xaccAccountGetType(xaccSplitGetAccount(s)) == ACCT_TYPE_TRADING)
         {
             --count;
             continue;
@@ -2138,27 +2144,40 @@ xaccSplitGetOtherSplit (const Split *split)
 gnc_numeric
 xaccSplitVoidFormerAmount(const Split *split)
 {
+    GValue v = G_VALUE_INIT;
+    gnc_numeric *num = NULL;
     g_return_val_if_fail(split, gnc_numeric_zero());
-    return kvp_frame_get_numeric(split->inst.kvp_data, void_former_amt_str);
+    qof_instance_get_kvp (QOF_INSTANCE (split), void_former_amt_str, &v);
+    if (G_VALUE_HOLDS_BOXED (&v))
+        num = (gnc_numeric*)g_value_get_boxed (&v);
+    return num ? *num : gnc_numeric_zero();
 }
 
 gnc_numeric
 xaccSplitVoidFormerValue(const Split *split)
 {
+    GValue v = G_VALUE_INIT;
+    gnc_numeric *num = NULL;
     g_return_val_if_fail(split, gnc_numeric_zero());
-    return kvp_frame_get_numeric(split->inst.kvp_data, void_former_val_str);
+    qof_instance_get_kvp (QOF_INSTANCE (split), void_former_val_str, &v);
+    if (G_VALUE_HOLDS_BOXED (&v))
+        num = (gnc_numeric*)g_value_get_boxed (&v);
+    return num ? *num : gnc_numeric_zero();
 }
 
 void
 xaccSplitVoid(Split *split)
 {
-    gnc_numeric zero = gnc_numeric_zero();
-    KvpFrame *frame = split->inst.kvp_data;
+    gnc_numeric zero = gnc_numeric_zero(), num;
+    GValue v = G_VALUE_INIT;
 
-    kvp_frame_set_gnc_numeric(frame, void_former_amt_str,
-                              xaccSplitGetAmount(split));
-    kvp_frame_set_gnc_numeric(frame, void_former_val_str,
-                              xaccSplitGetValue(split));
+    g_value_init (&v, GNC_TYPE_NUMERIC);
+    num =  xaccSplitGetAmount(split);
+    g_value_set_boxed (&v, &num);
+    qof_instance_set_kvp (QOF_INSTANCE (split), void_former_amt_str, &v);
+    num =  xaccSplitGetValue(split);
+    g_value_set_boxed (&v, &num);
+    qof_instance_set_kvp (QOF_INSTANCE (split), void_former_val_str, &v);
 
     /* Marking dirty handled by SetAmount etc. */
     xaccSplitSetAmount (split, zero);
@@ -2169,13 +2188,11 @@ xaccSplitVoid(Split *split)
 void
 xaccSplitUnvoid(Split *split)
 {
-    KvpFrame *frame = split->inst.kvp_data;
-
     xaccSplitSetAmount (split, xaccSplitVoidFormerAmount(split));
     xaccSplitSetValue (split, xaccSplitVoidFormerValue(split));
     xaccSplitSetReconcile(split, NREC);
-    kvp_frame_set_slot(frame, void_former_amt_str, NULL);
-    kvp_frame_set_slot(frame, void_former_val_str, NULL);
+    qof_instance_set_kvp (QOF_INSTANCE (split), void_former_amt_str, NULL);
+    qof_instance_set_kvp (QOF_INSTANCE (split), void_former_val_str, NULL);
     qof_instance_set_dirty (QOF_INSTANCE (split));
 }
 
@@ -2252,94 +2269,93 @@ qofSplitSetAccount(Split *s, QofInstance *ent)
 gboolean xaccSplitRegister (void)
 {
     static const QofParam params[] =
-    {
         {
-            SPLIT_DATE_RECONCILED, QOF_TYPE_DATE,
-            (QofAccessFunc)xaccSplitRetDateReconciledTS,
-            (QofSetterFunc)xaccSplitSetDateReconciledTS
-        },
+            {
+                SPLIT_DATE_RECONCILED, QOF_TYPE_DATE,
+                (QofAccessFunc)xaccSplitRetDateReconciledTS,
+                (QofSetterFunc)xaccSplitSetDateReconciledTS
+            },
 
-        /* d-* are deprecated query params, should not be used in new
-         * queries, should be removed from old queries. */
-        {
-            "d-share-amount", QOF_TYPE_DOUBLE,
-            (QofAccessFunc)DxaccSplitGetShareAmount, NULL
-        },
-        {
-            "d-share-int64", QOF_TYPE_INT64,
-            (QofAccessFunc)qof_entity_get_guid, NULL
-        },
-        {
-            SPLIT_BALANCE, QOF_TYPE_NUMERIC,
-            (QofAccessFunc)xaccSplitGetBalance, NULL
-        },
-        {
-            SPLIT_CLEARED_BALANCE, QOF_TYPE_NUMERIC,
-            (QofAccessFunc)xaccSplitGetClearedBalance, NULL
-        },
-        {
-            SPLIT_RECONCILED_BALANCE, QOF_TYPE_NUMERIC,
-            (QofAccessFunc)xaccSplitGetReconciledBalance, NULL
-        },
-        {
-            SPLIT_MEMO, QOF_TYPE_STRING,
-            (QofAccessFunc)xaccSplitGetMemo, (QofSetterFunc)qofSplitSetMemo
-        },
-        {
-            SPLIT_ACTION, QOF_TYPE_STRING,
-            (QofAccessFunc)xaccSplitGetAction, (QofSetterFunc)qofSplitSetAction
-        },
-        {
-            SPLIT_RECONCILE, QOF_TYPE_CHAR,
-            (QofAccessFunc)xaccSplitGetReconcile,
-            (QofSetterFunc)qofSplitSetReconcile
-        },
-        {
-            SPLIT_AMOUNT, QOF_TYPE_NUMERIC,
-            (QofAccessFunc)xaccSplitGetAmount, (QofSetterFunc)qofSplitSetAmount
-        },
-        {
-            SPLIT_SHARE_PRICE, QOF_TYPE_NUMERIC,
-            (QofAccessFunc)xaccSplitGetSharePrice,
-            (QofSetterFunc)qofSplitSetSharePrice
-        },
-        {
-            SPLIT_VALUE, QOF_TYPE_DEBCRED,
-            (QofAccessFunc)xaccSplitGetValue, (QofSetterFunc)qofSplitSetValue
-        },
-        { SPLIT_TYPE, QOF_TYPE_STRING, (QofAccessFunc)xaccSplitGetType, NULL },
-        {
-            SPLIT_VOIDED_AMOUNT, QOF_TYPE_NUMERIC,
-            (QofAccessFunc)xaccSplitVoidFormerAmount, NULL
-        },
-        {
-            SPLIT_VOIDED_VALUE, QOF_TYPE_NUMERIC,
-            (QofAccessFunc)xaccSplitVoidFormerValue, NULL
-        },
-        { SPLIT_LOT, GNC_ID_LOT, (QofAccessFunc)xaccSplitGetLot, NULL },
-        {
-            SPLIT_TRANS, GNC_ID_TRANS,
-            (QofAccessFunc)xaccSplitGetParent,
-            (QofSetterFunc)qofSplitSetParentTrans
-        },
-        {
-            SPLIT_ACCOUNT, GNC_ID_ACCOUNT,
-            (QofAccessFunc)xaccSplitGetAccount, (QofSetterFunc)qofSplitSetAccount
-        },
-        { SPLIT_ACCOUNT_GUID, QOF_TYPE_GUID, split_account_guid_getter, NULL },
-        /*  these are no-ops to register the parameter names (for sorting) but
-            they return an allocated object which getters cannot do.  */
-        { SPLIT_ACCT_FULLNAME, SPLIT_ACCT_FULLNAME, no_op, NULL },
-        { SPLIT_CORR_ACCT_NAME, SPLIT_CORR_ACCT_NAME, no_op, NULL },
-        { SPLIT_CORR_ACCT_CODE, SPLIT_CORR_ACCT_CODE, no_op, NULL },
-        { SPLIT_KVP, QOF_TYPE_KVP, (QofAccessFunc)qof_instance_get_slots, NULL },
-        { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)xaccSplitGetBook, NULL },
-        {
-            QOF_PARAM_GUID, QOF_TYPE_GUID,
-            (QofAccessFunc)qof_entity_get_guid, NULL
-        },
-        { NULL },
-    };
+            /* d-* are deprecated query params, should not be used in new
+             * queries, should be removed from old queries. */
+            {
+                "d-share-amount", QOF_TYPE_DOUBLE,
+                (QofAccessFunc)DxaccSplitGetShareAmount, NULL
+            },
+            {
+                "d-share-int64", QOF_TYPE_INT64,
+                (QofAccessFunc)qof_entity_get_guid, NULL
+            },
+            {
+                SPLIT_BALANCE, QOF_TYPE_NUMERIC,
+                (QofAccessFunc)xaccSplitGetBalance, NULL
+            },
+            {
+                SPLIT_CLEARED_BALANCE, QOF_TYPE_NUMERIC,
+                (QofAccessFunc)xaccSplitGetClearedBalance, NULL
+            },
+            {
+                SPLIT_RECONCILED_BALANCE, QOF_TYPE_NUMERIC,
+                (QofAccessFunc)xaccSplitGetReconciledBalance, NULL
+            },
+            {
+                SPLIT_MEMO, QOF_TYPE_STRING,
+                (QofAccessFunc)xaccSplitGetMemo, (QofSetterFunc)qofSplitSetMemo
+            },
+            {
+                SPLIT_ACTION, QOF_TYPE_STRING,
+                (QofAccessFunc)xaccSplitGetAction, (QofSetterFunc)qofSplitSetAction
+            },
+            {
+                SPLIT_RECONCILE, QOF_TYPE_CHAR,
+                (QofAccessFunc)xaccSplitGetReconcile,
+                (QofSetterFunc)qofSplitSetReconcile
+            },
+            {
+                SPLIT_AMOUNT, QOF_TYPE_NUMERIC,
+                (QofAccessFunc)xaccSplitGetAmount, (QofSetterFunc)qofSplitSetAmount
+            },
+            {
+                SPLIT_SHARE_PRICE, QOF_TYPE_NUMERIC,
+                (QofAccessFunc)xaccSplitGetSharePrice,
+                (QofSetterFunc)qofSplitSetSharePrice
+            },
+            {
+                SPLIT_VALUE, QOF_TYPE_DEBCRED,
+                (QofAccessFunc)xaccSplitGetValue, (QofSetterFunc)qofSplitSetValue
+            },
+            { SPLIT_TYPE, QOF_TYPE_STRING, (QofAccessFunc)xaccSplitGetType, NULL },
+            {
+                SPLIT_VOIDED_AMOUNT, QOF_TYPE_NUMERIC,
+                (QofAccessFunc)xaccSplitVoidFormerAmount, NULL
+            },
+            {
+                SPLIT_VOIDED_VALUE, QOF_TYPE_NUMERIC,
+                (QofAccessFunc)xaccSplitVoidFormerValue, NULL
+            },
+            { SPLIT_LOT, GNC_ID_LOT, (QofAccessFunc)xaccSplitGetLot, NULL },
+            {
+                SPLIT_TRANS, GNC_ID_TRANS,
+                (QofAccessFunc)xaccSplitGetParent,
+                (QofSetterFunc)qofSplitSetParentTrans
+            },
+            {
+                SPLIT_ACCOUNT, GNC_ID_ACCOUNT,
+                (QofAccessFunc)xaccSplitGetAccount, (QofSetterFunc)qofSplitSetAccount
+            },
+            { SPLIT_ACCOUNT_GUID, QOF_TYPE_GUID, split_account_guid_getter, NULL },
+            /*  these are no-ops to register the parameter names (for sorting) but
+                they return an allocated object which getters cannot do.  */
+            { SPLIT_ACCT_FULLNAME, SPLIT_ACCT_FULLNAME, no_op, NULL },
+            { SPLIT_CORR_ACCT_NAME, SPLIT_CORR_ACCT_NAME, no_op, NULL },
+            { SPLIT_CORR_ACCT_CODE, SPLIT_CORR_ACCT_CODE, no_op, NULL },
+            { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)xaccSplitGetBook, NULL },
+            {
+                QOF_PARAM_GUID, QOF_TYPE_GUID,
+                (QofAccessFunc)qof_entity_get_guid, NULL
+            },
+            { NULL },
+        };
 
     qof_class_register (GNC_ID_SPLIT, (QofSortFunc)xaccSplitOrder, params);
     qof_class_register (SPLIT_ACCT_FULLNAME,

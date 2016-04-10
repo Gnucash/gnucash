@@ -1,4 +1,4 @@
-SUBDIRS = . test-core test 
+SUBDIRS = . test-core test
 
 pkglib_LTLIBRARIES = libgncmod-engine.la
 
@@ -10,7 +10,9 @@ AM_CPPFLAGS = \
 	-I${top_srcdir}/src/gnc-module \
 	-I${top_srcdir}/src/libqof/qof \
 	${GLIB_CFLAGS} \
-	${GUILE_CFLAGS}
+	${GUILE_CFLAGS} \
+	$(BOOST_CPPFLAGS)
+
 
 libgncmod_engine_la_SOURCES = \
   Account.c \
@@ -38,7 +40,7 @@ libgncmod_engine_la_SOURCES = \
   gnc-session.c \
   gncmod-engine.c \
   swig-engine.c \
-  kvp-scm.c \
+  kvp-scm.cpp \
   engine-helpers.c \
   glib-helpers.c  \
   policy.c \
@@ -128,9 +130,10 @@ noinst_HEADERS = \
   gnc-pricedb-p.h \
   policy-p.h
 
-noinst_SCRIPTS = iso-currencies-to-c
-
 libgncmod_engine_la_LDFLAGS = -avoid-version
+if PLATFORM_WIN32
+libgncmod_engine_la_LDFLAGS += -Wl,-export-all-symbols
+endif
 if CLANG
 libgncmod_engine_la_CFLAGS = ${AM_CFLAGS} -Wno-invalid-source-encoding
 else
@@ -145,11 +148,11 @@ libgncmod_engine_la_LIBADD = \
   ${GLIB_LIBS} \
   ${top_builddir}/lib/libc/libc-missing.la
 
-gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
-gncmod_DATA = engine.scm \
+gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash
+gncscmmod_DATA = engine.scm \
   business-core.scm
 
-gncscmdir = ${GNC_SHAREDIR}/scm
+gncscmdir = ${GNC_SCM_INSTALL_DIR}
 gncscm_DATA = \
   commodity-table.scm \
   engine-interface.scm \
@@ -160,25 +163,24 @@ EXTRA_DIST = \
   README.query-api \
   design.txt \
   extensions.txt \
-  iso-4217-currencies.scm \
-  iso-currencies-to-c \
+  iso-4217-currencies.xml \
+  iso-currencies-to-c.xsl \
   kvp_doc.txt \
   SX-book-p.h \
   engine.i \
+  engine-common.i \
   business-core.i \
-  ${gncmod_DATA} \
+  ${gncscmmod_DATA} \
   ${gncscm_DATA}
 
 if GNUCASH_SEPARATE_BUILDDIR
-#For compiling
-SCM_FILE_LINKS = iso-4217-currencies.scm
 #For executing test cases
-SCM_FILE_LINKS += \
-  ${gncmod_DATA} \
+SCM_FILE_LINKS = \
+  ${gncscmmod_DATA} \
   ${gncscm_DATA}
 endif
 
-.scm-links: 
+.scm-links:
 	$(RM) -rf gnucash
 	mkdir -p  gnucash
 if GNUCASH_SEPARATE_BUILDDIR
@@ -186,15 +188,36 @@ if GNUCASH_SEPARATE_BUILDDIR
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
-	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
+	( cd gnucash; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
 if ! OS_WIN32
 # Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
 endif
 
+if GNC_HAVE_GUILE_2
+GUILE_COMPILE_ENV = \
+  --guile-load-dir ${top_builddir}/src/gnc-module \
+  --library-dir    ${top_builddir}/src/engine \
+  --library-dir    ${top_builddir}/src/gnc-module \
+  --library-dir    ${top_builddir}/src/core-utils \
+  --library-dir    ${top_builddir}/src/libqof/qof
+
+%.go : %.scm .scm-links $(pkglib_LTLIBRARIES)
+	GNC_UNINSTALLED=yes \
+	GNC_BUILDDIR=${top_builddir} \
+	$(shell ${abs_top_srcdir}/src/gnc-test-env.pl --noexports ${GUILE_COMPILE_ENV}) \
+	$(GUILD) compile -o $@ $<
+
+gncscmmodcachedir = ${pkglibdir}/scm/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash
+gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
+
+gncscmcachedir = ${pkglibdir}/scm/ccache/@GUILE_EFFECTIVE_VERSION@
+gncscmcache_DATA = $(gncscm_DATA:.scm=.go)
+endif
+
 noinst_DATA = .scm-links
 
-if BUILDING_FROM_SCM
+if BUILDING_FROM_VCS
 
 # The generated file depends on various libqof headers. Out of
 # laziness I only include a few here - more might be needed
@@ -217,14 +240,19 @@ endif
 endif
 endif
 
-iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
-	-chmod u+x ./iso-currencies-to-c
-	./iso-currencies-to-c "${srcdir}"
+
+iso-4217-currencies.c: iso-4217-currencies.xml iso-currencies-to-c.xsl
+	$(XSLTPROC) -o $@ $(srcdir)/iso-currencies-to-c.xsl $<
 
 BUILT_SOURCES = iso-4217-currencies.c
 
-CLEANFILES = $(BUILT_SOURCES) .scm-links \
-	${SCM_FILE_LINKS}
+CLEANFILES = \
+	$(BUILT_SOURCES) \
+	.scm-links \
+	${SCM_FILE_LINKS} \
+	${gncscmmodcache_DATA} \
+	${gncscmcache_DATA}
+
 MAINTAINERCLEANFILES = swig-engine.c
 
 clean-local:

@@ -1,7 +1,35 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program; if not, contact:
+;;
+;; Free Software Foundation           Voice:  +1-617-542-5942
+;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+;; Boston, MA  02110-1301,  USA       gnu@gnu.org
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (define-module (gnucash tax de_DE))
 
 (use-modules (gnucash gnc-module))
-(gnc:module-load "gnucash/app-utils" 0)
+(cond-expand
+  (guile-2
+    (eval-when
+      (compile load eval expand)
+      (load-extension "libgncmod-engine" "scm_init_sw_engine_module")
+      (load-extension "libgncmod-app-utils" "scm_init_sw_app_utils_module")))
+  (else ))
+(use-modules (sw_app_utils))
+(use-modules (sw_engine))
+(use-modules (gnucash app-utils))
 
 (export gnc:txf-get-payer-name-source)
 (export gnc:txf-get-form)
@@ -29,5 +57,5 @@
 
 (export gnc:*tax-label* gnc:*tax-nr-label*)
 
-(load-from-path "txf-de_DE.scm")
-(load-from-path "txf-help-de_DE.scm")
+(load-from-path "txf-de_DE")
+(load-from-path "txf-help-de_DE")

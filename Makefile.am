@@ -1,15 +1,23 @@
 
-SUBDIRS = . doc lib src intl-scm packaging po accounts checks
+SUBDIRS = . doc lib src packaging po accounts checks
 
 GNC_CTAGS_FILE = @GNC_CTAGS_FILE@
 GNC_ETAGS_FILE = @GNC_ETAGS_FILE@
 
 noinst_DATA = make-gnucash-potfiles
 
+noinst_PROGRAMS    = gnc-guile
+gnc_guile_SOURCES = util/guile.c
+gnc_guile_CFLAGS  = ${GUILE_CFLAGS}
+gnc_guile_LDADD   = ${GUILE_LIBS}
+
 dist_doc_DATA = \
   AUTHORS \
   COPYING \
   ChangeLog \
+  ChangeLog.2015 \
+  ChangeLog.2014 \
+  ChangeLog.2013 \
   ChangeLog.2012 \
   ChangeLog.2011 \
   ChangeLog.2010 \
@@ -20,6 +28,10 @@ dist_doc_DATA = \
   ChangeLog.2005 \
   ChangeLog.2004 \
   ChangeLog.2003 \
+  ChangeLog.2002 \
+  ChangeLog.2001 \
+  ChangeLog.2000 \
+  ChangeLog.1999 \
   DOCUMENTERS \
   HACKING \
   INSTALL \
@@ -82,7 +94,7 @@ EXTRA_DIST = \
   intltool-extract.in \
   intltool-merge.in \
   intltool-update.in \
-  util/gnc-scm-info
+  util/gnc-vcs-info
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
@@ -178,8 +190,6 @@ libtool: $(LIBTOOL_DEPS)
 
 .PHONY: pot
 pot: Makefile po/POTFILES.in
-	rm -f intl-scm/guile-strings.c
-	${MAKE} -C intl-scm
 	rm -f po/$(PACKAGE).pot
 	${MAKE} -C po $(PACKAGE).pot
 
@@ -189,16 +199,14 @@ $(srcdir)/po/POTFILES.in: make-gnucash-potfiles .potfiles
 
 # Creation rules so that po/gnucash.pot can always be created for
 # make dist.
-po/gnucash.pot: po/POTFILES.in intl-scm/guile-strings.c
+po/gnucash.pot: po/POTFILES.in
 	${MAKE} -C po gnucash.pot
-intl-scm/guile-strings.c:
-	${MAKE} -C intl-scm guile-strings.c
 
 .potfiles:
 
 SVN = svn
 
-if BUILDING_FROM_SCM
+if BUILDING_FROM_VCS
 # This rule will generate a ChangeLog of gnucash/trunk commits, plus
 # all additional branches that are added in
 # ./macros/svn2cl.xsl. (FIXME: Is the dependency on NEWS really a good
@@ -206,13 +214,13 @@ if BUILDING_FROM_SCM
 # change, so this should fit just fine.)
 ChangeLog: NEWS
 	cd $(abs_srcdir) ; \
-	if test x$(SCM_TYPE) = xsvn ; then \
-	  $(SVN) log -v --xml -r HEAD:'{2013-01-01}' http://svn.gnucash.org/repo/gnucash | \
+	if test x$(VCS_TYPE) = xsvn ; then \
+	  $(SVN) log -v --xml -r HEAD:'{2015-01-01}' http://svn.gnucash.org/repo/gnucash | \
 	    $(XSLTPROC) --stringparam strip-prefix "gnucash/trunk" \
 	    --stringparam include-rev "yes" $(abs_srcdir)/macros/svn2cl.xsl - > $(abs_builddir)/$@ ; \
 	else \
-	  if test x$(SCM_TYPE) = xgit ; then \
-	    "$(GIT_CMD)" log --format="%ad %aN %n%n%x09* %s%d%n" --date=short --since=2013-01-01 > $(abs_builddir)/$@ ; \
+	  if test x$(VCS_TYPE) = xgit ; then \
+	    "$(GIT_CMD)" log --format="%ad %aN %n%n%x09* %s%d%n" --date=short --since=2016-01-01 > $(abs_builddir)/$@ ; \
 	  else \
 	    touch $(abs_builddir)/$@ ; \
 	    echo "Note: not in svn or git. ChangeLog not regenerated." ; \

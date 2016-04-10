@@ -28,8 +28,10 @@
 
 #ifndef GNC_SCHEDXACTION_SQL_H
 #define GNC_SCHEDXACTION_SQL_H
-
+extern "C"
+{
 #include "qof.h"
+}
 #include "gnc-backend-sql.h"
 
 void gnc_sql_init_schedxaction_handler( void );

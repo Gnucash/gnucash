@@ -323,6 +323,29 @@ gnc_history_generate_label (int index, const gchar *filename)
 
 }
 
+/** This routine takes a filename and modifies it so that can be
+ *  used as a tooltip for a GtkLabel.  For true filenames it just
+ *  returns the file name. For database backed data files the
+ *  password will be stripped from the uri.
+ *
+ *  @param filename A pointer to the filename to mangle.
+ *
+ *  @return A pointer to the mangled filename.  The Caller is
+ *  responsible for freeing this memory.
+ */
+static gchar *
+gnc_history_generate_tooltip (int index, const gchar *filename)
+{
+
+    if ( gnc_uri_is_file_uri ( filename ) )
+        /* for file paths, display the full file path */
+        return gnc_uri_get_path ( filename );
+    else
+        /* for databases, display the full uri, except for the password */
+        return gnc_uri_normalize_uri ( filename, FALSE );
+
+}
+
 
 /** Update one entry in the file history menu.  This function is
  *  called by either the gnc_plugin_history_list_changed function or
@@ -348,7 +371,7 @@ gnc_history_update_action (GncMainWindow *window,
 {
     GtkActionGroup *action_group;
     GtkAction *action;
-    gchar *action_name, *label_name, *old_filename;
+    gchar *action_name, *label_name, *tooltip, *old_filename;
     gint limit;
 
     ENTER("window %p, index %d, filename %s", window, index,
@@ -367,8 +390,13 @@ gnc_history_update_action (GncMainWindow *window,
     {
         /* set the menu label (w/accelerator) */
         label_name = gnc_history_generate_label(index, filename);
-        g_object_set(G_OBJECT(action), "label", label_name, "visible", TRUE, NULL);
+        tooltip    = gnc_history_generate_tooltip(index, filename);
+        g_object_set(G_OBJECT(action), "label", label_name,
+                                       "tooltip", tooltip,
+                                       "visible", TRUE,
+                                       NULL);
         g_free(label_name);
+        g_free(tooltip);
 
         /* set the filename for the callback function */
         old_filename = g_object_get_data(G_OBJECT(action), FILENAME_STRING);

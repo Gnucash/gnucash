@@ -260,7 +260,7 @@
     <act:parent type="new">1b13a7614b5e84b0778963995e20d897</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>1575 Abziehbare VSt. 16%</act:name>
+    <act:name>1576 Abziehbare VSt. 19%</act:name>
     <act:id type="new">507b25d5d47d57ba115929b70a32fa5e</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -268,11 +268,11 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
-    <act:code>1575</act:code>
+    <act:code>1576</act:code>
     <act:parent type="new">1b13a7614b5e84b0778963995e20d897</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>1576 Abziehbare VStr. nach §13b UStG 16%</act:name>
+    <act:name>1577 Abziehbare VStr. nach §13b UStG 19%</act:name>
     <act:id type="new">ac0fb64d0cfc2b88444527ce8c8682fe</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -280,7 +280,7 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
-    <act:code>1576</act:code>
+    <act:code>1577</act:code>
     <act:parent type="new">1b13a7614b5e84b0778963995e20d897</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -313,7 +313,7 @@
     <act:parent type="new">fc3b1f110a6686f3d40bb0c41c0f8de0</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>3120 Leistungen §13b UStG 16% Vorsteuer, 16% Umsatzsteuer</act:name>
+    <act:name>3120 Leistungen §13b UStG 19% Vorsteuer, 19% Umsatzsteuer</act:name>
     <act:id type="new">39c180a4e3647d347ebc3e16e984372b</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -325,7 +325,7 @@
     <act:parent type="new">a26df9927a82bcb58a1facb4cde6f221</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>3400 Wareneingang VSt. 16%</act:name>
+    <act:name>3400 Wareneingang VSt. 19%</act:name>
     <act:id type="new">01e4b246665a54d40466ba88f5d1d34e</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>
@@ -390,7 +390,7 @@
     <act:parent type="new">dea7f32e6a447d2d1cd7048932c98265</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>1775 Umsatzsteuer 16%</act:name>
+    <act:name>1776 Umsatzsteuer 19%</act:name>
     <act:id type="new">55a2876edef147ed7631486de4af558c</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -398,7 +398,7 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
-    <act:code>1775</act:code>
+    <act:code>1776</act:code>
     <act:parent type="new">dea7f32e6a447d2d1cd7048932c98265</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -426,7 +426,7 @@
     <act:parent type="new">dea7f32e6a447d2d1cd7048932c98265</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>1786 Umsatzsteuer § 13b UStG 16%</act:name>
+    <act:name>1787 Umsatzsteuer § 13b UStG 19%</act:name>
     <act:id type="new">8e1583dfe60365b756f5365741250001</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -434,7 +434,7 @@
       <cmdty:id>EUR</cmdty:id>
     </act:commodity>
     <act:commodity-scu>100</act:commodity-scu>
-    <act:code>1786</act:code>
+    <act:code>1787</act:code>
     <act:parent type="new">dea7f32e6a447d2d1cd7048932c98265</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -525,7 +525,7 @@
     <act:parent type="new">3f31fc649f19b5201f22f7648c3f7107</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>8400 Erlöse USt. 16%</act:name>
+    <act:name>8400 Erlöse USt. 19%</act:name>
     <act:id type="new">d75d796e879b0ad9b2732d698ae9e838</act:id>
     <act:type>INCOME</act:type>
     <act:commodity>

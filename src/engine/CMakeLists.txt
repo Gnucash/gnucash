@@ -1,21 +1,23 @@
 # CMakeLists.txt for src/engine
 
-ADD_DEFINITIONS (-DG_LOG_DOMAIN=\"gnc.engine\")
+ADD_SUBDIRECTORY(test-core)
+ADD_SUBDIRECTORY(test)
 
-INCLUDE_DIRECTORIES (${GLIB2_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES (${LIBINTL_INCLUDE_PATH})
-INCLUDE_DIRECTORIES (${REGEX_INCLUDE_PATH})
-INCLUDE_DIRECTORIES (${GUILE_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES (${CMAKE_BINARY_DIR}/src ) # for config.h
-INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/lib/libc) # for pow.h
-INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src ) # for gnc-ui.h
-INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/libqof/qof) # for qof.h
-INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/gnc-module) # for gnc-module.h
-INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/core-utils) # for gnc-glib-utils.h
-INCLUDE_DIRECTORIES (${CMAKE_CURRENT_SOURCE_DIR}) # for <Account.h>
-INCLUDE_DIRECTORIES (${CMAKE_CURRENT_BINARY_DIR}) # for iso-4217-currencies.c
+SET(engine_noinst_HEADERS
+  AccountP.h
+  ScrubP.h
+  SplitP.h
+  SX-book.h
+  SX-ttinfo.h
+  TransactionP.h
+  gnc-hooks-scm.h
+  gnc-lot.h
+  gnc-lot-p.h
+  gnc-pricedb-p.h
+  policy-p.h
+)
 
-SET (libgncmod_engine_HEADERS
+SET (engine_HEADERS
   Account.h
   FreqSpec.h
   Recurrence.h
@@ -25,6 +27,7 @@ SET (libgncmod_engine_HEADERS
   Query.h
   Scrub.h
   Scrub2.h
+  ScrubBusiness.h
   Scrub3.h
   Split.h
   TransLog.h
@@ -32,6 +35,7 @@ SET (libgncmod_engine_HEADERS
   cap-gains.h
   cashobjects.h
   engine-helpers.h
+  engine-helpers-guile.h
   glib-helpers.h
   gnc-budget.h
   gnc-commodity.h
@@ -54,6 +58,7 @@ SET (libgncmod_engine_HEADERS
   gncEmployeeP.h
   gncEntry.h
   gncEntryP.h
+  gncIDSearch.h
   gncInvoice.h
   gncInvoiceP.h
   gncJob.h
@@ -70,23 +75,26 @@ SET (libgncmod_engine_HEADERS
 
 # Command to generate the swig-engine.c wrapper file
 SET (SWIG_ENGINE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-engine.c)
-GNC_ADD_SWIG_COMMAND (${SWIG_ENGINE_C} ${CMAKE_CURRENT_SOURCE_DIR}/engine.i ${libgncmod_engine_HEADERS})
+GNC_ADD_SWIG_COMMAND (${SWIG_ENGINE_C} ${CMAKE_CURRENT_SOURCE_DIR}/engine.i ${engine_HEADERS})
 
 # Command to generate the iso-4217-currencies.c file
 SET (ISO_4217_C ${CMAKE_CURRENT_BINARY_DIR}/iso-4217-currencies.c)
 ADD_CUSTOM_COMMAND (
   OUTPUT ${ISO_4217_C}
-  DEPENDS iso-4217-currencies.scm iso-currencies-to-c.in
+  DEPENDS iso-4217-currencies.xml iso-currencies-to-c.xsl
   COMMAND
-    ${GUILE_EXECUTABLE} -s "${CMAKE_CURRENT_SOURCE_DIR}/iso-currencies-to-c.in" "${CMAKE_CURRENT_SOURCE_DIR}"
+    ${LIBXSLT_XSLTPROC_EXECUTABLE} -o ${ISO_4217_C} "${CMAKE_CURRENT_SOURCE_DIR}/iso-currencies-to-c.xsl" "${CMAKE_CURRENT_SOURCE_DIR}/iso-4217-currencies.xml"
 )
 # Add dependency on iso-4217-currencies.c
-SET_SOURCE_FILES_PROPERTIES (gnc-commodity.c PROPERTIES OBJECT_DEPENDS ${ISO_4217_C})
+SET_SOURCE_FILES_PROPERTIES (gnc-commodity.c PROPERTIES OBJECT_DEPENDS "${ISO_4217_C};${CONFIG_H}")
+
+# Add dependency on config.h
+SET_SOURCE_FILES_PROPERTIES (${libgncmod_engine_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
 # Add dependency on swig-runtime.h
-SET_SOURCE_FILES_PROPERTIES (gnc-hooks.c engine-helpers.c kvp-scm.c glib-helpers.c PROPERTIES OBJECT_DEPENDS ${SWIG_RUNTIME_H})
+SET_SOURCE_FILES_PROPERTIES (gnc-hooks.c engine-helpers.c kvp-scm.cpp glib-helpers.c PROPERTIES OBJECT_DEPENDS "${CONFIG_H};${SWIG_RUNTIME_H}")
 
-SET (libgncmod_engine_SOURCES
+SET (engine_SOURCES
   Account.c
   Recurrence.c
   Query.c
@@ -96,6 +104,7 @@ SET (libgncmod_engine_SOURCES
   Scrub.c
   Scrub2.c
   Scrub3.c
+  ScrubBusiness.c
   Split.c
   TransLog.c
   Transaction.c
@@ -110,7 +119,7 @@ SET (libgncmod_engine_SOURCES
   gnc-pricedb.c
   gnc-session.c
   gncmod-engine.c
-  kvp-scm.c
+  kvp-scm.cpp
   engine-helpers.c
   glib-helpers.c
   policy.c
@@ -118,9 +127,11 @@ SET (libgncmod_engine_SOURCES
   gncAddress.c
   gncBillTerm.c
   gncBusGuile.c
+  gncBusiness.c
   gncCustomer.c
   gncEmployee.c
   gncEntry.c
+  gncIDSearch.c
   gncInvoice.c
   gncJob.c
   gncOrder.c
@@ -129,10 +140,74 @@ SET (libgncmod_engine_SOURCES
   gncVendor.c
 )
 
-# Add dependency on config.h
-#SET_SOURCE_FILES_PROPERTIES (${libgncmod_engine_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
-ADD_LIBRARY	(engine
-  ${libgncmod_engine_SOURCES}
-  ${libgncmod_engine_HEADERS}
-  )
+ADD_LIBRARY	(gncmod-engine
+  ${engine_SOURCES}
+  ${engine_HEADERS}
+  ${engine_noinst_HEADERS}
+)
+
+TARGET_LINK_LIBRARIES(gncmod-engine gnc-core-utils gnc-module gnc-qof ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS})
+
+TARGET_COMPILE_DEFINITIONS (gncmod-engine PRIVATE -DG_LOG_DOMAIN=\"gnc.engine\")
+
+TARGET_INCLUDE_DIRECTORIES (gncmod-engine
+    PRIVATE ${CMAKE_CURRENT_BINARY_DIR} # for iso-4217-currencies.c
+    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+INSTALL(TARGETS gncmod-engine
+  LIBRARY DESTINATION lib/gnucash
+  ARCHIVE DESTINATION lib/gnucash
+  RUNTIME DESTINATION bin)
+
+INSTALL(FILES ${engine_HEADERS} DESTINATION include/gnucash)
+
+# Scheme
+
+SET (engine_SCHEME_0
+    engine.scm
+    business-core.scm
+)
+
+SET (engine_SCHEME_1
+    commodity-table.scm
+    engine-interface.scm
+    engine-utilities.scm
+    gnc-numeric.scm
+)
+
+SET(BACKEND_DEPENDS gncmod-backend-xml-link)
+
+
+IF(WITH_SQL)
+  LIST(APPEND BACKEND_DEPENDS gncmod-backend-dbi-link)
+ENDIF(WITH_SQL)
+
+SET(GUILE_MODULES      "")
+SET(GUILE_LOAD_DIRS    src/gnc-module)
+SET(GUILE_LIBRARY_DIRS src/gnc-module)
+SET(GUILE_DEPENDS      ${BACKEND_DEPENDS} gnc-module gncmod-engine scm-gnc-module)
+
+
+GNC_ADD_SCHEME_TARGETS(scm-engine-0
+  "${engine_SCHEME_0}"
+  gnucash
+  "${GUILE_MODULES}"
+  "${GUILE_LOAD_DIRS}"
+  "${GUILE_LIBRARY_DIRS}"
+  "${GUILE_DEPENDS}"
+  FALSE
+)
+
+GNC_ADD_SCHEME_TARGETS(scm-engine-1
+  "${engine_SCHEME_1}"
+  ""
+  ""
+  ""
+  ""
+  "scm-engine-0;${GUILE_DEPENDS}"
+  FALSE
+)
+
+ADD_CUSTOM_TARGET(scm-engine ALL DEPENDS scm-engine-1 scm-engine-0)

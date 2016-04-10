@@ -24,7 +24,9 @@
             <property name="label" translatable="yes">
 This assistant will help you import Accounts from a file.
 
-The file must be in the same format as that exported as this is a fixed format import. If the account is missing, based on the full account name, it will be added as long as the security / currency specified exists. If the account exists, then four fields will be updated. These are code, description, notes and color.
+The file must be in the same format as that exported as this is a fixed format import which can be seen by looking at a file created by using the Account Tree export menu option.
+
+If the account is missing, based on the full account name, it will be added as long as the security / currency specified exists. If the account exists, then four fields will be updated. These are code, description, notes and color.
 
 Click on 'Forward' to proceed or 'Cancel' to Abort Import.
 </property>
@@ -135,11 +137,11 @@ Enter file name and location for the Import...
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">12</property>
-                <property name="n_rows">4</property>
-                <property name="n_columns">4</property>
+                <property name="n_rows">3</property>
+                <property name="n_columns">3</property>
                 <child>
-                  <object class="GtkRadioButton" id="radio_semi">
-                    <property name="label" translatable="yes">Semicolon Separated</property>
+                  <object class="GtkRadioButton" id="radio_comma">
+                    <property name="label" translatable="yes">Comma Separated</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -150,53 +152,19 @@ Enter file name and location for the Import...
                   </object>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="radio_semiq">
-                    <property name="label" translatable="yes">Semicolon Separated with Quotes</property>
+                  <object class="GtkRadioButton" id="radio_semi">
+                    <property name="label" translatable="yes">Semicolon Separated</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_action_appearance">False</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">radio_semi</property>
+                    <property name="group">radio_comma</property>
                     <signal name="toggled" handler="csv_import_sep_cb" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="right_attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkRadioButton" id="radio_comma">
-                    <property name="label" translatable="yes">Comma Separated</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">radio_semi</property>
-                    <signal name="toggled" handler="csv_import_sep_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="top_attach">1</property>
-                    <property name="bottom_attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkRadioButton" id="radio_commaq">
-                    <property name="label" translatable="yes">Comma Separated with Quotes</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">radio_semi</property>
-                    <signal name="toggled" handler="csv_import_sep_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="right_attach">3</property>
-                    <property name="top_attach">1</property>
-                    <property name="bottom_attach">2</property>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
                   </packing>
                 </child>
                 <child>
@@ -207,7 +175,7 @@ Enter file name and location for the Import...
                     <property name="receives_default">False</property>
                     <property name="use_action_appearance">False</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">radio_semi</property>
+                    <property name="group">radio_comma</property>
                     <signal name="toggled" handler="csv_import_sep_cb" swapped="no"/>
                   </object>
                   <packing>
@@ -216,37 +184,20 @@ Enter file name and location for the Import...
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
+                  <object class="GtkRadioButton" id="radio_colon">
+                    <property name="label" translatable="yes">Colon Separated</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_action_appearance">False</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">radio_comma</property>
+                    <signal name="toggled" handler="csv_import_sep_cb" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="right_attach">3</property>
+                  </packing>
                 </child>
               </object>
             </child>

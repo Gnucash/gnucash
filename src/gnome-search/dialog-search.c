@@ -120,7 +120,7 @@ struct _GNCSearchWindow
     /* The list of criteria */
     GNCSearchParam           *last_param;
     GList                    *params_list;  /* List of GNCSearchParams */
-    GList                    *display_list; /* List of GNCSearchParams for Display */
+    GList                    *display_list; /* List of GNCSearchParamSimples for Display */
     gint                      num_cols;     /* Number of Display Columns */
     GList                    *crit_list;    /* List of crit_data */
 
@@ -426,6 +426,38 @@ search_active_only_cb (GtkToggleButton *button, GNCSearchWindow *sw)
                        gtk_toggle_button_get_active (button));
 }
 
+static QofQuery *
+create_query_fragment (QofIdTypeConst search_for, GNCSearchParam *param, QofQueryPredData *pdata)
+{
+    GNCSearchParamKind kind = gnc_search_param_get_kind (param);
+    QofQuery *q = qof_query_create_for (search_for);
+    
+    if (kind == SEARCH_PARAM_ELEM)
+    {
+        /* The "op" parameter below will be ignored since q has no terms. */
+        qof_query_add_term (q, gnc_search_param_get_param_path (GNC_SEARCH_PARAM_SIMPLE (param)),
+                            pdata, QOF_QUERY_OR);
+    } 
+    else
+    {
+        GList *plist = gnc_search_param_get_search (GNC_SEARCH_PARAM_COMPOUND (param));
+        
+        for ( ; plist; plist  = plist->next)
+        {
+            QofQuery *new_q;
+            GNCSearchParam *param2 = plist->data;
+            QofQuery *q2 = create_query_fragment (search_for, param2, 
+                                                  qof_query_core_predicate_copy (pdata));
+            new_q = qof_query_merge (q, q2, kind == SEARCH_PARAM_ANY ? 
+                                                    QOF_QUERY_OR : QOF_QUERY_AND);
+            qof_query_destroy (q);
+            qof_query_destroy (q2);
+            q = new_q;
+        }
+        qof_query_core_predicate_free (pdata);
+    }
+    return q;
+}
 
 static void
 search_update_query (GNCSearchWindow *sw)
@@ -434,7 +466,6 @@ search_update_query (GNCSearchWindow *sw)
     QofQuery *q, *q2, *new_q;
     GList *node;
     QofQueryOp op;
-    QofQueryPredData* pdata;
 
     if (sw->grouping == GNC_SEARCH_MATCH_ANY)
         op = QOF_QUERY_OR;
@@ -463,11 +494,14 @@ search_update_query (GNCSearchWindow *sw)
     for (node = sw->crit_list; node; node = node->next)
     {
         struct _crit_data *data = node->data;
+        QofQueryPredData* pdata;
 
         pdata = gnc_search_core_type_get_predicate (data->element);
         if (pdata)
-            qof_query_add_term (q, gnc_search_param_get_param_path (data->param),
-                                pdata, op);
+        {
+            q2 = create_query_fragment(sw->search_for, GNC_SEARCH_PARAM (data->param), pdata);
+            q = qof_query_merge (q, q2, op);
+        }
     }
 
     /* Now combine this query with the existing query, depending on
@@ -909,7 +943,7 @@ gnc_search_dialog_book_option_changed (gpointer new_val, gpointer user_data)
 static void
 gnc_search_dialog_add_criterion (GNCSearchWindow *sw)
 {
-    GNCSearchCoreType *new;
+    GNCSearchCoreType *new_sct;
 
     /* First, make sure that the last criterion is ok */
     if (sw->crit_list)
@@ -926,25 +960,25 @@ gnc_search_dialog_add_criterion (GNCSearchWindow *sw)
         gtk_widget_hide(sw->match_all_label);
     }
     /* create a new criterion element */
-    new = gnc_search_core_type_new_type_name
+    new_sct = gnc_search_core_type_new_type_name
           (gnc_search_param_get_param_type (sw->last_param));
 
-    if (new)
+    if (new_sct)
     {
         struct _crit_data *data;
         GtkWidget *w;
         int rows;
 
-        w = get_element_widget (sw, new);
+        w = get_element_widget (sw, new_sct);
         data = g_object_get_data (G_OBJECT (w), "data");
         sw->crit_list = g_list_append (sw->crit_list, data);
 
-        rows = GTK_TABLE (sw->criteria_table)->nrows;
+        gtk_table_get_size (GTK_TABLE (sw->criteria_table), &rows, NULL);
         gtk_table_resize (GTK_TABLE (sw->criteria_table), rows + 1, 2);
         attach_element (w, sw, rows);
 
-        gnc_search_core_type_grab_focus (new);
-        gnc_search_core_type_editable_enters (new);
+        gnc_search_core_type_grab_focus (new_sct);
+        gnc_search_core_type_editable_enters (new_sct);
     }
 }
 
@@ -1016,50 +1050,50 @@ close_handler (gpointer data)
 static const gchar *
 type_label_to_new_button(const gchar* type_label)
 {
-    if (g_strcmp0(type_label, "Bill") == 0)
+    if (g_strcmp0(type_label, _("Bill")) == 0)
     {
         return _("New Bill");
     }
-    else if (g_strcmp0(type_label, "Customer") == 0)
+    else if (g_strcmp0(type_label, _("Customer")) == 0)
     {
         return _("New Customer");
     }
-    else if (g_strcmp0(type_label, "Employee") == 0)
+    else if (g_strcmp0(type_label, _("Employee")) == 0)
     {
         return _("New Employee");
     }
-    else if (g_strcmp0(type_label, "Expense Voucher") == 0)
+    else if (g_strcmp0(type_label, _("Expense Voucher")) == 0)
     {
         return _("New Expense Voucher");
     }
-    else if (g_strcmp0(type_label, "Invoice") == 0)
+    else if (g_strcmp0(type_label, _("Invoice")) == 0)
     {
         return _("New Invoice");
     }
-    else if (g_strcmp0(type_label, "Job") == 0)
+    else if (g_strcmp0(type_label, _("Job")) == 0)
     {
         return _("New Job");
     }
-    else if (g_strcmp0(type_label, "Order") == 0)
+    else if (g_strcmp0(type_label, _("Order")) == 0)
     {
         return _("New Order");
     }
-    else if (g_strcmp0(type_label, "Transaction") == 0)
+    else if (g_strcmp0(type_label, _("Transaction")) == 0)
     {
         return _("New Transaction");
     }
-    else if (g_strcmp0(type_label, "Split") == 0)
+    else if (g_strcmp0(type_label, _("Split")) == 0)
     {
         return _("New Split");
     }
-    else if (g_strcmp0(type_label, "Vendor") == 0)
+    else if (g_strcmp0(type_label, _("Vendor")) == 0)
     {
         return _("New Vendor");
     }
     else
     {
         PWARN("No translatable new-button label found for search type \"%s\", please add one into dialog-search.c!", type_label);
-        return _("New item");
+        return Q_("Item represents an unknown object type (in the sense of bill, customer, invoice, transaction, split,...)|New item");
     }
 }
 

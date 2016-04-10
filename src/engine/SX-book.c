@@ -45,6 +45,7 @@
 #include "SX-book.h"
 #include "SX-book-p.h"
 #include "gnc-event.h"
+#include <qofinstance-p.h>
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.engine.sx"
@@ -118,6 +119,7 @@ sxtg_book_begin (QofBook *book)
     xaccAccountBeginEdit(root);
     xaccAccountSetType(root, ACCT_TYPE_ROOT);
     xaccAccountSetName(root, "Template Root");
+    qof_instance_set_dirty (QOF_INSTANCE (root));
     xaccAccountCommitEdit(root);
     gnc_book_set_template_root (book, root);
 }

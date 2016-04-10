@@ -73,9 +73,9 @@
 	     (gnc:error "Illegal invoice value set"))))
      (lambda () (convert-to-invoice (default-getter)))
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (kvp-frame-set-slot-path-gslist f option p))
-     (lambda (f p)
-       (let ((v (kvp-frame-get-slot-path-gslist f p)))
+     (lambda (b p) (qof-book-set-option b option p))
+     (lambda (b p)
+       (let ((v (qof-book-get-option b p)))
 	 (if (and v (string? v))
 	     (begin
 	       (set! option v)
@@ -134,9 +134,9 @@
 	     (gnc:error "Illegal customer value set"))))
      (lambda () (convert-to-customer (default-getter)))
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (kvp-frame-set-slot-path-gslist f option p))
-     (lambda (f p)
-       (let ((v (kvp-frame-get-slot-path-gslist f p)))
+     (lambda (b p) (qof-book-set-option b option p))
+     (lambda (b p)
+       (let ((v (qof-book-get-option b p)))
 	 (if (and v (string? v))
 	     (begin
 	       (set! option v)
@@ -195,9 +195,9 @@
 	     (gnc:error "Illegal vendor value set"))))
      (lambda () (convert-to-vendor (default-getter)))
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (kvp-frame-set-slot-path-gslist f option p))
-     (lambda (f p)
-       (let ((v (kvp-frame-get-slot-path-gslist f p)))
+     (lambda (b p) (qof-book-set-option b option p))
+     (lambda (b p)
+       (let ((v (qof-book-get-option b p)))
 	 (if (and v (string? v))
 	     (begin
 	       (set! option v)
@@ -256,9 +256,9 @@
 	     (gnc:error "Illegal employee value set"))))
      (lambda () (convert-to-employee (default-getter)))
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (kvp-frame-set-slot-path-gslist f option p))
-     (lambda (f p)
-       (let ((v (kvp-frame-get-slot-path-gslist f p)))
+     (lambda (b p) (qof-book-set-option b option p))
+     (lambda (b p)
+       (let ((v (qof-book-get-option b p)))
 	 (if (and v (string? v))
 	     (begin
 	       (set! option v)
@@ -355,14 +355,14 @@
 	       (gnc:error "Illegal owner value set"))))
        (lambda () (convert-to-owner (default-getter)))
        (gnc:restore-form-generator value->string)
-       (lambda (f p)
-	 (kvp-frame-set-slot-path-gslist f (symbol->string (car option))
+       (lambda (b p)
+	 (qof-book-set-option b (symbol->string (car option))
 				      (append p '("type")))
-	 (kvp-frame-set-slot-path-gslist f (cdr option)
+	 (qof-book-set-option b (cdr option)
 				      (append p '("value"))))
-       (lambda (f p)
-	 (let ((t (kvp-frame-get-slot-path-gslist f (append p '("type"))))
-	       (v (kvp-frame-get-slot-path-gslist f (append p '("value")))))
+       (lambda (b p)
+	 (let ((t (qof-book-get-option b (append p '("type"))))
+	       (v (qof-book-get-option b (append p '("value")))))
 	   (if (and t v (string? t) (string? v))
 	       (begin
 		 (set! option (cons (string->symbol t) v))
@@ -422,9 +422,9 @@
 	     (gnc:error "Illegal taxtable value set"))))
      (lambda () (convert-to-taxtable (default-getter)))
      (gnc:restore-form-generator value->string)
-     (lambda (f p) (kvp-frame-set-slot-path-gslist f option p))
-     (lambda (f p)
-       (let ((v (kvp-frame-get-slot-path-gslist f p)))
+     (lambda (b p) (qof-book-set-option b option p))
+     (lambda (b p)
+       (let ((v (qof-book-get-option b p)))
 	 (if (and v (string? v))
 	     (begin
 	       (set! option v)
@@ -450,26 +450,35 @@
          documentation-string
          default-value)
   (let ((option (gnc:make-number-range-option section name sort-tag documentation-string default-value 0 999999999 0 1)))
-     (gnc:set-option-scm->kvp option (lambda (f p) (kvp-frame-set-slot-path-gslist f (inexact->exact ((gnc:option-getter option))) (list "counters" key))))
-     (gnc:set-option-kvp->scm option (lambda (f p)
-                               (let ((v (kvp-frame-get-slot-path-gslist f (list "counters" key))))
+     (gnc:set-option-scm->kvp option (lambda (b p) (qof-book-set-option b (inexact->exact ((gnc:option-getter option))) (list "counters" key))))
+     (gnc:set-option-kvp->scm option (lambda (b p)
+                               (let ((v (qof-book-get-option b (list "counters" key))))
                                  (if (and v (integer? v))
                                      ((gnc:option-setter option) v)))))
      option))
 
 ;; This defines an option to set a counter format, which has the same
 ;; exception as gnc:make-counter-option above.
+;; Note this function uses a hack to make sure there never is a default value
+;; (default-value is set to #f and value subsequently set to whatever was passed as default-value)
+;; This hack was introduced to fix https://bugzilla.gnome.org/show_bug.cgi?id=687504
 (define (gnc:make-counter-format-option
          section
          name
-	 key
+         key
          sort-tag
          documentation-string
          default-value)
-  (let ((option (gnc:make-string-option section name sort-tag documentation-string default-value)))
-     (gnc:set-option-scm->kvp option (lambda (f p) (kvp-frame-set-slot-path-gslist f ((gnc:option-getter option)) (list "counter_formats" key))))
-     (gnc:set-option-kvp->scm option (lambda (f p)
-                               (let ((v (kvp-frame-get-slot-path-gslist f (list "counter_formats" key))))
+  (let ((option (gnc:make-string-option section name sort-tag documentation-string #f)))
+     (gnc:option-set-value option default-value)
+     (gnc:set-option-scm->kvp option
+         (lambda (b p)
+             (let ((value ((gnc:option-getter option)))
+                   (path (string-concatenate (list "counter_formats/" key))))
+                  (qof-book-set-string-option b path value))))
+     (gnc:set-option-kvp->scm option (lambda (b p)
+                               (let* ((path (string-concatenate (list "counter_formats/" key)))
+                                     (v (qof-book-get-string-option b path)))
                                  (if (and v (string? v))
                                      ((gnc:option-setter option) v)))))
      option))

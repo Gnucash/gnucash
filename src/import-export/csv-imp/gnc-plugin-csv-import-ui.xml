@@ -5,6 +5,7 @@
       	<placeholder name="FileImportPlaceholder">
       	   <menuitem name="FileCsvImportAccounts" action="CsvImportAccountAction"/>
       	   <menuitem name="FileCsvImportTrans" action="CsvImportTransAction"/>
+      	   <menuitem name="FileCsvImportFixedTrans" action="CsvImportFixedTransAction"/>
       	</placeholder>
       </menu>
     </menu>

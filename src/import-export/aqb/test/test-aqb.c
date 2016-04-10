@@ -29,6 +29,7 @@ Write and link other test files */
 #include "backend/xml/gnc-backend-xml.h"
 #include "gnc-module/gnc-module.h"
 #include "engine/gnc-engine.h"
+#include <engine/TransLog.h>
 
 void test_qofsession_aqb_kvp( void );
 
@@ -39,14 +40,15 @@ main (int   argc,
     qof_init(); 			/* Initialize the GObject system */
     qof_log_init_filename_special("stderr"); /* Init the log system */
     g_test_init ( &argc, &argv, NULL ); 	/* initialize test program */
-    qof_log_set_level("gnc", G_LOG_LEVEL_DEBUG);
+    qof_log_set_level("gnc", (QofLogLevel)G_LOG_LEVEL_DEBUG);
     g_test_bug_base("https://bugzilla.gnome.org/show_bug.cgi?id="); /* init the bugzilla URL */
     /* Disable the transaction log */
     xaccLogDisable();
 
     gnc_module_system_init();
     gnc_engine_init_static(argc, argv);
-    gnc_module_init_backend_xml(); // register the file:// handler
+    qof_load_backend_library ("../../../backend/xml/.libs/",
+			      "gncmod-backend-xml");
 
     /* Add test functions and suites. See
      * http://library.gnome.org/devel/glib/stable/glib-Testing.html for

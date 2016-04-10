@@ -24,11 +24,13 @@
 
 #ifndef IO_UTILS_H
 #define IO_UTILS_H
-
+extern "C"
+{
 #include <stdio.h>
+#include "qof.h"
+}
 
 #include "io-gncxml-v2.h"
-#include "qof.h"
 
 gboolean write_account_tree(FILE *out, Account *root, sixtp_gdv2 *gd);
 gboolean write_accounts(FILE *out, QofBook *book, sixtp_gdv2 *gd);

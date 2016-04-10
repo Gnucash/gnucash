@@ -29,8 +29,10 @@
 
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
+(use-modules (gnucash gettext))
 
 (use-modules (gnucash printf))
+(use-modules (gnucash engine))
 
 (use-modules (srfi srfi-1))
 
@@ -808,47 +810,6 @@
          ;;(txt (gnc:make-html-text))
          )
 
-    ;; is account in list of accounts?
-    (define (same-account? a1 a2)
-      (string=? (gncAccountGetGUID a1) (gncAccountGetGUID a2)))
-
-    (define (same-split? s1 s2)
-      (string=? (gncSplitGetGUID s1) (gncSplitGetGUID s2)))
-
-    (define account-in-list?
-      (lambda (account accounts)
-        (cond
-          ((null? accounts) #f)
-          ((same-account? (car accounts) account) #t)
-          (else (account-in-list? account (cdr accounts))))))
-
-    (define split-in-list?
-      (lambda (split splits)
-    (cond
-     ((null? splits) #f)
-     ((same-split? (car splits) split) #t)
-     (else (split-in-list? split (cdr splits))))))
-
-    (define account-in-alist
-      (lambda (account alist)
-        (cond
-       ((null? alist) #f)
-           ((same-account? (caar alist) account) (car alist))
-           (else (account-in-alist account (cdr alist))))))
-
-    ;; helper for sorting of account list
-    (define (account-full-name<? a b)
-      (string<? (gnc-account-get-full-name a) (gnc-account-get-full-name b)))
-
-    ;; helper for account depth
-    (define (accounts-get-children-depth accounts)
-      (apply max
-         (map (lambda (acct)
-            (let ((children (gnc-account-get-children acct)))
-              (if (null? children)
-              1
-              (+ 1 (accounts-get-children-depth children)))))
-          accounts)))
     ;; end of defines
 
     ;; add subaccounts if requested

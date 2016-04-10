@@ -21,7 +21,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(load-from-path "html-jqplot.scm")
+(load-from-path "html-jqplot")
 
 (define <html-barchart>
   (make-record-type "<html-barchart>"
@@ -359,12 +359,12 @@
                          (push "var d")
                          (push series-index)
                          (push " = [];\n")))
-         (series-data-add (lambda (series-index date y)
+         (series-data-add (lambda (series-index x y)
                          (push (string-append
                                "  d"
                                (number->string series-index)
                                ".push(["
-                               "\"" date "\""
+                               (number->string x)
                                ", "
                                (number->string y)
                                "]);\n"))))
@@ -386,7 +386,7 @@
             (push (gnc:html-js-include "jqplot/jquery.jqplot.js"))
             (push (gnc:html-js-include "jqplot/jqplot.barRenderer.js"))
             (push (gnc:html-js-include "jqplot/jqplot.cursor.js"))
-            (push (gnc:html-js-include "jqplot/jqplot.dateAxisRenderer.js"))
+            (push (gnc:html-js-include "jqplot/jqplot.categoryAxisRenderer.js"))
             (push (gnc:html-js-include "jqplot/jqplot.highlighter.js"))
             (push (gnc:html-js-include "jqplot/jqplot.canvasTextRenderer.js"))
             (push (gnc:html-js-include "jqplot/jqplot.canvasAxisTickRenderer.js"))
@@ -406,15 +406,15 @@
             (if (and data (list? data))
               (let ((rows (length data))
                     (cols 0))
-                (let loop ((col 0) (rowcnt 0))
+                (let loop ((col 0) (rowcnt 1))
                   (series-data-start col)
                   (if (list? (car data))
                       (begin 
                         (set! cols (length (car data)))))    
                   (for-each
                     (lambda (row)
-                      (if (< rowcnt rows)
-                        (series-data-add col (list-ref (gnc:html-barchart-row-labels barchart) rowcnt)
+                      (if (<= rowcnt rows)
+                        (series-data-add col rowcnt
                                        (ensure-numeric (list-ref-safe row col)))
                       )
                       (set! rowcnt (+ rowcnt 1)))
@@ -424,6 +424,14 @@
                       (loop (+ 1 col) 1)))))
 
 
+            (push "var all_ticks = [")
+            (for-each
+                (lambda (val)
+                    (push "\"")
+                    (push val)
+                    (push "\","))
+                (gnc:html-barchart-row-labels barchart))
+            (push "];\n")
             (push "var options = {
                    shadowAlpha: 0.07,
                    stackSeries: false,
@@ -445,7 +453,7 @@
                    },
                    axes: {
                        xaxis: {
-                           renderer:$.jqplot.DateAxisRenderer,
+                           renderer:$.jqplot.CategoryAxisRenderer,
                            tickRenderer: $.jqplot.CanvasAxisTickRenderer,
                            tickOptions: {
                                angle: -30,
@@ -456,10 +464,14 @@
                            autoscale: true,
                        },
                    },
+                   highlighter: {
+                       tooltipContentEditor: formatTooltip,
+                   },
                    cursor:{
                        show: true,
-                       zoom: true
-                   }
+                       showTooltip: false,
+                       zoom: true,
+                   },
                 };\n")
 
             (push "  options.stackSeries = ")
@@ -489,19 +501,43 @@
                 (push "  options.axes.yaxis.label = \"")
                 (push y-label)
                 (push "\";\n")))
+            (push "  options.axes.xaxis.ticks = all_ticks;\n")
 
 
-            (push "$.jqplot.config.enablePlugins = true;")
-            (push "var plot = $.jqplot('")(push chart-id)(push"', data, options);
+            (push "$.jqplot.config.enablePlugins = true;\n")
+            (push "$(document).ready(function() {
+var plot = $.jqplot('")(push chart-id)(push"', data, options);
+var int_chart_width = document.getElementById(\"")(push chart-id)(push"\").getElementsByClassName(\"jqplot-zoom-canvas\")[0].width;
+plot.axes.xaxis.ticks = getVisualTicks(int_chart_width);
+plot.replot();
+});
 
-  function formatTooltip(str, seriesIndex, pointIndex) {
-      if (options.axes.xaxis.ticks[pointIndex] !== undefined)
-          x = options.axes.xaxis.ticks[pointIndex];
-      else
-          x = pointIndex;
-      y = data[seriesIndex][pointIndex][1].toFixed(2);
-      return options.series[seriesIndex].label + ' ' + x + '<br><b>' + y + '</b>';
-  }\n") 
+function formatTooltip(str, seriesIndex, pointIndex) {
+    if (options.axes.xaxis.ticks[pointIndex] !== undefined)
+        x = options.axes.xaxis.ticks[pointIndex];
+    else
+        x = pointIndex;
+    y = data[seriesIndex][pointIndex][1].toFixed(2);
+    return options.series[seriesIndex].label + '<br/>' + x + '<br/><b>' + y + '</b>';
+}
+
+function getVisualTicks(chart_width) {
+    var num_ticks = all_ticks.length;
+    var label_width = 25;
+    var num_labels = chart_width / label_width;
+    var show_every_nth_label = Math.ceil (num_ticks / num_labels);
+    var visual_ticks = [];
+
+    if (show_every_nth_label == 0)
+        show_every_nth_label = 1;
+    for (counter = 0; counter < all_ticks.length; counter++) {
+        if ((counter % show_every_nth_label) == 0)
+            visual_ticks.push (all_ticks[counter]);
+        else
+            visual_ticks.push (' ');
+    }
+    return visual_ticks;
+}\n")
 
             (push "});\n</script>")
 

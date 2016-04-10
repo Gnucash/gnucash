@@ -1,23 +1,55 @@
 /** @file test-engine-stuff.h
  *  $brief This file declares testing functions for the engine.
  */
+/********************************************************************\
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
 
 #ifndef TEST_ENGINE_STUFF_H
 #define TEST_ENGINE_STUFF_H
-
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 #include <glib.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 #include "qof.h"
 #include "Query.h"
 #include "gnc-pricedb.h"
 #include "SchedXaction.h"
 
+#ifndef __KVP_VALUE
+typedef struct KvpValueImpl KvpValue;
+#define __KVP_VALUE
+#endif
+#ifndef __KVP_FRAME
+typedef struct KvpFrameImpl KvpFrame;
+#define __KVP_FRAME
+#endif
 Timespec* get_random_timespec(void);
 void random_timespec_zero_nsec (gboolean zero_nsec);
 void random_timespec_usec_resolution (gboolean usec_resolution);
 
-kvp_value* get_random_kvp_value(int type);
+KvpValue* get_random_kvp_value(int type);
 
 typedef struct
 {
@@ -27,13 +59,11 @@ typedef struct
 
 bin_data* get_random_binary_data(void);
 
-kvp_frame* get_random_kvp_frame(void);
-gnc_numeric get_random_gnc_numeric(void);
+KvpFrame* get_random_kvp_frame(void);
+gnc_numeric get_random_gnc_numeric(int64_t);
 GncGUID* get_random_guid(void);
-GList* get_random_glist(void);
 
-void random_glist_strings_only (gboolean strings_only);
-void kvp_exclude_type (KvpValueType kvp_type);
+//void kvp_exclude_type (KvpValueType kvp_type);
 void set_max_kvp_depth (gint max_kvp_depth);
 void set_max_kvp_frame_elements (gint max_kvp_frame_elements);
 void set_max_account_tree_depth (gint max_tree_depth);
@@ -89,8 +119,12 @@ void make_random_changes_to_level (QofBook *book, Account *parent);
 void make_random_changes_to_book (QofBook *book);
 void make_random_changes_to_session (QofSession *session);
 
-SchedXaction* add_daily_sx(gchar *name, const GDate *start, const GDate *end, const GDate *last_occur);
-SchedXaction* add_once_sx(gchar *name, const GDate *when);
+SchedXaction* add_daily_sx(const gchar *name, const GDate *start,
+			   const GDate *end, const GDate *last_occur);
+SchedXaction* add_once_sx(const gchar *name, const GDate *when);
 void remove_sx(SchedXaction *sx);
 
+#ifdef __cplusplus
+}
+#endif
 #endif

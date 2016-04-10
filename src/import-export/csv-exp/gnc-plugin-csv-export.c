@@ -30,6 +30,12 @@
 
 #include "assistant-csv-export.h"
 
+#include "gnc-plugin-page-register.h"
+/*################## Added for Reg2 #################*/
+#include "gnc-plugin-page-register2.h"
+/*################## Added for Reg2 #################*/
+#include "Query.h"
+
 static void gnc_plugin_csv_export_class_init (GncPluginCsvExportClass *klass);
 static void gnc_plugin_csv_export_init (GncPluginCsvExport *plugin);
 static void gnc_plugin_csv_export_finalize (GObject *object);
@@ -37,6 +43,7 @@ static void gnc_plugin_csv_export_finalize (GObject *object);
 /* Command callbacks */
 static void gnc_plugin_csv_export_tree_cmd (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_csv_export_trans_cmd (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_csv_export_register_cmd (GtkAction *action, GncMainWindowActionData *data);
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-csv-export-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-csv-export-ui.xml"
@@ -52,6 +59,11 @@ static GtkActionEntry gnc_plugin_actions [] =
         "CsvExportTransAction", GTK_STOCK_CONVERT, N_("Export _Transactions to CSV..."), NULL,
         N_("Export the Transactions to a CSV file"),
         G_CALLBACK (gnc_plugin_csv_export_trans_cmd)
+    },
+    {
+        "CsvExportRegisterAction", GTK_STOCK_CONVERT, N_("Export _Active Register to CSV..."), NULL,
+        N_("Export the Active Register to a CSV file"),
+        G_CALLBACK (gnc_plugin_csv_export_register_cmd)
     },
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
@@ -154,6 +166,33 @@ gnc_plugin_csv_export_trans_cmd (GtkAction *action,
                                  GncMainWindowActionData *data)
 {
     gnc_file_csv_export(XML_EXPORT_TRANS);
+}
+
+static void
+gnc_plugin_csv_export_register_cmd (GtkAction *action,
+                                 GncMainWindowActionData *data)
+{
+    Query   *query;
+    GList   *splits;
+    Account *acc;
+
+    GncPluginPage *page = gnc_main_window_get_current_page (data->window);
+
+    if (GNC_IS_PLUGIN_PAGE_REGISTER(page))
+    {
+        query = gnc_plugin_page_register_get_query (page);
+        acc = gnc_plugin_page_register_get_account (GNC_PLUGIN_PAGE_REGISTER(page));
+        gnc_file_csv_export_register (XML_EXPORT_REGISTER, query, acc);
+    }
+
+/*################## Added for Reg2 #################*/
+    if (GNC_IS_PLUGIN_PAGE_REGISTER2(page))
+    {
+        query = gnc_plugin_page_register2_get_query (page);
+        acc = gnc_plugin_page_register2_get_account (GNC_PLUGIN_PAGE_REGISTER2(page));
+        gnc_file_csv_export_register (XML_EXPORT_REGISTER, query, acc);
+    }
+/*################## Added for Reg2 #################*/
 }
 
 /************************************************************

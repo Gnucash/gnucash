@@ -44,7 +44,7 @@
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash printf))
 (use-modules (gnucash gnc-module))
-(use-modules (gnucash app-utils))
+(use-modules (gnucash gettext))
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
@@ -136,6 +136,7 @@
 ;; options generator
 (define (budget-income-statement-options-generator-internal reportname)
   (let* ((options (gnc:new-options))
+         (book (gnc-get-current-book)) ; XXX Find a way to get the book that opened the report
          (add-option 
           (lambda (new-option)
             (gnc:register-option options new-option))))
@@ -147,7 +148,7 @@
     (add-option
       (gnc:make-string-option
       gnc:pagename-general optname-party-name
-      "b" opthelp-party-name (or (gnc:company-info gnc:*company-name*) "")))
+      "b" opthelp-party-name (or (gnc:company-info book gnc:*company-name*) "")))
 
     (add-option
      (gnc:make-budget-option

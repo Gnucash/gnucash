@@ -192,6 +192,7 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
         gnc_commodity *split_cmdty = NULL;
         GncGUID *acct_guid = NULL;
         Account *acct;
+        gboolean split_is_marker = TRUE;
 
         s = (Split*)split_list->data;
 
@@ -202,12 +203,27 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
 			  NULL);
         acct = xaccAccountLookup(acct_guid, gnc_get_current_book());
         split_cmdty = xaccAccountGetCommodity(acct);
-        if (first_cmdty == NULL)
+        // existing... ------------------------------------------
+	if (credit_formula && strlen(credit_formula) != 0)
+	{
+	    gnc_sx_parse_vars_from_formula(credit_formula, var_hash, NULL);
+	    split_is_marker = FALSE;
+	}
+	if (debit_formula && strlen(debit_formula) != 0)
+	{
+	    gnc_sx_parse_vars_from_formula(debit_formula, var_hash, NULL);
+	    split_is_marker = FALSE;
+	}
+	g_free (credit_formula);
+	g_free (debit_formula);
+
+        if (!split_is_marker && first_cmdty == NULL)
         {
             first_cmdty = split_cmdty;
         }
 
-        if (! gnc_commodity_equal(split_cmdty, first_cmdty))
+        if (!split_is_marker &&
+            ! gnc_commodity_equal(split_cmdty, first_cmdty))
         {
             GncSxVariable *var;
             GString *var_name;
@@ -223,18 +239,6 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
             g_hash_table_insert(var_hash, g_strdup(var->name), var);
             g_string_free(var_name, TRUE);
         }
-
-        // existing... ------------------------------------------
-	if (credit_formula && strlen(credit_formula) != 0)
-	{
-	    gnc_sx_parse_vars_from_formula(credit_formula, var_hash, NULL);
-	}
-	if (debit_formula && strlen(debit_formula) != 0)
-	{
-	    gnc_sx_parse_vars_from_formula(debit_formula, var_hash, NULL);
-	}
-	g_free (credit_formula);
-	g_free (debit_formula);
     }
 
     return 0;
@@ -255,8 +259,7 @@ gnc_sx_get_template_transaction_account(const SchedXaction *sx)
 void
 gnc_sx_get_variables(SchedXaction *sx, GHashTable *var_hash)
 {
-    Account *sx_template_acct;
-    sx_template_acct = gnc_sx_get_template_transaction_account(sx);
+    Account *sx_template_acct = gnc_sx_get_template_transaction_account(sx);
     xaccAccountForEachTransaction(sx_template_acct, _get_vars_helper, var_hash);
 }
 
@@ -349,7 +352,7 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
     const GDate *range_end = (const GDate*)user_data;
     GDate creation_end, remind_end;
     GDate cur_date;
-    void *sequence_ctx;
+    SXTmpStateData *temporal_state = gnc_sx_create_temporal_state(sx);
 
     instances->sx = sx;
 
@@ -370,37 +373,45 @@ _gnc_sx_gen_instances(gpointer *data, gpointer user_data)
             g_date_clear(&inst_date, 1);
             inst_date = xaccSchedXactionGetNextInstance(sx, postponed->data);
             seq_num = gnc_sx_get_instance_count(sx, postponed->data);
-            inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_POSTPONED, &inst_date, postponed->data, seq_num);
-            instances->instance_list = g_list_append(instances->instance_list, inst);
+            inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_POSTPONED,
+                                       &inst_date, postponed->data, seq_num);
+            instances->instance_list =
+                g_list_append(instances->instance_list, inst);
+            gnc_sx_destroy_temporal_state(temporal_state);
+            temporal_state = gnc_sx_clone_temporal_state(postponed->data);
+            gnc_sx_incr_temporal_state(sx, temporal_state);
         }
     }
 
     /* to-create */
     g_date_clear(&cur_date, 1);
-    sequence_ctx = gnc_sx_create_temporal_state(sx);
-    cur_date = xaccSchedXactionGetInstanceAfter(sx, &cur_date, sequence_ctx);
+    cur_date = xaccSchedXactionGetNextInstance(sx, temporal_state);
     instances->next_instance_date = cur_date;
     while (g_date_valid(&cur_date) && g_date_compare(&cur_date, &creation_end) <= 0)
     {
         GncSxInstance *inst;
         int seq_num;
-        seq_num = gnc_sx_get_instance_count(sx, sequence_ctx);
-        inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_TO_CREATE, &cur_date, sequence_ctx, seq_num);
+        seq_num = gnc_sx_get_instance_count(sx, temporal_state);
+        inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_TO_CREATE,
+                                   &cur_date, temporal_state, seq_num);
         instances->instance_list = g_list_append(instances->instance_list, inst);
-        gnc_sx_incr_temporal_state(sx, sequence_ctx);
-        cur_date = xaccSchedXactionGetInstanceAfter(sx, &cur_date, sequence_ctx);
+        gnc_sx_incr_temporal_state(sx, temporal_state);
+        cur_date = xaccSchedXactionGetNextInstance(sx, temporal_state);
     }
 
     /* reminders */
-    while (g_date_valid(&cur_date) && g_date_compare(&cur_date, &remind_end) <= 0)
+    while (g_date_valid(&cur_date) &&
+           g_date_compare(&cur_date, &remind_end) <= 0)
     {
         GncSxInstance *inst;
         int seq_num;
-        seq_num = gnc_sx_get_instance_count(sx, sequence_ctx);
-        inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_REMINDER, &cur_date, sequence_ctx, seq_num);
-        instances->instance_list = g_list_append(instances->instance_list, inst);
-        gnc_sx_incr_temporal_state(sx, sequence_ctx);
-        cur_date = xaccSchedXactionGetInstanceAfter(sx, &cur_date, sequence_ctx);
+        seq_num = gnc_sx_get_instance_count(sx, temporal_state);
+        inst = gnc_sx_instance_new(instances, SX_INSTANCE_STATE_REMINDER,
+                                   &cur_date, temporal_state, seq_num);
+        instances->instance_list = g_list_append(instances->instance_list,
+                                                 inst);
+        gnc_sx_incr_temporal_state(sx, temporal_state);
+        cur_date = xaccSchedXactionGetNextInstance(sx, temporal_state);
     }
 
     return instances;
@@ -464,17 +475,17 @@ gnc_sx_instance_model_get_type(void)
     if (type == 0)
     {
         static const GTypeInfo info =
-        {
-            sizeof (GncSxInstanceModelClass),
-            NULL,   /* base_init */
-            NULL,   /* base_finalize */
-            (GClassInitFunc)gnc_sx_instance_model_class_init,   /* class_init */
-            NULL,   /* class_finalize */
-            NULL,   /* class_data */
-            sizeof (GncSxInstanceModel),
-            0,      /* n_preallocs */
-            (GInstanceInitFunc)gnc_sx_instance_model_init    /* instance_init */
-        };
+            {
+                sizeof (GncSxInstanceModelClass),
+                NULL,   /* base_init */
+                NULL,   /* base_finalize */
+                (GClassInitFunc)gnc_sx_instance_model_class_init,   /* class_init */
+                NULL,   /* class_finalize */
+                NULL,   /* class_data */
+                sizeof (GncSxInstanceModel),
+                0,      /* n_preallocs */
+                (GInstanceInitFunc)gnc_sx_instance_model_init    /* instance_init */
+            };
         type = g_type_register_static (G_TYPE_OBJECT,
                                        "GncSxInstanceModelType",
                                        &info, 0);
@@ -663,8 +674,8 @@ _gnc_sx_instance_event_handler(QofInstance *ent, QofEventId event_type, gpointer
                 {
                     /* it's moved from disabled to enabled, add the instances */
                     instances->sx_instance_list
-                    = g_list_append(instances->sx_instance_list,
-                                    _gnc_sx_gen_instances((gpointer)sx, (gpointer) & instances->range_end));
+                        = g_list_append(instances->sx_instance_list,
+                                        _gnc_sx_gen_instances((gpointer)sx, (gpointer) & instances->range_end));
                     g_signal_emit_by_name(instances, "added", (gpointer)sx);
                 }
             }
@@ -694,8 +705,8 @@ _gnc_sx_instance_event_handler(QofInstance *ent, QofEventId event_type, gpointer
             {
                 /* generate instances, add to instance list, emit update. */
                 instances->sx_instance_list
-                = g_list_append(instances->sx_instance_list,
-                                _gnc_sx_gen_instances((gpointer)sx, (gpointer) & instances->range_end));
+                    = g_list_append(instances->sx_instance_list,
+                                    _gnc_sx_gen_instances((gpointer)sx, (gpointer) & instances->range_end));
                 g_signal_emit_by_name(instances, "added", (gpointer)sx);
             }
         }
@@ -714,7 +725,8 @@ _find_unreferenced_vars(gchar *key,
                         gpointer value,
                         HashListPair *cb_pair)
 {
-    if (!g_hash_table_lookup_extended(cb_pair->hash, key, NULL, NULL))
+    if (cb_pair->hash ==  NULL ||
+        !g_hash_table_lookup_extended(cb_pair->hash, key, NULL, NULL))
     {
         g_debug("variable [%s] not found", key);
         cb_pair->list = g_list_append(cb_pair->list, key);
@@ -788,20 +800,27 @@ gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXactio
 
     // handle variables
     {
-        HashListPair removed_cb_data, added_cb_data;
         GList *removed_var_names = NULL, *added_var_names = NULL;
         GList *inst_iter = NULL;
 
-        removed_cb_data.hash = new_instances->variable_names;
-        removed_cb_data.list = NULL;
-        g_hash_table_foreach(existing->variable_names, (GHFunc)_find_unreferenced_vars, &removed_cb_data);
-        removed_var_names = removed_cb_data.list;
+        if (existing->variable_names != NULL)
+        {
+            HashListPair removed_cb_data;
+            removed_cb_data.hash = new_instances->variable_names;
+            removed_cb_data.list = NULL;
+            g_hash_table_foreach(existing->variable_names, (GHFunc)_find_unreferenced_vars, &removed_cb_data);
+            removed_var_names = removed_cb_data.list;
+        }
         g_debug("%d removed variables", g_list_length(removed_var_names));
 
-        added_cb_data.hash = existing->variable_names;
-        added_cb_data.list = NULL;
-        g_hash_table_foreach(new_instances->variable_names, (GHFunc)_find_unreferenced_vars, &added_cb_data);
-        added_var_names = added_cb_data.list;
+        if (new_instances->variable_names != NULL)
+        {
+            HashListPair added_cb_data;
+            added_cb_data.hash = existing->variable_names;
+            added_cb_data.list = NULL;
+            g_hash_table_foreach(new_instances->variable_names, (GHFunc)_find_unreferenced_vars, &added_cb_data);
+            added_var_names = added_cb_data.list;
+        }
         g_debug("%d added variables", g_list_length(added_var_names));
 
         if (existing->variable_names != NULL)
@@ -826,10 +845,10 @@ gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXactio
             {
                 gchar *to_add_key = (gchar*)var_iter->data;
                 if (!g_hash_table_lookup_extended(
-                            inst->variable_bindings, to_add_key, NULL, NULL))
+                        inst->variable_bindings, to_add_key, NULL, NULL))
                 {
                     GncSxVariable *parent_var
-                    = g_hash_table_lookup(existing->variable_names, to_add_key);
+                        = g_hash_table_lookup(existing->variable_names, to_add_key);
                     GncSxVariable *var_copy;
 
                     g_assert(parent_var != NULL);
@@ -862,8 +881,8 @@ static void
 increment_sx_state(GncSxInstance *inst, GDate **last_occur_date, int *instance_count, int *remain_occur_count)
 {
     if (!g_date_valid(*last_occur_date)
-            || (g_date_valid(*last_occur_date)
-                && g_date_compare(*last_occur_date, &inst->date) <= 0))
+        || (g_date_valid(*last_occur_date)
+            && g_date_compare(*last_occur_date, &inst->date) <= 0))
     {
         *last_occur_date = &inst->date;
     }
@@ -930,13 +949,15 @@ _get_sx_formula_value(const SchedXaction* sx,
 		      numeric_key, &numeric_val,
 		      NULL);
 
-    if (numeric_val != NULL &&
+    if ((variable_bindings == NULL ||
+         g_hash_table_size (variable_bindings) == 0) &&
+        numeric_val != NULL &&
 	gnc_numeric_check(*numeric_val) == GNC_ERROR_OK &&
 	!gnc_numeric_zero_p(*numeric_val))
     {
-        /* Already a valid non-zero result? Then return and don't
-         * parse the string. Luckily we avoid any locale problems with
-         * decimal points here! Phew. */
+        /* If there are no variables to parse and we had a valid numeric stored
+         * then we can skip parsing the formual, which might save some
+         * localization problems with separators. */
 	numeric->num = numeric_val->num;
 	numeric->denom = numeric_val->denom;
         return;
@@ -976,19 +997,98 @@ _get_sx_formula_value(const SchedXaction* sx,
 }
 
 static void
-_get_credit_formula_value(GncSxInstance *instance, const Split *template_split, gnc_numeric *credit_num, GList **creation_errors)
+_get_credit_formula_value(GncSxInstance *instance,
+                          const Split *template_split, gnc_numeric *credit_num,
+                          GList **creation_errors)
 {
     _get_sx_formula_value(instance->parent->sx, template_split, credit_num,
-			  creation_errors, "sx-credit-formula",
-			  "sx-credit-numeric", instance->variable_bindings);
+                          creation_errors, "sx-credit-formula",
+                          "sx-credit-numeric", instance->variable_bindings);
 }
 
 static void
-_get_debit_formula_value(GncSxInstance *instance, const Split *template_split, gnc_numeric *debit_num, GList **creation_errors)
+_get_debit_formula_value(GncSxInstance *instance, const Split *template_split,
+                         gnc_numeric *debit_num, GList **creation_errors)
 {
     _get_sx_formula_value(instance->parent->sx, template_split, debit_num,
-			  creation_errors, "sx-debit-formula",
-			  "sx-debit-numeric", instance->variable_bindings);
+                          creation_errors, "sx-debit-formula",
+                          "sx-debit-numeric", instance->variable_bindings);
+}
+
+static gnc_numeric
+split_apply_formulas (const Split *split, SxTxnCreationData* creation_data)
+{
+    gnc_numeric credit_num = gnc_numeric_zero();
+    gnc_numeric debit_num = gnc_numeric_zero();
+    gnc_numeric final;
+    gint gncn_error;
+    SchedXaction *sx = creation_data->instance->parent->sx;
+
+    _get_credit_formula_value(creation_data->instance, split, &credit_num,
+                              creation_data->creation_errors);
+    _get_debit_formula_value(creation_data->instance, split, &debit_num,
+                             creation_data->creation_errors);
+
+    final = gnc_numeric_sub_fixed(debit_num, credit_num);
+
+    gncn_error = gnc_numeric_check(final);
+    if (gncn_error != GNC_ERROR_OK)
+    {
+        GString *err = g_string_new("");
+        g_string_printf(err, "error %d in SX [%s] final gnc_numeric value, using 0 instead",
+                        gncn_error, xaccSchedXactionGetName(sx));
+        g_critical("%s", err->str);
+        if (creation_data->creation_errors != NULL)
+            *creation_data->creation_errors =
+                g_list_append(*creation_data->creation_errors, err);
+        else
+            g_string_free(err, TRUE);
+        final = gnc_numeric_zero();
+    }
+    return final;
+}
+
+static void
+split_apply_exchange_rate (Split *split, GHashTable *bindings,
+                           gnc_commodity *first_cmdty,
+                           gnc_commodity *split_cmdty, gnc_numeric *final)
+{
+    GString *exchange_rate_var_name = g_string_sized_new(16);
+    GncSxVariable *exchange_rate_var;
+    gnc_numeric amt;
+    gnc_numeric exchange_rate = gnc_numeric_create (1, 1);
+
+    g_string_printf(exchange_rate_var_name, "%s -> %s",
+                    gnc_commodity_get_mnemonic(first_cmdty),
+                    gnc_commodity_get_mnemonic(split_cmdty));
+
+    g_debug("var_name is %s -> %s", gnc_commodity_get_mnemonic(first_cmdty),
+            gnc_commodity_get_mnemonic(split_cmdty));
+
+    exchange_rate_var =
+        (GncSxVariable*)g_hash_table_lookup(bindings,
+                                            exchange_rate_var_name->str);
+
+    if (exchange_rate_var != NULL)
+    {
+        exchange_rate = exchange_rate_var->value;
+        g_debug("exchange_rate is %s", gnc_numeric_to_string (exchange_rate));
+    }
+    g_string_free(exchange_rate_var_name, TRUE);
+
+    if (!gnc_commodity_is_currency (split_cmdty))
+        amt = gnc_numeric_div(*final, exchange_rate,
+                              gnc_commodity_get_fraction (split_cmdty),
+                              GNC_HOW_RND_ROUND_HALF_UP);
+    else
+        amt = gnc_numeric_mul(*final, exchange_rate, 1000,
+                              GNC_HOW_RND_ROUND_HALF_UP);
+
+
+    g_debug("amount is %s for memo split '%s'", gnc_numeric_to_string (amt),
+            xaccSplitGetMemo (split));
+    xaccSplitSetAmount(split, amt); /* marks split dirty */
+
 }
 
 static gboolean
@@ -999,9 +1099,8 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
     Split *copying_split;
     gnc_commodity *first_cmdty = NULL;
     gboolean err_flag = FALSE;
-    SxTxnCreationData *creation_data;
-
-    creation_data = (SxTxnCreationData*)user_data;
+    SxTxnCreationData *creation_data = (SxTxnCreationData*)user_data;
+    SchedXaction *sx = creation_data->instance->parent->sx;
 
     /* FIXME: In general, this should [correctly] deal with errors such
        as not finding the approrpiate Accounts and not being able to
@@ -1012,9 +1111,10 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
 
     g_debug("creating template txn desc [%s] for sx [%s]",
             xaccTransGetDescription(new_txn),
-            xaccSchedXactionGetName(creation_data->instance->parent->sx));
+            xaccSchedXactionGetName(sx));
 
-    g_debug("template txn currency is %s", gnc_commodity_get_mnemonic(xaccTransGetCurrency (template_txn)));
+    g_debug("template txn currency is %s",
+            gnc_commodity_get_mnemonic(xaccTransGetCurrency (template_txn)));
 
     /* Bug#500427: copy the notes, if any */
     if (xaccTransGetNotes(template_txn) != NULL)
@@ -1027,21 +1127,20 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
                      g_date_get_month(&creation_data->instance->date),
                      g_date_get_year(&creation_data->instance->date));
 
-    /* the accounts and amounts are in the kvp_frames of the splits. */
     template_splits = xaccTransGetSplitList(template_txn);
     txn_splits = xaccTransGetSplitList(new_txn);
     if ((template_splits == NULL) || (txn_splits == NULL))
     {
         g_critical("transaction w/o splits for sx [%s]",
-                   xaccSchedXactionGetName(creation_data->instance->parent->sx));
+                   xaccSchedXactionGetName(sx));
         xaccTransDestroy(new_txn);
         xaccTransCommitEdit(new_txn);
         return FALSE;
     }
 
     for (;
-            txn_splits && template_splits;
-            txn_splits = txn_splits->next, template_splits = template_splits->next)
+         txn_splits && template_splits;
+         txn_splits = txn_splits->next, template_splits = template_splits->next)
     {
         const Split *template_split;
         Account *split_acct;
@@ -1053,7 +1152,8 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
         template_split = (Split*)template_splits->data;
         copying_split = (Split*)txn_splits->data;
 
-        if (!_get_template_split_account(creation_data->instance->parent->sx, template_split, &split_acct, creation_data->creation_errors))
+        if (!_get_template_split_account(sx, template_split, &split_acct,
+                                         creation_data->creation_errors))
         {
             err_flag = TRUE;
             break;
@@ -1062,109 +1162,35 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
         split_cmdty = xaccAccountGetCommodity(split_acct);
         if (first_cmdty == NULL)
         {
-            /* Set new_txn currency to template_txn if we have one, else first split */
+            /* Set new_txn currency to template_txn if we have one, else first
+             * split
+             */
             if (xaccTransGetCurrency(template_txn))
-                xaccTransSetCurrency(new_txn, xaccTransGetCurrency(template_txn));
-            else
+                xaccTransSetCurrency(new_txn,
+                                     xaccTransGetCurrency(template_txn));
+            else /* FIXME check for marker split */
                 xaccTransSetCurrency(new_txn, split_cmdty);
 
             first_cmdty = xaccTransGetCurrency(new_txn);
         }
-        g_debug("new txn currency is %s", gnc_commodity_get_mnemonic(first_cmdty));
+        g_debug("new txn currency is %s",
+                gnc_commodity_get_mnemonic(first_cmdty));
 
         xaccSplitSetAccount(copying_split, split_acct);
 
         {
-            gnc_numeric credit_num, debit_num, final;
-            gint gncn_error;
-
-            credit_num = gnc_numeric_zero();
-            debit_num = gnc_numeric_zero();
-
-            _get_credit_formula_value(creation_data->instance, template_split, &credit_num, creation_data->creation_errors);
-            _get_debit_formula_value(creation_data->instance, template_split, &debit_num, creation_data->creation_errors);
-
-            final = gnc_numeric_sub_fixed( debit_num, credit_num );
-
-            gncn_error = gnc_numeric_check(final);
-            if (gncn_error != GNC_ERROR_OK)
-            {
-                GString *err = g_string_new("");
-                g_string_printf(err, "error %d in SX [%s] final gnc_numeric value, using 0 instead",
-                                gncn_error, xaccSchedXactionGetName(creation_data->instance->parent->sx));
-                g_critical("%s", err->str);
-                if (creation_data->creation_errors != NULL)
-                    *creation_data->creation_errors = g_list_append(*creation_data->creation_errors, err);
-                else
-                    g_string_free(err, TRUE);
-                final = gnc_numeric_zero();
-            }
-
+            gnc_numeric final = split_apply_formulas(template_split,
+                                                     creation_data);
             xaccSplitSetValue(copying_split, final);
-            g_debug("value is %s for memo split '%s'", gnc_numeric_to_string (final), xaccSplitGetMemo (copying_split));
-            if (! gnc_commodity_equal(split_cmdty, xaccTransGetCurrency (new_txn)))
+            g_debug("value is %s for memo split '%s'",
+                    gnc_numeric_to_string (final),
+                    xaccSplitGetMemo (copying_split));
+            if (! gnc_commodity_equal(split_cmdty,
+                                      xaccTransGetCurrency (new_txn)))
             {
-                GString *exchange_rate_var_name = g_string_sized_new(16);
-                GncSxVariable *exchange_rate_var;
-                gnc_numeric exchange_rate, amt;
-
-                /*
-                  GNCPriceDB *price_db = gnc_pricedb_get_db(gnc_get_current_book());
-                  GNCPrice *price;
-
-                  price = gnc_pricedb_lookup_latest(price_db, first_cmdty, split_cmdty);
-                  if (price == NULL)
-                  {
-                  price = gnc_pricedb_lookup_latest(price_db, split_cmdty, first_cmdty);
-                  if (price == NULL)
-                  {
-                  GString *err = g_string_new("");
-                  g_string_printf(err, "could not find pricedb entry for commodity-pair (%s, %s).",
-                  gnc_commodity_get_mnemonic(first_cmdty),
-                  gnc_commodity_get_mnemonic(split_cmdty));
-                  exchange = gnc_numeric_create(1, 1);
-                  *creation_data->creation_errors = g_list_append(*creation_data->creation_errors, err);
-
-                  }
-                  else
-                  {
-                  exchange = gnc_numeric_div(gnc_numeric_create(1,1),
-                  gnc_price_get_value(price),
-                  1000, GNC_HOW_RND_ROUND_HALF_UP);
-                  }
-                  }
-                  else
-                  {
-                  exchange = gnc_price_get_value(price);
-                  }
-                */
-
-                exchange_rate = gnc_numeric_zero();
-                g_string_printf(exchange_rate_var_name, "%s -> %s",
-                                gnc_commodity_get_mnemonic(first_cmdty),
-                                gnc_commodity_get_mnemonic(split_cmdty));
-
-                g_debug("var_name is %s -> %s", gnc_commodity_get_mnemonic(first_cmdty),
-                                                gnc_commodity_get_mnemonic(split_cmdty));
-
-                exchange_rate_var = (GncSxVariable*)g_hash_table_lookup(creation_data->instance->variable_bindings,
-                                    exchange_rate_var_name->str);
-
-                if (exchange_rate_var != NULL)
-                {
-                    exchange_rate = exchange_rate_var->value;
-                    g_debug("exchange_rate is %s", gnc_numeric_to_string (exchange_rate));
-                }
-                g_string_free(exchange_rate_var_name, TRUE);
-
-                if (!gnc_commodity_is_currency (split_cmdty))
-                    amt = gnc_numeric_div(final, exchange_rate, gnc_commodity_get_fraction (split_cmdty), GNC_HOW_RND_ROUND_HALF_UP);
-                else
-                    amt = gnc_numeric_mul(final, exchange_rate, 1000, GNC_HOW_RND_ROUND_HALF_UP);
-
-
-                g_debug("amount is %s for memo split '%s'", gnc_numeric_to_string (amt), xaccSplitGetMemo (copying_split));
-                xaccSplitSetAmount(copying_split, amt); /* marks split dirty */
+                split_apply_exchange_rate(copying_split,
+                                          creation_data->instance->variable_bindings,
+                                          first_cmdty, split_cmdty, &final);
             }
 
             xaccSplitScrub(copying_split);
@@ -1173,8 +1199,8 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
 
     if (err_flag)
     {
-        g_critical("new transaction creation sx [%s]",
-                   xaccSchedXactionGetName(creation_data->instance->parent->sx));
+        g_critical("Error in SX transaction [%s], creation aborted.",
+                   xaccSchedXactionGetName(sx));
         xaccTransDestroy(new_txn);
         xaccTransCommitEdit(new_txn);
         return FALSE;
@@ -1192,7 +1218,8 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
     if (creation_data->created_txn_guids != NULL)
     {
         *creation_data->created_txn_guids
-        = g_list_append(*(creation_data->created_txn_guids), (gpointer)xaccTransGetGUID(new_txn));
+            = g_list_append(*(creation_data->created_txn_guids),
+                            (gpointer)xaccTransGetGUID(new_txn));
     }
 
     return FALSE;
@@ -1251,6 +1278,7 @@ gnc_sx_instance_model_effect_change(GncSxInstanceModel *model,
         {
             GncSxInstance *inst = (GncSxInstance*)instance_iter->data;
             gboolean sx_is_auto_create;
+            GList *instance_errors = NULL;
 
             xaccSchedXactionGetAutoCreate(inst->parent->sx, &sx_is_auto_create, NULL);
             if (auto_create_only && !sx_is_auto_create)
@@ -1263,40 +1291,53 @@ gnc_sx_instance_model_effect_change(GncSxInstanceModel *model,
             }
 
             if (inst->orig_state == SX_INSTANCE_STATE_POSTPONED
-                    && inst->state != SX_INSTANCE_STATE_POSTPONED)
+                && inst->state != SX_INSTANCE_STATE_POSTPONED)
             {
                 // remove from postponed list
                 g_assert(inst->temporal_state != NULL);
-                gnc_sx_remove_defer_instance(inst->parent->sx, inst->temporal_state);
+                gnc_sx_remove_defer_instance(inst->parent->sx,
+                                             inst->temporal_state);
             }
 
             switch (inst->state)
             {
-            case SX_INSTANCE_STATE_CREATED:
-                // nop: we've already processed this.
-                break;
-            case SX_INSTANCE_STATE_IGNORED:
-                increment_sx_state(inst, &last_occur_date, &instance_count, &remain_occur_count);
-                break;
-            case SX_INSTANCE_STATE_POSTPONED:
-                if (inst->orig_state != SX_INSTANCE_STATE_POSTPONED)
-                {
-                    gnc_sx_add_defer_instance(instances->sx, inst->temporal_state);
-                }
-                increment_sx_state(inst, &last_occur_date, &instance_count, &remain_occur_count);
-                break;
-            case SX_INSTANCE_STATE_TO_CREATE:
-                create_transactions_for_instance(inst, created_transaction_guids, creation_errors);
-                increment_sx_state(inst, &last_occur_date, &instance_count, &remain_occur_count);
-                gnc_sx_instance_model_change_instance_state(model, inst, SX_INSTANCE_STATE_CREATED);
-                break;
-            case SX_INSTANCE_STATE_REMINDER:
-                // do nothing
-                // assert no non-remind instances after this?
-                break;
-            default:
-                g_assert_not_reached();
-                break;
+                case SX_INSTANCE_STATE_CREATED:
+                    // nop: we've already processed this.
+                    break;
+                case SX_INSTANCE_STATE_IGNORED:
+                    increment_sx_state(inst, &last_occur_date, &instance_count, &remain_occur_count);
+                    break;
+                case SX_INSTANCE_STATE_POSTPONED:
+                    if (inst->orig_state != SX_INSTANCE_STATE_POSTPONED)
+                    {
+                        gnc_sx_add_defer_instance(instances->sx,
+                                                  gnc_sx_clone_temporal_state (inst->temporal_state));
+                    }
+                    increment_sx_state(inst, &last_occur_date, &instance_count, &remain_occur_count);
+                    break;
+                case SX_INSTANCE_STATE_TO_CREATE:
+                    create_transactions_for_instance (inst,
+                                                      created_transaction_guids,
+                                                      &instance_errors);
+                    if (instance_errors == NULL)
+                    {
+                        increment_sx_state (inst, &last_occur_date,
+                                            &instance_count,
+                                            &remain_occur_count);
+                        gnc_sx_instance_model_change_instance_state
+                            (model, inst, SX_INSTANCE_STATE_CREATED);
+                    }
+                    else
+                        *creation_errors = g_list_concat (*creation_errors,
+                                                          instance_errors);
+                    break;
+                case SX_INSTANCE_STATE_REMINDER:
+                    // do nothing
+                    // assert no non-remind instances after this?
+                    break;
+                default:
+                    g_assert_not_reached();
+                    break;
             }
         }
 
@@ -1308,8 +1349,8 @@ gnc_sx_instance_model_effect_change(GncSxInstanceModel *model,
 
 void
 gnc_sx_instance_model_change_instance_state(GncSxInstanceModel *model,
-        GncSxInstance *instance,
-        GncSxInstanceState new_state)
+                                            GncSxInstance *instance,
+                                            GncSxInstanceState new_state)
 {
     if (instance->state == new_state)
         return;
@@ -1450,8 +1491,8 @@ gnc_sx_instance_model_summarize(GncSxInstanceModel *model, GncSxSummary *summary
     // if all the instances are 'auto-create, no-notify', then we don't need
     // the dialog.
     summary->need_dialog
-    = (summary->num_instances != 0
-       && summary->num_auto_create_no_notify_instances != summary->num_instances);
+        = (summary->num_instances != 0
+           && summary->num_auto_create_no_notify_instances != summary->num_instances);
 }
 
 void
@@ -1554,9 +1595,6 @@ create_cashflow_helper(Transaction *template_txn, void *user_data)
             xaccTransGetDescription(template_txn),
             xaccSchedXactionGetName(creation_data->sx));
 
-    /* The accounts and amounts are in the kvp_frames of the
-     * splits. Hence, we iterate over all splits of this
-     * transaction. */
     template_splits = xaccTransGetSplitList(template_txn);
 
     if (template_splits == NULL)
@@ -1567,8 +1605,8 @@ create_cashflow_helper(Transaction *template_txn, void *user_data)
     }
 
     for (;
-            template_splits;
-            template_splits = template_splits->next)
+         template_splits;
+         template_splits = template_splits->next)
     {
         Account *split_acct;
         const gnc_commodity *split_cmdty = NULL;
@@ -1740,4 +1778,3 @@ GHashTable* gnc_sx_all_instantiate_cashflow_all(GDate range_start, GDate range_e
                                     result_map, NULL);
     return result_map;
 }
-

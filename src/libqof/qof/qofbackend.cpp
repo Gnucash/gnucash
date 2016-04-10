@@ -72,6 +72,13 @@ qof_backend_get_error (QofBackend *be)
     return err;
 }
 
+gboolean
+qof_backend_check_error (QofBackend *be)
+{
+    g_return_val_if_fail (be != NULL, TRUE);
+    return be->last_err != ERR_BACKEND_NO_ERR;
+}
+
 void
 qof_backend_set_message (QofBackend *be, const char *format, ...)
 {
@@ -138,7 +145,6 @@ qof_backend_init(QofBackend *be)
 
     be->sync = NULL;
     be->safe_sync = NULL;
-    be->load_config = NULL;
 
     be->events_pending = NULL;
     be->process_events = NULL;
@@ -147,7 +153,6 @@ qof_backend_init(QofBackend *be)
     if (be->error_msg) g_free (be->error_msg);
     be->error_msg = NULL;
     be->percentage = NULL;
-    be->backend_configuration = kvp_frame_new();
 
     /* to be removed */
     be->price_lookup = NULL;
@@ -159,8 +164,6 @@ qof_backend_destroy(QofBackend *be)
 {
     g_free(be->error_msg);
     be->error_msg = NULL;
-    kvp_frame_delete(be->backend_configuration);
-    be->backend_configuration = NULL;
 }
 
 void

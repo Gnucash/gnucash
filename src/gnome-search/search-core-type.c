@@ -44,7 +44,7 @@ static void grab_focus (GNCSearchCoreType *fe);
 static void editable_enters (GNCSearchCoreType *fe);
 static gboolean validate (GNCSearchCoreType *fe);
 
-static void gnc_search_core_type_class_init	(GNCSearchCoreTypeClass *class);
+static void gnc_search_core_type_class_init	(GNCSearchCoreTypeClass *klass);
 static void gnc_search_core_type_init	(GNCSearchCoreType *gspaper);
 static void gnc_search_core_type_finalize	(GObject *obj);
 
@@ -58,7 +58,7 @@ struct _GNCSearchCoreTypePrivate
 #define _PRIVATE(o) \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_SEARCH_CORE_TYPE, GNCSearchCoreTypePrivate))
 
-static GtkObjectClass *parent_class;
+static GObjectClass *parent_class;
 
 static GHashTable *typeTable = NULL;
 

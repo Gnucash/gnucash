@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
       Boligejer
@@ -7,7 +7,7 @@
       Udgifter i forbindelse med at eje en bolig
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Du vil have nytte af disse konti, hvis du ejer en bolig. Konti til at holde øje med udgifter til boligen er medtaget (forsikring, skatter, vedligehold)
+    Du vil have nytte af disse konti, hvis du ejer en bolig. Konti til at holde Ã¸je med udgifter til boligen er medtaget (forsikring, skatter, vedligehold)
 </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -38,14 +38,14 @@
   <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Fællesudgifter</act:name>
+  <act:name>FÃ¦llesudgifter</act:name>
   <act:id type="new">fa27de57090e107fa99fe1db537a0f23</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>DKK</cmdty:id>
   </act:commodity>
-  <act:description>Fællesudgifter til ejerforening</act:description>
+  <act:description>FÃ¦llesudgifter til ejerforening</act:description>
   <act:parent type="new">84732f5fdd27b6463d75bf958e3a4b06</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

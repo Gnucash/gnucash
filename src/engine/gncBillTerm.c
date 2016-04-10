@@ -764,7 +764,7 @@ compute_monthyear (const GncBillTerm *term, Timespec post_date,
     gnc_timespec2dmy (post_date, &iday, &imonth, &iyear);
 
     if (cutoff <= 0)
-        cutoff += gnc_date_get_last_mday (imonth, iyear);
+        cutoff += gnc_date_get_last_mday (imonth - 1, iyear);
 
     if (iday <= cutoff)
     {
@@ -811,7 +811,7 @@ compute_time (const GncBillTerm *term, Timespec post_date, int days)
         break;
     case GNC_TERM_TYPE_PROXIMO:
         compute_monthyear (term, post_date, &month, &year);
-        day = gnc_date_get_last_mday (month, year);
+        day = gnc_date_get_last_mday (month - 1, year);
         if (days < day)
             day = days;
         res = gnc_dmy2timespec (day, month, year);

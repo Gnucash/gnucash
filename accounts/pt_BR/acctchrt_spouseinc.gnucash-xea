@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
-      Receitas do Cônjuge
+      Receitas do CÃ´njuge
     </gnc-act:title>
     <gnc-act:short-description>
-     Contas para registar separadamente as receitas do cônjuge
+     Contas para registar separadamente as receitas do cÃ´njuge
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Deverá selecionar este conjunto de contas caso tenha um cônjuge que tenha emprego (salário, impostos).
+    DeverÃ¡ selecionar este conjunto de contas caso tenha um cÃ´njuge que tenha emprego (salÃ¡rio, impostos).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -27,25 +27,25 @@
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Salário (Cônjuge)</act:name>
+  <act:name>SalÃ¡rio (CÃ´njuge)</act:name>
   <act:id type="new">7c4495ff132d100b0aa339ce683200dd</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
   </act:commodity>
-  <act:description>Salário (Cônjuge)</act:description>
+  <act:description>SalÃ¡rio (CÃ´njuge)</act:description>
   <act:parent type="new">b4fadf6188d7f1ae7e7aa4fa27f5cc95</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Impostos (Cônjuge)</act:name>
+  <act:name>Impostos (CÃ´njuge)</act:name>
   <act:id type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
   </act:commodity>
-  <act:description>Impostos (Cônjuge)</act:description>
+  <act:description>Impostos (CÃ´njuge)</act:description>
   <act:parent type="new">b4fadf6188d7f1ae7e7aa4fa27f5cc95</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -60,14 +60,14 @@
   <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Seguro Saúde</act:name>
+  <act:name>Seguro SaÃºde</act:name>
   <act:id type="new">eba0c095658c7c3a4f4294db9c7392f3</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
   </act:commodity>
-  <act:description>Seguro Saúde</act:description>
+  <act:description>Seguro SaÃºde</act:description>
   <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

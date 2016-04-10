@@ -25,7 +25,13 @@
 #include "gnucash-date-picker.h"
 #include "gnucash-item-list.h"
 #include "gnucash-sheet.h"
-
+/** @ingroup Register
+ * @addtogroup Gnome
+ * @{
+ */
+/** @file gnucash-item-edit.h
+ * @brief Public declarations for GncItemEdit class
+ */
 #define GNC_TYPE_ITEM_EDIT        (gnc_item_edit_get_type ())
 #define GNC_ITEM_EDIT(o)          (G_TYPE_CHECK_INSTANCE_CAST((o), GNC_TYPE_ITEM_EDIT, GncItemEdit))
 #define GNC_ITEM_EDIT_CLASS(k)    (G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_ITEM_EDIT, GncItemEditClass))
@@ -154,7 +160,5 @@ void gnc_item_edit_focus_in (GncItemEdit *item_edit);
 void gnc_item_edit_focus_out (GncItemEdit *item_edit);
 
 void gnc_item_edit_reset_offset (GncItemEdit *item_edit);
-
+/** @} */
 #endif /* GNUCASH_ITEM_EDIT_H */
-
-

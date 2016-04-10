@@ -30,10 +30,9 @@
 (use-modules (srfi srfi-1))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash main))        ; for gnc:debug
+(use-modules (gnucash gettext))
 
 (gnc:module-load "gnucash/report/report-system" 0)
-(gnc:module-load "gnucash/app-utils" 0)
-
 (use-modules (gnucash report standard-reports))
 (use-modules (gnucash report business-reports))
 
@@ -216,11 +215,10 @@
     (define oldintervalreversed (reverse (make-interval-list to-date)))          
     (reverse (cons dayforcurrent oldintervalreversed))) 
 
-(define (make-aging-table options query bucket-intervals reverse? date-type)
+(define (make-aging-table options query bucket-intervals reverse? date-type currency)
   (let ((lots (xaccQueryGetLots query QUERY-TXN-MATCH-ANY))
     (buckets (new-bucket-vector))
     (payments (gnc-numeric-zero))
-    (currency (gnc-default-currency)) ;XXX
     (table (gnc:make-html-table)))
 
      (define (in-interval this-date current-bucket)
@@ -419,9 +417,10 @@
     (total (gnc-numeric-zero))
     (debit (gnc-numeric-zero))
     (credit (gnc-numeric-zero))
+
     (tax (gnc-numeric-zero))
     (sale (gnc-numeric-zero))
-    (currency (gnc-default-currency)) ;XXX
+    (currency (xaccAccountGetCommodity acc))
     (table (gnc:make-html-table))
     (reverse? (gnc:option-value (gnc:lookup-option options "__reg"
                               "reverse?"))))
@@ -524,7 +523,7 @@
        "grand-total"
        (list (gnc:make-html-table-cell/size
           1 columns-used-size
-          (make-aging-table options query interval-vec reverse? date-type)))))
+          (make-aging-table options query interval-vec reverse? date-type currency)))))
 
     table))
 
@@ -609,12 +608,6 @@
    (gnc:make-simple-boolean-option
     (N_ "Display Columns") amount-header
     "hb" (N_ "Display the transaction amount?") #t)) 
-
-  (gnc:register-inv-option
-   (gnc:make-string-option
-    gnc:pagename-general (N_ "Today Date Format")
-    "p" (N_ "The format for the date->string conversion for today's date.")
-    (gnc-default-strftime-date-format)))
   
   (gnc:register-inv-option 
    (gnc:make-multichoice-option 
@@ -720,13 +713,8 @@
 
 (define (make-myname-table book date-format)
   (let* ((table (gnc:make-html-table))
-     (slots (qof-book-get-slots book))
-     (name (kvp-frame-get-slot-path-gslist
-        slots (append gnc:*kvp-option-path*
-                  (list gnc:*business-label* gnc:*company-name*))))
-     (addy (kvp-frame-get-slot-path-gslist
-        slots (append gnc:*kvp-option-path*
-                  (list gnc:*business-label* gnc:*company-addy*)))))
+     (name (gnc:company-info book gnc:*company-name*))
+     (addy (gnc:company-info book gnc:*company-addy*)))
 
     (gnc:html-table-set-style!
      table "table"
@@ -768,7 +756,8 @@
      (end-date (gnc:timepair-end-day-time 
                (gnc:date-option-absolute-time
                (opt-val gnc:pagename-general optname-to-date))))
-     (book (gnc-get-current-book)) ;XXX Grab this from elsewhere
+     (book (gnc-account-get-book account))
+     (date-format (gnc:fancy-date-info book gnc:*fancy-date-format*))
      (type (opt-val "__reg" "owner-type"))
      (owner-descr (owner-string type))
      (date-type (opt-val gnc:pagename-general optname-date-driver)) 
@@ -814,7 +803,7 @@
 
         (gnc:html-document-add-object!
          document
-         (make-myname-table book (opt-val gnc:pagename-general (N_ "Today Date Format"))))
+         (make-myname-table book date-format))
 
         (gnc:html-document-add-object!
          document
@@ -922,13 +911,6 @@
 
       (else #f))))
 
-(define (gnc:owner-report-create owner account)
-  ; Figure out an account to use if nothing exists here.
-  (if (null? account)
-      (set! account (find-first-account-for-owner owner)))
-
-  (owner-report-create owner account))
-
 (define (gnc:owner-report-create-internal
      account split query journal? double? title
      debit-string credit-string)
@@ -949,4 +931,4 @@
 (gnc:register-report-hook ACCT-TYPE-PAYABLE #t
               gnc:owner-report-create-internal)
 
-(export gnc:owner-report-create)
+(export find-first-account-for-owner owner-report-create)

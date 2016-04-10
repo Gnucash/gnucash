@@ -60,7 +60,6 @@ gnc_engine_init_part1()
 
     /* initialize QOF */
     qof_init();
-    qof_set_alt_dirty_mode(TRUE);
 
     /* Now register our core types */
     cashobjects_register();

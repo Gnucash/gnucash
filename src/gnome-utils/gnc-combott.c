@@ -76,7 +76,7 @@ typedef struct GncCombottPrivate
 /** Declarations *********************************************************/
 static void gctt_init (GncCombott *combott);
 
-static void gctt_class_init (GncCombottClass *class);
+static void gctt_class_init (GncCombottClass *klass);
 
 static void gctt_set_property (GObject *object,
                                guint param_id,
@@ -143,22 +143,22 @@ gnc_combott_get_type (void)
 
 
 static void
-gctt_class_init (GncCombottClass *class)
+gctt_class_init (GncCombottClass *klass)
 {
     GObjectClass            *gobject_class;
 
-    parent_class = g_type_class_peek_parent (class);
-    gobject_class = G_OBJECT_CLASS (class);
+    parent_class = g_type_class_peek_parent (klass);
+    gobject_class = G_OBJECT_CLASS (klass);
 
     gobject_class->set_property = gctt_set_property;
     gobject_class->get_property = gctt_get_property;
     gobject_class->finalize = gctt_finalize;
 
-    class->changed = gctt_changed;
+    klass->changed = gctt_changed;
 
     combott_signals[CHANGED] =
         g_signal_new ("changed",
-                      G_OBJECT_CLASS_TYPE (class),
+                      G_OBJECT_CLASS_TYPE (klass),
                       G_SIGNAL_RUN_LAST,
                       G_STRUCT_OFFSET (GncCombottClass, changed),
                       NULL, NULL,
@@ -196,7 +196,7 @@ gctt_class_init (GncCombottClass *class)
                           1,
                           G_PARAM_READWRITE));
 
-    g_type_class_add_private(class, sizeof(GncCombottPrivate));
+    g_type_class_add_private(klass, sizeof(GncCombottPrivate));
 }
 
 
@@ -469,27 +469,32 @@ gctt_combott_menu_position (GtkMenu  *menu,
     gint sx, sy;
     GtkWidget *child;
     GtkRequisition req;
+    GtkAllocation alloc;
 
-    child = GTK_BIN (priv->button)->child;
+    child = gtk_bin_get_child (GTK_BIN (priv->button));
 
     sx = sy = 0;
 
     if (!gtk_widget_get_has_window (child))
     {
-        sx += child->allocation.x;
-        sy += child->allocation.y;
+        gtk_widget_get_allocation (child, &alloc);
+        sx += alloc.x;
+        sy += alloc.y;
     }
 
-    gdk_window_get_root_coords (child->window, sx, sy, &sx, &sy);
+    gdk_window_get_root_coords (gtk_widget_get_window (child), sx, sy, &sx, &sy);
 
-    sx -= GTK_WIDGET (priv->button)->style->xthickness;
+    sx -= gtk_widget_get_style (GTK_WIDGET (priv->button))->xthickness;
 
     gtk_widget_size_request (GTK_WIDGET (menu), &req);
 
     if (gtk_widget_get_direction (GTK_WIDGET (priv->button)) == GTK_TEXT_DIR_LTR)
         *x = sx;
     else
-        *x = sx + child->allocation.width - req.width;
+    {
+        gtk_widget_get_allocation (child, &alloc);
+        *x = sx + alloc.width - req.width;
+    }
 
     if(priv->active == -1 || priv->active == 0)
         *y = sy;
@@ -532,7 +537,7 @@ which_tooltip_cb (GtkWidget  *widget, gint x, gint y, gboolean keyboard_mode, Gt
     GncCombott *combott = GNC_COMBOTT (user_data);
     GncCombottPrivate *priv = GNC_COMBOTT_GET_PRIVATE (combott);
 
-    if(!priv->active == 0)
+    if(priv->active != 0)
     {
         gtk_tree_model_get( priv->model, &priv->active_iter, priv->tip_col, &text, -1 );
         if(g_strcmp0(text, "") && (text != NULL))

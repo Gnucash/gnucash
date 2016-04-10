@@ -32,12 +32,12 @@ libgnc_gnome_la_SOURCES = \
   dialog-fincalc.c \
   dialog-find-transactions.c \
   dialog-find-transactions2.c \
+  dialog-imap-editor.c \
   dialog-lot-viewer.c \
   dialog-new-user.c \
   dialog-price-editor.c \
   dialog-price-edit-db.c \
   dialog-print-check.c \
-  dialog-print-check2.c \
   dialog-progress.c \
   dialog-sx-editor.c \
   dialog-sx-editor2.c \
@@ -84,10 +84,10 @@ noinst_HEADERS = \
   dialog-fincalc.h \
   dialog-find-transactions.h \
   dialog-find-transactions2.h \
+  dialog-imap-editor.h \
   dialog-lot-viewer.h \
   dialog-new-user.h \
   dialog-print-check.h \
-  dialog-print-check2.h \
   dialog-progress.h \
   dialog-sx-editor.h \
   dialog-sx-editor2.h \
@@ -112,7 +112,7 @@ noinst_HEADERS = \
   window-reconcile2.h \
   window-autoclear.h
 
-if BUILDING_FROM_SCM
+if BUILDING_FROM_VCS
 swig-gnome.c: gnome.i dialog-progress.h ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src -o $@ $<

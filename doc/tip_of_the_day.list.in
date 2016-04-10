@@ -17,7 +17,8 @@ account details. For more information on choosing an account type \
 or setting up a chart of accounts, please see the GnuCash online \
 manual.")
 
- N_( "Click the right mouse button in the main window to bring up the \
+ N_( "Click the right mouse button (control-click in Mac OS X) in the \
+Accounts tab of the main window to bring up the \
 account menu options. Within each register, clicking the right \
 mouse button brings up the transaction menu options.")
 
@@ -43,8 +44,8 @@ of the parent account, followed by ':' and the first letter(s) of \
 the subaccount (e.g. A:C for Assets:Cash.)")
 
  N_( "Want to see all your subaccount transactions in one register? \
-From the main menu, highlight the parent account and select \
-Accounts -> Open Subaccounts from the menu.")
+From the Accounts tab in the main window, highlight the parent account \
+and select View -> Open Subaccounts from the menu.")
 
  N_( "When entering dates, you can type '+' or '-' to increment or \
 decrement the selected date. You can use '+' and '-' to increment and \
@@ -84,8 +85,8 @@ you can choose the monthly basic frequency and then set 'Every \
 12 months'.")
 
  N_( "If you work overnight, you should close and reopen your working \
-register after midnight, to get the new date as default for new \
-transactions. It is not necessary to restart GnuCash therefore.")
+registers after midnight, to get the new date as default for new \
+transactions. It is not necessary to restart GnuCash.")
 
  N_( "The GnuCash developers are easy to contact. As well \
 as several mailing lists, you can chat to them live on IRC! \
@@ -101,3 +102,7 @@ Douglas Adams, \"The Restaurant at the End of the Universe\"")
  N_( "To search through all your transactions, start a search (Edit -> \
 Find...) from the main accounts hierarchy page. To limit your search \
 to a single account, start the search from that account's register.")
+
+ N_( "To visually compare on screen the contents of 2 tabs, \
+in one of the tabs, select Window -> New Window with Page \
+from the menu to duplicate that tab in a new window.")

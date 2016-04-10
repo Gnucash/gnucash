@@ -10,8 +10,7 @@ NONGUI_SUBDIRS = \
   engine \
   backend \
   scm \
-  quotes \
-  tax
+  quotes
 
 if WITH_PYTHON
    PYTHON_DIR = python
@@ -22,6 +21,7 @@ endif
 # app-utils. It should go away in the long run, though.
 ALMOST_NONGUI_SUBDIRS = \
   app-utils \
+  tax \
   ${PYTHON_DIR}
 
 # These directories contain the code with gtk dependency
@@ -51,9 +51,7 @@ endif
 noinst_HEADERS = \
   swig-runtime.h
 
-noinst_DATA = gnc-test-env
-
-if BUILDING_FROM_SCM
+if BUILDING_FROM_VCS
 swig-runtime.h:
 	$(SWIG) -guile -external-runtime $@
 endif
@@ -62,6 +60,6 @@ MAINTAINERCLEANFILES = swig-runtime.h
 EXTRA_DIST = \
   base-typemaps.i \
   README.modules \
-  gnc-test-env \
+  gnc-test-env.pl \
   guile-mappings.h \
   platform.h

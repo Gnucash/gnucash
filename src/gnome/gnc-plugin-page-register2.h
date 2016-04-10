@@ -22,16 +22,6 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                     *
  **********************************************************************/
 
-/** @addtogroup ContentPlugins
-    @{ */
-/** @addtogroup Register2Plugin Register2 Page
-    @{ */
-/** @file gnc-plugin-page-register.h
-    @brief  Functions providing a register page for the GnuCash UI
-    @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
-    @author Copyright (C) 2003 David Hampton <hampton@employees.org>
-*/
-
 #ifndef __GNC_PLUGIN_PAGE_REGISTER2_H
 #define __GNC_PLUGIN_PAGE_REGISTER2_H
 
@@ -41,9 +31,15 @@
 #include "gnc-ledger-display2.h"
 #include "gnc-plugin-page.h"
 #include "gnc-split-reg2.h"
+#include "Query.h"
 
 G_BEGIN_DECLS
-
+/** @ingroup Register
+ * @addtogroup Register2
+ * @{
+ */
+/** @file gnc-plugin-page-register2.h
+ */
 /* type macros */
 #define GNC_TYPE_PLUGIN_PAGE_REGISTER2            (gnc_plugin_page_register2_get_type ())
 #define GNC_PLUGIN_PAGE_REGISTER2(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_PLUGIN_PAGE_REGISTER2, GncPluginPageRegister2))
@@ -102,7 +98,7 @@ GncPluginPage *
 gnc_plugin_page_register2_new_ledger (GNCLedgerDisplay2 *ledger);
 
 
-/** Create a new "register" plugin page containing a general ledger.
+/** Create a new "register" plugin page containing a general journal.
  *
  *  @return The newly created plugin page.
  */
@@ -141,6 +137,16 @@ GNCLedgerDisplay2 *
 gnc_plugin_page_register2_get_ledger (GncPluginPage *plugin_page);
 
 
+/** Get the Query associated with this "register" plugin page.
+ *
+ *  @param plugin_page A "register" page.
+ *
+ *  @return The query.
+ */
+Query *
+gnc_plugin_page_register2_get_query (GncPluginPage *plugin_page);
+
+
 /** Get the Account associated with this register page.
  *
  *  @param page A "register" page.
@@ -153,7 +159,5 @@ gnc_plugin_page_register2_get_account (GncPluginPageRegister2 *page);
 
 G_END_DECLS
 /** @} */
-/** @} */
 
 #endif /* __GNC_PLUGIN_PAGE_REGISTER2_H */
-

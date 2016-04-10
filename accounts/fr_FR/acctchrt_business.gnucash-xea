@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
       Comptes d'affaires
     </gnc-act:title>
     <gnc-act:short-description>
-     Hiérarchie complète de comptes pour les affaires.
+     HiÃ©rarchie complÃ¨te de comptes pour les affaires.
     </gnc-act:short-description>
     <gnc-act:long-description>
-Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres choix. Ceci inclut tous les comptes dont vous avez besoin dans la plupart des activités, y compris les paiements différés, les rentrées et les sorties.
+Les utilisateurs gÃ©rant une entreprise sÃ©lectionneront ceci au lieu des autres choix. Ceci inclut tous les comptes dont vous avez besoin dans la plupart des activitÃ©s, y compris les paiements diffÃ©rÃ©s, les rentrÃ©es et les sorties.
     </gnc-act:long-description>
     <gnc-act:exclude-from-select-all>1</gnc-act:exclude-from-select-all>
 <gnc:account version="2.0.0">
@@ -22,7 +22,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Actifs</act:description>
@@ -34,22 +34,22 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Actifs actuels</act:description>
   <act:parent type="new">4f40ddce996f8f74b4e99f52e275ba14</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Compte chèque</act:name>
+  <act:name>Compte chÃ¨que</act:name>
   <act:id type="new">8048bd85020e9ecf57b7cb300f4fa7e2</act:id>
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Compte chèque</act:description>
+  <act:description>Compte chÃ¨que</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -63,15 +63,15 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:parent type="new">f8532a8cdc024e0178fe20a1482e3192</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Compte d'épargne</act:name>
+  <act:name>Compte d'Ã©pargne</act:name>
   <act:id type="new">f52774d7ec67a0c59c425a5c041dcc46</act:id>
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Compte d'épargne</act:description>
+  <act:description>Compte d'Ã©pargne</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -89,15 +89,15 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:parent type="new">f8532a8cdc024e0178fe20a1482e3192</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Liquidités</act:name>
+  <act:name>LiquiditÃ©s</act:name>
   <act:id type="new">c292f69c18e01e1b607e37b3188c7acc</act:id>
   <act:type>CASH</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Liquidités</act:description>
+  <act:description>LiquiditÃ©s</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -111,15 +111,15 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:parent type="new">f8532a8cdc024e0178fe20a1482e3192</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Compte à recevoir</act:name>
+  <act:name>Compte Ã  recevoir</act:name>
   <act:id type="new">0dd8987a2e860fa231a2a76e75cd5ad1</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Compte à recevoir</act:description>
+  <act:description>Compte Ã  recevoir</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -138,22 +138,22 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Passif</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Carte de crédit</act:name>
+  <act:name>Carte de crÃ©dit</act:name>
   <act:id type="new">b9718397ec0aec2d515b09af8b76b59c</act:id>
   <act:type>CREDIT</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Carte de crédit</act:description>
+  <act:description>Carte de crÃ©dit</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -167,15 +167,15 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:parent type="new">b83e860994b160b59dd463cf23636900</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Compte à payer</act:name>
+  <act:name>Compte Ã  payer</act:name>
   <act:id type="new">5c0cd58e416a5c3d26b5f4865c77b8b9</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Compte à payer</act:description>
+  <act:description>Compte Ã  payer</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -194,46 +194,46 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Revenus</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Revenus d'intérêts</act:name>
+  <act:name>Revenus d'intÃ©rÃªts</act:name>
   <act:id type="new">77e298a57faf85cacd4a881ade89808c</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Revenus d'intérêts</act:description>
+  <act:description>Revenus d'intÃ©rÃªts</act:description>
   <act:parent type="new">f7a2e8717ea0a2e1801740d2a69b947e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Autres rentrées</act:name>
+  <act:name>Autres rentrÃ©es</act:name>
   <act:id type="new">ba71604fe085423c6e8cb7fd1b7c6f54</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Autres rentrées</act:description>
+  <act:description>Autres rentrÃ©es</act:description>
   <act:parent type="new">f7a2e8717ea0a2e1801740d2a69b947e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Dépenses remboursées</act:name>
+  <act:name>DÃ©penses remboursÃ©es</act:name>
   <act:id type="new">eb35aec1095d23f511f0fb9f485808ea</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Dépenses remboursées</act:description>
+  <act:description>DÃ©penses remboursÃ©es</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -252,7 +252,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Ventes</act:description>
@@ -269,15 +269,15 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:parent type="new">f7a2e8717ea0a2e1801740d2a69b947e</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Dépenses</act:name>
+  <act:name>DÃ©penses</act:name>
   <act:id type="new">1eca26f16967a1627df155e49b44a609</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Dépenses</act:description>
+  <act:description>DÃ©penses</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -286,7 +286,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Ajustement</act:description>
@@ -298,7 +298,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Auto</act:description>
@@ -310,7 +310,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Frais</act:description>
@@ -322,7 +322,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Carburant</act:description>
@@ -334,22 +334,22 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Parking</act:description>
   <act:parent type="new">63a1cc17910a125405c1ec2aee831839</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Réparations et entretien</act:name>
+  <act:name>RÃ©parations et entretien</act:name>
   <act:id type="new">280f5d3834093afe91cd6cb0a38859f1</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Réparations et entretien</act:description>
+  <act:description>RÃ©parations et entretien</act:description>
   <act:parent type="new">63a1cc17910a125405c1ec2aee831839</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -358,7 +358,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Frais bancaires</act:description>
@@ -370,7 +370,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Livres</act:description>
@@ -382,7 +382,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Remises</act:description>
@@ -399,27 +399,27 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Charité</act:name>
+  <act:name>CharitÃ©</act:name>
   <act:id type="new">bf4c7466be71d858509cbb3d943dea8f</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Charité</act:description>
+  <act:description>CharitÃ©</act:description>
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Dépréciation</act:name>
+  <act:name>DÃ©prÃ©ciation</act:name>
   <act:id type="new">f7d4a3a1b78da69ff2b13e58069faf37</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Dépréciation</act:description>
+  <act:description>DÃ©prÃ©ciation</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -438,7 +438,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Repas</act:description>
@@ -450,7 +450,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Cotisations et abonnements</act:description>
@@ -472,22 +472,22 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Formation</act:description>
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Location d'équipement</act:name>
+  <act:name>Location d'Ã©quipement</act:name>
   <act:id type="new">c8e75ad8eb7085ac73b3b626d02a3c44</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Location d'équipement</act:description>
+  <act:description>Location d'Ã©quipement</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -506,22 +506,22 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Assurance</act:description>
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Assurance incapacité</act:name>
+  <act:name>Assurance incapacitÃ©</act:name>
   <act:id type="new">793001c2cac93c78d7b0e09b8d06e288</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Assurance incapacité</act:description>
+  <act:description>Assurance incapacitÃ©</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -535,15 +535,15 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:parent type="new">0ff061c9c27535d3b8629a333b02a7a0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Assurance responsabilité</act:name>
+  <act:name>Assurance responsabilitÃ©</act:name>
   <act:id type="new">3d2a415bd4b7571c77d6f4393633b0c8</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Assurance responsabilité</act:description>
+  <act:description>Assurance responsabilitÃ©</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -562,7 +562,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Personnel</act:description>
@@ -584,7 +584,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Licences et autorisations</act:description>
@@ -606,7 +606,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Divers</act:description>
@@ -618,7 +618,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Fournitures de bureau</act:description>
@@ -635,15 +635,15 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Services extérieurs</act:name>
+  <act:name>Services extÃ©rieurs</act:name>
   <act:id type="new">4f5265128a7a8d56820db2698cd1dadf</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Services extérieurs</act:description>
+  <act:description>Services extÃ©rieurs</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -657,15 +657,15 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Dépenses de personnel</act:name>
+  <act:name>DÃ©penses de personnel</act:name>
   <act:id type="new">52c59dac947098d11ca9a43d75714e9a</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Dépenses de personnel</act:description>
+  <act:description>DÃ©penses de personnel</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -684,7 +684,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Poste et livraisons</act:description>
@@ -706,7 +706,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Impression et Reproduction</act:description>
@@ -728,7 +728,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Charges professionelles</act:description>
@@ -745,15 +745,15 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Comptabilité</act:name>
+  <act:name>ComptabilitÃ©</act:name>
   <act:id type="new">f2fdacb032cbda092220d6b9bf78cdef</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Comptabilité</act:description>
+  <act:description>ComptabilitÃ©</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -767,15 +767,15 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:parent type="new">fbc12ded14b9dbc5119f2bdb288229eb</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Charges légales</act:name>
+  <act:name>Charges lÃ©gales</act:name>
   <act:id type="new">ef0c1ba6fc2b99a3256091255982773c</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Charges légales</act:description>
+  <act:description>Charges lÃ©gales</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -794,7 +794,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Location</act:description>
@@ -811,15 +811,15 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Réparations</act:name>
+  <act:name>RÃ©parations</act:name>
   <act:id type="new">f2145496f238b9002344ca78216bc91c</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Réparations</act:description>
+  <act:description>RÃ©parations</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -833,15 +833,15 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Réparations des immeubles</act:name>
+  <act:name>RÃ©parations des immeubles</act:name>
   <act:id type="new">861eaeafb9e9bf855943a8afb753fcc6</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Réparations des immeubles</act:description>
+  <act:description>RÃ©parations des immeubles</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -855,15 +855,15 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:parent type="new">f2145496f238b9002344ca78216bc91c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Réparations des ordinateurs</act:name>
+  <act:name>RÃ©parations des ordinateurs</act:name>
   <act:id type="new">2dc1fc6c60662751a6eae28e0a81bb22</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Réparations des ordinateurs</act:description>
+  <act:description>RÃ©parations des ordinateurs</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -877,15 +877,15 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:parent type="new">f2145496f238b9002344ca78216bc91c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Réparations des équipements</act:name>
+  <act:name>RÃ©parations des Ã©quipements</act:name>
   <act:id type="new">b340710eb5dc97bc4c23201beffae5f2</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Réparations des équipements</act:description>
+  <act:description>RÃ©parations des Ã©quipements</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -899,15 +899,15 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:parent type="new">f2145496f238b9002344ca78216bc91c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Dépenses d'entretien</act:name>
+  <act:name>DÃ©penses d'entretien</act:name>
   <act:id type="new">7943d40413854ff4237d88631cdcb4ef</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Dépenses d'entretien</act:description>
+  <act:description>DÃ©penses d'entretien</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -926,7 +926,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Taxes</act:description>
@@ -938,7 +938,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Employeur SS/Med</act:description>
@@ -960,7 +960,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>SS/Med</act:description>
@@ -982,7 +982,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>URSSAF</act:description>
@@ -1004,7 +1004,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Federal</act:description>
@@ -1026,7 +1026,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Local</act:description>
@@ -1048,7 +1048,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Autres Taxes</act:description>
@@ -1060,7 +1060,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Immobilier</act:description>
@@ -1077,15 +1077,15 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:parent type="new">30bdea8690c89621731f925c8b3c766a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>État/Département</act:name>
+  <act:name>Ã‰tat/DÃ©partement</act:name>
   <act:id type="new">03ed8cb60b8b12420e49350d93886132</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>État/Département</act:description>
+  <act:description>Ã‰tat/DÃ©partement</act:description>
   <act:parent type="new">30bdea8690c89621731f925c8b3c766a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -1094,7 +1094,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Voyages et divertissements</act:description>
@@ -1116,7 +1116,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Divertissements</act:description>
@@ -1138,7 +1138,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Repas</act:description>
@@ -1160,7 +1160,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Voyages</act:description>
@@ -1182,22 +1182,22 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Services</act:description>
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Câble</act:name>
+  <act:name>CÃ¢ble</act:name>
   <act:id type="new">6e3824bff6b9cf23a6d36a63ac5328b2</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Câble</act:description>
+  <act:description>CÃ¢ble</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -1211,15 +1211,15 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:parent type="new">b615fad5f752ab26809e3f1c0e788dd1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Téléphone portable</act:name>
+  <act:name>TÃ©lÃ©phone portable</act:name>
   <act:id type="new">57e08a9bd565efd6eff07fd11fb5b6b9</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Téléphone portable</act:description>
+  <act:description>TÃ©lÃ©phone portable</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -1233,27 +1233,27 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:parent type="new">b615fad5f752ab26809e3f1c0e788dd1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Électricité</act:name>
+  <act:name>Ã‰lectricitÃ©</act:name>
   <act:id type="new">e5378ddb536611d96ea62c9b4623f3ef</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Électricité</act:description>
+  <act:description>Ã‰lectricitÃ©</act:description>
   <act:parent type="new">b615fad5f752ab26809e3f1c0e788dd1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ordures ménagères</act:name>
+  <act:name>Ordures mÃ©nagÃ¨res</act:name>
   <act:id type="new">bbf9f26770d63a891f95a342925d8185</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Ordures ménagères</act:description>
+  <act:description>Ordures mÃ©nagÃ¨res</act:description>
   <act:parent type="new">b615fad5f752ab26809e3f1c0e788dd1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -1262,7 +1262,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Gaz</act:description>
@@ -1274,7 +1274,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Internet</act:description>
@@ -1291,15 +1291,15 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:parent type="new">b615fad5f752ab26809e3f1c0e788dd1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Téléphone</act:name>
+  <act:name>TÃ©lÃ©phone</act:name>
   <act:id type="new">f3c66e8b8f0448c3864c2cc0b49d9832</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Téléphone</act:description>
+  <act:description>TÃ©lÃ©phone</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -1318,7 +1318,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Eau</act:description>
@@ -1330,7 +1330,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Solde</act:description>
@@ -1342,22 +1342,22 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres c
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Soldes initiaux</act:description>
   <act:parent type="new">87e02e757b32b3059652cfe09fe9ae00</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Gains enregistrés</act:name>
+  <act:name>Gains enregistrÃ©s</act:name>
   <act:id type="new">1b44c21b9b8a7c6181d85f5551cca79d</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Gains enregistrés</act:description>
+  <act:description>Gains enregistrÃ©s</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>

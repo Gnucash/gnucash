@@ -41,6 +41,7 @@
 #include "gnc-ledger-display.h"
 #include "gnc-plugin-page.h"
 #include "gnc-split-reg.h"
+#include "Query.h"
 
 G_BEGIN_DECLS
 
@@ -102,7 +103,7 @@ GncPluginPage *
 gnc_plugin_page_register_new_ledger (GNCLedgerDisplay *ledger);
 
 
-/** Create a new "register" plugin page containing a general ledger.
+/** Create a new "register" plugin page containing a general journal.
  *
  *  @return The newly created plugin page.
  */
@@ -132,6 +133,15 @@ gnc_plugin_page_register_set_options (GncPluginPage *plugin_page,
 GNCSplitReg *
 gnc_plugin_page_register_get_gsr (GncPluginPage *plugin_page);
 
+
+/** Get the Query associated with this "register" plugin page.
+ *
+ *  @param plugin_page The "register" page to modify.
+ *
+ *  @return The query.
+ */
+Query *
+gnc_plugin_page_register_get_query (GncPluginPage *plugin_page);
 
 /** Get the Account associated with this register page.
  *

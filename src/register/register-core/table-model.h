@@ -30,6 +30,10 @@
 #include "basiccell.h"
 #include "register-common.h"
 
+/** @addtogroup Table Table
+ * @{
+ * @file table-model.h
+ */
 typedef enum
 {
     XACC_CELL_ALLOW_NONE       = 0,
@@ -122,8 +126,11 @@ typedef struct
      * be visually distinguished. */
     int dividing_row;
     /* If positive, denotes a row that marks a boundary that should
-     * be visually distinguished, but different from the other. */
+     * be visually distinguished, but different from the others. */
     int dividing_row_upper;
+    /* If positive, denotes a row that marks a boundary that should
+     * be visually distinguished. */
+    int dividing_row_lower;
 
     VirtCellDataAllocator cell_data_allocator;
     VirtCellDataDeallocator cell_data_deallocator;
@@ -243,5 +250,5 @@ TableSaveHandler gnc_table_model_get_pre_save_handler
 (TableModel *model);
 TableSaveHandler gnc_table_model_get_post_save_handler
 (TableModel *model);
-
+/** @} */
 #endif

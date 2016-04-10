@@ -31,6 +31,7 @@
 
 #include "gnc-date.h"
 #include "qof.h"
+#include "qofbook.h"
 #include "Transaction.h"
 #include "gnc-ui-util.h"
 #include "gnc-prefs.h"
@@ -352,20 +353,22 @@ gnc_reconcile_view_new (Account *account, GNCReconcileViewType type,
 static void
 gnc_reconcile_view_init (GNCReconcileView *view)
 {
-    GNCSearchParam *param;
+    GNCSearchParamSimple *param;
     GList          *columns = NULL;
+    gboolean num_action =
+                qof_book_use_split_action_for_num_field(gnc_get_current_book());
 
     view->reconciled = g_hash_table_new (NULL, NULL);
     view->account = NULL;
     view->sibling = NULL;
 
-    param = gnc_search_param_new();
+    param = gnc_search_param_simple_new();
     gnc_search_param_set_param_fcn (param, QOF_TYPE_BOOLEAN,
                                     gnc_reconcile_view_is_reconciled, view);
-    gnc_search_param_set_title (param, _("Reconciled:R") + 11);
-    gnc_search_param_set_justify (param, GTK_JUSTIFY_CENTER);
-    gnc_search_param_set_passive (param, TRUE);
-    gnc_search_param_set_non_resizeable (param, TRUE);
+    gnc_search_param_set_title ((GNCSearchParam *) param, _("Reconciled:R") + 11);
+    gnc_search_param_set_justify ((GNCSearchParam *) param, GTK_JUSTIFY_CENTER);
+    gnc_search_param_set_passive ((GNCSearchParam *) param, TRUE);
+    gnc_search_param_set_non_resizeable ((GNCSearchParam *) param, TRUE);
     columns = g_list_prepend (columns, param);
     columns = gnc_search_param_prepend_with_justify (columns, _("Amount"),
               GTK_JUSTIFY_RIGHT,
@@ -374,7 +377,12 @@ gnc_reconcile_view_init (GNCReconcileView *view)
     columns = gnc_search_param_prepend (columns, _("Description"), NULL,
                                         GNC_ID_SPLIT, SPLIT_TRANS,
                                         TRANS_DESCRIPTION, NULL);
-    columns = gnc_search_param_prepend_with_justify (columns, _("Num"),
+    columns = num_action ?
+              gnc_search_param_prepend_with_justify (columns, _("Num"),
+              GTK_JUSTIFY_CENTER,
+              NULL, GNC_ID_SPLIT,
+              SPLIT_ACTION, NULL) :
+              gnc_search_param_prepend_with_justify (columns, _("Num"),
               GTK_JUSTIFY_CENTER,
               NULL, GNC_ID_SPLIT,
               SPLIT_TRANS, TRANS_NUM, NULL);
@@ -706,7 +714,7 @@ gnc_reconcile_view_key_press_cb (GtkWidget *widget, GdkEventKey *event,
 
     switch (event->keyval)
     {
-    case GDK_space:
+    case GDK_KEY_space:
         g_signal_stop_emission_by_name (widget, "key_press_event");
 
         toggle = gnc_reconcile_view_set_toggle (view);

@@ -31,6 +31,11 @@
 
 #include "config.h"
 
+#include <platform.h>
+#if PLATFORM(WINDOWS)
+#include <windows.h>
+#endif
+
 #include <aqbanking/banking.h>
 #include <glib.h>
 #include <glib/gi18n.h>
@@ -44,7 +49,6 @@
 
 #include "dialog-utils.h"
 #include "assistant-ab-initial.h"
-#include "assistant-utils.h"
 #include "gnc-ab-kvp.h"
 #include "gnc-ab-utils.h"
 #include "gnc-component-manager.h"
@@ -75,7 +79,7 @@ void aai_on_prepare (GtkAssistant  *assistant, GtkWidget *page,
 
 void aai_on_finish (GtkAssistant *gtkassistant, gpointer user_data);
 void aai_on_cancel (GtkAssistant *assistant, gpointer user_data);
-void aai_destroy_cb(GtkObject *object, gpointer user_data);
+void aai_destroy_cb(GtkWidget *object, gpointer user_data);
 
 gboolean aai_key_press_event_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 
@@ -151,7 +155,7 @@ enum account_list_cols
 gboolean
 aai_key_press_event_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
-    if (event->keyval == GDK_Escape)
+    if (event->keyval == GDK_KEY_Escape)
     {
         gtk_widget_destroy(widget);
         return TRUE;
@@ -171,7 +175,7 @@ aai_on_cancel (GtkAssistant *gtkassistant, gpointer user_data)
 }
 
 void
-aai_destroy_cb(GtkObject *object, gpointer user_data)
+aai_destroy_cb(GtkWidget *object, gpointer user_data)
 {
     ABInitialInfo *info = user_data;
 
@@ -569,24 +573,22 @@ ab_account_longname(const AB_ACCOUNT *ab_acc)
 {
     gchar *bankname;
     gchar *result;
-    const char *ab_bankname, *bankcode;
+    const char *ab_bankname, *bankcode, *subAccountId;
 
     g_return_val_if_fail(ab_acc, NULL);
 
     ab_bankname = AB_Account_GetBankName(ab_acc);
     bankname = ab_bankname ? gnc_utf8_strip_invalid_strdup(ab_bankname) : NULL;
     bankcode = AB_Account_GetBankCode(ab_acc);
+    subAccountId = AB_Account_GetSubAccountId(ab_acc);
 
-    /* Translators: Strings are 1. Account code, 2. Bank name, 3. Bank code. */
-    if (bankname && *bankname)
-        result = g_strdup_printf(_("%s at %s (code %s)"),
-                                 AB_Account_GetAccountNumber(ab_acc),
-                                 bankname,
-                                 bankcode);
-    else
-        result = g_strdup_printf(_("%s at bank code %s"),
-                                 AB_Account_GetAccountNumber(ab_acc),
-                                 bankcode);
+    /* Translators: Strings are 1. Bank code, 2. Bank name,
+     * 3. Account Number,  4. Subaccount ID                  */
+    result = g_strdup_printf(_("Bank code %s (%s), Account %s (%s)"),
+                             bankcode,
+                             bankname ? bankname : "",
+                             AB_Account_GetAccountNumber(ab_acc),
+                             subAccountId ? subAccountId : "");
     g_free(bankname);
 
     return result;
@@ -857,8 +859,6 @@ gnc_ab_initial_assistant(void)
     gnc_builder_add_from_file (builder, "assistant-ab-initial.glade", "AqBanking Init Assistant");
 
     info->window = GTK_WIDGET(gtk_builder_get_object (builder, "AqBanking Init Assistant"));
-
-    gnc_assistant_set_colors (GTK_ASSISTANT (info->assistant));
 
     info->api = gnc_AB_BANKING_new();
     info->deferred_info = NULL;

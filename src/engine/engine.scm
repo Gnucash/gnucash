@@ -1,5 +1,30 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program; if not, contact:
+;;
+;; Free Software Foundation           Voice:  +1-617-542-5942
+;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+;; Boston, MA  02110-1301,  USA       gnu@gnu.org
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (define-module (gnucash engine))
 
+(cond-expand
+  (guile-2
+    (eval-when
+      (compile load eval expand)
+      (load-extension "libgncmod-engine" "scm_init_sw_engine_module")))
+  (else ))
 (use-modules (sw_engine))
 
 (export GNC-RND-FLOOR)
@@ -42,8 +67,28 @@
 (export GNC_COMMODITY_NS_MUTUAL)
 
 (export gnc:url->loaded-session)
+
+;; engine-utilities.scm
 (export gnc:account-map-descendants)
 (export gnc:account-map-children)
+
+(export account-same?)
+(export account-in-list?)
+(export account-in-list-pred)
+(export account-in-alist)
+(export account-full-name<?)
+(export account-list-predicate)
+(export accounts-get-children-depth)
+(export account-hashtable-ref)
+(export account-hashtable-set!)
+
+(export split-same?)
+(export split-in-list?)
+
+(export split-same?)
+(export split-in-list?)
+(export split-hashtable-ref)
+(export split-hashtable-set!)
 
 (export gnc:split-structure)
 (export gnc:make-split-scm)
@@ -94,7 +139,7 @@
 (export trans-splits)
 (export gnc:transaction-scm-onto-transaction)
 
-(load-from-path "gnc-numeric.scm")
-(load-from-path "commodity-table.scm")
-(load-from-path "engine-interface.scm")
-(load-from-path "engine-utilities.scm")
+(load-from-path "gnc-numeric")
+(load-from-path "commodity-table")
+(load-from-path "engine-interface")
+(load-from-path "engine-utilities")

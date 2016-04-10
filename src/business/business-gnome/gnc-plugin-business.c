@@ -822,7 +822,9 @@ static void gnc_plugin_business_cmd_assign_payment (GtkAction *action,
     SplitRegister *reg;
     Split *split;
     Transaction *trans;
-    gboolean is_customer;
+    gboolean have_owner;
+    GncOwner owner;
+    GncOwner *owner_p;
 
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
@@ -846,16 +848,20 @@ static void gnc_plugin_business_cmd_assign_payment (GtkAction *action,
 
     trans = xaccSplitGetParent(split);
     g_return_if_fail(trans);
-    is_customer = gnc_ui_payment_is_customer_payment(trans);
 
     plugin_business = GNC_PLUGIN_BUSINESS (mw->data);
     plugin_business_priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin_business);
 
+    have_owner = gncOwnerGetOwnerFromTxn (trans, &owner);
+    if (have_owner)
+        owner_p = &owner;
+    else if (gnc_ui_payment_is_customer_payment(trans))
+        owner_p = plugin_business_priv->last_customer;
+    else
+        owner_p = plugin_business_priv->last_vendor;
+
     gnc_business_assign_payment (gnc_plugin_page_get_window(plugin_page),
-                                 trans,
-                                 is_customer
-                                 ? plugin_business_priv->last_customer
-                                 : plugin_business_priv->last_vendor);
+                                 trans, owner_p);
 }
 
 static const gchar *register_txn_actions[] =

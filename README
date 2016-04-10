@@ -211,7 +211,7 @@ Building & Installing
 
 GnuCash uses GNU Automake to handle the build process, so for most of
 the details, see the generic instructions in INSTALL.  (If you are
-building directory from SVN, read the README.svn for more instructions.)
+building directory from Git, read the README.git file for more instructions.)
 Below we detail the GnuCash specific bits.
 
 Prior to building GnuCash, you will have to obtain and install the

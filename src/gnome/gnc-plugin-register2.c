@@ -54,8 +54,8 @@ static GtkActionEntry gnc_plugin_actions [] =
 {
 #ifdef REGISTER2_ENABLED
     {
-        "ToolsGeneralLedger2Action", NULL, N_("_General Ledger"), NULL,
-        N_("Open a general ledger window"),
+        "ToolsGeneralJournal2Action", NULL, N_("_General Journal"), NULL,
+        N_("Open a general journal window"),
         G_CALLBACK (gnc_plugin_register2_cmd_general_ledger)
     },
 #endif

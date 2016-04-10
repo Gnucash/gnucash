@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
-      Nærings Kontoer
+      NÃ¦rings Kontoer
     </gnc-act:title>
     <gnc-act:short-description>
-     Et konto oppsett for næringsvirksomhet.
+     Et konto oppsett for nÃ¦ringsvirksomhet.
     </gnc-act:short-description>
     <gnc-act:long-description>
-     Brukere som driver egen næring burde velge dette oppsettet.  Det inkluderer alle kontoene du trenger for de fleste typer næring, inkludert Payables, Receivables, Inntekter og Utgifter.
+     Brukere som driver egen nÃ¦ring burde velge dette oppsettet.  Det inkluderer alle kontoene du trenger for de fleste typer nÃ¦ring, inkludert Payables, Receivables, Inntekter og Utgifter.
     </gnc-act:long-description>
     <gnc-act:exclude-from-select-all>1</gnc-act:exclude-from-select-all>
 <gnc:account version="2.0.0">
@@ -29,7 +29,7 @@
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Nåværende Aktiva</act:name>
+  <act:name>NÃ¥vÃ¦rende Aktiva</act:name>
   <act:id type="new">f8532a8cdc024e0178fe20a1482e3192</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
@@ -37,7 +37,7 @@
     <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Nåværende Aktiva</act:description>
+  <act:description>NÃ¥vÃ¦rende Aktiva</act:description>
   <act:parent type="new">4f40ddce996f8f74b4e99f52e275ba14</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -89,7 +89,7 @@
   <act:parent type="new">f8532a8cdc024e0178fe20a1482e3192</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Småpenger</act:name>
+  <act:name>SmÃ¥penger</act:name>
   <act:id type="new">c292f69c18e01e1b607e37b3188c7acc</act:id>
   <act:type>CASH</act:type>
   <act:commodity>
@@ -97,7 +97,7 @@
     <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Småpenger</act:description>
+  <act:description>SmÃ¥penger</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -111,7 +111,7 @@
   <act:parent type="new">f8532a8cdc024e0178fe20a1482e3192</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Utestående Fordringer</act:name>
+  <act:name>UtestÃ¥ende Fordringer</act:name>
   <act:id type="new">0dd8987a2e860fa231a2a76e75cd5ad1</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
@@ -119,7 +119,7 @@
     <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Utestående Fordringer</act:description>
+  <act:description>UtestÃ¥ende Fordringer</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -467,7 +467,7 @@
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Opplæring</act:name>
+  <act:name>OpplÃ¦ring</act:name>
   <act:id type="new">2111b519274e18f8b2083f07b39b53d9</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -475,7 +475,7 @@
     <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Opplæring</act:description>
+  <act:description>OpplÃ¦ring</act:description>
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -513,7 +513,7 @@
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Uføreforsikring</act:name>
+  <act:name>UfÃ¸reforsikring</act:name>
   <act:id type="new">793001c2cac93c78d7b0e09b8d06e288</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -521,7 +521,7 @@
     <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Uføreforsikring</act:description>
+  <act:description>UfÃ¸reforsikring</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -657,7 +657,7 @@
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Lønnsutifter</act:name>
+  <act:name>LÃ¸nnsutifter</act:name>
   <act:id type="new">52c59dac947098d11ca9a43d75714e9a</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -665,7 +665,7 @@
     <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Lønnsutgifter</act:description>
+  <act:description>LÃ¸nnsutgifter</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -745,7 +745,7 @@
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Regnskapsføring</act:name>
+  <act:name>RegnskapsfÃ¸ring</act:name>
   <act:id type="new">f2fdacb032cbda092220d6b9bf78cdef</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -753,7 +753,7 @@
     <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Regnskapsføring</act:description>
+  <act:description>RegnskapsfÃ¸ring</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -1337,7 +1337,7 @@
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Inngående Balanse</act:name>
+  <act:name>InngÃ¥ende Balanse</act:name>
   <act:id type="new">a19c505d4b414bf3f5b574104959f534</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
@@ -1345,7 +1345,7 @@
     <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Inngående Balanse</act:description>
+  <act:description>InngÃ¥ende Balanse</act:description>
   <act:parent type="new">87e02e757b32b3059652cfe09fe9ae00</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

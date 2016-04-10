@@ -1,5 +1,487 @@
 Version history:
 ------- -------
+2.6.12 - 26 March 2016
+Announcement: GnuCash 2.6.12 Release 2016-03-26
+GnuCash 2.6.10 released
+
+The GnuCash development team proudly announces GnuCash 2.6.12, the
+twelfth maintenance release in the 2.6-stable series.
+
+The following bugs are fixed:
+     Bug 482186 - Customer and vendor report for partners who get invoiced/paid
+                  in foreign currency show total labeled with the symbol of the
+		  default currency
+     Bug 620281 - Adding reversing transaction to bill transactions creates
+                  undeleteable transactions
+     Bug 642292 - General Ledger report - 'Primary Sort Key' value is not
+                  persistent
+     Bug 687504 - Not possible to reset an invoice/bill counter format
+     Bug 693342 - Print (bottom) prints to middle for 3-check pages
+     Bug 719904 - Decide payment type only based on the account type involved
+     Bug 720934 - Barcharts with many data points have overlapping x-axis labels
+     Bug 722996 - Cannot add stock price on Price Editor
+     Bug 723689 - Splash screen doesn’t set the floating hint.
+     Bug 728074 - Posting bill converts currency to itself using 0 rate
+     Bug 728722 - Setting number format details appear wrong in Help,
+                  section 10.3.4. Counters Book Options Tab
+     Bug 733164 - {MacOSX] Command-H Invokes Help->Help Contents
+     Bug 742352 - Budget Summary section does not show expense totals
+     Bug 744157 - Tip about subaccount is confusing
+     Bug 754209 - Bills can be posted from "find bill" search results even if
+                  bill is already posted and results in extra $ posted to A/P
+     Bug 754856 - scheduled transaction <gnc.app-utils.sx> fails without warning
+     Bug 756469 - CSV Invoice Import - Items with double quote escape not
+                  imported.
+     Bug 760015 - guile support is automagic
+     Bug 760529 - Get Quotes updates value just once per day
+     Bug 760711 - Non-ASCII characters not shown in Report Name when a report
+                  is created with 2.6.11
+     Bug 762971 - Duplicating multiple invoices results in invoices without an
+                  ID number
+     Bug 763111 - commodities prices editor creates hidden db entries
+     Bug 763146 - Invalid exchange rate is recorded when entering multi-currency
+                  transaction
+     Bug 763279 - GnuCash has empty reports in recent Gentoo builds.
+
+Other repairs that weren't marked as bugs in git:
+     Various memory leaks.
+     More multi-currency fixes related to bug 763146.
+     Be more liberal in accepting business counter custom formats: li, lli, I64i,
+         and whatever is defined to G_GINT_64 or PRIx64 on the system on which
+	 GnuCash is compiled.
+     Correctly re-value splits when the transaction currency is changed.
+     Reset the transaction currency to match the currently open account when
+         auto-completing.
+     Refine the MacOS X localization when the system-generated POSIX locale
+         isn't a supported locale: Prefer the country to language when selecting
+	 an alternate locale, but still pass the original language to gettext.
+     Check printing: extract address from invoice/bill for payment transactions
+     
+Robert Fewell has contributed changes needed to allow the 2.6 series
+    to read files from future major versions which use GUIDs instead of
+    names to identify matched accounts with the Bayesian import matcher.
+
+Translation Updates: Azeri, Basque, Catalan, Chinese (Simplified), Czech,
+                     Danish, Dutch, Farsi, Japanese, Kinyarwandan, Portuguese,
+		     Slovak, Serbian, Swedish, Turkish, Ukrainian.
+
+2.6.11 - 11 January 2016
+Announcement: GnuCash 2.6.11 Release 2016-01-11
+GnuCash 2.6.11 released
+
+The GnuCash development team announces GnuCash 2.6.11, a snap release
+to correct a QIF import regression and the eleventh maintenance
+release in the 2.6-stable series.
+
+The following bugs are fixed:
+     Bug 680104 - Scheduled Tranaction formula not calculated when variables
+                  are mixed with constants.
+     Bug 756335 - When importing, date selection causes exit crash.
+     Bug 759570 - Postponing a repeating SX skips over the instance.
+     Bug 759674 - GNUCash crashes when importing invoices or bills with
+                  delimited import.
+     Bug 759859 - Reconcilation does not convert transactions' currency to
+                  the main one making reconcilation impossible.
+     Bug 760052 - missing flag translatable in Custom Report.
+     Bug 760079 - Translations comments: Remove translatable flag from
+                  placeholder labels in dialog date-close.
+     Bug 760398 - Cancelling the creation of a duplicate bill or invoice
+                  doesn't reset the invoice number counter
+
+Other repairs that weren't marked as bugs in git:
+     Add Account.AssignLots to python bindings.
+     Allow panel that provides information about TXF categories to be adjusted by the user in the Income Tax Information dialog under Edit->Tax Report Options.
+     Minor improvement to information provided about TXF categories in the Income Tax Information dialog under Edit->Tax Report Options.
+
+
+Updated Translations: German
+
+2.6.10 - 20 December 2015
+Announcement: GnuCash 2.6.10 Release 2015-12-20
+GnuCash 2.6.10 released
+
+The GnuCash development team proudly announces GnuCash 2.6.10, the
+tenth maintenance release in the 2.6-stable series.
+
+The following bugs are fixed:
+     Bug 627692 - Report options, Account Selection, "select all" => not all
+                  accounts selected, only visible ones
+     Bug 646129 - Account selection in reports: 'Select Children' doesn't
+                  actually select children if they are collapsed.
+     Bug 662126 - Cannot create scheduled transaction for dividend reinvestment
+     Bug 742321 - Reset temporary prefs on application startup
+     Bug 745101 - No warning when quitting with unsaved file.
+     	 	  When the file was first created without the New File Assistant.
+     Bug 746155 - Reports: html-acct-table prepend-row! & prepend-col!
+     	 	  unknown variables Fixed following the suggestions by
+		  Tony Kerns.
+     Bug 754192 - Since Last Run Dialog asks for security price even if not
+                  needed.
+     Bug 754533 -  No Account Templates Error Patch
+     Bug 755781 - Files with copyright but no grant of license.
+     Bug 756335 - When importing, date selection causes exit crash
+     Bug 756339 - Prices table not updated
+     Bug 756720 - configure fails to find libgoffice 0.10-10 (0.10.18-1)
+     	 	  While we can't support libgoffice 0.10 because that would
+		  require gtk3 we can improve the error message if no libgoffice
+		  0.8.x version is found.
+     Bug 757378 - Display the user-defined display symbol for non-currency
+                  commodities.
+     Bug 759224 - illegal dates in stock transactions cause corrupt file.
+     Bug 759294 - New the billing term are not saved during invoice editing.
+                  Prevent editing the terms from the invoice view.
+
+Other repairs that weren't marked as bugs in git:
+    Revert the automatic inversion of prices whose value is less than 1.0.
+        This corrects several regressions from 2.6.8 and 2.6.9; it proved to
+	be to big a change for a maintenance branch and will re-appear in the
+	next major release.
+    Fix test failure due to trying to parse nanoseconds, which we don't
+        actually use.
+    Use @SHELL@ instead of hardcode /bin/sh in test shell scripts.
+        This is a workaround for MacOS X 10.11's System Integrity Protection.
+    Improve the revert action: Ask user confirmation and don't ask to save
+        before reverting
+    Have a more generic mechanism to set Save action's sensitivity and use it
+        for Revert action as well
+    Avoid assert in gnc_split_register_balance_trans if default_account is null.
+    Performance improvements in the Cash Flow report.
+    Add new account chart for Duch small businesses.
+    Add some developer documentation.
+
+New Translations:
+     Portugal Portuguese
+Updated Translations:
+     Arabic, German
+
+2.6.9 - 5 October 2015
+Announcement: GnuCash 2.6.8 Release 2015-10-05
+GnuCash 2.6.9 released
+
+The GnuCash development team humbly announces GnuCash 2.6.9, the ninth
+maintenance release in the 2.6-stable series, a snap release to repair
+a serious bug on Microsoft Windows.
+
+The following bugs are fixed:
+     Bug 755920 - Crash (Freeze) when using File Save As.. in Windows OS
+     	 	  Fix termination of the loop so that it's not dependent
+		  upon Linux paths.
+     Bug 755778 - Test failure: test-engine: duplicate test case paths
+     Bug 755781 - Files with copyright but no grant of license.
+
+Updated Translations:
+     German
+2.6.8 - 27 September 2015
+Announcement: GnuCash 2.6.8 Release 2015-09-27
+GnuCash 2.6.8 released
+
+The GnuCash development team proudly announces GnuCash 2.6.8, the
+eighth maintenance release in the 2.6-stable series.
+
+The following bugs are fixed:
+
+     Bug 724738 - Value in "Display Symbol" field not saved.
+     Bug 746998 - "Months Remaining" spinbox in Loan Assistant is
+         non-obvious. Provide a tool tip explaining what it's for.
+     Bug 747795 - Attached file not found. MSWin only. ShellExecuteW("open")
+         doesn't decode http escapes on file: IRIs.
+     Bug 749077 - wrongfully invalidating any account save
+         location/path starting with ".gnucash"
+     Bug 752035 - Transaction Report "Filter By" Not Always Working.
+     Bug 752204 - .gml2 files are modified during build. Since there's
+         no real benefit to saving the files most of the time, don't,
+         but leave the save line in, commented out, to make it easy to
+         write new files if necessary.
+     Bug 752879 - Finance::Quote TZ Date::Manip config variable is
+         deprecated.
+     Bug 753146 - free(): invalid pointer on duplicate transaction
+         when Use Split Action Field for Number is set.
+     Bug 754617 - Gnucash should use PKG_PROG_PKG_CONFIG
+     Bug 754764 Budget Doxygen documentation - gnc-budget-view.c.
+
+Other repairs that weren't marked as bugs in git:
+     Clean up deprecated Gtk functions to make eventual migration to
+     Gtk3 easier.
+
+     Improve storage of prices in the price db so that there is only
+     one per day and a preference list determines what sources can
+     overwrite existing prices. Prices are stored in the direction
+     that the price is greater than one to preserve precision for
+     large prices that would be small in the other direction.
+
+     Correct the Stock, Bond, Market Index, and Mutual Fund account
+     types to ASSET in the template accounts.  STOCK and MUTUAL are
+     not compatible with currency.
+
+     Clean up some non-fatal asserts.
+
+     Developer documentation improvements.
+
+     Fix backend Sync errors not being reported.
+
+     Restore Date::Manip as an explicit dependency in gnc-fq-update;
+     it's required for gnc-fq-helper, not Finance::Quote.
+
+Updated Translations:
+     Danish, Dutch, French, German
+2.6.7 - 28 June 2015
+Announcement: GnuCash 2.6.7 Release 2015-06-28
+GnuCash 2.6.7 released
+
+The GnuCash development team proudly announces GnuCash 2.6.7, the
+seventh maintenance release in the 2.6-stable series.
+
+The following bugs are fixed:
+     681225 - income statement displays blank base currency entries when
+     	      trading account transactions are present during the report period.
+     734183 - Set value to zero before calling gnc_exp_parser_parse.
+     739271 - pt_BR translation wrong word "limpesa". Should be "limpeza".
+     740955 - Correct general journal and general ledger reports to properly.
+      	      handle Use-Split-Action-For-Num option in File->Properties.
+     744858 - Update exchange rate on bill only possible once per session
+     	      (after unpost/repost).
+     746163 - Custom register colors (table rows) not recognized from
+     	      .gtkrc-2.0.gnucash file.
+     746792 - process payment in foreign currency leads to broken equation.
+     746873 - Gnucash asks sql passwords before wallet password.
+     746977 - scm ccache files should be in pkglibdir not pkgdatadir.
+     747300 - SQL backend missing from most recent DMG?
+     747377 - Fix overly restrictive input validation for IBAN of SEPA transfer.
+     747812 - unset LDFLAGS when unsetting CFLAGS.
+
+Other repairs that weren't marked with bugs in git:
+     Fix hidden panes in lot viewer.
+     Fix some abs() errors from new clang and gcc versions.
+     Fix dbi driver detection on linux and similar.
+     Improve "Auto pay on posting" message.
+     Enable travis continuous integration tests on the gnucash repository.
+
+Updated Translations:
+     Azerbaijani, Basque, Catalan, Chinese (Simplified), Czech, Danish, Dutch,
+     German, Kinyarwanda, Persian (Farsi), Portuguese, Slovak, Swedish,
+     Turkish, Ukrainian.
+
+New Translations: Serbian
+
+2.6.6 - 29 March 2015
+Announcement: GnuCash 2.6.6 Release 2015-03-29
+GnuCash 2.6.6 released
+
+The GnuCash development team proudly announces GnuCash 2.6.6, the
+sixth maintenance release in the 2.6-stable series.
+
+The following bugs are fixed:
+	619899 - Use normal gettext or intltool toolchain also for scm files
+	649933 - Creating cash flow report takes a long tim
+	672760 - Postponed transaction applied invalid date
+	721196 - CSV. Cannot import lines with empty fields for deposit or withdrawal in bank transaction download.
+	723409 - Incorrect symbol for Turkish lira
+	727466 - The symbol of CNY changed to 元
+	727647 - "gncInvoiceGetTotal" is not read-only function?
+	731889 - guile 2 exports different autoconf macros than what is expected
+	733685 - Fancy Date Format doesn't stick
+	738749 - Broken account template en_GB/uk-vat.gnucash-xea.
+	739228 - Advanced Portfolio report: wrong calculation of Value Correctly convert the value into the report's currency.
+	739584 - gnucash-2.6.4 segfaults regularly on transfer .
+	740471 - Applying payment to invoice Segmentation fault
+	741228 - "Red line" threshold applies to Template scheduled transactions
+	741810 - Compilation fails because of creating .gnucash
+	742089 - Decimal places. Set the debit and credit cells' print_info to the account so that the decimal places are correct for the commodity.
+	742332 - German tax report uses US tax quarters and not real quarters.
+	742624 - Scheduled Transaction Editor results in immediate segfault
+	743609 - Add configure options to disable libsecret detection
+	743807 - Stops critical error messages.
+	745265 - Segfault in generate_statusbar_lastmodified_message on Windows. Actually change the default date format without AM/PM
+	745354 - Enhance the Find Transactions dialog. Make it possible to define search criteria that consist of multiple terms anded or ored together. Use this to define a new criterion to look for specified text in any of the Description, Notes, or Memo fields
+	746517 - gnc-sql-backend.c compile fails with -Werror=format-nonliteral. Use GCC pragma to disable the warning in the one place that trips it
+	746977 - scm ccache files should be in pkglibdir not pkgdatadir.
+
+Other repairs that weren't reported in bugs:
+      Let CPAN and ActiveState package managers take care of dependencies instead of explicitly installing a few of them directly.
+      Correct the number field displayed in the reconcile window to correspond with the source specified in File->Options
+      Fix some bugs found by SWIG version 3.0.5. Prior to version 3.0.3 SWIG silently ignored invalid preprocessor directives
+      Scrubbing Improvements, including avoiding a potential infinite loop.
+      Remove build and run of no-longer-existant intl-scm/guile-strings.
+      Rewrite gnc-test-env in perl. This eliminates another guile dependency in the build chain.
+      Switch from guile to xml to manage our iso-currencies source file
+      Numeric values with more than commodity smallest fraction get silently dropped.
+      Update US Income Tax data to reflect minor changes for 2014
+      Advanced portfolio should respect report date when looking for other income/expense
+      Improve income and expense reporting in advanced portfolio report
+      Accept prices of the form n.nnne[+-]nn, i.e. with an exponent. An example requiring this is currency conversion from IDR to USD
+      Added Lithuanian language business accounts
+      Fix crash when running check & repair on an open AP/AR register
+
+Updated Translations: Danish, Dutch, German, Spanish
+
+New Translations: Maithili, Manipuri-Bengali Script, Manipuri-Meetei Mayek Script.
+
+
+2.6.5 - 16 December 2014
+Announcement: GnuCash 2.6.5 Release 2014-12-16
+GnuCash 2.6.5 released
+
+The GnuCash development team proudly announces GnuCash 2.6.5, the
+fifth maintenance release in the 2.6-stable series.
+
+The primary reason for this release is that the problems which plagued 2.6.4 on Microsoft Windows have been resolved.
+
+We've also fixed the following bugs:
+    736359 - Date of 0000-00-00 in MySQL backend crashes GnuCash.
+    737815 - Graphs Cannot Be Generated Correctly.
+    738113 - Crash on reload budget report.
+    738477 - WebKit is broken on Win32.
+    741418 - Freeze unposting bill, 100% cpu usage.
+
+Other fixes that weren't reported as bugs:
+    Pre-compile scm files when building with guile 2.
+    Fix build-time hard-coded path introduced by the guile2 compile changes
+    Prevent crash when standards-report dir doesn't exist.
+    QIF Import crashes when closing via the 'X' button on the last page
+    Omit extension on calls to load-extension.
+    Use one common base directory to store all scheme files and modules.
+    Guile module structure cleanup.
+    Harmonize variable names used to refer to guile modules in all makefiles.
+    Add missing comma in call to gtk_tree_store_set(). Thanks to Frédéric Bière for finding and fixing the problem.
+    Revert to using numerical indexes for the x-axis on bar charts.
+    Aqbanking: Add display of aqbanking subaccountid in initial correspondence setup.
+    Aqbanking online SEPA transfer: Allow transfers without BIC, only IBAN. Also add IBAN checking.
+    Aqbanking transfer: Make IBAN and BIC text entry fields filter digits or alphas correctly as needed.
+    Adapt german SKR03 account template to updated tax rate.
+    Allow GUILE1_PROGS as m4 name. Patch by dimstar@opensuse.org.
+    Add sv_AX, sv_FI, zh_HK, and zh_TW to Makefiles & configure.
+
+Updated Translations: Assamese Indic, Danish, German, Gujarati Indic, Italian, Kannada Indic, Konkani Latin,
+
+
+
+2.6.4 - 28 September 2014
+
+Announcement: GnuCash 2.6.4 Release 2014-09-28
+GnuCash 2.6.4 released
+
+The GnuCash development team proudly announces GnuCash 2.6.4, the
+third maintenance release in the 2.6-stable series. Please take the
+tour of all the new features. 
+
+Between 2.6.3 and 2.6.4, the following bugfixes were accomplished:
+
+    120199 - Incorrect sort order in "Sort by Statement Date".
+    434462 - register color don't work correct with system theme color.
+    509263 - Since Last Run dialog won't allow resizing of Status column.
+    610202 - gnucash silently closes when no X11/$DISPLAY is present.
+    630638 - 'Process payment' should allow to select equity accounts for
+             payment
+    671615 - French: 'New Customer' button in Find Customer dialog is
+             translated to 'Nouvel onglet'
+    688965 - Page Up, Page Down keys cause GnuCash to hang.
+    692249 - Add Help button in Custom Reports dialog box,
+    695240 - mortgage wizard empty table.
+    707243 - Hard-coded font colors in account tree?
+    711440 - Tab labels have different background colour than containing gui
+             element.
+    711567 - Cannot save a custom report if a path contain diacritic chars
+    719457 - Template for Home Mortgage Loan isn't properly nested.
+    719457 - Template for Home Mortgage Loan isn't properly nested.
+    720427 - Review of french account templates
+    720934 - Barcharts with many data points have overlapping x-axis labels.
+    722140 - Add option to control inclusion of trading accounts in cash flow
+             report.
+    722200 - configure script does not pick the correct am_cv_scanf version.
+    723145 - Currency display does not respect locale.
+    723442 - Report Options - Report Name too short.
+    725054 - Re-numbering sub accounts crashes the program.
+    725366 - Formula Parsing Error with Scheduled Mortgage Transactions
+    726449 - Budget Barchart does not show up if running sum is selected.
+    726888 - cancel button is available on all pages of assistant.
+    727130 - Crash when newline in Report Title
+    727338 - Translation and Account file updates for Latvian.
+    728103 - Invoice opened does not contain the Job under circumstances.
+    728717 - Ubuntu 14.04 - GNUcash crashes on close.
+    728841 - XML backend does not always store KVP slots.
+    729157 - Bill Term discount days are allowed to be more than due days.
+    729497 - Saved Report Configuration selection window resize.
+    730255 - Python bindings: Assigns bill entries to non-existant invoice.
+    731519 - The fix sets the upper limit before it sets the value of the end
+             row spin button.
+    733107 - Search for reconcile status doesn't work right.
+    733283 - [PATCH] Loss of fractions when importing OFX investment
+             transactions.
+    733506 - (ForwadDisableQIF) The forward button is not active even though
+             a file is selected.
+    734183 - Set all of the denominators correctly on the currency values.
+    736703 - Scheduled transaction are registered without credit/debit.
+    732545 - gnucash-2.6.3 segfaults when started.
+
+Some other fixes not associated with reported bugs were accomplished:
+
+    Add business lot scrubbing to Check & Repair->All/This transaction(s).
+    Add context to generic translatable string. This was suggested in
+    	Bug 671615 by JÃ©rÃ´me Rapinat.
+    Add scrub function to reduce the amount of lot links used. Only lot links
+    	between two or more document lots must remain. All lot links between
+	document and payment lots can be scrubbed.
+    Add some date format checking and make sure generated dates are the correct
+    	user selected format, not always locale format.
+    Allow the ability to skip rows when importing transactions.
+    Always use the price we display to calculate the current value of an
+    	account.
+    Better period totals formatting in Invoices.
+    CSV Export: factor out function to generate regular expression.
+    CSV Import transform macro into function.
+    Convert ISO-8859-1 account chart templates to UTF-8.
+    Correct txf output to use a minus sign, rather than parenthesis.
+    Fix document type dispay for credit notes on owner report.
+    Fix test-backend-dbi segfault with libdbi-0.9.0.
+    Handle the case of scrubbing a lot link between two non-document lots.
+    Make scrub in lot viewer scrub business lots using the new scrub functions.
+    Move account type checking functions into the engine.
+    Prevent older gnucash versions from opening a data file if previously
+    	unhandled kvps are used.
+    Python bindings. Add function gncVendorNextID, complementary to
+        gncCustomerNextID.
+    Re-enable loading and saving gnucashdotdir/accelerator-home on OSX.
+    Refactor OS-specific ifdef to reduce code duplication, which results
+        in reduced risk on typos in either branch
+    Refactor get_pay_split into gncOwnerFindOffsettingSplit. In this form it
+        can be used both for scrubbing lot links and for adding new payments
+    Refactor gncOwnerReduceSplitTo out of reduce_biggest_split. It can now be
+        used both for scrubbing and when applying payments
+    Refactor gnc_doc_doc_link into gncOwnerSetLotLinkMemo and move it. It can
+        now be used both for scrubbing and when applying payments
+    Refactor scrub_doc_pay_link into scrub_other_link and make it more generic.
+        It can now be used both to:
+        * move a payment to a document lot (its original use case)
+        * move a refund to a payment lot or the other way around
+    Relax requirements for booleans in invoice line, accepting 'y' as well as
+        'yes', 't' as well as 'true'.
+    Replace C++ reserved words for future compatibility with C++.
+    Rework assistant csv import regex code to eliminate the mandatory dummy
+        field.
+    Rewrite invoice payment logic to fix lot link proliferation.
+    SQL: Save commodity namespace changes from template.
+    Set default currency for French account chart templates.
+    Tweak the get_pay_split function to prefer the best possible match.
+    Use libsecret if available since gnome-keyring has been deprecated.
+    Use more significant digits for SX function returns.
+    Use same default setting for quotes in csv import and export.
+    Widen the scope of the subsplit merge scrub function. When used in a
+        strict sense it will only merge splits that are marked as subsplits
+	of each other. In relaxed mode it will merge any split two splits
+	that are both in the same lot and the same transaction.
+    double_to_gnc_numeric: Return overflow error immediately on invalid input.
+    Ensure that the root account is saved to the SQL backend.
+
+Chart-of-Account Templates Updated: Latvian, French, Swedish
+
+Translations Updated: Brazilian Portuguese, Dutch, Konkani (includes replacing Raman character set with Devangari) ,Latvian, Marathi, Tamil,
+
+New Translations: Bodo, Hindi, Kashmiri, Telugu, Urdu. Thanks to The Centre for Development of Advanced Computing (C-DAC), Pune, India. Translation Team Leader: Chandrakant Dhutadmal
+Documentation
+Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new version 2.6.4 of the companion Help and Tutorial and Concepts Guide.
+
+
+
 2.6.3 - 30 March 2014
        The GnuCash development team proudly announces GnuCash 2.6.3,
        the latest stable release of the GnuCash Free Accounting
@@ -162,14 +644,14 @@ Version history:
 
        Bug Fixes:
 
-       Bug 157247 - Asset account's "total" value should use most
-                    recent transaction prices
-       Bug 710823 - libofx can supply broken UTF-8 for account id
-       Bug 710824 - GnuCash should sanitise UTF-8 before serialising files
-                    to avoid writing broken unparseable XML.
-       Bug 720555 - General Ledger - Can't Enter Transaction Amounts
-       Bug 720556 - The Tip of the Day preference isn't getting saved
-       Bug 720646 - New Book Tabs on Windows
+       157247 - Asset account's "total" value should use most
+                recent transaction prices
+       710823 - libofx can supply broken UTF-8 for account id
+       710824 - GnuCash should sanitise UTF-8 before serialising files
+                to avoid writing broken unparseable XML.
+       720555 - General Ledger - Can't Enter Transaction Amounts
+       720556 - The Tip of the Day preference isn't getting saved
+       720646 - New Book Tabs on Windows
 
        Other Changes:
 
@@ -199,30 +681,29 @@ Version history:
 
 	 Bug Fixes:
 
-	 Bug 336843 - Attach images/files/urls to transactions:
-	    Disable the "show attachment" menu item if the transaction
-	    has no attached file.
-
-	 Bug 619478 - Build warning in html/gnc-html-webkit.c
-	 Bug 627575 - Stylesheet names with non-alphanumeric characters
-	     and saved-reports
-	 Bug 630578 - current date instead of posting date in exchange rate,
-	    when posting a bill
-	 Bug 632588 - Scrub doesn't fix missing currency
-	 Bug 639371 - Welcome Sample Report reports wrong version and
-	    has a broken report
-	 Bug 653594 - wrong amount printed on checks
-	 Bug 705714 - QIF Import - File selection pop-up is not on top
-	     during qif import
-	 Bug 708526 - GnuCash Crashes when opening About page:
-	     Downgrade the error to a critical warning.
-	 Bug 711317 - Indian Rupee Symbol appears as "?" marks
-	 Bug 715123 - Post invoice problem, cannot unpost
-	 Bug 719481 - GnuCash report crashes with Guile2
-	 Bug 719521 - Missing radio button in "Edit security" dialog
-	 Bug 719726 - Click on File -> Open seg-faults
-	 Bug 720235 - Python bindings should load environment file just
-	     like gnucash does
+	 336843 - Attach images/files/urls to transactions:
+	          Disable the "show attachment" menu item if the transaction
+	          has no attached file.
+	 619478 - Build warning in html/gnc-html-webkit.c
+	 627575 - Stylesheet names with non-alphanumeric characters
+	          and saved-reports
+	 630578 - current date instead of posting date in exchange rate,
+	          when posting a bill
+	 632588 - Scrub doesn't fix missing currency
+	 639371 - Welcome Sample Report reports wrong version and
+	          has a broken report
+	 653594 - wrong amount printed on checks
+	 705714 - QIF Import - File selection pop-up is not on top
+	          during qif import
+	 708526 - GnuCash Crashes when opening About page:
+	          Downgrade the error to a critical warning.
+	 711317 - Indian Rupee Symbol appears as "?" marks
+	 715123 - Post invoice problem, cannot unpost
+	 719481 - GnuCash report crashes with Guile2
+	 719521 - Missing radio button in "Edit security" dialog
+	 719726 - Click on File -> Open seg-faults
+	 720235 - Python bindings should load environment file just
+	          like gnucash does
 	 Fix Python tests to no longer require gsettings schemas installed.
 	 Fix the CuteCash (Qt GUI based) build
 	 Multi-currency "Post invoice" improvements
@@ -530,12 +1011,12 @@ Version history:
 	 Python bindings. Patch by Tom Lofts
 
 	 Carsten Rinke provided several patches:
-	 Bug #682800 Generated balances on Report different than calculated
+	    682800 Generated balances on Report different than calculated
 	 balances on Ledger when using "open subaccounts"
-	 Bug #622778 Miscalculation in cashflow reports
-	 Bug #584869 net change line in general journal report
+	    622778 Miscalculation in cashflow reports
+	    584869 net change line in general journal report
 
-	 Bug #589865 - Budget flow period doesn't work. Patches by Carsten
+	    589865 - Budget flow period doesn't work. Patches by Carsten
 	 Rinke and Mikhail Tsaplin
 
 	 The translation files have been copied from the 2.4 branch.

@@ -232,7 +232,7 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplay2Type ld_type)
     SplitRegisterType2 reg_type;
 
     if (ld_type == LD2_GL)
-        return GENERAL_LEDGER2;
+        return GENERAL_JOURNAL2;
 
     account_type = xaccAccountGetType (leader);
 
@@ -304,9 +304,9 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplay2Type ld_type)
     {
         /* If any of the sub-accounts have ACCT_TYPE_STOCK or
          * ACCT_TYPE_MUTUAL types, then we must use the PORTFOLIO_LEDGER
-         * ledger. Otherwise, a plain old GENERAL_LEDGER will do. */
+         * ledger. Otherwise, a plain old GENERAL_JOURNAL will do. */
         gpointer ret;
-        reg_type = GENERAL_LEDGER2;
+        reg_type = GENERAL_JOURNAL2;
 
         ret = gnc_account_foreach_descendant_until(leader, look_for_portfolio_cb, NULL);
         if (ret) reg_type = PORTFOLIO_LEDGER2;
@@ -326,12 +326,12 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplay2Type ld_type)
 
     case ACCT_TYPE_EQUITY:
     case ACCT_TYPE_TRADING:
-        reg_type = GENERAL_LEDGER2;
+        reg_type = GENERAL_JOURNAL2;
         break;
 
     default:
         PERR ("unknown account type:%d", account_type);
-        reg_type = GENERAL_LEDGER2;
+        reg_type = GENERAL_JOURNAL2;
         break;
     }
 
@@ -397,7 +397,7 @@ gnc_ledger_display2_subaccounts (Account *account)
     return ld;
 }
 
-/* Opens up a general ledger window. */
+/* Opens up a general journal window. */
 GNCLedgerDisplay2 *
 gnc_ledger_display2_gl (void)
 {
@@ -424,7 +424,10 @@ gnc_ledger_display2_gl (void)
 
         tRoot = gnc_book_get_template_root( gnc_get_current_book() );
         al = gnc_account_get_descendants( tRoot );
-        xaccQueryAddAccountMatch( query, al, QOF_GUID_MATCH_NONE, QOF_QUERY_AND );
+
+        if (g_list_length(al) != 0)
+            xaccQueryAddAccountMatch( query, al, QOF_GUID_MATCH_NONE, QOF_QUERY_AND );
+
         g_list_free (al);
         al = NULL;
         tRoot = NULL;
@@ -438,7 +441,7 @@ gnc_ledger_display2_gl (void)
                              FALSE, 0,
                              QOF_QUERY_AND);
 
-    ld = gnc_ledger_display2_internal (NULL, query, LD2_GL, GENERAL_LEDGER2,
+    ld = gnc_ledger_display2_internal (NULL, query, LD2_GL, GENERAL_JOURNAL2,
                                       REG2_STYLE_JOURNAL, FALSE, FALSE);
     LEAVE("%p", ld);
     return ld;
@@ -698,7 +701,7 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
 {
     GNCLedgerDisplay2 *ld;
     gint limit;
-    const char *class;
+    const char *klass;
     GList *splits;
     gboolean display_subaccounts = FALSE;
     gboolean is_gl = FALSE;
@@ -706,7 +709,7 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
     switch (ld_type)
     {
     case LD2_SINGLE:
-        class = REGISTER_SINGLE_CM_CLASS;
+        klass = REGISTER_SINGLE_CM_CLASS;
 
         if (reg_type >= NUM_SINGLE_REGISTER_TYPES2)
         {
@@ -726,14 +729,14 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
             q = NULL;
         }
 
-        ld = gnc_find_first_gui_component (class, find_by_leader, lead_account);
+        ld = gnc_find_first_gui_component (klass, find_by_leader, lead_account);
         if (ld)
             return ld;
 
         break;
 
     case LD2_SUBACCOUNT:
-        class = REGISTER_SUBACCOUNT_CM_CLASS;
+        klass = REGISTER_SUBACCOUNT_CM_CLASS;
 
         if (!lead_account)
         {
@@ -747,7 +750,7 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
             q = NULL;
         }
 
-        ld = gnc_find_first_gui_component (class, find_by_leader, lead_account);
+        ld = gnc_find_first_gui_component (klass, find_by_leader, lead_account);
         if (ld)
             return ld;
 
@@ -755,11 +758,11 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
         break;
 
     case LD2_GL:
-        class = REGISTER_GL_CM_CLASS;
+        klass = REGISTER_GL_CM_CLASS;
 
         if (!q)
         {
-            PWARN ("general ledger with no query");
+            PWARN ("general journal with no query");
         }
 
         is_gl = TRUE;
@@ -790,7 +793,7 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
     else
         gnc_ledger_display2_make_query (ld, limit, reg_type);
 
-    ld->component_id = gnc_register_gui_component (class,
+    ld->component_id = gnc_register_gui_component (klass,
                        refresh_handler,
                        close_handler, ld);
 
@@ -863,8 +866,8 @@ gnc_ledger_display2_find_by_query (Query *q)
     if (ledger_display)
     {
         model = ledger_display->model;
-        // To get a new search page from a general ledger, search register is a LD2_GL also.
-        if (model->type == GENERAL_LEDGER2)
+        // To get a new search page from a general journal, search register is a LD2_GL also.
+        if (model->type == GENERAL_JOURNAL2)
             ledger_display = NULL;
     }
     return ledger_display;

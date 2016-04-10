@@ -1,5 +1,8 @@
 *.bak
 *.gmo
+*.gschema.xml
+*.gschema.xml.in
+*.gschema.valid
 *.la
 *.lo
 *.o
@@ -8,6 +11,7 @@
 *.pyo
 *.schemas
 *~
+.autotools
 .cproject
 .deps
 .libs
@@ -40,7 +44,6 @@ doc/tip_of_the_day.list
 gnucash-*.*.*.tar.*
 gnucash-*.*.*/
 install-sh
-intl-scm/guile-strings.c
 intltool-extract
 intltool-extract.in
 intltool-merge
@@ -256,3 +259,5 @@ DerivedData/
 *.mode2v3
 *.perspectivev3
 xcuserdata/
+messages.mo
+/.settings/

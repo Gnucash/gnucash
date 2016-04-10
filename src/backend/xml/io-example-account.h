@@ -24,10 +24,12 @@
 
 #ifndef IO_EXAMPLE_ACCOUNT_H
 #define IO_EXAMPLE_ACCOUNT_H
-
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 #include <glib.h>
 
-#include "sixtp.h"
 #include "gnc-engine.h"
 
 struct GncExampleAccount_struct
@@ -52,7 +54,9 @@ GncExampleAccount *gnc_read_example_account(const gchar *filename);
 
 void gnc_free_example_account_list(GSList *list);
 GSList* gnc_load_example_account_list(const char *dirname);
-
+#ifdef __cplusplus
+}
+#endif
 /* gboolean gnc_is_example_account_xml(const gchar *name); */
 
 #endif /* IO_EXAMPLE_ACCOUNT_H */

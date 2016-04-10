@@ -49,9 +49,12 @@ extern "C"
 #ifndef SWIG
 
 typedef struct _QofBookClass  QofBookClass;
+#ifndef __KVP_VALUE
+typedef struct KvpValueImpl KvpValue;
+#define __KVP_VALUE
+#endif
 
 #include "qofid.h"
-#include "kvp_frame.h"
 #include "qofinstance.h"
 
 /* --- type macros --- */
@@ -71,8 +74,8 @@ typedef void (*QofBookDirtyCB) (QofBook *, gboolean dirty, gpointer user_data);
 
 typedef struct gnc_option_db GNCOptionDB;
 
-typedef void (*GNCOptionSave) (GNCOptionDB*, KvpFrame*, gboolean);
-typedef void (*GNCOptionLoad) (GNCOptionDB*, KvpFrame*);
+typedef void (*GNCOptionSave) (GNCOptionDB*, QofBook*, gboolean);
+typedef void (*GNCOptionLoad) (GNCOptionDB*, QofBook*);
 
 /* Book structure */
 struct _QofBook
@@ -245,6 +248,20 @@ void qof_book_mark_readonly(QofBook *book);
 /** Returns flag indicating whether this book uses trading accounts */
 gboolean qof_book_use_trading_accounts (const QofBook *book);
 
+/** Returns pointer to book-currency name for book, if one exists in the
+  * KVP, or NULL; does not validate contents nor determine if there is a valid
+  * default gain/loss policy, both of which are required, for the
+  * 'book-currency' currency accounting method to apply. Use instead
+  * 'gnc_book_get_book_currency' which does these validations. */
+const gchar * qof_book_get_book_currency (QofBook *book);
+
+/** Returns pointer to default gain/loss policy for book, if one exists in the
+  * KVP, or NULL; does not validate contents nor determine if there is a valid
+  * book-currency, both of which are required, for the 'book-currency'
+  * currency accounting method to apply. Use instead
+  * 'gnc_book_get_default_gains_policy' which does these validations. */
+const gchar * qof_book_get_default_gains_policy (QofBook *book);
+
 /** Returns TRUE if the auto-read-only feature should be used, otherwise
  * FALSE. This is just a wrapper on qof_book_get_num_days_autoreadonly() == 0. */
 gboolean qof_book_uses_autoreadonly (const QofBook *book);
@@ -315,18 +332,21 @@ gint64 qof_book_get_counter (QofBook *book, const char *counter_name);
  */
 gchar *qof_book_increment_and_format_counter (QofBook *book, const char *counter_name);
 
-/** Validate a counter format string. Returns an error message if the
- *    format string was invalid, or NULL if it is ok. The caller should
- *    free the error message with g_free.
+/** Validate a counter format string. If valid, returns a normalized format string,
+ *    that is whatever long int specifier was used will be replaced with the value of
+ *    the posix "PRIx64" macro.
+ *    If not valid returns NULL and optionally set an error message is a non-null
+ *    err_msg parameter was passed.
+ *    The caller should free the returned format string and  error message with g_free.
  */
-gchar * qof_book_validate_counter_format(const gchar *format);
+gchar * qof_book_normalize_counter_format(const gchar *format, gchar **err_msg);
 
 /** Get the format string to use for the named counter.
  *    The return value is NULL on error or the format string of the
- *    counter. The string should not be freed.
+ *    counter. The returned string should be freed by the caller.
  */
-const char *qof_book_get_counter_format (const QofBook *book,
-					 const char *counter_name);
+char *qof_book_get_counter_format (const QofBook *book,
+                                   const char *counter_name);
 
 const char* qof_book_get_string_option(const QofBook* book, const char* opt_name);
 void qof_book_set_string_option(QofBook* book, const char* opt_name, const char* opt_val);
@@ -339,14 +359,51 @@ void qof_book_set_feature (QofBook *book, const gchar *key, const gchar *descr);
 void qof_book_begin_edit(QofBook *book);
 void qof_book_commit_edit(QofBook *book);
 
-/* Access functions for loading and saving the file options */
+/* Access functions for options. */
+/** @ingroup KVP
+ @{
+ */
+/** Load a GNCOptionsDB from KVP data.
+ * @param book: The book.
+ * @param load_cb: A callback function that does the loading.
+ * @param odb: The GNCOptionDB to load.
+ */
 void qof_book_load_options (QofBook *book, GNCOptionLoad load_cb,
 			    GNCOptionDB *odb);
-void
-qof_book_save_options (QofBook *book, GNCOptionSave save_cb,
-		       GNCOptionDB* odb, gboolean clear);
+/** Save a GNCOptionsDB back to the book's KVP.
+ * @param book: The book.
+ * @param save_cb: A callback function that does the saving.
+ * @param odb: The GNCOptionsDB to save from.
+ * @param clear: Should the GNCOptionsDB be emptied after the save?
+ */
+void qof_book_save_options (QofBook *book, GNCOptionSave save_cb,
+                            GNCOptionDB* odb, gboolean clear);
+/** Save a single option value.
+ * Used from Scheme, the KvpValue<-->SCM translation is handled by the functions
+ * in kvp-scm.c and automated by SWIG. The starting element is set as
+ * KVP_OPTION_PATH in qofbookslots.h.
+ * @param book: The book.
+ * @param value: The KvpValue to store.
+ * @param path: A GSList of keys which form a path under KVP_OPTION_PATH.
+ */
+void qof_book_set_option (QofBook *book, KvpValue *value, GSList *path);
 
+/** Read a single option value.
+ * Used from Scheme, the KvpValue<-->SCM translation is handled by the functions
+ * in kvp-scm.c and automated by SWIG. The starting element is set as
+ * KVP_OPTION_PATH in qofbookslots.h.
+ * @param book: The book.
+ * @param path: A GSList of keys which form a path under KVP_OPTION_PATH.
+ */
+KvpValue* qof_book_get_option (QofBook *book, GSList *path);
 
+/** Delete the options.
+ * Primarily used from Scheme to clear out the options before saving a new set.
+ * @param book: The book.
+ * @param list: A GList of keys which from a path under KVP_OPTION_PATH.
+ */
+void qof_book_options_delete (QofBook *book);
+/** @} End of Doxygen Include */
 /** deprecated */
 #define qof_book_get_guid(X) qof_entity_get_guid (QOF_INSTANCE(X))
 

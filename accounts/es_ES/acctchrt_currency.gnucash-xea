@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
-      Cuenta de conversión monetaria
+      Cuenta de conversiÃ³n monetaria
     </gnc-act:title>
     <gnc-act:short-description>
       Cuenta para convertir y comerciar con moneda extranjera
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Deseará seleccionar este juego de cuentas si convierte monedas
+    DesearÃ¡ seleccionar este juego de cuentas si convierte monedas
       extranjeras.
 
     Note: La cuenta se encuentra en USD; edite la cuenta para alterar

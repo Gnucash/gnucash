@@ -25,11 +25,12 @@
 
 #include <glib.h>
 
-
-/* This is the API for GTables, a datatype for 2-dimensional tables
+/** @addtogroup Table Table
+ * @{
+ * @file gtable.h
+ * This is the API for GTables, a datatype for 2-dimensional tables
  * with automatic resizing and memory management.
  *
- * HACK ALERT -- this thing should proably become a part of glib (??)
  */
 
 typedef struct GTable GTable;
@@ -38,7 +39,7 @@ typedef void (*g_table_entry_constructor) (gpointer entry, gpointer user_data);
 typedef void (*g_table_entry_destroyer)   (gpointer entry, gpointer user_data);
 
 
-/* Create a new table with the given entry constructor and destroyer.
+/** Create a new table with the given entry constructor and destroyer.
  * Both functions must be given. They are used to initialize the table
  * entries and free unneeded memory when resizing and destroying. */
 GTable * g_table_new (guint entry_size,
@@ -46,14 +47,14 @@ GTable * g_table_new (guint entry_size,
                       g_table_entry_destroyer destroyer,
                       gpointer user_data);
 
-/* Free the table and all associated table elements. */
+/** Free the table and all associated table elements. */
 void     g_table_destroy (GTable *gtable);
 
-/* Return the element at the given row and column. If the coordinates
+/** Return the element at the given row and column. If the coordinates
  * are out-of-bounds, return NULL */
 gpointer g_table_index (GTable *gtable, int row, int col);
 
-/* Resize the table, allocating and deallocating extra table
+/** Resize the table, allocating and deallocating extra table
  * members if needed. The relationship between table members
  * before and after resizing is undefined, except in the case
  * where the number of rows changes, but not the number of
@@ -61,10 +62,11 @@ gpointer g_table_index (GTable *gtable, int row, int col);
  * first. */
 void     g_table_resize (GTable *gtable, int rows, int cols);
 
-/* Return the number of table rows. */
+/** Return the number of table rows. */
 int      g_table_rows (GTable *gtable);
 
-/* Return the number of table columns. */
+/** Return the number of table columns. */
 int      g_table_cols (GTable *gtable);
 
+/** @} */
 #endif

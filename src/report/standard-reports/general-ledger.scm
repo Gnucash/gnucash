@@ -33,6 +33,7 @@
 (export gnc:make-general-ledger-report)
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
+(use-modules (gnucash gettext))
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
@@ -56,7 +57,7 @@
     
     (define pagename-sorting (N_ "Sorting"))
     (define (set-option! section name value)
-      (gnc:option-set-value 
+      (gnc:option-set-default-value
        (gnc:lookup-option options section name) value))
     
     ;; set options in the accounts tab...
@@ -70,27 +71,50 @@
      (lambda (l)
        (set-option! gnc:pagename-display (car l) (cadr l)))
      ;; One list per option here with: option-name, default-value
-     (list
-      (list (N_ "Date") #t)
-      (list (N_ "Reconciled Date") #f)
-      (list (N_ "Num") #f)
-      (list (N_ "Description") #t)
-      (list (N_ "Memo") #f)
-      (list (N_ "Account Name") #f)
-      (list (N_ "Use Full Account Name") #f)
-      (list (N_ "Account Code") #f)
-      (list (N_ "Other Account Name") #f)
-      (list (N_ "Use Full Other Account Name") #f)
-      (list (N_ "Other Account Code") #f)
-      (list (N_ "Shares") #f)
-      (list (N_ "Price") #f)
-      ;; note the "Amount" multichoice option here
-      (list (N_ "Amount") 'double)
-      (list (N_ "Running Balance") #t)
-      (list (N_ "Totals") #f)
-      (list (N_ "Sign Reverses") 'credit-accounts)
-      )
+     (if (qof-book-use-split-action-for-num-field (gnc-get-current-book))
+         (list
+          (list (N_ "Date") #t)
+          (list (N_ "Reconciled Date") #f)
+          (list (N_ "Num/Action") #f)
+          (list (N_ "Trans Number") #f)
+          (list (N_ "Description") #t)
+          (list (N_ "Memo") #f)
+          (list (N_ "Account Name") #f)
+          (list (N_ "Use Full Account Name") #f)
+          (list (N_ "Account Code") #f)
+          (list (N_ "Other Account Name") #f)
+          (list (N_ "Use Full Other Account Name") #f)
+          (list (N_ "Other Account Code") #f)
+          (list (N_ "Shares") #f)
+          (list (N_ "Price") #f)
+          ;; note the "Amount" multichoice option here
+          (list (N_ "Amount") 'double)
+          (list (N_ "Running Balance") #t)
+          (list (N_ "Totals") #f)
+          (list (N_ "Sign Reverses") 'credit-accounts)
+         )
+         (list
+          (list (N_ "Date") #t)
+          (list (N_ "Reconciled Date") #f)
+          (list (N_ "Num") #f)
+          (list (N_ "Description") #t)
+          (list (N_ "Memo") #f)
+          (list (N_ "Account Name") #f)
+          (list (N_ "Use Full Account Name") #f)
+          (list (N_ "Account Code") #f)
+          (list (N_ "Other Account Name") #f)
+          (list (N_ "Use Full Other Account Name") #f)
+          (list (N_ "Other Account Code") #f)
+          (list (N_ "Shares") #f)
+          (list (N_ "Price") #f)
+          ;; note the "Amount" multichoice option here
+          (list (N_ "Amount") 'double)
+          (list (N_ "Running Balance") #t)
+          (list (N_ "Totals") #f)
+          (list (N_ "Sign Reverses") 'credit-accounts)
+         )
      )
+    )
     
     ;; set options in the general tab...
     (set-option!

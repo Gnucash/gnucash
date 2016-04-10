@@ -28,7 +28,7 @@ libgncmod_qif_import_la_LIBADD = \
   ${GLIB_LIBS}
 
 
-gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/import-export
+gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash/import-export
 gncscmmod_DATA = qif-import.scm 
 
 gncscmdir = ${GNC_SCM_INSTALL_DIR}/qif-import
@@ -99,10 +99,46 @@ if ! OS_WIN32
 	touch .scm-links
 endif
 
+if GNC_HAVE_GUILE_2
+GUILE_COMPILE_ENV = \
+  --guile-load-dir ${top_builddir}/src/core-utils \
+  --guile-load-dir ${top_builddir}/src/gnc-module \
+  --guile-load-dir ${top_builddir}/src/scm \
+  --library-dir    ${top_builddir}/src/engine \
+  --library-dir    ${top_builddir}/src/libqof/qof \
+  --library-dir    ${top_builddir}/src/core-utils \
+  --library-dir    ${top_builddir}/src/app-utils \
+  --library-dir    ${top_builddir}/src/gnome \
+  --library-dir    ${top_builddir}/src/gnc-module \
+  --library-dir    ${top_builddir}/src/gnome-utils \
+  --library-dir    ${top_builddir}/src/backend/xml \
+  --library-dir    ${top_builddir}/src/backend/sql \
+  --library-dir    ${top_builddir}/src/html \
+  --library-dir    ${top_builddir}/src/report/report-system \
+  --library-dir    ${top_builddir}/src/report/report-gnome \
+  --library-dir    ${top_builddir}/src/register/register-gnome \
+  --library-dir    ${top_builddir}/src/register/register-core \
+  --library-dir    ${top_builddir}/src/register/ledger-core \
+  --library-dir    ${top_builddir}/src/gnome-search
+
+
+%.go : %.scm .scm-links $(pkglib_LTLIBRARIES)
+	GNC_UNINSTALLED=yes \
+	GNC_BUILDDIR=${top_builddir} \
+	$(shell ${abs_top_srcdir}/src/gnc-test-env.pl --noexports ${GUILE_COMPILE_ENV}) \
+	$(GUILD) compile -o $@ $<
+
+gncscmmodcachedir = ${pkglibdir}/scm/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/import-export
+gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
+
+gncscmcachedir = ${pkglibdir}/scm/ccache/@GUILE_EFFECTIVE_VERSION@/qif-import
+gncscmcache_DATA = $(gncscm_DATA:.scm=.go)
+endif
+
 clean-local:
 	$(RM) -rf gnucash qif-import
 
-CLEANFILES += .scm-links
+CLEANFILES += .scm-links ${gncscmmodcache_DATA} ${gncscmcache_DATA}
 DISTCLEANFILES = ${SCM_FILE_LINKS}
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.import.qif.import\"

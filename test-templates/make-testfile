@@ -278,7 +278,7 @@ make_testfile "Author Name <author@email.addr>" path/to/input [path/to/output]
 Creates template unit test files from C source files. The default
 output file is utest-filename in a subdirectory named "test". For
 example, if the input file is src/engine/Account.c, the default output
-file will be src/engine/test/test-Account.c.
+file will be src/engine/test/utest-Account.c.
 
 The program scans the input file to find function signatures. Each
 function signature will generate a comment with the function's

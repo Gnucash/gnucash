@@ -127,8 +127,7 @@ gint gnc_AB_BANKING_fini(AB_BANKING *api);
 /**
  * Get the corresponding AqBanking account to the GnuCash account @a gnc_acc.
  * Of course this only works after the GnuCash account has been set up for
- * AqBanking use, i.e. the kvp_frame "hbci/..." has been filled with
- * information.
+ * AqBanking use, i.e. the account's hbci data have been set up and populated.
  *
  * @param api The AB_BANKING to get the AB_ACCOUNT from
  * @param gnc_acc The GnuCash account to query for AB_ACCOUNT reference data

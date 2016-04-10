@@ -1,11 +1,31 @@
 ;; -*-scheme-*-
 ;; register.scm
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program; if not, contact:
+;;
+;; Free Software Foundation           Voice:  +1-617-542-5942
+;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+;; Boston, MA  02110-1301,  USA       gnu@gnu.org
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 (define-module (gnucash report standard-reports register))
 
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (srfi srfi-1))
 (use-modules (gnucash gnc-module))
+(use-modules (gnucash gettext))
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
@@ -303,6 +323,9 @@
                      (gnc:make-gnc-monetary trans-currency
                                             (gnc-numeric-neg (xaccSplitGetValue split))))
                     " ")))
+    ; For single account registers, use the split's cached balance to remain
+    ; consistent with the balances shown in the register itself
+    ; For others, use the cumulated balance from the totals-collector
     (if (balance-col column-vector)
         (addto! row-contents
                 (if transaction-info?
@@ -311,7 +334,10 @@
                      (gnc:html-split-anchor
                       split
                       (gnc:make-gnc-monetary
-                        currency (cadr (total-collector 'getpair currency #f)))))
+                        currency
+                        (if ledger-type?
+                            (cadr (total-collector 'getpair currency #f))
+                            (xaccSplitGetBalance split)))))
                     " ")))
 
     (gnc:html-table-append-row/markup! table row-style
@@ -641,7 +667,7 @@
           ;; ----------------------------------
           ;; add the splits to the table
           ;; ----------------------------------
-          ;; The general ledger has a split that doesn't have an account
+          ;; The general journal has a split that doesn't have an account
           ;; set yet (the new entry transaction).
           ;; This split should be skipped or the report errors out.
           ;; See bug #639082

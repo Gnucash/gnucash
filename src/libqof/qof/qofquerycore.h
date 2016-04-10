@@ -34,7 +34,6 @@
 
 #include "gnc-numeric.h"
 #include "gnc-date.h"
-#include "kvp_frame.h"
 #include "qofclass.h"
 
 #ifdef __cplusplus
@@ -59,7 +58,9 @@ typedef enum
     QOF_COMPARE_EQUAL,
     QOF_COMPARE_GT,
     QOF_COMPARE_GTE,
-    QOF_COMPARE_NEQ
+    QOF_COMPARE_NEQ,
+    QOF_COMPARE_CONTAINS,
+    QOF_COMPARE_NCONTAINS
 } QofQueryCompare;
 
 /** List of known core query data-types...
@@ -135,7 +136,7 @@ typedef enum
 } QofCharMatch;
 
 /** No extended comparisons for QOF_TYPE_INT32, QOF_TYPE_INT64,
- *  QOF_TYPE_DOUBLE, QOF_TYPE_BOOLEAN, QOF_TYPE_KVP
+ *  QOF_TYPE_DOUBLE, QOF_TYPE_BOOLEAN
  */
 
 /** Head of Predicate Data structures.  All PData must start like this. */
@@ -174,20 +175,6 @@ QofQueryPredData *qof_query_char_predicate (QofCharMatch options,
 QofQueryPredData *qof_query_collect_predicate (QofGuidMatch options,
         QofCollection *coll);
 QofQueryPredData *qof_query_choice_predicate  (QofGuidMatch options, GList *guids);
-
-/** The qof_query_kvp_predicate() matches the object that has
- *  the value 'value' located at the path 'path'.  In a certain
- *  sense, the 'path' is handled as if it were a parameter.
- */
-QofQueryPredData *qof_query_kvp_predicate (QofQueryCompare how,
-        QofQueryParamList *path,
-        const KvpValue *value);
-
-/** Same predicate as above, except that 'path' is assumed to be
- * a string containing slash-separated pathname. */
-QofQueryPredData *qof_query_kvp_predicate_path (QofQueryCompare how,
-        const gchar *path,
-        const KvpValue *value);
 
 /** Copy a predicate. */
 QofQueryPredData *qof_query_core_predicate_copy (const QofQueryPredData *pdata);

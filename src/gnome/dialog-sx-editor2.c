@@ -152,7 +152,7 @@ static gboolean gnc_sxed_check_consistent (GncSxEditorDialog2 *sxed);
 static gboolean gnc_sxed_check_changed (GncSxEditorDialog2 *sxed);
 static void gnc_sxed_save_sx (GncSxEditorDialog2 *sxed);
 static void gnc_sxed_freq_changed (GncFrequency *gf, gpointer ud);
-static void sxed_excal_update_adapt_cb (GtkObject *o, gpointer ud);
+static void sxed_excal_update_adapt_cb (GtkWidget *o, gpointer ud);
 static void gnc_sxed_update_cal (GncSxEditorDialog2 *sxed);
 static void on_sx_check_toggled_cb (GtkWidget *togglebutton, gpointer user_data);
 //void on_sx_check_toggled_cb (GtkWidget *togglebutton, gpointer user_data);
@@ -626,7 +626,8 @@ gnc_sxed_check_consistent (GncSxEditorDialog2 *sxed)
                 }
                 multi_commodity |= !gnc_commodity_equal(split_cmdty, base_cmdty);
 
-		if ( g_strcmp0 (credit_formula, "") != 0 &&
+		if ( credit_formula &&
+		     g_strcmp0 (credit_formula, "") != 0 &&
 		     gnc_sx_parse_vars_from_formula(credit_formula, vars,
 						    &tmp ) < 0 )
 		{
@@ -647,7 +648,8 @@ gnc_sxed_check_consistent (GncSxEditorDialog2 *sxed)
 		    gnc_numeric_add( tcds->creditSum, tmp, 100,
 				     (GNC_DENOM_AUTO | GNC_HOW_DENOM_LCD) );
 		tmp = gnc_numeric_zero();
-		if ( g_strcmp0 (debit_formula, "") != 0 &&
+		if ( debit_formula &&
+		     g_strcmp0 (debit_formula, "") != 0 &&
 		     gnc_sx_parse_vars_from_formula( debit_formula, vars,
 						     &tmp ) < 0 )
 		{
@@ -984,21 +986,21 @@ gnc_sxed_save_sx (GncSxEditorDialog2 *sxed )
 
 
 static void
-enabled_toggled_cb (GtkObject *o, GncSxEditorDialog2 *sxed)
+enabled_toggled_cb (GtkToggleButton *o, GncSxEditorDialog2 *sxed)
 {
     return;
 }
 
 
 static void
-autocreate_toggled_cb (GtkObject *o, GncSxEditorDialog2 *sxed)
+autocreate_toggled_cb (GtkToggleButton *o, GncSxEditorDialog2 *sxed)
 {
-    if ( !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(o)))
+    if ( !gtk_toggle_button_get_active (o))
     {
         gtk_toggle_button_set_active (sxed->notifyOpt, FALSE);
     }
     gtk_widget_set_sensitive (GTK_WIDGET (sxed->notifyOpt),
-                              gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(o)));
+                              gtk_toggle_button_get_active (o));
 }
 
 
@@ -1024,7 +1026,7 @@ remind_toggled_cb (GtkButton *o, GncSxEditorDialog2 *sxed)
 
 /* Local destruction of dialog */
 static void
-scheduledxaction_editor_dialog_destroy (GtkObject *object, gpointer data)
+scheduledxaction_editor_dialog_destroy (GtkWidget *object, gpointer data)
 {
     GncSxEditorDialog2 *sxed = data;
 
@@ -1625,7 +1627,7 @@ gnc_sxed_freq_changed (GncFrequency *gf, gpointer ud)
 
 
 static void
-sxed_excal_update_adapt_cb (GtkObject *o, gpointer ud)
+sxed_excal_update_adapt_cb (GtkWidget *o, gpointer ud)
 {
     gnc_sxed_update_cal ((GncSxEditorDialog2*)ud);
 }

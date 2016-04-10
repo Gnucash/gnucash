@@ -22,6 +22,13 @@
 
 (use-modules (gnucash main))
 (use-modules (gnucash printf))
+(use-modules (gnucash gettext))
+(cond-expand
+  (guile-2
+    (eval-when
+      (compile load eval expand)
+      (load-extension "libgncmod-report-system" "scm_init_sw_report_system_module")))
+  (else ))
 (use-modules (sw_report_system))
 
 ;; Terminology in this file:
@@ -66,6 +73,8 @@
 (define gnc:pagename-display (N_ "Display"))
 (define gnc:optname-reportname (N_ "Report name"))
 (define gnc:optname-stylesheet (N_ "Stylesheet"))
+(define gnc:menuname-business-reports (N_ "_Business"))
+(define gnc:optname-invoice-number (N_ "Invoice Number"))
 
 ;; We want to warn users if they've got an old-style, non-guid custom
 ;; report-template, but only once
@@ -165,7 +174,7 @@
 	  (if (not gnc:old-style-report-warned)
 	      (begin
 		(set! gnc:old-style-report-warned #t)
-		(gnc-error-dialog '() (string-append (_ "The GnuCash report system has been upgraded. Your old saved reports have been transfered into a new format. If you experience trouble with saved reports, please contact the GnuCash development team.")))))
+		(gnc-error-dialog '() (string-append (_ "The GnuCash report system has been upgraded. Your old saved reports have been transferred into a new format. If you experience trouble with saved reports, please contact the GnuCash development team.")))))
 	  (hash-set! *gnc:_report-templates_*
 		     (gnc:report-template-report-guid report-rec) report-rec)
 	  (gnc:warn "gnc:define-report: old-style report. setting guid for " (gnc:report-template-name report-rec) " to " (gnc:report-template-report-guid report-rec)))
@@ -620,22 +629,6 @@
          (guid (gnc:report-template-report-guid report-template)))
     (gnc:report-template-serialize-internal name type templ-name options guid)))
 
-(define gnc:current-saved-reports
-  (gnc-build-dotgnucash-path "saved-reports-2.4"))
-
-(define (gnc:open-saved-reports mode)
-  (let ((conf-file-name gnc:current-saved-reports))
-    (catch #t
-           (lambda () (open-file conf-file-name mode))
-           (lambda (key . args)
-             (gnc-error-dialog
-              '()
-              (sprintf
-               #f (_ "Could not open the file %s. The error is: %s")
-               conf-file-name
-               (string-append (symbol->string key) " - " (car (caddr args)))))
-             #f))))
-
 ;; Convert a report into a report template and save this template in the savefile
 ;; Under specific conditions the we will attempt to replace the current report's
 ;; template instead of simply adding a new template to the file.
@@ -692,27 +685,16 @@
   (gnc:report-to-template report #t))
 
 (define (gnc:report-template-save-to-savefile report-template)
-  (let* ((report-port (gnc:open-saved-reports "a")))
-    (if report-port
-        (let ((saved-form (gnc:report-template-serialize report-template)))
-          (display saved-form report-port)
-          (close report-port)
-          #t)
-        ;; Couldn't save report
-        #f)))
+  (let ((saved-form (gnc:report-template-serialize report-template)))
+          (gnc-saved-reports-write-to-file saved-form #f)))
 
 ;; save all custom reports, moving the old version of the
 ;; saved-reports file aside as a backup
 ;; return #t if all templates were saved successfully
 (define (gnc:save-all-reports)
-  (let ((save-ok? #t)
-        (temp-path (gnc-build-dotgnucash-path "saved-reports-2.4-backup")))
-       (gnc:debug "saving all reports...")
-       ;; On windows, it seems to crash if we try to rename without deleting the old file first.
-       (if (access? temp-path F_OK)
-           (delete-file temp-path))
-       (if (access? gnc:current-saved-reports F_OK)
-           (rename-file gnc:current-saved-reports temp-path))
+  (let ((save-ok? #t))
+       (gnc-saved-reports-backup)
+       (gnc-saved-reports-write-to-file "" #t)
        (hash-for-each (lambda (k v)
                         (if (gnc:report-template-parent-type v)
                             (begin

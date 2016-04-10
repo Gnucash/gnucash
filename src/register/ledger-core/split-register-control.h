@@ -24,7 +24,13 @@
 #define SPLIT_REGISTER_CONTROL_H
 
 #include "table-control.h"
+/** @addtogroup SplitRegister
+ *  @{
+ */
+/** @file split-register-control.h
+ * @brief TableControl specialized for the SplitRegister.*/
 
+/** Create a new TableControl specialized for the SplitRegister. */
 TableControl * gnc_split_register_control_new (void);
-
+/** @} */
 #endif

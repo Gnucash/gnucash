@@ -7,6 +7,26 @@
  * separated into gnc-test-stuff.h
  *
  */
+/********************************************************************\
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
 
 /* Outline of a test program using the new testing functions:
 #include "test-stuff.h"
@@ -37,21 +57,6 @@ Otherwise, only failures are printed out.
 #include <glib.h>
 #include <stdlib.h>
 
-/**
- * Use this to indicate the result of a test.
- * The result is TRUE for success, FALSE for failure.
- * title describes the test
- * Tests are automatically identified by their source file and line.
- */
-#define do_test( result, title ) do_test_call( result, title, __FILE__, __LINE__ )
-#define success( title ) success_call( title, __FILE__, __LINE__ );
-#define failure( title ) failure_call( title, __FILE__, __LINE__ );
-
-/** This one doesn't work because macros can't take a variable number of arguments.
- * well, apparently gcc can, but it's non-standard.
- * Apparently C99 can, too, but it's not exactly standard either.
-#define do_test_args( result, title, format ) do_test_call( result, title, __FILE__, __LINE__, format, ... );
-*/
 
 
 /* Privately used to indicate a test result. You may use these if you
@@ -116,6 +121,22 @@ void failure_args(
     int line,
     const char *format,
     ... );
+
+/**
+ * Use this to indicate the result of a test.
+ * The result is TRUE for success, FALSE for failure.
+ * title describes the test
+ * Tests are automatically identified by their source file and line.
+ */
+#define do_test( result, title ) do_test_call( result, title, __FILE__, __LINE__ )
+#define success( title ) success_call( title, __FILE__, __LINE__ );
+#define failure( title ) failure_call( title, __FILE__, __LINE__ );
+
+/** This one doesn't work because macros can't take a variable number of arguments.
+ * well, apparently gcc can, but it's non-standard.
+ * Apparently C99 can, too, but it's not exactly standard either.
+#define do_test_args( result, title, format ) do_test_call( result, title, __FILE__, __LINE__, format, ... );
+*/
 
 gboolean get_random_boolean(void);
 gint get_random_int_in_range(int start, int end);

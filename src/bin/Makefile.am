@@ -18,6 +18,7 @@ AM_CPPFLAGS = -I${top_builddir} ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GTK_CFLAGS} \
   -I${top_builddir}/src \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/libqof/qof \
+  -I${top_srcdir}/src/report/report-system \
   ${GUILE_CFLAGS} \
   ${GTK_MAC_CFLAGS}
 
@@ -54,6 +55,7 @@ gnucash_LDADD = \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
+  ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${GTK_LIBS}
@@ -75,7 +77,8 @@ gnucash-valgrind: gnucash-valgrind.in ${top_builddir}/config.status Makefile
 environment: environment.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-	    -e '/@-NOTE.*-@/ D'
+	    -e '/@-NOTE.*-@/ D' \
+	    -e "s#@-GUILE_EFFECTIVE_VERSION-@#@GUILE_EFFECTIVE_VERSION@#g"
 if CUSTOM_GNC_DBD_DIR
 	echo 'GNC_DBD_DIR=@GNC_DBD_DIR@' >> $@.tmp
 endif

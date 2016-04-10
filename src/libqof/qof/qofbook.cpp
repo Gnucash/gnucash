@@ -21,7 +21,7 @@
 
 /*
  * FILE:
- * qofbook.c
+ * qofbook.cpp
  *
  * FUNCTION:
  * Encapsulate all the information about a QOF dataset.
@@ -44,6 +44,11 @@ extern "C"
 #include <string.h>
 
 #include <glib.h>
+#ifdef GNC_PLATFORM_WINDOWS
+  /* Mingw disables the standard type macros for C++ without this override. */
+#define __STDC_FORMAT_MACROS = 1
+#endif
+#include <inttypes.h>
 
 #ifdef __cplusplus
 }
@@ -56,6 +61,7 @@ extern "C"
 #include "qofid-p.h"
 #include "qofobject-p.h"
 #include "qofbookslots.h"
+#include "kvp_frame.hpp"
 
 static QofLogModule log_module = QOF_MOD_ENGINE;
 #define AB_KEY "hbci"
@@ -66,7 +72,17 @@ enum
     PROP_0,
 //  PROP_ROOT_ACCOUNT,		/* Table */
 //  PROP_ROOT_TEMPLATE,		/* Table */
+/*   keep trading accounts property, while adding book-currency and default
+     gains properties, so that files prior to 2.7 can be read/processed; GUI
+     changed to use all three properties as of 2.7. Trading accounts, on the
+     one hand, and book-currency plus default-gains-policy, on the other,
+     are mutually exclusive */
     PROP_OPT_TRADING_ACCOUNTS,	/* KVP */
+/*   Book currency and default gains properties only apply if currency
+     accounting method selected in GUI is 'book-currency'; both required and
+     both are exclusive with trading accounts */
+    PROP_OPT_BOOK_CURRENCY, 	/* KVP */
+    PROP_OPT_DEFAULT_GAINS_POLICY, 	/* KVP */
     PROP_OPT_AUTO_READONLY_DAYS,/* KVP */
     PROP_OPT_NUM_FIELD_SOURCE,	/* KVP */
     PROP_OPT_DEFAULT_BUDGET,	/* KVP */
@@ -131,6 +147,20 @@ qof_book_get_property (GObject* object,
 	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
 	g_free (key);
 	break;
+    case PROP_OPT_BOOK_CURRENCY:
+	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
+			       OPTION_SECTION_ACCOUNTS,
+                   OPTION_NAME_BOOK_CURRENCY);
+	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
+	g_free (key);
+	break;
+    case PROP_OPT_DEFAULT_GAINS_POLICY:
+	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
+			       OPTION_SECTION_ACCOUNTS,
+                   OPTION_NAME_DEFAULT_GAINS_POLICY);
+	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
+	g_free (key);
+	break;
     case PROP_OPT_AUTO_READONLY_DAYS:
 	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
 			       OPTION_SECTION_ACCOUNTS,
@@ -151,6 +181,7 @@ qof_book_get_property (GObject* object,
 			       OPTION_NAME_DEFAULT_BUDGET);
 	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
 	g_free (key);
+	break;
     case PROP_OPT_FY_END:
 	key = const_cast<char*>("fy_end");
 	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
@@ -184,6 +215,20 @@ qof_book_set_property (GObject      *object,
 	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
 			       OPTION_SECTION_ACCOUNTS,
 			       OPTION_NAME_TRADING_ACCOUNTS);
+	qof_instance_set_kvp (QOF_INSTANCE (book), key, value);
+	g_free (key);
+	break;
+    case PROP_OPT_BOOK_CURRENCY:
+	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
+			       OPTION_SECTION_ACCOUNTS,
+                   OPTION_NAME_BOOK_CURRENCY);
+	qof_instance_set_kvp (QOF_INSTANCE (book), key, value);
+	g_free (key);
+	break;
+    case PROP_OPT_DEFAULT_GAINS_POLICY:
+	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
+			       OPTION_SECTION_ACCOUNTS,
+                   OPTION_NAME_DEFAULT_GAINS_POLICY);
 	qof_instance_set_kvp (QOF_INSTANCE (book), key, value);
 	g_free (key);
 	break;
@@ -239,6 +284,29 @@ qof_book_class_init (QofBookClass *klass)
 			 "Scheme true ('t') or NULL. If 't', then the book "
 			 "uses trading accounts for managing multiple-currency "
 			 "transactions.",
+                         NULL,
+                         G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_OPT_BOOK_CURRENCY,
+     g_param_spec_string("book-currency",
+                         "Select Book Currency",
+			 "The reference currency used to manage multiple-currency "
+             "transactions when 'book-currency' currency accounting method "
+             "selected; requires valid default gains/loss policy.",
+                         NULL,
+                         G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_OPT_DEFAULT_GAINS_POLICY,
+     g_param_spec_string("default-gains-policy",
+                         "Select Default Gains Policy",
+			 "The default policy to be used to calculate gains/losses on "
+             "dispositions of currencies/commodities other than "
+             "'book-currency' when 'book-currency' currency accounting "
+             "method selected; requires valid book-currency.",
                          NULL,
                          G_PARAM_READWRITE));
 
@@ -586,11 +654,11 @@ qof_book_get_counter (QofBook *book, const char *counter_name)
         return -1;
     }
 
-    value = kvp_frame_get_slot_path (kvp, "counters", counter_name, NULL);
+    value = kvp->get_slot({"counters", counter_name});
     if (value)
     {
         /* found it */
-        return kvp_value_get_gint64 (value);
+        return value->get<int64_t>();
     }
     else
     {
@@ -605,7 +673,8 @@ qof_book_increment_and_format_counter (QofBook *book, const char *counter_name)
     KvpFrame *kvp;
     KvpValue *value;
     gint64 counter;
-    const char* format;
+    gchar* format;
+    gchar* result;
 
     if (!book)
     {
@@ -640,9 +709,8 @@ qof_book_increment_and_format_counter (QofBook *book, const char *counter_name)
 
     /* Save off the new counter */
     qof_book_begin_edit(book);
-    value = kvp_value_new_gint64 (counter);
-    kvp_frame_set_slot_path (kvp, value, "counters", counter_name, NULL);
-    kvp_value_delete (value);
+    value = new KvpValue(counter);
+    delete kvp->set_path({"counters", counter_name}, value);
     qof_instance_set_dirty (QOF_INSTANCE (book));
     qof_book_commit_edit(book);
 
@@ -655,16 +723,19 @@ qof_book_increment_and_format_counter (QofBook *book, const char *counter_name)
     }
 
     /* Generate a string version of the counter */
-    return g_strdup_printf(format, counter);
+    result = g_strdup_printf(format, counter);
+    g_free (format);
+    return result;
 }
 
-const gchar *
+char *
 qof_book_get_counter_format(const QofBook *book, const char *counter_name)
 {
     KvpFrame *kvp;
-    const char *format;
+    const char *user_format = NULL;
+    gchar *norm_format = NULL;
     KvpValue *value;
-    gchar *error;
+    gchar *error = NULL;
 
     if (!book)
     {
@@ -687,49 +758,75 @@ qof_book_get_counter_format(const QofBook *book, const char *counter_name)
         return NULL;
     }
 
-    format = NULL;
-
     /* Get the format string */
-    value = kvp_frame_get_slot_path (kvp, "counter_formats", counter_name, NULL);
+    value = kvp->get_slot({"counter_formats", counter_name});
     if (value)
     {
-        format = kvp_value_get_string (value);
-        error = qof_book_validate_counter_format(format);
-        if (error != NULL)
+        user_format = value->get<const char*>();
+        norm_format = qof_book_normalize_counter_format(user_format, &error);
+        if (!norm_format)
         {
-            PWARN("Invalid counter format string. Format string: '%s' Counter: '%s' Error: '%s')", format, counter_name, error);
+            PWARN("Invalid counter format string. Format string: '%s' Counter: '%s' Error: '%s')", user_format, counter_name, error);
             /* Invalid format string */
-            format = NULL;
+            user_format = NULL;
             g_free(error);
         }
     }
 
     /* If no (valid) format string was found, use the default format
      * string */
-    if (!format)
+    if (!norm_format)
     {
         /* Use the default format */
-        format = "%.6" G_GINT64_FORMAT;
+        norm_format = g_strdup ("%.6" PRIi64);
     }
-    return format;
+    return norm_format;
 }
 
 gchar *
-qof_book_validate_counter_format(const gchar *p)
+qof_book_normalize_counter_format(const gchar *p, gchar **err_msg)
 {
-    return qof_book_validate_counter_format_internal(p, G_GINT64_FORMAT);
+    const gchar *valid_formats [] = {
+            G_GINT64_FORMAT,
+            "lli",
+            "I64i",
+            PRIi64,
+            "li",
+            NULL,
+    };
+    int i = 0;
+    gchar *normalized_spec = NULL;
+
+    while (valid_formats[i])
+    {
+
+        if (err_msg && *err_msg)
+        {
+            g_free (*err_msg);
+            *err_msg = NULL;
+        }
+
+        normalized_spec = qof_book_normalize_counter_format_internal(p, valid_formats[i], err_msg);
+        if (normalized_spec)
+            return normalized_spec;  /* Found a valid format specifier, return */
+        i++;
+    }
+
+    return NULL;
 }
 
 gchar *
-qof_book_validate_counter_format_internal(const gchar *p,
-        const gchar *gint64_format)
+qof_book_normalize_counter_format_internal(const gchar *p,
+        const gchar *gint64_format, gchar **err_msg)
 {
-    const gchar *conv_start, *tmp = NULL;
+    const gchar *conv_start, *base, *tmp = NULL;
+    gchar *normalized_str = NULL, *aux_str = NULL;
 
     /* Validate a counter format. This is a very simple "parser" that
      * simply checks for a single gint64 conversion specification,
      * allowing all modifiers and flags that printf(3) specifies (except
      * for the * width and precision, which need an extra argument). */
+    base = p;
 
     /* Skip a prefix of any character except % */
     while (*p)
@@ -750,7 +847,11 @@ qof_book_validate_counter_format_internal(const gchar *p,
     }
 
     if (!*p)
-        return g_strdup("Format string ended without any conversion specification");
+    {
+        if (err_msg)
+            *err_msg = g_strdup("Format string ended without any conversion specification");
+        return NULL;
+    }
 
     /* Store the start of the conversion for error messages */
     conv_start = p;
@@ -762,6 +863,13 @@ qof_book_validate_counter_format_internal(const gchar *p,
      * specification (e.g. "li" on Unix, "I64i" on Windows). */
     tmp = strstr(p, gint64_format);
 
+    if (!tmp)
+    {
+        if (err_msg)
+            *err_msg = g_strdup_printf("Format string doesn't contain requested format specifier: %s", gint64_format);
+        return NULL;
+    }
+
     /* Skip any number of flag characters */
     while (*p && (tmp != p) && strchr("#0- +'I", *p))
     {
@@ -769,39 +877,45 @@ qof_book_validate_counter_format_internal(const gchar *p,
         tmp = strstr(p, gint64_format);
     }
 
-    /* Skip any number of field width digits */
-    while (*p && (tmp != p) && strchr("0123456789", *p))
+    /* Skip any number of field width digits,
+     * and precision specifier digits (including the leading dot) */
+    while (*p && (tmp != p) && strchr("0123456789.", *p))
     {
         p++;
         tmp = strstr(p, gint64_format);
     }
 
-    /* A precision specifier always starts with a dot */
-    if (*p && *p == '.')
-    {
-        /* Skip the . */
-        p++;
-        /* Skip any number of precision digits */
-        while (*p && strchr("0123456789", *p)) p++;
-    }
-
     if (!*p)
-        return g_strdup_printf("Format string ended during the conversion specification. Conversion seen so far: %s", conv_start);
+    {
+        if (err_msg)
+            *err_msg = g_strdup_printf("Format string ended during the conversion specification. Conversion seen so far: %s", conv_start);
+        return NULL;
+    }
 
     /* See if the format string starts with the correct format
      * specification. */
     tmp = strstr(p, gint64_format);
     if (tmp == NULL)
     {
-        return g_strdup_printf("Invalid length modifier and/or conversion specifier ('%.4s'), it should be: %s", p, gint64_format);
+        if (err_msg)
+            *err_msg = g_strdup_printf("Invalid length modifier and/or conversion specifier ('%.4s'), it should be: %s", p, gint64_format);
+        return NULL;
     }
     else if (tmp != p)
     {
-        return g_strdup_printf("Garbage before length modifier and/or conversion specifier: '%*s'", (int)(tmp - p), p);
+        if (err_msg)
+            *err_msg = g_strdup_printf("Garbage before length modifier and/or conversion specifier: '%*s'", (int)(tmp - p), p);
+        return NULL;
     }
+
+    /* Copy the string we have so far and add normalized format specifier for long int */
+    aux_str = g_strndup (base, p - base);
+    normalized_str = g_strconcat (aux_str, PRIi64, NULL);
+    g_free (aux_str);
 
     /* Skip length modifier / conversion specifier */
     p += strlen(gint64_format);
+    tmp = p;
 
     /* Skip a suffix of any character except % */
     while (*p)
@@ -816,15 +930,98 @@ qof_book_validate_counter_format_internal(const gchar *p,
         /* Break on a single percent mark, which is the start of the
          * conversion specification */
         if (*p == '%')
-            return g_strdup_printf("Format string contains unescaped %% signs (or multiple conversion specifications) at '%s'", p);
+        {
+            if (err_msg)
+                *err_msg = g_strdup_printf("Format string contains unescaped %% signs (or multiple conversion specifications) at '%s'", p);
+            g_free (normalized_str);
+            return NULL;
+        }
         /* Skip all other characters */
         p++;
     }
 
+    /* Add the suffix to our normalized string */
+    aux_str = normalized_str;
+    normalized_str = g_strconcat (aux_str, tmp, NULL);
+    g_free (aux_str);
+
     /* If we end up here, the string was valid, so return no error
      * message */
-    return NULL;
+    return normalized_str;
 }
+
+/** Returns pointer to book-currency name for book, if one exists in the
+  * KVP, or NULL; does not validate contents nor determine if there is a valid
+  * default gain/loss policy, both of which are required, for the
+  * 'book-currency' currency accounting method to apply. Use instead
+  * 'gnc_book_get_book_currency' which does these validations. */
+const gchar *
+qof_book_get_book_currency (QofBook *book)
+{
+    KvpFrame *kvp;
+    KvpValue *value;
+
+    if (!book)
+    {
+        PWARN ("No book!!!");
+        return NULL;
+    }
+
+    /* Get the KVP from the current book */
+    kvp = qof_instance_get_slots (QOF_INSTANCE (book));
+
+    if (!kvp)
+    {
+        PWARN ("Book has no KVP_Frame");
+        return NULL;
+    }
+
+    /* See if there is a book currency. */
+    value = kvp->get_slot({KVP_OPTION_PATH, OPTION_SECTION_ACCOUNTS,
+                           OPTION_NAME_BOOK_CURRENCY});
+    if (!value) /* No book-currency */
+        return nullptr;
+
+    return value->get<const char*>();
+}
+
+/** Returns pointer to default gain/loss policy for book, if one exists in the
+  * KVP, or NULL; does not validate contents nor determine if there is a valid
+  * book-currency, both of which are required, for the 'book-currency'
+  * currency accounting method to apply. Use instead
+  * 'gnc_book_get_default_gains_policy' which does these validations. */
+const gchar *
+qof_book_get_default_gains_policy (QofBook *book)
+{
+    KvpFrame *kvp;
+    KvpValue *value;
+
+    if (!book)
+    {
+        PWARN ("No book!!!");
+        return NULL;
+    }
+
+    /* Get the KVP from the current book */
+    kvp = qof_instance_get_slots (QOF_INSTANCE (book));
+
+    if (!kvp)
+    {
+        PWARN ("Book has no KVP_Frame");
+        return NULL;
+    }
+
+    /* See if there is a default gain/loss policy */
+    value = kvp->get_slot({KVP_OPTION_PATH, OPTION_SECTION_ACCOUNTS,
+                           OPTION_NAME_DEFAULT_GAINS_POLICY});
+    if (!value)
+    /* No default gain/loss policy, therefore not valid book-currency
+       accounting method */
+        return nullptr;
+
+    return g_strdup(value->get<const char*>());
+}
+
 
 /* Determine whether this book uses trading accounts */
 gboolean
@@ -862,11 +1059,8 @@ gboolean qof_book_uses_autoreadonly (const QofBook *book)
 
 gint qof_book_get_num_days_autoreadonly (const QofBook *book)
 {
-    kvp_value *kvp_val;
-    double tmp = 0;
-    KvpFrame *frame = qof_instance_get_slots (QOF_INSTANCE (book));
-
     g_assert(book);
+    double tmp;
     qof_instance_get (QOF_INSTANCE (book),
 		      "autoreadonly-days", &tmp,
 		      NULL);
@@ -891,16 +1085,21 @@ GDate* qof_book_get_autoreadonly_gdate (const QofBook *book)
 const char*
 qof_book_get_string_option(const QofBook* book, const char* opt_name)
 {
-    return kvp_frame_get_string(qof_instance_get_slots(QOF_INSTANCE (book)),
-				opt_name);
+    auto slot = qof_instance_get_slots(QOF_INSTANCE (book))->get_slot(opt_name);
+    if (slot == nullptr)
+        return nullptr;
+    return slot->get<const char*>();
 }
 
 void
 qof_book_set_string_option(QofBook* book, const char* opt_name, const char* opt_val)
 {
     qof_book_begin_edit(book);
-    kvp_frame_set_string(qof_instance_get_slots(QOF_INSTANCE (book)),
-						opt_name, opt_val);
+    auto frame = qof_instance_get_slots(QOF_INSTANCE(book));
+    if (opt_val && (*opt_val != '\0'))
+        delete frame->set(opt_name, new KvpValue(g_strdup(opt_val)));
+    else
+        delete frame->set(opt_name, nullptr);
     qof_instance_set_dirty (QOF_INSTANCE (book));
     qof_book_commit_edit(book);
 }
@@ -917,11 +1116,11 @@ static void commit_err (G_GNUC_UNUSED QofInstance *inst, QofBackendError errcode
 //  gnc_engine_signal_commit_error( errcode );
 }
 
-#define GNC_FEATURES "/features/"
+#define GNC_FEATURES "features"
 static void
 add_feature_to_hash (const gchar *key, KvpValue *value, gpointer user_data)
 {
-    gchar *descr = kvp_value_get_string (value);
+    gchar *descr = g_strdup(value->get<const char*>());
     g_hash_table_insert (*(GHashTable**)user_data, (gchar*)key, descr);
 }
 
@@ -929,10 +1128,15 @@ GHashTable *
 qof_book_get_features (QofBook *book)
 {
     KvpFrame *frame = qof_instance_get_slots (QOF_INSTANCE (book));
-    GHashTable *features = g_hash_table_new (g_str_hash, g_str_equal);
+    GHashTable *features = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                  NULL, g_free);
 
-    frame = kvp_frame_get_frame (frame, GNC_FEATURES);
-    kvp_frame_for_each_slot (frame, &add_feature_to_hash, &features);
+    auto slot = frame->get_slot(GNC_FEATURES);
+    if (slot != nullptr)
+    {
+	frame = slot->get<KvpFrame*>();
+	frame->for_each_slot(&add_feature_to_hash, &features);
+    }
     return features;
 }
 
@@ -940,9 +1144,8 @@ void
 qof_book_set_feature (QofBook *book, const gchar *key, const gchar *descr)
 {
     KvpFrame *frame = qof_instance_get_slots (QOF_INSTANCE (book));
-    gchar *path = g_strconcat (GNC_FEATURES, key, NULL);
     qof_book_begin_edit (book);
-    kvp_frame_set_string (frame, path, descr);
+    delete frame->set_path({GNC_FEATURES, key}, new KvpValue(descr));
     qof_instance_set_dirty (QOF_INSTANCE (book));
     qof_book_commit_edit (book);
 }
@@ -950,17 +1153,20 @@ qof_book_set_feature (QofBook *book, const gchar *key, const gchar *descr)
 void
 qof_book_load_options (QofBook *book, GNCOptionLoad load_cb, GNCOptionDB *odb)
 {
-    KvpFrame *slots = qof_instance_get_slots (QOF_INSTANCE (book));
-    load_cb (odb, slots);
+    load_cb (odb, book);
 }
 
 void
 qof_book_save_options (QofBook *book, GNCOptionSave save_cb,
 		       GNCOptionDB* odb, gboolean clear)
 {
-    KvpFrame *slots = qof_instance_get_slots (QOF_INSTANCE (book));
-    save_cb (odb, slots, clear);
-    qof_instance_set_dirty (QOF_INSTANCE (book));
+    /* Wrap this in begin/commit so that it commits only once instead of doing
+     * so for every option. Qof_book_set_option will take care of dirtying the
+     * book.
+     */
+    qof_book_begin_edit (book);
+    save_cb (odb, book, clear);
+    qof_book_commit_edit (book);
 }
 
 static void noop (QofInstance *inst) {}
@@ -970,6 +1176,36 @@ qof_book_commit_edit(QofBook *book)
 {
     if (!qof_commit_edit (QOF_INSTANCE(book))) return;
     qof_commit_edit_part2 (&book->inst, commit_err, noop, noop/*lot_free*/);
+}
+
+void
+qof_book_set_option (QofBook *book, KvpValue *value, GSList *path)
+{
+    KvpFrame *root = qof_instance_get_slots (QOF_INSTANCE (book));
+    Path path_v {KVP_OPTION_PATH};
+    for (auto item = path; item != nullptr; item = g_slist_next(item))
+        path_v.push_back(static_cast<const char*>(item->data));
+    qof_book_begin_edit (book);
+    delete root->set_path(path_v, value);
+    qof_instance_set_dirty (QOF_INSTANCE (book));
+    qof_book_commit_edit (book);
+}
+
+KvpValue*
+qof_book_get_option (QofBook *book, GSList *path)
+{
+    KvpFrame *root = qof_instance_get_slots(QOF_INSTANCE (book));
+    Path path_v {KVP_OPTION_PATH};
+    for (auto item = path; item != nullptr; item = g_slist_next(item))
+        path_v.push_back(static_cast<const char*>(item->data));
+    return root->get_slot(path_v);
+}
+
+void
+qof_book_options_delete (QofBook *book)
+{
+    KvpFrame *root = qof_instance_get_slots(QOF_INSTANCE (book));
+    delete root->set_path(KVP_OPTION_PATH, nullptr);
 }
 
 /* QofObject function implementation and registration */

@@ -23,16 +23,52 @@
 
 #ifndef SIXTP_H
 #define SIXTP_H
-
+extern "C"
+{
 #include <glib.h>
 #include <stdio.h>
 
 #include <stdarg.h>
-
-#include "gnc-xml-helper.h"
 #include "gnc-engine.h"
+}
+#include "gnc-xml-helper.h"
 #include "gnc-backend-xml.h"
 
+typedef struct sixtp_gdv2 sixtp_gdv2;
+typedef void (*countCallbackFn)(sixtp_gdv2 *gd, const char *type);
+
+typedef struct
+{
+    int accounts_total;
+    int accounts_loaded;
+
+    int books_total;
+    int books_loaded;
+
+    int commodities_total;
+    int commodities_loaded;
+
+    int transactions_total;
+    int transactions_loaded;
+
+    int prices_total;
+    int prices_loaded;
+
+    int schedXactions_total;
+    int schedXactions_loaded;
+
+    int budgets_total;
+    int budgets_loaded;
+} load_counter;
+
+struct sixtp_gdv2
+{
+    QofBook *book;
+    load_counter counter;
+    countCallbackFn countCallback;
+    QofBePercentageFunc gui_display_fn;
+    gboolean exporting;
+};
 typedef struct _sixtp_child_result sixtp_child_result;
 
 typedef gboolean (*sixtp_start_handler)(GSList* sibling_data,
@@ -44,23 +80,23 @@ typedef gboolean (*sixtp_start_handler)(GSList* sibling_data,
                                         gchar **attrs);
 
 typedef gboolean (*sixtp_before_child_handler)(gpointer data_for_children,
-        GSList* data_from_children,
-        GSList* sibling_data,
-        gpointer parent_data,
-        gpointer global_data,
-        gpointer *result,
-        const gchar *tag,
-        const gchar *child_tag);
+                                               GSList* data_from_children,
+                                               GSList* sibling_data,
+                                               gpointer parent_data,
+                                               gpointer global_data,
+                                               gpointer *result,
+                                               const gchar *tag,
+                                               const gchar *child_tag);
 
 typedef gboolean (*sixtp_after_child_handler)(gpointer data_for_children,
-        GSList* data_from_children,
-        GSList* sibling_data,
-        gpointer parent_data,
-        gpointer global_data,
-        gpointer *result,
-        const gchar *tag,
-        const gchar *child_tag,
-        sixtp_child_result *child_result);
+                                              GSList* data_from_children,
+                                              GSList* sibling_data,
+                                              gpointer parent_data,
+                                              gpointer global_data,
+                                              gpointer *result,
+                                              const gchar *tag,
+                                              const gchar *child_tag,
+                                              sixtp_child_result *child_result);
 
 typedef gboolean (*sixtp_end_handler)(gpointer data_for_children,
                                       GSList* data_from_children,
@@ -71,11 +107,11 @@ typedef gboolean (*sixtp_end_handler)(gpointer data_for_children,
                                       const gchar *tag);
 
 typedef gboolean (*sixtp_characters_handler)(GSList *sibling_data,
-        gpointer parent_data,
-        gpointer global_data,
-        gpointer *result,
-        const char *text,
-        int length);
+                                             gpointer parent_data,
+                                             gpointer global_data,
+                                             gpointer *result,
+                                             const char *text,
+                                             int length);
 
 typedef void (*sixtp_result_handler)(sixtp_child_result *result);
 
@@ -163,9 +199,23 @@ typedef struct sixtp_sax_data
     sixtp *bad_xml_parser;
 } sixtp_sax_data;
 
+typedef struct
+{
+    int		version;	/* backend version number */
+    const char *	type_name;	/* The XML tag for this type */
+
+    sixtp *	(*create_parser) (void);
+    gboolean	(*add_item)(sixtp_gdv2 *, gpointer obj);
+    int	      (*get_count) (QofBook *);
+    gboolean	(*write) (FILE*, QofBook*);
+    void		(*scrub) (QofBook *);
+    gboolean	(*ns) (FILE*);
+} GncXmlDataType_t;
+
+
 
 gboolean is_child_result_from_node_named(sixtp_child_result *cr,
-        const char *tag);
+                                         const char *tag);
 void sixtp_child_free_data(sixtp_child_result *result);
 void sixtp_child_result_destroy(sixtp_child_result *r);
 void sixtp_child_result_print(sixtp_child_result *cr, FILE *f);
@@ -216,6 +266,7 @@ QofBookFileType gnc_is_our_xml_file(const char *filename,
                                     gboolean *with_encoding);
 
 QofBookFileType gnc_is_our_first_xml_chunk(char *chunk, gboolean *with_encoding);
-
+/** Call after loading each record */
+void sixtp_run_callback(sixtp_gdv2 *data, const char *type);
 
 #endif /* _SIXTP_H_ */

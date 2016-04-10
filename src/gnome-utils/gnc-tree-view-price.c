@@ -300,8 +300,7 @@ sort_by_source (GtkTreeModel *f_model,
         return sort_ns_or_cm (f_model, f_iter_a, f_iter_b);
 
     /* sort by source first */
-    result = safe_utf8_collate (gnc_price_get_source (price_a),
-                                gnc_price_get_source (price_b));
+    result = gnc_price_get_source (price_a) < gnc_price_get_source (price_b);
     if (result != 0)
         return result;
 
@@ -558,7 +557,7 @@ gnc_tree_view_price_filter_helper (GtkTreeModel *model,
                                    GtkTreeIter *iter,
                                    gpointer data)
 {
-    gnc_commodity_namespace *namespace;
+    gnc_commodity_namespace *name_space;
     gnc_commodity *commodity;
     GNCPrice *price;
     filter_user_data *fd = data;
@@ -570,8 +569,8 @@ gnc_tree_view_price_filter_helper (GtkTreeModel *model,
     {
         if (fd->user_ns_fn)
         {
-            namespace = gnc_tree_model_price_get_namespace (GNC_TREE_MODEL_PRICE(model), iter);
-            return fd->user_ns_fn(namespace, fd->user_data);
+            name_space = gnc_tree_model_price_get_namespace (GNC_TREE_MODEL_PRICE(model), iter);
+            return fd->user_ns_fn(name_space, fd->user_data);
         }
         return TRUE;
     }

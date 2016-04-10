@@ -138,6 +138,7 @@ If you make a mistake or want to make changes later, you can edit the created Sc
                 <property name="primary_icon_sensitive">True</property>
                 <property name="secondary_icon_sensitive">True</property>
                 <property name="climb_rate">1</property>
+		<property name="tooltip_text" translatable="yes">Enter the number of months still to be paid off. This determines both the remaining principle and the duration of the scheduled transaction.</property>
               </object>
               <packing>
                 <property name="left_attach">3</property>

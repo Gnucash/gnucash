@@ -4,6 +4,25 @@
 ;;
 ;;  Copyright (c) 2001 Linux Developers Group, Inc. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program; if not, contact:
+;;
+;; Free Software Foundation           Voice:  +1-617-542-5942
+;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+;; Boston, MA  02110-1301,  USA       gnu@gnu.org
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 (define-module (gnucash report standard-reports))
 (use-modules (srfi srfi-13))
@@ -74,24 +93,29 @@
 ;;   list of files in the directory
 
 (define (directory-files dir)
-  (let ((fname-regexp (make-regexp "\\.scm$")) ;; Regexp that matches the desired filenames
-        (dir-stream (opendir dir)))
-    (let loop ((fname (readdir dir-stream))
-	               (acc '())
-				  )
-                  (if (eof-object? fname)
-                      (begin
-                          (closedir dir-stream)
-                          acc
-                      )
-                      (loop (readdir dir-stream)
-                            (if (regexp-exec fname-regexp fname)
-                                (cons fname acc)
-                                acc
-                            )
-                      )
-                  )
-    )
+  (if (file-exists? dir)
+      (let ((fname-regexp (make-regexp "\\.scm$")) ;; Regexp that matches the desired filenames
+            (dir-stream (opendir dir)))
+
+           (let loop ((fname (readdir dir-stream))
+                      (acc '()))
+                     (if (eof-object? fname)
+                         (begin
+                             (closedir dir-stream)
+                             acc
+                         )
+                         (loop (readdir dir-stream)
+                               (if (regexp-exec fname-regexp fname)
+                                   (cons fname acc)
+                                   acc
+                               )
+                         )
+                     )
+           ))
+      (begin
+          (gnc:warn "Can't access " dir ".\nEmpty list will be returned.")
+          '() ;; return empty list
+      )
   )
 )
 
@@ -113,9 +137,8 @@
 ;; Return value:
 ;;  List of symbols for reports
 (define (get-report-list)
-	(map (lambda (s) (string->symbol s))
-         (process-file-list (directory-files (gnc-path-get-stdreportsdir)))
-    )
+    (map (lambda (s) (string->symbol s))
+         (process-file-list (directory-files (gnc-path-get-stdreportsdir))))
 )
 
 (gnc:debug "stdrpt-dir=" (gnc-path-get-stdreportsdir))

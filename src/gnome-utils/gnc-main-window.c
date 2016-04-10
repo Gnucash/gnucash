@@ -1037,7 +1037,7 @@ gnc_main_window_save_window (GncMainWindow *window, GncMainWindowSaveData *data)
     /* Save the window coordinates, etc. */
     gtk_window_get_position(GTK_WINDOW(window), &coords[0], &coords[1]);
     gtk_window_get_size(GTK_WINDOW(window), &coords[2], &coords[3]);
-    maximized = (gdk_window_get_state((GTK_WIDGET(window))->window)
+    maximized = (gdk_window_get_state(gtk_widget_get_window ((GTK_WIDGET(window))))
                  & GDK_WINDOW_STATE_MAXIMIZED) != 0;
     g_key_file_set_integer_list(data->key_file, window_group,
                                 WINDOW_POSITION, &coords[0], 2);
@@ -1468,26 +1468,13 @@ gnc_main_window_generate_title (GncMainWindow *window)
     const gchar *readonly_text = NULL;
     gchar *readonly;
     gchar *title;
-    GtkAction* action;
 
-    /* The save action is sensitive if the book is dirty */
-    action = gnc_main_window_find_action (window, "FileSaveAction");
-    if (action != NULL)
-    {
-        gtk_action_set_sensitive(action, FALSE);
-    }
     if (gnc_current_session_exist())
     {
         book_id = qof_session_get_url (gnc_get_current_session ());
         book = gnc_get_current_book();
         if (qof_book_session_not_saved (book))
-        {
             dirty = "*";
-            if (action != NULL)
-            {
-                gtk_action_set_sensitive(action, TRUE);
-            }
-        }
         if (qof_book_is_readonly(book))
         {
             /* Translators: This string is shown in the window title if this
@@ -1538,6 +1525,8 @@ gnc_main_window_generate_title (GncMainWindow *window)
     gnc_plugin_update_actions(priv->action_group,
                               immutable_page_actions,
                               "sensitive", !immutable);
+    /* Trigger sensitivity updtates of other actions such as Save/Revert */
+    g_signal_emit_by_name (window, "page_changed", page);
     g_free( filename );
     g_free(readonly);
 
@@ -1653,30 +1642,21 @@ static gchar *generate_statusbar_lastmodified_message()
                 int r = stat(filepath, &statbuf);
                 if (r == 0)
                 {
-                    // File mtime could be accessed ok
-                    gint64 mtime = statbuf.st_mtime;
-                    GDateTime *gdt = gnc_g_date_time_new_from_unix_local (mtime);
-                    gchar *dummy_strftime_has_ampm = g_date_time_format (gdt, "%P");
                     /* Translators: This is the date and time that is shown in
                     the status bar after opening a file: The date and time of
-                    last modification. The string is the format string for
-                    glib's function g_date_time_format(), see there for an
+                    last modification. The string is a format string using
+                    boost::date_time's format flags, see the boost docs for an
                     explanation of the modifiers. First string is for a locale
                     that has the a.m. or p.m. string in its locale, second
                     string is for locales that do not have that string. */
-                    gchar *time_string =
-                        g_date_time_format (gdt, (strlen(dummy_strftime_has_ampm) > 0)
-                                            ? _("Last modified on %a, %b %e, %Y at %I:%M%P")
-                                            : _("Last modified on %a, %b %e, %Y at %H:%M"));
-
-                    g_date_time_unref (gdt);
-
+                    char *time_string =
+			gnc_print_time64(statbuf.st_mtime,
+					 _("Last modified on %a, %b %e, %Y at %I:%M%P"));
                     //g_warning("got time %ld, str=%s\n", mtime, time_string);
                     /* Translators: This message appears in the status bar after opening the file. */
                     message = g_strdup_printf(_("File %s opened. %s"),
                                               filename, time_string);
-                    g_free(time_string);
-                    g_free(dummy_strftime_has_ampm);
+                    free(time_string);
                 }
                 else
                 {
@@ -2669,7 +2649,7 @@ gnc_main_window_new (void)
         gint width, height;
         gtk_window_get_size (GTK_WINDOW (old_window), &width, &height);
         gtk_window_resize (GTK_WINDOW (window), width, height);
-        if ((gdk_window_get_state((GTK_WIDGET(old_window))->window)
+        if ((gdk_window_get_state((gtk_widget_get_window (GTK_WIDGET(old_window))))
                 & GDK_WINDOW_STATE_MAXIMIZED) != 0)
         {
             gtk_window_maximize (GTK_WINDOW (window));
@@ -3945,26 +3925,40 @@ gnc_main_window_cmd_page_setup (GtkAction *action,
     gnc_ui_page_setup(gtk_window);
 }
 
-static void
-gnc_book_options_dialog_apply_cb(GNCOptionWin * optionwin,
-                                 gpointer user_data)
+void
+gnc_book_options_dialog_apply_helper(GNCOptionDB * options)
 {
-    GNCOptionDB * options = user_data;
-    gboolean use_split_action_for_num_before =
-        qof_book_use_split_action_for_num_field (gnc_get_current_book ());
-    gboolean use_split_action_for_num_after;
     QofBook *book = gnc_get_current_book ();
+    gboolean use_split_action_for_num_before =
+        qof_book_use_split_action_for_num_field (book);
+    gboolean use_book_currency_before =
+        gnc_book_use_book_currency (book);
+    gboolean use_split_action_for_num_after;
+    gboolean use_book_currency_after;
 
     if (!options) return;
 
     gnc_option_db_commit (options);
     qof_book_begin_edit (book);
-    qof_book_save_options (book, gnc_option_db_save_to_kvp, options, TRUE);
+    qof_book_save_options (book, gnc_option_db_save, options, TRUE);
     use_split_action_for_num_after =
-        qof_book_use_split_action_for_num_field (gnc_get_current_book ());
+        qof_book_use_split_action_for_num_field (book);
+    use_book_currency_after = gnc_book_use_book_currency (book);
     if (use_split_action_for_num_before != use_split_action_for_num_after)
-        gnc_book_option_num_field_source_change_cb (use_split_action_for_num_after);
+        gnc_book_option_num_field_source_change_cb (
+                                                use_split_action_for_num_after);
+    if (use_book_currency_before != use_book_currency_after)
+        gnc_book_option_book_currency_selected_cb (use_book_currency_after);
     qof_book_commit_edit (book);
+}
+
+static void
+gnc_book_options_dialog_apply_cb(GNCOptionWin * optionwin,
+                                 gpointer user_data)
+{
+    GNCOptionDB * options = user_data;
+    if (!options) return;
+    gnc_book_options_dialog_apply_helper (options);
 }
 
 static void
@@ -3985,7 +3979,7 @@ gnc_book_options_dialog_cb (gboolean modal, gchar *title)
     GNCOptionWin *optionwin;
 
     options = gnc_option_db_new_for_type (QOF_ID_BOOK);
-    qof_book_load_options (book, gnc_option_db_load_from_kvp, options);
+    qof_book_load_options (book, gnc_option_db_load, options);
     gnc_option_db_clean (options);
 
     optionwin = gnc_options_dialog_new_modal (modal,
@@ -4377,7 +4371,7 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
     {
 	const gchar *fixed_message = _("The GnuCash personal finance manager. "
                                    "The GNU way to manage your money!");
-	const gchar *copyright = _("© 1997-2014 Contributors");
+	const gchar *copyright = _("© 1997-2016 Contributors");
 	gchar **authors = get_file_strsplit("AUTHORS");
 	gchar **documenters = get_file_strsplit("DOCUMENTERS");
 	gchar *license = get_file("LICENSE");

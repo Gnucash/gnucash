@@ -25,6 +25,13 @@
 #include <gtk/gtk.h>
 #include "split-register-model.h"
 #include "table-allgui.h"
+/** @ingroup Register
+ * @addtogroup Gnome
+ * @{
+ */
+/** @file gnucash-sheet.h
+ * @brief Public declarations of GnucashSheet class.
+ */
 
 #define CELL_VPADDING 2
 #define CELL_HPADDING 5
@@ -51,13 +58,13 @@ typedef struct _GnucashRegisterClass GnucashRegisterClass;
 
 typedef struct
 {
-    /* The style for this block */
+    /** The style for this block */
     SheetBlockStyle *style;
 
-    gint origin_x; /* x origin of block */
-    gint origin_y; /* y origin of block */
+    gint origin_x; /** x origin of block */
+    gint origin_y; /** y origin of block */
 
-    gboolean visible; /* is block visible */
+    gboolean visible; /** is block visible */
 } SheetBlock;
 
 
@@ -70,7 +77,7 @@ void gnucash_sheet_recompute_block_offsets (GnucashSheet *sheet);
 
 GType gnucash_register_get_type (void);
 
-/* this already has scrollbars attached */
+/** this already has scrollbars attached */
 GtkWidget *gnucash_register_new (Table *table);
 
 SheetBlock *gnucash_sheet_get_block (GnucashSheet *sheet,
@@ -140,6 +147,5 @@ void gnucash_register_set_moved_cb (GnucashRegister *reg,
 GnucashSheet *gnucash_register_get_sheet (GnucashRegister *reg);
 
 GdkColor *get_gtkrc_color (GnucashSheet *sheet, RegisterColor field_type);
-
+/** @} */
 #endif
-

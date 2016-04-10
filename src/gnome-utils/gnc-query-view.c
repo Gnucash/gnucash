@@ -160,8 +160,11 @@ gnc_query_view_new (GList *param_list, Query *query)
     /* Get the types for the list store */
     for (i = 0, node = param_list; node; node = node->next, i++)
     {
-        GNCSearchParam *param = node->data;
-        const char *type = gnc_search_param_get_param_type (param);
+        GNCSearchParamSimple *param = node->data;
+        const char *type;
+
+        g_assert (GNC_IS_SEARCH_PARAM_SIMPLE (param));
+        type = gnc_search_param_get_param_type ((GNCSearchParam *) param);
 
         if (g_strcmp0 (type, QOF_TYPE_BOOLEAN) == 0)
             types[i+1] = G_TYPE_BOOLEAN;
@@ -323,24 +326,26 @@ gnc_query_view_init_view (GNCQueryView *qview)
     {
         const char *type;
         gfloat algn = 0;
-        GNCSearchParam *param = node->data;
+        GNCSearchParamSimple *param = node->data;
+
+        g_assert (GNC_IS_SEARCH_PARAM_SIMPLE (param));
 
         col = gtk_tree_view_column_new ();
 
         /* Set the column title */
-        gtk_tree_view_column_set_title (col, (gchar *)param->title);
+        gtk_tree_view_column_set_title (col, (gchar *) ((GNCSearchParam *) param)->title);
 
         /* pack tree view column into tree view */
         gtk_tree_view_append_column (view, col);
 
         /* Get justification */
-        if (param->justify == GTK_JUSTIFY_CENTER)
+        if (((GNCSearchParam *) param)->justify == GTK_JUSTIFY_CENTER)
             algn = 0.5;
-        else if (param->justify == GTK_JUSTIFY_RIGHT)
+        else if (((GNCSearchParam *) param)->justify == GTK_JUSTIFY_RIGHT)
             algn = 1.0;
 
         /* Set column resizeable */
-        if (param->non_resizeable)
+        if (((GNCSearchParam *) param)->non_resizeable)
         {
             gtk_tree_view_column_set_resizable (col, FALSE);
             gtk_tree_view_column_set_expand (col, FALSE);
@@ -349,7 +354,7 @@ gnc_query_view_init_view (GNCQueryView *qview)
             gtk_tree_view_column_set_resizable (col, TRUE);
 
         /* Set column clickable */
-        if (param->passive)
+        if (((GNCSearchParam *) param)->passive)
             gtk_tree_view_column_set_clickable (col, FALSE);
         else
 	{
@@ -360,7 +365,7 @@ gnc_query_view_init_view (GNCQueryView *qview)
                                     GINT_TO_POINTER (i+1), NULL);
 	}
 
-        type = gnc_search_param_get_param_type (param);
+        type = gnc_search_param_get_param_type (((GNCSearchParam *) param));
 
         if (g_strcmp0 (type, QOF_TYPE_BOOLEAN) == 0)
         {
@@ -713,18 +718,19 @@ gnc_query_view_set_query_sort (GNCQueryView *qview, gboolean new_column)
 {
     gboolean        sort_order = qview->increasing;
     GList          *node;
-    GNCSearchParam *param;
+    GNCSearchParamSimple *param;
 
     /* Find the column parameter definition */
     node = g_list_nth (qview->column_params, qview->sort_column);
     param = node->data;
+    g_assert (GNC_IS_SEARCH_PARAM_SIMPLE (param));
 
     /* If we're asked to invert numerics, and if this is a numeric or
      * debred column, then invert the sort order.
      */
     if (qview->numeric_inv_sort)
     {
-        const char *type = gnc_search_param_get_param_type (param);
+        const char *type = gnc_search_param_get_param_type ((GNCSearchParam *) param);
         if (!g_strcmp0(type, QOF_TYPE_NUMERIC) ||
                 !g_strcmp0(type, QOF_TYPE_DEBCRED))
             sort_order = !sort_order;
@@ -789,11 +795,14 @@ gnc_query_view_fill (GNCQueryView *qview)
         for (i = 0, node = qview->column_params; node; node = node->next)
         {
             gboolean result;
-            GNCSearchParam *param = node->data;
-            GSList *converters = gnc_search_param_get_converters (param);
-            const char *type = gnc_search_param_get_param_type (param);
+            GNCSearchParamSimple *param = node->data;
+            GSList *converters = NULL;
+            const char *type = gnc_search_param_get_param_type ((GNCSearchParam *) param);
             gpointer res = item->data;
             gchar *qofstring;
+
+            g_assert (GNC_IS_SEARCH_PARAM_SIMPLE (param));
+            converters = gnc_search_param_get_converters (param);
 
             /* Test for boolean type */
             if (g_strcmp0 (type, QOF_TYPE_BOOLEAN) == 0)

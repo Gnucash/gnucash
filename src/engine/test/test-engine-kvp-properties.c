@@ -129,7 +129,7 @@ teardown (Fixture *fixture, gconstpointer pData)
  */
     QofBook *book = qof_instance_get_book (QOF_INSTANCE (fixture->acct));
     test_destroy (fixture->acct);
-    test_destroy (book);
+    qof_book_destroy (book);
 }
 
 static void

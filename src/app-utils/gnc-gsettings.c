@@ -95,7 +95,7 @@ static GSettings * gnc_gsettings_get_schema_ptr (const gchar *schema_str)
 
     ENTER("");
     if (!schema_hash)
-        schema_hash = g_hash_table_new (g_str_hash, g_str_equal);
+        schema_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
     gset = g_hash_table_lookup (schema_hash, full_name);
     DEBUG ("Looking for schema %s returned gsettings %p", full_name, gset);
@@ -107,6 +107,10 @@ static GSettings * gnc_gsettings_get_schema_ptr (const gchar *schema_str)
             g_hash_table_insert (schema_hash, full_name, gset);
         else
             PWARN ("Ignoring attempt to access unknown gsettings schema %s", full_name);
+    }
+    else
+    {
+        g_free(full_name);
     }
 
     LEAVE("");

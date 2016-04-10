@@ -44,37 +44,6 @@
 #include "gnc-prefs.h"
 #include "gnc-ui-util.h"
 
-/* Private interface to Account GncImportMatchMap functions */
-
-/** @{
-Obtain an ImportMatchMap object from an Account */
-extern GncImportMatchMap * gnc_account_create_imap (Account *acc);
-/*@}*/
-
-/* Look up an Account in the map */
-extern Account* gnc_imap_find_account(GncImportMatchMap *imap,
-				      const char* category,
-				      const char *key);
-
-/* Store an Account in the map. This mapping is immediatly stored in
-  the underlying kvp frame, regardless of whether the MatchMap is
-  destroyed later or not. */
-extern void gnc_imap_add_account (GncImportMatchMap *imap,
-				  const char *category,
-				  const char *key, Account *acc);
-
-/* Look up an Account in the map from a GList* of pointers to strings(tokens)
-  from the current transaction */
-extern Account* gnc_imap_find_account_bayes (GncImportMatchMap *imap,
-					     GList* tokens);
-
-/* Store an Account in the map. This mapping is immediatly stored in
-  the underlying kvp frame, regardless of whether the MatchMap is
-  destroyed later or not. */
-extern void gnc_imap_add_account_bayes (GncImportMatchMap *imap,
-					GList* tokens,
-					Account *acc);
-
 #define GNCIMPORT_DESC    "desc"
 #define GNCIMPORT_MEMO    "memo"
 #define GNCIMPORT_PAYEE    "payee"
@@ -514,7 +483,7 @@ matchmap_find_destination (GncImportMatchMap *matchmap, GNCImportTransInfo *info
 
     g_assert (info);
     tmp_map = ((matchmap != NULL) ? matchmap :
-               gnc_account_create_imap
+               gnc_account_imap_create_imap
                (xaccSplitGetAccount
                 (gnc_import_TransInfo_get_fsplit (info))));
 
@@ -525,13 +494,13 @@ matchmap_find_destination (GncImportMatchMap *matchmap, GNCImportTransInfo *info
         tokens = TransactionGetTokens(info);
 
         /* try to find the destination account for this transaction from its tokens */
-        result = gnc_imap_find_account_bayes(tmp_map, tokens);
+        result = gnc_account_imap_find_account_bayes(tmp_map, tokens);
 
     }
     else
     {
         /* old system of transaction to account matching */
-        result = gnc_imap_find_account
+        result = gnc_account_imap_find_account
                  (tmp_map, GNCIMPORT_DESC,
                   xaccTransGetDescription (gnc_import_TransInfo_get_trans (info)));
     }
@@ -542,7 +511,7 @@ matchmap_find_destination (GncImportMatchMap *matchmap, GNCImportTransInfo *info
      * transaction is stored there.
 
        if (result == NULL)
-       result = gnc_imap_find_account
+       result = gnc_account_imap_find_account
        (tmp_map, GNCIMPORT_MEMO,
        xaccSplitGetMemo (gnc_import_TransInfo_get_fsplit (info)));
     */
@@ -584,7 +553,7 @@ matchmap_store_destination (GncImportMatchMap *matchmap,
 
     tmp_matchmap = ((matchmap != NULL) ?
                     matchmap :
-                    gnc_account_create_imap
+                    gnc_account_imap_create_imap
                     (xaccSplitGetAccount
                      (gnc_import_TransInfo_get_fsplit (trans_info))));
 
@@ -596,7 +565,7 @@ matchmap_store_destination (GncImportMatchMap *matchmap,
         tokens = TransactionGetTokens(trans_info);
 
         /* add the tokens to the imap with the given destination account */
-        gnc_imap_add_account_bayes(tmp_matchmap, tokens, dest);
+        gnc_account_imap_add_account_bayes(tmp_matchmap, tokens, dest);
 
     }
     else
@@ -605,14 +574,14 @@ matchmap_store_destination (GncImportMatchMap *matchmap,
         descr = xaccTransGetDescription
                 (gnc_import_TransInfo_get_trans (trans_info));
         if (descr && (strlen (descr) > 0))
-            gnc_imap_add_account (tmp_matchmap,
+            gnc_account_imap_add_account (tmp_matchmap,
                                   GNCIMPORT_DESC,
                                   descr,
                                   dest);
         memo = xaccSplitGetMemo
                (gnc_import_TransInfo_get_fsplit (trans_info));
         if (memo && (strlen (memo) > 0))
-            gnc_imap_add_account (tmp_matchmap,
+            gnc_account_imap_add_account (tmp_matchmap,
                                   GNCIMPORT_MEMO,
                                   memo,
                                   dest);
@@ -686,7 +655,7 @@ static void split_find_match (GNCImportTransInfo * trans_info,
         /* Date heuristics */
         match_time = xaccTransGetDate (xaccSplitGetParent (split));
         download_time = xaccTransGetDate (new_trans);
-        datediff_day = abs(match_time - download_time) / 86400;
+        datediff_day = llabs(match_time - download_time) / 86400;
         /* Sorry, there are not really functions around at all that
         	 provide for less hacky calculation of days of date
         	 differences. Whatever. On the other hand, the difference
@@ -1116,7 +1085,7 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
 /********************************************************************\
  * check_trans_online_id() Callback function used by
  * gnc_import_exists_online_id.  Takes pointers to transaction and split,
- * returns 0 if their online_id kvp_frames do NOT match, or if the split
+ * returns 0 if their online_ids  do NOT match, or if the split
  * belongs to the transaction
 \********************************************************************/
 static gint check_trans_online_id(Transaction *trans1, void *user_data)

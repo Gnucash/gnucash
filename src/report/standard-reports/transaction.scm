@@ -34,6 +34,7 @@
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (srfi srfi-1))
 (use-modules (gnucash gnc-module))
+(use-modules (gnucash gettext))
 
 (use-modules (gnucash printf))
 
@@ -45,6 +46,7 @@
 ;; Define the strings here to avoid typos and make changes easier.
 
 (define reportname (N_ "Transaction Report"))
+(define optname-detail-level (N_ "Detail Level"))
 (define pagename-sorting (N_ "Sorting"))
 (define optname-prime-sortkey (N_ "Primary Key"))
 (define optname-prime-subtotal (N_ "Primary Subtotal"))
@@ -375,48 +377,49 @@
   (define (opt-val section name)
     (gnc:option-value 
      (gnc:lookup-option options section name)))
-  (let ((column-list (make-vector columns-used-size #f)))
-    (if (opt-val (N_ "Display") (N_ "Date"))
+  (let ((column-list (make-vector columns-used-size #f))
+        (is-single? (eq? (opt-val gnc:pagename-display optname-detail-level) 'single)))
+    (if (opt-val gnc:pagename-display (N_ "Date"))
         (vector-set! column-list 0 #t))
-    (if (opt-val (N_ "Display") (N_ "Reconciled Date"))
+    (if (opt-val gnc:pagename-display (N_ "Reconciled Date"))
         (vector-set! column-list 1 #t))
-    (if (if (gnc:lookup-option options (N_ "Display") (N_ "Num"))
-            (opt-val (N_ "Display") (N_ "Num"))
-            (opt-val (N_ "Display") (N_ "Num/Action")))
+    (if (if (gnc:lookup-option options gnc:pagename-display (N_ "Num"))
+            (opt-val gnc:pagename-display (N_ "Num"))
+            (opt-val gnc:pagename-display (N_ "Num/Action")))
         (vector-set! column-list 2 #t))
-    (if (opt-val (N_ "Display") (N_ "Description"))
+    (if (opt-val gnc:pagename-display (N_ "Description"))
         (vector-set! column-list 3 #t))
-    (if (opt-val (N_ "Display") (N_ "Account Name"))
+    (if (opt-val gnc:pagename-display (N_ "Account Name"))
         (vector-set! column-list 4 #t))
-    (if (opt-val (N_ "Display") (N_ "Other Account Name"))
+    (if (and is-single? (opt-val gnc:pagename-display (N_ "Other Account Name")))
         (vector-set! column-list 5 #t))
-    (if (opt-val (N_ "Display") (N_ "Shares"))
+    (if (opt-val gnc:pagename-display (N_ "Shares"))
         (vector-set! column-list 6 #t))
-    (if (opt-val (N_ "Display") (N_ "Price"))
+    (if (opt-val gnc:pagename-display (N_ "Price"))
         (vector-set! column-list 7 #t))
-    (let ((amount-setting (opt-val (N_ "Display") (N_ "Amount"))))
+    (let ((amount-setting (opt-val gnc:pagename-display (N_ "Amount"))))
       (if (eq? amount-setting 'single)
           (vector-set! column-list 8 #t))
       (if (eq? amount-setting 'double)
           (begin (vector-set! column-list 9 #t)
                  (vector-set! column-list 10 #t))))
-    (if (opt-val (N_ "Display") (N_ "Running Balance"))
+    (if (opt-val gnc:pagename-display (N_ "Running Balance"))
         (vector-set! column-list 11 #t))
-    (if (opt-val (N_ "Display")  (N_ "Use Full Account Name"))
+    (if (opt-val gnc:pagename-display  (N_ "Use Full Account Name"))
         (vector-set! column-list 12 #t))
-    (if (opt-val (N_ "Display") (N_ "Memo"))
+    (if (opt-val gnc:pagename-display (N_ "Memo"))
         (vector-set! column-list 13 #t))
-    (if (opt-val (N_ "Display") (N_ "Account Code"))
+    (if (opt-val gnc:pagename-display (N_ "Account Code"))
         (vector-set! column-list 14 #t))
-    (if (opt-val (N_ "Display") (N_ "Other Account Code"))
+    (if (and is-single? (opt-val gnc:pagename-display (N_ "Other Account Code")))
         (vector-set! column-list 15 #t))
-    (if (opt-val (N_ "Display") (N_ "Use Full Other Account Name"))
+    (if (and is-single? (opt-val gnc:pagename-display (N_ "Use Full Other Account Name")))
         (vector-set! column-list 16 #t))
-    (if (opt-val (N_ "Sorting") (N_ "Show Account Code"))
+    (if (opt-val pagename-sorting (N_ "Show Account Code"))
         (vector-set! column-list 17 #t))
-    (if (opt-val (N_ "Sorting") (N_ "Show Full Account Name"))
+    (if (opt-val pagename-sorting (N_ "Show Full Account Name"))
         (vector-set! column-list 18 #t))
-    (if (opt-val (N_ "Display") (N_ "Notes"))
+    (if (opt-val gnc:pagename-display (N_ "Notes"))
         (vector-set! column-list 19 #t))
     column-list))
 
@@ -472,7 +475,7 @@
      (gnc:lookup-option options section name)))
 
   (let* ((row-contents '())
-	 (dummy  (gnc:debug "split is originally" split))
+         (dummy  (gnc:debug "split is originally" split))
          (parent (xaccSplitGetParent split))
          (account (xaccSplitGetAccount split))
          (account-type (xaccAccountGetType account))
@@ -612,18 +615,6 @@
   
   
   (gnc:register-trep-option
-   (gnc:make-multichoice-option
-    gnc:pagename-general (N_ "Style")
-    "d" (N_ "Report style.")
-    'single
-    (list (vector 'multi-line
-                  (N_ "Multi-Line")
-                  (N_ "Display N lines."))
-          (vector 'single
-                  (N_ "Single")
-                  (N_ "Display 1 line.")))))
-
-  (gnc:register-trep-option
    (gnc:make-complex-boolean-option
     gnc:pagename-general optname-common-currency
     "e" (N_ "Convert all transactions into a common currency.") #f
@@ -743,7 +734,7 @@
 
                    (vector 'register-order
                            (N_ "Register Order")
-                           (N_ "Sort as with the register."))
+                           (N_ "Sort as in the register."))
 
                    (vector 'corresponding-acc-name 
                            (N_ "Other Account Name")
@@ -798,7 +789,7 @@
 
                    (vector 'register-order
                            (N_ "Register Order")
-                           (N_ "Sort as with the register."))
+                           (N_ "Sort as in the register."))
 
                    (vector 'corresponding-acc-name 
                            (N_ "Other Account Name")
@@ -948,7 +939,7 @@
     (list (N_ "Account Name")                 "e"  (N_ "Display the account name?") #f)
     (list (N_ "Use Full Account Name")        "f"  (N_ "Display the full account name?") #t)
     (list (N_ "Account Code")                 "g"  (N_ "Display the account code?") #f)
-    (list (N_ "Other Account Name")           "h"  (N_ "Display the other account name?\
+    (list (N_ "Other Account Name")           "h1" (N_ "Display the other account name?\
  (if this is a split transaction, this parameter is guessed).") #f)
     (list (N_ "Use Full Other Account Name")  "i"  (N_ "Display the full account name?") #t)
     (list (N_ "Other Account Code")           "j"  (N_ "Display the other account code?") #f)
@@ -976,6 +967,31 @@
 		 gnc:pagename-display
 		 (N_ "Notes")
 		 x))))
+
+  (gnc:register-trep-option
+   (gnc:make-multichoice-callback-option
+    gnc:pagename-display optname-detail-level
+    "h" (N_ "Amount of detail to display per transaction.")
+    'single
+    (list (vector 'multi-line
+                  (N_ "Multi-Line")
+                  (N_ "Display all splits in a transaction on a separate line."))
+          (vector 'single
+                  (N_ "Single")
+                  (N_ "Display one line per transaction, merging multiple splits where required.")))
+    #f
+    (lambda (x)
+      (let ((is-single? (eq? x 'single)))
+           (gnc-option-db-set-option-selectable-by-name
+                gnc:*transaction-report-options*
+                gnc:pagename-display (N_ "Other Account Name") is-single?)
+           (gnc-option-db-set-option-selectable-by-name
+                gnc:*transaction-report-options*
+                gnc:pagename-display (N_ "Use Full Other Account Name") is-single?)
+           (gnc-option-db-set-option-selectable-by-name
+                gnc:*transaction-report-options*
+                gnc:pagename-display (N_ "Other Account Code") is-single?)))))
+
 
   (gnc:register-trep-option
    (gnc:make-multichoice-option
@@ -1059,14 +1075,14 @@ Credit Card, and Income accounts.")))))
   (define (get-account-types-to-reverse options)
     (cdr (assq (gnc:option-value 
                 (gnc:lookup-option options
-                                   (N_ "Display")
+                                   gnc:pagename-display
                                    (N_ "Sign Reverses")))
                account-types-to-reverse-assoc-list)))
   
 
   (define (transaction-report-multi-rows-p options)
     (eq? (gnc:option-value
-          (gnc:lookup-option options gnc:pagename-general (N_ "Style")))
+          (gnc:lookup-option options gnc:pagename-display optname-detail-level))
          'multi-line))
 
   (define (transaction-report-export-p options)
@@ -1377,40 +1393,45 @@ Credit Card, and Income accounts.")))))
      name-sortkey name-subtotal name-date-subtotal
      3 2))
 
-  (define (get-other-account-names account-list)
-    ( map (lambda (acct)  (gnc-account-get-full-name acct)) account-list))
+  ;;(define (get-other-account-names account-list)
+  ;;  ( map (lambda (acct)  (gnc-account-get-full-name acct)) account-list))
 
-  (define (is-filter-member split account-list splits-ok?)
-    (let ((fullname (gnc:split-get-corr-account-full-name split)))
+  (define (is-filter-member split account-list)
+    (let* ((txn (xaccSplitGetParent split))
+           (splitcount (xaccTransCountSplits txn)))
 
-      (if (string=? fullname (_ "-- Split Transaction --"))
-	  ;; Yep, this is a split transaction.
+      (cond
+        ;; A 2-split transaction - test separately so it can be optimized
+        ;; to significantly reduce the number of splits to traverse
+        ;; in guile code
+        ((= splitcount 2)
+         (let* ((other      (xaccSplitGetOtherSplit split))
+                (other-acct (xaccSplitGetAccount other)))
+               (member other-acct account-list)))
 
-	  (if splits-ok?
-	      (let* ((txn (xaccSplitGetParent split))
-		     (splits (xaccTransGetSplitList txn)))
+        ;; A multi-split transaction - run over all splits
+        ((> splitcount 2)
+         (let ((splits (xaccTransGetSplitList txn)))
 
-		;; Walk through the list of splits.
-		;; if we reach the end, return #f
-		;; if the 'this' != 'split' and the split->account is a member
-		;; of the account-list, then return #t, else recurse
-		(define (is-member splits)
-		  (if (null? splits)
-		      #f
-		      (let* ((this (car splits))
-			     (rest (cdr splits))
-			     (acct (xaccSplitGetAccount this)))
-			(if (and (not (eq? this split))
-				 (member acct account-list))
-			    #t
-			    (is-member rest)))))
+                ;; Walk through the list of splits.
+                ;; if we reach the end, return #f
+                ;; if the 'this' != 'split' and the split->account is a member
+                ;; of the account-list, then return #t, else recurse
+                (define (is-member splits)
+                  (if (null? splits)
+                      #f
+                      (let* ((this (car splits))
+                             (rest (cdr splits))
+                             (acct (xaccSplitGetAccount this)))
+                        (if (and (not (eq? this split))
+                                 (member acct account-list))
+                            #t
+                            (is-member rest)))))
 
-		(is-member splits))
-	      #f)
+                (is-member splits)))
 
-	  ;; Nope, this is a regular transaction
-	  (member fullname (get-other-account-names account-list))
-	  )))
+        ;; Single transaction splits
+        (else #f))))
 
 
   (gnc:report-starting reportname)
@@ -1476,7 +1497,7 @@ Credit Card, and Income accounts.")))))
 	      (begin
 		;;(gnc:warn "Including Filter Accounts")
 		(set! splits (filter (lambda (split) 
-				       (is-filter-member split c_account_2 #t))
+				       (is-filter-member split c_account_2))
 				     splits))
 		)
 	      )
@@ -1485,7 +1506,7 @@ Credit Card, and Income accounts.")))))
 	      (begin
 		;;(gnc:warn "Excluding Filter Accounts")
 		(set! splits (filter (lambda (split) 
-				       (not (is-filter-member split c_account_2 #t)))
+				       (not (is-filter-member split c_account_2)))
 				     splits))
 		)
 	      )

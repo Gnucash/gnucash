@@ -30,7 +30,7 @@ then
 fi
 
 set +x
-eval `${top_builddir}/src/gnc-test-env \
+eval `${top_srcdir}/src/gnc-test-env.pl \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/backend/xml \
   --gnc-module-dir ${top_builddir}/src/network-utils \

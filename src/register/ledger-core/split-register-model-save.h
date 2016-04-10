@@ -26,7 +26,13 @@
 #include "Transaction.h"
 #include "table-model.h"
 
-
+/** @addtogroup SplitRegister
+ * @{
+ */
+/** @file split-register-model-save.h
+ * @brief Save handlers for the SplitRegister Model and Template SplitRegister
+ * model.
+ */
 void gnc_split_register_model_add_save_handlers (TableModel *model);
 void gnc_template_register_model_add_save_handlers (TableModel *model);
 
@@ -38,4 +44,5 @@ SRSaveData * gnc_split_register_save_data_new (Transaction *trans,
 
 void gnc_split_register_save_data_destroy (SRSaveData *sd);
 
+/** @} */
 #endif

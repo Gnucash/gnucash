@@ -37,12 +37,12 @@
 #include "gnc-cell-renderer-popup.h"
 #include "gnc-cell-renderer-popup-entry.h"
 
-#define GNC_TYPE_CELL_RENDERER_DATE	       (gnc_cell_renderer_date_get_type ())
-#define GNC_CELL_RENDERER_DATE(obj)	       (GTK_CHECK_CAST ((obj), GNC_TYPE_CELL_RENDERER_DATE, GncCellRendererDate))
-#define GNC_CELL_RENDERER_DATE_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GNC_TYPE_CELL_RENDERER_DATE, GncCellRendererDateClass))
-#define GNC_IS_CELL_RENDERER_DATE(obj)	       (GTK_CHECK_TYPE ((obj), GNC_TYPE_CELL_RENDERER_DATE))
-#define GNC_IS_CELL_RENDERER_DATE_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((obj), GNC_TYPE_CELL_RENDERER_DATE))
-#define GNC_CELL_RENDERER_DATE_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GNC_TYPE_CELL_RENDERER_DATE, GncCellRendererDateClass))
+#define GNC_TYPE_CELL_RENDERER_DATE            (gnc_cell_renderer_date_get_type ())
+#define GNC_CELL_RENDERER_DATE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_CELL_RENDERER_DATE, GncCellRendererDate))
+#define GNC_CELL_RENDERER_DATE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_CELL_RENDERER_DATE, GncCellRendererDateClass))
+#define GNC_IS_CELL_RENDERER_DATE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_CELL_RENDERER_DATE))
+#define GNC_IS_CELL_RENDERER_DATE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((obj), GNC_TYPE_CELL_RENDERER_DATE))
+#define GNC_CELL_RENDERER_DATE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_CELL_RENDERER_DATE, GncCellRendererDateClass))
 
 typedef struct _GncCellRendererDate      GncCellRendererDate;
 typedef struct _GncCellRendererDateClass GncCellRendererDateClass;

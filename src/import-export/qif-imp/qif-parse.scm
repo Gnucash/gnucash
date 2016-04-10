@@ -4,6 +4,25 @@
 ;;;
 ;;;  Bill Gribble <grib@billgribble.com> 20 Feb 2000
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program; if not, contact:
+;;
+;; Free Software Foundation           Voice:  +1-617-542-5942
+;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+;; Boston, MA  02110-1301,  USA       gnu@gnu.org
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 (use-modules (gnucash printf))
 
@@ -400,8 +419,8 @@
   (let ((retval '()))
     (if (or (not (string? date-string))
             (not (> (string-length date-string) 0)))
-        (set! retval possible-formats))
-    (let ((match (regexp-exec qif-date-compiled-rexp date-string)))
+        (set! retval #f)
+        (let ((match (regexp-exec qif-date-compiled-rexp date-string)))
       (if match
           (if (match:substring match 1)
               (set! retval (parse-check-date-format match possible-formats))
@@ -423,7 +442,8 @@
                         (memq 'm-d-y possible-formats))
                     (set! res2 (parse-check-date-format date-mdy possible-formats)))
 
-                (set! retval (append res1 res2))))))
+                (set! retval (append res1 res2)))))))
+
     retval))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

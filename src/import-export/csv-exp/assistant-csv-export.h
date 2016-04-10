@@ -29,11 +29,13 @@
 #define GNC_ASSISTANT_CSV_EXPORT_H
 
 #include "Account.h"
+#include "Query.h"
 
 typedef enum
 {
     XML_EXPORT_TREE,
-    XML_EXPORT_TRANS
+    XML_EXPORT_TRANS,
+    XML_EXPORT_REGISTER
 } CsvExportType;
 
 typedef struct
@@ -53,9 +55,6 @@ typedef struct
 typedef struct
 {
     GtkWidget        *acct_info;
-    GtkWidget        *expense_radio;
-    GtkWidget        *asset_radio;
-    GtkWidget        *liab_eq_radio;
     GtkWidget        *account_treeview;
     GtkWidget        *select_button;
     GtkWidget        *num_acct_label;
@@ -67,32 +66,49 @@ typedef struct
 
 typedef struct
 {
-    CsvExportType export_type;
-    CsvExportDate csvd;
-    CsvExportAcc  csva;
+    CsvExportType   export_type;
+    CsvExportDate   csvd;
+    CsvExportAcc    csva;
+    GList          *trans_list;
 
-    GtkWidget    *window;
-    GtkWidget    *assistant;
-    GtkWidget    *start_label;
-    GtkWidget    *custom_entry;
+    Query          *query;
+    Account        *account;
+    
+    GtkWidget      *start_page;
+    GtkWidget      *account_page;
+    GtkWidget      *file_page;
 
-    GtkWidget    *file_chooser;
-    GtkWidget    *finish_label;
-    GtkWidget    *summary_label;
+    GtkWidget      *window;
+    GtkWidget      *assistant;
+    GtkWidget      *start_label;
+    GtkWidget      *custom_entry;
 
-    gchar        *starting_dir;
-    gchar        *file_name;
+    GtkWidget      *file_chooser;
+    GtkWidget      *finish_label;
+    GtkWidget      *summary_label;
 
-    char         *separator_str;
-    gboolean      use_quotes;
-    gboolean      use_custom;
-    gboolean      failed;
+    gchar          *starting_dir;
+    gchar          *file_name;
+
+    char           *separator_str;
+    gboolean        use_quotes;
+    gboolean        simple_layout;
+    gboolean        use_custom;
+    gboolean        failed;
+
+    gchar          *end_sep;
+    gchar          *mid_sep;
 } CsvExportInfo;
 
 
-/** The gnc_file_csv_export() will let the user export thte
+/** The gnc_file_csv_export() will let the user export the
  *  account tree or transactions to a delimited file.
  */
 void gnc_file_csv_export (CsvExportType export_type);
+
+/** The gnc_file_csv_export_register() will let the user export the
+ *  active register transactions to a delimited file.
+ */
+void gnc_file_csv_export_register (CsvExportType export_type, Query *query, Account *acc);
 
 #endif

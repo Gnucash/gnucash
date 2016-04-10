@@ -81,7 +81,7 @@ typedef struct _SchedXaction SchedXaction;
  *  . copying the fields of the template
  *  . setting the date to the calculated "due" date.
  *
- * We should be able to use the GeneralLedger [or, yet-another-subtype
+ * We should be able to use the GeneralJournal [or, yet-another-subtype
  * of the internal ledger] for this editing.
  **/
 struct _SchedXaction
@@ -269,10 +269,8 @@ SXTmpStateData *gnc_sx_clone_temporal_state( SXTmpStateData *stateData );
  * for possible action without modifying the SX state until action is
  * actually taken.
 */
-GDate xaccSchedXactionGetNextInstance(const SchedXaction *sx, SXTmpStateData *stateData );
-GDate xaccSchedXactionGetInstanceAfter(const SchedXaction *sx,
-                                       GDate *date,
-                                       SXTmpStateData *stateData );
+GDate xaccSchedXactionGetNextInstance(const SchedXaction *sx,
+                                      SXTmpStateData *stateData);
 
 /** \brief Set the schedxaction's template transaction.
 
@@ -303,7 +301,7 @@ void gnc_sx_remove_defer_instance( SchedXaction *sx, void *deferStateData );
 */
 GList *gnc_sx_get_defer_instances( SchedXaction *sx );
 
-/* #defines for KvpFrame strings and QOF */
+/* #defines for Properties and GncModule */
 #define GNC_SX_SHARES                "shares"
 #define GNC_SX_FREQ_SPEC             "scheduled-frequency"
 #define GNC_SX_NAME                  "sched-xname"
@@ -319,8 +317,6 @@ gboolean SXRegister (void);
 #define xaccSchedXactionIsDirty(X) qof_instance_is_dirty (QOF_INSTANCE(X))
 /** \deprecated */
 #define xaccSchedXactionGetGUID(X) qof_entity_get_guid(QOF_INSTANCE(X))
-/** \deprecated */
-#define xaccSchedXactionGetSlots(X) qof_instance_get_slots(QOF_INSTANCE(X))
 
 #endif /* XACC_SCHEDXACTION_H */
 

@@ -44,6 +44,25 @@
 ;; after midnight gives different dates than just before!  Referencing
 ;; all times to noon seems to fix this.  Subtracting 1 year sometimes
 ;; subtracts 2!  see "(to-value"
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program; if not, contact:
+;;
+;; Free Software Foundation           Voice:  +1-617-542-5942
+;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+;; Boston, MA  02110-1301,  USA       gnu@gnu.org
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 ;; depends must be outside module scope -- and should eventually go away.
 
@@ -52,6 +71,7 @@
 (use-modules (srfi srfi-1))
 (use-modules (gnucash printf))
 (use-modules (gnucash core-utils)) ; for gnc:version
+(use-modules (gnucash gettext))
 
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/tax/de_DE" 0)
@@ -114,9 +134,10 @@
 (define (lx-collector level action arg1 arg2)
   ((vector-ref levelx-collector (- level 1)) action arg1 arg2))
 
-;; IRS asked congress to make the tax quarters the same as real quarters
-;;   This is the year it is effective.  THIS IS A Y10K BUG!
-(define tax-qtr-real-qtr-year 10000)
+;; Unlike to the US the German tax quarters are real quarters.
+;; To allow for easily incorporating changes from the US version
+;; we simply set  tax-qtr-real-qtr-year to 0.
+(define tax-qtr-real-qtr-year 0)
 
 (define (tax-options-generator)
   (define options (gnc:new-options))
@@ -486,6 +507,7 @@
                                 (validate (reverse 
                                            (gnc-account-get-children-sorted
                                             (gnc-get-current-root-account))))))
+         (book (gnc:account-get-book (car selected-accounts)))
          (generations (if (pair? selected-accounts)
                           (apply max (map (lambda (x) (num-generations x 1))
                                           selected-accounts))
@@ -750,11 +772,8 @@
                                 (localtime 
                                  (car (timespecCanonicalDayTime
                                        (cons (current-time) 0))))))
-	  (tax-nr (or 
-		   (kvp-frame-get-slot-path-gslist
-		    (qof-book-get-slots (gnc-get-current-book))
-		    (append gnc:*kvp-option-path*
-			    (list gnc:*tax-label* gnc:*tax-nr-label*)))
+	  (tax-nr (or
+                   (gnc:option-get-value book gnc:*tax-label* gnc:*tax-nr-label*)
 		   ""))
 	  )
 

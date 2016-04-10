@@ -29,6 +29,7 @@
 (use-modules (srfi srfi-1))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
+(use-modules (gnucash gettext))
 
 (use-modules (gnucash printf))
 
@@ -36,7 +37,7 @@
 
 ;; included since Bug726449
 (use-modules (ice-9 regex)) ;; for regexp-substitute/global, used by jpqplot
-(load-from-path "html-jqplot.scm") ;; for jqplot-escape-string
+(load-from-path "html-jqplot") ;; for jqplot-escape-string
 
 (define reportname (N_ "Budget Chart"))
 
@@ -45,6 +46,12 @@
 
 (define optname-running-sum (N_ "Running Sum"))
 (define optname-chart-type (N_ "Chart Type"))
+(define optname-from-date (N_ "Start Date"))
+(define optname-to-date (N_ "End Date"))
+
+(define optname-depth-limit (N_ "Levels of Subaccounts"))
+(define opthelp-depth-limit
+  (N_ "Maximum number of levels in the account tree displayed."))
 
 ;(define (options-generator inc-exp?)
 (define (options-generator)
@@ -95,6 +102,11 @@
       )
     )
 
+    ;; date interval
+    (gnc:options-add-date-interval!
+     options gnc:pagename-general
+     optname-from-date optname-to-date "d")
+
 
     ;; Option to select the accounts to that will be displayed
     (add-option (gnc:make-account-list-option
@@ -105,6 +117,10 @@
 	    (list ACCT-TYPE-BANK ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY)
 	    (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
         #f #t))
+
+    (gnc:options-add-account-levels!
+     options gnc:pagename-accounts optname-depth-limit
+     "b" opthelp-depth-limit 6)
 
     ;; Set default page
     (gnc:options-set-default-section options gnc:pagename-general)
@@ -120,8 +136,12 @@
 ;;
 ;; Create bar and and vaules
 ;;
-(define (gnc:chart-create-budget-actual budget acct running-sum chart-type)
-  (let* ((chart #f))
+(define (gnc:chart-create-budget-actual budget acct running-sum chart-type from-tp to-tp)
+  (let* (
+          (chart #f)
+          (report-start-time (car from-tp))
+          (report-end-time (car to-tp))
+        )
 
     (if (eqv? chart-type 'bars)
       (begin
@@ -157,43 +177,51 @@
         (period 0)
         (bgt-sum 0)
         (act-sum 0)
-        (date 0)
+        (date (gnc-budget-get-period-start-date budget period))
+        (period-start-time (car date))
         (bgt-vals '())
         (act-vals '())
         (date-list '())
       )
 
-      ;; Loop though periods
+      ;; Loop through periods
       (while (< period num-periods)
-
-        ;; Add calc new running sum and add to list
-	(if running-sum 
-          (set! bgt-sum (+ bgt-sum 
-            (gnc-numeric-to-double
-              (gnc-budget-get-account-period-value budget acct period))))
-          
-	  (set! bgt-sum 
-            (gnc-numeric-to-double
-              (gnc-budget-get-account-period-value budget acct period)))
-        )
-        (set! bgt-vals (append bgt-vals (list bgt-sum)))
-
+        ;;add calc new running sums
 	(if running-sum
-	  (set! act-sum (+ act-sum
-            (gnc-numeric-to-double
-              (gnc-budget-get-account-period-actual-value budget acct period))))
-	  
-	  (set! act-sum
-            (gnc-numeric-to-double
-              (gnc-budget-get-account-period-actual-value budget acct period)))
-	)
-        (set! act-vals (append act-vals (list act-sum)))
-
-	;; Add period to date list
+          (begin
+            (set! bgt-sum (+ bgt-sum
+              (gnc-numeric-to-double
+                (gnc:get-account-period-rolledup-budget-value budget acct period))))
+	    (set! act-sum (+ act-sum
+              (gnc-numeric-to-double
+                (gnc-budget-get-account-period-actual-value budget acct period))))
+          )
+        )
+        (if (<= report-start-time period-start-time)
+	  ;; within reporting period, update the display lists
+          (begin
+            (if (not running-sum)
+              (begin
+	        (set! bgt-sum
+                  (gnc-numeric-to-double
+                    (gnc:get-account-period-rolledup-budget-value budget acct period)))
+	        (set! act-sum
+                  (gnc-numeric-to-double
+                    (gnc-budget-get-account-period-actual-value budget acct period)))
+              )
+            )
+            (set! bgt-vals (append bgt-vals (list bgt-sum)))
+            (set! act-vals (append act-vals (list act-sum)))
+            (set! date-list (append date-list (list (gnc-print-date date))))
+          )
+        )
+        ;; prepare data for next loop repetition
+        (set! period (+ period 1))
         (set! date (gnc-budget-get-period-start-date budget period))
-        (set! date-list (append date-list (list (gnc-print-date date))))
-
-	(set! period (+ period 1))
+        (set! period-start-time (car date))
+        (if (< report-end-time period-start-time)
+          (set! period num-periods) ;; reporting period has ended, break the loop
+        )
       )
 
       (if (eqv? chart-type 'bars)
@@ -249,15 +277,40 @@
     (gnc:option-value 
      (gnc:lookup-option (gnc:report-options report-obj) section name)))
 
+  ;; This is a helper function to find out the level of the account
+  ;; with in the account tree
+  (define (get-account-level account level)
+    (let (
+           (parent (gnc-account-get-parent account))
+         )
+      (cond
+        (
+          (null? parent) ;; exit
+          level
+        )
+        (else
+          (get-account-level parent (+ level 1))
+        )
+      )
+    )
+  )
+
   (let* (
       (budget (get-option gnc:pagename-general optname-budget))
       (budget-valid? (and budget (not (null? budget))))
       (running-sum (get-option gnc:pagename-general optname-running-sum))
       (chart-type (get-option gnc:pagename-general optname-chart-type))
       (accounts (get-option gnc:pagename-accounts optname-accounts))
+      (depth-limit (get-option gnc:pagename-accounts optname-depth-limit))
       (report-title (get-option gnc:pagename-general
         gnc:optname-reportname))
       (document (gnc:make-html-document))
+      (from-date-tp (gnc:timepair-start-day-time
+                      (gnc:date-option-absolute-time
+                        (get-option gnc:pagename-general optname-from-date))))
+      (to-date-tp (gnc:timepair-end-day-time
+                    (gnc:date-option-absolute-time
+                      (get-option gnc:pagename-general optname-to-date))))
     )
     (cond
       ((null? accounts)
@@ -276,9 +329,21 @@
       (else
         (for-each
           (lambda (acct)
-            (if (null? (gnc-account-get-descendants acct))
-              (gnc:html-document-add-object! document
-                (gnc:chart-create-budget-actual budget acct running-sum chart-type)
+            (if (or
+                  (and (equal? depth-limit 'all)
+                       (null? (gnc-account-get-descendants acct))
+                  )
+                  (and (not (equal? depth-limit 'all))
+                       (<= (get-account-level acct 0) depth-limit)
+                       (null? (gnc-account-get-descendants acct))
+                  )
+                  (and (not (equal? depth-limit 'all))
+                       (= (get-account-level acct 0) depth-limit)
+                  )
+                )
+              (gnc:html-document-add-object!
+                document
+                (gnc:chart-create-budget-actual budget acct running-sum chart-type from-date-tp to-date-tp)
               )
             )
           )

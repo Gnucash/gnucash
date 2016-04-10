@@ -41,10 +41,6 @@
 #include "dialog-utils.h"
 #include "gnc-engine.h"
 
-#ifndef HAVE_LOCALTIME_R
-# include "localtime_r.h"
-#endif
-
 /* Perhaps it's better just to use MAX_DATE_LENGTH defined in gnc-date.h */
 #define MAX_DATE_LEN 80
 
@@ -85,7 +81,7 @@ struct _GNCDateFormatPriv
 static guint date_format_signals [LAST_SIGNAL] = { 0 };
 
 static void gnc_date_format_init         (GNCDateFormat      *gdf);
-static void gnc_date_format_class_init   (GNCDateFormatClass *class);
+static void gnc_date_format_class_init   (GNCDateFormatClass *klass);
 static void gnc_date_format_finalize     (GObject            *object);
 static void gnc_date_format_compute_format(GNCDateFormat *gdf);
 
@@ -345,7 +341,7 @@ gnc_date_format_get_months (GNCDateFormat *gdf)
     if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(priv->months_abbrev)))
         return GNCDATE_MONTH_ABBREV;
     if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(priv->months_name)))
-        return GNCDATE_MONTH_ABBREV;
+        return GNCDATE_MONTH_NAME;
 
     /* We should never reach this point */
     g_assert(FALSE);

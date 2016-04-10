@@ -254,7 +254,7 @@ static void close_handler(gpointer data)
     gtk_widget_destroy(dialog);
 }
 
-static void destroy_cb(GtkObject *object, gpointer data)
+static void destroy_cb(GObject *object, gpointer data)
 {
     struct CloseBookWindow *cbw;
 

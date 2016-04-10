@@ -24,14 +24,16 @@
 #ifndef SIXTP_DOM_GENERATORS_H
 #define SIXTP_DOM_GENERATORS_H
 
+extern "C"
+{
 #include <glib.h>
 
-#include "gnc-xml-helper.h"
-
-#include "sixtp-dom-generators.h"
 #include "gnc-commodity.h"
 #include "qof.h"
 #include "Recurrence.h"
+}
+
+#include "gnc-xml-helper.h"
 
 xmlNodePtr text_to_dom_tree(const char *tag, const char *str);
 xmlNodePtr int_to_dom_tree(const char *tag, gint64 val);
@@ -43,7 +45,8 @@ gchar * timespec_nsec_to_string(const Timespec *ts);
 gchar * timespec_sec_to_string(const Timespec *ts);
 xmlNodePtr gdate_to_dom_tree(const char *tag, const GDate *spec);
 xmlNodePtr gnc_numeric_to_dom_tree(const char *tag, const gnc_numeric *num);
-xmlNodePtr kvp_frame_to_dom_tree(const char *tag, const kvp_frame *frame);
+xmlNodePtr qof_instance_slots_to_dom_tree(const char *tag,
+                                          const QofInstance *inst);
 xmlNodePtr guint_to_dom_tree(const char *tag, guint an_int);
 xmlNodePtr recurrence_to_dom_tree(const gchar *tag, const Recurrence *r);
 

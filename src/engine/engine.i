@@ -1,3 +1,23 @@
+/********************************************************************\
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
 %module sw_engine
 %{
 /* Includes the header in the wrapper code */
@@ -14,6 +34,7 @@
 #include "gnc-hooks-scm.h"
 #include "engine-helpers.h"
 #include "engine-helpers-guile.h"
+#include "policy.h"
 #include "SX-book.h"
 #include "kvp-scm.h"
 #include "glib-helpers.h"
@@ -136,22 +157,11 @@ functions. */
 %typemap(in) char * num;
 %typemap(in) char * action;
 
+%include <policy.h>
 %include <gnc-pricedb.h>
 
 QofSession * qof_session_new (void);
 QofBook * qof_session_get_book (QofSession *session);
-/* This horror is to permit the scheme options in
- * src/app-utils/options.scm to read and write the book's KVP (another
- * horror) directly. It should be refactored into book functions that
- * handle the KVP access.
- */
-%inline {
-  KvpFrame *qof_book_get_slots (QofBook *book);
-  extern KvpFrame *qof_instance_get_slots (QofInstance*);
-  KvpFrame *qof_book_get_slots (QofBook *book) {
-       return qof_instance_get_slots (QOF_INSTANCE (book));
-  }
-}
 // TODO: Unroll/remove
 const char *qof_session_get_url (QofSession *session);
 
@@ -236,12 +246,14 @@ Account * gnc_book_get_template_root(QofBook *book);
 %typemap(out) KvpValue * " $result = gnc_kvp_value_ptr_to_scm($1); "
 %typemap(in) GSList *key_path " $1 = gnc_scm_to_gslist_string($input);"
 
-void gnc_kvp_frame_delete_at_path(KvpFrame *frame, GSList *key_path);
-void kvp_frame_set_slot_path_gslist(
-   KvpFrame *frame, const KvpValue *new_value, GSList *key_path);
-KvpValue * kvp_frame_get_slot_path_gslist (KvpFrame *frame, GSList *key_path);
+void qof_book_options_delete (QofBook *book);
+void qof_book_set_option (QofBook *book, KvpValue *new_value, GSList *key_path);
+KvpValue* qof_book_get_option (QofBook *book, GSList *key_path);
 
 %clear GSList *key_path;
+
+const char* qof_book_get_string_option(const QofBook* book, const char* opt_name);
+void qof_book_set_string_option(QofBook* book, const char* opt_name, const char* opt_val);
 
 #if defined(SWIGGUILE)
 %init {
@@ -296,6 +308,8 @@ KvpValue * kvp_frame_get_slot_path_gslist (KvpFrame *frame, GSList *key_path);
     SET_ENUM("QOF-COMPARE-GT");
     SET_ENUM("QOF-COMPARE-GTE");
     SET_ENUM("QOF-COMPARE-NEQ");
+    SET_ENUM("QOF-COMPARE-CONTAINS");
+    SET_ENUM("QOF-COMPARE-NCONTAINS");
 
     SET_ENUM("QOF-NUMERIC-MATCH-ANY");
     SET_ENUM("QOF-NUMERIC-MATCH-CREDIT");
@@ -341,11 +355,14 @@ KvpValue * kvp_frame_get_slot_path_gslist (KvpFrame *frame, GSList *key_path);
     SET_ENUM("TRANS-DATE-POSTED");
     SET_ENUM("TRANS-DESCRIPTION");
     SET_ENUM("TRANS-NUM");
-    
+
     SET_ENUM("KVP-OPTION-PATH");
 
     SET_ENUM("OPTION-SECTION-ACCOUNTS");
     SET_ENUM("OPTION-NAME-TRADING-ACCOUNTS");
+    SET_ENUM("OPTION-NAME-CURRENCY-ACCOUNTING");
+    SET_ENUM("OPTION-NAME-BOOK-CURRENCY");
+    SET_ENUM("OPTION-NAME-DEFAULT-GAINS-POLICY");
     SET_ENUM("OPTION-NAME-AUTO-READONLY-DAYS");
     SET_ENUM("OPTION-NAME-NUM-FIELD-SOURCE");
 
@@ -362,7 +379,16 @@ KvpValue * kvp_frame_get_slot_path_gslist (KvpFrame *frame, GSList *key_path);
     SET_ENUM("GNC-HOW-RND-ROUND");
     SET_ENUM("GNC-HOW-RND-NEVER");
 
-#undefine SET_ENUM
+    SET_ENUM("PRICE-SOURCE-EDIT-DLG");
+    SET_ENUM("PRICE-SOURCE-FQ");
+    SET_ENUM("PRICE-SOURCE-USER-PRICE");
+    SET_ENUM("PRICE-SOURCE-XFER-DLG-VAL");
+    SET_ENUM("PRICE-SOURCE-SPLIT-REG");
+    SET_ENUM("PRICE-SOURCE-STOCK-SPLIT");
+    SET_ENUM("PRICE-SOURCE-TEMP");
+    SET_ENUM("PRICE-SOURCE-INVALID");
+
+#undef SET_ENUM
   }
 
 }

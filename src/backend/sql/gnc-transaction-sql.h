@@ -30,10 +30,12 @@
 #define GNC_TRANSACTION_SQL_H
 
 #include "gnc-backend-sql.h"
+extern "C"
+{
 #include "Transaction.h"
 #include "qof.h"
 #include "Account.h"
-
+}
 void gnc_sql_init_transaction_handler( void );
 
 /**

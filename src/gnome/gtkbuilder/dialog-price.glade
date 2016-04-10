@@ -526,7 +526,7 @@
   <object class="GtkDialog" id="Prices Dialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Price Editor</property>
+    <property name="title" translatable="yes">Price Database</property>
     <property name="default_width">400</property>
     <property name="default_height">400</property>
     <property name="type_hint">normal</property>

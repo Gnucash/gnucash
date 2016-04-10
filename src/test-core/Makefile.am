@@ -23,7 +23,7 @@ libtest_core_la_CPPFLAGS = \
 libtest_core_la_LDFLAGS = \
   -rpath ${exec-prefix}/lib
 
-if BUILDING_FROM_SCM
+if BUILDING_FROM_VCS
 swig-unittest-support-guile.c: unittest-support.i $(top_srcdir)/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src \
@@ -78,10 +78,25 @@ _unittest_support_la_LIBADD = \
   libtest-core.la
 
 endif
-SCM_FILES = unittest-support.scm
 
-gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
-gncmod_DATA = $(SCM_FILES)
+if WITH_GOOGLE_TEST
+if GOOGLE_TEST_LIBS
+noinst_LIBRARIES = libgmock.a
+else
+noinst_LIBRARIES = \
+        libgtest.a \
+        libgmock.a
+nodist_libgtest_a_SOURCES = ${GTEST_SRC}/src/gtest-all.cc
+libgtest_a_CPPFLAGS = ${AM_CPPFLAGS} -I${GTEST_HEADERS} -I${GTEST_SRC}
+endif
+nodist_libgmock_a_SOURCES = ${GMOCK_SRC_PATH}/gmock-all.cc
+libgmock_a_CPPFLAGS = ${libgtest_a_CPPFLAGS} -I${GMOCK_HEADERS} -I${GMOCK_SRC}
+endif
+
+gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash
+gncscmmod_DATA = unittest-support.scm
+
+SCM_FILES = $(gncscmmod_DATA)
 
 .scm-links:
 	$(RM) -rf gnucash
@@ -91,22 +106,38 @@ if GNUCASH_SEPARATE_BUILDDIR
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
-	( cd gnucash; for A in $(SCM_FILES) ; do $(LN_S) -f ../$$A . ; done )
+	( cd gnucash; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
 if ! OS_WIN32
 # Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
+endif
+
+if GNC_HAVE_GUILE_2
+GUILE_COMPILE_ENV = \
+  --library-dir    ${top_builddir}/src/test-core \
+  --library-dir    ${top_builddir}/src/libqof/qof
+
+%.go : %.scm .scm-links $(noinst_LTLIBRARIES)
+	GNC_UNINSTALLED=yes \
+	GNC_BUILDDIR=${top_builddir} \
+	$(shell ${abs_top_srcdir}/src/gnc-test-env.pl --noexports ${GUILE_COMPILE_ENV}) \
+	$(GUILD) compile -o $@ $<
+
+gncscmmodcachedir = ${pkglibdir}/scm/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash
+gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
 endif
 
 clean-local:
 	$(RM) -rf gnucash
 
 noinst_DATA = .scm-links
-CLEANFILES = .scm-links
+CLEANFILES = .scm-links ${gncscmmodcache_DATA}
 
 EXTRA_DIST = \
   $(SCM_FILES) \
   swig-unittest-support-python.c \
   swig-unittest-support-guile.c \
+  unittest_support.py \
   unittest-support.i
 
 MAINTAINERCLEANFILES = \

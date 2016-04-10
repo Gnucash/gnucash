@@ -38,7 +38,7 @@
     stores and use UNIVERSAL TIME internally.  Universal time is the
     'one true time' that is independent of one's location on planet
     Earth.  It is measured in seconds from midnight January 1, 1970
-    in localtime-Grenwich (GMT).  If one wants to display the local
+    in localtime-Greenwich (GMT).  If one wants to display the local
     time, then the display-print routine should make all final
     tweaks to print the local time.   The local time *must not* be
     kept as a numeric value anywhere in the program.   If one wants
@@ -108,10 +108,10 @@ extern const char *gnc_default_strftime_date_format;
 /** Constants *******************************************************/
 /** \brief UTC date format string.
 
-Timezone independent, date and time inclusive, as used in the QSF backend.
+Time zone independent, date and time inclusive, as used in the QSF backend.
 The T and Z characters are from xsd:dateTime format in coordinated universal time, UTC.
 You can reproduce the string from the GNU/Linux command line using the date utility:
-date -u +%Y-%m-%dT%H:M:SZ = 2004-12-12T23:39:11Z The datestring must be timezone independent
+date -u +%Y-%m-%dT%H:M:SZ = 2004-12-12T23:39:11Z The datestring must be time zone independent
 and include all specified fields. Remember to use gmtime() NOT localtime()!
 */
 
@@ -159,8 +159,7 @@ typedef enum
  * versions of Unix. 32-bit time_t overflows at 03:14:07 UTC on
  * Tuesday, 19 January 2038 and so cannot represent dates after that.
  *
- * These functions use GLib's GDateTime internally, and include a
- * workaround for the lack of Win32 support before GLib 2.36.
+ * These functions use boost::date_time internally.
  */
 /** \brief fill out a time struct from a 64-bit time value.
  *  \param secs: Seconds since 00:00:01 UTC 01 January 1970 (negative values
@@ -187,7 +186,7 @@ struct tm* gnc_localtime_r (const time64 *secs, struct tm* time);
 struct tm* gnc_gmtime (const time64 *secs);
 
 /** \brief calculate seconds from the epoch given a time struct
- *  \param time: A struct tm* for the function to fill.
+ *  \param time: A struct tm* containing the date-time information.
  *  The time is understood to be in the current local time zone.
  *  \return Seconds since 00:00:01 UTC 01 January 1970 (negative values
  * are seconds before that moment).
@@ -195,7 +194,7 @@ struct tm* gnc_gmtime (const time64 *secs);
 time64 gnc_mktime (struct tm* time);
 
 /** \brief calculate seconds from the epoch given a time struct
- *  \param time: A struct tm* for the function to fill.
+ *  \param time: A struct tm* containing the date-time information
  *  The time is understood to be utc.
  *  \return Seconds since 00:00:01 UTC 01 January 1970 (negative values
  * are seconds before that moment).
@@ -220,14 +219,6 @@ gchar* gnc_ctime (const time64 *secs);
  */
 time64 gnc_time (time64 *tbuf);
 
-/** \brief get the current utc time
- *  \param A time64* which, if not NULL, will be filled in with the same
- * value as is returned.
- * \return Seconds since 00:00:01 UTC 01 January 1970 (negative values
- * are seconds before that moment)
- */
-time64 gnc_time_utc (time64 *tbuf);
-
 /** \brief Find the difference in seconds between two time values
  *  \param secs1: The first time value, in Seconds since
  * 00:00:01 UTC 01 January 1970 (negative values are seconds before that moment)
@@ -238,24 +229,10 @@ time64 gnc_time_utc (time64 *tbuf);
  */
 gdouble gnc_difftime (const time64 secs1, const time64 secs2);
 
-/** Wrapper for g_date_time_new_from_unix_local() that takes special care on
- * windows to take the local timezone into account. On unix, it just calles the
- * g_date function. */
-GDateTime*
-gnc_g_date_time_new_from_unix_local (time64 time);
-
 /** \brief free a struct tm* created with gnc_localtime() or gnc_gmtime()
  * \param time: The struct tm* to be freed.
  */
 void gnc_tm_free (struct tm* time);
-
-/** \brief Create a GDateTime from a Timespec
- *  \param ts: A local (int64-based) Timespec
- *  \note: GDateTimes use microseconds, not nanoseconds, so in theory we lose precision. In practice, there's no portable way to get either.
- *  \note: Works around the lack of Win32 support in GTimeZone before GLib 2.36.
- *  \return A GDateTime pointer. Free it with g_date_time_unref () when you're done with it.
- */
-GDateTime* gnc_g_date_time_new_from_timespec_local (Timespec tm);
 
 /** \name String / DateFormat conversion. */
 //@{
@@ -280,6 +257,19 @@ Note the reversed return values!
 */
 gboolean gnc_date_string_to_monthformat(const gchar *format_string,
                                         GNCDateMonthFormat *format);
+
+/** \brief print a time64 as a date string per format
+ * \param time
+ * \param format A date format conforming to the strftime format rules.
+ * \return a raw heap-allocated char* which must be freed.
+ */
+char* gnc_print_time64(time64 time, const char* format);
+
+/** Returns a newly allocated date of the current clock time, taken from
+ * time(2). The caller must g_date_free() the object afterwards. */
+GDate* gnc_g_date_new_today (void);
+
+
 // @}
 
 /* Datatypes *******************************************************/
@@ -315,12 +305,12 @@ gboolean timespec_equal(const Timespec *ta, const Timespec *tb);
 /** comparison:  if (ta < tb) -1; else if (ta > tb) 1; else 0; */
 gint      timespec_cmp(const Timespec *ta, const Timespec *tb);
 
-/** difference between ta and tb, results are normalised
+/** difference between ta and tb, results are normalized
  * ie tv_sec and tv_nsec of the result have the same size
  * abs(result.tv_nsec) <= 1000000000 */
 Timespec timespec_diff(const Timespec *ta, const Timespec *tb);
 
-/** absolute value, also normalised */
+/** absolute value, also normalized */
 Timespec timespec_abs(const Timespec *t);
 
 /** convert a timepair on a certain day (localtime) to
@@ -338,10 +328,6 @@ void timespecFromTime64 (Timespec *ts, time64 t );
 /** Turns a Timespec into a time64 */
 time64 timespecToTime64 (Timespec ts);
 
-/** Returns a newly allocated date of the current clock time, taken from
- * time(2). The caller must g_date_free() the object afterwards. */
-GDate* gnc_g_date_new_today (void);
-
 /** Turns a Timespec into a GDate */
 GDate timespec_to_gdate (Timespec ts);
 
@@ -358,15 +344,15 @@ Timespec gnc_dmy2timespec_end (gint day, gint month, gint year);
 /** The gnc_iso8601_to_timespec_gmt() routine converts an ISO-8601 style
  *    date/time string to Timespec.  Please note that ISO-8601 strings
  *    are a representation of Universal Time (UTC), and as such, they
- *    'store' UTC.  To make them human readable, they show timezone
+ *    'store' UTC.  To make them human readable, they show time zone
  *    information along with a local-time string.  But fundamentally,
- *    they *are* UTC.  Thus, thir routine takes a UTC input, and
+ *    they *are* UTC.  Thus, this routine takes a UTC input, and
  *    returns a UTC output.
  *
  *    For example: 1998-07-17 11:00:00.68-0500
  *    is 680 milliseconds after 11 o'clock, central daylight time
- *    It is also 680 millisecs after 16:00:00 hours UTC.
- *    \return The universl time.
+ *    It is also 680 milliseconds after 16:00:00 hours UTC.
+ *    \return The universal time.
  *
  * XXX Caution: this routine does not handle strings that specify
  * times before January 1 1970.
@@ -382,12 +368,12 @@ Timespec gnc_iso8601_to_timespec_gmt(const gchar *);
  *
  *    Please note that ISO-8601 strings are a representation of
  *    Universal Time (UTC), and as such, they 'store' UTC.  To make them
- *    human readable, they show timezone information along with a
+ *    human readable, they show time zone information along with a
  *    local-time string.  But fundamentally, they *are* UTC.  Thus,
  *    this routine takes a UTC input, and returns a UTC output.
  *
- *    The string generated by this routine uses the local timezone
- *    on the machine on which it is executing to create the timestring.
+ *    The string generated by this routine uses the local time zone
+ *    on the machine on which it is executing to create the time string.
  */
 gchar * gnc_timespec_to_iso8601_buff (Timespec ts, gchar * buff);
 
@@ -399,26 +385,13 @@ gchar * gnc_timespec_to_iso8601_buff (Timespec ts, gchar * buff);
  */
 void gnc_timespec2dmy (Timespec ts, gint *day, gint *month, gint *year);
 
-/** The gnc_timezone function returns the number of seconds *west*
- * of UTC represented by the tm argument, adjusted for daylight
- * savings time.
- *
- * This function requires a tm argument returned by localtime or set
- * by mktime. This is a strange function! It requires that localtime
- * or mktime be called before use. Subsequent calls to localtime or
- * mktime *may* invalidate the result! The actual contents of tm *may*
- * be used for both timezone offset and daylight savings time, or only
- * daylight savings time! Timezone stuff under unix is not
- * standardized and is a big mess.
- */
-glong gnc_timezone (const struct tm *tm);
 // @}
 
 /* ------------------------------------------------------------------------ */
 /** \name QofDateFormat functions */
 // @{
 /** The qof_date_format_get routine returns the date format that
- *  the date printing will use when printing a date, and the scaning
+ *  the date printing will use when printing a date, and the scanning
  *  routines will assume when parsing a date.
  * @returns: the one of the enumerated date formats.
  */

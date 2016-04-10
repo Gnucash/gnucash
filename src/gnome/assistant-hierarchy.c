@@ -24,6 +24,11 @@
 
 #include "config.h"
 
+#include <platform.h>
+#if PLATFORM(WINDOWS)
+#include <windows.h>
+#endif
+
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
@@ -31,13 +36,16 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#ifdef PLATFORM_OSX
+#include <Foundation/Foundation.h>
+#endif
+
 #include "gnc-account-merge.h"
 #include "dialog-new-user.h"
 #include "dialog-options.h"
 #include "dialog-utils.h"
 #include "dialog-file-access.h"
 #include "assistant-hierarchy.h"
-#include "assistant-utils.h"
 #include "gnc-amount-edit.h"
 #include "gnc-currency-edit.h"
 #include "gnc-exp-parser.h"
@@ -136,7 +144,7 @@ destroy_hash_helper (gpointer key, gpointer value, gpointer user_data)
 }
 
 static void
-gnc_hierarchy_destroy_cb (GtkObject *obj,   hierarchy_data *data)
+gnc_hierarchy_destroy_cb (GtkWidget *obj,   hierarchy_data *data)
 {
     GHashTable *hash;
 
@@ -183,6 +191,36 @@ set_final_balance (GHashTable *hash, Account *account, gnc_numeric in_balance)
     g_hash_table_insert (hash, account, balance);
 }
 
+#ifdef PLATFORM_OSX
+/* Repeat retrieving the locale from defaults in case it was overridden in
+ * gnucash-bin because it wasn't a supported POSIX locale.
+ */
+static char*
+mac_locale()
+{
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSLocale* locale = [NSLocale currentLocale];
+    NSString* locale_str;
+    char *retval = NULL;
+    @try
+    {
+        locale_str =[[[locale objectForKey: NSLocaleLanguageCode]
+		       stringByAppendingString: @"_"]
+		      stringByAppendingString:
+		      [locale objectForKey: NSLocaleCountryCode]];
+    }
+    @catch (NSException *err)
+    {
+	locale_str = @"_";
+    }
+/* If we didn't get a valid current locale, the string will be just "_" */
+    if ([locale_str isEqualToString: @"_"])
+	locale_str = @"en_US";
+    retval = g_strdup([locale_str UTF8String]);
+    [pool drain];
+    return retval;
+}
+#endif
 static gchar*
 gnc_get_ea_locale_dir(const char *top_dir)
 {
@@ -192,26 +230,31 @@ gnc_get_ea_locale_dir(const char *top_dir)
     struct stat buf;
     int i;
 
-#ifdef HAVE_LC_MESSAGES
-    locale = g_strdup(setlocale(LC_MESSAGES, NULL));
-#else
-# ifdef G_OS_WIN32
-    /* On win32, setlocale() doesn't say anything useful. Use
-       glib's function instead. */
-    locale = g_win32_getlocale();
-    if (!locale)
-    {
-        PWARN ("Couldn't retrieve locale. Falling back to default one.");
-        locale = g_strdup ("C");
-    }
-# else
-    /*
-     * Mac OS X 10.1 and earlier, not only doesn't have LC_MESSAGES
-     * setlocale can sometimes return NULL instead of "C"
+#ifdef PLATFORM_WIN32
+    /* On win32, setlocale() doesn't say anything useful, so we check
+     * g_win32_getlocale(). Unfortunately it checks the value of $LANG first,
+     * and the user might have worked around the absence of sv in gettext's
+     * Microsoft Conversion Array by setting it to "Swedish_Sweden", so first
+     * check that.
      */
-    locale = g_strdup(setlocale(LC_ALL, NULL) ?
-                      setlocale(LC_ALL, NULL) : "C");
-# endif
+    locale = g_getenv("LANG");
+    if (g_strcmp0(locale, "Swedish_Sweden") == 0)
+        locale = g_strdup("sv_SV");
+    else if (g_strcmp0(locale, "Swedish_Finland") == 0)
+        locale =g_strdup("sv_FI");
+    else
+    {
+        locale = g_win32_getlocale();
+        if (!locale)
+        {
+            PWARN ("Couldn't retrieve locale. Falling back to default one.");
+            locale = g_strdup ("C");
+        }
+    }
+#elif defined PLATFORM_OSX
+    locale = mac_locale();
+# else
+    locale = g_strdup(setlocale(LC_MESSAGES, NULL));
 #endif
 
     i = strlen(locale);
@@ -1004,26 +1047,6 @@ on_cancel (GtkAssistant      *gtkassistant,
 }
 
 static void
-finish_book_options_helper(GNCOptionWin * optionwin,
-                          gpointer user_data)
-{
-    GNCOptionDB * options = user_data;
-    QofBook *book = gnc_get_current_book ();
-    gboolean use_split_action_for_num_before =
-        qof_book_use_split_action_for_num_field (book);
-    gboolean use_split_action_for_num_after;
-
-    if (!options) return;
-
-    gnc_option_db_commit (options);
-    qof_book_save_options (book, gnc_option_db_save_to_kvp, options, TRUE);
-    use_split_action_for_num_after =
-        qof_book_use_split_action_for_num_field (book);
-    if (use_split_action_for_num_before != use_split_action_for_num_after)
-        gnc_book_option_num_field_source_change_cb (use_split_action_for_num_after);
-}
-
-static void
 starting_balance_helper (Account *account, hierarchy_data *data)
 {
     gnc_numeric balance;
@@ -1057,7 +1080,7 @@ on_finish (GtkAssistant  *gtkassistant,
 
     /* Set book options based on the user's choices */
     if (data->new_book)
-        finish_book_options_helper(data->optionwin, data->options);
+        gnc_book_options_dialog_apply_helper(data->options);
 
     // delete before we suspend GUI events, and then muck with the model,
     // because the model doesn't seem to handle this correctly.
@@ -1122,7 +1145,7 @@ assistant_instert_book_options_page (hierarchy_data *data)
 
     data->options = gnc_option_db_new_for_type (QOF_ID_BOOK);
     qof_book_load_options (gnc_get_current_book (),
-			   gnc_option_db_load_from_kvp, data->options);
+			   gnc_option_db_load, data->options);
     gnc_option_db_clean (data->options);
 
     data->optionwin = gnc_options_dialog_new_modal (TRUE, _("New Book Options"));
@@ -1168,8 +1191,6 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
     /* If we have a callback, make this window stay on top */
     if (when_completed != NULL)
         gtk_window_set_keep_above (GTK_WINDOW(data->dialog), TRUE);
-
-    gnc_assistant_set_colors (GTK_ASSISTANT (data->dialog));
 
     /* Enable buttons on first and last page. */
     gtk_assistant_set_page_complete (GTK_ASSISTANT (dialog),

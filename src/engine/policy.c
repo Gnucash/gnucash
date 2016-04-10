@@ -42,7 +42,84 @@
 #include "policy.h"
 #include "policy-p.h"
 
+#ifndef SWIG             /* swig doesn't see N_() as a string constant */
+#include <glib/gi18n.h>
+#else
+#define N_(string) string
+#endif
+
+#define FIFO_POLICY            "fifo"
+#define FIFO_POLICY_DESC    N_("First In, First Out")
+#define FIFO_POLICY_HINT    N_("Use oldest lots first.")
+#define LIFO_POLICY            "lifo"
+#define LIFO_POLICY_DESC    N_("Last In, First Out")
+#define LIFO_POLICY_HINT    N_("Use newest lots first.")
+#define AVERAGE_POLICY         "average"
+#define AVERAGE_POLICY_DESC N_("Average")
+#define AVERAGE_POLICY_HINT N_("Average cost of open lots.")
+#define MANUAL_POLICY          "manual"
+#define MANUAL_POLICY_DESC  N_("Manual")
+#define MANUAL_POLICY_HINT  N_("Manually select lots.")
+
 //static QofLogModule log_module = GNC_MOD_LOT;
+
+GList *
+gnc_get_valid_policy_list (void)
+{
+    GList *return_list = NULL;
+    GList *policy_list1 = NULL;
+    GList *policy_list2 = NULL;
+    GList *policy_list3 = NULL;
+    GList *policy_list4 = NULL;
+
+    policy_list1 = g_list_prepend (policy_list1, MANUAL_POLICY_HINT);
+    policy_list1 = g_list_prepend (policy_list1, MANUAL_POLICY_DESC);
+    policy_list1 = g_list_prepend (policy_list1, MANUAL_POLICY);
+    return_list = g_list_prepend (return_list, policy_list1);
+    policy_list2 = g_list_prepend (policy_list2, AVERAGE_POLICY_HINT);
+    policy_list2 = g_list_prepend (policy_list2, AVERAGE_POLICY_DESC);
+    policy_list2 = g_list_prepend (policy_list2, AVERAGE_POLICY);
+    return_list = g_list_prepend (return_list, policy_list2);
+    policy_list3 = g_list_prepend (policy_list3, LIFO_POLICY_HINT);
+    policy_list3 = g_list_prepend (policy_list3, LIFO_POLICY_DESC);
+    policy_list3 = g_list_prepend (policy_list3, LIFO_POLICY);
+    return_list = g_list_prepend (return_list, policy_list3);
+    policy_list4 = g_list_prepend (policy_list4, FIFO_POLICY_HINT);
+    policy_list4 = g_list_prepend (policy_list4, FIFO_POLICY_DESC);
+    policy_list4 = g_list_prepend (policy_list4, FIFO_POLICY);
+    return_list = g_list_prepend (return_list, policy_list4);
+
+    return return_list;
+}
+
+gboolean
+gnc_valid_policy (const gchar *name)
+{
+    GList *list_of_policies = NULL;
+    gboolean ret_val = FALSE;
+
+    if (!name)
+        return ret_val;
+
+    list_of_policies = gnc_get_valid_policy_list();
+    if (!list_of_policies)
+    {
+        return ret_val;
+    }
+    else
+    {
+        GList *l = NULL;
+        for (l = list_of_policies; l != NULL; l = l->next)
+        {
+            GList *policy_list = l->data;
+            if (g_strcmp0(policy_list->data, name) == 0)
+                ret_val = TRUE;
+            g_list_free(policy_list);
+        }
+        g_list_free(list_of_policies);
+    return ret_val;
+    }
+}
 
 static Split *
 DirectionPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot, short reverse)

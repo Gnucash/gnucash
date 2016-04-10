@@ -164,9 +164,7 @@ void gnc_split_reg_size_allocate( GtkWidget *widget,
                                   gpointer user_data );
 
 
-void gnc_split_reg_handle_exchange_cb (GtkWidget *w, gpointer data);
-
-static void gnc_split_reg_class_init( GNCSplitRegClass *class );
+static void gnc_split_reg_class_init( GNCSplitRegClass *klass );
 static void gnc_split_reg_init( GNCSplitReg *gsr );
 static void gnc_split_reg_init2( GNCSplitReg *gsr );
 
@@ -230,10 +228,10 @@ enum gnc_split_reg_signal_enum
 static guint gnc_split_reg_signals[LAST_SIGNAL] = { 0 };
 
 static void
-gnc_split_reg_class_init( GNCSplitRegClass *class )
+gnc_split_reg_class_init( GNCSplitRegClass *klass )
 {
     int i;
-    GtkObjectClass *object_class;
+    GObjectClass *object_class;
     static struct similar_signal_info
     {
         enum gnc_split_reg_signal_enum s;
@@ -264,7 +262,7 @@ gnc_split_reg_class_init( GNCSplitRegClass *class )
         { LAST_SIGNAL, NULL, 0 }
     };
 
-    object_class = (GtkObjectClass*) class;
+    object_class = (GObjectClass*) klass;
 
     for ( i = 0; signals[i].s != INCLUDE_DATE_SIGNAL; i++ )
     {
@@ -291,27 +289,27 @@ gnc_split_reg_class_init( GNCSplitRegClass *class )
     g_assert( i == LAST_SIGNAL );
 
     /* Setup the default handlers. */
-    class->enter_ent_cb    = gsr_default_enter_handler;
-    class->cancel_ent_cb   = gsr_default_cancel_handler;
-    class->delete_ent_cb   = gsr_default_delete_handler;
-    class->reinit_ent_cb   = gsr_default_reinit_handler;
-    class->dup_ent_cb      = gsr_default_dup_handler;
-    class->schedule_ent_cb = gsr_default_schedule_handler;
-    class->expand_ent_cb   = gsr_default_expand_handler;
-    class->blank_cb        = gsr_default_blank_handler;
-    class->jump_cb         = gsr_default_jump_handler;
-    class->cut_cb          = gsr_default_cut_handler;
-    class->cut_txn_cb      = gsr_default_cut_txn_handler;
-    class->copy_cb         = gsr_default_copy_handler;
-    class->copy_txn_cb     = gsr_default_copy_txn_handler;
-    class->paste_cb        = gsr_default_paste_handler;
-    class->paste_txn_cb    = gsr_default_paste_txn_handler;
-    class->void_txn_cb     = gsr_default_void_txn_handler;
-    class->unvoid_txn_cb   = gsr_default_unvoid_txn_handler;
-    class->reverse_txn_cb  = gsr_default_reverse_txn_handler;
+    klass->enter_ent_cb    = gsr_default_enter_handler;
+    klass->cancel_ent_cb   = gsr_default_cancel_handler;
+    klass->delete_ent_cb   = gsr_default_delete_handler;
+    klass->reinit_ent_cb   = gsr_default_reinit_handler;
+    klass->dup_ent_cb      = gsr_default_dup_handler;
+    klass->schedule_ent_cb = gsr_default_schedule_handler;
+    klass->expand_ent_cb   = gsr_default_expand_handler;
+    klass->blank_cb        = gsr_default_blank_handler;
+    klass->jump_cb         = gsr_default_jump_handler;
+    klass->cut_cb          = gsr_default_cut_handler;
+    klass->cut_txn_cb      = gsr_default_cut_txn_handler;
+    klass->copy_cb         = gsr_default_copy_handler;
+    klass->copy_txn_cb     = gsr_default_copy_txn_handler;
+    klass->paste_cb        = gsr_default_paste_handler;
+    klass->paste_txn_cb    = gsr_default_paste_txn_handler;
+    klass->void_txn_cb     = gsr_default_void_txn_handler;
+    klass->unvoid_txn_cb   = gsr_default_unvoid_txn_handler;
+    klass->reverse_txn_cb  = gsr_default_reverse_txn_handler;
 
-    class->help_changed_cb = NULL;
-    class->include_date_cb = NULL;
+    klass->help_changed_cb = NULL;
+    klass->include_date_cb = NULL;
 }
 
 GtkWidget*
@@ -497,49 +495,6 @@ gsr_update_summary_label( GtkWidget *label,
     gtk_label_set_text( GTK_LABEL(label), string );
 }
 
-static GNCPrice *
-account_latest_price (Account *account)
-{
-    QofBook *book;
-    GNCPriceDB *pdb;
-    gnc_commodity *commodity;
-    gnc_commodity *currency;
-
-    if (!account) return NULL;
-    commodity = xaccAccountGetCommodity (account);
-    currency = gnc_default_currency ();
-
-    book = gnc_account_get_book (account);
-    pdb = gnc_pricedb_get_db (book);
-
-    return gnc_pricedb_lookup_latest (pdb, commodity, currency);
-}
-
-static GNCPrice *
-account_latest_price_any_currency (Account *account)
-{
-    QofBook *book;
-    GNCPriceDB *pdb;
-    gnc_commodity *commodity;
-    GList *price_list;
-    GNCPrice *result;
-
-    if (!account) return NULL;
-    commodity = xaccAccountGetCommodity (account);
-
-    book = gnc_account_get_book (account);
-    pdb = gnc_pricedb_get_db (book);
-
-    price_list = gnc_pricedb_lookup_latest_any_currency (pdb, commodity);
-    if (!price_list) return NULL;
-
-    result = gnc_price_clone((GNCPrice *)(price_list->data), book);
-
-    gnc_price_list_destroy(price_list);
-
-    return result;
-}
-
 static
 void
 gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
@@ -548,7 +503,6 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     gnc_commodity * commodity;
     GNCPrintAmountInfo print_info;
     gnc_numeric amount;
-    char string[256];
     Account *leader;
     gboolean reverse;
     gboolean euro;
@@ -585,18 +539,18 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     gsr_update_summary_label( gsr->projectedminimum_label,
                               xaccAccountGetProjectedMinimumBalance,
                               leader, print_info, commodity, reverse, euro );
+    if (gsr->shares_label == NULL && gsr->value_label == NULL)
+        return;
+    amount = xaccAccountGetBalance( leader );
+    if (reverse)
+        amount = gnc_numeric_neg( amount );
 
-    /* Print the summary share amount */
+   /* Print the summary share amount */
     if (gsr->shares_label != NULL)
     {
+        char string[256];
         print_info = gnc_account_print_info( leader, TRUE );
-
-        amount = xaccAccountGetBalance( leader );
-        if (reverse)
-            amount = gnc_numeric_neg( amount );
-
         xaccSPrintAmount( string, amount, print_info );
-
         gnc_set_label_color( gsr->shares_label, amount );
         gtk_label_set_text( GTK_LABEL(gsr->shares_label), string );
     }
@@ -604,86 +558,18 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     /* Print the summary share value */
     if (gsr->value_label != NULL)
     {
-        GNCPrice *price;
+        char string[256];
+        QofBook *book = gnc_account_get_book (leader);
+        GNCPriceDB *pricedb = gnc_pricedb_get_db (book);
+        gnc_commodity *currency = gnc_default_currency ();
+        gnc_numeric currency_value =
+            gnc_pricedb_convert_balance_latest_price(pricedb, amount,
+                                                     commodity, currency);
+        print_info = gnc_commodity_print_info (currency, TRUE);
+        xaccSPrintAmount (string, amount, print_info);
+        gnc_set_label_color (gsr->value_label, amount);
+        gtk_label_set_text (GTK_LABEL (gsr->value_label), string);
 
-        amount = xaccAccountGetBalance (leader);
-        if (reverse) amount = gnc_numeric_neg (amount);
-
-        price = account_latest_price (leader);
-        if (!price)
-        {
-            /* If the balance is zero, then print zero. */
-            if (gnc_numeric_equal(amount, gnc_numeric_zero()))
-            {
-                gnc_commodity *currency = gnc_default_currency ();
-                print_info = gnc_commodity_print_info (currency, TRUE);
-                amount = gnc_numeric_zero ();
-
-                xaccSPrintAmount (string, amount, print_info);
-
-                gnc_set_label_color (gsr->value_label, amount);
-                gtk_label_set_text (GTK_LABEL (gsr->value_label), string);
-            }
-            else
-            {
-                /* else try to do a double-price-conversion :-( */
-                price = account_latest_price_any_currency (leader);
-                if (!price)
-                {
-                    gnc_set_label_color (gsr->value_label, gnc_numeric_zero ());
-                    gtk_label_set_text (GTK_LABEL (gsr->value_label),
-                                        _("<No information>"));
-                }
-                else
-                {
-                    gnc_commodity *currency = gnc_price_get_currency (price);
-                    gnc_commodity *default_currency = gnc_default_currency ();
-                    gnc_numeric currency_amount;
-                    gnc_numeric default_currency_amount;
-
-                    print_info = gnc_commodity_print_info (currency, TRUE);
-
-                    currency_amount =
-                        xaccAccountConvertBalanceToCurrency(leader, amount,
-                                                            commodity, currency);
-                    xaccSPrintAmount (string, currency_amount, print_info);
-
-                    default_currency_amount =
-                        xaccAccountConvertBalanceToCurrency(leader, amount,
-                                                            commodity,
-                                                            default_currency);
-                    if (!gnc_numeric_zero_p(default_currency_amount))
-                    {
-                        strcat( string, " / " );
-                        print_info = gnc_commodity_print_info (default_currency, TRUE);
-                        xaccSPrintAmount( string + strlen( string ), default_currency_amount,
-                                          print_info);
-                    }
-
-                    gnc_set_label_color (gsr->value_label, amount);
-                    gtk_label_set_text (GTK_LABEL (gsr->value_label), string);
-
-                    gnc_price_unref (price);
-                }
-            }
-        }
-        else
-        {
-            gnc_commodity *currency = gnc_price_get_currency (price);
-
-            print_info = gnc_commodity_print_info (currency, TRUE);
-
-            amount = gnc_numeric_mul (amount, gnc_price_get_value (price),
-                                      gnc_commodity_get_fraction (currency),
-                                      GNC_HOW_RND_ROUND_HALF_UP);
-
-            xaccSPrintAmount (string, amount, print_info);
-
-            gnc_set_label_color (gsr->value_label, amount);
-            gtk_label_set_text (GTK_LABEL (gsr->value_label), string);
-
-            gnc_price_unref (price);
-        }
     }
 }
 
@@ -1103,7 +989,7 @@ gsr_default_associate_handler_location( GNCSplitReg *gsr, gpointer data )
                                      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
                                      NULL);
 
-    content_area = GTK_DIALOG (dialog)->vbox;
+    content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
     // add a label
     label = gtk_label_new ("Please enter URL:");
@@ -1463,8 +1349,8 @@ gsr_default_expand_handler( GNCSplitReg *gsr, gpointer data )
 
     /* These should all be in agreement. */
     activeCount =
-        ( ( GTK_CHECK_MENU_ITEM(gsr->split_menu_check)->active ? 1 : -1 )
-          + ( GTK_CHECK_MENU_ITEM(gsr->split_popup_check)->active ? 1 : -1 )
+        ( ( gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(gsr->split_menu_check)) ? 1 : -1 )
+          + ( gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(gsr->split_popup_check)) ? 1 : -1 )
           + ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(gsr->split_button) )
               ? 1 : -1 ) );
 
@@ -1612,7 +1498,7 @@ create_balancing_transaction(QofBook *book, Account *account,
     // fill Transaction
     xaccTransSetCurrency(trans, gnc_account_or_default_currency(account, NULL));
     xaccTransSetDatePostedSecsNormalized(trans, statement_date);
-    xaccTransSetDescription(trans, _("Balancing entry from reconcilation"));
+    xaccTransSetDescription(trans, _("Balancing entry from reconciliation"));
     /* We also must set a new DateEntered on the new entry
      * because otherwise the ordering is not deterministic */
     xaccTransSetDateEnteredSecs(trans, gnc_time(NULL));
@@ -1690,7 +1576,7 @@ gnc_split_reg_style_ledger_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg *gsr = data;
 
-    if (!GTK_CHECK_MENU_ITEM(w)->active)
+    if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w)))
         return;
 
     gnc_split_reg_change_style (gsr, REG_STYLE_LEDGER);
@@ -1701,7 +1587,7 @@ gnc_split_reg_style_auto_ledger_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg *gsr = data;
 
-    if (!GTK_CHECK_MENU_ITEM(w)->active)
+    if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w)))
         return;
 
     gnc_split_reg_change_style (gsr, REG_STYLE_AUTO_LEDGER);
@@ -1712,7 +1598,7 @@ gnc_split_reg_style_journal_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg *gsr = data;
 
-    if (!GTK_CHECK_MENU_ITEM(w)->active)
+    if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w)))
         return;
 
     gnc_split_reg_change_style (gsr, REG_STYLE_JOURNAL);
@@ -1725,7 +1611,7 @@ gnc_split_reg_double_line_cb (GtkWidget *w, gpointer data)
     SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
     gboolean use_double_line;
 
-    use_double_line = GTK_CHECK_MENU_ITEM(w)->active;
+    use_double_line = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w));
     if ( use_double_line == reg->use_double_line )
         return;
 
@@ -1885,22 +1771,12 @@ gnc_split_reg_sort_notes_cb(GtkWidget *w, gpointer data)
 }
 
 
-void 
+void
 gnc_split_reg_set_sort_reversed(GNCSplitReg *gsr, gboolean rev)
 {
   Query *query = gnc_ledger_display_get_query( gsr->ledger );
   qof_query_set_sort_increasing (query, rev, rev, rev);
   gnc_ledger_display_refresh( gsr->ledger );
-}
-
-void
-gnc_split_reg_handle_exchange_cb (GtkWidget *w, gpointer data)
-{
-    GNCSplitReg *gsr = data;
-    SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
-
-    /* XXX Ignore the return value -- we don't care if this succeeds */
-    (void)gnc_split_register_handle_exchange (reg, TRUE);
 }
 
 static void
@@ -2110,7 +1986,7 @@ gnc_split_reg_get_placeholder( GNCSplitReg *gsr )
 
     switch (reg->type)
     {
-    case GENERAL_LEDGER:
+    case GENERAL_JOURNAL:
     case INCOME_LEDGER:
     case PORTFOLIO_LEDGER:
     case SEARCH_LEDGER:

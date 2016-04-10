@@ -24,7 +24,13 @@
 #define GNUCASH_ITEM_LIST_H
 
 #include <libgnomecanvas/libgnomecanvas.h>
-
+/** @ingroup Register
+ * @addtogroup Gnome
+ * @{
+ */
+/** @file gnucash-item-list.h
+ * @brief Public Declarations for GncItemList class
+ */
 #define GNC_TYPE_ITEM_LIST     (gnc_item_list_get_type ())
 #define GNC_ITEM_LIST(o)       (G_TYPE_CHECK_INSTANCE_CAST((o), GNC_TYPE_ITEM_LIST, GncItemList))
 #define GNC_ITEM_LIST_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_ITEM_LIST, GncItemListClass))
@@ -79,7 +85,5 @@ void gnc_item_list_show_selected (GncItemList *item_list);
 int gnc_item_list_autosize (GncItemList *item_list);
 
 
-
+/** @} */
 #endif /* GNUCASH_ITEM_LIST_H */
-
-

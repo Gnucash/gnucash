@@ -79,7 +79,7 @@
             }
 
 static QofLogModule log_module = G_LOG_DOMAIN; //G_LOG_BUSINESS;
-
+static char * un_escape(char *str);
 bi_import_result
 gnc_bi_import_read_file (const gchar * filename, const gchar * parser_regexp,
                          GtkListStore * store, guint max_rows,
@@ -90,8 +90,9 @@ gnc_bi_import_read_file (const gchar * filename, const gchar * parser_regexp,
     FILE *f;
 
     // regexp
-    char *line;
-    gchar *line_utf8, *temp;
+    char *line = NULL;
+    gchar *line_utf8 = NULL;
+    gchar *temp = NULL;
     GMatchInfo *match_info;
     GError *err;
     GRegex *regexpat;
@@ -233,14 +234,15 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
 {
     GtkTreeIter iter;
     gboolean valid, row_deleted, row_fixed;
-    gchar *id, *date_opened, *date_posted, *due_date, *owner_id, *date, *quantity, *price;
+    gchar *id = NULL, *date_opened = NULL, *date_posted = NULL, *due_date = NULL,
+        *owner_id = NULL, *date = NULL, *quantity = NULL, *price = NULL;
     GString *prev_id, *prev_date_opened, *prev_date_posted, *prev_owner_id, *prev_date;	// needed to fix multi line invoices
     guint dummy;
     gint row = 1;
     const gchar* date_format_string = qof_date_format_get_string (qof_date_format_get()); // Get the user set date format string
-    
-    
-    //date_format_string = qof_date_format_get_string (qof_date_format_get());	
+
+
+    //date_format_string = qof_date_format_get_string (qof_date_format_get());
 
     DEBUG("date_format_string: %s",date_format_string);
     // allow the call to this function with only GtkListeStore* specified
@@ -296,7 +298,7 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                                     row, id);
         }
         else
-        {   // TODO: If id is empty get the next one in the series.  Bug 731105 
+        {   // TODO: If id is empty get the next one in the series.  Bug 731105
             if (strlen (id) == 0)
             {
                 // no invoice id specified
@@ -384,9 +386,9 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                 gtk_list_store_set (store, &iter, DUE_DATE,
                                         date_posted, -1);
                 row_fixed = TRUE;
-                
+
             }
-            
+
             // due_date is valid
             */
             if (strlen (quantity) == 0)
@@ -395,7 +397,7 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                 gtk_list_store_set (store, &iter, QUANTITY, "1", -1);
                 row_fixed = TRUE;
             }
-            
+
 
             // quantity is valid
 
@@ -511,11 +513,12 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
 {
     gboolean valid;
     GtkTreeIter iter;
-    gchar *id, *date_opened, *owner_id, *billing_id, *notes;
-    gchar *date, *desc, *action, *account, *quantity, *price, *disc_type,
-          *disc_how, *discount, *taxable, *taxincluded, *tax_table;
-    gchar *date_posted, *due_date, *account_posted, *memo_posted,
-          *accumulatesplits;
+    gchar *id = NULL, *date_opened = NULL, *owner_id = NULL, *billing_id = NULL, *notes = NULL;
+    gchar *date = NULL, *desc = NULL, *action = NULL, *account = NULL, *quantity = NULL,
+          *price = NULL, *disc_type = NULL, *disc_how = NULL, *discount = NULL, *taxable = NULL,
+          *taxincluded = NULL, *tax_table = NULL;
+    gchar *date_posted = NULL, *due_date = NULL, *account_posted = NULL, *memo_posted = NULL,
+          *accumulatesplits = NULL;
     guint dummy;
     GncInvoice *invoice;
     GncEntry *entry;
@@ -530,7 +533,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
     gchar *new_id = NULL;
     gint64 denom = 0;
     gnc_commodity *currency;
-    
+
     // these arguments are needed
     g_return_if_fail (store && book);
     // logic of this function only works for bills or invoices
@@ -623,6 +626,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                 gncInvoiceSetDateOpened (invoice, now_timespec);
             }
             gncInvoiceSetBillingID (invoice, billing_id ? billing_id : "");
+            notes = un_escape(notes);
             gncInvoiceSetNotes (invoice, notes ? notes : "");
             gncInvoiceSetActive (invoice, TRUE);
             //if (g_ascii_strcasecmp(type,"INVOICE"))gncInvoiceSetBillTo( invoice, billto );
@@ -707,19 +711,26 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
         }
         timespecFromTime64 (&today, gnc_time (NULL));	// set today to the current date
         gncEntrySetDateEntered (entry, today);
+        // Remove escaped quotes
+        desc = un_escape(desc);
+        notes = un_escape(notes);
         gncEntrySetDescription (entry, desc);
         gncEntrySetAction (entry, action);
-
+        value = gnc_numeric_zero(); 
         gnc_exp_parser_parse (quantity, &value, NULL);
+        // Need to set the denom appropriately else we get stupid rounding errors.
+        value = gnc_numeric_convert (value, denom * 100, GNC_HOW_RND_NEVER);
+        //DEBUG("qty = %s",gnc_num_dbg_to_string(value));
         gncEntrySetQuantity (entry, value);
         acc = gnc_account_lookup_for_register (gnc_get_current_root_account (),
                                                account);
-        
+
         if (g_ascii_strcasecmp (type, "BILL") == 0)
         {
             gncEntrySetBillAccount (entry, acc);
+            value = gnc_numeric_zero();
             gnc_exp_parser_parse (price, &value, NULL);
-            value = gnc_numeric_convert (value, denom, GNC_HOW_RND_NEVER);
+            value = gnc_numeric_convert (value, denom * 100, GNC_HOW_RND_NEVER);
             gncEntrySetBillPrice (entry, value);
             gncEntrySetBillTaxable (entry, text2bool (taxable));
             gncEntrySetBillTaxIncluded (entry, text2bool (taxincluded));
@@ -731,14 +742,17 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
         {
             gncEntrySetNotes (entry, notes);
             gncEntrySetInvAccount (entry, acc);
+            value = gnc_numeric_zero();
             gnc_exp_parser_parse (price, &value, NULL);
-            value = gnc_numeric_convert (value, denom, GNC_HOW_RND_NEVER);
+            value = gnc_numeric_convert (value, denom * 100, GNC_HOW_RND_NEVER);
+            //DEBUG("price = %s",gnc_num_dbg_to_string(value));
             gncEntrySetInvPrice (entry, value);
             gncEntrySetInvTaxable (entry, text2bool (taxable));
             gncEntrySetInvTaxIncluded (entry, text2bool (taxincluded));
             gncEntrySetInvTaxTable (entry, gncTaxTableLookupByName (book, tax_table));
+            value = gnc_numeric_zero();
             gnc_exp_parser_parse (discount, &value, NULL);
-            value = gnc_numeric_convert (value, denom, GNC_HOW_RND_NEVER);
+            value = gnc_numeric_convert (value, denom * 100, GNC_HOW_RND_NEVER);
             gncEntrySetInvDiscount (entry, value);
             gncEntrySetInvDiscountType (entry, text2disc_type (disc_type));
             gncEntrySetInvDiscountHow (entry, text2disc_how (disc_how));
@@ -748,8 +762,8 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
         valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
 
         // handle auto posting of invoices
-    
-        
+
+
         if (valid)
             gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, ID, &new_id, -1);
         if (g_strcmp0 (id, new_id) != 0)
@@ -779,8 +793,8 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             }
 
         }
-        
-        
+
+
     }
     // cleanup
     g_free (new_id);
@@ -806,5 +820,36 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
     g_free (account_posted);
     g_free (memo_posted);
     g_free (accumulatesplits);
-    
+
+}
+
+/* Change any escaped quotes ("") to (")
+ * @param char* String to be modified
+ * @return char* Modified string.
+*/
+static char * un_escape(char *str)
+{
+    gchar quote = '"';
+    gchar *newStr = NULL;
+    int n = 0;
+    newStr = g_malloc(strlen(str)+1); // This must be freed in the calling code.
+    while(*str != '\0')
+    {
+        if(*str == quote)
+        {
+            str++;
+            if(*str == quote)
+            {
+                newStr[n] = quote;
+            }
+        }
+        else
+        {
+            newStr[n] = *str;
+        }
+            str++;
+            n++;
+        }
+	newStr[n] = '\0'; //ending the character array
+    return newStr;
 }

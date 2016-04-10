@@ -30,8 +30,10 @@
 #define GNC_ACCOUNT_SQL_H
 
 #include "gnc-backend-sql.h"
+extern "C"
+{
 #include "qof.h"
-
+}
 void gnc_sql_init_account_handler( void );
 gboolean gnc_sql_save_account( GncSqlBackend* be, QofInstance* inst );
 

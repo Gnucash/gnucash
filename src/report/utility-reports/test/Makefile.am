@@ -16,6 +16,7 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/report/report-system \
   --guile-load-dir ${top_builddir}/src/report/utility-reports \
 \
+  --library-dir    ${top_builddir}/src/report/report-system \
   --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/app-utils \
@@ -28,7 +29,7 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
 TESTS_ENVIRONMENT = \
   GUILE_WARN_DEPRECATED=no \
   GUILE="${GUILE}" \
-  GNC_BUILDDIR=`\cd ${top_builddir} && pwd` \
-  $(shell ${top_builddir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
+  GNC_BUILDDIR="${abs_top_builddir}" \
+  $(shell ${abs_top_srcdir}/src/gnc-test-env.pl --noexports ${GNC_TEST_DEPS})
 
 EXTRA_DIST = test-load-module

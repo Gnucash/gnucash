@@ -46,6 +46,7 @@
 #include "gnc-prefs.h"
 #include "gnc-prefs-utils.h"
 #include "gnc-gsettings.h"
+#include "gnc-report.h"
 #include "gnc-main-window.h"
 #include "gnc-splash.h"
 #include "gnc-gnome-utils.h"
@@ -97,7 +98,7 @@ static GOptionEntry options[] =
 
     {
         "debug", '\0', 0, G_OPTION_ARG_NONE, &debugging,
-        N_("Enable debugging mode: increasing logging to provide deep detail."), NULL
+        N_("Enable debugging mode: provide deep detail in the logs.\nThis is equivalent to: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""), NULL
     },
 
     {
@@ -107,7 +108,7 @@ static GOptionEntry options[] =
 
     {
         "log", '\0', 0, G_OPTION_ARG_STRING_ARRAY, &log_flags,
-        N_("Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,error}\""),
+        N_("Log level overrides, of the form \"modulename={debug,info,warn,crit,error}\"\nExamples: \"--log qof=debug\" or \"--log gnc.backend.file.sx=info\"\nThis can be invoked multiple times."),
         NULL
     },
 
@@ -161,62 +162,9 @@ gnc_print_unstable_message(void)
 
 #ifdef MAC_INTEGRATION
 static void
-set_mac_locale()
+mac_set_currency_locale(NSLocale *locale, NSString *locale_str)
 {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
-    NSArray *languages = [defs objectForKey: @"AppleLanguages"];
-    const gchar *langs = NULL;
-    NSLocale *locale = [NSLocale currentLocale];
-    NSString *locale_str;
-    @try
-    {
-	locale_str = [[[locale objectForKey: NSLocaleLanguageCode]
-		       stringByAppendingString: @"_"]
-		      stringByAppendingString:
-		      [locale objectForKey: NSLocaleCountryCode]];
-    }
-    @catch (NSException *err)
-    {
-	PWARN("Locale detection raised error %s: %s. "
-	      "Check that your locale settings in "
-	      "System Preferences>Languages & Text are set correctly.",
-	      [[err name] UTF8String], [[err reason] UTF8String]);
-	locale_str = @"_";
-    }
-/* If we didn't get a valid current locale, the string will be just "_" */
-    if ([locale_str isEqualToString: @"_"])
-	locale_str = @"en_US";
-
-    if (!setlocale(LC_ALL, [locale_str UTF8String]))
-    {
-	NSArray *all_locales = [NSLocale availableLocaleIdentifiers];
-	NSEnumerator *locale_iter = [all_locales objectEnumerator];
-	NSString *this_locale, *new_locale = nil;
-	NSString *lang = [locale objectForKey: NSLocaleLanguageCode];
-	PWARN("Apple Locale is set to a value %s not supported"
-	      " by the C runtime", [locale_str UTF8String]);
-	while ((this_locale = (NSString*)[locale_iter nextObject]))
-	    if ([[[NSLocale componentsFromLocaleIdentifier: this_locale]
-		  objectForKey: NSLocaleLanguageCode]
-		 isEqualToString: lang] &&
-		setlocale (LC_ALL, [this_locale UTF8String]))
-	    {
-		new_locale = this_locale;
-		break;
-	    }
-	if (new_locale)
-	    locale_str = new_locale;
-	else
-	{
-	    locale_str = @"en_US";
-	    setlocale(LC_ALL, [locale_str UTF8String]);
-	}
-	PWARN("Using %s instead.", [locale_str UTF8String]);
-    }
-    if (g_getenv("LANG") == NULL)
-	g_setenv("LANG", [locale_str UTF8String], TRUE);
-/* If the currency doesn't match the base locale, we need to find a locale that does match, because setlocale won't know what to do with just a currency identifier. */
+    /* If the currency doesn't match the base locale, we need to find a locale that does match, because setlocale won't know what to do with just a currency identifier. */
     if (![[locale objectForKey: NSLocaleCurrencyCode] isEqualToString:
 	  [[[NSLocale alloc] initWithLocaleIdentifier: locale_str] objectForKey: NSLocaleCurrencyCode]]) {
 	NSArray *all_locales = [NSLocale availableLocaleIdentifiers];
@@ -240,49 +188,149 @@ set_mac_locale()
 	if (money_locale)
 	    setlocale(LC_MONETARY, [money_locale UTF8String]);
     }
+}
+/* The locale that we got from AppKit isn't a supported POSIX one, so we need to
+ * find something close. First see if we can find another locale for the
+ * country; failing that, try the language. Ultimately fall back on en_US.
+ */
+static NSString*
+mac_find_close_country(NSString *locale_str, NSString *country_str,
+                       NSString *lang_str)
+{
+    NSArray *all_locales = [NSLocale availableLocaleIdentifiers];
+    NSEnumerator *locale_iter = [all_locales objectEnumerator];
+    NSString *this_locale, *new_locale = nil;
+    PWARN("Apple Locale is set to a value %s not supported"
+          " by the C runtime", [locale_str UTF8String]);
+    while ((this_locale = (NSString*)[locale_iter nextObject]))
+        if ([[[NSLocale componentsFromLocaleIdentifier: this_locale]
+              objectForKey: NSLocaleCountryCode]
+             isEqualToString: country_str] &&
+            setlocale (LC_ALL, [this_locale UTF8String]))
+        {
+            new_locale = this_locale;
+            break;
+        }
+    if (new_locale)
+        locale_str = new_locale;
+    else
+        while ((this_locale = (NSString*)[locale_iter nextObject]))
+            if ([[[NSLocale componentsFromLocaleIdentifier: this_locale]
+                  objectForKey: NSLocaleLanguageCode]
+                 isEqualToString: lang_str] &&
+                setlocale (LC_ALL, [this_locale UTF8String]))
+            {
+                new_locale = this_locale;
+                break;
+            }
+    if (new_locale)
+        locale_str = new_locale;
+    else
+    {
+        locale_str = @"en_US";
+        setlocale(LC_ALL, [locale_str UTF8String]);
+    }
+    PWARN("Using %s instead.", [locale_str UTF8String]);
+    return locale_str;
+}
+
+/* Language subgroups (e.g., US English) are reported in the form "ll-SS"
+ * (e.g. again, "en-US"), not what gettext wants. We convert those to
+ * old-style locales, which is easy for most cases. There are two where it
+ * isn't, though: Simplified Chinese (zh-Hans) and traditional Chinese
+ * (zh-Hant), which are normally assigned the locales zh_CN and zh_TW,
+ * respectively. Those are handled specially.
+ */
+static NSString*
+mac_convert_complex_language(NSString* this_lang)
+{
+    NSArray *elements = [this_lang componentsSeparatedByString: @"-"];
+    if ([elements count] == 1)
+        return this_lang;
+    if ([[elements objectAtIndex: 0] isEqualToString: @"zh"]) {
+        if ([[elements objectAtIndex: 1] isEqualToString: @"Hans"])
+            this_lang = @"zh_CN";
+        else
+            this_lang = @"zh_TW";
+    }
+    else
+        this_lang = [elements componentsJoinedByString: @"_"];
+    return this_lang;
+}
+
+static void
+mac_set_languages(NSArray* languages, NSString *lang_str)
+{
+    /* Process the language list. */
+
+    const gchar *langs = NULL;
+    NSEnumerator *lang_iter = [languages objectEnumerator];
+    NSArray *new_languages = [NSArray array];
+    NSString *this_lang = NULL;
+    while ((this_lang = [lang_iter nextObject])) {
+        this_lang = [this_lang stringByTrimmingCharactersInSet:
+                     [NSCharacterSet characterSetWithCharactersInString: @"\""]];
+        this_lang = mac_convert_complex_language(this_lang);
+        new_languages = [new_languages arrayByAddingObject: this_lang];
+/* If it's an English language, add the "C" locale after it so that
+ * any messages can default to it */
+        if ( [this_lang containsString: @"en"])
+            new_languages = [new_languages arrayByAddingObject: @"C"];
+        if (![new_languages containsObject: lang_str]) {
+            NSArray *temp_array = [NSArray arrayWithObject: lang_str];
+            new_languages = [temp_array arrayByAddingObjectsFromArray: new_languages];
+        }
+        langs = [[new_languages componentsJoinedByString:@":"] UTF8String];
+    }
+    if (langs && strlen(langs) > 0)
+    {
+        PWARN("Language list: %s", langs);
+        g_setenv("LANGUAGE", langs, TRUE);
+    }
+}
+
+static void
+set_mac_locale()
+{
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
+    NSLocale *locale = [NSLocale currentLocale];
+    NSString *lang_str, *country_str, *locale_str;
+    NSArray *languages = [[defs arrayForKey: @"AppleLanguages"] retain];
+    @try
+    {
+        lang_str = [locale objectForKey: NSLocaleLanguageCode];
+        country_str = [locale objectForKey: NSLocaleCountryCode];
+	locale_str = [[lang_str stringByAppendingString: @"_"]
+		      stringByAppendingString: country_str];
+    }
+    @catch (NSException *err)
+    {
+	PWARN("Locale detection raised error %s: %s. "
+	      "Check that your locale settings in "
+	      "System Preferences>Languages & Text are set correctly.",
+	      [[err name] UTF8String], [[err reason] UTF8String]);
+	locale_str = @"_";
+    }
+/* If we didn't get a valid current locale, the string will be just "_" */
+    if ([locale_str isEqualToString: @"_"])
+	locale_str = @"en_US";
+
+    lang_str = mac_convert_complex_language(lang_str);
+    if (!setlocale(LC_ALL, [locale_str UTF8String]))
+        locale_str =  mac_find_close_country(locale_str, country_str, lang_str);
+    if (g_getenv("LANG") == NULL)
+	g_setenv("LANG", [locale_str UTF8String], TRUE);
+    mac_set_currency_locale(locale, locale_str);
 /* Now call gnc_localeconv() to force creation of the app locale
  * before another call to setlocale messes it up. */
     gnc_localeconv ();
-/* Process the language list.
- *
- * Language subgroups (e.g., US English) are reported in the form
- * "ll-SS" (e.g. again, "en-US"), not what gettext wants. We convert
- * those to old-style locales, which is easy for most cases. There are
- * two where it isn't, though: Simplified Chinese (zh-Hans) and
- * traditional Chinese (zh-Hant), which are normally assigned the
- * locales zh_CN and zh_TW, respectively. Those are handled
- * specially.*/
-    if ([languages count] > 0) {
-	NSEnumerator *lang_iter = [languages objectEnumerator];
-	NSString *this_lang;
-	NSArray *elements;
-	NSArray *new_languages = [NSArray array];
-	while ((this_lang = [lang_iter nextObject])) {
-	    this_lang = [this_lang stringByTrimmingCharactersInSet:
-			 [NSCharacterSet characterSetWithCharactersInString:
-			  @"\""]];
-	    elements = [this_lang componentsSeparatedByString: @"-"];
-	    if ([elements count] > 1) {
-		if ([[elements objectAtIndex: 0] isEqualToString: @"zh"]) {
-		    if ([[elements objectAtIndex: 1] isEqualToString: @"Hans"])
-			this_lang = @"zh_CN";
-		    else
-			this_lang = @"zh_TW";
-		}
-		else
-		  this_lang = [elements componentsJoinedByString: @"_"];
-	    }
-	    new_languages = [new_languages arrayByAddingObject: this_lang];
-/* If it's an English language, add the "C" locale after it so that
- * any messages can default to it */
-	    if ( [[elements objectAtIndex: 0] isEqualToString: @"en"])
-		new_languages = [new_languages arrayByAddingObject: @"C"];
-
-	}
-	langs = [[new_languages componentsJoinedByString:@":"] UTF8String];
-    }
-    if (langs && strlen(langs) > 0)
-	g_setenv("LANGUAGE", langs, TRUE);
+    /* Process the languages, including the one from the Apple locale. */
+    if ([languages count] > 0)
+        mac_set_languages(languages, lang_str);
+    else
+        g_setenv("LANGUAGE", [lang_str UTF8String], TRUE);
+    [languages release];
     [pool drain];
 }
 #endif /* MAC_INTEGRATION */
@@ -347,7 +395,7 @@ load_user_config(void)
     };
     static const gchar *saved_report_files[] =
     {
-        "saved-reports-2.4", "saved-reports-2.0", NULL
+        SAVED_REPORTS_FILE, SAVED_REPORTS_FILE_OLD_REV, NULL
     };
     static const gchar *stylesheet_files[] = { "stylesheets-2.0", NULL};
     static int is_user_config_loaded = FALSE;
@@ -612,6 +660,8 @@ inner_main (void *closure, int argc, char **argv)
         gnc_destroy_splash_screen();
         gnc_ui_new_user_dialog();
     }
+    /* Ensure temporary preferences are temporary */
+    gnc_prefs_reset_group (GNC_PREFS_GROUP_WARNINGS_TEMP);
 
     gnc_destroy_splash_screen();
     gnc_main_window_show_all_windows();

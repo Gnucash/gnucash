@@ -2,6 +2,13 @@
 <interface>
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy project-wide -->
+  <object class="GtkAdjustment" id="days_in_adj">
+    <property name="lower">1</property>
+    <property name="upper">180</property>
+    <property name="value">7</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkListStore" id="liststore_printinvoice">
     <columns>
       <!-- column-name item -->
@@ -34,36 +41,6 @@
         <property name="n_rows">14</property>
         <property name="n_columns">4</property>
         <property name="column_spacing">12</property>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
         <child>
           <placeholder/>
         </child>
@@ -144,9 +121,6 @@
           </packing>
         </child>
         <child>
-          <placeholder/>
-        </child>
-        <child>
           <object class="GtkLabel" id="label15">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -214,6 +188,9 @@
             <property name="x_options">GTK_FILL</property>
             <property name="y_options"/>
           </packing>
+        </child>
+        <child>
+          <placeholder/>
         </child>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.business.invoice/tax-included">
@@ -341,9 +318,6 @@
           <placeholder/>
         </child>
         <child>
-          <placeholder/>
-        </child>
-        <child>
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -359,32 +333,8 @@
           </packing>
         </child>
         <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
           <object class="GtkCheckButton" id="pref/dialogs.business.invoice/auto-pay">
-            <property name="label" translatable="yes">Auto pay on post_ing</property>
+            <property name="label" translatable="yes" comments="See the tooltip &quot;At post time...&quot; for details.">_Process payments on posting</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -401,17 +351,8 @@
           </packing>
         </child>
         <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
           <object class="GtkCheckButton" id="pref/dialogs.business.bill/auto-pay">
-            <property name="label" translatable="yes">Auto _pay on posting</property>
+            <property name="label" translatable="yes" comments="See the tooltip &quot;At post time...&quot; for details.">Pro_cess payments on posting</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -429,12 +370,5 @@
         </child>
       </object>
     </child>
-  </object>
-  <object class="GtkAdjustment" id="days_in_adj">
-    <property name="lower">1</property>
-    <property name="upper">180</property>
-    <property name="value">7</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
   </object>
 </interface>

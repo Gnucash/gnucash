@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
       Contas de Aposentadoria
@@ -7,7 +7,7 @@
       Contas de aposentadoria com subcontas de investimentos relacionados
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Deverá selecionar este conjunto de contas caso tenha contas de aposentadoria (ações, obrigações, fundos de investimento, fundos de índices).
+    DeverÃ¡ selecionar este conjunto de contas caso tenha contas de aposentadoria (aÃ§Ãµes, obrigaÃ§Ãµes, fundos de investimento, fundos de Ã­ndices).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -49,42 +49,42 @@
   <act:slots>
     <slot>
       <slot:key>notas</slot:key>
-      <slot:value type="string">fundo de pensões ou outra aposentadoria</slot:value>
+      <slot:value type="string">fundo de pensÃµes ou outra aposentadoria</slot:value>
     </slot>
   </act:slots>
   <act:parent type="new">64cf99f6bafe0a539a5941ea713bdfcd</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Obrigações</act:name>
+  <act:name>ObrigaÃ§Ãµes</act:name>
   <act:id type="new">9053199c1da747555d12272f48c719fd</act:id>
   <act:type>STOCK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
   </act:commodity>
-  <act:description>Obrigações</act:description>
+  <act:description>ObrigaÃ§Ãµes</act:description>
   <act:parent type="new">4173f3047238f4b5595b11d6161b2f48</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ações</act:name>
+  <act:name>AÃ§Ãµes</act:name>
   <act:id type="new">9bf53e9580991e323b297999fddff988</act:id>
   <act:type>STOCK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
   </act:commodity>
-  <act:description>Ações</act:description>
+  <act:description>AÃ§Ãµes</act:description>
   <act:parent type="new">4173f3047238f4b5595b11d6161b2f48</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Índice de Mercado</act:name>
+  <act:name>Ãndice de Mercado</act:name>
   <act:id type="new">2326b032fe4e8f434159310fccf17091</act:id>
   <act:type>MUTUAL</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>BRL</cmdty:id>
   </act:commodity>
-  <act:description>Índice de Mercado</act:description>
+  <act:description>Ãndice de Mercado</act:description>
   <act:parent type="new">4173f3047238f4b5595b11d6161b2f48</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

@@ -1002,6 +1002,11 @@ RESTART:
         g_free ( message );
     }
 
+    // Convert imap mappings from account full name to guid strings
+    qof_event_suspend();
+    gnc_account_imap_convert_bayes (gnc_get_current_book());
+    qof_event_resume();
+
     return TRUE;
 }
 
@@ -1091,6 +1096,37 @@ gnc_file_export (void)
     LEAVE (" ");
 }
 
+/* Prevent the user from storing or exporting data files into the settings
+ * directory.
+ */
+static gboolean
+check_file_path (const char *path)
+{
+    /* Remember the directory as the default. */
+     gchar *dir = g_path_get_dirname(path);
+     const gchar *dotgnucash = gnc_dotgnucash_dir();
+     char *dirpath = dir;
+
+     /* Prevent user from storing file in GnuCash' private configuration
+      * directory (~/.gnucash by default in linux, but can be overridden)
+      */
+     while (strcmp(dir = g_path_get_dirname(dirpath), dirpath) != 0)
+     {
+         if (strcmp(dirpath, dotgnucash) == 0)
+         {
+             g_free (dir);
+             g_free (dirpath);
+             return TRUE;
+         }
+         g_free (dirpath);
+         dirpath = dir;
+     }
+     g_free (dirpath);
+     g_free(dir);
+     return FALSE;
+}
+
+
 void
 gnc_file_do_export(const char * filename)
 {
@@ -1141,22 +1177,15 @@ gnc_file_do_export(const char * filename)
     /* Some extra steps for file based uri's only */
     if (gnc_uri_is_file_protocol(protocol))
     {
-        /* Remember the directory as the default. */
-        gchar *default_dir = g_path_get_dirname(path);
-        gnc_set_default_directory (GNC_PREFS_GROUP_OPEN_SAVE, default_dir);
-        g_free(default_dir);
-
-        /* Prevent user to store file in GnuCash' private configuration
-         * directory (~/.gnucash by default in linux, but can be overridden)
-         */
-        DEBUG("User path: %s, dotgnucash_dir: %s", path, gnc_dotgnucash_dir());
-        if (g_str_has_prefix(path, gnc_dotgnucash_dir()))
-        {
-            show_session_error (ERR_FILEIO_RESERVED_WRITE, newfile, GNC_FILE_DIALOG_SAVE);
-            return;
-        }
+	if (check_file_path (path))
+	{
+	    show_session_error (ERR_FILEIO_RESERVED_WRITE, newfile,
+				GNC_FILE_DIALOG_SAVE);
+	    return;
+	}
+	gnc_set_default_directory (GNC_PREFS_GROUP_OPEN_SAVE,
+				   g_path_get_dirname(path));
     }
-
     /* Check to see if the user specified the same file as the current
      * file. If so, prevent the export from happening to avoid killing this file */
     current_session = gnc_get_current_session ();
@@ -1379,20 +1408,14 @@ gnc_file_do_save_as (const char* filename)
     /* Some extra steps for file based uri's only */
     if (gnc_uri_is_file_protocol(protocol))
     {
-        /* Remember the directory as the default. */
-        gchar *default_dir = g_path_get_dirname(path);
-        gnc_set_default_directory (GNC_PREFS_GROUP_OPEN_SAVE, default_dir);
-        g_free(default_dir);
-
-        /* Prevent user to store file in GnuCash' private configuration
-         * directory (~/.gnucash by default in linux, but can be overridden)
-         */
-        DEBUG("User path: %s, dotgnucash_dir: %s", path, gnc_dotgnucash_dir());
-        if (g_str_has_prefix(path, gnc_dotgnucash_dir()))
-        {
-            show_session_error (ERR_FILEIO_RESERVED_WRITE, newfile, GNC_FILE_DIALOG_SAVE);
-            return;
-        }
+	if (check_file_path (path))
+	{
+	    show_session_error (ERR_FILEIO_RESERVED_WRITE, newfile,
+				GNC_FILE_DIALOG_SAVE);
+	    return;
+	}
+	gnc_set_default_directory (GNC_PREFS_GROUP_OPEN_SAVE,
+				   g_path_get_dirname (path));
     }
 
     /* Check to see if the user specified the same file as the current
@@ -1544,6 +1567,31 @@ gnc_file_do_save_as (const char* filename)
     g_free (newfile);
     LEAVE (" ");
 }
+
+void
+gnc_file_revert (void)
+{
+    QofSession *session;
+    const gchar *fileurl, *filename, *tmp;
+    const gchar *title = _("Reverting will discard all unsaved changes to %s. Are you sure you want to proceed ?");
+
+    if (!gnc_main_window_all_finish_pending())
+        return;
+
+    session = gnc_get_current_session();
+    fileurl = qof_session_get_url(session);
+    if (fileurl == NULL)
+        fileurl = _("<unknown>");
+    if ((tmp = strrchr(fileurl, '/')) != NULL)
+        filename = tmp + 1;
+    else
+        filename = fileurl;
+
+    if (!gnc_verify_dialog (NULL, FALSE, title, filename))
+        return;
+
+    qof_book_mark_session_saved (qof_session_get_book (session));
+    gnc_file_open_file (fileurl, qof_book_is_readonly(gnc_get_current_book()));}
 
 void
 gnc_file_quit (void)

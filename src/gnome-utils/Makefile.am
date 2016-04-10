@@ -26,7 +26,6 @@ AM_CPPFLAGS = \
 
 libgncmod_gnome_utils_la_SOURCES = \
   account-quickfill.c \
-  assistant-utils.c \
   assistant-xml-encoding.c \
   cursors.c \
   dialog-account.c \
@@ -112,7 +111,6 @@ libgncmod_gnome_utils_la_SOURCES = \
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   account-quickfill.h \
-  assistant-utils.h \
   assistant-xml-encoding.h \
   dialog-account.h \
   dialog-book-close.h \
@@ -225,7 +223,7 @@ if HAVE_X11_XLIB_H
   libgncmod_gnome_utils_la_LIBADD += -lX11
 endif
 
-if BUILDING_FROM_SCM
+if BUILDING_FROM_VCS
 swig-gnome-utils.c: gnome-utils.i \
                     ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
@@ -239,28 +237,28 @@ endif
 endif
 endif
 
-gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
-gncmod_DATA = gnome-utils.scm 
+gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash
+gncscmmod_DATA = gnome-utils.scm
 
-gncscmdir = ${GNC_SHAREDIR}/scm
+gncscmdir = ${GNC_SCM_INSTALL_DIR}
 gncscm_DATA = gnc-menu-extensions.scm
 
 EXTRA_DIST = \
   gnome-utils.i \
   make-gnc-warnings-c.xsl \
   make-gnc-warnings-h.xsl \
-  ${gncmod_DATA} \
+  ${gncscmmod_DATA} \
   ${gncscm_DATA}
 
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases
 SCM_FILE_LINKS = \
-  ${gncmod_DATA} \
+  ${gncscmmod_DATA} \
   ${gncscm_DATA}
 endif
 
-.scm-links: 
+.scm-links:
 	$(RM) -rf gnucash
 	mkdir -p  gnucash
 if GNUCASH_SEPARATE_BUILDDIR
@@ -268,21 +266,54 @@ if GNUCASH_SEPARATE_BUILDDIR
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
-	( cd gnucash; for A in $(gncmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
+	( cd gnucash; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../$$A . ; done )
 if ! OS_WIN32
 # Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
+endif
+
+if GNC_HAVE_GUILE_2
+GUILE_COMPILE_ENV = \
+  --guile-load-dir ${top_builddir}/src/core-utils \
+  --guile-load-dir ${top_builddir}/src/gnc-module \
+  --guile-load-dir ${top_builddir}/src/scm \
+  --library-dir    ${top_builddir}/src/engine \
+  --library-dir    ${top_builddir}/src/libqof/qof \
+  --library-dir    ${top_builddir}/src/core-utils \
+  --library-dir    ${top_builddir}/src/gnc-module \
+  --library-dir    ${top_builddir}/src/app-utils \
+  --library-dir    ${top_builddir}/src/backend/xml \
+  --library-dir    ${top_builddir}/src/gnome-utils
+
+%.go : %.scm .scm-links $(pkglib_LTLIBRARIES)
+	GNC_UNINSTALLED=yes \
+	GNC_BUILDDIR=${top_builddir} \
+	$(shell ${abs_top_srcdir}/src/gnc-test-env.pl --noexports ${GUILE_COMPILE_ENV}) \
+	$(GUILD) compile -o $@ $<
+
+gncscmmodcachedir = ${pkglibdir}/scm/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash
+gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
+
+gncscmcachedir = ${pkglibdir}/scm/ccache/@GUILE_EFFECTIVE_VERSION@
+gncscmcache_DATA = $(gncscm_DATA:.scm=.go)
 endif
 
 noinst_DATA = .scm-links
 clean-local:
 	rm -rf gnucash
 
-CLEANFILES = $(BUILT_SOURCES) .scm-links ${SCM_FILE_LINKS}
+CLEANFILES = \
+	$(BUILT_SOURCES) \
+	.scm-links \
+	${SCM_FILE_LINKS} \
+	${gncscmcache_DATA} \
+	${gncscmmodcache_DATA}
+
 MAINTAINERCLEANFILES = swig-gnome-utils.c
 
-# FIXME: Symlinking directories only works on non-win32.
+# We want to do this only for the Gnome help tool on Linux and MacPorts.
 if !PLATFORM_WIN32
+if !PLATFORM_OSX_QUARTZ
 #
 # I hate inconsistent standards. Autotools puts help files into
 # ${datadir}/gnome/help/${program} while the gnome2 libraries expect
@@ -293,6 +324,7 @@ install-data-hook:
 
 uninstall-hook:
 	rm -f ${DESTDIR}${pkgdatadir}/gnome
+endif
 endif
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.gui\"

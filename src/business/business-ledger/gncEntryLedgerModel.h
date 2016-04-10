@@ -25,7 +25,12 @@
 #define GNC_ENTRY_LEDGER_MODEL_H
 
 #include "gncEntryLedger.h"
-
+/** @ingroup Register
+ * @addtogroup BusinessRegister
+ * @{
+ */
+/** @file gncEntryLedgerModel.h
+ */
 TableModel * gnc_entry_ledger_model_new (GncEntryLedgerType type);
-
+/** @} */
 #endif /* GNC_ENTRY_LEDGER_MODEL_H */

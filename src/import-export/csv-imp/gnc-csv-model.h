@@ -38,24 +38,34 @@
  * columns that can exist in a CSV/Fixed-Width file. There should be
  * no two columns with the same type except for the GNC_CSV_NONE
  * type. */
-enum GncCsvColumnType {GNC_CSV_NONE,
-                       GNC_CSV_DATE,
-                       GNC_CSV_NUM,
-                       GNC_CSV_DESCRIPTION,
-                       GNC_CSV_NOTES,
-                       GNC_CSV_ACCOUNT,
-                       GNC_CSV_DEPOSIT,
-                       GNC_CSV_WITHDRAWAL,
-                       GNC_CSV_BALANCE,
-                       GNC_CSV_NUM_COL_TYPES
-                      };
+enum GncCsvColumnType {
+    GNC_CSV_NONE,
+    GNC_CSV_DATE,
+    GNC_CSV_NUM,
+    GNC_CSV_DESCRIPTION,
+    GNC_CSV_NOTES,
+    GNC_CSV_ACCOUNT,
+    GNC_CSV_DEPOSIT,
+    GNC_CSV_WITHDRAWAL,
+    GNC_CSV_BALANCE,
+    GNC_CSV_MEMO,
+    GNC_CSV_OACCOUNT,
+    GNC_CSV_OMEMO,
+    GNC_CSV_NUM_COL_TYPES
+};
+
+/** Error domain for the csv importer. */
+#define GNC_CSV_IMP_ERROR gnc_csv_imp_error_quark ()
+GQuark gnc_csv_imp_error_quark (void);
 
 /** Enumeration for error types. These are the different types of
  * errors that various functions used for the CSV/Fixed-Width importer
  * can have. */
-enum GncCsvErrorType {GNC_CSV_FILE_OPEN_ERR,
-                      GNC_CSV_ENCODING_ERR
-                     };
+enum GncCsvErrorType {
+    GNC_CSV_IMP_ERROR_OPEN,
+    GNC_CSV_IMP_ERROR_ENCODING,
+    GNC_CSV_IMP_ERROR_PARSE
+};
 
 /** Struct for containing a string. This struct simply contains
  * pointers to the beginning and end of a string. We need this because
@@ -80,9 +90,9 @@ typedef struct
 {
     int line_no;
     Transaction* trans;
-    gnc_numeric balance; /**< The (supposed) balance after this transaction takes place */
+    gnc_numeric balance;  /**< The (supposed) balance after this transaction takes place */
     gboolean balance_set; /**< TRUE if balance has been set from user data, FALSE otherwise */
-    gchar *num; /**< Saves the 'num'for use if balance has been set from user data */
+    gchar *num;           /**< Saves the 'num'for use if balance has been set from user data */
 } GncCsvTransLine;
 
 /* A set of currency formats that the user sees. */
@@ -115,22 +125,25 @@ typedef struct
     int date_format;            /**< The format of the text in the date columns from date_format_internal. */
     int start_row;              /**< The start row to generate transactions from. */
     int end_row;                /**< The end row to generate transactions from. */
+    gboolean skip_rows;         /**< Skip Alternate Rows from start row. */
     int currency_format;        /**< The currency format, 0 for locale, 1 for comma dec and 2 for period */
 } GncCsvParseData;
 
-GncCsvParseData* gnc_csv_new_parse_data(void);
+GncCsvParseData* gnc_csv_new_parse_data (void);
 
-void gnc_csv_parse_data_free(GncCsvParseData* parse_data);
+void gnc_csv_parse_data_free (GncCsvParseData* parse_data);
 
-int gnc_csv_load_file(GncCsvParseData* parse_data, const char* filename,
+int gnc_csv_load_file (GncCsvParseData* parse_data, const char* filename,
                       GError** error);
 
-int gnc_csv_convert_encoding(GncCsvParseData* parse_data, const char* encoding, GError** error);
+int gnc_csv_convert_encoding (GncCsvParseData* parse_data, const char* encoding, GError** error);
 
-int gnc_csv_parse(GncCsvParseData* parse_data, gboolean guessColTypes, GError** error);
+int gnc_csv_parse (GncCsvParseData* parse_data, gboolean guessColTypes, GError** error);
 
-int gnc_csv_parse_to_trans(GncCsvParseData* parse_data, Account* account, gboolean redo_errors);
+int gnc_csv_parse_to_trans (GncCsvParseData* parse_data, Account* account, gboolean redo_errors);
 
-time64 parse_date(const char* date_str, int format);
+time64 parse_date (const char* date_str, int format);
+
+gboolean gnc_csv_parse_check_for_column_type (GncCsvParseData* parse_data, gint type);
 
 #endif

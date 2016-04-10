@@ -164,7 +164,7 @@ gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
 
     g_list_free (radio_list);
 
-    root = gnc_account_get_root(default_account);
+    root = default_account ? gnc_account_get_root(default_account) : NULL;
     switch (choice)
     {
     default:
@@ -250,7 +250,7 @@ gnc_split_register_check_debcred (SplitRegister *reg,
             }
         }
     }
-    
+
     return TRUE;
 }
 
@@ -302,7 +302,7 @@ gnc_split_register_check_account (SplitRegister *reg,
                cell->cell.value);
     if (!new_acct)
         return FALSE;
-    
+
     split = gnc_split_register_get_current_split(reg);
     gnc_split_register_set_cell_fractions (reg, split);
 
@@ -885,11 +885,15 @@ gnc_split_register_auto_completion (SplitRegister *reg,
 
         if (gnc_split_register_get_default_account (reg) != NULL)
         {
-            Account *default_account;
+            Account *default_account =
+                gnc_split_register_get_default_account (reg);
+            gnc_commodity *trans_cmdty = xaccTransGetCurrency(trans);
+            gnc_commodity *acct_cmdty = xaccAccountGetCommodity(default_account);
             Split *s;
             int i = 0;
-
-            default_account = gnc_split_register_get_default_account (reg);
+            if (gnc_commodity_is_currency(acct_cmdty) &&
+                !gnc_commodity_equal(trans_cmdty, acct_cmdty))
+                xaccTransSetCurrency(trans, acct_cmdty);
 
             while ((s = xaccTransGetSplit(trans, i)) != NULL)
             {
@@ -1151,7 +1155,7 @@ gnc_split_register_check_cell (SplitRegister *reg, const char *cell_name)
         LEAVE("account check failed");
         return FALSE;
     }
-    
+
     /* See if we are leaving a debit or credit cell */
     if (!gnc_split_register_check_debcred (reg, cell_name))
     {
@@ -1287,10 +1291,13 @@ gnc_split_register_xfer_dialog(SplitRegister *reg, Transaction *txn,
     return xfer;
 }
 
-/* This function checks to see if we need to determine an exchange rate.
- * If we need to determine an exchange rate, then pop up the dialog.
+/** If needed display the transfer dialog to get a price/exchange rate and
+ * adjust the price cell accordingly.
  * If the dialog does not complete successfully, then return TRUE.
  * Return FALSE in all other cases (meaning "move on")
+ * @param reg the register to operate on
+ * @param force_dialog pop a dialog even if we don't think we need it.
+ * @return whether more handling is required.
  */
 gboolean
 gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)

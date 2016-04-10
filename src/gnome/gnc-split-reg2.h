@@ -33,7 +33,12 @@
 #include "gnc-ledger-display2.h"
 #include "gnc-split-reg.h"
 #include "gnc-tree-view-split-reg.h"
-
+/** @ingroup Register
+ * @addtogroup Register2
+ * @{
+ */
+/** @file gnc-split-reg2.h
+ */
 #define GNC_SPLIT_REG2(obj)         G_TYPE_CHECK_INSTANCE_CAST( obj, gnc_split_reg2_get_type(), GNCSplitReg2 )
 #define GNC_SPLIT_REG2_CLASS(klass) G_TYPE_CHECK_CLASS_CAST( klass, gnc_split_reg2_get_type(), GNCSplitReg2Class )
 #define IS_GNC_SPLIT_REG2(obj)      G_TYPE_CHECK_INSTANCE_TYPE( obj, gnc_split_reg2_get_type() )
@@ -154,5 +159,5 @@ void gnc_split_reg2_balancing_entry (GNCSplitReg2 *gsr, Account *account,
 
 
 void gnc_split_reg2_set_moved_cb (GNCSplitReg2 *gsr, GFunc cb, gpointer cb_data);
-
+/** @} */
 #endif /* GNC_SPLIT_REG2_H */

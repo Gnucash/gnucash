@@ -51,6 +51,7 @@
 #include "business-gnome-utils.h"
 
 #include "dialog-transfer.h"
+#include "dialog-print-check.h"
 #include "gnome-search/gnc-general-search.h"
 
 #define DIALOG_PAYMENT_CUSTOMER_CM_CLASS "customer-payment-dialog"
@@ -71,6 +72,8 @@ struct _payment_window
     GtkWidget   * date_edit;
     GtkWidget   * acct_tree;
     GtkWidget   * docs_list_tree_view;
+    GtkWidget   * commodity_label;
+    GtkWidget   * print_check;
 
     gint          component_id;
     QofBook     * book;
@@ -83,6 +86,7 @@ struct _payment_window
     GList       * acct_commodities;
 
     Transaction * pre_existing_txn;
+    gboolean      print_check_state;
 };
 
 void gnc_ui_payment_window_set_num (PaymentWindow *pw, const char* num)
@@ -122,6 +126,21 @@ void gnc_ui_payment_window_set_amount (PaymentWindow *pw, gnc_numeric amount)
     }
 
 }
+
+static void gnc_ui_payment_window_set_commodity (PaymentWindow *pw, const Account* account)
+{
+    gchar *comm_string;
+    gnc_commodity *comm;
+
+    g_assert(pw);
+    g_assert(account);
+
+    comm = xaccAccountGetCommodity (account);
+    comm_string = g_strconcat ("(", gnc_commodity_get_nice_symbol (comm), ")", NULL);
+    gtk_label_set_text (GTK_LABEL(pw->commodity_label), comm_string);
+    g_free (comm_string);
+}
+
 void gnc_ui_payment_window_set_postaccount (PaymentWindow *pw, const Account* account)
 {
     g_assert(pw);
@@ -131,7 +150,10 @@ void gnc_ui_payment_window_set_postaccount (PaymentWindow *pw, const Account* ac
         gnc_cbwe_set_by_string(GTK_COMBO_BOX(pw->post_combo), acct_string);
         g_free(acct_string);
     }
+
+    gnc_ui_payment_window_set_commodity (pw, account);
 }
+
 void gnc_ui_payment_window_set_xferaccount (PaymentWindow *pw, const Account* account)
 {
     g_assert(pw);
@@ -216,6 +238,16 @@ gnc_payment_window_check_payment (PaymentWindow *pw)
 
 update_cleanup:
     gtk_widget_set_sensitive (pw->acct_tree, enable_xfer_acct);
+
+    /* Disable "Print Check" widget if amount is zero but save current
+       state to restore when the widget is re-enabled */
+    if (gtk_widget_is_sensitive (pw->print_check))
+        pw->print_check_state = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(pw->print_check));
+    if (!enable_xfer_acct)
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(pw->print_check), FALSE);
+    gtk_widget_set_sensitive (pw->print_check, enable_xfer_acct);
+    if (gtk_widget_is_sensitive (pw->print_check))
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(pw->print_check), pw->print_check_state);
 
     /* Check if there are issues preventing a successful payment */
     gtk_widget_set_tooltip_text (pw->payment_warning, conflict_msg);
@@ -348,6 +380,7 @@ void
 gnc_payment_window_fill_docs_list (PaymentWindow *pw)
 {
     GtkListStore *store;
+    GtkTreeSelection *selection;
     GList *list = NULL, *node;
 
     g_return_if_fail (pw->docs_list_tree_view && GTK_IS_TREE_VIEW(pw->docs_list_tree_view));
@@ -358,6 +391,8 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
                                         &pw->owner, NULL);
 
     /* Clear the existing list */
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(pw->docs_list_tree_view));
+    gtk_tree_selection_unselect_all (selection);
     store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(pw->docs_list_tree_view)));
     gtk_list_store_clear(store);
 
@@ -456,9 +491,10 @@ gnc_payment_dialog_owner_changed (PaymentWindow *pw)
     pw->invoice = NULL;
 
     /* Now handle the account tree */
-    qof_instance_get (qofOwnerGetOwner (owner),
-		      "payment-last-account", &guid,
-		      NULL);
+    if (gncOwnerIsValid(owner))
+        qof_instance_get (qofOwnerGetOwner (owner),
+                          "payment-last-account", &guid,
+                          NULL);
 
     /* refresh the post and acc available accounts, but cleanup first */
     if (pw->acct_types)
@@ -477,6 +513,10 @@ gnc_payment_dialog_owner_changed (PaymentWindow *pw)
     if (gncOwnerIsValid(owner))
         pw->acct_commodities = gncOwnerGetCommoditiesList (owner);
     pw->post_acct = gnc_account_select_combo_fill (pw->post_combo, pw->book, pw->acct_types, pw->acct_commodities);
+
+    if (pw->post_acct)
+        gnc_ui_payment_window_set_commodity (pw, pw->post_acct);
+
 
     /* Update list of documents and pre-payments */
     gnc_payment_window_fill_docs_list (pw);
@@ -635,6 +675,17 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
      * and amount so we can proceed with the payment.
      * Note: make sure it's called before all entry points to this function !
      */
+
+    /* We're on our way out, stop watching for object changes that could
+     * trigger a gui refresh. Without this the gui suspend/resume
+     * pair could still trigger a gui update on the payment dialog
+     * before we close it. This is undesired because the lots may be in
+     * an inconsistent state until after all events are handled. So
+     * the gui refresh may result in a crash.
+     * See https://bugzilla.gnome.org/show_bug.cgi?id=740471
+     */
+    gnc_gui_component_clear_watches (pw->component_id);
+
     gnc_suspend_gui_refresh ();
     {
         const char *memo, *num;
@@ -666,10 +717,10 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
 
             text = _("The transfer and post accounts are associated with different currencies. Please specify the conversion rate.");
 
-            xfer = gnc_xfer_dialog(pw->dialog, pw->xfer_acct);
+            xfer = gnc_xfer_dialog(pw->dialog, pw->post_acct);
             gnc_info_dialog(pw->dialog, "%s", text);
 
-            gnc_xfer_dialog_select_to_account(xfer, pw->post_acct);
+            gnc_xfer_dialog_select_to_account(xfer, pw->xfer_acct);
             gnc_xfer_dialog_set_amount(xfer, pw->amount_tot);
 
             /* All we want is the exchange rate so prevent the user from thinking
@@ -688,14 +739,23 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
         else
             auto_pay = gnc_prefs_get_bool (GNC_PREFS_GROUP_BILL, GNC_PREF_AUTO_PAY);
 
-        gncOwnerApplyPayment (&pw->owner, pw->pre_existing_txn, selected_lots,
-                              pw->post_acct, pw->xfer_acct, pw->amount_tot,
-                              exch, date, memo, num, auto_pay);
+        gncOwnerApplyPayment (&pw->owner, &(pw->pre_existing_txn), selected_lots,
+                              pw->post_acct, pw->xfer_acct, pw->amount_tot, exch,
+                              date, memo, num, auto_pay);
     }
     gnc_resume_gui_refresh ();
 
     /* Save the transfer account, xfer_acct */
     gnc_payment_dialog_remember_account(pw, pw->xfer_acct);
+
+    if (gtk_widget_is_sensitive (pw->print_check) &&
+        gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(pw->print_check)))
+    {
+        Split *split = xaccTransFindSplitByAccount (pw->pre_existing_txn, pw->xfer_acct);
+        GList *splits = NULL;
+        splits = g_list_append(splits, split);
+        gnc_ui_print_check_dialog_create(NULL, splits);
+    }
 
     gnc_ui_payment_window_destroy (pw);
 }
@@ -783,19 +843,7 @@ gnc_payment_set_account_types (GncTreeViewAccount *tree)
     gnc_tree_view_account_get_view_info (tree, &avi);
 
     for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
-        switch (i)
-        {
-        case ACCT_TYPE_BANK:
-        case ACCT_TYPE_CASH:
-        case ACCT_TYPE_CREDIT:
-        case ACCT_TYPE_ASSET:
-        case ACCT_TYPE_LIABILITY:
-            avi.include_type[i] = TRUE;
-            break;
-        default:
-            avi.include_type[i] = FALSE;
-            break;
-        }
+        avi.include_type[i] = gncBusinessIsPaymentAcctType (i);
 
     gnc_tree_view_account_set_view_info (tree, &avi);
 }
@@ -887,6 +935,7 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
     pw->ok_button = GTK_WIDGET (gtk_builder_get_object (builder, "okbutton"));
     pw->num_entry = GTK_WIDGET (gtk_builder_get_object (builder, "num_entry"));
     pw->memo_entry = GTK_WIDGET (gtk_builder_get_object (builder, "memo_entry"));
+    pw->commodity_label = GTK_WIDGET (gtk_builder_get_object (builder, "commodity_label"));
     pw->post_combo = GTK_WIDGET (gtk_builder_get_object (builder, "post_combo"));
     gtk_combo_box_set_entry_text_column( GTK_COMBO_BOX( pw->post_combo ), 0 );
     gnc_cbwe_require_list_item(GTK_COMBO_BOX(pw->post_combo));
@@ -938,6 +987,7 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
     box = GTK_WIDGET (gtk_builder_get_object (builder, "date_box"));
     pw->date_edit = gnc_date_edit_new (time(NULL), FALSE, FALSE);
     gtk_box_pack_start (GTK_BOX (box), pw->date_edit, TRUE, TRUE, 0);
+    pw->print_check = GTK_WIDGET (gtk_builder_get_object (builder, "print_check"));
 
     pw->docs_list_tree_view = GTK_WIDGET (gtk_builder_get_object (builder, "docs_list_tree_view"));
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(pw->docs_list_tree_view));
@@ -1105,86 +1155,45 @@ gnc_ui_payment_new (GncOwner *owner, QofBook *book)
     return gnc_ui_payment_new_with_invoice (owner, book, NULL);
 }
 
-// ////////////////////////////////////////////////////////////
-static void increment_if_asset_account (gpointer data,
-                                        gpointer user_data)
-{
-    int *r = user_data;
-    const Split *split = data;
-    const Account *account = xaccSplitGetAccount(split);
-    if (xaccAccountIsAssetLiabType(xaccAccountGetType(account)))
-        ++(*r);
-}
-static int countAssetAccounts(SplitList* slist)
-{
-    int result = 0;
-    g_list_foreach(slist, &increment_if_asset_account, &result);
-    return result;
-}
-
-static gint predicate_is_asset_account(gconstpointer a,
-                                       gconstpointer user_data)
-{
-    const Split *split = a;
-    const Account *account = xaccSplitGetAccount(split);
-    if (xaccAccountIsAssetLiabType(xaccAccountGetType(account)))
-        return 0;
-    else
-        return -1;
-}
-static gint predicate_is_apar_account(gconstpointer a,
-                                      gconstpointer user_data)
-{
-    const Split *split = a;
-    const Account *account = xaccSplitGetAccount(split);
-    if (xaccAccountIsAPARType(xaccAccountGetType(account)))
-        return 0;
-    else
-        return -1;
-}
-static Split *getFirstAssetAccountSplit(SplitList* slist)
-{
-    GList *r = g_list_find_custom(slist, NULL, &predicate_is_asset_account);
-    if (r)
-        return r->data;
-    else
-        return NULL;
-}
-static Split *getFirstAPARAccountSplit(SplitList* slist)
-{
-    GList *r = g_list_find_custom(slist, NULL, &predicate_is_apar_account);
-    if (r)
-        return r->data;
-    else
-        return NULL;
-}
-
 // ///////////////
 
 gboolean gnc_ui_payment_is_customer_payment(const Transaction *txn)
 {
-    SplitList *slist;
     gboolean result = TRUE;
-
-    Split *assetaccount_split;
+    Split *assetaccount_split, *aparaccount_split;
     gnc_numeric amount;
 
     if (!txn)
         return result;
 
-    // We require the txn to have one split in an A/R or A/P account.
-
-    slist = xaccTransGetSplitList(txn);
-    if (!slist)
+    if (!xaccTransGetSplitList(txn))
         return result;
-    if (countAssetAccounts(slist) == 0)
+
+    /* First test if one split is in an A/R or A/P account.
+     * That will give us the best Customer vs Vendor/Employee distinction */
+    aparaccount_split = xaccTransGetFirstAPARAcctSplit(txn);
+    if (aparaccount_split)
     {
+        if (xaccAccountGetType (xaccSplitGetAccount (aparaccount_split)) == ACCT_TYPE_RECEIVABLE)
+            return TRUE;  // Type is Customer
+        else if (xaccAccountGetType (xaccSplitGetAccount (aparaccount_split)) == ACCT_TYPE_PAYABLE)
+            return FALSE; // Type is Vendor/Employee, there's not enough information to refine more
+    }
+
+    /* For the lack of an A/R or A/P account we'll assume positive changes to an
+     * Asset/Liability or Equity account are Customer payments the others will be
+     * considered Vendor payments */
+    assetaccount_split = xaccTransGetFirstPaymentAcctSplit(txn);
+    if (!assetaccount_split)
+    {
+        /* Transaction isn't valid for a payment, just return the default
+         * Calling code will have to handle this situation properly */
         g_message("No asset splits in txn \"%s\"; cannot use this for assigning a payment.",
                   xaccTransGetDescription(txn));
         return result;
     }
 
-    assetaccount_split = getFirstAssetAccountSplit(slist);
+    assetaccount_split = xaccTransGetFirstPaymentAcctSplit(txn);
     amount = xaccSplitGetValue(assetaccount_split);
     result = gnc_numeric_positive_p(amount); // positive amounts == customer
     //g_message("Amount=%s", gnc_numeric_to_string(amount));
@@ -1195,8 +1204,6 @@ gboolean gnc_ui_payment_is_customer_payment(const Transaction *txn)
 
 PaymentWindow * gnc_ui_payment_new_with_txn (GncOwner *owner, Transaction *txn)
 {
-    SplitList *slist;
-
     Split *assetaccount_split;
     Split *postaccount_split;
     gnc_numeric amount;
@@ -1207,23 +1214,22 @@ PaymentWindow * gnc_ui_payment_new_with_txn (GncOwner *owner, Transaction *txn)
 
     // We require the txn to have one split in an Asset account.
 
-    slist = xaccTransGetSplitList(txn);
-    if (!slist)
+    if (!xaccTransGetSplitList(txn))
         return NULL;
-    if (countAssetAccounts(slist) == 0)
+    assetaccount_split = xaccTransGetFirstPaymentAcctSplit(txn);
+    if (!assetaccount_split)
     {
         g_message("No asset splits in txn \"%s\"; cannot use this for assigning a payment.",
                   xaccTransGetDescription(txn));
         return NULL;
     }
 
-    assetaccount_split = getFirstAssetAccountSplit(slist);
-    postaccount_split = getFirstAPARAccountSplit(slist); // watch out: Might be NULL
+    postaccount_split = xaccTransGetFirstAPARAcctSplit(txn); // watch out: Might be NULL
     amount = xaccSplitGetValue(assetaccount_split);
 
     pw = gnc_ui_payment_new(owner,
                             qof_instance_get_book(QOF_INSTANCE(txn)));
-    g_assert(assetaccount_split); // we can rely on this because of the countAssetAccounts() check above
+    g_assert(assetaccount_split); // we can rely on this because of the check above
     g_debug("Amount=%s", gnc_numeric_to_string(amount));
 
     // Fill in the values from the given txn

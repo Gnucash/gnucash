@@ -51,10 +51,9 @@
 (use-modules (srfi srfi-1))
 (use-modules (gnucash printf))
 (use-modules (gnucash gnc-module))
+(use-modules (gnucash gettext))
 
 (gnc:module-load "gnucash/report/report-system" 0)
-(gnc:module-load "gnucash/app-utils" 0)
-
 (use-modules (gnucash report standard-reports))
 (use-modules (gnucash report business-reports))
 
@@ -345,7 +344,7 @@
    (gnc:make-text-option
     (N_ "Display") (N_ "Extra Notes")
      "u" (N_ "Extra notes to put on the invoice.")
-     (_ "Thank you for your patronage")))
+     (_ "Thank you for your patronage!")))
 
   (gnc:register-inv-option
    (gnc:make-complex-boolean-option
@@ -372,13 +371,6 @@
     (N_ "Display") (N_ "Company contact string")
     "ub2" (N_ "The phrase used to introduce the company contact.")
     (_ "Direct all inquiries to")))
-
-; not used
-;  (gnc:register-inv-option
-;   (gnc:make-string-option
-;    (N_ "Display") (N_ "Today Date Format")
-;    "v" (N_ "The format for the date->string conversion for today's date.")
-;    (gnc-default-strftime-date-format)))
 
   (gnc:options-set-default-section gnc:*report-options* "General")
 
@@ -662,18 +654,14 @@
      'attribute (list "valign" "top"))
     table))
 
-(define (make-date-row! table label date)
+(define (make-date-row! table label date date-format)
   (gnc:html-table-append-row!
    table
    (list
     (string-append label ":&nbsp;")
-    ;; oli-custom - modified to display a custom format
-    ;; for the invoice date/due date fields
-    ;; I could have taken the format from the report options, but... ;)
-    (string-expand (strftime (gnc-default-strftime-date-format)
+    (string-expand (strftime date-format
                              (localtime (car date)))
-                   #\space "&nbsp;")
-    ;;(string-expand (gnc-print-date date) #\space "&nbsp;")
+                             #\space "&nbsp;")
     )))
 
 (define (make-date-table)
@@ -687,30 +675,15 @@
      'attribute (list "valign" "top"))
     table))
 
-(define (make-myname-table book date-format title)
+(define (make-myname-table book title)
   (let* ((table (gnc:make-html-table))
-	 (slots (qof-book-get-slots book))
-	 (name (kvp-frame-get-slot-path-gslist
-		slots (append gnc:*kvp-option-path*
-			      (list gnc:*business-label* gnc:*company-name*))))
-;;	 (contact (kvp-frame-get-slot-path-gslist
-;;		slots (append gnc:*kvp-option-path*
-;;			      (list gnc:*business-label* gnc:*company-contact*))))
-	 (addy (kvp-frame-get-slot-path-gslist
-		slots (append gnc:*kvp-option-path*
-			      (list gnc:*business-label* gnc:*company-addy*))))
-	 (id (kvp-frame-get-slot-path-gslist
-		slots (append gnc:*kvp-option-path*
-			      (list gnc:*business-label* gnc:*company-id*))))
-	 (phone (kvp-frame-get-slot-path-gslist
-		slots (append gnc:*kvp-option-path*
-			      (list gnc:*business-label* gnc:*company-phone*))))
-	 (fax (kvp-frame-get-slot-path-gslist
-		slots (append gnc:*kvp-option-path*
-			      (list gnc:*business-label* gnc:*company-fax*))))
-	 (url (kvp-frame-get-slot-path-gslist
-		slots (append gnc:*kvp-option-path*
-			      (list gnc:*business-label* gnc:*company-url*))))
+	 (name (gnc:company-info book gnc:*company-name*))
+;;	 (contact (gnc:company-info book gnc:*company-contact*))
+	 (addy (gnc:company-info book gnc:*company-addy*))
+	 (id (gnc:company-info book gnc:*company-id*))
+	 (phone (gnc:company-info book gnc:*company-phone*))
+	 (fax (gnc:company-info book gnc:*company-fax*))
+	 (url (gnc:company-info book gnc:*company-url*))
 	 (invoice-cell (gnc:make-html-table-cell))
 	 (name-cell (gnc:make-html-table-cell))
 
@@ -756,14 +729,6 @@
 				     ""))
 		  #\newline "<br>" )
 		 (if url (string-append (_ "Web:") " " url) "")))
-
-;; oli-custom - I didn't want today's date on the invoice.
-;; The invoice already has a date.
-;; Today's date can be in the email, fax or letter accompanying the invoice.
-;;    (gnc:html-table-append-row! table (list
-;;				       (strftime
-;;					date-format
-;;					(localtime (car (gnc:get-today))))))
     table))
 
 (define (make-break! document)
@@ -831,11 +796,11 @@
 
 
     (if (not (null? invoice))
-	(let* ((book (gncInvoiceGetBook invoice))
-	      (slots (qof-book-get-slots book))
-	      (date-object #f)
-	      (helper-table (gnc:make-html-table))
-	      (title (title-string default-title custom-title)))
+        (let* ((book (gncInvoiceGetBook invoice))
+               (date-object #f)
+               (date-format (gnc:fancy-date-info book gnc:*fancy-date-format*))
+               (helper-table (gnc:make-html-table))
+               (title (title-string default-title custom-title)))
 	  (set! table (make-entry-table invoice
 					(gnc:report-options report-obj)
 					add-order cust-doc? credit-note?))
@@ -864,8 +829,7 @@
 
 	  (gnc:html-document-add-object!
 	   document (make-myname-table
-		     book ;;(opt-val "Display" "Today Date Format")))
-		     "" title))
+		     book title))
 
 	  (make-break! document)
 	  (make-break! document)
@@ -895,8 +859,8 @@
                   ;; options. This string sucks for i18n, but I don't
                   ;; have a better solution right now without breaking
                   ;; other people's invoices.
-		  (make-date-row! date-table (sprintf #f (_ "%s&nbsp;Date") title) post-date)
-		  (make-date-row! date-table (_ "Due Date") due-date)
+		  (make-date-row! date-table (sprintf #f (_ "%s&nbsp;Date") title) post-date date-format)
+		  (make-date-row! date-table (_ "Due&nbsp;Date") due-date date-format)
 		  date-table)
 		(gnc:make-html-text
 		  ;; oli-custom - FIXME: I have a feeling I broke a
@@ -965,10 +929,7 @@
 	  (make-break! document)
 
 	  (if (opt-val "Display" "Payable to")
-	      (let* ((name (kvp-frame-get-slot-path-gslist
-			    slots (append gnc:*kvp-option-path*
-					  (list gnc:*business-label*
-						gnc:*company-name*))))
+	      (let* ((name (gnc:company-info book gnc:*company-name*))
 		     (name-str (opt-val "Display" "Payable to string")))
 		(if (and name (> (string-length name) 0))
 		(gnc:html-document-add-object!
@@ -980,10 +941,7 @@
 	  (make-break! document)
 
 	  (if (opt-val "Display" "Company contact")
-	      (let* ((contact (kvp-frame-get-slot-path-gslist
-			       slots (append gnc:*kvp-option-path*
-					     (list gnc:*business-label*
-						   gnc:*company-contact*))))
+	      (let* ((contact (gnc:company-info book gnc:*company-contact*))
 		     (contact-str (opt-val "Display" "Company contact string")))
 		(if (and contact (> (string-length contact) 0))
 	        (gnc:html-document-add-object!

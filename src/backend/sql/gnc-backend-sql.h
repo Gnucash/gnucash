@@ -38,11 +38,12 @@
 
 #ifndef GNC_BACKEND_SQL_H
 #define GNC_BACKEND_SQL_H
-
+extern "C"
+{
 #include "qof.h"
 #include "qofbackend-p.h"
 #include <gmodule.h>
-
+}
 typedef struct GncSqlConnection GncSqlConnection;
 
 /**
@@ -80,6 +81,16 @@ void gnc_sql_init( GncSqlBackend* be );
  * @param book Book to be loaded
  */
 void gnc_sql_load( GncSqlBackend* be, /*@ dependent @*/ QofBook *book, QofBackendLoadType loadType );
+
+/**
+ * Register a commodity to be committed after loading is complete.
+ *
+ * Necessary to save corrections made while loading.
+ * @param be SQL backend
+ * @param comm The commodity item to be committed.
+ */
+void gnc_sql_push_commodity_for_postload_processing (GncSqlBackend *be,
+						     gpointer comm);
 
 /**
  * Save the contents of a book to an SQL database.

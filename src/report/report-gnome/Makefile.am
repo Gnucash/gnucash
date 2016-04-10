@@ -49,7 +49,7 @@ libgncmod_report_gnome_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GLIB_LIBS}
 
-if BUILDING_FROM_SCM
+if BUILDING_FROM_VCS
 swig-report-gnome.c: report-gnome.i ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
 	-I${top_srcdir}/src -o $@ $<
@@ -62,8 +62,8 @@ endif
 endif
 endif
 
-gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report
-gncmod_DATA = report-gnome.scm
+gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash/report
+gncscmmod_DATA = report-gnome.scm
 
 noinst_DATA = .scm-links
 
@@ -80,13 +80,13 @@ ui_DATA = \
 EXTRA_DIST = \
   report-gnome.i \
   ${gtkbuilder_DATA} \
-  ${gncmod_DATA} \
+  ${gncscmmod_DATA} \
   ${ui_DATA}
 
 if GNUCASH_SEPARATE_BUILDDIR
 #Only needed when srcdir and builddir are different
 # for running
-SCM_FILE_LINKS = ${gncmod_DATA}
+SCM_FILE_LINKS = ${gncscmmod_DATA}
 endif
 
 .scm-links: 
@@ -98,16 +98,48 @@ if GNUCASH_SEPARATE_BUILDDIR
 	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
-	( cd gnucash/report; for A in $(gncmod_DATA) ; do $(LN_S) -f ../../$$A . ; done )
+	( cd gnucash/report; for A in $(gncscmmod_DATA) ; do $(LN_S) -f ../../$$A . ; done )
 if ! OS_WIN32
 # Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
 	touch .scm-links
 endif
 
+if GNC_HAVE_GUILE_2
+GUILE_COMPILE_ENV = \
+  --gnc-module-dir ${top_builddir}/src/app-utils \
+  --gnc-module-dir ${top_builddir}/src/engine \
+  --guile-load-dir ${top_builddir}/src/app-utils \
+  --guile-load-dir ${top_builddir}/src/core-utils \
+  --guile-load-dir ${top_builddir}/src/engine \
+  --guile-load-dir ${top_builddir}/src/gnc-module \
+  --guile-load-dir ${top_builddir}/src/gnome-utils \
+  --guile-load-dir ${top_builddir}/src/scm \
+  --library-dir    ${top_builddir}/src/engine \
+  --library-dir    ${top_builddir}/src/libqof/qof \
+  --library-dir    ${top_builddir}/src/app-utils \
+  --library-dir    ${top_builddir}/src/core-utils \
+  --library-dir    ${top_builddir}/src/gnc-module \
+  --library-dir    ${top_builddir}/src/gnome-utils \
+  --library-dir    ${top_builddir}/src/backend/xml \
+  --library-dir    ${top_builddir}/src/backend/sql \
+  --library-dir    ${top_builddir}/src/html \
+  --library-dir    ${top_builddir}/src/report/report-system \
+  --library-dir    ${top_builddir}/src/report/report-gnome
+
+%.go : %.scm .scm-links $(pkglib_LTLIBRARIES)
+	GNC_UNINSTALLED=yes \
+	GNC_BUILDDIR=${top_builddir} \
+	$(shell ${abs_top_srcdir}/src/gnc-test-env.pl --noexports ${GUILE_COMPILE_ENV}) \
+	$(GUILD) compile -o $@ $<
+
+gncscmmodcachedir = ${pkglibdir}/scm/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/report
+gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
+endif
+
 clean-local:
 	rm -rf gnucash
 
-CLEANFILES = report .scm-links ${SCM_FILE_LINKS}
+CLEANFILES = report .scm-links ${SCM_FILE_LINKS} ${gncscmmodcache_DATA}
 MAINTAINERCLEANFILES = swig-report-gnome.c
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.report.gui\"

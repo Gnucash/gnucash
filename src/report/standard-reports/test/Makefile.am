@@ -3,6 +3,7 @@ MODULE_TESTS=test-load-module
 TESTS = $(SCM_TESTS) $(MODULE_TESTS)
 
 SCM_TESTS = \
+	test-cash-flow \
 	test-standard-category-report \
 	test-standard-net-barchart \
 	test-standard-net-linechart
@@ -11,6 +12,7 @@ SCM_TEST_SRCS = $(SCM_TESTS:%=%.scm)
 
 GNC_TEST_DEPS = \
   --gnc-module-dir ${top_builddir}/src/engine \
+  --gnc-module-dir ${top_builddir}/src/engine/test \
   --gnc-module-dir ${top_builddir}/src/app-utils \
   --gnc-module-dir ${top_builddir}/src/gnome-utils \
   --gnc-module-dir ${top_builddir}/src/html \
@@ -23,6 +25,7 @@ GNC_TEST_DEPS = \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/scm \
   --guile-load-dir ${top_builddir}/src/engine \
+  --guile-load-dir ${top_builddir}/src/engine/test \
   --guile-load-dir ${top_builddir}/src/core-utils \
   --guile-load-dir ${top_builddir}/src/app-utils \
   --guile-load-dir ${top_builddir}/src/gnome-utils \
@@ -31,6 +34,8 @@ GNC_TEST_DEPS = \
   --guile-load-dir ${top_builddir}/src/report/standard-reports \
   --guile-load-dir ${top_builddir}/src/report/standard-reports/test \
 \
+  --library-dir    ${top_builddir}/src/report/report-system \
+  --library-dir    ${top_builddir}/src/report/standard-reports \
   --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/app-utils \
@@ -47,8 +52,8 @@ $(SCM_TESTS): %: $(srcdir)/%.scm Makefile .scm-links
 TESTS_ENVIRONMENT = \
   GUILE_WARN_DEPRECATED=no \
   GUILE="${GUILE}" \
-  GNC_BUILDDIR=`\cd ${top_builddir} && pwd` \
-  $(shell ${top_builddir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
+  GNC_BUILDDIR="${abs_top_builddir}" \
+  $(shell ${abs_top_srcdir}/src/gnc-test-env.pl --noexports ${GNC_TEST_DEPS})
 
 
 SCM_TEST_HELPERS = \

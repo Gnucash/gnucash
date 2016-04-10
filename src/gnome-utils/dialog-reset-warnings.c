@@ -313,13 +313,13 @@ gnc_reset_warnings_add_section (RWDialog *rw_dialog, const gchar *prefs_group, G
  *  dialog.
  *
  *  @internal
- *  @param class Unused.
+ *  @param class_name Unused.
  *  @param component_id Unused.
  *  @param user_data A pointer to the rw structure.
  *  @param iter_data Unused.
  ***********************************************************************/
 static gboolean
-show_handler (const char *class, gint component_id,
+show_handler (const char *class_name, gint component_id,
               gpointer user_data, gpointer iter_data)
 {
     RWDialog *rw_dialog = user_data;

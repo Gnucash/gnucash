@@ -30,9 +30,8 @@
   (else ))
 (use-modules (gnucash main))
 (use-modules (gnucash gnc-module))
-(use-modules (gnucash app-utils))
+(use-modules (gnucash gettext))
 (gnc:module-load "gnucash/report/report-system" 0)
-(gnc:module-load "gnucash/app-utils" 0)
 (gnc:module-load "gnucash/html" 0)
 (gnc:module-load "gnucash/engine" 0)
 
@@ -76,12 +75,6 @@
       (if amt?
         (display-comm-coll-total amttot #f))
       (if (and (not amt?) (not pc?)) (display (_ "n/a"))))))        ; neither
-
-(define (coy-info slots key)
-  ;; Extract a value from the company info key-value pairs
-  (kvp-frame-get-slot-path-gslist
-    slots 
-    (append gnc:*kvp-option-path* (list gnc:*business-label* key))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Define all the options
@@ -161,7 +154,7 @@
       "a" "" (lambda () '()) 
       #f))        ;customers-only)) ;-- see above
 
-(add-option (gnc:make-currency-option		gnc:pagename-general	optname-report-currency		"b" "" (N_ "")))
+(add-option (gnc:make-currency-option		gnc:pagename-general	optname-report-currency		"b" "" ""))
 
   ;; Elements page options
 (add-option (gnc:make-simple-boolean-option	elementspage	optname-col-date		"a" (N_ "Display the date?") #t))
@@ -226,7 +219,7 @@
                 headingpage2 optname-amount-due "b" "" (_ "Amount Due")))
   (add-option (gnc:make-string-option
                 headingpage2 optname-payment-recd "c" "" 
-                (_ "Payment received, thank you")))
+                (_ "Payment received, thank you.")))
   (add-option (gnc:make-string-option	headingpage2	optname-invoice-number-text
     "d" "" (N_ "Invoice number: ")))
   (add-option (gnc:make-string-option	headingpage2	optname-to-text
@@ -241,7 +234,7 @@
   (add-option (gnc:make-text-option
                 notespage optname-extra-notes "a"
                 (_ "Notes added at end of invoice -- may contain HTML markup.") 
-                "Thank you for your patronage."))
+                (_ "Thank you for your patronage!")))
                 ;(N_ "(Development version -- don't rely on the numbers on this report without double-checking them.<br>Change the 'Extra Notes' option to get rid of this message)")))
 
   (add-option (gnc:make-text-option	notespage optname-extra-css "b"
@@ -340,3 +333,31 @@
   'options-generator options-generator
   'renderer report-renderer)
 
+(define (au-tax-options-generator)
+  (define (set-opt options page name value)
+    (let ((option (gnc:lookup-option options page name)))
+         (gnc:option-set-value option value)))
+
+  (let ((options (options-generator)))
+       (set-opt options headingpage optname-report-title (_ "Tax Invoice"))
+       ;(gnc:warn "title: " (gnc:option-value title-op))
+       (set-opt options headingpage optname-unit-price (_ "Unit"))
+       ;(gnc:warn "unitprice: " (gnc:option-value unit-price-op))
+       (set-opt options headingpage optname-tax-rate (_ "GST Rate"))
+       (set-opt options headingpage optname-tax-amount (_ "GST Amount"))
+       (set-opt options headingpage2 optname-amount-due (_ "Amount Due (inc GST)"))
+       (set-opt options headingpage2 optname-invoice-number-text (_ "Invoice #: "))
+       (set-opt options headingpage2 optname-ref-text (_ "Reference: "))
+       (set-opt options headingpage2 optname-jobname-text (_ "Engagement: "))
+       (set-opt options notespage optname-extra-css "h1.coyname { text-align: right; margin-bottom: 0px ; font-size: 200%; } h2.invoice { text-align: left; margin-bottom: 0px ; font-size: 500%; }")
+       options))
+
+(gnc:define-report
+  'version 1
+  'name (N_ "Australian Tax Invoice")
+  'report-guid "3dbbc2584da64e7a8674355bc3fbfe3d"
+  'menu-name (N_ "Australian Tax Invoice")
+  'menu-tip (N_ "Display an Australian customer invoice with tax columns (using eguile template)")
+  'menu-path (list gnc:menuname-business-reports)
+  'options-generator au-tax-options-generator
+  'renderer report-renderer)

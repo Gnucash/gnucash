@@ -277,7 +277,6 @@ struct _print_check_dialog
     GtkWidget *dialog;
     GtkWindow *caller_window;
 
-    GncPluginPageRegister *plugin_page;
     Split *split;
     GList *splits;
 
@@ -1601,7 +1600,7 @@ initialize_format_combobox (PrintCheckDialog *pcd)
  * make a new print check dialog and wait for it.    *
  *****************************************************/
 void
-gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
+gnc_ui_print_check_dialog_create(GtkWidget *parent,
                                  GList *splits)
 {
     PrintCheckDialog *pcd;
@@ -1612,7 +1611,7 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
     Transaction *trans = NULL;
 
     pcd = g_new0(PrintCheckDialog, 1);
-    pcd->plugin_page = plugin_page;
+    pcd->caller_window = GTK_WINDOW(parent);
     pcd->splits = g_list_copy(splits);
 
     builder = gtk_builder_new();
@@ -1682,9 +1681,7 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
     pcd->check_rotation = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "check_rotation_entry"));
     pcd->units_combobox = GTK_WIDGET(gtk_builder_get_object (builder, "units_combobox"));
 
-    window = GTK_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window);
-    gtk_window_set_transient_for(GTK_WINDOW(pcd->dialog), window);
-    pcd->caller_window = GTK_WINDOW(window);
+    gtk_window_set_transient_for(GTK_WINDOW(pcd->dialog), pcd->caller_window);
 
     /* Create and attach the date-format chooser */
     table = GTK_WIDGET(gtk_builder_get_object (builder, "options_table"));
@@ -1708,17 +1705,27 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
     /* Can't access business objects e.g. Customer,Vendor,Employee because
      * it would create build problems */
     if (g_list_length(pcd->splits) == 1)
+    {
+        GncOwner txn_owner;
+
         trans = xaccSplitGetParent((Split *)(pcd->splits->data));
-    else
-        trans = NULL;
-    if ( trans )
-    {
+        if (gncOwnerGetOwnerFromTxn (trans, &txn_owner))
+        {
+            GncOwner owner;
+            gncOwnerCopy (gncOwnerGetEndOwner (&txn_owner), &owner);
+
+            /* Got a business owner, get the address */
+            gtk_entry_set_text(GTK_ENTRY(pcd->check_address_name), gncOwnerGetName(&owner));
+            gtk_entry_set_text(GTK_ENTRY(pcd->check_address_1), gncAddressGetAddr1 (gncOwnerGetAddr(&owner)));
+            gtk_entry_set_text(GTK_ENTRY(pcd->check_address_2), gncAddressGetAddr2 (gncOwnerGetAddr(&owner)));
+            gtk_entry_set_text(GTK_ENTRY(pcd->check_address_3), gncAddressGetAddr3 (gncOwnerGetAddr(&owner)));
+            gtk_entry_set_text(GTK_ENTRY(pcd->check_address_4), gncAddressGetAddr4 (gncOwnerGetAddr(&owner)));
+        }
+    }
+
+    /* Use transaction description as address name if no better address has been found */
+    if ( trans && (0 == gtk_entry_get_text_length (GTK_ENTRY(pcd->check_address_name))) )
         gtk_entry_set_text(GTK_ENTRY(pcd->check_address_name), xaccTransGetDescription(trans));
-    }
-    else
-    {
-        /* nothing to do - defaults to blank */
-    }
 
     gtk_widget_destroy(GTK_WIDGET(gtk_builder_get_object (builder, "lower_left")));
 
@@ -2256,8 +2263,8 @@ draw_check_format(GtkPrintContext *context, gint position,
         /* Standard positioning is used.
          * Note that the first check on the page (position 0) doesn't
          * need to be moved (hence the test for position > 0 above. */
-        cairo_translate(cr, 0, format->height);
-        g_debug("Position %d translated by %f (pre-defined)", position, format->height);
+        cairo_translate(cr, 0, position * format->height);
+        g_debug("Position %d translated by %f (pre-defined)", position, position * format->height);
     }
     else if (position == pcd->position_max)
     {

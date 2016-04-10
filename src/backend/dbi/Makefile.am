@@ -15,11 +15,12 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/lib/libc \
   -I${top_srcdir}/src/libqof/qof \
+  -I${top_srcdir}/src \
   ${GLIB_CFLAGS} \
   ${WARN_CFLAGS}
 
 libgncmod_backend_dbi_la_SOURCES = \
-  gnc-backend-dbi.c
+  gnc-backend-dbi.cpp
 
 noinst_HEADERS = \
   gnc-backend-dbi.h \

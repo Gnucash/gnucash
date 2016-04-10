@@ -266,6 +266,89 @@ gnc_book_option_num_field_source_change_cb (gboolean num_action)
     gnc_gui_refresh_all ();
 }
 
+/** Calls gnc_book_option_book_currency_selected to initiate registered
+  * callbacks when currency accounting book option changes to book-currency so
+  * that registers/reports can update themselves; sets feature flag */
+void
+gnc_book_option_book_currency_selected_cb (gboolean use_book_currency)
+{
+    gnc_suspend_gui_refresh ();
+    if (use_book_currency)
+    {
+    /* Set a feature flag in the book for use of book currency. This will
+     * prevent older GnuCash versions that don't support this feature from
+     * opening this file. */
+        gnc_features_set_used (gnc_get_current_book(),
+                                GNC_FEATURE_BOOK_CURRENCY);
+    }
+    gnc_book_option_book_currency_selected (use_book_currency);
+    gnc_resume_gui_refresh ();
+    gnc_gui_refresh_all ();
+}
+
+/** Returns TRUE if both book-currency and default gain/loss policy KVPs exist
+  * and are valid and trading accounts are not used. */
+gboolean
+gnc_book_use_book_currency (QofBook *book)
+{
+    const gchar *policy;
+    const gchar *currency;
+
+    if (!book) return FALSE;
+
+    policy = qof_book_get_default_gains_policy (book);
+    currency = qof_book_get_book_currency (book);
+
+    /* If either a default gain/loss policy or a book-currency does not exist,
+       book-currency accounting method not valid */
+    if (!policy || !currency)
+       return FALSE;
+
+    /* If both exist, both must be valid */
+    if (!gnc_valid_policy (policy) || !gnc_commodity_table_lookup
+                                        (gnc_commodity_table_get_table
+                                          (gnc_get_current_book()),
+                                            GNC_COMMODITY_NS_CURRENCY,
+                                             currency))
+       return FALSE;
+
+    /* If both exist and are valid, there must be no trading accounts flag */
+    if (qof_book_use_trading_accounts (book))
+       return FALSE;
+
+    return TRUE;
+}
+
+/** Returns pointer to Book Currency name for book or NULL; determines
+  * that both book-currency and default gain/loss policy KVPs exist and that
+  * both are valid, a requirement for the 'book-currency' currency accounting
+  * method to apply. */
+const gchar *
+gnc_book_get_book_currency (QofBook *book)
+{
+    if (!book) return NULL;
+
+    if (gnc_book_use_book_currency (book))
+        return qof_book_get_book_currency (book);
+
+    return NULL;
+}
+
+/** Returns pointer to default gain/loss policy for book or NULL; determines
+  * that both book-currency and default gain/loss policy KVPs exist and that
+  * both are valid, a requirement for the 'book-currency' currency accounting
+  * method to apply. */
+const gchar *
+gnc_book_get_default_gains_policy (QofBook *book)
+{
+    if (!book) return NULL;
+
+    if (gnc_book_use_book_currency (book))
+        return qof_book_get_default_gains_policy (book);
+
+    return NULL;
+}
+
 Account *
 gnc_get_current_root_account (void)
 {
@@ -1258,8 +1341,8 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     {
         rounding.num = 5; /* Limit the denom to 10^13 ~= 2^44, leaving max at ~524288 */
         rounding.denom = pow(10, max_dp + 1);
-        val = gnc_numeric_add(val, rounding, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-        /* Yes, rounding up can cause overflow.  Check for it. */
+        val = gnc_numeric_add(val, rounding, val.denom, GNC_HOW_RND_TRUNC);
+
         if (gnc_numeric_check(val))
         {
             PWARN ("Bad numeric from rounding: %s.",
@@ -1473,11 +1556,9 @@ xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
 
     if (info.commodity && info.use_symbol)
     {
-        if (gnc_commodity_is_iso (info.commodity))
-	    currency_symbol = gnc_commodity_get_nice_symbol (info.commodity);
-        else
+        currency_symbol = gnc_commodity_get_nice_symbol (info.commodity);
+        if (!gnc_commodity_is_iso (info.commodity))
         {
-            currency_symbol = gnc_commodity_get_mnemonic (info.commodity);
             cs_precedes  = FALSE;
             sep_by_space = TRUE;
         }

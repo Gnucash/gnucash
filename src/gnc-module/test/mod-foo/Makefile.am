@@ -27,7 +27,7 @@ EXTRA_DIST = \
   foo.i \
   gnucash/foo.scm
 
-if BUILDING_FROM_SCM
+if BUILDING_FROM_VCS
 swig-foo.c: foo.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module -o $@ $<
 if ! OS_WIN32

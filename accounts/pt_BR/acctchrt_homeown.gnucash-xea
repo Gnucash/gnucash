@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
       Despesas da Casa
     </gnc-act:title>
     <gnc-act:short-description>
-      Despesas associadas à posse de uma habitação
+      Despesas associadas Ã  posse de uma habitaÃ§Ã£o
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Deverá selecionar este conjunto de contas caso possua uma habitação própria. Este conjunto disponibiliza um grupo de contas para acompanhar despesas da casa (seguro, impostos, reparos).
+    DeverÃ¡ selecionar este conjunto de contas caso possua uma habitaÃ§Ã£o prÃ³pria. Este conjunto disponibiliza um grupo de contas para acompanhar despesas da casa (seguro, impostos, reparos).
   </gnc-act:long-description>
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>

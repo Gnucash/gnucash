@@ -54,7 +54,7 @@ libgncmod_html_la_LIBADD = \
   ${GUILE_LIBS} \
   ${REGEX_LIBS}
 
-if BUILDING_FROM_SCM
+if BUILDING_FROM_VCS
 swig-gnc-html.c: gnc-html.i gnc-html.h \
                     ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
@@ -74,8 +74,9 @@ EXTRA_DIST = \
 CLEANFILES = $(BUILT_SOURCES) gnucash
 MAINTAINERCLEANFILES = swig-gnc-html.c
 
-# FIXME: Symlinking directories only works on non-win32.
+# We do this only for the gnome help tool on Linux and MacPorts.
 if !PLATFORM_WIN32
+if !PLATFORM_OSX_QUARTZ
 #
 # I hate inconsistent standards. Autotools puts help files into
 # ${datadir}/gnome/help/${program} while the gnome2 libraries expect
@@ -86,6 +87,7 @@ install-data-hook:
 
 uninstall-hook:
 	rm -f ${DESTDIR}${pkgdatadir}/gnome
+endif
 endif
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.html\"

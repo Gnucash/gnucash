@@ -24,6 +24,13 @@
 #include "table-allgui.h"
 #include "gnucash-sheet.h"
 
+/** @ingroup Register
+ * @addtogroup Gnome
+ * @{
+ */
+/** @file gnucash-grid.h
+ * @brief GnucashGrid declarations
+ */
 
 #define GNUCASH_TYPE_GRID     (gnucash_grid_get_type ())
 #define GNUCASH_GRID(obj)     (G_TYPE_CHECK_INSTANCE_CAST((obj), GNUCASH_TYPE_GRID, GnucashGrid))
@@ -42,7 +49,5 @@ gboolean   gnucash_grid_find_loc_by_pixel (GnucashGrid *grid, gint x, gint y,
 
 void       gnucash_draw_hatching (GdkDrawable *drawable, GdkGC *gc,
                                   int x, int y, int width, int height);
-
+/** @} */
 #endif /* GNUCASH_GRID_H */
-
-

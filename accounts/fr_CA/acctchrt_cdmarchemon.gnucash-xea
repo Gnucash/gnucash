@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <gnc-account-example>
     <gnc-act:title>
-      CD/CPG et marché monéraire
+      CD/CPG et marchÃ© monÃ©raire
     </gnc-act:title>
     <gnc-act:short-description>
-     Comptes corrrespondant aux certificats de dépôt et au marché monétaire.
+     Comptes corrrespondant aux certificats de dÃ©pÃ´t et au marchÃ© monÃ©taire.
     </gnc-act:short-description>
     <gnc-act:long-description>
-	    Sélectionnez ce groupe de comptes (CD/CPG , marché monétaire et intérêts) si vous détenez des certificats de dépôt et d'autres titres du marché monétaire.
+	    SÃ©lectionnez ce groupe de comptes (CD/CPG , marchÃ© monÃ©taire et intÃ©rÃªts) si vous dÃ©tenez des certificats de dÃ©pÃ´t et d'autres titres du marchÃ© monÃ©taire.
   </gnc-act:long-description>    
   <gnc:account version="2.0.0">
 	  <act:name>Root Account</act:name>
@@ -34,7 +34,7 @@
 	  </act:slots>
   </gnc:account>
   <gnc:account version="2.0.0">
-	  <act:name>Liquidités</act:name>
+	  <act:name>LiquiditÃ©s</act:name>
 	  <act:id type="new">aa06af77140bb86a516c66e2d80ca64b</act:id>
 	  <act:type>ASSET</act:type>
 	  <act:commodity>
@@ -42,7 +42,7 @@
 		  <cmdty:id>CAD</cmdty:id>
 	  </act:commodity>
 	  <act:commodity-scu>100</act:commodity-scu>
-	  <act:description>Liquidités ou actifs liquides</act:description>
+	  <act:description>LiquiditÃ©s ou actifs liquides</act:description>
 	  <act:slots>
 		  <slot>
 			  <slot:key>placeholder</slot:key>
@@ -60,11 +60,11 @@
 		  <cmdty:id>CAD</cmdty:id>
 	  </act:commodity>
 	  <act:commodity-scu>100</act:commodity-scu>
-	  <act:description>Certificats de dépôt et de placements bancaires</act:description>
+	  <act:description>Certificats de dÃ©pÃ´t et de placements bancaires</act:description>
 	  <act:parent type="new">aa06af77140bb86a516c66e2d80ca64b</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-	  <act:name>Marché monétaire</act:name>
+	  <act:name>MarchÃ© monÃ©taire</act:name>
 	  <act:id type="new">3dc58e05515a220bd6b825469f83fca1</act:id>
 	  <act:type>BANK</act:type>
 	  <act:commodity>
@@ -72,7 +72,7 @@
 		  <cmdty:id>CAD</cmdty:id>
 	  </act:commodity>
 	  <act:commodity-scu>100</act:commodity-scu>
-	  <act:description>Marché monétaire</act:description>
+	  <act:description>MarchÃ© monÃ©taire</act:description>
 	  <act:parent type="new">aa06af77140bb86a516c66e2d80ca64b</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
@@ -94,7 +94,7 @@
 	  </act:slots>
   </gnc:account>
   <gnc:account version="2.0.0">
-	  <act:name>Intérêts</act:name>
+	  <act:name>IntÃ©rÃªts</act:name>
 	  <act:id type="new">59057b71a3fd0057b2e5c2d23277ad96</act:id>
 	  <act:type>INCOME</act:type>
 	  <act:commodity>
@@ -102,7 +102,7 @@
 		  <cmdty:id>CAD</cmdty:id>
 	  </act:commodity>
 	  <act:commodity-scu>100</act:commodity-scu>
-	  <act:description>Revenus d'intérets</act:description>
+	  <act:description>Revenus d'intÃ©rets</act:description>
 	  <act:slots>
 		  <slot>
 			  <slot:key>placeholder</slot:key>
@@ -120,11 +120,11 @@
 		  <cmdty:id>CAD</cmdty:id>
 	  </act:commodity>
 	  <act:commodity-scu>100</act:commodity-scu>
-	  <act:description>Intérêts sur CD/CPG bancaires</act:description>
+	  <act:description>IntÃ©rÃªts sur CD/CPG bancaires</act:description>
 	  <act:parent type="new">59057b71a3fd0057b2e5c2d23277ad96</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-	  <act:name>Marché monétaire</act:name>
+	  <act:name>MarchÃ© monÃ©taire</act:name>
 	  <act:id type="new">2667d301e6b53d180c6e854616cdf817</act:id>
 	  <act:type>INCOME</act:type>
 	  <act:commodity>
@@ -132,7 +132,7 @@
 		  <cmdty:id>CAD</cmdty:id>
 	  </act:commodity>
 	  <act:commodity-scu>100</act:commodity-scu>
-	  <act:description>Intérêts sur marché monétaire</act:description>
+	  <act:description>IntÃ©rÃªts sur marchÃ© monÃ©taire</act:description>
 	  <act:parent type="new">59057b71a3fd0057b2e5c2d23277ad96</act:parent>
   </gnc:account>
 </gnc-account-example>

@@ -4,6 +4,25 @@
 ;;;
 ;;;  Bill Gribble <grib@billgribble.com> 20 Feb 2000
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program; if not, contact:
+;;
+;; Free Software Foundation           Voice:  +1-617-542-5942
+;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+;; Boston, MA  02110-1301,  USA       gnu@gnu.org
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 (define-module (gnucash import-export qif-import))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
@@ -31,14 +50,14 @@
 (gnc:module-load "gnucash/app-utils" 0)
 (gnc:module-load "gnucash/gnome-utils" 0)
 
-(load-from-path "qif-import/qif-objects.scm")      ;; class definitions
-(load-from-path "qif-import/qif-parse.scm")        ;; string-to-value
-(load-from-path "qif-import/qif-utils.scm")
-(load-from-path "qif-import/qif-file.scm")         ;; actual file reading
-(load-from-path "qif-import/qif-dialog-utils.scm") ;; build displays
-(load-from-path "qif-import/qif-guess-map.scm")    ;; build acct mappings
-(load-from-path "qif-import/qif-to-gnc.scm")       ;; conv QIF xtns to GNC
-(load-from-path "qif-import/qif-merge-groups.scm") ;; merge into user's acct
+(load-from-path "qif-import/qif-objects")      ;; class definitions
+(load-from-path "qif-import/qif-parse")        ;; string-to-value
+(load-from-path "qif-import/qif-utils")
+(load-from-path "qif-import/qif-file")         ;; actual file reading
+(load-from-path "qif-import/qif-dialog-utils") ;; build displays
+(load-from-path "qif-import/qif-guess-map")    ;; build acct mappings
+(load-from-path "qif-import/qif-to-gnc")       ;; conv QIF xtns to GNC
+(load-from-path "qif-import/qif-merge-groups") ;; merge into user's acct
 
 (export make-qif-file)
 (export make-ticker-map)

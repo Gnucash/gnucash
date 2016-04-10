@@ -755,7 +755,7 @@ gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
     parent = GNC_PLUGIN_PAGE(plugin_page);
     use_new = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_USE_NEW);
     g_object_set(G_OBJECT(plugin_page),
-                 "page-name",      _("General Ledger"),
+                 "page-name",      _("General Journal"),
                  "page-uri",       "default:",
                  "ui-description", "gnc-plugin-page-register-ui.xml",
                  "use-new-window", use_new,
@@ -1328,7 +1328,7 @@ gnc_plugin_page_register_save_page (GncPluginPage *plugin_page,
         g_key_file_set_string(key_file, group_name, KEY_ACCOUNT_NAME, name);
         g_free(name);
     }
-    else if (reg->type == GENERAL_LEDGER)
+    else if (reg->type == GENERAL_JOURNAL)
     {
         g_key_file_set_string(key_file, group_name, KEY_REGISTER_TYPE,
                               LABEL_GL);
@@ -1603,9 +1603,9 @@ gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page)
     case LD_GL:
         switch (reg->type)
         {
-        case GENERAL_LEDGER:
+        case GENERAL_JOURNAL:
         case INCOME_LEDGER:
-            return g_strdup(_("General Ledger"));
+            return g_strdup(_("General Journal"));
         case PORTFOLIO_LEDGER:
             return g_strdup(_("Portfolio"));
         case SEARCH_LEDGER:
@@ -1803,6 +1803,24 @@ gnc_plugin_page_register_summarybar_position_changed (gpointer prefs, gchar* pre
                           (position == GTK_POS_TOP ? 0 : -1) );
 }
 
+/** This function is called to get the query associated with this
+ *  plugin page.
+ *
+ *  @param page A pointer to the GncPluginPage.
+ */
+Query *
+gnc_plugin_page_register_get_query (GncPluginPage *plugin_page)
+{
+    GncPluginPageRegister *page;
+    GncPluginPageRegisterPrivate *priv;
+
+    g_return_val_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page), NULL);
+
+    page = GNC_PLUGIN_PAGE_REGISTER (plugin_page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+    return gnc_ledger_display_get_query (priv->ledger);
+}
+
 /************************************************************/
 /*                     "Sort By" Dialog                     */
 /************************************************************/
@@ -1965,7 +1983,7 @@ gnc_plugin_page_register_sort_order_save_cb (GtkToggleButton *button,
 void
 gnc_plugin_page_register_sort_order_reverse_cb (GtkToggleButton *button,
         GncPluginPageRegister *page)
-        
+
 {
     GncPluginPageRegisterPrivate *priv;
 
@@ -2557,10 +2575,10 @@ gnc_reg_get_name (GNCLedgerDisplay *ledger, gboolean for_window)
 
     switch (reg->type)
     {
-    case GENERAL_LEDGER:
+    case GENERAL_JOURNAL:
     case INCOME_LEDGER:
         if (for_window)
-            reg_name = _("General Ledger");
+            reg_name = _("General Journal");
         else
             reg_name = _("Transaction Report");
         break;
@@ -2639,7 +2657,7 @@ report_helper (GNCLedgerDisplay *ledger, Split *split, Query *query)
     arg = SCM_BOOL (reg->use_double_line);
     args = scm_cons (arg, args);
 
-    arg = SCM_BOOL (reg->type == GENERAL_LEDGER || reg->type == INCOME_LEDGER
+    arg = SCM_BOOL (reg->type == GENERAL_JOURNAL || reg->type == INCOME_LEDGER
                                                 || reg->type == SEARCH_LEDGER);
     args = scm_cons (arg, args);
 
@@ -2705,6 +2723,7 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
     GList         * splits = NULL, *item;
     GNCLedgerDisplayType ledger_type;
     Account       * account;
+    GtkWidget     * window;
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
 
@@ -2713,6 +2732,7 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
     reg = gnc_ledger_display_get_split_register (priv->ledger);
     ledger_type = gnc_ledger_display_type(priv->ledger);
+    window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(plugin_page));
     if (ledger_type == LD_SINGLE || ledger_type == LD_SUBACCOUNT)
     {
         account  = gnc_plugin_page_register_get_account (plugin_page);
@@ -2724,7 +2744,7 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
             if (xaccSplitGetAccount(split) == account)
             {
                 splits = g_list_append(splits, split);
-                gnc_ui_print_check_dialog_create(plugin_page, splits);
+                gnc_ui_print_check_dialog_create(window, splits);
                 g_list_free(splits);
             }
             else
@@ -2735,10 +2755,10 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
                 if (split)
                 {
                     splits = g_list_append(splits, split);
-                    gnc_ui_print_check_dialog_create(plugin_page, splits);
+                    gnc_ui_print_check_dialog_create(window, splits);
                     g_list_free(splits);
                 }
-            }           
+            }
         }
     }
     else if (ledger_type == LD_GL && reg->type == SEARCH_LEDGER)
@@ -2757,14 +2777,13 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
             {
                 if (xaccSplitGetAccount(split) != common_acct)
                 {
-                    GtkWidget *dialog, *window;
+                    GtkWidget *dialog;
                     gint response;
                     const gchar *title = _("Print checks from multiple accounts?");
                     const gchar *message =
                         _("This search result contains splits from more than one account. "
                           "Do you want to print the checks even though they are not all "
                           "from the same account?");
-                    window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(plugin_page));
                     dialog = gtk_message_dialog_new(GTK_WINDOW(window),
                                                     GTK_DIALOG_DESTROY_WITH_PARENT,
                                                     GTK_MESSAGE_WARNING,
@@ -2786,11 +2805,11 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
                 }
             }
         }
-        gnc_ui_print_check_dialog_create(plugin_page, splits);
+        gnc_ui_print_check_dialog_create(window, splits);
     }
     else
     {
-        gnc_error_dialog(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(plugin_page)), "%s",
+        gnc_error_dialog(window, "%s",
                          _("You can only print checks from a bank account register or search results."));
         LEAVE("Unsupported ledger type");
         return;
@@ -2954,6 +2973,12 @@ gnc_plugin_page_register_cmd_void_transaction (GtkAction *action,
         gnc_error_dialog(NULL, "%s", _("You cannot void a transaction with reconciled or cleared splits."));
         return;
     }
+    reason = xaccTransGetReadOnly (trans);
+    if (reason)
+    {
+        gnc_error_dialog(NULL, _("This transaction is marked read-only with the comment: '%s'"), reason);
+        return;
+    }
 
     if (!gnc_plugin_page_register_finish_pending(GNC_PLUGIN_PAGE(page)))
         return;
@@ -3089,9 +3114,9 @@ gnc_plugin_page_register_cmd_view_sort_by (GtkAction *action,
     button = GTK_WIDGET(gtk_builder_get_object (builder, "sort_save"));
     if (priv->sd.save_order == TRUE)
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
-    
+
     /* Set the button for the current reverse_order order */
-    button = GTK_WIDGET(gtk_builder_get_object (builder, "sort_reverse"));    
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "sort_reverse"));
     if(priv->sd.reverse_order == TRUE)
        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
 
@@ -3573,6 +3598,8 @@ gnc_plugin_page_register_cmd_expand_transaction (GtkToggleAction *action,
     LEAVE(" ");
 }
 
+/** Callback for "Edit Exchange Rate" menu item.
+ */
 static void
 gnc_plugin_page_register_cmd_exchange_rate (GtkAction *action,
         GncPluginPageRegister *plugin_page)
@@ -3724,7 +3751,10 @@ gnc_plugin_page_register_cmd_scrub_current (GtkAction *action,
     split = gnc_split_register_get_current_split (reg);
     lot = xaccSplitGetLot (split);
     if (lot && xaccAccountIsAPARType (xaccAccountGetType (xaccSplitGetAccount (split))))
+    {
         gncScrubBusinessLot (lot);
+        gncScrubBusinessSplit (split);
+    }
     gnc_resume_gui_refresh();
     LEAVE(" ");
 }
@@ -3736,10 +3766,8 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction *action,
     GncPluginPageRegisterPrivate *priv;
     Query *query;
     Account *root;
-    Transaction *trans;
-    GNCLot *lot;
-    Split *split;
-    GList *node;
+    GList *node, *splits;
+    gint split_count = 0, curr_split_no = 1;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
 
@@ -3756,17 +3784,31 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction *action,
     gnc_suspend_gui_refresh();
     root = gnc_get_current_root_account();
 
-    for (node = qof_query_run(query); node; node = node->next)
+    splits = qof_query_run(query);
+    split_count = g_list_length (splits);
+    for (node = splits; node; node = node->next)
     {
-        split = node->data;
-        trans = xaccSplitGetParent(split);
+        GNCLot *lot;
+        Split *split = node->data;
+        Transaction *trans = xaccSplitGetParent(split);
+
+
+        PINFO("Start processing split %d of %d",
+              curr_split_no, split_count);
 
         xaccTransScrubOrphans(trans);
         xaccTransScrubImbalance(trans, root, NULL);
 
         lot = xaccSplitGetLot (split);
         if (lot && xaccAccountIsAPARType (xaccAccountGetType (xaccSplitGetAccount (split))))
+        {
             gncScrubBusinessLot (lot);
+            gncScrubBusinessSplit (split);
+        }
+
+        PINFO("Finished processing split %d of %d",
+              curr_split_no, split_count);
+        curr_split_no++;
     }
 
     gnc_resume_gui_refresh();

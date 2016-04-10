@@ -47,3 +47,5 @@ gnc-fq-helper.1: gnc-fq-helper Makefile
 	pod2man $< > $@
 
 CLEANFILES = gnc-fq-helper gnc-fq-check gnc-fq-update
+
+DISTCLEANFILES = gnc-fq-dump.1 gnc-fq-helper.1

@@ -242,17 +242,13 @@ xaccLotScrubDoubleBalance (GNCLot *lot)
 static inline gboolean
 is_subsplit (Split *split)
 {
-    KvpValue *kval;
 
     /* generic stop-progress conditions */
     if (!split) return FALSE;
     g_return_val_if_fail (split->parent, FALSE);
 
     /* If there are no sub-splits, then there's nothing to do. */
-    kval = kvp_frame_get_slot (split->inst.kvp_data, "lot-split");
-    if (!kval) return FALSE;
-
-    return TRUE;
+    return xaccSplitHasPeers (split);
 }
 
 /* ================================================================= */
@@ -267,30 +263,9 @@ is_subsplit (Split *split)
 static void
 remove_guids (Split *sa, Split *sb)
 {
-    KvpFrame *ksub;
-
-    /* Find and remove the matching guid's */
-    ksub = (KvpFrame*)gnc_kvp_bag_find_by_guid (sa->inst.kvp_data, "lot-split",
-            "peer_guid", qof_instance_get_guid(sb));
-    if (ksub)
-    {
-        gnc_kvp_bag_remove_frame (sa->inst.kvp_data, "lot-split", ksub);
-        kvp_frame_delete (ksub);
-    }
-
-    /* Now do it in the other direction */
-    ksub = (KvpFrame*)gnc_kvp_bag_find_by_guid (sb->inst.kvp_data, "lot-split",
-            "peer_guid", qof_instance_get_guid(sa));
-    if (ksub)
-    {
-        gnc_kvp_bag_remove_frame (sb->inst.kvp_data, "lot-split", ksub);
-        kvp_frame_delete (ksub);
-    }
-
-    /* Finally, merge b's lot-splits, if any, into a's */
-    /* This is an important step, if it got busted into many pieces. */
-    gnc_kvp_bag_merge (sa->inst.kvp_data, "lot-split",
-                       sb->inst.kvp_data, "lot-split");
+     xaccSplitRemovePeerSplit (sa, sb);
+     xaccSplitRemovePeerSplit (sb, sa);
+     xaccSplitMergePeerSplits (sa, sb);
 }
 
 /* The merge_splits() routine causes the amount & value of sb
@@ -350,7 +325,6 @@ xaccScrubMergeSubSplits (Split *split, gboolean strict)
     Transaction *txn;
     SplitList *node;
     GNCLot *lot;
-    const GncGUID *guid;
 
     if (strict && (FALSE == is_subsplit (split))) return FALSE;
 
@@ -366,18 +340,19 @@ restart:
         if (s == split) continue;
         if (qof_instance_get_destroying(s)) continue;
 
-        /* OK, this split is in the same lot (and thus same account)
-         * as the indicated split.  Make sure it is really a subsplit
-         * of the split we started with.  It's possible to have two
-         * splits in the same lot and transaction that are not subsplits
-         * of each other, the test-period test suite does this, for
-         * example.  Only worry about adjacent sub-splits.  By
-         * repeatedly merging adjacent subsplits, we'll get the non-
-         * adjacent ones too. */
-        guid = qof_instance_get_guid(s);
-        if (gnc_kvp_bag_find_by_guid (split->inst.kvp_data, "lot-split",
-                                      "peer_guid", guid) == NULL)
-            continue;
+        if (strict)
+        {
+            /* OK, this split is in the same lot (and thus same account)
+             * as the indicated split.  Make sure it is really a subsplit
+             * of the split we started with.  It's possible to have two
+             * splits in the same lot and transaction that are not subsplits
+             * of each other, the test-period test suite does this, for
+             * example.  Only worry about adjacent sub-splits.  By
+             * repeatedly merging adjacent subsplits, we'll get the non-
+             * adjacent ones too. */
+            if (!xaccSplitIsPeerSplit (split, s))
+                continue;
+        }
 
         merge_splits (split, s);
         rc = TRUE;

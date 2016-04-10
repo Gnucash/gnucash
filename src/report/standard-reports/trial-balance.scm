@@ -54,7 +54,7 @@
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash printf))
 (use-modules (gnucash gnc-module))
-(use-modules (gnucash app-utils))
+(use-modules (gnucash gettext))
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
@@ -138,6 +138,7 @@
 ;; options generator
 (define (trial-balance-options-generator)
   (let* ((options (gnc:new-options))
+         (book (gnc-get-current-book)) ; XXX Find a way to get the book that opened the report
          (add-option 
           (lambda (new-option)
             (gnc:register-option options new-option))))
@@ -149,7 +150,7 @@
     (add-option
       (gnc:make-string-option
       (N_ "General") optname-party-name
-      "b" opthelp-party-name (or (gnc:company-info gnc:*company-name*) "")))
+      "b" opthelp-party-name (or (gnc:company-info book gnc:*company-name*) "")))
     
     ;; the period over which to collect adjusting/closing entries and
     ;; date at which to report the balance
@@ -164,7 +165,7 @@
       'current
       (list (vector 'current
 		    (N_ "Current Trial Balance")
-		    (N_ "Uses the exact balances in the general ledger"))
+		    (N_ "Uses the exact balances in the general journal"))
 	    (vector 'pre-adj
 		    (N_ "Pre-adjustment Trial Balance")
 		    (N_ "Ignores Adjusting/Closing entries"))
@@ -474,7 +475,7 @@
 	  (define atb-col 2) ;; adjusted trial balance column
 	  (define is-col  3) ;; income statement column
 	  (define bs-col  4) ;; balance sheet column
-	  (define bal-col 5) ;; for the current (general ledger) balance
+	  (define bal-col 5) ;; for the current (general journal) balance
 	  
 	  (define (report-val amt)
 	    (gnc:sum-collector-commodity

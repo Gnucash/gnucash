@@ -283,11 +283,6 @@ Plan A has been implemented in the engine.  To quickly summarize:
       it with the appropriate keys, markup, etc. and to carry balances 
       forward, etc.
 
--  src/engine/kvp-util.[ch]
-      Gemini code: code which allows 'linked lists' to be created, using
-      nothing but kvp trees and guid's.  These links are used to identify
-      peer accounts/ peer transactions, etc.
-
 -  src/engine/gnc-lot.[ch]
       Implements accounting Lots.
 

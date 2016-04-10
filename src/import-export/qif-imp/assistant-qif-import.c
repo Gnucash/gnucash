@@ -25,6 +25,11 @@
 
 #include "config.h"
 
+#include <platform.h>
+#if PLATFORM(WINDOWS)
+#include <windows.h>
+#endif
+
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
@@ -40,7 +45,6 @@
 #include "dialog-utils.h"
 #include "dialog-file-access.h"
 #include "assistant-qif-import.h"
-#include "assistant-utils.h"
 #include "gnc-component-manager.h"
 #include "qof.h"
 #include "gnc-file.h"
@@ -187,6 +191,7 @@ struct _qifimportwindow
     SCM       match_transactions;
     SCM       transaction_status;
     int       selected_transaction;
+    gchar    *date_format;
 };
 
 struct _qifassistantpage
@@ -201,7 +206,7 @@ struct _qifassistantpage
 
 typedef struct _qifassistantpage QIFAssistantPage;
 
-static void gnc_ui_qif_import_assistant_destroy (GtkObject *object, gpointer user_data);
+static void gnc_ui_qif_import_assistant_destroy (GtkWidget *object, gpointer user_data);
 static void gnc_ui_qif_import_assistant_close_handler (gpointer user_data );
 
 void gnc_ui_qif_import_cancel_cb (GtkAssistant *gtkassistant, gpointer user_data);
@@ -422,7 +427,7 @@ gnc_ui_qif_import_commodity_destroy(QIFImportWindow * wind)
  * close the QIF Import assistant window
  **********************************************/
 static void
-gnc_ui_qif_import_assistant_destroy(GtkObject *object, gpointer user_data)
+gnc_ui_qif_import_assistant_destroy(GtkWidget *object, gpointer user_data)
 {
     QIFImportWindow * wind = user_data;
 
@@ -1012,7 +1017,7 @@ gnc_ui_qif_import_commodity_update(QIFImportWindow * wind)
     GtkWidget          *gtkpage;
     QIFAssistantPage   *page;
     const gchar        *mnemonic = NULL;
-    gchar              *namespace = NULL;
+    gchar              *name_space = NULL;
     const gchar        *fullname = NULL;
     gnc_commodity      *tab_commodity;
 
@@ -1023,17 +1028,17 @@ gnc_ui_qif_import_commodity_update(QIFImportWindow * wind)
 
         /* Get any changes from the commodity page. */
         mnemonic  = gtk_entry_get_text(GTK_ENTRY(page->mnemonic_entry));
-        namespace = gnc_ui_namespace_picker_ns(page->namespace_combo);
+        name_space = gnc_ui_namespace_picker_ns(page->namespace_combo);
         fullname  = gtk_entry_get_text(GTK_ENTRY(page->name_entry));
 
         /* Update the commodity with the new values. */
-        gnc_commodity_set_namespace(page->commodity, namespace);
+        gnc_commodity_set_namespace(page->commodity, name_space);
         gnc_commodity_set_fullname(page->commodity, fullname);
         gnc_commodity_set_mnemonic(page->commodity, mnemonic);
 
         /* Add the commodity to the commodity table (if it isn't a duplicate). */
         tab_commodity = gnc_commodity_table_lookup(gnc_get_current_commodities(),
-                        namespace, mnemonic);
+                        name_space, mnemonic);
         if (!tab_commodity || tab_commodity == page->commodity)
             tab_commodity = gnc_commodity_table_insert(gnc_get_current_commodities(),
                             page->commodity);
@@ -1044,7 +1049,7 @@ gnc_ui_qif_import_commodity_update(QIFImportWindow * wind)
                        SWIG_NewPointerObj(tab_commodity,
                                           SWIG_TypeQuery("_p_gnc_commodity"), 0));
 
-        g_free(namespace);
+        g_free(name_space);
     }
 }
 
@@ -1309,8 +1314,17 @@ void
 gnc_ui_qif_import_cancel_cb(GtkAssistant *gtkassistant, gpointer user_data)
 {
     QIFImportWindow  *wind = user_data;
+    gint currentpage = gtk_assistant_get_current_page(gtkassistant);
+    GtkWidget *mypage = gtk_assistant_get_nth_page (gtkassistant, currentpage);
+    const char *pagename = gtk_buildable_get_name(GTK_BUILDABLE(mypage));
 
-    if (wind->busy)
+    if (!g_strcmp0 (pagename, "summary_page"))
+    {
+        /* Hitting the window close button on the summary page should not
+           invoke a cancel action. The import has finised at that point. */
+        gnc_ui_qif_import_close_cb(gtkassistant, user_data);
+    }
+    else if (wind->busy)
     {
         /* Cancel any long-running Scheme operation. */
         scm_c_eval_string("(qif-import:cancel)");
@@ -1543,12 +1557,22 @@ gnc_ui_qif_import_load_file_complete (GtkAssistant  *assistant,
 void
 gnc_ui_qif_import_load_file_prepare (GtkAssistant  *assistant, gpointer user_data)
 {
+    QIFImportWindow * wind = user_data;
+    const gchar * path_to_load;
+    gboolean page_status = FALSE;
 
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
-    /* Disable the Assistant Forward Button */
-    gtk_assistant_set_page_complete (assistant, page, FALSE);
+    /* Get the file name. */
+    path_to_load = gtk_entry_get_text(GTK_ENTRY(wind->filename_entry));
+
+    /* Calculate status for the Assistant Forward Button */
+    if (strlen(path_to_load) != 0)
+    {
+       page_status = gnc_ui_qif_import_load_file_complete(assistant, user_data);
+    }
+    gtk_assistant_set_page_complete (assistant, page, page_status);
 }
 
 
@@ -1789,6 +1813,7 @@ gnc_ui_qif_import_load_progress_start_cb(GtkButton * button,
     parse_return = scm_call_2(qif_file_parse, SCM_CAR(imported_files), progress);
     gnc_progress_dialog_pop(wind->load_progress);
     wind->ask_date_format = FALSE;
+    wind->date_format = NULL;
     if (parse_return == SCM_BOOL_T)
     {
         /* Canceled by the user. */
@@ -1984,28 +2009,31 @@ gnc_ui_qif_import_date_valid_cb (GtkWidget *widget, gpointer user_data)
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
-    SCM  reparse_dates   = scm_c_eval_string("qif-file:reparse-dates");
-    SCM  format_sym;
-    gchar *text;
-
     /* Get the selected date format. */
-    model = gtk_combo_box_get_model(GTK_COMBO_BOX(wind->date_format_combo));
-    gtk_combo_box_get_active_iter (GTK_COMBO_BOX(wind->date_format_combo), &iter);
-    gtk_tree_model_get( model, &iter, 0, &text, -1 );
+    model = gtk_combo_box_get_model(GTK_COMBO_BOX (wind->date_format_combo));
+    gtk_combo_box_get_active_iter (GTK_COMBO_BOX (wind->date_format_combo), &iter);
+    gtk_tree_model_get (model, &iter, 0, &wind->date_format, -1);
 
-    if (!text)
+    if (!wind->date_format)
     {
         g_critical("QIF import: BUG DETECTED in gnc_ui_qif_import_date_valid_cb. Format is NULL.");
     }
-    format_sym = scm_from_locale_symbol (text);
-    g_free(text);
-
-    /* Reparse the dates using the selected format. */
-    scm_call_2(reparse_dates, wind->selected_file, format_sym);
 
     gtk_assistant_set_page_complete (assistant, page, TRUE);
 }
 
+static void
+qif_import_reparse_dates (QIFImportWindow* wind)
+{
+    SCM  reparse_dates   = scm_c_eval_string ("qif-file:reparse-dates");
+    SCM format_sym = scm_from_locale_symbol (wind->date_format);
+
+    /* Reparse the dates using the selected format. */
+    scm_call_2 (reparse_dates, wind->selected_file, format_sym);
+    g_free (wind->date_format);
+    wind->date_format = NULL;
+    wind->ask_date_format = FALSE;
+}
 
 /******************************************
  * Page 4 - Account Setup Page Procedures
@@ -2023,8 +2051,9 @@ gnc_ui_qif_import_account_prepare (GtkAssistant  *assistant, gpointer user_data)
     gint num = gtk_assistant_get_current_page (assistant);
 
     SCM  check_from_acct = scm_c_eval_string("qif-file:check-from-acct");
-
-    /* Determine the next page to display. */
+    if (wind->ask_date_format && wind->date_format)
+        qif_import_reparse_dates (wind);
+   /* Determine the next page to display. */
     if (scm_call_1(check_from_acct, wind->selected_file) != SCM_BOOL_T)
     {
         /* There is an account name missing. Ask the user to provide one. */
@@ -2638,7 +2667,7 @@ gnc_ui_qif_import_comm_valid (GtkAssistant *assistant,
     gnc_commodity_table     *table;
     gnc_commodity_namespace *newns;
 
-    gchar       *namespace = gnc_ui_namespace_picker_ns(qpage->namespace_combo);
+    gchar       *name_space = gnc_ui_namespace_picker_ns(qpage->namespace_combo);
     const gchar *name      = gtk_entry_get_text(GTK_ENTRY(qpage->name_entry));
     const gchar *mnemonic  = gtk_entry_get_text(GTK_ENTRY(qpage->mnemonic_entry));
 
@@ -2646,7 +2675,7 @@ gnc_ui_qif_import_comm_valid (GtkAssistant *assistant,
     {
         gnc_warning_dialog(wind->window, "%s",
                            _("Enter a name or short description, such as \"Red Hat Stock\"."));
-        g_free(namespace);
+        g_free(name_space);
         return FALSE;
     }
     else if (!mnemonic || (mnemonic[0] == 0))
@@ -2654,18 +2683,18 @@ gnc_ui_qif_import_comm_valid (GtkAssistant *assistant,
         gnc_warning_dialog(wind->window, "%s",
                            _("Enter the ticker symbol or other well known abbreviation, such as"
                              " \"RHT\". If there isn't one, or you don't know it, create your own."));
-        g_free(namespace);
+        g_free(name_space);
         return FALSE;
     }
-    else if (!namespace || (namespace[0] == 0))
+    else if (!name_space || (name_space[0] == 0))
     {
         gnc_warning_dialog(wind->window, "%s",
                            _("Select the exchange on which the symbol is traded, or select the"
                              " type of investment (such as FUND for mutual funds.) If you don't"
                              " see your exchange or an appropriate investment type, you can"
                              " enter a new one."));
-        if (namespace)
-            g_free(namespace);
+        if (name_space)
+            g_free(name_space);
         return FALSE;
     }
 
@@ -2676,34 +2705,34 @@ gnc_ui_qif_import_comm_valid (GtkAssistant *assistant,
 
     book = gnc_get_current_book();
     table = gnc_commodity_table_get_table(book);
-    if (gnc_commodity_namespace_is_iso(namespace) &&
-            !gnc_commodity_table_lookup(table, namespace, mnemonic))
+    if (gnc_commodity_namespace_is_iso(name_space) &&
+            !gnc_commodity_table_lookup(table, name_space, mnemonic))
     {
         gnc_warning_dialog(wind->window, "%s",
                            _("You must enter an existing national "
                              "currency or enter a different type."));
 
-        g_free(namespace);
+        g_free(name_space);
         return FALSE;
     }
 
     /* Is the namespace a new one? */
-    if (!gnc_commodity_table_has_namespace(table, namespace))
+    if (!gnc_commodity_table_has_namespace(table, name_space))
     {
         /* Register it so that it will appear as an option on other pages. */
-        newns = gnc_commodity_table_add_namespace(table, namespace, book);
+        newns = gnc_commodity_table_add_namespace(table, name_space, book);
 
         /* Remember it so it can be removed if the import gets canceled. */
         if (newns)
-            wind->new_namespaces = g_list_prepend(wind->new_namespaces, namespace);
+            wind->new_namespaces = g_list_prepend(wind->new_namespaces, name_space);
         else
         {
-            g_warning("QIF import: Couldn't create namespace %s", namespace);
-            g_free(namespace);
+            g_warning("QIF import: Couldn't create namespace %s", name_space);
+            g_free(name_space);
         }
     }
     else
-        g_free(namespace);
+        g_free(name_space);
 
     return TRUE;
 }
@@ -3396,8 +3425,6 @@ get_assistant_widgets(QIFImportWindow *wind, GtkBuilder *builder)
         GTK_WIDGET(gtk_builder_get_object (builder, "new_transaction_view"));
     wind->old_transaction_view =
         GTK_WIDGET(gtk_builder_get_object (builder, "old_transaction_view"));
-
-    gnc_assistant_set_colors (GTK_ASSISTANT (wind->window));
 }
 
 

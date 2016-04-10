@@ -45,7 +45,6 @@
 #include "gnc-ui-balances.h"
 #include "dialog-utils.h"
 #include "window-main-summarybar.h"
-#include "assistant-utils.h"
 
 #define SAMPLE_OWNER_VALUE "$1,000,000.00"
 
@@ -364,9 +363,36 @@ gnc_tree_view_owner_new (GncOwnerType owner_type)
     GncTreeView *view;
     GtkTreeModel *model, *f_model, *s_model;
     const gchar *sample_type, *sample_currency;
+    const gchar *owner_name = NULL, * owner_id = NULL;
     GncTreeViewOwnerPrivate *priv;
 
     ENTER(" ");
+
+    switch (owner_type)
+    {
+    case GNC_OWNER_NONE :
+    case GNC_OWNER_UNDEFINED :
+        PWARN("missing owner_type");
+        owner_name = _("Name");
+        owner_id = _("ID #");
+        break;
+    case GNC_OWNER_CUSTOMER :
+        owner_name = _("Company Name");
+        owner_id = _("Customer Number");
+        break;
+    case GNC_OWNER_JOB :
+        owner_name = _("Job Name");
+        owner_id = _("Job Number");
+        break;
+    case GNC_OWNER_VENDOR :
+        owner_name = _("Company Name");
+        owner_id = _("Vendor Number");
+        break;
+    case GNC_OWNER_EMPLOYEE :
+        owner_name = _("Employee Name");
+        owner_id = _("Employee Number");
+        break;
+    }
     /* Create our view */
     view = g_object_new (GNC_TYPE_TREE_VIEW_OWNER,
                          "name", "owner_tree", NULL);
@@ -395,7 +421,7 @@ gnc_tree_view_owner_new (GncOwnerType owner_type)
     sample_currency = gnc_commodity_get_fullname(gnc_default_currency());
 
     priv->name_column
-        = gnc_tree_view_add_text_column(view, _("Owner Name"), GNC_OWNER_TREE_NAME_COL,
+        = gnc_tree_view_add_text_column(view, owner_name, GNC_OWNER_TREE_NAME_COL,
                                         NULL, "GnuCash Inc.",
                                         GNC_TREE_MODEL_OWNER_COL_NAME,
                                         GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
@@ -406,7 +432,7 @@ gnc_tree_view_owner_new (GncOwnerType owner_type)
                                   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                   sort_by_string);
     priv->id_column
-        = gnc_tree_view_add_text_column(view, _("Owner ID"), GNC_OWNER_TREE_ID_COL,
+        = gnc_tree_view_add_text_column(view, owner_id, GNC_OWNER_TREE_ID_COL,
                                         NULL, "1-123-1234",
                                         GNC_TREE_MODEL_OWNER_COL_ID,
                                         GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
@@ -954,16 +980,16 @@ owner_cell_kvp_data_func (GtkTreeViewColumn *tree_column,
                           gpointer key)
 {
     GncOwner *owner;
-    kvp_frame * frame;
+    GValue v = G_VALUE_INIT;
 
     g_return_if_fail (GTK_IS_TREE_MODEL_SORT (s_model));
     owner = gnc_tree_view_owner_get_owner_from_iter(s_model, s_iter);
-    frame = gncOwnerGetSlots(owner);
-
-    g_object_set (G_OBJECT (cell),
-                  "text", kvp_frame_get_string(frame, (gchar *)key),
-                  "xalign", 0.0,
-                  NULL);
+    qof_instance_get_kvp (QOF_INSTANCE (owner), (gchar*)key, &v);
+    if (G_VALUE_HOLDS_STRING)
+         g_object_set (G_OBJECT (cell),
+                       "text", g_value_get_string (&v),
+                       "xalign", 0.0,
+                       NULL);
 
 }
 

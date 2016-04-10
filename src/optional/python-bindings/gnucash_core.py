@@ -40,8 +40,9 @@ from gnucash_core_c import gncInvoiceLookup, gncInvoiceGetInvoiceFromTxn, \
     gncInvoiceGetInvoiceFromLot, gncEntryLookup, gncInvoiceLookup, \
     gncCustomerLookup, gncVendorLookup, gncJobLookup, gncEmployeeLookup, \
     gncTaxTableLookup, gncTaxTableLookupByName, gnc_search_invoice_on_id, \
-    gnc_search_customer_on_id, gnc_search_bill_on_id , gnc_search_vendor_on_id, \
-    gncInvoiceNextID, gncCustomerNextID, gncTaxTableGetTables, gncVendorNextID
+    gnc_search_customer_on_id, gnc_search_bill_on_id , \
+    gnc_search_vendor_on_id, gncInvoiceNextID, gncCustomerNextID, \
+    gncVendorNextID, gncTaxTableGetTables
 
 class GnuCashCoreClass(ClassFromFunctions):
     _module = gnucash_core_c
@@ -102,7 +103,13 @@ class Session(GnuCashCoreClass):
         if book_uri is not None:
             try:
                 self.begin(book_uri, ignore_lock, is_new, force_new)
-                self.load()
+                # Take care of backend inconsistency
+                # New xml file can't be loaded, new sql store
+                # has to be loaded before it can be altered
+                # Any existing store obviously has to be loaded
+                # More background: https://bugzilla.gnome.org/show_bug.cgi?id=726891
+                if book_uri[:3] != "xml" or not is_new:
+                    self.load()
             except GnuCashBackendException, backend_exception:
                 self.end()
                 self.destroy()
@@ -170,7 +177,7 @@ class Book(GnuCashCoreClass):
             gncInvoiceLookup, Invoice, guid.get_instance() )
 
     def EntryLookup(self, guid):
-        from gnucash_business import Entr
+        from gnucash_business import Entry
         return self.do_lookup_create_oo_instance(
             gncEntryLookup, Entry, guid.get_instance() )
 
@@ -208,7 +215,7 @@ class Book(GnuCashCoreClass):
         from gnucash_business import TaxTable
         return [ TaxTable(instance=item) for item in gncTaxTableGetTables(self.instance) ]
 
-    def BillLoookupByID(self, id):
+    def BillLookupByID(self, id):
         from gnucash_business import Bill
         return self.do_lookup_create_oo_instance(
             gnc_search_bill_on_id, Bill, id)
@@ -243,7 +250,7 @@ class Book(GnuCashCoreClass):
       ''' Return the next Customer ID. '''
       from gnucash.gnucash_core_c import gncCustomerNextID
       return gncCustomerNextID(self.get_instance())
-    
+
     def VendorNextID(self):
       ''' Return the next Vendor ID. '''
       from gnucash.gnucash_core_c import gncVendorNextID
@@ -575,6 +582,9 @@ methods_return_instance(GncLot, gnclot_dict)
 Transaction.add_methods_with_prefix('xaccTrans')
 Transaction.add_method('gncTransGetGUID', 'GetGUID');
 
+Transaction.add_method('xaccTransGetDescription', 'GetDescription')
+Transaction.add_method('xaccTransDestroy', 'Destroy')
+
 trans_dict =    {
                     'GetSplit': Split,
                     'FindSplitByAccount': Split,
@@ -600,6 +610,7 @@ Transaction.decorate_functions(
 # Split
 Split.add_methods_with_prefix('xaccSplit')
 Split.add_method('gncSplitGetGUID', 'GetGUID');
+Split.add_method('xaccSplitDestroy', 'Destroy')
 
 split_dict =    {
                     'GetBook': Book,
@@ -628,6 +639,7 @@ Split.parent = property( Split.GetParent, Split.SetParent )
 Account.add_methods_with_prefix('xaccAccount')
 Account.add_methods_with_prefix('gnc_account_')
 Account.add_method('gncAccountGetGUID', 'GetGUID');
+Account.add_method('xaccAccountGetPlaceholder', 'GetPlaceholder')
 
 account_dict =  {
                     'get_book' : Book,
@@ -728,19 +740,36 @@ Query.add_method('qof_query_search_for', 'search_for')
 Query.add_method('qof_query_run', 'run')
 Query.add_method('qof_query_add_term', 'add_term')
 Query.add_method('qof_query_add_boolean_match', 'add_boolean_match')
+Query.add_method('qof_query_add_guid_list_match', 'add_guid_list_match')
+Query.add_method('qof_query_add_guid_match', 'add_guid_match')
 Query.add_method('qof_query_destroy', 'destroy')
 
 class QueryStringPredicate(GnuCashCoreClass):
     pass
 
-QueryStringPredicate.add_constructor_and_methods_with_prefix('qof_query_', 'string_predicate')
+QueryStringPredicate.add_constructor_and_methods_with_prefix(
+    'qof_query_','string_predicate')
 
 class QueryBooleanPredicate(GnuCashCoreClass):
     pass
 
-QueryBooleanPredicate.add_constructor_and_methods_with_prefix('qof_query_', 'boolean_predicate')
+QueryBooleanPredicate.add_constructor_and_methods_with_prefix(
+    'qof_query_', 'boolean_predicate')
 
 class QueryInt32Predicate(GnuCashCoreClass):
     pass
 
-QueryInt32Predicate.add_constructor_and_methods_with_prefix('qof_query_', 'int32_predicate')
+QueryInt32Predicate.add_constructor_and_methods_with_prefix(
+    'qof_query_', 'int32_predicate')
+
+class QueryDatePredicate(GnuCashCoreClass):
+    pass
+
+QueryDatePredicate.add_constructor_and_methods_with_prefix(
+    'qof_query_', 'date_predicate')
+
+class QueryGuidPredicate(GnuCashCoreClass):
+    pass
+
+QueryGuidPredicate.add_constructor_and_methods_with_prefix(
+    'qof_query_', 'guid_predicate')

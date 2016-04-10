@@ -472,6 +472,7 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
     /* Visible types */
     priv->fd.visible_types = -1; /* Start with all types */
     priv->fd.show_hidden = FALSE;
+    priv->fd.show_unused = TRUE;
     priv->fd.show_zero_total = TRUE;
 
     LEAVE("page %p, priv %p, action group %p",
@@ -1573,7 +1574,7 @@ gnc_plugin_page_account_tree_cmd_scrub (GtkAction *action, GncPluginPageAccountT
     if (g_getenv("GNC_AUTO_SCRUB_LOTS") != NULL)
         xaccAccountScrubLots(account);
 
-    gncScrubBusinessAccountLots(account);
+    gncScrubBusinessAccount(account);
 
 
     gnc_resume_gui_refresh ();
@@ -1595,7 +1596,7 @@ gnc_plugin_page_account_tree_cmd_scrub_sub (GtkAction *action, GncPluginPageAcco
     if (g_getenv("GNC_AUTO_SCRUB_LOTS") != NULL)
         xaccAccountTreeScrubLots(account);
 
-    gncScrubBusinessAccountTreeLots(account);
+    gncScrubBusinessAccountTree(account);
 
     gnc_resume_gui_refresh ();
 }
@@ -1613,7 +1614,7 @@ gnc_plugin_page_account_tree_cmd_scrub_all (GtkAction *action, GncPluginPageAcco
     if (g_getenv("GNC_AUTO_SCRUB_LOTS") != NULL)
         xaccAccountTreeScrubLots(root);
 
-    gncScrubBusinessAccountTreeLots(root);
+    gncScrubBusinessAccountTree(root);
 
     gnc_resume_gui_refresh ();
 }

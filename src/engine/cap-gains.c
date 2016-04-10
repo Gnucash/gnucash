@@ -338,6 +338,7 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
         amt_tot = split->amount;
         amt_a = gnc_numeric_neg (baln);
         amt_b = gnc_numeric_sub_fixed (amt_tot, amt_a);
+        g_assert (gnc_numeric_check(amt_b) == GNC_ERROR_OK);
 
         PINFO ("++++++++++++++ splitting split=%p into amt = %s + %s",
                split,
@@ -377,6 +378,8 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
                gnc_num_dbg_to_string(val_a),
                gnc_num_dbg_to_string(val_b) );
 
+        g_assert (!gnc_numeric_zero_p (amt_a));
+        g_assert (!gnc_numeric_zero_p (val_a));
         xaccSplitSetAmount (split, amt_a);
         xaccSplitSetValue (split, val_a);
 
@@ -401,16 +404,8 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
         /* Set the lot-split and peer_guid properties on the two
          * splits to indicate that they're linked. 
          */
-        qof_instance_set (QOF_INSTANCE (split),
-                          "lot-split", now,
-                          "peer_guid", xaccSplitGetGUID (new_split),
-                          NULL);
-
-        qof_instance_set (QOF_INSTANCE (new_split),
-                          "lot-split", now,
-                          "peer_guid", xaccSplitGetGUID (split),
-                          NULL);
-
+        xaccSplitAddPeerSplit(split, new_split, now);
+        xaccSplitAddPeerSplit(new_split, split, now);
         xaccAccountInsertSplit (acc, new_split);
         xaccTransAppendSplit (trans, new_split);
         /* Set the amount and value after the split is in the transaction

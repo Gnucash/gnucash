@@ -38,7 +38,7 @@ _gnucash_core_c_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la
-if BUILDING_FROM_SCM
+if BUILDING_FROM_VCS
 _gnucash_core_c_includes= \
 	${top_builddir}/config.h \
 	${top_srcdir}/src/libqof/qof/qofsession.h \
@@ -133,3 +133,6 @@ CLEANFILES = $(BUILT_SOURCES) .py-links gnucash_core.c.py
 
 clean-local:
 	rm -rf gnucash
+
+uninstall-local:
+	rm -rf ${pkgpyexecdir}

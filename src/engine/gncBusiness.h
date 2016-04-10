@@ -36,6 +36,7 @@
 
 #include <glib.h>
 #include "qof.h"
+#include "Account.h"
 
 /* KVP key for report PDF directories */
 #define OWNER_EXPORT_PDF_DIRNAME "export-pdf-directory"
@@ -85,6 +86,11 @@ typedef GList OwnerList;
  * original data. */
 OwnerList * gncBusinessGetOwnerList (QofBook *book, QofIdTypeConst type_name,
                                      gboolean all_including_inactive);
+
+/** Returns whether the given account type is a valid type to use in
+ * business payments. Currently payments are allowed to/from assets,
+ * liabilities and equity accounts. */
+gboolean gncBusinessIsPaymentAcctType (GNCAccountType type);
 
 
 #endif /* GNC_BUSINESS_H_ */

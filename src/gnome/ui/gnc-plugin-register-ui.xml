@@ -2,7 +2,7 @@
   <menubar>
     <menu name="Tools" action="ToolsAction">
       <placeholder name="ToolsPlaceholder">
-        <menuitem name="ToolsGeneralLedger" action="ToolsGeneralLedgerAction"/>
+        <menuitem name="ToolsGeneralJournal" action="ToolsGeneralJournalAction"/>
       </placeholder>
     </menu>
   </menubar>

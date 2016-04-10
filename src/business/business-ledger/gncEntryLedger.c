@@ -80,7 +80,7 @@ gnc_entry_ledger_get_blank_entry (GncEntryLedger *ledger)
 
 Account *
 gnc_entry_ledger_get_account_by_name (GncEntryLedger *ledger, BasicCell * bcell,
-                                      const char *name, gboolean *new)
+                                      const char *name, gboolean *isnew)
 {
     const char *placeholder = _("The account %s does not allow transactions.");
     const char *missing = _("The account %s does not exist. "
@@ -100,7 +100,7 @@ gnc_entry_ledger_get_account_by_name (GncEntryLedger *ledger, BasicCell * bcell,
             return NULL;
 
         /* No changes, as yet. */
-        *new = FALSE;
+        *isnew = FALSE;
 
         /* User said yes, they want to create a new account. */
         account_types = g_list_prepend (account_types, (gpointer)ACCT_TYPE_CREDIT);
@@ -115,7 +115,7 @@ gnc_entry_ledger_get_account_by_name (GncEntryLedger *ledger, BasicCell * bcell,
         g_list_free ( account_types );
         if (!account)
             return NULL;
-        *new = TRUE;
+        *isnew = TRUE;
 
         /* Now have a new account. Update the cell with the name as created. */
         account_name = gnc_get_account_name_for_register (account);

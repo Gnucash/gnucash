@@ -6,8 +6,7 @@ lib_LTLIBRARIES = libgnc-qof.la
 
 libgnc_qof_la_LDFLAGS= \
 	-version-info \
-	$(LIBQOF_LIBRARY_VERSION) \
-	$(BOOST_LDFLAGS)
+	$(LIBQOF_LIBRARY_VERSION)
 
 libgnc_qof_common_libs =  \
   $(GLIB_LIBS) \
@@ -23,11 +22,16 @@ AM_CPPFLAGS = \
   $(BOOST_CPPFLAGS)
 
 libgnc_qof_la_SOURCES =  \
+   gnc-aqbanking-templates.cpp \
    gnc-date.cpp        \
-   gnc-numeric.cpp   \
+   gnc-int128.cpp      \
+   gnc-numeric.cpp     \
+   gnc-rational.cpp    \
+   gnc-timezone.cpp    \
+   gnc-datetime.cpp    \
    guid.cpp            \
-   kvp-util.cpp        \
    kvp_frame.cpp       \
+   kvp-value.cpp       \
    qofbackend.cpp      \
    qofbook.cpp         \
    qofchoice.cpp       \
@@ -46,13 +50,16 @@ libgnc_qof_la_SOURCES =  \
 qofincludedir = ${pkgincludedir}
 
 qofinclude_HEADERS = \
+   gnc-aqbanking-templates.h \
    gnc-date-p.h      \
    gnc-date.h        \
    gnc-numeric.h     \
+   gnc-rational.hpp  \
+   gnc-timezone.hpp  \
+   gnc-datetime.hpp  \
    guid.h            \
-   kvp-util-p.h      \
-   kvp-util.h        \
-   kvp_frame.h       \
+   kvp_frame.hpp     \
+   kvp-value.hpp     \
    qof.h             \
    qofbackend-p.h    \
    qofbackend.h      \
@@ -78,27 +85,16 @@ noinst_HEADERS = \
    qofbook-p.h  \
    qofclass-p.h  \
    qofevent-p.h \
-   qofmath128-p.h  \
+   gnc-int128.hpp  \
    qofobject-p.h  \
    qofquery-p.h  \
    qofquerycore-p.h \
    qofsession-p.h
-
-EXTRA_DIST += \
-  qofmath128.cpp
 
 if OS_WIN32
 libgnc_qof_la_SOURCES += qof-win32.cpp
 else
 EXTRA_DIST += qof-win32.cpp
 endif
-
-## For testing the qofmath128 routines
-# run "make check" (to build the test program) and then run test-qofmath
-check_PROGRAMS = test-qofmath
-test_qofmath_SOURCES = gnc-numeric.cpp
-test_qofmath_CPPFLAGS = $(AM_CPPFLAGS) -DTEST_128_BIT_MULT
-test_qofmath_LDFLAGS = $(libgnc_qof_la_LDFLAGS)
-test_qofmath_LDADD = $(libgnc_qof_common_libs)
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"qof\"

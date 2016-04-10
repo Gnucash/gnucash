@@ -79,7 +79,7 @@ void gnc_register_add_cell_type (const char *cell_type_name,
 BasicCell * gnc_register_make_cell (const char *cell_type_name);
 
 
-/* The VirtualCellLocation structure contains the virtual
+/** The VirtualCellLocation structure contains the virtual
  * location of a virtual cell.
  */
 typedef struct _VirtualCellLocation VirtualCellLocation;
@@ -94,7 +94,7 @@ gboolean virt_cell_loc_equal (VirtualCellLocation vcl1,
                               VirtualCellLocation vcl2);
 
 
-/* The VirtualLocation structure contains the virtual
+/** The VirtualLocation structure contains the virtual
  * location of a physical cell.
  *
  * There is one instance of Locator for each physical cell.

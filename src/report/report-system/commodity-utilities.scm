@@ -644,8 +644,11 @@
     (if (not (null? curr-accounts))
 	;; Go through all splits and add up all value-amounts
 	;; and share-amounts
+	;; However skip splits in trading accounts as these counterbalance
+	;; the actual value and share amounts back to zero
 	(for-each 
 	 (lambda (a)
+	   (if (not (eq? (xaccAccountGetType (xaccSplitGetAccount a)) ACCT-TYPE-TRADING))
 	   (let* ((transaction-comm (xaccTransGetCurrency
 				     (xaccSplitGetParent a)))
 		  (account-comm (xaccAccountGetCommodity
@@ -697,7 +700,7 @@
 					 (car comm-list) sumlist)))))
 		   ;; And add the balances to the comm-list entry.
 		   ((caadr pair) 'add (cadr foreignlist))
-		   ((cdadr pair) 'add (caddr foreignlist))))))
+		   ((cdadr pair) 'add (caddr foreignlist)))))))
 	 (gnc:get-all-commodity-splits curr-accounts end-date)))
   
     (gnc:resolve-unknown-comm sumlist report-commodity)))
