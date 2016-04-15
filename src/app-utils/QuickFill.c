@@ -41,8 +41,8 @@ struct _QuickFill
 
 
 /** PROTOTYPES ******************************************************/
-static void quickfill_insert_recursive (QuickFill *qf, const char *text,
-                                        int depth, QuickFillSort sort);
+static void quickfill_insert_recursive (QuickFill *qf, const char *text, int len,
+                                        const char* next_char, QuickFillSort sort);
 
 static void gnc_quickfill_remove_recursive (QuickFill *qf, const gchar *text,
         gint depth, QuickFillSort sort);
@@ -95,7 +95,7 @@ gnc_quickfill_destroy (QuickFill *qf)
     qf->matches = NULL;
 
     if (qf->text)
-        CACHE_REMOVE(qf->text);
+        g_free(qf->text);
     qf->text = NULL;
     qf->len = 0;
 
@@ -111,7 +111,7 @@ gnc_quickfill_purge (QuickFill *qf)
     g_hash_table_foreach_remove (qf->matches, destroy_helper, NULL);
 
     if (qf->text)
-        CACHE_REMOVE (qf->text);
+        g_free (qf->text);
     qf->text = NULL;
     qf->len = 0;
 }
@@ -229,13 +229,15 @@ void
 gnc_quickfill_insert (QuickFill *qf, const char *text, QuickFillSort sort)
 {
     gchar *normalized_str;
+    int len;
 
     if (NULL == qf) return;
     if (NULL == text) return;
 
 
     normalized_str = g_utf8_normalize (text, -1, G_NORMALIZE_NFC);
-    quickfill_insert_recursive (qf, normalized_str, 0, sort);
+    len = g_utf8_strlen (text, -1);
+    quickfill_insert_recursive (qf, normalized_str, len, normalized_str, sort);
     g_free (normalized_str);
 }
 
@@ -243,25 +245,22 @@ gnc_quickfill_insert (QuickFill *qf, const char *text, QuickFillSort sort)
 \********************************************************************/
 
 static void
-quickfill_insert_recursive (QuickFill *qf, const char *text, int depth,
-                            QuickFillSort sort)
+quickfill_insert_recursive (QuickFill *qf, const char *text, int len,
+                            const char *next_char, QuickFillSort sort)
 {
     guint key;
     char *old_text;
     QuickFill *match_qf;
-    int len;
-    char *key_char;
     gunichar key_char_uc;
 
     if (qf == NULL)
         return;
 
-    if ((text == NULL) || (g_utf8_strlen (text, -1) <= depth))
+    if ((text == NULL) || (*next_char == '\0'))
         return;
 
-    key_char = g_utf8_offset_to_pointer (text, depth);
 
-    key_char_uc = g_utf8_get_char (key_char);
+    key_char_uc = g_utf8_get_char (next_char);
     key = g_unichar_toupper (key_char_uc);
 
     match_qf = g_hash_table_lookup (qf->matches, GUINT_TO_POINTER (key));
@@ -282,12 +281,10 @@ quickfill_insert_recursive (QuickFill *qf, const char *text, int depth,
 
     case QUICKFILL_LIFO:
     default:
-        len = g_utf8_strlen (text, -1);
-
         /* If there's no string there already, just put the new one in. */
         if (old_text == NULL)
         {
-            match_qf->text = CACHE_INSERT((gpointer) text);
+            match_qf->text = g_strdup(text);
             match_qf->len = len;
             break;
         }
@@ -297,13 +294,13 @@ quickfill_insert_recursive (QuickFill *qf, const char *text, int depth,
                 (strncmp(text, old_text, strlen(old_text)) == 0))
             break;
 
-        CACHE_REMOVE(old_text);
-        match_qf->text = CACHE_INSERT((gpointer) text);
+        g_free(old_text);
+        match_qf->text = g_strdup(text);
         match_qf->len = len;
         break;
     }
 
-    quickfill_insert_recursive (match_qf, text, ++depth, sort);
+    quickfill_insert_recursive (match_qf, text, len, g_utf8_next_char (next_char), sort);
 }
 
 /********************************************************************\
@@ -436,10 +433,10 @@ gnc_quickfill_remove_recursive (QuickFill *qf, const gchar *text, gint depth,
         }
 
         /* now replace or clear text */
-        CACHE_REMOVE(qf->text);
+        g_free(qf->text);
         if (best_text != NULL)
         {
-            qf->text = CACHE_INSERT((gpointer) best_text);
+            qf->text = g_strdup(best_text);
             qf->len = best_len;
         }
         else
