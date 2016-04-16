@@ -334,16 +334,20 @@ developing over time"))
                                 (gnc:deltasym-to-delta interval))))
                ;; Here the date strings for the x-axis labels are
                ;; created.
-               (date-string-list
-                (map (lambda (date-list-item)
-                       (gnc-print-date
-                        (if do-intervals?
-                            (car date-list-item)
-                            date-list-item)))
-                     dates-list))
+               (date-string-list '())
+               (date-iso-string-list '())
+               (save-fmt (qof-date-format-get))
                (other-anchor "")
                (all-data '()))
-          
+
+          (define (datelist->stringlist dates-list)
+            (map (lambda (date-list-item)
+                         (gnc-print-date
+                          (if do-intervals?
+                              (car date-list-item)
+                              date-list-item)))
+                 dates-list))
+
           ;; Converts a commodity-collector into one single double
           ;; number, depending on the report's currency and the
           ;; exchange-fn calculated above. Returns a double, multiplied
@@ -475,6 +479,10 @@ developing over time"))
            (and (not (null? all-data))
                 (gnc:not-all-zeros (map cadr all-data)))
            (begin 
+             (set! date-string-list (datelist->stringlist dates-list))
+             (qof-date-format-set QOF-DATE-FORMAT-ISO)
+             (set! date-iso-string-list (datelist->stringlist dates-list))
+             (qof-date-format-set save-fmt)
              ;; Set chart title, subtitle etc.
              (if  (eqv? chart-type 'barchart)
                (begin
@@ -515,7 +523,7 @@ developing over time"))
                  (gnc:html-linechart-set-height! chart height)
              
                  ;; row labels etc.
-                 (gnc:html-linechart-set-row-labels! chart date-string-list)
+                 (gnc:html-linechart-set-row-labels! chart date-iso-string-list)
                  ;; FIXME: axis labels are not yet supported by
                  ;; libguppitank.
                  (gnc:html-linechart-set-y-axis-label!

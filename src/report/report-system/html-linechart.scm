@@ -541,16 +541,7 @@
 
             ;; adjust the date string format to the one given by the preferences
             (push "  options.axes.xaxis.tickOptions.formatString = '")
-            (let ( ;; get the date string for the 2nd January in year 1970
-                   (date-string (gnc-print-date (cons 86400 0)))
-                 )
-              (cond
-                ((string=? date-string "1970-01-02") (push "%F"))
-                ((string=? date-string "01/02/1970") (push "%v")) ;; US format is not supported by the DateAxisRenderer
-                ((string=? date-string "02/01/1970") (push "%d/%m/%Y"))
-                ((string=? date-string "02.01.1970") (push "%d.%m.%Y"))
-              )
-            )
+            (push (qof-date-format-get-string (qof-date-format-get)))
             (push "';\n")
 
             (push "$.jqplot.config.enablePlugins = true;")

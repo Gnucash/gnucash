@@ -165,8 +165,9 @@ QofBook * qof_session_get_book (QofSession *session);
 // TODO: Unroll/remove
 const char *qof_session_get_url (QofSession *session);
 
+%ignore qof_print_date_time_buff;
+%include <gnc-date.h>
 extern const char *gnc_default_strftime_date_format;
-const char *gnc_print_date (Timespec ts);
 
 GncGUID guid_new_return(void);
 
@@ -387,6 +388,15 @@ void qof_book_set_string_option(QofBook* book, const char* opt_name, const char*
     SET_ENUM("PRICE-SOURCE-STOCK-SPLIT");
     SET_ENUM("PRICE-SOURCE-TEMP");
     SET_ENUM("PRICE-SOURCE-INVALID");
+
+    SET_ENUM("QOF-DATE-FORMAT-US");
+    SET_ENUM("QOF-DATE-FORMAT-UK");
+    SET_ENUM("QOF-DATE-FORMAT-CE");
+    SET_ENUM("QOF-DATE-FORMAT-ISO");
+    SET_ENUM("QOF-DATE-FORMAT-LOCALE");
+    SET_ENUM("QOF-DATE-FORMAT-UTC");
+    SET_ENUM("QOF-DATE-FORMAT-CUSTOM");
+
 
 #undef SET_ENUM
   }
