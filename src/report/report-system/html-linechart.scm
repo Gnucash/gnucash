@@ -490,6 +490,10 @@
                            autoscale: true,
                        },
                    },
+                   highlighter: {
+                       tooltipContentEditor: formatTooltip,
+                       tooltipLocation: 'ne',
+                   },
                    cursor: {
                        show: true,
                        zoom: true
@@ -548,10 +552,8 @@
             (push "var plot = $.jqplot('")(push chart-id)(push"', data, options);
 
   function formatTooltip(str, seriesIndex, pointIndex) {
-      if (options.axes.xaxis.ticks[pointIndex] !== undefined)
-          x = options.axes.xaxis.ticks[pointIndex][1];
-      else
-          x = pointIndex;
+      x = $.jqplot.DateTickFormatter (options.axes.xaxis.tickOptions.formatString,
+                                      data[seriesIndex][pointIndex][0]);
       y = data[seriesIndex][pointIndex][1].toFixed(2);
       return options.series[seriesIndex].label + ' ' + x + '<br><b>' + y + '</b>';
   }\n") 
