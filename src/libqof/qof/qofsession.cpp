@@ -1,5 +1,5 @@
 /********************************************************************\
- * qofsesssion.c -- session access (connection to backend)          *
+ * qofsesssion.cpp -- session access (connection to backend)        *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -29,6 +29,7 @@
  @author Copyright (c) 1998-2004 Linas Vepstas <linas@linas.org>
  @author Copyright (c) 2000 Dave Peticolas
  @author Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
+ @author Copyright (c) 2016 Aaron Laws
    */
 
 #include "config.h"
