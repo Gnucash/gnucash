@@ -45,7 +45,6 @@ extern "C"
 {
 #endif
 
-extern GHookList* get_session_closed_hooks (void);
 extern GSList* get_provider_list (void);
 extern gboolean get_qof_providers_initialized (void);
 extern void unregister_all_providers (void);
@@ -886,37 +885,6 @@ mock_hook_fn (gpointer data, gpointer user_data)
     hooks_struct.call_count++;
 }
 
-static void
-test_qof_session_close_hooks (Fixture *fixture, gconstpointer pData)
-{
-    gint data1, data2, data3;
-
-    g_test_message ("Test hooks list is initialized and hooks are added");
-    g_assert (!get_session_closed_hooks ());
-    qof_session_add_close_hook (mock_hook_fn, (gpointer) &data1);
-    g_assert (get_session_closed_hooks ());
-    g_assert (g_hook_find_func_data (get_session_closed_hooks (), FALSE, mock_hook_fn, (gpointer) &data1));
-    qof_session_add_close_hook (mock_hook_fn, (gpointer) &data2);
-    g_assert (g_hook_find_func_data (get_session_closed_hooks (), FALSE, mock_hook_fn, (gpointer) &data2));
-    qof_session_add_close_hook (mock_hook_fn, (gpointer) &data3);
-    g_assert (g_hook_find_func_data (get_session_closed_hooks (), FALSE, mock_hook_fn, (gpointer) &data3));
-
-    g_test_message ("Test all close hooks are called");
-    hooks_struct.session = fixture->session;
-    hooks_struct.data1 = (gpointer) &data1;
-    hooks_struct.data2 = (gpointer) &data2;
-    hooks_struct.data3 = (gpointer) &data3;
-    hooks_struct.call_count = 0;
-    qof_session_call_close_hooks (fixture->session);
-    g_assert_cmpuint (hooks_struct.call_count, == , 3);
-
-    /* currently qofsession does not provide a way to clear hooks list
-     * g_hook_list_clear is used to destroy list and all of it's elements
-     * though i' not sure if it frees all the memory allocated
-     */
-    g_hook_list_clear (get_session_closed_hooks ());
-}
-
 void
 test_suite_qofsession ( void )
 {
@@ -936,5 +904,4 @@ test_suite_qofsession ( void )
     GNC_TEST_ADD (suitename, "qof session get book", Fixture, NULL, setup, test_qof_session_get_book, teardown);
     GNC_TEST_ADD (suitename, "qof session get error", Fixture, NULL, setup, test_qof_session_get_error, teardown);
     GNC_TEST_ADD (suitename, "qof session clear error", Fixture, NULL, setup, test_qof_session_clear_error, teardown);
-    GNC_TEST_ADD (suitename, "qof session close hooks", Fixture, NULL, setup, test_qof_session_close_hooks, teardown);
 }

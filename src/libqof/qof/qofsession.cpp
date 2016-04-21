@@ -58,7 +58,6 @@
 #include "qofsession.hpp"
 #include "qofobject-p.h"
 
-static GHookList * session_closed_hooks = NULL;
 static QofLogModule log_module = QOF_MOD_SESSION;
 static GSList *provider_list = NULL;
 static gboolean qof_providers_initialized = FALSE;
@@ -73,7 +72,6 @@ extern "C"
 {
 #endif
 
-GHookList* get_session_closed_hooks (void );
 GSList* get_provider_list (void );
 gboolean get_qof_providers_initialized (void );
 void unregister_all_providers (void );
@@ -81,12 +79,6 @@ void unregister_all_providers (void );
 #ifdef __cplusplus
 }
 #endif
-
-GHookList*
-get_session_closed_hooks (void)
-{
-    return session_closed_hooks;
-}
 
 GSList*
 get_provider_list (void)
@@ -132,48 +124,6 @@ qof_backend_get_registered_access_method_list(void)
     }
 
     return list;
-}
-
-/* ====================================================================== */
-
-/* hook routines */
-
-void
-qof_session_add_close_hook (GFunc fn, gpointer data)
-{
-    GHook *hook;
-
-    if (session_closed_hooks == NULL)
-    {
-        session_closed_hooks = static_cast<GHookList*>(malloc(sizeof(GHookList))); /* LEAKED */
-        g_hook_list_init (session_closed_hooks, sizeof(GHook));
-    }
-
-    hook = g_hook_alloc(session_closed_hooks);
-    if (!hook)
-        return;
-
-    hook->func = reinterpret_cast<void*>(fn);
-    hook->data = data;
-    g_hook_append(session_closed_hooks, hook);
-}
-
-void
-qof_session_call_close_hooks (QofSession *session)
-{
-    GHook *hook;
-    GFunc fn;
-
-    if (session_closed_hooks == NULL)
-        return;
-
-    hook = g_hook_first_valid (session_closed_hooks, FALSE);
-    while (hook)
-    {
-        fn = (GFunc)hook->func;
-        fn(session, hook->data);
-        hook = g_hook_next_valid (session_closed_hooks, hook, FALSE);
-    }
 }
 
 /* ====================================================================== */

@@ -527,7 +527,6 @@ gnc_file_new (void)
          * disable events so we don't get spammed by redraws. */
         qof_event_suspend ();
 
-        qof_session_call_close_hooks(session);
         gnc_hook_run(HOOK_BOOK_CLOSED, session);
 
         gnc_close_gui_component_by_session (session);
@@ -706,7 +705,6 @@ RESTART:
     if (gnc_current_session_exist())
     {
         current_session = gnc_get_current_session();
-        qof_session_call_close_hooks(current_session);
         gnc_hook_run(HOOK_BOOK_CLOSED, current_session);
         gnc_close_gui_component_by_session (current_session);
         gnc_state_save (current_session);
@@ -1605,7 +1603,6 @@ gnc_file_quit (void)
      * transactions during shutdown would cause massive redraws */
     qof_event_suspend ();
 
-    qof_session_call_close_hooks(session);
     gnc_hook_run(HOOK_BOOK_CLOSED, session);
     gnc_close_gui_component_by_session (session);
     gnc_state_save (session);
