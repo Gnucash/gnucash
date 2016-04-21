@@ -1,5 +1,5 @@
 /********************************************************************\
- * qofsession-p.h -- private functions for QOF sessions.            *
+ * qofsession.hpp -- declarations for QOF sessions.                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -31,9 +31,68 @@
 
 #include "qofbook.h"
 #include "qofsession.h"
+#include <utility>
 
-struct _QofSession
+struct QofSessionImpl
 {
+    QofSessionImpl () noexcept;
+    /*
+     * Ends the current session, destroys the backend, and destroys the book.
+     */
+    ~QofSessionImpl () noexcept;
+
+    /**
+     * Swap books with another session
+     */
+    void swap_books (QofSessionImpl &) noexcept;
+
+    /**
+     * Begin this session.
+     */
+    void begin (const char * book_id, bool ignore_lock, bool create, bool force) noexcept;
+
+    const char * get_error_message () const noexcept;
+
+    void clear_error () noexcept;
+
+    void push_error (QofBackendError const err, const char * message) noexcept;
+
+    QofBackendError pop_error () noexcept;
+
+    /**
+     * Returns the local cached error. If there is no local error, we check
+     * for an error in the backend.
+     */
+    QofBackendError get_error () noexcept;
+
+    QofBook * get_book () const noexcept;
+
+    const char * get_file_path () const noexcept;
+
+    void ensure_all_data_loaded () noexcept;
+
+    void load_backend (const char * access_method) noexcept;
+
+    void destroy_backend () noexcept;
+
+    void load (QofPercentageFunc) noexcept;
+
+    void save (QofPercentageFunc) noexcept;
+
+    void safe_save (QofPercentageFunc) noexcept;
+
+    bool save_in_progress () const noexcept;
+
+    void end () noexcept;
+
+    bool events_pending () const noexcept;
+
+    bool process_events () const noexcept;
+
+    bool export_session (QofSessionImpl & real_session, QofPercentageFunc) noexcept;
+
+
+
     /* This is just a "fake" entry point to allow me to pass a Session as
      * an Entity.  NOTE:  THIS IS NOT AN ENTITY!  THE ONLY PART OF ENTITY
      * THAT IS VALID IS E_TYPE!
@@ -63,7 +122,8 @@ struct _QofSession
     /* Pointer to the backend that is actually used to move data
      * between the persistant store and the local engine.  */
     QofBackend *backend;
-    gint lock;
+
+    int lock;
 };
 
 typedef struct qof_instance_copy_data
@@ -84,8 +144,6 @@ extern "C"
 
 QofBackend * qof_session_get_backend (const QofSession *session);
 
-void qof_session_push_error (QofSession *session, QofBackendError err,
-                             const char *message);
 #ifdef __cplusplus
 }
 #endif

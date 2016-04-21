@@ -112,7 +112,7 @@ extern "C"
 
 /* PROTOTYPES ******************************************************/
 
-typedef struct _QofSession    QofSession;
+typedef struct QofSessionImpl QofSession;
 
 QofSession * qof_session_new (void);
 void         qof_session_destroy (QofSession *session);
@@ -195,9 +195,29 @@ const char * qof_session_get_error_message(const QofSession *session);
 QofBackendError qof_session_pop_error (QofSession *session);
 /** @} */
 
+void qof_session_push_error (QofSession *session, QofBackendError err,
+                             const char *message);
+
+/**
+ * Returns the entity associated with the session.
+ *
+ * This is just a "fake" entry point to allow me to pass a Session as
+ * an Entity.  NOTE:  THIS IS NOT AN ENTITY!  THE ONLY PART OF ENTITY
+ * THAT IS VALID IS E_TYPE!
+ */
+QofInstance qof_session_get_entity (const QofSession *session);
+
+int qof_session_get_lock (const QofSession *session);
 
 /** Returns the QofBook of this session. */
 QofBook * qof_session_get_book (const QofSession *session);
+
+/**
+ * Returns the book id in the form ofa url.
+ */
+const char * qof_session_get_book_id (const QofSession *session);
+
+void qof_session_set_book_id (QofSession *session, char *book_id);
 
 /**
  *    The qof_session_get_file_path() routine returns the fully-qualified file
@@ -223,6 +243,14 @@ const char * qof_session_get_url (const QofSession *session);
  */
 /* gboolean qof_session_not_saved(const QofSession *session); <- unimplemented */
 gboolean qof_session_save_in_progress(const QofSession *session);
+
+/**
+ * Returns the qof session's backend.
+ */
+QofBackend * qof_session_get_backend(const QofSession *session);
+
+void qof_session_set_backend(QofSession *session, QofBackend * backend);
+
 
 /** The qof_session_save() method will commit all changes that have been
  *    made to the session. For the file backend, this is nothing
