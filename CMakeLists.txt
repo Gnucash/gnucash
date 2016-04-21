@@ -490,7 +490,6 @@ SET(gnucash_DOCS
     ChangeLog.2012
     ChangeLog.2013
     ChangeLog.2014
-    COPYING
     DOCUMENTERS
     HACKING
     LICENSE
