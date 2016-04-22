@@ -57,10 +57,10 @@
 #include "qofbook-p.h"
 #include "qofsession.hpp"
 #include "qofobject-p.h"
+#include <vector>
 
 static QofLogModule log_module = QOF_MOD_SESSION;
-static GSList *provider_list = NULL;
-static gboolean qof_providers_initialized = FALSE;
+static std::vector<QofBackendProvider *> provider_list;
 
 /*
  * These getters are used in tests to reach static vars from outside
@@ -72,7 +72,6 @@ extern "C"
 {
 #endif
 
-GSList* get_provider_list (void );
 gboolean get_qof_providers_initialized (void );
 void unregister_all_providers (void );
 
@@ -80,27 +79,10 @@ void unregister_all_providers (void );
 }
 #endif
 
-GSList*
-get_provider_list (void)
-{
-    return provider_list;
-}
-
-gboolean
-get_qof_providers_initialized (void)
-{
-    return qof_providers_initialized;
-}
-
 void
 unregister_all_providers (void)
 {
-    if (provider_list)
-    {
-        g_slist_foreach (provider_list, (GFunc) g_free, NULL);
-        g_slist_free (provider_list);
-        provider_list = NULL;
-    }
+    provider_list.clear ();
 }
 
 /* ====================================================================== */
@@ -108,7 +90,7 @@ unregister_all_providers (void)
 void
 qof_backend_register_provider (QofBackendProvider *prov)
 {
-    provider_list = g_slist_append (provider_list, prov);
+    provider_list.push_back (prov);
 }
 
 GList*
@@ -117,11 +99,8 @@ qof_backend_get_registered_access_method_list(void)
     GList* list = NULL;
     GSList* node;
 
-    for ( node = provider_list; node != NULL; node = node->next )
-    {
-        QofBackendProvider *prov = static_cast<QofBackendProvider*>(node->data);
-        list = g_list_append( list, (gchar*)prov->access_method );
-    }
+    for (auto const & temp_provider : provider_list)
+        list = g_list_append (list, (gchar*)temp_provider->access_method);
 
     return list;
 }
@@ -350,23 +329,13 @@ qof_session_ensure_all_data_loaded (QofSession *session)
 void
 QofSessionImpl::load_backend (const char * access_method) noexcept
 {
-    ENTER (" list=%d, initted=%s", g_slist_length(provider_list),
-           qof_providers_initialized ? "true" : "false");
+    ENTER (" list=%lu", provider_list.size ());
     bool prov_type {false};
-    if (!qof_providers_initialized)
+    for (auto const & prov : provider_list)
     {
-        qof_providers_initialized = TRUE;
-    }
-    GSList * p {provider_list};
-    while (p)
-    {
-        QofBackendProvider * prov = static_cast<QofBackendProvider*>(p->data);
         /* Does this provider handle the desired access method? */
         if (g_ascii_strcasecmp (access_method, prov->access_method))
-        {
-            p = p->next;
             continue;
-        }
         /* More than one backend could provide this
         access method, check file type compatibility. */
         auto type_check = prov->check_data_type;
@@ -377,7 +346,6 @@ QofSessionImpl::load_backend (const char * access_method) noexcept
             if (!prov_type)
             {
                 PINFO(" %s not usable", prov->provider_name);
-                p = p->next;
                 continue;
             }
         }
@@ -385,7 +353,6 @@ QofSessionImpl::load_backend (const char * access_method) noexcept
         if (!prov->backend_new)
         {
             PINFO ("  no constructor defined.");
-            p = p->next;
             continue;
         }
         /* Use the providers creation callback */
