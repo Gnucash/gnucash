@@ -34,11 +34,6 @@
 
 #include "config.h"
 
-#include <platform.h>
-#if PLATFORM(WINDOWS)
-#include <windows.h>
-#endif
-
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
@@ -701,9 +696,7 @@ QofSessionImpl::swap_books (QofSessionImpl & other) noexcept
     QofBook * book_2 {other.book};
 
     // Swap the read_only flags backwards.
-    bool tmp = book_1->read_only;
-    book_1->read_only = book_2->read_only;
-    book_2->read_only = tmp;
+    std::swap (book_1->read_only, book_2->read_only);
 
     book = book_2;
     other.book = book_1;
