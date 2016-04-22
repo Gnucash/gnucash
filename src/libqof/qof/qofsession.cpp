@@ -62,29 +62,6 @@
 static QofLogModule log_module = QOF_MOD_SESSION;
 static std::vector<QofBackendProvider *> provider_list;
 
-/*
- * These getters are used in tests to reach static vars from outside
- * They should be removed when no longer needed
- */
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-gboolean get_qof_providers_initialized (void );
-void unregister_all_providers (void );
-
-#ifdef __cplusplus
-}
-#endif
-
-void
-unregister_all_providers (void)
-{
-    provider_list.clear ();
-}
-
 /* ====================================================================== */
 
 void
@@ -830,31 +807,6 @@ qof_session_export (QofSession *tmp_session,
 {
     if ((!tmp_session) || (!real_session)) return FALSE;
     return tmp_session->export_session (*real_session, percentage_func);
-}
-
-/* ================= Static function access for testing ================= */
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-void init_static_qofsession_pointers (void);
-
-void (*p_qof_session_load_backend) (QofSession * session, const char * access_method);
-void (*p_qof_session_clear_error) (QofSession *session);
-void (*p_qof_session_destroy_backend) (QofSession *session);
-
-#ifdef __cplusplus
-}
-#endif
-
-void
-init_static_qofsession_pointers (void)
-{
-    p_qof_session_load_backend = qof_session_load_backend;
-    p_qof_session_clear_error = qof_session_clear_error;
-    p_qof_session_destroy_backend = qof_session_destroy_backend;
 }
 
 /* =================== END OF FILE ====================================== */
