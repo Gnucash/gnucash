@@ -123,7 +123,7 @@ struct QofSessionImpl
      * between the persistant store and the local engine.  */
     QofBackend *backend;
 
-    int lock;
+    bool saving;
 };
 
 typedef struct qof_instance_copy_data

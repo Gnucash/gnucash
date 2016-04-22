@@ -207,8 +207,6 @@ void qof_session_push_error (QofSession *session, QofBackendError err,
  */
 QofInstance qof_session_get_entity (const QofSession *session);
 
-int qof_session_get_lock (const QofSession *session);
-
 /** Returns the QofBook of this session. */
 QofBook * qof_session_get_book (const QofSession *session);
 

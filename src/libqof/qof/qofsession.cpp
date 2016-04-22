@@ -210,7 +210,7 @@ QofSessionImpl::QofSessionImpl () noexcept
     book_id {nullptr},
     error_message {nullptr},
     backend {nullptr},
-    lock {1}
+    saving {false}
 {
     entity.e_type = QOF_ID_SESSION;
     clear_error ();
@@ -242,13 +242,6 @@ qof_session_get_book (const QofSession *session)
 {
     if (!session) return NULL;
     return session->get_book ();
-}
-
-int
-qof_session_get_lock (const QofSession *session)
-{
-    if (!session) return -1;
-    return session->lock;
 }
 
 void
@@ -603,8 +596,7 @@ save_error_handler(QofBackend *be, QofSession *session)
 void
 QofSessionImpl::save (QofPercentageFunc percentage_func) noexcept
 {
-    if (!g_atomic_int_dec_and_test(&this->lock))
-        g_atomic_int_inc (&this->lock);
+    saving = true;
     ENTER ("sess=%p book_id=%s",
            this, this->book_id ? this->book_id : "(null)");
 
@@ -648,7 +640,7 @@ QofSessionImpl::save (QofPercentageFunc percentage_func) noexcept
     }
     LEAVE("error -- No backend!");
 leave:
-    g_atomic_int_inc (&this->lock);
+    saving = false;
     return;
 }
 
@@ -689,17 +681,11 @@ qof_session_safe_save(QofSession *session, QofPercentageFunc percentage_func)
 
 /* ====================================================================== */
 
-bool
-QofSessionImpl::save_in_progress () const noexcept
-{
-    return g_atomic_int_get (&this->lock) != 1;
-}
-
 gboolean
 qof_session_save_in_progress(const QofSession *session)
 {
     if (!session) return false;
-    return session->save_in_progress ();
+    return session->saving;
 }
 
 void
