@@ -206,6 +206,7 @@ src/gnome/assistant-loan.c
 src/gnome/assistant-stock-split.c
 src/gnome/dialog-commodities.c
 src/gnome/dialog-fincalc.c
+src/gnome/dialog-find-account.c
 src/gnome/dialog-find-transactions2.c
 src/gnome/dialog-find-transactions.c
 src/gnome/dialog-imap-editor.c
@@ -249,6 +250,7 @@ src/gnome/gtkbuilder/assistant-loan.glade
 src/gnome/gtkbuilder/assistant-stock-split.glade
 src/gnome/gtkbuilder/dialog-commodities.glade
 src/gnome/gtkbuilder/dialog-fincalc.glade
+src/gnome/gtkbuilder/dialog-find-account.glade
 src/gnome/gtkbuilder/dialog-imap-editor.glade
 src/gnome/gtkbuilder/dialog-lot-viewer.glade
 src/gnome/gtkbuilder/dialog-new-user.glade

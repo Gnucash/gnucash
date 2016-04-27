@@ -39,6 +39,7 @@
 
 #include "gnc-plugin-account-tree.h"
 #include "gnc-plugin-page-account-tree.h"
+#include "dialog-find-account.h"
 
 static void gnc_plugin_account_tree_class_init (GncPluginAccountTreeClass *klass);
 static void gnc_plugin_account_tree_init (GncPluginAccountTree *plugin);
@@ -46,7 +47,7 @@ static void gnc_plugin_account_tree_finalize (GObject *object);
 
 /* Command callbacks */
 static void gnc_plugin_account_tree_cmd_new_account_tree (GtkAction *action, GncMainWindowActionData *data);
-
+static void gnc_plugin_account_tree_cmd_find_account (GtkAction *action, GncMainWindowActionData *data);
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-account-tree-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-account-tree-ui.xml"
@@ -59,6 +60,11 @@ static GtkActionEntry gnc_plugin_actions [] =
         "ViewAccountTreeAction", NULL, N_("New Accounts _Page"), NULL,
         N_("Open a new Account Tree page"),
         G_CALLBACK (gnc_plugin_account_tree_cmd_new_account_tree)
+    },
+    {
+        "ViewFindAccountAction", GTK_STOCK_FIND, N_("F_ind Account"), "<control>i",
+        N_("Find an account"),
+        G_CALLBACK (gnc_plugin_account_tree_cmd_find_account)
     },
 };
 /** The number of actions provided by this plugin. */
@@ -196,6 +202,15 @@ gnc_plugin_account_tree_cmd_new_account_tree (GtkAction *action,
 
     page = gnc_plugin_page_account_tree_new ();
     gnc_main_window_open_page (data->window, page);
+}
+
+static void
+gnc_plugin_account_tree_cmd_find_account (GtkAction *action,
+        GncMainWindowActionData *data)
+{
+    g_return_if_fail (data != NULL);
+
+    gnc_find_account_dialog (GTK_WIDGET(data->window), NULL);
 }
 
 /** @} */
