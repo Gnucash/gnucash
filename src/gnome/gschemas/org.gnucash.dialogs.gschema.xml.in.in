@@ -9,6 +9,7 @@
     <child name="tax-info" schema="org.gnucash.dialogs.tax-info"/>
     <child name="fincalc" schema="org.gnucash.dialogs.fincalc"/>
     <child name="find" schema="org.gnucash.dialogs.find"/>
+    <child name="find-account" schema="org.gnucash.dialogs.find-account"/>
     <child name="export-accounts" schema="org.gnucash.dialogs.export-accounts"/>
     <child name="log-replay" schema="org.gnucash.dialogs.log-replay"/>
     <child name="open-save" schema="org.gnucash.dialogs.open-save"/>
@@ -33,6 +34,16 @@
   </schema>
 
   <schema id="org.gnucash.dialogs.imap-editor" path="/org/gnucash/dialogs/imap-editor/">
+    <key type="(iiii)" name="last-geometry">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.find-account" path="/org/gnucash/dialogs/find-account/">
     <key type="(iiii)" name="last-geometry">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>

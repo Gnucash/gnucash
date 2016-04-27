@@ -68,6 +68,7 @@
 #include "window-autoclear.h"
 #include "window-main-summarybar.h"
 #include "dialog-object-references.h"
+#include "dialog-find-account.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -136,6 +137,7 @@ static void gnc_plugin_page_account_tree_cmd_file_new_hierarchy (GtkAction *acti
 static void gnc_plugin_page_account_tree_cmd_open_account (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_open_subaccounts (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_edit_account (GtkAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_find_account (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_renumber_accounts (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_view_filter_by (GtkAction *action, GncPluginPageAccountTree *plugin_page);
@@ -230,6 +232,11 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
     {
         "ViewFilterByAction", NULL, N_("_Filter By..."), NULL, NULL,
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_view_filter_by)
+    },
+    {
+        "FindAccountAction", GTK_STOCK_FIND, N_("F_ind Account"), "<control>i",
+        N_("Find an account"),
+        G_CALLBACK (gnc_plugin_page_account_tree_cmd_find_account)
     },
 
     /* Actions menu */
@@ -493,6 +500,34 @@ gnc_plugin_page_account_tree_finalize (GObject *object)
 
     G_OBJECT_CLASS (parent_class)->finalize (object);
     LEAVE(" ");
+}
+
+void
+gnc_plugin_page_account_tree_open (Account *account)
+{
+    GncPluginPageAccountTreePrivate *priv;
+    GncPluginPageAccountTree *page;
+    GncPluginPage *plugin_page;
+    const GList *page_list;
+    GtkWidget   *window;
+
+    /* Find Accounts page */
+    page_list = gnc_gobject_tracking_get_list(GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME);
+
+    if (g_list_length ((GList*)page_list) != 0)
+        plugin_page = GNC_PLUGIN_PAGE(page_list->data);
+    else
+        plugin_page = gnc_plugin_page_account_tree_new ();
+
+    window = plugin_page->window;
+
+    gnc_main_window_open_page (GNC_MAIN_WINDOW(window), plugin_page);
+
+    page = GNC_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page);
+    priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
+
+    if (account != NULL)
+        gnc_tree_view_account_set_selected_account (GNC_TREE_VIEW_ACCOUNT(priv->tree_view), account);
 }
 
 Account *
@@ -1009,7 +1044,6 @@ gnc_plugin_page_account_tree_cmd_open2_subaccounts (GtkAction *action,
 }
 /*################## Added for Reg2 #################*/
 
-
 static void
 gnc_plugin_page_account_tree_cmd_edit_account (GtkAction *action, GncPluginPageAccountTree *page)
 {
@@ -1021,6 +1055,23 @@ gnc_plugin_page_account_tree_cmd_edit_account (GtkAction *action, GncPluginPageA
     g_return_if_fail (account != NULL);
 
     gnc_ui_edit_account_window (account);
+    LEAVE(" ");
+}
+
+static void
+gnc_plugin_page_account_tree_cmd_find_account (GtkAction *action, GncPluginPageAccountTree *page)
+{
+    Account *account;
+    GtkWidget *window;
+
+    ENTER("action %p, page %p", action, page);
+
+    account = gnc_plugin_page_account_tree_get_current_account (page);
+    g_return_if_fail (account != NULL);
+
+    window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page));
+
+    gnc_find_account_dialog (window, account);
     LEAVE(" ");
 }
 

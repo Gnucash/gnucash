@@ -7,6 +7,7 @@ gtkbuilder_DATA = \
 	dialog-commodities.glade \
 	dialog-imap-editor.glade \
 	dialog-fincalc.glade \
+	dialog-find-account.glade \
 	dialog-lot-viewer.glade \
 	dialog-new-user.glade \
 	dialog-price.glade \

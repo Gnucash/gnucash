@@ -30,6 +30,7 @@ libgnc_gnome_la_SOURCES = \
   assistant-stock-split.c \
   dialog-commodities.c \
   dialog-fincalc.c \
+  dialog-find-account.c \
   dialog-find-transactions.c \
   dialog-find-transactions2.c \
   dialog-imap-editor.c \
@@ -83,6 +84,7 @@ noinst_HEADERS = \
   assistant-loan.h \
   assistant-stock-split.h \
   dialog-fincalc.h \
+  dialog-find-account.h \
   dialog-find-transactions.h \
   dialog-find-transactions2.h \
   dialog-imap-editor.h \

@@ -44,6 +44,7 @@
       <menuitem name="AccountOpenAccount" action="FileOpenAccountAction"/>
       <menuitem name="AccountOpenSubaccounts" action="FileOpenSubaccountsAction"/>
       <menuitem name="AccountEditAccount" action="EditEditAccountAction"/>
+      <menuitem name="AccountFindAccount" action="FindAccountAction"/>
       <separator name="AccountSep1"/>
       <menuitem name="AccountReconcile" action="ActionsReconcileAction"/>
       <menuitem name="AccountAutoClear" action="ActionsAutoClearAction"/>
