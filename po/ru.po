@@ -21035,7 +21035,7 @@ msgstr "Показать чистую прибыль?"
 #: ../src/report/standard-reports/net-barchart.scm:127
 #: ../src/report/standard-reports/net-linechart.scm:133
 msgid "Show a Net Worth bar?"
-msgstr "Показать чистый убыток?"
+msgstr "Показать чистую стоимость?"
 
 #: ../src/report/standard-reports/net-barchart.scm:356
 #: ../src/report/standard-reports/net-barchart.scm:418
@@ -21049,7 +21049,7 @@ msgstr "Чистая прибыль"
 #: ../src/report/standard-reports/net-linechart.scm:395
 #: ../src/report/standard-reports/net-linechart.scm:468
 msgid "Net Worth"
-msgstr "Чистый убыток"
+msgstr "Чистая стоимость"
 
 #: ../src/report/standard-reports/net-barchart.scm:381
 #: ../src/report/standard-reports/net-linechart.scm:425
@@ -21073,7 +21073,7 @@ msgstr "График обязательств"
 
 #: ../src/report/standard-reports/net-barchart.scm:467
 msgid "Net Worth Barchart"
-msgstr "Гистограмма чистых убытков"
+msgstr "Гистограмма чистой стоимости"
 
 #: ../src/report/standard-reports/net-barchart.scm:477
 msgid "Income & Expense Chart"
@@ -21114,7 +21114,7 @@ msgstr "Выберите маркер для каждой точки данны�
 
 #: ../src/report/standard-reports/net-linechart.scm:513
 msgid "Net Worth Linechart"
-msgstr "График чистых убытков"
+msgstr "График чистой стоимости"
 
 #: ../src/report/standard-reports/portfolio.scm:35
 msgid "Investment Portfolio"
