@@ -195,9 +195,6 @@ const char * qof_session_get_error_message(const QofSession *session);
 QofBackendError qof_session_pop_error (QofSession *session);
 /** @} */
 
-void qof_session_push_error (QofSession *session, QofBackendError err,
-                             const char *message);
-
 /**
  * Returns the entity associated with the session.
  *

@@ -92,7 +92,16 @@ struct QofSessionImpl
 
     bool export_session (QofSessionImpl & real_session, QofPercentageFunc) noexcept;
 
+    std::string get_book_id () const noexcept;
 
+    bool is_saving () const noexcept;
+
+    /* ---------------------------------------------------- */
+    /* Pointer to the backend that is actually used to move data
+     * between the persistant store and the local engine.  */
+    QofBackend *backend;
+
+private:
 
     /* This is just a "fake" entry point to allow me to pass a Session as
      * an Entity.  NOTE:  THIS IS NOT AN ENTITY!  THE ONLY PART OF ENTITY
@@ -118,11 +127,6 @@ struct QofSessionImpl
      */
     QofBackendError last_err;
     std::string error_message;
-
-    /* ---------------------------------------------------- */
-    /* Pointer to the backend that is actually used to move data
-     * between the persistant store and the local engine.  */
-    QofBackend *backend;
 
     bool saving;
 };
