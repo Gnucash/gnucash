@@ -125,15 +125,15 @@ QofBackendError
 QofSessionImpl::get_error () noexcept
 {
     /* if we have a local error, return that. */
-    if (ERR_BACKEND_NO_ERR != this->last_err)
+    if (ERR_BACKEND_NO_ERR != last_err)
     {
-        return this->last_err;
+        return last_err;
     }
 
-    if (!this->backend) return ERR_BACKEND_NO_ERR;
+    if (!backend) return ERR_BACKEND_NO_ERR;
 
-    auto err = qof_backend_get_error (this->backend);
-    this->last_err = err;
+    auto err = qof_backend_get_error (backend);
+    last_err = err;
     return err;
 }
 
@@ -160,8 +160,8 @@ qof_session_get_error_message (const QofSession * session)
 QofBackendError
 QofSessionImpl::pop_error () noexcept
 {
-    QofBackendError err {this->get_error ()};
-    this->clear_error ();
+    QofBackendError err {get_error ()};
+    clear_error ();
     return err;
 }
 
@@ -200,9 +200,9 @@ qof_session_new (void)
 QofBook *
 QofSessionImpl::get_book () const noexcept
 {
-    if (!this->book) return nullptr;
-    if ('y' == this->book->book_open)
-        return this->book;
+    if (!book) return nullptr;
+    if ('y' == book->book_open)
+        return book;
     return nullptr;
 }
 
@@ -322,10 +322,10 @@ QofSessionImpl::load_backend (std::string access_method) noexcept
             continue;
         }
         /* Use the providers creation callback */
-        this->backend = (*(prov->backend_new))();
-        this->backend->provider = prov;
+        backend = (*(prov->backend_new))();
+        backend->provider = prov;
         /* Tell the book about the backend that he'll be using. */
-        qof_book_set_backend (this->book, this->backend);
+        qof_book_set_backend (book, backend);
         LEAVE (" ");
         return;
     }
@@ -347,16 +347,16 @@ qof_session_load_backend(QofSession * session, const char * access_method)
 void
 QofSessionImpl::destroy_backend () noexcept
 {
-    if (this->backend)
+    if (backend)
     {
         clear_error ();
 
-        if (this->backend->destroy_backend)
-            this->backend->destroy_backend (this->backend);
+        if (backend->destroy_backend)
+            backend->destroy_backend (backend);
         else
-            g_free(this->backend);
+            g_free(backend);
 
-        this->backend = nullptr;
+        backend = nullptr;
     }
 }
 
@@ -493,7 +493,7 @@ QofSessionImpl::load (QofPercentageFunc percentage_func) noexcept
     * top-level account group out of the backend, and that is a
     * generic, backend-independent operation.
     */
-    QofBackend * be {this->backend};
+    QofBackend * be {backend};
     qof_book_set_backend (newbook, be);
 
     /* Starting the session should result in a bunch of accounts
@@ -515,7 +515,7 @@ QofSessionImpl::load (QofPercentageFunc percentage_func) noexcept
     * user attempts to save after a failed load, they weill be trying to
     * save to some bogus URL.   This is wrong. XXX  FIXME.
     */
-    auto err = this->get_error ();
+    auto err = get_error ();
     if ((err != ERR_BACKEND_NO_ERR) &&
             (err != ERR_FILEIO_FILE_TOO_OLD) &&
             (err != ERR_FILEIO_NO_ENCODING) &&
@@ -526,8 +526,8 @@ QofSessionImpl::load (QofPercentageFunc percentage_func) noexcept
         /* Something broke, put back the old stuff */
         qof_book_set_backend (newbook, NULL);
         qof_book_destroy (newbook);
-        this->book = oldbook;
-        LEAVE ("error from backend %d", this->get_error ());
+        book = oldbook;
+        LEAVE ("error from backend %d", get_error ());
         return;
     }
     qof_book_set_backend (oldbook, NULL);
@@ -575,15 +575,15 @@ QofSessionImpl::save (QofPercentageFunc percentage_func) noexcept
     * hack alert -- FIXME -- XXX the code below no longer
     * does what the words above say.  This needs fixing.
     */
-    QofBackend * be = this->backend;
+    QofBackend * be = backend;
     if (be)
     {
         /* if invoked as SaveAs(), then backend not yet set */
-        qof_book_set_backend (this->book, be);
+        qof_book_set_backend (book, be);
         be->percentage = percentage_func;
         if (be->sync)
         {
-            (be->sync)(be, this->book);
+            (be->sync)(be, book);
             if (save_error_handler(be, this))
                 goto leave;
         }
@@ -591,13 +591,13 @@ QofSessionImpl::save (QofPercentageFunc percentage_func) noexcept
         /* If we got to here, then the backend saved everything
         * just fine, and we are done. So return. */
         /* Return the book_id to previous value. */
-        this->clear_error ();
+        clear_error ();
         LEAVE("Success");
         goto leave;
     }
     else
     {
-        if (ERR_BACKEND_NO_ERR != this->get_error ())
+        if (ERR_BACKEND_NO_ERR != get_error ())
         {
             /* push_error strdups, stack const is fine. */
             std::string msg {"failed to load backend"};
@@ -722,9 +722,9 @@ qof_session_swap_data (QofSession *session_1, QofSession *session_2)
 bool
 QofSessionImpl::events_pending () const noexcept
 {
-    if (!this->backend) return false;
-    if (!this->backend->events_pending) return false;
-    return this->backend->events_pending (this->backend);
+    if (!backend) return false;
+    if (!backend->events_pending) return false;
+    return backend->events_pending (backend);
 }
 
 gboolean
@@ -737,10 +737,10 @@ qof_session_events_pending (const QofSession *session)
 bool
 QofSessionImpl::process_events () const noexcept
 {
-    if (!this->backend) return false;
-    if (!this->backend->process_events) return false;
+    if (!backend) return false;
+    if (!backend->process_events) return false;
 
-    return this->backend->process_events (this->backend);
+    return backend->process_events (backend);
 }
 
 gboolean
@@ -763,7 +763,7 @@ QofSessionImpl::export_session (QofSessionImpl & real_session, QofPercentageFunc
     /* There must be a backend or else.  (It should always be the file
      * backend too.)
      */
-    QofBook * book2 = this->get_book ();
+    QofBook * book2 = get_book ();
     QofBackend * be2 = qof_book_get_backend(book2);
     if (!be2) return false;
 
