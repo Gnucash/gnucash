@@ -231,7 +231,7 @@ gnc_timegm (struct tm* time)
 char*
 gnc_ctime (const time64 *secs)
 {
-    return gnc_print_time64(*secs, "%a %b %e %H:%M:%S %Y");
+    return gnc_print_time64(*secs, "%a %b %d %H:%M:%S %Y");
 }
 
 time64

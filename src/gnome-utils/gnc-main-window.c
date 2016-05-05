@@ -1646,12 +1646,10 @@ static gchar *generate_statusbar_lastmodified_message()
                     the status bar after opening a file: The date and time of
                     last modification. The string is a format string using
                     boost::date_time's format flags, see the boost docs for an
-                    explanation of the modifiers. First string is for a locale
-                    that has the a.m. or p.m. string in its locale, second
-                    string is for locales that do not have that string. */
+                    explanation of the modifiers. */
                     char *time_string =
 			gnc_print_time64(statbuf.st_mtime,
-					 _("Last modified on %a, %b %e, %Y at %I:%M%P"));
+					 _("Last modified on %a, %b %d, %Y at %I:%M %p"));
                     //g_warning("got time %ld, str=%s\n", mtime, time_string);
                     /* Translators: This message appears in the status bar after opening the file. */
                     message = g_strdup_printf(_("File %s opened. %s"),
