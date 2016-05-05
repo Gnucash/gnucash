@@ -76,6 +76,9 @@ struct QofSessionImpl
 
     void destroy_backend () noexcept;
 
+    /**
+     * Loads data into the current book into the backend
+     */
     void load (QofPercentageFunc) noexcept;
 
     void save (QofPercentageFunc) noexcept;
@@ -84,6 +87,9 @@ struct QofSessionImpl
 
     bool save_in_progress () const noexcept;
 
+    /**
+     * Terminates the current backend.
+     */
     void end () noexcept;
 
     bool events_pending () const noexcept;

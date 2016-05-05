@@ -156,7 +156,6 @@ void qof_session_begin (QofSession *session, const char * book_id,
                         gboolean ignore_lock, gboolean create,
                         gboolean force);
 
-
 /**
  * The qof_session_load() method causes the QofBook to be made ready to
  *    to use with this URL/datastore.   When the URL points at a file,

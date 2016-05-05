@@ -600,7 +600,6 @@ QofSessionImpl::end () noexcept
 {
     ENTER ("sess=%p book_id=%s", this, book_id.c_str ());
 
-    /* close down the backend first */
     if (backend && backend->session_end)
         (backend->session_end) (backend);
 
