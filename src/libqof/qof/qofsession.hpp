@@ -72,8 +72,6 @@ struct QofSessionImpl
 
     void ensure_all_data_loaded () noexcept;
 
-    void load_backend (std::string access_method) noexcept;
-
     void destroy_backend () noexcept;
 
     /**
@@ -108,6 +106,8 @@ struct QofSessionImpl
     QofBackend *backend;
 
 private:
+
+    void load_backend (std::string access_method) noexcept;
 
     /* This is just a "fake" entry point to allow me to pass a Session as
      * an Entity.  NOTE:  THIS IS NOT AN ENTITY!  THE ONLY PART OF ENTITY
