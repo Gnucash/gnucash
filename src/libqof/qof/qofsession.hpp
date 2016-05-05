@@ -109,12 +109,6 @@ private:
 
     void load_backend (std::string access_method) noexcept;
 
-    /* This is just a "fake" entry point to allow me to pass a Session as
-     * an Entity.  NOTE:  THIS IS NOT AN ENTITY!  THE ONLY PART OF ENTITY
-     * THAT IS VALID IS E_TYPE!
-     */
-    QofInstance entity;
-
     /* A book holds pointers to the various types of datasets.
      * A session has exactly one book. */
     QofBook *book;

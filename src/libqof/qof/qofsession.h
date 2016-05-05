@@ -194,15 +194,6 @@ const char * qof_session_get_error_message(const QofSession *session);
 QofBackendError qof_session_pop_error (QofSession *session);
 /** @} */
 
-/**
- * Returns the entity associated with the session.
- *
- * This is just a "fake" entry point to allow me to pass a Session as
- * an Entity.  NOTE:  THIS IS NOT AN ENTITY!  THE ONLY PART OF ENTITY
- * THAT IS VALID IS E_TYPE!
- */
-QofInstance qof_session_get_entity (const QofSession *session);
-
 /** Returns the QofBook of this session. */
 QofBook * qof_session_get_book (const QofSession *session);
 

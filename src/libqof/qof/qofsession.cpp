@@ -164,7 +164,6 @@ QofSessionImpl::QofSessionImpl () noexcept
     error_message {},
     saving {false}
 {
-    entity.e_type = QOF_ID_SESSION;
     clear_error ();
 }
 
