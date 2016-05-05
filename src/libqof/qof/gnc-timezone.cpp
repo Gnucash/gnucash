@@ -227,7 +227,7 @@ TimeZoneProvider::load_windows_classic_tz (HKEY key, time_zone_names names)
 			      (LPBYTE) &regtzi, &size) == ERROR_SUCCESS)
 	{
 	    zone_vector.push_back(
-		std::make_pair(0, zone_from_regtzi (regtzi, names)));
+		std::make_pair(max_year, zone_from_regtzi (regtzi, names)));
 	}
     }
     catch (std::bad_alloc)
