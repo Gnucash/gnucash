@@ -6360,7 +6360,7 @@ msgstr "Zur freien Buchungszeile am Ende dieses Kontobuchs gehen"
 #: ../src/gnome/gnc-plugin-page-register2.c:361
 #: ../src/gnome/gnc-plugin-page-register.c:370
 msgid "Edit E_xchange Rate"
-msgstr "Wechsel_kurs bearbeiten..."
+msgstr "Wech_selkurs bearbeiten..."
 
 #: ../src/gnome/gnc-plugin-page-register2.c:362
 #: ../src/gnome/gnc-plugin-page-register.c:371
@@ -11859,7 +11859,7 @@ msgstr "Wählen Sie die Kontoarten, die in der Kontenansicht angezeigt werden."
 #: ../src/gnome-utils/gnc-main-window.c:343
 #: ../src/gnome/window-reconcile2.c:2189 ../src/gnome/window-reconcile.c:2229
 msgid "_Check & Repair"
-msgstr "Überprüfen"
+msgstr "Überprü_fen"
 
 #: ../src/gnome-utils/gnc-main-window.c:345
 msgid "Reset _Warnings..."
@@ -15262,7 +15262,7 @@ msgstr ""
 #. Toplevel
 #: ../src/gnome/window-reconcile2.c:2142 ../src/gnome/window-reconcile.c:2182
 msgid "_Reconcile"
-msgstr "Ab_gleichen"
+msgstr "_Abgleichen..."
 
 #: ../src/gnome/window-reconcile2.c:2143 ../src/gnome/window-reconcile.c:2183
 msgid "_Account"
