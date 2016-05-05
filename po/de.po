@@ -5622,7 +5622,7 @@ msgstr "Konten für Steuerbericht (MWSt) einrichten"
 #. Actions menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:158
 msgid "_Scheduled Transactions"
-msgstr "_Terminierte Buchungen"
+msgstr "Term_inierte Buchungen"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:160
 msgid "_Scheduled Transaction Editor"
@@ -5855,7 +5855,7 @@ msgstr "Die Unterkonten des gewählten Kontos neu nummerieren"
 #: ../src/gnome/gnc-plugin-page-register2.c:336
 #: ../src/gnome/gnc-plugin-page-register.c:345
 msgid "_Reconcile..."
-msgstr "Ab_gleichen..."
+msgstr "_Abgleichen..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:238
 #: ../src/gnome/gnc-plugin-page-register2.c:337
@@ -6371,7 +6371,7 @@ msgstr "Den Wechselkurs für die gewählte Buchung bearbeiten"
 #: ../src/gnome/gnc-plugin-page-register.c:375
 #: ../src/gnome-utils/gnc-icons.c:45
 msgid "_Jump"
-msgstr "Gegenbuchung"
+msgstr "Ge_genbuchung"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:367
 #: ../src/gnome/gnc-plugin-page-register.c:376
@@ -16277,7 +16277,7 @@ msgstr "Neue Einzelüberweisung mit HBCI online absenden"
 
 #: ../src/import-export/aqb/gnc-plugin-aqbanking.c:118
 msgid "_Issue SEPA Transaction..."
-msgstr "_SEPA Einzelüberweisung..."
+msgstr "SE_PA Einzelüberweisung..."
 
 #: ../src/import-export/aqb/gnc-plugin-aqbanking.c:119
 msgid ""
@@ -16287,7 +16287,7 @@ msgstr "Neue SEPA-Überweisung mit HBCI/Onlinebanking online absenden"
 
 #: ../src/import-export/aqb/gnc-plugin-aqbanking.c:123
 msgid "I_nternal Transaction..."
-msgstr "Interne _Umbuchung..."
+msgstr "_Interne Umbuchung..."
 
 #: ../src/import-export/aqb/gnc-plugin-aqbanking.c:124
 msgid "Issue a new bank-internal transaction online through Online Banking"
@@ -16296,7 +16296,7 @@ msgstr ""
 
 #: ../src/import-export/aqb/gnc-plugin-aqbanking.c:128
 msgid "_Direct Debit..."
-msgstr "Einzellastschrift..."
+msgstr "Einzel_lastschrift..."
 
 #: ../src/import-export/aqb/gnc-plugin-aqbanking.c:129
 msgid "Issue a new direct debit note online through Online Banking"
