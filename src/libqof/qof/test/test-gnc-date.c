@@ -321,13 +321,15 @@ test_gnc_ctime (void)
     guint ind;
     for (ind = 0; ind < G_N_ELEMENTS (secs); ind++)
     {
-         time_t time;
-         char *datestr;
+	time_t time;
+	char *datestr;
+	char check_str[80];
         if (secs[ind] < INT32_MIN)
             continue;
         time = (time_t)secs[ind];
         datestr = gnc_ctime (&secs[ind]);
-        g_assert_cmpstr (datestr, ==, strtok(ctime(&time), "\n"));
+	strftime (check_str, 80, "%a %b %d %H:%M:%S %Y", localtime(&time));
+        g_assert_cmpstr (datestr, ==, check_str);
         g_free (datestr);
     }
 }

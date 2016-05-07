@@ -417,9 +417,14 @@ test_gnc_transaction_set_get_property (Fixture *fixture, gconstpointer pData)
                           "GNR", "", 240), *t_curr = NULL;
     Timespec now = timespec_now (), *t_entered = NULL, *t_posted = NULL;
     time_t secs = (time_t)now.tv_sec;
+
+    char buff[80];
+    strftime (buff, 80, "%a %b %d %H:%M:%S %Y", localtime(&secs));
+
     auto msg1 = "g_object_set_valist: object class " _Q "Transaction' has no property named " _Q "bogus'";
-    auto msg2 = g_strdup_printf ("[xaccTransSetDateInternal] addr=%p set date to %" G_GUINT64_FORMAT ".%09ld %s",
-                                   txn, now.tv_sec, now.tv_nsec, ctime (&secs));
+    auto msg2 = g_strdup_printf ("[xaccTransSetDateInternal] addr=%p set date to %" G_GUINT64_FORMAT ".%09ld %s\n",
+                                   txn, now.tv_sec, now.tv_nsec, buff);
+
     auto loglevel1 = static_cast<GLogLevelFlags>(G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL);
     auto loglevel2 =static_cast<GLogLevelFlags>(G_LOG_LEVEL_INFO);
     auto check1 = test_error_struct_new ("GLib-GObject", loglevel1, msg1);
