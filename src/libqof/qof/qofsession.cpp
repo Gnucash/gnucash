@@ -557,10 +557,6 @@ qof_session_load (QofSession *session,
 
     oldbook = session->book;
 
-    /* XXX why are we creating a book here? I think the books
-    * need to be handled by the backend ... especially since
-    * the backend may need to load multiple books ... XXX. FIXME.
-    */
     newbook = qof_book_new();
     session->book = newbook;
     PINFO ("new book=%p", newbook);
