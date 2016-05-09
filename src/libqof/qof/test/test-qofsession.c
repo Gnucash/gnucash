@@ -112,12 +112,43 @@ percentage_fn ( const char* message, double percent )
 static QofBackend * last_backend_created = NULL;
 static QofBackendProvider * last_provider_created = NULL;
 
+static struct
+{
+    QofBook *book;
+    gboolean called;
+} data_load_struct;
+
+static void
+mock_all_data_load (QofBackend *be, QofBook *book, QofBackendLoadType type)
+{
+    g_assert (be);
+    g_assert (book);
+    g_assert (be == last_backend_created);
+    g_assert (book == data_load_struct.book);
+    g_assert_cmpint (type, == , LOAD_TYPE_LOAD_ALL);
+    qof_backend_set_error (be, ERR_BACKEND_DATA_CORRUPT);
+    data_load_struct.called = TRUE;
+}
+
+static struct
+{
+    gboolean called;
+} session_end_struct;
+
+static void
+mock_session_end (QofBackend *be)
+{
+    g_assert (be);
+    g_assert (be == last_backend_created);
+    session_end_struct.called = TRUE;
+}
+
 static QofBackend *
 test_backend_new (void)
 {
     QofBackend * ret = (QofBackend*) malloc (sizeof (QofBackend));
     ret->session_begin = &mock_session_begin;
-    ret->session_end = NULL;
+    ret->session_end = &mock_session_end;
     ret->destroy_backend = NULL;
     ret->load = &mock_load;
     ret->begin = NULL;
@@ -272,270 +303,30 @@ test_qof_session_save (Fixture *fixture, gconstpointer pData)
     g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_NO_ERR);
 }
 
-/*
-static struct
-{
-    QofBackend *be;
-    gboolean called;
-} destroy_backend_struct;
-
-static void
-mock_destroy_backend (QofBackend *be)
-{
-    g_assert (be);
-    g_assert (destroy_backend_struct.be == be);
-    destroy_backend_struct.called = TRUE;
-}
-
-static void
-test_qof_session_destroy_backend (Fixture *fixture, gconstpointer pData)
-{
-    QofBackend *be = NULL;
-
-    g_test_message ("Test with destroy backend callback not set");
-    be = g_new0 (QofBackend, 1);
-    g_assert (be);
-    qof_session_set_backend (fixture->session, be);
-    p_qof_session_destroy_backend (fixture->session);
-    g_assert (!qof_session_get_backend (fixture->session));
-
-    g_test_message ("Test with destroy backend callback set");
-    be = g_new0 (QofBackend, 1);
-    g_assert (be);
-    be->destroy_backend = mock_destroy_backend;
-    qof_session_set_backend (fixture->session, be);
-    destroy_backend_struct.called = FALSE;
-    destroy_backend_struct.be = be;
-    p_qof_session_destroy_backend (fixture->session);
-    g_assert (!qof_session_get_backend (fixture->session));
-    g_assert (destroy_backend_struct.called);
-}
-
-static struct
-{
-    QofBackend *be;
-    gboolean called;
-} session_end_struct;
-
-static void
-mock_session_end (QofBackend *be)
-{
-    g_assert (be);
-    g_assert (session_end_struct.be == be);
-    session_end_struct.called = TRUE;
-}
-
 static void
 test_qof_session_end (Fixture *fixture, gconstpointer pData)
 {
     QofBackend *be = NULL;
 
     g_test_message ("Test backend is closed, errors cleared and book_id removed");
-    be = g_new0 (QofBackend, 1);
-    g_assert (be);
-    be->session_end = mock_session_end;
-    qof_session_set_backend (fixture->session, be);
-    qof_session_push_error (fixture->session, ERR_BACKEND_DATA_CORRUPT, "push any error");
-    qof_session_set_book_id (fixture->session, g_strdup ("my book"));
+    qof_session_begin (fixture->session, "my book", FALSE, FALSE, FALSE);
     session_end_struct.called = FALSE;
-    session_end_struct.be = be;
     qof_session_end (fixture->session);
     g_assert (session_end_struct.called);
     g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_NO_ERR);
-    g_assert (!qof_session_get_book_id (fixture->session));
-}
-
-static struct
-{
-    QofBackend *be;
-    QofBook *book;
-    gboolean called;
-} session_export_struct;
-
-static void
-mock_export (QofBackend *be, QofBook *book)
-{
-    g_assert (be);
-    g_assert (session_export_struct.be == be);
-    g_assert (book);
-    g_assert (session_export_struct.book == book);
-    session_export_struct.called = TRUE;
-}
-
-static void
-test_qof_session_export (Fixture *fixture, gconstpointer pData)
-{
-    QofSession *real_session = NULL;
-    QofBook *tmp_book = NULL, *real_book = NULL;
-    QofBackend *be = NULL;
-
-    real_session = qof_session_new ();
-    g_assert (real_session);
-
-    g_test_message ("Test null checks");
-    g_assert (!qof_session_export (NULL, real_session, percentage_fn));
-    g_assert (!qof_session_export (fixture->session, NULL, percentage_fn));
-
-    g_test_message ("Test with backend not set");
-    tmp_book = qof_session_get_book (fixture->session);
-    g_assert (tmp_book);
-    be = qof_book_get_backend (tmp_book);
-    g_assert (!be);
-    g_assert (!qof_session_export (fixture->session, real_session, percentage_fn));
-
-    g_test_message ("Test with backend set");
-    be = g_new0 (QofBackend, 1);
-    g_assert (be);
-    qof_session_set_backend (fixture->session, be);
-    qof_book_set_backend (tmp_book, be);
-    g_assert (!be->percentage);
-    g_assert (qof_session_export (fixture->session, real_session, percentage_fn));
-    g_assert (be->percentage == percentage_fn);
-
-    g_test_message ("Test with backend export function set and error is produced");
-    be->export_fn = mock_export;
-    qof_backend_set_error (be, ERR_BACKEND_DATA_CORRUPT);
-    qof_backend_set_message (be, "push any error");
-    session_export_struct.called = FALSE;
-    real_book = qof_session_get_book (real_session);
-    g_assert (real_book);
-    session_export_struct.be = be;
-    session_export_struct.book = real_book;
-    g_assert (!qof_session_export (fixture->session, real_session, percentage_fn));
-    g_assert (session_export_struct.called);
-
-    g_test_message ("Test with backend export function set and no error produced");
-    p_qof_session_clear_error (fixture->session);
-    session_export_struct.called = FALSE;
-    g_assert (qof_session_export (fixture->session, real_session, percentage_fn));
-    g_assert (session_export_struct.called);
-
-    qof_session_destroy (real_session);
-}
-
-static void
-test_qof_session_swap_data (Fixture *fixture, gconstpointer pData)
-{
-    QofSession *session2 = NULL;
-    QofBackend *be1 = NULL, *be2 = NULL;
-    QofBook *book1 = NULL, *book2 = NULL;
-
-    g_assert (fixture->session);
-    session2 = qof_session_new ();
-    g_assert (session2);
-    g_assert (fixture->session != session2);
-    be1 = g_new0 (QofBackend, 1);
-    g_assert (be1);
-    be2 = g_new0 (QofBackend, 1);
-    g_assert (be2);
-    qof_session_set_backend (fixture->session, be1);
-    qof_session_set_backend (session2, be2);
-    book1 = qof_session_get_book (fixture->session);
-    book2 = qof_session_get_book (session2);
-    g_assert (book1);
-    g_assert (book2);
-    qof_book_set_backend (book1, qof_session_get_backend (fixture->session));
-    qof_book_set_backend (book2, qof_session_get_backend (session2));
-
-
-    g_test_message ("Test book lists are swapped and backend for each book is swapped");
-    qof_session_swap_data (fixture->session, session2);
-    g_assert (qof_session_get_book (fixture->session) == book2);
-    g_assert (qof_session_get_book (session2) == book1);
-
-    qof_session_destroy (session2);
-}
-
-static struct
-{
-    QofBackend *be;
-    gboolean called;
-} events_struct;
-
-static gboolean
-mock_events_fn (QofBackend *be)
-{
-    g_assert (be);
-    g_assert (be == events_struct.be);
-    events_struct.called = TRUE;
-    return TRUE;
-}
-
-static void
-test_qof_session_events (Fixture *fixture, gconstpointer pData)
-{
-    QofBackend *be = NULL;
-
-    g_test_message ("Test pending events null checks");
-    g_assert (!qof_session_events_pending (NULL));
-    g_assert (!qof_session_get_backend (fixture->session));
-    g_assert (!qof_session_events_pending (fixture->session));
-    be = g_new0 (QofBackend, 1);
-    g_assert (be);
-    be->events_pending = NULL;
-    qof_session_set_backend (fixture->session, be);
-    g_assert (!qof_session_events_pending (fixture->session));
-
-    g_test_message ("Test pending events callback");
-    be->events_pending = mock_events_fn;
-    events_struct.called = FALSE;
-    events_struct.be = be;
-    g_assert (qof_session_events_pending (fixture->session));
-    g_assert (events_struct.called);
-
-    g_test_message ("Test process events null checks");
-    g_assert (!qof_session_process_events (NULL));
-    qof_session_set_backend (fixture->session, NULL);
-    g_assert (!qof_session_process_events (fixture->session));
-    be->process_events = NULL;
-    qof_session_set_backend (fixture->session, be);
-    g_assert (!qof_session_process_events (fixture->session));
-
-    g_test_message ("Test process events callback");
-    be->process_events = mock_events_fn;
-    events_struct.called = FALSE;
-    events_struct.be = be;
-    g_assert (qof_session_process_events (fixture->session));
-    g_assert (events_struct.called);
-}
-
-static struct
-{
-    QofBackend *be;
-    QofBook *book;
-    gboolean called;
-} data_load_struct;
-
-static void
-mock_all_data_load (QofBackend *be, QofBook *book, QofBackendLoadType type)
-{
-    g_assert (be);
-    g_assert (book);
-    g_assert (be == data_load_struct.be);
-    g_assert (book == data_load_struct.book);
-    g_assert_cmpint (type, == , LOAD_TYPE_LOAD_ALL);
-    qof_backend_set_error (be, ERR_BACKEND_DATA_CORRUPT);
-    data_load_struct.called = TRUE;
 }
 
 static void
 test_qof_session_data_loaded (Fixture *fixture, gconstpointer pData)
 {
-    QofBackend *be = NULL;
-
-    be = g_new0 (QofBackend, 1);
-    g_assert (be);
-    be->load = mock_all_data_load;
-    qof_session_set_backend (fixture->session, be);
-
     g_test_message ("Test load callback and artificial error");
-    data_load_struct.be = be;
+    qof_session_begin (fixture->session, "my book", FALSE, FALSE, FALSE);
+    last_backend_created->load = &mock_all_data_load;
     data_load_struct.book = qof_session_get_book (fixture->session);
     data_load_struct.called = FALSE;
     qof_session_ensure_all_data_loaded (fixture->session);
     g_assert (data_load_struct.called);
     g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_DATA_CORRUPT);
-    g_assert_cmpstr (qof_session_get_error_message (fixture->session), == , "");
 }
 
 static void
@@ -543,17 +334,18 @@ test_qof_backend_get_access_method_list (Fixture *fixture, gconstpointer pData)
 {
     GList *list = NULL;
     const char *access_methods[4] = { "file", "http", "postgres", "sqlite" };
+    QofBackendProvider * providers[4];
     int i;
+    qof_backend_unregister_provider (fixture->provider);
 
     for (i = 0; i < 4; i++)
     {
         QofBackendProvider *prov = g_new0 (QofBackendProvider, 1);
+        providers[i] = prov;
         g_assert (prov);
         prov->access_method = access_methods[ i ];
         qof_backend_register_provider (prov);
-        g_assert_cmpint (g_slist_length (get_provider_list ()), == , (i + 1));
     }
-    g_assert_cmpint (g_slist_length (get_provider_list ()), == , 4);
 
     g_test_message ("Test list of access methods is returned");
     list = qof_backend_get_registered_access_method_list ();
@@ -565,100 +357,13 @@ test_qof_backend_get_access_method_list (Fixture *fixture, gconstpointer pData)
     g_assert_cmpstr (g_list_nth_data (list, 3), == , "sqlite");
 
     g_list_free (list);
-    unregister_all_providers ();
+    for (i = 0; i < 4; ++i)
+        qof_backend_unregister_provider (providers[i]);
+
+    list = qof_backend_get_registered_access_method_list ();
+    g_assert (!list);
 }
 
-
-static void
-test_qof_session_get_book (Fixture *fixture, gconstpointer pData)
-{
-    QofBook *book = NULL;
-
-    g_test_message ("Test null check");
-    g_assert (!qof_session_get_book (NULL));
-
-    g_test_message ("Test open book is returned");
-    g_assert (qof_session_get_book (fixture->session));
-    book = qof_session_get_book (fixture->session);
-    g_assert (book);
-    g_assert_cmpuint (book->book_open, == , 'y');
-
-    g_test_message ("Test when book is closed null returned");
-    qof_book_mark_closed (book);
-    g_assert (!qof_session_get_book (fixture->session));
-
-}
-
-static void
-test_qof_session_get_error (Fixture *fixture, gconstpointer pData)
-{
-    QofBackend *be = NULL;
-
-    g_test_message ("Test if session is null");
-    g_assert_cmpint (qof_session_get_error (NULL), == , ERR_BACKEND_NO_BACKEND);
-
-    g_test_message ("Test when there is a local error");
-    qof_session_push_error (fixture->session, ERR_BACKEND_DATA_CORRUPT, "oops");
-    g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_DATA_CORRUPT);
-
-    g_test_message ("Test if session backend is null");
-    g_assert (!qof_session_get_backend (fixture->session));
-    qof_session_push_error (fixture->session, ERR_BACKEND_NO_ERR, "oops");
-    g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_NO_ERR);
-
-    g_test_message ("Test for backend error");
-    be = g_new0 (QofBackend, 1);
-    g_assert (be);
-    qof_backend_set_error (be, ERR_BACKEND_CANT_CONNECT);
-    qof_session_set_backend (fixture->session, be);
-    g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_CANT_CONNECT);
-}
-
-static void
-test_qof_session_clear_error (Fixture *fixture, gconstpointer pData)
-{
-    QofBackend *be = NULL;
-
-    be = g_new0 (QofBackend, 1);
-    g_assert (be);
-
-    g_test_message ("Test session and backend errors are cleared");
-    qof_session_push_error (fixture->session, ERR_BACKEND_NO_SUCH_DB, "push any error");
-    qof_session_set_backend (fixture->session, be);
-    qof_backend_set_error (be, ERR_BACKEND_CANT_CONNECT);
-    p_qof_session_clear_error (fixture->session);
-    g_assert_cmpint (qof_session_get_error (fixture->session), == , ERR_BACKEND_NO_ERR);
-    g_assert_cmpstr (qof_session_get_error_message (fixture->session), == , "");
-    g_assert_cmpint (qof_backend_get_error (be), == , ERR_BACKEND_NO_ERR);
-}
-
-static struct
-{
-    QofSession *session;
-    gpointer data1;
-    gpointer data2;
-    gpointer data3;
-    guint call_count;
-} hooks_struct;
-
-static void
-mock_hook_fn (gpointer data, gpointer user_data)
-{
-    QofSession *session;
-
-    g_assert (data);
-    g_assert (user_data);
-    session = (QofSession*) data;
-    g_assert (session == hooks_struct.session);
-    if (hooks_struct.call_count == 0)
-        g_assert (hooks_struct.data1 == user_data);
-    if (hooks_struct.call_count == 1)
-        g_assert (hooks_struct.data2 == user_data);
-    if (hooks_struct.call_count == 2)
-        g_assert (hooks_struct.data3 == user_data);
-    hooks_struct.call_count++;
-}
-*/
 void
 test_suite_qofsession ( void )
 {
@@ -666,16 +371,7 @@ test_suite_qofsession ( void )
 
     GNC_TEST_ADD (suitename, "qof session begin", Fixture, NULL, setup, test_qof_session_begin, teardown);
     GNC_TEST_ADD (suitename, "qof session save", Fixture, NULL, setup, test_qof_session_save, teardown);
-    /*
-    GNC_TEST_ADD (suitename, "qof session destroy backend", Fixture, NULL, setup, test_qof_session_destroy_backend, teardown);
     GNC_TEST_ADD (suitename, "qof session end", Fixture, NULL, setup, test_qof_session_end, teardown);
-    GNC_TEST_ADD (suitename, "qof session export", Fixture, NULL, setup, test_qof_session_export, teardown);
-    GNC_TEST_ADD (suitename, "qof session swap data", Fixture, NULL, setup, test_qof_session_swap_data, teardown);
-    GNC_TEST_ADD (suitename, "qof session events", Fixture, NULL, setup, test_qof_session_events, teardown);
     GNC_TEST_ADD (suitename, "qof session data loaded", Fixture, NULL, setup, test_qof_session_data_loaded, teardown);
     GNC_TEST_ADD (suitename, "qof backend access method list", Fixture, NULL, setup, test_qof_backend_get_access_method_list, teardown);
-    GNC_TEST_ADD (suitename, "qof session get book", Fixture, NULL, setup, test_qof_session_get_book, teardown);
-    GNC_TEST_ADD (suitename, "qof session get error", Fixture, NULL, setup, test_qof_session_get_error, teardown);
-    GNC_TEST_ADD (suitename, "qof session clear error", Fixture, NULL, setup, test_qof_session_clear_error, teardown);
-    */
 }
