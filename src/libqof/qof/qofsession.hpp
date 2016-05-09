@@ -37,90 +37,66 @@
 struct QofSessionImpl
 {
     QofSessionImpl () noexcept;
-    /*
-     * Ends the current session, destroys the backend, and destroys the book.
-     */
+    /* Ends the current session, destroys the backend, and destroys the book.  */
     ~QofSessionImpl () noexcept;
 
-    /**
-     * Swap books with another session
-     */
-    void swap_books (QofSessionImpl &) noexcept;
-
-    /**
-     * Begin this session.
-     */
+    /** Begin this session.  */
     void begin (std::string book_id, bool ignore_lock, bool create, bool force) noexcept;
 
-    std::string get_error_message () const noexcept;
-
-    void clear_error () noexcept;
-
-    void push_error (QofBackendError const err, std::string message) noexcept;
-
-    QofBackendError pop_error () noexcept;
-
-    /**
-     * Returns the local cached error. If there is no local error, we check
-     * for an error in the backend.
-     */
-    QofBackendError get_error () noexcept;
-
-    QofBook * get_book () const noexcept;
-
-    std::string get_file_path () const noexcept;
-
+    /** Swap books with another session */
+    void swap_books (QofSessionImpl &) noexcept;
     void ensure_all_data_loaded () noexcept;
-
-    void destroy_backend () noexcept;
-
-    /**
-     * Loads data into the current book into the backend
-     */
     void load (QofPercentageFunc) noexcept;
-
     void save (QofPercentageFunc) noexcept;
-
     void safe_save (QofPercentageFunc) noexcept;
-
     bool save_in_progress () const noexcept;
-
-    /**
-     * Terminates the current backend.
-     */
-    void end () noexcept;
+    bool export_session (QofSessionImpl & real_session, QofPercentageFunc) noexcept;
 
     bool events_pending () const noexcept;
-
     bool process_events () const noexcept;
 
-    bool export_session (QofSessionImpl & real_session, QofPercentageFunc) noexcept;
+    void clear_error () noexcept;
+    QofBackendError pop_error () noexcept;
 
     /**
      * We return by reference so that a pointer to the data of the string lives
      * long enough to make it back to C code.
      */
     std::string const & get_book_id () const noexcept;
-
+    /**
+     * Returns and clears the local cached error. If there is no local error, we check
+     * for an error in the backend.
+     */
+    QofBackendError get_error () noexcept;
+    std::string get_error_message () const noexcept;
+    QofBook * get_book () const noexcept;
+    QofBackend * get_backend () const noexcept;
+    std::string get_file_path () const noexcept;
     bool is_saving () const noexcept;
 
-    /* ---------------------------------------------------- */
-    /* Pointer to the backend that is actually used to move data
-     * between the persistant store and the local engine.  */
-    QofBackend *backend;
+    /**
+     * Terminates the current backend.
+     */
+    void end () noexcept;
+    void destroy_backend () noexcept;
 
 private:
+    void push_error (QofBackendError const err, std::string message) noexcept;
 
     void load_backend (std::string access_method) noexcept;
 
     /* A book holds pointers to the various types of datasets.
      * A session has exactly one book. */
-    QofBook *book;
+    QofBook * m_book;
 
     /* The requested book id, in the form or a URI, such as
      * file:/some/where, or sql:server.host.com:555
      */
-    std::string book_id;
+    std::string m_book_id;
+
+    QofBackend * m_backend;
+
+    bool m_saving;
 
     /* If any book subroutine failed, this records the failure reason
      * (file not found, etc).
@@ -129,10 +105,8 @@ private:
      * and the backends should all be using (or making it look like)
      * there is only one stack.
      */
-    QofBackendError last_err;
-    std::string error_message;
-
-    bool saving;
+    QofBackendError m_last_err;
+    std::string m_error_message;
 };
 
 typedef struct qof_instance_copy_data

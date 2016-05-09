@@ -230,8 +230,8 @@ TEST (QofSessionTest, export_session)
     QofBook * b2 = s2.get_book ();
     std::cout << "b1 = " << b1 << " b2 = " << b2 << '\n';
     std::cout << "be1 = " << qof_book_get_backend (b1) << " be2 = " << qof_book_get_backend (b2) << '\n';
-    b1->backend = s1.backend;
-    b2->backend = s2.backend;
+    b1->backend = s1.get_backend ();
+    b2->backend = s2.get_backend ();
     s2.export_session (s1, nullptr);
     EXPECT_EQ (exported_book, b1);
 
