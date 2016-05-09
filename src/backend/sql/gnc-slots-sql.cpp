@@ -83,11 +83,11 @@ static void set_string_val (gpointer pObject,  gpointer pValue);
 static  gpointer get_double_val (gpointer pObject);
 static void set_double_val (gpointer pObject,  gpointer pValue);
 static Timespec get_timespec_val (gpointer pObject);
-static void set_timespec_val (gpointer pObject, Timespec ts);
+static void set_timespec_val (gpointer pObject, Timespec *ts);
 static  gpointer get_guid_val (gpointer pObject);
 static void set_guid_val (gpointer pObject,  gpointer pValue);
 static gnc_numeric get_numeric_val (gpointer pObject);
-static void set_numeric_val (gpointer pObject, gnc_numeric value);
+static void set_numeric_val (gpointer pObject, gnc_numeric *value);
 static GDate* get_gdate_val (gpointer pObject);
 static void set_gdate_val (gpointer pObject, GDate* value);
 static slot_info_t* slot_info_copy (slot_info_t* pInfo, GncGUID* guid);
@@ -436,7 +436,7 @@ get_timespec_val (gpointer pObject)
 }
 
 static void
-set_timespec_val (gpointer pObject, Timespec ts)
+set_timespec_val (gpointer pObject, Timespec *ts)
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
     KvpValue* value = NULL;
@@ -444,7 +444,7 @@ set_timespec_val (gpointer pObject, Timespec ts)
     g_return_if_fail (pObject != NULL);
 
     if (pInfo->value_type != KvpValue::Type::TIMESPEC) return;
-    value = new KvpValue {ts};
+    value = new KvpValue {*ts};
     set_slot_from_value (pInfo, value);
 }
 
@@ -553,7 +553,7 @@ get_numeric_val (gpointer pObject)
 }
 
 static void
-set_numeric_val (gpointer pObject, gnc_numeric value)
+set_numeric_val (gpointer pObject, gnc_numeric *value)
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
     KvpValue* pValue = NULL;
@@ -561,7 +561,7 @@ set_numeric_val (gpointer pObject, gnc_numeric value)
     g_return_if_fail (pObject != NULL);
 
     if (pInfo->value_type != KvpValue::Type::NUMERIC) return;
-    set_slot_from_value (pInfo, new KvpValue {value});
+    set_slot_from_value (pInfo, new KvpValue {*value});
 }
 
 static GDate*

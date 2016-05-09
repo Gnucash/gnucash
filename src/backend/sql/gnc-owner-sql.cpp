@@ -151,17 +151,7 @@ load_owner (const GncSqlBackend* be, GncSqlRow& row,
     default:
         PWARN ("Invalid owner type: %d\n", type);
     }
-
-    if (table_row.gobj_param_name != NULL)
-    {
-        qof_instance_increase_editlevel (pObject);
-        g_object_set (pObject, table_row.gobj_param_name, &owner, NULL);
-        qof_instance_decrease_editlevel (pObject);
-    }
-    else
-    {
-        (*setter) (pObject, &owner);
-    }
+    set_parameter (pObject, &owner, setter, table_row.gobj_param_name);
 }
 
 static void

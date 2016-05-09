@@ -290,23 +290,10 @@ load_invoice_guid (const GncSqlBackend* be, GncSqlRow& row,
         auto val = row.get_string_at_col (table_row.col_name);
         string_to_guid (val.c_str(), &guid);
         invoice = gncInvoiceLookup (be->book, &guid);
-        if (invoice != NULL)
-        {
-            if (table_row.gobj_param_name != NULL)
-            {
-                qof_instance_increase_editlevel (pObject);
-                g_object_set (pObject, table_row.gobj_param_name, invoice, NULL);
-                qof_instance_decrease_editlevel (pObject);
-            }
-            else
-            {
-                (*setter) (pObject, (const gpointer)invoice);
-            }
-        }
+        if (invoice != nullptr)
+            set_parameter (pObject, invoice, setter, table_row.gobj_param_name);
         else
-        {
             PWARN ("Invoice ref '%s' not found", val.c_str());
-        }
     }
     catch (std::invalid_argument) {}
 }

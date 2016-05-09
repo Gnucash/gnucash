@@ -70,7 +70,6 @@ load_address (const GncSqlBackend* be, GncSqlRow& row,
               QofSetterFunc setter, gpointer pObject,
               const GncSqlColumnTableEntry& table_row)
 {
-    AddressSetterFunc a_setter = (AddressSetterFunc)setter;
     const gchar* s;
 
 
@@ -87,40 +86,22 @@ load_address (const GncSqlBackend* be, GncSqlRow& row,
         {
             auto val = row.get_string_at_col (buf);
             g_free (buf);
-            if (subtable_row.gobj_param_name != NULL)
-            {
-                g_object_set (addr, subtable_row.gobj_param_name,
-                              val.c_str(), NULL);
-            }
-            else
-            {
-                if (subtable_row.qof_param_name != NULL)
-                {
-                    setter = qof_class_get_parameter_setter (GNC_ID_ADDRESS,
-                                                             subtable_row.qof_param_name);
-                }
-                else
-                {
-                    setter = subtable_row.setter;
-                }
-                (*setter) (addr, (const gpointer)val.c_str());
-            }
+            auto sub_setter = subtable_row.setter;
+            auto pname = subtable_row.qof_param_name;
+            if (pname != nullptr)
+                sub_setter = qof_class_get_parameter_setter (GNC_ID_ADDRESS,
+                                                             pname);
+            set_parameter (addr, val.c_str(), sub_setter,
+                           subtable_row.gobj_param_name);
         }
         catch (std::invalid_argument)
         {
             return;
         }
     }
-    if (table_row.gobj_param_name != NULL)
-    {
-        qof_instance_increase_editlevel (pObject);
-        g_object_set (pObject, table_row.gobj_param_name, addr, NULL);
-        qof_instance_decrease_editlevel (pObject);
-    }
-    else
-    {
-        (*a_setter) (pObject, addr);
-    }
+    set_parameter (pObject, addr,
+                  reinterpret_cast<AddressSetterFunc>(setter),
+                  table_row.gobj_param_name);
 }
 
 static void

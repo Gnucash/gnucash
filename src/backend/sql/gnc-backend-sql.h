@@ -492,6 +492,70 @@ typedef void (*GNC_SQL_ADD_VALUE_TO_VEC_FN) (const GncSqlBackend* be,
                                              PairVec& vec);
 
 /**
+ * Set an object property with a setter function.
+ * @param pObject void* to the object being set.
+ * @param item the value to be set in the property.
+ * @param setter The function to set the property.
+ * The void* is an obvious wart occasioned by the fact that we're using GLists
+ * to hold objects. As the rewrite progresses we'll replace that with another
+ * template paramter.
+ */
+template <typename T, typename P, typename F>
+void set_parameter(T object, P item, F& setter)
+{
+    (*setter)(object, item);
+}
+
+template <typename T, typename P>
+void set_parameter(T object, P item, QofSetterFunc setter, std::true_type)
+{
+    (*setter)(object, (void*)item);
+}
+
+template <typename T, typename P>
+void set_parameter(T object, P item, QofSetterFunc setter, std::false_type)
+{
+    (*setter)(object, (void*)(&item));
+}
+
+template <typename T, typename P>
+void set_parameter(T object, P item, QofSetterFunc setter)
+{
+    set_parameter(object, item, setter, std::is_pointer<P>());
+}
+
+/**
+ * Set an object property with g_object_set.
+ * @param pObject void* to the object being set.
+ * @param item the value to set in the property.
+ * @param property the property name.
+ * The void* is an obvious wart. So is g_object_set, partly because it's GObject
+ * but mostly because it works off of string comparisons.
+ */
+template <typename T, typename P>
+void set_parameter(T object, P item, const char* property)
+{
+    qof_instance_increase_editlevel(object);
+    g_object_set(object, property, item, nullptr);
+    qof_instance_decrease_editlevel(object);
+};
+
+/**
+ * Set an object property with either a g_object_set or a setter.
+ *
+ * See previous templates for the parameter meanings. This is clunky but fits in
+ * the current architecture for refactoring.
+ */
+template <typename T, typename P, typename F>
+void set_parameter(T object, P item, F setter, const char* property)
+{
+    if (property)
+        set_parameter(object, item, property);
+    else
+        set_parameter(object, item, setter);
+}
+
+/**
  * @struct GncSqlColumnTypeHandler
  *
  * The GncSqlColumnTypeHandler struct contains pointers to routines to handle

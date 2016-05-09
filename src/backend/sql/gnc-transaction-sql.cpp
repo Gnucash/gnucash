@@ -1440,20 +1440,8 @@ load_tx_guid (const GncSqlBackend* be, GncSqlRow& row,
             tx = xaccTransLookup (&guid, be->book);
         }
 
-        if (tx != NULL)
-        {
-            if (table_row.gobj_param_name != NULL)
-            {
-                qof_instance_increase_editlevel (pObject);
-                g_object_set (pObject, table_row.gobj_param_name, tx, NULL);
-                qof_instance_decrease_editlevel (pObject);
-            }
-            else
-            {
-                g_return_if_fail (setter != NULL);
-                (*setter) (pObject, (const gpointer)tx);
-            }
-        }
+        if (tx != nullptr)
+            set_parameter (pObject, tx, setter, table_row.gobj_param_name);
     }
     catch (std::invalid_argument) {}
 }

@@ -1181,24 +1181,6 @@ gnc_sql_get_getter (QofIdTypeConst obj_name,
     return getter;
 }
 
-template <typename T>
-void set_object_parameter(gpointer pObject, T item, QofSetterFunc setter,
-                          const char* param)
-{
-    if (param != NULL)
-    {
-        if (QOF_IS_INSTANCE (pObject))
-            qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
-        g_object_set (pObject, param, item, NULL);
-        if (QOF_IS_INSTANCE (pObject))
-            qof_instance_decrease_editlevel (QOF_INSTANCE (pObject));
-    }
-    else
-    {
-        g_return_if_fail (setter != NULL);
-        (*setter) (pObject, (const gpointer)(item));
-    }
-}
 
 /* ----------------------------------------------------------------- */
 static void
@@ -1212,20 +1194,7 @@ load_string (const GncSqlBackend* be, GncSqlRow& row,
     try
     {
         auto s = row.get_string_at_col (table_row.col_name);
-        if (table_row.gobj_param_name != NULL)
-        {
-            if (QOF_IS_INSTANCE (pObject))
-                qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
-            g_object_set (pObject, table_row.gobj_param_name, s.c_str(), NULL);
-            if (QOF_IS_INSTANCE (pObject))
-                qof_instance_decrease_editlevel (QOF_INSTANCE (pObject));
-
-        }
-        else
-        {
-            g_return_if_fail (setter != NULL);
-            (*setter) (pObject, (const gpointer)s.c_str());
-        }
+        set_parameter(pObject, s.c_str(), setter, table_row.gobj_param_name);
     }
     catch (std::invalid_argument) {}
 }
@@ -1283,20 +1252,9 @@ load_int (const GncSqlBackend* be, GncSqlRow& row,
     g_return_if_fail (table_row.gobj_param_name != NULL || setter != NULL);
 
     auto val = row.get_int_at_col(table_row.col_name);
-    if (table_row.gobj_param_name != NULL)
-    {
-        if (QOF_IS_INSTANCE (pObject))
-            qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
-        g_object_set (pObject, table_row.gobj_param_name, val, NULL);
-        if (QOF_IS_INSTANCE (pObject))
-            qof_instance_decrease_editlevel (QOF_INSTANCE (pObject));
-    }
-    else
-    {
-        g_return_if_fail (setter != NULL);
-        auto _setter = (IntSetterFunc)setter;
-        (*_setter) (pObject, val);
-    }
+    set_parameter(pObject, val,
+                  reinterpret_cast<IntSetterFunc>(setter),
+                  table_row.gobj_param_name);
 }
 
 static void
@@ -1331,20 +1289,9 @@ load_boolean (const GncSqlBackend* be, GncSqlRow& row,
     g_return_if_fail (table_row.gobj_param_name != NULL || setter != NULL);
 
     auto val = row.get_int_at_col (table_row.col_name);
-    if (table_row.gobj_param_name != nullptr)
-    {
-        if (QOF_IS_INSTANCE (pObject))
-            qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
-        g_object_set (pObject, table_row.gobj_param_name, val, nullptr);
-        if (QOF_IS_INSTANCE (pObject))
-            qof_instance_decrease_editlevel (QOF_INSTANCE (pObject));
-    }
-    else
-    {
-        g_return_if_fail (setter != NULL);
-        auto b_setter = (BooleanSetterFunc)setter;
-        (*b_setter) (pObject, (val != 0) ? TRUE : FALSE);
-    }
+    set_parameter(pObject, val,
+                  reinterpret_cast<BooleanSetterFunc>(setter),
+                  table_row.gobj_param_name);
 }
 
 static void
@@ -1379,19 +1326,9 @@ load_int64 (const GncSqlBackend* be, GncSqlRow& row,
                       setter != nullptr);
 
     auto val = row.get_int_at_col (table_row.col_name);
-    if (table_row.gobj_param_name != nullptr)
-    {
-        if (QOF_IS_INSTANCE (pObject))
-            qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
-        g_object_set (pObject, table_row.gobj_param_name, val, nullptr);
-        if (QOF_IS_INSTANCE (pObject))
-            qof_instance_decrease_editlevel (QOF_INSTANCE (pObject));
-    }
-    else
-    {
-        auto i64_setter = reinterpret_cast<Int64SetterFunc>(setter);
-        (*i64_setter) (pObject, val);
-    }
+    set_parameter(pObject, val,
+                  reinterpret_cast<Int64SetterFunc>(setter),
+                  table_row.gobj_param_name);
 }
 
 static void
@@ -1445,19 +1382,7 @@ load_double (const GncSqlBackend* be, GncSqlRow& row,
             }
         }
     }
-
-    if (table_row.gobj_param_name != NULL)
-    {
-        if (QOF_IS_INSTANCE (pObject))
-            qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
-        g_object_set (pObject, table_row.gobj_param_name, val, NULL);
-        if (QOF_IS_INSTANCE (pObject))
-            qof_instance_decrease_editlevel (QOF_INSTANCE (pObject));
-    }
-    else
-    {
-        (*setter) (pObject, (gpointer)&val);
-    }
+    set_parameter(pObject, val, setter, table_row.gobj_param_name);
 }
 
 static void
@@ -1503,22 +1428,7 @@ load_guid (const GncSqlBackend* be, GncSqlRow& row,
         return;
     }
     (void)string_to_guid (str.c_str(), &guid);
-    if (table_row.gobj_param_name != NULL)
-    {
-        if (QOF_IS_INSTANCE (pObject))
-            qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
-        g_object_set (pObject, table_row.gobj_param_name, &guid, NULL);
-        if (QOF_IS_INSTANCE (pObject))
-            qof_instance_decrease_editlevel (QOF_INSTANCE (pObject));
-    }
-    else
-    {
-        g_return_if_fail (setter != NULL);
-        /* FIXME: The setter had damn well better dereference and copy its
-         * arg!
-         */
-        (*setter) (pObject, (const gpointer)(&guid));
-    }
+    set_parameter(pObject, &guid, setter, table_row.gobj_param_name);
 }
 
 static void
@@ -1589,7 +1499,7 @@ gnc_sql_add_objectref_guid_col_info_to_list( const GncSqlBackend* be,
 
 /* ----------------------------------------------------------------- */
 typedef Timespec (*TimespecAccessFunc) (const gpointer);
-typedef void (*TimespecSetterFunc) (const gpointer, Timespec);
+typedef void (*TimespecSetterFunc) (const gpointer, Timespec*);
 
 #define TIMESPEC_STR_FORMAT "%04d%02d%02d%02d%02d%02d"
 #define TIMESPEC_COL_SIZE (4+2+2+2+2+2)
@@ -1625,7 +1535,6 @@ load_timespec (const GncSqlBackend* be, GncSqlRow& row,
 {
 
     Timespec ts = {0, 0};
-    TimespecSetterFunc ts_setter;
     gboolean isOK = FALSE;
 
 
@@ -1633,7 +1542,6 @@ load_timespec (const GncSqlBackend* be, GncSqlRow& row,
     g_return_if_fail (table_row.gobj_param_name != nullptr ||
                       setter != nullptr);
 
-    ts_setter = (TimespecSetterFunc)setter;
     try
     {
         auto val = row.get_time64_at_col(table_row.col_name);
@@ -1657,19 +1565,10 @@ load_timespec (const GncSqlBackend* be, GncSqlRow& row,
             return;
         }
     }
-    if (table_row.gobj_param_name != NULL)
-    {
-        if (QOF_IS_INSTANCE (pObject))
-            qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
-        g_object_set (pObject, table_row.gobj_param_name, &ts, NULL);
-        if (QOF_IS_INSTANCE (pObject))
-            qof_instance_decrease_editlevel (QOF_INSTANCE (pObject));
-    }
-    else
-    {
-        (*ts_setter) (pObject, ts);
-    }
-}
+    set_parameter(pObject, &ts,
+                  reinterpret_cast<TimespecSetterFunc>(setter),
+                  table_row.gobj_param_name);
+ }
 
 static void
 add_timespec_col_info_to_list(const GncSqlBackend* be,
@@ -1773,18 +1672,7 @@ load_date (const GncSqlBackend* be, GncSqlRow& row,
             return;
         }
     }
-    if (table_row.gobj_param_name != NULL)
-    {
-        if (QOF_IS_INSTANCE (pObject))
-            qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
-        g_object_set (pObject, table_row.gobj_param_name, &date, NULL);
-        if (QOF_IS_INSTANCE (pObject))
-            qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
-    }
-    else
-    {
-        (*setter) (pObject, &date);
-    }
+    set_parameter(pObject, &date, setter, table_row.gobj_param_name);
 }
 
 static void
@@ -1827,7 +1715,7 @@ static GncSqlColumnTypeHandler date_handler
 };
 /* ----------------------------------------------------------------- */
 typedef gnc_numeric (*NumericGetterFunc) (const gpointer);
-typedef void (*NumericSetterFunc) (gpointer, gnc_numeric);
+typedef void (*NumericSetterFunc) (gpointer, gnc_numeric*);
 
 static const EntryVec numeric_col_table =
 {
@@ -1859,19 +1747,9 @@ load_numeric (const GncSqlBackend* be, GncSqlRow& row,
     {
         return;
     }
-    if (table_row.gobj_param_name != nullptr)
-    {
-        if (QOF_IS_INSTANCE (pObject))
-            qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
-        g_object_set (pObject, table_row.gobj_param_name, &n, NULL);
-        if (QOF_IS_INSTANCE (pObject))
-            qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
-    }
-    else
-    {
-        NumericSetterFunc n_setter = (NumericSetterFunc)setter;
-        (*n_setter) (pObject, n);
-    }
+    set_parameter(pObject, &n,
+                  reinterpret_cast<NumericSetterFunc>(setter),
+                  table_row.gobj_param_name);
 }
 
 static void

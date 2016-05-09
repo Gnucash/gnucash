@@ -219,24 +219,10 @@ load_lot_guid (const GncSqlBackend* be, GncSqlRow& row,
         auto val = row.get_string_at_col (table_row.col_name);
         (void)string_to_guid (val.c_str(), &guid);
         lot = gnc_lot_lookup (&guid, be->book);
-        if (lot != NULL)
-        {
-            if (table_row.gobj_param_name != NULL)
-            {
-                qof_instance_increase_editlevel (pObject);
-                g_object_set (pObject, table_row.gobj_param_name, lot, NULL);
-                qof_instance_decrease_editlevel (pObject);
-            }
-            else
-            {
-                g_return_if_fail (setter != NULL);
-                (*setter) (pObject, (const gpointer)lot);
-            }
-        }
+        if (lot != nullptr)
+            set_parameter (pObject, lot, setter, table_row.gobj_param_name);
         else
-        {
             PWARN ("Lot ref '%s' not found", val.c_str());
-        }
     }
     catch (std::invalid_argument) {}
 }

@@ -477,24 +477,10 @@ load_budget_guid (const GncSqlBackend* be, GncSqlRow& row,
         auto val = row.get_string_at_col (table_row.col_name);
         (void)string_to_guid (val.c_str(), &guid);
         budget = gnc_budget_lookup (&guid, be->book);
-        if (budget != NULL)
-        {
-            if (table_row.gobj_param_name != NULL)
-            {
-                qof_instance_increase_editlevel (pObject);
-                g_object_set (pObject, table_row.gobj_param_name, budget, NULL);
-                qof_instance_decrease_editlevel (pObject);
-            }
-            else
-            {
-                g_return_if_fail (setter != NULL);
-                (*setter) (pObject, (const gpointer)budget);
-            }
-        }
+        if (budget != nullptr)
+            set_parameter(pObject, budget, setter, table_row.gobj_param_name);
         else
-        {
             PWARN ("Budget ref '%s' not found", val.c_str());
-        }
     }
     catch (std::invalid_argument) {}
 }

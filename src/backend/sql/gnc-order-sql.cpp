@@ -204,23 +204,10 @@ load_order_guid (const GncSqlBackend* be, GncSqlRow& row,
         auto val = row.get_string_at_col (table_row.col_name);
         string_to_guid (val.c_str(), &guid);
         order = gncOrderLookup (be->book, &guid);
-        if (order != NULL)
-        {
-            if (table_row.gobj_param_name != NULL)
-            {
-                qof_instance_increase_editlevel (pObject);
-                g_object_set (pObject, table_row.gobj_param_name, order, NULL);
-                qof_instance_decrease_editlevel (pObject);
-            }
-            else
-            {
-                (*setter) (pObject, (const gpointer)order);
-            }
-        }
+        if (order != nullptr)
+            set_parameter (pObject, order, setter, table_row.gobj_param_name);
         else
-        {
             PWARN ("Order ref '%s' not found", val.c_str());
-        }
     }
     catch (std::invalid_argument) {}
 }

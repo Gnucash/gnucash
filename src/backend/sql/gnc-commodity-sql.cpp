@@ -279,23 +279,11 @@ load_commodity_guid (const GncSqlBackend* be, GncSqlRow& row,
         auto val = row.get_string_at_col (table_row.col_name);
         (void)string_to_guid (val.c_str(), &guid);
         commodity = gnc_commodity_find_commodity_by_guid (&guid, be->book);
-        if (commodity != NULL)
-        {
-            if (table_row.gobj_param_name != NULL)
-            {
-                qof_instance_increase_editlevel (pObject);
-                g_object_set (pObject, table_row.gobj_param_name, commodity, NULL);
-                qof_instance_decrease_editlevel (pObject);
-            }
-            else if (setter != NULL)
-            {
-                (*setter) (pObject, (const gpointer)commodity);
-            }
-        }
+        if (commodity != nullptr)
+            set_parameter (pObject, commodity, setter,
+                           table_row.gobj_param_name);
         else
-        {
             PWARN ("Commodity ref '%s' not found", val.c_str());
-        }
     }
     catch (std::invalid_argument) {}
 }

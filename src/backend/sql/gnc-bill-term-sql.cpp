@@ -353,23 +353,10 @@ load_billterm_guid (const GncSqlBackend* be, GncSqlRow& row,
         auto val = row.get_string_at_col (table_row.col_name);
         string_to_guid (val.c_str(), &guid);
         term = gncBillTermLookup (be->book, &guid);
-        if (term != NULL)
-        {
-            if (table_row.gobj_param_name != NULL)
-            {
-                qof_instance_increase_editlevel (pObject);
-                g_object_set (pObject, table_row.gobj_param_name, term, NULL);
-                qof_instance_decrease_editlevel (pObject);
-            }
-            else
-            {
-                (*setter) (pObject, (const gpointer)term);
-            }
-        }
+        if (term != nullptr)
+            set_parameter (pObject, term, setter, table_row.gobj_param_name);
         else
-        {
             PWARN ("Billterm ref '%s' not found", val.c_str());
-        }
     }
     catch (std::invalid_argument) {}
 }
