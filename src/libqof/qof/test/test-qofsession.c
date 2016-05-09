@@ -334,14 +334,12 @@ test_qof_backend_get_access_method_list (Fixture *fixture, gconstpointer pData)
 {
     GList *list = NULL;
     const char *access_methods[4] = { "file", "http", "postgres", "sqlite" };
-    QofBackendProvider * providers[4];
     int i;
-    qof_backend_unregister_provider (fixture->provider);
+    qof_backend_unregister_all_providers ();
 
     for (i = 0; i < 4; i++)
     {
         QofBackendProvider *prov = g_new0 (QofBackendProvider, 1);
-        providers[i] = prov;
         g_assert (prov);
         prov->access_method = access_methods[ i ];
         qof_backend_register_provider (prov);
@@ -357,8 +355,7 @@ test_qof_backend_get_access_method_list (Fixture *fixture, gconstpointer pData)
     g_assert_cmpstr (g_list_nth_data (list, 3), == , "sqlite");
 
     g_list_free (list);
-    for (i = 0; i < 4; ++i)
-        qof_backend_unregister_provider (providers[i]);
+    qof_backend_unregister_all_providers ();
 
     list = qof_backend_get_registered_access_method_list ();
     g_assert (!list);
