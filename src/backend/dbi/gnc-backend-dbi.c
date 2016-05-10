@@ -788,6 +788,137 @@ gnc_dbi_unlock( QofBackend *qbe )
     qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
 }
 
+#define SQL_OPTION_TO_REMOVE "NO_ZERO_DATE"
+
+// Given an sql_options string returns a copy of the string adjusted as necessary.
+// In particular if the string contains SQL_OPTION_TO_REMOVE it is removed along with 
+// comma separator.
+static gchar*
+adjust_sql_options_string( const gchar *str )
+{
+    char* pos;
+    char* answer = g_malloc( strlen(str)+1 );  // this must be freed by the calling code
+    int chars_to_copy;
+    PERR( "\nIn %s", str );
+    pos = strstr( str, SQL_OPTION_TO_REMOVE );
+    if (pos)
+    {
+        PERR("%c %c", *(pos-1), *(pos+(strlen(SQL_OPTION_TO_REMOVE)+1)));
+        if ( pos == str )
+        {
+            PERR( "A" );
+            if ( *(pos+strlen(SQL_OPTION_TO_REMOVE)) == ',' )
+            {
+            PERR( "B" );
+                strcpy( answer, str + strlen(SQL_OPTION_TO_REMOVE) + 1 );
+            } else if ( *(pos+strlen(SQL_OPTION_TO_REMOVE)) == '\0' )
+            {
+            PERR( "C" );
+                strcpy( answer, "" );
+            } else
+            {
+                PERR( "A1" );
+                strcpy( answer, str );
+            }
+        } else if ( *(pos + strlen(SQL_OPTION_TO_REMOVE)) == '\0' )
+        {
+            PERR( "D" );
+            chars_to_copy =  strlen(str) - strlen(SQL_OPTION_TO_REMOVE) - 1;
+            strncpy( answer, str, chars_to_copy );
+            answer[chars_to_copy] = '\0';
+        } else if (*(pos-1) == ','  &&  *(pos+strlen(SQL_OPTION_TO_REMOVE)) == ',')
+        {
+            PERR( "E" );
+            chars_to_copy =  pos - str - 1;
+            strncpy( answer, str, chars_to_copy );
+            strcpy( answer + chars_to_copy, pos+strlen(SQL_OPTION_TO_REMOVE));
+        } else
+        {
+            PERR( "F" );
+            // not found
+            strcpy( answer, str );
+        }
+    } else
+    {
+        PERR( "G" );
+        // not found
+        strcpy( answer, str );
+    }
+    PERR( "Out %s\n", answer );
+    return answer;
+}
+
+/* checks mysql sql_options and adjusts if necessary */
+static void
+adjust_sql_options( dbi_conn connection )
+{
+    dbi_result result;
+    int err;
+    const char* str;
+    const gchar *errmsg;
+    gchar *adjusted_str;
+    gchar *set_str;
+    const char * strings[] = {
+        "NO_ZERO_DATE",
+        "NO_ZERO_DATE,something else",
+        "something,NO_ZERO_DATE",
+        "something,NO_ZERO_DATE,something else",
+        "NO_ZERO_DATExx",
+        "NO_ZERO_DATExx,something else",
+        "something,NO_ZERO_DATExx",
+        "something,NO_ZERO_DATExx,something else",
+        "fred,jim,john"
+    };
+    
+    size_t i;
+    for( i = 0; i < sizeof(strings) / sizeof(char*); i++)
+    {
+        adjusted_str = adjust_sql_options_string( strings[i] );
+        g_free( adjusted_str );
+    }
+    
+    PERR("in adjust_sql_options");
+    result = dbi_conn_query( connection, "SELECT @@sql_mode");
+    if (result)
+    {
+        err = dbi_result_first_row(result);
+        if (!err)
+        {
+            PERR("first_row err");
+        }
+        str = dbi_result_get_string_idx(result, 1);
+        if (str)
+        {
+            PERR("*************** %s", str);
+            if( strstr( str, SQL_OPTION_TO_REMOVE ) )
+            {
+                adjusted_str = adjust_sql_options_string( str );
+                set_str = g_malloc( strlen(adjusted_str) + 20 );
+                sprintf( set_str, "SET sql_mode='%s';", adjusted_str );
+                PERR("*** %s", set_str);
+                result = dbi_conn_query( connection, set_str);
+                if (!result)
+                {
+                    err = dbi_conn_error(connection, &errmsg);
+                    PERR("null result %d : %s", err, errmsg );
+                }
+                g_free( adjusted_str );
+                g_free( set_str );
+            }
+        }
+        else
+        {
+            PERR("null str");
+        }
+        dbi_result_free(result);
+    }
+    else
+    {
+      err = dbi_conn_error(connection, &errmsg);
+      PERR("null result %d : %s", err, errmsg );
+    }
+}
+
 static void
 gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
                              const gchar *book_id, gboolean ignore_lock,
@@ -848,6 +979,7 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
     result = dbi_conn_connect( be->conn );
     if ( result == 0 )
     {
+        adjust_sql_options( be->conn );
         dbi_test_result = conn_test_dbi_library( be->conn );
         switch ( dbi_test_result )
         {
@@ -907,6 +1039,7 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
                 qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
                 goto exit;
             }
+            adjust_sql_options( be->conn );
             dresult = dbi_conn_queryf( be->conn, "CREATE DATABASE %s CHARACTER SET utf8", dbname );
             if ( dresult == NULL )
             {
@@ -944,6 +1077,7 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
                 qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
                 goto exit;
             }
+            adjust_sql_options( be->conn );
             dbi_test_result = conn_test_dbi_library( be->conn );
             switch ( dbi_test_result )
             {
