@@ -799,52 +799,41 @@ adjust_sql_options_string( const gchar *str )
     char* pos;
     char* answer = g_malloc( strlen(str)+1 );  // this must be freed by the calling code
     int chars_to_copy;
-    PERR( "\nIn %s", str );
     pos = strstr( str, SQL_OPTION_TO_REMOVE );
     if (pos)
     {
-        PERR("%c %c", *(pos-1), *(pos+(strlen(SQL_OPTION_TO_REMOVE)+1)));
         if ( pos == str )
         {
-            PERR( "A" );
             if ( *(pos+strlen(SQL_OPTION_TO_REMOVE)) == ',' )
             {
-            PERR( "B" );
                 strcpy( answer, str + strlen(SQL_OPTION_TO_REMOVE) + 1 );
             } else if ( *(pos+strlen(SQL_OPTION_TO_REMOVE)) == '\0' )
             {
-            PERR( "C" );
                 strcpy( answer, "" );
             } else
             {
-                PERR( "A1" );
                 strcpy( answer, str );
             }
         } else if ( *(pos + strlen(SQL_OPTION_TO_REMOVE)) == '\0' )
         {
-            PERR( "D" );
             chars_to_copy =  strlen(str) - strlen(SQL_OPTION_TO_REMOVE) - 1;
             strncpy( answer, str, chars_to_copy );
             answer[chars_to_copy] = '\0';
         } else if (*(pos-1) == ','  &&  *(pos+strlen(SQL_OPTION_TO_REMOVE)) == ',')
         {
-            PERR( "E" );
             chars_to_copy =  pos - str - 1;
             strncpy( answer, str, chars_to_copy );
             strcpy( answer + chars_to_copy, pos+strlen(SQL_OPTION_TO_REMOVE));
         } else
         {
-            PERR( "F" );
             // not found
             strcpy( answer, str );
         }
     } else
     {
-        PERR( "G" );
         // not found
         strcpy( answer, str );
     }
-    PERR( "Out %s\n", answer );
     return answer;
 }
 
@@ -853,54 +842,36 @@ static void
 adjust_sql_options( dbi_conn connection )
 {
     dbi_result result;
-    int err;
+    gint err;
     const char* str;
     const gchar *errmsg;
-    gchar *adjusted_str;
-    gchar *set_str;
-    const char * strings[] = {
-        "NO_ZERO_DATE",
-        "NO_ZERO_DATE,something else",
-        "something,NO_ZERO_DATE",
-        "something,NO_ZERO_DATE,something else",
-        "NO_ZERO_DATExx",
-        "NO_ZERO_DATExx,something else",
-        "something,NO_ZERO_DATExx",
-        "something,NO_ZERO_DATExx,something else",
-        "fred,jim,john"
-    };
     
-    size_t i;
-    for( i = 0; i < sizeof(strings) / sizeof(char*); i++)
-    {
-        adjusted_str = adjust_sql_options_string( strings[i] );
-        g_free( adjusted_str );
-    }
-    
-    PERR("in adjust_sql_options");
     result = dbi_conn_query( connection, "SELECT @@sql_mode");
     if (result)
     {
-        err = dbi_result_first_row(result);
-        if (!err)
-        {
-            PERR("first_row err");
-        }
+        dbi_result_first_row(result);
         str = dbi_result_get_string_idx(result, 1);
         if (str)
         {
-            PERR("*************** %s", str);
+            PINFO("Initial sql_mode: %s", str);
             if( strstr( str, SQL_OPTION_TO_REMOVE ) )
             {
+                gchar *adjusted_str;
+                gchar *set_str;
+                dbi_result set_result;
+                
                 adjusted_str = adjust_sql_options_string( str );
+                PINFO("Setting sql_mode to %s", adjusted_str);
                 set_str = g_malloc( strlen(adjusted_str) + 20 );
                 sprintf( set_str, "SET sql_mode='%s';", adjusted_str );
-                PERR("*** %s", set_str);
-                result = dbi_conn_query( connection, set_str);
-                if (!result)
+                set_result = dbi_conn_query( connection, set_str);
+                if (set_result)
                 {
-                    err = dbi_conn_error(connection, &errmsg);
-                    PERR("null result %d : %s", err, errmsg );
+                    dbi_result_free( set_result );
+                } else
+                {
+                  err = dbi_conn_error(connection, &errmsg);
+                  PERR("Unable to set sql_mode %d : %s", err, errmsg );
                 }
                 g_free( adjusted_str );
                 g_free( set_str );
@@ -908,14 +879,15 @@ adjust_sql_options( dbi_conn connection )
         }
         else
         {
-            PERR("null str");
+            err = dbi_conn_error(connection, &errmsg);
+            PERR("Unable to get sql_mode %d : %s", err, errmsg );
         }
         dbi_result_free(result);
     }
     else
     {
       err = dbi_conn_error(connection, &errmsg);
-      PERR("null result %d : %s", err, errmsg );
+      PERR("Unable to read sql_mode %d : %s", err, errmsg );
     }
 }
 
