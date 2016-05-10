@@ -169,7 +169,7 @@ load_all_books (GncSqlBackend* be)
     if (stmt != NULL)
     {
         auto result = gnc_sql_execute_select_statement (be, stmt);
-        gnc_sql_statement_dispose (stmt);
+        delete stmt;
         auto row = result->begin();
 
         /* If there are no rows, try committing the book; unset

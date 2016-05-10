@@ -138,30 +138,20 @@ void gnc_sql_commit_edit (GncSqlBackend* qbe, QofInstance* inst);
 
 /**
  */
-typedef struct GncSqlStatement GncSqlStatement;
 class GncSqlResult;
 //using GncSqlResultPtr = std::unique_ptr<GncSqlResult>;
 using GncSqlResultPtr = GncSqlResult*;
 
 /**
- *@struct GncSqlStatement
- *
- * Struct which represents an SQL statement.  SQL backends must provide a
- * structure which implements all of the functions.
+ * SQL statement provider.
  */
-struct GncSqlStatement
+class GncSqlStatement
 {
-    void (*dispose) (GncSqlStatement*);
-    gchar* (*toSql) (GncSqlStatement*);
-    void (*addWhereCond) (GncSqlStatement*, QofIdTypeConst, gpointer,
-                          const PairVec&);
+public:
+    virtual ~GncSqlStatement() {}
+    virtual const char* to_sql() const = 0;
+    virtual void add_where_cond (QofIdTypeConst, const PairVec&) = 0;
 };
-#define gnc_sql_statement_dispose(STMT) \
-        (STMT)->dispose(STMT)
-#define gnc_sql_statement_to_sql(STMT) \
-        (STMT)->toSql(STMT)
-#define gnc_sql_statement_add_where_cond(STMT,TYPENAME,OBJ,COL_VAL_PAIR) \
-        (STMT)->addWhereCond(STMT, TYPENAME, OBJ, COL_VAL_PAIR)
 
 /**
  * @struct GncSqlConnection

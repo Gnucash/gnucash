@@ -122,7 +122,7 @@ load_all_lots (GncSqlBackend* be)
     if (stmt != NULL)
     {
         auto result = gnc_sql_execute_select_statement (be, stmt);
-        gnc_sql_statement_dispose (stmt);
+        delete stmt;
         if (result->begin () == nullptr)
             return;
         for (auto row : *result)

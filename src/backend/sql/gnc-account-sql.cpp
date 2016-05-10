@@ -213,7 +213,7 @@ load_all_accounts (GncSqlBackend* be)
         return;
     }
     auto result = gnc_sql_execute_select_statement (be, stmt);
-    gnc_sql_statement_dispose (stmt);
+    delete stmt;
     for (auto row : *result)
         load_single_account (be, row, &l_accounts_needing_parents);
 

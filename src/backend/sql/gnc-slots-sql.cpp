@@ -740,7 +740,7 @@ gnc_sql_slots_delete (GncSqlBackend* be, const GncGUID* guid)
     if (stmt != NULL)
     {
         auto result = gnc_sql_execute_select_statement (be, stmt);
-        gnc_sql_statement_dispose (stmt);
+        delete stmt;
         for (auto row : *result)
         {
             try
@@ -837,7 +837,7 @@ slots_load_info (slot_info_t* pInfo)
     if (stmt != NULL)
     {
         auto result = gnc_sql_execute_select_statement (pInfo->be, stmt);
-        gnc_sql_statement_dispose (stmt);
+        delete stmt;
         for (auto row : *result)
             load_slot (pInfo, row);
     }
@@ -928,7 +928,7 @@ gnc_sql_slots_load_for_list (GncSqlBackend* be, GList* list)
     }
     (void)g_string_free (sql, TRUE);
     auto result = gnc_sql_execute_select_statement (be, stmt);
-    gnc_sql_statement_dispose (stmt);
+    delete stmt;
     for (auto row : *result)
         load_slot_for_list_item (be, row, coll);
 }
@@ -996,7 +996,7 @@ void gnc_sql_slots_load_for_sql_subquery (GncSqlBackend* be,
     }
     g_free (sql);
     auto result = gnc_sql_execute_select_statement (be, stmt);
-    gnc_sql_statement_dispose (stmt);
+    delete stmt;
     for (auto row : *result)
         load_slot_for_book_object (be, row, lookup_fn);
 }

@@ -313,7 +313,7 @@ gnc_sql_set_recurrences_from_db (GncSqlBackend* be, const GncGUID* guid)
     stmt = gnc_sql_connection_create_statement_from_sql (be->conn, buf);
     g_free (buf);
     auto result = gnc_sql_execute_select_statement (be, stmt);
-    gnc_sql_statement_dispose (stmt);
+    delete stmt;
     return result;
 }
 

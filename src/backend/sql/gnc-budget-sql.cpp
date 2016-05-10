@@ -206,7 +206,7 @@ load_budget_amounts (GncSqlBackend* be, GncBudget* budget)
     if (stmt != NULL)
     {
         auto result = gnc_sql_execute_select_statement (be, stmt);
-        gnc_sql_statement_dispose (stmt);
+        delete stmt;
         budget_amount_info_t info = { budget, NULL, 0 };
 
         for (auto row : *result)
@@ -329,7 +329,7 @@ load_all_budgets (GncSqlBackend* be)
     if (stmt != NULL)
     {
         auto result = gnc_sql_execute_select_statement (be, stmt);
-        gnc_sql_statement_dispose (stmt);
+        delete stmt;
         for (auto row : *result)
         {
             auto b = load_single_budget (be, row);

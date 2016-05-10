@@ -97,7 +97,7 @@ load_all_prices (GncSqlBackend* be)
     if (stmt != NULL)
     {
         auto result = gnc_sql_execute_select_statement (be, stmt);
-        gnc_sql_statement_dispose (stmt);
+        delete stmt;
         if (result->begin() == result->end())
             return;
         

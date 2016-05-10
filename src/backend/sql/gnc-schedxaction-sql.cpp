@@ -110,7 +110,7 @@ load_all_sxes (GncSqlBackend* be)
     stmt = gnc_sql_create_select_statement (be, SCHEDXACTION_TABLE);
     if (stmt == NULL) return;
     auto result = gnc_sql_execute_select_statement (be, stmt);
-    gnc_sql_statement_dispose (stmt);
+    delete stmt;
     SchedXactions* sxes;
     GList* list = NULL;
     sxes = gnc_book_get_schedxactions (be->book);

@@ -231,7 +231,7 @@ load_taxtable_entries (GncSqlBackend* be, GncTaxTable* tt)
     stmt = gnc_sql_connection_create_statement_from_sql (be->conn, buf);
     g_free (buf);
     auto result = gnc_sql_execute_select_statement (be, stmt);
-    gnc_sql_statement_dispose (stmt);
+    delete stmt;
     for (auto row : *result)
         load_single_ttentry (be, row, tt);
 }
@@ -290,7 +290,7 @@ load_all_taxtables (GncSqlBackend* be)
     /* First time, create the query */
     stmt = gnc_sql_create_select_statement (be, TT_TABLE_NAME);
     auto result = gnc_sql_execute_select_statement (be, stmt);
-    gnc_sql_statement_dispose (stmt);
+    delete stmt;
     GList* tt_needing_parents = NULL;
 
     for (auto row : *result)

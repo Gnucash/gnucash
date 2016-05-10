@@ -810,7 +810,7 @@ void gnc_sql_transaction_load_tx_for_account (GncSqlBackend* be,
     if (stmt != NULL)
     {
         query_transactions (be, stmt);
-        gnc_sql_statement_dispose (stmt);
+        delete stmt;
     }
 }
 
@@ -833,7 +833,7 @@ void gnc_sql_transaction_load_all_tx (GncSqlBackend* be)
     if (stmt != NULL)
     {
         query_transactions (be, stmt);
-        gnc_sql_statement_dispose (stmt);
+        delete stmt;
     }
 }
 
@@ -1242,7 +1242,7 @@ run_split_query (GncSqlBackend* be, gpointer pQuery)
     {
         query_transactions (be, query_info->stmt);
         query_info->has_been_run = TRUE;
-        gnc_sql_statement_dispose (query_info->stmt);
+        delete query_info->stmt;
         query_info->stmt = NULL;
     }
 }
@@ -1338,7 +1338,7 @@ gnc_sql_get_account_balances_slist (GncSqlBackend* be)
     g_assert (stmt != NULL);
     g_free (buf);
     auto result = gnc_sql_execute_select_statement (be, stmt);
-    gnc_sql_statement_dispose (stmt);
+    delete stmt;
     acct_balances_t* bal = NULL;
 
     for (auto row : *result)

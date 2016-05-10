@@ -2304,68 +2304,41 @@ GncDbiSqlResult::size() const noexcept
 }
 
 /* --------------------------------------------------------- */
-typedef struct
+class GncDbiSqlStatement : public GncSqlStatement
 {
-    GncSqlStatement base;
+public:
+    GncDbiSqlStatement(GncSqlConnection* conn, const std::string&& sql) :
+        m_conn{conn}, m_sql {sql} {}
+    ~GncDbiSqlStatement() {}
+    const char* to_sql() const override;
+    void add_where_cond(QofIdTypeConst, const PairVec&) override;
 
-    GString* sql;
-    GncSqlConnection* conn;
-} GncDbiSqlStatement;
+private:
+    GncSqlConnection* m_conn;
+    std::string m_sql;
+};
 
-static void
-stmt_dispose (GncSqlStatement* stmt)
+
+const char*
+GncDbiSqlStatement::to_sql() const
 {
-    GncDbiSqlStatement* dbi_stmt = (GncDbiSqlStatement*)stmt;
-
-    if (dbi_stmt->sql != NULL)
-    {
-        (void)g_string_free (dbi_stmt->sql, TRUE);
-    }
-    g_free (stmt);
+    return m_sql.c_str();
 }
 
-static gchar*
-stmt_to_sql (GncSqlStatement* stmt)
+void
+GncDbiSqlStatement::add_where_cond(QofIdTypeConst type_name,
+                                   const PairVec& col_values)
 {
-    GncDbiSqlStatement* dbi_stmt = (GncDbiSqlStatement*)stmt;
-
-    return dbi_stmt->sql->str;
-}
-
-static void
-stmt_add_where_cond(GncSqlStatement* stmt, QofIdTypeConst type_name,
-                    gpointer obj, const PairVec& col_values)
-{
-    GncDbiSqlStatement* dbi_stmt = reinterpret_cast<GncDbiSqlStatement*>(stmt);
-    std::ostringstream sql;
-    sql << " WHERE ";
+    m_sql += " WHERE ";
     for (auto colpair : col_values)
     {
         if (colpair != *col_values.begin())
-            sql << " AND ";
-        sql << colpair.first << " = " <<
-            gnc_sql_connection_quote_string (dbi_stmt->conn,
-                                             colpair.second.c_str());
+            m_sql += " AND ";
+        m_sql += colpair.first + " = " +
+            gnc_sql_connection_quote_string (m_conn, colpair.second.c_str());
     }
-    (void)g_string_append (dbi_stmt->sql, sql.str().c_str());
 }
 
-static GncSqlStatement*
-create_dbi_statement (GncSqlConnection* conn, const gchar* sql)
-{
-    GncDbiSqlStatement* stmt;
-
-    stmt = g_new0 (GncDbiSqlStatement, 1);
-    g_assert (stmt != NULL);
-
-    stmt->base.dispose = stmt_dispose;
-    stmt->base.toSql = stmt_to_sql;
-    stmt->base.addWhereCond = stmt_add_where_cond;
-    stmt->sql = g_string_new (sql);
-    stmt->conn = conn;
-
-    return (GncSqlStatement*)stmt;
-}
 /* --------------------------------------------------------- */
 static void
 conn_dispose (GncSqlConnection* conn)
@@ -2379,19 +2352,18 @@ static  GncSqlResultPtr
 conn_execute_select_statement (GncSqlConnection* conn, GncSqlStatement* stmt)
 {
     GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
-    GncDbiSqlStatement* dbi_stmt = (GncDbiSqlStatement*)stmt;
     dbi_result result;
 
-    DEBUG ("SQL: %s\n", dbi_stmt->sql->str);
+    DEBUG ("SQL: %s\n", stmt->to_sql());
     gnc_push_locale (LC_NUMERIC, "C");
     do
     {
         gnc_dbi_init_error (dbi_conn);
-        result = dbi_conn_query (dbi_conn->conn, dbi_stmt->sql->str);
+        result = dbi_conn_query (dbi_conn->conn, stmt->to_sql());
     }
     while (dbi_conn->retry);
     if (result == nullptr)
-        PERR ("Error executing SQL %s\n", dbi_stmt->sql->str);
+        PERR ("Error executing SQL %s\n", stmt->to_sql());
     gnc_pop_locale (LC_NUMERIC);
     return GncSqlResultPtr(new GncDbiSqlResult (dbi_conn, result));
 }
@@ -2401,21 +2373,20 @@ conn_execute_nonselect_statement (GncSqlConnection* conn,
                                   GncSqlStatement* stmt)
 {
     GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
-    GncDbiSqlStatement* dbi_stmt = (GncDbiSqlStatement*)stmt;
     dbi_result result;
     gint num_rows;
     gint status;
 
-    DEBUG ("SQL: %s\n", dbi_stmt->sql->str);
+    DEBUG ("SQL: %s\n", stmt->to_sql());
     do
     {
         gnc_dbi_init_error (dbi_conn);
-        result = dbi_conn_query (dbi_conn->conn, dbi_stmt->sql->str);
+        result = dbi_conn_query (dbi_conn->conn, stmt->to_sql());
     }
     while (dbi_conn->retry);
     if (result == NULL)
     {
-        PERR ("Error executing SQL %s\n", dbi_stmt->sql->str);
+        PERR ("Error executing SQL %s\n", stmt->to_sql());
         return -1;
     }
     num_rows = (gint)dbi_result_get_numrows_affected (result);
@@ -2431,9 +2402,7 @@ conn_execute_nonselect_statement (GncSqlConnection* conn,
 static GncSqlStatement*
 conn_create_statement_from_sql (GncSqlConnection* conn, const gchar* sql)
 {
-    //GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
-
-    return create_dbi_statement (conn, sql);
+    return new GncDbiSqlStatement (conn, sql);
 }
 
 static gboolean

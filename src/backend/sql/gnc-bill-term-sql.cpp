@@ -225,7 +225,7 @@ load_all_billterms (GncSqlBackend* be)
 
     stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
     auto result = gnc_sql_execute_select_statement (be, stmt);
-    gnc_sql_statement_dispose (stmt);
+    delete stmt;
     GList* list = NULL;
     GList* l_billterms_needing_parents = NULL;
 
