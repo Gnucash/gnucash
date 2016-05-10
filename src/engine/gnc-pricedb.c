@@ -1047,6 +1047,22 @@ add_price(GNCPriceDB *db, GNCPrice *p)
         LEAVE ("no commodity hash found ");
         return FALSE;
     }
+/* Check for an existing price on the same day. If there is no existing price,
+ * add this one. If this price is of equal or better precedence than the old
+ * one, copy this one over the old one.
+ */
+    old_price = gnc_pricedb_lookup_day (db, p->commodity, p->currency,
+                                        p->tmspec);
+    if (!db->bulk_update && old_price != NULL)
+    {
+        if (p->source > old_price->source)
+        {
+            gnc_price_unref(p);
+            LEAVE ("Better price already in DB.");
+            return FALSE;
+        }
+        gnc_pricedb_remove_price(db, old_price);
+    }
 
     currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
     if (!currency_hash)
@@ -1068,22 +1084,6 @@ add_price(GNCPriceDB *db, GNCPrice *p)
         return FALSE;
     }
 
-/* Check for an existing price on the same day. If there is no existing price,
- * add this one. If this price is of equal or better precedence than the old
- * one, copy this one over the old one.
- */
-    old_price = gnc_pricedb_lookup_day (db, p->commodity, p->currency,
-                                        p->tmspec);
-    if (!db->bulk_update && old_price != NULL)
-    {
-        if (p->source > old_price->source)
-        {
-            gnc_price_unref(p);
-            LEAVE ("Better price already in DB.");
-            return FALSE;
-        }
-        gnc_pricedb_remove_price(db, old_price);
-    }
     g_hash_table_insert(currency_hash, currency, price_list);
     p->db = db;
 
