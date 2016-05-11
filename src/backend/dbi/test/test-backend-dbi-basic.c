@@ -50,6 +50,8 @@
 #include "gncInvoice.h"
 /* For test_conn_index_functions */
 #include "../gnc-backend-dbi-priv.h"
+/* For test_adjust_options_string */
+#include "../gnc-backend-dbi.h"
 /* For version_control */
 #include <gnc-prefs.h>
 #include <qofsession-p.h>
@@ -596,6 +598,42 @@ test_dbi_business_store_and_reload (Fixture *fixture, gconstpointer pData)
 }
 
 static void
+test_adjust_sql_options_string(void)
+{
+    gchar *adjusted_str;
+    const char* in[] = {
+        "NO_ZERO_DATE",
+        "NO_ZERO_DATE,something_else",
+        "something,NO_ZERO_DATE",
+        "something,NO_ZERO_DATE,something_else",
+        "NO_ZERO_DATExx",
+        "NO_ZERO_DATExx,something_ else",
+        "something,NO_ZERO_DATExx",
+        "something,NO_ZERO_DATExx,something_ else",
+        "fred,jim,john"
+    };
+    const char* out[] = {
+        "",
+        "something_else",
+        "something",
+        "something,something_else",
+        "NO_ZERO_DATExx",
+        "NO_ZERO_DATExx,something_ else",
+        "something,NO_ZERO_DATExx",
+        "something,NO_ZERO_DATExx,something_ else",
+        "fred,jim,john"
+    };
+    
+    size_t i;
+    for( i = 0; i < sizeof(in) / sizeof(gchar*); i++)
+    {
+        gchar *adjusted_str = adjust_sql_options_string( in[i] );
+        g_assert_cmpstr( out[i],==,adjusted_str );
+        g_free( adjusted_str );
+    }
+}
+
+static void
 create_dbi_test_suite (gchar *dbm_name, gchar *url)
 {
     gchar *subsuite = g_strdup_printf ("%s/%s", suitename, dbm_name);
@@ -640,4 +678,6 @@ test_suite_gnc_backend_dbi (void)
         create_dbi_test_suite ("postgres", TEST_PGSQL_URL);
     }
 
+    GNC_TEST_ADD_FUNC( suitename, "adjust sql options string localtime", 
+        test_adjust_sql_options_string );
 }

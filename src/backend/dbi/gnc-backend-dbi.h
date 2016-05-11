@@ -38,6 +38,9 @@ void gnc_module_init_backend_dbi(void);
  * statically linked into the application. */
 void gnc_module_finalize_backend_dbi(void);
 
+/* external access required for tests */
+gchar* adjust_sql_options_string(const gchar *);
+
 #ifndef GNC_NO_LOADABLE_MODULES
 /** This is the standarized initialization function of a qof_backend
  * GModule, but compiling this can be disabled by defining
