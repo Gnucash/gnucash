@@ -793,47 +793,35 @@ gnc_dbi_unlock( QofBackend *qbe )
 // Given an sql_options string returns a copy of the string adjusted as necessary.
 // In particular if the string contains SQL_OPTION_TO_REMOVE it is removed along with 
 // comma separator.
-static gchar*
+gchar*
 adjust_sql_options_string( const gchar *str )
 {
-    char* pos;
-    char* answer = g_malloc( strlen(str)+1 );  // this must be freed by the calling code
-    int chars_to_copy;
-    pos = strstr( str, SQL_OPTION_TO_REMOVE );
-    if (pos)
+    GRegex* regex = NULL;
+    GError* err = NULL;
+    gchar* regex_str = NULL;
+    gchar* answer = NULL;
+    
+    // build a regex string that will find the pattern at the beginning, end or
+    // within the string as a whole word, comma separated
+    regex_str = g_strdup_printf( "(?:,%s$|\\b%s\\b,?)",
+        SQL_OPTION_TO_REMOVE, SQL_OPTION_TO_REMOVE );
+    
+    // compile the regular expression and check for errors
+    regex = g_regex_new( regex_str, 0, 0, &err );
+    if ( err != NULL )
     {
-        if ( pos == str )
-        {
-            if ( *(pos+strlen(SQL_OPTION_TO_REMOVE)) == ',' )
-            {
-                strcpy( answer, str + strlen(SQL_OPTION_TO_REMOVE) + 1 );
-            } else if ( *(pos+strlen(SQL_OPTION_TO_REMOVE)) == '\0' )
-            {
-                strcpy( answer, "" );
-            } else
-            {
-                strcpy( answer, str );
-            }
-        } else if ( *(pos + strlen(SQL_OPTION_TO_REMOVE)) == '\0' )
-        {
-            chars_to_copy =  strlen(str) - strlen(SQL_OPTION_TO_REMOVE) - 1;
-            strncpy( answer, str, chars_to_copy );
-            answer[chars_to_copy] = '\0';
-        } else if (*(pos-1) == ','  &&  *(pos+strlen(SQL_OPTION_TO_REMOVE)) == ',')
-        {
-            chars_to_copy =  pos - str - 1;
-            strncpy( answer, str, chars_to_copy );
-            strcpy( answer + chars_to_copy, pos+strlen(SQL_OPTION_TO_REMOVE));
-        } else
-        {
-            // not found
-            strcpy( answer, str );
-        }
+        g_error_free (err);
     } else
     {
-        // not found
-        strcpy( answer, str );
+        answer = g_regex_replace( regex, str, -1, 0, "", 0, NULL );
     }
+    // in case of errors set the answer to the passed in string
+    if ( !answer )
+    {
+        answer = g_strdup( str );
+    }
+    g_free( regex_str );
+    g_regex_unref( regex );
     return answer;
 }
 
@@ -843,12 +831,12 @@ adjust_sql_options( dbi_conn connection )
 {
     dbi_result result;
     gint err;
-    const char* str;
-    const gchar *errmsg;
+    const char* errmsg;
     
     result = dbi_conn_query( connection, "SELECT @@sql_mode");
     if (result)
     {
+        const char* str;
         dbi_result_first_row(result);
         str = dbi_result_get_string_idx(result, 1);
         if (str)
@@ -862,8 +850,7 @@ adjust_sql_options( dbi_conn connection )
                 
                 adjusted_str = adjust_sql_options_string( str );
                 PINFO("Setting sql_mode to %s", adjusted_str);
-                set_str = g_malloc( strlen(adjusted_str) + 20 );
-                sprintf( set_str, "SET sql_mode='%s';", adjusted_str );
+                set_str = g_strdup_printf( "SET sql_mode='%s';", adjusted_str );
                 set_result = dbi_conn_query( connection, set_str);
                 if (set_result)
                 {
