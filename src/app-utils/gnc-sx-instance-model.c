@@ -249,18 +249,16 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
             ! gnc_commodity_equal(split_cmdty, first_cmdty))
         {
             GncSxVariable *var;
-            GString *var_name;
+            gchar *var_name;
             const gchar *split_mnemonic, *first_mnemonic;
 
-            var_name = g_string_sized_new(16);
             split_mnemonic = gnc_commodity_get_mnemonic(split_cmdty);
             first_mnemonic = gnc_commodity_get_mnemonic(first_cmdty);
-            g_string_printf(var_name, "%s -> %s",
+            var_name = g_strdup_printf ("%s -> %s",
                             split_mnemonic ? split_mnemonic : "(null)",
                             first_mnemonic ? first_mnemonic : "(null)");
-            var = gnc_sx_variable_new(g_strdup(var_name->str));
+            var = gnc_sx_variable_new(var_name);
             g_hash_table_insert(var_hash, g_strdup(var->name), var);
-            g_string_free(var_name, TRUE);
         }
 
     }
@@ -956,16 +954,15 @@ _get_template_split_account(const SchedXaction* sx, const Split *template_split,
     if (*split_acct == NULL)
     {
         char guid_str[GUID_ENCODING_LENGTH+1];
-        GString *err;
+        gchar* err;
         guid_to_string_buff((const GncGUID*)acct_guid, guid_str);
-        err = g_string_new("");
-        g_string_printf(err, "Unknown account for guid [%s], cancelling SX [%s] creation.",
+        err = g_strdup_printf ("Unknown account for guid [%s], cancelling SX [%s] creation.",
                         guid_str, xaccSchedXactionGetName(sx));
-        g_critical("%s", err->str);
+        g_critical("%s", err);
         if (creation_errors != NULL)
             *creation_errors = g_list_append(*creation_errors, err);
         else
-            g_string_free(err, TRUE);
+            g_free(err);
         return FALSE;
     }
 
@@ -1016,18 +1013,17 @@ _get_sx_formula_value(const SchedXaction* sx, const Split *template_split, gnc_n
                                                 &parseErrorLoc,
                                                 parser_vars))
         {
-            GString *err = g_string_new("");
-            g_string_printf(err, "Error parsing SX [%s] key [%s]=formula [%s] at [%s]: %s",
+            gchar *err = g_strdup_printf ("Error parsing SX [%s] key [%s]=formula [%s] at [%s]: %s",
                             xaccSchedXactionGetName(sx),
                             formula_key,
                             formula_str,
                             parseErrorLoc,
                             gnc_exp_parser_error_string());
-            g_critical("%s", err->str);
+            g_critical ("%s", err);
             if (creation_errors != NULL)
                 *creation_errors = g_list_append(*creation_errors, err);
             else
-                g_string_free(err, TRUE);
+                g_free (err);
         }
 
         if (parser_vars != NULL)
@@ -1075,15 +1071,14 @@ split_apply_formulas (const Split *split, SxTxnCreationData* creation_data)
     gncn_error = gnc_numeric_check(final);
     if (gncn_error != GNC_ERROR_OK)
     {
-        GString *err = g_string_new("");
-        g_string_printf(err, "error %d in SX [%s] final gnc_numeric value, using 0 instead",
+        gchar *err = g_strdup_printf ("error %d in SX [%s] final gnc_numeric value, using 0 instead",
                         gncn_error, xaccSchedXactionGetName(sx));
-        g_critical("%s", err->str);
+        g_critical("%s", err);
         if (creation_data->creation_errors != NULL)
             *creation_data->creation_errors =
                 g_list_append(*creation_data->creation_errors, err);
         else
-            g_string_free(err, TRUE);
+            g_free (err);
         final = gnc_numeric_zero();
     }
     return final;
@@ -1094,12 +1089,12 @@ split_apply_exchange_rate (Split *split, GHashTable *bindings,
                            gnc_commodity *first_cmdty,
                            gnc_commodity *split_cmdty, gnc_numeric *final)
 {
-    GString *exchange_rate_var_name = g_string_sized_new(16);
+    gchar *exchange_rate_var_name;
     GncSxVariable *exchange_rate_var;
     gnc_numeric amt;
     gnc_numeric exchange_rate = gnc_numeric_create (1, 1);
 
-    g_string_printf(exchange_rate_var_name, "%s -> %s",
+    exchange_rate_var_name = g_strdup_printf ("%s -> %s",
                     gnc_commodity_get_mnemonic(first_cmdty),
                     gnc_commodity_get_mnemonic(split_cmdty));
 
@@ -1108,14 +1103,14 @@ split_apply_exchange_rate (Split *split, GHashTable *bindings,
 
     exchange_rate_var =
         (GncSxVariable*)g_hash_table_lookup(bindings,
-                                            exchange_rate_var_name->str);
+                                            exchange_rate_var_name);
 
     if (exchange_rate_var != NULL)
     {
         exchange_rate = exchange_rate_var->value;
         g_debug("exchange_rate is %s", gnc_numeric_to_string (exchange_rate));
     }
-    g_string_free(exchange_rate_var_name, TRUE);
+    g_free (exchange_rate_var_name);
 
     if (!gnc_commodity_is_currency (split_cmdty))
         amt = gnc_numeric_div(*final, exchange_rate,
@@ -1707,30 +1702,28 @@ create_cashflow_helper(Transaction *template_txn, void *user_data)
             gncn_error = gnc_numeric_check(final);
             if (gncn_error != GNC_ERROR_OK)
             {
-                GString *err = g_string_new("");
-                g_string_printf(err, "error %d in SX [%s] final gnc_numeric value, using 0 instead",
+                gchar* err = g_strdup_printf ("error %d in SX [%s] final gnc_numeric value, using 0 instead",
                                 gncn_error, xaccSchedXactionGetName(creation_data->sx));
-                g_critical("%s", err->str);
+                g_critical("%s", err);
                 if (creation_data->creation_errors != NULL)
                     *creation_data->creation_errors = g_list_append(*creation_data->creation_errors, err);
                 else
-                    g_string_free(err, TRUE);
+                    g_free (err);
                 final = gnc_numeric_zero();
             }
 
             /* Print error message if we would have needed an exchange rate */
             if (! gnc_commodity_equal(split_cmdty, first_cmdty))
             {
-                GString *err = g_string_new("");
-                g_string_printf(err, "No exchange rate available in SX [%s] for %s -> %s, value is zero",
+                gchar* err = g_strdup_printf ("No exchange rate available in SX [%s] for %s -> %s, value is zero",
                                 xaccSchedXactionGetName(creation_data->sx),
                                 gnc_commodity_get_mnemonic(split_cmdty),
                                 gnc_commodity_get_mnemonic(first_cmdty));
-                g_critical("%s", err->str);
+                g_critical("%s", err);
                 if (creation_data->creation_errors != NULL)
                     *creation_data->creation_errors = g_list_append(*creation_data->creation_errors, err);
                 else
-                    g_string_free(err, TRUE);
+                    g_free(err);
                 final = gnc_numeric_zero();
             }
 
