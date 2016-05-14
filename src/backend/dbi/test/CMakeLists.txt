@@ -11,7 +11,7 @@ SET(BACKEND_DBI_TEST_INCLUDE_DIRS
   ${LIBDBI_INCLUDE_PATH}
   ${GLIB2_INCLUDE_DIRS}
 )
-SET(BACKEND_DBI_TEST_LIBS gnc-backend-sql gncmod-engine gncmod-test-engine gnc-qof test-core ${LIBDBI_LIBRARY})
+SET(BACKEND_DBI_TEST_LIBS gnc-backend-sql gnc-backend-dbi gncmod-engine gncmod-test-engine gnc-qof test-core ${LIBDBI_LIBRARY})
 
 SET(test_dbi_backend_SOURCES
   test-backend-dbi.c

@@ -596,7 +596,7 @@ test_dbi_business_store_and_reload (Fixture *fixture, gconstpointer pData)
     qof_session_end (session_3);
     qof_session_destroy (session_3);
 }
-
+#ifndef G_OS_WIN32
 static void
 test_adjust_sql_options_string(void)
 {
@@ -632,7 +632,7 @@ test_adjust_sql_options_string(void)
         g_free( adjusted_str );
     }
 }
-
+#endif //G_OS_WIN32
 static void
 create_dbi_test_suite (gchar *dbm_name, gchar *url)
 {
@@ -677,7 +677,8 @@ test_suite_gnc_backend_dbi (void)
         g_setenv ("PGOPTIONS", "-c client_min_messages=WARNING", FALSE);
         create_dbi_test_suite ("postgres", TEST_PGSQL_URL);
     }
-
+#ifndef G_OS_WIN32
     GNC_TEST_ADD_FUNC( suitename, "adjust sql options string localtime", 
         test_adjust_sql_options_string );
+#endif //G_OS_WIN32
 }
