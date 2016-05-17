@@ -45,6 +45,7 @@ enum GncFindAccountColumn {ACC_FULL_NAME, ACCOUNT, PLACE_HOLDER, HIDDEN};
 typedef struct
 {
     GtkWidget    *dialog;
+    GtkWidget    *parent;
     QofSession   *session;
     Account      *account;
     GtkWidget    *view;
@@ -98,12 +99,8 @@ static void
 jump_to_account (FindAccountDialog *facc_dialog, Account *jump_account)
 {
     if (jump_account != NULL)
-    {
-        if (xaccAccountGetHidden (jump_account))
-            gnc_ui_edit_account_window (jump_account);
-        else
-            gnc_plugin_page_account_tree_open (jump_account);
-    }
+        gnc_plugin_page_account_tree_open (jump_account, GTK_WINDOW(facc_dialog->parent));
+
     if (facc_dialog->jump_close == TRUE)
         gnc_find_account_dialog_close_cb (GTK_DIALOG(facc_dialog->dialog), facc_dialog);
 }
@@ -272,7 +269,12 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
 
     /* parent */
     if (parent != NULL)
+    {
+        facc_dialog->parent = parent;
         gtk_window_set_transient_for (GTK_WINDOW(dialog), GTK_WINDOW(parent));
+    }
+    else
+        facc_dialog->parent = NULL;
 
     /* Connect the radio buttons...*/
     facc_dialog->radio_root = GTK_WIDGET(gtk_builder_get_object (builder, "radio-root"));
