@@ -177,7 +177,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="ypad">5</property>
-            <property name="label" translatable="yes">Case insensative filtering is available on 'Account Full Name'.</property>
+            <property name="label" translatable="yes">Case insensative searching is available on 'Account Full Name'.</property>
             <property name="justify">center</property>
           </object>
           <packing>
@@ -220,7 +220,7 @@
             </child>
             <child>
               <object class="GtkButton" id="filter-button">
-                <property name="label" translatable="yes">_Filter</property>
+                <property name="label" translatable="yes">_Search</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -256,7 +256,7 @@
             <property name="can_focus">False</property>
             <property name="ypad">5</property>
             <property name="label" translatable="yes">Select a row and then press 'jump to' to jump to account in the Account Tree,
-if account is hidden then the Account Editor will open.</property>
+if account should not be shown, this will be temporarily overridden.</property>
             <property name="justify">center</property>
           </object>
           <packing>
