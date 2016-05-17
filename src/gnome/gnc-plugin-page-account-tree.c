@@ -481,6 +481,7 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
     priv->fd.show_hidden = FALSE;
     priv->fd.show_unused = TRUE;
     priv->fd.show_zero_total = TRUE;
+    priv->fd.filter_override = g_hash_table_new (g_direct_hash, g_direct_equal);
 
     LEAVE("page %p, priv %p, action group %p",
           plugin_page, priv, action_group);
@@ -503,20 +504,33 @@ gnc_plugin_page_account_tree_finalize (GObject *object)
 }
 
 void
-gnc_plugin_page_account_tree_open (Account *account)
+gnc_plugin_page_account_tree_open (Account *account, GtkWindow *win)
 {
     GncPluginPageAccountTreePrivate *priv;
     GncPluginPageAccountTree *page;
-    GncPluginPage *plugin_page;
+    GncPluginPage *plugin_page = NULL;
     const GList *page_list;
     GtkWidget   *window;
 
     /* Find Accounts page */
     page_list = gnc_gobject_tracking_get_list(GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME);
 
+    // If we have a window, look for account page in that window
     if (g_list_length ((GList*)page_list) != 0)
-        plugin_page = GNC_PLUGIN_PAGE(page_list->data);
-    else
+    {
+        if (win != NULL)
+        {
+            for ( ; page_list; page_list = g_list_next(page_list))
+            {
+                plugin_page = GNC_PLUGIN_PAGE(page_list->data);
+                if (GTK_WINDOW(plugin_page->window) == win)
+                    break;
+            }
+        }
+        else // if no window, open first account page in list
+            plugin_page = GNC_PLUGIN_PAGE(page_list->data);
+    }
+    else // we have no account pages, create one
         plugin_page = gnc_plugin_page_account_tree_new ();
 
     window = plugin_page->window;
@@ -527,7 +541,11 @@ gnc_plugin_page_account_tree_open (Account *account)
     priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
 
     if (account != NULL)
+    {
+        g_hash_table_insert (priv->fd.filter_override, account, account);
+        gnc_tree_view_account_refilter (GNC_TREE_VIEW_ACCOUNT(priv->tree_view));
         gnc_tree_view_account_set_selected_account (GNC_TREE_VIEW_ACCOUNT(priv->tree_view), account);
+    }
 }
 
 Account *
@@ -689,6 +707,9 @@ gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page)
                                  GNC_PREF_SUMMARYBAR_POSITION_BOTTOM,
                                  gnc_plugin_page_account_tree_summarybar_position_changed,
                                  page);
+
+    // Destroy the filter override hash table
+    g_hash_table_destroy(priv->fd.filter_override);
 
     if (priv->widget)
     {

@@ -78,6 +78,7 @@ typedef	struct
     GtkWidget           *dialog;
     GtkTreeModel        *model;
     GncTreeViewAccount  *tree_view;
+    GHashTable          *filter_override;
     guint32              visible_types;
     guint32              original_visible_types;
     gboolean             show_hidden;

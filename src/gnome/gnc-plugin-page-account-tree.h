@@ -99,8 +99,10 @@ Account * gnc_plugin_page_account_tree_get_current_account (GncPluginPageAccount
  *  and the account will be selected (if any).
  *
  *  @param account The "account" to be selected.
+ *
+ *  @param win The "window" where the account tree is to be selected.
  */
-void gnc_plugin_page_account_tree_open (Account *account);
+void gnc_plugin_page_account_tree_open (Account *account, GtkWindow *win);
 
 G_END_DECLS
 
