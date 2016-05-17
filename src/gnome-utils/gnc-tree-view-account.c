@@ -1911,6 +1911,17 @@ gnc_plugin_page_account_tree_filter_accounts (Account *account,
 
     ENTER("account %p:%s", account, xaccAccountGetName(account));
 
+    if (g_hash_table_size (fd->filter_override) > 0)
+    {
+        Account *test_acc = NULL;
+        test_acc = g_hash_table_lookup (fd->filter_override, account);
+        if (test_acc != NULL)
+        {
+            LEAVE(" filter: override");
+            return TRUE;
+        }
+    }
+
     if (!fd->show_hidden && xaccAccountIsHidden (account))
     {
         LEAVE(" hide: hidden");
