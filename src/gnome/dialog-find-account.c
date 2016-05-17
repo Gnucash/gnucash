@@ -40,7 +40,7 @@
 #define GNC_PREFS_GROUP                 "dialogs.find-account"
 
 /** Enumeration for the tree-store */
-enum GncFindAccountColumn {ACC_FULL_NAME, ACCOUNT, PLACE_HOLDER, HIDDEN};
+enum GncFindAccountColumn {ACC_FULL_NAME, ACCOUNT, PLACE_HOLDER, HIDDEN, NOT_USED, BAL_ZERO};
 
 typedef struct
 {
@@ -175,6 +175,8 @@ fill_model (FindAccountDialog *facc_dialog, Account *account)
     GtkTreeModel *model;
     GtkTreeIter   iter;
     gchar        *fullname = gnc_account_get_full_name (account);
+    gint          splits = xaccAccountCountSplits (account, TRUE);
+    gnc_numeric   total = xaccAccountGetBalanceInCurrency (account, NULL, TRUE);
 
     PINFO("Add to Store: Account '%s'", fullname);
 
@@ -185,7 +187,9 @@ fill_model (FindAccountDialog *facc_dialog, Account *account)
     gtk_list_store_set (GTK_LIST_STORE(model), &iter,
                         ACC_FULL_NAME, fullname, ACCOUNT, account,
                         PLACE_HOLDER, xaccAccountGetPlaceholder (account),
-                        HIDDEN, xaccAccountGetHidden (account), -1);
+                        HIDDEN, xaccAccountGetHidden (account),
+                        NOT_USED, (splits == 0 ? TRUE : FALSE),
+                        BAL_ZERO, gnc_numeric_zero_p(total), -1);
     g_free (fullname);
 }
 
@@ -304,6 +308,7 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
     gtk_tree_view_column_set_title (tree_column, _("Place Holder"));
     gtk_tree_view_append_column (GTK_TREE_VIEW(facc_dialog->view), tree_column);
     gtk_tree_view_column_set_alignment (tree_column, 0.5);
+    gtk_tree_view_column_set_expand (tree_column, TRUE);
     cr = gtk_cell_renderer_toggle_new();
     gtk_tree_view_column_pack_start (tree_column, cr, TRUE);
     // connect 'active' and set 'xalign' property of the cell renderer
@@ -314,10 +319,33 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
     gtk_tree_view_column_set_title (tree_column, _("Hidden"));
     gtk_tree_view_append_column (GTK_TREE_VIEW(facc_dialog->view), tree_column);
     gtk_tree_view_column_set_alignment (tree_column, 0.5);
+    gtk_tree_view_column_set_expand (tree_column, TRUE);
     cr = gtk_cell_renderer_toggle_new();
     gtk_tree_view_column_pack_start (tree_column, cr, TRUE);
     // connect 'active' and set 'xalign' property of the cell renderer
     gtk_tree_view_column_set_attributes (tree_column, cr, "active", HIDDEN, NULL);
+    gtk_cell_renderer_set_alignment (cr, 0.5, 0.5);
+
+    tree_column = gtk_tree_view_column_new();
+    gtk_tree_view_column_set_title (tree_column, _("Not Used"));
+    gtk_tree_view_append_column (GTK_TREE_VIEW(facc_dialog->view), tree_column);
+    gtk_tree_view_column_set_alignment (tree_column, 0.5);
+    gtk_tree_view_column_set_expand (tree_column, TRUE);
+    cr = gtk_cell_renderer_toggle_new();
+    gtk_tree_view_column_pack_start (tree_column, cr, TRUE);
+    // connect 'active' and set 'xalign' property of the cell renderer
+    gtk_tree_view_column_set_attributes (tree_column, cr, "active", NOT_USED, NULL);
+    gtk_cell_renderer_set_alignment (cr, 0.5, 0.5);
+
+    tree_column = gtk_tree_view_column_new();
+    gtk_tree_view_column_set_title (tree_column, _("Balance Zero"));
+    gtk_tree_view_append_column (GTK_TREE_VIEW(facc_dialog->view), tree_column);
+    gtk_tree_view_column_set_alignment (tree_column, 0.5);
+    gtk_tree_view_column_set_expand (tree_column, TRUE);
+    cr = gtk_cell_renderer_toggle_new();
+    gtk_tree_view_column_pack_start (tree_column, cr, TRUE);
+    // connect 'active' and set 'xalign' property of the cell renderer
+    gtk_tree_view_column_set_attributes (tree_column, cr, "active", BAL_ZERO, NULL);
     gtk_cell_renderer_set_alignment (cr, 0.5, 0.5);
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, facc_dialog);

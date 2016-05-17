@@ -12,6 +12,10 @@
       <column type="gboolean"/>
       <!-- column-name hidden -->
       <column type="gboolean"/>
+      <!-- column-name not_used -->
+      <column type="gboolean"/>
+      <!-- column-name bal_zero -->
+      <column type="gboolean"/>
     </columns>
   </object>
   <object class="GtkDialog" id="Find Account Dialog">
