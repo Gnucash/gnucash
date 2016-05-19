@@ -32,6 +32,7 @@
 #include "qofbook.h"
 #include "qofsession.h"
 #include <utility>
+#include <string>
 
 struct QofSessionImpl
 {
@@ -49,13 +50,13 @@ struct QofSessionImpl
     /**
      * Begin this session.
      */
-    void begin (const char * book_id, bool ignore_lock, bool create, bool force) noexcept;
+    void begin (std::string book_id, bool ignore_lock, bool create, bool force) noexcept;
 
-    const char * get_error_message () const noexcept;
+    std::string get_error_message () const noexcept;
 
     void clear_error () noexcept;
 
-    void push_error (QofBackendError const err, const char * message) noexcept;
+    void push_error (QofBackendError const err, std::string message) noexcept;
 
     QofBackendError pop_error () noexcept;
 
@@ -67,11 +68,11 @@ struct QofSessionImpl
 
     QofBook * get_book () const noexcept;
 
-    const char * get_file_path () const noexcept;
+    std::string get_file_path () const noexcept;
 
     void ensure_all_data_loaded () noexcept;
 
-    void load_backend (const char * access_method) noexcept;
+    void load_backend (std::string access_method) noexcept;
 
     void destroy_backend () noexcept;
 
@@ -106,7 +107,7 @@ struct QofSessionImpl
     /* The requested book id, in the form or a URI, such as
      * file:/some/where, or sql:server.host.com:555
      */
-    char *book_id;
+    std::string book_id;
 
     /* If any book subroutine failed, this records the failure reason
      * (file not found, etc).
@@ -116,7 +117,7 @@ struct QofSessionImpl
      * there is only one stack.
      */
     QofBackendError last_err;
-    char *error_message;
+    std::string error_message;
 
     /* ---------------------------------------------------- */
     /* Pointer to the backend that is actually used to move data
