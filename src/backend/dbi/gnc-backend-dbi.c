@@ -802,11 +802,11 @@ adjust_sql_options_string (const gchar *str)
     gchar* regex_str = NULL;
     gchar* answer = NULL;
 
-    regex_str = g_strdup_printf( "(?:,%s$|\\b%s\\b,?)",
-        SQL_OPTION_TO_REMOVE, SQL_OPTION_TO_REMOVE );
     /* Build a regex string that will find the pattern at the beginning, end or
      * within the string as a whole word, comma separated.
      */
+    regex_str =  "(?:," SQL_OPTION_TO_REMOVE "$|\\b"
+        SQL_OPTION_TO_REMOVE "\\b,?)";
 
     // compile the regular expression and check for errors
     regex = g_regex_new (regex_str, 0, 0, &err);
@@ -822,7 +822,6 @@ adjust_sql_options_string (const gchar *str)
     {
         answer = g_strdup (str);
     }
-    g_free( regex_str );
     g_regex_unref (regex);
     return answer;
 }
