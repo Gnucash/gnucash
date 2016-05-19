@@ -57,13 +57,11 @@ void test_sync (QofBackend *, QofBook *)
 void test_export_fn (QofBackend *, QofBook * book)
 {
     exported_book = book;
-    std::cout << "exported book called\n" << std::flush;
 }
 
 QofBackend * test_backend_factory ()
 {
     QofBackend * ret = (QofBackend*) std::malloc (sizeof (QofBackend));
-    std::cout << "getting backend " << ret << " ...\n";
     ret->session_begin = nullptr;
     ret->session_end = nullptr;
     ret->destroy_backend = nullptr;
@@ -74,6 +72,18 @@ QofBackend * test_backend_factory ()
     ret->error_msg = nullptr;
     ret->fullpath = nullptr;
     ret->last_err = ERR_BACKEND_NO_ERR;
+    ret->begin = nullptr;
+    ret->commit = nullptr;
+    ret->rollback = nullptr;
+    ret->compile_query = nullptr;
+    ret->free_query = nullptr;
+    ret->run_query = nullptr;
+    ret->events_pending = nullptr;
+    ret->process_events = nullptr;
+    ret->percentage = nullptr;
+    ret->provider = nullptr;
+    ret->config_count = 0;
+    ret->price_lookup = nullptr;
     return ret;
 }
 
@@ -214,8 +224,6 @@ TEST (QofSessionTest, export_session)
     s2.begin ("book2", false, false, false);
     QofBook * b1 = s1.get_book ();
     QofBook * b2 = s2.get_book ();
-    std::cout << "b1 = " << b1 << " b2 = " << b2 << '\n';
-    std::cout << "be1 = " << qof_book_get_backend (b1) << " be2 = " << qof_book_get_backend (b2) << '\n';
     b1->backend = s1.get_backend ();
     b2->backend = s2.get_backend ();
     s2.export_session (s1, nullptr);

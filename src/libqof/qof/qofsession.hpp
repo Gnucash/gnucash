@@ -94,8 +94,6 @@ private:
      */
     std::string m_book_id;
 
-    QofBackend * m_backend;
-
     bool m_saving;
 
     /* If any book subroutine failed, this records the failure reason
