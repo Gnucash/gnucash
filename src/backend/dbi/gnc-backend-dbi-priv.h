@@ -114,4 +114,7 @@ typedef struct
 
 } GncDbiSqlConnection;
 
+/* external access required for tests */
+gchar* adjust_sql_options_string(const gchar *);
+
 #endif //GNC_BACKEND_DBI_PRIV_H

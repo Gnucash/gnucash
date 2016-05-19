@@ -50,8 +50,6 @@
 #include "gncInvoice.h"
 /* For test_conn_index_functions */
 #include "../gnc-backend-dbi-priv.h"
-/* For test_adjust_options_string */
-#include "../gnc-backend-dbi.h"
 /* For version_control */
 #include <gnc-prefs.h>
 #include <qofsession-p.h>
