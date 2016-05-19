@@ -598,7 +598,7 @@ test_dbi_business_store_and_reload (Fixture *fixture, gconstpointer pData)
 }
 #ifndef G_OS_WIN32
 static void
-test_adjust_sql_options_string(void)
+test_adjust_sql_options_string (void)
 {
     gchar *adjusted_str;
     const char* in[] = {
@@ -623,13 +623,13 @@ test_adjust_sql_options_string(void)
         "something,NO_ZERO_DATExx,something_ else",
         "fred,jim,john"
     };
-    
+
     size_t i;
-    for( i = 0; i < sizeof(in) / sizeof(gchar*); i++)
+    for (i = 0; i < sizeof(in) / sizeof(gchar*); i++)
     {
-        gchar *adjusted_str = adjust_sql_options_string( in[i] );
-        g_assert_cmpstr( out[i],==,adjusted_str );
-        g_free( adjusted_str );
+        gchar *adjusted_str = adjust_sql_options_string (in[i]);
+        g_assert_cmpstr (out[i],==,adjusted_str);
+        g_free (adjusted_str);
     }
 }
 #endif //G_OS_WIN32

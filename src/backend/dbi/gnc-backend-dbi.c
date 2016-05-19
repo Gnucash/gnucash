@@ -790,91 +790,94 @@ gnc_dbi_unlock( QofBackend *qbe )
 
 #define SQL_OPTION_TO_REMOVE "NO_ZERO_DATE"
 
-// Given an sql_options string returns a copy of the string adjusted as necessary.
-// In particular if the string contains SQL_OPTION_TO_REMOVE it is removed along with 
-// comma separator.
+/* Given an sql_options string returns a copy of the string adjusted as
+ * necessary. In particular if the string contains SQL_OPTION_TO_REMOVE it is
+ * removed along with comma separator.
+ */
 gchar*
-adjust_sql_options_string( const gchar *str )
+adjust_sql_options_string (const gchar *str)
 {
     GRegex* regex = NULL;
     GError* err = NULL;
     gchar* regex_str = NULL;
     gchar* answer = NULL;
-    
-    // build a regex string that will find the pattern at the beginning, end or
-    // within the string as a whole word, comma separated
+
     regex_str = g_strdup_printf( "(?:,%s$|\\b%s\\b,?)",
         SQL_OPTION_TO_REMOVE, SQL_OPTION_TO_REMOVE );
-    
+    /* Build a regex string that will find the pattern at the beginning, end or
+     * within the string as a whole word, comma separated.
+     */
+
     // compile the regular expression and check for errors
-    regex = g_regex_new( regex_str, 0, 0, &err );
-    if ( err != NULL )
+    regex = g_regex_new (regex_str, 0, 0, &err);
+    if (err != NULL)
     {
         g_error_free (err);
     } else
     {
-        answer = g_regex_replace( regex, str, -1, 0, "", 0, NULL );
+        answer = g_regex_replace (regex, str, -1, 0, "", 0, NULL);
     }
     // in case of errors set the answer to the passed in string
-    if ( !answer )
+    if (!answer)
     {
-        answer = g_strdup( str );
+        answer = g_strdup (str);
     }
     g_free( regex_str );
-    g_regex_unref( regex );
+    g_regex_unref (regex);
     return answer;
 }
 
 /* checks mysql sql_options and adjusts if necessary */
 static void
-adjust_sql_options( dbi_conn connection )
+adjust_sql_options (dbi_conn connection)
 {
     dbi_result result;
     gint err;
     const char* errmsg;
-    
-    result = dbi_conn_query( connection, "SELECT @@sql_mode");
+
+    result = dbi_conn_query (connection, "SELECT @@sql_mode");
     if (result)
     {
         const char* str;
-        dbi_result_first_row(result);
-        str = dbi_result_get_string_idx(result, 1);
+        dbi_result_first_row (result);
+        str = dbi_result_get_string_idx (result, 1);
         if (str)
         {
             PINFO("Initial sql_mode: %s", str);
-            if( strstr( str, SQL_OPTION_TO_REMOVE ) )
+            if (strstr (str, SQL_OPTION_TO_REMOVE))
             {
                 gchar *adjusted_str;
                 gchar *set_str;
                 dbi_result set_result;
-                
-                adjusted_str = adjust_sql_options_string( str );
+
+                adjusted_str = adjust_sql_options_string (str);
                 PINFO("Setting sql_mode to %s", adjusted_str);
-                set_str = g_strdup_printf( "SET sql_mode='%s';", adjusted_str );
-                set_result = dbi_conn_query( connection, set_str);
+                set_str = g_strdup_printf ("SET sql_mode='%s';", adjusted_str);
+                set_result = dbi_conn_query (connection, set_str);
                 if (set_result)
                 {
-                    dbi_result_free( set_result );
-                } else
-                {
-                  err = dbi_conn_error(connection, &errmsg);
-                  PERR("Unable to set sql_mode %d : %s", err, errmsg );
+                    dbi_result_free (set_result);
                 }
-                g_free( adjusted_str );
-                g_free( set_str );
+                else
+                {
+                    err = dbi_conn_error (connection, &errmsg);
+                    PERR("Unable to set sql_mode %d : %s", err, errmsg );
+                }
+                g_free (adjusted_str);
+                g_free (set_str);
             }
         }
         else
         {
-            err = dbi_conn_error(connection, &errmsg);
-            PERR("Unable to get sql_mode %d : %s", err, errmsg );
+            err = dbi_conn_error (connection, &errmsg);
+            PERR("Unable to get sql_mode %d : %s", err, errmsg);
         }
         dbi_result_free(result);
     }
     else
     {
-      err = dbi_conn_error(connection, &errmsg);
-      PERR("Unable to read sql_mode %d : %s", err, errmsg );
+        err = dbi_conn_error (connection, &errmsg);
+        PERR("Unable to read sql_mode %d : %s", err, errmsg );
     }
 }
 
