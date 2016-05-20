@@ -80,7 +80,7 @@ extern "C"
 /* For direct access to dbi data structs, sadly needed for datetime */
 #include <dbi/dbi-dev.h>
 }
-#include <regex>
+#include <boost/regex.hpp>
 #include <string>
 
 #include "gnc-backend-dbi.h"
@@ -827,7 +827,7 @@ adjust_sql_options_string(const std::string& str)
 /* Regex that finds the SQL_OPTION_TO_REMOVE as the first, last, or middle of a
  * comma-delimited list.
  */
-    std::regex reg{"(?:," SQL_OPTION_TO_REMOVE "$|\\b"
+    boost::regex reg{"(?:," SQL_OPTION_TO_REMOVE "$|\\b"
             SQL_OPTION_TO_REMOVE "\\b,?)"};
     return regex_replace(str, reg, std::string{""});
 }
