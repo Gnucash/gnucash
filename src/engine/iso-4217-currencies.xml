@@ -576,7 +576,7 @@
   namespace="ISO4217"
   exchange-code="933"
   parts-per-unit="100"
-  smallest-fraction="1"
+  smallest-fraction="100"
   local-symbol="Br"
 />
 <!-- "BZD" - "Belize Dollar"
@@ -860,7 +860,7 @@
   local-symbol="RD$"
 />
 <!-- "DZD" - "Algerian Dinar"
-  ar.: 	دج
+  ar.:  دج
 -->
 <currency
   isocode="DZD"
