@@ -23,7 +23,6 @@ LDADD = ${top_builddir}/src/test-core/libtest-core.la \
         ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
         ${top_builddir}/src/core-utils/libgnc-core-utils.la \
         ${top_builddir}/src/libqof/qof/libgnc-qof.la \
-        ../libgncmod-backend-dbi.la \
         ${top_builddir}/src/backend/sql/libgnc-backend-sql.la \
         ${top_builddir}/src/backend/xml/libgnc-backend-xml-utils.la \
         ${top_builddir}/lib/libc/libc-missing.la
@@ -62,7 +61,8 @@ test_backend_dbi_SOURCES = \
     test-backend-dbi.c \
     test-backend-dbi-basic.c \
     test-dbi-stuff.c \
-    test-dbi-business-stuff.c
+    test-dbi-business-stuff.c \
+    ../gnc-backend-dbi.c
 
 test_backend_dbi_LDFLAGS="-ldbi"
 test_backend_dbi_CPPFLAGS = \
