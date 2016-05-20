@@ -599,6 +599,40 @@ test_dbi_business_store_and_reload (Fixture *fixture, gconstpointer pData)
     qof_session_end (session_3);
     qof_session_destroy (session_3);
 }
+#ifndef G_OS_WIN32
+static void
+test_adjust_sql_options_string (void)
+{
+    const char* in[] = {
+        "NO_ZERO_DATE",
+        "NO_ZERO_DATE,something_else",
+        "something,NO_ZERO_DATE",
+        "something,NO_ZERO_DATE,something_else",
+        "NO_ZERO_DATExx",
+        "NO_ZERO_DATExx,something_ else",
+        "something,NO_ZERO_DATExx",
+        "something,NO_ZERO_DATExx,something_ else",
+        "fred,jim,john"
+    };
+    const char* out[] = {
+        "",
+        "something_else",
+        "something",
+        "something,something_else",
+        "NO_ZERO_DATExx",
+        "NO_ZERO_DATExx,something_ else",
+        "something,NO_ZERO_DATExx",
+        "something,NO_ZERO_DATExx,something_ else",
+        "fred,jim,john"
+    };
+
+    for (size_t i = 0; i < sizeof(in) / sizeof(char*); i++)
+    {
+        std::string adjusted_str = adjust_sql_options_string(in[i]);
+        g_assert_cmpstr(out[i], ==, adjusted_str.c_str());
+    }
+}
+#endif //G_OS_WIN32
 
 static void
 create_dbi_test_suite (const char *dbm_name, const char *url)
@@ -644,5 +678,8 @@ test_suite_gnc_backend_dbi (void)
         g_setenv ("PGOPTIONS", "-c client_min_messages=WARNING", FALSE);
         create_dbi_test_suite ("postgres", TEST_PGSQL_URL);
     }
-
+#ifndef G_OS_WIN32
+    GNC_TEST_ADD_FUNC( suitename, "adjust sql options string localtime", 
+        test_adjust_sql_options_string );
+#endif //G_OS_WIN32
 }

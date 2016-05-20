@@ -505,7 +505,7 @@ msgstr "чистая прибыль"
 
 #. "Your net worth is your assets minus your liabilities. If your accounts are balanced, your net worth should equal your equity plus your net profit."
 msgid "net worth"
-msgstr "чистый убыток"
+msgstr "чистая стоимость"
 
 #. "One textfield per transaction that can hold explanatory text about the transaction."
 msgid "notes (register)"

@@ -119,5 +119,7 @@ typedef struct
     // transient error and managed to resolve it, but it can't run the original query)
 
 } GncDbiSqlConnection;
+/* external access required for tests */
+std::string adjust_sql_options_string(const std::string&);
 
 #endif //GNC_BACKEND_DBI_PRIV_H
