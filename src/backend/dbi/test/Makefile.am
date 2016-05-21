@@ -67,7 +67,10 @@ test_backend_dbi_CPPFLAGS = \
 	-DDBI_TEST_XML_FILENAME=\"${srcdir}/test-dbi.xml\" \
 	${AM_CPPFLAGS}
 
-
+test_backend_dbi_LDADD = \
+    ${BOOST_LDADD} -lboost_regex \
+    ${LIBDBI_LIBS} \
+    ${LDADD}
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.backend.dbi\"
 

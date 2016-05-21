@@ -19,7 +19,7 @@ ADD_LIBRARY	(gncmod-backend-dbi
   ${backend_dbi_noinst_HEADERS}
 )
 
-TARGET_LINK_LIBRARIES(gncmod-backend-dbi gnc-backend-sql gncmod-engine gnc-qof ${GTK2_LDFLAGS} ${LIBDBI_LIBRARY})
+TARGET_LINK_LIBRARIES(gncmod-backend-dbi gnc-backend-sql gncmod-engine gnc-qof ${GTK2_LDFLAGS} ${Boost_REGEX_LIBRARY} ${LIBDBI_LIBRARY})
 
 TARGET_COMPILE_DEFINITIONS(gncmod-backend-dbi PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.dbi\")
 

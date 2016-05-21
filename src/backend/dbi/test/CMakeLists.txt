@@ -11,13 +11,14 @@ SET(BACKEND_DBI_TEST_INCLUDE_DIRS
   ${LIBDBI_INCLUDE_PATH}
   ${GLIB2_INCLUDE_DIRS}
 )
-SET(BACKEND_DBI_TEST_LIBS gnc-backend-sql gncmod-backend-dbi gncmod-engine gncmod-test-engine gnc-qof test-core ${LIBDBI_LIBRARY})
+SET(BACKEND_DBI_TEST_LIBS gnc-backend-sql gncmod-engine gncmod-test-engine gnc-qof test-core ${Boost_REGEX_LIBRARY} ${LIBDBI_LIBRARY})
 
 SET(test_dbi_backend_SOURCES
   test-backend-dbi.cpp
   test-backend-dbi-basic.cpp
   test-dbi-business-stuff.cpp
   test-dbi-stuff.cpp
+  ../gnc-backend-dbi.cpp
 )
 
 # This test does not work on Win32
