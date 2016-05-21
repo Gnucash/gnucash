@@ -163,7 +163,7 @@ GncImportMatchMap::delete_account (const char *category, const char *key)
 }
 
 
-struct account_token_count
+struct AccountTokenCount
 {
     std::string account_guid; // returned account guid
     int64_t token_count;      // occurances of a given token for this account_guid
@@ -172,20 +172,20 @@ struct account_token_count
 /** total_count and the token_count for a given account let us calculate the
  * probability of a given account with any single token
  */
-struct token_accounts_info
+struct TokenAccountsInfo
 {
-    GList *accounts;           // array of struct account_token_count
+    GList *accounts;           // array of struct AccountTokenCount
     int64_t total_token_count; // the sum of token_count for a given token
 };
 
-/** gpointer is a pointer to a struct token_accounts_info
+/** gpointer is a pointer to a struct TokenAccountsInfo
  * \note Can always assume that keys are unique, reduces code in this function
  */
 static void
 buildTokenInfo(const char *key, const GValue *value, gpointer data)
 {
-    struct token_accounts_info *tokenInfo = (struct token_accounts_info*)data;
-    struct account_token_count* this_account;
+    struct TokenAccountsInfo *tokenInfo = (struct TokenAccountsInfo*)data;
+    struct AccountTokenCount* this_account;
 
     //  PINFO("buildTokenInfo: account '%s', token_count: '%" G_GINT64_FORMAT "'", (char*)key,
     //                  g_value_get_int64(value));
@@ -194,14 +194,14 @@ buildTokenInfo(const char *key, const GValue *value, gpointer data)
     tokenInfo->total_token_count += g_value_get_int64(value);
 
     /* allocate a new structure for this account and it's token count */
-    this_account = (struct account_token_count*)
-                   new (struct account_token_count);
+    this_account = (struct AccountTokenCount*)
+                   new (struct AccountTokenCount);
 
     /* fill in the account guid and number of tokens found for this account */
     this_account->account_guid = ((char*)key);
     this_account->token_count = g_value_get_int64(value);
 
-    /* append onto the glist a pointer to the new account_token_count structure */
+    /* append onto the glist a pointer to the new AccountTokenCount structure */
     tokenInfo->accounts = g_list_prepend(tokenInfo->accounts, this_account);
 }
 
@@ -235,11 +235,11 @@ GncImportMatchMap::find_account_bayes (GList* tokens)
 {
     GList *current_token;                 /**< pointer to the current token from the input GList tokens */
 
-    struct token_accounts_info tokenInfo; /**< holds the accounts and total token count for a single token */
+    struct TokenAccountsInfo tokenInfo; /**< holds the accounts and total token count for a single token */
 
-    struct account_token_count *account_c; /**< an account name and the number of times a token has appeared for the account */
+    struct AccountTokenCount *account_c; /**< an account name and the number of times a token has appeared for the account */
 
-    GList *current_account_token;         /**< pointer to the struct account_token_count */
+    GList *current_account_token;         /**< pointer to the struct AccountTokenCount */
 
     std::unordered_map<std::string, account_probability>probability_hash;
     std::string selected_account_guid;
@@ -255,8 +255,8 @@ GncImportMatchMap::find_account_bayes (GList* tokens)
     {
         std::string kvp_path = IMAP_FRAME_BAYES + delim + ((char*)current_token->data);
 
-        /* zero out the token_accounts_info structure */
-        memset(&tokenInfo, 0, sizeof(struct token_accounts_info));
+        /* zero out the TokenAccountsInfo structure */
+        memset(&tokenInfo, 0, sizeof(struct TokenAccountsInfo));
 
         PINFO("token: '%s'", (char*)current_token->data);
 
@@ -273,7 +273,7 @@ GncImportMatchMap::find_account_bayes (GList* tokens)
                 current_account_token = current_account_token->next)
         {
             /* get the account guid and corresponding token count */
-            account_c = (struct account_token_count*)current_account_token->data;
+            account_c = (struct AccountTokenCount*)current_account_token->data;
 
             PINFO("account_c->account_guid('%s'), "
                   "account_c->token_count('%" G_GINT64_FORMAT
@@ -342,8 +342,8 @@ GncImportMatchMap::find_account_bayes (GList* tokens)
         for (current_account_token = tokenInfo.accounts; current_account_token;
                 current_account_token = current_account_token->next)
         {
-            /* free up each struct account_token_count we allocated */
-            delete((struct account_token_count*)current_account_token->data);
+            /* free up each struct AccountTokenCount we allocated */
+            delete((struct AccountTokenCount*)current_account_token->data);
         }
         g_list_free (tokenInfo.accounts); /* free the accounts GList */
     }
