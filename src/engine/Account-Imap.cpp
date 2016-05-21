@@ -209,13 +209,13 @@ buildTokenInfo(const char *key, const GValue *value, gpointer data)
     account where p(AB) = (a*b)/[a*b + (1-a)(1-b)], product is (a*b),
     product_difference is (1-a) * (1-b)
  */
-class account_probability
+class AccountProbability
 {
     public:
     double m_product;             /* product of probabilities */
     double m_product_difference;  /* product of (1-probabilities) */
 
-    account_probability (double p, double pd)
+    AccountProbability (double p, double pd)
     {
         m_product = p;
         m_product_difference = pd;
@@ -241,7 +241,7 @@ GncImportMatchMap::find_account_bayes (GList* tokens)
 
     GList *current_account_token;         /**< pointer to the struct AccountTokenCount */
 
-    std::unordered_map<std::string, account_probability>probability_hash;
+    std::unordered_map<std::string, AccountProbability>probability_hash;
     std::string selected_account_guid;
     int32_t max_probability = 0;
     std::string delim = "/";
@@ -310,7 +310,7 @@ GncImportMatchMap::find_account_bayes (GList* tokens)
                 double product_difference = (double)1 - ((double)account_c->token_count /
                                             (double)tokenInfo.total_token_count);
 
-                account_probability a_prob({product, product_difference});
+                AccountProbability a_prob({product, product_difference});
 
                 probability_hash.emplace(account_c->account_guid, a_prob);
 
