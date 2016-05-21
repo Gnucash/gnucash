@@ -2460,15 +2460,31 @@ begin_print(GtkPrintOperation *operation,
 {
     PrintCheckDialog *pcd = (PrintCheckDialog *) user_data;
     guint check_count = g_list_length(pcd->splits);
-    gint first_page_count;
     gint pages;
     gint position = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->position_combobox));
 
-    if (pcd->selected_format && pcd->position_max > 1 && position < pcd->position_max)
+    if (pcd->selected_format /* User selected a format other than custom */
+            && pcd->position_max > 1 /* The format has more than one check per page
+                                        (position_max is equivalent to custom
+                                        positioning, and there need to be at least two
+                                        other check defined positions (0 and 1), so
+                                        custom positioning should be at least
+                                        at position 2, i.e. >1) */
+            && position < pcd->position_max) /* User chose a check position other
+                                                then custom (which is always at
+                                                position_max in the list) */
     {
+        gint first_page_count, remaining_count;
+
         first_page_count = gtk_spin_button_get_value_as_int(pcd->first_page_count);
-        pages = ((check_count - first_page_count) + pcd->position_max - 1) /
-                pcd->position_max + 1;
+        remaining_count = check_count - first_page_count;
+        pages = 1                  /* First page, will have first_page_count checks */
+                + remaining_count / pcd->position_max;
+                                   /* Subsequent pages with all positions filled */
+        if ((remaining_count % pcd->position_max) > 0)
+            pages++;  /* Last page, not all positions are filled. Needs to be added
+                         separately because integer division rounds towards 0 and
+                         would omit the last checks if they didn't fill a full page */
     }
     else
         pages = check_count;
