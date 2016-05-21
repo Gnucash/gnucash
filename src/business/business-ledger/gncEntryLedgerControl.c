@@ -581,8 +581,8 @@ gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
 
     /* Taxable?, Tax-include?, Tax table */
     {
-        gboolean taxable, taxincluded;
-        GncTaxTable *taxtable;
+        gboolean taxable = FALSE, taxincluded = FALSE;
+        GncTaxTable *taxtable = NULL;
         switch (ledger->type)
         {
         case GNCENTRY_INVOICE_ENTRY:
