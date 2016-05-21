@@ -355,27 +355,22 @@ GncImportMatchMap::find_account_bayes (GList* tokens)
     /* has this probability met our threshold? */
     if (max_probability >= threshold)
     {
-        GncGUID *guid;
-        Account *account = NULL;
+        GncGUID  guid;
+        Account *account = nullptr;
 
         PINFO("Probability has met threshold");
 
-        guid = new (GncGUID);
+        if (string_to_guid (selected_account_guid.c_str(), &guid))
+            account = xaccAccountLookup (&guid, m_book);
 
-        if (string_to_guid (selected_account_guid.c_str(), guid))
-            account = xaccAccountLookup (guid, m_book);
-
-        delete (guid);
-
-        if (account != NULL)
+        if (account != nullptr)
             LEAVE("Return account is '%s'", xaccAccountGetName (account));
         else
             LEAVE("Return NULL, account for Guid '%s' can not be found", selected_account_guid.c_str());
 
         return account;
     }
-    PINFO("Probability has not met threshold");
-    LEAVE("Return NULL");
+    LEAVE("Probability has not met threshold, return NULL");
 
     return nullptr; /* we didn't meet our threshold, return NULL for an account */
 }
