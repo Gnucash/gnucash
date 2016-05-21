@@ -18,6 +18,7 @@ SET(XML_TEST_LIBS gncmod-engine gnc-qof gncmod-test-engine test-core ${LIBXML2_L
 
 FUNCTION(ADD_XML_TEST _TARGET _SOURCE_FILES)
   GNC_ADD_TEST(${_TARGET} "${_SOURCE_FILES}" XML_TEST_INCLUDE_DIRS XML_TEST_LIBS ${ARGN})
+  TARGET_COMPILE_OPTIONS(${_TARGET} PRIVATE -DU_SHOW_CPLUSPLUS_API=0)
 ENDFUNCTION()
 
 
@@ -74,6 +75,7 @@ GNC_ADD_TEST_WITH_GUILE(test-load-example-account
   XML_TEST_INCLUDE_DIRS XML_TEST_LIBS
   GNC_ACCOUNT_PATH=${CMAKE_SOURCE_DIR}/accounts/C
 )
+TARGET_COMPILE_OPTIONS(test-load-example-account PRIVATE -DU_SHOW_CPLUSPLUS_API=0)
 ADD_XML_TEST(test-string-converters "${test_backend_xml_base_SOURCES};test-string-converters.cpp")
 ADD_XML_TEST(test-xml-account "${test_backend_xml_module_SOURCES};test-xml-account.cpp;test-file-stuff.cpp")
 ADD_XML_TEST(test-xml-commodity "${test_backend_xml_module_SOURCES};test-xml-commodity.cpp;test-file-stuff.cpp")

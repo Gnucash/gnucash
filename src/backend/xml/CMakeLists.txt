@@ -87,7 +87,7 @@ TARGET_INCLUDE_DIRECTORIES (gnc-backend-xml-utils
   PRIVATE ${ZLIB_INCLUDE_DIRS}
 )
 
-TARGET_COMPILE_DEFINITIONS (gnc-backend-xml-utils PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.xml\")
+TARGET_COMPILE_DEFINITIONS (gnc-backend-xml-utils PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.xml\" -DU_SHOW_CPLUSPLUS_API=0)
 
 INSTALL(TARGETS gnc-backend-xml-utils
   LIBRARY DESTINATION lib
@@ -105,7 +105,7 @@ ADD_LIBRARY(gncmod-backend-xml MODULE ${libgncmod_backend_xml_SOURCES})
 TARGET_LINK_LIBRARIES(gncmod-backend-xml gnc-backend-xml-utils gncmod-engine
                         gnc-core-utils ${LIBXML2_LDFLAGS} ${GLIB2_LDFLAGS} ${ZLIB_LIBRARY})
 
-TARGET_COMPILE_DEFINITIONS (gncmod-backend-xml PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.xml\")
+TARGET_COMPILE_DEFINITIONS (gncmod-backend-xml PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.xml\" -DU_SHOW_CPLUSPLUS_API=0)
 
 SET(LIB_DIR lib/gnucash)
 IF (WIN32)

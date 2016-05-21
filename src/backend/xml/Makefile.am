@@ -7,6 +7,7 @@ pkglib_LTLIBRARIES = libgncmod-backend-xml.la
 AM_CPPFLAGS = \
   -I.. -I../.. \
   -DLOCALE_DIR=\""$(datadir)/locale"\" \
+  -DU_SHOW_CPLUSPLUS_API=0 \
   -I${top_srcdir}/src/backend \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/core-utils \
