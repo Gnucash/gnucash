@@ -392,18 +392,19 @@ GncImportMatchMap::add_account_bayes (GList* tokens, Account *acc)
 {
     GList *current_token;
 
-    std::string account_fullname;
+    gchar *account_fullname;
+    gchar *guid_string;
     std::string kvp_path;
-    std::string guid_string;
     std::string delim = "/";
 
     ENTER(" ");
 
-    g_return_if_fail (acc != NULL);
+    g_return_if_fail (acc != nullptr);
     account_fullname = gnc_account_get_full_name (acc);
     xaccAccountBeginEdit (m_account);
 
-    PINFO("account name: '%s'", account_fullname.c_str());
+    PINFO("account name: '%s'", account_fullname);
+    g_free (account_fullname);
 
     guid_string = guid_to_string (xaccAccountGetGUID (acc));
 
@@ -425,15 +426,15 @@ GncImportMatchMap::add_account_bayes (GList* tokens, Account *acc)
 
         PINFO("adding token '%s'", token_data.c_str());
 
-        kvp_path = IMAP_FRAME_BAYES + delim + token_data + delim + guid_string;
+        kvp_path = IMAP_FRAME_BAYES + delim + token_data + delim + (guid_string);
 
         /* change the imap entry for the account */
         change_imap_entry (this, kvp_path, token_count);
-
     }
     /* free up the account fullname and guid string */
     qof_instance_set_dirty (QOF_INSTANCE (m_account));
     xaccAccountCommitEdit (m_account);
+    g_free (guid_string);
 
     LEAVE(" ");
 }
