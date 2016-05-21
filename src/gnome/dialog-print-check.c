@@ -2238,33 +2238,19 @@ draw_check_format(GtkPrintContext *context, gint position,
                   check_format_t *format, gpointer user_data)
 {
     PrintCheckDialog *pcd = (PrintCheckDialog *) user_data;
-    cairo_t *cr;
     gdouble x, y, r, multip;
+    cairo_t *cr = gtk_print_context_get_cairo_context(context);
 
-    cr = gtk_print_context_get_cairo_context(context);
-    cairo_translate(cr, format->trans_x, format->trans_y);
-    g_debug("Page translated by %f,%f", format->trans_x, format->trans_y);
-    cairo_rotate(cr, format->rotation * DEGREES_TO_RADIANS);
-    g_debug("Page rotated by %f degrees", format->rotation);
-
-    /* The grid is useful when determining check layouts */
-    if (format->show_grid)
-    {
-        draw_grid(context,
-                  gtk_print_context_get_width(context),
-                  gtk_print_context_get_height(context),
-                  pcd->default_font);
-    }
-
-    /* Translate all subsequent check items if requested.
-     * For check position 0, no translation is needed. */
+    /* Translate all subsequent check items if required. */
     if ((position > 0) && (position < pcd->position_max))
     {
         /* Standard positioning is used.
          * Note that the first check on the page (position 0) doesn't
          * need to be moved (hence the test for position > 0 above. */
-        cairo_translate(cr, 0, position * format->height);
-        g_debug("Position %d translated by %f (pre-defined)", position, position * format->height);
+        cairo_translate(cr, 0, format->height); /* Translation is relative to previous
+                                                   check translation, not to page border ! */
+        g_debug("Position %d translated by %f relative to previous check (pre-defined)", position, format->height);
+        g_debug("                      by %f relative to page (pre-defined)", position * format->height);
     }
     else if (position == pcd->position_max)
     {
@@ -2392,6 +2378,7 @@ draw_page(GtkPrintOperation *operation,
 {
     PrintCheckDialog *pcd = (PrintCheckDialog *) user_data;
     check_format_t *format;
+    cairo_t *cr = gtk_print_context_get_cairo_context(context);
 
     format = pcd->selected_format;
     if (format)
@@ -2401,6 +2388,7 @@ draw_page(GtkPrintOperation *operation,
         guint   check_count = g_list_length(pcd->splits);
         gint    check_number;
         gint    position = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->position_combobox));
+        gint    last_blank_check_pos;
         gint    checks_per_page;
         GList   *next_split;
 
@@ -2431,6 +2419,28 @@ draw_page(GtkPrintOperation *operation,
             if (position < pcd->position_max)
                 position = 0;
         }
+
+        /* Do page level translations/rotations */
+        cairo_translate(cr, format->trans_x, format->trans_y);
+        g_debug("Page translated by %f,%f", format->trans_x, format->trans_y);
+        cairo_rotate(cr, format->rotation * DEGREES_TO_RADIANS);
+        g_debug("Page rotated by %f degrees", format->rotation);
+
+        /* The grid is useful when determining check layouts */
+        if (format->show_grid)
+        {
+            draw_grid(context,
+                      gtk_print_context_get_width(context),
+                      gtk_print_context_get_height(context),
+                      pcd->default_font);
+        }
+
+        last_blank_check_pos = position - 1;
+        /* Optionally skip blank check positions if */
+        if ((page_nr == 0)                         /* on first page AND */
+                && (last_blank_check_pos > 0)      /* there's more than one blank check */
+                && (position < pcd->position_max)) /* but don't skip for custom positioning */
+            cairo_translate(cr, 0, format->height * last_blank_check_pos);
 
         for (check_number = first_check; check_number <= last_check;
                 check_number++, position++)
