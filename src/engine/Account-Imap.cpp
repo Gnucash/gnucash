@@ -163,18 +163,16 @@ GncImportMatchMap::delete_account (const char *category, const char *key)
 }
 
 
-struct AccountTokenCount
-{
-    std::string account_guid; // returned account guid
-    int64_t token_count;      // occurances of a given token for this account_guid
-};
+using AccountTokenCount = std::pair<std::string, int64_t>; // guid, token_count
+//using AccountTokenCountPtr = std::shared_ptr<AccountTokenCount>;
+//using TokenAccountsInfo = std::pair<std::vector<AccountTokenCountPtr>, int64_t>;
 
-/** total_count and the token_count for a given account let us calculate the
+/** total_token_count and the token_count for a given account let us calculate the
  * probability of a given account with any single token
  */
 struct TokenAccountsInfo
 {
-    GList *accounts;           // array of struct AccountTokenCount
+    std::vector<AccountTokenCount> accounts; // vector of AccountTokenCount
     int64_t total_token_count; // the sum of token_count for a given token
 };
 
@@ -185,7 +183,6 @@ static void
 buildTokenInfo(const char *key, const GValue *value, gpointer data)
 {
     struct TokenAccountsInfo *tokenInfo = (struct TokenAccountsInfo*)data;
-    struct AccountTokenCount* this_account;
 
     //  PINFO("buildTokenInfo: account '%s', token_count: '%" G_GINT64_FORMAT "'", (char*)key,
     //                  g_value_get_int64(value));
@@ -193,16 +190,11 @@ buildTokenInfo(const char *key, const GValue *value, gpointer data)
     /* add the count to the total_token_count */
     tokenInfo->total_token_count += g_value_get_int64(value);
 
-    /* allocate a new structure for this account and it's token count */
-    this_account = (struct AccountTokenCount*)
-                   new (struct AccountTokenCount);
-
     /* fill in the account guid and number of tokens found for this account */
-    this_account->account_guid = ((char*)key);
-    this_account->token_count = g_value_get_int64(value);
+    AccountTokenCount account_token_count = std::make_pair (key, g_value_get_int64(value));
 
-    /* append onto the glist a pointer to the new AccountTokenCount structure */
-    tokenInfo->accounts = g_list_prepend(tokenInfo->accounts, this_account);
+    /* append onto the vector the new AccountTokenCount pair */
+    tokenInfo->accounts.push_back (account_token_count);
 }
 
 /** intermediate values used to calculate the bayes probability of a given
@@ -233,18 +225,13 @@ static constexpr double threshold {CONFIDENCE * PROBABILITY_FACTOR};
 Account *
 GncImportMatchMap::find_account_bayes (GList* tokens)
 {
-    GList *current_token;                 /**< pointer to the current token from the input GList tokens */
+    GList *current_token;               /* pointer to the current token from the input GList tokens */
 
-    struct TokenAccountsInfo tokenInfo; /**< holds the accounts and total token count for a single token */
+    struct TokenAccountsInfo tokenInfo; /* holds the accounts and total_token_count for a single token */
 
-    struct AccountTokenCount *account_c; /**< an account name and the number of times a token has appeared for the account */
-
-    GList *current_account_token;         /**< pointer to the struct AccountTokenCount */
-
-    std::unordered_map<std::string, AccountProbability>probability_hash;
     std::string selected_account_guid;
     int32_t max_probability = 0;
-    std::string delim = "/";
+    std::unordered_map<std::string, AccountProbability>probability_hash;
 
     ENTER(" ");
 
@@ -253,10 +240,12 @@ GncImportMatchMap::find_account_bayes (GList* tokens)
      */
     for (current_token = tokens; current_token; current_token = current_token->next)
     {
+        std::string delim = "/";
         std::string kvp_path = IMAP_FRAME_BAYES + delim + ((char*)current_token->data);
 
-        /* zero out the TokenAccountsInfo structure */
-        memset(&tokenInfo, 0, sizeof(struct TokenAccountsInfo));
+        /* Zero out the TokenAccountsInfo structure */
+        tokenInfo.total_token_count = 0;
+        tokenInfo.accounts.clear();
 
         PINFO("token: '%s'", (char*)current_token->data);
 
@@ -264,88 +253,73 @@ GncImportMatchMap::find_account_bayes (GList* tokens)
          * doesn't already exist or adding to the existing accounts token
          * count if it does  */
         qof_instance_foreach_slot(QOF_INSTANCE (m_account), kvp_path.c_str(),
-                                  buildTokenInfo, &tokenInfo);
+                                                buildTokenInfo, &tokenInfo);
 
-        /* for each account we have just found, see if the account
-         * already exists in the list of account probabilities, if not
-         * add it */
-        for (current_account_token = tokenInfo.accounts; current_account_token;
-                current_account_token = current_account_token->next)
+        /* for each account we have just found, see if the account already
+         * exists in the list of account probabilities, if not add it */
+        for (auto it = begin (tokenInfo.accounts); it != end (tokenInfo.accounts); ++it)
         {
-            /* get the account guid and corresponding token count */
-            account_c = (struct AccountTokenCount*)current_account_token->data;
-
-            PINFO("account_c->account_guid('%s'), "
-                  "account_c->token_count('%" G_GINT64_FORMAT
+            PINFO("account_guid('%s'), token_count('%" G_GINT64_FORMAT
                   "')/total_count('%" G_GINT64_FORMAT "')",
-                  account_c->account_guid.c_str(), account_c->token_count,
+                  it->first.c_str(), it->second,
                   tokenInfo.total_token_count);
 
-            auto itr = probability_hash.find (account_c->account_guid);
-            if (itr != probability_hash.end()) // existing ?
+            auto itr = probability_hash.find (it->first);
+            if (itr != probability_hash.end()) // Existing entry
             {
-                // Existing entry
                 PINFO("Existing entry for this account");
 
-                itr->second.m_product = (((double)account_c->token_count /
+                itr->second.m_product = (((double)it->second /
                                        (double)tokenInfo.total_token_count)
                                         * itr->second.m_product);
 
-                itr->second.m_product_difference = ((double)1 - ((double)account_c->token_count /
+                itr->second.m_product_difference = ((double)1 - ((double)it->second /
                                                   (double)tokenInfo.total_token_count))
                                                    * itr->second.m_product_difference;
 
                 PINFO("product == %f, product_difference == %f",
                       itr->second.m_product, itr->second.m_product_difference);
             }
-            else
+            else // New entry
             {
-                // New entry
                 PINFO("Adding a new entry for this account");
 
                 /* set the product and product difference values */
-                double product = ((double)account_c->token_count /
+                double product = ((double)it->second /
                                   (double)tokenInfo.total_token_count);
 
-                double product_difference = (double)1 - ((double)account_c->token_count /
+                double product_difference = (double)1 - ((double)it->second /
                                             (double)tokenInfo.total_token_count);
 
                 AccountProbability a_prob({product, product_difference});
 
-                probability_hash.emplace(account_c->account_guid, a_prob);
+                probability_hash.emplace (it->first, a_prob);
 
                 PINFO("product == %f, product_difference == %f",
                       product, product_difference);
             }
         } // for all accounts in tokenInfo
+    }
 
-        // Now look for highest probability
-        for (auto &itr : probability_hash)
+    // Now look for highest probability
+    for (auto &itr : probability_hash)
+    {
+        /* P(AB) = A*B / [A*B + (1-A)*(1-B)]
+         * NOTE: so we only keep track of a running product(A*B*C...)
+         * and product difference ((1-A)(1-B)...) */
+
+        int32_t probability =
+            (itr.second.m_product /
+            (itr.second.m_product + itr.second.m_product_difference))
+             * PROBABILITY_FACTOR;
+
+        PINFO("guid is '%s', probability is %f", itr.first.c_str(), (double)probability);
+
+        if (probability > max_probability)
         {
-            /* P(AB) = A*B / [A*B + (1-A)*(1-B)]
-             * NOTE: so we only keep track of a running product(A*B*C...)
-             * and product difference ((1-A)(1-B)...) */
-
-            int32_t probability =
-                (itr.second.m_product /
-                (itr.second.m_product + itr.second.m_product_difference))
-                 * PROBABILITY_FACTOR;
-
-            if (probability > max_probability)
-            {
-                max_probability = probability;
-                selected_account_guid = itr.first;
-            }
+            max_probability = probability;
+            selected_account_guid = itr.first;
         }
-
-        /* free the data in tokenInfo */
-        for (current_account_token = tokenInfo.accounts; current_account_token;
-                current_account_token = current_account_token->next)
-        {
-            /* free up each struct AccountTokenCount we allocated */
-            delete((struct AccountTokenCount*)current_account_token->data);
-        }
-        g_list_free (tokenInfo.accounts); /* free the accounts GList */
     }
 
     PINFO("highest P('%s') = '%d'",
