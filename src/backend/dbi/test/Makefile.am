@@ -68,7 +68,7 @@ test_backend_dbi_CPPFLAGS = \
 	${AM_CPPFLAGS}
 
 test_backend_dbi_LDADD = \
-    ${BOOST_LDADD} -lboost_regex \
+    ${BOOST_LDFLAGS} -lboost_regex \
     ${LIBDBI_LIBS} \
     ${LDADD}
 
