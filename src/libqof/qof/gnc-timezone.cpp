@@ -657,7 +657,6 @@ TimeZoneProvider::get(int year) const noexcept
     auto iter = find_if(zone_vector.begin(), zone_vector.end(),
 			[=](TZ_Entry e) { return e.first >= year; });
     if (iter == zone_vector.end())
-	throw std::out_of_range ("Year " + to_string(year) +
-				 " isn't covered by this time zone.");
+        return nullptr;
     return iter->second;
 }
