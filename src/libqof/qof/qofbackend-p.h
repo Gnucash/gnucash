@@ -354,6 +354,8 @@ extern "C"
  */
 void qof_backend_register_provider (/*@ only @*/ QofBackendProvider *);
 
+void qof_backend_unregister_all_providers ();
+
 /** The qof_backend_set_message() assigns a string to the backend error message.
  */
 void qof_backend_set_message(QofBackend *be, const char *format, ...);

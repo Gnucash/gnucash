@@ -198,13 +198,6 @@ QofBackendError qof_session_pop_error (QofSession *session);
 QofBook * qof_session_get_book (const QofSession *session);
 
 /**
- * Returns the book id in the form ofa url.
- */
-const char * qof_session_get_book_id (const QofSession *session);
-
-void qof_session_set_book_id (QofSession *session, char *book_id);
-
-/**
  *    The qof_session_get_file_path() routine returns the fully-qualified file
  *    path for the session. That is, if a relative or partial filename
  *    was for the session, then it had to have been fully resolved to
@@ -233,9 +226,6 @@ gboolean qof_session_save_in_progress(const QofSession *session);
  * Returns the qof session's backend.
  */
 QofBackend * qof_session_get_backend(const QofSession *session);
-
-void qof_session_set_backend(QofSession *session, QofBackend * backend);
-
 
 /** The qof_session_save() method will commit all changes that have been
  *    made to the session. For the file backend, this is nothing

@@ -96,7 +96,11 @@ struct QofSessionImpl
 
     bool export_session (QofSessionImpl & real_session, QofPercentageFunc) noexcept;
 
-    std::string get_book_id () const noexcept;
+    /**
+     * We return by reference so that a pointer to the data of the string lives
+     * long enough to make it back to C code.
+     */
+    std::string const & get_book_id () const noexcept;
 
     bool is_saving () const noexcept;
 
