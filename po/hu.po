@@ -5306,7 +5306,7 @@ msgstr "Ütemezett tranzakciók beállítása kölcsön törlesztésére"
 #: ../src/gnome/gnc-plugin-basic-commands.c:174
 #: ../src/report/report-system/report.scm:67
 msgid "B_udget"
-msgstr "Költségvetés"
+msgstr "_Költségvetés"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:177
 msgid "Close _Books"

@@ -499,15 +499,10 @@ gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
         return FALSE;
 
     /* Ok, we are sure we want to trigger auto-completion. Now find an
-     * entry to copy the values from.  FIXME: Currently we only use
-     * the entries from the current invoice/bill, but it would be
-     * better to draw this from a larger set of entries. */
+     * entry to copy the values from. */
     auto_entry =
         /* Use this for book-wide auto-completion of the invoice entries */
         find_entry_in_book_by_desc(ledger, desc);
-    /* #else */
-    /*     gnc_find_entry_in_reg_by_desc(ledger, desc); */
-    /* #endif */
 
     if (auto_entry == NULL)
         return FALSE;
@@ -586,8 +581,8 @@ gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
 
     /* Taxable?, Tax-include?, Tax table */
     {
-        gboolean taxable, taxincluded;
-        GncTaxTable *taxtable;
+        gboolean taxable = FALSE, taxincluded = FALSE;
+        GncTaxTable *taxtable = NULL;
         switch (ledger->type)
         {
         case GNCENTRY_INVOICE_ENTRY:
@@ -596,26 +591,39 @@ gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
             taxincluded = gncEntryGetInvTaxIncluded (auto_entry);
             taxtable = gncEntryGetInvTaxTable (auto_entry);
             break;
-        default:
+        case GNCENTRY_BILL_ENTRY:
+        case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
             taxable = gncEntryGetBillTaxable (auto_entry);
             taxincluded = gncEntryGetBillTaxIncluded (auto_entry);
             taxtable = gncEntryGetBillTaxTable (auto_entry);
             break;
+        default:
+            break;
         }
 
-        /* Taxable? cell */
-        cell = gnc_table_layout_get_cell (ledger->table->layout, ENTRY_TAXABLE_CELL);
-        gnc_checkbox_cell_set_flag ((CheckboxCell *) cell, taxable);
-        gnc_basic_cell_set_changed (cell, TRUE);
+        switch (ledger->type)
+        {
+        case GNCENTRY_INVOICE_ENTRY:
+        case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
+        case GNCENTRY_BILL_ENTRY:
+        case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
+            /* Taxable? cell */
+            cell = gnc_table_layout_get_cell (ledger->table->layout, ENTRY_TAXABLE_CELL);
+            gnc_checkbox_cell_set_flag ((CheckboxCell *) cell, taxable);
+            gnc_basic_cell_set_changed (cell, TRUE);
 
-        /* taxincluded? cell */
-        cell = gnc_table_layout_get_cell (ledger->table->layout, ENTRY_TAXINCLUDED_CELL);
-        gnc_checkbox_cell_set_flag ((CheckboxCell *) cell, taxincluded);
-        gnc_basic_cell_set_changed (cell, TRUE);
+            /* taxincluded? cell */
+            cell = gnc_table_layout_get_cell (ledger->table->layout, ENTRY_TAXINCLUDED_CELL);
+            gnc_checkbox_cell_set_flag ((CheckboxCell *) cell, taxincluded);
+            gnc_basic_cell_set_changed (cell, TRUE);
 
-        /* Taxable? cell */
-        cell = gnc_table_layout_get_cell (ledger->table->layout, ENTRY_TAXTABLE_CELL);
-        set_value_combo_cell(cell, gncTaxTableGetName (taxtable));
+            /* Taxable? cell */
+            cell = gnc_table_layout_get_cell (ledger->table->layout, ENTRY_TAXTABLE_CELL);
+            set_value_combo_cell(cell, gncTaxTableGetName (taxtable));
+            break;
+        default:
+            break;
+        }
     }
 
 
