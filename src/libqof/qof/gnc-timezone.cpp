@@ -31,6 +31,11 @@
 //We'd prefer to use std::codecvt, but it's not supported by gcc until 5.0.
 #include <boost/locale/encoding_utf.hpp>
 #endif
+extern "C"
+{
+#include <qoflog.h>
+static const QofLogModule log_module = "gnc-timezone";
+}
 
 using namespace gnc::date;
 
@@ -657,7 +662,13 @@ TimeZoneProvider::get(int year) const noexcept
     auto iter = find_if(zone_vector.begin(), zone_vector.end(),
 			[=](TZ_Entry e) { return e.first >= year; });
     if (iter == zone_vector.end())
-	throw std::out_of_range ("Year " + to_string(year) +
-				 " isn't covered by this time zone.");
+    {
+        /* This shouldn't happen, but if it does: */
+        PERR("TimeZoneProvider::get was unable to get a timezone for year %d",
+             year);
+        if (!zone_vector.empty())
+            return zone_vector.back().second;
+        return TZ_Ptr(new boost::local_time::posix_time_zone("UTC0"));
+    }
     return iter->second;
 }
