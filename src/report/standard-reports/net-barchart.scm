@@ -474,7 +474,7 @@
  'version 1
  'name reportname
  'report-guid income-expense-barchart-uuid
- 'menu-name (N_ "Income & Expense Chart")
+ 'menu-name (N_ "Income & Expense Barchart")
  'menu-path (list gnc:menuname-income-expense)
  'options-generator (lambda () (options-generator #t))
  'renderer (lambda (report-obj) (net-renderer report-obj #t)))

@@ -142,21 +142,21 @@
 
     (gnc:options-add-plot-size!
      options gnc:pagename-display
-     optname-plot-width optname-plot-height "d" 800 450)
+     optname-plot-width optname-plot-height "d" 400 400)
 
 
      (add-option
      (gnc:make-number-range-option
       gnc:pagename-display optname-line-width
       "e" opthelp-line-width
-      0 0 5 0 1 ))
+      1.5 0.5 5 1 0.1 ))
 
 
     (add-option
      (gnc:make-simple-boolean-option
       gnc:pagename-display optname-y-grid
       "f" (N_ "Add grid lines.")
-      #f))
+      #t))
 
     ;(add-option
     ; (gnc:make-simple-boolean-option
@@ -168,7 +168,7 @@
      (gnc:make-simple-boolean-option
       gnc:pagename-display optname-markers
       "g" (N_ "Display a mark for each data point.")
-      #f))
+      #t))
 
     (gnc:options-set-default-section options gnc:pagename-general)
 
@@ -298,13 +298,20 @@
             (liability-list #f)
             (net-list #f)
 	    (progress-range (cons 50 80))
-            (date-string-list (map
-                               (if inc-exp?
-                                   (lambda (date-list-item)
-                                     (gnc-print-date
-                                      (car date-list-item)))
-                                   gnc-print-date)
-                               dates-list)))
+            ;; Here the date strings for the x-axis labels are
+            ;; created.
+            (date-string-list '())
+            (date-iso-string-list '())
+            (save-fmt (qof-date-format-get)))
+
+       (define (datelist->stringlist dates-list)
+         (map (lambda (date-list-item)
+                      (gnc-print-date
+                       (if inc-exp?
+                           (car date-list-item)
+                           date-list-item)))
+              dates-list))
+
        (let* ((the-acount-destination-alist
 	       (if inc-exp?
 		   (append (map (lambda (account) (cons account 'asset))
@@ -359,16 +366,15 @@
                        (gnc-print-date to-date-tp)))
        (gnc:html-linechart-set-width! chart width)
        (gnc:html-linechart-set-height! chart height)
-       (gnc:html-linechart-set-row-labels! chart date-string-list)
+
+       (qof-date-format-set QOF-DATE-FORMAT-ISO)
+       (set! date-iso-string-list (datelist->stringlist dates-list))
+       (qof-date-format-set save-fmt)
+       (gnc:html-linechart-set-row-labels! chart date-iso-string-list)
+
        (gnc:html-linechart-set-major-grid?! chart y-grid)
        (gnc:html-linechart-set-y-axis-label!
         chart (gnc-commodity-get-mnemonic report-currency))
-       ;; Determine whether we have enough space for horizontal labels
-       ;; -- kind of a hack. Assumptions: y-axis labels and legend
-       ;; require 200 pixels, and each x-axes label needs 60 pixels.
-       (gnc:html-linechart-set-row-labels-rotated?!
-        chart (< (/ (- width 200)
-                    (length date-string-list)) 60))
 
        ;; Add the data
        (if show-sep?
@@ -468,6 +474,7 @@
                           (list (_ "Net Worth")))
                       '()))
                  )
+               (set! date-string-list (datelist->stringlist dates-list))
                (gnc:html-table-append-column! table date-string-list)
                (if show-sep?
                    (begin
@@ -518,11 +525,11 @@
 
 ;; Not sure if a line chart makes sense for Income & Expense
 ;; Feel free to uncomment and try it though
-;(gnc:define-report
-; 'version 1
-; 'name reportname
-; 'report-guid "e533c998186b11e1b2e2001558291366"
-; 'menu-name (N_ "Income & Expense Line Chart")
-; 'menu-path (list gnc:menuname-income-expense)
-; 'options-generator (lambda () (options-generator #t))
-; 'renderer (lambda (report-obj) (net-renderer report-obj #t)))
+(gnc:define-report
+ 'version 1
+ 'name reportname
+ 'report-guid "e533c998186b11e1b2e2001558291366"
+ 'menu-name (N_ "Income & Expense Linechart")
+ 'menu-path (list gnc:menuname-income-expense)
+ 'options-generator (lambda () (options-generator #t))
+ 'renderer (lambda (report-obj) (net-renderer report-obj #t)))
