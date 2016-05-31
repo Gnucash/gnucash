@@ -323,8 +323,7 @@ Getting Source with Git
 We maintain a mirror of our master repository on Github. You can
 browse the code at https://github.com/Gnucash/gnucash. Clone URIs are
 on that page, or if you have a Github account you can fork it
-there. Note, however, that we do *not* accept Github pull requests:
-All patches should be submitted via Bugzilla, see below.
+there.
 
 ##################
 Developing GnuCash
@@ -354,6 +353,9 @@ Submitting a Patch:
   new bug if you don't find one that's applicable. Please don't submit
   patches to either of the mailing lists, as they tend to be
   forgotten.
+
+  Alternatively, you can also submit your patches in the form of a git
+  pull request.
 
 
 Thank you.
