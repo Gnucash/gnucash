@@ -341,20 +341,29 @@ typedef enum
 
 
 // Type for conversion of db row to object.
-#define CT_STRING "ct_string"
-#define CT_GUID "ct_guid"
-#define CT_INT "ct_int"
-#define CT_INT64 "ct_int64"
-#define CT_TIMESPEC "ct_timespec"
-#define CT_GDATE "ct_gdate"
-#define CT_NUMERIC "ct_numeric"
-#define CT_DOUBLE "ct_double"
-#define CT_BOOLEAN "ct_boolean"
-#define CT_ACCOUNTREF "ct_accountref"
-#define CT_BUDGETREF "ct_budgetref"
-#define CT_COMMODITYREF "ct_commodityref"
-#define CT_LOTREF "ct_lotref"
-#define CT_TXREF "ct_txref"
+enum GncSqlObjectType
+{
+    CT_STRING,
+    CT_GUID,
+    CT_INT,
+    CT_INT64,
+    CT_TIMESPEC,
+    CT_GDATE,
+    CT_NUMERIC,
+    CT_DOUBLE,
+    CT_BOOLEAN,
+    CT_ACCOUNTREF,
+    CT_BUDGETREF,
+    CT_COMMODITYREF,
+    CT_LOTREF,
+    CT_TXREF,
+    CT_ADDRESS,
+    CT_BILLTERMREF,
+    CT_INVOICEREF,
+    CT_ORDERREF,
+    CT_OWNERREF,
+    CT_TAXTABLEREF
+};
 
 enum ColumnFlags : int
 {
@@ -382,7 +391,8 @@ enum ColumnFlags : int
  */
 struct GncSqlColumnTableEntry
 {
-    GncSqlColumnTableEntry (const char* name, const char*type, unsigned int s,
+    GncSqlColumnTableEntry (const char* name, const GncSqlObjectType type,
+                            unsigned int s,
                             ColumnFlags f, const char* gobj_name = nullptr,
                             const char* qof_name = nullptr,
                             QofAccessFunc get = nullptr,
@@ -390,7 +400,8 @@ struct GncSqlColumnTableEntry
         col_name{name}, col_type{type}, size{s}, flags{f},
         gobj_param_name{gobj_name}, qof_param_name{qof_name}, getter{get},
         setter{set} {}
-    GncSqlColumnTableEntry (const char* name, const char*type, unsigned int s,
+    GncSqlColumnTableEntry (const char* name, const GncSqlObjectType type,
+                            unsigned int s,
                             int f, const char* gobj_name = nullptr,
                             const char* qof_name = nullptr,
                             QofAccessFunc get = nullptr,
@@ -400,7 +411,7 @@ struct GncSqlColumnTableEntry
         gobj_param_name{gobj_name}, qof_param_name{qof_name}, getter{get},
         setter{set} {}
     const char* col_name;        /**< Column name */
-    const char* col_type;        /**< Column type */
+    const GncSqlObjectType col_type;        /**< Column type */
     unsigned int size;         /**< Column size in bytes, for string columns */
     ColumnFlags flags;           /**< Column flags */
     const char* gobj_param_name; /**< If non-null, g_object param name */
@@ -412,8 +423,7 @@ struct GncSqlColumnTableEntry
 inline bool operator==(const GncSqlColumnTableEntry& l,
                        const GncSqlColumnTableEntry& r)
 {
-    return strcmp(l.col_name, r.col_name) == 0 &&
-        strcmp(l.col_type, r.col_type) == 0;
+    return strcmp(l.col_name, r.col_name) == 0 && l.col_type == r.col_type;
 }
 
 inline bool operator!=(const GncSqlColumnTableEntry& l,
@@ -764,7 +774,7 @@ GncSqlStatement* gnc_sql_create_select_statement (GncSqlBackend* be,
  * @param colType Column type
  * @param handler Column handler
  */
-void gnc_sql_register_col_type_handler (const gchar* colType,
+void gnc_sql_register_col_type_handler (const GncSqlObjectType colType,
                                         const GncSqlColumnTypeHandler* handler);
 
 /**

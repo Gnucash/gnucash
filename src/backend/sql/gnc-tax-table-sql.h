@@ -30,8 +30,6 @@
 #ifndef GNC_TAXTABLE_SQL_H
 #define GNC_TAXTABLE_SQL_H
 
-#define CT_TAXTABLEREF "tax-table"
-
 void gnc_taxtable_sql_initialize (void);
 
 #endif /* GNC_TAXTABLE_SQL_H */

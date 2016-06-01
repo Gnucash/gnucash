@@ -1825,20 +1825,19 @@ static GncSqlColumnTypeHandler numeric_handler
 static  GHashTable* g_columnTypeHash = NULL;
 
 void
-gnc_sql_register_col_type_handler (const gchar* colType,
+gnc_sql_register_col_type_handler (const GncSqlObjectType colType,
                                    const GncSqlColumnTypeHandler* handler)
 {
-    g_return_if_fail (colType != NULL);
     g_return_if_fail (handler != NULL);
 
     if (g_columnTypeHash == NULL)
     {
-        g_columnTypeHash = g_hash_table_new (g_str_hash, g_str_equal);
+        g_columnTypeHash = g_hash_table_new (g_direct_hash, g_direct_equal);
         g_assert (g_columnTypeHash != NULL);
     }
 
-    DEBUG ("Col type %s registered\n", colType);
-    g_hash_table_insert (g_columnTypeHash, (gpointer)colType, (gpointer)handler);
+    DEBUG ("Col type %d registered\n", colType);
+    g_hash_table_insert (g_columnTypeHash, GINT_TO_POINTER(colType), (gpointer)handler);
 }
 
 static GncSqlColumnTypeHandler*
@@ -1846,12 +1845,10 @@ get_handler (const GncSqlColumnTableEntry& table_row)
 {
     GncSqlColumnTypeHandler* pHandler;
 
-    g_return_val_if_fail (table_row.col_type != NULL, NULL);
-
     if (g_columnTypeHash != NULL)
     {
         pHandler = static_cast<decltype(pHandler)>(
-            g_hash_table_lookup (g_columnTypeHash, table_row.col_type));
+            g_hash_table_lookup (g_columnTypeHash, GINT_TO_POINTER(table_row.col_type)));
         g_assert (pHandler != NULL);
     }
     else
