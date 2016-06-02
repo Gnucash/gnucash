@@ -74,9 +74,14 @@ test_gnc_timezone_SOURCES = \
 
 test_gnc_timezone_CPPFLAGS = \
         -I${GTEST_HEADERS} \
-	-I${top_srcdir}/src \
-	$(BOOST_CPPFLAGS)
-test_gnc_timezone_LDADD = $(GTEST_LIBS)
+        -I$(top_srcdir)/$(MODULEPATH) \
+        $(GLIB_CFLAGS) \
+        $(BOOST_CPPFLAGS)
+
+test_gnc_timezone_LDADD = \
+	${top_builddir}/${MODULEPATH}/libgnc-qof.la \
+	$(GLIB_LIBS) \
+        $(GTEST_LIBS)
 if !GOOGLE_TEST_LIBS
 nodist_test_gnc_timezone_SOURCES = \
         ${GTEST_SRC}/src/gtest_main.cc
@@ -87,12 +92,18 @@ test_gnc_datetime_SOURCES = \
 	$(top_srcdir)/$(MODULEPATH)/gnc-datetime.cpp \
 	$(top_srcdir)/$(MODULEPATH)/gnc-timezone.cpp \
 	gtest-gnc-datetime.cpp
+
 test_gnc_datetime_CPPFLAGS =\
-	-I$(GTEST_HEADERS) \
-	-I$(top_srcdir)/src \
-	$(BOOST_CPPFLAGS)
+        -I$(GTEST_HEADERS) \
+        -I$(top_srcdir)/$(MODULEPATH) \
+        -I$(top_srcdir)/src \
+        $(GLIB_CFLAGS) \
+        $(BOOST_CPPFLAGS)
+
 test_gnc_datetime_LDADD = \
 	-lboost_date_time \
+	${top_builddir}/${MODULEPATH}/libgnc-qof.la \
+	$(GLIB_LIBS) \
 	$(GTEST_LIBS)
 if !GOOGLE_TEST_LIBS
 nodist_test_gnc_datetime_SOURCES = \

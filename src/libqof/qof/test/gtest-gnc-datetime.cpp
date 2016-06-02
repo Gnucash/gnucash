@@ -81,7 +81,7 @@ TEST(gnc_datetime_functions, test_format)
 TEST(gnc_datetime_functions, test_date)
 {
     GncDateTime atime(2394187200); //2045-11-13 12:00:00 Z
-    GncDate gncd = std::move(atime.date());
+    GncDate gncd = atime.date();
     auto ymd = gncd.year_month_day();
     EXPECT_EQ(ymd.year, 2045);
     EXPECT_EQ(ymd.month, 11);
