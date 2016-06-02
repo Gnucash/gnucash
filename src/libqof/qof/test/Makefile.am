@@ -75,8 +75,9 @@ test_gnc_timezone_SOURCES = \
 test_gnc_timezone_CPPFLAGS = \
         -I${GTEST_HEADERS} \
         -I$(top_srcdir)/$(MODULEPATH) \
+	-I${top_srcdir}/src \
         $(GLIB_CFLAGS) \
-        $(BOOST_CPPFLAGS)
+	$(BOOST_CPPFLAGS)
 
 test_gnc_timezone_LDADD = \
 	${top_builddir}/${MODULEPATH}/libgnc-qof.la \
@@ -92,13 +93,12 @@ test_gnc_datetime_SOURCES = \
 	$(top_srcdir)/$(MODULEPATH)/gnc-datetime.cpp \
 	$(top_srcdir)/$(MODULEPATH)/gnc-timezone.cpp \
 	gtest-gnc-datetime.cpp
-
 test_gnc_datetime_CPPFLAGS =\
-        -I$(GTEST_HEADERS) \
+	-I$(GTEST_HEADERS) \
         -I$(top_srcdir)/$(MODULEPATH) \
-        -I$(top_srcdir)/src \
+	-I$(top_srcdir)/src \
         $(GLIB_CFLAGS) \
-        $(BOOST_CPPFLAGS)
+	$(BOOST_CPPFLAGS)
 
 test_gnc_datetime_LDADD = \
 	-lboost_date_time \
