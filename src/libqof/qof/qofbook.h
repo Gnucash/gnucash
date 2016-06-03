@@ -56,6 +56,7 @@ typedef struct KvpValueImpl KvpValue;
 
 #include "qofid.h"
 #include "qofinstance.h"
+#include "qofbackend.h"
 
 /* --- type macros --- */
 #define QOF_TYPE_BOOK            (qof_book_get_type ())
