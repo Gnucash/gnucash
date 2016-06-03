@@ -26,7 +26,6 @@ extern "C"
 {
 #include <config.h>
 #include <qof.h>
-#include <qofsession-p.h>
 #include <cashobjects.h>
 #include <test-dbi-stuff.h>
 #include <unittest-support.h>

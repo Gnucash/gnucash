@@ -112,7 +112,7 @@ extern "C"
 
 /* PROTOTYPES ******************************************************/
 
-typedef struct _QofSession    QofSession;
+typedef struct QofSessionImpl QofSession;
 
 QofSession * qof_session_new (void);
 void         qof_session_destroy (QofSession *session);
@@ -156,7 +156,6 @@ void qof_session_begin (QofSession *session, const char * book_id,
                         gboolean ignore_lock, gboolean create,
                         gboolean force);
 
-
 /**
  * The qof_session_load() method causes the QofBook to be made ready to
  *    to use with this URL/datastore.   When the URL points at a file,
@@ -195,7 +194,6 @@ const char * qof_session_get_error_message(const QofSession *session);
 QofBackendError qof_session_pop_error (QofSession *session);
 /** @} */
 
-
 /** Returns the QofBook of this session. */
 QofBook * qof_session_get_book (const QofSession *session);
 
@@ -223,6 +221,11 @@ const char * qof_session_get_url (const QofSession *session);
  */
 /* gboolean qof_session_not_saved(const QofSession *session); <- unimplemented */
 gboolean qof_session_save_in_progress(const QofSession *session);
+
+/**
+ * Returns the qof session's backend.
+ */
+QofBackend * qof_session_get_backend(const QofSession *session);
 
 /** The qof_session_save() method will commit all changes that have been
  *    made to the session. For the file backend, this is nothing

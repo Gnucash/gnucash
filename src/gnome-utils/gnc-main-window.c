@@ -1216,7 +1216,7 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
     session = gnc_get_current_session();
     book = qof_session_get_book(session);
     filename = qof_session_get_url(session);
-    if (filename == NULL)
+    if (!strlen (filename))
         filename = _("<unknown>");
     if ((tmp = strrchr(filename, '/')) != NULL)
         filename = tmp + 1;
@@ -1626,7 +1626,7 @@ static gchar *generate_statusbar_lastmodified_message()
         book_id = qof_session_get_url (gnc_get_current_session ());
     }
 
-    if (!book_id)
+    if (!strlen (book_id))
         return NULL;
     else
     {
