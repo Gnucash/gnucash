@@ -168,6 +168,14 @@ gnc_options_dialog_changed (GNCOptionWin *win)
 }
 
 void
+gnc_options_dialog_not_changed (GNCOptionWin *win)
+{
+    if (!win) return;
+
+    gnc_options_dialog_changed_internal (win->dialog, FALSE);
+}
+
+void
 gnc_option_changed_widget_cb(GtkWidget *widget, GNCOption *option)
 {
     gnc_option_set_changed (option, TRUE);

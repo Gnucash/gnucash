@@ -263,7 +263,6 @@ gnc_book_option_num_field_source_change_cb (gboolean num_action)
     }
     gnc_book_option_num_field_source_change (num_action);
     gnc_resume_gui_refresh ();
-    gnc_gui_refresh_all ();
 }
 
 Account *
