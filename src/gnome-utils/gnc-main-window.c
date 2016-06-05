@@ -3923,7 +3923,7 @@ gnc_main_window_cmd_page_setup (GtkAction *action,
     gnc_ui_page_setup(gtk_window);
 }
 
-void
+gboolean
 gnc_book_options_dialog_apply_helper(GNCOptionDB * options)
 {
     QofBook *book = gnc_get_current_book ();
@@ -3933,8 +3933,9 @@ gnc_book_options_dialog_apply_helper(GNCOptionDB * options)
         gnc_book_use_book_currency (book);
     gboolean use_split_action_for_num_after;
     gboolean use_book_currency_after;
+    gboolean return_val = FALSE;
 
-    if (!options) return;
+    if (!options) return return_val;
 
     gnc_option_db_commit (options);
     qof_book_begin_edit (book);
@@ -3943,11 +3944,18 @@ gnc_book_options_dialog_apply_helper(GNCOptionDB * options)
         qof_book_use_split_action_for_num_field (book);
     use_book_currency_after = gnc_book_use_book_currency (book);
     if (use_split_action_for_num_before != use_split_action_for_num_after)
+    {
         gnc_book_option_num_field_source_change_cb (
                                                 use_split_action_for_num_after);
+        return_val = TRUE;
+    }
     if (use_book_currency_before != use_book_currency_after)
+    {
         gnc_book_option_book_currency_selected_cb (use_book_currency_after);
+        return_val = TRUE;
+    }
     qof_book_commit_edit (book);
+    return return_val;
 }
 
 static void
@@ -3955,8 +3963,18 @@ gnc_book_options_dialog_apply_cb(GNCOptionWin * optionwin,
                                  gpointer user_data)
 {
     GNCOptionDB * options = user_data;
+
     if (!options) return;
-    gnc_book_options_dialog_apply_helper (options);
+
+    if (gnc_book_options_dialog_apply_helper (options));
+    {
+        gnc_gui_refresh_all ();
+        if (!optionwin) return;
+        /* the previous stmt causes the 'apply' and 'OK' buttons to be set to
+           sensitive on the open Book Options dialog; the next stmt resets them
+           to insensitive, as they should be */
+        gnc_options_dialog_not_changed (optionwin);
+    }
 }
 
 static void

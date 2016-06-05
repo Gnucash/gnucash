@@ -431,8 +431,9 @@ GtkWidget *gnc_book_options_dialog_cb (gboolean modal, gchar *title);
  *
  *  @param GNCOptionDB * options.
  *
+ *  @return TRUE if gnc_gui_refresh_all should be called; otherwise FALSE.
  **/
-void gnc_book_options_dialog_apply_helper(GNCOptionDB * options);
+gboolean gnc_book_options_dialog_apply_helper(GNCOptionDB * options);
 
 #endif /* __GNC_MAIN_WINDOW_H */
 
