@@ -3966,7 +3966,7 @@ gnc_book_options_dialog_apply_cb(GNCOptionWin * optionwin,
 
     if (!options) return;
 
-    if (gnc_book_options_dialog_apply_helper (options));
+    if (gnc_book_options_dialog_apply_helper (options))
     {
         gnc_gui_refresh_all ();
         if (!optionwin) return;
