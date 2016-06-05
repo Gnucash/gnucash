@@ -930,7 +930,7 @@ gsr_default_associate_handler_file( GNCSplitReg *gsr, gpointer data )
     if (is_trans_readonly_and_warn(trans))
         return;
 
-	dialog = gtk_file_chooser_dialog_new ("Associate File with Transaction",
+    dialog = gtk_file_chooser_dialog_new ("Associate File with Transaction",
                                      GTK_WINDOW(gsr->window),
                                      GTK_FILE_CHOOSER_ACTION_OPEN,
                                      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
