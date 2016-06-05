@@ -51,7 +51,6 @@ extern "C"
 #include "gncInvoice.h"
     /* For version_control */
 #include <gnc-prefs.h>
-#include <qofsession-p.h>
 }
 /* For test_conn_index_functions */
 #include "test-dbi-stuff.h"
