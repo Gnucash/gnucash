@@ -3967,14 +3967,7 @@ gnc_book_options_dialog_apply_cb(GNCOptionWin * optionwin,
     if (!options) return;
 
     if (gnc_book_options_dialog_apply_helper (options))
-    {
         gnc_gui_refresh_all ();
-        if (!optionwin) return;
-        /* the previous stmt causes the 'apply' and 'OK' buttons to be set to
-           sensitive on the open Book Options dialog; the next stmt resets them
-           to insensitive, as they should be */
-        gnc_options_dialog_not_changed (optionwin);
-    }
 }
 
 static void

@@ -282,7 +282,6 @@ gnc_book_option_book_currency_selected_cb (gboolean use_book_currency)
     }
     gnc_book_option_book_currency_selected (use_book_currency);
     gnc_resume_gui_refresh ();
-    gnc_gui_refresh_all ();
 }
 
 /** Returns TRUE if both book-currency and default gain/loss policy KVPs exist
