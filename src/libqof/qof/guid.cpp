@@ -65,8 +65,6 @@ extern "C"
 
 using namespace std;
 
-typedef boost::uuids::uuid gg;
-
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = QOF_MOD_ENGINE;
 
