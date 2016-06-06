@@ -46,7 +46,6 @@ GtkWidget * gnc_options_page_list(GNCOptionWin * win);
 GtkWidget * gnc_options_dialog_notebook(GNCOptionWin * win);
 
 void gnc_options_dialog_changed (GNCOptionWin *win);
-void gnc_options_dialog_not_changed (GNCOptionWin *win);
 
 void gnc_option_changed_widget_cb(GtkWidget *widget, GNCOption *option);
 void gnc_option_changed_option_cb(GtkWidget *dummy, GNCOption *option);

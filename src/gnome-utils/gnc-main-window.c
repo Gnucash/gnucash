@@ -3956,10 +3956,6 @@ gnc_book_options_dialog_apply_cb(GNCOptionWin * optionwin,
     {
         gnc_book_option_num_field_source_change_cb (use_split_action_for_num_after);
         gnc_gui_refresh_all ();
-        /* the previous stmt causes the 'apply' and 'OK' buttons to be set to
-           sensitive on the open Book Options dialog; the next stmt resets them
-           to insensitive, as they should be */
-        gnc_options_dialog_not_changed (optionwin);
     }
 }
 
