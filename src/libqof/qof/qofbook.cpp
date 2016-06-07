@@ -33,10 +33,9 @@
  * Copyright (c) 2007 David Hampton <hampton@employees.org>
  */
 
-#ifdef __cplusplus
+#include <guid.hpp>
 extern "C"
 {
-#endif
 
 #include "config.h"
 
@@ -50,9 +49,7 @@ extern "C"
 #endif
 #include <inttypes.h>
 
-#ifdef __cplusplus
 }
-#endif
 
 #include "qof.h"
 #include "qofevent-p.h"

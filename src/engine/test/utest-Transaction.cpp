@@ -21,6 +21,7 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
+#include <guid.hpp>
 extern "C"
 {
 #include <config.h>

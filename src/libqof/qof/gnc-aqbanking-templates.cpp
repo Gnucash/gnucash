@@ -25,6 +25,7 @@
 /** Class for managing AQBanking Transaction Templates.
  */
 
+#include "guid.hpp"
 #include <string>
 
 extern "C"

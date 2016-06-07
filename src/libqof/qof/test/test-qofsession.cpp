@@ -26,6 +26,7 @@
 #include <qofsession.hpp>
 #include "qofbackend-p.h"
 #include <cstdlib>
+#include "../guid.hpp"
 #include "../gnc-backend-prov.hpp"
 
 static QofBook * exported_book {nullptr};

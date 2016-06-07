@@ -20,19 +20,13 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
+#include <guid.hpp>
 
-#ifdef __cplusplus
 extern "C"
 {
-#endif
-
 #include "config.h"
-
 #include <glib.h>
-
-#ifdef __cplusplus
 }
-#endif
 
 #include "qof.h"
 #include "qofclass-p.h"
