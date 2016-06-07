@@ -33,7 +33,7 @@ struct guid_syntax_exception : public std::invalid_argument
 struct GncGUID : public boost::uuids::uuid
 {
     GncGUID (boost::uuids::uuid const &) noexcept;
-    GncGUID () noexcept;
+    GncGUID () noexcept = default;
     static GncGUID create_random () noexcept;
     static GncGUID const & null_guid () noexcept;
     static GncGUID from_string (std::string const &) throw (guid_syntax_exception);
