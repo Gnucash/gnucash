@@ -1,5 +1,6 @@
 #include "gnc-tokenizer.hpp"
 #include "gnc-csv-tokenizer.hpp"
+#include "gnc-dummy-tokenizer.hpp"
 #include "gnc-fw-tokenizer.hpp"
 
 #include <iostream>
@@ -28,6 +29,7 @@ std::unique_ptr<GncTokenizer> GncTokenizerFactory(GncImpFileFormat fmt)
         tok.reset(new GncFwTokenizer());
         break;
     default:
+        tok.reset(new GncDummyTokenizer());
         break;
     }
 
