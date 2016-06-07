@@ -22,16 +22,12 @@
  *                                                                  *
 \********************************************************************/
 
+#include "guid.hpp"
 extern "C"
 {
 
 #ifdef HAVE_CONFIG_H
 # include <config.h>
-#endif
-
-#include <platform.h>
-#if PLATFORM(WINDOWS)
-#include <windows.h>
 #endif
 
 #ifdef HAVE_SYS_TYPES_H
@@ -88,13 +84,13 @@ gnc_value_get_guid (const GValue *value)
     return val;
 }
 
-static GncGUID * nullguid {reinterpret_cast<GncGUID*> (new boost::uuids::uuid{{0}})};
+static GncGUID s_null_guid {{0}};
 
 /*It looks like we are expected to provide the same pointer every time from this function*/
 const GncGUID *
 guid_null (void)
 {
-    return nullguid;
+    return &s_null_guid;
 }
 
 /* Memory management routines ***************************************/
@@ -111,7 +107,7 @@ guid_free (GncGUID *guid)
 {
     if (!guid)
         return;
-    if (guid == nullguid)
+    if (guid == &s_null_guid)
         /*!!Don't delete that!!*/
         return;
     delete reinterpret_cast<boost::uuids::uuid*> (guid);
@@ -194,7 +190,7 @@ string_to_guid (const char * str, GncGUID * guid)
     if (!guid || !str)
         return false;
 
-    try 
+    try
     {
         static boost::uuids::string_generator strgen;
         boost::uuids::uuid * converted {reinterpret_cast<boost::uuids::uuid*> (guid)};
@@ -316,4 +312,56 @@ gnc_guid_get_type (void)
     }
 
     return type;
+}
+
+GncGUID
+GncGUID::create_random () noexcept
+{
+    static boost::uuids::random_generator gen;
+    return {gen ()};
+}
+
+GncGUID::GncGUID () noexcept
+{
+}
+
+GncGUID::GncGUID (boost::uuids::uuid const & other) noexcept
+    : boost::uuids::uuid {other}
+{
+}
+
+GncGUID const &
+GncGUID::null_guid () noexcept
+{
+    return s_null_guid;
+}
+
+std::string
+GncGUID::to_string () const noexcept
+{
+    auto const & val = boost::uuids::to_string (*this);
+    std::string ret;
+    std::for_each (val.begin (), val.end (), [&ret] (auto a) {
+        if (a != '-') ret.push_back (a);
+    });
+    return ret;
+}
+
+GncGUID
+GncGUID::from_string (std::string const & str) throw (guid_syntax_exception)
+{
+    try
+    {
+        static boost::uuids::string_generator strgen;
+        return strgen (str);
+    }
+    catch (...)
+    {
+        throw guid_syntax_exception {};
+    }
+}
+
+guid_syntax_exception::guid_syntax_exception () noexcept
+    : invalid_argument {"Invalid syntax for guid."}
+{
 }

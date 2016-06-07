@@ -22,6 +22,7 @@
  ********************************************************************/
 
 #define __EXTENSIONS__
+#include <guid.hpp>
 extern "C"
 {
 #include "config.h"

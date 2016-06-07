@@ -25,6 +25,7 @@
  * This file implements the top-level QofBackend API for saving/
  * restoring data to/from an SQL db using libdbi
  */
+#include <guid.hpp>
 extern "C"
 {
 #include "config.h"
