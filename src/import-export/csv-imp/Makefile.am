@@ -6,7 +6,7 @@ libgncmod_csv_import_la_SOURCES = \
   gncmod-csv-import.c \
   assistant-csv-account-import.c \
   assistant-csv-fixed-trans-import.c \
-  assistant-csv-trans-import.c \
+  assistant-csv-trans-import.cpp \
   gnc-plugin-csv-import.c \
   csv-account-import.c \
   csv-fixed-trans-import.c \
