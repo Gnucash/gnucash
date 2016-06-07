@@ -105,7 +105,8 @@ extern const gchar* date_format_user[];
 /* This array contains all of the different strings for different column types. */
 extern const gchar* gnc_csv_col_type_strs[];
 
-using str_vec_t = std::vector<std::string> ;
+/** Pair to hold a tokenized line of input and an optional error string */
+using parse_line_t = std::pair<str_vec, std::string>;
 
 /** Struct containing data for parsing a CSV/Fixed-Width file. */
 class GncCsvParseData
@@ -126,8 +127,7 @@ public:
     bool check_for_column_type (GncTransPropType type);
 
     std::unique_ptr<GncTokenizer> tokenizer;    /**< Will handle file loading/encoding conversion/splitting into fields */
-    std::vector<str_vec_t> orig_lines;      /**< file_str parsed into a two-dimensional array of strings */
-    std::vector<str_vec>::size_type orig_max_row;           /**< Holds the maximum value in orig_row_lengths */
+    std::vector<parse_line_t> orig_lines;      /**< file_str parsed into a two-dimensional array of strings */
     std::vector<GncTransPropType> column_types;       /**< Vector of values from the GncCsvColumnType enumeration */
     GList* transactions;        /**< List of GncCsvTransLine*s created using orig_lines and column_types */
     int date_format;            /**< The format of the text in the date columns from date_format_internal. */
@@ -137,10 +137,6 @@ public:
     int currency_format;        /**< The currency format, 0 for locale, 1 for comma dec and 2 for period */
 
 private:
-    std::vector<std::vector<str_vec>::size_type>
-              orig_row_lengths; /**< The lengths of rows in orig_lines
-                                      before error messages are appended */
-    std::vector<std::string> line_errors;
     GncImpFileFormat file_fmt = GncImpFileFormat::UNKNOWN;
 };
 

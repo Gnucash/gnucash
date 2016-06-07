@@ -335,9 +335,16 @@ int GncCsvParseData::load_file (const char* filename,
  */
 int GncCsvParseData::parse (gboolean guessColTypes, GError** error)
 {
+    uint max_cols = 0;
     tokenizer->tokenize();
     orig_lines.clear();
-    orig_lines = tokenizer->get_tokens();
+    for (auto tokenized_line : tokenizer->get_tokens())
+    {
+        orig_lines.push_back (std::make_pair (tokenized_line, std::string()));
+        auto length = tokenized_line.size();
+        if (length > max_cols)
+            max_cols = length;
+    }
 
     /* If it failed, generate an error. */
     if (orig_lines.size() == 0)
@@ -346,26 +353,12 @@ int GncCsvParseData::parse (gboolean guessColTypes, GError** error)
         return 1;
     }
 
-
-    /* Record the original row lengths of orig_lines. */
-    orig_row_lengths.clear();
-
-    orig_row_lengths.reserve(orig_lines.size());
-    orig_max_row = 0;
-    for(std::vector<str_vec>::iterator it = orig_lines.begin(); it != orig_lines.end(); ++it)
-    {
-        std::vector<std::string>::size_type length = it->size();
-        orig_row_lengths.push_back(length);
-        if (length > orig_max_row)
-            orig_max_row = length;
-    }
-
     if (guessColTypes)
     {
         /* Free column_types if it's already been created. */
         column_types.clear();
     }
-    column_types.resize(orig_max_row, GncTransPropType::NONE);
+    column_types.resize(max_cols, GncTransPropType::NONE);
 
     if (guessColTypes)
     {
@@ -871,8 +864,8 @@ int GncCsvParseData::parse_to_trans (Account* account,
      * already exist. */
     if (!redo_errors) /* If we're redoing errors, we save freeing until the end. */
     {
-        line_errors.clear();
-        line_errors.resize(orig_lines.size());
+        for (auto orig_line : orig_lines)
+            orig_line.second.clear();
 
         if (transactions != NULL)
             g_list_free (transactions);
@@ -898,21 +891,19 @@ int GncCsvParseData::parse_to_trans (Account* account,
     }
 
     /* compute start and end iterators based on user-set restrictions */
-    auto line_errs_it = line_errors.begin();
-    std::advance(line_errs_it, start_row);
-    auto orig_lines_it = orig_lines.cbegin();
+    auto orig_lines_it = orig_lines.begin();
     std::advance(orig_lines_it, start_row);
 
-    auto orig_lines_max = orig_lines.cbegin();
+    auto orig_lines_max = orig_lines.begin();
     if (end_row > orig_lines.size())
-        orig_lines_max = orig_lines.cend();
+        orig_lines_max = orig_lines.end();
     else
         std::advance(orig_lines_max, end_row);
 
     bool odd_line = false;
-    for (orig_lines_it, line_errs_it, odd_line;
+    for (orig_lines_it, odd_line;
             orig_lines_it != orig_lines_max;
-            ++orig_lines_it, ++line_errs_it, odd_line = !odd_line)
+            ++orig_lines_it, odd_line = !odd_line)
     {
         /* Skip current line if:
            1. only looking for lines with error AND no error on current line
@@ -920,11 +911,11 @@ int GncCsvParseData::parse_to_trans (Account* account,
            2. looking for all lines AND
               skip_rows is enabled AND
               current line is an odd line */
-        if ((redo_errors && line_errs_it->empty()) ||
+        if ((redo_errors && orig_lines_it->second.empty()) ||
            (!redo_errors && skip_rows && odd_line))
             continue;
 
-        std::vector<std::string> line = *orig_lines_it;
+        auto line = orig_lines_it->first;
         GncCsvTransLine* trans_line = NULL;
 
         home_account = account;
@@ -942,7 +933,7 @@ int GncCsvParseData::parse_to_trans (Account* account,
 
         if (home_account == NULL)
         {
-            *line_errs_it = _("Account column could not be understood.");
+            orig_lines_it->second = _("Account column could not be understood.");
             continue;
         }
 
@@ -966,7 +957,7 @@ int GncCsvParseData::parse_to_trans (Account* account,
                     loop_err = true;
                     gchar *error_message = g_strdup_printf (_("%s column could not be understood."),
                                                     _(gnc_csv_col_type_strs[property->type]));
-                    *line_errs_it = error_message;
+                    orig_lines_it->second = error_message;
 
                     g_free (error_message);
                     trans_property_free (property);
@@ -983,7 +974,7 @@ int GncCsvParseData::parse_to_trans (Account* account,
         trans_line = trans_property_list_to_trans (list, &error_message);
         if (trans_line == NULL)
         {
-            *line_errs_it = error_message;
+            orig_lines_it->second = error_message;
             g_free (error_message);
             trans_property_list_free (list);
             continue;
