@@ -23,19 +23,12 @@
  * Copyright (C) 2001 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
-
-#ifdef __cplusplus
+#include <guid.hpp>
 extern "C"
 {
-#endif
-
 #include "config.h"
-
 #include <glib.h>
-
-#ifdef __cplusplus
 }
-#endif
 
 #include "qof.h"
 #include "qofobject-p.h"
