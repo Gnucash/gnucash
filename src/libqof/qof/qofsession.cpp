@@ -31,6 +31,7 @@
  @author Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
    */
 
+#include "guid.hpp"
 extern "C"
 {
 

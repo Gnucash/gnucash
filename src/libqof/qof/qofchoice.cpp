@@ -21,17 +21,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifdef __cplusplus
+#include <guid.hpp>
 extern "C"
 {
-#endif
 
 #include "config.h"
 #include <glib.h>
 
-#ifdef __cplusplus
 }
-#endif
 
 #include "qof.h"
 #include "qofchoice.h"

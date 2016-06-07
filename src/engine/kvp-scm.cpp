@@ -1,3 +1,4 @@
+#include <guid.hpp>
 #include <kvp_frame.hpp>
 #include <libguile.h>
 

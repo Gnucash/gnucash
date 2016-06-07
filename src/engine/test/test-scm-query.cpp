@@ -20,6 +20,7 @@
 
 #include <libguile.h>
 
+#include <guid.hpp>
 extern "C"
 {
 #include "config.h"

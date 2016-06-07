@@ -27,6 +27,7 @@
  * FUNCTION:
  * Escapes the ' and \ characters in a string
  */
+#include <guid.hpp>
 
 #include "config.h"
 #include <glib.h>

@@ -22,6 +22,7 @@
  *  02110-1301, USA.
  */
 
+#include <guid.hpp>
 extern "C"
 {
 #include "config.h"
