@@ -84,9 +84,9 @@ gnc_state_set_base (const QofSession *session)
     state_file_name = NULL;
     state_file_name_pre_241 = NULL;
 
-    uri = qof_session_get_url(session);
+    uri = qof_session_get_url (session);
     ENTER("session %p (%s)", session, uri ? uri : "(null)");
-    if (!uri)
+    if (!strlen (uri))
     {
         LEAVE("no uri, nothing to do");
         return;
@@ -228,7 +228,7 @@ void gnc_state_save (const QofSession *session)
 {
     GError *error = NULL;
 
-    if (!qof_session_get_url(session))
+    if (!strlen (qof_session_get_url(session)))
     {
         DEBUG("No file associated with session - skip state saving");
         return;

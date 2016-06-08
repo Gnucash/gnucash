@@ -77,6 +77,7 @@ qofinclude_HEADERS = \
    qofquery.h        \
    qofquerycore.h    \
    qofsession.h      \
+   qofsession.hpp    \
    qof-string-cache.h  \
    qofutil.h         \
    qof-gobject.h
@@ -89,8 +90,7 @@ noinst_HEADERS = \
    gnc-int128.hpp  \
    qofobject-p.h  \
    qofquery-p.h  \
-   qofquerycore-p.h \
-   qofsession-p.h
+   qofquerycore-p.h
 
 if OS_WIN32
 libgnc_qof_la_SOURCES += qof-win32.cpp

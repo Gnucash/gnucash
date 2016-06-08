@@ -868,7 +868,9 @@ if test x$enable_google_test != xno; then
    AC_CHECK_LIB([gtest_main], [main],
       [AC_CHECK_FILES([/usr/src/gmock/gmock-all.cc
 		       /usr/include/gtest/gtest.h
-		       /usr/include/gmock/gmock.h],
+		       /usr/include/gmock/gmock.h
+               /usr/src/gmock/src/gmock-all.cc
+               /usr/src/gtest/src/gtest-all.cc],
       	[ac_cv_gtest_system_install=yes] [ac_cv_have_gtest_libs=yes],
 	[ac_cv_gtest_system_install=no])],
       [AC_CHECK_FILES([/usr/src/gtest/src/gtest-all.cc

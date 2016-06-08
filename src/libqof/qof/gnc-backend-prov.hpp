@@ -78,4 +78,6 @@ using QofBackendProvider_ptr = std::unique_ptr<QofBackendProvider>;
  */
 void qof_backend_register_provider (QofBackendProvider_ptr&&);
 
+void qof_backend_unregister_all_providers ();
+
 #endif // __GNC_BACKEND_PROV_HPP__

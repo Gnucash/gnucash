@@ -492,7 +492,7 @@ gnc_add_history (QofSession * session)
     if (!session) return;
 
     url = qof_session_get_url ( session );
-    if ( !url )
+    if ( !strlen (url) )
         return;
 
     if ( gnc_uri_is_file_uri ( url ) )
@@ -1188,7 +1188,7 @@ gnc_file_do_export(const char * filename)
      * file. If so, prevent the export from happening to avoid killing this file */
     current_session = gnc_get_current_session ();
     oldfile = qof_session_get_url(current_session);
-    if (oldfile && (strcmp(oldfile, newfile) == 0))
+    if (strlen (oldfile) && (strcmp(oldfile, newfile) == 0))
     {
         g_free (newfile);
         show_session_error (ERR_FILEIO_WRITE_ERROR, filename,
@@ -1271,7 +1271,7 @@ gnc_file_save (void)
     /* If we don't have a filename/path to save to get one. */
     session = gnc_get_current_session ();
 
-    if (!qof_session_get_url(session))
+    if (!strlen (qof_session_get_url (session)))
     {
         gnc_file_save_as ();
         return;
@@ -1420,7 +1420,7 @@ gnc_file_do_save_as (const char* filename)
      * file. If so, then just do a simple save, instead of a full save as */
     session = gnc_get_current_session ();
     oldfile = qof_session_get_url(session);
-    if (oldfile && (strcmp(oldfile, newfile) == 0))
+    if (strlen (oldfile) && (strcmp(oldfile, newfile) == 0))
     {
         g_free (newfile);
         gnc_file_save ();
@@ -1578,7 +1578,7 @@ gnc_file_revert (void)
 
     session = gnc_get_current_session();
     fileurl = qof_session_get_url(session);
-    if (fileurl == NULL)
+    if (!strlen (fileurl))
         fileurl = _("<unknown>");
     if ((tmp = strrchr(fileurl, '/')) != NULL)
         filename = tmp + 1;
