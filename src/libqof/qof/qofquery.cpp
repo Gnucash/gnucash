@@ -21,11 +21,9 @@
  *                                                                  *
 \********************************************************************/
 
-#ifdef __cplusplus
+#include <guid.hpp>
 extern "C"
 {
-#endif
-
 #include "config.h"
 
 #include <sys/types.h>
@@ -33,10 +31,7 @@ extern "C"
 #include <glib.h>
 #include <regex.h>
 #include <string.h>
-
-#ifdef __cplusplus
 }
-#endif
 
 #include "qof.h"
 #include "qofbackend-p.h"

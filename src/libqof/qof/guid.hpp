@@ -1,7 +1,6 @@
 /********************************************************************
- * test-backend-dbi.c: GLib test execution file for backend/dbi     *
- * Copyright 2011 John Ralls <jralls@ceridwen.us>                   *
- *                                                                  *
+ * guid.hpp - GncGUID struct definition.                            *
+ * Copyright 2016 Aaron Laws                                        *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -18,34 +17,27 @@
  * Free Software Foundation           Voice:  +1-617-542-5942       *
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
-\********************************************************************/
+ *                                                                  *
+ *******************************************************************/
+#ifndef GUID_HPP_HEADER
+#define GUID_HPP_HEADER
 
-#include <guid.hpp>
-extern "C"
+#include <boost/uuid/uuid.hpp>
+#include <stdexcept>
+
+struct guid_syntax_exception : public std::invalid_argument
 {
-#include "config.h"
-#include <glib.h>
-#include "qof.h"
-#include "cashobjects.h"
-}
-extern void test_suite_gnc_backend_dbi ();
+    guid_syntax_exception () noexcept;
+};
 
-#define GNC_LIB_NAME "gncmod-backend-dbi"
-
-int
-main (int   argc,
-      char* argv[])
+struct GncGUID : public boost::uuids::uuid
 {
-    qof_init (); /* equally initializes gobject system */
-    qof_log_init_filename_special ("stderr"); /* Init the log system */
-    g_test_init (&argc, &argv, NULL);       /* initialize test program */
-    g_test_bug_base ("https://bugzilla.gnome.org/show_bug.cgi?id="); /* init the bugzilla URL */
-    cashobjects_register ();
-    g_assert (qof_load_backend_library ("../.libs/", GNC_LIB_NAME));
-    g_assert (qof_load_backend_library ("../../xml/.libs",
-                                        "gncmod-backend-xml"));
+    GncGUID (boost::uuids::uuid const &) noexcept;
+    GncGUID () noexcept = default;
+    static GncGUID create_random () noexcept;
+    static GncGUID const & null_guid () noexcept;
+    static GncGUID from_string (std::string const &) throw (guid_syntax_exception);
+    std::string to_string () const noexcept;
+};
 
-    test_suite_gnc_backend_dbi ();
-
-    return g_test_run ();
-}
+#endif

@@ -25,6 +25,7 @@
  * Try to create duplicate GncGUID's, which should never happen.
  *
  */
+#include <guid.hpp>
 extern "C"
 {
 #include "config.h"

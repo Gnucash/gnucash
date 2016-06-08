@@ -28,6 +28,7 @@
  * restoring data to/from an SQL database
  */
 
+#include <guid.hpp>
 extern "C"
 {
 #include "config.h"

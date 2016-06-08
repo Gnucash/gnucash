@@ -16,7 +16,7 @@ test_qof_SOURCES = \
 	test-qofobject.c \
 	test-qofsession.cpp \
 	test-qof-string-cache.c \
-	test-gnc-guid.cpp \
+	test-gnc-guid-old.cpp \
 	${top_srcdir}/src/test-core/unittest-support.c
 
 test_qof_HEADERS = \
@@ -33,6 +33,27 @@ check_PROGRAMS = \
 TESTS = ${check_PROGRAMS}
 
 if WITH_GOOGLE_TEST
+test_gnc_guid_SOURCES = \
+	$(top_srcdir)/$(MODULEPATH)/guid.cpp \
+	test-gnc-guid.cpp
+test_gnc_guid_LDADD = \
+	$(top_builddir)/$(MODULEPATH)/libgnc-qof.la \
+        $(GLIB_LIBS) \
+	$(GTEST_LIBS) \
+	$(BOOST_LDFLAGS)
+if !GOOGLE_TEST_LIBS
+nodist_test_gnc_guid_SOURCES = \
+        ${GTEST_SRC}/src/gtest_main.cc
+endif
+
+test_gnc_guid_CPPFLAGS = \
+    -I$(GTEST_HEADERS) \
+    -I$(top_srcdir)/$(MODULEPATH) \
+    $(GLIB_CFLAGS) \
+    $(BOOST_CPPFLAGS)
+
+check_PROGRAMS += test-gnc-guid
+
 test_kvp_value_SOURCES = \
     $(top_srcdir)/$(MODULEPATH)/kvp-value.cpp \
     test-kvp-value.cpp \

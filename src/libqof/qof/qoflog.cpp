@@ -25,11 +25,9 @@
  *  02110-1301,  USA
  */
 
-#ifdef __cplusplus
+#include <guid.hpp>
 extern "C"
 {
-#endif
-
 #include "config.h"
 
 #include <platform.h>
@@ -53,10 +51,7 @@ extern "C"
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "qof.log"
-
-#ifdef __cplusplus
 }
-#endif
 
 #include "qof.h"
 #include "qoflog.h"
