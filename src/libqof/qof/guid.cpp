@@ -83,7 +83,7 @@ gnc_value_get_guid (const GValue *value)
     return val;
 }
 
-static GncGUID s_null_guid {{0}};
+static GncGUID s_null_guid {{{0}}};
 
 /*It looks like we are expected to provide the same pointer every time from this function*/
 const GncGUID *
