@@ -41,7 +41,6 @@ extern "C"
 #include "gnc-backend-sql.h"
 #include "gnc-slots-sql.h"
 #include "gnc-job-sql.h"
-#include "gnc-owner-sql.h"
 
 #define _GNC_MOD_NAME   GNC_ID_JOB
 
@@ -56,18 +55,18 @@ G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
 static EntryVec col_table
 ({
-    { "guid",      CT_GUID,     0,                 COL_NNUL | COL_PKEY, "guid" },
-    { "id",        CT_STRING,   MAX_ID_LEN,        COL_NNUL,          NULL, JOB_ID },
-    { "name",      CT_STRING,   MAX_NAME_LEN,      COL_NNUL,          "name" },
-    { "reference", CT_STRING,   MAX_REFERENCE_LEN, COL_NNUL,          NULL, JOB_REFERENCE },
-    {
-        "active",    CT_BOOLEAN,  0,                 COL_NNUL,          NULL, NULL,
-        (QofAccessFunc)gncJobGetActive, (QofSetterFunc)gncJobSetActive
-    },
-    {
-        "owner",     CT_OWNERREF, 0,                 0,                 NULL, NULL,
-        (QofAccessFunc)gncJobGetOwner, (QofSetterFunc)gncJobSetOwner
-    },
+    gnc_sql_make_table_entry<CT_GUID>("guid", 0, COL_NNUL | COL_PKEY, "guid"),
+    gnc_sql_make_table_entry<CT_STRING>("id", MAX_ID_LEN, COL_NNUL,
+                                        JOB_ID, true),
+    gnc_sql_make_table_entry<CT_STRING>("name", MAX_NAME_LEN, COL_NNUL, "name"),
+    gnc_sql_make_table_entry<CT_STRING>("reference", MAX_REFERENCE_LEN,
+                                        COL_NNUL, JOB_REFERENCE, true),
+    gnc_sql_make_table_entry<CT_BOOLEAN>("active", 0, COL_NNUL,
+                                         (QofAccessFunc)gncJobGetActive,
+                                         (QofSetterFunc)gncJobSetActive),
+    gnc_sql_make_table_entry<CT_OWNERREF>("owner", 0, 0,
+                                          (QofAccessFunc)gncJobGetOwner,
+                                          (QofSetterFunc)gncJobSetOwner),
 });
 
 static GncJob*

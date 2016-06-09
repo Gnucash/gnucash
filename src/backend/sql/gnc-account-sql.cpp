@@ -64,24 +64,31 @@ static void set_parent_guid (gpointer pObject,  gpointer pValue);
 
 static const EntryVec col_table
 {
-    { "guid",           CT_GUID,         0,                           COL_NNUL | COL_PKEY, "guid" },
-    { "name",           CT_STRING,       ACCOUNT_MAX_NAME_LEN,        COL_NNUL,          "name" },
-    { "account_type",   CT_STRING,       ACCOUNT_MAX_TYPE_LEN,        COL_NNUL,          NULL, ACCOUNT_TYPE_ },
-    { "commodity_guid", CT_COMMODITYREF, 0,                           0,                 "commodity" },
-    { "commodity_scu",  CT_INT,          0,                           COL_NNUL,          "commodity-scu" },
-    { "non_std_scu",    CT_BOOLEAN,      0,                           COL_NNUL,          "non-std-scu" },
-    {
-        "parent_guid",    CT_GUID,         0,                           0,                 NULL, NULL,
-        (QofAccessFunc)get_parent, set_parent
-    },
-    { "code",           CT_STRING,       ACCOUNT_MAX_CODE_LEN,        0,                 "code" },
-    { "description",    CT_STRING,       ACCOUNT_MAX_DESCRIPTION_LEN, 0,                 "description" },
-    { "hidden",         CT_BOOLEAN,      0,                           0,                 "hidden" },
-    { "placeholder",    CT_BOOLEAN,      0,                           0,                 "placeholder" },
+    gnc_sql_make_table_entry<CT_GUID>("guid", 0, COL_NNUL | COL_PKEY, "guid" ),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "name", ACCOUNT_MAX_NAME_LEN, COL_NNUL, "name"),
+    gnc_sql_make_table_entry<CT_STRING>("account_type", ACCOUNT_MAX_TYPE_LEN,
+                                        COL_NNUL, ACCOUNT_TYPE_, true),
+    gnc_sql_make_table_entry<CT_COMMODITYREF>(
+        "commodity_guid", 0, 0, "commodity"),
+    gnc_sql_make_table_entry<CT_INT>(
+        "commodity_scu", 0, COL_NNUL, "commodity-scu"),
+    gnc_sql_make_table_entry<CT_BOOLEAN>(
+        "non_std_scu", 0, COL_NNUL, "non-std-scu"),
+        gnc_sql_make_table_entry<CT_GUID>("parent_guid", 0, 0,
+                                          (QofAccessFunc)get_parent,
+                                          (QofSetterFunc)set_parent),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "code", ACCOUNT_MAX_CODE_LEN, 0, "code"),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "description", ACCOUNT_MAX_DESCRIPTION_LEN, 0, "description"),
+    gnc_sql_make_table_entry<CT_BOOLEAN>("hidden", 0, 0, "hidden"),
+    gnc_sql_make_table_entry<CT_BOOLEAN>("placeholder", 0, 0, "placeholder"),
 };
 static EntryVec parent_col_table
 ({
-    { "parent_guid", CT_GUID, 0, 0, NULL, NULL, NULL, set_parent_guid },
+    gnc_sql_make_table_entry<CT_GUID>(
+        "parent_guid", 0, 0, nullptr, (QofSetterFunc)set_parent_guid),
 });
 
 typedef struct
@@ -386,36 +393,34 @@ gnc_sql_save_account (GncSqlBackend* be, QofInstance* inst)
 }
 
 /* ================================================================= */
-static void
-load_account_guid (const GncSqlBackend* be, GncSqlRow& row,
-                   QofSetterFunc setter, gpointer pObject,
-                   const GncSqlColumnTableEntry& table_row)
+
+template<> void
+GncSqlColumnTableEntryImpl<CT_ACCOUNTREF>::load (const GncSqlBackend* be,
+                                                 GncSqlRow& row,
+                                                 QofIdTypeConst obj_name,
+                                                 gpointer pObject) const noexcept
 {
-    const GValue* val;
-    GncGUID guid;
-    Account* account = NULL;
-
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (pObject != NULL);
-
-    try
-    {
-        auto val = row.get_string_at_col (table_row.col_name);
-        (void)string_to_guid (val.c_str(), &guid);
-        account = xaccAccountLookup (&guid, be->book);
-        if (account != nullptr)
-            set_parameter (pObject, account, setter, table_row.gobj_param_name);
-        else
-            PWARN ("Account ref '%s' not found", val.c_str());
-    }
-    catch (std::invalid_argument) {}
+    load_from_guid_ref(row, obj_name, pObject,
+                       [be](GncGUID* g){
+                           return xaccAccountLookup(g, be->book);
+                       });
 }
 
-static GncSqlColumnTypeHandler account_guid_handler
-= { load_account_guid,
-    gnc_sql_add_objectref_guid_col_info_to_list,
-    gnc_sql_add_objectref_guid_to_vec
-  };
+template<> void
+GncSqlColumnTableEntryImpl<CT_ACCOUNTREF>::add_to_table(const GncSqlBackend* be,
+                                                 ColVec& vec) const noexcept
+{
+    add_objectref_guid_to_table(be, vec);
+}
+
+template<> void
+GncSqlColumnTableEntryImpl<CT_ACCOUNTREF>::add_to_query(const GncSqlBackend* be,
+                                                    QofIdTypeConst obj_name,
+                                                    const gpointer pObject,
+                                                    PairVec& vec) const noexcept
+{
+    add_objectref_guid_to_query(be, obj_name, pObject, vec);
+}
 /* ================================================================= */
 void
 gnc_sql_init_account_handler (void)
@@ -434,7 +439,5 @@ gnc_sql_init_account_handler (void)
     };
 
     gnc_sql_register_backend(&be_data);
-
-    gnc_sql_register_col_type_handler (CT_ACCOUNTREF, &account_guid_handler);
 }
 /* ========================== END OF FILE ===================== */

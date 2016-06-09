@@ -113,59 +113,51 @@ enum
 static const EntryVec col_table
 {
     /* col_name, col_type, size, flags, g0bj_param_name, qof_param_name, getter, setter */
-    { "id",             CT_INT,      0, COL_PKEY | COL_NNUL | COL_AUTOINC },
-    {
-        "obj_guid",     CT_GUID,     0,                     COL_NNUL, NULL, NULL,
-        (QofAccessFunc)get_obj_guid, (QofSetterFunc)set_obj_guid
-    },
-    {
-        "name",         CT_STRING,   SLOT_MAX_PATHNAME_LEN, COL_NNUL, NULL, NULL,
-        (QofAccessFunc)get_path,         set_path
-    },
-    {
-        "slot_type",    CT_INT,      0,                     COL_NNUL, NULL, NULL,
-        (QofAccessFunc)get_slot_type,    set_slot_type,
-    },
-    {
-        "int64_val",    CT_INT64,    0,                     0,        NULL, NULL,
-        (QofAccessFunc)get_int64_val, (QofSetterFunc)set_int64_val
-    },
-    {
-        "string_val",   CT_STRING,   SLOT_MAX_PATHNAME_LEN, 0,        NULL, NULL,
-        (QofAccessFunc)get_string_val,   set_string_val
-    },
-    {
-        "double_val",   CT_DOUBLE,   0,                     0,        NULL, NULL,
-        (QofAccessFunc)get_double_val,   set_double_val
-    },
-    {
-        "timespec_val", CT_TIMESPEC, 0,                     0,        NULL, NULL,
-        (QofAccessFunc)get_timespec_val, (QofSetterFunc)set_timespec_val
-    },
-    {
-        "guid_val",     CT_GUID,     0,                     0,        NULL, NULL,
-        (QofAccessFunc)get_guid_val,     set_guid_val
-    },
-    {
-        "numeric_val",  CT_NUMERIC,  0,                     0,        NULL, NULL,
-        (QofAccessFunc)get_numeric_val, (QofSetterFunc)set_numeric_val
-    },
-    {
-        "gdate_val",    CT_GDATE,    0,                     0,        NULL, NULL,
-        (QofAccessFunc)get_gdate_val, (QofSetterFunc)set_gdate_val
-    },
+    gnc_sql_make_table_entry<CT_INT>(
+        "id", 0, COL_PKEY | COL_NNUL | COL_AUTOINC),
+    gnc_sql_make_table_entry<CT_GUID>("obj_guid", 0, COL_NNUL,
+                                      (QofAccessFunc)get_obj_guid,
+                                      (QofSetterFunc)set_obj_guid),
+    gnc_sql_make_table_entry<CT_STRING>("name", SLOT_MAX_PATHNAME_LEN, COL_NNUL,
+                                        (QofAccessFunc)get_path, set_path),
+    gnc_sql_make_table_entry<CT_INT>("slot_type", 0, COL_NNUL,
+                                     (QofAccessFunc)get_slot_type,
+                                     set_slot_type),
+    gnc_sql_make_table_entry<CT_INT64>("int64_val", 0, 0,
+                                       (QofAccessFunc)get_int64_val,
+                                       (QofSetterFunc)set_int64_val),
+    gnc_sql_make_table_entry<CT_STRING>("string_val", SLOT_MAX_PATHNAME_LEN, 0,
+                                        (QofAccessFunc)get_string_val,
+                                        set_string_val),
+    gnc_sql_make_table_entry<CT_DOUBLE>("double_val", 0, 0,
+                                        (QofAccessFunc)get_double_val,
+                                        set_double_val),
+    gnc_sql_make_table_entry<CT_TIMESPEC>("timespec_val", 0, 0,
+                                          (QofAccessFunc)get_timespec_val,
+                                          (QofSetterFunc)set_timespec_val),
+    gnc_sql_make_table_entry<CT_GUID>("guid_val", 0, 0,
+                                      (QofAccessFunc)get_guid_val,
+                                      set_guid_val),
+    gnc_sql_make_table_entry<CT_NUMERIC>("numeric_val", 0, 0,
+                                         (QofAccessFunc)get_numeric_val,
+                                         (QofSetterFunc)set_numeric_val),
+    gnc_sql_make_table_entry<CT_GDATE>("gdate_val", 0, 0,
+                                       (QofAccessFunc)get_gdate_val,
+                                       (QofSetterFunc)set_gdate_val),
 };
 
 /* Special column table because we need to be able to access the table by
 a column other than the primary key */
 static const EntryVec obj_guid_col_table
 {
-    { "obj_guid", CT_GUID, 0, 0, NULL, NULL, (QofAccessFunc)get_obj_guid, _retrieve_guid_ },
+    gnc_sql_make_table_entry<CT_GUID>("obj_guid", 0, 0,
+                                      (QofAccessFunc)get_obj_guid,
+                                      _retrieve_guid_),
 };
 
 static const EntryVec gdate_col_table
 {
-    { "gdate_val", CT_GDATE, 0, 0, },
+    gnc_sql_make_table_entry<CT_GDATE>("gdate_val", 0, 0),
 };
 
 /* ================================================================= */
@@ -745,10 +737,10 @@ gnc_sql_slots_delete (GncSqlBackend* be, const GncGUID* guid)
         {
             try
             {
-                const GncSqlColumnTableEntry& table_row =
+                const GncSqlColumnTableEntryPtr table_row =
                     col_table[guid_val_col];
                 GncGUID child_guid;
-                auto val = row.get_string_at_col (table_row.col_name);
+                auto val = row.get_string_at_col (table_row->name());
                 (void)string_to_guid (val.c_str(), &child_guid);
                 gnc_sql_slots_delete (be, &child_guid);
             }
@@ -901,7 +893,7 @@ gnc_sql_slots_load_for_list (GncSqlBackend* be, GList* list)
     sql = g_string_sized_new (40 + (GUID_ENCODING_LENGTH + 3) * g_list_length (
                                   list));
     g_string_append_printf (sql, "SELECT * FROM %s WHERE %s ", TABLE_NAME,
-                            obj_guid_col_table[0].col_name);
+                            obj_guid_col_table[0]->name());
     if (g_list_length (list) != 1)
     {
         (void)g_string_append (sql, "IN (");
@@ -983,7 +975,7 @@ void gnc_sql_slots_load_for_sql_subquery (GncSqlBackend* be,
     if (subquery == NULL) return;
 
     sql = g_strdup_printf ("SELECT * FROM %s WHERE %s IN (%s)",
-                           TABLE_NAME, obj_guid_col_table[0].col_name,
+                           TABLE_NAME, obj_guid_col_table[0]->name(),
                            subquery);
 
     // Execute the query and load the slots

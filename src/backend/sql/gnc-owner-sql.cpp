@@ -41,17 +41,17 @@ extern "C"
 #include "gncVendorP.h"
 }
 #include "gnc-backend-sql.h"
-#include "gnc-owner-sql.h"
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 typedef void (*OwnerSetterFunc) (gpointer, GncOwner*);
 typedef GncOwner* (*OwnerGetterFunc) (const gpointer);
 
-static void
-load_owner (const GncSqlBackend* be, GncSqlRow& row,
-            QofSetterFunc setter, gpointer pObject,
-            const GncSqlColumnTableEntry& table_row)
+template<> void
+GncSqlColumnTableEntryImpl<CT_OWNERREF>::load (const GncSqlBackend* be,
+                                               GncSqlRow& row,
+                                               QofIdTypeConst obj_name,
+                                               gpointer pObject) const noexcept
 {
     GncOwnerType type;
     GncGUID guid;
@@ -62,14 +62,12 @@ load_owner (const GncSqlBackend* be, GncSqlRow& row,
     g_return_if_fail (pObject != NULL);
 
     auto book = be->book;
-    auto buf = g_strdup_printf ("%s_type", table_row.col_name);
+    auto buf = std::string{m_col_name} + "_type";
     try
     {
-        type = static_cast<decltype(type)>(row.get_int_at_col (buf));
-        g_free (buf);
-        buf = g_strdup_printf ("%s_guid", table_row.col_name);
-        auto val = row.get_string_at_col (buf);
-        g_free (buf);
+        type = static_cast<decltype(type)>(row.get_int_at_col (buf.c_str()));
+        buf = std::string{m_col_name} + "_guid";
+        auto val = row.get_string_at_col (buf.c_str());
         string_to_guid (val.c_str(), &guid);
         pGuid = &guid;
     }
@@ -151,56 +149,44 @@ load_owner (const GncSqlBackend* be, GncSqlRow& row,
     default:
         PWARN ("Invalid owner type: %d\n", type);
     }
-    set_parameter (pObject, &owner, setter, table_row.gobj_param_name);
+    set_parameter (pObject, &owner, get_setter(obj_name), m_gobj_param_name);
 }
 
-static void
-add_owner_col_info_to_list(const GncSqlBackend* be,
-                           const GncSqlColumnTableEntry& table_row,
-                           ColVec& vec)
+template<> void
+GncSqlColumnTableEntryImpl<CT_OWNERREF>::add_to_table(const GncSqlBackend* be,
+                                                      ColVec& vec) const noexcept
 {
-    gchar* buf;
-
     g_return_if_fail (be != NULL);
 
-    buf = g_strdup_printf ("%s_type", table_row.col_name);
+    auto buf = g_strdup_printf ("%s_type", m_col_name);
     GncSqlColumnInfo info(buf, BCT_INT, 0, false, false,
-                                     table_row.flags & COL_PKEY,
-                                     table_row.flags & COL_NNUL);
+                          m_flags & COL_PKEY, m_flags & COL_NNUL);
     vec.emplace_back(std::move(info));
-
-    buf = g_strdup_printf ("%s_guid", table_row.col_name);
-    GncSqlColumnInfo info2(buf, BCT_STRING, GUID_ENCODING_LENGTH,
-                                     false, false,
-                                     table_row.flags & COL_PKEY,
-                                     table_row.flags & COL_NNUL);
+/* Buf isn't leaking, it belongs to ColVec now. */
+    buf = g_strdup_printf ("%s_guid", m_col_name);
+    GncSqlColumnInfo info2(buf, BCT_STRING, GUID_ENCODING_LENGTH, false, false,
+                           m_flags & COL_PKEY, m_flags & COL_NNUL);
     vec.emplace_back(std::move(info2));
 }
 
-static void
-add_value_owner_to_vec (const GncSqlBackend* be, QofIdTypeConst obj_name,
-                        const gpointer pObject,
-                        const GncSqlColumnTableEntry& table_row,
-                        PairVec& vec)
+template<> void
+GncSqlColumnTableEntryImpl<CT_OWNERREF>::add_to_query(const GncSqlBackend* be,
+                                                      QofIdTypeConst obj_name,
+                                                      const gpointer pObject,
+                                                      PairVec& vec) const noexcept
 {
     g_return_if_fail (be != NULL);
     g_return_if_fail (obj_name != NULL);
     g_return_if_fail (pObject != NULL);
 
-    auto getter = (OwnerGetterFunc)gnc_sql_get_getter (obj_name, table_row);
+    auto getter = (OwnerGetterFunc)get_getter (obj_name);
     auto owner = (*getter) (pObject);
 
     QofInstance* inst = nullptr;
     GncOwnerType type;
 
-    std::ostringstream buf;
-
-    buf << table_row.col_name << "_type";
-    std::string type_hdr{buf.str()};
-    buf.str("");
-    buf << table_row.col_name << "_guid";
-    std::string guid_hdr{buf.str()};
-    buf.str("");
+    auto type_hdr = std::string{m_col_name} + "_type";
+    auto guid_hdr = std::string{m_col_name} + "_guid";
 
     if (owner != nullptr)
     {
@@ -236,6 +222,8 @@ add_value_owner_to_vec (const GncSqlBackend* be, QofIdTypeConst obj_name,
 
         return;
     }
+    std::ostringstream buf;
+
     buf << type;
     vec.emplace_back(std::make_pair(type_hdr, buf.str()));
     buf.str("");
@@ -246,17 +234,3 @@ add_value_owner_to_vec (const GncSqlBackend* be, QofIdTypeConst obj_name,
         buf << "NULL";
     vec.emplace_back(std::make_pair(guid_hdr, buf.str()));
 }
-
-static GncSqlColumnTypeHandler owner_handler
-= { load_owner,
-    add_owner_col_info_to_list,
-    add_value_owner_to_vec
-  };
-
-/* ================================================================= */
-void
-gnc_owner_sql_initialize (void)
-{
-    gnc_sql_register_col_type_handler (CT_OWNERREF, &owner_handler);
-}
-/* ========================== END OF FILE ===================== */

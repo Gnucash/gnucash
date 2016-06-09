@@ -45,7 +45,6 @@ extern "C"
 #include "gnc-commodity-sql.h"
 #include "gnc-slots-sql.h"
 #include "gnc-invoice-sql.h"
-#include "gnc-owner-sql.h"
 #include "gnc-bill-term-sql.h"
 
 #define _GNC_MOD_NAME   GNC_ID_INVOICE
@@ -61,36 +60,40 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 
 static EntryVec col_table
 ({
-    { "guid",         CT_GUID,         0,                  COL_NNUL | COL_PKEY, "guid" },
-    { "id",           CT_STRING,       MAX_ID_LEN,         COL_NNUL,          NULL, INVOICE_ID },
-    { "date_opened",  CT_TIMESPEC,     0,                  0,                 NULL, INVOICE_OPENED },
-    { "date_posted",  CT_TIMESPEC,     0,                  0,                 NULL, INVOICE_POSTED },
-    { "notes",        CT_STRING,       MAX_NOTES_LEN,      COL_NNUL,          "notes" },
-    { "active",       CT_BOOLEAN,      0,                  COL_NNUL,          NULL, QOF_PARAM_ACTIVE },
-    {
-        "currency",     CT_COMMODITYREF, 0,                  COL_NNUL,          NULL, NULL,
-        (QofAccessFunc)gncInvoiceGetCurrency, (QofSetterFunc)gncInvoiceSetCurrency
-    },
-    {
-        "owner",        CT_OWNERREF,     0,                  0,                 NULL, NULL,
-        (QofAccessFunc)gncInvoiceGetOwner, (QofSetterFunc)gncInvoiceSetOwner
-    },
-    { "terms",        CT_BILLTERMREF,  0,                  0,                 NULL, INVOICE_TERMS },
-    { "billing_id",   CT_STRING,       MAX_BILLING_ID_LEN, 0,                 NULL, INVOICE_BILLINGID },
-    { "post_txn",     CT_TXREF,        0,                  0,                 NULL, INVOICE_POST_TXN },
-    {
-        "post_lot",     CT_LOTREF,       0,                  0,                 NULL, NULL,
-        (QofAccessFunc)gncInvoiceGetPostedLot, (QofSetterFunc)gncInvoiceSetPostedLot
-    },
-    { "post_acc",     CT_ACCOUNTREF,   0,                  0,                 NULL, INVOICE_ACC },
-    {
-        "billto",       CT_OWNERREF,     0,                  0,                 NULL, NULL,
-        (QofAccessFunc)gncInvoiceGetBillTo, (QofSetterFunc)gncInvoiceSetBillTo
-    },
-    {
-        "charge_amt",   CT_NUMERIC,      0,                  0,                 NULL, NULL,
-        (QofAccessFunc)gncInvoiceGetToChargeAmount, (QofSetterFunc)gncInvoiceSetToChargeAmount
-    },
+    gnc_sql_make_table_entry<CT_GUID>("guid", 0, COL_NNUL | COL_PKEY, "guid"),
+    gnc_sql_make_table_entry<CT_STRING>("id", MAX_ID_LEN, COL_NNUL, INVOICE_ID,
+                                        true),
+    gnc_sql_make_table_entry<CT_TIMESPEC>("date_opened", 0, 0, INVOICE_OPENED,
+                                          true),
+    gnc_sql_make_table_entry<CT_TIMESPEC>("date_posted", 0, 0, INVOICE_POSTED,
+                                          true),
+    gnc_sql_make_table_entry<CT_STRING>("notes", MAX_NOTES_LEN, COL_NNUL,
+                                        "notes"),
+    gnc_sql_make_table_entry<CT_BOOLEAN>("active", 0, COL_NNUL,
+                                         QOF_PARAM_ACTIVE, true),
+    gnc_sql_make_table_entry<CT_COMMODITYREF>("currency", 0, COL_NNUL,
+                                          (QofAccessFunc)gncInvoiceGetCurrency,
+                                          (QofSetterFunc)gncInvoiceSetCurrency),
+    gnc_sql_make_table_entry<CT_OWNERREF>("owner", 0, 0,
+                                          (QofAccessFunc)gncInvoiceGetOwner,
+                                          (QofSetterFunc)gncInvoiceSetOwner),
+    gnc_sql_make_table_entry<CT_BILLTERMREF>("terms", 0, 0, INVOICE_TERMS,
+                                             true),
+    gnc_sql_make_table_entry<CT_STRING>("billing_id", MAX_BILLING_ID_LEN, 0,
+                                        INVOICE_BILLINGID, true),
+    gnc_sql_make_table_entry<CT_TXREF>("post_txn", 0, 0, INVOICE_POST_TXN,
+                                       true),
+    gnc_sql_make_table_entry<CT_LOTREF>("post_lot", 0, 0,
+                                        (QofAccessFunc)gncInvoiceGetPostedLot,
+                                        (QofSetterFunc)gncInvoiceSetPostedLot),
+    gnc_sql_make_table_entry<CT_ACCOUNTREF>("post_acc", 0, 0, INVOICE_ACC,
+                                            true),
+    gnc_sql_make_table_entry<CT_OWNERREF>("billto", 0, 0,
+                                          (QofAccessFunc)gncInvoiceGetBillTo,
+                                          (QofSetterFunc)gncInvoiceSetBillTo),
+    gnc_sql_make_table_entry<CT_NUMERIC>("charge_amt", 0, 0,
+                                    (QofAccessFunc)gncInvoiceGetToChargeAmount,
+                                    (QofSetterFunc)gncInvoiceSetToChargeAmount),
 });
 
 static GncInvoice*
@@ -274,35 +277,34 @@ write_invoices (GncSqlBackend* be)
 }
 
 /* ================================================================= */
-static void
-load_invoice_guid (const GncSqlBackend* be, GncSqlRow& row,
-                   QofSetterFunc setter, gpointer pObject,
-                   const GncSqlColumnTableEntry& table_row)
+template<> void
+GncSqlColumnTableEntryImpl<CT_INVOICEREF>::load (const GncSqlBackend* be,
+                                                 GncSqlRow& row,
+                                                 QofIdTypeConst obj_name,
+                                                 gpointer pObject) const noexcept
 {
-    GncGUID guid;
-    GncInvoice* invoice = NULL;
-
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (pObject != NULL);
-
-    try
-    {
-        auto val = row.get_string_at_col (table_row.col_name);
-        string_to_guid (val.c_str(), &guid);
-        invoice = gncInvoiceLookup (be->book, &guid);
-        if (invoice != nullptr)
-            set_parameter (pObject, invoice, setter, table_row.gobj_param_name);
-        else
-            PWARN ("Invoice ref '%s' not found", val.c_str());
-    }
-    catch (std::invalid_argument) {}
+     load_from_guid_ref(row, obj_name, pObject,
+                       [be](GncGUID* g){
+                            return gncInvoiceLookup (be->book, g);
+                        });
 }
 
-static GncSqlColumnTypeHandler invoice_guid_handler
-= { load_invoice_guid,
-    gnc_sql_add_objectref_guid_col_info_to_list,
-    gnc_sql_add_objectref_guid_to_vec
-  };
+template<> void
+GncSqlColumnTableEntryImpl<CT_INVOICEREF>::add_to_table(const GncSqlBackend* be,
+                                                 ColVec& vec) const noexcept
+{
+    add_objectref_guid_to_table(be, vec);
+}
+
+template<> void
+GncSqlColumnTableEntryImpl<CT_INVOICEREF>::add_to_query(const GncSqlBackend* be,
+                                                    QofIdTypeConst obj_name,
+                                                    const gpointer pObject,
+                                                    PairVec& vec) const noexcept
+{
+    add_objectref_guid_to_query(be, obj_name, pObject, vec);
+}
+
 /* ================================================================= */
 void
 gnc_invoice_sql_initialize (void)
@@ -319,6 +321,5 @@ gnc_invoice_sql_initialize (void)
     };
 
     gnc_sql_register_backend(&be_data);
-    gnc_sql_register_col_type_handler (CT_INVOICEREF, &invoice_guid_handler);
 }
 /* ========================== END OF FILE ===================== */

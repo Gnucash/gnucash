@@ -61,22 +61,27 @@ static void set_quote_source_name (gpointer pObject,  gpointer pValue);
 
 static const EntryVec col_table
 {
-    { "guid",         CT_GUID,    0,                             COL_NNUL | COL_PKEY, "guid" },
-    {
-        "namespace",    CT_STRING,  COMMODITY_MAX_NAMESPACE_LEN,   COL_NNUL,          NULL, NULL,
-        (QofAccessFunc)gnc_commodity_get_namespace,
-        (QofSetterFunc)gnc_commodity_set_namespace
-    },
-    { "mnemonic",     CT_STRING,  COMMODITY_MAX_MNEMONIC_LEN,    COL_NNUL,          "mnemonic" },
-    { "fullname",     CT_STRING,  COMMODITY_MAX_FULLNAME_LEN,    0,                 "fullname" },
-    { "cusip",        CT_STRING,  COMMODITY_MAX_CUSIP_LEN,       0,                 "cusip" },
-    { "fraction",     CT_INT,     0,                             COL_NNUL,          "fraction" },
-    { "quote_flag",   CT_BOOLEAN, 0,                             COL_NNUL,          "quote_flag" },
-    {
-        "quote_source", CT_STRING,  COMMODITY_MAX_QUOTESOURCE_LEN, 0,                 NULL, NULL,
-        (QofAccessFunc)get_quote_source_name, set_quote_source_name
-    },
-    { "quote_tz",     CT_STRING,  COMMODITY_MAX_QUOTE_TZ_LEN,    0,                 "quote-tz" },
+    gnc_sql_make_table_entry<CT_GUID>(
+        "guid", 0, COL_NNUL | COL_PKEY | COL_UNIQUE, "guid"),
+    gnc_sql_make_table_entry<CT_STRING>("namespace",
+                                        COMMODITY_MAX_NAMESPACE_LEN, COL_NNUL,
+                                     (QofAccessFunc)gnc_commodity_get_namespace,
+                                     (QofSetterFunc)gnc_commodity_set_namespace),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "mnemonic", COMMODITY_MAX_MNEMONIC_LEN, COL_NNUL, "mnemonic"),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "fullname", COMMODITY_MAX_FULLNAME_LEN, 0, "fullname"),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "cusip", COMMODITY_MAX_CUSIP_LEN, 0, "cusip"),
+    gnc_sql_make_table_entry<CT_INT>("fraction", 0, COL_NNUL, "fraction"),
+    gnc_sql_make_table_entry<CT_BOOLEAN>(
+        "quote_flag", 0, COL_NNUL, "quote_flag"),
+    gnc_sql_make_table_entry<CT_STRING>("quote_source",
+                                        COMMODITY_MAX_QUOTESOURCE_LEN, 0,
+                                        (QofAccessFunc)get_quote_source_name,
+                                        set_quote_source_name),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "quote_tz", COMMODITY_MAX_QUOTE_TZ_LEN, 0, "quote-tz"),
 };
 
 /* ================================================================= */
@@ -262,37 +267,33 @@ gnc_sql_commit_commodity (gnc_commodity* pCommodity)
 }
 
 /* ----------------------------------------------------------------- */
-
-static void
-load_commodity_guid (const GncSqlBackend* be, GncSqlRow& row,
-                     QofSetterFunc setter, gpointer pObject,
-                     const GncSqlColumnTableEntry& table_row)
+template<> void
+GncSqlColumnTableEntryImpl<CT_COMMODITYREF>::load (const GncSqlBackend* be,
+                                                 GncSqlRow& row,
+                                                 QofIdTypeConst obj_name,
+                                                 gpointer pObject) const noexcept
 {
-    GncGUID guid;
-    gnc_commodity* commodity = NULL;
-
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (pObject != NULL);
-
-    try
-    {
-        auto val = row.get_string_at_col (table_row.col_name);
-        (void)string_to_guid (val.c_str(), &guid);
-        commodity = gnc_commodity_find_commodity_by_guid (&guid, be->book);
-        if (commodity != nullptr)
-            set_parameter (pObject, commodity, setter,
-                           table_row.gobj_param_name);
-        else
-            PWARN ("Commodity ref '%s' not found", val.c_str());
-    }
-    catch (std::invalid_argument) {}
+    load_from_guid_ref(row, obj_name, pObject,
+                       [be](GncGUID* g){
+                           return gnc_commodity_find_commodity_by_guid(g, be->book);
+                       });
 }
 
-static GncSqlColumnTypeHandler commodity_guid_handler
-= { load_commodity_guid,
-    gnc_sql_add_objectref_guid_col_info_to_list,
-    gnc_sql_add_objectref_guid_to_vec
-  };
+template<> void
+GncSqlColumnTableEntryImpl<CT_COMMODITYREF>::add_to_table(const GncSqlBackend* be,
+                                                 ColVec& vec) const noexcept
+{
+    add_objectref_guid_to_table(be, vec);
+}
+
+template<> void
+GncSqlColumnTableEntryImpl<CT_COMMODITYREF>::add_to_query(const GncSqlBackend* be,
+                                                    QofIdTypeConst obj_name,
+                                                    const gpointer pObject,
+                                                    PairVec& vec) const noexcept
+{
+    add_objectref_guid_to_query(be, obj_name, pObject, vec);
+}
 /* ================================================================= */
 void
 gnc_sql_init_commodity_handler (void)
@@ -311,6 +312,5 @@ gnc_sql_init_commodity_handler (void)
     };
 
     gnc_sql_register_backend(&be_data);
-    gnc_sql_register_col_type_handler (CT_COMMODITYREF, &commodity_guid_handler);
 }
 /* ========================== END OF FILE ===================== */

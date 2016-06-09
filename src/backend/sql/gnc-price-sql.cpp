@@ -55,13 +55,16 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 
 static const EntryVec col_table
 ({
-    { "guid",           CT_GUID,           0,                    COL_NNUL | COL_PKEY, "guid" },
-    { "commodity_guid", CT_COMMODITYREF,   0,                    COL_NNUL,          "commodity" },
-    { "currency_guid",  CT_COMMODITYREF,   0,                    COL_NNUL,          "currency" },
-    { "date",           CT_TIMESPEC,       0,                    COL_NNUL,          "date" },
-    { "source",         CT_STRING,         PRICE_MAX_SOURCE_LEN, 0,                 "source" },
-    { "type",           CT_STRING,         PRICE_MAX_TYPE_LEN,   0,                 "type" },
-    { "value",          CT_NUMERIC,        0,                    COL_NNUL,          "value" }
+    gnc_sql_make_table_entry<CT_GUID>("guid", 0, COL_NNUL | COL_PKEY, "guid"),
+    gnc_sql_make_table_entry<CT_COMMODITYREF>("commodity_guid", 0, COL_NNUL,
+                                              "commodity"),
+    gnc_sql_make_table_entry<CT_COMMODITYREF>("currency_guid", 0, COL_NNUL,
+                                              "currency"),
+    gnc_sql_make_table_entry<CT_TIMESPEC>("date", 0, COL_NNUL, "date"),
+    gnc_sql_make_table_entry<CT_STRING>("source", PRICE_MAX_SOURCE_LEN, 0,
+                                        "source"),
+    gnc_sql_make_table_entry<CT_STRING>("type", PRICE_MAX_TYPE_LEN, 0, "type"),
+    gnc_sql_make_table_entry<CT_NUMERIC>("value", 0, COL_NNUL, "value")
 });
 
 /* ================================================================= */

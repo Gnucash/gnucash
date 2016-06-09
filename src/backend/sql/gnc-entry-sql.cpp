@@ -46,7 +46,6 @@ extern "C"
 #include "gnc-entry-sql.h"
 #include "gnc-invoice-sql.h"
 #include "gnc-order-sql.h"
-#include "gnc-owner-sql.h"
 #include "gnc-tax-table-sql.h"
 
 #define _GNC_MOD_NAME   GNC_ID_ENTRY
@@ -66,53 +65,63 @@ static void entry_set_bill (gpointer pObject, gpointer val);
 
 static EntryVec col_table
 ({
-    { "guid",          CT_GUID,        0,                   COL_NNUL | COL_PKEY, "guid" },
-    { "date",          CT_TIMESPEC,    0,                   COL_NNUL,          NULL, ENTRY_DATE },
-    { "date_entered",  CT_TIMESPEC,    0,                   0,                 NULL, ENTRY_DATE_ENTERED },
-    { "description",   CT_STRING,      MAX_DESCRIPTION_LEN, 0,                 "description" },
-    { "action",        CT_STRING,      MAX_ACTION_LEN,      0,                 NULL, ENTRY_ACTION },
-    { "notes",         CT_STRING,      MAX_NOTES_LEN,       0,                 NULL, ENTRY_NOTES },
-    { "quantity",      CT_NUMERIC,     0,                   0,                 NULL, ENTRY_QTY },
-    { "i_acct",        CT_ACCOUNTREF,  0,                   0,                 NULL, ENTRY_IACCT },
-    { "i_price",       CT_NUMERIC,     0,                   0,                 NULL, ENTRY_IPRICE },
-    {
-        "i_discount",    CT_NUMERIC,     0,                   0,                 NULL, NULL,
-        (QofAccessFunc)gncEntryGetInvDiscount, (QofSetterFunc)gncEntrySetInvDiscount
-    },
-    {
-        "invoice",       CT_INVOICEREF,  0,                   0,                 NULL, NULL,
-        (QofAccessFunc)gncEntryGetInvoice, (QofSetterFunc)entry_set_invoice
-    },
-    { "i_disc_type",   CT_STRING,      MAX_DISCTYPE_LEN,    0,                  NULL, ENTRY_INV_DISC_TYPE },
-    { "i_disc_how",    CT_STRING,      MAX_DISCHOW_LEN,     0,                  NULL, ENTRY_INV_DISC_HOW },
-    { "i_taxable",     CT_BOOLEAN,     0,                   0,                  NULL, ENTRY_INV_TAXABLE },
-    { "i_taxincluded", CT_BOOLEAN,     0,                   0,                  NULL, ENTRY_INV_TAX_INC },
-    {
-        "i_taxtable",    CT_TAXTABLEREF, 0,                   0,                    NULL, NULL,
-        (QofAccessFunc)gncEntryGetInvTaxTable, (QofSetterFunc)gncEntrySetInvTaxTable
-    },
-    { "b_acct",        CT_ACCOUNTREF,  0,                   0,                  NULL, ENTRY_BACCT },
-    { "b_price",       CT_NUMERIC,     0,                   0,                  NULL, ENTRY_BPRICE },
-    {
-        "bill",          CT_INVOICEREF,  0,                   0,                    NULL, NULL,
-        (QofAccessFunc)gncEntryGetBill, (QofSetterFunc)entry_set_bill
-    },
-    { "b_taxable",     CT_BOOLEAN,     0,                   0,                  NULL, ENTRY_BILL_TAXABLE },
-    { "b_taxincluded", CT_BOOLEAN,     0,                   0,                  NULL, ENTRY_BILL_TAX_INC },
-    {
-        "b_taxtable",    CT_TAXTABLEREF, 0,                   0,                    NULL, NULL,
-        (QofAccessFunc)gncEntryGetBillTaxTable, (QofSetterFunc)gncEntrySetBillTaxTable
-    },
-    {
-        "b_paytype",     CT_INT,         0,                   0,                    NULL, NULL,
-        (QofAccessFunc)gncEntryGetBillPayment, (QofSetterFunc)gncEntrySetBillPayment
-    },
-    { "billable",      CT_BOOLEAN,     0,                   0,                  NULL, ENTRY_BILLABLE },
-    { "billto",        CT_OWNERREF,    0,                   0,                  NULL, ENTRY_BILLTO },
-    {
-        "order_guid",    CT_ORDERREF,    0,                   0,                    NULL, NULL,
-        (QofAccessFunc)gncEntryGetOrder, (QofSetterFunc)gncEntrySetOrder
-    },
+    gnc_sql_make_table_entry<CT_GUID>("guid", 0, COL_NNUL | COL_PKEY, "guid"),
+    gnc_sql_make_table_entry<CT_TIMESPEC>("date", 0, COL_NNUL, ENTRY_DATE,
+                                          true),
+    gnc_sql_make_table_entry<CT_TIMESPEC>("date_entered", 0, 0,
+                                          ENTRY_DATE_ENTERED, true),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "description", MAX_DESCRIPTION_LEN, 0, "description"),
+    gnc_sql_make_table_entry<CT_STRING>("action", MAX_ACTION_LEN, 0,
+                                        ENTRY_ACTION, true),
+    gnc_sql_make_table_entry<CT_STRING>("notes", MAX_NOTES_LEN, 0, ENTRY_NOTES,
+                                        true),
+    gnc_sql_make_table_entry<CT_NUMERIC>("quantity", 0, 0, ENTRY_QTY,
+                                         true),
+    gnc_sql_make_table_entry<CT_ACCOUNTREF>("i_acct", 0, 0, ENTRY_IACCT,
+                                        true),
+    gnc_sql_make_table_entry<CT_NUMERIC>("i_price", 0, 0, ENTRY_IPRICE,
+                                         true),
+    gnc_sql_make_table_entry<CT_NUMERIC>("i_discount", 0, 0,
+                                         (QofAccessFunc)gncEntryGetInvDiscount,
+                                         (QofSetterFunc)gncEntrySetInvDiscount),
+    gnc_sql_make_table_entry<CT_INVOICEREF>("invoice", 0, 0,
+                                            (QofAccessFunc)gncEntryGetInvoice,
+                                            (QofSetterFunc)entry_set_invoice),
+    gnc_sql_make_table_entry<CT_STRING>("i_disc_type", MAX_DISCTYPE_LEN, 0,
+                                        ENTRY_INV_DISC_TYPE, true),
+    gnc_sql_make_table_entry<CT_STRING>("i_disc_how", MAX_DISCHOW_LEN, 0,
+                                        ENTRY_INV_DISC_HOW, true),
+    gnc_sql_make_table_entry<CT_BOOLEAN>("i_taxable", 0, 0, ENTRY_INV_TAXABLE,
+                                         true),
+    gnc_sql_make_table_entry<CT_BOOLEAN>("i_taxincluded", 0, 0,
+                                         ENTRY_INV_TAX_INC, true),
+    gnc_sql_make_table_entry<CT_TAXTABLEREF>("i_taxtable", 0, 0,
+                                         (QofAccessFunc)gncEntryGetInvTaxTable,
+                                         (QofSetterFunc)gncEntrySetInvTaxTable),
+    gnc_sql_make_table_entry<CT_ACCOUNTREF>("b_acct", 0, 0, ENTRY_BACCT,
+                                            true),
+    gnc_sql_make_table_entry<CT_NUMERIC>("b_price", 0, 0, ENTRY_BPRICE,
+                                         true),
+    gnc_sql_make_table_entry<CT_INVOICEREF>("bill", 0, 0,
+                                            (QofAccessFunc)gncEntryGetBill,
+                                            (QofSetterFunc)entry_set_bill),
+    gnc_sql_make_table_entry<CT_BOOLEAN>("b_taxable", 0, 0, ENTRY_BILL_TAXABLE,
+                                         true),
+    gnc_sql_make_table_entry<CT_BOOLEAN>("b_taxincluded", 0, 0,
+                                         ENTRY_BILL_TAX_INC, true),
+    gnc_sql_make_table_entry<CT_TAXTABLEREF>("b_taxtable", 0, 0,
+                                        (QofAccessFunc)gncEntryGetBillTaxTable,
+                                        (QofSetterFunc)gncEntrySetBillTaxTable),
+    gnc_sql_make_table_entry<CT_INT>("b_paytype", 0, 0,
+                                     (QofAccessFunc)gncEntryGetBillPayment,
+                                     (QofSetterFunc)gncEntrySetBillPayment),
+    gnc_sql_make_table_entry<CT_BOOLEAN>("billable", 0, 0, ENTRY_BILLABLE,
+                                         true),
+    gnc_sql_make_table_entry<CT_OWNERREF>("billto", 0, 0, ENTRY_BILLTO, true),
+    gnc_sql_make_table_entry<CT_ORDERREF>("order_guid", 0, 0,
+                                          (QofAccessFunc)gncEntryGetOrder,
+                                          (QofSetterFunc)gncEntrySetOrder),
 });
 
 static void

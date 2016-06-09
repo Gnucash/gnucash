@@ -43,7 +43,6 @@ extern "C"
 #include "gnc-backend-sql.h"
 #include "gnc-slots-sql.h"
 #include "gnc-customer-sql.h"
-#include "gnc-address-sql.h"
 #include "gnc-bill-term-sql.h"
 #include "gnc-tax-table-sql.h"
 
@@ -60,29 +59,35 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 
 static EntryVec col_table
 ({
-    { "guid",         CT_GUID,          0,             COL_NNUL | COL_PKEY, "guid" },
-    { "name",         CT_STRING,        MAX_NAME_LEN,  COL_NNUL,          "name" },
-    { "id",           CT_STRING,        MAX_ID_LEN,    COL_NNUL,          NULL, CUSTOMER_ID },
-    { "notes",        CT_STRING,        MAX_NOTES_LEN, COL_NNUL,          NULL, CUSTOMER_NOTES },
-    { "active",       CT_BOOLEAN,       0,             COL_NNUL,          NULL, QOF_PARAM_ACTIVE },
-    { "discount",     CT_NUMERIC,       0,             COL_NNUL,          NULL, CUSTOMER_DISCOUNT },
-    { "credit",       CT_NUMERIC,       0,             COL_NNUL,          NULL, CUSTOMER_CREDIT },
-    {
-        "currency",     CT_COMMODITYREF,  0,             COL_NNUL,          NULL, NULL,
-        (QofAccessFunc)gncCustomerGetCurrency, (QofSetterFunc)gncCustomerSetCurrency
-    },
-    { "tax_override", CT_BOOLEAN,       0,             COL_NNUL,          NULL, CUSTOMER_TT_OVER },
-    { "addr",         CT_ADDRESS,       0,             0,                 NULL, CUSTOMER_ADDR },
-    { "shipaddr",     CT_ADDRESS,       0,             0,                 NULL, CUSTOMER_SHIPADDR },
-    { "terms",        CT_BILLTERMREF,   0,             0,                 NULL, CUSTOMER_TERMS },
-    {
-        "tax_included", CT_INT,           0,             0,                 NULL, NULL,
-        (QofAccessFunc)gncCustomerGetTaxIncluded, (QofSetterFunc)gncCustomerSetTaxIncluded
-    },
-    {
-        "taxtable",     CT_TAXTABLEREF,   0,             0,                 NULL, NULL,
-        (QofAccessFunc)gncCustomerGetTaxTable, (QofSetterFunc)gncCustomerSetTaxTable
-    },
+    gnc_sql_make_table_entry<CT_GUID>("guid", 0, COL_NNUL | COL_PKEY, "guid" ),
+    gnc_sql_make_table_entry<CT_STRING>("name", MAX_NAME_LEN, COL_NNUL, "name"),
+    gnc_sql_make_table_entry<CT_STRING>("id", MAX_ID_LEN, COL_NNUL,
+                                        CUSTOMER_ID, true),
+    gnc_sql_make_table_entry<CT_STRING>("notes", MAX_NOTES_LEN, COL_NNUL,
+                                        CUSTOMER_NOTES, true),
+    gnc_sql_make_table_entry<CT_BOOLEAN>("active", 0, COL_NNUL,
+                                         QOF_PARAM_ACTIVE, true),
+    gnc_sql_make_table_entry<CT_NUMERIC>("discount", 0, COL_NNUL,
+                                         CUSTOMER_DISCOUNT, true),
+    gnc_sql_make_table_entry<CT_NUMERIC>("credit", 0, COL_NNUL,
+                                         CUSTOMER_CREDIT, true),
+    gnc_sql_make_table_entry<CT_COMMODITYREF>("currency", 0, COL_NNUL,
+                                         (QofAccessFunc)gncCustomerGetCurrency,
+                                         (QofSetterFunc)gncCustomerSetCurrency),
+    gnc_sql_make_table_entry<CT_BOOLEAN>("tax_override", 0, COL_NNUL,
+                                         CUSTOMER_TT_OVER, true),
+    gnc_sql_make_table_entry<CT_ADDRESS>("addr", 0, 0, CUSTOMER_ADDR,
+                                         true),
+    gnc_sql_make_table_entry<CT_ADDRESS>("shipaddr", 0, 0, CUSTOMER_SHIPADDR,
+                                         true),
+    gnc_sql_make_table_entry<CT_BILLTERMREF>("terms", 0, 0, CUSTOMER_TERMS,
+                                             true),
+    gnc_sql_make_table_entry<CT_INT>("tax_included", 0, 0,
+                                     (QofAccessFunc)gncCustomerGetTaxIncluded,
+                                     (QofSetterFunc)gncCustomerSetTaxIncluded),
+    gnc_sql_make_table_entry<CT_TAXTABLEREF>("taxtable", 0, 0,
+                                         (QofAccessFunc)gncCustomerGetTaxTable,
+                                         (QofSetterFunc)gncCustomerSetTaxTable),
 });
 
 static GncCustomer*

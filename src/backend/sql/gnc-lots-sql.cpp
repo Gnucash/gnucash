@@ -56,12 +56,11 @@ static void set_lot_account (gpointer pObject,  gpointer pValue);
 
 static const EntryVec col_table
 ({
-    { "guid",         CT_GUID,       0, COL_NNUL | COL_PKEY, "guid" },
-    {
-        "account_guid", CT_ACCOUNTREF, 0, 0,                 NULL, NULL,
-        (QofAccessFunc)get_lot_account,   set_lot_account
-    },
-    { "is_closed",    CT_BOOLEAN,    0, COL_NNUL,          "is-closed" }
+    gnc_sql_make_table_entry<CT_GUID>("guid", 0, COL_NNUL | COL_PKEY, "guid"),
+    gnc_sql_make_table_entry<CT_ACCOUNTREF>("account_guid", 0, 0,
+                                            (QofAccessFunc)get_lot_account,
+                                            set_lot_account),
+    gnc_sql_make_table_entry<CT_BOOLEAN>("is_closed", 0, COL_NNUL, "is-closed")
 });
 
 /* ================================================================= */
@@ -203,35 +202,33 @@ write_lots (GncSqlBackend* be)
 }
 
 /* ================================================================= */
-static void
-load_lot_guid (const GncSqlBackend* be, GncSqlRow& row,
-               QofSetterFunc setter, gpointer pObject,
-               const GncSqlColumnTableEntry& table_row)
+template<> void
+GncSqlColumnTableEntryImpl<CT_LOTREF>::load (const GncSqlBackend* be,
+                                                 GncSqlRow& row,
+                                                 QofIdTypeConst obj_name,
+                                                 gpointer pObject) const noexcept
 {
-    GncGUID guid;
-    GNCLot* lot;
-
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (pObject != NULL);
-
-    try
-    {
-        auto val = row.get_string_at_col (table_row.col_name);
-        (void)string_to_guid (val.c_str(), &guid);
-        lot = gnc_lot_lookup (&guid, be->book);
-        if (lot != nullptr)
-            set_parameter (pObject, lot, setter, table_row.gobj_param_name);
-        else
-            PWARN ("Lot ref '%s' not found", val.c_str());
-    }
-    catch (std::invalid_argument) {}
+    load_from_guid_ref(row, obj_name, pObject,
+                       [be](GncGUID* g){
+                           return gnc_lot_lookup(g, be->book);
+                       });
 }
 
-static GncSqlColumnTypeHandler lot_guid_handler
-= { load_lot_guid,
-    gnc_sql_add_objectref_guid_col_info_to_list,
-    gnc_sql_add_objectref_guid_to_vec
-  };
+template<> void
+GncSqlColumnTableEntryImpl<CT_LOTREF>::add_to_table(const GncSqlBackend* be,
+                                                 ColVec& vec) const noexcept
+{
+    add_objectref_guid_to_table(be, vec);
+}
+
+template<> void
+GncSqlColumnTableEntryImpl<CT_LOTREF>::add_to_query(const GncSqlBackend* be,
+                                                    QofIdTypeConst obj_name,
+                                                    const gpointer pObject,
+                                                    PairVec& vec) const noexcept
+{
+    add_objectref_guid_to_query(be, obj_name, pObject, vec);
+}
 /* ================================================================= */
 void
 gnc_sql_init_lot_handler (void)
@@ -248,7 +245,6 @@ gnc_sql_init_lot_handler (void)
     };
 
     gnc_sql_register_backend(&be_data);
-    gnc_sql_register_col_type_handler (CT_LOTREF, &lot_guid_handler);
 }
 
 /* ========================== END OF FILE ===================== */

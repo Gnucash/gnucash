@@ -2544,13 +2544,13 @@ create_index_ddl (GncSqlConnection* conn, const char* index_name,
 
     ddl = g_string_new ("");
     g_string_printf (ddl, "CREATE INDEX %s ON %s (", index_name, table_name);
-    for (auto const& table_row : col_table)
+    for (auto const table_row : col_table)
     {
         if (table_row != *col_table.begin())
         {
             (void)g_string_append (ddl, ", ");
         }
-        g_string_append_printf (ddl, "%s", table_row.col_name);
+        g_string_append_printf (ddl, "%s", table_row->name());
     }
     (void)g_string_append (ddl, ")");
 

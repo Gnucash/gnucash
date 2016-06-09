@@ -40,7 +40,6 @@ extern "C"
 #include "gncAddress.h"
 }
 #include "gnc-backend-sql.h"
-#include "gnc-address-sql.h"
 
 G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
@@ -52,23 +51,32 @@ G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
 static EntryVec col_table
 ({
-    { "name",  CT_STRING, ADDRESS_MAX_NAME_LEN,         COL_NNUL, "name" },
-    { "addr1", CT_STRING, ADDRESS_MAX_ADDRESS_LINE_LEN, COL_NNUL, "addr1" },
-    { "addr2", CT_STRING, ADDRESS_MAX_ADDRESS_LINE_LEN, COL_NNUL, "addr2" },
-    { "addr3", CT_STRING, ADDRESS_MAX_ADDRESS_LINE_LEN, COL_NNUL, "addr3" },
-    { "addr4", CT_STRING, ADDRESS_MAX_ADDRESS_LINE_LEN, COL_NNUL, "addr4" },
-    { "phone", CT_STRING, ADDRESS_MAX_PHONE_LEN,        COL_NNUL, "phone" },
-    { "fax",   CT_STRING, ADDRESS_MAX_FAX_LEN,          COL_NNUL, "fax" },
-    { "email", CT_STRING, ADDRESS_MAX_EMAIL_LEN,        COL_NNUL, "email" },
+    std::make_shared<GncSqlColumnTableEntryImpl<CT_STRING>>(
+        "name",  CT_STRING, ADDRESS_MAX_NAME_LEN, COL_NNUL, "name"),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "addr1", ADDRESS_MAX_ADDRESS_LINE_LEN, COL_NNUL, "addr1"),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "addr2", ADDRESS_MAX_ADDRESS_LINE_LEN, COL_NNUL, "addr2"),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "addr3", ADDRESS_MAX_ADDRESS_LINE_LEN, COL_NNUL, "addr3"),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "addr4", ADDRESS_MAX_ADDRESS_LINE_LEN, COL_NNUL, "addr4"),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "phone", ADDRESS_MAX_PHONE_LEN, COL_NNUL, "phone"),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "fax", ADDRESS_MAX_FAX_LEN, COL_NNUL, "fax" ),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "email", ADDRESS_MAX_EMAIL_LEN, COL_NNUL, "email"),
 });
 
 typedef void (*AddressSetterFunc) (gpointer, GncAddress*);
 typedef GncAddress* (*AddressGetterFunc) (const gpointer);
 
-static void
-load_address (const GncSqlBackend* be, GncSqlRow& row,
-              QofSetterFunc setter, gpointer pObject,
-              const GncSqlColumnTableEntry& table_row)
+template<> void
+GncSqlColumnTableEntryImpl<CT_ADDRESS>::load (const GncSqlBackend* be,
+                                              GncSqlRow& row,
+                                              QofIdTypeConst obj_name,
+                                              gpointer pObject) const noexcept
 {
     const gchar* s;
 
@@ -80,19 +88,13 @@ load_address (const GncSqlBackend* be, GncSqlRow& row,
 
     for (auto const& subtable_row : col_table)
     {
-        auto buf = g_strdup_printf ("%s_%s", table_row.col_name,
-                                    subtable_row.col_name);
+        auto buf = std::string{m_col_name} + "_" + subtable_row->m_col_name;
         try
         {
-            auto val = row.get_string_at_col (buf);
-            g_free (buf);
-            auto sub_setter = subtable_row.setter;
-            auto pname = subtable_row.qof_param_name;
-            if (pname != nullptr)
-                sub_setter = qof_class_get_parameter_setter (GNC_ID_ADDRESS,
-                                                             pname);
+            auto val = row.get_string_at_col (buf.c_str());
+            auto sub_setter = subtable_row->get_setter(GNC_ID_ADDRESS);
             set_parameter (addr, val.c_str(), sub_setter,
-                           subtable_row.gobj_param_name);
+                           subtable_row->m_gobj_param_name);
         }
         catch (std::invalid_argument)
         {
@@ -100,65 +102,44 @@ load_address (const GncSqlBackend* be, GncSqlRow& row,
         }
     }
     set_parameter (pObject, addr,
-                  reinterpret_cast<AddressSetterFunc>(setter),
-                  table_row.gobj_param_name);
+                   reinterpret_cast<AddressSetterFunc>(get_setter(obj_name)),
+                   m_gobj_param_name);
 }
 
-static void
-add_address_col_info_to_list(const GncSqlBackend* be,
-                             const GncSqlColumnTableEntry& table_row,
-                             ColVec& vec)
+template<> void
+GncSqlColumnTableEntryImpl<CT_ADDRESS>::add_to_table(const GncSqlBackend* be,
+                                                  ColVec& vec) const noexcept
 {
-    GncSqlColumnInfo* info;
-    gchar* buf;
-
     g_return_if_fail (be != NULL);
-
     for (auto const& subtable_row : col_table)
     {
-        buf = g_strdup_printf ("%s_%s", table_row.col_name, subtable_row.col_name);
-
-        GncSqlColumnInfo info(buf, BCT_STRING, subtable_row.size, true, false,
-                              table_row.flags & COL_PKEY,
-                              table_row.flags & COL_NNUL);
+        auto buf = std::string{m_col_name} + "_" + subtable_row->m_col_name;
+        GncSqlColumnInfo info(buf.c_str(), BCT_STRING, subtable_row->m_size,
+                              true, false, m_flags & COL_PKEY, m_flags & COL_NNUL);
         vec.emplace_back(std::move(info));
     }
 }
 
-static void
-add_value_address_to_vec (const GncSqlBackend* be, QofIdTypeConst obj_name,
-                          const gpointer pObject,
-                          const GncSqlColumnTableEntry& table_row,
-                          PairVec& vec)
+/* char is unusual in that we get a pointer but don't deref it to pass
+ * it to operator<<().
+ */
+template<> void
+GncSqlColumnTableEntryImpl<CT_ADDRESS>::add_to_query(const GncSqlBackend* be,
+                                                    QofIdTypeConst obj_name,
+                                                    const gpointer pObject,
+                                                    PairVec& vec) const noexcept
 {
-    auto addr = get_row_value_from_object<GncAddress*>(obj_name, pObject,
-                                                       table_row);
+    auto addr{get_row_value_from_object<char*>(obj_name, pObject)};
+    if (addr == nullptr) return;
 
-
-    if (addr == nullptr)
-        return;
     for (auto const& subtable_row : col_table)
     {
-        auto s = get_row_value_from_object<char*>(GNC_ID_ADDRESS, addr,
-                                                  subtable_row);
+        auto s = subtable_row->get_row_value_from_object<char*>(GNC_ID_ADDRESS,
+                                                                addr);
         if (s == nullptr)
             continue;
-        std::ostringstream buf;
-        buf << table_row.col_name << "_" << subtable_row.col_name;
-        vec.emplace_back(make_pair(buf.str(), std::string{s}));
+        auto buf = std::string{m_col_name} + "_" + subtable_row->m_col_name;
+        vec.emplace_back(make_pair(buf, std::string{s}));
     }
-}
-
-static GncSqlColumnTypeHandler address_handler
-= { load_address,
-    add_address_col_info_to_list,
-    add_value_address_to_vec
-  };
-
-/* ================================================================= */
-void
-gnc_address_sql_initialize (void)
-{
-    gnc_sql_register_col_type_handler (CT_ADDRESS, &address_handler);
 }
 /* ========================== END OF FILE ===================== */

@@ -63,31 +63,36 @@ static void bt_set_parent_guid (gpointer data, gpointer value);
 
 static EntryVec col_table
 {
-    { "guid",         CT_GUID,        0,                   COL_NNUL | COL_PKEY, "guid" },
-    { "name",         CT_STRING,      MAX_NAME_LEN,        COL_NNUL,          "name" },
-    { "description",  CT_STRING,      MAX_DESCRIPTION_LEN, COL_NNUL,          NULL, GNC_BILLTERM_DESC },
-    {
-        "refcount",     CT_INT,         0,                   COL_NNUL,          NULL, NULL,
-        (QofAccessFunc)gncBillTermGetRefcount, (QofSetterFunc)gncBillTermSetRefcount
-    },
-    {
-        "invisible",    CT_BOOLEAN,     0,                   COL_NNUL,          NULL, NULL,
-        (QofAccessFunc)gncBillTermGetInvisible, (QofSetterFunc)set_invisible
-    },
-    {
-        "parent",       CT_GUID,       0,                   0,                 NULL, NULL,
-        (QofAccessFunc)bt_get_parent, (QofSetterFunc)bt_set_parent
-    },
-    { "type",         CT_STRING,      MAX_TYPE_LEN,        COL_NNUL,          NULL, GNC_BILLTERM_TYPE },
-    { "duedays",      CT_INT,         0,                   0,                 0,    GNC_BILLTERM_DUEDAYS },
-    { "discountdays", CT_INT,         0,                   0,                 0,    GNC_BILLTERM_DISCDAYS },
-    { "discount",     CT_NUMERIC,     0,                   0,                 0,    GNC_BILLTERM_DISCOUNT },
-    { "cutoff",       CT_INT,         0,                   0,                 0,    GNC_BILLTERM_CUTOFF },
+    gnc_sql_make_table_entry<CT_GUID>("guid", 0, COL_NNUL | COL_PKEY, "guid"),
+    gnc_sql_make_table_entry<CT_STRING>("name", MAX_NAME_LEN, COL_NNUL, "name"),
+    gnc_sql_make_table_entry<CT_STRING>("description", MAX_DESCRIPTION_LEN,
+                                        COL_NNUL, GNC_BILLTERM_DESC,
+                                        true),
+    gnc_sql_make_table_entry<CT_INT>("refcount", 0, COL_NNUL,
+                                     (QofAccessFunc)gncBillTermGetRefcount,
+                                     (QofSetterFunc)gncBillTermSetRefcount),
+    gnc_sql_make_table_entry<CT_BOOLEAN>("invisible", 0, COL_NNUL,
+                                         (QofAccessFunc)gncBillTermGetInvisible,
+                                         (QofSetterFunc)set_invisible),
+    gnc_sql_make_table_entry<CT_GUID>("parent", 0, 0,
+                                      (QofAccessFunc)bt_get_parent,
+                                      (QofSetterFunc)bt_set_parent),
+    gnc_sql_make_table_entry<CT_STRING>("type", MAX_TYPE_LEN, COL_NNUL,
+                                        GNC_BILLTERM_TYPE, true),
+    gnc_sql_make_table_entry<CT_INT>("duedays", 0, 0, GNC_BILLTERM_DUEDAYS,
+                                         true),
+    gnc_sql_make_table_entry<CT_INT>("discountdays", 0, 0,
+                                     GNC_BILLTERM_DISCDAYS, true),
+    gnc_sql_make_table_entry<CT_NUMERIC>("discount", 0, 0,
+                                         GNC_BILLTERM_DISCOUNT, true),
+    gnc_sql_make_table_entry<CT_INT>("cutoff", 0, 0, GNC_BILLTERM_CUTOFF,
+                                     true),
 };
 
 static EntryVec billterm_parent_col_table
 {
-    { "parent", CT_GUID, 0, 0, NULL, NULL, NULL, (QofSetterFunc)bt_set_parent_guid },
+    gnc_sql_make_table_entry<CT_INT64>("parent", 0, 0, nullptr,
+                                       bt_set_parent_guid),
 };
 
 typedef struct
@@ -337,35 +342,34 @@ gnc_sql_save_billterm (GncSqlBackend* be, QofInstance* inst)
 }
 
 /* ================================================================= */
-static void
-load_billterm_guid (const GncSqlBackend* be, GncSqlRow& row,
-                    QofSetterFunc setter, gpointer pObject,
-                    const GncSqlColumnTableEntry& table_row)
+
+template<> void
+GncSqlColumnTableEntryImpl<CT_BILLTERMREF>::load (const GncSqlBackend* be,
+                                                 GncSqlRow& row,
+                                                 QofIdTypeConst obj_name,
+                                                 gpointer pObject) const noexcept
 {
-    GncGUID guid;
-    GncBillTerm* term = NULL;
-
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (pObject != NULL);
-
-    try
-    {
-        auto val = row.get_string_at_col (table_row.col_name);
-        string_to_guid (val.c_str(), &guid);
-        term = gncBillTermLookup (be->book, &guid);
-        if (term != nullptr)
-            set_parameter (pObject, term, setter, table_row.gobj_param_name);
-        else
-            PWARN ("Billterm ref '%s' not found", val.c_str());
-    }
-    catch (std::invalid_argument) {}
+    load_from_guid_ref(row, obj_name, pObject,
+                       [be](GncGUID* g){
+                           return gncBillTermLookup(be->book, g);
+                       });
 }
 
-static GncSqlColumnTypeHandler billterm_guid_handler
-= { load_billterm_guid,
-    gnc_sql_add_objectref_guid_col_info_to_list,
-    gnc_sql_add_objectref_guid_to_vec
-  };
+template<> void
+GncSqlColumnTableEntryImpl<CT_BILLTERMREF>::add_to_table(const GncSqlBackend* be,
+                                                 ColVec& vec) const noexcept
+{
+    add_objectref_guid_to_table(be, vec);
+}
+
+template<> void
+GncSqlColumnTableEntryImpl<CT_BILLTERMREF>::add_to_query(const GncSqlBackend* be,
+                                                    QofIdTypeConst obj_name,
+                                                    const gpointer pObject,
+                                                    PairVec& vec) const noexcept
+{
+    add_objectref_guid_to_query(be, obj_name, pObject, vec);
+}
 /* ================================================================= */
 void
 gnc_billterm_sql_initialize (void)
@@ -382,6 +386,5 @@ gnc_billterm_sql_initialize (void)
     };
 
     gnc_sql_register_backend(&be_data);
-    gnc_sql_register_col_type_handler (CT_BILLTERMREF, &billterm_guid_handler);
 }
 /* ========================== END OF FILE ===================== */

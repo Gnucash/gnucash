@@ -67,21 +67,21 @@ static void tt_set_parent_guid (gpointer pObject, gpointer pValue);
 
 static EntryVec tt_col_table
 ({
-    { "guid",      CT_GUID,        0,            COL_NNUL | COL_PKEY, "guid" },
-    { "name",      CT_STRING,      MAX_NAME_LEN, COL_NNUL,          "name" },
-    { "refcount",  CT_INT64,       0,            COL_NNUL,          "ref-count" },
-    { "invisible", CT_BOOLEAN,     0,            COL_NNUL,          "invisible" },
-    /*  { "child",     CT_TAXTABLEREF, 0,            0,                 NULL, NULL,
-                get_child, (QofSetterFunc)gncTaxTableSetChild }, */
-    {
-        "parent",    CT_GUID,        0,          0,                 NULL, NULL,
+    gnc_sql_make_table_entry<CT_GUID>("guid", 0, COL_NNUL | COL_PKEY, "guid" ),
+    gnc_sql_make_table_entry<CT_STRING>("name", MAX_NAME_LEN, COL_NNUL, "name" ),
+    gnc_sql_make_table_entry<CT_INT64>("refcount", 0, COL_NNUL, "ref-count" ),
+    gnc_sql_make_table_entry<CT_BOOLEAN>("invisible", 0, COL_NNUL, "invisible" ),
+    /*  gnc_sql_make_table_entry<CT_TAXTABLEREF>("child", 0, 0,
+                get_child, (QofSetterFunc)gncTaxTableSetChild ), */
+    gnc_sql_make_table_entry<CT_GUID>("parent", 0, 0,
         (QofAccessFunc)bt_get_parent, tt_set_parent
-    },
+    ),
 });
 
 static EntryVec tt_parent_col_table
 ({
-    { "parent", CT_GUID, 0, 0, NULL, NULL, NULL, tt_set_parent_guid },
+    gnc_sql_make_table_entry<CT_GUID>("parent", 0, 0, nullptr,
+                                      tt_set_parent_guid ),
 });
 
 #define TTENTRIES_TABLE_NAME "taxtable_entries"
@@ -89,30 +89,28 @@ static EntryVec tt_parent_col_table
 
 static EntryVec ttentries_col_table
 ({
-    { "id",       CT_INT,         0, COL_PKEY | COL_NNUL | COL_AUTOINC },
-    {
-        "taxtable", CT_TAXTABLEREF, 0, COL_NNUL, NULL, NULL,
-        (QofAccessFunc)gncTaxTableEntryGetTable, set_obj_guid
-    },
-    {
-        "account",  CT_ACCOUNTREF,  0, COL_NNUL, NULL, NULL,
-        (QofAccessFunc)gncTaxTableEntryGetAccount, (QofSetterFunc)gncTaxTableEntrySetAccount
-    },
-    {
-        "amount",   CT_NUMERIC,     0, COL_NNUL, NULL, NULL,
-        (QofAccessFunc)gncTaxTableEntryGetAmount, (QofSetterFunc)gncTaxTableEntrySetAmount
-    },
-    {
-        "type",     CT_INT,         0, COL_NNUL, NULL, NULL,
-        (QofAccessFunc)gncTaxTableEntryGetType, (QofSetterFunc)gncTaxTableEntrySetType
-    },
+    gnc_sql_make_table_entry<CT_INT>(
+        "id", 0, COL_PKEY | COL_NNUL | COL_AUTOINC),
+    gnc_sql_make_table_entry<CT_TAXTABLEREF>("taxtable", 0, COL_NNUL,
+                                        (QofAccessFunc)gncTaxTableEntryGetTable,
+                                             set_obj_guid),
+    gnc_sql_make_table_entry<CT_ACCOUNTREF>("account", 0, COL_NNUL,
+                                     (QofAccessFunc)gncTaxTableEntryGetAccount,
+                                     (QofSetterFunc)gncTaxTableEntrySetAccount),
+    gnc_sql_make_table_entry<CT_NUMERIC>("amount", 0, COL_NNUL,
+                                      (QofAccessFunc)gncTaxTableEntryGetAmount,
+                                      (QofSetterFunc)gncTaxTableEntrySetAmount),
+    gnc_sql_make_table_entry<CT_INT>("type", 0, COL_NNUL,
+                                     (QofAccessFunc)gncTaxTableEntryGetType,
+                                     (QofSetterFunc)gncTaxTableEntrySetType),
 });
 
 /* Special column table because we need to be able to access the table by
 a column other than the primary key */
 static EntryVec guid_col_table
 ({
-    { "taxtable", CT_GUID, 0, 0, NULL, NULL, get_obj_guid, set_obj_guid },
+    gnc_sql_make_table_entry<CT_GUID>("taxtable", 0, 0,
+                                      get_obj_guid, set_obj_guid),
 });
 
 typedef struct
@@ -481,36 +479,34 @@ write_taxtables (GncSqlBackend* be)
 }
 
 /* ================================================================= */
-static void
-load_taxtable_guid (const GncSqlBackend* be, GncSqlRow& row,
-                    QofSetterFunc setter, gpointer pObject,
-                    const GncSqlColumnTableEntry& table_row)
+template<> void
+GncSqlColumnTableEntryImpl<CT_TAXTABLEREF>::load (const GncSqlBackend* be,
+                                                  GncSqlRow& row,
+                                                  QofIdTypeConst obj_name,
+                                                  gpointer pObject) const noexcept
 {
-    GncGUID guid;
-    GncTaxTable* taxtable = NULL;
-
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (pObject != NULL);
-
-    try
-    {
-        auto val = row.get_string_at_col (table_row.col_name);
-        string_to_guid (val.c_str(), &guid);
-        taxtable = gncTaxTableLookup (be->book, &guid);
-        if (taxtable != nullptr)
-            set_parameter (pObject, taxtable, setter,
-                           table_row.gobj_param_name);
-        else
-            PWARN ("Taxtable ref '%s' not found", val.c_str());
-    }
-    catch (std::invalid_argument) {}
+    load_from_guid_ref(row, obj_name, pObject,
+                       [be](GncGUID* g){
+                           return gncTaxTableLookup(be->book, g);
+                       });
 }
 
-static GncSqlColumnTypeHandler taxtable_guid_handler
-= { load_taxtable_guid,
-    gnc_sql_add_objectref_guid_col_info_to_list,
-    gnc_sql_add_objectref_guid_to_vec
-  };
+template<> void
+GncSqlColumnTableEntryImpl<CT_TAXTABLEREF>::add_to_table(const GncSqlBackend* be,
+                                                         ColVec& vec) const noexcept
+{
+    add_objectref_guid_to_table(be, vec);
+}
+
+template<> void
+GncSqlColumnTableEntryImpl<CT_TAXTABLEREF>::add_to_query(const GncSqlBackend* be,
+                                                         QofIdTypeConst obj_name,
+                                                         const gpointer pObject,
+                                                         PairVec& vec) const noexcept
+{
+    add_objectref_guid_to_query(be, obj_name, pObject, vec);
+}
+
 /* ================================================================= */
 void
 gnc_taxtable_sql_initialize (void)
@@ -527,6 +523,5 @@ gnc_taxtable_sql_initialize (void)
     };
 
     gnc_sql_register_backend(&be_data);
-    gnc_sql_register_col_type_handler (CT_TAXTABLEREF, &taxtable_guid_handler);
 }
 /* ========================== END OF FILE ===================== */

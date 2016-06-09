@@ -41,7 +41,6 @@ extern "C"
 #include "gnc-backend-sql.h"
 #include "gnc-slots-sql.h"
 #include "gnc-order-sql.h"
-#include "gnc-owner-sql.h"
 
 #define _GNC_MOD_NAME   GNC_ID_ORDER
 
@@ -56,14 +55,19 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 
 static EntryVec col_table
 ({
-    { "guid",        CT_GUID,     0,                 COL_NNUL | COL_PKEY, "guid" },
-    { "id",          CT_STRING,   MAX_ID_LEN,        COL_NNUL,            "id" },
-    { "notes",       CT_STRING,   MAX_NOTES_LEN,     COL_NNUL,            "notes" },
-    { "reference",   CT_STRING,   MAX_REFERENCE_LEN, COL_NNUL,            "reference" },
-    { "active",      CT_BOOLEAN,  0,                 COL_NNUL,            "order" },
-    { "date_opened", CT_TIMESPEC, 0,                 COL_NNUL,            "date-opened" },
-    { "date_closed", CT_TIMESPEC, 0,                 COL_NNUL,            "date-closed" },
-    { "owner",       CT_OWNERREF, 0,                 COL_NNUL,            NULL, ORDER_OWNER },
+    gnc_sql_make_table_entry<CT_GUID>("guid", 0, COL_NNUL | COL_PKEY, "guid"),
+    gnc_sql_make_table_entry<CT_STRING>("id", MAX_ID_LEN, COL_NNUL, "id"),
+    gnc_sql_make_table_entry<CT_STRING>("notes", MAX_NOTES_LEN, COL_NNUL,
+                                        "notes"),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "reference", MAX_REFERENCE_LEN, COL_NNUL, "reference"),
+    gnc_sql_make_table_entry<CT_BOOLEAN>("active", 0, COL_NNUL, "order"),
+    gnc_sql_make_table_entry<CT_TIMESPEC>("date_opened", 0, COL_NNUL,
+                                          "date-opened"),
+    gnc_sql_make_table_entry<CT_TIMESPEC>("date_closed", 0, COL_NNUL,
+                                          "date-closed"),
+    gnc_sql_make_table_entry<CT_OWNERREF>("owner", 0, COL_NNUL,
+                                          ORDER_OWNER, true),
 });
 
 static GncOrder*
@@ -188,35 +192,33 @@ write_orders (GncSqlBackend* be)
 }
 
 /* ================================================================= */
-static void
-load_order_guid (const GncSqlBackend* be, GncSqlRow& row,
-                 QofSetterFunc setter, gpointer pObject,
-                 const GncSqlColumnTableEntry& table_row)
+template<> void
+GncSqlColumnTableEntryImpl<CT_ORDERREF>::load (const GncSqlBackend* be,
+                                                 GncSqlRow& row,
+                                                 QofIdTypeConst obj_name,
+                                                 gpointer pObject) const noexcept
 {
-    GncGUID guid;
-    GncOrder* order = NULL;
-
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (pObject != NULL);
-
-    try
-    {
-        auto val = row.get_string_at_col (table_row.col_name);
-        string_to_guid (val.c_str(), &guid);
-        order = gncOrderLookup (be->book, &guid);
-        if (order != nullptr)
-            set_parameter (pObject, order, setter, table_row.gobj_param_name);
-        else
-            PWARN ("Order ref '%s' not found", val.c_str());
-    }
-    catch (std::invalid_argument) {}
+    load_from_guid_ref(row, obj_name, pObject,
+                       [be](GncGUID* g){
+                           return gncOrderLookup(be->book, g);
+                       });
 }
 
-static GncSqlColumnTypeHandler order_guid_handler
-= { load_order_guid,
-    gnc_sql_add_objectref_guid_col_info_to_list,
-    gnc_sql_add_objectref_guid_to_vec
-  };
+template<> void
+GncSqlColumnTableEntryImpl<CT_ORDERREF>::add_to_table(const GncSqlBackend* be,
+                                                 ColVec& vec) const noexcept
+{
+    add_objectref_guid_to_table(be, vec);
+}
+
+template<> void
+GncSqlColumnTableEntryImpl<CT_ORDERREF>::add_to_query(const GncSqlBackend* be,
+                                                    QofIdTypeConst obj_name,
+                                                    const gpointer pObject,
+                                                    PairVec& vec) const noexcept
+{
+    add_objectref_guid_to_query(be, obj_name, pObject, vec);
+}
 /* ================================================================= */
 void
 gnc_order_sql_initialize (void)
@@ -233,6 +235,5 @@ gnc_order_sql_initialize (void)
     };
 
     gnc_sql_register_backend(&be_data);
-    gnc_sql_register_col_type_handler (CT_ORDERREF, &order_guid_handler);
 }
 /* ========================== END OF FILE ===================== */

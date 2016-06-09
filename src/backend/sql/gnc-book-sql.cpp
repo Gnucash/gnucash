@@ -58,15 +58,14 @@ static void set_root_template_guid (gpointer pObject,  gpointer pValue);
 
 static const EntryVec col_table
 {
-    { "guid",               CT_GUID, 0, COL_NNUL | COL_PKEY, "guid" },
-    {
-        "root_account_guid",  CT_GUID, 0, COL_NNUL,          NULL, NULL,
-        (QofAccessFunc)get_root_account_guid,  set_root_account_guid
-    },
-    {
-        "root_template_guid", CT_GUID, 0, COL_NNUL,          NULL, NULL,
-        (QofAccessFunc)get_root_template_guid, set_root_template_guid
-    },
+    gnc_sql_make_table_entry<CT_GUID>(
+        "guid", 0, COL_NNUL | COL_PKEY, "guid"),
+    gnc_sql_make_table_entry<CT_GUID>("root_account_guid",  0, COL_NNUL,
+                                      (QofAccessFunc)get_root_account_guid,
+                                      set_root_account_guid),
+    gnc_sql_make_table_entry<CT_GUID>("root_template_guid", 0, COL_NNUL,
+                                      (QofAccessFunc)get_root_template_guid,
+                                      set_root_template_guid)
 };
 
 /* ================================================================= */

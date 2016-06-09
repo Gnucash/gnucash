@@ -57,20 +57,28 @@ G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
 static const EntryVec col_table
 ({
-    { "guid",              CT_GUID,       0,               COL_NNUL | COL_PKEY, "guid" },
-    { "name",              CT_STRING,     SX_MAX_NAME_LEN, 0,                 "name" },
-    { "enabled",           CT_BOOLEAN,    0,               COL_NNUL,          "enabled" },
-    { "start_date",        CT_GDATE,      0,               0,                 "start-date" },
-    { "end_date",          CT_GDATE,      0,               0,                 "end-date" },
-    { "last_occur",        CT_GDATE,      0,               0,                 "last-occurance-date" },
-    { "num_occur",         CT_INT,        0,               COL_NNUL,          "num-occurance" },
-    { "rem_occur",         CT_INT,        0,               COL_NNUL,          "rem-occurance" },
-    { "auto_create",       CT_BOOLEAN,    0,               COL_NNUL,          "auto-create" },
-    { "auto_notify",       CT_BOOLEAN,    0,               COL_NNUL,          "auto-create-notify" },
-    { "adv_creation",      CT_INT,        0,               COL_NNUL,          "advance-creation-days" },
-    { "adv_notify",        CT_INT,        0,               COL_NNUL,          "advance-reminder-days" },
-    { "instance_count",    CT_INT,        0,               COL_NNUL,          "instance-count" },
-    { "template_act_guid", CT_ACCOUNTREF, 0,               COL_NNUL,          "template-account" },
+    gnc_sql_make_table_entry<CT_GUID>("guid", 0, COL_NNUL | COL_PKEY, "guid"),
+    gnc_sql_make_table_entry<CT_STRING>("name", SX_MAX_NAME_LEN, 0, "name"),
+    gnc_sql_make_table_entry<CT_BOOLEAN>("enabled", 0, COL_NNUL, "enabled"),
+    gnc_sql_make_table_entry<CT_GDATE>("start_date", 0, 0, "start-date"),
+    gnc_sql_make_table_entry<CT_GDATE>("end_date", 0, 0, "end-date"),
+    gnc_sql_make_table_entry<CT_GDATE>(
+        "last_occur", 0, 0, "last-occurance-date"),
+    gnc_sql_make_table_entry<CT_INT>(
+        "num_occur", 0, COL_NNUL, "num-occurance"),
+    gnc_sql_make_table_entry<CT_INT>("rem_occur", 0, COL_NNUL, "rem-occurance"),
+    gnc_sql_make_table_entry<CT_BOOLEAN>(
+        "auto_create", 0, COL_NNUL, "auto-create"),
+    gnc_sql_make_table_entry<CT_BOOLEAN>(
+        "auto_notify", 0, COL_NNUL, "auto-create-notify"),
+    gnc_sql_make_table_entry<CT_INT>(
+        "adv_creation", 0, COL_NNUL, "advance-creation-days"),
+    gnc_sql_make_table_entry<CT_INT>(
+        "adv_notify", 0, COL_NNUL, "advance-reminder-days"),
+    gnc_sql_make_table_entry<CT_INT>(
+        "instance_count", 0, COL_NNUL, "instance-count"),
+    gnc_sql_make_table_entry<CT_ACCOUNTREF>(
+        "template_act_guid", 0, COL_NNUL, "template-account"),
 });
 
 /* ================================================================= */

@@ -42,7 +42,6 @@ extern "C"
 }
 
 #include "gnc-vendor-sql.h"
-#include "gnc-address-sql.h"
 #include "gnc-bill-term-sql.h"
 #include "gnc-tax-table-sql.h"
 #include "gnc-backend-sql.h"
@@ -63,17 +62,21 @@ G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
 static EntryVec col_table
 ({
-    { "guid",         CT_GUID,          0,               COL_NNUL | COL_PKEY, "guid" },
-    { "name",         CT_STRING,        MAX_NAME_LEN,    COL_NNUL,            "name" },
-    { "id",           CT_STRING,        MAX_ID_LEN,      COL_NNUL,            "id" },
-    { "notes",        CT_STRING,        MAX_NOTES_LEN,   COL_NNUL,            "notes" },
-    { "currency",     CT_COMMODITYREF,  0,               COL_NNUL,            "currency" },
-    { "active",       CT_BOOLEAN,       0,               COL_NNUL,            "active" },
-    { "tax_override", CT_BOOLEAN,       0,               COL_NNUL,            "tax-table-override" },
-    { "addr",         CT_ADDRESS,       0,               0,                   "address" },
-    { "terms",        CT_BILLTERMREF,   0,               0,                   "terms" },
-    { "tax_inc",      CT_STRING,        MAX_TAX_INC_LEN, 0,                   "tax-included-string" },
-    { "tax_table",    CT_TAXTABLEREF,   0,               0,                   "tax-table" },
+    gnc_sql_make_table_entry<CT_GUID>("guid", 0, COL_NNUL | COL_PKEY, "guid"),
+    gnc_sql_make_table_entry<CT_STRING>("name", MAX_NAME_LEN, COL_NNUL, "name"),
+    gnc_sql_make_table_entry<CT_STRING>("id", MAX_ID_LEN, COL_NNUL, "id"),
+    gnc_sql_make_table_entry<CT_STRING>("notes", MAX_NOTES_LEN, COL_NNUL,
+                                        "notes"),
+    gnc_sql_make_table_entry<CT_COMMODITYREF>("currency", 0, COL_NNUL,
+                                              "currency"),
+    gnc_sql_make_table_entry<CT_BOOLEAN>("active", 0, COL_NNUL, "active"),
+    gnc_sql_make_table_entry<CT_BOOLEAN>("tax_override", 0, COL_NNUL,
+                                         "tax-table-override"),
+    gnc_sql_make_table_entry<CT_ADDRESS>("addr", 0, 0, "address"),
+    gnc_sql_make_table_entry<CT_BILLTERMREF>("terms", 0, 0, "terms"),
+    gnc_sql_make_table_entry<CT_STRING>("tax_inc", MAX_TAX_INC_LEN, 0,
+                                        "tax-included-string"),
+    gnc_sql_make_table_entry<CT_TAXTABLEREF>("tax_table", 0, 0, "tax-table"),
 });
 
 static GncVendor*

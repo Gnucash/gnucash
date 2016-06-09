@@ -78,12 +78,14 @@ typedef struct
 
 static const EntryVec tx_col_table
 {
-    { "guid",          CT_GUID,           0,                      COL_NNUL | COL_PKEY, "guid" },
-    { "currency_guid", CT_COMMODITYREF,   0,                      COL_NNUL,          "currency" },
-    { "num",           CT_STRING,         TX_MAX_NUM_LEN,         COL_NNUL,          "num" },
-    { "post_date",     CT_TIMESPEC,       0,                      0,                 "post-date" },
-    { "enter_date",    CT_TIMESPEC,       0,                      0,                 "enter-date" },
-    { "description",   CT_STRING,         TX_MAX_DESCRIPTION_LEN, 0,                 "description" },
+    gnc_sql_make_table_entry<CT_GUID>("guid", 0, COL_NNUL | COL_PKEY, "guid"),
+    gnc_sql_make_table_entry<CT_COMMODITYREF>("currency_guid", 0, COL_NNUL,
+                                              "currency"),
+    gnc_sql_make_table_entry<CT_STRING>("num", TX_MAX_NUM_LEN, COL_NNUL, "num"),
+    gnc_sql_make_table_entry<CT_TIMESPEC>("post_date", 0, 0, "post-date"),
+    gnc_sql_make_table_entry<CT_TIMESPEC>("enter_date", 0, 0, "enter-date"),
+    gnc_sql_make_table_entry<CT_STRING>("description", TX_MAX_DESCRIPTION_LEN,
+                                        0, "description"),
 };
 
 static  gpointer get_split_reconcile_state (gpointer pObject);
@@ -95,37 +97,40 @@ static void set_split_lot (gpointer pObject,  gpointer pLot);
 
 static const EntryVec split_col_table
 {
-    { "guid",            CT_GUID,         0,                    COL_NNUL | COL_PKEY, "guid" },
-    { "tx_guid",         CT_TXREF,        0,                    COL_NNUL,          "transaction" },
-    { "account_guid",    CT_ACCOUNTREF,   0,                    COL_NNUL,          "account" },
-    { "memo",            CT_STRING,       SPLIT_MAX_MEMO_LEN,   COL_NNUL,          "memo" },
-    { "action",          CT_STRING,       SPLIT_MAX_ACTION_LEN, COL_NNUL,          "action" },
-    {
-        "reconcile_state", CT_STRING,       1,                    COL_NNUL,          NULL, NULL,
-        (QofAccessFunc)get_split_reconcile_state, set_split_reconcile_state
-    },
-    { "reconcile_date",  CT_TIMESPEC,     0,                    0,                 "reconcile-date" },
-    { "value",           CT_NUMERIC,      0,                    COL_NNUL,          "value" },
-    { "quantity",        CT_NUMERIC,      0,                    COL_NNUL,          "amount" },
-    {
-        "lot_guid",        CT_LOTREF,       0,                    0,                 NULL, NULL,
-        (QofAccessFunc)xaccSplitGetLot, set_split_lot
-    },
+    gnc_sql_make_table_entry<CT_GUID>("guid", 0, COL_NNUL | COL_PKEY, "guid"),
+    gnc_sql_make_table_entry<CT_TXREF>("tx_guid", 0, COL_NNUL, "transaction"),
+    gnc_sql_make_table_entry<CT_ACCOUNTREF>("account_guid", 0, COL_NNUL,
+                                            "account"),
+    gnc_sql_make_table_entry<CT_STRING>("memo", SPLIT_MAX_MEMO_LEN, COL_NNUL,
+                                        "memo"),
+    gnc_sql_make_table_entry<CT_STRING>("action", SPLIT_MAX_ACTION_LEN,
+                                        COL_NNUL, "action"),
+    gnc_sql_make_table_entry<CT_STRING>("reconcile_state", 1, COL_NNUL,
+                                       (QofAccessFunc)get_split_reconcile_state,
+                                        set_split_reconcile_state),
+    gnc_sql_make_table_entry<CT_TIMESPEC>("reconcile_date", 0, 0,
+                                          "reconcile-date"),
+    gnc_sql_make_table_entry<CT_NUMERIC>("value", 0, COL_NNUL, "value"),
+    gnc_sql_make_table_entry<CT_NUMERIC>("quantity", 0, COL_NNUL, "amount"),
+    gnc_sql_make_table_entry<CT_LOTREF>("lot_guid", 0, 0,
+                                        (QofAccessFunc)xaccSplitGetLot,
+                                        set_split_lot),
 };
 
 static const EntryVec post_date_col_table
 {
-    { "post_date", CT_TIMESPEC, 0, 0, "post-date" },
+    gnc_sql_make_table_entry<CT_TIMESPEC>("post_date", 0, 0, "post-date"),
 };
 
 static const EntryVec account_guid_col_table
 {
-    { "account_guid", CT_ACCOUNTREF, 0, COL_NNUL, "account" },
+    gnc_sql_make_table_entry<CT_ACCOUNTREF>("account_guid", 0, COL_NNUL,
+                                            "account"),
 };
 
 static const EntryVec tx_guid_col_table
 {
-    { "tx_guid", CT_GUID, 0, 0, "guid" },
+    gnc_sql_make_table_entry<CT_GUID>("tx_guid", 0, 0, "guid"),
 };
 
 /* ================================================================= */
@@ -232,7 +237,7 @@ load_splits_for_tx_list (GncSqlBackend* be, GList* list)
     sql = g_string_sized_new (40 + (GUID_ENCODING_LENGTH + 3) * g_list_length (
                                   list));
     g_string_append_printf (sql, "SELECT * FROM %s WHERE %s IN (", SPLIT_TABLE,
-                            tx_guid_col_table[0].col_name);
+                            tx_guid_col_table[0]->name());
     (void)gnc_sql_append_guid_list_to_sql (sql, list, G_MAXUINT);
     (void)g_string_append (sql, ")");
 
@@ -1301,9 +1306,12 @@ set_acct_bal_balance (gpointer pObject, gnc_numeric value)
 
 static const EntryVec acct_balances_col_table
 {
-    { "account_guid",    CT_GUID,    0, 0, NULL, NULL, NULL, (QofSetterFunc)set_acct_bal_account_from_guid },
-    { "reconcile_state", CT_STRING,  1, 0, NULL, NULL, NULL, (QofSetterFunc)set_acct_bal_reconcile_state },
-    { "quantity",        CT_NUMERIC, 0, 0, NULL, NULL, NULL, (QofSetterFunc)set_acct_bal_balance },
+    gnc_sql_make_table_entry<CT_GUID>("account_guid", 0, 0, nullptr,
+                                (QofSetterFunc)set_acct_bal_account_from_guid),
+    gnc_sql_make_table_entry<CT_STRING>("reconcile_state", 1, 0, nullptr,
+                                (QofSetterFunc)set_acct_bal_reconcile_state),
+    gnc_sql_make_table_entry<CT_NUMERIC>("quantity", 0, 0, nullptr,
+                                         (QofSetterFunc)set_acct_bal_balance),
 };
 
 G_GNUC_UNUSED static  single_acct_balance_t*
@@ -1408,13 +1416,12 @@ gnc_sql_get_account_balances_slist (GncSqlBackend* be)
 }
 
 /* ----------------------------------------------------------------- */
-static void
-load_tx_guid (const GncSqlBackend* be, GncSqlRow& row,
-              QofSetterFunc setter, gpointer pObject,
-              const GncSqlColumnTableEntry& table_row)
+template<> void
+GncSqlColumnTableEntryImpl<CT_TXREF>::load (const GncSqlBackend* be,
+                                            GncSqlRow& row,
+                                            QofIdTypeConst obj_name,
+                                            gpointer pObject) const noexcept
 {
-    GncGUID guid;
-    Transaction* tx;
     const gchar* guid_str;
 
     g_return_if_fail (be != NULL);
@@ -1422,35 +1429,44 @@ load_tx_guid (const GncSqlBackend* be, GncSqlRow& row,
 
     try
     {
-        auto val = row.get_string_at_col (table_row.col_name);
+        auto val = row.get_string_at_col (m_col_name);
+        GncGUID guid;
         (void)string_to_guid (val.c_str(), &guid);
-        tx = xaccTransLookup (&guid, be->book);
+        auto tx = xaccTransLookup (&guid, be->book);
 
         // If the transaction is not found, try loading it
-        if (tx == NULL)
+        if (tx == nullptr)
         {
-            gchar* buf;
-            GncSqlStatement* stmt;
-
-            buf = g_strdup_printf ("SELECT * FROM %s WHERE guid='%s'",
-                                   TRANSACTION_TABLE, val.c_str());
-            stmt = gnc_sql_create_statement_from_sql ((GncSqlBackend*)be, buf);
-            g_free (buf);
+            auto buf = std::string{"SELECT * FROM "} + TRANSACTION_TABLE +
+                                       " WHERE guid='" + val + "'";
+            auto stmt = gnc_sql_create_statement_from_sql ((GncSqlBackend*)be,
+                                                           buf.c_str());
             query_transactions ((GncSqlBackend*)be, stmt);
             tx = xaccTransLookup (&guid, be->book);
         }
 
         if (tx != nullptr)
-            set_parameter (pObject, tx, setter, table_row.gobj_param_name);
+            set_parameter (pObject, tx, get_setter(obj_name), m_gobj_param_name);
     }
     catch (std::invalid_argument) {}
 }
 
-static GncSqlColumnTypeHandler tx_guid_handler
-= { load_tx_guid,
-    gnc_sql_add_objectref_guid_col_info_to_list,
-    gnc_sql_add_objectref_guid_to_vec
-  };
+template<> void
+GncSqlColumnTableEntryImpl<CT_TXREF>::add_to_table(const GncSqlBackend* be,
+                                                   ColVec& vec) const noexcept
+{
+    add_objectref_guid_to_table(be, vec);
+}
+
+template<> void
+GncSqlColumnTableEntryImpl<CT_TXREF>::add_to_query(const GncSqlBackend* be,
+                                                   QofIdTypeConst obj_name,
+                                                   const gpointer pObject,
+                                                   PairVec& vec) const noexcept
+{
+    add_objectref_guid_to_query(be, obj_name, pObject, vec);
+}
+
 /* ================================================================= */
 void
 gnc_sql_init_transaction_handler (void)
@@ -1492,7 +1508,6 @@ gnc_sql_init_transaction_handler (void)
 
     gnc_sql_register_backend(&be_data_tx);
     gnc_sql_register_backend(&be_data_split);
-    gnc_sql_register_col_type_handler (CT_TXREF, &tx_guid_handler);
 }
 
 /* ========================== END OF FILE ===================== */

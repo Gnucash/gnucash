@@ -71,45 +71,42 @@ static void set_recurrence_period_start (gpointer pObject,  gpointer pValue);
 
 static const EntryVec col_table
 ({
-    { "id",                      CT_INT,    0,                                     COL_PKEY | COL_NNUL | COL_AUTOINC },
-    {
-        "obj_guid",                CT_GUID,   0,                                     COL_NNUL, NULL, NULL,
-        (QofAccessFunc)get_obj_guid, (QofSetterFunc)set_obj_guid
-    },
-    {
-        "recurrence_mult",         CT_INT,    0,                                     COL_NNUL, NULL, NULL,
-        (QofAccessFunc)get_recurrence_mult, (QofSetterFunc)set_recurrence_mult
-    },
-    {
-        "recurrence_period_type",  CT_STRING, BUDGET_MAX_RECURRENCE_PERIOD_TYPE_LEN, COL_NNUL, NULL, NULL,
-        (QofAccessFunc)get_recurrence_period_type, set_recurrence_period_type
-    },
-    {
-        "recurrence_period_start", CT_GDATE,  0,                                     COL_NNUL, NULL, NULL,
-        (QofAccessFunc)get_recurrence_period_start, set_recurrence_period_start
-    },
-    {
-        "recurrence_weekend_adjust",  CT_STRING, BUDGET_MAX_RECURRENCE_WEEKEND_ADJUST_LEN, COL_NNUL, NULL, NULL,
-        (QofAccessFunc)get_recurrence_weekend_adjust, set_recurrence_weekend_adjust
-    }
+    gnc_sql_make_table_entry<CT_INT>(
+        "id", 0, COL_PKEY | COL_NNUL | COL_AUTOINC),
+    gnc_sql_make_table_entry<CT_GUID>("obj_guid", 0, COL_NNUL,
+        (QofAccessFunc)get_obj_guid, (QofSetterFunc)set_obj_guid),
+    gnc_sql_make_table_entry<CT_INT>(
+        "recurrence_mult", 0, COL_NNUL,
+        (QofAccessFunc)get_recurrence_mult, (QofSetterFunc)set_recurrence_mult),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "recurrence_period_type", BUDGET_MAX_RECURRENCE_PERIOD_TYPE_LEN,
+        COL_NNUL,
+        (QofAccessFunc)get_recurrence_period_type, set_recurrence_period_type),
+    gnc_sql_make_table_entry<CT_GDATE>(
+        "recurrence_period_start", 0, COL_NNUL,
+        (QofAccessFunc)get_recurrence_period_start,
+        set_recurrence_period_start),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "recurrence_weekend_adjust", BUDGET_MAX_RECURRENCE_WEEKEND_ADJUST_LEN,
+        COL_NNUL,
+        (QofAccessFunc)get_recurrence_weekend_adjust,
+        set_recurrence_weekend_adjust)
 });
 
 /* Special column table because we need to be able to access the table by
 a column other than the primary key */
 static const EntryVec guid_col_table
 ({
-    {
-        "obj_guid", CT_GUID, 0, 0, NULL, NULL,
-        (QofAccessFunc)get_obj_guid, (QofSetterFunc)set_obj_guid
-    }
+    gnc_sql_make_table_entry<CT_GUID>("obj_guid", 0, 0,
+                                      (QofAccessFunc)get_obj_guid,
+                                      (QofSetterFunc)set_obj_guid)
 });
 
 /* Special column table used to upgrade table from version 1 to 2 */
 static const EntryVec weekend_adjust_col_table
 ({
-    {
-        "recurrence_weekend_adjust",  CT_STRING, BUDGET_MAX_RECURRENCE_WEEKEND_ADJUST_LEN, 0,
-    }
+    gnc_sql_make_table_entry<CT_STRING>(
+       "recurrence_weekend_adjust", BUDGET_MAX_RECURRENCE_WEEKEND_ADJUST_LEN, 0)
 });
 
 /* ================================================================= */
@@ -380,7 +377,7 @@ upgrade_recurrence_table_1_2 (GncSqlBackend* be)
         gchar* weekend_adj_str = recurrenceWeekendAdjustToString (WEEKEND_ADJ_NONE);
         gchar* update_query = g_strdup_printf ("UPDATE %s SET %s = '%s';",
                                                TABLE_NAME,
-                                               weekend_adjust_col_table[0].col_name,
+                                               weekend_adjust_col_table[0]->name(),
                                                weekend_adj_str);
         (void)gnc_sql_execute_nonselect_sql (be, update_query);
         g_free (weekend_adj_str);

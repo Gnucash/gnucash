@@ -43,8 +43,6 @@ extern "C"
 #include "gnc-slots-sql.h"
 #include "gnc-commodity-sql.h"
 #include "gnc-employee-sql.h"
-#include "gnc-address-sql.h"
-
 
 #define _GNC_MOD_NAME   GNC_ID_EMPLOYEE
 
@@ -60,17 +58,21 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 
 static EntryVec col_table
 ({
-    { "guid",       CT_GUID,          0,                COL_NNUL | COL_PKEY, "guid" },
-    { "username",   CT_STRING,        MAX_USERNAME_LEN, COL_NNUL,            "username" },
-    { "id",         CT_STRING,        MAX_ID_LEN,       COL_NNUL,            "id" },
-    { "language",   CT_STRING,        MAX_LANGUAGE_LEN, COL_NNUL,            "language" },
-    { "acl",        CT_STRING,        MAX_ACL_LEN,      COL_NNUL,            "acl" },
-    { "active",     CT_BOOLEAN,       0,                COL_NNUL,            "active" },
-    { "currency",   CT_COMMODITYREF,  0,                COL_NNUL,            "currency" },
-    { "ccard_guid", CT_ACCOUNTREF,    0,                0,                   "credit-card-account" },
-    { "workday",    CT_NUMERIC,       0,                COL_NNUL,            "workday" },
-    { "rate",       CT_NUMERIC,       0,                COL_NNUL,            "rate" },
-    { "addr",       CT_ADDRESS,       0,                0,                   "address" },
+    gnc_sql_make_table_entry<CT_GUID>("guid", 0, COL_NNUL | COL_PKEY, "guid"),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "username", MAX_USERNAME_LEN, COL_NNUL, "username"),
+    gnc_sql_make_table_entry<CT_STRING>("id", MAX_ID_LEN, COL_NNUL, "id"),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "language", MAX_LANGUAGE_LEN, COL_NNUL, "language"),
+    gnc_sql_make_table_entry<CT_STRING>("acl", MAX_ACL_LEN, COL_NNUL, "acl"),
+    gnc_sql_make_table_entry<CT_BOOLEAN>("active", 0, COL_NNUL, "active"),
+    gnc_sql_make_table_entry<CT_COMMODITYREF>(
+        "currency", 0, COL_NNUL, "currency"),
+    gnc_sql_make_table_entry<CT_ACCOUNTREF>(
+        "ccard_guid", 0, 0, "credit-card-account"),
+    gnc_sql_make_table_entry<CT_NUMERIC>("workday", 0, COL_NNUL, "workday"),
+    gnc_sql_make_table_entry<CT_NUMERIC>("rate", 0, COL_NNUL, "rate"),
+    gnc_sql_make_table_entry<CT_ADDRESS>("addr", 0, 0, "address"),
 });
 
 static GncEmployee*
