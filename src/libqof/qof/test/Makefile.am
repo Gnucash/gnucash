@@ -14,7 +14,7 @@ test_qof_SOURCES = \
 	test-qofbook.c \
 	test-qofinstance.cpp \
 	test-qofobject.c \
-	test-qofsession.cpp \
+	test-qofsession-old.cpp \
 	test-qof-string-cache.c \
 	test-gnc-guid.cpp \
 	${top_srcdir}/src/test-core/unittest-support.c
@@ -55,6 +55,28 @@ test_kvp_value_CPPFLAGS = \
     $(BOOST_CPPFLAGS)
 
 check_PROGRAMS += test-kvp-value
+
+test_qofsession_SOURCES = \
+	$(top_srcdir)/$(MODULEPATH)/qofsession.cpp \
+	test-qofsession.cpp
+test_qofsession_LDADD = \
+	$(top_builddir)/$(MODULEPATH)/libgnc-qof.la \
+	$(GLIB_LIBS) \
+	$(GTEST_LIBS) \
+	$(BOOST_LDFLAGS)
+
+if !GOOGLE_TEST_LIBS
+nodist_test_qofsession_SOURCES = \
+	${GTEST_SRC}/src/gtest_main.cc
+endif
+
+test_qofsession_CPPFLAGS = \
+	-I$(GTEST_HEADERS) \
+	-I$(top_srcdir)/$(MODULEPATH) \
+	$(GLIB_CFLAGS) \
+	$(BOOST_CPPFLAGS)
+
+check_PROGRAMS += test-qofsession
 
 test_gnc_int128_SOURCES = \
         $(top_srcdir)/${MODULEPATH}/gnc-int128.cpp \
