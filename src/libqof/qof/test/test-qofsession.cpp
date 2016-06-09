@@ -23,6 +23,7 @@
  ********************************************************************/
 
 #include <gtest/gtest.h>
+#include "../guid.hpp"
 #include <qofsession.hpp>
 #include "qofbackend-p.h"
 #include <cstdlib>

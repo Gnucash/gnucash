@@ -22,17 +22,12 @@
  *                                                                  *
  ********************************************************************/
 
-#ifdef __cplusplus
+#include <guid.hpp>
 extern "C"
 {
-#endif
-
 #include "config.h"
 #include <glib.h>
-
-#ifdef __cplusplus
 }
-#endif
 
 #include "qof.h"
 #include "qofevent-p.h"

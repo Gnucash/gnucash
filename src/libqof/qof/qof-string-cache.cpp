@@ -26,11 +26,9 @@
  *   Author: Phil Longstaff (phil.longstaff@yahoo.ca)               *
 \********************************************************************/
 
-#ifdef __cplusplus
+#include <guid.hpp>
 extern "C"
 {
-#endif
-
 #include "config.h"
 
 #include <ctype.h>
@@ -38,10 +36,7 @@ extern "C"
 #include <stdlib.h>
 #include <string.h>
 #include "qof.h"
-
-#ifdef __cplusplus
 }
-#endif
 
 /* Uncomment if you need to log anything.
 static QofLogModule log_module = QOF_MOD_UTIL;

@@ -22,16 +22,12 @@
  *                                                                  *
 \********************************************************************/
 
+#include "guid.hpp"
 extern "C"
 {
 
 #ifdef HAVE_CONFIG_H
 # include <config.h>
-#endif
-
-#include <platform.h>
-#if PLATFORM(WINDOWS)
-#include <windows.h>
 #endif
 
 #ifdef HAVE_SYS_TYPES_H
@@ -63,10 +59,6 @@ extern "C"
 #include <sstream>
 #include <string>
 
-using namespace std;
-
-typedef boost::uuids::uuid gg;
-
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = QOF_MOD_ENGINE;
 
@@ -80,6 +72,7 @@ static QofLogModule log_module = QOF_MOD_ENGINE;
 const GncGUID*
 gnc_value_get_guid (const GValue *value)
 {
+    if (!value) return nullptr;
     GncGUID *val;
 
     g_return_val_if_fail (value && G_IS_VALUE (value), NULL);
@@ -90,13 +83,13 @@ gnc_value_get_guid (const GValue *value)
     return val;
 }
 
-static GncGUID * nullguid {reinterpret_cast<GncGUID*> (new boost::uuids::uuid{{0}})};
+static GncGUID s_null_guid {{{0}}};
 
 /*It looks like we are expected to provide the same pointer every time from this function*/
 const GncGUID *
 guid_null (void)
 {
-    return nullguid;
+    return &s_null_guid;
 }
 
 /* Memory management routines ***************************************/
@@ -104,74 +97,52 @@ guid_null (void)
 GncGUID *
 guid_malloc (void)
 {
-    /*Note, the Boost uuid is a POD, so its constructor is trivial*/
-    return reinterpret_cast<GncGUID*> (new boost::uuids::uuid);
+    return new GncGUID;
 }
 
 void
 guid_free (GncGUID *guid)
 {
-    if (!guid)
-        return;
-    if (guid == nullguid)
+    if (!guid) return;
+    if (guid == &s_null_guid)
         /*!!Don't delete that!!*/
         return;
-    delete reinterpret_cast<boost::uuids::uuid*> (guid);
-    guid = nullptr;
+    delete guid;
 }
-
 
 GncGUID *
 guid_copy (const GncGUID *guid)
 {
-    const boost::uuids::uuid * old {reinterpret_cast<const boost::uuids::uuid*> (guid)};
-    boost::uuids::uuid * ret {new boost::uuids::uuid (*old)};
-    return reinterpret_cast<GncGUID*> (ret);
+    if (!guid) return nullptr;
+    return new GncGUID {*guid};
 }
 
 /*Takes an allocated guid pointer and constructs it in place*/
 void
 guid_replace (GncGUID *guid)
 {
-    static boost::uuids::random_generator gen;
-    boost::uuids::uuid * val {reinterpret_cast<boost::uuids::uuid*> (guid)};
-    val->boost::uuids::uuid::~uuid ();
-    boost::uuids::uuid temp (gen ());
-    val->swap (temp);
+    if (!guid) return;
+    auto other = GncGUID::create_random();
+    guid->swap (other);
 }
 
 GncGUID *
 guid_new (void)
 {
-    GncGUID * ret {guid_malloc ()};
-    guid_replace (ret);
-    return ret;
+    return new GncGUID {GncGUID::create_random ()};
 }
 
 GncGUID
 guid_new_return (void)
 {
-    /*we need to construct our value as a boost guid so that
-    it can be deconstructed (in place) in guid_replace*/
-    boost::uuids::uuid guid;
-    GncGUID * ret {reinterpret_cast<GncGUID*> (&guid)};
-    guid_replace (ret);
-    /*return a copy*/
-    return *ret;
+    return GncGUID::create_random ();
 }
 
 gchar *
 guid_to_string (const GncGUID * guid)
 {
-    /* We need to malloc here, not 'new' because it will be freed
-    by the caller which will use free (not delete).*/
-    gchar * ret {reinterpret_cast<gchar*> (g_malloc (sizeof (gchar)*GUID_ENCODING_LENGTH+1))};
-    gchar * temp {guid_to_string_buff (guid, ret)};
-    if (!temp){
-        g_free (ret);
-        return nullptr;
-    }
-    return ret;
+    if (!guid) return nullptr;
+    return g_strdup (guid->to_string ().c_str ());
 }
 
 gchar *
@@ -179,28 +150,21 @@ guid_to_string_buff (const GncGUID * guid, gchar *str)
 {
     if (!str || !guid) return NULL;
 
-    boost::uuids::uuid const & tempg = *reinterpret_cast<boost::uuids::uuid const *> (guid);
-    unsigned destspot {0};
-    string const & val {to_string (tempg)};
-    for (auto val_char : val)
-        if (val_char != '-')
-            str [destspot++] = val_char;
-
-    str[GUID_ENCODING_LENGTH] = '\0';
-    return &str[GUID_ENCODING_LENGTH];
+    auto val = guid->to_string ();
+    /*We need to be sure to copy the terminating null character.*/
+    std::copy (val.c_str (), val.c_str() + val.size () + 1, str);
+    return str + val.size();
 }
 
 gboolean
 string_to_guid (const char * str, GncGUID * guid)
 {
-    if (!guid || !str)
-        return false;
+    if (!guid || !str) return false;
 
-    try 
+    try
     {
-        static boost::uuids::string_generator strgen;
-        boost::uuids::uuid * converted {reinterpret_cast<boost::uuids::uuid*> (guid)};
-        new (converted) boost::uuids::uuid (strgen (str));
+        auto other = GncGUID::from_string (str);
+        guid->swap (other);
     }
     catch (...)
     {
@@ -213,20 +177,16 @@ gboolean
 guid_equal (const GncGUID *guid_1, const GncGUID *guid_2)
 {
     if (!guid_1 || !guid_2)
-        return false;
-    boost::uuids::uuid const * g1 {reinterpret_cast<boost::uuids::uuid const *> (guid_1)};
-    boost::uuids::uuid const * g2 {reinterpret_cast<boost::uuids::uuid const *> (guid_2)};
-    return *g1 == *g2;
+        return !guid_1 && !guid_2;
+    return *guid_1 == *guid_2;
 }
 
 gint
 guid_compare (const GncGUID *guid_1, const GncGUID *guid_2)
 {
-    boost::uuids::uuid const * g1 {reinterpret_cast<boost::uuids::uuid const *> (guid_1)};
-    boost::uuids::uuid const * g2 {reinterpret_cast<boost::uuids::uuid const *> (guid_2)};
-    if (*g1 < *g2)
+    if (*guid_1 < *guid_2)
         return -1;
-    if (*g1 == *g2)
+    if (*guid_1 == *guid_2)
         return 0;
     return 1;
 }
@@ -234,21 +194,19 @@ guid_compare (const GncGUID *guid_1, const GncGUID *guid_2)
 guint
 guid_hash_to_guint (gconstpointer ptr)
 {
-    const boost::uuids::uuid * guid = reinterpret_cast<const boost::uuids::uuid*> (ptr);
-
-    if (!guid)
+    if (!ptr)
     {
         PERR ("received NULL guid pointer.");
         return 0;
     }
+    GncGUID const & guid = * reinterpret_cast <GncGUID const *> (ptr);
 
     guint hash {0};
     unsigned retspot {0};
-    for (auto guidspot : *guid)
-    {
-        hash <<= 4;
-        hash |= guidspot;
-    }
+    std::for_each (guid.begin (), guid.end (), [&hash] (unsigned char a) {
+        hash <<=4;
+        hash |= a;
+    });
     return hash;
 }
 
@@ -318,4 +276,52 @@ gnc_guid_get_type (void)
     }
 
     return type;
+}
+
+GncGUID
+GncGUID::create_random () noexcept
+{
+    static boost::uuids::random_generator gen;
+    return {gen ()};
+}
+
+GncGUID::GncGUID (boost::uuids::uuid const & other) noexcept
+    : boost::uuids::uuid (other)
+{
+}
+
+GncGUID const &
+GncGUID::null_guid () noexcept
+{
+    return s_null_guid;
+}
+
+std::string
+GncGUID::to_string () const noexcept
+{
+    auto const & val = boost::uuids::to_string (*this);
+    std::string ret;
+    std::for_each (val.begin (), val.end (), [&ret] (char a) {
+        if (a != '-') ret.push_back (a);
+    });
+    return ret;
+}
+
+GncGUID
+GncGUID::from_string (std::string const & str) throw (guid_syntax_exception)
+{
+    try
+    {
+        static boost::uuids::string_generator strgen;
+        return strgen (str);
+    }
+    catch (...)
+    {
+        throw guid_syntax_exception {};
+    }
+}
+
+guid_syntax_exception::guid_syntax_exception () noexcept
+    : invalid_argument {"Invalid syntax for guid."}
+{
 }

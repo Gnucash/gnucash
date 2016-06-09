@@ -24,6 +24,7 @@
  * @brief Minimal test of reading/writing account parameters
  * @author David Hampton <hampton@employees.org>
  */
+#include <guid.hpp>
 extern "C"
 {
 #include "config.h"

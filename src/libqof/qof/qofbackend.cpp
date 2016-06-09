@@ -21,10 +21,10 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-#ifdef __cplusplus
+
+#include <guid.hpp>
 extern "C"
 {
-#endif
 
 #include "config.h"
 #include <stdio.h>
@@ -37,9 +37,7 @@ extern "C"
 #include "qof.h"
 #include "qofbackend-p.h"
 
-#ifdef __cplusplus
 }
-#endif
 
 G_GNUC_UNUSED static QofLogModule log_module = QOF_MOD_BACKEND;
 

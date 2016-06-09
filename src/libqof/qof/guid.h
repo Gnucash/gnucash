@@ -61,10 +61,16 @@ extern "C"
 #define GNC_TYPE_GUID (gnc_guid_get_type())
 #define GNC_VALUE_HOLDS_GUID(value) G_VALUE_HOLDS(value, GNC_TYPE_GUID)
 
-/** The type used to store guids */
+/* We use two definitions for gncguid: one when compiling for C (so that
+ * the object can be persisted), and a different one when compiling for C++
+ * found in guid.hpp
+ */
+#ifndef __cplusplus
+/** The type used to store guids in C */
 typedef struct _gncGuid {
     unsigned char reserved[GUID_DATA_SIZE];
 } GncGUID;
+#endif
 
 GType gnc_guid_get_type (void);
 const GncGUID* gnc_value_get_guid (const GValue *value);
