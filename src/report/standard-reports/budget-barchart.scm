@@ -181,8 +181,12 @@
         (period-start-time (car date))
         (bgt-vals '())
         (act-vals '())
-        (date-list '())
+        (date-iso-string-list '())
+        (save-fmt (qof-date-format-get))
       )
+
+      ;; make sure jqplot receives the date strings in ISO format (Bug763257)
+      (qof-date-format-set QOF-DATE-FORMAT-ISO)
 
       ;; Loop through periods
       (while (< period num-periods)
@@ -212,7 +216,7 @@
             )
             (set! bgt-vals (append bgt-vals (list bgt-sum)))
             (set! act-vals (append act-vals (list act-sum)))
-            (set! date-list (append date-list (list (gnc-print-date date))))
+            (set! date-iso-string-list (append date-iso-string-list (list (gnc-print-date date))))
           )
         )
         ;; prepare data for next loop repetition
@@ -224,12 +228,15 @@
         )
       )
 
+      ;; restore the date strings format
+      (qof-date-format-set save-fmt)
+
       (if (eqv? chart-type 'bars)
         (begin
           ;; Add data to the bar chart
           (gnc:html-barchart-append-column! chart bgt-vals)
           (gnc:html-barchart-append-column! chart act-vals)
-          (gnc:html-barchart-set-row-labels! chart date-list)
+          (gnc:html-barchart-set-row-labels! chart date-iso-string-list)
           (if running-sum
             (gnc:html-barchart-set-subtitle! chart
               (string-append "Bgt:"
@@ -245,7 +252,7 @@
           ;; Add data to the line chart
           (gnc:html-linechart-append-column! chart bgt-vals)
           (gnc:html-linechart-append-column! chart act-vals)
-          (gnc:html-linechart-set-row-labels! chart date-list)
+          (gnc:html-linechart-set-row-labels! chart date-iso-string-list)
           (if running-sum
             (gnc:html-linechart-set-subtitle! chart
               (string-append "Bgt:"
