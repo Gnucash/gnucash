@@ -23,7 +23,6 @@
  * Copyright (C) 2001 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
-#include <guid.hpp>
 extern "C"
 {
 #include "config.h"

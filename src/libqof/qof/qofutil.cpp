@@ -25,7 +25,6 @@
  *   Author: Linas Vepstas (linas@linas.org)                        *
 \********************************************************************/
 
-#include <guid.hpp>
 #include "config.h"
 
 #include <ctype.h>

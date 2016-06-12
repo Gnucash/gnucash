@@ -65,7 +65,9 @@ extern "C"
  * the object can be persisted), and a different one when compiling for C++
  * found in guid.hpp
  */
-#ifndef __cplusplus
+#ifdef __cplusplus
+struct GncGUID;
+#else
 /** The type used to store guids in C */
 typedef struct _gncGuid {
     unsigned char reserved[GUID_DATA_SIZE];

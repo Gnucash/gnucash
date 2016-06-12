@@ -1,4 +1,3 @@
-#include <guid.hpp>
 #include <kvp_frame.hpp>
 
 extern "C"
