@@ -27,6 +27,8 @@
     @author Copyright (c) 2012 Robert Fewell
 */
 
+#include <guid.hpp>
+
 extern "C"
 {
 #include "config.h"
