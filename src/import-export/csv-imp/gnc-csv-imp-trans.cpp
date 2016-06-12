@@ -230,6 +230,7 @@ GncCsvParseData::GncCsvParseData(GncImpFileFormat format)
     start_row = 0;
     end_row = 1000;
     skip_rows = FALSE;
+    parse_errors = false;
 
     file_fmt = format;
     tokenizer = GncTokenizerFactory(file_fmt);
@@ -899,6 +900,7 @@ int GncCsvParseData::parse_to_trans (Account* account,
 
     Account *home_account = NULL;
     bool odd_line = false;
+    parse_errors = false;
     for (orig_lines_it, odd_line;
             orig_lines_it != orig_lines_max;
             ++orig_lines_it, odd_line = !odd_line)
@@ -931,6 +933,7 @@ int GncCsvParseData::parse_to_trans (Account* account,
 
         if (home_account == NULL)
         {
+            parse_errors = true;
             orig_lines_it->second = _("Account column could not be understood.");
             continue;
         }
@@ -952,7 +955,7 @@ int GncCsvParseData::parse_to_trans (Account* account,
                     trans_property_list_add (property);
                 else
                 {
-                    loop_err = true;
+                    parse_errors = loop_err = true;
                     gchar *error_message = g_strdup_printf (_("%s column could not be understood."),
                                                     _(gnc_csv_col_type_strs[property->type]));
                     orig_lines_it->second = error_message;
@@ -972,6 +975,7 @@ int GncCsvParseData::parse_to_trans (Account* account,
         trans_line = trans_property_list_to_trans (list, &error_message);
         if (trans_line == NULL)
         {
+            parse_errors = true;
             orig_lines_it->second = error_message;
             g_free (error_message);
             trans_property_list_free (list);
