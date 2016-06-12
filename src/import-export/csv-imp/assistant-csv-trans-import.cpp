@@ -322,16 +322,12 @@ csv_import_trans_load_settings (CsvImportTrans *info)
                 int s = i * 2 + 1;
                 gboolean found = FALSE;
 
-                for (auto t = GncTransPropType::NONE;
-                          t != GncTransPropType::NUM_COL_TYPES;
-                          static_cast<GncTransPropType>(static_cast<int>(t) + 1))
+                for (auto col_type : gnc_csv_col_type_strs )
                 {
-                    const gchar *type = gnc_csv_column_type_strs[static_cast<int>(t)];
-
                     // Check to see if column type is valid
-                    if (g_strcmp0 (type, columns[i]) == 0)
+                    if (g_strcmp0 (columns[i], col_type.second) == 0)
                     {
-                        info->parse_data->column_types.at(i) = t;
+                        info->parse_data->column_types.at(i) = col_type.first;
                         /* Get the type string first. (store is arranged so that every two
                         * columns is a pair of the model used for the combobox and the
                         * string that appears, so that store looks like:
@@ -339,6 +335,7 @@ csv_import_trans_load_settings (CsvImportTrans *info)
                         if (s < gtk_tree_model_get_n_columns (store))
                             gtk_list_store_set (GTK_LIST_STORE(store), &iter, s, columns[i], -1);
                         found = TRUE;
+                        break;
                     }
                 }
                 if (!found)
@@ -1353,7 +1350,7 @@ static void column_type_changed (GtkCellRenderer* renderer, gchar* path,
             {
                 /* ... set this column to the "None" type. (We can't allow duplicate types.) */
                 gtk_list_store_set (GTK_LIST_STORE(store), &iter, 2 * i + 1,
-                                   _(gnc_csv_column_type_strs[static_cast<int>(GncTransPropType::NONE)]), -1);
+                                   _(gnc_csv_col_type_strs[GncTransPropType::NONE]), -1);
             }
             g_free (contents);
         }
@@ -1470,17 +1467,15 @@ gboolean preview_settings_valid (CsvImportTrans* info)
         gtk_tree_model_get (store, &iter1, 2 * i + 1, &contents, -1);
 
         /* Go through each column type until ... */
-        for (auto col_type = GncTransPropType::NONE;
-                  col_type != GncTransPropType::NUM_COL_TYPES;
-                  col_type = static_cast<GncTransPropType>(static_cast<int>(col_type) + 1))
+        for (auto col_type : gnc_csv_col_type_strs)
         {
             /* ... we find one that matches with what's in the column. */
-            if (!g_strcmp0 (contents, _(gnc_csv_column_type_strs[static_cast<int>(col_type)])))
+            if (!g_strcmp0 (contents, _(col_type.second)))
             {
                 /* Set the column_types array appropriately and quit. */
-                info->parse_data->column_types[i] = col_type;
+                info->parse_data->column_types[i] = col_type.first;
 
-                switch (col_type)
+                switch (col_type.first)
                 {
                 case GncTransPropType::DATE:
                     weight = weight + 1000;
@@ -1631,9 +1626,9 @@ gboolean get_list_of_accounts (CsvImportTrans* info, GtkTreeModel *store)
 
             /* We're only interested in columns of type ACCOUNT and OACCOUNT. */
             auto col_type = GncTransPropType::NONE;
-            if (!g_strcmp0 (contents, _(gnc_csv_column_type_strs[static_cast<int>(GncTransPropType::ACCOUNT)])))
+            if (!g_strcmp0 (contents, _(gnc_csv_col_type_strs[GncTransPropType::ACCOUNT])))
                 col_type = GncTransPropType::ACCOUNT;
-            else if(!g_strcmp0 (contents, _(gnc_csv_column_type_strs[static_cast<int>(GncTransPropType::OACCOUNT)])))
+            else if(!g_strcmp0 (contents, _(gnc_csv_col_type_strs[GncTransPropType::OACCOUNT])))
                 col_type = GncTransPropType::OACCOUNT;
             if ((col_type == GncTransPropType::ACCOUNT) || (col_type == GncTransPropType::OACCOUNT))
             {
@@ -1684,7 +1679,7 @@ static void gnc_csv_preview_update_assist (CsvImportTrans* info)
     GtkTreeIter iter;
     GtkTreeSelection *selection;
     /* ncols is the number of columns in the file data. */
-    guint i, j, ncols = info->parse_data->column_types.size();
+    guint i, ncols = info->parse_data->column_types.size();
 
     /* store contains only strings. */
     GType* types = g_new (GType, 2 * ncols);
@@ -1709,10 +1704,10 @@ static void gnc_csv_preview_update_assist (CsvImportTrans* info)
     {
         cstores[i] = gtk_list_store_new (1, G_TYPE_STRING);
         /* Add all of the possible entries to the combo box. */
-        for (j = 0; j < static_cast<int>(GncTransPropType::NUM_COL_TYPES); j++)
+        for (auto col_type : gnc_csv_col_type_strs)
         {
             gtk_list_store_append (cstores[i], &iter);
-            gtk_list_store_set (cstores[i], &iter, 0, _(gnc_csv_column_type_strs[j]), -1);
+            gtk_list_store_set (cstores[i], &iter, 0, _(col_type.second), -1);
         }
     }
 
@@ -1769,7 +1764,7 @@ static void gnc_csv_preview_update_assist (CsvImportTrans* info)
     for (i = 0; i < ncols; i++)
     {
         gtk_list_store_set (ctstore, &iter, 2 * i, cstores[i], 2 * i + 1,
-                           _(gnc_csv_column_type_strs[(int)(info->parse_data->column_types[i])]),
+                           _(gnc_csv_col_type_strs[info->parse_data->column_types[i]]),
                            -1);
     }
 

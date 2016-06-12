@@ -37,6 +37,7 @@ extern "C" {
 }
 
 #include <vector>
+#include <map>
 #include <memory>
 
 #include "gnc-tokenizer.hpp"
@@ -58,9 +59,14 @@ enum class GncTransPropType {
     BALANCE,
     MEMO,
     OACCOUNT,
-    OMEMO,
-    NUM_COL_TYPES
+    OMEMO
 };
+
+/** Maps all column types to a string representation.
+ *  The actual definition is in gnc-csv-imp-trans.cpp.
+ *  Attention: that definition should be adjusted for any
+ *  changes to enum class GncTransPropType ! */
+extern std::map<GncTransPropType, const char*> gnc_csv_col_type_strs;
 
 /** Error domain for the csv importer. */
 #define GNC_CSV_IMP_ERROR gnc_csv_imp_error_quark ()
@@ -101,9 +107,6 @@ extern const gchar* currency_format_user[];
 /* A set of date formats that the user sees. */
 extern const int num_date_formats;
 extern const gchar* date_format_user[];
-
-/* This array contains all of the different strings for different column types. */
-extern const gchar* gnc_csv_col_type_strs[];
 
 /** Pair to hold a tokenized line of input and an optional error string */
 using parse_line_t = std::pair<str_vec, std::string>;
