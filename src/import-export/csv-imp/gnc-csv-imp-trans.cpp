@@ -20,6 +20,8 @@
  *                                                                  *
 \********************************************************************/
 
+#include <guid.hpp>
+
 extern "C" {
 #include <platform.h>
 #if PLATFORM(WINDOWS)
@@ -124,20 +126,20 @@ const char* date_regex[] = {
 //                                       N_("Comma: 123.456,78")
 //                                      };
 //
-/* This array contains all of the different strings for different column types. */
-const gchar* gnc_csv_col_type_strs[GncTransPropType::NUM_COL_TYPES] = {
-        N_("None"),
-        N_("Date"),
-        N_("Num"),
-        N_("Description"),
-        N_("Notes"),
-        N_("Account"),
-        N_("Deposit"),
-        N_("Withdrawal"),
-        N_("Balance"),
-        N_("Memo"),
-        N_("Other Account"),
-        N_("Other Memo")
+/* This map contains a set of strings representing the different column types. */
+std::map<GncTransPropType, const char*> gnc_csv_col_type_strs = {
+        { GncTransPropType::NONE, N_("None") },
+        { GncTransPropType::DATE, N_("Date") },
+        { GncTransPropType::NUM, N_("Num") },
+        { GncTransPropType::DESCRIPTION, N_("Description") },
+        { GncTransPropType::NOTES, N_("Notes") },
+        { GncTransPropType::ACCOUNT, N_("Account") },
+        { GncTransPropType::DEPOSIT, N_("Deposit") },
+        { GncTransPropType::WITHDRAWAL, N_("Withdrawal") },
+        { GncTransPropType::BALANCE, N_("Balance") },
+        { GncTransPropType::MEMO, N_("Memo") },
+        { GncTransPropType::OACCOUNT, N_("Other Account") },
+        { GncTransPropType::OMEMO, N_("Other Memo") }
 };
 
 /** Parses a string into a date, given a format. This function
@@ -383,7 +385,7 @@ typedef struct
 typedef struct
 {
     GncTransPropType type;   /**< A value from the GncTransPropType enum except
-                               * GncTransPropType::NONE and GncTransPropType::NUM_COL_TYPES */
+                               * GncTransPropType::NONE */
     void* value;             /**< Pointer to the data that will be used to configure a transaction */
     TransPropertyList* list; /**< The list the property belongs to */
 } TransProperty;
