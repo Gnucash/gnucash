@@ -854,12 +854,6 @@ static GncCsvTransLine* trans_property_list_to_trans (TransPropertyList* list, g
 int GncCsvParseData::parse_to_trans (Account* account,
                                      gboolean redo_errors)
 {
-    Account *home_account = NULL;
-
-    /* last_transaction points to the last element in
-     * transactions, or NULL if it's empty. */
-    GList* last_transaction = NULL;
-
     /* Free error_lines and transactions if they
      * already exist. */
     if (!redo_errors) /* If we're redoing errors, we save freeing until the end. */
@@ -871,6 +865,9 @@ int GncCsvParseData::parse_to_trans (Account* account,
             g_list_free (transactions);
     }
 
+    /* last_transaction points to the last element in
+     * transactions, or NULL if it's empty. */
+    GList* last_transaction = NULL;
     if (redo_errors) /* If we're looking only at error data ... */
     {
         if (transactions == NULL)
@@ -900,6 +897,7 @@ int GncCsvParseData::parse_to_trans (Account* account,
     else
         std::advance(orig_lines_max, end_row);
 
+    Account *home_account = NULL;
     bool odd_line = false;
     for (orig_lines_it, odd_line;
             orig_lines_it != orig_lines_max;
