@@ -27,7 +27,6 @@
  * This file implements the top-level QofBackend API for saving/
  * restoring data to/from an ordinary Unix filesystem file.
  */
-#include <guid.hpp>
 extern "C"
 {
 #include "config.h"

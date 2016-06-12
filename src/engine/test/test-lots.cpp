@@ -24,7 +24,6 @@
  * @brief Minimal test to see if automatic lot scrubbing works.
  * @author Linas Vepstas <linas@linas.org>
  */
-#include <guid.hpp>
 extern "C"
 {
 #include "config.h"
