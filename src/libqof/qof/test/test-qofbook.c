@@ -460,35 +460,43 @@ test_book_use_book_currency( Fixture *fixture, gconstpointer pData )
 {
     const gchar *cur;
     const gchar *pol;
+    GncGUID *acct;
+    const GncGUID *acct2;
 
-    cur = qof_book_get_book_currency( fixture-> book );
+    cur = qof_book_get_book_currency_name( fixture-> book );
     g_assert_cmpstr( cur, == , NULL );
     pol = qof_book_get_default_gains_policy( fixture-> book );
     g_assert_cmpstr( pol, == , NULL );
+    acct2 = qof_book_get_default_gain_loss_acct_guid( fixture-> book );
+    g_assert (acct2 == NULL );
 
     g_test_message( "Testing with existing trading accounts set to true - t" );
     qof_book_begin_edit (fixture->book);
     qof_instance_set (QOF_INSTANCE (fixture->book),
 		      "trading-accts", "t",
 		      NULL);
-    cur = qof_book_get_book_currency( fixture-> book );
+    cur = qof_book_get_book_currency_name( fixture-> book );
     g_assert_cmpstr( cur, == , NULL );
     pol = qof_book_get_default_gains_policy( fixture-> book );
     g_assert_cmpstr( pol, == , NULL );
+    acct2 = qof_book_get_default_gain_loss_acct_guid( fixture-> book );
+    g_assert (acct2 == NULL );
     qof_book_commit_edit (fixture->book);
 
     qof_book_destroy( fixture->book );
     fixture->book = qof_book_new();
 
-    g_test_message( "Testing with book-currency set and no default-gains-policy" );
+    g_test_message( "Testing with book-currency set and no default-gains-policy or account" );
     qof_book_begin_edit (fixture->book);
     qof_instance_set (QOF_INSTANCE (fixture->book),
 		      "book-currency", "USD",
 		      NULL);
-    cur = qof_book_get_book_currency( fixture-> book );
+    cur = qof_book_get_book_currency_name( fixture-> book );
     g_assert_cmpstr( cur, == , "USD" );
     pol = qof_book_get_default_gains_policy( fixture-> book );
     g_assert_cmpstr( pol, == , NULL );
+    acct2 = qof_book_get_default_gain_loss_acct_guid( fixture-> book );
+    g_assert (acct2 == NULL );
     qof_book_commit_edit (fixture->book);
 
     qof_book_destroy( fixture->book );
@@ -499,10 +507,12 @@ test_book_use_book_currency( Fixture *fixture, gconstpointer pData )
     qof_instance_set (QOF_INSTANCE (fixture->book),
 		      "default-gains-policy", "fifo",
 		      NULL);
-    cur = qof_book_get_book_currency( fixture-> book );
+    cur = qof_book_get_book_currency_name( fixture-> book );
     g_assert_cmpstr( cur, == , NULL );
     pol = qof_book_get_default_gains_policy( fixture-> book );
     g_assert_cmpstr( pol, == , "fifo" );
+    acct2 = qof_book_get_default_gain_loss_acct_guid( fixture-> book );
+    g_assert (acct2 == NULL );
     qof_book_commit_edit (fixture->book);
 
     qof_book_destroy( fixture->book );
@@ -516,16 +526,18 @@ test_book_use_book_currency( Fixture *fixture, gconstpointer pData )
     qof_instance_set (QOF_INSTANCE (fixture->book),
 		      "default-gains-policy", "random",
 		      NULL);
-    cur = qof_book_get_book_currency( fixture-> book );
+    cur = qof_book_get_book_currency_name( fixture-> book );
     g_assert_cmpstr( cur, == , "myMoney" );
     pol = qof_book_get_default_gains_policy( fixture-> book );
     g_assert_cmpstr( pol, == , "random" );
+    acct2 = qof_book_get_default_gain_loss_acct_guid( fixture-> book );
+    g_assert (acct2 == NULL );
     qof_book_commit_edit (fixture->book);
 
     qof_book_destroy( fixture->book );
     fixture->book = qof_book_new();
 
-    g_test_message( "Testing with book-currency and default-gains-policy set to valid values" );
+    g_test_message( "Testing with book-currency, default-gains-policy and default-gains-account set to valid values" );
     qof_book_begin_edit (fixture->book);
     qof_instance_set (QOF_INSTANCE (fixture->book),
 		      "book-currency", "USD",
@@ -533,10 +545,18 @@ test_book_use_book_currency( Fixture *fixture, gconstpointer pData )
     qof_instance_set (QOF_INSTANCE (fixture->book),
 		      "default-gains-policy", "fifo",
 		      NULL);
-    cur = qof_book_get_book_currency( fixture-> book );
+    acct = guid_new();
+    qof_instance_set (QOF_INSTANCE (fixture->book),
+		      "default-gain-loss-account-guid", acct,
+		      NULL);
+    cur = qof_book_get_book_currency_name( fixture-> book );
     g_assert_cmpstr( cur, == , "USD" );
     pol = qof_book_get_default_gains_policy( fixture-> book );
     g_assert_cmpstr( pol, == , "fifo" );
+    acct2 = qof_book_get_default_gain_loss_acct_guid( fixture-> book );
+    g_assert_cmpstr( guid_to_string (acct), == , guid_to_string (acct2) );
+    g_assert (guid_equal(acct, acct2));
+    guid_free (acct);
     qof_book_commit_edit (fixture->book);
 }
 

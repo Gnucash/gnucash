@@ -571,8 +571,8 @@ gnc_option_currency_accounting_set_sensitivity(GNCOption *option,
             for (l = list_of_policies; l != NULL; l = l->next)
             {
                 /* First item in policy_list is internal name of policy */
-                GList *policy_list = l->data;
-                if (g_strcmp0(policy_list->data,
+                GNCPolicy *pcy = l->data;
+                if (g_strcmp0(PolicyGetName (pcy),
                                gnc_scm_symbol_to_locale_string(list_symbol))
                                == 0)
                 {
@@ -581,7 +581,6 @@ gnc_option_currency_accounting_set_sensitivity(GNCOption *option,
                                     GNC_COMBOTT(default_cost_policy_widget), i);
                 }
                 i++;
-                g_list_free(policy_list);
             }
             g_list_free(list_of_policies);
         }
@@ -869,16 +868,11 @@ gnc_option_create_currency_accounting_widget (char *name, GNCOption *option)
     GtkWidget *frame = NULL, *vbox1 = NULL;
     GtkWidget *widget = NULL;
     int num_values;
-    GList *list_of_policies = NULL;
     int i;
 
     num_values = gnc_option_num_permissible_values(option);
 
     g_return_val_if_fail(num_values == 3, NULL);
-
-    list_of_policies = gnc_get_valid_policy_list();
-
-    g_return_val_if_fail(g_list_length (list_of_policies) >= 0, NULL);
 
     /* Create our button frame */
     frame = gtk_frame_new (name);
@@ -915,7 +909,7 @@ gnc_option_create_currency_accounting_widget (char *name, GNCOption *option)
         {
             GtkWidget *widget_label;
             GtkWidget *book_currency_widget = NULL,
-                      *default_cost_policy_widget = NULL;
+                      *default_cost_policy_widget = gnc_cost_policy_select_new();
 
             g_signal_connect(G_OBJECT(widget),
                          "toggled",
@@ -934,46 +928,8 @@ gnc_option_create_currency_accounting_widget (char *name, GNCOption *option)
             gtk_box_pack_start (GTK_BOX (vbox2),
                                 book_currency_widget, FALSE, FALSE, 0);
             gtk_box_pack_start (GTK_BOX (hbox), vbox2, FALSE, FALSE, 0);
-            if (list_of_policies)
+            if (default_cost_policy_widget)
             {
-                GtkListStore *store;
-                GtkTreeIter  iter;
-                char *itemstring;
-                char *description;
-                GList *l = NULL;
-
-                store = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
-                /* Add values to the list store, entry and tooltip */
-                for (l = list_of_policies; l != NULL; l = l->next)
-                {
-                    GList *policy_list = l->data;
-                    /* First item in policy_list is internal name of policy */
-                    policy_list = policy_list->next;
-                    /* Second item in policy_list is policy description */
-                    itemstring = policy_list->data;
-                    policy_list = policy_list->next;
-                    /* Third item in policy_list is policy hint */
-                    description = policy_list->data;
-                    gtk_list_store_append (store, &iter);
-                    gtk_list_store_set
-                           (store,
-                            &iter,
-                            0,
-                            (itemstring && *itemstring) ? _(itemstring) : "",
-                            1,
-                            (description && *description) ? _(description) : "",
-                            -1);
-                    g_list_free(policy_list);
-                }
-                g_list_free(list_of_policies);
-                /* Create the new Combo with tooltip and add the store */
-                default_cost_policy_widget = GTK_WIDGET(gnc_combott_new());
-                g_object_set( G_OBJECT( default_cost_policy_widget ),
-                              "model",
-                              GTK_TREE_MODEL(store),
-                              NULL );
-                g_object_unref(store);
-
                 g_signal_connect(G_OBJECT(default_cost_policy_widget), "changed",
                                  G_CALLBACK(gnc_option_multichoice_cb), option);
             }
@@ -3089,8 +3045,9 @@ gnc_option_set_ui_value_currency_accounting (GNCOption *option,
                         {
                             /* First item in policy_list is internal name of
                                policy */
-                            GList *policy_list = l->data;
-                            if (g_strcmp0(policy_list->data,
+                            GNCPolicy *pcy = l->data;
+
+                            if (g_strcmp0(PolicyGetName (pcy),
                                    gnc_scm_symbol_to_locale_string(list_symbol))
                                    == 0)
                             {
@@ -3101,7 +3058,6 @@ gnc_option_set_ui_value_currency_accounting (GNCOption *option,
                                     i);
                             }
                             i++;
-                            g_list_free(policy_list);
                         }
                         g_list_free(list_of_policies);
                     }
@@ -3470,11 +3426,10 @@ gnc_option_get_ui_value_currency_accounting (GNCOption *option, GtkWidget *widge
             gint i = 0;
             for (l = list_of_policies; l != NULL; l = l->next)
             {
-                GList *policy_list = l->data;
+                GNCPolicy *pcy = l->data;
                 if(i == policy_index)
-                    str = policy_list->data;
+                    str = PolicyGetName (pcy);
                 i++;
-                g_list_free(policy_list);
             }
             g_list_free(list_of_policies);
         }

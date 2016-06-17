@@ -1441,7 +1441,7 @@
                                             (currency?
                                               book-currency-option-path-kvp?))
                                         (if gains-policy-option-path-kvp?
-                                            (gnc-valid-policy
+                                            (gnc-valid-policy-name
                                               gains-policy-option-path-kvp?)))
                                    (begin
                                      (set! book-currency
@@ -1464,7 +1464,7 @@
            (if (legal-val (car x) ok-radiobutton-values)
                (if (eq? 'book-currency (car x))
                    (if (currency? (currency->scm (cadr x)))
-                       (if (gnc-valid-policy (symbol->string (caddr x)))
+                       (if (gnc-valid-policy-name (symbol->string (caddr x)))
                            (list #t x)
                            (list #f "cap-gains-policy-option: illegal value"))
                        (list #f "currency-option: illegal value"))

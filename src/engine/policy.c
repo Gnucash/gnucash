@@ -67,38 +67,22 @@ GList *
 gnc_get_valid_policy_list (void)
 {
     GList *return_list = NULL;
-    GList *policy_list1 = NULL;
-    GList *policy_list2 = NULL;
-    GList *policy_list3 = NULL;
-    GList *policy_list4 = NULL;
 
-    policy_list1 = g_list_prepend (policy_list1, MANUAL_POLICY_HINT);
-    policy_list1 = g_list_prepend (policy_list1, MANUAL_POLICY_DESC);
-    policy_list1 = g_list_prepend (policy_list1, MANUAL_POLICY);
-    return_list = g_list_prepend (return_list, policy_list1);
-    policy_list2 = g_list_prepend (policy_list2, AVERAGE_POLICY_HINT);
-    policy_list2 = g_list_prepend (policy_list2, AVERAGE_POLICY_DESC);
-    policy_list2 = g_list_prepend (policy_list2, AVERAGE_POLICY);
-    return_list = g_list_prepend (return_list, policy_list2);
-    policy_list3 = g_list_prepend (policy_list3, LIFO_POLICY_HINT);
-    policy_list3 = g_list_prepend (policy_list3, LIFO_POLICY_DESC);
-    policy_list3 = g_list_prepend (policy_list3, LIFO_POLICY);
-    return_list = g_list_prepend (return_list, policy_list3);
-    policy_list4 = g_list_prepend (policy_list4, FIFO_POLICY_HINT);
-    policy_list4 = g_list_prepend (policy_list4, FIFO_POLICY_DESC);
-    policy_list4 = g_list_prepend (policy_list4, FIFO_POLICY);
-    return_list = g_list_prepend (return_list, policy_list4);
+/*    return_list = g_list_prepend (return_list, xaccGetManualPolicy());
+    return_list = g_list_prepend (return_list, xaccGetAveragePolicy()); */
+    return_list = g_list_prepend (return_list, xaccGetLIFOPolicy());
+    return_list = g_list_prepend (return_list, xaccGetFIFOPolicy());
 
     return return_list;
 }
 
 gboolean
-gnc_valid_policy (const gchar *name)
+gnc_valid_policy_name (const gchar *policy_name)
 {
     GList *list_of_policies = NULL;
     gboolean ret_val = FALSE;
 
-    if (!name)
+    if (!policy_name)
         return ret_val;
 
     list_of_policies = gnc_get_valid_policy_list();
@@ -111,13 +95,12 @@ gnc_valid_policy (const gchar *name)
         GList *l = NULL;
         for (l = list_of_policies; l != NULL; l = l->next)
         {
-            GList *policy_list = l->data;
-            if (g_strcmp0(policy_list->data, name) == 0)
+            GNCPolicy *list_pcy = l->data;
+            if (g_strcmp0(PolicyGetName (list_pcy), policy_name) == 0)
                 ret_val = TRUE;
-            g_list_free(policy_list);
         }
         g_list_free(list_of_policies);
-    return ret_val;
+        return ret_val;
     }
 }
 
@@ -208,6 +191,26 @@ donext:
     return NULL;
 }
 
+const char *
+PolicyGetName (const GNCPolicy *pcy)
+{
+    if(!pcy) return NULL;
+    return pcy->name;
+}
+
+const char *
+PolicyGetDescription (const GNCPolicy *pcy)
+{
+    if(!pcy) return NULL;
+    return pcy->description;
+}
+const char *
+PolicyGetHint (const GNCPolicy *pcy)
+{
+    if(!pcy) return NULL;
+    return pcy->hint;
+}
+
 /* ============================================================== */
 
 static GNCLot *
@@ -246,11 +249,6 @@ FIFOPolicyIsOpeningSplit (GNCPolicy *pcy, GNCLot *lot, Split *split)
     return (split == opening_split);
 }
 
-/* ============================================================== */
-/* Define a single, static policy, since we have no per-object data.
- * I suppose this could change, but we don't need any better at the
- * moment ... */
-
 GNCPolicy *
 xaccGetFIFOPolicy (void)
 {
@@ -259,6 +257,9 @@ xaccGetFIFOPolicy (void)
     if (!pcy)
     {
         pcy = g_new (GNCPolicy, 1);
+        pcy->name = FIFO_POLICY;
+        pcy->description = FIFO_POLICY_DESC;
+        pcy->hint = FIFO_POLICY_HINT;
         pcy->PolicyGetLot = FIFOPolicyGetLot;
         pcy->PolicyGetSplit = FIFOPolicyGetSplit;
         pcy->PolicyGetLotOpening = FIFOPolicyGetLotOpening;
@@ -267,12 +268,7 @@ xaccGetFIFOPolicy (void)
     return pcy;
 }
 
-/* ============================================================== */
-/* Stab at implementing the LIFO policy.  This is untested.
- * I'm not sure I got it right.
- */
-
-G_GNUC_UNUSED static GNCLot *
+static GNCLot *
 LIFOPolicyGetLot (GNCPolicy *pcy, Split *split)
 {
     if (!split) return NULL;
@@ -280,14 +276,14 @@ LIFOPolicyGetLot (GNCPolicy *pcy, Split *split)
                                          split->parent->common_currency);
 }
 
-G_GNUC_UNUSED static Split *
+static Split *
 LIFOPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot)
 {
     return DirectionPolicyGetSplit (pcy, lot, 1);
 }
 
 /* This routine is actually identical to FIFO... */
-G_GNUC_UNUSED static void
+static void
 LIFOPolicyGetLotOpening (GNCPolicy *pcy,
                          GNCLot *lot,
                          gnc_numeric *ret_amount, gnc_numeric *ret_value,
@@ -302,12 +298,31 @@ LIFOPolicyGetLotOpening (GNCPolicy *pcy,
 }
 
 /* This routine is actually identical to FIFO... */
-G_GNUC_UNUSED static gboolean
+static gboolean
 LIFOPolicyIsOpeningSplit (GNCPolicy *pcy, GNCLot *lot, Split *split)
 {
     Split *opening_split;
     opening_split = gnc_lot_get_earliest_split(lot);
     return (split == opening_split);
+}
+
+GNCPolicy *
+xaccGetLIFOPolicy (void)
+{
+    static GNCPolicy *pcy = NULL;
+
+    if (!pcy)
+    {
+        pcy = g_new (GNCPolicy, 1);
+        pcy->name = LIFO_POLICY;
+        pcy->description = LIFO_POLICY_DESC;
+        pcy->hint = LIFO_POLICY_HINT;
+        pcy->PolicyGetLot = LIFOPolicyGetLot;
+        pcy->PolicyGetSplit = LIFOPolicyGetSplit;
+        pcy->PolicyGetLotOpening = LIFOPolicyGetLotOpening;
+        pcy->PolicyIsOpeningSplit = LIFOPolicyIsOpeningSplit;
+    }
+    return pcy;
 }
 
 /* =========================== END OF FILE ======================= */

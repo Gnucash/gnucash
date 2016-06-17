@@ -94,13 +94,25 @@ gboolean gnc_book_use_book_currency (QofBook *book);
   * that both book-currency and default gain/loss policy KVPs exist and that
   * both are valid, a requirement for the 'book-currency' currency accounting
   * method to apply. */
-const gchar * gnc_book_get_book_currency (QofBook *book);
+const gchar * gnc_book_get_book_currency_name (QofBook *book);
+
+/** Returns pointer to Book Currency for book or NULL; determines
+  * that both book-currency and default gain/loss policy KVPs exist and that
+  * both are valid, a requirement for the 'book-currency' currency accounting
+  * method to apply. */
+gnc_commodity * gnc_book_get_book_currency (QofBook *book);
 
 /** Returns pointer to default gain/loss policy for book or NULL; determines
   * that both book-currency and default gain/loss policy KVPs exist and that
   * both are valid, a requirement for the 'book-currency' currency accounting
   * method to apply. */
 const gchar * gnc_book_get_default_gains_policy (QofBook *book);
+
+/** Returns pointer to default gain/loss account for book or NULL; determines
+  * that both book-currency and default gain/loss policy KVPs exist and that
+  * both are valid, a requirement for the 'book-currency' currency accounting
+  * method to apply. */
+Account * gnc_book_get_default_gain_loss_acct (QofBook *book);
 
 Account * gnc_get_current_root_account (void);
 gnc_commodity_table * gnc_get_current_commodities (void);

@@ -101,8 +101,13 @@ gnc_dialog_run(GtkDialog *dialog, const gchar *pref_key);
 
 /* If this is a new book, this function can be used to display book options
  * dialog so user can specify options, before any transactions can be
- * imported/entered, since they can affect how transactions are created
- * Note: This dialog is modal! */
+ * imported/entered, since the book options can affect how transactions are
+ * created. Note: This dialog is modal! */
 gboolean gnc_new_book_option_display (GtkWidget *parent);
+
+/** This function returns a widget for selecting a cost policy
+  */
+GtkWidget *
+gnc_cost_policy_select_new (void);
 
 #endif /* DIALOG_UTILS_H */

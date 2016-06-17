@@ -40,21 +40,22 @@
 typedef struct gncpolicy_s GNCPolicy;
 
 /** Valid Policy List
- *  Provides a glist of glists for implemented policies. For each implemented
- *  policy, this glist contains: name, description, hint, as follows:
- *    glist(
- *       glist("fifo", "First In First Out", "Use oldest lots first.")
- *       glist("lifo", "Last In First Out", "Use newest lots first.")
- *       etc.
- *         )
- *  Both levels of lists must be freed with g_list_free().
+ *  Provides a glist of implemented policies.
+ *
+ *  List must be freed with g_list_free().
  */
 GList * gnc_get_valid_policy_list (void);
 
-/** Valid Policy
+/** Valid Policy Name
  *  Uses the Valid Policy List to determine if a policy name is valid.
  */
-gboolean gnc_valid_policy (const gchar *name);
+gboolean gnc_valid_policy_name (const gchar *policy_name);
+
+const char *PolicyGetName (const GNCPolicy *pcy);
+
+const char *PolicyGetDescription (const GNCPolicy *pcy);
+
+const char *PolicyGetHint (const GNCPolicy *pcy);
 
 /** First-in, First-out Policy
  *  This policy will create FIFO Lots.  FIFO Lots have the following
@@ -64,9 +65,23 @@ gboolean gnc_valid_policy (const gchar *name);
  *  -- Splits are added to the lot in date order, with earliest splits
  *     added first.
  *  -- All splits in the lot share the same transaction currency as
- *     the split that opened the lot.
+ *     the split that opened the lot (if book-currency book option
+ *     selected, this will always be book currency).
  */
 GNCPolicy *xaccGetFIFOPolicy (void);
+
+/** Last-in, Last-out Policy
+ *  This policy will create LIFO Lots.  LIFO Lots have the following
+ *  properties:
+ *  -- The lot is started with the latest posted split that isn't
+ *     a part of another lot already.
+ *  -- Splits are added to the lot in date order, with latest splits
+ *     added first.
+ *  -- All splits in the lot share the same transaction currency as
+ *     the split that opened the lot (if book-currency book option
+ *     selected, this will always be book currency).
+ */
+GNCPolicy *xaccGetLIFOPolicy (void);
 
 #endif /* XACC_POLICY_H */
 /** @} */
