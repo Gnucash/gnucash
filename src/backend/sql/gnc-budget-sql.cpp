@@ -76,6 +76,20 @@ static void set_period_num (gpointer pObj, gpointer val);
 static gnc_numeric get_amount (gpointer pObj);
 static void set_amount (gpointer pObj, gnc_numeric value);
 
+class GncSqlBudgetBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlBudgetBackend(int version, const std::string& type,
+                      const std::string& table, const EntryVec& vec) :
+        GncSqlObjectBackend(version, type, table, vec) {}
+    void load_all(GncSqlBackend*) override;
+    void create_tables(GncSqlBackend*) override;
+    bool commit (GncSqlBackend* be, QofInstance* inst) override;
+    bool write(GncSqlBackend*) override;
+private:
+    static void save(QofInstance*, void*);
+};
+
 typedef struct
 {
     GncBudget* budget;
@@ -318,8 +332,8 @@ load_single_budget (GncSqlBackend* be, GncSqlRow& row)
     return pBudget;
 }
 
-static void
-load_all_budgets (GncSqlBackend* be)
+void
+GncSqlBudgetBackend::load_all (GncSqlBackend* be)
 {
     GncSqlStatement* stmt;
     GList* list = NULL;
@@ -349,8 +363,8 @@ load_all_budgets (GncSqlBackend* be)
 }
 
 /* ================================================================= */
-static void
-create_budget_tables (GncSqlBackend* be)
+void
+GncSqlBudgetBackend::create_tables (GncSqlBackend* be)
 {
     gint version;
 
@@ -371,8 +385,8 @@ create_budget_tables (GncSqlBackend* be)
 }
 
 /* ================================================================= */
-static gboolean
-save_budget (GncSqlBackend* be, QofInstance* inst)
+bool
+GncSqlBudgetBackend::commit (GncSqlBackend* be, QofInstance* inst)
 {
     GncBudget* pBudget = GNC_BUDGET (inst);
     const GncGUID* guid;
@@ -435,18 +449,18 @@ save_budget (GncSqlBackend* be, QofInstance* inst)
 }
 
 static void
-do_save_budget (QofInstance* inst, gpointer data)
+do_save (QofInstance* inst, gpointer data)
 {
     write_objects_t* s = (write_objects_t*)data;
 
     if (s->is_ok)
     {
-        s->is_ok = save_budget (s->be, inst);
+        s->is_ok = s->obe->commit (s->be, inst);
     }
 }
 
-static gboolean
-write_budgets (GncSqlBackend* be)
+bool
+GncSqlBudgetBackend::write (GncSqlBackend* be)
 {
     write_objects_t data;
 
@@ -454,8 +468,9 @@ write_budgets (GncSqlBackend* be)
 
     data.be = be;
     data.is_ok = TRUE;
+    data.obe = this;
     qof_collection_foreach (qof_book_get_collection (be->book, GNC_ID_BUDGET),
-                            (QofInstanceForeachCB)do_save_budget, &data);
+                            (QofInstanceForeachCB)do_save, &data);
 
     return data.is_ok;
 }
@@ -492,19 +507,8 @@ GncSqlColumnTableEntryImpl<CT_BUDGETREF>::add_to_query(const GncSqlBackend* be,
 void
 gnc_sql_init_budget_handler (void)
 {
-    static GncSqlObjectBackend be_data =
-    {
-        GNC_SQL_BACKEND_VERSION,
-        GNC_ID_BUDGET,
-        save_budget,                    /* commit */
-        load_all_budgets,               /* initial_load */
-        create_budget_tables,           /* create_tables */
-        NULL,                           /* compile_query */
-        NULL,                           /* run_query */
-        NULL,                           /* free_query */
-        write_budgets                   /* write */
-    };
-
+    static GncSqlBudgetBackend be_data {
+        GNC_SQL_BACKEND_VERSION, GNC_ID_BUDGET, BUDGET_TABLE, col_table};
     gnc_sql_register_backend(&be_data);
 }
 /* ========================== END OF FILE ===================== */

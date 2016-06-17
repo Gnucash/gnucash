@@ -69,6 +69,17 @@ static EntryVec col_table
                                           (QofSetterFunc)gncJobSetOwner),
 });
 
+class GncSqlJobBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlJobBackend(int version, const std::string& type,
+                      const std::string& table, const EntryVec& vec) :
+        GncSqlObjectBackend(version, type, table, vec) {}
+    void load_all(GncSqlBackend*) override;
+    bool write(GncSqlBackend*) override;
+};
+
+
 static GncJob*
 load_single_job (GncSqlBackend* be, GncSqlRow& row)
 {
@@ -89,8 +100,8 @@ load_single_job (GncSqlBackend* be, GncSqlRow& row)
     return pJob;
 }
 
-static void
-load_all_jobs (GncSqlBackend* be)
+void
+GncSqlJobBackend::load_all (GncSqlBackend* be)
 {
     GncSqlStatement* stmt;
     g_return_if_fail (be != NULL);
@@ -117,33 +128,6 @@ load_all_jobs (GncSqlBackend* be)
 }
 
 /* ================================================================= */
-static void
-create_job_tables (GncSqlBackend* be)
-{
-    gint version;
-
-    g_return_if_fail (be != NULL);
-
-    version = gnc_sql_get_table_version (be, TABLE_NAME);
-    if (version == 0)
-    {
-        gnc_sql_create_table (be, TABLE_NAME, TABLE_VERSION, col_table);
-    }
-}
-
-/* ================================================================= */
-static gboolean
-save_job (GncSqlBackend* be, QofInstance* inst)
-{
-    g_return_val_if_fail (inst != NULL, FALSE);
-    g_return_val_if_fail (GNC_IS_JOB (inst), FALSE);
-    g_return_val_if_fail (be != NULL, FALSE);
-
-    return gnc_sql_commit_standard_item (be, inst, TABLE_NAME, GNC_ID_JOB,
-                                         col_table);
-}
-
-/* ================================================================= */
 static gboolean
 job_should_be_saved (GncJob* job)
 {
@@ -164,7 +148,7 @@ job_should_be_saved (GncJob* job)
 static void
 write_single_job (QofInstance* term_p, gpointer data_p)
 {
-    write_objects_t* s = (write_objects_t*)data_p;
+    auto s = reinterpret_cast<write_objects_t*>(data_p);
 
     g_return_if_fail (term_p != NULL);
     g_return_if_fail (GNC_IS_JOB (term_p));
@@ -172,19 +156,16 @@ write_single_job (QofInstance* term_p, gpointer data_p)
 
     if (s->is_ok && job_should_be_saved (GNC_JOB (term_p)))
     {
-        s->is_ok = save_job (s->be, term_p);
+        s->commit (term_p);
     }
 }
 
-static gboolean
-write_jobs (GncSqlBackend* be)
+bool
+GncSqlJobBackend::write (GncSqlBackend* be)
 {
-    write_objects_t data;
-
     g_return_val_if_fail (be != NULL, FALSE);
+    write_objects_t data{be, true, this};
 
-    data.be = be;
-    data.is_ok = TRUE;
     qof_object_foreach (GNC_ID_JOB, be->book, write_single_job, &data);
 
     return data.is_ok;
@@ -194,17 +175,8 @@ write_jobs (GncSqlBackend* be)
 void
 gnc_job_sql_initialize (void)
 {
-    static GncSqlObjectBackend be_data =
-    {
-        GNC_SQL_BACKEND_VERSION,
-        GNC_ID_JOB,
-        save_job,                       /* commit */
-        load_all_jobs,                  /* initial_load */
-        create_job_tables,              /* create_tables */
-        NULL, NULL, NULL,
-        write_jobs                      /* write */
-    };
-
+    static GncSqlJobBackend be_data {
+        GNC_SQL_BACKEND_VERSION, GNC_ID_JOB, TABLE_NAME, col_table};
     gnc_sql_register_backend(&be_data);
 }
 /* ========================== END OF FILE ===================== */

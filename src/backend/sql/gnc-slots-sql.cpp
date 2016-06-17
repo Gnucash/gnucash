@@ -160,6 +160,21 @@ static const EntryVec gdate_col_table
     gnc_sql_make_table_entry<CT_GDATE>("gdate_val", 0, 0),
 };
 
+/**
+ * Slots are neither loadable nor committable. Note that the default
+ * write() implementation is also a no-op.
+ */
+class GncSqlSlotsBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlSlotsBackend(int version, const std::string& type,
+                      const std::string& table, const EntryVec& vec) :
+        GncSqlObjectBackend(version, type, table, vec) {}
+    void load_all(GncSqlBackend*) override { return; }
+    void create_tables(GncSqlBackend*) override;
+    bool commit(GncSqlBackend*, QofInstance*) override { return false; }
+};
+
 /* ================================================================= */
 
 static gchar*
@@ -994,8 +1009,8 @@ void gnc_sql_slots_load_for_sql_subquery (GncSqlBackend* be,
 }
 
 /* ================================================================= */
-static void
-create_slots_tables (GncSqlBackend* be)
+void
+GncSqlSlotsBackend::create_tables (GncSqlBackend* be)
 {
     gint version;
     gboolean ok;
@@ -1048,23 +1063,8 @@ create_slots_tables (GncSqlBackend* be)
 void
 gnc_sql_init_slots_handler (void)
 {
-    static GncSqlObjectBackend be_data =
-    {
-        GNC_SQL_BACKEND_VERSION,
-// This was GNC_ID_ACCOUNT. If somethine blows up, change it back,
-// make the registry store a std::tuple<std::string,
-// GncSqlObjectBackendPtr>, and check the first string against types
-// in the functions that are called on each backend.
-        GNC_ID_ACCOUNT,
-        NULL,                    /* commit - cannot occur */
-        NULL,                    /* initial_load - cannot occur */
-        create_slots_tables,     /* create_tables */
-        NULL,                    /* compile_query */
-        NULL,                    /* run_query */
-        NULL,                    /* free_query */
-        NULL                     /* write */
-    };
-
+    static GncSqlSlotsBackend be_data {
+        GNC_SQL_BACKEND_VERSION, GNC_ID_ACCOUNT, TABLE_NAME, col_table};
     gnc_sql_register_backend(std::make_tuple(std::string{TABLE_NAME},
                                              &be_data));
 }

@@ -66,12 +66,14 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define SPLIT_TABLE "splits"
 #define SPLIT_TABLE_VERSION 4
 
-typedef struct
+struct split_info_t : public write_objects_t
 {
-    GncSqlBackend* be;
+    split_info_t () = default;
+    split_info_t (GncSqlBackend* be, bool o,
+                  GncSqlObjectBackendPtr e, const GncGUID* g):
+        write_objects_t(be, o, e), guid{g} {}
     const GncGUID* guid;
-    gboolean is_ok;
-} split_info_t;
+};
 
 #define TX_MAX_NUM_LEN 2048
 #define TX_MAX_DESCRIPTION_LEN 2048
@@ -132,6 +134,36 @@ static const EntryVec tx_guid_col_table
 {
     gnc_sql_make_table_entry<CT_GUID>("tx_guid", 0, 0, "guid"),
 };
+
+class GncSqlTransBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlTransBackend(int version, const std::string& type,
+                      const std::string& table, const EntryVec& vec) :
+        GncSqlObjectBackend(version, type, table, vec) {}
+    void load_all(GncSqlBackend*) override;
+    void create_tables(GncSqlBackend*) override;
+    bool commit (GncSqlBackend* be, QofInstance* inst) override;
+};
+
+class GncSqlSplitBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlSplitBackend(int version, const std::string& type,
+                      const std::string& table, const EntryVec& vec) :
+        GncSqlObjectBackend(version, type, table, vec) {}
+    void load_all(GncSqlBackend*) override { return; } // loaded by transaction.
+    void create_tables(GncSqlBackend*) override;
+    bool commit (GncSqlBackend* be, QofInstance* inst) override;
+};
+static GncSqlSplitBackend be_data_split {
+    GNC_SQL_BACKEND_VERSION, GNC_ID_SPLIT, SPLIT_TABLE, split_col_table};
+/* These functions exist but have not been tested.
+   #if LOAD_TRANSACTIONS_AS_NEEDED
+   compile_split_query,
+   run_split_query,
+   free_split_query,
+*/
 
 /* ================================================================= */
 
@@ -447,15 +479,15 @@ query_transactions (GncSqlBackend* be, GncSqlStatement* stmt)
  *
  * @param be SQL backend
  */
-static void
-create_transaction_tables (GncSqlBackend* be)
+void
+GncSqlTransBackend::create_tables (GncSqlBackend* be)
 {
     gint version;
     gboolean ok;
 
     g_return_if_fail (be != NULL);
 
-    version = gnc_sql_get_table_version (be, TRANSACTION_TABLE);
+    version = gnc_sql_get_table_version (be, m_table_name.c_str());
     if (version == 0)
     {
         (void)gnc_sql_create_table (be, TRANSACTION_TABLE, TX_TABLE_VERSION,
@@ -467,35 +499,35 @@ create_transaction_tables (GncSqlBackend* be)
             PERR ("Unable to create index\n");
         }
     }
-    else if (version < TX_TABLE_VERSION)
+    else if (version < m_version)
     {
         /* Upgrade:
             1->2: 64 bit int handling
             2->3: allow dates to be NULL
         */
-        gnc_sql_upgrade_table (be, TRANSACTION_TABLE, tx_col_table);
-        (void)gnc_sql_set_table_version (be, TRANSACTION_TABLE, TX_TABLE_VERSION);
-        PINFO ("Transactions table upgraded from version %d to version %d\n", version,
-               TX_TABLE_VERSION);
+        gnc_sql_upgrade_table (be, m_table_name.c_str(), tx_col_table);
+        (void)gnc_sql_set_table_version (be, m_table_name.c_str(), m_version);
+        PINFO ("Transactions table upgraded from version %d to version %d\n",
+               version, m_version);
     }
+}
+void
+GncSqlSplitBackend::create_tables (GncSqlBackend* be)
+{
+    g_return_if_fail (be != nullptr);
 
-    version = gnc_sql_get_table_version (be, SPLIT_TABLE);
+    auto version = gnc_sql_get_table_version (be, m_table_name.c_str());
     if (version == 0)
     {
-        (void)gnc_sql_create_table (be, SPLIT_TABLE, SPLIT_TABLE_VERSION,
-                                    split_col_table);
-        ok = gnc_sql_create_index (be, "splits_tx_guid_index", SPLIT_TABLE,
-                                   tx_guid_col_table);
-        if (!ok)
-        {
+        (void)gnc_sql_create_table (be, m_table_name.c_str(),
+                                    m_version, m_col_table);
+        if (!gnc_sql_create_index (be, "splits_tx_guid_index",
+                                   m_table_name.c_str(), tx_guid_col_table))
             PERR ("Unable to create index\n");
-        }
-        ok = gnc_sql_create_index (be, "splits_account_guid_index", SPLIT_TABLE,
-                                   account_guid_col_table);
-        if (!ok)
-        {
+        if (!gnc_sql_create_index (be, "splits_account_guid_index",
+                                   m_table_name.c_str(),
+                                   account_guid_col_table))
             PERR ("Unable to create index\n");
-        }
     }
     else if (version < SPLIT_TABLE_VERSION)
     {
@@ -503,22 +535,18 @@ create_transaction_tables (GncSqlBackend* be)
         /* Upgrade:
            1->2: 64 bit int handling
            3->4: Split reconcile date can be NULL */
-        gnc_sql_upgrade_table (be, SPLIT_TABLE, split_col_table);
-        ok = gnc_sql_create_index (be, "splits_tx_guid_index", SPLIT_TABLE,
-                                   tx_guid_col_table);
-        if (!ok)
-        {
+        gnc_sql_upgrade_table (be, m_table_name.c_str(), split_col_table);
+        if (!gnc_sql_create_index (be, "splits_tx_guid_index",
+                                   m_table_name.c_str(),
+                                   tx_guid_col_table))
             PERR ("Unable to create index\n");
-        }
-        ok = gnc_sql_create_index (be, "splits_account_guid_index", SPLIT_TABLE,
-                                   account_guid_col_table);
-        if (!ok)
-        {
+        if (!gnc_sql_create_index (be, "splits_account_guid_index",
+                                   m_table_name.c_str(),
+                                   account_guid_col_table))
             PERR ("Unable to create index\n");
-        }
-        (void)gnc_sql_set_table_version (be, SPLIT_TABLE, SPLIT_TABLE_VERSION);
+        (void)gnc_sql_set_table_version (be, m_table_name.c_str(), m_version);
         PINFO ("Splits table upgraded from version %d to version %d\n", version,
-               SPLIT_TABLE_VERSION);
+               m_version);
     }
 }
 /* ================================================================= */
@@ -581,8 +609,8 @@ delete_splits (GncSqlBackend* be, Transaction* pTx)
  * @param inst Split
  * @return TRUE if successful, FALSE if error
  */
-static gboolean
-commit_split (GncSqlBackend* be, QofInstance* inst)
+bool
+GncSqlSplitBackend::commit (GncSqlBackend* be, QofInstance* inst)
 {
     E_DB_OPERATION op;
     gboolean is_infant;
@@ -623,54 +651,19 @@ commit_split (GncSqlBackend* be, QofInstance* inst)
     return is_ok;
 }
 
-static void
-save_split_cb (gpointer data, gpointer user_data)
+
+bool
+GncSqlTransBackend::commit (GncSqlBackend* be, QofInstance* inst)
 {
-    split_info_t* split_info = (split_info_t*)user_data;
-    Split* pSplit = GNC_SPLIT (data);
-
-    g_return_if_fail (data != NULL);
-    g_return_if_fail (GNC_IS_SPLIT (data));
-    g_return_if_fail (user_data != NULL);
-
-    if (split_info->is_ok)
-    {
-        split_info->is_ok = commit_split (split_info->be, QOF_INSTANCE (pSplit));
-    }
-}
-
-static gboolean
-save_splits (GncSqlBackend* be, const GncGUID* tx_guid, SplitList* pSplitList)
-{
-    split_info_t split_info;
-
-    g_return_val_if_fail (be != NULL, FALSE);
-    g_return_val_if_fail (tx_guid != NULL, FALSE);
-    g_return_val_if_fail (pSplitList != NULL, FALSE);
-
-    split_info.be = be;
-    split_info.guid = tx_guid;
-    split_info.is_ok = TRUE;
-    g_list_foreach (pSplitList, save_split_cb, &split_info);
-
-    return split_info.is_ok;
-}
-
-static gboolean
-save_transaction (GncSqlBackend* be, Transaction* pTx, gboolean do_save_splits)
-{
-    const GncGUID* guid;
     E_DB_OPERATION op;
-    gboolean is_infant;
-    QofInstance* inst;
     gboolean is_ok = TRUE;
     const char* err = NULL;
 
     g_return_val_if_fail (be != NULL, FALSE);
-    g_return_val_if_fail (pTx != NULL, FALSE);
+    g_return_val_if_fail (inst != NULL, FALSE);
 
-    inst = QOF_INSTANCE (pTx);
-    is_infant = qof_instance_get_infant (inst);
+    auto pTx = GNC_TRANS(inst);
+    auto is_infant = qof_instance_get_infant (inst);
     if (qof_instance_get_destroying (inst))
     {
         op = OP_DB_DELETE;
@@ -708,22 +701,14 @@ save_transaction (GncSqlBackend* be, Transaction* pTx, gboolean do_save_splits)
 
     if (is_ok)
     {
-        // Commit slots and splits
-        guid = qof_instance_get_guid (inst);
+        // Commit slots
+        auto guid = qof_instance_get_guid (inst);
         if (!qof_instance_get_destroying (inst))
         {
             is_ok = gnc_sql_slots_save (be, guid, is_infant, inst);
             if (! is_ok)
             {
                 err = "Slots save failed. Check trace log for SQL errors";
-            }
-            if (is_ok && do_save_splits)
-            {
-                is_ok = save_splits (be, guid, xaccTransGetSplitList (pTx));
-                if (! is_ok)
-                {
-                    err = "Split save failed. Check trace log for SQL errors";
-                }
             }
         }
         else
@@ -767,26 +752,6 @@ save_transaction (GncSqlBackend* be, Transaction* pTx, gboolean do_save_splits)
     return is_ok;
 }
 
-gboolean
-gnc_sql_save_transaction (GncSqlBackend* be, QofInstance* inst)
-{
-    g_return_val_if_fail (be != NULL, FALSE);
-    g_return_val_if_fail (inst != NULL, FALSE);
-    g_return_val_if_fail (GNC_IS_TRANS (inst), FALSE);
-
-    return save_transaction (be, GNC_TRANS (inst), /* do_save_splits */TRUE);
-}
-
-static gboolean
-commit_transaction (GncSqlBackend* be, QofInstance* inst)
-{
-    g_return_val_if_fail (be != NULL, FALSE);
-    g_return_val_if_fail (inst != NULL, FALSE);
-    g_return_val_if_fail (GNC_IS_TRANS (inst), FALSE);
-
-    return save_transaction (be, GNC_TRANS (inst), /* do_save_splits */FALSE);
-}
-
 /* ================================================================= */
 /**
  * Loads all transactions for an account.
@@ -825,7 +790,8 @@ void gnc_sql_transaction_load_tx_for_account (GncSqlBackend* be,
  *
  * @param be SQL backend
  */
-void gnc_sql_transaction_load_all_tx (GncSqlBackend* be)
+void
+GncSqlTransBackend::load_all (GncSqlBackend* be)
 {
     gchar* query_sql;
     GncSqlStatement* stmt;
@@ -1471,41 +1437,8 @@ GncSqlColumnTableEntryImpl<CT_TXREF>::add_to_query(const GncSqlBackend* be,
 void
 gnc_sql_init_transaction_handler (void)
 {
-    static GncSqlObjectBackend be_data_tx =
-    {
-        GNC_SQL_BACKEND_VERSION,
-        GNC_ID_TRANS,
-        commit_transaction,          /* commit */
-#if LOAD_TRANSACTIONS_AS_NEEDED
-        NULL,                        /* initial load */
-#else
-        gnc_sql_transaction_load_all_tx,
-#endif
-        create_transaction_tables,   /* create tables */
-        NULL,                        /* compile_query */
-        NULL,                        /* run_query */
-        NULL,                        /* free_query */
-        NULL                         /* write */
-    };
-    static GncSqlObjectBackend be_data_split =
-    {
-        GNC_SQL_BACKEND_VERSION,
-        GNC_ID_SPLIT,
-        commit_split,                /* commit */
-        NULL,                        /* initial_load */
-        NULL,                        /* create tables */
-#if LOAD_TRANSACTIONS_AS_NEEDED
-        compile_split_query,
-        run_split_query,
-        free_split_query,
-#else
-        NULL,                        /* compile_query */
-        NULL,                        /* run_query */
-        NULL,                        /* free_query */
-#endif
-        NULL                         /* write */
-    };
-
+    static GncSqlTransBackend be_data_tx {
+        GNC_SQL_BACKEND_VERSION, GNC_ID_TRANS, TRANSACTION_TABLE, tx_col_table};
     gnc_sql_register_backend(&be_data_tx);
     gnc_sql_register_backend(&be_data_split);
 }

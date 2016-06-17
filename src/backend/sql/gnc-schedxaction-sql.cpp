@@ -81,6 +81,16 @@ static const EntryVec col_table
         "template_act_guid", 0, COL_NNUL, "template-account"),
 });
 
+class GncSqlSchedXactionBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlSchedXactionBackend(int version, const std::string& type,
+                      const std::string& table, const EntryVec& vec) :
+        GncSqlObjectBackend(version, type, table, vec) {}
+    void load_all(GncSqlBackend*) override;
+    bool commit (GncSqlBackend* be, QofInstance* inst) override;
+};
+
 /* ================================================================= */
 static  SchedXaction*
 load_single_sx (GncSqlBackend* be, GncSqlRow& row)
@@ -108,8 +118,8 @@ load_single_sx (GncSqlBackend* be, GncSqlRow& row)
     return pSx;
 }
 
-static void
-load_all_sxes (GncSqlBackend* be)
+void
+GncSqlSchedXactionBackend::load_all (GncSqlBackend* be)
 {
     GncSqlStatement* stmt = NULL;
 
@@ -142,24 +152,10 @@ load_all_sxes (GncSqlBackend* be)
     }
 }
 
-/* ================================================================= */
-static void
-create_sx_tables (GncSqlBackend* be)
-{
-    gint version;
-
-    g_return_if_fail (be != NULL);
-
-    version = gnc_sql_get_table_version (be, SCHEDXACTION_TABLE);
-    if (version == 0)
-    {
-        (void)gnc_sql_create_table (be, SCHEDXACTION_TABLE, TABLE_VERSION, col_table);
-    }
-}
 
 /* ================================================================= */
-gboolean
-gnc_sql_save_schedxaction (GncSqlBackend* be, QofInstance* inst)
+bool
+GncSqlSchedXactionBackend::commit (GncSqlBackend* be, QofInstance* inst)
 {
     SchedXaction* pSx;
     const GncGUID* guid;
@@ -218,19 +214,9 @@ gnc_sql_save_schedxaction (GncSqlBackend* be, QofInstance* inst)
 void
 gnc_sql_init_schedxaction_handler (void)
 {
-    static GncSqlObjectBackend be_data =
-    {
-        GNC_SQL_BACKEND_VERSION,
-        GNC_ID_SCHEDXACTION,
-        gnc_sql_save_schedxaction,    /* commit */
-        load_all_sxes,                /* initial_load */
-        create_sx_tables,             /* create_tables */
-        NULL,                         /* compile_query */
-        NULL,                         /* run_query */
-        NULL,                         /* free_query */
-        NULL                          /* write */
-    };
-
+    static GncSqlSchedXactionBackend be_data {
+        GNC_SQL_BACKEND_VERSION, GNC_ID_SCHEDXACTION, SCHEDXACTION_TABLE,
+            col_table};
     gnc_sql_register_backend(&be_data);
 }
 /* ========================== END OF FILE ===================== */

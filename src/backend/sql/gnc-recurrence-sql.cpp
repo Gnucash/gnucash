@@ -109,6 +109,21 @@ static const EntryVec weekend_adjust_col_table
        "recurrence_weekend_adjust", BUDGET_MAX_RECURRENCE_WEEKEND_ADJUST_LEN, 0)
 });
 
+/**
+ * Recurrences are neither loadable nor committable. Note that the default
+ * write() implementation is also a no-op.
+ */
+class GncSqlRecurrenceBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlRecurrenceBackend(int version, const std::string& type,
+                      const std::string& table, const EntryVec& vec) :
+        GncSqlObjectBackend(version, type, table, vec) {}
+    void load_all(GncSqlBackend*) override { return; }
+    void create_tables(GncSqlBackend*) override;
+    bool commit(GncSqlBackend*, QofInstance*) override { return false; }
+};
+
 /* ================================================================= */
 
 static  gpointer
@@ -389,8 +404,8 @@ upgrade_recurrence_table_1_2 (GncSqlBackend* be)
 
 }
 
-static void
-create_recurrence_tables (GncSqlBackend* be)
+void
+GncSqlRecurrenceBackend::create_tables (GncSqlBackend* be)
 {
     gint version;
     gboolean ok;
@@ -421,19 +436,8 @@ create_recurrence_tables (GncSqlBackend* be)
 void
 gnc_sql_init_recurrence_handler (void)
 {
-    static GncSqlObjectBackend be_data =
-    {
-        GNC_SQL_BACKEND_VERSION,
-        GNC_ID_ACCOUNT,
-        NULL,                           /* commit - cannot occur */
-        NULL,                           /* initial_load - cannot occur */
-        create_recurrence_tables,       /* create_tables */
-        NULL,                           /* compile_query */
-        NULL,                           /* run_query */
-        NULL,                           /* free_query */
-        NULL                            /* write */
-    };
-
+    static GncSqlRecurrenceBackend be_data {
+        GNC_SQL_BACKEND_VERSION, GNC_ID_ACCOUNT, TABLE_NAME, col_table};
     gnc_sql_register_backend(&be_data);
 }
 /* ========================== END OF FILE ===================== */

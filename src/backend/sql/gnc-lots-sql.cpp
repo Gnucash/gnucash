@@ -63,6 +63,17 @@ static const EntryVec col_table
     gnc_sql_make_table_entry<CT_BOOLEAN>("is_closed", 0, COL_NNUL, "is-closed")
 });
 
+class GncSqlLotsBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlLotsBackend(int version, const std::string& type,
+                      const std::string& table, const EntryVec& vec) :
+        GncSqlObjectBackend(version, type, table, vec) {}
+    void load_all(GncSqlBackend*) override;
+    void create_tables(GncSqlBackend*) override;
+    bool write(GncSqlBackend*) override;
+};
+
 /* ================================================================= */
 static  gpointer
 get_lot_account (gpointer pObject)
@@ -111,8 +122,8 @@ load_single_lot (GncSqlBackend* be, GncSqlRow& row)
     return lot;
 }
 
-static void
-load_all_lots (GncSqlBackend* be)
+void
+GncSqlLotsBackend::load_all (GncSqlBackend* be)
 {
     GncSqlStatement* stmt;
     g_return_if_fail (be != NULL);
@@ -135,8 +146,8 @@ load_all_lots (GncSqlBackend* be)
 }
 
 /* ================================================================= */
-static void
-create_lots_tables (GncSqlBackend* be)
+void
+GncSqlLotsBackend::create_tables (GncSqlBackend* be)
 {
     gint version;
 
@@ -163,39 +174,23 @@ create_lots_tables (GncSqlBackend* be)
     }
 }
 
-/* ================================================================= */
-
-static gboolean
-commit_lot (GncSqlBackend* be, QofInstance* inst)
-{
-    g_return_val_if_fail (be != NULL, FALSE);
-    g_return_val_if_fail (inst != NULL, FALSE);
-    g_return_val_if_fail (GNC_IS_LOT (inst), FALSE);
-
-    return gnc_sql_commit_standard_item (be, inst, TABLE_NAME, GNC_ID_LOT,
-                                         col_table);
-}
-
 static void
 do_save_lot (QofInstance* inst, gpointer data)
 {
-    write_objects_t* s = (write_objects_t*)data;
+    auto s = reinterpret_cast<write_objects_t*>(data);
 
     if (s->is_ok)
     {
-        s->is_ok = commit_lot (s->be, inst);
+        s->commit (inst);
     }
 }
 
-static gboolean
-write_lots (GncSqlBackend* be)
+bool
+GncSqlLotsBackend::write (GncSqlBackend* be)
 {
-    write_objects_t data;
-
     g_return_val_if_fail (be != NULL, FALSE);
+    write_objects_t data{be, true, this};
 
-    data.be = be;
-    data.is_ok = TRUE;
     qof_collection_foreach (qof_book_get_collection (be->book, GNC_ID_LOT),
                             (QofInstanceForeachCB)do_save_lot, &data);
     return data.is_ok;
@@ -233,17 +228,8 @@ GncSqlColumnTableEntryImpl<CT_LOTREF>::add_to_query(const GncSqlBackend* be,
 void
 gnc_sql_init_lot_handler (void)
 {
-    static GncSqlObjectBackend be_data =
-    {
-        GNC_SQL_BACKEND_VERSION,
-        GNC_ID_LOT,
-        commit_lot,            /* commit */
-        load_all_lots,         /* initial_load */
-        create_lots_tables,    /* create tables */
-        NULL, NULL, NULL,
-        write_lots             /* save all */
-    };
-
+    static GncSqlLotsBackend be_data {
+        GNC_SQL_BACKEND_VERSION, GNC_ID_LOT, TABLE_NAME, col_table};
     gnc_sql_register_backend(&be_data);
 }
 

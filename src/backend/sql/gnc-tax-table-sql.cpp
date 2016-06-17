@@ -113,6 +113,18 @@ static EntryVec guid_col_table
                                       get_obj_guid, set_obj_guid),
 });
 
+class GncSqlTaxTableBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlTaxTableBackend(int version, const std::string& type,
+                      const std::string& table, const EntryVec& vec) :
+        GncSqlObjectBackend(version, type, table, vec) {}
+    void load_all(GncSqlBackend*) override;
+    void create_tables(GncSqlBackend*) override;
+    bool commit (GncSqlBackend* be, QofInstance* inst) override;
+    bool write(GncSqlBackend*) override;
+};
+
 typedef struct
 {
     GncTaxTable* tt;
@@ -278,8 +290,8 @@ load_single_taxtable (GncSqlBackend* be, GncSqlRow& row,
     qof_instance_mark_clean (QOF_INSTANCE (tt));
 }
 
-static void
-load_all_taxtables (GncSqlBackend* be)
+void
+GncSqlTaxTableBackend::load_all (GncSqlBackend* be)
 {
     GncSqlStatement* stmt;
 
@@ -319,8 +331,8 @@ load_all_taxtables (GncSqlBackend* be)
 }
 
 /* ================================================================= */
-static void
-create_taxtable_tables (GncSqlBackend* be)
+void
+GncSqlTaxTableBackend::create_tables (GncSqlBackend* be)
 {
     gint version;
 
@@ -396,8 +408,8 @@ save_tt_entries (GncSqlBackend* be, const GncGUID* guid, GList* entries)
     return is_ok;
 }
 
-static gboolean
-save_taxtable (GncSqlBackend* be, QofInstance* inst)
+bool
+GncSqlTaxTableBackend::commit (GncSqlBackend* be, QofInstance* inst)
 {
     GncTaxTable* tt;
     const GncGUID* guid;
@@ -456,23 +468,20 @@ save_taxtable (GncSqlBackend* be, QofInstance* inst)
 static void
 save_next_taxtable (QofInstance* inst, gpointer data)
 {
-    write_objects_t* s = (write_objects_t*)data;
+    auto s = reinterpret_cast<write_objects_t*>(data);
 
     if (s->is_ok)
     {
-        s->is_ok = save_taxtable (s->be, inst);
+        s->commit (inst);
     }
 }
 
-static gboolean
-write_taxtables (GncSqlBackend* be)
+bool
+GncSqlTaxTableBackend::write (GncSqlBackend* be)
 {
-    write_objects_t data;
-
     g_return_val_if_fail (be != NULL, FALSE);
+    write_objects_t data{be, true, this};
 
-    data.be = be;
-    data.is_ok = TRUE;
     qof_object_foreach (GNC_ID_TAXTABLE, be->book, save_next_taxtable, &data);
 
     return data.is_ok;
@@ -511,17 +520,8 @@ GncSqlColumnTableEntryImpl<CT_TAXTABLEREF>::add_to_query(const GncSqlBackend* be
 void
 gnc_taxtable_sql_initialize (void)
 {
-    static GncSqlObjectBackend be_data =
-    {
-        GNC_SQL_BACKEND_VERSION,
-        GNC_ID_TAXTABLE,
-        save_taxtable,                      /* commit */
-        load_all_taxtables,                 /* initial_load */
-        create_taxtable_tables,             /* create_tables */
-        NULL, NULL, NULL,
-        write_taxtables                     /* write */
-    };
-
+    static GncSqlTaxTableBackend be_data {
+        GNC_SQL_BACKEND_VERSION, GNC_ID_TAXTABLE, TT_TABLE_NAME, tt_col_table};
     gnc_sql_register_backend(&be_data);
 }
 /* ========================== END OF FILE ===================== */

@@ -96,6 +96,18 @@ static EntryVec col_table
                                     (QofSetterFunc)gncInvoiceSetToChargeAmount),
 });
 
+class GncSqlInvoiceBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlInvoiceBackend(int version, const std::string& type,
+                      const std::string& table, const EntryVec& vec) :
+        GncSqlObjectBackend(version, type, table, vec) {}
+    void load_all(GncSqlBackend*) override;
+    void create_tables(GncSqlBackend*) override;
+    bool commit (GncSqlBackend* be, QofInstance* inst) override;
+    bool write(GncSqlBackend*) override;
+};
+
 static GncInvoice*
 load_single_invoice (GncSqlBackend* be, GncSqlRow& row)
 {
@@ -116,8 +128,8 @@ load_single_invoice (GncSqlBackend* be, GncSqlRow& row)
     return pInvoice;
 }
 
-static void
-load_all_invoices (GncSqlBackend* be)
+void
+GncSqlInvoiceBackend::load_all (GncSqlBackend* be)
 {
     GncSqlStatement* stmt;
 
@@ -145,8 +157,8 @@ load_all_invoices (GncSqlBackend* be)
 }
 
 /* ================================================================= */
-static void
-create_invoice_tables (GncSqlBackend* be)
+void
+GncSqlInvoiceBackend::create_tables (GncSqlBackend* be)
 {
     gint version;
 
@@ -172,8 +184,8 @@ create_invoice_tables (GncSqlBackend* be)
 }
 
 /* ================================================================= */
-static gboolean
-save_invoice (GncSqlBackend* be, QofInstance* inst)
+bool
+GncSqlInvoiceBackend::commit (GncSqlBackend* be, QofInstance* inst)
 {
     const GncGUID* guid;
     GncInvoice* invoice;
@@ -250,7 +262,7 @@ invoice_should_be_saved (GncInvoice* invoice)
 static void
 write_single_invoice (QofInstance* term_p, gpointer data_p)
 {
-    write_objects_t* s = (write_objects_t*)data_p;
+    auto s = reinterpret_cast<write_objects_t*>(data_p);
 
     g_return_if_fail (term_p != NULL);
     g_return_if_fail (GNC_IS_INVOICE (term_p));
@@ -258,19 +270,16 @@ write_single_invoice (QofInstance* term_p, gpointer data_p)
 
     if (s->is_ok && invoice_should_be_saved (GNC_INVOICE (term_p)))
     {
-        s->is_ok = save_invoice (s->be, term_p);
+        s->commit (term_p);
     }
 }
 
-static gboolean
-write_invoices (GncSqlBackend* be)
+bool
+GncSqlInvoiceBackend::write (GncSqlBackend* be)
 {
-    write_objects_t data;
-
     g_return_val_if_fail (be != NULL, FALSE);
+    write_objects_t data{be, true, this};
 
-    data.be = be;
-    data.is_ok = TRUE;
     qof_object_foreach (GNC_ID_INVOICE, be->book, write_single_invoice, &data);
 
     return data.is_ok;
@@ -309,17 +318,8 @@ GncSqlColumnTableEntryImpl<CT_INVOICEREF>::add_to_query(const GncSqlBackend* be,
 void
 gnc_invoice_sql_initialize (void)
 {
-    static GncSqlObjectBackend be_data =
-    {
-        GNC_SQL_BACKEND_VERSION,
-        GNC_ID_INVOICE,
-        save_invoice,                       /* commit */
-        load_all_invoices,                  /* initial_load */
-        create_invoice_tables,              /* create_tables */
-        NULL, NULL, NULL,
-        write_invoices                      /* write */
-    };
-
+    static GncSqlInvoiceBackend be_data {
+        GNC_SQL_BACKEND_VERSION, GNC_ID_INVOICE, TABLE_NAME, col_table};
     gnc_sql_register_backend(&be_data);
 }
 /* ========================== END OF FILE ===================== */

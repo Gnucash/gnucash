@@ -84,6 +84,16 @@ static const EntryVec col_table
         "quote_tz", COMMODITY_MAX_QUOTE_TZ_LEN, 0, "quote-tz"),
 };
 
+class GncSqlCommodityBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlCommodityBackend(int version, const std::string& type,
+                      const std::string& table, const EntryVec& vec) :
+        GncSqlObjectBackend(version, type, table, vec) {}
+    void load_all(GncSqlBackend*) override;
+    bool commit(GncSqlBackend*, QofInstance*) override;
+};
+
 /* ================================================================= */
 
 static  gpointer
@@ -130,8 +140,8 @@ load_single_commodity (GncSqlBackend* be, GncSqlRow& row)
     return pCommodity;
 }
 
-static void
-load_all_commodities (GncSqlBackend* be)
+void
+GncSqlCommodityBackend::load_all (GncSqlBackend* be)
 {
     GncSqlStatement* stmt;
     gnc_commodity_table* pTable;
@@ -163,21 +173,6 @@ load_all_commodities (GncSqlBackend* be)
         g_free (sql);
     }
 }
-/* ================================================================= */
-static void
-create_commodities_tables (GncSqlBackend* be)
-{
-    gint version;
-
-    g_return_if_fail (be != NULL);
-
-    version = gnc_sql_get_table_version (be, COMMODITIES_TABLE);
-    if (version == 0)
-    {
-        (void)gnc_sql_create_table (be, COMMODITIES_TABLE, TABLE_VERSION, col_table);
-    }
-}
-
 /* ================================================================= */
 static gboolean
 do_commit_commodity (GncSqlBackend* be, QofInstance* inst,
@@ -221,8 +216,8 @@ do_commit_commodity (GncSqlBackend* be, QofInstance* inst,
     return is_ok;
 }
 
-static gboolean
-commit_commodity (GncSqlBackend* be, QofInstance* inst)
+bool
+GncSqlCommodityBackend::commit (GncSqlBackend* be, QofInstance* inst)
 {
     g_return_val_if_fail (be != NULL, FALSE);
     g_return_val_if_fail (inst != NULL, FALSE);
@@ -298,19 +293,9 @@ GncSqlColumnTableEntryImpl<CT_COMMODITYREF>::add_to_query(const GncSqlBackend* b
 void
 gnc_sql_init_commodity_handler (void)
 {
-    static GncSqlObjectBackend be_data =
+    static GncSqlCommodityBackend be_data =
     {
-        GNC_SQL_BACKEND_VERSION,
-        GNC_ID_COMMODITY,
-        commit_commodity,            /* commit */
-        load_all_commodities,        /* initial_load */
-        create_commodities_tables,   /* create_tables */
-        NULL,                        /* compile_query */
-        NULL,                        /* run_query */
-        NULL,                        /* free_query */
-        NULL                         /* write */
-    };
-
+        GNC_SQL_BACKEND_VERSION, GNC_ID_COMMODITY, COMMODITIES_TABLE, col_table};
     gnc_sql_register_backend(&be_data);
 }
 /* ========================== END OF FILE ===================== */

@@ -124,6 +124,17 @@ static EntryVec col_table
                                           (QofSetterFunc)gncEntrySetOrder),
 });
 
+class GncSqlEntryBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlEntryBackend(int version, const std::string& type,
+                      const std::string& table, const EntryVec& vec) :
+        GncSqlObjectBackend(version, type, table, vec) {}
+    void load_all(GncSqlBackend*) override;
+    void create_tables(GncSqlBackend*) override;
+    bool write(GncSqlBackend*) override;
+};
+
 static void
 entry_set_invoice (gpointer pObject, gpointer val)
 {
@@ -178,8 +189,8 @@ load_single_entry (GncSqlBackend* be, GncSqlRow& row)
     return pEntry;
 }
 
-static void
-load_all_entries (GncSqlBackend* be)
+void
+GncSqlEntryBackend::load_all (GncSqlBackend* be)
 {
     GncSqlStatement* stmt;
 
@@ -207,8 +218,8 @@ load_all_entries (GncSqlBackend* be)
 }
 
 /* ================================================================= */
-static void
-create_entry_tables (GncSqlBackend* be)
+void
+GncSqlEntryBackend::create_tables (GncSqlBackend* be)
 {
     gint version;
 
@@ -234,18 +245,6 @@ create_entry_tables (GncSqlBackend* be)
 }
 
 /* ================================================================= */
-static gboolean
-save_entry (GncSqlBackend* be, QofInstance* inst)
-{
-    g_return_val_if_fail (inst != NULL, FALSE);
-    g_return_val_if_fail (GNC_IS_ENTRY (inst), FALSE);
-    g_return_val_if_fail (be != NULL, FALSE);
-
-    return gnc_sql_commit_standard_item (be, inst, TABLE_NAME, GNC_ID_ENTRY,
-                                         col_table);
-}
-
-/* ================================================================= */
 static void
 write_single_entry (QofInstance* term_p, gpointer data_p)
 {
@@ -261,19 +260,16 @@ write_single_entry (QofInstance* term_p, gpointer data_p)
                      gncEntryGetInvoice (entry) != NULL ||
                      gncEntryGetBill (entry) != NULL))
     {
-        s->is_ok = save_entry (s->be, term_p);
+        s->commit (term_p);
     }
 }
 
-static gboolean
-write_entries (GncSqlBackend* be)
+bool
+GncSqlEntryBackend::write (GncSqlBackend* be)
 {
-    write_objects_t data;
-
     g_return_val_if_fail (be != NULL, FALSE);
+    write_objects_t data{be, true, this};
 
-    data.be = be;
-    data.is_ok = TRUE;
     qof_object_foreach (GNC_ID_ENTRY, be->book, write_single_entry, &data);
 
     return data.is_ok;
@@ -283,17 +279,8 @@ write_entries (GncSqlBackend* be)
 void
 gnc_entry_sql_initialize (void)
 {
-    static GncSqlObjectBackend be_data =
-    {
-        GNC_SQL_BACKEND_VERSION,
-        GNC_ID_ENTRY,
-        save_entry,                         /* commit */
-        load_all_entries,                   /* initial_load */
-        create_entry_tables,                /* create_tables */
-        NULL, NULL, NULL,
-        write_entries                       /* write */
-    };
-
+    static GncSqlEntryBackend be_data {
+        GNC_SQL_BACKEND_VERSION, GNC_ID_ENTRY, TABLE_NAME, col_table};
     gnc_sql_register_backend(&be_data);
 }
 /* ========================== END OF FILE ===================== */

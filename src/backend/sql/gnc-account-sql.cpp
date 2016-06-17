@@ -91,6 +91,18 @@ static EntryVec parent_col_table
         "parent_guid", 0, 0, nullptr, (QofSetterFunc)set_parent_guid),
 });
 
+class GncSqlAccountBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlAccountBackend(int version, const std::string& type,
+                         const std::string& table, const EntryVec& vec) :
+        GncSqlObjectBackend(version, type, table, vec) {}
+    void load_all(GncSqlBackend*) override;
+    bool commit(GncSqlBackend*, QofInstance*) override;
+};
+
+
+
 typedef struct
 {
     Account* pAccount;
@@ -198,8 +210,8 @@ load_single_account (GncSqlBackend* be, GncSqlRow& row,
     return pAccount;
 }
 
-static void
-load_all_accounts (GncSqlBackend* be)
+void
+GncSqlAccountBackend::load_all (GncSqlBackend* be)
 {
     GncSqlStatement* stmt = NULL;
     QofBook* pBook;
@@ -308,23 +320,8 @@ load_all_accounts (GncSqlBackend* be)
 }
 
 /* ================================================================= */
-static void
-create_account_tables (GncSqlBackend* be)
-{
-    gint version;
-
-    g_return_if_fail (be != NULL);
-
-    version = gnc_sql_get_table_version (be, TABLE_NAME);
-    if (version == 0)
-    {
-        (void)gnc_sql_create_table (be, TABLE_NAME, TABLE_VERSION, col_table);
-    }
-}
-
-/* ================================================================= */
-gboolean
-gnc_sql_save_account (GncSqlBackend* be, QofInstance* inst)
+bool
+GncSqlAccountBackend::commit (GncSqlBackend* be, QofInstance* inst)
 {
     Account* pAcc = GNC_ACCOUNT (inst);
     const GncGUID* guid;
@@ -425,19 +422,8 @@ GncSqlColumnTableEntryImpl<CT_ACCOUNTREF>::add_to_query(const GncSqlBackend* be,
 void
 gnc_sql_init_account_handler (void)
 {
-    static GncSqlObjectBackend be_data =
-    {
-        GNC_SQL_BACKEND_VERSION,
-        GNC_ID_ACCOUNT,
-        gnc_sql_save_account,       /* commit */
-        load_all_accounts,          /* initial_load */
-        create_account_tables,      /* create_tables */
-        NULL,                       /* compile_query */
-        NULL,                       /* run_query */
-        NULL,                       /* free_query */
-        NULL                        /* write */
-    };
-
+    static GncSqlAccountBackend be_data{
+        GNC_SQL_BACKEND_VERSION, GNC_ID_ACCOUNT, TABLE_NAME, col_table};
     gnc_sql_register_backend(&be_data);
 }
 /* ========================== END OF FILE ===================== */

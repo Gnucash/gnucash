@@ -294,12 +294,9 @@ create_tables(const OBEEntry& entry, GncDbiBackend* be)
     std::string type;
     GncSqlObjectBackendPtr obe = nullptr;
     std::tie(type, obe) = entry;
-    g_return_if_fail(obe->version == GNC_SQL_BACKEND_VERSION);
+    g_return_if_fail(obe->is_version (GNC_SQL_BACKEND_VERSION));
 
-    if (obe->create_tables != nullptr)
-    {
-        (obe->create_tables)(&be->sql_be);
-    }
+    obe->create_tables (&be->sql_be);
 }
 
 static void
@@ -1926,9 +1923,12 @@ init_sql_backend (GncDbiBackend* dbi_be)
     be->sync = gnc_dbi_safe_sync_all;
     be->safe_sync = gnc_dbi_safe_sync_all;
 
-    be->compile_query = gnc_sql_compile_query;
-    be->run_query = gnc_sql_run_query;
-    be->free_query = gnc_sql_free_query;
+//    be->compile_query = gnc_sql_compile_query;
+//    be->run_query = gnc_sql_run_query;
+//    be->free_query = gnc_sql_free_query;
+    be->compile_query = nullptr;
+    be->run_query = nullptr;
+    be->free_query = nullptr;
 
     be->export_fn = NULL;
 

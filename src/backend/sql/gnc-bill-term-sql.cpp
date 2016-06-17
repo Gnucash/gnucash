@@ -95,6 +95,17 @@ static EntryVec billterm_parent_col_table
                                        bt_set_parent_guid),
 };
 
+class GncSqlBillTermBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlBillTermBackend(int version, const std::string& type,
+                      const std::string& table, const EntryVec& vec) :
+        GncSqlObjectBackend(version, type, table, vec) {}
+    void load_all(GncSqlBackend*) override;
+    void create_tables(GncSqlBackend*) override;
+    bool write(GncSqlBackend*) override;
+};
+
 typedef struct
 {
     GncBillTerm* billterm;
@@ -221,8 +232,8 @@ load_single_billterm (GncSqlBackend* be, GncSqlRow& row,
     return pBillTerm;
 }
 
-static void
-load_all_billterms (GncSqlBackend* be)
+void
+GncSqlBillTermBackend::load_all (GncSqlBackend* be)
 {
     GncSqlStatement* stmt;
 
@@ -278,7 +289,8 @@ load_all_billterms (GncSqlBackend* be)
 typedef struct
 {
     GncSqlBackend* be;
-    gboolean is_ok;
+    GncSqlBillTermBackend* btbe;
+    bool is_ok;
 } write_billterms_t;
 
 static void
@@ -288,26 +300,24 @@ do_save_billterm (QofInstance* inst, gpointer p2)
 
     if (data->is_ok)
     {
-        data->is_ok = gnc_sql_save_billterm (data->be, inst);
+        data->is_ok = data->btbe->commit (data->be, inst);
     }
 }
 
-static gboolean
-write_billterms (GncSqlBackend* be)
+bool
+GncSqlBillTermBackend::write (GncSqlBackend* be)
 {
-    write_billterms_t data;
+    write_billterms_t data {be, this, true};
 
     g_return_val_if_fail (be != NULL, FALSE);
 
-    data.be = be;
-    data.is_ok = TRUE;
     qof_object_foreach (GNC_ID_BILLTERM, be->book, do_save_billterm, &data);
     return data.is_ok;
 }
 
 /* ================================================================= */
-static void
-create_billterm_tables (GncSqlBackend* be)
+void
+GncSqlBillTermBackend::create_tables (GncSqlBackend* be)
 {
     gint version;
 
@@ -327,18 +337,6 @@ create_billterm_tables (GncSqlBackend* be)
         PINFO ("Billterms table upgraded from version 1 to version %d\n",
                TABLE_VERSION);
     }
-}
-
-/* ================================================================= */
-gboolean
-gnc_sql_save_billterm (GncSqlBackend* be, QofInstance* inst)
-{
-    g_return_val_if_fail (inst != NULL, FALSE);
-    g_return_val_if_fail (GNC_IS_BILLTERM (inst), FALSE);
-    g_return_val_if_fail (be != NULL, FALSE);
-
-    return gnc_sql_commit_standard_item (be, inst, TABLE_NAME, GNC_ID_BILLTERM,
-                                         col_table);
 }
 
 /* ================================================================= */
@@ -374,17 +372,8 @@ GncSqlColumnTableEntryImpl<CT_BILLTERMREF>::add_to_query(const GncSqlBackend* be
 void
 gnc_billterm_sql_initialize (void)
 {
-    static GncSqlObjectBackend be_data =
-    {
-        GNC_SQL_BACKEND_VERSION,
-        GNC_ID_BILLTERM,
-        gnc_sql_save_billterm,              /* commit */
-        load_all_billterms,                 /* initial_load */
-        create_billterm_tables,             /* create_tables */
-        NULL, NULL, NULL,
-        write_billterms                     /* write */
-    };
-
+    static GncSqlBillTermBackend be_data {
+        GNC_SQL_BACKEND_VERSION, GNC_ID_BILLTERM, TABLE_NAME, col_table};
     gnc_sql_register_backend(&be_data);
 }
 /* ========================== END OF FILE ===================== */

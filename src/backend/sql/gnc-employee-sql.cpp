@@ -75,6 +75,18 @@ static EntryVec col_table
     gnc_sql_make_table_entry<CT_ADDRESS>("addr", 0, 0, "address"),
 });
 
+class GncSqlEmployeeBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlEmployeeBackend(int version, const std::string& type,
+                      const std::string& table, const EntryVec& vec) :
+        GncSqlObjectBackend(version, type, table, vec) {}
+    void load_all(GncSqlBackend*) override;
+    void create_tables(GncSqlBackend*) override;
+    bool commit(GncSqlBackend*, QofInstance*) override;
+    bool write(GncSqlBackend*) override;
+};
+
 static GncEmployee*
 load_single_employee (GncSqlBackend* be, GncSqlRow& row)
 {
@@ -95,8 +107,8 @@ load_single_employee (GncSqlBackend* be, GncSqlRow& row)
     return pEmployee;
 }
 
-static void
-load_all_employees (GncSqlBackend* be)
+void
+GncSqlEmployeeBackend::load_all (GncSqlBackend* be)
 {
     GncSqlStatement* stmt;
 
@@ -126,8 +138,8 @@ load_all_employees (GncSqlBackend* be)
 }
 
 /* ================================================================= */
-static void
-create_employee_tables (GncSqlBackend* be)
+void
+GncSqlEmployeeBackend::create_tables (GncSqlBackend* be)
 {
     gint version;
 
@@ -150,8 +162,8 @@ create_employee_tables (GncSqlBackend* be)
 }
 
 /* ================================================================= */
-static gboolean
-save_employee (GncSqlBackend* be, QofInstance* inst)
+bool
+GncSqlEmployeeBackend::commit (GncSqlBackend* be, QofInstance* inst)
 {
     GncEmployee* emp;
     const GncGUID* guid;
@@ -236,12 +248,12 @@ write_single_employee (QofInstance* term_p, gpointer data_p)
 
     if (s->is_ok && employee_should_be_saved (GNC_EMPLOYEE (term_p)))
     {
-        s->is_ok = save_employee (s->be, term_p);
+        s->is_ok = s->obe->commit (s->be, term_p);
     }
 }
 
-static gboolean
-write_employees (GncSqlBackend* be)
+bool
+GncSqlEmployeeBackend::write (GncSqlBackend* be)
 {
     write_objects_t data;
 
@@ -249,6 +261,7 @@ write_employees (GncSqlBackend* be)
 
     data.be = be;
     data.is_ok = TRUE;
+    data.obe = this;
     qof_object_foreach (GNC_ID_EMPLOYEE, be->book, write_single_employee, &data);
 
     return data.is_ok;
@@ -258,17 +271,8 @@ write_employees (GncSqlBackend* be)
 void
 gnc_employee_sql_initialize (void)
 {
-    static GncSqlObjectBackend be_data =
-    {
-        GNC_SQL_BACKEND_VERSION,
-        GNC_ID_EMPLOYEE,
-        save_employee,                      /* commit */
-        load_all_employees,                 /* initial_load */
-        create_employee_tables,             /* create_tables */
-        NULL, NULL, NULL,
-        write_employees                     /* write */
-    };
-
+    static GncSqlEmployeeBackend be_data {
+        GNC_SQL_BACKEND_VERSION, GNC_ID_EMPLOYEE, TABLE_NAME, col_table};
     gnc_sql_register_backend(&be_data);
 }
 /* ========================== END OF FILE ===================== */

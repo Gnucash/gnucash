@@ -90,6 +90,17 @@ static EntryVec col_table
                                          (QofSetterFunc)gncCustomerSetTaxTable),
 });
 
+class GncSqlCustomerBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlCustomerBackend(int version, const std::string& type,
+                      const std::string& table, const EntryVec& vec) :
+        GncSqlObjectBackend(version, type, table, vec) {}
+    void load_all(GncSqlBackend*) override;
+    void create_tables(GncSqlBackend*) override;
+    bool write(GncSqlBackend*) override;
+};
+
 static GncCustomer*
 load_single_customer (GncSqlBackend* be, GncSqlRow& row)
 {
@@ -110,8 +121,8 @@ load_single_customer (GncSqlBackend* be, GncSqlRow& row)
     return pCustomer;
 }
 
-static void
-load_all_customers (GncSqlBackend* be)
+void
+GncSqlCustomerBackend::load_all (GncSqlBackend* be)
 {
     GncSqlStatement* stmt;
 
@@ -140,8 +151,8 @@ load_all_customers (GncSqlBackend* be)
 }
 
 /* ================================================================= */
-static void
-create_customer_tables (GncSqlBackend* be)
+void
+GncSqlCustomerBackend::create_tables (GncSqlBackend* be)
 {
     gint version;
 
@@ -165,24 +176,6 @@ create_customer_tables (GncSqlBackend* be)
 
 /* ================================================================= */
 static gboolean
-save_customer (GncSqlBackend* be, QofInstance* inst)
-{
-    g_return_val_if_fail (inst != NULL, FALSE);
-    g_return_val_if_fail (GNC_CUSTOMER (inst), FALSE);
-    g_return_val_if_fail (be != NULL, FALSE);
-
-    return gnc_sql_commit_standard_item (be, inst, TABLE_NAME, GNC_ID_CUSTOMER,
-                                         col_table);
-}
-
-/* ================================================================= */
-typedef struct
-{
-    GncSqlBackend* be;
-    gboolean is_ok;
-} write_customers_t;
-
-static gboolean
 customer_should_be_saved (GncCustomer* customer)
 {
     const char* id;
@@ -202,7 +195,7 @@ customer_should_be_saved (GncCustomer* customer)
 static void
 write_single_customer (QofInstance* term_p, gpointer data_p)
 {
-    write_customers_t* data = (write_customers_t*)data_p;
+    auto data = reinterpret_cast<write_objects_t*>(data_p);
 
     g_return_if_fail (term_p != NULL);
     g_return_if_fail (GNC_IS_CUSTOMER (term_p));
@@ -210,19 +203,20 @@ write_single_customer (QofInstance* term_p, gpointer data_p)
 
     if (customer_should_be_saved (GNC_CUSTOMER (term_p)) && data->is_ok)
     {
-        data->is_ok = save_customer (data->be, term_p);
+        data->is_ok = data->obe->commit (data->be, term_p);
     }
 }
 
-static gboolean
-write_customers (GncSqlBackend* be)
+bool
+GncSqlCustomerBackend::write (GncSqlBackend* be)
 {
-    write_customers_t data;
+    write_objects_t data;
 
     g_return_val_if_fail (be != NULL, FALSE);
 
     data.be = be;
     data.is_ok = TRUE;
+    data.obe = this;
     qof_object_foreach (GNC_ID_CUSTOMER, be->book, write_single_customer,
                         (gpointer)&data);
     return data.is_ok;
@@ -232,17 +226,8 @@ write_customers (GncSqlBackend* be)
 void
 gnc_customer_sql_initialize (void)
 {
-    static GncSqlObjectBackend be_data =
-    {
-        GNC_SQL_BACKEND_VERSION,
-        GNC_ID_CUSTOMER,
-        save_customer,                      /* commit */
-        load_all_customers,                 /* initial_load */
-        create_customer_tables,             /* create_tables */
-        NULL, NULL, NULL,
-        write_customers                     /* write */
-    };
-
+    static GncSqlCustomerBackend be_data {
+        GNC_SQL_BACKEND_VERSION, GNC_ID_CUSTOMER, TABLE_NAME, col_table};
     gnc_sql_register_backend(&be_data);
 }
 /* ========================== END OF FILE ===================== */

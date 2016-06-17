@@ -136,7 +136,7 @@ gnc_sql_register_backend(OBEEntry&& entry)
 void
 gnc_sql_register_backend(GncSqlObjectBackendPtr obe)
 {
-    backend_registry.emplace_back(make_tuple(std::string{obe->type_name}, obe));
+    backend_registry.emplace_back(make_tuple(std::string{obe->type()}, obe));
 }
 
 const OBEVec&
@@ -144,6 +144,21 @@ gnc_sql_get_backend_registry()
 {
     return backend_registry;
 }
+
+GncSqlObjectBackendPtr
+gnc_sql_get_object_backend(const std::string& type)
+{
+    auto entry = std::find_if(backend_registry.begin(),
+                              backend_registry.end(),
+                              [type](const OBEEntry& entry){
+                                  return type == std::get<0>(entry);
+                              });
+    auto obe = std::get<1>(*entry);
+    if (entry != backend_registry.end())
+        return obe;
+    return nullptr;
+}
+
 void
 gnc_sql_init(GncSqlBackend* be)
 {
@@ -164,13 +179,9 @@ create_tables(const OBEEntry& entry, GncSqlBackend* be)
     std::string type;
     GncSqlObjectBackendPtr obe = nullptr;
     std::tie(type, obe) = entry;
-    g_return_if_fail (obe->version == GNC_SQL_BACKEND_VERSION);
-
-    if (obe->create_tables != nullptr)
-    {
-        update_progress(be);
-        (obe->create_tables)(be);
-    }
+    g_return_if_fail (obe->is_version (GNC_SQL_BACKEND_VERSION));
+    update_progress(be);
+    obe->create_tables(be);
 }
 
 /* ================================================================= */
@@ -195,7 +206,7 @@ initial_load(const OBEEntry& entry, GncSqlBackend* be)
     std::string type;
     GncSqlObjectBackendPtr obe = nullptr;
     std::tie(type, obe) = entry;
-    g_return_if_fail(obe->version == GNC_SQL_BACKEND_VERSION);
+    g_return_if_fail(obe->is_version (GNC_SQL_BACKEND_VERSION));
 
     /* Don't need to load anything if it has already been loaded with
      * the fixed order.
@@ -205,8 +216,7 @@ initial_load(const OBEEntry& entry, GncSqlBackend* be)
     if (std::find(other_load_order.begin(), other_load_order.end(),
                   type) != other_load_order.end()) return;
 
-    if (obe->initial_load != nullptr)
-        (obe->initial_load)(be);
+    obe->load_all (be);
 }
 
 void
@@ -243,34 +253,20 @@ gnc_sql_load (GncSqlBackend* be,  QofBook* book, QofBackendLoadType loadType)
         /* Load any initial stuff. Some of this needs to happen in a certain order */
         for (auto type : fixed_load_order)
         {
-            auto entry = std::find_if(backend_registry.begin(),
-                                      backend_registry.end(),
-                                      [type](const OBEEntry& entry){
-                                          return type == std::get<0>(entry);
-                                      });
-            auto obe = std::get<1>(*entry);
-            if (entry != backend_registry.end() &&
-                obe->initial_load != nullptr)
+            auto obe = gnc_sql_get_object_backend(type);
+            if (obe)
             {
                 update_progress(be);
-                (obe->initial_load)(be);
+                obe->load_all (be);
             }
         }
         for (auto type : other_load_order)
         {
-            auto entry = std::find_if(backend_registry.begin(),
-                                      backend_registry.end(),
-                                      [type](const OBEEntry& entry){
-                                          return type == std::get<0>(entry);
-                                      });
-            if (entry == backend_registry.end())
-                continue;
-            auto obe = std::get<1>(*entry);
-            if (entry != backend_registry.end() &&
-                obe->initial_load != nullptr)
+            auto obe = gnc_sql_get_object_backend(type);
+            if (obe)
             {
                 update_progress(be);
-                (obe->initial_load)(be);
+                obe->load_all (be);
             }
         }
 
@@ -287,7 +283,8 @@ gnc_sql_load (GncSqlBackend* be,  QofBook* book, QofBackendLoadType loadType)
     else if (loadType == LOAD_TYPE_LOAD_ALL)
     {
         // Load all transactions
-        gnc_sql_transaction_load_all_tx (be);
+        auto obe = gnc_sql_get_object_backend (GNC_ID_TRANS);
+        obe->load_all (be);
     }
 
     be->loading = FALSE;
@@ -315,13 +312,14 @@ write_account_tree (GncSqlBackend* be, Account* root)
     g_return_val_if_fail (be != NULL, FALSE);
     g_return_val_if_fail (root != NULL, FALSE);
 
-    is_ok = gnc_sql_save_account (be, QOF_INSTANCE (root));
+    auto obe = gnc_sql_get_object_backend (GNC_ID_ACCOUNT);
+    is_ok = obe->commit (be, QOF_INSTANCE (root));
     if (is_ok)
     {
         descendants = gnc_account_get_descendants (root);
         for (node = descendants; node != NULL && is_ok; node = g_list_next (node))
         {
-            is_ok = gnc_sql_save_account (be, QOF_INSTANCE (GNC_ACCOUNT (node->data)));
+            is_ok = obe->commit(be, QOF_INSTANCE (GNC_ACCOUNT (node->data)));
             if (!is_ok) break;
         }
         g_list_free (descendants);
@@ -349,36 +347,34 @@ write_accounts (GncSqlBackend* be)
     return is_ok;
 }
 
-static int
+static gboolean
 write_tx (Transaction* tx, gpointer data)
 {
-    write_objects_t* s = (write_objects_t*)data;
+    auto s = static_cast<write_objects_t*>(data);
 
     g_return_val_if_fail (tx != NULL, 0);
     g_return_val_if_fail (data != NULL, 0);
 
-    s->is_ok = gnc_sql_save_transaction (s->be, QOF_INSTANCE (tx));
+    s->commit (QOF_INSTANCE (tx));
+    auto splitbe = gnc_sql_get_object_backend (GNC_ID_SPLIT);
+    for (auto split_node = xaccTransGetSplitList (tx);
+         split_node != nullptr && s->is_ok;
+         split_node = g_list_next (split_node))
+    {
+        s->is_ok = splitbe->commit(s->be, QOF_INSTANCE(split_node->data));
+    }
     update_progress (s->be);
-
-    if (s->is_ok)
-    {
-        return 0;
-    }
-    else
-    {
-        return 1;
-    }
+    return (s->is_ok ? 0 : 1);
 }
 
 static gboolean
 write_transactions (GncSqlBackend* be)
 {
-    write_objects_t data;
-
     g_return_val_if_fail (be != NULL, FALSE);
 
-    data.be = be;
-    data.is_ok = TRUE;
+    auto obe = gnc_sql_get_object_backend(GNC_ID_TRANS);
+    write_objects_t data{be, true, obe};
+
     (void)xaccAccountTreeForEachTransaction (
         gnc_book_get_root_account (be->book), write_tx, &data);
     update_progress (be);
@@ -388,14 +384,11 @@ write_transactions (GncSqlBackend* be)
 static gboolean
 write_template_transactions (GncSqlBackend* be)
 {
-    Account* ra;
-    write_objects_t data;
-
     g_return_val_if_fail (be != NULL, FALSE);
 
-    data.is_ok = TRUE;
-    data.be = be;
-    ra = gnc_book_get_template_root (be->book);
+    auto obe = gnc_sql_get_object_backend(GNC_ID_TRANS);
+    write_objects_t data{be, true, obe};
+    auto ra = gnc_book_get_template_root (be->book);
     if (gnc_account_n_descendants (ra) > 0)
     {
         (void)xaccAccountTreeForEachTransaction (ra, write_tx, &data);
@@ -415,30 +408,16 @@ write_schedXactions (GncSqlBackend* be)
     g_return_val_if_fail (be != NULL, FALSE);
 
     schedXactions = gnc_book_get_schedxactions (be->book)->sx_list;
+    auto obe = gnc_sql_get_object_backend(GNC_ID_SCHEDXACTION);
 
     for (; schedXactions != NULL && is_ok; schedXactions = schedXactions->next)
     {
         tmpSX = static_cast<decltype (tmpSX)> (schedXactions->data);
-        is_ok = gnc_sql_save_schedxaction (be, QOF_INSTANCE (tmpSX));
+        is_ok = obe->commit (be, QOF_INSTANCE (tmpSX));
     }
     update_progress (be);
 
     return is_ok;
-}
-
-static void
-write(const OBEEntry& entry, GncSqlBackend* be)
-{
-    std::string type;
-    GncSqlObjectBackendPtr obe = nullptr;
-    std::tie(type, obe) = entry;
-    g_return_if_fail (obe->version == GNC_SQL_BACKEND_VERSION);
-
-    if (obe->write != nullptr)
-    {
-        (void)(obe->write)(be);
-        update_progress(be);
-    }
 }
 
 static void
@@ -486,7 +465,8 @@ gnc_sql_sync_all (GncSqlBackend* be,  QofBook* book)
     //write_commodities( be, book );
     if (is_ok)
     {
-        is_ok = gnc_sql_save_book (be, QOF_INSTANCE (book));
+        auto obe = gnc_sql_get_object_backend(GNC_ID_BOOK);
+        is_ok = obe->commit (be, QOF_INSTANCE (book));
     }
     if (is_ok)
     {
@@ -507,7 +487,7 @@ gnc_sql_sync_all (GncSqlBackend* be,  QofBook* book)
     if (is_ok)
     {
         for (auto entry : backend_registry)
-            write(entry, be);
+            std::get<1>(entry)->write (be);
     }
     if (is_ok)
     {
@@ -561,7 +541,7 @@ commit(const OBEEntry& entry, sql_backend* be_data)
     std::string type;
     GncSqlObjectBackendPtr obe= nullptr;
     std::tie(type, obe) = entry;
-    g_return_if_fail (obe->version == GNC_SQL_BACKEND_VERSION);
+    g_return_if_fail (obe->is_version (GNC_SQL_BACKEND_VERSION));
 
     /* If this has already been handled, or is not the correct
      * handler, return
@@ -569,11 +549,8 @@ commit(const OBEEntry& entry, sql_backend* be_data)
     if (type != std::string{be_data->inst->e_type}) return;
     if (be_data->is_known) return;
 
-    if (obe->commit != nullptr)
-    {
-        be_data->is_ok = (obe->commit)(be_data->be, be_data->inst);
-        be_data->is_known = TRUE;
-    }
+    be_data->is_ok = obe->commit (be_data->be, be_data->inst);
+    be_data->is_known = TRUE;
 }
 
 /* Commit_edit handler - find the correct backend handler for this object
@@ -823,26 +800,23 @@ handle_and_term (QofQueryTerm* pTerm, GString* sql)
 
     g_string_append (sql, ")");
 }
-
+#if 0 //The query compilation code was never tested so it isn't implemnted for GncSqlObjectBackend.
 static void
 compile_query(const OBEEntry& entry, sql_backend* be_data)
 {
     std::string type;
     GncSqlObjectBackendPtr obe = nullptr;
     std::tie(type, obe) = entry;
-    g_return_if_fail (obe->version == GNC_SQL_BACKEND_VERSION);
+    g_return_if_fail (obe->is_version (GNC_SQL_BACKEND_VERSION));
 
     // Is this the right item?
     if (type != std::string{be_data->pQueryInfo->searchObj}) return;
     if (be_data->is_ok) return;
 
-    if (obe->compile_query != nullptr)
-    {
-        be_data->pQueryInfo->pCompiledQuery = (obe->compile_query)(
-            be_data->be,
-            be_data->pQuery);
-        be_data->is_ok = TRUE;
-    }
+    be_data->pQueryInfo->pCompiledQuery = (obe->compile_query)(
+        be_data->be,
+        be_data->pQuery);
+    be_data->is_ok = TRUE;
 }
 
 gchar* gnc_sql_compile_query_to_sql (GncSqlBackend* be, QofQuery* query);
@@ -1052,7 +1026,7 @@ gnc_sql_run_query (QofBackend* pBEnd, gpointer pQuery)
 
     LEAVE ("");
 }
-
+#endif //if 0: query creation isn't used yet, code never tested.
 /* ================================================================= */
 /* Order in which business objects need to be loaded */
 static const StrVec business_fixed_load_order =
@@ -2199,10 +2173,8 @@ build_delete_statement (GncSqlBackend* be,
 }
 
 /* ================================================================= */
-gboolean
-gnc_sql_commit_standard_item (GncSqlBackend* be, QofInstance* inst,
-                              const gchar* tableName, QofIdTypeConst obj_name,
-                              const EntryVec& col_table)
+bool
+GncSqlObjectBackend::commit (GncSqlBackend* be, QofInstance* inst)
 {
     const GncGUID* guid;
     gboolean is_infant;
@@ -2222,7 +2194,8 @@ gnc_sql_commit_standard_item (GncSqlBackend* be, QofInstance* inst,
     {
         op = OP_DB_UPDATE;
     }
-    is_ok = gnc_sql_do_db_operation (be, op, tableName, obj_name, inst, col_table);
+    is_ok = gnc_sql_do_db_operation (be, op, m_table_name.c_str(),
+                                     m_type_name.c_str(), inst, m_col_table);
 
     if (is_ok)
     {
@@ -2278,6 +2251,19 @@ gnc_sql_create_table (GncSqlBackend* be, const char* table_name,
         ok = gnc_sql_set_table_version (be, table_name, table_version);
     }
     return ok;
+}
+
+void
+GncSqlObjectBackend::create_tables (GncSqlBackend* be)
+{
+    g_return_if_fail (be != nullptr);
+    int version = gnc_sql_get_table_version (be, m_table_name.c_str());
+    if (version == 0) //No tables, otherwise version will be >= 1. 
+        gnc_sql_create_table (be, m_table_name.c_str(),
+                              m_version, m_col_table);
+    else if (version != m_version)
+        PERR("Version mismatch in table %s, expecting %d but backend is %d."
+             "Table creation aborted.", m_table_name.c_str(), m_version, version);
 }
 
 gboolean

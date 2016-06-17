@@ -282,51 +282,100 @@ inline bool operator==(const GncSqlRow& lr, const GncSqlRow& rr) {
     return !(lr != rr);
 }
 
-/**
- * @struct GncSqlObjectBackend
- *
- * Struct used to handle a specific engine object type for an SQL backend.
- * This handler should be registered with gnc_sql_register_backend().
- *
- * commit()         - commit an object to the db
- * initial_load()   - load stuff when new db opened
- * create_tables()  - create any db tables
- * compile_query()  - compile a backend object query
- * run_query()      - run a compiled query
- * free_query()     - free a compiled query
- * write()          - write all objects
- */
-typedef struct
-{
-    int         version;                /**< Backend version number */
-    const std::string   type_name;      /**< Engine object type name */
-    /** Commit an instance of this object to the database
-     * @return TRUE if successful, FALSE if error
-     */
-    gboolean (*commit) (GncSqlBackend* be, QofInstance* inst);
-    /** Load all objects of this type from the database */
-    void (*initial_load) (GncSqlBackend* be);
-    /** Create database tables for this object */
-    void (*create_tables) (GncSqlBackend* be);
-    /** Compile a query on these objects */
-    gpointer (*compile_query) (GncSqlBackend* be, QofQuery* pQuery);
-    /** Run a query on these objects */
-    void (*run_query) (GncSqlBackend* be, gpointer pQuery);
-    /** Free a query on these objects */
-    void (*free_query) (GncSqlBackend* be, gpointer pQuery);
-    /** Write all objects of this type to the database
-     * @return TRUE if successful, FALSE if error
-     */
-    gboolean (*write) (GncSqlBackend* be);
-} GncSqlObjectBackend;
 #define GNC_SQL_BACKEND             "gnc:sql:1"
 #define GNC_SQL_BACKEND_VERSION 1
+
+/**
+ * Encapsulates per-class table schema with functions to load, create a table,
+ * commit a changed front-end object (note that database transaction semantics
+ * are not yet implemented; edit/commit applies to the front-end object!) and
+ * write all front-end objects of the type to the database. Additional functions
+ * for creating and runing queries existed but were unused and untested. They've
+ * been temporarily removed until the front end is ready to use them.
+ */
+class GncSqlObjectBackend
+{
+public:
+    GncSqlObjectBackend (int version, const std::string& type,
+                         const std::string& table, const EntryVec& vec) :
+         m_table_name{table}, m_version{version}, m_type_name{type},
+         m_col_table{vec} {}
+    /**
+     * Load all objects of m_type in the database into memory.
+     * @param be The GncSqlBackend containing the database connection.
+     */
+    virtual void load_all (GncSqlBackend*) = 0;
+    /**
+     * Conditionally create or update a database table from m_col_table. The
+     * condition is the version returned by querying the database's version
+     * table: If it's 0 then the table wasn't found and will be created; All
+     * tables areat least version 1. If the database's version is less than the
+     * compiled version then the table schema is upgraded but the data isn't,
+     * that's the engine's responsibility when the object is loaded. If the
+     * version is greater than the compiled version then nothing is touched.
+     * @param be The GncSqlBackend containing the database connection.
+     */
+    virtual void create_tables (GncSqlBackend*);
+    /**
+     * UPDATE/INSERT a single instance of m_type_name into the database.
+     * @param be The GncSqlBackend containing the database.
+     * @param inst The QofInstance to be written out.
+     */
+    virtual bool commit (GncSqlBackend* be, QofInstance* inst);
+    /**
+     * Write all objects of m_type_name to the database.
+     * @param be The GncSqlBackend containing the database.
+     * @return true if the objects were successfully written, false otherwise.
+     */
+    virtual bool write (GncSqlBackend*) { return true; }
+    /**
+     * Return the m_type_name for the class. This value is created at
+     * compilation time and is called QofIdType or QofIdTypeConst in other parts
+     * of GnuCash. Most values are defined in src/engine/gnc-engine.h.
+     * @return m_type_name.
+     */
+    const char* type () const noexcept { return m_type_name.c_str(); }
+    /**
+     * Compare a version with the compiled version (m_version).
+     * @return true if they match.
+     */
+    const bool is_version (int version) const noexcept {
+        return version == m_version;
+    }
+protected:
+    const std::string m_table_name;
+    const int m_version;
+    const std::string m_type_name; /// The front-end QofIdType
+    const EntryVec& m_col_table;   /// The ORM table definition.
+};
+
 using GncSqlObjectBackendPtr = GncSqlObjectBackend*;
+
 using OBEEntry = std::tuple<std::string, GncSqlObjectBackendPtr>;
 using OBEVec = std::vector<OBEEntry>;
 void gnc_sql_register_backend(OBEEntry&&);
 void gnc_sql_register_backend(GncSqlObjectBackendPtr);
 const OBEVec& gnc_sql_get_backend_registry();
+GncSqlObjectBackendPtr gnc_sql_get_object_backend(const std::string& table_name);
+
+/**
+ * Data-passing struct for callbacks to qof_object_foreach() used in
+ * GncSqlObjectBackend::write(). Once QofCollection is rewritten to use C++
+ * containers we'll use std::foreach() and lambdas instead of callbacks and this
+ * can go away.
+ */
+struct write_objects_t
+{
+    write_objects_t() = default;
+    write_objects_t (GncSqlBackend* b, bool o, GncSqlObjectBackendPtr e) :
+        be{b}, is_ok{o}, obe{e} {}
+    void commit (QofInstance* inst) {
+        if (is_ok) is_ok = obe->commit (be, inst);
+    }
+    GncSqlBackend* be;
+    bool is_ok;
+    GncSqlObjectBackendPtr obe;
+};
 
 /**
  * Basic column type
@@ -958,12 +1007,6 @@ void _retrieve_guid_ (gpointer pObject,  gpointer pValue);
 gpointer gnc_sql_compile_query (QofBackend* pBEnd, QofQuery* pQuery);
 void gnc_sql_free_query (QofBackend* pBEnd, gpointer pQuery);
 void gnc_sql_run_query (QofBackend* pBEnd, gpointer pQuery);
-
-typedef struct
-{
-    GncSqlBackend* be;
-    gboolean is_ok;
-} write_objects_t;
 
 template <typename T> T
 GncSqlColumnTableEntry::get_row_value_from_object(QofIdTypeConst obj_name,

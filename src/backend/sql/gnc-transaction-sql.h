@@ -39,23 +39,6 @@ extern "C"
 void gnc_sql_init_transaction_handler (void);
 
 /**
- * Commits all of the splits for a transaction.
- *
- * @param be SQL backend
- * @param pTx Transaction
- */
-void gnc_sql_transaction_commit_splits (GncSqlBackend* be, Transaction* pTx);
-
-/**
- * Saves a transaction to the db.
- *
- * @param be SQL backend
- * @param inst Transaction instance
- * @return TRUE if successful, FALSE if unsuccessful
- */
-gboolean gnc_sql_save_transaction (GncSqlBackend* be, QofInstance* inst);
-
-/**
  * Loads all transactions which have splits for a specific account.
  *
  * @param be SQL backend
@@ -63,14 +46,6 @@ gboolean gnc_sql_save_transaction (GncSqlBackend* be, QofInstance* inst);
  */
 void gnc_sql_transaction_load_tx_for_account (GncSqlBackend* be,
                                               Account* account);
-
-/**
- * Loads all transactions.
- *
- * @param be SQL backend
- */
-void gnc_sql_transaction_load_all_tx (GncSqlBackend* be);
-
 typedef struct
 {
     Account* acct;
