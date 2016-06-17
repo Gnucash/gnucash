@@ -37,6 +37,7 @@
 
 (define acc-page gnc:pagename-general)
 (define this-acc (N_ "Receivables Account"))
+(define receivable #t)		;; receivable = #t, payable = #f
 
 (define (options-generator)    
   (let* ((options (gnc:new-options)) 
@@ -50,7 +51,7 @@
       "w" (N_ "The receivables account you wish to examine.") 
       #f #f (list ACCT-TYPE-RECEIVABLE)))
 
-    (aging-options-generator options)))
+    (aging-options-generator options receivable)))
 
 (define (receivables-renderer report-obj)
   (define (op-value section name)
@@ -60,7 +61,7 @@
   (let* ((receivables-account (op-value acc-page this-acc)))
     (gnc:debug "receivables-account" receivables-account)
 
-    (aging-renderer report-obj this-acc receivables-account #t)))
+    (aging-renderer report-obj this-acc receivables-account #t receivable)))
 
 (define receivables-aging-guid "9cf76bed17f14401b8e3e22d0079cb98")
 
