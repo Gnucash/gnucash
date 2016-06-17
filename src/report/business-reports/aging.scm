@@ -45,6 +45,18 @@
 (define optname-show-zeros (N_ "Show zero balance items"))
 (define optname-date-driver (N_ "Due or Post Date"))
 
+;; Display tab options
+(define optname-addr-source (N_ "Address Source")) ;; Billing or Shipping addresses
+(define optname-disp-addr-name (N_ "Address Name"))
+(define optname-disp-addr1 (N_ "Address 1"))
+(define optname-disp-addr2 (N_ "Address 2"))
+(define optname-disp-addr3 (N_ "Address 3"))
+(define optname-disp-addr4 (N_ "Address 4"))
+(define optname-disp-addr-phone (N_ "Address Phone"))
+(define optname-disp-addr-fax (N_ "Address Fax"))
+(define optname-disp-addr-email (N_ "Address Email"))
+(define optname-disp-active (N_ "Active"))
+
 (export optname-show-zeros)
 
 ;; The idea is:  have a hash with the key being the contact name
@@ -319,7 +331,7 @@ more than one currency. This report is not designed to cope with this possibilit
     (qof-query-set-sort-increasing query #t #t #t)))
      
 
-(define (aging-options-generator options)
+(define (aging-options-generator options receivable)
   (let* ((add-option 
           (lambda (new-option)
             (gnc:register-option options new-option))))
@@ -391,8 +403,97 @@ totals to report currency.")
        'duedate
        (list
          (vector 'duedate (N_ "Due Date") (N_ "Due date is leading.")) ;; Should be using standard label for due date?
-	 (vector 'postdate (N_ "Post Date") (N_ "Post date is leading."))))) ;; Should be using standard label for post date?
+         (vector 'postdate (N_ "Post Date") (N_ "Post date is leading."))))) ;; Should be using standard label for post date?
     
+	;; display tab options
+	
+	(gnc:debug "aging-options-generator: receivable=" receivable)
+	
+    (if receivable
+        (add-option
+          (gnc:make-multichoice-option
+            gnc:pagename-display
+            optname-addr-source
+            "a"
+            (N_ "Address source.")
+            'billing
+            (list
+             (vector 'billing (N_ "Billing") (N_ "Address fields from billing address."))
+             (vector 'shipping (N_ "Shipping") (N_ "Address fields from shipping address."))))))
+		
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display
+      optname-disp-addr-name
+      "b"
+      (N_ "Display Address Name. This, and other fields, may be useful if \
+copying this report to a spreadsheet for use in a mail merge.")
+      #f))
+
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display
+      optname-disp-addr1
+      "c"
+      (N_ "Display Address 1.")
+      #f))
+
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display
+      optname-disp-addr2
+      "d"
+      (N_ "Display Address 2.")
+      #f))
+	
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display
+      optname-disp-addr3
+      "e"
+      (N_ "Display Address 3.")
+      #f))
+	
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display
+      optname-disp-addr4
+      "f"
+      (N_ "Display Address 4.")
+      #f))
+	
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display
+      optname-disp-addr-phone
+      "g"
+      (N_ "Display Phone.")
+      #f))
+	
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display
+      optname-disp-addr-fax
+      "h"
+      (N_ "Display Fax.")
+      #f))
+	
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display
+      optname-disp-addr-email
+      "i"
+      (N_ "Display Email.")
+      #f))
+		
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display
+      optname-disp-active
+      "j"
+      (N_ "Display Active status.")
+      #f))
+		
     (gnc:options-set-default-section options "General")      
     options))
 
@@ -409,8 +510,8 @@ totals to report currency.")
     (define oldintervalreversed (reverse (make-interval-list to-date)))		
   (reverse (cons dayforcurrent oldintervalreversed)))
 
-(define (aging-renderer report-obj reportname account reverse?)
-
+(define (aging-renderer report-obj reportname account reverse? receivable)
+	
   (define (get-name a)
     (let* ((owner (company-get-owner-obj (cdr a))))
       (gncOwnerGetName owner)))
@@ -454,20 +555,34 @@ totals to report currency.")
     (gnc:lookup-option (gnc:report-options report-obj) section name))
   
   (define (op-value section name)
-    (gnc:option-value (get-op section name)))
+    (begin
+;;	  (gnc:debug "op-value: name=" name)
+      (gnc:option-value (get-op section name)))
+  )
 
 
   ;; XXX: This is a hack - will be fixed when we move to a
   ;; more general interval scheme in this report
-  (define (make-heading-list)
+  (define make-heading-list
     (list 
-     (_ "Company")
-     (_ "Current")
-     (_ "0-30 days")
-     (_ "31-60 days")
-     (_ "61-90 days")
-     (_ "91+ days")
-     (_ "Total")))
+      (_ "Company")
+      (_ "Current")
+      (_ "0-30 days")
+      (_ "31-60 days")
+      (_ "61-90 days")
+      (_ "91+ days")
+      (_ "Total")))
+     
+;; following cols are optional 
+;;    (_ "Address Name")
+;;    (_ "Address 1")
+;;    (_ "Address 2")
+;;    (_ "Address 3")
+;;    (_ "Address 4")
+;;    (_ "Phone")
+;;    (_ "Fax")
+;;    (_ "Email")
+;;    (_ "Active")
 
 
   ;;  Make a list of commodity collectors for column totals
@@ -540,7 +655,17 @@ totals to report currency.")
 	       fmt-multiple-currencies
 	       fmt-one-currency)))
       (map fmt-function collector-list)))
-
+  
+  ;; return pointer to either billing or shipping address
+  ;;  note customers have a shipping address but not vendors
+  
+  (define (get-addr owner disp-addr-source)
+   (begin
+;;  (gnc:debug "get-addr: disp-addr-source=" disp-addr-source)
+    (if (and receivable (eq? disp-addr-source 'shipping))
+        (gncCustomerGetShipAddr (gncOwnerGetCustomer owner)) ;; shipping
+        (gncOwnerGetAddr owner))) 			   			     ;; billing
+  )
 
   (gnc:report-starting reportname)
   (let* ((companys (make-hash-table 23))
@@ -557,8 +682,20 @@ totals to report currency.")
 	(price-source (op-value gnc:pagename-general optname-price-source))
 	(multi-totals-p (op-value gnc:pagename-general optname-multicurrency-totals))
 	(show-zeros (op-value gnc:pagename-general optname-show-zeros))
-        (date-type (op-value gnc:pagename-general optname-date-driver))        
-	(heading-list (make-heading-list))
+    (date-type (op-value gnc:pagename-general optname-date-driver)) 
+    (disp-addr-source (if receivable
+      (op-value gnc:pagename-display optname-addr-source)
+      'billing))
+    (disp-addr-name (op-value gnc:pagename-display optname-disp-addr-name))
+    (disp-addr1 (op-value gnc:pagename-display optname-disp-addr1))
+    (disp-addr2 (op-value gnc:pagename-display optname-disp-addr2))
+    (disp-addr3 (op-value gnc:pagename-display optname-disp-addr3))
+    (disp-addr4 (op-value gnc:pagename-display optname-disp-addr4))
+    (disp-addr-phone (op-value gnc:pagename-display optname-disp-addr-phone))
+    (disp-addr-fax (op-value gnc:pagename-display optname-disp-addr-fax))
+    (disp-addr-email (op-value gnc:pagename-display optname-disp-addr-email))
+    (disp-active (op-value gnc:pagename-display optname-disp-active))
+	(heading-list make-heading-list)
 	(exchange-fn (gnc:case-exchange-fn price-source report-currency report-date))
 	(total-collector-list (make-collector-list))
 	(table (gnc:make-html-table))
@@ -568,6 +705,26 @@ totals to report currency.")
 	(work-to-do 0)
         (document (gnc:make-html-document)))
 ;    (gnc:debug "Account: " account)
+
+	;; add optional column headings
+    (if disp-addr-name
+      (set! heading-list (append heading-list (list (_ "Address Name")))))
+    (if disp-addr1
+      (set! heading-list (append heading-list (list (_ "Address 1")))))
+    (if disp-addr2
+      (set! heading-list (append heading-list (list (_ "Address 2")))))
+    (if disp-addr3
+      (set! heading-list (append heading-list (list (_ "Address 3")))))
+    (if disp-addr4
+      (set! heading-list (append heading-list (list (_ "Address 4")))))
+    (if disp-addr-phone
+      (set! heading-list (append heading-list (list (_ "Phone")))))
+    (if disp-addr-fax
+      (set! heading-list (append heading-list (list (_ "Fax")))))
+    (if disp-addr-email
+      (set! heading-list (append heading-list (list (_ "Email")))))
+    (if disp-active
+      (set! heading-list (append heading-list (list (_ "Active")))))
 
     ;; set default title
     (gnc:html-document-set-title! document report-title)
@@ -632,8 +789,43 @@ totals to report currency.")
 						(cdr company-list-entry))))
 			       (owner (company-get-owner-obj
 				       (cdr company-list-entry)))
-			       (company-name (gncOwnerGetName owner)))
-
+			       (company-name (gncOwnerGetName owner))
+			       (addr (get-addr owner disp-addr-source))
+			       (addr-name  (gncAddressGetName  addr))
+			       (addr-addr1 (gncAddressGetAddr1 addr))
+			       (addr-addr2 (gncAddressGetAddr2 addr))
+			       (addr-addr3 (gncAddressGetAddr3 addr))
+			       (addr-addr4 (gncAddressGetAddr4 addr))
+			       (addr-phone (gncAddressGetPhone addr))
+			       (addr-fax   (gncAddressGetFax   addr))
+			       (addr-email (gncAddressGetEmail addr))
+			       (company-active (if (gncOwnerGetActive owner)
+			         (_ "Y") (_ "N")))
+			       (opt-fld-list '())
+			      )
+;;            (gnc:debug "aging-renderer: disp-addr-source=" disp-addr-source
+;;              " owner=" owner
+;;              " gncOwnerGetID="  (gncOwnerGetID owner)	;; cust no
+;;              " gncCustomerGetShipAddr="                  
+;;                (gncCustomerGetShipAddr (gncOwnerGetCustomer owner)))
+			  (if disp-addr-name
+			    (set! opt-fld-list (append opt-fld-list (list addr-name))))
+			  (if disp-addr1
+                (set! opt-fld-list (append opt-fld-list (list addr-addr1))))
+			  (if disp-addr2
+                (set! opt-fld-list (append opt-fld-list (list addr-addr2))))
+			  (if disp-addr3
+                (set! opt-fld-list (append opt-fld-list (list addr-addr3))))
+			  (if disp-addr4
+                (set! opt-fld-list (append opt-fld-list (list addr-addr4))))
+			  (if disp-addr-phone
+                (set! opt-fld-list (append opt-fld-list (list addr-phone))))
+			  (if disp-addr-fax
+                (set! opt-fld-list (append opt-fld-list (list addr-fax))))
+			  (if disp-addr-email
+                (set! opt-fld-list (append opt-fld-list (list addr-email))))
+			  (if disp-active
+                (set! opt-fld-list (append opt-fld-list (list company-active))))
 			  (add-to-column-totals total-collector-list
 						monetary-list)
 
@@ -650,13 +842,15 @@ totals to report currency.")
 				      total))
 				    rest))))
 
-			  (gnc:html-table-append-row!
-			   table (cons
-				  (gnc:make-html-text
-				   (gnc:html-markup-anchor
-				    (gnc:owner-anchor-text owner)
-				    company-name))
-				  monetary-list))
+			  (gnc:html-table-append-row! table
+			  	(append
+			  	  (cons
+				    (gnc:make-html-text
+				      (gnc:html-markup-anchor
+				        (gnc:owner-anchor-text owner)
+				        company-name))
+				    monetary-list)
+				  opt-fld-list))
 			  (gncOwnerFree owner)))
 		      company-list)
 
