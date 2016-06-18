@@ -321,7 +321,7 @@ gnc_sql_set_recurrences_from_db (GncSqlBackend* be, const GncGUID* guid)
     (void)guid_to_string_buff (guid, guid_buf);
     buf = g_strdup_printf ("SELECT * FROM %s WHERE obj_guid='%s'", TABLE_NAME,
                            guid_buf);
-    auto stmt = gnc_sql_connection_create_statement_from_sql (be->conn, buf);
+    auto stmt = be->conn->create_statement_from_sql (buf);
     g_free (buf);
     auto result = gnc_sql_execute_select_statement (be, stmt);
     return result;

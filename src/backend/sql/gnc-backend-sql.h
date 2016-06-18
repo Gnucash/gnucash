@@ -58,7 +58,7 @@ using EntryVec = std::vector<GncSqlColumnTableEntryPtr>;
 using ColVec = std::vector<GncSqlColumnInfo>;
 using StrVec = std::vector<std::string>;
 using PairVec = std::vector<std::pair<std::string, std::string>>;
-typedef struct GncSqlConnection GncSqlConnection;
+class GncSqlConnection;
 
 /**
  * @struct GncSqlBackend
@@ -158,49 +158,40 @@ public:
 using GncSqlStatementPtr = std::unique_ptr<GncSqlStatement>;
 
 /**
- * @struct GncSqlConnection
- *
- * Struct which represents the connection to an SQL database.  SQL backends
- * must provide a structure which implements all of the functions.
+ * Encapsulate the connection to the database. 
  */
-struct GncSqlConnection
+class GncSqlConnection
 {
-    void (*dispose) (GncSqlConnection*);
-    GncSqlResultPtr (*executeSelectStatement) (GncSqlConnection*, const GncSqlStatementPtr&); /**< Returns NULL if error */
-    gint (*executeNonSelectStatement) (GncSqlConnection*, const GncSqlStatementPtr&); /**< Returns -1 if error */
-    GncSqlStatementPtr (*createStatementFromSql) (GncSqlConnection*, const gchar*);
-    gboolean (*doesTableExist) (GncSqlConnection*, const gchar*);  /**< Returns true if successful */
-    gboolean (*beginTransaction) (GncSqlConnection*); /**< Returns TRUE if successful, FALSE if error */
-    gboolean (*rollbackTransaction) (GncSqlConnection*); /**< Returns TRUE if successful, FALSE if error */
-    gboolean (*commitTransaction) (GncSqlConnection*); /**< Returns TRUE if successful, FALSE if error */
-    gboolean (*createTable) (GncSqlConnection*, const gchar*, const ColVec&); /**< Returns TRUE if successful, FALSE if error */
-    gboolean (*createIndex) (GncSqlConnection*, const gchar*, const gchar*, const EntryVec&); /**< Returns TRUE if successful, FALSE if error */
-    gboolean (*addColumnsToTable) (GncSqlConnection*, const gchar* table, const ColVec&); /**< Returns TRUE if successful, FALSE if error */
-    gchar* (*quoteString) (const GncSqlConnection*, const char*);
+public:
+    /** Returns NULL if error */
+    virtual ~GncSqlConnection() = default;
+    virtual GncSqlResultPtr execute_select_statement (const GncSqlStatementPtr&)
+        noexcept = 0;
+    /** Returns false if error */
+    virtual int execute_nonselect_statement (const GncSqlStatementPtr&)
+        noexcept = 0;
+    virtual GncSqlStatementPtr create_statement_from_sql (const std::string&)
+        const noexcept = 0;
+    /** Returns true if successful */
+    virtual bool does_table_exist (const std::string&) const noexcept = 0;
+    /** Returns TRUE if successful, false if error */
+    virtual bool begin_transaction () noexcept = 0;
+    /** Returns TRUE if successful, FALSE if error */
+    virtual bool rollback_transaction () const noexcept = 0;
+    /** Returns TRUE if successful, FALSE if error */
+    virtual bool commit_transaction () const noexcept = 0;
+    /** Returns TRUE if successful, FALSE if error */
+    virtual bool create_table (const std::string&, const ColVec&)
+        const noexcept = 0;
+    /** Returns TRUE if successful, FALSE if error */
+    virtual bool create_index (const std::string&, const std::string&,
+                               const EntryVec&) const noexcept = 0;
+    /** Returns TRUE if successful, FALSE if error */
+    virtual bool add_columns_to_table (const std::string&, const ColVec&)
+        const noexcept = 0;
+    virtual std::string quote_string (const std::string&)
+        const noexcept = 0;
 };
-#define gnc_sql_connection_dispose(CONN) (CONN)->dispose(CONN)
-#define gnc_sql_connection_execute_select_statement(CONN,STMT) \
-        (CONN)->executeSelectStatement(CONN,STMT)
-#define gnc_sql_connection_execute_nonselect_statement(CONN,STMT) \
-        (CONN)->executeNonSelectStatement(CONN,STMT)
-#define gnc_sql_connection_create_statement_from_sql(CONN,SQL) \
-        (CONN)->createStatementFromSql(CONN,SQL)
-#define gnc_sql_connection_does_table_exist(CONN,NAME) \
-        (CONN)->doesTableExist(CONN,NAME)
-#define gnc_sql_connection_begin_transaction(CONN) \
-        (CONN)->beginTransaction(CONN)
-#define gnc_sql_connection_rollback_transaction(CONN) \
-        (CONN)->rollbackTransaction(CONN)
-#define gnc_sql_connection_commit_transaction(CONN) \
-        (CONN)->commitTransaction(CONN)
-#define gnc_sql_connection_create_table(CONN,NAME,COLLIST) \
-        (CONN)->createTable(CONN,NAME,COLLIST)
-#define gnc_sql_connection_create_index(CONN,INDEXNAME,TABLENAME,COLTABLE) \
-        (CONN)->createIndex(CONN,INDEXNAME,TABLENAME,COLTABLE)
-#define gnc_sql_connection_add_columns_to_table(CONN,TABLENAME,COLLIST) \
-        (CONN)->addColumnsToTable(CONN,TABLENAME,COLLIST)
-#define gnc_sql_connection_quote_string(CONN,STR) \
-        (CONN)->quoteString(CONN,STR)
 
 /**
  * Struct used to represent a row in the result of an SQL SELECT statement.

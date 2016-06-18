@@ -284,31 +284,20 @@ GncSqlBillTermBackend::load_all (GncSqlBackend* be)
 }
 
 /* ================================================================= */
-typedef struct
-{
-    GncSqlBackend* be;
-    GncSqlBillTermBackend* btbe;
-    bool is_ok;
-} write_billterms_t;
 
 static void
-do_save_billterm (QofInstance* inst, gpointer p2)
+do_save_billterm (QofInstance* inst, void* p2)
 {
-    write_billterms_t* data = (write_billterms_t*)p2;
-
-    if (data->is_ok)
-    {
-        data->is_ok = data->btbe->commit (data->be, inst);
-    }
+    auto data = static_cast<write_objects_t*>(p2);
+    data->commit(inst);
 }
 
 bool
 GncSqlBillTermBackend::write (GncSqlBackend* be)
 {
-    write_billterms_t data {be, this, true};
-
     g_return_val_if_fail (be != NULL, FALSE);
 
+    write_objects_t data {be, true, this};
     qof_object_foreach (GNC_ID_BILLTERM, be->book, do_save_billterm, &data);
     return data.is_ok;
 }

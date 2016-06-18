@@ -198,9 +198,9 @@ write_single_customer (QofInstance* term_p, gpointer data_p)
     g_return_if_fail (GNC_IS_CUSTOMER (term_p));
     g_return_if_fail (data_p != NULL);
 
-    if (customer_should_be_saved (GNC_CUSTOMER (term_p)) && data->is_ok)
+    if (customer_should_be_saved (GNC_CUSTOMER (term_p)))
     {
-        data->is_ok = data->obe->commit (data->be, term_p);
+        data->commit (term_p);
     }
 }
 

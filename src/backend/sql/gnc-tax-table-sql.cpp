@@ -237,7 +237,7 @@ load_taxtable_entries (GncSqlBackend* be, GncTaxTable* tt)
     g_value_set_string (&value, guid_buf);
     buf = g_strdup_printf ("SELECT * FROM %s WHERE taxtable='%s'",
                            TTENTRIES_TABLE_NAME, guid_buf);
-    auto stmt = gnc_sql_connection_create_statement_from_sql (be->conn, buf);
+    auto stmt = be->conn->create_statement_from_sql (buf);
     g_free (buf);
     auto result = gnc_sql_execute_select_statement (be, stmt);
     for (auto row : *result)

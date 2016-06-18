@@ -462,7 +462,7 @@ gnc_sql_sync_all (GncSqlBackend* be,  QofBook* book)
     be->obj_total += gnc_book_count_transactions (book);
     be->operations_done = 0;
 
-    is_ok = gnc_sql_connection_begin_transaction (be->conn);
+    is_ok = be->conn->begin_transaction ();
 
     // FIXME: should write the set of commodities that are used
     //write_commodities( be, book );
@@ -494,7 +494,7 @@ gnc_sql_sync_all (GncSqlBackend* be,  QofBook* book)
     }
     if (is_ok)
     {
-        is_ok = gnc_sql_connection_commit_transaction (be->conn);
+        is_ok = be->conn->commit_transaction ();
     }
     if (is_ok)
     {
@@ -509,7 +509,7 @@ gnc_sql_sync_all (GncSqlBackend* be,  QofBook* book)
     {
         if (!qof_backend_check_error ((QofBackend*)be))
             qof_backend_set_error ((QofBackend*)be, ERR_BACKEND_SERVER_ERR);
-        is_ok = gnc_sql_connection_rollback_transaction (be->conn);
+        is_ok = be->conn->rollback_transaction ();
     }
     finish_progress (be);
     LEAVE ("book=%p", book);
@@ -573,7 +573,7 @@ gnc_sql_commit_edit (GncSqlBackend* be, QofInstance* inst)
     if (qof_book_is_readonly (be->book))
     {
         qof_backend_set_error ((QofBackend*)be, ERR_BACKEND_READONLY);
-        (void)gnc_sql_connection_rollback_transaction (be->conn);
+        (void)be->conn->rollback_transaction ();
         return;
     }
     /* During initial load where objects are being created, don't commit
@@ -608,7 +608,7 @@ gnc_sql_commit_edit (GncSqlBackend* be, QofInstance* inst)
         return;
     }
 
-    if (!gnc_sql_connection_begin_transaction (be->conn))
+    if (!be->conn->begin_transaction ())
     {
         PERR ("gnc_sql_commit_edit(): begin_transaction failed\n");
         LEAVE ("Rolled back - database transaction begin error");
@@ -626,7 +626,7 @@ gnc_sql_commit_edit (GncSqlBackend* be, QofInstance* inst)
     if (!be_data.is_known)
     {
         PERR ("gnc_sql_commit_edit(): Unknown object type '%s'\n", inst->e_type);
-        (void)gnc_sql_connection_rollback_transaction (be->conn);
+        (void)be->conn->rollback_transaction ();
 
         // Don't let unknown items still mark the book as being dirty
         qof_book_mark_session_saved (be->book);
@@ -637,14 +637,14 @@ gnc_sql_commit_edit (GncSqlBackend* be, QofInstance* inst)
     if (!be_data.is_ok)
     {
         // Error - roll it back
-        (void)gnc_sql_connection_rollback_transaction (be->conn);
+        (void)be->conn->rollback_transaction ();
 
         // This *should* leave things marked dirty
         LEAVE ("Rolled back - database error");
         return;
     }
 
-    (void)gnc_sql_connection_commit_transaction (be->conn);
+    (void)be->conn->commit_transaction ();
 
     qof_book_mark_session_saved (be->book);
     qof_instance_mark_clean (inst);
@@ -1869,7 +1869,7 @@ gnc_sql_execute_select_statement (GncSqlBackend* be,
     g_return_val_if_fail (be != NULL, NULL);
     g_return_val_if_fail (stmt != NULL, NULL);
 
-    auto result = gnc_sql_connection_execute_select_statement (be->conn, stmt);
+    auto result = be->conn->execute_select_statement (stmt);
     if (result == NULL)
     {
         PERR ("SQL error: %s\n", stmt->to_sql());
@@ -1886,8 +1886,8 @@ gnc_sql_create_statement_from_sql (GncSqlBackend* be, const gchar* sql)
     g_return_val_if_fail (be != NULL, NULL);
     g_return_val_if_fail (sql != NULL, NULL);
 
-    auto stmt = gnc_sql_connection_create_statement_from_sql (be->conn, sql);
-    if (stmt == NULL)
+    auto stmt = be->conn->create_statement_from_sql (sql);
+    if (stmt == nullptr)
     {
         PERR ("SQL error: %s\n", sql);
         if (!qof_backend_check_error(&be->be))
@@ -1908,8 +1908,8 @@ gnc_sql_execute_select_sql (GncSqlBackend* be, const gchar* sql)
     {
         return nullptr;
     }
-    auto result = gnc_sql_connection_execute_select_statement (be->conn, stmt);
-    if (result == NULL)
+    auto result = be->conn->execute_select_statement (stmt);
+    if (result == nullptr)
     {
         PERR ("SQL error: %s\n", sql);
         if (!qof_backend_check_error(&be->be))
@@ -1930,8 +1930,7 @@ gnc_sql_execute_nonselect_sql (GncSqlBackend* be, const gchar* sql)
     {
         return -1;
     }
-    auto result = gnc_sql_connection_execute_nonselect_statement (be->conn,
-                                                                  stmt);
+    auto result = be->conn->execute_nonselect_statement (stmt);
     return result;
 }
 
@@ -2041,9 +2040,7 @@ gnc_sql_do_db_operation (GncSqlBackend* be,
     }
     if (stmt != nullptr)
     {
-        gint result;
-
-        result = gnc_sql_connection_execute_nonselect_statement (be->conn, stmt);
+        auto result = be->conn->execute_nonselect_statement (stmt);
         if (result == -1)
         {
             PERR ("SQL error: %s\n", stmt->to_sql());
@@ -2088,13 +2085,11 @@ build_insert_statement (GncSqlBackend* be,
     {
         if (col_value != *values.begin())
             sql << ",";
-        sql <<
-            gnc_sql_connection_quote_string(be->conn, col_value.second.c_str());
+        sql << be->conn->quote_string(col_value.second);
     }
     sql << ")";
 
-    stmt = gnc_sql_connection_create_statement_from_sql(be->conn,
-                                                        sql.str().c_str());
+    stmt = be->conn->create_statement_from_sql(sql.str());
     return stmt;
 }
 
@@ -2123,10 +2118,10 @@ build_update_statement (GncSqlBackend* be,
         if (col_value != *values.begin())
             sql << ",";
         sql << col_value.first << "=" <<
-            gnc_sql_connection_quote_string(be->conn, col_value.second.c_str());
+            be->conn->quote_string(col_value.second);
     }
 
-    stmt = gnc_sql_connection_create_statement_from_sql(be->conn, sql.str().c_str());
+    stmt = be->conn->create_statement_from_sql(sql.str());
     /* We want our where condition to be just the first column and
      * value, i.e. the guid of the object.
      */
@@ -2149,8 +2144,7 @@ build_delete_statement (GncSqlBackend* be,
     g_return_val_if_fail (pObject != NULL, NULL);
 
     sql << "DELETE FROM " << table_name;
-    auto stmt = gnc_sql_connection_create_statement_from_sql (be->conn,
-                                                              sql.str().c_str());
+    auto stmt = be->conn->create_statement_from_sql (sql.str());
 
     /* WHERE */
     PairVec values;
@@ -2219,7 +2213,7 @@ do_create_table (const GncSqlBackend* be, const gchar* table_name,
     {
         table_row->add_to_table (be, info_vec);
     }
-    ok = gnc_sql_connection_create_table (be->conn, table_name, info_vec);
+    ok = be->conn->create_table (table_name, info_vec);
     return ok;
 }
 
@@ -2276,8 +2270,7 @@ gnc_sql_create_index (const GncSqlBackend* be, const gchar* index_name,
     g_return_val_if_fail (index_name != NULL, FALSE);
     g_return_val_if_fail (table_name != NULL, FALSE);
 
-    ok = gnc_sql_connection_create_index (be->conn, index_name, table_name,
-                                          col_table);
+    ok = be->conn->create_index (index_name, table_name, col_table);
     return ok;
 }
 
@@ -2342,7 +2335,7 @@ gboolean gnc_sql_add_columns_to_table (GncSqlBackend* be, const gchar* table_nam
     {
         table_row->add_to_table (be, info_vec);
     }
-    ok = gnc_sql_connection_add_columns_to_table(be->conn, table_name, info_vec);
+    ok = be->conn->add_columns_to_table(table_name, info_vec);
     return ok;
 }
 
@@ -2376,7 +2369,7 @@ gnc_sql_init_version_info (GncSqlBackend* be)
     }
     be->versions = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
-    if (gnc_sql_connection_does_table_exist (be->conn, VERSION_TABLE_NAME))
+    if (be->conn->does_table_exist (VERSION_TABLE_NAME))
     {
         auto sql = g_strdup_printf ("SELECT * FROM %s", VERSION_TABLE_NAME);
         auto result = gnc_sql_execute_select_sql (be, sql);

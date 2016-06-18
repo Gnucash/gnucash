@@ -32,6 +32,81 @@ extern "C"
 
 static const gchar* suitename = "/backend/sql/gnc-backend-sql";
 void test_suite_gnc_backend_sql (void);
+class GncMockSqlConnection;
+
+class GncMockSqlResult : public GncSqlResult
+{
+public:
+    GncMockSqlResult(const GncMockSqlConnection* conn) :
+        m_conn{conn}, m_iter{this}, m_row{&m_iter} {}
+    uint64_t size() const noexcept { return 1; }
+    GncSqlRow& begin() { return m_row; }
+    GncSqlRow& end() { return m_row; }
+protected:
+    class IteratorImpl : public GncSqlResult::IteratorImpl
+        {
+        public:
+            ~IteratorImpl() = default;
+            IteratorImpl(GncMockSqlResult* inst) : m_inst{inst} {}
+            virtual GncSqlRow& operator++() { return m_inst->m_row; }
+            virtual GncSqlRow& operator++(int) { return ++(*this); };
+            virtual GncSqlResult* operator*() { return m_inst; }
+            virtual int64_t get_int_at_col (const char* col) const
+            { return 1LL; }
+            virtual float get_float_at_col (const char* col) const
+            { return 1.0; }
+            virtual double get_double_at_col (const char* col) const
+            { return 1.0; }
+            virtual std::string get_string_at_col (const char* col)const
+            { return std::string{"foo"}; }
+            virtual time64 get_time64_at_col (const char* col) const
+            { return 1466270857LL; }
+            virtual bool is_col_null(const char* col) const noexcept
+            { return false; }
+        private:
+            GncMockSqlResult* m_inst;
+        };
+private:
+    const GncMockSqlConnection* m_conn;
+    IteratorImpl m_iter;
+    GncSqlRow m_row;
+};
+
+class GncMockSqlStatement : public GncSqlStatement
+{
+public:
+    const char* to_sql() const { return "SELECT * FROM foo"; }
+    void add_where_cond (QofIdTypeConst, const PairVec&) {}
+};
+
+
+class GncMockSqlConnection : public GncSqlConnection
+{
+public:
+    GncMockSqlConnection() : m_result{this} {}
+    GncSqlResultPtr execute_select_statement (const GncSqlStatementPtr&)
+        noexcept override { return &m_result; }
+    int execute_nonselect_statement (const GncSqlStatementPtr&)
+        noexcept override { return 1; }
+    GncSqlStatementPtr create_statement_from_sql (const std::string&)
+        const noexcept override {
+        return std::unique_ptr<GncMockSqlStatement>(new GncMockSqlStatement); }
+    bool does_table_exist (const std::string&) const noexcept override {
+        return true; }
+    bool begin_transaction () noexcept override { return true;}
+    bool rollback_transaction () const noexcept override { return true; }
+    bool commit_transaction () const noexcept override { return true; }
+    bool create_table (const std::string&, const ColVec&)
+        const noexcept override { return false; }
+    bool create_index (const std::string&, const std::string&,
+                       const EntryVec&) const noexcept override { return false; }
+    bool add_columns_to_table (const std::string&, const ColVec&)
+        const noexcept override { return false; }
+    virtual std::string quote_string (const std::string& str)
+        const noexcept override { return std::string{str}; }
+private:
+    GncMockSqlResult m_result;
+};
 
 /* gnc_sql_init
 void
@@ -185,19 +260,13 @@ test_dirty_cb (QofBook* book, gboolean dirty, gpointer data)
         --* (guint*)data;
 }
 
-static gboolean
-fake_connection_function (GncSqlConnection* conn)
-{
-    return TRUE;
-}
-
 static void
 test_gnc_sql_commit_edit (void)
 {
     GncSqlBackend be;
     QofInstance* inst;
     guint dirty_called = 0;
-    GncSqlConnection conn;
+    GncMockSqlConnection conn;
     const char* msg1 =
         "[gnc_sql_commit_edit()] gnc_sql_commit_edit(): Unknown object type 'null'\n";
     const char* msg2 =
@@ -222,9 +291,6 @@ test_gnc_sql_commit_edit (void)
     qof_object_initialize ();
     be.book = qof_book_new ();
     be.conn = &conn;
-    conn.beginTransaction = fake_connection_function;
-    conn.rollbackTransaction = fake_connection_function;
-    conn.commitTransaction = fake_connection_function;
     inst  = static_cast<decltype (inst)> (g_object_new (QOF_TYPE_INSTANCE, NULL));
     qof_instance_init_data (inst, QOF_ID_NULL, be.book);
     be.loading = FALSE;
