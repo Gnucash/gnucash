@@ -169,15 +169,12 @@ load_single_book (GncSqlBackend* be, GncSqlRow& row)
 void
 GncSqlBookBackend::load_all (GncSqlBackend* be)
 {
-    GncSqlStatement* stmt;
-
     g_return_if_fail (be != NULL);
 
-    stmt = gnc_sql_create_select_statement (be, BOOK_TABLE);
-    if (stmt != NULL)
+    auto stmt = gnc_sql_create_select_statement (be, BOOK_TABLE);
+    if (stmt != nullptr)
     {
         auto result = gnc_sql_execute_select_statement (be, stmt);
-        delete stmt;
         auto row = result->begin();
 
         /* If there are no rows, try committing the book; unset

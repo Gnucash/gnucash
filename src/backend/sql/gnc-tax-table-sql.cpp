@@ -227,7 +227,6 @@ load_taxtable_entries (GncSqlBackend* be, GncTaxTable* tt)
     gchar guid_buf[GUID_ENCODING_LENGTH + 1];
     GValue value;
     gchar* buf;
-    GncSqlStatement* stmt;
 
     g_return_if_fail (be != NULL);
     g_return_if_fail (tt != NULL);
@@ -238,10 +237,9 @@ load_taxtable_entries (GncSqlBackend* be, GncTaxTable* tt)
     g_value_set_string (&value, guid_buf);
     buf = g_strdup_printf ("SELECT * FROM %s WHERE taxtable='%s'",
                            TTENTRIES_TABLE_NAME, guid_buf);
-    stmt = gnc_sql_connection_create_statement_from_sql (be->conn, buf);
+    auto stmt = gnc_sql_connection_create_statement_from_sql (be->conn, buf);
     g_free (buf);
     auto result = gnc_sql_execute_select_statement (be, stmt);
-    delete stmt;
     for (auto row : *result)
         load_single_ttentry (be, row, tt);
 }
@@ -293,14 +291,11 @@ load_single_taxtable (GncSqlBackend* be, GncSqlRow& row,
 void
 GncSqlTaxTableBackend::load_all (GncSqlBackend* be)
 {
-    GncSqlStatement* stmt;
-
     g_return_if_fail (be != NULL);
 
     /* First time, create the query */
-    stmt = gnc_sql_create_select_statement (be, TT_TABLE_NAME);
+    auto stmt = gnc_sql_create_select_statement (be, TT_TABLE_NAME);
     auto result = gnc_sql_execute_select_statement (be, stmt);
-    delete stmt;
     GList* tt_needing_parents = NULL;
 
     for (auto row : *result)

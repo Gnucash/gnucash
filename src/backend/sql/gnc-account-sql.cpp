@@ -213,7 +213,6 @@ load_single_account (GncSqlBackend* be, GncSqlRow& row,
 void
 GncSqlAccountBackend::load_all (GncSqlBackend* be)
 {
-    GncSqlStatement* stmt = NULL;
     QofBook* pBook;
     GList* l_accounts_needing_parents = NULL;
     GSList* bal_slist;
@@ -225,14 +224,13 @@ GncSqlAccountBackend::load_all (GncSqlBackend* be)
 
     pBook = be->book;
 
-    stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
-    if (stmt == NULL)
+    auto stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
+    if (stmt == nullptr)
     {
         LEAVE ("stmt == NULL");
         return;
     }
     auto result = gnc_sql_execute_select_statement (be, stmt);
-    delete stmt;
     for (auto row : *result)
         load_single_account (be, row, &l_accounts_needing_parents);
 

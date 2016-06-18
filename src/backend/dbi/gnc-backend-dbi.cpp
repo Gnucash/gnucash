@@ -2349,7 +2349,8 @@ conn_dispose (GncSqlConnection* conn)
 }
 
 static  GncSqlResultPtr
-conn_execute_select_statement (GncSqlConnection* conn, GncSqlStatement* stmt)
+conn_execute_select_statement (GncSqlConnection* conn,
+                               const GncSqlStatementPtr& stmt)
 {
     GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
     dbi_result result;
@@ -2370,7 +2371,7 @@ conn_execute_select_statement (GncSqlConnection* conn, GncSqlStatement* stmt)
 
 static gint
 conn_execute_nonselect_statement (GncSqlConnection* conn,
-                                  GncSqlStatement* stmt)
+                                  const GncSqlStatementPtr& stmt)
 {
     GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
     dbi_result result;
@@ -2399,10 +2400,10 @@ conn_execute_nonselect_statement (GncSqlConnection* conn,
     return num_rows;
 }
 
-static GncSqlStatement*
+static GncSqlStatementPtr
 conn_create_statement_from_sql (GncSqlConnection* conn, const gchar* sql)
 {
-    return new GncDbiSqlStatement (conn, sql);
+    return std::unique_ptr<GncSqlStatement>(new GncDbiSqlStatement (conn, sql));
 }
 
 static gboolean

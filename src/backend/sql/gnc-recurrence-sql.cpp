@@ -314,7 +314,6 @@ gnc_sql_set_recurrences_from_db (GncSqlBackend* be, const GncGUID* guid)
 {
     gchar* buf;
     gchar guid_buf[GUID_ENCODING_LENGTH + 1];
-    GncSqlStatement* stmt;
 
     g_return_val_if_fail (be != NULL, NULL);
     g_return_val_if_fail (guid != NULL, NULL);
@@ -322,10 +321,9 @@ gnc_sql_set_recurrences_from_db (GncSqlBackend* be, const GncGUID* guid)
     (void)guid_to_string_buff (guid, guid_buf);
     buf = g_strdup_printf ("SELECT * FROM %s WHERE obj_guid='%s'", TABLE_NAME,
                            guid_buf);
-    stmt = gnc_sql_connection_create_statement_from_sql (be->conn, buf);
+    auto stmt = gnc_sql_connection_create_statement_from_sql (be->conn, buf);
     g_free (buf);
     auto result = gnc_sql_execute_select_statement (be, stmt);
-    delete stmt;
     return result;
 }
 

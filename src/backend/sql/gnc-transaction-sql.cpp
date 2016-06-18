@@ -355,7 +355,7 @@ typedef struct
  * @param stmt SQL statement
  */
 static void
-query_transactions (GncSqlBackend* be, GncSqlStatement* stmt)
+query_transactions (GncSqlBackend* be, const GncSqlStatementPtr& stmt)
 {
     g_return_if_fail (be != NULL);
     g_return_if_fail (stmt != NULL);
@@ -765,7 +765,6 @@ void gnc_sql_transaction_load_tx_for_account (GncSqlBackend* be,
     const GncGUID* guid;
     gchar guid_buf[GUID_ENCODING_LENGTH + 1];
     gchar* query_sql;
-    GncSqlStatement* stmt;
 
     g_return_if_fail (be != NULL);
     g_return_if_fail (account != NULL);
@@ -775,12 +774,11 @@ void gnc_sql_transaction_load_tx_for_account (GncSqlBackend* be,
     query_sql = g_strdup_printf (
                     "SELECT DISTINCT t.* FROM %s AS t, %s AS s WHERE s.tx_guid=t.guid AND s.account_guid ='%s'",
                     TRANSACTION_TABLE, SPLIT_TABLE, guid_buf);
-    stmt = gnc_sql_create_statement_from_sql (be, query_sql);
+    auto stmt = gnc_sql_create_statement_from_sql (be, query_sql);
     g_free (query_sql);
-    if (stmt != NULL)
+    if (stmt != nullptr)
     {
         query_transactions (be, stmt);
-        delete stmt;
     }
 }
 
@@ -793,18 +791,14 @@ void gnc_sql_transaction_load_tx_for_account (GncSqlBackend* be,
 void
 GncSqlTransBackend::load_all (GncSqlBackend* be)
 {
-    gchar* query_sql;
-    GncSqlStatement* stmt;
-
     g_return_if_fail (be != NULL);
 
-    query_sql = g_strdup_printf ("SELECT * FROM %s", TRANSACTION_TABLE);
-    stmt = gnc_sql_create_statement_from_sql (be, query_sql);
+    auto query_sql = g_strdup_printf ("SELECT * FROM %s", TRANSACTION_TABLE);
+    auto stmt = gnc_sql_create_statement_from_sql (be, query_sql);
     g_free (query_sql);
-    if (stmt != NULL)
+    if (stmt != nullptr)
     {
         query_transactions (be, stmt);
-        delete stmt;
     }
 }
 
@@ -1033,7 +1027,7 @@ convert_query_term_to_sql (const GncSqlBackend* be, const gchar* fieldName,
 
 typedef struct
 {
-    GncSqlStatement* stmt;
+    GncSqlStatementPtr stmt;
     gboolean has_been_run;
 } split_query_info_t;
 
@@ -1213,8 +1207,7 @@ run_split_query (GncSqlBackend* be, gpointer pQuery)
     {
         query_transactions (be, query_info->stmt);
         query_info->has_been_run = TRUE;
-        delete query_info->stmt;
-        query_info->stmt = NULL;
+        query_info->stmt = nullptr;
     }
 }
 
@@ -1300,7 +1293,6 @@ GSList*
 gnc_sql_get_account_balances_slist (GncSqlBackend* be)
 {
 #if LOAD_TRANSACTIONS_AS_NEEDED
-    GncSqlStatement* stmt;
     gchar* buf;
     GSList* bal_slist = NULL;
 
@@ -1308,11 +1300,10 @@ gnc_sql_get_account_balances_slist (GncSqlBackend* be)
 
     buf = g_strdup_printf ("SELECT account_guid, reconcile_state, sum(quantity_num) as quantity_num, quantity_denom FROM %s GROUP BY account_guid, reconcile_state, quantity_denom ORDER BY account_guid, reconcile_state",
                            SPLIT_TABLE);
-    stmt = gnc_sql_create_statement_from_sql (be, buf);
-    g_assert (stmt != NULL);
+    auto stmt = gnc_sql_create_statement_from_sql (be, buf);
+    g_assert (stmt != nullptr);
     g_free (buf);
     auto result = gnc_sql_execute_select_statement (be, stmt);
-    delete stmt;
     acct_balances_t* bal = NULL;
 
     for (auto row : *result)

@@ -103,12 +103,10 @@ load_single_order (GncSqlBackend* be, GncSqlRow& row)
 void
 GncSqlOrderBackend::load_all (GncSqlBackend* be)
 {
-    GncSqlStatement* stmt;
     g_return_if_fail (be != NULL);
 
-    stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
+    auto stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
     auto result = gnc_sql_execute_select_statement (be, stmt);
-    delete stmt;
     GList* list = NULL;
 
     for (auto row : *result)

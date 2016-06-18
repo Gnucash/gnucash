@@ -732,7 +732,6 @@ gnc_sql_slots_delete (GncSqlBackend* be, const GncGUID* guid)
 {
     gchar* buf;
     gchar guid_buf[GUID_ENCODING_LENGTH + 1];
-    GncSqlStatement* stmt;
     slot_info_t slot_info = { NULL, NULL, TRUE, NULL, KvpValue::Type::INVALID, NULL, FRAME, NULL, g_string_new (NULL) };
 
     g_return_val_if_fail (be != NULL, FALSE);
@@ -742,12 +741,11 @@ gnc_sql_slots_delete (GncSqlBackend* be, const GncGUID* guid)
 
     buf = g_strdup_printf ("SELECT * FROM %s WHERE obj_guid='%s' and slot_type in ('%d', '%d') and not guid_val is null",
                            TABLE_NAME, guid_buf, KvpValue::Type::FRAME, KvpValue::Type::GLIST);
-    stmt = gnc_sql_create_statement_from_sql (be, buf);
+    auto stmt = gnc_sql_create_statement_from_sql (be, buf);
     g_free (buf);
-    if (stmt != NULL)
+    if (stmt != nullptr)
     {
         auto result = gnc_sql_execute_select_statement (be, stmt);
-        delete stmt;
         for (auto row : *result)
         {
             try
@@ -828,7 +826,6 @@ slots_load_info (slot_info_t* pInfo)
 {
     gchar* buf;
     gchar guid_buf[GUID_ENCODING_LENGTH + 1];
-    GncSqlStatement* stmt;
 
     g_return_if_fail (pInfo != NULL);
     g_return_if_fail (pInfo->be != NULL);
@@ -839,12 +836,11 @@ slots_load_info (slot_info_t* pInfo)
 
     buf = g_strdup_printf ("SELECT * FROM %s WHERE obj_guid='%s'",
                            TABLE_NAME, guid_buf);
-    stmt = gnc_sql_create_statement_from_sql (pInfo->be, buf);
+    auto stmt = gnc_sql_create_statement_from_sql (pInfo->be, buf);
     g_free (buf);
-    if (stmt != NULL)
+    if (stmt != nullptr)
     {
         auto result = gnc_sql_execute_select_statement (pInfo->be, stmt);
-        delete stmt;
         for (auto row : *result)
             load_slot (pInfo, row);
     }
@@ -893,7 +889,6 @@ void
 gnc_sql_slots_load_for_list (GncSqlBackend* be, GList* list)
 {
     QofCollection* coll;
-    GncSqlStatement* stmt;
     GString* sql;
     gboolean single_item;
 
@@ -926,8 +921,8 @@ gnc_sql_slots_load_for_list (GncSqlBackend* be, GList* list)
     }
 
     // Execute the query and load the slots
-    stmt = gnc_sql_create_statement_from_sql (be, sql->str);
-    if (stmt == NULL)
+    auto stmt = gnc_sql_create_statement_from_sql (be, sql->str);
+    if (stmt == nullptr)
     {
         PERR ("stmt == NULL, SQL = '%s'\n", sql->str);
         (void)g_string_free (sql, TRUE);
@@ -935,7 +930,6 @@ gnc_sql_slots_load_for_list (GncSqlBackend* be, GList* list)
     }
     (void)g_string_free (sql, TRUE);
     auto result = gnc_sql_execute_select_statement (be, stmt);
-    delete stmt;
     for (auto row : *result)
         load_slot_for_list_item (be, row, coll);
 }
@@ -982,7 +976,6 @@ void gnc_sql_slots_load_for_sql_subquery (GncSqlBackend* be,
                                           BookLookupFn lookup_fn)
 {
     gchar* sql;
-    GncSqlStatement* stmt;
 
     g_return_if_fail (be != NULL);
 
@@ -994,8 +987,8 @@ void gnc_sql_slots_load_for_sql_subquery (GncSqlBackend* be,
                            subquery);
 
     // Execute the query and load the slots
-    stmt = gnc_sql_create_statement_from_sql (be, sql);
-    if (stmt == NULL)
+    auto stmt = gnc_sql_create_statement_from_sql (be, sql);
+    if (stmt == nullptr)
     {
         PERR ("stmt == NULL, SQL = '%s'\n", sql);
         g_free (sql);
@@ -1003,7 +996,6 @@ void gnc_sql_slots_load_for_sql_subquery (GncSqlBackend* be,
     }
     g_free (sql);
     auto result = gnc_sql_execute_select_statement (be, stmt);
-    delete stmt;
     for (auto row : *result)
         load_slot_for_book_object (be, row, lookup_fn);
 }

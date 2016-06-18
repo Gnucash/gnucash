@@ -155,6 +155,8 @@ public:
     virtual void add_where_cond (QofIdTypeConst, const PairVec&) = 0;
 };
 
+using GncSqlStatementPtr = std::unique_ptr<GncSqlStatement>;
+
 /**
  * @struct GncSqlConnection
  *
@@ -164,9 +166,9 @@ public:
 struct GncSqlConnection
 {
     void (*dispose) (GncSqlConnection*);
-    GncSqlResultPtr (*executeSelectStatement) (GncSqlConnection*, GncSqlStatement*); /**< Returns NULL if error */
-    gint (*executeNonSelectStatement) (GncSqlConnection*, GncSqlStatement*); /**< Returns -1 if error */
-    GncSqlStatement* (*createStatementFromSql) (GncSqlConnection*, const gchar*);
+    GncSqlResultPtr (*executeSelectStatement) (GncSqlConnection*, const GncSqlStatementPtr&); /**< Returns NULL if error */
+    gint (*executeNonSelectStatement) (GncSqlConnection*, const GncSqlStatementPtr&); /**< Returns -1 if error */
+    GncSqlStatementPtr (*createStatementFromSql) (GncSqlConnection*, const gchar*);
     gboolean (*doesTableExist) (GncSqlConnection*, const gchar*);  /**< Returns true if successful */
     gboolean (*beginTransaction) (GncSqlConnection*); /**< Returns TRUE if successful, FALSE if error */
     gboolean (*rollbackTransaction) (GncSqlConnection*); /**< Returns TRUE if successful, FALSE if error */
@@ -763,7 +765,7 @@ gboolean gnc_sql_do_db_operation (GncSqlBackend* be,
  * @return Results, or NULL if an error has occured
  */
 GncSqlResultPtr gnc_sql_execute_select_statement (GncSqlBackend* be,
-                                                  GncSqlStatement* statement);
+                                                  const GncSqlStatementPtr& statement);
 
 /**
  * Executes an SQL SELECT statement from an SQL char string and returns the
@@ -792,8 +794,8 @@ gint gnc_sql_execute_nonselect_sql (GncSqlBackend* be, const gchar* sql);
  * @param sql SQL char string
  * @return Statement
  */
-GncSqlStatement* gnc_sql_create_statement_from_sql (GncSqlBackend* be,
-                                                    const gchar* sql);
+GncSqlStatementPtr gnc_sql_create_statement_from_sql (GncSqlBackend* be,
+                                                      const gchar* sql);
 
 /**
  * Loads a Gnucash object from the database.
@@ -906,8 +908,8 @@ const GncGUID* gnc_sql_load_tx_guid (const GncSqlBackend* be, GncSqlRow& row);
  * @param table_name Table name
  * @return Statement
  */
-GncSqlStatement* gnc_sql_create_select_statement (GncSqlBackend* be,
-                                                  const gchar* table_name);
+GncSqlStatementPtr gnc_sql_create_select_statement (GncSqlBackend* be,
+                                                    const gchar* table_name);
 
 /**
  * Appends the ascii strings for a list of GUIDs to the end of an SQL string.

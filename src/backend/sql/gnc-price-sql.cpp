@@ -101,7 +101,6 @@ load_single_price (GncSqlBackend* be, GncSqlRow& row)
 void
 GncSqlPriceBackend::load_all (GncSqlBackend* be)
 {
-    GncSqlStatement* stmt;
     QofBook* pBook;
     GNCPriceDB* pPriceDB;
 
@@ -109,11 +108,10 @@ GncSqlPriceBackend::load_all (GncSqlBackend* be)
 
     pBook = be->book;
     pPriceDB = gnc_pricedb_get_db (pBook);
-    stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
-    if (stmt != NULL)
+    auto stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
+    if (stmt != nullptr)
     {
         auto result = gnc_sql_execute_select_statement (be, stmt);
-        delete stmt;
         if (result->begin() == result->end())
             return;
 

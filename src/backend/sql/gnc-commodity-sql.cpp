@@ -143,14 +143,12 @@ load_single_commodity (GncSqlBackend* be, GncSqlRow& row)
 void
 GncSqlCommodityBackend::load_all (GncSqlBackend* be)
 {
-    GncSqlStatement* stmt;
     gnc_commodity_table* pTable;
 
     pTable = gnc_commodity_table_get_table (be->book);
-    stmt = gnc_sql_create_select_statement (be, COMMODITIES_TABLE);
-    if (stmt == NULL) return;
+    auto stmt = gnc_sql_create_select_statement (be, COMMODITIES_TABLE);
+    if (stmt == nullptr) return;
     auto result = gnc_sql_execute_select_statement (be, stmt);
-    delete stmt;
 
     for (auto row : *result)
     {

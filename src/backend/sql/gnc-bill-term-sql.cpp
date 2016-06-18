@@ -235,13 +235,11 @@ load_single_billterm (GncSqlBackend* be, GncSqlRow& row,
 void
 GncSqlBillTermBackend::load_all (GncSqlBackend* be)
 {
-    GncSqlStatement* stmt;
 
     g_return_if_fail (be != NULL);
 
-    stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
+    auto stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
     auto result = gnc_sql_execute_select_statement (be, stmt);
-    delete stmt;
     GList* list = NULL;
     GList* l_billterms_needing_parents = NULL;
 

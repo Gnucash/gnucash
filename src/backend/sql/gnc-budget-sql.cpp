@@ -206,22 +206,19 @@ static void
 load_budget_amounts (GncSqlBackend* be, GncBudget* budget)
 {
     gchar guid_buf[GUID_ENCODING_LENGTH + 1];
-    gchar* sql;
-    GncSqlStatement* stmt;
 
     g_return_if_fail (be != NULL);
     g_return_if_fail (budget != NULL);
 
     (void)guid_to_string_buff (qof_instance_get_guid (QOF_INSTANCE (budget)),
                                guid_buf);
-    sql = g_strdup_printf ("SELECT * FROM %s WHERE budget_guid='%s'",
-                           AMOUNTS_TABLE, guid_buf);
-    stmt = gnc_sql_create_statement_from_sql (be, sql);
+    auto sql = g_strdup_printf ("SELECT * FROM %s WHERE budget_guid='%s'",
+                                AMOUNTS_TABLE, guid_buf);
+    auto stmt = gnc_sql_create_statement_from_sql (be, sql);
     g_free (sql);
-    if (stmt != NULL)
+    if (stmt != nullptr)
     {
         auto result = gnc_sql_execute_select_statement (be, stmt);
-        delete stmt;
         budget_amount_info_t info = { budget, NULL, 0 };
 
         for (auto row : *result)
@@ -335,16 +332,14 @@ load_single_budget (GncSqlBackend* be, GncSqlRow& row)
 void
 GncSqlBudgetBackend::load_all (GncSqlBackend* be)
 {
-    GncSqlStatement* stmt;
     GList* list = NULL;
 
     g_return_if_fail (be != NULL);
 
-    stmt = gnc_sql_create_select_statement (be, BUDGET_TABLE);
-    if (stmt != NULL)
+    auto stmt = gnc_sql_create_select_statement (be, BUDGET_TABLE);
+    if (stmt != nullptr)
     {
         auto result = gnc_sql_execute_select_statement (be, stmt);
-        delete stmt;
         for (auto row : *result)
         {
             auto b = load_single_budget (be, row);

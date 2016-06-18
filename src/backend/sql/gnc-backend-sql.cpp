@@ -86,18 +86,21 @@ static void gnc_sql_init_object_handlers (void);
 static void update_progress (GncSqlBackend* be);
 static void finish_progress (GncSqlBackend* be);
 static gboolean reset_version_info (GncSqlBackend* be);
-static GncSqlStatement* build_insert_statement (GncSqlBackend* be,
-                                                const gchar* table_name,
-                                                QofIdTypeConst obj_name, gpointer pObject,
-                                                const EntryVec& table);
-static GncSqlStatement* build_update_statement (GncSqlBackend* be,
-                                                const gchar* table_name,
-                                                QofIdTypeConst obj_name, gpointer pObject,
-                                                const EntryVec& table);
-static GncSqlStatement* build_delete_statement (GncSqlBackend* be,
-                                                const gchar* table_name,
-                                                QofIdTypeConst obj_name, gpointer pObject,
-                                                const EntryVec& table);
+static GncSqlStatementPtr build_insert_statement (GncSqlBackend* be,
+                                                  const gchar* table_name,
+                                                  QofIdTypeConst obj_name,
+                                                  gpointer pObject,
+                                                  const EntryVec& table);
+static GncSqlStatementPtr build_update_statement (GncSqlBackend* be,
+                                                  const gchar* table_name,
+                                                  QofIdTypeConst obj_name,
+                                                  gpointer pObject,
+                                                  const EntryVec& table);
+static GncSqlStatementPtr build_delete_statement (GncSqlBackend* be,
+                                                  const gchar* table_name,
+                                                  QofIdTypeConst obj_name,
+                                                  gpointer pObject,
+                                                  const EntryVec& table);
 
 static GList* post_load_commodities = NULL;
 
@@ -1832,22 +1835,19 @@ gnc_sql_load_object (const GncSqlBackend* be, GncSqlRow& row,
 }
 
 /* ================================================================= */
-GncSqlStatement*
+GncSqlStatementPtr
 gnc_sql_create_select_statement (GncSqlBackend* be, const gchar* table_name)
 {
-    gchar* sql;
-    GncSqlStatement* stmt;
-
     g_return_val_if_fail (be != NULL, NULL);
     g_return_val_if_fail (table_name != NULL, NULL);
 
-    sql = g_strdup_printf ("SELECT * FROM %s", table_name);
-    stmt = gnc_sql_create_statement_from_sql (be, sql);
+    auto sql = g_strdup_printf ("SELECT * FROM %s", table_name);
+    auto stmt = gnc_sql_create_statement_from_sql (be, sql);
     g_free (sql);
     return stmt;
 }
 
-static GncSqlStatement*
+static GncSqlStatementPtr
 create_single_col_select_statement (GncSqlBackend* be,
                                     const gchar* table_name,
                                     const GncSqlColumnTableEntryPtr table_row)
@@ -1862,7 +1862,8 @@ create_single_col_select_statement (GncSqlBackend* be,
 /* ================================================================= */
 
 GncSqlResultPtr
-gnc_sql_execute_select_statement (GncSqlBackend* be, GncSqlStatement* stmt)
+gnc_sql_execute_select_statement (GncSqlBackend* be,
+                                  const GncSqlStatementPtr& stmt)
 {
 
     g_return_val_if_fail (be != NULL, NULL);
@@ -1879,15 +1880,13 @@ gnc_sql_execute_select_statement (GncSqlBackend* be, GncSqlStatement* stmt)
     return result;
 }
 
-GncSqlStatement*
+GncSqlStatementPtr
 gnc_sql_create_statement_from_sql (GncSqlBackend* be, const gchar* sql)
 {
-    GncSqlStatement* stmt;
-
     g_return_val_if_fail (be != NULL, NULL);
     g_return_val_if_fail (sql != NULL, NULL);
 
-    stmt = gnc_sql_connection_create_statement_from_sql (be->conn, sql);
+    auto stmt = gnc_sql_connection_create_statement_from_sql (be->conn, sql);
     if (stmt == NULL)
     {
         PERR ("SQL error: %s\n", sql);
@@ -1901,18 +1900,15 @@ gnc_sql_create_statement_from_sql (GncSqlBackend* be, const gchar* sql)
 GncSqlResultPtr
 gnc_sql_execute_select_sql (GncSqlBackend* be, const gchar* sql)
 {
-    GncSqlStatement* stmt;
-
     g_return_val_if_fail (be != NULL, NULL);
     g_return_val_if_fail (sql != NULL, NULL);
 
-    stmt = gnc_sql_create_statement_from_sql (be, sql);
-    if (stmt == NULL)
+    auto stmt = gnc_sql_create_statement_from_sql (be, sql);
+    if (stmt == nullptr)
     {
-        return NULL;
+        return nullptr;
     }
     auto result = gnc_sql_connection_execute_select_statement (be->conn, stmt);
-    delete stmt;
     if (result == NULL)
     {
         PERR ("SQL error: %s\n", sql);
@@ -1926,19 +1922,16 @@ gnc_sql_execute_select_sql (GncSqlBackend* be, const gchar* sql)
 gint
 gnc_sql_execute_nonselect_sql (GncSqlBackend* be, const gchar* sql)
 {
-    GncSqlStatement* stmt;
-    gint result;
-
     g_return_val_if_fail (be != NULL, 0);
     g_return_val_if_fail (sql != NULL, 0);
 
-    stmt = gnc_sql_create_statement_from_sql (be, sql);
+    auto stmt = gnc_sql_create_statement_from_sql (be, sql);
     if (stmt == NULL)
     {
         return -1;
     }
-    result = gnc_sql_connection_execute_nonselect_statement (be->conn, stmt);
-    delete stmt;
+    auto result = gnc_sql_connection_execute_nonselect_statement (be->conn,
+                                                                  stmt);
     return result;
 }
 
@@ -1987,7 +1980,6 @@ get_object_values (GncSqlBackend* be, QofIdTypeConst obj_name,
     return vec;
 }
 
-
 gboolean
 gnc_sql_object_is_it_in_db (GncSqlBackend* be, const gchar* table_name,
                             QofIdTypeConst obj_name, gpointer pObject,
@@ -2007,7 +1999,6 @@ gnc_sql_object_is_it_in_db (GncSqlBackend* be, const gchar* table_name,
     PairVec values{get_object_values(be, obj_name, pObject, table)};
     stmt->add_where_cond(obj_name, values);
     auto result = gnc_sql_execute_select_statement (be, stmt);
-    delete stmt;
     if (result != NULL)
     {
         auto retval = result->size() > 0;
@@ -2024,7 +2015,7 @@ gnc_sql_do_db_operation (GncSqlBackend* be,
                          QofIdTypeConst obj_name, gpointer pObject,
                          const EntryVec& table)
 {
-    GncSqlStatement* stmt = NULL;
+    GncSqlStatementPtr stmt;
     gboolean ok = FALSE;
 
     g_return_val_if_fail (be != NULL, FALSE);
@@ -2048,7 +2039,7 @@ gnc_sql_do_db_operation (GncSqlBackend* be,
     {
         g_assert (FALSE);
     }
-    if (stmt != NULL)
+    if (stmt != nullptr)
     {
         gint result;
 
@@ -2063,19 +2054,18 @@ gnc_sql_do_db_operation (GncSqlBackend* be,
         {
             ok = TRUE;
         }
-        delete stmt;
     }
 
     return ok;
 }
 
-static GncSqlStatement*
+static GncSqlStatementPtr
 build_insert_statement (GncSqlBackend* be,
                         const gchar* table_name,
                         QofIdTypeConst obj_name, gpointer pObject,
                         const EntryVec& table)
 {
-    GncSqlStatement* stmt;
+    GncSqlStatementPtr stmt;
     PairVec col_values;
     std::ostringstream sql;
 
@@ -2108,13 +2098,13 @@ build_insert_statement (GncSqlBackend* be,
     return stmt;
 }
 
-static GncSqlStatement*
+static GncSqlStatementPtr
 build_update_statement (GncSqlBackend* be,
                         const gchar* table_name,
                         QofIdTypeConst obj_name, gpointer pObject,
                         const EntryVec& table)
 {
-    GncSqlStatement* stmt;
+    GncSqlStatementPtr stmt;
     std::ostringstream sql;
 
     g_return_val_if_fail (be != NULL, NULL);
@@ -2145,13 +2135,12 @@ build_update_statement (GncSqlBackend* be,
     return stmt;
 }
 
-static GncSqlStatement*
+static GncSqlStatementPtr
 build_delete_statement (GncSqlBackend* be,
                         const gchar* table_name,
                         QofIdTypeConst obj_name, gpointer pObject,
                         const EntryVec& table)
 {
-    GncSqlStatement* stmt;
     std::ostringstream sql;
 
     g_return_val_if_fail (be != NULL, NULL);
@@ -2160,8 +2149,8 @@ build_delete_statement (GncSqlBackend* be,
     g_return_val_if_fail (pObject != NULL, NULL);
 
     sql << "DELETE FROM " << table_name;
-    stmt = gnc_sql_connection_create_statement_from_sql (be->conn,
-                                                         sql.str().c_str());
+    auto stmt = gnc_sql_connection_create_statement_from_sql (be->conn,
+                                                              sql.str().c_str());
 
     /* WHERE */
     PairVec values;

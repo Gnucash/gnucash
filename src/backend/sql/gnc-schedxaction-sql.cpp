@@ -121,14 +121,11 @@ load_single_sx (GncSqlBackend* be, GncSqlRow& row)
 void
 GncSqlSchedXactionBackend::load_all (GncSqlBackend* be)
 {
-    GncSqlStatement* stmt = NULL;
-
     g_return_if_fail (be != NULL);
 
-    stmt = gnc_sql_create_select_statement (be, SCHEDXACTION_TABLE);
+    auto stmt = gnc_sql_create_select_statement (be, SCHEDXACTION_TABLE);
     if (stmt == NULL) return;
     auto result = gnc_sql_execute_select_statement (be, stmt);
-    delete stmt;
     SchedXactions* sxes;
     GList* list = NULL;
     sxes = gnc_book_get_schedxactions (be->book);

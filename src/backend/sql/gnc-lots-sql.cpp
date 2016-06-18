@@ -125,14 +125,12 @@ load_single_lot (GncSqlBackend* be, GncSqlRow& row)
 void
 GncSqlLotsBackend::load_all (GncSqlBackend* be)
 {
-    GncSqlStatement* stmt;
     g_return_if_fail (be != NULL);
 
-    stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
-    if (stmt != NULL)
+    auto stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
+    if (stmt != nullptr)
     {
         auto result = gnc_sql_execute_select_statement (be, stmt);
-        delete stmt;
         if (result->begin () == nullptr)
             return;
         for (auto row : *result)
