@@ -1455,7 +1455,8 @@ gnc_iso8601_to_timespec_gmt(const char *str)
 	 * this in files by looking for minutes-only offsets and
 	 * making the appropriate correction.
 	 */
-	if (strlen(zone) > 2 + plus && offset > -100 && offset < 100)
+	if (offset != 0 && strlen(zone) > 2 + plus && offset > -100 &&
+            offset < 100)
 	{
 	    strcpy(zone, "+0000");
 	    second = 0.0;
