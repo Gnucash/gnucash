@@ -1440,8 +1440,14 @@ gnc_iso8601_to_timespec_gmt(const char *str)
 	GTimeZone *tz = NULL;
         time64 secs;
 	int plus = strspn(zone, "+-");
-	long offset = strtol(zone, NULL, 10);
+        char *colon = NULL;
+	long offset = strtol(zone, &colon, 10);
 	gboolean adjust_time = FALSE;
+        if (colon != NULL)
+        {
+            long zone_minutes = strtol(colon + 1, NULL, 10);
+            offset = 100 * offset + zone_minutes;
+        }
 	/* Bug 767824: A GLib bug in parsing the UTC timezone on
 	 * Windows may have created a bogus timezone of a random
 	 * number of minutes. Since there are no fractional-hour
