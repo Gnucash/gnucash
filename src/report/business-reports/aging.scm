@@ -167,7 +167,7 @@
 		 (gnc-numeric-sub-fixed amount current-bucket-amt)
 		 buckets
 		 (+ current-bucket-index 1)))))))
-  
+
   (let ((overpayment (company-get-overpayment company)))
 	;; if there's already an overpayment, make it bigger
     (gnc:debug "processing payment of " amount)
@@ -175,11 +175,11 @@
 
 	(if (gnc-numeric-positive-p overpayment)
 	    (company-set-overpayment company (gnc-numeric-add-fixed overpayment amount))
-	    
+
 	    (let ((result (process-payment-driver amount (company-get-buckets company) 0)))
 	      (gnc:debug "payment-driver processed.  new overpayment: " result)
 	      (company-set-overpayment company result)))))
-		  
+
 ;; determine date function to use 
 (define (get-selected-date-from-txn transaction date-type)
   (if (eq? date-type 'postdate)
@@ -233,7 +233,7 @@ more than one currency. This report is not designed to cope with this possibilit
 		     (hash-set! hash guid company-info)
 		     (cons #t guid)))
 	       (gncOwnerFree temp-owner))
-		 
+
 	     ;; if it's a new company
 	     (begin
 	       (gnc:debug "value" value)
@@ -245,7 +245,7 @@ more than one currency. This report is not designed to cope with this possibilit
 	       (cons #t guid))))
        ; else (no owner)
        (gncOwnerFree temp-owner))))
-  
+
   ;; figure out if this split is part of a closed lot
   ;; also save the split value...
   (let* ((lot (xaccSplitGetLot split))
@@ -272,7 +272,7 @@ more than one currency. This report is not designed to cope with this possibilit
 
 ;; compare by the total in the buckets
 
-(define (compare-total litem-a litem-b)    
+(define (compare-total litem-a litem-b)
   (let*  ((company-a (cdr litem-a))
 	 (bucket-a (company-get-buckets company-a))
 	 (company-b (cdr litem-b))
@@ -299,19 +299,19 @@ more than one currency. This report is not designed to cope with this possibilit
 	  (if (= diff 0)
 	      (driver (cdr buckets-a) (cdr buckets-b))
 	      diff))))
- 
+
   (let*  ((company-a (cdr litem-a))
 	 (bucket-a (vector->list (company-get-buckets company-a)))
 	 (company-b (cdr litem-b))
 	 (bucket-b (vector->list (company-get-buckets company-b)))
-	 
+
 	 (difference (driver bucket-a bucket-b)))
 	 ;; if same totals, compare by name
 	 (if (= difference 0)
 	     (gnc:safe-strcmp (car litem-a) (car litem-b))
 	     difference)))
-  
-    
+
+
 ;; set up the query to get the splits in the chosen account
 ;; XXX: FIXME: begindate is a hack -- we currently only go back a year
 (define (setup-query query account date)
@@ -329,12 +329,13 @@ more than one currency. This report is not designed to cope with this possibilit
 			      (list SPLIT-TRANS TRANS-DATE-POSTED)
 			      '() '())
     (qof-query-set-sort-increasing query #t #t #t)))
-     
 
-(define (aging-options-generator options receivable)
+
+(define (aging-options-generator options)
   (let* ((add-option 
           (lambda (new-option)
             (gnc:register-option options new-option))))
+
 
     (gnc:options-add-report-date!
      options gnc:pagename-general
@@ -344,7 +345,7 @@ more than one currency. This report is not designed to cope with this possibilit
                                              gnc:pagename-general
                                              optname-to-date)
                           (cons 'relative 'today))
-   
+
  ;; all about currencies
     (gnc:options-add-currency!
      options gnc:pagename-general
@@ -404,23 +405,12 @@ totals to report currency.")
        (list
          (vector 'duedate (N_ "Due Date") (N_ "Due date is leading.")) ;; Should be using standard label for due date?
          (vector 'postdate (N_ "Post Date") (N_ "Post date is leading."))))) ;; Should be using standard label for post date?
-    
-	;; display tab options
-	
-	(gnc:debug "aging-options-generator: receivable=" receivable)
-	
-    (if receivable
-        (add-option
-          (gnc:make-multichoice-option
-            gnc:pagename-display
-            optname-addr-source
-            "a"
-            (N_ "Address source.")
-            'billing
-            (list
-             (vector 'billing (N_ "Billing") (N_ "Address fields from billing address."))
-             (vector 'shipping (N_ "Shipping") (N_ "Address fields from shipping address."))))))
-		
+
+	  ;; display tab options
+
+    ;; option optname-addr-source is added in receivables.scm
+    ;; as cannot access the value of an option in aging-options-generator
+
     (add-option
      (gnc:make-simple-boolean-option
       gnc:pagename-display
@@ -445,7 +435,7 @@ copying this report to a spreadsheet for use in a mail merge.")
       "d"
       (N_ "Display Address 2.")
       #f))
-	
+
     (add-option
      (gnc:make-simple-boolean-option
       gnc:pagename-display
@@ -453,7 +443,7 @@ copying this report to a spreadsheet for use in a mail merge.")
       "e"
       (N_ "Display Address 3.")
       #f))
-	
+
     (add-option
      (gnc:make-simple-boolean-option
       gnc:pagename-display
@@ -461,7 +451,7 @@ copying this report to a spreadsheet for use in a mail merge.")
       "f"
       (N_ "Display Address 4.")
       #f))
-	
+
     (add-option
      (gnc:make-simple-boolean-option
       gnc:pagename-display
@@ -469,7 +459,7 @@ copying this report to a spreadsheet for use in a mail merge.")
       "g"
       (N_ "Display Phone.")
       #f))
-	
+
     (add-option
      (gnc:make-simple-boolean-option
       gnc:pagename-display
@@ -477,7 +467,7 @@ copying this report to a spreadsheet for use in a mail merge.")
       "h"
       (N_ "Display Fax.")
       #f))
-	
+
     (add-option
      (gnc:make-simple-boolean-option
       gnc:pagename-display
@@ -485,7 +475,7 @@ copying this report to a spreadsheet for use in a mail merge.")
       "i"
       (N_ "Display Email.")
       #f))
-		
+
     (add-option
      (gnc:make-simple-boolean-option
       gnc:pagename-display
@@ -493,8 +483,8 @@ copying this report to a spreadsheet for use in a mail merge.")
       "j"
       (N_ "Display Active status.")
       #f))
-		
-    (gnc:options-set-default-section options "General")      
+
+    (gnc:options-set-default-section options "General")
     options))
 
 (define (make-interval-list to-date)
@@ -510,8 +500,10 @@ copying this report to a spreadsheet for use in a mail merge.")
     (define oldintervalreversed (reverse (make-interval-list to-date)))		
   (reverse (cons dayforcurrent oldintervalreversed)))
 
-(define (aging-renderer report-obj reportname account reverse? receivable)
-	
+(define (aging-renderer report-obj reportname account reverse?)
+
+  (define receivable #t)     ;; receivable=#t payable=#f
+
   (define (get-name a)
     (let* ((owner (company-get-owner-obj (cdr a))))
       (gncOwnerGetName owner)))
@@ -534,8 +526,7 @@ copying this report to a spreadsheet for use in a mail merge.")
 			     (< (compare-buckets a b) 0))
 			    (lambda (a b)
 			      (> (compare-buckets a b) 0))))))
-				 
-				 
+
 
   (define (get-sort-pred sort-criterion sort-order)
     (let ((choice (assq-ref sort-preds sort-criterion)))
@@ -550,15 +541,12 @@ copying this report to a spreadsheet for use in a mail merge.")
 	    (gnc:warn "internal sorting option errorin aging.scm")
 	    (lambda (a b)
 	      (string<? (car a) (car b)))))))
-		       
+
   (define (get-op section name)
     (gnc:lookup-option (gnc:report-options report-obj) section name))
-  
+
   (define (op-value section name)
-    (begin
-;;	  (gnc:debug "op-value: name=" name)
-      (gnc:option-value (get-op section name)))
-  )
+    (gnc:option-value (get-op section name)))
 
 
   ;; XXX: This is a hack - will be fixed when we move to a
@@ -660,13 +648,11 @@ copying this report to a spreadsheet for use in a mail merge.")
   ;;  note customers have a shipping address but not vendors
   
   (define (get-addr owner disp-addr-source)
-   (begin
-;;  (gnc:debug "get-addr: disp-addr-source=" disp-addr-source)
     (if (and receivable (eq? disp-addr-source 'shipping))
-        (gncCustomerGetShipAddr (gncOwnerGetCustomer owner)) ;; shipping
-        (gncOwnerGetAddr owner))) 			   			     ;; billing
-  )
+      (gncCustomerGetShipAddr (gncOwnerGetCustomer owner)) ;; shipping
+      (gncOwnerGetAddr owner)))                            ;; billing
 
+  (set! receivable (eq? (op-value "__hidden" "receivable-or-payable") 'R))
   (gnc:report-starting reportname)
   (let* ((companys (make-hash-table 23))
 	 (report-title (op-value gnc:pagename-general gnc:optname-reportname))
@@ -706,7 +692,7 @@ copying this report to a spreadsheet for use in a mail merge.")
         (document (gnc:make-html-document)))
 ;    (gnc:debug "Account: " account)
 
-	;; add optional column headings
+    ;; add optional column headings
     (if disp-addr-name
       (set! heading-list (append heading-list (list (_ "Address Name")))))
     (if disp-addr1
