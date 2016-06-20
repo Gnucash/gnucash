@@ -21,7 +21,7 @@
  *                                                                  *
 \********************************************************************/
 
-#include <guid.hpp>
+#include "guid.hpp"
 #include "config.h"
 
 #include <glib.h>

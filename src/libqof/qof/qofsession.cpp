@@ -32,7 +32,6 @@
  @author Copyright (c) 2016 Aaron Laws
    */
 
-#include "guid.hpp"
 extern "C"
 {
 
