@@ -37,7 +37,6 @@
 
 (define acc-page gnc:pagename-general)
 (define this-acc (N_ "Payable Account"))
-(define receivable #f)		;; receivable = #t, payable = #f
 
 (define (options-generator)    
   (let* ((options (gnc:new-options)) 
@@ -51,7 +50,16 @@
       "w" (N_ "The payable account you wish to examine.") 
       #f #f (list ACCT-TYPE-PAYABLE)))
 
-    (aging-options-generator options receivable)))
+    ;; As aging.scm functions are used by both receivables.scm and payables.scm
+    ;;  add option "receivable" on hidden page "__hidden" with default value 'P
+    ;;  so aging.scm functions can tell if they are reporting on
+    ;;  accounts receivable or payable, as customers have a shipping address
+    ;;  but vendors do not. The Address Source option therefore only applies
+    ;;  to customers.
+    (add-option
+     (gnc:make-internal-option "__hidden" "receivable-or-payable" 'P))
+
+    (aging-options-generator options)))
 
 (define (payables-renderer report-obj)
   (define (opt-val section name)
@@ -60,7 +68,7 @@
 
   (let ((payables-account (opt-val acc-page this-acc)))
     (gnc:debug "payables-account" payables-account)
-    (aging-renderer report-obj this-acc payables-account #f receivable)))
+    (aging-renderer report-obj this-acc payables-account #f)))
 
 (define payables-aging-guid "e57770f2dbca46619d6dac4ac5469b50")
 
