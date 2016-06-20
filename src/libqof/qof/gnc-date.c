@@ -1423,6 +1423,7 @@ gnc_iso8601_to_timespec_gmt(const char *str)
     gint hour = 0, minute = 0, day = 0, month = 0, year = 0;
     gchar zone[12];
     gdouble second = 0.0;
+    int correction = 0;
     gint fields;
 
     memset (zone, 0, sizeof (zone));
@@ -1436,11 +1437,30 @@ gnc_iso8601_to_timespec_gmt(const char *str)
 	return time;
     else if (fields > 6 && strlen (zone) > 0) /* Date string included a timezone */
     {
-	GTimeZone *tz = g_time_zone_new (zone);
+	GTimeZone *tz = NULL;
         time64 secs;
+	int plus = strspn(zone, "+-");
+	long offset = strtol(zone, NULL, 10);
+	gboolean adjust_time = FALSE;
+	/* Bug 767824: A GLib bug in parsing the UTC timezone on
+	 * Windows may have created a bogus timezone of a random
+	 * number of minutes. Since there are no fractional-hour
+	 * timezones around the prime meridian we can safely check for
+	 * this in files by looking for minutes-only offsets and
+	 * making the appropriate correction.
+	 */
+	if (strlen(zone) > 2 + plus && offset > -100 && offset < 100)
+	{
+	    strcpy(zone, "+0000");
+	    second = 0.0;
+	    adjust_time = TRUE;
+	}
 	second += 5e-10;
+	tz = g_time_zone_new (zone);
 	gdt = g_date_time_new (tz, year, month, day, hour, minute, second);
         secs = g_date_time_to_unix (gdt);
+	if (adjust_time)
+	    secs -= offset * 60;
     }
     else /* No zone info, assume UTC */
     {
