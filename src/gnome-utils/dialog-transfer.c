@@ -1462,7 +1462,7 @@ check_accounts  (XferDialog* xferData, Account* from_account,
         gnc_error_dialog(xferData->dialog, placeholder_format, name);
         g_free(name);
         LEAVE("placeholder");
-        return TRUE;
+        return FALSE;
     }
 
     if (!gnc_commodity_is_iso (xferData->from_commodity))
