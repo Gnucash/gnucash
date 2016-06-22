@@ -230,7 +230,14 @@ gnc_saved_reports_write_internal (const gchar *file, const gchar *contents, gboo
     ssize_t written;
     gint length;
     gint flags = O_WRONLY | O_CREAT | (overwrite ? O_TRUNC : O_APPEND);
-
+    /* Bug 764248: Keep write from adding \r to the line endings.  On
+     * windows the file already has them set to \r\n and if we output
+     * in text mode we get \r\r\n.
+     */
+#ifdef G_OS_WIN32
+    if (strstr(file, "backup"))
+	flags |= O_BINARY;
+#endif
     fd = g_open (file, flags, 0666);
     if (fd == -1)
     {
