@@ -1871,6 +1871,7 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
 {
     GtkBuilder *builder;
     gboolean  use_accounting_labels;
+    g_return_if_fail(to_info == NULL && from_info == NULL);
 
     use_accounting_labels = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL,
                                                GNC_PREF_ACCOUNTING_LABELS);
@@ -2067,7 +2068,9 @@ close_handler (gpointer user_data)
     gnc_xfer_dialog_close_cb(GTK_DIALOG(dialog), xferData);
     gtk_widget_destroy (dialog);
     g_free (to_info);
+    to_info = NULL;
     g_free (from_info);
+    from_info = NULL;
     LEAVE(" ");
 }
 
