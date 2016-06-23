@@ -96,11 +96,6 @@ void on_matcher_help_close_clicked (GtkButton *button, gpointer user_data);
 
 /* Local prototypes */
 static void
-automatch_store_transactions(GNCImportMainMatcher *info,
-                             GtkTreeModel *model,
-                             GtkTreeIter *iter,
-                             GNCImportTransInfo *trans_info);
-static void
 refresh_model_row(GNCImportMainMatcher *gui, GtkTreeModel *model,
                   GtkTreeIter *iter, GNCImportTransInfo *info);
 
@@ -258,14 +253,7 @@ run_account_picker_dialog (GNCImportMainMatcher *info,
                                         old_acc,
                                         &ok_pressed);
     if (ok_pressed)
-    {
-        gnc_import_TransInfo_set_destacc (trans_info,
-                                          new_acc,
-                                          TRUE);
-
-        /* Iterate through the transactions in a given clist to auto match them */
-        automatch_store_transactions(info, model, iter, trans_info);
-    }
+        gnc_import_TransInfo_set_destacc (trans_info, new_acc, TRUE);
 }
 
 static void
@@ -913,20 +901,6 @@ void gnc_gen_trans_list_add_trans_with_ref_id(GNCImportMainMatcher *gui, Transac
     }
     return;
 }/* end gnc_import_add_trans_with_ref_id() */
-
-/* Iterate through the rows of the clist and try to automatch each of them */
-static void
-automatch_store_transactions (GNCImportMainMatcher *info,
-                              GtkTreeModel *model,
-                              GtkTreeIter *iter,
-                              GNCImportTransInfo *trans_info)
-{
-    /* returns TRUE if we changed this row, so update it */
-    if (gnc_import_TransInfo_refresh_destacc(trans_info, NULL))
-    {
-        refresh_model_row(info, model, iter, trans_info);
-    }
-}
 
 GtkWidget *gnc_gen_trans_list_widget (GNCImportMainMatcher *info)
 {
