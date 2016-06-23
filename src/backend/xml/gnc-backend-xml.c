@@ -95,7 +95,7 @@ typedef int ssize_t;
 
 static QofLogModule log_module = GNC_MOD_BACKEND;
 
-static gboolean save_may_clobber_data (QofBackend *bend);
+static gboolean save_may_clobber_data (FileBackend *bend);
 
 /* ================================================================= */
 
@@ -263,7 +263,7 @@ xml_session_begin(QofBackend *be_start, QofSession *session,
         LEAVE("");
         return;
     }
-    if (create && !force && save_may_clobber_data( be_start ) )
+    if (create && !force && save_may_clobber_data (be))
     {
         qof_backend_set_error (be_start, ERR_BACKEND_STORE_EXISTS);
         LEAVE("Might clobber, no force");
@@ -1165,7 +1165,7 @@ gnc_xml_be_load_from_file (QofBackend *bend, QofBook *book, QofBackendLoadType l
 /* ---------------------------------------------------------------------- */
 
 static gboolean
-save_may_clobber_data (QofBackend *bend)
+save_may_clobber_data (FileBackend *bend)
 {
     struct stat statbuf;
     if (!bend->fullpath) return FALSE;
