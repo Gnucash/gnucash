@@ -310,35 +310,36 @@ csv_import_trans_load_settings (CsvImportTrans *info)
 
             columns = g_strsplit (info->settings_data->column_types, ",", -1);
 
-            // store contains the actual strings appearing in the column types treeview.
+            // store contains the column types and their (translated) string representation appearing in the column types treeview.
             store = gtk_tree_view_get_model (info->ctreeview);
 
             // Get an iterator for the first (and only) row.
             gtk_tree_model_get_iter_first (store, &iter);
 
-            // Even Entries are the column types / names
             for (i=0; columns[i] != NULL; i++)
             {
-                int s = i * 2 + 1;
-                gboolean found = FALSE;
+                auto col_type = GncTransPropType::NONE;
+                int saved_col_type = atoi (columns[i]);
 
-                for (auto col_type : gnc_csv_col_type_strs )
+                if (saved_col_type >= static_cast<int>(GncTransPropType::NONE) &&
+                    saved_col_type <= static_cast<int>(GncTransPropType::OMEMO))
                 {
-                    // Check to see if column type is valid
-                    if (g_strcmp0 (columns[i], col_type.second) == 0)
-                    {
-                        info->parse_data->column_types.at(i) = col_type.first;
-                        /* Get the type string first. (store is arranged so that every two
-                        * columns is a pair of the model used for the combobox and the
-                        * string that appears, so that store looks like:
-                        * model 0, string 0, model 1, string 1, ..., model ncols, string ncols. */
-                        if (s < gtk_tree_model_get_n_columns (store))
-                            gtk_list_store_set (GTK_LIST_STORE(store), &iter, s, columns[i], -1);
-                        found = TRUE;
-                        break;
-                    }
+                    col_type = static_cast<GncTransPropType>(saved_col_type);
+                    info->parse_data->column_types.at(i) = col_type;
+                    /* Set the column type. Store is arranged so that every three
+                     * columns is a triplet of
+                     * - model used for the combobox
+                     * - the column type as a user visible (translated) string
+                     * - the internal type for this column
+                     * So store looks like:
+                     * model 0, col_type_str 0, col_type, model 1, col_type_str 1, col_type 1, ..., model ncols, col_type_str ncols, col_type ncols. */
+                    if ((3 * i + 2) < gtk_tree_model_get_n_columns (store))
+                        gtk_list_store_set (GTK_LIST_STORE(store), &iter,
+                                3 * i + 1, _(gnc_csv_col_type_strs[col_type]),
+                                3 * i + 2, col_type,
+                                -1);
                 }
-                if (!found)
+                else
                     error = TRUE;
             }
             if (error)
@@ -566,25 +567,30 @@ csv_import_trans_save_settings_cb (GtkWidget *button, CsvImportTrans *info)
         // Get an iterator for the first (and only) row.
         gtk_tree_model_get_iter_first (store, &iter);
 
-        for (column = columns, i = 1; column; column = g_list_next (column), i = i + 2)
+        for (column = columns, i = 2; column; column = g_list_next (column), i += 3)
         {
-            gchar *contents = NULL;
+            auto col_type = GncTransPropType::NONE;
+            gchar *col_type_str = NULL;
 
-            /* Get the type string first. (store is arranged so that every two
-            * columns is a pair of the model used for the combobox and the
-            * string that appears, so that store looks like:
-            * model 0, string 0, model 1, string 1, ..., model ncols, string ncols. */
-            gtk_tree_model_get (store, &iter, i, &contents, -1);
+            /* Get the column type. Store is arranged so that every three
+             * columns is a triplet of
+             * - model used for the combobox
+             * - the column type as a user visible (translated) string
+             * - the internal type for this column
+             * So store looks like:
+             * model 0, col_type_str 0, col_type, model 1, col_type_str 1, col_type 1, ..., model ncols, col_type_str ncols, col_type ncols. */
+            gtk_tree_model_get (store, &iter, i, &col_type, -1);
 
+            col_type_str = g_strdup_printf ("%i", static_cast<int>(col_type));
             if (!details)
-                details = g_strdup (contents);
+                details = col_type_str;
             else
             {
                 gchar *details_prev = details;
-                details = g_strjoin (",", details_prev, contents, NULL);
+                details = g_strjoin (",", details_prev, col_type_str, NULL);
                 g_free (details_prev);
+                g_free (col_type_str);
             }
-            g_free (contents);
         }
         g_list_free (columns);
 
@@ -1314,10 +1320,14 @@ static void column_type_changed (GtkCellRenderer* renderer, gchar* path,
     gint textColumn;
     GtkTreeIter iter;
     gchar* new_text;
+    auto new_col_type = GncTransPropType::NONE;
 
     /* Get the new text */
     g_object_get (renderer, "model", &model, "text-column", &textColumn, NULL);
-    gtk_tree_model_get (model, new_text_iter, textColumn, &new_text, -1);
+    gtk_tree_model_get (model, new_text_iter,
+            textColumn, &new_text,
+            1, &new_col_type,            // Invisible column in the combobox' model containing the colum type
+            -1);
 
     /* Get an iterator for the first (and only) row. */
     gtk_tree_model_get_iter_first (store, &iter);
@@ -1338,28 +1348,35 @@ static void column_type_changed (GtkCellRenderer* renderer, gchar* path,
         /* If this is not the column that was changed ... */
         if (col_renderer != renderer)
         {
-            /* The string that appears in the column */
-            gchar* contents = NULL;
-            /* Get the type string. (store is arranged so that every two
-             * columns is a pair of the model used for the combobox and the
-             * string that appears, so that store looks like:
-             * model 0, string 0, model 1, string 1, ..., model ncols, string ncols. */
-            gtk_tree_model_get(store, &iter, 2 * i + 1, &contents, -1);
-            /* If this column has the same string that the user selected ... */
-            if (!g_strcmp0 (contents, new_text))
+            /* The data type of this column */
+            auto cur_col_type = GncTransPropType::NONE;
+            /* Get the column type. Store is arranged so that every three
+             * columns is a triplet of
+             * - model used for the combobox
+             * - the column type as a user visible (translated) string
+             * - the internal type for this column
+             * So store looks like:
+             * model 0, col_type_str 0, col_type, model 1, col_type_str 1, col_type 1, ..., model ncols, col_type_str ncols, col_type ncols. */
+            gtk_tree_model_get(store, &iter, 3 * i + 2, &cur_col_type, -1);
+            /* If this column has the same type as the user selected ... */
+            if (cur_col_type == new_col_type)
             {
                 /* ... set this column to the "None" type. (We can't allow duplicate types.) */
-                gtk_list_store_set (GTK_LIST_STORE(store), &iter, 2 * i + 1,
-                                   _(gnc_csv_col_type_strs[GncTransPropType::NONE]), -1);
+                gtk_list_store_set (GTK_LIST_STORE(store), &iter,
+                        3 * i + 1, _(gnc_csv_col_type_strs[GncTransPropType::NONE]),
+                        3 * i + 2, GncTransPropType::NONE,
+                        -1);
             }
-            g_free (contents);
         }
         else /* If this is the column that was changed ... */
         {
-            /* Set the text for this column to what the user selected. (See
-             * comment above "Get the type string. ..." for why we set
-             * column 2*i+1 in store.) */
-            gtk_list_store_set (GTK_LIST_STORE(store), &iter, 2 * i + 1, new_text, -1);
+            /* Set the type for this column to what the user selected. (See
+             * comment above "Get the column type. ..." for why we set
+             * column 3*i+1 in store.) */
+            gtk_list_store_set (GTK_LIST_STORE(store), &iter,
+                    3 * i + 1, new_text,
+                    3 * i + 2, new_col_type,
+                    -1);
         }
     }
 }
@@ -1458,70 +1475,64 @@ gboolean preview_settings_valid (CsvImportTrans* info)
     /* Go through each of the columns. */
     for (i = 0; i < ncols; i++)
     {
-        gchar* contents = NULL; /* The column type string in this column. */
         gchar* prevstr = NULL; /* The string in this column from datastore. */
-        /* Get the type string first. (store is arranged so that every two
-         * columns is a pair of the model used for the combobox and the
-         * string that appears, so that store looks like:
-         * model 0, string 0, model 1, string 1, ..., model ncols, string ncols. */
-        gtk_tree_model_get (store, &iter1, 2 * i + 1, &contents, -1);
+        auto col_type = GncTransPropType::NONE;
+        /* Get the column type. Store is arranged so that every three
+         * columns is a triplet of
+         * - model used for the combobox
+         * - the column type as a user visible (translated) string
+         * - the internal type for this column
+         * So store looks like:
+         * model 0, col_type_str 0, col_type, model 1, col_type_str 1, col_type 1, ..., model ncols, col_type_str ncols, col_type ncols. */
+        gtk_tree_model_get (store, &iter1, 3 * i + 2, &col_type, -1);
 
-        /* Go through each column type until ... */
-        for (auto col_type : gnc_csv_col_type_strs)
+        /* Set the column_types array appropriately*/
+        info->parse_data->column_types[i] = col_type;
+
+        switch (col_type)
         {
-            /* ... we find one that matches with what's in the column. */
-            if (!g_strcmp0 (contents, _(col_type.second)))
-            {
-                /* Set the column_types array appropriately and quit. */
-                info->parse_data->column_types[i] = col_type.first;
+        case GncTransPropType::DATE:
+            weight = weight + 1000;
+            gtk_tree_model_get (datastore, &iter2, i + 1, &prevstr, -1);
 
-                switch (col_type.first)
-                {
-                case GncTransPropType::DATE:
-                    weight = weight + 1000;
-                    gtk_tree_model_get (datastore, &iter2, i + 1, &prevstr, -1);
+            if (parse_date (prevstr, info->parse_data->date_format) == -1)
+                valid = FALSE;
+            break;
 
-                    if (parse_date (prevstr, info->parse_data->date_format) == -1)
-                        valid = FALSE;
-                    break;
+        case GncTransPropType::DESCRIPTION:
+            weight = weight + 100;
+            break;
 
-                case GncTransPropType::DESCRIPTION:
-                    weight = weight + 100;
-                    break;
+        case GncTransPropType::BALANCE:
+            havebalance = TRUE;
+            /* No break */
+        case GncTransPropType::DEPOSIT:
+        case GncTransPropType::WITHDRAWAL:
+            weight = weight + 10;
+            break;
 
-                case GncTransPropType::BALANCE:
-                    havebalance = TRUE;
-                    /* No break */
-                case GncTransPropType::DEPOSIT:
-                case GncTransPropType::WITHDRAWAL:
-                    weight = weight + 10;
-                    break;
+        case GncTransPropType::NUM:
+        case GncTransPropType::NOTES:
+        case GncTransPropType::MEMO:
+            weight = weight + 1;
+            break;
 
-                case GncTransPropType::NUM:
-                case GncTransPropType::NOTES:
-                case GncTransPropType::MEMO:
-                    weight = weight + 1;
-                    break;
+        case GncTransPropType::ACCOUNT:
+            weight = weight + 1;
+            break;
 
-                case GncTransPropType::ACCOUNT:
-                    weight = weight + 1;
-                    break;
+        case GncTransPropType::OACCOUNT:
+            oweight = oweight + 100;
+            break;
 
-                case GncTransPropType::OACCOUNT:
-                    oweight = oweight + 100;
-                    break;
-
-                case GncTransPropType::OMEMO:
-                    oweight = oweight + 1;
-                    break;
-                default:
-                    break;
-                }
-                break;
-            }
+        case GncTransPropType::OMEMO:
+            oweight = oweight + 1;
+            break;
+        default:
+            break;
         }
+
         /* Free the type string created by gtk_tree_model_get() */
-        g_free (contents);
         g_free (prevstr);
     }
 
@@ -1615,21 +1626,19 @@ gboolean get_list_of_accounts (CsvImportTrans* info, GtkTreeModel *store)
         /* Go through each of the columns. */
         for (i = 0; i < ncols; i++)
         {
-            gchar* contents = NULL; /* The column type string in this column. */
             gchar* accstr = NULL;   /* The string in this column from datastore. */
+            auto col_type = GncTransPropType::NONE;
 
-            /* Get the type string first. (store is arranged so that every two
-             * columns is a pair of the model used for the combobox and the
-             * string that appears, so that store looks like:
-             * model 0, string 0, model 1, string 1, ..., model ncols, string ncols. */
-            gtk_tree_model_get (columnstore, &iter1, 2 * i + 1, &contents, -1);
+            /* Get the column type. Store is arranged so that every three
+             * columns is a triplet of
+             * - model used for the combobox
+             * - the column type as a user visible (translated) string
+             * - the internal type for this column
+             * So store looks like:
+             * model 0, col_type_str 0, col_type, model 1, col_type_str 1, col_type 1, ..., model ncols, col_type_str ncols, col_type ncols. */
+            gtk_tree_model_get (columnstore, &iter1, 3 * i + 2, &col_type, -1);
 
             /* We're only interested in columns of type ACCOUNT and OACCOUNT. */
-            auto col_type = GncTransPropType::NONE;
-            if (!g_strcmp0 (contents, _(gnc_csv_col_type_strs[GncTransPropType::ACCOUNT])))
-                col_type = GncTransPropType::ACCOUNT;
-            else if(!g_strcmp0 (contents, _(gnc_csv_col_type_strs[GncTransPropType::OACCOUNT])))
-                col_type = GncTransPropType::OACCOUNT;
             if ((col_type == GncTransPropType::ACCOUNT) || (col_type == GncTransPropType::OACCOUNT))
             {
                 /* Get an iterator for the row in the data store. */
@@ -1653,8 +1662,6 @@ gboolean get_list_of_accounts (CsvImportTrans* info, GtkTreeModel *store)
                     g_free (accstr);
                 }
             }
-            /* Free the type string created by gtk_tree_model_get() */
-            g_free (contents);
         }
     }
     info->home_account_number = home_account_number;
@@ -1682,19 +1689,25 @@ static void gnc_csv_preview_update_assist (CsvImportTrans* info)
     guint i, ncols = info->parse_data->column_types.size();
 
     /* store contains only strings. */
-    GType* types = g_new (GType, 2 * ncols);
+    GType* types = g_new (GType, 3 * ncols);
     for (i = 0; i <  ncols + 1; i++)
         types[i] = G_TYPE_STRING;
     store = gtk_list_store_newv (ncols + 1, types);
 
-    /* ctstore is arranged as follows:
-     * model 0, text 0, model 1, text 1, ..., model ncols, text ncols. */
-    for (i = 0; i < 2 * ncols; i += 2)
+    /* ctstore is arranged so that every three
+     * columns is a triplet of
+     * - model used for the combobox
+     * - the column type as a user visible (translated) string
+     * - the internal type for this column
+     * So store looks like:
+     * model 0, col_type_str 0, col_type, model 1, col_type_str 1, col_type 1, ..., model ncols, col_type_str ncols, col_type ncols. */
+    for (i = 0; i < 3 * ncols; i += 3)
     {
         types[i] = GTK_TYPE_TREE_MODEL;
         types[i+1] = G_TYPE_STRING;
+        types[i+2] = G_TYPE_INT;
     }
-    ctstore = gtk_list_store_newv (2 * ncols, types);
+    ctstore = gtk_list_store_newv (3 * ncols, types);
 
     g_free (types);
 
@@ -1702,12 +1715,14 @@ static void gnc_csv_preview_update_assist (CsvImportTrans* info)
     cstores = g_new (GtkListStore*, ncols);
     for (i = 0; i < ncols; i++)
     {
-        cstores[i] = gtk_list_store_new (1, G_TYPE_STRING);
+        cstores[i] = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_INT);
         /* Add all of the possible entries to the combo box. */
         for (auto col_type : gnc_csv_col_type_strs)
         {
             gtk_list_store_append (cstores[i], &iter);
-            gtk_list_store_set (cstores[i], &iter, 0, _(col_type.second), -1);
+            gtk_list_store_set (cstores[i], &iter, 0, _(col_type.second),
+                                                   1, static_cast<int>(col_type.first),
+                                                   -1);
         }
     }
 
@@ -1760,12 +1775,13 @@ static void gnc_csv_preview_update_assist (CsvImportTrans* info)
 
     /* Set all the column types to what's in the parse data. */
     gtk_list_store_append (ctstore, &iter);
-    gtk_list_store_set (ctstore, &iter, 0, NULL, -1); /* Dummy Column to match row color */
     for (i = 0; i < ncols; i++)
     {
-        gtk_list_store_set (ctstore, &iter, 2 * i, cstores[i], 2 * i + 1,
-                           _(gnc_csv_col_type_strs[info->parse_data->column_types[i]]),
-                           -1);
+        gtk_list_store_set (ctstore, &iter,
+                3 * i, cstores[i],
+                3 * i + 1, _(gnc_csv_col_type_strs[info->parse_data->column_types[i]]),
+                3 * i + 2, static_cast<int>(info->parse_data->column_types[i]),
+                -1);
     }
 
     info->treeview_buttons = g_new (GtkWidget*, ncols);
@@ -1799,8 +1815,8 @@ static void gnc_csv_preview_update_assist (CsvImportTrans* info)
         /* Use the alternating model and text entries from ctstore in
          * info->ctreeview. */
         gtk_tree_view_insert_column_with_attributes (info->ctreeview,
-                -1, "", crenderer, "model", 2 * i,
-                "text", 2 * i + 1, NULL);
+                -1, "", crenderer, "model", 3 * i,
+                "text", 3 * i + 1, NULL);
 
         /* We need to allow clicking on the column headers for fixed-width
          * column splitting and merging. */
