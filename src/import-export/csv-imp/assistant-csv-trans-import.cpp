@@ -156,21 +156,12 @@ typedef struct
 
 /*************************************************************************/
 
+extern "C"
+{
 void csv_import_trans_assistant_prepare (GtkAssistant  *assistant, GtkWidget *page, gpointer user_data);
 void csv_import_trans_assistant_finish (GtkAssistant *gtkassistant, gpointer user_data);
 void csv_import_trans_assistant_cancel (GtkAssistant *gtkassistant, gpointer user_data);
 void csv_import_trans_assistant_close (GtkAssistant *gtkassistant, gpointer user_data);
-
-void csv_import_trans_assistant_start_page_prepare (GtkAssistant *gtkassistant, gpointer user_data);
-void csv_import_trans_assistant_file_page_prepare (GtkAssistant *assistant, gpointer user_data);
-void csv_import_trans_assistant_preview_page_prepare (GtkAssistant *gtkassistant, gpointer user_data);
-void csv_import_trans_assistant_account_page_prepare (GtkAssistant *assistant, gpointer user_data);
-void csv_import_trans_assistant_account_match_page_prepare (GtkAssistant *assistant, gpointer user_data);
-void csv_import_trans_assistant_doc_page_prepare (GtkAssistant *assistant, gpointer user_data);
-void csv_import_trans_assistant_match_page_prepare (GtkAssistant *assistant, gpointer user_data);
-void csv_import_trans_assistant_finish_page_prepare (GtkAssistant *assistant, gpointer user_data);
-void csv_import_trans_assistant_summary_page_prepare (GtkAssistant *assistant, gpointer user_data);
-
 void csv_import_trans_srow_cb (GtkWidget *spin, gpointer user_data);
 void csv_import_trans_erow_cb (GtkWidget *spin, gpointer user_data);
 void csv_import_trans_skip_errors_cb (GtkWidget *cb, gpointer user_data);
@@ -181,9 +172,20 @@ void csv_import_trans_file_chooser_confirm_cb (GtkWidget *button, CsvImportTrans
 void csv_import_trans_delete_settings_cb (GtkWidget *button, CsvImportTrans *info);
 void csv_import_trans_save_settings_cb (GtkWidget *button, CsvImportTrans *info);
 void csv_import_trans_changed_settings_cb (GtkWidget *button, CsvImportTrans *info);
+void sep_button_clicked (GtkWidget* widget, CsvImportTrans* info);
+}
+
+void csv_import_trans_assistant_start_page_prepare (GtkAssistant *gtkassistant, gpointer user_data);
+void csv_import_trans_assistant_file_page_prepare (GtkAssistant *assistant, gpointer user_data);
+void csv_import_trans_assistant_preview_page_prepare (GtkAssistant *gtkassistant, gpointer user_data);
+void csv_import_trans_assistant_account_page_prepare (GtkAssistant *assistant, gpointer user_data);
+void csv_import_trans_assistant_account_match_page_prepare (GtkAssistant *assistant, gpointer user_data);
+void csv_import_trans_assistant_doc_page_prepare (GtkAssistant *assistant, gpointer user_data);
+void csv_import_trans_assistant_match_page_prepare (GtkAssistant *assistant, gpointer user_data);
+void csv_import_trans_assistant_summary_page_prepare (GtkAssistant *assistant, gpointer user_data);
+
 void csv_import_trans_load_settings (CsvImportTrans *info);
 
-void sep_button_clicked (GtkWidget* widget, CsvImportTrans* info);
 static void gnc_csv_preview_update_assist (CsvImportTrans* info);
 void gnc_csv_reset_preview_setting (CsvImportTrans* info, gboolean block);
 gboolean preview_settings_valid (CsvImportTrans *info);
