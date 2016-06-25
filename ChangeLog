@@ -1,6 +1,238 @@
+2016-06-24 John Ralls 
+
+	* Update translations from the translation project. (HEAD, origin/maint, maint)
+
+2016-06-23 John Ralls 
+
+	* Remove automatch_store_transactions() from import-main-matcher.
+
+2016-06-23 John Ralls 
+
+	* Bug 760021 - File "Save As" to an existing file...overwrites without warning.
+
+2016-06-23 John Ralls 
+
+	* Bump CMake version to current.
+
+2016-06-22 John Ralls 
+
+	* Bug 761672 - Transfer made to placeholder account
+
+2016-06-22 John Ralls 
+
+	* Bug 764248 - saved-reports-2.4-backup line endings unconventional
+
+2016-06-22 goodvibes2 
+
+	* Update README to refer to wiki Submitting_Patches as per github  discussion re this file.
+
+2016-06-22 John Ralls 
+
+	* Bug 748983 - Crash after opening money transfer dialog twice
+
+2016-06-20 goodvibes2 
+
+	* Bug 637004 Optionally allow customer and vendor address info to display   Use an internal option to hold receivable/payable flag,   remove trailing spaces.
+
+2016-06-18 goodvibes2 
+
+	* Bug 637004 Optionally allow customer and vendor address info to display   in the Receivable Aging and Payable Aging reports so can be copied   and pasted into a spreadsheet for use in mail merge.
+
+2016-06-20 John Ralls 
+
+	* Fix Travis test failure in gnc_iso8601_to_timespec_gmt.
+
+2016-06-20 John Ralls 
+
+	* Fix gnc_iso8601_to_timespec_gmt test failure.
+
+2016-06-20 John Ralls 
+
+	* Bug 767824 - Some UTC timezones incorrectly recognized on Windows 7
+
+2016-06-06 Alex Aycinena 
+
+	* Partially revert commit B555f495 and solve problem more simply by instead resequencing prior statements.
+
+2016-06-04 Alex Aycinena 
+
+	* The gnc_gui_refresh_all statement in gnc_book_options_dialog_apply_cb causes the 'apply' and 'OK' buttons to be set to sensitive on the open Book Options dialog in some circumstances; this commit causes them to be reset to insensitive, as they should be.
+
+2016-05-31 Geert Janssens 
+
+	* Update README file regarding pull request policy
+
+2016-05-29 John Ralls 
+
+	* Bug 766960 - gnucash-make-guids fails to run due to hardcoded paths.
+
+2016-05-21 Geert Janssens 
+
+	* Bug 765859 - The budget reports missing in Hungarian edition
+
+2016-05-21 Geert Janssens 
+
+	* Fix travis build
+
+2016-05-21 Geert Janssens 
+
+	* Bug 736352 - Expense Voucher adds tax automatically
+
+2016-05-21 Geert Janssens 
+
+	* Bug 766200 - Three-up printing does not position the third check properly
+
+2016-05-21 Geert Janssens 
+
+	* Check printing: make logic easier to follow
+
+2016-05-20 John Ralls 
+
+	* Fix adjust_sql_option_string test on Windows.
+
+2016-05-19 John Ralls 
+
+	* Move adjust_sql_options_string declaration to gnc-backend-dbi-priv.h.
+
+2016-05-19 John Ralls 
+
+	* Remove unnecessary g_strdup_printf.
+
+2016-05-19 John Ralls 
+
+	* Fix inconsistent and non-conforming whitespace and comments.
+
+2016-05-20 Mike Evans 
+
+	* Bug 766688 - Minimal fraction of BYN should be 1/100
+
+2016-05-19 John Ralls 
+
+	* Fix bad library name from c1ad6154.
+
+2016-05-13 John Ralls 
+
+	* Bug 764871 - Crash starting gnu cash
+
+2016-05-14 John Ralls 
+
+	* Don't try to compile test_adjust_sql_options on windows, it won't link.
+
+2016-05-11 colinl 
+
+	* Improved adjust_sql_options_string, added tests
+
+2016-05-10 colinl 
+
+	* Tidied up adjust_sql_options
+
+2016-05-10 colinl 
+
+	* adjust_sql_options working but needs tidy up and remove diagnostics
+
+2016-05-03 victor811 
+
+	* Update Russian translation
+
+2016-05-03 victor811 
+
+	* Update Russian translation
+
+2016-05-10 John Ralls 
+
+	* Bug 766028 - crash on manual addition of price entry in Price Editor
+
+2016-05-05 Mechtilde 
+
+	* correct some more shortcuts
+
+2016-05-05 Mechtilde 
+
+	* correct some shortcuts
+
+2016-01-19 Mechtilde 
+
+	* correct typos
+
+2016-01-02 Mechtilde 
+
+	* remove some fuzzy flags and add some translations
+
+2016-01-20 Mechtilde 
+
+	* some corrections
+
+2016-01-02 Mechtilde 
+
+	* remove some fuzzy flags
+
+2016-01-02 Mechtilde 
+
+	* add some translations
+
+2016-04-24 Per Johansson 
+
+	* FIxed remaining names.
+
+2016-04-24 Per Johansson 
+
+	* Added Finnish account plan.
+
+2016-04-10 Per Johansson 
+
+	* Added new sv_AX and sv_FI account plans.
+
+2016-04-15 Geert Janssens 
+
+	* Improve quickfill performance on huge registers
+
+2016-03-24 John Ralls 
+
+	* Mac Localization: Prefer the country to the language for fall-back locales.
+
+2016-03-22 John Ralls 
+
+	* Extract some functions to make the Mac locale setup a bit more maintainable.
+
+2016-03-25 John Ralls 
+
+	* Release 2.6.12 (tag: 2.6.12)
+
+2016-03-25 John Ralls 
+
+	* Update translations from the Translation Project.
+
+2016-03-25 Geert Janssens 
+
+	* Bug 719904 - Decide payment type only based on the account type involved
+
+2016-03-25 Geert Janssens 
+
+	* Factor out a convenience function to retrieve a (business) owner starting from a transaction
+
+2016-03-25 Geert Janssens 
+
+	* Provide option to print checks directly from the payment window
+
+2016-03-25 Geert Janssens 
+
+	* Check printing: extract address from invoice/bill for payment transactions
+
+2016-03-25 Geert Janssens 
+
+	* Move some utility functions from gui code to engine
+
+2016-03-25 Geert Janssens 
+
+	* Update POTFILES.in after previous commit
+
 2016-03-24 Geert Janssens 
 
-	* Bug 693342 - Print (bottom) prints to middle for 3-check pages (HEAD, origin/maint, maint)
+	* Merge reg and reg2 variant of print check dialog back into one file
+
+2016-03-24 Geert Janssens 
+
+	* Bug 693342 - Print (bottom) prints to middle for 3-check pages
 
 2016-03-23 Geert Janssens 
 
