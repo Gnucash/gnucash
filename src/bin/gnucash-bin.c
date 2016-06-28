@@ -267,6 +267,7 @@ mac_set_languages(NSArray* languages, NSString *lang_str)
     NSEnumerator *lang_iter = [languages objectEnumerator];
     NSArray *new_languages = [NSArray array];
     NSString *this_lang = NULL;
+    NSRange not_found = {NSNotFound, 0};
     while ((this_lang = [lang_iter nextObject])) {
         this_lang = [this_lang stringByTrimmingCharactersInSet:
                      [NSCharacterSet characterSetWithCharactersInString: @"\""]];
@@ -274,7 +275,7 @@ mac_set_languages(NSArray* languages, NSString *lang_str)
         new_languages = [new_languages arrayByAddingObject: this_lang];
 /* If it's an English language, add the "C" locale after it so that
  * any messages can default to it */
-        if ( [this_lang containsString: @"en"])
+        if (!NSEqualRanges([this_lang String: @"en"], not_found))
             new_languages = [new_languages arrayByAddingObject: @"C"];
         if (![new_languages containsObject: lang_str]) {
             NSArray *temp_array = [NSArray arrayWithObject: lang_str];
