@@ -344,18 +344,6 @@ Before you start developing GnuCash, you should do the following:
 
 Submitting a Patch:
 
-  Patches should be created from a git clone using the appropriate
-  branch HEAD. For those unfamiliar with git, instructions on making a
-  patch may be found at http://wiki.gnucash.org/wiki/Git#Patches
-
-  Please attach patches to the appropriate bug or enhancement request
-  in Bugzilla (https://bugzilla.gnome.org, Project GnuCash). Create a
-  new bug if you don't find one that's applicable. Please don't submit
-  patches to either of the mailing lists, as they tend to be
-  forgotten.
-
-  Alternatively, you can also submit your patches in the form of a git
-  pull request.
-
+  Please read http://wiki.gnucash.org/wiki/Development#Submitting_Patches.
 
 Thank you.

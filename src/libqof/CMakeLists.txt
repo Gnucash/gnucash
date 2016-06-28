@@ -44,7 +44,7 @@ SET (gnc_qof_noinst_HEADERS
     qof/qofobject-p.h
     qof/qofquery-p.h
     qof/qofquerycore-p.h
-    qof/qofsession-p.h
+    qof/qofsession.hpp
 )
 
 SET (gnc_qof_SOURCES
