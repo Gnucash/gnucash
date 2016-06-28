@@ -275,7 +275,7 @@ mac_set_languages(NSArray* languages, NSString *lang_str)
         new_languages = [new_languages arrayByAddingObject: this_lang];
 /* If it's an English language, add the "C" locale after it so that
  * any messages can default to it */
-        if (!NSEqualRanges([this_lang String: @"en"], not_found))
+        if (!NSEqualRanges([this_lang rangeOfString: @"en"], not_found))
             new_languages = [new_languages arrayByAddingObject: @"C"];
         if (![new_languages containsObject: lang_str]) {
             NSArray *temp_array = [NSArray arrayWithObject: lang_str];
