@@ -32,6 +32,7 @@ extern "C"
 #include <memory>
 #include <iostream>
 #include <sstream>
+#include <string>
 #include "gnc-timezone.hpp"
 #include "gnc-datetime.hpp"
 
@@ -179,7 +180,7 @@ GncDateTimeImpl::GncDateTimeImpl(const std::string str) :
                 (tzstr.length() > 10 ? tzstr[10] != '0' :
                  !tzstr.compare(10, 11, "00")))
             {
-                offset = stoi(tzstr.substr(10,11));
+                offset = atoi(tzstr.substr(10,11).c_str());
                 if (offset && tzpos == '-')
                     offset = -offset;
                 tzstr.replace(10, 11, "00");
