@@ -59,14 +59,14 @@ TEST (GncGUID, move)
 TEST (GncGUID, to_string)
 {
     std::string fixture (32, '0');
-    auto str {GncGUID::null_guid ().to_string ()};
+    auto str = GncGUID::null_guid ().to_string ();
     EXPECT_EQ (str, fixture);
 }
 
 TEST (GncGUID, from_string)
 {
     std::string fixture (32, '0');
-    auto guid {GncGUID::from_string (fixture)};
+    auto guid = GncGUID::from_string (fixture);
     EXPECT_EQ (guid, GncGUID::null_guid ());
 
     guid = GncGUID::create_random ();
