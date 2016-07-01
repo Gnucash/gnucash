@@ -418,6 +418,8 @@ IF (GNC_BUILD_AS_INSTALL)
 ENDIF()
 # ############################################################
 
+GNC_GTEST_CONFIGURE()
+
 SET(CMAKE_CTEST_COMMAND ctest)
 IF (XCODE_VERSION)
   SET(CMAKE_CTEST_COMMAND ctest -C Debug)

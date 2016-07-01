@@ -28,10 +28,8 @@
 extern void test_suite_qofbook();
 extern void test_suite_qofinstance();
 extern void test_suite_qofobject();
-extern void test_suite_qofsession();
 extern void test_suite_gnc_date();
 extern void test_suite_qof_string_cache();
-extern void test_suite_gnc_guid ( void );
 
 int
 main (int   argc,
@@ -43,11 +41,9 @@ main (int   argc,
 //    g_log_set_always_fatal (0);
     g_test_bug_base("https://bugzilla.gnome.org/show_bug.cgi?id="); /* init the bugzilla URL */
 
-    test_suite_gnc_guid();
     test_suite_qofbook();
     test_suite_qofinstance();
     test_suite_qofobject();
-    test_suite_qofsession();
     test_suite_gnc_date();
     test_suite_qof_string_cache();
 
