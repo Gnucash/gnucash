@@ -351,6 +351,15 @@ Timespec gnc_dmy2timespec (gint day, gint month, gint year);
 /** Same as gnc_dmy2timespec, but last second of the day */
 Timespec gnc_dmy2timespec_end (gint day, gint month, gint year);
 
+/** Converts a day, month, and year to a Timespec representing 11:00:00 UTC
+ *  11:00:00 UTC falls on the same time in almost all timezones, the exceptions
+ *  being the +13, +14, and -12 timezones used by countries along the
+ *  International Date Line. Since users in those timezones would see dates
+ *  immediately change by one day, the function checks the current timezone for
+ *  those changes and adjusts the UTC time so that the date will be consistent.
+ */
+Timespec gnc_dmy2timespec_neutral (gint day, gint month, gint year);
+
 /** The gnc_iso8601_to_timespec_gmt() routine converts an ISO-8601 style
  *    date/time string to Timespec.  Please note that ISO-8601 strings
  *    are a representation of Universal Time (UTC), and as such, they

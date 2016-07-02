@@ -47,6 +47,7 @@ void test_suite_gnc_date ( void );
 typedef struct
 {
     GDateTime *(*new_local)(gint, gint, gint, gint, gint, gdouble);
+    GDateTime *(*new_utc)(gint, gint, gint, gint, gint, gdouble);
     GDateTime *(*adjust_for_dst)(GDateTime *, GTimeZone *);
     GDateTime *(*new_from_unix_local)(time64);
     GDateTime *(*new_from_timeval_local)(GTimeVal *);
@@ -1967,6 +1968,48 @@ test_gnc_dmy2timespec_end (void)
     g_date_time_unref (gdt3);
     g_date_time_unref (gdt4);
 }
+
+/*gnc_dmy2timespec_neutral*/
+static void
+test_gnc_dmy2timespec_neutral (void)
+{
+    GDateTime *gdt1 = gncdt.new_utc (1999, 7, 21, 11, 0, 0);
+    GDateTime *gdt2 = gncdt.new_utc (1918, 3, 31, 11, 0, 0);
+    GDateTime *gdt3 = gncdt.new_utc (1918, 4, 1, 11, 0, 0);
+    GDateTime *gdt4 = gncdt.new_utc (2057, 11, 20, 11, 0, 0);
+
+    gint day, mon, yr;
+    Timespec t, r_t;
+
+    t = g_date_time_to_timespec (gdt1);
+    g_date_time_get_ymd (gdt1, &yr, &mon, &day);
+    r_t = gnc_dmy2timespec_neutral (day, mon, yr);
+    g_assert_cmpint (r_t.tv_sec, ==, t.tv_sec);
+    g_assert_cmpint (r_t.tv_nsec, ==, t.tv_nsec);
+
+    t = g_date_time_to_timespec (gdt2);
+    g_date_time_get_ymd (gdt2, &yr, &mon, &day);
+    r_t = gnc_dmy2timespec_neutral (day, mon, yr);
+    g_assert_cmpint (r_t.tv_sec, ==, t.tv_sec);
+    g_assert_cmpint (r_t.tv_nsec, ==, t.tv_nsec);
+
+    t = g_date_time_to_timespec (gdt3);
+    g_date_time_get_ymd (gdt3, &yr, &mon, &day);
+    r_t = gnc_dmy2timespec_neutral (day, mon, yr);
+    g_assert_cmpint (r_t.tv_sec, ==, t.tv_sec);
+    g_assert_cmpint (r_t.tv_nsec, ==, t.tv_nsec);
+
+    t = g_date_time_to_timespec (gdt4);
+    g_date_time_get_ymd (gdt4, &yr, &mon, &day);
+    r_t = gnc_dmy2timespec_neutral (day, mon, yr);
+    g_assert_cmpint (r_t.tv_sec, ==, t.tv_sec);
+    g_assert_cmpint (r_t.tv_nsec, ==, t.tv_nsec);
+
+    g_date_time_unref (gdt1);
+    g_date_time_unref (gdt2);
+    g_date_time_unref (gdt3);
+    g_date_time_unref (gdt4);
+}
 /* gnc_timezone
 long int
 gnc_timezone (const struct tm *tm)// C: 5 in 2  Local: 2:0:0
@@ -2086,10 +2129,10 @@ Timespec gdate_to_timespec (GDate d)// C: 7 in 6  Local: 0:0:0
 static void
 test_gdate_to_timespec (void)
 {
-    GDateTime *gdt1 = gncdt.new_local (1999, 7, 21, 0, 0, 0);
-    GDateTime *gdt2 = gncdt.new_local (1918, 3, 31, 0, 0, 0);
-    GDateTime *gdt3 = gncdt.new_local (1918, 4, 1, 0, 0, 0);
-    GDateTime *gdt4 = gncdt.new_local (2057, 11, 20, 0, 0, 0);
+    GDateTime *gdt1 = gncdt.new_utc (1999, 7, 21, 11, 0, 0);
+    GDateTime *gdt2 = gncdt.new_utc (1918, 3, 31, 11, 0, 0);
+    GDateTime *gdt3 = gncdt.new_utc (1918, 4, 1, 11, 0, 0);
+    GDateTime *gdt4 = gncdt.new_utc (2057, 11, 20, 11, 0, 0);
 
     gint day, mon, yr;
     Timespec t, r_t;
@@ -2411,6 +2454,7 @@ test_suite_gnc_date (void)
 // GNC_TEST_ADD_FUNC (suitename, "gnc dmy2timespec internal", test_gnc_dmy2timespec_internal);
     GNC_TEST_ADD_FUNC (suitename, "gnc dmy2timespec", test_gnc_dmy2timespec);
     GNC_TEST_ADD_FUNC (suitename, "gnc dmy2timespec end", test_gnc_dmy2timespec_end);
+    GNC_TEST_ADD_FUNC (suitename, "gnc dmy2timespec Neutral", test_gnc_dmy2timespec_neutral);
 // GNC_TEST_ADD_FUNC (suitename, "gnc timezone", test_gnc_timezone);
 // GNC_TEST_ADD_FUNC (suitename, "timespecFromTime t", test_timespecFromtime64);
 // GNC_TEST_ADD_FUNC (suitename, "timespec now", test_timespec_now);

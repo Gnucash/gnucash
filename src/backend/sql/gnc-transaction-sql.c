@@ -36,6 +36,7 @@
 
 #include "Account.h"
 #include "Transaction.h"
+#include <Scrub.h>
 #include "gnc-lot.h"
 #include "engine-helpers.h"
 
@@ -376,6 +377,7 @@ query_transactions( GncSqlBackend* be, GncSqlStatement* stmt )
             if ( tx != NULL )
             {
                 tx_list = g_list_prepend( tx_list, tx );
+                xaccTransScrubPostedDate (tx);
             }
             row = gnc_sql_result_get_next_row( result );
         }

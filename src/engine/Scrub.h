@@ -142,7 +142,17 @@ void xaccAccountTreeScrubCommodities (Account *acc);
  */
 void xaccAccountTreeScrubQuoteSources (Account *root, gnc_commodity_table *table);
 
+/** Removes empty "notes", "placeholder", and "hbci" KVP slots from Accounts. */
 void xaccAccountScrubKvp (Account *account);
+
+/** Changes Transaction date_posted timestamps from 00:00 local to 11:00 UTC.
+ * 11:00 UTC is the same day local time in almost all timezones, the exceptions
+ * being the -12, +13, and +14 timezones along the International Date Line. If
+ * Local time is set to one of these timezones then the new date_posted time
+ * will be adjusted as needed to ensure that the date doesn't change there. This
+ * change was made for v2.6.14 to partially resolve bug 137017.
+ */
+void xaccTransScrubPostedDate (Transaction *trans);
 
 #endif /* XACC_SCRUB_H */
 /** @} */

@@ -183,6 +183,7 @@ gnc_g_date_time_to_local (GDateTime* gdt)
 typedef struct
 {
     GDateTime *(*new_local)(gint, gint, gint, gint, gint, gdouble);
+    GDateTime *(*new_utc)(gint, gint, gint, gint, gint, gdouble);
     GDateTime *(*adjust_for_dst)(GDateTime *, GTimeZone *);
     GDateTime *(*new_from_unix_local)(time64);
     GDateTime *(*new_from_timeval_local)(const GTimeVal *);
@@ -195,6 +196,7 @@ void
 _gnc_date_time_init (_GncDateTime *gncdt)
 {
     gncdt->new_local = gnc_g_date_time_new_local;
+    gncdt->new_utc = g_date_time_new_utc;
     gncdt->adjust_for_dst = gnc_g_date_time_adjust_for_dst;
     gncdt->new_from_unix_local = gnc_g_date_time_new_from_unix_local;
     gncdt->new_from_timeval_local = gnc_g_date_time_new_from_timeval_local;
@@ -372,12 +374,13 @@ gnc_timegm (struct tm* time)
      gdt = g_date_time_new_utc (time->tm_year + 1900, time->tm_mon,
 				time->tm_mday, time->tm_hour, time->tm_min,
 				(gdouble)(time->tm_sec));
-     time->tm_mon = time->tm_mon > 0 ? time->tm_mon - 1 : 11;
-     // Watch out: struct tm has wday=0..6 with Sunday=0, but GDateTime has wday=1..7 with Sunday=7.
-     time->tm_wday = g_date_time_get_day_of_week (gdt) % 7;
-     time->tm_yday = g_date_time_get_day_of_year (gdt);
-     time->tm_isdst = g_date_time_is_daylight_savings (gdt);
-
+     if (gdt == NULL)
+     {
+         PERR("Failed to get valid GDateTime with struct tm: %d-%d-%d %d:%d:%d",
+              time->tm_year + 1900, time->tm_mon, time->tm_mday, time->tm_hour,
+              time->tm_min, time->tm_sec);
+         return 0;
+     }
      secs = g_date_time_to_unix (gdt);
      g_date_time_unref (gdt);
      return secs;
@@ -1551,6 +1554,7 @@ gnc_dmy2timespec_internal (int day, int month, int year, gboolean start_of_day)
     return result;
 }
 
+
 Timespec
 gnc_dmy2timespec (int day, int month, int year)
 {
@@ -1563,6 +1567,29 @@ gnc_dmy2timespec_end (int day, int month, int year)
     return gnc_dmy2timespec_internal (day, month, year, FALSE);
 }
 
+Timespec
+gnc_dmy2timespec_neutral (int day, int month, int year)
+{
+    struct tm date;
+    Timespec ts = {0, 0};
+    GTimeZone *zone = gnc_g_time_zone_new_local();
+    GDateTime *gdt = gnc_g_date_time_new_local (year, month, day, 12, 0, 0.0);
+    int interval = g_time_zone_find_interval (zone, G_TIME_TYPE_STANDARD,
+                                              g_date_time_to_unix(gdt));
+    int offset = g_time_zone_get_offset(gnc_g_time_zone_new_local(),
+                                        interval) / 3600;
+    g_date_time_unref (gdt);
+    memset (&date, 0, sizeof(struct tm));
+    date.tm_year = year - 1900;
+    date.tm_mon = month - 1;
+    date.tm_mday = day;
+    date.tm_hour = offset < -11 ? -offset : offset > 13 ? 24 - offset : 11;
+    date.tm_min = 0;
+    date.tm_sec = 0;
+
+    ts.tv_sec = gnc_timegm(&date);
+    return ts;
+}
 /********************************************************************\
 \********************************************************************/
 
@@ -1648,9 +1675,9 @@ GDate* gnc_g_date_new_today ()
 Timespec gdate_to_timespec (GDate d)
 {
     gnc_gdate_range_check (&d);
-    return gnc_dmy2timespec(g_date_get_day(&d),
-                            g_date_get_month(&d),
-                            g_date_get_year(&d));
+    return gnc_dmy2timespec_neutral (g_date_get_day(&d),
+                                     g_date_get_month(&d),
+                                     g_date_get_year(&d));
 }
 
 static void

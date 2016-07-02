@@ -1373,4 +1373,17 @@ xaccScrubUtilityGetOrMakeAccount (Account *root, gnc_commodity * currency,
     return acc;
 }
 
+void
+xaccTransScrubPostedDate (Transaction *trans)
+{
+    time64 orig = xaccTransGetDate(trans);
+    GDate date = xaccTransGetDatePostedGDate(trans);
+    Timespec ts = gdate_to_timespec(date);
+    if (orig && orig != ts.tv_sec)
+    {
+        /* xaccTransSetDatePostedTS handles committing the change. */
+        xaccTransSetDatePostedTS(trans, &ts);
+    }
+}
+
 /* ==================== END OF FILE ==================== */
