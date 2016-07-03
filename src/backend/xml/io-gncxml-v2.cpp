@@ -287,6 +287,7 @@ add_transaction_local (sixtp_gdv2* data, Transaction* trn)
                                     xaccTransSetCurrency);
 
     xaccTransScrubCurrency (trn);
+    xaccTransScrubPostedDate (trn);
     xaccTransCommitEdit (trn);
 
     data->counter.transactions_loaded++;

@@ -123,6 +123,15 @@ setup_begin(FixtureB *f, gconstpointer pData)
 }
 
 static void
+setup_neutral(FixtureB *f, gconstpointer pData)
+{
+    f->test[0] = (TimeMap){1999, 7, 21, INT64_C(932554800)};
+    f->test[1] = (TimeMap){1918, 3, 31, INT64_C(-1633266000)};
+    f->test[2] = (TimeMap){1918, 4, 1, INT64_C(-1633179600)};
+    f->test[3] = (TimeMap){2057, 11, 20, INT64_C(2773479600)};
+}
+
+static void
 setup_end(FixtureB *f, gconstpointer pData)
 {
     f->test[0] = (TimeMap){1999, 7, 21, INT64_C(932601599)};
@@ -1825,6 +1834,19 @@ test_gnc_dmy2timespec_end (FixtureB *f, gconstpointer pData)
     }
 }
 
+/*gnc_dmy2timespec_neutral*/
+static void
+test_gnc_dmy2timespec_neutral (FixtureB *f, gconstpointer pData)
+{
+    for (int i = 0; i < sizeof(f->test)/sizeof(TimeMap); ++i)
+    {
+        Timespec r_t = gnc_dmy2timespec_neutral (f->test[i].day, f->test[i].mon,
+                                             f->test[i].yr);
+
+        g_assert_cmpint (r_t.tv_sec, ==, f->test[i].secs);
+    }
+}
+
 /* gnc_timezone
 long int
 gnc_timezone (const struct tm *tm)// C: 5 in 2  Local: 2:0:0
@@ -1913,20 +1935,12 @@ test_gdate_to_timespec (FixtureB *f, gconstpointer pData)
 {
     for (int i = 0; i < sizeof(f->test)/sizeof(TimeMap); ++i)
     {
-#ifdef HAVE_STRUCT_TM_GMTOFF
-        struct tm tm = {0, 0, 0, f->test[i].day, f->test[i].mon - 1,
-                        f->test[i].yr - 1900, 0, 0, -1, 0, NULL};
-#else
-        struct tm tm = {0, 0, 0, f->test[i].day, f->test[i].mon - 1,
-                        f->test[i].yr - 1900, 0, 0, -1};
-#endif
         GDate gd;
         Timespec r_t;
-        int offset = gnc_mktime(&tm) - gnc_timegm(&tm);
         g_date_clear(&gd, 1);
         g_date_set_dmy(&gd, f->test[i].day, f->test[i].mon, f->test[i].yr);
         r_t = gdate_to_timespec(gd);
-        g_assert_cmpint (r_t.tv_sec, ==, f->test[i].secs + offset);
+        g_assert_cmpint (r_t.tv_sec, ==, f->test[i].secs);
     }
 }
 /* gnc_tm_get_day_start
@@ -2158,14 +2172,16 @@ test_suite_gnc_date (void)
     GNC_TEST_ADD (suitename, "gnc timespec to iso8601 buff", FixtureA, NULL, setup, test_gnc_timespec_to_iso8601_buff, NULL);
     GNC_TEST_ADD (suitename, "gnc timespec2dmy", FixtureA, NULL, setup, test_gnc_timespec2dmy, NULL);
 // GNC_TEST_ADD_FUNC (suitename, "gnc dmy2timespec internal", test_gnc_dmy2timespec_internal);
+
     GNC_TEST_ADD (suitename, "gnc dmy2timespec", FixtureB, NULL, setup_begin, test_gnc_dmy2timespec, NULL);
     GNC_TEST_ADD (suitename, "gnc dmy2timespec end", FixtureB, NULL, setup_end, test_gnc_dmy2timespec_end, NULL);
+    GNC_TEST_ADD (suitename, "gnc dmy2timespec Neutral", FixtureB, NULL, setup_neutral, test_gnc_dmy2timespec_neutral, NULL);
 // GNC_TEST_ADD_FUNC (suitename, "gnc timezone", test_gnc_timezone);
 // GNC_TEST_ADD_FUNC (suitename, "timespecFromTime t", test_timespecFromtime64);
 // GNC_TEST_ADD_FUNC (suitename, "timespec now", test_timespec_now);
 // GNC_TEST_ADD_FUNC (suitename, "timespecToTime t", test_timespecTotime64);
     GNC_TEST_ADD (suitename, "timespec to gdate", FixtureA, NULL, setup, test_timespec_to_gdate, NULL);
-    GNC_TEST_ADD (suitename, "gdate to timespec", FixtureB, NULL, setup_begin, test_gdate_to_timespec, NULL);
+    GNC_TEST_ADD (suitename, "gdate to timespec", FixtureB, NULL, setup_neutral, test_gdate_to_timespec, NULL);
 // GNC_TEST_ADD_FUNC (suitename, "gnc tm get day start", test_gnc_tm_get_day_start);
 // GNC_TEST_ADD_FUNC (suitename, "gnc tm get day end", test_gnc_tm_get_day_end);
     GNC_TEST_ADD (suitename, "gnc time64 get day start", FixtureA, NULL, setup, test_gnc_time64_get_day_start, NULL);

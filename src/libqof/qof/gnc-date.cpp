@@ -226,7 +226,6 @@ gnc_timegm (struct tm* time)
     {
 	return 0;
     }
-
 }
 
 char*
@@ -1217,6 +1216,7 @@ gnc_dmy2timespec_internal (int day, int month, int year, gboolean start_of_day)
     return result;
 }
 
+
 Timespec
 gnc_dmy2timespec (int day, int month, int year)
 {
@@ -1229,6 +1229,27 @@ gnc_dmy2timespec_end (int day, int month, int year)
     return gnc_dmy2timespec_internal (day, month, year, FALSE);
 }
 
+Timespec
+gnc_dmy2timespec_neutral (int day, int month, int year)
+{
+    struct tm date;
+    memset (&date, 0, sizeof(struct tm));
+    date.tm_year = year - 1900;
+    date.tm_mon = month - 1;
+    date.tm_mday = day;
+    date.tm_hour = 11;
+    date.tm_min = 0;
+    date.tm_sec = 0;
+
+    GncDateTime gncdt(date);
+    auto offset = gncdt.offset() / 3600;
+    if (offset < -11)
+        date.tm_hour = -offset;
+    if (offset > 13)
+        date.tm_hour = 24 - offset;
+
+    return {gnc_timegm(&date), 0};
+}
 /********************************************************************\
 \********************************************************************/
 void
@@ -1283,9 +1304,9 @@ GDate* gnc_g_date_new_today ()
 
 Timespec gdate_to_timespec (GDate d)
 {
-    return gnc_dmy2timespec(g_date_get_day(&d),
-                            g_date_get_month(&d),
-                            g_date_get_year(&d));
+    return gnc_dmy2timespec_neutral (g_date_get_day(&d),
+                                     g_date_get_month(&d),
+                                     g_date_get_year(&d));
 }
 
 static void

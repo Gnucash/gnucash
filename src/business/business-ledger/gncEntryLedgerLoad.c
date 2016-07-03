@@ -451,6 +451,7 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 
                 if (ledger->is_cust_doc)
                 {
+                    gncEntrySetInvTaxable (blank_entry, table != NULL);
                     gncEntrySetInvTaxTable (blank_entry, table);
                     gncEntrySetInvTaxIncluded (blank_entry, taxincluded);
                     gncEntrySetInvDiscount (blank_entry, discount);
@@ -458,6 +459,7 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
                 }
                 else
                 {
+                    gncEntrySetBillTaxable (blank_entry, table != NULL);
                     gncEntrySetBillTaxTable (blank_entry, table);
                     gncEntrySetBillTaxIncluded (blank_entry, taxincluded);
                     gncEntrySetBillPrice (blank_entry, price);
