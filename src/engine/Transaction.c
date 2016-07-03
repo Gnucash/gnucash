@@ -2248,6 +2248,7 @@ GDate
 xaccTransGetDatePostedGDate (const Transaction *trans)
 {
     GDate result;
+    g_date_clear (&result, 1);
     if (trans)
     {
         /* Can we look up this value in the kvp slot? If yes, use it
@@ -2259,10 +2260,6 @@ xaccTransGetDatePostedGDate (const Transaction *trans)
             result = kvp_value_get_gdate(kvp_value);
         else
             result = timespec_to_gdate(xaccTransRetDatePostedTS(trans));
-    }
-    else
-    {
-        g_date_clear(&result, 1);
     }
     return result;
 }
