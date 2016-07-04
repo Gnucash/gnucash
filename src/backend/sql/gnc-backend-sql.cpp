@@ -193,15 +193,9 @@ create_tables(const OBEEntry& entry, GncSqlBackend* be)
 static const StrVec fixed_load_order
 { GNC_ID_BOOK, GNC_ID_COMMODITY, GNC_ID_ACCOUNT, GNC_ID_LOT };
 
-
-/* Load order for objects from other modules */
-static StrVec other_load_order;
-
-void
-gnc_sql_set_load_order(const StrVec& load_order)
-{
-    other_load_order = load_order;
-}
+/* Order in which business objects need to be loaded */
+static const StrVec business_fixed_load_order =
+{ GNC_ID_BILLTERM, GNC_ID_TAXTABLE, GNC_ID_INVOICE };
 
 static void
 initial_load(const OBEEntry& entry, GncSqlBackend* be)
@@ -216,8 +210,8 @@ initial_load(const OBEEntry& entry, GncSqlBackend* be)
      */
     if (std::find(fixed_load_order.begin(), fixed_load_order.end(),
                   type) != fixed_load_order.end()) return;
-    if (std::find(other_load_order.begin(), other_load_order.end(),
-                  type) != other_load_order.end()) return;
+    if (std::find(business_fixed_load_order.begin(), business_fixed_load_order.end(),
+                  type) != business_fixed_load_order.end()) return;
 
     obe->load_all (be);
 }
@@ -263,7 +257,7 @@ gnc_sql_load (GncSqlBackend* be,  QofBook* book, QofBackendLoadType loadType)
                 obe->load_all (be);
             }
         }
-        for (auto type : other_load_order)
+        for (auto type : business_fixed_load_order)
         {
             auto obe = gnc_sql_get_object_backend(type);
             if (obe)
@@ -1031,9 +1025,6 @@ gnc_sql_run_query (QofBackend* pBEnd, gpointer pQuery)
 }
 #endif //if 0: query creation isn't used yet, code never tested.
 /* ================================================================= */
-/* Order in which business objects need to be loaded */
-static const StrVec business_fixed_load_order =
-{ GNC_ID_BILLTERM, GNC_ID_TAXTABLE, GNC_ID_INVOICE };
 
 static void
 business_core_sql_init (void)
@@ -1048,8 +1039,6 @@ business_core_sql_init (void)
     gnc_order_sql_initialize ();
     gnc_taxtable_sql_initialize ();
     gnc_vendor_sql_initialize ();
-
-    gnc_sql_set_load_order (business_fixed_load_order);
 }
 
 static void
@@ -1071,49 +1060,6 @@ gnc_sql_init_object_handlers (void)
 }
 
 /* ================================================================= */
-
-gint64
-gnc_sql_get_integer_value (const GValue* value)
-{
-    g_return_val_if_fail (value != NULL, 0);
-
-    if (G_VALUE_HOLDS_INT (value))
-    {
-        return (gint64)g_value_get_int (value);
-    }
-    else if (G_VALUE_HOLDS_UINT (value))
-    {
-        return (gint64)g_value_get_uint (value);
-    }
-    else if (G_VALUE_HOLDS_LONG (value))
-    {
-        return (gint64)g_value_get_long (value);
-    }
-    else if (G_VALUE_HOLDS_ULONG (value))
-    {
-        return (gint64)g_value_get_ulong (value);
-    }
-    else if (G_VALUE_HOLDS_INT64 (value))
-    {
-        return g_value_get_int64 (value);
-    }
-    else if (G_VALUE_HOLDS_UINT64 (value))
-    {
-        return (gint64)g_value_get_uint64 (value);
-    }
-    else if (G_VALUE_HOLDS_STRING (value))
-    {
-        return g_ascii_strtoll (g_value_get_string (value), NULL, 10);
-    }
-    else
-    {
-        PWARN ("Unknown type: %s", G_VALUE_TYPE_NAME (value));
-    }
-
-    return 0;
-}
-
-/* ----------------------------------------------------------------- */
 static gpointer
 get_autoinc_id (void* object, const QofParam* param)
 {
@@ -1804,19 +1750,6 @@ static EntryVec tx_guid_table
 {
     gnc_sql_make_table_entry<CT_GUID>("tx_guid", 0, 0, nullptr, _retrieve_guid_)
  };
-
-
-const GncGUID*
-gnc_sql_load_tx_guid (const GncSqlBackend* be, GncSqlRow& row)
-{
-    static GncGUID guid;
-
-    g_return_val_if_fail (be != NULL, NULL);
-
-    gnc_sql_load_object (be, row, NULL, &guid, tx_guid_table);
-
-    return &guid;
-}
 
 void
 gnc_sql_load_object (const GncSqlBackend* be, GncSqlRow& row,

@@ -881,16 +881,6 @@ gboolean gnc_sql_create_index (const GncSqlBackend* be, const char* index_name,
 
 const GncGUID* gnc_sql_load_guid (const GncSqlBackend* be, GncSqlRow& row);
 
-/**
- * Loads the transaction guid from a database row.  The table must have a column
- * named "tx_guid" with type CT_GUID.
- *
- * @param be SQL backend struct
- * @param row Database row
- * @return GncGUID
- */
-
-const GncGUID* gnc_sql_load_tx_guid (const GncSqlBackend* be, GncSqlRow& row);
 
 /**
  * Creates a basic SELECT statement for a table.
@@ -928,30 +918,6 @@ void gnc_sql_init_version_info (GncSqlBackend* be);
 void gnc_sql_finalize_version_info (GncSqlBackend* be);
 
 /**
- * Commits a "standard" item to the database.  In most cases, a commit of one
- * object vs another differs only in the table name and column table.
- *
- * @param be SQL backend
- * @param inst Instance
- * @param tableName SQL table name
- * @param obj_name QOF object type name
- * @param col_table Column table
- * @return TRUE if successful, FALSE if not
- */
-gboolean gnc_sql_commit_standard_item (GncSqlBackend* be, QofInstance* inst,
-                                       const gchar* tableName,
-                                       QofIdTypeConst obj_name,
-                                       const EntryVec& col_table);
-
-/**
- * Gets an integer value (of any size) from a GValue.
- *
- * @param value Source value
- * @return Integer value
- */
-gint64 gnc_sql_get_integer_value (const GValue* value);
-
-/**
  * Converts a Timespec value to a string value for the database.
  *
  * @param be SQL backend
@@ -985,15 +951,6 @@ void gnc_sql_upgrade_table (GncSqlBackend* be, const gchar* table_name,
  */
 gboolean gnc_sql_add_columns_to_table (GncSqlBackend* be, const char* table_name,
                                        const EntryVec& new_col_table);
-
-/**
- * Specifies the load order for a set of objects.  When loading from a database,
- * the objects will be loaded in this order, so that when later objects have
- * references to objects, those objects will already have been loaded.
- *
- * @param load_order NULL-terminated array of object type ID strings
- */
-void gnc_sql_set_load_order(StrVec&& load_order);
 
 void _retrieve_guid_ (gpointer pObject,  gpointer pValue);
 

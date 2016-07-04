@@ -123,14 +123,6 @@ create_tables_cb (const gchar* type, gpointer data_p, gpointer be_p)// 2
 test_create_tables_cb (Fixture *fixture, gconstpointer pData)
 {
 }*/
-/* gnc_sql_set_load_order
-void
-gnc_sql_set_load_order (const gchar** load_order)// 2
-*/
-/* static void
-test_gnc_sql_set_load_order (Fixture *fixture, gconstpointer pData)
-{
-}*/
 /* initial_load_cb
 static void
 initial_load_cb (const gchar* type, gpointer data_p, gpointer be_p)// 2
@@ -426,13 +418,6 @@ gnc_sql_init_object_handlers (void)// 3
 */
 /* static void
 test_gnc_sql_init_object_handlers (Fixture *fixture, gconstpointer pData)
-{
-}*/
-/* gnc_sql_get_integer_value
-gint64
-gnc_sql_get_integer_value (const GValue* value)// C: 1 */
-/* static void
-test_gnc_sql_get_integer_value (Fixture *fixture, gconstpointer pData)
 {
 }*/
 // Make Static
@@ -784,15 +769,6 @@ gnc_sql_load_guid (const GncSqlBackend* be, GncSqlRow& row)// C: 15 in 14 */
 test_gnc_sql_load_guid (Fixture *fixture, gconstpointer pData)
 {
 }*/
-// Not Used
-/* gnc_sql_load_tx_guid
-const GncGUID*
-gnc_sql_load_tx_guid (const GncSqlBackend* be, GncSqlRow& row)// 1
-*/
-/* static void
-test_gnc_sql_load_tx_guid (Fixture *fixture, gconstpointer pData)
-{
-}*/
 /* gnc_sql_load_object
 void
 gnc_sql_load_object (const GncSqlBackend* be, GncSqlRow& row,// C: 29 in 19 */
@@ -915,13 +891,6 @@ build_delete_statement (GncSqlBackend* be,// 3
 test_build_delete_statement (Fixture *fixture, gconstpointer pData)
 {
 }*/
-/* gnc_sql_commit_standard_item
-gboolean
-gnc_sql_commit_standard_item (GncSqlBackend* be, QofInstance* inst, const gchar* tableName,// C: 7 in 7 */
-/* static void
-test_gnc_sql_commit_standard_item (Fixture *fixture, gconstpointer pData)
-{
-}*/
 /* do_create_table
 static gboolean
 do_create_table (const GncSqlBackend* be, const gchar* table_name,// 5
@@ -1010,7 +979,6 @@ test_suite_gnc_backend_sql (void)
 
 // GNC_TEST_ADD (suitename, "gnc sql init", Fixture, nullptr, test_gnc_sql_init,  teardown);
 // GNC_TEST_ADD (suitename, "create tables cb", Fixture, nullptr, test_create_tables_cb,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql set load order", Fixture, nullptr, test_gnc_sql_set_load_order,  teardown);
 // GNC_TEST_ADD (suitename, "initial load cb", Fixture, nullptr, test_initial_load_cb,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql load", Fixture, nullptr, test_gnc_sql_load,  teardown);
 // GNC_TEST_ADD (suitename, "write account tree", Fixture, nullptr, test_write_account_tree,  teardown);
@@ -1038,7 +1006,6 @@ test_suite_gnc_backend_sql (void)
 // GNC_TEST_ADD (suitename, "gnc sql run query", Fixture, nullptr, test_gnc_sql_run_query,  teardown);
 // GNC_TEST_ADD (suitename, "business core sql init", Fixture, nullptr, test_business_core_sql_init,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql init object handlers", Fixture, nullptr, test_gnc_sql_init_object_handlers,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql get integer value", Fixture, nullptr, test_gnc_sql_get_integer_value,  teardown);
 // GNC_TEST_ADD (suitename, "get autoinc id", Fixture, nullptr, test_get_autoinc_id,  teardown);
 // GNC_TEST_ADD (suitename, "set autoinc id", Fixture, nullptr, test_set_autoinc_id,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql get getter", Fixture, nullptr, test_gnc_sql_get_getter,  teardown);
@@ -1098,7 +1065,6 @@ test_suite_gnc_backend_sql (void)
 // GNC_TEST_ADD (suitename, "build insert statement", Fixture, nullptr, test_build_insert_statement,  teardown);
 // GNC_TEST_ADD (suitename, "build update statement", Fixture, nullptr, test_build_update_statement,  teardown);
 // GNC_TEST_ADD (suitename, "build delete statement", Fixture, nullptr, test_build_delete_statement,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql commit standard item", Fixture, nullptr, test_gnc_sql_commit_standard_item,  teardown);
 // GNC_TEST_ADD (suitename, "do create table", Fixture, nullptr, test_do_create_table,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql create table", Fixture, nullptr, test_gnc_sql_create_table,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql create temp table", Fixture, nullptr, test_gnc_sql_create_temp_table,  teardown);
