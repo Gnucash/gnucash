@@ -673,75 +673,64 @@ csv_import_trans_file_chooser_confirm_cb (GtkWidget *button, CsvImportTrans *inf
     GtkAssistant *assistant = GTK_ASSISTANT(info->window);
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
-    GError* error;
-    gchar *file_name;
+    GError* error = NULL;
 
     gtk_assistant_set_page_complete (assistant, page, FALSE);
 
-    file_name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(info->file_chooser));
+    gchar *file_name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(info->file_chooser));
+    if (!file_name)
+        return;
 
-    if (file_name)
-    {
-        gchar *filepath = gnc_uri_get_path (file_name);
-        gchar *filedir = g_path_get_dirname (filepath);
-        if (info->starting_dir)
-            g_free (info->starting_dir);
-        info->starting_dir = g_strdup (filedir);
-        g_free (filedir);
-        g_free (filepath);
+    gchar *filepath = gnc_uri_get_path (file_name);
+    if (info->starting_dir)
+        g_free (info->starting_dir);
+    info->starting_dir = g_path_get_dirname (filepath);
+    g_free (filepath);
 
-        if (info->file_name)
-            g_free (info->file_name);
-        info->file_name = g_strdup (file_name);
-        error = NULL;
-        /* Load the file into parse_data. */
-        auto parse_data = new GncCsvParseData;
-        // FIXME Filetype isn't set yet !?
-        if (parse_data->load_file (file_name, &error))
-        {
-            /* If we couldn't load the file ... */
-            gnc_error_dialog (NULL, "%s", error->message);
-            if (error->code == GNC_CSV_IMP_ERROR_OPEN)
-            {
-                g_free (file_name);
-                delete parse_data;
-                return;
-            }
-            /* If we couldn't guess the encoding, we are content with just
-             * displaying an error message and move on with a blank
-             * display. */
-        }
-        else
-        {
-            /* Parse the data. */
-            if (parse_data->parse (TRUE, &error))
-            {
-                /* If we couldn't parse the data ... */
-                gnc_error_dialog (NULL, "%s", error->message);
-                delete parse_data;
-            }
-            else
-            {
-                if (info->parse_data) // Free parse_data if we have come back here
-                {
-                    delete info->parse_data;
-                    gnc_csv_reset_preview_setting (info, TRUE);
-                }
-                info->parse_data = parse_data;
-                info->previewing_errors = FALSE; /* We're looking at all the data. */
-                info->skip_errors = FALSE; // Set skip_errors to False
-                gtk_assistant_set_page_complete (assistant, page, TRUE);
-            }
-        }
-    }
-    g_free (file_name);
+    if (info->file_name)
+        g_free (info->file_name);
+    info->file_name = file_name;
 
     DEBUG("file_name selected is %s", info->file_name);
     DEBUG("starting directory is %s", info->starting_dir);
 
-    /* Step to next page if page is complete */
-    if (gtk_assistant_get_page_complete (assistant, page))
-        gtk_assistant_set_current_page (assistant, num + 1);
+    /* Load the file into parse_data. */
+    auto parse_data = new GncCsvParseData;
+    /* Assume data is CSV. User can later override to Fixed Width if needed */
+    parse_data->file_format (GncImpFileFormat::CSV, &error);
+    if (parse_data->load_file (file_name, &error))
+    {
+        /* If we couldn't load the file ... */
+        gnc_error_dialog (NULL, "%s", error->message);
+        if (error->code == GNC_CSV_IMP_ERROR_OPEN)
+        {
+            delete parse_data;
+            return;
+        }
+        /* If we couldn't guess the encoding, we are content with just
+         * displaying an error message and move on with a blank
+         * display. */
+    }
+
+    /* Parse the data. */
+    if (parse_data->parse (TRUE, &error))
+    {
+        /* If we couldn't parse the data ... */
+        gnc_error_dialog (NULL, "%s", error->message);
+        delete parse_data;
+        return;
+    }
+
+    if (info->parse_data) // Free parse_data if we have come back here
+    {
+        delete info->parse_data;
+        gnc_csv_reset_preview_setting (info, TRUE);
+    }
+    info->parse_data = parse_data;
+    info->previewing_errors = FALSE; /* We're looking at all the data. */
+    info->skip_errors = FALSE; // Set skip_errors to False
+    gtk_assistant_set_page_complete (assistant, page, TRUE);
+    gtk_assistant_set_current_page (assistant, num + 1);
 }
 
 
