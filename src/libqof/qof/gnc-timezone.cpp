@@ -25,7 +25,7 @@
 
 #include <string>
 #include <cstdint>
-#include <istream>
+#include <iostream>
 #include <algorithm>
 #include <boost/date_time/gregorian/gregorian.hpp>
 #if PLATFORM(WINDOWS)
@@ -161,13 +161,25 @@ zone_from_regtzi (const RegTZI& regtzi, time_zone_names names)
     auto std_week_num = make_week_num(regtzi.StandardDate.wDay);
     auto dlt_week_num = make_week_num(regtzi.DaylightDate.wDay);
     calc_rule_ptr dates;
-    if (regtzi.DaylightBias != 0)
+    if (regtzi.StandardDate.wMonth != 0)
     {
-	ndate start (std_week_num, regtzi.StandardDate.wDayOfWeek,
-		     regtzi.StandardDate.wMonth);
-	ndate end(dlt_week_num, regtzi.DaylightDate.wDayOfWeek,
-		  regtzi.DaylightDate.wMonth);
-	dates.reset(new nth_day_rule (start, end));
+	try
+	{
+	    ndate start (std_week_num, regtzi.StandardDate.wDayOfWeek,
+			 regtzi.StandardDate.wMonth);
+	    ndate end(dlt_week_num, regtzi.DaylightDate.wDayOfWeek,
+		      regtzi.DaylightDate.wMonth);
+	    dates.reset(new nth_day_rule (start, end));
+	}
+	catch (boost::gregorian::bad_month& err)
+	{
+	    std::stringstream str;
+	    str << "Caught Bad Month Exception. Daylight Bias: " <<
+		regtzi.DaylightBias << " Standard Month : " <<
+		regtzi.StandardDate.wMonth << " Daylight Month: " <<
+		regtzi.DaylightDate.wMonth << "\n";
+	    PWARN(str.str().c_str());
+	}
     }
     return TZ_Ptr(new time_zone(names, std_off, offsets, dates));
 }
