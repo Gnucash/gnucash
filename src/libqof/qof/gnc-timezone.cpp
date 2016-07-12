@@ -178,7 +178,7 @@ zone_from_regtzi (const RegTZI& regtzi, time_zone_names names)
 		regtzi.DaylightBias << " Standard Month : " <<
 		regtzi.StandardDate.wMonth << " Daylight Month: " <<
 		regtzi.DaylightDate.wMonth << "\n";
-	    PWARN(str.str().c_str());
+	    PWARN("%s", str.str().c_str());
 	}
     }
     return TZ_Ptr(new time_zone(names, std_off, offsets, dates));
