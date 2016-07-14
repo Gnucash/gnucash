@@ -173,12 +173,10 @@ zone_from_regtzi (const RegTZI& regtzi, time_zone_names names)
 	}
 	catch (boost::gregorian::bad_month& err)
 	{
-	    std::stringstream str;
-	    str << "Caught Bad Month Exception. Daylight Bias: " <<
-		regtzi.DaylightBias << " Standard Month : " <<
-		regtzi.StandardDate.wMonth << " Daylight Month: " <<
-		regtzi.DaylightDate.wMonth << "\n";
-	    PWARN("%s", str.str().c_str());
+	    PWARN("Caught Bad Month Exception. Daylight Bias: %d  "
+		  "Standard Month : %d  Daylight Month: %d",
+		  regtzi.DaylightBias, regtzi.StandardDate.wMonth,
+		  regtzi.DaylightDate.wMonth);
 	}
     }
     return TZ_Ptr(new time_zone(names, std_off, offsets, dates));
