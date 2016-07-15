@@ -760,10 +760,10 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             gncInvoiceAddEntry (invoice, entry);
         }
         valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
-
         // handle auto posting of invoices
 
-
+        new_id = NULL;
+       
         if (valid)
             gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, ID, &new_id, -1);
         if (g_strcmp0 (id, new_id) != 0)
@@ -790,6 +790,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                                          memo_posted,
                                          text2bool (accumulatesplits),
                                          auto_pay);
+                DEBUG("Invoice %s posted",id);
             }
 
         }
