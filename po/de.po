@@ -20199,7 +20199,7 @@ msgstr ""
 #: ../src/report/business-reports/invoice.scm:332
 #: ../src/report/business-reports/taxinvoice.scm:243
 msgid "Thank you for your patronage!"
-msgstr "Vielen Dank für das uns engegengebrachte Vertrauen!"
+msgstr "Vielen Dank für das uns entgegengebrachte Vertrauen!"
 
 #: ../src/report/business-reports/easy-invoice.scm:361
 #: ../src/report/business-reports/invoice.scm:336
@@ -20515,11 +20515,11 @@ msgstr "Entwicklung Forderungen"
 
 #: ../src/report/business-reports/taxinvoice.eguile.scm:197
 msgid "Email"
-msgstr "E-Mail:"
+msgstr "E-Mail"
 
 #: ../src/report/business-reports/taxinvoice.eguile.scm:203
 msgid "Website"
-msgstr "WWW:"
+msgstr "Webseite"
 
 #: ../src/report/business-reports/taxinvoice.eguile.scm:239
 msgid "Invoice Date"
@@ -20639,7 +20639,7 @@ msgstr "table-cell-border-color"
 
 #: ../src/report/business-reports/taxinvoice.scm:115
 msgid "Embedded CSS"
-msgstr "Embedded CSS"
+msgstr "Eingebettetes CSS"
 
 #: ../src/report/business-reports/taxinvoice.scm:116
 msgid "Report title"
@@ -20722,7 +20722,7 @@ msgstr "Anzeigen der Rechnungsnummer?"
 
 #: ../src/report/business-reports/taxinvoice.scm:172
 msgid "Display the Company Name?"
-msgstr "Den Firmennamen anzeigen?"
+msgstr "Anzeigen des Firmennamens?"
 
 #: ../src/report/business-reports/taxinvoice.scm:173
 msgid "Invoice Number next to title?"
@@ -20743,7 +20743,7 @@ msgid ""
 "GnuCash installation directories."
 msgstr ""
 "Der Dateiname der eguile-Vorlage für diesen Bericht. Sie sollte sich "
-"entweder in ihrem .gnucash-Verzeichnis befinden oder an ihrem angestammten "
+"entweder in Ihrem .gnucash-Verzeichnis befinden oder an ihrem angestammten "
 "Platz in den GnuCash-Installationsverzeichnissen."
 
 #: ../src/report/business-reports/taxinvoice.scm:182
@@ -20753,7 +20753,7 @@ msgid ""
 "within the GnuCash installation directories."
 msgstr ""
 "Der Name der CSS-Vorlage, welche in diesem Bericht verwendet werden soll. "
-"Sie sollte sich entweder in ihrem .gnucash-Verzeichnis befinden oder an "
+"Sie sollte sich entweder in Ihrem .gnucash-Verzeichnis befinden oder an "
 "ihrem angestammten Platz in den GnuCash-Installationsverzeichnissen."
 
 #: ../src/report/business-reports/taxinvoice.scm:186
@@ -20768,7 +20768,7 @@ msgstr "Zeichensatz für alles andere."
 msgid "Name of a file containing a logo to be used on the report."
 msgstr ""
 "Name der Datei, welche das Logo enthält, das in diesem Bericht verwendet "
-"weerden soll."
+"werden soll."
 
 #: ../src/report/business-reports/taxinvoice.scm:195
 msgid ""
@@ -20815,7 +20815,7 @@ msgstr "Auftragsbezeichnung"
 
 #: ../src/report/business-reports/taxinvoice.scm:247
 msgid "Embedded CSS."
-msgstr "Embedded CSS."
+msgstr "Eingebettetes CSS."
 
 #: ../src/report/business-reports/taxinvoice.scm:337
 msgid "Display a customer invoice with tax columns (using eguile template)"
@@ -20843,12 +20843,12 @@ msgstr "Benutzen Sie Von - Bis"
 #: ../src/report/locale-specific/us/taxtxf-de_DE.scm:158
 #: ../src/report/locale-specific/us/taxtxf.scm:183
 msgid "Use From - To period."
-msgstr "Benutzen Sie den Von-Bis Zeitraum"
+msgstr "Benutzen Sie den Von - Bis Zeitraum"
 
 #: ../src/report/locale-specific/us/taxtxf-de_DE.scm:160
 #: ../src/report/locale-specific/us/taxtxf.scm:185
 msgid "1st Est Tax Quarter"
-msgstr "Steuerschätzung des ersten Quartals"
+msgstr "Steuerschätzung 1. Quartal"
 
 #: ../src/report/locale-specific/us/taxtxf-de_DE.scm:160
 #: ../src/report/locale-specific/us/taxtxf.scm:185
@@ -20871,17 +20871,17 @@ msgstr "1. Apr. - 31. Mai"
 #: ../src/report/locale-specific/us/taxtxf-de_DE.scm:167
 #: ../src/report/locale-specific/us/taxtxf.scm:192
 msgid "3rd Est Tax Quarter"
-msgstr "Steurschätzung des dritten Quartals"
+msgstr "Steuerschätzung 3. Quartal"
 
 #: ../src/report/locale-specific/us/taxtxf-de_DE.scm:167
 #: ../src/report/locale-specific/us/taxtxf.scm:192
 msgid "Jun 1 - Aug 31."
-msgstr "1. Juni -31. Aug."
+msgstr "1. Juni - 31. Aug."
 
 #: ../src/report/locale-specific/us/taxtxf-de_DE.scm:169
 #: ../src/report/locale-specific/us/taxtxf.scm:194
 msgid "4th Est Tax Quarter"
-msgstr "Steuerschätzung des 4. Quartals"
+msgstr "Steuerschätzung 4. Quartal"
 
 #: ../src/report/locale-specific/us/taxtxf-de_DE.scm:169
 #: ../src/report/locale-specific/us/taxtxf.scm:194
@@ -20893,15 +20893,10 @@ msgstr "1. Sept - 31. Dez."
 msgid "Last Year"
 msgstr "Letztes Jahr"
 
-#: ../src/report/locale-specific/us/taxtxf-de_DE.scm:171
-#: ../src/report/locale-specific/us/taxtxf.scm:196
-msgid "Last Year."
-msgstr "Letztes Jahr"
-
 #: ../src/report/locale-specific/us/taxtxf-de_DE.scm:173
 #: ../src/report/locale-specific/us/taxtxf.scm:198
 msgid "Last Yr 1st Est Tax Qtr"
-msgstr "Steuerschätzung erstes Quartal des vergangenen Jahres"
+msgstr "Steuerschätzung 1. Quartal des letzten Jahres"
 
 #: ../src/report/locale-specific/us/taxtxf-de_DE.scm:174
 #: ../src/report/locale-specific/us/taxtxf.scm:199
@@ -20911,17 +20906,17 @@ msgstr "1. Januar - 31. März letzten Jahres"
 #: ../src/report/locale-specific/us/taxtxf-de_DE.scm:176
 #: ../src/report/locale-specific/us/taxtxf.scm:201
 msgid "Last Yr 2nd Est Tax Qtr"
-msgstr "Steuerschätzung des 2. Quartals des letzten Jahres"
+msgstr "Steuerschätzung 2. Quartal des letzten Jahres"
 
 #: ../src/report/locale-specific/us/taxtxf-de_DE.scm:177
 #: ../src/report/locale-specific/us/taxtxf.scm:202
 msgid "Apr 1 - May 31, Last year."
-msgstr "1. April- 31. Mai letzten Jahres"
+msgstr "1. April - 31. Mai letzten Jahres"
 
 #: ../src/report/locale-specific/us/taxtxf-de_DE.scm:179
 #: ../src/report/locale-specific/us/taxtxf.scm:204
 msgid "Last Yr 3rd Est Tax Qtr"
-msgstr "Steuerschätzung des 3. Quartals des letzten Jahres"
+msgstr "Steuerschätzung 3. Quartal des letzten Jahres"
 
 #. Translators: The US tax quarters are different from
 #. actual year's quarters! See the definition of
@@ -20934,7 +20929,7 @@ msgstr "1. Juni - 31. August letzten Jahres"
 #: ../src/report/locale-specific/us/taxtxf-de_DE.scm:182
 #: ../src/report/locale-specific/us/taxtxf.scm:210
 msgid "Last Yr 4th Est Tax Qtr"
-msgstr "Steuer-Schätzung des vierten Quartals des letzten Jahres"
+msgstr "Steuerschätzung 4. Quartal des letzten Jahres"
 
 #: ../src/report/locale-specific/us/taxtxf-de_DE.scm:183
 #: ../src/report/locale-specific/us/taxtxf.scm:211
