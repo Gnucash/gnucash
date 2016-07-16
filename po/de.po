@@ -12136,7 +12136,7 @@ msgid ""
 "The current transaction has been changed. Would you like to record the "
 "changes before proceeding, or cancel?"
 msgstr ""
-"Der aktuelle Buchung wurde verändert. Wollen Sie die Änderungen aufzeichnen, "
+"Die aktuelle Buchung wurde verändert. Wollen Sie die Änderungen aufzeichnen, "
 "bevor Sie weitermachen oder abbrechen. "
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:185
@@ -12879,7 +12879,7 @@ msgstr "Geben Sie einen Buchungstext der Buchung ein"
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3302
 #: ../src/register/ledger-core/split-register-model.c:1024
 msgid "Enter the name of the Vendor"
-msgstr "Geben Sie den Namen des Lieferants ein"
+msgstr "Geben Sie den Namen des Lieferanten ein"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3311
 #: ../src/register/ledger-core/split-register-model.c:1027
@@ -15159,7 +15159,7 @@ msgstr "Gewinn:"
 
 #: ../src/gnome/window-autoclear.c:138
 msgid "Searching for splits to clear ..."
-msgstr "Buchungsteile zum abgleichen werden gesucht..."
+msgstr "Buchungsteile zum Abgleichen werden gesucht..."
 
 #: ../src/gnome/window-autoclear.c:240
 msgid "Cannot uniquely clear splits. Found multiple possibilities."
@@ -15366,7 +15366,7 @@ msgid ""
 "the Preferences dialog."
 msgstr ""
 "Sie haben den »HTTP Netzwerkzugang« abgeschaltet. Sie können ihn wieder im "
-"Menü »Voreinstellungen«einschalten"
+"Menü »Voreinstellungen« einschalten"
 
 #. %s is a URL (some location somewhere).
 #: ../src/html/gnc-html-webkit.c:840
@@ -15502,7 +15502,7 @@ msgstr ""
 "* Informationen über die öffentlichen kryptographischen Schlüssel Ihrer Bank "
 "(»Ini-Brief«)\n"
 "\n"
-"Diese Informationen werden im folgenden benötigt. Klicken Sie jetzt »Vor«.\n"
+"Diese Informationen werden im Folgenden benötigt. Klicken Sie jetzt »Vor«.\n"
 "\n"
 "ACHTUNG: Die Programmierer geben keine Garantie auf korrekte Funktion. "
 "Insbesondere kann bei manchen Bank-Servern eine schlechte HBCI-"
@@ -15856,11 +15856,11 @@ msgstr "BIC des Zahlungspflichtigen"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:416
 msgid "Credited IBAN (International Account Number)"
-msgstr "IBAN des Zahlungsempfänger"
+msgstr "IBAN des Zahlungsempfängers"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:418
 msgid "Credited BIC (Bank Code)"
-msgstr "BIC des Zahlungsempfänger"
+msgstr "BIC des Zahlungsempfängers"
 
 # c-format
 #: ../src/import-export/aqb/dialog-ab-trans.c:497
@@ -15930,7 +15930,7 @@ msgid ""
 msgstr ""
 "Der Betrag ist Null oder der eingegebene Betrag konnte nicht korrekt "
 "interpretiert werden. Eventuell haben Sie Komma und Dezimalpunkt "
-"verwechselt. Wenn die länderspezifischen Einstellung auf "
+"verwechselt. Wenn die länderspezifischen Einstellungen auf "
 "»Deutschland« (locale de, LANG=de_DE) gestellt sind, müssen Sie ein Komma "
 "eingeben, andernfalls einen Punkt. Dies ergibt keinen zulässigen "
 "Zahlungsauftrag."
@@ -15941,7 +15941,7 @@ msgid ""
 "online transfer.\n"
 msgstr ""
 "Sie haben keinen Verwendungszweck eingegeben. Für einen Überweisungsauftrag "
-"ist die Eingabe eines Verwendungszweck erforderlich.\n"
+"ist die Eingabe eines Verwendungszwecks erforderlich.\n"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:718
 msgid ""
@@ -16489,7 +16489,7 @@ msgid ""
 "Select the settings you require for the file and then click 'Forward' to "
 "proceed or 'Cancel' to Abort Export.\n"
 msgstr ""
-"Mit diesem Assistent können Sie Ihren Kontenplan (d.h. die Kontenstruktur) "
+"Mit diesem Assistenten können Sie Ihren Kontenplan (d.h. die Kontenstruktur) "
 "in eine Datei exportieren.\n"
 "\n"
 "Wählen Sie die Einstellungen für die Datei und klicken Sie »Weiter«. Mit "
@@ -16502,7 +16502,7 @@ msgid ""
 "Select the settings you require for the file and then click 'Forward' to "
 "proceed or 'Cancel' to Abort Export.\n"
 msgstr ""
-"Mit diesem Assistent können Sie Ihre Buchungen in eine Datei exportieren.\n"
+"Mit diesem Assistenten können Sie Ihre Buchungen in eine Datei exportieren.\n"
 "\n"
 "Wählen Sie die Einstellungen für die Datei und klicken Sie »Weiter«. Mit "
 "»Abbrechen« können Sie den Export abbrechen.\n"
@@ -16546,7 +16546,7 @@ msgstr "Kurse benutzen"
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:7
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:25
 msgid "Comma (,)"
-msgstr "Kommma (,)"
+msgstr "Komma (,)"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:8
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:26
@@ -16798,7 +16798,7 @@ msgstr ""
 "\n"
 "Die Datei muß im selben Format vorliegen wie das, welches von GnuCash beim "
 "Export erstellt wird, da es sich um ein festes Format handelt. Falls ein "
-"Konto mit dem vollständigen Name bisher nicht existiert wird es erstellt, "
+"Konto mit dem vollständigen Namen bisher nicht existiert wird es erstellt, "
 "sofern die Währung oder das Wertpapier, in dem es notiert wird bereits im "
 "Programm oder ihrer GnuCash-Datei definiert ist. Falls das Konto bereits "
 "existiert, werden vier Felder aktualisiert. Diese sind Kontonummer, "
@@ -16960,7 +16960,7 @@ msgstr ""
 "importieren.\n"
 "\n"
 "Alle importierten Buchungen eines Imports werden mit einem bestimmten Konto "
-"pro Import assiziiert. Wenn Sie eine Kontospalte wählen wird das Konto aus "
+"pro Import assoziiert. Wenn Sie eine Kontospalte wählen wird das Konto aus "
 "der ersten Zeile für den gesamten Import verwendet.\n"
 "\n"
 "Es gibt verschiedene Optionen, Trennzeichen zu bestimmen, ebenso, wie eine "
@@ -17013,7 +17013,7 @@ msgstr "Feste Breite"
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:21
 msgid "Currency format"
-msgstr "WährungsFormat"
+msgstr "Währungsformat"
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:22
 msgid "Encoding: "
@@ -17963,7 +17963,7 @@ msgstr ""
 "klicken, wird die Datei geladen und analysiert. Anschließend werden "
 "eventuell weitere Angaben von Ihnen benötigt.\n"
 "\n"
-"Sie können soviele Dateien laden, wie Sie möchten. Es ist also kein Problem, "
+"Sie können so viele Dateien laden, wie Sie möchten. Es ist also kein Problem, "
 "falls sich Ihre Daten in mehreren Dateien befinden.\n"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:12
@@ -18046,7 +18046,7 @@ msgid ""
 msgstr ""
 "Wenn Sie noch mehr Dateien importieren möchten, klicken Sie bitte auf »Eine "
 "weitere Datei öffnen«. Das ist insbesondere sinnvoll, wenn Sie Ihre Daten in "
-"mehreren seperaten QIF-Dateien gespeichert haben.\n"
+"mehreren separaten QIF-Dateien gespeichert haben.\n"
 "\n"
 "Klicken Sie auf »Vor«, um das Laden von Dateien zu beenden und zum nächsten "
 "Schritt des QIF-Importprozesses zu gehen."
@@ -18093,9 +18093,9 @@ msgstr ""
 "Es kann sein, dass GnuCash viele Konten erzeugt, die es im anderen "
 "Finanzprogramm nicht gegeben hat. Das können sein: ein Konto für jedes "
 "Wertpapier, separate Konten für Maklergebühren, spezielle »Eigenkapital«-"
-"Konten als Quelle des Anfangsbestand usw. Diese Konten können Sie alle auf "
+"Konten als Quelle des Anfangsbestands usw. Diese Konten können Sie alle auf "
 "der nächsten Seite bearbeiten. Allerdings wird empfohlen, die Auswahl "
-"zuächst erstmal zu übernehmen.\n"
+"zunächst erstmal zu übernehmen.\n"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:38
 msgid "Accounts and stock holdings"
@@ -18132,7 +18132,7 @@ msgid ""
 "safely within GnuCash."
 msgstr ""
 "Für Aufwendungen und Erträge (Ausgaben und Einnahmen) benutzt GnuCash "
-"seperate Konten anstelle von »Kategorien«, um Buchungen zu klassifizieren. "
+"separate Konten anstelle von »Kategorien«, um Buchungen zu klassifizieren. "
 "Jede Kategorie in der QIF-Datei wird also in ein GnuCash Konto umgewandelt.\n"
 "\n"
 "Auf der nächsten Seite werden Sie die Möglichkeit haben, die vorgeschlagenen "
@@ -18163,11 +18163,11 @@ msgstr ""
 "QIF Dateien, die Sie von einer Bank oder einem Finanzinstitut "
 "heruntergeladen haben, bieten oftmals nicht genügend Informationen über "
 "Kontengliederungen und Kategorien, um sie automatisch den richtigen GnuCash-"
-"Konten zuzuordenen.\n"
+"Konten zuzuordnen.\n"
 "\n"
 "Auf der folgenden Seite werden der Zahlungsempfänger und Buchungstext von "
 "Buchungssätzen ohne Konten oder Kategorien aus der QIF Datei angezeigt. Als "
-"Voreinstellung werden solchen Buchungssätze dem Konto »Nicht spezifiziert« "
+"Voreinstellung werden solche Buchungssätze dem Konto »Nicht spezifiziert« "
 "zugeordnet. Wenn Sie nun die Buchungssätze einem anderen Konto zuweisen, "
 "wird diese Auswahl für zukünftige Importvorgänge gespeichert."
 
@@ -18236,7 +18236,7 @@ msgstr ""
 "\n"
 "Jede Aktie, Investmentfonds oder andere Investition muss einen Namen und "
 "eine Abkürzung haben, zum Beispiel ein Tickersymbol, die WKN oder ISIN. Weil "
-"manchmal unabhängig von einander zwei Finanzanlagen die gleiche Abkürzung "
+"manchmal unabhängig voneinander zwei Finanzanlagen die gleiche Abkürzung "
 "haben, müssen Sie noch angeben um welche Art von Abkürzung es sich handelt. "
 "Sie können zum Beispiel den Börsenplatz angeben, welcher die Wertpapiere "
 "gelistet hat (NASDAQ, SWX, etc.). Oder sie können auch die Anlageart "
@@ -19099,7 +19099,7 @@ msgid ""
 "Enter a reference number, such as the next check number, or choose an action "
 "type from the list"
 msgstr ""
-"Geben Sie eine Refereenznummer wie etwa die nächste Schecknummer ein oder "
+"Geben Sie eine Referenznummer wie etwa die nächste Schecknummer ein oder "
 "wählen sie eine Aktion aus der Liste."
 
 #: ../src/register/ledger-core/split-register-model.c:1452
@@ -20349,7 +20349,7 @@ msgstr "Fax:"
 
 #: ../src/report/business-reports/fancy-invoice.scm:757
 msgid "Web:"
-msgstr "WWW:"
+msgstr "Webseite:"
 
 #: ../src/report/business-reports/fancy-invoice.scm:891
 msgid "%s&nbsp;#"
@@ -20408,7 +20408,7 @@ msgstr "Das Konto, in dem nach Buchungen gesucht werden soll."
 #: ../src/report/business-reports/owner-report.scm:519
 #: ../src/report/business-reports/owner-report.scm:524
 msgid "Display the transaction date?"
-msgstr "Anzeigen des Buchungsdatum?"
+msgstr "Anzeigen des Buchungsdatums?"
 
 #: ../src/report/business-reports/job-report.scm:394
 #: ../src/report/business-reports/owner-report.scm:529
@@ -20969,7 +20969,7 @@ msgid ""
 "codes with payer sources may be repeated."
 msgstr ""
 "Warnung: Es sind mehrere steuerrelevante Codes für einzelne Konten "
-"zugewiesen woden. Normalerweise dürfen sich nur die TXF Codes für "
+"zugewiesen worden. Normalerweise dürfen sich nur die TXF Codes für "
 "Zahlungspflichtige wiederholen."
 
 #: ../src/report/locale-specific/us/taxtxf-de_DE.scm:851
@@ -21144,7 +21144,7 @@ msgstr "Sie müssen eine Berichtskonfiguration auswählen, die Sie erstellen wol
 
 #: ../src/report/report-gnome/dialog-custom-report.c:432
 msgid "You must select a report configuration to delete."
-msgstr "Sie müssen einen Berichtskonfiguration auswählen, die Sie löschen wollen."
+msgstr "Sie müssen eine Berichtskonfiguration auswählen, die Sie löschen wollen."
 
 #: ../src/report/report-gnome/dialog-custom-report.c:441
 msgid "Unable to change report configuration name."
@@ -21247,7 +21247,7 @@ msgstr "Berichtsgröße"
 
 #: ../src/report/report-gnome/dialog-report.glade.h:9
 msgid "Enter report row/column span"
-msgstr "Ausdehnung des Bericht in Tabellen-Spalten oder -Zeilen"
+msgstr "Ausdehnung des Berichts in Tabellen-Spalten oder -Zeilen"
 
 #: ../src/report/report-gnome/dialog-report.glade.h:10
 msgid "_Row span:"
@@ -21935,8 +21935,8 @@ msgid ""
 "Calculate the subtotal for this parent account and all of its subaccounts, "
 "and show this as the parent account balance."
 msgstr ""
-"Berechne den Saldo für das übergeordnete Konto und alle seineUnterkonten und "
-"zeige diesen als Saldo des übergeordneten Konten an."
+"Berechne den Saldo für das übergeordnete Konto und alle seine Unterkonten und "
+"zeige diesen als Saldo des übergeordneten Konto an."
 
 #: ../src/report/report-system/options-utilities.scm:269
 #: ../src/report/report-system/options-utilities.scm:284
@@ -22800,7 +22800,7 @@ msgstr ""
 
 #: ../src/report/standard-reports/average-balance.scm:89
 msgid "Do transaction report on this account."
-msgstr "Erstelle den Buchungsbericht zu diesem Konto.n"
+msgstr "Erstelle den Buchungsbericht zu diesem Konto."
 
 #: ../src/report/standard-reports/average-balance.scm:112
 #: ../src/report/standard-reports/average-balance.scm:342
@@ -23139,7 +23139,7 @@ msgstr "%s: %s - %s"
 
 #: ../src/report/standard-reports/budget-income-statement.scm:63
 msgid "Report for range of budget periods"
-msgstr "Bericht für einenBereich von Budgetperioden"
+msgstr "Bericht für einen Bereich von Budgetperioden"
 
 #: ../src/report/standard-reports/budget-income-statement.scm:65
 msgid "Create report for a budget period range instead of the entire budget."
@@ -23363,7 +23363,7 @@ msgstr ""
 
 #: ../src/report/standard-reports/budget.scm:64
 msgid "Include accounts with zero total balances and budget values"
-msgstr "Konten, die Saldo und Budgetwert Null haben, mit einbeziehen"
+msgstr "Konten, die Saldo- und Budgetwert Null haben, mit einbeziehen"
 
 #: ../src/report/standard-reports/budget.scm:65
 msgid ""
@@ -24375,7 +24375,7 @@ msgstr "Jährlich."
 
 #: ../src/report/standard-reports/transaction.scm:849
 msgid "Sort by this criterion first."
-msgstr "Sortiere zuerst nach diesem Kriteriums."
+msgstr "Sortiere zuerst nach diesem Kriterium."
 
 #: ../src/report/standard-reports/transaction.scm:864
 msgid "Show the full account name for subtotals and subtitles?"
@@ -24477,7 +24477,7 @@ msgid ""
 "Reverse amount display for Liability, Payable, Equity, Credit Card, and "
 "Income accounts."
 msgstr ""
-"Passiv- (Kreditkarten, Eigen- & Fremdkapital)- und Ertragskonten mit "
+"Passiv- (Kreditkarten, Eigen- & Fremdkapital) und Ertragskonten mit "
 "umgekehrten Vorzeichen darstellen."
 
 #: ../src/report/standard-reports/transaction.scm:1014
@@ -25081,7 +25081,7 @@ msgstr "Tabellen-Randbreite"
 #: ../src/report/stylesheets/stylesheet-footer.scm:188
 #: ../src/report/stylesheets/stylesheet-plain.scm:80
 msgid "Bevel depth on tables."
-msgstr "Die Breite der Schräge an der Tabellenkanten."
+msgstr "Die Breite der Schräge an den Tabellenkanten."
 
 #: ../src/report/stylesheets/stylesheet-easy.scm:433
 #: ../src/report/stylesheets/stylesheet-fancy.scm:428
@@ -25388,7 +25388,7 @@ msgstr "Die Datums-Option ist %s."
 
 #: ../src/report/utility-reports/hello-world.scm:388
 msgid "The date and time option is %s."
-msgstr "Die Datums und Zeit-Option ist %s."
+msgstr "Die Datums- und Zeit-Option ist %s."
 
 #: ../src/report/utility-reports/hello-world.scm:393
 msgid "The relative date option is %s."
@@ -25781,7 +25781,7 @@ msgid ""
 msgstr ""
 "Im Fenster »Abgleichen« können Sie mit der Leertaste Buchungen als "
 "»Abgeglichen« markieren. Um zwischen Haben und Soll zu wechseln, können Sie "
-"die Tab (die Tabulatortaste) und Umschalt-Tab drücken."
+"Tab (die Tabulatortaste) und Umschalt-Tab drücken."
 
 #: ../doc/tip_of_the_day.list.in:60
 msgid ""
@@ -25866,8 +25866,8 @@ msgid ""
 "org"
 msgstr ""
 "Die Entwickler von GnuCash können auf einfache Weise erreicht werden. Es "
-"gibt einige Mailing-Listen, aber Sie können genausogut einen Live-Chat im "
-"IRC (Internet Relay Chat) ausprobieren. Die Entwicker sind im Kanal #gnucash "
+"gibt einige Mailing-Listen, aber Sie können genauso gut einen Live-Chat im "
+"IRC (Internet Relay Chat) ausprobieren. Die Entwickler sind im Kanal #gnucash "
 "auf irc.gnome.org zu finden."
 
 #: ../doc/tip_of_the_day.list.in:94
