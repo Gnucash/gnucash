@@ -39,7 +39,7 @@ extern "C"
 }
 
 #include <kvp_frame.hpp>
-#include "../gnc-backend-dbi-priv.h"
+#include "../gnc-backend-dbi.hpp"
 
 G_GNUC_UNUSED static QofLogModule log_module = "test-dbi";
 

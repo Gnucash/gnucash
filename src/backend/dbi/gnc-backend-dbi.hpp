@@ -1,5 +1,5 @@
 /********************************************************************
- * gnc-backend-dbi-priv.h: load and save data to SQL via libdbi     *
+ * gnc-backend-dbi.hpp: load and save data to SQL via libdbi     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,16 +20,12 @@
 \********************************************************************/
 
 /* Private structures and variables for gnc-backend-dbi.c and its unit tests */
-#ifndef GNC_BACKEND_DBI_PRIV_H
-#define GNC_BACKEND_DBI_PRIV_H
-#ifdef __cplusplus
+#ifndef GNC_BACKEND_DBI_HPP
+#define GNC_BACKEND_DBI_HPP
 extern "C"
 {
-#endif
 #include <dbi/dbi.h>
-#ifdef __cplusplus
 }
-#endif
 #include "gnc-backend-sql.h"
 
 enum class DbType
@@ -239,4 +235,4 @@ private:
 };
 
 
-#endif //GNC_BACKEND_DBI_PRIV_H
+#endif //GNC_BACKEND_DBI_HPP

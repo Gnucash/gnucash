@@ -28,10 +28,8 @@
 
 #ifndef GNC_BACKEND_DBI_H_
 #define GNC_BACKEND_DBI_H_
-#ifdef __cplusplus
 extern "C"
 {
-#endif
 #include <gmodule.h>
 
 /** Initialization function which can be used when this module is
@@ -48,7 +46,5 @@ void gnc_module_finalize_backend_dbi (void);
 G_MODULE_EXPORT void qof_backend_module_init (void);
 G_MODULE_EXPORT void qof_backend_module_finalize (void);
 #endif
-#ifdef __cplusplus
 }
-#endif
 #endif /* GNC_BACKEND_DBI_H_ */

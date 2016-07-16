@@ -51,7 +51,7 @@ extern "C"
 #include <gnc-prefs.h>
 }
 /* For test_conn_index_functions */
-#include "../gnc-backend-dbi-priv.h"
+#include "../gnc-backend-dbi.hpp"
 extern "C"
 {
 #include <unittest-support.h>
