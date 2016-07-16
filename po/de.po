@@ -2420,7 +2420,7 @@ msgstr "Steuertabelle..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:274
 msgid "View and edit the list of Sales Tax Tables (GST/VAT)"
-msgstr "Liste der Steuertabellen (MWSt/USt) anzeigen und bearbeiten"
+msgstr "Liste der Steuertabellen (MwSt./USt.) anzeigen und bearbeiten"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:278
 msgid "_Billing Terms Editor"
@@ -2616,7 +2616,7 @@ msgstr "_Firmenbericht"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:201
 msgid "Open a company report window for the owner of this Invoice"
-msgstr "Einen Firmenbericht für den Mandant dieser Rechnung öffnen"
+msgstr "Einen Firmenbericht für den Mandanten dieser Rechnung öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:209
 msgid "_Standard"
@@ -2939,7 +2939,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in.h:5
 msgid "Is tax included in this type of business entry?"
-msgstr "Ist der Preis des Postens inklusive MWSt.?"
+msgstr "Ist der Preis des Postens inklusive MwSt.?"
 
 #: ../src/business/business-gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in.h:6
 msgid ""
@@ -2964,7 +2964,7 @@ msgid ""
 "credit notes and negative invoices are considered counter documents."
 msgstr ""
 "Während des Buchungsvorgangs wird versucht Kundendokumente mit bereits "
-"geleisteten Vorauszahlungen und Gegendokumentenen zu verrechnen. Die "
+"geleisteten Vorauszahlungen und Gegendokumenten zu verrechnen. Die "
 "Vorauszahlungen und Gegendokumente müssen natürlich denselben Kunden "
 "betreffen. Gegendokumente sind Dokumente mit umgekehrtem Vorzeichen. Zu "
 "einer Rechnung wären beispielsweise Gutschriften und negative Rechnungen als "
@@ -4202,7 +4202,7 @@ msgstr "Steuerbar?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:106
 msgid "Tax Included?"
-msgstr "Inkl. MWSt.?"
+msgstr "Inkl. MwSt.?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:111
 msgid "Invoiced?"
@@ -4256,7 +4256,7 @@ msgstr "Geben Sie den Nachlass-Prozentsatz ein"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:619
 msgid "Enter the Discount ... unknown type"
-msgstr "Geben Sie den Nachlassart ... unbekannt ein"
+msgstr "Geben Sie die Nachlassart ... unbekannt ein"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:637
 msgid "Discount Type: Monetary Value"
@@ -4272,11 +4272,11 @@ msgstr "Wählen Sie die Nachlassart"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:660
 msgid "Tax computed after discount is applied"
-msgstr "MWSt-Berechnung nach Anwendung des Nachlasses"
+msgstr "MwSt.-Berechnung nach Anwendung des Nachlasses"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:663
 msgid "Discount and tax both applied on pretax value"
-msgstr "Nachlass und MWSt. beides auf Nettobetrag anwenden"
+msgstr "Nachlass und MwSt. beides auf Nettobetrag anwenden"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:666
 msgid "Discount computed after tax is applied"
@@ -4284,7 +4284,7 @@ msgstr "Nachlass auf Brutto-Betrag anwenden"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:669
 msgid "Select how to compute the Discount and Taxes"
-msgstr "Wählen Sie, wie Nachlass und MWSt berechnet werden"
+msgstr "Wählen Sie, wie Nachlass und MwSt. berechnet werden"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:682
 msgid "Enter the unit-Price for this Entry"
@@ -4305,7 +4305,7 @@ msgstr "Wird dieser Posten besteuert?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:724
 msgid "Is the tax already included in the price of this entry?"
-msgstr "Ist der Preis des Postens inklusive MWSt.?"
+msgstr "Ist der Preis des Postens inklusive MwSt.?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:742
 msgid "Is this entry invoiced?"
@@ -4333,7 +4333,7 @@ msgstr "Zwischensumme dieses Postens"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:784
 msgid "The total tax of this entry "
-msgstr "Gesamte MWSt dieses Postens "
+msgstr "Gesamte MwSt. dieses Postens "
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:793
 msgid "Is this entry billable to a customer or job?"
@@ -5617,7 +5617,7 @@ msgstr "Optionen _Steuerbericht"
 #. * So adjust this string
 #: ../src/gnome/gnc-plugin-basic-commands.c:152
 msgid "Setup relevant accounts for tax reports, e.g. US income tax"
-msgstr "Konten für Steuerbericht (MWSt) einrichten"
+msgstr "Konten für Steuerbericht (MwSt.) einrichten"
 
 #. Actions menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:158
