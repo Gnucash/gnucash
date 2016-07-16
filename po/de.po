@@ -2061,7 +2061,7 @@ msgstr "Rechnungen anzeigen"
 
 #: ../src/business/business-gnome/dialog-job.c:558
 msgid "Owner's Name"
-msgstr "Mandantname"
+msgstr "Mandantenname"
 
 #: ../src/business/business-gnome/dialog-job.c:560
 msgid "Only Active?"
@@ -6449,7 +6449,7 @@ msgstr "_Mehrteilige Buchung"
 #: ../src/gnome/gnc-plugin-page-register2.c:416
 #: ../src/gnome/gnc-plugin-page-register.c:419
 msgid "Show all splits in the current transaction"
-msgstr "Alle Buchungsteile des aktuellen Buchungsatzes anzeigen"
+msgstr "Alle Buchungsteile des aktuellen Buchungssatzes anzeigen"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:427
 #: ../src/gnome/gnc-plugin-page-register.c:430
@@ -6951,7 +6951,7 @@ msgstr "Buchungsteile entfernen"
 
 #: ../src/gnome/gnc-split-reg.c:1178
 msgid "This transaction is not associated with a URI."
-msgstr "Diesem  Buchungssatz ist keine URI zugeordnet."
+msgstr "Diesem Buchungssatz ist keine URI zugeordnet."
 
 #: ../src/gnome/gnc-split-reg.c:1234
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:964
@@ -7050,7 +7050,7 @@ msgstr "Auswahl Datumsformat"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:7
 msgid "This is the numerical identifier of the predefined date format to use."
-msgstr "Gewählte Nummer des mitgelieferten Datumsformat."
+msgstr "Gewählte Nummer des mitgelieferten Datumsformats."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:8
 msgid "Custom date format"
@@ -7151,7 +7151,7 @@ msgid ""
 "the check. Coordinates are from the lower left corner of the specified check "
 "position."
 msgstr ""
-"Dieser Wert enthält die X,Y-Koordinaten für die Zeile Bemerkunge auf dem "
+"Dieser Wert enthält die X,Y-Koordinaten für die Zeile Bemerkungen auf dem "
 "Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:24
@@ -7363,7 +7363,7 @@ msgid ""
 msgstr ""
 "Vor dem Abgleichen eines Kontos mit Haben- oder Sollzinsen nachfragen, um "
 "eine Buchung für die Zinszahlung zu erstellen.\n"
-"Zur Zeit nur möglich für Konten der Art Aktiva, Bank, Investmentfonds, "
+"Zurzeit nur möglich für Konten der Art Aktiva, Bank, Investmentfonds, "
 "Forderungen, Fremdkapital, Verbindlichkeiten und Kreditkarte."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in.in.h:5
@@ -7624,9 +7624,9 @@ msgid ""
 "successfully."
 msgstr ""
 "GnuCash wechselte zwischen Version 2.4 und 2.6 zu einem anderen Backend um "
-"die Nutzereinstellungen zu speichern.Um den Übergang zu ebnen, werden viele "
-"Eisntellungen beim ersten Start einer 2.6er Version migriert.Diese Migration "
-"sollte nur einmal laufen. Diese Eisntellungen halten fest, ob das "
+"die Nutzereinstellungen zu speichern. Um den Übergang zu ebnen, werden viele "
+"Einstellungen beim ersten Start einer 2.6er Version migriert. Diese Migration "
+"sollte nur einmal laufen. Diese Einstellungen halten fest, ob das "
 "Migrationswerkzeug erfolgreich gelaufen ist."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:22
@@ -8157,12 +8157,12 @@ msgstr ""
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:97
 msgid "Show the calendar buttons"
-msgstr "Zeigt die Kalenderschaltfächen an"
+msgstr "Zeigt die Kalenderschaltflächen an"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:98
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:156
 msgid "Show the calendar buttons Cancel, Today and Select."
-msgstr "Zeigt die Kalenderschaltfächen Abbrechen, Heute und Auswählen an"
+msgstr "Zeigt die Kalenderschaltflächen Abbrechen, Heute und Auswählen an"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:99
 #, fuzzy
@@ -8438,11 +8438,11 @@ msgid ""
 "development. It will probably damage your data in such a way that it cannot "
 "be repaired!"
 msgstr ""
-"In diesem Assistent können Sie Buchungsperioden einrichten.\n"
+"In diesem Assistenten können Sie Buchungsperioden einrichten.\n"
 "\n"
-"Achtung: Dieses Feature ist noch total in Entwicklung und funktioniert "
-"wahrscheinlich nur krass falsch. Es könnte sogar Ihre Daten absolut kaputt "
-"machen. Bitte sorgen Sie für ein konkret rechtzeitiges Backup."
+"Achtung: Dieses Feature ist noch in Entwicklung und funktioniert "
+"wahrscheinlich nur fehlerhaft. Es könnte sogar Ihre Daten korrumpieren. "
+"Bitte sorgen Sie daher für ein rechtzeitiges Backup."
 
 #: ../src/gnome/gtkbuilder/assistant-acct-period.glade.h:4
 msgid "Setup Account Period"
@@ -8505,7 +8505,7 @@ msgid ""
 msgstr ""
 "Dieser Assistent hilft Ihnen, in GnuCash Konten für Ihre Aktiva (Geld- oder "
 "Sachanlagen) und Verbindlichkeiten (Schulden), sowie Aufwendungen (Ausgaben) "
-"und  Erträge (Einnahmen) zu erstellen.\n"
+"und Erträge (Einnahmen) zu erstellen.\n"
 "\n"
 "Drücken Sie »Abbrechen«, wenn Sie keine neuen Konten erstellen möchten."
 
@@ -8581,12 +8581,12 @@ msgid ""
 msgstr ""
 "\n"
 "Um den Namen eines Kontos zu ändern, klicken Sie zunächst auf die Zeile, "
-"welche das Konto enthält, dann auf den Kontenname und ändern Sie ihn.\n"
+"welche das Konto enthält, dann auf den Kontennamen und ändern Sie ihn.\n"
 "\n"
 "Einige Konten sind als \"Platzhalter\" markiert. Platzhalter-Konten dienen "
 "der Gruppierung der Konten in einer Hierarchie und enthalten normalerweise "
 "keine Buchungen - auch keinen Anfangsbestand. Um ein Konto als Platzhalter "
-"zu kennzeichnen, klicken in das entsprechende Kästchen des Kontos.\n"
+"zu kennzeichnen, klicken Sie in das entsprechende Kästchen des Kontos.\n"
 "\n"
 "Falls Sie einem Konto einen Anfangsbestand zuweisen möchten, klicken Sie "
 "zunächst auf die Zeile, welche das Konto enthält, dann auf das Feld für die "
@@ -8750,7 +8750,7 @@ msgstr "Tilgungshäufigkeit"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:32
 msgid "Loan Repayment"
-msgstr "Tilgung des Darlehen"
+msgstr "Tilgung des Darlehens"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:33
 msgid ""
@@ -9607,7 +9607,7 @@ msgstr "Seit-Letztem-Aufruf Fenster starten, wenn eine _Datei geöffnet wird"
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:7
 msgid "Run the \"since last run\" process when a file is opened."
 msgstr ""
-"Lasse den »Seit letztem Aufruf« Pozess laufen, wenn eine Datei geöffnet wird "
+"Lasse den »Seit letztem Aufruf« Prozess laufen, wenn eine Datei geöffnet wird "
 
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:8
 msgid "_Show notification window"
@@ -9857,7 +9857,7 @@ msgstr "<b>TXF _Kategorien</b>"
 
 #: ../src/gnome/gtkbuilder/dialog-tax-info.glade.h:17
 msgid "<b>Payer Name Source</b>"
-msgstr "<b>Herkunft des Namen des Zahlungspflichtigen</b>"
+msgstr "<b>Herkunft des Namens des Zahlungspflichtigen</b>"
 
 #: ../src/gnome/gtkbuilder/dialog-tax-info.glade.h:18
 msgid "C_urrent Account"
@@ -11183,7 +11183,7 @@ msgid_plural ""
 msgstr[0] ""
 "Ihre Datei muss auf der Festplatte gespeichert werden, um Ihre Änderungen zu "
 "sichern. GnuCash kann das Speichern automatisch jede Minute auslösen, so als "
-"ob Sie jedesmal den Knopf »Speichern« klicken würden.\n"
+"ob Sie jedes Mal den Knopf »Speichern« klicken würden.\n"
 "\n"
 "Wenn Sie das Zeitintervall ändern möchten, können Sie dies tun unter "
 "Bearbeiten -> Einstellungen -> Allgemein -> Zeitintervall automatisch "
@@ -11193,7 +11193,7 @@ msgstr[0] ""
 msgstr[1] ""
 "Ihre Datei muss auf der Festplatte gespeichert werden, um Ihre Änderungen zu "
 "sichern. GnuCash kann das Speichern automatisch alle %d Minuten auslösen, so "
-"als ob Sie jedesmal den Knopf »Speichern« klicken würden.\n"
+"als ob Sie jedes Mal den Knopf »Speichern« klicken würden.\n"
 "\n"
 "Wenn Sie das Zeitintervall ändern möchten, können Sie dies tun unter "
 "Bearbeiten -> Einstellungen -> Allgemein -> Zeitintervall automatisch "
@@ -21927,7 +21927,7 @@ msgstr "Kontosaldo"
 #: ../src/report/report-system/options-utilities.scm:264
 msgid "Show only the balance in the parent account, excluding any subaccounts."
 msgstr ""
-"Zeige nur den unmittelbaren Saldo vom übergeordneten Konto an und schließe  "
+"Zeige nur den unmittelbaren Saldo vom übergeordneten Konto an und schließe "
 "dabei jegliche Unterkonten aus."
 
 #: ../src/report/report-system/options-utilities.scm:267
@@ -22270,7 +22270,7 @@ msgstr "Zeige nur die Beträge ohne weitere Durchschnittberechnungen an."
 
 #: ../src/report/standard-reports/account-piecharts.scm:120
 msgid "Show the average yearly amount during the reporting period."
-msgstr "Zeige den jährlichen Durchschnitt  im Berichtszeitraum an."
+msgstr "Zeige den jährlichen Durchschnitt im Berichtszeitraum an."
 
 #: ../src/report/standard-reports/account-piecharts.scm:123
 #: ../src/report/standard-reports/category-barchart.scm:130
