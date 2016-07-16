@@ -8,7 +8,7 @@ SET (backend_dbi_SOURCES
   gnc-backend-dbi.cpp
 )
 SET (backend_dbi_noinst_HEADERS
-  gnc-backend-dbi.h gnc-backend-dbi-priv.h
+  gnc-backend-dbi.h gnc-backend-dbi.hpp
 )
 
 # Add dependency on config.h

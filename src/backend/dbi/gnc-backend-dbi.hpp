@@ -28,13 +28,6 @@ extern "C"
 }
 #include "gnc-backend-sql.h"
 
-enum class DbType
-{
-    DBI_SQLITE,
-    DBI_MYSQL,
-    DBI_PGSQL
-};
-
 /**
  * Options to conn_table_operation
  * @var drop Drop (remove without recourse) the table from the database
@@ -65,27 +58,25 @@ typedef enum
     GNC_DBI_FAIL_TEST
 } GncDbiTestResult;
 
-typedef gchar* (*CREATE_TABLE_DDL_FN)   (const GncSqlConnection* conn,
-                                         const gchar* table_name,
-                                         const ColVec& info_vec);
-typedef GSList* (*GET_TABLE_LIST_FN)    (dbi_conn conn, const gchar* dbname);
-typedef void    (*APPEND_COLUMN_DEF_FN) (GString* ddl,
-                                         const GncSqlColumnInfo& info);
-typedef GSList* (*GET_INDEX_LIST_FN)    (dbi_conn conn);
-typedef void    (*DROP_INDEX_FN)        (dbi_conn conn, const gchar* index);
-typedef struct
+class GncDbiProvider
 {
-    CREATE_TABLE_DDL_FN     create_table_ddl;
-    GET_TABLE_LIST_FN       get_table_list;
-    APPEND_COLUMN_DEF_FN    append_col_def;
-    GET_INDEX_LIST_FN       get_index_list;
-    DROP_INDEX_FN           drop_index;
-} provider_functions_t;
+public:
+    virtual ~GncDbiProvider() = default;
+    virtual std::string create_table_ddl(const GncSqlConnection* conn,
+                                         const std::string& table_name,
+                                         const ColVec& info_vec) = 0;
+    virtual std::vector<std::string> get_table_list(dbi_conn conn,
+                                                    const std::string& dbname) = 0;
+    virtual void append_col_def(std::string& ddl,
+                                const GncSqlColumnInfo& info) = 0;
+    virtual std::vector<std::string> get_index_list (dbi_conn conn) = 0;
+    virtual void drop_index(dbi_conn conn, const std::string& index) = 0;
+};
 
 /**
  * Implementations of GncSqlBackend.
  */
-struct GncDbiBackend_struct
+struct GncDbiBackend
 {
     GncSqlBackend sql_be;
 
@@ -103,16 +94,14 @@ struct GncDbiBackend_struct
 //  GHashTable* versions;       // Version number for each table
 };
 
-typedef struct GncDbiBackend_struct GncDbiBackend;
-
 class GncDbiSqlConnection : public GncSqlConnection
 {
 public:
-    GncDbiSqlConnection (provider_functions_t* provider, QofBackend* qbe,
+    GncDbiSqlConnection (GncDbiProvider* provider, QofBackend* qbe,
                          dbi_conn conn) :
         m_qbe{qbe}, m_conn{conn}, m_provider{provider}, m_conn_ok{true},
         m_last_error{ERR_BACKEND_NO_ERR}, m_error_repeat{0}, m_retry{false} {}
-    ~GncDbiSqlConnection() override = default;
+    ~GncDbiSqlConnection() override { delete m_provider; };
     GncSqlResultPtr execute_select_statement (const GncSqlStatementPtr&)
         noexcept override;
     int execute_nonselect_statement (const GncSqlStatementPtr&)
@@ -131,7 +120,7 @@ public:
     std::string quote_string (const std::string&) const noexcept override;
     QofBackend* qbe () const noexcept { return m_qbe; }
     dbi_conn conn() const noexcept { return m_conn; }
-    provider_functions_t* provider() { return m_provider; }
+    GncDbiProvider* provider() { return m_provider; }
     inline void set_error (int error, int repeat,  bool retry) noexcept
     {
         m_last_error = error;
@@ -151,17 +140,17 @@ public:
     /* FIXME: These three friend functions should really be members, but doing
      * that is too invasive just yet. */
     friend gboolean conn_table_operation (GncSqlConnection* sql_conn,
-                                          GSList* table_name_list,
+                                          std::vector<std::string> table_name_list,
                                           TableOpType op);
     friend void gnc_dbi_safe_sync_all (QofBackend* qbe, QofBook* book);
-    friend gchar* add_columns_ddl(const GncSqlConnection* conn,
-                                  const gchar* table_name,
-                                  const ColVec& info_vec);
+    friend std::string add_columns_ddl(const GncSqlConnection* conn,
+                                       const std::string& table_name,
+                                       const ColVec& info_vec);
 
 private:
     QofBackend* m_qbe;
     dbi_conn m_conn;
-    provider_functions_t* m_provider;
+    GncDbiProvider* m_provider;
     /** Used by the error handler routines to flag if the connection is ok to
      * use
      */
@@ -186,8 +175,9 @@ private:
 gboolean conn_table_operation (GncSqlConnection* sql_conn,
                                GSList* table_name_list, TableOpType op);
 void gnc_dbi_safe_sync_all (QofBackend* qbe, QofBook* book);
-gchar* add_columns_ddl(const GncSqlConnection* conn, const gchar* table_name,
-                       const ColVec& info_vec);
+std::string add_columns_ddl(const GncSqlConnection* conn,
+                            const std::string& table_name,
+                            const ColVec& info_vec);
 
 /* external access required for tests */
 std::string adjust_sql_options_string(const std::string&);

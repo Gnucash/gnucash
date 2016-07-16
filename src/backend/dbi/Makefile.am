@@ -25,7 +25,7 @@ libgncmod_backend_dbi_la_SOURCES = \
 
 noinst_HEADERS = \
   gnc-backend-dbi.h \
-  gnc-backend-dbi-priv.h
+  gnc-backend-dbi.hpp
 
 libgncmod_backend_dbi_la_LDFLAGS = -shared -avoid-version
 libgncmod_backend_dbi_la_LIBADD = \

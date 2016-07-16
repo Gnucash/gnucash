@@ -78,7 +78,6 @@ struct GncSqlBackend
     GHashTable* versions;    /**< Version number for each table */
     const gchar* timespec_format;   /**< Format string for SQL for timespec values */
 };
-typedef struct GncSqlBackend GncSqlBackend;
 
 /**
  * Initialize the SQL backend.

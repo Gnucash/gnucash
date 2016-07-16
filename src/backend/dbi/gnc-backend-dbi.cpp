@@ -86,7 +86,7 @@ extern "C"
 #include <gnc-datetime.hpp>
 #include <gnc-backend-prov.hpp>
 #include "gnc-backend-dbi.h"
-#include "gnc-backend-dbi-priv.h"
+#include "gnc-backend-dbi.hpp"
 
 #if PLATFORM(WINDOWS)
 #ifdef __STRICT_ANSI_UNSET__
@@ -157,73 +157,43 @@ static gchar lock_table[] = "gnclock";
 #define SQLITE3_URI_PREFIX (SQLITE3_URI_TYPE "://")
 #define PGSQL_DEFAULT_PORT 5432
 
-static gchar* conn_create_table_ddl_sqlite3 (const GncSqlConnection* conn,
-                                             const gchar* table_name,
-                                             const ColVec& info_vec);
-static GSList* conn_get_table_list (dbi_conn conn, const gchar* dbname);
-static GSList* conn_get_table_list_sqlite3 (dbi_conn conn, const gchar* dbname);
-static void append_sqlite3_col_def (GString* ddl, const GncSqlColumnInfo& info);
-static GSList *conn_get_index_list_sqlite3 (dbi_conn conn);
-static void conn_drop_index_sqlite3 (dbi_conn conn, const gchar *index);
-static provider_functions_t provider_sqlite3 =
-{
-    conn_create_table_ddl_sqlite3,
-    conn_get_table_list_sqlite3,
-    append_sqlite3_col_def,
-    conn_get_index_list_sqlite3,
-    conn_drop_index_sqlite3
-};
 #define SQLITE3_TIMESPEC_STR_FORMAT "%04d%02d%02d%02d%02d%02d"
-
-static gchar* conn_create_table_ddl_mysql (const GncSqlConnection* conn,
-                                           const gchar* table_name,
-                                           const ColVec& info_vec);
-static void append_mysql_col_def (GString* ddl, const GncSqlColumnInfo& info);
-static GSList *conn_get_index_list_mysql (dbi_conn conn);
-static void conn_drop_index_mysql (dbi_conn conn, const gchar *index);
-static provider_functions_t provider_mysql =
-{
-    conn_create_table_ddl_mysql,
-    conn_get_table_list,
-    append_mysql_col_def,
-    conn_get_index_list_mysql,
-    conn_drop_index_mysql
-};
 #define MYSQL_TIMESPEC_STR_FORMAT "%04d%02d%02d%02d%02d%02d"
-
-static gchar* conn_create_table_ddl_pgsql (const GncSqlConnection* conn,
-                                           const gchar* table_name,
-                                           const ColVec& info_vec );
-static GSList* conn_get_table_list_pgsql (dbi_conn conn, const gchar* dbname);
-static void append_pgsql_col_def (GString* ddl, const GncSqlColumnInfo& info);
-static GSList *conn_get_index_list_pgsql (dbi_conn conn);
-static void conn_drop_index_pgsql (dbi_conn conn, const gchar *index);
-
-static provider_functions_t provider_pgsql =
-{
-    conn_create_table_ddl_pgsql,
-    conn_get_table_list_pgsql,
-    append_pgsql_col_def,
-    conn_get_index_list_pgsql,
-    conn_drop_index_pgsql
-};
 #define PGSQL_TIMESPEC_STR_FORMAT "%04d%02d%02d %02d%02d%02d"
 
 static gboolean gnc_dbi_lock_database (QofBackend *qbe, gboolean ignore_lock);
 static void gnc_dbi_unlock (QofBackend *qbe);
 static gboolean save_may_clobber_data (QofBackend* qbe);
 
-static gchar* create_index_ddl (const GncSqlConnection* conn,
-                                const gchar* index_name,
-                                const gchar* table_name,
-                                const EntryVec& col_table);
+static std::string create_index_ddl (const GncSqlConnection* conn,
+                                     const std::string& index_name,
+                                     const std::string& table_name,
+                                     const EntryVec& col_table);
 static GncDbiTestResult conn_test_dbi_library (dbi_conn conn);
-#define GNC_DBI_PROVIDER_SQLITE (&provider_sqlite3)
-#define GNC_DBI_PROVIDER_MYSQL (&provider_mysql)
-#define GNC_DBI_PROVIDER_PGSQL (&provider_pgsql)
-
 
 #define DBI_MAX_CONN_ATTEMPTS 5
+enum class DbType
+{
+    DBI_SQLITE,
+    DBI_MYSQL,
+    DBI_PGSQL
+};
+
+
+template <DbType T>
+class GncDbiProviderImpl : public GncDbiProvider
+{
+public:
+    std::string create_table_ddl(const GncSqlConnection* conn,
+                                 const std::string& table_name,
+                                 const ColVec& info_vec);
+    std::vector<std::string> get_table_list(dbi_conn conn,
+                                            const std::string& dbname);
+    void append_col_def(std::string& ddl, const GncSqlColumnInfo& info);
+    std::vector<std::string> get_index_list (dbi_conn conn);
+    void drop_index(dbi_conn conn, const std::string& index);
+};
+
 
 /* ================================================================= */
 
@@ -454,8 +424,8 @@ gnc_dbi_sqlite3_session_begin (QofBackend* qbe, QofSession* session,
     {
         delete (be->sql_be.conn);
     }
-    be->sql_be.conn = new GncDbiSqlConnection (GNC_DBI_PROVIDER_SQLITE, qbe,
-                                             be->conn);
+    be->sql_be.conn = new GncDbiSqlConnection (new GncDbiProviderImpl<DbType::DBI_SQLITE>,
+                                               qbe, be->conn);
     be->sql_be.timespec_format = SQLITE3_TIMESPEC_STR_FORMAT;
 
     /* We should now have a proper session set up.
@@ -470,33 +440,31 @@ exit:
     LEAVE ("%s", msg);
 }
 
-static GSList*
-conn_get_index_list_sqlite3 (dbi_conn conn)
+template<> std::vector<std::string>
+GncDbiProviderImpl<DbType::DBI_SQLITE>::get_index_list (dbi_conn conn)
 {
-    GSList* list = nullptr;
-    const gchar* errmsg;
+    std::vector<std::string> retval;
+    const char* errmsg;
     dbi_result result = dbi_conn_query (conn,
                                         "SELECT name FROM sqlite_master WHERE type = 'index' AND name NOT LIKE 'sqlite_autoindex%'");
     if (dbi_conn_error (conn, &errmsg) != DBI_ERROR_NONE)
     {
-        g_print ("Index Table Retrieval Error: %s\n", errmsg);
-        return nullptr;
+        PWARN ("Index Table Retrieval Error: %s\n", errmsg);
+        return retval;
     }
     while (dbi_result_next_row (result) != 0)
     {
-        const gchar* index_name;
-
-        index_name = dbi_result_get_string_idx (result, 1);
-        list = g_slist_prepend (list, strdup (index_name));
+        std::string index_name {dbi_result_get_string_idx (result, 1)};
+        retval.push_back(index_name);
     }
     dbi_result_free (result);
-    return list;
+    return retval;
 }
 
-static void
-conn_drop_index_sqlite3 (dbi_conn conn, const gchar* index)
+template <DbType P> void
+GncDbiProviderImpl<P>::drop_index(dbi_conn conn, const std::string& index)
 {
-    dbi_result result = dbi_conn_queryf (conn, "DROP INDEX %s", index);
+    dbi_result result = dbi_conn_queryf (conn, "DROP INDEX %s", index.c_str());
     if (result)
         dbi_result_free (result);
 }
@@ -1111,8 +1079,8 @@ gnc_dbi_mysql_session_begin (QofBackend* qbe, QofSession* session,
         {
             delete (be->sql_be.conn);
         }
-        be->sql_be.conn = new GncDbiSqlConnection (GNC_DBI_PROVIDER_MYSQL, qbe,
-                                                 be->conn);
+        be->sql_be.conn = new GncDbiSqlConnection (new GncDbiProviderImpl<DbType::DBI_MYSQL>,
+                                                   qbe, be->conn);
     }
     be->sql_be.timespec_format = MYSQL_TIMESPEC_STR_FORMAT;
 
@@ -1135,69 +1103,60 @@ exit:
     LEAVE (" ");
 }
 
-static GSList*
-conn_get_index_list_mysql (dbi_conn conn)
+template<> std::vector<std::string>
+GncDbiProviderImpl<DbType::DBI_MYSQL>::get_index_list (dbi_conn conn)
 {
-    GSList* index_list = nullptr;
-    dbi_result table_list;
+    std::vector<std::string> retval;
     const char* errmsg;
-    const gchar* dbname = dbi_conn_get_option (conn, "dbname");
-    g_return_val_if_fail (conn != nullptr, nullptr);
-    table_list = dbi_conn_get_table_list (conn, dbname, nullptr);
+    auto dbname = dbi_conn_get_option (conn, "dbname");
+    auto table_list = dbi_conn_get_table_list (conn, dbname, nullptr);
     if (dbi_conn_error (conn, &errmsg) != DBI_ERROR_NONE)
     {
-        g_print ("Table Retrieval Error: %s\n", errmsg);
-        return nullptr;
+        PWARN ("Table Retrieval Error: %s\n", errmsg);
+        return retval;
     }
     while (dbi_result_next_row (table_list) != 0)
     {
-        dbi_result result;
-        const gchar* table_name = dbi_result_get_string_idx (table_list, 1);
-        result = dbi_conn_queryf (conn,
-                                  "SHOW INDEXES IN %s WHERE Key_name != 'PRIMARY'",
-                                  table_name);
+        auto table_name = dbi_result_get_string_idx (table_list, 1);
+        auto result = dbi_conn_queryf (conn,
+                                       "SHOW INDEXES IN %s WHERE Key_name != 'PRIMARY'",
+                                       table_name);
         if (dbi_conn_error (conn, &errmsg) != DBI_ERROR_NONE)
         {
-            g_print ("Index Table Retrieval Error: %s\n", errmsg);
+            PWARN ("Index Table Retrieval Error: %s on table %s\n",
+                   errmsg, table_name);
             continue;
         }
 
         while (dbi_result_next_row (result) != 0)
         {
-            const gchar*  index_name = dbi_result_get_string_idx (result, 3);
-            index_list = g_slist_prepend (index_list, g_strjoin (" ", index_name,
-                                                                 table_name, nullptr));
+            std::string index_name {dbi_result_get_string_idx (result, 3)};
+            retval.push_back(index_name + " " + table_name);
         }
         dbi_result_free (result);
     }
 
-    return index_list;
+    return retval;
 }
 
-static void
-conn_drop_index_mysql (dbi_conn conn, const gchar* index)
+template<> void
+GncDbiProviderImpl<DbType::DBI_MYSQL>::drop_index (dbi_conn conn, const std::string& index)
 {
-    dbi_result result;
-    gchar** index_table_split = g_strsplit (index, " ", 2);
-    int splitlen = -1;
-
-    /* Check if the index split can be valid */
-    while (index_table_split[++splitlen] != nullptr)
-    { /* do nothing, just count split members */ }
-
-    if (splitlen != 2)
+    unsigned int sep{0}, count{0};
+    while ((sep = index.find(' ', sep)) != std::string::npos)
+        ++count;
+    if (count != 1)
     {
-        g_print ("Drop index error: invalid MySQL index format (<index> <table>): %s",
-                 index);
+        PWARN("Drop index error: invalid MySQL index format (<index> <table>): %s",
+              index.c_str());
         return;
     }
 
-    result = dbi_conn_queryf (conn, "DROP INDEX %s ON %s",
-                              index_table_split[0], index_table_split[1]);
+    auto result = dbi_conn_queryf (conn, "DROP INDEX %s ON %s",
+                                   index.substr(0, sep).c_str(),
+                                   index.substr(sep + 1).c_str());
     if (result)
         dbi_result_free (result);
-
-    g_strfreev (index_table_split);
 }
 
 static void
@@ -1450,8 +1409,8 @@ gnc_dbi_postgres_session_begin (QofBackend* qbe, QofSession* session,
         {
             delete (be->sql_be.conn);
         }
-        be->sql_be.conn = new GncDbiSqlConnection (GNC_DBI_PROVIDER_PGSQL, qbe,
-                                                 be->conn);
+        be->sql_be.conn = new GncDbiSqlConnection (new GncDbiProviderImpl<DbType::DBI_PGSQL>,
+                                                   qbe, be->conn);
     }
     be->sql_be.timespec_format = PGSQL_TIMESPEC_STR_FORMAT;
 
@@ -1475,39 +1434,27 @@ exit:
     LEAVE (" ");
 }
 
-static GSList*
-conn_get_index_list_pgsql (dbi_conn conn)
+template<> std::vector<std::string>
+GncDbiProviderImpl<DbType::DBI_PGSQL>::get_index_list (dbi_conn conn)
 {
-    GSList* list = nullptr;
-    const gchar* errmsg;
-    dbi_result result;
+    std::vector<std::string> retval;
+    const char* errmsg;
     PINFO ("Retrieving postgres index list\n");
-    result = dbi_conn_query (conn,
-                             "SELECT relname FROM pg_class AS a INNER JOIN pg_index AS b ON (b.indexrelid = a.oid) INNER JOIN pg_namespace AS c ON (a.relnamespace = c.oid) WHERE reltype = '0' AND indisprimary = 'f' AND nspname = 'public'");
+    auto result = dbi_conn_query (conn,
+                                  "SELECT relname FROM pg_class AS a INNER JOIN pg_index AS b ON (b.indexrelid = a.oid) INNER JOIN pg_namespace AS c ON (a.relnamespace = c.oid) WHERE reltype = '0' AND indisprimary = 'f' AND nspname = 'public'");
     if (dbi_conn_error (conn, &errmsg) != DBI_ERROR_NONE)
     {
-        g_print ("Index Table Retrieval Error: %s\n", errmsg);
-        return nullptr;
+        PWARN("Index Table Retrieval Error: %s\n", errmsg);
+        return retval;
     }
     while (dbi_result_next_row (result) != 0)
     {
-        const gchar* index_name;
-
-        index_name = dbi_result_get_string_idx (result, 1);
-        list = g_slist_prepend (list, strdup (index_name));
+        std::string index_name {dbi_result_get_string_idx (result, 1)};
+        retval.push_back(index_name);
     }
     dbi_result_free (result);
-    return list;
+    return retval;
 }
-
-static void
-conn_drop_index_pgsql (dbi_conn conn, const gchar* index)
-{
-    dbi_result result = dbi_conn_queryf (conn, "DROP INDEX %s", index);
-    if (result)
-        dbi_result_free (result);
-}
-
 
 /* ================================================================= */
 
@@ -1682,24 +1629,20 @@ GncDbiSqlConnection::table_manage_backup (const std::string& table_name,
  */
 
 gboolean
-conn_table_operation (GncSqlConnection* sql_conn, GSList* table_name_list,
+conn_table_operation (GncSqlConnection* sql_conn,
+                      std::vector<std::string> table_name_list,
                       TableOpType op)
 {
-    GSList* node;
     gboolean result = TRUE;
     GncDbiSqlConnection* conn = (GncDbiSqlConnection*) (sql_conn);
-    GSList* full_table_name_list = nullptr;
     const gchar* dbname = dbi_conn_get_option (conn->m_conn, "dbname");
 
-    g_return_val_if_fail (table_name_list != nullptr, FALSE);
-    if (op == rollback)
-        full_table_name_list =
-            conn->m_provider->get_table_list (conn->m_conn, dbname);
+    g_return_val_if_fail (!table_name_list.empty(), FALSE);
 
-    for (node = table_name_list; node != nullptr && result; node = node->next)
+    for (auto table : table_name_list)
     {
-        gchar* table_name = (gchar*)node->data;
         dbi_result result;
+        auto table_name = table.c_str();
         /* Ignore the lock table */
         if (g_strcmp0 (table_name, lock_table) == 0)
         {
@@ -1711,14 +1654,20 @@ conn_table_operation (GncSqlConnection* sql_conn, GSList* table_name_list,
             switch (op)
             {
             case rollback:
-                if (g_slist_find (full_table_name_list, table_name))
+            {
+                auto full_table_name_list =
+                    conn->m_provider->get_table_list (conn->m_conn, dbname);
+                if (std::find (full_table_name_list.begin(),
+                               full_table_name_list.end(),
+                               table_name) != full_table_name_list.end())
                 {
                     result = dbi_conn_queryf (conn->m_conn, "DROP TABLE %s",
                                               table_name);
                     if (result)
                         break;
                 }
-                /* Fall through */
+            }
+            /* Fall through */
             case backup:
             case drop_backup:
                 result = conn->table_manage_backup (table_name, op);
@@ -1744,7 +1693,6 @@ conn_table_operation (GncSqlConnection* sql_conn, GSList* table_name_list,
             }
         }
     }
-    gnc_table_slist_free (full_table_name_list);
     return result;
 }
 
@@ -1763,7 +1711,6 @@ gnc_dbi_safe_sync_all (QofBackend* qbe, QofBook* book)
     GncDbiBackend* be = (GncDbiBackend*)qbe;
     GncDbiSqlConnection* conn = (GncDbiSqlConnection*) (((GncSqlBackend*)
                                                          be)->conn);
-    GSList* table_list, *index_list, *iter;
     const gchar* dbname = nullptr;
 
     g_return_if_fail (be != nullptr);
@@ -1771,49 +1718,38 @@ gnc_dbi_safe_sync_all (QofBackend* qbe, QofBook* book)
 
     ENTER ("book=%p, primary=%p", book, be->primary_book);
     dbname = dbi_conn_get_option (be->conn, "dbname");
-    table_list = conn->m_provider->get_table_list (conn->m_conn, dbname);
-    if (!conn_table_operation ((GncSqlConnection*)conn, table_list,
-                               backup))
+    auto table_list = conn->m_provider->get_table_list (conn->m_conn, dbname);
+    if (!conn_table_operation (conn, table_list, backup))
     {
         qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
-        conn_table_operation ((GncSqlConnection*)conn, table_list,
-                              rollback);
+        conn_table_operation (conn, table_list, rollback);
         LEAVE ("Failed to rename tables");
-        gnc_table_slist_free (table_list);
         return;
     }
-    index_list = conn->m_provider->get_index_list (conn->m_conn);
-    for (iter = index_list; iter != nullptr; iter = g_slist_next (iter))
+    auto index_list = conn->m_provider->get_index_list (conn->m_conn);
+    for (auto index : index_list)
     {
         const char* errmsg;
-        conn->m_provider->drop_index (conn->m_conn, static_cast<char*> (iter->data));
+        conn->m_provider->drop_index (conn->m_conn, index);
         if (DBI_ERROR_NONE != dbi_conn_error (conn->m_conn, &errmsg))
         {
             qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
-            gnc_table_slist_free (index_list);
-            conn_table_operation ((GncSqlConnection*)conn, table_list,
-                                  rollback);
-            gnc_table_slist_free (table_list);
+            conn_table_operation (conn, table_list, rollback);
             LEAVE ("Failed to drop indexes %s", errmsg);
             return;
         }
     }
-    gnc_table_slist_free (index_list);
-
     be->is_pristine_db = TRUE;
     be->primary_book = book;
 
     gnc_sql_sync_all (&be->sql_be, book);
     if (qof_backend_check_error (qbe))
     {
-        conn_table_operation ((GncSqlConnection*)conn, table_list,
-                              rollback);
+        conn_table_operation (conn, table_list, rollback);
         LEAVE ("Failed to create new database tables");
         return;
     }
-    conn_table_operation ((GncSqlConnection*)conn, table_list,
-                          drop_backup);
-    gnc_table_slist_free (table_list);
+    conn_table_operation (conn, table_list, drop_backup);
     LEAVE ("book=%p", book);
 }
 /* ================================================================= */
@@ -2451,59 +2387,49 @@ GncDbiSqlConnection::commit_transaction () const noexcept
     return success;
 }
 
-static gchar*
-create_index_ddl (const GncSqlConnection* conn, const char* index_name,
-                  const char* table_name, const EntryVec& col_table)
+static std::string
+create_index_ddl (const GncSqlConnection* conn, const std::string& index_name,
+                  const std::string& table_name, const EntryVec& col_table)
 {
-    GString* ddl;
-
-    g_return_val_if_fail (conn != nullptr, nullptr);
-    g_return_val_if_fail (index_name != nullptr, nullptr);
-    g_return_val_if_fail (table_name != nullptr, nullptr);
-
-    ddl = g_string_new ("");
-    g_string_printf (ddl, "CREATE INDEX %s ON %s (", index_name, table_name);
+    std::string ddl;
+    ddl += "CREATE INDEX " + index_name + " ON " + table_name + "(";
     for (auto const table_row : col_table)
     {
         if (table_row != *col_table.begin())
         {
-            (void)g_string_append (ddl, ", ");
+            ddl =+ ", ";
         }
-        g_string_append_printf (ddl, "%s", table_row->name());
+        ddl += table_row->name();
     }
-    (void)g_string_append (ddl, ")");
-
-    return g_string_free (ddl, FALSE);
+    ddl += ")";
+    return ddl;
 }
 
-gchar*
+std::string
 add_columns_ddl(const GncSqlConnection* conn,
-                const gchar* table_name,
+                const std::string& table_name,
                 const ColVec& info_vec)
 {
-    GString* ddl;
-    GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
+    std::string ddl;
+    const GncDbiSqlConnection* dbi_conn = dynamic_cast<decltype(dbi_conn)>(conn);
 
     g_return_val_if_fail (conn != nullptr, nullptr);
-    g_return_val_if_fail (table_name != nullptr, nullptr);
-
-    ddl = g_string_new ("");
-    g_string_printf (ddl, "ALTER TABLE %s ", table_name);
+    ddl += "ALTER TABLE " + table_name;
     for (auto const& info : info_vec)
     {
         if (info != *info_vec.begin())
         {
-            (void)g_string_append (ddl, ", ");
+            ddl += ", ";
         }
-        g_string_append (ddl, "ADD COLUMN ");
+        ddl += "ADD COLUMN ";
         dbi_conn->m_provider->append_col_def (ddl, info);
     }
-
-    return g_string_free (ddl, FALSE);
+    return ddl;
 }
 
-static void
-append_sqlite3_col_def(GString* ddl, const GncSqlColumnInfo& info)
+template<> void
+GncDbiProviderImpl<DbType::DBI_SQLITE>::append_col_def(std::string& ddl,
+                                           const GncSqlColumnInfo& info)
 {
     const char* type_name = nullptr;
 
@@ -2529,53 +2455,51 @@ append_sqlite3_col_def(GString* ddl, const GncSqlColumnInfo& info)
         PERR ("Unknown column type: %d\n", info.m_type);
         type_name = "";
     }
-    g_string_append_printf (ddl, "%s %s", info.m_name.c_str(), type_name);
+    ddl += (info.m_name + " " + type_name);
     if (info.m_size != 0)
     {
-        (void)g_string_append_printf (ddl, "(%d)", info.m_size);
+        ddl += "(" + std::to_string(info.m_size) + ")";
     }
     if (info.m_primary_key)
     {
-        (void)g_string_append (ddl, " PRIMARY KEY");
+        ddl += " PRIMARY KEY";
     }
     if (info.m_autoinc)
     {
-        (void)g_string_append (ddl, " AUTOINCREMENT");
+        ddl += " AUTOINCREMENT";
     }
     if (info.m_not_null)
     {
-        (void)g_string_append (ddl, " NOT NULL");
+        ddl += " NOT NULL";
     }
 }
 
-static  gchar*
-conn_create_table_ddl_sqlite3 (const GncSqlConnection* conn,
-                               const gchar* table_name,
-                               const ColVec& info_vec)
+template <DbType P> std::string
+GncDbiProviderImpl<P>::create_table_ddl (const GncSqlConnection* conn,
+                                              const std::string& table_name,
+                                              const ColVec& info_vec)
 {
-    GString* ddl;
+    std::string ddl;
     unsigned int col_num = 0;
 
-    g_return_val_if_fail (conn != nullptr, nullptr);
-    g_return_val_if_fail (table_name != nullptr, nullptr);
-
-    ddl = g_string_new ("");
-    g_string_printf (ddl, "CREATE TABLE %s (", table_name);
+    g_return_val_if_fail (conn != nullptr, ddl);
+    ddl += "CREATE TABLE " + table_name + "(";
     for (auto const& info : info_vec)
     {
         if (col_num++ != 0)
         {
-            (void)g_string_append (ddl, ", ");
+            ddl += ", ";
         }
-        append_sqlite3_col_def (ddl, info);
+        append_col_def (ddl, info);
     }
-    (void)g_string_append (ddl, ")");
+    ddl += ")";
 
-    return g_string_free (ddl, FALSE);
+    return ddl;
 }
 
-static void
-append_mysql_col_def (GString* ddl, const GncSqlColumnInfo& info)
+template<> void
+GncDbiProviderImpl<DbType::DBI_MYSQL>::append_col_def (std::string& ddl,
+                                           const GncSqlColumnInfo& info)
 {
     const char* type_name = nullptr;
 
@@ -2608,56 +2532,33 @@ append_mysql_col_def (GString* ddl, const GncSqlColumnInfo& info)
         PERR ("Unknown column type: %d\n", info.m_type);
         type_name = "";
     }
-    g_string_append_printf (ddl, "%s %s", info.m_name.c_str(), type_name);
+    ddl += info.m_name + " " + type_name;
     if (info.m_size != 0 && info.m_type == BCT_STRING)
     {
-        g_string_append_printf (ddl, "(%d)", info.m_size);
+        ddl += std::to_string(info.m_size);
     }
     if (info.m_unicode)
     {
-        (void)g_string_append (ddl, " CHARACTER SET utf8");
+        ddl += " CHARACTER SET utf8";
     }
     if (info.m_primary_key)
     {
-        (void)g_string_append (ddl, " PRIMARY KEY");
+        ddl += " PRIMARY KEY";
     }
     if (info.m_autoinc)
     {
-        (void)g_string_append (ddl, " AUTO_INCREMENT");
+        ddl += " AUTO_INCREMENT";
     }
     if (info.m_not_null)
     {
-        (void)g_string_append (ddl, " NOT NULL");
+        ddl += " NOT NULL";
     }
 }
 
-static  gchar*
-conn_create_table_ddl_mysql (const GncSqlConnection* conn,
-                             const gchar* table_name, const ColVec& info_vec)
-{
-    GString* ddl;
-    unsigned int col_num = 0;
 
-    g_return_val_if_fail (conn != nullptr, nullptr);
-    g_return_val_if_fail (table_name != nullptr, nullptr);
-
-    ddl = g_string_new ("");
-    g_string_printf (ddl, "CREATE TABLE %s (", table_name);
-    for (auto const& info : info_vec)
-    {
-        if (col_num++ != 0)
-        {
-            (void)g_string_append (ddl, ", ");
-        }
-        append_mysql_col_def (ddl, info);
-    }
-    (void)g_string_append (ddl, ")");
-
-    return g_string_free (ddl, FALSE);
-}
-
-static void
-append_pgsql_col_def (GString* ddl, const GncSqlColumnInfo& info)
+template<> void
+GncDbiProviderImpl<DbType::DBI_PGSQL>::append_col_def (std::string& ddl,
+                                           const GncSqlColumnInfo& info)
 {
     const char* type_name = nullptr;
 
@@ -2698,67 +2599,36 @@ append_pgsql_col_def (GString* ddl, const GncSqlColumnInfo& info)
         PERR ("Unknown column type: %d\n", info.m_type);
         type_name = "";
     }
-    g_string_append_printf (ddl, "%s %s", info.m_name.c_str(), type_name);
+    ddl += info.m_name + " " + type_name;
     if (info.m_size != 0 && info.m_type == BCT_STRING)
     {
-        g_string_append_printf (ddl, "(%d)", info.m_size);
+        ddl += "(" + std::to_string(info.m_size) + ")";
     }
     if (info.m_primary_key)
     {
-        (void)g_string_append (ddl, " PRIMARY KEY");
+        ddl += " PRIMARY KEY";
     }
     if (info.m_not_null)
     {
-        (void)g_string_append (ddl, " NOT NULL");
+        ddl += " NOT NULL";
     }
-}
-
-static  gchar*
-conn_create_table_ddl_pgsql (const GncSqlConnection* conn, const gchar* table_name,
-                             const ColVec& info_vec)
-{
-    GString* ddl;
-    unsigned int col_num = 0;
-
-    g_return_val_if_fail (conn != nullptr, nullptr);
-    g_return_val_if_fail (table_name != nullptr, nullptr);
-
-    ddl = g_string_new ("");
-    g_string_printf (ddl, "CREATE TABLE %s (", table_name);
-    for (auto const& info : info_vec)
-    {
-        if (col_num++ != 0)
-        {
-            (void)g_string_append (ddl, ", ");
-        }
-        append_pgsql_col_def (ddl, info);
-    }
-    (void)g_string_append (ddl, ")");
-
-    return g_string_free (ddl, FALSE);
 }
 
 bool
 GncDbiSqlConnection::create_table (const std::string& table_name,
                                    const ColVec& info_vec) const noexcept
 {
-    auto ddl = m_provider->create_table_ddl(this, table_name.c_str(), info_vec);
-    if (ddl != nullptr)
-    {
-
-        DEBUG ("SQL: %s\n", ddl);
-        auto result = dbi_conn_query (m_conn, ddl);
-        g_free (ddl);
-        auto status = dbi_result_free (result);
-        if (status < 0)
-        {
-            PERR ("Error in dbi_result_free() result\n");
-            qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
-        }
-    }
-    else
-    {
+    auto ddl = m_provider->create_table_ddl(this, table_name, info_vec);
+    if (ddl.empty())
         return false;
+
+    DEBUG ("SQL: %s\n", ddl.c_str());
+    auto result = dbi_conn_query (m_conn, ddl.c_str());
+    auto status = dbi_result_free (result);
+    if (status < 0)
+    {
+        PERR ("Error in dbi_result_free() result\n");
+        qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
     }
 
     return true;
@@ -2769,23 +2639,16 @@ GncDbiSqlConnection::create_index(const std::string& index_name,
                                   const std::string& table_name,
                                   const EntryVec& col_table) const noexcept
 {
-    auto ddl = create_index_ddl (this, index_name.c_str(), table_name.c_str(),
-                                 col_table);
-    if (ddl != nullptr)
-    {
-        DEBUG ("SQL: %s\n", ddl);
-        auto result = dbi_conn_query (m_conn, ddl);
-        g_free (ddl);
-        auto status = dbi_result_free (result);
-        if (status < 0)
-        {
-            PERR ("Error in dbi_result_free() result\n");
-            qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
-        }
-    }
-    else
-    {
+    auto ddl = create_index_ddl (this, index_name, table_name, col_table);
+    if (ddl.empty())
         return false;
+    DEBUG ("SQL: %s\n", ddl.c_str());
+    auto result = dbi_conn_query (m_conn, ddl.c_str());
+    auto status = dbi_result_free (result);
+    if (status < 0)
+    {
+        PERR ("Error in dbi_result_free() result\n");
+        qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
     }
 
     return true;
@@ -2796,13 +2659,12 @@ GncDbiSqlConnection::add_columns_to_table(const std::string& table_name,
                                           const ColVec& info_vec)
     const noexcept
 {
-    auto ddl = add_columns_ddl(this, table_name.c_str(), info_vec);
-    if (ddl == nullptr)
-        return FALSE;
+    auto ddl = add_columns_ddl(this, table_name, info_vec);
+    if (ddl.empty())
+        return false;
 
-    DEBUG ("SQL: %s\n", ddl);
-    auto result = dbi_conn_query (m_conn, ddl);
-    g_free (ddl);
+    DEBUG ("SQL: %s\n", ddl.c_str());
+    auto result = dbi_conn_query (m_conn, ddl.c_str());
     auto status = dbi_result_free (result);
     if (status < 0)
     {
@@ -2832,85 +2694,55 @@ GncDbiSqlConnection::quote_string (const std::string& unquoted_str)
     }
 }
 
-static GSList*
-conn_get_table_list (dbi_conn conn, const gchar* dbname)
+static std::vector<std::string>
+conn_get_table_list (dbi_conn conn, const std::string& dbname)
 {
-    GSList* list = nullptr;
-
-    auto tables = dbi_conn_get_table_list (conn, dbname, nullptr);
+    std::vector<std::string> retval;
+    auto tables = dbi_conn_get_table_list (conn, dbname.c_str(), nullptr);
     while (dbi_result_next_row (tables) != 0)
     {
-        const gchar* table_name;
-
-        table_name = dbi_result_get_string_idx (tables, 1);
-        list = g_slist_prepend (list, strdup (table_name));
+        std::string table_name {dbi_result_get_string_idx (tables, 1)};
+        retval.push_back(table_name);
     }
     dbi_result_free (tables);
-    return list;
+    return retval;
 }
 
-static GSList*
-conn_get_table_list_sqlite3 (dbi_conn conn, const gchar* dbname)
+template<> std::vector<std::string>
+GncDbiProviderImpl<DbType::DBI_SQLITE>::get_table_list (dbi_conn conn,
+                                            const std::string& dbname)
 {
-    gboolean change_made;
-
     /* Return the list, but remove the tables that sqlite3 adds for
      * its own use. */
-    GSList* list = conn_get_table_list (conn, dbname);
-    change_made = TRUE;
-    while (list != nullptr && change_made)
-    {
-        GSList* node;
-
-        change_made = FALSE;
-        for (node = list; node != nullptr; node = node->next)
-        {
-            const gchar* table_name = (const gchar*)node->data;
-
-            if (strcmp (table_name, "sqlite_sequence") == 0)
-            {
-                g_free (node->data);
-                list = g_slist_delete_link (list, node);
-                change_made = TRUE;
-                break;
-            }
-        }
-    }
+    auto list = conn_get_table_list (conn, dbname);
+    auto end = std::remove(list.begin(), list.end(), "sqlite_sequence");
+    list.erase(end, list.end());
     return list;
 }
 
-static GSList*
-conn_get_table_list_pgsql (dbi_conn conn, const gchar* dbname)
+template<> std::vector<std::string>
+GncDbiProviderImpl<DbType::DBI_MYSQL>::get_table_list (dbi_conn conn,
+                                               const std::string& dbname)
 {
-    gboolean change_made;
+    return conn_get_table_list (conn, dbname);
+}
 
-    /* Return the list, but remove the tables that postgresql adds from the information schema. */
-    GSList* list = conn_get_table_list (conn, dbname);
-    change_made = TRUE;
-    while (list != nullptr && change_made)
-    {
-        GSList* node;
-
-        change_made = FALSE;
-        for (node = list; node != nullptr; node = node->next)
-        {
-            const gchar* table_name = (const gchar*)node->data;
-
-            if (strcmp (table_name, "sql_features") == 0 ||
-                strcmp (table_name, "sql_implementation_info") == 0 ||
-                strcmp (table_name, "sql_languages") == 0 ||
-                strcmp (table_name, "sql_packages") == 0 ||
-                strcmp (table_name, "sql_parts") == 0 ||
-                strcmp (table_name, "sql_sizing") == 0 ||
-                strcmp (table_name, "sql_sizing_profiles") == 0)
-            {
-                g_free (node->data);
-                list = g_slist_delete_link (list, node);
-                change_made = TRUE;
-                break;
-            }
-        }
-    }
+template<> std::vector<std::string>
+GncDbiProviderImpl<DbType::DBI_PGSQL>::get_table_list (dbi_conn conn,
+                                           const std::string& dbname)
+{
+    auto list = conn_get_table_list (conn, dbname);
+    auto end = std::remove_if (list.begin(), list.end(),
+                               [](std::string& table_name){
+                                   return table_name == "sql_features" ||
+                                   table_name == "sql_implementation_info" ||
+                                   table_name == "sql_languages" ||
+                                   table_name == "sql_packages" ||
+                                   table_name == "sql_parts" ||
+                                   table_name == "sql_sizing" ||
+                                   table_name == "sql_sizing_profiles";
+                               });
+    list.erase(end, list.end());
     return list;
 }
 

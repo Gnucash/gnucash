@@ -216,23 +216,16 @@ test_conn_index_functions (QofBackend* qbe)
 {
     GncDbiBackend* be = (GncDbiBackend*)qbe;
     GncDbiSqlConnection* conn = (GncDbiSqlConnection*) (be->sql_be.conn);
-    GSList* index_list, *iter;
 
-    index_list = conn->provider()->get_index_list (be->conn);
+    auto index_list = conn->provider()->get_index_list (be->conn);
     g_test_message ("Returned from index list\n");
-    g_assert (index_list != NULL);
-    g_assert_cmpint (g_slist_length (index_list), == , 4);
-    for (iter = index_list; iter != NULL; iter = g_slist_next (iter))
+    g_assert_cmpint (index_list.size(), == , 4);
+    for (auto index : index_list)
     {
         const char* errmsg;
-        conn->provider()->drop_index (be->conn,
-                                    static_cast<const char*> (iter->data));
+        conn->provider()->drop_index (be->conn, index); 
         g_assert (DBI_ERROR_NONE == dbi_conn_error (conn->conn(), &errmsg));
     }
-
-    g_slist_free (index_list);
-
-
 }
 
 static void
