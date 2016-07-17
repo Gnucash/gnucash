@@ -171,19 +171,6 @@ public:
 
 /* ================================================================= */
 
-/* Free the contents of a GSList, then free the list. Don't use this
- * if the elements of the list weren't created with g_new! */
-static void
-gnc_table_slist_free (GSList* table_list)
-{
-    GSList* list;
-    for (list = table_list; list != nullptr; list = g_slist_next (list))
-    {
-        g_free (list->data);
-    }
-    g_slist_free (table_list);
-}
-
 /* Check if the dbi connection is valid. If not attempt to re-establish it
  * Returns TRUE is there is a valid connection in the end or FALSE otherwise
  */
