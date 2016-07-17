@@ -95,46 +95,6 @@ extern "C"
 #endif
 #endif
 
-struct QofSQLITEBackendProvider : public QofBackendProvider
-{
-    QofSQLITEBackendProvider (const char* name, const char* type) :
-        QofBackendProvider {name, type} {}
-    QofSQLITEBackendProvider(QofSQLITEBackendProvider&) = delete;
-    QofSQLITEBackendProvider operator=(QofSQLITEBackendProvider&) = delete;
-    QofSQLITEBackendProvider(QofSQLITEBackendProvider&&) = delete;
-    QofSQLITEBackendProvider operator=(QofSQLITEBackendProvider&&) = delete;
-    ~QofSQLITEBackendProvider () = default;
-    QofBackend* create_backend(void);
-    bool type_check(const char* type);
-};
-
-struct QofMYSQLBackendProvider : public QofBackendProvider
-{
-    QofMYSQLBackendProvider (const char* name, const char* type) :
-        QofBackendProvider {name, type} {}
-    QofMYSQLBackendProvider(QofMYSQLBackendProvider&) = delete;
-    QofMYSQLBackendProvider operator=(QofMYSQLBackendProvider&) = delete;
-    QofMYSQLBackendProvider(QofMYSQLBackendProvider&&) = delete;
-    QofMYSQLBackendProvider operator=(QofMYSQLBackendProvider&&) = delete;
-    ~QofMYSQLBackendProvider () = default;
-    QofBackend* create_backend(void);
-    bool type_check(const char* type) { return true; }
-};
-
-struct QofPGSQLBackendProvider : public QofBackendProvider
-{
-    QofPGSQLBackendProvider (const char* name, const char* type) :
-        QofBackendProvider {name, type} {}
-    QofPGSQLBackendProvider(QofPGSQLBackendProvider&) = delete;
-    QofPGSQLBackendProvider operator=(QofPGSQLBackendProvider&) = delete;
-    QofPGSQLBackendProvider(QofPGSQLBackendProvider&&) = delete;
-    QofPGSQLBackendProvider operator=(QofPGSQLBackendProvider&&) = delete;
-    ~QofPGSQLBackendProvider () = default;
-    QofBackend* create_backend(void);
-    bool type_check(const char* type) { return true; }
-
-};
-
 #if LIBDBI_VERSION >= 900
 #define HAVE_LIBDBI_R 1
 #define HAVE_LIBDBI_TO_LONGLONG 1
@@ -194,6 +154,20 @@ public:
     void drop_index(dbi_conn conn, const std::string& index);
 };
 
+template <DbType T>
+class QofDbiBackendProvider : public QofBackendProvider
+{
+public:
+    QofDbiBackendProvider (const char* name, const char* type) :
+        QofBackendProvider {name, type} {}
+    QofDbiBackendProvider(QofDbiBackendProvider&) = delete;
+    QofDbiBackendProvider operator=(QofDbiBackendProvider&) = delete;
+    QofDbiBackendProvider(QofDbiBackendProvider&&) = delete;
+    QofDbiBackendProvider operator=(QofDbiBackendProvider&&) = delete;
+    ~QofDbiBackendProvider () = default;
+    QofBackend* create_backend(void);
+    bool type_check(const char* type) { return true; }
+};
 
 /* ================================================================= */
 
@@ -1850,20 +1824,20 @@ new_backend (void (*session_begin) (QofBackend*, QofSession*, const gchar*,
     return be;
 }
 
-QofBackend*
-QofSQLITEBackendProvider::create_backend()
+template<> QofBackend*
+QofDbiBackendProvider<DbType::DBI_SQLITE>::create_backend()
 {
     return new_backend (gnc_dbi_sqlite3_session_begin);
 }
 
-QofBackend*
-QofMYSQLBackendProvider::create_backend()
+template<> QofBackend*
+QofDbiBackendProvider<DbType::DBI_MYSQL>::create_backend()
 {
     return new_backend (gnc_dbi_mysql_session_begin);
 }
 
-QofBackend*
-QofPGSQLBackendProvider::create_backend()
+template<> QofBackend*
+QofDbiBackendProvider<DbType::DBI_PGSQL>::create_backend()
 {
     return new_backend (gnc_dbi_postgres_session_begin);
 }
@@ -1871,10 +1845,10 @@ QofPGSQLBackendProvider::create_backend()
 
 /*
  * Checks to see whether the file is an sqlite file or not
- *
+ *1980
  */
-bool
-QofSQLITEBackendProvider::type_check(const char *uri)
+template<> bool
+QofDbiBackendProvider<DbType::DBI_SQLITE>::type_check(const char *uri)
 {
     FILE* f;
     gchar buf[50];
@@ -1993,23 +1967,23 @@ gnc_module_init_backend_dbi (void)
     if (have_sqlite3_driver)
     {
         const char* name = "GnuCash Libdbi (SQLITE3) Backend";
-        auto prov = QofBackendProvider_ptr(new QofSQLITEBackendProvider{name, FILE_URI_TYPE});
+        auto prov = QofBackendProvider_ptr(new QofDbiBackendProvider<DbType::DBI_SQLITE>{name, FILE_URI_TYPE});
         qof_backend_register_provider(std::move(prov));
-        prov = QofBackendProvider_ptr(new QofSQLITEBackendProvider{name, SQLITE3_URI_TYPE});
+        prov = QofBackendProvider_ptr(new QofDbiBackendProvider<DbType::DBI_SQLITE>{name, SQLITE3_URI_TYPE});
         qof_backend_register_provider(std::move(prov));
     }
 
     if (have_mysql_driver)
     {
         const char *name = "GnuCash Libdbi (MYSQL) Backend";
-        auto prov = QofBackendProvider_ptr(new QofMYSQLBackendProvider{name, "mysql"});
+        auto prov = QofBackendProvider_ptr(new QofDbiBackendProvider<DbType::DBI_MYSQL>{name, "mysql"});
         qof_backend_register_provider(std::move(prov));
     }
 
     if (have_pgsql_driver)
     {
         const char* name = "GnuCash Libdbi (POSTGRESQL) Backend";
-        auto prov = QofBackendProvider_ptr(new QofPGSQLBackendProvider{name, "postgres"});
+        auto prov = QofBackendProvider_ptr(new QofDbiBackendProvider<DbType::DBI_PGSQL>{name, "postgres"});
         qof_backend_register_provider(std::move(prov));
     }
 
