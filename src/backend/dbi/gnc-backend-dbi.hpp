@@ -109,6 +109,8 @@ public:
     bool add_columns_to_table (const std::string&, const ColVec&)
         const noexcept override;
     std::string quote_string (const std::string&) const noexcept override;
+    int dberror() const noexcept override {
+        return dbi_conn_error(m_conn, nullptr); }
     QofBackend* qbe () const noexcept { return m_qbe; }
     dbi_conn conn() const noexcept { return m_conn; }
     GncDbiProvider* provider() { return m_provider; }
@@ -181,8 +183,8 @@ public:
         m_conn{conn}, m_dbi_result{result}, m_iter{this}, m_row{&m_iter},
         m_sentinel{nullptr} {}
     ~GncDbiSqlResult();
-    int dberror();
     uint64_t size() const noexcept;
+    int dberror() { return m_conn->dberror(); }
     GncSqlRow& begin();
     GncSqlRow& end() { return m_sentinel; }
 protected:

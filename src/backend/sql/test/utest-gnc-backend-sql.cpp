@@ -104,6 +104,7 @@ public:
         const noexcept override { return false; }
     virtual std::string quote_string (const std::string& str)
         const noexcept override { return std::string{str}; }
+    int dberror() const noexcept override { return 0; }
 private:
     GncMockSqlResult m_result;
 };

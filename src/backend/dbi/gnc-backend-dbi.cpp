@@ -2044,12 +2044,6 @@ GncDbiSqlResult::begin()
     return m_sentinel;
 }
 
-int
-GncDbiSqlResult::dberror()
-{
-    return dbi_conn_error(m_conn->conn(), nullptr);
-}
-
 uint64_t
 GncDbiSqlResult::size() const noexcept
 {

@@ -188,6 +188,10 @@ public:
         const noexcept = 0;
     virtual std::string quote_string (const std::string&)
         const noexcept = 0;
+    /** Get the connection error value.
+     * If not 0 will normally be meaningless outside of implementation code.
+     */
+    virtual int dberror() const noexcept = 0;
 };
 
 /**
