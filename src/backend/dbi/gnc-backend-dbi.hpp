@@ -26,7 +26,7 @@ extern "C"
 {
 #include <dbi/dbi.h>
 }
-#include "gnc-backend-sql.h"
+#include <gnc-backend-sql.h>
 
 /**
  * Options to conn_table_operation
