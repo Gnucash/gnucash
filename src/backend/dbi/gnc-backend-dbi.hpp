@@ -92,7 +92,7 @@ public:
                          dbi_conn conn) :
         m_qbe{qbe}, m_conn{conn}, m_provider{provider}, m_conn_ok{true},
         m_last_error{ERR_BACKEND_NO_ERR}, m_error_repeat{0}, m_retry{false} {}
-    ~GncDbiSqlConnection() override { delete m_provider; };
+    ~GncDbiSqlConnection() override;
     GncSqlResultPtr execute_select_statement (const GncSqlStatementPtr&)
         noexcept override;
     int execute_nonselect_statement (const GncSqlStatementPtr&)

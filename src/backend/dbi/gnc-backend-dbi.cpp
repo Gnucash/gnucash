@@ -1373,7 +1373,6 @@ gnc_dbi_session_end (QofBackend* be_start)
     if (be->conn != nullptr)
     {
         gnc_dbi_unlock (be_start);
-        dbi_conn_close (be->conn);
         be->conn = nullptr;
     }
     if (be->sql_be.conn != nullptr)

@@ -71,6 +71,16 @@ GncDbiSqlStatement::add_where_cond(QofIdTypeConst type_name,
     }
 }
 
+GncDbiSqlConnection::~GncDbiSqlConnection()
+{
+    if (m_conn)
+    {
+        dbi_conn_close(m_conn);
+        m_conn = nullptr;
+    }
+    delete m_provider;
+}
+
 GncSqlResultPtr
 GncDbiSqlConnection::execute_select_statement (const GncSqlStatementPtr& stmt)
     noexcept
