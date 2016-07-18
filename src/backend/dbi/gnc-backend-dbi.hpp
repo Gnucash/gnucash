@@ -175,7 +175,9 @@ std::string add_columns_ddl(const GncSqlConnection* conn,
 /* external access required for tests */
 std::string adjust_sql_options_string(const std::string&);
 
-
+/**
+ * An iterable wrapper for dbi_result; allows using C++11 range for.
+ */
 class GncDbiSqlResult : public GncSqlResult
 {
 public:
