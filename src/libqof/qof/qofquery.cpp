@@ -548,7 +548,7 @@ static void compile_terms (QofQuery *q)
     compile_sort (&(q->tertiary_sort), q->search_for);
 
     q->defaultSort = qof_class_get_default_sort (q->search_for);
-
+#ifdef QOF_BACKEND_QUERY
     /* Now compile the backend instances */
     for (node = q->books; node; node = node->next)
     {
@@ -561,7 +561,9 @@ static void compile_terms (QofQuery *q)
             if (result)
                 g_hash_table_insert (q->be_compiled, book, result);
         }
+
     }
+#endif
     LEAVE (" query=%p", q);
 }
 
@@ -621,12 +623,13 @@ static GList * merge_books (GList *l1, GList *l2)
 static gboolean
 query_free_compiled (gpointer key, gpointer value, gpointer not_used)
 {
+#ifdef QOF_BACKEND_QUERY
     QofBook* book = static_cast<QofBook*>(key);
     QofBackend* be = book->backend;
 
     if (be && be->free_query)
         (be->free_query)(be, value);
-
+#endif
     return TRUE;
 }
 
@@ -822,9 +825,10 @@ static void qof_query_run_cb(QofQueryCB* qcb, gpointer cb_arg)
     for (node = qcb->query->books; node; node = node->next)
     {
         QofBook* book = static_cast<QofBook*>(node->data);
+#ifdef QOF_BACKEND_QUERY
         QofBackend* be = book->backend;
 
-        /* run the query in the backend */
+
         if (be)
         {
             gpointer compiled_query = g_hash_table_lookup (qcb->query->be_compiled,
@@ -835,7 +839,7 @@ static void qof_query_run_cb(QofQueryCB* qcb, gpointer cb_arg)
                 (be->run_query) (be, compiled_query);
             }
         }
-
+#endif
         /* And then iterate over all the objects */
         qof_object_foreach (qcb->query->search_for, book,
                             (QofInstanceForeachCB) check_item_cb, qcb);

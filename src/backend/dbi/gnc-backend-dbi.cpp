@@ -1766,22 +1766,11 @@ init_sql_backend (GncDbiBackend* dbi_be)
     be->commit = gnc_dbi_commit_edit;
     be->rollback = gnc_dbi_rollback_edit;
 
-    /* The gda backend will not be multi-user (for now)... */
-    be->events_pending = nullptr;
-    be->process_events = nullptr;
-
     /* The SQL/DBI backend doesn't need to be synced until it is
      * configured for multiuser access. */
     be->sync = gnc_dbi_safe_sync_all;
     be->safe_sync = gnc_dbi_safe_sync_all;
-
-//    be->compile_query = gnc_sql_compile_query;
-//    be->run_query = gnc_sql_run_query;
-//    be->free_query = gnc_sql_free_query;
-    be->compile_query = nullptr;
-    be->run_query = nullptr;
-    be->free_query = nullptr;
-
+    /* CoA Export function not implemented for the SQL backend. */
     be->export_fn = nullptr;
 
     gnc_sql_init (&dbi_be->sql_be);

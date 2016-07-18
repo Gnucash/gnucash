@@ -1243,15 +1243,6 @@ QofXmlBackendProvider::create_backend(void)
     be->commit = NULL;
     be->rollback = xml_rollback_edit;
 
-    /* The file backend always loads all data ... */
-    be->compile_query = NULL;
-    be->free_query = NULL;
-    be->run_query = NULL;
-
-    /* The file backend will never be multi-user... */
-    be->events_pending = NULL;
-    be->process_events = NULL;
-
     be->sync = xml_sync_all;
 
     be->export_fn = gnc_xml_be_write_accounts_to_file;

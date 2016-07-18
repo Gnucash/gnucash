@@ -538,19 +538,13 @@ QofSessionImpl::swap_books (QofSessionImpl & other) noexcept
 bool
 QofSessionImpl::events_pending () const noexcept
 {
-    auto backend = qof_book_get_backend (m_book);
-    if (!backend) return false;
-    if (!backend->events_pending) return false;
-    return backend->events_pending (backend);
+    return false;
 }
 
 bool
 QofSessionImpl::process_events () const noexcept
 {
-    auto backend = qof_book_get_backend (m_book);
-    if (!backend) return false;
-    if (!backend->process_events) return false;
-    return backend->process_events (backend);
+    return false;
 }
 
 /* XXX This exports the list of accounts to a file.  It does not

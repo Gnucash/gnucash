@@ -150,24 +150,15 @@ qof_backend_init(QofBackend *be)
     be->commit = NULL;
     be->rollback = NULL;
 
-    be->compile_query = NULL;
-    be->free_query = NULL;
-    be->run_query = NULL;
-
     be->sync = NULL;
     be->safe_sync = NULL;
 
-    be->events_pending = NULL;
-    be->process_events = NULL;
+    be->export_fn = NULL;
 
     be->last_err = ERR_BACKEND_NO_ERR;
     if (be->error_msg) g_free (be->error_msg);
     be->error_msg = NULL;
     be->percentage = NULL;
-
-    /* to be removed */
-    be->price_lookup = NULL;
-    be->export_fn = NULL;
 }
 
 void
