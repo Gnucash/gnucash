@@ -61,6 +61,7 @@ test_backend_dbi_SOURCES = \
     test-backend-dbi-basic.cpp \
     test-dbi-stuff.cpp \
     test-dbi-business-stuff.cpp \
+    ../gnc-dbisqlconnection.cpp \
     ../gnc-backend-dbi.cpp
 
 test_backend_dbi_CPPFLAGS = \

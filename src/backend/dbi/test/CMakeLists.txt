@@ -19,6 +19,7 @@ SET(test_dbi_backend_SOURCES
   test-dbi-business-stuff.cpp
   test-dbi-stuff.cpp
   ../gnc-backend-dbi.cpp
+  ../gnc-dbisqlconnection.cpp
 )
 
 # This test does not work on Win32

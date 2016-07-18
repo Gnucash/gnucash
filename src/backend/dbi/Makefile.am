@@ -21,7 +21,8 @@ AM_CPPFLAGS = \
   ${WARN_CFLAGS}
 
 libgncmod_backend_dbi_la_SOURCES = \
-  gnc-backend-dbi.cpp
+  gnc-backend-dbi.cpp \
+  gnc-dbisqlconnection.cpp
 
 noinst_HEADERS = \
   gnc-backend-dbi.h \
