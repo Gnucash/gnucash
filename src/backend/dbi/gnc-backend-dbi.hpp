@@ -82,16 +82,7 @@ struct GncDbiBackend
 
     dbi_conn conn;
 
-    QofBook* primary_book;  /* The primary, main open book */
-    gboolean    loading;        /* We are performing an initial load */
-    gboolean  in_query;
-    gboolean  supports_transactions;
-    gboolean  is_pristine_db;   // Are we saving to a new pristine db?
     gboolean  exists;         // Does the database exist?
-
-    gint obj_total;         // Total # of objects (for percentage calculation)
-    gint operations_done;       // Number of operations (save/load) done
-//  GHashTable* versions;       // Version number for each table
 };
 
 class GncDbiSqlConnection : public GncSqlConnection

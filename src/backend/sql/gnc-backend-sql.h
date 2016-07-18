@@ -73,8 +73,6 @@ struct GncSqlBackend
     gboolean loading;        /**< We are performing an initial load */
     gboolean in_query;       /**< We are processing a query */
     gboolean is_pristine_db; /**< Are we saving to a new pristine db? */
-    gint obj_total;     /**< Total # of objects (for percentage calculation) */
-    gint operations_done;    /**< Number of operations (save/load) done */
     GHashTable* versions;    /**< Version number for each table */
     const gchar* timespec_format;   /**< Format string for SQL for timespec values */
 };

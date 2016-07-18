@@ -1480,8 +1480,7 @@ gnc_dbi_load (QofBackend* qbe,  QofBook* book, QofBackendLoadType loadType)
 
     if (loadType == LOAD_TYPE_INITIAL_LOAD)
     {
-        g_assert (be->primary_book == nullptr);
-        be->primary_book = book;
+        g_assert (be->sql_be.book == nullptr);
 
         // Set up table version information
         gnc_sql_init_version_info (&be->sql_be);
@@ -1677,7 +1676,7 @@ gnc_dbi_safe_sync_all (QofBackend* qbe, QofBook* book)
     g_return_if_fail (be != nullptr);
     g_return_if_fail (book != nullptr);
 
-    ENTER ("book=%p, primary=%p", book, be->primary_book);
+    ENTER ("book=%p, primary=%p", book, be->sql_be.book);
     dbname = dbi_conn_get_option (be->conn, "dbname");
     auto table_list = conn->m_provider->get_table_list (conn->m_conn, dbname);
     if (!conn_table_operation (conn, table_list, backup))
@@ -1700,8 +1699,6 @@ gnc_dbi_safe_sync_all (QofBackend* qbe, QofBook* book)
             return;
         }
     }
-    be->is_pristine_db = TRUE;
-    be->primary_book = book;
 
     gnc_sql_sync_all (&be->sql_be, book);
     if (qof_backend_check_error (qbe))

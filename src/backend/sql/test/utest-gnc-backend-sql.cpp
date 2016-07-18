@@ -637,7 +637,7 @@ test_gnc_sql_convert_timespec_to_string ()
             nullptr, nullptr, nullptr, nullptr, ERR_BACKEND_NO_ERR, nullptr,
             0, nullptr
         },
-        nullptr, nullptr, FALSE, FALSE, FALSE, 0, 0, nullptr,
+        nullptr, nullptr, FALSE, FALSE, FALSE, nullptr,
         "%4d-%02d-%02d %02d:%02d:%02d"
     };
     const char* date[numtests] = {"1995-03-11 19:17:26",
