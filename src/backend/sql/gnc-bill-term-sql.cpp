@@ -197,10 +197,10 @@ load_single_billterm (GncSqlBackend* be, GncSqlRow& row,
     g_return_val_if_fail (be != NULL, NULL);
 
     guid = gnc_sql_load_guid (be, row);
-    pBillTerm = gncBillTermLookup (be->book, guid);
+    pBillTerm = gncBillTermLookup (be->book(), guid);
     if (pBillTerm == NULL)
     {
-        pBillTerm = gncBillTermCreate (be->book);
+        pBillTerm = gncBillTermCreate (be->book());
     }
     gnc_sql_load_object (be, row, GNC_ID_BILLTERM, pBillTerm, col_table);
 
@@ -298,7 +298,7 @@ GncSqlBillTermBackend::write (GncSqlBackend* be)
     g_return_val_if_fail (be != NULL, FALSE);
 
     write_objects_t data {be, true, this};
-    qof_object_foreach (GNC_ID_BILLTERM, be->book, do_save_billterm, &data);
+    qof_object_foreach (GNC_ID_BILLTERM, be->book(), do_save_billterm, &data);
     return data.is_ok;
 }
 
@@ -319,7 +319,7 @@ GncSqlBillTermBackend::create_tables (GncSqlBackend* be)
     {
         /* Upgrade 64 bit int handling */
         gnc_sql_upgrade_table (be, TABLE_NAME, col_table);
-        gnc_sql_set_table_version (be, TABLE_NAME, TABLE_VERSION);
+        be->set_table_version (TABLE_NAME, TABLE_VERSION);
 
         PINFO ("Billterms table upgraded from version 1 to version %d\n",
                TABLE_VERSION);
@@ -336,7 +336,7 @@ GncSqlColumnTableEntryImpl<CT_BILLTERMREF>::load (const GncSqlBackend* be,
 {
     load_from_guid_ref(row, obj_name, pObject,
                        [be](GncGUID* g){
-                           return gncBillTermLookup(be->book, g);
+                           return gncBillTermLookup(be->book(), g);
                        });
 }
 

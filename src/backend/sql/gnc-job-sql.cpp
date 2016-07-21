@@ -89,10 +89,10 @@ load_single_job (GncSqlBackend* be, GncSqlRow& row)
     g_return_val_if_fail (be != NULL, NULL);
 
     guid = gnc_sql_load_guid (be, row);
-    pJob = gncJobLookup (be->book, guid);
+    pJob = gncJobLookup (be->book(), guid);
     if (pJob == NULL)
     {
-        pJob = gncJobCreate (be->book);
+        pJob = gncJobCreate (be->book());
     }
     gnc_sql_load_object (be, row, GNC_ID_JOB, pJob, col_table);
     qof_instance_mark_clean (QOF_INSTANCE (pJob));
@@ -164,7 +164,7 @@ GncSqlJobBackend::write (GncSqlBackend* be)
     g_return_val_if_fail (be != NULL, FALSE);
     write_objects_t data{be, true, this};
 
-    qof_object_foreach (GNC_ID_JOB, be->book, write_single_job, &data);
+    qof_object_foreach (GNC_ID_JOB, be->book(), write_single_job, &data);
 
     return data.is_ok;
 }

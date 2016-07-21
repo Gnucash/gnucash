@@ -231,12 +231,12 @@ load_single_split (GncSqlBackend* be, GncSqlRow& row)
     else
     {
         split_guid = *guid;
-        pSplit = xaccSplitLookup (&split_guid, be->book);
+        pSplit = xaccSplitLookup (&split_guid, be->book());
     }
 
     if (pSplit == NULL)
     {
-        pSplit = xaccMallocSplit (be->book);
+        pSplit = xaccMallocSplit (be->book());
     }
 
     /* If the split is dirty, don't overwrite it */
@@ -246,12 +246,12 @@ load_single_split (GncSqlBackend* be, GncSqlRow& row)
     }
 
     /*# -ifempty */
-    if (pSplit != xaccSplitLookup (&split_guid, be->book))
+    if (pSplit != xaccSplitLookup (&split_guid, be->book()))
     {
         gchar guidstr[GUID_ENCODING_LENGTH + 1];
         guid_to_string_buff (qof_instance_get_guid (pSplit), guidstr);
         PERR ("A malformed split with id %s was found in the dataset.", guidstr);
-        qof_backend_set_error (&be->be, ERR_BACKEND_DATA_CORRUPT);
+        qof_backend_set_error ((QofBackend*)be, ERR_BACKEND_DATA_CORRUPT);
         pSplit = NULL;
     }
     return pSplit;
@@ -308,22 +308,22 @@ load_single_tx (GncSqlBackend* be, GncSqlRow& row)
     tx_guid = *guid;
 
     // Don't overwrite the transaction if it's already been loaded (and possibly modified).
-    pTx = xaccTransLookup (&tx_guid, be->book);
+    pTx = xaccTransLookup (&tx_guid, be->book());
     if (pTx != NULL)
     {
         return NULL;
     }
 
-    pTx = xaccMallocTransaction (be->book);
+    pTx = xaccMallocTransaction (be->book());
     xaccTransBeginEdit (pTx);
     gnc_sql_load_object (be, row, GNC_ID_TRANS, pTx, tx_col_table);
 
-    if (pTx != xaccTransLookup (&tx_guid, be->book))
+    if (pTx != xaccTransLookup (&tx_guid, be->book()))
     {
         gchar guidstr[GUID_ENCODING_LENGTH + 1];
         guid_to_string_buff (qof_instance_get_guid (pTx), guidstr);
         PERR ("A malformed transaction with id %s was found in the dataset.", guidstr);
-        qof_backend_set_error (&be->be, ERR_BACKEND_DATA_CORRUPT);
+        qof_backend_set_error ((QofBackend*)be, ERR_BACKEND_DATA_CORRUPT);
         pTx = NULL;
     }
 
@@ -370,7 +370,7 @@ query_transactions (GncSqlBackend* be, const GncSqlStatementPtr& stmt)
 #if LOAD_TRANSACTIONS_AS_NEEDED
     GSList* bal_list = NULL;
     GSList* nextbal;
-    Account* root = gnc_book_get_root_account (be->book);
+    Account* root = gnc_book_get_root_account (be->book());
 
     qof_event_suspend ();
     xaccAccountBeginEdit (root);
@@ -506,7 +506,7 @@ GncSqlTransBackend::create_tables (GncSqlBackend* be)
             2->3: allow dates to be NULL
         */
         gnc_sql_upgrade_table (be, m_table_name.c_str(), tx_col_table);
-        (void)gnc_sql_set_table_version (be, m_table_name.c_str(), m_version);
+        be->set_table_version (m_table_name.c_str(), m_version);
         PINFO ("Transactions table upgraded from version %d to version %d\n",
                version, m_version);
     }
@@ -544,7 +544,7 @@ GncSqlSplitBackend::create_tables (GncSqlBackend* be)
                                    m_table_name.c_str(),
                                    account_guid_col_table))
             PERR ("Unable to create index\n");
-        (void)gnc_sql_set_table_version (be, m_table_name.c_str(), m_version);
+        be->set_table_version (m_table_name.c_str(), m_version);
         PINFO ("Splits table upgraded from version %d to version %d\n", version,
                m_version);
     }
@@ -625,7 +625,7 @@ GncSqlSplitBackend::commit (GncSqlBackend* be, QofInstance* inst)
     {
         op = OP_DB_DELETE;
     }
-    else if (be->is_pristine_db || is_infant)
+    else if (be->pristine() || is_infant)
     {
         op = OP_DB_INSERT;
     }
@@ -668,7 +668,7 @@ GncSqlTransBackend::commit (GncSqlBackend* be, QofInstance* inst)
     {
         op = OP_DB_DELETE;
     }
-    else if (be->is_pristine_db || is_infant)
+    else if (be->pristine() || is_infant)
     {
         op = OP_DB_INSERT;
     }
@@ -685,7 +685,7 @@ GncSqlTransBackend::commit (GncSqlBackend* be, QofInstance* inst)
         if (! is_ok)
         {
             err = "Commodity save failed: Probably an invalid or missing currency";
-            qof_backend_set_error (&be->be, ERR_BACKEND_DATA_CORRUPT);
+            qof_backend_set_error ((QofBackend*)be, ERR_BACKEND_DATA_CORRUPT);
         }
     }
 
@@ -1238,7 +1238,7 @@ set_acct_bal_account_from_guid (gpointer pObject, gpointer pValue)
     g_return_if_fail (pObject != NULL);
     g_return_if_fail (pValue != NULL);
 
-    bal->acct = xaccAccountLookup (guid, bal->be->book);
+    bal->acct = xaccAccountLookup (guid, bal->be->book());
 }
 
 static void
@@ -1389,7 +1389,7 @@ GncSqlColumnTableEntryImpl<CT_TXREF>::load (const GncSqlBackend* be,
         auto val = row.get_string_at_col (m_col_name);
         GncGUID guid;
         (void)string_to_guid (val.c_str(), &guid);
-        auto tx = xaccTransLookup (&guid, be->book);
+        auto tx = xaccTransLookup (&guid, be->book());
 
         // If the transaction is not found, try loading it
         if (tx == nullptr)
@@ -1399,7 +1399,7 @@ GncSqlColumnTableEntryImpl<CT_TXREF>::load (const GncSqlBackend* be,
             auto stmt = gnc_sql_create_statement_from_sql ((GncSqlBackend*)be,
                                                            buf.c_str());
             query_transactions ((GncSqlBackend*)be, stmt);
-            tx = xaccTransLookup (&guid, be->book);
+            tx = xaccTransLookup (&guid, be->book());
         }
 
         if (tx != nullptr)

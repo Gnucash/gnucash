@@ -96,10 +96,10 @@ load_single_employee (GncSqlBackend* be, GncSqlRow& row)
     g_return_val_if_fail (be != NULL, NULL);
 
     guid = gnc_sql_load_guid (be, row);
-    pEmployee = gncEmployeeLookup (be->book, guid);
+    pEmployee = gncEmployeeLookup (be->book(), guid);
     if (pEmployee == NULL)
     {
-        pEmployee = gncEmployeeCreate (be->book);
+        pEmployee = gncEmployeeCreate (be->book());
     }
     gnc_sql_load_object (be, row, GNC_ID_EMPLOYEE, pEmployee, col_table);
     qof_instance_mark_clean (QOF_INSTANCE (pEmployee));
@@ -151,7 +151,7 @@ GncSqlEmployeeBackend::create_tables (GncSqlBackend* be)
     {
         /* Upgrade 64 bit int handling */
         gnc_sql_upgrade_table (be, TABLE_NAME, col_table);
-        gnc_sql_set_table_version (be, TABLE_NAME, TABLE_VERSION);
+        be->set_table_version (TABLE_NAME, TABLE_VERSION);
 
         PINFO ("Employees table upgraded from version 1 to version %d\n",
                TABLE_VERSION);
@@ -179,7 +179,7 @@ GncSqlEmployeeBackend::commit (GncSqlBackend* be, QofInstance* inst)
     {
         op = OP_DB_DELETE;
     }
-    else if (be->is_pristine_db || is_infant)
+    else if (be->pristine() || is_infant)
     {
         op = OP_DB_INSERT;
     }
@@ -259,7 +259,7 @@ GncSqlEmployeeBackend::write (GncSqlBackend* be)
     data.be = be;
     data.is_ok = TRUE;
     data.obe = this;
-    qof_object_foreach (GNC_ID_EMPLOYEE, be->book, write_single_employee, &data);
+    qof_object_foreach (GNC_ID_EMPLOYEE, be->book(), write_single_employee, &data);
 
     return data.is_ok;
 }

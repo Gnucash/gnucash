@@ -117,10 +117,10 @@ load_single_invoice (GncSqlBackend* be, GncSqlRow& row)
     g_return_val_if_fail (be != NULL, NULL);
 
     guid = gnc_sql_load_guid (be, row);
-    pInvoice = gncInvoiceLookup (be->book, guid);
+    pInvoice = gncInvoiceLookup (be->book(), guid);
     if (pInvoice == NULL)
     {
-        pInvoice = gncInvoiceCreate (be->book);
+        pInvoice = gncInvoiceCreate (be->book());
     }
     gnc_sql_load_object (be, row, GNC_ID_INVOICE, pInvoice, col_table);
     qof_instance_mark_clean (QOF_INSTANCE (pInvoice));
@@ -173,7 +173,7 @@ GncSqlInvoiceBackend::create_tables (GncSqlBackend* be)
              2->3: invoice open date can be NULL
         */
         gnc_sql_upgrade_table (be, TABLE_NAME, col_table);
-        gnc_sql_set_table_version (be, TABLE_NAME, TABLE_VERSION);
+        be->set_table_version (TABLE_NAME, TABLE_VERSION);
 
         PINFO ("Invoices table upgraded from version %d to version %d\n", version,
                TABLE_VERSION);
@@ -201,7 +201,7 @@ GncSqlInvoiceBackend::commit (GncSqlBackend* be, QofInstance* inst)
     {
         op = OP_DB_DELETE;
     }
-    else if (be->is_pristine_db || is_infant)
+    else if (be->pristine() || is_infant)
     {
         op = OP_DB_INSERT;
     }
@@ -277,7 +277,7 @@ GncSqlInvoiceBackend::write (GncSqlBackend* be)
     g_return_val_if_fail (be != NULL, FALSE);
     write_objects_t data{be, true, this};
 
-    qof_object_foreach (GNC_ID_INVOICE, be->book, write_single_invoice, &data);
+    qof_object_foreach (GNC_ID_INVOICE, be->book(), write_single_invoice, &data);
 
     return data.is_ok;
 }
@@ -291,7 +291,7 @@ GncSqlColumnTableEntryImpl<CT_INVOICEREF>::load (const GncSqlBackend* be,
 {
      load_from_guid_ref(row, obj_name, pObject,
                        [be](GncGUID* g){
-                            return gncInvoiceLookup (be->book, g);
+                            return gncInvoiceLookup (be->book(), g);
                         });
 }
 

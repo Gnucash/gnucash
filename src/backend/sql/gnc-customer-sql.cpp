@@ -110,10 +110,10 @@ load_single_customer (GncSqlBackend* be, GncSqlRow& row)
     g_return_val_if_fail (be != NULL, NULL);
 
     guid = gnc_sql_load_guid (be, row);
-    pCustomer = gncCustomerLookup (be->book, guid);
+    pCustomer = gncCustomerLookup (be->book(), guid);
     if (pCustomer == NULL)
     {
-        pCustomer = gncCustomerCreate (be->book);
+        pCustomer = gncCustomerCreate (be->book());
     }
     gnc_sql_load_object (be, row, GNC_ID_CUSTOMER, pCustomer, col_table);
     qof_instance_mark_clean (QOF_INSTANCE (pCustomer));
@@ -164,7 +164,7 @@ GncSqlCustomerBackend::create_tables (GncSqlBackend* be)
     {
         /* Upgrade 64 bit int handling */
         gnc_sql_upgrade_table (be, TABLE_NAME, col_table);
-        gnc_sql_set_table_version (be, TABLE_NAME, TABLE_VERSION);
+        be->set_table_version (TABLE_NAME, TABLE_VERSION);
 
         PINFO ("Customers table upgraded from version 1 to version %d\n",
                TABLE_VERSION);
@@ -214,7 +214,7 @@ GncSqlCustomerBackend::write (GncSqlBackend* be)
     data.be = be;
     data.is_ok = TRUE;
     data.obe = this;
-    qof_object_foreach (GNC_ID_CUSTOMER, be->book, write_single_customer,
+    qof_object_foreach (GNC_ID_CUSTOMER, be->book(), write_single_customer,
                         (gpointer)&data);
     return data.is_ok;
 }

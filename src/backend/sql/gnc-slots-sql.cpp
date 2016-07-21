@@ -714,7 +714,7 @@ gnc_sql_slots_save (GncSqlBackend* be, const GncGUID* guid, gboolean is_infant,
     g_return_val_if_fail (pFrame != NULL, FALSE);
 
     // If this is not saving into a new db, clear out the old saved slots first
-    if (!be->is_pristine_db && !is_infant)
+    if (!be->pristine() && !is_infant)
     {
         (void)gnc_sql_slots_delete (be, guid);
     }
@@ -947,7 +947,7 @@ load_slot_for_book_object (GncSqlBackend* be, GncSqlRow& row,
 
     guid = load_obj_guid (be, row);
     g_return_if_fail (guid != NULL);
-    inst = lookup_fn (guid, be->book);
+    inst = lookup_fn (guid, be->book());
     g_return_if_fail (inst != NULL);
 
     slot_info.be = be;
@@ -1045,7 +1045,7 @@ GncSqlSlotsBackend::create_tables (GncSqlBackend* be)
                 PERR ("Unable to add gdate column\n");
             }
         }
-        (void)gnc_sql_set_table_version (be, TABLE_NAME, TABLE_VERSION);
+        be->set_table_version (TABLE_NAME, TABLE_VERSION);
         PINFO ("Slots table upgraded from version %d to version %d\n", version,
                TABLE_VERSION);
     }

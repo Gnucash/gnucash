@@ -113,7 +113,7 @@ load_single_lot (GncSqlBackend* be, GncSqlRow& row)
 
     g_return_val_if_fail (be != NULL, NULL);
 
-    lot = gnc_lot_new (be->book);
+    lot = gnc_lot_new (be->book());
 
     gnc_lot_begin_edit (lot);
     gnc_sql_load_object (be, row, GNC_ID_LOT, lot, col_table);
@@ -166,7 +166,7 @@ GncSqlLotsBackend::create_tables (GncSqlBackend* be)
         old table, then rename the new one. */
 
         gnc_sql_upgrade_table (be, TABLE_NAME, col_table);
-        (void)gnc_sql_set_table_version (be, TABLE_NAME, TABLE_VERSION);
+        be->set_table_version (TABLE_NAME, TABLE_VERSION);
 
         PINFO ("Lots table upgraded from version 1 to version %d\n", TABLE_VERSION);
     }
@@ -189,7 +189,7 @@ GncSqlLotsBackend::write (GncSqlBackend* be)
     g_return_val_if_fail (be != NULL, FALSE);
     write_objects_t data{be, true, this};
 
-    qof_collection_foreach (qof_book_get_collection (be->book, GNC_ID_LOT),
+    qof_collection_foreach (qof_book_get_collection (be->book(), GNC_ID_LOT),
                             (QofInstanceForeachCB)do_save_lot, &data);
     return data.is_ok;
 }
@@ -203,7 +203,7 @@ GncSqlColumnTableEntryImpl<CT_LOTREF>::load (const GncSqlBackend* be,
 {
     load_from_guid_ref(row, obj_name, pObject,
                        [be](GncGUID* g){
-                           return gnc_lot_lookup(g, be->book);
+                           return gnc_lot_lookup(g, be->book());
                        });
 }
 

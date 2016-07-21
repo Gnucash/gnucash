@@ -129,7 +129,7 @@ set_quote_source_name (gpointer pObject, gpointer pValue)
 static  gnc_commodity*
 load_single_commodity (GncSqlBackend* be, GncSqlRow& row)
 {
-    QofBook* pBook = be->book;
+    QofBook* pBook = be->book();
     gnc_commodity* pCommodity;
 
     pCommodity = gnc_commodity_new (pBook, NULL, NULL, NULL, NULL, 100);
@@ -145,7 +145,7 @@ GncSqlCommodityBackend::load_all (GncSqlBackend* be)
 {
     gnc_commodity_table* pTable;
 
-    pTable = gnc_commodity_table_get_table (be->book);
+    pTable = gnc_commodity_table_get_table (be->book());
     auto stmt = gnc_sql_create_select_statement (be, COMMODITIES_TABLE);
     if (stmt == nullptr) return;
     auto result = gnc_sql_execute_select_statement (be, stmt);
@@ -186,7 +186,7 @@ do_commit_commodity (GncSqlBackend* be, QofInstance* inst,
     {
         op = OP_DB_DELETE;
     }
-    else if (be->is_pristine_db || is_infant || force_insert)
+    else if (be->pristine() || is_infant || force_insert)
     {
         op = OP_DB_INSERT;
     }
@@ -268,7 +268,7 @@ GncSqlColumnTableEntryImpl<CT_COMMODITYREF>::load (const GncSqlBackend* be,
 {
     load_from_guid_ref(row, obj_name, pObject,
                        [be](GncGUID* g){
-                           return gnc_commodity_find_commodity_by_guid(g, be->book);
+                           return gnc_commodity_find_commodity_by_guid(g, be->book());
                        });
 }
 

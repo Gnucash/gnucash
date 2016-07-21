@@ -99,10 +99,10 @@ load_single_vendor (GncSqlBackend* be, GncSqlRow& row)
     g_return_val_if_fail (be != NULL, NULL);
 
     guid = gnc_sql_load_guid (be, row);
-    pVendor = gncVendorLookup (be->book, guid);
+    pVendor = gncVendorLookup (be->book(), guid);
     if (pVendor == NULL)
     {
-        pVendor = gncVendorCreate (be->book);
+        pVendor = gncVendorCreate (be->book());
     }
     gnc_sql_load_object (be, row, GNC_ID_VENDOR, pVendor, col_table);
     qof_instance_mark_clean (QOF_INSTANCE (pVendor));
@@ -154,7 +154,7 @@ GncSqlVendorBackend::commit (GncSqlBackend* be, QofInstance* inst)
     {
         op = OP_DB_DELETE;
     }
-    else if (be->is_pristine_db || is_infant)
+    else if (be->pristine() || is_infant)
     {
         op = OP_DB_INSERT;
     }
@@ -229,7 +229,7 @@ GncSqlVendorBackend::write (GncSqlBackend* be)
     g_return_val_if_fail (be != NULL, FALSE);
     write_objects_t data{be, true, this};
 
-    qof_object_foreach (GNC_ID_VENDOR, be->book, write_single_vendor, &data);
+    qof_object_foreach (GNC_ID_VENDOR, be->book(), write_single_vendor, &data);
 
     return data.is_ok;
 }

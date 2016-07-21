@@ -89,10 +89,10 @@ load_single_order (GncSqlBackend* be, GncSqlRow& row)
     g_return_val_if_fail (be != NULL, NULL);
 
     guid = gnc_sql_load_guid (be, row);
-    pOrder = gncOrderLookup (be->book, guid);
+    pOrder = gncOrderLookup (be->book(), guid);
     if (pOrder == NULL)
     {
-        pOrder = gncOrderCreate (be->book);
+        pOrder = gncOrderCreate (be->book());
     }
     gnc_sql_load_object (be, row, GNC_ID_ORDER, pOrder, col_table);
     qof_instance_mark_clean (QOF_INSTANCE (pOrder));
@@ -164,7 +164,7 @@ GncSqlOrderBackend::write (GncSqlBackend* be)
     g_return_val_if_fail (be != NULL, FALSE);
     write_objects_t data{be, true, this};
 
-    qof_object_foreach (GNC_ID_ORDER, be->book, write_single_order, &data);
+    qof_object_foreach (GNC_ID_ORDER, be->book(), write_single_order, &data);
 
     return data.is_ok;
 }
@@ -178,7 +178,7 @@ GncSqlColumnTableEntryImpl<CT_ORDERREF>::load (const GncSqlBackend* be,
 {
     load_from_guid_ref(row, obj_name, pObject,
                        [be](GncGUID* g){
-                           return gncOrderLookup(be->book, g);
+                           return gncOrderLookup(be->book(), g);
                        });
 }
 

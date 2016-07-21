@@ -61,7 +61,7 @@ GncSqlColumnTableEntryImpl<CT_OWNERREF>::load (const GncSqlBackend* be,
     g_return_if_fail (be != NULL);
     g_return_if_fail (pObject != NULL);
 
-    auto book = be->book;
+    auto book = be->book();
     auto buf = std::string{m_col_name} + "_type";
     try
     {

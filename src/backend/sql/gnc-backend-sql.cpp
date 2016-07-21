@@ -82,10 +82,12 @@ extern "C"
 #include "gnc-tax-table-sql.h"
 #include "gnc-vendor-sql.h"
 
+#define VERSION_TABLE_NAME "versions"
+#define MAX_TABLE_NAME_LEN 50
+#define TABLE_COL_NAME "table_name"
+#define VERSION_COL_NAME "table_version"
+
 static void gnc_sql_init_object_handlers (void);
-static void update_progress (GncSqlBackend* be);
-static void finish_progress (GncSqlBackend* be);
-static gboolean reset_version_info (GncSqlBackend* be);
 static GncSqlStatementPtr build_insert_statement (GncSqlBackend* be,
                                                   const gchar* table_name,
                                                   QofIdTypeConst obj_name,
@@ -183,7 +185,7 @@ create_tables(const OBEEntry& entry, GncSqlBackend* be)
     GncSqlObjectBackendPtr obe = nullptr;
     std::tie(type, obe) = entry;
     g_return_if_fail (obe->is_version (GNC_SQL_BACKEND_VERSION));
-    update_progress(be);
+    be->update_progress();
     obe->create_tables(be);
 }
 
@@ -240,12 +242,12 @@ gnc_sql_load (GncSqlBackend* be,  QofBook* book, QofBackendLoadType loadType)
 
     ENTER ("be=%p, book=%p", be, book);
 
-    be->loading = TRUE;
+    be->m_loading = TRUE;
 
     if (loadType == LOAD_TYPE_INITIAL_LOAD)
     {
-        g_assert (be->book == NULL);
-        be->book = book;
+        g_assert (be->m_book == NULL);
+        be->m_book = book;
 
         /* Load any initial stuff. Some of this needs to happen in a certain order */
         for (auto type : fixed_load_order)
@@ -253,7 +255,7 @@ gnc_sql_load (GncSqlBackend* be,  QofBook* book, QofBackendLoadType loadType)
             auto obe = gnc_sql_get_object_backend(type);
             if (obe)
             {
-                update_progress(be);
+                be->update_progress();
                 obe->load_all (be);
             }
         }
@@ -262,7 +264,7 @@ gnc_sql_load (GncSqlBackend* be,  QofBook* book, QofBackendLoadType loadType)
             auto obe = gnc_sql_get_object_backend(type);
             if (obe)
             {
-                update_progress(be);
+                be->update_progress();
                 obe->load_all (be);
             }
         }
@@ -284,7 +286,7 @@ gnc_sql_load (GncSqlBackend* be,  QofBook* book, QofBackendLoadType loadType)
         obe->load_all (be);
     }
 
-    be->loading = FALSE;
+    be->m_loading = FALSE;
     g_list_free_full (post_load_commodities, commit_commodity);
     post_load_commodities = NULL;
 
@@ -292,7 +294,7 @@ gnc_sql_load (GncSqlBackend* be,  QofBook* book, QofBackendLoadType loadType)
      * dirty with this backend
      */
     qof_book_mark_session_saved (book);
-    finish_progress (be);
+    be->finish_progress();
 
     LEAVE ("");
 }
@@ -321,7 +323,7 @@ write_account_tree (GncSqlBackend* be, Account* root)
         }
         g_list_free (descendants);
     }
-    update_progress (be);
+    be->update_progress();
 
     return is_ok;
 }
@@ -333,12 +335,12 @@ write_accounts (GncSqlBackend* be)
 
     g_return_val_if_fail (be != NULL, FALSE);
 
-    update_progress (be);
-    is_ok = write_account_tree (be, gnc_book_get_root_account (be->book));
+    be->update_progress();
+    is_ok = write_account_tree (be, gnc_book_get_root_account (be->book()));
     if (is_ok)
     {
-        update_progress (be);
-        is_ok = write_account_tree (be, gnc_book_get_template_root (be->book));
+        be->update_progress();
+        is_ok = write_account_tree (be, gnc_book_get_template_root (be->book()));
     }
 
     return is_ok;
@@ -360,7 +362,7 @@ write_tx (Transaction* tx, gpointer data)
     {
         s->is_ok = splitbe->commit(s->be, QOF_INSTANCE(split_node->data));
     }
-    update_progress (s->be);
+    s->be->update_progress ();
     return (s->is_ok ? 0 : 1);
 }
 
@@ -373,8 +375,8 @@ write_transactions (GncSqlBackend* be)
     write_objects_t data{be, true, obe};
 
     (void)xaccAccountTreeForEachTransaction (
-        gnc_book_get_root_account (be->book), write_tx, &data);
-    update_progress (be);
+        gnc_book_get_root_account (be->book()), write_tx, &data);
+    be->update_progress();
     return data.is_ok;
 }
 
@@ -385,11 +387,11 @@ write_template_transactions (GncSqlBackend* be)
 
     auto obe = gnc_sql_get_object_backend(GNC_ID_TRANS);
     write_objects_t data{be, true, obe};
-    auto ra = gnc_book_get_template_root (be->book);
+    auto ra = gnc_book_get_template_root (be->book());
     if (gnc_account_n_descendants (ra) > 0)
     {
         (void)xaccAccountTreeForEachTransaction (ra, write_tx, &data);
-        update_progress (be);
+        be->update_progress();
     }
 
     return data.is_ok;
@@ -404,7 +406,7 @@ write_schedXactions (GncSqlBackend* be)
 
     g_return_val_if_fail (be != NULL, FALSE);
 
-    schedXactions = gnc_book_get_schedxactions (be->book)->sx_list;
+    schedXactions = gnc_book_get_schedxactions (be->book())->sx_list;
     auto obe = gnc_sql_get_object_backend(GNC_ID_SCHEDXACTION);
 
     for (; schedXactions != NULL && is_ok; schedXactions = schedXactions->next)
@@ -412,24 +414,269 @@ write_schedXactions (GncSqlBackend* be)
         tmpSX = static_cast<decltype (tmpSX)> (schedXactions->data);
         is_ok = obe->commit (be, QOF_INSTANCE (tmpSX));
     }
-    update_progress (be);
+    be->update_progress();
 
     return is_ok;
 }
 
-static void
-update_progress (GncSqlBackend* be)
+static EntryVec version_table
 {
-    if (be->be.percentage != NULL)
-        (be->be.percentage) (NULL, 101.0);
+    gnc_sql_make_table_entry<CT_STRING>(
+        TABLE_COL_NAME, MAX_TABLE_NAME_LEN, COL_PKEY | COL_NNUL),
+    gnc_sql_make_table_entry<CT_INT>(VERSION_COL_NAME, 0, COL_NNUL)
+};
+
+GncSqlBackend::GncSqlBackend(GncSqlConnection *conn, QofBook* book,
+                             const char* format) :
+        be {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+            nullptr, nullptr, nullptr, nullptr, ERR_BACKEND_NO_ERR, nullptr, 0,
+            nullptr}, m_conn{conn}, m_book{book}, m_loading{false},
+        m_in_query{false}, m_is_pristine_db{false}, m_versions{nullptr},
+        m_timespec_format{format}
+{
+    if (conn != nullptr)
+        connect (conn);
 }
 
-static void
-finish_progress (GncSqlBackend* be)
+void
+GncSqlBackend::connect(GncSqlConnection *conn) noexcept
 {
-    if (be->be.percentage != NULL)
-        (be->be.percentage) (NULL, -1.0);
+    if (m_conn != nullptr && m_conn != conn)
+        delete m_conn;
+    if (m_versions != nullptr)
+        finalize_version_info();
+    m_conn = conn;
 }
+
+GncSqlStatementPtr
+GncSqlBackend::create_statement_from_sql(const std::string& str) const noexcept
+{
+    auto stmt = m_conn->create_statement_from_sql(str);
+    if (stmt == nullptr)
+    {
+        PERR ("SQL error: %s\n", str.c_str());
+        qof_backend_set_error ((QofBackend*)this, ERR_BACKEND_SERVER_ERR);
+    }
+    return stmt;
+}
+
+GncSqlResultPtr
+GncSqlBackend::execute_select_statement(const GncSqlStatementPtr& stmt) const noexcept
+{
+    auto result = m_conn->execute_select_statement(stmt);
+    if (result == nullptr)
+    {
+        PERR ("SQL error: %s\n", stmt->to_sql());
+        qof_backend_set_error ((QofBackend*)this, ERR_BACKEND_SERVER_ERR);
+    }
+    return result;
+}
+
+int
+GncSqlBackend::execute_nonselect_statement(const GncSqlStatementPtr& stmt) const noexcept
+{
+    auto result = m_conn->execute_nonselect_statement(stmt);
+    if (result == -1)
+    {
+        PERR ("SQL error: %s\n", stmt->to_sql());
+        qof_backend_set_error ((QofBackend*)this, ERR_BACKEND_SERVER_ERR);
+    }
+    return result;
+}
+
+std::string
+GncSqlBackend::quote_string(const std::string& str) const noexcept
+{
+    return m_conn->quote_string(str);
+}
+
+bool
+GncSqlBackend::create_table(const std::string& table_name,
+                            const EntryVec& col_table) const noexcept
+{
+    ColVec info_vec;
+    gboolean ok = FALSE;
+
+    for (auto const& table_row : col_table)
+    {
+        table_row->add_to_table (this, info_vec);
+    }
+    return m_conn->create_table (table_name, info_vec);
+
+}
+
+bool
+GncSqlBackend::create_index(const std::string& index_name,
+                            const std::string& table_name,
+                            const EntryVec& col_table) const noexcept
+{
+    return m_conn->create_index(index_name, table_name, col_table);
+}
+
+bool
+GncSqlBackend::add_columns_to_table(const std::string& table_name,
+                                    const EntryVec& col_table) const noexcept
+{
+    ColVec info_vec;
+
+    for (auto const& table_row : col_table)
+    {
+        table_row->add_to_table (this, info_vec);
+    }
+    return m_conn->add_columns_to_table(table_name, info_vec);
+}
+
+void
+GncSqlBackend::update_progress() const noexcept
+{
+    if (be.percentage != nullptr)
+        (be.percentage) (nullptr, 101.0);
+}
+
+void
+GncSqlBackend::finish_progress() const noexcept
+{
+    if (be.percentage != nullptr)
+        (be.percentage) (nullptr, -1.0);
+}
+
+/**
+ * Sees if the version table exists, and if it does, loads the info into
+ * the version hash table.  Otherwise, it creates an empty version table.
+ *
+ * @param be Backend struct
+ */
+void
+GncSqlBackend::init_version_info() noexcept
+{
+    if (m_versions != NULL)
+    {
+        g_hash_table_destroy (m_versions);
+    }
+    m_versions = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
+    if (m_conn->does_table_exist (VERSION_TABLE_NAME))
+    {
+        std::string sql {"SELECT * FROM "};
+        sql += VERSION_TABLE_NAME;
+        auto stmt = m_conn->create_statement_from_sql(sql);
+        auto result = m_conn->execute_select_statement (stmt);
+        for (const auto& row : *result)
+        {
+            auto name = row.get_string_at_col (TABLE_COL_NAME);
+            auto version = row.get_int_at_col (VERSION_COL_NAME);
+            g_hash_table_insert (m_versions, g_strdup (name.c_str()),
+                                 GINT_TO_POINTER (version));
+        }
+    }
+    else
+    {
+        create_table (VERSION_TABLE_NAME, version_table);
+        set_table_version("Gnucash", gnc_prefs_get_long_version ());
+        set_table_version("Gnucash-Resave", GNUCASH_RESAVE_VERSION);
+    }
+}
+
+/**
+ * Resets the version table information by removing all version table info.
+ * It also recreates the version table in the db.
+ *
+ * @param be Backend struct
+ * @return TRUE if successful, FALSE if error
+ */
+bool
+GncSqlBackend::reset_version_info() noexcept
+{
+    bool ok = true;
+    if (!m_conn->does_table_exist (VERSION_TABLE_NAME))
+        ok = create_table (VERSION_TABLE_NAME, version_table);
+    if (m_versions == nullptr)
+    {
+        m_versions = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+    }
+    else
+    {
+        g_hash_table_remove_all (m_versions);
+    }
+
+    set_table_version ("Gnucash", gnc_prefs_get_long_version ());
+    set_table_version ("Gnucash-Resave", GNUCASH_RESAVE_VERSION);
+    return ok;
+}
+
+/**
+ * Finalizes the version table info by destroying the hash table.
+ *
+ * @param be Backend struct
+ */
+void
+GncSqlBackend::finalize_version_info() noexcept
+{
+    if (m_versions != nullptr)
+    {
+        g_hash_table_destroy (m_versions);
+        m_versions = nullptr;
+    }
+}
+
+int
+GncSqlBackend::get_table_version(const std::string& table_name) const noexcept
+{
+    /* If the db is pristine because it's being saved, the table does not exist. */
+    if (m_is_pristine_db)
+        return 0;
+
+    return GPOINTER_TO_INT (g_hash_table_lookup (m_versions,
+                                                 table_name.c_str()));
+}
+
+/**
+ * Registers the version for a table.  Registering involves updating the
+ * db version table and also the hash table.
+ *
+ * @param be Backend struct
+ * @param table_name Table name
+ * @param version Version number
+ * @return TRUE if successful, FALSE if unsuccessful
+ */
+bool
+GncSqlBackend::set_table_version (const std::string& table_name, int version) noexcept
+{
+    gchar* sql;
+    gint cur_version;
+    gint status;
+
+    g_return_val_if_fail (version > 0, false);
+
+    cur_version = get_table_version (table_name);
+    if (cur_version != version)
+    {
+        if (cur_version == 0)
+        {
+            sql = g_strdup_printf ("INSERT INTO %s VALUES('%s',%d)", VERSION_TABLE_NAME,
+                                   table_name.c_str(), version);
+        }
+        else
+        {
+            sql = g_strdup_printf ("UPDATE %s SET %s=%d WHERE %s='%s'", VERSION_TABLE_NAME,
+                                   VERSION_COL_NAME, version,
+                                   TABLE_COL_NAME, table_name.c_str());
+        }
+        status = gnc_sql_execute_nonselect_sql (this, sql);
+        if (status == -1)
+        {
+            PERR ("SQL error: %s\n", sql);
+            qof_backend_set_error ((QofBackend*)this, ERR_BACKEND_SERVER_ERR);
+        }
+        g_free (sql);
+    }
+
+    g_hash_table_insert (m_versions, g_strdup (table_name.c_str()),
+                         GINT_TO_POINTER (version));
+
+    return true;
+}
+
 
 void
 gnc_sql_sync_all (GncSqlBackend* be,  QofBook* book)
@@ -439,18 +686,18 @@ gnc_sql_sync_all (GncSqlBackend* be,  QofBook* book)
     g_return_if_fail (be != NULL);
     g_return_if_fail (book != NULL);
 
-    ENTER ("book=%p, be->book=%p", book, be->book);
-    update_progress (be);
-    (void)reset_version_info (be);
+    be->reset_version_info();
+    ENTER ("book=%p, be->book=%p", book, be->book());
+    be->update_progress();
 
     /* Create new tables */
-    be->is_pristine_db = TRUE;
+    be->m_is_pristine_db = true;
     for(auto entry : backend_registry)
         create_tables(entry, be);
 
     /* Save all contents */
-    be->book = book;
-    is_ok = be->conn->begin_transaction ();
+    be->m_book = book;
+    is_ok = be->m_conn->begin_transaction ();
 
     // FIXME: should write the set of commodities that are used
     //write_commodities( be, book );
@@ -482,11 +729,11 @@ gnc_sql_sync_all (GncSqlBackend* be,  QofBook* book)
     }
     if (is_ok)
     {
-        is_ok = be->conn->commit_transaction ();
+        is_ok = be->m_conn->commit_transaction ();
     }
     if (is_ok)
     {
-        be->is_pristine_db = FALSE;
+        be->m_is_pristine_db = false;
 
         /* Mark the session as clean -- though it shouldn't ever get
          * marked dirty with this backend
@@ -497,9 +744,9 @@ gnc_sql_sync_all (GncSqlBackend* be,  QofBook* book)
     {
         if (!qof_backend_check_error ((QofBackend*)be))
             qof_backend_set_error ((QofBackend*)be, ERR_BACKEND_SERVER_ERR);
-        is_ok = be->conn->rollback_transaction ();
+        is_ok = be->m_conn->rollback_transaction ();
     }
-    finish_progress (be);
+    be->finish_progress();
     LEAVE ("book=%p", book);
 }
 
@@ -558,15 +805,15 @@ gnc_sql_commit_edit (GncSqlBackend* be, QofInstance* inst)
     g_return_if_fail (be != NULL);
     g_return_if_fail (inst != NULL);
 
-    if (qof_book_is_readonly (be->book))
+    if (qof_book_is_readonly (be->book()))
     {
         qof_backend_set_error ((QofBackend*)be, ERR_BACKEND_READONLY);
-        (void)be->conn->rollback_transaction ();
+        (void)be->m_conn->rollback_transaction ();
         return;
     }
     /* During initial load where objects are being created, don't commit
-       anything, but do mark the object as clean. */
-    if (be->loading)
+    anything, but do mark the object as clean. */
+    if (be->m_loading)
     {
         qof_instance_mark_clean (inst);
         return;
@@ -576,7 +823,7 @@ gnc_sql_commit_edit (GncSqlBackend* be, QofInstance* inst)
     if (strcmp (inst->e_type, "PriceDB") == 0)
     {
         qof_instance_mark_clean (inst);
-        qof_book_mark_session_saved (be->book);
+        qof_book_mark_session_saved (be->book());
         return;
     }
 
@@ -596,7 +843,7 @@ gnc_sql_commit_edit (GncSqlBackend* be, QofInstance* inst)
         return;
     }
 
-    if (!be->conn->begin_transaction ())
+    if (!be->m_conn->begin_transaction ())
     {
         PERR ("gnc_sql_commit_edit(): begin_transaction failed\n");
         LEAVE ("Rolled back - database transaction begin error");
@@ -614,10 +861,10 @@ gnc_sql_commit_edit (GncSqlBackend* be, QofInstance* inst)
     if (!be_data.is_known)
     {
         PERR ("gnc_sql_commit_edit(): Unknown object type '%s'\n", inst->e_type);
-        (void)be->conn->rollback_transaction ();
+        (void)be->m_conn->rollback_transaction ();
 
         // Don't let unknown items still mark the book as being dirty
-        qof_book_mark_session_saved (be->book);
+        qof_book_mark_session_saved (be->book());
         qof_instance_mark_clean (inst);
         LEAVE ("Rolled back - unknown object type");
         return;
@@ -625,16 +872,16 @@ gnc_sql_commit_edit (GncSqlBackend* be, QofInstance* inst)
     if (!be_data.is_ok)
     {
         // Error - roll it back
-        (void)be->conn->rollback_transaction ();
+        (void)be->m_conn->rollback_transaction ();
 
         // This *should* leave things marked dirty
         LEAVE ("Rolled back - database error");
         return;
     }
 
-    (void)be->conn->commit_transaction ();
+    (void)be->m_conn->commit_transaction ();
 
-    qof_book_mark_session_saved (be->book);
+    qof_book_mark_session_saved (be->book());
     qof_instance_mark_clean (inst);
 
     LEAVE ("");
@@ -1011,7 +1258,7 @@ gnc_sql_run_query (QofBackend* pBEnd, gpointer pQuery)
 //    }
 
     // Mark the book as clean
-    qof_instance_mark_clean (QOF_INSTANCE (be->book));
+    qof_instance_mark_clean (QOF_INSTANCE (be->book()));
 
 //    DEBUG( "%s\n", (gchar*)pQueryInfo->pCompiledQuery );
 
@@ -1431,7 +1678,7 @@ gnc_sql_convert_timespec_to_string (const GncSqlBackend* be, Timespec ts)
 
     year = tm->tm_year + 1900;
 
-    datebuf = g_strdup_printf (be->timespec_format,
+    datebuf = g_strdup_printf (be->timespec_format(),
                                year, tm->tm_mon + 1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec);
     gnc_tm_free (tm);
     return datebuf;
@@ -1794,17 +2041,8 @@ gnc_sql_execute_select_statement (GncSqlBackend* be,
 {
 
     g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (stmt != NULL, NULL);
 
-    auto result = be->conn->execute_select_statement (stmt);
-    if (result == NULL)
-    {
-        PERR ("SQL error: %s\n", stmt->to_sql());
-        if (!qof_backend_check_error(&be->be))
-            qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);
-    }
-
-    return result;
+    return be->execute_select_statement (stmt);
 }
 
 GncSqlStatementPtr
@@ -1813,15 +2051,7 @@ gnc_sql_create_statement_from_sql (GncSqlBackend* be, const gchar* sql)
     g_return_val_if_fail (be != NULL, NULL);
     g_return_val_if_fail (sql != NULL, NULL);
 
-    auto stmt = be->conn->create_statement_from_sql (sql);
-    if (stmt == nullptr)
-    {
-        PERR ("SQL error: %s\n", sql);
-        if (!qof_backend_check_error(&be->be))
-            qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);
-    }
-
-    return stmt;
+    return be->create_statement_from_sql (sql);
 }
 
 GncSqlResultPtr
@@ -1835,15 +2065,7 @@ gnc_sql_execute_select_sql (GncSqlBackend* be, const gchar* sql)
     {
         return nullptr;
     }
-    auto result = be->conn->execute_select_statement (stmt);
-    if (result == nullptr)
-    {
-        PERR ("SQL error: %s\n", sql);
-        if (!qof_backend_check_error(&be->be))
-            qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);
-    }
-
-    return result;
+    return be->execute_select_statement (stmt);
 }
 
 gint
@@ -1857,8 +2079,7 @@ gnc_sql_execute_nonselect_sql (GncSqlBackend* be, const gchar* sql)
     {
         return -1;
     }
-    auto result = be->conn->execute_nonselect_statement (stmt);
-    return result;
+    return be->execute_nonselect_statement (stmt);
 }
 
 guint
@@ -1942,7 +2163,7 @@ gnc_sql_do_db_operation (GncSqlBackend* be,
                          const EntryVec& table)
 {
     GncSqlStatementPtr stmt;
-    gboolean ok = FALSE;
+    bool ok = false;
 
     g_return_val_if_fail (be != NULL, FALSE);
     g_return_val_if_fail (table_name != NULL, FALSE);
@@ -1965,20 +2186,8 @@ gnc_sql_do_db_operation (GncSqlBackend* be,
     {
         g_assert (FALSE);
     }
-    if (stmt != nullptr)
-    {
-        auto result = be->conn->execute_nonselect_statement (stmt);
-        if (result == -1)
-        {
-            PERR ("SQL error: %s\n", stmt->to_sql());
-            if (!qof_backend_check_error(&be->be))
-                qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);
-        }
-        else
-        {
-            ok = TRUE;
-        }
-    }
+    if (be->execute_nonselect_statement (stmt) != -1)
+        ok = true;
 
     return ok;
 }
@@ -2012,11 +2221,11 @@ build_insert_statement (GncSqlBackend* be,
     {
         if (col_value != *values.begin())
             sql << ",";
-        sql << be->conn->quote_string(col_value.second);
+        sql << be->quote_string(col_value.second);
     }
     sql << ")";
 
-    stmt = be->conn->create_statement_from_sql(sql.str());
+    stmt = be->create_statement_from_sql(sql.str());
     return stmt;
 }
 
@@ -2045,10 +2254,10 @@ build_update_statement (GncSqlBackend* be,
         if (col_value != *values.begin())
             sql << ",";
         sql << col_value.first << "=" <<
-            be->conn->quote_string(col_value.second);
+            be->quote_string(col_value.second);
     }
 
-    stmt = be->conn->create_statement_from_sql(sql.str());
+    stmt = be->create_statement_from_sql(sql.str());
     /* We want our where condition to be just the first column and
      * value, i.e. the guid of the object.
      */
@@ -2071,7 +2280,7 @@ build_delete_statement (GncSqlBackend* be,
     g_return_val_if_fail (pObject != NULL, NULL);
 
     sql << "DELETE FROM " << table_name;
-    auto stmt = be->conn->create_statement_from_sql (sql.str());
+    auto stmt = be->create_statement_from_sql (sql.str());
 
     /* WHERE */
     PairVec values;
@@ -2096,7 +2305,7 @@ GncSqlObjectBackend::commit (GncSqlBackend* be, QofInstance* inst)
     {
         op = OP_DB_DELETE;
     }
-    else if (be->is_pristine_db || is_infant)
+    else if (be->pristine() || is_infant)
     {
         op = OP_DB_INSERT;
     }
@@ -2126,51 +2335,28 @@ GncSqlObjectBackend::commit (GncSqlBackend* be, QofInstance* inst)
 
 /* ================================================================= */
 
-static gboolean
-do_create_table (const GncSqlBackend* be, const gchar* table_name,
-                 const EntryVec& col_table)
-{
-    ColVec info_vec;
-    gboolean ok = FALSE;
-
-    g_return_val_if_fail (be != NULL, FALSE);
-    g_return_val_if_fail (table_name != NULL, FALSE);
-
-    for (auto const& table_row : col_table)
-    {
-        table_row->add_to_table (be, info_vec);
-    }
-    ok = be->conn->create_table (table_name, info_vec);
-    return ok;
-}
-
 gboolean
-gnc_sql_create_table (GncSqlBackend* be, const char* table_name,
-                      gint table_version, const EntryVec& col_table)
+gnc_sql_create_table (GncSqlBackend* be, const gchar* table_name,
+                      int table_version, const EntryVec& col_table)
 {
-    gboolean ok;
-
-    g_return_val_if_fail (be != NULL, FALSE);
-    g_return_val_if_fail (table_name != NULL, FALSE);
-
     DEBUG ("Creating %s table\n", table_name);
 
-    ok = do_create_table (be, table_name, col_table);
-    if (ok)
-    {
-        ok = gnc_sql_set_table_version (be, table_name, table_version);
-    }
-    return ok;
+    if (be->create_table (table_name, col_table))
+        return be->set_table_version (table_name, table_version);
+
+    return false;
 }
 
 void
 GncSqlObjectBackend::create_tables (GncSqlBackend* be)
 {
     g_return_if_fail (be != nullptr);
-    int version = gnc_sql_get_table_version (be, m_table_name.c_str());
-    if (version == 0) //No tables, otherwise version will be >= 1. 
-        gnc_sql_create_table (be, m_table_name.c_str(),
-                              m_version, m_col_table);
+    int version = be->get_table_version (m_table_name);
+    if (version == 0) //No tables, otherwise version will be >= 1.
+    {
+        be->create_table(m_table_name, m_col_table);
+        be->set_table_version(m_table_name, m_version);
+    }
     else if (version != m_version)
         PERR("Version mismatch in table %s, expecting %d but backend is %d."
              "Table creation aborted.", m_table_name.c_str(), m_version, version);
@@ -2183,7 +2369,7 @@ gnc_sql_create_temp_table (const GncSqlBackend* be, const gchar* table_name,
     g_return_val_if_fail (be != NULL, FALSE);
     g_return_val_if_fail (table_name != NULL, FALSE);
 
-    return do_create_table (be, table_name, col_table);
+    return be->create_table (table_name, col_table);
 }
 
 gboolean
@@ -2197,7 +2383,7 @@ gnc_sql_create_index (const GncSqlBackend* be, const gchar* index_name,
     g_return_val_if_fail (index_name != NULL, FALSE);
     g_return_val_if_fail (table_name != NULL, FALSE);
 
-    ok = be->conn->create_index (index_name, table_name, col_table);
+    ok = be->create_index (index_name, table_name, col_table);
     return ok;
 }
 
@@ -2206,14 +2392,7 @@ gnc_sql_get_table_version (const GncSqlBackend* be, const gchar* table_name)
 {
     g_return_val_if_fail (be != NULL, 0);
     g_return_val_if_fail (table_name != NULL, 0);
-
-    /* If the db is pristine because it's being saved, the table does not exist. */
-    if (be->is_pristine_db)
-    {
-        return 0;
-    }
-
-    return GPOINTER_TO_INT (g_hash_table_lookup (be->versions, table_name));
+    return be->get_table_version(table_name);
 }
 
 /* Create a temporary table, copy the data from the old table, delete the
@@ -2252,169 +2431,14 @@ gnc_sql_upgrade_table (GncSqlBackend* be, const gchar* table_name,
 gboolean gnc_sql_add_columns_to_table (GncSqlBackend* be, const gchar* table_name,
                                        const EntryVec& new_col_table)
 {
-    ColVec info_vec;
-    gboolean ok = FALSE;
-
     g_return_val_if_fail (be != NULL, FALSE);
     g_return_val_if_fail (table_name != NULL, FALSE);
 
-    for (auto const& table_row : new_col_table)
-    {
-        table_row->add_to_table (be, info_vec);
-    }
-    ok = be->conn->add_columns_to_table(table_name, info_vec);
-    return ok;
+    return be->add_columns_to_table(table_name, new_col_table);
 }
 
 /* ================================================================= */
-#define VERSION_TABLE_NAME "versions"
-#define MAX_TABLE_NAME_LEN 50
-#define TABLE_COL_NAME "table_name"
-#define VERSION_COL_NAME "table_version"
 
-static EntryVec version_table
-{
-    gnc_sql_make_table_entry<CT_STRING>(
-        TABLE_COL_NAME, MAX_TABLE_NAME_LEN, COL_PKEY | COL_NNUL),
-    gnc_sql_make_table_entry<CT_INT>(VERSION_COL_NAME, 0, COL_NNUL)
-};
-
-/**
- * Sees if the version table exists, and if it does, loads the info into
- * the version hash table.  Otherwise, it creates an empty version table.
- *
- * @param be Backend struct
- */
-void
-gnc_sql_init_version_info (GncSqlBackend* be)
-{
-    g_return_if_fail (be != NULL);
-
-    if (be->versions != NULL)
-    {
-        g_hash_table_destroy (be->versions);
-    }
-    be->versions = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-
-    if (be->conn->does_table_exist (VERSION_TABLE_NAME))
-    {
-        auto sql = g_strdup_printf ("SELECT * FROM %s", VERSION_TABLE_NAME);
-        auto result = gnc_sql_execute_select_sql (be, sql);
-        g_free (sql);
-        for (const auto& row : *result)
-        {
-            auto name = row.get_string_at_col (TABLE_COL_NAME);
-            auto version = row.get_int_at_col (VERSION_COL_NAME);
-            g_hash_table_insert (be->versions, g_strdup (name.c_str()),
-                                 GINT_TO_POINTER (version));
-        }
-    }
-    else
-    {
-        do_create_table (be, VERSION_TABLE_NAME, version_table);
-        gnc_sql_set_table_version (be, "Gnucash",
-                                   gnc_prefs_get_long_version ());
-        gnc_sql_set_table_version (be, "Gnucash-Resave",
-                                   GNUCASH_RESAVE_VERSION);
-    }
-}
-
-/**
- * Resets the version table information by removing all version table info.
- * It also recreates the version table in the db.
- *
- * @param be Backend struct
- * @return TRUE if successful, FALSE if error
- */
-static gboolean
-reset_version_info (GncSqlBackend* be)
-{
-    gboolean ok;
-
-    g_return_val_if_fail (be != NULL, FALSE);
-
-    ok = do_create_table (be, VERSION_TABLE_NAME, version_table);
-    if (be->versions == NULL)
-    {
-        be->versions = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-    }
-    else
-    {
-        g_hash_table_remove_all (be->versions);
-    }
-
-    gnc_sql_set_table_version (be, "Gnucash", gnc_prefs_get_long_version ());
-    gnc_sql_set_table_version (be, "Gnucash-Resave", GNUCASH_RESAVE_VERSION);
-    return ok;
-}
-
-/**
- * Finalizes the version table info by destroying the hash table.
- *
- * @param be Backend struct
- */
-void
-gnc_sql_finalize_version_info (GncSqlBackend* be)
-{
-    g_return_if_fail (be != NULL);
-
-    if (be->versions != NULL)
-    {
-        g_hash_table_destroy (be->versions);
-        be->versions = NULL;
-    }
-}
-
-/**
- * Registers the version for a table.  Registering involves updating the
- * db version table and also the hash table.
- *
- * @param be Backend struct
- * @param table_name Table name
- * @param version Version number
- * @return TRUE if successful, FALSE if unsuccessful
- */
-gboolean
-gnc_sql_set_table_version (GncSqlBackend* be, const gchar* table_name,
-                           gint version)
-{
-    gchar* sql;
-    gint cur_version;
-    gint status;
-
-    g_return_val_if_fail (be != NULL, FALSE);
-    g_return_val_if_fail (table_name != NULL, FALSE);
-    g_return_val_if_fail (version > 0, FALSE);
-
-    cur_version = gnc_sql_get_table_version (be, table_name);
-    if (cur_version != version)
-    {
-        if (cur_version == 0)
-        {
-            sql = g_strdup_printf ("INSERT INTO %s VALUES('%s',%d)", VERSION_TABLE_NAME,
-                                   table_name, version);
-        }
-        else
-        {
-            sql = g_strdup_printf ("UPDATE %s SET %s=%d WHERE %s='%s'", VERSION_TABLE_NAME,
-                                   VERSION_COL_NAME, version,
-                                   TABLE_COL_NAME, table_name);
-        }
-        status = gnc_sql_execute_nonselect_sql (be, sql);
-        if (status == -1)
-        {
-            PERR ("SQL error: %s\n", sql);
-            if (!qof_backend_check_error(&be->be))
-                qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);
-        }
-        g_free (sql);
-    }
-
-    g_hash_table_insert (be->versions, g_strdup (table_name),
-                         GINT_TO_POINTER (version));
-
-    return TRUE;
-}
 
 /* This is necessary for 64-bit builds because g++ complains
  * that reinterpret_casting a void* (64 bits) to an int (32 bits)

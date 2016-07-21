@@ -71,10 +71,99 @@ GncDbiSqlStatement::add_where_cond(QofIdTypeConst type_name,
     }
 }
 
+void
+GncDbiSqlConnection::unlock_database ()
+{
+    GncDbiBackend* qe = reinterpret_cast<decltype(qe)>(m_qbe);
+
+    if (m_conn == nullptr) return;
+    g_return_if_fail (dbi_conn_error (m_conn, nullptr) == 0);
+
+    auto dbname = dbi_conn_get_option (m_conn, "dbname");
+    /* Check if the lock table exists */
+    g_return_if_fail (dbname != nullptr);
+    auto result = dbi_conn_get_table_list (m_conn, dbname, m_lock_table);
+    if (! (result && dbi_result_get_numrows (result)))
+    {
+        if (result)
+        {
+            dbi_result_free (result);
+            result = nullptr;
+        }
+        PWARN ("No lock table in database, so not unlocking it.");
+        return;
+    }
+    dbi_result_free (result);
+
+    result = dbi_conn_query (m_conn, "BEGIN");
+    if (result)
+    {
+        /* Delete the entry if it's our hostname and PID */
+        gchar hostname[ GNC_HOST_NAME_MAX + 1 ];
+
+        dbi_result_free (result);
+        result = nullptr;
+        memset (hostname, 0, sizeof (hostname));
+        gethostname (hostname, GNC_HOST_NAME_MAX);
+        result = dbi_conn_queryf (m_conn,
+                                  "SELECT * FROM %s WHERE Hostname = '%s' AND PID = '%d'", m_lock_table, hostname,
+                                  (int)GETPID ());
+        if (result && dbi_result_get_numrows (result))
+        {
+            if (result)
+            {
+                dbi_result_free (result);
+                result = nullptr;
+            }
+            result = dbi_conn_queryf (m_conn, "DELETE FROM %s", m_lock_table);
+            if (!result)
+            {
+                PERR ("Failed to delete the lock entry");
+                qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
+                result = dbi_conn_query (m_conn, "ROLLBACK");
+                if (result)
+                {
+                    dbi_result_free (result);
+                    result = nullptr;
+                }
+                return;
+            }
+            else
+            {
+                dbi_result_free (result);
+                result = nullptr;
+            }
+            result = dbi_conn_query (m_conn, "COMMIT");
+            if (result)
+            {
+                dbi_result_free (result);
+                result = nullptr;
+            }
+            return;
+        }
+        result = dbi_conn_query (m_conn, "ROLLBACK");
+        if (result)
+        {
+            dbi_result_free (result);
+            result = nullptr;
+        }
+        PWARN ("There was no lock entry in the Lock table");
+        return;
+    }
+    if (result)
+    {
+        dbi_result_free (result);
+        result = nullptr;
+    }
+    PWARN ("Unable to get a lock on LOCK, so failed to clear the lock entry.");
+    qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
+}
+
 GncDbiSqlConnection::~GncDbiSqlConnection()
 {
     if (m_conn)
     {
+        unlock_database();
         dbi_conn_close(m_conn);
         m_conn = nullptr;
     }
@@ -336,7 +425,8 @@ GncDbiSqlConnection::quote_string (const std::string& unquoted_str)
     }
 }
 
-/* Check if the dbi connection is valid. If not attempt to re-establish it
+
+/** Check if the dbi connection is valid. If not attempt to re-establish it
  * Returns TRUE is there is a valid connection in the end or FALSE otherwise
  */
 bool

@@ -89,7 +89,7 @@ load_single_price (GncSqlBackend* be, GncSqlRow& row)
 
     g_return_val_if_fail (be != NULL, NULL);
 
-    pPrice = gnc_price_create (be->book);
+    pPrice = gnc_price_create (be->book());
 
     gnc_price_begin_edit (pPrice);
     gnc_sql_load_object (be, row, GNC_ID_PRICE, pPrice, col_table);
@@ -106,7 +106,7 @@ GncSqlPriceBackend::load_all (GncSqlBackend* be)
 
     g_return_if_fail (be != NULL);
 
-    pBook = be->book;
+    pBook = be->book();
     pPriceDB = gnc_pricedb_get_db (pBook);
     auto stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
     if (stmt != nullptr)
@@ -154,7 +154,7 @@ GncSqlPriceBackend::create_tables (GncSqlBackend* be)
     {
         /* Upgrade 64 bit int handling */
         gnc_sql_upgrade_table (be, TABLE_NAME, col_table);
-        (void)gnc_sql_set_table_version (be, TABLE_NAME, TABLE_VERSION);
+        be->set_table_version (TABLE_NAME, TABLE_VERSION);
 
         PINFO ("Prices table upgraded from version 1 to version %d\n", TABLE_VERSION);
     }
@@ -179,7 +179,7 @@ GncSqlPriceBackend::commit (GncSqlBackend* be, QofInstance* inst)
     {
         op = OP_DB_DELETE;
     }
-    else if (be->is_pristine_db || is_infant)
+    else if (be->pristine() || is_infant)
     {
         op = OP_DB_INSERT;
     }
@@ -226,7 +226,7 @@ GncSqlPriceBackend::write (GncSqlBackend* be)
     g_return_val_if_fail (be != NULL, FALSE);
     write_objects_t data{be, true, this};
 
-    auto priceDB = gnc_pricedb_get_db (be->book);
+    auto priceDB = gnc_pricedb_get_db (be->book());
     return gnc_pricedb_foreach_price (priceDB, write_price, &data, TRUE);
 }
 

@@ -152,7 +152,7 @@ load_single_book (GncSqlBackend* be, GncSqlRow& row)
 
     gnc_sql_load_guid (be, row);
 
-    pBook = be->book;
+    pBook = be->book();
     if (pBook == NULL)
     {
         pBook = qof_book_new ();
@@ -182,9 +182,9 @@ GncSqlBookBackend::load_all (GncSqlBackend* be)
          */
         if (row == result->end())
         {
-            be->loading = FALSE;
-            commit(be, QOF_INSTANCE (be->book));
-            be->loading = TRUE;
+            be->set_loading(false);
+            commit (be, QOF_INSTANCE (be->book()));
+            be->set_loading(true);
         }
         else
         {

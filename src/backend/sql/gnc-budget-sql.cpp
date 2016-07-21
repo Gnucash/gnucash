@@ -275,7 +275,7 @@ save_budget_amounts (GncSqlBackend* be, GncBudget* budget)
     info.budget = budget;
     num_periods = gnc_budget_get_num_periods (budget);
     descendants = gnc_account_get_descendants (gnc_book_get_root_account (
-                                                   be->book));
+                                                   be->book()));
     for (node = descendants; node != NULL && is_ok; node = g_list_next (node))
     {
         guint i;
@@ -308,11 +308,11 @@ load_single_budget (GncSqlBackend* be, GncSqlRow& row)
     guid = gnc_sql_load_guid (be, row);
     if (guid != NULL)
     {
-        pBudget = gnc_budget_lookup (guid, be->book);
+        pBudget = gnc_budget_lookup (guid, be->book());
     }
     if (pBudget == NULL)
     {
-        pBudget = gnc_budget_new (be->book);
+        pBudget = gnc_budget_new (be->book());
     }
 
     gnc_budget_begin_edit (pBudget);
@@ -398,7 +398,7 @@ GncSqlBudgetBackend::commit (GncSqlBackend* be, QofInstance* inst)
     {
         op = OP_DB_DELETE;
     }
-    else if (be->is_pristine_db || is_infant)
+    else if (be->pristine() || is_infant)
     {
         op = OP_DB_INSERT;
     }
@@ -464,7 +464,7 @@ GncSqlBudgetBackend::write (GncSqlBackend* be)
     data.be = be;
     data.is_ok = TRUE;
     data.obe = this;
-    qof_collection_foreach (qof_book_get_collection (be->book, GNC_ID_BUDGET),
+    qof_collection_foreach (qof_book_get_collection (be->book(), GNC_ID_BUDGET),
                             (QofInstanceForeachCB)do_save, &data);
 
     return data.is_ok;
@@ -479,7 +479,7 @@ GncSqlColumnTableEntryImpl<CT_BUDGETREF>::load (const GncSqlBackend* be,
 {
     load_from_guid_ref(row, obj_name, pObject,
                        [be](GncGUID* g){
-                            return gnc_budget_lookup (g, be->book);
+                            return gnc_budget_lookup (g, be->book());
                         });
 }
 

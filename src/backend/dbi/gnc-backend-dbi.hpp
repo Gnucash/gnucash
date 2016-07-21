@@ -25,8 +25,17 @@
 extern "C"
 {
 #include <dbi/dbi.h>
+#ifdef G_OS_WIN32
+#include <winsock2.h>
+#define GETPID() GetCurrentProcessId()
+#else
+#include <limits.h>
+#include <unistd.h>
+#define GETPID() getpid()
+#endif
 }
 #include <gnc-backend-sql.h>
+#define GNC_HOST_NAME_MAX 255
 
 /**
  * Options to conn_table_operation
@@ -76,22 +85,41 @@ public:
 /**
  * Implementations of GncSqlBackend.
  */
-struct GncDbiBackend
+class GncDbiBackend : public GncSqlBackend
 {
-    GncSqlBackend sql_be;
-
-    dbi_conn conn;
-
-    gboolean  exists;         // Does the database exist?
+public:
+    GncDbiBackend(GncSqlConnection *conn, QofBook* book,
+                  const char* format = nullptr) :
+        GncSqlBackend(conn, book, format), m_exists{false} {}
+    bool connected() const noexcept { return m_conn != nullptr; }
+    /** FIXME: Just a pass-through to m_conn: */
+    void set_error(int error, int repeat,  bool retry) noexcept
+    {
+        m_conn->set_error(error, repeat, retry);
+    }
+    void retry_connection(const char* msg) const noexcept
+    {
+        m_conn->retry_connection(msg);
+    }
+    /* Worst of all: */
+    GncSqlConnection* conn() { return m_conn; }
+    /*-----*/
+    bool exists() { return m_exists; }
+    void set_exists(bool exists) { m_exists = exists; }
+    friend void gnc_dbi_load(QofBackend*, QofBook*, QofBackendLoadType);
+    friend void gnc_dbi_safe_sync_all(QofBackend*, QofBook*);
+private:
+    bool m_exists;         // Does the database exist?
 };
 
 class GncDbiSqlConnection : public GncSqlConnection
 {
 public:
     GncDbiSqlConnection (GncDbiProvider* provider, QofBackend* qbe,
-                         dbi_conn conn) :
+                         dbi_conn conn, const char* lock_table) :
         m_qbe{qbe}, m_conn{conn}, m_provider{provider}, m_conn_ok{true},
-        m_last_error{ERR_BACKEND_NO_ERR}, m_error_repeat{0}, m_retry{false} {}
+        m_last_error{ERR_BACKEND_NO_ERR}, m_error_repeat{0}, m_retry{false},
+        m_lock_table{lock_table} {}
     ~GncDbiSqlConnection() override;
     GncSqlResultPtr execute_select_statement (const GncSqlStatementPtr&)
         noexcept override;
@@ -114,21 +142,21 @@ public:
     QofBackend* qbe () const noexcept { return m_qbe; }
     dbi_conn conn() const noexcept { return m_conn; }
     GncDbiProvider* provider() { return m_provider; }
-    inline void set_error (int error, int repeat,  bool retry) noexcept
+    inline void set_error(int error, int repeat,  bool retry) noexcept override
     {
         m_last_error = error;
         m_error_repeat = repeat;
         m_retry = retry;
     }
-    inline void init_error () noexcept
+    inline void init_error() noexcept
     {
         set_error(ERR_BACKEND_NO_ERR, 0, false);
     }
     /** Check if the dbi connection is valid. If not attempt to re-establish it
      * Returns TRUE is there is a valid connection in the end or FALSE otherwise
      */
-    bool verify() noexcept;
-    bool retry_connection(const char* msg) noexcept;
+    bool verify() noexcept override;
+    bool retry_connection(const char* msg) noexcept override;
     dbi_result table_manage_backup(const std::string& table_name, TableOpType op);
     /* FIXME: These three friend functions should really be members, but doing
      * that is too invasive just yet. */
@@ -162,6 +190,8 @@ private:
      * original query)
      */
     gboolean m_retry;
+    const char* m_lock_table;
+    void unlock_database();
 
 };
 

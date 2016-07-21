@@ -104,7 +104,7 @@ load_single_sx (GncSqlBackend* be, GncSqlRow& row)
 
     guid = gnc_sql_load_guid (be, row);
     g_assert (guid != NULL);
-    pSx = xaccSchedXactionMalloc (be->book);
+    pSx = xaccSchedXactionMalloc (be->book());
 
     gnc_sx_begin_edit (pSx);
     gnc_sql_load_object (be, row, GNC_SX_ID, pSx, col_table);
@@ -128,7 +128,7 @@ GncSqlSchedXactionBackend::load_all (GncSqlBackend* be)
     auto result = gnc_sql_execute_select_statement (be, stmt);
     SchedXactions* sxes;
     GList* list = NULL;
-    sxes = gnc_book_get_schedxactions (be->book);
+    sxes = gnc_book_get_schedxactions (be->book());
 
     for (auto row : *result)
     {
@@ -171,7 +171,7 @@ GncSqlSchedXactionBackend::commit (GncSqlBackend* be, QofInstance* inst)
     {
         op = OP_DB_DELETE;
     }
-    else if (be->is_pristine_db || is_infant)
+    else if (be->pristine() || is_infant)
     {
         op = OP_DB_INSERT;
     }

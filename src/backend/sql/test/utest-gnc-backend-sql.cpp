@@ -105,6 +105,9 @@ public:
     virtual std::string quote_string (const std::string& str)
         const noexcept override { return std::string{str}; }
     int dberror() const noexcept override { return 0; }
+    void set_error(int error, int repeat, bool retry) noexcept override { return; }
+    bool verify() noexcept override { return true; }
+    bool retry_connection(const char* msg) noexcept override { return true; }
 private:
     GncMockSqlResult m_result;
 };
@@ -256,7 +259,6 @@ test_dirty_cb (QofBook* book, gboolean dirty, gpointer data)
 static void
 test_gnc_sql_commit_edit (void)
 {
-    GncSqlBackend be;
     QofInstance* inst;
     guint dirty_called = 0;
     GncMockSqlConnection conn;
@@ -282,52 +284,51 @@ test_gnc_sql_commit_edit (void)
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_list_handler, NULL);
 
     qof_object_initialize ();
-    be.book = qof_book_new ();
-    be.conn = &conn;
+    auto book = qof_book_new();
+    GncSqlBackend be (&conn, book);
     inst  = static_cast<decltype (inst)> (g_object_new (QOF_TYPE_INSTANCE, NULL));
-    qof_instance_init_data (inst, QOF_ID_NULL, be.book);
-    be.loading = FALSE;
-    qof_book_set_dirty_cb (be.book, test_dirty_cb, &dirty_called);
+    qof_instance_init_data (inst, QOF_ID_NULL, book);
+    qof_book_set_dirty_cb (book, test_dirty_cb, &dirty_called);
     qof_instance_set_dirty_flag (inst, TRUE);
-    qof_book_mark_session_dirty (be.book);
+    qof_book_mark_session_dirty (book);
 
     g_assert (qof_instance_get_dirty_flag (inst));
-    g_assert (qof_book_session_not_saved (be.book));
+    g_assert (qof_book_session_not_saved (book));
     g_assert_cmpint (dirty_called, == , 1);
     gnc_sql_commit_edit (&be, inst);
     g_assert (!qof_instance_get_dirty_flag (inst));
-    g_assert (!qof_book_session_not_saved (be.book));
+    g_assert (!qof_book_session_not_saved (book));
     g_assert_cmpint (dirty_called, == , 0);
     g_assert_cmpint (check1.hits, == , 2);
     g_assert_cmpint (check2.hits, == , 0);
 
-    qof_book_mark_session_dirty (be.book);
+    qof_book_mark_session_dirty (book);
 
-    g_assert (!qof_instance_get_dirty_flag (QOF_INSTANCE (be.book)));
-    g_assert (qof_book_session_not_saved (be.book));
+    g_assert (!qof_instance_get_dirty_flag (QOF_INSTANCE (book)));
+    g_assert (qof_book_session_not_saved (book));
     g_assert_cmpint (dirty_called, == , 1);
-    gnc_sql_commit_edit (&be, QOF_INSTANCE (be.book));
-    g_assert (!qof_instance_get_dirty_flag (QOF_INSTANCE (be.book)));
-    g_assert (qof_book_session_not_saved (be.book));
+    gnc_sql_commit_edit (&be, QOF_INSTANCE (book));
+    g_assert (!qof_instance_get_dirty_flag (QOF_INSTANCE (book)));
+    g_assert (qof_book_session_not_saved (book));
     g_assert_cmpint (dirty_called, == , 1);
     g_assert_cmpint (check1.hits, == , 2);
     g_assert_cmpint (check2.hits, == , 0);
 
-    qof_instance_set_dirty_flag (QOF_INSTANCE (be.book), TRUE);
+    qof_instance_set_dirty_flag (QOF_INSTANCE (book), TRUE);
 
-    g_assert (qof_instance_get_dirty_flag (QOF_INSTANCE (be.book)));
-    g_assert (qof_book_session_not_saved (be.book));
+    g_assert (qof_instance_get_dirty_flag (QOF_INSTANCE (book)));
+    g_assert (qof_book_session_not_saved (book));
     g_assert_cmpint (dirty_called, == , 1);
-    gnc_sql_commit_edit (&be, QOF_INSTANCE (be.book));
-    g_assert (!qof_instance_get_dirty_flag (QOF_INSTANCE (be.book)));
-    g_assert (!qof_book_session_not_saved (be.book));
+    gnc_sql_commit_edit (&be, QOF_INSTANCE (book));
+    g_assert (!qof_instance_get_dirty_flag (QOF_INSTANCE (book)));
+    g_assert (!qof_book_session_not_saved (book));
     g_assert_cmpint (dirty_called, == , 0);
     g_assert_cmpint (check1.hits, == , 2);
     g_assert_cmpint (check2.hits, == , 2);
 
     g_log_remove_handler (logdomain, hdlr1);
     g_object_unref (inst);
-    g_object_unref (be.book);
+    g_object_unref (book);
 }
 /* handle_and_term
 static void
@@ -633,14 +634,7 @@ gnc_sql_convert_timespec_to_string (const GncSqlBackend* be, Timespec ts)// C: 1
 static void
 test_gnc_sql_convert_timespec_to_string ()
 {
-    GncSqlBackend be = {{
-            nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
-            nullptr, nullptr, nullptr, nullptr, ERR_BACKEND_NO_ERR, nullptr,
-            0, nullptr
-        },
-        nullptr, nullptr, FALSE, FALSE, FALSE, nullptr,
-        "%4d-%02d-%02d %02d:%02d:%02d"
-    };
+    GncSqlBackend be {nullptr, nullptr, "%4d-%02d-%02d %02d:%02d:%02d"};
     const char* date[numtests] = {"1995-03-11 19:17:26",
                                   "2001-04-20 11:44:07",
                                   "1964-02-29 09:15:23",

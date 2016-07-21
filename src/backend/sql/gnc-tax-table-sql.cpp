@@ -237,7 +237,7 @@ load_taxtable_entries (GncSqlBackend* be, GncTaxTable* tt)
     g_value_set_string (&value, guid_buf);
     buf = g_strdup_printf ("SELECT * FROM %s WHERE taxtable='%s'",
                            TTENTRIES_TABLE_NAME, guid_buf);
-    auto stmt = be->conn->create_statement_from_sql (buf);
+    auto stmt = be->create_statement_from_sql (buf);
     g_free (buf);
     auto result = gnc_sql_execute_select_statement (be, stmt);
     for (auto row : *result)
@@ -254,10 +254,10 @@ load_single_taxtable (GncSqlBackend* be, GncSqlRow& row,
     g_return_if_fail (be != NULL);
 
     guid = gnc_sql_load_guid (be, row);
-    tt = gncTaxTableLookup (be->book, guid);
+    tt = gncTaxTableLookup (be->book(), guid);
     if (tt == NULL)
     {
-        tt = gncTaxTableCreate (be->book);
+        tt = gncTaxTableCreate (be->book());
     }
     gnc_sql_load_object (be, row, GNC_ID_TAXTABLE, tt, tt_col_table);
     gnc_sql_slots_load (be, QOF_INSTANCE (tt));
@@ -342,7 +342,7 @@ GncSqlTaxTableBackend::create_tables (GncSqlBackend* be)
     {
         /* Upgrade 64 bit int handling */
         gnc_sql_upgrade_table (be, TT_TABLE_NAME, tt_col_table);
-        gnc_sql_set_table_version (be, TT_TABLE_NAME, TT_TABLE_VERSION);
+        be->set_table_version (TT_TABLE_NAME, TT_TABLE_VERSION);
         PINFO ("Taxtables table upgraded from version 1 to version %d\n",
                TT_TABLE_VERSION);
     }
@@ -357,7 +357,7 @@ GncSqlTaxTableBackend::create_tables (GncSqlBackend* be)
     {
         /* Upgrade 64 bit int handling */
         gnc_sql_upgrade_table (be, TTENTRIES_TABLE_NAME, ttentries_col_table);
-        gnc_sql_set_table_version (be, TTENTRIES_TABLE_NAME, TTENTRIES_TABLE_VERSION);
+        be->set_table_version (TTENTRIES_TABLE_NAME, TTENTRIES_TABLE_VERSION);
         PINFO ("Taxtable entries table upgraded from version 1 to version %d\n",
                TTENTRIES_TABLE_VERSION);
     }
@@ -423,7 +423,7 @@ GncSqlTaxTableBackend::commit (GncSqlBackend* be, QofInstance* inst)
     {
         op = OP_DB_DELETE;
     }
-    else if (be->is_pristine_db || is_infant)
+    else if (be->pristine() || is_infant)
     {
         op = OP_DB_INSERT;
     }
@@ -477,7 +477,7 @@ GncSqlTaxTableBackend::write (GncSqlBackend* be)
     g_return_val_if_fail (be != NULL, FALSE);
     write_objects_t data{be, true, this};
 
-    qof_object_foreach (GNC_ID_TAXTABLE, be->book, save_next_taxtable, &data);
+    qof_object_foreach (GNC_ID_TAXTABLE, be->book(), save_next_taxtable, &data);
 
     return data.is_ok;
 }
@@ -491,7 +491,7 @@ GncSqlColumnTableEntryImpl<CT_TAXTABLEREF>::load (const GncSqlBackend* be,
 {
     load_from_guid_ref(row, obj_name, pObject,
                        [be](GncGUID* g){
-                           return gncTaxTableLookup(be->book, g);
+                           return gncTaxTableLookup(be->book(), g);
                        });
 }
 

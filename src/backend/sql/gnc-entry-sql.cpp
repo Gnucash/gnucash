@@ -178,10 +178,10 @@ load_single_entry (GncSqlBackend* be, GncSqlRow& row)
     g_return_val_if_fail (be != NULL, NULL);
 
     guid = gnc_sql_load_guid (be, row);
-    pEntry = gncEntryLookup (be->book, guid);
+    pEntry = gncEntryLookup (be->book(), guid);
     if (pEntry == NULL)
     {
-        pEntry = gncEntryCreate (be->book);
+        pEntry = gncEntryCreate (be->book());
     }
     gnc_sql_load_object (be, row, GNC_ID_ENTRY, pEntry, col_table);
     qof_instance_mark_clean (QOF_INSTANCE (pEntry));
@@ -234,7 +234,7 @@ GncSqlEntryBackend::create_tables (GncSqlBackend* be)
             2->3: "entered" -> "date_entered", and it can be NULL
         */
         gnc_sql_upgrade_table (be, TABLE_NAME, col_table);
-        gnc_sql_set_table_version (be, TABLE_NAME, TABLE_VERSION);
+        be->set_table_version (TABLE_NAME, TABLE_VERSION);
 
         PINFO ("Entries table upgraded from version %d to version %d\n", version,
                TABLE_VERSION);
@@ -267,7 +267,7 @@ GncSqlEntryBackend::write (GncSqlBackend* be)
     g_return_val_if_fail (be != NULL, FALSE);
     write_objects_t data{be, true, this};
 
-    qof_object_foreach (GNC_ID_ENTRY, be->book, write_single_entry, &data);
+    qof_object_foreach (GNC_ID_ENTRY, be->book(), write_single_entry, &data);
 
     return data.is_ok;
 }

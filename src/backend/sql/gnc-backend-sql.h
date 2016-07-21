@@ -59,22 +59,66 @@ using ColVec = std::vector<GncSqlColumnInfo>;
 using StrVec = std::vector<std::string>;
 using PairVec = std::vector<std::pair<std::string, std::string>>;
 class GncSqlConnection;
+class GncSqlStatement;
+using GncSqlStatementPtr = std::unique_ptr<GncSqlStatement>;
+class GncSqlResult;
+//using GncSqlResultPtr = std::unique_ptr<GncSqlResult>;
+using GncSqlResultPtr = GncSqlResult*;
 
 /**
  * @struct GncSqlBackend
  *
  * Main SQL backend structure.
  */
-struct GncSqlBackend
+class GncSqlBackend
 {
-    QofBackend be;           /**< QOF backend */
-    GncSqlConnection* conn;  /**< SQL connection */
-    QofBook* book;           /**< The primary, main open book */
-    gboolean loading;        /**< We are performing an initial load */
-    gboolean in_query;       /**< We are processing a query */
-    gboolean is_pristine_db; /**< Are we saving to a new pristine db? */
-    GHashTable* versions;    /**< Version number for each table */
-    const gchar* timespec_format;   /**< Format string for SQL for timespec values */
+public:
+    GncSqlBackend(GncSqlConnection *conn, QofBook* book,
+                  const char* format = nullptr);
+    virtual ~GncSqlBackend() = default;
+    /** Connect the backend to a GncSqlConnection.
+     * Sets up version info. Calling with nullptr clears the connection and
+     * destroys the version info.
+     */
+    void connect(GncSqlConnection *conn) noexcept;
+    void init_version_info() noexcept;
+    bool reset_version_info() noexcept;
+    void finalize_version_info() noexcept;
+    /* FIXME: These are just pass-throughs of m_conn functions. */
+    GncSqlStatementPtr create_statement_from_sql(const std::string& str) const noexcept;
+    GncSqlResultPtr execute_select_statement(const GncSqlStatementPtr& stmt) const noexcept;
+    int execute_nonselect_statement(const GncSqlStatementPtr& stmt) const noexcept;
+    std::string quote_string(const std::string&) const noexcept;
+    bool create_table(const std::string& table_name, const EntryVec& col_table) const noexcept;
+    bool create_index(const std::string& index_name,
+                      const std::string& table_name,
+                      const EntryVec& col_table) const noexcept;
+    bool add_columns_to_table(const std::string& table_name,
+                              const EntryVec& col_table) const noexcept;
+    int get_table_version(const std::string& table_name) const noexcept;
+    bool set_table_version (const std::string& table_name, int version) noexcept;
+    QofBook* book() const noexcept { return m_book; }
+
+    bool pristine() const noexcept { return m_is_pristine_db; }
+    void update_progress() const noexcept;
+    void finish_progress() const noexcept;
+    void set_loading(bool val) noexcept { m_loading = val; }
+    const char* timespec_format() const noexcept { return m_timespec_format; }
+
+    friend void gnc_sql_load(GncSqlBackend*, QofBook*, QofBackendLoadType);
+    friend void gnc_sql_sync_all(GncSqlBackend*, QofBook*);
+    friend void gnc_sql_commit_edit(GncSqlBackend*, QofInstance*);
+
+protected:
+    QofBackend be;           /**< QOF backend. Not a pointer, nor really a member */
+    GncSqlConnection* m_conn;  /**< SQL connection */
+    QofBook* m_book;           /**< The primary, main open book */
+    bool m_loading;        /**< We are performing an initial load */
+    bool m_in_query;       /**< We are processing a query */
+    bool m_is_pristine_db; /**< Are we saving to a new pristine db? */
+    GHashTable* m_versions;    /**< Version number for each table */
+    const char* m_timespec_format;   /**< Format string for SQL for timespec values */
+private:
 };
 
 /**
@@ -137,9 +181,6 @@ void gnc_sql_commit_edit (GncSqlBackend* qbe, QofInstance* inst);
 
 /**
  */
-class GncSqlResult;
-//using GncSqlResultPtr = std::unique_ptr<GncSqlResult>;
-using GncSqlResultPtr = GncSqlResult*;
 
 /**
  * SQL statement provider.
@@ -151,8 +192,6 @@ public:
     virtual const char* to_sql() const = 0;
     virtual void add_where_cond (QofIdTypeConst, const PairVec&) = 0;
 };
-
-using GncSqlStatementPtr = std::unique_ptr<GncSqlStatement>;
 
 /**
  * Encapsulate the connection to the database. 
@@ -192,6 +231,10 @@ public:
      * If not 0 will normally be meaningless outside of implementation code.
      */
     virtual int dberror() const noexcept = 0;
+    virtual void set_error(int error, int repeat,  bool retry) noexcept = 0;
+    virtual bool verify() noexcept = 0;
+    virtual bool retry_connection(const char* msg) noexcept = 0;
+
 };
 
 /**
