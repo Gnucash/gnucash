@@ -431,8 +431,7 @@ GncSqlBackend::GncSqlBackend(GncSqlConnection *conn, QofBook* book,
         be {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
             nullptr, nullptr, nullptr, nullptr, ERR_BACKEND_NO_ERR, nullptr, 0,
             nullptr}, m_conn{conn}, m_book{book}, m_loading{false},
-        m_in_query{false}, m_is_pristine_db{false}, m_versions{nullptr},
-        m_timespec_format{format}
+        m_in_query{false}, m_is_pristine_db{false}, m_timespec_format{format}
 {
     if (conn != nullptr)
         connect (conn);
@@ -443,8 +442,7 @@ GncSqlBackend::connect(GncSqlConnection *conn) noexcept
 {
     if (m_conn != nullptr && m_conn != conn)
         delete m_conn;
-    if (m_versions != nullptr)
-        finalize_version_info();
+    finalize_version_info();
     m_conn = conn;
 }
 
@@ -549,11 +547,6 @@ GncSqlBackend::finish_progress() const noexcept
 void
 GncSqlBackend::init_version_info() noexcept
 {
-    if (m_versions != NULL)
-    {
-        g_hash_table_destroy (m_versions);
-    }
-    m_versions = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
     if (m_conn->does_table_exist (VERSION_TABLE_NAME))
     {
@@ -564,9 +557,8 @@ GncSqlBackend::init_version_info() noexcept
         for (const auto& row : *result)
         {
             auto name = row.get_string_at_col (TABLE_COL_NAME);
-            auto version = row.get_int_at_col (VERSION_COL_NAME);
-            g_hash_table_insert (m_versions, g_strdup (name.c_str()),
-                                 GINT_TO_POINTER (version));
+            unsigned int version = row.get_int_at_col (VERSION_COL_NAME);
+            m_versions.push_back(std::make_pair(name, version));
         }
     }
     else
@@ -590,15 +582,7 @@ GncSqlBackend::reset_version_info() noexcept
     bool ok = true;
     if (!m_conn->does_table_exist (VERSION_TABLE_NAME))
         ok = create_table (VERSION_TABLE_NAME, version_table);
-    if (m_versions == nullptr)
-    {
-        m_versions = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-    }
-    else
-    {
-        g_hash_table_remove_all (m_versions);
-    }
-
+    m_versions.clear();
     set_table_version ("Gnucash", gnc_prefs_get_long_version ());
     set_table_version ("Gnucash-Resave", GNUCASH_RESAVE_VERSION);
     return ok;
@@ -612,22 +596,22 @@ GncSqlBackend::reset_version_info() noexcept
 void
 GncSqlBackend::finalize_version_info() noexcept
 {
-    if (m_versions != nullptr)
-    {
-        g_hash_table_destroy (m_versions);
-        m_versions = nullptr;
-    }
+    m_versions.clear();
 }
 
-int
+unsigned int
 GncSqlBackend::get_table_version(const std::string& table_name) const noexcept
 {
     /* If the db is pristine because it's being saved, the table does not exist. */
     if (m_is_pristine_db)
         return 0;
 
-    return GPOINTER_TO_INT (g_hash_table_lookup (m_versions,
-                                                 table_name.c_str()));
+    auto version = std::find_if(m_versions.begin(), m_versions.end(),
+                                [table_name](const VersionPair& version) {
+                                    return version.first == table_name; });
+    if (version != m_versions.end())
+        return version->second;
+    return 0;
 }
 
 /**
@@ -640,39 +624,42 @@ GncSqlBackend::get_table_version(const std::string& table_name) const noexcept
  * @return TRUE if successful, FALSE if unsuccessful
  */
 bool
-GncSqlBackend::set_table_version (const std::string& table_name, int version) noexcept
+GncSqlBackend::set_table_version (const std::string& table_name,
+                                  unsigned int version) noexcept
 {
-    gchar* sql;
-    gint cur_version;
-    gint status;
-
     g_return_val_if_fail (version > 0, false);
 
-    cur_version = get_table_version (table_name);
+    unsigned int cur_version{0};
+    std::stringstream sql;
+    auto ver_entry = std::find_if(m_versions.begin(), m_versions.end(),
+                                [table_name](const VersionPair& ver) {
+                                    return ver.first == table_name; });
+    if (ver_entry != m_versions.end())
+        cur_version = ver_entry->second;
     if (cur_version != version)
     {
         if (cur_version == 0)
         {
-            sql = g_strdup_printf ("INSERT INTO %s VALUES('%s',%d)", VERSION_TABLE_NAME,
-                                   table_name.c_str(), version);
+            sql << "INSERT INTO " << VERSION_TABLE_NAME << " VALUES('" <<
+                table_name << "'," << version <<")";
+            m_versions.push_back(std::make_pair(table_name, version));
         }
         else
         {
-            sql = g_strdup_printf ("UPDATE %s SET %s=%d WHERE %s='%s'", VERSION_TABLE_NAME,
-                                   VERSION_COL_NAME, version,
-                                   TABLE_COL_NAME, table_name.c_str());
+            sql << "UPDATE " <<  VERSION_TABLE_NAME << " SET " <<
+                VERSION_COL_NAME << "=" << version << " WHERE " <<
+                TABLE_COL_NAME << "='" << table_name << "'";
+            ver_entry->second = version;
         }
-        status = gnc_sql_execute_nonselect_sql (this, sql);
+        auto stmt = create_statement_from_sql(sql.str());
+        auto status = execute_nonselect_statement (stmt);
         if (status == -1)
         {
-            PERR ("SQL error: %s\n", sql);
+            PERR ("SQL error: %s\n", sql.str().c_str());
             qof_backend_set_error ((QofBackend*)this, ERR_BACKEND_SERVER_ERR);
+            return false;
         }
-        g_free (sql);
     }
-
-    g_hash_table_insert (m_versions, g_strdup (table_name.c_str()),
-                         GINT_TO_POINTER (version));
 
     return true;
 }

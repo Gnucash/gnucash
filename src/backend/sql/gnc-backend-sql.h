@@ -58,6 +58,8 @@ using EntryVec = std::vector<GncSqlColumnTableEntryPtr>;
 using ColVec = std::vector<GncSqlColumnInfo>;
 using StrVec = std::vector<std::string>;
 using PairVec = std::vector<std::pair<std::string, std::string>>;
+using VersionPair = std::pair<const std::string, unsigned int>;
+using VersionVec = std::vector<VersionPair>;
 class GncSqlConnection;
 class GncSqlStatement;
 using GncSqlStatementPtr = std::unique_ptr<GncSqlStatement>;
@@ -95,8 +97,8 @@ public:
                       const EntryVec& col_table) const noexcept;
     bool add_columns_to_table(const std::string& table_name,
                               const EntryVec& col_table) const noexcept;
-    int get_table_version(const std::string& table_name) const noexcept;
-    bool set_table_version (const std::string& table_name, int version) noexcept;
+    unsigned int get_table_version(const std::string& table_name) const noexcept;
+    bool set_table_version (const std::string& table_name, unsigned int version) noexcept;
     QofBook* book() const noexcept { return m_book; }
 
     bool pristine() const noexcept { return m_is_pristine_db; }
@@ -116,7 +118,7 @@ protected:
     bool m_loading;        /**< We are performing an initial load */
     bool m_in_query;       /**< We are processing a query */
     bool m_is_pristine_db; /**< Are we saving to a new pristine db? */
-    GHashTable* m_versions;    /**< Version number for each table */
+    VersionVec m_versions;    /**< Version number for each table */
     const char* m_timespec_format;   /**< Format string for SQL for timespec values */
 private:
 };
