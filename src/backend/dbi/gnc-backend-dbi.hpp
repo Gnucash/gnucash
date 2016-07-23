@@ -160,13 +160,11 @@ public:
     dbi_result table_manage_backup(const std::string& table_name, TableOpType op);
     /* FIXME: These three friend functions should really be members, but doing
      * that is too invasive just yet. */
-    friend gboolean conn_table_operation (GncSqlConnection* sql_conn,
-                                          std::vector<std::string> table_name_list,
-                                          TableOpType op);
+    bool table_operation (const std::vector<std::string>& table_name_list,
+                          TableOpType op) noexcept;
+    std::string add_columns_ddl(const std::string& table_name,
+                                const ColVec& info_vec) const noexcept;
     friend void gnc_dbi_safe_sync_all (QofBackend* qbe, QofBook* book);
-    friend std::string add_columns_ddl(const GncSqlConnection* conn,
-                                       const std::string& table_name,
-                                       const ColVec& info_vec);
 
 private:
     QofBackend* m_qbe;
@@ -195,8 +193,6 @@ private:
 
 };
 
-gboolean conn_table_operation (GncSqlConnection* sql_conn,
-                               GSList* table_name_list, TableOpType op);
 void gnc_dbi_safe_sync_all (QofBackend* qbe, QofBook* book);
 std::string add_columns_ddl(const GncSqlConnection* conn,
                             const std::string& table_name,

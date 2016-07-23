@@ -1344,98 +1344,6 @@ save_may_clobber_data (QofBackend* qbe)
     return retval;
 }
 
-/**
- * Perform a specified SQL operation on every table in a
- * database. Possible operations are:
- * * drop: to DROP all tables from the database
- * * empty: to DELETE all records from each table in the database.
- * * backup: Rename every table from "name" to "name_back"
- * * drop_backup: DROP the backup tables.
- * * rollback: DROP the new table "name" and rename "name_back" to
- *   "name", restoring the database to its previous state.
- *
- * The intent of the last two is to be able to move an existing table
- * aside, query its contents with a transformation (in 2.4.x this is
- * already done as the contents are loaded completely when a Qof
- * session is started), save them to a new table according to a new
- * database format, and finally drop the backup table; if there's an
- * error during the process, rollback allows returning the table to
- * its original state.
- *
- * @param sql_conn: The sql connection (via dbi) to which the
- * transactions will be sent
- * @param tables: GList of tables to operate on.
- * @param op: The operation to perform.
- * @return Success (TRUE) or failure.
- */
-
-gboolean
-conn_table_operation (GncSqlConnection* sql_conn,
-                      std::vector<std::string> table_name_list,
-                      TableOpType op)
-{
-    gboolean result = TRUE;
-    GncDbiSqlConnection* conn = (GncDbiSqlConnection*) (sql_conn);
-    const gchar* dbname = dbi_conn_get_option (conn->m_conn, "dbname");
-
-    g_return_val_if_fail (!table_name_list.empty(), FALSE);
-
-    for (auto table : table_name_list)
-    {
-        dbi_result result;
-        auto table_name = table.c_str();
-        /* Ignore the lock table */
-        if (g_strcmp0 (table_name, lock_table) == 0)
-        {
-            continue;
-        }
-        do
-        {
-            conn->init_error ();
-            switch (op)
-            {
-            case rollback:
-            {
-                auto full_table_name_list =
-                    conn->m_provider->get_table_list (conn->m_conn, dbname);
-                if (std::find (full_table_name_list.begin(),
-                               full_table_name_list.end(),
-                               table_name) != full_table_name_list.end())
-                {
-                    result = dbi_conn_queryf (conn->m_conn, "DROP TABLE %s",
-                                              table_name);
-                    if (result)
-                        break;
-                }
-            }
-            /* Fall through */
-            case backup:
-            case drop_backup:
-                result = conn->table_manage_backup (table_name, op);
-                break;
-            case empty:
-                result = dbi_conn_queryf (conn->m_conn, "DELETE FROM TABLE %s",
-                                          table_name);
-                break;
-            case drop:
-            default:
-                result = dbi_conn_queryf (conn->m_conn, "DROP TABLE %s",
-                                          table_name);
-                break;
-            }
-        }
-        while (conn->m_retry);
-        if (result != nullptr)
-        {
-            if (dbi_result_free (result) < 0)
-            {
-                PERR ("Error in dbi_result_free() result\n");
-                result = FALSE;
-            }
-        }
-    }
-    return result;
-}
 
 /**
  * Safely resave a database by renaming all of its tables, recreating
@@ -1459,10 +1367,10 @@ gnc_dbi_safe_sync_all (QofBackend* qbe, QofBook* book)
     ENTER ("book=%p, primary=%p", book, be->m_book);
     auto dbname = dbi_conn_get_option (conn->conn(), "dbname");
     auto table_list = conn->m_provider->get_table_list (conn->conn(), dbname);
-    if (!conn_table_operation (conn, table_list, backup))
+    if (!conn->table_operation (table_list, backup))
     {
         qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
-        conn_table_operation (conn, table_list, rollback);
+        conn->table_operation (table_list, rollback);
         LEAVE ("Failed to rename tables");
         return;
     }
@@ -1474,7 +1382,7 @@ gnc_dbi_safe_sync_all (QofBackend* qbe, QofBook* book)
         if (DBI_ERROR_NONE != dbi_conn_error (conn->m_conn, &errmsg))
         {
             qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
-            conn_table_operation (conn, table_list, rollback);
+            conn->table_operation (table_list, rollback);
             LEAVE ("Failed to drop indexes %s", errmsg);
             return;
         }
@@ -1483,11 +1391,11 @@ gnc_dbi_safe_sync_all (QofBackend* qbe, QofBook* book)
     gnc_sql_sync_all (be, book);
     if (qof_backend_check_error (qbe))
     {
-        conn_table_operation (conn, table_list, rollback);
+        conn->table_operation (table_list, rollback);
         LEAVE ("Failed to create new database tables");
         return;
     }
-    conn_table_operation (conn, table_list, drop_backup);
+    conn->table_operation (table_list, drop_backup);
     LEAVE ("book=%p", book);
 }
 /* ================================================================= */
@@ -1914,28 +1822,6 @@ GncDbiSqlResult::size() const noexcept
 }
 
 /* --------------------------------------------------------- */
-
-std::string
-add_columns_ddl(const GncSqlConnection* conn,
-                const std::string& table_name,
-                const ColVec& info_vec)
-{
-    std::string ddl;
-    const GncDbiSqlConnection* dbi_conn = dynamic_cast<decltype(dbi_conn)>(conn);
-
-    g_return_val_if_fail (conn != nullptr, nullptr);
-    ddl += "ALTER TABLE " + table_name;
-    for (auto const& info : info_vec)
-    {
-        if (info != *info_vec.begin())
-        {
-            ddl += ", ";
-        }
-        ddl += "ADD COLUMN ";
-        dbi_conn->m_provider->append_col_def (ddl, info);
-    }
-    return ddl;
-}
 
 template<> void
 GncDbiProviderImpl<DbType::DBI_SQLITE>::append_col_def(std::string& ddl,

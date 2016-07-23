@@ -390,7 +390,7 @@ GncDbiSqlConnection::add_columns_to_table(const std::string& table_name,
                                           const ColVec& info_vec)
     const noexcept
 {
-    auto ddl = add_columns_ddl(this, table_name, info_vec);
+    auto ddl = add_columns_ddl(table_name, info_vec);
     if (ddl.empty())
         return false;
 
@@ -502,4 +502,109 @@ GncDbiSqlConnection::table_manage_backup (const std::string& table_name,
         break;
     }
     return result;
+}
+/**
+ * Perform a specified SQL operation on every table in a
+ * database. Possible operations are:
+ * * drop: to DROP all tables from the database
+ * * empty: to DELETE all records from each table in the database.
+ * * backup: Rename every table from "name" to "name_back"
+ * * drop_backup: DROP the backup tables.
+ * * rollback: DROP the new table "name" and rename "name_back" to
+ *   "name", restoring the database to its previous state.
+ *
+ * The intent of the last two is to be able to move an existing table
+ * aside, query its contents with a transformation (in 2.4.x this is
+ * already done as the contents are loaded completely when a Qof
+ * session is started), save them to a new table according to a new
+ * database format, and finally drop the backup table; if there's an
+ * error during the process, rollback allows returning the table to
+ * its original state.
+ *
+ * @param sql_conn: The sql connection (via dbi) to which the
+ * transactions will be sent
+ * @param tables: GList of tables to operate on.
+ * @param op: The operation to perform.
+ * @return Success (TRUE) or failure.
+ */
+
+bool
+GncDbiSqlConnection::table_operation(const std::vector<std::string>& table_names,
+                                  TableOpType op) noexcept
+{
+    const char* dbname = dbi_conn_get_option (m_conn, "dbname");
+    std::string lock_table{m_lock_table};
+    g_return_val_if_fail (!table_names.empty(), FALSE);
+    bool retval{true};
+    for (auto table : table_names)
+    {
+        dbi_result result;
+        /* Ignore the lock table */
+        if (table == lock_table)
+        {
+            continue;
+        }
+        do
+        {
+            init_error();
+            switch (op)
+            {
+            case rollback:
+            {
+                auto all_tables = m_provider->get_table_list(m_conn, dbname);
+                if (std::find(all_tables.begin(),
+                              all_tables.end(), table) != all_tables.end())
+                {
+                    result = dbi_conn_queryf (m_conn, "DROP TABLE %s",
+                                              table.c_str());
+                    if (result)
+                        break;
+                }
+            }
+            /* Fall through */
+            case backup:
+            case drop_backup:
+                result = table_manage_backup (table, op);
+                break;
+            case empty:
+                result = dbi_conn_queryf (m_conn, "DELETE FROM TABLE %s",
+                                          table.c_str());
+                break;
+            case drop:
+            default:
+                result = dbi_conn_queryf (m_conn, "DROP TABLE %s", table.c_str());
+                break;
+            }
+        }
+        while (m_retry);
+
+        if (result != nullptr)
+        {
+            if (dbi_result_free (result) < 0)
+            {
+                PERR ("Error in dbi_result_free() result\n");
+                retval = false;
+            }
+        }
+    }
+    return retval;
+}
+
+std::string
+GncDbiSqlConnection::add_columns_ddl(const std::string& table_name,
+                                     const ColVec& info_vec) const noexcept
+{
+    std::string ddl;
+
+    ddl += "ALTER TABLE " + table_name;
+    for (auto const& info : info_vec)
+    {
+        if (info != *info_vec.begin())
+        {
+            ddl += ", ";
+        }
+        ddl += "ADD COLUMN ";
+        m_provider->append_col_def (ddl, info);
+    }
+    return ddl;
 }
