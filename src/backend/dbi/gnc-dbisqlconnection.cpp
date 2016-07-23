@@ -529,8 +529,8 @@ GncDbiSqlConnection::table_manage_backup (const std::string& table_name,
  */
 
 bool
-GncDbiSqlConnection::table_operation(const std::vector<std::string>& table_names,
-                                  TableOpType op) noexcept
+GncDbiSqlConnection::table_operation(const StrVec& table_names,
+                                     TableOpType op) noexcept
 {
     const char* dbname = dbi_conn_get_option (m_conn, "dbname");
     std::string lock_table{m_lock_table};

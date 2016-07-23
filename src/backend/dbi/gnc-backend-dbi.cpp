@@ -132,10 +132,10 @@ public:
     std::string create_table_ddl(const GncSqlConnection* conn,
                                  const std::string& table_name,
                                  const ColVec& info_vec);
-    std::vector<std::string> get_table_list(dbi_conn conn,
+    StrVec get_table_list(dbi_conn conn,
                                             const std::string& dbname);
     void append_col_def(std::string& ddl, const GncSqlColumnInfo& info);
-    std::vector<std::string> get_index_list (dbi_conn conn);
+    StrVec get_index_list (dbi_conn conn);
     void drop_index(dbi_conn conn, const std::string& index);
 };
 
@@ -326,10 +326,10 @@ exit:
     LEAVE ("%s", msg);
 }
 
-template<> std::vector<std::string>
+template<> StrVec
 GncDbiProviderImpl<DbType::DBI_SQLITE>::get_index_list (dbi_conn conn)
 {
-    std::vector<std::string> retval;
+    StrVec retval;
     const char* errmsg;
     dbi_result result = dbi_conn_query (conn,
                                         "SELECT name FROM sqlite_master WHERE type = 'index' AND name NOT LIKE 'sqlite_autoindex%'");
@@ -891,10 +891,10 @@ exit:
     LEAVE (" ");
 }
 
-template<> std::vector<std::string>
+template<> StrVec
 GncDbiProviderImpl<DbType::DBI_MYSQL>::get_index_list (dbi_conn conn)
 {
-    std::vector<std::string> retval;
+    StrVec retval;
     const char* errmsg;
     auto dbname = dbi_conn_get_option (conn, "dbname");
     auto table_list = dbi_conn_get_table_list (conn, dbname, nullptr);
@@ -1213,10 +1213,10 @@ exit:
     LEAVE (" ");
 }
 
-template<> std::vector<std::string>
+template<> StrVec
 GncDbiProviderImpl<DbType::DBI_PGSQL>::get_index_list (dbi_conn conn)
 {
-    std::vector<std::string> retval;
+    StrVec retval;
     const char* errmsg;
     PINFO ("Retrieving postgres index list\n");
     auto result = dbi_conn_query (conn,
@@ -2010,10 +2010,10 @@ GncDbiProviderImpl<DbType::DBI_PGSQL>::append_col_def (std::string& ddl,
     }
 }
 
-static std::vector<std::string>
+static StrVec
 conn_get_table_list (dbi_conn conn, const std::string& dbname)
 {
-    std::vector<std::string> retval;
+    StrVec retval;
     auto tables = dbi_conn_get_table_list (conn, dbname.c_str(), nullptr);
     while (dbi_result_next_row (tables) != 0)
     {
@@ -2024,7 +2024,7 @@ conn_get_table_list (dbi_conn conn, const std::string& dbname)
     return retval;
 }
 
-template<> std::vector<std::string>
+template<> StrVec
 GncDbiProviderImpl<DbType::DBI_SQLITE>::get_table_list (dbi_conn conn,
                                             const std::string& dbname)
 {
@@ -2036,14 +2036,14 @@ GncDbiProviderImpl<DbType::DBI_SQLITE>::get_table_list (dbi_conn conn,
     return list;
 }
 
-template<> std::vector<std::string>
+template<> StrVec
 GncDbiProviderImpl<DbType::DBI_MYSQL>::get_table_list (dbi_conn conn,
                                                const std::string& dbname)
 {
     return conn_get_table_list (conn, dbname);
 }
 
-template<> std::vector<std::string>
+template<> StrVec
 GncDbiProviderImpl<DbType::DBI_PGSQL>::get_table_list (dbi_conn conn,
                                            const std::string& dbname)
 {
