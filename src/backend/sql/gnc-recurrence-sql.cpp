@@ -388,17 +388,17 @@ upgrade_recurrence_table_1_2 (GncSqlBackend* be)
     /* Step 2: insert a default value in the newly created column */
     {
         gchar* weekend_adj_str = recurrenceWeekendAdjustToString (WEEKEND_ADJ_NONE);
-        gchar* update_query = g_strdup_printf ("UPDATE %s SET %s = '%s';",
-                                               TABLE_NAME,
-                                               weekend_adjust_col_table[0]->name(),
-                                               weekend_adj_str);
-        (void)gnc_sql_execute_nonselect_sql (be, update_query);
+        std::stringstream sql;
+        sql << "UPDATE " << TABLE_NAME << " SET " <<
+            weekend_adjust_col_table[0]->name() << "='" <<
+            weekend_adj_str << "'";
+        auto stmt = be->create_statement_from_sql(sql.str());
+        be->execute_nonselect_statement(stmt);
         g_free (weekend_adj_str);
-        g_free (update_query);
     }
 
     /* Step 3: rewrite the table, requiring the weekend_adj column to be non-null */
-    gnc_sql_upgrade_table (be, TABLE_NAME, col_table);
+    be->upgrade_table(TABLE_NAME, col_table);
 
 }
 

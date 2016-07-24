@@ -492,7 +492,7 @@ GncSqlTransBackend::create_tables (GncSqlBackend* be)
             1->2: 64 bit int handling
             2->3: allow dates to be NULL
         */
-        gnc_sql_upgrade_table (be, m_table_name.c_str(), tx_col_table);
+        be->upgrade_table(m_table_name.c_str(), tx_col_table);
         be->set_table_version (m_table_name.c_str(), m_version);
         PINFO ("Transactions table upgraded from version %d to version %d\n",
                version, m_version);
@@ -522,7 +522,7 @@ GncSqlSplitBackend::create_tables (GncSqlBackend* be)
         /* Upgrade:
            1->2: 64 bit int handling
            3->4: Split reconcile date can be NULL */
-        gnc_sql_upgrade_table (be, m_table_name.c_str(), split_col_table);
+        be->upgrade_table(m_table_name.c_str(), split_col_table);
         if (!be->create_index("splits_tx_guid_index",
                                    m_table_name.c_str(),
                                    tx_guid_col_table))
@@ -969,9 +969,8 @@ convert_query_term_to_sql (const GncSqlBackend* be, const gchar* fieldName,
         else if (g_strcmp0 (pPredData->type_name, QOF_TYPE_DATE) == 0)
         {
             query_date_t date_data = (query_date_t)pPredData;
-            gchar* datebuf;
 
-            datebuf = gnc_sql_convert_timespec_to_string (be, date_data->date);
+            auto datebuf = be->time64_to_string (date_data->date.tv_sec);
             g_string_append_printf (sql, "'%s'", datebuf);
 
         }

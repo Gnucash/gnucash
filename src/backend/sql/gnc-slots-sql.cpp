@@ -1017,7 +1017,7 @@ GncSqlSlotsBackend::create_tables (GncSqlBackend* be)
         */
         if (version == 1)
         {
-            gnc_sql_upgrade_table (be, TABLE_NAME, col_table);
+            be->upgrade_table(TABLE_NAME, col_table);
             ok = be->create_index ("slots_guid_index", TABLE_NAME,
                                    obj_guid_col_table);
             if (!ok)

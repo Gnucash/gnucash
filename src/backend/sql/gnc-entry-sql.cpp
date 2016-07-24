@@ -194,7 +194,9 @@ GncSqlEntryBackend::load_all (GncSqlBackend* be)
 {
     g_return_if_fail (be != NULL);
 
-    auto stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
+    std::stringstream sql;
+    sql << "SELECT * FROM " << TABLE_NAME;
+    auto stmt = be->create_statement_from_sql(sql.str());
     auto result = be->execute_select_statement(stmt);
     InstanceVec instances;
 
@@ -228,7 +230,7 @@ GncSqlEntryBackend::create_tables (GncSqlBackend* be)
             1->2: 64 bit int handling
             2->3: "entered" -> "date_entered", and it can be NULL
         */
-        gnc_sql_upgrade_table (be, TABLE_NAME, col_table);
+        be->upgrade_table(TABLE_NAME, col_table);
         be->set_table_version (TABLE_NAME, TABLE_VERSION);
 
         PINFO ("Entries table upgraded from version %d to version %d\n", version,

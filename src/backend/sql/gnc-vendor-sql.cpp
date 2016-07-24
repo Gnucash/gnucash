@@ -115,7 +115,9 @@ GncSqlVendorBackend::load_all (GncSqlBackend* be)
 {
     g_return_if_fail (be != NULL);
 
-    auto stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
+    std::stringstream sql;
+    sql << "SELECT * FROM " << TABLE_NAME;
+    auto stmt = be->create_statement_from_sql(sql.str());
     auto result = be->execute_select_statement(stmt);
     InstanceVec instances;
 

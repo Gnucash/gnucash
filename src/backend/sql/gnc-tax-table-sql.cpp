@@ -294,7 +294,9 @@ GncSqlTaxTableBackend::load_all (GncSqlBackend* be)
     g_return_if_fail (be != NULL);
 
     /* First time, create the query */
-    auto stmt = gnc_sql_create_select_statement (be, TT_TABLE_NAME);
+    std::stringstream sql;
+    sql << "SELECT * FROM " << TT_TABLE_NAME;
+    auto stmt = be->create_statement_from_sql(sql.str());
     auto result = be->execute_select_statement(stmt);
     GList* tt_needing_parents = NULL;
 
@@ -341,7 +343,7 @@ GncSqlTaxTableBackend::create_tables (GncSqlBackend* be)
     else if (version == 1)
     {
         /* Upgrade 64 bit int handling */
-        gnc_sql_upgrade_table (be, TT_TABLE_NAME, tt_col_table);
+        be->upgrade_table(TT_TABLE_NAME, tt_col_table);
         be->set_table_version (TT_TABLE_NAME, TT_TABLE_VERSION);
         PINFO ("Taxtables table upgraded from version 1 to version %d\n",
                TT_TABLE_VERSION);
@@ -356,7 +358,7 @@ GncSqlTaxTableBackend::create_tables (GncSqlBackend* be)
     else if (version == 1)
     {
         /* Upgrade 64 bit int handling */
-        gnc_sql_upgrade_table (be, TTENTRIES_TABLE_NAME, ttentries_col_table);
+        be->upgrade_table(TTENTRIES_TABLE_NAME, ttentries_col_table);
         be->set_table_version (TTENTRIES_TABLE_NAME, TTENTRIES_TABLE_VERSION);
         PINFO ("Taxtable entries table upgraded from version 1 to version %d\n",
                TTENTRIES_TABLE_VERSION);

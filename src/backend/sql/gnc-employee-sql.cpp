@@ -112,7 +112,9 @@ GncSqlEmployeeBackend::load_all (GncSqlBackend* be)
 {
     g_return_if_fail (be != NULL);
 
-    auto stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
+    std::stringstream sql;
+    sql << "SELECT * FROM " << TABLE_NAME;
+    auto stmt = be->create_statement_from_sql(sql.str());
     auto result = be->execute_select_statement(stmt);
 
     InstanceVec instances;
@@ -144,7 +146,7 @@ GncSqlEmployeeBackend::create_tables (GncSqlBackend* be)
     else if (version == 1)
     {
         /* Upgrade 64 bit int handling */
-        gnc_sql_upgrade_table (be, TABLE_NAME, col_table);
+        be->upgrade_table(TABLE_NAME, col_table);
         be->set_table_version (TABLE_NAME, TABLE_VERSION);
 
         PINFO ("Employees table upgraded from version 1 to version %d\n",

@@ -127,7 +127,9 @@ GncSqlLotsBackend::load_all (GncSqlBackend* be)
 {
     g_return_if_fail (be != NULL);
 
-    auto stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
+    std::stringstream sql;
+    sql << "SELECT * FROM " << TABLE_NAME;
+    auto stmt = be->create_statement_from_sql(sql.str());
     if (stmt != nullptr)
     {
         auto result = be->execute_select_statement(stmt);
@@ -165,7 +167,7 @@ GncSqlLotsBackend::create_tables (GncSqlBackend* be)
         Create a temporary table, copy the data from the old table, delete the
         old table, then rename the new one. */
 
-        gnc_sql_upgrade_table (be, TABLE_NAME, col_table);
+        be->upgrade_table(TABLE_NAME, col_table);
         be->set_table_version (TABLE_NAME, TABLE_VERSION);
 
         PINFO ("Lots table upgraded from version 1 to version %d\n", TABLE_VERSION);

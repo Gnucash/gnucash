@@ -673,6 +673,50 @@ GncSqlBackend::set_table_version (const std::string& table_name,
     return true;
 }
 
+void
+GncSqlBackend::upgrade_table (const std::string& table_name,
+                              const EntryVec& col_table) noexcept
+{
+    DEBUG ("Upgrading %s table\n", table_name.c_str());
+
+    auto temp_table_name = table_name + "_new";
+    create_table (temp_table_name, col_table);
+    std::stringstream sql;
+    sql << "INSERT INTO " << temp_table_name << " SELECT * FROM " << table_name;
+    auto stmt = create_statement_from_sql(sql.str());
+    execute_nonselect_statement(stmt);
+
+    sql.str("");
+    sql << "DROP TABLE " << table_name;
+    stmt = create_statement_from_sql(sql.str());
+    execute_nonselect_statement(stmt);
+
+    sql.str("");
+    sql << "ALTER TABLE " << temp_table_name << " RENAME TO " << table_name;
+    stmt = create_statement_from_sql(sql.str());
+    execute_nonselect_statement(stmt);
+}
+
+/* This is required because we're passing be->timespace_format to
+ * g_strdup_printf.
+ */
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
+std::string
+GncSqlBackend::time64_to_string (time64 t) const noexcept
+{
+    auto tm = gnc_gmtime (&t);
+
+    auto year = tm->tm_year + 1900;
+
+    auto datebuf = g_strdup_printf (m_timespec_format,
+                                    year, tm->tm_mon + 1, tm->tm_mday,
+                                    tm->tm_hour, tm->tm_min, tm->tm_sec);
+    gnc_tm_free (tm);
+    std::string date{datebuf};
+    g_free(datebuf);
+    return date;
+}
+#pragma GCC diagnostic warning "-Wformat-nonliteral"
 
 void
 gnc_sql_sync_all (GncSqlBackend* be,  QofBook* book)
@@ -1657,30 +1701,6 @@ typedef void (*TimespecSetterFunc) (const gpointer, Timespec*);
 #define TIMESPEC_STR_FORMAT "%04d%02d%02d%02d%02d%02d"
 #define TIMESPEC_COL_SIZE (4+2+2+2+2+2)
 
-/* This is required because we're passing be->timespace_format to
- * g_strdup_printf.
- */
-#pragma GCC diagnostic ignored "-Wformat-nonliteral"
-gchar*
-gnc_sql_convert_timespec_to_string (const GncSqlBackend* be, Timespec ts)
-{
-    time64 time;
-    struct tm* tm;
-    gint year;
-    gchar* datebuf;
-
-    time = timespecToTime64 (ts);
-    tm = gnc_gmtime (&time);
-
-    year = tm->tm_year + 1900;
-
-    datebuf = g_strdup_printf (be->timespec_format(),
-                               year, tm->tm_mon + 1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec);
-    gnc_tm_free (tm);
-    return datebuf;
-}
-#pragma GCC diagnostic warning "-Wformat-nonliteral"
-
 template<> void
 GncSqlColumnTableEntryImpl<CT_TIMESPEC>::load (const GncSqlBackend* be,
                                                GncSqlRow& row,
@@ -1764,9 +1784,8 @@ GncSqlColumnTableEntryImpl<CT_TIMESPEC>::add_to_query(const GncSqlBackend* be,
 
     if (ts.tv_sec != 0 || ts.tv_nsec != 0)
     {
-        char* datebuf = gnc_sql_convert_timespec_to_string (be, ts);
-        vec.emplace_back (std::make_pair (std::string{m_col_name},
-                                          std::string{datebuf}));
+        auto datebuf = be->time64_to_string (ts.tv_sec);
+        vec.emplace_back (std::make_pair (std::string{m_col_name}, datebuf));
         return;
     }
 }
@@ -2005,18 +2024,6 @@ gnc_sql_load_object (const GncSqlBackend* be, GncSqlRow& row,
 }
 
 /* ================================================================= */
-GncSqlStatementPtr
-gnc_sql_create_select_statement (GncSqlBackend* be, const gchar* table_name)
-{
-    g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (table_name != NULL, NULL);
-
-    auto sql = g_strdup_printf ("SELECT * FROM %s", table_name);
-    auto stmt = be->create_statement_from_sql(sql);
-    g_free (sql);
-    return stmt;
-}
-
 static GncSqlStatementPtr
 create_single_col_select_statement (GncSqlBackend* be,
                                     const gchar* table_name,
@@ -2030,35 +2037,6 @@ create_single_col_select_statement (GncSqlBackend* be,
 }
 
 /* ================================================================= */
-
-
-GncSqlResultPtr
-gnc_sql_execute_select_sql (GncSqlBackend* be, const gchar* sql)
-{
-    g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (sql != NULL, NULL);
-
-    auto stmt = be->create_statement_from_sql(sql);
-    if (stmt == nullptr)
-    {
-        return nullptr;
-    }
-    return be->execute_select_statement (stmt);
-}
-
-gint
-gnc_sql_execute_nonselect_sql (GncSqlBackend* be, const gchar* sql)
-{
-    g_return_val_if_fail (be != NULL, 0);
-    g_return_val_if_fail (sql != NULL, 0);
-
-    auto stmt = be->create_statement_from_sql(sql);
-    if (stmt == NULL)
-    {
-        return -1;
-    }
-    return be->execute_nonselect_statement (stmt);
-}
 
 uint_t
 gnc_sql_append_guids_to_sql (std::stringstream& sql, const InstanceVec& instances)
@@ -2314,48 +2292,6 @@ GncSqlObjectBackend::create_tables (GncSqlBackend* be)
     else if (version != m_version)
         PERR("Version mismatch in table %s, expecting %d but backend is %d."
              "Table creation aborted.", m_table_name.c_str(), m_version, version);
-}
-
-gboolean
-gnc_sql_create_temp_table (const GncSqlBackend* be, const gchar* table_name,
-                           const EntryVec& col_table)
-{
-    g_return_val_if_fail (be != NULL, FALSE);
-    g_return_val_if_fail (table_name != NULL, FALSE);
-
-    return be->create_table (table_name, col_table);
-}
-
-/* Create a temporary table, copy the data from the old table, delete the
-   old table, then rename the new one. */
-void
-gnc_sql_upgrade_table (GncSqlBackend* be, const gchar* table_name,
-                       const EntryVec& col_table)
-{
-    gchar* sql;
-    gchar* temp_table_name;
-
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (table_name != NULL);
-
-    DEBUG ("Upgrading %s table\n", table_name);
-
-    temp_table_name = g_strdup_printf ("%s_new", table_name);
-    (void)gnc_sql_create_temp_table (be, temp_table_name, col_table);
-    sql = g_strdup_printf ("INSERT INTO %s SELECT * FROM %s",
-                           temp_table_name, table_name);
-    (void)gnc_sql_execute_nonselect_sql (be, sql);
-    g_free (sql);
-
-    sql = g_strdup_printf ("DROP TABLE %s", table_name);
-    (void)gnc_sql_execute_nonselect_sql (be, sql);
-    g_free (sql);
-
-    sql = g_strdup_printf ("ALTER TABLE %s RENAME TO %s", temp_table_name,
-                           table_name);
-    (void)gnc_sql_execute_nonselect_sql (be, sql);
-    g_free (sql);
-    g_free (temp_table_name);
 }
 
 /* ================================================================= */

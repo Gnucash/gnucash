@@ -146,8 +146,9 @@ GncSqlCommodityBackend::load_all (GncSqlBackend* be)
     gnc_commodity_table* pTable;
 
     pTable = gnc_commodity_table_get_table (be->book());
-    auto stmt = gnc_sql_create_select_statement (be, COMMODITIES_TABLE);
-    if (stmt == nullptr) return;
+    std::stringstream sql;
+    sql << "SELECT * FROM " << COMMODITIES_TABLE;
+    auto stmt = be->create_statement_from_sql(sql.str());
     auto result = be->execute_select_statement(stmt);
 
     for (auto row : *result)

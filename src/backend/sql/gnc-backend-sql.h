@@ -21,7 +21,7 @@
 
 /**
  * @defgroup SQLBE SQL Backend Core
-  @{
+ @{
 */
 
 /** @addtogroup Columns Columns
@@ -112,13 +112,13 @@ public:
     GncSqlResultPtr execute_select_statement(const GncSqlStatementPtr& stmt) const noexcept;
     int execute_nonselect_statement(const GncSqlStatementPtr& stmt) const noexcept;
     std::string quote_string(const std::string&) const noexcept;
-   /**
-    * Creates a table in the database
-    *
-    * @param table_name Table name
-    * @param col_table DB table description
-    * @return TRUE if successful, FALSE if unsuccessful
-    */
+    /**
+     * Creates a table in the database
+     *
+     * @param table_name Table name
+     * @param col_table DB table description
+     * @return TRUE if successful, FALSE if unsuccessful
+     */
     bool create_table(const std::string& table_name, const EntryVec& col_table) const noexcept;
     /**
      * Creates a table in the database and sets its version
@@ -150,8 +150,35 @@ public:
      */
     bool add_columns_to_table(const std::string& table_name,
                               const EntryVec& col_table) const noexcept;
+    /**
+     * Upgrades a table to a new structure.
+     *
+     * The upgrade is done by creating a new table with the new structure,
+     * SELECTing the old data into the new table, deleting the old table, then
+     * renaming the new table.  Therefore, this will only work if the new table
+     * structure is similar enough to the old table that the SELECT will work.
+     *
+     * @param table_name SQL table name
+     * @param col_table Column table
+     */
+    void upgrade_table (const std::string& table_name,
+                        const EntryVec& col_table) noexcept;
+    /**
+     * Returns the version number for a DB table.
+     *
+     * @param table_name Table name
+     * @return Version number, or 0 if the table does not exist
+     */
     uint_t get_table_version(const std::string& table_name) const noexcept;
     bool set_table_version (const std::string& table_name, uint_t version) noexcept;
+    /**
+     * Converts a time64 value to a string value for the database.
+     *
+     * @param t time64 to be converted.
+     * @return String representation of the Timespec
+     */
+    std::string time64_to_string (time64 t) const noexcept;
+
     QofBook* book() const noexcept { return m_book; }
 
     bool pristine() const noexcept { return m_is_pristine_db; }
@@ -390,8 +417,8 @@ class GncSqlObjectBackend
 public:
     GncSqlObjectBackend (int version, const std::string& type,
                          const std::string& table, const EntryVec& vec) :
-         m_table_name{table}, m_version{version}, m_type_name{type},
-         m_col_table{vec} {}
+        m_table_name{table}, m_version{version}, m_type_name{type},
+        m_col_table{vec} {}
     /**
      * Load all objects of m_type in the database into memory.
      * @param be The GncSqlBackend containing the database connection.
@@ -592,21 +619,21 @@ public:
                                                  QofIdTypeConst obj_name,
                                                  gpointer pObject, T get_ref)
         const noexcept
-    {
-        g_return_if_fail (pObject != NULL);
-
-        try
         {
-            GncGUID guid;
-            auto val = row.get_string_at_col (m_col_name);
-            (void)string_to_guid (val.c_str(), &guid);
-            auto target = get_ref(&guid);
-            if (target != nullptr)
-                set_parameter (pObject, target, get_setter(obj_name),
-                               m_gobj_param_name);
+            g_return_if_fail (pObject != NULL);
+
+            try
+            {
+                GncGUID guid;
+                auto val = row.get_string_at_col (m_col_name);
+                (void)string_to_guid (val.c_str(), &guid);
+                auto target = get_ref(&guid);
+                if (target != nullptr)
+                    set_parameter (pObject, target, get_setter(obj_name),
+                                   m_gobj_param_name);
+            }
+            catch (std::invalid_argument) {}
         }
-        catch (std::invalid_argument) {}
-    }
 
 protected:
     template <typename T> T
@@ -676,7 +703,7 @@ public:
               gpointer pObject) const noexcept override;
     void add_to_table(const GncSqlBackend* be, ColVec& vec) const noexcept override;
     void add_to_query(const GncSqlBackend* be, QofIdTypeConst obj_name,
-                              gpointer pObject, PairVec& vec) const noexcept override;
+                      gpointer pObject, PairVec& vec) const noexcept override;
 };
 
 template <GncSqlObjectType Type>
@@ -845,25 +872,6 @@ gboolean gnc_sql_do_db_operation (GncSqlBackend* be,
                                   gpointer pObject,
                                   const EntryVec& table);
 
-/**
- * Executes an SQL SELECT statement from an SQL char string and returns the
- * result rows.  If an error occurs, an entry is added to the log, an error
- * status is returned to qof and NULL is returned.
- *
- * @param be SQL backend struct
- * @param sql SQL SELECT string
- * @return Results, or NULL if an error has occured
- */
-GncSqlResultPtr gnc_sql_execute_select_sql (GncSqlBackend* be, const gchar* sql);
-
-/**
- * Executes an SQL non-SELECT statement from an SQL char string.
- *
- * @param be SQL backend struct
- * @param sql SQL non-SELECT string
- * @returns Number of rows affected, or -1 if an error has occured
- */
-gint gnc_sql_execute_nonselect_sql (GncSqlBackend* be, const gchar* sql);
 
 /**
  * Loads a Gnucash object from the database.
@@ -893,20 +901,6 @@ gboolean gnc_sql_object_is_it_in_db (GncSqlBackend* be,
                                      QofIdTypeConst obj_name,
                                      const gpointer pObject,
                                      const EntryVec& table );
-
-/**
- * Creates a temporary table in the database.  A temporary table does not
- * have a version number added to the versions table.
- *
- * @param be SQL backend struct
- * @param table_name Table name
- * @param col_table DB table description
- * @return TRUE if successful, FALSE if unsuccessful
- */
-gboolean gnc_sql_create_temp_table (const GncSqlBackend* be,
-                                    const gchar* table_name,
-                                    const EntryVec& col_table);
-
 /**
  * Loads the object guid from a database row.  The table must have a column
  * named "guid" with type CT_GUID.
@@ -920,16 +914,6 @@ const GncGUID* gnc_sql_load_guid (const GncSqlBackend* be, GncSqlRow& row);
 
 
 /**
- * Creates a basic SELECT statement for a table.
- *
- * @param be SQL backend struct
- * @param table_name Table name
- * @return Statement
- */
-GncSqlStatementPtr gnc_sql_create_select_statement (GncSqlBackend* be,
-                                                    const gchar* table_name);
-
-/**
  * Appends the ascii strings for a list of GUIDs to the end of an SQL string.
  *
  * @param str SQL string
@@ -939,30 +923,6 @@ GncSqlStatementPtr gnc_sql_create_select_statement (GncSqlBackend* be,
  */
 uint_t gnc_sql_append_guids_to_sql (std::stringstream& sql,
                                     const InstanceVec& instances);
-
-/**
- * Converts a Timespec value to a string value for the database.
- *
- * @param be SQL backend
- * @param ts Timespec to be converted
- * @return String representation of the Timespec
- */
-gchar* gnc_sql_convert_timespec_to_string (const GncSqlBackend* be,
-                                           Timespec ts);
-
-/**
- * Upgrades a table to a new structure.  The upgrade is done by creating a new
- * table with the new structure, SELECTing the old data into the new table,
- * deleting the old table, then renaming the new table.  Therefore, this will
- * only work if the new table structure is similar enough to the old table that
- * the SELECT will work.
- *
- * @param be SQL backend
- * @param table_name SQL table name
- * @param col_table Column table
- */
-void gnc_sql_upgrade_table (GncSqlBackend* be, const gchar* table_name,
-                            const EntryVec& col_table);
 
 void _retrieve_guid_ (gpointer pObject,  gpointer pValue);
 
@@ -1058,5 +1018,5 @@ GncSqlColumnTableEntry::add_value_to_vec(const GncSqlBackend* be,
 #endif /* GNC_BACKEND_SQL_H */
 
 /**
-  @}  end of the SQL Backend Core doxygen group
+   @}  end of the SQL Backend Core doxygen group
 */

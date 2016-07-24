@@ -591,31 +591,29 @@ gnc_sql_add_objectref_guid_col_info_to_list (const GncSqlBackend* be,// 1
 test_gnc_sql_add_objectref_guid_col_info_to_list (Fixture *fixture, gconstpointer pData)
 {
 }*/
-/* gnc_sql_convert_timespec_to_string
-gchar*
-gnc_sql_convert_timespec_to_string (const GncSqlBackend* be, Timespec ts)// C: 1 */
+/* GncDbiBackend::time64_to_string
+std::string
+GncDbiBackend::time64_to_string (time64 t)// C: 1 */
 
 #define numtests 6
 static void
-test_gnc_sql_convert_timespec_to_string ()
+test_time64_to_string ()
 {
     GncSqlBackend be {nullptr, nullptr, "%4d-%02d-%02d %02d:%02d:%02d"};
-    const char* date[numtests] = {"1995-03-11 19:17:26",
+    const char* dates[numtests] = {"1995-03-11 19:17:26",
                                   "2001-04-20 11:44:07",
                                   "1964-02-29 09:15:23",
                                   "1959-04-02 00:00:00",
                                   "2043-11-22 05:32:45",
                                   "2153-12-18 01:15:30"
                                  };
-    int i;
-    for (i = 0; i < numtests; i++)
+    
+    for (auto date : dates)
     {
 
-        Timespec ts = gnc_iso8601_to_timespec_gmt (date[i]);
-        gchar* datestr = gnc_sql_convert_timespec_to_string (&be, ts);
-        g_assert_cmpstr (date[i], == , datestr);
-
-        g_free (datestr);
+        Timespec ts = gnc_iso8601_to_timespec_gmt (date);
+        auto datestr = be.time64_to_string (ts.tv_sec);
+        g_assert_cmpstr (date, == , datestr.c_str());
     }
 
 }
@@ -937,8 +935,8 @@ test_suite_gnc_backend_sql (void)
 // GNC_TEST_ADD (suitename, "add value guid to vec", Fixture, nullptr, test_add_value_guid_to_vec,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql add gvalue objectref guid to slist", Fixture, nullptr, test_gnc_sql_add_objectref_guid_to_vec,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql add objectref guid col info to list", Fixture, nullptr, test_gnc_sql_add_objectref_guid_col_info_to_list,  teardown);
-    GNC_TEST_ADD_FUNC (suitename, "gnc sql convert timespec to string",
-                       test_gnc_sql_convert_timespec_to_string);
+    GNC_TEST_ADD_FUNC (suitename, "GncDbiBackend time64 to string",
+                       test_time64_to_string);
 // GNC_TEST_ADD (suitename, "load timespec", Fixture, nullptr, test_load_timespec,  teardown);
 // GNC_TEST_ADD (suitename, "add timespec col info to list", Fixture, nullptr, test_add_timespec_col_info_to_list,  teardown);
 // GNC_TEST_ADD (suitename, "add value timespec to vec", Fixture, nullptr, test_add_value_timespec_to_vec,  teardown);
@@ -970,7 +968,6 @@ test_suite_gnc_backend_sql (void)
 // GNC_TEST_ADD (suitename, "build update statement", Fixture, nullptr, test_build_update_statement,  teardown);
 // GNC_TEST_ADD (suitename, "build delete statement", Fixture, nullptr, test_build_delete_statement,  teardown);
 // GNC_TEST_ADD (suitename, "do create table", Fixture, nullptr, test_do_create_table,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql create temp table", Fixture, nullptr, test_gnc_sql_create_temp_table,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql create index", Fixture, nullptr, test_gnc_sql_create_index,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql upgrade table", Fixture, nullptr, test_gnc_sql_upgrade_table,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql add columns to table", Fixture, nullptr, test_gnc_sql_add_columns_to_table,  teardown);

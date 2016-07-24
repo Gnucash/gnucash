@@ -224,19 +224,17 @@ GncSqlAccountBackend::load_all (GncSqlBackend* be)
 
     pBook = be->book();
 
-    auto stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
-    if (stmt == nullptr)
-    {
-        LEAVE ("stmt == NULL");
-        return;
-    }
+    std::stringstream sql;
+    sql << "SELECT * FROM " << TABLE_NAME;
+    auto stmt = be->create_statement_from_sql(sql.str());
     auto result = be->execute_select_statement(stmt);
     for (auto row : *result)
         load_single_account (be, row, &l_accounts_needing_parents);
 
-    auto sql = g_strdup_printf ("SELECT DISTINCT guid FROM %s", TABLE_NAME);
-    gnc_sql_slots_load_for_sql_subquery (be, sql, (BookLookupFn)xaccAccountLookup);
-    g_free (sql);
+    sql.str("");
+    sql << "SELECT DISTINCT guid FROM " << TABLE_NAME;
+    gnc_sql_slots_load_for_sql_subquery (be, sql.str().c_str(),
+                                         (BookLookupFn)xaccAccountLookup);
 
     /* While there are items on the list of accounts needing parents,
        try to see if the parent has now been loaded.  Theory says that if

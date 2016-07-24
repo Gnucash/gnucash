@@ -236,19 +236,19 @@ static gboolean
 delete_budget_amounts (GncSqlBackend* be, GncBudget* budget)
 {
     gchar guid_buf[GUID_ENCODING_LENGTH + 1];
-    gchar* sql;
 
     g_return_val_if_fail (be != NULL, FALSE);
     g_return_val_if_fail (budget != NULL, FALSE);
 
     (void)guid_to_string_buff (qof_instance_get_guid (QOF_INSTANCE (budget)),
                                guid_buf);
-    sql = g_strdup_printf ("DELETE FROM %s WHERE budget_guid='%s'", AMOUNTS_TABLE,
-                           guid_buf);
-    (void)gnc_sql_execute_nonselect_sql (be, sql);
-    g_free (sql);
+    std::stringstream sql;
+    sql << "DELETE FROM " << AMOUNTS_TABLE << " WHERE budget_guid='"<<
+        guid_buf << "'";
+    auto stmt = be->create_statement_from_sql(sql.str());
+    be->execute_nonselect_statement(stmt);
 
-    return TRUE;
+    return true;
 }
 
 /**
@@ -335,10 +335,9 @@ GncSqlBudgetBackend::load_all (GncSqlBackend* be)
     InstanceVec instances;
     g_return_if_fail (be != NULL);
 
-    auto stmt = gnc_sql_create_select_statement (be, BUDGET_TABLE);
-    if (stmt == nullptr)
-        return;
-
+    std::stringstream sql;
+    sql << "SELECT * FROM " << BUDGET_TABLE;
+    auto stmt = be->create_statement_from_sql(sql.str());
     auto result = be->execute_select_statement(stmt);
     for (auto row : *result)
     {

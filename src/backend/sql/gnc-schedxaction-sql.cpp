@@ -123,7 +123,9 @@ GncSqlSchedXactionBackend::load_all (GncSqlBackend* be)
 {
     g_return_if_fail (be != NULL);
 
-    auto stmt = gnc_sql_create_select_statement (be, SCHEDXACTION_TABLE);
+    std::stringstream sql;
+    sql << "SELECT * FROM " << SCHEDXACTION_TABLE;
+    auto stmt = be->create_statement_from_sql(sql.str());
     if (stmt == NULL) return;
     auto result = be->execute_select_statement(stmt);
     SchedXactions* sxes;
