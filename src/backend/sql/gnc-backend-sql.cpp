@@ -625,7 +625,7 @@ GncSqlBackend::get_table_version(const std::string& table_name) const noexcept
  */
 bool
 GncSqlBackend::set_table_version (const std::string& table_name,
-                                  unsigned int version) noexcept
+                                  uint_t version) noexcept
 {
     g_return_val_if_fail (version > 0, false);
 
@@ -2069,33 +2069,23 @@ gnc_sql_execute_nonselect_sql (GncSqlBackend* be, const gchar* sql)
     return be->execute_nonselect_statement (stmt);
 }
 
-guint
-gnc_sql_append_guid_list_to_sql (GString* sql, GList* list, guint maxCount)
+uint_t
+gnc_sql_append_guids_to_sql (std::stringstream& sql, const InstanceVec& instances)
 {
-    gchar guid_buf[GUID_ENCODING_LENGTH + 1];
-    gboolean first_guid = TRUE;
-    guint count;
+    char guid_buf[GUID_ENCODING_LENGTH + 1];
 
-    g_return_val_if_fail (sql != NULL, 0);
-
-    if (list == NULL) return 0;
-
-    for (count = 0; list != NULL && count < maxCount; list = list->next, count++)
+    for (auto inst : instances)
     {
-        QofInstance* inst = QOF_INSTANCE (list->data);
         (void)guid_to_string_buff (qof_instance_get_guid (inst), guid_buf);
 
-        if (!first_guid)
+        if (inst != *(instances.begin()))
         {
-            (void)g_string_append (sql, ",");
+            sql << ",";
         }
-        (void)g_string_append (sql, "'");
-        (void)g_string_append (sql, guid_buf);
-        (void)g_string_append (sql, "'");
-        first_guid = FALSE;
+        sql << "'" << guid_buf << "'";
     }
 
-    return count;
+    return instances.size();
 }
 /* ================================================================= */
 static PairVec

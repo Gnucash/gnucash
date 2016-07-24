@@ -107,22 +107,17 @@ GncSqlJobBackend::load_all (GncSqlBackend* be)
 
     auto stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
     auto result = gnc_sql_execute_select_statement (be, stmt);
-    GList* list = NULL;
+    InstanceVec instances;
 
     for (auto row : *result)
     {
         GncJob* pJob = load_single_job (be, row);
-        if (pJob != NULL)
-        {
-            list = g_list_append (list, pJob);
-        }
+        if (pJob != nullptr)
+            instances.push_back(QOF_INSTANCE(pJob));
     }
 
-    if (list != NULL)
-    {
-        gnc_sql_slots_load_for_list (be, list);
-        g_list_free (list);
-    }
+    if (!instances.empty())
+        gnc_sql_slots_load_for_instancevec (be, instances);
 }
 
 /* ================================================================= */

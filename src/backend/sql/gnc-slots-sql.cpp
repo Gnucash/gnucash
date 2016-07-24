@@ -886,50 +886,39 @@ load_slot_for_list_item (GncSqlBackend* be, GncSqlRow& row,
 }
 
 void
-gnc_sql_slots_load_for_list (GncSqlBackend* be, GList* list)
+gnc_sql_slots_load_for_instancevec (GncSqlBackend* be, InstanceVec& instances)
 {
     QofCollection* coll;
-    GString* sql;
-    gboolean single_item;
+    std::stringstream sql;
 
     g_return_if_fail (be != NULL);
 
     // Ignore empty list
-    if (list == NULL) return;
+    if (instances.empty()) return;
 
-    coll = qof_instance_get_collection (QOF_INSTANCE (list->data));
+    coll = qof_instance_get_collection (instances[0]);
 
     // Create the query for all slots for all items on the list
-    sql = g_string_sized_new (40 + (GUID_ENCODING_LENGTH + 3) * g_list_length (
-                                  list));
-    g_string_append_printf (sql, "SELECT * FROM %s WHERE %s ", TABLE_NAME,
-                            obj_guid_col_table[0]->name());
-    if (g_list_length (list) != 1)
-    {
-        (void)g_string_append (sql, "IN (");
-        single_item = FALSE;
-    }
+
+    sql << "SELECT * FROM " << TABLE_NAME << " WHERE " <<
+                            obj_guid_col_table[0]->name();
+    if (instances.size() != 1)
+        sql << " IN (";
     else
-    {
-        (void)g_string_append (sql, "= ");
-        single_item = TRUE;
-    }
-    (void)gnc_sql_append_guid_list_to_sql (sql, list, G_MAXUINT);
-    if (!single_item)
-    {
-        (void)g_string_append (sql, ")");
-    }
+        sql << " = ";
+
+    gnc_sql_append_guids_to_sql (sql, instances);
+    if (instances.size() > 1)
+        sql << ")";
 
     // Execute the query and load the slots
-    auto stmt = gnc_sql_create_statement_from_sql (be, sql->str);
+    auto stmt = be->create_statement_from_sql(sql.str());
     if (stmt == nullptr)
     {
-        PERR ("stmt == NULL, SQL = '%s'\n", sql->str);
-        (void)g_string_free (sql, TRUE);
+        PERR ("stmt == NULL, SQL = '%s'\n", sql.str().c_str());
         return;
     }
-    (void)g_string_free (sql, TRUE);
-    auto result = gnc_sql_execute_select_statement (be, stmt);
+    auto result = be->execute_select_statement (stmt);
     for (auto row : *result)
         load_slot_for_list_item (be, row, coll);
 }

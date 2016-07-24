@@ -258,40 +258,31 @@ load_single_split (GncSqlBackend* be, GncSqlRow& row)
 }
 
 static void
-load_splits_for_tx_list (GncSqlBackend* be, GList* list)
+load_splits_for_tx_list (GncSqlBackend* be, InstanceVec& transactions)
 {
-    GString* sql;
-
     g_return_if_fail (be != NULL);
 
-    if (list == NULL) return;
+    std::stringstream sql;
 
-    sql = g_string_sized_new (40 + (GUID_ENCODING_LENGTH + 3) * g_list_length (
-                                  list));
-    g_string_append_printf (sql, "SELECT * FROM %s WHERE %s IN (", SPLIT_TABLE,
-                            tx_guid_col_table[0]->name());
-    (void)gnc_sql_append_guid_list_to_sql (sql, list, G_MAXUINT);
-    (void)g_string_append (sql, ")");
+    sql << "SELECT * FROM " << SPLIT_TABLE << " WHERE " <<
+        tx_guid_col_table[0]->name() << " IN (";
+    gnc_sql_append_guids_to_sql (sql, transactions);
+    sql << ")";
 
     // Execute the query and load the splits
-    auto result = gnc_sql_execute_select_sql (be, sql->str);
-    GList* split_list = NULL;
+    auto stmt = be->create_statement_from_sql(sql.str());
+    auto result = be->execute_select_statement (stmt);
+    InstanceVec instances;
+
     for (auto row : *result)
     {
-        Split* s;
-        s = load_single_split (be, row);
-        if (s != NULL)
-        {
-            split_list = g_list_prepend (split_list, s);
-        }
+        Split* s = load_single_split (be, row);
+        if (s != nullptr)
+            instances.push_back(QOF_INSTANCE(s));
     }
 
-    if (split_list != NULL)
-    {
-        gnc_sql_slots_load_for_list (be, split_list);
-        g_list_free (split_list);
-    }
-    (void)g_string_free (sql, TRUE);
+    if (!instances.empty())
+        gnc_sql_slots_load_for_instancevec (be, instances);
 }
 
 static  Transaction*
@@ -364,7 +355,6 @@ query_transactions (GncSqlBackend* be, const GncSqlStatementPtr& stmt)
     if (result->begin() == result->end())
         return;
 
-    GList* tx_list = NULL;
     GList* node;
     Transaction* tx;
 #if LOAD_TRANSACTIONS_AS_NEEDED
@@ -383,30 +373,27 @@ query_transactions (GncSqlBackend* be, const GncSqlStatementPtr& stmt)
 #endif
 
     // Load the transactions
+    InstanceVec instances;
     for (auto row : *result)
     {
         tx = load_single_tx (be, row);
-        if (tx != NULL)
+        if (tx != nullptr)
         {
             xaccTransScrubPostedDate (tx);
-            tx_list = g_list_prepend (tx_list, tx);
+            instances.push_back(QOF_INSTANCE(tx));
         }
     }
 
     // Load all splits and slots for the transactions
-    if (tx_list != NULL)
+    if (!instances.empty())
     {
-        gnc_sql_slots_load_for_list (be, tx_list);
-        load_splits_for_tx_list (be, tx_list);
+        gnc_sql_slots_load_for_instancevec (be, instances);
+        load_splits_for_tx_list (be, instances);
     }
 
     // Commit all of the transactions
-    for (node = tx_list; node != NULL; node = node->next)
-    {
-        Transaction* pTx = GNC_TRANSACTION (node->data);
-        xaccTransCommitEdit (pTx);
-    }
-    g_list_free (tx_list);
+    for (auto instance : instances)
+         xaccTransCommitEdit(GNC_TRANSACTION(instance));
 
 #if LOAD_TRANSACTIONS_AS_NEEDED
     // Update the account balances based on the loaded splits.  If the end

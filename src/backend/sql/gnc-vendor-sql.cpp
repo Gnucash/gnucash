@@ -117,20 +117,17 @@ GncSqlVendorBackend::load_all (GncSqlBackend* be)
 
     auto stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
     auto result = gnc_sql_execute_select_statement (be, stmt);
-    GList* list = NULL;
+    InstanceVec instances;
 
     for (auto row : *result)
     {
         GncVendor* pVendor = load_single_vendor (be, row);
-        if (pVendor != NULL)
-            list = g_list_append (list, pVendor);
+        if (pVendor != nullptr)
+            instances.push_back(QOF_INSTANCE(pVendor));
     }
 
-    if (list != NULL)
-    {
-        gnc_sql_slots_load_for_list (be, list);
-        g_list_free (list);
-    }
+    if (!instances.empty())
+        gnc_sql_slots_load_for_instancevec (be, instances);
 }
 
 /* ================================================================= */

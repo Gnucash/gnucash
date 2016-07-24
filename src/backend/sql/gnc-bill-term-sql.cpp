@@ -240,22 +240,19 @@ GncSqlBillTermBackend::load_all (GncSqlBackend* be)
 
     auto stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
     auto result = gnc_sql_execute_select_statement (be, stmt);
-    GList* list = NULL;
+    InstanceVec instances;
     GList* l_billterms_needing_parents = NULL;
 
     for (auto row : *result)
     {
         auto pBillTerm =
             load_single_billterm (be, row, &l_billterms_needing_parents);
-        if (pBillTerm != NULL)
-            list = g_list_append (list, pBillTerm);
+        if (pBillTerm != nullptr)
+            instances.push_back(QOF_INSTANCE(pBillTerm));
     }
 
-    if (list != NULL)
-    {
-        gnc_sql_slots_load_for_list (be, list);
-        g_list_free (list);
-    }
+    if (!instances.empty())
+        gnc_sql_slots_load_for_instancevec (be, instances);
 
     /* While there are items on the list of billterms needing parents,
        try to see if the parent has now been loaded.  Theory says that if

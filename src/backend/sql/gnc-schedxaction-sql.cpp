@@ -127,7 +127,7 @@ GncSqlSchedXactionBackend::load_all (GncSqlBackend* be)
     if (stmt == NULL) return;
     auto result = gnc_sql_execute_select_statement (be, stmt);
     SchedXactions* sxes;
-    GList* list = NULL;
+    InstanceVec instances;
     sxes = gnc_book_get_schedxactions (be->book());
 
     for (auto row : *result)
@@ -135,18 +135,15 @@ GncSqlSchedXactionBackend::load_all (GncSqlBackend* be)
         SchedXaction* sx;
 
         sx = load_single_sx (be, row);
-        if (sx != NULL)
+        if (sx != nullptr)
         {
             gnc_sxes_add_sx (sxes, sx);
-            list = g_list_prepend (list, sx);
+            instances.push_back(QOF_INSTANCE(sx));
         }
     }
 
-    if (list != NULL)
-    {
-        gnc_sql_slots_load_for_list (be, list);
-        g_list_free (list);
-    }
+    if (!instances.empty())
+        gnc_sql_slots_load_for_instancevec (be, instances);
 }
 
 

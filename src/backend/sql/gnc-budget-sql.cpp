@@ -332,29 +332,23 @@ load_single_budget (GncSqlBackend* be, GncSqlRow& row)
 void
 GncSqlBudgetBackend::load_all (GncSqlBackend* be)
 {
-    GList* list = NULL;
-
+    InstanceVec instances;
     g_return_if_fail (be != NULL);
 
     auto stmt = gnc_sql_create_select_statement (be, BUDGET_TABLE);
-    if (stmt != nullptr)
-    {
-        auto result = gnc_sql_execute_select_statement (be, stmt);
-        for (auto row : *result)
-        {
-            auto b = load_single_budget (be, row);
-            if (b != NULL)
-            {
-                list = g_list_prepend (list, b);
-            }
-        }
+    if (stmt == nullptr)
+        return;
 
-        if (list != NULL)
-        {
-            gnc_sql_slots_load_for_list (be, list);
-            g_list_free (list);
-        }
+    auto result = gnc_sql_execute_select_statement (be, stmt);
+    for (auto row : *result)
+    {
+        auto b = load_single_budget (be, row);
+        if (b != nullptr)
+            instances.push_back(QOF_INSTANCE(b));
     }
+
+    if (!instances.empty())
+        gnc_sql_slots_load_for_instancevec (be, instances);
 }
 
 /* ================================================================= */

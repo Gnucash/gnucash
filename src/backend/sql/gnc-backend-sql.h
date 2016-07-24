@@ -50,13 +50,17 @@ extern "C"
 #include <string>
 #include <vector>
 #include <memory>
+#include <cstdint>
 
+
+using uint_t = unsigned int;
 struct GncSqlColumnInfo;
 class GncSqlColumnTableEntry;
 using GncSqlColumnTableEntryPtr = std::shared_ptr<GncSqlColumnTableEntry>;
 using EntryVec = std::vector<GncSqlColumnTableEntryPtr>;
 using ColVec = std::vector<GncSqlColumnInfo>;
 using StrVec = std::vector<std::string>;
+using InstanceVec = std::vector<QofInstance*>;
 using PairVec = std::vector<std::pair<std::string, std::string>>;
 using VersionPair = std::pair<const std::string, unsigned int>;
 using VersionVec = std::vector<VersionPair>;
@@ -98,7 +102,7 @@ public:
     bool add_columns_to_table(const std::string& table_name,
                               const EntryVec& col_table) const noexcept;
     unsigned int get_table_version(const std::string& table_name) const noexcept;
-    bool set_table_version (const std::string& table_name, unsigned int version) noexcept;
+    bool set_table_version (const std::string& table_name, uint_t version) noexcept;
     QofBook* book() const noexcept { return m_book; }
 
     bool pristine() const noexcept { return m_is_pristine_db; }
@@ -946,8 +950,8 @@ GncSqlStatementPtr gnc_sql_create_select_statement (GncSqlBackend* be,
  * @param maxCount Max # of GUIDs to append
  * @return Number of GUIDs appended
  */
-guint gnc_sql_append_guid_list_to_sql (GString* str, GList* list,
-                                       guint maxCount);
+uint_t gnc_sql_append_guids_to_sql (std::stringstream& sql,
+                                    const InstanceVec& instances);
 
 /**
  * Initializes DB table version information.
