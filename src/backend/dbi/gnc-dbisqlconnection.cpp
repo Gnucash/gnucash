@@ -523,7 +523,7 @@ GncDbiSqlConnection::table_manage_backup (const std::string& table_name,
  *
  * @param sql_conn: The sql connection (via dbi) to which the
  * transactions will be sent
- * @param tables: GList of tables to operate on.
+ * @param table_namess: StrVec of tables to operate on.
  * @param op: The operation to perform.
  * @return Success (TRUE) or failure.
  */

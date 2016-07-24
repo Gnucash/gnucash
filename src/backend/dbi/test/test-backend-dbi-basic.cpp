@@ -236,16 +236,6 @@ setup_business (Fixture* fixture, gconstpointer pData)
 }
 
 static void
-drop_table (gconstpointer tdata, gconstpointer cdata)
-{
-    gchar* table = (gchar*)tdata;
-    dbi_conn conn = (dbi_conn)cdata;
-    gchar* query = g_strdup_printf ("DROP TABLE %s", table);
-    dbi_result rslt = dbi_conn_query (conn, query);
-    g_free (query);
-}
-
-static void
 destroy_database (gchar* url)
 {
     gchar* protocol = NULL;
@@ -261,7 +251,7 @@ destroy_database (gchar* url)
     auto errfmt = "Unable to delete tables in %s: %s";
     gint fail = 0;
     dbi_result tables;
-    GSList* list = NULL;
+    StrVec tblnames;
 
     gnc_uri_get_components (url, &protocol, &host, &portnum,
                             &username, &password, &dbname);
@@ -313,12 +303,16 @@ destroy_database (gchar* url)
     tables = dbi_conn_get_table_list (conn, dbname, NULL);
     while (dbi_result_next_row (tables) != 0)
     {
-        const gchar* table = dbi_result_get_string_idx (tables, 1);
-        list = g_slist_prepend (list, g_strdup (table));
+        const std::string table{dbi_result_get_string_idx (tables, 1)};
+        tblnames.push_back(table);
     }
     dbi_result_free (tables);
-    g_slist_foreach (list, (GFunc)drop_table, (gpointer)conn);
-    g_slist_free_full (list, (GDestroyNotify)g_free);
+    std::for_each(tblnames.begin(), tblnames.end(),
+                 [conn](std::string table) {
+                     std::string query{"DROP TABLE "};
+                     query += table;
+                     dbi_result rslt = dbi_conn_query (conn, query.c_str());
+                  });
 }
 
 static void
@@ -654,8 +648,8 @@ create_dbi_test_suite (const char* dbm_name, const char* url)
 void
 test_suite_gnc_backend_dbi (void)
 {
-    dbi_driver driver = NULL;
-    GList* drivers = NULL;
+    dbi_driver driver = nullptr;
+    StrVec drivers;
 #if HAVE_LIBDBI_R
     if (dbi_instance == NULL)
         dbi_initialize_r (NULL, &dbi_instance);
@@ -665,19 +659,19 @@ test_suite_gnc_backend_dbi (void)
     while ((driver = dbi_driver_list (driver)))
 #endif
     {
-        drivers = g_list_prepend (drivers,
-                                  (gchar*)dbi_driver_get_name (driver));
+        drivers.push_back(dbi_driver_get_name (driver));
     }
-    if (g_list_find_custom (drivers, "sqlite3", (GCompareFunc)g_strcmp0))
-        create_dbi_test_suite ("sqlite3", "sqlite3");
-    if (strlen (TEST_MYSQL_URL) > 0 &&
-        g_list_find_custom (drivers, "mysql", (GCompareFunc)g_strcmp0))
-        create_dbi_test_suite ("mysql", TEST_MYSQL_URL);
-    if (strlen (TEST_PGSQL_URL) > 0 &&
-        g_list_find_custom (drivers, "pgsql", (GCompareFunc)g_strcmp0))
+    for (auto name : drivers)
     {
-        g_setenv ("PGOPTIONS", "-c client_min_messages=WARNING", FALSE);
-        create_dbi_test_suite ("postgres", TEST_PGSQL_URL);
+        if (name == "sqlite3")
+            create_dbi_test_suite ("sqlite3", "sqlite3");
+        if (strlen (TEST_MYSQL_URL) > 0 && name == "mysql")
+            create_dbi_test_suite ("mysql", TEST_MYSQL_URL);
+        if (strlen (TEST_PGSQL_URL) > 0 && name == "pgsql")
+        {
+            g_setenv ("PGOPTIONS", "-c client_min_messages=WARNING", FALSE);
+            create_dbi_test_suite ("postgres", TEST_PGSQL_URL);
+        }
     }
 
     GNC_TEST_ADD_FUNC( suitename, "adjust sql options string localtime", 

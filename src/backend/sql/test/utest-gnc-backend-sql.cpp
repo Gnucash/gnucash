@@ -444,23 +444,6 @@ gnc_sql_get_getter (QofIdTypeConst obj_name, const GncSqlColumnTableEntry& table
 test_gnc_sql_get_getter (Fixture *fixture, gconstpointer pData)
 {
 }*/
-// Make Static
-/* gnc_sql_add_colname_to_list
-void
-gnc_sql_add_colname_to_list (const GncSqlColumnTableEntry& table_row, GList** pList)// 9
-*/
-/* static void
-test_gnc_sql_add_colname_to_list (Fixture *fixture, gconstpointer pData)
-{
-}*/
-/* gnc_sql_add_subtable_colnames_to_list
-void
-gnc_sql_add_subtable_colnames_to_list (const GncSqlColumnTableEntry& table_row, const EntryVec& subtable,
-GList** pList)// C: 1 */
-/* static void
-test_gnc_sql_add_subtable_colnames_to_list (Fixture *fixture, gconstpointer pData)
-{
-}*/
 /* load_string
 static void
 load_string (const GncSqlBackend* be, GncSqlRow& row,
@@ -468,24 +451,6 @@ const GncSqlColumnTableEntry& table_row)// 2
 */
 /* static void
 test_load_string (Fixture *fixture, gconstpointer pData)
-{
-}*/
-/* add_string_col_info_to_list
-static void
-add_string_col_info_to_list (const GncSqlBackend* be, const GncSqlColumnTableEntry& table_row,
-GList** pList)// 2
-*/
-/* static void
-test_add_string_col_info_to_list (Fixture *fixture, gconstpointer pData)
-{
-}*/
-/* add_gvalue_string_to_slist
-static void
-add_gvalue_string_to_slist (const GncSqlBackend* be, QofIdTypeConst obj_name,
-const gpointer pObject, const GncSqlColumnTableEntry& table_row, GSList** pList)// 2
-*/
-/* static void
-test_add_gvalue_string_to_slist (Fixture *fixture, gconstpointer pData)
 {
 }*/
 /* load_int
@@ -718,14 +683,6 @@ add_numeric_col_info_to_list (const GncSqlBackend* be, const GncSqlColumnTableEn
 test_add_numeric_col_info_to_list (Fixture *fixture, gconstpointer pData)
 {
 }*/
-/* add_numeric_colname_to_list
-static void
-add_numeric_colname_to_list (const GncSqlColumnTableEntry& table_row, GList** pList)// 2
-*/
-/* static void
-test_add_numeric_colname_to_list (Fixture *fixture, gconstpointer pData)
-{
-}*/
 /* add_value_numeric_to_vec
 static void
 add_value_numeric_to_vec (const GncSqlBackend* be, QofIdTypeConst obj_name,// 2
@@ -818,13 +775,6 @@ execute_statement_get_count (GncSqlBackend* be, GncSqlStatement* stmt)// 2
 test_execute_statement_get_count (Fixture *fixture, gconstpointer pData)
 {
 }*/
-/* gnc_sql_append_guid_list_to_sql
-guint
-gnc_sql_append_guid_list_to_sql (GString* sql, GList* list, guint maxCount)// C: 2 in 2 */
-/* static void
-test_gnc_sql_append_guid_list_to_sql (Fixture *fixture, gconstpointer pData)
-{
-}*/
 /* gnc_sql_object_is_it_in_db
 gboolean
 gnc_sql_object_is_it_in_db (GncSqlBackend* be, const gchar* table_name,// C: 1 */
@@ -839,27 +789,11 @@ gnc_sql_do_db_operation (GncSqlBackend* be,// C: 22 in 12 */
 test_gnc_sql_do_db_operation (Fixture *fixture, gconstpointer pData)
 {
 }*/
-/* create_gslist_from_values
-static GSList*
-create_gslist_from_values (GncSqlBackend* be,// 3
-*/
-/* static void
-test_create_gslist_from_values (Fixture *fixture, gconstpointer pData)
-{
-}*/
 /* gnc_sql_get_sql_value
 gchar*
 gnc_sql_get_sql_value (const GncSqlConnection* conn, const GValue* value)// C: 1 */
 /* static void
 test_gnc_sql_get_sql_value (Fixture *fixture, gconstpointer pData)
-{
-}*/
-/* free_gvalue_list
-static void
-free_gvalue_list (GSList* list)// 4
-*/
-/* static void
-test_free_gvalue_list (Fixture *fixture, gconstpointer pData)
 {
 }*/
 // Make Static
@@ -1004,7 +938,6 @@ test_suite_gnc_backend_sql (void)
 // GNC_TEST_ADD (suitename, "get autoinc id", Fixture, nullptr, test_get_autoinc_id,  teardown);
 // GNC_TEST_ADD (suitename, "set autoinc id", Fixture, nullptr, test_set_autoinc_id,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql get getter", Fixture, nullptr, test_gnc_sql_get_getter,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql add colname to list", Fixture, nullptr, test_gnc_sql_add_colname_to_list,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql add subtable colnames to list", Fixture, nullptr, test_gnc_sql_add_subtable_colnames_to_list,  teardown);
 // GNC_TEST_ADD (suitename, "load string", Fixture, nullptr, test_load_string,  teardown);
 // GNC_TEST_ADD (suitename, "add string col info to list", Fixture, nullptr, test_add_string_col_info_to_list,  teardown);
@@ -1054,9 +987,7 @@ test_suite_gnc_backend_sql (void)
 // GNC_TEST_ADD (suitename, "gnc sql append guid list to sql", Fixture, nullptr, test_gnc_sql_append_guid_list_to_sql,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql object is it in db", Fixture, nullptr, test_gnc_sql_object_is_it_in_db,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql do db operation", Fixture, nullptr, test_gnc_sql_do_db_operation,  teardown);
-// GNC_TEST_ADD (suitename, "create gslist from values", Fixture, nullptr, test_create_gslist_from_values,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql get sql value", Fixture, nullptr, test_gnc_sql_get_sql_value,  teardown);
-// GNC_TEST_ADD (suitename, "free gvalue list", Fixture, nullptr, test_free_gvalue_list,  teardown);
 // GNC_TEST_ADD (suitename, "build insert statement", Fixture, nullptr, test_build_insert_statement,  teardown);
 // GNC_TEST_ADD (suitename, "build update statement", Fixture, nullptr, test_build_update_statement,  teardown);
 // GNC_TEST_ADD (suitename, "build delete statement", Fixture, nullptr, test_build_delete_statement,  teardown);
