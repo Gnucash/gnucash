@@ -214,11 +214,11 @@ load_budget_amounts (GncSqlBackend* be, GncBudget* budget)
                                guid_buf);
     auto sql = g_strdup_printf ("SELECT * FROM %s WHERE budget_guid='%s'",
                                 AMOUNTS_TABLE, guid_buf);
-    auto stmt = gnc_sql_create_statement_from_sql (be, sql);
+    auto stmt = be->create_statement_from_sql(sql);
     g_free (sql);
     if (stmt != nullptr)
     {
-        auto result = gnc_sql_execute_select_statement (be, stmt);
+        auto result = be->execute_select_statement(stmt);
         budget_amount_info_t info = { budget, NULL, 0 };
 
         for (auto row : *result)
@@ -339,7 +339,7 @@ GncSqlBudgetBackend::load_all (GncSqlBackend* be)
     if (stmt == nullptr)
         return;
 
-    auto result = gnc_sql_execute_select_statement (be, stmt);
+    auto result = be->execute_select_statement(stmt);
     for (auto row : *result)
     {
         auto b = load_single_budget (be, row);
@@ -359,16 +359,16 @@ GncSqlBudgetBackend::create_tables (GncSqlBackend* be)
 
     g_return_if_fail (be != NULL);
 
-    version = gnc_sql_get_table_version (be, BUDGET_TABLE);
+    version = be->get_table_version( BUDGET_TABLE);
     if (version == 0)
     {
-        (void)gnc_sql_create_table (be, BUDGET_TABLE, TABLE_VERSION, col_table);
+        (void)be->create_table(BUDGET_TABLE, TABLE_VERSION, col_table);
     }
 
-    version = gnc_sql_get_table_version (be, AMOUNTS_TABLE);
+    version = be->get_table_version( AMOUNTS_TABLE);
     if (version == 0)
     {
-        (void)gnc_sql_create_table (be, AMOUNTS_TABLE, AMOUNTS_TABLE_VERSION,
+        (void)be->create_table(AMOUNTS_TABLE, AMOUNTS_TABLE_VERSION,
                                     budget_amounts_col_table);
     }
 }

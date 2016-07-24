@@ -239,7 +239,7 @@ load_taxtable_entries (GncSqlBackend* be, GncTaxTable* tt)
                            TTENTRIES_TABLE_NAME, guid_buf);
     auto stmt = be->create_statement_from_sql (buf);
     g_free (buf);
-    auto result = gnc_sql_execute_select_statement (be, stmt);
+    auto result = be->execute_select_statement(stmt);
     for (auto row : *result)
         load_single_ttentry (be, row, tt);
 }
@@ -295,7 +295,7 @@ GncSqlTaxTableBackend::load_all (GncSqlBackend* be)
 
     /* First time, create the query */
     auto stmt = gnc_sql_create_select_statement (be, TT_TABLE_NAME);
-    auto result = gnc_sql_execute_select_statement (be, stmt);
+    auto result = be->execute_select_statement(stmt);
     GList* tt_needing_parents = NULL;
 
     for (auto row : *result)
@@ -333,10 +333,10 @@ GncSqlTaxTableBackend::create_tables (GncSqlBackend* be)
 
     g_return_if_fail (be != NULL);
 
-    version = gnc_sql_get_table_version (be, TT_TABLE_NAME);
+    version = be->get_table_version( TT_TABLE_NAME);
     if (version == 0)
     {
-        gnc_sql_create_table (be, TT_TABLE_NAME, TT_TABLE_VERSION, tt_col_table);
+        be->create_table(TT_TABLE_NAME, TT_TABLE_VERSION, tt_col_table);
     }
     else if (version == 1)
     {
@@ -347,10 +347,10 @@ GncSqlTaxTableBackend::create_tables (GncSqlBackend* be)
                TT_TABLE_VERSION);
     }
 
-    version = gnc_sql_get_table_version (be, TTENTRIES_TABLE_NAME);
+    version = be->get_table_version( TTENTRIES_TABLE_NAME);
     if (version == 0)
     {
-        gnc_sql_create_table (be, TTENTRIES_TABLE_NAME, TTENTRIES_TABLE_VERSION,
+        be->create_table(TTENTRIES_TABLE_NAME, TTENTRIES_TABLE_VERSION,
                               ttentries_col_table);
     }
     else if (version == 1)

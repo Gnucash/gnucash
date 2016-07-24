@@ -828,13 +828,6 @@ do_create_table (const GncSqlBackend* be, const gchar* table_name,// 5
 test_do_create_table (Fixture *fixture, gconstpointer pData)
 {
 }*/
-/* gnc_sql_create_table
-gboolean
-gnc_sql_create_table (GncSqlBackend* be, const gchar* table_name,// C: 22 in 19 */
-/* static void
-test_gnc_sql_create_table (Fixture *fixture, gconstpointer pData)
-{
-}*/
 // Make Static
 /* gnc_sql_create_temp_table
 gboolean
@@ -849,13 +842,6 @@ gboolean
 gnc_sql_create_index (const GncSqlBackend* be, const gchar* index_name,// C: 7 in 2 */
 /* static void
 test_gnc_sql_create_index (Fixture *fixture, gconstpointer pData)
-{
-}*/
-/* gnc_sql_get_table_version
-gint
-gnc_sql_get_table_version (const GncSqlBackend* be, const gchar* table_name)// C: 24 in 20 */
-/* static void
-test_gnc_sql_get_table_version (Fixture *fixture, gconstpointer pData)
 {
 }*/
 /* gnc_sql_upgrade_table
@@ -893,14 +879,6 @@ gnc_sql_finalize_version_info (GncSqlBackend* be)// C: 1 */
 test_gnc_sql_finalize_version_info (Fixture *fixture, gconstpointer pData)
 {
 }*/
-/* gnc_sql_set_table_version
-gboolean
-gnc_sql_set_table_version (GncSqlBackend* be, const gchar* table_name, gint version)// C: 12 in 10 */
-/* static void
-test_gnc_sql_set_table_version (Fixture *fixture, gconstpointer pData)
-{
-}*/
-
 
 void
 test_suite_gnc_backend_sql (void)
@@ -992,15 +970,12 @@ test_suite_gnc_backend_sql (void)
 // GNC_TEST_ADD (suitename, "build update statement", Fixture, nullptr, test_build_update_statement,  teardown);
 // GNC_TEST_ADD (suitename, "build delete statement", Fixture, nullptr, test_build_delete_statement,  teardown);
 // GNC_TEST_ADD (suitename, "do create table", Fixture, nullptr, test_do_create_table,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql create table", Fixture, nullptr, test_gnc_sql_create_table,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql create temp table", Fixture, nullptr, test_gnc_sql_create_temp_table,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql create index", Fixture, nullptr, test_gnc_sql_create_index,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql get table version", Fixture, nullptr, test_gnc_sql_get_table_version,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql upgrade table", Fixture, nullptr, test_gnc_sql_upgrade_table,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql add columns to table", Fixture, nullptr, test_gnc_sql_add_columns_to_table,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql init version info", Fixture, nullptr, test_gnc_sql_init_version_info,  teardown);
 // GNC_TEST_ADD (suitename, "reset version info", Fixture, nullptr, test_reset_version_info,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql finalize version info", Fixture, nullptr, test_gnc_sql_finalize_version_info,  teardown);
-// GNC_TEST_ADD (suitename, "gnc sql set table version", Fixture, nullptr, test_gnc_sql_set_table_version,  teardown);
 
 }

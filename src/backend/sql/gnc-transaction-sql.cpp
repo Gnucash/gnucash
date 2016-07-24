@@ -351,7 +351,7 @@ query_transactions (GncSqlBackend* be, const GncSqlStatementPtr& stmt)
     g_return_if_fail (be != NULL);
     g_return_if_fail (stmt != NULL);
 
-    auto result = gnc_sql_execute_select_statement (be, stmt);
+    auto result = be->execute_select_statement(stmt);
     if (result->begin() == result->end())
         return;
 
@@ -474,12 +474,12 @@ GncSqlTransBackend::create_tables (GncSqlBackend* be)
 
     g_return_if_fail (be != NULL);
 
-    version = gnc_sql_get_table_version (be, m_table_name.c_str());
+    version = be->get_table_version( m_table_name.c_str());
     if (version == 0)
     {
-        (void)gnc_sql_create_table (be, TRANSACTION_TABLE, TX_TABLE_VERSION,
+        (void)be->create_table(TRANSACTION_TABLE, TX_TABLE_VERSION,
                                     tx_col_table);
-        ok = gnc_sql_create_index (be, "tx_post_date_index", TRANSACTION_TABLE,
+        ok = be->create_index ("tx_post_date_index", TRANSACTION_TABLE,
                                    post_date_col_table);
         if (!ok)
         {
@@ -503,15 +503,15 @@ GncSqlSplitBackend::create_tables (GncSqlBackend* be)
 {
     g_return_if_fail (be != nullptr);
 
-    auto version = gnc_sql_get_table_version (be, m_table_name.c_str());
+    auto version = be->get_table_version( m_table_name.c_str());
     if (version == 0)
     {
-        (void)gnc_sql_create_table (be, m_table_name.c_str(),
+        (void)be->create_table(m_table_name.c_str(),
                                     m_version, m_col_table);
-        if (!gnc_sql_create_index (be, "splits_tx_guid_index",
+        if (!be->create_index("splits_tx_guid_index",
                                    m_table_name.c_str(), tx_guid_col_table))
             PERR ("Unable to create index\n");
-        if (!gnc_sql_create_index (be, "splits_account_guid_index",
+        if (!be->create_index("splits_account_guid_index",
                                    m_table_name.c_str(),
                                    account_guid_col_table))
             PERR ("Unable to create index\n");
@@ -523,11 +523,11 @@ GncSqlSplitBackend::create_tables (GncSqlBackend* be)
            1->2: 64 bit int handling
            3->4: Split reconcile date can be NULL */
         gnc_sql_upgrade_table (be, m_table_name.c_str(), split_col_table);
-        if (!gnc_sql_create_index (be, "splits_tx_guid_index",
+        if (!be->create_index("splits_tx_guid_index",
                                    m_table_name.c_str(),
                                    tx_guid_col_table))
             PERR ("Unable to create index\n");
-        if (!gnc_sql_create_index (be, "splits_account_guid_index",
+        if (!be->create_index("splits_account_guid_index",
                                    m_table_name.c_str(),
                                    account_guid_col_table))
             PERR ("Unable to create index\n");
@@ -761,7 +761,7 @@ void gnc_sql_transaction_load_tx_for_account (GncSqlBackend* be,
     query_sql = g_strdup_printf (
                     "SELECT DISTINCT t.* FROM %s AS t, %s AS s WHERE s.tx_guid=t.guid AND s.account_guid ='%s'",
                     TRANSACTION_TABLE, SPLIT_TABLE, guid_buf);
-    auto stmt = gnc_sql_create_statement_from_sql (be, query_sql);
+    auto stmt = be->create_statement_from_sql(query_sql);
     g_free (query_sql);
     if (stmt != nullptr)
     {
@@ -781,7 +781,7 @@ GncSqlTransBackend::load_all (GncSqlBackend* be)
     g_return_if_fail (be != NULL);
 
     auto query_sql = g_strdup_printf ("SELECT * FROM %s", TRANSACTION_TABLE);
-    auto stmt = gnc_sql_create_statement_from_sql (be, query_sql);
+    auto stmt = be->create_statement_from_sql(query_sql);
     g_free (query_sql);
     if (stmt != nullptr)
     {
@@ -1166,7 +1166,7 @@ done_compiling_query:
         {
             query_sql = g_strdup_printf ("SELECT * FROM %s", TRANSACTION_TABLE);
         }
-        query_info->stmt = gnc_sql_create_statement_from_sql (be, query_sql);
+        query_info->stmt = be->create_statement_from_sql(query_sql);
 
         g_string_free (sql, TRUE);
         g_free (query_sql);
@@ -1175,7 +1175,7 @@ done_compiling_query:
     else
     {
         query_sql = g_strdup_printf ("SELECT * FROM %s", TRANSACTION_TABLE);
-        query_info->stmt = gnc_sql_create_statement_from_sql (be, query_sql);
+        query_info->stmt = be->create_statement_from_sql(query_sql);
         g_free (query_sql);
     }
 
@@ -1287,10 +1287,10 @@ gnc_sql_get_account_balances_slist (GncSqlBackend* be)
 
     buf = g_strdup_printf ("SELECT account_guid, reconcile_state, sum(quantity_num) as quantity_num, quantity_denom FROM %s GROUP BY account_guid, reconcile_state, quantity_denom ORDER BY account_guid, reconcile_state",
                            SPLIT_TABLE);
-    auto stmt = gnc_sql_create_statement_from_sql (be, buf);
+    auto stmt = be->create_statement_from_sql(buf);
     g_assert (stmt != nullptr);
     g_free (buf);
-    auto result = gnc_sql_execute_select_statement (be, stmt);
+    auto result = be->execute_select_statement(stmt);
     acct_balances_t* bal = NULL;
 
     for (auto row : *result)
@@ -1383,8 +1383,7 @@ GncSqlColumnTableEntryImpl<CT_TXREF>::load (const GncSqlBackend* be,
         {
             auto buf = std::string{"SELECT * FROM "} + TRANSACTION_TABLE +
                                        " WHERE guid='" + val + "'";
-            auto stmt = gnc_sql_create_statement_from_sql ((GncSqlBackend*)be,
-                                                           buf.c_str());
+            auto stmt = be->create_statement_from_sql (buf);
             query_transactions ((GncSqlBackend*)be, stmt);
             tx = xaccTransLookup (&guid, be->book());
         }

@@ -504,6 +504,15 @@ GncSqlBackend::create_table(const std::string& table_name,
 }
 
 bool
+GncSqlBackend::create_table(const std::string& table_name, int table_version,
+                            const EntryVec& col_table) noexcept
+{
+    if (create_table (table_name, col_table))
+        return set_table_version (table_name, table_version);
+    return false;
+}
+
+bool
 GncSqlBackend::create_index(const std::string& index_name,
                             const std::string& table_name,
                             const EntryVec& col_table) const noexcept
@@ -2003,7 +2012,7 @@ gnc_sql_create_select_statement (GncSqlBackend* be, const gchar* table_name)
     g_return_val_if_fail (table_name != NULL, NULL);
 
     auto sql = g_strdup_printf ("SELECT * FROM %s", table_name);
-    auto stmt = gnc_sql_create_statement_from_sql (be, sql);
+    auto stmt = be->create_statement_from_sql(sql);
     g_free (sql);
     return stmt;
 }
@@ -2017,29 +2026,11 @@ create_single_col_select_statement (GncSqlBackend* be,
     g_return_val_if_fail (table_name != NULL, NULL);
 
     auto sql = std::string{"SELECT "} + table_row->name() + " FROM " + table_name;
-    return gnc_sql_create_statement_from_sql (be, sql.c_str());
+    return be->create_statement_from_sql(sql.c_str());
 }
 
 /* ================================================================= */
 
-GncSqlResultPtr
-gnc_sql_execute_select_statement (GncSqlBackend* be,
-                                  const GncSqlStatementPtr& stmt)
-{
-
-    g_return_val_if_fail (be != NULL, NULL);
-
-    return be->execute_select_statement (stmt);
-}
-
-GncSqlStatementPtr
-gnc_sql_create_statement_from_sql (GncSqlBackend* be, const gchar* sql)
-{
-    g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (sql != NULL, NULL);
-
-    return be->create_statement_from_sql (sql);
-}
 
 GncSqlResultPtr
 gnc_sql_execute_select_sql (GncSqlBackend* be, const gchar* sql)
@@ -2047,7 +2038,7 @@ gnc_sql_execute_select_sql (GncSqlBackend* be, const gchar* sql)
     g_return_val_if_fail (be != NULL, NULL);
     g_return_val_if_fail (sql != NULL, NULL);
 
-    auto stmt = gnc_sql_create_statement_from_sql (be, sql);
+    auto stmt = be->create_statement_from_sql(sql);
     if (stmt == nullptr)
     {
         return nullptr;
@@ -2061,7 +2052,7 @@ gnc_sql_execute_nonselect_sql (GncSqlBackend* be, const gchar* sql)
     g_return_val_if_fail (be != NULL, 0);
     g_return_val_if_fail (sql != NULL, 0);
 
-    auto stmt = gnc_sql_create_statement_from_sql (be, sql);
+    auto stmt = be->create_statement_from_sql(sql);
     if (stmt == NULL)
     {
         return -1;
@@ -2122,11 +2113,10 @@ gnc_sql_object_is_it_in_db (GncSqlBackend* be, const gchar* table_name,
     /* WHERE */
     PairVec values{get_object_values(be, obj_name, pObject, table)};
     stmt->add_where_cond(obj_name, values);
-    auto result = gnc_sql_execute_select_statement (be, stmt);
+    auto result = be->execute_select_statement (stmt);
     if (result != NULL)
     {
         auto retval = result->size() > 0;
-        delete result;
         return retval;
     }
     return false;
@@ -2311,19 +2301,6 @@ GncSqlObjectBackend::commit (GncSqlBackend* be, QofInstance* inst)
 }
 
 /* ================================================================= */
-
-gboolean
-gnc_sql_create_table (GncSqlBackend* be, const gchar* table_name,
-                      int table_version, const EntryVec& col_table)
-{
-    DEBUG ("Creating %s table\n", table_name);
-
-    if (be->create_table (table_name, col_table))
-        return be->set_table_version (table_name, table_version);
-
-    return false;
-}
-
 void
 GncSqlObjectBackend::create_tables (GncSqlBackend* be)
 {
@@ -2347,29 +2324,6 @@ gnc_sql_create_temp_table (const GncSqlBackend* be, const gchar* table_name,
     g_return_val_if_fail (table_name != NULL, FALSE);
 
     return be->create_table (table_name, col_table);
-}
-
-gboolean
-gnc_sql_create_index (const GncSqlBackend* be, const gchar* index_name,
-                      const gchar* table_name,
-                      const EntryVec& col_table)
-{
-    gboolean ok;
-
-    g_return_val_if_fail (be != NULL, FALSE);
-    g_return_val_if_fail (index_name != NULL, FALSE);
-    g_return_val_if_fail (table_name != NULL, FALSE);
-
-    ok = be->create_index (index_name, table_name, col_table);
-    return ok;
-}
-
-gint
-gnc_sql_get_table_version (const GncSqlBackend* be, const gchar* table_name)
-{
-    g_return_val_if_fail (be != NULL, 0);
-    g_return_val_if_fail (table_name != NULL, 0);
-    return be->get_table_version(table_name);
 }
 
 /* Create a temporary table, copy the data from the old table, delete the
@@ -2402,16 +2356,6 @@ gnc_sql_upgrade_table (GncSqlBackend* be, const gchar* table_name,
     (void)gnc_sql_execute_nonselect_sql (be, sql);
     g_free (sql);
     g_free (temp_table_name);
-}
-
-/* Adds one or more columns to an existing table. */
-gboolean gnc_sql_add_columns_to_table (GncSqlBackend* be, const gchar* table_name,
-                                       const EntryVec& new_col_table)
-{
-    g_return_val_if_fail (be != NULL, FALSE);
-    g_return_val_if_fail (table_name != NULL, FALSE);
-
-    return be->add_columns_to_table(table_name, new_col_table);
 }
 
 /* ================================================================= */

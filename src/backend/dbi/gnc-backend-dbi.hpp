@@ -194,9 +194,6 @@ private:
 };
 
 void gnc_dbi_safe_sync_all (QofBackend* qbe, QofBook* book);
-std::string add_columns_ddl(const GncSqlConnection* conn,
-                            const std::string& table_name,
-                            const ColVec& info_vec);
 
 /* external access required for tests */
 std::string adjust_sql_options_string(const std::string&);

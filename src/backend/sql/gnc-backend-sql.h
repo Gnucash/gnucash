@@ -87,21 +87,70 @@ public:
      * destroys the version info.
      */
     void connect(GncSqlConnection *conn) noexcept;
+    /**
+     * Initializes DB table version information.
+     *
+     * @param be SQL backend struct
+     */
     void init_version_info() noexcept;
     bool reset_version_info() noexcept;
+    /**
+     * Finalizes DB table version information.
+     *
+     * @param be SQL backend struct
+     */
     void finalize_version_info() noexcept;
     /* FIXME: These are just pass-throughs of m_conn functions. */
     GncSqlStatementPtr create_statement_from_sql(const std::string& str) const noexcept;
+    /** Executes an SQL SELECT statement and returns the result rows.  If an
+     * error occurs, an entry is added to the log, an error status is returned
+     * to qof and nullptr is returned.
+     *
+     * @param statement Statement
+     * @return Results, or nullptr if an error has occured
+     */
     GncSqlResultPtr execute_select_statement(const GncSqlStatementPtr& stmt) const noexcept;
     int execute_nonselect_statement(const GncSqlStatementPtr& stmt) const noexcept;
     std::string quote_string(const std::string&) const noexcept;
+   /**
+    * Creates a table in the database
+    *
+    * @param table_name Table name
+    * @param col_table DB table description
+    * @return TRUE if successful, FALSE if unsuccessful
+    */
     bool create_table(const std::string& table_name, const EntryVec& col_table) const noexcept;
+    /**
+     * Creates a table in the database and sets its version
+     *
+     * @param table_name Table name
+     * @param table_version Table version
+     * @param col_table DB table description
+     * @return TRUE if successful, FALSE if unsuccessful
+     */
+    bool create_table(const std::string& table_name, int table_version,
+                      const EntryVec& col_table) noexcept;
+    /**
+     * Creates an index in the database
+     *
+     * @param index_name Index name
+     * @param table_name Table name
+     * @param col_table Columns that the index should index
+     * @return TRUE if successful, FALSE if unsuccessful
+     */
     bool create_index(const std::string& index_name,
                       const std::string& table_name,
                       const EntryVec& col_table) const noexcept;
+    /**
+     * Adds one or more columns to an existing table.
+     *
+     * @param table_name SQL table name
+     * @param new_col_table Column table for new columns
+     * @return TRUE if successful, FALSE if unsuccessful
+     */
     bool add_columns_to_table(const std::string& table_name,
                               const EntryVec& col_table) const noexcept;
-    unsigned int get_table_version(const std::string& table_name) const noexcept;
+    uint_t get_table_version(const std::string& table_name) const noexcept;
     bool set_table_version (const std::string& table_name, uint_t version) noexcept;
     QofBook* book() const noexcept { return m_book; }
 
@@ -797,18 +846,6 @@ gboolean gnc_sql_do_db_operation (GncSqlBackend* be,
                                   const EntryVec& table);
 
 /**
- * Executes an SQL SELECT statement and returns the result rows.  If an error
- * occurs, an entry is added to the log, an error status is returned to qof and
- * NULL is returned.
- *
- * @param be SQL backend struct
- * @param statement Statement
- * @return Results, or NULL if an error has occured
- */
-GncSqlResultPtr gnc_sql_execute_select_statement (GncSqlBackend* be,
-                                                  const GncSqlStatementPtr& statement);
-
-/**
  * Executes an SQL SELECT statement from an SQL char string and returns the
  * result rows.  If an error occurs, an entry is added to the log, an error
  * status is returned to qof and NULL is returned.
@@ -827,16 +864,6 @@ GncSqlResultPtr gnc_sql_execute_select_sql (GncSqlBackend* be, const gchar* sql)
  * @returns Number of rows affected, or -1 if an error has occured
  */
 gint gnc_sql_execute_nonselect_sql (GncSqlBackend* be, const gchar* sql);
-
-/**
- * Creates a statement from an SQL char string.
- *
- * @param be SQL backend struct
- * @param sql SQL char string
- * @return Statement
- */
-GncSqlStatementPtr gnc_sql_create_statement_from_sql (GncSqlBackend* be,
-                                                      const gchar* sql);
 
 /**
  * Loads a Gnucash object from the database.
@@ -868,34 +895,6 @@ gboolean gnc_sql_object_is_it_in_db (GncSqlBackend* be,
                                      const EntryVec& table );
 
 /**
- * Returns the version number for a DB table.
- *
- * @param be SQL backend struct
- * @param table_name Table name
- * @return Version number, or 0 if the table does not exist
- */
-gint gnc_sql_get_table_version (const GncSqlBackend* be,
-                                const gchar* table_name);
-
-gboolean gnc_sql_set_table_version (GncSqlBackend* be,
-                                    const gchar* table_name,
-                                    gint version);
-
-/**
- * Creates a table in the database
- *
- * @param be SQL backend struct
- * @param table_name Table name
- * @param table_version Table version
- * @param col_table DB table description
- * @return TRUE if successful, FALSE if unsuccessful
- */
-gboolean gnc_sql_create_table (GncSqlBackend* be,
-                               const gchar* table_name,
-                               gint table_version,
-                               const EntryVec& col_table);
-
-/**
  * Creates a temporary table in the database.  A temporary table does not
  * have a version number added to the versions table.
  *
@@ -907,18 +906,6 @@ gboolean gnc_sql_create_table (GncSqlBackend* be,
 gboolean gnc_sql_create_temp_table (const GncSqlBackend* be,
                                     const gchar* table_name,
                                     const EntryVec& col_table);
-
-/**
- * Creates an index in the database
- *
- * @param be SQL backend struct
- * @param index_name Index name
- * @param table_name Table name
- * @param col_table Columns that the index should index
- * @return TRUE if successful, FALSE if unsuccessful
- */
-gboolean gnc_sql_create_index (const GncSqlBackend* be, const char* index_name,
-                               const char* table_name, const EntryVec& col_table);
 
 /**
  * Loads the object guid from a database row.  The table must have a column
@@ -954,20 +941,6 @@ uint_t gnc_sql_append_guids_to_sql (std::stringstream& sql,
                                     const InstanceVec& instances);
 
 /**
- * Initializes DB table version information.
- *
- * @param be SQL backend struct
- */
-void gnc_sql_init_version_info (GncSqlBackend* be);
-
-/**
- * Finalizes DB table version information.
- *
- * @param be SQL backend struct
- */
-void gnc_sql_finalize_version_info (GncSqlBackend* be);
-
-/**
  * Converts a Timespec value to a string value for the database.
  *
  * @param be SQL backend
@@ -990,17 +963,6 @@ gchar* gnc_sql_convert_timespec_to_string (const GncSqlBackend* be,
  */
 void gnc_sql_upgrade_table (GncSqlBackend* be, const gchar* table_name,
                             const EntryVec& col_table);
-
-/**
- * Adds one or more columns to an existing table.
- *
- * @param be SQL backend
- * @param table_name SQL table name
- * @param new_col_table Column table for new columns
- * @return TRUE if successful, FALSE if unsuccessful
- */
-gboolean gnc_sql_add_columns_to_table (GncSqlBackend* be, const char* table_name,
-                                       const EntryVec& new_col_table);
 
 void _retrieve_guid_ (gpointer pObject,  gpointer pValue);
 

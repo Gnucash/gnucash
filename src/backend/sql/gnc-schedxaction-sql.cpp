@@ -125,7 +125,7 @@ GncSqlSchedXactionBackend::load_all (GncSqlBackend* be)
 
     auto stmt = gnc_sql_create_select_statement (be, SCHEDXACTION_TABLE);
     if (stmt == NULL) return;
-    auto result = gnc_sql_execute_select_statement (be, stmt);
+    auto result = be->execute_select_statement(stmt);
     SchedXactions* sxes;
     InstanceVec instances;
     sxes = gnc_book_get_schedxactions (be->book());

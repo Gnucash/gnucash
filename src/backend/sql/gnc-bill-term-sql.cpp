@@ -239,7 +239,7 @@ GncSqlBillTermBackend::load_all (GncSqlBackend* be)
     g_return_if_fail (be != NULL);
 
     auto stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
-    auto result = gnc_sql_execute_select_statement (be, stmt);
+    auto result = be->execute_select_statement(stmt);
     InstanceVec instances;
     GList* l_billterms_needing_parents = NULL;
 
@@ -307,10 +307,10 @@ GncSqlBillTermBackend::create_tables (GncSqlBackend* be)
 
     g_return_if_fail (be != NULL);
 
-    version = gnc_sql_get_table_version (be, TABLE_NAME);
+    version = be->get_table_version( TABLE_NAME);
     if (version == 0)
     {
-        gnc_sql_create_table (be, TABLE_NAME, TABLE_VERSION, col_table);
+        be->create_table(TABLE_NAME, TABLE_VERSION, col_table);
     }
     else if (version == 1)
     {

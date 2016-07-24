@@ -323,7 +323,7 @@ gnc_sql_set_recurrences_from_db (GncSqlBackend* be, const GncGUID* guid)
                            guid_buf);
     auto stmt = be->create_statement_from_sql (buf);
     g_free (buf);
-    auto result = gnc_sql_execute_select_statement (be, stmt);
+    auto result = be->execute_select_statement(stmt);
     return result;
 }
 
@@ -377,8 +377,8 @@ static void
 upgrade_recurrence_table_1_2 (GncSqlBackend* be)
 {
     /* Step 1: add field, but allow it to be null */
-    gboolean ok = gnc_sql_add_columns_to_table (be, TABLE_NAME,
-                                                weekend_adjust_col_table);
+    gboolean ok = be->add_columns_to_table(TABLE_NAME,
+                                           weekend_adjust_col_table);
     if (!ok)
     {
         PERR ("Unable to add recurrence_weekend_adjust column\n");
@@ -410,10 +410,10 @@ GncSqlRecurrenceBackend::create_tables (GncSqlBackend* be)
 
     g_return_if_fail (be != NULL);
 
-    version = gnc_sql_get_table_version (be, TABLE_NAME);
+    version = be->get_table_version( TABLE_NAME);
     if (version == 0)
     {
-        (void)gnc_sql_create_table (be, TABLE_NAME, TABLE_VERSION, col_table);
+        (void)be->create_table(TABLE_NAME, TABLE_VERSION, col_table);
     }
     else if (version < TABLE_VERSION)
     {

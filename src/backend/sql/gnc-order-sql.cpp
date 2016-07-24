@@ -106,7 +106,7 @@ GncSqlOrderBackend::load_all (GncSqlBackend* be)
     g_return_if_fail (be != NULL);
 
     auto stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
-    auto result = gnc_sql_execute_select_statement (be, stmt);
+    auto result = be->execute_select_statement(stmt);
     InstanceVec instances;
 
     for (auto row : *result)

@@ -148,7 +148,7 @@ GncSqlCommodityBackend::load_all (GncSqlBackend* be)
     pTable = gnc_commodity_table_get_table (be->book());
     auto stmt = gnc_sql_create_select_statement (be, COMMODITIES_TABLE);
     if (stmt == nullptr) return;
-    auto result = gnc_sql_execute_select_statement (be, stmt);
+    auto result = be->execute_select_statement(stmt);
 
     for (auto row : *result)
     {

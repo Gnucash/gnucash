@@ -174,7 +174,7 @@ GncSqlBookBackend::load_all (GncSqlBackend* be)
     auto stmt = gnc_sql_create_select_statement (be, BOOK_TABLE);
     if (stmt != nullptr)
     {
-        auto result = gnc_sql_execute_select_statement (be, stmt);
+        auto result = be->execute_select_statement(stmt);
         auto row = result->begin();
 
         /* If there are no rows, try committing the book; unset
