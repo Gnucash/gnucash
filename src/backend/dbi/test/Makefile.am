@@ -62,7 +62,8 @@ test_backend_dbi_SOURCES = \
     test-dbi-stuff.cpp \
     test-dbi-business-stuff.cpp \
     ../gnc-dbisqlconnection.cpp \
-    ../gnc-backend-dbi.cpp
+    ../gnc-backend-dbi.cpp \
+    ../gnc-dbisqlresult.cpp
 
 test_backend_dbi_CPPFLAGS = \
 	-DDBI_TEST_XML_FILENAME=\"${srcdir}/test-dbi.xml\" \

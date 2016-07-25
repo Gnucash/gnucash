@@ -28,12 +28,11 @@ extern "C"
 #include <platform.h>
 #include <gnc-locale-utils.h>
 }
-#include "gnc-backend-dbi.hpp"
+#include "gnc-dbisqlconnection.hpp"
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 static const unsigned int DBI_MAX_CONN_ATTEMPTS = 5;
-
 
 /* --------------------------------------------------------- */
 class GncDbiSqlStatement : public GncSqlStatement

@@ -22,11 +22,16 @@ AM_CPPFLAGS = \
 
 libgncmod_backend_dbi_la_SOURCES = \
   gnc-backend-dbi.cpp \
-  gnc-dbisqlconnection.cpp
+  gnc-dbisqlconnection.cpp \
+  gnc-dbisqlresult.cpp
 
 noinst_HEADERS = \
   gnc-backend-dbi.h \
-  gnc-backend-dbi.hpp
+  gnc-backend-dbi.hpp \
+  gnc-dbisqlconnection.hpp \
+  gnc-dbisqlresult.hpp \
+  gnc-dbiprovider.hpp \
+  gnc-dbiproviderimpl.hpp
 
 libgncmod_backend_dbi_la_LDFLAGS = -shared -avoid-version
 libgncmod_backend_dbi_la_LIBADD = \

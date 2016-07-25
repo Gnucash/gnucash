@@ -68,17 +68,16 @@ extern "C"
 #include "splint-defs.h"
 #endif
 
-
-    /* For direct access to dbi data structs, sadly needed for datetime */
-#include <dbi/dbi-dev.h>
 }
 #include <boost/regex.hpp>
 #include <string>
 
-#include <gnc-datetime.hpp>
 #include <gnc-backend-prov.hpp>
 #include "gnc-backend-dbi.h"
 #include "gnc-backend-dbi.hpp"
+
+#include "gnc-dbisqlresult.hpp"
+#include "gnc-dbisqlconnection.hpp"
 
 #if PLATFORM(WINDOWS)
 #ifdef __STRICT_ANSI_UNSET__
@@ -99,6 +98,8 @@ static dbi_inst dbi_instance = nullptr;
 #define TRANSACTION_NAME "trans"
 
 static QofLogModule log_module = G_LOG_DOMAIN;
+// gnc-dbiproviderimpl.hpp has templates that need log_module defined.
+#include "gnc-dbiproviderimpl.hpp"
 
 static gchar lock_table[] = "gnclock";
 
@@ -116,28 +117,6 @@ static gboolean gnc_dbi_lock_database (QofBackend*, dbi_conn, gboolean);
 static gboolean save_may_clobber_data (QofBackend* qbe);
 
 static GncDbiTestResult conn_test_dbi_library (dbi_conn conn);
-
-enum class DbType
-{
-    DBI_SQLITE,
-    DBI_MYSQL,
-    DBI_PGSQL
-};
-
-
-template <DbType T>
-class GncDbiProviderImpl : public GncDbiProvider
-{
-public:
-    std::string create_table_ddl(const GncSqlConnection* conn,
-                                 const std::string& table_name,
-                                 const ColVec& info_vec);
-    StrVec get_table_list(dbi_conn conn,
-                                            const std::string& dbname);
-    void append_col_def(std::string& ddl, const GncSqlColumnInfo& info);
-    StrVec get_index_list (dbi_conn conn);
-    void drop_index(dbi_conn conn, const std::string& index);
-};
 
 template <DbType T>
 class QofDbiBackendProvider : public QofBackendProvider
@@ -957,7 +936,6 @@ pgsql_error_fn (dbi_conn conn, void* user_data)
     {
         PINFO ("DBI error: %s\n", msg);
         be->set_exists(false);
-        be->set_error (ERR_BACKEND_NO_SUCH_DB, 0, FALSE);
     }
     else if (g_strrstr (msg,
                         "server closed the connection unexpectedly"))    // Connection lost
@@ -971,17 +949,23 @@ pgsql_error_fn (dbi_conn conn, void* user_data)
         be->set_error (ERR_BACKEND_CONN_LOST, 1, true);
         be->retry_connection(msg);
     }
-    else if (be->connected() &&
-             (g_str_has_prefix (msg, "connection pointer is NULL") ||
-              g_str_has_prefix (msg, "could not connect to server")))       // No connection
+    else if (g_str_has_prefix (msg, "connection pointer is NULL") ||
+             g_str_has_prefix (msg, "could not connect to server"))       // No connection
     {
-        be->set_error(ERR_BACKEND_CANT_CONNECT, 1, true);
-        be->retry_connection (msg);
+
+        if (!be->connected())
+            qof_backend_set_error((QofBackend*)be, ERR_BACKEND_CANT_CONNECT);
+        else
+        {
+            be->set_error(ERR_BACKEND_CANT_CONNECT, 1, true);
+            be->retry_connection (msg);
+        }
     }
     else
     {
         PERR ("DBI error: %s\n", msg);
-        be->set_error (ERR_BACKEND_MISC, 0, false);
+        if (be->connected())
+            be->set_error (ERR_BACKEND_MISC, 0, false);
     }
 }
 
@@ -1678,387 +1662,6 @@ gnc_module_finalize_backend_dbi (void)
 }
 
 /* --------------------------------------------------------- */
-GncSqlRow&
-GncDbiSqlResult::IteratorImpl::operator++()
-{
-    int status = dbi_result_next_row (m_inst->m_dbi_result);
-    if (status)
-        return m_inst->m_row;
-    int error = m_inst->dberror();
-    if (error == DBI_ERROR_BADIDX || error == 0) //ran off the end of the results
-        return m_inst->m_sentinel;
-    PERR("Error %d incrementing results iterator.", error);
-    qof_backend_set_error (m_inst->m_conn->qbe(), ERR_BACKEND_SERVER_ERR);
-    return m_inst->m_sentinel;
-}
-
-int64_t
-GncDbiSqlResult::IteratorImpl::get_int_at_col(const char* col) const
-{
-    auto type = dbi_result_get_field_type (m_inst->m_dbi_result, col);
-    if(type != DBI_TYPE_INTEGER)
-        throw (std::invalid_argument{"Requested integer from non-integer column."});
-    return dbi_result_get_longlong (m_inst->m_dbi_result, col);
-}
-
-float
-GncDbiSqlResult::IteratorImpl::get_float_at_col(const char* col) const
-{
-    auto type = dbi_result_get_field_type (m_inst->m_dbi_result, col);
-    auto attrs = dbi_result_get_field_attribs (m_inst->m_dbi_result, col);
-    if(type != DBI_TYPE_DECIMAL ||
-       (attrs & DBI_DECIMAL_SIZEMASK) != DBI_DECIMAL_SIZE4)
-        throw (std::invalid_argument{"Requested float from non-float column."});
-    gnc_push_locale (LC_NUMERIC, "C");
-    auto retval =  dbi_result_get_float(m_inst->m_dbi_result, col);
-    gnc_pop_locale (LC_NUMERIC);
-    return retval;
-}
-
-double
-GncDbiSqlResult::IteratorImpl::get_double_at_col(const char* col) const
-{
-    auto type = dbi_result_get_field_type (m_inst->m_dbi_result, col);
-    auto attrs = dbi_result_get_field_attribs (m_inst->m_dbi_result, col);
-    if(type != DBI_TYPE_DECIMAL ||
-       (attrs & DBI_DECIMAL_SIZEMASK) != DBI_DECIMAL_SIZE8)
-        throw (std::invalid_argument{"Requested double from non-double column."});
-    gnc_push_locale (LC_NUMERIC, "C");
-    auto retval =  dbi_result_get_double(m_inst->m_dbi_result, col);
-    gnc_pop_locale (LC_NUMERIC);
-    return retval;
-}
-
-std::string
-GncDbiSqlResult::IteratorImpl::get_string_at_col(const char* col) const
-{
-    auto type = dbi_result_get_field_type (m_inst->m_dbi_result, col);
-    auto attrs = dbi_result_get_field_attribs (m_inst->m_dbi_result, col);
-    if(type != DBI_TYPE_STRING)
-        throw (std::invalid_argument{"Requested string from non-string column."});
-    gnc_push_locale (LC_NUMERIC, "C");
-    auto strval = dbi_result_get_string(m_inst->m_dbi_result, col);
-    if (strval == nullptr)
-    {
-        gnc_pop_locale (LC_NUMERIC);
-        throw (std::invalid_argument{"Column empty."});
-    }
-    auto retval =  std::string{strval};
-    gnc_pop_locale (LC_NUMERIC);
-    return retval;
-}
-time64
-GncDbiSqlResult::IteratorImpl::get_time64_at_col (const char* col) const
-{
-    auto type = dbi_result_get_field_type (m_inst->m_dbi_result, col);
-    auto attrs = dbi_result_get_field_attribs (m_inst->m_dbi_result, col);
-    if (type != DBI_TYPE_DATETIME)
-        throw (std::invalid_argument{"Requested double from non-double column."});
-    gnc_push_locale (LC_NUMERIC, "C");
-#if HAVE_LIBDBI_TO_LONGLONG
-    /* A less evil hack than the one equrie by libdbi-0.8, but
-     * still necessary to work around the same bug.
-     */
-    auto retval = dbi_result_get_as_longlong(dbi_row->result,
-                                             col_name);
-#else
-    /* A seriously evil hack to work around libdbi bug #15
-     * https://sourceforge.net/p/libdbi/bugs/15/. When libdbi
-     * v0.9 is widely available this can be replaced with
-     * dbi_result_get_as_longlong.
-     * Note: 0.9 is available in Debian Jessie and Fedora 21.
-     */
-    auto result = (dbi_result_t*) (m_inst->m_dbi_result);
-    auto row = dbi_result_get_currow (result);
-    auto idx = dbi_result_get_field_idx (result, col) - 1;
-    time64 retval = result->rows[row]->field_values[idx].d_datetime;
-    if (retval < MINTIME || retval > MAXTIME)
-        retval = 0;
-#endif //HAVE_LIBDBI_TO_LONGLONG
-    gnc_pop_locale (LC_NUMERIC);
-    return retval;
-}
-
-
-/* --------------------------------------------------------- */
-
-GncDbiSqlResult::~GncDbiSqlResult()
-{
-    int status = dbi_result_free (m_dbi_result);
-
-    if (status == 0)
-        return;
-
-    PERR ("Error %d in dbi_result_free() result.", dberror() );
-    qof_backend_set_error (m_conn->qbe(), ERR_BACKEND_SERVER_ERR);
-}
-
-GncSqlRow&
-GncDbiSqlResult::begin()
-{
-
-    if (m_dbi_result == nullptr ||
-        dbi_result_get_numrows(m_dbi_result) == 0)
-        return m_sentinel;
-    int status = dbi_result_first_row(m_dbi_result);
-    if (status)
-        return m_row;
-    int error = dberror(); //
-
-    if (error != DBI_ERROR_BADIDX) //otherwise just an empty result set
-    {
-        PERR ("Error %d in dbi_result_first_row()", dberror());
-        qof_backend_set_error (m_conn->qbe(), ERR_BACKEND_SERVER_ERR);
-    }
-    return m_sentinel;
-}
-
-uint64_t
-GncDbiSqlResult::size() const noexcept
-{
-    return dbi_result_get_numrows(m_dbi_result);
-}
-
-/* --------------------------------------------------------- */
-
-template<> void
-GncDbiProviderImpl<DbType::DBI_SQLITE>::append_col_def(std::string& ddl,
-                                           const GncSqlColumnInfo& info)
-{
-    const char* type_name = nullptr;
-
-    if (info.m_type == BCT_INT)
-    {
-        type_name = "integer";
-    }
-    else if (info.m_type == BCT_INT64)
-    {
-        type_name = "bigint";
-    }
-    else if (info.m_type == BCT_DOUBLE)
-    {
-        type_name = "float8";
-    }
-    else if (info.m_type == BCT_STRING || info.m_type == BCT_DATE
-              || info.m_type == BCT_DATETIME)
-    {
-        type_name = "text";
-    }
-    else
-    {
-        PERR ("Unknown column type: %d\n", info.m_type);
-        type_name = "";
-    }
-    ddl += (info.m_name + " " + type_name);
-    if (info.m_size != 0)
-    {
-        ddl += "(" + std::to_string(info.m_size) + ")";
-    }
-    if (info.m_primary_key)
-    {
-        ddl += " PRIMARY KEY";
-    }
-    if (info.m_autoinc)
-    {
-        ddl += " AUTOINCREMENT";
-    }
-    if (info.m_not_null)
-    {
-        ddl += " NOT NULL";
-    }
-}
-
-template <DbType P> std::string
-GncDbiProviderImpl<P>::create_table_ddl (const GncSqlConnection* conn,
-                                              const std::string& table_name,
-                                              const ColVec& info_vec)
-{
-    std::string ddl;
-    unsigned int col_num = 0;
-
-    g_return_val_if_fail (conn != nullptr, ddl);
-    ddl += "CREATE TABLE " + table_name + "(";
-    for (auto const& info : info_vec)
-    {
-        if (col_num++ != 0)
-        {
-            ddl += ", ";
-        }
-        append_col_def (ddl, info);
-    }
-    ddl += ")";
-
-    return ddl;
-}
-
-template<> void
-GncDbiProviderImpl<DbType::DBI_MYSQL>::append_col_def (std::string& ddl,
-                                           const GncSqlColumnInfo& info)
-{
-    const char* type_name = nullptr;
-
-    if (info.m_type == BCT_INT)
-    {
-        type_name = "integer";
-    }
-    else if (info.m_type == BCT_INT64)
-    {
-        type_name = "bigint";
-    }
-    else if (info.m_type == BCT_DOUBLE)
-    {
-        type_name = "double";
-    }
-    else if (info.m_type == BCT_STRING)
-    {
-        type_name = "varchar";
-    }
-    else if (info.m_type == BCT_DATE)
-    {
-        type_name = "date";
-    }
-    else if (info.m_type == BCT_DATETIME)
-    {
-        type_name = "TIMESTAMP NULL DEFAULT 0";
-    }
-    else
-    {
-        PERR ("Unknown column type: %d\n", info.m_type);
-        type_name = "";
-    }
-    ddl += info.m_name + " " + type_name;
-    if (info.m_size != 0 && info.m_type == BCT_STRING)
-    {
-        ddl += "(" + std::to_string(info.m_size) + ")";
-    }
-    if (info.m_unicode)
-    {
-        ddl += " CHARACTER SET utf8";
-    }
-    if (info.m_primary_key)
-    {
-        ddl += " PRIMARY KEY";
-    }
-    if (info.m_autoinc)
-    {
-        ddl += " AUTO_INCREMENT";
-    }
-    if (info.m_not_null)
-    {
-        ddl += " NOT NULL";
-    }
-}
-
-
-template<> void
-GncDbiProviderImpl<DbType::DBI_PGSQL>::append_col_def (std::string& ddl,
-                                           const GncSqlColumnInfo& info)
-{
-    const char* type_name = nullptr;
-
-    if (info.m_type == BCT_INT)
-    {
-        if (info.m_autoinc)
-        {
-            type_name = "serial";
-        }
-        else
-        {
-            type_name = "integer";
-        }
-    }
-    else if (info.m_type == BCT_INT64)
-    {
-        type_name = "int8";
-    }
-    else if (info.m_type == BCT_DOUBLE)
-
-    {
-        type_name = "double precision";
-    }
-    else if (info.m_type == BCT_STRING)
-    {
-        type_name = "varchar";
-    }
-    else if (info.m_type == BCT_DATE)
-    {
-        type_name = "date";
-    }
-    else if (info.m_type == BCT_DATETIME)
-    {
-        type_name = "timestamp without time zone";
-    }
-    else
-    {
-        PERR ("Unknown column type: %d\n", info.m_type);
-        type_name = "";
-    }
-    ddl += info.m_name + " " + type_name;
-    if (info.m_size != 0 && info.m_type == BCT_STRING)
-    {
-        ddl += "(" + std::to_string(info.m_size) + ")";
-    }
-    if (info.m_primary_key)
-    {
-        ddl += " PRIMARY KEY";
-    }
-    if (info.m_not_null)
-    {
-        ddl += " NOT NULL";
-    }
-}
-
-static StrVec
-conn_get_table_list (dbi_conn conn, const std::string& dbname)
-{
-    StrVec retval;
-    auto tables = dbi_conn_get_table_list (conn, dbname.c_str(), nullptr);
-    while (dbi_result_next_row (tables) != 0)
-    {
-        std::string table_name {dbi_result_get_string_idx (tables, 1)};
-        retval.push_back(table_name);
-    }
-    dbi_result_free (tables);
-    return retval;
-}
-
-template<> StrVec
-GncDbiProviderImpl<DbType::DBI_SQLITE>::get_table_list (dbi_conn conn,
-                                            const std::string& dbname)
-{
-    /* Return the list, but remove the tables that sqlite3 adds for
-     * its own use. */
-    auto list = conn_get_table_list (conn, dbname);
-    auto end = std::remove(list.begin(), list.end(), "sqlite_sequence");
-    list.erase(end, list.end());
-    return list;
-}
-
-template<> StrVec
-GncDbiProviderImpl<DbType::DBI_MYSQL>::get_table_list (dbi_conn conn,
-                                               const std::string& dbname)
-{
-    return conn_get_table_list (conn, dbname);
-}
-
-template<> StrVec
-GncDbiProviderImpl<DbType::DBI_PGSQL>::get_table_list (dbi_conn conn,
-                                           const std::string& dbname)
-{
-    auto list = conn_get_table_list (conn, dbname);
-    auto end = std::remove_if (list.begin(), list.end(),
-                               [](std::string& table_name){
-                                   return table_name == "sql_features" ||
-                                   table_name == "sql_implementation_info" ||
-                                   table_name == "sql_languages" ||
-                                   table_name == "sql_packages" ||
-                                   table_name == "sql_parts" ||
-                                   table_name == "sql_sizing" ||
-                                   table_name == "sql_sizing_profiles";
-                               });
-    list.erase(end, list.end());
-    return list;
-}
 
 /** Users discovered a bug in some distributions of libdbi, where if
  * it is compiled on certain versions of gcc with the -ffast-math

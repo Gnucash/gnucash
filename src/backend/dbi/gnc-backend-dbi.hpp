@@ -34,7 +34,8 @@ extern "C"
 #define GETPID() getpid()
 #endif
 }
-#include <gnc-backend-sql.h>
+#include "gnc-backend-sql.h"
+
 #define GNC_HOST_NAME_MAX 255
 
 /**
@@ -67,20 +68,6 @@ typedef enum
     GNC_DBI_FAIL_TEST
 } GncDbiTestResult;
 
-class GncDbiProvider
-{
-public:
-    virtual ~GncDbiProvider() = default;
-    virtual std::string create_table_ddl(const GncSqlConnection* conn,
-                                         const std::string& table_name,
-                                         const ColVec& info_vec) = 0;
-    virtual std::vector<std::string> get_table_list(dbi_conn conn,
-                                                    const std::string& dbname) = 0;
-    virtual void append_col_def(std::string& ddl,
-                                const GncSqlColumnInfo& info) = 0;
-    virtual std::vector<std::string> get_index_list (dbi_conn conn) = 0;
-    virtual void drop_index(dbi_conn conn, const std::string& index) = 0;
-};
 
 /**
  * Implementations of GncSqlBackend.
@@ -112,135 +99,12 @@ private:
     bool m_exists;         // Does the database exist?
 };
 
-class GncDbiSqlConnection : public GncSqlConnection
-{
-public:
-    GncDbiSqlConnection (GncDbiProvider* provider, QofBackend* qbe,
-                         dbi_conn conn, const char* lock_table) :
-        m_qbe{qbe}, m_conn{conn}, m_provider{provider}, m_conn_ok{true},
-        m_last_error{ERR_BACKEND_NO_ERR}, m_error_repeat{0}, m_retry{false},
-        m_lock_table{lock_table} {}
-    ~GncDbiSqlConnection() override;
-    GncSqlResultPtr execute_select_statement (const GncSqlStatementPtr&)
-        noexcept override;
-    int execute_nonselect_statement (const GncSqlStatementPtr&)
-        noexcept override;
-    GncSqlStatementPtr create_statement_from_sql (const std::string&)
-        const noexcept override;
-    bool does_table_exist (const std::string&) const noexcept override;
-    bool begin_transaction () noexcept override;
-    bool rollback_transaction () const noexcept override;
-    bool commit_transaction () const noexcept override;
-    bool create_table (const std::string&, const ColVec&) const noexcept override;
-    bool create_index (const std::string&, const std::string&, const EntryVec&)
-        const noexcept override;
-    bool add_columns_to_table (const std::string&, const ColVec&)
-        const noexcept override;
-    std::string quote_string (const std::string&) const noexcept override;
-    int dberror() const noexcept override {
-        return dbi_conn_error(m_conn, nullptr); }
-    QofBackend* qbe () const noexcept { return m_qbe; }
-    dbi_conn conn() const noexcept { return m_conn; }
-    GncDbiProvider* provider() { return m_provider; }
-    inline void set_error(int error, int repeat,  bool retry) noexcept override
-    {
-        m_last_error = error;
-        m_error_repeat = repeat;
-        m_retry = retry;
-    }
-    inline void init_error() noexcept
-    {
-        set_error(ERR_BACKEND_NO_ERR, 0, false);
-    }
-    /** Check if the dbi connection is valid. If not attempt to re-establish it
-     * Returns TRUE is there is a valid connection in the end or FALSE otherwise
-     */
-    bool verify() noexcept override;
-    bool retry_connection(const char* msg) noexcept override;
-    dbi_result table_manage_backup(const std::string& table_name, TableOpType op);
-    /* FIXME: These three friend functions should really be members, but doing
-     * that is too invasive just yet. */
-    bool table_operation (const StrVec& table_name_list,
-                          TableOpType op) noexcept;
-    std::string add_columns_ddl(const std::string& table_name,
-                                const ColVec& info_vec) const noexcept;
-    friend void gnc_dbi_safe_sync_all (QofBackend* qbe, QofBook* book);
-
-private:
-    QofBackend* m_qbe;
-    dbi_conn m_conn;
-    GncDbiProvider* m_provider;
-    /** Used by the error handler routines to flag if the connection is ok to
-     * use
-     */
-    bool m_conn_ok;
-    /** Code of the last error that occurred. This is set in the error callback
-     * function.
-     */
-    int m_last_error;
-    /** Used in case of transient errors. After such error, another attempt at
-     * the original call is allowed. error_repeat tracks the number of attempts
-     * and can be used to prevent infinite loops.
-     */
-    int m_error_repeat;
-    /** Signals the calling function that it should retry (the error handler
-     * detected transient error and managed to resolve it, but it can't run the
-     * original query)
-     */
-    gboolean m_retry;
-    const char* m_lock_table;
-    void unlock_database();
-
-};
 
 void gnc_dbi_safe_sync_all (QofBackend* qbe, QofBook* book);
 
 /* external access required for tests */
 std::string adjust_sql_options_string(const std::string&);
 
-/**
- * An iterable wrapper for dbi_result; allows using C++11 range for.
- */
-class GncDbiSqlResult : public GncSqlResult
-{
-public:
-    GncDbiSqlResult(const GncDbiSqlConnection* conn, dbi_result result) :
-        m_conn{conn}, m_dbi_result{result}, m_iter{this}, m_row{&m_iter},
-        m_sentinel{nullptr} {}
-    ~GncDbiSqlResult();
-    uint64_t size() const noexcept;
-    int dberror() { return m_conn->dberror(); }
-    GncSqlRow& begin();
-    GncSqlRow& end() { return m_sentinel; }
-protected:
-    class IteratorImpl : public GncSqlResult::IteratorImpl
-        {
-        public:
-            ~IteratorImpl() = default;
-            IteratorImpl(GncDbiSqlResult* inst) : m_inst{inst} {}
-            virtual GncSqlRow& operator++();
-            virtual GncSqlRow& operator++(int) { return ++(*this); };
-            virtual GncSqlResult* operator*() { return m_inst; }
-            virtual int64_t get_int_at_col (const char* col) const;
-            virtual float get_float_at_col (const char* col) const;
-            virtual double get_double_at_col (const char* col) const;
-            virtual std::string get_string_at_col (const char* col)const;
-            virtual time64 get_time64_at_col (const char* col) const;
-            virtual bool is_col_null(const char* col) const noexcept
-            {
-                return dbi_result_field_is_null(m_inst->m_dbi_result, col);
-            }
-        private:
-            GncDbiSqlResult* m_inst;
-        };
-private:
-    const GncDbiSqlConnection* m_conn;
-    dbi_result m_dbi_result;
-    IteratorImpl m_iter;
-    GncSqlRow m_row;
-    GncSqlRow m_sentinel;
-
-};
 
 
 #endif //GNC_BACKEND_DBI_HPP

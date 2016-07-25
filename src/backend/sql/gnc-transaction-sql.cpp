@@ -971,7 +971,7 @@ convert_query_term_to_sql (const GncSqlBackend* be, const gchar* fieldName,
             query_date_t date_data = (query_date_t)pPredData;
 
             auto datebuf = be->time64_to_string (date_data->date.tv_sec);
-            g_string_append_printf (sql, "'%s'", datebuf);
+            g_string_append_printf (sql, "'%s'", datebuf.c_str());
 
         }
         else if (strcmp (pPredData->type_name, QOF_TYPE_INT32) == 0)

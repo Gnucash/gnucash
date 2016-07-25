@@ -5,10 +5,16 @@ ADD_SUBDIRECTORY(test)
 # Source file gncmod-backend-dbi.c does not appear to be use in Makefile.in, so not included here.
 
 SET (backend_dbi_SOURCES
-  gnc-backend-dbi.cpp gnc-dbisqlconnection.cpp
+  gnc-backend-dbi.cpp
+  gnc-dbisqlresult.cpp
+  gnc-dbisqlconnection.cpp
 )
 SET (backend_dbi_noinst_HEADERS
-  gnc-backend-dbi.h gnc-backend-dbi.hpp
+  gnc-backend-dbi.h
+  gnc-backend-dbi.hpp
+  gnc-dbisqlresult.hpp
+  gnc-dbisqlconnection.hpp
+  gnc-dbiprovider.hpp
 )
 
 # Add dependency on config.h

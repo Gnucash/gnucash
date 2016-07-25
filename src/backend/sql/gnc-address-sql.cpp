@@ -84,7 +84,7 @@ GncSqlColumnTableEntryImpl<CT_ADDRESS>::load (const GncSqlBackend* be,
     g_return_if_fail (be != NULL);
     g_return_if_fail (pObject != NULL);
 
-    auto addr = gncAddressCreate (be->book, QOF_INSTANCE(pObject));
+    auto addr = gncAddressCreate (be->book(), QOF_INSTANCE(pObject));
 
     for (auto const& subtable_row : col_table)
     {
