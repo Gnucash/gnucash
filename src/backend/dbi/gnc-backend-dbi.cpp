@@ -147,6 +147,24 @@ create_tables(const OBEEntry& entry, GncDbiBackend* be)
     obe->create_tables (be);
 }
 
+static void
+set_options(dbi_conn conn, const PairVec& options)
+{
+    for (auto option : options)
+    {
+        auto opt = option.first.c_str();
+        auto val = option.second.c_str();
+        auto result = dbi_conn_set_option(conn, opt, val);
+        if (result < 0)
+        {
+            const char *msg = nullptr;
+            int err = dbi_conn_error(conn, &msg);
+            PERR("Error setting %s option to %s: %s", opt, val, msg);
+            throw std::runtime_error(msg);
+        }
+    }
+}
+
 void
 sqlite3_error_fn (dbi_conn conn, void* user_data)
 {
@@ -171,7 +189,8 @@ gnc_dbi_sqlite3_session_begin (QofBackend* qbe, QofSession* session,
     const char* msg = nullptr;
     gboolean file_exists;
     GncDbiTestResult dbi_test_result = GNC_DBI_PASS;
-
+    PairVec options;
+    
     g_return_if_fail (qbe != nullptr);
     g_return_if_fail (session != nullptr);
     g_return_if_fail (book_id != nullptr);
@@ -221,24 +240,15 @@ gnc_dbi_sqlite3_session_begin (QofBackend* qbe, QofSession* session,
     basename = g_path_get_basename (filepath);
     dbi_conn_error_handler (conn, sqlite3_error_fn, be);
     /* dbi-sqlite3 documentation says that sqlite3 doesn't take a "host" option */
-    result = dbi_conn_set_option (conn, "host", "localhost");
-    if (result < 0)
-    {
-        PERR ("Error setting 'host' option\n");
-        qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
-        goto exit;
+
+    options.push_back(std::make_pair("host", "localhost"));
+    options.push_back(std::make_pair("dbname", basename));
+    options.push_back(std::make_pair("sqlite3_dbdir", dirname));
+    try {
+        set_options(conn, options);
     }
-    result = dbi_conn_set_option (conn, "dbname", basename);
-    if (result < 0)
+    catch (std::runtime_error& err)
     {
-        PERR ("Error setting 'dbname' option\n");
-        qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
-        goto exit;
-    }
-    result = dbi_conn_set_option (conn, "sqlite3_dbdir", dirname);
-    if (result < 0)
-    {
-        PERR ("Error setting 'sqlite3_dbdir' option\n");
         qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
         goto exit;
     }
@@ -398,58 +408,40 @@ mysql_error_fn (dbi_conn conn, void* user_data)
  * @param password Password
  * @return TRUE if successful, FALSE if error
  */
-static gboolean
+static bool
 set_standard_connection_options (QofBackend* qbe, dbi_conn conn,
-                                 const gchar* host, int port,
-                                 const gchar* dbname, const gchar* username, const gchar* password)
+                                 const std::string& host, int port,
+                                 const std::string& dbname,
+                                 const std::string& username,
+                                 const std::string& password)
 {
     gint result;
-
-    result = dbi_conn_set_option (conn, "host", host);
-    if (result < 0)
+    PairVec options;
+    options.push_back(std::make_pair("host", host));
+    options.push_back(std::make_pair("dbname", dbname));
+    options.push_back(std::make_pair("username", username));
+    options.push_back(std::make_pair("password", password));
+    options.push_back(std::make_pair("encoding", "UTF-8"));
+    try
     {
-        PERR ("Error setting 'host' option\n");
-        qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
-        return FALSE;
+        set_options(conn, options);
+        auto result = dbi_conn_set_option_numeric(conn, "port", port);
+        if (result < 0)
+        {
+            const char *msg = nullptr;
+            auto err = dbi_conn_error(conn, &msg);
+            PERR("Error setting port option to %d: %s", port, msg);
+            throw std::runtime_error(msg);
+        }
     }
-    result = dbi_conn_set_option_numeric (conn, "port", port);
-    if (result < 0)
+    catch (std::runtime_error& err)
     {
-        PERR ("Error setting 'port' option\n");
         qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
-        return FALSE;
-    }
-    result = dbi_conn_set_option (conn, "dbname", dbname);
-    if (result < 0)
-    {
-        PERR ("Error setting 'dbname' option\n");
-        qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
-        return FALSE;
-    }
-    result = dbi_conn_set_option (conn, "username", username);
-    if (result < 0)
-    {
-        PERR ("Error setting 'username' option\n");
-        qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
-        return FALSE;
-    }
-    result = dbi_conn_set_option (conn, "password", password);
-    if (result < 0)
-    {
-        PERR ("Error setting 'password' option\n");
-        qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
-        return FALSE;
+        return false;
     }
 
-    result = dbi_conn_set_option (conn, "encoding", "UTF-8");
-    if (result < 0)
-    {
-        PERR ("Error setting 'encoding' option\n");
-        qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
-        return FALSE;
-    }
-
-    return TRUE;
+    
+    return true;
 }
 
 /* FIXME: Move to GncDbiSqlConnection. */
@@ -616,27 +608,27 @@ adjust_sql_options (dbi_conn connection)
             else
                 PINFO("Sql_mode isn't set.");
         }
-        else
+	else
         {
-            PINFO("Initial sql_mode: %s", str.c_str());
+	    PINFO("Initial sql_mode: %s", str.c_str());
             if(str.find(SQL_OPTION_TO_REMOVE) != std::string::npos)
             {
-                std::string adjusted_str{adjust_sql_options_string(str)};
-                PINFO("Setting sql_mode to %s", adjusted_str.c_str());
-                std::string set_str{"SET sql_mode=" + std::move(adjusted_str)};
-                dbi_result set_result = dbi_conn_query(connection,
-                                                       set_str.c_str());
-                if (set_result)
-                {
-                    dbi_result_free(set_result);
-                }
-                else
-                {
-                    const char* errmsg;
-                    int err = dbi_conn_error(connection, &errmsg);
-                    PERR("Unable to set sql_mode %d : %s", err, errmsg);
-                }
-            }
+		std::string adjusted_str{adjust_sql_options_string(str)};
+		PINFO("Setting sql_mode to %s", adjusted_str.c_str());
+		std::string set_str{"SET sql_mode=" + std::move(adjusted_str)};
+		dbi_result set_result = dbi_conn_query(connection,
+						       set_str.c_str());
+		if (set_result)
+		{
+		    dbi_result_free(set_result);
+		}
+		else
+		{
+		    const char* errmsg;
+		    int err = dbi_conn_error(connection, &errmsg);
+		    PERR("Unable to set sql_mode %d : %s", err, errmsg);
+		}
+	    }
         }
         dbi_result_free(result);
     }
@@ -665,6 +657,7 @@ gnc_dbi_mysql_session_begin (QofBackend* qbe, QofSession* session,
     gint result;
     gboolean success = FALSE;
     GncDbiTestResult dbi_test_result = GNC_DBI_PASS;
+    PairVec options;
 
     g_return_if_fail (qbe != nullptr);
     g_return_if_fail (session != nullptr);
@@ -752,14 +745,17 @@ gnc_dbi_mysql_session_begin (QofBackend* qbe, QofSession* session,
         // The db does not already exist.  Connect to the 'mysql' db and try to create it.
         if (create)
         {
-            dbi_result dresult;
-            result = dbi_conn_set_option (conn, "dbname", "mysql");
-            if (result < 0)
+            options.push_back(std::make_pair("dbname", "mysql"));
+            try
             {
-                PERR ("Error setting 'dbname' option\n");
+                set_options(conn, options);
+            }
+            catch (std::runtime_error& err)
+            {
                 qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
                 goto exit;
             }
+
             result = dbi_conn_connect (conn);
             if (result < 0)
             {
@@ -768,9 +764,9 @@ gnc_dbi_mysql_session_begin (QofBackend* qbe, QofSession* session,
                 goto exit;
             }
             adjust_sql_options (conn);
-            dresult = dbi_conn_queryf (conn,
-                                       "CREATE DATABASE %s CHARACTER SET utf8",
-                                       dbname);
+            auto dresult = dbi_conn_queryf (conn,
+                                            "CREATE DATABASE %s CHARACTER SET utf8",
+                                            dbname);
             if (dresult == nullptr)
             {
                 PERR ("Unable to create database '%s'\n", dbname);
@@ -986,7 +982,8 @@ gnc_dbi_postgres_session_begin (QofBackend* qbe, QofSession* session,
     gboolean success = FALSE;
     gint portnum = 0;
     GncDbiTestResult dbi_test_result = GNC_DBI_PASS;
-
+    PairVec options;
+    
     g_return_if_fail (qbe != nullptr);
     g_return_if_fail (session != nullptr);
     g_return_if_fail (book_id != nullptr);
@@ -1080,14 +1077,17 @@ gnc_dbi_postgres_session_begin (QofBackend* qbe, QofSession* session,
         // The db does not already exist.  Connect to the 'postgres' db and try to create it.
         if (create)
         {
-            dbi_result dresult;
-            result = dbi_conn_set_option (conn, "dbname", "postgres");
-            if (result < 0)
+            options.push_back(std::make_pair("dbname", "postgres"));
+            try
             {
-                PERR ("Error setting 'dbname' option\n");
+                set_options(conn, options);
+            }
+            catch (std::runtime_error& err)
+            {
                 qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
                 goto exit;
             }
+
             result = dbi_conn_connect (conn);
             if (result < 0)
             {
@@ -1095,8 +1095,8 @@ gnc_dbi_postgres_session_begin (QofBackend* qbe, QofSession* session,
                 qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
                 goto exit;
             }
-            dresult = dbi_conn_queryf (conn,
-                                       "CREATE DATABASE %s WITH TEMPLATE template0 ENCODING 'UTF8'", dbnamelc);
+            auto dresult = dbi_conn_queryf (conn,
+                                            "CREATE DATABASE %s WITH TEMPLATE template0 ENCODING 'UTF8'", dbnamelc);
             if (dresult == nullptr)
             {
                 PERR ("Unable to create database '%s'\n", dbname);
