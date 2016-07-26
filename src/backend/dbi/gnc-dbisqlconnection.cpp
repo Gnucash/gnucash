@@ -414,14 +414,11 @@ GncDbiSqlConnection::quote_string (const std::string& unquoted_str)
 
     size = dbi_conn_quote_string_copy (m_conn, unquoted_str.c_str(),
                                        &quoted_str);
-    if (size != 0)
-    {
-        return std::string{quoted_str};
-    }
-    else
-    {
+    if (quoted_str == nullptr)
         return std::string{""};
-    }
+    std::string retval{quoted_str};
+    free(quoted_str);
+    return retval;
 }
 
 
