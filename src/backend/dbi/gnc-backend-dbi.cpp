@@ -595,48 +595,44 @@ static void
 adjust_sql_options (dbi_conn connection)
 {
     dbi_result result = dbi_conn_query( connection, "SELECT @@sql_mode");
-    if (result)
+    if (result == nullptr)
     {
-        dbi_result_first_row(result);
-        std::string str{dbi_result_get_string_idx(result, 1)};
-        if (str.empty())
-        {
-            const char* errmsg;
-            int err = dbi_conn_error(connection, &errmsg);
-            if (err)
-                PERR("Unable to get sql_mode %d : %s", err, errmsg);
-            else
-                PINFO("Sql_mode isn't set.");
-        }
+        const char* errmsg;
+        int err = dbi_conn_error(connection, &errmsg);
+        PERR("Unable to read sql_mode %d : %s", err, errmsg);
+        return;
+    }
+    dbi_result_first_row(result);
+    std::string str{dbi_result_get_string_idx(result, 1)};
+    dbi_result_free(result);
+    if (str.empty())
+    {
+        const char* errmsg;
+        int err = dbi_conn_error(connection, &errmsg);
+	if (err)
+	    PERR("Unable to get sql_mode %d : %s", err, errmsg);
 	else
-        {
-	    PINFO("Initial sql_mode: %s", str.c_str());
-            if(str.find(SQL_OPTION_TO_REMOVE) != std::string::npos)
-            {
-		std::string adjusted_str{adjust_sql_options_string(str)};
-		PINFO("Setting sql_mode to %s", adjusted_str.c_str());
-		std::string set_str{"SET sql_mode=" + std::move(adjusted_str)};
-		dbi_result set_result = dbi_conn_query(connection,
-						       set_str.c_str());
-		if (set_result)
-		{
-		    dbi_result_free(set_result);
-		}
-		else
-		{
-		    const char* errmsg;
-		    int err = dbi_conn_error(connection, &errmsg);
-		    PERR("Unable to set sql_mode %d : %s", err, errmsg);
-		}
-	    }
-        }
-        dbi_result_free(result);
+	    PINFO("Sql_mode isn't set.");
+        return;
+    }
+    PINFO("Initial sql_mode: %s", str.c_str());
+    if(str.find(SQL_OPTION_TO_REMOVE) == std::string::npos)
+        return;
+
+    std::string adjusted_str{adjust_sql_options_string(str)};
+    PINFO("Setting sql_mode to %s", adjusted_str.c_str());
+    std::string set_str{"SET sql_mode=" + std::move(adjusted_str)};
+    dbi_result set_result = dbi_conn_query(connection,
+                                           set_str.c_str());
+    if (set_result)
+    {
+        dbi_result_free(set_result);
     }
     else
     {
         const char* errmsg;
         int err = dbi_conn_error(connection, &errmsg);
-        PERR("Unable to read sql_mode %d : %s", err, errmsg);
+        PERR("Unable to set sql_mode %d : %s", err, errmsg);
     }
 }
 
