@@ -113,6 +113,7 @@ static gchar lock_table[] = "gnclock";
 #define MYSQL_TIMESPEC_STR_FORMAT   "%04d%02d%02d%02d%02d%02d"
 #define PGSQL_TIMESPEC_STR_FORMAT   "%04d%02d%02d %02d%02d%02d"
 
+static void adjust_sql_options (dbi_conn connection);
 static gboolean gnc_dbi_lock_database (QofBackend*, dbi_conn, gboolean);
 static gboolean save_may_clobber_data (QofBackend* qbe);
 
@@ -137,7 +138,9 @@ public:
 /* ================================================================= */
 struct UriStrings
 {
+    UriStrings() = default;
     UriStrings(const std::string& uri);
+    ~UriStrings() = default;
     std::string basename() const noexcept;
     const char* dbname() const noexcept;
     std::string m_protocol;
@@ -209,6 +212,146 @@ set_options(dbi_conn conn, const PairVec& options)
     }
 }
 
+/**
+ * Sets standard db options in a dbi_conn.
+ *
+ * @param qbe QOF backend
+ * @param conn dbi_conn connection
+ * @param uri UriStrings containing the needed paramters.
+ * @return TRUE if successful, FALSE if error
+ */
+static bool
+set_standard_connection_options (QofBackend* qbe, dbi_conn conn,
+                                 const UriStrings& uri)
+
+{
+    gint result;
+    PairVec options;
+    options.push_back(std::make_pair("host", uri.m_host));
+    options.push_back(std::make_pair("dbname", uri.m_dbname));
+    options.push_back(std::make_pair("username", uri.m_username));
+    options.push_back(std::make_pair("password", uri.m_password));
+    options.push_back(std::make_pair("encoding", "UTF-8"));
+    try
+    {
+        set_options(conn, options);
+        auto result = dbi_conn_set_option_numeric(conn, "port", uri.m_portnum);
+        if (result < 0)
+        {
+            const char *msg = nullptr;
+            auto err = dbi_conn_error(conn, &msg);
+            PERR("Error setting port option to %d: %s", uri.m_portnum, msg);
+            throw std::runtime_error(msg);
+        }
+    }
+    catch (std::runtime_error& err)
+    {
+        qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
+        return false;
+    }
+
+    return true;
+}
+static dbi_conn
+conn_setup (const char* dbtype, QofBackend* qbe,
+                     dbi_conn_error_handler_func err_handler, PairVec& options,
+                     UriStrings& uri)
+{
+#if HAVE_LIBDBI_R
+    dbi_conn conn;
+    if (dbi_instance)
+        conn = dbi_conn_new_r (dbtype, dbi_instance);
+    else
+        PERR ("Attempt to connect with an uninitialized dbi_instance");
+#else
+    auto conn = dbi_conn_new (dbtype);
+#endif
+
+    if (conn == nullptr)
+    {
+        PERR ("Unable to create %s dbi connection", dbtype);
+        qof_backend_set_error (qbe, ERR_BACKEND_BAD_URL);
+	return nullptr;
+    }
+
+    dbi_conn_error_handler (conn, err_handler, qbe);
+
+    if (!uri.m_dbname.empty() &&
+        !set_standard_connection_options(qbe, conn, uri))
+    {
+        dbi_conn_close(conn);
+        return nullptr;
+    }
+    if(!options.empty())
+    {
+        try {
+            set_options(conn, options);
+        }
+        catch (std::runtime_error& err)
+        {
+            dbi_conn_close(conn);
+            qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
+            return nullptr;
+        }
+    }
+
+    return conn;
+}
+
+static bool
+create_database(DbType type, QofBackend *qbe, dbi_conn conn, const char* db)
+{
+    const char *dbname;
+    const char *dbcreate;
+    if (type == DbType::DBI_MYSQL)
+    {
+        dbname = "mysql";
+        dbcreate = "CREATE DATABASE %s CHARACTER SET utf8";
+    }
+    else
+    {
+        dbname = "postgres";
+        dbcreate = "CREATE DATABASE %s WITH TEMPLATE template0 ENCODING 'UTF8'";
+    }
+    PairVec options;
+    options.push_back(std::make_pair("dbname", dbname));
+    try
+    {
+        set_options(conn, options);
+    }
+    catch (std::runtime_error& err)
+    {
+        qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
+        return false;
+    }
+
+    auto result = dbi_conn_connect (conn);
+    if (result < 0)
+    {
+        PERR ("Unable to connect to %s database", dbname);
+        qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
+        return false;
+    }
+    if (type == DbType::DBI_MYSQL)
+        adjust_sql_options(conn);
+    auto dresult = dbi_conn_queryf (conn, dbcreate, db);
+    if (dresult == nullptr)
+    {
+        PERR ("Unable to create database '%s'\n", db);
+        qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
+        return false;
+    }
+    if (type == DbType::DBI_PGSQL)
+    {
+        const char *alterdb = "ALTER DATABASE %s SET "
+            "standard_conforming_strings TO on";
+        dbi_conn_queryf (conn, alterdb, db);
+    }
+    dbi_conn_close(conn);
+    conn = nullptr;
+    return true;
+}
+
 void
 sqlite3_error_fn (dbi_conn conn, void* user_data)
 {
@@ -226,10 +369,8 @@ gnc_dbi_sqlite3_session_begin (QofBackend* qbe, QofSession* session,
                                gboolean create, gboolean force)
 {
     GncDbiBackend* be = (GncDbiBackend*)qbe;
-    gint result;
     const char* msg = nullptr;
     gboolean file_exists;
-    GncDbiTestResult dbi_test_result = GNC_DBI_PASS;
     PairVec options;
 
     g_return_if_fail (qbe != nullptr);
@@ -265,25 +406,6 @@ gnc_dbi_sqlite3_session_begin (QofBackend* qbe, QofSession* session,
     }
 
     be->connect(nullptr);
-    dbi_conn conn;
-#if HAVE_LIBDBI_R
-    if (dbi_instance)
-        conn = dbi_conn_new_r ("sqlite3", dbi_instance);
-    else
-        PERR ("Attempt to connect with an uninitialized dbi_instance");
-#else
-    conn = dbi_conn_new ("sqlite3");
-#endif
-
-    if (conn == nullptr)
-    {
-        PERR ("Unable to create sqlite3 dbi connection\n");
-        qof_backend_set_error (qbe, ERR_BACKEND_BAD_URL);
-        LEAVE("Error");
-	return;
-    }
-
-    dbi_conn_error_handler (conn, sqlite3_error_fn, be);
     /* dbi-sqlite3 documentation says that sqlite3 doesn't take a "host" option */
     options.push_back(std::make_pair("host", "localhost"));
     auto dirname = g_path_get_dirname (filepath.c_str());
@@ -292,20 +414,19 @@ gnc_dbi_sqlite3_session_begin (QofBackend* qbe, QofSession* session,
     options.push_back(std::make_pair("sqlite3_dbdir", dirname));
     if (basename != nullptr) g_free (basename);
     if (dirname != nullptr) g_free (dirname);
-
-    try {
-        set_options(conn, options);
-    }
-    catch (std::runtime_error& err)
+    UriStrings uri;
+    auto conn = conn_setup ("sqlite3", qbe, sqlite3_error_fn, options, uri);
+    if (conn == nullptr)
     {
-        qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
         LEAVE("Error");
-	return;
+        return;
     }
-    result = dbi_conn_connect (conn);
+
+    auto result = dbi_conn_connect (conn);
 
     if (result < 0)
     {
+        dbi_conn_close(conn);
         PERR ("Unable to connect to %s: %d\n", book_id, result);
         qof_backend_set_error (qbe, ERR_BACKEND_BAD_URL);
         LEAVE("Error");
@@ -314,22 +435,22 @@ gnc_dbi_sqlite3_session_begin (QofBackend* qbe, QofSession* session,
 
     if (!conn_test_dbi_library(conn, qbe))
     {
-        if (create && !file_exists)   /* File didn't exist before, but it */
+        if (create && !file_exists)
         {
-            /* does now, and we don't want to */
-            dbi_conn_close (conn); /* leave it lying around. */
+         /* File didn't exist before, but it does now, and we don't want to
+          * leave it lying around.
+          */
+            dbi_conn_close (conn);
             conn = nullptr;
             g_unlink (filepath.c_str());
         }
-        msg = "Bad DBI Library";
-        LEAVE("Error");
+        LEAVE("Bad DBI Library");
 	return;
     }
     if (!gnc_dbi_lock_database (qbe, conn, ignore_lock))
     {
         qof_backend_set_error (qbe, ERR_BACKEND_LOCKED);
-        msg = "Locked";
-        LEAVE("Error");
+        LEAVE("Locked");
 	return;
     }
 
@@ -343,7 +464,7 @@ gnc_dbi_sqlite3_session_begin (QofBackend* qbe, QofSession* session,
     xaccLogSetBaseName (filepath.c_str());
     PINFO ("logpath=%s", filepath.c_str() ? filepath.c_str() : "(null)");
 
-    LEAVE ("%s", msg);
+    LEAVE ("");
 }
 
 template<> StrVec
@@ -427,51 +548,6 @@ mysql_error_fn (dbi_conn conn, void* user_data)
     }
 }
 
-/**
- * Sets standard db options in a dbi_conn.
- *
- * @param qbe QOF backend
- * @param conn dbi_conn connection
- * @param host Hostname
- * @param port Port number
- * @param dbname Database name
- * @param username User name
- * @param password Password
- * @return TRUE if successful, FALSE if error
- */
-static bool
-set_standard_connection_options (QofBackend* qbe, dbi_conn conn,
-                                 const UriStrings& uri)
-
-{
-    gint result;
-    PairVec options;
-    options.push_back(std::make_pair("host", uri.m_host));
-    options.push_back(std::make_pair("dbname", uri.m_dbname));
-    options.push_back(std::make_pair("username", uri.m_username));
-    options.push_back(std::make_pair("password", uri.m_password));
-    options.push_back(std::make_pair("encoding", "UTF-8"));
-    try
-    {
-        set_options(conn, options);
-        auto result = dbi_conn_set_option_numeric(conn, "port", uri.m_portnum);
-        if (result < 0)
-        {
-            const char *msg = nullptr;
-            auto err = dbi_conn_error(conn, &msg);
-            PERR("Error setting port option to %d: %s", uri.m_portnum, msg);
-            throw std::runtime_error(msg);
-        }
-    }
-    catch (std::runtime_error& err)
-    {
-        qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
-        return false;
-    }
-
-    
-    return true;
-}
 
 /* FIXME: Move to GncDbiSqlConnection. */
 static gboolean
@@ -672,10 +748,6 @@ gnc_dbi_mysql_session_begin (QofBackend* qbe, QofSession* session,
                              gboolean create, gboolean force)
 {
     GncDbiBackend* be = (GncDbiBackend*)qbe;
-    gchar* basename = nullptr;
-    gchar* translog_path = nullptr;
-    gint result;
-    gboolean success = FALSE;
     GncDbiTestResult dbi_test_result = GNC_DBI_PASS;
     PairVec options;
 
@@ -690,34 +762,17 @@ gnc_dbi_mysql_session_begin (QofBackend* qbe, QofSession* session,
      where username, password and port are optional) */
     UriStrings uri(book_id);
 
-    // Try to connect to the db.  If it doesn't exist and the create
-    // flag is TRUE, we'll need to connect to the 'mysql' db and execute the
-    // CREATE DATABASE ddl statement there.
     be->connect(nullptr);
-    dbi_conn conn;
-#if HAVE_LIBDBI_R
-    if (dbi_instance)
-        conn = dbi_conn_new_r ("mysql", dbi_instance);
-    else
-        PERR ("Attempt to connect with an uninitialized dbi_instance");
-#else
-    conn = dbi_conn_new ("mysql");
-#endif
+
+    auto conn = conn_setup("mysql", qbe, mysql_error_fn, options, uri);
     if (conn == nullptr)
     {
-        PERR ("Unable to create mysql dbi connection\n");
-        qof_backend_set_error (qbe, ERR_BACKEND_BAD_URL);
         LEAVE("Error");
         return;
     }
-    dbi_conn_error_handler (conn, mysql_error_fn, be);
-    if (!set_standard_connection_options (qbe, conn, uri))
-    {
-        LEAVE("Error");
-        return;
-    }
-    be->set_exists(true);
-    result = dbi_conn_connect (conn);
+
+    be->set_exists(true); //May be unset in the error handler.
+    auto result = dbi_conn_connect (conn);
     if (result == 0)
     {
         adjust_sql_options (conn);
@@ -734,7 +789,8 @@ gnc_dbi_mysql_session_begin (QofBackend* qbe, QofSession* session,
             return;
         }
 
-        success = gnc_dbi_lock_database (qbe, conn, ignore_lock);
+        if (!gnc_dbi_lock_database (qbe, conn, ignore_lock))
+            return;
     }
     else
     {
@@ -747,67 +803,14 @@ gnc_dbi_mysql_session_begin (QofBackend* qbe, QofSession* session,
             return;
         }
 
-        // The db does not already exist.  Connect to the 'mysql' db and try to create it.
         if (create)
         {
-            options.push_back(std::make_pair("dbname", "mysql"));
-            try
+            if (!create_database(DbType::DBI_MYSQL, qbe, conn, uri.dbname()))
             {
-                set_options(conn, options);
-            }
-            catch (std::runtime_error& err)
-            {
-                qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
                 LEAVE("Error");
                 return;
             }
-
-            result = dbi_conn_connect (conn);
-            if (result < 0)
-            {
-                PERR ("Unable to connect to 'mysql' database\n");
-                qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
-                LEAVE("Error");
-                return;
-            }
-            adjust_sql_options (conn);
-            auto dresult = dbi_conn_queryf (conn,
-                                            "CREATE DATABASE %s CHARACTER SET utf8",
-                                            uri.dbname());
-            if (dresult == nullptr)
-            {
-                PERR ("Unable to create database '%s'\n", uri.dbname());
-                qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
-                LEAVE("Error");
-                return;
-            }
-            dbi_conn_close (conn);
-            conn = nullptr;
-
-            // Try again to connect to the db
-#if HAVE_LIBDBI_R
-            if (dbi_instance)
-                conn = dbi_conn_new_r ("mysql", dbi_instance);
-            else
-                PERR ("Attempt to connect with an uninitialized dbi_instance");
-#else
-            conn = dbi_conn_new ("mysql");
-#endif
-
-            if (conn == nullptr)
-            {
-                PERR ("Unable to create mysql dbi connection\n");
-                qof_backend_set_error (qbe, ERR_BACKEND_BAD_URL);
-                LEAVE("Error");
-                return;
-            }
-            dbi_conn_error_handler (conn, mysql_error_fn, be);
-            uri.m_portnum = 0;
-            if (!set_standard_connection_options (qbe, conn, uri))
-            {
-                LEAVE("Error: Failed to set options.");
-                return;
-            }
+            conn = conn_setup("mysql", qbe, mysql_error_fn, options, uri);
             result = dbi_conn_connect (conn);
             if (result < 0)
             {
@@ -822,7 +825,8 @@ gnc_dbi_mysql_session_begin (QofBackend* qbe, QofSession* session,
                 dbi_conn_queryf (conn, "DROP DATABASE %s", uri.dbname());
                 return;
             }
-            success = gnc_dbi_lock_database (qbe, conn, ignore_lock);
+            if (!gnc_dbi_lock_database (qbe, conn, ignore_lock))
+                return;
         }
         else
         {
@@ -831,17 +835,14 @@ gnc_dbi_mysql_session_begin (QofBackend* qbe, QofSession* session,
         }
     }
 
-    if (success)
-    {
-        be->connect(nullptr);
-        be->connect(
-            new GncDbiSqlConnection (new GncDbiProviderImpl<DbType::DBI_MYSQL>,
-                                     qbe, conn, lock_table));
-    }
+    be->connect(nullptr);
+    be->connect(
+        new GncDbiSqlConnection (new GncDbiProviderImpl<DbType::DBI_MYSQL>,
+                                 qbe, conn, lock_table));
 
     /* We should now have a proper session set up.
      * Let's start logging */
-    translog_path = gnc_build_translog_path (uri.basename().c_str());
+    auto translog_path = gnc_build_translog_path (uri.basename().c_str());
     xaccLogSetBaseName (translog_path);
     PINFO ("logpath=%s", translog_path ? translog_path : "(null)");
     g_free (translog_path);
@@ -954,9 +955,7 @@ gnc_dbi_postgres_session_begin (QofBackend* qbe, QofSession* session,
                                 gboolean create, gboolean force)
 {
     GncDbiBackend* be = (GncDbiBackend*)qbe;
-    gint result = 0;
-    gboolean success = FALSE;
-    GncDbiTestResult dbi_test_result = GNC_DBI_PASS;
+    bool success = false;
     PairVec options;
     
     g_return_if_fail (qbe != nullptr);
@@ -978,35 +977,17 @@ gnc_dbi_postgres_session_begin (QofBackend* qbe, QofSession* session,
     auto lcname = g_utf8_strdown (uri.dbname(), -1);
     uri.m_dbname = std::string{lcname};
     g_free(lcname);
-    // Try to connect to the db.  If it doesn't exist and the create
-    // flag is TRUE, we'll need to connect to the 'postgres' db and execute the
-    // CREATE DATABASE ddl statement there.
     be->connect(nullptr);
-    dbi_conn conn;
-#if HAVE_LIBDBI_R
-    if (dbi_instance)
-        conn = dbi_conn_new_r ("pgsql", dbi_instance);
-    else
-        PERR ("Attempt to connect with an uninitialized dbi_instance");
-#else
-    conn = dbi_conn_new ("pgsql");
-#endif
 
+    auto conn = conn_setup("pgsql", qbe, pgsql_error_fn, options, uri);
     if (conn == nullptr)
     {
-        PERR ("Unable to create pgsql dbi connection\n");
-        qof_backend_set_error (qbe, ERR_BACKEND_BAD_URL);
         LEAVE("Error");
-	return;
+        return;
     }
-    dbi_conn_error_handler (conn, pgsql_error_fn, be);
-    if (!set_standard_connection_options (qbe, conn, uri))
-    {
-        LEAVE("Error");
-	return;
-    }
-    be->set_exists(true);
-    result = dbi_conn_connect (conn);
+
+    be->set_exists(true); //May be unset in the error handler.
+    auto result = dbi_conn_connect (conn);
     if (result == 0)
     {
         if (!conn_test_dbi_library(conn, qbe))
@@ -1022,7 +1003,8 @@ gnc_dbi_postgres_session_begin (QofBackend* qbe, QofSession* session,
             return;
         }
 
-        success = gnc_dbi_lock_database (qbe, conn, ignore_lock);
+        if (!gnc_dbi_lock_database (qbe, conn, ignore_lock))
+            return;
     }
     else
     {
@@ -1035,66 +1017,14 @@ gnc_dbi_postgres_session_begin (QofBackend* qbe, QofSession* session,
             return;
         }
 
-        // The db does not already exist.  Connect to the 'postgres' db and try to create it.
         if (create)
         {
-            options.push_back(std::make_pair("dbname", "postgres"));
-            try
-            {
-                set_options(conn, options);
-            }
-            catch (std::runtime_error& err)
-            {
-                qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
-                LEAVE("Error");
-                return;
-            }
-
-            result = dbi_conn_connect (conn);
-            if (result < 0)
-            {
-                PERR ("Unable to connect to 'postgres' database\n");
-                qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
-                LEAVE("Error");
-                return;
-            }
-            auto dresult = dbi_conn_queryf (conn,
-                                            "CREATE DATABASE %s WITH TEMPLATE template0 ENCODING 'UTF8'", uri.dbname());
-            if (dresult == nullptr)
-            {
-                PERR ("Unable to create database '%s'\n", uri.dbname());
-                qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
-                LEAVE("Error");
-                return;
-            }
-            dbi_conn_queryf (conn,
-                             "ALTER DATABASE %s SET standard_conforming_strings TO on", uri.dbname());
-            dbi_conn_close (conn);
-
-            // Try again to connect to the db
-#if HAVE_LIBDBI_R
-            if (dbi_instance)
-                conn = dbi_conn_new_r ("pgsql", dbi_instance);
-            else
-                PERR ("Attempt to connect with an uninitialized dbi_instance");
-#else
-            conn = dbi_conn_new ("pgsql");
-#endif
-
-            if (conn == nullptr)
-            {
-                PERR ("Unable to create pgsql dbi connection\n");
-                qof_backend_set_error (qbe, ERR_BACKEND_BAD_URL);
-                LEAVE("Error");
-                return;
-            }
-            dbi_conn_error_handler (conn, pgsql_error_fn, be);
-            uri.m_portnum = PGSQL_DEFAULT_PORT;
-            if (!set_standard_connection_options (qbe, conn, uri))
+            if (!create_database(DbType::DBI_PGSQL, qbe, conn, uri.dbname()))
             {
                 LEAVE("Error");
                 return;
             }
+            conn = conn_setup("pgsql", qbe, pgsql_error_fn, options, uri);
             result = dbi_conn_connect (conn);
             if (result < 0)
             {
@@ -1110,7 +1040,8 @@ gnc_dbi_postgres_session_begin (QofBackend* qbe, QofSession* session,
                 LEAVE("Error");
                 return;
             }
-            success = gnc_dbi_lock_database (qbe, conn, ignore_lock);
+            if (!gnc_dbi_lock_database (qbe, conn, ignore_lock))
+                return;
         }
         else
         {
@@ -1118,13 +1049,10 @@ gnc_dbi_postgres_session_begin (QofBackend* qbe, QofSession* session,
             qof_backend_set_message (qbe, "Database %s not found", uri.dbname());
         }
     }
-    if (success)
-    {
-        be->connect(nullptr);
-        be->connect(
+    be->connect(nullptr);
+    be->connect(
             new GncDbiSqlConnection (new GncDbiProviderImpl<DbType::DBI_PGSQL>,
                                      qbe, conn, lock_table));
-    }
 
     /* We should now have a proper session set up.
      * Let's start logging */
