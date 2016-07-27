@@ -109,15 +109,50 @@ static gchar lock_table[] = "gnclock";
 #define SQLITE3_URI_PREFIX (SQLITE3_URI_TYPE "://")
 #define PGSQL_DEFAULT_PORT 5432
 
-#define SQLITE3_TIMESPEC_STR_FORMAT "%04d%02d%02d%02d%02d%02d"
-#define MYSQL_TIMESPEC_STR_FORMAT   "%04d%02d%02d%02d%02d%02d"
-#define PGSQL_TIMESPEC_STR_FORMAT   "%04d%02d%02d %02d%02d%02d"
+constexpr const char* SQLITE3_TIMESPEC_STR_FORMAT = "%04d%02d%02d%02d%02d%02d";
+constexpr const char* MYSQL_TIMESPEC_STR_FORMAT =   "%04d%02d%02d%02d%02d%02d";
+constexpr const char* PGSQL_TIMESPEC_STR_FORMAT =   "%04d%02d%02d %02d%02d%02d";
 
 static void adjust_sql_options (dbi_conn connection);
 static gboolean gnc_dbi_lock_database (QofBackend*, dbi_conn, gboolean);
 static gboolean save_may_clobber_data (QofBackend* qbe);
+static void init_sql_backend (GncDbiBackend* dbi_be);
 
 static bool conn_test_dbi_library (dbi_conn conn, QofBackend* qbe);
+
+template <DbType T> void gnc_dbi_session_begin(QofBackend* qbe,
+                                               QofSession* session,
+                                               const gchar* book_id,
+                                               gboolean ignore_lock,
+                                               gboolean create, gboolean force);
+template <DbType Type> QofBackend*
+new_backend ()
+{
+    QofBackend* be;
+    const char* format;
+    switch (Type)
+    {
+        case (DbType::DBI_SQLITE):
+            format = SQLITE3_TIMESPEC_STR_FORMAT;
+            break;
+        case (DbType::DBI_MYSQL):
+            format = MYSQL_TIMESPEC_STR_FORMAT;
+            break;
+        case (DbType::DBI_PGSQL):
+            format = PGSQL_TIMESPEC_STR_FORMAT;
+            break;
+    }
+    auto dbi_be = new GncDbiBackend(nullptr, nullptr, format);
+    g_assert (dbi_be != nullptr);
+
+    be = (QofBackend*)dbi_be;
+    qof_backend_init (be);
+
+    be->session_begin = gnc_dbi_session_begin<Type>;
+    init_sql_backend (dbi_be);
+
+    return be;
+}
 
 template <DbType T>
 class QofDbiBackendProvider : public QofBackendProvider
@@ -130,7 +165,7 @@ public:
     QofDbiBackendProvider(QofDbiBackendProvider&&) = delete;
     QofDbiBackendProvider operator=(QofDbiBackendProvider&&) = delete;
     ~QofDbiBackendProvider () = default;
-    QofBackend* create_backend(void);
+    QofBackend* create_backend(void) { return new_backend<T>(); }
     bool type_check(const char* type) { return true; }
 };
 
@@ -363,8 +398,8 @@ sqlite3_error_fn (dbi_conn conn, void* user_data)
         be->set_error (ERR_BACKEND_MISC, 0, false);
 }
 
-void
-gnc_dbi_sqlite3_session_begin (QofBackend* qbe, QofSession* session,
+template <> void
+gnc_dbi_session_begin<DbType::DBI_SQLITE>(QofBackend* qbe, QofSession* session,
                                const gchar* book_id, gboolean ignore_lock,
                                gboolean create, gboolean force)
 {
@@ -714,8 +749,8 @@ adjust_sql_options (dbi_conn connection)
 }
 
 
-static void
-gnc_dbi_mysql_session_begin (QofBackend* qbe, QofSession* session,
+template <> void
+gnc_dbi_session_begin<DbType::DBI_MYSQL> (QofBackend* qbe, QofSession* session,
                              const gchar* book_id, gboolean ignore_lock,
                              gboolean create, gboolean force)
 {
@@ -867,8 +902,8 @@ pgsql_error_fn (dbi_conn conn, void* user_data)
     }
 }
 
-static void
-gnc_dbi_postgres_session_begin (QofBackend* qbe, QofSession* session,
+template <>void
+gnc_dbi_session_begin<DbType::DBI_PGSQL> (QofBackend* qbe, QofSession* session,
                                 const gchar* book_id, gboolean ignore_lock,
                                 gboolean create, gboolean force)
 {
@@ -1206,47 +1241,6 @@ init_sql_backend (GncDbiBackend* dbi_be)
 
     gnc_sql_init (dbi_be);
 }
-
-static QofBackend*
-new_backend (void (*session_begin) (QofBackend*, QofSession*, const gchar*,
-                                    gboolean, gboolean, gboolean),
-             const char* format)
-{
-    QofBackend* be;
-
-    auto dbi_be = new GncDbiBackend(nullptr, nullptr, format);
-    g_assert (dbi_be != nullptr);
-
-    be = (QofBackend*)dbi_be;
-    qof_backend_init (be);
-
-    be->session_begin = session_begin;
-    init_sql_backend (dbi_be);
-
-    return be;
-}
-
-template<> QofBackend*
-QofDbiBackendProvider<DbType::DBI_SQLITE>::create_backend()
-{
-    return new_backend (gnc_dbi_sqlite3_session_begin,
-                        SQLITE3_TIMESPEC_STR_FORMAT);
-}
-
-template<> QofBackend*
-QofDbiBackendProvider<DbType::DBI_MYSQL>::create_backend()
-{
-    return new_backend (gnc_dbi_mysql_session_begin,
-                        MYSQL_TIMESPEC_STR_FORMAT);
-}
-
-template<> QofBackend*
-QofDbiBackendProvider<DbType::DBI_PGSQL>::create_backend()
-{
-    return new_backend (gnc_dbi_postgres_session_begin,
-                        PGSQL_TIMESPEC_STR_FORMAT);
-}
-
 
 /*
  * Checks to see whether the file is an sqlite file or not
