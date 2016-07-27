@@ -467,34 +467,6 @@ gnc_dbi_sqlite3_session_begin (QofBackend* qbe, QofSession* session,
     LEAVE ("");
 }
 
-template<> StrVec
-GncDbiProviderImpl<DbType::DBI_SQLITE>::get_index_list (dbi_conn conn)
-{
-    StrVec retval;
-    const char* errmsg;
-    dbi_result result = dbi_conn_query (conn,
-                                        "SELECT name FROM sqlite_master WHERE type = 'index' AND name NOT LIKE 'sqlite_autoindex%'");
-    if (dbi_conn_error (conn, &errmsg) != DBI_ERROR_NONE)
-    {
-        PWARN ("Index Table Retrieval Error: %s\n", errmsg);
-        return retval;
-    }
-    while (dbi_result_next_row (result) != 0)
-    {
-        std::string index_name {dbi_result_get_string_idx (result, 1)};
-        retval.push_back(index_name);
-    }
-    dbi_result_free (result);
-    return retval;
-}
-
-template <DbType P> void
-GncDbiProviderImpl<P>::drop_index(dbi_conn conn, const std::string& index)
-{
-    dbi_result result = dbi_conn_queryf (conn, "DROP INDEX %s", index.c_str());
-    if (result)
-        dbi_result_free (result);
-}
 
 static void
 mysql_error_fn (dbi_conn conn, void* user_data)
@@ -850,60 +822,6 @@ gnc_dbi_mysql_session_begin (QofBackend* qbe, QofSession* session,
     LEAVE (" ");
 }
 
-template<> StrVec
-GncDbiProviderImpl<DbType::DBI_MYSQL>::get_index_list (dbi_conn conn)
-{
-    StrVec retval;
-    const char* errmsg;
-    auto dbname = dbi_conn_get_option (conn, "dbname");
-    auto table_list = dbi_conn_get_table_list (conn, dbname, nullptr);
-    if (dbi_conn_error (conn, &errmsg) != DBI_ERROR_NONE)
-    {
-        PWARN ("Table Retrieval Error: %s\n", errmsg);
-        return retval;
-    }
-    while (dbi_result_next_row (table_list) != 0)
-    {
-        auto table_name = dbi_result_get_string_idx (table_list, 1);
-        auto result = dbi_conn_queryf (conn,
-                                       "SHOW INDEXES IN %s WHERE Key_name != 'PRIMARY'",
-                                       table_name);
-        if (dbi_conn_error (conn, &errmsg) != DBI_ERROR_NONE)
-        {
-            PWARN ("Index Table Retrieval Error: %s on table %s\n",
-                   errmsg, table_name);
-            continue;
-        }
-
-        while (dbi_result_next_row (result) != 0)
-        {
-            std::string index_name {dbi_result_get_string_idx (result, 3)};
-            retval.push_back(index_name + " " + table_name);
-        }
-        dbi_result_free (result);
-    }
-
-    return retval;
-}
-
-template<> void
-GncDbiProviderImpl<DbType::DBI_MYSQL>::drop_index (dbi_conn conn, const std::string& index)
-{
-    auto sep = index.find(' ', 0);
-    if (index.find(' ', sep + 1) != std::string::npos)
-    {
-        PWARN("Drop index error: invalid MySQL index format (<index> <table>): %s",
-              index.c_str());
-        return;
-    }
-
-    auto result = dbi_conn_queryf (conn, "DROP INDEX %s ON %s",
-                                   index.substr(0, sep).c_str(),
-                                   index.substr(sep + 1).c_str());
-    if (result)
-        dbi_result_free (result);
-}
-
 static void
 pgsql_error_fn (dbi_conn conn, void* user_data)
 {
@@ -1064,27 +982,6 @@ gnc_dbi_postgres_session_begin (QofBackend* qbe, QofSession* session,
     LEAVE (" ");
 }
 
-template<> StrVec
-GncDbiProviderImpl<DbType::DBI_PGSQL>::get_index_list (dbi_conn conn)
-{
-    StrVec retval;
-    const char* errmsg;
-    PINFO ("Retrieving postgres index list\n");
-    auto result = dbi_conn_query (conn,
-                                  "SELECT relname FROM pg_class AS a INNER JOIN pg_index AS b ON (b.indexrelid = a.oid) INNER JOIN pg_namespace AS c ON (a.relnamespace = c.oid) WHERE reltype = '0' AND indisprimary = 'f' AND nspname = 'public'");
-    if (dbi_conn_error (conn, &errmsg) != DBI_ERROR_NONE)
-    {
-        PWARN("Index Table Retrieval Error: %s\n", errmsg);
-        return retval;
-    }
-    while (dbi_result_next_row (result) != 0)
-    {
-        std::string index_name {dbi_result_get_string_idx (result, 1)};
-        retval.push_back(index_name);
-    }
-    dbi_result_free (result);
-    return retval;
-}
 
 /* ================================================================= */
 

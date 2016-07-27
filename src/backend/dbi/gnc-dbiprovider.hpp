@@ -42,9 +42,6 @@ class GncDbiProvider
 {
 public:
     virtual ~GncDbiProvider() = default;
-    virtual std::string create_table_ddl(const GncSqlConnection* conn,
-                                         const std::string& table_name,
-                                         const ColVec& info_vec) = 0;
     virtual StrVec get_table_list(dbi_conn conn, const std::string& dbname) = 0;
     virtual void append_col_def(std::string& ddl,
                                 const GncSqlColumnInfo& info) = 0;

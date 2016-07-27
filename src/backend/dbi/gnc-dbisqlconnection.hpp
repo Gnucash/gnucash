@@ -78,8 +78,6 @@ public:
     bool verify() noexcept override;
     bool retry_connection(const char* msg) noexcept override;
     dbi_result table_manage_backup(const std::string& table_name, TableOpType op);
-    /* FIXME: These three friend functions should really be members, but doing
-     * that is too invasive just yet. */
     bool table_operation (const StrVec& table_name_list,
                           TableOpType op) noexcept;
     std::string add_columns_ddl(const std::string& table_name,

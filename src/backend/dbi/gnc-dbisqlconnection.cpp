@@ -330,7 +330,20 @@ bool
 GncDbiSqlConnection::create_table (const std::string& table_name,
                                    const ColVec& info_vec) const noexcept
 {
-    auto ddl = m_provider->create_table_ddl(this, table_name, info_vec);
+    std::string ddl;
+    unsigned int col_num = 0;
+
+    ddl += "CREATE TABLE " + table_name + "(";
+    for (auto const& info : info_vec)
+    {
+        if (col_num++ != 0)
+        {
+            ddl += ", ";
+        }
+        m_provider->append_col_def (ddl, info);
+    }
+    ddl += ")";
+
     if (ddl.empty())
         return false;
 

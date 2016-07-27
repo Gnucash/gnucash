@@ -30,22 +30,12 @@ extern "C"
 #include "gnc-backend-dbi.hpp"
 #include "gnc-dbiprovider.hpp"
 
-enum class DbType
-{
-    DBI_SQLITE,
-    DBI_MYSQL,
-    DBI_PGSQL
-};
 
 template <DbType T>
 class GncDbiProviderImpl : public GncDbiProvider
 {
 public:
-    std::string create_table_ddl(const GncSqlConnection* conn,
-                                 const std::string& table_name,
-                                 const ColVec& info_vec);
-    StrVec get_table_list(dbi_conn conn,
-                                            const std::string& dbname);
+    StrVec get_table_list(dbi_conn conn, const std::string& dbname);
     void append_col_def(std::string& ddl, const GncSqlColumnInfo& info);
     StrVec get_index_list (dbi_conn conn);
     void drop_index(dbi_conn conn, const std::string& index);
@@ -98,28 +88,6 @@ GncDbiProviderImpl<DbType::DBI_SQLITE>::append_col_def(std::string& ddl,
     }
 }
 
-template <DbType P> std::string
-GncDbiProviderImpl<P>::create_table_ddl (const GncSqlConnection* conn,
-                                              const std::string& table_name,
-                                              const ColVec& info_vec)
-{
-    std::string ddl;
-    unsigned int col_num = 0;
-
-    g_return_val_if_fail (conn != nullptr, ddl);
-    ddl += "CREATE TABLE " + table_name + "(";
-    for (auto const& info : info_vec)
-    {
-        if (col_num++ != 0)
-        {
-            ddl += ", ";
-        }
-        append_col_def (ddl, info);
-    }
-    ddl += ")";
-
-    return ddl;
-}
 
 template<> void
 GncDbiProviderImpl<DbType::DBI_MYSQL>::append_col_def (std::string& ddl,
@@ -290,4 +258,109 @@ GncDbiProviderImpl<DbType::DBI_PGSQL>::get_table_list (dbi_conn conn,
     return list;
 }
 
+template<> StrVec
+GncDbiProviderImpl<DbType::DBI_SQLITE>::get_index_list (dbi_conn conn)
+{
+    StrVec retval;
+    const char* errmsg;
+    dbi_result result = dbi_conn_query (conn,
+                                        "SELECT name FROM sqlite_master WHERE type = 'index' AND name NOT LIKE 'sqlite_autoindex%'");
+    if (dbi_conn_error (conn, &errmsg) != DBI_ERROR_NONE)
+    {
+        PWARN ("Index Table Retrieval Error: %s\n", errmsg);
+        return retval;
+    }
+    while (dbi_result_next_row (result) != 0)
+    {
+        std::string index_name {dbi_result_get_string_idx (result, 1)};
+        retval.push_back(index_name);
+    }
+    dbi_result_free (result);
+    return retval;
+}
+
+template<> StrVec
+GncDbiProviderImpl<DbType::DBI_MYSQL>::get_index_list (dbi_conn conn)
+{
+    StrVec retval;
+    const char* errmsg;
+    auto dbname = dbi_conn_get_option (conn, "dbname");
+    auto table_list = dbi_conn_get_table_list (conn, dbname, nullptr);
+    if (dbi_conn_error (conn, &errmsg) != DBI_ERROR_NONE)
+    {
+        PWARN ("Table Retrieval Error: %s\n", errmsg);
+        return retval;
+    }
+    while (dbi_result_next_row (table_list) != 0)
+    {
+        auto table_name = dbi_result_get_string_idx (table_list, 1);
+        auto result = dbi_conn_queryf (conn,
+                                       "SHOW INDEXES IN %s WHERE Key_name != 'PRIMARY'",
+                                       table_name);
+        if (dbi_conn_error (conn, &errmsg) != DBI_ERROR_NONE)
+        {
+            PWARN ("Index Table Retrieval Error: %s on table %s\n",
+                   errmsg, table_name);
+            continue;
+        }
+
+        while (dbi_result_next_row (result) != 0)
+        {
+            std::string index_name {dbi_result_get_string_idx (result, 3)};
+            retval.push_back(index_name + " " + table_name);
+        }
+        dbi_result_free (result);
+    }
+
+    return retval;
+}
+
+template<> StrVec
+GncDbiProviderImpl<DbType::DBI_PGSQL>::get_index_list (dbi_conn conn)
+{
+    StrVec retval;
+    const char* errmsg;
+    PINFO ("Retrieving postgres index list\n");
+    auto result = dbi_conn_query (conn,
+                                  "SELECT relname FROM pg_class AS a INNER JOIN pg_index AS b ON (b.indexrelid = a.oid) INNER JOIN pg_namespace AS c ON (a.relnamespace = c.oid) WHERE reltype = '0' AND indisprimary = 'f' AND nspname = 'public'");
+    if (dbi_conn_error (conn, &errmsg) != DBI_ERROR_NONE)
+    {
+        PWARN("Index Table Retrieval Error: %s\n", errmsg);
+        return retval;
+    }
+    while (dbi_result_next_row (result) != 0)
+    {
+        std::string index_name {dbi_result_get_string_idx (result, 1)};
+        retval.push_back(index_name);
+    }
+    dbi_result_free (result);
+    return retval;
+}
+
+template <DbType P> void
+GncDbiProviderImpl<P>::drop_index(dbi_conn conn, const std::string& index)
+{
+    dbi_result result = dbi_conn_queryf (conn, "DROP INDEX %s", index.c_str());
+    if (result)
+        dbi_result_free (result);
+}
+
+template<> void
+GncDbiProviderImpl<DbType::DBI_MYSQL>::drop_index (dbi_conn conn, const std::string& index)
+{
+
+    auto sep = index.find(' ', 0);
+    if (index.find(' ', sep + 1) != std::string::npos)
+    {
+        PWARN("Drop index error: invalid MySQL index format (<index> <table>): %s",
+              index.c_str());
+        return;
+    }
+
+    auto result = dbi_conn_queryf (conn, "DROP INDEX %s ON %s",
+                                   index.substr(0, sep).c_str(),
+                                   index.substr(sep + 1).c_str());
+    if (result)
+        dbi_result_free (result);
+}
 #endif //__GNC_DBISQLPROVIDERIMPL_HPP__

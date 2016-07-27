@@ -68,6 +68,15 @@ typedef enum
     GNC_DBI_FAIL_TEST
 } GncDbiTestResult;
 
+/**
+ * Supported Dbi Backends.
+ */
+enum class DbType
+{
+    DBI_SQLITE, /**< Sqlite3 */
+    DBI_MYSQL,  /**< MySQL and probably MariaDB */
+    DBI_PGSQL   /**< Postgresql */
+};
 
 /**
  * Implementations of GncSqlBackend.
