@@ -97,8 +97,6 @@ public:
     {
         m_conn->retry_connection(msg);
     }
-    /* Worst of all: */
-    GncSqlConnection* conn() { return m_conn; }
     /*-----*/
     bool exists() { return m_exists; }
     void set_exists(bool exists) { m_exists = exists; }

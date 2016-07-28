@@ -115,7 +115,7 @@ constexpr const char* PGSQL_TIMESPEC_STR_FORMAT =   "%04d%02d%02d %02d%02d%02d";
 
 static void adjust_sql_options (dbi_conn connection);
 static gboolean gnc_dbi_lock_database (QofBackend*, dbi_conn, gboolean);
-static gboolean save_may_clobber_data (QofBackend* qbe);
+static bool save_may_clobber_data (dbi_conn conn);
 static void init_sql_backend (GncDbiBackend* dbi_be);
 
 static bool conn_test_dbi_library (dbi_conn conn, QofBackend* qbe);
@@ -788,7 +788,7 @@ gnc_dbi_session_begin<DbType::DBI_MYSQL> (QofBackend* qbe, QofSession* session,
             LEAVE("Error");
             return;
         }
-        if (create && !force && save_may_clobber_data (qbe))
+        if (create && !force && save_may_clobber_data (conn))
         {
             qof_backend_set_error (qbe, ERR_BACKEND_STORE_EXISTS);
             PWARN ("Databse already exists, Might clobber it.");
@@ -948,7 +948,7 @@ gnc_dbi_session_begin<DbType::DBI_PGSQL> (QofBackend* qbe, QofSession* session,
             LEAVE("Error");
             return;
         }
-        if (create && !force && save_may_clobber_data (qbe))
+        if (create && !force && save_may_clobber_data(conn))
         {
             qof_backend_set_error (qbe, ERR_BACKEND_STORE_EXISTS);
             PWARN ("Databse already exists, Might clobber it.");
@@ -1106,17 +1106,14 @@ gnc_dbi_load (QofBackend* qbe,  QofBook* book, QofBackendLoadType loadType)
 
 /* ================================================================= */
 
-static gboolean
-save_may_clobber_data (QofBackend* qbe)
+static bool
+save_may_clobber_data (dbi_conn conn)
 {
-    GncDbiBackend* be = (GncDbiBackend*)qbe;
-    const gchar* dbname;
-    dbi_result result;
-    gboolean retval = FALSE;
 
     /* Data may be clobbered iff the number of tables != 0 */
-    dbname = dbi_conn_get_option (be->conn(), "dbname");
-    result = dbi_conn_get_table_list (be->conn(), dbname, nullptr);
+    auto dbname = dbi_conn_get_option (conn, "dbname");
+    auto result = dbi_conn_get_table_list (conn, dbname, nullptr);
+    bool retval = false;
     if (result)
     {
         retval =  dbi_result_get_numrows (result) > 0;
