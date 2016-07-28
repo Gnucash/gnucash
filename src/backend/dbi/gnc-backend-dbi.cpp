@@ -101,8 +101,6 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 // gnc-dbiproviderimpl.hpp has templates that need log_module defined.
 #include "gnc-dbiproviderimpl.hpp"
 
-static gchar lock_table[] = "gnclock";
-
 #define FILE_URI_TYPE "file"
 #define FILE_URI_PREFIX (FILE_URI_TYPE "://")
 #define SQLITE3_URI_TYPE "sqlite3"
@@ -114,7 +112,6 @@ constexpr const char* MYSQL_TIMESPEC_STR_FORMAT =   "%04d%02d%02d%02d%02d%02d";
 constexpr const char* PGSQL_TIMESPEC_STR_FORMAT =   "%04d%02d%02d %02d%02d%02d";
 
 static void adjust_sql_options (dbi_conn connection);
-static gboolean gnc_dbi_lock_database (QofBackend*, dbi_conn, gboolean);
 static bool save_may_clobber_data (dbi_conn conn);
 static void init_sql_backend (GncDbiBackend* dbi_be);
 
@@ -480,19 +477,18 @@ gnc_dbi_session_begin<DbType::DBI_SQLITE>(QofBackend* qbe, QofSession* session,
             g_unlink (filepath.c_str());
         }
         LEAVE("Bad DBI Library");
-	return;
-    }
-    if (!gnc_dbi_lock_database (qbe, conn, ignore_lock))
-    {
-        qof_backend_set_error (qbe, ERR_BACKEND_LOCKED);
-        LEAVE("Locked");
-	return;
     }
 
     be->connect(nullptr);
-    be->connect(
-        new GncDbiSqlConnection (new GncDbiProviderImpl<DbType::DBI_SQLITE>,
-                                 qbe, conn, lock_table));
+    try
+    {
+        be->connect(new GncDbiSqlConnection(make_dbi_provider<DbType::DBI_SQLITE>(),
+                                            qbe, conn, ignore_lock));
+    }
+    catch (std::runtime_error& err)
+    {
+        return;
+    }
 
     /* We should now have a proper session set up.
      * Let's start logging */
@@ -553,136 +549,6 @@ mysql_error_fn (dbi_conn conn, void* user_data)
         PERR ("DBI error: %s\n", msg);
         be->set_error (ERR_BACKEND_MISC, 0, FALSE);
     }
-}
-
-
-/* FIXME: Move to GncDbiSqlConnection. */
-static gboolean
-gnc_dbi_lock_database (QofBackend* qbe, dbi_conn conn, gboolean ignore_lock)
-{
-
-    GncDbiBackend* qe = (GncDbiBackend*)qbe;
-
-    dbi_result result;
-    const gchar* dbname = dbi_conn_get_option (conn, "dbname");
-    /* Create the table if it doesn't exist */
-    result = dbi_conn_get_table_list (conn, dbname, lock_table);
-    if (! (result && dbi_result_get_numrows (result)))
-    {
-        if (result)
-        {
-            dbi_result_free (result);
-            result = nullptr;
-        }
-        result = dbi_conn_queryf (conn,
-                                  "CREATE TABLE %s ( Hostname varchar(%d), PID int )", lock_table,
-                                  GNC_HOST_NAME_MAX);
-        if (dbi_conn_error (conn, nullptr))
-        {
-            const gchar* errstr;
-            dbi_conn_error (conn, &errstr);
-            PERR ("Error %s creating lock table", errstr);
-            qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
-            if (result)
-            {
-                dbi_result_free (result);
-                result = nullptr;
-            }
-            return FALSE;
-        }
-        if (result)
-        {
-            dbi_result_free (result);
-            result = nullptr;
-        }
-    }
-    if (result)
-    {
-        dbi_result_free (result);
-        result = nullptr;
-    }
-
-    /* Protect everything with a single transaction to prevent races */
-    if ((result = dbi_conn_query (conn, "BEGIN")))
-    {
-        /* Check for an existing entry; delete it if ignore_lock is true, otherwise fail */
-        gchar hostname[ GNC_HOST_NAME_MAX + 1 ];
-        if (result)
-        {
-            dbi_result_free (result);
-            result = nullptr;
-        }
-        result = dbi_conn_queryf (conn, "SELECT * FROM %s", lock_table);
-        if (result && dbi_result_get_numrows (result))
-        {
-            dbi_result_free (result);
-            result = nullptr;
-            if (!ignore_lock)
-            {
-                qof_backend_set_error (qbe, ERR_BACKEND_LOCKED);
-                /* FIXME: After enhancing the qof_backend_error mechanism, report in the dialog what is the hostname of the machine holding the lock. */
-                dbi_conn_query (conn, "ROLLBACK");
-                return FALSE;
-            }
-            result = dbi_conn_queryf (conn, "DELETE FROM %s", lock_table);
-            if (!result)
-            {
-                qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
-                qof_backend_set_message (qbe, "Failed to delete lock record");
-                result = dbi_conn_query (conn, "ROLLBACK");
-                if (result)
-                {
-                    dbi_result_free (result);
-                    result = nullptr;
-                }
-                return FALSE;
-            }
-            if (result)
-            {
-                dbi_result_free (result);
-                result = nullptr;
-            }
-        }
-        /* Add an entry and commit the transaction */
-        memset (hostname, 0, sizeof (hostname));
-        gethostname (hostname, GNC_HOST_NAME_MAX);
-        result = dbi_conn_queryf (conn,
-                                  "INSERT INTO %s VALUES ('%s', '%d')",
-                                  lock_table, hostname, (int)GETPID ());
-        if (!result)
-        {
-            qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
-            qof_backend_set_message (qbe, "Failed to create lock record");
-            result = dbi_conn_query (conn, "ROLLBACK");
-            if (result)
-            {
-                dbi_result_free (result);
-                result = nullptr;
-            }
-            return FALSE;
-        }
-        if (result)
-        {
-            dbi_result_free (result);
-            result = nullptr;
-        }
-        result = dbi_conn_query (conn, "COMMIT");
-        if (result)
-        {
-            dbi_result_free (result);
-            result = nullptr;
-        }
-        return TRUE;
-    }
-    /* Couldn't get a transaction (probably couldn't get a lock), so fail */
-    qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
-    qof_backend_set_message (qbe, "SQL Backend failed to obtain a transaction");
-    if (result)
-    {
-        dbi_result_free (result);
-        result = nullptr;
-    }
-    return FALSE;
 }
 
 #define SQL_OPTION_TO_REMOVE "NO_ZERO_DATE"
@@ -796,8 +662,6 @@ gnc_dbi_session_begin<DbType::DBI_MYSQL> (QofBackend* qbe, QofSession* session,
             return;
         }
 
-        if (!gnc_dbi_lock_database (qbe, conn, ignore_lock))
-            return;
     }
     else
     {
@@ -832,8 +696,6 @@ gnc_dbi_session_begin<DbType::DBI_MYSQL> (QofBackend* qbe, QofSession* session,
                 dbi_conn_queryf (conn, "DROP DATABASE %s", uri.dbname());
                 return;
             }
-            if (!gnc_dbi_lock_database (qbe, conn, ignore_lock))
-                return;
         }
         else
         {
@@ -843,10 +705,15 @@ gnc_dbi_session_begin<DbType::DBI_MYSQL> (QofBackend* qbe, QofSession* session,
     }
 
     be->connect(nullptr);
-    be->connect(
-        new GncDbiSqlConnection (new GncDbiProviderImpl<DbType::DBI_MYSQL>,
-                                 qbe, conn, lock_table));
-
+    try
+    {
+        be->connect(new GncDbiSqlConnection(make_dbi_provider<DbType::DBI_MYSQL>(),
+                                            qbe, conn, ignore_lock));
+    }
+    catch (std::runtime_error& err)
+    {
+        return;
+    }
     /* We should now have a proper session set up.
      * Let's start logging */
     auto translog_path = gnc_build_translog_path (uri.basename().c_str());
@@ -956,8 +823,6 @@ gnc_dbi_session_begin<DbType::DBI_PGSQL> (QofBackend* qbe, QofSession* session,
             return;
         }
 
-        if (!gnc_dbi_lock_database (qbe, conn, ignore_lock))
-            return;
     }
     else
     {
@@ -993,8 +858,6 @@ gnc_dbi_session_begin<DbType::DBI_PGSQL> (QofBackend* qbe, QofSession* session,
                 LEAVE("Error");
                 return;
             }
-            if (!gnc_dbi_lock_database (qbe, conn, ignore_lock))
-                return;
         }
         else
         {
@@ -1003,9 +866,15 @@ gnc_dbi_session_begin<DbType::DBI_PGSQL> (QofBackend* qbe, QofSession* session,
         }
     }
     be->connect(nullptr);
-    be->connect(
-            new GncDbiSqlConnection (new GncDbiProviderImpl<DbType::DBI_PGSQL>,
-                                     qbe, conn, lock_table));
+    try
+    {
+        be->connect(new GncDbiSqlConnection(make_dbi_provider<DbType::DBI_PGSQL>(),
+                                            qbe, conn, ignore_lock));
+    }
+    catch (std::runtime_error& err)
+    {
+        return;
+    }
 
     /* We should now have a proper session set up.
      * Let's start logging */

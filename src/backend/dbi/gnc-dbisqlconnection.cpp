@@ -33,6 +33,7 @@ extern "C"
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 static const unsigned int DBI_MAX_CONN_ATTEMPTS = 5;
+constexpr const char *lock_table_name = "gnclock";
 
 /* --------------------------------------------------------- */
 class GncDbiSqlStatement : public GncSqlStatement
@@ -70,6 +71,108 @@ GncDbiSqlStatement::add_where_cond(QofIdTypeConst type_name,
     }
 }
 
+bool
+GncDbiSqlConnection::lock_database (bool ignore_lock)
+{
+
+    auto dbname = dbi_conn_get_option (m_conn, "dbname");
+    /* Create the table if it doesn't exist */
+    auto result = dbi_conn_get_table_list (m_conn, dbname, lock_table_name);
+    int numrows = 0;
+    const char* errstr;
+   if (result) {
+        numrows = dbi_result_get_numrows (result);
+        dbi_result_free (result);
+        result = nullptr;
+    }
+    if (numrows == 0)
+    {
+        result = dbi_conn_queryf (m_conn,
+                                  "CREATE TABLE %s ( Hostname varchar(%d), PID int )", lock_table_name,
+                                  GNC_HOST_NAME_MAX);
+        if (result)
+        {
+            dbi_result_free (result);
+            result = nullptr;
+        }
+        if (dbi_conn_error (m_conn, &errstr))
+        {
+            PERR ("Error %s creating lock table", errstr);
+            qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
+            return false;
+        }
+    }
+
+    /* Protect everything with a single transaction to prevent races */
+    result = dbi_conn_query (m_conn, "BEGIN");
+    if (dbi_conn_error (m_conn, &errstr))
+    {
+    /* Couldn't get a transaction (probably couldn't get a lock), so fail */
+        std::string err{"SQL Backend failed to obtain a transaction: "};
+        err += errstr;
+        qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
+        qof_backend_set_message (m_qbe, err.c_str());
+        return false;
+    }
+    dbi_result_free(result);
+    result = nullptr;
+    /* Check for an existing entry; delete it if ignore_lock is true, otherwise fail */
+    char hostname[ GNC_HOST_NAME_MAX + 1 ];
+    result = dbi_conn_queryf (m_conn, "SELECT * FROM %s", lock_table_name);
+    if (result && dbi_result_get_numrows (result))
+    {
+        dbi_result_free (result);
+        result = nullptr;
+        if (!ignore_lock)
+        {
+            qof_backend_set_error (m_qbe, ERR_BACKEND_LOCKED);
+            /* FIXME: After enhancing the qof_backend_error mechanism, report in the dialog what is the hostname of the machine holding the lock. */
+            dbi_conn_query (m_conn, "ROLLBACK");
+            return false;
+        }
+        result = dbi_conn_queryf (m_conn, "DELETE FROM %s", lock_table_name);
+        if (!result)
+        {
+            qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
+            qof_backend_set_message (m_qbe, "Failed to delete lock record");
+            result = dbi_conn_query (m_conn, "ROLLBACK");
+            if (result)
+                dbi_result_free (result);
+            return false;
+        }
+        dbi_result_free (result);
+        result = nullptr;
+    }
+    /* Add an entry and commit the transaction */
+    memset (hostname, 0, sizeof (hostname));
+    gethostname (hostname, GNC_HOST_NAME_MAX);
+    result = dbi_conn_queryf (m_conn,
+                              "INSERT INTO %s VALUES ('%s', '%d')",
+                              lock_table_name, hostname, (int)GETPID ());
+    if (!result)
+    {
+        qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
+        qof_backend_set_message (m_qbe, "Failed to create lock record");
+        result = dbi_conn_query (m_conn, "ROLLBACK");
+        if (result)
+            dbi_result_free (result);
+        return false;
+    }
+    dbi_result_free (result);
+    result = dbi_conn_query (m_conn, "COMMIT");
+    if (!result)
+    {
+        auto errnum = dbi_conn_error(m_conn, &errstr);
+        qof_backend_set_error(m_qbe, ERR_BACKEND_SERVER_ERR);
+        std::string err{"Failed to commit transaction: "};
+        err += errstr;
+        qof_backend_set_message(m_qbe, err.c_str());
+        return false;
+    }
+    dbi_result_free (result);
+    return true;
+}
+
 void
 GncDbiSqlConnection::unlock_database ()
 {
@@ -81,7 +184,7 @@ GncDbiSqlConnection::unlock_database ()
     auto dbname = dbi_conn_get_option (m_conn, "dbname");
     /* Check if the lock table exists */
     g_return_if_fail (dbname != nullptr);
-    auto result = dbi_conn_get_table_list (m_conn, dbname, m_lock_table);
+    auto result = dbi_conn_get_table_list (m_conn, dbname, lock_table_name);
     if (! (result && dbi_result_get_numrows (result)))
     {
         if (result)
@@ -105,7 +208,7 @@ GncDbiSqlConnection::unlock_database ()
         memset (hostname, 0, sizeof (hostname));
         gethostname (hostname, GNC_HOST_NAME_MAX);
         result = dbi_conn_queryf (m_conn,
-                                  "SELECT * FROM %s WHERE Hostname = '%s' AND PID = '%d'", m_lock_table, hostname,
+                                  "SELECT * FROM %s WHERE Hostname = '%s' AND PID = '%d'", lock_table_name, hostname,
                                   (int)GETPID ());
         if (result && dbi_result_get_numrows (result))
         {
@@ -114,7 +217,7 @@ GncDbiSqlConnection::unlock_database ()
                 dbi_result_free (result);
                 result = nullptr;
             }
-            result = dbi_conn_queryf (m_conn, "DELETE FROM %s", m_lock_table);
+            result = dbi_conn_queryf (m_conn, "DELETE FROM %s", lock_table_name);
             if (!result)
             {
                 PERR ("Failed to delete the lock entry");
@@ -166,7 +269,6 @@ GncDbiSqlConnection::~GncDbiSqlConnection()
         dbi_conn_close(m_conn);
         m_conn = nullptr;
     }
-    delete m_provider;
 }
 
 GncSqlResultPtr
@@ -542,7 +644,7 @@ GncDbiSqlConnection::table_operation(const StrVec& table_names,
                                      TableOpType op) noexcept
 {
     const char* dbname = dbi_conn_get_option (m_conn, "dbname");
-    std::string lock_table{m_lock_table};
+    std::string lock_table{lock_table_name};
     g_return_val_if_fail (!table_names.empty(), FALSE);
     bool retval{true};
     for (auto table : table_names)

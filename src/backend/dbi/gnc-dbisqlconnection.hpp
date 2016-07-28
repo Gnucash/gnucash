@@ -35,11 +35,14 @@ class GncDbiProvider;
 class GncDbiSqlConnection : public GncSqlConnection
 {
 public:
-    GncDbiSqlConnection (GncDbiProvider* provider, QofBackend* qbe,
-                         dbi_conn conn, const char* lock_table) :
-        m_qbe{qbe}, m_conn{conn}, m_provider{provider}, m_conn_ok{true},
-        m_last_error{ERR_BACKEND_NO_ERR}, m_error_repeat{0}, m_retry{false},
-        m_lock_table{lock_table} {}
+    GncDbiSqlConnection (std::unique_ptr<GncDbiProvider> provider,
+                         QofBackend* qbe, dbi_conn conn, bool ignore_lock) :
+        m_qbe{qbe}, m_conn{conn}, m_provider{std::move(provider)},
+        m_conn_ok{true}, m_last_error{ERR_BACKEND_NO_ERR}, m_error_repeat{0},
+        m_retry{false} {
+            if (!lock_database(ignore_lock))
+                throw std::runtime_error("Failed to lock database!");
+        }
     ~GncDbiSqlConnection() override;
     GncSqlResultPtr execute_select_statement (const GncSqlStatementPtr&)
         noexcept override;
@@ -61,7 +64,6 @@ public:
         return dbi_conn_error(m_conn, nullptr); }
     QofBackend* qbe () const noexcept { return m_qbe; }
     dbi_conn conn() const noexcept { return m_conn; }
-    GncDbiProvider* provider() { return m_provider; }
     inline void set_error(int error, int repeat,  bool retry) noexcept override
     {
         m_last_error = error;
@@ -87,7 +89,7 @@ public:
 private:
     QofBackend* m_qbe;
     dbi_conn m_conn;
-    GncDbiProvider* m_provider;
+    std::unique_ptr<GncDbiProvider> m_provider;
     /** Used by the error handler routines to flag if the connection is ok to
      * use
      */
@@ -106,7 +108,7 @@ private:
      * original query)
      */
     gboolean m_retry;
-    const char* m_lock_table;
+    bool lock_database(bool ignore_lock);
     void unlock_database();
 
 };

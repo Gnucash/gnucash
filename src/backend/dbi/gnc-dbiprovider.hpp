@@ -49,4 +49,6 @@ public:
     virtual void drop_index(dbi_conn conn, const std::string& index) = 0;
 };
 
+using GncDbiProviderPtr = std::unique_ptr<GncDbiProvider>;
+
 #endif //__GNC_DBIPROVIDER_HPP__

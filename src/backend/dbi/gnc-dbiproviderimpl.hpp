@@ -30,7 +30,6 @@ extern "C"
 #include "gnc-backend-dbi.hpp"
 #include "gnc-dbiprovider.hpp"
 
-
 template <DbType T>
 class GncDbiProviderImpl : public GncDbiProvider
 {
@@ -40,6 +39,12 @@ public:
     StrVec get_index_list (dbi_conn conn);
     void drop_index(dbi_conn conn, const std::string& index);
 };
+
+template <DbType T> GncDbiProviderPtr
+make_dbi_provider()
+{
+    return GncDbiProviderPtr(new GncDbiProviderImpl<T>);
+}
 
 template<> void
 GncDbiProviderImpl<DbType::DBI_SQLITE>::append_col_def(std::string& ddl,
