@@ -98,8 +98,6 @@ static dbi_inst dbi_instance = nullptr;
 #define TRANSACTION_NAME "trans"
 
 static QofLogModule log_module = G_LOG_DOMAIN;
-// gnc-dbiproviderimpl.hpp has templates that need log_module defined.
-#include "gnc-dbiproviderimpl.hpp"
 
 #define FILE_URI_TYPE "file"
 #define FILE_URI_PREFIX (FILE_URI_TYPE "://")
@@ -288,7 +286,7 @@ set_standard_connection_options (QofBackend* qbe, dbi_conn conn,
 template <DbType Type> void error_handler(void* conn, void* data);
 void error_handler(void* conn, void* data);
 
-template <DbType Type>dbi_conn
+template <DbType Type> dbi_conn
 conn_setup (QofBackend* qbe, PairVec& options,
             UriStrings& uri)
 {
@@ -487,7 +485,7 @@ gnc_dbi_session_begin<DbType::DBI_SQLITE>(QofBackend* qbe, QofSession* session,
     be->connect(nullptr);
     try
     {
-        be->connect(new GncDbiSqlConnection(make_dbi_provider<DbType::DBI_SQLITE>(),
+        be->connect(new GncDbiSqlConnection(DbType::DBI_SQLITE,
                                             qbe, conn, ignore_lock));
     }
     catch (std::runtime_error& err)
@@ -712,7 +710,7 @@ gnc_dbi_session_begin<DbType::DBI_MYSQL> (QofBackend* qbe, QofSession* session,
     be->connect(nullptr);
     try
     {
-        be->connect(new GncDbiSqlConnection(make_dbi_provider<DbType::DBI_MYSQL>(),
+        be->connect(new GncDbiSqlConnection(DbType::DBI_MYSQL,
                                             qbe, conn, ignore_lock));
     }
     catch (std::runtime_error& err)
@@ -873,7 +871,7 @@ gnc_dbi_session_begin<DbType::DBI_PGSQL> (QofBackend* qbe, QofSession* session,
     be->connect(nullptr);
     try
     {
-        be->connect(new GncDbiSqlConnection(make_dbi_provider<DbType::DBI_PGSQL>(),
+        be->connect(new GncDbiSqlConnection(DbType::DBI_PGSQL,
                                             qbe, conn, ignore_lock));
     }
     catch (std::runtime_error& err)

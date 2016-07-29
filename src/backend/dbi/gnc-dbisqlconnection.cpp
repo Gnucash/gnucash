@@ -31,6 +31,8 @@ extern "C"
 #include "gnc-dbisqlconnection.hpp"
 
 static QofLogModule log_module = G_LOG_DOMAIN;
+// gnc-dbiproviderimpl.hpp has templates that need log_module defined.
+#include "gnc-dbiproviderimpl.hpp"
 
 static const unsigned int DBI_MAX_CONN_ATTEMPTS = 5;
 constexpr const char *lock_table_name = "gnclock";
@@ -69,6 +71,21 @@ GncDbiSqlStatement::add_where_cond(QofIdTypeConst type_name,
         m_sql += colpair.first + " = " +
             m_conn->quote_string (colpair.second.c_str());
     }
+}
+
+GncDbiSqlConnection::GncDbiSqlConnection (DbType type, QofBackend* qbe,
+                                          dbi_conn conn, bool ignore_lock) :
+    m_qbe{qbe}, m_conn{conn},
+    m_provider{std::move(type == DbType::DBI_SQLITE ?
+                         make_dbi_provider<DbType::DBI_SQLITE>() :
+                         type == DbType::DBI_MYSQL ?
+                         make_dbi_provider<DbType::DBI_MYSQL>() :
+                         make_dbi_provider<DbType::DBI_PGSQL>())},
+    m_conn_ok{true}, m_last_error{ERR_BACKEND_NO_ERR}, m_error_repeat{0},
+    m_retry{false}
+{
+    if (!lock_database(ignore_lock))
+        throw std::runtime_error("Failed to lock database!");
 }
 
 bool

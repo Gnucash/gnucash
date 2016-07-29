@@ -35,14 +35,8 @@ class GncDbiProvider;
 class GncDbiSqlConnection : public GncSqlConnection
 {
 public:
-    GncDbiSqlConnection (std::unique_ptr<GncDbiProvider> provider,
-                         QofBackend* qbe, dbi_conn conn, bool ignore_lock) :
-        m_qbe{qbe}, m_conn{conn}, m_provider{std::move(provider)},
-        m_conn_ok{true}, m_last_error{ERR_BACKEND_NO_ERR}, m_error_repeat{0},
-        m_retry{false} {
-            if (!lock_database(ignore_lock))
-                throw std::runtime_error("Failed to lock database!");
-        }
+    GncDbiSqlConnection (DbType type, QofBackend* qbe, dbi_conn conn,
+                         bool ignore_lock);
     ~GncDbiSqlConnection() override;
     GncSqlResultPtr execute_select_statement (const GncSqlStatementPtr&)
         noexcept override;
