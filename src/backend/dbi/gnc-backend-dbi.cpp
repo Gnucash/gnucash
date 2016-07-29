@@ -44,6 +44,7 @@ extern "C"
 #include <windows.h>
 #endif
 
+#include <inttypes.h>
 #include <errno.h>
 #include <glib.h>
 #include <glib/gstdio.h>
@@ -71,6 +72,7 @@ extern "C"
 }
 #include <boost/regex.hpp>
 #include <string>
+#include <iomanip>
 
 #include <gnc-backend-prov.hpp>
 #include "gnc-backend-dbi.h"
@@ -479,7 +481,9 @@ gnc_dbi_session_begin<DbType::DBI_SQLITE>(QofBackend* qbe, QofSession* session,
             conn = nullptr;
             g_unlink (filepath.c_str());
         }
+        dbi_conn_close(conn);
         LEAVE("Bad DBI Library");
+        return;
     }
 
     try
@@ -1208,9 +1212,7 @@ dbi_library_test (dbi_conn conn)
     uint64_t testulonglong = 9223372036854775807LLU, resultulonglong = 0;
     double testdouble = 1.7976921348623157E+307, resultdouble = 0.0;
     dbi_result result;
-    char doublestr[G_ASCII_DTOSTR_BUF_SIZE], *querystr;
     GncDbiTestResult retval = GNC_DBI_PASS;
-    memset (doublestr, 0, sizeof (doublestr));
 
     result = dbi_conn_query (conn, "CREATE TEMPORARY TABLE numtest "
                              "( test_int BIGINT, test_unsigned BIGINT,"
@@ -1221,12 +1223,12 @@ dbi_library_test (dbi_conn conn)
         return GNC_DBI_FAIL_SETUP;
     }
     dbi_result_free (result);
-    g_ascii_dtostr (doublestr, sizeof (doublestr), testdouble);
-    querystr = g_strdup_printf ("INSERT INTO numtest VALUES (%" G_GINT64_FORMAT
-                                ", %" G_GUINT64_FORMAT ", %s)",
-                                testlonglong, testulonglong, doublestr);
-    result = dbi_conn_query (conn, querystr);
-    g_free (querystr);
+    std::stringstream querystr;
+    querystr << "INSERT INTO numtest VALUES (" << testlonglong <<
+        ", " << testulonglong << ", " << std::setprecision(12) <<
+        testdouble << ")";
+    auto query = querystr.str();
+    result = dbi_conn_query (conn, query.c_str());
     if (result == nullptr)
     {
         PWARN ("Test_DBI_Library: Failed to insert test row into table");
@@ -1254,16 +1256,14 @@ dbi_library_test (dbi_conn conn)
     gnc_pop_locale (LC_NUMERIC);
     if (testlonglong != resultlonglong)
     {
-        PWARN ("Test_DBI_Library: LongLong Failed %" G_GINT64_FORMAT " != % "
-               G_GINT64_FORMAT,
+        PWARN ("Test_DBI_Library: LongLong Failed %" PRId64 " != % " PRId64,
                testlonglong, resultlonglong);
         retval = GNC_DBI_FAIL_TEST;
     }
     if (testulonglong != resultulonglong)
     {
-        PWARN ("Test_DBI_Library: Unsigned longlong Failed %" G_GUINT64_FORMAT " != %"
-               G_GUINT64_FORMAT,
-               testulonglong, resultulonglong);
+        PWARN ("Test_DBI_Library: Unsigned longlong Failed %" PRIu64 " != %"
+               PRIu64, testulonglong, resultulonglong);
         retval = GNC_DBI_FAIL_TEST;
     }
     /* A bug in libdbi stores only 7 digits of precision */
