@@ -482,7 +482,6 @@ gnc_dbi_session_begin<DbType::DBI_SQLITE>(QofBackend* qbe, QofSession* session,
         LEAVE("Bad DBI Library");
     }
 
-    be->connect(nullptr);
     try
     {
         be->connect(new GncDbiSqlConnection(DbType::DBI_SQLITE,
@@ -618,8 +617,8 @@ adjust_sql_options (dbi_conn connection)
 }
 
 
-template <> void
-gnc_dbi_session_begin<DbType::DBI_MYSQL> (QofBackend* qbe, QofSession* session,
+template <DbType T> void
+gnc_dbi_session_begin (QofBackend* qbe, QofSession* session,
                              const gchar* book_id, gboolean ignore_lock,
                              gboolean create, gboolean force)
 {
@@ -638,9 +637,21 @@ gnc_dbi_session_begin<DbType::DBI_MYSQL> (QofBackend* qbe, QofSession* session,
      where username, password and port are optional) */
     UriStrings uri(book_id);
 
+    if (T == DbType::DBI_PGSQL)
+    {
+        if (uri.m_portnum == 0)
+            uri.m_portnum = PGSQL_DEFAULT_PORT;
+        /* Postgres's SQL interface coerces identifiers to lower case, but the
+         * C interface is case-sensitive. This results in a mixed-case dbname
+         * being created (with a lower case name) but then dbi can't conect to
+         * it. To work around this, coerce the name to lowercase first. */
+        auto lcname = g_utf8_strdown (uri.dbname(), -1);
+        uri.m_dbname = std::string{lcname};
+        g_free(lcname);
+    }
     be->connect(nullptr);
 
-    auto conn = conn_setup<DbType::DBI_MYSQL>(qbe, options, uri);
+    auto conn = conn_setup<T>(qbe, options, uri);
     if (conn == nullptr)
     {
         LEAVE("Error");
@@ -651,9 +662,11 @@ gnc_dbi_session_begin<DbType::DBI_MYSQL> (QofBackend* qbe, QofSession* session,
     auto result = dbi_conn_connect (conn);
     if (result == 0)
     {
-        adjust_sql_options (conn);
+        if (T == DbType::DBI_MYSQL)
+            adjust_sql_options (conn);
         if(!conn_test_dbi_library(conn, qbe))
         {
+            dbi_conn_close(conn);
             LEAVE("Error");
             return;
         }
@@ -661,6 +674,7 @@ gnc_dbi_session_begin<DbType::DBI_MYSQL> (QofBackend* qbe, QofSession* session,
         {
             qof_backend_set_error (qbe, ERR_BACKEND_STORE_EXISTS);
             PWARN ("Databse already exists, Might clobber it.");
+            dbi_conn_close(conn);
             LEAVE("Error");
             return;
         }
@@ -673,30 +687,37 @@ gnc_dbi_session_begin<DbType::DBI_MYSQL> (QofBackend* qbe, QofSession* session,
         {
             PERR ("Unable to connect to database '%s'\n", uri.dbname());
             qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
+            dbi_conn_close(conn);
             LEAVE("Error");
             return;
         }
 
         if (create)
         {
-            if (!create_database(DbType::DBI_MYSQL, qbe, conn, uri.dbname()))
+            if (!create_database(T, qbe, conn, uri.dbname()))
             {
+                dbi_conn_close(conn);
                 LEAVE("Error");
                 return;
             }
-            conn = conn_setup<DbType::DBI_MYSQL>(qbe, options, uri);
+            conn = conn_setup<T>(qbe, options, uri);
             result = dbi_conn_connect (conn);
             if (result < 0)
             {
                 PERR ("Unable to create database '%s'\n", uri.dbname());
                 qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
+                dbi_conn_close(conn);
                 LEAVE("Error");
                 return;
             }
-            adjust_sql_options (conn);
+            if (T == DbType::DBI_MYSQL)
+                adjust_sql_options (conn);
             if (!conn_test_dbi_library(conn, qbe))
             {
+                if (T == DbType::DBI_PGSQL)
+                    dbi_conn_select_db (conn, "template1");
                 dbi_conn_queryf (conn, "DROP DATABASE %s", uri.dbname());
+                dbi_conn_close(conn);
                 return;
             }
         }
@@ -710,8 +731,7 @@ gnc_dbi_session_begin<DbType::DBI_MYSQL> (QofBackend* qbe, QofSession* session,
     be->connect(nullptr);
     try
     {
-        be->connect(new GncDbiSqlConnection(DbType::DBI_MYSQL,
-                                            qbe, conn, ignore_lock));
+        be->connect(new GncDbiSqlConnection(T, qbe, conn, ignore_lock));
     }
     catch (std::runtime_error& err)
     {
@@ -771,124 +791,6 @@ error_handler<DbType::DBI_PGSQL> (dbi_conn conn, void* user_data)
             be->set_error (ERR_BACKEND_MISC, 0, false);
     }
 }
-
-template <>void
-gnc_dbi_session_begin<DbType::DBI_PGSQL> (QofBackend* qbe, QofSession* session,
-                                const gchar* book_id, gboolean ignore_lock,
-                                gboolean create, gboolean force)
-{
-    GncDbiBackend* be = (GncDbiBackend*)qbe;
-    bool success = false;
-    PairVec options;
-    
-    g_return_if_fail (qbe != nullptr);
-    g_return_if_fail (session != nullptr);
-    g_return_if_fail (book_id != nullptr);
-
-    ENTER (" ");
-
-    /* Split the book-id
-     * Format is protocol://username:password@hostname:port/dbname
-     where username, password and port are optional) */
-    UriStrings uri(book_id);
-    if (uri.m_portnum == 0)
-        uri.m_portnum = PGSQL_DEFAULT_PORT;
-    /* Postgres's SQL interface coerces identifiers to lower case, but the
-     * C interface is case-sensitive. This results in a mixed-case dbname
-     * being created (with a lower case name) but then dbi can't conect to
-     * it. To work around this, coerce the name to lowercase first. */
-    auto lcname = g_utf8_strdown (uri.dbname(), -1);
-    uri.m_dbname = std::string{lcname};
-    g_free(lcname);
-    be->connect(nullptr);
-
-    auto conn = conn_setup<DbType::DBI_PGSQL>(qbe, options, uri);
-    if (conn == nullptr)
-    {
-        LEAVE("Error");
-        return;
-    }
-
-    be->set_exists(true); //May be unset in the error handler.
-    auto result = dbi_conn_connect (conn);
-    if (result == 0)
-    {
-        if (!conn_test_dbi_library(conn, qbe))
-        {
-            LEAVE("Error");
-            return;
-        }
-        if (create && !force && save_may_clobber_data(conn))
-        {
-            qof_backend_set_error (qbe, ERR_BACKEND_STORE_EXISTS);
-            PWARN ("Databse already exists, Might clobber it.");
-            LEAVE("Error");
-            return;
-        }
-
-    }
-    else
-    {
-
-        if (be->exists())
-        {
-            PERR ("Unable to connect to database '%s'\n", uri.dbname());
-            qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
-            LEAVE("Error");
-            return;
-        }
-
-        if (create)
-        {
-            if (!create_database(DbType::DBI_PGSQL, qbe, conn, uri.dbname()))
-            {
-                LEAVE("Error");
-                return;
-            }
-            conn = conn_setup<DbType::DBI_PGSQL>(qbe, options, uri);
-            result = dbi_conn_connect (conn);
-            if (result < 0)
-            {
-                PERR ("Unable to create database '%s'\n", uri.dbname());
-                qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
-                LEAVE("Error");
-                return;
-            }
-            if (!conn_test_dbi_library(conn, qbe))
-            {
-                dbi_conn_select_db (conn, "template1");
-                dbi_conn_queryf (conn, "DROP DATABASE %s", uri.dbname());
-                LEAVE("Error");
-                return;
-            }
-        }
-        else
-        {
-            qof_backend_set_error (qbe, ERR_BACKEND_NO_SUCH_DB);
-            qof_backend_set_message (qbe, "Database %s not found", uri.dbname());
-        }
-    }
-    be->connect(nullptr);
-    try
-    {
-        be->connect(new GncDbiSqlConnection(DbType::DBI_PGSQL,
-                                            qbe, conn, ignore_lock));
-    }
-    catch (std::runtime_error& err)
-    {
-        return;
-    }
-
-    /* We should now have a proper session set up.
-     * Let's start logging */
-    auto translog_path = gnc_build_translog_path (uri.basename().c_str());
-    xaccLogSetBaseName (translog_path);
-    PINFO ("logpath=%s", translog_path ? translog_path : "(null)");
-    g_free (translog_path);
-
-    LEAVE (" ");
-}
-
 
 /* ================================================================= */
 
