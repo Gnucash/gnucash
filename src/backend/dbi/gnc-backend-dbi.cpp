@@ -284,29 +284,34 @@ set_standard_connection_options (QofBackend* qbe, dbi_conn conn,
 
     return true;
 }
-static dbi_conn
-conn_setup (const char* dbtype, QofBackend* qbe,
-                     dbi_conn_error_handler_func err_handler, PairVec& options,
-                     UriStrings& uri)
+
+template <DbType Type> void error_handler(void* conn, void* data);
+void error_handler(void* conn, void* data);
+
+template <DbType Type>dbi_conn
+conn_setup (QofBackend* qbe, PairVec& options,
+            UriStrings& uri)
 {
+    const char* dbstr = (Type == DbType::DBI_SQLITE ? "sqlite3" :
+                         Type == DbType::DBI_MYSQL ? "mysql" : "pgsql");
 #if HAVE_LIBDBI_R
     dbi_conn conn;
     if (dbi_instance)
-        conn = dbi_conn_new_r (dbtype, dbi_instance);
+        conn = dbi_conn_new_r (dbstr, dbi_instance);
     else
         PERR ("Attempt to connect with an uninitialized dbi_instance");
 #else
-    auto conn = dbi_conn_new (dbtype);
+    auto conn = dbi_conn_new (dbstr);
 #endif
 
     if (conn == nullptr)
     {
-        PERR ("Unable to create %s dbi connection", dbtype);
+        PERR ("Unable to create %s dbi connection", dbstr);
         qof_backend_set_error (qbe, ERR_BACKEND_BAD_URL);
 	return nullptr;
     }
 
-    dbi_conn_error_handler (conn, err_handler, qbe);
+    dbi_conn_error_handler (conn, error_handler<Type>, qbe);
 
     if (!uri.m_dbname.empty() &&
         !set_standard_connection_options(qbe, conn, uri))
@@ -384,8 +389,8 @@ create_database(DbType type, QofBackend *qbe, dbi_conn conn, const char* db)
     return true;
 }
 
-void
-sqlite3_error_fn (dbi_conn conn, void* user_data)
+template <> void
+error_handler<DbType::DBI_SQLITE> (dbi_conn conn, void* user_data)
 {
     const gchar* msg;
     GncDbiBackend *be = static_cast<decltype(be)>(user_data);
@@ -447,7 +452,7 @@ gnc_dbi_session_begin<DbType::DBI_SQLITE>(QofBackend* qbe, QofSession* session,
     if (basename != nullptr) g_free (basename);
     if (dirname != nullptr) g_free (dirname);
     UriStrings uri;
-    auto conn = conn_setup ("sqlite3", qbe, sqlite3_error_fn, options, uri);
+    auto conn = conn_setup<DbType::DBI_SQLITE>(qbe, options, uri);
     if (conn == nullptr)
     {
         LEAVE("Error");
@@ -499,8 +504,8 @@ gnc_dbi_session_begin<DbType::DBI_SQLITE>(QofBackend* qbe, QofSession* session,
 }
 
 
-static void
-mysql_error_fn (dbi_conn conn, void* user_data)
+template <> void
+error_handler<DbType::DBI_MYSQL> (dbi_conn conn, void* user_data)
 {
     GncDbiBackend* be = (GncDbiBackend*)user_data;
     const char* msg;
@@ -637,7 +642,7 @@ gnc_dbi_session_begin<DbType::DBI_MYSQL> (QofBackend* qbe, QofSession* session,
 
     be->connect(nullptr);
 
-    auto conn = conn_setup("mysql", qbe, mysql_error_fn, options, uri);
+    auto conn = conn_setup<DbType::DBI_MYSQL>(qbe, options, uri);
     if (conn == nullptr)
     {
         LEAVE("Error");
@@ -681,7 +686,7 @@ gnc_dbi_session_begin<DbType::DBI_MYSQL> (QofBackend* qbe, QofSession* session,
                 LEAVE("Error");
                 return;
             }
-            conn = conn_setup("mysql", qbe, mysql_error_fn, options, uri);
+            conn = conn_setup<DbType::DBI_MYSQL>(qbe, options, uri);
             result = dbi_conn_connect (conn);
             if (result < 0)
             {
@@ -724,8 +729,8 @@ gnc_dbi_session_begin<DbType::DBI_MYSQL> (QofBackend* qbe, QofSession* session,
     LEAVE (" ");
 }
 
-static void
-pgsql_error_fn (dbi_conn conn, void* user_data)
+template<> void
+error_handler<DbType::DBI_PGSQL> (dbi_conn conn, void* user_data)
 {
     GncDbiBackend* be = (GncDbiBackend*)user_data;
     const gchar* msg;
@@ -799,7 +804,7 @@ gnc_dbi_session_begin<DbType::DBI_PGSQL> (QofBackend* qbe, QofSession* session,
     g_free(lcname);
     be->connect(nullptr);
 
-    auto conn = conn_setup("pgsql", qbe, pgsql_error_fn, options, uri);
+    auto conn = conn_setup<DbType::DBI_PGSQL>(qbe, options, uri);
     if (conn == nullptr)
     {
         LEAVE("Error");
@@ -842,7 +847,7 @@ gnc_dbi_session_begin<DbType::DBI_PGSQL> (QofBackend* qbe, QofSession* session,
                 LEAVE("Error");
                 return;
             }
-            conn = conn_setup("pgsql", qbe, pgsql_error_fn, options, uri);
+            conn = conn_setup<DbType::DBI_PGSQL>(qbe, options, uri);
             result = dbi_conn_connect (conn);
             if (result < 0)
             {
