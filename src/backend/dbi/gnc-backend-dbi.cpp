@@ -117,7 +117,7 @@ static bool conn_test_dbi_library (dbi_conn conn, QofBackend* qbe);
 
 template <DbType T> void gnc_dbi_session_begin(QofBackend* qbe,
                                                QofSession* session,
-                                               const gchar* book_id,
+                                               const char* book_id,
                                                gboolean ignore_lock,
                                                gboolean create, gboolean force);
 template <DbType Type> QofBackend*
@@ -138,7 +138,7 @@ new_backend ()
             break;
     }
     auto dbi_be = new GncDbiBackend(nullptr, nullptr, format);
-    g_assert (dbi_be != nullptr);
+    assert (dbi_be != nullptr);
 
     be = (QofBackend*)dbi_be;
     qof_backend_init (be);
@@ -390,7 +390,7 @@ create_database(DbType type, QofBackend *qbe, dbi_conn conn, const char* db)
 template <> void
 error_handler<DbType::DBI_SQLITE> (dbi_conn conn, void* user_data)
 {
-    const gchar* msg;
+    const char* msg;
     GncDbiBackend *be = static_cast<decltype(be)>(user_data);
     int errnum = dbi_conn_error (conn, &msg);
     PERR ("DBI error: %s\n", msg);
@@ -400,7 +400,7 @@ error_handler<DbType::DBI_SQLITE> (dbi_conn conn, void* user_data)
 
 template <> void
 gnc_dbi_session_begin<DbType::DBI_SQLITE>(QofBackend* qbe, QofSession* session,
-                               const gchar* book_id, gboolean ignore_lock,
+                               const char* book_id, gboolean ignore_lock,
                                gboolean create, gboolean force)
 {
     GncDbiBackend* be = (GncDbiBackend*)qbe;
@@ -619,7 +619,7 @@ adjust_sql_options (dbi_conn connection)
 
 template <DbType T> void
 gnc_dbi_session_begin (QofBackend* qbe, QofSession* session,
-                             const gchar* book_id, gboolean ignore_lock,
+                             const char* book_id, gboolean ignore_lock,
                              gboolean create, gboolean force)
 {
     GncDbiBackend* be = (GncDbiBackend*)qbe;
@@ -751,7 +751,7 @@ template<> void
 error_handler<DbType::DBI_PGSQL> (dbi_conn conn, void* user_data)
 {
     GncDbiBackend* be = (GncDbiBackend*)user_data;
-    const gchar* msg;
+    const char* msg;
 
     (void)dbi_conn_error (conn, &msg);
     if (g_str_has_prefix (msg, "FATAL:  database") &&
@@ -848,7 +848,7 @@ gnc_dbi_load (QofBackend* qbe,  QofBook* book, QofBackendLoadType loadType)
 
         // Set up table version information
         be->init_version_info ();
-        g_assert (be->m_book == nullptr);
+        assert (be->m_book == nullptr);
 
         // Call all object backends to create any required tables
         auto registry = gnc_sql_get_backend_registry();
@@ -1061,7 +1061,7 @@ QofDbiBackendProvider<DbType::DBI_SQLITE>::type_check(const char *uri)
 void
 gnc_module_init_backend_dbi (void)
 {
-    const gchar* driver_dir;
+    const char* driver_dir;
     int num_drivers;
     gboolean have_sqlite3_driver = FALSE;
     gboolean have_mysql_driver = FALSE;
@@ -1204,11 +1204,11 @@ gnc_module_finalize_backend_dbi (void)
 static GncDbiTestResult
 dbi_library_test (dbi_conn conn)
 {
-    gint64 testlonglong = -9223372036854775807LL, resultlonglong = 0;
-    guint64 testulonglong = 9223372036854775807LLU, resultulonglong = 0;
-    gdouble testdouble = 1.7976921348623157E+307, resultdouble = 0.0;
+    int64_t testlonglong = -9223372036854775807LL, resultlonglong = 0;
+    uint64_t testulonglong = 9223372036854775807LLU, resultulonglong = 0;
+    double testdouble = 1.7976921348623157E+307, resultdouble = 0.0;
     dbi_result result;
-    gchar doublestr[G_ASCII_DTOSTR_BUF_SIZE], *querystr;
+    char doublestr[G_ASCII_DTOSTR_BUF_SIZE], *querystr;
     GncDbiTestResult retval = GNC_DBI_PASS;
     memset (doublestr, 0, sizeof (doublestr));
 

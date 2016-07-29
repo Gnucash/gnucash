@@ -218,7 +218,7 @@ GncDbiSqlConnection::unlock_database ()
     if (result)
     {
         /* Delete the entry if it's our hostname and PID */
-        gchar hostname[ GNC_HOST_NAME_MAX + 1 ];
+        char hostname[ GNC_HOST_NAME_MAX + 1 ];
 
         dbi_result_free (result);
         result = nullptr;
@@ -541,7 +541,7 @@ std::string
 GncDbiSqlConnection::quote_string (const std::string& unquoted_str)
     const noexcept
 {
-    gchar* quoted_str;
+    char* quoted_str;
     size_t size;
 
     size = dbi_conn_quote_string_copy (m_conn, unquoted_str.c_str(),
