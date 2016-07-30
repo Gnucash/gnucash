@@ -23363,7 +23363,7 @@ msgstr ""
 
 #: ../src/report/standard-reports/budget.scm:64
 msgid "Include accounts with zero total balances and budget values"
-msgstr "Konten, die Saldo- und Budgetwert Null haben, mit einbeziehen"
+msgstr "Konten, deren Saldo und Budgetwert Null sind, mit einbeziehen"
 
 #: ../src/report/standard-reports/budget.scm:65
 msgid ""
