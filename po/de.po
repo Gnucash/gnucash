@@ -5,9 +5,9 @@
 # Christian Stimming <stimming@tuhh.de>, 2001-2014.
 # Christian Meyer <chrisime@gnome.org>, 2000, 2001.
 # Herbert Thoma <tma@iis.fhg.de>, 2001.
-# Frank H. Ellenberger <f.ellenberger@online.de>, 2007, 2009-2015.
+# Frank H. Ellenberger <f.ellenberger@online.de>, 2007, 2009-2016.
 # Rolf Leggewie, 2008
-# Mechtilde Stehmann <ooo@mechtilde.de>, 2014,2015
+# Mechtilde Stehmann <ooo@mechtilde.de>, 2014-2016
 #
 msgid ""
 msgstr ""
@@ -1385,7 +1385,7 @@ msgstr "Zahlungsbedingung »%s« ist in Benutzung. Sie können sie nicht lösche
 #: ../src/gnome-utils/dialog-tax-table.c:571
 #, c-format
 msgid "Are you sure you want to delete \"%s\"?"
-msgstr "Sind Sie sicher, dass Sie \"%s\" löschen möchten?"
+msgstr "Sind Sie sicher, dass Sie “%s” löschen möchten?"
 
 #: ../src/business/business-gnome/dialog-choose-owner.c:75
 msgid ""
@@ -8322,10 +8322,10 @@ msgid ""
 "date specified by the start-date key. If set to anything else, GnuCash will "
 "retrieve the starting date specified by the start-period key."
 msgstr ""
-"Diese Einstellung prüft die Art des Start-Datums in den Einnahmen-/"
-"Ausgabenrechnungen. Wenn diese auf \"absolute\"gesetzt ist, wird das absolute "
-"Startdatum aus der Einstellung \"start_date\" verwendet. Andernfalls wird ein "
-"relatives Startdatum gemäß der Einstellung \"start_period\" verwendet."
+"Diese Einstellung bestimmt die Art des Start-Datums in den Einnahmen-/"
+"Ausgabenrechnungen. Wenn diese auf »absolute« gesetzt ist, wird das absolute "
+"Startdatum aus der Einstellung »start_date« verwendet. Andernfalls wird ein "
+"relatives Startdatum gemäß der Einstellung »start_period« verwendet."
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:6
 msgid "Use absolute profit/loss starting date"
@@ -8343,7 +8343,7 @@ msgid ""
 "date as represented in seconds from January 1st, 1970."
 msgstr ""
 "Diese Einstellung setzt das Anfangs-Datum in den Einnahme-/"
-"Ausgabenrechnungen, wenn die Einstellung \"start_choice\" auf \"absolute\" "
+"Ausgabenrechnungen, wenn die Einstellung »start_choice« auf »absolute« "
 "gesetzt ist. Dann gibt diese Einstellung das Datum in Sekunden seit dem "
 "1. Januar 1970 an."
 
@@ -8358,7 +8358,7 @@ msgid ""
 "field should contain a value between 0 and 8."
 msgstr ""
 "Diese Einstellung setzt das Start-Datum in den Einname-/Ausgabenrechnungen, "
-"wenn die Einstellung \"start_choice\" auf etwas anderes als \"absolute\" gesetzt "
+"wenn die Einstellung »start_choice« auf etwas anderes als »absolute« gesetzt "
 "ist. Dann wählt diese Einstellung eines der relativen Datumsvorgaben mit dem "
 "jeweiligen Index von 0 bis 8."
 
@@ -8373,10 +8373,10 @@ msgid ""
 "date specified by the end-date key. If set to anything else, GnuCash will "
 "retrieve the ending date specified by the end-period key."
 msgstr ""
-"Diese Einstellung prüft die Art des End-Datums in den Einnahme-/"
-"Ausgabenrechnungen. Wenn diese auf \"absolute\" gesetzt sind, wird das absolute Enddatum "
+"Diese Einstellung bestimmt die Art des End-Datums in den Einnahme-/"
+"Ausgabenrechnungen. Wenn diese auf »absolute« gesetzt sind, wird das absolute Enddatum "
 "aus der Einstellung »end_date« verwendet. Andernfalls wird ein relatives "
-"Enddatum gemäß der Einstellung \"end_period\" verwendet."
+"Enddatum gemäß der Einstellung »end_period« verwendet."
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:13
 msgid "Use absolute profit/loss ending date"
@@ -8393,7 +8393,7 @@ msgid ""
 "as represented in seconds from January 1st, 1970."
 msgstr ""
 "Diese Einstellung setzt das End-Datum in den Einnahme-/Ausgabenrechnungen, "
-"wenn die Einstellung \"end_choice\" auf \"absolute\" gesetzt ist. Dann gibt "
+"wenn die Einstellung »end_choice« auf »absolute« gesetzt ist. Dann gibt "
 "diese Einstellung das Datum in Sekunden seit dem 1. Januar 1970 an."
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:16
@@ -8408,7 +8408,7 @@ msgid ""
 "should contain a value between 0 and 8."
 msgstr ""
 "Diese Einstellung setzt das Enddatum in den Einname-/Ausgabenrechnungen, "
-"wenn die Einstellung \"end_choice\" auf etwas anderes als \"absolute« gesetzt "
+"wenn die Einstellung »end_choice« auf etwas anderes als »absolute« gesetzt "
 "ist. Dann wählt diese Einstellung eines der relativen Datumsvorgaben mit dem "
 "jeweiligen Index von 0 bis 8."
 
@@ -13984,7 +13984,7 @@ msgstr "Konteneinrichtung bei neuer Datei"
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:61
 msgid "Present the new account list dialog when you choose File -> New File."
 msgstr ""
-"Der Assistent für neue Konteneinrichtung erscheint, wenn Sie Datei -> Neue Datei wählen"
+"Der Assistent für neue Konteneinrichtung erscheint, wenn Sie »Datei -> Neue Datei« wählen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:64
 msgid "Display \"_tip of the day\" dialog"
@@ -16707,11 +16707,11 @@ msgstr "Buchungen in eine CSV-Textdatei exportieren"
 
 #: ../src/import-export/csv-exp/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in.in.h:5
 msgid "Window geometry"
-msgstr "Fensterposition"
+msgstr "Fensterposition und Größe"
 
 #: ../src/import-export/csv-exp/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in.in.h:6
 msgid "The position of paned window when it was last closed."
-msgstr "Position des Fensters beim letzten Schließen"
+msgstr "Position des gekachelt angeordneten Fensters beim letzten Schließen"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.c:70
 #, c-format
