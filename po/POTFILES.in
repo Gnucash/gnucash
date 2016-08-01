@@ -220,6 +220,7 @@ src/gnome/dialog-sx-editor.c
 src/gnome/dialog-sx-from-trans.c
 src/gnome/dialog-sx-since-last-run.c
 src/gnome/dialog-tax-info.c
+src/gnome/dialog-trans-assoc.c
 src/gnome/gnc-budget-view.c
 src/gnome/gnc-plugin-account-tree.c
 src/gnome/gnc-plugin-basic-commands.c
@@ -256,6 +257,7 @@ src/gnome/gtkbuilder/dialog-print-check.glade
 src/gnome/gtkbuilder/dialog-progress.glade
 src/gnome/gtkbuilder/dialog-sx.glade
 src/gnome/gtkbuilder/dialog-tax-info.glade
+src/gnome/gtkbuilder/dialog-trans-assoc.glade
 src/gnome/gtkbuilder/gnc-plugin-page-budget.glade
 src/gnome/gtkbuilder/gnc-plugin-page-register2.glade
 src/gnome/gtkbuilder/gnc-plugin-page-register.glade

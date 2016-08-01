@@ -14,6 +14,7 @@ gtkbuilder_DATA = \
 	dialog-progress.glade \
 	dialog-sx.glade \
 	dialog-tax-info.glade \
+	dialog-trans-assoc.glade \
 	gnc-plugin-page-budget.glade \
 	gnc-plugin-page-register.glade \
 	gnc-plugin-page-register2.glade \
