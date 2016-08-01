@@ -319,6 +319,13 @@ gnc_split_register_get_action_label (VirtualLocation virt_loc,
 }
 
 static const char *
+gnc_split_register_get_associate_label (VirtualLocation virt_loc,
+                                   gpointer user_data)
+{
+    return _("Associate:A") + 10;
+}
+
+static const char *
 gnc_split_register_get_xfrm_label (VirtualLocation virt_loc,
                                    gpointer user_data)
 {
@@ -337,13 +344,6 @@ gnc_split_register_get_memo_label (VirtualLocation virt_loc,
                                    gpointer user_data)
 {
     return _("Memo");
-}
-
-static const char *
-gnc_split_register_get_associate_label (VirtualLocation virt_loc,
-                                   gpointer user_data)
-{
-    return _("Associate:A");
 }
 
 static const char *
@@ -786,7 +786,12 @@ gnc_split_register_get_associate_entry (VirtualLocation virt_loc,
 
     // Check for uri is empty or NULL
     if (g_strcmp0 (uri, "") != 0 && g_strcmp0 (uri, NULL) != 0)
-        associate = '@';
+    {
+        if (g_str_has_prefix (uri, "file:"))
+            associate = 'f';
+        else
+            associate = 'w';
+    }
     else
         associate = ' ';
 
@@ -808,7 +813,6 @@ gnc_split_register_get_associate_value (SplitRegister *reg,
 
     return gnc_recn_cell_get_flag (cell);
 }
-
 
 static const char *
 gnc_split_register_get_type_entry (VirtualLocation virt_loc,
