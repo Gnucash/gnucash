@@ -81,8 +81,8 @@ gnc_split_register_load_associate_cells (SplitRegister *reg)
     if (!cell) return;
 
     /* FIXME: These should get moved to an i18n function */
-    gnc_recn_cell_set_valid_flags (cell, "@ ", ' ');
-    gnc_recn_cell_set_flag_order (cell, "@ ");
+    gnc_recn_cell_set_valid_flags (cell, "fw ", ' ');
+    gnc_recn_cell_set_flag_order (cell, "fw ");
 }
 
 static void

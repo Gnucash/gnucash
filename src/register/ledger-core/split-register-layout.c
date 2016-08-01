@@ -696,7 +696,7 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
                            ASSOC_CELL,
                            RECN_CELL_TYPE_NAME,
                            N_("Associate:A") + 10,
-                           CELL_ALIGN_LEFT,
+                           CELL_ALIGN_CENTER,
                            FALSE,
                            FALSE);
 
