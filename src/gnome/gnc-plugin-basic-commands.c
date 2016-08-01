@@ -47,6 +47,7 @@
 #include "dialog-imap-editor.h"
 #include "dialog-sx-since-last-run.h"
 #include "dialog-totd.h"
+#include "dialog-trans-assoc.h"
 #include "assistant-acct-period.h"
 #include "assistant-loan.h"
 #include "gnc-engine.h"
@@ -90,6 +91,7 @@ static void gnc_main_window_cmd_tools_close_book (GtkAction *action, GncMainWind
 static void gnc_main_window_cmd_tools_find_transactions (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_tools_price_editor (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_tools_imap_editor (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_main_window_cmd_tools_trans_assoc (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_tools_commodity_editor (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_help_totd (GtkAction *action, GncMainWindowActionData *data);
 
@@ -207,6 +209,11 @@ static GtkActionEntry gnc_plugin_actions [] =
         "ToolsImapEditorAction", NULL, N_("_Import Map Editor"), NULL,
         N_("View and Delete Bayesian and Non Bayesian information"),
         G_CALLBACK (gnc_main_window_cmd_tools_imap_editor)
+    },
+    {
+        "ToolsTransAssocAction", NULL, N_("_Transaction Associations"), NULL,
+        N_("View all Transaction Associations"),
+        G_CALLBACK (gnc_main_window_cmd_tools_trans_assoc)
     },
 
     /* Help menu */
@@ -615,6 +622,14 @@ gnc_main_window_cmd_tools_imap_editor (GtkAction *action, GncMainWindowActionDat
     gnc_set_busy_cursor(NULL, TRUE);
     gnc_imap_dialog (NULL);
     gnc_unset_busy_cursor(NULL);
+}
+
+static void
+gnc_main_window_cmd_tools_trans_assoc (GtkAction *action, GncMainWindowActionData *data)
+{
+    gnc_set_busy_cursor (NULL, TRUE);
+    gnc_trans_assoc_dialog ();
+    gnc_unset_busy_cursor (NULL);
 }
 
 static void

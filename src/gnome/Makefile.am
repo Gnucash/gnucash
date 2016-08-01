@@ -44,6 +44,7 @@ libgnc_gnome_la_SOURCES = \
   dialog-sx-from-trans.c \
   dialog-sx-since-last-run.c \
   dialog-tax-info.c \
+  dialog-trans-assoc.c \
   gnc-budget-view.c \
   gnc-plugin-account-tree.c \
   gnc-plugin-basic-commands.c \
@@ -93,6 +94,7 @@ noinst_HEADERS = \
   dialog-sx-editor2.h \
   dialog-sx-from-trans.h \
   dialog-sx-since-last-run.h \
+  dialog-trans-assoc.h \
   gnc-budget-view.h \
   gnc-plugin-account-tree.h \
   gnc-plugin-basic-commands.h \
