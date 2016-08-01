@@ -74,6 +74,9 @@ gnc_recn_cell_enter (BasicCell *_cell,
             ! (cell->confirm_cb (cell->flag, cell->confirm_data)))
         return FALSE;
 
+    if (cell->read_only == TRUE)
+        return FALSE;
+
     /* Find the current flag in the list of flags */
     this_flag = strchr (cell->flag_order, cell->flag);
 
@@ -111,6 +114,7 @@ gnc_recn_cell_init (RecnCell *cell)
     cell->get_string = NULL;
     cell->valid_flags = "";
     cell->flag_order = "";
+    cell->read_only = FALSE;
 
     cell->cell.enter_cell = gnc_recn_cell_enter;
     cell->cell.set_value = gnc_recn_cell_set_value;
@@ -206,4 +210,11 @@ gnc_recn_cell_set_flag_order (RecnCell *cell, const char *flags)
     g_return_if_fail (flags != NULL);
 
     cell->flag_order = (char *)flags;
+}
+
+void
+gnc_recn_cell_set_read_only (RecnCell *cell, gboolean read_only)
+{
+    g_return_if_fail (cell != NULL);
+    cell->read_only = read_only;
 }
