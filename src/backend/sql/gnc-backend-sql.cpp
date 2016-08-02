@@ -2078,16 +2078,23 @@ load_date (const GncSqlBackend* be, GncSqlRow* row,
     {
         if (G_VALUE_HOLDS_INT64 (val))
         {
-            gint64 time = g_value_get_int64 (val);
-            Timespec ts = {time, 0};
-            struct tm tm;
-            gint day, month, year;
-            GDate date = timespec_to_gdate (ts);
+            /* timespec_to_gdate applies the tz, and gdates are saved
+             * as ymd, so we don't want that.
+             */
+            auto time = g_value_get_int64 (val);
+            auto tm = gnc_gmtime(&time);
+
+            GDate date;
+            g_date_clear(&date, 1);
+            g_date_set_dmy(&date, tm->tm_mday,
+                           static_cast<GDateMonth>(tm->tm_mon + 1),
+                           tm->tm_year + 1900);
+            free(tm);
             if (table_row->gobj_param_name != NULL)
             {
                 if (QOF_IS_INSTANCE (pObject))
                     qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
-                g_object_set (pObject, table_row->gobj_param_name, date, NULL);
+                g_object_set (pObject, table_row->gobj_param_name, &date, NULL);
                 if (QOF_IS_INSTANCE (pObject))
                     qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
             }
