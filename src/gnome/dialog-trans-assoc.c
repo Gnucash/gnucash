@@ -86,6 +86,56 @@ gnc_assoc_dialog_close_cb (GtkDialog *dialog, gpointer user_data)
     LEAVE(" ");
 }
 
+static gint
+sort_iter_compare_func (GtkTreeModel *model,
+                        GtkTreeIter  *a,
+                        GtkTreeIter  *b,
+                        gpointer  user_data)
+{
+    gint ret = 0;
+    gchar *uri1, *uri2;
+
+    gtk_tree_model_get (model, a, URI, &uri1, -1);
+    gtk_tree_model_get (model, b, URI, &uri2, -1);
+
+    ret = g_utf8_collate (uri1, uri2);
+
+    g_free (uri1);
+    g_free (uri2);
+
+    return ret;
+}
+
+static void
+assoc_dialog_sort (AssocDialog *assoc_dialog)
+{
+    GtkTreeModel *model;
+    GtkTreeSortable *sortable;
+    gint id;
+    GtkSortType order;
+
+    model = gtk_tree_view_get_model (GTK_TREE_VIEW(assoc_dialog->view));
+
+    sortable = GTK_TREE_SORTABLE(model);
+
+    if (gtk_tree_sortable_get_sort_column_id (sortable, &id, &order))
+    {
+        if (order == GTK_SORT_ASCENDING)
+            order = GTK_SORT_DESCENDING;
+        else
+            order = GTK_SORT_ASCENDING;
+    }
+    else
+    {
+        gtk_tree_sortable_set_sort_func (sortable, URI, sort_iter_compare_func,
+                                assoc_dialog, NULL);
+
+        order = GTK_SORT_ASCENDING;
+    }
+    /* set sort order */
+    gtk_tree_sortable_set_sort_column_id (sortable, URI, order);
+}
+
 static void
 assoc_dialog_update (AssocDialog *assoc_dialog)
 {
@@ -144,6 +194,10 @@ gnc_assoc_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user
     {
     case GTK_RESPONSE_APPLY:
         assoc_dialog_update (assoc_dialog);
+        return;
+
+    case -8:
+        assoc_dialog_sort (assoc_dialog);
         return;
 
     case GTK_RESPONSE_CLOSE:
