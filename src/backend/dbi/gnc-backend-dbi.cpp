@@ -897,7 +897,10 @@ adjust_sql_options (dbi_conn connection)
         {
             const char* errmsg;
             int err = dbi_conn_error(connection, &errmsg);
-            PERR("Unable to get sql_mode %d : %s", err, errmsg);
+            if (err)
+                PERR("Unable to get sql_mode %d : %s", err, errmsg);
+            else
+                PINFO("Sql_mode isn't set.");
         }
         else
         {
