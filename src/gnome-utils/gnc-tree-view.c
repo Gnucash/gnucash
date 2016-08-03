@@ -1104,10 +1104,8 @@ void gnc_tree_view_save_state (GncTreeView *view)
         gchar *sort_order = gnc_tree_view_get_sort_order (view);
         gchar **col_order = gnc_tree_view_get_column_order (view, &num_cols);
 
-        /* Default sort column is the first column */
-        if (sort_column &&
-                (gnc_tree_view_find_column_by_name (view, sort_column) !=
-                        gtk_tree_view_get_column (GTK_TREE_VIEW (view), 0)))
+        /* Default sort column is the name column */
+        if (sort_column && (g_strcmp0 (sort_column, "name") != 0))
             g_key_file_set_string (state_file, priv->state_section, STATE_KEY_SORT_COLUMN, sort_column);
         else if (g_key_file_has_key (state_file, priv->state_section, STATE_KEY_SORT_COLUMN, NULL))
             g_key_file_remove_key (state_file, priv->state_section, STATE_KEY_SORT_COLUMN, NULL);
