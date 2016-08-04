@@ -464,7 +464,7 @@ gnc_sql_init_account_handler (void)
         NULL                        /* write */
     };
 
-    (void)qof_object_register_backend (GNC_ID_ACCOUNT, GNC_SQL_BACKEND, &be_data);
+    gnc_sql_register_backend(&be_data);
 
     gnc_sql_register_col_type_handler (CT_ACCOUNTREF, &account_guid_handler);
 }

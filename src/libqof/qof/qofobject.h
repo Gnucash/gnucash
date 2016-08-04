@@ -171,19 +171,6 @@ void qof_object_foreach (QofIdTypeConst type_name, QofBook *book,
 void qof_object_foreach_sorted (QofIdTypeConst type_name, QofBook *book,
                                 QofInstanceForeachCB cb, gpointer user_data);
 
-/** Register and lookup backend-specific data for this particular object */
-gboolean qof_object_register_backend (QofIdTypeConst type_name,
-                                      const char *backend_name,
-                                      gpointer be_data);
-
-/*@ dependent @*/
-gpointer qof_object_lookup_backend (QofIdTypeConst type_name,
-                                    const char *backend_name);
-
-void qof_object_foreach_backend (const char *backend_name,
-                                 QofForeachBackendTypeCB cb,
-                                 gpointer user_data);
-
 #ifdef __cplusplus
 }
 #endif

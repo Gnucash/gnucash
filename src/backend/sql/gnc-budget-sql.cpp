@@ -545,8 +545,7 @@ gnc_sql_init_budget_handler (void)
         write_budgets                   /* write */
     };
 
-    (void)qof_object_register_backend (GNC_ID_BUDGET, GNC_SQL_BACKEND, &be_data);
-
+    gnc_sql_register_backend(&be_data);
     gnc_sql_register_col_type_handler (CT_BUDGETREF, &budget_guid_handler);
 }
 /* ========================== END OF FILE ===================== */

@@ -260,8 +260,7 @@ gnc_order_sql_initialize (void)
         write_orders                    /* write */
     };
 
-    qof_object_register_backend (GNC_ID_ORDER, GNC_SQL_BACKEND, &be_data);
-
+    gnc_sql_register_backend(&be_data);
     gnc_sql_register_col_type_handler (CT_ORDERREF, &order_guid_handler);
 }
 /* ========================== END OF FILE ===================== */

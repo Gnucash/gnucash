@@ -1,3 +1,4 @@
+
 /********************************************************************
  * gnc-backend-sql.h: load and save data to SQL                     *
  *                                                                  *
@@ -44,6 +45,13 @@ extern "C"
 #include "qofbackend-p.h"
 #include <gmodule.h>
 }
+
+#include <algorithm>
+#include <sstream>
+#include <string>
+#include <vector>
+
+using LoadOrder = std::vector<std::string>;
 typedef struct GncSqlConnection GncSqlConnection;
 
 /**
@@ -247,7 +255,7 @@ struct GncSqlResult
  * @struct GncSqlObjectBackend
  *
  * Struct used to handle a specific engine object type for an SQL backend.
- * This handler should be registered with qof_object_register_backend().
+ * This handler should be registered with gnc_sql_register_backend().
  *
  * commit()         - commit an object to the db
  * initial_load()   - load stuff when new db opened
@@ -259,8 +267,8 @@ struct GncSqlResult
  */
 typedef struct
 {
-    int     version;        /**< Backend version number */
-    const gchar*    type_name;  /**< Engine object type name */
+    int		version;		/**< Backend version number */
+    const std::string	type_name;	/**< Engine object type name */
     /** Commit an instance of this object to the database
      * @return TRUE if successful, FALSE if error
      */
@@ -281,7 +289,13 @@ typedef struct
     gboolean (*write) (GncSqlBackend* be);
 } GncSqlObjectBackend;
 #define GNC_SQL_BACKEND             "gnc:sql:1"
-#define GNC_SQL_BACKEND_VERSION 1
+#define GNC_SQL_BACKEND_VERSION	1
+using GncSqlObjectBackendPtr = GncSqlObjectBackend*;
+using OBEEntry = std::tuple<std::string, GncSqlObjectBackendPtr>;
+using OBEVec = std::vector<OBEEntry>;
+void gnc_sql_register_backend(OBEEntry&&);
+void gnc_sql_register_backend(GncSqlObjectBackendPtr);
+const OBEVec& gnc_sql_get_backend_registry();
 
 /**
  * Basic column type
@@ -762,7 +776,7 @@ gboolean gnc_sql_add_columns_to_table (GncSqlBackend* be,
  *
  * @param load_order NULL-terminated array of object type ID strings
  */
-void gnc_sql_set_load_order (const gchar** load_order);
+void gnc_sql_set_load_order(LoadOrder&& load_order);
 
 void _retrieve_guid_ (gpointer pObject,  gpointer pValue);
 

@@ -289,17 +289,16 @@ gnc_dbi_verify_conn (GncDbiSqlConnection* dbi_conn)
 /* ================================================================= */
 
 static void
-create_tables_cb (const gchar* type, gpointer data_p, gpointer be_p)
+create_tables(const OBEEntry& entry, GncDbiBackend* be)
 {
-    GncSqlObjectBackend* pData = static_cast<decltype (pData)> (data_p);
-    GncDbiBackend* be = static_cast<decltype (be)> (be_p);
+    std::string type;
+    GncSqlObjectBackendPtr obe = nullptr;
+    std::tie(type, obe) = entry;
+    g_return_if_fail(obe->version == GNC_SQL_BACKEND_VERSION);
 
-    g_return_if_fail (type != NULL && data_p != NULL && be_p != NULL);
-    g_return_if_fail (pData->version == GNC_SQL_BACKEND_VERSION);
-
-    if (pData->create_tables != NULL)
+    if (obe->create_tables != nullptr)
     {
-        (pData->create_tables) (&be->sql_be);
+        (obe->create_tables)(&be->sql_be);
     }
 }
 
@@ -1627,7 +1626,9 @@ gnc_dbi_load (QofBackend* qbe,  QofBook* book, QofBackendLoadType loadType)
         gnc_sql_init_version_info (&be->sql_be);
 
         // Call all object backends to create any required tables
-        qof_object_foreach_backend (GNC_SQL_BACKEND, create_tables_cb, be);
+        auto registry = gnc_sql_get_backend_registry();
+        for (auto entry : registry)
+            create_tables(entry, be);
     }
 
     gnc_sql_load (&be->sql_be, book, loadType);

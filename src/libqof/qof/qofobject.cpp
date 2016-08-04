@@ -37,7 +37,6 @@ static QofLogModule log_module = QOF_MOD_OBJECT;
 static gboolean object_is_initialized = FALSE;
 static GList *object_modules = NULL;
 static GList *book_list = NULL;
-static GHashTable *backend_data = NULL;
 
 /*
  * These getters are used in tests to reach static vars from outside
@@ -52,7 +51,6 @@ extern "C"
 gboolean get_object_is_initialized( void );
 GList* get_object_modules( void );
 GList* get_book_list( void );
-GHashTable* get_backend_data( void );
 
 #ifdef __cplusplus
 }
@@ -74,12 +72,6 @@ GList*
 get_book_list( void )
 {
     return book_list;
-}
-
-GHashTable*
-get_backend_data( void )
-{
-    return backend_data;
 }
 
 /*********/
@@ -306,17 +298,12 @@ static gboolean clear_table (gpointer key, gpointer value, gpointer user_data)
 void qof_object_initialize (void)
 {
     if (object_is_initialized) return;
-    backend_data = g_hash_table_new (g_str_hash, g_str_equal);
     object_is_initialized = TRUE;
 }
 
 void qof_object_shutdown (void)
 {
     g_return_if_fail (object_is_initialized == TRUE);
-
-    g_hash_table_foreach_remove (backend_data, clear_table, NULL);
-    g_hash_table_destroy (backend_data);
-    backend_data = NULL;
 
     g_list_free (object_modules);
     object_modules = NULL;
@@ -369,86 +356,6 @@ const QofObject * qof_object_lookup (QofIdTypeConst name)
             return obj;
     }
     return NULL;
-}
-
-gboolean qof_object_register_backend (QofIdTypeConst type_name,
-                                      const char *backend_name,
-                                      gpointer be_data)
-{
-    GHashTable *ht;
-    g_return_val_if_fail (object_is_initialized, FALSE);
-
-    if (!type_name || *type_name == '\0' ||
-            !backend_name || *backend_name == '\0' ||
-            !be_data)
-        return FALSE;
-
-    ht = static_cast<GHashTable*>(g_hash_table_lookup (backend_data, backend_name));
-
-    /* If it doesn't already exist, create a new table for this backend */
-    if (!ht)
-    {
-        ht = g_hash_table_new (g_str_hash, g_str_equal);
-        g_hash_table_insert (backend_data, (char *)backend_name, ht);
-    }
-
-    /* Now insert the data */
-    g_hash_table_insert (ht, (char *)type_name, be_data);
-
-    return TRUE;
-}
-
-gpointer qof_object_lookup_backend (QofIdTypeConst type_name,
-                                    const char *backend_name)
-{
-    GHashTable *ht;
-
-    if (!type_name || *type_name == '\0' ||
-            !backend_name || *backend_name == '\0')
-        return NULL;
-
-    ht = static_cast<GHashTable*>(g_hash_table_lookup (backend_data, (char *)backend_name));
-    if (!ht)
-        return NULL;
-
-    return g_hash_table_lookup (ht, (char *)type_name);
-}
-
-struct foreach_data
-{
-    QofForeachBackendTypeCB        cb;
-    gpointer                 user_data;
-};
-
-static void foreach_backend (gpointer key, gpointer be_item, gpointer arg)
-{
-    char *data_type = static_cast<char*>(key);
-    struct foreach_data *cb_data = static_cast<struct foreach_data*>(arg);
-
-    g_return_if_fail (key && be_item && arg);
-
-    /* Call the callback for this data type */
-    (cb_data->cb) (data_type, be_item, cb_data->user_data);
-}
-
-void qof_object_foreach_backend (const char *backend_name,
-                                 QofForeachBackendTypeCB cb,
-                                 gpointer user_data)
-{
-    GHashTable *ht;
-    struct foreach_data cb_data;
-
-    if (!backend_name || *backend_name == '\0' || !cb)
-        return;
-
-    ht = static_cast<GHashTable*>(g_hash_table_lookup (backend_data, (char *)backend_name));
-    if (!ht)
-        return;
-
-    cb_data.cb = cb;
-    cb_data.user_data = user_data;
-
-    g_hash_table_foreach_sorted (ht, foreach_backend, &cb_data, (GCompareFunc)strcmp);
 }
 
 /* ========================= END OF FILE =================== */

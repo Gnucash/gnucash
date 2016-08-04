@@ -719,7 +719,5 @@ gnc_taxtable_xml_initialize (void)
         taxtable_ns,
     };
 
-    qof_object_register_backend (_GNC_MOD_NAME,
-                                 GNC_FILE_BACKEND,
-                                 &be_data);
+    gnc_xml_register_backend(be_data);
 }

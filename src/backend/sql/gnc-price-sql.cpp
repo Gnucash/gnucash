@@ -242,7 +242,7 @@ gnc_sql_init_price_handler (void)
         write_prices                /* write */
     };
 
-    (void)qof_object_register_backend (GNC_ID_PRICE, GNC_SQL_BACKEND, &be_data);
+    gnc_sql_register_backend(&be_data);
 }
 
 /* ========================== END OF FILE ===================== */

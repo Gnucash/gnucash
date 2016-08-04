@@ -345,8 +345,7 @@ gnc_invoice_sql_initialize (void)
         write_invoices                      /* write */
     };
 
-    qof_object_register_backend (GNC_ID_INVOICE, GNC_SQL_BACKEND, &be_data);
-
+    gnc_sql_register_backend(&be_data);
     gnc_sql_register_col_type_handler (CT_INVOICEREF, &invoice_guid_handler);
 }
 /* ========================== END OF FILE ===================== */

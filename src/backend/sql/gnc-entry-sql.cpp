@@ -295,6 +295,6 @@ gnc_entry_sql_initialize (void)
         write_entries                       /* write */
     };
 
-    qof_object_register_backend (GNC_ID_ENTRY, GNC_SQL_BACKEND, &be_data);
+    gnc_sql_register_backend(&be_data);
 }
 /* ========================== END OF FILE ===================== */

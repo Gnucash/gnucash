@@ -248,6 +248,6 @@ gnc_customer_sql_initialize (void)
         write_customers                     /* write */
     };
 
-    qof_object_register_backend (GNC_ID_CUSTOMER, GNC_SQL_BACKEND, &be_data);
+    gnc_sql_register_backend(&be_data);
 }
 /* ========================== END OF FILE ===================== */

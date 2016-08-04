@@ -411,8 +411,7 @@ gnc_billterm_sql_initialize (void)
         write_billterms                     /* write */
     };
 
-    qof_object_register_backend (GNC_ID_BILLTERM, GNC_SQL_BACKEND, &be_data);
-
+    gnc_sql_register_backend(&be_data);
     gnc_sql_register_col_type_handler (CT_BILLTERMREF, &billterm_guid_handler);
 }
 /* ========================== END OF FILE ===================== */

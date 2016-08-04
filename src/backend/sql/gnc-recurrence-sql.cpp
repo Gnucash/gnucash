@@ -459,6 +459,6 @@ gnc_sql_init_recurrence_handler (void)
         NULL                            /* write */
     };
 
-    (void)qof_object_register_backend (TABLE_NAME, GNC_SQL_BACKEND, &be_data);
+    gnc_sql_register_backend(&be_data);
 }
 /* ========================== END OF FILE ===================== */

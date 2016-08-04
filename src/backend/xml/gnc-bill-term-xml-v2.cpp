@@ -774,9 +774,7 @@ gnc_billterm_xml_initialize (void)
         billterm_ns,
     };
 
-    qof_object_register_backend (_GNC_MOD_NAME,
-                                 GNC_FILE_BACKEND,
-                                 &be_data);
+    gnc_xml_register_backend(be_data);
 }
 
 GncBillTerm*

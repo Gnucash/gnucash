@@ -1100,6 +1100,10 @@ gnc_sql_init_slots_handler (void)
     static GncSqlObjectBackend be_data =
     {
         GNC_SQL_BACKEND_VERSION,
+// This was GNC_ID_ACCOUNT. If somethine blows up, change it back,
+// make the registry store a std::tuple<std::string,
+// GncSqlObjectBackendPtr>, and check the first string against types
+// in the functions that are called on each backend.
         GNC_ID_ACCOUNT,
         NULL,                    /* commit - cannot occur */
         NULL,                    /* initial_load - cannot occur */
@@ -1110,6 +1114,7 @@ gnc_sql_init_slots_handler (void)
         NULL                     /* write */
     };
 
-    (void)qof_object_register_backend (TABLE_NAME, GNC_SQL_BACKEND, &be_data);
+    gnc_sql_register_backend(std::make_tuple(std::string{TABLE_NAME},
+                                             &be_data));
 }
 /* ========================== END OF FILE ===================== */

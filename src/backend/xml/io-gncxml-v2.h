@@ -37,8 +37,11 @@ extern "C"
 #include <glib.h>
 
 #include "gnc-engine.h"
+#ifdef __cplusplus
+}
 #include "gnc-backend-xml.h"
-
+#include "sixtp.h"
+#include <vector>
 
 
 /**
@@ -106,6 +109,13 @@ QofBookFileType gnc_is_xml_data_file_v2 (const gchar* name,
  */
 gboolean gnc_xml2_write_namespace_decl (FILE* out, const char* name_space);
 
+extern "C"
+{
+#endif /* __cplusplus. The next two functions are used (only) by
+        * src/gnome-utils/assistant-xml-encoding.c and so need C linkage;
+        * they're also the only part of this file that the C compiler needs to
+        * see.
+        */
 
 typedef struct
 {
@@ -147,5 +157,19 @@ gboolean gnc_xml2_parse_with_subst (
     FileBackend* fbe, QofBook* book, GHashTable* subst);
 #ifdef __cplusplus
 }
-#endif
+typedef struct
+{
+    int		version;	/* backend version number */
+    const char *	type_name;	/* The XML tag for this type */
+
+    sixtp *	(*create_parser) (void);
+    gboolean	(*add_item)(sixtp_gdv2 *, gpointer obj);
+    int	      (*get_count) (QofBook *);
+    gboolean	(*write) (FILE*, QofBook*);
+    void		(*scrub) (QofBook *);
+    gboolean	(*ns) (FILE*);
+} GncXmlDataType_t;
+
+void gnc_xml_register_backend(GncXmlDataType_t&);
+#endif /* __cplusplus */
 #endif /* __IO_GNCXML_V2_H__ */

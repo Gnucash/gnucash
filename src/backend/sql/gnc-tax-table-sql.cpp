@@ -569,8 +569,7 @@ gnc_taxtable_sql_initialize (void)
         write_taxtables                     /* write */
     };
 
-    qof_object_register_backend (GNC_ID_TAXTABLE, GNC_SQL_BACKEND, &be_data);
-
+    gnc_sql_register_backend(&be_data);
     gnc_sql_register_col_type_handler (CT_TAXTABLEREF, &taxtable_guid_handler);
 }
 /* ========================== END OF FILE ===================== */

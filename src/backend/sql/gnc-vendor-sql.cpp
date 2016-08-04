@@ -268,6 +268,6 @@ gnc_vendor_sql_initialize (void)
         write_vendors                       /* write */
     };
 
-    qof_object_register_backend (GNC_ID_VENDOR, GNC_SQL_BACKEND, &be_data);
+    gnc_sql_register_backend(&be_data);
 }
 /* ========================== END OF FILE ===================== */

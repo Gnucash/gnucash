@@ -276,8 +276,7 @@ gnc_sql_init_lot_handler (void)
         write_lots             /* save all */
     };
 
-    (void)qof_object_register_backend (GNC_ID_LOT, GNC_SQL_BACKEND, &be_data);
-
+    gnc_sql_register_backend(&be_data);
     gnc_sql_register_col_type_handler (CT_LOTREF, &lot_guid_handler);
 }
 

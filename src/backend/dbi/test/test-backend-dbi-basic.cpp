@@ -35,9 +35,7 @@ extern "C"
 #include <glib/gstdio.h>
 
 #include <qof.h>
-#include <unittest-support.h>
-#include <test-stuff.h>
-    /* For cleaning up the database */
+/* For cleaning up the database */
 #include <dbi/dbi.h>
 #include <gnc-uri-utils.h>
     /* For setup_business */
@@ -53,9 +51,14 @@ extern "C"
 #include <gnc-prefs.h>
 }
 /* For test_conn_index_functions */
+#include "../gnc-backend-dbi-priv.h"
+extern "C"
+{
+#include <unittest-support.h>
+#include <test-stuff.h>
+}
 #include "test-dbi-stuff.h"
 #include "test-dbi-business-stuff.h"
-#include "../gnc-backend-dbi-priv.h"
 
 #if LIBDBI_VERSION >= 900
 #define HAVE_LIBDBI_R 1

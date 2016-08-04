@@ -1540,10 +1540,8 @@ gnc_sql_init_transaction_handler (void)
         NULL                         /* write */
     };
 
-    (void)qof_object_register_backend (GNC_ID_TRANS, GNC_SQL_BACKEND, &be_data_tx);
-    (void)qof_object_register_backend (GNC_ID_SPLIT, GNC_SQL_BACKEND,
-                                       &be_data_split);
-
+    gnc_sql_register_backend(&be_data_tx);
+    gnc_sql_register_backend(&be_data_split);
     gnc_sql_register_col_type_handler (CT_TXREF, &tx_guid_handler);
 }
 
