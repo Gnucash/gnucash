@@ -712,7 +712,7 @@ gnc_template_register_save_debcred_cell (BasicCell * cell,
     /* amountStr = gnc_numeric_to_string (new_amount); */
 
     formula = gnc_table_layout_get_cell_value (reg->table->layout, FCRED_CELL);
-    /* If the value can be parsed into a numeric result (without any
+   /* If the value can be parsed into a numeric result (without any
      * further variable definitions), store that numeric value
      * additionally in the kvp. Otherwise store a zero numeric
      * there.*/
@@ -725,11 +725,15 @@ gnc_template_register_save_debcred_cell (BasicCell * cell,
             amount = gnc_numeric_zero();
         }
         qof_instance_set (QOF_INSTANCE (sd->split),
-                          "sx-credit-numeric", amount,
+			  "sx-credit-formula", formula,
+                          "sx-credit-numeric", &amount,
                           NULL);
     }
     else
     {
+	qof_instance_set (QOF_INSTANCE (sd->split),
+			  "sx-credit-formula", formula,
+			  NULL);
         g_hash_table_destroy(parser_vars);
         parser_vars = g_hash_table_new (g_str_hash, g_str_equal);
     }
@@ -746,11 +750,15 @@ gnc_template_register_save_debcred_cell (BasicCell * cell,
             amount = gnc_numeric_zero();
         }
         qof_instance_set (QOF_INSTANCE (sd->split),
-                          "sx-debit-numeric", amount,
+			  "sx-debit-formula", formula,
+                          "sx-debit-numeric", &amount,
                           NULL);
     }
     else
     {
+	qof_instance_set (QOF_INSTANCE (sd->split),
+			  "sx-debit-formula", formula,
+			  NULL);
         g_hash_table_destroy(parser_vars);
         parser_vars = NULL;
     }
