@@ -2130,7 +2130,8 @@ gnc_sql_execute_select_statement (GncSqlBackend* be, GncSqlStatement* stmt)
     if (result == NULL)
     {
         PERR ("SQL error: %s\n", gnc_sql_statement_to_sql (stmt));
-        qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);
+        if (!qof_backend_check_error(&be->be))
+            qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);
     }
 
     return result;
@@ -2148,7 +2149,8 @@ gnc_sql_create_statement_from_sql (GncSqlBackend* be, const gchar* sql)
     if (stmt == NULL)
     {
         PERR ("SQL error: %s\n", sql);
-        qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);
+        if (!qof_backend_check_error(&be->be))
+            qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);
     }
 
     return stmt;
@@ -2173,7 +2175,8 @@ gnc_sql_execute_select_sql (GncSqlBackend* be, const gchar* sql)
     if (result == NULL)
     {
         PERR ("SQL error: %s\n", sql);
-        qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);
+        if (!qof_backend_check_error(&be->be))
+            qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);
     }
 
     return result;
@@ -2324,7 +2327,8 @@ gnc_sql_do_db_operation (GncSqlBackend* be,
         if (result == -1)
         {
             PERR ("SQL error: %s\n", gnc_sql_statement_to_sql (stmt));
-            qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);
+            if (!qof_backend_check_error(&be->be))
+                qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);
         }
         else
         {
@@ -2788,7 +2792,8 @@ gnc_sql_set_table_version (GncSqlBackend* be, const gchar* table_name,
         if (status == -1)
         {
             PERR ("SQL error: %s\n", sql);
-            qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);
+            if (!qof_backend_check_error(&be->be))
+                qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);
         }
         g_free (sql);
     }
