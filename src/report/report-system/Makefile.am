@@ -119,6 +119,7 @@ GUILE_COMPILE_ENV = \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/gnome-utils \
   --guile-load-dir ${top_builddir}/src/scm \
+  --guile-load-dir ${top_builddir}/src/report/report-system \
   --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/src/app-utils \

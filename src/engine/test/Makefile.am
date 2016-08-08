@@ -64,18 +64,21 @@ GNC_TEST_DEPS = \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/engine/test \
   --gnc-module-dir ${top_builddir}/src/app-utils \
+  --gnc-module-dir ${top_builddir}/src/engine/test \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/app-utils \
   --guile-load-dir ${top_builddir}/src/core-utils \
   --guile-load-dir ${top_builddir}/src/scm \
+  --guile-load-dir ${top_builddir}/src/engine/test \
   --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/src/app-utils \
   --library-dir    ${top_builddir}/src/backend/xml \
-  --library-dir    ${top_builddir}/src/backend/sql
+  --library-dir    ${top_builddir}/src/backend/sql \
+  --library-dir    ${top_builddir}/src/engine/test
 
 $(SCM_TESTS): %: $(srcdir)/%.scm Makefile .scm-links
 	echo '${GUILE} --debug -l $(srcdir)/$*.scm -c "(exit (run-test))"' > $@
