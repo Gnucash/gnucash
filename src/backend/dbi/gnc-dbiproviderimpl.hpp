@@ -34,7 +34,7 @@ template <DbType T>
 class GncDbiProviderImpl : public GncDbiProvider
 {
 public:
-    StrVec get_table_list(dbi_conn conn, const std::string& dbname);
+    StrVec get_table_list(dbi_conn conn, const std::string& table);
     void append_col_def(std::string& ddl, const GncSqlColumnInfo& info);
     StrVec get_index_list (dbi_conn conn);
     void drop_index(dbi_conn conn, const std::string& index);
@@ -212,10 +212,12 @@ GncDbiProviderImpl<DbType::DBI_PGSQL>::append_col_def (std::string& ddl,
 }
 
 static StrVec
-conn_get_table_list (dbi_conn conn, const std::string& dbname)
+conn_get_table_list (dbi_conn conn, const std::string& dbname,
+                     const std::string& table)
 {
     StrVec retval;
-    auto tables = dbi_conn_get_table_list (conn, dbname.c_str(), nullptr);
+    const char* tableptr = (table.empty() ? nullptr : table.c_str());
+    auto tables = dbi_conn_get_table_list (conn, dbname.c_str(), tableptr);
     while (dbi_result_next_row (tables) != 0)
     {
         std::string table_name {dbi_result_get_string_idx (tables, 1)};
@@ -227,11 +229,12 @@ conn_get_table_list (dbi_conn conn, const std::string& dbname)
 
 template<> StrVec
 GncDbiProviderImpl<DbType::DBI_SQLITE>::get_table_list (dbi_conn conn,
-                                            const std::string& dbname)
+                                                        const std::string& table)
 {
     /* Return the list, but remove the tables that sqlite3 adds for
      * its own use. */
-    auto list = conn_get_table_list (conn, dbname);
+    std::string dbname (dbi_conn_get_option (conn, "dbname"));
+    auto list = conn_get_table_list (conn, dbname, table);
     auto end = std::remove(list.begin(), list.end(), "sqlite_sequence");
     list.erase(end, list.end());
     return list;
@@ -239,16 +242,18 @@ GncDbiProviderImpl<DbType::DBI_SQLITE>::get_table_list (dbi_conn conn,
 
 template<> StrVec
 GncDbiProviderImpl<DbType::DBI_MYSQL>::get_table_list (dbi_conn conn,
-                                               const std::string& dbname)
+                                                       const std::string& table)
 {
-    return conn_get_table_list (conn, dbname);
+    std::string dbname (dbi_conn_get_option (conn, "dbname"));
+    return conn_get_table_list (conn, dbname, table);
 }
 
 template<> StrVec
 GncDbiProviderImpl<DbType::DBI_PGSQL>::get_table_list (dbi_conn conn,
-                                           const std::string& dbname)
+                                                       const std::string& table)
 {
-    auto list = conn_get_table_list (conn, dbname);
+    std::string dbname (dbi_conn_get_option (conn, "dbname"));
+    auto list = conn_get_table_list (conn, dbname, table);
     auto end = std::remove_if (list.begin(), list.end(),
                                [](std::string& table_name){
                                    return table_name == "sql_features" ||
@@ -289,19 +294,12 @@ GncDbiProviderImpl<DbType::DBI_MYSQL>::get_index_list (dbi_conn conn)
 {
     StrVec retval;
     const char* errmsg;
-    auto dbname = dbi_conn_get_option (conn, "dbname");
-    auto table_list = dbi_conn_get_table_list (conn, dbname, nullptr);
-    if (dbi_conn_error (conn, &errmsg) != DBI_ERROR_NONE)
+    auto tables = get_table_list(conn, "");
+    for (auto table_name : tables)
     {
-        PWARN ("Table Retrieval Error: %s\n", errmsg);
-        return retval;
-    }
-    while (dbi_result_next_row (table_list) != 0)
-    {
-        auto table_name = dbi_result_get_string_idx (table_list, 1);
         auto result = dbi_conn_queryf (conn,
                                        "SHOW INDEXES IN %s WHERE Key_name != 'PRIMARY'",
-                                       table_name);
+                                       table_name.c_str());
         if (dbi_conn_error (conn, &errmsg) != DBI_ERROR_NONE)
         {
             PWARN ("Index Table Retrieval Error: %s on table %s\n",

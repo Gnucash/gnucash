@@ -42,7 +42,7 @@ class GncDbiProvider
 {
 public:
     virtual ~GncDbiProvider() = default;
-    virtual StrVec get_table_list(dbi_conn conn, const std::string& dbname) = 0;
+    virtual StrVec get_table_list(dbi_conn conn, const std::string& table) = 0;
     virtual void append_col_def(std::string& ddl,
                                 const GncSqlColumnInfo& info) = 0;
     virtual StrVec get_index_list (dbi_conn conn) = 0;

@@ -35,7 +35,7 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #include "gnc-dbiproviderimpl.hpp"
 
 static const unsigned int DBI_MAX_CONN_ATTEMPTS = 5;
-constexpr const char *lock_table_name = "gnclock";
+const std::string lock_table = "gnclock";
 
 /* --------------------------------------------------------- */
 class GncDbiSqlStatement : public GncSqlStatement
@@ -91,22 +91,14 @@ GncDbiSqlConnection::GncDbiSqlConnection (DbType type, QofBackend* qbe,
 bool
 GncDbiSqlConnection::lock_database (bool ignore_lock)
 {
-
-    auto dbname = dbi_conn_get_option (m_conn, "dbname");
-    /* Create the table if it doesn't exist */
-    auto result = dbi_conn_get_table_list (m_conn, dbname, lock_table_name);
-    int numrows = 0;
-    const char* errstr;
-   if (result) {
-        numrows = dbi_result_get_numrows (result);
-        dbi_result_free (result);
-        result = nullptr;
-    }
-    if (numrows == 0)
+    const char *errstr;
+    auto tables = m_provider->get_table_list(m_conn, lock_table);
+    if (tables.empty())
     {
-        result = dbi_conn_queryf (m_conn,
-                                  "CREATE TABLE %s ( Hostname varchar(%d), PID int )", lock_table_name,
-                                  GNC_HOST_NAME_MAX);
+        auto result = dbi_conn_queryf (m_conn,
+                                       "CREATE TABLE %s ( Hostname varchar(%d), PID int )",
+                                       lock_table.c_str(),
+                                       GNC_HOST_NAME_MAX);
         if (result)
         {
             dbi_result_free (result);
@@ -121,7 +113,7 @@ GncDbiSqlConnection::lock_database (bool ignore_lock)
     }
 
     /* Protect everything with a single transaction to prevent races */
-    result = dbi_conn_query (m_conn, "BEGIN");
+    auto result = dbi_conn_query (m_conn, "BEGIN");
     if (dbi_conn_error (m_conn, &errstr))
     {
     /* Couldn't get a transaction (probably couldn't get a lock), so fail */
@@ -135,7 +127,7 @@ GncDbiSqlConnection::lock_database (bool ignore_lock)
     result = nullptr;
     /* Check for an existing entry; delete it if ignore_lock is true, otherwise fail */
     char hostname[ GNC_HOST_NAME_MAX + 1 ];
-    result = dbi_conn_queryf (m_conn, "SELECT * FROM %s", lock_table_name);
+    result = dbi_conn_queryf (m_conn, "SELECT * FROM %s", lock_table.c_str());
     if (result && dbi_result_get_numrows (result))
     {
         dbi_result_free (result);
@@ -147,7 +139,7 @@ GncDbiSqlConnection::lock_database (bool ignore_lock)
             dbi_conn_query (m_conn, "ROLLBACK");
             return false;
         }
-        result = dbi_conn_queryf (m_conn, "DELETE FROM %s", lock_table_name);
+        result = dbi_conn_queryf (m_conn, "DELETE FROM %s", lock_table.c_str());
         if (!result)
         {
             qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
@@ -165,7 +157,7 @@ GncDbiSqlConnection::lock_database (bool ignore_lock)
     gethostname (hostname, GNC_HOST_NAME_MAX);
     result = dbi_conn_queryf (m_conn,
                               "INSERT INTO %s VALUES ('%s', '%d')",
-                              lock_table_name, hostname, (int)GETPID ());
+                              lock_table.c_str(), hostname, (int)GETPID ());
     if (!result)
     {
         qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
@@ -198,23 +190,13 @@ GncDbiSqlConnection::unlock_database ()
     if (m_conn == nullptr) return;
     g_return_if_fail (dbi_conn_error (m_conn, nullptr) == 0);
 
-    auto dbname = dbi_conn_get_option (m_conn, "dbname");
-    /* Check if the lock table exists */
-    g_return_if_fail (dbname != nullptr);
-    auto result = dbi_conn_get_table_list (m_conn, dbname, lock_table_name);
-    if (! (result && dbi_result_get_numrows (result)))
+    auto tables = m_provider->get_table_list (m_conn, lock_table);
+    if (tables.empty())
     {
-        if (result)
-        {
-            dbi_result_free (result);
-            result = nullptr;
-        }
         PWARN ("No lock table in database, so not unlocking it.");
         return;
     }
-    dbi_result_free (result);
-
-    result = dbi_conn_query (m_conn, "BEGIN");
+    auto result = dbi_conn_query (m_conn, "BEGIN");
     if (result)
     {
         /* Delete the entry if it's our hostname and PID */
@@ -225,7 +207,7 @@ GncDbiSqlConnection::unlock_database ()
         memset (hostname, 0, sizeof (hostname));
         gethostname (hostname, GNC_HOST_NAME_MAX);
         result = dbi_conn_queryf (m_conn,
-                                  "SELECT * FROM %s WHERE Hostname = '%s' AND PID = '%d'", lock_table_name, hostname,
+                                  "SELECT * FROM %s WHERE Hostname = '%s' AND PID = '%d'", lock_table.c_str(), hostname,
                                   (int)GETPID ());
         if (result && dbi_result_get_numrows (result))
         {
@@ -234,7 +216,8 @@ GncDbiSqlConnection::unlock_database ()
                 dbi_result_free (result);
                 result = nullptr;
             }
-            result = dbi_conn_queryf (m_conn, "DELETE FROM %s", lock_table_name);
+            result = dbi_conn_queryf (m_conn, "DELETE FROM %s",
+                                      lock_table.c_str());
             if (!result)
             {
                 PERR ("Failed to delete the lock entry");
@@ -349,17 +332,7 @@ bool
 GncDbiSqlConnection::does_table_exist (const std::string& table_name)
     const noexcept
 {
-    auto dbname = dbi_conn_get_option (m_conn, "dbname");
-    auto tables = dbi_conn_get_table_list (m_conn, dbname, table_name.c_str());
-    auto nTables = dbi_result_get_numrows (tables);
-    auto status = dbi_result_free (tables);
-    if (status < 0)
-    {
-        PERR ("Error in dbi_result_free() result\n");
-        qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
-    }
-
-    return nTables == 1;
+    return ! m_provider->get_table_list(m_conn, table_name).empty();
 }
 
 bool
@@ -660,8 +633,6 @@ bool
 GncDbiSqlConnection::table_operation(const StrVec& table_names,
                                      TableOpType op) noexcept
 {
-    const char* dbname = dbi_conn_get_option (m_conn, "dbname");
-    std::string lock_table{lock_table_name};
     g_return_val_if_fail (!table_names.empty(), FALSE);
     bool retval{true};
     for (auto table : table_names)
@@ -679,7 +650,7 @@ GncDbiSqlConnection::table_operation(const StrVec& table_names,
             {
             case rollback:
             {
-                auto all_tables = m_provider->get_table_list(m_conn, dbname);
+                auto all_tables = m_provider->get_table_list(m_conn, "");
                 if (std::find(all_tables.begin(),
                               all_tables.end(), table) != all_tables.end())
                 {

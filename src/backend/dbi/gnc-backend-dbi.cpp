@@ -921,8 +921,7 @@ gnc_dbi_safe_sync_all (QofBackend* qbe, QofBook* book)
     g_return_if_fail (book != nullptr);
 
     ENTER ("book=%p, primary=%p", book, be->m_book);
-    auto dbname = dbi_conn_get_option (conn->conn(), "dbname");
-    auto table_list = conn->m_provider->get_table_list (conn->conn(), dbname);
+    auto table_list = conn->m_provider->get_table_list (conn->conn(), "");
     if (!conn->table_operation (table_list, backup))
     {
         qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
