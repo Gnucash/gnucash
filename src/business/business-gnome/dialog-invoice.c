@@ -2922,7 +2922,7 @@ multi_post_invoice_cb (GList *invoice_list, gpointer user_data)
     if (test)
     {
         gnc_error_dialog (iw_get_window(iw), "%s",
-                          _("One or more selected invoices have already been posted.\nRe-check you selection."));
+                          _("One or more selected invoices have already been posted.\nRe-check your selection."));
         return;
     }
     
