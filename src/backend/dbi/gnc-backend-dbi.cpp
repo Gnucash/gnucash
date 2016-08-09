@@ -112,7 +112,7 @@ constexpr const char* MYSQL_TIMESPEC_STR_FORMAT =   "%04d%02d%02d%02d%02d%02d";
 constexpr const char* PGSQL_TIMESPEC_STR_FORMAT =   "%04d%02d%02d %02d%02d%02d";
 
 static void adjust_sql_options (dbi_conn connection);
-static bool save_may_clobber_data (dbi_conn conn);
+static bool save_may_clobber_data (dbi_conn conn, const std::string& dbname);
 static void init_sql_backend (GncDbiBackend* dbi_be);
 
 static bool conn_test_dbi_library (dbi_conn conn, QofBackend* qbe);
@@ -175,6 +175,7 @@ struct UriStrings
     ~UriStrings() = default;
     std::string basename() const noexcept;
     const char* dbname() const noexcept;
+    std::string quote_dbname(DbType t) const noexcept;
     std::string m_protocol;
     std::string m_host;
     std::string m_dbname;
@@ -201,6 +202,7 @@ UriStrings::UriStrings(const std::string& uri)
     g_free(username);
     g_free(password);
     g_free(dbname);
+    
 }
 
 std::string
@@ -213,6 +215,17 @@ const char*
 UriStrings::dbname() const noexcept
 {
     return m_dbname.c_str();
+}
+
+std::string
+UriStrings::quote_dbname(DbType t) const noexcept
+{
+    if (m_dbname.empty())
+        return "";
+    const char quote = (t == DbType::DBI_MYSQL ? '`' : '"');
+    std::string retval(1, quote);
+    retval += m_dbname + quote;
+    return retval;
 }
 
 static void
@@ -312,7 +325,6 @@ conn_setup (QofBackend* qbe, PairVec& options,
     }
 
     dbi_conn_error_handler (conn, error_handler<Type>, qbe);
-
     if (!uri.m_dbname.empty() &&
         !set_standard_connection_options(qbe, conn, uri))
     {
@@ -674,7 +686,8 @@ gnc_dbi_session_begin (QofBackend* qbe, QofSession* session,
             LEAVE("Error");
             return;
         }
-        if (create && !force && save_may_clobber_data (conn))
+        if (create && !force && save_may_clobber_data (conn,
+                                                       uri.quote_dbname(T)))
         {
             qof_backend_set_error (qbe, ERR_BACKEND_STORE_EXISTS);
             PWARN ("Databse already exists, Might clobber it.");
@@ -698,7 +711,7 @@ gnc_dbi_session_begin (QofBackend* qbe, QofSession* session,
 
         if (create)
         {
-            if (!create_database(T, qbe, conn, uri.dbname()))
+            if (!create_database(T, qbe, conn, uri.quote_dbname(T).c_str()))
             {
                 dbi_conn_close(conn);
                 LEAVE("Error");
@@ -720,7 +733,8 @@ gnc_dbi_session_begin (QofBackend* qbe, QofSession* session,
             {
                 if (T == DbType::DBI_PGSQL)
                     dbi_conn_select_db (conn, "template1");
-                dbi_conn_queryf (conn, "DROP DATABASE %s", uri.dbname());
+                dbi_conn_queryf (conn, "DROP DATABASE %s",
+                                 uri.quote_dbname(T).c_str());
                 dbi_conn_close(conn);
                 return;
             }
@@ -883,14 +897,13 @@ gnc_dbi_load (QofBackend* qbe,  QofBook* book, QofBackendLoadType loadType)
 }
 
 /* ================================================================= */
-
+/* This is used too early to call GncDbiProvider::get_table_list(). */
 static bool
-save_may_clobber_data (dbi_conn conn)
+save_may_clobber_data (dbi_conn conn, const std::string& dbname)
 {
 
     /* Data may be clobbered iff the number of tables != 0 */
-    auto dbname = dbi_conn_get_option (conn, "dbname");
-    auto result = dbi_conn_get_table_list (conn, dbname, nullptr);
+    auto result = dbi_conn_get_table_list (conn, dbname.c_str(), nullptr);
     bool retval = false;
     if (result)
     {

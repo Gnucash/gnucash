@@ -245,6 +245,8 @@ GncDbiProviderImpl<DbType::DBI_MYSQL>::get_table_list (dbi_conn conn,
                                                        const std::string& table)
 {
     std::string dbname (dbi_conn_get_option (conn, "dbname"));
+    dbname.insert((std::string::size_type)0, 1, '`');
+    dbname += '`';
     return conn_get_table_list (conn, dbname, table);
 }
 
