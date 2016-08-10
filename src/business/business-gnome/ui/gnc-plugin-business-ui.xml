@@ -17,6 +17,7 @@
 	  <menuitem name="CustomerNewJobOpen"       action="CustomerNewJobOpenAction"/>
 	  <menuitem name="CustomerFindJobOpen"      action="CustomerFindJobOpenAction"/>
 	  <menuitem name="CustomerProcessPayment"   action="CustomerProcessPaymentAction"/>
+          <menuitem name="InvoicesDueReminderOpen" action="InvoicesDueReminderOpenAction"/>
 	</menu>
 
 	<menu name="VendorMenu" action="VendorMenuAction">
@@ -28,6 +29,7 @@
 	  <menuitem name="VendorNewJobOpen"     action="VendorNewJobOpenAction"/>
 	  <menuitem name="VendorFindJobOpen"    action="VendorFindJobOpenAction"/>
 	  <menuitem name="VendorProcessPayment" action="VendorProcessPaymentAction"/>
+          <menuitem name="BillsDueReminderOpen" action="BillsDueReminderOpenAction"/>
 	</menu>
 
 	<menu name="EmployeeMenu" action="EmployeeMenuAction">
@@ -44,7 +46,6 @@
 
 	<menuitem name="TaxTablesOpen" action="TaxTablesOpenAction"/>
 	<menuitem name="BillingTermsOpen" action="BillingTermsOpenAction"/>
-	<menuitem name="BillsDueReminderOpen" action="BillsDueReminderOpenAction"/>
 
         <placeholder name="BusinessPlaceholderMiddle"/>
         <placeholder name="BusinessPlaceholderBottom"/>

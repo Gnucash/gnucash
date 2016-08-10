@@ -119,6 +119,8 @@ static void gnc_plugin_business_cmd_billing_terms      (GtkAction *action,
         GncMainWindowActionData *data);
 static void gnc_plugin_business_cmd_bills_due_reminder (GtkAction *action,
         GncMainWindowActionData *data);
+static void gnc_plugin_business_cmd_invoices_due_reminder (GtkAction *action,
+        GncMainWindowActionData *data);
 
 static void gnc_plugin_business_cmd_test_search (GtkAction *action,
         GncMainWindowActionData *data);
@@ -283,6 +285,11 @@ static GtkActionEntry gnc_plugin_actions [] =
         "BillsDueReminderOpenAction", NULL, N_("Bills _Due Reminder"), NULL,
         N_("Open the Bills Due Reminder dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_bills_due_reminder)
+    },
+    {
+        "InvoicesDueReminderOpenAction", NULL, N_("Invoices _Due Reminder"), NULL,
+        N_("Open the Invoices Due Reminder dialog"),
+        G_CALLBACK (gnc_plugin_business_cmd_invoices_due_reminder)
     },
     { "ExportMenuAction", NULL, N_("E_xport"), NULL, NULL, NULL },
 
@@ -789,6 +796,17 @@ gnc_plugin_business_cmd_bills_due_reminder (GtkAction *action,
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
     gnc_invoice_remind_bills_due();
+}
+
+
+static void
+gnc_plugin_business_cmd_invoices_due_reminder (GtkAction *action,
+        GncMainWindowActionData *mw)
+{
+    g_return_if_fail (mw != NULL);
+    g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
+
+    gnc_invoice_remind_invoices_due();
 }
 
 static void

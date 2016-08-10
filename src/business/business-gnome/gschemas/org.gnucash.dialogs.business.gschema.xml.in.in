@@ -112,6 +112,16 @@
       <summary>Auto pay when posting.</summary>
       <description>At post time, automatically attempt to pay customer documents with outstanding pre-payments and counter documents. The pre-payments and documents obviously have to be against the same customer. Counter documents are documents with opposite sign. For example for an invoice, customer credit notes and negative invoices are considered counter documents.</description>
     </key>
+    <key name="notify-when-due" type="b">
+      <default>true</default>
+      <summary>Show invoices due reminder at startup</summary>
+      <description>If active, at startup GnuCash will check to see whether any invoices will become due soon. If so, it will present the user with a reminder dialog. The definition of "soon" is controlled by the "Days in Advance" setting. Otherwise GnuCash does not check for due invoices.</description>
+    </key>
+    <key name="days-in-advance" type="d">
+      <default>7.0</default>
+      <summary>Show invoices due within this many days</summary>
+      <description>This field defines the number of days in advance that GnuCash will check for due invoices. Its value is only used if the "Notify when due" setting is active.</description>
+    </key>
     <key name="enable-toolbuttons" type="b">
       <default>false</default>
       <summary>Enable extra toolbar buttons for business</summary>

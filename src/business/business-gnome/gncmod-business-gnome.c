@@ -110,6 +110,8 @@ libgncmod_business_gnome_gnc_module_init(int refcount)
 
         gnc_hook_add_dangler(HOOK_BOOK_OPENED,
                              (GFunc)gnc_invoice_remind_bills_due_cb, NULL);
+        gnc_hook_add_dangler(HOOK_BOOK_OPENED,
+                             (GFunc)gnc_invoice_remind_invoices_due_cb, NULL);
 
         /* Add to preferences under Business */
         /* The parameters are; glade file, items to add from glade file - last being the dialog, preference tab name */
