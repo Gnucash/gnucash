@@ -768,8 +768,8 @@ main(int argc, char ** argv)
     sys_locale = g_strdup (setlocale (LC_ALL, ""));
     if (!sys_locale)
       {
-        g_print ("The locale defined in the environment isn't supported. "
-                 "Falling back to the 'C' (US English) locale\n");
+	// g_print ("The locale defined in the environment isn't supported. "
+        //         "Falling back to the 'C' (US English) locale\n");
         g_setenv ("LC_ALL", "C", TRUE);
         setlocale (LC_ALL, "C");
       }
@@ -785,7 +785,7 @@ main(int argc, char ** argv)
 #endif
     
     gnc_parse_command_line(&argc, &argv);
-    gnc_print_unstable_message();
+    //gnc_print_unstable_message();
 
     gnc_log_init();
 
