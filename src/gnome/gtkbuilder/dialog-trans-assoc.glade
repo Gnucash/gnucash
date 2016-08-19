@@ -8,12 +8,16 @@
       <column type="gchararray"/>
       <!-- column-name desc -->
       <column type="gchararray"/>
-      <!-- column-name uri -->
+      <!-- column-name uri_u -->
       <column type="gchararray"/>
       <!-- column-name available -->
       <column type="gchararray"/>
       <!-- column-name split -->
       <column type="gpointer"/>
+      <!-- column-name uri -->
+      <column type="gchararray"/>
+      <!-- column-name uri_relative -->
+      <column type="gboolean"/>
     </columns>
   </object>
   <object class="GtkDialog" id="Transaction Association Dialog">
@@ -32,6 +36,19 @@
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox2">
         <property name="can_focus">False</property>
+        <child>
+          <object class="GtkLabel" id="label1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">All Transaction Associations</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="padding">2</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
         <child internal-child="action_area">
           <object class="GtkHButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
@@ -89,16 +106,15 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="label1">
+          <object class="GtkLabel" id="path-head">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">All Transaction Associations</property>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
             <property name="padding">5</property>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
@@ -139,7 +155,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkTreeViewColumn" id="uri entry">
+                  <object class="GtkTreeViewColumn" id="uri-entry">
                     <property name="resizable">True</property>
                     <property name="title" translatable="yes">Association</property>
                     <property name="alignment">0.5</property>
@@ -172,7 +188,7 @@
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="position">3</property>
           </packing>
         </child>
         <child>
@@ -180,13 +196,14 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="ypad">5</property>
-            <property name="label" translatable="yes">To jump to Transaction, double click on Date or Description columns on
- row required or Association and Available to Open the Association</property>
+            <property name="label" translatable="yes">     To jump to the Transaction, double click on the entry in the
+Description column or Association column to open the Association</property>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">3</property>
+            <property name="padding">5</property>
+            <property name="position">4</property>
           </packing>
         </child>
       </object>
