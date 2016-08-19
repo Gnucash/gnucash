@@ -34,7 +34,8 @@
 
 #include "gnc-plugin-page-register.h"
 #include "gnc-main-window.h"
-
+#include "gnc-prefs.h"
+#include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-gnome-utils.h"
 #include "Account.h"
@@ -43,12 +44,14 @@
 #define GNC_PREFS_GROUP         "dialogs.trans-assoc"
 
 /** Enumeration for the tree-store */
-enum GncAssocColumn {DATE_TRANS, DESC_TRANS, URI, AVAILABLE, URI_SPLIT};
+enum GncAssocColumn {DATE_TRANS, DESC_TRANS, URI_U, AVAILABLE, URI_SPLIT, URI, URI_RELATIVE};
 
 typedef struct
 {
     GtkWidget    *dialog;
     GtkWidget    *view;
+    const gchar  *path_head;
+    gboolean      valid_path_head;
 }AssocDialog;
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -136,6 +139,41 @@ assoc_dialog_sort (AssocDialog *assoc_dialog)
     gtk_tree_sortable_set_sort_column_id (sortable, URI, order);
 }
 
+static const gchar *
+convert_uri_relative_to_uri (AssocDialog *assoc_dialog, const gchar *uri)
+{
+    const gchar *new_uri;
+
+    if (assoc_dialog->valid_path_head && g_str_has_prefix (uri,"file:/") &&
+        !g_str_has_prefix (uri,"file://")) // path is relative
+    {
+        const gchar *part = uri + strlen ("file:");
+        new_uri = g_strconcat (assoc_dialog->path_head, part, NULL);
+    }
+    else
+        new_uri = g_strdup (uri);
+
+    return new_uri;
+}
+
+static gchar *
+convert_uri_to_filename (AssocDialog *assoc_dialog, const gchar *uri)
+{
+    const gchar *new_uri = convert_uri_relative_to_uri (assoc_dialog, uri);
+    gchar *filename = g_filename_from_uri (new_uri, NULL, NULL);
+
+    return filename;
+}
+
+static gchar *
+convert_uri_to_unescaped (AssocDialog *assoc_dialog, const gchar *uri)
+{
+    const gchar *new_uri = convert_uri_relative_to_uri (assoc_dialog, uri);
+    gchar *uri_u = g_uri_unescape_string (new_uri, NULL);
+
+    return uri_u;
+}
+
 static void
 assoc_dialog_update (AssocDialog *assoc_dialog)
 {
@@ -157,7 +195,7 @@ assoc_dialog_update (AssocDialog *assoc_dialog)
 
         gtk_tree_model_get (model, &iter, URI, &uri, -1);
 
-        filename = g_filename_from_uri (uri, NULL, NULL);
+        filename = convert_uri_to_filename (assoc_dialog, uri);
 
         if (filename != NULL)
         {
@@ -179,8 +217,8 @@ assoc_dialog_update (AssocDialog *assoc_dialog)
                     gtk_list_store_set (GTK_LIST_STORE(model), &iter, AVAILABLE, _("Address Not Found"), -1);
             }
         }
-        g_free (filename);
         g_free (uri);
+        g_free (filename);
         valid = gtk_tree_model_iter_next (model, &iter);
     }
 }
@@ -212,28 +250,38 @@ row_selected_cb (GtkTreeView *view, GtkTreePath *path,
                   GtkTreeViewColumn  *col, gpointer user_data)
 {
     AssocDialog   *assoc_dialog = user_data;
-    GncPluginPage *page;
-    GNCSplitReg   *gsr;
-    Account       *account;
-    GtkTreeModel  *model;
+    GtkTreeModel  *model = gtk_tree_view_get_model (GTK_TREE_VIEW(assoc_dialog->view));
     GtkTreeIter    iter;
     Split         *split;
     const gchar   *uri;
 
-    model = gtk_tree_view_get_model (GTK_TREE_VIEW(assoc_dialog->view));
-
     if (!gtk_tree_model_get_iter (model, &iter, path))
-      return; /* path describes a non-existing row - should not happen */
+        return; /* path describes a non-existing row - should not happen */
 
     gtk_tree_model_get (model, &iter, URI, &uri, URI_SPLIT, &split, -1);
 
-    if ((gtk_tree_view_get_column (GTK_TREE_VIEW(assoc_dialog->view), URI) == col) ||
-        (gtk_tree_view_get_column (GTK_TREE_VIEW(assoc_dialog->view), AVAILABLE) == col))
+    // Open associated link
+    if (gtk_tree_view_get_column (GTK_TREE_VIEW(assoc_dialog->view), URI_U) == col)
     {
-        gnc_launch_assoc (uri);
+        const gchar *uri_out = convert_uri_relative_to_uri (assoc_dialog, uri);
+        gchar *uri_scheme = g_uri_parse_scheme (uri_out);
+
+        if (uri_scheme != NULL) // make sure we have a schme entry
+        {
+            gnc_launch_assoc (uri_out);
+            g_free (uri_scheme);
+        }
+        else
+            gnc_error_dialog (NULL, "%s", _("This transaction is not associated with a valid URI."));
     }
-    else
+
+    // Open transaction
+    if (gtk_tree_view_get_column (GTK_TREE_VIEW(assoc_dialog->view), DESC_TRANS) == col)
     {
+        GncPluginPage *page;
+        GNCSplitReg   *gsr;
+        Account       *account;
+
         /* This should never be true, but be paranoid */
         if (split == NULL)
             return;
@@ -293,6 +341,8 @@ get_trans_info (AssocDialog *assoc_dialog)
 
             if (g_strcmp0 (uri, "") != 0 && g_strcmp0 (uri, NULL) != 0)
             {
+                gchar *uri_u;
+                gboolean rel = FALSE;
                 Timespec ts = {0,0};
                 xaccTransGetDatePostedTS (trans, &ts);
 
@@ -301,10 +351,18 @@ get_trans_info (AssocDialog *assoc_dialog)
 
                 gtk_list_store_append (GTK_LIST_STORE(model), &iter);
 
+                if (g_str_has_prefix (uri,"file:/") && !g_str_has_prefix (uri,"file://")) // path is relative
+                    rel = TRUE;
+
+                uri_u = convert_uri_to_unescaped (assoc_dialog, uri);
+
                 gtk_list_store_set (GTK_LIST_STORE(model), &iter,
                                     DATE_TRANS, gnc_print_date (ts),
                                     DESC_TRANS, xaccTransGetDescription (trans),
-                                    URI, uri, AVAILABLE, _("Unknown"), URI_SPLIT, split, -1);
+                                    URI_U, uri_u, AVAILABLE, _("Unknown"),
+                                    URI_SPLIT, split, URI, uri, URI_RELATIVE, rel, -1);
+
+                g_free (uri_u);
             }
             trans_list = g_list_prepend (trans_list, trans); // add trans to trans_list
         }
@@ -318,9 +376,12 @@ get_trans_info (AssocDialog *assoc_dialog)
 static void
 gnc_assoc_dialog_create (AssocDialog *assoc_dialog)
 {
-    GtkWidget        *dialog;
-    GtkBuilder       *builder;
-    GtkTreeSelection *selection;
+    GtkWidget         *dialog;
+    GtkBuilder        *builder;
+    GtkTreeSelection  *selection;
+    GtkWidget         *path_head;
+    GtkTreeViewColumn *tree_column;
+    GtkCellRenderer   *cr;
 
     ENTER(" ");
     builder = gtk_builder_new();
@@ -332,6 +393,43 @@ gnc_assoc_dialog_create (AssocDialog *assoc_dialog)
     assoc_dialog->dialog = dialog;
 
     assoc_dialog->view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview"));
+    path_head = GTK_WIDGET(gtk_builder_get_object (builder, "path-head"));
+
+    assoc_dialog->path_head = gnc_prefs_get_string (GNC_PREFS_GROUP_GENERAL, "assoc-head");
+
+    if ((assoc_dialog->path_head != NULL) && (g_strcmp0 (assoc_dialog->path_head, "") != 0)) // not default entry
+    {
+        gchar *uri_u = g_uri_unescape_string (assoc_dialog->path_head, NULL);
+        gchar *path_head_str = g_filename_from_uri (uri_u, NULL, NULL);
+        gchar *path_head_label;
+
+        assoc_dialog->valid_path_head = TRUE;
+
+        // test for current folder being present
+        if (g_file_test (path_head_str, G_FILE_TEST_IS_DIR))
+            path_head_label = g_strconcat (_("Path head for files is, "), path_head_str, NULL);
+        else
+            path_head_label = g_strconcat (_("Path head does not exist, "), path_head_str, NULL);
+
+        gtk_label_set_text (GTK_LABEL(path_head), path_head_label);
+        g_free (path_head_label);
+        g_free (uri_u);
+        g_free (path_head_str);
+    }
+    else
+        assoc_dialog->valid_path_head = FALSE;
+
+    /* Need to add toggle renderers here to get the xalign to work. */
+    tree_column = gtk_tree_view_column_new();
+    gtk_tree_view_column_set_title (tree_column, _("Relative"));
+    gtk_tree_view_append_column (GTK_TREE_VIEW(assoc_dialog->view), tree_column);
+    gtk_tree_view_column_set_alignment (tree_column, 0.5);
+    gtk_tree_view_column_set_expand (tree_column, TRUE);
+    cr = gtk_cell_renderer_toggle_new();
+    gtk_tree_view_column_pack_start (tree_column, cr, TRUE);
+    // connect 'active' and set 'xalign' property of the cell renderer
+    gtk_tree_view_column_set_attributes (tree_column, cr, "active", URI_RELATIVE, NULL);
+    gtk_cell_renderer_set_alignment (cr, 0.5, 0.5);
 
     g_signal_connect (assoc_dialog->view, "row-activated",
                       G_CALLBACK(row_selected_cb), (gpointer)assoc_dialog);
