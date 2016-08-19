@@ -240,10 +240,12 @@ static void
 sqlite3_error_fn( dbi_conn conn, /*@ unused @*/ void* user_data )
 {
     const gchar* msg;
+    GncDbiBackend *be = (GncDbiBackend*)user_data;
+    GncDbiSqlConnection *dbi_conn = (GncDbiSqlConnection*)(be->sql_be.conn);
 
     (void)dbi_conn_error( conn, &msg );
     PERR( "DBI error: %s\n", msg );
-    gnc_dbi_set_error( conn, ERR_BACKEND_MISC, 0, FALSE );
+    gnc_dbi_set_error( dbi_conn, ERR_BACKEND_MISC, 0, FALSE );
 }
 
 static void
