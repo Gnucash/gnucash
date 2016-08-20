@@ -32,7 +32,10 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/report/report-system \
   --gnc-module-dir ${top_builddir}/src/report/report-system/test \
   --gnc-module-dir ${top_builddir}/src/engine/test \
-\
+  --gnc-module-dir ${top_builddir}/src/backend/xml \
+  --gnc-module-dir ${top_builddir}/src/backend/sql \
+  --gnc-module-dir ${top_builddir}/src/backend/dbi \
+ \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/scm \
   --guile-load-dir ${top_builddir}/src/engine \
@@ -51,6 +54,7 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/src/backend/xml \
   --library-dir    ${top_builddir}/src/backend/sql  \
+  --library-dir    ${top_builddir}/src/backend/dbi  \
   --library-dir    ${top_builddir}/src/gnc-module
 
 $(SCM_TESTS): %: $(srcdir)/%.scm Makefile .scm-links

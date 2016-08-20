@@ -70,9 +70,11 @@
 
 #if LIBDBI_VERSION >= 900
 #define HAVE_LIBDBI_R 1
+#define HAVE_LIBDBI_TO_LONGLONG 1
 static dbi_inst dbi_instance = NULL;
 #else
 #define HAVE_LIBDBI_R 0
+#define HAVE_LIBDBI_TO_LONGLONG 0
 #endif
 
 /* For direct access to dbi data structs, sadly needed for datetime */
@@ -240,10 +242,12 @@ static void
 sqlite3_error_fn( dbi_conn conn, /*@ unused @*/ void* user_data )
 {
     const gchar* msg;
+    GncDbiBackend *be = (GncDbiBackend*)user_data;
+    GncDbiSqlConnection *dbi_conn = (GncDbiSqlConnection*)(be->sql_be.conn);
 
     (void)dbi_conn_error( conn, &msg );
     PERR( "DBI error: %s\n", msg );
-    gnc_dbi_set_error( conn, ERR_BACKEND_MISC, 0, FALSE );
+    gnc_dbi_set_error( dbi_conn, ERR_BACKEND_MISC, 0, FALSE );
 }
 
 static void
@@ -2206,15 +2210,21 @@ row_get_value_at_col_name( GncSqlRow* row, const gchar* col_name )
         }
 	else
 	{
+#if HAVE_LIBDBI_TO_LONGLONG
+            /* A less evil hack than the one required by libdbi-0.8, but still
+             * necessary to work around the same bug.
+             */
+            time64 time = dbi_result_get_as_longlong(dbi_row->result,
+                                                     col_name);
+#else
 	    /* A seriously evil hack to work around libdbi bug #15
-	     * https://sourceforge.net/p/libdbi/bugs/15/. When libdbi
-	     * v0.9 is widely available this can be replaced with
-	     * dbi_result_get_as_longlong.
+	     * https://sourceforge.net/p/libdbi/bugs/15/.
 	     */
 	    dbi_result_t *result = (dbi_result_t*)(dbi_row->result);
 	    guint64 row = dbi_result_get_currow (result);
 	    guint idx = dbi_result_get_field_idx (result, col_name) - 1;
 	    time64 time = result->rows[row]->field_values[idx].d_datetime;
+#endif
 	    (void)g_value_init( value, G_TYPE_INT64 );
 	    g_value_set_int64 (value, time);
 	}
