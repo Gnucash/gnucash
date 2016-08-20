@@ -937,7 +937,10 @@ gnc_plugin_page_register_ui_update (gpointer various, GncPluginPageRegister *pag
     uri = xaccTransGetAssociation(trans);
     action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
                                          "ExecAssociatedTransactionAction");
-    gtk_action_set_sensitive (GTK_ACTION(action), uri ? TRUE:FALSE);
+    if (g_strcmp0 (uri, "") != 0 && g_strcmp0 (uri, NULL) != 0)
+        gtk_action_set_sensitive (GTK_ACTION(action), TRUE);
+    else
+        gtk_action_set_sensitive (GTK_ACTION(action), FALSE);
 
     /* If we are in a readonly book, make any modifying action inactive */
     if (qof_book_is_readonly(gnc_get_current_book()))
@@ -3488,10 +3491,9 @@ gnc_plugin_page_register_cmd_associate_file_transaction (GtkAction *action,
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
-    gsr_default_associate_handler_file(priv->gsr, NULL);
+    gsr_default_associate_handler (priv->gsr, TRUE);
     gnc_plugin_page_register_ui_update (NULL, plugin_page);
     LEAVE(" ");
-
 }
 
 static void
@@ -3505,10 +3507,9 @@ gnc_plugin_page_register_cmd_associate_location_transaction (GtkAction *action,
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
-    gsr_default_associate_handler_location(priv->gsr, NULL);
+    gsr_default_associate_handler (priv->gsr, FALSE);
     gnc_plugin_page_register_ui_update (NULL, plugin_page);
     LEAVE(" ");
-
 }
 
 static void

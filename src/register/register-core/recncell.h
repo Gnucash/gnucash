@@ -57,6 +57,7 @@ typedef struct
     RecnCellStringGetter get_string;
     RecnCellConfirm confirm_cb;
     gpointer confirm_data;
+    gboolean read_only;
 } RecnCell;
 
 BasicCell * gnc_recn_cell_new (void);
@@ -81,5 +82,7 @@ void gnc_recn_cell_set_string_getter (RecnCell *cell,
 void gnc_recn_cell_set_valid_flags (RecnCell *cell, const char *flags,
                                     char default_flag);
 void gnc_recn_cell_set_flag_order (RecnCell *cell, const char *flags);
+
+void gnc_recn_cell_set_read_only (RecnCell *cell, gboolean read_only);
 /** @} */
 #endif

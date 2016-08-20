@@ -693,6 +693,143 @@ gnc_prefs_connect_font_button (GtkFontButton *fb)
 
 /****************************************************************************/
 
+/** Callback for a GtkFileChooser widget to store a value in the preferences database.
+ *
+ *  @internal
+ *
+ *  @param fc A pointer to the file chooser widget emitting signal.
+ */
+static void
+file_chooser_selected_cb (GtkFileChooser *fc, gpointer user_data)
+{
+    GtkImage    *image = g_object_get_data (G_OBJECT(fc), "path_head_error");
+    const gchar *group = g_object_get_data (G_OBJECT(fc), "group");
+    const gchar *pref = g_object_get_data (G_OBJECT(fc), "pref");
+    gchar       *folder = gtk_file_chooser_get_uri (fc);
+
+    gtk_widget_hide (GTK_WIDGET(image));
+
+    if (!gnc_prefs_set_string (group, pref, folder))
+        PINFO("Failed to save preference at %s, %s with %s", group, pref, folder);
+
+    g_free (folder);
+}
+
+/** Connect a GtkFileChooserButton widget to its stored value in the preferences database.
+ *
+ *  @internal
+ *
+ *  @param fb A pointer to the file chooser button that should be connected.
+ *
+ *  @param boxname The Hbox name that contains the GtkFileChooserButton and Clear button
+ */
+static void
+gnc_prefs_connect_file_chooser_button (GtkFileChooserButton *fcb, const gchar *boxname)
+{
+    GtkImage *image;
+    gchar *group, *pref;
+    gchar *uri;
+    gboolean folder_set = TRUE;
+
+    g_return_if_fail(GTK_FILE_CHOOSER_BUTTON(fcb));
+
+    if (boxname == NULL)
+        gnc_prefs_split_widget_name (gtk_buildable_get_name(GTK_BUILDABLE(fcb)), &group, &pref);
+    else
+        gnc_prefs_split_widget_name (boxname, &group, &pref);
+
+    uri = gnc_prefs_get_string (group, pref);
+
+    PINFO("Uri is %s", uri);
+
+    if ((uri != NULL) && (g_strcmp0 (uri, "") != 0)) // default entry
+    {
+        gchar *path_head = g_filename_from_uri (uri, NULL, NULL);
+
+        // test for current folder present and set chooser to it
+        if (g_file_test (path_head, G_FILE_TEST_IS_DIR))
+            gtk_file_chooser_set_current_folder_uri (GTK_FILE_CHOOSER(fcb), uri);
+        else
+            folder_set = FALSE;
+
+        g_free (path_head);
+    }
+
+    image = g_object_get_data(G_OBJECT(fcb), "path_head_error");
+
+    if (folder_set) // If current folder missing, display error and tt message
+        gtk_widget_hide (GTK_WIDGET(image));
+    else
+    {
+        gchar *uri_u = g_uri_unescape_string (uri, NULL);
+        gchar *path_head = g_filename_from_uri (uri_u, NULL, NULL);
+        gchar *ttip = g_strconcat (_("Path does not exist, "), path_head, NULL);
+
+        gtk_widget_set_tooltip_text(GTK_WIDGET(image), ttip);
+        gtk_widget_show (GTK_WIDGET(image));
+
+        g_free (ttip);
+        g_free (uri_u);
+        g_free (path_head);
+    }
+
+    g_signal_connect (GTK_FILE_CHOOSER(fcb), "selection-changed",
+                      G_CALLBACK(file_chooser_selected_cb), NULL);
+
+    g_object_set_data_full (G_OBJECT(fcb),"group", g_strdup (group), (GDestroyNotify) g_free);
+    g_object_set_data_full (G_OBJECT(fcb),"pref", g_strdup (pref), (GDestroyNotify) g_free);
+
+    g_free (group);
+    g_free (pref);
+    g_free (uri);
+
+    gtk_widget_show_all(GTK_WIDGET(fcb));
+}
+
+/** Callback for a 'Clear' button for GtkFileChooserButton widget.
+ *
+ *  @internal
+ *
+ *  @param button A pointer to the button widget emitting signal.
+ *
+ *  @param user_data A Pointer to the GtkFileChooserButton widget.
+ */
+static void
+file_chooser_clear_cb (GtkButton *button, gpointer user_data)
+{
+    GtkFileChooserButton *fcb = GTK_FILE_CHOOSER_BUTTON(user_data);
+    const gchar          *group = g_object_get_data (G_OBJECT(fcb), "group");
+    const gchar          *pref = g_object_get_data (G_OBJECT(fcb), "pref");
+    GtkImage             *image = g_object_get_data (G_OBJECT(fcb), "path_head_error");
+    GtkWidget            *box;
+    GtkWidget            *fcb_new;
+    gchar                *boxname;
+
+    /* We need to distroy the GtkFileChooserButton and recreate as there
+       does not seem to be away of resetting the folder path to NONE */
+    box = gtk_widget_get_parent (GTK_WIDGET(fcb));
+    gtk_widget_destroy (GTK_WIDGET(fcb));
+
+    if (!gnc_prefs_set_string (group, pref, ""))
+        PINFO("Failed to Clear preference at %s, %s", group, pref);
+
+    fcb_new = gtk_file_chooser_button_new (_("Select a folder"),
+                             GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+
+    g_object_set_data (G_OBJECT(fcb_new), "path_head_error", image);
+
+    gtk_box_pack_start (GTK_BOX (box), fcb_new, TRUE, TRUE, 0);
+    gtk_box_reorder_child (GTK_BOX (box),fcb_new, 0);
+    gtk_widget_show (fcb_new);
+
+    boxname = g_strconcat ("pref/", group, "/", pref, NULL);
+
+    gnc_prefs_connect_file_chooser_button (GTK_FILE_CHOOSER_BUTTON(fcb_new), boxname);
+    g_free (boxname);
+}
+
+/****************************************************************************/
+
 /** Connect a GtkRadioButton widget to its stored value in the preferences database.
  *
  *  @internal
@@ -716,8 +853,8 @@ gnc_prefs_connect_radio_button (GtkRadioButton *button)
 
     gnc_prefs_bind (group, pref, G_OBJECT (button), "active");
 
-    g_free(group);
-    g_free(pref);
+    g_free (group);
+    g_free (pref);
 }
 
 /****************************************************************************/
@@ -974,8 +1111,13 @@ gnc_prefs_connect_one (const gchar *name,
 
     if (GTK_IS_FONT_BUTTON(widget))
     {
-        DEBUG("  %s - entry", name);
+        DEBUG("  %s - font button", name);
         gnc_prefs_connect_font_button(GTK_FONT_BUTTON(widget));
+    }
+    else if (GTK_IS_FILE_CHOOSER_BUTTON(widget))
+    {
+        DEBUG("  %s - file chooser button", name);
+        gnc_prefs_connect_file_chooser_button(GTK_FILE_CHOOSER_BUTTON(widget), NULL);
     }
     else if (GTK_IS_RADIO_BUTTON(widget))
     {
@@ -1027,6 +1169,11 @@ gnc_prefs_connect_one (const gchar *name,
             DEBUG("  %s - date_edit", name);
             gnc_prefs_connect_date_edit(GNC_DATE_EDIT(widget_child), name );
         }
+        else if (GTK_FILE_CHOOSER_BUTTON(widget_child))
+        {
+            DEBUG("  %s - file chooser buuton", name);
+            gnc_prefs_connect_file_chooser_button(GTK_FILE_CHOOSER_BUTTON(widget_child), name );
+        }
     }
     else
     {
@@ -1052,7 +1199,7 @@ gnc_preferences_dialog_create(void)
 {
     GtkBuilder *builder;
     GtkWidget *dialog, *notebook, *label, *image;
-    GtkWidget *box, *date, *period, *currency;
+    GtkWidget *box, *date, *period, *currency, *fcb, *button;
     GHashTable *prefs_table;
     GDate* gdate = NULL;
     gchar buf[128];
@@ -1165,6 +1312,19 @@ gnc_preferences_dialog_create(void)
     gtk_widget_show (currency);
     gtk_box_pack_start(GTK_BOX (box), currency, TRUE, TRUE, 0);
 
+    box = GTK_WIDGET(gtk_builder_get_object (builder,
+                     "pref/" GNC_PREFS_GROUP_GENERAL "/assoc-head"));
+    fcb = gtk_file_chooser_button_new (_("Select a folder"),
+                             GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+    gtk_box_pack_start (GTK_BOX (box), fcb, TRUE, TRUE, 0);
+    button = gtk_button_new_with_label (_("Clear"));
+    gtk_box_pack_start (GTK_BOX (box), button, TRUE, TRUE, 0);
+    gtk_widget_show (button);
+    g_signal_connect (GTK_BUTTON(button), "clicked",
+                      G_CALLBACK(file_chooser_clear_cb), fcb);
+
+    image = GTK_WIDGET(gtk_builder_get_object (builder, "path_head_error"));
+    g_object_set_data(G_OBJECT(fcb), "path_head_error", image);
 
     /* Add to the list of interesting widgets */
     gnc_prefs_build_widget_table(builder, dialog);

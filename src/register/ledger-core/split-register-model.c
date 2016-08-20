@@ -319,6 +319,13 @@ gnc_split_register_get_action_label (VirtualLocation virt_loc,
 }
 
 static const char *
+gnc_split_register_get_associate_label (VirtualLocation virt_loc,
+                                   gpointer user_data)
+{
+    return _("Associate:A") + 10;
+}
+
+static const char *
 gnc_split_register_get_xfrm_label (VirtualLocation virt_loc,
                                    gpointer user_data)
 {
@@ -756,6 +763,55 @@ gnc_split_register_get_border (VirtualLocation virt_loc,
         if (virt_loc.phys_col_offset == vcell->cellblock->stop_col)
             borders->right = CELL_BORDER_LINE_LIGHT;
     }
+}
+
+static const char *
+gnc_split_register_get_associate_entry (VirtualLocation virt_loc,
+                                   gboolean translate,
+                                   gboolean *conditionally_changed,
+                                   gpointer user_data)
+{
+    SplitRegister *reg = user_data;
+    Transaction *trans;
+    char associate;
+    static char s[2];
+    const char *uri;
+
+    trans = gnc_split_register_get_trans (reg, virt_loc.vcell_loc);
+    if (!trans)
+        return NULL;
+
+    // get the existing uri
+    uri = xaccTransGetAssociation (trans);
+
+    // Check for uri is empty or NULL
+    if (g_strcmp0 (uri, "") != 0 && g_strcmp0 (uri, NULL) != 0)
+    {
+        if (g_str_has_prefix (uri, "file:"))
+            associate = 'f';
+        else
+            associate = 'w';
+    }
+    else
+        associate = ' ';
+
+    s[0] = associate;
+    s[1] = '\0';
+
+    return s;
+}
+
+static char
+gnc_split_register_get_associate_value (SplitRegister *reg,
+                                   VirtualLocation virt_loc)
+{
+    RecnCell *cell;
+
+    cell = (RecnCell *)gnc_table_layout_get_cell (reg->table->layout, ASSOC_CELL);
+    if (!cell)
+        return '\0';
+
+    return gnc_recn_cell_get_flag (cell);
 }
 
 static const char *
@@ -2332,6 +2388,10 @@ gnc_split_register_model_new (void)
                                        TCRED_CELL);
 
     gnc_table_model_set_entry_handler (model,
+                                       gnc_split_register_get_associate_entry,
+                                       ASSOC_CELL);
+
+    gnc_table_model_set_entry_handler (model,
                                        gnc_split_register_get_type_entry,
                                        TYPE_CELL);
 
@@ -2423,6 +2483,10 @@ gnc_split_register_model_new (void)
     gnc_table_model_set_label_handler (model,
                                        gnc_split_register_get_tbalance_label,
                                        TBALN_CELL);
+
+    gnc_table_model_set_label_handler (model,
+                                       gnc_split_register_get_associate_label,
+                                       ASSOC_CELL);
 
     gnc_table_model_set_label_handler (model,
                                        gnc_split_register_get_type_label,
@@ -2558,6 +2622,9 @@ gnc_split_register_model_new (void)
 
     gnc_table_model_set_io_flags_handler(
         model, gnc_split_register_get_recn_io_flags, RECN_CELL);
+
+    gnc_table_model_set_io_flags_handler(
+        model, gnc_split_register_get_recn_io_flags, ASSOC_CELL);
 
     gnc_table_model_set_io_flags_handler(
         model, gnc_split_register_get_recn_io_flags, TYPE_CELL);

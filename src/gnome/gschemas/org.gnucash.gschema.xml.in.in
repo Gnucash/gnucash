@@ -15,6 +15,11 @@
       <summary>Character to use as separator between account names</summary>
       <description>This setting determines the character that will be used between components of an account name. Possible values are any single non-alphanumeric unicode character, or any of the following strings: "colon" "slash", "backslash", "dash" and "period".</description>
     </key>
+    <key name="assoc-head" type="s">
+      <default>''</default>
+      <summary>Transaction Associations head path</summary>
+      <description>This is the path head for the Transaction file Associations</description>
+    </key>
     <key name="file-compression" type="b">
       <default>true</default>
       <summary>Compress the data file</summary>

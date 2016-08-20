@@ -180,6 +180,7 @@ typedef enum
  *  @{
  */
 #define ACTN_CELL  "action"
+#define ASSOC_CELL "associate"
 #define BALN_CELL  "balance"
 #define CRED_CELL  "credit"
 #define DATE_CELL  "date"
