@@ -124,6 +124,8 @@ IF (WIN32)
   SET(LIBXSLT_XSLTPROC_EXECUTABLE ${CMAKE_PREFIX_PATH}/libxslt/bin/xsltproc)
   # I have not yet debugged the intltool-merge file generation process on Windows.
   SET(NO_INTLTOOL TRUE)
+#Prevent creating a console window on startup.
+  SET(CMAKE_EXE_LINKER_FLAGS -mwindows)
 ENDIF(WIN32)
 
 IF (APPLE)
