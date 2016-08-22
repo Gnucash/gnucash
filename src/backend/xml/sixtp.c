@@ -165,13 +165,13 @@ sixtp_set_any(sixtp *tochange, int cleanup, ...)
     va_list ap;
     sixtp_handler_type type;
 
-    va_start(ap, cleanup);
-
     if (!tochange)
     {
         g_warning("Null tochange passed");
         return NULL;
     }
+
+    va_start(ap, cleanup);
 
     do
     {
