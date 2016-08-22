@@ -82,7 +82,7 @@ load_address( const GncSqlBackend* be, GncSqlRow* row,
     g_return_if_fail( pObject != NULL );
     g_return_if_fail( table_row != NULL );
 
-    addr = gncAddressCreate( be->book, NULL );
+    addr = gncAddressCreate( be->book, QOF_INSTANCE(pObject));
     for ( subtable = col_table; subtable->col_name != NULL; subtable++ )
     {
         buf = g_strdup_printf( "%s_%s", table_row->col_name, subtable->col_name );
