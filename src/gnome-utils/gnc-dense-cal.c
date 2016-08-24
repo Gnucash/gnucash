@@ -1738,17 +1738,25 @@ gdc_add_tag_markings(GncDenseCal *cal, guint tag)
     }
     if (g_date_valid(dates[0]))
     {
-	 if (g_date_get_julian(dates[0]) < g_date_get_julian(calDate))
-	 {
-	      _gnc_dense_cal_set_month(cal, g_date_get_month(dates[0]), FALSE);
-	      _gnc_dense_cal_set_year(cal, g_date_get_year(dates[0]), FALSE);
-	 }
+        if (g_date_get_julian(dates[0]) < g_date_get_julian(calDate))
+        {
+            /* Oops, first marking is earlier than months displayed.
+             * Choose new first month and recalculate all markings for all
+             * tags. Their offsets are all wrong with the newly added month(s).
+             */
+            _gnc_dense_cal_set_month(cal, g_date_get_month(dates[0]), FALSE);
+            _gnc_dense_cal_set_year(cal, g_date_get_year(dates[0]), FALSE);
+
+            gdc_remove_markings (cal);
+            gdc_add_markings (cal);
+        }
+        else
+            gdc_mark_add(cal, tag, name, info, num_marks, dates);
     }
     else
     {
-	 g_warning("Bad date, skipped.");
+        g_warning("Bad date, skipped.");
     }
-    gdc_mark_add(cal, tag, name, info, num_marks, dates);
 
     for (idx = 0; idx < num_marks; idx++)
     {
