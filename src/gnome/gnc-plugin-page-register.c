@@ -115,6 +115,8 @@ void gnc_plugin_page_register_sort_order_reverse_cb(GtkToggleButton *button, Gnc
 
 static gchar *gnc_plugin_page_register_get_sort_order (GncPluginPage *plugin_page);
 void gnc_plugin_page_register_set_sort_order (GncPluginPage *plugin_page, const gchar *sort_order);
+static gboolean gnc_plugin_page_register_get_sort_reversed (GncPluginPage *plugin_page);
+void gnc_plugin_page_register_set_sort_reversed (GncPluginPage *plugin_page, gboolean reverse_order);
 
 /* Callbacks for the "Filter By" dialog */
 void gnc_plugin_page_register_filter_select_range_cb(GtkRadioButton *button, GncPluginPageRegister *page);
@@ -540,6 +542,7 @@ typedef struct GncPluginPageRegisterPrivate
         gboolean original_save_order;
         gboolean save_order;
         gboolean reverse_order;
+        gboolean original_reverse_order;
     } sd;
 
     struct
@@ -1100,7 +1103,6 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
     {
         /* Set the sort order for the split register and status of save order button */
         priv->sd.save_order = FALSE;
-        priv->sd.reverse_order = FALSE;
         order = gnc_plugin_page_register_get_sort_order(plugin_page);
 
         PINFO("Loaded Sort order is %s", order);
@@ -1112,6 +1114,13 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 
         priv->sd.original_save_order = priv->sd.save_order;
         g_free(order);
+
+        priv->sd.reverse_order = gnc_plugin_page_register_get_sort_reversed(plugin_page);
+        gnc_split_reg_set_sort_reversed(priv->gsr, priv->sd.reverse_order);
+        if (priv->sd.reverse_order)
+            priv->sd.save_order = TRUE;
+
+        priv->sd.original_reverse_order = priv->sd.reverse_order;
 
         /* Set the filter for the split register and status of save filter button */
         priv->fd.save_filter = FALSE;
@@ -1740,6 +1749,45 @@ gnc_plugin_page_register_set_sort_order (GncPluginPage *plugin_page, const gchar
     return;
 }
 
+static gboolean
+gnc_plugin_page_register_get_sort_reversed (GncPluginPage *plugin_page)
+{
+    GncPluginPageRegisterPrivate *priv;
+    GNCLedgerDisplayType ledger_type;
+    GNCLedgerDisplay *ld;
+    Account *leader;
+    gboolean sort_reversed = FALSE;
+
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page), FALSE);
+
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
+    ld = priv->ledger;
+    ledger_type = gnc_ledger_display_type (ld);
+    leader = gnc_ledger_display_leader (ld);
+
+    if ((ledger_type == LD_SINGLE) || (ledger_type == LD_SUBACCOUNT))
+        sort_reversed = xaccAccountGetSortReversed (leader);
+
+    return sort_reversed;
+}
+
+void
+gnc_plugin_page_register_set_sort_reversed (GncPluginPage *plugin_page, gboolean reverse_order)
+{
+    GncPluginPageRegisterPrivate *priv;
+    GNCLedgerDisplay *ld;
+    Account *leader;
+
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
+    ld = priv->ledger;
+    leader = gnc_ledger_display_leader (ld);
+
+    if (leader != NULL)
+        xaccAccountSetSortReversed (leader, reverse_order);
+
+    return;
+}
+
 static gchar *
 gnc_plugin_page_register_get_long_name (GncPluginPage *plugin_page)
 {
@@ -1872,6 +1920,8 @@ gnc_plugin_page_register_sort_response_cb (GtkDialog *dialog,
     if (response != GTK_RESPONSE_OK)
     {
         /* Restore the original sort order */
+        gnc_split_reg_set_sort_reversed(priv->gsr, priv->sd.original_reverse_order);
+        priv->sd.reverse_order = priv->sd.original_reverse_order;
         gnc_split_reg_set_sort_type(priv->gsr, priv->sd.original_sort_type);
         priv->sd.save_order = priv->sd.original_save_order;
     }
@@ -1884,6 +1934,7 @@ gnc_plugin_page_register_sort_response_cb (GtkDialog *dialog,
             type = gnc_split_reg_get_sort_type(priv->gsr);
             order = SortTypeasString(type);
             gnc_plugin_page_register_set_sort_order (plugin_page, order);
+            gnc_plugin_page_register_set_sort_reversed (plugin_page, priv->sd.reverse_order);
         }
     }
     gnc_book_option_remove_cb(OPTION_NAME_NUM_FIELD_SOURCE,
@@ -1977,16 +2028,8 @@ gnc_plugin_page_register_sort_order_reverse_cb (GtkToggleButton *button,
     /* Compute the new save sort order */
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
 
-    if (gtk_toggle_button_get_active(button))
-    {
-        gnc_split_reg_set_sort_reversed(priv->gsr, FALSE);
-        priv->sd.reverse_order = TRUE;
-      }
-    else
-    {
-        gnc_split_reg_set_sort_reversed(priv->gsr, TRUE);
-        priv->sd.reverse_order = FALSE;
-      }
+    priv->sd.reverse_order = gtk_toggle_button_get_active(button);
+    gnc_split_reg_set_sort_reversed(priv->gsr, priv->sd.reverse_order);
     LEAVE(" ");
 }
 
@@ -3101,6 +3144,7 @@ gnc_plugin_page_register_cmd_view_sort_by (GtkAction *action,
     button = GTK_WIDGET(gtk_builder_get_object (builder, "sort_reverse"));
     if(priv->sd.reverse_order == TRUE)
        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
+    priv->sd.original_reverse_order = priv->sd.reverse_order;
 
     priv->sd.num_radio = GTK_WIDGET(gtk_builder_get_object (builder, "BY_NUM"));
     priv->sd.act_radio = GTK_WIDGET(gtk_builder_get_object (builder, "BY_ACTION"));

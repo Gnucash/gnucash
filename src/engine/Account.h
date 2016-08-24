@@ -293,6 +293,8 @@ void xaccAccountSetColor (Account *account, const char *color);
 void xaccAccountSetFilter (Account *account, const char *filter);
 /** Set the account's Sort Order */
 void xaccAccountSetSortOrder (Account *account, const char *sortorder);
+/** Set the account's Sort Order direction */
+void xaccAccountSetSortReversed (Account *account, gboolean sortreversed);
 /** Set the account's notes */
 void xaccAccountSetNotes (Account *account, const char *notes);
 /** Set the last num field of an Account */
@@ -384,6 +386,8 @@ const char * xaccAccountGetColor (const Account *account);
 const char * xaccAccountGetFilter (const Account *account);
 /** Get the account's Sort Order */
 const char * xaccAccountGetSortOrder (const Account *account);
+/** Get the account's Sort Order direction */
+gboolean xaccAccountGetSortReversed (const Account *account);
 /** Get the account's notes */
 const char * xaccAccountGetNotes (const Account *account);
 /** Get the last num field of an Account */
@@ -1400,6 +1404,7 @@ const char * dxaccAccountGetQuoteTZ (const Account *account);
 #define ACCOUNT_COLOR_		"color"
 #define ACCOUNT_FILTER_		"filter"
 #define ACCOUNT_SORT_ORDER_	"sort-order"
+#define ACCOUNT_SORT_REVERSED_ "sort-reversed"
 #define ACCOUNT_NOTES_		"notes"
 #define ACCOUNT_BALANCE_	"balance"
 #define ACCOUNT_CLEARED_	"cleared"

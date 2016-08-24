@@ -1895,8 +1895,13 @@ gnc_split_reg_sort_notes_cb(GtkWidget *w, gpointer data)
 void
 gnc_split_reg_set_sort_reversed(GNCSplitReg *gsr, gboolean rev)
 {
+  /* Note: sort_reversed is the boolean opposite of sort_increasing
+   *       so when rev == true, we're sorting decreasing
+   *       In other words, qof_query_set_sort_increasing should
+   *       always use the inverse of rev.
+   */
   Query *query = gnc_ledger_display_get_query( gsr->ledger );
-  qof_query_set_sort_increasing (query, rev, rev, rev);
+  qof_query_set_sort_increasing (query, !rev, !rev, !rev);
   gnc_ledger_display_refresh( gsr->ledger );
 }
 
