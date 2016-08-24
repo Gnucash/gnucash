@@ -182,9 +182,6 @@ gdcs_generic_update_recurrences(GncDenseCalStore *trans, GDate *start, GList *re
     GDate date, next;
 
     date = *start;
-    /* go one day before what's in the box so we can get the correct start
-     * date. */
-    g_date_subtract_days(&date, 1);
     recurrenceListNextInstance(recurrences, &date, &next);
 
     i = 0;

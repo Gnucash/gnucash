@@ -1609,9 +1609,15 @@ gnc_sxed_update_cal(GncSxEditorDialog *sxed)
             && g_date_valid(&first_date)
             && g_date_compare(last_sx_inst, &first_date) != 0)
         {
+            /* last occurrence will be passed as initial date to update store
+             * later on as well */
             start_date = *last_sx_inst;
             recurrenceListNextInstance(recurrences, &start_date, &first_date);
         }
+        else
+            /* move one day back so the store can get the proper first recurrence. */
+            g_date_subtract_days(&start_date, 1);
+
     }
 
     if (!g_date_valid(&first_date))
@@ -1637,17 +1643,17 @@ gnc_sxed_update_cal(GncSxEditorDialog *sxed)
         GDate end_date;
         g_date_clear (&end_date, 1);
         gnc_gdate_set_time64 (&end_date, gnc_date_edit_get_date(sxed->endDateEntry));
-        gnc_dense_cal_store_update_recurrences_date_end(sxed->dense_cal_model, &first_date, recurrences, &end_date);
+        gnc_dense_cal_store_update_recurrences_date_end(sxed->dense_cal_model, &start_date, recurrences, &end_date);
     }
     else if (gtk_toggle_button_get_active(sxed->optEndNone))
     {
-        gnc_dense_cal_store_update_recurrences_no_end(sxed->dense_cal_model, &first_date, recurrences);
+        gnc_dense_cal_store_update_recurrences_no_end(sxed->dense_cal_model, &start_date, recurrences);
     }
     else if (gtk_toggle_button_get_active(sxed->optEndCount))
     {
         gint num_remain
             = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(sxed->endRemainSpin));
-        gnc_dense_cal_store_update_recurrences_count_end(sxed->dense_cal_model, &first_date, recurrences, num_remain);
+        gnc_dense_cal_store_update_recurrences_count_end(sxed->dense_cal_model, &start_date, recurrences, num_remain);
     }
     else
     {

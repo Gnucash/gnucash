@@ -715,16 +715,17 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
     gtk_widget_set_sensitive( GTK_WIDGET(sxfti->endDateGDE), (get.type == END_ON_DATE) );
     gtk_widget_set_sensitive( GTK_WIDGET(sxfti->n_occurences), (get.type == END_AFTER_N_OCCS) );
 
+    /* Use the day preceding the start date for the store to find the correct real start date */
     switch (get.type)
     {
     case NEVER_END:
-        gnc_dense_cal_store_update_recurrences_no_end(sxfti->dense_cal_model, &startDate, schedule);
+        gnc_dense_cal_store_update_recurrences_no_end(sxfti->dense_cal_model, &date, schedule);
         break;
     case END_ON_DATE:
-        gnc_dense_cal_store_update_recurrences_date_end(sxfti->dense_cal_model, &startDate, schedule, &get.end_date);
+        gnc_dense_cal_store_update_recurrences_date_end(sxfti->dense_cal_model, &date, schedule, &get.end_date);
         break;
     case END_AFTER_N_OCCS:
-        gnc_dense_cal_store_update_recurrences_count_end(sxfti->dense_cal_model, &startDate, schedule, get.n_occurrences);
+        gnc_dense_cal_store_update_recurrences_count_end(sxfti->dense_cal_model, &date, schedule, get.n_occurrences);
         break;
     default:
         g_warning("unknown get.type [%d]\n", get.type);
