@@ -8,8 +8,12 @@ SET (report_gnome_HEADERS
   window-report.h
 )
 
-SET (SWIG_REPORT_GNOME_C ${CMAKE_CURRENT_BINARY_DIR}/swig-report-gnome.c)
-GNC_ADD_SWIG_COMMAND (${SWIG_REPORT_GNOME_C} ${CMAKE_CURRENT_SOURCE_DIR}/report-gnome.i ${report_gnome_HEADERS})
+IF (BUILDING_FROM_VCS)
+  SET (SWIG_REPORT_GNOME_C ${CMAKE_CURRENT_BINARY_DIR}/swig-report-gnome.c)
+  GNC_ADD_SWIG_COMMAND (${SWIG_REPORT_GNOME_C} ${CMAKE_CURRENT_SOURCE_DIR}/report-gnome.i ${report_gnome_HEADERS})
+ELSE()
+  SET (SWIG_REPORT_GNOME_C swig-report-gnome.c)
+ENDIF()
 
 SET (report_gnome_SOURCES
   ${SWIG_REPORT_GNOME_C}

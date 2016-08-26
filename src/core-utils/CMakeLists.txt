@@ -1,9 +1,16 @@
 # CMakeLists.txt for src/core-utils
 
 ADD_SUBDIRECTORY(test)
-# Command to generate the swig-engine.c wrapper file
-SET (SWIG_CORE_UTILS_C ${CMAKE_CURRENT_BINARY_DIR}/swig-core-utils.c)
-GNC_ADD_SWIG_COMMAND (${SWIG_CORE_UTILS_C} ${CMAKE_CURRENT_SOURCE_DIR}/core-utils.i)
+
+IF (BUILDING_FROM_VCS)
+  SET (SWIG_CORE_UTILS_GUILE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-core-utils-guile.c)
+  GNC_ADD_SWIG_COMMAND (${SWIG_CORE_UTILS_GUILE_C} ${CMAKE_CURRENT_SOURCE_DIR}/core-utils.i)
+  SET (SWIG_CORE_UTILS_PYTHON_C ${CMAKE_CURRENT_BINARY_DIR}/swig-core-utils-python.c)
+  GNC_ADD_SWIG_PYTHON_COMMAND (swig-core-utils-python ${SWIG_CORE_UTILS_PYTHON_C} ${CMAKE_CURRENT_SOURCE_DIR}/core-utils.i)
+ELSE()
+  SET(SWIG_CORE_UTILS_GUILE_C swig-core-utils-guile.c)
+  SET(SWIG_CORE_UTILS_PYTHON_C swig-core-utils-python.c)
+ENDIF()
 
 SET (core_utils_SOURCES
   binreloc.c
@@ -19,7 +26,6 @@ SET (core_utils_SOURCES
   gnc-locale-utils.c
   gnc-path.c
   gnc-uri-utils.c
-  ${SWIG_CORE_UTILS_C}
 )
 
 # Add dependency on config.h
@@ -102,33 +108,59 @@ SET(core_utils_noinst_HEADERS
   gnc-uri-utils.h
 )
 
-ADD_LIBRARY	(gnc-core-utils
-  ${core_utils_SOURCES}
-  ${core_utils_noinst_HEADERS}
-)
+SET(core_utils_ALL_SOURCES ${core_utils_SOURCES} ${core_utils_noinst_HEADERS})
+SET(core_utils_ALL_LIBRARIES gnc-qof ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS} ${GOBJECT_LDFLAGS} ${GTK_MAC_LDFLAGS})
+SET(core_utils_ALL_INCLUDES ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}
+                            ${GUILE_INCLUDE_DIRS} ${GTK_MAC_INCLUDE_DIRS})
+
+IF (MAC_INTEGRATION)
+  LIST(APPEND core_utils_ALL_LIBRARIES ${OSX_EXTRA_LIBRARIES})
+ENDIF()
+
+ADD_LIBRARY	(gnc-core-utils ${core_utils_ALL_SOURCES} ${SWIG_CORE_UTILS_GUILE_C})
 ADD_DEPENDENCIES(gnc-core-utils gnc-vcs-info)
 
-TARGET_LINK_LIBRARIES(gnc-core-utils gnc-qof ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS} ${GOBJECT_LDFLAGS} ${GTK_MAC_LDFLAGS})
+TARGET_LINK_LIBRARIES(gnc-core-utils ${core_utils_ALL_LIBRARIES})
 
 TARGET_COMPILE_DEFINITIONS(gnc-core-utils
     PRIVATE -DG_LOG_DOMAIN=\"gnc.core-utils\" ${GTK_MAC_CFLAGS_OTHER})
 
-TARGET_INCLUDE_DIRECTORIES(gnc-core-utils PUBLIC
-  ${CMAKE_CURRENT_BINARY_DIR} # for headers generated in core-utils build directory
-  ${CMAKE_CURRENT_SOURCE_DIR}
-  ${GUILE_INCLUDE_DIRS}
-  ${GTK_MAC_INCLUDE_DIRS}
-)
+TARGET_INCLUDE_DIRECTORIES(gnc-core-utils PUBLIC ${core_utils_ALL_INCLUDES})
 
 IF (MAC_INTEGRATION)
   TARGET_COMPILE_OPTIONS(gnc-core-utils PRIVATE ${OSX_EXTRA_COMPILE_FLAGS})
-  TARGET_LINK_LIBRARIES(gnc-core-utils ${OSX_EXTRA_LIBRARIES})
 ENDIF(MAC_INTEGRATION)
 
 INSTALL(TARGETS gnc-core-utils
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
-  RUNTIME DESTINATION bin)
+  RUNTIME DESTINATION bin
+)
+
+IF (WITH_PYTHON)
+  ADD_LIBRARY	(gnc-core-utils-python ${core_utils_ALL_SOURCES} ${SWIG_CORE_UTILS_PYTHON_C})
+  ADD_DEPENDENCIES(gnc-core-utils-python gnc-vcs-info)
+
+  TARGET_LINK_LIBRARIES(gnc-core-utils-python ${core_utils_ALL_LIBRARIES} ${PYTHON_LIBRARIES})
+
+  TARGET_COMPILE_DEFINITIONS(gnc-core-utils-python
+    PRIVATE -DG_LOG_DOMAIN=\"gnc.core-utils\" ${GTK_MAC_CFLAGS_OTHER}
+  )
+
+  TARGET_INCLUDE_DIRECTORIES(gnc-core-utils-python PUBLIC ${core_utils_ALL_INCLUDES} ${PYTHON_INCLUDE_DIRS})
+
+  IF (MAC_INTEGRATION)
+    TARGET_COMPILE_OPTIONS(gnc-core-utils-python PRIVATE ${OSX_EXTRA_COMPILE_FLAGS})
+  ENDIF(MAC_INTEGRATION)
+
+  INSTALL(TARGETS gnc-core-utils-python
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin
+  )
+
+ENDIF()
+
 # No headers to install
 
 # Scheme

@@ -9,8 +9,12 @@ SET (html_HEADERS
   gnc-html-webkit-p.h
 )
 
-SET (SWIG_GNC_HTML_C ${CMAKE_CURRENT_BINARY_DIR}/swig-gnc-html.c)
-GNC_ADD_SWIG_COMMAND (${SWIG_GNC_HTML_C} ${CMAKE_CURRENT_SOURCE_DIR}/gnc-html.i ${gncmod_html_HEADERS})  
+IF (BUILDING_FROM_VCS)
+  SET (SWIG_GNC_HTML_C ${CMAKE_CURRENT_BINARY_DIR}/swig-gnc-html.c)
+  GNC_ADD_SWIG_COMMAND (${SWIG_GNC_HTML_C} ${CMAKE_CURRENT_SOURCE_DIR}/gnc-html.i ${gncmod_html_HEADERS})
+ELSE()
+  SET (SWIG_GNC_HTML_C swig-gnc-html.c)
+ENDIF()
 
 SET (html_SOURCES
   gncmod-html.c

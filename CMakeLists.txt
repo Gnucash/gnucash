@@ -56,6 +56,7 @@ OPTION (WITH_AQBANKING "Build this project with aqbanking (online banking) suppo
 OPTION (WITH_GNUCASH "Build all of GnuCash, not just cutecash" ON)
 OPTION (WITH_CUTECASH "Also build cutecash" OFF)
 OPTION (WITH_OFX "compile with ofx support (needs LibOFX)" ON)
+OPTION (WITH_PYTHON "enable python plugin and bindings" OFF)
 OPTION (ENABLE_BINRELOC "compile with binary relocation support" ON)
 OPTION (ENABLE_DEBUG "compile with debugging flags set" OFF)
 OPTION (ENABLE_REGISTER2 "compile with register2 enabled" OFF)
@@ -98,6 +99,19 @@ IF (WIN32)
 ENDIF()
 IF (SHELL_FROM_ENV) # Replacing this with IF ($ENV{SHELL}) doesn't work.
   SET(SHELL ${SHELL_FROM_ENV})
+ENDIF()
+
+# Determine whether we are building from a VCS or from a tarball
+EXECUTE_PROCESS(
+  COMMAND ${SHELL} ${CMAKE_SOURCE_DIR}/util/gnc-vcs-info -t ${CMAKE_SOURCE_DIR}
+  RESULT_VARIABLE GNC_VCS_INFO_RESULT
+  OUTPUT_VARIABLE GNC_VCS_INFO_OUTPUT
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+SET(BUILDING_FROM_VCS "NO")
+IF (GNC_VCS_INFO_RESULT EQUAL 0)
+  SET(BUILDING_FROM_VCS "YES")
 ENDIF()
 
 IF (WIN32)
@@ -215,8 +229,10 @@ ENDIF (WIN32)
 # ############################################################
 
 # SWIG
-FIND_PACKAGE (SWIG REQUIRED)
-INCLUDE (${SWIG_USE_FILE})
+IF(BUILDING_FROM_VCS)
+  FIND_PACKAGE (SWIG REQUIRED)
+  INCLUDE (${SWIG_USE_FILE})
+ENDIF()
 
 # Find Guile and determine which version we are using.
 # First look for guile-2.0. If not found, try to locate guile-1.8
@@ -325,6 +341,24 @@ ENDIF (WITH_SQL)
 
 # ############################################################
 
+IF (WITH_PYTHON)
+  FIND_PACKAGE(PythonInterp)
+  IF (NOT PYTHONINTERP_FOUND)
+    MESSAGE(SEND_ERROR "Python support enabled, but Python interpreter not found.")
+  ENDIF()
+
+  IF (PYTHON_VERSION_STRING VERSION_LESS "2.4.0")
+    MESSAGE(SEND_ERROR "Found python version ${PYTHON_VERSION_STRING}, but it's too old. Need python >= 2.4.0")
+  ENDIF()
+
+  FIND_PACKAGE(PythonLibs)
+  IF (NOT PYTHONLIBS_FOUND)
+    MESSAGE(SEND_ERROR "Python support enabled, but Python libraries not found.")
+  ENDIF()
+ENDIF()
+
+
+
 FIND_PACKAGE(Perl)
 
 if (NOT PERL_FOUND)
@@ -416,6 +450,7 @@ ENDIF()
 ADD_SUBDIRECTORY (accounts)
 ADD_SUBDIRECTORY (checks)
 ADD_SUBDIRECTORY (doc)
+ADD_SUBDIRECTORY (packaging)
 ADD_SUBDIRECTORY (po)
 ADD_SUBDIRECTORY (src)
 

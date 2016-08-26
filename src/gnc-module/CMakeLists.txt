@@ -1,9 +1,13 @@
 # CMakeLists.txt for src/gnc-module
 ADD_SUBDIRECTORY(test)
 
-# Command to generate the swig-engine.c wrapper file
-SET (SWIG_GNC_MODULE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-gnc-module.c)
-GNC_ADD_SWIG_COMMAND (${SWIG_GNC_MODULE_C} ${CMAKE_CURRENT_SOURCE_DIR}/gnc-module.i)
+IF (BUILDING_FROM_VCS)
+  # Command to generate the swig-engine.c wrapper file
+  SET (SWIG_GNC_MODULE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-gnc-module.c)
+  GNC_ADD_SWIG_COMMAND (${SWIG_GNC_MODULE_C} ${CMAKE_CURRENT_SOURCE_DIR}/gnc-module.i)
+ELSE()
+  SET (SWIG_GNC_MODULE_C swig-gnc-module.c)
+ENDIF()
 
 SET (gnc_module_SOURCES
   gnc-module.c

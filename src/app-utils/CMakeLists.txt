@@ -36,9 +36,16 @@ SET (app_utils_HEADERS
 
 )
 
-# Command to generate the swig-app-utils.c wrapper file
-SET (SWIG_APP_UTILS_C ${CMAKE_CURRENT_BINARY_DIR}/swig-app-utils.c)
-GNC_ADD_SWIG_COMMAND (${SWIG_APP_UTILS_C} ${CMAKE_CURRENT_SOURCE_DIR}/app-utils.i)
+IF (BUILDING_FROM_VCS)
+  # Command to generate the swig-app-utils.c wrapper file
+  SET (SWIG_APP_UTILS_GUILE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-app-utils-guile.c)
+  GNC_ADD_SWIG_COMMAND (${SWIG_APP_UTILS_GUILE_C} ${CMAKE_CURRENT_SOURCE_DIR}/app-utils.i)
+  SET (SWIG_APP_UTILS_PYTHON_C ${CMAKE_CURRENT_BINARY_DIR}/swig-app-utils-python.c)
+  GNC_ADD_SWIG_PYTHON_COMMAND (swig-app-utils-python ${SWIG_APP_UTILS_PYTHON_C} ${CMAKE_CURRENT_SOURCE_DIR}/app-utils.i)
+ELSE()
+  SET (SWIG_APP_UTILS_GUILE_C swig-app-utils-guile.c)
+  SET (SWIG_APP_UTILS_PYTHON_C swig-app-utils-python.c)
+ENDIF()
 
 SET (app_utils_SOURCES
   calculation/expression_parser.c
@@ -66,47 +73,57 @@ SET (app_utils_SOURCES
   gncmod-app-utils.c
   guile-util.c
   option-util.c
-  ${SWIG_APP_UTILS_C}
+  ${SWIG_APP_UTILS_GUILE_C}
 )
-
-IF (WIN32)
-  SET (app_utils_SOURCES ${app_utils_SOURCES} gnc-help-utils.c)
-ENDIF (WIN32)
 
 SET_SOURCE_FILES_PROPERTIES (${app_utils_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
-ADD_LIBRARY	(gncmod-app-utils
-  ${app_utils_SOURCES}
-  ${app_utils_HEADERS}
-  ${app_utils_noinst_HEADERS}
-)
+SET(app_utils_ALL_SOURCES ${app_utils_SOURCES} ${app_utils_HEADERS} ${app_utils_noinst_HEADERS})
+SET(app_utils_ALL_LIBRARIES gncmod-engine gnc-module ${GTK2_LDFLAGS} ${LIBXML2_LDFLAGS} ${LIBXSLT_LDFLAGS})
+SET(app_utils_ALL_INCLUDES  ${CMAKE_CURRENT_SOURCE_DIR}/calculation  ${LIBXML2_INCLUDE_DIRS}
+                               ${LIBXSLT_INCLUDE_DIRS} ${GTK2_INCLUDE_DIRS})
 
-TARGET_LINK_LIBRARIES(gncmod-app-utils gncmod-engine gnc-module 
-  ${GTK2_LDFLAGS} ${LIBXML2_LDFLAGS} ${LIBXSLT_LDFLAGS}
-)
+IF (WIN32)
+  LIST(APPEND app_utils_ALL_SOURCES gnc-help-utils.c)
+  LIST(APPEND app_utils_ALL_LIBRARIES ${HTMLHELP_LIBRARY})
+  LIST(APPEND app_utils_ALL_INCLUDES ${HTMLHELP_INCLUDE_PATH})
+ENDIF()
 
-IF (WIN32) 
-   TARGET_LINK_LIBRARIES(gncmod-app-utils ${HTMLHELP_LIBRARY})
-ENDIF(WIN32)
+ADD_LIBRARY (gncmod-app-utils ${app_utils_ALL_SOURCES})
+TARGET_LINK_LIBRARIES(gncmod-app-utils ${app_utils_ALL_LIBRARIES})
 
 TARGET_INCLUDE_DIRECTORIES (gncmod-app-utils
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
-    PRIVATE
-      ${CMAKE_CURRENT_SOURCE_DIR}/calculation
-      ${LIBXML2_INCLUDE_DIRS}
-      ${LIBXSLT_INCLUDE_DIRS}
-      ${HTMLHELP_INCLUDE_PATH}
-      ${GTK2_INCLUDE_DIRS}
+    PRIVATE ${app_utils_ALL_INCLUDES}
 )
-
 TARGET_COMPILE_DEFINITIONS (gncmod-app-utils PRIVATE -DG_LOG_DOMAIN=\"gnc.app-utils\")
 
-
 INSTALL(TARGETS gncmod-app-utils
-     LIBRARY DESTINATION lib/gnucash
-     ARCHIVE DESTINATION lib/gnucash
-     RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib/gnucash
+  ARCHIVE DESTINATION lib/gnucash
+  RUNTIME DESTINATION bin
 )
+
+IF (WITH_PYTHON)
+  ADD_LIBRARY (gncmod-app-utils-python ${app_utils_ALL_SOURCES} ${SWIG_APP_UTILS_PYTHON_C})
+
+  TARGET_LINK_LIBRARIES(gncmod-app-utils-python ${app_utils_ALL_LIBRARIES} ${PYTHON_LIBRARIES})
+
+  TARGET_INCLUDE_DIRECTORIES (gncmod-app-utils-python
+    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
+    PRIVATE ${app_utils_ALL_INCLUDES} ${PYTHON_INCLUDE_DIRS}
+  )
+  TARGET_COMPILE_DEFINITIONS (gncmod-app-utils-python PRIVATE -DG_LOG_DOMAIN=\"gnc.app-utils\")
+
+  INSTALL(TARGETS gncmod-app-utils-python
+    LIBRARY DESTINATION lib/gnucash
+    ARCHIVE DESTINATION lib/gnucash
+    RUNTIME DESTINATION bin
+  )
+ENDIF()
+
+
+
 INSTALL(FILES ${app_utils_HEADERS} DESTINATION include/gnucash)
 
 FILE(READ ${CMAKE_SOURCE_DIR}/src/import-export/ofx/migratable-prefs-ofx.xml MIGRATABLE_PREFS_OFX)
