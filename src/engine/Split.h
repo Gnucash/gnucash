@@ -172,7 +172,8 @@ const char *  xaccSplitGetMemo (const Split *split);
  * It is meant to be a very short (one to ten character) string that
  * signifies the "type" of this split, such as e.g. Buy, Sell, Div,
  * Withdraw, Deposit, ATM, Check, etc. The idea is that this field
- * can be used to create custom reports or graphs of data. Rather than use
+ * can be used to create custom reports or graphs of data. Note that the
+ * business features auto-fill this value, but doesn't depend on it. Rather than use
  * this function directly, see 'gnc_set_num_action' in
  * engine/engine-helpers.c & .h which takes a user-set book option for selecting
  * the source for the num-cell (the transaction-number or the split-action field)
