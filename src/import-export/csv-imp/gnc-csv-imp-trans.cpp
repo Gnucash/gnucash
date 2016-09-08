@@ -372,32 +372,18 @@ int GncCsvParseData::parse (gboolean guessColTypes, GError** error)
     return 0;
 }
 
-/** A struct containing TransProperties that all describe a single transaction. */
-typedef struct
-{
-    int date_format; /**< The format for parsing dates */
-    int currency_format; /**< The format for currency */
-    Account* account; /**< The account the transaction belongs to */
-    GList* properties; /**< List of TransProperties */
-} TransPropertyList;
-
 /** A struct encapsulating a property of a transaction. */
 typedef struct
 {
-    GncTransPropType type;   /**< A value from the GncTransPropType enum except
-                               * GncTransPropType::NONE */
     void* value;             /**< Pointer to the data that will be used to configure a transaction */
-    TransPropertyList* list; /**< The list the property belongs to */
 } TransProperty;
 
 /** Constructor for TransProperty.
  * @param type The type of the new property (see TransProperty.type for possible values)
  */
-static TransProperty* trans_property_new (GncTransPropType type, TransPropertyList* list)
+static TransProperty* trans_property_new (void)
 {
     TransProperty* prop = g_new (TransProperty, 1);
-    prop->type = type;
-    prop->list = list;
     prop->value = NULL;
     return prop;
 }
@@ -405,9 +391,9 @@ static TransProperty* trans_property_new (GncTransPropType type, TransPropertyLi
 /** Destructor for TransProperty.
  * @param prop The property to be freed
  */
-static void trans_property_free (TransProperty* prop)
+static void trans_property_free (TransProperty* prop, GncTransPropType type)
 {
-    switch (prop->type)
+    switch (type)
     {
         /* The types for "Date" and "Balance" (time64 and gnc_numeric,
          * respectively) are typically not pointed to, we have to free
@@ -432,17 +418,17 @@ static void trans_property_free (TransProperty* prop)
  * @param str The string to be parsed
  * @return TRUE on success, FALSE on failure
  */
-static gboolean trans_property_set (TransProperty* prop, const char* str)
+static gboolean trans_property_set (TransProperty* prop, GncTransPropType type, const char* str, int currency_format, int date_format)
 {
     char *endptr, *possible_currency_symbol, *str_dupe;
     gnc_numeric val;
     int reti;
     regex_t regex;
-    switch (prop->type)
+    switch (type)
     {
     case GncTransPropType::DATE:
         prop->value = g_new(time64, 1);
-        *((time64*)(prop->value)) = parse_date(str, prop->list->date_format);
+        *((time64*)(prop->value)) = parse_date(str, date_format);
         return *((time64*)(prop->value)) != -1;
 
     case GncTransPropType::DESCRIPTION:
@@ -453,6 +439,7 @@ static gboolean trans_property_set (TransProperty* prop, const char* str)
         prop->value = g_strdup (str);
         return TRUE;
 
+    case GncTransPropType::ACCOUNT:
     case GncTransPropType::OACCOUNT:
         prop->value = gnc_csv_account_map_search (str);
         return TRUE;
@@ -492,7 +479,7 @@ static gboolean trans_property_set (TransProperty* prop, const char* str)
         }
 
         /* Currency format */
-        switch (prop->list->currency_format)
+        switch (currency_format)
         {
         case 0:
             /* Currency locale */
@@ -529,47 +516,6 @@ static gboolean trans_property_set (TransProperty* prop, const char* str)
         break;
     }
     return FALSE; /* We should never actually get here. */
-}
-
-/** Constructor for TransPropertyList.
- * @param account The account with which transactions should be built
- * @param date_format An index from date_format_user for how date properties should be parsed
- * @return A pointer to a new TransPropertyList
- */
-static TransPropertyList* trans_property_list_new (Account* account, int date_format, int currency_format)
-{
-    TransPropertyList* list = g_new (TransPropertyList, 1);
-    list->account = account;
-    list->date_format = date_format;
-    list->currency_format = currency_format;
-    list->properties = NULL;
-    return list;
-}
-
-/** Destructor for TransPropertyList.
- * @param list The list to be freed
- */
-static void trans_property_list_free (TransPropertyList* list)
-{
-    /* Free all of the properties in this list before freeing the list itself. */
-    GList* properties_begin = list->properties;
-    while (list->properties != NULL)
-    {
-        trans_property_free ((TransProperty*)(list->properties->data));
-        list->properties = g_list_next (list->properties);
-    }
-    g_list_free (properties_begin);
-    g_free (list);
-}
-
-/** Adds a property to the list it's linked with.
- * (The TransPropertyList is not passed as a parameter because the property is
- * associated with a list when it's constructed.)
- * @param property The property to be added to its list
- */
-static void trans_property_list_add (TransProperty* property)
-{
-    property->list->properties = g_list_append (property->list->properties, property);
 }
 
 /** Adds a split to a transaction.
@@ -609,98 +555,36 @@ static void trans_add_osplit (Transaction* trans, Account* account, QofBook* boo
 }
 
 /** Tests a TransPropertyList for having enough essential properties.
- * Essential properties are "Date" and one of the following: "Balance", "Deposit", or
- * "Withdrawal".
+ * Essential properties are
+ * - "Date"
+ * - at least one of "Balance", "Deposit", or "Withdrawal"
+ * - "Account"
+ * Note account isn't checked for here as this has been done before
  * @param list The list we are checking
  * @param error Contains an error message on failure
- * @return TRUE if there are enough essentials; FALSE otherwise
+ * @return true if there are enough essentials; false otherwise
  */
-static gboolean trans_property_list_verify_essentials (TransPropertyList* list, gchar** error)
+static bool trans_properties_verify_essentials (std::map<GncTransPropType, TransProperty* >& trans_props, gchar** error)
 {
-    int i;
-    /* possible_errors lists the ways in which a list can fail this test. */
-    enum PossibleErrorTypes {NO_DATE, NO_AMOUNT, NUM_OF_POSSIBLE_ERRORS};
-    const gchar* possible_errors[NUM_OF_POSSIBLE_ERRORS] =
-    {
-        N_("No date column."),
-        N_("No balance, deposit, or withdrawal column.")
-    };
-    int possible_error_lengths[NUM_OF_POSSIBLE_ERRORS] = {0};
-    GList *properties_begin = list->properties, *errors_list = NULL;
+    /* Make sure this is a transaction with all the columns we need. */
+    bool have_date = (trans_props.find (GncTransPropType::DATE) != trans_props.end());
+    bool have_amount = ((trans_props.find (GncTransPropType::DEPOSIT) != trans_props.end()) ||
+                        (trans_props.find (GncTransPropType::WITHDRAWAL) != trans_props.end()) ||
+                        (trans_props.find (GncTransPropType::BALANCE) != trans_props.end()));
 
-    /* Go through each of the properties and erase possible errors. */
-    while (list->properties)
+    std::string error_message {""};
+    if (!have_date)
+        error_message += N_("No date column.");
+    if (!have_amount)
     {
-        switch (((TransProperty*)(list->properties->data))->type)
-        {
-        case GncTransPropType::DATE:
-            possible_errors[NO_DATE] = NULL;
-            break;
-
-        case GncTransPropType::BALANCE:
-        case GncTransPropType::DEPOSIT:
-        case GncTransPropType::WITHDRAWAL:
-            possible_errors[NO_AMOUNT] = NULL;
-            break;
-        default:
-            break;
-        }
-        list->properties = g_list_next (list->properties);
+        if (!have_date)
+            error_message += "\n";
+        error_message += N_("No balance, deposit, or withdrawal column.");
     }
-    list->properties = properties_begin;
+    if (!have_date || !have_amount)
+        *error = g_strdup (error_message.c_str());
 
-    /* Accumulate a list of the actual errors. */
-    for (i = 0; i < NUM_OF_POSSIBLE_ERRORS; i++)
-    {
-        if (possible_errors[i] != NULL)
-        {
-            errors_list = g_list_append (errors_list, GINT_TO_POINTER(i));
-            /* Since we added an error, we want to also store its length for
-             * when we construct the full error string. */
-            possible_error_lengths[i] = strlen (_(possible_errors[i]));
-        }
-    }
-
-    /* If there are no errors, we can quit now. */
-    if (errors_list == NULL)
-        return TRUE;
-    else
-    {
-        /* full_error_size is the full length of the error message. */
-        int full_error_size = 0, string_length = 0;
-        GList* errors_list_begin = errors_list;
-        gchar *error_message, *error_message_begin;
-
-        /* Find the value for full_error_size. */
-        while (errors_list)
-        {
-            /* We add an extra 1 to account for spaces in between messages. */
-            full_error_size += possible_error_lengths[GPOINTER_TO_INT(errors_list->data)] + 1;
-            errors_list = g_list_next (errors_list);
-        }
-        errors_list = errors_list_begin;
-
-        /* Append the error messages one after another. */
-        error_message = error_message_begin = g_new (gchar, full_error_size);
-        while (errors_list)
-        {
-            i = GPOINTER_TO_INT(errors_list->data);
-            string_length = possible_error_lengths[i];
-
-            /* Copy the error message and put a space after it. */
-            strncpy(error_message, _(possible_errors[i]), string_length);
-            error_message += string_length;
-            *error_message = ' ';
-            error_message++;
-
-            errors_list = g_list_next (errors_list);
-        }
-        *error_message = '\0'; /* Replace the last space with the null byte. */
-        g_list_free (errors_list_begin);
-
-        *error = error_message_begin;
-        return FALSE;
-    }
+    return have_amount && have_date;
 }
 
 /** Create a Transaction from a TransPropertyList.
@@ -708,49 +592,46 @@ static gboolean trans_property_list_verify_essentials (TransPropertyList* list, 
  * @param error Contains an error on failure
  * @return On success, a GncCsvTransLine; on failure, the trans pointer is NULL
  */
-static GncCsvTransLine* trans_property_list_to_trans (TransPropertyList* list, gchar** error)
+static GncCsvTransLine* trans_properties_to_trans (std::map<GncTransPropType, TransProperty* >& trans_props, gchar** error)
 {
-    GncCsvTransLine* trans_line = g_new (GncCsvTransLine, 1);
-    GList* properties_begin = list->properties;
-    QofBook* book = gnc_account_get_book (list->account);
-    gnc_commodity* currency = xaccAccountGetCommodity (list->account);
-    gnc_numeric amount = double_to_gnc_numeric (0.0, xaccAccountGetCommoditySCU (list->account),
-                         GNC_HOW_RND_ROUND_HALF_UP);
-    gchar *num = NULL;
-    gchar *memo = NULL;
-    gchar *omemo = NULL;
-    Account *oaccount = NULL;
 
-    /* This flag is set to TRUE if we can use the "Deposit" or "Withdrawal" column. */
-    gboolean amount_set = FALSE;
+    if (!trans_properties_verify_essentials(trans_props, error))
+        return NULL;
+
+    TransProperty * property = trans_props.find (GncTransPropType::ACCOUNT)->second;
+    Account* account = static_cast<Account*> (property->value);
+
+    GncCsvTransLine* trans_line = g_new (GncCsvTransLine, 1);
 
     /* The balance is 0 by default. */
-    trans_line->balance_set = FALSE;
-    trans_line->balance = amount;
-    trans_line->num = NULL;
+    trans_line->balance_set = false;
+    trans_line->balance = double_to_gnc_numeric (0.0, xaccAccountGetCommoditySCU (account),
+                          GNC_HOW_RND_ROUND_HALF_UP);
 
     /* We make the line_no -1 just to mark that it hasn't been set. We
      * may get rid of line_no soon anyway, so it's not particularly
      * important. */
     trans_line->line_no = -1;
 
-    /* Make sure this is a transaction with all the columns we need. */
-    if (!trans_property_list_verify_essentials (list, error))
-    {
-        g_free(trans_line);
-        return NULL;
-    }
-
+    QofBook* book = gnc_account_get_book (account);
+    gnc_commodity* currency = xaccAccountGetCommodity (account);
     trans_line->trans = xaccMallocTransaction (book);
     xaccTransBeginEdit (trans_line->trans);
     xaccTransSetCurrency (trans_line->trans, currency);
 
     /* Go through each of the properties and edit the transaction accordingly. */
-    list->properties = properties_begin;
-    while (list->properties != NULL)
+    gchar *num = NULL;
+    gchar *memo = NULL;
+    gchar *omemo = NULL;
+    Account *oaccount = NULL;
+    bool amount_set = false;
+    gnc_numeric amount = trans_line->balance;
+
+    for (auto prop_pair : trans_props)
     {
-        TransProperty* prop = (TransProperty*)(list->properties->data);
-        switch (prop->type)
+        GncTransPropType type = prop_pair.first;
+        TransProperty* prop = prop_pair.second;
+        switch (type)
         {
         case GncTransPropType::DATE:
             xaccTransSetDatePostedSecsNormalized (trans_line->trans, *((time64*)(prop->value)));
@@ -781,10 +662,6 @@ static GncCsvTransLine* trans_property_list_to_trans (TransPropertyList* list, g
              * 'gnc_set_num_action' is used to set tran-num and/or split-action
              * per book option */
             num = g_strdup ((char*)(prop->value));
-            /* the 'num' is also saved and used in 'gnc_csv_parse_to_trans' when
-             * it calls 'trans_add_split' after deleting the splits added below
-             * when a balance is used by the user */
-            trans_line->num = g_strdup ((char*)(prop->value));
             break;
 
         case GncTransPropType::DEPOSIT: /* Add deposits to the existing amount. */
@@ -792,11 +669,11 @@ static GncCsvTransLine* trans_property_list_to_trans (TransPropertyList* list, g
             {
                 amount = gnc_numeric_add (*((gnc_numeric*)(prop->value)),
                                          amount,
-                                         xaccAccountGetCommoditySCU (list->account),
+                                         xaccAccountGetCommoditySCU (account),
                                          GNC_HOW_RND_ROUND_HALF_UP);
-                amount_set = TRUE;
+                amount_set = true;
                 /* We will use the "Deposit" and "Withdrawal" columns in preference to "Balance". */
-                trans_line->balance_set = FALSE;
+                trans_line->balance_set = false;
             }
             break;
 
@@ -805,11 +682,11 @@ static GncCsvTransLine* trans_property_list_to_trans (TransPropertyList* list, g
             {
                 amount = gnc_numeric_add (gnc_numeric_neg(*((gnc_numeric*)(prop->value))),
                                          amount,
-                                         xaccAccountGetCommoditySCU (list->account),
+                                         xaccAccountGetCommoditySCU (account),
                                          GNC_HOW_RND_ROUND_HALF_UP);
-                amount_set = TRUE;
+                amount_set = true;
                 /* We will use the "Deposit" and "Withdrawal" columns in preference to "Balance". */
-                trans_line->balance_set = FALSE;
+                trans_line->balance_set = false;
             }
             break;
 
@@ -819,17 +696,16 @@ static GncCsvTransLine* trans_property_list_to_trans (TransPropertyList* list, g
             {
                 /* This gets put into the actual transaction at the end of gnc_csv_parse_to_trans. */
                 trans_line->balance = *((gnc_numeric*)(prop->value));
-                trans_line->balance_set = TRUE;
+                trans_line->balance_set = true;
             }
             break;
         default:
             break;
         }
-        list->properties = g_list_next (list->properties);
     }
 
     /* Add a split with the cumulative amount value. */
-    trans_add_split (trans_line->trans, list->account, book, amount, num, memo);
+    trans_add_split (trans_line->trans, account, book, amount, num, memo);
 
     if (oaccount)
         trans_add_osplit (trans_line->trans, oaccount, book, amount, num, omemo);
@@ -907,6 +783,8 @@ int GncCsvParseData::parse_to_trans (Account* account,
             orig_lines_it != orig_lines_max;
             ++orig_lines_it, odd_line = !odd_line)
     {
+        std::map<GncTransPropType, TransProperty *> trans_props;
+
         /* Skip current line if:
            1. only looking for lines with error AND no error on current line
            OR
@@ -920,9 +798,8 @@ int GncCsvParseData::parse_to_trans (Account* account,
         auto line = orig_lines_it->first;
         GncCsvTransLine* trans_line = NULL;
 
-        home_account = account;
-
         // If account = NULL, we should have an Account column
+        home_account = account;
         if (home_account == NULL)
         {
             for (uint j = 0; j < line.size(); j++)
@@ -940,47 +817,50 @@ int GncCsvParseData::parse_to_trans (Account* account,
             continue;
         }
 
-        TransPropertyList* list = trans_property_list_new (home_account, date_format, currency_format);
-
         bool loop_err = false;
         for (uint j = 0; j < line.size(); j++)
         {
-            /* We do nothing in "None" or "Account" columns. */
-            if ((column_types[j] != GncTransPropType::NONE) && (column_types[j] != GncTransPropType::ACCOUNT))
+            /* We do nothing with "None"-type columns. */
+            if (column_types[j] != GncTransPropType::NONE)
             {
                 /* Affect the transaction appropriately. */
-                TransProperty* property = trans_property_new (column_types[j], list);
-                gboolean succeeded = trans_property_set (property, line[j].c_str());
+                TransProperty* property = trans_property_new ();
+                gboolean succeeded = trans_property_set (property, column_types[j], line[j].c_str(), currency_format, date_format);
 
                 /* TODO Maybe move error handling to within TransPropertyList functions? */
                 if (succeeded)
-                    trans_property_list_add (property);
+                    trans_props.insert(std::pair<GncTransPropType, TransProperty *>(column_types[j], property));
                 else
                 {
                     parse_errors = loop_err = true;
                     gchar *error_message = g_strdup_printf (_("%s column could not be understood."),
-                                                    _(gnc_csv_col_type_strs[property->type]));
+                                                    _(gnc_csv_col_type_strs[column_types[j]]));
                     orig_lines_it->second = error_message;
 
                     g_free (error_message);
-                    trans_property_free (property);
-                    trans_property_list_free (list);
+                    trans_property_free (property, column_types[j]);
                     break;
                 }
             }
         }
+        // Add an ACCOUNT property with the home_account if no account column was set by the user
+        if (std::find (column_types.begin(), column_types.end(), GncTransPropType::ACCOUNT) == column_types.end())
+        {
+            TransProperty* property = trans_property_new ();
+            property->value = home_account;
+        }
+
         if (loop_err)
             continue;
 
         /* If column parsing was successful, convert trans properties into a trans line. */
         gchar *error_message = NULL;
-        trans_line = trans_property_list_to_trans (list, &error_message);
+        trans_line = trans_properties_to_trans (trans_props, &error_message);
         if (trans_line == NULL)
         {
             parse_errors = true;
             orig_lines_it->second = error_message;
             g_free (error_message);
-            trans_property_list_free (list);
             continue;
         }
 
@@ -1067,9 +947,6 @@ int GncCsvParseData::parse_to_trans (Account* account,
                     xaccSplitSetAmount (split, amount);
                     xaccSplitSetValue (split, gnc_numeric_neg (amount));
                 }
-
-                if (trans_line->num)
-                    g_free (trans_line->num);
 
                 /* This new transaction needs to be added to the balance offset. */
                 balance_offset = gnc_numeric_add (balance_offset,
