@@ -2791,12 +2791,17 @@ edit_invoice_direct (gpointer invoice, gpointer user_data)
 }
 
 static void
-edit_invoice_cb (gpointer *invoice_p, gpointer user_data)
+edit_invoice_cb (gpointer inv, gpointer user_data)
 {
-    g_return_if_fail (invoice_p && user_data);
-    if (! *invoice_p)
-        return;
-    edit_invoice_direct (*invoice_p, user_data);
+    GncInvoice *invoice = inv;
+    g_return_if_fail (invoice && user_data);
+    edit_invoice_direct (invoice, user_data);
+}
+
+static void
+multi_edit_invoice_cb (GList *invoice_list, gpointer user_data)
+{
+    g_list_foreach(invoice_list, edit_invoice_cb, user_data);
 }
 
 static void
@@ -2990,7 +2995,7 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
     static GNCSearchCallbackButton *buttons;
     static GNCSearchCallbackButton inv_buttons[] =
     {
-        { N_("View/Edit Invoice"), edit_invoice_cb, NULL, TRUE},
+        { N_("View/Edit Invoice"), NULL, multi_edit_invoice_cb, TRUE},
         { N_("Process Payment"), pay_invoice_cb, NULL, FALSE},
         { N_("Duplicate"), NULL, multi_duplicate_invoice_cb, FALSE},
         { N_("Post"), NULL, multi_post_invoice_cb, FALSE},
@@ -2999,7 +3004,7 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
     };
     static GNCSearchCallbackButton bill_buttons[] =
     {
-        { N_("View/Edit Bill"), edit_invoice_cb, NULL, TRUE},
+        { N_("View/Edit Bill"), NULL, multi_edit_invoice_cb, TRUE},
         { N_("Process Payment"), pay_invoice_cb, NULL, FALSE},
         { N_("Duplicate"), NULL, multi_duplicate_invoice_cb, FALSE},
         { N_("Post"), NULL, multi_post_invoice_cb, FALSE},
@@ -3010,7 +3015,7 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
     {
         /* Translators: The terms 'Voucher' and 'Expense Voucher' are used
            interchangeably in gnucash and mean the same thing. */
-        { N_("View/Edit Voucher"), edit_invoice_cb, NULL, TRUE},
+        { N_("View/Edit Voucher"), NULL, multi_edit_invoice_cb, TRUE},
         { N_("Process Payment"), pay_invoice_cb, NULL, FALSE},
         { N_("Duplicate"), NULL, multi_duplicate_invoice_cb, FALSE},
         { N_("Post"), NULL, multi_post_invoice_cb, FALSE},
