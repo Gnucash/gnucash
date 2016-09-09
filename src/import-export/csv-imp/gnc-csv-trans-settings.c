@@ -232,7 +232,7 @@ gnc_csv_trans_load_settings (CsvSettings *settings_data, gchar *group)
        error = load_error (&key_error, group);
 
     key_char = g_key_file_get_string (keyfile, group, CSV_ENCODING, &key_error);
-    settings_data->encoding = (key_error) ? "UTF-8" : key_char;
+    settings_data->encoding = g_strdup((key_error) ? "UTF-8" : key_char);
     if (key_error)
        error = load_error (&key_error, group);
 
