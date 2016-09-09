@@ -372,6 +372,7 @@ int GncCsvParseData::parse (gboolean guessColTypes, GError** error)
     return 0;
 }
 
+
 /** Convert str into a time64 using the user-specified (import) date format.
  * @param str The string to be parsed
  * @param date_format The date format to use.
@@ -467,6 +468,110 @@ static gnc_numeric* convert_amount_col_str (const char* str, int currency_format
     return amount;
 }
 
+/* Define a class hierarchy to temporarily store transaction/split properties
+ * found in one import line. There is a generic parent class and an implementation
+ * template class. This template class is further specialized for each data type
+ * we support (currently time64, Account, string and gnc_numeric).
+ */
+struct GncTransProperty
+{
+    virtual ~GncTransProperty()
+      //Remove pure designation.
+        {}
+    bool m_valid = false;
+};
+
+template<class T>
+struct GncTransPropImpl
+: public GncTransProperty
+{
+public:
+    ~GncTransPropImpl(){};
+    GncTransPropImpl(std::string& val, int fmt)
+    {
+        m_valid = false;
+    };
+
+    static GncTransProperty* make_new(std::string& val,int fmt = 0)
+        { return nullptr; }
+
+    T value;
+};
+
+template<>
+struct GncTransPropImpl<time64*>
+: public GncTransProperty
+{
+    GncTransPropImpl(std::string& val, int fmt)
+    {
+        value = convert_date_col_str (val.c_str(), fmt);
+        m_valid = (value != nullptr);
+    }
+    ~GncTransPropImpl()
+        { if (value) delete value; }
+
+    static std::shared_ptr<GncTransProperty> make_new(std::string& val,int fmt)
+    { return std::shared_ptr<GncTransProperty>(new GncTransPropImpl<time64*>(val, fmt)); }
+
+    time64* value;
+};
+
+
+template<>
+struct GncTransPropImpl<std::string*>
+: public GncTransProperty
+{
+    GncTransPropImpl(std::string& val, int fmt = 0)
+    {
+        value = new std::string(val);
+        m_valid = (value != nullptr);
+    }
+    ~GncTransPropImpl()
+        { if (value) delete value; }
+
+    static std::shared_ptr<GncTransProperty> make_new(std::string& val,int fmt = 0)
+        { return std::shared_ptr<GncTransProperty>(new GncTransPropImpl<std::string*>(val)); } /* Note fmt is not used for strings */
+
+    std::string* value;
+};
+
+template<>
+struct GncTransPropImpl<Account *>
+: public GncTransProperty
+{
+    GncTransPropImpl(std::string& val, int fmt = 0)
+    {
+        value = gnc_csv_account_map_search (val.c_str());
+        m_valid = (value != nullptr);
+    }
+    GncTransPropImpl(Account* val)
+        { value = val; }
+    ~GncTransPropImpl(){};
+
+    static std::shared_ptr<GncTransProperty> make_new(std::string& val,int fmt = 0)
+        { return std::shared_ptr<GncTransProperty>(new GncTransPropImpl<Account*>(val)); } /* Note fmt is not used in for accounts */
+
+    Account* value;
+};
+
+template<>
+struct GncTransPropImpl<gnc_numeric *>
+: public GncTransProperty
+{
+    GncTransPropImpl(std::string& val, int fmt)
+    {
+        value = convert_amount_col_str (val.c_str(), fmt);
+        m_valid = (value != nullptr);
+    }
+    ~GncTransPropImpl()
+        { if (value) delete value; }
+
+    static std::shared_ptr<GncTransProperty> make_new(std::string& val,int fmt)
+    { return std::shared_ptr<GncTransProperty>(new GncTransPropImpl<gnc_numeric*>(val, fmt)); }
+
+    gnc_numeric* value;
+};
+
 /** Adds a split to a transaction.
  * @param trans The transaction to add a split to
  * @param account The account used for the split
@@ -489,8 +594,13 @@ static void trans_add_split (Transaction* trans, Account* account, QofBook* book
         gnc_set_num_action (trans, split, num.c_str(), NULL);
 }
 
-using prop_pair_t = std::pair<GncTransPropType, void*>;
-using prop_map_t = std::map<GncTransPropType, void*>;
+
+/* Shorthand aliases for the container to keep track of property types (a map)
+ * and its iterator (a pair)
+ */
+using prop_pair_t = std::pair<GncTransPropType, std::shared_ptr<GncTransProperty>>;
+using prop_map_t = std::map<GncTransPropType, std::shared_ptr<GncTransProperty>>;
+
 /** Tests a TransPropertyList for having enough essential properties.
  * Essential properties are
  * - "Date"
@@ -524,8 +634,11 @@ static bool trans_properties_verify_essentials (prop_map_t& trans_props, gchar**
     return have_amount && have_date;
 }
 
-/** Create a Transaction from a TransPropertyList.
- * @param list The list of properties
+/** Create a Transaction from a map of transaction properties.
+ * Note: this function assumes all properties in the map have been verified
+ *       to be valid. No further checks are performed here other than that
+ *       the required properties are in the map
+ * @param transprops The map of transaction properties
  * @param error Contains an error on failure
  * @return On success, a GncCsvTransLine; on failure, the trans pointer is NULL
  */
@@ -536,7 +649,7 @@ static GncCsvTransLine* trans_properties_to_trans (prop_map_t& trans_props, gcha
         return NULL;
 
     auto property = trans_props.find (GncTransPropType::ACCOUNT)->second;
-    Account* account = static_cast<Account*> (property);
+    auto account = dynamic_cast<GncTransPropImpl<Account*>*>(property.get())->value;
 
     GncCsvTransLine* trans_line = g_new (GncCsvTransLine, 1);
 
@@ -571,40 +684,49 @@ static GncCsvTransLine* trans_properties_to_trans (prop_map_t& trans_props, gcha
         switch (type)
         {
         case GncTransPropType::DATE:
-            xaccTransSetDatePostedSecsNormalized (trans_line->trans, *((time64*)(prop)));
+            {
+                auto transdate = dynamic_cast<GncTransPropImpl<time64*>*>(prop.get())->value;
+                xaccTransSetDatePostedSecsNormalized (trans_line->trans, *transdate);
+            }
             break;
 
         case GncTransPropType::DESCRIPTION:
-            xaccTransSetDescription (trans_line->trans, (char*)(prop));
+            {
+                auto propstring = dynamic_cast<GncTransPropImpl<std::string*>*>(prop.get())->value;
+                xaccTransSetDescription (trans_line->trans, propstring->c_str());
+            }
             break;
 
         case GncTransPropType::NOTES:
-            xaccTransSetNotes (trans_line->trans, (char*)(prop));
+            {
+                auto propstring = dynamic_cast<GncTransPropImpl<std::string*>*>(prop.get())->value;
+                xaccTransSetNotes (trans_line->trans, propstring->c_str());
+            }
             break;
 
         case GncTransPropType::OACCOUNT:
-            oaccount = ((Account*)(prop));
+            oaccount = dynamic_cast<GncTransPropImpl<Account*>*>(prop.get())->value;
             break;
 
         case GncTransPropType::MEMO:
-            memo = g_strdup ((char*)(prop));
+            memo = *dynamic_cast<GncTransPropImpl<std::string*>*>(prop.get())->value;
             break;
 
         case GncTransPropType::OMEMO:
-            omemo = g_strdup ((char*)(prop));
+            omemo = *dynamic_cast<GncTransPropImpl<std::string*>*>(prop.get())->value;
             break;
 
         case GncTransPropType::NUM:
             /* the 'num' is saved and passed to 'trans_add_split' below where
              * 'gnc_set_num_action' is used to set tran-num and/or split-action
              * per book option */
-            num = g_strdup ((char*)(prop));
+            num = *dynamic_cast<GncTransPropImpl<std::string*>*>(prop.get())->value;
             break;
 
         case GncTransPropType::DEPOSIT: /* Add deposits to the existing amount. */
-            if (prop != NULL)
             {
-                amount = gnc_numeric_add (*((gnc_numeric*)(prop)),
+                auto propval = dynamic_cast<GncTransPropImpl<gnc_numeric*>*>(prop.get())->value;
+                amount = gnc_numeric_add (*propval,
                                          amount,
                                          xaccAccountGetCommoditySCU (account),
                                          GNC_HOW_RND_ROUND_HALF_UP);
@@ -615,9 +737,9 @@ static GncCsvTransLine* trans_properties_to_trans (prop_map_t& trans_props, gcha
             break;
 
         case GncTransPropType::WITHDRAWAL: /* Withdrawals are just negative deposits. */
-            if (prop != NULL)
             {
-                amount = gnc_numeric_add (gnc_numeric_neg(*((gnc_numeric*)(prop))),
+                auto propval = dynamic_cast<GncTransPropImpl<gnc_numeric*>*>(prop.get())->value;
+                amount = gnc_numeric_add (gnc_numeric_neg(*propval),
                                          amount,
                                          xaccAccountGetCommoditySCU (account),
                                          GNC_HOW_RND_ROUND_HALF_UP);
@@ -629,10 +751,11 @@ static GncCsvTransLine* trans_properties_to_trans (prop_map_t& trans_props, gcha
 
         case GncTransPropType::BALANCE: /* The balance gets stored in a separate field in trans_line. */
             /* We will use the "Deposit" and "Withdrawal" columns in preference to "Balance". */
-            if (!amount_set && prop != NULL)
+            if (!amount_set)
             {
+                auto propval = dynamic_cast<GncTransPropImpl<gnc_numeric*>*>(prop.get())->value;
                 /* This gets put into the actual transaction at the end of gnc_csv_parse_to_trans. */
-                trans_line->balance = *((gnc_numeric*)(prop));
+                trans_line->balance = *propval;
                 trans_line->balance_set = true;
             }
             break;
@@ -755,11 +878,11 @@ int GncCsvParseData::parse_to_trans (Account* account,
         bool loop_err = false;
         for (uint j = 0; j < line.size(); j++)
         {
-            void* property;
+            std::shared_ptr<GncTransProperty> property;
             switch (column_types[j])
             {
                 case GncTransPropType::DATE:
-                    property = static_cast<void*> (convert_date_col_str (line[j].c_str(), date_format));
+                    property = GncTransPropImpl<time64*>::make_new (line[j], date_format);
                 break;
 
                 case GncTransPropType::DESCRIPTION:
@@ -767,18 +890,18 @@ int GncCsvParseData::parse_to_trans (Account* account,
                 case GncTransPropType::MEMO:
                 case GncTransPropType::OMEMO:
                 case GncTransPropType::NUM:
-                    property = static_cast<void*> (g_strdup (line[j].c_str()));
+                    property = GncTransPropImpl<std::string*>::make_new (line[j]);
                     break;
 
                 case GncTransPropType::ACCOUNT:
                 case GncTransPropType::OACCOUNT:
-                    property = static_cast<void*> (gnc_csv_account_map_search (line[j].c_str()));
+                    property = GncTransPropImpl<Account*>::make_new (line[j]);
                     break;
 
                 case GncTransPropType::BALANCE:
                 case GncTransPropType::DEPOSIT:
                 case GncTransPropType::WITHDRAWAL:
-                    property = static_cast<void*> (convert_amount_col_str (line[j].c_str(), currency_format));
+                    property = GncTransPropImpl<gnc_numeric*>::make_new (line[j], currency_format);
                     break;
 
                 default:
@@ -786,7 +909,7 @@ int GncCsvParseData::parse_to_trans (Account* account,
                     break;
             }
 
-            if (property)
+            if (property->m_valid)
                 trans_props.insert(prop_pair_t(column_types[j], property));
             else
             {
@@ -801,10 +924,12 @@ int GncCsvParseData::parse_to_trans (Account* account,
         }
         // Add an ACCOUNT property with the home_account if no account column was set by the user
         if (std::find (column_types.begin(), column_types.end(), GncTransPropType::ACCOUNT) == column_types.end())
-            trans_props.insert(prop_pair_t(GncTransPropType::ACCOUNT, static_cast<void*> (home_account)));
+        {
+            auto property = std::shared_ptr<GncTransProperty>(new GncTransPropImpl<Account*>(home_account));
+            trans_props.insert(prop_pair_t(GncTransPropType::ACCOUNT, property));
+        }
 
         if (loop_err)
-            /* FIXME huge memory leak here: the trans_props for this line aren't freed! */
             continue;
 
         /* If column parsing was successful, convert trans properties into a trans line. */
