@@ -372,150 +372,99 @@ int GncCsvParseData::parse (gboolean guessColTypes, GError** error)
     return 0;
 }
 
-/** A struct encapsulating a property of a transaction. */
-typedef struct
-{
-    void* value;             /**< Pointer to the data that will be used to configure a transaction */
-} TransProperty;
-
-/** Constructor for TransProperty.
- * @param type The type of the new property (see TransProperty.type for possible values)
- */
-static TransProperty* trans_property_new (void)
-{
-    TransProperty* prop = g_new (TransProperty, 1);
-    prop->value = NULL;
-    return prop;
-}
-
-/** Destructor for TransProperty.
- * @param prop The property to be freed
- */
-static void trans_property_free (TransProperty* prop, GncTransPropType type)
-{
-    switch (type)
-    {
-        /* The types for "Date" and "Balance" (time64 and gnc_numeric,
-         * respectively) are typically not pointed to, we have to free
-         * them, unlike types like char* ("Description"). */
-    case GncTransPropType::DATE:
-    case GncTransPropType::BALANCE:
-    case GncTransPropType::DEPOSIT:
-    case GncTransPropType::WITHDRAWAL:
-        if (prop->value != NULL)
-            g_free(prop->value);
-        break;
-    default:
-       break;
-    }
-    g_free (prop);
-}
-
-/** Sets the value of the property by parsing str. Note: this should
- * only be called once on an instance of TransProperty, as calling it
- * more than once can cause memory leaks.
- * @param prop The property being set
+/** Convert str into a time64 using the user-specified (import) date format.
  * @param str The string to be parsed
- * @return TRUE on success, FALSE on failure
+ * @param date_format The date format to use.
+ * @return a pointer to a time64 on success, nullptr on failure
  */
-static gboolean trans_property_set (TransProperty* prop, GncTransPropType type, const char* str, int currency_format, int date_format)
+static time64* convert_date_col_str (const char* str, int date_format)
 {
-    char *endptr, *possible_currency_symbol, *str_dupe;
-    gnc_numeric val;
-    int reti;
-    regex_t regex;
-    switch (type)
+    auto parsed_date = parse_date(str, date_format);
+    if (parsed_date == -1)
+        return nullptr;
+    else
     {
-    case GncTransPropType::DATE:
-        prop->value = g_new(time64, 1);
-        *((time64*)(prop->value)) = parse_date(str, date_format);
-        return *((time64*)(prop->value)) != -1;
+        auto mydate = new time64;
+        *mydate = parsed_date;
+        return mydate;
+    }
+}
 
-    case GncTransPropType::DESCRIPTION:
-    case GncTransPropType::NOTES:
-    case GncTransPropType::MEMO:
-    case GncTransPropType::OMEMO:
-    case GncTransPropType::NUM:
-        prop->value = g_strdup (str);
-        return TRUE;
 
-    case GncTransPropType::ACCOUNT:
-    case GncTransPropType::OACCOUNT:
-        prop->value = gnc_csv_account_map_search (str);
-        return TRUE;
+/** Convert str into a gnc_numeric using the user-specified (import) currency format.
+ * @param str The string to be parsed
+ * @param currency_format The currency format to use.
+ * @return a pointer to a gnc_numeric on success, nullptr on failure
+ */
+static gnc_numeric* convert_amount_col_str (const char* str, int currency_format)
+{
+    auto str_dupe = g_strdup (str); /* First, we make a copy so we can't mess up real data. */
+    /* If a cell is empty or just spaces make its value = "0" */
+    regex_t regex;
+    int reti = regcomp(&regex, "[0-9]", 0);
+    reti = regexec(&regex, str_dupe, 0, NULL, 0);
+    if (reti == REG_NOMATCH)
+    {
+        g_free (str_dupe);
+        str_dupe = g_strdup ("0");
+    }
+    /* Go through str_dupe looking for currency symbols. */
+    for (auto possible_currency_symbol = str_dupe; *possible_currency_symbol;
+            possible_currency_symbol = g_utf8_next_char (possible_currency_symbol))
+    {
+        if (g_unichar_type (g_utf8_get_char (possible_currency_symbol)) == G_UNICODE_CURRENCY_SYMBOL)
+        {
+            /* If we find a currency symbol, save the position just ahead
+             * of the currency symbol (next_symbol), and find the null
+             * terminator of the string (last_symbol). */
+            char *next_symbol = g_utf8_next_char (possible_currency_symbol), *last_symbol = next_symbol;
+            while (*last_symbol)
+                last_symbol = g_utf8_next_char (last_symbol);
 
-    case GncTransPropType::BALANCE:
-    case GncTransPropType::DEPOSIT:
-    case GncTransPropType::WITHDRAWAL:
-        str_dupe = g_strdup (str); /* First, we make a copy so we can't mess up real data. */
-        /* If a cell is empty or just spaces make its value = "0" */
-        reti = regcomp(&regex, "[0-9]", 0);
-        reti = regexec(&regex, str_dupe, 0, NULL, 0);
-        if (reti == REG_NOMATCH)
+            /* Move all of the string (including the null byte, which is
+             * why we have +1 in the size parameter) following the
+             * currency symbol back one character, thereby overwriting the
+             * currency symbol. */
+            memmove (possible_currency_symbol, next_symbol, last_symbol - next_symbol + 1);
+            break;
+        }
+    }
+
+    /* Currency format */
+    gnc_numeric val;
+    char *endptr;
+    switch (currency_format)
+    {
+    case 0:
+        /* Currency locale */
+        if (!(xaccParseAmount (str_dupe, TRUE, &val, &endptr)))
         {
             g_free (str_dupe);
-            str_dupe = g_strdup ("0");
+            return nullptr;
         }
-        /* Go through str_dupe looking for currency symbols. */
-        for (possible_currency_symbol = str_dupe; *possible_currency_symbol;
-                possible_currency_symbol = g_utf8_next_char (possible_currency_symbol))
+        break;
+    case 1:
+        /* Currency decimal period */
+        if (!(xaccParseAmountExtended (str_dupe, TRUE, '-', '.', ',', "\003\003", "$+", &val, &endptr)))
         {
-            if (g_unichar_type (g_utf8_get_char (possible_currency_symbol)) == G_UNICODE_CURRENCY_SYMBOL)
-            {
-                /* If we find a currency symbol, save the position just ahead
-                 * of the currency symbol (next_symbol), and find the null
-                 * terminator of the string (last_symbol). */
-                char *next_symbol = g_utf8_next_char (possible_currency_symbol), *last_symbol = next_symbol;
-                while (*last_symbol)
-                    last_symbol = g_utf8_next_char (last_symbol);
-
-                /* Move all of the string (including the null byte, which is
-                 * why we have +1 in the size parameter) following the
-                 * currency symbol back one character, thereby overwriting the
-                 * currency symbol. */
-                memmove (possible_currency_symbol, next_symbol, last_symbol - next_symbol + 1);
-                break;
-            }
+            g_free (str_dupe);
+            return nullptr;
         }
-
-        /* Currency format */
-        switch (currency_format)
+        break;
+    case 2:
+        /* Currency decimal comma */
+        if (!(xaccParseAmountExtended (str_dupe, TRUE, '-', ',', '.', "\003\003", "$+", &val, &endptr)))
         {
-        case 0:
-            /* Currency locale */
-            if (!(xaccParseAmount (str_dupe, TRUE, &val, &endptr)))
-            {
-                g_free (str_dupe);
-                return FALSE;
-            }
-            break;
-        case 1:
-            /* Currency decimal period */
-            if (!(xaccParseAmountExtended (str_dupe, TRUE, '-', '.', ',', "\003\003", "$+", &val, &endptr)))
-            {
-                g_free (str_dupe);
-                return FALSE;
-            }
-            break;
-        case 2:
-            /* Currency decimal comma */
-            if (!(xaccParseAmountExtended (str_dupe, TRUE, '-', ',', '.', "\003\003", "$+", &val, &endptr)))
-            {
-                g_free (str_dupe);
-                return FALSE;
-            }
-            break;
+            g_free (str_dupe);
+            return nullptr;
         }
-
-        prop->value = g_new (gnc_numeric, 1);
-        *((gnc_numeric*)(prop->value)) = val;
-        g_free (str_dupe);
-        return TRUE;
-
-    default:
         break;
     }
-    return FALSE; /* We should never actually get here. */
+
+    g_free (str_dupe);
+    auto amount = new gnc_numeric;
+    *amount = val;
+    return amount;
 }
 
 /** Adds a split to a transaction.
@@ -554,6 +503,8 @@ static void trans_add_osplit (Transaction* trans, Account* account, QofBook* boo
     xaccSplitSetMemo (osplit, memo);
 }
 
+using prop_pair_t = std::pair<GncTransPropType, void*>;
+using prop_map_t = std::map<GncTransPropType, void*>;
 /** Tests a TransPropertyList for having enough essential properties.
  * Essential properties are
  * - "Date"
@@ -564,7 +515,7 @@ static void trans_add_osplit (Transaction* trans, Account* account, QofBook* boo
  * @param error Contains an error message on failure
  * @return true if there are enough essentials; false otherwise
  */
-static bool trans_properties_verify_essentials (std::map<GncTransPropType, TransProperty* >& trans_props, gchar** error)
+static bool trans_properties_verify_essentials (prop_map_t& trans_props, gchar** error)
 {
     /* Make sure this is a transaction with all the columns we need. */
     bool have_date = (trans_props.find (GncTransPropType::DATE) != trans_props.end());
@@ -592,14 +543,14 @@ static bool trans_properties_verify_essentials (std::map<GncTransPropType, Trans
  * @param error Contains an error on failure
  * @return On success, a GncCsvTransLine; on failure, the trans pointer is NULL
  */
-static GncCsvTransLine* trans_properties_to_trans (std::map<GncTransPropType, TransProperty* >& trans_props, gchar** error)
+static GncCsvTransLine* trans_properties_to_trans (prop_map_t& trans_props, gchar** error)
 {
 
     if (!trans_properties_verify_essentials(trans_props, error))
         return NULL;
 
-    TransProperty * property = trans_props.find (GncTransPropType::ACCOUNT)->second;
-    Account* account = static_cast<Account*> (property->value);
+    auto property = trans_props.find (GncTransPropType::ACCOUNT)->second;
+    Account* account = static_cast<Account*> (property);
 
     GncCsvTransLine* trans_line = g_new (GncCsvTransLine, 1);
 
@@ -629,45 +580,45 @@ static GncCsvTransLine* trans_properties_to_trans (std::map<GncTransPropType, Tr
 
     for (auto prop_pair : trans_props)
     {
-        GncTransPropType type = prop_pair.first;
-        TransProperty* prop = prop_pair.second;
+        auto type = prop_pair.first;
+        auto prop = prop_pair.second;
         switch (type)
         {
         case GncTransPropType::DATE:
-            xaccTransSetDatePostedSecsNormalized (trans_line->trans, *((time64*)(prop->value)));
+            xaccTransSetDatePostedSecsNormalized (trans_line->trans, *((time64*)(prop)));
             break;
 
         case GncTransPropType::DESCRIPTION:
-            xaccTransSetDescription (trans_line->trans, (char*)(prop->value));
+            xaccTransSetDescription (trans_line->trans, (char*)(prop));
             break;
 
         case GncTransPropType::NOTES:
-            xaccTransSetNotes (trans_line->trans, (char*)(prop->value));
+            xaccTransSetNotes (trans_line->trans, (char*)(prop));
             break;
 
         case GncTransPropType::OACCOUNT:
-            oaccount = ((Account*)(prop->value));
+            oaccount = ((Account*)(prop));
             break;
 
         case GncTransPropType::MEMO:
-            memo = g_strdup ((char*)(prop->value));
+            memo = g_strdup ((char*)(prop));
             break;
 
         case GncTransPropType::OMEMO:
-            omemo = g_strdup ((char*)(prop->value));
+            omemo = g_strdup ((char*)(prop));
             break;
 
         case GncTransPropType::NUM:
             /* the 'num' is saved and passed to 'trans_add_split' below where
              * 'gnc_set_num_action' is used to set tran-num and/or split-action
              * per book option */
-            num = g_strdup ((char*)(prop->value));
+            num = g_strdup ((char*)(prop));
             break;
 
         case GncTransPropType::DEPOSIT: /* Add deposits to the existing amount. */
-            if (prop->value != NULL)
+            if (prop != NULL)
             {
-                amount = gnc_numeric_add (*((gnc_numeric*)(prop->value)),
+                amount = gnc_numeric_add (*((gnc_numeric*)(prop)),
                                          amount,
                                          xaccAccountGetCommoditySCU (account),
                                          GNC_HOW_RND_ROUND_HALF_UP);
@@ -678,9 +629,9 @@ static GncCsvTransLine* trans_properties_to_trans (std::map<GncTransPropType, Tr
             break;
 
         case GncTransPropType::WITHDRAWAL: /* Withdrawals are just negative deposits. */
-            if (prop->value != NULL)
+            if (prop != NULL)
             {
-                amount = gnc_numeric_add (gnc_numeric_neg(*((gnc_numeric*)(prop->value))),
+                amount = gnc_numeric_add (gnc_numeric_neg(*((gnc_numeric*)(prop))),
                                          amount,
                                          xaccAccountGetCommoditySCU (account),
                                          GNC_HOW_RND_ROUND_HALF_UP);
@@ -692,10 +643,10 @@ static GncCsvTransLine* trans_properties_to_trans (std::map<GncTransPropType, Tr
 
         case GncTransPropType::BALANCE: /* The balance gets stored in a separate field in trans_line. */
             /* We will use the "Deposit" and "Withdrawal" columns in preference to "Balance". */
-            if (!amount_set && prop->value != NULL)
+            if (!amount_set && prop != NULL)
             {
                 /* This gets put into the actual transaction at the end of gnc_csv_parse_to_trans. */
-                trans_line->balance = *((gnc_numeric*)(prop->value));
+                trans_line->balance = *((gnc_numeric*)(prop));
                 trans_line->balance_set = true;
             }
             break;
@@ -783,7 +734,7 @@ int GncCsvParseData::parse_to_trans (Account* account,
             orig_lines_it != orig_lines_max;
             ++orig_lines_it, odd_line = !odd_line)
     {
-        std::map<GncTransPropType, TransProperty *> trans_props;
+        prop_map_t trans_props;
 
         /* Skip current line if:
            1. only looking for lines with error AND no error on current line
@@ -817,40 +768,60 @@ int GncCsvParseData::parse_to_trans (Account* account,
             continue;
         }
 
+        /* Affect the transaction appropriately. */
         bool loop_err = false;
         for (uint j = 0; j < line.size(); j++)
         {
-            /* We do nothing with "None"-type columns. */
-            if (column_types[j] != GncTransPropType::NONE)
+            void* property;
+            switch (column_types[j])
             {
-                /* Affect the transaction appropriately. */
-                TransProperty* property = trans_property_new ();
-                gboolean succeeded = trans_property_set (property, column_types[j], line[j].c_str(), currency_format, date_format);
+                case GncTransPropType::DATE:
+                    property = static_cast<void*> (convert_date_col_str (line[j].c_str(), date_format));
+                break;
 
-                /* TODO Maybe move error handling to within TransPropertyList functions? */
-                if (succeeded)
-                    trans_props.insert(std::pair<GncTransPropType, TransProperty *>(column_types[j], property));
-                else
-                {
-                    parse_errors = loop_err = true;
-                    gchar *error_message = g_strdup_printf (_("%s column could not be understood."),
-                                                    _(gnc_csv_col_type_strs[column_types[j]]));
-                    orig_lines_it->second = error_message;
-
-                    g_free (error_message);
-                    trans_property_free (property, column_types[j]);
+                case GncTransPropType::DESCRIPTION:
+                case GncTransPropType::NOTES:
+                case GncTransPropType::MEMO:
+                case GncTransPropType::OMEMO:
+                case GncTransPropType::NUM:
+                    property = static_cast<void*> (g_strdup (line[j].c_str()));
                     break;
-                }
+
+                case GncTransPropType::ACCOUNT:
+                case GncTransPropType::OACCOUNT:
+                    property = static_cast<void*> (gnc_csv_account_map_search (line[j].c_str()));
+                    break;
+
+                case GncTransPropType::BALANCE:
+                case GncTransPropType::DEPOSIT:
+                case GncTransPropType::WITHDRAWAL:
+                    property = static_cast<void*> (convert_amount_col_str (line[j].c_str(), currency_format));
+                    break;
+
+                default:
+                    continue; /* We do nothing with "None"-type columns. */
+                    break;
+            }
+
+            if (property)
+                trans_props.insert(prop_pair_t(column_types[j], property));
+            else
+            {
+                parse_errors = loop_err = true;
+                gchar *error_message = g_strdup_printf (_("%s column could not be understood."),
+                                                _(gnc_csv_col_type_strs[column_types[j]]));
+                orig_lines_it->second = error_message;
+
+                g_free (error_message);
+                break;
             }
         }
         // Add an ACCOUNT property with the home_account if no account column was set by the user
         if (std::find (column_types.begin(), column_types.end(), GncTransPropType::ACCOUNT) == column_types.end())
-        {
-            TransProperty* property = trans_property_new ();
-            property->value = home_account;
-        }
+            trans_props.insert(prop_pair_t(GncTransPropType::ACCOUNT, static_cast<void*> (home_account)));
 
         if (loop_err)
+            /* FIXME huge memory leak here: the trans_props for this line aren't freed! */
             continue;
 
         /* If column parsing was successful, convert trans properties into a trans line. */
