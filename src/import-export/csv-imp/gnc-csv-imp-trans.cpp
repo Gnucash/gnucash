@@ -226,7 +226,6 @@ GncCsvParseData::GncCsvParseData(GncImpFileFormat format)
     /* All of the data pointers are initially NULL. This is so that, if
      * gnc_csv_parse_data_free is called before all of the data is
      * initialized, only the data that needs to be freed is freed. */
-    transactions = NULL;
     date_format = -1;
     currency_format = 0;
     start_row = 0;
@@ -242,10 +241,6 @@ GncCsvParseData::GncCsvParseData(GncImpFileFormat format)
  */
 GncCsvParseData::~GncCsvParseData()
 {
-    /* All non-NULL pointers have been initialized and must be freed. */
-
-    if (transactions != NULL)
-        g_list_free_full (transactions, g_free);
 }
 
 int GncCsvParseData::file_format(GncImpFileFormat format,
@@ -762,30 +757,11 @@ int GncCsvParseData::parse_to_trans (Account* account,
         for (auto orig_line : orig_lines)
             orig_line.second.clear();
 
-        if (transactions != NULL)
-            g_list_free (transactions);
-    }
-
-    /* last_transaction points to the last element in
-     * transactions, or NULL if it's empty. */
-    GList* last_transaction = NULL;
-    if (redo_errors) /* If we're looking only at error data ... */
-    {
-        if (transactions == NULL)
-            last_transaction = NULL;
-        else
-        {
-            /* Move last_transaction to the end. */
-            last_transaction = transactions;
-            while (g_list_next (last_transaction) != NULL)
-            {
-                last_transaction = g_list_next (last_transaction);
-            }
-        }
-    }
-    else /* Otherwise, we look at all the data. */
-    {
-        last_transaction = NULL;
+        /* FIXME handle memory leak here!
+         * Existing transactions in the map should probably removed before emptying the map
+         */
+        if (!transactions.empty())
+            transactions.clear();
     }
 
     /* compute start and end iterators based on user-set restrictions */
@@ -911,48 +887,17 @@ int GncCsvParseData::parse_to_trans (Account* account,
         }
 
         /* If all went well, add this transaction to the list. */
-        /* We keep the transactions sorted by date. We start at the end
-         * of the list and go backward, simply because the file itself
-         * is probably also sorted by date (but we need to handle the
-         * exception anyway). */
-
-        /* If we can just put it at the end, do so and increment last_transaction. */
-        if (last_transaction == NULL ||
-                xaccTransGetDate (((GncCsvTransLine*)(last_transaction->data))->trans) <= xaccTransGetDate (trans_line->trans))
-        {
-            transactions = g_list_append (transactions, trans_line);
-            /* If this is the first transaction, we need to get last_transaction on track. */
-            if (last_transaction == NULL)
-                last_transaction = transactions;
-            else /* Otherwise, we can just continue. */
-                last_transaction = g_list_next (last_transaction);
-        }
-        /* Otherwise, search backward for the correct spot. */
-        else
-        {
-            GList* insertion_spot = last_transaction;
-            while (insertion_spot != NULL &&
-                    xaccTransGetDate (((GncCsvTransLine*)(insertion_spot->data))->trans) > xaccTransGetDate (trans_line->trans))
-            {
-                insertion_spot = g_list_previous (insertion_spot);
-            }
-            /* Move insertion_spot one location forward since we have to
-             * use the g_list_insert_before function. */
-            if (insertion_spot == NULL) /* We need to handle the case of inserting at the beginning of the list. */
-                insertion_spot = transactions;
-            else
-                insertion_spot = g_list_next (insertion_spot);
-
-            transactions = g_list_insert_before (transactions, insertion_spot, trans_line);
-        }
+        /* We want to keep the transactions sorted by date in case we have
+         * to calculate the transaction's amount based on the user provided balances.
+         * The multimap should deal with this for us. */
+        auto trans_date = xaccTransGetDate (trans_line->trans);
+        transactions.insert (std::pair<time64, GncCsvTransLine*>(trans_date,trans_line));
     }
 
     if (std::find(column_types.begin(),column_types.end(), GncTransPropType::BALANCE) !=
         column_types.end()) // This is only used if we have one home account
     {
         Split      *split, *osplit;
-        gnc_numeric balance_offset;
-        GList* tx_iter = transactions;
 
         if (account != NULL)
             home_account = account;
@@ -961,11 +906,11 @@ int GncCsvParseData::parse_to_trans (Account* account,
          * differs from what it will be after the transactions are
          * imported. This will be sum of all the previous transactions for
          * any given transaction. */
-        balance_offset = double_to_gnc_numeric (0.0, xaccAccountGetCommoditySCU (home_account),
+        auto balance_offset = double_to_gnc_numeric (0.0, xaccAccountGetCommoditySCU (home_account),
                                      GNC_HOW_RND_ROUND_HALF_UP);
-        while (tx_iter != NULL)
+        for (auto trans_iter : transactions)
         {
-            auto trans_line = static_cast<GncCsvTransLine*> (tx_iter->data);
+            auto trans_line = trans_iter.second;
             if (trans_line->balance_set)
             {
                 time64 date = xaccTransGetDate (trans_line->trans);
@@ -1000,7 +945,6 @@ int GncCsvParseData::parse_to_trans (Account* account,
                                                  xaccAccountGetCommoditySCU (home_account),
                                                  GNC_HOW_RND_ROUND_HALF_UP);
             }
-            tx_iter = g_list_next (tx_iter);
         }
     }
 
