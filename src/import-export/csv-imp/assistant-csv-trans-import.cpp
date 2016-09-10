@@ -77,9 +77,9 @@ typedef struct
 
     GtkWidget       *file_page;                     /**< Assistant file page widget */
     GtkWidget       *file_chooser;                  /**< The widget for the file chooser */
-    gchar           *starting_dir;                  /**< The starting directory for import file */
-    gchar           *file_name;                     /**< The import file name */
-    gchar           *error_text;                    /**< Error Text */
+    std::string      starting_dir;                  /**< The starting directory for import file */
+    std::string      file_name;                     /**< The import file name */
+    std::string      error_text;                    /**< Error Text */
 
     GtkWidget       *preview_page;                  /**< Assistant preview page widget */
     GtkWidget       *settings_combo;                /**< The Settings Combo */
@@ -107,16 +107,16 @@ typedef struct
     GtkTreeView     *ctreeview;                     /**< The treeview containing the column types */
     GtkLabel        *instructions_label;            /**< The instructions label */
     GtkImage        *instructions_image;            /**< The instructions image */
-    gboolean         encoding_selected_called;      /**< Before encoding_selected is first called, this is FALSE.
+    bool             encoding_selected_called;      /**< Before encoding_selected is first called, this is false.
                                                        * (See description of encoding_selected.) */
-    gboolean         not_empty;                     /**< FALSE initially, true after the first type gnc_csv_preview_update_assist is called. */
-    gboolean         previewing_errors;             /**< TRUE if the dialog is displaying
+    bool             not_empty;                     /**< false initially, true after the first type gnc_csv_preview_update_assist is called. */
+    bool             previewing_errors;             /**< true if the dialog is displaying
                                                        * error lines, instead of all the file data. */
     int              code_encoding_calls;           /**< Normally this is 0. If the computer
                                                        * changes encselector, this is set to
                                                        * 2. encoding_selected is called twice,
                                                        * each time decrementing this by 1. */
-    gboolean         skip_errors;                   /**< This is FALSE until the user checks the skip errors. */
+    bool             skip_errors;                   /**< This is false until the user checks the skip errors. */
     GtkWidget      **treeview_buttons;              /**< This array contains the header buttons in treeview */
     int              num_of_rows;                   /**< The number of rows in the store */
     int              longest_line;                  /**< The length of the longest row */
@@ -141,15 +141,15 @@ typedef struct
     GtkWidget            *match_label;              /**< The match label at the bottom of the page */
     GtkWidget            *help_button;              /**< The widget for the help button on the matcher page */
     GtkWidget            *cancel_button;            /**< The widget for the new cancel button when going back is blocked */
-    gboolean              match_parse_run;          /**< This is set after the first run */
+    bool                  match_parse_run;          /**< This is set after the first run */
 
     GtkWidget            *summary_page;             /**< Assistant summary page widget */
     GtkWidget            *summary_label;            /**< The summary text */
 
-    gboolean              new_book;                 /**< Are we importing into a new book?; if yes, call book options */
-    gint                  callcount;                /**< Number of times the assistant page forward function called */
-    gint                  next_page;                /**< The saved assistant next page number */
-    gboolean              settings_valid;           /**< Are the settings valid */
+    bool                  new_book;                 /**< Are we importing into a new book?; if yes, call book options */
+    int                   callcount;                /**< Number of times the assistant page forward function called */
+    int                   next_page;                /**< The saved assistant next page number */
+    bool                  settings_valid;           /**< Are the settings valid */
 
 } CsvImportTrans;
 
@@ -187,9 +187,9 @@ void csv_import_trans_assistant_summary_page_prepare (GtkAssistant *assistant, g
 void csv_import_trans_load_settings (CsvImportTrans *info);
 
 static void gnc_csv_preview_update_assist (CsvImportTrans* info);
-void gnc_csv_reset_preview_setting (CsvImportTrans* info, gboolean block);
-gboolean preview_settings_valid (CsvImportTrans *info);
-gboolean get_list_of_accounts (CsvImportTrans* info, GtkTreeModel *store);
+void gnc_csv_reset_preview_setting (CsvImportTrans* info, bool block);
+bool preview_settings_valid (CsvImportTrans *info);
+bool get_list_of_accounts (CsvImportTrans* info, GtkTreeModel *store);
 
 /*************************************************************************/
 
@@ -290,7 +290,7 @@ csv_import_trans_load_settings (CsvImportTrans *info)
                 fwtok->cols_from_string (std::string(info->settings_data->column_widths));
 
             GError  *error = NULL;
-            if (info->parse_data->parse (FALSE, &error))
+            if (info->parse_data->parse (false, &error))
             {
                 gnc_error_dialog (NULL, "%s", _("There was a problem with the column widths, please review."));
                 g_error_free (error);
@@ -308,7 +308,7 @@ csv_import_trans_load_settings (CsvImportTrans *info)
             GtkTreeIter   iter;
             gchar       **columns;
             int           i;
-            gboolean      error = FALSE;
+            bool          error = false;
 
             columns = g_strsplit (info->settings_data->column_types, ",", -1);
 
@@ -342,7 +342,7 @@ csv_import_trans_load_settings (CsvImportTrans *info)
                                 -1);
                 }
                 else
-                    error = TRUE;
+                    error = true;
             }
             if (error)
                 gnc_error_dialog (NULL, "%s", _("There was a problem with the column types, please review."));
@@ -409,7 +409,7 @@ csv_import_trans_delete_settings_cb (GtkWidget *button, CsvImportTrans *info)
                 g_key_file_remove_group (keyfile, group, NULL);
                 gnc_csv_trans_find_settings (model);
                 gtk_combo_box_set_active (GTK_COMBO_BOX(info->settings_combo), 0); // Default
-                gnc_csv_reset_preview_setting (info, FALSE); // Reset the widgets
+                gnc_csv_reset_preview_setting (info, false); // Reset the widgets
             }
         }
         g_free (group);
@@ -443,7 +443,7 @@ csv_import_trans_save_settings_cb (GtkWidget *button, CsvImportTrans *info)
     GtkWidget     *entry;
     gchar         *group = NULL, *name = NULL;
     const gchar   *title = _("Save the Import Settings.");
-    gboolean       error = FALSE;
+    bool           error = false;
     const gchar   *entry_text;
 
     // Get the Entry Text
@@ -468,7 +468,7 @@ csv_import_trans_save_settings_cb (GtkWidget *button, CsvImportTrans *info)
                 "%s", _("You can not save to 'No Settings'."));
             gtk_dialog_run (GTK_DIALOG (dialog));
             gtk_widget_destroy (dialog);
-            error = TRUE;
+            error = true;
         }
         g_free (group);
         g_free (name);
@@ -486,15 +486,15 @@ csv_import_trans_save_settings_cb (GtkWidget *button, CsvImportTrans *info)
                 "%s", _("The settings name is blank."));
             gtk_dialog_run (GTK_DIALOG (dialog));
             gtk_widget_destroy (dialog);
-            error = TRUE;
+            error = true;
         }
         else // Check for entry_text in settings list
         {
             GtkTreeModel *model;
             GtkTreeIter   iter;
-            gboolean      valid = FALSE;
-            gboolean      found = FALSE;
-            gint          response;
+            bool          valid = false;
+            bool          found = false;
+            int           response;
 
             model = gtk_combo_box_get_model (GTK_COMBO_BOX(info->settings_combo));
 
@@ -508,7 +508,7 @@ csv_import_trans_save_settings_cb (GtkWidget *button, CsvImportTrans *info)
                 gtk_tree_model_get (model, &iter, SET_NAME, &name, -1);
 
                 if (g_strcmp0 (name, entry_text) == 0)
-                    found = TRUE;
+                    found = true;
 
                 g_free (name);
 
@@ -528,13 +528,13 @@ csv_import_trans_save_settings_cb (GtkWidget *button, CsvImportTrans *info)
                 gtk_widget_destroy (dialog);
 
                 if (response != GTK_RESPONSE_OK)
-                    error = TRUE;
+                    error = true;
             }
         }
     }
 
     // Call save settings if we have no errors
-    if (error == FALSE)
+    if (!error)
     {
         int           i;
         GList        *columns;
@@ -613,7 +613,7 @@ csv_import_trans_save_settings_cb (GtkWidget *button, CsvImportTrans *info)
         {
             GtkTreeModel *model;
             GtkTreeIter   iter;
-            gboolean      valid = FALSE;
+            bool          valid = false;
 
             dialog = gtk_message_dialog_new (GTK_WINDOW(info->window),
                                         (GtkDialogFlags) 0,
@@ -677,28 +677,28 @@ csv_import_trans_file_chooser_confirm_cb (GtkWidget *button, CsvImportTrans *inf
 
     gtk_assistant_set_page_complete (assistant, page, FALSE);
 
-    gchar *file_name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(info->file_chooser));
+    auto file_name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(info->file_chooser));
     if (!file_name)
         return;
 
     gchar *filepath = gnc_uri_get_path (file_name);
-    if (info->starting_dir)
-        g_free (info->starting_dir);
-    info->starting_dir = g_path_get_dirname (filepath);
-    g_free (filepath);
+    auto starting_dir = g_path_get_dirname (filepath);
 
-    if (info->file_name)
-        g_free (info->file_name);
     info->file_name = file_name;
+    info->starting_dir = starting_dir;
 
-    DEBUG("file_name selected is %s", info->file_name);
-    DEBUG("starting directory is %s", info->starting_dir);
+    g_free (filepath);
+    g_free (file_name);
+    g_free (starting_dir);
+
+    DEBUG("file_name selected is %s", info->file_name.c_str());
+    DEBUG("starting directory is %s", info->starting_dir.c_str());
 
     /* Load the file into parse_data. */
     auto parse_data = new GncCsvParseData;
     /* Assume data is CSV. User can later override to Fixed Width if needed */
     parse_data->file_format (GncImpFileFormat::CSV, &error);
-    if (parse_data->load_file (file_name, &error))
+    if (parse_data->load_file (info->file_name, &error))
     {
         /* If we couldn't load the file ... */
         gnc_error_dialog (NULL, "%s", error->message);
@@ -713,7 +713,7 @@ csv_import_trans_file_chooser_confirm_cb (GtkWidget *button, CsvImportTrans *inf
     }
 
     /* Parse the data. */
-    if (parse_data->parse (TRUE, &error))
+    if (parse_data->parse (true, &error))
     {
         /* If we couldn't parse the data ... */
         gnc_error_dialog (NULL, "%s", error->message);
@@ -724,11 +724,11 @@ csv_import_trans_file_chooser_confirm_cb (GtkWidget *button, CsvImportTrans *inf
     if (info->parse_data) // Free parse_data if we have come back here
     {
         delete info->parse_data;
-        gnc_csv_reset_preview_setting (info, TRUE);
+        gnc_csv_reset_preview_setting (info, true);
     }
     info->parse_data = parse_data;
-    info->previewing_errors = FALSE; /* We're looking at all the data. */
-    info->skip_errors = FALSE; // Set skip_errors to False
+    info->previewing_errors = false; /* We're looking at all the data. */
+    info->skip_errors = false; // Set skip_errors to False
     gtk_assistant_set_page_complete (assistant, page, TRUE);
     gtk_assistant_set_current_page (assistant, num + 1);
 }
@@ -744,7 +744,7 @@ void row_selection_update (CsvImportTrans* info)
 {
     GtkListStore *store;
     GtkTreeIter iter;
-    gboolean valid;
+    bool valid;
     int i = 0;
 
     store = GTK_LIST_STORE(gtk_tree_view_get_model (info->treeview));
@@ -800,7 +800,7 @@ void row_selection_update (CsvImportTrans* info)
     }
 
     /* Skip rows */
-    if (info->parse_data->skip_rows == TRUE)
+    if (info->parse_data->skip_rows)
     {
         for (i = info->start_row + 1; i <= info->end_row; i = i + 2)
         {
@@ -869,9 +869,9 @@ void csv_import_trans_skip_errors_cb (GtkWidget *cb, gpointer user_data)
     CsvImportTrans *info = (CsvImportTrans*) user_data;
 
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(cb)))
-        info->skip_errors = TRUE;
+        info->skip_errors = true;
     else
-        info->skip_errors = FALSE;
+        info->skip_errors = false;
 }
 
 
@@ -949,7 +949,7 @@ void sep_button_clicked (GtkWidget* widget, CsvImportTrans* info)
      * the column types because we want to leave the user's
      * configurations intact. */
     GError* error;
-    if (info->parse_data->parse (FALSE, &error))
+    if (info->parse_data->parse (false, &error))
     {
         /* Warn the user there was a problem and try to undo what caused
          * the error. (This will cause a reparsing and ideally a usable
@@ -998,7 +998,7 @@ static void separated_or_fixed_selected (GtkToggleButton* csv_button, CsvImportT
 
     /* Reparse the data. */
     GError* error = NULL;
-    if (info->parse_data->parse (FALSE, &error))
+    if (info->parse_data->parse (false, &error))
     {
         /* Show an error dialog explaining the problem. */
         gnc_error_dialog (NULL, "%s", error->message);
@@ -1041,11 +1041,11 @@ static void encoding_selected (GOCharmapSel* selector, const char* encoding,
         GError* error = NULL;
         /* Try converting the new encoding and reparsing. */
         info->parse_data->convert_encoding (encoding);
-        if (info->parse_data->parse (FALSE, &error))
+        if (info->parse_data->parse (false, &error))
         {
             /* If it fails, change back to the old encoding. */
             gnc_error_dialog (NULL, "%s", _("Invalid encoding selected"));
-            info->encoding_selected_called = FALSE;
+            info->encoding_selected_called = false;
             go_charmap_sel_set_encoding (selector, previous_encoding.c_str());
             return;
         }
@@ -1055,11 +1055,11 @@ static void encoding_selected (GOCharmapSel* selector, const char* encoding,
         /* Refresh the row highlighting */
         row_selection_update (info);
 
-        info->encoding_selected_called = FALSE;
+        info->encoding_selected_called = false;
     }
     else /* If this is the first call of the function ... */
     {
-        info->encoding_selected_called = TRUE; /* ... set the flag and wait for the next call. */
+        info->encoding_selected_called = true; /* ... set the flag and wait for the next call. */
     }
 }
 
@@ -1197,7 +1197,7 @@ fixed_context_menu_handler (GnumericPopupMenuElement const *element,
     }
 
     GError* error = NULL;
-    if (info->parse_data->parse (FALSE, &error))
+    if (info->parse_data->parse (false, &error))
     {
         gnc_error_dialog (NULL, "%s", error->message);
         return FALSE;
@@ -1380,7 +1380,7 @@ split_column (CsvImportTrans* info, int col, int dx)
     GncFwTokenizer *fwtok = dynamic_cast<GncFwTokenizer*>(info->parse_data->tokenizer.get());
     fwtok->col_split (col, rel_pos);
     GError* error = NULL;
-    if (info->parse_data->parse (FALSE, &error))
+    if (info->parse_data->parse (false, &error))
     {
         gnc_error_dialog (NULL, "%s", error->message);
         return;
@@ -1441,17 +1441,17 @@ static void header_button_press_handler (GtkWidget* button, GdkEventButton* even
 
 /* Test for the required minimum number of columns selected and
  * a valid date format.
- * Returns TRUE if we do or FALSE if we don't.
+ * Returns true if we do or false if we don't.
  *
  * @param info The data being previewed
  */
-gboolean preview_settings_valid (CsvImportTrans* info)
+bool preview_settings_valid (CsvImportTrans* info)
 {
     int i, ncols = info->parse_data->column_types.size(); /* ncols is the number of columns in the data. */
     int weight = 0;
     int oweight = 0;
-    gboolean valid = TRUE;
-    gboolean havebalance = FALSE;
+    bool valid = true;
+    bool havebalance = false;
     /* store contains the actual strings appearing in the column types treeview. */
     GtkTreeModel* store = gtk_tree_view_get_model (info->ctreeview);
     /* datastore contains the actual strings appearing in the preview treeview. */
@@ -1487,7 +1487,7 @@ gboolean preview_settings_valid (CsvImportTrans* info)
             gtk_tree_model_get (datastore, &iter2, i + 1, &prevstr, -1);
 
             if (parse_date (prevstr, info->parse_data->date_format) == -1)
-                valid = FALSE;
+                valid = false;
             break;
 
         case GncTransPropType::DESCRIPTION:
@@ -1495,7 +1495,7 @@ gboolean preview_settings_valid (CsvImportTrans* info)
             break;
 
         case GncTransPropType::BALANCE:
-            havebalance = TRUE;
+            havebalance = true;
             /* No break */
         case GncTransPropType::DEPOSIT:
         case GncTransPropType::WITHDRAWAL:
@@ -1527,46 +1527,43 @@ gboolean preview_settings_valid (CsvImportTrans* info)
         g_free (prevstr);
     }
 
-    if ((havebalance == TRUE) && (info->home_account_number > 1))
+    if (havebalance && (info->home_account_number > 1))
     {
-        g_free (info->error_text);
-        info->error_text = g_strdup_printf (gettext ("There are problems with the import settings!\nIf you have a Balance column "
-                                        "and an Account column there must be only one account listed..."));
-        return FALSE;
+        info->error_text = _("There are problems with the import settings!\nIf you have a Balance column "
+                             "and an Account column there must be only one account listed...");
+        return false;
     }
 
     if ((oweight > 0) && (oweight < 99))
     {
-        g_free (info->error_text);
-        info->error_text = g_strdup_printf (gettext ("There are problems with the import settings!\nIf you have an Other Memo column "
-                                        "you must have an Other Account column..."));
-        return FALSE;
+        info->error_text = _("There are problems with the import settings!\nIf you have an Other Memo column "
+                             "you must have an Other Account column...");
+        return false;
     }
 
-    if (weight < 1109 || valid == FALSE)
+    if (weight < 1109 || !valid)
     {
-        g_free (info->error_text);
-        info->error_text = g_strdup_printf (gettext ("There are problems with the import settings!\nThe date format could be wrong "
-                                        "or there are not enough columns set..."));
-        return FALSE;
+        info->error_text = _("There are problems with the import settings!\nThe date format could be wrong "
+                             "or there are not enough columns set...");
+        return false;
     }
     else
-        return TRUE;
+        return true;
 }
 
 
 /* Test for the string being in the liststore
- * Returns TRUE if it is or FALSE if not.
+ * Returns true if it is or false if not.
  *
  * @param liststore The data being reviewed
  *
  * @param string to check for
  */
-static gboolean
+static bool
 check_for_duplicates (GtkListStore *liststore, const gchar *string)
 {
     GtkTreeIter iter;
-    gboolean valid;
+    bool valid;
 
     valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL(liststore), &iter);
     while (valid)
@@ -1578,27 +1575,27 @@ check_for_duplicates (GtkListStore *liststore, const gchar *string)
         if(!(g_strcmp0 (text, string)))
         {
             g_free (text);
-            return TRUE;
+            return true;
         }
         g_free (text);
 
         valid = gtk_tree_model_iter_next (GTK_TREE_MODEL(liststore), &iter);
     }
-    return FALSE;
+    return false;
 }
 
 
 /* Get the list of accounts
- * Returns TRUE if we have any accounts
+ * Returns true if we have any accounts
  *
  * @param info The data being previewed
  *
  * @param store for the account match page
  */
-gboolean get_list_of_accounts (CsvImportTrans* info, GtkTreeModel *store)
+bool get_list_of_accounts (CsvImportTrans* info, GtkTreeModel *store)
 {
     int      i, j, ncols = info->parse_data->column_types.size(); /* ncols is the number of columns in the data. */
-    gboolean have_accounts = FALSE;
+    bool     have_accounts = false;
     gint     home_account_number = 0;
     gint     other_account_number = 0;
 
@@ -1648,7 +1645,7 @@ gboolean get_list_of_accounts (CsvImportTrans* info, GtkTreeModel *store)
                         gtk_list_store_append (GTK_LIST_STORE(store), &iter3);
                         gtk_list_store_set (GTK_LIST_STORE(store), &iter3, MAPPING_STRING, accstr,
                                             MAPPING_FULLPATH, _("No Linked Account"), MAPPING_ACCOUNT, NULL, -1);
-                        have_accounts = TRUE;
+                        have_accounts = true;
                     }
                     g_free (accstr);
                 }
@@ -1661,8 +1658,8 @@ gboolean get_list_of_accounts (CsvImportTrans* info, GtkTreeModel *store)
 }
 
 
-/* Loads the preview's data into its data treeview. not_empty is TRUE
- * when the data treeview already contains data, FALSE otherwise
+/* Loads the preview's data into its data treeview. not_empty is true
+ * when the data treeview already contains data, false otherwise
  * (e.g. the first time this function is called on a preview).
  *
  * @param info The data being previewed
@@ -1845,7 +1842,7 @@ static void gnc_csv_preview_update_assist (CsvImportTrans* info)
     info->parse_data->date_format = gtk_combo_box_get_active (GTK_COMBO_BOX(info->date_format_combo));
 
     /* It's now been filled with some stuff. */
-    info->not_empty = TRUE;
+    info->not_empty = true;
 }
 
 
@@ -1854,7 +1851,7 @@ static void gnc_csv_preview_update_assist (CsvImportTrans* info)
  *
  * Reset the widgets on the preview settings page
  *******************************************************/
-void gnc_csv_reset_preview_setting (CsvImportTrans *info, gboolean block)
+void gnc_csv_reset_preview_setting (CsvImportTrans *info, bool block)
 {
     int i;
     GtkAdjustment  *adj;
@@ -1917,10 +1914,10 @@ void gnc_csv_reset_preview_setting (CsvImportTrans *info, gboolean block)
 
 // FIXME Should I explicitly do a reparse here, or did the above code already trigger it in some way ?
 //    GError* error = NULL;
-//    if (gnc_csv_parse (info->parse_data, FALSE, &error))
+//    if (gnc_csv_parse (info->parse_data, false, &error))
 //    {
 //        gnc_error_dialog (NULL, "%s", error->message);
-//        return FALSE;
+//        return false;
 //    }
 //    gnc_csv_preview_update_assist (info);
 //
@@ -1939,10 +1936,11 @@ static
 void load_settings (CsvImportTrans *info)
 {
     info->start_row = 0;
-    info->match_parse_run = FALSE;
-    info->file_name = NULL;
-    info->starting_dir = NULL;
-    info->error_text = NULL;
+    info->match_parse_run = false;
+    if (!info->file_name.empty())
+        info->file_name.clear();
+    if (!info->error_text.empty())
+        info->error_text.clear();
 
     /* Init Settings data. */
     info->settings_data = gnc_csv_trans_new_settings_data();
@@ -1986,12 +1984,12 @@ csv_import_trans_assistant_file_page_prepare (GtkAssistant *assistant,
     gint            num = gtk_assistant_get_current_page (assistant);
     GtkWidget      *page = gtk_assistant_get_nth_page (assistant, num);
 
-    info->previewing_errors = FALSE; // We're looking at all the data.
-    info->skip_errors = FALSE; // Set skip_errors to False to start with.
+    info->previewing_errors = false; // We're looking at all the data.
+    info->skip_errors = false; // Set skip_errors to False to start with.
 
     /* Set the default directory */
-    if (info->starting_dir)
-        gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(info->file_chooser), info->starting_dir);
+    if (info->starting_dir.size())
+        gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(info->file_chooser), info->starting_dir.c_str());
 
     /* Reset start row to first row 1 */
     adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(info->start_row_spin));
@@ -2025,7 +2023,7 @@ csv_import_trans_assistant_preview_page_prepare (GtkAssistant *assistant,
     gtk_widget_hide (GTK_WIDGET(info->check_label));
     gtk_widget_hide (GTK_WIDGET(info->check_butt));
 
-    if (info->previewing_errors == TRUE) // We are looking at errors to display
+    if (info->previewing_errors) // We are looking at errors to display
     {
         gchar* name;
         GtkIconSize size;
@@ -2093,9 +2091,9 @@ csv_import_trans_assistant_account_page_prepare (GtkAssistant *assistant,
 
     info->settings_valid = preview_settings_valid (info);
 
-    if (!info->settings_valid && (info->skip_errors == FALSE))
+    if (!info->settings_valid && !info->skip_errors)
     {
-        mtext = g_strdup_printf ("<span size=\"medium\" color=\"red\"><b>%s</b></span>", info->error_text);
+        mtext = g_strdup_printf ("<span size=\"medium\" color=\"red\"><b>%s</b></span>", info->error_text.c_str());
         gtk_label_set_markup (GTK_LABEL(info->account_label), mtext);
         g_free (mtext);
 
@@ -2133,11 +2131,11 @@ csv_import_trans_assistant_account_page_prepare (GtkAssistant *assistant,
 }
 
 
-static gboolean
+static bool
 import_account_check_all (GtkTreeModel *model)
 {
     GtkTreeIter iter;
-    gboolean valid, ret = TRUE;
+    bool valid, ret = true;
 
     // Set iter to first entry of store
     valid = gtk_tree_model_get_iter_first (model, &iter);
@@ -2151,7 +2149,7 @@ import_account_check_all (GtkTreeModel *model)
         gtk_tree_model_get (model, &iter, MAPPING_ACCOUNT, &account, -1);
 
         if (account == NULL)
-            ret = FALSE;
+            ret = false;
 
         valid = gtk_tree_model_iter_next (model, &iter);
     }
@@ -2294,7 +2292,7 @@ import_account_select_cb (GtkWidget *widget, gpointer user_data)
 
 
 /* This is the callback for the mouse click */
-static gboolean
+static bool
 import_account_button_cb (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
     CsvImportTrans     *info = (CsvImportTrans*) user_data;
@@ -2311,7 +2309,7 @@ import_account_button_cb (GtkWidget *widget, GdkEventButton *event, gpointer use
         GdkWindow *window = gtk_tree_view_get_bin_window (GTK_TREE_VIEW (info->account_match_view));
 
         if (event->window != window)
-            return FALSE;
+            return false;
 
         /* Get tree path for row that was clicked, true if row exists */
         if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (info->account_match_view), (gint) event->x, (gint) event->y,
@@ -2357,9 +2355,9 @@ import_account_button_cb (GtkWidget *widget, GdkEventButton *event, gpointer use
         if (import_account_check_all (model))
             gtk_assistant_set_page_complete (GTK_ASSISTANT(info->window), info->account_match_page, TRUE);
 
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 
@@ -2373,9 +2371,9 @@ csv_import_trans_assistant_account_match_page_prepare (GtkAssistant *assistant,
 
     info->settings_valid = preview_settings_valid (info);
 
-    if (!info->settings_valid && (info->skip_errors == FALSE))
+    if (!info->settings_valid && !info->skip_errors)
     {
-        mtext = g_strdup_printf ("<span size=\"medium\" color=\"red\"><b>%s</b></span>", info->error_text);
+        mtext = g_strdup_printf ("<span size=\"medium\" color=\"red\"><b>%s</b></span>", info->error_text.c_str());
         gtk_label_set_markup (GTK_LABEL(info->account_match_label), mtext);
         g_free (mtext);
 
@@ -2425,7 +2423,7 @@ csv_import_trans_assistant_doc_page_prepare (GtkAssistant *assistant,
     if (info->new_book)
         info->new_book = gnc_new_book_option_display (info->window);
 
-    if (info->match_parse_run == FALSE)
+    if (!info->match_parse_run)
     {
         /* Add the Cancel button for the matcher */
         info->cancel_button = gtk_button_new_with_mnemonic (_("_Cancel"));
@@ -2434,7 +2432,7 @@ csv_import_trans_assistant_doc_page_prepare (GtkAssistant *assistant,
                          G_CALLBACK(csv_import_trans_assistant_cancel), info);
         gtk_widget_show (GTK_WIDGET(info->cancel_button));
     }
-    info->match_parse_run = TRUE;
+    info->match_parse_run = true;
 }
 
 
@@ -2450,10 +2448,8 @@ csv_import_trans_assistant_match_page_prepare (GtkAssistant *assistant,
     /* Block going back */
     gtk_assistant_commit (GTK_ASSISTANT(info->window));
 
-    if (!info->parse_data->parse_errors || (info->skip_errors == TRUE))
+    if (!info->parse_data->parse_errors || info->skip_errors)
     {
-        GList* transactions; /* A list of the transactions we create */
-
         text =  _("Double click on rows to change, then click on Apply to Import");
         mtext = g_strdup_printf ("<span size=\"medium\" color=\"red\"><b>%s</b></span>", text);
         gtk_label_set_markup (GTK_LABEL(info->match_label), mtext);
@@ -2472,7 +2468,7 @@ csv_import_trans_assistant_match_page_prepare (GtkAssistant *assistant,
             gtk_widget_show (GTK_WIDGET(info->help_button));
 
             /* Get the list of the transactions that were created. */
-            transactions = info->parse_data->transactions;
+            GList *transactions = info->parse_data->transactions;
             /* Copy all of the transactions to the importer GUI. */
             while (transactions != NULL)
             {
@@ -2496,13 +2492,13 @@ csv_import_trans_assistant_summary_page_prepare (GtkAssistant *assistant,
     gchar *text, *mtext;
 
     /* Save the Window size and directory */
-    gnc_set_default_directory (GNC_PREFS_GROUP, info->starting_dir);
+    gnc_set_default_directory (GNC_PREFS_GROUP, info->starting_dir.c_str());
 
     /* Remove the added button */
     gtk_assistant_remove_action_widget (assistant, info->help_button);
     gtk_assistant_remove_action_widget (assistant, info->cancel_button);
 
-    text = g_strdup_printf (gettext ("The transactions were imported from the file '%s'."), info->file_name);
+    text = g_strdup_printf (gettext ("The transactions were imported from the file '%s'."), info->file_name.c_str());
     mtext = g_strdup_printf ("<span size=\"medium\"><b>%s</b></span>", text);
     gtk_label_set_markup (GTK_LABEL(info->summary_label), mtext);
     g_free (text);
@@ -2548,7 +2544,7 @@ csv_import_trans_forward_page_func (gint current_page, gpointer user_data)
             if (info->callcount == 1)
             {
                 GtkTreeModel *store;
-                gboolean      valid;
+                bool          valid;
 
                 // Load the account strings into the store
                 store = gtk_tree_view_get_model (GTK_TREE_VIEW(info->account_match_view));
@@ -2563,7 +2559,7 @@ csv_import_trans_forward_page_func (gint current_page, gpointer user_data)
                     next_page = 3;
 
                 // Skip Errors set, goto to doc page
-                if (info->skip_errors == TRUE)
+                if (info->skip_errors)
                     next_page = 5;
 
                 info->next_page = next_page;
@@ -2585,7 +2581,7 @@ csv_import_trans_forward_page_func (gint current_page, gpointer user_data)
                     next_page = 5;
 
                 // Skip Errors set, goto to doc page
-                if (info->skip_errors == TRUE)
+                if (info->skip_errors)
                     next_page = 5;
 
                 info->next_page = next_page;
@@ -2607,14 +2603,14 @@ csv_import_trans_forward_page_func (gint current_page, gpointer user_data)
         case 5: //from doc page
             if (info->callcount == 1)
             {
-                /* Create transactions from the parsed data, first time with FALSE
-                   Subsequent times with TRUE */
+                /* Create transactions from the parsed data, first time with false
+                   Subsequent times with true */
                     info->parse_data->parse_to_trans (info->account, info->match_parse_run);
 
                 /* if there are errors, we jump back to preview to correct */
-                if (info->parse_data->parse_errors && (info->skip_errors == FALSE) )
+                if (info->parse_data->parse_errors && !info->skip_errors)
                 {
-                    info->previewing_errors = TRUE; /* We're looking at errors. */
+                    info->previewing_errors = true; /* We're looking at errors. */
                     next_page = 2;
                 }
                 else
@@ -2728,10 +2724,6 @@ static void
 csv_import_trans_close_handler (gpointer user_data)
 {
     CsvImportTrans *info = (CsvImportTrans*) user_data;
-
-    g_free(info->file_name);
-    g_free(info->starting_dir);
-    g_free(info->error_text);
 
     /* Free the memory we allocated. */
     if (!(info->parse_data == NULL))
@@ -2958,12 +2950,12 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
         /* Load the column type treeview. */
         info->ctreeview = (GtkTreeView*)GTK_WIDGET(gtk_builder_get_object (builder, "ctreeview"));
 
-        /* This is TRUE only after encoding_selected is called, so we must
-         * set it initially to FALSE. */
-        info->encoding_selected_called = FALSE;
+        /* This is true only after encoding_selected is called, so we must
+         * set it initially to false. */
+        info->encoding_selected_called = false;
 
         /* It is empty at first. */
-        info->not_empty = FALSE;
+        info->not_empty = false;
     }
 
     /* Account page */
