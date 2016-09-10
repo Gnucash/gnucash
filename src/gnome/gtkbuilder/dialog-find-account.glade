@@ -9,13 +9,13 @@
       <!-- column-name account -->
       <column type="gpointer"/>
       <!-- column-name place_holder -->
-      <column type="gboolean"/>
+      <column type="gchararray"/>
       <!-- column-name hidden -->
-      <column type="gboolean"/>
+      <column type="gchararray"/>
       <!-- column-name not_used -->
-      <column type="gboolean"/>
+      <column type="gchararray"/>
       <!-- column-name bal_zero -->
-      <column type="gboolean"/>
+      <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkDialog" id="Find Account Dialog">
