@@ -542,7 +542,20 @@ gnc_plugin_page_account_tree_open (Account *account, GtkWindow *win)
 
     if (account != NULL)
     {
+        Account *root_account = gnc_get_current_root_account ();
+        Account *parent_account = NULL;
+        Account *temp_account = account;
+
         g_hash_table_insert (priv->fd.filter_override, account, account);
+
+        // make sure we overide all the parent accounts to root
+        while (parent_account != root_account)
+        {
+            parent_account = gnc_account_get_parent (temp_account);
+
+            g_hash_table_insert (priv->fd.filter_override, parent_account, parent_account);
+            temp_account = parent_account;
+        }
         gnc_tree_view_account_refilter (GNC_TREE_VIEW_ACCOUNT(priv->tree_view));
         gnc_tree_view_account_set_selected_account (GNC_TREE_VIEW_ACCOUNT(priv->tree_view), account);
     }
