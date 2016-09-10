@@ -855,25 +855,6 @@ int GncCsvParseData::parse_to_trans (Account* account,
         auto line = orig_lines_it->first;
         GncCsvTransLine* trans_line = NULL;
 
-        // If account = NULL, we should have an Account column
-        home_account = account;
-        if (home_account == NULL)
-        {
-            for (uint j = 0; j < line.size(); j++)
-            {
-                /* Look for "Account" columns. */
-                if (column_types[j] == GncTransPropType::ACCOUNT)
-                    home_account = gnc_csv_account_map_search (line[j].c_str());
-            }
-        }
-
-        if (home_account == NULL)
-        {
-            parse_errors = true;
-            orig_lines_it->second = _("Account column could not be understood.");
-            continue;
-        }
-
         /* Affect the transaction appropriately. */
         bool loop_err = false;
         for (uint j = 0; j < line.size(); j++)
@@ -896,6 +877,8 @@ int GncCsvParseData::parse_to_trans (Account* account,
                 case GncTransPropType::ACCOUNT:
                 case GncTransPropType::OACCOUNT:
                     property = GncTransPropImpl<Account*>::make_new (line[j]);
+                    if (*col_types_it == GncTransPropType::ACCOUNT)
+                        home_account = dynamic_cast<GncTransPropImpl<Account*>*>(property.get())->value;
                     break;
 
                 case GncTransPropType::BALANCE:
@@ -922,15 +905,29 @@ int GncCsvParseData::parse_to_trans (Account* account,
                 break;
             }
         }
-        // Add an ACCOUNT property with the home_account if no account column was set by the user
-        if (std::find (column_types.begin(), column_types.end(), GncTransPropType::ACCOUNT) == column_types.end())
-        {
-            auto property = std::shared_ptr<GncTransProperty>(new GncTransPropImpl<Account*>(home_account));
-            trans_props.insert(prop_pair_t(GncTransPropType::ACCOUNT, property));
-        }
 
         if (loop_err)
             continue;
+
+        // Add an ACCOUNT property with the default account if no account column was set by the user
+        if (std::find (column_types.begin(), column_types.end(), GncTransPropType::ACCOUNT) == column_types.end())
+        {
+            // If there is no ACCOUNT property by now, try to use the default account passed in
+            if (account)
+            {
+                auto property = std::shared_ptr<GncTransProperty>(new GncTransPropImpl<Account*>(account));
+                trans_props.insert(prop_pair_t(GncTransPropType::ACCOUNT, property));
+                home_account = account;
+            }
+            else
+            {
+                // Oops - the user didn't select an Account column *and* we didn't get a default value either!
+                // Note if you get here this suggests a bug in the code!
+                parse_errors = true;
+                orig_lines_it->second = _("No account column selected and no default account specified either.");
+                continue;
+            }
+        }
 
         /* If column parsing was successful, convert trans properties into a trans line. */
         gchar *error_message = NULL;
