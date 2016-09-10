@@ -121,11 +121,11 @@ public:
     int file_format(GncImpFileFormat format, GError** error);
     GncImpFileFormat file_format();
 
-    int load_file (const char* filename, GError** error);
+    int load_file (const std::string& filename, GError** error);
     void convert_encoding (const std::string& encoding);
 
-    int parse (gboolean guessColTypes, GError** error);
-    int parse_to_trans (Account* account, gboolean redo_errors);
+    int parse (bool guessColTypes, GError** error);
+    int parse_to_trans (Account* account, bool redo_errors);
     bool check_for_column_type (GncTransPropType type);
 
     std::unique_ptr<GncTokenizer> tokenizer;    /**< Will handle file loading/encoding conversion/splitting into fields */

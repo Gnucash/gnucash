@@ -38,7 +38,6 @@ extern "C" {
 
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <regex.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdlib.h>
@@ -47,6 +46,7 @@ extern "C" {
 
 #include <algorithm>
 #include <boost/regex.hpp>
+#include <boost/regex/icu.hpp>
 
 #include "gnc-csv-imp-trans.hpp"
 #include "gnc-csv-tokenizer.hpp"
@@ -152,16 +152,15 @@ std::map<GncTransPropType, const char*> gnc_csv_col_type_strs = {
  */
 time64 parse_date (const std::string &date_str, int format)
 {
-    time64 rawtime; /* The integer time */
     struct tm retvalue, test_retvalue; /* The time in a broken-down structure */
     int orig_year = -1, orig_month = -1, orig_day = -1;
 
     boost::regex r(date_regex[format]);
     boost::smatch what;
-    if(!boost::regex_search(date_str.cbegin(), date_str.cend(), what, r))
+    if(!boost::regex_search(date_str, what, r))
         return -1;  // regex didn't find a match
 
-    // xxx Different behavior from 2.6.x series !
+    // Attention: different behavior from 2.6.x series !
     // If date format without year was selected, the match
     // should NOT have found a year.
     if ((format >= 3) && (what.length("YEAR") != 0))
@@ -170,6 +169,7 @@ time64 parse_date (const std::string &date_str, int format)
 
     /* Put some sane values in retvalue by using a fixed time for
      * the non-year-month-day parts of the date. */
+    time64 rawtime; /* The integer time */
     gnc_time (&rawtime);
     gnc_localtime_r (&rawtime, &retvalue);
     retvalue.tm_hour = 11;
@@ -254,8 +254,8 @@ int GncCsvParseData::file_format(GncImpFileFormat format,
     if (file_fmt == format)
         return 0;
 
-    std::string new_encoding = "UTF-8";
-    std::string new_imp_file;
+    auto new_encoding = std::string("UTF-8");
+    auto new_imp_file = std::string();
 
     // Recover common settings from old tokenizer
     if (tokenizer)
@@ -270,7 +270,7 @@ int GncCsvParseData::file_format(GncImpFileFormat format,
     // Set up new tokenizer with common settings
     // recovered from old tokenizer
     tokenizer->encoding(new_encoding);
-    return load_file(new_imp_file.c_str(), error);
+    return load_file(new_imp_file, error);
 }
 GncImpFileFormat GncCsvParseData::file_format()
 {
@@ -278,7 +278,7 @@ GncImpFileFormat GncCsvParseData::file_format()
 }
 
 /** Converts raw file data using a new encoding. This function must be
- * called after gnc_csv_load_file only if gnc_csv_load_file guessed
+ * called after load_file only if load_file guessed
  * the wrong encoding.
  * @param parse_data Data that is being parsed
  * @param encoding Encoding that data should be translated using
@@ -304,7 +304,7 @@ void GncCsvParseData::convert_encoding (const std::string& encoding)
  * @param error Will contain an error if there is a failure
  * @return 0 on success, 1 on failure
  */
-int GncCsvParseData::load_file (const char* filename,
+int GncCsvParseData::load_file (const std::string& filename,
                                 GError** error)
 {
 
@@ -336,7 +336,7 @@ int GncCsvParseData::load_file (const char* filename,
  * @param error Will contain an error if there is a failure
  * @return 0 on success, 1 on failure
  */
-int GncCsvParseData::parse (gboolean guessColTypes, GError** error)
+int GncCsvParseData::parse (bool guessColTypes, GError** error)
 {
     uint max_cols = 0;
     tokenizer->tokenize();
@@ -378,9 +378,9 @@ int GncCsvParseData::parse (gboolean guessColTypes, GError** error)
  * @param date_format The date format to use.
  * @return a pointer to a time64 on success, nullptr on failure
  */
-static time64* convert_date_col_str (const char* str, int date_format)
+static time64* convert_date_col_str (const std::string &str, int date_format)
 {
-    auto parsed_date = parse_date(str, date_format);
+    auto parsed_date = parse_date (str.c_str(), date_format);
     if (parsed_date == -1)
         return nullptr;
     else
@@ -397,72 +397,37 @@ static time64* convert_date_col_str (const char* str, int date_format)
  * @param currency_format The currency format to use.
  * @return a pointer to a gnc_numeric on success, nullptr on failure
  */
-static gnc_numeric* convert_amount_col_str (const char* str, int currency_format)
+static gnc_numeric* convert_amount_col_str (const std::string &str, int currency_format)
 {
-    auto str_dupe = g_strdup (str); /* First, we make a copy so we can't mess up real data. */
-    /* If a cell is empty or just spaces make its value = "0" */
-    regex_t regex;
-    int reti = regcomp(&regex, "[0-9]", 0);
-    reti = regexec(&regex, str_dupe, 0, NULL, 0);
-    if (reti == REG_NOMATCH)
-    {
-        g_free (str_dupe);
-        str_dupe = g_strdup ("0");
-    }
-    /* Go through str_dupe looking for currency symbols. */
-    for (auto possible_currency_symbol = str_dupe; *possible_currency_symbol;
-            possible_currency_symbol = g_utf8_next_char (possible_currency_symbol))
-    {
-        if (g_unichar_type (g_utf8_get_char (possible_currency_symbol)) == G_UNICODE_CURRENCY_SYMBOL)
-        {
-            /* If we find a currency symbol, save the position just ahead
-             * of the currency symbol (next_symbol), and find the null
-             * terminator of the string (last_symbol). */
-            char *next_symbol = g_utf8_next_char (possible_currency_symbol), *last_symbol = next_symbol;
-            while (*last_symbol)
-                last_symbol = g_utf8_next_char (last_symbol);
+    /* If a cell is empty or just spaces return 0 as amount */
+    if(!boost::regex_search(str, boost::regex("[0-9]")))
+        return new gnc_numeric({0, 0});
 
-            /* Move all of the string (including the null byte, which is
-             * why we have +1 in the size parameter) following the
-             * currency symbol back one character, thereby overwriting the
-             * currency symbol. */
-            memmove (possible_currency_symbol, next_symbol, last_symbol - next_symbol + 1);
-            break;
-        }
-    }
+    auto expr = boost::make_u32regex("[[:Sc:]]");
+    std::string str_no_symbols = boost::u32regex_replace(str, expr, "");
 
-    /* Currency format */
+    /* Convert based on user chosen currency format */
     gnc_numeric val;
     char *endptr;
     switch (currency_format)
     {
     case 0:
         /* Currency locale */
-        if (!(xaccParseAmount (str_dupe, TRUE, &val, &endptr)))
-        {
-            g_free (str_dupe);
+        if (!(xaccParseAmount (str_no_symbols.c_str(), TRUE, &val, &endptr)))
             return nullptr;
-        }
         break;
     case 1:
         /* Currency decimal period */
-        if (!(xaccParseAmountExtended (str_dupe, TRUE, '-', '.', ',', "\003\003", "$+", &val, &endptr)))
-        {
-            g_free (str_dupe);
+        if (!(xaccParseAmountExtended (str_no_symbols.c_str(), TRUE, '-', '.', ',', "\003\003", "$+", &val, &endptr)))
             return nullptr;
-        }
         break;
     case 2:
         /* Currency decimal comma */
-        if (!(xaccParseAmountExtended (str_dupe, TRUE, '-', ',', '.', "\003\003", "$+", &val, &endptr)))
-        {
-            g_free (str_dupe);
+        if (!(xaccParseAmountExtended (str_no_symbols.c_str(), TRUE, '-', ',', '.', "\003\003", "$+", &val, &endptr)))
             return nullptr;
-        }
         break;
     }
 
-    g_free (str_dupe);
     auto amount = new gnc_numeric;
     *amount = val;
     return amount;
@@ -487,12 +452,12 @@ struct GncTransPropImpl
 {
 public:
     ~GncTransPropImpl(){};
-    GncTransPropImpl(std::string& val, int fmt)
+    GncTransPropImpl(const std::string& val, int fmt)
     {
         m_valid = false;
     };
 
-    static GncTransProperty* make_new(std::string& val,int fmt = 0)
+    static GncTransProperty* make_new(const std::string& val,int fmt = 0)
         { return nullptr; }
 
     T value;
@@ -502,15 +467,15 @@ template<>
 struct GncTransPropImpl<time64*>
 : public GncTransProperty
 {
-    GncTransPropImpl(std::string& val, int fmt)
+    GncTransPropImpl(const std::string& val, int fmt)
     {
-        value = convert_date_col_str (val.c_str(), fmt);
+        value = convert_date_col_str (val, fmt);
         m_valid = (value != nullptr);
     }
     ~GncTransPropImpl()
         { if (value) delete value; }
 
-    static std::shared_ptr<GncTransProperty> make_new(std::string& val,int fmt)
+    static std::shared_ptr<GncTransProperty> make_new(const std::string& val,int fmt)
     { return std::shared_ptr<GncTransProperty>(new GncTransPropImpl<time64*>(val, fmt)); }
 
     time64* value;
@@ -521,7 +486,7 @@ template<>
 struct GncTransPropImpl<std::string*>
 : public GncTransProperty
 {
-    GncTransPropImpl(std::string& val, int fmt = 0)
+    GncTransPropImpl(const std::string& val, int fmt = 0)
     {
         value = new std::string(val);
         m_valid = (value != nullptr);
@@ -529,7 +494,7 @@ struct GncTransPropImpl<std::string*>
     ~GncTransPropImpl()
         { if (value) delete value; }
 
-    static std::shared_ptr<GncTransProperty> make_new(std::string& val,int fmt = 0)
+    static std::shared_ptr<GncTransProperty> make_new(const std::string& val,int fmt = 0)
         { return std::shared_ptr<GncTransProperty>(new GncTransPropImpl<std::string*>(val)); } /* Note fmt is not used for strings */
 
     std::string* value;
@@ -539,7 +504,7 @@ template<>
 struct GncTransPropImpl<Account *>
 : public GncTransProperty
 {
-    GncTransPropImpl(std::string& val, int fmt = 0)
+    GncTransPropImpl(const std::string& val, int fmt = 0)
     {
         value = gnc_csv_account_map_search (val.c_str());
         m_valid = (value != nullptr);
@@ -548,7 +513,7 @@ struct GncTransPropImpl<Account *>
         { value = val; }
     ~GncTransPropImpl(){};
 
-    static std::shared_ptr<GncTransProperty> make_new(std::string& val,int fmt = 0)
+    static std::shared_ptr<GncTransProperty> make_new(const std::string& val,int fmt = 0)
         { return std::shared_ptr<GncTransProperty>(new GncTransPropImpl<Account*>(val)); } /* Note fmt is not used in for accounts */
 
     Account* value;
@@ -558,15 +523,15 @@ template<>
 struct GncTransPropImpl<gnc_numeric *>
 : public GncTransProperty
 {
-    GncTransPropImpl(std::string& val, int fmt)
+    GncTransPropImpl(const std::string& val, int fmt)
     {
-        value = convert_amount_col_str (val.c_str(), fmt);
+        value = convert_amount_col_str (val, fmt);
         m_valid = (value != nullptr);
     }
     ~GncTransPropImpl()
         { if (value) delete value; }
 
-    static std::shared_ptr<GncTransProperty> make_new(std::string& val,int fmt)
+    static std::shared_ptr<GncTransProperty> make_new(const std::string& val,int fmt)
     { return std::shared_ptr<GncTransProperty>(new GncTransPropImpl<gnc_numeric*>(val, fmt)); }
 
     gnc_numeric* value;
@@ -581,7 +546,7 @@ struct GncTransPropImpl<gnc_numeric *>
 static void trans_add_split (Transaction* trans, Account* account, QofBook* book,
                             gnc_numeric amount, const std::string& num, const std::string& memo)
 {
-    Split* split = xaccMallocSplit (book);
+    auto split = xaccMallocSplit (book);
     xaccSplitSetAccount (split, account);
     xaccSplitSetParent (split, trans);
     xaccSplitSetAmount (split, amount);
@@ -788,7 +753,7 @@ static GncCsvTransLine* trans_properties_to_trans (prop_map_t& trans_props, gcha
  * @return 0 on success, 1 on failure
  */
 int GncCsvParseData::parse_to_trans (Account* account,
-                                     gboolean redo_errors)
+                                     bool redo_errors)
 {
     /* Free error_lines and transactions if they
      * already exist. */
@@ -834,7 +799,7 @@ int GncCsvParseData::parse_to_trans (Account* account,
         std::advance(orig_lines_max, end_row);
 
     Account *home_account = NULL;
-    bool odd_line = false;
+    auto odd_line = false;
     parse_errors = false;
     for (orig_lines_it, odd_line;
             orig_lines_it != orig_lines_max;
@@ -855,15 +820,20 @@ int GncCsvParseData::parse_to_trans (Account* account,
         auto line = orig_lines_it->first;
         GncCsvTransLine* trans_line = NULL;
 
-        /* Affect the transaction appropriately. */
-        bool loop_err = false;
-        for (uint j = 0; j < line.size(); j++)
+        /* Convert this import line into a map of transaction/split properties. */
+        auto loop_err = false;
+        auto col_types_it = column_types.cbegin();
+        auto line_it = line.cbegin();
+        for (col_types_it, line_it;
+                col_types_it != column_types.cend(),
+                line_it != line.cend();
+                ++col_types_it, ++line_it)
         {
             std::shared_ptr<GncTransProperty> property;
-            switch (column_types[j])
+            switch (*col_types_it)
             {
                 case GncTransPropType::DATE:
-                    property = GncTransPropImpl<time64*>::make_new (line[j], date_format);
+                    property = GncTransPropImpl<time64*>::make_new (*line_it, date_format);
                 break;
 
                 case GncTransPropType::DESCRIPTION:
@@ -871,12 +841,12 @@ int GncCsvParseData::parse_to_trans (Account* account,
                 case GncTransPropType::MEMO:
                 case GncTransPropType::OMEMO:
                 case GncTransPropType::NUM:
-                    property = GncTransPropImpl<std::string*>::make_new (line[j]);
+                    property = GncTransPropImpl<std::string*>::make_new (*line_it);
                     break;
 
                 case GncTransPropType::ACCOUNT:
                 case GncTransPropType::OACCOUNT:
-                    property = GncTransPropImpl<Account*>::make_new (line[j]);
+                    property = GncTransPropImpl<Account*>::make_new (*line_it);
                     if (*col_types_it == GncTransPropType::ACCOUNT)
                         home_account = dynamic_cast<GncTransPropImpl<Account*>*>(property.get())->value;
                     break;
@@ -884,7 +854,7 @@ int GncCsvParseData::parse_to_trans (Account* account,
                 case GncTransPropType::BALANCE:
                 case GncTransPropType::DEPOSIT:
                 case GncTransPropType::WITHDRAWAL:
-                    property = GncTransPropImpl<gnc_numeric*>::make_new (line[j], currency_format);
+                    property = GncTransPropImpl<gnc_numeric*>::make_new (*line_it, currency_format);
                     break;
 
                 default:
@@ -893,12 +863,12 @@ int GncCsvParseData::parse_to_trans (Account* account,
             }
 
             if (property->m_valid)
-                trans_props.insert(prop_pair_t(column_types[j], property));
+                trans_props.insert(prop_pair_t(*col_types_it, property));
             else
             {
                 parse_errors = loop_err = true;
                 gchar *error_message = g_strdup_printf (_("%s column could not be understood."),
-                                                _(gnc_csv_col_type_strs[column_types[j]]));
+                                                _(gnc_csv_col_type_strs[*col_types_it]));
                 orig_lines_it->second = error_message;
 
                 g_free (error_message);
@@ -995,7 +965,7 @@ int GncCsvParseData::parse_to_trans (Account* account,
                                      GNC_HOW_RND_ROUND_HALF_UP);
         while (tx_iter != NULL)
         {
-            GncCsvTransLine* trans_line = (GncCsvTransLine*)tx_iter->data;
+            auto trans_line = static_cast<GncCsvTransLine*> (tx_iter->data);
             if (trans_line->balance_set)
             {
                 time64 date = xaccTransGetDate (trans_line->trans);
