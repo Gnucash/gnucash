@@ -474,33 +474,19 @@ static gnc_numeric* convert_amount_col_str (const char* str, int currency_format
  * @param amount The amount of the split
  */
 static void trans_add_split (Transaction* trans, Account* account, QofBook* book,
-                            gnc_numeric amount, const char *num, const char *memo)
+                            gnc_numeric amount, const std::string& num, const std::string& memo)
 {
     Split* split = xaccMallocSplit (book);
     xaccSplitSetAccount (split, account);
     xaccSplitSetParent (split, trans);
     xaccSplitSetAmount (split, amount);
     xaccSplitSetValue (split, amount);
-    xaccSplitSetMemo (split, memo);
-    /* set tran-num and/or split-action per book option */
-    gnc_set_num_action (trans, split, num, NULL);
-}
-
-/** Adds a other split to a transaction.
- * @param trans The transaction to add a split to
- * @param account The account used for the other split
- * @param book The book where the split should be stored
- * @param amount The amount of the split
- */
-static void trans_add_osplit (Transaction* trans, Account* account, QofBook* book,
-                            gnc_numeric amount, const char *num, const char *memo)
-{
-    Split *osplit = xaccMallocSplit (book);
-    xaccSplitSetAccount (osplit, account);
-    xaccSplitSetParent (osplit, trans);
-    xaccSplitSetAmount (osplit, amount);
-    xaccSplitSetValue (osplit, gnc_numeric_neg (amount));
-    xaccSplitSetMemo (osplit, memo);
+    if (!memo.empty())
+        xaccSplitSetMemo (split, memo.c_str());
+    /* set tran-num and/or split-action per book option
+     * note this function does nothing if num is NULL also */
+    if (!num.empty())
+        gnc_set_num_action (trans, split, num.c_str(), NULL);
 }
 
 using prop_pair_t = std::pair<GncTransPropType, void*>;
@@ -571,9 +557,9 @@ static GncCsvTransLine* trans_properties_to_trans (prop_map_t& trans_props, gcha
     xaccTransSetCurrency (trans_line->trans, currency);
 
     /* Go through each of the properties and edit the transaction accordingly. */
-    gchar *num = NULL;
-    gchar *memo = NULL;
-    gchar *omemo = NULL;
+    std::string num;
+    std::string memo;
+    std::string omemo;
     Account *oaccount = NULL;
     bool amount_set = false;
     gnc_numeric amount = trans_line->balance;
@@ -659,14 +645,11 @@ static GncCsvTransLine* trans_properties_to_trans (prop_map_t& trans_props, gcha
     trans_add_split (trans_line->trans, account, book, amount, num, memo);
 
     if (oaccount)
-        trans_add_osplit (trans_line->trans, oaccount, book, amount, num, omemo);
-
-    if (num)
-        g_free (num);
-    if (memo)
-        g_free (memo);
-    if (omemo)
-        g_free (omemo);
+        /* Note: the current importer assumes at most 2 splits. This means the second split amount
+         * will be the negative of the the first split amount. We also only set the num field once,
+         * for the first split.
+         */
+        trans_add_split (trans_line->trans, oaccount, book, gnc_numeric_neg(amount), "", omemo);
 
     return trans_line;
 }
