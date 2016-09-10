@@ -131,7 +131,7 @@ public:
     std::unique_ptr<GncTokenizer> tokenizer;    /**< Will handle file loading/encoding conversion/splitting into fields */
     std::vector<parse_line_t> orig_lines;      /**< file_str parsed into a two-dimensional array of strings */
     std::vector<GncTransPropType> column_types;       /**< Vector of values from the GncCsvColumnType enumeration */
-    GList* transactions;        /**< List of GncCsvTransLine*s created using orig_lines and column_types */
+    std::multimap <time64, GncCsvTransLine*> transactions;        /**< List of GncCsvTransLine*s created using orig_lines and column_types */
     int date_format;            /**< The format of the text in the date columns from date_format_internal. */
     guint start_row;            /**< The start row to generate transactions from. */
     guint end_row;              /**< The end row to generate transactions from. */

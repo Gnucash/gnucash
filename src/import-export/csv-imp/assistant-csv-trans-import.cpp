@@ -2467,16 +2467,12 @@ csv_import_trans_assistant_match_page_prepare (GtkAssistant *assistant,
                              G_CALLBACK(on_matcher_help_clicked), info->gnc_csv_importer_gui);
             gtk_widget_show (GTK_WIDGET(info->help_button));
 
-            /* Get the list of the transactions that were created. */
-            GList *transactions = info->parse_data->transactions;
             /* Copy all of the transactions to the importer GUI. */
-            while (transactions != NULL)
+            for (auto trans_it : info->parse_data->transactions)
             {
-                GncCsvTransLine* trans_line = (GncCsvTransLine*) transactions->data;
+                auto trans_line = trans_it.second;
                 gnc_gen_trans_list_add_trans (info->gnc_csv_importer_gui, trans_line->trans);
-                transactions = g_list_next (transactions);
             }
-            g_list_free (transactions);
         }
     }
     /* Enable the Forward Assistant Button */
@@ -2714,7 +2710,7 @@ csv_import_trans_assistant_finish (GtkAssistant *assistant, gpointer user_data)
     CsvImportTrans *info = (CsvImportTrans*) user_data;
 
     /* Start the import */
-    if (info->parse_data->transactions != NULL)
+    if (!info->parse_data->transactions.empty())
         gnc_gen_trans_assist_start (info->gnc_csv_importer_gui);
     else
         gnc_gen_trans_list_delete (info->gnc_csv_importer_gui);
