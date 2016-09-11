@@ -291,6 +291,31 @@ ENDIF (WITH_AQBANKING)
 
 IF (WITH_OFX)
   GNC_PKG_CHECK_MODULES (LIBOFX REQUIRED libofx)
+  INCLUDE(CheckCXXSourceRuns)
+  SET(CMAKE_REQUIRED_LIBRARIES "-lofx")
+  CHECK_CXX_SOURCE_RUNS("
+#include <time.h>
+#include <stdlib.h>
+#include <string>
+extern time_t ofxdate_to_time_t(const std::string ofxdate);
+
+int main(int argc, char** argv)
+{
+    const std::string timestr = \"20160319000000\";
+    struct tm ts;
+    ts.tm_year = 116;
+    ts.tm_mon = 2;
+    ts.tm_mday = 19;
+
+    setenv(\"TZ\", \"PST 08 PDT 07 M 4.1.0, M 10.6.0\", 1);
+    time_t t = ofxdate_to_time_t(timestr);
+    if (t == mktime(&ts))
+        exit(1);
+    exit(0);
+}
+" HAVE_OFX_BUG_39)
+  SET(HAVE_OFX_BUG_39 ${HAVE_OFX_BUG_39})
+  SET(CMAKE_REQUIRED_LIBRARIES)
 ENDIF(WITH_OFX)
 # ############################################################
 

@@ -327,6 +327,10 @@
    your system. */
 #cmakedefine PTHREAD_CREATE_JOINABLE 1
 
+/* Result of LibOFX Bug 39 detection (see
+  https://sourceforge.net/p/libofx/bugs/39/ for details). */
+#cmakedefine HAVE_OFX_BUG_39 1
+
 /* Name of package containing qt3-wizard. */
 #define QT3_WIZARD_PACKAGE "aqbanking"
 

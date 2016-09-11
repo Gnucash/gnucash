@@ -792,6 +792,41 @@ if test x${have_ofx} = xyes ; then
   MIGRATABLE_PREFS_OFX="$srcdir/src/import-export/ofx/migratable-prefs-ofx.xml"
 fi
 
+ofx_has_bug_39=no
+if test x${have_ofx} = xyes ; then
+  AC_MSG_CHECKING([Does libofx have bug 39])
+  libs_old="$LIBS"
+  LIBS="$LIBS -lofx"
+  AC_LANG_PUSH(C++)
+  AC_RUN_IFELSE(
+    [AC_LANG_PROGRAM([
+#include <time.h>
+#include <stdlib.h>
+#include <string>
+extern time_t ofxdate_to_time_t(const std::string ofxdate);
+],[
+const std::string timestr = "20160319000000";
+struct tm ts;
+ts.tm_year = 116;
+ts.tm_mon = 2;
+ts.tm_mday = 19;
+
+setenv("TZ", "PST 08 PDT 07 M 4.1.0, M 10.6.0", 1);
+time_t t = ofxdate_to_time_t(timestr);
+if (t == mktime(&ts))
+  exit(0);
+exit(1);
+])],
+    [AC_MSG_RESULT(no)], [
+    AC_MSG_RESULT(yes)
+    ofx_has_bug_39=yes
+    ])
+  if test x$ofx_has_bug_39 = "xyes"; then
+    AC_DEFINE(HAVE_OFX_BUG_39, 1, [Libofx has a daylight-time handling bug.])
+  fi
+  AC_LANG_POP([C++])
+  LIBS="$libs_old"
+fi
 AM_CONDITIONAL([WITH_OFX], [test "x${have_ofx}" = xyes])
 AC_SUBST_FILE([MIGRATABLE_PREFS_OFX])
 ### --------------------------------------------------------------------------
