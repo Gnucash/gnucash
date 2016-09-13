@@ -9,6 +9,7 @@
 
 #include <boost/tokenizer.hpp>
 #include <boost/locale.hpp>
+#include <boost/algorithm/string.hpp>
 
 void
 GncFwTokenizer::columns(const std::vector<uint>& cols)
@@ -192,7 +193,14 @@ int GncFwTokenizer::tokenize()
     while (std::getline (in_stream, line))
     {
         Tokenizer tok(line, sep);
-        vec.assign(tok.begin(),tok.end());
+        vec.clear();
+        for (auto token : tok)
+            vec.push_back (boost::trim_copy(token));
+        //vec.assign(tok.begin(),tok.end());
+
+        // Trim all leading and trailing whitespace
+        //for (auto token : vec)
+        //    boost::trim(token);
 
         line.clear(); // clear here, next check could fail
 
