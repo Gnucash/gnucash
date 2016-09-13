@@ -54,9 +54,11 @@ enum class GncImpFileFormat {
     FIXED_WIDTH
 };
 
+class GncTokenizerTest;
 
 class GncTokenizer
 {
+friend GncTokenizerTest;
 public:
     GncTokenizer() = default;                               // default constructor
     GncTokenizer(const GncTokenizer&) = default;            // copy constructor
