@@ -206,7 +206,7 @@ int GncFwTokenizer::tokenize()
 
         // example checking
         // for correctly parsed 3 fields per record
-        if (vec.size() < 3) continue;
+        // if (vec.size() < 3) continue;
 
         tokenized_contents.push_back(vec);
     }
