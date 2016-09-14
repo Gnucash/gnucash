@@ -15,13 +15,13 @@ int GncDummyTokenizer::tokenize()
     std::vector<std::string> vec;
     std::string line;
 
-    tokenized_contents.clear();
-    std::istringstream in_stream(utf8_contents);
+    m_tokenized_contents.clear();
+    std::istringstream in_stream(m_utf8_contents);
 
     while (std::getline (in_stream, line))
     {
         vec.push_back (line);
-        tokenized_contents.push_back(vec);
+        m_tokenized_contents.push_back(vec);
 
         line.clear();
         vec.clear();

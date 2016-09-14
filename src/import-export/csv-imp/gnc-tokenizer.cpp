@@ -42,49 +42,49 @@ GncTokenizer::load_file(const std::string& path)
     if (path.empty())
         return;
 
-    imp_file_str = path;
+    m_imp_file_str = path;
 
     std::ifstream in;
     in.exceptions ( std::ifstream::failbit | std::ifstream::badbit );
-    in.open (imp_file_str.c_str(), std::ios::in | std::ios::binary);
+    in.open (m_imp_file_str.c_str(), std::ios::in | std::ios::binary);
 
-    raw_contents.clear();
+    m_raw_contents.clear();
     in.seekg(0, std::ios::end);
-    raw_contents.resize(in.tellg());
+    m_raw_contents.resize(in.tellg());
     in.seekg(0, std::ios::beg);
-    in.read(&raw_contents[0], raw_contents.size());
+    in.read(&m_raw_contents[0], m_raw_contents.size());
     in.close();
 
     // Guess encoding, user can override if needed later on.
     const char *guessed_enc = NULL;
-    guessed_enc = go_guess_encoding (raw_contents.c_str(),
-                                     raw_contents.length(),
-                                     enc_str.empty() ? "UTF-8" : enc_str.c_str(),
+    guessed_enc = go_guess_encoding (m_raw_contents.c_str(),
+                                     m_raw_contents.length(),
+                                     m_enc_str.empty() ? "UTF-8" : m_enc_str.c_str(),
                                      NULL);
     if (guessed_enc)
         this->encoding(guessed_enc);
     else
-        enc_str.clear();
+        m_enc_str.clear();
 
 }
 
-std::string
+const std::string&
 GncTokenizer::current_file()
 {
-    return imp_file_str;
+    return m_imp_file_str;
 }
 
 void
 GncTokenizer::encoding(const std::string& encoding)
 {
-    enc_str = encoding;
-    utf8_contents = boost::locale::conv::to_utf<char>(raw_contents, enc_str);
+    m_enc_str = encoding;
+    m_utf8_contents = boost::locale::conv::to_utf<char>(m_raw_contents, m_enc_str);
 }
 
-std::string
+const std::string&
 GncTokenizer::encoding()
 {
-    return enc_str;
+    return m_enc_str;
 }
 
 
@@ -94,7 +94,8 @@ int GncTokenizer::tokenize()
 }
 
 
-std::vector<str_vec> GncTokenizer::get_tokens()
+const std::vector<str_vec>&
+GncTokenizer::get_tokens()
 {
-    return tokenized_contents;
+    return m_tokenized_contents;
 }
