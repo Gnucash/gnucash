@@ -58,7 +58,7 @@ public:
     int  tokenize() override;
 
 private:
-    std::string sep_str = ",";
+    std::string m_sep_str = ",";
 };
 
 #endif

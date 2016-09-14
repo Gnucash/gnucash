@@ -13,15 +13,15 @@
 void
 GncCsvTokenizer::set_separators(const std::string& separators)
 {
-    sep_str = separators;
+    m_sep_str = separators;
 }
 
 
 int GncCsvTokenizer::tokenize()
 {
-    typedef boost::tokenizer< boost::escaped_list_separator<char> > Tokenizer;
+    using Tokenizer = boost::tokenizer< boost::escaped_list_separator<char>>;
 
-    boost::escaped_list_separator<char> sep("\\", sep_str, "\"");
+    boost::escaped_list_separator<char> sep("\\", m_sep_str, "\"");
 
     std::vector<std::string> vec;
     std::string line;
@@ -30,8 +30,8 @@ int GncCsvTokenizer::tokenize()
     bool inside_quotes(false);
     size_t last_quote(0);
 
-    tokenized_contents.clear();
-    std::istringstream in_stream(utf8_contents);
+    m_tokenized_contents.clear();
+    std::istringstream in_stream(m_utf8_contents);
 
     while (std::getline (in_stream, buffer))
     {
@@ -64,7 +64,7 @@ int GncCsvTokenizer::tokenize()
         // for correctly parsed 3 fields per record
         // if (vec.size() < 3) continue;
 
-        tokenized_contents.push_back(vec);
+        m_tokenized_contents.push_back(vec);
     }
 
     return 0;

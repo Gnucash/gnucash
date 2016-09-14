@@ -68,20 +68,20 @@ public:
     virtual ~GncTokenizer() = default;                      // destructor
 
     void load_file(const std::string& path);
-    std::string current_file();
+    const std::string& current_file();
     void encoding(const std::string& encoding);
-    std::string encoding();
+    const std::string& encoding();
     virtual int  tokenize();
-    std::vector<str_vec> get_tokens();
+    const std::vector<str_vec>& get_tokens();
     
 protected:
-    std::string utf8_contents;
-    std::vector<str_vec> tokenized_contents;
+    std::string m_utf8_contents;
+    std::vector<str_vec> m_tokenized_contents;
 
 private:
-    std::string imp_file_str;
-    std::string raw_contents;
-    std::string enc_str;
+    std::string m_imp_file_str;
+    std::string m_raw_contents;
+    std::string m_enc_str;
 };
 
 

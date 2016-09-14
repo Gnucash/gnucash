@@ -64,9 +64,9 @@ public:
 
 protected:
     std::string& get_utf8_contents(std::unique_ptr<GncTokenizer> &tokenizer)
-    { return tokenizer->utf8_contents; }
+    { return tokenizer->m_utf8_contents; }
     void set_utf8_contents(std::unique_ptr<GncTokenizer> &tokenizer, const std::string& newcontents)
-    { tokenizer->utf8_contents = newcontents; }
+    { tokenizer->m_utf8_contents = newcontents; }
     void test_gnc_tokenize_helper (const std::string& separators, tokenize_csv_test_data* test_data); // for csv tokenizer
     void test_gnc_tokenize_helper (tokenize_fw_test_data* test_data); // for csv tokenizer
 

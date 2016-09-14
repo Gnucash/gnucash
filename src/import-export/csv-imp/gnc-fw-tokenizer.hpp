@@ -80,8 +80,8 @@ public:
 
 
 private:
-    std::vector<uint> col_vec;
-    uint longest_line;
+    std::vector<uint> m_col_vec;
+    uint m_longest_line;
 };
 
 #endif
