@@ -174,6 +174,11 @@ void GncFwTokenizer::load_file(const std::string& path)
 
         line.clear();
     }
+
+    /* Set a sane default for the offsets
+     * That is, assume one column with all the data */
+    if (m_col_vec.empty())
+        m_col_vec.push_back(m_longest_line);
 }
 
 

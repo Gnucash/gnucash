@@ -75,7 +75,7 @@ public:
     std::string cols_to_string();
     void cols_from_string(const std::string& col_str);
 
-    void load_file (const std::string& path);
+    void load_file (const std::string& path) override;
     int  tokenize() override;
 
 
