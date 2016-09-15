@@ -1665,14 +1665,17 @@ static void gnc_csv_preview_update_assist (CsvImportTrans* info)
      * - the column type as a user visible (translated) string
      * - the internal type for this column
      * So store looks like:
-     * col_type_str 0, col_type, col_type_str 1, col_type 1, ..., col_type_str ncols, col_type ncols. */
-    GType* types = g_new (GType, 2 * ncols);
+     * col_type_str 0, col_type, col_type_str 1, col_type 1, ..., col_type_str ncols, col_type ncols.
+     * And then a final column is added for the Error column (which doesn't require a col_type) */
+    GType* headertypes = g_new (GType, 2 * ncols + 1);
     for (guint i = 0; i < 2 * ncols; i += 2)
     {
-        types[i] = G_TYPE_STRING;
-        types[i+1] = G_TYPE_INT;
+        headertypes[i] = G_TYPE_STRING;
+        headertypes[i+1] = G_TYPE_INT;
     }
-    auto ctstore = gtk_list_store_newv (2 * ncols, types);
+    headertypes[2 * ncols] = G_TYPE_STRING;
+    auto ctstore = gtk_list_store_newv (2 * ncols + 1, headertypes);
+    g_free (headertypes);
 
     /* Set all the column types to what's in the parse data. */
     GtkTreeIter iter;
@@ -1684,16 +1687,19 @@ static void gnc_csv_preview_update_assist (CsvImportTrans* info)
                 2 * i + 1, static_cast<int>(info->parse_data->column_types[i]),
                 -1);
     }
+    gtk_list_store_set (ctstore, &iter, 2 * ncols, _("Errors"), -1);
     gtk_tree_view_set_model (info->ctreeview, GTK_TREE_MODEL(ctstore));
+
 
     // Set up file data liststore
 
     /* store is a liststore to hold the data from the file being imported.
        it contains only strings. */
-    for (guint i = 0; i <  ncols + 1; i++)
-        types[i] = G_TYPE_STRING;
-    auto store = gtk_list_store_newv (ncols + 1, types);
-    g_free (types);
+    GType* bodytypes = g_new (GType, ncols + 2);
+    for (guint i = 0; i <  ncols + 2; i++)
+        bodytypes[i] = G_TYPE_STRING;
+    auto store = gtk_list_store_newv (ncols + 2, bodytypes);
+    g_free (bodytypes);
 
     /* Fill the data liststore with data from the file. */
     info->num_of_rows = info->parse_data->orig_lines.size();
@@ -1715,6 +1721,8 @@ static void gnc_csv_preview_update_assist (CsvImportTrans* info)
             uint pos = cell_str_it - parse_line.first.cbegin() + 1;
             gtk_list_store_set (store, &iter, pos, cell_str_it->c_str(), -1);
         }
+        /* Add the optional error messages in the last column of the store */
+        gtk_list_store_set (store, &iter, ncols + 1, parse_line.second.c_str(), -1);
     }
     gtk_tree_view_set_model (info->treeview, GTK_TREE_MODEL(store));
 
@@ -1781,6 +1789,21 @@ static void gnc_csv_preview_update_assist (CsvImportTrans* info)
                          G_CALLBACK(header_button_press_handler), (gpointer)info);
         /* Store the column number in the button to know which one was clicked later on */
         g_object_set_data (G_OBJECT(col->button), "col-num",GINT_TO_POINTER(i));
+    }
+
+    /* Add a column for the error messages when reviewing errors */
+    if (info->previewing_errors)
+    {
+        auto crenderer = gtk_cell_renderer_text_new();
+        gtk_tree_view_insert_column_with_attributes (info->ctreeview,
+                -1, "", crenderer, "text", 2 * ncols, NULL);
+
+        auto renderer = gtk_cell_renderer_text_new();
+        auto col = gtk_tree_view_column_new_with_attributes ("", renderer, "background", 0,
+                                                             "text", ncols + 1, NULL);
+        gtk_tree_view_insert_column (info->treeview, col, -1);
+        /* Enable resizing of the columns. */
+        gtk_tree_view_column_set_resizable (col, TRUE);
     }
 
     /* Select the header row */
