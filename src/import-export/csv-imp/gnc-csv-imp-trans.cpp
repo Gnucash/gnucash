@@ -396,7 +396,7 @@ static gnc_numeric* convert_amount_col_str (const std::string &str, int currency
 {
     /* If a cell is empty or just spaces return 0 as amount */
     if(!boost::regex_search(str, boost::regex("[0-9]")))
-        return new gnc_numeric({0, 0});
+        return nullptr;
 
     auto expr = boost::make_u32regex("[[:Sc:]]");
     std::string str_no_symbols = boost::u32regex_replace(str, expr, "");
