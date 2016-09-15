@@ -61,8 +61,6 @@ public:
     uint get_column (uint num);
 
     // Column manipulators
-    bool col_can_add (uint col_end);
-    void col_add (uint col_end);
     bool col_can_delete (uint col_num);
     void col_delete (uint col_num);
     bool col_can_narrow (uint col_num);
