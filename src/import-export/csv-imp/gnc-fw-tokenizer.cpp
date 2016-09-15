@@ -18,36 +18,10 @@ GncFwTokenizer::columns(const std::vector<uint>& cols)
 }
 
 
-bool GncFwTokenizer::col_can_add (uint col_end)
-{
-    if (col_end < 0 || col_end > m_longest_line)
-        return false;
-    else
-        return true;
-}
-
-void GncFwTokenizer::col_add (uint col_end)
-{
-    if (col_can_add (col_end))
-    {
-        for (auto col_it = m_col_vec.begin(); col_it != m_col_vec.end(); col_it++)
-        {
-            if (*col_it == col_end)
-                return; // don't add same column end twice in the column list
-            if (*col_it > col_end)
-                m_col_vec.insert (col_it, col_end);
-        }
-
-        // If we got here that means the requested col_end is beyond the currently
-        // inserted columns, so append it
-        m_col_vec.push_back (col_end);
-    }
-}
-
 bool GncFwTokenizer::col_can_delete (uint col_num)
 {
     auto last_col = m_col_vec.size() - 1;
-    if (col_num < 0 || col_num > last_col)
+    if (col_num < 0 || col_num >= last_col)
         return false;
     else
         return true;
@@ -55,22 +29,18 @@ bool GncFwTokenizer::col_can_delete (uint col_num)
 
 void GncFwTokenizer::col_delete (uint col_num)
 {
-    if (col_can_delete (col_num))
-        m_col_vec.erase (m_col_vec.begin() + col_num);
+    if (!col_can_delete (col_num))
+        return;
+
+    m_col_vec[col_num + 1] += m_col_vec[col_num];
+    m_col_vec.erase (m_col_vec.begin() + col_num);
 }
 
 bool GncFwTokenizer::col_can_narrow (uint col_num)
 {
+    // Can't narrow the last column, it always sticks to the end of the parseable data
     auto last_col = m_col_vec.size() - 1;
-    int col_start, next_col_start;
-
-    if (col_num > last_col)
-        return false;
-
-    col_start = (col_num == 0) ? 0 : m_col_vec[col_num - 1];
-    next_col_start = m_col_vec[col_num];
-
-    if (next_col_start - 1 <= col_start)
+    if (col_num >= last_col)
         return false;
     else
         return true;
@@ -78,24 +48,22 @@ bool GncFwTokenizer::col_can_narrow (uint col_num)
 
 void GncFwTokenizer::col_narrow (uint col_num)
 {
-    if (col_can_narrow (col_num))
-        m_col_vec[col_num]--;
+    if (!col_can_narrow (col_num))
+        return;
+
+    m_col_vec[col_num]--;
+    m_col_vec[col_num + 1]++;
+
+    // Drop column if it has become 0-width now
+    if (m_col_vec[col_num] == 0)
+        m_col_vec.erase (m_col_vec.begin() + col_num);
 }
 
 bool GncFwTokenizer::col_can_widen (uint col_num)
 {
+    // Can't widen the last column, it always sticks to the end of the parseable data
     auto last_col = m_col_vec.size() - 1;
-    int col_end, next_col_end;
-
-    if (col_num > last_col)
-        return false;
-
-    col_end = m_col_vec[col_num];
-    next_col_end = (col_num == last_col - 1)
-                    ? m_longest_line
-                    : m_col_vec[col_num + 1];
-
-    if (col_end + 1 >= next_col_end)
+    if (col_num >= last_col)
         return false;
     else
         return true;
@@ -103,8 +71,15 @@ bool GncFwTokenizer::col_can_widen (uint col_num)
 
 void GncFwTokenizer::col_widen (uint col_num)
 {
-    if (col_can_widen (col_num))
-        m_col_vec[col_num]++;
+    if (!col_can_widen (col_num))
+        return;
+
+    m_col_vec[col_num]++;
+    m_col_vec[col_num + 1]--;
+
+    // Drop next column if it has become 0-width now
+    if (m_col_vec[col_num + 1] == 0)
+        m_col_vec.erase (m_col_vec.begin() + col_num + 1);
 }
 
 bool GncFwTokenizer::col_can_split (uint col_num, uint position)
@@ -113,9 +88,8 @@ bool GncFwTokenizer::col_can_split (uint col_num, uint position)
     if (col_num > last_col)
         return false;
 
-    uint col_start = (col_num == 0) ? 0 : m_col_vec[col_num - 1];
     uint col_end = m_col_vec[col_num];
-    if (position <= col_start || position >= col_end)
+    if (position < 1 || position >= col_end)
         return false;
     else
         return true;
@@ -125,8 +99,8 @@ void GncFwTokenizer::col_split (uint col_num, uint position)
 {
     if (col_can_split (col_num, position))
     {
-        uint col_start = (col_num == 0) ? 0 : m_col_vec[col_num - 1];;
-        m_col_vec.insert (m_col_vec.begin() + col_num, col_start + position);
+        m_col_vec.insert (m_col_vec.begin() + col_num, position);
+        m_col_vec[col_num + 1] -= position;
     }
 }
 
@@ -147,6 +121,16 @@ void GncFwTokenizer::cols_from_string(const std::string& col_str)
     // Clear existing columns first
     columns();
 
+    /* Set an initial column as expected by the code below
+     * If no data is read yet, take a rather large value
+     * Otherwise take the size of the widest line in the data
+     */
+    if (m_longest_line != 0)
+        m_col_vec.push_back (m_longest_line);
+    else
+        m_col_vec.push_back (99999);
+
+    uint col = 0;
     std::istringstream in_stream(col_str);
     std::string col_end_str;
     while (std::getline (in_stream, col_end_str, ','))
@@ -154,9 +138,14 @@ void GncFwTokenizer::cols_from_string(const std::string& col_str)
         if (col_end_str.empty())
             continue;  // Skip empty column positions
 
-        uint charindex = std::stoi (col_end_str);
-        col_add (charindex);
+        uint col_width = std::stoi (col_end_str);
+        col_split (col, col_width);
+        col++;
     }
+
+    // If no data is loaded yet, remove last, unreasonably wide column
+    if (m_longest_line == 0)
+        m_col_vec.pop_back();
 }
 
 
@@ -175,10 +164,31 @@ void GncFwTokenizer::load_file(const std::string& path)
         line.clear();
     }
 
-    /* Set a sane default for the offsets
-     * That is, assume one column with all the data */
     if (m_col_vec.empty())
+        /* Set a sane default for the offsets
+         * That is, assume one column with all the data */
         m_col_vec.push_back(m_longest_line);
+    else
+    {
+        /* Adjust existing last column(s) so the total column width
+         * equals the width of the longest line
+         * This may mean
+         * - widening the last column to widen to the longest line or
+         * - deleting columns/narrowing the last one to reduce to the longest line
+         */
+        uint total_width = 0;
+        for (auto col_width : m_col_vec)
+            total_width += col_width;
+
+        if (m_longest_line > total_width)
+            m_col_vec.back() += m_longest_line - total_width;
+        else if (m_longest_line < total_width)
+        {
+            while (total_width - m_col_vec.back() > m_longest_line)
+                col_delete (m_col_vec[m_col_vec.size() - 2]);
+            m_col_vec.back() -= total_width - m_longest_line;
+        }
+    }
 }
 
 
