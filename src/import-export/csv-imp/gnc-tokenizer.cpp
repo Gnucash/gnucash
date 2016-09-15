@@ -88,12 +88,6 @@ GncTokenizer::encoding()
 }
 
 
-int GncTokenizer::tokenize()
-{
-	return 0;
-}
-
-
 const std::vector<str_vec>&
 GncTokenizer::get_tokens()
 {

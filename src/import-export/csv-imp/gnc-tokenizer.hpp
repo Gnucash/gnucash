@@ -67,11 +67,11 @@ public:
     GncTokenizer& operator=(GncTokenizer&&) = default;      // move assignment
     virtual ~GncTokenizer() = default;                      // destructor
 
-    void load_file(const std::string& path);
+    virtual void load_file(const std::string& path);
     const std::string& current_file();
     void encoding(const std::string& encoding);
     const std::string& encoding();
-    virtual int  tokenize();
+    virtual int  tokenize() = 0;
     const std::vector<str_vec>& get_tokens();
     
 protected:
