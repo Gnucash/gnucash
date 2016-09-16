@@ -1,6 +1,226 @@
+2016-09-16 John Ralls 
+
+	* Synchronize translation project. (HEAD, maint)
+
+2016-09-15 John Ralls 
+
+	* Bug 769746 - Zero interest loan formula fails. (origin/maint)
+
+2016-08-01 Robert Fewell 
+
+	* Add option to recn cell type to be read only
+
+2016-08-01 Robert Fewell 
+
+	* Make a distinction between file/link Association
+
+2016-08-01 Robert Fewell 
+
+	* Indicate an Association in the Register
+
+2016-09-13 John Ralls 
+
+	* Bug 771379 - GnuCash doesn't support Russian Ruble Symbol
+
+2016-09-12 Mike Evans 
+
+	* Bug 771246 - Set Invoice/Bill items date correctly from imported CSV.
+
+2016-09-11 John Ralls 
+
+	* Bug 770181 - gnc-fq-dump incorrectly says "quote cannot be used...
+
+2016-09-11 John Ralls 
+
+	* Bug 761667 - Crash opening associated location that has no scheme
+
+2016-09-11 John Ralls 
+
+	* Australian (GMT-10) OFX transactions imported have previous days date
+
+2016-09-08 Geert Janssens 
+
+	* Bug 643025 - RFE: Ability to select and open multiple invoices
+
+2016-09-07 Geert Janssens 
+
+	* Bug 733153 - Ambiguous view of buttons in search dialog Linux version
+
+2016-09-07 Geert Janssens 
+
+	* Add small note the split action field is pre-filled by the business features
+
+2016-08-03 Robert Fewell 
+
+	* Bug 762901 [PATCH] Fix saving Account Treeview sort order.
+
+2016-09-02 Serge Gebhardt 
+
+	* Value "price" allowed in attr cd:type for element book (RELAX NG file)
+
+2016-09-01 John Ralls 
+
+	* Bug 769730 - Investments: Lots in This Account, Closed column shows
+
+2016-08-26 Rob Gowin 
+
+	* CMake improvements for SWIG handling and Python bindings.
+
+2016-08-25 Geoff Lee 
+
+	* Bug 770303 - Incorrect commodity match during import OFX and possible solution.
+
+2016-08-25 John Ralls 
+
+	* Whitespace cleanup in gnc_import_select_commodity.
+
+2016-08-24 Geert Janssens 
+
+	* SX - recalculate all occurrences of all SX if the calendar is updated to start on another month
+
+2016-08-24 Geert Janssens 
+
+	* SX Window: correctly show first sx on calendar when it is moved to next weekday
+
+2016-08-24 Geert Janssens 
+
+	* Bug 770136 - 'Reverse Order' in 'View'->'Sort by' is not saved
+
+2016-08-22 John Ralls 
+
+	* Bug 742461 - SQL backend doesn't update customer info
+
+2016-08-22 Pierre-André Jacquod 
+
+	* Bug 770196 - cppcheck va_list not closed
+
+2016-08-21 John Ralls 
+
+	* Revert "temporarily disable pre-logging messages."
+
+2016-08-20 John Ralls 
+
+	* Suppress the console window on launch when building with CMake on MSWin.
+
+2016-08-20 John Ralls 
+
+	* Merge branch 'maint' of ssh://code.gnucash.org/gnucash into maint
+
+2016-08-19 John Ralls 
+
+	* Bug 770113 - compiling issue with libdbi.
+
+2016-08-19 John Ralls 
+
+	* Fix compilation error in sqlite3_error_fn.
+
+2016-08-18 John Ralls 
+
+	* temporarily disable pre-logging messages.
+
+2016-08-08 Stefan Talpalaru 
+
+	* remove duplicate line
+
+2016-08-08 Stefan Talpalaru 
+
+	* fix compilation with guile-2.0.12
+
+2016-04-28 fell 
+
+	* Minor improvement of singe quote sources SIX*
+
+2016-08-01 John Ralls 
+
+	* Attempt to fix Travis test failure.
+
+2016-07-31 fell 
+
+	* de.po: merge new template
+
+2016-07-31 fell 
+
+	* Fix a typo in dialog invoice
+
+2016-07-31 fell 
+
+	* de.po: review of commit d5fa61d
+
+2016-07-31 fell 
+
+	* minor fix of de.po
+
+2016-07-16 Marco Zietzling 
+
+	* fixed some more German translations
+
+2016-07-16 Marco Zietzling 
+
+	* fixed some more German translations
+
+2016-07-16 Marco Zietzling 
+
+	* fixed some more German translations
+
+2016-07-16 Marco Zietzling 
+
+	* fixed German translations
+
+2016-07-16 Rob Gowin 
+
+	* Fixes to get CMake "MinGW Makefiles" generator to work. (github/maint)
+
+2016-07-14 Rob Gowin 
+
+	* Allow HTMLHELP_DIR to be specified on cmake command line
+
+2016-07-12 Mike Evans 
+
+	* Bug 756416 - CSV data with Posted information will always have last invoice not posted.
+
+2016-07-08 John Ralls 
+
+	* Tweak version.cmake to work on Windows.
+
+2016-07-05 John Ralls 
+
+	* Make CMake use the same scm-revision program as Autotools.
+
+2016-07-03 John Ralls 
+
+	* Clear the GDate before use.
+
+2016-07-02 John Ralls 
+
+	* Bug 137017 - date of transaction change with time zone change
+
+2016-07-02 John Ralls 
+
+	* Don't override optimization flags in CMakeLists.txt.
+
+2016-07-02 Geert Janssens 
+
+	* When default tax table is 'None', set a new invoice/bill entry as not taxabl by default as well.
+
+2016-06-28 John Ralls 
+
+	* Fix incomplete function name from 74fa556. (tag: 2.6.13b)
+
+2016-06-27 John Ralls 
+
+	* Reset release date to 28 June. (tag: 2.6.13a)
+
+2016-06-27 John Ralls 
+
+	* containsString wasn't introduced until OS X 10.10.
+
+2016-06-25 John Ralls 
+
+	* Release 2.6.13 (tag: 2.6.13)
+
 2016-06-24 John Ralls 
 
-	* Update translations from the translation project. (HEAD, origin/maint, maint)
+	* Update translations from the translation project.
 
 2016-06-23 John Ralls 
 
