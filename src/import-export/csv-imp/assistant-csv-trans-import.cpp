@@ -57,7 +57,7 @@ extern "C"
 #include <goffice/go-charmap-sel.h>
 }
 
-#include "gnc-csv-imp-trans.hpp"
+#include "gnc-tx-import.hpp"
 #include "gnc-fw-tokenizer.hpp"
 #include "gnc-csv-tokenizer.hpp"
 
@@ -95,7 +95,7 @@ typedef struct
     int              end_row;                       /**< The liststore end row, max number of rows -1 */
     int              home_account_number;           /**< The number of unique home account strings */
 
-    GncCsvParseData *parse_data;                    /**< The actual data we are previewing */
+    GncTxImport *parse_data;                    /**< The actual data we are previewing */
     CsvSettings     *settings_data;                 /**< The settings to be saved and loaded */
     GOCharmapSel    *encselector;                   /**< The widget for selecting the encoding */
     GtkCheckButton  *sep_buttons[SEP_NUM_OF_TYPES]; /**< Checkbuttons for common separators */
@@ -691,7 +691,7 @@ csv_import_trans_file_chooser_confirm_cb (GtkWidget *button, CsvImportTrans *inf
     DEBUG("starting directory is %s", info->starting_dir.c_str());
 
     /* Load the file into parse_data. */
-    auto parse_data = new GncCsvParseData;
+    auto parse_data = new GncTxImport;
     /* Assume data is CSV. User can later override to Fixed Width if needed */
     parse_data->file_format (GncImpFileFormat::CSV, &error);
     if (parse_data->load_file (info->file_name, &error))

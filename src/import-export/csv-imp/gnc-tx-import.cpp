@@ -1,5 +1,6 @@
 /********************************************************************\
- * gnc-csv-imp-trans.cpp - import transactions from csv files       *
+ * gnc-tx-import.cpp - import transactions from csv or fixed-width  *
+ *                     files                                        *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -48,14 +49,14 @@ extern "C" {
 #include <boost/regex.hpp>
 #include <boost/regex/icu.hpp>
 
-#include "gnc-csv-imp-trans.hpp"
+#include "gnc-tx-import.hpp"
 #include "gnc-csv-tokenizer.hpp"
 #include "gnc-fw-tokenizer.hpp"
 
 GQuark
 gnc_csv_imp_error_quark (void)
 {
-  return g_quark_from_static_string ("g-csv-imp-error-quark");
+  return g_quark_from_static_string ("g-tx-import-error-quark");
 }
 
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
@@ -218,10 +219,10 @@ time64 parse_date (const std::string &date_str, int format)
         return -1;
 }
 
-/** Constructor for GncCsvParseData.
+/** Constructor for GncTxImport.
  * @return Pointer to a new GncCSvParseData
  */
-GncCsvParseData::GncCsvParseData(GncImpFileFormat format)
+GncTxImport::GncTxImport(GncImpFileFormat format)
 {
     /* All of the data pointers are initially NULL. This is so that, if
      * gnc_csv_parse_data_free is called before all of the data is
@@ -237,13 +238,13 @@ GncCsvParseData::GncCsvParseData(GncImpFileFormat format)
     tokenizer = GncTokenizerFactory(file_fmt);
 }
 
-/** Destructor for GncCsvParseData.
+/** Destructor for GncTxImport.
  */
-GncCsvParseData::~GncCsvParseData()
+GncTxImport::~GncTxImport()
 {
 }
 
-int GncCsvParseData::file_format(GncImpFileFormat format,
+int GncTxImport::file_format(GncImpFileFormat format,
                                   GError** error)
 {
     if (file_fmt == format)
@@ -267,7 +268,7 @@ int GncCsvParseData::file_format(GncImpFileFormat format,
     tokenizer->encoding(new_encoding);
     return load_file(new_imp_file, error);
 }
-GncImpFileFormat GncCsvParseData::file_format()
+GncImpFileFormat GncTxImport::file_format()
 {
     return file_fmt;
 }
@@ -280,15 +281,15 @@ GncImpFileFormat GncCsvParseData::file_format()
  * @param error Will point to an error on failure
  * @return 0 on success, 1 on failure
  */
-void GncCsvParseData::convert_encoding (const std::string& encoding)
+void GncTxImport::convert_encoding (const std::string& encoding)
 {
     // TODO investigate if we can catch conversion errors and report them
     if (tokenizer)
         tokenizer->encoding(encoding);
 }
 
-/** Loads a file into a GncCsvParseData. This is the first function
- * that must be called after creating a new GncCsvParseData. If this
+/** Loads a file into a GncTxImport. This is the first function
+ * that must be called after creating a new GncTxImport. If this
  * fails because the file couldn't be opened, no more functions can be
  * called on the parse data until this succeeds (or until it fails
  * because of an encoding guess error). If it fails because the
@@ -299,7 +300,7 @@ void GncCsvParseData::convert_encoding (const std::string& encoding)
  * @param error Will contain an error if there is a failure
  * @return 0 on success, 1 on failure
  */
-int GncCsvParseData::load_file (const std::string& filename,
+int GncTxImport::load_file (const std::string& filename,
                                 GError** error)
 {
 
@@ -331,7 +332,7 @@ int GncCsvParseData::load_file (const std::string& filename,
  * @param error Will contain an error if there is a failure
  * @return 0 on success, 1 on failure
  */
-int GncCsvParseData::parse (bool guessColTypes, GError** error)
+int GncTxImport::parse (bool guessColTypes, GError** error)
 {
     uint max_cols = 0;
     tokenizer->tokenize();
@@ -747,7 +748,7 @@ static GncCsvTransLine* trans_properties_to_trans (prop_map_t& trans_props, gcha
  * @param redo_errors TRUE to convert only error data, FALSE for all data
  * @return 0 on success, 1 on failure
  */
-int GncCsvParseData::parse_to_trans (Account* account,
+int GncTxImport::parse_to_trans (Account* account,
                                      bool redo_errors)
 {
     /* Free error_lines and transactions if they
@@ -953,7 +954,7 @@ int GncCsvParseData::parse_to_trans (Account* account,
 
 
 bool
-GncCsvParseData::check_for_column_type (GncTransPropType type)
+GncTxImport::check_for_column_type (GncTransPropType type)
 {
     return (std::find (column_types.begin(), column_types.end(), type) != column_types.end());
 }
