@@ -36,5 +36,10 @@ IF (NOT WIN32)
     gtest_csv_imp_INCLUDES gtest_csv_imp_LIBS
     SRCDIR=${CMAKE_SOURCE_DIR}/src/import-export/csv-imp/test)
 
+  SET(test_tx_import_SOURCES
+    test-tx-import.cpp
+    ${GTEST_SRC})
+  GNC_ADD_TEST(test-tx_import "${test_tx_import_SOURCES}"
+    gtest_csv_imp_INCLUDES gtest_csv_imp_LIBS)
 ENDIF()
 
