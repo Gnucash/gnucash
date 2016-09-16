@@ -22,14 +22,11 @@ test_csv_impdir = ${top_srcdir}/${MODULEPATH}/test
 #support library.
 test_csv_imp_SOURCES = \
   test-csv-imp.c \
-  utest-gnc-csv-model.c \
-  utest-gnc-csv-imp-trans.cpp
+  utest-gnc-csv-model.c
 
 test_csv_imp_HEADERS =
 
-#The tests might require more libraries, but try to keep them
-#as independent as possible.
-test_csv_imp_LDADD = \
+IMP_TEST_LDFLAGS = \
   ${top_builddir}/${MODULEPATH}/libgncmod-csv-import.la \
   ${top_builddir}/src/import-export/libgncmod-generic-import.la \
   ${top_builddir}/src/gnome/libgnc-gnome.la \
@@ -45,6 +42,11 @@ test_csv_imp_LDADD = \
   ${top_builddir}/lib/stf/libgnc-stf.la \
   ${GLIB_LIBS} \
   $(BOOST_LDFLAGS)
+
+#The tests might require more libraries, but try to keep them
+#as independent as possible.
+test_csv_imp_LDADD = \
+   $(IMP_TEST_LDFLAGS)
 
 test_csv_imp_CFLAGS = \
 	-DTESTPROG=test_csv-imp \
@@ -68,8 +70,7 @@ test_csv_imp_CFLAGS = \
   ${GTK_CFLAGS} \
   ${GLIB_CFLAGS}
 
-test_csv_imp_CPPFLAGS = \
-	-DTESTPROG=test_csv-imp \
+IMP_TEST_CPPFLAGS =  \
 	${DEFAULT_INCLUDES} \
 	-I$(top_srcdir)/${MODULEPATH}/ \
   -I${top_srcdir}/src/test-core \
@@ -90,6 +91,10 @@ test_csv_imp_CPPFLAGS = \
   ${GTK_CFLAGS} \
   ${GLIB_CFLAGS} \
   $(BOOST_CPPFLAGS)
+
+test_csv_imp_CPPFLAGS = \
+	-DTESTPROG=test_csv-imp \
+	$(IMP_TEST_CPPFLAGS)
 
 GNC_TEST_DEPS = \
 --library-dir    ${top_builddir}/${MODULEPATH} \
@@ -118,41 +123,6 @@ TESTS_ENVIRONMENT = \
 
 test_tokenizer_SOURCES = \
     test-tokenizer.cpp
-test_tokenizer_LDADD = \
-  -L${top_builddir}/${MODULEPATH} \
-  -L${top_builddir}/src/import-export \
-  -L${top_builddir}/src/gnome \
-  -L${top_builddir}/src/gnome-utils \
-  -L${top_builddir}/src/gnome-search \
-  -L${top_builddir}/src/register/ledger-core \
-  -L${top_builddir}/src/register/register-core \
-  -L${top_builddir}/src/register/register-gnome \
-  -L${top_builddir}/src/report/report-system \
-  -L${top_builddir}/src/report/report-gnome \
-  -L${top_builddir}/src/html \
-  -L${top_builddir}/src/app-utils \
-  -L${top_builddir}/src/backend/xml \
-  -L${top_builddir}/src/engine \
-  -L${top_builddir}/src/core-utils \
-  -L${top_builddir}/src/gnc-module \
-  -L${top_builddir}/src/libqof/qof \
-  -L${top_builddir}/lib/stf \
-  ${top_builddir}/${MODULEPATH}/libgncmod-csv-import.la \
-  ${top_builddir}/src/import-export/libgncmod-generic-import.la \
-  ${top_builddir}/src/gnome/libgnc-gnome.la \
-  ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
-  ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
-  ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
-  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
-  ${top_builddir}/src/backend/xml/libgnc-backend-xml-utils.la \
-  ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/core-utils/libgnc-core-utils.la \
-  ${top_builddir}/src/gnc-module/libgnc-module.la \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
-  ${top_builddir}/lib/stf/libgnc-stf.la \
-  ${GLIB_LIBS} \
-  $(GTEST_LIBS) \
-  $(BOOST_LDFLAGS)
 
 if !GOOGLE_TEST_LIBS
 nodist_test_tokenizer_SOURCES = \
@@ -161,27 +131,30 @@ endif
 
 test_tokenizer_CPPFLAGS = \
   -I$(GTEST_HEADERS) \
-  -I$(top_srcdir)/$(MODULEPATH) \
-  -I${top_srcdir}/src/test-core \
-  -I${top_srcdir}/src \
-  -I${top_srcdir}/src/import-export \
-  -I${top_srcdir}/src/gnome \
-  -I${top_srcdir}/src/register/ledger-core \
-  -I${top_srcdir}/src/register/register-gnome \
-  -I${top_srcdir}/src/register/register-core \
-  -I${top_srcdir}/src/gnome-utils \
-  -I${top_srcdir}/src/app-utils \
-  -I${top_srcdir}/src/engine \
-  -I${top_srcdir}/src/core-utils \
-  -I${top_srcdir}/src/gnc-module \
-  -I${top_srcdir}/src/libqof/qof \
-  -I${top_srcdir}/lib/libc \
-  -I${top_srcdir}/lib \
-  ${GTK_CFLAGS} \
-  ${GLIB_CFLAGS} \
-  $(BOOST_CPPFLAGS)
+  $(IMP_TEST_CPPFLAGS)
 
-check_PROGRAMS += test-tokenizer
+test_tokenizer_LDADD = \
+  ${IMP_TEST_LDFLAGS} \
+  $(GTEST_LIBS)
+
+test_tx_import_SOURCES = \
+    test-tx-import.cpp
+
+if !GOOGLE_TEST_LIBS
+nodist_test_tx_import_SOURCES = \
+        ${GTEST_SRC}/src/gtest_main.cc
+endif
+
+test_tx_import_CPPFLAGS = \
+  -I$(GTEST_HEADERS) \
+  $(IMP_TEST_CPPFLAGS)
+
+test_tx_import_LDADD = \
+  ${IMP_TEST_LDFLAGS} \
+  $(GTEST_LIBS)
+
+check_PROGRAMS += test-tokenizer \
+                  test-tx-import
 
 EXTRA_DIST= \
   sample1.csv
