@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-csv-imp-trans.hpp - import transactions from csv files       *
+ * gnc-tx-import.hpp - import transactions from csv files       *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,14 +20,14 @@
 \********************************************************************/
 
 /** @file
-     @brief Class to import transactions from CSV files
+     @brief Class to import transactions from CSV or fixed width files
      *
-     gnc-csv-imp-trans.hpp
+     gnc-tx-import.hpp
      @author Copyright (c) 2015 Geert Janssens <geert@kobaltwit.be>
  */
 
-#ifndef GNC_CSV_IMP_TRANS_HPP
-#define GNC_CSV_IMP_TRANS_HPP
+#ifndef GNC_TX_IMPORT_HPP
+#define GNC_TX_IMPORT_HPP
 
 extern "C" {
 #include "config.h"
@@ -63,7 +63,7 @@ enum class GncTransPropType {
 };
 
 /** Maps all column types to a string representation.
- *  The actual definition is in gnc-csv-imp-trans.cpp.
+ *  The actual definition is in gnc-tx-import.cpp.
  *  Attention: that definition should be adjusted for any
  *  changes to enum class GncTransPropType ! */
 extern std::map<GncTransPropType, const char*> gnc_csv_col_type_strs;
@@ -110,13 +110,22 @@ extern const gchar* date_format_user[];
 /** Pair to hold a tokenized line of input and an optional error string */
 using parse_line_t = std::pair<str_vec, std::string>;
 
-/** Struct containing data for parsing a CSV/Fixed-Width file. */
-class GncCsvParseData
+/* The actual TxImport class
+ * It's intended to use in the following sequence of actions:
+ * - set a file format
+ * - load a file
+ * - optionally convert it's encoding
+ * - parse the file into lines, which in turn are split up in columns
+ *   the result of this step can be queried from tokenizer
+ * - the user should now map the columns to types, which is stored in column_types
+ * - last step is convert the mapped columns into a list of transactions
+ * - this list will then be passed on the the generic importer for further processing */
+class GncTxImport
 {
 public:
     // Constructor - Destructor
-    GncCsvParseData(GncImpFileFormat format = GncImpFileFormat::UNKNOWN);
-    ~GncCsvParseData();
+    GncTxImport(GncImpFileFormat format = GncImpFileFormat::UNKNOWN);
+    ~GncTxImport();
 
     int file_format(GncImpFileFormat format, GError** error);
     GncImpFileFormat file_format();
