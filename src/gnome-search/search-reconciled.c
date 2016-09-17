@@ -199,7 +199,7 @@ make_toggle (GNCSearchReconciled *fi, char *label, cleared_match_t option)
 {
     GtkWidget *toggle;
 
-    toggle = gtk_toggle_button_new_with_label (label);
+    toggle = gtk_check_button_new_with_label (label);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle), (fi->value & option));
     g_object_set_data (G_OBJECT (toggle), "button-value", (gpointer) option);
     g_signal_connect (G_OBJECT (toggle), "toggled", G_CALLBACK (toggle_changed), fi);

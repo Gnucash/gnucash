@@ -257,6 +257,7 @@ If you make a mistake or want to make changes later, you can edit the created Sc
                         <property name="digits">3</property>
                         <property name="snap_to_ticks">True</property>
                         <property name="numeric">True</property>
+                        <property name="tooltip_text" translatable="yes">Enter the annual interest rate in percent. Accepts values from 0.001 - 100. The Mortgage Assistant does not support zero-interest loans.</property>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -660,6 +661,7 @@ All accounts must have valid entries to continue.
                   <object class="GtkEntry" id="amount_ent">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="editable">False</property>
                     <property name="invisible_char">&#x25CF;</property>
                     <property name="invisible_char_set">True</property>
                     <property name="primary_icon_activatable">False</property>

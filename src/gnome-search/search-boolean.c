@@ -107,7 +107,6 @@ gnc_search_boolean_class_init (GNCSearchBooleanClass *klass)
 static void
 gnc_search_boolean_init (GNCSearchBoolean *o)
 {
-    o->how = QOF_COMPARE_EQUAL;
     o->value = TRUE;
 }
 
@@ -143,14 +142,6 @@ gnc_search_boolean_set_value (GNCSearchBoolean *fi, gboolean value)
     fi->value = value;
 }
 
-void
-gnc_search_boolean_set_how (GNCSearchBoolean *fi, QofQueryCompare how)
-{
-    g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_BOOLEAN (fi));
-    fi->how = how;
-}
-
 static gboolean
 gncs_validate (GNCSearchCoreType *fe)
 {
@@ -172,24 +163,9 @@ toggle_changed (GtkToggleButton *button, GNCSearchBoolean *fe)
 }
 
 static GtkWidget *
-make_menu (GNCSearchCoreType *fe)
-{
-    GNCSearchBoolean *fi = (GNCSearchBoolean *)fe;
-    GtkComboBox *combo;
-
-    combo = GTK_COMBO_BOX(gnc_combo_box_new_search());
-    gnc_combo_box_search_add(combo, _("is"), QOF_COMPARE_EQUAL);
-    gnc_combo_box_search_add(combo, _("is not"), QOF_COMPARE_NEQ);
-    gnc_combo_box_search_changed(combo, &fi->how);
-    gnc_combo_box_search_set_active(combo, fi->how ? fi->how : QOF_COMPARE_EQUAL);
-
-    return GTK_WIDGET(combo);
-}
-
-static GtkWidget *
 gncs_get_widget (GNCSearchCoreType *fe)
 {
-    GtkWidget *toggle, *menu, *box;
+    GtkWidget *toggle, *box;
     GNCSearchBoolean *fi = (GNCSearchBoolean *)fe;
 
     g_return_val_if_fail (fi, NULL);
@@ -197,12 +173,8 @@ gncs_get_widget (GNCSearchCoreType *fe)
 
     box = gtk_hbox_new (FALSE, 3);
 
-    /* Build and connect the option menu */
-    menu = make_menu (fe);
-    gtk_box_pack_start (GTK_BOX (box), menu, FALSE, FALSE, 3);
-
     /* Build and connect the toggle */
-    toggle = gtk_toggle_button_new_with_label (_("set true"));
+    toggle = gtk_check_button_new ();
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle), fi->value);
     g_signal_connect (G_OBJECT (toggle), "toggled", G_CALLBACK (toggle_changed), fe);
     gtk_box_pack_start (GTK_BOX (box), toggle, FALSE, FALSE, 3);
@@ -218,7 +190,7 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
     g_return_val_if_fail (fi, NULL);
     g_return_val_if_fail (IS_GNCSEARCH_BOOLEAN (fi), NULL);
 
-    return qof_query_boolean_predicate (fi->how, fi->value);
+    return qof_query_boolean_predicate (QOF_COMPARE_EQUAL, fi->value);
 }
 
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
@@ -230,7 +202,6 @@ static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
 
     se = gnc_search_boolean_new ();
     gnc_search_boolean_set_value (se, fse->value);
-    gnc_search_boolean_set_how (se, fse->how);
 
     return (GNCSearchCoreType *)se;
 }

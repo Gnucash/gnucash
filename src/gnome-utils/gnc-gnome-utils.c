@@ -431,9 +431,10 @@ void
 gnc_launch_assoc (const char *uri)
 {
     wchar_t *winuri = NULL;
+    char* scheme = g_uri_parse_scheme(uri);
     /* ShellExecuteW open doesn't decode http escapes if it's passed a
      * file URI so we have to do it. */
-    if (strcmp (g_uri_parse_scheme(uri), "file") == 0)
+    if (scheme && strcmp (scheme, "file") == 0)
     {
 	gchar *filename = g_filename_from_uri (uri, NULL, NULL);
 	winuri = (wchar_t *)g_utf8_to_utf16(filename, -1, NULL, NULL, NULL);
@@ -455,6 +456,7 @@ gnc_launch_assoc (const char *uri)
 	g_free (wincmd);
 	g_free (winuri);
     }
+    g_free (scheme);
 }
 
 #else

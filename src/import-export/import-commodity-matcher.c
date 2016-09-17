@@ -78,33 +78,31 @@ gnc_commodity * gnc_import_select_commodity(const char * cusip,
     {
         tmp_namespace = namespace_list->data;
         DEBUG("Looking at namespace %s", tmp_namespace);
-
-
-        /*Nested loop*/
         commodity_list = gnc_commodity_table_get_commodities(commodity_table,
-                         tmp_namespace);
+                                                             tmp_namespace);
         commodity_list  = g_list_first(commodity_list);
         while ( commodity_list != NULL && retval == NULL)
         {
+            const char* tmp_cusip = NULL;
             tmp_commodity = commodity_list->data;
-            DEBUG("Looking at commodity %s", gnc_commodity_get_fullname(tmp_commodity));
-
-            if (gnc_commodity_get_cusip(tmp_commodity) != NULL &&
-                    cusip != NULL &&
-                    strncmp(gnc_commodity_get_cusip(tmp_commodity), cusip, strlen(cusip)) == 0)
+            DEBUG("Looking at commodity %s",
+                  gnc_commodity_get_fullname(tmp_commodity));
+            tmp_cusip = gnc_commodity_get_cusip(tmp_commodity);
+            if  (tmp_cusip != NULL && cusip != NULL)
             {
-                retval = tmp_commodity;
-                DEBUG("Commodity %s%s", gnc_commodity_get_fullname(retval), " matches.");
+                int len = strlen(cusip) > strlen(tmp_cusip) ? strlen(cusip) :
+                    strlen(tmp_cusip);
+                if (strncmp(tmp_cusip, cusip, len) == 0)
+                {
+                    retval = tmp_commodity;
+                    DEBUG("Commodity %s%s",
+                          gnc_commodity_get_fullname(retval), " matches.");
+                }
             }
             commodity_list = g_list_next(commodity_list);
         }
-        /*End nested loop*/
-
         namespace_list = g_list_next(namespace_list);
     }
-
-
-
 
     g_list_free(commodity_list);
     g_list_free(namespace_list);

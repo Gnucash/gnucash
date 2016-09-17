@@ -58,6 +58,7 @@ GUILE_COMPILE_ENV = \
   --gnc-module-dir ${top_builddir}/src/gnome-utils \
   --gnc-module-dir ${top_builddir}/src/html \
   --gnc-module-dir ${top_builddir}/src/report/report-system \
+  --gnc-module-dir ${top_builddir}/src/report/locale-specific/us \
   --gnc-module-dir ${top_builddir}/src/tax/us \
   --guile-load-dir ${top_builddir}/src/app-utils \
   --guile-load-dir ${top_builddir}/src/core-utils \
@@ -65,6 +66,7 @@ GUILE_COMPILE_ENV = \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/gnome-utils \
   --guile-load-dir ${top_builddir}/src/report/report-system \
+  --guile-load-dir ${top_builddir}/src/report/locale-specific/us \
   --guile-load-dir ${top_builddir}/src/scm \
   --guile-load-dir ${top_builddir}/src/tax/us \
   --library-dir    ${top_builddir}/src/engine \
@@ -76,7 +78,8 @@ GUILE_COMPILE_ENV = \
   --library-dir    ${top_builddir}/src/backend/xml \
   --library-dir    ${top_builddir}/src/backend/sql \
   --library-dir    ${top_builddir}/src/html \
-  --library-dir    ${top_builddir}/src/report/report-system
+  --library-dir    ${top_builddir}/src/report/report-system \
+  --library-dir    ${top_builddir}/src/report/locale-specific/us
 
 %.go : %.scm .scm-links $(pkglib_LTLIBRARIES)
 	GNC_UNINSTALLED=yes \

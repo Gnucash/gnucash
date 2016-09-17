@@ -86,6 +86,7 @@ Book = element gnc:book {
   element gnc:count-data { attribute cd:type { "transaction" }, xsd:int }?,
   element gnc:count-data { attribute cd:type { "schedxaction" }, xsd:int }?,
   element gnc:count-data { attribute cd:type { "budget" }, xsd:int }?,
+  element gnc:count-data { attribute cd:type { "price" }, xsd:int }?,
 
 # plugins (those with a get_count slot)
 

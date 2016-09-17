@@ -62,6 +62,7 @@
 #include "Split.h"
 #include "Account.h"
 #include "gnc-commodity.h"
+#include "gnc-environment.h"
 #include "gnc-lot.h"
 #include "gnc-numeric.h"
 #include "gncCustomer.h"

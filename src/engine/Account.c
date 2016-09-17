@@ -88,6 +88,7 @@ enum
     PROP_PLACEHOLDER,                   /* Table slot exists, but in KVP in memory & xml */
     PROP_FILTER,                        /* KVP */
     PROP_SORT_ORDER,                    /* KVP */
+    PROP_SORT_REVERSED,
 
     PROP_LOT_NEXT_ID,                   /* KVP */
     PROP_ONLINE_ACCOUNT,                /* KVP */
@@ -400,6 +401,8 @@ gnc_account_get_property (GObject         *object,
     case PROP_SORT_ORDER:
         g_value_set_string(value, xaccAccountGetSortOrder(account));
         break;
+    case PROP_SORT_REVERSED:
+        g_value_set_boolean(value, xaccAccountGetSortReversed(account));
     case PROP_LOT_NEXT_ID:
         key = "lot-mgmt/next-id";
         /* Pre-set the value in case the frame is empty */
@@ -532,6 +535,8 @@ gnc_account_set_property (GObject         *object,
     case PROP_SORT_ORDER:
         xaccAccountSetSortOrder(account, g_value_get_string(value));
         break;
+    case PROP_SORT_REVERSED:
+        xaccAccountSetSortReversed(account, g_value_get_boolean(value));
     case PROP_LOT_NEXT_ID:
         key = "lot-mgmt/next-id";
         qof_instance_set_kvp (QOF_INSTANCE (account), key, value);
@@ -916,6 +921,15 @@ gnc_account_class_init (AccountClass *klass)
                           "The account sort order is a value saved to allow "
                           "the sort order to be recalled.",
                           NULL,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_SORT_REVERSED,
+     g_param_spec_boolean ("sort-reversed",
+                          "Account Sort Reversed",
+                          "Parameter to store whether the sort order is reversed or not.",
+                          FALSE,
                           G_PARAM_READWRITE));
 
     g_object_class_install_property
@@ -2339,6 +2353,12 @@ xaccAccountSetSortOrder (Account *acc, const char *str)
     set_kvp_string_tag (acc, "sort-order", str);
 }
 
+void
+xaccAccountSetSortReversed (Account *acc, gboolean sortreversed)
+{
+     set_kvp_string_tag (acc, "sort-reversed", sortreversed ? "true" : NULL);
+}
+
 static void
 qofAccountSetParent (Account *acc, QofInstance *parent)
 {
@@ -3096,6 +3116,14 @@ xaccAccountGetSortOrder (const Account *acc)
 {
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), 0);
     return get_kvp_string_tag (acc, "sort-order");
+}
+
+gboolean
+xaccAccountGetSortReversed (const Account *acc)
+{
+
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
+    return g_strcmp0 (get_kvp_string_tag (acc, "sort-reversed"), "true") == 0;
 }
 
 const char *
@@ -6018,6 +6046,11 @@ gboolean xaccAccountRegister (void)
             ACCOUNT_SORT_ORDER_, QOF_TYPE_STRING,
             (QofAccessFunc) xaccAccountGetSortOrder,
             (QofSetterFunc) xaccAccountSetSortOrder
+        },
+        {
+            ACCOUNT_SORT_REVERSED_, QOF_TYPE_BOOLEAN,
+            (QofAccessFunc) xaccAccountGetSortReversed,
+            (QofSetterFunc) xaccAccountSetSortReversed
         },
         {
             ACCOUNT_NOTES_, QOF_TYPE_STRING,

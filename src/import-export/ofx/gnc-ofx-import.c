@@ -325,7 +325,28 @@ static Account *gnc_ofx_new_account(const char* name,
     g_list_free(valid_types);
     return result;
 }
-
+/* LibOFX has a daylight time handling bug,
+ * https://sourceforge.net/p/libofx/bugs/39/, which causes it to adjust the
+ * timestamp for daylight time even when daylight time is not in
+ * effect. HAvE_OFX_BUG_39 reflects the result of checking for this bug during
+ * configuration, and fix_ofx_bug_39() corrects for it.
+ */
+static time64
+fix_ofx_bug_39 (time64 t)
+{
+#if HAVE_OFX_BUG_39
+    struct tm stm;
+    gnc_localtime_r(&t, &stm);
+    if (!stm.tm_isdst)
+    {
+        time64 new_t;
+        stm.tm_isdst = 1;
+        new_t = gnc_mktime(&stm);
+    t += t - new_t;
+    }
+#endif
+    return t;
+}
 
 int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_user_data)
 {
@@ -386,11 +407,13 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
     if (data.date_posted_valid && (data.date_posted != 0))
     {
         /* The hopeful case: We have a posted_date */
+        data.date_posted = fix_ofx_bug_39 (data.date_posted);
         xaccTransSetDatePostedSecsNormalized(transaction, data.date_posted);
     }
     else if (data.date_initiated_valid && (data.date_initiated != 0))
     {
         /* No posted date? Maybe we have an initiated_date */
+        data.date_initiated = fix_ofx_bug_39 (data.date_initiated);
         xaccTransSetDatePostedSecsNormalized(transaction, data.date_initiated);
     }
     else

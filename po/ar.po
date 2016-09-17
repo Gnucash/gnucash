@@ -4,11 +4,6 @@
 #
 # Translators:
 # Aziz2013 <Abdulaziz_ahmed2001@hotmail.com>, 2013
-# ashalash <ashalash@msn.com>, 2013
-# ashalash1409 <ashalash1409@hotmail.com>, 2013
-# ashalash1409 <ashalash1409@hotmail.com>, 2013
-# ashalash <ashalash@msn.com>, 2013
-# Aziz2013 <Abdulaziz_ahmed2001@hotmail.com>, 2013
 # khadiramd <khadird@yahoo.com>, 2013
 # ashalash <ashalash@msn.com>, 2013
 msgid ""
@@ -18,9 +13,9 @@ msgstr ""
 "POT-Creation-Date: 2015-10-05 12:57-0700\n"
 "PO-Revision-Date: 2015-10-23 10:00+0300\n"
 "Last-Translator: Abdulsalam ALshilash <ashalash@msn.com>\n"
-"Language-Team: Arabic (http://www.transifex.com/projects/p/gnucash-2410/language/ar/)\n"
-"<ashalash@msn.com>\n"
+"Language-Team: \n"
 "Language: ar\n"
+"X-Bugs: Report translation errors to the Language-Team address.\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"

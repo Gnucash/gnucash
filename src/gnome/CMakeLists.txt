@@ -41,8 +41,12 @@ SET (gnc_gnome_noinst_HEADERS
   window-autoclear.h
 )
 
-SET (SWIG_GNOME_C ${CMAKE_CURRENT_BINARY_DIR}/swig-gnome.c)
-GNC_ADD_SWIG_COMMAND (${SWIG_GNOME_C} ${CMAKE_CURRENT_SOURCE_DIR}/gnome.i ${gnc_gnome_HEADERS})
+IF (BUILDING_FROM_VCS)
+  SET (SWIG_GNOME_C ${CMAKE_CURRENT_BINARY_DIR}/swig-gnome.c)
+  GNC_ADD_SWIG_COMMAND (${SWIG_GNOME_C} ${CMAKE_CURRENT_SOURCE_DIR}/gnome.i ${gnc_gnome_HEADERS})
+ELSE()
+  SET (SWIG_GNOME_C swig-gnome.c)
+ENDIF()
 
 SET (gnc_gnome_SOURCES 
   ${SWIG_GNOME_C}

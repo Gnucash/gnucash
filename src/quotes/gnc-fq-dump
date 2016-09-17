@@ -49,7 +49,7 @@ sub check_modules {
 sub report {
   my($itemname, $qh, $verbose) = @_;
   my ($symbol, $date, $currency, $last, $nav, $price, $timezone, $keyname);
-  my($gccanuse);
+  my($gccanuse, $gcshoulduse) = (1, 1);
 
   # Sanity check returned results
   if ((keys %$qh) < 1) {
@@ -76,7 +76,6 @@ sub report {
   }
 
   # Parse the quote fields and put warnings where necessary.
-  $gccanuse = 1;
   if (defined($$qh{$itemname, "symbol"})) {
     $symbol = $$qh{$itemname, "symbol"};
   } else {
@@ -87,7 +86,7 @@ sub report {
     $date = $$qh{$itemname, "date"};
   } else {
     $date = "** missing **";
-    $gccanuse = 0;
+    $gcshoulduse = 0;
   }
   if (defined($$qh{$itemname, "currency"})) {
     $currency = $$qh{$itemname, "currency"};
@@ -116,7 +115,7 @@ sub report {
   # Dump gnucash recognized fields
   printf "Finance::Quote fields Gnucash uses:\n";
   printf "    symbol: %-20s <=== required\n",	  $symbol;
-  printf "      date: %-20s <=== required\n",  	  $date;
+  printf "      date: %-20s <=== recommended\n",  $date;
   printf "  currency: %-20s <=== required\n", 	  $currency;
   printf "      last: %-20s <=\\       \n",    	  $last;
   printf "       nav: %-20s <=== one of these\n", $nav;
@@ -125,9 +124,11 @@ sub report {
 
   # Report failure
   if ($gccanuse == 0) {
-    printf "\n** This stock quote cannot be used by gnucash!!\n\n";
+    printf "\n** This stock quote cannot be used by GnuCash!\n\n";
+  } elsif ($gcshoulduse == 0) {
+      printf "\n** This quote will have today's date, which might be incorrect.\n";
+      printf "   GnuCash will use it, but you might prefer that it doesn't.\n\n";
   }
-
   # Dump all fields if requested
   if ($verbose) {
     printf "\nAll fields returned by Finance::Quote for stock $itemname\n\n";

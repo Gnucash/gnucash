@@ -4,8 +4,13 @@ SET (report_system_HEADERS
   gnc-report.h
 )  
 
-SET (SWIG_REPORT_SYSTEM_C ${CMAKE_CURRENT_BINARY_DIR}/swig-report-system.c)
-GNC_ADD_SWIG_COMMAND (${SWIG_REPORT_SYSTEM_C} ${CMAKE_CURRENT_SOURCE_DIR}/report-system.i ${report_system_HEADERS})
+IF (BUILDING_FROM_VCS)
+  SET (SWIG_REPORT_SYSTEM_C ${CMAKE_CURRENT_BINARY_DIR}/swig-report-system.c)
+  GNC_ADD_SWIG_COMMAND (${SWIG_REPORT_SYSTEM_C} ${CMAKE_CURRENT_SOURCE_DIR}/report-system.i ${report_system_HEADERS})
+ELSE()
+  SET (SWIG_REPORT_SYSTEM_C swig-report-system.c)
+ENDIF()
+
 
 SET (report_system_SOURCES
   ${SWIG_REPORT_SYSTEM_C}

@@ -54,6 +54,7 @@ GUILE_COMPILE_ENV = \
   --gnc-module-dir ${top_builddir}/src/html \
   --gnc-module-dir ${top_builddir}/src/report/report-system \
   --gnc-module-dir ${top_builddir}/src/report/standard-reports \
+  --gnc-module-dir ${top_builddir}/src/report/business-reports \
   --guile-load-dir ${top_builddir}/src/app-utils \
   --guile-load-dir ${top_builddir}/src/core-utils \
   --guile-load-dir ${top_builddir}/src/engine \
@@ -61,6 +62,7 @@ GUILE_COMPILE_ENV = \
   --guile-load-dir ${top_builddir}/src/gnome-utils \
   --guile-load-dir ${top_builddir}/src/report/report-system \
   --guile-load-dir ${top_builddir}/src/report/standard-reports \
+  --guile-load-dir ${top_builddir}/src/report/business-reports \
   --guile-load-dir ${top_builddir}/src/scm \
   --library-dir    ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/src/libqof/qof \
@@ -71,7 +73,8 @@ GUILE_COMPILE_ENV = \
   --library-dir    ${top_builddir}/src/backend/sql \
   --library-dir    ${top_builddir}/src/html \
   --library-dir    ${top_builddir}/src/gnc-module \
-  --library-dir    ${top_builddir}/src/report/report-system
+  --library-dir    ${top_builddir}/src/report/report-system \
+  --library-dir    ${top_builddir}/src/report/business-reports
 
 
 %.go : %.scm .scm-links $(pkglib_LTLIBRARIES)

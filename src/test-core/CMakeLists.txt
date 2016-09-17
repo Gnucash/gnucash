@@ -24,15 +24,27 @@ IF (UNIX)
   TARGET_COMPILE_OPTIONS(test-core PRIVATE -fPIC)
 ENDIF()
 
-SET (SWIG_UNITTEST_SUPPORT_GUILE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-unittest-support-guile.c)
-GNC_ADD_SWIG_COMMAND (${SWIG_UNITTEST_SUPPORT_GUILE_C}
-    ${CMAKE_CURRENT_SOURCE_DIR}/unittest-support.i ${test_core_HEADERS})
+IF (BUILDING_FROM_VCS)
+  SET (SWIG_UNITTEST_SUPPORT_GUILE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-unittest-support-guile.c)
+  GNC_ADD_SWIG_COMMAND (${SWIG_UNITTEST_SUPPORT_GUILE_C}
+      ${CMAKE_CURRENT_SOURCE_DIR}/unittest-support.i ${test_core_HEADERS})
+  SET (SWIG_UNITTEST_SUPPORT_PYTHON_C ${CMAKE_CURRENT_BINARY_DIR}/swig-unittest-support-python.c)
+  GNC_ADD_SWIG_PYTHON_COMMAND (swig-unittest-support-python ${SWIG_UNITTEST_SUPPORT_PYTHON_C} ${CMAKE_CURRENT_SOURCE_DIR}/unittest-support.i)
+ELSE()
+  SET (SWIG_UNITTEST_SUPPORT_GUILE_C  swig-unittest-support-guile.c)
+  SET (SWIG_UNITTEST_SUPPORT_PYTHON_C swig-unittest-support-python.c)
+ENDIF()
 
 
-SET(test_core_guile_SOURCES ${SWIG_UNITTEST_SUPPORT_GUILE_C})
-
-ADD_LIBRARY(test-core-guile ${test_core_guile_SOURCES})
+ADD_LIBRARY(test-core-guile ${SWIG_UNITTEST_SUPPORT_GUILE_C})
 TARGET_LINK_LIBRARIES(test-core-guile test-core ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS})
+
+IF (WITH_PYTHON)
+  ADD_LIBRARY(unittest_support MODULE ${SWIG_UNITTEST_SUPPORT_PYTHON_C})
+  TARGET_LINK_LIBRARIES(unittest_support test-core ${PYTHON_LIBRARIES})
+  TARGET_INCLUDE_DIRECTORIES(unittest_support PRIVATE ${PYTHON_INCLUDE_DIRS})
+  SET_TARGET_PROPERTIES(unittest_support PROPERTIES PREFIX "_")
+ENDIF()
 
 SET(test_core_SCHEME unittest-support.scm)
 

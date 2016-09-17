@@ -1,5 +1,49 @@
 Version history:
 ------- -------
+2.6.14 - 17 September 2016
+Announcement: GnuCash 2.6.14 Release 2016-09-17
+GnuCash 2.6.14 released
+
+The GnuCash development team proudly announces GnuCash 2.6.14, the
+fourteenth maintenance release in the 2.6-stable series.
+
+The following bugs are fixed:
+    Bug 643025 - RFE: Ability to select and open multiple invoices.
+    Bug 733153 - Ambiguous view of buttons in search dialog Linux version.
+    Bug 742461 - SQL backend doesn't update customer info.
+    Bug 756416 - CSV data with Posted information will always have last
+    	         invoice not posted.
+    Bug 761667 - Crash opening associated location that has no scheme.
+    Bug 762901 - Fix saving Account Treeview sort order.
+    Bug 769730 - Investments: Lots in This Account, Closed column shows
+                 date 25/11/1833 instead of Open.
+    Bug 769746 - Zero interest loan formula fails.
+    Bug 770113 - compiling issue with libdbi.
+    Bug 770136 - 'Reverse Order' in 'View'->'Sort by' is not saved.
+    Bug 770181 - gnc-fq-dump incorrectly says "quote cannot be used...
+    Bug 770196 - cppcheck va_list not closed.
+    Bug 770303 - Incorrect commodity match during import OFX and possible
+                 solution.
+    Bug 771246 - Set Invoice/Bill items date correctly from imported CSV.
+    Bug 771379 - GnuCash doesn't support Russian Ruble Symbol.
+
+Other repairs that weren't marked as bugs in git:
+     Build improvements with CMake, accomodation for Guile-2.0.12 on Gentoo.
+     Change the date_posted timestamp from midnight local to 11:00 AM GMT,
+          which will be the same date in nearly all timezones.
+     SX - Recalculate all occurrences of all SX if the calendar is updated
+          to start on another month
+     SX Window: correctly show first sx on calendar when it is moved to next
+          weekday.
+     Work around libofx bug which caused OFX imports to have the wrong
+          date_posted when in an eastern-hemisphere timezone and not
+          daylight time.
+     Indicate in the register when a transaction has an associated file or
+          URI. The indicator will appear in the "reconciled" column in the
+          second transaction line (enable double-line view to see it).
+
+Translation Updates: Dutch, German, Serbian, Spanish
+
 2.6.13 - 28 June 2016
 Announcement: GnuCash 2.6.13 Release 2016-06-28
 GnuCash 2.6.13 released
