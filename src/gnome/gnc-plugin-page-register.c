@@ -50,6 +50,7 @@
 #include "gnc-plugin-page-report.h"
 
 #include "dialog-account.h"
+#include "dialog-find-account.h"
 #include "dialog-find-transactions.h"
 #include "dialog-print-check.h"
 #include "dialog-transfer.h"
@@ -141,6 +142,7 @@ static void gnc_plugin_page_register_cmd_cut (GtkAction *action, GncPluginPageRe
 static void gnc_plugin_page_register_cmd_copy (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_paste (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_edit_account (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_find_account (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_find_transactions (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_cut_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_copy_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
@@ -248,6 +250,11 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
         "EditEditAccountAction", GNC_STOCK_EDIT_ACCOUNT, N_("Edit _Account"), "<control>e",
         N_("Edit the selected account"),
         G_CALLBACK (gnc_plugin_page_register_cmd_edit_account)
+    },
+    {
+        "EditFindAccountAction", GTK_STOCK_FIND, N_("F_ind Account"), "<control>i",
+        N_("Find an account"),
+        G_CALLBACK (gnc_plugin_page_register_cmd_find_account)
     },
     {
         "EditFindTransactionsAction", GTK_STOCK_FIND, N_("_Find..."), "<control>f",
@@ -2923,6 +2930,21 @@ gnc_plugin_page_register_cmd_edit_account (GtkAction *action,
         gnc_ui_edit_account_window (account);
     LEAVE(" ");
 }
+
+
+static void
+gnc_plugin_page_register_cmd_find_account (GtkAction *action,
+        GncPluginPageRegister *page)
+{
+    GtkWidget *window;
+
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
+
+    window = gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page));
+
+    gnc_find_account_dialog (window, NULL);
+}
+
 
 
 static void
