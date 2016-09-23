@@ -14,4 +14,4 @@ install:
   - sudo apt-get install -qq swig
   - sudo apt-get install -qq libboost-all-dev
   - sudo apt-get --reinstall install -qq language-pack-en language-pack-fr
-script: ./autogen.sh && ./configure && make && make check
+script: ./autogen.sh && ./configure && make && TZ="America/Los_Angeles" make check
