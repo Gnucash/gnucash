@@ -3807,6 +3807,33 @@ xaccAccountForEachLot(const Account *acc,
     return result;
 }
 
+static void
+set_boolean_key (Account *acc, const char* key, gboolean option)
+{
+    GValue v = G_VALUE_INIT;
+    g_return_if_fail(GNC_IS_ACCOUNT(acc));
+
+    g_value_init (&v, G_TYPE_BOOLEAN);
+    g_value_set_boolean (&v, option);
+    xaccAccountBeginEdit (acc);
+    qof_instance_set_kvp (QOF_INSTANCE (acc),key , &v);
+    mark_account (acc);
+    xaccAccountCommitEdit (acc);
+}
+
+static gboolean
+boolean_from_key (const Account *acc, const char *key)
+{
+    GValue v = G_VALUE_INIT;
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
+    qof_instance_get_kvp (QOF_INSTANCE(acc), key, &v);
+    if (G_VALUE_HOLDS_BOOLEAN (&v))
+         return g_value_get_boolean (&v);
+    if (G_VALUE_HOLDS_STRING (&v))
+         return strcmp (g_value_get_string (&v), "true") == 0;
+    return FALSE;
+}
+
 /********************************************************************\
 \********************************************************************/
 
@@ -3814,25 +3841,13 @@ xaccAccountForEachLot(const Account *acc,
 gboolean
 xaccAccountGetTaxRelated (const Account *acc)
 {
-    GValue v = G_VALUE_INIT;
-    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    qof_instance_get_kvp (QOF_INSTANCE(acc), "tax-related", &v);
-    return G_VALUE_HOLDS_BOOLEAN (&v) ? g_value_get_boolean (&v) : FALSE;
+    return boolean_from_key(acc, "tax-related");
 }
 
 void
 xaccAccountSetTaxRelated (Account *acc, gboolean tax_related)
 {
-    GValue v = G_VALUE_INIT;
-    g_return_if_fail(GNC_IS_ACCOUNT(acc));
-
-    g_value_init (&v, G_TYPE_BOOLEAN);
-    g_value_set_boolean (&v, tax_related);
-
-    xaccAccountBeginEdit(acc);
-    qof_instance_set_kvp (QOF_INSTANCE (acc), "tax-related", &v);
-    mark_account (acc);
-    xaccAccountCommitEdit(acc);
+    set_boolean_key(acc, "tax-related", tax_related);
 }
 
 const char *
@@ -3921,28 +3936,13 @@ xaccAccountSetTaxUSCopyNumber (Account *acc, gint64 copy_number)
 gboolean
 xaccAccountGetPlaceholder (const Account *acc)
 {
-    GValue v = G_VALUE_INIT;
-    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    qof_instance_get_kvp (QOF_INSTANCE(acc), "placeholder", &v);
-    if (G_VALUE_HOLDS_BOOLEAN (&v))
-         return g_value_get_boolean (&v);
-    if (G_VALUE_HOLDS_STRING (&v))
-         return strcmp (g_value_get_string (&v), "true") == 0;
-    return FALSE;
+    return boolean_from_key(acc, "placeholder");
 }
 
 void
 xaccAccountSetPlaceholder (Account *acc, gboolean val)
 {
-    GValue v = G_VALUE_INIT;
-    g_return_if_fail(GNC_IS_ACCOUNT(acc));
-
-    g_value_init (&v, G_TYPE_BOOLEAN);
-    g_value_set_boolean (&v, val);
-    xaccAccountBeginEdit (acc);
-    qof_instance_set_kvp (QOF_INSTANCE (acc), "placeholder", &v);
-    mark_account (acc);
-    xaccAccountCommitEdit (acc);
+    set_boolean_key(acc, "placeholder", val);
 }
 
 GNCPlaceholderType
@@ -3972,24 +3972,13 @@ xaccAccountGetDescendantPlaceholder (const Account *acc)
 gboolean
 xaccAccountGetHidden (const Account *acc)
 {
-    GValue v = G_VALUE_INIT;
-    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    qof_instance_get_kvp (QOF_INSTANCE(acc), "hidden", &v);
-    return G_VALUE_HOLDS_BOOLEAN (&v) ? g_value_get_boolean (&v) : FALSE;
+    return boolean_from_key (acc, "hidden");
 }
 
 void
 xaccAccountSetHidden (Account *acc, gboolean val)
 {
-    GValue v = G_VALUE_INIT;
-    g_return_if_fail(GNC_IS_ACCOUNT(acc));
-
-    g_value_init (&v, G_TYPE_BOOLEAN);
-    g_value_set_boolean (&v, val);
-    xaccAccountBeginEdit (acc);
-    qof_instance_set_kvp (QOF_INSTANCE (acc), "hidden", &v);
-    mark_account (acc);
-    xaccAccountCommitEdit (acc);
+    set_boolean_key (acc, "hidden", val);
 }
 
 gboolean
@@ -4471,11 +4460,7 @@ xaccAccountClearReconcilePostpone (Account *acc)
 gboolean
 xaccAccountGetAutoInterestXfer (const Account *acc, gboolean default_value)
 {
-    GValue v = G_VALUE_INIT;
-    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    qof_instance_get_kvp (QOF_INSTANCE(acc),
-                          "reconcile-info/auto-interest-transfer", &v);
-    return G_VALUE_HOLDS_BOOLEAN (&v) ? g_value_get_boolean (&v) : FALSE;
+    return boolean_from_key (acc, "reconcile-info/auto-interest-transfer");
 }
 
 /********************************************************************\
@@ -4484,16 +4469,7 @@ xaccAccountGetAutoInterestXfer (const Account *acc, gboolean default_value)
 void
 xaccAccountSetAutoInterestXfer (Account *acc, gboolean option)
 {
-    GValue v = G_VALUE_INIT;
-    g_return_if_fail(GNC_IS_ACCOUNT(acc));
-
-    g_value_init (&v, G_TYPE_BOOLEAN);
-    g_value_set_boolean (&v, option);
-    xaccAccountBeginEdit (acc);
-    qof_instance_set_kvp (QOF_INSTANCE (acc),
-                          "/reconcile-info/auto-interest-transfer", &v);
-    mark_account (acc);
-    xaccAccountCommitEdit (acc);
+    set_boolean_key (acc, "reconcile-info/auto-interest-transfer", option);
 }
 
 /********************************************************************\
