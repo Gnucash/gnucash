@@ -61,11 +61,6 @@ static GtkActionEntry gnc_plugin_actions [] =
         N_("Open a new Account Tree page"),
         G_CALLBACK (gnc_plugin_account_tree_cmd_new_account_tree)
     },
-    {
-        "ViewFindAccountAction", GTK_STOCK_FIND, N_("F_ind Account"), "<control>i",
-        N_("Find an account"),
-        G_CALLBACK (gnc_plugin_account_tree_cmd_find_account)
-    },
 };
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
@@ -202,15 +197,6 @@ gnc_plugin_account_tree_cmd_new_account_tree (GtkAction *action,
 
     page = gnc_plugin_page_account_tree_new ();
     gnc_main_window_open_page (data->window, page);
-}
-
-static void
-gnc_plugin_account_tree_cmd_find_account (GtkAction *action,
-        GncMainWindowActionData *data)
-{
-    g_return_if_fail (data != NULL);
-
-    gnc_find_account_dialog (GTK_WIDGET(data->window), NULL);
 }
 
 /** @} */
