@@ -351,14 +351,17 @@ namespace IANAParser
     find_tz_file(const std::string& name)
     {
 	std::ifstream ifs;
-	if (name.empty())
+        auto tzname = name;
+        if (tzname.empty())
+            tzname = std::string(std::getenv("TZ"));
+        std::cout << "Testing tzname " << tzname << "\n";
+	if (tzname.empty())
 	{
 	    ifs.open("/etc/localtime",
 		     std::ios::in|std::ios::binary|std::ios::ate);
 	}
 	else
 	{
-	    std::string tzname = name;
 //POSIX specifies that that identifier should begin with ':', but we
 //should be liberal. If it's there, it's not part of the filename.
 	    if (tzname[0] == ':')
