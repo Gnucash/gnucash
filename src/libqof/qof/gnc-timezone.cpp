@@ -353,8 +353,9 @@ namespace IANAParser
 	std::ifstream ifs;
         auto tzname = name;
         if (tzname.empty())
-            tzname = std::string(std::getenv("TZ"));
-        std::cout << "Testing tzname " << tzname << "\n";
+            if (auto tzenv = getenv("TZ"))
+                tzname = std::string(std::getenv("TZ"));
+        //std::cout << "Testing tzname " << tzname << "\n";
 	if (tzname.empty())
 	{
 	    ifs.open("/etc/localtime",
