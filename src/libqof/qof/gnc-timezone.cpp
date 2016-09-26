@@ -356,13 +356,8 @@ namespace IANAParser
             if (auto tzenv = getenv("TZ"))
                 tzname = std::string(std::getenv("TZ"));
         //std::cout << "Testing tzname " << tzname << "\n";
-	if (tzname.empty())
-	{
-	    ifs.open("/etc/localtime",
-		     std::ios::in|std::ios::binary|std::ios::ate);
-	}
-	else
-	{
+        if (!tzname.empty())
+        {
 //POSIX specifies that that identifier should begin with ':', but we
 //should be liberal. If it's there, it's not part of the filename.
 	    if (tzname[0] == ':')
@@ -380,6 +375,16 @@ namespace IANAParser
 			 std::ios::in|std::ios::binary|std::ios::ate);
 	    }
 	}
+
+        if (!ifs.is_open())
+        {
+            if (!tzname.empty())
+                std::cerr << "Failed to open time zone " << tzname <<
+                    "; No such file. Falling back on system default timezone.\n";
+            ifs.open("/etc/localtime",
+                     std::ios::in|std::ios::binary|std::ios::ate);
+        }
+
 	if (! ifs.is_open())
 	    throw std::invalid_argument("The timezone string failed to resolve to a valid filename");
 	std::streampos filesize = ifs.tellg();
