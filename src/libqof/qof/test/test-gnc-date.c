@@ -261,10 +261,10 @@ test_gnc_mktime (void)
     {
         time64 secs = gnc_mktime (&time[ind]);
 #if !PLATFORM(WINDOWS)
-	//The 64-bit timezone database uses local time for some
+	//The timezone database uses local time for some
 	//timezones before 1900, which screws up the offset.
-	if (time[ind].tm_year < 0 && sizeof(time_t) == sizeof(int64_t))
-	     continue;
+	if (time[ind].tm_year < 0)
+            continue;
 #endif
         g_assert_cmpint (secs, ==, ans[ind] - offset);
 
