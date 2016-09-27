@@ -57,8 +57,23 @@ TEST(gnc_timezone_constructors, test_pacific_time_constructor)
     EXPECT_TRUE(tz->base_utc_offset().hours() == -8);
 }
 
+#if !PLATFORM(WINDOWS)
+TEST(gnc_timezone_constructors, test_posix_timezone)
+{
+    std::string timezone("FST08FDT07,M4.1.0,M10.31.0");
+    TimeZoneProvider tzp(timezone);
+    TZ_Ptr tz = tzp.get(2006);
+    EXPECT_TRUE(tz->std_zone_abbrev() == "FST");
+    EXPECT_TRUE(tz->dst_zone_abbrev() == "FDT");
+    EXPECT_TRUE(tz->base_utc_offset().hours() == 8L);
+    EXPECT_TRUE(tz->dst_offset().hours() == 7L);
+}
+#endif
+
 TEST(gnc_timezone_constructors, test_bogus_time_constructor)
 {
-    EXPECT_THROW (TimeZoneProvider tzp ("New York Standard Time"),
-		  std::invalid_argument);
+    TimeZoneProvider tzp ("New York Standard Time");
+    TimeZoneProvider machine ("");
+    EXPECT_TRUE(machine.get(2006)->std_zone_abbrev() ==
+                tzp.get(2006)->std_zone_abbrev());
 }

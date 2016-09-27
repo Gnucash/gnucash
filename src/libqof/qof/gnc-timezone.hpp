@@ -58,6 +58,7 @@ public:
     static const unsigned int min_year; //1400
     static const unsigned int max_year; //9999
 private:
+    void parse_file(const std::string& tzname);
     TZ_Vector zone_vector;
 #if PLATFORM(WINDOWS)
     void load_windows_dynamic_tz(HKEY, time_zone_names);

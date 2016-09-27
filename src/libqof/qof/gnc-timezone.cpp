@@ -377,15 +377,6 @@ namespace IANAParser
 	    }
 	}
 
-        if (!ifs.is_open())
-        {
-            if (!tzname.empty())
-                std::cerr << "Failed to open time zone " << tzname <<
-                    "; No such file. Falling back on system default timezone.\n";
-            ifs.open("/etc/localtime",
-                     std::ios::in|std::ios::binary|std::ios::ate);
-        }
-
 	if (! ifs.is_open())
 	    throw std::invalid_argument("The timezone string failed to resolve to a valid filename");
 	std::streampos filesize = ifs.tellg();
@@ -609,7 +600,8 @@ zone_from_rule(int year, DSTRule::DSTRule rule)
     return std::make_pair(year, tz);
 }
 
-TimeZoneProvider::TimeZoneProvider(const std::string& tzname) :  zone_vector {}
+void
+TimeZoneProvider::parse_file(const std::string& tzname)
 {
     IANAParser::IANAParser parser(tzname);
     auto last_info = std::find_if(parser.tzinfo.begin(), parser.tzinfo.end(),
@@ -675,6 +667,34 @@ TimeZoneProvider::TimeZoneProvider(const std::string& tzname) :  zone_vector {}
         zone_vector.push_back(zone_from_rule(max_year, last_rule));
 }
 
+TimeZoneProvider::TimeZoneProvider(const std::string& tzname) :  zone_vector {}
+{
+    try
+    {
+        parse_file(tzname);
+    }
+    catch(const std::invalid_argument& err)
+    {
+        try
+        {
+            TZ_Ptr zone(new PTZ(tzname));
+            zone_vector.push_back(std::make_pair(max_year, zone));
+        }
+        catch(const std::exception& err)
+        {
+            std::cerr << "Unable to use either provided tzname or TZ environment variable. Resorting to /etc/localtime.\n";
+            try
+            {
+                parse_file("/etc/localtime");
+            }
+            catch(const std::invalid_argument& env)
+            {
+                std::cerr << "/etc/localtime invalid, resorting to GMT.";
+                TZ_Ptr zone(new PTZ("UTC0"));
+                zone_vector.push_back(std::make_pair(max_year, zone));
+            }
+        }
+    }
 }
 #endif
 
