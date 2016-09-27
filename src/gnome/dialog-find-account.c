@@ -50,6 +50,7 @@ typedef struct
     Account      *account;
     GtkWidget    *view;
 
+    GtkWidget    *radio_hbox;
     GtkWidget    *radio_root;
     GtkWidget    *radio_subroot;
 
@@ -286,6 +287,7 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
 
     facc_dialog->filter_text_entry = GTK_WIDGET(gtk_builder_get_object (builder, "filter-text-entry"));
     facc_dialog->sub_label = GTK_WIDGET(gtk_builder_get_object (builder, "sub-label"));
+    facc_dialog->radio_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "hbox-radio"));
     facc_dialog->filter_button = GTK_WIDGET(gtk_builder_get_object (builder, "filter-button"));
     g_signal_connect (facc_dialog->filter_button, "clicked",
                       G_CALLBACK(filter_button_cb), (gpointer)facc_dialog);
@@ -366,9 +368,10 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
         g_free (sub_label);
 
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(facc_dialog->radio_subroot), TRUE);
+        gtk_widget_show_all (facc_dialog->radio_hbox);
     }
     else
-        gtk_widget_set_sensitive (GTK_WIDGET(facc_dialog->radio_subroot), FALSE);
+        gtk_widget_hide_all (facc_dialog->radio_hbox);
 
     // Set the filter to Wildcard
     gtk_entry_set_text (GTK_ENTRY(facc_dialog->filter_text_entry), "");

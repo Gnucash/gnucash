@@ -101,7 +101,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkHBox" id="hbox1">
+          <object class="GtkHBox" id="hbox-radio">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="border_width">5</property>
