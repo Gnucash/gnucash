@@ -1006,7 +1006,7 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * priv)
 static GtkActionEntry report_actions[] =
 {
     {
-        "FilePrintAction", GTK_STOCK_PRINT, N_("_Print Report..."), "<control>p",
+        "FilePrintAction", GTK_STOCK_PRINT, N_("_Print Report..."), "<primary>p",
         N_("Print the current report"),
         G_CALLBACK(gnc_plugin_page_report_print_cb)
     },
@@ -1031,18 +1031,18 @@ static GtkActionEntry report_actions[] =
         NULL
     },
     {
-        "ViewRefreshAction", GTK_STOCK_REFRESH, N_("_Refresh"), "<control>r",
+        "ViewRefreshAction", GTK_STOCK_REFRESH, N_("_Refresh"), "<primary>r",
         N_("Refresh this window"),
         G_CALLBACK (gnc_plugin_page_report_reload_cb)
     },
     {
-        "ReportSaveAction", GTK_STOCK_SAVE, N_("Save _Report Configuration"), "<control><alt>s",
+        "ReportSaveAction", GTK_STOCK_SAVE, N_("Save _Report Configuration"), "<primary><alt>s",
         N_("Update the current report's saved configuration. "
         "The report will be saved in the file ~/.gnucash/saved-reports-2.4. "),
         G_CALLBACK(gnc_plugin_page_report_save_cb)
     },
     {
-        "ReportSaveAsAction", GTK_STOCK_SAVE_AS, N_("Save Report Configuration As..."), "<control><alt><shift>s",
+        "ReportSaveAsAction", GTK_STOCK_SAVE_AS, N_("Save Report Configuration As..."), "<primary><alt><shift>s",
         N_("Add the current report's configuration to the `Saved Report Configurations' menu. "
         "The report will be saved in the file ~/.gnucash/saved-reports-2.4. "),
         G_CALLBACK(gnc_plugin_page_report_save_as_cb)
