@@ -214,7 +214,7 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
 
     /* Edit menu */
     {
-        "EditEditAccountAction", GNC_STOCK_EDIT_ACCOUNT, N_("Edit _Account"), "<control>e",
+        "EditEditAccountAction", GNC_STOCK_EDIT_ACCOUNT, N_("Edit _Account"), "<primary>e",
         N_("Edit the selected account"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_edit_account)
     },
@@ -224,12 +224,12 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_delete_account)
     },
     {
-        "EditFindAccountAction", GTK_STOCK_FIND, N_("F_ind Account"), "<control>i",
+        "EditFindAccountAction", GTK_STOCK_FIND, N_("F_ind Account"), "<primary>i",
         N_("Find an account"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_find_account)
     },
     {
-        "EditFindAccountPopupAction", GTK_STOCK_FIND, N_("F_ind Account"), "<control>i",
+        "EditFindAccountPopupAction", GTK_STOCK_FIND, N_("F_ind Account"), "<primary>i",
         N_("Find an account"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_find_account_popup)
     },
@@ -257,7 +257,7 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_autoclear)
     },
     {
-        "ActionsTransferAction", NULL, N_("_Transfer..."), "<control>t",
+        "ActionsTransferAction", NULL, N_("_Transfer..."), "<primary>t",
         N_("Transfer funds from one account to another"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_transfer)
     },

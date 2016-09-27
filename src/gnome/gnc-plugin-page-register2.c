@@ -218,7 +218,7 @@ static GtkActionEntry gnc_plugin_page_register2_actions [] =
     /* File menu */
 
     {
-        "FilePrintAction", GTK_STOCK_PRINT, N_("_Print Checks..."), "<control>p", NULL,
+        "FilePrintAction", GTK_STOCK_PRINT, N_("_Print Checks..."), "<primary>p", NULL,
         G_CALLBACK (gnc_plugin_page_register2_cmd_print_check)
     },
 
@@ -240,17 +240,17 @@ static GtkActionEntry gnc_plugin_page_register2_actions [] =
         G_CALLBACK (gnc_plugin_page_register2_cmd_paste)
     },
     {
-        "EditEditAccountAction", GNC_STOCK_EDIT_ACCOUNT, N_("Edit _Account"), "<control>e",
+        "EditEditAccountAction", GNC_STOCK_EDIT_ACCOUNT, N_("Edit _Account"), "<primary>e",
         N_("Edit the selected account"),
         G_CALLBACK (gnc_plugin_page_register2_cmd_edit_account)
     },
     {
-        "EditFindAccountAction", GTK_STOCK_FIND, N_("F_ind Account"), "<control>i",
+        "EditFindAccountAction", GTK_STOCK_FIND, N_("F_ind Account"), "<primary>i",
         N_("Find an account"),
         G_CALLBACK (gnc_plugin_page_register2_cmd_find_account)
     },
     {
-        "EditFindTransactionsAction", GTK_STOCK_FIND, N_("_Find..."), "<control>f",
+        "EditFindTransactionsAction", GTK_STOCK_FIND, N_("_Find..."), "<primary>f",
         N_("Find transactions with a search"),
         G_CALLBACK (gnc_plugin_page_register2_cmd_find_transactions)
     },
@@ -327,7 +327,7 @@ static GtkActionEntry gnc_plugin_page_register2_actions [] =
         G_CALLBACK (gnc_plugin_page_register2_cmd_view_filter_by)
     },
     {
-        "ViewRefreshAction", GTK_STOCK_REFRESH, N_("_Refresh"), "<control>r",
+        "ViewRefreshAction", GTK_STOCK_REFRESH, N_("_Refresh"), "<primary>r",
         N_("Refresh this window"),
         G_CALLBACK (gnc_plugin_page_register2_cmd_reload)
     },
@@ -335,7 +335,7 @@ static GtkActionEntry gnc_plugin_page_register2_actions [] =
     /* Actions menu */
 
     {
-        "ActionsTransferAction", GNC_STOCK_TRANSFER, N_("_Transfer..."), "<control>t",
+        "ActionsTransferAction", GNC_STOCK_TRANSFER, N_("_Transfer..."), "<primary>t",
         N_("Transfer funds from one account to another"),
         G_CALLBACK (gnc_plugin_page_register2_cmd_transfer)
     },
@@ -360,7 +360,7 @@ static GtkActionEntry gnc_plugin_page_register2_actions [] =
         G_CALLBACK (gnc_plugin_page_register2_cmd_lots)
     },
     {
-        "BlankTransactionAction", GTK_STOCK_GOTO_BOTTOM, N_("_Blank Transaction"), "<control>Page_Down",
+        "BlankTransactionAction", GTK_STOCK_GOTO_BOTTOM, N_("_Blank Transaction"), "<primary>Page_Down",
         N_("Move to the blank transaction at the bottom of the register"),
         G_CALLBACK (gnc_plugin_page_register2_cmd_blank_transaction)
     },

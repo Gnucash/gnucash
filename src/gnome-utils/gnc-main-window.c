@@ -272,14 +272,14 @@ static GtkActionEntry gnc_menu_actions [] =
     { "FileImportAction", NULL, N_("_Import"), NULL, NULL, NULL },
     { "FileExportAction", NULL, N_("_Export"), NULL, NULL, NULL },
     {
-        "FilePrintAction", GTK_STOCK_PRINT, N_("_Print..."), "<control>p",
+        "FilePrintAction", GTK_STOCK_PRINT, N_("_Print..."), "<primary>p",
         N_("Print the currently active page"), NULL
     },
 #ifndef GTK_STOCK_PAGE_SETUP
 #    define GTK_STOCK_PAGE_SETUP NULL
 #endif
     {
-        "FilePageSetupAction", GTK_STOCK_PAGE_SETUP, N_("Pa_ge Setup..."), "<control><shift>p",
+        "FilePageSetupAction", GTK_STOCK_PAGE_SETUP, N_("Pa_ge Setup..."), "<primary><shift>p",
         N_("Specify the page size and orientation for printing"),
         G_CALLBACK (gnc_main_window_cmd_page_setup)
     },
@@ -333,7 +333,7 @@ static GtkActionEntry gnc_menu_actions [] =
         N_("Select the account types that should be displayed."), NULL
     },
     {
-        "ViewRefreshAction", GTK_STOCK_REFRESH, N_("_Refresh"), "<control>r",
+        "ViewRefreshAction", GTK_STOCK_REFRESH, N_("_Refresh"), "<primary>r",
         N_("Refresh this window"),
         G_CALLBACK (gnc_main_window_cmd_view_refresh)
     },
