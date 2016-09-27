@@ -1,4 +1,4 @@
-if(${CMAKE_VERSION} VERSION_GREATER 3.1)
+if((${CMAKE_VERSION} VERSION_GREATER 3.1) AND (${CMAKE_VERSION} VERSION_LESS 3.5))
 
 function (pkg_get_variable result pkg variable)
   _pkgconfig_invoke("${pkg}" "prefix" "result" "" "--variable=${variable}")
@@ -247,12 +247,10 @@ endmacro()
 
 else()
 
+include(FindPkgConfig)
+
 macro(gnc_pkg_check_modules _prefix _module0)
-  if (NOT DEFINED __pkg_config_checked_${_prefix} OR __pkg_config_checked_${_prefix} LESS ${PKG_CONFIG_VERSION} OR NOT ${_prefix}_FOUND)
-    _pkgconfig_parse_options   (_pkg_modules _pkg_is_required _pkg_is_silent "${_module0}" ${ARGN})
-    _pkg_check_modules_internal("${_pkg_is_required}" "${_pkg_is_silent}" "${_prefix}" ${_pkg_modules})
-    _pkgconfig_set(__pkg_config_checked_${_prefix} ${PKG_CONFIG_VERSION})
-  endif()
+   PKG_CHECK_MODULES(${_prefix} ${_module0} ${ARGN})
 endmacro()
 
 endif()
