@@ -44,6 +44,7 @@ using duration = boost::posix_time::time_duration;
 using time_zone = boost::local_time::custom_time_zone;
 using dst_offsets = boost::local_time::dst_adjustment_offsets;
 using calc_rule_ptr = boost::local_time::dst_calc_rule_ptr;
+using PTZ = boost::local_time::posix_time_zone;
 
 const unsigned int TimeZoneProvider::min_year = 1400;
 const unsigned int TimeZoneProvider::max_year = 9999;
@@ -688,7 +689,7 @@ TimeZoneProvider::get(int year) const noexcept
              year);
         if (!zone_vector.empty())
             return zone_vector.back().second;
-        return TZ_Ptr(new boost::local_time::posix_time_zone("UTC0"));
+        return TZ_Ptr(new PTZ("UTC0"));
     }
     return iter->second;
 }
