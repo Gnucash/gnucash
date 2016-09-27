@@ -613,66 +613,68 @@ TimeZoneProvider::TimeZoneProvider(const std::string& tzname) :  zone_vector {}
 {
     IANAParser::IANAParser parser(tzname);
     auto last_info = std::find_if(parser.tzinfo.begin(), parser.tzinfo.end(),
-				  [](IANAParser::TZInfo tz)
-				  {return !tz.info.isdst;});
+                                  [](IANAParser::TZInfo tz)
+                                  {return !tz.info.isdst;});
     auto last_time = ptime();
     DSTRule::DSTRule last_rule;
     using boost::gregorian::date;
     using boost::posix_time::ptime;
     using boost::posix_time::time_duration;
     for (auto txi = parser.transitions.begin();
-	 txi != parser.transitions.end(); ++txi)
+         txi != parser.transitions.end(); ++txi)
     {
-	auto this_info = parser.tzinfo.begin() + txi->index;
+        auto this_info = parser.tzinfo.begin() + txi->index;
 //Can't use boost::posix_date::from_time_t() constructor because it
 //silently casts the time_t to an int32_t.
-	auto this_time = ptime(date(1970, 1, 1),
-			       time_duration(txi->timestamp / 3600, 0,
-					     txi->timestamp % 3600));
-	try
-	{
-	    auto this_year = this_time.date().year();
-	    //Initial case
-	    if (last_time.is_not_a_date_time())
-		zone_vector.push_back(zone_no_dst(this_year - 1, last_info));
-	    //gap in transitions > 1 year, non-dst zone
-	    //change. In the last case the exact date of the change will be
-	    //wrong because boost::local_date::timezone isn't able to
-	    //represent it. For GnuCash's purposes this isn't likely to be
-	    //important as the last time this sort of transition happened
-	    //was 1946, but we have to handle the case in order to parse
-	    //the tz file.
-	    else if (this_year - last_time.date().year() > 1 ||
-		     last_info->info.isdst == this_info->info.isdst)
-	    {
-		zone_vector.push_back(zone_no_dst(this_year, last_info));
-	    }
+        auto this_time = ptime(date(1970, 1, 1),
+                               time_duration(txi->timestamp / 3600, 0,
+                                             txi->timestamp % 3600));
+        try
+        {
+            auto this_year = this_time.date().year();
+            //Initial case
+            if (last_time.is_not_a_date_time())
+                zone_vector.push_back(zone_no_dst(this_year - 1, last_info));
+            //gap in transitions > 1 year, non-dst zone
+            //change. In the last case the exact date of the change will be
+            //wrong because boost::local_date::timezone isn't able to
+            //represent it. For GnuCash's purposes this isn't likely to be
+            //important as the last time this sort of transition happened
+            //was 1946, but we have to handle the case in order to parse
+            //the tz file.
+            else if (this_year - last_time.date().year() > 1 ||
+                     last_info->info.isdst == this_info->info.isdst)
+            {
+                zone_vector.push_back(zone_no_dst(this_year, last_info));
+            }
 
-	    else
-	    {
-		DSTRule::DSTRule new_rule(last_info, this_info,
-					  last_time, this_time);
-		if (new_rule != last_rule)
-		{
-		    last_rule = new_rule;
-		    zone_vector.push_back(zone_from_rule (this_time.date().year(),
-							  new_rule));
-		}
-	    }
-	}
-	catch(boost::gregorian::bad_year err)
-	{
-	    continue;
-	}
-	last_time = this_time;
-	last_info = this_info;
+            else
+            {
+                DSTRule::DSTRule new_rule(last_info, this_info,
+                                          last_time, this_time);
+                if (new_rule != last_rule)
+                {
+                    last_rule = new_rule;
+                    zone_vector.push_back(zone_from_rule (this_time.date().year(),
+                                                          new_rule));
+                }
+            }
+        }
+        catch(const boost::gregorian::bad_year& err)
+        {
+            continue;
+        }
+        last_time = this_time;
+        last_info = this_info;
     }
 
     if (last_time.is_not_a_date_time() ||
-	last_time.date().year() < parser.last_year)
-	zone_vector.push_back(zone_no_dst(max_year, last_info));
+        last_time.date().year() < parser.last_year)
+        zone_vector.push_back(zone_no_dst(max_year, last_info));
     else //Last DST rule forever after.
-	zone_vector.push_back(zone_from_rule(max_year, last_rule));
+        zone_vector.push_back(zone_from_rule(max_year, last_rule));
+}
+
 }
 #endif
 
