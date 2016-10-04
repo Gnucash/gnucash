@@ -98,11 +98,9 @@ static StfParseOptions_t* default_parse_options (void)
  */
 static time64 parse_date_with_year (const char* date_str, int format)
 {
-    time64 rawtime; /* The integer time */
-    struct tm retvalue, test_retvalue; /* The time in a broken-down structure */
 
-    int i, j, mem_length, orig_year = -1, orig_month = -1, orig_day = -1;
-
+    int i, j, mem_length, year = -1, month = -1, day = -1;
+    Timespec ts;
     /* Buffer for containing individual parts (e.g. year, month, day) of a date */
     char date_segment[5];
 
@@ -155,15 +153,6 @@ static time64 parse_date_with_year (const char* date_str, int format)
         }
     }
 
-    /* Put some sane values in retvalue by using a fixed time for
-     * the non-year-month-day parts of the date. */
-    gnc_time (&rawtime);
-    gnc_localtime_r (&rawtime, &retvalue);
-    retvalue.tm_hour = 11;
-    retvalue.tm_min = 0;
-    retvalue.tm_sec = 0;
-    retvalue.tm_isdst = -1;
-
     /* j traverses pmatch (index 0 contains the entire string, so we
      * start at index 1 for the first meaningful match). */
     j = 1;
@@ -187,51 +176,32 @@ static time64 parse_date_with_year (const char* date_str, int format)
             switch (segment_type)
             {
             case 'y':
-                retvalue.tm_year = atoi (date_segment);
+                year = atoi (date_segment);
 
                 /* Handle two-digit years. */
-                if (retvalue.tm_year < 100)
+                if (year < 100)
                 {
                     /* We allow two-digit years in the range 1969 - 2068. */
-                    if (retvalue.tm_year < 69)
-                        retvalue.tm_year += 100;
+                    if (year < 69)
+                        year += 2000;
+                    else
+                        year += 1900;
                 }
-                else
-                    retvalue.tm_year -= 1900;
-                orig_year = retvalue.tm_year;
                 break;
 
             case 'm':
-                orig_month = retvalue.tm_mon = atoi (date_segment) - 1;
+                month =atoi (date_segment);
                 break;
 
             case 'd':
-                orig_day = retvalue.tm_mday = atoi (date_segment);
+                day = atoi (date_segment);
                 break;
             }
             j++;
         }
     }
-    /* Convert back to an integer. If gnc_mktime leaves retvalue unchanged,
-     * everything is okay; otherwise, an error has occurred. */
-    /* We have to use a "test" date value to account for changes in
-     * daylight savings time, which can cause a date change with gnc_mktime
-     * near midnight, causing the code to incorrectly think a date is
-     * incorrect. */
-    test_retvalue = retvalue;
-    gnc_mktime (&test_retvalue);
-    retvalue.tm_isdst = test_retvalue.tm_isdst;
-    rawtime = gnc_mktime (&retvalue);
-    if (retvalue.tm_mday == orig_day &&
-            retvalue.tm_mon == orig_month &&
-            retvalue.tm_year == orig_year)
-    {
-        return rawtime;
-    }
-    else
-    {
-        return -1;
-    }
+    ts = gnc_dmy2timespec_neutral(day, month, year);
+    return ts.tv_sec;
 }
 
 /** Parses a string into a date, given a format. The format cannot
@@ -243,10 +213,8 @@ static time64 parse_date_with_year (const char* date_str, int format)
  */
 static time64 parse_date_without_year (const char* date_str, int format)
 {
-    time64 rawtime; /* The integer time */
-    struct tm retvalue, test_retvalue; /* The time in a broken-down structure */
-
-    int i, j, mem_length, orig_year = -1, orig_month = -1, orig_day = -1;
+    Timespec ts;
+    int i, j, mem_length, year = -1, month = -1, day = -1;
 
     /* Buffer for containing individual parts (e.g. year, month, day) of a date */
     gchar* date_segment;
@@ -264,20 +232,13 @@ static time64 parse_date_without_year (const char* date_str, int format)
     regcomp (&preg, regex, REG_EXTENDED);
     regexec (&preg, date_str, 3, pmatch, 0);
     regfree (&preg);
-
+    /* Set day, month, and year to today. We'll replace day & month with the
+     * values from the string.
+     */
+    gnc_timespec2dmy(timespec_now(), &day, &month, &year);
     /* If there wasn't a match, there was an error. */
     if (pmatch[0].rm_eo == 0)
         return -1;
-
-    /* Put some sane values in retvalue by using a fixed time for
-     * the non-year-month-day parts of the date. */
-    gnc_time (&rawtime);
-    gnc_localtime_r (&rawtime, &retvalue);
-    retvalue.tm_hour = 11;
-    retvalue.tm_min = 0;
-    retvalue.tm_sec = 0;
-    retvalue.tm_isdst = -1;
-    orig_year = retvalue.tm_year;
 
     /* j traverses pmatch (index 0 contains the entire string, so we
      * start at index 1 for the first meaningful match). */
@@ -303,37 +264,21 @@ static time64 parse_date_without_year (const char* date_str, int format)
             switch (segment_type)
             {
             case 'm':
-                orig_month = retvalue.tm_mon = atoi (date_segment) - 1;
+                month = atoi (date_segment);
                 break;
 
             case 'd':
-                orig_day = retvalue.tm_mday = atoi (date_segment);
+                day = atoi (date_segment);
                 break;
             }
             g_free (date_segment);
             j++;
         }
     }
-    /* Convert back to an integer. If gnc_mktime leaves retvalue unchanged,
-     * everything is okay; otherwise, an error has occurred. */
-    /* We have to use a "test" date value to account for changes in
-     * daylight savings time, which can cause a date change with gnc_mktime
-     * near midnight, causing the code to incorrectly think a date is
-     * incorrect. */
-    test_retvalue = retvalue;
-    gnc_mktime (&test_retvalue);
-    retvalue.tm_isdst = test_retvalue.tm_isdst;
-    rawtime = gnc_mktime (&retvalue);
-    if (retvalue.tm_mday == orig_day &&
-            retvalue.tm_mon == orig_month &&
-            retvalue.tm_year == orig_year)
-    {
-        return rawtime;
-    }
-    else
-    {
+    if (month > 12 || day > 31)
         return -1;
-    }
+    ts = gnc_dmy2timespec_neutral(day, month, year);
+    return ts.tv_sec;
 }
 
 /** Parses a string into a date, given a format. This function
