@@ -1237,8 +1237,8 @@ gnc_dmy2timespec_neutral (int day, int month, int year)
     date.tm_year = year - 1900;
     date.tm_mon = month - 1;
     date.tm_mday = day;
-    date.tm_hour = 11;
-    date.tm_min = 0;
+    date.tm_hour = 10;
+    date.tm_min = 59;
     date.tm_sec = 0;
 
     GncDateTime gncdt(date);
@@ -1246,7 +1246,7 @@ gnc_dmy2timespec_neutral (int day, int month, int year)
     if (offset < -11)
         date.tm_hour = -offset;
     if (offset > 13)
-        date.tm_hour = 24 - offset;
+        date.tm_hour = 23 - offset;
 
     return {gnc_timegm(&date), 0};
 }

@@ -125,10 +125,10 @@ setup_begin(FixtureB *f, gconstpointer pData)
 static void
 setup_neutral(FixtureB *f, gconstpointer pData)
 {
-    f->test[0] = (TimeMap){1999, 7, 21, INT64_C(932554800)};
-    f->test[1] = (TimeMap){1918, 3, 31, INT64_C(-1633266000)};
-    f->test[2] = (TimeMap){1918, 4, 1, INT64_C(-1633179600)};
-    f->test[3] = (TimeMap){2057, 11, 20, INT64_C(2773479600)};
+    f->test[0] = (TimeMap){1999, 7, 21, INT64_C(932554740)};
+    f->test[1] = (TimeMap){1918, 3, 31, INT64_C(-1633266060)};
+    f->test[2] = (TimeMap){1918, 4, 1, INT64_C(-1633179660)};
+    f->test[3] = (TimeMap){2057, 11, 20, INT64_C(2773479540)};
 }
 
 static void
