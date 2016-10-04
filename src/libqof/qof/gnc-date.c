@@ -1576,15 +1576,14 @@ gnc_dmy2timespec_neutral (int day, int month, int year)
     GDateTime *gdt = gnc_g_date_time_new_local (year, month, day, 12, 0, 0.0);
     int interval = g_time_zone_find_interval (zone, G_TIME_TYPE_STANDARD,
                                               g_date_time_to_unix(gdt));
-    int offset = g_time_zone_get_offset(gnc_g_time_zone_new_local(),
-                                        interval) / 3600;
+    int offset = g_time_zone_get_offset(zone, interval) / 3600;
     g_date_time_unref (gdt);
     memset (&date, 0, sizeof(struct tm));
     date.tm_year = year - 1900;
     date.tm_mon = month - 1;
     date.tm_mday = day;
-    date.tm_hour = offset < -11 ? -offset : offset > 13 ? 24 - offset : 11;
-    date.tm_min = 0;
+    date.tm_hour = offset < -11 ? -offset : offset > 13 ? 23 - offset : 10;
+    date.tm_min = 59;
     date.tm_sec = 0;
 
     ts.tv_sec = gnc_timegm(&date);

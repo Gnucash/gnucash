@@ -1973,10 +1973,10 @@ test_gnc_dmy2timespec_end (void)
 static void
 test_gnc_dmy2timespec_neutral (void)
 {
-    GDateTime *gdt1 = gncdt.new_utc (1999, 7, 21, 11, 0, 0);
-    GDateTime *gdt2 = gncdt.new_utc (1918, 3, 31, 11, 0, 0);
-    GDateTime *gdt3 = gncdt.new_utc (1918, 4, 1, 11, 0, 0);
-    GDateTime *gdt4 = gncdt.new_utc (2057, 11, 20, 11, 0, 0);
+    GDateTime *gdt1 = gncdt.new_utc (1999, 7, 21, 10, 59, 0);
+    GDateTime *gdt2 = gncdt.new_utc (1918, 3, 31, 10, 59, 0);
+    GDateTime *gdt3 = gncdt.new_utc (1918, 4, 1, 10, 59, 0);
+    GDateTime *gdt4 = gncdt.new_utc (2057, 11, 20, 10, 59, 0);
 
     gint day, mon, yr;
     Timespec t, r_t;
@@ -2129,10 +2129,10 @@ Timespec gdate_to_timespec (GDate d)// C: 7 in 6  Local: 0:0:0
 static void
 test_gdate_to_timespec (void)
 {
-    GDateTime *gdt1 = gncdt.new_utc (1999, 7, 21, 11, 0, 0);
-    GDateTime *gdt2 = gncdt.new_utc (1918, 3, 31, 11, 0, 0);
-    GDateTime *gdt3 = gncdt.new_utc (1918, 4, 1, 11, 0, 0);
-    GDateTime *gdt4 = gncdt.new_utc (2057, 11, 20, 11, 0, 0);
+    GDateTime *gdt1 = gncdt.new_utc (1999, 7, 21, 10, 59, 0);
+    GDateTime *gdt2 = gncdt.new_utc (1918, 3, 31, 10, 59, 0);
+    GDateTime *gdt3 = gncdt.new_utc (1918, 4, 1, 10, 59, 0);
+    GDateTime *gdt4 = gncdt.new_utc (2057, 11, 20, 10, 59, 0);
 
     gint day, mon, yr;
     Timespec t, r_t;
