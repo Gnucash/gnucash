@@ -23,6 +23,7 @@
 #define DASHBOARD_HPP
 
 #include "config.h"
+#include "libqof/qof/guid.hpp"
 
 extern "C"
 {

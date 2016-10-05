@@ -26,6 +26,7 @@
 // gnucash includes
 #include "config.h" // required by qof/qofutil.h
 #include <glib/gi18n.h>
+#include "libqof/qof/guid.hpp"
 extern "C"
 {
 #include "qof.h"

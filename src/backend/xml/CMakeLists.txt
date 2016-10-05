@@ -120,6 +120,14 @@ INSTALL(TARGETS gncmod-backend-xml
 
 # ----
 
+# Special normal (non-MODULE) library for cutecash only
+ADD_LIBRARY(gncmod-backend-xml-utils ${libgncmod_backend_xml_SOURCES})
+TARGET_LINK_LIBRARIES(gncmod-backend-xml-utils gnc-backend-xml-utils gncmod-engine
+                        gnc-core-utils ${LIBXML2_LDFLAGS} ${GLIB2_LDFLAGS} ${ZLIB_LIBRARY})
+TARGET_COMPILE_DEFINITIONS (gncmod-backend-xml-utils PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.xml\" -DU_SHOW_CPLUSPLUS_API=0)
+
+# ----
+
 # FIXME: Below is a hack to create .libs/libgncmod-backend-xml to silence some complaints
 # from guile when compiling. Eventually, fix the guile module loader to not expect items
 # to be in .libs. At this time, WIN32 does not use guile-2, so no need for this.

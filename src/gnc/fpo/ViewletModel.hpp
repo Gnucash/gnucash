@@ -5,6 +5,7 @@
 #include <QtGui>
 
 #include "config.h"
+#include "libqof/qof/guid.hpp"
 
 extern "C"
 {
