@@ -1,5 +1,5 @@
 
-accountdir = ${GNC_ACCOUNTS_DIR}/da
+accountdir = ${GNC_ACCOUNTS_DIR}/da_DK
 
 account_DATA = \
   acctchrt_car.gnucash-xea \

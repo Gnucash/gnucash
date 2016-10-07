@@ -2,7 +2,7 @@
 SUBDIRS = \
 	C \
 	cs_CZ \
-	da \
+	da_DK \
 	de_AT \
 	de_CH \
 	de_DE \
