@@ -1,5 +1,5 @@
 
-accountdir = ${GNC_ACCOUNTS_DIR}/ja
+accountdir = ${GNC_ACCOUNTS_DIR}/ja_JP
 
 account_DATA = \
   acctchrt_brokerage.gnucash-xea \

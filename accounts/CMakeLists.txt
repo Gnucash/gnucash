@@ -15,7 +15,7 @@ SET(accounts_SUBDIRS
   fr_FR
   hu_HU
   it
-#  ja
+#  ja_JP
   ko_KR
   lt
   lv
