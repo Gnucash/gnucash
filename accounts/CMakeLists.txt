@@ -1,6 +1,6 @@
 SET(accounts_SUBDIRS
   C
-  cs
+  cs_CZ
   da
   de_AT
   de_CH

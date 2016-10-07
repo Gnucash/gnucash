@@ -1432,7 +1432,7 @@ AC_CONFIG_FILES(
   Makefile
   accounts/Makefile
   accounts/C/Makefile
-  accounts/cs/Makefile
+  accounts/cs_CZ/Makefile
   accounts/da/Makefile
   accounts/de_AT/Makefile
   accounts/de_CH/Makefile
