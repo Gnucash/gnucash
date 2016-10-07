@@ -16,7 +16,7 @@ SET(accounts_SUBDIRS
   hu_HU
   it
 #  ja
-  ko
+  ko_KR
   lt
   lv
 #  nb
