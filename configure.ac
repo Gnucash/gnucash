@@ -1451,7 +1451,7 @@ AC_CONFIG_FILES(
   accounts/ko_KR/Makefile
   accounts/lt/Makefile
   accounts/lv/Makefile
-  accounts/nb/Makefile
+  accounts/nb_NO/Makefile
   accounts/nl/Makefile
   accounts/pl/Makefile
   accounts/pt_BR/Makefile

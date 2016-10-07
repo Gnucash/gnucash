@@ -20,7 +20,7 @@ SUBDIRS = \
 	ko_KR \
 	lt \
 	lv \
-	nb \
+	nb_NO \
 	nl \
 	pl \
 	pt_BR \
