@@ -153,9 +153,6 @@ std::map<GncTransPropType, const char*> gnc_csv_col_type_strs = {
  */
 time64 parse_date (const std::string &date_str, int format)
 {
-    struct tm retvalue, test_retvalue; /* The time in a broken-down structure */
-    int orig_year = -1, orig_month = -1, orig_day = -1;
-
     boost::regex r(date_regex[format]);
     boost::smatch what;
     if(!boost::regex_search(date_str, what, r))
@@ -167,56 +164,34 @@ time64 parse_date (const std::string &date_str, int format)
     if ((format >= 3) && (what.length("YEAR") != 0))
         return -1;
 
+    auto day = std::stoi (what.str("DAY"));
+    auto month = std::stoi (what.str("MONTH"));
 
-    /* Put some sane values in retvalue by using a fixed time for
-     * the non-year-month-day parts of the date. */
-    time64 rawtime; /* The integer time */
-    gnc_time (&rawtime);
-    gnc_localtime_r (&rawtime, &retvalue);
-    retvalue.tm_hour = 11;
-    retvalue.tm_min = 0;
-    retvalue.tm_sec = 0;
-    retvalue.tm_isdst = -1;
-
-    retvalue.tm_mday = std::stoi (what.str("DAY"));
-    retvalue.tm_mon = std::stoi (what.str("MONTH")) - 1;
-
+    int year;
     if (format < 3)
     {
-        retvalue.tm_year = std::stoi (what.str("YEAR"));
+        /* The input dates have a year, so use that one */
+        year = std::stoi (what.str("YEAR"));
 
         /* Handle two-digit years. */
-        if (retvalue.tm_year < 100)
+        if (year < 100)
         {
             /* We allow two-digit years in the range 1969 - 2068. */
-            if (retvalue.tm_year < 69)
-                retvalue.tm_year += 100;
+            if (year < 69)
+                year += 2000;
+            else
+                year += 1900;
         }
-        else
-            retvalue.tm_year -= 1900;
+    }
+    else
+    {
+        /* The input dates don't have a year, so work with today's year.
+         */
+        gnc_timespec2dmy(timespec_now(), nullptr, nullptr, &year);
     }
 
-    /* Convert back to an integer. If gnc_mktime leaves retvalue unchanged,
-     * everything is okay; otherwise, an error has occurred. */
-    /* We have to use a "test" date value to account for changes in
-     * daylight savings time, which can cause a date change with gnc_mktime
-     * near midnight, causing the code to incorrectly think a date is
-     * incorrect. */
-
-    orig_day   = retvalue.tm_mday;
-    orig_month = retvalue.tm_mon;
-    orig_year  = retvalue.tm_year;
-
-    test_retvalue = retvalue;
-    gnc_mktime (&test_retvalue);
-    retvalue.tm_isdst = test_retvalue.tm_isdst;
-    rawtime = gnc_mktime (&retvalue);
-    if (retvalue.tm_mday == orig_day &&
-            retvalue.tm_mon == orig_month &&
-            retvalue.tm_year == orig_year)
-        return rawtime;
-    else
-        return -1;
+    auto ts = gnc_dmy2timespec_neutral(day, month, year);
+    return ts.tv_sec;
 }
 
 /** Constructor for GncTxImport.
