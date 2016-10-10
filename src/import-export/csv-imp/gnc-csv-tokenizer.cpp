@@ -23,7 +23,7 @@ int GncCsvTokenizer::tokenize()
 
     boost::escaped_list_separator<char> sep("\\", m_sep_str, "\"");
 
-    std::vector<std::string> vec;
+    StrVec vec;
     std::string line;
     std::string buffer;
 

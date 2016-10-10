@@ -210,7 +210,7 @@ GncTxImport::GncTxImport(GncImpFileFormat format)
     parse_errors = false;
 
     file_fmt = format;
-    tokenizer = GncTokenizerFactory(file_fmt);
+    tokenizer = gnc_tokenizer_factory(file_fmt);
 }
 
 /** Destructor for GncTxImport.
@@ -236,7 +236,7 @@ int GncTxImport::file_format(GncImpFileFormat format,
     }
 
     file_fmt = format;
-    tokenizer = GncTokenizerFactory(file_fmt);
+    tokenizer = gnc_tokenizer_factory(file_fmt);
 
     // Set up new tokenizer with common settings
     // recovered from old tokenizer
@@ -431,7 +431,7 @@ public:
     static GncTransProperty* make_new(const std::string& val,int fmt = 0)
         { return nullptr; }
 
-    T value;
+    T m_value;
 };
 
 template<>
@@ -440,16 +440,16 @@ struct GncTransPropImpl<time64*>
 {
     GncTransPropImpl(const std::string& val, int fmt)
     {
-        value = convert_date_col_str (val, fmt);
-        m_valid = (value != nullptr);
+        m_value = convert_date_col_str (val, fmt);
+        m_valid = (m_value != nullptr);
     }
     ~GncTransPropImpl()
-        { if (value) delete value; }
+        { if (m_value) delete m_value; }
 
     static std::shared_ptr<GncTransProperty> make_new(const std::string& val,int fmt)
     { return std::shared_ptr<GncTransProperty>(new GncTransPropImpl<time64*>(val, fmt)); }
 
-    time64* value;
+    time64* m_value;
 };
 
 
@@ -459,16 +459,16 @@ struct GncTransPropImpl<std::string*>
 {
     GncTransPropImpl(const std::string& val, int fmt = 0)
     {
-        value = new std::string(val);
-        m_valid = (value != nullptr);
+        m_value = new std::string(val);
+        m_valid = (m_value != nullptr);
     }
     ~GncTransPropImpl()
-        { if (value) delete value; }
+        { if (m_value) delete m_value; }
 
     static std::shared_ptr<GncTransProperty> make_new(const std::string& val,int fmt = 0)
         { return std::shared_ptr<GncTransProperty>(new GncTransPropImpl<std::string*>(val)); } /* Note fmt is not used for strings */
 
-    std::string* value;
+    std::string* m_value;
 };
 
 template<>
@@ -477,17 +477,17 @@ struct GncTransPropImpl<Account *>
 {
     GncTransPropImpl(const std::string& val, int fmt = 0)
     {
-        value = gnc_csv_account_map_search (val.c_str());
-        m_valid = (value != nullptr);
+        m_value = gnc_csv_account_map_search (val.c_str());
+        m_valid = (m_value != nullptr);
     }
     GncTransPropImpl(Account* val)
-        { value = val; }
+        { m_value = val; }
     ~GncTransPropImpl(){};
 
     static std::shared_ptr<GncTransProperty> make_new(const std::string& val,int fmt = 0)
         { return std::shared_ptr<GncTransProperty>(new GncTransPropImpl<Account*>(val)); } /* Note fmt is not used in for accounts */
 
-    Account* value;
+    Account * m_value;
 };
 
 template<>
@@ -496,16 +496,16 @@ struct GncTransPropImpl<gnc_numeric *>
 {
     GncTransPropImpl(const std::string& val, int fmt)
     {
-        value = convert_amount_col_str (val, fmt);
-        m_valid = (value != nullptr);
+        m_value = convert_amount_col_str (val, fmt);
+        m_valid = (m_value != nullptr);
     }
     ~GncTransPropImpl()
-        { if (value) delete value; }
+        { if (m_value) delete m_value; }
 
     static std::shared_ptr<GncTransProperty> make_new(const std::string& val,int fmt)
     { return std::shared_ptr<GncTransProperty>(new GncTransPropImpl<gnc_numeric*>(val, fmt)); }
 
-    gnc_numeric* value;
+    gnc_numeric * m_value;
 };
 
 /** Adds a split to a transaction.
@@ -585,7 +585,7 @@ static GncCsvTransLine* trans_properties_to_trans (prop_map_t& trans_props, gcha
         return NULL;
 
     auto property = trans_props.find (GncTransPropType::ACCOUNT)->second;
-    auto account = dynamic_cast<GncTransPropImpl<Account*>*>(property.get())->value;
+    auto account = dynamic_cast<GncTransPropImpl<Account*>*>(property.get())->m_value;
 
     GncCsvTransLine* trans_line = g_new (GncCsvTransLine, 1);
 
@@ -621,47 +621,47 @@ static GncCsvTransLine* trans_properties_to_trans (prop_map_t& trans_props, gcha
         {
         case GncTransPropType::DATE:
             {
-                auto transdate = dynamic_cast<GncTransPropImpl<time64*>*>(prop.get())->value;
+                auto transdate = dynamic_cast<GncTransPropImpl<time64*>*>(prop.get())->m_value;
                 xaccTransSetDatePostedSecsNormalized (trans_line->trans, *transdate);
             }
             break;
 
         case GncTransPropType::DESCRIPTION:
             {
-                auto propstring = dynamic_cast<GncTransPropImpl<std::string*>*>(prop.get())->value;
+                auto propstring = dynamic_cast<GncTransPropImpl<std::string*>*>(prop.get())->m_value;
                 xaccTransSetDescription (trans_line->trans, propstring->c_str());
             }
             break;
 
         case GncTransPropType::NOTES:
             {
-                auto propstring = dynamic_cast<GncTransPropImpl<std::string*>*>(prop.get())->value;
+                auto propstring = dynamic_cast<GncTransPropImpl<std::string*>*>(prop.get())->m_value;
                 xaccTransSetNotes (trans_line->trans, propstring->c_str());
             }
             break;
 
         case GncTransPropType::OACCOUNT:
-            oaccount = dynamic_cast<GncTransPropImpl<Account*>*>(prop.get())->value;
+            oaccount = dynamic_cast<GncTransPropImpl<Account*>*>(prop.get())->m_value;
             break;
 
         case GncTransPropType::MEMO:
-            memo = *dynamic_cast<GncTransPropImpl<std::string*>*>(prop.get())->value;
+            memo = *dynamic_cast<GncTransPropImpl<std::string*>*>(prop.get())->m_value;
             break;
 
         case GncTransPropType::OMEMO:
-            omemo = *dynamic_cast<GncTransPropImpl<std::string*>*>(prop.get())->value;
+            omemo = *dynamic_cast<GncTransPropImpl<std::string*>*>(prop.get())->m_value;
             break;
 
         case GncTransPropType::NUM:
             /* the 'num' is saved and passed to 'trans_add_split' below where
              * 'gnc_set_num_action' is used to set tran-num and/or split-action
              * per book option */
-            num = *dynamic_cast<GncTransPropImpl<std::string*>*>(prop.get())->value;
+            num = *dynamic_cast<GncTransPropImpl<std::string*>*>(prop.get())->m_value;
             break;
 
         case GncTransPropType::DEPOSIT: /* Add deposits to the existing amount. */
             {
-                auto propval = dynamic_cast<GncTransPropImpl<gnc_numeric*>*>(prop.get())->value;
+                auto propval = dynamic_cast<GncTransPropImpl<gnc_numeric*>*>(prop.get())->m_value;
                 amount = gnc_numeric_add (*propval,
                                          amount,
                                          xaccAccountGetCommoditySCU (account),
@@ -674,7 +674,7 @@ static GncCsvTransLine* trans_properties_to_trans (prop_map_t& trans_props, gcha
 
         case GncTransPropType::WITHDRAWAL: /* Withdrawals are just negative deposits. */
             {
-                auto propval = dynamic_cast<GncTransPropImpl<gnc_numeric*>*>(prop.get())->value;
+                auto propval = dynamic_cast<GncTransPropImpl<gnc_numeric*>*>(prop.get())->m_value;
                 amount = gnc_numeric_add (gnc_numeric_neg(*propval),
                                          amount,
                                          xaccAccountGetCommoditySCU (account),
@@ -689,7 +689,7 @@ static GncCsvTransLine* trans_properties_to_trans (prop_map_t& trans_props, gcha
             /* We will use the "Deposit" and "Withdrawal" columns in preference to "Balance". */
             if (!amount_set)
             {
-                auto propval = dynamic_cast<GncTransPropImpl<gnc_numeric*>*>(prop.get())->value;
+                auto propval = dynamic_cast<GncTransPropImpl<gnc_numeric*>*>(prop.get())->m_value;
                 /* This gets put into the actual transaction at the end of gnc_csv_parse_to_trans. */
                 trans_line->balance = *propval;
                 trans_line->balance_set = true;
@@ -777,7 +777,7 @@ int GncTxImport::parse_to_trans (Account* account,
         auto col_types_it = column_types.cbegin();
         auto line_it = line.cbegin();
         for (col_types_it, line_it;
-                col_types_it != column_types.cend(),
+                col_types_it != column_types.cend() &&
                 line_it != line.cend();
                 ++col_types_it, ++line_it)
         {
@@ -800,7 +800,7 @@ int GncTxImport::parse_to_trans (Account* account,
                 case GncTransPropType::OACCOUNT:
                     property = GncTransPropImpl<Account*>::make_new (*line_it);
                     if (*col_types_it == GncTransPropType::ACCOUNT)
-                        home_account = dynamic_cast<GncTransPropImpl<Account*>*>(property.get())->value;
+                        home_account = dynamic_cast<GncTransPropImpl<Account*>*>(property.get())->m_value;
                     break;
 
                 case GncTransPropType::BALANCE:
@@ -819,11 +819,9 @@ int GncTxImport::parse_to_trans (Account* account,
             else
             {
                 parse_errors = loop_err = true;
-                gchar *error_message = g_strdup_printf (_("%s column could not be understood."),
-                                                _(gnc_csv_col_type_strs[*col_types_it]));
-                orig_lines_it->second = error_message;
-
-                g_free (error_message);
+                std::string error_message {_(gnc_csv_col_type_strs[*col_types_it])};
+                error_message += _(" column could not be understood.");
+                orig_lines_it->second = std::move(error_message);
                 break;
             }
         }

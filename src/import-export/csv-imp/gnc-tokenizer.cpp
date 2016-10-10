@@ -17,7 +17,7 @@ extern "C" {
 #include <goffice/go-glib-extras.h>
 }
 
-std::unique_ptr<GncTokenizer> GncTokenizerFactory(GncImpFileFormat fmt)
+std::unique_ptr<GncTokenizer> gnc_tokenizer_factory(GncImpFileFormat fmt)
 {
     std::unique_ptr<GncTokenizer> tok(nullptr);
     switch (fmt)
@@ -88,7 +88,7 @@ GncTokenizer::encoding()
 }
 
 
-const std::vector<str_vec>&
+const std::vector<StrVec>&
 GncTokenizer::get_tokens()
 {
     return m_tokenized_contents;

@@ -194,11 +194,11 @@ void GncFwTokenizer::load_file(const std::string& path)
 
 int GncFwTokenizer::tokenize()
 {
-    typedef boost::tokenizer< boost::offset_separator > Tokenizer;
+    using Tokenizer = boost::tokenizer< boost::offset_separator > ;
 
     boost::offset_separator sep(m_col_vec.begin(), m_col_vec.end(), false);
 
-    std::vector<std::string> vec;
+    StrVec vec;
     std::string line;
     std::string buffer;
 

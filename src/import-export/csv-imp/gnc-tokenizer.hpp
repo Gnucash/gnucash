@@ -45,7 +45,7 @@ extern "C" {
 #include <string>
 #include <memory>
 
-using str_vec = std::vector<std::string>;
+using StrVec = std::vector<std::string>;
 
 /** Enumeration for file formats supported by this importer. */
 enum class GncImpFileFormat {
@@ -72,11 +72,11 @@ public:
     void encoding(const std::string& encoding);
     const std::string& encoding();
     virtual int  tokenize() = 0;
-    const std::vector<str_vec>& get_tokens();
+    const std::vector<StrVec>& get_tokens();
     
 protected:
     std::string m_utf8_contents;
-    std::vector<str_vec> m_tokenized_contents;
+    std::vector<StrVec> m_tokenized_contents;
 
 private:
     std::string m_imp_file_str;
@@ -86,6 +86,6 @@ private:
 
 
 // Function to instantiate specializations of the GncTokenizer
-std::unique_ptr<GncTokenizer> GncTokenizerFactory(GncImpFileFormat fmt);
+std::unique_ptr<GncTokenizer> gnc_tokenizer_factory(GncImpFileFormat fmt);
 
 #endif

@@ -56,8 +56,8 @@ class GncTokenizerTest : public ::testing::Test
 public:
     GncTokenizerTest()
     {
-        fw_tok = GncTokenizerFactory(GncImpFileFormat::FIXED_WIDTH);
-        csv_tok = GncTokenizerFactory(GncImpFileFormat::CSV);
+        fw_tok = gnc_tokenizer_factory(GncImpFileFormat::FIXED_WIDTH);
+        csv_tok = gnc_tokenizer_factory(GncImpFileFormat::CSV);
     }
 
     std::string get_filepath(const std::string& filename);
