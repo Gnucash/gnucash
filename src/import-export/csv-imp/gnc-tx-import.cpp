@@ -149,6 +149,7 @@ std::map<GncTransPropType, const char*> gnc_csv_col_type_strs = {
  * 01/02/2003.
  * @param date_str The string containing a date being parsed
  * @param format An index specifying a format in date_format_user
+ * @exception std::invalid_argument if the string can't be parsed into a date.
  * @return The parsed value of date_str on success or -1 on failure
  */
 time64 parse_date (const std::string &date_str, int format)
@@ -156,13 +157,13 @@ time64 parse_date (const std::string &date_str, int format)
     boost::regex r(date_regex[format]);
     boost::smatch what;
     if(!boost::regex_search(date_str, what, r))
-        return -1;  // regex didn't find a match
+        throw std::invalid_argument ("String doesn't appear to be formatted as a date.");  // regex didn't find a match
 
     // Attention: different behavior from 2.6.x series !
     // If date format without year was selected, the match
     // should NOT have found a year.
     if ((format >= 3) && (what.length("YEAR") != 0))
-        return -1;
+        throw std::invalid_argument ("String appears to contain a year while the selected format forbids this.");
 
     auto day = std::stoi (what.str("DAY"));
     auto month = std::stoi (what.str("MONTH"));
@@ -351,14 +352,16 @@ int GncTxImport::parse (bool guessColTypes, GError** error)
  */
 static time64* convert_date_col_str (const std::string &str, int date_format)
 {
-    auto parsed_date = parse_date (str.c_str(), date_format);
-    if (parsed_date == -1)
-        return nullptr;
-    else
+    try
     {
+        auto parsed_date = parse_date (str.c_str(), date_format);
         auto mydate = new time64;
         *mydate = parsed_date;
         return mydate;
+    }
+    catch (std::invalid_argument)
+    {
+        return nullptr;
     }
 }
 
