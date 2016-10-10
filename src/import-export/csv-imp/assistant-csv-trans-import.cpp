@@ -256,18 +256,25 @@ csv_import_trans_load_settings (CsvImportTrans *info)
         // This Section deals with the separators
         if (info->settings_data->csv_format)
         {
-            info->parse_data->file_format (GncImpFileFormat::CSV, NULL);
-            for (i = 0; i < SEP_NUM_OF_TYPES; i++)
+            try
             {
-                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->sep_buttons[i]), info->settings_data->separator[i]);
-            }
-            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->custom_cbutton), info->settings_data->custom);
-            if (info->settings_data->custom)
-                gtk_entry_set_text (GTK_ENTRY(info->custom_entry), info->settings_data->custom_entry);
-            else
-                gtk_entry_set_text (GTK_ENTRY(info->custom_entry), "");
+                info->parse_data->file_format (GncImpFileFormat::CSV);
+                for (i = 0; i < SEP_NUM_OF_TYPES; i++)
+                {
+                    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->sep_buttons[i]), info->settings_data->separator[i]);
+                }
+                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->custom_cbutton), info->settings_data->custom);
+                if (info->settings_data->custom)
+                    gtk_entry_set_text (GTK_ENTRY(info->custom_entry), info->settings_data->custom_entry);
+                else
+                    gtk_entry_set_text (GTK_ENTRY(info->custom_entry), "");
 
-            sep_button_clicked (NULL, info);
+                sep_button_clicked (NULL, info);
+            }
+            catch (...)
+            {
+                // FIXME Handle file loading errors (possibly thrown by file_format above)
+            }
         }
 
         // This section deals with the combo's and character encoding
@@ -282,21 +289,28 @@ csv_import_trans_load_settings (CsvImportTrans *info)
         // This section deals with the column widths (which are only used for fixed width files)
         if (!info->settings_data->csv_format)
         {
-            info->parse_data->file_format (GncImpFileFormat::FIXED_WIDTH, NULL);
-            GncFwTokenizer *fwtok = dynamic_cast<GncFwTokenizer*>(info->parse_data->tokenizer.get());
-            if (info->settings_data->column_widths, NULL)
-                fwtok->cols_from_string (std::string(info->settings_data->column_widths));
-
-            GError  *error = NULL;
-            if (info->parse_data->parse (false, &error))
+            try
             {
-                gnc_error_dialog (NULL, "%s", _("There was a problem with the column widths, please review."));
-                g_error_free (error);
-                g_free (group);
-                g_free (name);
-                return;
+                info->parse_data->file_format (GncImpFileFormat::FIXED_WIDTH);
+                GncFwTokenizer *fwtok = dynamic_cast<GncFwTokenizer*>(info->parse_data->tokenizer.get());
+                if (info->settings_data->column_widths, NULL)
+                    fwtok->cols_from_string (std::string(info->settings_data->column_widths));
+
+                GError  *error = NULL;
+                if (info->parse_data->parse (false, &error))
+                {
+                    gnc_error_dialog (NULL, "%s", _("There was a problem with the column widths, please review."));
+                    g_error_free (error);
+                    g_free (group);
+                    g_free (name);
+                    return;
+                }
+                gnc_csv_preview_update_assist (info);
             }
-            gnc_csv_preview_update_assist (info);
+            catch (...)
+            {
+                // FIXME Handle file loading errors (possibly thrown by file_format above)
+            }
         }
 
         // This section deals with the column types
@@ -693,19 +707,17 @@ csv_import_trans_file_chooser_confirm_cb (GtkWidget *button, CsvImportTrans *inf
     /* Load the file into parse_data. */
     auto parse_data = new GncTxImport;
     /* Assume data is CSV. User can later override to Fixed Width if needed */
-    parse_data->file_format (GncImpFileFormat::CSV, &error);
-    if (parse_data->load_file (info->file_name, &error))
+    try
+    {
+        parse_data->file_format (GncImpFileFormat::CSV);
+        parse_data->load_file (info->file_name);
+    }
+    catch (std::ifstream::failure& ios_err)
     {
         /* If we couldn't load the file ... */
-        gnc_error_dialog (NULL, "%s", error->message);
-        if (error->code == GNC_CSV_IMP_ERROR_OPEN)
-        {
+        gnc_error_dialog (NULL, "%s", ios_err.what());
             delete parse_data;
             return;
-        }
-        /* If we couldn't guess the encoding, we are content with just
-         * displaying an error message and move on with a blank
-         * display. */
     }
 
     /* Parse the data. */
@@ -983,29 +995,44 @@ static void separated_or_fixed_selected (GtkToggleButton* csv_button, CsvImportT
     /* Set the parsing type correctly. */
     if (gtk_toggle_button_get_active (csv_button)) /* If we're in CSV mode ... */
     {
-        info->parse_data->file_format (GncImpFileFormat::CSV, NULL);
-        sep_button_clicked (NULL, info);
-        // Note: sep_button_clicked also handles reparsing the data, so we're done here
-        return;
+        try
+        {
+            info->parse_data->file_format (GncImpFileFormat::CSV);
+            sep_button_clicked (NULL, info);
+            // Note: sep_button_clicked also handles reparsing the data, so we're done here
+            return;
+        }
+        catch (...)
+        {
+            // FIXME Handle file loading errors (possibly thrown by file_format above)
+        }
     }
 
     /* So we're in fixed-width mode ... */
-    info->parse_data->file_format (GncImpFileFormat::FIXED_WIDTH, NULL);
-
-    /* Reparse the data. */
-    GError* error = NULL;
-    if (info->parse_data->parse (false, &error))
+    try
     {
-        /* Show an error dialog explaining the problem. */
-        gnc_error_dialog (NULL, "%s", error->message);
-        return;
+        info->parse_data->file_format (GncImpFileFormat::FIXED_WIDTH);
+
+        /* Reparse the data. */
+        GError* error = NULL;
+        if (info->parse_data->parse (false, &error))
+        {
+            /* Show an error dialog explaining the problem. */
+            gnc_error_dialog (NULL, "%s", error->message);
+            return;
+        }
+
+        /* Show the new data. */
+        gnc_csv_preview_update_assist (info);
+
+        /* Refresh the row highlighting */
+        row_selection_update (info);
     }
-
-    /* Show the new data. */
-    gnc_csv_preview_update_assist (info);
-
-    /* Refresh the row highlighting */
-    row_selection_update (info);
+    catch (...)
+    {
+        // FIXME Handle file loading errors (possibly thrown by file_format above)
+        // or parse errors from parse above
+    }
 }
 
 

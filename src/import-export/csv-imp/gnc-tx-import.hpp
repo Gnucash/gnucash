@@ -127,10 +127,10 @@ public:
     GncTxImport(GncImpFileFormat format = GncImpFileFormat::UNKNOWN);
     ~GncTxImport();
 
-    int file_format(GncImpFileFormat format, GError** error);
+    void file_format(GncImpFileFormat format);
     GncImpFileFormat file_format();
 
-    int load_file (const std::string& filename, GError** error);
+    void load_file (const std::string& filename);
     void convert_encoding (const std::string& encoding);
 
     int parse (bool guessColTypes, GError** error);

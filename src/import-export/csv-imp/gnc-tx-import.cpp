@@ -220,11 +220,17 @@ GncTxImport::~GncTxImport()
 {
 }
 
-int GncTxImport::file_format(GncImpFileFormat format,
-                                  GError** error)
+/** Sets the file format for the file to import, which
+ *  may cause the file to be reloaded as well if the
+ *  previously set file format was different and a
+ *  filename was already set.
+ *  @param format the new format to set
+ *  @exception the reloading of the file may throw std::ifstream::failure
+ */
+void GncTxImport::file_format(GncImpFileFormat format)
 {
     if (file_fmt == format)
-        return 0;
+        return;
 
     auto new_encoding = std::string("UTF-8");
     auto new_imp_file = std::string();
@@ -242,7 +248,7 @@ int GncTxImport::file_format(GncImpFileFormat format,
     // Set up new tokenizer with common settings
     // recovered from old tokenizer
     tokenizer->encoding(new_encoding);
-    return load_file(new_imp_file, error);
+    load_file(new_imp_file);
 }
 GncImpFileFormat GncTxImport::file_format()
 {
@@ -274,25 +280,23 @@ void GncTxImport::convert_encoding (const std::string& encoding)
  * @param parse_data Data that is being parsed
  * @param filename Name of the file that should be opened
  * @param error Will contain an error if there is a failure
+ * @exception may throw std::ifstream::failure on any io error
  * @return 0 on success, 1 on failure
  */
-int GncTxImport::load_file (const std::string& filename,
-                                GError** error)
+void GncTxImport::load_file (const std::string& filename)
 {
 
     /* Get the raw data first and handle an error if one occurs. */
     try
     {
         tokenizer->load_file (filename);
-        return 0;
+        return;
     }
     catch (std::ifstream::failure& ios_err)
     {
-        /* TODO Handle file opening errors more specifically,
-         * e.g. inexistent file versus no read permission. */
+        // Just log the error and pass it on the call stack for proper handling
         PWARN ("Error: %s", ios_err.what());
-        g_set_error (error, GNC_CSV_IMP_ERROR, GNC_CSV_IMP_ERROR_OPEN, "%s", _("File opening failed."));
-        return 1;
+        throw;
     }
 }
 
