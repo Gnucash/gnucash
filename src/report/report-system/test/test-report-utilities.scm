@@ -20,10 +20,13 @@
 (define (test-account-get-trans-type-splits-interval)
   (let* ((env (create-test-env))
          (ts-now (localtime (current-time)))
-         (end-date-tp (gnc-dmy2timespec-neutral (tm:mday ts-now) (tm:mon ts-now) (tm:year ts-now)))
+         (test-day (tm:mday ts-now))
+         (test-month (+ 1 (tm:mon ts-now)))
+         (test-year (+ 1900 (tm:year ts-now)))
+         (end-date-tp (gnc-dmy2timespec-neutral test-day test-month test-year))
          (start-date-tp (NDayDelta end-date-tp 10))
-         (q-end-date-tp (gnc-dmy2timespec-end (tm:mday ts-now) (tm:mon ts-now) (tm:year ts-now)))
-         (q-start-date-tp (gnc-dmy2timespec (tm:mday ts-now) (tm:mon ts-now) (tm:year ts-now)))
+         (q-end-date-tp (gnc-dmy2timespec-end test-day test-month test-year))
+         (q-start-date-tp (gnc-dmy2timespec test-day test-month test-year))
          (q-start-date-tp (NDayDelta q-start-date-tp 5)))
 
     (let* ((accounts (env-create-account-structure-alist env (list "Assets"
