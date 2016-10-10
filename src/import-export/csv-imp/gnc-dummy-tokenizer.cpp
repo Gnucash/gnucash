@@ -12,7 +12,7 @@
 
 int GncDummyTokenizer::tokenize()
 {
-    std::vector<std::string> vec;
+    StrVec vec;
     std::string line;
 
     m_tokenized_contents.clear();

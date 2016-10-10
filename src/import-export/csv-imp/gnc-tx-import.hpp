@@ -91,13 +91,13 @@ enum GncCsvErrorType {
  * "correct" the error list. If we keep the line numbers of valid
  * transactions, we can then put transactions created from the newly
  * corrected rows into the right places. */
-typedef struct
+struct GncCsvTransLine
 {
     int line_no;
     Transaction* trans;
     gnc_numeric balance;  /**< The (supposed) balance after this transaction takes place */
     bool balance_set;     /**< true if balance has been set from user data, false otherwise */
-} GncCsvTransLine;
+};
 
 /* A set of currency formats that the user sees. */
 extern const int num_currency_formats;
@@ -108,9 +108,9 @@ extern const int num_date_formats;
 extern const gchar* date_format_user[];
 
 /** Pair to hold a tokenized line of input and an optional error string */
-using parse_line_t = std::pair<str_vec, std::string>;
+using parse_line_t = std::pair<StrVec, std::string>;
 
-/* The actual TxImport class
+/** The actual TxImport class
  * It's intended to use in the following sequence of actions:
  * - set a file format
  * - load a file
