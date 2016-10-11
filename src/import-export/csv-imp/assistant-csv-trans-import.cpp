@@ -201,168 +201,152 @@ void
 csv_import_trans_load_settings (CsvImportTrans *info)
 {
     GtkTreeIter   iter;
-    gchar        *group = NULL, *name = NULL;
 
     // Get the Active Selection
-    if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX(info->settings_combo), &iter))
+    if (!gtk_combo_box_get_active_iter (GTK_COMBO_BOX(info->settings_combo), &iter))
+        return;
+
+    GtkTreeModel *model;
+    gchar *group = NULL;
+
+    model = gtk_combo_box_get_model (GTK_COMBO_BOX(info->settings_combo));
+    gtk_tree_model_get (model, &iter, SET_GROUP, &group, -1);
+
+    // Test for default selection, return
+    if (!group)
+        return;
+
+    // Load the settings from the keyfile
+    if (gnc_csv_trans_load_settings (info->settings_data, group))
     {
-        GtkTreeModel *model;
-        GtkAdjustment *adj;
-        int i;
-
-        model = gtk_combo_box_get_model (GTK_COMBO_BOX(info->settings_combo));
-        gtk_tree_model_get (model, &iter, SET_GROUP, &group, SET_NAME, &name, -1);
-
-        // Test for default selection, return
-        if (g_strcmp0 (group, NULL) == 0)
-            return;
-
-        // Load the settings from the keyfile
-        if (gnc_csv_trans_load_settings (info->settings_data, group))
-        {
-            GtkWidget    *dialog;
-            const gchar  *title = _("Load the Import Settings.");
-
-            dialog = gtk_message_dialog_new (GTK_WINDOW(info->window),
-                                        (GtkDialogFlags) 0,
-                                        GTK_MESSAGE_ERROR,
-                                        GTK_BUTTONS_OK,
-                                        "%s", title);
-            gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                "%s", _("There were problems reading some saved settings, continuing to load.\n Please review and save again."));
-            gtk_dialog_run (GTK_DIALOG (dialog));
-            gtk_widget_destroy (dialog);
-        }
-
-        // Set start row
-        info->parse_data->start_row = info->settings_data->header_rows;
-        adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(info->start_row_spin));
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->start_row_spin), info->settings_data->header_rows);
-
-        // Set end row
-        info->parse_data->end_row = info->num_of_rows - info->settings_data->footer_rows;
-        adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(info->end_row_spin));
-        gtk_adjustment_set_upper (adj, info->num_of_rows);
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->end_row_spin), info->num_of_rows - info->settings_data->footer_rows);
-
-        // Set Alternate rows
-        info->parse_data->skip_rows = info->settings_data->skip_alt_rows;
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->skip_rows), info->settings_data->skip_alt_rows);
-
-        // Set Import Format
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->csv_button), info->settings_data->csv_format);
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->fixed_button), !info->settings_data->csv_format);
-
-        // This Section deals with the separators
-        if (info->settings_data->csv_format)
-        {
-            try
-            {
-                info->parse_data->file_format (GncImpFileFormat::CSV);
-                for (i = 0; i < SEP_NUM_OF_TYPES; i++)
-                {
-                    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->sep_buttons[i]), info->settings_data->separator[i]);
-                }
-                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->custom_cbutton), info->settings_data->custom);
-                if (info->settings_data->custom)
-                    gtk_entry_set_text (GTK_ENTRY(info->custom_entry), info->settings_data->custom_entry);
-                else
-                    gtk_entry_set_text (GTK_ENTRY(info->custom_entry), "");
-
-                sep_button_clicked (NULL, info);
-            }
-            catch (...)
-            {
-                // FIXME Handle file loading errors (possibly thrown by file_format above)
-            }
-        }
-
-        // This section deals with the combo's and character encoding
-        info->parse_data->date_format = info->settings_data->date_active;
-        gtk_combo_box_set_active (GTK_COMBO_BOX(info->date_format_combo), info->settings_data->date_active);
-
-        info->parse_data->currency_format = info->settings_data->currency_active;
-        gtk_combo_box_set_active (GTK_COMBO_BOX(info->currency_format_combo), info->settings_data->currency_active);
-        info->parse_data->convert_encoding (info->settings_data->encoding);
-        go_charmap_sel_set_encoding (info->encselector, info->settings_data->encoding);
-
-        // This section deals with the column widths (which are only used for fixed width files)
-        if (!info->settings_data->csv_format)
-        {
-            try
-            {
-                info->parse_data->file_format (GncImpFileFormat::FIXED_WIDTH);
-                GncFwTokenizer *fwtok = dynamic_cast<GncFwTokenizer*>(info->parse_data->tokenizer.get());
-                if (info->settings_data->column_widths, NULL)
-                    fwtok->cols_from_string (std::string(info->settings_data->column_widths));
-
-                GError  *error = NULL;
-                if (info->parse_data->parse (false, &error))
-                {
-                    gnc_error_dialog (NULL, "%s", _("There was a problem with the column widths, please review."));
-                    g_error_free (error);
-                    g_free (group);
-                    g_free (name);
-                    return;
-                }
-                gnc_csv_preview_update_assist (info);
-            }
-            catch (...)
-            {
-                // FIXME Handle file loading errors (possibly thrown by file_format above)
-            }
-        }
-
-        // This section deals with the column types
-        if (info->settings_data->column_types)
-        {
-            GtkTreeModel *ctstore;
-            GtkTreeIter   iter;
-            gchar       **columns;
-            int           i;
-            bool          error = false;
-
-            columns = g_strsplit (info->settings_data->column_types, ",", -1);
-
-            // ctstore contains the column types and their (translated) string representation appearing in the column types treeview.
-            ctstore = gtk_tree_view_get_model (info->ctreeview);
-
-            // Get an iterator for the first (and only) row.
-            gtk_tree_model_get_iter_first (ctstore, &iter);
-
-            for (i=0; columns[i] != NULL; i++)
-            {
-                auto col_type = GncTransPropType::NONE;
-                int saved_col_type = atoi (columns[i]);
-
-                if (saved_col_type >= static_cast<int>(GncTransPropType::NONE) &&
-                    saved_col_type <= static_cast<int>(GncTransPropType::OMEMO))
-                {
-                    col_type = static_cast<GncTransPropType>(saved_col_type);
-                    info->parse_data->column_types.at(i) = col_type;
-                    /* Set the column type. Store is arranged so that every two
-                     * columns is a pair of
-                     * - the column type as a user visible (translated) string
-                     * - the internal type for this column
-                     * So ctstore looks like:
-                     * col_type_str 0, col_type, col_type_str 1, col_type 1, ..., col_type_str ncols, col_type ncols. */
-                    if ((2 * i + 1) < gtk_tree_model_get_n_columns (ctstore))
-                        gtk_list_store_set (GTK_LIST_STORE(ctstore), &iter,
-                                2 * i, _(gnc_csv_col_type_strs[col_type]),
-                                2 * i + 1, col_type,
-                                -1);
-                }
-                else
-                    error = true;
-            }
-            if (error)
-                gnc_error_dialog (NULL, "%s", _("There was a problem with the column types, please review."));
-
-            g_strfreev (columns);
-        }
+        const gchar *title = _("Load the Import Settings.");
+        GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW(info->window),
+                                    (GtkDialogFlags) 0,
+                                    GTK_MESSAGE_ERROR,
+                                    GTK_BUTTONS_OK,
+                                    "%s", title);
+        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+            "%s", _("There were problems reading some saved settings, continuing to load.\n Please review and save again."));
+        gtk_dialog_run (GTK_DIALOG (dialog));
+        gtk_widget_destroy (dialog);
     }
     g_free (group);
-    g_free (name);
+
+    // Set start row
+    info->parse_data->start_row = info->settings_data->header_rows;
+    GtkAdjustment *adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(info->start_row_spin));
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->start_row_spin), info->settings_data->header_rows);
+
+    // Set end row
+    info->parse_data->end_row = info->num_of_rows - info->settings_data->footer_rows;
+    adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(info->end_row_spin));
+    gtk_adjustment_set_upper (adj, info->num_of_rows);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->end_row_spin), info->num_of_rows - info->settings_data->footer_rows);
+
+    // Set Alternate rows
+    info->parse_data->skip_rows = info->settings_data->skip_alt_rows;
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->skip_rows), info->settings_data->skip_alt_rows);
+
+    // Set Import Format
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->csv_button), info->settings_data->csv_format);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->fixed_button), !info->settings_data->csv_format);
+
+    // This section deals with the combo's and character encoding
+    info->parse_data->date_format = info->settings_data->date_active;
+    gtk_combo_box_set_active (GTK_COMBO_BOX(info->date_format_combo), info->settings_data->date_active);
+
+    info->parse_data->currency_format = info->settings_data->currency_active;
+    gtk_combo_box_set_active (GTK_COMBO_BOX(info->currency_format_combo), info->settings_data->currency_active);
+    info->parse_data->convert_encoding (info->settings_data->encoding);
+    go_charmap_sel_set_encoding (info->encselector, info->settings_data->encoding);
+
+    try
+    {
+        if (info->settings_data->csv_format)
+        {
+            // Handle separators, only relevant if the file format is csv
+            info->parse_data->file_format (GncImpFileFormat::CSV);
+            for (int i = 0; i < SEP_NUM_OF_TYPES; i++)
+                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->sep_buttons[i]), info->settings_data->separator[i]);
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->custom_cbutton), info->settings_data->custom);
+            if (info->settings_data->custom)
+                gtk_entry_set_text (GTK_ENTRY(info->custom_entry), info->settings_data->custom_entry);
+            else
+                gtk_entry_set_text (GTK_ENTRY(info->custom_entry), "");
+
+            sep_button_clicked (NULL, info);
+        }
+        else
+        {
+            // Handle column widths, only relevant if the file format is fixed width
+            info->parse_data->file_format (GncImpFileFormat::FIXED_WIDTH);
+            GncFwTokenizer *fwtok = dynamic_cast<GncFwTokenizer*>(info->parse_data->tokenizer.get());
+            if (info->settings_data->column_widths, NULL)
+                fwtok->cols_from_string (std::string(info->settings_data->column_widths));
+
+            info->parse_data->parse (false);
+            gnc_csv_preview_update_assist (info);
+        }
+    }
+    catch (std::range_error &e)
+    {
+        // Catch parse errors
+        gnc_error_dialog (NULL, "%s", _("There was a problem with the column widths, please review."));
+        return;
+    }
+    catch (...)
+    {
+        // FIXME Handle file loading errors (possibly thrown by file_format above)
+        PWARN("Got an error during file loading");
+    }
+
+    // This section deals with the column types
+    if (info->settings_data->column_types)
+    {
+        GtkTreeModel *ctstore;
+        GtkTreeIter   iter;
+        gchar       **columns;
+        uint          i;
+        bool          error = false;
+
+        columns = g_strsplit (info->settings_data->column_types, ",", -1);
+
+        // ctstore contains the column types and their (translated) string representation appearing in the column types treeview.
+        ctstore = gtk_tree_view_get_model (info->ctreeview);
+
+        // Get an iterator for the first (and only) row.
+        gtk_tree_model_get_iter_first (ctstore, &iter);
+
+        for (i=0; columns[i] != NULL && i < info->parse_data->column_types.size(); i++)
+        {
+            auto col_type = GncTransPropType::NONE;
+            int saved_col_type = atoi (columns[i]);
+
+            if (saved_col_type >= static_cast<int>(GncTransPropType::NONE) &&
+                saved_col_type <= static_cast<int>(GncTransPropType::OMEMO))
+            {
+                col_type = static_cast<GncTransPropType>(saved_col_type);
+                info->parse_data->column_types.at(i) = col_type;
+                /* Set the column type. Store is arranged so that every two
+                 * columns is a pair of
+                 * - the column type as a user visible (translated) string
+                 * - the internal type for this column
+                 * So ctstore looks like:
+                 * col_type_str 0, col_type, col_type_str 1, col_type 1, ..., col_type_str ncols, col_type ncols. */
+                if ((2 * i + 1) < static_cast<uint>(gtk_tree_model_get_n_columns (ctstore)))
+                    gtk_list_store_set (GTK_LIST_STORE(ctstore), &iter,
+                            2 * i, _(gnc_csv_col_type_strs[col_type]),
+                            2 * i + 1, col_type,
+                            -1);
+            }
+            else
+                error = true;
+        }
+        if (error)
+            gnc_error_dialog (NULL, "%s", _("There was a problem with the column types, please review."));
+
+        g_strfreev (columns);
+    }
 }
 
 
@@ -378,7 +362,7 @@ csv_import_trans_delete_settings_cb (GtkWidget *button, CsvImportTrans *info)
     GtkTreeIter   iter;
     GtkWidget    *dialog;
     gint          response;
-    gchar        *group = NULL, *name = NULL;
+    gchar        *group = NULL;
     const gchar  *title = _("Delete the Import Settings.");
 
     // Get the Key file
@@ -389,7 +373,7 @@ csv_import_trans_delete_settings_cb (GtkWidget *button, CsvImportTrans *info)
     {
         GtkTreeModel *model;
         model = gtk_combo_box_get_model (GTK_COMBO_BOX(info->settings_combo));
-        gtk_tree_model_get (model, &iter, SET_GROUP, &group, SET_NAME, &name, -1);
+        gtk_tree_model_get (model, &iter, SET_GROUP, &group, -1);
 
         if (g_strcmp0 (group, NULL) == 0)
         {
@@ -424,7 +408,6 @@ csv_import_trans_delete_settings_cb (GtkWidget *button, CsvImportTrans *info)
             }
         }
         g_free (group);
-        g_free (name);
     }
 }
 
@@ -683,7 +666,6 @@ csv_import_trans_file_chooser_confirm_cb (GtkWidget *button, CsvImportTrans *inf
     GtkAssistant *assistant = GTK_ASSISTANT(info->window);
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
-    GError* error = NULL;
 
     gtk_assistant_set_page_complete (assistant, page, FALSE);
 
@@ -711,20 +693,19 @@ csv_import_trans_file_chooser_confirm_cb (GtkWidget *button, CsvImportTrans *inf
     {
         parse_data->file_format (GncImpFileFormat::CSV);
         parse_data->load_file (info->file_name);
+        parse_data->parse (true);
     }
-    catch (std::ifstream::failure& ios_err)
+    catch (std::ifstream::failure& e)
     {
-        /* If we couldn't load the file ... */
-        gnc_error_dialog (NULL, "%s", ios_err.what());
+        /* File loading failed ... */
+        gnc_error_dialog (NULL, "%s", e.what());
             delete parse_data;
             return;
     }
-
-    /* Parse the data. */
-    if (parse_data->parse (true, &error))
+    catch (std::range_error &e)
     {
-        /* If we couldn't parse the data ... */
-        gnc_error_dialog (NULL, "%s", error->message);
+        /* Parsing failed ... */
+        gnc_error_dialog (NULL, "%s", e.what());
         delete parse_data;
         return;
     }
@@ -956,8 +937,11 @@ void sep_button_clicked (GtkWidget* widget, CsvImportTrans* info)
     /* Parse the data using the new options. We don't want to reguess
      * the column types because we want to leave the user's
      * configurations intact. */
-    GError* error;
-    if (info->parse_data->parse (false, &error))
+    try
+    {
+        info->parse_data->parse (false);
+    }
+    catch (std::range_error &e)
     {
         /* Warn the user there was a problem and try to undo what caused
          * the error. (This will cause a reparsing and ideally a usable
@@ -1005,6 +989,7 @@ static void separated_or_fixed_selected (GtkToggleButton* csv_button, CsvImportT
         catch (...)
         {
             // FIXME Handle file loading errors (possibly thrown by file_format above)
+            PWARN("Got an error during file loading");
         }
     }
 
@@ -1014,13 +999,7 @@ static void separated_or_fixed_selected (GtkToggleButton* csv_button, CsvImportT
         info->parse_data->file_format (GncImpFileFormat::FIXED_WIDTH);
 
         /* Reparse the data. */
-        GError* error = NULL;
-        if (info->parse_data->parse (false, &error))
-        {
-            /* Show an error dialog explaining the problem. */
-            gnc_error_dialog (NULL, "%s", error->message);
-            return;
-        }
+        info->parse_data->parse (false);
 
         /* Show the new data. */
         gnc_csv_preview_update_assist (info);
@@ -1028,10 +1007,16 @@ static void separated_or_fixed_selected (GtkToggleButton* csv_button, CsvImportT
         /* Refresh the row highlighting */
         row_selection_update (info);
     }
+    catch (std::range_error &e)
+    {
+        /* Parsing failed ... */
+        gnc_error_dialog (NULL, "%s", e.what());
+        return;
+    }
     catch (...)
     {
         // FIXME Handle file loading errors (possibly thrown by file_format above)
-        // or parse errors from parse above
+        PWARN("Got an error during file loading");
     }
 }
 
@@ -1060,11 +1045,14 @@ static void encoding_selected (GOCharmapSel* selector, const char* encoding,
     /* If this is the second time the function is called ... */
     if (info->encoding_selected_called)
     {
-        std::string previous_encoding = info->parse_data->tokenizer->encoding().c_str();
-        GError* error = NULL;
+        std::string previous_encoding = info->parse_data->tokenizer->encoding();
         /* Try converting the new encoding and reparsing. */
-        info->parse_data->convert_encoding (encoding);
-        if (info->parse_data->parse (false, &error))
+        try
+        {
+            info->parse_data->convert_encoding (encoding);
+            info->parse_data->parse (false);
+        }
+        catch (...)
         {
             /* If it fails, change back to the old encoding. */
             gnc_error_dialog (NULL, "%s", _("Invalid encoding selected"));
@@ -1219,10 +1207,13 @@ fixed_context_menu_handler (GnumericPopupMenuElement const *element,
         ; /* Nothing */
     }
 
-    GError* error = NULL;
-    if (info->parse_data->parse (false, &error))
+    try
     {
-        gnc_error_dialog (NULL, "%s", error->message);
+        info->parse_data->parse (false);
+    }
+    catch(std::range_error& e)
+    {
+        gnc_error_dialog (NULL, "%s", e.what());
         return FALSE;
     }
     gnc_csv_preview_update_assist (info);
@@ -1401,10 +1392,13 @@ split_column (CsvImportTrans* info, int col, int dx)
 
     GncFwTokenizer *fwtok = dynamic_cast<GncFwTokenizer*>(info->parse_data->tokenizer.get());
     fwtok->col_split (col, rel_pos);
-    GError* error = NULL;
-    if (info->parse_data->parse (false, &error))
+    try
     {
-        gnc_error_dialog (NULL, "%s", error->message);
+        info->parse_data->parse (false);
+    }
+    catch (std::range_error& e)
+    {
+        gnc_error_dialog (NULL, "%s", e.what());
         return;
     }
     gnc_csv_preview_update_assist (info);

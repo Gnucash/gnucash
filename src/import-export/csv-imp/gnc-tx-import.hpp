@@ -133,7 +133,7 @@ public:
     void load_file (const std::string& filename);
     void convert_encoding (const std::string& encoding);
 
-    int parse (bool guessColTypes, GError** error);
+    void parse (bool guessColTypes);
     int parse_to_trans (Account* account, bool redo_errors);
     bool check_for_column_type (GncTransPropType type);
 
