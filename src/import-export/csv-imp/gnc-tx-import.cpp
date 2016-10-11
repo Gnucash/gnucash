@@ -260,8 +260,6 @@ GncImpFileFormat GncTxImport::file_format()
  * the wrong encoding.
  * @param parse_data Data that is being parsed
  * @param encoding Encoding that data should be translated using
- * @param error Will point to an error on failure
- * @return 0 on success, 1 on failure
  */
 void GncTxImport::convert_encoding (const std::string& encoding)
 {
@@ -279,9 +277,7 @@ void GncTxImport::convert_encoding (const std::string& encoding)
  * called until it succeeds.
  * @param parse_data Data that is being parsed
  * @param filename Name of the file that should be opened
- * @param error Will contain an error if there is a failure
  * @exception may throw std::ifstream::failure on any io error
- * @return 0 on success, 1 on failure
  */
 void GncTxImport::load_file (const std::string& filename)
 {
@@ -307,12 +303,10 @@ void GncTxImport::load_file (const std::string& filename)
  * TRUE before it is ever called with it as FALSE.) (Note: if
  * guessColTypes is TRUE, all the column types will be GncTransPropType::NONE
  * right now.)
- * @param parse_data Data that is being parsed
  * @param guessColTypes TRUE to guess what the types of columns are based on the cell contents
- * @param error Will contain an error if there is a failure
- * @return 0 on success, 1 on failure
+ * @exception throws std::range_error if parsing failed
  */
-int GncTxImport::parse (bool guessColTypes, GError** error)
+void GncTxImport::parse (bool guessColTypes)
 {
     uint max_cols = 0;
     tokenizer->tokenize();
@@ -328,8 +322,8 @@ int GncTxImport::parse (bool guessColTypes, GError** error)
     /* If it failed, generate an error. */
     if (orig_lines.size() == 0)
     {
-        g_set_error (error, GNC_CSV_IMP_ERROR, GNC_CSV_IMP_ERROR_PARSE, "Parsing failed.");
-        return 1;
+        throw (std::range_error ("Parsing failed."));
+        return;
     }
 
     if (guessColTypes)
@@ -345,7 +339,6 @@ int GncTxImport::parse (bool guessColTypes, GError** error)
          * on the contents of each column. */
         /* TODO Make it actually guess. */
     }
-    return 0;
 }
 
 
