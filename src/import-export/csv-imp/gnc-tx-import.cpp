@@ -53,12 +53,6 @@ extern "C" {
 #include "gnc-csv-tokenizer.hpp"
 #include "gnc-fw-tokenizer.hpp"
 
-GQuark
-gnc_csv_imp_error_quark (void)
-{
-  return g_quark_from_static_string ("g-tx-import-error-quark");
-}
-
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 
 //const int num_date_formats = 5;
