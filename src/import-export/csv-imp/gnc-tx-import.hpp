@@ -68,19 +68,6 @@ enum class GncTransPropType {
  *  changes to enum class GncTransPropType ! */
 extern std::map<GncTransPropType, const char*> gnc_csv_col_type_strs;
 
-/** Error domain for the csv importer. */
-#define GNC_CSV_IMP_ERROR gnc_csv_imp_error_quark ()
-GQuark gnc_csv_imp_error_quark (void);
-
-/** Enumeration for error types. These are the different types of
- * errors that various functions used for the CSV/Fixed-Width importer
- * can have. */
-enum GncCsvErrorType {
-    GNC_CSV_IMP_ERROR_OPEN,
-    GNC_CSV_IMP_ERROR_ENCODING,
-    GNC_CSV_IMP_ERROR_PARSE
-};
-
 /* TODO We now sort transactions by date, not line number, so we
  * should probably get rid of this struct and uses of it. */
 
