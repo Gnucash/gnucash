@@ -588,11 +588,6 @@ static GncCsvTransLine* trans_properties_to_trans (prop_map_t& trans_props, gcha
     trans_line->balance = double_to_gnc_numeric (0.0, xaccAccountGetCommoditySCU (account),
                           GNC_HOW_RND_ROUND_HALF_UP);
 
-    /* We make the line_no -1 just to mark that it hasn't been set. We
-     * may get rid of line_no soon anyway, so it's not particularly
-     * important. */
-    trans_line->line_no = -1;
-
     QofBook* book = gnc_account_get_book (account);
     gnc_commodity* currency = xaccAccountGetCommodity (account);
     trans_line->trans = xaccMallocTransaction (book);

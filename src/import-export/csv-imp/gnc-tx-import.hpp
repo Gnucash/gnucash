@@ -80,7 +80,6 @@ extern std::map<GncTransPropType, const char*> gnc_csv_col_type_strs;
  * corrected rows into the right places. */
 struct GncCsvTransLine
 {
-    int line_no;
     Transaction* trans;
     gnc_numeric balance;  /**< The (supposed) balance after this transaction takes place */
     bool balance_set;     /**< true if balance has been set from user data, false otherwise */
