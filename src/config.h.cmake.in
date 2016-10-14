@@ -197,9 +197,6 @@
 /* Have PTHREAD_PRIO_INHERIT. */
 #cmakedefine HAVE_PTHREAD_PRIO_INHERIT 1
 
-/* Define to 1 if you have the `putenv' function. */
-#cmakedefine HAVE_PUTENV 1
-
 /* If available, contains the Python version number currently in use. */
 #cmakedefine HAVE_PYTHON 1
 
