@@ -83,16 +83,23 @@ gnc_value_get_guid (const GValue *value)
     return val;
 }
 
-static GncGUID s_null_guid {{{0}}};
+GncGUID * guid_convert_create (gnc::GUID const &);
 
-/*It looks like we are expected to provide the same pointer every time from this function*/
-const GncGUID *
-guid_null (void)
-{
-    return &s_null_guid;
-}
+static gnc::GUID s_null_guid {boost::uuids::uuid { {0}}};
+static GncGUID * s_null_gncguid {guid_convert_create (s_null_guid)};
 
 /* Memory management routines ***************************************/
+
+/**
+ * Allocates and returns a new GncGUID containing the same value as the
+ * gnc::GUID passed in.
+ */
+GncGUID *
+guid_convert_create (gnc::GUID const & guid)
+{
+    GncGUID temp = guid;
+    return guid_copy (&temp);
+}
 
 GncGUID *
 guid_malloc (void)
@@ -104,9 +111,6 @@ void
 guid_free (GncGUID *guid)
 {
     if (!guid) return;
-    if (guid == &s_null_guid)
-        /*!!Don't delete that!!*/
-        return;
     delete guid;
 }
 
@@ -117,32 +121,47 @@ guid_copy (const GncGUID *guid)
     return new GncGUID {*guid};
 }
 
+/*It looks like we are expected to provide the same pointer every time from this function*/
+const GncGUID *
+guid_null (void)
+{
+    return s_null_gncguid;
+}
+
+void
+guid_assign (GncGUID & target, gnc::GUID const & source)
+{
+    memcpy (&target, &source, sizeof (GncGUID));
+}
+
 /*Takes an allocated guid pointer and constructs it in place*/
 void
 guid_replace (GncGUID *guid)
 {
     if (!guid) return;
-    auto other = GncGUID::create_random();
-    guid->swap (other);
+    gnc::GUID temp_random {gnc::GUID::create_random ()};
+    guid_assign (*guid, temp_random);
 }
 
 GncGUID *
 guid_new (void)
 {
-    return new GncGUID {GncGUID::create_random ()};
+    return new GncGUID {guid_new_return ()};
 }
 
 GncGUID
 guid_new_return (void)
 {
-    return GncGUID::create_random ();
+    return gnc::GUID::create_random ();
 }
 
 gchar *
 guid_to_string (const GncGUID * guid)
 {
     if (!guid) return nullptr;
-    return g_strdup (guid->to_string ().c_str ());
+    gnc::GUID temp {*guid};
+    auto temp_str = temp.to_string ();
+    return g_strdup (temp_str.c_str ());
 }
 
 gchar *
@@ -150,10 +169,11 @@ guid_to_string_buff (const GncGUID * guid, gchar *str)
 {
     if (!str || !guid) return NULL;
 
-    auto val = guid->to_string ();
+    gnc::GUID temp {*guid};
+    auto val = temp.to_string ();
     /*We need to be sure to copy the terminating null character.*/
-    std::copy (val.c_str (), val.c_str() + val.size () + 1, str);
-    return str + val.size();
+    std::copy (val.c_str (), val.c_str () + val.size () + 1, str);
+    return str + val.size ();
 }
 
 gboolean
@@ -163,8 +183,7 @@ string_to_guid (const char * str, GncGUID * guid)
 
     try
     {
-        auto other = GncGUID::from_string (str);
-        guid->swap (other);
+        guid_assign (*guid, gnc::GUID::from_string (str));
     }
     catch (...)
     {
@@ -178,15 +197,21 @@ guid_equal (const GncGUID *guid_1, const GncGUID *guid_2)
 {
     if (!guid_1 || !guid_2)
         return !guid_1 && !guid_2;
-    return *guid_1 == *guid_2;
+    gnc::GUID temp1 {*guid_1};
+    gnc::GUID temp2 {*guid_2};
+    return temp1 == temp2;
 }
 
 gint
 guid_compare (const GncGUID *guid_1, const GncGUID *guid_2)
 {
-    if (*guid_1 < *guid_2)
+    if (!guid_1 || !guid_2)
+        return !guid_1 && !guid_2;
+    gnc::GUID temp1 {*guid_1};
+    gnc::GUID temp2 {*guid_2};
+    if (temp1 < temp2)
         return -1;
-    if (*guid_1 == *guid_2)
+    if (temp1 == temp2)
         return 0;
     return 1;
 }
@@ -200,10 +225,11 @@ guid_hash_to_guint (gconstpointer ptr)
         return 0;
     }
     GncGUID const & guid = * reinterpret_cast <GncGUID const *> (ptr);
+    gnc::GUID const & temp {guid};
 
     guint hash {0};
     unsigned retspot {0};
-    std::for_each (guid.begin (), guid.end (), [&hash] (unsigned char a) {
+    std::for_each (temp.begin (), temp.end (), [&hash] (unsigned char a) {
         hash <<=4;
         hash |= a;
     });
@@ -278,26 +304,29 @@ gnc_guid_get_type (void)
     return type;
 }
 
-GncGUID
-GncGUID::create_random () noexcept
+namespace gnc
+{
+
+GUID
+GUID::create_random () noexcept
 {
     static boost::uuids::random_generator gen;
     return {gen ()};
 }
 
-GncGUID::GncGUID (boost::uuids::uuid const & other) noexcept
+GUID::GUID (boost::uuids::uuid const & other) noexcept
     : boost::uuids::uuid (other)
 {
 }
 
-GncGUID const &
-GncGUID::null_guid () noexcept
+GUID const &
+GUID::null_guid () noexcept
 {
     return s_null_guid;
 }
 
 std::string
-GncGUID::to_string () const noexcept
+GUID::to_string () const noexcept
 {
     auto const & val = boost::uuids::to_string (*this);
     std::string ret;
@@ -307,8 +336,8 @@ GncGUID::to_string () const noexcept
     return ret;
 }
 
-GncGUID
-GncGUID::from_string (std::string const & str) throw (guid_syntax_exception)
+GUID
+GUID::from_string (std::string const & str) throw (guid_syntax_exception)
 {
     try
     {
@@ -325,3 +354,26 @@ guid_syntax_exception::guid_syntax_exception () noexcept
     : invalid_argument {"Invalid syntax for guid."}
 {
 }
+
+GUID::GUID(GncGUID const & other) noexcept
+    : boost::uuids::uuid {other.reserved[0] , other.reserved[1]
+         , other.reserved[2], other.reserved[3]
+         , other.reserved[4], other.reserved[5]
+         , other.reserved[6], other.reserved[7]
+         , other.reserved[8], other.reserved[9]
+         , other.reserved[10], other.reserved[11]
+         , other.reserved[12], other.reserved[13]
+         , other.reserved[14], other.reserved[15]
+    }
+{
+
+}
+
+GUID::operator GncGUID() const noexcept
+{
+    GncGUID ret;
+    guid_assign (ret, *this);
+    return ret;
+}
+
+} // namespace gnc

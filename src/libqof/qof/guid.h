@@ -66,13 +66,15 @@ extern "C"
  * found in guid.hpp
  */
 #ifdef __cplusplus
-struct GncGUID;
-#else
+namespace gnc {
+struct GUID;
+}
+#endif
+
 /** The type used to store guids in C */
 typedef struct _gncGuid {
     unsigned char reserved[GUID_DATA_SIZE];
 } GncGUID;
-#endif
 
 GType gnc_guid_get_type (void);
 const GncGUID* gnc_value_get_guid (const GValue *value);

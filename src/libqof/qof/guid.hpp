@@ -24,20 +24,30 @@
 
 #include <boost/uuid/uuid.hpp>
 #include <stdexcept>
+extern "C" {
+#include "guid.h"
+}
 
+namespace gnc {
 struct guid_syntax_exception : public std::invalid_argument
 {
     guid_syntax_exception () noexcept;
 };
 
-struct GncGUID : public boost::uuids::uuid
+struct GUID : public boost::uuids::uuid
 {
-    GncGUID (boost::uuids::uuid const &) noexcept;
-    GncGUID () noexcept = default;
-    static GncGUID create_random () noexcept;
-    static GncGUID const & null_guid () noexcept;
-    static GncGUID from_string (std::string const &) throw (guid_syntax_exception);
+    GUID (boost::uuids::uuid const &) noexcept;
+    GUID (GncGUID const &) noexcept;
+    GUID () noexcept = default;
+    operator GncGUID() const noexcept;
+    static GUID create_random () noexcept;
+    static GUID const & null_guid () noexcept;
+    static GUID from_string (std::string const &) throw (guid_syntax_exception);
     std::string to_string () const noexcept;
 };
 
+bool operator==(GUID const &, GncGUID const &) noexcept;
+
+
+}
 #endif

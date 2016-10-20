@@ -33,24 +33,24 @@
 
 TEST (GncGUID, creation)
 {
-    auto guid = GncGUID::create_random ();
-    EXPECT_NE (guid, GncGUID::null_guid ());
+    auto guid = gnc::GUID::create_random ();
+    EXPECT_NE (guid, gnc::GUID::null_guid ());
     // There should be a default constructor.
     GncGUID other;
 }
 
 TEST (GncGUID, copy)
 {
-    auto guid = GncGUID::create_random ();
+    auto guid = gnc::GUID::create_random ();
     auto cpy = guid;
     EXPECT_EQ (guid, cpy);
-    GncGUID cpy2 {cpy};
+    gnc::GUID cpy2 {cpy};
     EXPECT_EQ (guid, cpy2);
 }
 
 TEST (GncGUID, move)
 {
-    auto guid = GncGUID::create_random ();
+    auto guid = gnc::GUID::create_random ();
     auto cpy = guid;
     auto mv = std::move(guid);
     EXPECT_EQ (cpy, mv);
@@ -59,24 +59,24 @@ TEST (GncGUID, move)
 TEST (GncGUID, to_string)
 {
     std::string fixture (32, '0');
-    auto str = GncGUID::null_guid ().to_string ();
+    auto str = gnc::GUID::null_guid ().to_string ();
     EXPECT_EQ (str, fixture);
 }
 
 TEST (GncGUID, from_string)
 {
     std::string fixture (32, '0');
-    auto guid = GncGUID::from_string (fixture);
-    EXPECT_EQ (guid, GncGUID::null_guid ());
+    auto guid = gnc::GUID::from_string (fixture);
+    EXPECT_EQ (guid, gnc::GUID::null_guid ());
 
-    guid = GncGUID::create_random ();
+    guid = gnc::GUID::create_random ();
     std::string bogus {"Have a great big roast beef sandwich, if you please!"};
     bool fail = false;
     try
     {
-        auto guid = GncGUID::from_string (bogus);
+        auto guid = gnc::GUID::from_string (bogus);
     }
-    catch (guid_syntax_exception const &)
+    catch (gnc::guid_syntax_exception const &)
     {
         fail = true;
     }
@@ -88,9 +88,9 @@ TEST (GncGUID, from_string)
 
 TEST (GncGUID, round_trip)
 {
-    auto guid1 = GncGUID::create_random ();
+    auto guid1 = gnc::GUID::create_random ();
     auto str = guid1.to_string ();
-    auto guid2 = GncGUID::from_string (str);
+    auto guid2 = gnc::GUID::from_string (str);
     EXPECT_EQ (guid1, guid2);
 }
 
