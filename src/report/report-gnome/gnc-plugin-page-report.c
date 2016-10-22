@@ -119,9 +119,6 @@ typedef struct GncPluginPageReportPrivate
      * the window is closed. */
     SCM          edited_reports;
 
-    /* This is set to mark the fact that we need to reload the html */
-    gboolean	need_reload;
-
     /* The page is in the process of reloading the html */
     gboolean	reloading;
 
@@ -454,9 +451,6 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     /* load uri when view idle */
     g_idle_add ((GSourceFunc)gnc_plugin_page_report_load_uri, page);
 
-//    g_signal_connect(priv->container, "expose_event",
-//                     G_CALLBACK(gnc_plugin_page_report_expose_event_cb), report);
-
     gtk_widget_show_all( GTK_WIDGET(priv->container) );
 
     LEAVE("container %p", priv->container);
@@ -690,7 +684,6 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
     scm_call_2(dirty_report, priv->cur_report, SCM_BOOL_T);
 
     /* Now queue the fact that we need to reload this report */
-    priv->need_reload = TRUE;
     // jsled: this doesn't seem to cause any effect.
     gtk_widget_queue_draw( GTK_WIDGET(priv->container) );
     // jsled: this does.
@@ -735,30 +728,6 @@ gnc_plugin_page_report_history_destroy_cb(gnc_html_history_node * node,
         return;
     }
 #endif
-}
-
-/* We got a draw event.  See if we need to reload the report */
-static void
-gnc_plugin_page_report_expose_event_cb(GtkWidget *unused, GdkEventExpose *unused1, gpointer data)
-{
-    GncPluginPageReport *page = data;
-    GncPluginPageReportPrivate *priv;
-
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REPORT(page));
-
-    priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(page);
-    ENTER( "report_draw" );
-    if (!priv->need_reload)
-    {
-        LEAVE( "no reload needed" );
-        return;
-    }
-
-    priv->need_reload = FALSE;
-    gnc_window_set_progressbar_window( GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window) );
-    gnc_html_reload(priv->html, FALSE);
-    gnc_window_set_progressbar_window( NULL );
-    LEAVE( "reload forced" );
 }
 
 // @param data is actually GncPluginPageReportPrivate
@@ -1387,9 +1356,7 @@ gnc_plugin_page_report_reload_cb( GtkAction *action, GncPluginPageReport *report
     dirty_report = scm_c_eval_string("gnc:report-set-dirty?!");
     scm_call_2(dirty_report, priv->cur_report, SCM_BOOL_T);
 
-    priv->need_reload = TRUE;
     /* now queue the fact that we need to reload this report */
-
     // this doens't seem to do anything...
     gtk_widget_queue_draw( GTK_WIDGET(priv->container) );
 
