@@ -100,15 +100,30 @@ gnc_html_class_init( GncHtmlClass* klass )
 }
 
 static void
+gnc_html_scroll_vis_cb( GtkWidget *widget, gpointer user_data )
+{
+    GncHtml* self = user_data;
+    gnc_html_reload( self );
+}
+
+static void
 gnc_html_init( GncHtml* self )
 {
     GncHtmlPrivate* priv;
+    GtkWidget *vscroll, *hscroll;
     priv = self->priv = g_new0( GncHtmlPrivate, 1 );
 
     priv->container = gtk_scrolled_window_new( NULL, NULL );
     gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW(priv->container),
                                     GTK_POLICY_AUTOMATIC,
                                     GTK_POLICY_AUTOMATIC );
+
+    vscroll = GTK_WIDGET(gtk_scrolled_window_get_vscrollbar(GTK_SCROLLED_WINDOW(priv->container)));
+    hscroll = GTK_WIDGET(gtk_scrolled_window_get_hscrollbar(GTK_SCROLLED_WINDOW(priv->container)));
+
+    g_signal_connect(GTK_WIDGET(vscroll), "show", G_CALLBACK(gnc_html_scroll_vis_cb), self);
+    g_signal_connect(GTK_WIDGET(hscroll), "show", G_CALLBACK(gnc_html_scroll_vis_cb), self);
+
     priv->request_info = g_hash_table_new( g_str_hash, g_str_equal );
     priv->history = gnc_html_history_new();
 }
