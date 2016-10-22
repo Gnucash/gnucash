@@ -1143,6 +1143,49 @@
      (list lower-bound upper-bound num-decimals step-size)
      #f #f #f)))
 
+;; number range options use the option-data as a list whose
+;; elements are: (lower-bound upper-bound num-decimals step-size)
+;; positve value numbers are pixels, negative numbers are percentages
+(define (gnc:make-number-plot-size-option
+         section
+         name
+         sort-tag
+         documentation-string
+         default-value
+         lower-bound
+         upper-bound
+         num-decimals
+         step-size)
+  (let* ((value default-value)
+         (value->string (lambda () (number->string value))))
+    (gnc:make-option
+     section name sort-tag 'plot-size documentation-string
+     (lambda () value)
+     (lambda (x) (set! value x))
+     (lambda () default-value)
+     (gnc:restore-form-generator value->string)
+     (lambda (b p) (qof-book-set-option b value p))
+     (lambda (b p)
+       (let ((v (qof-book-get-option b p)))
+         (if (and v (number? v))
+             (set! value v))))
+     (lambda (x)
+       (if (positive? x)
+         (cond ((not (number? x)) (list #f "number-plot-size-option-pixels: not a number"))
+               ((and (>= x lower-bound)
+                     (<= x upper-bound))
+                (list #t x))
+               (else (list #f "number-plot-size-option-pixels: out of range")))
+         (cond ((not (number? x)) (list #f "number-plot-size-option-percentage: not a number"))
+               ((and (<= x -10)
+                     (>= x -100))
+                (list #t x))
+               (else (list #f "number-plot-size-option-percentage: out of range")))
+       )
+     )
+     (list lower-bound upper-bound num-decimals step-size)
+     #f #f #f)))
+
 (define (gnc:make-internal-option
          section
          name

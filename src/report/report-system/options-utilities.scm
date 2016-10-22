@@ -207,6 +207,27 @@
     (N_ "Height of plot in pixels.") default-height
     100 20000 0 5)))
 
+;; The width- and height- options for charts
+(define (gnc:options-add-plot-sizes!
+	 options pagename 
+	 name-size-width name-size-height sort-tag 
+	 default-size-width default-size-height)
+  (gnc:register-option
+   options
+   (gnc:make-number-plot-size-option
+    pagename name-size-width
+    (string-append sort-tag "a")
+    (N_ "Width of plot in pixels or as a percentage.") default-size-width
+    100 20000 0 5))
+
+  (gnc:register-option
+   options
+   (gnc:make-number-plot-size-option
+    pagename name-size-height
+    (string-append sort-tag "b")
+    (N_ "Height of plot in pixels or as a percentage.") default-size-height
+    100 20000 0 5)))
+
 ;; A multicoice option for the marker of a scatter plot.
 (define (gnc:options-add-marker-choice!
 	 options pagename optname sort-tag default)

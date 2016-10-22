@@ -81,6 +81,7 @@
 (export gnc:options-add-currency-selection!)
 (export gnc:options-add-price-source!)
 (export gnc:options-add-plot-size!)
+(export gnc:options-add-plot-sizes!)
 (export gnc:options-add-marker-choice!)
 (export gnc:options-add-sort-method!)
 (export gnc:options-add-subtotal-view!)
