@@ -393,11 +393,8 @@
 
             (push (gnc:html-css-include "jqplot/jquery.jqplot.css"))
 
-            (push "<div id=\"")(push chart-id)(push "\" style=\"width:")
-            (push (gnc:html-barchart-width barchart))
-            (push "px;height:")
-            (push (gnc:html-barchart-height barchart))
-            (push "px;\"></div>\n")
+            (push "<div id=\"")(push chart-id)
+            (push "\" style=\"width: 100%;height:100%;\"></div>\n")
             (push "<script id=\"source\">\n$(function () {")
 
             (push "var data = [];")
