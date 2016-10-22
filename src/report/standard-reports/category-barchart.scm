@@ -89,6 +89,7 @@ developing over time"))
 (define optname-slices (N_ "Maximum Bars"))
 (define optname-plot-width (N_ "Plot Width"))
 (define optname-plot-height (N_ "Plot Height"))
+
 (define optname-sort-method (N_ "Sort Method"))
 
 (define optname-averaging (N_ "Show Average"))
@@ -203,13 +204,15 @@ developing over time"))
       "e" (N_ "Display a table of the selected data.")
       #f))
 
-    (gnc:options-add-plot-size! 
+;;  A default positve value represents pixels
+;;  A default negative value represents a percentage
+    (gnc:options-add-plot-sizes! 
      options gnc:pagename-display 
-     optname-plot-width optname-plot-height "e" 400 400)
+     optname-plot-width optname-plot-height "f" 400 400)
 
     (gnc:options-add-sort-method! 
      options gnc:pagename-display
-     optname-sort-method "f" 'amount)
+     optname-sort-method "g" 'amount)
 
     (gnc:options-set-default-section options gnc:pagename-general)
 
@@ -494,8 +497,22 @@ developing over time"))
                                  (_ "Balances %s to %s"))
                              (jqplot-escape-string (gnc-print-date from-date-tp))
                              (jqplot-escape-string (gnc-print-date to-date-tp))))
-                 (gnc:html-barchart-set-width! chart width)
-                 (gnc:html-barchart-set-height! chart height)
+
+                 (if (positive? height);; height in pixels
+                   (begin
+                     (gnc:html-barchart-set-height! chart height)
+                     (gnc:html-barchart-set-pixels-height?! chart #t))
+                   (begin  
+                     (gnc:html-barchart-set-height! chart (* height -1))
+                     (gnc:html-barchart-set-pixels-height?! chart #f)))
+
+                 (if (positive? width);; width in pixels
+                   (begin
+                     (gnc:html-barchart-set-width! chart width)
+                     (gnc:html-barchart-set-pixels-width?! chart #t))
+                   (begin  
+                     (gnc:html-barchart-set-width! chart (* width -1))
+                     (gnc:html-barchart-set-pixels-width?! chart #f)))
 
                  ;; row labels etc.
                  (gnc:html-barchart-set-row-labels! chart date-string-list)
@@ -519,8 +536,22 @@ developing over time"))
                                  (_ "Balances %s to %s"))
                              (jqplot-escape-string (gnc-print-date from-date-tp))
                              (jqplot-escape-string (gnc-print-date to-date-tp))))
-                 (gnc:html-linechart-set-width! chart width)
-                 (gnc:html-linechart-set-height! chart height)
+
+                 (if (positive? height);; height in pixels
+                   (begin
+                     (gnc:html-linechart-set-height! chart height)
+                     (gnc:html-linechart-set-pixels-height?! chart #t))
+                   (begin  
+                     (gnc:html-linechart-set-height! chart (* height -1))
+                     (gnc:html-linechart-set-pixels-height?! chart #f)))
+
+                 (if (positive? width);; width in pixels
+                   (begin
+                     (gnc:html-linechart-set-width! chart width)
+                     (gnc:html-linechart-set-pixels-width?! chart #t))
+                   (begin  
+                     (gnc:html-linechart-set-width! chart (* width -1))
+                     (gnc:html-linechart-set-pixels-width?! chart #f)))
              
                  ;; row labels etc.
                  (gnc:html-linechart-set-row-labels! chart date-iso-string-list)

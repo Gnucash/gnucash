@@ -38,6 +38,8 @@
                       legend-reversed?
                       row-labels-rotated?
                       stacked?
+                      pixels-width?
+                      pixels-height?
                       markers?
                       major-grid?
                       minor-grid?
@@ -75,6 +77,8 @@
     #f   ;;legend-reversed?
     #f   ;;row-labels-rotated?
     #f   ;;stacked?
+    #t   ;;pixels-width?
+    #t   ;;pixels-height?
     #t   ;;markers?
     #t   ;;major-grid?
     #t   ;;minor-grid?
@@ -136,6 +140,18 @@
 
 (define gnc:html-linechart-set-stacked?!
   (record-modifier <html-linechart> 'stacked?))
+
+(define gnc:html-linechart-pixels-width?
+  (record-accessor <html-linechart> 'pixels-width?))
+
+(define gnc:html-linechart-set-pixels-width?!
+  (record-modifier <html-linechart> 'pixels-width?))
+
+(define gnc:html-linechart-pixels-height?
+  (record-accessor <html-linechart> 'pixels-height?))
+
+(define gnc:html-linechart-set-pixels-height?!
+  (record-modifier <html-linechart> 'pixels-height?))
 
 (define gnc:html-linechart-markers?
   (record-accessor <html-linechart> 'markers?))
@@ -430,9 +446,13 @@
 
             (push "<div id=\"")(push chart-id)(push "\" style=\"width:")
             (push (gnc:html-linechart-width linechart))
-            (push "px;height:")
+            (if (gnc:html-linechart-pixels-width? linechart)
+                 (push "px;height:")
+                 (push "%;height:"))
             (push (gnc:html-linechart-height linechart))
-            (push "px;\"></div>\n")
+            (if (gnc:html-linechart-pixels-height? linechart)
+                 (push "px;\"></div>\n")
+                 (push "%;\"></div>\n"))
             (push "<script id=\"source\">\n$(function () {")
 
             (push "var data = [];")
