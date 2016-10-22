@@ -108,7 +108,7 @@ static void impl_webkit_show_url( GncHtml* self, URLType type,
                                   const gchar* location, const gchar* label,
                                   gboolean new_window_hint );
 static void impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen );
-static void impl_webkit_reload( GncHtml* self );
+static void impl_webkit_reload( GncHtml* self, gboolean view );
 static void impl_webkit_copy_to_clipboard( GncHtml* self );
 static gboolean impl_webkit_export_to_file( GncHtml* self, const gchar* filepath );
 static void impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf );
@@ -956,10 +956,11 @@ impl_webkit_show_url( GncHtml* self, URLType type,
 /********************************************************************
  * gnc_html_reload
  * reload the current page
+ * if view is TRUE, web view is reloaded, if FALSE, report is recreated
  ********************************************************************/
 
 static void
-impl_webkit_reload( GncHtml* self )
+impl_webkit_reload( GncHtml* self, gboolean view )
 {
     gnc_html_history_node * n;
     GncHtmlWebkitPrivate* priv;
@@ -969,9 +970,13 @@ impl_webkit_reload( GncHtml* self )
 
     priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
     n = gnc_html_history_get_current( priv->base.history );
-    if ( n != NULL )
+
+    if ( view )
+        webkit_web_view_reload( priv->web_view );
+    else
     {
-        gnc_html_show_url( self, n->type, n->location, n->label, 0 );
+        if ( n != NULL )
+            gnc_html_show_url( self, n->type, n->location, n->label, 0 );
     }
 }
 
