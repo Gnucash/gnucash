@@ -3403,7 +3403,8 @@ gnc_sql_set_table_version (GncSqlBackend* be, const gchar* table_name,
     {
         if (cur_version == 0)
         {
-            sql = g_strdup_printf ("INSERT INTO %s VALUES('%s',%d)", VERSION_TABLE_NAME,
+            sql = g_strdup_printf ("INSERT INTO %s (%s, %s) VALUES('%s',%d)", VERSION_TABLE_NAME,
+                                   TABLE_COL_NAME, VERSION_COL_NAME,
                                    table_name, version);
         }
         else

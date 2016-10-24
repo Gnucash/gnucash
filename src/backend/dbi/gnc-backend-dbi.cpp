@@ -741,7 +741,7 @@ gnc_dbi_lock_database (QofBackend* qbe, gboolean ignore_lock)
         memset (hostname, 0, sizeof (hostname));
         gethostname (hostname, GNC_HOST_NAME_MAX);
         result = dbi_conn_queryf (dcon,
-                                  "INSERT INTO %s VALUES ('%s', '%d')",
+                                  "INSERT INTO %s (Hostname, PID) VALUES ('%s', '%d')",
                                   lock_table, hostname, (int)GETPID ());
         if (!result)
         {
@@ -3230,7 +3230,7 @@ conn_test_dbi_library (dbi_conn conn)
     }
     dbi_result_free (result);
     g_ascii_dtostr (doublestr, sizeof (doublestr), testdouble);
-    querystr = g_strdup_printf ("INSERT INTO numtest VALUES (%" G_GINT64_FORMAT
+    querystr = g_strdup_printf ("INSERT INTO numtest (test_int, test_unsigned, test_double) VALUES (%" G_GINT64_FORMAT
                                 ", %" G_GUINT64_FORMAT ", %s)",
                                 testlonglong, testulonglong, doublestr);
     result = dbi_conn_query (conn, querystr);
