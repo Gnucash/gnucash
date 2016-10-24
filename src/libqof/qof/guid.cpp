@@ -111,6 +111,9 @@ void
 guid_free (GncGUID *guid)
 {
     if (!guid) return;
+    if (guid == s_null_gncguid)
+        /* Don't delete that! */
+        return;
     delete guid;
 }
 
@@ -118,7 +121,9 @@ GncGUID *
 guid_copy (const GncGUID *guid)
 {
     if (!guid) return nullptr;
-    return new GncGUID {*guid};
+    auto ret = guid_malloc ();
+    memcpy (ret, guid, sizeof (GncGUID));
+    return ret;
 }
 
 /*It looks like we are expected to provide the same pointer every time from this function*/
@@ -146,7 +151,8 @@ guid_replace (GncGUID *guid)
 GncGUID *
 guid_new (void)
 {
-    return new GncGUID {guid_new_return ()};
+    auto ret = guid_new_return ();
+    return guid_copy (&ret);
 }
 
 GncGUID
@@ -276,7 +282,7 @@ gnc_guid_to_string (const GValue *src, GValue *dest)
     g_return_if_fail (G_VALUE_HOLDS_STRING (dest) &&
                       GNC_VALUE_HOLDS_GUID (src));
 
-    str = guid_to_string(gnc_value_get_guid (src));
+    str = guid_to_string (gnc_value_get_guid (src));
 
     g_value_set_string (dest, str);
 }
@@ -315,7 +321,7 @@ GUID::create_random () noexcept
 }
 
 GUID::GUID (boost::uuids::uuid const & other) noexcept
-    : boost::uuids::uuid (other)
+    : implementation (other)
 {
 }
 
@@ -328,7 +334,7 @@ GUID::null_guid () noexcept
 std::string
 GUID::to_string () const noexcept
 {
-    auto const & val = boost::uuids::to_string (*this);
+    auto const & val = boost::uuids::to_string (implementation);
     std::string ret;
     std::for_each (val.begin (), val.end (), [&ret] (char a) {
         if (a != '-') ret.push_back (a);
@@ -355,8 +361,8 @@ guid_syntax_exception::guid_syntax_exception () noexcept
 {
 }
 
-GUID::GUID(GncGUID const & other) noexcept
-    : boost::uuids::uuid {other.reserved[0] , other.reserved[1]
+GUID::GUID (GncGUID const & other) noexcept
+    : implementation {other.reserved[0] , other.reserved[1]
          , other.reserved[2], other.reserved[3]
          , other.reserved[4], other.reserved[5]
          , other.reserved[6], other.reserved[7]
@@ -369,7 +375,44 @@ GUID::GUID(GncGUID const & other) noexcept
 
 }
 
-GUID::operator GncGUID() const noexcept
+auto
+GUID::end () const noexcept -> decltype (implementation.end ())
+{
+    return implementation.end ();
+}
+
+auto
+GUID::begin () const noexcept -> decltype (implementation.begin ())
+{
+    return implementation.begin ();
+}
+
+bool
+GUID::operator < (GUID const & other) noexcept
+{
+    return implementation < other.implementation;
+}
+
+bool operator == (GUID const & lhs, GncGUID const & rhs) noexcept
+{
+    auto ret = std::mismatch (lhs.begin (), lhs.end (), rhs.reserved);
+    return ret.first == lhs.end ();
+
+}
+
+bool
+operator != (GUID const & one, GUID const & two) noexcept
+{
+    return one.implementation != two.implementation;
+}
+
+GUID & GUID::operator = (GUID && other) noexcept
+{
+    boost::uuids::swap (other.implementation, implementation);
+    return *this;
+}
+
+GUID::operator GncGUID () const noexcept
 {
     GncGUID ret;
     guid_assign (ret, *this);
