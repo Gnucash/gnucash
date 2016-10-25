@@ -305,7 +305,7 @@ GncDbiProviderImpl<DbType::DBI_MYSQL>::get_index_list (dbi_conn conn)
         if (dbi_conn_error (conn, &errmsg) != DBI_ERROR_NONE)
         {
             PWARN ("Index Table Retrieval Error: %s on table %s\n",
-                   errmsg, table_name);
+                   errmsg, table_name.c_str());
             continue;
         }
 
