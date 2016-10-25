@@ -25,7 +25,6 @@
 /* @file test-load-xml2.c
  * @brief test the loading of a version-2 gnucash XML file
  */
-#include <guid.hpp>
 extern "C"
 {
 #include "config.h"

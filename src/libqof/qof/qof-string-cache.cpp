@@ -26,7 +26,6 @@
  *   Author: Phil Longstaff (phil.longstaff@yahoo.ca)               *
 \********************************************************************/
 
-#include <guid.hpp>
 extern "C"
 {
 #include "config.h"
