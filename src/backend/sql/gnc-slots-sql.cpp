@@ -665,10 +665,10 @@ save_slot (const gchar* key, KvpValue* value, gpointer data)
     break;
     case KvpValue::Type::GLIST:
     {
-        GncGUID guid = guid_new_return ();
-        slot_info_t* pNewInfo = slot_info_copy (pSlot_info, &guid);
+        GncGUID* guid = guid_new ();
+        slot_info_t* pNewInfo = slot_info_copy (pSlot_info, guid);
         KvpValue* oldValue = pSlot_info->pKvpValue;
-        pSlot_info->pKvpValue = new KvpValue {&guid};
+        pSlot_info->pKvpValue = new KvpValue {guid};  // Transfer ownership!
         pSlot_info->is_ok = gnc_sql_do_db_operation (pSlot_info->be,
                                                      OP_DB_INSERT, TABLE_NAME,
                                                      TABLE_NAME, pSlot_info,
