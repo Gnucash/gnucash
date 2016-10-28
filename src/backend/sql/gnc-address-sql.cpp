@@ -129,7 +129,7 @@ GncSqlColumnTableEntryImpl<CT_ADDRESS>::add_to_query(const GncSqlBackend* be,
                                                     const gpointer pObject,
                                                     PairVec& vec) const noexcept
 {
-    auto addr{get_row_value_from_object<char*>(obj_name, pObject)};
+    auto addr(get_row_value_from_object<char*>(obj_name, pObject));
     if (addr == nullptr) return;
 
     for (auto const& subtable_row : col_table)
@@ -139,7 +139,7 @@ GncSqlColumnTableEntryImpl<CT_ADDRESS>::add_to_query(const GncSqlBackend* be,
         if (s == nullptr)
             continue;
         auto buf = std::string{m_col_name} + "_" + subtable_row->m_col_name;
-        vec.emplace_back(make_pair(buf, std::string{s}));
+        vec.emplace_back(make_pair(buf, std::string(s)));
     }
 }
 /* ========================== END OF FILE ===================== */
