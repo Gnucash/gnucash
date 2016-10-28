@@ -89,7 +89,7 @@ public:
         GncSqlBackend(conn, book, format), m_exists{false} {}
     bool connected() const noexcept { return m_conn != nullptr; }
     /** FIXME: Just a pass-through to m_conn: */
-    void set_error(int error, int repeat,  bool retry) noexcept
+    void set_error(int error, unsigned int repeat,  bool retry) noexcept
     {
         m_conn->set_error(error, repeat, retry);
     }
