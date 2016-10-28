@@ -308,7 +308,7 @@ conn_setup (QofBackend* qbe, PairVec& options,
     const char* dbstr = (Type == DbType::DBI_SQLITE ? "sqlite3" :
                          Type == DbType::DBI_MYSQL ? "mysql" : "pgsql");
 #if HAVE_LIBDBI_R
-    dbi_conn conn;
+    dbi_conn conn = nullptr;
     if (dbi_instance)
         conn = dbi_conn_new_r (dbstr, dbi_instance);
     else
