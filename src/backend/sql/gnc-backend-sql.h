@@ -418,7 +418,7 @@ public:
     GncSqlObjectBackend (int version, const std::string& type,
                          const std::string& table, const EntryVec& vec) :
         m_table_name{table}, m_version{version}, m_type_name{type},
-        m_col_table{vec} {}
+        m_col_table(vec) {}
     /**
      * Load all objects of m_type in the database into memory.
      * @param be The GncSqlBackend containing the database connection.
