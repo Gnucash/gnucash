@@ -56,18 +56,25 @@ static void set_root_account_guid (gpointer pObject,  gpointer pValue);
 static  gpointer get_root_template_guid (gpointer pObject);
 static void set_root_template_guid (gpointer pObject,  gpointer pValue);
 
-static const GncSqlColumnTableEntry col_table[] =
+static const EntryVec col_table
 {
-    { "guid",               CT_GUID, 0, COL_NNUL | COL_PKEY, "guid" },
-    {
-        "root_account_guid",  CT_GUID, 0, COL_NNUL,          NULL, NULL,
-        (QofAccessFunc)get_root_account_guid,  set_root_account_guid
-    },
-    {
-        "root_template_guid", CT_GUID, 0, COL_NNUL,          NULL, NULL,
-        (QofAccessFunc)get_root_template_guid, set_root_template_guid
-    },
-    { NULL }
+    gnc_sql_make_table_entry<CT_GUID>(
+        "guid", 0, COL_NNUL | COL_PKEY, "guid"),
+    gnc_sql_make_table_entry<CT_GUID>("root_account_guid",  0, COL_NNUL,
+                                      (QofAccessFunc)get_root_account_guid,
+                                      set_root_account_guid),
+    gnc_sql_make_table_entry<CT_GUID>("root_template_guid", 0, COL_NNUL,
+                                      (QofAccessFunc)get_root_template_guid,
+                                      set_root_template_guid)
+};
+
+class GncSqlBookBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlBookBackend(int version, const std::string& type,
+                      const std::string& table, const EntryVec& vec) :
+        GncSqlObjectBackend(version, type, table, vec) {}
+    void load_all(GncSqlBackend*) override;
 };
 
 /* ================================================================= */
@@ -137,16 +144,15 @@ set_root_template_guid (gpointer pObject,  gpointer pValue)
 
 /* ================================================================= */
 static void
-load_single_book (GncSqlBackend* be, GncSqlRow* row)
+load_single_book (GncSqlBackend* be, GncSqlRow& row)
 {
     QofBook* pBook;
 
     g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
 
     gnc_sql_load_guid (be, row);
 
-    pBook = be->book;
+    pBook = be->book();
     if (pBook == NULL)
     {
         pBook = qof_book_new ();
@@ -160,91 +166,42 @@ load_single_book (GncSqlBackend* be, GncSqlRow* row)
     qof_instance_mark_clean (QOF_INSTANCE (pBook));
 }
 
-static void
-load_all_books (GncSqlBackend* be)
+void
+GncSqlBookBackend::load_all (GncSqlBackend* be)
 {
-    GncSqlStatement* stmt;
-    GncSqlResult* result;
-
     g_return_if_fail (be != NULL);
 
-    stmt = gnc_sql_create_select_statement (be, BOOK_TABLE);
-    if (stmt != NULL)
+    std::stringstream sql;
+    sql << "SELECT * FROM " << BOOK_TABLE;
+    auto stmt = be->create_statement_from_sql(sql.str());
+    if (stmt != nullptr)
     {
-        result = gnc_sql_execute_select_statement (be, stmt);
-        gnc_sql_statement_dispose (stmt);
-        if (result != NULL)
+        auto result = be->execute_select_statement(stmt);
+        auto row = result->begin();
+
+        /* If there are no rows, try committing the book; unset
+         * loading so that it will actually get saved.
+         */
+        if (row == result->end())
         {
-            GncSqlRow* row = gnc_sql_result_get_first_row (result);
-
-            /* If there are no rows, try committing the book; unset
-            * loading so that it will actually get saved.
-            */
-            if (row == NULL)
-            {
-                be->loading = FALSE;
-                (void)gnc_sql_save_book (be, QOF_INSTANCE (be->book));
-                be->loading = TRUE;
-            }
-            else
-            {
-                // Otherwise, load the 1st book.
-                load_single_book (be, row);
-            }
-
-            gnc_sql_result_dispose (result);
+            be->set_loading(false);
+            commit (be, QOF_INSTANCE (be->book()));
+            be->set_loading(true);
+        }
+        else
+        {
+            // Otherwise, load the 1st book.
+            load_single_book (be, *row);
         }
     }
-}
-
-/* ================================================================= */
-static void
-create_book_tables (GncSqlBackend* be)
-{
-    gint version;
-
-    g_return_if_fail (be != NULL);
-
-    version = gnc_sql_get_table_version (be, BOOK_TABLE);
-    if (version == 0)
-    {
-        (void)gnc_sql_create_table (be, BOOK_TABLE, TABLE_VERSION, col_table);
-    }
-}
-
-/* ================================================================= */
-gboolean
-gnc_sql_save_book (GncSqlBackend* be, QofInstance* inst)
-{
-    gboolean status;
-
-    g_return_val_if_fail (be != NULL, FALSE);
-    g_return_val_if_fail (inst != NULL, FALSE);
-    g_return_val_if_fail (QOF_IS_BOOK (inst), FALSE);
-
-    status = gnc_sql_commit_standard_item (be, inst, BOOK_TABLE, GNC_ID_BOOK,
-                                           col_table);
-
-    return status;
 }
 
 /* ================================================================= */
 void
 gnc_sql_init_book_handler (void)
 {
-    static GncSqlObjectBackend be_data =
-    {
-        GNC_SQL_BACKEND_VERSION,
-        GNC_ID_BOOK,
-        gnc_sql_save_book,      /* commit */
-        load_all_books,         /* initial_load */
-        create_book_tables,     /* create_tables */
-        NULL,                   /* compile_query */
-        NULL,                   /* run_query */
-        NULL,                   /* free_query */
-        NULL                    /* write */
-    };
-
-    (void)qof_object_register_backend (GNC_ID_BOOK, GNC_SQL_BACKEND, &be_data);
+    static GncSqlBookBackend be_data {
+        GNC_SQL_BACKEND_VERSION, GNC_ID_BOOK, BOOK_TABLE, col_table};
+    gnc_sql_register_backend(&be_data);
 }
 /* ========================== END OF FILE ===================== */

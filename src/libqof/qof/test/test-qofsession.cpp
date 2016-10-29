@@ -77,14 +77,8 @@ QofBackend * test_backend_factory ()
     ret->begin = nullptr;
     ret->commit = nullptr;
     ret->rollback = nullptr;
-    ret->compile_query = nullptr;
-    ret->free_query = nullptr;
-    ret->run_query = nullptr;
-    ret->events_pending = nullptr;
-    ret->process_events = nullptr;
     ret->percentage = nullptr;
     ret->config_count = 0;
-    ret->price_lookup = nullptr;
     return ret;
 }
 

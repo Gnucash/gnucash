@@ -53,29 +53,43 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define PRICE_MAX_SOURCE_LEN 2048
 #define PRICE_MAX_TYPE_LEN 2048
 
-static const GncSqlColumnTableEntry col_table[] =
+static const EntryVec col_table
+({
+    gnc_sql_make_table_entry<CT_GUID>("guid", 0, COL_NNUL | COL_PKEY, "guid"),
+    gnc_sql_make_table_entry<CT_COMMODITYREF>("commodity_guid", 0, COL_NNUL,
+                                              "commodity"),
+    gnc_sql_make_table_entry<CT_COMMODITYREF>("currency_guid", 0, COL_NNUL,
+                                              "currency"),
+    gnc_sql_make_table_entry<CT_TIMESPEC>("date", 0, COL_NNUL, "date"),
+    gnc_sql_make_table_entry<CT_STRING>("source", PRICE_MAX_SOURCE_LEN, 0,
+                                        "source"),
+    gnc_sql_make_table_entry<CT_STRING>("type", PRICE_MAX_TYPE_LEN, 0, "type"),
+    gnc_sql_make_table_entry<CT_NUMERIC>("value", 0, COL_NNUL, "value")
+});
+
+class GncSqlPriceBackend : public GncSqlObjectBackend
 {
-    { "guid",           CT_GUID,           0,                    COL_NNUL | COL_PKEY, "guid" },
-    { "commodity_guid", CT_COMMODITYREF,   0,                    COL_NNUL,          "commodity" },
-    { "currency_guid",  CT_COMMODITYREF,   0,                    COL_NNUL,          "currency" },
-    { "date",           CT_TIMESPEC,       0,                    COL_NNUL,          "date" },
-    { "source",         CT_STRING,         PRICE_MAX_SOURCE_LEN, 0,                 "source" },
-    { "type",           CT_STRING,         PRICE_MAX_TYPE_LEN,   0,                 "type" },
-    { "value",          CT_NUMERIC,        0,                    COL_NNUL,          "value" },
-    { NULL }
+public:
+    GncSqlPriceBackend(int version, const std::string& type,
+                      const std::string& table, const EntryVec& vec) :
+        GncSqlObjectBackend(version, type, table, vec) {}
+    void load_all(GncSqlBackend*) override;
+    void create_tables(GncSqlBackend*) override;
+    bool commit (GncSqlBackend* be, QofInstance* inst) override;
+    bool write(GncSqlBackend*) override;
 };
+
 
 /* ================================================================= */
 
 static  GNCPrice*
-load_single_price (GncSqlBackend* be, GncSqlRow* row)
+load_single_price (GncSqlBackend* be, GncSqlRow& row)
 {
     GNCPrice* pPrice;
 
     g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (row != NULL, NULL);
 
-    pPrice = gnc_price_create (be->book);
+    pPrice = gnc_price_create (be->book());
 
     gnc_price_begin_edit (pPrice);
     gnc_sql_load_object (be, row, GNC_ID_PRICE, pPrice, col_table);
@@ -84,69 +98,65 @@ load_single_price (GncSqlBackend* be, GncSqlRow* row)
     return pPrice;
 }
 
-static void
-load_all_prices (GncSqlBackend* be)
+void
+GncSqlPriceBackend::load_all (GncSqlBackend* be)
 {
-    GncSqlStatement* stmt;
-    GncSqlResult* result;
     QofBook* pBook;
     GNCPriceDB* pPriceDB;
 
     g_return_if_fail (be != NULL);
 
-    pBook = be->book;
+    pBook = be->book();
     pPriceDB = gnc_pricedb_get_db (pBook);
-    stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
-    if (stmt != NULL)
+    std::stringstream sql;
+    sql << "SELECT * FROM " << TABLE_NAME;
+    auto stmt = be->create_statement_from_sql(sql.str());
+    if (stmt != nullptr)
     {
-        result = gnc_sql_execute_select_statement (be, stmt);
-        gnc_sql_statement_dispose (stmt);
-        if (result != NULL)
+        auto result = be->execute_select_statement(stmt);
+        if (result->begin() == result->end())
+            return;
+
+        GNCPrice* pPrice;
+        gchar* sql;
+
+        gnc_pricedb_set_bulk_update (pPriceDB, TRUE);
+        for (auto row : *result)
         {
-            GNCPrice* pPrice;
-            GncSqlRow* row = gnc_sql_result_get_first_row (result);
-            gchar* sql;
+            pPrice = load_single_price (be, row);
 
-            gnc_pricedb_set_bulk_update (pPriceDB, TRUE);
-            while (row != NULL)
+            if (pPrice != NULL)
             {
-                pPrice = load_single_price (be, row);
-
-                if (pPrice != NULL)
-                {
-                    (void)gnc_pricedb_add_price (pPriceDB, pPrice);
-                    gnc_price_unref (pPrice);
-                }
-                row = gnc_sql_result_get_next_row (result);
+                (void)gnc_pricedb_add_price (pPriceDB, pPrice);
+                gnc_price_unref (pPrice);
             }
-            gnc_sql_result_dispose (result);
-            gnc_pricedb_set_bulk_update (pPriceDB, FALSE);
-
-            sql = g_strdup_printf ("SELECT DISTINCT guid FROM %s", TABLE_NAME);
-            gnc_sql_slots_load_for_sql_subquery (be, sql, (BookLookupFn)gnc_price_lookup);
-            g_free (sql);
         }
+        gnc_pricedb_set_bulk_update (pPriceDB, FALSE);
+
+        sql = g_strdup_printf ("SELECT DISTINCT guid FROM %s", TABLE_NAME);
+        gnc_sql_slots_load_for_sql_subquery (be, sql, (BookLookupFn)gnc_price_lookup);
+        g_free (sql);
     }
 }
 
 /* ================================================================= */
-static void
-create_prices_tables (GncSqlBackend* be)
+void
+GncSqlPriceBackend::create_tables (GncSqlBackend* be)
 {
     gint version;
 
     g_return_if_fail (be != NULL);
 
-    version = gnc_sql_get_table_version (be, TABLE_NAME);
+    version = be->get_table_version( TABLE_NAME);
     if (version == 0)
     {
-        (void)gnc_sql_create_table (be, TABLE_NAME, TABLE_VERSION, col_table);
+        (void)be->create_table(TABLE_NAME, TABLE_VERSION, col_table);
     }
     else if (version == 1)
     {
         /* Upgrade 64 bit int handling */
-        gnc_sql_upgrade_table (be, TABLE_NAME, col_table);
-        (void)gnc_sql_set_table_version (be, TABLE_NAME, TABLE_VERSION);
+        be->upgrade_table(TABLE_NAME, col_table);
+        be->set_table_version (TABLE_NAME, TABLE_VERSION);
 
         PINFO ("Prices table upgraded from version 1 to version %d\n", TABLE_VERSION);
     }
@@ -154,8 +164,8 @@ create_prices_tables (GncSqlBackend* be)
 
 /* ================================================================= */
 
-static gboolean
-save_price (GncSqlBackend* be, QofInstance* inst)
+bool
+GncSqlPriceBackend::commit (GncSqlBackend* be, QofInstance* inst)
 {
     GNCPrice* pPrice = GNC_PRICE (inst);
     E_DB_OPERATION op;
@@ -171,7 +181,7 @@ save_price (GncSqlBackend* be, QofInstance* inst)
     {
         op = OP_DB_DELETE;
     }
-    else if (be->is_pristine_db || is_infant)
+    else if (be->pristine() || is_infant)
     {
         op = OP_DB_INSERT;
     }
@@ -196,34 +206,29 @@ save_price (GncSqlBackend* be, QofInstance* inst)
     return is_ok;
 }
 
-static gboolean
+gboolean
 write_price (GNCPrice* p, gpointer data)
 {
-    write_objects_t* s = (write_objects_t*)data;
+    auto s = reinterpret_cast<write_objects_t*>(data);
 
     g_return_val_if_fail (p != NULL, FALSE);
     g_return_val_if_fail (data != NULL, FALSE);
 
     if (s->is_ok && gnc_price_get_source (p) != PRICE_SOURCE_TEMP)
     {
-        s->is_ok = save_price (s->be, QOF_INSTANCE (p));
+        s->commit (QOF_INSTANCE(p));
     }
 
     return s->is_ok;
 }
 
-static gboolean
-write_prices (GncSqlBackend* be)
+bool
+GncSqlPriceBackend::write (GncSqlBackend* be)
 {
-    GNCPriceDB* priceDB;
-    write_objects_t data;
-
     g_return_val_if_fail (be != NULL, FALSE);
+    write_objects_t data{be, true, this};
 
-    priceDB = gnc_pricedb_get_db (be->book);
-
-    data.be = be;
-    data.is_ok = TRUE;
+    auto priceDB = gnc_pricedb_get_db (be->book());
     return gnc_pricedb_foreach_price (priceDB, write_price, &data, TRUE);
 }
 
@@ -231,18 +236,9 @@ write_prices (GncSqlBackend* be)
 void
 gnc_sql_init_price_handler (void)
 {
-    static GncSqlObjectBackend be_data =
-    {
-        GNC_SQL_BACKEND_VERSION,
-        GNC_ID_PRICE,
-        save_price,                 /* commit */
-        load_all_prices,            /* initial_load */
-        create_prices_tables,       /* create tables */
-        NULL, NULL, NULL,
-        write_prices                /* write */
-    };
-
-    (void)qof_object_register_backend (GNC_ID_PRICE, GNC_SQL_BACKEND, &be_data);
+    static GncSqlPriceBackend be_data {
+        GNC_SQL_BACKEND_VERSION, GNC_ID_PRICE, TABLE_NAME, col_table};
+    gnc_sql_register_backend(&be_data);
 }
 
 /* ========================== END OF FILE ===================== */

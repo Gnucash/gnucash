@@ -41,7 +41,6 @@ extern "C"
 #include "gnc-backend-sql.h"
 #include "gnc-slots-sql.h"
 #include "gnc-job-sql.h"
-#include "gnc-owner-sql.h"
 
 #define _GNC_MOD_NAME   GNC_ID_JOB
 
@@ -54,37 +53,46 @@ G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 #define MAX_NAME_LEN 2048
 #define MAX_REFERENCE_LEN 2048
 
-static GncSqlColumnTableEntry col_table[] =
+static EntryVec col_table
+({
+    gnc_sql_make_table_entry<CT_GUID>("guid", 0, COL_NNUL | COL_PKEY, "guid"),
+    gnc_sql_make_table_entry<CT_STRING>("id", MAX_ID_LEN, COL_NNUL,
+                                        JOB_ID, true),
+    gnc_sql_make_table_entry<CT_STRING>("name", MAX_NAME_LEN, COL_NNUL, "name"),
+    gnc_sql_make_table_entry<CT_STRING>("reference", MAX_REFERENCE_LEN,
+                                        COL_NNUL, JOB_REFERENCE, true),
+    gnc_sql_make_table_entry<CT_BOOLEAN>("active", 0, COL_NNUL,
+                                         (QofAccessFunc)gncJobGetActive,
+                                         (QofSetterFunc)gncJobSetActive),
+    gnc_sql_make_table_entry<CT_OWNERREF>("owner", 0, 0,
+                                          (QofAccessFunc)gncJobGetOwner,
+                                          (QofSetterFunc)gncJobSetOwner),
+});
+
+class GncSqlJobBackend : public GncSqlObjectBackend
 {
-    { "guid",      CT_GUID,     0,                 COL_NNUL | COL_PKEY, "guid" },
-    { "id",        CT_STRING,   MAX_ID_LEN,        COL_NNUL,          NULL, JOB_ID },
-    { "name",      CT_STRING,   MAX_NAME_LEN,      COL_NNUL,          "name" },
-    { "reference", CT_STRING,   MAX_REFERENCE_LEN, COL_NNUL,          NULL, JOB_REFERENCE },
-    {
-        "active",    CT_BOOLEAN,  0,                 COL_NNUL,          NULL, NULL,
-        (QofAccessFunc)gncJobGetActive, (QofSetterFunc)gncJobSetActive
-    },
-    {
-        "owner",     CT_OWNERREF, 0,                 0,                 NULL, NULL,
-        (QofAccessFunc)gncJobGetOwner, (QofSetterFunc)gncJobSetOwner
-    },
-    { NULL }
+public:
+    GncSqlJobBackend(int version, const std::string& type,
+                      const std::string& table, const EntryVec& vec) :
+        GncSqlObjectBackend(version, type, table, vec) {}
+    void load_all(GncSqlBackend*) override;
+    bool write(GncSqlBackend*) override;
 };
 
+
 static GncJob*
-load_single_job (GncSqlBackend* be, GncSqlRow* row)
+load_single_job (GncSqlBackend* be, GncSqlRow& row)
 {
     const GncGUID* guid;
     GncJob* pJob;
 
     g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (row != NULL, NULL);
 
     guid = gnc_sql_load_guid (be, row);
-    pJob = gncJobLookup (be->book, guid);
+    pJob = gncJobLookup (be->book(), guid);
     if (pJob == NULL)
     {
-        pJob = gncJobCreate (be->book);
+        pJob = gncJobCreate (be->book());
     }
     gnc_sql_load_object (be, row, GNC_ID_JOB, pJob, col_table);
     qof_instance_mark_clean (QOF_INSTANCE (pJob));
@@ -92,67 +100,26 @@ load_single_job (GncSqlBackend* be, GncSqlRow* row)
     return pJob;
 }
 
-static void
-load_all_jobs (GncSqlBackend* be)
+void
+GncSqlJobBackend::load_all (GncSqlBackend* be)
 {
-    GncSqlStatement* stmt;
-    GncSqlResult* result;
-
     g_return_if_fail (be != NULL);
 
-    stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
-    result = gnc_sql_execute_select_statement (be, stmt);
-    gnc_sql_statement_dispose (stmt);
-    if (result != NULL)
+    std::stringstream sql;
+    sql << "SELECT * FROM " << TABLE_NAME;
+    auto stmt = be->create_statement_from_sql(sql.str());
+    auto result = be->execute_select_statement(stmt);
+    InstanceVec instances;
+
+    for (auto row : *result)
     {
-        GncSqlRow* row;
-        GList* list = NULL;
-
-        row = gnc_sql_result_get_first_row (result);
-        while (row != NULL)
-        {
-            GncJob* pJob = load_single_job (be, row);
-            if (pJob != NULL)
-            {
-                list = g_list_append (list, pJob);
-            }
-            row = gnc_sql_result_get_next_row (result);
-        }
-        gnc_sql_result_dispose (result);
-
-        if (list != NULL)
-        {
-            gnc_sql_slots_load_for_list (be, list);
-            g_list_free (list);
-        }
+        GncJob* pJob = load_single_job (be, row);
+        if (pJob != nullptr)
+            instances.push_back(QOF_INSTANCE(pJob));
     }
-}
 
-/* ================================================================= */
-static void
-create_job_tables (GncSqlBackend* be)
-{
-    gint version;
-
-    g_return_if_fail (be != NULL);
-
-    version = gnc_sql_get_table_version (be, TABLE_NAME);
-    if (version == 0)
-    {
-        gnc_sql_create_table (be, TABLE_NAME, TABLE_VERSION, col_table);
-    }
-}
-
-/* ================================================================= */
-static gboolean
-save_job (GncSqlBackend* be, QofInstance* inst)
-{
-    g_return_val_if_fail (inst != NULL, FALSE);
-    g_return_val_if_fail (GNC_IS_JOB (inst), FALSE);
-    g_return_val_if_fail (be != NULL, FALSE);
-
-    return gnc_sql_commit_standard_item (be, inst, TABLE_NAME, GNC_ID_JOB,
-                                         col_table);
+    if (!instances.empty())
+        gnc_sql_slots_load_for_instancevec (be, instances);
 }
 
 /* ================================================================= */
@@ -176,7 +143,7 @@ job_should_be_saved (GncJob* job)
 static void
 write_single_job (QofInstance* term_p, gpointer data_p)
 {
-    write_objects_t* s = (write_objects_t*)data_p;
+    auto s = reinterpret_cast<write_objects_t*>(data_p);
 
     g_return_if_fail (term_p != NULL);
     g_return_if_fail (GNC_IS_JOB (term_p));
@@ -184,20 +151,17 @@ write_single_job (QofInstance* term_p, gpointer data_p)
 
     if (s->is_ok && job_should_be_saved (GNC_JOB (term_p)))
     {
-        s->is_ok = save_job (s->be, term_p);
+        s->commit (term_p);
     }
 }
 
-static gboolean
-write_jobs (GncSqlBackend* be)
+bool
+GncSqlJobBackend::write (GncSqlBackend* be)
 {
-    write_objects_t data;
-
     g_return_val_if_fail (be != NULL, FALSE);
+    write_objects_t data{be, true, this};
 
-    data.be = be;
-    data.is_ok = TRUE;
-    qof_object_foreach (GNC_ID_JOB, be->book, write_single_job, &data);
+    qof_object_foreach (GNC_ID_JOB, be->book(), write_single_job, &data);
 
     return data.is_ok;
 }
@@ -206,17 +170,8 @@ write_jobs (GncSqlBackend* be)
 void
 gnc_job_sql_initialize (void)
 {
-    static GncSqlObjectBackend be_data =
-    {
-        GNC_SQL_BACKEND_VERSION,
-        GNC_ID_JOB,
-        save_job,                       /* commit */
-        load_all_jobs,                  /* initial_load */
-        create_job_tables,              /* create_tables */
-        NULL, NULL, NULL,
-        write_jobs                      /* write */
-    };
-
-    qof_object_register_backend (GNC_ID_JOB, GNC_SQL_BACKEND, &be_data);
+    static GncSqlJobBackend be_data {
+        GNC_SQL_BACKEND_VERSION, GNC_ID_JOB, TABLE_NAME, col_table};
+    gnc_sql_register_backend(&be_data);
 }
 /* ========================== END OF FILE ===================== */

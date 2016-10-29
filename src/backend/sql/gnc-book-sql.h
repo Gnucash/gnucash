@@ -35,6 +35,5 @@ extern "C"
 #include "qof.h"
 }
 void gnc_sql_init_book_handler (void);
-gboolean gnc_sql_save_book (GncSqlBackend* be, QofInstance* inst);
 
 #endif /* GNC_BOOK_SQL_H */

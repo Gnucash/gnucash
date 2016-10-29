@@ -39,6 +39,8 @@ typedef struct
 class GncDateImpl;
 class GncDateTimeImpl;
 using time64 = int64_t;
+constexpr const time64 MINTIME = -17987443200;
+constexpr const time64 MAXTIME = 253402214400;
 
 class GncDate
 {

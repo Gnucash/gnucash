@@ -239,7 +239,5 @@ gnc_owner_xml_initialize (void)
         owner_ns,
     };
 
-    qof_object_register_backend ("gnc:Owner",
-                                 GNC_FILE_BACKEND,
-                                 &be_data);
+    gnc_xml_register_backend (be_data);
 }

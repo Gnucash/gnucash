@@ -30,8 +30,6 @@
 #ifndef GNC_INVOICE_SQL_H
 #define GNC_INVOICE_SQL_H
 
-#define CT_INVOICEREF "invoice"
-
 void gnc_invoice_sql_initialize (void);
 
 #endif /* GNC_INVOICE_SQL_H */

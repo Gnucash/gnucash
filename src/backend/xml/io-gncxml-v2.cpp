@@ -66,7 +66,6 @@ extern "C"
 #endif
 }
 
-#include "sixtp.h"
 #include "sixtp-parsers.h"
 #include "sixtp-utils.h"
 #include "gnc-xml.h"
@@ -108,6 +107,13 @@ struct file_backend
     FILE*           out;
     QofBook*        book;
 };
+
+static std::vector<GncXmlDataType_t> backend_registry;
+void
+gnc_xml_register_backend(GncXmlDataType_t& xmlbe)
+{
+    backend_registry.push_back(xmlbe);
+}
 
 #define GNC_V2_STRING "gnc-v2"
 /* non-static because they are used in sixtp.c */
@@ -356,18 +362,14 @@ add_pricedb_local (sixtp_gdv2* data, GNCPriceDB* db)
 }
 
 static void
-do_counter_cb (const char* type, gpointer data_p, gpointer be_data_p)
+counter (const GncXmlDataType_t& data, file_backend* be_data)
 {
-    GncXmlDataType_t* data = static_cast<decltype (data)> (data_p);
-    struct file_backend* be_data = static_cast<decltype (be_data)> (be_data_p);
-
-    g_return_if_fail (type && data && be_data);
-    g_return_if_fail (data->version == GNC_FILE_BACKEND_VERS);
+    g_return_if_fail (data.version == GNC_FILE_BACKEND_VERS);
 
     if (be_data->ok == TRUE)
         return;
 
-    if (!g_strcmp0 (be_data->tag, data->type_name))
+    if (!g_strcmp0 (be_data->tag, data.type_name))
         be_data->ok = TRUE;
 
     /* XXX: should we do anything with this counter? */
@@ -443,8 +445,8 @@ gnc_counter_end_handler (gpointer data_for_children,
 
         be_data.ok = FALSE;
         be_data.tag = type;
-
-        qof_object_foreach_backend (GNC_FILE_BACKEND, do_counter_cb, &be_data);
+        for(auto data : backend_registry)
+            counter(data, &be_data);
 
         if (be_data.ok == FALSE)
         {
@@ -544,21 +546,17 @@ static const char* TEMPLATE_TRANSACTION_TAG = "gnc:template-transactions";
 static const char* BUDGET_TAG = "gnc:budget";
 
 static void
-add_item_cb (const char* type, gpointer data_p, gpointer be_data_p)
+add_item (const GncXmlDataType_t& data, struct file_backend* be_data)
 {
-    GncXmlDataType_t* data = static_cast<decltype (data)> (data_p);
-    struct file_backend* be_data = static_cast<decltype (be_data)> (be_data_p);
-
-    g_return_if_fail (type && data && be_data);
-    g_return_if_fail (data->version == GNC_FILE_BACKEND_VERS);
+    g_return_if_fail (data.version == GNC_FILE_BACKEND_VERS);
 
     if (be_data->ok)
         return;
 
-    if (!g_strcmp0 (be_data->tag, data->type_name))
+    if (!g_strcmp0 (be_data->tag, data.type_name))
     {
-        if (data->add_item)
-            (data->add_item) (be_data->gd, be_data->data);
+        if (data.add_item)
+            (data.add_item)(be_data->gd, be_data->data);
 
         be_data->ok = TRUE;
     }
@@ -606,7 +604,8 @@ book_callback (const char* tag, gpointer globaldata, gpointer data)
         be_data.gd = gd;
         be_data.data = data;
 
-        qof_object_foreach_backend (GNC_FILE_BACKEND, add_item_cb, &be_data);
+        for (auto data : backend_registry)
+            add_item(data, &be_data);
 
         if (be_data.ok == FALSE)
         {
@@ -635,36 +634,28 @@ generic_callback (const char* tag, gpointer globaldata, gpointer data)
 }
 
 static void
-add_parser_cb (const char* type, gpointer data_p, gpointer be_data_p)
+add_parser(const GncXmlDataType_t& data, struct file_backend* be_data)
 {
-    GncXmlDataType_t* data = static_cast<decltype (data)> (data_p);
-    struct file_backend* be_data = static_cast<decltype (be_data)> (be_data_p);
-
-    g_return_if_fail (type && data && be_data);
-    g_return_if_fail (data->version == GNC_FILE_BACKEND_VERS);
+    g_return_if_fail (data.version == GNC_FILE_BACKEND_VERS);
 
     if (be_data->ok == FALSE)
         return;
 
-    if (data->create_parser)
-        if (!sixtp_add_some_sub_parsers (
-                be_data->parser, TRUE,
-                data->type_name, (data->create_parser) (),
-                NULL, NULL))
+    if (data.create_parser)
+        if (!sixtp_add_some_sub_parsers(
+                    be_data->parser, TRUE,
+                    data.type_name, (data.create_parser)(),
+                    NULL, NULL))
             be_data->ok = FALSE;
 }
 
 static void
-scrub_cb (const char* type, gpointer data_p, gpointer be_data_p)
+scrub (const GncXmlDataType_t& data, struct file_backend* be_data)
 {
-    GncXmlDataType_t* data = static_cast<decltype (data)> (data_p);
-    struct file_backend* be_data = static_cast<decltype (be_data)> (be_data_p);
+    g_return_if_fail (data.version == GNC_FILE_BACKEND_VERS);
 
-    g_return_if_fail (type && data && be_data);
-    g_return_if_fail (data->version == GNC_FILE_BACKEND_VERS);
-
-    if (data->scrub)
-        (data->scrub) (be_data->book);
+    if (data.scrub)
+        (data.scrub)(be_data->book);
 }
 
 static sixtp_gdv2*
@@ -773,7 +764,8 @@ qof_session_load_from_xml_file_v2_full (
 
     be_data.ok = TRUE;
     be_data.parser = book_parser;
-    qof_object_foreach_backend (GNC_FILE_BACKEND, add_parser_cb, &be_data);
+    for (auto data : backend_registry)
+        add_parser(data, &be_data);
     if (be_data.ok == FALSE)
         goto bail;
 
@@ -841,7 +833,8 @@ qof_session_load_from_xml_file_v2_full (
     /* Call individual scrub functions */
     memset (&be_data, 0, sizeof (be_data));
     be_data.book = book;
-    qof_object_foreach_backend (GNC_FILE_BACKEND, scrub_cb, &be_data);
+    for (auto data : backend_registry)
+        scrub(data, &be_data);
 
     /* fix price quote sources */
     root = gnc_book_get_root_account (book);
@@ -963,31 +956,23 @@ static gboolean write_schedXactions (FILE* out, QofBook* book, sixtp_gdv2* gd);
 static void write_budget (QofInstance* ent, gpointer data);
 
 static void
-write_counts_cb (const char* type, gpointer data_p, gpointer be_data_p)
+write_counts(const GncXmlDataType_t& data, struct file_backend* be_data)
 {
-    GncXmlDataType_t* data = static_cast<decltype (data)> (data_p);
-    struct file_backend* be_data = static_cast<decltype (be_data)> (be_data_p);
+    g_return_if_fail (data.version == GNC_FILE_BACKEND_VERS);
 
-    g_return_if_fail (type && data && be_data);
-    g_return_if_fail (data->version == GNC_FILE_BACKEND_VERS);
-
-    if (data->get_count)
-        write_counts (be_data->out, data->type_name,
-                      (data->get_count) (be_data->book),
+    if (data.get_count)
+        write_counts (be_data->out, data.type_name,
+                      (data.get_count) (be_data->book),
                       NULL);
 }
 
 static void
-write_data_cb (const char* type, gpointer data_p, gpointer be_data_p)
+write_data(const GncXmlDataType_t& data, struct file_backend* be_data)
 {
-    GncXmlDataType_t* data = static_cast<decltype (data)> (data_p);
-    struct file_backend* be_data = static_cast<decltype (be_data)> (be_data_p);
+    g_return_if_fail (data.version == GNC_FILE_BACKEND_VERS);
 
-    g_return_if_fail (type && data && be_data);
-    g_return_if_fail (data->version == GNC_FILE_BACKEND_VERS);
-
-    if (data->write && !ferror (be_data->out))
-        (data->write) (be_data->out, be_data->book);
+    if (data.write && !ferror(be_data->out))
+        (data.write)(be_data->out, be_data->book);
 }
 
 static gboolean
@@ -1048,7 +1033,8 @@ write_book (FILE* out, QofBook* book, sixtp_gdv2* gd)
                        NULL))
         return FALSE;
 
-    qof_object_foreach_backend (GNC_FILE_BACKEND, write_counts_cb, &be_data);
+    for (auto data : backend_registry)
+        write_counts(data, &be_data);
 
     if (ferror (out)
         || !write_commodities (out, book, gd)
@@ -1065,8 +1051,9 @@ write_book (FILE* out, QofBook* book, sixtp_gdv2* gd)
     if (ferror (out))
         return FALSE;
 
-    qof_object_foreach_backend (GNC_FILE_BACKEND, write_data_cb, &be_data);
-    if (ferror (out))
+    for (auto data : backend_registry)
+        write_data(data, &be_data);
+    if (ferror(out))
         return FALSE;
 
     if (fprintf (out, "</%s>\n", BOOK_TAG) < 0)
@@ -1296,16 +1283,12 @@ gnc_xml2_write_namespace_decl (FILE* out, const char* name_space)
 }
 
 static void
-do_write_namespace_cb (const char* type, gpointer data_p, gpointer file_p)
+write_namespace (const GncXmlDataType_t& data, FILE* out)
 {
-    GncXmlDataType_t* data = static_cast<decltype (data)> (data_p);
-    FILE* out = static_cast<decltype (out)> (file_p);
+    g_return_if_fail (data.version == GNC_FILE_BACKEND_VERS);
 
-    g_return_if_fail (type && data && out);
-    g_return_if_fail (data->version == GNC_FILE_BACKEND_VERS);
-
-    if (data->ns && !ferror (out))
-        (data->ns) (out);
+    if (data.ns && !ferror(out))
+        (data.ns)(out);
 }
 
 static gboolean
@@ -1333,7 +1316,8 @@ write_v2_header (FILE* out)
         return FALSE;
 
     /* now cope with the plugins */
-    qof_object_foreach_backend (GNC_FILE_BACKEND, do_write_namespace_cb, out);
+    for (auto data : backend_registry)
+        write_namespace(data, out);
 
     if (ferror (out) || fprintf (out, ">\n") < 0)
         return FALSE;

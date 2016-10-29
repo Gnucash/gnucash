@@ -55,13 +55,16 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define BUDGET_MAX_NAME_LEN 2048
 #define BUDGET_MAX_DESCRIPTION_LEN 2048
 
-static const GncSqlColumnTableEntry col_table[] =
+static const EntryVec col_table
 {
-    { "guid",        CT_GUID,   0,                          COL_NNUL | COL_PKEY, "guid" },
-    { "name",        CT_STRING, BUDGET_MAX_NAME_LEN,        COL_NNUL,          "name" },
-    { "description", CT_STRING, BUDGET_MAX_DESCRIPTION_LEN, 0,                 "description" },
-    { "num_periods", CT_INT,    0,                          COL_NNUL,          "num_periods" },
-    { NULL }
+    gnc_sql_make_table_entry<CT_GUID>(
+        "guid", 0, COL_NNUL | COL_PKEY, "guid"),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "name", BUDGET_MAX_NAME_LEN, COL_NNUL, "name"),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "description", BUDGET_MAX_DESCRIPTION_LEN, 0, "description"),
+    gnc_sql_make_table_entry<CT_INT>(
+        "num_periods", 0, COL_NNUL, "num_periods"),
 };
 
 static  QofInstance* get_budget (gpointer pObj);
@@ -73,6 +76,20 @@ static void set_period_num (gpointer pObj, gpointer val);
 static gnc_numeric get_amount (gpointer pObj);
 static void set_amount (gpointer pObj, gnc_numeric value);
 
+class GncSqlBudgetBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlBudgetBackend(int version, const std::string& type,
+                      const std::string& table, const EntryVec& vec) :
+        GncSqlObjectBackend(version, type, table, vec) {}
+    void load_all(GncSqlBackend*) override;
+    void create_tables(GncSqlBackend*) override;
+    bool commit (GncSqlBackend* be, QofInstance* inst) override;
+    bool write(GncSqlBackend*) override;
+private:
+    static void save(QofInstance*, void*);
+};
+
 typedef struct
 {
     GncBudget* budget;
@@ -80,26 +97,22 @@ typedef struct
     guint period_num;
 } budget_amount_info_t;
 
-static const GncSqlColumnTableEntry budget_amounts_col_table[] =
+static const EntryVec budget_amounts_col_table
 {
-    { "id",           CT_INT,        0, COL_NNUL | COL_PKEY | COL_AUTOINC },
-    {
-        "budget_guid",  CT_BUDGETREF,  0, COL_NNUL,                     NULL, NULL,
-        (QofAccessFunc)get_budget, (QofSetterFunc)set_budget
-    },
-    {
-        "account_guid", CT_ACCOUNTREF, 0, COL_NNUL,                     NULL, NULL,
-        (QofAccessFunc)get_account, (QofSetterFunc)set_account
-    },
-    {
-        "period_num",   CT_INT,        0, COL_NNUL,                     NULL, NULL,
-        (QofAccessFunc)get_period_num, (QofSetterFunc)set_period_num
-    },
-    {
-        "amount",       CT_NUMERIC,    0, COL_NNUL,                     NULL, NULL,
-        (QofAccessFunc)get_amount, (QofSetterFunc)set_amount
-    },
-    { NULL }
+    gnc_sql_make_table_entry<CT_INT>(
+        "id", 0, COL_NNUL | COL_PKEY | COL_AUTOINC),
+    gnc_sql_make_table_entry<CT_BUDGETREF>("budget_guid",  0, COL_NNUL,
+                                           (QofAccessFunc)get_budget,
+                                           (QofSetterFunc)set_budget),
+    gnc_sql_make_table_entry<CT_ACCOUNTREF>("account_guid", 0, COL_NNUL,
+                                            (QofAccessFunc)get_account,
+                                            (QofSetterFunc)set_account),
+    gnc_sql_make_table_entry<CT_INT>("period_num", 0, COL_NNUL,
+                                     (QofAccessFunc)get_period_num,
+                                     (QofSetterFunc)set_period_num),
+    gnc_sql_make_table_entry<CT_NUMERIC>("amount", 0, COL_NNUL,
+                                         (QofAccessFunc)get_amount,
+                                         (QofSetterFunc)set_amount),
 };
 
 /* ================================================================= */
@@ -193,35 +206,23 @@ static void
 load_budget_amounts (GncSqlBackend* be, GncBudget* budget)
 {
     gchar guid_buf[GUID_ENCODING_LENGTH + 1];
-    gchar* sql;
-    GncSqlStatement* stmt;
-    GncSqlResult* result;
 
     g_return_if_fail (be != NULL);
     g_return_if_fail (budget != NULL);
 
     (void)guid_to_string_buff (qof_instance_get_guid (QOF_INSTANCE (budget)),
                                guid_buf);
-    sql = g_strdup_printf ("SELECT * FROM %s WHERE budget_guid='%s'",
-                           AMOUNTS_TABLE, guid_buf);
-    stmt = gnc_sql_create_statement_from_sql (be, sql);
+    auto sql = g_strdup_printf ("SELECT * FROM %s WHERE budget_guid='%s'",
+                                AMOUNTS_TABLE, guid_buf);
+    auto stmt = be->create_statement_from_sql(sql);
     g_free (sql);
-    if (stmt != NULL)
+    if (stmt != nullptr)
     {
-        result = gnc_sql_execute_select_statement (be, stmt);
-        gnc_sql_statement_dispose (stmt);
-        if (result != NULL)
-        {
-            GncSqlRow* row = gnc_sql_result_get_first_row (result);
-            budget_amount_info_t info = { budget, NULL, 0 };
+        auto result = be->execute_select_statement(stmt);
+        budget_amount_info_t info = { budget, NULL, 0 };
 
-            while (row != NULL)
-            {
-                gnc_sql_load_object (be, row, NULL, &info, budget_amounts_col_table);
-                row = gnc_sql_result_get_next_row (result);
-            }
-            gnc_sql_result_dispose (result);
-        }
+        for (auto row : *result)
+            gnc_sql_load_object (be, row, NULL, &info, budget_amounts_col_table);
     }
 }
 
@@ -235,19 +236,19 @@ static gboolean
 delete_budget_amounts (GncSqlBackend* be, GncBudget* budget)
 {
     gchar guid_buf[GUID_ENCODING_LENGTH + 1];
-    gchar* sql;
 
     g_return_val_if_fail (be != NULL, FALSE);
     g_return_val_if_fail (budget != NULL, FALSE);
 
     (void)guid_to_string_buff (qof_instance_get_guid (QOF_INSTANCE (budget)),
                                guid_buf);
-    sql = g_strdup_printf ("DELETE FROM %s WHERE budget_guid='%s'", AMOUNTS_TABLE,
-                           guid_buf);
-    (void)gnc_sql_execute_nonselect_sql (be, sql);
-    g_free (sql);
+    std::stringstream sql;
+    sql << "DELETE FROM " << AMOUNTS_TABLE << " WHERE budget_guid='"<<
+        guid_buf << "'";
+    auto stmt = be->create_statement_from_sql(sql.str());
+    be->execute_nonselect_statement(stmt);
 
-    return TRUE;
+    return true;
 }
 
 /**
@@ -274,7 +275,7 @@ save_budget_amounts (GncSqlBackend* be, GncBudget* budget)
     info.budget = budget;
     num_periods = gnc_budget_get_num_periods (budget);
     descendants = gnc_account_get_descendants (gnc_book_get_root_account (
-                                                   be->book));
+                                                   be->book()));
     for (node = descendants; node != NULL && is_ok; node = g_list_next (node))
     {
         guint i;
@@ -296,23 +297,22 @@ save_budget_amounts (GncSqlBackend* be, GncBudget* budget)
 }
 /*----------------------------------------------------------------*/
 static  GncBudget*
-load_single_budget (GncSqlBackend* be, GncSqlRow* row)
+load_single_budget (GncSqlBackend* be, GncSqlRow& row)
 {
     const GncGUID* guid;
     GncBudget* pBudget = NULL;
     Recurrence* r;
 
     g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (row != NULL, NULL);
 
     guid = gnc_sql_load_guid (be, row);
     if (guid != NULL)
     {
-        pBudget = gnc_budget_lookup (guid, be->book);
+        pBudget = gnc_budget_lookup (guid, be->book());
     }
     if (pBudget == NULL)
     {
-        pBudget = gnc_budget_new (be->book);
+        pBudget = gnc_budget_new (be->book());
     }
 
     gnc_budget_begin_edit (pBudget);
@@ -329,70 +329,52 @@ load_single_budget (GncSqlBackend* be, GncSqlRow* row)
     return pBudget;
 }
 
-static void
-load_all_budgets (GncSqlBackend* be)
+void
+GncSqlBudgetBackend::load_all (GncSqlBackend* be)
 {
-    GncSqlStatement* stmt;
-    GncSqlResult* result;
-    GList* list = NULL;
-
+    InstanceVec instances;
     g_return_if_fail (be != NULL);
 
-    stmt = gnc_sql_create_select_statement (be, BUDGET_TABLE);
-    if (stmt != NULL)
+    std::stringstream sql;
+    sql << "SELECT * FROM " << BUDGET_TABLE;
+    auto stmt = be->create_statement_from_sql(sql.str());
+    auto result = be->execute_select_statement(stmt);
+    for (auto row : *result)
     {
-        result = gnc_sql_execute_select_statement (be, stmt);
-        gnc_sql_statement_dispose (stmt);
-        if (result != NULL)
-        {
-            GncSqlRow* row = gnc_sql_result_get_first_row (result);
-            GncBudget* b;
-
-            while (row != NULL)
-            {
-                b = load_single_budget (be, row);
-                if (b != NULL)
-                {
-                    list = g_list_prepend (list, b);
-                }
-                row = gnc_sql_result_get_next_row (result);
-            }
-            gnc_sql_result_dispose (result);
-
-            if (list != NULL)
-            {
-                gnc_sql_slots_load_for_list (be, list);
-                g_list_free (list);
-            }
-        }
+        auto b = load_single_budget (be, row);
+        if (b != nullptr)
+            instances.push_back(QOF_INSTANCE(b));
     }
+
+    if (!instances.empty())
+        gnc_sql_slots_load_for_instancevec (be, instances);
 }
 
 /* ================================================================= */
-static void
-create_budget_tables (GncSqlBackend* be)
+void
+GncSqlBudgetBackend::create_tables (GncSqlBackend* be)
 {
     gint version;
 
     g_return_if_fail (be != NULL);
 
-    version = gnc_sql_get_table_version (be, BUDGET_TABLE);
+    version = be->get_table_version( BUDGET_TABLE);
     if (version == 0)
     {
-        (void)gnc_sql_create_table (be, BUDGET_TABLE, TABLE_VERSION, col_table);
+        (void)be->create_table(BUDGET_TABLE, TABLE_VERSION, col_table);
     }
 
-    version = gnc_sql_get_table_version (be, AMOUNTS_TABLE);
+    version = be->get_table_version( AMOUNTS_TABLE);
     if (version == 0)
     {
-        (void)gnc_sql_create_table (be, AMOUNTS_TABLE, AMOUNTS_TABLE_VERSION,
+        (void)be->create_table(AMOUNTS_TABLE, AMOUNTS_TABLE_VERSION,
                                     budget_amounts_col_table);
     }
 }
 
 /* ================================================================= */
-static gboolean
-save_budget (GncSqlBackend* be, QofInstance* inst)
+bool
+GncSqlBudgetBackend::commit (GncSqlBackend* be, QofInstance* inst)
 {
     GncBudget* pBudget = GNC_BUDGET (inst);
     const GncGUID* guid;
@@ -409,7 +391,7 @@ save_budget (GncSqlBackend* be, QofInstance* inst)
     {
         op = OP_DB_DELETE;
     }
-    else if (be->is_pristine_db || is_infant)
+    else if (be->pristine() || is_infant)
     {
         op = OP_DB_INSERT;
     }
@@ -455,18 +437,18 @@ save_budget (GncSqlBackend* be, QofInstance* inst)
 }
 
 static void
-do_save_budget (QofInstance* inst, gpointer data)
+do_save (QofInstance* inst, gpointer data)
 {
     write_objects_t* s = (write_objects_t*)data;
 
     if (s->is_ok)
     {
-        s->is_ok = save_budget (s->be, inst);
+        s->is_ok = s->obe->commit (s->be, inst);
     }
 }
 
-static gboolean
-write_budgets (GncSqlBackend* be)
+bool
+GncSqlBudgetBackend::write (GncSqlBackend* be)
 {
     write_objects_t data;
 
@@ -474,79 +456,47 @@ write_budgets (GncSqlBackend* be)
 
     data.be = be;
     data.is_ok = TRUE;
-    qof_collection_foreach (qof_book_get_collection (be->book, GNC_ID_BUDGET),
-                            (QofInstanceForeachCB)do_save_budget, &data);
+    data.obe = this;
+    qof_collection_foreach (qof_book_get_collection (be->book(), GNC_ID_BUDGET),
+                            (QofInstanceForeachCB)do_save, &data);
 
     return data.is_ok;
 }
 
 /* ================================================================= */
-static void
-load_budget_guid (const GncSqlBackend* be, GncSqlRow* row,
-                  QofSetterFunc setter, gpointer pObject,
-                  const GncSqlColumnTableEntry* table_row)
+template<> void
+GncSqlColumnTableEntryImpl<CT_BUDGETREF>::load (const GncSqlBackend* be,
+                                                 GncSqlRow& row,
+                                                 QofIdTypeConst obj_name,
+                                                 gpointer pObject) const noexcept
 {
-    const GValue* val;
-    GncGUID guid;
-    GncBudget* budget = NULL;
-
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
-    g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
-
-    val = gnc_sql_row_get_value_at_col_name (row, table_row->col_name);
-    if (val != NULL && G_VALUE_HOLDS_STRING (val) &&
-        g_value_get_string (val) != NULL)
-    {
-        (void)string_to_guid (g_value_get_string (val), &guid);
-        budget = gnc_budget_lookup (&guid, be->book);
-        if (budget != NULL)
-        {
-            if (table_row->gobj_param_name != NULL)
-            {
-                qof_instance_increase_editlevel (pObject);
-                g_object_set (pObject, table_row->gobj_param_name, budget, NULL);
-                qof_instance_decrease_editlevel (pObject);
-            }
-            else
-            {
-                g_return_if_fail (setter != NULL);
-                (*setter) (pObject, (const gpointer)budget);
-            }
-        }
-        else
-        {
-            PWARN ("Budget ref '%s' not found", g_value_get_string (val));
-        }
-    }
+    load_from_guid_ref(row, obj_name, pObject,
+                       [be](GncGUID* g){
+                            return gnc_budget_lookup (g, be->book());
+                        });
 }
 
-static GncSqlColumnTypeHandler budget_guid_handler
-= { load_budget_guid,
-    gnc_sql_add_objectref_guid_col_info_to_list,
-    gnc_sql_add_colname_to_list,
-    gnc_sql_add_gvalue_objectref_guid_to_slist
-  };
+template<> void
+GncSqlColumnTableEntryImpl<CT_BUDGETREF>::add_to_table(const GncSqlBackend* be,
+                                                 ColVec& vec) const noexcept
+{
+    add_objectref_guid_to_table(be, vec);
+}
+
+template<> void
+GncSqlColumnTableEntryImpl<CT_BUDGETREF>::add_to_query(const GncSqlBackend* be,
+                                                    QofIdTypeConst obj_name,
+                                                    const gpointer pObject,
+                                                    PairVec& vec) const noexcept
+{
+    add_objectref_guid_to_query(be, obj_name, pObject, vec);
+}
 /* ================================================================= */
 void
 gnc_sql_init_budget_handler (void)
 {
-    static GncSqlObjectBackend be_data =
-    {
-        GNC_SQL_BACKEND_VERSION,
-        GNC_ID_BUDGET,
-        save_budget,                    /* commit */
-        load_all_budgets,               /* initial_load */
-        create_budget_tables,           /* create_tables */
-        NULL,                           /* compile_query */
-        NULL,                           /* run_query */
-        NULL,                           /* free_query */
-        write_budgets                   /* write */
-    };
-
-    (void)qof_object_register_backend (GNC_ID_BUDGET, GNC_SQL_BACKEND, &be_data);
-
-    gnc_sql_register_col_type_handler (CT_BUDGETREF, &budget_guid_handler);
+    static GncSqlBudgetBackend be_data {
+        GNC_SQL_BACKEND_VERSION, GNC_ID_BUDGET, BUDGET_TABLE, col_table};
+    gnc_sql_register_backend(&be_data);
 }
 /* ========================== END OF FILE ===================== */

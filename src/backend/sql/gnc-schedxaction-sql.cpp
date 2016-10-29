@@ -55,28 +55,45 @@ G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define SX_MAX_NAME_LEN 2048
 
-static const GncSqlColumnTableEntry col_table[] =
+static const EntryVec col_table
+({
+    gnc_sql_make_table_entry<CT_GUID>("guid", 0, COL_NNUL | COL_PKEY, "guid"),
+    gnc_sql_make_table_entry<CT_STRING>("name", SX_MAX_NAME_LEN, 0, "name"),
+    gnc_sql_make_table_entry<CT_BOOLEAN>("enabled", 0, COL_NNUL, "enabled"),
+    gnc_sql_make_table_entry<CT_GDATE>("start_date", 0, 0, "start-date"),
+    gnc_sql_make_table_entry<CT_GDATE>("end_date", 0, 0, "end-date"),
+    gnc_sql_make_table_entry<CT_GDATE>(
+        "last_occur", 0, 0, "last-occurance-date"),
+    gnc_sql_make_table_entry<CT_INT>(
+        "num_occur", 0, COL_NNUL, "num-occurance"),
+    gnc_sql_make_table_entry<CT_INT>("rem_occur", 0, COL_NNUL, "rem-occurance"),
+    gnc_sql_make_table_entry<CT_BOOLEAN>(
+        "auto_create", 0, COL_NNUL, "auto-create"),
+    gnc_sql_make_table_entry<CT_BOOLEAN>(
+        "auto_notify", 0, COL_NNUL, "auto-create-notify"),
+    gnc_sql_make_table_entry<CT_INT>(
+        "adv_creation", 0, COL_NNUL, "advance-creation-days"),
+    gnc_sql_make_table_entry<CT_INT>(
+        "adv_notify", 0, COL_NNUL, "advance-reminder-days"),
+    gnc_sql_make_table_entry<CT_INT>(
+        "instance_count", 0, COL_NNUL, "instance-count"),
+    gnc_sql_make_table_entry<CT_ACCOUNTREF>(
+        "template_act_guid", 0, COL_NNUL, "template-account"),
+});
+
+class GncSqlSchedXactionBackend : public GncSqlObjectBackend
 {
-    { "guid",              CT_GUID,       0,               COL_NNUL | COL_PKEY, "guid" },
-    { "name",              CT_STRING,     SX_MAX_NAME_LEN, 0,                 "name" },
-    { "enabled",           CT_BOOLEAN,    0,               COL_NNUL,          "enabled" },
-    { "start_date",        CT_GDATE,      0,               0,                 "start-date" },
-    { "end_date",          CT_GDATE,      0,               0,                 "end-date" },
-    { "last_occur",        CT_GDATE,      0,               0,                 "last-occurance-date" },
-    { "num_occur",         CT_INT,        0,               COL_NNUL,          "num-occurance" },
-    { "rem_occur",         CT_INT,        0,               COL_NNUL,          "rem-occurance" },
-    { "auto_create",       CT_BOOLEAN,    0,               COL_NNUL,          "auto-create" },
-    { "auto_notify",       CT_BOOLEAN,    0,               COL_NNUL,          "auto-create-notify" },
-    { "adv_creation",      CT_INT,        0,               COL_NNUL,          "advance-creation-days" },
-    { "adv_notify",        CT_INT,        0,               COL_NNUL,          "advance-reminder-days" },
-    { "instance_count",    CT_INT,        0,               COL_NNUL,          "instance-count" },
-    { "template_act_guid", CT_ACCOUNTREF, 0,               COL_NNUL,          "template-account" },
-    { NULL }
+public:
+    GncSqlSchedXactionBackend(int version, const std::string& type,
+                      const std::string& table, const EntryVec& vec) :
+        GncSqlObjectBackend(version, type, table, vec) {}
+    void load_all(GncSqlBackend*) override;
+    bool commit (GncSqlBackend* be, QofInstance* inst) override;
 };
 
 /* ================================================================= */
 static  SchedXaction*
-load_single_sx (GncSqlBackend* be, GncSqlRow* row)
+load_single_sx (GncSqlBackend* be, GncSqlRow& row)
 {
     const GncGUID* guid;
     SchedXaction* pSx;
@@ -84,11 +101,10 @@ load_single_sx (GncSqlBackend* be, GncSqlRow* row)
     GDate start_date;
 
     g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (row != NULL, NULL);
 
     guid = gnc_sql_load_guid (be, row);
     g_assert (guid != NULL);
-    pSx = xaccSchedXactionMalloc (be->book);
+    pSx = xaccSchedXactionMalloc (be->book());
 
     gnc_sx_begin_edit (pSx);
     gnc_sql_load_object (be, row, GNC_SX_ID, pSx, col_table);
@@ -102,66 +118,40 @@ load_single_sx (GncSqlBackend* be, GncSqlRow* row)
     return pSx;
 }
 
-static void
-load_all_sxes (GncSqlBackend* be)
+void
+GncSqlSchedXactionBackend::load_all (GncSqlBackend* be)
 {
-    GncSqlStatement* stmt = NULL;
-    GncSqlResult* result;
-
     g_return_if_fail (be != NULL);
 
-    stmt = gnc_sql_create_select_statement (be, SCHEDXACTION_TABLE);
+    std::stringstream sql;
+    sql << "SELECT * FROM " << SCHEDXACTION_TABLE;
+    auto stmt = be->create_statement_from_sql(sql.str());
     if (stmt == NULL) return;
-    result = gnc_sql_execute_select_statement (be, stmt);
-    gnc_sql_statement_dispose (stmt);
-    if (result != NULL)
+    auto result = be->execute_select_statement(stmt);
+    SchedXactions* sxes;
+    InstanceVec instances;
+    sxes = gnc_book_get_schedxactions (be->book());
+
+    for (auto row : *result)
     {
-        GncSqlRow* row;
-        SchedXactions* sxes;
-        GList* list = NULL;
-        sxes = gnc_book_get_schedxactions (be->book);
+        SchedXaction* sx;
 
-        row = gnc_sql_result_get_first_row (result);
-        while (row != NULL)
+        sx = load_single_sx (be, row);
+        if (sx != nullptr)
         {
-            SchedXaction* sx;
-
-            sx = load_single_sx (be, row);
-            if (sx != NULL)
-            {
-                gnc_sxes_add_sx (sxes, sx);
-                list = g_list_prepend (list, sx);
-            }
-            row = gnc_sql_result_get_next_row (result);
-        }
-        gnc_sql_result_dispose (result);
-
-        if (list != NULL)
-        {
-            gnc_sql_slots_load_for_list (be, list);
-            g_list_free (list);
+            gnc_sxes_add_sx (sxes, sx);
+            instances.push_back(QOF_INSTANCE(sx));
         }
     }
+
+    if (!instances.empty())
+        gnc_sql_slots_load_for_instancevec (be, instances);
 }
 
-/* ================================================================= */
-static void
-create_sx_tables (GncSqlBackend* be)
-{
-    gint version;
-
-    g_return_if_fail (be != NULL);
-
-    version = gnc_sql_get_table_version (be, SCHEDXACTION_TABLE);
-    if (version == 0)
-    {
-        (void)gnc_sql_create_table (be, SCHEDXACTION_TABLE, TABLE_VERSION, col_table);
-    }
-}
 
 /* ================================================================= */
-gboolean
-gnc_sql_save_schedxaction (GncSqlBackend* be, QofInstance* inst)
+bool
+GncSqlSchedXactionBackend::commit (GncSqlBackend* be, QofInstance* inst)
 {
     SchedXaction* pSx;
     const GncGUID* guid;
@@ -180,7 +170,7 @@ gnc_sql_save_schedxaction (GncSqlBackend* be, QofInstance* inst)
     {
         op = OP_DB_DELETE;
     }
-    else if (be->is_pristine_db || is_infant)
+    else if (be->pristine() || is_infant)
     {
         op = OP_DB_INSERT;
     }
@@ -220,20 +210,9 @@ gnc_sql_save_schedxaction (GncSqlBackend* be, QofInstance* inst)
 void
 gnc_sql_init_schedxaction_handler (void)
 {
-    static GncSqlObjectBackend be_data =
-    {
-        GNC_SQL_BACKEND_VERSION,
-        GNC_ID_SCHEDXACTION,
-        gnc_sql_save_schedxaction,    /* commit */
-        load_all_sxes,                /* initial_load */
-        create_sx_tables,             /* create_tables */
-        NULL,                         /* compile_query */
-        NULL,                         /* run_query */
-        NULL,                         /* free_query */
-        NULL                          /* write */
-    };
-
-    (void)qof_object_register_backend (GNC_ID_SCHEDXACTION, GNC_SQL_BACKEND,
-                                       &be_data);
+    static GncSqlSchedXactionBackend be_data {
+        GNC_SQL_BACKEND_VERSION, GNC_ID_SCHEDXACTION, SCHEDXACTION_TABLE,
+            col_table};
+    gnc_sql_register_backend(&be_data);
 }
 /* ========================== END OF FILE ===================== */

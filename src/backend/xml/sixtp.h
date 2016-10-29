@@ -199,21 +199,6 @@ typedef struct sixtp_sax_data
     sixtp* bad_xml_parser;
 } sixtp_sax_data;
 
-typedef struct
-{
-    int     version;    /* backend version number */
-    const char*     type_name;  /* The XML tag for this type */
-
-    sixtp*  (*create_parser) (void);
-    gboolean (*add_item) (sixtp_gdv2*, gpointer obj);
-    int (*get_count) (QofBook*);
-    gboolean (*write) (FILE*, QofBook*);
-    void (*scrub) (QofBook*);
-    gboolean (*ns) (FILE*);
-} GncXmlDataType_t;
-
-
-
 gboolean is_child_result_from_node_named (sixtp_child_result* cr,
                                           const char* tag);
 void sixtp_child_free_data (sixtp_child_result* result);

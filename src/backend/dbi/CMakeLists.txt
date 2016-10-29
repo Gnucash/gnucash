@@ -6,9 +6,15 @@ ADD_SUBDIRECTORY(test)
 
 SET (backend_dbi_SOURCES
   gnc-backend-dbi.cpp
+  gnc-dbisqlresult.cpp
+  gnc-dbisqlconnection.cpp
 )
 SET (backend_dbi_noinst_HEADERS
-  gnc-backend-dbi.h gnc-backend-dbi-priv.h
+  gnc-backend-dbi.h
+  gnc-backend-dbi.hpp
+  gnc-dbisqlresult.hpp
+  gnc-dbisqlconnection.hpp
+  gnc-dbiprovider.hpp
 )
 
 # Add dependency on config.h

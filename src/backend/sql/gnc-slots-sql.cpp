@@ -83,11 +83,11 @@ static void set_string_val (gpointer pObject,  gpointer pValue);
 static  gpointer get_double_val (gpointer pObject);
 static void set_double_val (gpointer pObject,  gpointer pValue);
 static Timespec get_timespec_val (gpointer pObject);
-static void set_timespec_val (gpointer pObject, Timespec ts);
+static void set_timespec_val (gpointer pObject, Timespec *ts);
 static  gpointer get_guid_val (gpointer pObject);
 static void set_guid_val (gpointer pObject,  gpointer pValue);
 static gnc_numeric get_numeric_val (gpointer pObject);
-static void set_numeric_val (gpointer pObject, gnc_numeric value);
+static void set_numeric_val (gpointer pObject, gnc_numeric *value);
 static GDate* get_gdate_val (gpointer pObject);
 static void set_gdate_val (gpointer pObject, GDate* value);
 static slot_info_t* slot_info_copy (slot_info_t* pInfo, GncGUID* guid);
@@ -110,65 +110,69 @@ enum
     gdate_val_col
 };
 
-static const GncSqlColumnTableEntry col_table[] =
+static const EntryVec col_table
 {
     /* col_name, col_type, size, flags, g0bj_param_name, qof_param_name, getter, setter */
-    { "id",             CT_INT,      0, COL_PKEY | COL_NNUL | COL_AUTOINC },
-    {
-        "obj_guid",     CT_GUID,     0,                     COL_NNUL, NULL, NULL,
-        (QofAccessFunc)get_obj_guid, (QofSetterFunc)set_obj_guid
-    },
-    {
-        "name",         CT_STRING,   SLOT_MAX_PATHNAME_LEN, COL_NNUL, NULL, NULL,
-        (QofAccessFunc)get_path,         set_path
-    },
-    {
-        "slot_type",    CT_INT,      0,                     COL_NNUL, NULL, NULL,
-        (QofAccessFunc)get_slot_type,    set_slot_type,
-    },
-    {
-        "int64_val",    CT_INT64,    0,                     0,        NULL, NULL,
-        (QofAccessFunc)get_int64_val, (QofSetterFunc)set_int64_val
-    },
-    {
-        "string_val",   CT_STRING,   SLOT_MAX_PATHNAME_LEN, 0,        NULL, NULL,
-        (QofAccessFunc)get_string_val,   set_string_val
-    },
-    {
-        "double_val",   CT_DOUBLE,   0,                     0,        NULL, NULL,
-        (QofAccessFunc)get_double_val,   set_double_val
-    },
-    {
-        "timespec_val", CT_TIMESPEC, 0,                     0,        NULL, NULL,
-        (QofAccessFunc)get_timespec_val, (QofSetterFunc)set_timespec_val
-    },
-    {
-        "guid_val",     CT_GUID,     0,                     0,        NULL, NULL,
-        (QofAccessFunc)get_guid_val,     set_guid_val
-    },
-    {
-        "numeric_val",  CT_NUMERIC,  0,                     0,        NULL, NULL,
-        (QofAccessFunc)get_numeric_val, (QofSetterFunc)set_numeric_val
-    },
-    {
-        "gdate_val",    CT_GDATE,    0,                     0,        NULL, NULL,
-        (QofAccessFunc)get_gdate_val, (QofSetterFunc)set_gdate_val
-    },
-    { NULL }
+    gnc_sql_make_table_entry<CT_INT>(
+        "id", 0, COL_PKEY | COL_NNUL | COL_AUTOINC),
+    gnc_sql_make_table_entry<CT_GUID>("obj_guid", 0, COL_NNUL,
+                                      (QofAccessFunc)get_obj_guid,
+                                      (QofSetterFunc)set_obj_guid),
+    gnc_sql_make_table_entry<CT_STRING>("name", SLOT_MAX_PATHNAME_LEN, COL_NNUL,
+                                        (QofAccessFunc)get_path, set_path),
+    gnc_sql_make_table_entry<CT_INT>("slot_type", 0, COL_NNUL,
+                                     (QofAccessFunc)get_slot_type,
+                                     set_slot_type),
+    gnc_sql_make_table_entry<CT_INT64>("int64_val", 0, 0,
+                                       (QofAccessFunc)get_int64_val,
+                                       (QofSetterFunc)set_int64_val),
+    gnc_sql_make_table_entry<CT_STRING>("string_val", SLOT_MAX_PATHNAME_LEN, 0,
+                                        (QofAccessFunc)get_string_val,
+                                        set_string_val),
+    gnc_sql_make_table_entry<CT_DOUBLE>("double_val", 0, 0,
+                                        (QofAccessFunc)get_double_val,
+                                        set_double_val),
+    gnc_sql_make_table_entry<CT_TIMESPEC>("timespec_val", 0, 0,
+                                          (QofAccessFunc)get_timespec_val,
+                                          (QofSetterFunc)set_timespec_val),
+    gnc_sql_make_table_entry<CT_GUID>("guid_val", 0, 0,
+                                      (QofAccessFunc)get_guid_val,
+                                      set_guid_val),
+    gnc_sql_make_table_entry<CT_NUMERIC>("numeric_val", 0, 0,
+                                         (QofAccessFunc)get_numeric_val,
+                                         (QofSetterFunc)set_numeric_val),
+    gnc_sql_make_table_entry<CT_GDATE>("gdate_val", 0, 0,
+                                       (QofAccessFunc)get_gdate_val,
+                                       (QofSetterFunc)set_gdate_val),
 };
 
 /* Special column table because we need to be able to access the table by
 a column other than the primary key */
-static const GncSqlColumnTableEntry obj_guid_col_table[] =
+static const EntryVec obj_guid_col_table
 {
-    { "obj_guid", CT_GUID, 0, 0, NULL, NULL, (QofAccessFunc)get_obj_guid, _retrieve_guid_ },
-    { NULL }
+    gnc_sql_make_table_entry<CT_GUID>("obj_guid", 0, 0,
+                                      (QofAccessFunc)get_obj_guid,
+                                      _retrieve_guid_),
 };
 
-static const GncSqlColumnTableEntry gdate_col_table[] =
+static const EntryVec gdate_col_table
 {
-    { "gdate_val", CT_GDATE, 0, 0, },
-    { NULL }
+    gnc_sql_make_table_entry<CT_GDATE>("gdate_val", 0, 0),
+};
+
+/**
+ * Slots are neither loadable nor committable. Note that the default
+ * write() implementation is also a no-op.
+ */
+class GncSqlSlotsBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlSlotsBackend(int version, const std::string& type,
+                      const std::string& table, const EntryVec& vec) :
+        GncSqlObjectBackend(version, type, table, vec) {}
+    void load_all(GncSqlBackend*) override { return; }
+    void create_tables(GncSqlBackend*) override;
+    bool commit(GncSqlBackend*, QofInstance*) override { return false; }
 };
 
 /* ================================================================= */
@@ -439,7 +443,7 @@ get_timespec_val (gpointer pObject)
 }
 
 static void
-set_timespec_val (gpointer pObject, Timespec ts)
+set_timespec_val (gpointer pObject, Timespec *ts)
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
     KvpValue* value = NULL;
@@ -447,7 +451,7 @@ set_timespec_val (gpointer pObject, Timespec ts)
     g_return_if_fail (pObject != NULL);
 
     if (pInfo->value_type != KvpValue::Type::TIMESPEC) return;
-    value = new KvpValue {ts};
+    value = new KvpValue {*ts};
     set_slot_from_value (pInfo, value);
 }
 
@@ -556,7 +560,7 @@ get_numeric_val (gpointer pObject)
 }
 
 static void
-set_numeric_val (gpointer pObject, gnc_numeric value)
+set_numeric_val (gpointer pObject, gnc_numeric *value)
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
     KvpValue* pValue = NULL;
@@ -564,7 +568,7 @@ set_numeric_val (gpointer pObject, gnc_numeric value)
     g_return_if_fail (pObject != NULL);
 
     if (pInfo->value_type != KvpValue::Type::NUMERIC) return;
-    set_slot_from_value (pInfo, new KvpValue {value});
+    set_slot_from_value (pInfo, new KvpValue {*value});
 }
 
 static GDate*
@@ -710,7 +714,7 @@ gnc_sql_slots_save (GncSqlBackend* be, const GncGUID* guid, gboolean is_infant,
     g_return_val_if_fail (pFrame != NULL, FALSE);
 
     // If this is not saving into a new db, clear out the old saved slots first
-    if (!be->is_pristine_db && !is_infant)
+    if (!be->pristine() && !is_infant)
     {
         (void)gnc_sql_slots_delete (be, guid);
     }
@@ -727,9 +731,7 @@ gboolean
 gnc_sql_slots_delete (GncSqlBackend* be, const GncGUID* guid)
 {
     gchar* buf;
-    GncSqlResult* result;
     gchar guid_buf[GUID_ENCODING_LENGTH + 1];
-    GncSqlStatement* stmt;
     slot_info_t slot_info = { NULL, NULL, TRUE, NULL, KvpValue::Type::INVALID, NULL, FRAME, NULL, g_string_new (NULL) };
 
     g_return_val_if_fail (be != NULL, FALSE);
@@ -739,30 +741,26 @@ gnc_sql_slots_delete (GncSqlBackend* be, const GncGUID* guid)
 
     buf = g_strdup_printf ("SELECT * FROM %s WHERE obj_guid='%s' and slot_type in ('%d', '%d') and not guid_val is null",
                            TABLE_NAME, guid_buf, KvpValue::Type::FRAME, KvpValue::Type::GLIST);
-    stmt = gnc_sql_create_statement_from_sql (be, buf);
+    auto stmt = be->create_statement_from_sql(buf);
     g_free (buf);
-    if (stmt != NULL)
+    if (stmt != nullptr)
     {
-        result = gnc_sql_execute_select_statement (be, stmt);
-        gnc_sql_statement_dispose (stmt);
-        if (result != NULL)
+        auto result = be->execute_select_statement(stmt);
+        for (auto row : *result)
         {
-            GncSqlRow* row = gnc_sql_result_get_first_row (result);
-
-            while (row != NULL)
+            try
             {
-                GncSqlColumnTableEntry table_row = col_table[guid_val_col];
+                const GncSqlColumnTableEntryPtr table_row =
+                    col_table[guid_val_col];
                 GncGUID child_guid;
-                const GValue* val =
-                    gnc_sql_row_get_value_at_col_name (row, table_row.col_name);
-                if (val == NULL)
-                    continue;
-
-                (void)string_to_guid (g_value_get_string (val), &child_guid);
+                auto val = row.get_string_at_col (table_row->name());
+                (void)string_to_guid (val.c_str(), &child_guid);
                 gnc_sql_slots_delete (be, &child_guid);
-                row = gnc_sql_result_get_next_row (result);
             }
-            gnc_sql_result_dispose (result);
+            catch (std::invalid_argument)
+            {
+                continue;
+            }
         }
     }
 
@@ -776,13 +774,12 @@ gnc_sql_slots_delete (GncSqlBackend* be, const GncGUID* guid)
 }
 
 static void
-load_slot (slot_info_t* pInfo, GncSqlRow* row)
+load_slot (slot_info_t* pInfo, GncSqlRow& row)
 {
     slot_info_t* slot_info;
 
     g_return_if_fail (pInfo != NULL);
     g_return_if_fail (pInfo->be != NULL);
-    g_return_if_fail (row != NULL);
     g_return_if_fail (pInfo->pKvpFrame != NULL);
 
     slot_info = slot_info_copy (pInfo, NULL);
@@ -827,10 +824,7 @@ gnc_sql_slots_load (GncSqlBackend* be, QofInstance* inst)
 static void
 slots_load_info (slot_info_t* pInfo)
 {
-    gchar* buf;
-    GncSqlResult* result;
     gchar guid_buf[GUID_ENCODING_LENGTH + 1];
-    GncSqlStatement* stmt;
 
     g_return_if_fail (pInfo != NULL);
     g_return_if_fail (pInfo->be != NULL);
@@ -839,35 +833,24 @@ slots_load_info (slot_info_t* pInfo)
 
     (void)guid_to_string_buff (pInfo->guid, guid_buf);
 
-    buf = g_strdup_printf ("SELECT * FROM %s WHERE obj_guid='%s'",
-                           TABLE_NAME, guid_buf);
-    stmt = gnc_sql_create_statement_from_sql (pInfo->be, buf);
-    g_free (buf);
-    if (stmt != NULL)
+    std::stringstream buf;
+    buf << "SELECT * FROM " << TABLE_NAME <<
+        " WHERE obj_guid='" << guid_buf << "'";
+    auto stmt = pInfo->be->create_statement_from_sql (buf.str());
+    if (stmt != nullptr)
     {
-        result = gnc_sql_execute_select_statement (pInfo->be, stmt);
-        gnc_sql_statement_dispose (stmt);
-        if (result != NULL)
-        {
-            GncSqlRow* row = gnc_sql_result_get_first_row (result);
-
-            while (row != NULL)
-            {
-                load_slot (pInfo, row);
-                row = gnc_sql_result_get_next_row (result);
-            }
-            gnc_sql_result_dispose (result);
-        }
+        auto result = pInfo->be->execute_select_statement (stmt);
+        for (auto row : *result)
+            load_slot (pInfo, row);
     }
 }
 
 static  const GncGUID*
-load_obj_guid (const GncSqlBackend* be, GncSqlRow* row)
+load_obj_guid (const GncSqlBackend* be, GncSqlRow& row)
 {
     static GncGUID guid;
 
     g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (row != NULL, NULL);
 
     gnc_sql_load_object (be, row, NULL, &guid, obj_guid_col_table);
 
@@ -875,7 +858,7 @@ load_obj_guid (const GncSqlBackend* be, GncSqlRow* row)
 }
 
 static void
-load_slot_for_list_item (GncSqlBackend* be, GncSqlRow* row,
+load_slot_for_list_item (GncSqlBackend* be, GncSqlRow& row,
                          QofCollection* coll)
 {
     slot_info_t slot_info = { NULL, NULL, TRUE, NULL, KvpValue::Type::INVALID, NULL, FRAME, NULL, NULL };
@@ -883,7 +866,6 @@ load_slot_for_list_item (GncSqlBackend* be, GncSqlRow* row,
     QofInstance* inst;
 
     g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
     g_return_if_fail (coll != NULL);
 
     guid = load_obj_guid (be, row);
@@ -903,68 +885,45 @@ load_slot_for_list_item (GncSqlBackend* be, GncSqlRow* row,
 }
 
 void
-gnc_sql_slots_load_for_list (GncSqlBackend* be, GList* list)
+gnc_sql_slots_load_for_instancevec (GncSqlBackend* be, InstanceVec& instances)
 {
     QofCollection* coll;
-    GncSqlStatement* stmt;
-    GString* sql;
-    GncSqlResult* result;
-    gboolean single_item;
+    std::stringstream sql;
 
     g_return_if_fail (be != NULL);
 
     // Ignore empty list
-    if (list == NULL) return;
+    if (instances.empty()) return;
 
-    coll = qof_instance_get_collection (QOF_INSTANCE (list->data));
+    coll = qof_instance_get_collection (instances[0]);
 
     // Create the query for all slots for all items on the list
-    sql = g_string_sized_new (40 + (GUID_ENCODING_LENGTH + 3) * g_list_length (
-                                  list));
-    g_string_append_printf (sql, "SELECT * FROM %s WHERE %s ", TABLE_NAME,
-                            obj_guid_col_table[0].col_name);
-    if (g_list_length (list) != 1)
-    {
-        (void)g_string_append (sql, "IN (");
-        single_item = FALSE;
-    }
+
+    sql << "SELECT * FROM " << TABLE_NAME << " WHERE " <<
+                            obj_guid_col_table[0]->name();
+    if (instances.size() != 1)
+        sql << " IN (";
     else
-    {
-        (void)g_string_append (sql, "= ");
-        single_item = TRUE;
-    }
-    (void)gnc_sql_append_guid_list_to_sql (sql, list, G_MAXUINT);
-    if (!single_item)
-    {
-        (void)g_string_append (sql, ")");
-    }
+        sql << " = ";
+
+    gnc_sql_append_guids_to_sql (sql, instances);
+    if (instances.size() > 1)
+        sql << ")";
 
     // Execute the query and load the slots
-    stmt = gnc_sql_create_statement_from_sql (be, sql->str);
-    if (stmt == NULL)
+    auto stmt = be->create_statement_from_sql(sql.str());
+    if (stmt == nullptr)
     {
-        PERR ("stmt == NULL, SQL = '%s'\n", sql->str);
-        (void)g_string_free (sql, TRUE);
+        PERR ("stmt == NULL, SQL = '%s'\n", sql.str().c_str());
         return;
     }
-    (void)g_string_free (sql, TRUE);
-    result = gnc_sql_execute_select_statement (be, stmt);
-    gnc_sql_statement_dispose (stmt);
-    if (result != NULL)
-    {
-        GncSqlRow* row = gnc_sql_result_get_first_row (result);
-
-        while (row != NULL)
-        {
-            load_slot_for_list_item (be, row, coll);
-            row = gnc_sql_result_get_next_row (result);
-        }
-        gnc_sql_result_dispose (result);
-    }
+    auto result = be->execute_select_statement (stmt);
+    for (auto row : *result)
+        load_slot_for_list_item (be, row, coll);
 }
 
 static void
-load_slot_for_book_object (GncSqlBackend* be, GncSqlRow* row,
+load_slot_for_book_object (GncSqlBackend* be, GncSqlRow& row,
                            BookLookupFn lookup_fn)
 {
     slot_info_t slot_info = { NULL, NULL, TRUE, NULL, KvpValue::Type::INVALID, NULL, FRAME, NULL, NULL };
@@ -972,12 +931,11 @@ load_slot_for_book_object (GncSqlBackend* be, GncSqlRow* row,
     QofInstance* inst;
 
     g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
     g_return_if_fail (lookup_fn != NULL);
 
     guid = load_obj_guid (be, row);
     g_return_if_fail (guid != NULL);
-    inst = lookup_fn (guid, be->book);
+    inst = lookup_fn (guid, be->book());
     g_return_if_fail (inst != NULL);
 
     slot_info.be = be;
@@ -1006,8 +964,6 @@ void gnc_sql_slots_load_for_sql_subquery (GncSqlBackend* be,
                                           BookLookupFn lookup_fn)
 {
     gchar* sql;
-    GncSqlStatement* stmt;
-    GncSqlResult* result;
 
     g_return_if_fail (be != NULL);
 
@@ -1015,49 +971,39 @@ void gnc_sql_slots_load_for_sql_subquery (GncSqlBackend* be,
     if (subquery == NULL) return;
 
     sql = g_strdup_printf ("SELECT * FROM %s WHERE %s IN (%s)",
-                           TABLE_NAME, obj_guid_col_table[0].col_name,
+                           TABLE_NAME, obj_guid_col_table[0]->name(),
                            subquery);
 
     // Execute the query and load the slots
-    stmt = gnc_sql_create_statement_from_sql (be, sql);
-    if (stmt == NULL)
+    auto stmt = be->create_statement_from_sql(sql);
+    if (stmt == nullptr)
     {
         PERR ("stmt == NULL, SQL = '%s'\n", sql);
         g_free (sql);
         return;
     }
     g_free (sql);
-    result = gnc_sql_execute_select_statement (be, stmt);
-    gnc_sql_statement_dispose (stmt);
-    if (result != NULL)
-    {
-        GncSqlRow* row = gnc_sql_result_get_first_row (result);
-
-        while (row != NULL)
-        {
-            load_slot_for_book_object (be, row, lookup_fn);
-            row = gnc_sql_result_get_next_row (result);
-        }
-        gnc_sql_result_dispose (result);
-    }
+    auto result = be->execute_select_statement(stmt);
+    for (auto row : *result)
+        load_slot_for_book_object (be, row, lookup_fn);
 }
 
 /* ================================================================= */
-static void
-create_slots_tables (GncSqlBackend* be)
+void
+GncSqlSlotsBackend::create_tables (GncSqlBackend* be)
 {
     gint version;
     gboolean ok;
 
     g_return_if_fail (be != NULL);
 
-    version = gnc_sql_get_table_version (be, TABLE_NAME);
+    version = be->get_table_version( TABLE_NAME);
     if (version == 0)
     {
-        (void)gnc_sql_create_table (be, TABLE_NAME, TABLE_VERSION, col_table);
+        (void)be->create_table(TABLE_NAME, TABLE_VERSION, col_table);
 
-        ok = gnc_sql_create_index (be, "slots_guid_index", TABLE_NAME,
-                                   obj_guid_col_table);
+        ok = be->create_index ("slots_guid_index", TABLE_NAME,
+                               obj_guid_col_table);
         if (!ok)
         {
             PERR ("Unable to create index\n");
@@ -1071,9 +1017,9 @@ create_slots_tables (GncSqlBackend* be)
         */
         if (version == 1)
         {
-            gnc_sql_upgrade_table (be, TABLE_NAME, col_table);
-            ok = gnc_sql_create_index (be, "slots_guid_index", TABLE_NAME,
-                                       obj_guid_col_table);
+            be->upgrade_table(TABLE_NAME, col_table);
+            ok = be->create_index ("slots_guid_index", TABLE_NAME,
+                                   obj_guid_col_table);
             if (!ok)
             {
                 PERR ("Unable to create index\n");
@@ -1081,13 +1027,13 @@ create_slots_tables (GncSqlBackend* be)
         }
         else if (version == 2)
         {
-            ok = gnc_sql_add_columns_to_table (be, TABLE_NAME, gdate_col_table);
+            ok = be->add_columns_to_table(TABLE_NAME, gdate_col_table);
             if (!ok)
             {
                 PERR ("Unable to add gdate column\n");
             }
         }
-        (void)gnc_sql_set_table_version (be, TABLE_NAME, TABLE_VERSION);
+        be->set_table_version (TABLE_NAME, TABLE_VERSION);
         PINFO ("Slots table upgraded from version %d to version %d\n", version,
                TABLE_VERSION);
     }
@@ -1097,19 +1043,9 @@ create_slots_tables (GncSqlBackend* be)
 void
 gnc_sql_init_slots_handler (void)
 {
-    static GncSqlObjectBackend be_data =
-    {
-        GNC_SQL_BACKEND_VERSION,
-        GNC_ID_ACCOUNT,
-        NULL,                    /* commit - cannot occur */
-        NULL,                    /* initial_load - cannot occur */
-        create_slots_tables,     /* create_tables */
-        NULL,                    /* compile_query */
-        NULL,                    /* run_query */
-        NULL,                    /* free_query */
-        NULL                     /* write */
-    };
-
-    (void)qof_object_register_backend (TABLE_NAME, GNC_SQL_BACKEND, &be_data);
+    static GncSqlSlotsBackend be_data {
+        GNC_SQL_BACKEND_VERSION, GNC_ID_ACCOUNT, TABLE_NAME, col_table};
+    gnc_sql_register_backend(std::make_tuple(std::string{TABLE_NAME},
+                                             &be_data));
 }
 /* ========================== END OF FILE ===================== */

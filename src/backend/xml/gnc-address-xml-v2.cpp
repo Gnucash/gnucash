@@ -238,7 +238,5 @@ gnc_address_xml_initialize (void)
         address_ns,
     };
 
-    qof_object_register_backend ("gnc:Address",
-                                 GNC_FILE_BACKEND,
-                                 &be_data);
+    gnc_xml_register_backend (be_data);
 }

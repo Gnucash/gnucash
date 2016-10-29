@@ -42,7 +42,6 @@ extern "C"
 }
 
 #include "gnc-vendor-sql.h"
-#include "gnc-address-sql.h"
 #include "gnc-bill-term-sql.h"
 #include "gnc-tax-table-sql.h"
 #include "gnc-backend-sql.h"
@@ -61,36 +60,49 @@ G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 #define TABLE_NAME "vendors"
 #define TABLE_VERSION 1
 
-static GncSqlColumnTableEntry col_table[] =
+static EntryVec col_table
+({
+    gnc_sql_make_table_entry<CT_GUID>("guid", 0, COL_NNUL | COL_PKEY, "guid"),
+    gnc_sql_make_table_entry<CT_STRING>("name", MAX_NAME_LEN, COL_NNUL, "name"),
+    gnc_sql_make_table_entry<CT_STRING>("id", MAX_ID_LEN, COL_NNUL, "id"),
+    gnc_sql_make_table_entry<CT_STRING>("notes", MAX_NOTES_LEN, COL_NNUL,
+                                        "notes"),
+    gnc_sql_make_table_entry<CT_COMMODITYREF>("currency", 0, COL_NNUL,
+                                              "currency"),
+    gnc_sql_make_table_entry<CT_BOOLEAN>("active", 0, COL_NNUL, "active"),
+    gnc_sql_make_table_entry<CT_BOOLEAN>("tax_override", 0, COL_NNUL,
+                                         "tax-table-override"),
+    gnc_sql_make_table_entry<CT_ADDRESS>("addr", 0, 0, "address"),
+    gnc_sql_make_table_entry<CT_BILLTERMREF>("terms", 0, 0, "terms"),
+    gnc_sql_make_table_entry<CT_STRING>("tax_inc", MAX_TAX_INC_LEN, 0,
+                                        "tax-included-string"),
+    gnc_sql_make_table_entry<CT_TAXTABLEREF>("tax_table", 0, 0, "tax-table"),
+});
+
+class GncSqlVendorBackend : public GncSqlObjectBackend
 {
-    { "guid",         CT_GUID,          0,               COL_NNUL | COL_PKEY, "guid" },
-    { "name",         CT_STRING,        MAX_NAME_LEN,    COL_NNUL,            "name" },
-    { "id",           CT_STRING,        MAX_ID_LEN,      COL_NNUL,            "id" },
-    { "notes",        CT_STRING,        MAX_NOTES_LEN,   COL_NNUL,            "notes" },
-    { "currency",     CT_COMMODITYREF,  0,               COL_NNUL,            "currency" },
-    { "active",       CT_BOOLEAN,       0,               COL_NNUL,            "active" },
-    { "tax_override", CT_BOOLEAN,       0,               COL_NNUL,            "tax-table-override" },
-    { "addr",         CT_ADDRESS,       0,               0,                   "address" },
-    { "terms",        CT_BILLTERMREF,   0,               0,                   "terms" },
-    { "tax_inc",      CT_STRING,        MAX_TAX_INC_LEN, 0,                   "tax-included-string" },
-    { "tax_table",    CT_TAXTABLEREF,   0,               0,                   "tax-table" },
-    { NULL }
+public:
+    GncSqlVendorBackend(int version, const std::string& type,
+                      const std::string& table, const EntryVec& vec) :
+        GncSqlObjectBackend(version, type, table, vec) {}
+    void load_all(GncSqlBackend*) override;
+    bool commit(GncSqlBackend*, QofInstance*) override;
+    bool write(GncSqlBackend*) override;
 };
 
 static GncVendor*
-load_single_vendor (GncSqlBackend* be, GncSqlRow* row)
+load_single_vendor (GncSqlBackend* be, GncSqlRow& row)
 {
     const GncGUID* guid;
     GncVendor* pVendor;
 
     g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (row != NULL, NULL);
 
     guid = gnc_sql_load_guid (be, row);
-    pVendor = gncVendorLookup (be->book, guid);
+    pVendor = gncVendorLookup (be->book(), guid);
     if (pVendor == NULL)
     {
-        pVendor = gncVendorCreate (be->book);
+        pVendor = gncVendorCreate (be->book());
     }
     gnc_sql_load_object (be, row, GNC_ID_VENDOR, pVendor, col_table);
     qof_instance_mark_clean (QOF_INSTANCE (pVendor));
@@ -98,60 +110,31 @@ load_single_vendor (GncSqlBackend* be, GncSqlRow* row)
     return pVendor;
 }
 
-static void
-load_all_vendors (GncSqlBackend* be)
+void
+GncSqlVendorBackend::load_all (GncSqlBackend* be)
 {
-    GncSqlStatement* stmt;
-    GncSqlResult* result;
-
     g_return_if_fail (be != NULL);
 
-    stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
-    result = gnc_sql_execute_select_statement (be, stmt);
-    gnc_sql_statement_dispose (stmt);
-    if (result != NULL)
+    std::stringstream sql;
+    sql << "SELECT * FROM " << TABLE_NAME;
+    auto stmt = be->create_statement_from_sql(sql.str());
+    auto result = be->execute_select_statement(stmt);
+    InstanceVec instances;
+
+    for (auto row : *result)
     {
-        GncSqlRow* row;
-        GList* list = NULL;
-
-        row = gnc_sql_result_get_first_row (result);
-        while (row != NULL)
-        {
-            GncVendor* pVendor = load_single_vendor (be, row);
-            if (pVendor != NULL)
-            {
-                list = g_list_append (list, pVendor);
-            }
-            row = gnc_sql_result_get_next_row (result);
-        }
-        gnc_sql_result_dispose (result);
-
-        if (list != NULL)
-        {
-            gnc_sql_slots_load_for_list (be, list);
-            g_list_free (list);
-        }
+        GncVendor* pVendor = load_single_vendor (be, row);
+        if (pVendor != nullptr)
+            instances.push_back(QOF_INSTANCE(pVendor));
     }
+
+    if (!instances.empty())
+        gnc_sql_slots_load_for_instancevec (be, instances);
 }
 
 /* ================================================================= */
-static void
-create_vendor_tables (GncSqlBackend* be)
-{
-    gint version;
-
-    g_return_if_fail (be != NULL);
-
-    version = gnc_sql_get_table_version (be, TABLE_NAME);
-    if (version == 0)
-    {
-        gnc_sql_create_table (be, TABLE_NAME, TABLE_VERSION, col_table);
-    }
-}
-
-/* ================================================================= */
-static gboolean
-save_vendor (GncSqlBackend* be, QofInstance* inst)
+bool
+GncSqlVendorBackend::commit (GncSqlBackend* be, QofInstance* inst)
 {
     GncVendor* v;
     const GncGUID* guid;
@@ -170,7 +153,7 @@ save_vendor (GncSqlBackend* be, QofInstance* inst)
     {
         op = OP_DB_DELETE;
     }
-    else if (be->is_pristine_db || is_infant)
+    else if (be->pristine() || is_infant)
     {
         op = OP_DB_INSERT;
     }
@@ -227,28 +210,25 @@ vendor_should_be_saved (GncVendor* vendor)
 static void
 write_single_vendor (QofInstance* term_p, gpointer data_p)
 {
-    write_objects_t* s = (write_objects_t*)data_p;
+    auto s = reinterpret_cast<write_objects_t*>(data_p);
 
     g_return_if_fail (term_p != NULL);
     g_return_if_fail (GNC_IS_VENDOR (term_p));
     g_return_if_fail (data_p != NULL);
 
-    if (s->is_ok && vendor_should_be_saved (GNC_VENDOR (term_p)))
+    if (vendor_should_be_saved (GNC_VENDOR (term_p)))
     {
-        s->is_ok = save_vendor (s->be, term_p);
+        s->commit (term_p);
     }
 }
 
-static gboolean
-write_vendors (GncSqlBackend* be)
+bool
+GncSqlVendorBackend::write (GncSqlBackend* be)
 {
-    write_objects_t data;
-
     g_return_val_if_fail (be != NULL, FALSE);
+    write_objects_t data{be, true, this};
 
-    data.be = be;
-    data.is_ok = TRUE;
-    qof_object_foreach (GNC_ID_VENDOR, be->book, write_single_vendor, &data);
+    qof_object_foreach (GNC_ID_VENDOR, be->book(), write_single_vendor, &data);
 
     return data.is_ok;
 }
@@ -257,17 +237,9 @@ write_vendors (GncSqlBackend* be)
 void
 gnc_vendor_sql_initialize (void)
 {
-    static GncSqlObjectBackend be_data =
-    {
-        GNC_SQL_BACKEND_VERSION,
-        GNC_ID_VENDOR,
-        save_vendor,                        /* commit */
-        load_all_vendors,                   /* initial_load */
-        create_vendor_tables,               /* create_tables */
-        NULL, NULL, NULL,
-        write_vendors                       /* write */
-    };
+    static GncSqlVendorBackend be_data {
+        GNC_SQL_BACKEND_VERSION, GNC_ID_VENDOR, TABLE_NAME, col_table};
 
-    qof_object_register_backend (GNC_ID_VENDOR, GNC_SQL_BACKEND, &be_data);
+    gnc_sql_register_backend(&be_data);
 }
 /* ========================== END OF FILE ===================== */

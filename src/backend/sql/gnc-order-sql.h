@@ -30,8 +30,6 @@
 #ifndef GNC_ORDER_SQL_H
 #define GNC_ORDER_SQL_H
 
-#define CT_ORDERREF "order"
-
 void gnc_order_sql_initialize (void);
 
 #endif /* GNC_ORDER_SQL_H */

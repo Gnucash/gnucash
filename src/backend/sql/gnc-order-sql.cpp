@@ -41,7 +41,6 @@ extern "C"
 #include "gnc-backend-sql.h"
 #include "gnc-slots-sql.h"
 #include "gnc-order-sql.h"
-#include "gnc-owner-sql.h"
 
 #define _GNC_MOD_NAME   GNC_ID_ORDER
 
@@ -54,33 +53,46 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define MAX_NOTES_LEN 2048
 #define MAX_REFERENCE_LEN 2048
 
-static GncSqlColumnTableEntry col_table[] =
+static EntryVec col_table
+({
+    gnc_sql_make_table_entry<CT_GUID>("guid", 0, COL_NNUL | COL_PKEY, "guid"),
+    gnc_sql_make_table_entry<CT_STRING>("id", MAX_ID_LEN, COL_NNUL, "id"),
+    gnc_sql_make_table_entry<CT_STRING>("notes", MAX_NOTES_LEN, COL_NNUL,
+                                        "notes"),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "reference", MAX_REFERENCE_LEN, COL_NNUL, "reference"),
+    gnc_sql_make_table_entry<CT_BOOLEAN>("active", 0, COL_NNUL, "order"),
+    gnc_sql_make_table_entry<CT_TIMESPEC>("date_opened", 0, COL_NNUL,
+                                          "date-opened"),
+    gnc_sql_make_table_entry<CT_TIMESPEC>("date_closed", 0, COL_NNUL,
+                                          "date-closed"),
+    gnc_sql_make_table_entry<CT_OWNERREF>("owner", 0, COL_NNUL,
+                                          ORDER_OWNER, true),
+});
+
+class GncSqlOrderBackend : public GncSqlObjectBackend
 {
-    { "guid",        CT_GUID,     0,                 COL_NNUL | COL_PKEY, "guid" },
-    { "id",          CT_STRING,   MAX_ID_LEN,        COL_NNUL,            "id" },
-    { "notes",       CT_STRING,   MAX_NOTES_LEN,     COL_NNUL,            "notes" },
-    { "reference",   CT_STRING,   MAX_REFERENCE_LEN, COL_NNUL,            "reference" },
-    { "active",      CT_BOOLEAN,  0,                 COL_NNUL,            "order" },
-    { "date_opened", CT_TIMESPEC, 0,                 COL_NNUL,            "date-opened" },
-    { "date_closed", CT_TIMESPEC, 0,                 COL_NNUL,            "date-closed" },
-    { "owner",       CT_OWNERREF, 0,                 COL_NNUL,            NULL, ORDER_OWNER },
-    { NULL },
+public:
+    GncSqlOrderBackend(int version, const std::string& type,
+                      const std::string& table, const EntryVec& vec) :
+        GncSqlObjectBackend(version, type, table, vec) {}
+    void load_all(GncSqlBackend*) override;
+    bool write(GncSqlBackend*) override;
 };
 
 static GncOrder*
-load_single_order (GncSqlBackend* be, GncSqlRow* row)
+load_single_order (GncSqlBackend* be, GncSqlRow& row)
 {
     const GncGUID* guid;
     GncOrder* pOrder;
 
     g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (row != NULL, NULL);
 
     guid = gnc_sql_load_guid (be, row);
-    pOrder = gncOrderLookup (be->book, guid);
+    pOrder = gncOrderLookup (be->book(), guid);
     if (pOrder == NULL)
     {
-        pOrder = gncOrderCreate (be->book);
+        pOrder = gncOrderCreate (be->book());
     }
     gnc_sql_load_object (be, row, GNC_ID_ORDER, pOrder, col_table);
     qof_instance_mark_clean (QOF_INSTANCE (pOrder));
@@ -88,67 +100,26 @@ load_single_order (GncSqlBackend* be, GncSqlRow* row)
     return pOrder;
 }
 
-static void
-load_all_orders (GncSqlBackend* be)
+void
+GncSqlOrderBackend::load_all (GncSqlBackend* be)
 {
-    GncSqlStatement* stmt;
-    GncSqlResult* result;
-
     g_return_if_fail (be != NULL);
 
-    stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
-    result = gnc_sql_execute_select_statement (be, stmt);
-    gnc_sql_statement_dispose (stmt);
-    if (result != NULL)
+    std::stringstream sql;
+    sql << "SELECT * FROM " << TABLE_NAME;
+    auto stmt = be->create_statement_from_sql(sql.str());
+    auto result = be->execute_select_statement(stmt);
+    InstanceVec instances;
+
+    for (auto row : *result)
     {
-        GncSqlRow* row;
-        GList* list = NULL;
-
-        row = gnc_sql_result_get_first_row (result);
-        while (row != NULL)
-        {
-            GncOrder* pOrder = load_single_order (be, row);
-            if (pOrder != NULL)
-            {
-                list = g_list_append (list, pOrder);
-            }
-            row = gnc_sql_result_get_next_row (result);
-        }
-        gnc_sql_result_dispose (result);
-
-        if (list != NULL)
-        {
-            gnc_sql_slots_load_for_list (be, list);
-            g_list_free (list);
-        }
+        GncOrder* pOrder = load_single_order (be, row);
+        if (pOrder != nullptr)
+            instances.push_back(QOF_INSTANCE(pOrder));
     }
-}
 
-/* ================================================================= */
-static void
-create_order_tables (GncSqlBackend* be)
-{
-    gint version;
-
-    g_return_if_fail (be != NULL);
-
-    version = gnc_sql_get_table_version (be, TABLE_NAME);
-    if (version == 0)
-    {
-        gnc_sql_create_table (be, TABLE_NAME, TABLE_VERSION, col_table);
-    }
-}
-
-/* ================================================================= */
-static gboolean
-save_order (GncSqlBackend* be, QofInstance* inst)
-{
-    g_return_val_if_fail (inst != NULL, FALSE);
-    g_return_val_if_fail (GNC_IS_ORDER (inst), FALSE);
-    g_return_val_if_fail (be != NULL, FALSE);
-
-    return gnc_sql_commit_standard_item (be, inst, TABLE_NAME, GNC_ID_ORDER,
-                                         col_table);
+    if (!instances.empty())
+        gnc_sql_slots_load_for_instancevec (be, instances);
 }
 
 /* ================================================================= */
@@ -172,7 +143,7 @@ order_should_be_saved (GncOrder* order)
 static void
 write_single_order (QofInstance* term_p, gpointer data_p)
 {
-    write_objects_t* s = (write_objects_t*)data_p;
+    auto s = reinterpret_cast<write_objects_t*>(data_p);
 
     g_return_if_fail (term_p != NULL);
     g_return_if_fail (GNC_IS_ORDER (term_p));
@@ -180,88 +151,56 @@ write_single_order (QofInstance* term_p, gpointer data_p)
 
     if (s->is_ok && order_should_be_saved (GNC_ORDER (term_p)))
     {
-        s->is_ok = save_order (s->be, term_p);
+        s->commit (term_p);
     }
 }
 
-static gboolean
-write_orders (GncSqlBackend* be)
+bool
+GncSqlOrderBackend::write (GncSqlBackend* be)
 {
-    write_objects_t data;
-
     g_return_val_if_fail (be != NULL, FALSE);
+    write_objects_t data{be, true, this};
 
-    data.be = be;
-    data.is_ok = TRUE;
-    qof_object_foreach (GNC_ID_ORDER, be->book, write_single_order, &data);
+    qof_object_foreach (GNC_ID_ORDER, be->book(), write_single_order, &data);
 
     return data.is_ok;
 }
 
 /* ================================================================= */
-static void
-load_order_guid (const GncSqlBackend* be, GncSqlRow* row,
-                 QofSetterFunc setter, gpointer pObject,
-                 const GncSqlColumnTableEntry* table_row)
+template<> void
+GncSqlColumnTableEntryImpl<CT_ORDERREF>::load (const GncSqlBackend* be,
+                                                 GncSqlRow& row,
+                                                 QofIdTypeConst obj_name,
+                                                 gpointer pObject) const noexcept
 {
-    const GValue* val;
-    GncGUID guid;
-    GncOrder* order = NULL;
-
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
-    g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
-
-    val = gnc_sql_row_get_value_at_col_name (row, table_row->col_name);
-    if (val != NULL && G_VALUE_HOLDS_STRING (val) &&
-        g_value_get_string (val) != NULL)
-    {
-        string_to_guid (g_value_get_string (val), &guid);
-        order = gncOrderLookup (be->book, &guid);
-        if (order != NULL)
-        {
-            if (table_row->gobj_param_name != NULL)
-            {
-                qof_instance_increase_editlevel (pObject);
-                g_object_set (pObject, table_row->gobj_param_name, order, NULL);
-                qof_instance_decrease_editlevel (pObject);
-            }
-            else
-            {
-                (*setter) (pObject, (const gpointer)order);
-            }
-        }
-        else
-        {
-            PWARN ("Order ref '%s' not found", g_value_get_string (val));
-        }
-    }
+    load_from_guid_ref(row, obj_name, pObject,
+                       [be](GncGUID* g){
+                           return gncOrderLookup(be->book(), g);
+                       });
 }
 
-static GncSqlColumnTypeHandler order_guid_handler
-= { load_order_guid,
-    gnc_sql_add_objectref_guid_col_info_to_list,
-    gnc_sql_add_colname_to_list,
-    gnc_sql_add_gvalue_objectref_guid_to_slist
-  };
+template<> void
+GncSqlColumnTableEntryImpl<CT_ORDERREF>::add_to_table(const GncSqlBackend* be,
+                                                 ColVec& vec) const noexcept
+{
+    add_objectref_guid_to_table(be, vec);
+}
+
+template<> void
+GncSqlColumnTableEntryImpl<CT_ORDERREF>::add_to_query(const GncSqlBackend* be,
+                                                    QofIdTypeConst obj_name,
+                                                    const gpointer pObject,
+                                                    PairVec& vec) const noexcept
+{
+    add_objectref_guid_to_query(be, obj_name, pObject, vec);
+}
 /* ================================================================= */
 void
 gnc_order_sql_initialize (void)
 {
-    static GncSqlObjectBackend be_data =
-    {
-        GNC_SQL_BACKEND_VERSION,
-        GNC_ID_ORDER,
-        save_order,                     /* commit */
-        load_all_orders,                /* initial_load */
-        create_order_tables,            /* create_tables */
-        NULL, NULL, NULL,
-        write_orders                    /* write */
-    };
+    static GncSqlOrderBackend be_data {
+        GNC_SQL_BACKEND_VERSION, GNC_ID_ORDER, TABLE_NAME, col_table};
 
-    qof_object_register_backend (GNC_ID_ORDER, GNC_SQL_BACKEND, &be_data);
-
-    gnc_sql_register_col_type_handler (CT_ORDERREF, &order_guid_handler);
+    gnc_sql_register_backend(&be_data);
 }
 /* ========================== END OF FILE ===================== */

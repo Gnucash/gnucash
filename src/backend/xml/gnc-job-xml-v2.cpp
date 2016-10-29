@@ -359,7 +359,5 @@ gnc_job_xml_initialize (void)
         job_ns,
     };
 
-    qof_object_register_backend (_GNC_MOD_NAME,
-                                 GNC_FILE_BACKEND,
-                                 &be_data);
+    gnc_xml_register_backend(be_data);
 }

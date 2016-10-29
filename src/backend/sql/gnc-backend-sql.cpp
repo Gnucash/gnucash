@@ -55,6 +55,10 @@ extern "C"
 #include "splint-defs.h"
 #endif
 }
+
+#include <tuple>
+#include <iomanip>
+
 #include "gnc-backend-sql.h"
 
 #include "gnc-account-sql.h"
@@ -68,7 +72,6 @@ extern "C"
 #include "gnc-slots-sql.h"
 #include "gnc-transaction-sql.h"
 
-#include "gnc-address-sql.h"
 #include "gnc-bill-term-sql.h"
 #include "gnc-customer-sql.h"
 #include "gnc-employee-sql.h"
@@ -76,27 +79,30 @@ extern "C"
 #include "gnc-invoice-sql.h"
 #include "gnc-job-sql.h"
 #include "gnc-order-sql.h"
-#include "gnc-owner-sql.h"
 #include "gnc-tax-table-sql.h"
 #include "gnc-vendor-sql.h"
 
+#define VERSION_TABLE_NAME "versions"
+#define MAX_TABLE_NAME_LEN 50
+#define TABLE_COL_NAME "table_name"
+#define VERSION_COL_NAME "table_version"
+
 static void gnc_sql_init_object_handlers (void);
-static void update_progress (GncSqlBackend* be);
-static void finish_progress (GncSqlBackend* be);
-static void register_standard_col_type_handlers (void);
-static gboolean reset_version_info (GncSqlBackend* be);
-static GncSqlStatement* build_insert_statement (GncSqlBackend* be,
-                                                const gchar* table_name,
-                                                QofIdTypeConst obj_name, gpointer pObject,
-                                                const GncSqlColumnTableEntry* table);
-static GncSqlStatement* build_update_statement (GncSqlBackend* be,
-                                                const gchar* table_name,
-                                                QofIdTypeConst obj_name, gpointer pObject,
-                                                const GncSqlColumnTableEntry* table);
-static GncSqlStatement* build_delete_statement (GncSqlBackend* be,
-                                                const gchar* table_name,
-                                                QofIdTypeConst obj_name, gpointer pObject,
-                                                const GncSqlColumnTableEntry* table);
+static GncSqlStatementPtr build_insert_statement (GncSqlBackend* be,
+                                                  const gchar* table_name,
+                                                  QofIdTypeConst obj_name,
+                                                  gpointer pObject,
+                                                  const EntryVec& table);
+static GncSqlStatementPtr build_update_statement (GncSqlBackend* be,
+                                                  const gchar* table_name,
+                                                  QofIdTypeConst obj_name,
+                                                  gpointer pObject,
+                                                  const EntryVec& table);
+static GncSqlStatementPtr build_delete_statement (GncSqlBackend* be,
+                                                  const gchar* table_name,
+                                                  QofIdTypeConst obj_name,
+                                                  gpointer pObject,
+                                                  const EntryVec& table);
 
 static GList* post_load_commodities = NULL;
 
@@ -125,15 +131,46 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define SQLITE_PROVIDER_NAME "SQLite"
 
 /* ================================================================= */
+static OBEVec backend_registry;
+void
+gnc_sql_register_backend(OBEEntry&& entry)
+{
+    backend_registry.emplace_back(entry);
+}
 
 void
-gnc_sql_init (GncSqlBackend* be)
+gnc_sql_register_backend(GncSqlObjectBackendPtr obe)
+{
+    backend_registry.emplace_back(make_tuple(std::string{obe->type()}, obe));
+}
+
+const OBEVec&
+gnc_sql_get_backend_registry()
+{
+    return backend_registry;
+}
+
+GncSqlObjectBackendPtr
+gnc_sql_get_object_backend(const std::string& type)
+{
+    auto entry = std::find_if(backend_registry.begin(),
+                              backend_registry.end(),
+                              [type](const OBEEntry& entry){
+                                  return type == std::get<0>(entry);
+                              });
+    if (entry == backend_registry.end())
+        return nullptr;
+
+    return std::get<1>(*entry);
+}
+
+void
+gnc_sql_init(GncSqlBackend* be)
 {
     static gboolean initialized = FALSE;
 
     if (!initialized)
     {
-        register_standard_col_type_handlers ();
         gnc_sql_init_object_handlers ();
         initialized = TRUE;
     }
@@ -142,65 +179,43 @@ gnc_sql_init (GncSqlBackend* be)
 /* ================================================================= */
 
 static void
-create_tables_cb (const gchar* type, gpointer data_p, gpointer be_p)
+create_tables(const OBEEntry& entry, GncSqlBackend* be)
 {
-    GncSqlObjectBackend* pData = static_cast<decltype (pData)> (data_p);
-    GncSqlBackend* be = static_cast<decltype (be)> (be_p);
-
-    g_return_if_fail (type != NULL && data_p != NULL && be_p != NULL);
-    g_return_if_fail (pData->version == GNC_SQL_BACKEND_VERSION);
-
-    if (pData->create_tables != NULL)
-    {
-        update_progress (be);
-        (pData->create_tables) (be);
-    }
+    std::string type;
+    GncSqlObjectBackendPtr obe = nullptr;
+    std::tie(type, obe) = entry;
+    g_return_if_fail (obe->is_version (GNC_SQL_BACKEND_VERSION));
+    be->update_progress();
+    obe->create_tables(be);
 }
 
 /* ================================================================= */
 
 /* Main object load order */
-static const gchar* fixed_load_order[] =
-{ GNC_ID_BOOK, GNC_ID_COMMODITY, GNC_ID_ACCOUNT, GNC_ID_LOT, NULL };
+static const StrVec fixed_load_order
+{ GNC_ID_BOOK, GNC_ID_COMMODITY, GNC_ID_ACCOUNT, GNC_ID_LOT };
 
-/* Load order for objects from other modules */
-static const gchar** other_load_order = NULL;
-
-void
-gnc_sql_set_load_order (const gchar** load_order)
-{
-    other_load_order = load_order;
-}
+/* Order in which business objects need to be loaded */
+static const StrVec business_fixed_load_order =
+{ GNC_ID_BILLTERM, GNC_ID_TAXTABLE, GNC_ID_INVOICE };
 
 static void
-initial_load_cb (const gchar* type, gpointer data_p, gpointer be_p)
+initial_load(const OBEEntry& entry, GncSqlBackend* be)
 {
-    GncSqlObjectBackend* pData = static_cast<decltype (pData)> (data_p);
-    GncSqlBackend* be = static_cast<decltype (be)> (be_p);
-    gint i;
+    std::string type;
+    GncSqlObjectBackendPtr obe = nullptr;
+    std::tie(type, obe) = entry;
+    g_return_if_fail(obe->is_version (GNC_SQL_BACKEND_VERSION));
 
-    g_return_if_fail (type != NULL && data_p != NULL && be_p != NULL);
-    g_return_if_fail (pData->version == GNC_SQL_BACKEND_VERSION);
+    /* Don't need to load anything if it has already been loaded with
+     * the fixed order.
+     */
+    if (std::find(fixed_load_order.begin(), fixed_load_order.end(),
+                  type) != fixed_load_order.end()) return;
+    if (std::find(business_fixed_load_order.begin(), business_fixed_load_order.end(),
+                  type) != business_fixed_load_order.end()) return;
 
-    // Don't need to load anything if it has already been loaded with the fixed order
-    for (i = 0; fixed_load_order[i] != NULL; i++)
-    {
-        update_progress (be);
-        if (g_ascii_strcasecmp (type, fixed_load_order[i]) == 0) return;
-    }
-    if (other_load_order != NULL)
-    {
-        for (i = 0; other_load_order[i] != NULL; i++)
-        {
-            update_progress (be);
-            if (g_ascii_strcasecmp (type, other_load_order[i]) == 0) return;
-        }
-    }
-
-    if (pData->initial_load != NULL)
-    {
-        (pData->initial_load) (be);
-    }
+    obe->load_all (be);
 }
 
 void
@@ -220,8 +235,6 @@ commit_commodity (gpointer data)
 void
 gnc_sql_load (GncSqlBackend* be,  QofBook* book, QofBackendLoadType loadType)
 {
-    GncSqlObjectBackend* pData;
-    gint i;
     Account* root;
 
     g_return_if_fail (be != NULL);
@@ -229,55 +242,51 @@ gnc_sql_load (GncSqlBackend* be,  QofBook* book, QofBackendLoadType loadType)
 
     ENTER ("be=%p, book=%p", be, book);
 
-    be->loading = TRUE;
+    be->m_loading = TRUE;
 
     if (loadType == LOAD_TYPE_INITIAL_LOAD)
     {
-        g_assert (be->book == NULL);
-        be->book = book;
+        g_assert (be->m_book == NULL);
+        be->m_book = book;
 
         /* Load any initial stuff. Some of this needs to happen in a certain order */
-        for (i = 0; fixed_load_order[i] != NULL; i++)
+        for (auto type : fixed_load_order)
         {
-            pData = static_cast<decltype (pData)> (qof_object_lookup_backend (
-                                                       fixed_load_order[i],
-                                                       GNC_SQL_BACKEND));
-            if (pData->initial_load != NULL)
+            auto obe = gnc_sql_get_object_backend(type);
+            if (obe)
             {
-                update_progress (be);
-                (pData->initial_load) (be);
+                be->update_progress();
+                obe->load_all (be);
             }
         }
-        if (other_load_order != NULL)
+        for (auto type : business_fixed_load_order)
         {
-            for (i = 0; other_load_order[i] != NULL; i++)
+            auto obe = gnc_sql_get_object_backend(type);
+            if (obe)
             {
-                pData =
-                    static_cast<decltype (pData)> (qof_object_lookup_backend (
-                                                       other_load_order[i],
-                                                       GNC_SQL_BACKEND));
-                if (pData->initial_load != NULL)
-                {
-                    update_progress (be);
-                    (pData->initial_load) (be);
-                }
+                be->update_progress();
+                obe->load_all (be);
             }
         }
 
-        root = gnc_book_get_root_account (book);
-        gnc_account_foreach_descendant (root, (AccountCb)xaccAccountBeginEdit, NULL);
+        root = gnc_book_get_root_account( book );
+        gnc_account_foreach_descendant(root, (AccountCb)xaccAccountBeginEdit,
+                                       nullptr);
 
-        qof_object_foreach_backend (GNC_SQL_BACKEND, initial_load_cb, be);
+        for (auto entry : backend_registry)
+            initial_load(entry, be);
 
-        gnc_account_foreach_descendant (root, (AccountCb)xaccAccountCommitEdit, NULL);
+        gnc_account_foreach_descendant(root, (AccountCb)xaccAccountCommitEdit,
+                                       nullptr);
     }
     else if (loadType == LOAD_TYPE_LOAD_ALL)
     {
         // Load all transactions
-        gnc_sql_transaction_load_all_tx (be);
+        auto obe = gnc_sql_get_object_backend (GNC_ID_TRANS);
+        obe->load_all (be);
     }
 
-    be->loading = FALSE;
+    be->m_loading = FALSE;
     g_list_free_full (post_load_commodities, commit_commodity);
     post_load_commodities = NULL;
 
@@ -285,7 +294,7 @@ gnc_sql_load (GncSqlBackend* be,  QofBook* book, QofBackendLoadType loadType)
      * dirty with this backend
      */
     qof_book_mark_session_saved (book);
-    finish_progress (be);
+    be->finish_progress();
 
     LEAVE ("");
 }
@@ -302,18 +311,19 @@ write_account_tree (GncSqlBackend* be, Account* root)
     g_return_val_if_fail (be != NULL, FALSE);
     g_return_val_if_fail (root != NULL, FALSE);
 
-    is_ok = gnc_sql_save_account (be, QOF_INSTANCE (root));
+    auto obe = gnc_sql_get_object_backend (GNC_ID_ACCOUNT);
+    is_ok = obe->commit (be, QOF_INSTANCE (root));
     if (is_ok)
     {
         descendants = gnc_account_get_descendants (root);
         for (node = descendants; node != NULL && is_ok; node = g_list_next (node))
         {
-            is_ok = gnc_sql_save_account (be, QOF_INSTANCE (GNC_ACCOUNT (node->data)));
+            is_ok = obe->commit(be, QOF_INSTANCE (GNC_ACCOUNT (node->data)));
             if (!is_ok) break;
         }
         g_list_free (descendants);
     }
-    update_progress (be);
+    be->update_progress();
 
     return is_ok;
 }
@@ -325,68 +335,63 @@ write_accounts (GncSqlBackend* be)
 
     g_return_val_if_fail (be != NULL, FALSE);
 
-    update_progress (be);
-    is_ok = write_account_tree (be, gnc_book_get_root_account (be->book));
+    be->update_progress();
+    is_ok = write_account_tree (be, gnc_book_get_root_account (be->book()));
     if (is_ok)
     {
-        update_progress (be);
-        is_ok = write_account_tree (be, gnc_book_get_template_root (be->book));
+        be->update_progress();
+        is_ok = write_account_tree (be, gnc_book_get_template_root (be->book()));
     }
 
     return is_ok;
 }
 
-static int
+static gboolean
 write_tx (Transaction* tx, gpointer data)
 {
-    write_objects_t* s = (write_objects_t*)data;
+    auto s = static_cast<write_objects_t*>(data);
 
     g_return_val_if_fail (tx != NULL, 0);
     g_return_val_if_fail (data != NULL, 0);
 
-    s->is_ok = gnc_sql_save_transaction (s->be, QOF_INSTANCE (tx));
-    update_progress (s->be);
-
-    if (s->is_ok)
+    s->commit (QOF_INSTANCE (tx));
+    auto splitbe = gnc_sql_get_object_backend (GNC_ID_SPLIT);
+    for (auto split_node = xaccTransGetSplitList (tx);
+         split_node != nullptr && s->is_ok;
+         split_node = g_list_next (split_node))
     {
-        return 0;
+        s->is_ok = splitbe->commit(s->be, QOF_INSTANCE(split_node->data));
     }
-    else
-    {
-        return 1;
-    }
+    s->be->update_progress ();
+    return (s->is_ok ? 0 : 1);
 }
 
 static gboolean
 write_transactions (GncSqlBackend* be)
 {
-    write_objects_t data;
-
     g_return_val_if_fail (be != NULL, FALSE);
 
-    data.be = be;
-    data.is_ok = TRUE;
+    auto obe = gnc_sql_get_object_backend(GNC_ID_TRANS);
+    write_objects_t data{be, true, obe};
+
     (void)xaccAccountTreeForEachTransaction (
-        gnc_book_get_root_account (be->book), write_tx, &data);
-    update_progress (be);
+        gnc_book_get_root_account (be->book()), write_tx, &data);
+    be->update_progress();
     return data.is_ok;
 }
 
 static gboolean
 write_template_transactions (GncSqlBackend* be)
 {
-    Account* ra;
-    write_objects_t data;
-
     g_return_val_if_fail (be != NULL, FALSE);
 
-    data.is_ok = TRUE;
-    data.be = be;
-    ra = gnc_book_get_template_root (be->book);
+    auto obe = gnc_sql_get_object_backend(GNC_ID_TRANS);
+    write_objects_t data{be, true, obe};
+    auto ra = gnc_book_get_template_root (be->book());
     if (gnc_account_n_descendants (ra) > 0)
     {
         (void)xaccAccountTreeForEachTransaction (ra, write_tx, &data);
-        update_progress (be);
+        be->update_progress();
     }
 
     return data.is_ok;
@@ -401,47 +406,317 @@ write_schedXactions (GncSqlBackend* be)
 
     g_return_val_if_fail (be != NULL, FALSE);
 
-    schedXactions = gnc_book_get_schedxactions (be->book)->sx_list;
+    schedXactions = gnc_book_get_schedxactions (be->book())->sx_list;
+    auto obe = gnc_sql_get_object_backend(GNC_ID_SCHEDXACTION);
 
     for (; schedXactions != NULL && is_ok; schedXactions = schedXactions->next)
     {
         tmpSX = static_cast<decltype (tmpSX)> (schedXactions->data);
-        is_ok = gnc_sql_save_schedxaction (be, QOF_INSTANCE (tmpSX));
+        is_ok = obe->commit (be, QOF_INSTANCE (tmpSX));
     }
-    update_progress (be);
+    be->update_progress();
 
     return is_ok;
 }
 
-static void
-write_cb (const gchar* type, gpointer data_p, gpointer be_p)
+static EntryVec version_table
 {
-    GncSqlObjectBackend* pData = static_cast<decltype (pData)> (data_p);
-    GncSqlBackend* be = static_cast<decltype (be)> (be_p);
+    gnc_sql_make_table_entry<CT_STRING>(
+        TABLE_COL_NAME, MAX_TABLE_NAME_LEN, COL_PKEY | COL_NNUL),
+    gnc_sql_make_table_entry<CT_INT>(VERSION_COL_NAME, 0, COL_NNUL)
+};
 
-    g_return_if_fail (type != NULL && data_p != NULL && be_p != NULL);
-    g_return_if_fail (pData->version == GNC_SQL_BACKEND_VERSION);
+GncSqlBackend::GncSqlBackend(GncSqlConnection *conn, QofBook* book,
+                             const char* format) :
+        be {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+            nullptr, nullptr, nullptr, nullptr, ERR_BACKEND_NO_ERR, nullptr, 0,
+            nullptr}, m_conn{conn}, m_book{book}, m_loading{false},
+        m_in_query{false}, m_is_pristine_db{false}, m_timespec_format{format}
+{
+    if (conn != nullptr)
+        connect (conn);
+}
 
-    if (pData->write != NULL)
+void
+GncSqlBackend::connect(GncSqlConnection *conn) noexcept
+{
+    if (m_conn != nullptr && m_conn != conn)
+        delete m_conn;
+    finalize_version_info();
+    m_conn = conn;
+}
+
+GncSqlStatementPtr
+GncSqlBackend::create_statement_from_sql(const std::string& str) const noexcept
+{
+    auto stmt = m_conn->create_statement_from_sql(str);
+    if (stmt == nullptr)
     {
-        (void) (pData->write) (be);
-        update_progress (be);
+        PERR ("SQL error: %s\n", str.c_str());
+        qof_backend_set_error ((QofBackend*)this, ERR_BACKEND_SERVER_ERR);
+    }
+    return stmt;
+}
+
+GncSqlResultPtr
+GncSqlBackend::execute_select_statement(const GncSqlStatementPtr& stmt) const noexcept
+{
+    auto result = m_conn->execute_select_statement(stmt);
+    if (result == nullptr)
+    {
+        PERR ("SQL error: %s\n", stmt->to_sql());
+        qof_backend_set_error ((QofBackend*)this, ERR_BACKEND_SERVER_ERR);
+    }
+    return result;
+}
+
+int
+GncSqlBackend::execute_nonselect_statement(const GncSqlStatementPtr& stmt) const noexcept
+{
+    auto result = m_conn->execute_nonselect_statement(stmt);
+    if (result == -1)
+    {
+        PERR ("SQL error: %s\n", stmt->to_sql());
+        qof_backend_set_error ((QofBackend*)this, ERR_BACKEND_SERVER_ERR);
+    }
+    return result;
+}
+
+std::string
+GncSqlBackend::quote_string(const std::string& str) const noexcept
+{
+    return m_conn->quote_string(str);
+}
+
+bool
+GncSqlBackend::create_table(const std::string& table_name,
+                            const EntryVec& col_table) const noexcept
+{
+    ColVec info_vec;
+    gboolean ok = FALSE;
+
+    for (auto const& table_row : col_table)
+    {
+        table_row->add_to_table (this, info_vec);
+    }
+    return m_conn->create_table (table_name, info_vec);
+
+}
+
+bool
+GncSqlBackend::create_table(const std::string& table_name, int table_version,
+                            const EntryVec& col_table) noexcept
+{
+    if (create_table (table_name, col_table))
+        return set_table_version (table_name, table_version);
+    return false;
+}
+
+bool
+GncSqlBackend::create_index(const std::string& index_name,
+                            const std::string& table_name,
+                            const EntryVec& col_table) const noexcept
+{
+    return m_conn->create_index(index_name, table_name, col_table);
+}
+
+bool
+GncSqlBackend::add_columns_to_table(const std::string& table_name,
+                                    const EntryVec& col_table) const noexcept
+{
+    ColVec info_vec;
+
+    for (auto const& table_row : col_table)
+    {
+        table_row->add_to_table (this, info_vec);
+    }
+    return m_conn->add_columns_to_table(table_name, info_vec);
+}
+
+void
+GncSqlBackend::update_progress() const noexcept
+{
+    if (be.percentage != nullptr)
+        (be.percentage) (nullptr, 101.0);
+}
+
+void
+GncSqlBackend::finish_progress() const noexcept
+{
+    if (be.percentage != nullptr)
+        (be.percentage) (nullptr, -1.0);
+}
+
+/**
+ * Sees if the version table exists, and if it does, loads the info into
+ * the version hash table.  Otherwise, it creates an empty version table.
+ *
+ * @param be Backend struct
+ */
+void
+GncSqlBackend::init_version_info() noexcept
+{
+
+    if (m_conn->does_table_exist (VERSION_TABLE_NAME))
+    {
+        std::string sql {"SELECT * FROM "};
+        sql += VERSION_TABLE_NAME;
+        auto stmt = m_conn->create_statement_from_sql(sql);
+        auto result = m_conn->execute_select_statement (stmt);
+        for (const auto& row : *result)
+        {
+            auto name = row.get_string_at_col (TABLE_COL_NAME);
+            unsigned int version = row.get_int_at_col (VERSION_COL_NAME);
+            m_versions.push_back(std::make_pair(name, version));
+        }
+    }
+    else
+    {
+        create_table (VERSION_TABLE_NAME, version_table);
+        set_table_version("Gnucash", gnc_prefs_get_long_version ());
+        set_table_version("Gnucash-Resave", GNUCASH_RESAVE_VERSION);
     }
 }
 
-static void
-update_progress (GncSqlBackend* be)
+/**
+ * Resets the version table information by removing all version table info.
+ * It also recreates the version table in the db.
+ *
+ * @param be Backend struct
+ * @return TRUE if successful, FALSE if error
+ */
+bool
+GncSqlBackend::reset_version_info() noexcept
 {
-    if (be->be.percentage != NULL)
-        (be->be.percentage) (NULL, 101.0);
+    bool ok = true;
+    if (!m_conn->does_table_exist (VERSION_TABLE_NAME))
+        ok = create_table (VERSION_TABLE_NAME, version_table);
+    m_versions.clear();
+    set_table_version ("Gnucash", gnc_prefs_get_long_version ());
+    set_table_version ("Gnucash-Resave", GNUCASH_RESAVE_VERSION);
+    return ok;
 }
 
-static void
-finish_progress (GncSqlBackend* be)
+/**
+ * Finalizes the version table info by destroying the hash table.
+ *
+ * @param be Backend struct
+ */
+void
+GncSqlBackend::finalize_version_info() noexcept
 {
-    if (be->be.percentage != NULL)
-        (be->be.percentage) (NULL, -1.0);
+    m_versions.clear();
 }
+
+unsigned int
+GncSqlBackend::get_table_version(const std::string& table_name) const noexcept
+{
+    /* If the db is pristine because it's being saved, the table does not exist. */
+    if (m_is_pristine_db)
+        return 0;
+
+    auto version = std::find_if(m_versions.begin(), m_versions.end(),
+                                [table_name](const VersionPair& version) {
+                                    return version.first == table_name; });
+    if (version != m_versions.end())
+        return version->second;
+    return 0;
+}
+
+/**
+ * Registers the version for a table.  Registering involves updating the
+ * db version table and also the hash table.
+ *
+ * @param be Backend struct
+ * @param table_name Table name
+ * @param version Version number
+ * @return TRUE if successful, FALSE if unsuccessful
+ */
+bool
+GncSqlBackend::set_table_version (const std::string& table_name,
+                                  uint_t version) noexcept
+{
+    g_return_val_if_fail (version > 0, false);
+
+    unsigned int cur_version{0};
+    std::stringstream sql;
+    auto ver_entry = std::find_if(m_versions.begin(), m_versions.end(),
+                                [table_name](const VersionPair& ver) {
+                                    return ver.first == table_name; });
+    if (ver_entry != m_versions.end())
+        cur_version = ver_entry->second;
+    if (cur_version != version)
+    {
+        if (cur_version == 0)
+        {
+            sql << "INSERT INTO " << VERSION_TABLE_NAME << " VALUES('" <<
+                table_name << "'," << version <<")";
+            m_versions.push_back(std::make_pair(table_name, version));
+        }
+        else
+        {
+            sql << "UPDATE " <<  VERSION_TABLE_NAME << " SET " <<
+                VERSION_COL_NAME << "=" << version << " WHERE " <<
+                TABLE_COL_NAME << "='" << table_name << "'";
+            ver_entry->second = version;
+        }
+        auto stmt = create_statement_from_sql(sql.str());
+        auto status = execute_nonselect_statement (stmt);
+        if (status == -1)
+        {
+            PERR ("SQL error: %s\n", sql.str().c_str());
+            qof_backend_set_error ((QofBackend*)this, ERR_BACKEND_SERVER_ERR);
+            return false;
+        }
+    }
+
+    return true;
+}
+
+void
+GncSqlBackend::upgrade_table (const std::string& table_name,
+                              const EntryVec& col_table) noexcept
+{
+    DEBUG ("Upgrading %s table\n", table_name.c_str());
+
+    auto temp_table_name = table_name + "_new";
+    create_table (temp_table_name, col_table);
+    std::stringstream sql;
+    sql << "INSERT INTO " << temp_table_name << " SELECT * FROM " << table_name;
+    auto stmt = create_statement_from_sql(sql.str());
+    execute_nonselect_statement(stmt);
+
+    sql.str("");
+    sql << "DROP TABLE " << table_name;
+    stmt = create_statement_from_sql(sql.str());
+    execute_nonselect_statement(stmt);
+
+    sql.str("");
+    sql << "ALTER TABLE " << temp_table_name << " RENAME TO " << table_name;
+    stmt = create_statement_from_sql(sql.str());
+    execute_nonselect_statement(stmt);
+}
+
+/* This is required because we're passing be->timespace_format to
+ * g_strdup_printf.
+ */
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
+std::string
+GncSqlBackend::time64_to_string (time64 t) const noexcept
+{
+    auto tm = gnc_gmtime (&t);
+
+    auto year = tm->tm_year + 1900;
+
+    auto datebuf = g_strdup_printf (m_timespec_format,
+                                    year, tm->tm_mon + 1, tm->tm_mday,
+                                    tm->tm_hour, tm->tm_min, tm->tm_sec);
+    gnc_tm_free (tm);
+    std::string date{datebuf};
+    g_free(datebuf);
+    return date;
+}
+#pragma GCC diagnostic warning "-Wformat-nonliteral"
 
 void
 gnc_sql_sync_all (GncSqlBackend* be,  QofBook* book)
@@ -451,29 +726,25 @@ gnc_sql_sync_all (GncSqlBackend* be,  QofBook* book)
     g_return_if_fail (be != NULL);
     g_return_if_fail (book != NULL);
 
-    ENTER ("book=%p, be->book=%p", book, be->book);
-    update_progress (be);
-    (void)reset_version_info (be);
+    be->reset_version_info();
+    ENTER ("book=%p, be->book=%p", book, be->book());
+    be->update_progress();
 
     /* Create new tables */
-    be->is_pristine_db = TRUE;
-    qof_object_foreach_backend (GNC_SQL_BACKEND, create_tables_cb, be);
+    be->m_is_pristine_db = true;
+    for(auto entry : backend_registry)
+        create_tables(entry, be);
 
     /* Save all contents */
-    be->book = book;
-    be->obj_total = 0;
-    be->obj_total += 1 + gnc_account_n_descendants (gnc_book_get_root_account (
-                                                        book));
-    be->obj_total += gnc_book_count_transactions (book);
-    be->operations_done = 0;
-
-    is_ok = gnc_sql_connection_begin_transaction (be->conn);
+    be->m_book = book;
+    is_ok = be->m_conn->begin_transaction ();
 
     // FIXME: should write the set of commodities that are used
     //write_commodities( be, book );
     if (is_ok)
     {
-        is_ok = gnc_sql_save_book (be, QOF_INSTANCE (book));
+        auto obe = gnc_sql_get_object_backend(GNC_ID_BOOK);
+        is_ok = obe->commit (be, QOF_INSTANCE (book));
     }
     if (is_ok)
     {
@@ -493,18 +764,19 @@ gnc_sql_sync_all (GncSqlBackend* be,  QofBook* book)
     }
     if (is_ok)
     {
-        qof_object_foreach_backend (GNC_SQL_BACKEND, write_cb, be);
+        for (auto entry : backend_registry)
+            std::get<1>(entry)->write (be);
     }
     if (is_ok)
     {
-        is_ok = gnc_sql_connection_commit_transaction (be->conn);
+        is_ok = be->m_conn->commit_transaction ();
     }
     if (is_ok)
     {
-        be->is_pristine_db = FALSE;
+        be->m_is_pristine_db = false;
 
         /* Mark the session as clean -- though it shouldn't ever get
-        * marked dirty with this backend
+         * marked dirty with this backend
          */
         qof_book_mark_session_saved (book);
     }
@@ -512,9 +784,9 @@ gnc_sql_sync_all (GncSqlBackend* be,  QofBook* book)
     {
         if (!qof_backend_check_error ((QofBackend*)be))
             qof_backend_set_error ((QofBackend*)be, ERR_BACKEND_SERVER_ERR);
-        is_ok = gnc_sql_connection_rollback_transaction (be->conn);
+        is_ok = be->m_conn->rollback_transaction ();
     }
-    finish_progress (be);
+    be->finish_progress();
     LEAVE ("book=%p", book);
 }
 
@@ -542,23 +814,21 @@ gnc_sql_rollback_edit (GncSqlBackend* be, QofInstance* inst)
 }
 
 static void
-commit_cb (const gchar* type, gpointer data_p, gpointer be_data_p)
+commit(const OBEEntry& entry, sql_backend* be_data)
 {
-    GncSqlObjectBackend* pData = static_cast<decltype (pData)> (data_p);
-    sql_backend* be_data = static_cast<decltype (be_data)> (be_data_p);
+    std::string type;
+    GncSqlObjectBackendPtr obe= nullptr;
+    std::tie(type, obe) = entry;
+    g_return_if_fail (obe->is_version (GNC_SQL_BACKEND_VERSION));
 
-    g_return_if_fail (type != NULL && pData != NULL && be_data != NULL);
-    g_return_if_fail (pData->version == GNC_SQL_BACKEND_VERSION);
-
-    /* If this has already been handled, or is not the correct handler, return */
-    if (strcmp (pData->type_name, be_data->inst->e_type) != 0) return;
+    /* If this has already been handled, or is not the correct
+     * handler, return
+     */
+    if (type != std::string{be_data->inst->e_type}) return;
     if (be_data->is_known) return;
 
-    if (pData->commit != NULL)
-    {
-        be_data->is_ok = (pData->commit) (be_data->be, be_data->inst);
-        be_data->is_known = TRUE;
-    }
+    be_data->is_ok = obe->commit (be_data->be, be_data->inst);
+    be_data->is_known = TRUE;
 }
 
 /* Commit_edit handler - find the correct backend handler for this object
@@ -575,15 +845,15 @@ gnc_sql_commit_edit (GncSqlBackend* be, QofInstance* inst)
     g_return_if_fail (be != NULL);
     g_return_if_fail (inst != NULL);
 
-    if (qof_book_is_readonly (be->book))
+    if (qof_book_is_readonly (be->book()))
     {
         qof_backend_set_error ((QofBackend*)be, ERR_BACKEND_READONLY);
-        (void)gnc_sql_connection_rollback_transaction (be->conn);
+        (void)be->m_conn->rollback_transaction ();
         return;
     }
     /* During initial load where objects are being created, don't commit
     anything, but do mark the object as clean. */
-    if (be->loading)
+    if (be->m_loading)
     {
         qof_instance_mark_clean (inst);
         return;
@@ -593,7 +863,7 @@ gnc_sql_commit_edit (GncSqlBackend* be, QofInstance* inst)
     if (strcmp (inst->e_type, "PriceDB") == 0)
     {
         qof_instance_mark_clean (inst);
-        qof_book_mark_session_saved (be->book);
+        qof_book_mark_session_saved (be->book());
         return;
     }
 
@@ -613,7 +883,7 @@ gnc_sql_commit_edit (GncSqlBackend* be, QofInstance* inst)
         return;
     }
 
-    if (!gnc_sql_connection_begin_transaction (be->conn))
+    if (!be->m_conn->begin_transaction ())
     {
         PERR ("gnc_sql_commit_edit(): begin_transaction failed\n");
         LEAVE ("Rolled back - database transaction begin error");
@@ -625,15 +895,16 @@ gnc_sql_commit_edit (GncSqlBackend* be, QofInstance* inst)
     be_data.inst = inst;
     be_data.is_ok = TRUE;
 
-    qof_object_foreach_backend (GNC_SQL_BACKEND, commit_cb, &be_data);
+    for (auto entry : backend_registry)
+        commit(entry, &be_data);
 
     if (!be_data.is_known)
     {
         PERR ("gnc_sql_commit_edit(): Unknown object type '%s'\n", inst->e_type);
-        (void)gnc_sql_connection_rollback_transaction (be->conn);
+        (void)be->m_conn->rollback_transaction ();
 
         // Don't let unknown items still mark the book as being dirty
-        qof_book_mark_session_saved (be->book);
+        qof_book_mark_session_saved (be->book());
         qof_instance_mark_clean (inst);
         LEAVE ("Rolled back - unknown object type");
         return;
@@ -641,16 +912,16 @@ gnc_sql_commit_edit (GncSqlBackend* be, QofInstance* inst)
     if (!be_data.is_ok)
     {
         // Error - roll it back
-        (void)gnc_sql_connection_rollback_transaction (be->conn);
+        (void)be->m_conn->rollback_transaction ();
 
         // This *should* leave things marked dirty
         LEAVE ("Rolled back - database error");
         return;
     }
 
-    (void)gnc_sql_connection_commit_transaction (be->conn);
+    (void)be->m_conn->commit_transaction ();
 
-    qof_book_mark_session_saved (be->book);
+    qof_book_mark_session_saved (be->book());
     qof_instance_mark_clean (inst);
 
     LEAVE ("");
@@ -807,27 +1078,23 @@ handle_and_term (QofQueryTerm* pTerm, GString* sql)
 
     g_string_append (sql, ")");
 }
-
+#if 0 //The query compilation code was never tested so it isn't implemnted for GncSqlObjectBackend.
 static void
-compile_query_cb (const gchar* type, gpointer data_p, gpointer be_data_p)
+compile_query(const OBEEntry& entry, sql_backend* be_data)
 {
-    GncSqlObjectBackend* pData = static_cast<decltype (pData)> (data_p);
-    sql_backend* be_data = static_cast<decltype (be_data)> (be_data_p);
-
-    g_return_if_fail (type != NULL && pData != NULL && be_data != NULL);
-    g_return_if_fail (pData->version == GNC_SQL_BACKEND_VERSION);
+    std::string type;
+    GncSqlObjectBackendPtr obe = nullptr;
+    std::tie(type, obe) = entry;
+    g_return_if_fail (obe->is_version (GNC_SQL_BACKEND_VERSION));
 
     // Is this the right item?
-    if (strcmp (type, be_data->pQueryInfo->searchObj) != 0) return;
+    if (type != std::string{be_data->pQueryInfo->searchObj}) return;
     if (be_data->is_ok) return;
 
-    if (pData->compile_query != NULL)
-    {
-        be_data->pQueryInfo->pCompiledQuery = (pData->compile_query) (
-                                                  be_data->be,
-                                                  be_data->pQuery);
-        be_data->is_ok = TRUE;
-    }
+    be_data->pQueryInfo->pCompiledQuery = (obe->compile_query)(
+        be_data->be,
+        be_data->pQuery);
+    be_data->is_ok = TRUE;
 }
 
 gchar* gnc_sql_compile_query_to_sql (GncSqlBackend* be, QofQuery* query);
@@ -849,7 +1116,7 @@ gnc_sql_compile_query (QofBackend* pBEnd, QofQuery* pQuery)
     searchObj = qof_query_get_search_for (pQuery);
 
     pQueryInfo = static_cast<decltype (pQueryInfo)> (
-                     g_malloc (sizeof (gnc_sql_query_info)));
+        g_malloc (sizeof (gnc_sql_query_info)));
     g_assert (pQueryInfo != NULL);
     pQueryInfo->pCompiledQuery = NULL;
     pQueryInfo->searchObj = searchObj;
@@ -860,7 +1127,8 @@ gnc_sql_compile_query (QofBackend* pBEnd, QofQuery* pQuery)
     be_data.pQuery = pQuery;
     be_data.pQueryInfo = pQueryInfo;
 
-    qof_object_foreach_backend (GNC_SQL_BACKEND, compile_query_cb, &be_data);
+    for (auto entry : backend_registry)
+        compile_query(entry, &be_data);
     if (be_data.is_ok)
     {
         LEAVE ("");
@@ -925,19 +1193,18 @@ gnc_sql_compile_query_to_sql (GncSqlBackend* be, QofQuery* query)
 }
 
 static void
-free_query_cb (const gchar* type, gpointer data_p, gpointer be_data_p)
+free_query(const OBEEntry& entry, sql_backend* be_data)
 {
-    GncSqlObjectBackend* pData = static_cast<decltype (pData)> (data_p);
-    sql_backend* be_data = static_cast<decltype (be_data)> (be_data_p);
-
-    g_return_if_fail (type != NULL && pData != NULL && be_data != NULL);
-    g_return_if_fail (pData->version == GNC_SQL_BACKEND_VERSION);
+    std::string type;
+    GncSqlObjectBackendPtr obe= nullptr;
+    std::tie(type, obe) = entry;
+    g_return_if_fail (obe->version == GNC_SQL_BACKEND_VERSION);
     if (be_data->is_ok) return;
-    if (strcmp (type, be_data->pQueryInfo->searchObj) != 0) return;
+    if (type != std::string{be_data->pQueryInfo->searchObj}) return;
 
-    if (pData->free_query != NULL)
+    if (obe->free_query != nullptr)
     {
-        (pData->free_query) (be_data->be, be_data->pCompiledQuery);
+        (obe->free_query)(be_data->be, be_data->pCompiledQuery);
         be_data->is_ok = TRUE;
     }
 }
@@ -960,7 +1227,8 @@ gnc_sql_free_query (QofBackend* pBEnd, gpointer pQuery)
     be_data.pCompiledQuery = pQuery;
     be_data.pQueryInfo = pQueryInfo;
 
-    qof_object_foreach_backend (GNC_SQL_BACKEND, free_query_cb, &be_data);
+    for (auto entry : backend_registry)
+        free_query(entry, &be_data);
     if (be_data.is_ok)
     {
         LEAVE ("");
@@ -978,21 +1246,20 @@ gnc_sql_free_query (QofBackend* pBEnd, gpointer pQuery)
 }
 
 static void
-run_query_cb (const gchar* type, gpointer data_p, gpointer be_data_p)
+run_query(const OBEEntry& entry, sql_backend* be_data)
 {
-    GncSqlObjectBackend* pData = static_cast<decltype (pData)> (data_p);
-    sql_backend* be_data = static_cast<decltype (be_data)> (be_data_p);
-
-    g_return_if_fail (type != NULL && pData != NULL && be_data != NULL);
-    g_return_if_fail (pData->version == GNC_SQL_BACKEND_VERSION);
+    std::string type;
+    GncSqlObjectBackendPtr obe = nullptr;
+    std::tie(type, obe) = entry;
+    g_return_if_fail (obe->version == GNC_SQL_BACKEND_VERSION);
     if (be_data->is_ok) return;
 
     // Is this the right item?
-    if (strcmp (type, be_data->pQueryInfo->searchObj) != 0) return;
+    if (type != std::string{be_data->pQueryInfo->searchObj}) return;
 
-    if (pData->run_query != NULL)
+    if (obe->run_query != nullptr)
     {
-        (pData->run_query) (be_data->be, be_data->pCompiledQuery);
+        (obe->run_query)(be_data->be, be_data->pCompiledQuery);
         be_data->is_ok = TRUE;
     }
 }
@@ -1020,8 +1287,8 @@ gnc_sql_run_query (QofBackend* pBEnd, gpointer pQuery)
     be_data.be = be;
     be_data.pCompiledQuery = pQueryInfo->pCompiledQuery;
     be_data.pQueryInfo = pQueryInfo;
-
-    qof_object_foreach_backend (GNC_SQL_BACKEND, run_query_cb, &be_data);
+    for (auto entry : backend_registry)
+        run_query(entry, &be_data);
     be->loading = FALSE;
     be->in_query = FALSE;
     qof_event_resume ();
@@ -1031,23 +1298,19 @@ gnc_sql_run_query (QofBackend* pBEnd, gpointer pQuery)
 //    }
 
     // Mark the book as clean
-    qof_instance_mark_clean (QOF_INSTANCE (be->book));
+    qof_instance_mark_clean (QOF_INSTANCE (be->book()));
 
 //    DEBUG( "%s\n", (gchar*)pQueryInfo->pCompiledQuery );
 
     LEAVE ("");
 }
-
+#endif //if 0: query creation isn't used yet, code never tested.
 /* ================================================================= */
-/* Order in which business objects need to be loaded */
-static const gchar* business_fixed_load_order[] =
-{ GNC_ID_BILLTERM, GNC_ID_TAXTABLE, GNC_ID_INVOICE, NULL };
 
 static void
 business_core_sql_init (void)
 {
     /* Initialize our pointers into the backend subsystem */
-    gnc_address_sql_initialize ();
     gnc_billterm_sql_initialize ();
     gnc_customer_sql_initialize ();
     gnc_employee_sql_initialize ();
@@ -1055,11 +1318,8 @@ business_core_sql_init (void)
     gnc_invoice_sql_initialize ();
     gnc_job_sql_initialize ();
     gnc_order_sql_initialize ();
-    gnc_owner_sql_initialize ();
     gnc_taxtable_sql_initialize ();
     gnc_vendor_sql_initialize ();
-
-    gnc_sql_set_load_order (business_fixed_load_order);
 }
 
 static void
@@ -1081,49 +1341,6 @@ gnc_sql_init_object_handlers (void)
 }
 
 /* ================================================================= */
-
-gint64
-gnc_sql_get_integer_value (const GValue* value)
-{
-    g_return_val_if_fail (value != NULL, 0);
-
-    if (G_VALUE_HOLDS_INT (value))
-    {
-        return (gint64)g_value_get_int (value);
-    }
-    else if (G_VALUE_HOLDS_UINT (value))
-    {
-        return (gint64)g_value_get_uint (value);
-    }
-    else if (G_VALUE_HOLDS_LONG (value))
-    {
-        return (gint64)g_value_get_long (value);
-    }
-    else if (G_VALUE_HOLDS_ULONG (value))
-    {
-        return (gint64)g_value_get_ulong (value);
-    }
-    else if (G_VALUE_HOLDS_INT64 (value))
-    {
-        return g_value_get_int64 (value);
-    }
-    else if (G_VALUE_HOLDS_UINT64 (value))
-    {
-        return (gint64)g_value_get_uint64 (value);
-    }
-    else if (G_VALUE_HOLDS_STRING (value))
-    {
-        return g_ascii_strtoll (g_value_get_string (value), NULL, 10);
-    }
-    else
-    {
-        PWARN ("Unknown type: %s", G_VALUE_TYPE_NAME (value));
-    }
-
-    return 0;
-}
-
-/* ----------------------------------------------------------------- */
 static gpointer
 get_autoinc_id (void* object, const QofParam* param)
 {
@@ -1138,1213 +1355,597 @@ set_autoinc_id (void* object, void* item)
 }
 
 QofAccessFunc
-gnc_sql_get_getter (QofIdTypeConst obj_name,
-                    const GncSqlColumnTableEntry* table_row)
+GncSqlColumnTableEntry::get_getter (QofIdTypeConst obj_name) const noexcept
 {
     QofAccessFunc getter;
 
     g_return_val_if_fail (obj_name != NULL, NULL);
-    g_return_val_if_fail (table_row != NULL, NULL);
 
-    if ((table_row->flags & COL_AUTOINC) != 0)
+    if (m_flags & COL_AUTOINC)
     {
         getter = get_autoinc_id;
     }
-    else if (table_row->qof_param_name != NULL)
+    else if (m_qof_param_name != NULL)
     {
-        getter = qof_class_get_parameter_getter (obj_name,
-                                                 table_row->qof_param_name);
+        getter = qof_class_get_parameter_getter (obj_name, m_qof_param_name);
     }
     else
     {
-        getter = table_row->getter;
+        getter = m_getter;
     }
 
     return getter;
 }
 
-/* ----------------------------------------------------------------- */
-void
-gnc_sql_add_colname_to_list (const GncSqlColumnTableEntry* table_row,
-                             GList** pList)
+QofSetterFunc
+GncSqlColumnTableEntry::get_setter(QofIdTypeConst obj_name) const noexcept
 {
-    (*pList) = g_list_append ((*pList), g_strdup (table_row->col_name));
-}
-
-/* ----------------------------------------------------------------- */
-void
-gnc_sql_add_subtable_colnames_to_list (const GncSqlColumnTableEntry* table_row,
-                                       const GncSqlColumnTableEntry* subtable,
-                                       GList** pList)
-{
-    const GncSqlColumnTableEntry* subtable_row;
-    gchar* buf;
-
-    for (subtable_row = subtable; subtable_row->col_name != NULL; subtable_row++)
+    QofSetterFunc setter = nullptr;
+    if (m_flags & COL_AUTOINC)
     {
-        buf = g_strdup_printf ("%s_%s", table_row->col_name, subtable_row->col_name);
-        (*pList) = g_list_append ((*pList), buf);
+        setter = set_autoinc_id;
     }
-}
-
-static GncSqlColumnInfo*
-create_column_info (const GncSqlColumnTableEntry* table_row,
-                    GncSqlBasicColumnType type,
-                    gint size, gboolean is_unicode)
-{
-    GncSqlColumnInfo* info;
-
-    info = g_new0 (GncSqlColumnInfo, 1);
-    g_assert (info != NULL);
-    info->name = g_strdup (table_row->col_name);
-    info->type = type;
-    info->size = size;
-    info->is_primary_key = ((table_row->flags & COL_PKEY) != 0) ? TRUE : FALSE;
-    info->null_allowed = ((table_row->flags & COL_NNUL) != 0) ? FALSE : TRUE;
-    info->is_unicode = is_unicode;
-    info->is_autoinc = ((table_row->flags & COL_AUTOINC) != 0) ? TRUE : FALSE;
-
-    return info;
-}
-
-/* ----------------------------------------------------------------- */
-static void
-load_string (const GncSqlBackend* be, GncSqlRow* row,
-             QofSetterFunc setter, gpointer pObject,
-             const GncSqlColumnTableEntry* table_row)
-{
-    const GValue* val;
-    const gchar* s;
-
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
-    g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
-    g_return_if_fail (table_row->gobj_param_name != NULL || setter != NULL);
-
-    val = gnc_sql_row_get_value_at_col_name (row, table_row->col_name);
-    g_return_if_fail (val != NULL);
-    s = g_value_get_string (val);
-    if (table_row->gobj_param_name != NULL)
+    else if (m_qof_param_name != nullptr)
     {
-        if (QOF_IS_INSTANCE (pObject))
-            qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
-        g_object_set (pObject, table_row->gobj_param_name, s, NULL);
-        if (QOF_IS_INSTANCE (pObject))
-            qof_instance_decrease_editlevel (QOF_INSTANCE (pObject));
+        g_assert (obj_name != NULL);
+        setter = qof_class_get_parameter_setter (obj_name, m_qof_param_name);
     }
     else
     {
-        g_return_if_fail (setter != NULL);
-        (*setter) (pObject, (const gpointer)s);
+        setter = m_setter;
     }
+    return setter;
 }
 
-static void
-add_string_col_info_to_list (const GncSqlBackend* be,
-                             const GncSqlColumnTableEntry* table_row,
-                             GList** pList)
+void
+GncSqlColumnTableEntry::add_objectref_guid_to_query (const GncSqlBackend* be,
+                                                     QofIdTypeConst obj_name,
+                                                     const gpointer pObject,
+                                                     PairVec& vec) const noexcept
 {
-    GncSqlColumnInfo* info;
-
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (table_row != NULL);
-    g_return_if_fail (pList != NULL);
-
-    info = create_column_info (table_row, BCT_STRING, table_row->size, TRUE);
-
-    *pList = g_list_append (*pList, info);
+    auto inst = get_row_value_from_object<QofInstance*>(obj_name, pObject);
+    if (inst == nullptr) return;
+    auto guid = qof_instance_get_guid (inst);
+    if (guid != nullptr)
+        vec.emplace_back (std::make_pair (std::string{m_col_name},
+                                          std::string{guid_to_string(guid)}));
 }
 
-static void
-add_gvalue_string_to_slist (const GncSqlBackend* be, QofIdTypeConst obj_name,
-                            const gpointer pObject, const GncSqlColumnTableEntry* table_row,
-                            GSList** pList)
+void
+GncSqlColumnTableEntry::add_objectref_guid_to_table (const GncSqlBackend* be,
+                                                     ColVec& vec) const noexcept
 {
-    QofAccessFunc getter;
-    gchar* s = NULL;
-    GValue* value;
-
     g_return_if_fail (be != NULL);
-    g_return_if_fail (obj_name != NULL);
+
+    GncSqlColumnInfo info{*this, BCT_STRING, GUID_ENCODING_LENGTH, FALSE};
+    vec.emplace_back(std::move(info));
+}
+
+
+/* ----------------------------------------------------------------- */
+template<> void
+GncSqlColumnTableEntryImpl<CT_STRING>::load (const GncSqlBackend* be,
+                                             GncSqlRow& row,
+                                             QofIdTypeConst obj_name,
+                                             gpointer pObject) const noexcept
+{
     g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
-    g_return_if_fail (pList != NULL);
+    g_return_if_fail (m_gobj_param_name != NULL || get_setter(obj_name) != NULL);
 
-    value = g_new0 (GValue, 1);
-    g_assert (value != NULL);
-    memset (value, 0, sizeof (GValue));
-    if (table_row->gobj_param_name != NULL)
+    try
     {
-        g_object_get (pObject, table_row->gobj_param_name, &s, NULL);
+        auto s = row.get_string_at_col (m_col_name);
+        set_parameter(pObject, s.c_str(), get_setter(obj_name), m_gobj_param_name);
     }
-    else
-    {
-        getter = gnc_sql_get_getter (obj_name, table_row);
-        if (getter != NULL)
-        {
-            s = (gchar*) (*getter) (pObject, NULL);
-            if (s != NULL)
-            {
-                s = g_strdup (s);
-            }
-        }
-    }
-    (void)g_value_init (value, G_TYPE_STRING);
-    if (s)
-    {
-        g_value_take_string (value, s);
-    }
-
-    (*pList) = g_slist_append ((*pList), value);
+    catch (std::invalid_argument) {}
 }
 
-static GncSqlColumnTypeHandler string_handler
-=
+template<> void
+GncSqlColumnTableEntryImpl<CT_STRING>::add_to_table(const GncSqlBackend* be,
+                                                  ColVec& vec) const noexcept
 {
-    load_string,
-    add_string_col_info_to_list,
-    gnc_sql_add_colname_to_list,
-    add_gvalue_string_to_slist
-};
+    g_return_if_fail (be != NULL);
+
+    GncSqlColumnInfo info{*this, BCT_STRING, m_size, TRUE};
+    vec.emplace_back(std::move(info));
+}
+
+/* char is unusual in that we get a pointer but don't deref it to pass
+ * it to operator<<().
+ */
+template<> void
+GncSqlColumnTableEntryImpl<CT_STRING>::add_to_query(const GncSqlBackend* be,
+                                                    QofIdTypeConst obj_name,
+                                                    const gpointer pObject,
+                                                    PairVec& vec) const noexcept
+{
+    auto s = get_row_value_from_object<char*>(obj_name, pObject);
+
+    if (s != nullptr)
+    {
+        std::ostringstream stream;
+        stream << s;
+        vec.emplace_back (std::make_pair (std::string{m_col_name}, stream.str()));
+        return;
+    }
+}
+
 /* ----------------------------------------------------------------- */
 typedef gint (*IntAccessFunc) (const gpointer);
 typedef void (*IntSetterFunc) (const gpointer, gint);
 
-static void
-load_int (const GncSqlBackend* be, GncSqlRow* row,
-          QofSetterFunc setter, gpointer pObject,
-          const GncSqlColumnTableEntry* table_row)
+template<> void
+GncSqlColumnTableEntryImpl<CT_INT>::load (const GncSqlBackend* be, GncSqlRow& row,
+                                          QofIdTypeConst obj_name,
+                                          gpointer pObject) const noexcept
 {
-    const GValue* val;
-    gint int_value;
-    IntSetterFunc i_setter;
 
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
-    g_return_if_fail (table_row->gobj_param_name != NULL || setter != NULL);
+    g_return_if_fail (m_gobj_param_name != NULL || get_setter(obj_name) != NULL);
 
-    val = gnc_sql_row_get_value_at_col_name (row, table_row->col_name);
-    if (val == NULL)
-    {
-        int_value = 0;
-    }
-    else
-    {
-        int_value = (gint)gnc_sql_get_integer_value (val);
-    }
-    if (table_row->gobj_param_name != NULL)
-    {
-        if (QOF_IS_INSTANCE (pObject))
-            qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
-        g_object_set (pObject, table_row->gobj_param_name, int_value, NULL);
-        if (QOF_IS_INSTANCE (pObject))
-            qof_instance_decrease_editlevel (QOF_INSTANCE (pObject));
-    }
-    else
-    {
-        g_return_if_fail (setter != NULL);
-        i_setter = (IntSetterFunc)setter;
-        (*i_setter) (pObject, int_value);
-    }
+    auto val = row.get_int_at_col(m_col_name);
+    set_parameter(pObject, val,
+                  reinterpret_cast<IntSetterFunc>(get_setter(obj_name)), m_gobj_param_name);
 }
 
-static void
-add_int_col_info_to_list (const GncSqlBackend* be,
-                          const GncSqlColumnTableEntry* table_row,
-                          GList** pList)
+template<> void
+GncSqlColumnTableEntryImpl<CT_INT>::add_to_table(const GncSqlBackend* be,
+                                                 ColVec& vec) const noexcept
 {
-    GncSqlColumnInfo* info;
-
     g_return_if_fail (be != NULL);
-    g_return_if_fail (table_row != NULL);
-    g_return_if_fail (pList != NULL);
 
-    info = create_column_info (table_row, BCT_INT, 0, FALSE);
-
-    *pList = g_list_append (*pList, info);
+    GncSqlColumnInfo info{*this, BCT_INT, 0, FALSE};
+    vec.emplace_back(std::move(info));
 }
 
-static void
-add_gvalue_int_to_slist (const GncSqlBackend* be, QofIdTypeConst obj_name,
-                         const gpointer pObject, const GncSqlColumnTableEntry* table_row,
-                         GSList** pList)
+template<> void
+GncSqlColumnTableEntryImpl<CT_INT>::add_to_query(const GncSqlBackend* be,
+                                                    QofIdTypeConst obj_name,
+                                                    const gpointer pObject,
+                                                    PairVec& vec) const noexcept
 {
-    gint int_value = 0;
-    IntAccessFunc i_getter;
-    GValue* value;
-
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (obj_name != NULL);
-    g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
-    g_return_if_fail (pList != NULL);
-
-    value = g_new0 (GValue, 1);
-    g_assert (value != NULL);
-    (void)g_value_init (value, G_TYPE_INT);
-
-    if (table_row->gobj_param_name != NULL)
-    {
-        g_object_get_property (G_OBJECT (pObject), table_row->gobj_param_name,
-                               value);
-    }
-    else
-    {
-        i_getter = (IntAccessFunc)gnc_sql_get_getter (obj_name, table_row);
-        if (i_getter != NULL)
-        {
-            int_value = (*i_getter) (pObject);
-        }
-        g_value_set_int (value, int_value);
-    }
-
-    (*pList) = g_slist_append ((*pList), value);
+    add_value_to_vec<int>(be, obj_name, pObject, vec);
 }
 
-static GncSqlColumnTypeHandler int_handler
-=
-{
-    load_int,
-    add_int_col_info_to_list,
-    gnc_sql_add_colname_to_list,
-    add_gvalue_int_to_slist
-};
 /* ----------------------------------------------------------------- */
 typedef gboolean (*BooleanAccessFunc) (const gpointer);
 typedef void (*BooleanSetterFunc) (const gpointer, gboolean);
 
-static void
-load_boolean (const GncSqlBackend* be, GncSqlRow* row,
-              QofSetterFunc setter, gpointer pObject,
-              const GncSqlColumnTableEntry* table_row)
+template<> void
+GncSqlColumnTableEntryImpl<CT_BOOLEAN>::load (const GncSqlBackend* be,
+                                              GncSqlRow& row,
+                                              QofIdTypeConst obj_name,
+                                              gpointer pObject)
+    const noexcept
 {
-    const GValue* val;
-    gint int_value;
-    BooleanSetterFunc b_setter;
-
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
-    g_return_if_fail (table_row->gobj_param_name != NULL || setter != NULL);
+    g_return_if_fail (m_gobj_param_name != NULL || get_setter(obj_name) != NULL);
 
-    val = gnc_sql_row_get_value_at_col_name (row, table_row->col_name);
-    if (val == NULL)
-    {
-        int_value = 0;
-    }
-    else
-    {
-        int_value = (gint)gnc_sql_get_integer_value (val);
-    }
-    if (table_row->gobj_param_name != NULL)
-    {
-        if (QOF_IS_INSTANCE (pObject))
-            qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
-        g_object_set (pObject, table_row->gobj_param_name, int_value, NULL);
-        if (QOF_IS_INSTANCE (pObject))
-            qof_instance_decrease_editlevel (QOF_INSTANCE (pObject));
-    }
-    else
-    {
-        g_return_if_fail (setter != NULL);
-        b_setter = (BooleanSetterFunc)setter;
-        (*b_setter) (pObject, (int_value != 0) ? TRUE : FALSE);
-    }
+    auto val = row.get_int_at_col (m_col_name);
+    set_parameter(pObject, val,
+                  reinterpret_cast<BooleanSetterFunc>(get_setter(obj_name)),
+                  m_gobj_param_name);
 }
 
-static void
-add_boolean_col_info_to_list (const GncSqlBackend* be,
-                              const GncSqlColumnTableEntry* table_row,
-                              GList** pList)
+template<> void
+GncSqlColumnTableEntryImpl<CT_BOOLEAN>::add_to_table(const GncSqlBackend* be,
+                                                 ColVec& vec) const noexcept
 {
-    GncSqlColumnInfo* info;
-
     g_return_if_fail (be != NULL);
-    g_return_if_fail (table_row != NULL);
-    g_return_if_fail (pList != NULL);
 
-    info = create_column_info (table_row, BCT_INT, 0, FALSE);
-
-    *pList = g_list_append (*pList, info);
+    GncSqlColumnInfo info{*this, BCT_INT, 0, FALSE};
+    vec.emplace_back(std::move(info));
 }
 
-static void
-add_gvalue_boolean_to_slist (const GncSqlBackend* be, QofIdTypeConst obj_name,
-                             const gpointer pObject, const GncSqlColumnTableEntry* table_row,
-                             GSList** pList)
+template<> void
+GncSqlColumnTableEntryImpl<CT_BOOLEAN>::add_to_query(const GncSqlBackend* be,
+                                                    QofIdTypeConst obj_name,
+                                                    const gpointer pObject,
+                                                    PairVec& vec) const noexcept
 {
-    gint int_value = 0;
-    BooleanAccessFunc b_getter;
-    GValue* value;
-
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (obj_name != NULL);
-    g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
-    g_return_if_fail (pList != NULL);
-
-    value = g_new0 (GValue, 1);
-    g_assert (value != NULL);
-
-    if (table_row->gobj_param_name != NULL)
-    {
-        g_object_get (pObject, table_row->gobj_param_name, &int_value, NULL);
-    }
-    else
-    {
-        b_getter = (BooleanAccessFunc)gnc_sql_get_getter (obj_name, table_row);
-        if (b_getter != NULL)
-        {
-            int_value = ((*b_getter) (pObject)) ? 1 : 0;
-        }
-    }
-    (void)g_value_init (value, G_TYPE_INT);
-    g_value_set_int (value, int_value);
-
-    (*pList) = g_slist_append ((*pList), value);
+    add_value_to_vec<int>(be, obj_name, pObject, vec);
 }
 
-static GncSqlColumnTypeHandler boolean_handler
-=
-{
-    load_boolean,
-    add_boolean_col_info_to_list,
-    gnc_sql_add_colname_to_list,
-    add_gvalue_boolean_to_slist
-};
 /* ----------------------------------------------------------------- */
 typedef gint64 (*Int64AccessFunc) (const gpointer);
 typedef void (*Int64SetterFunc) (const gpointer, gint64);
 
-static void
-load_int64 (const GncSqlBackend* be, GncSqlRow* row,
-            QofSetterFunc setter, gpointer pObject,
-            const GncSqlColumnTableEntry* table_row)
+template<> void
+GncSqlColumnTableEntryImpl<CT_INT64>::load (const GncSqlBackend* be,
+                                            GncSqlRow& row,
+                                            QofIdTypeConst obj_name,
+                                            gpointer pObject)
+    const noexcept
 {
-    const GValue* val;
-    gint64 i64_value = 0;
-    Int64SetterFunc i64_setter = (Int64SetterFunc)setter;
+    g_return_if_fail (m_gobj_param_name != nullptr || get_setter(obj_name) != nullptr);
 
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
-    g_return_if_fail (table_row != NULL);
-    g_return_if_fail (table_row->gobj_param_name != NULL || setter != NULL);
-
-    val = gnc_sql_row_get_value_at_col_name (row, table_row->col_name);
-    if (val != NULL)
-    {
-        i64_value = gnc_sql_get_integer_value (val);
-    }
-    if (table_row->gobj_param_name != NULL)
-    {
-        if (QOF_IS_INSTANCE (pObject))
-            qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
-        g_object_set (pObject, table_row->gobj_param_name, i64_value, NULL);
-        if (QOF_IS_INSTANCE (pObject))
-            qof_instance_decrease_editlevel (QOF_INSTANCE (pObject));
-    }
-    else
-    {
-        (*i64_setter) (pObject, i64_value);
-    }
+    auto val = row.get_int_at_col (m_col_name);
+    set_parameter(pObject, val,
+                  reinterpret_cast<Int64SetterFunc>(get_setter(obj_name)),
+                  m_gobj_param_name);
 }
 
-static void
-add_int64_col_info_to_list (const GncSqlBackend* be,
-                            const GncSqlColumnTableEntry* table_row,
-                            GList** pList)
+template<> void
+GncSqlColumnTableEntryImpl<CT_INT64>::add_to_table(const GncSqlBackend* be,
+                                                   ColVec& vec) const noexcept
 {
-    GncSqlColumnInfo* info;
-
     g_return_if_fail (be != NULL);
-    g_return_if_fail (table_row != NULL);
-    g_return_if_fail (pList != NULL);
 
-    info = create_column_info (table_row, BCT_INT64, 0, FALSE);
-
-    *pList = g_list_append (*pList, info);
+    GncSqlColumnInfo info{*this, BCT_INT64, 0, FALSE};
+    vec.emplace_back(std::move(info));
 }
 
-static void
-add_gvalue_int64_to_slist (const GncSqlBackend* be, QofIdTypeConst obj_name,
-                           const gpointer pObject, const GncSqlColumnTableEntry* table_row,
-                           GSList** pList)
+template<> void
+GncSqlColumnTableEntryImpl<CT_INT64>::add_to_query(const GncSqlBackend* be,
+                                                   QofIdTypeConst obj_name,
+                                                   const gpointer pObject,
+                                                   PairVec& vec) const noexcept
 {
-    gint64 i64_value = 0;
-    Int64AccessFunc getter;
-    GValue* value;
-
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (obj_name != NULL);
-    g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
-    g_return_if_fail (pList != NULL);
-
-    value = g_new0 (GValue, 1);
-    g_assert (value != NULL);
-    if (table_row->gobj_param_name != NULL)
-    {
-        g_object_get (pObject, table_row->gobj_param_name, &i64_value, NULL);
-    }
-    else
-    {
-        getter = (Int64AccessFunc)gnc_sql_get_getter (obj_name, table_row);
-        if (getter != NULL)
-        {
-            i64_value = (*getter) (pObject);
-        }
-    }
-    (void)g_value_init (value, G_TYPE_INT64);
-    g_value_set_int64 (value, i64_value);
-
-    (*pList) = g_slist_append ((*pList), value);
+    add_value_to_vec<int64_t>(be, obj_name, pObject, vec);
 }
-
-static GncSqlColumnTypeHandler int64_handler
-=
-{
-    load_int64,
-    add_int64_col_info_to_list,
-    gnc_sql_add_colname_to_list,
-    add_gvalue_int64_to_slist
-};
 /* ----------------------------------------------------------------- */
 
-static void
-load_double (const GncSqlBackend* be, GncSqlRow* row,
-             QofSetterFunc setter, gpointer pObject,
-             const GncSqlColumnTableEntry* table_row)
+template<> void
+GncSqlColumnTableEntryImpl<CT_DOUBLE>::load (const GncSqlBackend* be,
+                                             GncSqlRow& row,
+                                             QofIdTypeConst obj_name,
+                                             gpointer pObject)
+    const noexcept
 {
-    const GValue* val;
-    gdouble d_value;
-
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
-    g_return_if_fail (table_row->gobj_param_name != NULL || setter != NULL);
-
-    val = gnc_sql_row_get_value_at_col_name (row, table_row->col_name);
-    if (val == NULL)
+    g_return_if_fail (m_gobj_param_name != nullptr || get_setter(obj_name) != nullptr);
+    double val;
+    try
     {
-        (*setter) (pObject, (gpointer)NULL);
+        val = static_cast<double>(row.get_int_at_col(m_col_name));
     }
-    else
+    catch (std::invalid_argument)
     {
-        if (G_VALUE_HOLDS (val, G_TYPE_INT))
+        try
         {
-            d_value = (gdouble)g_value_get_int (val);
+            val = static_cast<double>(row.get_float_at_col(m_col_name));
         }
-        else if (G_VALUE_HOLDS (val, G_TYPE_FLOAT))
+        catch (std::invalid_argument)
         {
-            d_value = g_value_get_float (val);
-        }
-        else if (G_VALUE_HOLDS (val, G_TYPE_DOUBLE))
-        {
-            d_value = g_value_get_double (val);
-        }
-        else
-        {
-            PWARN ("Unknown float value type: %s\n", g_type_name (G_VALUE_TYPE (val)));
-            d_value = 0;
-        }
-        if (table_row->gobj_param_name != NULL)
-        {
-            if (QOF_IS_INSTANCE (pObject))
-                qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
-            g_object_set (pObject, table_row->gobj_param_name, d_value, NULL);
-            if (QOF_IS_INSTANCE (pObject))
-                qof_instance_decrease_editlevel (QOF_INSTANCE (pObject));
-        }
-        else
-        {
-            (*setter) (pObject, (gpointer)&d_value);
+            try
+            {
+                val = row.get_double_at_col(m_col_name);
+            }
+            catch (std::invalid_argument)
+            {
+                val = 0.0;
+            }
         }
     }
+    set_parameter(pObject, val, get_setter(obj_name), m_gobj_param_name);
 }
 
-static void
-add_double_col_info_to_list (const GncSqlBackend* be,
-                             const GncSqlColumnTableEntry* table_row,
-                             GList** pList)
+template<> void
+GncSqlColumnTableEntryImpl<CT_DOUBLE>::add_to_table(const GncSqlBackend* be,
+                                                 ColVec& vec) const noexcept
 {
-    GncSqlColumnInfo* info;
-
     g_return_if_fail (be != NULL);
-    g_return_if_fail (table_row != NULL);
-    g_return_if_fail (pList != NULL);
 
-    info = create_column_info (table_row, BCT_DOUBLE, 0, FALSE);
-
-    *pList = g_list_append (*pList, info);
+    GncSqlColumnInfo info{*this, BCT_DOUBLE, 0, FALSE};
+    vec.emplace_back(std::move(info));
 }
 
-static void
-add_gvalue_double_to_slist (const GncSqlBackend* be, QofIdTypeConst obj_name,
-                            const gpointer pObject, const GncSqlColumnTableEntry* table_row,
-                            GSList** pList)
+template<> void
+GncSqlColumnTableEntryImpl<CT_DOUBLE>::add_to_query(const GncSqlBackend* be,
+                                                    QofIdTypeConst obj_name,
+                                                    const gpointer pObject,
+                                                    PairVec& vec) const noexcept
 {
-    QofAccessFunc getter;
-    gdouble* pDouble = NULL;
-    gdouble d_value;
-    GValue* value;
-
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (obj_name != NULL);
-    g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
-
-    value = g_new0 (GValue, 1);
-    g_assert (value != NULL);
-    getter = gnc_sql_get_getter (obj_name, table_row);
-    if (getter != NULL)
-    {
-        pDouble = static_cast<decltype (pDouble)> ((*getter) (pObject, NULL));
-    }
-    if (pDouble != NULL)
-    {
-        d_value = *pDouble;
-        (void)g_value_init (value, G_TYPE_DOUBLE);
-        g_value_set_double (value, d_value);
-    }
-    else
-    {
-        (void)g_value_init (value, G_TYPE_DOUBLE);
-        g_value_set_double (value, 0.0);
-    }
-
-    (*pList) = g_slist_append ((*pList), value);
+    add_value_to_vec<double*>(be, obj_name, pObject, vec);
 }
 
-static GncSqlColumnTypeHandler double_handler
-=
-{
-    load_double,
-    add_double_col_info_to_list,
-    gnc_sql_add_colname_to_list,
-    add_gvalue_double_to_slist
-};
 /* ----------------------------------------------------------------- */
 
-static void
-load_guid (const GncSqlBackend* be, GncSqlRow* row,
-           QofSetterFunc setter, gpointer pObject,
-           const GncSqlColumnTableEntry* table_row)
+template<> void
+GncSqlColumnTableEntryImpl<CT_GUID>::load (const GncSqlBackend* be,
+                                           GncSqlRow& row,
+                                           QofIdTypeConst obj_name,
+                                           gpointer pObject)
+    const noexcept
 {
-    const GValue* val;
+
     GncGUID guid;
     const GncGUID* pGuid;
 
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
-    g_return_if_fail (table_row->gobj_param_name != NULL || setter != NULL);
+    g_return_if_fail (m_gobj_param_name != nullptr || get_setter(obj_name) != nullptr);
 
-    val = gnc_sql_row_get_value_at_col_name (row, table_row->col_name);
-    if (val == NULL || g_value_get_string (val) == NULL)
+    std::string str;
+    try
     {
-        pGuid = NULL;
+        str = row.get_string_at_col(m_col_name);
     }
-    else
+    catch (std::invalid_argument)
     {
-        (void)string_to_guid (g_value_get_string (val), &guid);
-        pGuid = &guid;
+        return;
     }
-    if (pGuid != NULL)
-    {
-        if (table_row->gobj_param_name != NULL)
-        {
-            if (QOF_IS_INSTANCE (pObject))
-                qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
-            g_object_set (pObject, table_row->gobj_param_name, pGuid, NULL);
-            if (QOF_IS_INSTANCE (pObject))
-                qof_instance_decrease_editlevel (QOF_INSTANCE (pObject));
-        }
-        else
-        {
-            g_return_if_fail (setter != NULL);
-            (*setter) (pObject, (const gpointer)pGuid);
-        }
-    }
+    (void)string_to_guid (str.c_str(), &guid);
+    set_parameter(pObject, &guid, get_setter(obj_name), m_gobj_param_name);
 }
 
-static void
-add_guid_col_info_to_list (const GncSqlBackend* be,
-                           const GncSqlColumnTableEntry* table_row,
-                           GList** pList)
+template<> void
+GncSqlColumnTableEntryImpl<CT_GUID>::add_to_table(const GncSqlBackend* be,
+                                                 ColVec& vec) const noexcept
 {
-    GncSqlColumnInfo* info;
-
     g_return_if_fail (be != NULL);
-    g_return_if_fail (table_row != NULL);
-    g_return_if_fail (pList != NULL);
 
-    info = create_column_info (table_row, BCT_STRING, GUID_ENCODING_LENGTH, FALSE);
-
-    *pList = g_list_append (*pList, info);
+    GncSqlColumnInfo info{*this, BCT_STRING, GUID_ENCODING_LENGTH, FALSE};
+    vec.emplace_back(std::move(info));
 }
 
-static void
-add_gvalue_guid_to_slist (const GncSqlBackend* be, QofIdTypeConst obj_name,
-                          const gpointer pObject, const GncSqlColumnTableEntry* table_row,
-                          GSList** pList)
+template<> void
+GncSqlColumnTableEntryImpl<CT_GUID>::add_to_query(const GncSqlBackend* be,
+                                                    QofIdTypeConst obj_name,
+                                                    const gpointer pObject,
+                                                    PairVec& vec) const noexcept
 {
-    QofAccessFunc getter;
-    GncGUID* guid = NULL;
-    gchar guid_buf[GUID_ENCODING_LENGTH + 1];
-    GValue* value;
+    auto s = get_row_value_from_object<GncGUID*>(obj_name, pObject);
 
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (obj_name != NULL);
-    g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
-
-    value = g_new0 (GValue, 1);
-    g_assert (value != NULL);
-    if (table_row->gobj_param_name != NULL)
+    if (s != nullptr)
     {
-        g_object_get (pObject, table_row->gobj_param_name, &guid, NULL);
-    }
-    else
-    {
-        getter = gnc_sql_get_getter (obj_name, table_row);
-        if (getter != NULL)
-        {
-            guid = static_cast<decltype (guid)> ((*getter) (pObject, NULL));
-        }
-    }
-    (void)g_value_init (value, G_TYPE_STRING);
-    if (guid != NULL)
-    {
-        (void)guid_to_string_buff (guid, guid_buf);
-        g_value_set_string (value, guid_buf);
-    }
 
-    (*pList) = g_slist_append ((*pList), value);
-
+        vec.emplace_back (std::make_pair (std::string{m_col_name},
+                                          std::string{guid_to_string(s)}));
+        return;
+    }
 }
-
-static GncSqlColumnTypeHandler guid_handler
-=
-{
-    load_guid,
-    add_guid_col_info_to_list,
-    gnc_sql_add_colname_to_list,
-    add_gvalue_guid_to_slist
-};
-/* ----------------------------------------------------------------- */
-
-void
-gnc_sql_add_gvalue_objectref_guid_to_slist (const GncSqlBackend* be,
-                                            QofIdTypeConst obj_name,
-                                            const gpointer pObject, const GncSqlColumnTableEntry* table_row,
-                                            GSList** pList)
-{
-    QofAccessFunc getter;
-    const GncGUID* guid = NULL;
-    gchar guid_buf[GUID_ENCODING_LENGTH + 1];
-    QofInstance* inst = NULL;
-    GValue* value;
-
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (obj_name != NULL);
-    g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
-
-    value = g_new0 (GValue, 1);
-    g_assert (value != NULL);
-    if (table_row->gobj_param_name != NULL)
-    {
-        g_object_get (pObject, table_row->gobj_param_name, &inst, NULL);
-    }
-    else
-    {
-        getter = gnc_sql_get_getter (obj_name, table_row);
-        if (getter != NULL)
-        {
-            inst = static_cast<decltype (inst)> ((*getter) (pObject, NULL));
-        }
-    }
-    if (inst != NULL)
-    {
-        guid = qof_instance_get_guid (inst);
-    }
-    (void)g_value_init (value, G_TYPE_STRING);
-    if (guid != NULL)
-    {
-        (void)guid_to_string_buff (guid, guid_buf);
-        g_value_set_string (value, guid_buf);
-    }
-
-    (*pList) = g_slist_append ((*pList), value);
-}
-
-void
-gnc_sql_add_objectref_guid_col_info_to_list (const GncSqlBackend* be,
-                                             const GncSqlColumnTableEntry* table_row,
-                                             GList** pList)
-{
-    add_guid_col_info_to_list (be, table_row, pList);
-}
-
 /* ----------------------------------------------------------------- */
 typedef Timespec (*TimespecAccessFunc) (const gpointer);
-typedef void (*TimespecSetterFunc) (const gpointer, Timespec);
+typedef void (*TimespecSetterFunc) (const gpointer, Timespec*);
 
 #define TIMESPEC_STR_FORMAT "%04d%02d%02d%02d%02d%02d"
 #define TIMESPEC_COL_SIZE (4+2+2+2+2+2)
 
-/* This is required because we're passing be->timespace_format to
- * g_strdup_printf.
- */
-#pragma GCC diagnostic ignored "-Wformat-nonliteral"
-gchar*
-gnc_sql_convert_timespec_to_string (const GncSqlBackend* be, Timespec ts)
+template<> void
+GncSqlColumnTableEntryImpl<CT_TIMESPEC>::load (const GncSqlBackend* be,
+                                               GncSqlRow& row,
+                                               QofIdTypeConst obj_name,
+                                               gpointer pObject) const noexcept
 {
-    time64 time;
-    struct tm* tm;
-    gint year;
-    gchar* datebuf;
 
-    time = timespecToTime64 (ts);
-    tm = gnc_gmtime (&time);
-
-    year = tm->tm_year + 1900;
-
-    datebuf = g_strdup_printf (be->timespec_format,
-                               year, tm->tm_mon + 1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec);
-    gnc_tm_free (tm);
-    return datebuf;
-}
-#pragma GCC diagnostic warning "-Wformat-nonliteral"
-
-static void
-load_timespec (const GncSqlBackend* be, GncSqlRow* row,
-               QofSetterFunc setter, gpointer pObject,
-               const GncSqlColumnTableEntry* table_row)
-{
-    const GValue* val;
     Timespec ts = {0, 0};
-    TimespecSetterFunc ts_setter;
     gboolean isOK = FALSE;
 
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
+
     g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
-    g_return_if_fail (table_row->gobj_param_name != NULL || setter != NULL);
+    g_return_if_fail (m_gobj_param_name != nullptr || get_setter(obj_name) != nullptr);
 
-    ts_setter = (TimespecSetterFunc)setter;
-    val = gnc_sql_row_get_value_at_col_name (row, table_row->col_name);
-    if (val == NULL)
+    try
     {
-        isOK = TRUE;
+        auto val = row.get_time64_at_col(m_col_name);
+        timespecFromTime64 (&ts, val);
     }
-    else
+    catch (std::invalid_argument)
     {
-        if (G_VALUE_HOLDS_INT64 (val))
+        try
         {
-            timespecFromTime64 (&ts, (time64) (g_value_get_int64 (val)));
-            isOK = TRUE;
+            auto val = row.get_string_at_col(m_col_name);
+            auto s = val.c_str();
+            auto buf = g_strdup_printf ("%c%c%c%c-%c%c-%c%c %c%c:%c%c:%c%c",
+                                        s[0], s[1], s[2], s[3], s[4], s[5],
+                                        s[6], s[7], s[8], s[9], s[10], s[11],
+                                        s[12], s[13]);
+            ts = gnc_iso8601_to_timespec_gmt (buf);
+            g_free (buf);
         }
-        else if (G_VALUE_HOLDS_STRING (val))
+        catch (std::invalid_argument)
         {
-            const gchar* s = g_value_get_string (val);
-            if (s != NULL)
-            {
-                gchar* buf;
-                buf = g_strdup_printf ("%c%c%c%c-%c%c-%c%c %c%c:%c%c:%c%c",
-                                       s[0], s[1], s[2], s[3],
-                                       s[4], s[5],
-                                       s[6], s[7],
-                                       s[8], s[9],
-                                       s[10], s[11],
-                                       s[12], s[13]);
-                ts = gnc_iso8601_to_timespec_gmt (buf);
-                g_free (buf);
-                isOK = TRUE;
-            }
-        }
-        else
-        {
-            PWARN ("Unknown timespec type: %s", G_VALUE_TYPE_NAME (val));
+            return;
         }
     }
-    if (isOK)
-    {
-        if (table_row->gobj_param_name != NULL)
-        {
-            if (QOF_IS_INSTANCE (pObject))
-                qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
-            g_object_set (pObject, table_row->gobj_param_name, &ts, NULL);
-            if (QOF_IS_INSTANCE (pObject))
-                qof_instance_decrease_editlevel (QOF_INSTANCE (pObject));
-        }
-        else
-        {
-            (*ts_setter) (pObject, ts);
-        }
-    }
-}
+    set_parameter(pObject, &ts,
+                  reinterpret_cast<TimespecSetterFunc>(get_setter(obj_name)),
+                  m_gobj_param_name);
+ }
 
-static void
-add_timespec_col_info_to_list (const GncSqlBackend* be,
-                               const GncSqlColumnTableEntry* table_row,
-                               GList** pList)
+template<> void
+GncSqlColumnTableEntryImpl<CT_TIMESPEC>::add_to_table(const GncSqlBackend* be,
+                                                 ColVec& vec) const noexcept
 {
-    GncSqlColumnInfo* info;
+    g_return_if_fail (be != nullptr);
 
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (table_row != NULL);
-    g_return_if_fail (pList != NULL);
-
-    info = create_column_info (table_row, BCT_DATETIME, TIMESPEC_COL_SIZE, FALSE);
-
-    *pList = g_list_append (*pList, info);
+    GncSqlColumnInfo info{*this, BCT_DATETIME, TIMESPEC_COL_SIZE, FALSE};
+    vec.emplace_back(std::move(info));
 }
 
-static void
-add_gvalue_timespec_to_slist (const GncSqlBackend* be, QofIdTypeConst obj_name,
-                              const gpointer pObject, const GncSqlColumnTableEntry* table_row,
-                              GSList** pList)
+template<> void
+GncSqlColumnTableEntryImpl<CT_TIMESPEC>::add_to_query(const GncSqlBackend* be,
+                                                      QofIdTypeConst obj_name,
+                                                      const gpointer pObject,
+                                                      PairVec& vec) const noexcept
 {
     TimespecAccessFunc ts_getter;
     Timespec ts;
-    gchar* datebuf;
-    GValue* value;
-
+/* Can't use get_row_value_from_object because g_object_get returns a
+ * Timespec* and the getter returns a Timespec. Will be fixed by the
+ * replacement of timespecs with time64s.
+ */
     g_return_if_fail (be != NULL);
     g_return_if_fail (obj_name != NULL);
     g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
-    g_return_if_fail (pList != NULL);
 
-    if (table_row->gobj_param_name != NULL)
+    if (m_gobj_param_name != NULL)
     {
         Timespec* pts;
-        g_object_get (pObject, table_row->gobj_param_name, &pts, NULL);
+        g_object_get (pObject, m_gobj_param_name, &pts, NULL);
         ts = *pts;
     }
     else
     {
-        ts_getter = (TimespecAccessFunc)gnc_sql_get_getter (obj_name, table_row);
+        ts_getter = (TimespecAccessFunc)get_getter (obj_name);
         g_return_if_fail (ts_getter != NULL);
         ts = (*ts_getter) (pObject);
     }
 
-    value = g_new0 (GValue, 1);
-    g_assert (value != NULL);
-    (void)g_value_init (value, G_TYPE_STRING);
     if (ts.tv_sec != 0 || ts.tv_nsec != 0)
     {
-        datebuf = gnc_sql_convert_timespec_to_string (be, ts);
-        g_value_take_string (value, datebuf);
+        auto datebuf = be->time64_to_string (ts.tv_sec);
+        vec.emplace_back (std::make_pair (std::string{m_col_name}, datebuf));
+        return;
     }
-
-    (*pList) = g_slist_append ((*pList), value);
 }
 
-static GncSqlColumnTypeHandler timespec_handler
-=
-{
-    load_timespec,
-    add_timespec_col_info_to_list,
-    gnc_sql_add_colname_to_list,
-    add_gvalue_timespec_to_slist
-};
 /* ----------------------------------------------------------------- */
 #define DATE_COL_SIZE 8
 
-static void
-load_date (const GncSqlBackend* be, GncSqlRow* row,
-           QofSetterFunc setter, gpointer pObject,
-           const GncSqlColumnTableEntry* table_row)
+template<> void
+GncSqlColumnTableEntryImpl<CT_GDATE>::load (const GncSqlBackend* be,
+                                            GncSqlRow& row,
+                                            QofIdTypeConst obj_name,
+                                            gpointer pObject) const noexcept
 {
-    const GValue* val;
-
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
-    g_return_if_fail (table_row->gobj_param_name != NULL || setter != NULL);
-
-    val = gnc_sql_row_get_value_at_col_name (row, table_row->col_name);
-    if (val != NULL)
+    g_return_if_fail (m_gobj_param_name != nullptr || get_setter(obj_name) != nullptr);
+    if (row.is_col_null(m_col_name))
+        return;
+    GDate date;
+    g_date_clear (&date, 1);
+    try
     {
-        if (G_VALUE_HOLDS_INT64 (val))
+	/* timespec_to_gdate applies the tz, and gdates are saved
+	 * as ymd, so we don't want that.
+	 */
+	auto time = row.get_time64_at_col(m_col_name);
+	auto tm = gnc_gmtime(&time);
+	g_date_set_dmy(&date, tm->tm_mday,
+		       static_cast<GDateMonth>(tm->tm_mon + 1),
+		       tm->tm_year + 1900);
+	free(tm);
+    }
+    catch (std::invalid_argument)
+    {
+        try
         {
-            /* timespec_to_gdate applies the tz, and gdates are saved
-             * as ymd, so we don't want that.
-             */
-            auto time = g_value_get_int64 (val);
-            auto tm = gnc_gmtime(&time);
+            std::string str = row.get_string_at_col(m_col_name);
+            if (str.empty()) return;
+            auto year = static_cast<GDateYear>(stoi (str.substr (0,4)));
+            auto month = static_cast<GDateMonth>(stoi (str.substr (4,2)));
+            auto day = static_cast<GDateDay>(stoi (str.substr (6,2)));
 
-            GDate date;
-            g_date_clear(&date, 1);
-            g_date_set_dmy(&date, tm->tm_mday,
-                           static_cast<GDateMonth>(tm->tm_mon + 1),
-                           tm->tm_year + 1900);
-            free(tm);
-            if (table_row->gobj_param_name != NULL)
-            {
-                if (QOF_IS_INSTANCE (pObject))
-                    qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
-                g_object_set (pObject, table_row->gobj_param_name, &date, NULL);
-                if (QOF_IS_INSTANCE (pObject))
-                    qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
-            }
-            else
-            {
-                (*setter) (pObject, &date);
-            }
+            if (year != 0 || month != 0 || day != (GDateDay)0)
+                g_date_set_dmy(&date, day, month, year);
+
         }
-        else if (G_VALUE_HOLDS_STRING (val))
+        catch (std::invalid_argument)
         {
-            // Format of date is YYYYMMDD
-            const gchar* s = g_value_get_string (val);
-            GDate* date;
-            if (s != NULL)
-            {
-                gchar buf[5];
-                GDateDay day;
-                GDateMonth month;
-                GDateYear year;
-
-                strncpy (buf, &s[0], 4);
-                buf[4] = '\0';
-                year = (GDateYear)atoi (buf);
-                strncpy (buf, &s[4], 2);
-                buf[2] = '\0';
-                month = static_cast<decltype (month)> (atoi (buf));
-                strncpy (buf, &s[6], 2);
-                day = (GDateDay)atoi (buf);
-
-                if (year != 0 || month != 0 || day != (GDateDay)0)
-                {
-                    date = g_date_new_dmy (day, month, year);
-                    if (table_row->gobj_param_name != NULL)
-                    {
-                        if (QOF_IS_INSTANCE (pObject))
-                            qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
-                        g_object_set (pObject, table_row->gobj_param_name,
-                                      date, NULL);
-                        if (QOF_IS_INSTANCE (pObject))
-                            qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
-                    }
-                    else
-                    {
-                        (*setter) (pObject, date);
-                    }
-                    g_date_free (date);
-                }
-            }
-        }
-        else
-        {
-            PWARN ("Unknown date type: %s", G_VALUE_TYPE_NAME (val));
+            return;
         }
     }
+    set_parameter(pObject, &date, get_setter(obj_name), m_gobj_param_name);
 }
 
-static void
-add_date_col_info_to_list (const GncSqlBackend* be,
-                           const GncSqlColumnTableEntry* table_row,
-                           GList** pList)
+template<> void
+GncSqlColumnTableEntryImpl<CT_GDATE>::add_to_table(const GncSqlBackend* be,
+                                                 ColVec& vec) const noexcept
 {
-    GncSqlColumnInfo* info;
-
     g_return_if_fail (be != NULL);
-    g_return_if_fail (table_row != NULL);
-    g_return_if_fail (pList != NULL);
 
-    info = create_column_info (table_row, BCT_DATE, DATE_COL_SIZE, FALSE);
-
-    *pList = g_list_append (*pList, info);
+    GncSqlColumnInfo info{*this,  BCT_DATE, DATE_COL_SIZE, FALSE};
+    vec.emplace_back(std::move(info));
 }
 
-static void
-add_gvalue_date_to_slist (const GncSqlBackend* be, QofIdTypeConst obj_name,
-                          const gpointer pObject,
-                          const GncSqlColumnTableEntry* table_row, GSList** pList)
+template<> void
+GncSqlColumnTableEntryImpl<CT_GDATE>::add_to_query(const GncSqlBackend* be,
+                                                    QofIdTypeConst obj_name,
+                                                    const gpointer pObject,
+                                                    PairVec& vec) const noexcept
 {
-    GDate* date = NULL;
-    QofAccessFunc getter;
-    gchar* buf;
-    GValue* value;
+    GDate *date = get_row_value_from_object<GDate*>(obj_name, pObject);
 
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (obj_name != NULL);
-    g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
-
-    value = g_new0 (GValue, 1);
-    g_assert (value != NULL);
-    (void)g_value_init (value, G_TYPE_STRING);
-    if (table_row->gobj_param_name != NULL)
-    {
-        g_object_get (pObject, table_row->gobj_param_name, &date, NULL);
-    }
-    else
-    {
-        getter = gnc_sql_get_getter (obj_name, table_row);
-        if (getter != NULL)
-        {
-            date = (GDate*) (*getter) (pObject, NULL);
-        }
-    }
     if (date && g_date_valid (date))
     {
-        buf = g_strdup_printf ("%04d%02d%02d",
-                               g_date_get_year (date), g_date_get_month (date), g_date_get_day (date));
-        g_value_take_string (value, buf);
+        std::ostringstream buf;
+        buf << std::setfill ('0') << std::setw (4) << g_date_get_year (date) <<
+            std::setw (2) << g_date_get_month (date) <<
+            std::setw (2) << static_cast<int>(g_date_get_day (date));
+        vec.emplace_back (std::make_pair (std::string{m_col_name}, buf.str()));
+        return;
     }
-
-    (*pList) = g_slist_append ((*pList), value);
 }
 
-static GncSqlColumnTypeHandler date_handler
-=
-{
-    load_date,
-    add_date_col_info_to_list,
-    gnc_sql_add_colname_to_list,
-    add_gvalue_date_to_slist
-};
 /* ----------------------------------------------------------------- */
 typedef gnc_numeric (*NumericGetterFunc) (const gpointer);
-typedef void (*NumericSetterFunc) (gpointer, gnc_numeric);
+typedef void (*NumericSetterFunc) (gpointer, gnc_numeric*);
 
-static const GncSqlColumnTableEntry numeric_col_table[] =
+static const EntryVec numeric_col_table =
 {
-    { "num",    CT_INT64, 0, COL_NNUL, "guid" },
-    { "denom",  CT_INT64, 0, COL_NNUL, "guid" },
-    { NULL }
+    gnc_sql_make_table_entry<CT_INT64>("num", 0, COL_NNUL, "guid"),
+    gnc_sql_make_table_entry<CT_INT64>("denom", 0, COL_NNUL, "guid")
 };
 
-static void
-load_numeric (const GncSqlBackend* be, GncSqlRow* row,
-              QofSetterFunc setter, gpointer pObject,
-              const GncSqlColumnTableEntry* table_row)
+template<> void
+GncSqlColumnTableEntryImpl<CT_NUMERIC>::load (const GncSqlBackend* be,
+                                              GncSqlRow& row,
+                                              QofIdTypeConst obj_name,
+                                              gpointer pObject) const noexcept
 {
-    const GValue* val;
-    gchar* buf;
-    gint64 num, denom;
-    gnc_numeric n;
-    gboolean isNull = FALSE;
 
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
+
     g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
-    g_return_if_fail (table_row->gobj_param_name != NULL || setter != NULL);
-
-    buf = g_strdup_printf ("%s_num", table_row->col_name);
-    val = gnc_sql_row_get_value_at_col_name (row, buf);
-    g_free (buf);
-    if (val == NULL)
+    g_return_if_fail (m_gobj_param_name != nullptr || get_setter(obj_name) != nullptr);
+    gnc_numeric n;
+    try
     {
-        isNull = TRUE;
-        num = 0;
+        auto buf = g_strdup_printf ("%s_num", m_col_name);
+        auto num = row.get_int_at_col (buf);
+        g_free (buf);
+        buf = g_strdup_printf ("%s_denom", m_col_name);
+        auto denom = row.get_int_at_col (buf);
+        n = gnc_numeric_create (num, denom);
     }
-    else
+    catch (std::invalid_argument)
     {
-        num = gnc_sql_get_integer_value (val);
+        return;
     }
-    buf = g_strdup_printf ("%s_denom", table_row->col_name);
-    val = gnc_sql_row_get_value_at_col_name (row, buf);
-    g_free (buf);
-    if (val == NULL)
-    {
-        isNull = TRUE;
-        denom = 1;
-    }
-    else
-    {
-        denom = gnc_sql_get_integer_value (val);
-    }
-    n = gnc_numeric_create (num, denom);
-    if (!isNull)
-    {
-        if (table_row->gobj_param_name != NULL)
-        {
-            if (QOF_IS_INSTANCE (pObject))
-                qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
-            g_object_set (pObject, table_row->gobj_param_name, &n, NULL);
-            if (QOF_IS_INSTANCE (pObject))
-                qof_instance_increase_editlevel (QOF_INSTANCE (pObject));
-        }
-        else
-        {
-            NumericSetterFunc n_setter = (NumericSetterFunc)setter;
-            (*n_setter) (pObject, n);
-        }
-    }
+    set_parameter(pObject, &n,
+                  reinterpret_cast<NumericSetterFunc>(get_setter(obj_name)),
+                  m_gobj_param_name);
 }
 
-static void
-add_numeric_col_info_to_list (const GncSqlBackend* be,
-                              const GncSqlColumnTableEntry* table_row,
-                              GList** pList)
+template<> void
+GncSqlColumnTableEntryImpl<CT_NUMERIC>::add_to_table(const GncSqlBackend* be,
+                                                     ColVec& vec) const noexcept
 {
-    GncSqlColumnInfo* info;
-    gchar* buf;
-    const GncSqlColumnTableEntry* subtable_row;
-
     g_return_if_fail (be != NULL);
-    g_return_if_fail (table_row != NULL);
-    g_return_if_fail (pList != NULL);
 
-    for (subtable_row = numeric_col_table; subtable_row->col_name != NULL;
-         subtable_row++)
+    for (auto const& subtable_row : numeric_col_table)
     {
-        buf = g_strdup_printf ("%s_%s", table_row->col_name, subtable_row->col_name);
-        info = g_new0 (GncSqlColumnInfo, 1);
-        g_assert (info != NULL);
-        info->name = buf;
-        info->type = BCT_INT64;
-        info->is_primary_key = ((table_row->flags & COL_PKEY) != 0) ? TRUE : FALSE;
-        info->null_allowed = ((table_row->flags & COL_NNUL) != 0) ? FALSE : TRUE;
-        info->is_unicode = FALSE;
-        *pList = g_list_append (*pList, info);
+        gchar* buf = g_strdup_printf("%s_%s", m_col_name,
+                                     subtable_row->m_col_name);
+        GncSqlColumnInfo info(buf, BCT_INT64, 0, false, false,
+                              m_flags & COL_PKEY, m_flags & COL_NNUL);
+        vec.emplace_back(std::move(info));
     }
 }
 
-static void
-add_numeric_colname_to_list (const GncSqlColumnTableEntry* table_row,
-                             GList** pList)
+template<> void
+GncSqlColumnTableEntryImpl<CT_NUMERIC>::add_to_query(const GncSqlBackend* be,
+                                                     QofIdTypeConst obj_name,
+                                                     const gpointer pObject,
+                                                     PairVec& vec) const noexcept
 {
-    gnc_sql_add_subtable_colnames_to_list (table_row, numeric_col_table, pList);
-}
-
-static void
-add_gvalue_numeric_to_slist (const GncSqlBackend* be, QofIdTypeConst obj_name,
-                             const gpointer pObject, const GncSqlColumnTableEntry* table_row,
-                             GSList** pList)
-{
+/* We can't use get_row_value_from_object for the same reason as Timespec. */
     NumericGetterFunc getter;
     gnc_numeric n;
-    GValue* num_value;
-    GValue* denom_value;
 
     g_return_if_fail (be != NULL);
     g_return_if_fail (obj_name != NULL);
     g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table_row != NULL);
 
-    if (table_row->gobj_param_name != NULL)
+    if (m_gobj_param_name != nullptr)
     {
         gnc_numeric* s;
-        g_object_get (pObject, table_row->gobj_param_name, &s, NULL);
+        g_object_get (pObject, m_gobj_param_name, &s, NULL);
         n = *s;
     }
     else
     {
-        getter = (NumericGetterFunc)gnc_sql_get_getter (obj_name, table_row);
+        getter = reinterpret_cast<NumericGetterFunc>(get_getter (obj_name));
         if (getter != NULL)
         {
             n = (*getter) (pObject);
@@ -2355,81 +1956,19 @@ add_gvalue_numeric_to_slist (const GncSqlBackend* be, QofIdTypeConst obj_name,
         }
     }
 
-    num_value = g_new0 (GValue, 1);
-    g_assert (num_value != NULL);
-    (void)g_value_init (num_value, G_TYPE_INT64);
-    g_value_set_int64 (num_value, gnc_numeric_num (n));
-    denom_value = g_new0 (GValue, 1);
-    g_assert (denom_value != NULL);
-    (void)g_value_init (denom_value, G_TYPE_INT64);
-    g_value_set_int64 (denom_value, gnc_numeric_denom (n));
-
-    (*pList) = g_slist_append ((*pList), num_value);
-    (*pList) = g_slist_append ((*pList), denom_value);
+    std::ostringstream buf;
+    std::string num_col{m_col_name};
+    std::string denom_col{m_col_name};
+    num_col += "_num";
+    denom_col += "_denom";
+    buf << gnc_numeric_num (n);
+    vec.emplace_back (std::make_pair (num_col, buf.str ()));
+    buf.str ("");
+    buf << gnc_numeric_denom (n);
+    vec.emplace_back (denom_col, buf.str ());
 }
 
-static GncSqlColumnTypeHandler numeric_handler
-= { load_numeric,
-    add_numeric_col_info_to_list,
-    add_numeric_colname_to_list,
-    add_gvalue_numeric_to_slist
-  };
 /* ================================================================= */
-
-static  GHashTable* g_columnTypeHash = NULL;
-
-void
-gnc_sql_register_col_type_handler (const gchar* colType,
-                                   const GncSqlColumnTypeHandler* handler)
-{
-    g_return_if_fail (colType != NULL);
-    g_return_if_fail (handler != NULL);
-
-    if (g_columnTypeHash == NULL)
-    {
-        g_columnTypeHash = g_hash_table_new (g_str_hash, g_str_equal);
-        g_assert (g_columnTypeHash != NULL);
-    }
-
-    DEBUG ("Col type %s registered\n", colType);
-    g_hash_table_insert (g_columnTypeHash, (gpointer)colType, (gpointer)handler);
-}
-
-static GncSqlColumnTypeHandler*
-get_handler (const GncSqlColumnTableEntry* table_row)
-{
-    GncSqlColumnTypeHandler* pHandler;
-
-    g_return_val_if_fail (table_row != NULL, NULL);
-    g_return_val_if_fail (table_row->col_type != NULL, NULL);
-
-    if (g_columnTypeHash != NULL)
-    {
-        pHandler = static_cast<decltype (pHandler)> (
-                       g_hash_table_lookup (g_columnTypeHash, table_row->col_type));
-        g_assert (pHandler != NULL);
-    }
-    else
-    {
-        pHandler = NULL;
-    }
-
-    return pHandler;
-}
-
-static void
-register_standard_col_type_handlers (void)
-{
-    gnc_sql_register_col_type_handler (CT_STRING, &string_handler);
-    gnc_sql_register_col_type_handler (CT_BOOLEAN, &boolean_handler);
-    gnc_sql_register_col_type_handler (CT_INT, &int_handler);
-    gnc_sql_register_col_type_handler (CT_INT64, &int64_handler);
-    gnc_sql_register_col_type_handler (CT_DOUBLE, &double_handler);
-    gnc_sql_register_col_type_handler (CT_GUID, &guid_handler);
-    gnc_sql_register_col_type_handler (CT_TIMESPEC, &timespec_handler);
-    gnc_sql_register_col_type_handler (CT_GDATE, &date_handler);
-    gnc_sql_register_col_type_handler (CT_NUMERIC, &numeric_handler);
-}
 
 void
 _retrieve_guid_ (gpointer pObject,  gpointer pValue)
@@ -2445,19 +1984,17 @@ _retrieve_guid_ (gpointer pObject,  gpointer pValue)
 
 
 // Table to retrieve just the guid
-static GncSqlColumnTableEntry guid_table[] =
+static EntryVec guid_table
 {
-    { "guid", CT_GUID, 0, 0, NULL, NULL, NULL, _retrieve_guid_ },
-    { NULL }
+    gnc_sql_make_table_entry<CT_GUID>("guid", 0, 0, nullptr, _retrieve_guid_)
 };
 
 const GncGUID*
-gnc_sql_load_guid (const GncSqlBackend* be, GncSqlRow* row)
+gnc_sql_load_guid (const GncSqlBackend* be, GncSqlRow& row)
 {
     static GncGUID guid;
 
     g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (row != NULL, NULL);
 
     gnc_sql_load_object (be, row, NULL, &guid, guid_table);
 
@@ -2465,265 +2002,102 @@ gnc_sql_load_guid (const GncSqlBackend* be, GncSqlRow* row)
 }
 
 // Table to retrieve just the guid
-static GncSqlColumnTableEntry tx_guid_table[] =
+static EntryVec tx_guid_table
 {
-    { "tx_guid", CT_GUID, 0, 0, NULL, NULL, NULL, _retrieve_guid_ },
-    { NULL }
-};
-
-
-const GncGUID*
-gnc_sql_load_tx_guid (const GncSqlBackend* be, GncSqlRow* row)
-{
-    static GncGUID guid;
-
-    g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (row != NULL, NULL);
-
-    gnc_sql_load_object (be, row, NULL, &guid, tx_guid_table);
-
-    return &guid;
-}
+    gnc_sql_make_table_entry<CT_GUID>("tx_guid", 0, 0, nullptr, _retrieve_guid_)
+ };
 
 void
-gnc_sql_load_object (const GncSqlBackend* be, GncSqlRow* row,
+gnc_sql_load_object (const GncSqlBackend* be, GncSqlRow& row,
                      QofIdTypeConst obj_name, gpointer pObject,
-                     const GncSqlColumnTableEntry* table)
+                     const EntryVec& table)
 {
     QofSetterFunc setter;
-    GncSqlColumnTypeHandler* pHandler;
-    const GncSqlColumnTableEntry* table_row;
 
     g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
     g_return_if_fail (pObject != NULL);
-    g_return_if_fail (table != NULL);
 
-    for (table_row = table; table_row->col_name != NULL; table_row++)
+    for (auto const& table_row : table)
     {
-        if ((table_row->flags & COL_AUTOINC) != 0)
-        {
-            setter = set_autoinc_id;
-        }
-        else if (table_row->qof_param_name != NULL)
-        {
-            g_assert (obj_name != NULL);
-            setter = qof_class_get_parameter_setter (obj_name,
-                                                     table_row->qof_param_name);
-        }
-        else
-        {
-            setter = table_row->setter;
-        }
-        pHandler = get_handler (table_row);
-        g_assert (pHandler != NULL);
-        pHandler->load_fn (be, row, setter, pObject, table_row);
+        table_row->load (be, row, obj_name, pObject);
     }
 }
 
 /* ================================================================= */
-GncSqlStatement*
-gnc_sql_create_select_statement (GncSqlBackend* be, const gchar* table_name)
-{
-    gchar* sql;
-    GncSqlStatement* stmt;
-
-    g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (table_name != NULL, NULL);
-
-    sql = g_strdup_printf ("SELECT * FROM %s", table_name);
-    stmt = gnc_sql_create_statement_from_sql (be, sql);
-    g_free (sql);
-    return stmt;
-}
-
-static GncSqlStatement*
+static GncSqlStatementPtr
 create_single_col_select_statement (GncSqlBackend* be,
                                     const gchar* table_name,
-                                    const GncSqlColumnTableEntry* table_row)
+                                    const GncSqlColumnTableEntryPtr table_row)
 {
-    gchar* sql;
-    GncSqlStatement* stmt;
-
     g_return_val_if_fail (be != NULL, NULL);
     g_return_val_if_fail (table_name != NULL, NULL);
-    g_return_val_if_fail (table_row != NULL, NULL);
 
-    sql = g_strdup_printf ("SELECT %s FROM %s", table_row->col_name, table_name);
-    stmt = gnc_sql_create_statement_from_sql (be, sql);
-    g_free (sql);
-    return stmt;
+    auto sql = std::string{"SELECT "} + table_row->name() + " FROM " + table_name;
+    return be->create_statement_from_sql(sql.c_str());
 }
 
 /* ================================================================= */
 
-GncSqlResult*
-gnc_sql_execute_select_statement (GncSqlBackend* be, GncSqlStatement* stmt)
+uint_t
+gnc_sql_append_guids_to_sql (std::stringstream& sql, const InstanceVec& instances)
 {
-    GncSqlResult* result;
+    char guid_buf[GUID_ENCODING_LENGTH + 1];
 
-    g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (stmt != NULL, NULL);
-
-    result = gnc_sql_connection_execute_select_statement (be->conn, stmt);
-    if (result == NULL)
+    for (auto inst : instances)
     {
-        PERR ("SQL error: %s\n", gnc_sql_statement_to_sql (stmt));
-        qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);
-    }
-
-    return result;
-}
-
-GncSqlStatement*
-gnc_sql_create_statement_from_sql (GncSqlBackend* be, const gchar* sql)
-{
-    GncSqlStatement* stmt;
-
-    g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (sql != NULL, NULL);
-
-    stmt = gnc_sql_connection_create_statement_from_sql (be->conn, sql);
-    if (stmt == NULL)
-    {
-        PERR ("SQL error: %s\n", sql);
-        qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);
-    }
-
-    return stmt;
-}
-
-GncSqlResult*
-gnc_sql_execute_select_sql (GncSqlBackend* be, const gchar* sql)
-{
-    GncSqlStatement* stmt;
-    GncSqlResult* result = NULL;
-
-    g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (sql != NULL, NULL);
-
-    stmt = gnc_sql_create_statement_from_sql (be, sql);
-    if (stmt == NULL)
-    {
-        return NULL;
-    }
-    result = gnc_sql_connection_execute_select_statement (be->conn, stmt);
-    gnc_sql_statement_dispose (stmt);
-    if (result == NULL)
-    {
-        PERR ("SQL error: %s\n", sql);
-        qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);
-    }
-
-    return result;
-}
-
-gint
-gnc_sql_execute_nonselect_sql (GncSqlBackend* be, const gchar* sql)
-{
-    GncSqlStatement* stmt;
-    gint result;
-
-    g_return_val_if_fail (be != NULL, 0);
-    g_return_val_if_fail (sql != NULL, 0);
-
-    stmt = gnc_sql_create_statement_from_sql (be, sql);
-    if (stmt == NULL)
-    {
-        return -1;
-    }
-    result = gnc_sql_connection_execute_nonselect_statement (be->conn, stmt);
-    gnc_sql_statement_dispose (stmt);
-    return result;
-}
-
-static guint
-execute_statement_get_count (GncSqlBackend* be, GncSqlStatement* stmt)
-{
-    GncSqlResult* result;
-    guint count = 0;
-
-    g_return_val_if_fail (be != NULL, 0);
-    g_return_val_if_fail (stmt != NULL, 0);
-
-    result = gnc_sql_execute_select_statement (be, stmt);
-    if (result != NULL)
-    {
-        count = gnc_sql_result_get_num_rows (result);
-        gnc_sql_result_dispose (result);
-    }
-
-    return count;
-}
-
-guint
-gnc_sql_append_guid_list_to_sql (GString* sql, GList* list, guint maxCount)
-{
-    gchar guid_buf[GUID_ENCODING_LENGTH + 1];
-    gboolean first_guid = TRUE;
-    guint count;
-
-    g_return_val_if_fail (sql != NULL, 0);
-
-    if (list == NULL) return 0;
-
-    for (count = 0; list != NULL && count < maxCount; list = list->next, count++)
-    {
-        QofInstance* inst = QOF_INSTANCE (list->data);
         (void)guid_to_string_buff (qof_instance_get_guid (inst), guid_buf);
 
-        if (!first_guid)
+        if (inst != *(instances.begin()))
         {
-            (void)g_string_append (sql, ",");
+            sql << ",";
         }
-        (void)g_string_append (sql, "'");
-        (void)g_string_append (sql, guid_buf);
-        (void)g_string_append (sql, "'");
-        first_guid = FALSE;
+        sql << "'" << guid_buf << "'";
     }
 
-    return count;
+    return instances.size();
 }
 /* ================================================================= */
+static PairVec
+get_object_values (GncSqlBackend* be, QofIdTypeConst obj_name,
+                   gpointer pObject, const EntryVec& table)
+{
+    PairVec vec;
+
+    for (auto const& table_row : table)
+    {
+        if (!(table_row->is_autoincr()))
+        {
+            table_row->add_to_query (be, obj_name, pObject, vec);
+        }
+    }
+    return vec;
+}
 
 gboolean
 gnc_sql_object_is_it_in_db (GncSqlBackend* be, const gchar* table_name,
                             QofIdTypeConst obj_name, gpointer pObject,
-                            const GncSqlColumnTableEntry* table)
+                            const EntryVec& table)
 {
-    GncSqlStatement* sqlStmt;
     guint count;
-    GncSqlColumnTypeHandler* pHandler;
-    GSList* list = NULL;
-
     g_return_val_if_fail (be != NULL, FALSE);
     g_return_val_if_fail (table_name != NULL, FALSE);
     g_return_val_if_fail (obj_name != NULL, FALSE);
     g_return_val_if_fail (pObject != NULL, FALSE);
-    g_return_val_if_fail (table != NULL, FALSE);
 
     /* SELECT * FROM */
-    sqlStmt = create_single_col_select_statement (be, table_name, table);
-    g_assert (sqlStmt != NULL);
+    auto stmt = create_single_col_select_statement (be, table_name, table[0]);
+    g_assert (stmt != NULL);
 
     /* WHERE */
-    pHandler = get_handler (table);
-    g_assert (pHandler != NULL);
-    pHandler->add_gvalue_to_slist_fn (be, obj_name, pObject, table, &list);
-    g_assert (list != NULL);
-    gnc_sql_statement_add_where_cond (sqlStmt, obj_name, pObject, &table[0],
-                                      (GValue*) (list->data));
-
-    count = execute_statement_get_count (be, sqlStmt);
-    gnc_sql_statement_dispose (sqlStmt);
-    if (count == 0)
+    PairVec values{get_object_values(be, obj_name, pObject, table)};
+    stmt->add_where_cond(obj_name, values);
+    auto result = be->execute_select_statement (stmt);
+    if (result != NULL)
     {
-        return FALSE;
+        auto retval = result->size() > 0;
+        return retval;
     }
-    else
-    {
-        return TRUE;
-    }
+    return false;
 }
 
 gboolean
@@ -2731,16 +2105,15 @@ gnc_sql_do_db_operation (GncSqlBackend* be,
                          E_DB_OPERATION op,
                          const gchar* table_name,
                          QofIdTypeConst obj_name, gpointer pObject,
-                         const GncSqlColumnTableEntry* table)
+                         const EntryVec& table)
 {
-    GncSqlStatement* stmt = NULL;
-    gboolean ok = FALSE;
+    GncSqlStatementPtr stmt;
+    bool ok = false;
 
     g_return_val_if_fail (be != NULL, FALSE);
     g_return_val_if_fail (table_name != NULL, FALSE);
     g_return_val_if_fail (obj_name != NULL, FALSE);
     g_return_val_if_fail (pObject != NULL, FALSE);
-    g_return_val_if_fail (table != NULL, FALSE);
 
     if (op == OP_DB_INSERT)
     {
@@ -2758,326 +2131,114 @@ gnc_sql_do_db_operation (GncSqlBackend* be,
     {
         g_assert (FALSE);
     }
-    if (stmt != NULL)
-    {
-        gint result;
-
-        result = gnc_sql_connection_execute_nonselect_statement (be->conn, stmt);
-        if (result == -1)
-        {
-            PERR ("SQL error: %s\n", gnc_sql_statement_to_sql (stmt));
-            qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);
-        }
-        else
-        {
-            ok = TRUE;
-        }
-        gnc_sql_statement_dispose (stmt);
-    }
+    if (be->execute_nonselect_statement (stmt) != -1)
+        ok = true;
 
     return ok;
 }
 
-static GSList*
-create_gslist_from_values (GncSqlBackend* be,
-                           QofIdTypeConst obj_name, gpointer pObject,
-                           const GncSqlColumnTableEntry* table)
-{
-    GSList* list = NULL;
-    GncSqlColumnTypeHandler* pHandler;
-    const GncSqlColumnTableEntry* table_row;
-
-    for (table_row = table; table_row->col_name != NULL; table_row++)
-    {
-        if ((table_row->flags & COL_AUTOINC) == 0)
-        {
-            pHandler = get_handler (table_row);
-            g_assert (pHandler != NULL);
-            pHandler->add_gvalue_to_slist_fn (be, obj_name, pObject, table_row, &list);
-        }
-    }
-
-    g_assert (list != NULL);
-    return list;
-}
-
-gchar*
-gnc_sql_get_sql_value (const GncSqlConnection* conn, const GValue* value)
-{
-    if (value != NULL && G_IS_VALUE (value))
-    {
-        GType type = G_VALUE_TYPE (value);
-
-        if (G_VALUE_HOLDS_STRING (value))
-        {
-            if (g_value_get_string (value) != NULL)
-            {
-                gchar* before_str;
-                gchar* after_str;
-                before_str = g_value_dup_string (value);
-                after_str = gnc_sql_connection_quote_string (conn, before_str);
-                g_free (before_str);
-                return after_str;
-            }
-            else
-            {
-                return g_strdup ("NULL");
-            }
-        }
-        else if (type == G_TYPE_INT64)
-        {
-            return g_strdup_printf ("%" G_GINT64_FORMAT, g_value_get_int64 (value));
-
-        }
-        else if (type == G_TYPE_INT)
-        {
-            return g_strdup_printf ("%d", g_value_get_int (value));
-
-        }
-        else if (type == G_TYPE_DOUBLE)
-        {
-            gchar doublestr[G_ASCII_DTOSTR_BUF_SIZE];
-            g_ascii_dtostr (doublestr, sizeof (doublestr),
-                            g_value_get_double (value));
-            return g_strdup (doublestr);
-
-        }
-        else if (g_value_type_transformable (type, G_TYPE_STRING))
-        {
-            GValue* string;
-            gchar* str;
-
-            string = g_new0 (GValue, 1);
-            g_assert (string != NULL);
-            (void)g_value_init (string, G_TYPE_STRING);
-            (void)g_value_transform (value, string);
-            str = g_value_dup_string (string);
-            g_value_unset (string);
-            g_free (string);
-            PWARN ("using g_value_transform(), gtype = '%s'\n", g_type_name (type));
-            return str;
-        }
-        else
-        {
-            PWARN ("not transformable, gtype = '%s'\n", g_type_name (type));
-            return g_strdup ("$$$");
-        }
-    }
-    else
-    {
-        PWARN ("value is NULL or not G_IS_VALUE()\n");
-        return g_strdup ("");
-    }
-}
-
-static void
-free_gvalue_list (GSList* list)
-{
-    GSList* node;
-    GValue* value;
-
-    for (node = list; node != NULL; node = node->next)
-    {
-        value = (GValue*)node->data;
-
-        g_value_unset (value);
-        g_free (value);
-    }
-    g_slist_free (list);
-}
-
-static GncSqlStatement*
+static GncSqlStatementPtr
 build_insert_statement (GncSqlBackend* be,
                         const gchar* table_name,
                         QofIdTypeConst obj_name, gpointer pObject,
-                        const GncSqlColumnTableEntry* table)
+                        const EntryVec& table)
 {
-    GncSqlStatement* stmt;
-    GString* sql;
-    GSList* values;
-    GSList* node;
-    gchar* sqlbuf;
-    GList* colnames = NULL;
-    GList* colname;
-    const GncSqlColumnTableEntry* table_row;
+    GncSqlStatementPtr stmt;
+    PairVec col_values;
+    std::ostringstream sql;
 
     g_return_val_if_fail (be != NULL, NULL);
     g_return_val_if_fail (table_name != NULL, NULL);
     g_return_val_if_fail (obj_name != NULL, NULL);
     g_return_val_if_fail (pObject != NULL, NULL);
-    g_return_val_if_fail (table != NULL, NULL);
+    PairVec values{get_object_values(be, obj_name, pObject, table)};
 
-    sqlbuf = g_strdup_printf ("INSERT INTO %s(", table_name);
-    sql = g_string_new (sqlbuf);
-    g_free (sqlbuf);
-
-    // Get all col names and all values
-    for (table_row = table; table_row->col_name != NULL; table_row++)
+    sql << "INSERT INTO " << table_name <<"(";
+    for (auto const& col_value : values)
     {
-        if ((table_row->flags & COL_AUTOINC) == 0)
-        {
-            GncSqlColumnTypeHandler* pHandler;
-
-            // Add col names to the list
-            pHandler = get_handler (table_row);
-            g_assert (pHandler != NULL);
-            pHandler->add_colname_to_list_fn (table_row, &colnames);
-        }
+        if (col_value != *values.begin())
+            sql << ",";
+        sql << col_value.first;
     }
-    g_assert (colnames != NULL);
 
-    for (colname = colnames; colname != NULL; colname = colname->next)
+    sql << ") VALUES(";
+    for (auto col_value : values)
     {
-        if (colname != colnames)
-        {
-            g_string_append (sql, ",");
-        }
-        g_string_append (sql, (gchar*)colname->data);
-        g_free (colname->data);
+        if (col_value != *values.begin())
+            sql << ",";
+        sql << be->quote_string(col_value.second);
     }
-    g_list_free (colnames);
+    sql << ")";
 
-    g_string_append (sql, ") VALUES(");
-    values = create_gslist_from_values (be, obj_name, pObject, table);
-    for (node = values; node != NULL; node = node->next)
-    {
-        GValue* value = (GValue*)node->data;
-        gchar* value_str;
-        if (node != values)
-        {
-            (void)g_string_append (sql, ",");
-        }
-        value_str = gnc_sql_get_sql_value (be->conn, value);
-        (void)g_string_append (sql, value_str);
-        g_free (value_str);
-        (void)g_value_reset (value);
-    }
-    free_gvalue_list (values);
-    (void)g_string_append (sql, ")");
-
-    stmt = gnc_sql_connection_create_statement_from_sql (be->conn, sql->str);
-    (void)g_string_free (sql, TRUE);
-
+    stmt = be->create_statement_from_sql(sql.str());
     return stmt;
 }
 
-static GncSqlStatement*
+static GncSqlStatementPtr
 build_update_statement (GncSqlBackend* be,
                         const gchar* table_name,
                         QofIdTypeConst obj_name, gpointer pObject,
-                        const GncSqlColumnTableEntry* table)
+                        const EntryVec& table)
 {
-    GncSqlStatement* stmt;
-    GString* sql;
-    GSList* values;
-    GList* colnames = NULL;
-    GSList* value;
-    GList* colname;
-    gboolean firstCol;
-    const GncSqlColumnTableEntry* table_row;
-    gchar* sqlbuf;
+    GncSqlStatementPtr stmt;
+    std::ostringstream sql;
 
     g_return_val_if_fail (be != NULL, NULL);
     g_return_val_if_fail (table_name != NULL, NULL);
     g_return_val_if_fail (obj_name != NULL, NULL);
     g_return_val_if_fail (pObject != NULL, NULL);
-    g_return_val_if_fail (table != NULL, NULL);
 
-    // Get all col names and all values
-    for (table_row = table; table_row->col_name != NULL; table_row++)
-    {
-        if ((table_row->flags & COL_AUTOINC) == 0)
-        {
-            GncSqlColumnTypeHandler* pHandler;
 
-            // Add col names to the list
-            pHandler = get_handler (table_row);
-            g_assert (pHandler != NULL);
-            pHandler->add_colname_to_list_fn (table_row, &colnames);
-        }
-    }
-    g_assert (colnames != NULL);
-    values = create_gslist_from_values (be, obj_name, pObject, table);
+    PairVec values{get_object_values (be, obj_name, pObject, table)};
 
     // Create the SQL statement
-    sqlbuf = g_strdup_printf ("UPDATE %s SET ", table_name);
-    sql = g_string_new (sqlbuf);
-    g_free (sqlbuf);
+    sql <<  "UPDATE " << table_name << " SET ";
 
-    firstCol = TRUE;
-    for (colname = colnames->next, value = values->next;
-         colname != NULL && value != NULL;
-         colname = colname->next, value = value->next)
+    for (auto const& col_value : values)
     {
-        gchar* value_str;
-        if (!firstCol)
-        {
-            (void)g_string_append (sql, ",");
-        }
-        (void)g_string_append (sql, (gchar*)colname->data);
-        (void)g_string_append (sql, "=");
-        value_str = gnc_sql_get_sql_value (be->conn, (GValue*) (value->data));
-        (void)g_string_append (sql, value_str);
-        g_free (value_str);
-        firstCol = FALSE;
-    }
-    for (colname = colnames; colname != NULL; colname = colname->next)
-    {
-        g_free (colname->data);
-    }
-    g_list_free (colnames);
-    if (value != NULL || colname != NULL)
-    {
-        PERR ("Mismatch in number of column names and values");
+        if (col_value != *values.begin())
+            sql << ",";
+        sql << col_value.first << "=" <<
+            be->quote_string(col_value.second);
     }
 
-    stmt = gnc_sql_connection_create_statement_from_sql (be->conn, sql->str);
-    gnc_sql_statement_add_where_cond (stmt, obj_name, pObject, &table[0],
-                                      (GValue*) (values->data));
-    free_gvalue_list (values);
-    (void)g_string_free (sql, TRUE);
-
+    stmt = be->create_statement_from_sql(sql.str());
+    /* We want our where condition to be just the first column and
+     * value, i.e. the guid of the object.
+     */
+    values.erase(values.begin() + 1, values.end());
+    stmt->add_where_cond(obj_name, values);
     return stmt;
 }
 
-static GncSqlStatement*
+static GncSqlStatementPtr
 build_delete_statement (GncSqlBackend* be,
                         const gchar* table_name,
                         QofIdTypeConst obj_name, gpointer pObject,
-                        const GncSqlColumnTableEntry* table)
+                        const EntryVec& table)
 {
-    GncSqlStatement* stmt;
-    GncSqlColumnTypeHandler* pHandler;
-    GSList* list = NULL;
-    gchar* sqlbuf;
+    std::ostringstream sql;
 
     g_return_val_if_fail (be != NULL, NULL);
     g_return_val_if_fail (table_name != NULL, NULL);
     g_return_val_if_fail (obj_name != NULL, NULL);
     g_return_val_if_fail (pObject != NULL, NULL);
-    g_return_val_if_fail (table != NULL, NULL);
 
-    sqlbuf = g_strdup_printf ("DELETE FROM %s ", table_name);
-    stmt = gnc_sql_connection_create_statement_from_sql (be->conn, sqlbuf);
-    g_free (sqlbuf);
+    sql << "DELETE FROM " << table_name;
+    auto stmt = be->create_statement_from_sql (sql.str());
 
     /* WHERE */
-    pHandler = get_handler (table);
-    g_assert (pHandler != NULL);
-    pHandler->add_gvalue_to_slist_fn (be, obj_name, pObject, table, &list);
-    g_assert (list != NULL);
-    gnc_sql_statement_add_where_cond (stmt, obj_name, pObject, &table[0],
-                                      (GValue*) (list->data));
-    free_gvalue_list (list);
+    PairVec values;
+    table[0]->add_to_query (be, obj_name, pObject, values);
+    PairVec col_values{values[0]};
+    stmt->add_where_cond (obj_name, col_values);
 
     return stmt;
 }
 
 /* ================================================================= */
-gboolean
-gnc_sql_commit_standard_item (GncSqlBackend* be, QofInstance* inst,
-                              const gchar* tableName,
-                              QofIdTypeConst obj_name, const GncSqlColumnTableEntry* col_table)
+bool
+GncSqlObjectBackend::commit (GncSqlBackend* be, QofInstance* inst)
 {
     const GncGUID* guid;
     gboolean is_infant;
@@ -3089,7 +2250,7 @@ gnc_sql_commit_standard_item (GncSqlBackend* be, QofInstance* inst,
     {
         op = OP_DB_DELETE;
     }
-    else if (be->is_pristine_db || is_infant)
+    else if (be->pristine() || is_infant)
     {
         op = OP_DB_INSERT;
     }
@@ -3097,7 +2258,8 @@ gnc_sql_commit_standard_item (GncSqlBackend* be, QofInstance* inst,
     {
         op = OP_DB_UPDATE;
     }
-    is_ok = gnc_sql_do_db_operation (be, op, tableName, obj_name, inst, col_table);
+    is_ok = gnc_sql_do_db_operation (be, op, m_table_name.c_str(),
+                                     m_type_name.c_str(), inst, m_col_table);
 
     if (is_ok)
     {
@@ -3117,314 +2279,67 @@ gnc_sql_commit_standard_item (GncSqlBackend* be, QofInstance* inst,
 }
 
 /* ================================================================= */
-
-static gboolean
-do_create_table (const GncSqlBackend* be, const gchar* table_name,
-                 const GncSqlColumnTableEntry* col_table)
-{
-    GList* col_info_list = NULL;
-    gboolean ok = FALSE;
-
-    g_return_val_if_fail (be != NULL, FALSE);
-    g_return_val_if_fail (table_name != NULL, FALSE);
-    g_return_val_if_fail (col_table != NULL, FALSE);
-
-    for (; col_table->col_name != NULL; col_table++)
-    {
-        GncSqlColumnTypeHandler* pHandler;
-
-        pHandler = get_handler (col_table);
-        g_assert (pHandler != NULL);
-        pHandler->add_col_info_to_list_fn (be, col_table, &col_info_list);
-    }
-    g_assert (col_info_list != NULL);
-    ok = gnc_sql_connection_create_table (be->conn, table_name, col_info_list);
-    return ok;
-}
-
-gboolean
-gnc_sql_create_table (GncSqlBackend* be, const gchar* table_name,
-                      gint table_version, const GncSqlColumnTableEntry* col_table)
-{
-    gboolean ok;
-
-    g_return_val_if_fail (be != NULL, FALSE);
-    g_return_val_if_fail (table_name != NULL, FALSE);
-    g_return_val_if_fail (col_table != NULL, FALSE);
-
-    DEBUG ("Creating %s table\n", table_name);
-
-    ok = do_create_table (be, table_name, col_table);
-    if (ok)
-    {
-        ok = gnc_sql_set_table_version (be, table_name, table_version);
-    }
-    return ok;
-}
-
-gboolean
-gnc_sql_create_temp_table (const GncSqlBackend* be, const gchar* table_name,
-                           const GncSqlColumnTableEntry* col_table)
-{
-    g_return_val_if_fail (be != NULL, FALSE);
-    g_return_val_if_fail (table_name != NULL, FALSE);
-    g_return_val_if_fail (col_table != NULL, FALSE);
-
-    return do_create_table (be, table_name, col_table);
-}
-
-gboolean
-gnc_sql_create_index (const GncSqlBackend* be, const gchar* index_name,
-                      const gchar* table_name,
-                      const GncSqlColumnTableEntry* col_table)
-{
-    gboolean ok;
-
-    g_return_val_if_fail (be != NULL, FALSE);
-    g_return_val_if_fail (index_name != NULL, FALSE);
-    g_return_val_if_fail (table_name != NULL, FALSE);
-    g_return_val_if_fail (col_table != NULL, FALSE);
-
-    ok = gnc_sql_connection_create_index (be->conn, index_name, table_name,
-                                          col_table);
-    return ok;
-}
-
-gint
-gnc_sql_get_table_version (const GncSqlBackend* be, const gchar* table_name)
-{
-    g_return_val_if_fail (be != NULL, 0);
-    g_return_val_if_fail (table_name != NULL, 0);
-
-    /* If the db is pristine because it's being saved, the table does not exist. */
-    if (be->is_pristine_db)
-    {
-        return 0;
-    }
-
-    return GPOINTER_TO_INT (g_hash_table_lookup (be->versions, table_name));
-}
-
-/* Create a temporary table, copy the data from the old table, delete the
-   old table, then rename the new one. */
 void
-gnc_sql_upgrade_table (GncSqlBackend* be, const gchar* table_name,
-                       const GncSqlColumnTableEntry* col_table)
+GncSqlObjectBackend::create_tables (GncSqlBackend* be)
 {
-    gchar* sql;
-    gchar* temp_table_name;
-
-    g_return_if_fail (be != NULL);
-    g_return_if_fail (table_name != NULL);
-    g_return_if_fail (col_table != NULL);
-
-    DEBUG ("Upgrading %s table\n", table_name);
-
-    temp_table_name = g_strdup_printf ("%s_new", table_name);
-    (void)gnc_sql_create_temp_table (be, temp_table_name, col_table);
-    sql = g_strdup_printf ("INSERT INTO %s SELECT * FROM %s",
-                           temp_table_name, table_name);
-    (void)gnc_sql_execute_nonselect_sql (be, sql);
-    g_free (sql);
-
-    sql = g_strdup_printf ("DROP TABLE %s", table_name);
-    (void)gnc_sql_execute_nonselect_sql (be, sql);
-    g_free (sql);
-
-    sql = g_strdup_printf ("ALTER TABLE %s RENAME TO %s", temp_table_name,
-                           table_name);
-    (void)gnc_sql_execute_nonselect_sql (be, sql);
-    g_free (sql);
-    g_free (temp_table_name);
-}
-
-/* Adds one or more columns to an existing table. */
-gboolean gnc_sql_add_columns_to_table (GncSqlBackend* be,
-                                       const gchar* table_name,
-                                       const GncSqlColumnTableEntry* new_col_table)
-{
-    GList* col_info_list = NULL;
-    gboolean ok = FALSE;
-
-    g_return_val_if_fail (be != NULL, FALSE);
-    g_return_val_if_fail (table_name != NULL, FALSE);
-    g_return_val_if_fail (new_col_table != NULL, FALSE);
-
-    for (; new_col_table->col_name != NULL; new_col_table++)
+    g_return_if_fail (be != nullptr);
+    int version = be->get_table_version (m_table_name);
+    if (version == 0) //No tables, otherwise version will be >= 1.
     {
-        GncSqlColumnTypeHandler* pHandler;
-
-        pHandler = get_handler (new_col_table);
-        g_assert (pHandler != NULL);
-        pHandler->add_col_info_to_list_fn (be, new_col_table, &col_info_list);
+        be->create_table(m_table_name, m_col_table);
+        be->set_table_version(m_table_name, m_version);
     }
-    g_assert (col_info_list != NULL);
-    ok = gnc_sql_connection_add_columns_to_table (be->conn, table_name,
-                                                  col_info_list);
-    return ok;
+    else if (version != m_version)
+        PERR("Version mismatch in table %s, expecting %d but backend is %d."
+             "Table creation aborted.", m_table_name.c_str(), m_version, version);
 }
 
 /* ================================================================= */
-#define VERSION_TABLE_NAME "versions"
-#define MAX_TABLE_NAME_LEN 50
-#define TABLE_COL_NAME "table_name"
-#define VERSION_COL_NAME "table_version"
 
-static GncSqlColumnTableEntry version_table[] =
-{
-    { TABLE_COL_NAME,   CT_STRING, MAX_TABLE_NAME_LEN, COL_PKEY | COL_NNUL },
-    { VERSION_COL_NAME, CT_INT,    0,                  COL_NNUL },
-    { NULL }
-};
 
-/**
- * Sees if the version table exists, and if it does, loads the info into
- * the version hash table.  Otherwise, it creates an empty version table.
- *
- * @param be Backend struct
+/* This is necessary for 64-bit builds because g++ complains
+ * that reinterpret_casting a void* (64 bits) to an int (32 bits)
+ * loses precision, so we have to explicitly dispose of the precision.
+ * FIXME: We shouldn't be storing ints in ptrs in the first place.
  */
-void
-gnc_sql_init_version_info (GncSqlBackend* be)
+#ifdef __LP64__
+template <> int
+GncSqlColumnTableEntry::get_row_value_from_object<int>(QofIdTypeConst obj_name,
+                                                       const gpointer pObject,
+                                                       std::false_type) const
 {
-    g_return_if_fail (be != NULL);
-
-    if (be->versions != NULL)
-    {
-        g_hash_table_destroy (be->versions);
-    }
-    be->versions = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-
-    if (gnc_sql_connection_does_table_exist (be->conn, VERSION_TABLE_NAME))
-    {
-        GncSqlResult* result;
-        gchar* sql;
-
-        sql = g_strdup_printf ("SELECT * FROM %s", VERSION_TABLE_NAME);
-        result = gnc_sql_execute_select_sql (be, sql);
-        g_free (sql);
-        if (result != NULL)
-        {
-            const GValue* name;
-            const GValue* version;
-            GncSqlRow* row;
-
-            row = gnc_sql_result_get_first_row (result);
-            while (row != NULL)
-            {
-                name = gnc_sql_row_get_value_at_col_name (row, TABLE_COL_NAME);
-                version = gnc_sql_row_get_value_at_col_name (row, VERSION_COL_NAME);
-                g_hash_table_insert (be->versions,
-                                     g_strdup (g_value_get_string (name)),
-                                     GINT_TO_POINTER ((gint)g_value_get_int64 (version)));
-                row = gnc_sql_result_get_next_row (result);
-            }
-            gnc_sql_result_dispose (result);
-        }
-    }
+    g_return_val_if_fail(obj_name != nullptr && pObject != nullptr, 0);
+    int result = 0;
+    if (m_gobj_param_name != nullptr)
+        g_object_get(pObject, m_gobj_param_name, &result, NULL );
     else
     {
-        do_create_table (be, VERSION_TABLE_NAME, version_table);
-        gnc_sql_set_table_version (be, "Gnucash",
-                                   gnc_prefs_get_long_version ());
-        gnc_sql_set_table_version (be, "Gnucash-Resave",
-                                   GNUCASH_RESAVE_VERSION);
-    }
-}
-
-/**
- * Resets the version table information by removing all version table info.
- * It also recreates the version table in the db.
- *
- * @param be Backend struct
- * @return TRUE if successful, FALSE if error
- */
-static gboolean
-reset_version_info (GncSqlBackend* be)
-{
-    gboolean ok;
-
-    g_return_val_if_fail (be != NULL, FALSE);
-
-    ok = do_create_table (be, VERSION_TABLE_NAME, version_table);
-    if (be->versions == NULL)
-    {
-        be->versions = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-    }
-    else
-    {
-        g_hash_table_remove_all (be->versions);
-    }
-
-    gnc_sql_set_table_version (be, "Gnucash", gnc_prefs_get_long_version ());
-    gnc_sql_set_table_version (be, "Gnucash-Resave", GNUCASH_RESAVE_VERSION);
-    return ok;
-}
-
-/**
- * Finalizes the version table info by destroying the hash table.
- *
- * @param be Backend struct
- */
-void
-gnc_sql_finalize_version_info (GncSqlBackend* be)
-{
-    g_return_if_fail (be != NULL);
-
-    if (be->versions != NULL)
-    {
-        g_hash_table_destroy (be->versions);
-        be->versions = NULL;
-    }
-}
-
-/**
- * Registers the version for a table.  Registering involves updating the
- * db version table and also the hash table.
- *
- * @param be Backend struct
- * @param table_name Table name
- * @param version Version number
- * @return TRUE if successful, FALSE if unsuccessful
- */
-gboolean
-gnc_sql_set_table_version (GncSqlBackend* be, const gchar* table_name,
-                           gint version)
-{
-    gchar* sql;
-    gint cur_version;
-    gint status;
-
-    g_return_val_if_fail (be != NULL, FALSE);
-    g_return_val_if_fail (table_name != NULL, FALSE);
-    g_return_val_if_fail (version > 0, FALSE);
-
-    cur_version = gnc_sql_get_table_version (be, table_name);
-    if (cur_version != version)
-    {
-        if (cur_version == 0)
+        QofAccessFunc getter = get_getter(obj_name);
+        if (getter != nullptr)
         {
-            sql = g_strdup_printf ("INSERT INTO %s VALUES('%s',%d)", VERSION_TABLE_NAME,
-                                   table_name, version);
+            auto value = ((getter)(pObject, nullptr));
+            result = reinterpret_cast<uint64_t>(value) &
+                UINT64_C(0x00000000FFFFFFFF);
         }
-        else
-        {
-            sql = g_strdup_printf ("UPDATE %s SET %s=%d WHERE %s='%s'", VERSION_TABLE_NAME,
-                                   VERSION_COL_NAME, version,
-                                   TABLE_COL_NAME, table_name);
-        }
-        status = gnc_sql_execute_nonselect_sql (be, sql);
-        if (status == -1)
-        {
-            PERR ("SQL error: %s\n", sql);
-            qof_backend_set_error (&be->be, ERR_BACKEND_SERVER_ERR);
-        }
-        g_free (sql);
     }
+    return result;
+}
+#endif
 
-    g_hash_table_insert (be->versions, g_strdup (table_name),
-                         GINT_TO_POINTER (version));
-
-    return TRUE;
+GncSqlRow&
+GncSqlRow::operator++()
+{
+    auto& new_row =  m_iter->operator++();
+    if (new_row != *this)
+        m_iter = nullptr;
+    return new_row;
 }
 
+/*
+  GncSqlResult*
+  GncSqlRow::operator*()
+  {
+  return m_iter->operator*();
+  }
+*/
 /* ========================== END OF FILE ===================== */

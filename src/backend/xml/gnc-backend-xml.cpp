@@ -77,7 +77,6 @@ extern "C"
 #include "gnc-engine.h"
 
 #include "gnc-uri-utils.h"
-#include "io-gncxml-v2.h"
 #include "gnc-prefs.h"
 
 #ifndef HAVE_STRPTIME
@@ -89,6 +88,7 @@ extern "C"
 #include "gnc-backend-xml.h"
 #include <qofbackend-p.h>
 #include "gnc-xml-helper.h"
+#include "io-gncxml-v2.h"
 #include "io-gncxml.h"
 
 #include "gnc-address-xml-v2.h"
@@ -1242,15 +1242,6 @@ QofXmlBackendProvider::create_backend(void)
     be->begin = xml_begin_edit;
     be->commit = NULL;
     be->rollback = xml_rollback_edit;
-
-    /* The file backend always loads all data ... */
-    be->compile_query = NULL;
-    be->free_query = NULL;
-    be->run_query = NULL;
-
-    /* The file backend will never be multi-user... */
-    be->events_pending = NULL;
-    be->process_events = NULL;
 
     be->sync = xml_sync_all;
 

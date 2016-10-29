@@ -69,50 +69,59 @@ static void set_recurrence_weekend_adjust (gpointer pObject,  gpointer pValue);
 static  gpointer get_recurrence_period_start (gpointer pObject);
 static void set_recurrence_period_start (gpointer pObject,  gpointer pValue);
 
-static const GncSqlColumnTableEntry col_table[] =
-{
-    { "id",                      CT_INT,    0,                                     COL_PKEY | COL_NNUL | COL_AUTOINC },
-    {
-        "obj_guid",                CT_GUID,   0,                                     COL_NNUL, NULL, NULL,
-        (QofAccessFunc)get_obj_guid, (QofSetterFunc)set_obj_guid
-    },
-    {
-        "recurrence_mult",         CT_INT,    0,                                     COL_NNUL, NULL, NULL,
-        (QofAccessFunc)get_recurrence_mult, (QofSetterFunc)set_recurrence_mult
-    },
-    {
-        "recurrence_period_type",  CT_STRING, BUDGET_MAX_RECURRENCE_PERIOD_TYPE_LEN, COL_NNUL, NULL, NULL,
-        (QofAccessFunc)get_recurrence_period_type, set_recurrence_period_type
-    },
-    {
-        "recurrence_period_start", CT_GDATE,  0,                                     COL_NNUL, NULL, NULL,
-        (QofAccessFunc)get_recurrence_period_start, set_recurrence_period_start
-    },
-    {
-        "recurrence_weekend_adjust",  CT_STRING, BUDGET_MAX_RECURRENCE_WEEKEND_ADJUST_LEN, COL_NNUL, NULL, NULL,
-        (QofAccessFunc)get_recurrence_weekend_adjust, set_recurrence_weekend_adjust
-    },
-    { NULL }
-};
+static const EntryVec col_table
+({
+    gnc_sql_make_table_entry<CT_INT>(
+        "id", 0, COL_PKEY | COL_NNUL | COL_AUTOINC),
+    gnc_sql_make_table_entry<CT_GUID>("obj_guid", 0, COL_NNUL,
+        (QofAccessFunc)get_obj_guid, (QofSetterFunc)set_obj_guid),
+    gnc_sql_make_table_entry<CT_INT>(
+        "recurrence_mult", 0, COL_NNUL,
+        (QofAccessFunc)get_recurrence_mult, (QofSetterFunc)set_recurrence_mult),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "recurrence_period_type", BUDGET_MAX_RECURRENCE_PERIOD_TYPE_LEN,
+        COL_NNUL,
+        (QofAccessFunc)get_recurrence_period_type, set_recurrence_period_type),
+    gnc_sql_make_table_entry<CT_GDATE>(
+        "recurrence_period_start", 0, COL_NNUL,
+        (QofAccessFunc)get_recurrence_period_start,
+        set_recurrence_period_start),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "recurrence_weekend_adjust", BUDGET_MAX_RECURRENCE_WEEKEND_ADJUST_LEN,
+        COL_NNUL,
+        (QofAccessFunc)get_recurrence_weekend_adjust,
+        set_recurrence_weekend_adjust)
+});
 
 /* Special column table because we need to be able to access the table by
 a column other than the primary key */
-static const GncSqlColumnTableEntry guid_col_table[] =
-{
-    {
-        "obj_guid", CT_GUID, 0, 0, NULL, NULL,
-        (QofAccessFunc)get_obj_guid, (QofSetterFunc)set_obj_guid
-    },
-    { NULL }
-};
+static const EntryVec guid_col_table
+({
+    gnc_sql_make_table_entry<CT_GUID>("obj_guid", 0, 0,
+                                      (QofAccessFunc)get_obj_guid,
+                                      (QofSetterFunc)set_obj_guid)
+});
 
 /* Special column table used to upgrade table from version 1 to 2 */
-static const GncSqlColumnTableEntry weekend_adjust_col_table[] =
+static const EntryVec weekend_adjust_col_table
+({
+    gnc_sql_make_table_entry<CT_STRING>(
+       "recurrence_weekend_adjust", BUDGET_MAX_RECURRENCE_WEEKEND_ADJUST_LEN, 0)
+});
+
+/**
+ * Recurrences are neither loadable nor committable. Note that the default
+ * write() implementation is also a no-op.
+ */
+class GncSqlRecurrenceBackend : public GncSqlObjectBackend
 {
-    {
-        "recurrence_weekend_adjust",  CT_STRING, BUDGET_MAX_RECURRENCE_WEEKEND_ADJUST_LEN, 0,
-    },
-    { NULL }
+public:
+    GncSqlRecurrenceBackend(int version, const std::string& type,
+                      const std::string& table, const EntryVec& vec) :
+        GncSqlObjectBackend(version, type, table, vec) {}
+    void load_all(GncSqlBackend*) override { return; }
+    void create_tables(GncSqlBackend*) override;
+    bool commit(GncSqlBackend*, QofInstance*) override { return false; }
 };
 
 /* ================================================================= */
@@ -287,12 +296,11 @@ gnc_sql_recurrence_delete (GncSqlBackend* be, const GncGUID* guid)
 }
 
 static void
-load_recurrence (GncSqlBackend* be, GncSqlRow* row,  Recurrence* r)
+load_recurrence (GncSqlBackend* be, GncSqlRow& row,  Recurrence* r)
 {
     recurrence_info_t recurrence_info;
 
     g_return_if_fail (be != NULL);
-    g_return_if_fail (row != NULL);
     g_return_if_fail (r != NULL);
 
     recurrence_info.be = be;
@@ -301,13 +309,11 @@ load_recurrence (GncSqlBackend* be, GncSqlRow* row,  Recurrence* r)
     gnc_sql_load_object (be, row, TABLE_NAME, &recurrence_info, col_table);
 }
 
-static  GncSqlResult*
+static  GncSqlResultPtr
 gnc_sql_set_recurrences_from_db (GncSqlBackend* be, const GncGUID* guid)
 {
     gchar* buf;
     gchar guid_buf[GUID_ENCODING_LENGTH + 1];
-    GncSqlStatement* stmt;
-    GncSqlResult* result;
 
     g_return_val_if_fail (be != NULL, NULL);
     g_return_val_if_fail (guid != NULL, NULL);
@@ -315,43 +321,33 @@ gnc_sql_set_recurrences_from_db (GncSqlBackend* be, const GncGUID* guid)
     (void)guid_to_string_buff (guid, guid_buf);
     buf = g_strdup_printf ("SELECT * FROM %s WHERE obj_guid='%s'", TABLE_NAME,
                            guid_buf);
-    stmt = gnc_sql_connection_create_statement_from_sql (be->conn, buf);
+    auto stmt = be->create_statement_from_sql (buf);
     g_free (buf);
-    result = gnc_sql_execute_select_statement (be, stmt);
-    gnc_sql_statement_dispose (stmt);
+    auto result = be->execute_select_statement(stmt);
     return result;
 }
 
 Recurrence*
 gnc_sql_recurrence_load (GncSqlBackend* be, const GncGUID* guid)
 {
-    GncSqlResult* result;
     Recurrence* r = NULL;
 
     g_return_val_if_fail (be != NULL, NULL);
     g_return_val_if_fail (guid != NULL, NULL);
 
-    result = gnc_sql_set_recurrences_from_db (be, guid);
-    if (result != NULL)
+    auto result = gnc_sql_set_recurrences_from_db (be, guid);
+    auto row = result->begin();
+    if (row == nullptr)
     {
-        guint numRows = gnc_sql_result_get_num_rows (result);
-
-        if (numRows > 0)
-        {
-            if (numRows > 1)
-            {
-                g_warning ("More than 1 recurrence found: first one used");
-            }
-            r = g_new0 (Recurrence, 1);
-            g_assert (r != NULL);
-            load_recurrence (be, gnc_sql_result_get_first_row (result), r);
-        }
-        else
-        {
-            g_warning ("No recurrences found");
-        }
-        gnc_sql_result_dispose (result);
+        g_warning ("No recurrences found");
+        return r;
     }
+    r = g_new0 (Recurrence, 1);
+    g_assert (r != NULL);
+    load_recurrence (be, *(result->begin()), r);
+
+    if (++row != nullptr)
+        g_warning ("More than 1 recurrence found: first one used");
 
     return r;
 }
@@ -359,26 +355,18 @@ gnc_sql_recurrence_load (GncSqlBackend* be, const GncGUID* guid)
 GList*
 gnc_sql_recurrence_load_list (GncSqlBackend* be, const GncGUID* guid)
 {
-    GncSqlResult* result;
     GList* list = NULL;
 
     g_return_val_if_fail (be != NULL, NULL);
     g_return_val_if_fail (guid != NULL, NULL);
 
-    result = gnc_sql_set_recurrences_from_db (be, guid);
-    if (result != NULL)
+    auto result = gnc_sql_set_recurrences_from_db (be, guid);
+    for (auto row : *result)
     {
-        GncSqlRow* row = gnc_sql_result_get_first_row (result);
-
-        while (row != NULL)
-        {
-            Recurrence* pRecurrence = g_new0 (Recurrence, 1);
-            g_assert (pRecurrence != NULL);
-            load_recurrence (be, row, pRecurrence);
-            list = g_list_append (list, pRecurrence);
-            row = gnc_sql_result_get_next_row (result);
-        }
-        gnc_sql_result_dispose (result);
+        Recurrence* pRecurrence = g_new0 (Recurrence, 1);
+        g_assert (pRecurrence != NULL);
+        load_recurrence (be, row, pRecurrence);
+        list = g_list_append (list, pRecurrence);
     }
 
     return list;
@@ -389,8 +377,8 @@ static void
 upgrade_recurrence_table_1_2 (GncSqlBackend* be)
 {
     /* Step 1: add field, but allow it to be null */
-    gboolean ok = gnc_sql_add_columns_to_table (be, TABLE_NAME,
-                                                weekend_adjust_col_table);
+    gboolean ok = be->add_columns_to_table(TABLE_NAME,
+                                           weekend_adjust_col_table);
     if (!ok)
     {
         PERR ("Unable to add recurrence_weekend_adjust column\n");
@@ -400,32 +388,32 @@ upgrade_recurrence_table_1_2 (GncSqlBackend* be)
     /* Step 2: insert a default value in the newly created column */
     {
         gchar* weekend_adj_str = recurrenceWeekendAdjustToString (WEEKEND_ADJ_NONE);
-        gchar* update_query = g_strdup_printf ("UPDATE %s SET %s = '%s';",
-                                               TABLE_NAME,
-                                               weekend_adjust_col_table[0].col_name,
-                                               weekend_adj_str);
-        (void)gnc_sql_execute_nonselect_sql (be, update_query);
+        std::stringstream sql;
+        sql << "UPDATE " << TABLE_NAME << " SET " <<
+            weekend_adjust_col_table[0]->name() << "='" <<
+            weekend_adj_str << "'";
+        auto stmt = be->create_statement_from_sql(sql.str());
+        be->execute_nonselect_statement(stmt);
         g_free (weekend_adj_str);
-        g_free (update_query);
     }
 
     /* Step 3: rewrite the table, requiring the weekend_adj column to be non-null */
-    gnc_sql_upgrade_table (be, TABLE_NAME, col_table);
+    be->upgrade_table(TABLE_NAME, col_table);
 
 }
 
-static void
-create_recurrence_tables (GncSqlBackend* be)
+void
+GncSqlRecurrenceBackend::create_tables (GncSqlBackend* be)
 {
     gint version;
     gboolean ok;
 
     g_return_if_fail (be != NULL);
 
-    version = gnc_sql_get_table_version (be, TABLE_NAME);
+    version = be->get_table_version( TABLE_NAME);
     if (version == 0)
     {
-        (void)gnc_sql_create_table (be, TABLE_NAME, TABLE_VERSION, col_table);
+        (void)be->create_table(TABLE_NAME, TABLE_VERSION, col_table);
     }
     else if (version < TABLE_VERSION)
     {
@@ -436,7 +424,7 @@ create_recurrence_tables (GncSqlBackend* be)
         {
             upgrade_recurrence_table_1_2 (be);
         }
-        (void)gnc_sql_set_table_version (be, TABLE_NAME, TABLE_VERSION);
+        be->set_table_version (TABLE_NAME, TABLE_VERSION);
         PINFO ("Recurrence table upgraded from version %d to version %d\n", version,
                TABLE_VERSION);
     }
@@ -446,19 +434,8 @@ create_recurrence_tables (GncSqlBackend* be)
 void
 gnc_sql_init_recurrence_handler (void)
 {
-    static GncSqlObjectBackend be_data =
-    {
-        GNC_SQL_BACKEND_VERSION,
-        GNC_ID_ACCOUNT,
-        NULL,                           /* commit - cannot occur */
-        NULL,                           /* initial_load - cannot occur */
-        create_recurrence_tables,       /* create_tables */
-        NULL,                           /* compile_query */
-        NULL,                           /* run_query */
-        NULL,                           /* free_query */
-        NULL                            /* write */
-    };
-
-    (void)qof_object_register_backend (TABLE_NAME, GNC_SQL_BACKEND, &be_data);
+    static GncSqlRecurrenceBackend be_data {
+        GNC_SQL_BACKEND_VERSION, GNC_ID_ACCOUNT, TABLE_NAME, col_table};
+    gnc_sql_register_backend(&be_data);
 }
 /* ========================== END OF FILE ===================== */

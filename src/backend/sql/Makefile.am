@@ -47,7 +47,6 @@ libgnc_backend_sql_la_SOURCES = \
 
 noinst_HEADERS = \
   gnc-account-sql.h \
-  gnc-address-sql.h \
   gnc-backend-sql.h \
   gnc-bill-term-sql.h \
   gnc-book-sql.h \
@@ -60,7 +59,6 @@ noinst_HEADERS = \
   gnc-job-sql.h \
   gnc-lots-sql.h \
   gnc-order-sql.h \
-  gnc-owner-sql.h \
   gnc-price-sql.h \
   gnc-recurrence-sql.h \
   gnc-schedxaction-sql.h \

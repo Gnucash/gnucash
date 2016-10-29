@@ -27,10 +27,13 @@ extern "C"
 {
 #include "config.h"
 #include "qof.h"
+}
+#include "gnc-backend-sql.h"
+extern "C"
+{
 #include "cashobjects.h"
 #include "test-stuff.h"
 }
-#include "gnc-backend-sql.h"
 
 int main (int argc, char** argv)
 {

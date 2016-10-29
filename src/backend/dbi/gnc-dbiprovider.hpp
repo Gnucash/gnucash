@@ -1,5 +1,7 @@
 /********************************************************************
- * gnc-backend-dbi.h: load and save data to SQL via libdbi          *
+ * gnc-dbiprovider.cpp: Encapsulate differences among Dbi backends. *
+ *                                                                  *
+ * Copyright 2016 John Ralls <jralls@ceridwen.us>                   *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -18,33 +20,35 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/** @file gnc-backend-dbi.h
- *  @brief load and save data to SQL via libdbi
- *  @author Copyright (c) 2006-2008 Phil Longstaff <plongstaff@rogers.com>
- *
- * This file implements the top-level QofBackend API for saving/
- * restoring data to/from an SQL database via libdbi
- */
 
-#ifndef GNC_BACKEND_DBI_H_
-#define GNC_BACKEND_DBI_H_
+#ifndef __GNC_DBIPROVIDER_HPP__
+#define __GNC_DBIPROVIDER_HPP__
+
 extern "C"
 {
-#include <gmodule.h>
-
-/** Initialization function which can be used when this module is
- * statically linked into the application. */
-void gnc_module_init_backend_dbi (void);
-/** Shutdown function which can be used when this module is
- * statically linked into the application. */
-void gnc_module_finalize_backend_dbi (void);
-
-#ifndef GNC_NO_LOADABLE_MODULES
-/** This is the standarized initialization function of a qof_backend
- * GModule, but compiling this can be disabled by defining
- * GNC_NO_LOADABLE_MODULES. */
-G_MODULE_EXPORT void qof_backend_module_init (void);
-G_MODULE_EXPORT void qof_backend_module_finalize (void);
-#endif
+#include <dbi/dbi.h>
 }
-#endif /* GNC_BACKEND_DBI_H_ */
+#include <string>
+#include <vector>
+
+/**
+ * Provides the primary abstraction for different DBI backends.
+ */
+class GncSqlConnection;
+struct GncSqlColumnInfo;
+using ColVec=std::vector<GncSqlColumnInfo>;
+
+class GncDbiProvider
+{
+public:
+    virtual ~GncDbiProvider() = default;
+    virtual StrVec get_table_list(dbi_conn conn, const std::string& table) = 0;
+    virtual void append_col_def(std::string& ddl,
+                                const GncSqlColumnInfo& info) = 0;
+    virtual StrVec get_index_list (dbi_conn conn) = 0;
+    virtual void drop_index(dbi_conn conn, const std::string& index) = 0;
+};
+
+using GncDbiProviderPtr = std::unique_ptr<GncDbiProvider>;
+
+#endif //__GNC_DBIPROVIDER_HPP__

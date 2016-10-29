@@ -29,7 +29,6 @@ SET (backend_sql_SOURCES
 )
 SET (backend_sql_noinst_HEADERS
   gnc-account-sql.h
-  gnc-address-sql.h
   gnc-backend-sql.h
   gnc-bill-term-sql.h
   gnc-book-sql.h
@@ -42,7 +41,6 @@ SET (backend_sql_noinst_HEADERS
   gnc-job-sql.h
   gnc-lots-sql.h
   gnc-order-sql.h
-  gnc-owner-sql.h
   gnc-price-sql.h
   gnc-recurrence-sql.h
   gnc-schedxaction-sql.h

@@ -259,16 +259,12 @@ struct QofBackend_s
     void (*commit) (QofBackend *, QofInstance *);
     void (*rollback) (QofBackend *, QofInstance *);
 
-    gpointer (*compile_query) (QofBackend *, QofQuery *);
-    void (*free_query) (QofBackend *, gpointer);
-    void (*run_query) (QofBackend *, gpointer);
-
     void (*sync) (QofBackend *, /*@ dependent @*/ QofBook *);
     void (*safe_sync) (QofBackend *, /*@ dependent @*/ QofBook *);
-
-    gboolean (*events_pending) (QofBackend *);
-    gboolean (*process_events) (QofBackend *);
-
+    /* This is implented only in the XML backend where it exports only a chart
+     * of accounts.
+     */
+    void (*export_fn) (QofBackend *, QofBook *);
     QofBePercentageFunc percentage;
 
     QofBackendError last_err;
@@ -279,24 +275,6 @@ struct QofBackend_s
      * This holds the filepath and communicates it to the frontends.
      */
     char * fullpath;
-
-    /** \deprecated price_lookup should be removed during the redesign
-     * of the SQL backend... prices can now be queried using
-     * the generic query mechanism.
-     *
-     * Note the correct signature for this call is
-     * void (*price_lookup) (QofBackend *, GNCPriceLookup *);
-     * we use gpointer to avoid an unwanted include file dependency.
-     */
-    void (*price_lookup) (QofBackend *, gpointer);
-
-    /** \deprecated Export should really _NOT_ be here, but is left here for now.
-     * I'm not sure where this should be going to. It should be
-     * removed ASAP.   This is a temporary hack-around until period-closing
-     * is fully implemented.
-     */
-    void (*export_fn) (QofBackend *, QofBook *);
-
 };
 
 #ifdef __cplusplus

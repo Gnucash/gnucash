@@ -43,7 +43,6 @@ extern "C"
 #include "gnc-backend-sql.h"
 #include "gnc-slots-sql.h"
 #include "gnc-customer-sql.h"
-#include "gnc-address-sql.h"
 #include "gnc-bill-term-sql.h"
 #include "gnc-tax-table-sql.h"
 
@@ -58,48 +57,63 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define MAX_ID_LEN 2048
 #define MAX_NOTES_LEN 2048
 
-static GncSqlColumnTableEntry col_table[] =
+static EntryVec col_table
+({
+    gnc_sql_make_table_entry<CT_GUID>("guid", 0, COL_NNUL | COL_PKEY, "guid" ),
+    gnc_sql_make_table_entry<CT_STRING>("name", MAX_NAME_LEN, COL_NNUL, "name"),
+    gnc_sql_make_table_entry<CT_STRING>("id", MAX_ID_LEN, COL_NNUL,
+                                        CUSTOMER_ID, true),
+    gnc_sql_make_table_entry<CT_STRING>("notes", MAX_NOTES_LEN, COL_NNUL,
+                                        CUSTOMER_NOTES, true),
+    gnc_sql_make_table_entry<CT_BOOLEAN>("active", 0, COL_NNUL,
+                                         QOF_PARAM_ACTIVE, true),
+    gnc_sql_make_table_entry<CT_NUMERIC>("discount", 0, COL_NNUL,
+                                         CUSTOMER_DISCOUNT, true),
+    gnc_sql_make_table_entry<CT_NUMERIC>("credit", 0, COL_NNUL,
+                                         CUSTOMER_CREDIT, true),
+    gnc_sql_make_table_entry<CT_COMMODITYREF>("currency", 0, COL_NNUL,
+                                         (QofAccessFunc)gncCustomerGetCurrency,
+                                         (QofSetterFunc)gncCustomerSetCurrency),
+    gnc_sql_make_table_entry<CT_BOOLEAN>("tax_override", 0, COL_NNUL,
+                                         CUSTOMER_TT_OVER, true),
+    gnc_sql_make_table_entry<CT_ADDRESS>("addr", 0, 0, CUSTOMER_ADDR,
+                                         true),
+    gnc_sql_make_table_entry<CT_ADDRESS>("shipaddr", 0, 0, CUSTOMER_SHIPADDR,
+                                         true),
+    gnc_sql_make_table_entry<CT_BILLTERMREF>("terms", 0, 0, CUSTOMER_TERMS,
+                                             true),
+    gnc_sql_make_table_entry<CT_INT>("tax_included", 0, 0,
+                                     (QofAccessFunc)gncCustomerGetTaxIncluded,
+                                     (QofSetterFunc)gncCustomerSetTaxIncluded),
+    gnc_sql_make_table_entry<CT_TAXTABLEREF>("taxtable", 0, 0,
+                                         (QofAccessFunc)gncCustomerGetTaxTable,
+                                         (QofSetterFunc)gncCustomerSetTaxTable),
+});
+
+class GncSqlCustomerBackend : public GncSqlObjectBackend
 {
-    { "guid",         CT_GUID,          0,             COL_NNUL | COL_PKEY, "guid" },
-    { "name",         CT_STRING,        MAX_NAME_LEN,  COL_NNUL,          "name" },
-    { "id",           CT_STRING,        MAX_ID_LEN,    COL_NNUL,          NULL, CUSTOMER_ID },
-    { "notes",        CT_STRING,        MAX_NOTES_LEN, COL_NNUL,          NULL, CUSTOMER_NOTES },
-    { "active",       CT_BOOLEAN,       0,             COL_NNUL,          NULL, QOF_PARAM_ACTIVE },
-    { "discount",     CT_NUMERIC,       0,             COL_NNUL,          NULL, CUSTOMER_DISCOUNT },
-    { "credit",       CT_NUMERIC,       0,             COL_NNUL,          NULL, CUSTOMER_CREDIT },
-    {
-        "currency",     CT_COMMODITYREF,  0,             COL_NNUL,          NULL, NULL,
-        (QofAccessFunc)gncCustomerGetCurrency, (QofSetterFunc)gncCustomerSetCurrency
-    },
-    { "tax_override", CT_BOOLEAN,       0,             COL_NNUL,          NULL, CUSTOMER_TT_OVER },
-    { "addr",         CT_ADDRESS,       0,             0,                 NULL, CUSTOMER_ADDR },
-    { "shipaddr",     CT_ADDRESS,       0,             0,                 NULL, CUSTOMER_SHIPADDR },
-    { "terms",        CT_BILLTERMREF,   0,             0,                 NULL, CUSTOMER_TERMS },
-    {
-        "tax_included", CT_INT,           0,             0,                 NULL, NULL,
-        (QofAccessFunc)gncCustomerGetTaxIncluded, (QofSetterFunc)gncCustomerSetTaxIncluded
-    },
-    {
-        "taxtable",     CT_TAXTABLEREF,   0,             0,                 NULL, NULL,
-        (QofAccessFunc)gncCustomerGetTaxTable, (QofSetterFunc)gncCustomerSetTaxTable
-    },
-    { NULL }
+public:
+    GncSqlCustomerBackend(int version, const std::string& type,
+                      const std::string& table, const EntryVec& vec) :
+        GncSqlObjectBackend(version, type, table, vec) {}
+    void load_all(GncSqlBackend*) override;
+    void create_tables(GncSqlBackend*) override;
+    bool write(GncSqlBackend*) override;
 };
 
 static GncCustomer*
-load_single_customer (GncSqlBackend* be, GncSqlRow* row)
+load_single_customer (GncSqlBackend* be, GncSqlRow& row)
 {
     const GncGUID* guid;
     GncCustomer* pCustomer;
 
     g_return_val_if_fail (be != NULL, NULL);
-    g_return_val_if_fail (row != NULL, NULL);
 
     guid = gnc_sql_load_guid (be, row);
-    pCustomer = gncCustomerLookup (be->book, guid);
+    pCustomer = gncCustomerLookup (be->book(), guid);
     if (pCustomer == NULL)
     {
-        pCustomer = gncCustomerCreate (be->book);
+        pCustomer = gncCustomerCreate (be->book());
     }
     gnc_sql_load_object (be, row, GNC_ID_CUSTOMER, pCustomer, col_table);
     qof_instance_mark_clean (QOF_INSTANCE (pCustomer));
@@ -107,61 +121,46 @@ load_single_customer (GncSqlBackend* be, GncSqlRow* row)
     return pCustomer;
 }
 
-static void
-load_all_customers (GncSqlBackend* be)
+void
+GncSqlCustomerBackend::load_all (GncSqlBackend* be)
 {
-    GncSqlStatement* stmt;
-    GncSqlResult* result;
-
     g_return_if_fail (be != NULL);
 
+    std::stringstream sql;
+    sql << "SELECT * FROM " << TABLE_NAME;
+    auto stmt = be->create_statement_from_sql(sql.str());
+    auto result = be->execute_select_statement(stmt);
+    InstanceVec instances;
 
-    stmt = gnc_sql_create_select_statement (be, TABLE_NAME);
-    result = gnc_sql_execute_select_statement (be, stmt);
-    gnc_sql_statement_dispose (stmt);
-    if (result != NULL)
+    for (auto row : *result)
     {
-        GList* list = NULL;
-        GncSqlRow* row;
-
-        row = gnc_sql_result_get_first_row (result);
-        while (row != NULL)
-        {
-            GncCustomer* pCustomer = load_single_customer (be, row);
-            if (pCustomer != NULL)
-            {
-                list = g_list_append (list, pCustomer);
-            }
-            row = gnc_sql_result_get_next_row (result);
-        }
-        gnc_sql_result_dispose (result);
-
-        if (list != NULL)
-        {
-            gnc_sql_slots_load_for_list (be, list);
-            g_list_free (list);
-        }
+        GncCustomer* pCustomer = load_single_customer (be, row);
+        if (pCustomer != nullptr)
+            instances.push_back(QOF_INSTANCE(pCustomer));
     }
+
+    if (!instances.empty())
+        gnc_sql_slots_load_for_instancevec (be, instances);
 }
 
 /* ================================================================= */
-static void
-create_customer_tables (GncSqlBackend* be)
+void
+GncSqlCustomerBackend::create_tables (GncSqlBackend* be)
 {
     gint version;
 
     g_return_if_fail (be != NULL);
 
-    version = gnc_sql_get_table_version (be, TABLE_NAME);
+    version = be->get_table_version( TABLE_NAME);
     if (version == 0)
     {
-        gnc_sql_create_table (be, TABLE_NAME, TABLE_VERSION, col_table);
+        be->create_table(TABLE_NAME, TABLE_VERSION, col_table);
     }
     else if (version == 1)
     {
         /* Upgrade 64 bit int handling */
-        gnc_sql_upgrade_table (be, TABLE_NAME, col_table);
-        gnc_sql_set_table_version (be, TABLE_NAME, TABLE_VERSION);
+        be->upgrade_table(TABLE_NAME, col_table);
+        be->set_table_version (TABLE_NAME, TABLE_VERSION);
 
         PINFO ("Customers table upgraded from version 1 to version %d\n",
                TABLE_VERSION);
@@ -169,24 +168,6 @@ create_customer_tables (GncSqlBackend* be)
 }
 
 /* ================================================================= */
-static gboolean
-save_customer (GncSqlBackend* be, QofInstance* inst)
-{
-    g_return_val_if_fail (inst != NULL, FALSE);
-    g_return_val_if_fail (GNC_CUSTOMER (inst), FALSE);
-    g_return_val_if_fail (be != NULL, FALSE);
-
-    return gnc_sql_commit_standard_item (be, inst, TABLE_NAME, GNC_ID_CUSTOMER,
-                                         col_table);
-}
-
-/* ================================================================= */
-typedef struct
-{
-    GncSqlBackend* be;
-    gboolean is_ok;
-} write_customers_t;
-
 static gboolean
 customer_should_be_saved (GncCustomer* customer)
 {
@@ -207,28 +188,29 @@ customer_should_be_saved (GncCustomer* customer)
 static void
 write_single_customer (QofInstance* term_p, gpointer data_p)
 {
-    write_customers_t* data = (write_customers_t*)data_p;
+    auto data = reinterpret_cast<write_objects_t*>(data_p);
 
     g_return_if_fail (term_p != NULL);
     g_return_if_fail (GNC_IS_CUSTOMER (term_p));
     g_return_if_fail (data_p != NULL);
 
-    if (customer_should_be_saved (GNC_CUSTOMER (term_p)) && data->is_ok)
+    if (customer_should_be_saved (GNC_CUSTOMER (term_p)))
     {
-        data->is_ok = save_customer (data->be, term_p);
+        data->commit (term_p);
     }
 }
 
-static gboolean
-write_customers (GncSqlBackend* be)
+bool
+GncSqlCustomerBackend::write (GncSqlBackend* be)
 {
-    write_customers_t data;
+    write_objects_t data;
 
     g_return_val_if_fail (be != NULL, FALSE);
 
     data.be = be;
     data.is_ok = TRUE;
-    qof_object_foreach (GNC_ID_CUSTOMER, be->book, write_single_customer,
+    data.obe = this;
+    qof_object_foreach (GNC_ID_CUSTOMER, be->book(), write_single_customer,
                         (gpointer)&data);
     return data.is_ok;
 }
@@ -237,17 +219,8 @@ write_customers (GncSqlBackend* be)
 void
 gnc_customer_sql_initialize (void)
 {
-    static GncSqlObjectBackend be_data =
-    {
-        GNC_SQL_BACKEND_VERSION,
-        GNC_ID_CUSTOMER,
-        save_customer,                      /* commit */
-        load_all_customers,                 /* initial_load */
-        create_customer_tables,             /* create_tables */
-        NULL, NULL, NULL,
-        write_customers                     /* write */
-    };
-
-    qof_object_register_backend (GNC_ID_CUSTOMER, GNC_SQL_BACKEND, &be_data);
+    static GncSqlCustomerBackend be_data {
+        GNC_SQL_BACKEND_VERSION, GNC_ID_CUSTOMER, TABLE_NAME, col_table};
+    gnc_sql_register_backend(&be_data);
 }
 /* ========================== END OF FILE ===================== */
