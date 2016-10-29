@@ -158,10 +158,10 @@ gnc_sql_get_object_backend(const std::string& type)
                               [type](const OBEEntry& entry){
                                   return type == std::get<0>(entry);
                               });
-    auto obe = std::get<1>(*entry);
-    if (entry != backend_registry.end())
-        return obe;
-    return nullptr;
+    if (entry == backend_registry.end())
+        return nullptr;
+
+    return std::get<1>(*entry);
 }
 
 void

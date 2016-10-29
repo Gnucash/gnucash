@@ -156,7 +156,7 @@ GncDbiSqlResult::IteratorImpl::get_time64_at_col (const char* col) const
     auto type = dbi_result_get_field_type (m_inst->m_dbi_result, col);
     auto attrs = dbi_result_get_field_attribs (m_inst->m_dbi_result, col);
     if (type != DBI_TYPE_DATETIME)
-        throw (std::invalid_argument{"Requested double from non-double column."});
+        throw (std::invalid_argument{"Requested time64 from non-time64 column."});
     gnc_push_locale (LC_NUMERIC, "C");
 #if HAVE_LIBDBI_TO_LONGLONG
     /* A less evil hack than the one equrie by libdbi-0.8, but

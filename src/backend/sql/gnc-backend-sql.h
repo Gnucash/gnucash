@@ -355,7 +355,7 @@ protected:
  * Row of SQL Query results.
  *
  * This is a "pointer" class of a pimpl pattern, the implementation being
- * GncSqlResul::IteratorImpl. It's designed to present a std::forward_iterator
+ * GncSqlResult::IteratorImpl. It's designed to present a std::forward_iterator
  * like interface for use with range-for while allowing for wrapping a C API.
  *
  * Important Implementation Note: Operator++() as written requires that the
