@@ -73,7 +73,7 @@ typedef void (*AddressSetterFunc) (gpointer, GncAddress*);
 typedef GncAddress* (*AddressGetterFunc) (const gpointer);
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_ADDRESS>::load (const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_ADDRESS>::load (const GncSqlBackend* sql_be,
                                               GncSqlRow& row,
                                               QofIdTypeConst obj_name,
                                               gpointer pObject) const noexcept
@@ -81,10 +81,10 @@ GncSqlColumnTableEntryImpl<CT_ADDRESS>::load (const GncSqlBackend* be,
     const gchar* s;
 
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
     g_return_if_fail (pObject != NULL);
 
-    auto addr = gncAddressCreate (be->book(), QOF_INSTANCE(pObject));
+    auto addr = gncAddressCreate (sql_be->book(), QOF_INSTANCE(pObject));
 
     for (auto const& subtable_row : col_table)
     {
@@ -107,10 +107,10 @@ GncSqlColumnTableEntryImpl<CT_ADDRESS>::load (const GncSqlBackend* be,
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_ADDRESS>::add_to_table(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_ADDRESS>::add_to_table(const GncSqlBackend* sql_be,
                                                   ColVec& vec) const noexcept
 {
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
     for (auto const& subtable_row : col_table)
     {
         auto buf = std::string{m_col_name} + "_" + subtable_row->m_col_name;
@@ -124,7 +124,7 @@ GncSqlColumnTableEntryImpl<CT_ADDRESS>::add_to_table(const GncSqlBackend* be,
  * it to operator<<().
  */
 template<> void
-GncSqlColumnTableEntryImpl<CT_ADDRESS>::add_to_query(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_ADDRESS>::add_to_query(const GncSqlBackend* sql_be,
                                                     QofIdTypeConst obj_name,
                                                     const gpointer pObject,
                                                     PairVec& vec) const noexcept

@@ -81,45 +81,45 @@ public:
 };
 
 static GncOrder*
-load_single_order (GncSqlBackend* be, GncSqlRow& row)
+load_single_order (GncSqlBackend* sql_be, GncSqlRow& row)
 {
     const GncGUID* guid;
     GncOrder* pOrder;
 
-    g_return_val_if_fail (be != NULL, NULL);
+    g_return_val_if_fail (sql_be != NULL, NULL);
 
-    guid = gnc_sql_load_guid (be, row);
-    pOrder = gncOrderLookup (be->book(), guid);
+    guid = gnc_sql_load_guid (sql_be, row);
+    pOrder = gncOrderLookup (sql_be->book(), guid);
     if (pOrder == NULL)
     {
-        pOrder = gncOrderCreate (be->book());
+        pOrder = gncOrderCreate (sql_be->book());
     }
-    gnc_sql_load_object (be, row, GNC_ID_ORDER, pOrder, col_table);
+    gnc_sql_load_object (sql_be, row, GNC_ID_ORDER, pOrder, col_table);
     qof_instance_mark_clean (QOF_INSTANCE (pOrder));
 
     return pOrder;
 }
 
 void
-GncSqlOrderBackend::load_all (GncSqlBackend* be)
+GncSqlOrderBackend::load_all (GncSqlBackend* sql_be)
 {
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
     std::stringstream sql;
     sql << "SELECT * FROM " << TABLE_NAME;
-    auto stmt = be->create_statement_from_sql(sql.str());
-    auto result = be->execute_select_statement(stmt);
+    auto stmt = sql_be->create_statement_from_sql(sql.str());
+    auto result = sql_be->execute_select_statement(stmt);
     InstanceVec instances;
 
     for (auto row : *result)
     {
-        GncOrder* pOrder = load_single_order (be, row);
+        GncOrder* pOrder = load_single_order (sql_be, row);
         if (pOrder != nullptr)
             instances.push_back(QOF_INSTANCE(pOrder));
     }
 
     if (!instances.empty())
-        gnc_sql_slots_load_for_instancevec (be, instances);
+        gnc_sql_slots_load_for_instancevec (sql_be, instances);
 }
 
 /* ================================================================= */
@@ -156,43 +156,43 @@ write_single_order (QofInstance* term_p, gpointer data_p)
 }
 
 bool
-GncSqlOrderBackend::write (GncSqlBackend* be)
+GncSqlOrderBackend::write (GncSqlBackend* sql_be)
 {
-    g_return_val_if_fail (be != NULL, FALSE);
-    write_objects_t data{be, true, this};
+    g_return_val_if_fail (sql_be != NULL, FALSE);
+    write_objects_t data{sql_be, true, this};
 
-    qof_object_foreach (GNC_ID_ORDER, be->book(), write_single_order, &data);
+    qof_object_foreach (GNC_ID_ORDER, sql_be->book(), write_single_order, &data);
 
     return data.is_ok;
 }
 
 /* ================================================================= */
 template<> void
-GncSqlColumnTableEntryImpl<CT_ORDERREF>::load (const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_ORDERREF>::load (const GncSqlBackend* sql_be,
                                                  GncSqlRow& row,
                                                  QofIdTypeConst obj_name,
                                                  gpointer pObject) const noexcept
 {
     load_from_guid_ref(row, obj_name, pObject,
-                       [be](GncGUID* g){
-                           return gncOrderLookup(be->book(), g);
+                       [sql_be](GncGUID* g){
+                           return gncOrderLookup(sql_be->book(), g);
                        });
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_ORDERREF>::add_to_table(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_ORDERREF>::add_to_table(const GncSqlBackend* sql_be,
                                                  ColVec& vec) const noexcept
 {
-    add_objectref_guid_to_table(be, vec);
+    add_objectref_guid_to_table(sql_be, vec);
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_ORDERREF>::add_to_query(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_ORDERREF>::add_to_query(const GncSqlBackend* sql_be,
                                                     QofIdTypeConst obj_name,
                                                     const gpointer pObject,
                                                     PairVec& vec) const noexcept
 {
-    add_objectref_guid_to_query(be, obj_name, pObject, vec);
+    add_objectref_guid_to_query(sql_be, obj_name, pObject, vec);
 }
 /* ================================================================= */
 void

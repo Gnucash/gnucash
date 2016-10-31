@@ -116,9 +116,9 @@ static void adjust_sql_options (dbi_conn connection);
 static bool save_may_clobber_data (dbi_conn conn, const std::string& dbname);
 static void init_sql_backend (GncDbiBackend* dbi_be);
 
-static bool conn_test_dbi_library (dbi_conn conn, QofBackend* qbe);
+static bool conn_test_dbi_library (dbi_conn conn, QofBackend* qof_be);
 
-template <DbType T> void gnc_dbi_session_begin(QofBackend* qbe,
+template <DbType T> void gnc_dbi_session_begin(QofBackend* qof_be,
                                                QofSession* session,
                                                const char* book_id,
                                                gboolean ignore_lock,
@@ -126,7 +126,6 @@ template <DbType T> void gnc_dbi_session_begin(QofBackend* qbe,
 template <DbType Type> QofBackend*
 new_backend ()
 {
-    QofBackend* be;
     const char* format;
     switch (Type)
     {
@@ -143,13 +142,13 @@ new_backend ()
     auto dbi_be = new GncDbiBackend(nullptr, nullptr, format);
     assert (dbi_be != nullptr);
 
-    be = (QofBackend*)dbi_be;
-    qof_backend_init (be);
+    QofBackend* qof_be = reinterpret_cast<decltype(qof_be)>(dbi_be);
+    qof_backend_init (qof_be);
 
-    be->session_begin = gnc_dbi_session_begin<Type>;
+    qof_be->session_begin = gnc_dbi_session_begin<Type>;
     init_sql_backend (dbi_be);
 
-    return be;
+    return qof_be;
 }
 
 template <DbType T>
@@ -230,14 +229,14 @@ UriStrings::quote_dbname(DbType t) const noexcept
 }
 
 static void
-create_tables(const OBEEntry& entry, GncDbiBackend* be)
+create_tables(const OBEEntry& entry, GncDbiBackend* dbi_be)
 {
     std::string type;
     GncSqlObjectBackendPtr obe = nullptr;
     std::tie(type, obe) = entry;
     g_return_if_fail(obe->is_version (GNC_SQL_BACKEND_VERSION));
 
-    obe->create_tables (be);
+    obe->create_tables (dbi_be);
 }
 
 static void
@@ -261,13 +260,13 @@ set_options(dbi_conn conn, const PairVec& options)
 /**
  * Sets standard db options in a dbi_conn.
  *
- * @param qbe QOF backend
+ * @param qof_be QOF backend
  * @param conn dbi_conn connection
  * @param uri UriStrings containing the needed paramters.
  * @return TRUE if successful, FALSE if error
  */
 static bool
-set_standard_connection_options (QofBackend* qbe, dbi_conn conn,
+set_standard_connection_options (QofBackend* qof_be, dbi_conn conn,
                                  const UriStrings& uri)
 
 {
@@ -292,7 +291,7 @@ set_standard_connection_options (QofBackend* qbe, dbi_conn conn,
     }
     catch (std::runtime_error& err)
     {
-        qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
+        qof_backend_set_error (qof_be, ERR_BACKEND_SERVER_ERR);
         return false;
     }
 
@@ -303,7 +302,7 @@ template <DbType Type> void error_handler(void* conn, void* data);
 void error_handler(void* conn, void* data);
 
 template <DbType Type> dbi_conn
-conn_setup (QofBackend* qbe, PairVec& options,
+conn_setup (QofBackend* qof_be, PairVec& options,
             UriStrings& uri)
 {
     const char* dbstr = (Type == DbType::DBI_SQLITE ? "sqlite3" :
@@ -321,13 +320,13 @@ conn_setup (QofBackend* qbe, PairVec& options,
     if (conn == nullptr)
     {
         PERR ("Unable to create %s dbi connection", dbstr);
-        qof_backend_set_error (qbe, ERR_BACKEND_BAD_URL);
+        qof_backend_set_error (qof_be, ERR_BACKEND_BAD_URL);
 	return nullptr;
     }
 
-    dbi_conn_error_handler (conn, error_handler<Type>, qbe);
+    dbi_conn_error_handler (conn, error_handler<Type>, qof_be);
     if (!uri.m_dbname.empty() &&
-        !set_standard_connection_options(qbe, conn, uri))
+        !set_standard_connection_options(qof_be, conn, uri))
     {
         dbi_conn_close(conn);
         return nullptr;
@@ -340,7 +339,7 @@ conn_setup (QofBackend* qbe, PairVec& options,
         catch (std::runtime_error& err)
         {
             dbi_conn_close(conn);
-            qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
+            qof_backend_set_error (qof_be, ERR_BACKEND_SERVER_ERR);
             return nullptr;
         }
     }
@@ -349,7 +348,7 @@ conn_setup (QofBackend* qbe, PairVec& options,
 }
 
 static bool
-create_database(DbType type, QofBackend *qbe, dbi_conn conn, const char* db)
+create_database(DbType type, QofBackend *qof_be, dbi_conn conn, const char* db)
 {
     const char *dbname;
     const char *dbcreate;
@@ -371,7 +370,7 @@ create_database(DbType type, QofBackend *qbe, dbi_conn conn, const char* db)
     }
     catch (std::runtime_error& err)
     {
-        qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
+        qof_backend_set_error (qof_be, ERR_BACKEND_SERVER_ERR);
         return false;
     }
 
@@ -379,7 +378,7 @@ create_database(DbType type, QofBackend *qbe, dbi_conn conn, const char* db)
     if (result < 0)
     {
         PERR ("Unable to connect to %s database", dbname);
-        qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
+        qof_backend_set_error (qof_be, ERR_BACKEND_SERVER_ERR);
         return false;
     }
     if (type == DbType::DBI_MYSQL)
@@ -388,7 +387,7 @@ create_database(DbType type, QofBackend *qbe, dbi_conn conn, const char* db)
     if (dresult == nullptr)
     {
         PERR ("Unable to create database '%s'\n", db);
-        qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
+        qof_backend_set_error (qof_be, ERR_BACKEND_SERVER_ERR);
         return false;
     }
     if (type == DbType::DBI_PGSQL)
@@ -406,24 +405,26 @@ template <> void
 error_handler<DbType::DBI_SQLITE> (dbi_conn conn, void* user_data)
 {
     const char* msg;
-    GncDbiBackend *be = static_cast<decltype(be)>(user_data);
+    GncDbiBackend *dbi_be = static_cast<decltype(dbi_be)>(user_data);
     int errnum = dbi_conn_error (conn, &msg);
     PERR ("DBI error: %s\n", msg);
-    if (be->connected())
-        be->set_error (ERR_BACKEND_MISC, 0, false);
+    if (dbi_be->connected())
+        dbi_be->set_error (ERR_BACKEND_MISC, 0, false);
 }
 
 template <> void
-gnc_dbi_session_begin<DbType::DBI_SQLITE>(QofBackend* qbe, QofSession* session,
-                               const char* book_id, gboolean ignore_lock,
-                               gboolean create, gboolean force)
+gnc_dbi_session_begin<DbType::DBI_SQLITE>(QofBackend* qof_be,
+                                          QofSession* session,
+                                          const char* book_id,
+                                          gboolean ignore_lock,
+                                          gboolean create, gboolean force)
 {
-    GncDbiBackend* be = (GncDbiBackend*)qbe;
+    GncDbiBackend* dbi_be = reinterpret_cast<decltype(dbi_be)>(qof_be);
     const char* msg = nullptr;
     gboolean file_exists;
     PairVec options;
 
-    g_return_if_fail (qbe != nullptr);
+    g_return_if_fail (qof_be != nullptr);
     g_return_if_fail (session != nullptr);
     g_return_if_fail (book_id != nullptr);
 
@@ -438,8 +439,8 @@ gnc_dbi_session_begin<DbType::DBI_SQLITE>(QofBackend* qbe, QofSession* session,
     file_exists = g_file_test (filepath.c_str(), ftest);
     if (!create && !file_exists)
     {
-        qof_backend_set_error (qbe, ERR_FILEIO_FILE_NOT_FOUND);
-        qof_backend_set_message (qbe, "Sqlite3 file %s not found",
+        qof_backend_set_error (qof_be, ERR_FILEIO_FILE_NOT_FOUND);
+        qof_backend_set_message (qof_be, "Sqlite3 file %s not found",
                                  filepath.c_str());
         PWARN ("Sqlite3 file %s not found", filepath.c_str());
         LEAVE("Error");
@@ -448,14 +449,14 @@ gnc_dbi_session_begin<DbType::DBI_SQLITE>(QofBackend* qbe, QofSession* session,
 
     if (create && !force && file_exists)
     {
-        qof_backend_set_error (qbe, ERR_BACKEND_STORE_EXISTS);
+        qof_backend_set_error (qof_be, ERR_BACKEND_STORE_EXISTS);
         msg = "Might clobber, no force";
         PWARN ("%s", msg);
         LEAVE("Error");
 	return;
     }
 
-    be->connect(nullptr);
+    dbi_be->connect(nullptr);
     /* dbi-sqlite3 documentation says that sqlite3 doesn't take a "host" option */
     options.push_back(std::make_pair("host", "localhost"));
     auto dirname = g_path_get_dirname (filepath.c_str());
@@ -465,7 +466,7 @@ gnc_dbi_session_begin<DbType::DBI_SQLITE>(QofBackend* qbe, QofSession* session,
     if (basename != nullptr) g_free (basename);
     if (dirname != nullptr) g_free (dirname);
     UriStrings uri;
-    auto conn = conn_setup<DbType::DBI_SQLITE>(qbe, options, uri);
+    auto conn = conn_setup<DbType::DBI_SQLITE>(qof_be, options, uri);
     if (conn == nullptr)
     {
         LEAVE("Error");
@@ -478,12 +479,12 @@ gnc_dbi_session_begin<DbType::DBI_SQLITE>(QofBackend* qbe, QofSession* session,
     {
         dbi_conn_close(conn);
         PERR ("Unable to connect to %s: %d\n", book_id, result);
-        qof_backend_set_error (qbe, ERR_BACKEND_BAD_URL);
+        qof_backend_set_error (qof_be, ERR_BACKEND_BAD_URL);
         LEAVE("Error");
 	return;
     }
 
-    if (!conn_test_dbi_library(conn, qbe))
+    if (!conn_test_dbi_library(conn, qof_be))
     {
         if (create && !file_exists)
         {
@@ -501,8 +502,8 @@ gnc_dbi_session_begin<DbType::DBI_SQLITE>(QofBackend* qbe, QofSession* session,
 
     try
     {
-        be->connect(new GncDbiSqlConnection(DbType::DBI_SQLITE,
-                                            qbe, conn, ignore_lock));
+        dbi_be->connect(new GncDbiSqlConnection(DbType::DBI_SQLITE,
+                                            qof_be, conn, ignore_lock));
     }
     catch (std::runtime_error& err)
     {
@@ -521,7 +522,7 @@ gnc_dbi_session_begin<DbType::DBI_SQLITE>(QofBackend* qbe, QofSession* session,
 template <> void
 error_handler<DbType::DBI_MYSQL> (dbi_conn conn, void* user_data)
 {
-    GncDbiBackend* be = (GncDbiBackend*)user_data;
+    GncDbiBackend* dbi_be = static_cast<decltype(dbi_be)>(user_data);
     const char* msg;
 
     auto err_num = dbi_conn_error (conn, &msg);
@@ -536,7 +537,7 @@ error_handler<DbType::DBI_MYSQL> (dbi_conn conn, void* user_data)
     if (err_num == 1049)            // Database doesn't exist
     {
         PINFO ("DBI error: %s\n", msg);
-        be->set_exists(false);
+        dbi_be->set_exists(false);
         return;
     }
 
@@ -544,7 +545,7 @@ error_handler<DbType::DBI_MYSQL> (dbi_conn conn, void* user_data)
      *  has been initialized. So let's assert it exits here, otherwise
      * simply return.
      */
-    if (!be->connected())
+    if (!dbi_be->connected())
     {
         PINFO ("DBI error: %s\n", msg);
         PINFO ("Note: GbcDbiSqlConnection not yet initialized. Skipping further error processing.");
@@ -555,18 +556,18 @@ error_handler<DbType::DBI_MYSQL> (dbi_conn conn, void* user_data)
     if (err_num == 2006)       // Server has gone away
     {
         PINFO ("DBI error: %s - Reconnecting...\n", msg);
-        be->set_error (ERR_BACKEND_CONN_LOST, 1, true);
-        be->retry_connection(msg);
+        dbi_be->set_error (ERR_BACKEND_CONN_LOST, 1, true);
+        dbi_be->retry_connection(msg);
     }
     else if (err_num == 2003)       // Unable to connect
     {
-        be->set_error (ERR_BACKEND_CANT_CONNECT, 1, true);
-        be->retry_connection (msg);
+        dbi_be->set_error (ERR_BACKEND_CANT_CONNECT, 1, true);
+        dbi_be->retry_connection (msg);
     }
     else                            // Any other error
     {
         PERR ("DBI error: %s\n", msg);
-        be->set_error (ERR_BACKEND_MISC, 0, FALSE);
+        dbi_be->set_error (ERR_BACKEND_MISC, 0, FALSE);
     }
 }
 
@@ -635,15 +636,15 @@ adjust_sql_options (dbi_conn connection)
 
 
 template <DbType T> void
-gnc_dbi_session_begin (QofBackend* qbe, QofSession* session,
+gnc_dbi_session_begin (QofBackend* qof_be, QofSession* session,
                              const char* book_id, gboolean ignore_lock,
                              gboolean create, gboolean force)
 {
-    GncDbiBackend* be = (GncDbiBackend*)qbe;
+    GncDbiBackend* dbi_be = reinterpret_cast<decltype(dbi_be)>(qof_be);
     GncDbiTestResult dbi_test_result = GNC_DBI_PASS;
     PairVec options;
 
-    g_return_if_fail (qbe != nullptr);
+    g_return_if_fail (qof_be != nullptr);
     g_return_if_fail (session != nullptr);
     g_return_if_fail (book_id != nullptr);
 
@@ -666,22 +667,22 @@ gnc_dbi_session_begin (QofBackend* qbe, QofSession* session,
         uri.m_dbname = std::string{lcname};
         g_free(lcname);
     }
-    be->connect(nullptr);
+    dbi_be->connect(nullptr);
 
-    auto conn = conn_setup<T>(qbe, options, uri);
+    auto conn = conn_setup<T>(qof_be, options, uri);
     if (conn == nullptr)
     {
         LEAVE("Error");
         return;
     }
 
-    be->set_exists(true); //May be unset in the error handler.
+    dbi_be->set_exists(true); //May be unset in the error handler.
     auto result = dbi_conn_connect (conn);
     if (result == 0)
     {
         if (T == DbType::DBI_MYSQL)
             adjust_sql_options (conn);
-        if(!conn_test_dbi_library(conn, qbe))
+        if(!conn_test_dbi_library(conn, qof_be))
         {
             dbi_conn_close(conn);
             LEAVE("Error");
@@ -690,7 +691,7 @@ gnc_dbi_session_begin (QofBackend* qbe, QofSession* session,
         if (create && !force && save_may_clobber_data (conn,
                                                        uri.quote_dbname(T)))
         {
-            qof_backend_set_error (qbe, ERR_BACKEND_STORE_EXISTS);
+            qof_backend_set_error (qof_be, ERR_BACKEND_STORE_EXISTS);
             PWARN ("Databse already exists, Might clobber it.");
             dbi_conn_close(conn);
             LEAVE("Error");
@@ -701,10 +702,10 @@ gnc_dbi_session_begin (QofBackend* qbe, QofSession* session,
     else
     {
 
-        if (be->exists())
+        if (dbi_be->exists())
         {
             PERR ("Unable to connect to database '%s'\n", uri.dbname());
-            qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
+            qof_backend_set_error (qof_be, ERR_BACKEND_SERVER_ERR);
             dbi_conn_close(conn);
             LEAVE("Error");
             return;
@@ -712,25 +713,25 @@ gnc_dbi_session_begin (QofBackend* qbe, QofSession* session,
 
         if (create)
         {
-            if (!create_database(T, qbe, conn, uri.quote_dbname(T).c_str()))
+            if (!create_database(T, qof_be, conn, uri.quote_dbname(T).c_str()))
             {
                 dbi_conn_close(conn);
                 LEAVE("Error");
                 return;
             }
-            conn = conn_setup<T>(qbe, options, uri);
+            conn = conn_setup<T>(qof_be, options, uri);
             result = dbi_conn_connect (conn);
             if (result < 0)
             {
                 PERR ("Unable to create database '%s'\n", uri.dbname());
-                qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
+                qof_backend_set_error (qof_be, ERR_BACKEND_SERVER_ERR);
                 dbi_conn_close(conn);
                 LEAVE("Error");
                 return;
             }
             if (T == DbType::DBI_MYSQL)
                 adjust_sql_options (conn);
-            if (!conn_test_dbi_library(conn, qbe))
+            if (!conn_test_dbi_library(conn, qof_be))
             {
                 if (T == DbType::DBI_PGSQL)
                     dbi_conn_select_db (conn, "template1");
@@ -742,15 +743,15 @@ gnc_dbi_session_begin (QofBackend* qbe, QofSession* session,
         }
         else
         {
-            qof_backend_set_error (qbe, ERR_BACKEND_NO_SUCH_DB);
-            qof_backend_set_message (qbe, "Database %s not found", uri.dbname());
+            qof_backend_set_error (qof_be, ERR_BACKEND_NO_SUCH_DB);
+            qof_backend_set_message (qof_be, "Database %s not found", uri.dbname());
         }
     }
 
-    be->connect(nullptr);
+    dbi_be->connect(nullptr);
     try
     {
-        be->connect(new GncDbiSqlConnection(T, qbe, conn, ignore_lock));
+        dbi_be->connect(new GncDbiSqlConnection(T, qof_be, conn, ignore_lock));
     }
     catch (std::runtime_error& err)
     {
@@ -769,7 +770,7 @@ gnc_dbi_session_begin (QofBackend* qbe, QofSession* session,
 template<> void
 error_handler<DbType::DBI_PGSQL> (dbi_conn conn, void* user_data)
 {
-    GncDbiBackend* be = (GncDbiBackend*)user_data;
+    GncDbiBackend* dbi_be = static_cast<decltype(dbi_be)>(user_data);
     const char* msg;
 
     (void)dbi_conn_error (conn, &msg);
@@ -777,68 +778,69 @@ error_handler<DbType::DBI_PGSQL> (dbi_conn conn, void* user_data)
         g_str_has_suffix (msg, "does not exist\n"))
     {
         PINFO ("DBI error: %s\n", msg);
-        be->set_exists(false);
+        dbi_be->set_exists(false);
     }
     else if (g_strrstr (msg,
                         "server closed the connection unexpectedly"))    // Connection lost
     {
-        if (!be->connected())
+        if (!dbi_be->connected())
         {
             PWARN ("DBI Error: Connection lost, connection pointer invalid");
             return;
         }
         PINFO ("DBI error: %s - Reconnecting...\n", msg);
-        be->set_error (ERR_BACKEND_CONN_LOST, 1, true);
-        be->retry_connection(msg);
+        dbi_be->set_error (ERR_BACKEND_CONN_LOST, 1, true);
+        dbi_be->retry_connection(msg);
     }
     else if (g_str_has_prefix (msg, "connection pointer is NULL") ||
              g_str_has_prefix (msg, "could not connect to server"))       // No connection
     {
 
-        if (!be->connected())
-            qof_backend_set_error((QofBackend*)be, ERR_BACKEND_CANT_CONNECT);
+        if (!dbi_be->connected())
+            qof_backend_set_error(reinterpret_cast<QofBackend*>(dbi_be),
+                                  ERR_BACKEND_CANT_CONNECT);
         else
         {
-            be->set_error(ERR_BACKEND_CANT_CONNECT, 1, true);
-            be->retry_connection (msg);
+            dbi_be->set_error(ERR_BACKEND_CANT_CONNECT, 1, true);
+            dbi_be->retry_connection (msg);
         }
     }
     else
     {
         PERR ("DBI error: %s\n", msg);
-        if (be->connected())
-            be->set_error (ERR_BACKEND_MISC, 0, false);
+        if (dbi_be->connected())
+            dbi_be->set_error (ERR_BACKEND_MISC, 0, false);
     }
 }
 
 /* ================================================================= */
 
 static void
-gnc_dbi_session_end (QofBackend* be_start)
+gnc_dbi_session_end (QofBackend* qof_be)
 {
-    GncDbiBackend* be = (GncDbiBackend*)be_start;
+    GncDbiBackend* dbi_be = reinterpret_cast<decltype(dbi_be)>(qof_be);
 
-    g_return_if_fail (be_start != nullptr);
+    g_return_if_fail (dbi_be != nullptr);
 
     ENTER (" ");
 
-    be->finalize_version_info ();
-    be->connect(nullptr);
+    dbi_be->finalize_version_info ();
+    dbi_be->connect(nullptr);
 
     LEAVE (" ");
 }
 
 static void
-gnc_dbi_destroy_backend (QofBackend* be)
+gnc_dbi_destroy_backend (QofBackend* qof_be)
 {
-    g_return_if_fail (be != nullptr);
+    g_return_if_fail (qof_be != nullptr);
 
     /* Stop transaction logging */
     xaccLogSetBaseName (nullptr);
 
-    qof_backend_destroy (be);
+    qof_backend_destroy (qof_be);
 
-    g_free (be);
+    g_free (qof_be);
 }
 
 /* ================================================================= */
@@ -853,44 +855,44 @@ gnc_dbi_destroy_backend (QofBackend* be)
  * both values to match this version of Gnucash.
  */
 void
-gnc_dbi_load (QofBackend* qbe,  QofBook* book, QofBackendLoadType loadType)
+gnc_dbi_load (QofBackend* qof_be,  QofBook* book, QofBackendLoadType loadType)
 {
-    GncDbiBackend* be = (GncDbiBackend*)qbe;
+    GncDbiBackend* dbi_be = reinterpret_cast<decltype(dbi_be)>(qof_be);
 
-    g_return_if_fail (qbe != nullptr);
+    g_return_if_fail (qof_be != nullptr);
     g_return_if_fail (book != nullptr);
 
-    ENTER ("be=%p, book=%p", be, book);
+    ENTER ("dbi_be=%p, book=%p", dbi_be, book);
 
     if (loadType == LOAD_TYPE_INITIAL_LOAD)
     {
 
         // Set up table version information
-        be->init_version_info ();
-        assert (be->m_book == nullptr);
+        dbi_be->init_version_info ();
+        assert (dbi_be->m_book == nullptr);
 
         // Call all object backends to create any required tables
         auto registry = gnc_sql_get_backend_registry();
         for (auto entry : registry)
-            create_tables(entry, be);
+            create_tables(entry, dbi_be);
     }
 
-    gnc_sql_load (be, book, loadType);
+    gnc_sql_load (dbi_be, book, loadType);
 
-    if (GNUCASH_RESAVE_VERSION > be->get_table_version("Gnucash"))
+    if (GNUCASH_RESAVE_VERSION > dbi_be->get_table_version("Gnucash"))
     {
         /* The database was loaded with an older database schema or
          * data semantics. In order to ensure consistency, the whole
          * thing needs to be saved anew. */
-        qof_backend_set_error (qbe, ERR_SQL_DB_TOO_OLD);
+        qof_backend_set_error (qof_be, ERR_SQL_DB_TOO_OLD);
     }
-    else if (GNUCASH_RESAVE_VERSION < be->get_table_version("Gnucash-Resave"))
+    else if (GNUCASH_RESAVE_VERSION < dbi_be->get_table_version("Gnucash-Resave"))
     {
         /* Worse, the database was created with a newer version. We
          * can't safely write to this database, so the user will have
          * to do a "save as" to make one that we can write to.
          */
-        qof_backend_set_error (qbe, ERR_SQL_DB_TOO_NEW);
+        qof_backend_set_error (qof_be, ERR_SQL_DB_TOO_NEW);
     }
 
 
@@ -921,24 +923,24 @@ save_may_clobber_data (dbi_conn conn, const std::string& dbname)
  * no errors. If there are errors, drop the new tables and restore the
  * originals.
  *
- * @param qbe: QofBackend for the session.
+ * @param qof_be: QofBackend for the session.
  * @param book: QofBook to be saved in the database.
  */
 void
-gnc_dbi_safe_sync_all (QofBackend* qbe, QofBook* book)
+gnc_dbi_safe_sync_all (QofBackend* qof_be, QofBook* book)
 {
-    GncDbiBackend* be = (GncDbiBackend*)qbe;
-    auto conn = dynamic_cast<GncDbiSqlConnection*>(be->m_conn);
+    GncDbiBackend* dbi_be = reinterpret_cast<decltype(dbi_be)>(qof_be);
+    auto conn = dynamic_cast<GncDbiSqlConnection*>(dbi_be->m_conn);
 
     g_return_if_fail (conn != nullptr);
-    g_return_if_fail (be != nullptr);
+    g_return_if_fail (dbi_be != nullptr);
     g_return_if_fail (book != nullptr);
 
-    ENTER ("book=%p, primary=%p", book, be->m_book);
+    ENTER ("book=%p, primary=%p", book, dbi_be->m_book);
     auto table_list = conn->m_provider->get_table_list (conn->conn(), "");
     if (!conn->table_operation (table_list, backup))
     {
-        qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
+        qof_backend_set_error (qof_be, ERR_BACKEND_SERVER_ERR);
         conn->table_operation (table_list, rollback);
         LEAVE ("Failed to rename tables");
         return;
@@ -950,15 +952,15 @@ gnc_dbi_safe_sync_all (QofBackend* qbe, QofBook* book)
         conn->m_provider->drop_index (conn->m_conn, index);
         if (DBI_ERROR_NONE != dbi_conn_error (conn->m_conn, &errmsg))
         {
-            qof_backend_set_error (qbe, ERR_BACKEND_SERVER_ERR);
+            qof_backend_set_error (qof_be, ERR_BACKEND_SERVER_ERR);
             conn->table_operation (table_list, rollback);
             LEAVE ("Failed to drop indexes %s", errmsg);
             return;
         }
     }
 
-    gnc_sql_sync_all (be, book);
-    if (qof_backend_check_error (qbe))
+    gnc_sql_sync_all (dbi_be, book);
+    if (qof_backend_check_error (qof_be))
     {
         conn->table_operation (table_list, rollback);
         LEAVE ("Failed to create new database tables");
@@ -969,36 +971,36 @@ gnc_dbi_safe_sync_all (QofBackend* qbe, QofBook* book)
 }
 /* ================================================================= */
 static void
-gnc_dbi_begin_edit (QofBackend* qbe, QofInstance* inst)
+gnc_dbi_begin_edit (QofBackend* qof_be, QofInstance* inst)
 {
-    GncDbiBackend* be = (GncDbiBackend*)qbe;
+    GncDbiBackend* dbi_be = reinterpret_cast<decltype(dbi_be)>(qof_be);
 
-    g_return_if_fail (be != nullptr);
+    g_return_if_fail (dbi_be != nullptr);
     g_return_if_fail (inst != nullptr);
 
-    gnc_sql_begin_edit (be, inst);
+    gnc_sql_begin_edit (dbi_be, inst);
 }
 
 static void
-gnc_dbi_rollback_edit (QofBackend* qbe, QofInstance* inst)
+gnc_dbi_rollback_edit (QofBackend* qof_be, QofInstance* inst)
 {
-    GncDbiBackend* be = (GncDbiBackend*)qbe;
+    GncDbiBackend* dbi_be = reinterpret_cast<decltype(dbi_be)>(qof_be);
 
-    g_return_if_fail (be != nullptr);
+    g_return_if_fail (dbi_be != nullptr);
     g_return_if_fail (inst != nullptr);
 
-    gnc_sql_rollback_edit (be, inst);
+    gnc_sql_rollback_edit (dbi_be, inst);
 }
 
 static void
-gnc_dbi_commit_edit (QofBackend* qbe, QofInstance* inst)
+gnc_dbi_commit_edit (QofBackend* qof_be, QofInstance* inst)
 {
-    GncDbiBackend* be = (GncDbiBackend*)qbe;
+    GncDbiBackend* dbi_be = reinterpret_cast<decltype(dbi_be)>(qof_be);
 
-    g_return_if_fail (be != nullptr);
+    g_return_if_fail (dbi_be != nullptr);
     g_return_if_fail (inst != nullptr);
 
-    gnc_sql_commit_edit (be, inst);
+    gnc_sql_commit_edit (dbi_be, inst);
 }
 
 /* ================================================================= */
@@ -1006,26 +1008,24 @@ gnc_dbi_commit_edit (QofBackend* qbe, QofInstance* inst)
 static void
 init_sql_backend (GncDbiBackend* dbi_be)
 {
-    QofBackend* be;
+    QofBackend* qof_be = reinterpret_cast<decltype(qof_be)>(dbi_be);
 
-    be = (QofBackend*)dbi_be;
+    qof_be->session_end = gnc_dbi_session_end;
+    qof_be->destroy_backend = gnc_dbi_destroy_backend;
 
-    be->session_end = gnc_dbi_session_end;
-    be->destroy_backend = gnc_dbi_destroy_backend;
-
-    be->load = gnc_dbi_load;
+    qof_be->load = gnc_dbi_load;
 
     /* The gda backend treats accounting periods transactionally. */
-    be->begin = gnc_dbi_begin_edit;
-    be->commit = gnc_dbi_commit_edit;
-    be->rollback = gnc_dbi_rollback_edit;
+    qof_be->begin = gnc_dbi_begin_edit;
+    qof_be->commit = gnc_dbi_commit_edit;
+    qof_be->rollback = gnc_dbi_rollback_edit;
 
     /* The SQL/DBI backend doesn't need to be synced until it is
      * configured for multiuser access. */
-    be->sync = gnc_dbi_safe_sync_all;
-    be->safe_sync = gnc_dbi_safe_sync_all;
+    qof_be->sync = gnc_dbi_safe_sync_all;
+    qof_be->safe_sync = gnc_dbi_safe_sync_all;
     /* CoA Export function not implemented for the SQL backend. */
-    be->export_fn = nullptr;
+    qof_be->export_fn = nullptr;
 
     gnc_sql_init (dbi_be);
 }
@@ -1291,7 +1291,7 @@ dbi_library_test (dbi_conn conn)
 }
 
 static bool
-conn_test_dbi_library(dbi_conn conn, QofBackend* qbe)
+conn_test_dbi_library(dbi_conn conn, QofBackend* qof_be)
 {
     auto result = dbi_library_test (conn);
     switch (result)
@@ -1300,14 +1300,14 @@ conn_test_dbi_library(dbi_conn conn, QofBackend* qbe)
             break;
 
         case GNC_DBI_FAIL_SETUP:
-            qof_backend_set_error (qbe, ERR_SQL_DBI_UNTESTABLE);
-            qof_backend_set_message (qbe,
+            qof_backend_set_error (qof_be, ERR_SQL_DBI_UNTESTABLE);
+            qof_backend_set_message (qof_be,
                                      "DBI library large number test incomplete");
             break;
 
         case GNC_DBI_FAIL_TEST:
-            qof_backend_set_error (qbe, ERR_SQL_BAD_DBI);
-            qof_backend_set_message (qbe,
+            qof_backend_set_error (qof_be, ERR_SQL_BAD_DBI);
+            qof_backend_set_message (qof_be,
                                      "DBI library fails large number test");
             break;
     }

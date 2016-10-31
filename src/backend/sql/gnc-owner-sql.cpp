@@ -48,7 +48,7 @@ typedef void (*OwnerSetterFunc) (gpointer, GncOwner*);
 typedef GncOwner* (*OwnerGetterFunc) (const gpointer);
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_OWNERREF>::load (const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_OWNERREF>::load (const GncSqlBackend* sql_be,
                                                GncSqlRow& row,
                                                QofIdTypeConst obj_name,
                                                gpointer pObject) const noexcept
@@ -58,10 +58,10 @@ GncSqlColumnTableEntryImpl<CT_OWNERREF>::load (const GncSqlBackend* be,
     GncOwner owner;
     GncGUID* pGuid = NULL;
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
     g_return_if_fail (pObject != NULL);
 
-    auto book = be->book();
+    auto book = sql_be->book();
     auto buf = std::string{m_col_name} + "_type";
     try
     {
@@ -153,10 +153,10 @@ GncSqlColumnTableEntryImpl<CT_OWNERREF>::load (const GncSqlBackend* be,
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_OWNERREF>::add_to_table(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_OWNERREF>::add_to_table(const GncSqlBackend* sql_be,
                                                       ColVec& vec) const noexcept
 {
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
     auto buf = g_strdup_printf ("%s_type", m_col_name);
     GncSqlColumnInfo info(buf, BCT_INT, 0, false, false,
@@ -170,12 +170,12 @@ GncSqlColumnTableEntryImpl<CT_OWNERREF>::add_to_table(const GncSqlBackend* be,
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_OWNERREF>::add_to_query(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_OWNERREF>::add_to_query(const GncSqlBackend* sql_be,
                                                       QofIdTypeConst obj_name,
                                                       const gpointer pObject,
                                                       PairVec& vec) const noexcept
 {
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
     g_return_if_fail (obj_name != NULL);
     g_return_if_fail (pObject != NULL);
 

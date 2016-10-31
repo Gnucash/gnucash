@@ -212,17 +212,17 @@ compare_lots (QofBook* book_1, QofBook* book_2)
 }
 #if 0 //Disable test temporarily 
 static void
-test_conn_index_functions (QofBackend* qbe)
+test_conn_index_functions (QofBackend* qof_be)
 {
-    GncDbiBackend* be = (GncDbiBackend*)qbe;
+    GncDbiBackend* dbi_be = reinterpret_cast<decltype(dbi_be)>(qof_be);
 
-    auto index_list = conn->provider()->get_index_list (be->conn);
+    auto index_list = conn->provider()->get_index_list (dbi_be->conn);
     g_test_message ("Returned from index list\n");
     g_assert_cmpint (index_list.size(), == , 4);
     for (auto index : index_list)
     {
         const char* errmsg;
-        conn->provider()->drop_index (be->conn, index); 
+        conn->provider()->drop_index (dbi_be->conn, index);
         g_assert (DBI_ERROR_NONE == dbi_conn_error (conn->conn(), &errmsg));
     }
 }
@@ -237,7 +237,6 @@ compare_pricedbs (QofBook* book_1, QofBook* book_2)
 void
 compare_books (QofBook* book_1, QofBook* book_2)
 {
-    QofBackend* be = qof_book_get_backend (book_2);
     compare_account_trees (book_1, book_2);
     compare_pricedbs (book_1, book_2);
     compare_txs (book_1, book_2);

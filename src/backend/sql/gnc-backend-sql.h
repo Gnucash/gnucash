@@ -89,15 +89,11 @@ public:
     void connect(GncSqlConnection *conn) noexcept;
     /**
      * Initializes DB table version information.
-     *
-     * @param be SQL backend struct
      */
     void init_version_info() noexcept;
     bool reset_version_info() noexcept;
     /**
      * Finalizes DB table version information.
-     *
-     * @param be SQL backend struct
      */
     void finalize_version_info() noexcept;
     /* FIXME: These are just pass-throughs of m_conn functions. */
@@ -192,7 +188,7 @@ public:
     friend void gnc_sql_commit_edit(GncSqlBackend*, QofInstance*);
 
 protected:
-    QofBackend be;           /**< QOF backend. Not a pointer, nor really a member */
+    QofBackend qof_be;           /**< QOF backend. Not a pointer, nor really a member */
     GncSqlConnection* m_conn;  /**< SQL connection */
     QofBook* m_book;           /**< The primary, main open book */
     bool m_loading;        /**< We are performing an initial load */
@@ -206,60 +202,60 @@ private:
 /**
  * Initialize the SQL backend.
  *
- * @param be SQL backend
+ * @param sql_be SQL backend
  */
-void gnc_sql_init (GncSqlBackend* be);
+void gnc_sql_init (GncSqlBackend* sql_be);
 
 /**
  * Load the contents of an SQL database into a book.
  *
- * @param be SQL backend
+ * @param sql_be SQL backend
  * @param book Book to be loaded
  */
-void gnc_sql_load (GncSqlBackend* be,  QofBook* book,
+void gnc_sql_load (GncSqlBackend* sql_be,  QofBook* book,
                    QofBackendLoadType loadType);
 
 /**
  * Register a commodity to be committed after loading is complete.
  *
  * Necessary to save corrections made while loading.
- * @param be SQL backend
+ * @param sql_be SQL backend
  * @param comm The commodity item to be committed.
  */
-void gnc_sql_push_commodity_for_postload_processing (GncSqlBackend* be,
+void gnc_sql_push_commodity_for_postload_processing (GncSqlBackend* sql_be,
                                                      gpointer comm);
 
 /**
  * Save the contents of a book to an SQL database.
  *
- * @param be SQL backend
+ * @param sql_be SQL backend
  * @param book Book to be saved
  */
-void gnc_sql_sync_all (GncSqlBackend* be,  QofBook* book);
+void gnc_sql_sync_all (GncSqlBackend* sql_be,  QofBook* book);
 
 /**
  * An object is about to be edited.
  *
- * @param be SQL backend
+ * @param sql_be SQL backend
  * @param inst Object being edited
  */
-void gnc_sql_begin_edit (GncSqlBackend* be, QofInstance* inst);
+void gnc_sql_begin_edit (GncSqlBackend* sql_be, QofInstance* inst);
 
 /**
  * Object editing has been cancelled.
  *
- * @param qbe SQL backend
+ * @param qsql_be SQL backend
  * @param inst Object being edited
  */
-void gnc_sql_rollback_edit (GncSqlBackend* qbe, QofInstance* inst);
+void gnc_sql_rollback_edit (GncSqlBackend* qsql_be, QofInstance* inst);
 
 /**
  * Object editting is complete and the object should be saved.
  *
- * @param qbe SQL backend
+ * @param qsql_be SQL backend
  * @param inst Object being edited
  */
-void gnc_sql_commit_edit (GncSqlBackend* qbe, QofInstance* inst);
+void gnc_sql_commit_edit (GncSqlBackend* qsql_be, QofInstance* inst);
 
 /**
  */
@@ -421,9 +417,9 @@ public:
         m_col_table(vec) {}
     /**
      * Load all objects of m_type in the database into memory.
-     * @param be The GncSqlBackend containing the database connection.
+     * @param sql_be The GncSqlBackend containing the database connection.
      */
-    virtual void load_all (GncSqlBackend*) = 0;
+    virtual void load_all (GncSqlBackend* sql_be) = 0;
     /**
      * Conditionally create or update a database table from m_col_table. The
      * condition is the version returned by querying the database's version
@@ -432,21 +428,21 @@ public:
      * compiled version then the table schema is upgraded but the data isn't,
      * that's the engine's responsibility when the object is loaded. If the
      * version is greater than the compiled version then nothing is touched.
-     * @param be The GncSqlBackend containing the database connection.
+     * @param sql_be The GncSqlBackend containing the database connection.
      */
-    virtual void create_tables (GncSqlBackend*);
+    virtual void create_tables (GncSqlBackend* sql_be);
     /**
      * UPDATE/INSERT a single instance of m_type_name into the database.
-     * @param be The GncSqlBackend containing the database.
+     * @param sql_be The GncSqlBackend containing the database.
      * @param inst The QofInstance to be written out.
      */
-    virtual bool commit (GncSqlBackend* be, QofInstance* inst);
+    virtual bool commit (GncSqlBackend* sql_be, QofInstance* inst);
     /**
      * Write all objects of m_type_name to the database.
-     * @param be The GncSqlBackend containing the database.
+     * @param sql_be The GncSqlBackend containing the database.
      * @return true if the objects were successfully written, false otherwise.
      */
-    virtual bool write (GncSqlBackend*) { return true; }
+    virtual bool write (GncSqlBackend* sql_be) { return true; }
     /**
      * Return the m_type_name for the class. This value is created at
      * compilation time and is called QofIdType or QofIdTypeConst in other parts
@@ -486,8 +482,8 @@ GncSqlObjectBackendPtr gnc_sql_get_object_backend(const std::string& table_name)
 struct write_objects_t
 {
     write_objects_t() = default;
-    write_objects_t (GncSqlBackend* b, bool o, GncSqlObjectBackendPtr e) :
-        be{b}, is_ok{o}, obe{e} {}
+    write_objects_t (GncSqlBackend* sql_be, bool o, GncSqlObjectBackendPtr e) :
+        be{sql_be}, is_ok{o}, obe{e} {}
     void commit (QofInstance* inst) {
         if (is_ok) is_ok = obe->commit (be, inst);
     }
@@ -577,19 +573,19 @@ public:
     /**
      * Load a value into an object from the database row.
      */
-    virtual void load(const GncSqlBackend* be, GncSqlRow& row,
+    virtual void load(const GncSqlBackend* sql_be, GncSqlRow& row,
                       QofIdTypeConst obj_name, gpointer pObject) const noexcept = 0;
     /**
      * Add a GncSqlColumnInfo structure for the column type to a
      * ColVec.
      */
-    virtual void add_to_table(const GncSqlBackend* be, ColVec& vec) const noexcept = 0;
+    virtual void add_to_table(const GncSqlBackend* sql_be, ColVec& vec) const noexcept = 0;
     /**
      * Add a pair of the table column heading and object's value's string
      * representation to a PairVec; used for constructing WHERE clauses and
      * UPDATE statements.
      */
-    virtual void add_to_query(const GncSqlBackend* be, QofIdTypeConst obj_name,
+    virtual void add_to_query(const GncSqlBackend* sql_be, QofIdTypeConst obj_name,
                               gpointer pObject, PairVec& vec) const noexcept = 0;
     /**
      * Retrieve the getter function depending on whether it's an auto-increment
@@ -639,27 +635,27 @@ protected:
     template <typename T> T
     get_row_value_from_object(QofIdTypeConst obj_name, const gpointer pObject) const;
     template <typename T> void
-    add_value_to_vec(const GncSqlBackend* be, QofIdTypeConst obj_name,
+    add_value_to_vec(const GncSqlBackend* sql_be, QofIdTypeConst obj_name,
                      const gpointer pObject, PairVec& vec) const;
 /**
  * Adds a name/guid std::pair to a PairVec for creating a query.
  *
- * @param be SQL backend struct
+ * @param sql_be SQL backend struct
  * @param obj_name QOF object type name
  * @param pObject Object
  * @param pList List
  */
-    void add_objectref_guid_to_query (const GncSqlBackend* be,
+    void add_objectref_guid_to_query (const GncSqlBackend* sql_be,
                                       QofIdTypeConst obj_name,
                                       const gpointer pObject,
                                       PairVec& vec) const noexcept;
 /**
  * Adds a column info structure for an object reference GncGUID to a ColVec.
  *
- * @param be SQL backend struct
+ * @param sql_be SQL backend struct
  * @param pList List
  */
-    void add_objectref_guid_to_table (const GncSqlBackend* be,
+    void add_objectref_guid_to_table (const GncSqlBackend* sql_be,
                                       ColVec& vec) const noexcept;
 private:
     const char* m_col_name;        /**< Column name */
@@ -676,11 +672,11 @@ private:
     template <typename T> T get_row_value_from_object(QofIdTypeConst obj_name,
                                                       const gpointer pObject,
                                                       std::false_type) const;
-    template <typename T> void add_value_to_vec(const GncSqlBackend* be,
+    template <typename T> void add_value_to_vec(const GncSqlBackend* sql_be,
                                                 QofIdTypeConst obj_name,
                                                 const gpointer pObject,
                                                 PairVec& vec, std::true_type) const;
-    template <typename T> void add_value_to_vec(const GncSqlBackend* be,
+    template <typename T> void add_value_to_vec(const GncSqlBackend* sql_be,
                                                 QofIdTypeConst obj_name,
                                                 const gpointer pObject,
                                                 PairVec& vec, std::false_type) const;
@@ -699,10 +695,10 @@ public:
                                 QofSetterFunc set = nullptr) :
         GncSqlColumnTableEntry (name, type, s, f, gobj_name,qof_name, get, set)
         {} 
-    void load(const GncSqlBackend* be, GncSqlRow& row,  QofIdTypeConst obj_name,
+    void load(const GncSqlBackend* sql_be, GncSqlRow& row,  QofIdTypeConst obj_name,
               gpointer pObject) const noexcept override;
-    void add_to_table(const GncSqlBackend* be, ColVec& vec) const noexcept override;
-    void add_to_query(const GncSqlBackend* be, QofIdTypeConst obj_name,
+    void add_to_table(const GncSqlBackend* sql_be, ColVec& vec) const noexcept override;
+    void add_to_query(const GncSqlBackend* sql_be, QofIdTypeConst obj_name,
                       gpointer pObject, PairVec& vec) const noexcept override;
 };
 
@@ -857,7 +853,7 @@ void set_parameter(T object, P item, F setter, const char* property)
 /**
  * Performs an operation on the database.
  *
- * @param be SQL backend struct
+ * @param sql_be SQL backend struct
  * @param op Operation type
  * @param table_name SQL table name
  * @param obj_name QOF object type name
@@ -865,7 +861,7 @@ void set_parameter(T object, P item, F setter, const char* property)
  * @param table DB table description
  * @return TRUE if successful, FALSE if not
  */
-gboolean gnc_sql_do_db_operation (GncSqlBackend* be,
+gboolean gnc_sql_do_db_operation (GncSqlBackend* sql_be,
                                   E_DB_OPERATION op,
                                   const gchar* table_name,
                                   QofIdTypeConst obj_name,
@@ -876,27 +872,27 @@ gboolean gnc_sql_do_db_operation (GncSqlBackend* be,
 /**
  * Loads a Gnucash object from the database.
  *
- * @param be SQL backend struct
+ * @param sql_be SQL backend struct
  * @param row DB result row
  * @param obj_name QOF object type name
  * @param pObject Object to be loaded
  * @param table DB table description
  */
-void gnc_sql_load_object (const GncSqlBackend* be, GncSqlRow& row,
+void gnc_sql_load_object (const GncSqlBackend* sql_be, GncSqlRow& row,
                           QofIdTypeConst obj_name, gpointer pObject,
                           const EntryVec& table);
 
 /**
  * Checks whether an object is in the database or not.
  *
- * @param be SQL backend struct
+ * @param sql_be SQL backend struct
  * @param table_name DB table name
  * @param obj_name QOF object type name
  * @param pObject Object to be checked
  * @param table DB table description
  * @return TRUE if the object is in the database, FALSE otherwise
  */
-gboolean gnc_sql_object_is_it_in_db (GncSqlBackend* be,
+gboolean gnc_sql_object_is_it_in_db (GncSqlBackend* sql_be,
                                      const gchar* table_name,
                                      QofIdTypeConst obj_name,
                                      const gpointer pObject,
@@ -905,12 +901,12 @@ gboolean gnc_sql_object_is_it_in_db (GncSqlBackend* be,
  * Loads the object guid from a database row.  The table must have a column
  * named "guid" with type CT_GUID.
  *
- * @param be SQL backend struct
+ * @param sql_be SQL backend struct
  * @param row Database row
  * @return GncGUID
  */
 
-const GncGUID* gnc_sql_load_guid (const GncSqlBackend* be, GncSqlRow& row);
+const GncGUID* gnc_sql_load_guid (const GncSqlBackend* sql_be, GncSqlRow& row);
 
 
 /**
@@ -926,9 +922,9 @@ uint_t gnc_sql_append_guids_to_sql (std::stringstream& sql,
 
 void _retrieve_guid_ (gpointer pObject,  gpointer pValue);
 
-gpointer gnc_sql_compile_query (QofBackend* pBEnd, QofQuery* pQuery);
-void gnc_sql_free_query (QofBackend* pBEnd, gpointer pQuery);
-void gnc_sql_run_query (QofBackend* pBEnd, gpointer pQuery);
+gpointer gnc_sql_compile_query (QofBackend* qof_be, QofQuery* pQuery);
+void gnc_sql_free_query (QofBackend* qof_be, gpointer pQuery);
+void gnc_sql_run_query (QofBackend* qof_be, gpointer pQuery);
 
 template <typename T> T
 GncSqlColumnTableEntry::get_row_value_from_object(QofIdTypeConst obj_name,
@@ -976,16 +972,16 @@ GncSqlColumnTableEntry::get_row_value_from_object(QofIdTypeConst obj_name,
 }
 
 template <typename T> void
-GncSqlColumnTableEntry::add_value_to_vec(const GncSqlBackend* be,
+GncSqlColumnTableEntry::add_value_to_vec(const GncSqlBackend* sql_be,
                                          QofIdTypeConst obj_name,
                                          const gpointer pObject,
                                          PairVec& vec) const
 {
-    add_value_to_vec<T>(be, obj_name, pObject, vec, std::is_pointer<T>());
+    add_value_to_vec<T>(sql_be, obj_name, pObject, vec, std::is_pointer<T>());
 }
 
 template <typename T> void
-GncSqlColumnTableEntry::add_value_to_vec(const GncSqlBackend* be,
+GncSqlColumnTableEntry::add_value_to_vec(const GncSqlBackend* sql_be,
                                          QofIdTypeConst obj_name,
                                          const gpointer pObject,
                                          PairVec& vec, std::true_type) const
@@ -1002,7 +998,7 @@ GncSqlColumnTableEntry::add_value_to_vec(const GncSqlBackend* be,
 }
 
 template <typename T> void
-GncSqlColumnTableEntry::add_value_to_vec(const GncSqlBackend* be,
+GncSqlColumnTableEntry::add_value_to_vec(const GncSqlBackend* sql_be,
                                          QofIdTypeConst obj_name,
                                          const gpointer pObject,
                                          PairVec& vec, std::false_type) const

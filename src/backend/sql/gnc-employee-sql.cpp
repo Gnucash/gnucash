@@ -88,66 +88,66 @@ public:
 };
 
 static GncEmployee*
-load_single_employee (GncSqlBackend* be, GncSqlRow& row)
+load_single_employee (GncSqlBackend* sql_be, GncSqlRow& row)
 {
     const GncGUID* guid;
     GncEmployee* pEmployee;
 
-    g_return_val_if_fail (be != NULL, NULL);
+    g_return_val_if_fail (sql_be != NULL, NULL);
 
-    guid = gnc_sql_load_guid (be, row);
-    pEmployee = gncEmployeeLookup (be->book(), guid);
+    guid = gnc_sql_load_guid (sql_be, row);
+    pEmployee = gncEmployeeLookup (sql_be->book(), guid);
     if (pEmployee == NULL)
     {
-        pEmployee = gncEmployeeCreate (be->book());
+        pEmployee = gncEmployeeCreate (sql_be->book());
     }
-    gnc_sql_load_object (be, row, GNC_ID_EMPLOYEE, pEmployee, col_table);
+    gnc_sql_load_object (sql_be, row, GNC_ID_EMPLOYEE, pEmployee, col_table);
     qof_instance_mark_clean (QOF_INSTANCE (pEmployee));
 
     return pEmployee;
 }
 
 void
-GncSqlEmployeeBackend::load_all (GncSqlBackend* be)
+GncSqlEmployeeBackend::load_all (GncSqlBackend* sql_be)
 {
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
     std::stringstream sql;
     sql << "SELECT * FROM " << TABLE_NAME;
-    auto stmt = be->create_statement_from_sql(sql.str());
-    auto result = be->execute_select_statement(stmt);
+    auto stmt = sql_be->create_statement_from_sql(sql.str());
+    auto result = sql_be->execute_select_statement(stmt);
 
     InstanceVec instances;
 
     for (auto row : *result)
     {
-        GncEmployee* pEmployee = load_single_employee (be, row);
+        GncEmployee* pEmployee = load_single_employee (sql_be, row);
         if (pEmployee != nullptr)
             instances.push_back(QOF_INSTANCE(pEmployee));
     }
 
     if (!instances.empty())
-        gnc_sql_slots_load_for_instancevec (be, instances);
+        gnc_sql_slots_load_for_instancevec (sql_be, instances);
 }
 
 /* ================================================================= */
 void
-GncSqlEmployeeBackend::create_tables (GncSqlBackend* be)
+GncSqlEmployeeBackend::create_tables (GncSqlBackend* sql_be)
 {
     gint version;
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
-    version = be->get_table_version( TABLE_NAME);
+    version = sql_be->get_table_version( TABLE_NAME);
     if (version == 0)
     {
-        be->create_table(TABLE_NAME, TABLE_VERSION, col_table);
+        sql_be->create_table(TABLE_NAME, TABLE_VERSION, col_table);
     }
     else if (version == 1)
     {
         /* Upgrade 64 bit int handling */
-        be->upgrade_table(TABLE_NAME, col_table);
-        be->set_table_version (TABLE_NAME, TABLE_VERSION);
+        sql_be->upgrade_table(TABLE_NAME, col_table);
+        sql_be->set_table_version (TABLE_NAME, TABLE_VERSION);
 
         PINFO ("Employees table upgraded from version 1 to version %d\n",
                TABLE_VERSION);
@@ -156,7 +156,7 @@ GncSqlEmployeeBackend::create_tables (GncSqlBackend* be)
 
 /* ================================================================= */
 bool
-GncSqlEmployeeBackend::commit (GncSqlBackend* be, QofInstance* inst)
+GncSqlEmployeeBackend::commit (GncSqlBackend* sql_be, QofInstance* inst)
 {
     GncEmployee* emp;
     const GncGUID* guid;
@@ -166,7 +166,7 @@ GncSqlEmployeeBackend::commit (GncSqlBackend* be, QofInstance* inst)
 
     g_return_val_if_fail (inst != NULL, FALSE);
     g_return_val_if_fail (GNC_IS_EMPLOYEE (inst), FALSE);
-    g_return_val_if_fail (be != NULL, FALSE);
+    g_return_val_if_fail (sql_be != NULL, FALSE);
 
     emp = GNC_EMPLOYEE (inst);
 
@@ -175,7 +175,7 @@ GncSqlEmployeeBackend::commit (GncSqlBackend* be, QofInstance* inst)
     {
         op = OP_DB_DELETE;
     }
-    else if (be->pristine() || is_infant)
+    else if (sql_be->pristine() || is_infant)
     {
         op = OP_DB_INSERT;
     }
@@ -186,12 +186,12 @@ GncSqlEmployeeBackend::commit (GncSqlBackend* be, QofInstance* inst)
     if (op != OP_DB_DELETE)
     {
         // Ensure the commodity is in the db
-        is_ok = gnc_sql_save_commodity (be, gncEmployeeGetCurrency (emp));
+        is_ok = gnc_sql_save_commodity (sql_be, gncEmployeeGetCurrency (emp));
     }
 
     if (is_ok)
     {
-        is_ok = gnc_sql_do_db_operation (be, op, TABLE_NAME, GNC_ID_EMPLOYEE, emp,
+        is_ok = gnc_sql_do_db_operation (sql_be, op, TABLE_NAME, GNC_ID_EMPLOYEE, emp,
                                          col_table);
     }
 
@@ -201,11 +201,11 @@ GncSqlEmployeeBackend::commit (GncSqlBackend* be, QofInstance* inst)
         guid = qof_instance_get_guid (inst);
         if (!qof_instance_get_destroying (inst))
         {
-            is_ok = gnc_sql_slots_save (be, guid, is_infant, inst);
+            is_ok = gnc_sql_slots_save (sql_be, guid, is_infant, inst);
         }
         else
         {
-            is_ok = gnc_sql_slots_delete (be, guid);
+            is_ok = gnc_sql_slots_delete (sql_be, guid);
         }
     }
 
@@ -246,16 +246,16 @@ write_single_employee (QofInstance* term_p, gpointer data_p)
 }
 
 bool
-GncSqlEmployeeBackend::write (GncSqlBackend* be)
+GncSqlEmployeeBackend::write (GncSqlBackend* sql_be)
 {
     write_objects_t data;
 
-    g_return_val_if_fail (be != NULL, FALSE);
+    g_return_val_if_fail (sql_be != NULL, FALSE);
 
-    data.be = be;
+    data.be = sql_be;
     data.is_ok = TRUE;
     data.obe = this;
-    qof_object_foreach (GNC_ID_EMPLOYEE, be->book(), write_single_employee, &data);
+    qof_object_foreach (GNC_ID_EMPLOYEE, sql_be->book(), write_single_employee, &data);
 
     return data.is_ok;
 }

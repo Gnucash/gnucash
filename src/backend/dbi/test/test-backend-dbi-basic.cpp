@@ -347,17 +347,17 @@ teardown (Fixture* fixture, gconstpointer pData)
 
 #if 0 //temporarily disable test pending refactor.
 static void
-test_conn_index_functions (QofBackend* qbe)
+test_conn_index_functions (QofBackend* qof_be)
 {
-    GncDbiBackend* be = (GncDbiBackend*)qbe;
+    GncDbiBackend* dbi_be = reinterpret_cast<decltype(dbi_be)>(qof_be);
 
-    auto index_list = conn->provider()->get_index_list (be->conn);
+    auto index_list = conn->provider()->get_index_list (dbi_be->conn);
     g_test_message ("Returned from index list\n");
     g_assert_cmpint (index_list.size(), == , 4);
     for (auto index : index_list)
     {
         const char* errmsg;
-        conn->provider()->drop_index (be->conn, index);
+        conn->provider()->drop_index (dbi_be->conn, index);
         g_assert (DBI_ERROR_NONE == dbi_conn_error (conn->conn(), &errmsg));
     }
 
@@ -373,7 +373,6 @@ test_dbi_store_and_reload (Fixture* fixture, gconstpointer pData)
     const gchar* url = (const gchar*)pData;
     QofSession* session_2;
     QofSession* session_3;
-    QofBackend* be;
 
     auto msg = "[gnc_dbi_unlock()] There was no lock entry in the Lock table";
     auto log_domain = "gnc.backend.dbi";
@@ -426,7 +425,6 @@ test_dbi_safe_save (Fixture* fixture, gconstpointer pData)
 {
     auto url = (gchar*)pData;
     QofSession* session_1 = NULL, *session_2 = NULL;
-    QofBackend* be;
 
     auto msg = "[gnc_dbi_unlock()] There was no lock entry in the Lock table";
     auto log_domain = "gnc.backend.dbi";
@@ -477,8 +475,8 @@ test_dbi_safe_save (Fixture* fixture, gconstpointer pData)
     qof_session_load (session_2, NULL);
     compare_books (qof_session_get_book (session_1),
                    qof_session_get_book (session_2));
-    be = qof_book_get_backend (qof_session_get_book (session_2));
-//    test_conn_index_functions (be);
+//    auto qof_be = qof_book_get_backend (qof_session_get_book (session_2));
+//    test_conn_index_functions (qof_be);
 
 cleanup:
     fixture->hdlrs = test_log_set_fatal_handler (fixture->hdlrs, check,
@@ -507,7 +505,8 @@ test_dbi_version_control (Fixture* fixture, gconstpointer pData)
     QofBook* book;
     QofBackendError err;
     gint ourversion = gnc_prefs_get_long_version ();
-    GncSqlBackend* be;
+    GncSqlBackend* sql_be = nullptr;
+
     // Load the session data
     if (fixture->filename)
         url = fixture->filename;
@@ -523,10 +522,10 @@ test_dbi_version_control (Fixture* fixture, gconstpointer pData)
     }
     qof_session_swap_data (fixture->session, sess);
     qof_session_save (sess, NULL);
-    be = reinterpret_cast<GncSqlBackend*>(qof_session_get_backend (sess));
+    sql_be = reinterpret_cast<decltype(sql_be)>(qof_session_get_backend (sess));
     book = qof_session_get_book (sess);
     qof_book_begin_edit (book);
-    be->set_table_version ("Gnucash", GNUCASH_RESAVE_VERSION - 1);
+    sql_be->set_table_version ("Gnucash", GNUCASH_RESAVE_VERSION - 1);
     qof_book_commit_edit (book);
     qof_session_end (sess);
     qof_session_destroy (sess);
@@ -535,11 +534,11 @@ test_dbi_version_control (Fixture* fixture, gconstpointer pData)
     qof_session_load (sess, NULL);
     err = qof_session_pop_error (sess);
     g_assert_cmpint (err, == , ERR_SQL_DB_TOO_OLD);
-    be = reinterpret_cast<GncSqlBackend*>(qof_session_get_backend (sess));
+    sql_be = reinterpret_cast<decltype(sql_be)>(qof_session_get_backend (sess));
     book = qof_session_get_book (sess);
     qof_book_begin_edit (book);
-    be->set_table_version ("Gnucash", ourversion);
-    be->set_table_version ("Gnucash-Resave", ourversion + 1);
+    sql_be->set_table_version ("Gnucash", ourversion);
+    sql_be->set_table_version ("Gnucash-Resave", ourversion + 1);
     qof_book_commit_edit (book);
     qof_session_end (sess);
     qof_session_destroy (sess);
@@ -550,10 +549,10 @@ test_dbi_version_control (Fixture* fixture, gconstpointer pData)
     err = qof_session_pop_error (sess);
     g_assert_cmpint (err, == , ERR_SQL_DB_TOO_NEW);
 cleanup:
-    be = reinterpret_cast<GncSqlBackend*>(qof_session_get_backend (sess));
+    sql_be = reinterpret_cast<decltype(sql_be)>(qof_session_get_backend (sess));
     book = qof_session_get_book (sess);
     qof_book_begin_edit (book);
-    be->set_table_version ("Gnucash-Resave", GNUCASH_RESAVE_VERSION);
+    sql_be->set_table_version ("Gnucash-Resave", GNUCASH_RESAVE_VERSION);
     qof_book_commit_edit (book);
     qof_session_end (sess);
     qof_session_destroy (sess);

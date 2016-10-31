@@ -107,57 +107,57 @@ set_lot_account (gpointer pObject,  gpointer pValue)
 }
 
 static  GNCLot*
-load_single_lot (GncSqlBackend* be, GncSqlRow& row)
+load_single_lot (GncSqlBackend* sql_be, GncSqlRow& row)
 {
     GNCLot* lot;
 
-    g_return_val_if_fail (be != NULL, NULL);
+    g_return_val_if_fail (sql_be != NULL, NULL);
 
-    lot = gnc_lot_new (be->book());
+    lot = gnc_lot_new (sql_be->book());
 
     gnc_lot_begin_edit (lot);
-    gnc_sql_load_object (be, row, GNC_ID_LOT, lot, col_table);
+    gnc_sql_load_object (sql_be, row, GNC_ID_LOT, lot, col_table);
     gnc_lot_commit_edit (lot);
 
     return lot;
 }
 
 void
-GncSqlLotsBackend::load_all (GncSqlBackend* be)
+GncSqlLotsBackend::load_all (GncSqlBackend* sql_be)
 {
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
     std::stringstream sql;
     sql << "SELECT * FROM " << TABLE_NAME;
-    auto stmt = be->create_statement_from_sql(sql.str());
+    auto stmt = sql_be->create_statement_from_sql(sql.str());
     if (stmt != nullptr)
     {
-        auto result = be->execute_select_statement(stmt);
+        auto result = sql_be->execute_select_statement(stmt);
         if (result->begin () == nullptr)
             return;
         for (auto row : *result)
-            load_single_lot (be, row);
+            load_single_lot (sql_be, row);
 
         auto sql = g_strdup_printf ("SELECT DISTINCT guid FROM %s",
                                    TABLE_NAME);
-        gnc_sql_slots_load_for_sql_subquery (be, sql, (BookLookupFn)gnc_lot_lookup);
+        gnc_sql_slots_load_for_sql_subquery (sql_be, sql, (BookLookupFn)gnc_lot_lookup);
         g_free (sql);
     }
 }
 
 /* ================================================================= */
 void
-GncSqlLotsBackend::create_tables (GncSqlBackend* be)
+GncSqlLotsBackend::create_tables (GncSqlBackend* sql_be)
 {
     gint version;
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
-    version = be->get_table_version( TABLE_NAME);
+    version = sql_be->get_table_version( TABLE_NAME);
     if (version == 0)
     {
         /* The table doesn't exist, so create it */
-        (void)be->create_table(TABLE_NAME, TABLE_VERSION, col_table);
+        (void)sql_be->create_table(TABLE_NAME, TABLE_VERSION, col_table);
     }
     else if (version == 1)
     {
@@ -167,8 +167,8 @@ GncSqlLotsBackend::create_tables (GncSqlBackend* be)
         Create a temporary table, copy the data from the old table, delete the
         old table, then rename the new one. */
 
-        be->upgrade_table(TABLE_NAME, col_table);
-        be->set_table_version (TABLE_NAME, TABLE_VERSION);
+        sql_be->upgrade_table(TABLE_NAME, col_table);
+        sql_be->set_table_version (TABLE_NAME, TABLE_VERSION);
 
         PINFO ("Lots table upgraded from version 1 to version %d\n", TABLE_VERSION);
     }
@@ -186,43 +186,43 @@ do_save_lot (QofInstance* inst, gpointer data)
 }
 
 bool
-GncSqlLotsBackend::write (GncSqlBackend* be)
+GncSqlLotsBackend::write (GncSqlBackend* sql_be)
 {
-    g_return_val_if_fail (be != NULL, FALSE);
-    write_objects_t data{be, true, this};
+    g_return_val_if_fail (sql_be != NULL, FALSE);
+    write_objects_t data{sql_be, true, this};
 
-    qof_collection_foreach (qof_book_get_collection (be->book(), GNC_ID_LOT),
+    qof_collection_foreach (qof_book_get_collection (sql_be->book(), GNC_ID_LOT),
                             (QofInstanceForeachCB)do_save_lot, &data);
     return data.is_ok;
 }
 
 /* ================================================================= */
 template<> void
-GncSqlColumnTableEntryImpl<CT_LOTREF>::load (const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_LOTREF>::load (const GncSqlBackend* sql_be,
                                                  GncSqlRow& row,
                                                  QofIdTypeConst obj_name,
                                                  gpointer pObject) const noexcept
 {
     load_from_guid_ref(row, obj_name, pObject,
-                       [be](GncGUID* g){
-                           return gnc_lot_lookup(g, be->book());
+                       [sql_be](GncGUID* g){
+                           return gnc_lot_lookup(g, sql_be->book());
                        });
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_LOTREF>::add_to_table(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_LOTREF>::add_to_table(const GncSqlBackend* sql_be,
                                                  ColVec& vec) const noexcept
 {
-    add_objectref_guid_to_table(be, vec);
+    add_objectref_guid_to_table(sql_be, vec);
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_LOTREF>::add_to_query(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_LOTREF>::add_to_query(const GncSqlBackend* sql_be,
                                                     QofIdTypeConst obj_name,
                                                     const gpointer pObject,
                                                     PairVec& vec) const noexcept
 {
-    add_objectref_guid_to_query(be, obj_name, pObject, vec);
+    add_objectref_guid_to_query(sql_be, obj_name, pObject, vec);
 }
 /* ================================================================= */
 void

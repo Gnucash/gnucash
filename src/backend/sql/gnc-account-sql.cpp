@@ -171,39 +171,39 @@ set_parent_guid (gpointer pObject,  gpointer pValue)
 }
 
 static  Account*
-load_single_account (GncSqlBackend* be, GncSqlRow& row,
+load_single_account (GncSqlBackend* sql_be, GncSqlRow& row,
                      GList** l_accounts_needing_parents)
 {
     const GncGUID* guid;
     Account* pAccount = NULL;
 
-    g_return_val_if_fail (be != NULL, NULL);
+    g_return_val_if_fail (sql_be != NULL, NULL);
     g_return_val_if_fail (l_accounts_needing_parents != NULL, NULL);
 
-    guid = gnc_sql_load_guid (be, row);
+    guid = gnc_sql_load_guid (sql_be, row);
     if (guid != NULL)
     {
-        pAccount = xaccAccountLookup (guid, be->book());
+        pAccount = xaccAccountLookup (guid, sql_be->book());
     }
     if (pAccount == NULL)
     {
-        pAccount = xaccMallocAccount (be->book());
+        pAccount = xaccMallocAccount (sql_be->book());
     }
     xaccAccountBeginEdit (pAccount);
-    gnc_sql_load_object (be, row, GNC_ID_ACCOUNT, pAccount, col_table);
+    gnc_sql_load_object (sql_be, row, GNC_ID_ACCOUNT, pAccount, col_table);
     xaccAccountCommitEdit (pAccount);
 
     /* If we don't have a parent and this isn't the root account, it might be because the parent
        account hasn't been loaded yet.  Remember the account and its parent guid for later. */
     if (gnc_account_get_parent (pAccount) == NULL
-        && pAccount != gnc_book_get_root_account (be->book()))
+        && pAccount != gnc_book_get_root_account (sql_be->book()))
     {
         account_parent_guid_struct* s = static_cast<decltype (s)> (
                                             g_malloc (sizeof (account_parent_guid_struct)));
         g_assert (s != NULL);
 
         s->pAccount = pAccount;
-        gnc_sql_load_object (be, row, GNC_ID_ACCOUNT, s, parent_col_table);
+        gnc_sql_load_object (sql_be, row, GNC_ID_ACCOUNT, s, parent_col_table);
         *l_accounts_needing_parents = g_list_prepend (*l_accounts_needing_parents, s);
     }
 
@@ -211,29 +211,29 @@ load_single_account (GncSqlBackend* be, GncSqlRow& row,
 }
 
 void
-GncSqlAccountBackend::load_all (GncSqlBackend* be)
+GncSqlAccountBackend::load_all (GncSqlBackend* sql_be)
 {
     QofBook* pBook;
     GList* l_accounts_needing_parents = NULL;
     GSList* bal_slist;
     GSList* bal;
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
     ENTER ("");
 
-    pBook = be->book();
+    pBook = sql_be->book();
 
     std::stringstream sql;
     sql << "SELECT * FROM " << TABLE_NAME;
-    auto stmt = be->create_statement_from_sql(sql.str());
-    auto result = be->execute_select_statement(stmt);
+    auto stmt = sql_be->create_statement_from_sql(sql.str());
+    auto result = sql_be->execute_select_statement(stmt);
     for (auto row : *result)
-        load_single_account (be, row, &l_accounts_needing_parents);
+        load_single_account (sql_be, row, &l_accounts_needing_parents);
 
     sql.str("");
     sql << "SELECT DISTINCT guid FROM " << TABLE_NAME;
-    gnc_sql_slots_load_for_sql_subquery (be, sql.str().c_str(),
+    gnc_sql_slots_load_for_sql_subquery (sql_be, sql.str().c_str(),
                                          (BookLookupFn)xaccAccountLookup);
 
     /* While there are items on the list of accounts needing parents,
@@ -254,7 +254,7 @@ GncSqlAccountBackend::load_all (GncSqlBackend* be)
             for (elem = l_accounts_needing_parents; elem != NULL;)
             {
                 account_parent_guid_struct* s = (account_parent_guid_struct*)elem->data;
-                pParent = xaccAccountLookup (&s->guid, be->book());
+                pParent = xaccAccountLookup (&s->guid, sql_be->book());
                 if (pParent != NULL)
                 {
                     GList* next_elem;
@@ -293,7 +293,7 @@ GncSqlAccountBackend::load_all (GncSqlBackend* be)
     }
 
     /* Load starting balances */
-    bal_slist = gnc_sql_get_account_balances_slist (be);
+    bal_slist = gnc_sql_get_account_balances_slist (sql_be);
     for (bal = bal_slist; bal != NULL; bal = bal->next)
     {
         acct_balances_t* balances = (acct_balances_t*)bal->data;
@@ -317,7 +317,7 @@ GncSqlAccountBackend::load_all (GncSqlBackend* be)
 
 /* ================================================================= */
 bool
-GncSqlAccountBackend::commit (GncSqlBackend* be, QofInstance* inst)
+GncSqlAccountBackend::commit (GncSqlBackend* sql_be, QofInstance* inst)
 {
     Account* pAcc = GNC_ACCOUNT (inst);
     const GncGUID* guid;
@@ -326,7 +326,7 @@ GncSqlAccountBackend::commit (GncSqlBackend* be, QofInstance* inst)
     gnc_commodity* commodity;
     E_DB_OPERATION op;
 
-    g_return_val_if_fail (be != NULL, FALSE);
+    g_return_val_if_fail (sql_be != NULL, FALSE);
     g_return_val_if_fail (inst != NULL, FALSE);
     g_return_val_if_fail (GNC_IS_ACCOUNT (inst), FALSE);
 
@@ -345,7 +345,7 @@ GncSqlAccountBackend::commit (GncSqlBackend* be, QofInstance* inst)
     {
         op = OP_DB_DELETE;
     }
-    else if (be->pristine() || is_infant)
+    else if (sql_be->pristine() || is_infant)
     {
         op = OP_DB_INSERT;
     }
@@ -357,12 +357,12 @@ GncSqlAccountBackend::commit (GncSqlBackend* be, QofInstance* inst)
     // If not deleting the account, ensure the commodity is in the db
     if (op != OP_DB_DELETE && commodity != NULL)
     {
-        is_ok = gnc_sql_save_commodity (be, commodity);
+        is_ok = gnc_sql_save_commodity (sql_be, commodity);
     }
 
     if (is_ok)
     {
-        is_ok = gnc_sql_do_db_operation (be, op, TABLE_NAME, GNC_ID_ACCOUNT, pAcc,
+        is_ok = gnc_sql_do_db_operation (sql_be, op, TABLE_NAME, GNC_ID_ACCOUNT, pAcc,
                                          col_table);
     }
 
@@ -372,11 +372,11 @@ GncSqlAccountBackend::commit (GncSqlBackend* be, QofInstance* inst)
         guid = qof_instance_get_guid (inst);
         if (!qof_instance_get_destroying (inst))
         {
-            is_ok = gnc_sql_slots_save (be, guid, is_infant, inst);
+            is_ok = gnc_sql_slots_save (sql_be, guid, is_infant, inst);
         }
         else
         {
-            is_ok = gnc_sql_slots_delete (be, guid);
+            is_ok = gnc_sql_slots_delete (sql_be, guid);
         }
     }
 
@@ -388,31 +388,31 @@ GncSqlAccountBackend::commit (GncSqlBackend* be, QofInstance* inst)
 /* ================================================================= */
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_ACCOUNTREF>::load (const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_ACCOUNTREF>::load (const GncSqlBackend* sql_be,
                                                  GncSqlRow& row,
                                                  QofIdTypeConst obj_name,
                                                  gpointer pObject) const noexcept
 {
     load_from_guid_ref(row, obj_name, pObject,
-                       [be](GncGUID* g){
-                           return xaccAccountLookup(g, be->book());
+                       [sql_be](GncGUID* g){
+                           return xaccAccountLookup(g, sql_be->book());
                        });
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_ACCOUNTREF>::add_to_table(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_ACCOUNTREF>::add_to_table(const GncSqlBackend* sql_be,
                                                  ColVec& vec) const noexcept
 {
-    add_objectref_guid_to_table(be, vec);
+    add_objectref_guid_to_table(sql_be, vec);
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_ACCOUNTREF>::add_to_query(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_ACCOUNTREF>::add_to_query(const GncSqlBackend* sql_be,
                                                     QofIdTypeConst obj_name,
                                                     const gpointer pObject,
                                                     PairVec& vec) const noexcept
 {
-    add_objectref_guid_to_query(be, obj_name, pObject, vec);
+    add_objectref_guid_to_query(sql_be, obj_name, pObject, vec);
 }
 /* ================================================================= */
 void

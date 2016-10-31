@@ -41,10 +41,10 @@ void gnc_sql_init_transaction_handler (void);
 /**
  * Loads all transactions which have splits for a specific account.
  *
- * @param be SQL backend
+ * @param sql_be SQL backend
  * @param account Account
  */
-void gnc_sql_transaction_load_tx_for_account (GncSqlBackend* be,
+void gnc_sql_transaction_load_tx_for_account (GncSqlBackend* sql_be,
                                               Account* account);
 typedef struct
 {
@@ -58,9 +58,9 @@ typedef struct
  * Returns a list of acct_balances_t structures, one for each account which
  * has splits.
  *
- * @param be SQL backend
+ * @param sql_be SQL backend
  * @return GSList of acct_balances_t structures
  */
-GSList* gnc_sql_get_account_balances_slist (GncSqlBackend* be);
+GSList* gnc_sql_get_account_balances_slist (GncSqlBackend* sql_be);
 
 #endif /* GNC_TRANSACTION_SQL_H */

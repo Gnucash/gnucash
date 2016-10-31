@@ -241,101 +241,101 @@ set_recurrence_period_start (gpointer pObject, gpointer pValue)
 /* ================================================================= */
 
 gboolean
-gnc_sql_recurrence_save (GncSqlBackend* be, const GncGUID* guid,
+gnc_sql_recurrence_save (GncSqlBackend* sql_be, const GncGUID* guid,
                          const Recurrence* r)
 {
     recurrence_info_t recurrence_info;
 
-    g_return_val_if_fail (be != NULL, FALSE);
+    g_return_val_if_fail (sql_be != NULL, FALSE);
     g_return_val_if_fail (guid != NULL, FALSE);
     g_return_val_if_fail (r != NULL, FALSE);
 
-    (void)gnc_sql_recurrence_delete (be, guid);
+    (void)gnc_sql_recurrence_delete (sql_be, guid);
 
-    recurrence_info.be = be;
+    recurrence_info.be = sql_be;
     recurrence_info.guid = guid;
     recurrence_info.pRecurrence = (Recurrence*)r;
-    return gnc_sql_do_db_operation (be, OP_DB_INSERT, TABLE_NAME,
+    return gnc_sql_do_db_operation (sql_be, OP_DB_INSERT, TABLE_NAME,
                                     TABLE_NAME, &recurrence_info, col_table);
 }
 
 void
-gnc_sql_recurrence_save_list (GncSqlBackend* be, const GncGUID* guid,
+gnc_sql_recurrence_save_list (GncSqlBackend* sql_be, const GncGUID* guid,
                               GList* schedule)
 {
     recurrence_info_t recurrence_info;
     GList* l;
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
     g_return_if_fail (guid != NULL);
 
-    (void)gnc_sql_recurrence_delete (be, guid);
+    (void)gnc_sql_recurrence_delete (sql_be, guid);
 
-    recurrence_info.be = be;
+    recurrence_info.be = sql_be;
     recurrence_info.guid = guid;
     for (l = schedule; l != NULL; l = g_list_next (l))
     {
         recurrence_info.pRecurrence = (Recurrence*)l->data;
-        (void)gnc_sql_do_db_operation (be, OP_DB_INSERT, TABLE_NAME,
+        (void)gnc_sql_do_db_operation (sql_be, OP_DB_INSERT, TABLE_NAME,
                                        TABLE_NAME, &recurrence_info, col_table);
     }
 }
 
 gboolean
-gnc_sql_recurrence_delete (GncSqlBackend* be, const GncGUID* guid)
+gnc_sql_recurrence_delete (GncSqlBackend* sql_be, const GncGUID* guid)
 {
     recurrence_info_t recurrence_info;
 
-    g_return_val_if_fail (be != NULL, FALSE);
+    g_return_val_if_fail (sql_be != NULL, FALSE);
     g_return_val_if_fail (guid != NULL, FALSE);
 
-    recurrence_info.be = be;
+    recurrence_info.be = sql_be;
     recurrence_info.guid = guid;
-    return gnc_sql_do_db_operation (be, OP_DB_DELETE, TABLE_NAME,
+    return gnc_sql_do_db_operation (sql_be, OP_DB_DELETE, TABLE_NAME,
                                     TABLE_NAME, &recurrence_info, guid_col_table);
 }
 
 static void
-load_recurrence (GncSqlBackend* be, GncSqlRow& row,  Recurrence* r)
+load_recurrence (GncSqlBackend* sql_be, GncSqlRow& row,  Recurrence* r)
 {
     recurrence_info_t recurrence_info;
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
     g_return_if_fail (r != NULL);
 
-    recurrence_info.be = be;
+    recurrence_info.be = sql_be;
     recurrence_info.pRecurrence = r;
 
-    gnc_sql_load_object (be, row, TABLE_NAME, &recurrence_info, col_table);
+    gnc_sql_load_object (sql_be, row, TABLE_NAME, &recurrence_info, col_table);
 }
 
 static  GncSqlResultPtr
-gnc_sql_set_recurrences_from_db (GncSqlBackend* be, const GncGUID* guid)
+gnc_sql_set_recurrences_from_db (GncSqlBackend* sql_be, const GncGUID* guid)
 {
     gchar* buf;
     gchar guid_buf[GUID_ENCODING_LENGTH + 1];
 
-    g_return_val_if_fail (be != NULL, NULL);
+    g_return_val_if_fail (sql_be != NULL, NULL);
     g_return_val_if_fail (guid != NULL, NULL);
 
     (void)guid_to_string_buff (guid, guid_buf);
     buf = g_strdup_printf ("SELECT * FROM %s WHERE obj_guid='%s'", TABLE_NAME,
                            guid_buf);
-    auto stmt = be->create_statement_from_sql (buf);
+    auto stmt = sql_be->create_statement_from_sql (buf);
     g_free (buf);
-    auto result = be->execute_select_statement(stmt);
+    auto result = sql_be->execute_select_statement(stmt);
     return result;
 }
 
 Recurrence*
-gnc_sql_recurrence_load (GncSqlBackend* be, const GncGUID* guid)
+gnc_sql_recurrence_load (GncSqlBackend* sql_be, const GncGUID* guid)
 {
     Recurrence* r = NULL;
 
-    g_return_val_if_fail (be != NULL, NULL);
+    g_return_val_if_fail (sql_be != NULL, NULL);
     g_return_val_if_fail (guid != NULL, NULL);
 
-    auto result = gnc_sql_set_recurrences_from_db (be, guid);
+    auto result = gnc_sql_set_recurrences_from_db (sql_be, guid);
     auto row = result->begin();
     if (row == nullptr)
     {
@@ -344,7 +344,7 @@ gnc_sql_recurrence_load (GncSqlBackend* be, const GncGUID* guid)
     }
     r = g_new0 (Recurrence, 1);
     g_assert (r != NULL);
-    load_recurrence (be, *(result->begin()), r);
+    load_recurrence (sql_be, *(result->begin()), r);
 
     if (++row != nullptr)
         g_warning ("More than 1 recurrence found: first one used");
@@ -353,19 +353,19 @@ gnc_sql_recurrence_load (GncSqlBackend* be, const GncGUID* guid)
 }
 
 GList*
-gnc_sql_recurrence_load_list (GncSqlBackend* be, const GncGUID* guid)
+gnc_sql_recurrence_load_list (GncSqlBackend* sql_be, const GncGUID* guid)
 {
     GList* list = NULL;
 
-    g_return_val_if_fail (be != NULL, NULL);
+    g_return_val_if_fail (sql_be != NULL, NULL);
     g_return_val_if_fail (guid != NULL, NULL);
 
-    auto result = gnc_sql_set_recurrences_from_db (be, guid);
+    auto result = gnc_sql_set_recurrences_from_db (sql_be, guid);
     for (auto row : *result)
     {
         Recurrence* pRecurrence = g_new0 (Recurrence, 1);
         g_assert (pRecurrence != NULL);
-        load_recurrence (be, row, pRecurrence);
+        load_recurrence (sql_be, row, pRecurrence);
         list = g_list_append (list, pRecurrence);
     }
 
@@ -374,10 +374,10 @@ gnc_sql_recurrence_load_list (GncSqlBackend* be, const GncGUID* guid)
 
 /* ================================================================= */
 static void
-upgrade_recurrence_table_1_2 (GncSqlBackend* be)
+upgrade_recurrence_table_1_2 (GncSqlBackend* sql_be)
 {
     /* Step 1: add field, but allow it to be null */
-    gboolean ok = be->add_columns_to_table(TABLE_NAME,
+    gboolean ok = sql_be->add_columns_to_table(TABLE_NAME,
                                            weekend_adjust_col_table);
     if (!ok)
     {
@@ -392,28 +392,28 @@ upgrade_recurrence_table_1_2 (GncSqlBackend* be)
         sql << "UPDATE " << TABLE_NAME << " SET " <<
             weekend_adjust_col_table[0]->name() << "='" <<
             weekend_adj_str << "'";
-        auto stmt = be->create_statement_from_sql(sql.str());
-        be->execute_nonselect_statement(stmt);
+        auto stmt = sql_be->create_statement_from_sql(sql.str());
+        sql_be->execute_nonselect_statement(stmt);
         g_free (weekend_adj_str);
     }
 
     /* Step 3: rewrite the table, requiring the weekend_adj column to be non-null */
-    be->upgrade_table(TABLE_NAME, col_table);
+    sql_be->upgrade_table(TABLE_NAME, col_table);
 
 }
 
 void
-GncSqlRecurrenceBackend::create_tables (GncSqlBackend* be)
+GncSqlRecurrenceBackend::create_tables (GncSqlBackend* sql_be)
 {
     gint version;
     gboolean ok;
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
-    version = be->get_table_version( TABLE_NAME);
+    version = sql_be->get_table_version( TABLE_NAME);
     if (version == 0)
     {
-        (void)be->create_table(TABLE_NAME, TABLE_VERSION, col_table);
+        (void)sql_be->create_table(TABLE_NAME, TABLE_VERSION, col_table);
     }
     else if (version < TABLE_VERSION)
     {
@@ -422,9 +422,9 @@ GncSqlRecurrenceBackend::create_tables (GncSqlBackend* be)
         */
         if (version == 1)
         {
-            upgrade_recurrence_table_1_2 (be);
+            upgrade_recurrence_table_1_2 (sql_be);
         }
-        be->set_table_version (TABLE_NAME, TABLE_VERSION);
+        sql_be->set_table_version (TABLE_NAME, TABLE_VERSION);
         PINFO ("Recurrence table upgraded from version %d to version %d\n", version,
                TABLE_VERSION);
     }

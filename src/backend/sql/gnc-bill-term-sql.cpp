@@ -188,21 +188,21 @@ bt_set_parent_guid (gpointer pObject,  gpointer pValue)
 }
 
 static GncBillTerm*
-load_single_billterm (GncSqlBackend* be, GncSqlRow& row,
+load_single_billterm (GncSqlBackend* sql_be, GncSqlRow& row,
                       GList** l_billterms_needing_parents)
 {
     const GncGUID* guid;
     GncBillTerm* pBillTerm;
 
-    g_return_val_if_fail (be != NULL, NULL);
+    g_return_val_if_fail (sql_be != NULL, NULL);
 
-    guid = gnc_sql_load_guid (be, row);
-    pBillTerm = gncBillTermLookup (be->book(), guid);
+    guid = gnc_sql_load_guid (sql_be, row);
+    pBillTerm = gncBillTermLookup (sql_be->book(), guid);
     if (pBillTerm == NULL)
     {
-        pBillTerm = gncBillTermCreate (be->book());
+        pBillTerm = gncBillTermCreate (sql_be->book());
     }
-    gnc_sql_load_object (be, row, GNC_ID_BILLTERM, pBillTerm, col_table);
+    gnc_sql_load_object (sql_be, row, GNC_ID_BILLTERM, pBillTerm, col_table);
 
     /* If the billterm doesn't have a parent, it might be because it hasn't been loaded yet.
        If so, add this billterm to the list of billterms with no parent, along with the parent
@@ -215,7 +215,7 @@ load_single_billterm (GncSqlBackend* be, GncSqlRow& row,
 
         s->billterm = pBillTerm;
         s->have_guid = FALSE;
-        gnc_sql_load_object (be, row, GNC_ID_TAXTABLE, s, billterm_parent_col_table);
+        gnc_sql_load_object (sql_be, row, GNC_ID_TAXTABLE, s, billterm_parent_col_table);
         if (s->have_guid)
         {
             *l_billterms_needing_parents = g_list_prepend (*l_billterms_needing_parents,
@@ -233,28 +233,28 @@ load_single_billterm (GncSqlBackend* be, GncSqlRow& row,
 }
 
 void
-GncSqlBillTermBackend::load_all (GncSqlBackend* be)
+GncSqlBillTermBackend::load_all (GncSqlBackend* sql_be)
 {
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
     std::stringstream sql;
     sql << "SELECT * FROM " << TABLE_NAME;
-    auto stmt = be->create_statement_from_sql(sql.str());
-    auto result = be->execute_select_statement(stmt);
+    auto stmt = sql_be->create_statement_from_sql(sql.str());
+    auto result = sql_be->execute_select_statement(stmt);
     InstanceVec instances;
     GList* l_billterms_needing_parents = NULL;
 
     for (auto row : *result)
     {
         auto pBillTerm =
-            load_single_billterm (be, row, &l_billterms_needing_parents);
+            load_single_billterm (sql_be, row, &l_billterms_needing_parents);
         if (pBillTerm != nullptr)
             instances.push_back(QOF_INSTANCE(pBillTerm));
     }
 
     if (!instances.empty())
-        gnc_sql_slots_load_for_instancevec (be, instances);
+        gnc_sql_slots_load_for_instancevec (sql_be, instances);
 
     /* While there are items on the list of billterms needing parents,
        try to see if the parent has now been loaded.  Theory says that if
@@ -292,33 +292,33 @@ do_save_billterm (QofInstance* inst, void* p2)
 }
 
 bool
-GncSqlBillTermBackend::write (GncSqlBackend* be)
+GncSqlBillTermBackend::write (GncSqlBackend* sql_be)
 {
-    g_return_val_if_fail (be != NULL, FALSE);
+    g_return_val_if_fail (sql_be != NULL, FALSE);
 
-    write_objects_t data {be, true, this};
-    qof_object_foreach (GNC_ID_BILLTERM, be->book(), do_save_billterm, &data);
+    write_objects_t data {sql_be, true, this};
+    qof_object_foreach (GNC_ID_BILLTERM, sql_be->book(), do_save_billterm, &data);
     return data.is_ok;
 }
 
 /* ================================================================= */
 void
-GncSqlBillTermBackend::create_tables (GncSqlBackend* be)
+GncSqlBillTermBackend::create_tables (GncSqlBackend* sql_be)
 {
     gint version;
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
-    version = be->get_table_version( TABLE_NAME);
+    version = sql_be->get_table_version( TABLE_NAME);
     if (version == 0)
     {
-        be->create_table(TABLE_NAME, TABLE_VERSION, col_table);
+        sql_be->create_table(TABLE_NAME, TABLE_VERSION, col_table);
     }
     else if (version == 1)
     {
         /* Upgrade 64 bit int handling */
-        be->upgrade_table(TABLE_NAME, col_table);
-        be->set_table_version (TABLE_NAME, TABLE_VERSION);
+        sql_be->upgrade_table(TABLE_NAME, col_table);
+        sql_be->set_table_version (TABLE_NAME, TABLE_VERSION);
 
         PINFO ("Billterms table upgraded from version 1 to version %d\n",
                TABLE_VERSION);
@@ -328,31 +328,31 @@ GncSqlBillTermBackend::create_tables (GncSqlBackend* be)
 /* ================================================================= */
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_BILLTERMREF>::load (const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_BILLTERMREF>::load (const GncSqlBackend* sql_be,
                                                  GncSqlRow& row,
                                                  QofIdTypeConst obj_name,
                                                  gpointer pObject) const noexcept
 {
     load_from_guid_ref(row, obj_name, pObject,
-                       [be](GncGUID* g){
-                           return gncBillTermLookup(be->book(), g);
+                       [sql_be](GncGUID* g){
+                           return gncBillTermLookup(sql_be->book(), g);
                        });
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_BILLTERMREF>::add_to_table(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_BILLTERMREF>::add_to_table(const GncSqlBackend* sql_be,
                                                  ColVec& vec) const noexcept
 {
-    add_objectref_guid_to_table(be, vec);
+    add_objectref_guid_to_table(sql_be, vec);
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_BILLTERMREF>::add_to_query(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_BILLTERMREF>::add_to_query(const GncSqlBackend* sql_be,
                                                     QofIdTypeConst obj_name,
                                                     const gpointer pObject,
                                                     PairVec& vec) const noexcept
 {
-    add_objectref_guid_to_query(be, obj_name, pObject, vec);
+    add_objectref_guid_to_query(sql_be, obj_name, pObject, vec);
 }
 /* ================================================================= */
 void

@@ -88,17 +88,17 @@ extern "C"
 #define VERSION_COL_NAME "table_version"
 
 static void gnc_sql_init_object_handlers (void);
-static GncSqlStatementPtr build_insert_statement (GncSqlBackend* be,
+static GncSqlStatementPtr build_insert_statement (GncSqlBackend* sql_be,
                                                   const gchar* table_name,
                                                   QofIdTypeConst obj_name,
                                                   gpointer pObject,
                                                   const EntryVec& table);
-static GncSqlStatementPtr build_update_statement (GncSqlBackend* be,
+static GncSqlStatementPtr build_update_statement (GncSqlBackend* sql_be,
                                                   const gchar* table_name,
                                                   QofIdTypeConst obj_name,
                                                   gpointer pObject,
                                                   const EntryVec& table);
-static GncSqlStatementPtr build_delete_statement (GncSqlBackend* be,
+static GncSqlStatementPtr build_delete_statement (GncSqlBackend* sql_be,
                                                   const gchar* table_name,
                                                   QofIdTypeConst obj_name,
                                                   gpointer pObject,
@@ -119,7 +119,7 @@ typedef struct
 {
     gboolean is_known;
     gboolean is_ok;
-    GncSqlBackend* be;
+    GncSqlBackend* sql_be;
     QofInstance* inst;
     QofQuery* pQuery;
     gpointer pCompiledQuery;
@@ -165,7 +165,7 @@ gnc_sql_get_object_backend(const std::string& type)
 }
 
 void
-gnc_sql_init(GncSqlBackend* be)
+gnc_sql_init(GncSqlBackend* sql_be)
 {
     static gboolean initialized = FALSE;
 
@@ -179,14 +179,14 @@ gnc_sql_init(GncSqlBackend* be)
 /* ================================================================= */
 
 static void
-create_tables(const OBEEntry& entry, GncSqlBackend* be)
+create_tables(const OBEEntry& entry, GncSqlBackend* sql_be)
 {
     std::string type;
     GncSqlObjectBackendPtr obe = nullptr;
     std::tie(type, obe) = entry;
     g_return_if_fail (obe->is_version (GNC_SQL_BACKEND_VERSION));
-    be->update_progress();
-    obe->create_tables(be);
+    sql_be->update_progress();
+    obe->create_tables(sql_be);
 }
 
 /* ================================================================= */
@@ -200,7 +200,7 @@ static const StrVec business_fixed_load_order =
 { GNC_ID_BILLTERM, GNC_ID_TAXTABLE, GNC_ID_INVOICE };
 
 static void
-initial_load(const OBEEntry& entry, GncSqlBackend* be)
+initial_load(const OBEEntry& entry, GncSqlBackend* sql_be)
 {
     std::string type;
     GncSqlObjectBackendPtr obe = nullptr;
@@ -215,11 +215,11 @@ initial_load(const OBEEntry& entry, GncSqlBackend* be)
     if (std::find(business_fixed_load_order.begin(), business_fixed_load_order.end(),
                   type) != business_fixed_load_order.end()) return;
 
-    obe->load_all (be);
+    obe->load_all (sql_be);
 }
 
 void
-gnc_sql_push_commodity_for_postload_processing (GncSqlBackend* be,
+gnc_sql_push_commodity_for_postload_processing (GncSqlBackend* sql_be,
                                                 gpointer comm)
 {
     post_load_commodities = g_list_prepend (post_load_commodities, comm);
@@ -233,21 +233,21 @@ commit_commodity (gpointer data)
 }
 
 void
-gnc_sql_load (GncSqlBackend* be,  QofBook* book, QofBackendLoadType loadType)
+gnc_sql_load (GncSqlBackend* sql_be,  QofBook* book, QofBackendLoadType loadType)
 {
     Account* root;
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
     g_return_if_fail (book != NULL);
 
-    ENTER ("be=%p, book=%p", be, book);
+    ENTER ("sql_be=%p, book=%p", sql_be, book);
 
-    be->m_loading = TRUE;
+    sql_be->m_loading = TRUE;
 
     if (loadType == LOAD_TYPE_INITIAL_LOAD)
     {
-        g_assert (be->m_book == NULL);
-        be->m_book = book;
+        g_assert (sql_be->m_book == NULL);
+        sql_be->m_book = book;
 
         /* Load any initial stuff. Some of this needs to happen in a certain order */
         for (auto type : fixed_load_order)
@@ -255,8 +255,8 @@ gnc_sql_load (GncSqlBackend* be,  QofBook* book, QofBackendLoadType loadType)
             auto obe = gnc_sql_get_object_backend(type);
             if (obe)
             {
-                be->update_progress();
-                obe->load_all (be);
+                sql_be->update_progress();
+                obe->load_all (sql_be);
             }
         }
         for (auto type : business_fixed_load_order)
@@ -264,8 +264,8 @@ gnc_sql_load (GncSqlBackend* be,  QofBook* book, QofBackendLoadType loadType)
             auto obe = gnc_sql_get_object_backend(type);
             if (obe)
             {
-                be->update_progress();
-                obe->load_all (be);
+                sql_be->update_progress();
+                obe->load_all (sql_be);
             }
         }
 
@@ -274,7 +274,7 @@ gnc_sql_load (GncSqlBackend* be,  QofBook* book, QofBackendLoadType loadType)
                                        nullptr);
 
         for (auto entry : backend_registry)
-            initial_load(entry, be);
+            initial_load(entry, sql_be);
 
         gnc_account_foreach_descendant(root, (AccountCb)xaccAccountCommitEdit,
                                        nullptr);
@@ -283,10 +283,10 @@ gnc_sql_load (GncSqlBackend* be,  QofBook* book, QofBackendLoadType loadType)
     {
         // Load all transactions
         auto obe = gnc_sql_get_object_backend (GNC_ID_TRANS);
-        obe->load_all (be);
+        obe->load_all (sql_be);
     }
 
-    be->m_loading = FALSE;
+    sql_be->m_loading = FALSE;
     g_list_free_full (post_load_commodities, commit_commodity);
     post_load_commodities = NULL;
 
@@ -294,7 +294,7 @@ gnc_sql_load (GncSqlBackend* be,  QofBook* book, QofBackendLoadType loadType)
      * dirty with this backend
      */
     qof_book_mark_session_saved (book);
-    be->finish_progress();
+    sql_be->finish_progress();
 
     LEAVE ("");
 }
@@ -302,45 +302,45 @@ gnc_sql_load (GncSqlBackend* be,  QofBook* book, QofBackendLoadType loadType)
 /* ================================================================= */
 
 static gboolean
-write_account_tree (GncSqlBackend* be, Account* root)
+write_account_tree (GncSqlBackend* sql_be, Account* root)
 {
     GList* descendants;
     GList* node;
     gboolean is_ok = TRUE;
 
-    g_return_val_if_fail (be != NULL, FALSE);
+    g_return_val_if_fail (sql_be != NULL, FALSE);
     g_return_val_if_fail (root != NULL, FALSE);
 
     auto obe = gnc_sql_get_object_backend (GNC_ID_ACCOUNT);
-    is_ok = obe->commit (be, QOF_INSTANCE (root));
+    is_ok = obe->commit (sql_be, QOF_INSTANCE (root));
     if (is_ok)
     {
         descendants = gnc_account_get_descendants (root);
         for (node = descendants; node != NULL && is_ok; node = g_list_next (node))
         {
-            is_ok = obe->commit(be, QOF_INSTANCE (GNC_ACCOUNT (node->data)));
+            is_ok = obe->commit(sql_be, QOF_INSTANCE (GNC_ACCOUNT (node->data)));
             if (!is_ok) break;
         }
         g_list_free (descendants);
     }
-    be->update_progress();
+    sql_be->update_progress();
 
     return is_ok;
 }
 
 static gboolean
-write_accounts (GncSqlBackend* be)
+write_accounts (GncSqlBackend* sql_be)
 {
     gboolean is_ok;
 
-    g_return_val_if_fail (be != NULL, FALSE);
+    g_return_val_if_fail (sql_be != NULL, FALSE);
 
-    be->update_progress();
-    is_ok = write_account_tree (be, gnc_book_get_root_account (be->book()));
+    sql_be->update_progress();
+    is_ok = write_account_tree (sql_be, gnc_book_get_root_account (sql_be->book()));
     if (is_ok)
     {
-        be->update_progress();
-        is_ok = write_account_tree (be, gnc_book_get_template_root (be->book()));
+        sql_be->update_progress();
+        is_ok = write_account_tree (sql_be, gnc_book_get_template_root (sql_be->book()));
     }
 
     return is_ok;
@@ -367,54 +367,54 @@ write_tx (Transaction* tx, gpointer data)
 }
 
 static gboolean
-write_transactions (GncSqlBackend* be)
+write_transactions (GncSqlBackend* sql_be)
 {
-    g_return_val_if_fail (be != NULL, FALSE);
+    g_return_val_if_fail (sql_be != NULL, FALSE);
 
     auto obe = gnc_sql_get_object_backend(GNC_ID_TRANS);
-    write_objects_t data{be, true, obe};
+    write_objects_t data{sql_be, true, obe};
 
     (void)xaccAccountTreeForEachTransaction (
-        gnc_book_get_root_account (be->book()), write_tx, &data);
-    be->update_progress();
+        gnc_book_get_root_account (sql_be->book()), write_tx, &data);
+    sql_be->update_progress();
     return data.is_ok;
 }
 
 static gboolean
-write_template_transactions (GncSqlBackend* be)
+write_template_transactions (GncSqlBackend* sql_be)
 {
-    g_return_val_if_fail (be != NULL, FALSE);
+    g_return_val_if_fail (sql_be != NULL, FALSE);
 
     auto obe = gnc_sql_get_object_backend(GNC_ID_TRANS);
-    write_objects_t data{be, true, obe};
-    auto ra = gnc_book_get_template_root (be->book());
+    write_objects_t data{sql_be, true, obe};
+    auto ra = gnc_book_get_template_root (sql_be->book());
     if (gnc_account_n_descendants (ra) > 0)
     {
         (void)xaccAccountTreeForEachTransaction (ra, write_tx, &data);
-        be->update_progress();
+        sql_be->update_progress();
     }
 
     return data.is_ok;
 }
 
 static gboolean
-write_schedXactions (GncSqlBackend* be)
+write_schedXactions (GncSqlBackend* sql_be)
 {
     GList* schedXactions;
     SchedXaction* tmpSX;
     gboolean is_ok = TRUE;
 
-    g_return_val_if_fail (be != NULL, FALSE);
+    g_return_val_if_fail (sql_be != NULL, FALSE);
 
-    schedXactions = gnc_book_get_schedxactions (be->book())->sx_list;
+    schedXactions = gnc_book_get_schedxactions (sql_be->book())->sx_list;
     auto obe = gnc_sql_get_object_backend(GNC_ID_SCHEDXACTION);
 
     for (; schedXactions != NULL && is_ok; schedXactions = schedXactions->next)
     {
         tmpSX = static_cast<decltype (tmpSX)> (schedXactions->data);
-        is_ok = obe->commit (be, QOF_INSTANCE (tmpSX));
+        is_ok = obe->commit (sql_be, QOF_INSTANCE (tmpSX));
     }
-    be->update_progress();
+    sql_be->update_progress();
 
     return is_ok;
 }
@@ -428,7 +428,7 @@ static EntryVec version_table
 
 GncSqlBackend::GncSqlBackend(GncSqlConnection *conn, QofBook* book,
                              const char* format) :
-        be {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+    qof_be {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
             nullptr, nullptr, nullptr, nullptr, ERR_BACKEND_NO_ERR, nullptr, 0,
             nullptr}, m_conn{conn}, m_book{book}, m_loading{false},
         m_in_query{false}, m_is_pristine_db{false}, m_timespec_format{format}
@@ -536,15 +536,15 @@ GncSqlBackend::add_columns_to_table(const std::string& table_name,
 void
 GncSqlBackend::update_progress() const noexcept
 {
-    if (be.percentage != nullptr)
-        (be.percentage) (nullptr, 101.0);
+    if (qof_be.percentage != nullptr)
+        (qof_be.percentage) (nullptr, 101.0);
 }
 
 void
 GncSqlBackend::finish_progress() const noexcept
 {
-    if (be.percentage != nullptr)
-        (be.percentage) (nullptr, -1.0);
+    if (qof_be.percentage != nullptr)
+        (qof_be.percentage) (nullptr, -1.0);
 }
 
 /**
@@ -719,61 +719,61 @@ GncSqlBackend::time64_to_string (time64 t) const noexcept
 #pragma GCC diagnostic warning "-Wformat-nonliteral"
 
 void
-gnc_sql_sync_all (GncSqlBackend* be,  QofBook* book)
+gnc_sql_sync_all (GncSqlBackend* sql_be,  QofBook* book)
 {
     gboolean is_ok;
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
     g_return_if_fail (book != NULL);
 
-    be->reset_version_info();
-    ENTER ("book=%p, be->book=%p", book, be->book());
-    be->update_progress();
+    sql_be->reset_version_info();
+    ENTER ("book=%p, sql_be->book=%p", book, sql_be->book());
+    sql_be->update_progress();
 
     /* Create new tables */
-    be->m_is_pristine_db = true;
+    sql_be->m_is_pristine_db = true;
     for(auto entry : backend_registry)
-        create_tables(entry, be);
+        create_tables(entry, sql_be);
 
     /* Save all contents */
-    be->m_book = book;
-    is_ok = be->m_conn->begin_transaction ();
+    sql_be->m_book = book;
+    is_ok = sql_be->m_conn->begin_transaction ();
 
     // FIXME: should write the set of commodities that are used
-    //write_commodities( be, book );
+    //write_commodities( sql_be, book );
     if (is_ok)
     {
         auto obe = gnc_sql_get_object_backend(GNC_ID_BOOK);
-        is_ok = obe->commit (be, QOF_INSTANCE (book));
+        is_ok = obe->commit (sql_be, QOF_INSTANCE (book));
     }
     if (is_ok)
     {
-        is_ok = write_accounts (be);
+        is_ok = write_accounts (sql_be);
     }
     if (is_ok)
     {
-        is_ok = write_transactions (be);
+        is_ok = write_transactions (sql_be);
     }
     if (is_ok)
     {
-        is_ok = write_template_transactions (be);
+        is_ok = write_template_transactions (sql_be);
     }
     if (is_ok)
     {
-        is_ok = write_schedXactions (be);
+        is_ok = write_schedXactions (sql_be);
     }
     if (is_ok)
     {
         for (auto entry : backend_registry)
-            std::get<1>(entry)->write (be);
+            std::get<1>(entry)->write (sql_be);
     }
     if (is_ok)
     {
-        is_ok = be->m_conn->commit_transaction ();
+        is_ok = sql_be->m_conn->commit_transaction ();
     }
     if (is_ok)
     {
-        be->m_is_pristine_db = false;
+        sql_be->m_is_pristine_db = false;
 
         /* Mark the session as clean -- though it shouldn't ever get
          * marked dirty with this backend
@@ -782,11 +782,11 @@ gnc_sql_sync_all (GncSqlBackend* be,  QofBook* book)
     }
     else
     {
-        if (!qof_backend_check_error ((QofBackend*)be))
-            qof_backend_set_error ((QofBackend*)be, ERR_BACKEND_SERVER_ERR);
-        is_ok = be->m_conn->rollback_transaction ();
+        if (!qof_backend_check_error ((QofBackend*)sql_be))
+            qof_backend_set_error ((QofBackend*)sql_be, ERR_BACKEND_SERVER_ERR);
+        is_ok = sql_be->m_conn->rollback_transaction ();
     }
-    be->finish_progress();
+    sql_be->finish_progress();
     LEAVE ("book=%p", book);
 }
 
@@ -794,9 +794,9 @@ gnc_sql_sync_all (GncSqlBackend* be,  QofBook* book)
 /* Routines to deal with the creation of multiple books. */
 
 void
-gnc_sql_begin_edit (GncSqlBackend* be, QofInstance* inst)
+gnc_sql_begin_edit (GncSqlBackend* sql_be, QofInstance* inst)
 {
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
     g_return_if_fail (inst != NULL);
 
     ENTER (" ");
@@ -804,9 +804,9 @@ gnc_sql_begin_edit (GncSqlBackend* be, QofInstance* inst)
 }
 
 void
-gnc_sql_rollback_edit (GncSqlBackend* be, QofInstance* inst)
+gnc_sql_rollback_edit (GncSqlBackend* sql_be, QofInstance* inst)
 {
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
     g_return_if_fail (inst != NULL);
 
     ENTER (" ");
@@ -827,7 +827,7 @@ commit(const OBEEntry& entry, sql_backend* be_data)
     if (type != std::string{be_data->inst->e_type}) return;
     if (be_data->is_known) return;
 
-    be_data->is_ok = obe->commit (be_data->be, be_data->inst);
+    be_data->is_ok = obe->commit (be_data->sql_be, be_data->inst);
     be_data->is_known = TRUE;
 }
 
@@ -835,25 +835,25 @@ commit(const OBEEntry& entry, sql_backend* be_data)
  * type and call its commit handler
  */
 void
-gnc_sql_commit_edit (GncSqlBackend* be, QofInstance* inst)
+gnc_sql_commit_edit (GncSqlBackend* sql_be, QofInstance* inst)
 {
     sql_backend be_data;
     gboolean is_dirty;
     gboolean is_destroying;
     gboolean is_infant;
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
     g_return_if_fail (inst != NULL);
 
-    if (qof_book_is_readonly (be->book()))
+    if (qof_book_is_readonly (sql_be->book()))
     {
-        qof_backend_set_error ((QofBackend*)be, ERR_BACKEND_READONLY);
-        (void)be->m_conn->rollback_transaction ();
+        qof_backend_set_error ((QofBackend*)sql_be, ERR_BACKEND_READONLY);
+        (void)sql_be->m_conn->rollback_transaction ();
         return;
     }
     /* During initial load where objects are being created, don't commit
     anything, but do mark the object as clean. */
-    if (be->m_loading)
+    if (sql_be->m_loading)
     {
         qof_instance_mark_clean (inst);
         return;
@@ -863,7 +863,7 @@ gnc_sql_commit_edit (GncSqlBackend* be, QofInstance* inst)
     if (strcmp (inst->e_type, "PriceDB") == 0)
     {
         qof_instance_mark_clean (inst);
-        qof_book_mark_session_saved (be->book());
+        qof_book_mark_session_saved (sql_be->book());
         return;
     }
 
@@ -883,7 +883,7 @@ gnc_sql_commit_edit (GncSqlBackend* be, QofInstance* inst)
         return;
     }
 
-    if (!be->m_conn->begin_transaction ())
+    if (!sql_be->m_conn->begin_transaction ())
     {
         PERR ("gnc_sql_commit_edit(): begin_transaction failed\n");
         LEAVE ("Rolled back - database transaction begin error");
@@ -891,7 +891,7 @@ gnc_sql_commit_edit (GncSqlBackend* be, QofInstance* inst)
     }
 
     be_data.is_known = FALSE;
-    be_data.be = be;
+    be_data.sql_be = sql_be;
     be_data.inst = inst;
     be_data.is_ok = TRUE;
 
@@ -901,10 +901,10 @@ gnc_sql_commit_edit (GncSqlBackend* be, QofInstance* inst)
     if (!be_data.is_known)
     {
         PERR ("gnc_sql_commit_edit(): Unknown object type '%s'\n", inst->e_type);
-        (void)be->m_conn->rollback_transaction ();
+        (void)sql_be->m_conn->rollback_transaction ();
 
         // Don't let unknown items still mark the book as being dirty
-        qof_book_mark_session_saved (be->book());
+        qof_book_mark_session_saved (sql_be->book());
         qof_instance_mark_clean (inst);
         LEAVE ("Rolled back - unknown object type");
         return;
@@ -912,16 +912,16 @@ gnc_sql_commit_edit (GncSqlBackend* be, QofInstance* inst)
     if (!be_data.is_ok)
     {
         // Error - roll it back
-        (void)be->m_conn->rollback_transaction ();
+        (void)sql_be->m_conn->rollback_transaction ();
 
         // This *should* leave things marked dirty
         LEAVE ("Rolled back - database error");
         return;
     }
 
-    (void)be->m_conn->commit_transaction ();
+    (void)sql_be->m_conn->commit_transaction ();
 
-    qof_book_mark_session_saved (be->book());
+    qof_book_mark_session_saved (sql_be->book());
     qof_instance_mark_clean (inst);
 
     LEAVE ("");
@@ -1097,22 +1097,22 @@ compile_query(const OBEEntry& entry, sql_backend* be_data)
     be_data->is_ok = TRUE;
 }
 
-gchar* gnc_sql_compile_query_to_sql (GncSqlBackend* be, QofQuery* query);
+gchar* gnc_sql_compile_query_to_sql (GncSqlBackend* sql_be, QofQuery* query);
 
 gpointer
-gnc_sql_compile_query (QofBackend* pBEnd, QofQuery* pQuery)
+gnc_sql_compile_query (QofBackend* qof_be, QofQuery* pQuery)
 {
-    GncSqlBackend* be = (GncSqlBackend*)pBEnd;
+    GncSqlBackend* sql_be = reinterpret_cast<decltype(sql_be)>(qof_be);
     QofIdType searchObj;
     sql_backend be_data;
     gnc_sql_query_info* pQueryInfo;
 
-    g_return_val_if_fail (pBEnd != NULL, NULL);
+    g_return_val_if_fail (sql_be != NULL, NULL);
     g_return_val_if_fail (pQuery != NULL, NULL);
 
     ENTER (" ");
 
-//gnc_sql_compile_query_to_sql( be, pQuery );
+//gnc_sql_compile_query_to_sql( sql_be, pQuery );
     searchObj = qof_query_get_search_for (pQuery);
 
     pQueryInfo = static_cast<decltype (pQueryInfo)> (
@@ -1123,7 +1123,7 @@ gnc_sql_compile_query (QofBackend* pBEnd, QofQuery* pQuery)
 
     // Try various objects first
     be_data.is_ok = FALSE;
-    be_data.be = be;
+    be_data.be = sql_be;
     be_data.pQuery = pQuery;
     be_data.pQueryInfo = pQueryInfo;
 
@@ -1147,12 +1147,12 @@ convert_search_obj (QofIdType objType)
 }
 
 gchar*
-gnc_sql_compile_query_to_sql (GncSqlBackend* be, QofQuery* query)
+gnc_sql_compile_query_to_sql (GncSqlBackend* sql_be, QofQuery* query)
 {
     QofIdType searchObj;
     GString* sql;
 
-    g_return_val_if_fail (be != NULL, NULL);
+    g_return_val_if_fail (sql_be != NULL, NULL);
     g_return_val_if_fail (query != NULL, NULL);
 
     searchObj = qof_query_get_search_for (query);
@@ -1210,20 +1210,20 @@ free_query(const OBEEntry& entry, sql_backend* be_data)
 }
 
 void
-gnc_sql_free_query (QofBackend* pBEnd, gpointer pQuery)
+gnc_sql_free_query (QofBackend* qof_be, gpointer pQuery)
 {
-    GncSqlBackend* be = (GncSqlBackend*)pBEnd;
+    GncSqlBackend* sql_be = reinterpret_cast<decltype(sql_be)>(qof_be);
     gnc_sql_query_info* pQueryInfo = (gnc_sql_query_info*)pQuery;
     sql_backend be_data;
 
-    g_return_if_fail (pBEnd != NULL);
+    g_return_if_fail (sql_be != NULL);
     g_return_if_fail (pQuery != NULL);
 
     ENTER (" ");
 
     // Try various objects first
     be_data.is_ok = FALSE;
-    be_data.be = be;
+    be_data.be = sql_be;
     be_data.pCompiledQuery = pQuery;
     be_data.pQueryInfo = pQueryInfo;
 
@@ -1265,32 +1265,32 @@ run_query(const OBEEntry& entry, sql_backend* be_data)
 }
 
 void
-gnc_sql_run_query (QofBackend* pBEnd, gpointer pQuery)
+gnc_sql_run_query (QofBackend* qof_be, gpointer pQuery)
 {
-    GncSqlBackend* be = (GncSqlBackend*)pBEnd;
+    GncSqlBackend* sql_be = reinterpret_cast<decltype(sql_be)>(qof_be);
     gnc_sql_query_info* pQueryInfo = (gnc_sql_query_info*)pQuery;
     sql_backend be_data;
 
-    g_return_if_fail (pBEnd != NULL);
+    g_return_if_fail (sql_be != NULL);
     g_return_if_fail (pQuery != NULL);
-    g_return_if_fail (!be->in_query);
+    g_return_if_fail (!sql_be->in_query);
 
     ENTER (" ");
 
-    be->loading = TRUE;
-    be->in_query = TRUE;
+    sql_be->loading = TRUE;
+    sql_be->in_query = TRUE;
 
     qof_event_suspend ();
 
     // Try various objects first
     be_data.is_ok = FALSE;
-    be_data.be = be;
+    be_data.be = sql_be;
     be_data.pCompiledQuery = pQueryInfo->pCompiledQuery;
     be_data.pQueryInfo = pQueryInfo;
     for (auto entry : backend_registry)
         run_query(entry, &be_data);
-    be->loading = FALSE;
-    be->in_query = FALSE;
+    sql_be->loading = FALSE;
+    sql_be->in_query = FALSE;
     qof_event_resume ();
 //    if( be_data.is_ok ) {
 //        LEAVE( "" );
@@ -1298,7 +1298,7 @@ gnc_sql_run_query (QofBackend* pBEnd, gpointer pQuery)
 //    }
 
     // Mark the book as clean
-    qof_instance_mark_clean (QOF_INSTANCE (be->book()));
+    qof_instance_mark_clean (QOF_INSTANCE (sql_be->book()));
 
 //    DEBUG( "%s\n", (gchar*)pQueryInfo->pCompiledQuery );
 
@@ -1398,7 +1398,7 @@ GncSqlColumnTableEntry::get_setter(QofIdTypeConst obj_name) const noexcept
 }
 
 void
-GncSqlColumnTableEntry::add_objectref_guid_to_query (const GncSqlBackend* be,
+GncSqlColumnTableEntry::add_objectref_guid_to_query (const GncSqlBackend* sql_be,
                                                      QofIdTypeConst obj_name,
                                                      const gpointer pObject,
                                                      PairVec& vec) const noexcept
@@ -1412,10 +1412,10 @@ GncSqlColumnTableEntry::add_objectref_guid_to_query (const GncSqlBackend* be,
 }
 
 void
-GncSqlColumnTableEntry::add_objectref_guid_to_table (const GncSqlBackend* be,
+GncSqlColumnTableEntry::add_objectref_guid_to_table (const GncSqlBackend* sql_be,
                                                      ColVec& vec) const noexcept
 {
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
     GncSqlColumnInfo info{*this, BCT_STRING, GUID_ENCODING_LENGTH, FALSE};
     vec.emplace_back(std::move(info));
@@ -1424,7 +1424,7 @@ GncSqlColumnTableEntry::add_objectref_guid_to_table (const GncSqlBackend* be,
 
 /* ----------------------------------------------------------------- */
 template<> void
-GncSqlColumnTableEntryImpl<CT_STRING>::load (const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_STRING>::load (const GncSqlBackend* sql_be,
                                              GncSqlRow& row,
                                              QofIdTypeConst obj_name,
                                              gpointer pObject) const noexcept
@@ -1441,10 +1441,10 @@ GncSqlColumnTableEntryImpl<CT_STRING>::load (const GncSqlBackend* be,
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_STRING>::add_to_table(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_STRING>::add_to_table(const GncSqlBackend* sql_be,
                                                   ColVec& vec) const noexcept
 {
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
     GncSqlColumnInfo info{*this, BCT_STRING, m_size, TRUE};
     vec.emplace_back(std::move(info));
@@ -1454,7 +1454,7 @@ GncSqlColumnTableEntryImpl<CT_STRING>::add_to_table(const GncSqlBackend* be,
  * it to operator<<().
  */
 template<> void
-GncSqlColumnTableEntryImpl<CT_STRING>::add_to_query(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_STRING>::add_to_query(const GncSqlBackend* sql_be,
                                                     QofIdTypeConst obj_name,
                                                     const gpointer pObject,
                                                     PairVec& vec) const noexcept
@@ -1475,7 +1475,8 @@ typedef gint (*IntAccessFunc) (const gpointer);
 typedef void (*IntSetterFunc) (const gpointer, gint);
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_INT>::load (const GncSqlBackend* be, GncSqlRow& row,
+GncSqlColumnTableEntryImpl<CT_INT>::load (const GncSqlBackend* sql_be,
+                                          GncSqlRow& row,
                                           QofIdTypeConst obj_name,
                                           gpointer pObject) const noexcept
 {
@@ -1489,22 +1490,22 @@ GncSqlColumnTableEntryImpl<CT_INT>::load (const GncSqlBackend* be, GncSqlRow& ro
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_INT>::add_to_table(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_INT>::add_to_table(const GncSqlBackend* sql_be,
                                                  ColVec& vec) const noexcept
 {
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
     GncSqlColumnInfo info{*this, BCT_INT, 0, FALSE};
     vec.emplace_back(std::move(info));
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_INT>::add_to_query(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_INT>::add_to_query(const GncSqlBackend* sql_be,
                                                     QofIdTypeConst obj_name,
                                                     const gpointer pObject,
                                                     PairVec& vec) const noexcept
 {
-    add_value_to_vec<int>(be, obj_name, pObject, vec);
+    add_value_to_vec<int>(sql_be, obj_name, pObject, vec);
 }
 
 /* ----------------------------------------------------------------- */
@@ -1512,7 +1513,7 @@ typedef gboolean (*BooleanAccessFunc) (const gpointer);
 typedef void (*BooleanSetterFunc) (const gpointer, gboolean);
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_BOOLEAN>::load (const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_BOOLEAN>::load (const GncSqlBackend* sql_be,
                                               GncSqlRow& row,
                                               QofIdTypeConst obj_name,
                                               gpointer pObject)
@@ -1528,22 +1529,22 @@ GncSqlColumnTableEntryImpl<CT_BOOLEAN>::load (const GncSqlBackend* be,
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_BOOLEAN>::add_to_table(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_BOOLEAN>::add_to_table(const GncSqlBackend* sql_be,
                                                  ColVec& vec) const noexcept
 {
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
     GncSqlColumnInfo info{*this, BCT_INT, 0, FALSE};
     vec.emplace_back(std::move(info));
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_BOOLEAN>::add_to_query(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_BOOLEAN>::add_to_query(const GncSqlBackend* sql_be,
                                                     QofIdTypeConst obj_name,
                                                     const gpointer pObject,
                                                     PairVec& vec) const noexcept
 {
-    add_value_to_vec<int>(be, obj_name, pObject, vec);
+    add_value_to_vec<int>(sql_be, obj_name, pObject, vec);
 }
 
 /* ----------------------------------------------------------------- */
@@ -1551,7 +1552,7 @@ typedef gint64 (*Int64AccessFunc) (const gpointer);
 typedef void (*Int64SetterFunc) (const gpointer, gint64);
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_INT64>::load (const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_INT64>::load (const GncSqlBackend* sql_be,
                                             GncSqlRow& row,
                                             QofIdTypeConst obj_name,
                                             gpointer pObject)
@@ -1566,27 +1567,27 @@ GncSqlColumnTableEntryImpl<CT_INT64>::load (const GncSqlBackend* be,
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_INT64>::add_to_table(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_INT64>::add_to_table(const GncSqlBackend* sql_be,
                                                    ColVec& vec) const noexcept
 {
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
     GncSqlColumnInfo info{*this, BCT_INT64, 0, FALSE};
     vec.emplace_back(std::move(info));
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_INT64>::add_to_query(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_INT64>::add_to_query(const GncSqlBackend* sql_be,
                                                    QofIdTypeConst obj_name,
                                                    const gpointer pObject,
                                                    PairVec& vec) const noexcept
 {
-    add_value_to_vec<int64_t>(be, obj_name, pObject, vec);
+    add_value_to_vec<int64_t>(sql_be, obj_name, pObject, vec);
 }
 /* ----------------------------------------------------------------- */
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_DOUBLE>::load (const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_DOUBLE>::load (const GncSqlBackend* sql_be,
                                              GncSqlRow& row,
                                              QofIdTypeConst obj_name,
                                              gpointer pObject)
@@ -1621,28 +1622,28 @@ GncSqlColumnTableEntryImpl<CT_DOUBLE>::load (const GncSqlBackend* be,
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_DOUBLE>::add_to_table(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_DOUBLE>::add_to_table(const GncSqlBackend* sql_be,
                                                  ColVec& vec) const noexcept
 {
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
     GncSqlColumnInfo info{*this, BCT_DOUBLE, 0, FALSE};
     vec.emplace_back(std::move(info));
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_DOUBLE>::add_to_query(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_DOUBLE>::add_to_query(const GncSqlBackend* sql_be,
                                                     QofIdTypeConst obj_name,
                                                     const gpointer pObject,
                                                     PairVec& vec) const noexcept
 {
-    add_value_to_vec<double*>(be, obj_name, pObject, vec);
+    add_value_to_vec<double*>(sql_be, obj_name, pObject, vec);
 }
 
 /* ----------------------------------------------------------------- */
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_GUID>::load (const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_GUID>::load (const GncSqlBackend* sql_be,
                                            GncSqlRow& row,
                                            QofIdTypeConst obj_name,
                                            gpointer pObject)
@@ -1669,17 +1670,17 @@ GncSqlColumnTableEntryImpl<CT_GUID>::load (const GncSqlBackend* be,
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_GUID>::add_to_table(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_GUID>::add_to_table(const GncSqlBackend* sql_be,
                                                  ColVec& vec) const noexcept
 {
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
     GncSqlColumnInfo info{*this, BCT_STRING, GUID_ENCODING_LENGTH, FALSE};
     vec.emplace_back(std::move(info));
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_GUID>::add_to_query(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_GUID>::add_to_query(const GncSqlBackend* sql_be,
                                                     QofIdTypeConst obj_name,
                                                     const gpointer pObject,
                                                     PairVec& vec) const noexcept
@@ -1702,7 +1703,7 @@ typedef void (*TimespecSetterFunc) (const gpointer, Timespec*);
 #define TIMESPEC_COL_SIZE (4+2+2+2+2+2)
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_TIMESPEC>::load (const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_TIMESPEC>::load (const GncSqlBackend* sql_be,
                                                GncSqlRow& row,
                                                QofIdTypeConst obj_name,
                                                gpointer pObject) const noexcept
@@ -1744,17 +1745,17 @@ GncSqlColumnTableEntryImpl<CT_TIMESPEC>::load (const GncSqlBackend* be,
  }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_TIMESPEC>::add_to_table(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_TIMESPEC>::add_to_table(const GncSqlBackend* sql_be,
                                                  ColVec& vec) const noexcept
 {
-    g_return_if_fail (be != nullptr);
+    g_return_if_fail (sql_be != nullptr);
 
     GncSqlColumnInfo info{*this, BCT_DATETIME, TIMESPEC_COL_SIZE, FALSE};
     vec.emplace_back(std::move(info));
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_TIMESPEC>::add_to_query(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_TIMESPEC>::add_to_query(const GncSqlBackend* sql_be,
                                                       QofIdTypeConst obj_name,
                                                       const gpointer pObject,
                                                       PairVec& vec) const noexcept
@@ -1765,7 +1766,7 @@ GncSqlColumnTableEntryImpl<CT_TIMESPEC>::add_to_query(const GncSqlBackend* be,
  * Timespec* and the getter returns a Timespec. Will be fixed by the
  * replacement of timespecs with time64s.
  */
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
     g_return_if_fail (obj_name != NULL);
     g_return_if_fail (pObject != NULL);
 
@@ -1784,7 +1785,7 @@ GncSqlColumnTableEntryImpl<CT_TIMESPEC>::add_to_query(const GncSqlBackend* be,
 
     if (ts.tv_sec != 0 || ts.tv_nsec != 0)
     {
-        auto datebuf = be->time64_to_string (ts.tv_sec);
+        auto datebuf = sql_be->time64_to_string (ts.tv_sec);
         vec.emplace_back (std::make_pair (std::string{m_col_name}, datebuf));
         return;
     }
@@ -1794,7 +1795,7 @@ GncSqlColumnTableEntryImpl<CT_TIMESPEC>::add_to_query(const GncSqlBackend* be,
 #define DATE_COL_SIZE 8
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_GDATE>::load (const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_GDATE>::load (const GncSqlBackend* sql_be,
                                             GncSqlRow& row,
                                             QofIdTypeConst obj_name,
                                             gpointer pObject) const noexcept
@@ -1840,17 +1841,17 @@ GncSqlColumnTableEntryImpl<CT_GDATE>::load (const GncSqlBackend* be,
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_GDATE>::add_to_table(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_GDATE>::add_to_table(const GncSqlBackend* sql_be,
                                                  ColVec& vec) const noexcept
 {
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
     GncSqlColumnInfo info{*this,  BCT_DATE, DATE_COL_SIZE, FALSE};
     vec.emplace_back(std::move(info));
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_GDATE>::add_to_query(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_GDATE>::add_to_query(const GncSqlBackend* sql_be,
                                                     QofIdTypeConst obj_name,
                                                     const gpointer pObject,
                                                     PairVec& vec) const noexcept
@@ -1879,7 +1880,7 @@ static const EntryVec numeric_col_table =
 };
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_NUMERIC>::load (const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_NUMERIC>::load (const GncSqlBackend* sql_be,
                                               GncSqlRow& row,
                                               QofIdTypeConst obj_name,
                                               gpointer pObject) const noexcept
@@ -1908,10 +1909,10 @@ GncSqlColumnTableEntryImpl<CT_NUMERIC>::load (const GncSqlBackend* be,
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_NUMERIC>::add_to_table(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_NUMERIC>::add_to_table(const GncSqlBackend* sql_be,
                                                      ColVec& vec) const noexcept
 {
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
     for (auto const& subtable_row : numeric_col_table)
     {
@@ -1924,7 +1925,7 @@ GncSqlColumnTableEntryImpl<CT_NUMERIC>::add_to_table(const GncSqlBackend* be,
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_NUMERIC>::add_to_query(const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_NUMERIC>::add_to_query(const GncSqlBackend* sql_be,
                                                      QofIdTypeConst obj_name,
                                                      const gpointer pObject,
                                                      PairVec& vec) const noexcept
@@ -1933,7 +1934,7 @@ GncSqlColumnTableEntryImpl<CT_NUMERIC>::add_to_query(const GncSqlBackend* be,
     NumericGetterFunc getter;
     gnc_numeric n;
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
     g_return_if_fail (obj_name != NULL);
     g_return_if_fail (pObject != NULL);
 
@@ -1990,13 +1991,13 @@ static EntryVec guid_table
 };
 
 const GncGUID*
-gnc_sql_load_guid (const GncSqlBackend* be, GncSqlRow& row)
+gnc_sql_load_guid (const GncSqlBackend* sql_be, GncSqlRow& row)
 {
     static GncGUID guid;
 
-    g_return_val_if_fail (be != NULL, NULL);
+    g_return_val_if_fail (sql_be != NULL, NULL);
 
-    gnc_sql_load_object (be, row, NULL, &guid, guid_table);
+    gnc_sql_load_object (sql_be, row, NULL, &guid, guid_table);
 
     return &guid;
 }
@@ -2008,32 +2009,32 @@ static EntryVec tx_guid_table
  };
 
 void
-gnc_sql_load_object (const GncSqlBackend* be, GncSqlRow& row,
+gnc_sql_load_object (const GncSqlBackend* sql_be, GncSqlRow& row,
                      QofIdTypeConst obj_name, gpointer pObject,
                      const EntryVec& table)
 {
     QofSetterFunc setter;
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
     g_return_if_fail (pObject != NULL);
 
     for (auto const& table_row : table)
     {
-        table_row->load (be, row, obj_name, pObject);
+        table_row->load (sql_be, row, obj_name, pObject);
     }
 }
 
 /* ================================================================= */
 static GncSqlStatementPtr
-create_single_col_select_statement (GncSqlBackend* be,
+create_single_col_select_statement (GncSqlBackend* sql_be,
                                     const gchar* table_name,
                                     const GncSqlColumnTableEntryPtr table_row)
 {
-    g_return_val_if_fail (be != NULL, NULL);
+    g_return_val_if_fail (sql_be != NULL, NULL);
     g_return_val_if_fail (table_name != NULL, NULL);
 
     auto sql = std::string{"SELECT "} + table_row->name() + " FROM " + table_name;
-    return be->create_statement_from_sql(sql.c_str());
+    return sql_be->create_statement_from_sql(sql.c_str());
 }
 
 /* ================================================================= */
@@ -2058,7 +2059,7 @@ gnc_sql_append_guids_to_sql (std::stringstream& sql, const InstanceVec& instance
 }
 /* ================================================================= */
 static PairVec
-get_object_values (GncSqlBackend* be, QofIdTypeConst obj_name,
+get_object_values (GncSqlBackend* sql_be, QofIdTypeConst obj_name,
                    gpointer pObject, const EntryVec& table)
 {
     PairVec vec;
@@ -2067,31 +2068,31 @@ get_object_values (GncSqlBackend* be, QofIdTypeConst obj_name,
     {
         if (!(table_row->is_autoincr()))
         {
-            table_row->add_to_query (be, obj_name, pObject, vec);
+            table_row->add_to_query (sql_be, obj_name, pObject, vec);
         }
     }
     return vec;
 }
 
 gboolean
-gnc_sql_object_is_it_in_db (GncSqlBackend* be, const gchar* table_name,
+gnc_sql_object_is_it_in_db (GncSqlBackend* sql_be, const gchar* table_name,
                             QofIdTypeConst obj_name, gpointer pObject,
                             const EntryVec& table)
 {
     guint count;
-    g_return_val_if_fail (be != NULL, FALSE);
+    g_return_val_if_fail (sql_be != NULL, FALSE);
     g_return_val_if_fail (table_name != NULL, FALSE);
     g_return_val_if_fail (obj_name != NULL, FALSE);
     g_return_val_if_fail (pObject != NULL, FALSE);
 
     /* SELECT * FROM */
-    auto stmt = create_single_col_select_statement (be, table_name, table[0]);
+    auto stmt = create_single_col_select_statement (sql_be, table_name, table[0]);
     g_assert (stmt != NULL);
 
     /* WHERE */
-    PairVec values{get_object_values(be, obj_name, pObject, table)};
+    PairVec values{get_object_values(sql_be, obj_name, pObject, table)};
     stmt->add_where_cond(obj_name, values);
-    auto result = be->execute_select_statement (stmt);
+    auto result = sql_be->execute_select_statement (stmt);
     if (result != NULL)
     {
         auto retval = result->size() > 0;
@@ -2101,7 +2102,7 @@ gnc_sql_object_is_it_in_db (GncSqlBackend* be, const gchar* table_name,
 }
 
 gboolean
-gnc_sql_do_db_operation (GncSqlBackend* be,
+gnc_sql_do_db_operation (GncSqlBackend* sql_be,
                          E_DB_OPERATION op,
                          const gchar* table_name,
                          QofIdTypeConst obj_name, gpointer pObject,
@@ -2110,35 +2111,35 @@ gnc_sql_do_db_operation (GncSqlBackend* be,
     GncSqlStatementPtr stmt;
     bool ok = false;
 
-    g_return_val_if_fail (be != NULL, FALSE);
+    g_return_val_if_fail (sql_be != NULL, FALSE);
     g_return_val_if_fail (table_name != NULL, FALSE);
     g_return_val_if_fail (obj_name != NULL, FALSE);
     g_return_val_if_fail (pObject != NULL, FALSE);
 
     if (op == OP_DB_INSERT)
     {
-        stmt = build_insert_statement (be, table_name, obj_name, pObject, table);
+        stmt = build_insert_statement (sql_be, table_name, obj_name, pObject, table);
     }
     else if (op == OP_DB_UPDATE)
     {
-        stmt = build_update_statement (be, table_name, obj_name, pObject, table);
+        stmt = build_update_statement (sql_be, table_name, obj_name, pObject, table);
     }
     else if (op == OP_DB_DELETE)
     {
-        stmt = build_delete_statement (be, table_name, obj_name, pObject, table);
+        stmt = build_delete_statement (sql_be, table_name, obj_name, pObject, table);
     }
     else
     {
         g_assert (FALSE);
     }
-    if (be->execute_nonselect_statement (stmt) != -1)
+    if (sql_be->execute_nonselect_statement (stmt) != -1)
         ok = true;
 
     return ok;
 }
 
 static GncSqlStatementPtr
-build_insert_statement (GncSqlBackend* be,
+build_insert_statement (GncSqlBackend* sql_be,
                         const gchar* table_name,
                         QofIdTypeConst obj_name, gpointer pObject,
                         const EntryVec& table)
@@ -2147,11 +2148,11 @@ build_insert_statement (GncSqlBackend* be,
     PairVec col_values;
     std::ostringstream sql;
 
-    g_return_val_if_fail (be != NULL, NULL);
+    g_return_val_if_fail (sql_be != NULL, NULL);
     g_return_val_if_fail (table_name != NULL, NULL);
     g_return_val_if_fail (obj_name != NULL, NULL);
     g_return_val_if_fail (pObject != NULL, NULL);
-    PairVec values{get_object_values(be, obj_name, pObject, table)};
+    PairVec values{get_object_values(sql_be, obj_name, pObject, table)};
 
     sql << "INSERT INTO " << table_name <<"(";
     for (auto const& col_value : values)
@@ -2166,16 +2167,16 @@ build_insert_statement (GncSqlBackend* be,
     {
         if (col_value != *values.begin())
             sql << ",";
-        sql << be->quote_string(col_value.second);
+        sql << sql_be->quote_string(col_value.second);
     }
     sql << ")";
 
-    stmt = be->create_statement_from_sql(sql.str());
+    stmt = sql_be->create_statement_from_sql(sql.str());
     return stmt;
 }
 
 static GncSqlStatementPtr
-build_update_statement (GncSqlBackend* be,
+build_update_statement (GncSqlBackend* sql_be,
                         const gchar* table_name,
                         QofIdTypeConst obj_name, gpointer pObject,
                         const EntryVec& table)
@@ -2183,13 +2184,13 @@ build_update_statement (GncSqlBackend* be,
     GncSqlStatementPtr stmt;
     std::ostringstream sql;
 
-    g_return_val_if_fail (be != NULL, NULL);
+    g_return_val_if_fail (sql_be != NULL, NULL);
     g_return_val_if_fail (table_name != NULL, NULL);
     g_return_val_if_fail (obj_name != NULL, NULL);
     g_return_val_if_fail (pObject != NULL, NULL);
 
 
-    PairVec values{get_object_values (be, obj_name, pObject, table)};
+    PairVec values{get_object_values (sql_be, obj_name, pObject, table)};
 
     // Create the SQL statement
     sql <<  "UPDATE " << table_name << " SET ";
@@ -2199,10 +2200,10 @@ build_update_statement (GncSqlBackend* be,
         if (col_value != *values.begin())
             sql << ",";
         sql << col_value.first << "=" <<
-            be->quote_string(col_value.second);
+            sql_be->quote_string(col_value.second);
     }
 
-    stmt = be->create_statement_from_sql(sql.str());
+    stmt = sql_be->create_statement_from_sql(sql.str());
     /* We want our where condition to be just the first column and
      * value, i.e. the guid of the object.
      */
@@ -2212,24 +2213,24 @@ build_update_statement (GncSqlBackend* be,
 }
 
 static GncSqlStatementPtr
-build_delete_statement (GncSqlBackend* be,
+build_delete_statement (GncSqlBackend* sql_be,
                         const gchar* table_name,
                         QofIdTypeConst obj_name, gpointer pObject,
                         const EntryVec& table)
 {
     std::ostringstream sql;
 
-    g_return_val_if_fail (be != NULL, NULL);
+    g_return_val_if_fail (sql_be != NULL, NULL);
     g_return_val_if_fail (table_name != NULL, NULL);
     g_return_val_if_fail (obj_name != NULL, NULL);
     g_return_val_if_fail (pObject != NULL, NULL);
 
     sql << "DELETE FROM " << table_name;
-    auto stmt = be->create_statement_from_sql (sql.str());
+    auto stmt = sql_be->create_statement_from_sql (sql.str());
 
     /* WHERE */
     PairVec values;
-    table[0]->add_to_query (be, obj_name, pObject, values);
+    table[0]->add_to_query (sql_be, obj_name, pObject, values);
     PairVec col_values{values[0]};
     stmt->add_where_cond (obj_name, col_values);
 
@@ -2238,7 +2239,7 @@ build_delete_statement (GncSqlBackend* be,
 
 /* ================================================================= */
 bool
-GncSqlObjectBackend::commit (GncSqlBackend* be, QofInstance* inst)
+GncSqlObjectBackend::commit (GncSqlBackend* sql_be, QofInstance* inst)
 {
     const GncGUID* guid;
     gboolean is_infant;
@@ -2250,7 +2251,7 @@ GncSqlObjectBackend::commit (GncSqlBackend* be, QofInstance* inst)
     {
         op = OP_DB_DELETE;
     }
-    else if (be->pristine() || is_infant)
+    else if (sql_be->pristine() || is_infant)
     {
         op = OP_DB_INSERT;
     }
@@ -2258,7 +2259,7 @@ GncSqlObjectBackend::commit (GncSqlBackend* be, QofInstance* inst)
     {
         op = OP_DB_UPDATE;
     }
-    is_ok = gnc_sql_do_db_operation (be, op, m_table_name.c_str(),
+    is_ok = gnc_sql_do_db_operation (sql_be, op, m_table_name.c_str(),
                                      m_type_name.c_str(), inst, m_col_table);
 
     if (is_ok)
@@ -2267,11 +2268,11 @@ GncSqlObjectBackend::commit (GncSqlBackend* be, QofInstance* inst)
         guid = qof_instance_get_guid (inst);
         if (!qof_instance_get_destroying (inst))
         {
-            is_ok = gnc_sql_slots_save (be, guid, is_infant, inst);
+            is_ok = gnc_sql_slots_save (sql_be, guid, is_infant, inst);
         }
         else
         {
-            is_ok = gnc_sql_slots_delete (be, guid);
+            is_ok = gnc_sql_slots_delete (sql_be, guid);
         }
     }
 
@@ -2280,14 +2281,14 @@ GncSqlObjectBackend::commit (GncSqlBackend* be, QofInstance* inst)
 
 /* ================================================================= */
 void
-GncSqlObjectBackend::create_tables (GncSqlBackend* be)
+GncSqlObjectBackend::create_tables (GncSqlBackend* sql_be)
 {
-    g_return_if_fail (be != nullptr);
-    int version = be->get_table_version (m_table_name);
-    if (version == 0) //No tables, otherwise version will be >= 1.
+    g_return_if_fail (sql_be != nullptr);
+    int version = sql_be->get_table_version (m_table_name);
+    if (version == 0) //No tables, otherwise version will sql_be >= 1.
     {
-        be->create_table(m_table_name, m_col_table);
-        be->set_table_version(m_table_name, m_version);
+        sql_be->create_table(m_table_name, m_col_table);
+        sql_be->set_table_version(m_table_name, m_version);
     }
     else if (version != m_version)
         PERR("Version mismatch in table %s, expecting %d but backend is %d."

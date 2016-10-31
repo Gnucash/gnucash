@@ -703,23 +703,23 @@ save_slot (const gchar* key, KvpValue* value, gpointer data)
 }
 
 gboolean
-gnc_sql_slots_save (GncSqlBackend* be, const GncGUID* guid, gboolean is_infant,
+gnc_sql_slots_save (GncSqlBackend* sql_be, const GncGUID* guid, gboolean is_infant,
                     QofInstance* inst)
 {
     slot_info_t slot_info = { NULL, NULL, TRUE, NULL, KvpValue::Type::INVALID, NULL, FRAME, NULL, g_string_new (NULL) };
     KvpFrame* pFrame = qof_instance_get_slots (inst);
 
-    g_return_val_if_fail (be != NULL, FALSE);
+    g_return_val_if_fail (sql_be != NULL, FALSE);
     g_return_val_if_fail (guid != NULL, FALSE);
     g_return_val_if_fail (pFrame != NULL, FALSE);
 
     // If this is not saving into a new db, clear out the old saved slots first
-    if (!be->pristine() && !is_infant)
+    if (!sql_be->pristine() && !is_infant)
     {
-        (void)gnc_sql_slots_delete (be, guid);
+        (void)gnc_sql_slots_delete (sql_be, guid);
     }
 
-    slot_info.be = be;
+    slot_info.be = sql_be;
     slot_info.guid = guid;
     pFrame->for_each_slot (save_slot, &slot_info);
     (void)g_string_free (slot_info.path, TRUE);
@@ -728,24 +728,24 @@ gnc_sql_slots_save (GncSqlBackend* be, const GncGUID* guid, gboolean is_infant,
 }
 
 gboolean
-gnc_sql_slots_delete (GncSqlBackend* be, const GncGUID* guid)
+gnc_sql_slots_delete (GncSqlBackend* sql_be, const GncGUID* guid)
 {
     gchar* buf;
     gchar guid_buf[GUID_ENCODING_LENGTH + 1];
     slot_info_t slot_info = { NULL, NULL, TRUE, NULL, KvpValue::Type::INVALID, NULL, FRAME, NULL, g_string_new (NULL) };
 
-    g_return_val_if_fail (be != NULL, FALSE);
+    g_return_val_if_fail (sql_be != NULL, FALSE);
     g_return_val_if_fail (guid != NULL, FALSE);
 
     (void)guid_to_string_buff (guid, guid_buf);
 
     buf = g_strdup_printf ("SELECT * FROM %s WHERE obj_guid='%s' and slot_type in ('%d', '%d') and not guid_val is null",
                            TABLE_NAME, guid_buf, KvpValue::Type::FRAME, KvpValue::Type::GLIST);
-    auto stmt = be->create_statement_from_sql(buf);
+    auto stmt = sql_be->create_statement_from_sql(buf);
     g_free (buf);
     if (stmt != nullptr)
     {
-        auto result = be->execute_select_statement(stmt);
+        auto result = sql_be->execute_select_statement(stmt);
         for (auto row : *result)
         {
             try
@@ -755,7 +755,7 @@ gnc_sql_slots_delete (GncSqlBackend* be, const GncGUID* guid)
                 GncGUID child_guid;
                 auto val = row.get_string_at_col (table_row->name());
                 (void)string_to_guid (val.c_str(), &child_guid);
-                gnc_sql_slots_delete (be, &child_guid);
+                gnc_sql_slots_delete (sql_be, &child_guid);
             }
             catch (std::invalid_argument)
             {
@@ -764,10 +764,10 @@ gnc_sql_slots_delete (GncSqlBackend* be, const GncGUID* guid)
         }
     }
 
-    slot_info.be = be;
+    slot_info.be = sql_be;
     slot_info.guid = guid;
     slot_info.is_ok = TRUE;
-    slot_info.is_ok = gnc_sql_do_db_operation (be, OP_DB_DELETE, TABLE_NAME,
+    slot_info.is_ok = gnc_sql_do_db_operation (sql_be, OP_DB_DELETE, TABLE_NAME,
                                                TABLE_NAME, &slot_info, obj_guid_col_table);
 
     return slot_info.is_ok;
@@ -807,13 +807,13 @@ load_slot (slot_info_t* pInfo, GncSqlRow& row)
 }
 
 void
-gnc_sql_slots_load (GncSqlBackend* be, QofInstance* inst)
+gnc_sql_slots_load (GncSqlBackend* sql_be, QofInstance* inst)
 {
     slot_info_t info = { NULL, NULL, TRUE, NULL, KvpValue::Type::INVALID, NULL, FRAME, NULL, g_string_new (NULL) };
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
     g_return_if_fail (inst != NULL);
 
-    info.be = be;
+    info.be = sql_be;
     info.guid = qof_instance_get_guid (inst);
     info.pKvpFrame = qof_instance_get_slots (inst);
     info.context = NONE;
@@ -846,37 +846,37 @@ slots_load_info (slot_info_t* pInfo)
 }
 
 static  const GncGUID*
-load_obj_guid (const GncSqlBackend* be, GncSqlRow& row)
+load_obj_guid (const GncSqlBackend* sql_be, GncSqlRow& row)
 {
     static GncGUID guid;
 
-    g_return_val_if_fail (be != NULL, NULL);
+    g_return_val_if_fail (sql_be != NULL, NULL);
 
-    gnc_sql_load_object (be, row, NULL, &guid, obj_guid_col_table);
+    gnc_sql_load_object (sql_be, row, NULL, &guid, obj_guid_col_table);
 
     return &guid;
 }
 
 static void
-load_slot_for_list_item (GncSqlBackend* be, GncSqlRow& row,
+load_slot_for_list_item (GncSqlBackend* sql_be, GncSqlRow& row,
                          QofCollection* coll)
 {
     slot_info_t slot_info = { NULL, NULL, TRUE, NULL, KvpValue::Type::INVALID, NULL, FRAME, NULL, NULL };
     const GncGUID* guid;
     QofInstance* inst;
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
     g_return_if_fail (coll != NULL);
 
-    guid = load_obj_guid (be, row);
+    guid = load_obj_guid (sql_be, row);
     g_assert (guid != NULL);
     inst = qof_collection_lookup_entity (coll, guid);
 
-    slot_info.be = be;
+    slot_info.be = sql_be;
     slot_info.pKvpFrame = qof_instance_get_slots (inst);
     slot_info.context = NONE;
 
-    gnc_sql_load_object (be, row, TABLE_NAME, &slot_info, col_table);
+    gnc_sql_load_object (sql_be, row, TABLE_NAME, &slot_info, col_table);
 
     if (slot_info.path != NULL)
     {
@@ -885,12 +885,12 @@ load_slot_for_list_item (GncSqlBackend* be, GncSqlRow& row,
 }
 
 void
-gnc_sql_slots_load_for_instancevec (GncSqlBackend* be, InstanceVec& instances)
+gnc_sql_slots_load_for_instancevec (GncSqlBackend* sql_be, InstanceVec& instances)
 {
     QofCollection* coll;
     std::stringstream sql;
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
     // Ignore empty list
     if (instances.empty()) return;
@@ -911,38 +911,38 @@ gnc_sql_slots_load_for_instancevec (GncSqlBackend* be, InstanceVec& instances)
         sql << ")";
 
     // Execute the query and load the slots
-    auto stmt = be->create_statement_from_sql(sql.str());
+    auto stmt = sql_be->create_statement_from_sql(sql.str());
     if (stmt == nullptr)
     {
         PERR ("stmt == NULL, SQL = '%s'\n", sql.str().c_str());
         return;
     }
-    auto result = be->execute_select_statement (stmt);
+    auto result = sql_be->execute_select_statement (stmt);
     for (auto row : *result)
-        load_slot_for_list_item (be, row, coll);
+        load_slot_for_list_item (sql_be, row, coll);
 }
 
 static void
-load_slot_for_book_object (GncSqlBackend* be, GncSqlRow& row,
+load_slot_for_book_object (GncSqlBackend* sql_be, GncSqlRow& row,
                            BookLookupFn lookup_fn)
 {
     slot_info_t slot_info = { NULL, NULL, TRUE, NULL, KvpValue::Type::INVALID, NULL, FRAME, NULL, NULL };
     const GncGUID* guid;
     QofInstance* inst;
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
     g_return_if_fail (lookup_fn != NULL);
 
-    guid = load_obj_guid (be, row);
+    guid = load_obj_guid (sql_be, row);
     g_return_if_fail (guid != NULL);
-    inst = lookup_fn (guid, be->book());
+    inst = lookup_fn (guid, sql_be->book());
     g_return_if_fail (inst != NULL);
 
-    slot_info.be = be;
+    slot_info.be = sql_be;
     slot_info.pKvpFrame = qof_instance_get_slots (inst);
     slot_info.path = NULL;
 
-    gnc_sql_load_object (be, row, TABLE_NAME, &slot_info, col_table);
+    gnc_sql_load_object (sql_be, row, TABLE_NAME, &slot_info, col_table);
 
     if (slot_info.path != NULL)
     {
@@ -955,17 +955,17 @@ load_slot_for_book_object (GncSqlBackend* be, GncSqlRow& row,
  * supplied by a subquery.  The subquery should be of the form "SELECT DISTINCT guid FROM ...".
  * This is faster than loading for one object at a time because fewer SQL queries * are used.
  *
- * @param be SQL backend
+ * @param sql_be SQL backend
  * @param subquery Subquery SQL string
  * @param lookup_fn Lookup function
  */
-void gnc_sql_slots_load_for_sql_subquery (GncSqlBackend* be,
+void gnc_sql_slots_load_for_sql_subquery (GncSqlBackend* sql_be,
                                           const gchar* subquery,
                                           BookLookupFn lookup_fn)
 {
     gchar* sql;
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
     // Ignore empty subquery
     if (subquery == NULL) return;
@@ -975,7 +975,7 @@ void gnc_sql_slots_load_for_sql_subquery (GncSqlBackend* be,
                            subquery);
 
     // Execute the query and load the slots
-    auto stmt = be->create_statement_from_sql(sql);
+    auto stmt = sql_be->create_statement_from_sql(sql);
     if (stmt == nullptr)
     {
         PERR ("stmt == NULL, SQL = '%s'\n", sql);
@@ -983,26 +983,26 @@ void gnc_sql_slots_load_for_sql_subquery (GncSqlBackend* be,
         return;
     }
     g_free (sql);
-    auto result = be->execute_select_statement(stmt);
+    auto result = sql_be->execute_select_statement(stmt);
     for (auto row : *result)
-        load_slot_for_book_object (be, row, lookup_fn);
+        load_slot_for_book_object (sql_be, row, lookup_fn);
 }
 
 /* ================================================================= */
 void
-GncSqlSlotsBackend::create_tables (GncSqlBackend* be)
+GncSqlSlotsBackend::create_tables (GncSqlBackend* sql_be)
 {
     gint version;
     gboolean ok;
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
-    version = be->get_table_version( TABLE_NAME);
+    version = sql_be->get_table_version( TABLE_NAME);
     if (version == 0)
     {
-        (void)be->create_table(TABLE_NAME, TABLE_VERSION, col_table);
+        (void)sql_be->create_table(TABLE_NAME, TABLE_VERSION, col_table);
 
-        ok = be->create_index ("slots_guid_index", TABLE_NAME,
+        ok = sql_be->create_index ("slots_guid_index", TABLE_NAME,
                                obj_guid_col_table);
         if (!ok)
         {
@@ -1017,8 +1017,8 @@ GncSqlSlotsBackend::create_tables (GncSqlBackend* be)
         */
         if (version == 1)
         {
-            be->upgrade_table(TABLE_NAME, col_table);
-            ok = be->create_index ("slots_guid_index", TABLE_NAME,
+            sql_be->upgrade_table(TABLE_NAME, col_table);
+            ok = sql_be->create_index ("slots_guid_index", TABLE_NAME,
                                    obj_guid_col_table);
             if (!ok)
             {
@@ -1027,13 +1027,13 @@ GncSqlSlotsBackend::create_tables (GncSqlBackend* be)
         }
         else if (version == 2)
         {
-            ok = be->add_columns_to_table(TABLE_NAME, gdate_col_table);
+            ok = sql_be->add_columns_to_table(TABLE_NAME, gdate_col_table);
             if (!ok)
             {
                 PERR ("Unable to add gdate column\n");
             }
         }
-        be->set_table_version (TABLE_NAME, TABLE_VERSION);
+        sql_be->set_table_version (TABLE_NAME, TABLE_VERSION);
         PINFO ("Slots table upgraded from version %d to version %d\n", version,
                TABLE_VERSION);
     }

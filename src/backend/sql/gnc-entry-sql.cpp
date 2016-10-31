@@ -170,59 +170,59 @@ entry_set_bill (gpointer pObject, gpointer val)
 }
 
 static GncEntry*
-load_single_entry (GncSqlBackend* be, GncSqlRow& row)
+load_single_entry (GncSqlBackend* sql_be, GncSqlRow& row)
 {
     const GncGUID* guid;
     GncEntry* pEntry;
 
-    g_return_val_if_fail (be != NULL, NULL);
+    g_return_val_if_fail (sql_be != NULL, NULL);
 
-    guid = gnc_sql_load_guid (be, row);
-    pEntry = gncEntryLookup (be->book(), guid);
+    guid = gnc_sql_load_guid (sql_be, row);
+    pEntry = gncEntryLookup (sql_be->book(), guid);
     if (pEntry == NULL)
     {
-        pEntry = gncEntryCreate (be->book());
+        pEntry = gncEntryCreate (sql_be->book());
     }
-    gnc_sql_load_object (be, row, GNC_ID_ENTRY, pEntry, col_table);
+    gnc_sql_load_object (sql_be, row, GNC_ID_ENTRY, pEntry, col_table);
     qof_instance_mark_clean (QOF_INSTANCE (pEntry));
 
     return pEntry;
 }
 
 void
-GncSqlEntryBackend::load_all (GncSqlBackend* be)
+GncSqlEntryBackend::load_all (GncSqlBackend* sql_be)
 {
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
     std::stringstream sql;
     sql << "SELECT * FROM " << TABLE_NAME;
-    auto stmt = be->create_statement_from_sql(sql.str());
-    auto result = be->execute_select_statement(stmt);
+    auto stmt = sql_be->create_statement_from_sql(sql.str());
+    auto result = sql_be->execute_select_statement(stmt);
     InstanceVec instances;
 
     for (auto row : *result)
     {
-        GncEntry* pEntry = load_single_entry (be, row);
+        GncEntry* pEntry = load_single_entry (sql_be, row);
         if (pEntry != nullptr)
             instances.push_back(QOF_INSTANCE(pEntry));
     }
 
     if (!instances.empty())
-        gnc_sql_slots_load_for_instancevec(be, instances);
+        gnc_sql_slots_load_for_instancevec(sql_be, instances);
 }
 
 /* ================================================================= */
 void
-GncSqlEntryBackend::create_tables (GncSqlBackend* be)
+GncSqlEntryBackend::create_tables (GncSqlBackend* sql_be)
 {
     gint version;
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
-    version = be->get_table_version( TABLE_NAME);
+    version = sql_be->get_table_version( TABLE_NAME);
     if (version == 0)
     {
-        be->create_table(TABLE_NAME, TABLE_VERSION, col_table);
+        sql_be->create_table(TABLE_NAME, TABLE_VERSION, col_table);
     }
     else if (version < TABLE_VERSION)
     {
@@ -230,8 +230,8 @@ GncSqlEntryBackend::create_tables (GncSqlBackend* be)
             1->2: 64 bit int handling
             2->3: "entered" -> "date_entered", and it can be NULL
         */
-        be->upgrade_table(TABLE_NAME, col_table);
-        be->set_table_version (TABLE_NAME, TABLE_VERSION);
+        sql_be->upgrade_table(TABLE_NAME, col_table);
+        sql_be->set_table_version (TABLE_NAME, TABLE_VERSION);
 
         PINFO ("Entries table upgraded from version %d to version %d\n", version,
                TABLE_VERSION);
@@ -259,12 +259,12 @@ write_single_entry (QofInstance* term_p, gpointer data_p)
 }
 
 bool
-GncSqlEntryBackend::write (GncSqlBackend* be)
+GncSqlEntryBackend::write (GncSqlBackend* sql_be)
 {
-    g_return_val_if_fail (be != NULL, FALSE);
-    write_objects_t data{be, true, this};
+    g_return_val_if_fail (sql_be != NULL, FALSE);
+    write_objects_t data{sql_be, true, this};
 
-    qof_object_foreach (GNC_ID_ENTRY, be->book(), write_single_entry, &data);
+    qof_object_foreach (GNC_ID_ENTRY, sql_be->book(), write_single_entry, &data);
 
     return data.is_ok;
 }
