@@ -32,14 +32,16 @@ extern "C"
 #include "config.h"
 
 #include <glib.h>
-#include <stdlib.h>
-#include <string.h>
 
 #include "gnc-engine.h"
 
 #include "gncAddress.h"
 }
-#include "gnc-backend-sql.h"
+#include <cstdlib>
+#include <cstring>
+#include <sstream>
+#include "gnc-sql-backend.hpp"
+#include "gnc-sql-column-table-entry.hpp"
 
 G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 

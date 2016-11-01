@@ -39,6 +39,10 @@ extern "C"
 #include "gncEmployeeP.h"
 }
 
+#include "gnc-sql-connection.hpp"
+#include "gnc-sql-backend.hpp"
+#include "gnc-sql-object-backend.hpp"
+#include "gnc-sql-column-table-entry.hpp"
 #include "gnc-backend-sql.h"
 #include "gnc-slots-sql.h"
 #include "gnc-commodity-sql.h"

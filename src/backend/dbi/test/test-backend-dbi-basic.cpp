@@ -57,6 +57,10 @@ extern "C"
 #include <unittest-support.h>
 #include <test-stuff.h>
 }
+
+#include <string>
+#include <vector>
+
 #include "test-dbi-stuff.h"
 #include "test-dbi-business-stuff.h"
 
@@ -69,6 +73,8 @@ static dbi_inst dbi_instance = NULL;
 
 static const gchar* suitename = "/backend/dbi";
 void test_suite_gnc_backend_dbi (void);
+
+using StrVec = std::vector<std::string>;
 
 typedef struct
 {

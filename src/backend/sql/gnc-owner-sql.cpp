@@ -30,17 +30,19 @@
 #include <guid.hpp>
 extern "C"
 {
-#include "config.h"
-
+#include <config.h>
+#include <qof.h>
 #include <glib.h>
-#include <stdlib.h>
-#include <string.h>
 #include "gncCustomerP.h"
 #include "gncJobP.h"
 #include "gncEmployeeP.h"
 #include "gncVendorP.h"
 }
-#include "gnc-backend-sql.h"
+#include <cstdlib>
+#include <cstring>
+#include <sstream>
+#include "gnc-sql-backend.hpp"
+#include "gnc-sql-column-table-entry.hpp"
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 

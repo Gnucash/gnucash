@@ -43,6 +43,10 @@ libgnc_backend_sql_la_SOURCES = \
   gnc-tax-table-sql.cpp \
   gnc-transaction-sql.cpp \
   gnc-vendor-sql.cpp \
+  gnc-sql-backend.cpp \
+  gnc-sql-result.cpp \
+  gnc-sql-column-table-entry.cpp \
+  gnc-sql-object-backend.cpp \
   escape.cpp
 
 noinst_HEADERS = \
@@ -66,6 +70,11 @@ noinst_HEADERS = \
   gnc-tax-table-sql.h \
   gnc-transaction-sql.h \
   gnc-vendor-sql.h \
+  gnc-sql-backend.hpp \
+  gnc-sql-connection.hpp \
+  gnc-sql-result.hpp \
+  gnc-sql-column-table-entry.hpp \
+  gnc-sql-object-backend.hpp \
   escape.h
 
 libgnc_backend_sql_la_LIBADD = \

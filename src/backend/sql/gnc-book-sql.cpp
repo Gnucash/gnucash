@@ -41,6 +41,11 @@ extern "C"
 #include "splint-defs.h"
 #endif
 }
+
+#include "gnc-sql-connection.hpp"
+#include "gnc-sql-backend.hpp"
+#include "gnc-sql-object-backend.hpp"
+#include "gnc-sql-column-table-entry.hpp"
 #include "gnc-backend-sql.h"
 #include "gnc-book-sql.h"
 #include "gnc-slots-sql.h"

@@ -34,7 +34,10 @@ extern "C"
 #define GETPID() getpid()
 #endif
 }
-#include "gnc-backend-sql.h"
+#include <gnc-sql-backend.hpp>
+#include <gnc-sql-connection.hpp>
+
+class GncSqlRow;
 
 #define GNC_HOST_NAME_MAX 255
 
