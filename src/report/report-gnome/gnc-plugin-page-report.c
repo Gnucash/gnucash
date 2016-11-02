@@ -129,6 +129,9 @@ typedef struct GncPluginPageReportPrivate
     // keep the view size
     gint view_width, view_height;
 
+    // This is set to mark that we need to reload the html
+    gboolean	need_reload;
+
     /// the container the above HTML widget is in.
     GtkContainer *container;
 } GncPluginPageReportPrivate;
@@ -157,7 +160,7 @@ static int gnc_plugin_page_report_check_urltype(URLType t);
 static void gnc_plugin_page_report_load_cb(GncHtml * html, URLType type,
         const gchar * location, const gchar * label,
         gpointer data);
-static void gnc_plugin_page_report_expose_event_cb(GtkWidget *unused, GdkEventExpose *unused1, gpointer data);
+static gboolean gnc_plugin_page_report_expose_event_cb(GtkWidget *widget, GdkEventExpose *event, gpointer user_data);
 static void gnc_plugin_page_report_refresh (gpointer data);
 static void gnc_plugin_page_report_set_fwd_button(GncPluginPageReport * page, int enabled);
 static void gnc_plugin_page_report_set_back_button(GncPluginPageReport * page, int enabled);
@@ -330,8 +333,7 @@ gnc_plugin_page_report_view_size (GtkWidget *widget, GtkAllocation *allocation, 
 
     if ((allocation->width != priv->view_width)||(allocation->height != priv->view_height))
     {
-        gnc_html_reload (priv->html, FALSE); //reload by view
-
+        priv->need_reload = TRUE;
         priv->view_width = allocation->width;
         priv->view_height = allocation->height;
     }
@@ -424,6 +426,7 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
 
     priv->view_width = 0; // default
     priv->view_height = 0; // default
+    priv->need_reload = FALSE;
 
     gnc_html_history_set_node_destroy_cb(gnc_html_get_history(priv->html),
                                          gnc_plugin_page_report_history_destroy_cb,
@@ -449,6 +452,9 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
 
     /* load uri when view idle */
     g_idle_add ((GSourceFunc)gnc_plugin_page_report_load_uri, page);
+
+    g_signal_connect(priv->container, "expose-event",
+                     G_CALLBACK(gnc_plugin_page_report_expose_event_cb), report);
 
     gtk_widget_show_all( GTK_WIDGET(priv->container) );
 
@@ -683,9 +689,6 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
     scm_call_2(dirty_report, priv->cur_report, SCM_BOOL_T);
 
     /* Now queue the fact that we need to reload this report */
-    // jsled: this doesn't seem to cause any effect.
-    gtk_widget_queue_draw( GTK_WIDGET(priv->container) );
-    // jsled: this does.
     // this sets the window for the progressbar
     gnc_window_set_progressbar_window( GNC_WINDOW(page->window) );
 
@@ -727,6 +730,28 @@ gnc_plugin_page_report_history_destroy_cb(gnc_html_history_node * node,
         return;
     }
 #endif
+}
+
+/* We got a draw event.  See if we need to reload the report */
+static gboolean
+gnc_plugin_page_report_expose_event_cb(GtkWidget *widget, GdkEventExpose *event, gpointer user_data)
+{
+    GncPluginPageReport *page = user_data;
+    GncPluginPageReportPrivate *priv;
+
+    g_return_val_if_fail(GNC_IS_PLUGIN_PAGE_REPORT(page), FALSE);
+
+    priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(page);
+    ENTER( "report_draw" );
+    if (!priv->need_reload)
+    {
+        LEAVE( "no reload needed" );
+        return FALSE;
+    }
+    priv->need_reload = FALSE;
+    gnc_html_reload(priv->html, FALSE);
+    LEAVE( "reload forced" );
+    return FALSE;
 }
 
 // @param data is actually GncPluginPageReportPrivate
@@ -1356,10 +1381,6 @@ gnc_plugin_page_report_reload_cb( GtkAction *action, GncPluginPageReport *report
     scm_call_2(dirty_report, priv->cur_report, SCM_BOOL_T);
 
     /* now queue the fact that we need to reload this report */
-    // this doens't seem to do anything...
-    gtk_widget_queue_draw( GTK_WIDGET(priv->container) );
-
-    // this does...
     priv->reloading = TRUE;
     // this sets the window for the progressbar
     gnc_window_set_progressbar_window( GNC_WINDOW(page->window) );
