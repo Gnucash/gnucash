@@ -330,7 +330,7 @@ gnc_plugin_page_report_view_size (GtkWidget *widget, GtkAllocation *allocation, 
 
     if ((allocation->width != priv->view_width)||(allocation->height != priv->view_height))
     {
-        gnc_html_reload (priv->html, TRUE);
+        gnc_html_reload (priv->html, FALSE); //reload by view
 
         priv->view_width = allocation->width;
         priv->view_height = allocation->height;
@@ -692,7 +692,7 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
     // this sets the minimum size of the progressbar to that allocated
     gnc_plugin_page_report_set_progressbar( page, TRUE );
 
-    gnc_html_reload( priv->html, FALSE );
+    gnc_html_reload( priv->html, TRUE ); //reload by rebuild
 
     gnc_plugin_page_report_set_progressbar( page, FALSE );
 
@@ -1367,7 +1367,7 @@ gnc_plugin_page_report_reload_cb( GtkAction *action, GncPluginPageReport *report
     // this sets the minimum size of the progressbar to that allocated
     gnc_plugin_page_report_set_progressbar( page, TRUE );
 
-    gnc_html_reload( priv->html, FALSE );
+    gnc_html_reload( priv->html, TRUE ); //reload by rebuild
 
     gnc_plugin_page_report_set_progressbar( page, FALSE );
 
