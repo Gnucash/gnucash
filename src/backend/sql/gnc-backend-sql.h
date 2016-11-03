@@ -51,100 +51,12 @@ extern "C"
 #include "gnc-sql-object-backend.hpp"
 
 using StrVec = std::vector<std::string>;
-using InstanceVec = std::vector<QofInstance*>;
 using PairVec = std::vector<std::pair<std::string, std::string>>;
 using uint_t = unsigned int;
 class GncSqlRow;
 
-/**
- * Initialize the SQL backend.
- *
- * @param sql_be SQL backend
- */
-void gnc_sql_init (GncSqlBackend* sql_be);
-
-/**
- * Load the contents of an SQL database into a book.
- *
- * @param sql_be SQL backend
- * @param book Book to be loaded
- */
-void gnc_sql_load (GncSqlBackend* sql_be,  QofBook* book,
-                   QofBackendLoadType loadType);
-
-/**
- * Register a commodity to be committed after loading is complete.
- *
- * Necessary to save corrections made while loading.
- * @param sql_be SQL backend
- * @param comm The commodity item to be committed.
- */
-void gnc_sql_push_commodity_for_postload_processing (GncSqlBackend* sql_be,
-                                                     gpointer comm);
-
-/**
- * Save the contents of a book to an SQL database.
- *
- * @param sql_be SQL backend
- * @param book Book to be saved
- */
-void gnc_sql_sync_all (GncSqlBackend* sql_be,  QofBook* book);
-
-/**
- * An object is about to be edited.
- *
- * @param sql_be SQL backend
- * @param inst Object being edited
- */
-void gnc_sql_begin_edit (GncSqlBackend* sql_be, QofInstance* inst);
-
-/**
- * Object editing has been cancelled.
- *
- * @param qsql_be SQL backend
- * @param inst Object being edited
- */
-void gnc_sql_rollback_edit (GncSqlBackend* qsql_be, QofInstance* inst);
-
-/**
- * Object editting is complete and the object should be saved.
- *
- * @param qsql_be SQL backend
- * @param inst Object being edited
- */
-void gnc_sql_commit_edit (GncSqlBackend* qsql_be, QofInstance* inst);
-
-/**
- */
-
 #define GNC_SQL_BACKEND             "gnc:sql:1"
 #define GNC_SQL_BACKEND_VERSION 1
-
-void gnc_sql_register_backend(OBEEntry&&);
-void gnc_sql_register_backend(GncSqlObjectBackendPtr);
-const OBEVec& gnc_sql_get_backend_registry();
-GncSqlObjectBackendPtr gnc_sql_get_object_backend(const std::string& table_name);
-
-/**
- * Data-passing struct for callbacks to qof_object_foreach() used in
- * GncSqlObjectBackend::write(). Once QofCollection is rewritten to use C++
- * containers we'll use std::foreach() and lambdas instead of callbacks and this
- * can go away.
- */
-struct write_objects_t
-{
-    write_objects_t() = default;
-    write_objects_t (GncSqlBackend* sql_be, bool o, GncSqlObjectBackendPtr e) :
-        be{sql_be}, is_ok{o}, obe{e} {}
-    void commit (QofInstance* inst) {
-        if (is_ok) is_ok = obe->commit (be, inst);
-    }
-    GncSqlBackend* be;
-    bool is_ok;
-    GncSqlObjectBackendPtr obe;
-};
-
-
 
 /**
  * Performs an operation on the database.

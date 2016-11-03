@@ -30,11 +30,15 @@
 #ifndef GNC_BILLTERM_SQL_H
 #define GNC_BILLTERM_SQL_H
 
-#include "gnc-backend-sql.h"
-extern "C"
+#include "gnc-sql-object-backend.hpp"
+
+class GncSqlBillTermBackend : public GncSqlObjectBackend
 {
-#include "qof.h"
-}
-void gnc_billterm_sql_initialize (void);
+public:
+    GncSqlBillTermBackend();
+    void load_all(GncSqlBackend*) override;
+    void create_tables(GncSqlBackend*) override;
+    bool write(GncSqlBackend*) override;
+};
 
 #endif /* GNC_BILLTERM_SQL_H */

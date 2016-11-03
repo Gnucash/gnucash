@@ -94,17 +94,9 @@ static EntryVec parent_col_table
         "parent_guid", 0, 0, nullptr, (QofSetterFunc)set_parent_guid),
 });
 
-class GncSqlAccountBackend : public GncSqlObjectBackend
-{
-public:
-    GncSqlAccountBackend(int version, const std::string& type,
-                         const std::string& table, const EntryVec& vec) :
-        GncSqlObjectBackend(version, type, table, vec) {}
-    void load_all(GncSqlBackend*) override;
-    bool commit(GncSqlBackend*, QofInstance*) override;
-};
-
-
+GncSqlAccountBackend::GncSqlAccountBackend() :
+    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_ACCOUNT,
+                        TABLE_NAME, col_table) {}
 
 typedef struct
 {
@@ -417,12 +409,5 @@ GncSqlColumnTableEntryImpl<CT_ACCOUNTREF>::add_to_query(const GncSqlBackend* sql
 {
     add_objectref_guid_to_query(sql_be, obj_name, pObject, vec);
 }
-/* ================================================================= */
-void
-gnc_sql_init_account_handler (void)
-{
-    static GncSqlAccountBackend be_data{
-        GNC_SQL_BACKEND_VERSION, GNC_ID_ACCOUNT, TABLE_NAME, col_table};
-    gnc_sql_register_backend(&be_data);
-}
+
 /* ========================== END OF FILE ===================== */

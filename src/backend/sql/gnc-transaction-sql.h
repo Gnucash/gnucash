@@ -36,7 +36,23 @@ extern "C"
 #include "qof.h"
 #include "Account.h"
 }
-void gnc_sql_init_transaction_handler (void);
+class GncSqlTransBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlTransBackend();
+    void load_all(GncSqlBackend*) override;
+    void create_tables(GncSqlBackend*) override;
+    bool commit (GncSqlBackend* sql_be, QofInstance* inst) override;
+};
+
+class GncSqlSplitBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlSplitBackend();
+    void load_all(GncSqlBackend*) override { return; } // loaded by transaction.
+    void create_tables(GncSqlBackend*) override;
+    bool commit (GncSqlBackend* sql_be, QofInstance* inst) override;
+};
 
 /**
  * Loads all transactions which have splits for a specific account.

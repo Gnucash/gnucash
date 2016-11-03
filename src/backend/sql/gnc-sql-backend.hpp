@@ -38,7 +38,7 @@ class GncSqlColumnTableEntry;
 using GncSqlColumnTableEntryPtr = std::shared_ptr<GncSqlColumnTableEntry>;
 using EntryVec = std::vector<GncSqlColumnTableEntryPtr>;
 class GncSqlObjectBackend;
-using GncSqlObjectBackendPtr = GncSqlObjectBackend*;
+using GncSqlObjectBackendPtr = std::shared_ptr<GncSqlObjectBackend>;
 using OBEEntry = std::tuple<std::string, GncSqlObjectBackendPtr>;
 using OBEVec = std::vector<OBEEntry>;
 class GncSqlConnection;
@@ -157,17 +157,58 @@ public:
      * @return String representation of the Timespec
      */
     std::string time64_to_string (time64 t) const noexcept;
+    /**
+     * Load the contents of an SQL database into a book.
+     *
+     * @param book Book to be loaded
+     */
+    void load(QofBook*, QofBackendLoadType);
+    /**
+     * Save the contents of a book to an SQL database.
+     *
+     * @param book Book to be saved
+     */
+    void sync_all(QofBook*);
+    /**
+     * An object is about to be edited.
+     *
+     * @param inst Object being edited
+     */
+    void begin_edit(QofInstance*);
+    /**
+     * Object editting is complete and the object should be saved.
+     *
+     * @param inst Object being edited
+     */
+    void commit_edit(QofInstance*);
+    /**
+     * Object editing has been cancelled.
+     *
+     * @param inst Object being edited
+     */
+    void rollback_edit(QofInstance*);
+    /**
+     * Register a commodity to be committed after loading is complete.
+     *
+     * Necessary to save corrections made while loading.
+     * @param comm The commodity item to be committed.
+     */
+    void commodity_for_postload_processing(gnc_commodity*);
+    /**
+     * Get the GncSqlObjectBackend for the indicated type.
+     *
+     * Required because we need to pass a pointer to this to a callback via a C
+     * function.
+     * @param type: The QofInstance type constant to select the object backend.
+     */
+    GncSqlObjectBackendPtr get_object_backend(const std::string& type) const noexcept;
     QofBook* book() const noexcept { return m_book; }
     void set_loading(bool loading) noexcept { m_loading = loading; }
     bool pristine() const noexcept { return m_is_pristine_db; }
     void update_progress() const noexcept;
     void finish_progress() const noexcept;
 
-    friend void gnc_sql_load (GncSqlBackend* sql_be,  QofBook* book, QofBackendLoadType loadType);
-    friend void gnc_sql_sync_all (GncSqlBackend* sql_be,  QofBook* book);
-    friend void gnc_sql_commit_edit (GncSqlBackend* sql_be, QofInstance* inst);
-
- protected:
+protected:
     QofBackend qof_be;           /**< QOF backend. Not a pointer, nor really a member */
     GncSqlConnection* m_conn;  /**< SQL connection */
     QofBook* m_book;           /**< The primary, main open book */
@@ -176,6 +217,32 @@ public:
     bool m_is_pristine_db; /**< Are we saving to a new pristine db? */
     const char* m_timespec_format; /**< Server-specific date-time string format */
     VersionVec m_versions;    /**< Version number for each table */
+private:
+    bool write_account_tree(Account*);
+    bool write_accounts();
+    bool write_transactions();
+    bool write_template_transactions();
+    bool write_schedXactions();
+    class ObjectBackendRegistry
+    {
+    public:
+        ObjectBackendRegistry();
+        ObjectBackendRegistry(const ObjectBackendRegistry&) = delete;
+        ObjectBackendRegistry(const ObjectBackendRegistry&&) = delete;
+        ObjectBackendRegistry operator=(const ObjectBackendRegistry&) = delete;
+        ObjectBackendRegistry operator=(const ObjectBackendRegistry&&) = delete;
+        ~ObjectBackendRegistry() = default;
+        void register_backend(OBEEntry&& entry) noexcept;
+        void register_backend(GncSqlObjectBackendPtr obe) noexcept;
+        GncSqlObjectBackendPtr get_object_backend(const std::string& type) const;
+        void load_remaining(GncSqlBackend*);
+        OBEVec::iterator begin() { return m_registry.begin(); }
+        OBEVec::iterator end() { return m_registry.end(); }
+    private:
+        OBEVec m_registry;
+    };
+    ObjectBackendRegistry m_backend_registry;
+    std::vector<gnc_commodity*> m_postload_commodities;
 };
 
 #endif //__GNC_SQL_BACKEND_HPP__

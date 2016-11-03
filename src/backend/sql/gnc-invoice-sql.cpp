@@ -101,17 +101,9 @@ static EntryVec col_table
                                     (QofSetterFunc)gncInvoiceSetToChargeAmount),
 });
 
-class GncSqlInvoiceBackend : public GncSqlObjectBackend
-{
-public:
-    GncSqlInvoiceBackend(int version, const std::string& type,
-                      const std::string& table, const EntryVec& vec) :
-        GncSqlObjectBackend(version, type, table, vec) {}
-    void load_all(GncSqlBackend*) override;
-    void create_tables(GncSqlBackend*) override;
-    bool commit (GncSqlBackend* sql_be, QofInstance* inst) override;
-    bool write(GncSqlBackend*) override;
-};
+GncSqlInvoiceBackend::GncSqlInvoiceBackend() :
+    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_INVOICE,
+                        TABLE_NAME, col_table) {}
 
 static GncInvoice*
 load_single_invoice (GncSqlBackend* sql_be, GncSqlRow& row)
@@ -313,12 +305,4 @@ GncSqlColumnTableEntryImpl<CT_INVOICEREF>::add_to_query(const GncSqlBackend* sql
     add_objectref_guid_to_query(sql_be, obj_name, pObject, vec);
 }
 
-/* ================================================================= */
-void
-gnc_invoice_sql_initialize (void)
-{
-    static GncSqlInvoiceBackend be_data {
-        GNC_SQL_BACKEND_VERSION, GNC_ID_INVOICE, TABLE_NAME, col_table};
-    gnc_sql_register_backend(&be_data);
-}
 /* ========================== END OF FILE ===================== */

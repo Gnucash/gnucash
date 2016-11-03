@@ -30,6 +30,15 @@
 #ifndef GNC_ENTRY_SQL_H
 #define GNC_ENTRY_SQL_H
 
-void gnc_entry_sql_initialize (void);
+#include "gnc-sql-object-backend.hpp"
+
+class GncSqlEntryBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlEntryBackend();
+    void load_all(GncSqlBackend*) override;
+    void create_tables(GncSqlBackend*) override;
+    bool write(GncSqlBackend*) override;
+};
 
 #endif /* GNC_ENTRY_SQL_H */

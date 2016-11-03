@@ -73,16 +73,9 @@ static EntryVec col_table
                                           (QofSetterFunc)gncJobSetOwner),
 });
 
-class GncSqlJobBackend : public GncSqlObjectBackend
-{
-public:
-    GncSqlJobBackend(int version, const std::string& type,
-                      const std::string& table, const EntryVec& vec) :
-        GncSqlObjectBackend(version, type, table, vec) {}
-    void load_all(GncSqlBackend*) override;
-    bool write(GncSqlBackend*) override;
-};
-
+GncSqlJobBackend::GncSqlJobBackend() :
+    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_JOB,
+                        TABLE_NAME, col_table) {}
 
 static GncJob*
 load_single_job (GncSqlBackend* sql_be, GncSqlRow& row)
@@ -170,12 +163,4 @@ GncSqlJobBackend::write (GncSqlBackend* sql_be)
     return data.is_ok;
 }
 
-/* ================================================================= */
-void
-gnc_job_sql_initialize (void)
-{
-    static GncSqlJobBackend be_data {
-        GNC_SQL_BACKEND_VERSION, GNC_ID_JOB, TABLE_NAME, col_table};
-    gnc_sql_register_backend(&be_data);
-}
 /* ========================== END OF FILE ===================== */

@@ -75,15 +75,9 @@ static EntryVec col_table
                                           ORDER_OWNER, true),
 });
 
-class GncSqlOrderBackend : public GncSqlObjectBackend
-{
-public:
-    GncSqlOrderBackend(int version, const std::string& type,
-                      const std::string& table, const EntryVec& vec) :
-        GncSqlObjectBackend(version, type, table, vec) {}
-    void load_all(GncSqlBackend*) override;
-    bool write(GncSqlBackend*) override;
-};
+GncSqlOrderBackend::GncSqlOrderBackend() :
+    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_ORDER,
+                        TABLE_NAME, col_table) {}
 
 static GncOrder*
 load_single_order (GncSqlBackend* sql_be, GncSqlRow& row)
@@ -199,13 +193,5 @@ GncSqlColumnTableEntryImpl<CT_ORDERREF>::add_to_query(const GncSqlBackend* sql_b
 {
     add_objectref_guid_to_query(sql_be, obj_name, pObject, vec);
 }
-/* ================================================================= */
-void
-gnc_order_sql_initialize (void)
-{
-    static GncSqlOrderBackend be_data {
-        GNC_SQL_BACKEND_VERSION, GNC_ID_ORDER, TABLE_NAME, col_table};
 
-    gnc_sql_register_backend(&be_data);
-}
 /* ========================== END OF FILE ===================== */

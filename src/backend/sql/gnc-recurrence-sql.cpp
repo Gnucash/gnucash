@@ -117,16 +117,8 @@ static const EntryVec weekend_adjust_col_table
  * Recurrences are neither loadable nor committable. Note that the default
  * write() implementation is also a no-op.
  */
-class GncSqlRecurrenceBackend : public GncSqlObjectBackend
-{
-public:
-    GncSqlRecurrenceBackend(int version, const std::string& type,
-                      const std::string& table, const EntryVec& vec) :
-        GncSqlObjectBackend(version, type, table, vec) {}
-    void load_all(GncSqlBackend*) override { return; }
-    void create_tables(GncSqlBackend*) override;
-    bool commit(GncSqlBackend*, QofInstance*) override { return false; }
-};
+GncSqlRecurrenceBackend::GncSqlRecurrenceBackend() :
+        GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_ACCOUNT, TABLE_NAME, col_table) {}
 
 /* ================================================================= */
 
@@ -434,12 +426,4 @@ GncSqlRecurrenceBackend::create_tables (GncSqlBackend* sql_be)
     }
 }
 
-/* ================================================================= */
-void
-gnc_sql_init_recurrence_handler (void)
-{
-    static GncSqlRecurrenceBackend be_data {
-        GNC_SQL_BACKEND_VERSION, GNC_ID_ACCOUNT, TABLE_NAME, col_table};
-    gnc_sql_register_backend(&be_data);
-}
 /* ========================== END OF FILE ===================== */

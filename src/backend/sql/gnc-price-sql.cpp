@@ -71,18 +71,9 @@ static const EntryVec col_table
     gnc_sql_make_table_entry<CT_NUMERIC>("value", 0, COL_NNUL, "value")
 });
 
-class GncSqlPriceBackend : public GncSqlObjectBackend
-{
-public:
-    GncSqlPriceBackend(int version, const std::string& type,
-                      const std::string& table, const EntryVec& vec) :
-        GncSqlObjectBackend(version, type, table, vec) {}
-    void load_all(GncSqlBackend*) override;
-    void create_tables(GncSqlBackend*) override;
-    bool commit (GncSqlBackend* sql_be, QofInstance* inst) override;
-    bool write(GncSqlBackend*) override;
-};
-
+GncSqlPriceBackend::GncSqlPriceBackend() :
+    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_PRICE,
+                        TABLE_NAME, col_table) {}
 
 /* ================================================================= */
 
@@ -234,15 +225,6 @@ GncSqlPriceBackend::write (GncSqlBackend* sql_be)
 
     auto priceDB = gnc_pricedb_get_db (sql_be->book());
     return gnc_pricedb_foreach_price (priceDB, write_price, &data, TRUE);
-}
-
-/* ================================================================= */
-void
-gnc_sql_init_price_handler (void)
-{
-    static GncSqlPriceBackend be_data {
-        GNC_SQL_BACKEND_VERSION, GNC_ID_PRICE, TABLE_NAME, col_table};
-    gnc_sql_register_backend(&be_data);
 }
 
 /* ========================== END OF FILE ===================== */

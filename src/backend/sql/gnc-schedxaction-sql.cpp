@@ -85,15 +85,9 @@ static const EntryVec col_table
         "template_act_guid", 0, COL_NNUL, "template-account"),
 });
 
-class GncSqlSchedXactionBackend : public GncSqlObjectBackend
-{
-public:
-    GncSqlSchedXactionBackend(int version, const std::string& type,
-                      const std::string& table, const EntryVec& vec) :
-        GncSqlObjectBackend(version, type, table, vec) {}
-    void load_all(GncSqlBackend*) override;
-    bool commit (GncSqlBackend* sql_be, QofInstance* inst) override;
-};
+GncSqlSchedXactionBackend::GncSqlSchedXactionBackend() :
+    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_SCHEDXACTION,
+                        SCHEDXACTION_TABLE, col_table) {}
 
 /* ================================================================= */
 static  SchedXaction*
@@ -210,13 +204,4 @@ GncSqlSchedXactionBackend::commit (GncSqlBackend* sql_be, QofInstance* inst)
     return is_ok;
 }
 
-/* ================================================================= */
-void
-gnc_sql_init_schedxaction_handler (void)
-{
-    static GncSqlSchedXactionBackend be_data {
-        GNC_SQL_BACKEND_VERSION, GNC_ID_SCHEDXACTION, SCHEDXACTION_TABLE,
-            col_table};
-    gnc_sql_register_backend(&be_data);
-}
 /* ========================== END OF FILE ===================== */

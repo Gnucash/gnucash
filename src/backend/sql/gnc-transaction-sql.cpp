@@ -74,7 +74,7 @@ struct split_info_t : public write_objects_t
 {
     split_info_t () = default;
     split_info_t (GncSqlBackend* sql_be, bool o,
-                  GncSqlObjectBackendPtr e, const GncGUID* g):
+                  GncSqlObjectBackend* e, const GncGUID* g):
         write_objects_t(sql_be, o, e), guid{g} {}
     const GncGUID* guid;
 };
@@ -139,29 +139,14 @@ static const EntryVec tx_guid_col_table
     gnc_sql_make_table_entry<CT_GUID>("tx_guid", 0, 0, "guid"),
 };
 
-class GncSqlTransBackend : public GncSqlObjectBackend
-{
-public:
-    GncSqlTransBackend(int version, const std::string& type,
-                      const std::string& table, const EntryVec& vec) :
-        GncSqlObjectBackend(version, type, table, vec) {}
-    void load_all(GncSqlBackend*) override;
-    void create_tables(GncSqlBackend*) override;
-    bool commit (GncSqlBackend* sql_be, QofInstance* inst) override;
-};
+GncSqlTransBackend::GncSqlTransBackend() :
+    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_TRANS,
+                        TRANSACTION_TABLE, tx_col_table) {}
 
-class GncSqlSplitBackend : public GncSqlObjectBackend
-{
-public:
-    GncSqlSplitBackend(int version, const std::string& type,
-                      const std::string& table, const EntryVec& vec) :
-        GncSqlObjectBackend(version, type, table, vec) {}
-    void load_all(GncSqlBackend*) override { return; } // loaded by transaction.
-    void create_tables(GncSqlBackend*) override;
-    bool commit (GncSqlBackend* sql_be, QofInstance* inst) override;
-};
-static GncSqlSplitBackend be_data_split {
-    GNC_SQL_BACKEND_VERSION, GNC_ID_SPLIT, SPLIT_TABLE, split_col_table};
+GncSqlSplitBackend::GncSqlSplitBackend() :
+    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_SPLIT,
+                        SPLIT_TABLE, split_col_table) {}
+
 /* These functions exist but have not been tested.
    #if LOAD_TRANSACTIONS_AS_NEEDED
    compile_split_query,
@@ -1411,16 +1396,6 @@ GncSqlColumnTableEntryImpl<CT_TXREF>::add_to_query(const GncSqlBackend* sql_be,
                                                    PairVec& vec) const noexcept
 {
     add_objectref_guid_to_query(sql_be, obj_name, pObject, vec);
-}
-
-/* ================================================================= */
-void
-gnc_sql_init_transaction_handler (void)
-{
-    static GncSqlTransBackend be_data_tx {
-        GNC_SQL_BACKEND_VERSION, GNC_ID_TRANS, TRANSACTION_TABLE, tx_col_table};
-    gnc_sql_register_backend(&be_data_tx);
-    gnc_sql_register_backend(&be_data_split);
 }
 
 /* ========================== END OF FILE ===================== */

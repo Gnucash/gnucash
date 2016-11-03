@@ -34,7 +34,20 @@ extern "C"
 #include "guid.h"
 #include "qof.h"
 }
-#include "gnc-backend-sql.h"
+#include "gnc-sql-object-backend.hpp"
+
+/**
+ * Slots are neither loadable nor committable. Note that the default
+ * write() implementation is also a no-op.
+ */
+class GncSqlSlotsBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlSlotsBackend();
+    void load_all(GncSqlBackend*) override { return; }
+    void create_tables(GncSqlBackend*) override;
+    bool commit(GncSqlBackend*, QofInstance*) override { return false; }
+};
 
 /**
  * gnc_sql_slots_save - Saves slots for an object to the db.

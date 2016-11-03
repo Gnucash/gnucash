@@ -266,22 +266,16 @@ test_gnc_sql_commit_edit (void)
     guint dirty_called = 0;
     GncMockSqlConnection conn;
     const char* msg1 =
-        "[gnc_sql_commit_edit()] gnc_sql_commit_edit(): Unknown object type 'null'\n";
-    const char* msg2 =
-        "[gnc_sql_commit_edit()] gnc_sql_commit_edit(): Unknown object type 'Book'\n";
+        "[GncSqlBackend::commit_edit()] Unknown object type 'null'\n";
     GLogLevelFlags loglevel = static_cast<decltype (loglevel)>
                               (G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     const char* logdomain = "gnc.backend.sql";
     TestErrorStruct check1 = { loglevel, const_cast<char*> (logdomain),
                                const_cast<char*> (msg1), 0
                              };
-    TestErrorStruct check2 = { loglevel, const_cast<char*> (logdomain),
-                               const_cast<char*> (msg2), 0
-                             };
     guint hdlr1;
 
     test_add_error (&check1);
-    test_add_error (&check2);
     hdlr1 = g_log_set_handler (logdomain, loglevel,
                                (GLogFunc)test_list_handler, NULL);
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_list_handler, NULL);
@@ -298,36 +292,33 @@ test_gnc_sql_commit_edit (void)
     g_assert (qof_instance_get_dirty_flag (inst));
     g_assert (qof_book_session_not_saved (book));
     g_assert_cmpint (dirty_called, == , 1);
-    gnc_sql_commit_edit (&sql_be, inst);
+    sql_be.commit_edit (inst);
     g_assert (!qof_instance_get_dirty_flag (inst));
     g_assert (!qof_book_session_not_saved (book));
     g_assert_cmpint (dirty_called, == , 0);
     g_assert_cmpint (check1.hits, == , 2);
-    g_assert_cmpint (check2.hits, == , 0);
 
     qof_book_mark_session_dirty (book);
 
     g_assert (!qof_instance_get_dirty_flag (QOF_INSTANCE (book)));
     g_assert (qof_book_session_not_saved (book));
     g_assert_cmpint (dirty_called, == , 1);
-    gnc_sql_commit_edit (&sql_be, QOF_INSTANCE (book));
+    sql_be.commit_edit (QOF_INSTANCE (book));
     g_assert (!qof_instance_get_dirty_flag (QOF_INSTANCE (book)));
     g_assert (qof_book_session_not_saved (book));
     g_assert_cmpint (dirty_called, == , 1);
     g_assert_cmpint (check1.hits, == , 2);
-    g_assert_cmpint (check2.hits, == , 0);
 
     qof_instance_set_dirty_flag (QOF_INSTANCE (book), TRUE);
 
     g_assert (qof_instance_get_dirty_flag (QOF_INSTANCE (book)));
     g_assert (qof_book_session_not_saved (book));
     g_assert_cmpint (dirty_called, == , 1);
-    gnc_sql_commit_edit (&sql_be, QOF_INSTANCE (book));
+    sql_be.commit_edit(QOF_INSTANCE (book));
     g_assert (!qof_instance_get_dirty_flag (QOF_INSTANCE (book)));
     g_assert (!qof_book_session_not_saved (book));
     g_assert_cmpint (dirty_called, == , 0);
     g_assert_cmpint (check1.hits, == , 2);
-    g_assert_cmpint (check2.hits, == , 2);
 
     g_log_remove_handler (logdomain, hdlr1);
     g_object_unref (inst);

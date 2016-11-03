@@ -129,16 +129,9 @@ static EntryVec col_table
                                           (QofSetterFunc)gncEntrySetOrder),
 });
 
-class GncSqlEntryBackend : public GncSqlObjectBackend
-{
-public:
-    GncSqlEntryBackend(int version, const std::string& type,
-                      const std::string& table, const EntryVec& vec) :
-        GncSqlObjectBackend(version, type, table, vec) {}
-    void load_all(GncSqlBackend*) override;
-    void create_tables(GncSqlBackend*) override;
-    bool write(GncSqlBackend*) override;
-};
+GncSqlEntryBackend::GncSqlEntryBackend() :
+    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_ENTRY,
+                        TABLE_NAME, col_table) {}
 
 static void
 entry_set_invoice (gpointer pObject, gpointer val)
@@ -274,12 +267,5 @@ GncSqlEntryBackend::write (GncSqlBackend* sql_be)
     return data.is_ok;
 }
 
-/* ================================================================= */
-void
-gnc_entry_sql_initialize (void)
-{
-    static GncSqlEntryBackend be_data {
-        GNC_SQL_BACKEND_VERSION, GNC_ID_ENTRY, TABLE_NAME, col_table};
-    gnc_sql_register_backend(&be_data);
-}
+
 /* ========================== END OF FILE ===================== */

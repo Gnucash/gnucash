@@ -88,16 +88,9 @@ static const EntryVec col_table
         "quote_tz", COMMODITY_MAX_QUOTE_TZ_LEN, 0, "quote-tz"),
 };
 
-class GncSqlCommodityBackend : public GncSqlObjectBackend
-{
-public:
-    GncSqlCommodityBackend(int version, const std::string& type,
-                      const std::string& table, const EntryVec& vec) :
-        GncSqlObjectBackend(version, type, table, vec) {}
-    void load_all(GncSqlBackend*) override;
-    bool commit(GncSqlBackend*, QofInstance*) override;
-};
-
+GncSqlCommodityBackend::GncSqlCommodityBackend() :
+    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_COMMODITY,
+                        COMMODITIES_TABLE, col_table) {}
 /* ================================================================= */
 
 static  gpointer
@@ -166,7 +159,7 @@ GncSqlCommodityBackend::load_all (GncSqlBackend* sql_be)
             guid = *qof_instance_get_guid (QOF_INSTANCE (pCommodity));
             pCommodity = gnc_commodity_table_insert (pTable, pCommodity);
             if (qof_instance_is_dirty (QOF_INSTANCE (pCommodity)))
-                gnc_sql_push_commodity_for_postload_processing (sql_be, (gpointer)pCommodity);
+                sql_be->commodity_for_postload_processing(pCommodity);
             qof_instance_set_guid (QOF_INSTANCE (pCommodity), &guid);
         }
 
@@ -292,13 +285,5 @@ GncSqlColumnTableEntryImpl<CT_COMMODITYREF>::add_to_query(const GncSqlBackend* s
 {
     add_objectref_guid_to_query(sql_be, obj_name, pObject, vec);
 }
-/* ================================================================= */
-void
-gnc_sql_init_commodity_handler (void)
-{
-    static GncSqlCommodityBackend be_data =
-    {
-        GNC_SQL_BACKEND_VERSION, GNC_ID_COMMODITY, COMMODITIES_TABLE, col_table};
-    gnc_sql_register_backend(&be_data);
-}
+
 /* ========================== END OF FILE ===================== */

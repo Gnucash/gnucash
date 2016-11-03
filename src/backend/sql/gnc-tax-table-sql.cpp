@@ -117,17 +117,9 @@ static EntryVec guid_col_table
                                       get_obj_guid, set_obj_guid),
 });
 
-class GncSqlTaxTableBackend : public GncSqlObjectBackend
-{
-public:
-    GncSqlTaxTableBackend(int version, const std::string& type,
-                      const std::string& table, const EntryVec& vec) :
-        GncSqlObjectBackend(version, type, table, vec) {}
-    void load_all(GncSqlBackend*) override;
-    void create_tables(GncSqlBackend*) override;
-    bool commit (GncSqlBackend* sql_be, QofInstance* inst) override;
-    bool write(GncSqlBackend*) override;
-};
+GncSqlTaxTableBackend::GncSqlTaxTableBackend() :
+    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_TAXTABLE,
+                        TT_TABLE_NAME, tt_col_table) {}
 
 typedef struct
 {
@@ -517,12 +509,4 @@ GncSqlColumnTableEntryImpl<CT_TAXTABLEREF>::add_to_query(const GncSqlBackend* sq
     add_objectref_guid_to_query(sql_be, obj_name, pObject, vec);
 }
 
-/* ================================================================= */
-void
-gnc_taxtable_sql_initialize (void)
-{
-    static GncSqlTaxTableBackend be_data {
-        GNC_SQL_BACKEND_VERSION, GNC_ID_TAXTABLE, TT_TABLE_NAME, tt_col_table};
-    gnc_sql_register_backend(&be_data);
-}
 /* ========================== END OF FILE ===================== */

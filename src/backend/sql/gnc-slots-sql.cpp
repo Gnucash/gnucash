@@ -165,20 +165,9 @@ static const EntryVec gdate_col_table
     gnc_sql_make_table_entry<CT_GDATE>("gdate_val", 0, 0),
 };
 
-/**
- * Slots are neither loadable nor committable. Note that the default
- * write() implementation is also a no-op.
- */
-class GncSqlSlotsBackend : public GncSqlObjectBackend
-{
-public:
-    GncSqlSlotsBackend(int version, const std::string& type,
-                      const std::string& table, const EntryVec& vec) :
-        GncSqlObjectBackend(version, type, table, vec) {}
-    void load_all(GncSqlBackend*) override { return; }
-    void create_tables(GncSqlBackend*) override;
-    bool commit(GncSqlBackend*, QofInstance*) override { return false; }
-};
+GncSqlSlotsBackend::GncSqlSlotsBackend() :
+    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_ACCOUNT,
+                        TABLE_NAME, col_table) {}
 
 /* ================================================================= */
 
@@ -1044,13 +1033,4 @@ GncSqlSlotsBackend::create_tables (GncSqlBackend* sql_be)
     }
 }
 
-/* ================================================================= */
-void
-gnc_sql_init_slots_handler (void)
-{
-    static GncSqlSlotsBackend be_data {
-        GNC_SQL_BACKEND_VERSION, GNC_ID_ACCOUNT, TABLE_NAME, col_table};
-    gnc_sql_register_backend(std::make_tuple(std::string{TABLE_NAME},
-                                             &be_data));
-}
 /* ========================== END OF FILE ===================== */

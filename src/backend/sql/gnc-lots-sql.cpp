@@ -68,16 +68,9 @@ static const EntryVec col_table
     gnc_sql_make_table_entry<CT_BOOLEAN>("is_closed", 0, COL_NNUL, "is-closed")
 });
 
-class GncSqlLotsBackend : public GncSqlObjectBackend
-{
-public:
-    GncSqlLotsBackend(int version, const std::string& type,
-                      const std::string& table, const EntryVec& vec) :
-        GncSqlObjectBackend(version, type, table, vec) {}
-    void load_all(GncSqlBackend*) override;
-    void create_tables(GncSqlBackend*) override;
-    bool write(GncSqlBackend*) override;
-};
+GncSqlLotsBackend::GncSqlLotsBackend() :
+    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_LOT,
+                        TABLE_NAME, col_table) {}
 
 /* ================================================================= */
 static  gpointer
@@ -228,14 +221,6 @@ GncSqlColumnTableEntryImpl<CT_LOTREF>::add_to_query(const GncSqlBackend* sql_be,
                                                     PairVec& vec) const noexcept
 {
     add_objectref_guid_to_query(sql_be, obj_name, pObject, vec);
-}
-/* ================================================================= */
-void
-gnc_sql_init_lot_handler (void)
-{
-    static GncSqlLotsBackend be_data {
-        GNC_SQL_BACKEND_VERSION, GNC_ID_LOT, TABLE_NAME, col_table};
-    gnc_sql_register_backend(&be_data);
 }
 
 /* ========================== END OF FILE ===================== */

@@ -36,6 +36,7 @@ class GncSqlBackend;
 class GncSqlColumnTableEntry;
 using GncSqlColumnTableEntryPtr = std::shared_ptr<GncSqlColumnTableEntry>;
 using EntryVec = std::vector<GncSqlColumnTableEntryPtr>;
+using InstanceVec = std::vector<QofInstance*>;
 
 typedef enum
 {
@@ -108,9 +109,29 @@ protected:
     const EntryVec& m_col_table;   /// The ORM table definition.
 };
 
-using GncSqlObjectBackendPtr = GncSqlObjectBackend*;
+using GncSqlObjectBackendPtr = std::shared_ptr<GncSqlObjectBackend>;
 
 using OBEEntry = std::tuple<std::string, GncSqlObjectBackendPtr>;
 using OBEVec = std::vector<OBEEntry>;
+
+/**
+ * Data-passing struct for callbacks to qof_object_foreach() used in
+ * GncSqlObjectBackend::write(). Once QofCollection is rewritten to use C++
+ * containers we'll use std::foreach() and lambdas instead of callbacks and this
+ * can go away.
+ */
+struct write_objects_t
+{
+    write_objects_t() = default;
+    write_objects_t (GncSqlBackend* sql_be, bool o, GncSqlObjectBackend* e) :
+        be{sql_be}, is_ok{o}, obe{e} {}
+    void commit (QofInstance* inst) {
+        if (is_ok) is_ok = obe->commit (be, inst);
+    }
+    GncSqlBackend* be;
+    bool is_ok;
+    GncSqlObjectBackend* obe;
+};
+
 
 #endif //__GNC_SQL_OBJECT_BACKEND_HPP__

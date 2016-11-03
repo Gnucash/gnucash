@@ -73,14 +73,9 @@ static const EntryVec col_table
                                       set_root_template_guid)
 };
 
-class GncSqlBookBackend : public GncSqlObjectBackend
-{
-public:
-    GncSqlBookBackend(int version, const std::string& type,
-                      const std::string& table, const EntryVec& vec) :
-        GncSqlObjectBackend(version, type, table, vec) {}
-    void load_all(GncSqlBackend*) override;
-};
+GncSqlBookBackend::GncSqlBookBackend() :
+    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_BOOK,
+                        BOOK_TABLE, col_table) {}
 
 /* ================================================================= */
 static  gpointer
@@ -201,12 +196,4 @@ GncSqlBookBackend::load_all (GncSqlBackend* sql_be)
     }
 }
 
-/* ================================================================= */
-void
-gnc_sql_init_book_handler (void)
-{
-    static GncSqlBookBackend be_data {
-        GNC_SQL_BACKEND_VERSION, GNC_ID_BOOK, BOOK_TABLE, col_table};
-    gnc_sql_register_backend(&be_data);
-}
 /* ========================== END OF FILE ===================== */

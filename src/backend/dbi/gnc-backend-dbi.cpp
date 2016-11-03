@@ -231,17 +231,6 @@ UriStrings::quote_dbname(DbType t) const noexcept
 }
 
 static void
-create_tables(const OBEEntry& entry, GncDbiBackend* dbi_be)
-{
-    std::string type;
-    GncSqlObjectBackendPtr obe = nullptr;
-    std::tie(type, obe) = entry;
-    g_return_if_fail(obe->is_version (GNC_SQL_BACKEND_VERSION));
-
-    obe->create_tables (dbi_be);
-}
-
-static void
 set_options(dbi_conn conn, const PairVec& options)
 {
     for (auto option : options)
@@ -872,14 +861,10 @@ gnc_dbi_load (QofBackend* qof_be,  QofBook* book, QofBackendLoadType loadType)
         // Set up table version information
         dbi_be->init_version_info ();
         assert (dbi_be->m_book == nullptr);
-
-        // Call all object backends to create any required tables
-        auto registry = gnc_sql_get_backend_registry();
-        for (auto entry : registry)
-            create_tables(entry, dbi_be);
+        dbi_be->create_tables();
     }
 
-    gnc_sql_load (dbi_be, book, loadType);
+    dbi_be->load(book, loadType);
 
     if (GNUCASH_RESAVE_VERSION > dbi_be->get_table_version("Gnucash"))
     {
@@ -961,7 +946,7 @@ gnc_dbi_safe_sync_all (QofBackend* qof_be, QofBook* book)
         }
     }
 
-    gnc_sql_sync_all (dbi_be, book);
+    dbi_be->sync_all(book);
     if (qof_backend_check_error (qof_be))
     {
         conn->table_operation (table_list, rollback);
@@ -980,7 +965,7 @@ gnc_dbi_begin_edit (QofBackend* qof_be, QofInstance* inst)
     g_return_if_fail (dbi_be != nullptr);
     g_return_if_fail (inst != nullptr);
 
-    gnc_sql_begin_edit (dbi_be, inst);
+    dbi_be->begin_edit(inst);
 }
 
 static void
@@ -991,7 +976,7 @@ gnc_dbi_rollback_edit (QofBackend* qof_be, QofInstance* inst)
     g_return_if_fail (dbi_be != nullptr);
     g_return_if_fail (inst != nullptr);
 
-    gnc_sql_rollback_edit (dbi_be, inst);
+    dbi_be->rollback_edit(inst);
 }
 
 static void
@@ -1002,7 +987,7 @@ gnc_dbi_commit_edit (QofBackend* qof_be, QofInstance* inst)
     g_return_if_fail (dbi_be != nullptr);
     g_return_if_fail (inst != nullptr);
 
-    gnc_sql_commit_edit (dbi_be, inst);
+    dbi_be->commit_edit(inst);
 }
 
 /* ================================================================= */
@@ -1028,13 +1013,11 @@ init_sql_backend (GncDbiBackend* dbi_be)
     qof_be->safe_sync = gnc_dbi_safe_sync_all;
     /* CoA Export function not implemented for the SQL backend. */
     qof_be->export_fn = nullptr;
-
-    gnc_sql_init (dbi_be);
 }
 
 /*
  * Checks to see whether the file is an sqlite file or not
- *1980
+ *
  */
 template<> bool
 QofDbiBackendProvider<DbType::DBI_SQLITE>::type_check(const char *uri)

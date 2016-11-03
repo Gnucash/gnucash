@@ -34,7 +34,16 @@ extern "C"
 #include "Recurrence.h"
 #include "guid.h"
 }
-#include "gnc-backend-sql.h"
+#include "gnc-sql-object-backend.hpp"
+
+class GncSqlRecurrenceBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlRecurrenceBackend();
+    void load_all(GncSqlBackend*) override { return; }
+    void create_tables(GncSqlBackend*) override;
+    bool commit(GncSqlBackend*, QofInstance*) override { return false; }
+};
 
 gboolean gnc_sql_recurrence_save (GncSqlBackend* sql_be, const GncGUID* guid,
                                   const Recurrence* pRecurrence);
@@ -43,7 +52,5 @@ void gnc_sql_recurrence_save_list (GncSqlBackend* sql_be, const GncGUID* guid,
 gboolean gnc_sql_recurrence_delete (GncSqlBackend* sql_be, const GncGUID* guid);
 Recurrence* gnc_sql_recurrence_load (GncSqlBackend* sql_be, const GncGUID* guid);
 GList* gnc_sql_recurrence_load_list (GncSqlBackend* sql_be, const GncGUID* guid);
-
-void gnc_sql_init_recurrence_handler (void);
 
 #endif /* GNC_RECURRENCE_SQL_H */

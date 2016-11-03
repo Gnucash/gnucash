@@ -79,17 +79,9 @@ static EntryVec col_table
     gnc_sql_make_table_entry<CT_ADDRESS>("addr", 0, 0, "address"),
 });
 
-class GncSqlEmployeeBackend : public GncSqlObjectBackend
-{
-public:
-    GncSqlEmployeeBackend(int version, const std::string& type,
-                      const std::string& table, const EntryVec& vec) :
-        GncSqlObjectBackend(version, type, table, vec) {}
-    void load_all(GncSqlBackend*) override;
-    void create_tables(GncSqlBackend*) override;
-    bool commit(GncSqlBackend*, QofInstance*) override;
-    bool write(GncSqlBackend*) override;
-};
+GncSqlEmployeeBackend::GncSqlEmployeeBackend() :
+    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_EMPLOYEE,
+                        TABLE_NAME, col_table) {}
 
 static GncEmployee*
 load_single_employee (GncSqlBackend* sql_be, GncSqlRow& row)
@@ -264,12 +256,5 @@ GncSqlEmployeeBackend::write (GncSqlBackend* sql_be)
     return data.is_ok;
 }
 
-/* ================================================================= */
-void
-gnc_employee_sql_initialize (void)
-{
-    static GncSqlEmployeeBackend be_data {
-        GNC_SQL_BACKEND_VERSION, GNC_ID_EMPLOYEE, TABLE_NAME, col_table};
-    gnc_sql_register_backend(&be_data);
-}
+
 /* ========================== END OF FILE ===================== */

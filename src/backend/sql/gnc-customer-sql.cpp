@@ -94,16 +94,9 @@ static EntryVec col_table
                                          (QofSetterFunc)gncCustomerSetTaxTable),
 });
 
-class GncSqlCustomerBackend : public GncSqlObjectBackend
-{
-public:
-    GncSqlCustomerBackend(int version, const std::string& type,
-                      const std::string& table, const EntryVec& vec) :
-        GncSqlObjectBackend(version, type, table, vec) {}
-    void load_all(GncSqlBackend*) override;
-    void create_tables(GncSqlBackend*) override;
-    bool write(GncSqlBackend*) override;
-};
+GncSqlCustomerBackend::GncSqlCustomerBackend() :
+    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_CUSTOMER,
+                        TABLE_NAME, col_table) {}
 
 static GncCustomer*
 load_single_customer (GncSqlBackend* sql_be, GncSqlRow& row)
@@ -219,12 +212,4 @@ GncSqlCustomerBackend::write (GncSqlBackend* sql_be)
     return data.is_ok;
 }
 
-/* ================================================================= */
-void
-gnc_customer_sql_initialize (void)
-{
-    static GncSqlCustomerBackend be_data {
-        GNC_SQL_BACKEND_VERSION, GNC_ID_CUSTOMER, TABLE_NAME, col_table};
-    gnc_sql_register_backend(&be_data);
-}
 /* ========================== END OF FILE ===================== */

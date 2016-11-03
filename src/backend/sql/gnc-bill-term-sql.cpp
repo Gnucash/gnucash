@@ -99,16 +99,9 @@ static EntryVec billterm_parent_col_table
                                        bt_set_parent_guid),
 };
 
-class GncSqlBillTermBackend : public GncSqlObjectBackend
-{
-public:
-    GncSqlBillTermBackend(int version, const std::string& type,
-                      const std::string& table, const EntryVec& vec) :
-        GncSqlObjectBackend(version, type, table, vec) {}
-    void load_all(GncSqlBackend*) override;
-    void create_tables(GncSqlBackend*) override;
-    bool write(GncSqlBackend*) override;
-};
+GncSqlBillTermBackend::GncSqlBillTermBackend() :
+        GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_BILLTERM,
+                            TABLE_NAME, col_table) {}
 
 typedef struct
 {
@@ -358,12 +351,5 @@ GncSqlColumnTableEntryImpl<CT_BILLTERMREF>::add_to_query(const GncSqlBackend* sq
 {
     add_objectref_guid_to_query(sql_be, obj_name, pObject, vec);
 }
-/* ================================================================= */
-void
-gnc_billterm_sql_initialize (void)
-{
-    static GncSqlBillTermBackend be_data {
-        GNC_SQL_BACKEND_VERSION, GNC_ID_BILLTERM, TABLE_NAME, col_table};
-    gnc_sql_register_backend(&be_data);
-}
+
 /* ========================== END OF FILE ===================== */

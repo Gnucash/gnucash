@@ -81,19 +81,9 @@ static void set_period_num (gpointer pObj, gpointer val);
 static gnc_numeric get_amount (gpointer pObj);
 static void set_amount (gpointer pObj, gnc_numeric value);
 
-class GncSqlBudgetBackend : public GncSqlObjectBackend
-{
-public:
-    GncSqlBudgetBackend(int version, const std::string& type,
-                      const std::string& table, const EntryVec& vec) :
-        GncSqlObjectBackend(version, type, table, vec) {}
-    void load_all(GncSqlBackend*) override;
-    void create_tables(GncSqlBackend*) override;
-    bool commit (GncSqlBackend* sql_be, QofInstance* inst) override;
-    bool write(GncSqlBackend*) override;
-private:
-    static void save(QofInstance*, void*);
-};
+GncSqlBudgetBackend::GncSqlBudgetBackend() :
+    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_BUDGET,
+                        BUDGET_TABLE, col_table) {}
 
 typedef struct
 {
@@ -496,12 +486,5 @@ GncSqlColumnTableEntryImpl<CT_BUDGETREF>::add_to_query(const GncSqlBackend* sql_
 {
     add_objectref_guid_to_query(sql_be, obj_name, pObject, vec);
 }
-/* ================================================================= */
-void
-gnc_sql_init_budget_handler (void)
-{
-    static GncSqlBudgetBackend be_data {
-        GNC_SQL_BACKEND_VERSION, GNC_ID_BUDGET, BUDGET_TABLE, col_table};
-    gnc_sql_register_backend(&be_data);
-}
+
 /* ========================== END OF FILE ===================== */

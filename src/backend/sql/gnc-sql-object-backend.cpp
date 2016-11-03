@@ -29,6 +29,7 @@ extern "C"
 #include "gnc-sql-backend.hpp"
 #include "gnc-sql-column-table-entry.hpp"
 #include "gnc-slots-sql.h"
+#include "gnc-backend-sql.h" //for gnc_sql_do_db_operation
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 

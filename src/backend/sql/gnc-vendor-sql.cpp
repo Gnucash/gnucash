@@ -83,16 +83,9 @@ static EntryVec col_table
     gnc_sql_make_table_entry<CT_TAXTABLEREF>("tax_table", 0, 0, "tax-table"),
 });
 
-class GncSqlVendorBackend : public GncSqlObjectBackend
-{
-public:
-    GncSqlVendorBackend(int version, const std::string& type,
-                      const std::string& table, const EntryVec& vec) :
-        GncSqlObjectBackend(version, type, table, vec) {}
-    void load_all(GncSqlBackend*) override;
-    bool commit(GncSqlBackend*, QofInstance*) override;
-    bool write(GncSqlBackend*) override;
-};
+GncSqlVendorBackend::GncSqlVendorBackend() :
+    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_VENDOR,
+                        TABLE_NAME, col_table) {}
 
 static GncVendor*
 load_single_vendor (GncSqlBackend* sql_be, GncSqlRow& row)
@@ -237,13 +230,4 @@ GncSqlVendorBackend::write (GncSqlBackend* sql_be)
     return data.is_ok;
 }
 
-/* ================================================================= */
-void
-gnc_vendor_sql_initialize (void)
-{
-    static GncSqlVendorBackend be_data {
-        GNC_SQL_BACKEND_VERSION, GNC_ID_VENDOR, TABLE_NAME, col_table};
-
-    gnc_sql_register_backend(&be_data);
-}
 /* ========================== END OF FILE ===================== */

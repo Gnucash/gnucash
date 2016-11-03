@@ -30,6 +30,16 @@
 #ifndef GNC_TAXTABLE_SQL_H
 #define GNC_TAXTABLE_SQL_H
 
-void gnc_taxtable_sql_initialize (void);
+#include "gnc-sql-object-backend.hpp"
+
+class GncSqlTaxTableBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlTaxTableBackend();
+    void load_all(GncSqlBackend*) override;
+    void create_tables(GncSqlBackend*) override;
+    bool commit (GncSqlBackend* sql_be, QofInstance* inst) override;
+    bool write(GncSqlBackend*) override;
+};
 
 #endif /* GNC_TAXTABLE_SQL_H */
