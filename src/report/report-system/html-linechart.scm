@@ -38,8 +38,6 @@
                       legend-reversed?
                       row-labels-rotated?
                       stacked?
-                      pixels-width?
-                      pixels-height?
                       markers?
                       major-grid?
                       minor-grid?
@@ -65,8 +63,8 @@
 
 (define (gnc:make-html-linechart)
   (gnc:make-html-linechart-internal
-    -1   ;;width
-    -1   ;;height
+    '(pixels . -1)  ;;width
+    '(pixels . -1)  ;;height
     #f   ;;title
     #f   ;;subtitle
     #f   ;;x-axis-label
@@ -77,8 +75,6 @@
     #f   ;;legend-reversed?
     #f   ;;row-labels-rotated?
     #f   ;;stacked?
-    #t   ;;pixels-width?
-    #t   ;;pixels-height?
     #t   ;;markers?
     #t   ;;major-grid?
     #t   ;;minor-grid?
@@ -141,18 +137,6 @@
 (define gnc:html-linechart-set-stacked?!
   (record-modifier <html-linechart> 'stacked?))
 
-(define gnc:html-linechart-pixels-width?
-  (record-accessor <html-linechart> 'pixels-width?))
-
-(define gnc:html-linechart-set-pixels-width?!
-  (record-modifier <html-linechart> 'pixels-width?))
-
-(define gnc:html-linechart-pixels-height?
-  (record-accessor <html-linechart> 'pixels-height?))
-
-(define gnc:html-linechart-set-pixels-height?!
-  (record-modifier <html-linechart> 'pixels-height?))
-
 (define gnc:html-linechart-markers?
   (record-accessor <html-linechart> 'markers?))
 
@@ -182,7 +166,6 @@
 
 (define gnc:html-linechart-set-col-colors!
   (record-modifier <html-linechart> 'col-colors))
-
 
 (define gnc:html-linechart-legend-reversed?
   (record-accessor <html-linechart> 'legend-reversed?))
@@ -445,12 +428,13 @@
             (push (gnc:html-css-include "jqplot/jquery.jqplot.css"))
 
             (push "<div id=\"")(push chart-id)(push "\" style=\"width:")
-            (push (gnc:html-linechart-width linechart))
-            (if (gnc:html-linechart-pixels-width? linechart)
+            (push (cdr (gnc:html-linechart-width linechart)))
+            (if (eq? 'pixels (car (gnc:html-linechart-width linechart)))
                  (push "px;height:")
                  (push "%;height:"))
-            (push (gnc:html-linechart-height linechart))
-            (if (gnc:html-linechart-pixels-height? linechart)
+
+            (push (cdr (gnc:html-linechart-height linechart)))
+            (if (eq? 'pixels (car (gnc:html-linechart-height linechart)))
                  (push "px;\"></div>\n")
                  (push "%;\"></div>\n"))
             (push "<script id=\"source\">\n$(function () {")

@@ -37,8 +37,6 @@
 		      legend-reversed?
                       row-labels-rotated?
 		      stacked?
-                      pixels-width?
-                      pixels-height?
                       data
 		      button-1-bar-urls
                       button-2-bar-urls 
@@ -59,8 +57,8 @@
   (record-constructor <html-barchart>))
 
 (define (gnc:make-html-barchart)
-  (gnc:make-html-barchart-internal -1 -1 #f #f #f #f '() '() '() 
-				   #f #f #f #t #t '() #f #f #f #f #f #f))
+  (gnc:make-html-barchart-internal '(pixels . -1) '(pixels . -1) #f #f #f #f '() '() '() 
+				   #f #f #f '() #f #f #f #f #f #f))
 
 (define gnc:html-barchart-data
   (record-accessor <html-barchart> 'data))
@@ -109,18 +107,6 @@
 
 (define gnc:html-barchart-set-stacked?!
   (record-modifier <html-barchart> 'stacked?))
-
-(define gnc:html-barchart-pixels-width?
-  (record-accessor <html-barchart> 'pixels-width?))
-
-(define gnc:html-barchart-set-pixels-width?!
-  (record-modifier <html-barchart> 'pixels-width?))
-
-(define gnc:html-barchart-pixels-height?
-  (record-accessor <html-barchart> 'pixels-height?))
-
-(define gnc:html-barchart-set-pixels-height?!
-  (record-modifier <html-barchart> 'pixels-height?))
 
 (define gnc:html-barchart-col-labels
   (record-accessor <html-barchart> 'col-labels))
@@ -407,12 +393,13 @@
 
             (push (gnc:html-css-include "jqplot/jquery.jqplot.css"))
             (push "<div id=\"")(push chart-id)(push "\" style=\"width:")
-            (push (gnc:html-barchart-width barchart))
-            (if (gnc:html-barchart-pixels-width? barchart)
+            (push (cdr (gnc:html-barchart-width barchart)))
+            (if (eq? 'pixels (car (gnc:html-barchart-width barchart)))
                  (push "px;height:")
                  (push "%;height:"))
-            (push (gnc:html-barchart-height barchart))
-            (if (gnc:html-barchart-pixels-height? barchart)
+
+            (push (cdr (gnc:html-barchart-height barchart)))
+            (if (eq? 'pixels (car (gnc:html-barchart-height barchart)))
                  (push "px;\"></div>\n")
                  (push "%;\"></div>\n"))
             (push "<script id=\"source\">\n$(function () {")
