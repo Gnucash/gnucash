@@ -3087,6 +3087,7 @@ gnc_option_set_ui_value_plot_size (GNCOption *option, gboolean use_default,
 {
     GList* widget_list;
     GtkWidget *px_button, *p_button, *px_widget, *p_widget;
+    char *symbol_str;
     gdouble d_value;
 
     widget_list = gtk_container_get_children(GTK_CONTAINER(widget));
@@ -3096,24 +3097,27 @@ gnc_option_set_ui_value_plot_size (GNCOption *option, gboolean use_default,
     p_widget = g_list_nth_data(widget_list, 3);
     g_list_free(widget_list);
 
-    if (scm_is_number(value))
+    if (scm_is_pair(value))
     {
-        d_value = scm_to_double(value);
+        symbol_str = gnc_plot_size_option_value_get_type(value);
+        d_value = gnc_plot_size_option_value_get_value(value);
 
-        if (d_value > 0) // pixel values
+        if (symbol_str)
         {
-            gtk_spin_button_set_value (GTK_SPIN_BUTTON(px_widget), d_value);
-            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(px_button), TRUE);
+            if (g_strcmp0(symbol_str, "pixels") == 0) // pixel values
+            {
+                gtk_spin_button_set_value(GTK_SPIN_BUTTON(px_widget), d_value);
+                gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(px_button), TRUE);
+            }
+            else // percent values
+            {
+                gtk_spin_button_set_value(GTK_SPIN_BUTTON(p_widget), (d_value));
+                gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(p_button), TRUE);
+            }
+            return FALSE;
         }
-        else // percentage values
-        {
-            gtk_spin_button_set_value (GTK_SPIN_BUTTON(p_widget), (d_value * -1));
-            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(p_button), TRUE);
-        }
-        return FALSE;
     }
-    else
-        return TRUE;
+    return TRUE;
 }
 
 static gboolean
@@ -3567,6 +3571,7 @@ gnc_option_get_ui_value_plot_size (GNCOption *option, GtkWidget *widget)
     GList* widget_list;
     GtkWidget *px_button, *p_button, *px_widget, *p_widget;
     gdouble d_value;
+    SCM type, val;
 
     widget_list = gtk_container_get_children(GTK_CONTAINER(widget));
     px_button = g_list_nth_data(widget_list, 0);
@@ -3576,11 +3581,17 @@ gnc_option_get_ui_value_plot_size (GNCOption *option, GtkWidget *widget)
     g_list_free(widget_list);
 
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(px_button)))
+    {
+        type = scm_from_locale_symbol("pixels");
         d_value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(px_widget));
+    }
     else
-        d_value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(p_widget)) * -1; 
-
-    return (scm_from_double (d_value));
+    {
+        type = scm_from_locale_symbol("percent");
+        d_value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(p_widget));
+    }
+    val = scm_from_double(d_value);
+    return scm_cons(type, val);
 }
 
 static SCM
