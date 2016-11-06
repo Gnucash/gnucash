@@ -124,13 +124,13 @@ public:
      * Add a GncSqlColumnInfo structure for the column type to a
      * ColVec.
      */
-    virtual void add_to_table(const GncSqlBackend* sql_be, ColVec& vec) const noexcept = 0;
+    virtual void add_to_table(ColVec& vec) const noexcept = 0;
     /**
      * Add a pair of the table column heading and object's value's string
      * representation to a PairVec; used for constructing WHERE clauses and
      * UPDATE statements.
      */
-    virtual void add_to_query(const GncSqlBackend* sql_be, QofIdTypeConst obj_name,
+    virtual void add_to_query(QofIdTypeConst obj_name,
                               void* pObject, PairVec& vec) const noexcept = 0;
     /**
      * Retrieve the getter function depending on whether it's an auto-increment
@@ -180,7 +180,7 @@ protected:
     template <typename T> T
     get_row_value_from_object(QofIdTypeConst obj_name, const void* pObject) const;
     template <typename T> void
-    add_value_to_vec(const GncSqlBackend* sql_be, QofIdTypeConst obj_name,
+    add_value_to_vec(QofIdTypeConst obj_name,
                      const void* pObject, PairVec& vec) const;
 /**
  * Adds a name/guid std::pair to a PairVec for creating a query.
@@ -190,8 +190,7 @@ protected:
  * @param pObject Object
  * @param pList List
  */
-    void add_objectref_guid_to_query (const GncSqlBackend* sql_be,
-                                      QofIdTypeConst obj_name,
+    void add_objectref_guid_to_query (QofIdTypeConst obj_name,
                                       const void* pObject,
                                       PairVec& vec) const noexcept;
 /**
@@ -200,8 +199,7 @@ protected:
  * @param sql_be SQL backend struct
  * @param pList List
  */
-    void add_objectref_guid_to_table (const GncSqlBackend* sql_be,
-                                      ColVec& vec) const noexcept;
+    void add_objectref_guid_to_table (ColVec& vec) const noexcept;
 private:
     const char* m_col_name;        /**< Column name */
     const GncSqlObjectType m_col_type;        /**< Column type */
@@ -217,12 +215,10 @@ private:
     template <typename T> T get_row_value_from_object(QofIdTypeConst obj_name,
                                                       const void* pObject,
                                                       std::false_type) const;
-    template <typename T> void add_value_to_vec(const GncSqlBackend* sql_be,
-                                                QofIdTypeConst obj_name,
+    template <typename T> void add_value_to_vec(QofIdTypeConst obj_name,
                                                 const void* pObject,
                                                 PairVec& vec, std::true_type) const;
-    template <typename T> void add_value_to_vec(const GncSqlBackend* sql_be,
-                                                QofIdTypeConst obj_name,
+    template <typename T> void add_value_to_vec(QofIdTypeConst obj_name,
                                                 const void* pObject,
                                                 PairVec& vec, std::false_type) const;
 
@@ -242,9 +238,9 @@ public:
         {}
     void load(const GncSqlBackend* sql_be, GncSqlRow& row,  QofIdTypeConst obj_name,
               void* pObject) const noexcept override;
-    void add_to_table(const GncSqlBackend* sql_be, ColVec& vec) const noexcept override;
-    void add_to_query(const GncSqlBackend* sql_be, QofIdTypeConst obj_name,
-                      void* pObject, PairVec& vec) const noexcept override;
+    void add_to_table(ColVec& vec) const noexcept override;
+    void add_to_query(QofIdTypeConst obj_name, void* pObject, PairVec& vec)
+        const noexcept override;
 };
 
 using GncSqlColumnTableEntryPtr = std::shared_ptr<GncSqlColumnTableEntry>;
@@ -338,17 +334,15 @@ GncSqlColumnTableEntry::get_row_value_from_object(QofIdTypeConst obj_name,
 }
 
 template <typename T> void
-GncSqlColumnTableEntry::add_value_to_vec(const GncSqlBackend* sql_be,
-                                         QofIdTypeConst obj_name,
+GncSqlColumnTableEntry::add_value_to_vec(QofIdTypeConst obj_name,
                                          const void* pObject,
                                          PairVec& vec) const
 {
-    add_value_to_vec<T>(sql_be, obj_name, pObject, vec, std::is_pointer<T>());
+    add_value_to_vec<T>(obj_name, pObject, vec, std::is_pointer<T>());
 }
 
 template <typename T> void
-GncSqlColumnTableEntry::add_value_to_vec(const GncSqlBackend* sql_be,
-                                         QofIdTypeConst obj_name,
+GncSqlColumnTableEntry::add_value_to_vec(QofIdTypeConst obj_name,
                                          const void* pObject,
                                          PairVec& vec, std::true_type) const
 {
@@ -364,8 +358,7 @@ GncSqlColumnTableEntry::add_value_to_vec(const GncSqlBackend* sql_be,
 }
 
 template <typename T> void
-GncSqlColumnTableEntry::add_value_to_vec(const GncSqlBackend* sql_be,
-                                         QofIdTypeConst obj_name,
+GncSqlColumnTableEntry::add_value_to_vec(QofIdTypeConst obj_name,
                                          const void* pObject,
                                          PairVec& vec, std::false_type) const
 {

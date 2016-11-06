@@ -148,7 +148,7 @@ GncSqlBackend::create_table(const std::string& table_name,
 
     for (auto const& table_row : col_table)
     {
-        table_row->add_to_table (this, info_vec);
+        table_row->add_to_table (info_vec);
     }
     return m_conn->create_table (table_name, info_vec);
 
@@ -179,7 +179,7 @@ GncSqlBackend::add_columns_to_table(const std::string& table_name,
 
     for (auto const& table_row : col_table)
     {
-        table_row->add_to_table (this, info_vec);
+        table_row->add_to_table (info_vec);
     }
     return m_conn->add_columns_to_table(table_name, info_vec);
 }

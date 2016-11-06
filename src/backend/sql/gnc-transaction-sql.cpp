@@ -1385,19 +1385,17 @@ GncSqlColumnTableEntryImpl<CT_TXREF>::load (const GncSqlBackend* sql_be,
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_TXREF>::add_to_table(const GncSqlBackend* sql_be,
-                                                   ColVec& vec) const noexcept
+GncSqlColumnTableEntryImpl<CT_TXREF>::add_to_table(ColVec& vec) const noexcept
 {
-    add_objectref_guid_to_table(sql_be, vec);
+    add_objectref_guid_to_table(vec);
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_TXREF>::add_to_query(const GncSqlBackend* sql_be,
-                                                   QofIdTypeConst obj_name,
+GncSqlColumnTableEntryImpl<CT_TXREF>::add_to_query(QofIdTypeConst obj_name,
                                                    const gpointer pObject,
                                                    PairVec& vec) const noexcept
 {
-    add_objectref_guid_to_query(sql_be, obj_name, pObject, vec);
+    add_objectref_guid_to_query(obj_name, pObject, vec);
 }
 
 /* ========================== END OF FILE ===================== */

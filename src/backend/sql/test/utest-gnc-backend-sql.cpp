@@ -570,7 +570,7 @@ test_add_gvalue_guid_to_slist (Fixture *fixture, gconstpointer pData)
 // Not Used
 /* gnc_sql_add_objectref_guid_to_vec
 void
-gnc_sql_add_objectref_guid_to_vec (const GncSqlBackend* sql_be, QofIdTypeConst obj_name,// 1
+gnc_sql_add_objectref_guid_to_vec (QofIdTypeConst obj_name,// 1
 */
 /* static void
 test_gnc_sql_add_objectref_guid_to_vec (Fixture *fixture, gconstpointer pData)
@@ -579,38 +579,12 @@ test_gnc_sql_add_objectref_guid_to_vec (Fixture *fixture, gconstpointer pData)
 // Not Used
 /* gnc_sql_add_objectref_guid_col_info_to_list
 void
-gnc_sql_add_objectref_guid_col_info_to_list (const GncSqlBackend* sql_be,// 1
+gnc_sql_add_objectref_guid_col_info_to_list (,// 1
 */
 /* static void
 test_gnc_sql_add_objectref_guid_col_info_to_list (Fixture *fixture, gconstpointer pData)
 {
 }*/
-/* GncDbiBackend::time64_to_string
-std::string
-GncDbiBackend::time64_to_string (time64 t)// C: 1 */
-
-#define numtests 6
-static void
-test_time64_to_string ()
-{
-    GncSqlBackend sql_be {nullptr, nullptr, "%4d-%02d-%02d %02d:%02d:%02d"};
-    const char* dates[numtests] = {"1995-03-11 19:17:26",
-                                  "2001-04-20 11:44:07",
-                                  "1964-02-29 09:15:23",
-                                  "1959-04-02 00:00:00",
-                                  "2043-11-22 05:32:45",
-                                  "2153-12-18 01:15:30"
-                                 };
-    
-    for (auto date : dates)
-    {
-
-        Timespec ts = gnc_iso8601_to_timespec_gmt (date);
-        auto datestr = sql_be.time64_to_string (ts.tv_sec);
-        g_assert_cmpstr (date, == , datestr.c_str());
-    }
-
-}
 /* load_timespec
 static void
 load_timespec (const GncSqlBackend* sql_be, GncSqlRow& row,// 2
@@ -929,8 +903,6 @@ test_suite_gnc_backend_sql (void)
 // GNC_TEST_ADD (suitename, "add value guid to vec", Fixture, nullptr, test_add_value_guid_to_vec,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql add gvalue objectref guid to slist", Fixture, nullptr, test_gnc_sql_add_objectref_guid_to_vec,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql add objectref guid col info to list", Fixture, nullptr, test_gnc_sql_add_objectref_guid_col_info_to_list,  teardown);
-    GNC_TEST_ADD_FUNC (suitename, "GncDbiBackend time64 to string",
-                       test_time64_to_string);
 // GNC_TEST_ADD (suitename, "load timespec", Fixture, nullptr, test_load_timespec,  teardown);
 // GNC_TEST_ADD (suitename, "add timespec col info to list", Fixture, nullptr, test_add_timespec_col_info_to_list,  teardown);
 // GNC_TEST_ADD (suitename, "add value timespec to vec", Fixture, nullptr, test_add_value_timespec_to_vec,  teardown);

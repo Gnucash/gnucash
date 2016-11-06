@@ -109,10 +109,8 @@ GncSqlColumnTableEntryImpl<CT_ADDRESS>::load (const GncSqlBackend* sql_be,
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_ADDRESS>::add_to_table(const GncSqlBackend* sql_be,
-                                                  ColVec& vec) const noexcept
+GncSqlColumnTableEntryImpl<CT_ADDRESS>::add_to_table(ColVec& vec) const noexcept
 {
-    g_return_if_fail (sql_be != NULL);
     for (auto const& subtable_row : col_table)
     {
         auto buf = std::string{m_col_name} + "_" + subtable_row->m_col_name;
@@ -126,8 +124,7 @@ GncSqlColumnTableEntryImpl<CT_ADDRESS>::add_to_table(const GncSqlBackend* sql_be
  * it to operator<<().
  */
 template<> void
-GncSqlColumnTableEntryImpl<CT_ADDRESS>::add_to_query(const GncSqlBackend* sql_be,
-                                                    QofIdTypeConst obj_name,
+GncSqlColumnTableEntryImpl<CT_ADDRESS>::add_to_query(QofIdTypeConst obj_name,
                                                     const gpointer pObject,
                                                     PairVec& vec) const noexcept
 {

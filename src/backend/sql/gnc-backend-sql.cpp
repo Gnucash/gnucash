@@ -579,7 +579,7 @@ gnc_sql_append_guids_to_sql (std::stringstream& sql, const InstanceVec& instance
 }
 /* ================================================================= */
 static PairVec
-get_object_values (GncSqlBackend* sql_be, QofIdTypeConst obj_name,
+get_object_values (QofIdTypeConst obj_name,
                    gpointer pObject, const EntryVec& table)
 {
     PairVec vec;
@@ -588,7 +588,7 @@ get_object_values (GncSqlBackend* sql_be, QofIdTypeConst obj_name,
     {
         if (!(table_row->is_autoincr()))
         {
-            table_row->add_to_query (sql_be, obj_name, pObject, vec);
+            table_row->add_to_query (obj_name, pObject, vec);
         }
     }
     return vec;
@@ -610,7 +610,7 @@ gnc_sql_object_is_it_in_db (GncSqlBackend* sql_be, const gchar* table_name,
     g_assert (stmt != NULL);
 
     /* WHERE */
-    PairVec values{get_object_values(sql_be, obj_name, pObject, table)};
+    PairVec values{get_object_values(obj_name, pObject, table)};
     stmt->add_where_cond(obj_name, values);
     auto result = sql_be->execute_select_statement (stmt);
     if (result != NULL)
@@ -672,7 +672,7 @@ build_insert_statement (GncSqlBackend* sql_be,
     g_return_val_if_fail (table_name != NULL, NULL);
     g_return_val_if_fail (obj_name != NULL, NULL);
     g_return_val_if_fail (pObject != NULL, NULL);
-    PairVec values{get_object_values(sql_be, obj_name, pObject, table)};
+    PairVec values{get_object_values(obj_name, pObject, table)};
 
     sql << "INSERT INTO " << table_name <<"(";
     for (auto const& col_value : values)
@@ -710,7 +710,7 @@ build_update_statement (GncSqlBackend* sql_be,
     g_return_val_if_fail (pObject != NULL, NULL);
 
 
-    PairVec values{get_object_values (sql_be, obj_name, pObject, table)};
+    PairVec values{get_object_values (obj_name, pObject, table)};
 
     // Create the SQL statement
     sql <<  "UPDATE " << table_name << " SET ";
@@ -750,7 +750,7 @@ build_delete_statement (GncSqlBackend* sql_be,
 
     /* WHERE */
     PairVec values;
-    table[0]->add_to_query (sql_be, obj_name, pObject, values);
+    table[0]->add_to_query (obj_name, pObject, values);
     PairVec col_values{values[0]};
     stmt->add_where_cond (obj_name, col_values);
 

@@ -95,8 +95,7 @@ GncSqlColumnTableEntry::get_setter(QofIdTypeConst obj_name) const noexcept
 }
 
 void
-GncSqlColumnTableEntry::add_objectref_guid_to_query (const GncSqlBackend* sql_be,
-                                                     QofIdTypeConst obj_name,
+GncSqlColumnTableEntry::add_objectref_guid_to_query (QofIdTypeConst obj_name,
                                                      const void* pObject,
                                                      PairVec& vec) const noexcept
 {
@@ -109,11 +108,8 @@ GncSqlColumnTableEntry::add_objectref_guid_to_query (const GncSqlBackend* sql_be
 }
 
 void
-GncSqlColumnTableEntry::add_objectref_guid_to_table (const GncSqlBackend* sql_be,
-                                                     ColVec& vec) const noexcept
+GncSqlColumnTableEntry::add_objectref_guid_to_table (ColVec& vec) const noexcept
 {
-    g_return_if_fail (sql_be != NULL);
-
     GncSqlColumnInfo info{*this, BCT_STRING, GUID_ENCODING_LENGTH, FALSE};
     vec.emplace_back(std::move(info));
 }
@@ -138,11 +134,8 @@ GncSqlColumnTableEntryImpl<CT_STRING>::load (const GncSqlBackend* sql_be,
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_STRING>::add_to_table(const GncSqlBackend* sql_be,
-                                                  ColVec& vec) const noexcept
+GncSqlColumnTableEntryImpl<CT_STRING>::add_to_table(ColVec& vec) const noexcept
 {
-    g_return_if_fail (sql_be != NULL);
-
     GncSqlColumnInfo info{*this, BCT_STRING, m_size, TRUE};
     vec.emplace_back(std::move(info));
 }
@@ -151,8 +144,7 @@ GncSqlColumnTableEntryImpl<CT_STRING>::add_to_table(const GncSqlBackend* sql_be,
  * it to operator<<().
  */
 template<> void
-GncSqlColumnTableEntryImpl<CT_STRING>::add_to_query(const GncSqlBackend* sql_be,
-                                                    QofIdTypeConst obj_name,
+GncSqlColumnTableEntryImpl<CT_STRING>::add_to_query(QofIdTypeConst obj_name,
                                                     const gpointer pObject,
                                                     PairVec& vec) const noexcept
 {
@@ -187,22 +179,18 @@ GncSqlColumnTableEntryImpl<CT_INT>::load (const GncSqlBackend* sql_be,
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_INT>::add_to_table(const GncSqlBackend* sql_be,
-                                                 ColVec& vec) const noexcept
+GncSqlColumnTableEntryImpl<CT_INT>::add_to_table(ColVec& vec) const noexcept
 {
-    g_return_if_fail (sql_be != NULL);
-
     GncSqlColumnInfo info{*this, BCT_INT, 0, FALSE};
     vec.emplace_back(std::move(info));
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_INT>::add_to_query(const GncSqlBackend* sql_be,
-                                                    QofIdTypeConst obj_name,
-                                                    const gpointer pObject,
-                                                    PairVec& vec) const noexcept
+GncSqlColumnTableEntryImpl<CT_INT>::add_to_query(QofIdTypeConst obj_name,
+                                                 const gpointer pObject,
+                                                 PairVec& vec) const noexcept
 {
-    add_value_to_vec<int>(sql_be, obj_name, pObject, vec);
+    add_value_to_vec<int>(obj_name, pObject, vec);
 }
 
 /* ----------------------------------------------------------------- */
@@ -226,22 +214,18 @@ GncSqlColumnTableEntryImpl<CT_BOOLEAN>::load (const GncSqlBackend* sql_be,
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_BOOLEAN>::add_to_table(const GncSqlBackend* sql_be,
-                                                 ColVec& vec) const noexcept
+GncSqlColumnTableEntryImpl<CT_BOOLEAN>::add_to_table(ColVec& vec) const noexcept
 {
-    g_return_if_fail (sql_be != NULL);
-
     GncSqlColumnInfo info{*this, BCT_INT, 0, FALSE};
     vec.emplace_back(std::move(info));
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_BOOLEAN>::add_to_query(const GncSqlBackend* sql_be,
-                                                    QofIdTypeConst obj_name,
+GncSqlColumnTableEntryImpl<CT_BOOLEAN>::add_to_query(QofIdTypeConst obj_name,
                                                     const gpointer pObject,
                                                     PairVec& vec) const noexcept
 {
-    add_value_to_vec<int>(sql_be, obj_name, pObject, vec);
+    add_value_to_vec<int>(obj_name, pObject, vec);
 }
 
 /* ----------------------------------------------------------------- */
@@ -264,22 +248,19 @@ GncSqlColumnTableEntryImpl<CT_INT64>::load (const GncSqlBackend* sql_be,
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_INT64>::add_to_table(const GncSqlBackend* sql_be,
-                                                   ColVec& vec) const noexcept
+GncSqlColumnTableEntryImpl<CT_INT64>::add_to_table(ColVec& vec) const noexcept
 {
-    g_return_if_fail (sql_be != NULL);
 
     GncSqlColumnInfo info{*this, BCT_INT64, 0, FALSE};
     vec.emplace_back(std::move(info));
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_INT64>::add_to_query(const GncSqlBackend* sql_be,
-                                                   QofIdTypeConst obj_name,
+GncSqlColumnTableEntryImpl<CT_INT64>::add_to_query(QofIdTypeConst obj_name,
                                                    const gpointer pObject,
                                                    PairVec& vec) const noexcept
 {
-    add_value_to_vec<int64_t>(sql_be, obj_name, pObject, vec);
+    add_value_to_vec<int64_t>(obj_name, pObject, vec);
 }
 /* ----------------------------------------------------------------- */
 
@@ -319,22 +300,18 @@ GncSqlColumnTableEntryImpl<CT_DOUBLE>::load (const GncSqlBackend* sql_be,
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_DOUBLE>::add_to_table(const GncSqlBackend* sql_be,
-                                                 ColVec& vec) const noexcept
+GncSqlColumnTableEntryImpl<CT_DOUBLE>::add_to_table(ColVec& vec) const noexcept
 {
-    g_return_if_fail (sql_be != NULL);
-
     GncSqlColumnInfo info{*this, BCT_DOUBLE, 0, FALSE};
     vec.emplace_back(std::move(info));
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_DOUBLE>::add_to_query(const GncSqlBackend* sql_be,
-                                                    QofIdTypeConst obj_name,
+GncSqlColumnTableEntryImpl<CT_DOUBLE>::add_to_query(QofIdTypeConst obj_name,
                                                     const gpointer pObject,
                                                     PairVec& vec) const noexcept
 {
-    add_value_to_vec<double*>(sql_be, obj_name, pObject, vec);
+    add_value_to_vec<double*>(obj_name, pObject, vec);
 }
 
 /* ----------------------------------------------------------------- */
@@ -367,20 +344,16 @@ GncSqlColumnTableEntryImpl<CT_GUID>::load (const GncSqlBackend* sql_be,
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_GUID>::add_to_table(const GncSqlBackend* sql_be,
-                                                 ColVec& vec) const noexcept
+GncSqlColumnTableEntryImpl<CT_GUID>::add_to_table(ColVec& vec) const noexcept
 {
-    g_return_if_fail (sql_be != NULL);
-
     GncSqlColumnInfo info{*this, BCT_STRING, GUID_ENCODING_LENGTH, FALSE};
     vec.emplace_back(std::move(info));
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_GUID>::add_to_query(const GncSqlBackend* sql_be,
-                                                    QofIdTypeConst obj_name,
-                                                    const gpointer pObject,
-                                                    PairVec& vec) const noexcept
+GncSqlColumnTableEntryImpl<CT_GUID>::add_to_query(QofIdTypeConst obj_name,
+                                                  const gpointer pObject,
+                                                  PairVec& vec) const noexcept
 {
     auto s = get_row_value_from_object<GncGUID*>(obj_name, pObject);
 
@@ -436,18 +409,14 @@ GncSqlColumnTableEntryImpl<CT_TIMESPEC>::load (const GncSqlBackend* sql_be,
  }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_TIMESPEC>::add_to_table(const GncSqlBackend* sql_be,
-                                                 ColVec& vec) const noexcept
+GncSqlColumnTableEntryImpl<CT_TIMESPEC>::add_to_table(ColVec& vec) const noexcept
 {
-    g_return_if_fail (sql_be != nullptr);
-
     GncSqlColumnInfo info{*this, BCT_DATETIME, TIMESPEC_COL_SIZE, FALSE};
     vec.emplace_back(std::move(info));
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_TIMESPEC>::add_to_query(const GncSqlBackend* sql_be,
-                                                      QofIdTypeConst obj_name,
+GncSqlColumnTableEntryImpl<CT_TIMESPEC>::add_to_query(QofIdTypeConst obj_name,
                                                       const gpointer pObject,
                                                       PairVec& vec) const noexcept
 {
@@ -457,7 +426,6 @@ GncSqlColumnTableEntryImpl<CT_TIMESPEC>::add_to_query(const GncSqlBackend* sql_b
  * Timespec* and the getter returns a Timespec. Will be fixed by the
  * replacement of timespecs with time64s.
  */
-    g_return_if_fail (sql_be != NULL);
     g_return_if_fail (obj_name != NULL);
     g_return_if_fail (pObject != NULL);
 
@@ -537,8 +505,8 @@ GncSqlColumnTableEntryImpl<CT_GDATE>::add_to_table(ColVec& vec) const noexcept
 
 template<> void
 GncSqlColumnTableEntryImpl<CT_GDATE>::add_to_query(QofIdTypeConst obj_name,
-                                                    const gpointer pObject,
-                                                    PairVec& vec) const noexcept
+                                                   const gpointer pObject,
+                                                   PairVec& vec) const noexcept
 {
     GDate *date = get_row_value_from_object<GDate*>(obj_name, pObject);
 
@@ -593,10 +561,8 @@ GncSqlColumnTableEntryImpl<CT_NUMERIC>::load (const GncSqlBackend* sql_be,
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_NUMERIC>::add_to_table(const GncSqlBackend* sql_be,
-                                                     ColVec& vec) const noexcept
+GncSqlColumnTableEntryImpl<CT_NUMERIC>::add_to_table(ColVec& vec) const noexcept
 {
-    g_return_if_fail (sql_be != NULL);
 
     for (auto const& subtable_row : numeric_col_table)
     {
@@ -609,8 +575,7 @@ GncSqlColumnTableEntryImpl<CT_NUMERIC>::add_to_table(const GncSqlBackend* sql_be
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_NUMERIC>::add_to_query(const GncSqlBackend* sql_be,
-                                                     QofIdTypeConst obj_name,
+GncSqlColumnTableEntryImpl<CT_NUMERIC>::add_to_query(QofIdTypeConst obj_name,
                                                      const gpointer pObject,
                                                      PairVec& vec) const noexcept
 {
@@ -618,7 +583,6 @@ GncSqlColumnTableEntryImpl<CT_NUMERIC>::add_to_query(const GncSqlBackend* sql_be
     NumericGetterFunc getter;
     gnc_numeric n;
 
-    g_return_if_fail (sql_be != NULL);
     g_return_if_fail (obj_name != NULL);
     g_return_if_fail (pObject != NULL);
 
