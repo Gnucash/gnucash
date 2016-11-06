@@ -78,12 +78,11 @@ static EntryVec version_table
     gnc_sql_make_table_entry<CT_INT>(VERSION_COL_NAME, 0, COL_NNUL)
 };
 
-GncSqlBackend::GncSqlBackend(GncSqlConnection *conn, QofBook* book,
-                             const char* format) :
+GncSqlBackend::GncSqlBackend(GncSqlConnection *conn, QofBook* book) :
     qof_be {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
             nullptr, nullptr, nullptr, nullptr, ERR_BACKEND_NO_ERR, nullptr, 0,
             nullptr}, m_conn{conn}, m_book{book}, m_loading{false},
-        m_in_query{false}, m_is_pristine_db{false}, m_timespec_format{format}
+        m_in_query{false}, m_is_pristine_db{false}
 {
     if (conn != nullptr)
         connect (conn);
@@ -780,26 +779,6 @@ GncSqlBackend::upgrade_table (const std::string& table_name,
     sql << "ALTER TABLE " << temp_table_name << " RENAME TO " << table_name;
     stmt = create_statement_from_sql(sql.str());
     execute_nonselect_statement(stmt);
-}
-
-/* This is required because we're passing be->timespace_format to
- * g_strdup_printf.
- */
-#pragma GCC diagnostic ignored "-Wformat-nonliteral"
-std::string
-GncSqlBackend::time64_to_string (time64 t) const noexcept
-{
-    auto tm = gnc_gmtime (&t);
-
-    auto year = tm->tm_year + 1900;
-
-    auto datebuf = g_strdup_printf (m_timespec_format,
-                                    year, tm->tm_mon + 1, tm->tm_mday,
-                                    tm->tm_hour, tm->tm_min, tm->tm_sec);
-    gnc_tm_free (tm);
-    std::string date{datebuf};
-    g_free(datebuf);
-    return date;
 }
 
 GncSqlBackend::ObjectBackendRegistry::ObjectBackendRegistry()

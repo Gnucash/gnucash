@@ -57,8 +57,7 @@ using uint_t = unsigned int;
 class GncSqlBackend
 {
 public:
-    GncSqlBackend(GncSqlConnection *conn, QofBook* book,
-                  const char* format = nullptr);
+    GncSqlBackend(GncSqlConnection *conn, QofBook* book);
     virtual ~GncSqlBackend() = default;
     /** Connect the backend to a GncSqlConnection.
      * Sets up version info. Calling with nullptr clears the connection and
@@ -150,13 +149,6 @@ public:
      */
     uint_t get_table_version(const std::string& table_name) const noexcept;
     bool set_table_version (const std::string& table_name, uint_t version) noexcept;
-    /**
-     * Converts a time64 value to a string value for the database.
-     *
-     * @param t time64 to be converted.
-     * @return String representation of the Timespec
-     */
-    std::string time64_to_string (time64 t) const noexcept;
     /**
      * Load the contents of an SQL database into a book.
      *

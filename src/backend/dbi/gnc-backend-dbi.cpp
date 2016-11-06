@@ -110,10 +110,6 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define SQLITE3_URI_PREFIX (SQLITE3_URI_TYPE "://")
 #define PGSQL_DEFAULT_PORT 5432
 
-constexpr const char* SQLITE3_TIMESPEC_STR_FORMAT = "%04d%02d%02d%02d%02d%02d";
-constexpr const char* MYSQL_TIMESPEC_STR_FORMAT =   "%04d%02d%02d%02d%02d%02d";
-constexpr const char* PGSQL_TIMESPEC_STR_FORMAT =   "%04d%02d%02d %02d%02d%02d";
-
 static void adjust_sql_options (dbi_conn connection);
 static bool save_may_clobber_data (dbi_conn conn, const std::string& dbname);
 static void init_sql_backend (GncDbiBackend* dbi_be);
@@ -128,20 +124,7 @@ template <DbType T> void gnc_dbi_session_begin(QofBackend* qof_be,
 template <DbType Type> QofBackend*
 new_backend ()
 {
-    const char* format;
-    switch (Type)
-    {
-        case (DbType::DBI_SQLITE):
-            format = SQLITE3_TIMESPEC_STR_FORMAT;
-            break;
-        case (DbType::DBI_MYSQL):
-            format = MYSQL_TIMESPEC_STR_FORMAT;
-            break;
-        case (DbType::DBI_PGSQL):
-            format = PGSQL_TIMESPEC_STR_FORMAT;
-            break;
-    }
-    auto dbi_be = new GncDbiBackend(nullptr, nullptr, format);
+    auto dbi_be = new GncDbiBackend(nullptr, nullptr);
     assert (dbi_be != nullptr);
 
     QofBackend* qof_be = reinterpret_cast<decltype(qof_be)>(dbi_be);

@@ -87,9 +87,8 @@ enum class DbType
 class GncDbiBackend : public GncSqlBackend
 {
 public:
-    GncDbiBackend(GncSqlConnection *conn, QofBook* book,
-                  const char* format = nullptr) :
-        GncSqlBackend(conn, book, format), m_exists{false} {}
+    GncDbiBackend(GncSqlConnection *conn, QofBook* book) :
+        GncSqlBackend(conn, book), m_exists{false} {}
     bool connected() const noexcept { return m_conn != nullptr; }
     /** FIXME: Just a pass-through to m_conn: */
     void set_error(int error, unsigned int repeat,  bool retry) noexcept

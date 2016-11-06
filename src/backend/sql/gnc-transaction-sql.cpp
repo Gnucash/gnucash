@@ -51,6 +51,7 @@ extern "C"
 
 #include "escape.h"
 
+#include <gnc-datetime.hpp>
 #include "gnc-sql-connection.hpp"
 #include "gnc-sql-backend.hpp"
 #include "gnc-sql-object-backend.hpp"
@@ -959,7 +960,8 @@ convert_query_term_to_sql (const GncSqlBackend* sql_be, const gchar* fieldName,
         {
             query_date_t date_data = (query_date_t)pPredData;
 
-            auto datebuf = sql_be->time64_to_string (date_data->date.tv_sec);
+            GncDateTime time(date_data->date.tv_sec);
+            auto datebuf = time.format_zulu ("%Y-%m-%d %H:%M%S");
             g_string_append_printf (sql, "'%s'", datebuf.c_str());
 
         }

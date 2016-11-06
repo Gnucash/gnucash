@@ -28,7 +28,7 @@ extern "C"
 }
 #include <sstream>
 #include <iomanip>
-
+#include <gnc-datetime.hpp>
 #include "gnc-sql-backend.hpp"
 #include "gnc-sql-object-backend.hpp"
 #include "gnc-sql-column-table-entry.hpp"
@@ -396,8 +396,7 @@ GncSqlColumnTableEntryImpl<CT_GUID>::add_to_query(const GncSqlBackend* sql_be,
 typedef Timespec (*TimespecAccessFunc) (const gpointer);
 typedef void (*TimespecSetterFunc) (const gpointer, Timespec*);
 
-#define TIMESPEC_STR_FORMAT "%04d%02d%02d%02d%02d%02d"
-#define TIMESPEC_COL_SIZE (4+2+2+2+2+2)
+#define TIMESPEC_COL_SIZE (4+3+3+3+3+3)
 
 template<> void
 GncSqlColumnTableEntryImpl<CT_TIMESPEC>::load (const GncSqlBackend* sql_be,
@@ -423,13 +422,8 @@ GncSqlColumnTableEntryImpl<CT_TIMESPEC>::load (const GncSqlBackend* sql_be,
         try
         {
             auto val = row.get_string_at_col(m_col_name);
-            auto s = val.c_str();
-            auto buf = g_strdup_printf ("%c%c%c%c-%c%c-%c%c %c%c:%c%c:%c%c",
-                                        s[0], s[1], s[2], s[3], s[4], s[5],
-                                        s[6], s[7], s[8], s[9], s[10], s[11],
-                                        s[12], s[13]);
-            ts = gnc_iso8601_to_timespec_gmt (buf);
-            g_free (buf);
+            GncDateTime time(val);
+            ts.tv_sec = static_cast<time64>(time);
         }
         catch (std::invalid_argument)
         {
@@ -480,12 +474,9 @@ GncSqlColumnTableEntryImpl<CT_TIMESPEC>::add_to_query(const GncSqlBackend* sql_b
         ts = (*ts_getter) (pObject);
     }
 
-    if (ts.tv_sec != 0 || ts.tv_nsec != 0)
-    {
-        auto datebuf = sql_be->time64_to_string (ts.tv_sec);
-        vec.emplace_back (std::make_pair (std::string{m_col_name}, datebuf));
-        return;
-    }
+    GncDateTime time(ts.tv_sec);
+    vec.emplace_back (std::make_pair (std::string{m_col_name},
+                                      time.format_zulu ("%Y-%m-%d %H:%M:%S")));
 }
 
 /* ----------------------------------------------------------------- */
@@ -538,18 +529,14 @@ GncSqlColumnTableEntryImpl<CT_GDATE>::load (const GncSqlBackend* sql_be,
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_GDATE>::add_to_table(const GncSqlBackend* sql_be,
-                                                 ColVec& vec) const noexcept
+GncSqlColumnTableEntryImpl<CT_GDATE>::add_to_table(ColVec& vec) const noexcept
 {
-    g_return_if_fail (sql_be != NULL);
-
     GncSqlColumnInfo info{*this,  BCT_DATE, DATE_COL_SIZE, FALSE};
     vec.emplace_back(std::move(info));
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_GDATE>::add_to_query(const GncSqlBackend* sql_be,
-                                                    QofIdTypeConst obj_name,
+GncSqlColumnTableEntryImpl<CT_GDATE>::add_to_query(QofIdTypeConst obj_name,
                                                     const gpointer pObject,
                                                     PairVec& vec) const noexcept
 {
