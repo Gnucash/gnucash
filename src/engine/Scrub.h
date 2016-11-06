@@ -77,12 +77,12 @@ void xaccTransScrubOrphans (Transaction *trans);
 /** The xaccAccountScrubOrphans() method performs this scrub only for the
  *    indicated account, and not for any of its children.
  */
-void xaccAccountScrubOrphans (Account *acc);
+void xaccAccountScrubOrphans (Account *acc, QofPercentageFunc percentagefunc);
 
 /** The xaccAccountTreeScrubOrphans() method performs this scrub for the
  *    indicated account and its children.
  */
-void xaccAccountTreeScrubOrphans (Account *acc);
+void xaccAccountTreeScrubOrphans (Account *acc, QofPercentageFunc percentagefunc);
 
 /** The xaccSplitScrub method ensures that if this split has the same
  *   commodity and currency, then it will have the same amount and value.
@@ -108,8 +108,8 @@ void xaccAccountTreeScrubSplits (Account *account);
  */
 void xaccTransScrubImbalance (Transaction *trans, Account *root,
                               Account *parent);
-void xaccAccountScrubImbalance (Account *acc);
-void xaccAccountTreeScrubImbalance (Account *acc);
+void xaccAccountScrubImbalance (Account *acc, QofPercentageFunc percentagefunc);
+void xaccAccountTreeScrubImbalance (Account *acc, QofPercentageFunc percentagefunc);
 
 /** The xaccTransScrubCurrency method fixes transactions without a
  * common_currency by looking for the most commonly used currency

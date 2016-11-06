@@ -509,12 +509,13 @@ gncScrubBusinessSplit (Split *split)
 /* ============================================================== */
 
 void
-gncScrubBusinessAccountLots (Account *acc)
+gncScrubBusinessAccountLots (Account *acc, QofPercentageFunc percentagefunc)
 {
     LotList *lots, *node;
     gint lot_count = 0;
-    gint curr_lot_no = 1;
+    gint curr_lot_no = 0;
     const gchar *str;
+    const char *message = _( "Checking business lots in account %s: %u of %u");
 
     if (!acc) return;
     if (FALSE == xaccAccountIsAPARType (xaccAccountGetType (acc))) return;
@@ -533,29 +534,38 @@ gncScrubBusinessAccountLots (Account *acc)
         GNCLot *lot = node->data;
 
         PINFO("Start processing lot %d of %d",
-              curr_lot_no, lot_count);
+              curr_lot_no + 1, lot_count);
+
+        if (curr_lot_no % 100 == 0)
+        {
+            char *progress_msg = g_strdup_printf (message, str, curr_lot_no, lot_count);
+            (percentagefunc)(progress_msg, (100 * curr_lot_no) / lot_count);
+            g_free (progress_msg);
+        }
 
         if (lot)
             gncScrubBusinessLot (lot);
 
         PINFO("Finished processing lot %d of %d",
-              curr_lot_no, lot_count);
+              curr_lot_no + 1, lot_count);
         curr_lot_no++;
     }
     g_list_free(lots);
     xaccAccountCommitEdit(acc);
+    (percentagefunc)(NULL, -1.0);
     LEAVE ("(acc=%s)", str);
 }
 
 /* ============================================================== */
 
 void
-gncScrubBusinessAccountSplits (Account *acc)
+gncScrubBusinessAccountSplits (Account *acc, QofPercentageFunc percentagefunc)
 {
     SplitList *splits, *node;
     gint split_count = 0;
-    gint curr_split_no = 1;
+    gint curr_split_no = 0;
     const gchar *str;
+    const char *message = _( "Checking business splits in account %s: %u of %u");
 
     if (!acc) return;
     if (FALSE == xaccAccountIsAPARType (xaccAccountGetType (acc))) return;
@@ -574,29 +584,37 @@ gncScrubBusinessAccountSplits (Account *acc)
         Split *split = node->data;
 
         PINFO("Start processing split %d of %d",
-              curr_split_no, split_count);
+              curr_split_no + 1, split_count);
+
+        if (curr_split_no % 100 == 0)
+        {
+            char *progress_msg = g_strdup_printf (message, str, curr_split_no, split_count);
+            (percentagefunc)(progress_msg, (100 * curr_split_no) / split_count);
+            g_free (progress_msg);
+        }
 
         if (split)
             gncScrubBusinessSplit (split);
 
         PINFO("Finished processing split %d of %d",
-              curr_split_no, split_count);
+              curr_split_no + 1, split_count);
         curr_split_no++;
     }
     xaccAccountCommitEdit(acc);
+    (percentagefunc)(NULL, -1.0);
     LEAVE ("(acc=%s)", str);
 }
 
 /* ============================================================== */
 
 void
-gncScrubBusinessAccount (Account *acc)
+gncScrubBusinessAccount (Account *acc, QofPercentageFunc percentagefunc)
 {
     if (!acc) return;
     if (FALSE == xaccAccountIsAPARType (xaccAccountGetType (acc))) return;
 
-    gncScrubBusinessAccountLots (acc);
-    gncScrubBusinessAccountSplits (acc);
+    gncScrubBusinessAccountLots (acc, percentagefunc);
+    gncScrubBusinessAccountSplits (acc, percentagefunc);
 }
 
 /* ============================================================== */
@@ -605,16 +623,16 @@ static void
 lot_scrub_cb (Account *acc, gpointer data)
 {
     if (FALSE == xaccAccountIsAPARType (xaccAccountGetType (acc))) return;
-    gncScrubBusinessAccount (acc);
+    gncScrubBusinessAccount (acc, data);
 }
 
 void
-gncScrubBusinessAccountTree (Account *acc)
+gncScrubBusinessAccountTree (Account *acc, QofPercentageFunc percentagefunc)
 {
     if (!acc) return;
 
-    gnc_account_foreach_descendant(acc, lot_scrub_cb, NULL);
-    gncScrubBusinessAccount (acc);
+    gnc_account_foreach_descendant(acc, lot_scrub_cb, percentagefunc);
+    gncScrubBusinessAccount (acc, percentagefunc);
 }
 
 /* ========================== END OF FILE  ========================= */

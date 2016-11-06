@@ -48,6 +48,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-prefs.h"
 #include "gnc-ui-util.h"
+#include "gnc-window.h"
 #include "misc-gnome-utils.h"
 #include "tree-view-utils.h"
 
@@ -762,7 +763,7 @@ lv_response_cb (GtkDialog *dialog, gint response, gpointer data)
     case RESPONSE_SCRUB_ACCOUNT:
         gnc_suspend_gui_refresh ();
         if (xaccAccountIsAPARType (xaccAccountGetType(lv->account)))
-            gncScrubBusinessAccountLots (lv->account);
+            gncScrubBusinessAccountLots (lv->account, gnc_window_show_progress);
         else
             xaccAccountScrubLots (lv->account);
         gnc_resume_gui_refresh ();

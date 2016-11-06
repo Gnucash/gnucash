@@ -54,6 +54,7 @@
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
 #include "gnc-ui-balances.h"
+#include "gnc-window.h"
 #include "guile-util.h"
 #include "reconcile-view.h"
 #include "window-reconcile.h"
@@ -1407,8 +1408,8 @@ gnc_recn_scrub_cb(GtkAction *action, gpointer data)
 
     gnc_suspend_gui_refresh ();
 
-    xaccAccountTreeScrubOrphans (account);
-    xaccAccountTreeScrubImbalance (account);
+    xaccAccountTreeScrubOrphans (account, gnc_window_show_progress);
+    xaccAccountTreeScrubImbalance (account, gnc_window_show_progress);
 
     // XXX: Lots are disabled.
     if (g_getenv("GNC_AUTO_SCRUB_LOTS") != NULL)
