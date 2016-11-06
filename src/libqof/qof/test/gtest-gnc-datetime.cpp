@@ -77,6 +77,13 @@ TEST(gnc_datetime_functions, test_format)
     EXPECT_EQ(atime.format("%d-%m-%Y"), "13-11-2045");
 }
 
+TEST(gnc_datetime_functions, test_format_zulu)
+{
+    GncDateTime atime(2394187200); //2045-11-13 12:00:00 Z
+    //Date only to finesse timezone issues. It will still fail in +12 DST.
+    EXPECT_EQ(atime.format_zulu("%d-%m-%Y %H:%M:%S"), "13-11-2045 12:00:00");
+}
+
 //This is a bit convoluted because it uses GncDate's GncDateImpl constructor and year_month_day() function. There's no good way to test the former without violating the privacy of the implementation.
 TEST(gnc_datetime_functions, test_date)
 {

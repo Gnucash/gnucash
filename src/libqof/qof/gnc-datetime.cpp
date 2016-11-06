@@ -71,6 +71,7 @@ public:
     void today() { m_greg = boost::gregorian::day_clock::local_day(); }
     ymd year_month_day() const;
     std::string format(const char* format) const;
+    std::string format_zulu(const char* format) const;
 private:
     Date m_greg;
 };
@@ -147,6 +148,7 @@ public:
     struct tm utc_tm() const { return to_tm(m_time.utc_time()); }
     std::unique_ptr<GncDateImpl> date() const;
     std::string format(const char* format) const;
+    std::string format_zulu(const char* format) const;
 private:
     LDT m_time;
 };
@@ -256,6 +258,18 @@ GncDateTimeImpl::format(const char* format) const
     return ss.str();
 }
 
+std::string
+GncDateTimeImpl::format_zulu(const char* format) const
+{
+    using Facet = boost::posix_time::time_facet;
+    std::stringstream ss;
+    //The stream destructor frees the facet, so it must be heap-allocated.
+    auto output_facet(new Facet(format));
+    ss.imbue(std::locale(std::locale(), output_facet));
+    ss << m_time.utc_time();
+    return ss.str();
+}
+
 /* =================== Presentation-class Implementations ====================*/
 /* GncDate */
 GncDate::GncDate() : m_impl{new GncDateImpl} {}
@@ -336,4 +350,10 @@ std::string
 GncDateTime::format(const char* format) const
 {
     return m_impl->format(format);
+}
+
+std::string
+GncDateTime::format_zulu(const char* format) const
+{
+    return m_impl->format_zulu(format);
 }
