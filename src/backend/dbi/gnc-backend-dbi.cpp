@@ -179,8 +179,10 @@ UriStrings::UriStrings(const std::string& uri)
     m_protocol = std::string{protocol};
     m_host = std::string{host};
     m_dbname = std::string{dbname};
-    m_username = std::string{username};
-    m_password = std::string{password};
+    if (username)
+	m_username = std::string{username};
+    if (password)
+	m_password = std::string{password};
     m_portnum = portnum;
     g_free(protocol);
     g_free(host);
