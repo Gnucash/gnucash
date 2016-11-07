@@ -42,6 +42,7 @@ extern "C"
 #endif
 #if PLATFORM(WINDOWS)
 #include <windows.h>
+#define __STDC_FORMAT_MACROS 1
 #endif
 
 #include <inttypes.h>
