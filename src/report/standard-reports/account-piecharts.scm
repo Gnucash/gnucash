@@ -181,9 +181,9 @@ balance at a given time"))
       "c" (N_ "Maximum number of slices in pie.") 7
       2 24 0 1))
 
-    (gnc:options-add-plot-size! 
+    (gnc:options-add-plot-sizes! 
      options gnc:pagename-display 
-     optname-plot-width optname-plot-height "d" 500 350)
+     optname-plot-width optname-plot-height "d" (cons 'percent 100.0) (cons 'percent 100.0))
 
     (gnc:options-add-sort-method! 
      options gnc:pagename-display
