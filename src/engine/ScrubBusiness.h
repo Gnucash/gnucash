@@ -57,7 +57,9 @@ gboolean gncScrubBusinessLot (GNCLot *lot);
 /** The gncScrubBusinessSplit() function will fix all issues found with
  *    the given split.
  *
- *    Currently this function only does one thing: check if the split is
+ *    Current checks are:
+ *
+ *    * check if the split is
  *    part of a transaction that was generated as the result of a doubly
  *    posted invoice/bill/credit note. Refer to
  *    https://bugzilla.gnome.org/show_bug.cgi?id=754209 to learn how this
@@ -66,8 +68,11 @@ gboolean gncScrubBusinessLot (GNCLot *lot);
  *    a warning is written to the trace file. Considering the user may
  *    already have added a correcting transaction we leave it up to the user
  *    to decide whether to also delete the transaction or not.
+ *
+ *    * remove empty splits, on condition they aren't part of an invoice transaction.
+ *    In this case the function returns true so the caller knows a split was removed.
  */
-void gncScrubBusinessSplit (Split *split);
+gboolean gncScrubBusinessSplit (Split *split);
 
 /** The gncScrubBusinessAccountLots() function will call
  *    gncScrubBusinessLot() on each lot in the given account.

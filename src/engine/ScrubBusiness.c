@@ -462,13 +462,14 @@ gncScrubBusinessLot (GNCLot *lot)
     return splits_deleted;
 }
 
-void
+gboolean
 gncScrubBusinessSplit (Split *split)
 {
     const gchar *memo = _("Please delete this transaction. Explanation at http://wiki.gnucash.org/wiki/Business_Features_Issues#Double_Posting");
     Transaction *txn;
+    gboolean deleted_split = FALSE;
 
-    if (!split) return;
+    if (!split) return FALSE;
     ENTER ("(split=%p)", split);
 
     txn = xaccSplitGetParent (split);
@@ -500,10 +501,23 @@ gncScrubBusinessSplit (Split *split)
                   txn_date);
             g_free (txn_date);
         }
+        /* Next delete any empty splits that aren't part of an invoice transaction
+         * Such splits may be the result of scrubbing the business lots, which can
+         * merge splits together while reducing superfluous lot links
+         */
+        else if (gnc_numeric_zero_p (xaccSplitGetAmount(split)) && !gncInvoiceGetInvoiceFromTxn (txn))
+        {
+            time64 pdate = xaccTransGetDate (txn);
+            gchar *pdatestr = gnc_ctime (&pdate);
+            PINFO ("Destroying empty split %p from transaction %s (%s)", split, pdatestr, xaccTransGetDescription(txn));
+            xaccSplitDestroy (split);
+            deleted_split = TRUE;
+        }
 
     }
 
     LEAVE ("(split=%p)", split);
+    return deleted_split;
 }
 
 /* ============================================================== */
@@ -563,7 +577,7 @@ gncScrubBusinessAccountSplits (Account *acc, QofPercentageFunc percentagefunc)
 {
     SplitList *splits, *node;
     gint split_count = 0;
-    gint curr_split_no = 0;
+    gint curr_split_no;
     const gchar *str;
     const char *message = _( "Checking business splits in account %s: %u of %u");
 
@@ -577,6 +591,8 @@ gncScrubBusinessAccountSplits (Account *acc, QofPercentageFunc percentagefunc)
     PINFO ("Cleaning up superfluous lot links in account %s \n", str);
     xaccAccountBeginEdit(acc);
 
+restart:
+    curr_split_no = 0;
     splits = xaccAccountGetSplitList(acc);
     split_count = g_list_length (splits);
     for (node = splits; node; node = node->next)
@@ -594,7 +610,10 @@ gncScrubBusinessAccountSplits (Account *acc, QofPercentageFunc percentagefunc)
         }
 
         if (split)
-            gncScrubBusinessSplit (split);
+            // If gncScrubBusinessSplit returns true, a split was deleted and hence
+            // The account split list has become invalid, so we need to start over
+            if (gncScrubBusinessSplit (split))
+                goto restart;
 
         PINFO("Finished processing split %d of %d",
               curr_split_no + 1, split_count);
