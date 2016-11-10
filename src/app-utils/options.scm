@@ -1339,7 +1339,7 @@
   (define (def-value)
     (if (list? default-value)
         default-value
-        '(locale number #t "")))
+        '('locale 'number #t "")))
 
   (let* ((value (def-value))
          (value->string (lambda () 
