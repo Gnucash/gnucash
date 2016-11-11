@@ -72,6 +72,9 @@
            (qty?       #f) ; does any row have qty <> 1?
            (tbl_cols   0)) ; number of columns for 'colspan' attributes
 
+      (if (boolean? dateformat) ;; date-format does not exist
+        (set! dateformat (gnc-default-strftime-date-format)))
+
       ; load splits, if any
       (if (not (null? lot))
         (set! splits

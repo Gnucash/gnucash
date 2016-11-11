@@ -760,9 +760,12 @@
      (date-format (gnc:fancy-date-info book gnc:*fancy-date-format*))
      (type (opt-val "__reg" "owner-type"))
      (owner-descr (owner-string type))
-     (date-type (opt-val gnc:pagename-general optname-date-driver)) 
+     (date-type (opt-val gnc:pagename-general optname-date-driver))
      (owner (opt-val owner-page owner-descr))
      (report-title (string-append (doctype-str type) " " (_ "Report"))))
+
+    (if (boolean? date-format) ;; date-format does not exist
+      (set! date-format (gnc-default-strftime-date-format)))
 
     (if (not (gncOwnerIsValid owner))
      (gnc:html-document-add-object!
