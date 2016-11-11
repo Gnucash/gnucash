@@ -1130,7 +1130,7 @@ qofInvoiceSetJob (GncInvoice *invoice, GncJob *job)
     invoice->job = job;
 }
 
-static void
+void
 gncInvoiceDetachFromLot (GNCLot *lot)
 {
     KvpFrame *kvp;
@@ -1143,7 +1143,7 @@ gncInvoiceDetachFromLot (GNCLot *lot)
     gnc_lot_commit_edit (lot);
 }
 
-static void
+void
 gncInvoiceAttachToLot (GncInvoice *invoice, GNCLot *lot)
 {
     KvpFrame *kvp;
@@ -1182,7 +1182,7 @@ GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot)
     return gncInvoiceLookup(book, guid);
 }
 
-static void
+void
 gncInvoiceAttachToTxn (GncInvoice *invoice, Transaction *txn)
 {
     KvpFrame *kvp;

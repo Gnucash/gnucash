@@ -37,6 +37,7 @@
 #include "policy-p.h"
 #include "Account.h"
 #include "gncInvoice.h"
+#include "gncInvoiceP.h"
 #include "Scrub2.h"
 #include "ScrubBusiness.h"
 #include "Transaction.h"
@@ -45,6 +46,41 @@
 #define G_LOG_DOMAIN "gnc.engine.scrub"
 
 static QofLogModule log_module = G_LOG_DOMAIN;
+
+static void
+gncScrubInvoiceState (GNCLot *lot)
+{
+    SplitList *ls_iter = NULL;
+    Transaction *txn = NULL; // ll_txn = "Lot Link Transaction"
+    GncInvoice *invoice = NULL;
+    GncInvoice *lot_invoice = gncInvoiceGetInvoiceFromLot (lot);
+
+    for (ls_iter = gnc_lot_get_split_list (lot); ls_iter; ls_iter = ls_iter->next)
+    {
+        Split *split = ls_iter->data;
+        Transaction *txn = NULL; // ll_txn = "Lot Link Transaction"
+
+        if (!split)
+            continue; // next scrub lot split
+
+        txn = xaccSplitGetParent (split);
+        invoice = gncInvoiceGetInvoiceFromTxn (txn);
+        if (invoice)
+            break;
+
+    }
+
+    if (invoice != lot_invoice)
+    {
+        PINFO("Correcting lot invoice associaton. Old invoice: %p, new invoice %p", lot_invoice, invoice);
+        gncInvoiceDetachFromLot(lot);
+
+        if (invoice)
+            gncInvoiceAttachToLot (invoice, lot);
+        else
+            gncOwnerAttachToLot (gncInvoiceGetOwner(lot_invoice), lot);
+    }
+}
 
 // A helper function that takes two splits. If the splits are  of opposite sign
 // it reduces the biggest split to have the same value (but with opposite sign)
@@ -214,7 +250,7 @@ scrub_start:
             // Depending on the type of lots we're comparing, we need different actions
             // - Two document lots (an invoice and a credit note):
             //   Special treatment - look for all document lots linked via ll_txn
-            //   and update the memo to be of more use to the uses.
+            //   and update the memo to be of more use to the users.
             // - Two payment lots:
             //   (Part of) the link will be eliminated and instead (part of)
             //   one payment will be added to the other lot to keep the balance.
@@ -423,6 +459,13 @@ gncScrubBusinessLot (GNCLot *lot)
     acc = gnc_lot_get_account (lot);
     if (acc)
         xaccAccountBeginEdit(acc);
+
+    /* Check invoice link consistency
+     * A lot should have both or neither of:
+     * - one split from an invoice transaction
+     * - an invoice-guid set
+     */
+    gncScrubInvoiceState (lot);
 
     // Scrub lot links.
     // They should only remain when two document lots are linked together
