@@ -500,8 +500,9 @@ gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_l
         time64 date = xaccTransGetDate (trans);
         gnc_numeric amnt, valu, gains;
 
-        /* Do not show gains splits */
-        if (gnc_numeric_zero_p (xaccSplitGetAmount(split))) continue;
+        /* Do not show gains splits, however do show empty business splits */
+        if (!xaccAccountIsAPARType (xaccAccountGetType (xaccSplitGetAccount (split)))
+                && gnc_numeric_zero_p (xaccSplitGetAmount(split))) continue;
 
         gtk_list_store_append(store, &iter);
 
