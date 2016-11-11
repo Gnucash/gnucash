@@ -154,7 +154,10 @@
       "a" "" (lambda () '()) 
       #f))        ;customers-only)) ;-- see above
 
-(add-option (gnc:make-currency-option		gnc:pagename-general	optname-report-currency		"b" "" ""))
+  (add-option
+    (gnc:make-currency-option
+      gnc:pagename-general optname-report-currency
+      "b" "" (gnc-default-report-currency)))
 
   ;; Elements page options
 (add-option (gnc:make-simple-boolean-option	elementspage	optname-col-date		"a" (N_ "Display the date?") #t))
