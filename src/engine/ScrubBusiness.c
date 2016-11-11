@@ -200,7 +200,6 @@ scrub_start:
         if (!sl_split)
             continue; // next scrub lot split
 
-        // Only lot link transactions need to be scrubbed
         ll_txn = xaccSplitGetParent (sl_split);
 
         if (!ll_txn)
@@ -212,8 +211,18 @@ scrub_start:
             continue;
         }
 
-        if (xaccTransGetTxnType (ll_txn) != TXN_TYPE_LINK)
+        // Don't scrub invoice type transactions
+        if (xaccTransGetTxnType (ll_txn) == TXN_TYPE_INVOICE)
             continue; // next scrub lot split
+
+        // Empty splits can be removed immediately
+        if (gnc_numeric_zero_p (xaccSplitGetValue (sl_split)) ||
+                gnc_numeric_zero_p(xaccSplitGetValue (sl_split)))
+        {
+            xaccSplitDestroy (sl_split);
+            modified = TRUE;
+            goto scrub_start;
+        }
 
         // Iterate over all splits in the lot link transaction
         for (lts_iter = xaccTransGetSplitList (ll_txn); lts_iter; lts_iter = lts_iter->next)
@@ -229,20 +238,22 @@ scrub_start:
             if (sl_split == ll_txn_split)
                 continue; // next lot link transaction split
 
+            // Skip empty other splits. They'll be scrubbed in the outer for loop later
+            if (gnc_numeric_zero_p (xaccSplitGetValue (ll_txn_split)) ||
+                    gnc_numeric_zero_p(xaccSplitGetValue (ll_txn_split)))
+                continue;
+
             // Only splits of opposite signed values can be scrubbed
             if (gnc_numeric_positive_p (xaccSplitGetValue (sl_split)) ==
                 gnc_numeric_positive_p (xaccSplitGetValue (ll_txn_split)))
                 continue; // next lot link transaction split
 
-            // Find linked lot via split
+            // We can only scrub if the other split is in a lot as well
+            // Link transactions always have their other split in another lot
+            // however ordinary payment transactions may not
             remote_lot = xaccSplitGetLot (ll_txn_split);
             if (!remote_lot)
-            {
-                // This is unexpected - write a warning message and skip this split
-                PWARN("Encountered a Lot Link transaction with a split that's not in any lot. "
-                      "This is unexpected! Skipping split %p from transaction %p.", ll_txn_split, ll_txn);
                 continue;
-            }
 
             sl_is_doc_lot = (gncInvoiceGetInvoiceFromLot (scrub_lot) != NULL);
             rl_is_doc_lot = (gncInvoiceGetInvoiceFromLot (remote_lot) != NULL);
@@ -550,10 +561,16 @@ gncScrubBusinessSplit (Split *split)
          */
         else if (gnc_numeric_zero_p (xaccSplitGetAmount(split)) && !gncInvoiceGetInvoiceFromTxn (txn))
         {
+            GNCLot *lot = xaccSplitGetLot (split);
             time64 pdate = xaccTransGetDate (txn);
             gchar *pdatestr = gnc_ctime (&pdate);
             PINFO ("Destroying empty split %p from transaction %s (%s)", split, pdatestr, xaccTransGetDescription(txn));
             xaccSplitDestroy (split);
+
+            // Also delete the lot containing this split if it was the last split in that lot
+            if (lot && (gnc_lot_count_splits (lot) == 0))
+                gnc_lot_destroy (lot);
+
             deleted_split = TRUE;
         }
 
