@@ -393,7 +393,7 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
         }
         else
         {
-            gtk_list_store_set(store, &iter, LOT_COL_CLOSE, 0LL, -1);
+            gtk_list_store_set(store, &iter, LOT_COL_CLOSE, G_MAXINT64, -1);
         }
 
         /* Title */
@@ -800,7 +800,7 @@ static void print_date (GtkTreeViewColumn *tree_column,
     doc_date_time = (time64) g_value_get_int64 (&value);
     g_value_unset (&value);
 
-    if (doc_date_time) /* assumes 0 represents an invalid date/time */
+    if (doc_date_time != G_MAXINT64) /* assumes INT64_MAX represents an invalid date/time */
     {
         g_free (doc_date_str);
         doc_date_str = qof_print_date (doc_date_time);
