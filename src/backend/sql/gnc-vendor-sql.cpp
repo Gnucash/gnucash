@@ -48,7 +48,6 @@ extern "C"
 #include "gnc-vendor-sql.h"
 #include "gnc-bill-term-sql.h"
 #include "gnc-tax-table-sql.h"
-#include "gnc-backend-sql.h"
 #include "gnc-commodity-sql.h"
 #include "gnc-slots-sql.h"
 

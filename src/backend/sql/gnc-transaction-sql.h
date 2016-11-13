@@ -29,7 +29,6 @@
 #ifndef GNC_TRANSACTION_SQL_H
 #define GNC_TRANSACTION_SQL_H
 
-#include "gnc-backend-sql.h"
 extern "C"
 {
 #include "Transaction.h"

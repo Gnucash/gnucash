@@ -42,7 +42,6 @@ extern "C"
 #include "gnc-sql-object-backend.hpp"
 #include "gnc-sql-column-table-entry.hpp"
 #include "gnc-sql-result.hpp"
-#include "gnc-backend-sql.h"
 
 #include "gnc-account-sql.h"
 #include "gnc-book-sql.h"
@@ -70,6 +69,8 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define MAX_TABLE_NAME_LEN 50
 #define TABLE_COL_NAME "table_name"
 #define VERSION_COL_NAME "table_version"
+
+using StrVec = std::vector<std::string>;
 
 static EntryVec version_table
 {

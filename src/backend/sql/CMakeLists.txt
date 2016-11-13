@@ -3,7 +3,6 @@
 ADD_SUBDIRECTORY(test)
 
 SET (backend_sql_SOURCES
-  gnc-backend-sql.cpp
   gnc-account-sql.cpp
   gnc-address-sql.cpp
   gnc-bill-term-sql.cpp
@@ -33,7 +32,6 @@ SET (backend_sql_SOURCES
 )
 SET (backend_sql_noinst_HEADERS
   gnc-account-sql.h
-  gnc-backend-sql.h
   gnc-bill-term-sql.h
   gnc-book-sql.h
   gnc-budget-sql.h

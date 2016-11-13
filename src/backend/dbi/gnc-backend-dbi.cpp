@@ -80,7 +80,6 @@ extern "C"
 #include "gnc-backend-dbi.hpp"
 
 #include <gnc-sql-object-backend.hpp>
-#include <gnc-backend-sql.h>
 #include "gnc-dbisqlresult.hpp"
 #include "gnc-dbisqlconnection.hpp"
 

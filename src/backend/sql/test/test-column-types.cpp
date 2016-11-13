@@ -28,7 +28,6 @@ extern "C"
 #include "config.h"
 #include "qof.h"
 }
-#include "gnc-backend-sql.h"
 extern "C"
 {
 #include "cashobjects.h"

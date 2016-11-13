@@ -56,9 +56,6 @@ test_sqlbe_SOURCES = \
 	test-sqlbe.cpp \
 	utest-gnc-backend-sql.cpp
 
-#test_sqlbe_HEADERS = \
-#	$(top_srcdir)/$(MODULEPATH)/gnc-backend-sql.h
-
 test_sqlbe_LDADD = \
 	$(top_builddir)/$(MODULEPATH)/libgnc-backend-sql.la \
 	$(top_builddir)/src/libqof/qof/libgnc-qof.la \

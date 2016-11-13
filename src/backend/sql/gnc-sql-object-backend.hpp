@@ -37,6 +37,9 @@ class GncSqlColumnTableEntry;
 using GncSqlColumnTableEntryPtr = std::shared_ptr<GncSqlColumnTableEntry>;
 using EntryVec = std::vector<GncSqlColumnTableEntryPtr>;
 
+#define GNC_SQL_BACKEND "gnc:sql:1"
+#define GNC_SQL_BACKEND_VERSION 1
+
 /**
  * Encapsulates per-class table schema with functions to load, create a table,
  * commit a changed front-end object (note that database transaction semantics

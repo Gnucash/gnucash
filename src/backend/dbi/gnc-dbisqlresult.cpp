@@ -31,7 +31,6 @@ extern "C"
 #include <dbi/dbi-dev.h>
 }
 #include <gnc-datetime.hpp>
-#include <gnc-backend-sql.h>
 #include "gnc-dbisqlresult.hpp"
 #include "gnc-dbisqlconnection.hpp"
 

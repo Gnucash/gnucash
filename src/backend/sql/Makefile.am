@@ -21,7 +21,6 @@ AM_CPPFLAGS = \
   ${BOOST_CPPFLAGS}
 
 libgnc_backend_sql_la_SOURCES = \
-  gnc-backend-sql.cpp \
   gnc-account-sql.cpp \
   gnc-address-sql.cpp \
   gnc-bill-term-sql.cpp \
@@ -51,7 +50,6 @@ libgnc_backend_sql_la_SOURCES = \
 
 noinst_HEADERS = \
   gnc-account-sql.h \
-  gnc-backend-sql.h \
   gnc-bill-term-sql.h \
   gnc-book-sql.h \
   gnc-budget-sql.h \

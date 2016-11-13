@@ -31,7 +31,6 @@ extern "C"
 #include "../gnc-sql-connection.hpp"
 #include "../gnc-sql-backend.hpp"
 #include "../gnc-sql-result.hpp"
-#include "../gnc-backend-sql.h"
 
 static const gchar* suitename = "/backend/sql/gnc-backend-sql";
 void test_suite_gnc_backend_sql (void);
