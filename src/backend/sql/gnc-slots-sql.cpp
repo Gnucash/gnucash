@@ -151,6 +151,18 @@ static const EntryVec col_table
                                        (QofSetterFunc)set_gdate_val),
 };
 
+static void
+_retrieve_guid_ (gpointer pObject,  gpointer pValue)
+{
+    GncGUID* pGuid = (GncGUID*)pObject;
+    GncGUID* guid = (GncGUID*)pValue;
+
+    g_return_if_fail (pObject != NULL);
+    g_return_if_fail (pValue != NULL);
+
+    memcpy (pGuid, guid, sizeof (GncGUID));
+}
+
 /* Special column table because we need to be able to access the table by
 a column other than the primary key */
 static const EntryVec obj_guid_col_table

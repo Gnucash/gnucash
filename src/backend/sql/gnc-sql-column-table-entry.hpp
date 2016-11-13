@@ -36,6 +36,8 @@ extern "C"
 struct GncSqlColumnInfo;
 using ColVec = std::vector<GncSqlColumnInfo>;
 using PairVec = std::vector<std::pair<std::string, std::string>>;
+using InstanceVec = std::vector<QofInstance*>;
+using uint_t = unsigned int;
 class GncSqlBackend;
 
 /**
@@ -175,6 +177,7 @@ public:
             }
             catch (std::invalid_argument) {}
         }
+
 
 protected:
     template <typename T> T
@@ -369,6 +372,37 @@ GncSqlColumnTableEntry::add_value_to_vec(QofIdTypeConst obj_name,
     vec.emplace_back(std::make_pair(std::string{m_col_name}, stream.str()));
     return;
 }
+
+/**
+ * Load an arbitrary object from a result row.
+ *
+ * @param sql_be: GncSqlBackend*, pass-through to the implementation loader.
+ * @param row: The GncSqlResult
+ * @param obj_name: The object-name with which to retrieve the setter func.
+ * @param pObject: The target object being loaded.
+ * @param table: The table description to interpret the row.
+ */
+void gnc_sql_load_object (const GncSqlBackend* sql_be, GncSqlRow& row,
+                          QofIdTypeConst obj_name, gpointer pObject,
+                          const EntryVec& table);
+/**
+ * Create a GncGUID from a guid stored in a row.
+ *
+ * @param sql_be: The active GncSqlBackend. Pass-throug to gnc_sql_load_object.
+ * @param row: The GncSqlResult row.
+ */
+const GncGUID*
+gnc_sql_load_guid (const GncSqlBackend* sql_be, GncSqlRow& row);
+
+/**
+ * Append the GUIDs of QofInstances to a SQL query.
+ *
+ * @param sql: The SQL Query in progress to which the GncGUIDS should be appended.
+ * @param instances: The QofInstances
+ * @return The number of instances
+ */
+uint_t gnc_sql_append_guids_to_sql (std::stringstream& sql,
+                                    const InstanceVec& instances);
 
 /**
  *  information required to create a column in a table.

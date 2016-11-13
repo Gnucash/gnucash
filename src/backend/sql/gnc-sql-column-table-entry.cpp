@@ -617,6 +617,71 @@ GncSqlColumnTableEntryImpl<CT_NUMERIC>::add_to_query(QofIdTypeConst obj_name,
     vec.emplace_back (denom_col, buf.str ());
 }
 
+static void
+_retrieve_guid_ (gpointer pObject,  gpointer pValue)
+{
+    GncGUID* pGuid = (GncGUID*)pObject;
+    GncGUID* guid = (GncGUID*)pValue;
+
+    g_return_if_fail (pObject != NULL);
+    g_return_if_fail (pValue != NULL);
+
+    memcpy (pGuid, guid, sizeof (GncGUID));
+}
+
+// Table to retrieve just the guid
+static EntryVec guid_table
+{
+    gnc_sql_make_table_entry<CT_GUID>("guid", 0, 0, nullptr, _retrieve_guid_)
+};
+
+const GncGUID*
+gnc_sql_load_guid (const GncSqlBackend* sql_be, GncSqlRow& row)
+{
+    static GncGUID guid;
+
+    g_return_val_if_fail (sql_be != NULL, NULL);
+
+    gnc_sql_load_object (sql_be, row, NULL, &guid, guid_table);
+
+    return &guid;
+}
+
+void
+gnc_sql_load_object (const GncSqlBackend* sql_be, GncSqlRow& row,
+                     QofIdTypeConst obj_name, gpointer pObject,
+                     const EntryVec& table)
+{
+    QofSetterFunc setter;
+
+    g_return_if_fail (sql_be != NULL);
+    g_return_if_fail (pObject != NULL);
+
+    for (auto const& table_row : table)
+    {
+        table_row->load (sql_be, row, obj_name, pObject);
+    }
+}
+
+uint_t
+gnc_sql_append_guids_to_sql (std::stringstream& sql,
+                             const InstanceVec& instances)
+{
+    char guid_buf[GUID_ENCODING_LENGTH + 1];
+
+    for (auto inst : instances)
+    {
+        (void)guid_to_string_buff (qof_instance_get_guid (inst), guid_buf);
+
+        if (inst != *(instances.begin()))
+        {
+            sql << ",";
+        }
+        sql << "'" << guid_buf << "'";
+    }
+
+    return instances.size();
+}
 
 /* This is necessary for 64-bit builds because g++ complains
  * that reinterpret_casting a void* (64 bits) to an int (32 bits)

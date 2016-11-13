@@ -52,51 +52,11 @@ extern "C"
 
 using StrVec = std::vector<std::string>;
 using PairVec = std::vector<std::pair<std::string, std::string>>;
-using uint_t = unsigned int;
 class GncSqlRow;
 
 #define GNC_SQL_BACKEND             "gnc:sql:1"
 #define GNC_SQL_BACKEND_VERSION 1
 
-
-
-/**
- * Loads a Gnucash object from the database.
- *
- * @param sql_be SQL backend struct
- * @param row DB result row
- * @param obj_name QOF object type name
- * @param pObject Object to be loaded
- * @param table DB table description
- */
-void gnc_sql_load_object (const GncSqlBackend* sql_be, GncSqlRow& row,
-                          QofIdTypeConst obj_name, gpointer pObject,
-                          const EntryVec& table);
-
-/**
- * Loads the object guid from a database row.  The table must have a column
- * named "guid" with type CT_GUID.
- *
- * @param sql_be SQL backend struct
- * @param row Database row
- * @return GncGUID
- */
-
-const GncGUID* gnc_sql_load_guid (const GncSqlBackend* sql_be, GncSqlRow& row);
-
-
-/**
- * Appends the ascii strings for a list of GUIDs to the end of an SQL string.
- *
- * @param str SQL string
- * @param list List of GUIDs
- * @param maxCount Max # of GUIDs to append
- * @return Number of GUIDs appended
- */
-uint_t gnc_sql_append_guids_to_sql (std::stringstream& sql,
-                                    const InstanceVec& instances);
-
-void _retrieve_guid_ (gpointer pObject,  gpointer pValue);
 
 gpointer gnc_sql_compile_query (QofBackend* qof_be, QofQuery* pQuery);
 void gnc_sql_free_query (QofBackend* qof_be, gpointer pQuery);
