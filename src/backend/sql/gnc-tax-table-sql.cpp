@@ -372,8 +372,8 @@ delete_all_tt_entries (GncSqlBackend* sql_be, const GncGUID* guid)
 
     guid_info.be = sql_be;
     guid_info.guid = guid;
-    return gnc_sql_do_db_operation (sql_be, OP_DB_DELETE, TTENTRIES_TABLE_NAME,
-                                    TTENTRIES_TABLE_NAME, &guid_info, guid_col_table);
+    return sql_be->do_db_operation(OP_DB_DELETE, TTENTRIES_TABLE_NAME,
+                                   TTENTRIES_TABLE_NAME, &guid_info, guid_col_table);
 }
 
 static gboolean
@@ -391,11 +391,9 @@ save_tt_entries (GncSqlBackend* sql_be, const GncGUID* guid, GList* entries)
     for (entry = entries; entry != NULL && is_ok; entry = entry->next)
     {
         GncTaxTableEntry* e = (GncTaxTableEntry*)entry->data;
-        is_ok = gnc_sql_do_db_operation (sql_be,
-                                         OP_DB_INSERT,
-                                         TTENTRIES_TABLE_NAME,
-                                         GNC_ID_TAXTABLE, e,
-                                         ttentries_col_table);
+        is_ok = sql_be->do_db_operation(OP_DB_INSERT, TTENTRIES_TABLE_NAME,
+                                        GNC_ID_TAXTABLE, e,
+                                        ttentries_col_table);
     }
 
     return is_ok;
@@ -429,8 +427,8 @@ GncSqlTaxTableBackend::commit (GncSqlBackend* sql_be, QofInstance* inst)
     {
         op = OP_DB_UPDATE;
     }
-    is_ok = gnc_sql_do_db_operation (sql_be, op, TT_TABLE_NAME, GNC_ID_TAXTABLE, tt,
-                                     tt_col_table);
+    is_ok = sql_be->do_db_operation(op, TT_TABLE_NAME, GNC_ID_TAXTABLE, tt,
+                                    tt_col_table);
 
     if (is_ok)
     {

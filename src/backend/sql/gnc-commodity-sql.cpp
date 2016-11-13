@@ -192,8 +192,8 @@ do_commit_commodity (GncSqlBackend* sql_be, QofInstance* inst,
     {
         op = OP_DB_UPDATE;
     }
-    is_ok = gnc_sql_do_db_operation (sql_be, op, COMMODITIES_TABLE, GNC_ID_COMMODITY,
-                                     inst, col_table);
+    is_ok = sql_be->do_db_operation(op, COMMODITIES_TABLE, GNC_ID_COMMODITY,
+                                    inst, col_table);
 
     if (is_ok)
     {
@@ -228,8 +228,8 @@ is_commodity_in_db (GncSqlBackend* sql_be, gnc_commodity* pCommodity)
     g_return_val_if_fail (sql_be != NULL, FALSE);
     g_return_val_if_fail (pCommodity != NULL, FALSE);
 
-    return gnc_sql_object_is_it_in_db (sql_be, COMMODITIES_TABLE, GNC_ID_COMMODITY,
-                                       pCommodity, col_table);
+    return sql_be->object_in_db (COMMODITIES_TABLE, GNC_ID_COMMODITY,
+                                 pCommodity, col_table);
 }
 
 gboolean

@@ -50,6 +50,13 @@ using VersionPair = std::pair<const std::string, unsigned int>;
 using VersionVec = std::vector<VersionPair>;
 using uint_t = unsigned int;
 
+typedef enum
+{
+    OP_DB_INSERT,
+    OP_DB_UPDATE,
+    OP_DB_DELETE
+} E_DB_OPERATION;
+
 /**
  *
  * Main SQL backend structure.
@@ -194,6 +201,31 @@ public:
      * @param type: The QofInstance type constant to select the object backend.
      */
     GncSqlObjectBackendPtr get_object_backend(const std::string& type) const noexcept;
+    /**
+     * Checks whether an object is in the database or not.
+     *
+     * @param table_name DB table name
+     * @param obj_name QOF object type name
+     * @param pObject Object to be checked
+     * @param table DB table description
+     * @return TRUE if the object is in the database, FALSE otherwise
+     */
+    bool object_in_db (const char* table_name, QofIdTypeConst obj_name,
+                       const gpointer pObject, const EntryVec& table ) const noexcept;
+    /**
+     * Performs an operation on the database.
+     *
+     * @param op Operation type
+     * @param table_name SQL table name
+     * @param obj_name QOF object type name
+     * @param pObject Gnucash object
+     * @param table DB table description
+     * @return TRUE if successful, FALSE if not
+     */
+    bool do_db_operation (E_DB_OPERATION op, const char* table_name,
+                          QofIdTypeConst obj_name, gpointer pObject,
+                          const EntryVec& table) const noexcept;
+
     QofBook* book() const noexcept { return m_book; }
     void set_loading(bool loading) noexcept { m_loading = loading; }
     bool pristine() const noexcept { return m_is_pristine_db; }
@@ -215,6 +247,19 @@ private:
     bool write_transactions();
     bool write_template_transactions();
     bool write_schedXactions();
+    GncSqlStatementPtr build_insert_statement (const char* table_name,
+                                               QofIdTypeConst obj_name,
+                                               gpointer pObject,
+                                               const EntryVec& table) const noexcept;
+    GncSqlStatementPtr build_update_statement (const gchar* table_name,
+                                               QofIdTypeConst obj_name,
+                                               gpointer pObject,
+                                               const EntryVec& table) const noexcept;
+    GncSqlStatementPtr build_delete_statement (const char* table_name,
+                                               QofIdTypeConst obj_name,
+                                               gpointer pObject,
+                                               const EntryVec& table) const noexcept;
+
     class ObjectBackendRegistry
     {
     public:

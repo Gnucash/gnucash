@@ -781,6 +781,166 @@ GncSqlBackend::upgrade_table (const std::string& table_name,
     execute_nonselect_statement(stmt);
 }
 
+static inline PairVec
+get_object_values (QofIdTypeConst obj_name,
+                   gpointer pObject, const EntryVec& table)
+{
+    PairVec vec;
+
+    for (auto const& table_row : table)
+    {
+        if (!(table_row->is_autoincr()))
+        {
+            table_row->add_to_query (obj_name, pObject, vec);
+        }
+    }
+    return vec;
+}
+
+bool
+GncSqlBackend::object_in_db (const char* table_name, QofIdTypeConst obj_name,
+                             const gpointer pObject, const EntryVec& table) const noexcept
+{
+    guint count;
+    g_return_val_if_fail (table_name != nullptr, false);
+    g_return_val_if_fail (obj_name != nullptr, false);
+    g_return_val_if_fail (pObject != nullptr, false);
+
+    /* SELECT * FROM */
+    auto sql = std::string{"SELECT "} + table[0]->name() + " FROM " + table_name;
+    auto stmt = create_statement_from_sql(sql.c_str());
+    assert (stmt != nullptr);
+
+    /* WHERE */
+    PairVec values{get_object_values(obj_name, pObject, table)};
+    stmt->add_where_cond(obj_name, values);
+    auto result = execute_select_statement (stmt);
+    return (result != nullptr && result->size() > 0);
+}
+
+bool
+GncSqlBackend::do_db_operation (E_DB_OPERATION op, const char* table_name,
+                                QofIdTypeConst obj_name, gpointer pObject,
+                                const EntryVec& table) const noexcept
+{
+    GncSqlStatementPtr stmt;
+
+    g_return_val_if_fail (table_name != nullptr, false);
+    g_return_val_if_fail (obj_name != nullptr, false);
+    g_return_val_if_fail (pObject != nullptr, false);
+
+    switch(op)
+    {
+        case  OP_DB_INSERT:
+        stmt = build_insert_statement (table_name, obj_name, pObject, table);
+        break;
+        case OP_DB_UPDATE:
+        stmt = build_update_statement (table_name, obj_name, pObject, table);
+        break;
+        case OP_DB_DELETE:
+        stmt = build_delete_statement (table_name, obj_name, pObject, table);
+        break;
+    }
+    if (stmt == nullptr)
+        return false;
+    return (execute_nonselect_statement(stmt) != -1);
+}
+
+GncSqlStatementPtr
+GncSqlBackend::build_insert_statement (const char* table_name,
+                                       QofIdTypeConst obj_name,
+                                       gpointer pObject,
+                                       const EntryVec& table) const noexcept
+{
+    GncSqlStatementPtr stmt;
+    PairVec col_values;
+    std::ostringstream sql;
+
+    g_return_val_if_fail (table_name != nullptr, nullptr);
+    g_return_val_if_fail (obj_name != nullptr, nullptr);
+    g_return_val_if_fail (pObject != nullptr, nullptr);
+    PairVec values{get_object_values(obj_name, pObject, table)};
+
+    sql << "INSERT INTO " << table_name <<"(";
+    for (auto const& col_value : values)
+    {
+        if (col_value != *values.begin())
+            sql << ",";
+        sql << col_value.first;
+    }
+
+    sql << ") VALUES(";
+    for (auto col_value : values)
+    {
+        if (col_value != *values.begin())
+            sql << ",";
+        sql << quote_string(col_value.second);
+    }
+    sql << ")";
+
+    stmt = create_statement_from_sql(sql.str());
+    return stmt;
+}
+
+GncSqlStatementPtr
+GncSqlBackend::build_update_statement(const gchar* table_name,
+                                      QofIdTypeConst obj_name, gpointer pObject,
+                                      const EntryVec& table) const noexcept
+{
+    GncSqlStatementPtr stmt;
+    std::ostringstream sql;
+
+    g_return_val_if_fail (table_name != nullptr, nullptr);
+    g_return_val_if_fail (obj_name != nullptr, nullptr);
+    g_return_val_if_fail (pObject != nullptr, nullptr);
+
+
+    PairVec values{get_object_values (obj_name, pObject, table)};
+
+    // Create the SQL statement
+    sql <<  "UPDATE " << table_name << " SET ";
+
+    for (auto const& col_value : values)
+    {
+        if (col_value != *values.begin())
+            sql << ",";
+        sql << col_value.first << "=" <<
+            quote_string(col_value.second);
+    }
+
+    stmt = create_statement_from_sql(sql.str());
+    /* We want our where condition to be just the first column and
+     * value, i.e. the guid of the object.
+     */
+    values.erase(values.begin() + 1, values.end());
+    stmt->add_where_cond(obj_name, values);
+    return stmt;
+}
+
+GncSqlStatementPtr
+GncSqlBackend::build_delete_statement(const gchar* table_name,
+                                      QofIdTypeConst obj_name,
+                                      gpointer pObject,
+                                      const EntryVec& table) const noexcept
+{
+    std::ostringstream sql;
+
+    g_return_val_if_fail (table_name != nullptr, nullptr);
+    g_return_val_if_fail (obj_name != nullptr, nullptr);
+    g_return_val_if_fail (pObject != nullptr, nullptr);
+
+    sql << "DELETE FROM " << table_name;
+    auto stmt = create_statement_from_sql (sql.str());
+
+    /* WHERE */
+    PairVec values;
+    table[0]->add_to_query (obj_name, pObject, values);
+    PairVec col_values{values[0]};
+    stmt->add_where_cond (obj_name, col_values);
+
+    return stmt;
+}
+
 GncSqlBackend::ObjectBackendRegistry::ObjectBackendRegistry()
 {
     register_backend(std::make_shared<GncSqlBookBackend>());

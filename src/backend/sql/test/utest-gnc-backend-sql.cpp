@@ -748,9 +748,9 @@ gnc_sql_object_is_it_in_db (GncSqlBackend* sql_be, const gchar* table_name,// C:
 test_gnc_sql_object_is_it_in_db (Fixture *fixture, gconstpointer pData)
 {
 }*/
-/* gnc_sql_do_db_operation
+/* GncSqlBackend::do_db_operation
 gboolean
-gnc_sql_do_db_operation (GncSqlBackend* sql_be,// C: 22 in 12 */
+GncSqlBackend::do_db_operation (GncSqlBackend* sql_be,// C: 22 in 12 */
 /* static void
 test_gnc_sql_do_db_operation (Fixture *fixture, gconstpointer pData)
 {

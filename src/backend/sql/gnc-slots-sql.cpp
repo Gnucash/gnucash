@@ -649,10 +649,11 @@ save_slot (const gchar* key, KvpValue* value, gpointer data)
         slot_info_t* pNewInfo = slot_info_copy (pSlot_info, guid);
         KvpValue* oldValue = pSlot_info->pKvpValue;
         pSlot_info->pKvpValue = new KvpValue {guid};
-        pSlot_info->is_ok = gnc_sql_do_db_operation (pSlot_info->be,
-                                                     OP_DB_INSERT, TABLE_NAME,
-                                                     TABLE_NAME, pSlot_info,
-                                                     col_table);
+        pSlot_info->is_ok = pSlot_info->be->do_db_operation(OP_DB_INSERT,
+                                                            TABLE_NAME,
+                                                            TABLE_NAME,
+                                                            pSlot_info,
+                                                            col_table);
         g_return_if_fail (pSlot_info->is_ok);
         pKvpFrame->for_each_slot (save_slot, pNewInfo);
         delete pSlot_info->pKvpValue;
@@ -667,10 +668,11 @@ save_slot (const gchar* key, KvpValue* value, gpointer data)
         slot_info_t* pNewInfo = slot_info_copy (pSlot_info, guid);
         KvpValue* oldValue = pSlot_info->pKvpValue;
         pSlot_info->pKvpValue = new KvpValue {guid};  // Transfer ownership!
-        pSlot_info->is_ok = gnc_sql_do_db_operation (pSlot_info->be,
-                                                     OP_DB_INSERT, TABLE_NAME,
-                                                     TABLE_NAME, pSlot_info,
-                                                     col_table);
+        pSlot_info->is_ok = pSlot_info->be->do_db_operation(OP_DB_INSERT,
+                                                            TABLE_NAME,
+                                                            TABLE_NAME,
+                                                            pSlot_info,
+                                                            col_table);
         g_return_if_fail (pSlot_info->is_ok);
         for (auto cursor = value->get<GList*> (); cursor; cursor = cursor->next)
         {
@@ -685,10 +687,11 @@ save_slot (const gchar* key, KvpValue* value, gpointer data)
     break;
     default:
     {
-        pSlot_info->is_ok = gnc_sql_do_db_operation (pSlot_info->be,
-                                                     OP_DB_INSERT, TABLE_NAME,
-                                                     TABLE_NAME, pSlot_info,
-                                                     col_table);
+        pSlot_info->is_ok = pSlot_info->be->do_db_operation (OP_DB_INSERT,
+                                                             TABLE_NAME,
+                                                             TABLE_NAME,
+                                                             pSlot_info,
+                                                             col_table);
     }
     break;
     }
@@ -761,8 +764,9 @@ gnc_sql_slots_delete (GncSqlBackend* sql_be, const GncGUID* guid)
     slot_info.be = sql_be;
     slot_info.guid = guid;
     slot_info.is_ok = TRUE;
-    slot_info.is_ok = gnc_sql_do_db_operation (sql_be, OP_DB_DELETE, TABLE_NAME,
-                                               TABLE_NAME, &slot_info, obj_guid_col_table);
+    slot_info.is_ok = sql_be->do_db_operation(OP_DB_DELETE, TABLE_NAME,
+                                              TABLE_NAME, &slot_info,
+                                              obj_guid_col_table);
 
     return slot_info.is_ok;
 }

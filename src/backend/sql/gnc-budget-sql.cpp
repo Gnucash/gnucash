@@ -281,7 +281,8 @@ save_budget_amounts (GncSqlBackend* sql_be, GncBudget* budget)
             if (gnc_budget_is_account_period_value_set (budget, info.account, i))
             {
                 info.period_num = i;
-                is_ok = gnc_sql_do_db_operation (sql_be, OP_DB_INSERT, AMOUNTS_TABLE, "", &info,
+                is_ok = sql_be->do_db_operation(OP_DB_INSERT, AMOUNTS_TABLE,
+                                                "", &info,
                                                  budget_amounts_col_table);
             }
         }
@@ -394,8 +395,8 @@ GncSqlBudgetBackend::commit (GncSqlBackend* sql_be, QofInstance* inst)
     {
         op = OP_DB_UPDATE;
     }
-    is_ok = gnc_sql_do_db_operation (sql_be, op, BUDGET_TABLE, GNC_ID_BUDGET, pBudget,
-                                     col_table);
+    is_ok = sql_be->do_db_operation(op, BUDGET_TABLE, GNC_ID_BUDGET, pBudget,
+                                    col_table);
 
     // Now, commit any slots and recurrence
     if (is_ok)

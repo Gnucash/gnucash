@@ -176,8 +176,8 @@ GncSqlSchedXactionBackend::commit (GncSqlBackend* sql_be, QofInstance* inst)
     {
         op = OP_DB_UPDATE;
     }
-    is_ok = gnc_sql_do_db_operation (sql_be, op, SCHEDXACTION_TABLE, GNC_SX_ID, pSx,
-                                     col_table);
+    is_ok = sql_be->do_db_operation(op, SCHEDXACTION_TABLE, GNC_SX_ID, pSx,
+                                    col_table);
     guid = qof_instance_get_guid (inst);
     if (op == OP_DB_INSERT || op == OP_DB_UPDATE)
     {

@@ -38,13 +38,6 @@ using GncSqlColumnTableEntryPtr = std::shared_ptr<GncSqlColumnTableEntry>;
 using EntryVec = std::vector<GncSqlColumnTableEntryPtr>;
 using InstanceVec = std::vector<QofInstance*>;
 
-typedef enum
-{
-    OP_DB_INSERT,
-    OP_DB_UPDATE,
-    OP_DB_DELETE
-} E_DB_OPERATION;
-
 /**
  * Encapsulates per-class table schema with functions to load, create a table,
  * commit a changed front-end object (note that database transaction semantics

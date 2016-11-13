@@ -565,8 +565,8 @@ delete_splits (GncSqlBackend* sql_be, Transaction* pTx)
     g_return_val_if_fail (sql_be != NULL, FALSE);
     g_return_val_if_fail (pTx != NULL, FALSE);
 
-    if (!gnc_sql_do_db_operation (sql_be, OP_DB_DELETE, SPLIT_TABLE,
-                                  SPLIT_TABLE, pTx, tx_guid_col_table))
+    if (!sql_be->do_db_operation(OP_DB_DELETE, SPLIT_TABLE,
+                                 SPLIT_TABLE, pTx, tx_guid_col_table))
     {
         return FALSE;
     }
@@ -617,8 +617,8 @@ GncSqlSplitBackend::commit (GncSqlBackend* sql_be, QofInstance* inst)
         qof_instance_set_guid (inst, guid);
     }
 
-    is_ok = gnc_sql_do_db_operation (sql_be, op, SPLIT_TABLE, GNC_ID_SPLIT,
-                                     inst, split_col_table);
+    is_ok = sql_be->do_db_operation(op, SPLIT_TABLE, GNC_ID_SPLIT,
+                                    inst, split_col_table);
 
     if (is_ok && !qof_instance_get_destroying (inst))
     {
@@ -668,8 +668,8 @@ GncSqlTransBackend::commit (GncSqlBackend* sql_be, QofInstance* inst)
 
     if (is_ok)
     {
-        is_ok = gnc_sql_do_db_operation (sql_be, op, TRANSACTION_TABLE, GNC_ID_TRANS, pTx,
-                                         tx_col_table);
+        is_ok = sql_be->do_db_operation(op, TRANSACTION_TABLE, GNC_ID_TRANS,
+                                        pTx, tx_col_table);
         if (! is_ok)
         {
             err = "Transaction header save failed. Check trace log for SQL errors";

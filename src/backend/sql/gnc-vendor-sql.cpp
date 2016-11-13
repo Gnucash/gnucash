@@ -165,8 +165,8 @@ GncSqlVendorBackend::commit (GncSqlBackend* sql_be, QofInstance* inst)
     }
     if (is_ok)
     {
-        is_ok = gnc_sql_do_db_operation (sql_be, op, TABLE_NAME, GNC_ID_VENDOR, v,
-                                         col_table);
+        is_ok = sql_be->do_db_operation(op, TABLE_NAME, GNC_ID_VENDOR, v,
+                                        col_table);
     }
 
     if (is_ok)

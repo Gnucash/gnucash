@@ -58,23 +58,6 @@ class GncSqlRow;
 #define GNC_SQL_BACKEND             "gnc:sql:1"
 #define GNC_SQL_BACKEND_VERSION 1
 
-/**
- * Performs an operation on the database.
- *
- * @param sql_be SQL backend struct
- * @param op Operation type
- * @param table_name SQL table name
- * @param obj_name QOF object type name
- * @param pObject Gnucash object
- * @param table DB table description
- * @return TRUE if successful, FALSE if not
- */
-gboolean gnc_sql_do_db_operation (GncSqlBackend* sql_be,
-                                  E_DB_OPERATION op,
-                                  const gchar* table_name,
-                                  QofIdTypeConst obj_name,
-                                  gpointer pObject,
-                                  const EntryVec& table);
 
 
 /**
@@ -90,21 +73,6 @@ void gnc_sql_load_object (const GncSqlBackend* sql_be, GncSqlRow& row,
                           QofIdTypeConst obj_name, gpointer pObject,
                           const EntryVec& table);
 
-/**
- * Checks whether an object is in the database or not.
- *
- * @param sql_be SQL backend struct
- * @param table_name DB table name
- * @param obj_name QOF object type name
- * @param pObject Object to be checked
- * @param table DB table description
- * @return TRUE if the object is in the database, FALSE otherwise
- */
-gboolean gnc_sql_object_is_it_in_db (GncSqlBackend* sql_be,
-                                     const gchar* table_name,
-                                     QofIdTypeConst obj_name,
-                                     const gpointer pObject,
-                                     const EntryVec& table );
 /**
  * Loads the object guid from a database row.  The table must have a column
  * named "guid" with type CT_GUID.

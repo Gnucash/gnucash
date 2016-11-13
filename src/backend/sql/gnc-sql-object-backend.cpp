@@ -29,7 +29,6 @@ extern "C"
 #include "gnc-sql-backend.hpp"
 #include "gnc-sql-column-table-entry.hpp"
 #include "gnc-slots-sql.h"
-#include "gnc-backend-sql.h" //for gnc_sql_do_db_operation
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 
@@ -54,8 +53,8 @@ GncSqlObjectBackend::commit (GncSqlBackend* sql_be, QofInstance* inst)
     {
         op = OP_DB_UPDATE;
     }
-    is_ok = gnc_sql_do_db_operation (sql_be, op, m_table_name.c_str(),
-                                     m_type_name.c_str(), inst, m_col_table);
+    is_ok = sql_be->do_db_operation(op, m_table_name.c_str(),
+                                    m_type_name.c_str(), inst, m_col_table);
 
     if (is_ok)
     {

@@ -251,8 +251,8 @@ gnc_sql_recurrence_save (GncSqlBackend* sql_be, const GncGUID* guid,
     recurrence_info.be = sql_be;
     recurrence_info.guid = guid;
     recurrence_info.pRecurrence = (Recurrence*)r;
-    return gnc_sql_do_db_operation (sql_be, OP_DB_INSERT, TABLE_NAME,
-                                    TABLE_NAME, &recurrence_info, col_table);
+    return sql_be->do_db_operation(OP_DB_INSERT, TABLE_NAME,
+                                   TABLE_NAME, &recurrence_info, col_table);
 }
 
 void
@@ -272,8 +272,8 @@ gnc_sql_recurrence_save_list (GncSqlBackend* sql_be, const GncGUID* guid,
     for (l = schedule; l != NULL; l = g_list_next (l))
     {
         recurrence_info.pRecurrence = (Recurrence*)l->data;
-        (void)gnc_sql_do_db_operation (sql_be, OP_DB_INSERT, TABLE_NAME,
-                                       TABLE_NAME, &recurrence_info, col_table);
+        (void)sql_be->do_db_operation(OP_DB_INSERT, TABLE_NAME,
+                                      TABLE_NAME, &recurrence_info, col_table);
     }
 }
 
@@ -287,8 +287,8 @@ gnc_sql_recurrence_delete (GncSqlBackend* sql_be, const GncGUID* guid)
 
     recurrence_info.be = sql_be;
     recurrence_info.guid = guid;
-    return gnc_sql_do_db_operation (sql_be, OP_DB_DELETE, TABLE_NAME,
-                                    TABLE_NAME, &recurrence_info, guid_col_table);
+    return sql_be->do_db_operation(OP_DB_DELETE, TABLE_NAME,
+                                   TABLE_NAME, &recurrence_info, guid_col_table);
 }
 
 static void
