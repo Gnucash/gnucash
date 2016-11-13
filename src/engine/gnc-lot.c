@@ -227,7 +227,7 @@ gnc_lot_free(GNCLot* lot)
     }
     g_list_free (priv->splits);
 
-    if (priv->account)
+    if (priv->account && !qof_instance_get_destroying(priv->account))
         xaccAccountRemoveLot (priv->account, lot);
 
     priv->account = NULL;

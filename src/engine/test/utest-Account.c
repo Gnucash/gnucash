@@ -1274,15 +1274,11 @@ test_xaccAccountInsertRemoveLot (Fixture *fixture, gconstpointer pData)
     g_assert_cmpuint (g_list_length (p_priv->lots), == , 1);
     g_assert (gnc_lot_get_account (lot) == parent);
     gnc_lot_destroy (lot);
-    /* Destroying the lot should remove it from the account; Not Happening. */
-    g_assert_cmpuint (g_list_length (p_priv->lots), != , 0);
+    /* Destroying the lot should remove it from the account. */
+    g_assert_cmpuint (g_list_length (p_priv->lots), == , 0);
     test_signal_assert_hits (sig1, 3);
-    /* We get a modify only on the insert, since there is no remove when
-     * the lot is destroyed. */
-    test_signal_assert_hits (sig4, 3);
-    /* Same thing: There should be a "removed" signal on the lot, but
-     * since it isn't removed, no signal. */
-    test_signal_assert_hits (sig3, 1);
+    test_signal_assert_hits (sig3, 2);
+    test_signal_assert_hits (sig4, 4);
     test_signal_free (sig1);
     test_signal_free (sig2);
     test_signal_free (sig3);
