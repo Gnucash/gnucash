@@ -49,6 +49,9 @@ extern "C"
 #endif
 }
 
+#include <string>
+#include <sstream>
+
 #include "escape.h"
 
 #include <gnc-datetime.hpp>
@@ -780,54 +783,41 @@ GncSqlTransBackend::load_all (GncSqlBackend* sql_be)
 
 static void
 convert_query_comparison_to_sql (QofQueryPredData* pPredData,
-                                 gboolean isInverted, GString* sql)
+                                 gboolean isInverted, std::stringstream& sql)
 {
     if (pPredData->how == QOF_COMPARE_LT
         || (isInverted && pPredData->how == QOF_COMPARE_GTE))
-    {
-        g_string_append (sql, "<");
-    }
+        sql << "<";
     else if (pPredData->how == QOF_COMPARE_LTE
              || (isInverted && pPredData->how == QOF_COMPARE_GT))
-    {
-        g_string_append (sql, "<=");
-    }
+        sql << "<=";
     else if (pPredData->how == QOF_COMPARE_EQUAL
              || (isInverted && pPredData->how == QOF_COMPARE_NEQ))
-    {
-        g_string_append (sql, "=");
-    }
+        sql << "=";
     else if (pPredData->how == QOF_COMPARE_GT
              || (isInverted && pPredData->how == QOF_COMPARE_LTE))
-    {
-        g_string_append (sql, ">");
-    }
+        sql << ">";
     else if (pPredData->how == QOF_COMPARE_GTE
              || (isInverted && pPredData->how == QOF_COMPARE_LT))
-    {
-        g_string_append (sql, ">=");
-    }
+        sql << ">=";
     else if (pPredData->how == QOF_COMPARE_NEQ
              || (isInverted && pPredData->how == QOF_COMPARE_EQUAL))
-    {
-        g_string_append (sql, "~=");
-    }
+        sql <<  "~=";
     else
     {
         PERR ("Unknown comparison type\n");
-        g_string_append (sql, "??");
+        sql << "??";
     }
 }
 
 static void
 convert_query_term_to_sql (const GncSqlBackend* sql_be, const gchar* fieldName,
-                           QofQueryTerm* pTerm, GString* sql)
+                           QofQueryTerm* pTerm, std::stringstream& sql)
 {
     QofQueryPredData* pPredData;
     gboolean isInverted;
 
     g_return_if_fail (pTerm != NULL);
-    g_return_if_fail (sql != NULL);
 
     pPredData = qof_query_term_get_pred_data (pTerm);
     isInverted = qof_query_term_is_inverted (pTerm);
@@ -836,20 +826,16 @@ convert_query_term_to_sql (const GncSqlBackend* sql_be, const gchar* fieldName,
     {
         query_guid_t guid_data = (query_guid_t)pPredData;
         GList* guid_entry;
-
-        g_string_append (sql, "(");
-        g_string_append (sql, fieldName);
+        sql << "(" << fieldName;
 
         switch (guid_data->options)
         {
         case QOF_GUID_MATCH_ANY:
-            if (isInverted) g_string_append (sql, " NOT IN (");
-            else g_string_append (sql, " IN (");
+            sql << (isInverted ? " NOT IN (" : " IN (");
             break;
 
         case QOF_GUID_MATCH_NONE:
-            if (isInverted) g_string_append (sql, " IN (");
-            else g_string_append (sql, " NOT IN (");
+            sql << (isInverted ? " IN (" : " NOT IN (");
             break;
 
         default:
@@ -861,12 +847,12 @@ convert_query_term_to_sql (const GncSqlBackend* sql_be, const gchar* fieldName,
         {
             gchar guid_buf[GUID_ENCODING_LENGTH + 1];
 
-            if (guid_entry != guid_data->guids) g_string_append (sql, ",");
+            if (guid_entry != guid_data->guids) sql << ",";
             (void)guid_to_string_buff (static_cast<GncGUID*> (guid_entry->data),
                                        guid_buf);
-            g_string_append_printf (sql, "'%s'", guid_buf);
+            sql << guid_buf;
         }
-        g_string_append (sql, "))");
+        sql << "))";
 
     }
     else if (g_strcmp0 (pPredData->type_name, QOF_TYPE_CHAR) == 0)
@@ -874,130 +860,86 @@ convert_query_term_to_sql (const GncSqlBackend* sql_be, const gchar* fieldName,
         query_char_t char_data = (query_char_t)pPredData;
         int i;
 
-        if (isInverted)
-        {
-            g_string_append (sql, "NOT(");
-        }
-        if (char_data->options == QOF_CHAR_MATCH_NONE)
-        {
-            g_string_append (sql, "NOT ");
-        }
-        g_string_append (sql, "(");
+        if (isInverted) sql <<  "NOT(";
+        if (char_data->options == QOF_CHAR_MATCH_NONE) sql << "NOT ";
+        sql << "(";
         for (i = 0; char_data->char_list[i] != '\0'; i++)
         {
-            if (i != 0)
-            {
-                g_string_append (sql, " OR ");
-            }
-            g_string_append (sql, fieldName);
-            g_string_append (sql, " = '");
-            g_string_append_c (sql, char_data->char_list[i]);
-            g_string_append (sql, "'");
+            if (i != 0) sql << " OR ";
+            sql << fieldName << " = '" << char_data->char_list[i] << "'";
         }
-        g_string_append (sql, ") ");
-        if (isInverted)
-        {
-            g_string_append (sql, ") ");
-        }
-
+        sql << ") ";
+        if (isInverted) sql << ") ";
     }
     else if (g_strcmp0 (pPredData->type_name, QOF_TYPE_STRING) == 0)
     {
         query_string_t string_data = (query_string_t)pPredData;
         sqlEscape* escape = sqlEscape_new ();
 
-        if (isInverted)
-        {
-            g_string_append (sql, "NOT(");
-        }
-        if (pPredData->how == QOF_COMPARE_NEQ)
-        {
-            g_string_append (sql, "NOT(");
-        }
-        g_string_append (sql, fieldName);
+        if (isInverted ||  pPredData->how == QOF_COMPARE_NEQ)
+            sql << "NOT(";
+        sql << fieldName;
         if (string_data->is_regex ||
             string_data->options == QOF_STRING_MATCH_CASEINSENSITIVE)
         {
             PWARN ("String is_regex || option = QOF_STRING_MATCH_INSENSITIVE\n");
         }
-//          g_string_append( sql, " ~" );
+//          sql << " ~" ;
 //      } else {
-        g_string_append (sql, " =");
+        sql << " =";
 //      }
 //      if( string_data->options == QOF_STRING_MATCH_CASEINSENSITIVE ) {
-//          g_string_append( sql, "*" );
+//          sql+= "*";
 //      }
-        g_string_append (sql, "'");
-        g_string_append (sql, sqlEscapeString (escape, string_data->matchstring));
-        g_string_append (sql, "'");
-        if (pPredData->how == QOF_COMPARE_NEQ)
-        {
-            g_string_append (sql, ")");
-        }
-        if (isInverted)
-        {
-            g_string_append (sql, ")");
-        }
+        sql << "'" << sqlEscapeString (escape, string_data->matchstring) << "'";
+        if (pPredData->how == QOF_COMPARE_NEQ) sql << ")";
+        if (isInverted) sql << ")";
         sqlEscape_destroy (escape);
 
     }
     else
     {
-        g_string_append (sql, "(");
-        g_string_append (sql, fieldName);
+        sql << "(" << fieldName;
         convert_query_comparison_to_sql (pPredData, isInverted, sql);
 
         if (strcmp (pPredData->type_name, QOF_TYPE_NUMERIC) == 0)
         {
             query_numeric_t pData = (query_numeric_t)pPredData;
-            double d = gnc_numeric_to_double (pData->amount);
-
-            g_string_append_printf (sql, "%f", d);
-
+            sql << gnc_numeric_to_double (pData->amount);
         }
         else if (g_strcmp0 (pPredData->type_name, QOF_TYPE_DATE) == 0)
         {
             query_date_t date_data = (query_date_t)pPredData;
 
             GncDateTime time(date_data->date.tv_sec);
-            auto datebuf = time.format_zulu ("%Y-%m-%d %H:%M%S");
-            g_string_append_printf (sql, "'%s'", datebuf.c_str());
-
+            sql << time.format_zulu ("%Y-%m-%d %H:%M%S");
         }
         else if (strcmp (pPredData->type_name, QOF_TYPE_INT32) == 0)
         {
             query_int32_t pData = (query_int32_t)pPredData;
-
-            g_string_append_printf (sql, "%d", pData->val);
-
+            sql << pData->val;
         }
         else if (strcmp (pPredData->type_name, QOF_TYPE_INT64) == 0)
         {
             query_int64_t pData = (query_int64_t)pPredData;
-
-            g_string_append_printf (sql, "%" G_GINT64_FORMAT, pData->val);
-
+            sql << pData->val;
         }
         else if (strcmp (pPredData->type_name, QOF_TYPE_DOUBLE) == 0)
         {
             query_double_t pData = (query_double_t)pPredData;
-
-            g_string_append_printf (sql, "%f", pData->val);
-
+            sql << pData->val;
         }
         else if (strcmp (pPredData->type_name, QOF_TYPE_BOOLEAN) == 0)
         {
             query_boolean_t pData = (query_boolean_t)pPredData;
-
-            g_string_append_printf (sql, "%d", pData->val);
-
+            sql << pData->val;
         }
         else
         {
             PERR ("Unknown query predicate type: %s\n", pPredData->type_name);
         }
 
-        g_string_append (sql, ")");
+        sql << ")";
     }
 }
 
@@ -1027,7 +969,7 @@ compile_split_query (GncSqlBackend* sql_be, QofQuery* query)
     {
         GList* orterms = qof_query_get_terms (query);
         GList* orTerm;
-        GString* sql = g_string_new ("");
+        std::stringstream sql;
         gboolean need_OR = FALSE;
 
         for (orTerm = orterms; orTerm != NULL; orTerm = orTerm->next)
@@ -1040,9 +982,9 @@ compile_split_query (GncSqlBackend* sql_be, QofQuery* query)
 #endif
             if (need_OR)
             {
-                g_string_append (sql, " OR ");
+                sql << " OR ";
             }
-            g_string_append (sql, "(");
+            sql << "(";
             for (andTerm = andterms; andTerm != NULL; andTerm = andTerm->next)
             {
                 QofQueryTerm* term;
@@ -1061,12 +1003,13 @@ compile_split_query (GncSqlBackend* sql_be, QofQuery* query)
                     strcmp (next_path, QOF_PARAM_GUID) != 0) continue;
 #endif
 
-                if (need_AND) g_string_append (sql, " AND ");
+                if (need_AND) sql<< " AND ";
 
                 if (strcmp (path, SPLIT_ACCOUNT) == 0 &&
                     strcmp (next_path, QOF_PARAM_GUID) == 0)
                 {
-                    convert_query_term_to_sql (sql_be, "s.account_guid", term, sql);
+                    convert_query_term_to_sql (sql_be, "s.account_guid", term,
+                                               sql);
 #if SIMPLE_QUERY_COMPILATION
                     goto done_compiling_query;
 #endif
@@ -1074,7 +1017,8 @@ compile_split_query (GncSqlBackend* sql_be, QofQuery* query)
                 }
                 else if (strcmp (path, SPLIT_RECONCILE) == 0)
                 {
-                    convert_query_term_to_sql (sql_be, "s.reconcile_state", term, sql);
+                    convert_query_term_to_sql (sql_be, "s.reconcile_state",
+                                               term, sql);
 
                 }
                 else if (strcmp (path, SPLIT_TRANS) == 0)
@@ -1082,17 +1026,19 @@ compile_split_query (GncSqlBackend* sql_be, QofQuery* query)
 #if TX_GUID_CHECK
                     if (!has_tx_guid_check)
                     {
-                        g_string_append (sql, "(splits.tx_guid = transactions.guid) AND ");
+                        sql << "(splits.tx_guid = transactions.guid) AND ");
                         has_tx_guid_check = TRUE;
                     }
 #endif
                     if (strcmp (next_path, TRANS_DATE_POSTED) == 0)
                     {
-                        convert_query_term_to_sql (sql_be, "t.post_date", term, sql);
+                        convert_query_term_to_sql (sql_be, "t.post_date", term,
+                                                   sql);
                     }
                     else if (strcmp (next_path, TRANS_DESCRIPTION) == 0)
                     {
-                        convert_query_term_to_sql (sql_be, "t.description", term, sql);
+                        convert_query_term_to_sql (sql_be, "t.description",
+                                                   term, sql);
                     }
                     else
                     {
@@ -1102,8 +1048,9 @@ compile_split_query (GncSqlBackend* sql_be, QofQuery* query)
                 }
                 else if (strcmp (path, SPLIT_VALUE) == 0)
                 {
-                    convert_query_term_to_sql (sql_be, "s.value_num/s.value_denom", term, sql);
-
+                    convert_query_term_to_sql (sql_be,
+                                               "s.value_num/s.value_denom",
+                                               term, sql);
                 }
                 else
                 {
@@ -1112,29 +1059,30 @@ compile_split_query (GncSqlBackend* sql_be, QofQuery* query)
 
                 if (unknownPath)
                 {
-                    GString* name = g_string_new ((gchar*)paramPath->data);
-                    while (paramPath->next != NULL)
+                    std::stringstream name;
+                    name << static_cast<char*>(paramPath->data);
+                    for (;paramPath->next != NULL; paramPath = paramPath->next)
                     {
-                        g_string_append (name, ".");
-                        g_string_append (name, next_path);
-                        paramPath = paramPath->next;
+                        next_path =
+                            static_cast<decltype (next_path)>(paramPath->next->data);
+                        name << "." << next_path;
                     }
-                    PERR ("Unknown SPLIT query field: %s\n", name->str);
-                    g_string_free (name, TRUE);
+                    PERR ("Unknown SPLIT query field: %s\n",
+                          name.str().c_str());
                 }
                 need_AND = TRUE;
             }
 
             /* If the last char in the string is a '(', then for some reason, there were
                no terms added to the SQL.  If so, remove it and ignore the OR term. */
-            if (sql->str[sql->len - 1] == '(')
+        if (!sql.str().empty() && sql.str().back() == '(')
             {
-                g_string_truncate (sql, sql->len - 1);
+                sql.str().erase(sql.str().back());
                 need_OR = FALSE;
             }
             else
             {
-                g_string_append (sql, ")");
+                sql << ")";
                 need_OR = TRUE;
             }
         }
@@ -1142,22 +1090,20 @@ compile_split_query (GncSqlBackend* sql_be, QofQuery* query)
 #if SIMPLE_QUERY_COMPILATION
 done_compiling_query:
 #endif
-        if (sql->len != 0)
+    if (!sql.str().empty())
         {
 #if SIMPLE_QUERY_COMPILATION
-            g_string_append (sql, ")");
+            sql<< ")";
 #endif
             query_sql = g_strdup_printf (
                             "SELECT DISTINCT t.* FROM %s AS t, %s AS s WHERE s.tx_guid=t.guid AND %s",
-                            TRANSACTION_TABLE, SPLIT_TABLE, sql->str);
+                            TRANSACTION_TABLE, SPLIT_TABLE, sql.str().c_str());
         }
         else
         {
             query_sql = g_strdup_printf ("SELECT * FROM %s", TRANSACTION_TABLE);
         }
         query_info->stmt = sql_be->create_statement_from_sql(query_sql);
-
-        g_string_free (sql, TRUE);
         g_free (query_sql);
 
     }

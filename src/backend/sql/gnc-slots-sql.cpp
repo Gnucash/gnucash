@@ -40,6 +40,9 @@ extern "C"
 #endif
 }
 
+#include <string>
+#include <sstream>
+
 #include "gnc-sql-connection.hpp"
 #include "gnc-sql-backend.hpp"
 #include "gnc-sql-object-backend.hpp"
@@ -60,7 +63,7 @@ typedef enum
     LIST
 } context_t;
 
-typedef struct
+struct slot_info_t
 {
     GncSqlBackend* be;
     const GncGUID* guid;
@@ -70,8 +73,8 @@ typedef struct
     GList* pList;
     context_t context;
     KvpValue* pKvpValue;
-    GString* path;
-} slot_info_t;
+    std::string path;
+};
 
 
 static  gpointer get_obj_guid (gpointer pObject);
@@ -182,64 +185,34 @@ GncSqlSlotsBackend::GncSqlSlotsBackend() :
 
 /* ================================================================= */
 
-static gchar*
-get_key_from_path (GString* path)
+inline static std::string::size_type
+get_final_delim(std::string& path)
 {
-    gchar* str = NULL, *key = NULL, *ret = NULL;
-
-    g_return_val_if_fail (path != NULL, g_strdup (""));
-
-    if (path->str == NULL) return g_strdup ("");
-    str = g_strdup (path->str);
-    key = strrchr (str, '/');
-
-    /* Remove trailing /es */
-    if (key == NULL) return str;
-    while (str + strlen (str) - key == 1)
+    auto idx = path.rfind('/');
+    while (idx == path.length())
     {
-        *key = '\0';
-        key = strrchr (str, '/');
+        path.erase(idx);
+        idx = path.rfind('/');
     }
-    if (key == NULL) return str;
-    /* Now advance key past the last intermediate / to get the post-delimiter string */
-    while (*key == '/') ++key;
-
-    ret = g_strdup (key);
-    g_free (str);
-    return ret;
+    return idx;
 }
 
-static gchar*
-get_path_from_path (GString* path)
+static std::string
+get_key_from_path (std::string path)
 {
-    gchar* str = NULL, *key = NULL;
+    auto idx = get_final_delim(path);
+    if (idx == std::string::npos)
+        return path;
+    return path.substr(idx);
+}
 
-    g_return_val_if_fail (path != NULL, NULL);
-
-    if (path->str == NULL) return NULL;
-    str = g_strdup (path->str);
-    key = strrchr (str, '/');
-    /* No /es means no path, just a key */
-    if (key == NULL)
-    {
-        g_free (str);
-        return NULL;
-    }
-    /* Remove trailing /es */
-    while (str + strlen (str) - key == 1)
-    {
-        *key = '\0';
-        key = strrchr (str, '/');
-    }
-    if (key == NULL)
-    {
-        g_free (str);
-        return NULL;
-    }
-    /* reterminate the string at the slash */
-    *key = '\0';
-
-    return str;
+static std::string
+get_path_from_path (std::string path)
+{
+    auto idx = get_final_delim(path);
+    if (idx == std::string::npos)
+        return "";
+    return path.substr(0, idx);
 }
 
 static void
@@ -252,9 +225,8 @@ set_slot_from_value (slot_info_t* pInfo, KvpValue* pValue)
     {
     case FRAME:
     {
-        gchar* key = get_key_from_path (pInfo->path);
-        pInfo->pKvpFrame->set (key, pValue);
-        g_free (key);
+        auto key = get_key_from_path (pInfo->path);
+        pInfo->pKvpFrame->set (key.c_str(), pValue);
         break;
     }
     case LIST:
@@ -265,17 +237,15 @@ set_slot_from_value (slot_info_t* pInfo, KvpValue* pValue)
     case NONE:
     default:
     {
-        gchar* key = get_key_from_path (pInfo->path);
-        gchar* path = get_path_from_path (pInfo->path);
+        auto key = get_key_from_path (pInfo->path);
+        auto path = get_path_from_path (pInfo->path);
         auto frame = pInfo->pKvpFrame;
-        if (path)
+        if (!path.empty())
         {
-            frame->set_path ({path, key}, pValue);
-            g_free (path);
+            frame->set_path ({path.c_str(), key.c_str()}, pValue);
         }
         else
-            frame->set (key, pValue);
-        g_free (key);
+            frame->set (key.c_str(), pValue);
         break;
     }
     }
@@ -304,22 +274,14 @@ get_path (gpointer pObject)
 
     g_return_val_if_fail (pObject != NULL, NULL);
 
-    return (gpointer)pInfo->path->str;
+    return (gpointer)pInfo->path.c_str();
 }
 
 static void
 set_path (gpointer pObject,  gpointer pValue)
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
-
-    g_return_if_fail (pObject != NULL);
-    g_return_if_fail (pValue != NULL);
-
-    if (pInfo->path != NULL)
-    {
-        (void)g_string_free (pInfo->path, TRUE);
-    }
-    pInfo->path = g_string_new ((gchar*)pValue);
+    pInfo->path = static_cast<char*>(pValue);
 }
 
 static KvpValue::Type
@@ -497,16 +459,14 @@ set_guid_val (gpointer pObject,  gpointer pValue)
     {
         slot_info_t* newInfo = slot_info_copy (pInfo, (GncGUID*)pValue);
         KvpValue* pValue = NULL;
-        gchar* key = get_key_from_path (pInfo->path);
+        auto key = get_key_from_path (pInfo->path);
 
         newInfo->context = LIST;
 
         slots_load_info (newInfo);
         pValue = new KvpValue {newInfo->pList};
-        pInfo->pKvpFrame->set (key, pValue);
-        g_string_free (newInfo->path, TRUE);
-        g_slice_free (slot_info_t, newInfo);
-        g_free (key);
+        pInfo->pKvpFrame->set (key.c_str(), pValue);
+	delete newInfo;
         break;
     }
     case KvpValue::Type::FRAME:
@@ -520,26 +480,22 @@ set_guid_val (gpointer pObject,  gpointer pValue)
         case LIST:
         {
             auto value = new KvpValue {newFrame};
-            gchar* key = get_key_from_path (pInfo->path);
-            newInfo->path = g_string_assign (newInfo->path, key);
+            newInfo->path = get_key_from_path (pInfo->path);
             pInfo->pList = g_list_append (pInfo->pList, value);
-            g_free (key);
             break;
         }
         case FRAME:
         default:
         {
-            gchar* key = get_key_from_path (pInfo->path);
-            pInfo->pKvpFrame->set (key, new KvpValue {newFrame});
-            g_free (key);
+            auto key = get_key_from_path (pInfo->path);
+            pInfo->pKvpFrame->set (key.c_str(), new KvpValue {newFrame});
             break;
         }
         }
 
         newInfo->context = FRAME;
         slots_load_info (newInfo);
-        g_string_free (newInfo->path, TRUE);
-        g_slice_free (slot_info_t, newInfo);
+        delete newInfo;
         break;
     }
     default:
@@ -610,9 +566,8 @@ set_gdate_val (gpointer pObject, GDate* value)
 static slot_info_t*
 slot_info_copy (slot_info_t* pInfo, GncGUID* guid)
 {
-    slot_info_t* newSlot;
     g_return_val_if_fail (pInfo != NULL, NULL);
-    newSlot = g_slice_new0 (slot_info_t);
+    auto newSlot = new slot_info_t;
 
     newSlot->be = pInfo->be;
     newSlot->guid = guid == NULL ? pInfo->guid : guid;
@@ -622,17 +577,15 @@ slot_info_copy (slot_info_t* pInfo, GncGUID* guid)
     newSlot->pList = pInfo->pList;
     newSlot->context = pInfo->context;
     newSlot->pKvpValue = pInfo->pKvpValue;
-    newSlot->path = g_string_new (pInfo->path->str);
+    newSlot->path.clear();
     return newSlot;
 }
 
 static void
-save_slot (const gchar* key, KvpValue* value, gpointer data)
+save_slot (const char* key, KvpValue* value, gpointer data)
 {
     slot_info_t* pSlot_info = (slot_info_t*)data;
-    gsize curlen;
 
-    g_return_if_fail (key != NULL);
     g_return_if_fail (value != NULL);
     g_return_if_fail (data != NULL);
 
@@ -641,14 +594,12 @@ save_slot (const gchar* key, KvpValue* value, gpointer data)
     {
         return;
     }
-
-    curlen = pSlot_info->path->len;
+    auto curlen = pSlot_info->path.length();
     pSlot_info->pKvpValue = value;
     if (curlen != 0)
-    {
-        (void)g_string_append (pSlot_info->path, "/");
-    }
-    (void)g_string_append (pSlot_info->path, key);
+        pSlot_info->path += "/";
+
+    pSlot_info->path += key;
     pSlot_info->value_type = value->get_type ();
 
     switch (pSlot_info->value_type)
@@ -669,8 +620,7 @@ save_slot (const gchar* key, KvpValue* value, gpointer data)
         pKvpFrame->for_each_slot (save_slot, pNewInfo);
         delete pSlot_info->pKvpValue;
         pSlot_info->pKvpValue = oldValue;
-        g_string_free (pNewInfo->path, TRUE);
-        g_slice_free (slot_info_t, pNewInfo);
+        delete pNewInfo;
     }
     break;
     case KvpValue::Type::GLIST:
@@ -692,8 +642,7 @@ save_slot (const gchar* key, KvpValue* value, gpointer data)
         }
         delete pSlot_info->pKvpValue;
         pSlot_info->pKvpValue = oldValue;
-        g_string_free (pNewInfo->path, TRUE);
-        g_slice_free (slot_info_t, pNewInfo);
+        delete pNewInfo;
     }
     break;
     default:
@@ -707,14 +656,15 @@ save_slot (const gchar* key, KvpValue* value, gpointer data)
     break;
     }
 
-    (void)g_string_truncate (pSlot_info->path, curlen);
+    pSlot_info->path.erase(curlen);
 }
 
 gboolean
 gnc_sql_slots_save (GncSqlBackend* sql_be, const GncGUID* guid, gboolean is_infant,
                     QofInstance* inst)
 {
-    slot_info_t slot_info = { NULL, NULL, TRUE, NULL, KvpValue::Type::INVALID, NULL, FRAME, NULL, g_string_new (NULL) };
+    slot_info_t slot_info = { NULL, NULL, TRUE, NULL, KvpValue::Type::INVALID,
+                              NULL, FRAME, NULL, "" };
     KvpFrame* pFrame = qof_instance_get_slots (inst);
 
     g_return_val_if_fail (sql_be != NULL, FALSE);
@@ -730,7 +680,6 @@ gnc_sql_slots_save (GncSqlBackend* sql_be, const GncGUID* guid, gboolean is_infa
     slot_info.be = sql_be;
     slot_info.guid = guid;
     pFrame->for_each_slot (save_slot, &slot_info);
-    (void)g_string_free (slot_info.path, TRUE);
 
     return slot_info.is_ok;
 }
@@ -740,7 +689,8 @@ gnc_sql_slots_delete (GncSqlBackend* sql_be, const GncGUID* guid)
 {
     gchar* buf;
     gchar guid_buf[GUID_ENCODING_LENGTH + 1];
-    slot_info_t slot_info = { NULL, NULL, TRUE, NULL, KvpValue::Type::INVALID, NULL, FRAME, NULL, g_string_new (NULL) };
+    slot_info_t slot_info = { NULL, NULL, TRUE, NULL, KvpValue::Type::INVALID,
+                              NULL, FRAME, NULL, "" };
 
     g_return_val_if_fail (sql_be != NULL, FALSE);
     g_return_val_if_fail (guid != NULL, FALSE);
@@ -792,15 +742,9 @@ load_slot (slot_info_t* pInfo, GncSqlRow& row)
     g_return_if_fail (pInfo->pKvpFrame != NULL);
 
     slot_info = slot_info_copy (pInfo, NULL);
-    g_string_free (slot_info->path, TRUE);
-    slot_info->path = NULL;
 
     gnc_sql_load_object (pInfo->be, row, TABLE_NAME, slot_info, col_table);
 
-    if (slot_info->path != NULL)
-    {
-        (void)g_string_free (slot_info->path, TRUE);
-    }
     if (slot_info->pList != pInfo->pList)
     {
         if (pInfo->pList != NULL)
@@ -812,13 +756,14 @@ load_slot (slot_info_t* pInfo, GncSqlRow& row)
             pInfo->pList = slot_info->pList;
         }
     }
-    g_slice_free (slot_info_t, slot_info);
+    delete slot_info;
 }
 
 void
 gnc_sql_slots_load (GncSqlBackend* sql_be, QofInstance* inst)
 {
-    slot_info_t info = { NULL, NULL, TRUE, NULL, KvpValue::Type::INVALID, NULL, FRAME, NULL, g_string_new (NULL) };
+    slot_info_t info = { NULL, NULL, TRUE, NULL, KvpValue::Type::INVALID,
+                         NULL, FRAME, NULL, "" };
     g_return_if_fail (sql_be != NULL);
     g_return_if_fail (inst != NULL);
 
@@ -870,7 +815,8 @@ static void
 load_slot_for_list_item (GncSqlBackend* sql_be, GncSqlRow& row,
                          QofCollection* coll)
 {
-    slot_info_t slot_info = { NULL, NULL, TRUE, NULL, KvpValue::Type::INVALID, NULL, FRAME, NULL, NULL };
+    slot_info_t slot_info = { NULL, NULL, TRUE, NULL, KvpValue::Type::INVALID,
+                              NULL, FRAME, NULL, "" };
     const GncGUID* guid;
     QofInstance* inst;
 
@@ -887,10 +833,7 @@ load_slot_for_list_item (GncSqlBackend* sql_be, GncSqlRow& row,
 
     gnc_sql_load_object (sql_be, row, TABLE_NAME, &slot_info, col_table);
 
-    if (slot_info.path != NULL)
-    {
-        (void)g_string_free (slot_info.path, TRUE);
-    }
+
 }
 
 void
@@ -935,7 +878,8 @@ static void
 load_slot_for_book_object (GncSqlBackend* sql_be, GncSqlRow& row,
                            BookLookupFn lookup_fn)
 {
-    slot_info_t slot_info = { NULL, NULL, TRUE, NULL, KvpValue::Type::INVALID, NULL, FRAME, NULL, NULL };
+    slot_info_t slot_info = { NULL, NULL, TRUE, NULL, KvpValue::Type::INVALID,
+                              NULL, FRAME, NULL, "" };
     const GncGUID* guid;
     QofInstance* inst;
 
@@ -949,14 +893,9 @@ load_slot_for_book_object (GncSqlBackend* sql_be, GncSqlRow& row,
 
     slot_info.be = sql_be;
     slot_info.pKvpFrame = qof_instance_get_slots (inst);
-    slot_info.path = NULL;
+    slot_info.path.clear();
 
     gnc_sql_load_object (sql_be, row, TABLE_NAME, &slot_info, col_table);
-
-    if (slot_info.path != NULL)
-    {
-        (void)g_string_free (slot_info.path, TRUE);
-    }
 }
 
 /**
