@@ -314,7 +314,10 @@ GncSqlBackend::load (QofBook* book, QofBackendLoadType loadType)
 
     m_loading = FALSE;
     std::for_each(m_postload_commodities.begin(), m_postload_commodities.end(),
-                 [](gnc_commodity* comm) { gnc_sql_commit_commodity (comm); });
+                 [](gnc_commodity* comm) {
+                      gnc_commodity_begin_edit(comm);
+                      gnc_commodity_commit_edit(comm);
+                  });
     m_postload_commodities.empty();
 
     /* Mark the sessoion as clean -- though it should never be marked
@@ -845,6 +848,17 @@ GncSqlBackend::do_db_operation (E_DB_OPERATION op, const char* table_name,
     if (stmt == nullptr)
         return false;
     return (execute_nonselect_statement(stmt) != -1);
+}
+
+bool
+GncSqlBackend::save_commodity(gnc_commodity* comm) noexcept
+{
+    if (comm == nullptr) return false;
+    QofInstance* inst = QOF_INSTANCE(comm);
+    auto obe = m_backend_registry.get_object_backend(std::string(inst->e_type));
+    if (obe && !obe->instance_in_db(this, inst))
+        return obe->commit(this, inst);
+    return true;
 }
 
 GncSqlStatementPtr

@@ -205,7 +205,7 @@ GncSqlInvoiceBackend::commit (GncSqlBackend* sql_be, QofInstance* inst)
     if (op != OP_DB_DELETE)
     {
         // Ensure the commodity is in the db
-        is_ok = gnc_sql_save_commodity (sql_be, gncInvoiceGetCurrency (invoice));
+        is_ok = sql_be->save_commodity(gncInvoiceGetCurrency(invoice));
     }
 
     if (is_ok)

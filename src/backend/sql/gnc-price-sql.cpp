@@ -187,8 +187,8 @@ GncSqlPriceBackend::commit (GncSqlBackend* sql_be, QofInstance* inst)
     if (op != OP_DB_DELETE)
     {
         /* Ensure commodity and currency are in the db */
-        (void)gnc_sql_save_commodity (sql_be, gnc_price_get_commodity (pPrice));
-        is_ok = gnc_sql_save_commodity (sql_be, gnc_price_get_currency (pPrice));
+        (void)sql_be->save_commodity(gnc_price_get_commodity(pPrice));
+        is_ok = sql_be->save_commodity(gnc_price_get_currency(pPrice));
     }
 
     if (is_ok)

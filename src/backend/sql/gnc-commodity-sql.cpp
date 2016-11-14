@@ -221,41 +221,6 @@ GncSqlCommodityBackend::commit (GncSqlBackend* sql_be, QofInstance* inst)
     return do_commit_commodity (sql_be, inst, FALSE);
 }
 
-static gboolean
-is_commodity_in_db (GncSqlBackend* sql_be, gnc_commodity* pCommodity)
-{
-    g_return_val_if_fail (sql_be != NULL, FALSE);
-    g_return_val_if_fail (pCommodity != NULL, FALSE);
-
-    return sql_be->object_in_db (COMMODITIES_TABLE, GNC_ID_COMMODITY,
-                                 pCommodity, col_table);
-}
-
-gboolean
-gnc_sql_save_commodity (GncSqlBackend* sql_be, gnc_commodity* pCommodity)
-{
-    gboolean is_ok = TRUE;
-
-    g_return_val_if_fail (sql_be != NULL, FALSE);
-    g_return_val_if_fail (pCommodity != NULL, FALSE);
-
-    if (!is_commodity_in_db (sql_be, pCommodity))
-    {
-        is_ok = do_commit_commodity (sql_be, QOF_INSTANCE (pCommodity), TRUE);
-    }
-
-    return is_ok;
-}
-
-void
-gnc_sql_commit_commodity (gnc_commodity* pCommodity)
-{
-    g_return_if_fail (pCommodity != NULL);
-    g_return_if_fail (GNC_IS_COMMODITY (pCommodity));
-    gnc_commodity_begin_edit (pCommodity);
-    gnc_commodity_commit_edit (pCommodity);
-}
-
 /* ----------------------------------------------------------------- */
 template<> void
 GncSqlColumnTableEntryImpl<CT_COMMODITYREF>::load (const GncSqlBackend* sql_be,

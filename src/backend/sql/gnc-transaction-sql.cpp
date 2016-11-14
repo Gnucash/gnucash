@@ -657,7 +657,7 @@ GncSqlTransBackend::commit (GncSqlBackend* sql_be, QofInstance* inst)
     {
         gnc_commodity* commodity = xaccTransGetCurrency (pTx);
         // Ensure the commodity is in the db
-        is_ok = gnc_sql_save_commodity (sql_be, commodity);
+        is_ok = sql_be->save_commodity(commodity);
         if (! is_ok)
         {
             err = "Commodity save failed: Probably an invalid or missing currency";

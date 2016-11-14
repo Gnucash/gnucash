@@ -97,6 +97,14 @@ public:
     const bool is_version (int version) const noexcept {
         return version == m_version;
     }
+    /**
+     * Check the presence of an object in the backend's database.
+     *
+     * @param sql_be Backend owning the database
+     * @param inst QofInstance to be checked.
+     */
+    bool instance_in_db(const GncSqlBackend* sql_be,
+                        QofInstance* inst) const noexcept;
 protected:
     const std::string m_table_name;
     const int m_version;

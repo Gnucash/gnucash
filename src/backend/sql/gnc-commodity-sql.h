@@ -45,9 +45,4 @@ public:
     bool commit(GncSqlBackend*, QofInstance*) override;
 };
 
-
-gboolean gnc_sql_save_commodity (GncSqlBackend* sql_be,
-                                 gnc_commodity* pCommodity);
-void gnc_sql_commit_commodity (gnc_commodity* pCommodity);
-
 #endif /* GNC_COMMODITY_SQL_H */

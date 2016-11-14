@@ -225,7 +225,14 @@ public:
     bool do_db_operation (E_DB_OPERATION op, const char* table_name,
                           QofIdTypeConst obj_name, gpointer pObject,
                           const EntryVec& table) const noexcept;
-
+    /**
+     * Ensure that a commodity referenced in another object is in fact saved
+     * in the database.
+     *
+     * @param comm The commodity in question
+     * @return true if the commodity needed to be saved.
+     */
+    bool save_commodity(gnc_commodity* comm) noexcept;
     QofBook* book() const noexcept { return m_book; }
     void set_loading(bool loading) noexcept { m_loading = loading; }
     bool pristine() const noexcept { return m_is_pristine_db; }

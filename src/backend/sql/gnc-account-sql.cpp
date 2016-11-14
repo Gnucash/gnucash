@@ -352,7 +352,7 @@ GncSqlAccountBackend::commit (GncSqlBackend* sql_be, QofInstance* inst)
     // If not deleting the account, ensure the commodity is in the db
     if (op != OP_DB_DELETE && commodity != NULL)
     {
-        is_ok = gnc_sql_save_commodity (sql_be, commodity);
+        is_ok = sql_be->save_commodity(commodity);
     }
 
     if (is_ok)

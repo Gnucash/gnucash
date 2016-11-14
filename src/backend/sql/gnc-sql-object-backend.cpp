@@ -87,3 +87,11 @@ GncSqlObjectBackend::create_tables (GncSqlBackend* sql_be)
         PERR("Version mismatch in table %s, expecting %d but backend is %d."
              "Table creation aborted.", m_table_name.c_str(), m_version, version);
 }
+
+bool
+GncSqlObjectBackend::instance_in_db(const GncSqlBackend* sql_be,
+                                    QofInstance* inst) const noexcept
+{
+    return sql_be->object_in_db(m_table_name.c_str(), m_type_name.c_str(),
+                                inst, m_col_table);
+}
