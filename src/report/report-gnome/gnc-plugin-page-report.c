@@ -324,6 +324,38 @@ gnc_plugin_page_report_finalize (GObject *object)
     LEAVE(" ");
 }
 
+static gboolean
+gnc_plugin_page_report_load_uri (GncPluginPage *page)
+{
+    GncPluginPageReport *report;
+    GncPluginPageReportPrivate *priv;
+    URLType type;
+    char * id_name;
+    char * child_name;
+    char * url_location = NULL;
+    char * url_label = NULL;
+
+    report = GNC_PLUGIN_PAGE_REPORT(page);
+    priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
+
+    id_name = g_strdup_printf("id=%d", priv->reportId );
+    child_name = gnc_build_url( URL_TYPE_REPORT, id_name, NULL );
+    type = gnc_html_parse_url( priv->html, child_name, &url_location, &url_label);
+    DEBUG( "passing id_name=[%s] child_name=[%s] type=[%s], location=[%s], label=[%s]",
+           id_name, child_name ? child_name : "(null)",
+           type ? type : "(null)", url_location ? url_location : "(null)",
+           url_label ? url_label : "(null)" );
+
+    g_free(id_name);
+    g_free(child_name);
+    gnc_window_set_progressbar_window( GNC_WINDOW(page->window) );
+    gnc_html_show_url(priv->html, type, url_location, url_label, 0);
+    g_free(url_location);
+    gnc_window_set_progressbar_window( NULL );
+
+    return FALSE;
+}
+
 static
 GtkWidget*
 gnc_plugin_page_report_create_widget( GncPluginPage *page )
@@ -331,11 +363,6 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     GncPluginPageReport *report;
     GncPluginPageReportPrivate *priv;
     GtkWindow *topLvl;
-    URLType type;
-    char * id_name;
-    char * child_name;
-    char * url_location = NULL;
-    char * url_label = NULL;
 
     ENTER("page %p", page);
 
@@ -368,20 +395,9 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
 
     // FIXME.  This is f^-1(f(x)), isn't it?
     DEBUG( "id=%d", priv->reportId );
-    id_name = g_strdup_printf("id=%d", priv->reportId );
-    child_name = gnc_build_url( URL_TYPE_REPORT, id_name, NULL );
-    type = gnc_html_parse_url( priv->html, child_name, &url_location, &url_label);
-    DEBUG( "passing id_name=[%s] child_name=[%s] type=[%s], location=[%s], label=[%s]",
-           id_name, child_name ? child_name : "(null)",
-           type ? type : "(null)", url_location ? url_location : "(null)",
-           url_label ? url_label : "(null)" );
 
-    g_free(id_name);
-    g_free(child_name);
-    gnc_window_set_progressbar_window( GNC_WINDOW(page->window) );
-    gnc_html_show_url(priv->html, type, url_location, url_label, 0);
-    g_free(url_location);
-    gnc_window_set_progressbar_window( NULL );
+    /* load uri when view idle */
+    g_idle_add ((GSourceFunc)gnc_plugin_page_report_load_uri, page);
 
     g_signal_connect(priv->container, "expose_event",
                      G_CALLBACK(gnc_plugin_page_report_expose_event_cb), report);
