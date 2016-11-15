@@ -277,8 +277,7 @@ gnc_plugin_page_report_class_init (GncPluginPageReportClass *klass)
     object_class->set_property = gnc_plugin_page_report_set_property;
     object_class->get_property = gnc_plugin_page_report_get_property;
 
-    // FIXME: stock reporting icon?
-    //gnc_plugin_page_class->tab_icon        = GNC_STOCK_ACCOUNT;
+    gnc_plugin_page_class->tab_icon        = GNC_STOCK_ACCOUNT_REPORT;
     gnc_plugin_page_class->plugin_name     = GNC_PLUGIN_PAGE_REPORT_NAME;
 
     gnc_plugin_page_class->create_widget   = gnc_plugin_page_report_create_widget;
