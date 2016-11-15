@@ -110,6 +110,7 @@
 (export gnc:options-make-date-interval!)
 
 (export gnc:make-number-range-option)
+(export gnc:make-number-plot-size-option)
 (export gnc:make-internal-option)
 (export gnc:make-query-option)
 (export gnc:make-color-option)

@@ -1143,6 +1143,48 @@
      (list lower-bound upper-bound num-decimals step-size)
      #f #f #f)))
 
+
+;; plot size options use the option-data as a list whose
+;; elements are: (lower-bound upper-bound num-decimals step-size)
+(define (gnc:make-number-plot-size-option
+         section
+         name
+         sort-tag
+         documentation-string
+         default-value
+         lower-bound
+         upper-bound
+         num-decimals
+         step-size)
+  (let* ((value default-value)
+         (value->string (lambda () (number->string value))))
+    (gnc:make-option
+     section name sort-tag 'number-range documentation-string
+     (lambda () value)
+     (lambda (x)
+       (cond ((and (pair? x) ;; new pair value
+                   (eq? 'pixels (car x)))
+              (set! value (cdr x)))
+             (else (set! value default-value)))
+
+       (if (number? x) ;; old single value
+         (set! value x)))
+     (lambda () default-value)
+     (gnc:restore-form-generator value->string)
+     (lambda (f p) (kvp-frame-set-slot-path-gslist f value p))
+     (lambda (f p)
+       (let ((v (kvp-frame-get-slot-path-gslist f p)))
+         (if (and v (number? v))
+             (set! value v))))
+     (lambda (x)
+       (cond ((not (number? x)) (list #f "number-plot-size-option: not a number"))
+             ((and (>= value lower-bound)
+                   (<= value upper-bound))
+              (list #t x))
+             (else (list #f "number-plot-size-option: out of range"))))
+     (list lower-bound upper-bound num-decimals step-size)
+     #f #f #f)))
+
 (define (gnc:make-internal-option
          section
          name
