@@ -341,12 +341,27 @@ gnc_plugin_page_report_view_size (GtkWidget *widget, GtkAllocation *allocation, 
     }
 }
 
+static void
+gnc_plugin_page_report_set_progressbar (GncPluginPage *page, gboolean set)
+{
+    GtkWidget *progressbar;
+    GtkAllocation allocation;
+
+    progressbar = gnc_window_get_progressbar (GNC_WINDOW(page->window));
+    gtk_widget_get_allocation (GTK_WIDGET(progressbar), &allocation); 
+
+    // this sets the minimum size of the progressbar to that allocated
+    if (set)
+        gtk_widget_set_size_request (GTK_WIDGET(progressbar), -1, allocation.height);
+    else
+        gtk_widget_set_size_request (GTK_WIDGET(progressbar), -1, -1); //reset
+}
+
 static gboolean
 gnc_plugin_page_report_load_uri (GncPluginPage *page)
 {
     GncPluginPageReport *report;
     GncPluginPageReportPrivate *priv;
-    GtkWidget *progressbar;
     GtkAllocation allocation;
     URLType type;
     char * id_name;
@@ -379,14 +394,14 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
     // this sets the window for the progressbar
     gnc_window_set_progressbar_window( GNC_WINDOW(page->window) );
 
-    progressbar = gnc_window_get_progressbar (GNC_WINDOW(page->window));
-    gtk_widget_get_allocation (GTK_WIDGET(progressbar), &allocation); 
-
     // this sets the minimum size of the progressbar to that allocated
-    gtk_widget_set_size_request (GTK_WIDGET(progressbar), -1, allocation.height);
+    gnc_plugin_page_report_set_progressbar( page, TRUE );
 
     gnc_html_show_url(priv->html, type, url_location, url_label, 0);
     g_free(url_location);
+
+    gnc_plugin_page_report_set_progressbar( page, FALSE );
+
     // this resets the window for the progressbar to NULL
     gnc_window_set_progressbar_window( NULL );
 
@@ -639,6 +654,7 @@ gnc_plugin_page_report_load_cb(GncHtml * html, URLType type,
 static void
 gnc_plugin_page_report_option_change_cb(gpointer data)
 {
+    GncPluginPage *page;
     GncPluginPageReport *report;
     GncPluginPageReportPrivate *priv;
     SCM dirty_report = scm_c_eval_string("gnc:report-set-dirty?!");
@@ -649,6 +665,7 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REPORT(data));
     report = GNC_PLUGIN_PAGE_REPORT(data);
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
+    page = GNC_PLUGIN_PAGE(report);
 
     DEBUG( "option_change" );
     if (priv->cur_report == SCM_BOOL_F)
@@ -677,7 +694,18 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
     // jsled: this doesn't seem to cause any effect.
     gtk_widget_queue_draw( GTK_WIDGET(priv->container) );
     // jsled: this does.
+    // this sets the window for the progressbar
+    gnc_window_set_progressbar_window( GNC_WINDOW(page->window) );
+
+    // this sets the minimum size of the progressbar to that allocated
+    gnc_plugin_page_report_set_progressbar( page, TRUE );
+
     gnc_html_reload( priv->html );
+
+    gnc_plugin_page_report_set_progressbar( page, FALSE );
+
+    // this resets the window for the progressbar to NULL
+    gnc_window_set_progressbar_window( NULL );
 }
 
 /* FIXME: This function does... nothing.  */
@@ -1345,10 +1373,12 @@ gnc_plugin_page_report_back_cb( GtkAction *action, GncPluginPageReport *report )
 static void
 gnc_plugin_page_report_reload_cb( GtkAction *action, GncPluginPageReport *report )
 {
+    GncPluginPage *page;
     GncPluginPageReportPrivate *priv;
     SCM dirty_report;
 
     DEBUG( "reload" );
+    page = GNC_PLUGIN_PAGE(report);
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
     if (priv->cur_report == SCM_BOOL_F)
         return;
@@ -1365,7 +1395,18 @@ gnc_plugin_page_report_reload_cb( GtkAction *action, GncPluginPageReport *report
 
     // this does...
     priv->reloading = TRUE;
+    // this sets the window for the progressbar
+    gnc_window_set_progressbar_window( GNC_WINDOW(page->window) );
+
+    // this sets the minimum size of the progressbar to that allocated
+    gnc_plugin_page_report_set_progressbar( page, TRUE );
+
     gnc_html_reload( priv->html );
+
+    gnc_plugin_page_report_set_progressbar( page, FALSE );
+
+    // this resets the window for the progressbar to NULL
+    gnc_window_set_progressbar_window( NULL );
     priv->reloading = FALSE;
 }
 
