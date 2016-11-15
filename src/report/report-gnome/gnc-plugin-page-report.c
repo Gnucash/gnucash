@@ -329,6 +329,8 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
 {
     GncPluginPageReport *report;
     GncPluginPageReportPrivate *priv;
+    GtkWidget *progressbar;
+    GtkAllocation allocation;
     URLType type;
     char * id_name;
     char * child_name;
@@ -348,9 +350,19 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
 
     g_free(id_name);
     g_free(child_name);
+
+    // this sets the window for the progressbar
     gnc_window_set_progressbar_window( GNC_WINDOW(page->window) );
+
+    progressbar = gnc_window_get_progressbar (GNC_WINDOW(page->window));
+    gtk_widget_get_allocation (GTK_WIDGET(progressbar), &allocation); 
+
+    // this sets the minimum size of the progressbar to that allocated
+    gtk_widget_set_size_request (GTK_WIDGET(progressbar), -1, allocation.height);
+
     gnc_html_show_url(priv->html, type, url_location, url_label, 0);
     g_free(url_location);
+    // this resets the window for the progressbar to NULL
     gnc_window_set_progressbar_window( NULL );
 
     return FALSE;
