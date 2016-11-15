@@ -98,7 +98,7 @@ static void
 gnc_html_scroll_vis_cb( GtkWidget *widget, gpointer user_data )
 {
     GncHtml* self = user_data;
-    gnc_html_reload( self );
+    gnc_html_reload( self, FALSE ); //reload by view
 }
 
 static void
@@ -391,17 +391,19 @@ gnc_html_show_url( GncHtml* self, URLType type,
 /********************************************************************
  * gnc_html_reload
  * reload the current page
+ * if force_rebuild is TRUE, the report is recreated, if FALSE, report
+ * is reloaded ib the view
  ********************************************************************/
 
 void
-gnc_html_reload( GncHtml* self )
+gnc_html_reload( GncHtml* self, gboolean force_rebuild )
 {
     g_return_if_fail( self != NULL );
     g_return_if_fail( GNC_IS_HTML(self) );
 
     if ( GNC_HTML_GET_CLASS(self)->reload != NULL )
     {
-        GNC_HTML_GET_CLASS(self)->reload( self );
+        GNC_HTML_GET_CLASS(self)->reload( self, force_rebuild );
     }
     else
     {
