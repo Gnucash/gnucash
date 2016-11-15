@@ -129,6 +129,9 @@ typedef struct GncPluginPageReportPrivate
 //        gnc_html *html;
     GncHtml *html;
 
+    // keep the view size
+    gint view_width, view_height;
+
     /// the container the above HTML widget is in.
     GtkContainer *container;
 } GncPluginPageReportPrivate;
@@ -324,6 +327,20 @@ gnc_plugin_page_report_finalize (GObject *object)
     LEAVE(" ");
 }
 
+static void
+gnc_plugin_page_report_view_size (GtkWidget *widget, GtkAllocation *allocation, gpointer user_data)
+{
+    GncPluginPageReportPrivate *priv = user_data;
+
+    if ((allocation->width != priv->view_width)||(allocation->height != priv->view_height))
+    {
+        gnc_html_reload (priv->html);
+
+        priv->view_width = allocation->width;
+        priv->view_height = allocation->height;
+    }
+}
+
 static gboolean
 gnc_plugin_page_report_load_uri (GncPluginPage *page)
 {
@@ -339,6 +356,14 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
 
     report = GNC_PLUGIN_PAGE_REPORT(page);
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
+
+    gtk_widget_get_allocation (GTK_WIDGET(gnc_html_get_widget(priv->html)), &allocation); 
+
+    priv->view_width = allocation.width;
+    priv->view_height = allocation.height;
+
+    g_signal_connect(GTK_WIDGET(gnc_html_get_widget(priv->html)), "size-allocate",
+                     G_CALLBACK(gnc_plugin_page_report_view_size), priv);
 
     id_name = g_strdup_printf("id=%d", priv->reportId );
     child_name = gnc_build_url( URL_TYPE_REPORT, id_name, NULL );
@@ -386,6 +411,9 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     priv->html = gnc_html_factory_create_html();
     gnc_html_set_parent( priv->html, topLvl );
 
+    priv->view_width = 0; // default
+    priv->view_height = 0; // default
+
     gnc_html_history_set_node_destroy_cb(gnc_html_get_history(priv->html),
                                          gnc_plugin_page_report_history_destroy_cb,
                                          (gpointer)priv);
@@ -411,8 +439,8 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     /* load uri when view idle */
     g_idle_add ((GSourceFunc)gnc_plugin_page_report_load_uri, page);
 
-    g_signal_connect(priv->container, "expose_event",
-                     G_CALLBACK(gnc_plugin_page_report_expose_event_cb), report);
+//    g_signal_connect(priv->container, "expose_event",
+//                     G_CALLBACK(gnc_plugin_page_report_expose_event_cb), report);
 
     gtk_widget_show_all( GTK_WIDGET(priv->container) );
 
