@@ -16,7 +16,7 @@
       <description>Number of checks to print on the first page.</description>
     </key>
     <key name="date-format" type="i">
-      <default>0</default>
+      <default>7</default>
       <summary>Date format to use</summary>
       <description>This is the numerical identifier of the predefined date format to use.</description>
     </key>
