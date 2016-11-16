@@ -65,6 +65,8 @@ static void set_parent_guid (gpointer pObject,  gpointer pValue);
 #define ACCOUNT_MAX_CODE_LEN 2048
 #define ACCOUNT_MAX_DESCRIPTION_LEN 2048
 
+using AccountVec = std::vector<Account*>;
+
 static const EntryVec col_table
 {
     gnc_sql_make_table_entry<CT_GUID>("guid", 0, COL_NNUL | COL_PKEY, "guid" ),
@@ -98,11 +100,14 @@ GncSqlAccountBackend::GncSqlAccountBackend() :
     GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_ACCOUNT,
                         TABLE_NAME, col_table) {}
 
-typedef struct
+struct ParentGuid
 {
     Account* pAccount;
     GncGUID guid;
-} account_parent_guid_struct;
+};
+
+using ParentGuidPtr = ParentGuid*; // Can't pass std::shared_ptr<ParentGuid> as a gpointer.
+using ParentGuidVec = std::vector<ParentGuidPtr>;
 
 /* ================================================================= */
 
@@ -156,24 +161,20 @@ set_parent (gpointer pObject,  gpointer pValue)
 static void
 set_parent_guid (gpointer pObject,  gpointer pValue)
 {
-    account_parent_guid_struct* s = (account_parent_guid_struct*)pObject;
-    GncGUID* guid = (GncGUID*)pValue;
-
     g_return_if_fail (pObject != NULL);
     g_return_if_fail (pValue != NULL);
-
-    s->guid = *guid;
+    ParentGuidPtr s = reinterpret_cast<decltype(s)>(pObject);
+    s->guid = *static_cast<GncGUID*>(pValue);
 }
 
 static  Account*
 load_single_account (GncSqlBackend* sql_be, GncSqlRow& row,
-                     GList** l_accounts_needing_parents)
+                     ParentGuidVec& l_accounts_needing_parents)
 {
     const GncGUID* guid;
     Account* pAccount = NULL;
 
     g_return_val_if_fail (sql_be != NULL, NULL);
-    g_return_val_if_fail (l_accounts_needing_parents != NULL, NULL);
 
     guid = gnc_sql_load_guid (sql_be, row);
     if (guid != NULL)
@@ -188,18 +189,17 @@ load_single_account (GncSqlBackend* sql_be, GncSqlRow& row,
     gnc_sql_load_object (sql_be, row, GNC_ID_ACCOUNT, pAccount, col_table);
     xaccAccountCommitEdit (pAccount);
 
-    /* If we don't have a parent and this isn't the root account, it might be because the parent
-       account hasn't been loaded yet.  Remember the account and its parent guid for later. */
+    /* If we don't have a parent and this isn't the root account, it might be
+       because the parent account hasn't been loaded yet.  Remember the account
+       and its parent guid for later. */
     if (gnc_account_get_parent (pAccount) == NULL
         && pAccount != gnc_book_get_root_account (sql_be->book()))
     {
-        account_parent_guid_struct* s = static_cast<decltype (s)> (
-                                            g_malloc (sizeof (account_parent_guid_struct)));
-        g_assert (s != NULL);
+        auto s = new ParentGuid;
 
         s->pAccount = pAccount;
         gnc_sql_load_object (sql_be, row, GNC_ID_ACCOUNT, s, parent_col_table);
-        *l_accounts_needing_parents = g_list_prepend (*l_accounts_needing_parents, s);
+        l_accounts_needing_parents.push_back(s);
     }
 
     return pAccount;
@@ -209,10 +209,7 @@ void
 GncSqlAccountBackend::load_all (GncSqlBackend* sql_be)
 {
     QofBook* pBook;
-    GList* l_accounts_needing_parents = NULL;
-    GSList* bal_slist;
-    GSList* bal;
-
+    ParentGuidVec l_accounts_needing_parents;
     g_return_if_fail (sql_be != NULL);
 
     ENTER ("");
@@ -224,7 +221,7 @@ GncSqlAccountBackend::load_all (GncSqlBackend* sql_be)
     auto stmt = sql_be->create_statement_from_sql(sql.str());
     auto result = sql_be->execute_select_statement(stmt);
     for (auto row : *result)
-        load_single_account (sql_be, row, &l_accounts_needing_parents);
+        load_single_account (sql_be, row, l_accounts_needing_parents);
 
     sql.str("");
     sql << "SELECT DISTINCT guid FROM " << TABLE_NAME;
@@ -236,60 +233,48 @@ GncSqlAccountBackend::load_all (GncSqlBackend* sql_be)
        items are removed from the front and added to the back if the
        parent is still not available, then eventually, the list will
        shrink to size 0. */
-    if (l_accounts_needing_parents != NULL)
+    if (!l_accounts_needing_parents.empty())
     {
-        gboolean progress_made = TRUE;
-        Account* root;
-        Account* pParent;
-        GList* elem;
-
+        auto progress_made = true;
+        std::reverse(l_accounts_needing_parents.begin(),
+                     l_accounts_needing_parents.end());
+	auto end = l_accounts_needing_parents.end();
         while (progress_made)
         {
-            progress_made = FALSE;
-            for (elem = l_accounts_needing_parents; elem != NULL;)
-            {
-                account_parent_guid_struct* s = (account_parent_guid_struct*)elem->data;
-                pParent = xaccAccountLookup (&s->guid, sql_be->book());
-                if (pParent != NULL)
-                {
-                    GList* next_elem;
-
-                    gnc_account_append_child (pParent, s->pAccount);
-                    next_elem = g_list_next (elem);
-                    l_accounts_needing_parents = g_list_delete_link (l_accounts_needing_parents,
-                                                                     elem);
-                    g_free (s);
-                    elem = next_elem;
-                    progress_made = TRUE;
-                }
-                else
-                {
-                    /* Can't be up in the for loop because the 'then' clause reads inside a node freed
-                       by g_list_delete_link(). */
-                    elem = g_list_next (elem);
-                }
-            }
+            progress_made = false;
+            end = std::remove_if(l_accounts_needing_parents.begin(), end,
+				 [&](ParentGuidPtr s)
+				 {
+				     auto pParent = xaccAccountLookup (&s->guid,
+								       sql_be->book());
+				     if (pParent != nullptr)
+				     {
+					 gnc_account_append_child (pParent,
+								   s->pAccount);
+					 progress_made = true;
+					 delete s;
+					 return true;
+				     }
+				     return false;
+				 });
         }
 
         /* Any non-ROOT accounts left over must be parented by the root account */
-        root = gnc_book_get_root_account (pBook);
-        while (l_accounts_needing_parents != NULL)
-        {
-            account_parent_guid_struct* s = (account_parent_guid_struct*)
-                l_accounts_needing_parents->data;
-            if (xaccAccountGetType (s->pAccount) != ACCT_TYPE_ROOT)
-            {
-                gnc_account_append_child (root, s->pAccount);
-            }
-            g_free (s);
-            l_accounts_needing_parents = g_list_delete_link (l_accounts_needing_parents,
-                                                             l_accounts_needing_parents);
-        }
+        auto root = gnc_book_get_root_account (pBook);
+        end = std::remove_if(l_accounts_needing_parents.begin(), end,
+			     [&](ParentGuidPtr s)
+			     {
+				 if (xaccAccountGetType (s->pAccount) != ACCT_TYPE_ROOT)
+				     gnc_account_append_child (root, s->pAccount);
+				 delete s;
+				 return true;
+			     });
     }
 
+#if LOAD_TRANSACTIONS_AS_NEEDED
     /* Load starting balances */
-    bal_slist = gnc_sql_get_account_balances_slist (sql_be);
-    for (bal = bal_slist; bal != NULL; bal = bal->next)
+    auto bal_slist = gnc_sql_get_account_balances_slist (sql_be);
+    for (auto bal = bal_slist; bal != NULL; bal = bal->next)
     {
         acct_balances_t* balances = (acct_balances_t*)bal->data;
 
@@ -306,7 +291,7 @@ GncSqlAccountBackend::load_all (GncSqlBackend* sql_be)
     {
         g_slist_free (bal_slist);
     }
-
+#endif
     LEAVE ("");
 }
 

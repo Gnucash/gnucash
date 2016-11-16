@@ -120,12 +120,15 @@ GncSqlTaxTableBackend::GncSqlTaxTableBackend() :
     GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_TAXTABLE,
                         TT_TABLE_NAME, tt_col_table) {}
 
-typedef struct
+struct TaxTblParentGuid
 {
     GncTaxTable* tt;
     GncGUID guid;
-    gboolean have_guid;
-} taxtable_parent_guid_struct;
+    bool have_guid;
+};
+
+using TaxTblParentGuidPtr = TaxTblParentGuid*;
+using TaxTblParentGuidVec = std::vector<TaxTblParentGuidPtr>;
 
 static gpointer
 get_obj_guid (gpointer pObject, const QofParam* param)
@@ -194,14 +197,12 @@ tt_set_parent (gpointer data, gpointer value)
 static void
 tt_set_parent_guid (gpointer pObject,  gpointer pValue)
 {
-    taxtable_parent_guid_struct* s = (taxtable_parent_guid_struct*)pObject;
-    GncGUID* guid = (GncGUID*)pValue;
-
     g_return_if_fail (pObject != NULL);
     g_return_if_fail (pValue != NULL);
 
-    s->guid = *guid;
-    s->have_guid = TRUE;
+    auto s = static_cast<TaxTblParentGuidPtr>(pObject);
+    s->guid = *static_cast<GncGUID*>(pValue);
+    s->have_guid = true;
 }
 
 static void
@@ -241,7 +242,7 @@ load_taxtable_entries (GncSqlBackend* sql_be, GncTaxTable* tt)
 
 static void
 load_single_taxtable (GncSqlBackend* sql_be, GncSqlRow& row,
-                      GList** l_tt_needing_parents)
+                      TaxTblParentGuidVec& l_tt_needing_parents)
 {
     const GncGUID* guid;
     GncTaxTable* tt;
@@ -250,7 +251,7 @@ load_single_taxtable (GncSqlBackend* sql_be, GncSqlRow& row,
 
     guid = gnc_sql_load_guid (sql_be, row);
     tt = gncTaxTableLookup (sql_be->book(), guid);
-    if (tt == NULL)
+    if (tt == nullptr)
     {
         tt = gncTaxTableCreate (sql_be->book());
     }
@@ -258,26 +259,21 @@ load_single_taxtable (GncSqlBackend* sql_be, GncSqlRow& row,
     gnc_sql_slots_load (sql_be, QOF_INSTANCE (tt));
     load_taxtable_entries (sql_be, tt);
 
-    /* If the tax table doesn't have a parent, it might be because it hasn't been loaded yet.
-       If so, add this tax table to the list of tax tables with no parent, along with the parent
-       GncGUID so that after they are all loaded, the parents can be fixed up. */
+    /* If the tax table doesn't have a parent, it might be because it hasn't
+       been loaded yet.  if so, add this tax table to the list of tax tables
+       with no parent, along with the parent GncGUID so that after they are all
+       loaded, the parents can be fixed up. */
     if (gncTaxTableGetParent (tt) == NULL)
     {
-        taxtable_parent_guid_struct* s = static_cast<decltype (s)> (
-                                             g_malloc (sizeof (taxtable_parent_guid_struct)));
-        g_assert (s != NULL);
+        TaxTblParentGuid s;
 
-        s->tt = tt;
-        s->have_guid = FALSE;
-        gnc_sql_load_object (sql_be, row, GNC_ID_TAXTABLE, s, tt_parent_col_table);
-        if (s->have_guid)
-        {
-            *l_tt_needing_parents = g_list_prepend (*l_tt_needing_parents, s);
-        }
-        else
-        {
-            g_free (s);
-        }
+        s.tt = tt;
+        s.have_guid = false;
+        gnc_sql_load_object (sql_be, row, GNC_ID_TAXTABLE, &s,
+                             tt_parent_col_table);
+        if (s.have_guid)
+            l_tt_needing_parents.push_back(new TaxTblParentGuid(s));
+
     }
 
     qof_instance_mark_clean (QOF_INSTANCE (tt));
@@ -293,31 +289,41 @@ GncSqlTaxTableBackend::load_all (GncSqlBackend* sql_be)
     sql << "SELECT * FROM " << TT_TABLE_NAME;
     auto stmt = sql_be->create_statement_from_sql(sql.str());
     auto result = sql_be->execute_select_statement(stmt);
-    GList* tt_needing_parents = NULL;
+    TaxTblParentGuidVec tt_needing_parents;
 
     for (auto row : *result)
-        load_single_taxtable (sql_be, row, &tt_needing_parents);
+        load_single_taxtable (sql_be, row, tt_needing_parents);
 
     /* While there are items on the list of taxtables needing parents,
        try to see if the parent has now been loaded.  Theory says that if
        items are removed from the front and added to the back if the
        parent is still not available, then eventually, the list will
        shrink to size 0. */
-    if (tt_needing_parents != NULL)
+    if (!tt_needing_parents.empty())
     {
-        gboolean progress_made = TRUE;
-        GList* elem;
-
+        bool progress_made = true;
+	std::reverse(tt_needing_parents.begin(),
+		     tt_needing_parents.end());
+	auto end = tt_needing_parents.end();
         while (progress_made)
         {
-            progress_made = FALSE;
-            for (elem = tt_needing_parents; elem != NULL; elem = g_list_next (elem))
-            {
-                taxtable_parent_guid_struct* s = (taxtable_parent_guid_struct*)elem->data;
-                tt_set_parent (s->tt, &s->guid);
-                tt_needing_parents = g_list_delete_link (tt_needing_parents, elem);
-                progress_made = TRUE;
-            }
+            progress_made = false;
+            end = std::remove_if(tt_needing_parents.begin(), end,
+				 [&](TaxTblParentGuidPtr s)
+				 {
+				     auto pBook = qof_instance_get_book (QOF_INSTANCE (s->tt));
+				     auto parent = gncTaxTableLookup (pBook,
+								      &s->guid);
+				     if (parent != nullptr)
+				     {
+					 tt_set_parent (s->tt, &s->guid);
+					 progress_made = true;
+					 delete s;
+					 return true;
+				     }
+				     return false;
+				 });
+
         }
     }
 }

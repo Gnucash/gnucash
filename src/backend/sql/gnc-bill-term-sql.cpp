@@ -102,12 +102,15 @@ GncSqlBillTermBackend::GncSqlBillTermBackend() :
         GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_BILLTERM,
                             TABLE_NAME, col_table) {}
 
-typedef struct
+struct BillTermParentGuid
 {
     GncBillTerm* billterm;
     GncGUID guid;
-    gboolean have_guid;
-} billterm_parent_guid_struct;
+    bool have_guid;
+};
+
+using BillTermParentGuidPtr = BillTermParentGuid*;
+using BillTermParentGuidVec = std::vector<BillTermParentGuidPtr>;
 
 static void
 set_invisible (gpointer data, gboolean value)
@@ -173,54 +176,43 @@ bt_set_parent (gpointer data, gpointer value)
 static void
 bt_set_parent_guid (gpointer pObject,  gpointer pValue)
 {
-    billterm_parent_guid_struct* s = (billterm_parent_guid_struct*)pObject;
-    GncGUID* guid = (GncGUID*)pValue;
-
     g_return_if_fail (pObject != NULL);
     g_return_if_fail (pValue != NULL);
 
-    s->guid = *guid;
-    s->have_guid = TRUE;
+    auto s = static_cast<BillTermParentGuidPtr>(pObject);
+    s->guid = *static_cast<GncGUID*>(pValue);
+    s->have_guid = true;
 }
 
 static GncBillTerm*
 load_single_billterm (GncSqlBackend* sql_be, GncSqlRow& row,
-                      GList** l_billterms_needing_parents)
+                      BillTermParentGuidVec& l_billterms_needing_parents)
 {
-    const GncGUID* guid;
-    GncBillTerm* pBillTerm;
-
     g_return_val_if_fail (sql_be != NULL, NULL);
 
-    guid = gnc_sql_load_guid (sql_be, row);
-    pBillTerm = gncBillTermLookup (sql_be->book(), guid);
-    if (pBillTerm == NULL)
+    auto guid = gnc_sql_load_guid (sql_be, row);
+    auto pBillTerm = gncBillTermLookup (sql_be->book(), guid);
+    if (pBillTerm == nullptr)
     {
         pBillTerm = gncBillTermCreate (sql_be->book());
     }
     gnc_sql_load_object (sql_be, row, GNC_ID_BILLTERM, pBillTerm, col_table);
 
-    /* If the billterm doesn't have a parent, it might be because it hasn't been loaded yet.
-       If so, add this billterm to the list of billterms with no parent, along with the parent
-       GncGUID so that after they are all loaded, the parents can be fixed up. */
+    /* If the billterm doesn't have a parent, it might be because it hasn't been
+       loaded yet.  If so, add this billterm to the list of billterms with no
+       parent, along with the parent GncGUID so that after they are all loaded,
+       the parents can be fixed up. */
     if (gncBillTermGetParent (pBillTerm) == NULL)
     {
-        billterm_parent_guid_struct* s = static_cast<decltype (s)> (
-                                             g_malloc (sizeof (billterm_parent_guid_struct)));
-        g_assert (s != NULL);
+        BillTermParentGuid s;
 
-        s->billterm = pBillTerm;
-        s->have_guid = FALSE;
-        gnc_sql_load_object (sql_be, row, GNC_ID_TAXTABLE, s, billterm_parent_col_table);
-        if (s->have_guid)
-        {
-            *l_billterms_needing_parents = g_list_prepend (*l_billterms_needing_parents,
-                                                           s);
-        }
-        else
-        {
-            g_free (s);
-        }
+        s.billterm = pBillTerm;
+        s.have_guid = false;
+        gnc_sql_load_object (sql_be, row, GNC_ID_TAXTABLE, &s,
+                             billterm_parent_col_table);
+        if (s.have_guid)
+            l_billterms_needing_parents.push_back(new BillTermParentGuid(s));
+
     }
 
     qof_instance_mark_clean (QOF_INSTANCE (pBillTerm));
@@ -239,12 +231,12 @@ GncSqlBillTermBackend::load_all (GncSqlBackend* sql_be)
     auto stmt = sql_be->create_statement_from_sql(sql.str());
     auto result = sql_be->execute_select_statement(stmt);
     InstanceVec instances;
-    GList* l_billterms_needing_parents = NULL;
+    BillTermParentGuidVec l_billterms_needing_parents;
 
     for (auto row : *result)
     {
         auto pBillTerm =
-            load_single_billterm (sql_be, row, &l_billterms_needing_parents);
+            load_single_billterm (sql_be, row, l_billterms_needing_parents);
         if (pBillTerm != nullptr)
             instances.push_back(QOF_INSTANCE(pBillTerm));
     }
@@ -257,23 +249,31 @@ GncSqlBillTermBackend::load_all (GncSqlBackend* sql_be)
        items are removed from the front and added to the back if the
        parent is still not available, then eventually, the list will
        shrink to size 0. */
-    if (l_billterms_needing_parents != NULL)
+    if (!l_billterms_needing_parents.empty())
     {
-        gboolean progress_made = TRUE;
-        GList* elem;
-
+        bool progress_made = true;
+	std::reverse(l_billterms_needing_parents.begin(),
+		     l_billterms_needing_parents.end());
+	auto end = l_billterms_needing_parents.end();
         while (progress_made)
         {
-            progress_made = FALSE;
-            for (elem = l_billterms_needing_parents; elem != NULL;
-                 elem = g_list_next (elem))
-            {
-                billterm_parent_guid_struct* s = (billterm_parent_guid_struct*)elem->data;
-                bt_set_parent (s->billterm, &s->guid);
-                l_billterms_needing_parents = g_list_delete_link (l_billterms_needing_parents,
-                                                                  elem);
-                progress_made = TRUE;
-            }
+            progress_made = false;
+            end = std::remove_if(l_billterms_needing_parents.begin(), end,
+				 [&](BillTermParentGuidPtr s)
+				 {
+				     auto pBook = qof_instance_get_book (QOF_INSTANCE (s->billterm));
+				     auto parent = gncBillTermLookup (pBook,
+								      &s->guid);
+				     if (parent != nullptr)
+				     {
+					 gncBillTermSetParent (s->billterm, parent);
+					 gncBillTermSetChild (parent, s->billterm);
+					 progress_made = true;
+					 delete s;
+					 return true;
+				     }
+				     return false;
+				 });
         }
     }
 }
