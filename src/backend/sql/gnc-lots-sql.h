@@ -29,6 +29,15 @@
 #ifndef GNC_LOT_SQL_H
 #define GNC_LOT_SQL_H
 
-void gnc_sql_init_lot_handler (void);
+#include "gnc-sql-object-backend.hpp"
+
+class GncSqlLotsBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlLotsBackend();
+    void load_all(GncSqlBackend*) override;
+    void create_tables(GncSqlBackend*) override;
+    bool write(GncSqlBackend*) override;
+};
 
 #endif /* GNC_LOT_SQL_H */

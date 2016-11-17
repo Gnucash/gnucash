@@ -26,6 +26,7 @@
 #define __GNC_DBISQLBACKEND_HPP__
 
 #include "gnc-backend-dbi.h"
+#include <gnc-sql-result.hpp>
 
 class GncDbiSqlConnection;
 

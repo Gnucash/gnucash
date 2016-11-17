@@ -28,7 +28,6 @@ extern "C"
 #include "config.h"
 #include "qof.h"
 }
-#include "gnc-backend-sql.h"
 extern "C"
 {
 #include "cashobjects.h"
@@ -39,7 +38,6 @@ int main (int argc, char** argv)
 {
     qof_init ();
     cashobjects_register ();
-    gnc_sql_init (NULL);
     /*    do_test(
             qof_load_backend_library ("../.libs/", GNC_LIB_NAME),
             " loading gnc-backend-gda GModule failed");

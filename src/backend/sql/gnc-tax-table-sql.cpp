@@ -40,7 +40,10 @@ extern "C"
 #include "gncTaxTableP.h"
 }
 
-#include "gnc-backend-sql.h"
+#include "gnc-sql-connection.hpp"
+#include "gnc-sql-backend.hpp"
+#include "gnc-sql-object-backend.hpp"
+#include "gnc-sql-column-table-entry.hpp"
 #include "gnc-slots-sql.h"
 #include "gnc-tax-table-sql.h"
 
@@ -113,24 +116,19 @@ static EntryVec guid_col_table
                                       get_obj_guid, set_obj_guid),
 });
 
-class GncSqlTaxTableBackend : public GncSqlObjectBackend
-{
-public:
-    GncSqlTaxTableBackend(int version, const std::string& type,
-                      const std::string& table, const EntryVec& vec) :
-        GncSqlObjectBackend(version, type, table, vec) {}
-    void load_all(GncSqlBackend*) override;
-    void create_tables(GncSqlBackend*) override;
-    bool commit (GncSqlBackend* be, QofInstance* inst) override;
-    bool write(GncSqlBackend*) override;
-};
+GncSqlTaxTableBackend::GncSqlTaxTableBackend() :
+    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_TAXTABLE,
+                        TT_TABLE_NAME, tt_col_table) {}
 
-typedef struct
+struct TaxTblParentGuid
 {
     GncTaxTable* tt;
     GncGUID guid;
-    gboolean have_guid;
-} taxtable_parent_guid_struct;
+    bool have_guid;
+};
+
+using TaxTblParentGuidPtr = TaxTblParentGuid*;
+using TaxTblParentGuidVec = std::vector<TaxTblParentGuidPtr>;
 
 static gpointer
 get_obj_guid (gpointer pObject, const QofParam* param)
@@ -199,36 +197,34 @@ tt_set_parent (gpointer data, gpointer value)
 static void
 tt_set_parent_guid (gpointer pObject,  gpointer pValue)
 {
-    taxtable_parent_guid_struct* s = (taxtable_parent_guid_struct*)pObject;
-    GncGUID* guid = (GncGUID*)pValue;
-
     g_return_if_fail (pObject != NULL);
     g_return_if_fail (pValue != NULL);
 
-    s->guid = *guid;
-    s->have_guid = TRUE;
+    auto s = static_cast<TaxTblParentGuidPtr>(pObject);
+    s->guid = *static_cast<GncGUID*>(pValue);
+    s->have_guid = true;
 }
 
 static void
-load_single_ttentry (GncSqlBackend* be, GncSqlRow& row, GncTaxTable* tt)
+load_single_ttentry (GncSqlBackend* sql_be, GncSqlRow& row, GncTaxTable* tt)
 {
     GncTaxTableEntry* e = gncTaxTableEntryCreate ();
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
     g_return_if_fail (tt != NULL);
 
-    gnc_sql_load_object (be, row, GNC_ID_TAXTABLE, e, ttentries_col_table);
+    gnc_sql_load_object (sql_be, row, GNC_ID_TAXTABLE, e, ttentries_col_table);
     gncTaxTableAddEntry (tt, e);
 }
 
 static void
-load_taxtable_entries (GncSqlBackend* be, GncTaxTable* tt)
+load_taxtable_entries (GncSqlBackend* sql_be, GncTaxTable* tt)
 {
     gchar guid_buf[GUID_ENCODING_LENGTH + 1];
     GValue value;
     gchar* buf;
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
     g_return_if_fail (tt != NULL);
 
     guid_to_string_buff (qof_instance_get_guid (QOF_INSTANCE (tt)), guid_buf);
@@ -237,129 +233,134 @@ load_taxtable_entries (GncSqlBackend* be, GncTaxTable* tt)
     g_value_set_string (&value, guid_buf);
     buf = g_strdup_printf ("SELECT * FROM %s WHERE taxtable='%s'",
                            TTENTRIES_TABLE_NAME, guid_buf);
-    auto stmt = be->create_statement_from_sql (buf);
+    auto stmt = sql_be->create_statement_from_sql (buf);
     g_free (buf);
-    auto result = be->execute_select_statement(stmt);
+    auto result = sql_be->execute_select_statement(stmt);
     for (auto row : *result)
-        load_single_ttentry (be, row, tt);
+        load_single_ttentry (sql_be, row, tt);
 }
 
 static void
-load_single_taxtable (GncSqlBackend* be, GncSqlRow& row,
-                      GList** l_tt_needing_parents)
+load_single_taxtable (GncSqlBackend* sql_be, GncSqlRow& row,
+                      TaxTblParentGuidVec& l_tt_needing_parents)
 {
     const GncGUID* guid;
     GncTaxTable* tt;
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
-    guid = gnc_sql_load_guid (be, row);
-    tt = gncTaxTableLookup (be->book(), guid);
-    if (tt == NULL)
+    guid = gnc_sql_load_guid (sql_be, row);
+    tt = gncTaxTableLookup (sql_be->book(), guid);
+    if (tt == nullptr)
     {
-        tt = gncTaxTableCreate (be->book());
+        tt = gncTaxTableCreate (sql_be->book());
     }
-    gnc_sql_load_object (be, row, GNC_ID_TAXTABLE, tt, tt_col_table);
-    gnc_sql_slots_load (be, QOF_INSTANCE (tt));
-    load_taxtable_entries (be, tt);
+    gnc_sql_load_object (sql_be, row, GNC_ID_TAXTABLE, tt, tt_col_table);
+    gnc_sql_slots_load (sql_be, QOF_INSTANCE (tt));
+    load_taxtable_entries (sql_be, tt);
 
-    /* If the tax table doesn't have a parent, it might be because it hasn't been loaded yet.
-       If so, add this tax table to the list of tax tables with no parent, along with the parent
-       GncGUID so that after they are all loaded, the parents can be fixed up. */
+    /* If the tax table doesn't have a parent, it might be because it hasn't
+       been loaded yet.  if so, add this tax table to the list of tax tables
+       with no parent, along with the parent GncGUID so that after they are all
+       loaded, the parents can be fixed up. */
     if (gncTaxTableGetParent (tt) == NULL)
     {
-        taxtable_parent_guid_struct* s = static_cast<decltype (s)> (
-                                             g_malloc (sizeof (taxtable_parent_guid_struct)));
-        g_assert (s != NULL);
+        TaxTblParentGuid s;
 
-        s->tt = tt;
-        s->have_guid = FALSE;
-        gnc_sql_load_object (be, row, GNC_ID_TAXTABLE, s, tt_parent_col_table);
-        if (s->have_guid)
-        {
-            *l_tt_needing_parents = g_list_prepend (*l_tt_needing_parents, s);
-        }
-        else
-        {
-            g_free (s);
-        }
+        s.tt = tt;
+        s.have_guid = false;
+        gnc_sql_load_object (sql_be, row, GNC_ID_TAXTABLE, &s,
+                             tt_parent_col_table);
+        if (s.have_guid)
+            l_tt_needing_parents.push_back(new TaxTblParentGuid(s));
+
     }
 
     qof_instance_mark_clean (QOF_INSTANCE (tt));
 }
 
 void
-GncSqlTaxTableBackend::load_all (GncSqlBackend* be)
+GncSqlTaxTableBackend::load_all (GncSqlBackend* sql_be)
 {
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
     /* First time, create the query */
     std::stringstream sql;
     sql << "SELECT * FROM " << TT_TABLE_NAME;
-    auto stmt = be->create_statement_from_sql(sql.str());
-    auto result = be->execute_select_statement(stmt);
-    GList* tt_needing_parents = NULL;
+    auto stmt = sql_be->create_statement_from_sql(sql.str());
+    auto result = sql_be->execute_select_statement(stmt);
+    TaxTblParentGuidVec tt_needing_parents;
 
     for (auto row : *result)
-        load_single_taxtable (be, row, &tt_needing_parents);
+        load_single_taxtable (sql_be, row, tt_needing_parents);
 
     /* While there are items on the list of taxtables needing parents,
        try to see if the parent has now been loaded.  Theory says that if
        items are removed from the front and added to the back if the
        parent is still not available, then eventually, the list will
        shrink to size 0. */
-    if (tt_needing_parents != NULL)
+    if (!tt_needing_parents.empty())
     {
-        gboolean progress_made = TRUE;
-        GList* elem;
-
+        bool progress_made = true;
+	std::reverse(tt_needing_parents.begin(),
+		     tt_needing_parents.end());
+	auto end = tt_needing_parents.end();
         while (progress_made)
         {
-            progress_made = FALSE;
-            for (elem = tt_needing_parents; elem != NULL; elem = g_list_next (elem))
-            {
-                taxtable_parent_guid_struct* s = (taxtable_parent_guid_struct*)elem->data;
-                tt_set_parent (s->tt, &s->guid);
-                tt_needing_parents = g_list_delete_link (tt_needing_parents, elem);
-                progress_made = TRUE;
-            }
+            progress_made = false;
+            end = std::remove_if(tt_needing_parents.begin(), end,
+				 [&](TaxTblParentGuidPtr s)
+				 {
+				     auto pBook = qof_instance_get_book (QOF_INSTANCE (s->tt));
+				     auto parent = gncTaxTableLookup (pBook,
+								      &s->guid);
+				     if (parent != nullptr)
+				     {
+					 tt_set_parent (s->tt, &s->guid);
+					 progress_made = true;
+					 delete s;
+					 return true;
+				     }
+				     return false;
+				 });
+
         }
     }
 }
 
 /* ================================================================= */
 void
-GncSqlTaxTableBackend::create_tables (GncSqlBackend* be)
+GncSqlTaxTableBackend::create_tables (GncSqlBackend* sql_be)
 {
     gint version;
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
-    version = be->get_table_version( TT_TABLE_NAME);
+    version = sql_be->get_table_version( TT_TABLE_NAME);
     if (version == 0)
     {
-        be->create_table(TT_TABLE_NAME, TT_TABLE_VERSION, tt_col_table);
+        sql_be->create_table(TT_TABLE_NAME, TT_TABLE_VERSION, tt_col_table);
     }
     else if (version == 1)
     {
         /* Upgrade 64 bit int handling */
-        be->upgrade_table(TT_TABLE_NAME, tt_col_table);
-        be->set_table_version (TT_TABLE_NAME, TT_TABLE_VERSION);
+        sql_be->upgrade_table(TT_TABLE_NAME, tt_col_table);
+        sql_be->set_table_version (TT_TABLE_NAME, TT_TABLE_VERSION);
         PINFO ("Taxtables table upgraded from version 1 to version %d\n",
                TT_TABLE_VERSION);
     }
 
-    version = be->get_table_version( TTENTRIES_TABLE_NAME);
+    version = sql_be->get_table_version( TTENTRIES_TABLE_NAME);
     if (version == 0)
     {
-        be->create_table(TTENTRIES_TABLE_NAME, TTENTRIES_TABLE_VERSION,
+        sql_be->create_table(TTENTRIES_TABLE_NAME, TTENTRIES_TABLE_VERSION,
                               ttentries_col_table);
     }
     else if (version == 1)
     {
         /* Upgrade 64 bit int handling */
-        be->upgrade_table(TTENTRIES_TABLE_NAME, ttentries_col_table);
-        be->set_table_version (TTENTRIES_TABLE_NAME, TTENTRIES_TABLE_VERSION);
+        sql_be->upgrade_table(TTENTRIES_TABLE_NAME, ttentries_col_table);
+        sql_be->set_table_version (TTENTRIES_TABLE_NAME, TTENTRIES_TABLE_VERSION);
         PINFO ("Taxtable entries table upgraded from version 1 to version %d\n",
                TTENTRIES_TABLE_VERSION);
     }
@@ -367,46 +368,44 @@ GncSqlTaxTableBackend::create_tables (GncSqlBackend* be)
 
 /* ================================================================= */
 static gboolean
-delete_all_tt_entries (GncSqlBackend* be, const GncGUID* guid)
+delete_all_tt_entries (GncSqlBackend* sql_be, const GncGUID* guid)
 {
     guid_info_t guid_info;
 
-    g_return_val_if_fail (be != NULL, FALSE);
+    g_return_val_if_fail (sql_be != NULL, FALSE);
     g_return_val_if_fail (guid != NULL, FALSE);
 
-    guid_info.be = be;
+    guid_info.be = sql_be;
     guid_info.guid = guid;
-    return gnc_sql_do_db_operation (be, OP_DB_DELETE, TTENTRIES_TABLE_NAME,
-                                    TTENTRIES_TABLE_NAME, &guid_info, guid_col_table);
+    return sql_be->do_db_operation(OP_DB_DELETE, TTENTRIES_TABLE_NAME,
+                                   TTENTRIES_TABLE_NAME, &guid_info, guid_col_table);
 }
 
 static gboolean
-save_tt_entries (GncSqlBackend* be, const GncGUID* guid, GList* entries)
+save_tt_entries (GncSqlBackend* sql_be, const GncGUID* guid, GList* entries)
 {
     GList* entry;
     gboolean is_ok;
 
-    g_return_val_if_fail (be != NULL, FALSE);
+    g_return_val_if_fail (sql_be != NULL, FALSE);
     g_return_val_if_fail (guid != NULL, FALSE);
 
     /* First, delete the old entries for this object */
-    is_ok = delete_all_tt_entries (be, guid);
+    is_ok = delete_all_tt_entries (sql_be, guid);
 
     for (entry = entries; entry != NULL && is_ok; entry = entry->next)
     {
         GncTaxTableEntry* e = (GncTaxTableEntry*)entry->data;
-        is_ok = gnc_sql_do_db_operation (be,
-                                         OP_DB_INSERT,
-                                         TTENTRIES_TABLE_NAME,
-                                         GNC_ID_TAXTABLE, e,
-                                         ttentries_col_table);
+        is_ok = sql_be->do_db_operation(OP_DB_INSERT, TTENTRIES_TABLE_NAME,
+                                        GNC_ID_TAXTABLE, e,
+                                        ttentries_col_table);
     }
 
     return is_ok;
 }
 
 bool
-GncSqlTaxTableBackend::commit (GncSqlBackend* be, QofInstance* inst)
+GncSqlTaxTableBackend::commit (GncSqlBackend* sql_be, QofInstance* inst)
 {
     GncTaxTable* tt;
     const GncGUID* guid;
@@ -416,7 +415,7 @@ GncSqlTaxTableBackend::commit (GncSqlBackend* be, QofInstance* inst)
 
     g_return_val_if_fail (inst != NULL, FALSE);
     g_return_val_if_fail (GNC_IS_TAXTABLE (inst), FALSE);
-    g_return_val_if_fail (be != NULL, FALSE);
+    g_return_val_if_fail (sql_be != NULL, FALSE);
 
     tt = GNC_TAXTABLE (inst);
 
@@ -425,7 +424,7 @@ GncSqlTaxTableBackend::commit (GncSqlBackend* be, QofInstance* inst)
     {
         op = OP_DB_DELETE;
     }
-    else if (be->pristine() || is_infant)
+    else if (sql_be->pristine() || is_infant)
     {
         op = OP_DB_INSERT;
     }
@@ -433,8 +432,8 @@ GncSqlTaxTableBackend::commit (GncSqlBackend* be, QofInstance* inst)
     {
         op = OP_DB_UPDATE;
     }
-    is_ok = gnc_sql_do_db_operation (be, op, TT_TABLE_NAME, GNC_ID_TAXTABLE, tt,
-                                     tt_col_table);
+    is_ok = sql_be->do_db_operation(op, TT_TABLE_NAME, GNC_ID_TAXTABLE, tt,
+                                    tt_col_table);
 
     if (is_ok)
     {
@@ -442,18 +441,18 @@ GncSqlTaxTableBackend::commit (GncSqlBackend* be, QofInstance* inst)
         guid = qof_instance_get_guid (inst);
         if (!qof_instance_get_destroying (inst))
         {
-            is_ok = gnc_sql_slots_save (be, guid, is_infant, inst);
+            is_ok = gnc_sql_slots_save (sql_be, guid, is_infant, inst);
             if (is_ok)
             {
-                is_ok = save_tt_entries (be, guid, gncTaxTableGetEntries (tt));
+                is_ok = save_tt_entries (sql_be, guid, gncTaxTableGetEntries (tt));
             }
         }
         else
         {
-            is_ok = gnc_sql_slots_delete (be, guid);
+            is_ok = gnc_sql_slots_delete (sql_be, guid);
             if (is_ok)
             {
-                is_ok = delete_all_tt_entries (be, guid);
+                is_ok = delete_all_tt_entries (sql_be, guid);
             }
         }
     }
@@ -474,51 +473,41 @@ save_next_taxtable (QofInstance* inst, gpointer data)
 }
 
 bool
-GncSqlTaxTableBackend::write (GncSqlBackend* be)
+GncSqlTaxTableBackend::write (GncSqlBackend* sql_be)
 {
-    g_return_val_if_fail (be != NULL, FALSE);
-    write_objects_t data{be, true, this};
+    g_return_val_if_fail (sql_be != NULL, FALSE);
+    write_objects_t data{sql_be, true, this};
 
-    qof_object_foreach (GNC_ID_TAXTABLE, be->book(), save_next_taxtable, &data);
+    qof_object_foreach (GNC_ID_TAXTABLE, sql_be->book(), save_next_taxtable, &data);
 
     return data.is_ok;
 }
 
 /* ================================================================= */
 template<> void
-GncSqlColumnTableEntryImpl<CT_TAXTABLEREF>::load (const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_TAXTABLEREF>::load (const GncSqlBackend* sql_be,
                                                   GncSqlRow& row,
                                                   QofIdTypeConst obj_name,
                                                   gpointer pObject) const noexcept
 {
     load_from_guid_ref(row, obj_name, pObject,
-                       [be](GncGUID* g){
-                           return gncTaxTableLookup(be->book(), g);
+                       [sql_be](GncGUID* g){
+                           return gncTaxTableLookup(sql_be->book(), g);
                        });
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_TAXTABLEREF>::add_to_table(const GncSqlBackend* be,
-                                                         ColVec& vec) const noexcept
+GncSqlColumnTableEntryImpl<CT_TAXTABLEREF>::add_to_table(ColVec& vec) const noexcept
 {
-    add_objectref_guid_to_table(be, vec);
+    add_objectref_guid_to_table(vec);
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_TAXTABLEREF>::add_to_query(const GncSqlBackend* be,
-                                                         QofIdTypeConst obj_name,
+GncSqlColumnTableEntryImpl<CT_TAXTABLEREF>::add_to_query(QofIdTypeConst obj_name,
                                                          const gpointer pObject,
                                                          PairVec& vec) const noexcept
 {
-    add_objectref_guid_to_query(be, obj_name, pObject, vec);
+    add_objectref_guid_to_query(obj_name, pObject, vec);
 }
 
-/* ================================================================= */
-void
-gnc_taxtable_sql_initialize (void)
-{
-    static GncSqlTaxTableBackend be_data {
-        GNC_SQL_BACKEND_VERSION, GNC_ID_TAXTABLE, TT_TABLE_NAME, tt_col_table};
-    gnc_sql_register_backend(&be_data);
-}
 /* ========================== END OF FILE ===================== */

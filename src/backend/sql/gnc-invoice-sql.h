@@ -30,6 +30,16 @@
 #ifndef GNC_INVOICE_SQL_H
 #define GNC_INVOICE_SQL_H
 
-void gnc_invoice_sql_initialize (void);
+#include "gnc-sql-object-backend.hpp"
+
+class GncSqlInvoiceBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlInvoiceBackend();
+    void load_all(GncSqlBackend*) override;
+    void create_tables(GncSqlBackend*) override;
+    bool commit (GncSqlBackend* sql_be, QofInstance* inst) override;
+    bool write(GncSqlBackend*) override;
+};
 
 #endif /* GNC_INVOICE_SQL_H */

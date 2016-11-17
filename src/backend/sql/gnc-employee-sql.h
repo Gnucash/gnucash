@@ -30,6 +30,16 @@
 #ifndef GNC_EMPLOYEE_SQL_H
 #define GNC_EMPLOYEE_SQL_H
 
-void gnc_employee_sql_initialize (void);
+#include "gnc-sql-object-backend.hpp"
+
+class GncSqlEmployeeBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlEmployeeBackend();
+    void load_all(GncSqlBackend*) override;
+    void create_tables(GncSqlBackend*) override;
+    bool commit(GncSqlBackend*, QofInstance*) override;
+    bool write(GncSqlBackend*) override;
+};
 
 #endif /* GNC_EMPLOYEE_SQL_H */

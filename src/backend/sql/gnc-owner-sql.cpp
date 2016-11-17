@@ -30,17 +30,19 @@
 #include <guid.hpp>
 extern "C"
 {
-#include "config.h"
-
+#include <config.h>
+#include <qof.h>
 #include <glib.h>
-#include <stdlib.h>
-#include <string.h>
 #include "gncCustomerP.h"
 #include "gncJobP.h"
 #include "gncEmployeeP.h"
 #include "gncVendorP.h"
 }
-#include "gnc-backend-sql.h"
+#include <cstdlib>
+#include <cstring>
+#include <sstream>
+#include "gnc-sql-backend.hpp"
+#include "gnc-sql-column-table-entry.hpp"
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 
@@ -48,7 +50,7 @@ typedef void (*OwnerSetterFunc) (gpointer, GncOwner*);
 typedef GncOwner* (*OwnerGetterFunc) (const gpointer);
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_OWNERREF>::load (const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_OWNERREF>::load (const GncSqlBackend* sql_be,
                                                GncSqlRow& row,
                                                QofIdTypeConst obj_name,
                                                gpointer pObject) const noexcept
@@ -58,10 +60,10 @@ GncSqlColumnTableEntryImpl<CT_OWNERREF>::load (const GncSqlBackend* be,
     GncOwner owner;
     GncGUID* pGuid = NULL;
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
     g_return_if_fail (pObject != NULL);
 
-    auto book = be->book();
+    auto book = sql_be->book();
     auto buf = std::string{m_col_name} + "_type";
     try
     {
@@ -153,11 +155,8 @@ GncSqlColumnTableEntryImpl<CT_OWNERREF>::load (const GncSqlBackend* be,
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_OWNERREF>::add_to_table(const GncSqlBackend* be,
-                                                      ColVec& vec) const noexcept
+GncSqlColumnTableEntryImpl<CT_OWNERREF>::add_to_table(ColVec& vec) const noexcept
 {
-    g_return_if_fail (be != NULL);
-
     auto buf = g_strdup_printf ("%s_type", m_col_name);
     GncSqlColumnInfo info(buf, BCT_INT, 0, false, false,
                           m_flags & COL_PKEY, m_flags & COL_NNUL);
@@ -170,12 +169,10 @@ GncSqlColumnTableEntryImpl<CT_OWNERREF>::add_to_table(const GncSqlBackend* be,
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_OWNERREF>::add_to_query(const GncSqlBackend* be,
-                                                      QofIdTypeConst obj_name,
+GncSqlColumnTableEntryImpl<CT_OWNERREF>::add_to_query(QofIdTypeConst obj_name,
                                                       const gpointer pObject,
                                                       PairVec& vec) const noexcept
 {
-    g_return_if_fail (be != NULL);
     g_return_if_fail (obj_name != NULL);
     g_return_if_fail (pObject != NULL);
 

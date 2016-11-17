@@ -23,10 +23,16 @@
 #ifndef _GNC_DBISQLCONNECTION_HPP_
 #define _GNC_DBISQLCONNECTION_HPP_
 
+#include <string>
+#include <vector>
+
+#include <gnc-sql-connection.hpp>
 #include "gnc-backend-dbi.hpp"
 #include "gnc-dbisqlresult.hpp"
 #include "gnc-dbiprovider.hpp"
+#include "gnc-backend-dbi.h"
 
+using StrVec = std::vector<std::string>;
 class GncDbiProvider;
 
 /**

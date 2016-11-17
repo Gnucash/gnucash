@@ -157,10 +157,19 @@ public:
  *  presented. Code letters preceded with % stand in for arguments;
  *  most are the same as described in strftime(3), but there are a few
  *  differences. Consult the boost::date_time documentation.
- *  @return a std::string containing a representation of the date
- *  according to the format.
+ *  @return a std::string containing a representation of the date and time in
+ *  the locale's time zone according to the format.
  */
     std::string format(const char* format) const;
+/** Format the GncDateTime into a std::string in GMT
+ *  @param format: A cstr describing the way the date and time are
+ *  presented. Code letters preceded with % stand in for arguments;
+ *  most are the same as described in strftime(3), but there are a few
+ *  differences. Consult the boost::date_time documentation.
+ *  @return a std::string containing a representation of the date and time in
+ *  GMT (timezone Z) according to the format.
+ */
+    std::string format_zulu(const char* format) const;
 
 private:
     std::unique_ptr<GncDateTimeImpl> m_impl;

@@ -40,7 +40,10 @@ extern "C"
 #include "gncTaxTableP.h"
 }
 
-#include "gnc-backend-sql.h"
+#include "gnc-sql-connection.hpp"
+#include "gnc-sql-backend.hpp"
+#include "gnc-sql-object-backend.hpp"
+#include "gnc-sql-column-table-entry.hpp"
 #include "gnc-slots-sql.h"
 #include "gnc-customer-sql.h"
 #include "gnc-bill-term-sql.h"
@@ -90,77 +93,70 @@ static EntryVec col_table
                                          (QofSetterFunc)gncCustomerSetTaxTable),
 });
 
-class GncSqlCustomerBackend : public GncSqlObjectBackend
-{
-public:
-    GncSqlCustomerBackend(int version, const std::string& type,
-                      const std::string& table, const EntryVec& vec) :
-        GncSqlObjectBackend(version, type, table, vec) {}
-    void load_all(GncSqlBackend*) override;
-    void create_tables(GncSqlBackend*) override;
-    bool write(GncSqlBackend*) override;
-};
+GncSqlCustomerBackend::GncSqlCustomerBackend() :
+    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_CUSTOMER,
+                        TABLE_NAME, col_table) {}
 
 static GncCustomer*
-load_single_customer (GncSqlBackend* be, GncSqlRow& row)
+load_single_customer (GncSqlBackend* sql_be, GncSqlRow& row)
 {
     const GncGUID* guid;
     GncCustomer* pCustomer;
 
-    g_return_val_if_fail (be != NULL, NULL);
+    g_return_val_if_fail (sql_be != NULL, NULL);
 
-    guid = gnc_sql_load_guid (be, row);
-    pCustomer = gncCustomerLookup (be->book(), guid);
+    guid = gnc_sql_load_guid (sql_be, row);
+    pCustomer = gncCustomerLookup (sql_be->book(), guid);
     if (pCustomer == NULL)
     {
-        pCustomer = gncCustomerCreate (be->book());
+        pCustomer = gncCustomerCreate (sql_be->book());
     }
-    gnc_sql_load_object (be, row, GNC_ID_CUSTOMER, pCustomer, col_table);
+    gnc_sql_load_object (sql_be, row, GNC_ID_CUSTOMER, pCustomer, col_table);
     qof_instance_mark_clean (QOF_INSTANCE (pCustomer));
 
     return pCustomer;
 }
 
 void
-GncSqlCustomerBackend::load_all (GncSqlBackend* be)
+GncSqlCustomerBackend::load_all (GncSqlBackend* sql_be)
 {
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
     std::stringstream sql;
     sql << "SELECT * FROM " << TABLE_NAME;
-    auto stmt = be->create_statement_from_sql(sql.str());
-    auto result = be->execute_select_statement(stmt);
+    auto stmt = sql_be->create_statement_from_sql(sql.str());
+    auto result = sql_be->execute_select_statement(stmt);
     InstanceVec instances;
 
     for (auto row : *result)
     {
-        GncCustomer* pCustomer = load_single_customer (be, row);
+        GncCustomer* pCustomer = load_single_customer (sql_be, row);
         if (pCustomer != nullptr)
             instances.push_back(QOF_INSTANCE(pCustomer));
     }
 
     if (!instances.empty())
-        gnc_sql_slots_load_for_instancevec (be, instances);
+        gnc_sql_slots_load_for_instancevec (sql_be, instances);
 }
 
 /* ================================================================= */
 void
-GncSqlCustomerBackend::create_tables (GncSqlBackend* be)
+GncSqlCustomerBackend::create_tables (GncSqlBackend* sql_be)
 {
     gint version;
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
-    version = be->get_table_version( TABLE_NAME);
+    version = sql_be->get_table_version( TABLE_NAME);
     if (version == 0)
     {
-        be->create_table(TABLE_NAME, TABLE_VERSION, col_table);
+        sql_be->create_table(TABLE_NAME, TABLE_VERSION, col_table);
     }
     else if (version == 1)
     {
         /* Upgrade 64 bit int handling */
-        be->upgrade_table(TABLE_NAME, col_table);
-        be->set_table_version (TABLE_NAME, TABLE_VERSION);
+        sql_be->upgrade_table(TABLE_NAME, col_table);
+        sql_be->set_table_version (TABLE_NAME, TABLE_VERSION);
 
         PINFO ("Customers table upgraded from version 1 to version %d\n",
                TABLE_VERSION);
@@ -201,26 +197,18 @@ write_single_customer (QofInstance* term_p, gpointer data_p)
 }
 
 bool
-GncSqlCustomerBackend::write (GncSqlBackend* be)
+GncSqlCustomerBackend::write (GncSqlBackend* sql_be)
 {
     write_objects_t data;
 
-    g_return_val_if_fail (be != NULL, FALSE);
+    g_return_val_if_fail (sql_be != NULL, FALSE);
 
-    data.be = be;
+    data.be = sql_be;
     data.is_ok = TRUE;
     data.obe = this;
-    qof_object_foreach (GNC_ID_CUSTOMER, be->book(), write_single_customer,
+    qof_object_foreach (GNC_ID_CUSTOMER, sql_be->book(), write_single_customer,
                         (gpointer)&data);
     return data.is_ok;
 }
 
-/* ================================================================= */
-void
-gnc_customer_sql_initialize (void)
-{
-    static GncSqlCustomerBackend be_data {
-        GNC_SQL_BACKEND_VERSION, GNC_ID_CUSTOMER, TABLE_NAME, col_table};
-    gnc_sql_register_backend(&be_data);
-}
 /* ========================== END OF FILE ===================== */

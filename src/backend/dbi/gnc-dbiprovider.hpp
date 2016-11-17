@@ -36,8 +36,8 @@ extern "C"
  */
 class GncSqlConnection;
 struct GncSqlColumnInfo;
-using ColVec=std::vector<GncSqlColumnInfo>;
-
+using ColVec = std::vector<GncSqlColumnInfo>;
+using StrVec = std::vector<std::string>;
 class GncDbiProvider
 {
 public:

@@ -32,14 +32,16 @@ extern "C"
 #include "config.h"
 
 #include <glib.h>
-#include <stdlib.h>
-#include <string.h>
 
 #include "gnc-engine.h"
 
 #include "gncAddress.h"
 }
-#include "gnc-backend-sql.h"
+#include <cstdlib>
+#include <cstring>
+#include <sstream>
+#include "gnc-sql-backend.hpp"
+#include "gnc-sql-column-table-entry.hpp"
 
 G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
@@ -73,7 +75,7 @@ typedef void (*AddressSetterFunc) (gpointer, GncAddress*);
 typedef GncAddress* (*AddressGetterFunc) (const gpointer);
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_ADDRESS>::load (const GncSqlBackend* be,
+GncSqlColumnTableEntryImpl<CT_ADDRESS>::load (const GncSqlBackend* sql_be,
                                               GncSqlRow& row,
                                               QofIdTypeConst obj_name,
                                               gpointer pObject) const noexcept
@@ -81,10 +83,10 @@ GncSqlColumnTableEntryImpl<CT_ADDRESS>::load (const GncSqlBackend* be,
     const gchar* s;
 
 
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
     g_return_if_fail (pObject != NULL);
 
-    auto addr = gncAddressCreate (be->book(), QOF_INSTANCE(pObject));
+    auto addr = gncAddressCreate (sql_be->book(), QOF_INSTANCE(pObject));
 
     for (auto const& subtable_row : col_table)
     {
@@ -107,10 +109,8 @@ GncSqlColumnTableEntryImpl<CT_ADDRESS>::load (const GncSqlBackend* be,
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_ADDRESS>::add_to_table(const GncSqlBackend* be,
-                                                  ColVec& vec) const noexcept
+GncSqlColumnTableEntryImpl<CT_ADDRESS>::add_to_table(ColVec& vec) const noexcept
 {
-    g_return_if_fail (be != NULL);
     for (auto const& subtable_row : col_table)
     {
         auto buf = std::string{m_col_name} + "_" + subtable_row->m_col_name;
@@ -124,8 +124,7 @@ GncSqlColumnTableEntryImpl<CT_ADDRESS>::add_to_table(const GncSqlBackend* be,
  * it to operator<<().
  */
 template<> void
-GncSqlColumnTableEntryImpl<CT_ADDRESS>::add_to_query(const GncSqlBackend* be,
-                                                    QofIdTypeConst obj_name,
+GncSqlColumnTableEntryImpl<CT_ADDRESS>::add_to_query(QofIdTypeConst obj_name,
                                                     const gpointer pObject,
                                                     PairVec& vec) const noexcept
 {

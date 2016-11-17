@@ -38,7 +38,10 @@ extern "C"
 #include "gncJobP.h"
 }
 
-#include "gnc-backend-sql.h"
+#include "gnc-sql-connection.hpp"
+#include "gnc-sql-backend.hpp"
+#include "gnc-sql-object-backend.hpp"
+#include "gnc-sql-column-table-entry.hpp"
 #include "gnc-slots-sql.h"
 #include "gnc-job-sql.h"
 
@@ -69,57 +72,50 @@ static EntryVec col_table
                                           (QofSetterFunc)gncJobSetOwner),
 });
 
-class GncSqlJobBackend : public GncSqlObjectBackend
-{
-public:
-    GncSqlJobBackend(int version, const std::string& type,
-                      const std::string& table, const EntryVec& vec) :
-        GncSqlObjectBackend(version, type, table, vec) {}
-    void load_all(GncSqlBackend*) override;
-    bool write(GncSqlBackend*) override;
-};
-
+GncSqlJobBackend::GncSqlJobBackend() :
+    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_JOB,
+                        TABLE_NAME, col_table) {}
 
 static GncJob*
-load_single_job (GncSqlBackend* be, GncSqlRow& row)
+load_single_job (GncSqlBackend* sql_be, GncSqlRow& row)
 {
     const GncGUID* guid;
     GncJob* pJob;
 
-    g_return_val_if_fail (be != NULL, NULL);
+    g_return_val_if_fail (sql_be != NULL, NULL);
 
-    guid = gnc_sql_load_guid (be, row);
-    pJob = gncJobLookup (be->book(), guid);
+    guid = gnc_sql_load_guid (sql_be, row);
+    pJob = gncJobLookup (sql_be->book(), guid);
     if (pJob == NULL)
     {
-        pJob = gncJobCreate (be->book());
+        pJob = gncJobCreate (sql_be->book());
     }
-    gnc_sql_load_object (be, row, GNC_ID_JOB, pJob, col_table);
+    gnc_sql_load_object (sql_be, row, GNC_ID_JOB, pJob, col_table);
     qof_instance_mark_clean (QOF_INSTANCE (pJob));
 
     return pJob;
 }
 
 void
-GncSqlJobBackend::load_all (GncSqlBackend* be)
+GncSqlJobBackend::load_all (GncSqlBackend* sql_be)
 {
-    g_return_if_fail (be != NULL);
+    g_return_if_fail (sql_be != NULL);
 
     std::stringstream sql;
     sql << "SELECT * FROM " << TABLE_NAME;
-    auto stmt = be->create_statement_from_sql(sql.str());
-    auto result = be->execute_select_statement(stmt);
+    auto stmt = sql_be->create_statement_from_sql(sql.str());
+    auto result = sql_be->execute_select_statement(stmt);
     InstanceVec instances;
 
     for (auto row : *result)
     {
-        GncJob* pJob = load_single_job (be, row);
+        GncJob* pJob = load_single_job (sql_be, row);
         if (pJob != nullptr)
             instances.push_back(QOF_INSTANCE(pJob));
     }
 
     if (!instances.empty())
-        gnc_sql_slots_load_for_instancevec (be, instances);
+        gnc_sql_slots_load_for_instancevec (sql_be, instances);
 }
 
 /* ================================================================= */
@@ -156,22 +152,14 @@ write_single_job (QofInstance* term_p, gpointer data_p)
 }
 
 bool
-GncSqlJobBackend::write (GncSqlBackend* be)
+GncSqlJobBackend::write (GncSqlBackend* sql_be)
 {
-    g_return_val_if_fail (be != NULL, FALSE);
-    write_objects_t data{be, true, this};
+    g_return_val_if_fail (sql_be != NULL, FALSE);
+    write_objects_t data{sql_be, true, this};
 
-    qof_object_foreach (GNC_ID_JOB, be->book(), write_single_job, &data);
+    qof_object_foreach (GNC_ID_JOB, sql_be->book(), write_single_job, &data);
 
     return data.is_ok;
 }
 
-/* ================================================================= */
-void
-gnc_job_sql_initialize (void)
-{
-    static GncSqlJobBackend be_data {
-        GNC_SQL_BACKEND_VERSION, GNC_ID_JOB, TABLE_NAME, col_table};
-    gnc_sql_register_backend(&be_data);
-}
 /* ========================== END OF FILE ===================== */

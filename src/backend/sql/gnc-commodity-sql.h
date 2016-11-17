@@ -29,13 +29,20 @@
 #ifndef GNC_COMMODITY_SQL_H
 #define GNC_COMMODITY_SQL_H
 
-#include "gnc-backend-sql.h"
+#include "gnc-sql-backend.hpp"
+#include "gnc-sql-object-backend.hpp"
+
 extern "C"
 {
 #include "gnc-commodity.h"
 }
-void gnc_sql_init_commodity_handler (void);
-gboolean gnc_sql_save_commodity (GncSqlBackend* be, gnc_commodity* pCommodity);
-void gnc_sql_commit_commodity (gnc_commodity* pCommodity);
+
+class GncSqlCommodityBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlCommodityBackend();
+    void load_all(GncSqlBackend*) override;
+    bool commit(GncSqlBackend*, QofInstance*) override;
+};
 
 #endif /* GNC_COMMODITY_SQL_H */

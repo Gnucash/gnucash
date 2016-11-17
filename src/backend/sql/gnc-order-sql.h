@@ -30,6 +30,14 @@
 #ifndef GNC_ORDER_SQL_H
 #define GNC_ORDER_SQL_H
 
-void gnc_order_sql_initialize (void);
+#include "gnc-sql-object-backend.hpp"
+
+class GncSqlOrderBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlOrderBackend();
+    void load_all(GncSqlBackend*) override;
+    bool write(GncSqlBackend*) override;
+};
 
 #endif /* GNC_ORDER_SQL_H */

@@ -27,8 +27,15 @@ extern "C"
 {
 #include <config.h>
 }
+#include <string>
+#include <vector>
+
 #include "gnc-backend-dbi.hpp"
 #include "gnc-dbiprovider.hpp"
+#include "gnc-backend-dbi.h"
+#include <gnc-sql-column-table-entry.hpp>
+
+using StrVec = std::vector<std::string>;
 
 template <DbType T>
 class GncDbiProviderImpl : public GncDbiProvider
