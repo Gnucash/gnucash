@@ -347,11 +347,9 @@ query_transactions (GncSqlBackend* sql_be, const GncSqlStatementPtr& stmt)
     if (result->begin() == result->end())
         return;
 
-    GList* node;
     Transaction* tx;
 #if LOAD_TRANSACTIONS_AS_NEEDED
     GSList* bal_list = NULL;
-    GSList* nextbal;
     Account* root = gnc_book_get_root_account (sql_be->book());
 
     qof_event_suspend ();
@@ -392,7 +390,7 @@ query_transactions (GncSqlBackend* sql_be, const GncSqlStatementPtr& stmt)
     // balance has changed, update the start balance so that the end
     // balance is the same as it was before the splits were loaded.
     // Repeat for cleared and reconciled balances.
-    for (nextbal = bal_list; nextbal != NULL; nextbal = nextbal->next)
+    for (auto nextbal = bal_list; nextbal != NULL; nextbal = nextbal->next)
     {
         full_acct_balances_t* balns = (full_acct_balances_t*)nextbal->data;
         gnc_numeric* pnew_end_bal;
