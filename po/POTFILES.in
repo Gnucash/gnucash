@@ -39,10 +39,11 @@ src/app-utils/prefs.scm
 src/app-utils/QuickFill.c
 src/app-utils/simple-obj.scm
 src/backend/dbi/gnc-backend-dbi.cpp
+src/backend/dbi/gnc-dbisqlconnection.cpp
+src/backend/dbi/gnc-dbisqlresult.cpp
 src/backend/sql/escape.cpp
 src/backend/sql/gnc-account-sql.cpp
 src/backend/sql/gnc-address-sql.cpp
-src/backend/sql/gnc-backend-sql.cpp
 src/backend/sql/gnc-bill-term-sql.cpp
 src/backend/sql/gnc-book-sql.cpp
 src/backend/sql/gnc-budget-sql.cpp
@@ -59,6 +60,10 @@ src/backend/sql/gnc-price-sql.cpp
 src/backend/sql/gnc-recurrence-sql.cpp
 src/backend/sql/gnc-schedxaction-sql.cpp
 src/backend/sql/gnc-slots-sql.cpp
+src/backend/sql/gnc-sql-backend.cpp
+src/backend/sql/gnc-sql-column-table-entry.cpp
+src/backend/sql/gnc-sql-object-backend.cpp
+src/backend/sql/gnc-sql-result.cpp
 src/backend/sql/gnc-tax-table-sql.cpp
 src/backend/sql/gnc-transaction-sql.cpp
 src/backend/sql/gnc-vendor-sql.cpp
@@ -421,6 +426,7 @@ src/import-export/csv-imp/assistant-csv-trans-import.c
 src/import-export/csv-imp/assistant-csv-trans-import.glade
 src/import-export/csv-imp/csv-account-import.c
 src/import-export/csv-imp/csv-fixed-trans-import.c
+src/import-export/csv-imp/gnc-csv-account-map.c
 src/import-export/csv-imp/gnc-csv-gnumeric-popup.c
 src/import-export/csv-imp/gnc-csv-model.c
 src/import-export/csv-imp/gnc-csv-trans-settings.c
