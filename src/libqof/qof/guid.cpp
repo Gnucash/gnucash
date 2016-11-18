@@ -362,14 +362,14 @@ guid_syntax_exception::guid_syntax_exception () noexcept
 }
 
 GUID::GUID (GncGUID const & other) noexcept
-    : implementation {other.reserved[0] , other.reserved[1]
-         , other.reserved[2], other.reserved[3]
-         , other.reserved[4], other.reserved[5]
-         , other.reserved[6], other.reserved[7]
-         , other.reserved[8], other.reserved[9]
-         , other.reserved[10], other.reserved[11]
-         , other.reserved[12], other.reserved[13]
-         , other.reserved[14], other.reserved[15]
+: implementation {{other.reserved[0] , other.reserved[1]
+            , other.reserved[2], other.reserved[3]
+            , other.reserved[4], other.reserved[5]
+            , other.reserved[6], other.reserved[7]
+            , other.reserved[8], other.reserved[9]
+            , other.reserved[10], other.reserved[11]
+            , other.reserved[12], other.reserved[13]
+            , other.reserved[14], other.reserved[15]}
     }
 {
 
