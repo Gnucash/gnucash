@@ -76,11 +76,11 @@ GncDbiSqlStatement::add_where_cond(QofIdTypeConst type_name,
 GncDbiSqlConnection::GncDbiSqlConnection (DbType type, QofBackend* qbe,
                                           dbi_conn conn, bool ignore_lock) :
     m_qbe{qbe}, m_conn{conn},
-    m_provider{std::move(type == DbType::DBI_SQLITE ?
-                         make_dbi_provider<DbType::DBI_SQLITE>() :
-                         type == DbType::DBI_MYSQL ?
-                         make_dbi_provider<DbType::DBI_MYSQL>() :
-                         make_dbi_provider<DbType::DBI_PGSQL>())},
+    m_provider{type == DbType::DBI_SQLITE ?
+            make_dbi_provider<DbType::DBI_SQLITE>() :
+            type == DbType::DBI_MYSQL ?
+            make_dbi_provider<DbType::DBI_MYSQL>() :
+            make_dbi_provider<DbType::DBI_PGSQL>()},
     m_conn_ok{true}, m_last_error{ERR_BACKEND_NO_ERR}, m_error_repeat{0},
     m_retry{false}
 {
