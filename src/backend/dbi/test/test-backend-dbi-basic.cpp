@@ -60,6 +60,7 @@ extern "C"
 
 #include <string>
 #include <vector>
+#include <algorithm>
 
 #include "test-dbi-stuff.h"
 #include "test-dbi-business-stuff.h"
