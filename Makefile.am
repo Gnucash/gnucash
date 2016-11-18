@@ -54,7 +54,6 @@ dist_doc_DATA = \
 EXTRA_DIST = \
   $(SWIG_DIST_FAIL) \
   make-gnucash-potfiles.in \
-  macros/as-scrub-include.m4 \
   macros/binreloc.m4 \
   macros/compiler-flags.m4 \
   macros/ax_pkg_swig.m4 \
