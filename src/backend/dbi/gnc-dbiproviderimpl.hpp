@@ -28,6 +28,7 @@ extern "C"
 #include <config.h>
 }
 #include <string>
+#include <algorithm>
 #include <vector>
 
 #include "gnc-backend-dbi.hpp"
