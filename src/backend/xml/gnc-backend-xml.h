@@ -56,24 +56,6 @@ typedef enum
     GNC_BOOK_POST_XML2_0_0_FILE
 } QofBookFileType;
 
-struct FileBackend_struct
-{
-    QofBackend be;
-
-    char* dirname;
-    char* fullpath;  /* Fully qualified path to book */
-    char* lockfile;
-    char* linkfile;
-    int lockfd;
-
-    QofBook* book;  /* The primary, main open book */
-};
-
-typedef struct FileBackend_struct FileBackend;
-
-// This is now a static inside the module
-//QofBackend * libgncmod_backend_file_LTX_gnc_backend_new(void);
-
 /** Initialization function which can be used when this module is
  * statically linked into the application. */
 void gnc_module_init_backend_xml (void);
@@ -88,5 +70,20 @@ void qof_backend_module_init (void);
 #endif
 #ifdef __cplusplus
 }
+
+class XmlBackend
+{
+public:
+    QofBackend be;
+
+    char* m_dirname;
+    char* m_fullpath;  /* Fully qualified path to book */
+    char* m_lockfile;
+    char* m_linkfile;
+    int m_lockfd;
+
+    QofBook* m_book;  /* The primary, main open book */
+};
+
 #endif
 #endif /* GNC_BACKEND_XML_H_ */

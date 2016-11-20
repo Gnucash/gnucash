@@ -35,8 +35,27 @@
 #include "gnc-uri-utils.h"
 #include "gnc-module.h"
 #include "gnc-ui.h"
-#include "io-gncxml-v2.h"
 
+/* The following are copied from src/backend/xml/io-gncxml2-v2.h as a temporary
+ * measure to enable this to compile in the face of making changing struct
+ * FileBackend into C++ class XmlBackend, which can't be exposed to this C
+ * file. A future commit will separate the session code from the UI code in this
+ * file.
+ */
+typedef struct
+{
+    GQuark encoding;
+    gchar* utf8_string;
+} conv_type;
+
+extern gint gnc_xml2_find_ambiguous (const gchar* filename,
+                                     GList* encodings,
+                                     GHashTable** unique,
+                                     GHashTable** ambiguous,
+                                     GList** impossible);
+
+extern gboolean gnc_xml2_parse_with_subst (QofBackend* xml_be, QofBook* book,
+                                           GHashTable* subst);
 /* NOTE: This file uses the term "encoding" even in places where it is not
  * accurate. Please ignore that. Encodings occur in different forms:
  * - as descriptive string, as in the list of system encodings
@@ -1041,7 +1060,7 @@ gxi_parse_file (GncXmlImportData *data)
 {
     QofSession *session = NULL;
     QofBook *book;
-    FileBackend *backend;
+    QofBackend *backend;
     QofBackendError io_err = ERR_BACKEND_NO_ERR;
     gchar *message = NULL;
     gboolean success = FALSE;
@@ -1091,7 +1110,7 @@ gxi_parse_file (GncXmlImportData *data)
 
     qof_session_pop_error (session);
     book = qof_session_get_book (session);
-    backend = (FileBackend*) qof_book_get_backend (book);
+    backend = qof_book_get_backend (book);
 
     gxi_update_progress_bar (_("Parsing file..."), 0.0);
     success = gnc_xml2_parse_with_subst (backend, book, data->subst);

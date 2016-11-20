@@ -43,6 +43,7 @@ extern "C"
 #include "sixtp.h"
 #include <vector>
 
+class XmlBackend;
 
 /**
  * Struct used to pass in a new data type for XML storage.  This contains
@@ -84,7 +85,7 @@ typedef struct
 } gnc_template_xaction_data;
 
 /** read in an account group from a file */
-gboolean qof_session_load_from_xml_file_v2 (FileBackend*, QofBook*,
+gboolean qof_session_load_from_xml_file_v2 (XmlBackend*, QofBook*,
                                             QofBookFileType);
 
 /* write all book info to a file */
@@ -154,7 +155,7 @@ gint gnc_xml2_find_ambiguous (
  * @param subst hash table with keys and values of type gchar*
  */
 gboolean gnc_xml2_parse_with_subst (
-    FileBackend* fbe, QofBook* book, GHashTable* subst);
+    XmlBackend* xml_be, QofBook* book, GHashTable* subst);
 #ifdef __cplusplus
 }
 typedef struct

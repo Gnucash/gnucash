@@ -692,12 +692,12 @@ gnc_sixtp_gdv2_new (
 
 static gboolean
 qof_session_load_from_xml_file_v2_full (
-    FileBackend* fbe, QofBook* book,
+    XmlBackend* xml_be, QofBook* book,
     sixtp_push_handler push_handler, gpointer push_user_data,
     QofBookFileType type)
 {
     Account* root;
-    QofBackend* be = &fbe->be;
+    QofBackend* qof_be = reinterpret_cast<decltype(qof_be)>(xml_be);
     sixtp_gdv2* gd;
     sixtp* top_parser;
     sixtp* main_parser;
@@ -706,7 +706,7 @@ qof_session_load_from_xml_file_v2_full (
     gboolean retval;
     char* v2type = NULL;
 
-    gd = gnc_sixtp_gdv2_new (book, FALSE, file_rw_feedback, be->percentage);
+    gd = gnc_sixtp_gdv2_new (book, FALSE, file_rw_feedback, qof_be->percentage);
 
     top_parser = sixtp_new ();
     main_parser = sixtp_new ();
@@ -793,7 +793,7 @@ qof_session_load_from_xml_file_v2_full (
          * https://bugzilla.gnome.org/show_bug.cgi?id=712528 for more
          * info.
          */
-        gchar* filename = fbe->fullpath;
+        gchar* filename = xml_be->m_fullpath;
         FILE* file;
         gboolean is_compressed = is_gzipped_file (filename);
         file = try_gz_open (filename, "r", is_compressed, FALSE);
@@ -864,10 +864,10 @@ bail:
 }
 
 gboolean
-qof_session_load_from_xml_file_v2 (FileBackend* fbe, QofBook* book,
+qof_session_load_from_xml_file_v2 (XmlBackend* xml_be, QofBook* book,
                                    QofBookFileType type)
 {
-    return qof_session_load_from_xml_file_v2_full (fbe, book, NULL, NULL, type);
+    return qof_session_load_from_xml_file_v2_full (xml_be, book, NULL, NULL, type);
 }
 
 /***********************************************************************/
@@ -1257,21 +1257,21 @@ static void
 write_budget (QofInstance* ent, gpointer data)
 {
     xmlNodePtr node;
-    struct file_backend* be = static_cast<decltype (be)> (data);
+    struct file_backend* file_be = static_cast<decltype (file_be)> (data);
 
     GncBudget* bgt = GNC_BUDGET (ent);
 
-    if (ferror (be->out))
+    if (ferror (file_be->out))
         return;
 
     node = gnc_budget_dom_tree_create (bgt);
-    xmlElemDump (be->out, NULL, node);
+    xmlElemDump (file_be->out, NULL, node);
     xmlFreeNode (node);
-    if (ferror (be->out) || fprintf (be->out, "\n") < 0)
+    if (ferror (file_be->out) || fprintf (file_be->out, "\n") < 0)
         return;
 
-    be->gd->counter.budgets_loaded++;
-    sixtp_run_callback (be->gd, "budgets");
+    file_be->gd->counter.budgets_loaded++;
+    sixtp_run_callback (file_be->gd, "budgets");
 }
 
 gboolean
@@ -1328,7 +1328,7 @@ write_v2_header (FILE* out)
 gboolean
 gnc_book_write_to_xml_filehandle_v2 (QofBook* book, FILE* out)
 {
-    QofBackend* be;
+    QofBackend* qof_be;
     sixtp_gdv2* gd;
     gboolean success = TRUE;
 
@@ -1338,8 +1338,8 @@ gnc_book_write_to_xml_filehandle_v2 (QofBook* book, FILE* out)
         || !write_counts (out, "book", 1, NULL))
         return FALSE;
 
-    be = qof_book_get_backend (book);
-    gd = gnc_sixtp_gdv2_new (book, FALSE, file_rw_feedback, be->percentage);
+    qof_be = qof_book_get_backend (book);
+    gd = gnc_sixtp_gdv2_new (book, FALSE, file_rw_feedback, qof_be->percentage);
     gd->counter.commodities_total =
         gnc_commodity_table_get_size (gnc_commodity_table_get_table (book));
     gd->counter.accounts_total = 1 +
@@ -1364,7 +1364,7 @@ gnc_book_write_to_xml_filehandle_v2 (QofBook* book, FILE* out)
  * This function is called by the "export" code.
  */
 gboolean
-gnc_book_write_accounts_to_xml_filehandle_v2 (QofBackend* be, QofBook* book,
+gnc_book_write_accounts_to_xml_filehandle_v2 (QofBackend* qof_be, QofBook* book,
                                               FILE* out)
 {
     gnc_commodity_table* table;
@@ -1385,7 +1385,7 @@ gnc_book_write_accounts_to_xml_filehandle_v2 (QofBackend* be, QofBook* book,
         || !write_counts (out, "commodity", ncom, "account", nacc, NULL))
         return FALSE;
 
-    gd = gnc_sixtp_gdv2_new (book, TRUE, file_rw_feedback, be->percentage);
+    gd = gnc_sixtp_gdv2_new (book, TRUE, file_rw_feedback, qof_be->percentage);
     gd->counter.commodities_total = ncom;
     gd->counter.accounts_total = nacc;
 
@@ -1651,7 +1651,7 @@ gnc_book_write_to_xml_file_v2 (
  */
 gboolean
 gnc_book_write_accounts_to_xml_file_v2 (
-    QofBackend* be,
+    QofBackend* qof_be,
     QofBook* book,
     const char* filename)
 {
@@ -1662,7 +1662,7 @@ gnc_book_write_accounts_to_xml_file_v2 (
 
     /* Try to write as much as possible */
     if (!out
-        || !gnc_book_write_accounts_to_xml_filehandle_v2 (be, book, out)
+        || !gnc_book_write_accounts_to_xml_filehandle_v2 (qof_be, book, out)
         || !write_emacs_trailer (out))
         success = FALSE;
 
@@ -1670,11 +1670,11 @@ gnc_book_write_accounts_to_xml_file_v2 (
     if (out && fclose (out))
         success = FALSE;
 
-    if (!success && !qof_backend_check_error (be))
+    if (!success && !qof_backend_check_error (qof_be))
     {
 
         /* Use a generic write error code */
-        qof_backend_set_error (be, ERR_FILEIO_WRITE_ERROR);
+        qof_backend_set_error (qof_be, ERR_FILEIO_WRITE_ERROR);
     }
 
     return success;
@@ -2168,17 +2168,17 @@ cleanup_push_handler:
 }
 
 gboolean
-gnc_xml2_parse_with_subst (FileBackend* fbe, QofBook* book, GHashTable* subst)
+gnc_xml2_parse_with_subst (XmlBackend* xml_be, QofBook* book, GHashTable* subst)
 {
     push_data_type* push_data;
     gboolean success;
 
     push_data = g_new (push_data_type, 1);
-    push_data->filename = fbe->fullpath;
+    push_data->filename = xml_be->m_fullpath;
     push_data->subst = subst;
 
     success = qof_session_load_from_xml_file_v2_full (
-                  fbe, book, (sixtp_push_handler) parse_with_subst_push_handler,
+                  xml_be, book, (sixtp_push_handler) parse_with_subst_push_handler,
                   push_data, GNC_BOOK_XML2_FILE);
 
     if (success)
