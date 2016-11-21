@@ -145,7 +145,6 @@ update_report_list(GtkListStore *store, CustomReportDialog *crd)
     {
         GValue value = { 0, };
         GncGUID *row_guid;
-        g_value_init ( &value, G_TYPE_POINTER);
         gtk_tree_model_get_value (model, &iter, COL_NUM, &value);
         row_guid = (GncGUID *) g_value_get_pointer (&value);
         guid_free (row_guid);
@@ -578,7 +577,6 @@ void gnc_ui_custom_report_edit_name (GncMainWindow * window, SCM scm_guid)
     {
         GValue value = { 0, };
         GncGUID *row_guid;
-        g_value_init (&value, G_TYPE_POINTER);
         gtk_tree_model_get_value (model, &iter, COL_NUM, &value);
         row_guid = (GncGUID *) g_value_get_pointer (&value);
 

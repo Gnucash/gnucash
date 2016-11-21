@@ -1143,6 +1143,68 @@
      (list lower-bound upper-bound num-decimals step-size)
      #f #f #f)))
 
+;; number plot size options use the option-data as a list whose
+;; elements are: (lower-bound upper-bound num-decimals step-size)
+;; which is used for the valid pixel range
+(define (gnc:make-number-plot-size-option
+         section
+         name
+         sort-tag
+         documentation-string
+         default-value
+         lower-bound
+         upper-bound
+         num-decimals
+         step-size)
+  (let* ((value default-value)
+         (value->string (lambda ()
+                          (string-append "'" (gnc:value->string value)))))
+    (gnc:make-option
+     section name sort-tag 'plot-size documentation-string
+     (lambda () value)  ;;getter
+     (lambda (x)
+             (if (number? x) ;; this is for old style plot size
+             (set! value (cons 'pixels x))
+             (set! value x)))  ;;setter
+
+     (lambda () default-value)  ;;default-getter
+     (gnc:restore-form-generator value->string)  ;;restore-form
+     (lambda (b p)
+       (qof-book-set-option b (symbol->string (car value))
+                              (append p '("type")))
+       (qof-book-set-option b (if (symbol? (cdr value))
+                                  (symbol->string (cdr value))
+                                  (cdr value))
+                                  (append p '("value"))))  ;;scm->kvp
+     (lambda (b p)
+       (let ((t (qof-book-get-option b (append p '("type"))))
+             (v (qof-book-get-option b (append p '("value")))))
+         (if (and t v (string? t))
+             (set! value (cons (string->symbol t)
+                               (if (string? v) (string->number v) v))))))  ;;kvp->scm
+     (lambda (x)
+       (if (eq? 'pixels (car x))
+         (cond ((not (number? (cdr x))) (list #f "number-plot-size-option-pixels: not a number"))
+               ((and (>= (cdr x) lower-bound)
+                     (<= (cdr x) upper-bound))
+                (list #t x))
+               (else (list #f "number-plot-size-option-pixels: out of range")))
+         (cond ((not (number? (cdr x))) (list #f "number-plot-size-option-percentage: not a number"))
+               ((and (>= (cdr x) 10)
+                     (<= (cdr x) 100))
+                (list #t x))
+               (else (list #f "number-plot-size-option-percentage: out of range")))
+       )
+     )  ;;value-validator
+     (list lower-bound upper-bound num-decimals step-size)  ;;option-data
+     #f #f #f)))  ;;option-data-fns, strings-getter, option-widget-changed-proc
+
+(define (gnc:plot-size-option-value-type option-value)
+  (car option-value))
+
+(define (gnc:plot-size-option-value option-value)
+  (cdr option-value))
+
 (define (gnc:make-internal-option
          section
          name
@@ -1277,7 +1339,7 @@
   (define (def-value)
     (if (list? default-value)
         default-value
-        '(locale number #t "")))
+        '('locale 'number #t "")))
 
   (let* ((value (def-value))
          (value->string (lambda () 

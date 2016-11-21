@@ -721,6 +721,9 @@
          (notification-str "")
          (currency (gnc-default-currency)))
 
+    (if (boolean? date-format) ;; date-format does not exist
+      (set! date-format (gnc-default-strftime-date-format)))
+
     (cond
      ((eqv? type GNC-OWNER-CUSTOMER)
       (set! type-str (N_ "Customer")))

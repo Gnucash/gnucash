@@ -11,6 +11,8 @@ gncpixmap_DATA = \
   gnc-account-open-16.png \
   gnc-account-open.png \
   gnc-account.png \
+  gnc-account-report-16.png \
+  gnc-account-report.png \
   gnc-gnome-pdf-16.png \
   gnc-gnome-pdf-24.png \
   gnc-invoice-16.png \
