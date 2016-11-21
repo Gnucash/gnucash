@@ -41,6 +41,7 @@ libgnc_backend_xml_utils_la_SOURCES = \
   gnc-tax-table-xml-v2.cpp \
   gnc-transaction-xml-v2.cpp \
   gnc-vendor-xml-v2.cpp \
+  gnc-xml-backend.cpp \
   gnc-xml-helper.cpp \
   io-example-account.cpp \
   io-gncxml-gen.cpp \
@@ -71,6 +72,7 @@ noinst_HEADERS = \
   gnc-owner-xml-v2.h \
   gnc-tax-table-xml-v2.h \
   gnc-vendor-xml-v2.h \
+  gnc-xml-backend.hpp \
   gnc-xml-helper.h \
   io-example-account.h \
   io-gncxml-gen.h \

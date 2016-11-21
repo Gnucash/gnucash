@@ -66,6 +66,7 @@ extern "C"
 #endif
 }
 
+#include "gnc-xml-backend.hpp"
 #include "sixtp-parsers.h"
 #include "sixtp-utils.h"
 #include "gnc-xml.h"
@@ -692,7 +693,7 @@ gnc_sixtp_gdv2_new (
 
 static gboolean
 qof_session_load_from_xml_file_v2_full (
-    XmlBackend* xml_be, QofBook* book,
+    GncXmlBackend* xml_be, QofBook* book,
     sixtp_push_handler push_handler, gpointer push_user_data,
     QofBookFileType type)
 {
@@ -793,7 +794,7 @@ qof_session_load_from_xml_file_v2_full (
          * https://bugzilla.gnome.org/show_bug.cgi?id=712528 for more
          * info.
          */
-        gchar* filename = xml_be->m_fullpath;
+         const char* filename = xml_be->get_filename();
         FILE* file;
         gboolean is_compressed = is_gzipped_file (filename);
         file = try_gz_open (filename, "r", is_compressed, FALSE);
@@ -864,7 +865,7 @@ bail:
 }
 
 gboolean
-qof_session_load_from_xml_file_v2 (XmlBackend* xml_be, QofBook* book,
+qof_session_load_from_xml_file_v2 (GncXmlBackend* xml_be, QofBook* book,
                                    QofBookFileType type)
 {
     return qof_session_load_from_xml_file_v2_full (xml_be, book, NULL, NULL, type);
@@ -2031,7 +2032,7 @@ cleanup_find_ambs:
 
 typedef struct
 {
-    gchar* filename;
+    const char* filename;
     GHashTable* subst;
 } push_data_type;
 
@@ -2168,13 +2169,13 @@ cleanup_push_handler:
 }
 
 gboolean
-gnc_xml2_parse_with_subst (XmlBackend* xml_be, QofBook* book, GHashTable* subst)
+gnc_xml2_parse_with_subst (GncXmlBackend* xml_be, QofBook* book, GHashTable* subst)
 {
     push_data_type* push_data;
     gboolean success;
 
     push_data = g_new (push_data_type, 1);
-    push_data->filename = xml_be->m_fullpath;
+    push_data->filename = xml_be->get_filename();
     push_data->subst = subst;
 
     success = qof_session_load_from_xml_file_v2_full (

@@ -71,19 +71,5 @@ void qof_backend_module_init (void);
 #ifdef __cplusplus
 }
 
-class XmlBackend
-{
-public:
-    QofBackend be;
-
-    char* m_dirname;
-    char* m_fullpath;  /* Fully qualified path to book */
-    char* m_lockfile;
-    char* m_linkfile;
-    int m_lockfd;
-
-    QofBook* m_book;  /* The primary, main open book */
-};
-
 #endif
 #endif /* GNC_BACKEND_XML_H_ */
