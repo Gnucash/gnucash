@@ -57,6 +57,7 @@
 #include "gnc-html.h"
 #include "gnc-html-factory.h"
 #include "gnc-file.h"
+#include "gnc-filepath-utils.h"
 #include "gnc-plugin.h"
 #include "gnc-plugin-page-report.h"
 #include "gnc-plugin-file-history.h"
@@ -1079,84 +1080,6 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * priv)
         scm_gc_unprotect_object(priv->edited_reports);
 }
 
-static GtkActionEntry report_actions[] =
-{
-    {
-        "FilePrintAction", GTK_STOCK_PRINT, N_("_Print Report..."), "<primary>p",
-        N_("Print the current report"),
-        G_CALLBACK(gnc_plugin_page_report_print_cb)
-    },
-    {
-        "FilePrintPDFAction", GNC_STOCK_PDF_EXPORT, N_("Export as P_DF..."), NULL,
-        N_("Export the current report as a PDF document"),
-        G_CALLBACK(gnc_plugin_page_report_exportpdf_cb)
-    },
-    {
-        "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), NULL,
-        N_("Cut the current selection and copy it to clipboard"),
-        NULL
-    },
-    {
-        "EditCopyAction", GTK_STOCK_COPY, N_("_Copy"), NULL,
-        N_("Copy the current selection to clipboard"),
-        G_CALLBACK(gnc_plugin_page_report_copy_cb)
-    },
-    {
-        "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), NULL,
-        N_("Paste the clipboard content at the cursor position"),
-        NULL
-    },
-    {
-        "ViewRefreshAction", GTK_STOCK_REFRESH, N_("_Refresh"), "<primary>r",
-        N_("Refresh this window"),
-        G_CALLBACK (gnc_plugin_page_report_reload_cb)
-    },
-    {
-        "ReportSaveAction", GTK_STOCK_SAVE, N_("Save _Report Configuration"), "<primary><alt>s",
-        N_("Update the current report's saved configuration. "
-        "The report will be saved in the file ~/.gnucash/saved-reports-2.4. "),
-        G_CALLBACK(gnc_plugin_page_report_save_cb)
-    },
-    {
-        "ReportSaveAsAction", GTK_STOCK_SAVE_AS, N_("Save Report Configuration As..."), "<primary><alt><shift>s",
-        N_("Add the current report's configuration to the `Saved Report Configurations' menu. "
-        "The report will be saved in the file ~/.gnucash/saved-reports-2.4. "),
-        G_CALLBACK(gnc_plugin_page_report_save_as_cb)
-    },
-    {
-        "ReportExportAction", GTK_STOCK_CONVERT, N_("Export _Report"), NULL,
-        N_("Export HTML-formatted report to file"),
-        G_CALLBACK(gnc_plugin_page_report_export_cb)
-    },
-    {
-        "ReportOptionsAction", GTK_STOCK_PROPERTIES, N_("_Report Options"), NULL,
-        N_("Edit report options"),
-        G_CALLBACK(gnc_plugin_page_report_options_cb)
-    },
-
-    {
-        "ReportBackAction", GTK_STOCK_GO_BACK, N_("Back"), NULL,
-        N_("Move back one step in the history"),
-        G_CALLBACK(gnc_plugin_page_report_back_cb)
-    },
-    {
-        "ReportForwAction", GTK_STOCK_GO_FORWARD, N_("Forward"), NULL,
-        N_("Move forward one step in the history"),
-        G_CALLBACK(gnc_plugin_page_report_forw_cb)
-    },
-    {
-        "ReportReloadAction", GTK_STOCK_REFRESH, N_("Reload"), NULL,
-        N_("Reload the current page"),
-        G_CALLBACK(gnc_plugin_page_report_reload_cb)
-    },
-    {
-        "ReportStopAction", GTK_STOCK_STOP, N_("Stop"), NULL,
-        N_("Cancel outstanding HTML requests"),
-        G_CALLBACK(gnc_plugin_page_report_stop_cb)
-    },
-};
-static guint num_report_actions = G_N_ELEMENTS( report_actions );
-
 /** Short labels for use on the toolbar buttons. */
 static action_toolbar_labels toolbar_labels[] =
 {
@@ -1212,6 +1135,87 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
     GncPluginPage *parent;
     gboolean use_new;
     gchar *name;
+    gchar *saved_reports_path = gnc_build_dotgnucash_path (SAVED_REPORTS_FILE);
+    gchar *report_save_str = g_strdup_printf (
+        _("Update the current report's saved configuration. "
+        "The report will be saved in the file %s. "), saved_reports_path);
+    gchar *report_saveas_str = g_strdup_printf (
+        _("Add the current report's configuration to the `Saved Report Configurations' menu. "
+        "The report will be saved in the file %s. "), saved_reports_path);
+
+    GtkActionEntry report_actions[] =
+    {
+        {
+            "FilePrintAction", GTK_STOCK_PRINT, N_("_Print Report..."), "<primary>p",
+            N_("Print the current report"),
+            G_CALLBACK(gnc_plugin_page_report_print_cb)
+        },
+        {
+            "FilePrintPDFAction", GNC_STOCK_PDF_EXPORT, N_("Export as P_DF..."), NULL,
+            N_("Export the current report as a PDF document"),
+            G_CALLBACK(gnc_plugin_page_report_exportpdf_cb)
+        },
+        {
+            "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), NULL,
+            N_("Cut the current selection and copy it to clipboard"),
+            NULL
+        },
+        {
+            "EditCopyAction", GTK_STOCK_COPY, N_("_Copy"), NULL,
+            N_("Copy the current selection to clipboard"),
+            G_CALLBACK(gnc_plugin_page_report_copy_cb)
+        },
+        {
+            "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), NULL,
+            N_("Paste the clipboard content at the cursor position"),
+            NULL
+        },
+        {
+            "ViewRefreshAction", GTK_STOCK_REFRESH, N_("_Refresh"), "<primary>r",
+            N_("Refresh this window"),
+            G_CALLBACK (gnc_plugin_page_report_reload_cb)
+        },
+        {
+            "ReportSaveAction", GTK_STOCK_SAVE, N_("Save _Report Configuration"), "<primary><alt>s",
+            report_save_str, G_CALLBACK(gnc_plugin_page_report_save_cb)
+        },
+        {
+            "ReportSaveAsAction", GTK_STOCK_SAVE_AS, N_("Save Report Configuration As..."), "<primary><alt><shift>s",
+            report_saveas_str, G_CALLBACK(gnc_plugin_page_report_save_as_cb)
+        },
+        {
+            "ReportExportAction", GTK_STOCK_CONVERT, N_("Export _Report"), NULL,
+            N_("Export HTML-formatted report to file"),
+            G_CALLBACK(gnc_plugin_page_report_export_cb)
+        },
+        {
+            "ReportOptionsAction", GTK_STOCK_PROPERTIES, N_("_Report Options"), NULL,
+            N_("Edit report options"),
+            G_CALLBACK(gnc_plugin_page_report_options_cb)
+        },
+
+        {
+            "ReportBackAction", GTK_STOCK_GO_BACK, N_("Back"), NULL,
+            N_("Move back one step in the history"),
+            G_CALLBACK(gnc_plugin_page_report_back_cb)
+        },
+        {
+            "ReportForwAction", GTK_STOCK_GO_FORWARD, N_("Forward"), NULL,
+            N_("Move forward one step in the history"),
+            G_CALLBACK(gnc_plugin_page_report_forw_cb)
+        },
+        {
+            "ReportReloadAction", GTK_STOCK_REFRESH, N_("Reload"), NULL,
+            N_("Reload the current page"),
+            G_CALLBACK(gnc_plugin_page_report_reload_cb)
+        },
+        {
+            "ReportStopAction", GTK_STOCK_STOP, N_("Stop"), NULL,
+            N_("Cancel outstanding HTML requests"),
+            G_CALLBACK(gnc_plugin_page_report_stop_cb)
+        },
+    };
+    guint num_report_actions = G_N_ELEMENTS( report_actions );
 
     DEBUG( "property reportId=%d", reportId );
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(plugin_page);
@@ -1246,6 +1250,10 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
                               initially_insensitive_actions,
                               "sensitive", FALSE);
     gnc_plugin_init_short_names (action_group, toolbar_labels);
+
+    g_free (saved_reports_path);
+    g_free (report_save_str);
+    g_free (report_saveas_str);
 }
 
 GncPluginPage*
