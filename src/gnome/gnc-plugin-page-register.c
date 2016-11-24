@@ -3833,8 +3833,10 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction *action,
     GncPluginPageRegisterPrivate *priv;
     Query *query;
     Account *root;
+    GncWindow *window;
     GList *node, *splits;
-    gint split_count = 0, curr_split_no = 1;
+    gint split_count = 0, curr_split_no = 0;
+    const char *message = _( "Checking splits in current register: %u of %u");
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
 
@@ -3849,6 +3851,9 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction *action,
     }
 
     gnc_suspend_gui_refresh();
+    window = GNC_WINDOW(GNC_PLUGIN_PAGE (plugin_page)->window);
+    gnc_window_set_progressbar_window (window);
+
     root = gnc_get_current_root_account();
 
     splits = qof_query_run(query);
@@ -3859,9 +3864,17 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction *action,
         Split *split = node->data;
         Transaction *trans = xaccSplitGetParent(split);
 
+        if (!split) continue;
 
         PINFO("Start processing split %d of %d",
-              curr_split_no, split_count);
+              curr_split_no + 1, split_count);
+
+        if (curr_split_no % 100 == 0)
+        {
+            char *progress_msg = g_strdup_printf (message, curr_split_no, split_count);
+            gnc_window_show_progress (progress_msg, (100 * curr_split_no) / split_count);
+            g_free (progress_msg);
+        }
 
         xaccTransScrubOrphans(trans);
         xaccTransScrubImbalance(trans, root, NULL);
@@ -3874,10 +3887,11 @@ gnc_plugin_page_register_cmd_scrub_all (GtkAction *action,
         }
 
         PINFO("Finished processing split %d of %d",
-              curr_split_no, split_count);
+              curr_split_no + 1, split_count);
         curr_split_no++;
     }
 
+    gnc_window_show_progress (NULL, -1.0);
     gnc_resume_gui_refresh();
     LEAVE(" ");
 }

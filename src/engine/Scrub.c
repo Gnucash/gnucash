@@ -60,13 +60,13 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 /* ================================================================ */
 
 void
-xaccAccountTreeScrubOrphans (Account *acc)
+xaccAccountTreeScrubOrphans (Account *acc, QofPercentageFunc percentagefunc)
 {
     if (!acc) return;
 
-    xaccAccountScrubOrphans (acc);
+    xaccAccountScrubOrphans (acc, percentagefunc);
     gnc_account_foreach_descendant(acc,
-                                   (AccountCb)xaccAccountScrubOrphans, NULL);
+                                   (AccountCb)xaccAccountScrubOrphans, percentagefunc);
 }
 
 static void
@@ -100,24 +100,38 @@ TransScrubOrphansFast (Transaction *trans, Account *root)
 }
 
 void
-xaccAccountScrubOrphans (Account *acc)
+xaccAccountScrubOrphans (Account *acc, QofPercentageFunc percentagefunc)
 {
-    GList *node;
+    GList *node, *splits;
     const char *str;
+    const char *message = _( "Looking for orphans in account %s: %u of %u");
+    guint total_splits = 0;
+    guint current_split = 0;
 
     if (!acc) return;
 
     str = xaccAccountGetName (acc);
     str = str ? str : "(null)";
     PINFO ("Looking for orphans in account %s \n", str);
+    splits = xaccAccountGetSplitList(acc);
+    total_splits = g_list_length (splits);
 
-    for (node = xaccAccountGetSplitList(acc); node; node = node->next)
+    for (node = splits; node; node = node->next)
     {
         Split *split = node->data;
 
+        if (current_split % 100 == 0)
+        {
+            char *progress_msg = g_strdup_printf (message, str, current_split, total_splits);
+            (percentagefunc)(progress_msg, (100 * current_split) / total_splits);
+            g_free (progress_msg);
+        }
+
         TransScrubOrphansFast (xaccSplitGetParent (split),
                                gnc_account_get_root (acc));
+        current_split++;
     }
+    (percentagefunc)(NULL, -1.0);
 }
 
 
@@ -274,25 +288,26 @@ xaccSplitScrub (Split *split)
 /* ================================================================ */
 
 void
-xaccAccountTreeScrubImbalance (Account *acc)
+xaccAccountTreeScrubImbalance (Account *acc, QofPercentageFunc percentagefunc)
 {
-    xaccAccountScrubImbalance (acc);
+    xaccAccountScrubImbalance (acc, percentagefunc);
     gnc_account_foreach_descendant(acc,
-                                   (AccountCb)xaccAccountScrubImbalance, NULL);
+                                   (AccountCb)xaccAccountScrubImbalance, percentagefunc);
 }
 
 void
-xaccAccountScrubImbalance (Account *acc)
+xaccAccountScrubImbalance (Account *acc, QofPercentageFunc percentagefunc)
 {
     GList *node, *splits;
     const char *str;
-    gint split_count = 0, curr_split_no = 1;
+    const char *message = _( "Looking for imbalances in account %s: %u of %u");
+    gint split_count = 0, curr_split_no = 0;
 
     if (!acc) return;
 
     str = xaccAccountGetName(acc);
     str = str ? str : "(null)";
-    PINFO ("Looking for imbalance in account %s \n", str);
+    PINFO ("Looking for imbalances in account %s \n", str);
 
     splits = xaccAccountGetSplitList(acc);
     split_count = g_list_length (splits);
@@ -302,16 +317,28 @@ xaccAccountScrubImbalance (Account *acc)
         Transaction *trans = xaccSplitGetParent(split);
 
         PINFO("Start processing split %d of %d",
-              curr_split_no, split_count);
+              curr_split_no + 1, split_count);
+
+        if (curr_split_no % 100 == 0)
+        {
+            char *progress_msg = g_strdup_printf (message, str, curr_split_no, split_count);
+            (percentagefunc)(progress_msg, (100 * curr_split_no) / split_count);
+            g_free (progress_msg);
+        }
+
+        TransScrubOrphansFast (xaccSplitGetParent (split),
+                               gnc_account_get_root (acc));
+        (percentagefunc)(NULL, 0.0);
 
         xaccTransScrubCurrency(trans);
 
         xaccTransScrubImbalance (trans, gnc_account_get_root (acc), NULL);
 
         PINFO("Finished processing split %d of %d",
-              curr_split_no, split_count);
+              curr_split_no + 1, split_count);
         curr_split_no++;
     }
+    (percentagefunc)(NULL, -1.0);
 }
 
 static Split *

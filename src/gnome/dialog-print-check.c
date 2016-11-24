@@ -68,7 +68,7 @@ G_GNUC_UNUSED static QofLogModule log_module = "gnc.printing.checks";
 #define GNC_PREF_CHECK_FORMAT_GUID  "check-format-guid"
 #define GNC_PREF_CHECK_POSITION     "check-position"
 #define GNC_PREF_FIRST_PAGE_COUNT   "first-page-count"
-#define GNC_PREF_DATE_FORMAT_USER   "date-format-custom"
+#define GNC_PREF_DATE_FORMAT_USER   "date-format-user"
 #define GNC_PREF_CUSTOM_PAYEE       "custom-payee"
 #define GNC_PREF_CUSTOM_DATE        "custom-date"
 #define GNC_PREF_CUSTOM_WORDS       "custom-amount-words"

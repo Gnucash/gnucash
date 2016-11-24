@@ -43,6 +43,7 @@
 #include "ScrubP.h"
 #include "cap-gains.h"
 #include "gnc-engine.h"
+#include "gncInvoice.h"
 #include "gnc-lot.h"
 #include "policy-p.h"
 
@@ -329,6 +330,11 @@ xaccScrubMergeSubSplits (Split *split, gboolean strict)
     if (strict && (FALSE == is_subsplit (split))) return FALSE;
 
     txn = split->parent;
+
+    // Don't mess with splits from an invoice transaction
+    // Those are the responsibility of the business code
+    if (gncInvoiceGetInvoiceFromTxn (txn)) return FALSE;
+
     lot = xaccSplitGetLot (split);
 
     ENTER ("(Lot=%s)", gnc_lot_get_title(lot));
@@ -339,6 +345,10 @@ restart:
         if (xaccSplitGetLot (s) != lot) continue;
         if (s == split) continue;
         if (qof_instance_get_destroying(s)) continue;
+
+        // Don't mess with splits from an invoice transaction
+        // Those are the responsibility of the business code
+        if (gncInvoiceGetInvoiceFromTxn (s->parent)) return FALSE;
 
         if (strict)
         {
@@ -358,9 +368,13 @@ restart:
         rc = TRUE;
         goto restart;
     }
-    if (gnc_numeric_zero_p (split->amount))
+    if (rc && gnc_numeric_zero_p (split->amount))
     {
+        time64 pdate = xaccTransGetDate (txn);
+        gchar *pdatestr = gnc_ctime (&pdate);
         PWARN ("Result of merge has zero amt!");
+        PWARN ("Transaction details - posted date %s - description %s", pdatestr, xaccTransGetDescription(txn));
+        g_free (pdatestr);
     }
     LEAVE (" splits merged=%d", rc);
     return rc;

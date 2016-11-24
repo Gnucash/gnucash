@@ -55,6 +55,7 @@ typedef struct _item_file
 static item_file item_files[] =
 {
     { GNC_STOCK_ACCOUNT,        "gnc-account.png",        "gnc-account-16.png"},
+    { GNC_STOCK_ACCOUNT_REPORT, "gnc-account-report.png", "gnc-account-report-16.png"},
     { GNC_STOCK_DELETE_ACCOUNT, "gnc-account-delete.png", "gnc-account-delete-16.png"},
     { GNC_STOCK_EDIT_ACCOUNT,   "gnc-account-edit.png",   "gnc-account-edit-16.png"},
     { GNC_STOCK_NEW_ACCOUNT,    "gnc-account-new.png",    "gnc-account-new-16.png"},

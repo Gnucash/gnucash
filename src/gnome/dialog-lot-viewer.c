@@ -48,6 +48,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-prefs.h"
 #include "gnc-ui-util.h"
+#include "gnc-window.h"
 #include "misc-gnome-utils.h"
 #include "tree-view-utils.h"
 
@@ -392,7 +393,7 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
         }
         else
         {
-            gtk_list_store_set(store, &iter, LOT_COL_CLOSE, 0LL, -1);
+            gtk_list_store_set(store, &iter, LOT_COL_CLOSE, G_MAXINT64, -1);
         }
 
         /* Title */
@@ -484,8 +485,12 @@ gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_l
 {
     SplitList *node;
     GtkTreeIter iter;
-
+    gboolean is_business_lot = FALSE;
     gnc_numeric baln = gnc_numeric_zero();
+
+    if (lv->selected_lot)
+        is_business_lot = xaccAccountIsAPARType (xaccAccountGetType (gnc_lot_get_account (lv->selected_lot)));
+
     gtk_list_store_clear (lv->split_in_lot_store);
     for (node = split_list; node; node = node->next)
     {
@@ -499,8 +504,8 @@ gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_l
         time64 date = xaccTransGetDate (trans);
         gnc_numeric amnt, valu, gains;
 
-        /* Do not show gains splits */
-        if (gnc_numeric_zero_p (xaccSplitGetAmount(split))) continue;
+        /* Do not show gains splits, however do show empty business splits */
+        if (!is_business_lot && gnc_numeric_zero_p (xaccSplitGetAmount(split))) continue;
 
         gtk_list_store_append(store, &iter);
 
@@ -520,13 +525,13 @@ gnc_split_viewer_fill (GNCLotViewer *lv, GtkListStore *store, SplitList *split_l
                           gnc_account_print_info (lv->account, TRUE));
         gtk_list_store_set (store, &iter, SPLIT_COL_AMOUNT, amtbuff, -1);
 
-        /* Value. Invert the sign on the first, opening entry. */
+        /* Value.
+         * For non-business accounts which are part of a lot,
+         * invert the sign on the first. */
         currency = xaccTransGetCurrency (trans);
         valu = xaccSplitGetValue (split);
-        if (node != split_list)
-        {
-            valu = gnc_numeric_neg (valu);
-        }
+        if (lv->selected_lot && !is_business_lot && (node != split_list))
+                valu = gnc_numeric_neg (valu);
         xaccSPrintAmount (valbuff, valu,
                           gnc_commodity_print_info (currency, TRUE));
         gtk_list_store_set (store, &iter, SPLIT_COL_VALUE, valbuff, -1);
@@ -762,7 +767,7 @@ lv_response_cb (GtkDialog *dialog, gint response, gpointer data)
     case RESPONSE_SCRUB_ACCOUNT:
         gnc_suspend_gui_refresh ();
         if (xaccAccountIsAPARType (xaccAccountGetType(lv->account)))
-            gncScrubBusinessAccountLots (lv->account);
+            gncScrubBusinessAccountLots (lv->account, gnc_window_show_progress);
         else
             xaccAccountScrubLots (lv->account);
         gnc_resume_gui_refresh ();
@@ -798,7 +803,7 @@ static void print_date (GtkTreeViewColumn *tree_column,
     doc_date_time = (time64) g_value_get_int64 (&value);
     g_value_unset (&value);
 
-    if (doc_date_time) /* assumes 0 represents an invalid date/time */
+    if (doc_date_time != G_MAXINT64) /* assumes INT64_MAX represents an invalid date/time */
     {
         g_free (doc_date_str);
         doc_date_str = qof_print_date (doc_date_time);

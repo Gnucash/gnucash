@@ -63,6 +63,7 @@
 #include "gnc-tree-model-account-types.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
+#include "gnc-window.h"
 #include "dialog-lot-viewer.h"
 #include "window-reconcile.h"
 #include "window-autoclear.h"
@@ -1665,19 +1666,23 @@ static void
 gnc_plugin_page_account_tree_cmd_scrub (GtkAction *action, GncPluginPageAccountTree *page)
 {
     Account *account = gnc_plugin_page_account_tree_get_current_account (page);
+    GncWindow *window;
 
     g_return_if_fail (account != NULL);
 
     gnc_suspend_gui_refresh ();
 
-    xaccAccountScrubOrphans (account);
-    xaccAccountScrubImbalance (account);
+    window = GNC_WINDOW(GNC_PLUGIN_PAGE (page)->window);
+    gnc_window_set_progressbar_window (window);
+
+    xaccAccountScrubOrphans (account, gnc_window_show_progress);
+    xaccAccountScrubImbalance (account, gnc_window_show_progress);
 
     // XXX: Lots/capital gains scrubbing is disabled
     if (g_getenv("GNC_AUTO_SCRUB_LOTS") != NULL)
         xaccAccountScrubLots(account);
 
-    gncScrubBusinessAccount(account);
+    gncScrubBusinessAccount(account, gnc_window_show_progress);
 
 
     gnc_resume_gui_refresh ();
@@ -1687,19 +1692,23 @@ static void
 gnc_plugin_page_account_tree_cmd_scrub_sub (GtkAction *action, GncPluginPageAccountTree *page)
 {
     Account *account = gnc_plugin_page_account_tree_get_current_account (page);
+    GncWindow *window;
 
     g_return_if_fail (account != NULL);
 
     gnc_suspend_gui_refresh ();
 
-    xaccAccountTreeScrubOrphans (account);
-    xaccAccountTreeScrubImbalance (account);
+    window = GNC_WINDOW(GNC_PLUGIN_PAGE (page)->window);
+    gnc_window_set_progressbar_window (window);
+
+    xaccAccountTreeScrubOrphans (account, gnc_window_show_progress);
+    xaccAccountTreeScrubImbalance (account, gnc_window_show_progress);
 
     // XXX: Lots/capital gains scrubbing is disabled
     if (g_getenv("GNC_AUTO_SCRUB_LOTS") != NULL)
         xaccAccountTreeScrubLots(account);
 
-    gncScrubBusinessAccountTree(account);
+    gncScrubBusinessAccountTree(account, gnc_window_show_progress);
 
     gnc_resume_gui_refresh ();
 }
@@ -1708,16 +1717,20 @@ static void
 gnc_plugin_page_account_tree_cmd_scrub_all (GtkAction *action, GncPluginPageAccountTree *page)
 {
     Account *root = gnc_get_current_root_account ();
+    GncWindow *window;
 
     gnc_suspend_gui_refresh ();
 
-    xaccAccountTreeScrubOrphans (root);
-    xaccAccountTreeScrubImbalance (root);
+    window = GNC_WINDOW(GNC_PLUGIN_PAGE (page)->window);
+    gnc_window_set_progressbar_window (window);
+
+    xaccAccountTreeScrubOrphans (root, gnc_window_show_progress);
+    xaccAccountTreeScrubImbalance (root, gnc_window_show_progress);
     // XXX: Lots/capital gains scrubbing is disabled
     if (g_getenv("GNC_AUTO_SCRUB_LOTS") != NULL)
         xaccAccountTreeScrubLots(root);
 
-    gncScrubBusinessAccountTree(root);
+    gncScrubBusinessAccountTree(root, gnc_window_show_progress);
 
     gnc_resume_gui_refresh ();
 }

@@ -370,6 +370,7 @@ test_gnc_date_dateformat_to_string (void)
     g_assert_cmpstr (gnc_date_dateformat_to_string (QOF_DATE_FORMAT_UTC), ==, "utc");
     g_assert_cmpstr (gnc_date_dateformat_to_string (QOF_DATE_FORMAT_LOCALE), ==, "locale");
     g_assert_cmpstr (gnc_date_dateformat_to_string (QOF_DATE_FORMAT_CUSTOM), ==, "custom");
+    g_assert_cmpstr (gnc_date_dateformat_to_string (QOF_DATE_FORMAT_UNSET), ==, "unset");
 
 }
 /* gnc_date_string_to_dateformat
@@ -396,6 +397,8 @@ test_gnc_date_string_to_dateformat (void)
     g_assert_cmpint (fmt, ==, QOF_DATE_FORMAT_LOCALE);
     g_assert (!gnc_date_string_to_dateformat ("custom", &fmt));
     g_assert_cmpint (fmt, ==, QOF_DATE_FORMAT_CUSTOM);
+    g_assert (!gnc_date_string_to_dateformat ("unset", &fmt));
+    g_assert_cmpint (fmt, ==, QOF_DATE_FORMAT_UNSET);
     fmt = 123;
     g_assert (gnc_date_string_to_dateformat ("", &fmt));
     g_assert_cmpint (fmt, ==, 123);

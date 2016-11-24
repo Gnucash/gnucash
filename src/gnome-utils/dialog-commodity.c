@@ -646,6 +646,7 @@ gnc_ui_update_namespace_picker (GtkWidget *cbwe,
     GtkTreeModel *model;
     GtkTreeIter iter, match;
     GList *namespaces, *node;
+    gboolean matched = FALSE;
 
     g_return_if_fail(GTK_IS_COMBO_BOX (cbwe));
 
@@ -653,8 +654,6 @@ gnc_ui_update_namespace_picker (GtkWidget *cbwe,
     combo_box = GTK_COMBO_BOX(cbwe);
     model = gtk_combo_box_get_model(combo_box);
     gtk_list_store_clear(GTK_LIST_STORE(model));
-    gtk_tree_model_get_iter_first(model, &match);
-    gtk_combo_box_set_active_iter(combo_box, &match);
 
     /* fetch a list of the namespaces */
     switch (mode)
@@ -698,9 +697,14 @@ gnc_ui_update_namespace_picker (GtkWidget *cbwe,
         }
 
         if (init_string && (g_utf8_collate(node->data, init_string) == 0))
+        {
+            matched = TRUE;
             match = iter;
+        }
     }
 
+    if (!matched)
+        gtk_tree_model_get_iter_first(model, &match);
     gtk_combo_box_set_active_iter(combo_box, &match);
     g_list_free(namespaces);
 }

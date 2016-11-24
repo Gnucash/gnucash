@@ -193,7 +193,7 @@
 	 default-width default-height)
   (gnc:register-option
    options
-   (gnc:make-number-range-option
+   (gnc:make-number-plot-size-option
     pagename name-width
     (string-append sort-tag "a")
     (N_ "Width of plot in pixels.") default-width
@@ -201,7 +201,7 @@
 
   (gnc:register-option
    options
-   (gnc:make-number-range-option
+   (gnc:make-number-plot-size-option
     pagename name-height
     (string-append sort-tag "b")
     (N_ "Height of plot in pixels.") default-height

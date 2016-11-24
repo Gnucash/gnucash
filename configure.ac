@@ -1080,8 +1080,11 @@ struct tm ts;
 ts.tm_year = 116;
 ts.tm_mon = 2;
 ts.tm_mday = 19;
-
+#ifdef _WIN32
+putenv(\"TZ=PST-8PDT-7,M 4.1.0/0,M 10.6.0/0\");
+#else
 setenv("TZ", "PST 08 PDT 07 M 4.1.0, M 10.6.0", 1);
+#endif
 time_t t = ofxdate_to_time_t(timestr);
 if (t == mktime(&ts))
   exit(0);

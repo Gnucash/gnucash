@@ -184,7 +184,7 @@ gnc_date_format_init (GNCDateFormat *gdf)
     priv->sample_label = GTK_WIDGET(gtk_builder_get_object (builder, "sample_label"));
 
     /* Set initial format to gnucash default */
-    gnc_date_format_set_format(gdf, qof_date_format_get());
+    gnc_date_format_set_format(gdf, QOF_DATE_FORMAT_UNSET);
 
     /* pull in the dialog and table widgets and play the reconnect game */
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "GNC Date Format"));

@@ -41,5 +41,9 @@ void gncInvoiceSetPostedTxn (GncInvoice *invoice, Transaction *txn);
 void gncInvoiceSetPostedLot (GncInvoice *invoice, GNCLot *lot);
 //void gncInvoiceSetPaidTxn (GncInvoice *invoice, Transaction *txn);
 
+void gncInvoiceAttachToLot (GncInvoice *invoice, GNCLot *lot);
+void gncInvoiceDetachFromLot (GNCLot *lot);
+void gncInvoiceAttachToTxn (GncInvoice *invoice, Transaction *txn);
+
 #define gncInvoiceSetGUID(I,G) qof_instance_set_guid(QOF_INSTANCE(I),(G))
 #endif /* GNC_INVOICEP_H_ */

@@ -305,13 +305,16 @@
         <col id="0" translatable="yes">ISO (2001-12-31)</col>
       </row>
       <row>
-        <col id="0" translatable="yes">UTC</col>
-      </row>
-      <row>
         <col id="0" translatable="yes">Locale</col>
       </row>
       <row>
+        <col id="0" translatable="yes">UTC - Coordinated Universal Time</col>
+      </row>
+      <row>
         <col id="0" translatable="yes">Custom</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">No Fancy Date Format</col>
       </row>
     </data>
   </object>

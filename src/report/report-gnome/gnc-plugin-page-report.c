@@ -119,15 +119,18 @@ typedef struct GncPluginPageReportPrivate
      * the window is closed. */
     SCM          edited_reports;
 
-    /* This is set to mark the fact that we need to reload the html */
-    gboolean	need_reload;
-
     /* The page is in the process of reloading the html */
     gboolean	reloading;
 
     /// the gnc_html abstraction this PluginPage contains
 //        gnc_html *html;
     GncHtml *html;
+
+    // keep the view size
+    gint view_width, view_height;
+
+    // This is set to mark that we need to reload the html
+    gboolean need_reload;
 
     /// the container the above HTML widget is in.
     GtkContainer *container;
@@ -157,7 +160,7 @@ static int gnc_plugin_page_report_check_urltype(URLType t);
 static void gnc_plugin_page_report_load_cb(GncHtml * html, URLType type,
         const gchar * location, const gchar * label,
         gpointer data);
-static void gnc_plugin_page_report_expose_event_cb(GtkWidget *unused, GdkEventExpose *unused1, gpointer data);
+static gboolean gnc_plugin_page_report_expose_event_cb(GtkWidget *widget, GdkEventExpose *event, gpointer user_data);
 static void gnc_plugin_page_report_refresh (gpointer data);
 static void gnc_plugin_page_report_set_fwd_button(GncPluginPageReport * page, int enabled);
 static void gnc_plugin_page_report_set_back_button(GncPluginPageReport * page, int enabled);
@@ -274,8 +277,7 @@ gnc_plugin_page_report_class_init (GncPluginPageReportClass *klass)
     object_class->set_property = gnc_plugin_page_report_set_property;
     object_class->get_property = gnc_plugin_page_report_get_property;
 
-    // FIXME: stock reporting icon?
-    //gnc_plugin_page_class->tab_icon        = GNC_STOCK_ACCOUNT;
+    gnc_plugin_page_class->tab_icon        = GNC_STOCK_ACCOUNT_REPORT;
     gnc_plugin_page_class->plugin_name     = GNC_PLUGIN_PAGE_REPORT_NAME;
 
     gnc_plugin_page_class->create_widget   = gnc_plugin_page_report_create_widget;
@@ -324,6 +326,86 @@ gnc_plugin_page_report_finalize (GObject *object)
     LEAVE(" ");
 }
 
+static void
+gnc_plugin_page_report_view_size (GtkWidget *widget, GtkAllocation *allocation, gpointer user_data)
+{
+    GncPluginPageReportPrivate *priv = user_data;
+
+    if ((allocation->width != priv->view_width)||(allocation->height != priv->view_height))
+    {
+        priv->need_reload = TRUE;
+        priv->view_width = allocation->width;
+        priv->view_height = allocation->height;
+    }
+}
+
+static void
+gnc_plugin_page_report_set_progressbar (GncPluginPage *page, gboolean set)
+{
+    GtkWidget *progressbar;
+    GtkAllocation allocation;
+
+    progressbar = gnc_window_get_progressbar (GNC_WINDOW(page->window));
+    gtk_widget_get_allocation (GTK_WIDGET(progressbar), &allocation); 
+
+    // this sets the minimum size of the progressbar to that allocated
+    if (set)
+        gtk_widget_set_size_request (GTK_WIDGET(progressbar), -1, allocation.height);
+    else
+        gtk_widget_set_size_request (GTK_WIDGET(progressbar), -1, -1); //reset
+}
+
+static gboolean
+gnc_plugin_page_report_load_uri (GncPluginPage *page)
+{
+    GncPluginPageReport *report;
+    GncPluginPageReportPrivate *priv;
+    GtkAllocation allocation;
+    URLType type;
+    char * id_name;
+    char * child_name;
+    char * url_location = NULL;
+    char * url_label = NULL;
+
+    report = GNC_PLUGIN_PAGE_REPORT(page);
+    priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
+
+    gtk_widget_get_allocation (GTK_WIDGET(gnc_html_get_widget(priv->html)), &allocation); 
+
+    priv->view_width = allocation.width;
+    priv->view_height = allocation.height;
+
+    g_signal_connect(GTK_WIDGET(gnc_html_get_widget(priv->html)), "size-allocate",
+                     G_CALLBACK(gnc_plugin_page_report_view_size), priv);
+
+    id_name = g_strdup_printf("id=%d", priv->reportId );
+    child_name = gnc_build_url( URL_TYPE_REPORT, id_name, NULL );
+    type = gnc_html_parse_url( priv->html, child_name, &url_location, &url_label);
+    DEBUG( "passing id_name=[%s] child_name=[%s] type=[%s], location=[%s], label=[%s]",
+           id_name, child_name ? child_name : "(null)",
+           type ? type : "(null)", url_location ? url_location : "(null)",
+           url_label ? url_label : "(null)" );
+
+    g_free(id_name);
+    g_free(child_name);
+
+    // this sets the window for the progressbar
+    gnc_window_set_progressbar_window( GNC_WINDOW(page->window) );
+
+    // this sets the minimum size of the progressbar to that allocated
+    gnc_plugin_page_report_set_progressbar( page, TRUE );
+
+    gnc_html_show_url(priv->html, type, url_location, url_label, 0);
+    g_free(url_location);
+
+    gnc_plugin_page_report_set_progressbar( page, FALSE );
+
+    // this resets the window for the progressbar to NULL
+    gnc_window_set_progressbar_window( NULL );
+
+    return FALSE;
+}
+
 static
 GtkWidget*
 gnc_plugin_page_report_create_widget( GncPluginPage *page )
@@ -331,11 +413,6 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     GncPluginPageReport *report;
     GncPluginPageReportPrivate *priv;
     GtkWindow *topLvl;
-    URLType type;
-    char * id_name;
-    char * child_name;
-    char * url_location = NULL;
-    char * url_label = NULL;
 
     ENTER("page %p", page);
 
@@ -346,6 +423,10 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
 //        priv->html = gnc_html_new( topLvl );
     priv->html = gnc_html_factory_create_html();
     gnc_html_set_parent( priv->html, topLvl );
+
+    priv->view_width = 0; // default
+    priv->view_height = 0; // default
+    priv->need_reload = FALSE;
 
     gnc_html_history_set_node_destroy_cb(gnc_html_get_history(priv->html),
                                          gnc_plugin_page_report_history_destroy_cb,
@@ -368,22 +449,11 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
 
     // FIXME.  This is f^-1(f(x)), isn't it?
     DEBUG( "id=%d", priv->reportId );
-    id_name = g_strdup_printf("id=%d", priv->reportId );
-    child_name = gnc_build_url( URL_TYPE_REPORT, id_name, NULL );
-    type = gnc_html_parse_url( priv->html, child_name, &url_location, &url_label);
-    DEBUG( "passing id_name=[%s] child_name=[%s] type=[%s], location=[%s], label=[%s]",
-           id_name, child_name ? child_name : "(null)",
-           type ? type : "(null)", url_location ? url_location : "(null)",
-           url_label ? url_label : "(null)" );
 
-    g_free(id_name);
-    g_free(child_name);
-    gnc_window_set_progressbar_window( GNC_WINDOW(page->window) );
-    gnc_html_show_url(priv->html, type, url_location, url_label, 0);
-    g_free(url_location);
-    gnc_window_set_progressbar_window( NULL );
+    /* load uri when view idle */
+    g_idle_add ((GSourceFunc)gnc_plugin_page_report_load_uri, page);
 
-    g_signal_connect(priv->container, "expose_event",
+    g_signal_connect(priv->container, "expose-event",
                      G_CALLBACK(gnc_plugin_page_report_expose_event_cb), report);
 
     gtk_widget_show_all( GTK_WIDGET(priv->container) );
@@ -583,6 +653,7 @@ gnc_plugin_page_report_load_cb(GncHtml * html, URLType type,
 static void
 gnc_plugin_page_report_option_change_cb(gpointer data)
 {
+    GncPluginPage *page;
     GncPluginPageReport *report;
     GncPluginPageReportPrivate *priv;
     SCM dirty_report = scm_c_eval_string("gnc:report-set-dirty?!");
@@ -593,6 +664,7 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REPORT(data));
     report = GNC_PLUGIN_PAGE_REPORT(data);
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
+    page = GNC_PLUGIN_PAGE(report);
 
     DEBUG( "option_change" );
     if (priv->cur_report == SCM_BOOL_F)
@@ -616,12 +688,18 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
     /* it's probably already dirty, but make sure */
     scm_call_2(dirty_report, priv->cur_report, SCM_BOOL_T);
 
-    /* Now queue the fact that we need to reload this report */
-    priv->need_reload = TRUE;
-    // jsled: this doesn't seem to cause any effect.
-    gtk_widget_queue_draw( GTK_WIDGET(priv->container) );
-    // jsled: this does.
-    gnc_html_reload( priv->html );
+    // this sets the window for the progressbar
+    gnc_window_set_progressbar_window( GNC_WINDOW(page->window) );
+
+    // this sets the minimum size of the progressbar to that allocated
+    gnc_plugin_page_report_set_progressbar( page, TRUE );
+
+    gnc_html_reload( priv->html, TRUE ); //reload by rebuild
+
+    gnc_plugin_page_report_set_progressbar( page, FALSE );
+
+    // this resets the window for the progressbar to NULL
+    gnc_window_set_progressbar_window( NULL );
 }
 
 /* FIXME: This function does... nothing.  */
@@ -654,27 +732,25 @@ gnc_plugin_page_report_history_destroy_cb(gnc_html_history_node * node,
 }
 
 /* We got a draw event.  See if we need to reload the report */
-static void
-gnc_plugin_page_report_expose_event_cb(GtkWidget *unused, GdkEventExpose *unused1, gpointer data)
+static gboolean
+gnc_plugin_page_report_expose_event_cb(GtkWidget *widget, GdkEventExpose *event, gpointer user_data)
 {
-    GncPluginPageReport *page = data;
+    GncPluginPageReport *page = user_data;
     GncPluginPageReportPrivate *priv;
 
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REPORT(page));
+    g_return_val_if_fail(GNC_IS_PLUGIN_PAGE_REPORT(page), FALSE);
 
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(page);
     ENTER( "report_draw" );
     if (!priv->need_reload)
     {
         LEAVE( "no reload needed" );
-        return;
+        return FALSE;
     }
-
     priv->need_reload = FALSE;
-    gnc_window_set_progressbar_window( GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window) );
-    gnc_html_reload(priv->html);
-    gnc_window_set_progressbar_window( NULL );
+    gnc_html_reload(priv->html, FALSE);
     LEAVE( "reload forced" );
+    return FALSE;
 }
 
 // @param data is actually GncPluginPageReportPrivate
@@ -1289,10 +1365,12 @@ gnc_plugin_page_report_back_cb( GtkAction *action, GncPluginPageReport *report )
 static void
 gnc_plugin_page_report_reload_cb( GtkAction *action, GncPluginPageReport *report )
 {
+    GncPluginPage *page;
     GncPluginPageReportPrivate *priv;
     SCM dirty_report;
 
     DEBUG( "reload" );
+    page = GNC_PLUGIN_PAGE(report);
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
     if (priv->cur_report == SCM_BOOL_F)
         return;
@@ -1301,15 +1379,21 @@ gnc_plugin_page_report_reload_cb( GtkAction *action, GncPluginPageReport *report
     dirty_report = scm_c_eval_string("gnc:report-set-dirty?!");
     scm_call_2(dirty_report, priv->cur_report, SCM_BOOL_T);
 
-    priv->need_reload = TRUE;
     /* now queue the fact that we need to reload this report */
-
-    // this doens't seem to do anything...
-    gtk_widget_queue_draw( GTK_WIDGET(priv->container) );
-
-    // this does...
     priv->reloading = TRUE;
-    gnc_html_reload( priv->html );
+
+    // this sets the window for the progressbar
+    gnc_window_set_progressbar_window( GNC_WINDOW(page->window) );
+
+    // this sets the minimum size of the progressbar to that allocated
+    gnc_plugin_page_report_set_progressbar( page, TRUE );
+
+    gnc_html_reload( priv->html, TRUE ); //reload by rebuild
+
+    gnc_plugin_page_report_set_progressbar( page, FALSE );
+
+    // this resets the window for the progressbar to NULL
+    gnc_window_set_progressbar_window( NULL );
     priv->reloading = FALSE;
 }
 

@@ -57,7 +57,9 @@ gboolean gncScrubBusinessLot (GNCLot *lot);
 /** The gncScrubBusinessSplit() function will fix all issues found with
  *    the given split.
  *
- *    Currently this function only does one thing: check if the split is
+ *    Current checks are:
+ *
+ *    * check if the split is
  *    part of a transaction that was generated as the result of a doubly
  *    posted invoice/bill/credit note. Refer to
  *    https://bugzilla.gnome.org/show_bug.cgi?id=754209 to learn how this
@@ -66,8 +68,11 @@ gboolean gncScrubBusinessLot (GNCLot *lot);
  *    a warning is written to the trace file. Considering the user may
  *    already have added a correcting transaction we leave it up to the user
  *    to decide whether to also delete the transaction or not.
+ *
+ *    * remove empty splits, on condition they aren't part of an invoice transaction.
+ *    In this case the function returns true so the caller knows a split was removed.
  */
-void gncScrubBusinessSplit (Split *split);
+gboolean gncScrubBusinessSplit (Split *split);
 
 /** The gncScrubBusinessAccountLots() function will call
  *    gncScrubBusinessLot() on each lot in the given account.
@@ -76,12 +81,12 @@ void gncScrubBusinessSplit (Split *split);
  *    lot structure of every lot of a business account is in good
  *    order.
  */
-void gncScrubBusinessAccountLots (Account *acc);
+void gncScrubBusinessAccountLots (Account *acc, QofPercentageFunc percentagefunc);
 
 /** The gncScrubBusinessAccountSplits() function will call
  *    gncScrubBusinessSplit() on each split in the given account.
  */
-void gncScrubBusinessAccountSplits (Account *acc);
+void gncScrubBusinessAccountSplits (Account *acc, QofPercentageFunc percentagefunc);
 
 /** The gncScrubBusinessAccount() function will call
  *    all scrub functions relevant for a given account
@@ -91,13 +96,13 @@ void gncScrubBusinessAccountSplits (Account *acc);
  *    This routine is the primary routine for fixing all
  *    (known) issues in a business account.
  */
-void gncScrubBusinessAccount (Account *acc);
+void gncScrubBusinessAccount (Account *acc, QofPercentageFunc percentagefunc);
 
 /** The gncScrubBusinessAccountTreeLots() function will call
  *    gncScrubBusinessAccount() on the given account
  *    and its sub accounts.
  */
-void gncScrubBusinessAccountTree (Account *acc);
+void gncScrubBusinessAccountTree (Account *acc, QofPercentageFunc percentagefunc);
 
 /** @} */
 #endif /* GNC_SCRUBBUSINESS_H */

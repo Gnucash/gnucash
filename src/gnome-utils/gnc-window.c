@@ -88,7 +88,7 @@ gnc_window_get_statusbar (GncWindow *window)
     return GNC_WINDOW_GET_IFACE (window)->get_statusbar (window);
 }
 
-static GtkWidget *
+GtkWidget *
 gnc_window_get_progressbar (GncWindow *window)
 {
     g_return_val_if_fail(GNC_WINDOW (window), NULL);

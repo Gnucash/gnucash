@@ -30,6 +30,7 @@
 G_BEGIN_DECLS
 
 #define GNC_STOCK_ACCOUNT "gnc-account"
+#define GNC_STOCK_ACCOUNT_REPORT "gnc-account-report"
 #define GNC_STOCK_DELETE_ACCOUNT "gnc-delete-account"
 #define GNC_STOCK_EDIT_ACCOUNT "gnc-edit-account"
 #define GNC_STOCK_NEW_ACCOUNT "gnc-new-account"

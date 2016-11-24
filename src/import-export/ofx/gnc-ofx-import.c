@@ -337,13 +337,8 @@ fix_ofx_bug_39 (time64 t)
 #if HAVE_OFX_BUG_39
     struct tm stm;
     gnc_localtime_r(&t, &stm);
-    if (!stm.tm_isdst)
-    {
-        time64 new_t;
-        stm.tm_isdst = 1;
-        new_t = gnc_mktime(&stm);
-    t += t - new_t;
-    }
+    if (daylight && !stm.tm_isdst)
+      t += 3600;
 #endif
     return t;
 }

@@ -964,10 +964,12 @@ gncOwnerReduceSplitTo (Split *split, gnc_numeric target_value)
     rem_val = gnc_numeric_sub (split_val, target_value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD); // note: values are of opposite sign
     rem_split = xaccMallocSplit (xaccSplitGetBook (split));
     xaccSplitCopyOnto (split, rem_split);
+    xaccSplitSetAmount (rem_split, rem_val);
     xaccSplitSetValue (rem_split, rem_val);
 
     txn = xaccSplitGetParent (split);
     xaccTransBeginEdit (txn);
+    xaccSplitSetAmount (split, target_value);
     xaccSplitSetValue (split, target_value);
     xaccSplitSetParent (rem_split, txn);
     xaccTransCommitEdit (txn);

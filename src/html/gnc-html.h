@@ -132,7 +132,7 @@ struct _GncHtmlClass
                       const gchar* label,
                       gboolean new_window_hint );
     void (*show_data)( GncHtml* html, const gchar* data, int datalen );
-    void (*reload)( GncHtml* html );
+    void (*reload)( GncHtml* html, gboolean force_rebuild );
     void (*copy_to_clipboard)( GncHtml* html );
     gboolean (*export_to_file)( GncHtml* html, const gchar* file );
     void (*print)( GncHtml* html, const gchar* jobname, gboolean export_pdf );
@@ -176,8 +176,9 @@ void gnc_html_show_data( GncHtml* html, const gchar* data, int datalen );
  * Reloads the current GncHtml object.
  *
  * @param html GncHtml object
+ * @param view if TRUE, view is reloaded, if FALSE, report is recreated
  */
-void gnc_html_reload( GncHtml* html );
+void gnc_html_reload( GncHtml* html, gboolean view );
 
 /**
  * Copies the html to the clipboard
