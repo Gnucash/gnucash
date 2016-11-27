@@ -21,10 +21,10 @@
 extern "C"
 {
 #include <qof.h>
-#include <qofbackend-p.h>
 }
 
 #include <string>
+#include <qof-backend.hpp>
 
 class GncXmlBackend
 {

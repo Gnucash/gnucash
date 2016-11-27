@@ -56,7 +56,7 @@ extern "C"
 static QofLogModule log_module = QOF_MOD_SESSION;
 } //extern 'C'
 
-#include "qofbackend-p.h"
+#include "qof-backend.hpp"
 #include "qofsession.hpp"
 #include "gnc-backend-prov.hpp"
 

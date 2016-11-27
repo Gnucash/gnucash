@@ -25,7 +25,7 @@
 #include <gtest/gtest.h>
 #include "../guid.hpp"
 #include <qofsession.hpp>
-#include "qofbackend-p.h"
+#include <qof-backend.hpp>
 #include <cstdlib>
 #include "../gnc-backend-prov.hpp"
 

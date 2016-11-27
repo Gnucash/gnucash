@@ -34,9 +34,9 @@ extern "C"
 #include <gmodule.h>
 #include <errno.h>
 #include "qof.h"
-#include "qofbackend-p.h"
-
 }
+
+#include "qof-backend.hpp"
 
 G_GNUC_UNUSED static QofLogModule log_module = QOF_MOD_BACKEND;
 

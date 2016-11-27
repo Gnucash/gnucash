@@ -33,7 +33,7 @@ extern "C"
 }
 
 #include "qof.h"
-#include "qofbackend-p.h"
+#include "qof-backend.hpp"
 #include "qofbook-p.h"
 #include "qofclass-p.h"
 #include "qofquery-p.h"

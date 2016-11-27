@@ -27,8 +27,8 @@ extern "C"
 #include <glib.h>
 #include <unittest-support.h>
 #include "../qof.h"
-#include "../qofbackend-p.h"
 }
+#include "../qof-backend.hpp"
 #include "../kvp_frame.hpp"
 static const gchar *suitename = "/qof/qofinstance";
 extern "C" void test_suite_qofinstance ( void );

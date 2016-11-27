@@ -35,7 +35,6 @@ extern "C"
 #include "../gnc-lot.h"
 #include "../gnc-event.h"
 #include <qof.h>
-#include <qofbackend-p.h>
 
 #ifdef HAVE_GLIB_2_38
 #define _Q "'"
@@ -50,6 +49,7 @@ static const gchar *suitename = "/engine/Transaction";
 void test_suite_transaction ( void );
 }
 
+#include <qof-backend.hpp>
 #include <kvp_frame.hpp>
 
 /* Copied from Transaction.c. Changing these values will break

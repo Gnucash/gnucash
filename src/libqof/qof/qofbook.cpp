@@ -52,7 +52,7 @@ extern "C"
 
 #include "qof.h"
 #include "qofevent-p.h"
-#include "qofbackend-p.h"
+#include "qofbackend.h"
 #include "qofbook-p.h"
 #include "qofid-p.h"
 #include "qofobject-p.h"

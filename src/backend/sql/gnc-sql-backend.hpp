@@ -27,13 +27,14 @@
 extern "C"
 {
 #include <qof.h>
-#include <qofbackend-p.h>
 #include <Account.h>
 }
 #include <memory>
 #include <exception>
 #include <sstream>
 #include <vector>
+#include <qof-backend.hpp>
+
 class GncSqlColumnTableEntry;
 using GncSqlColumnTableEntryPtr = std::shared_ptr<GncSqlColumnTableEntry>;
 using EntryVec = std::vector<GncSqlColumnTableEntryPtr>;

@@ -36,7 +36,6 @@ extern "C"
 #endif
 #include <qof.h>
 #include <gmodule.h>
-#include <qofbackend-p.h>
 
 typedef enum
 {
@@ -70,6 +69,6 @@ void qof_backend_module_init (void);
 #endif
 #ifdef __cplusplus
 }
-
+#include <qof-backend.hpp>
 #endif
 #endif /* GNC_BACKEND_XML_H_ */

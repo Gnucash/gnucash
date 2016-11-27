@@ -14,7 +14,7 @@ SET (gnc_qof_HEADERS
     qof/kvp_frame.hpp
     qof/kvp-value.hpp
     qof/qof.h
-    qof/qofbackend-p.h
+    qof/qof-backend.hpp
     qof/qofbackend.h
     qof/qofbook.h
     qof/qofbookslots.h
@@ -59,7 +59,7 @@ SET (gnc_qof_SOURCES
    qof/guid.cpp
    qof/kvp_frame.cpp
    qof/kvp-value.cpp
-   qof/qofbackend.cpp
+   qof/qof-backend.cpp
    qof/qofbook.cpp
    qof/qofchoice.cpp
    qof/qofclass.cpp

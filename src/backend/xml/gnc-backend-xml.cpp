@@ -78,7 +78,7 @@ extern "C"
 
 #include <gnc-backend-prov.hpp>
 #include "gnc-backend-xml.h"
-#include <qofbackend-p.h>
+#include <qof-backend.hpp>
 #include "gnc-xml-backend.hpp"
 #include "gnc-xml-helper.h"
 #include "io-gncxml-v2.h"
