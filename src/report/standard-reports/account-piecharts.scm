@@ -181,7 +181,7 @@ balance at a given time"))
       "c" (N_ "Maximum number of slices in pie.") 7
       2 24 0 1))
 
-    (gnc:options-add-plot-size!
+    (gnc:options-add-plot-size! 
      options gnc:pagename-display 
      optname-plot-width optname-plot-height "d" 500 350)
 
@@ -291,7 +291,7 @@ balance at a given time"))
         (if (null? remaining)
             (cons cur-work-done res)
             (begin
-              (gnc:report-percent-done (* 100 (/ cur-work-done work-to-do)))
+              (gnc:report-percent-done (* 100 (/ cur-work-done (work-to-do))))
               (let* ((cur (car remaining))
                      (tail (cdr remaining))
                      (subaccts-data (traverse-accounts
@@ -313,7 +313,7 @@ balance at a given time"))
       (let* ((proc-account (lambda (a)
                               (set! work-done (1+ work-done))
                               (gnc:report-percent-done
-                                (* 100 (/ work-done work-to-do)))
+                                (* 100 (/ work-done (work-to-do))))
                               (list (account-balance a #t) a)))
              (new-accts (map proc-account (filter show-acct? accts))))
         (cons work-done new-accts))))
@@ -339,7 +339,7 @@ balance at a given time"))
              (tail (cdr remaining))
              (cur-work-done (1+ initial-work))
              (subaccts (gnc-account-get-children cur)))
-        (gnc:report-percent-done (* 100 (/ cur-work-done work-to-do)))
+        (gnc:report-percent-done (* 100 (/ cur-work-done (work-to-do))))
         (if (show-acct? cur)
           (add! (xaccAccountGetCommodity cur) (account-balance cur #f)))
         (traverse! tail (traverse! subaccts cur-work-done)))))
@@ -357,7 +357,7 @@ balance at a given time"))
 (define (piechart-renderer report-obj reportname report-guid
                            account-types do-intervals? depth-based?
                            display-name sort-comparator get-data)
-  
+
   ;; This is a helper function for looking up option values.
   (define (get-option section name)
     (gnc:option-value 
@@ -499,10 +499,11 @@ balance at a given time"))
 	    (length (filter show-acct? accts))))
 
       ;; Get base data to be plotted.
-      (define work-to-do (count-accounts 1 topl-accounts))
-      (define base-data
+      (define work-to-do (lambda () (count-accounts 1 topl-accounts)))
+ 
+      (define base-data (lambda ()
         (get-data account-balance show-acct? work-to-do tree-depth
-                  0 1 topl-accounts))
+                  0 1 topl-accounts)))
 
       (define (fix-signs combined)
         (map (lambda (pair)
@@ -517,7 +518,7 @@ balance at a given time"))
           (begin
             (set! combined
 		  (sort (filter (lambda (pair) (not (>= 0.0 (car pair))))
-				(fix-signs (cdr base-data)))
+				(fix-signs (cdr (base-data))))
                         (sort-comparator sort-method show-fullname?)))
 
             ;; if too many slices, condense them to an 'other' slice
@@ -598,7 +599,7 @@ balance at a given time"))
 				  (car pair)
 				  (gnc-commodity-get-fraction report-currency)
 				  GNC-RND-ROUND)
- 				 print-info)
+				 print-info)
  				 )
  			       "")
  			   (if show-percent?
