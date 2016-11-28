@@ -307,7 +307,8 @@ void GncTxImport::parse (bool guessColTypes)
     orig_lines.clear();
     for (auto tokenized_line : tokenizer->get_tokens())
     {
-        orig_lines.push_back (std::make_tuple (tokenized_line, std::string()));
+        orig_lines.push_back (std::make_tuple (tokenized_line, std::string(),
+                std::make_shared<GncPreTrans>(), std::make_shared<GncPreSplit>()));
         auto length = tokenized_line.size();
         if (length > max_cols)
             max_cols = length;
