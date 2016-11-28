@@ -702,6 +702,57 @@ static GncCsvTransLine* trans_properties_to_trans (prop_map_t& trans_props, gcha
     return trans_line;
 }
 
+void GncTxImport::adjust_balances (Account *account)
+{
+    Split      *split, *osplit;
+
+    /* balance_offset is how much the balance currently in the account
+     * differs from what it will be after the transactions are
+     * imported. This will be sum of all the previous transactions for
+     * any given transaction. */
+    auto balance_offset = double_to_gnc_numeric (0.0, xaccAccountGetCommoditySCU (account),
+                                 GNC_HOW_RND_ROUND_HALF_UP);
+    for (auto trans_iter : transactions)
+    {
+        auto trans_line = trans_iter.second;
+        if (trans_line->balance_set)
+        {
+            time64 date = xaccTransGetDate (trans_line->trans);
+            /* Find what the balance should be by adding the offset to the actual balance. */
+            gnc_numeric existing_balance = gnc_numeric_add (balance_offset,
+                                           xaccAccountGetBalanceAsOfDate (account, date),
+                                           xaccAccountGetCommoditySCU (account),
+                                           GNC_HOW_RND_ROUND_HALF_UP);
+
+            /* The amount of the transaction is the difference between the new and existing balance. */
+            gnc_numeric amount = gnc_numeric_sub (trans_line->balance,
+                                                 existing_balance,
+                                                 xaccAccountGetCommoditySCU (account),
+                                                 GNC_HOW_RND_ROUND_HALF_UP);
+
+            // Find home account split
+            split  = xaccTransFindSplitByAccount (trans_line->trans, account);
+            xaccSplitSetAmount (split, amount);
+            xaccSplitSetValue (split, amount);
+
+            // If we have two splits, change other side
+            if (xaccTransCountSplits (trans_line->trans) == 2)
+            {
+                osplit = xaccSplitGetOtherSplit (split);
+                xaccSplitSetAmount (split, amount);
+                xaccSplitSetValue (split, gnc_numeric_neg (amount));
+            }
+
+            /* This new transaction needs to be added to the balance offset. */
+            balance_offset = gnc_numeric_add (balance_offset,
+                                             amount,
+                                             xaccAccountGetCommoditySCU (account),
+                                             GNC_HOW_RND_ROUND_HALF_UP);
+        }
+    }
+
+}
+
 /** Creates a list of transactions from parsed data. Transactions that
  * could be created from rows are placed in transactions;
  * rows that fail are placed in error_lines. (Note: there
@@ -859,57 +910,7 @@ int GncTxImport::parse_to_trans (Account* account,
 
     if (std::find(column_types.begin(),column_types.end(), GncTransPropType::BALANCE) !=
         column_types.end()) // This is only used if we have one home account
-    {
-        Split      *split, *osplit;
-
-        if (account != NULL)
-            home_account = account;
-
-        /* balance_offset is how much the balance currently in the account
-         * differs from what it will be after the transactions are
-         * imported. This will be sum of all the previous transactions for
-         * any given transaction. */
-        auto balance_offset = double_to_gnc_numeric (0.0, xaccAccountGetCommoditySCU (home_account),
-                                     GNC_HOW_RND_ROUND_HALF_UP);
-        for (auto trans_iter : transactions)
-        {
-            auto trans_line = trans_iter.second;
-            if (trans_line->balance_set)
-            {
-                time64 date = xaccTransGetDate (trans_line->trans);
-                /* Find what the balance should be by adding the offset to the actual balance. */
-                gnc_numeric existing_balance = gnc_numeric_add (balance_offset,
-                                               xaccAccountGetBalanceAsOfDate (home_account, date),
-                                               xaccAccountGetCommoditySCU (home_account),
-                                               GNC_HOW_RND_ROUND_HALF_UP);
-
-                /* The amount of the transaction is the difference between the new and existing balance. */
-                gnc_numeric amount = gnc_numeric_sub (trans_line->balance,
-                                                     existing_balance,
-                                                     xaccAccountGetCommoditySCU (home_account),
-                                                     GNC_HOW_RND_ROUND_HALF_UP);
-
-                // Find home account split
-                split  = xaccTransFindSplitByAccount (trans_line->trans, home_account);
-                xaccSplitSetAmount (split, amount);
-                xaccSplitSetValue (split, amount);
-
-                // If we have two splits, change other side
-                if (xaccTransCountSplits (trans_line->trans) == 2)
-                {
-                    osplit = xaccSplitGetOtherSplit (split);
-                    xaccSplitSetAmount (split, amount);
-                    xaccSplitSetValue (split, gnc_numeric_neg (amount));
-                }
-
-                /* This new transaction needs to be added to the balance offset. */
-                balance_offset = gnc_numeric_add (balance_offset,
-                                                 amount,
-                                                 xaccAccountGetCommoditySCU (home_account),
-                                                 GNC_HOW_RND_ROUND_HALF_UP);
-            }
-        }
-    }
+        adjust_balances (account ? account : home_account);
 
     return 0;
 }

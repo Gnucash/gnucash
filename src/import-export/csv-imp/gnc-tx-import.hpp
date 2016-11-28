@@ -135,6 +135,8 @@ public:
     bool parse_errors;          /**< Indicates whether the last parse_to_trans run had any errors */
 
 private:
+    void adjust_balances (Account *account);
+
     GncImpFileFormat file_fmt = GncImpFileFormat::UNKNOWN;
 };
 
