@@ -123,6 +123,9 @@ using parse_line_t = std::tuple<StrVec,
                                 std::shared_ptr<GncPreTrans>,
                                 std::shared_ptr<GncPreSplit>>;
 
+struct GncTransProperty;
+using prop_map_t = std::map<GncTransPropType, std::shared_ptr<GncTransProperty>>;
+
 /** The actual TxImport class
  * It's intended to use in the following sequence of actions:
  * - set a file format
@@ -162,6 +165,7 @@ public:
     bool parse_errors;          /**< Indicates whether the last parse_to_trans run had any errors */
 
 private:
+    void parse_line_to_trans (StrVec& line, prop_map_t& trans_props);
     void adjust_balances (Account *account);
 
     GncImpFileFormat file_fmt = GncImpFileFormat::UNKNOWN;
