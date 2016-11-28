@@ -46,6 +46,8 @@
 
 (define optname-running-sum (N_ "Running Sum"))
 (define optname-chart-type (N_ "Chart Type"))
+(define optname-plot-width (N_ "Plot Width"))
+(define optname-plot-height (N_ "Plot Height"))
 (define optname-from-date (N_ "Start Date"))
 (define optname-to-date (N_ "End Date"))
 
@@ -68,21 +70,40 @@
         gnc:pagename-general optname-budget
         "a" (N_ "Budget to use.")))
 
+    ;; date interval
+    (gnc:options-add-date-interval!
+     options gnc:pagename-general
+     optname-from-date optname-to-date "b")
+
+    ;; Option to select the accounts to that will be displayed
+    (add-option (gnc:make-account-list-option
+        gnc:pagename-accounts optname-accounts
+        "c" (N_ "Report on these accounts.")
+        (lambda ()
+	  (gnc:filter-accountlist-type
+	    (list ACCT-TYPE-BANK ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY)
+	    (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
+        #f #t))
+
+    (gnc:options-add-account-levels!
+     options gnc:pagename-accounts optname-depth-limit
+     "d" opthelp-depth-limit 6)
+
     ;; Display tab
     (add-option
      (gnc:make-simple-boolean-option
-      gnc:pagename-general 
+      gnc:pagename-display 
       optname-running-sum
-      "b"
+      "a"
       (N_ "Calculate as running sum?")
       #t))
 
     ;; Display tab
     (add-option
       (gnc:make-multichoice-option
-        gnc:pagename-general                  ;; tab name
+        gnc:pagename-display                  ;; tab name
         optname-chart-type                    ;; displayed option name
-        "c"                                   ;; localization in the tab
+        "b"                                   ;; localization in the tab
         (N_ "This is a multi choice option.") ;; option help text
         'bars                                 ;; default selectioin
         (list
@@ -102,25 +123,9 @@
       )
     )
 
-    ;; date interval
-    (gnc:options-add-date-interval!
-     options gnc:pagename-general
-     optname-from-date optname-to-date "d")
-
-
-    ;; Option to select the accounts to that will be displayed
-    (add-option (gnc:make-account-list-option
-        gnc:pagename-accounts optname-accounts
-        "a" (N_ "Report on these accounts.")
-        (lambda ()
-	  (gnc:filter-accountlist-type
-	    (list ACCT-TYPE-BANK ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY)
-	    (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
-        #f #t))
-
-    (gnc:options-add-account-levels!
-     options gnc:pagename-accounts optname-depth-limit
-     "b" opthelp-depth-limit 6)
+    (gnc:options-add-plot-size! 
+     options gnc:pagename-display 
+     optname-plot-width optname-plot-height "c" (cons 'percent 100.0) (cons 'percent 100.0))
 
     ;; Set default page
     (gnc:options-set-default-section options gnc:pagename-general)
@@ -136,7 +141,7 @@
 ;;
 ;; Create bar and and vaules
 ;;
-(define (gnc:chart-create-budget-actual budget acct running-sum chart-type from-tp to-tp)
+(define (gnc:chart-create-budget-actual budget acct running-sum chart-type width height from-tp to-tp)
   (let* (
           (chart #f)
           (report-start-time (car from-tp))
@@ -148,8 +153,8 @@
         ;; Setup barchart
         (set! chart (gnc:make-html-barchart))
         (gnc:html-barchart-set-title! chart (xaccAccountGetName acct))
-        (gnc:html-barchart-set-width! chart 700)
-        (gnc:html-barchart-set-height! chart 400)
+        (gnc:html-barchart-set-width! chart width)
+        (gnc:html-barchart-set-height! chart height)
         (gnc:html-barchart-set-row-labels-rotated?! chart #t)
         (gnc:html-barchart-set-col-labels!
           chart (list (_ "Budget") (_ "Actual")))
@@ -161,8 +166,8 @@
         ;; Setup linechart
         (set! chart (gnc:make-html-linechart))
         (gnc:html-linechart-set-title! chart (xaccAccountGetName acct))
-        (gnc:html-linechart-set-width! chart 700)
-        (gnc:html-linechart-set-height! chart 400)
+        (gnc:html-linechart-set-width! chart width)
+        (gnc:html-linechart-set-height! chart height)
         (gnc:html-linechart-set-row-labels-rotated?! chart #t)
         (gnc:html-linechart-set-col-labels!
           chart (list (_ "Budget") (_ "Actual")))
@@ -305,8 +310,10 @@
   (let* (
       (budget (get-option gnc:pagename-general optname-budget))
       (budget-valid? (and budget (not (null? budget))))
-      (running-sum (get-option gnc:pagename-general optname-running-sum))
-      (chart-type (get-option gnc:pagename-general optname-chart-type))
+      (running-sum (get-option gnc:pagename-display optname-running-sum))
+      (chart-type (get-option gnc:pagename-display optname-chart-type))
+      (height (get-option gnc:pagename-display optname-plot-height))
+      (width (get-option gnc:pagename-display optname-plot-width))
       (accounts (get-option gnc:pagename-accounts optname-accounts))
       (depth-limit (get-option gnc:pagename-accounts optname-depth-limit))
       (report-title (get-option gnc:pagename-general
@@ -350,7 +357,7 @@
                 )
               (gnc:html-document-add-object!
                 document
-                (gnc:chart-create-budget-actual budget acct running-sum chart-type from-date-tp to-date-tp)
+                (gnc:chart-create-budget-actual budget acct running-sum chart-type width height from-date-tp to-date-tp)
               )
             )
           )
