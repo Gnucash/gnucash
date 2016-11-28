@@ -409,8 +409,9 @@ KvpValue* qof_book_get_option (QofBook *book, GSList *path);
  * Primarily used from Scheme to clear out the options before saving a new set.
  * @param book: The book.
  * @param list: A GList of keys which from a path under KVP_OPTION_PATH.
+ *              If GList is Null, the whole option is deleted.
  */
-void qof_book_options_delete (QofBook *book);
+void qof_book_options_delete (QofBook *book, GSList *path);
 /** @} End of Doxygen Include */
 /** deprecated */
 #define qof_book_get_guid(X) qof_entity_get_guid (QOF_INSTANCE(X))
