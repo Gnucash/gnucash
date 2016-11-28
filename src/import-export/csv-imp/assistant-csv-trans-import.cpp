@@ -1727,7 +1727,7 @@ static void gnc_csv_preview_update_assist (CsvImportTrans* info)
     for (auto parse_line : info->parse_data->orig_lines)
     {
         // When previewing errors skip all lines that don't have errors
-        if (info->previewing_errors && parse_line.second.empty())
+        if (info->previewing_errors && std::get<1>(parse_line).empty())
             continue;
 
         GtkTreeIter iter;
@@ -1736,14 +1736,14 @@ static void gnc_csv_preview_update_assist (CsvImportTrans* info)
         /* Row Color column */
         gtk_list_store_set (store, &iter, 0, NULL, -1);
 
-        for (auto cell_str_it = parse_line.first.cbegin(); cell_str_it != parse_line.first.cend(); cell_str_it++)
+        for (auto cell_str_it = std::get<0>(parse_line).cbegin(); cell_str_it != std::get<0>(parse_line).cend(); cell_str_it++)
         {
             /* Set the value of the proper column in the list store. */
-            uint pos = cell_str_it - parse_line.first.cbegin() + 1;
+            uint pos = cell_str_it - std::get<0>(parse_line).cbegin() + 1;
             gtk_list_store_set (store, &iter, pos, cell_str_it->c_str(), -1);
         }
         /* Add the optional error messages in the last column of the store */
-        gtk_list_store_set (store, &iter, ncols + 1, parse_line.second.c_str(), -1);
+        gtk_list_store_set (store, &iter, ncols + 1, std::get<1>(parse_line).c_str(), -1);
     }
     gtk_tree_view_set_model (info->treeview, GTK_TREE_MODEL(store));
 

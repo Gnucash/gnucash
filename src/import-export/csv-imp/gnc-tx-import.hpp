@@ -93,8 +93,8 @@ extern const gchar* currency_format_user[];
 extern const int num_date_formats;
 extern const gchar* date_format_user[];
 
-/** Pair to hold a tokenized line of input and an optional error string */
-using parse_line_t = std::pair<StrVec, std::string>;
+/** Tuple to hold a tokenized line of input and an optional error string */
+using parse_line_t = std::tuple<StrVec, std::string>;
 
 /** The actual TxImport class
  * It's intended to use in the following sequence of actions:
