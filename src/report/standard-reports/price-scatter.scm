@@ -107,7 +107,7 @@
     
     (gnc:options-add-plot-size! 
      options gnc:pagename-display 
-     optname-plot-width optname-plot-height "c" 500 400)
+     optname-plot-width optname-plot-height "c" (cons 'percent 100.0) (cons 'percent 100.0))
     
     (gnc:options-add-marker-choice!
      options gnc:pagename-display 
