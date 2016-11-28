@@ -108,6 +108,8 @@ struct _Getters
     SCM date_option_value_type;
     SCM date_option_value_absolute;
     SCM date_option_value_relative;
+    SCM plot_size_option_value_type;
+    SCM plot_size_option_value;
     SCM currency_accounting_option_currency_doc_string;
     SCM currency_accounting_option_default_currency;
     SCM currency_accounting_option_policy_doc_string;
@@ -596,6 +598,8 @@ initialize_getters(void)
         scm_c_eval_string("gnc:date-option-absolute-time");
     getters.date_option_value_relative =
         scm_c_eval_string("gnc:date-option-relative-time");
+    getters.plot_size_option_value_type = scm_c_eval_string ("gnc:plot-size-option-value-type");
+    getters.plot_size_option_value = scm_c_eval_string("gnc:plot-size-option-value");
     getters.currency_accounting_option_currency_doc_string =
         scm_c_eval_string("gnc:currency-accounting-option-get-curr-doc-string");
     getters.currency_accounting_option_default_currency =
@@ -2665,6 +2669,45 @@ gnc_date_option_value_get_relative (SCM option_value)
     initialize_getters();
 
     return scm_call_1 (getters.date_option_value_relative, option_value);
+}
+
+/*******************************************************************\
+ * gnc_plot_size_option_value_get_type                             *
+ *   get the type of a plot size option value                      *
+ *                                                                 *
+ * Args: option_value - option value to get type of                *
+ * Return: newly allocated type string or NULL                     *
+\*******************************************************************/
+char *
+gnc_plot_size_option_value_get_type (SCM option_value)
+{
+    SCM value;
+
+    initialize_getters();
+
+    return gnc_scm_call_1_symbol_to_string (getters.plot_size_option_value_type, option_value);
+}
+
+/*******************************************************************\
+ * gnc_plot_size_option_value_get_value                            *
+ *   get the plot size option value                                *
+ *                                                                 *
+ * Args: option_value - option value to get the plot size of       *
+ * Return: double value                                            *
+\*******************************************************************/
+gdouble
+gnc_plot_size_option_value_get_value (SCM option_value)
+{
+    SCM value;
+
+    initialize_getters();
+
+    value = scm_call_1 (getters.plot_size_option_value, option_value);
+
+    if (scm_is_number(value))
+        return scm_to_double (value);
+    else
+        return 1.0;
 }
 
 /********************************************************************\

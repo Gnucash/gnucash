@@ -2262,71 +2262,6 @@ gnc_option_set_ui_widget_number_range (GNCOption *option, GtkBox *page_box,
 }
 
 static GtkWidget *
-gnc_option_set_ui_widget_plot_size (GNCOption *option, GtkBox *page_box,
-                                    char *name, char *documentation,
-                                    /* Return values */
-                                    GtkWidget **enclosing, gboolean *packed)
-{
-    GtkWidget *value;
-    GtkWidget *label;
-    gchar *colon_name;
-    GtkAdjustment *adj;
-    gdouble lower_bound = G_MINDOUBLE;
-    gdouble upper_bound = G_MAXDOUBLE;
-    gdouble step_size = 1.0;
-    int num_decimals = 0;
-
-    colon_name = g_strconcat(name, ":", NULL);
-    label = gtk_label_new(colon_name);
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    g_free(colon_name);
-
-    *enclosing = gtk_hbox_new(FALSE, 5);
-
-    gnc_option_get_range_info(option, &lower_bound, &upper_bound,
-                              &num_decimals, &step_size);
-    adj = GTK_ADJUSTMENT(gtk_adjustment_new(lower_bound, lower_bound,
-                                            upper_bound, step_size,
-                                            step_size * 5.0,
-                                            0));
-    value = gtk_spin_button_new(adj, step_size, num_decimals);
-    gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(value), TRUE);
-
-    {
-        gdouble biggest;
-        gint num_digits;
-
-        biggest = ABS(lower_bound);
-        biggest = MAX(biggest, ABS(upper_bound));
-
-        num_digits = 0;
-        while (biggest >= 1)
-        {
-            num_digits++;
-            biggest = biggest / 10;
-        }
-
-        if (num_digits == 0)
-            num_digits = 1;
-
-        num_digits += num_decimals;
-
-        gtk_entry_set_width_chars(GTK_ENTRY(value), num_digits);
-    }
-
-    gnc_option_set_widget (option, value);
-    gnc_option_set_ui_value(option, FALSE);
-
-    g_signal_connect(G_OBJECT(value), "changed",
-                     G_CALLBACK(gnc_option_changed_widget_cb), option);
-
-    gtk_box_pack_start(GTK_BOX(*enclosing), label, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(*enclosing), value, FALSE, FALSE, 0);
-    gtk_widget_show_all(*enclosing);
-    return value;
-}
-
-static GtkWidget *
 gnc_option_set_ui_widget_color (GNCOption *option, GtkBox *page_box,
                                 char *name, char *documentation,
                                 /* Return values */
@@ -2483,6 +2418,149 @@ gnc_option_set_ui_widget_dateformat (GNCOption *option, GtkBox *page_box,
                      G_CALLBACK(gnc_option_changed_option_cb), option);
     gtk_widget_show_all(*enclosing);
     return *enclosing;
+}
+
+
+static void
+gnc_plot_size_option_set_select_method(GNCOption *option, gboolean set_buttons)
+{
+    GList* widget_list;
+    GtkWidget *px_button, *p_button, *px_widget, *p_widget;
+    GtkWidget *widget;
+
+    widget = gnc_option_get_gtk_widget (option);
+
+    widget_list = gtk_container_get_children(GTK_CONTAINER(widget));
+    px_button = g_list_nth_data(widget_list, 0);
+    px_widget = g_list_nth_data(widget_list, 1);
+    p_button = g_list_nth_data(widget_list, 2);
+    p_widget = g_list_nth_data(widget_list, 3);
+    g_list_free(widget_list);
+
+    if (set_buttons)
+    {
+        gtk_widget_set_sensitive(px_widget, TRUE);
+        gtk_widget_set_sensitive(p_widget, FALSE);
+    }
+    else
+    {
+        gtk_widget_set_sensitive(p_widget, TRUE);
+        gtk_widget_set_sensitive(px_widget, FALSE);
+    }
+}
+
+static void
+gnc_rd_option_px_set_cb(GtkWidget *widget, gpointer *raw_option)
+{
+    GNCOption *option = (GNCOption *) raw_option;
+    gnc_plot_size_option_set_select_method(option, TRUE);
+    gnc_option_changed_option_cb(widget, option);
+}
+
+static void
+gnc_rd_option_p_set_cb(GtkWidget *widget, gpointer *raw_option)
+{
+    GNCOption *option = (GNCOption *) raw_option;
+    gnc_plot_size_option_set_select_method(option, FALSE);
+    gnc_option_changed_option_cb(widget, option);
+    return;
+}
+
+
+static GtkWidget *
+gnc_option_set_ui_widget_plot_size (GNCOption *option, GtkBox *page_box,
+                                     char *name, char *documentation,
+                                     /* Return values */
+                                     GtkWidget **enclosing, gboolean *packed)
+{
+    GtkWidget *value_px, *value_percent;
+    GtkWidget *label;
+    GtkWidget *px_butt, *p_butt;
+    GtkWidget *hbox;
+    gchar *colon_name;
+    GtkAdjustment *adj_px, *adj_percent;
+    gdouble lower_bound = G_MINDOUBLE;
+    gdouble upper_bound = G_MAXDOUBLE;
+    gdouble step_size = 1.0;
+    int num_decimals = 0;
+
+    colon_name = g_strconcat(name, ":", NULL);
+    label = gtk_label_new(colon_name);
+    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
+    g_free(colon_name);
+
+    hbox = gtk_hbox_new(FALSE, 5);
+
+    *enclosing = gtk_hbox_new(FALSE, 5);
+
+    gtk_box_pack_start(GTK_BOX(*enclosing), label, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(*enclosing), hbox, FALSE, FALSE, 0);
+
+    gnc_option_get_range_info(option, &lower_bound, &upper_bound,
+                              &num_decimals, &step_size);
+    adj_px = GTK_ADJUSTMENT(gtk_adjustment_new(lower_bound, lower_bound,
+                                            upper_bound, step_size,
+                                            step_size * 5.0,
+                                            0));
+
+    value_px = gtk_spin_button_new(adj_px, step_size, num_decimals);
+    gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(value_px), TRUE);
+
+    {
+        gdouble biggest;
+        gint num_digits;
+
+        biggest = ABS(lower_bound);
+        biggest = MAX(biggest, ABS(upper_bound));
+
+        num_digits = 0;
+        while (biggest >= 1)
+        {
+            num_digits++;
+            biggest = biggest / 10;
+        }
+
+        if (num_digits == 0)
+            num_digits = 1;
+
+        num_digits += num_decimals;
+
+        gtk_entry_set_width_chars(GTK_ENTRY(value_px), num_digits);
+    }
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(value_px), (upper_bound / 2)); //default
+    g_signal_connect(G_OBJECT(value_px), "changed",
+                     G_CALLBACK(gnc_option_changed_widget_cb), option);
+
+    adj_percent = GTK_ADJUSTMENT(gtk_adjustment_new(1, 10, 100, 1, 5.0, 0));
+    value_percent = gtk_spin_button_new(adj_percent, 1, 0);
+    gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(value_percent), TRUE);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(value_percent), 100); //default
+    gtk_entry_set_width_chars(GTK_ENTRY(value_percent), 3);
+    gtk_widget_set_sensitive(value_percent, FALSE);
+
+    g_signal_connect(G_OBJECT(value_percent), "changed",
+                     G_CALLBACK(gnc_option_changed_widget_cb), option);
+
+    px_butt = gtk_radio_button_new_with_label(NULL, _("Pixels"));
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(px_butt), TRUE);
+
+    g_signal_connect(G_OBJECT(px_butt), "toggled",
+                         G_CALLBACK(gnc_rd_option_px_set_cb), option);
+
+    p_butt = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(px_butt), _("Percent"));
+    g_signal_connect(G_OBJECT(p_butt), "toggled",
+                         G_CALLBACK(gnc_rd_option_p_set_cb), option);
+
+    gtk_box_pack_start(GTK_BOX(hbox), px_butt, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(hbox), value_px, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(hbox), p_butt, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(hbox), value_percent, FALSE, FALSE, 0);
+
+    gnc_option_set_widget (option, hbox);
+    gnc_option_set_ui_value (option, FALSE);
+
+    gtk_widget_show_all(*enclosing);
+    return hbox;
 }
 
 static GtkWidget *
@@ -2836,25 +2914,6 @@ gnc_option_set_ui_value_number_range (GNCOption *option, gboolean use_default,
 }
 
 static gboolean
-gnc_option_set_ui_value_plot_size (GNCOption *option, gboolean use_default,
-                                   GtkWidget *widget, SCM value)
-{
-    GtkSpinButton *spinner;
-    gdouble d_value;;
-
-    spinner = GTK_SPIN_BUTTON(widget);
-
-    if (scm_is_number(value))
-    {
-        d_value = scm_to_double(value);
-        gtk_spin_button_set_value(spinner, d_value);
-        return FALSE;
-    }
-    else
-        return TRUE;
-}
-
-static gboolean
 gnc_option_set_ui_value_color (GNCOption *option, gboolean use_default,
                                GtkWidget *widget, SCM value)
 {
@@ -3020,6 +3079,45 @@ gnc_option_set_ui_value_dateformat (GNCOption *option, gboolean use_default,
         free(custom);
 
     return FALSE;
+}
+
+static gboolean
+gnc_option_set_ui_value_plot_size (GNCOption *option, gboolean use_default,
+                                    GtkWidget *widget, SCM value)
+{
+    GList* widget_list;
+    GtkWidget *px_button, *p_button, *px_widget, *p_widget;
+    char *symbol_str;
+    gdouble d_value;
+
+    widget_list = gtk_container_get_children(GTK_CONTAINER(widget));
+    px_button = g_list_nth_data(widget_list, 0);
+    px_widget = g_list_nth_data(widget_list, 1);
+    p_button = g_list_nth_data(widget_list, 2);
+    p_widget = g_list_nth_data(widget_list, 3);
+    g_list_free(widget_list);
+
+    if (scm_is_pair(value))
+    {
+        symbol_str = gnc_plot_size_option_value_get_type(value);
+        d_value = gnc_plot_size_option_value_get_value(value);
+
+        if (symbol_str)
+        {
+            if (g_strcmp0(symbol_str, "pixels") == 0) // pixel values
+            {
+                gtk_spin_button_set_value(GTK_SPIN_BUTTON(px_widget), d_value);
+                gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(px_button), TRUE);
+            }
+            else // percent values
+            {
+                gtk_spin_button_set_value(GTK_SPIN_BUTTON(p_widget), (d_value));
+                gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(p_button), TRUE);
+            }
+            return FALSE;
+        }
+    }
+    return TRUE;
 }
 
 static gboolean
@@ -3387,19 +3485,6 @@ gnc_option_get_ui_value_number_range (GNCOption *option, GtkWidget *widget)
 }
 
 static SCM
-gnc_option_get_ui_value_plot_size (GNCOption *option, GtkWidget *widget)
-{
-    GtkSpinButton *spinner;
-    gdouble value;
-
-    spinner = GTK_SPIN_BUTTON(widget);
-
-    value = gtk_spin_button_get_value(spinner);
-
-    return (scm_from_double (value));
-}
-
-static SCM
 gnc_option_get_ui_value_color (GNCOption *option, GtkWidget *widget)
 {
     SCM result;
@@ -3478,6 +3563,35 @@ gnc_option_get_ui_value_dateformat (GNCOption *option, GtkWidget *widget)
     custom = gnc_date_format_get_custom(gdf);
 
     return (gnc_dateformat_option_set_value(format, months, years, custom));
+}
+
+static SCM
+gnc_option_get_ui_value_plot_size (GNCOption *option, GtkWidget *widget)
+{
+    GList* widget_list;
+    GtkWidget *px_button, *p_button, *px_widget, *p_widget;
+    gdouble d_value;
+    SCM type, val;
+
+    widget_list = gtk_container_get_children(GTK_CONTAINER(widget));
+    px_button = g_list_nth_data(widget_list, 0);
+    px_widget = g_list_nth_data(widget_list, 1);
+    p_button = g_list_nth_data(widget_list, 2);
+    p_widget = g_list_nth_data(widget_list, 3);
+    g_list_free(widget_list);
+
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(px_button)))
+    {
+        type = scm_from_locale_symbol("pixels");
+        d_value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(px_widget));
+    }
+    else
+    {
+        type = scm_from_locale_symbol("percent");
+        d_value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(p_widget));
+    }
+    val = scm_from_double(d_value);
+    return scm_cons(type, val);
 }
 
 static SCM
@@ -3603,10 +3717,6 @@ static void gnc_options_initialize_options (void)
             gnc_option_set_ui_value_number_range, gnc_option_get_ui_value_number_range
         },
         {
-            "plot-size", gnc_option_set_ui_widget_plot_size,
-            gnc_option_set_ui_value_plot_size, gnc_option_get_ui_value_plot_size
-        },
-        {
             "color", gnc_option_set_ui_widget_color,
             gnc_option_set_ui_value_color, gnc_option_get_ui_value_color
         },
@@ -3625,6 +3735,10 @@ static void gnc_options_initialize_options (void)
         {
             "dateformat", gnc_option_set_ui_widget_dateformat,
             gnc_option_set_ui_value_dateformat, gnc_option_get_ui_value_dateformat
+        },
+        {
+            "plot-size", gnc_option_set_ui_widget_plot_size,
+            gnc_option_set_ui_value_plot_size, gnc_option_get_ui_value_plot_size
         },
         {
             "budget", gnc_option_set_ui_widget_budget,

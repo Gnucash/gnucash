@@ -1143,9 +1143,9 @@
      (list lower-bound upper-bound num-decimals step-size)
      #f #f #f)))
 
-
-;; plot size options use the option-data as a list whose
+;; number plot size options use the option-data as a list whose
 ;; elements are: (lower-bound upper-bound num-decimals step-size)
+;; which is used for the valid pixel range
 (define (gnc:make-number-plot-size-option
          section
          name
@@ -1157,33 +1157,53 @@
          num-decimals
          step-size)
   (let* ((value default-value)
-         (value->string (lambda () (number->string value))))
+         (value->string (lambda ()
+                          (string-append "'" (gnc:value->string value)))))
     (gnc:make-option
-     section name sort-tag 'number-range documentation-string
-     (lambda () value)
+     section name sort-tag 'plot-size documentation-string
+     (lambda () value)  ;;getter
      (lambda (x)
-       (cond ((and (pair? x) ;; new pair value
-                   (eq? 'pixels (car x)))
-              (set! value (cdr x)))
-             (else (set! value default-value)))
+             (if (number? x) ;; this is for old style plot size
+             (set! value (cons 'pixels x))
+             (set! value x)))  ;;setter
 
-       (if (number? x) ;; old single value
-         (set! value x)))
-     (lambda () default-value)
-     (gnc:restore-form-generator value->string)
-     (lambda (f p) (kvp-frame-set-slot-path-gslist f value p))
-     (lambda (f p)
-       (let ((v (kvp-frame-get-slot-path-gslist f p)))
-         (if (and v (number? v))
-             (set! value v))))
+     (lambda () default-value)  ;;default-getter
+     (gnc:restore-form-generator value->string)  ;;restore-form
+     (lambda (b p)
+       (qof-book-set-option b (symbol->string (car value))
+                              (append p '("type")))
+       (qof-book-set-option b (if (symbol? (cdr value))
+                                  (symbol->string (cdr value))
+                                  (cdr value))
+                                  (append p '("value"))))  ;;scm->kvp
+     (lambda (b p)
+       (let ((t (qof-book-get-option b (append p '("type"))))
+             (v (qof-book-get-option b (append p '("value")))))
+         (if (and t v (string? t))
+             (set! value (cons (string->symbol t)
+                               (if (string? v) (string->number v) v))))))  ;;kvp->scm
      (lambda (x)
-       (cond ((not (number? x)) (list #f "number-plot-size-option: not a number"))
-             ((and (>= value lower-bound)
-                   (<= value upper-bound))
-              (list #t x))
-             (else (list #f "number-plot-size-option: out of range"))))
-     (list lower-bound upper-bound num-decimals step-size)
-     #f #f #f)))
+       (if (eq? 'pixels (car x))
+         (cond ((not (number? (cdr x))) (list #f "number-plot-size-option-pixels: not a number"))
+               ((and (>= (cdr x) lower-bound)
+                     (<= (cdr x) upper-bound))
+                (list #t x))
+               (else (list #f "number-plot-size-option-pixels: out of range")))
+         (cond ((not (number? (cdr x))) (list #f "number-plot-size-option-percentage: not a number"))
+               ((and (>= (cdr x) 10)
+                     (<= (cdr x) 100))
+                (list #t x))
+               (else (list #f "number-plot-size-option-percentage: out of range")))
+       )
+     )  ;;value-validator
+     (list lower-bound upper-bound num-decimals step-size)  ;;option-data
+     #f #f #f)))  ;;option-data-fns, strings-getter, option-widget-changed-proc
+
+(define (gnc:plot-size-option-value-type option-value)
+  (car option-value))
+
+(define (gnc:plot-size-option-value option-value)
+  (cdr option-value))
 
 (define (gnc:make-internal-option
          section

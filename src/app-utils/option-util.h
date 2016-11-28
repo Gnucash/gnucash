@@ -251,6 +251,9 @@ char * gnc_date_option_value_get_type (SCM option_value);
 Timespec gnc_date_option_value_get_absolute (SCM option_value);
 SCM gnc_date_option_value_get_relative (SCM option_value);
 
+char * gnc_plot_size_option_value_get_type (SCM option_value);
+gdouble gnc_plot_size_option_value_get_value (SCM option_value);
+
 char * gnc_currency_accounting_option_currency_documentation(GNCOption *option);
 SCM gnc_currency_accounting_option_get_default_currency(GNCOption *option);
 char * gnc_currency_accounting_option_policy_documentation(GNCOption *option);
