@@ -1202,10 +1202,18 @@ qof_book_get_option (QofBook *book, GSList *path)
 }
 
 void
-qof_book_options_delete (QofBook *book)
+qof_book_options_delete (QofBook *book, GSList *path)
 {
     KvpFrame *root = qof_instance_get_slots(QOF_INSTANCE (book));
-    delete root->set_path(KVP_OPTION_PATH, nullptr);
+    if (path != nullptr)
+    {
+        Path path_v {KVP_OPTION_PATH};
+        for (auto item = path; item != nullptr; item = g_slist_next(item))
+            path_v.push_back(static_cast<const char*>(item->data));
+        delete root->set_path(path_v, nullptr);
+    }
+    else
+        delete root->set_path(KVP_OPTION_PATH, nullptr);
 }
 
 /* QofObject function implementation and registration */
