@@ -42,6 +42,8 @@
 (define optname-price-source (N_ "Price Source"))
 (define optname-subacct (N_ "Include Sub-Accounts"))
 (define optname-internal (N_ "Exclude transactions between selected accounts"))
+(define optname-plot-width (N_ "Plot Width"))
+(define optname-plot-height (N_ "Plot Height"))
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Options
@@ -127,8 +129,8 @@
        (vector 'GLPlot (N_ "Gain/Loss") (N_ "Gain And Loss.")))))
 
     (gnc:options-add-plot-size! 
-     options gnc:pagename-display (N_ "Plot Width") (N_ "Plot Height")
-     "d" 400 400)
+     options gnc:pagename-display 
+     optname-plot-width optname-plot-height "d" (cons 'percent 100.0) (cons 'percent 100.0))
 
     ;; Set the general page as default option tab
     (gnc:options-set-default-section options gnc:pagename-general)      
@@ -462,10 +464,8 @@
           ;; plot comes first. 
           (if show-plot?
               (let ((barchart (gnc:make-html-barchart))
-                    (width (get-option gnc:pagename-display 
-                                       (N_ "Plot Width")))
-                    (height (get-option gnc:pagename-display 
-                                        (N_ "Plot Height")))
+                    (height (get-option gnc:pagename-display optname-plot-height))
+                    (width (get-option gnc:pagename-display optname-plot-width))
                     (col-labels '())
                     (col-colors '()))
                 (if (memq 'AvgBalPlot plot-type)
