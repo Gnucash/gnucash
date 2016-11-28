@@ -120,9 +120,9 @@
       gnc:pagename-display optname-show-total
       "b" (N_ "Show the total balance in legend?") #t))
 
-    (gnc:options-add-plot-size!
+    (gnc:options-add-plot-size! 
      options gnc:pagename-display 
-     optname-plot-width optname-plot-height "d" 500 500)
+     optname-plot-width optname-plot-height "d" (cons 'percent 100.0) (cons 'percent 100.0))
 
     (gnc:options-set-default-section options gnc:pagename-general)      
 
