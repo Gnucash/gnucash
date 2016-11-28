@@ -115,7 +115,7 @@ libgncmod_business_gnome_gnc_module_init(int refcount)
 
         /* Add to preferences under Business */
         /* The parameters are; glade file, items to add from glade file - last being the dialog, preference tab name */
-        gnc_preferences_add_page("business-prefs.glade", "liststore_printinvoice,days_in_adj,business_prefs",
+        gnc_preferences_add_page("business-prefs.glade", "liststore_printinvoice,days_in_adj,cust_days_in_adj,business_prefs",
                                  _("Business"));
     }
 
