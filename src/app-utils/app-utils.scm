@@ -140,6 +140,7 @@
 (export gnc:options-for-each-general)
 (export gnc:lookup-option)
 (export gnc:generate-restore-forms)
+(export gnc:options-fancy-date)
 (export gnc:options-scm->kvp)
 (export gnc:options-kvp->scm)
 (export gnc:options-clear-changes)
