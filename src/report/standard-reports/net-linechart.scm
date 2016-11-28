@@ -140,9 +140,9 @@
       "c" (N_ "Display a table of the selected data.")
       #f))
 
-    (gnc:options-add-plot-size!
-     options gnc:pagename-display
-     optname-plot-width optname-plot-height "d" 400 400)
+    (gnc:options-add-plot-size! 
+     options gnc:pagename-display 
+     optname-plot-width optname-plot-height "d" (cons 'percent 100.0) (cons 'percent 100.0))
 
 
      (add-option
