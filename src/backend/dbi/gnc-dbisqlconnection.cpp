@@ -28,6 +28,10 @@ extern "C"
 #include <platform.h>
 #include <gnc-locale-utils.h>
 }
+
+#include <string>
+#include <regex>
+
 #include "gnc-dbisqlconnection.hpp"
 
 static QofLogModule log_module = G_LOG_DOMAIN;
@@ -586,16 +590,16 @@ GncDbiSqlConnection::table_manage_backup (const std::string& table_name,
     dbi_result result = nullptr;
     switch (op)
     {
-    case backup:
+    case TableOpType::backup:
         result = dbi_conn_queryf (m_conn, "ALTER TABLE %s RENAME TO %s",
                                   table_name.c_str(), new_name.c_str());
         break;
-    case rollback:
+    case TableOpType::rollback:
         result = dbi_conn_queryf (m_conn,
                                   "ALTER TABLE %s RENAME TO %s",
                                   new_name.c_str(), table_name.c_str());
         break;
-    case drop_backup:
+    case TableOpType::drop_backup:
         result = dbi_conn_queryf (m_conn, "DROP TABLE %s",
                                   new_name.c_str());
         break;
@@ -630,16 +634,20 @@ GncDbiSqlConnection::table_manage_backup (const std::string& table_name,
  */
 
 bool
-GncDbiSqlConnection::table_operation(const StrVec& table_names,
-                                     TableOpType op) noexcept
+GncDbiSqlConnection::table_operation(TableOpType op) noexcept
 {
-    g_return_val_if_fail (!table_names.empty(), FALSE);
+    static const std::regex backupre (".*_back");
     bool retval{true};
-    for (auto table : table_names)
+    for (auto table : m_provider->get_table_list(m_conn, ""))
     {
         dbi_result result;
-        /* Ignore the lock table */
-        if (table == lock_table)
+        /* Skip the lock table and existing backup tables; the former we don't
+         * want to touch, the latter are handled by table_manage_backup. It
+         * would be nicer to handle this with the get_table_list query, but that
+         * can accept only SQL LIKE patterns (not even regexps) and there's no
+         * way to have a negative one.
+         */
+        if (table == lock_table || std::regex_match(table, backupre))
         {
             continue;
         }
@@ -660,7 +668,7 @@ GncDbiSqlConnection::table_operation(const StrVec& table_names,
                         break;
                 }
             }
-            /* Fall through */
+            /* Fall through to rename the _back tables back.*/
             case backup:
             case drop_backup:
                 result = table_manage_backup (table, op);
@@ -687,6 +695,23 @@ GncDbiSqlConnection::table_operation(const StrVec& table_names,
         }
     }
     return retval;
+}
+
+bool
+GncDbiSqlConnection::drop_indexes() noexcept
+{
+    auto index_list = m_provider->get_index_list (m_conn);
+    for (auto index : index_list)
+    {
+        const char* errmsg;
+        m_provider->drop_index (m_conn, index);
+        if (DBI_ERROR_NONE != dbi_conn_error (m_conn, &errmsg))
+        {
+            PERR("Failed to drop indexes %s", errmsg);
+            return false;
+        }
+    }
+    return true;
 }
 
 std::string

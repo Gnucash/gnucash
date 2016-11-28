@@ -49,14 +49,14 @@ class GncSqlRow;
  * @var rollback drop the name table if it exists and rename name_back to name
  * @var drop_backup Drop the backup table
  */
-typedef enum
+enum TableOpType
 {
     drop = 0,
     empty,
     backup,
     rollback,
     drop_backup
-} TableOpType;
+};
 
 /**
  * Return values from conn_test_dbi_library

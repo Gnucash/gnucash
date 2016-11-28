@@ -907,25 +907,20 @@ gnc_dbi_safe_sync_all (QofBackend* qof_be, QofBook* book)
     g_return_if_fail (dbi_be != nullptr);
     g_return_if_fail (book != nullptr);
 
-    ENTER ("book=%p, primary=%p", book, dbi_be->m_book);
-    auto table_list = conn->m_provider->get_table_list (conn->conn(), "");
-    if (!conn->table_operation (table_list, backup))
+    ENTER ("book=%p, primary=%p", book, m_book);
+    if (!conn->table_operation (TableOpType::backup))
     {
-        qof_backend_set_error (qof_be, ERR_BACKEND_SERVER_ERR);
-        conn->table_operation (table_list, rollback);
+        set_error(ERR_BACKEND_SERVER_ERR);
+        conn->table_operation (TableOpType::rollback);
         LEAVE ("Failed to rename tables");
         return;
     }
-    auto index_list = conn->m_provider->get_index_list (conn->m_conn);
-    for (auto index : index_list)
+    if (!conn->drop_indexes())
     {
-        const char* errmsg;
-        conn->m_provider->drop_index (conn->m_conn, index);
-        if (DBI_ERROR_NONE != dbi_conn_error (conn->m_conn, &errmsg))
-        {
-            qof_backend_set_error (qof_be, ERR_BACKEND_SERVER_ERR);
-            conn->table_operation (table_list, rollback);
-            LEAVE ("Failed to drop indexes %s", errmsg);
+        conn->table_operation (TableOpType::rollback);
+        set_error (ERR_BACKEND_SERVER_ERR);
+        set_message("Failed to drop indexes");
+        LEAVE ("Failed to drop indexes");
             return;
         }
     }
@@ -933,12 +928,12 @@ gnc_dbi_safe_sync_all (QofBackend* qof_be, QofBook* book)
     dbi_be->sync_all(book);
     if (qof_backend_check_error (qof_be))
     {
-        conn->table_operation (table_list, rollback);
+        conn->table_operation (TableOpType::rollback);
         LEAVE ("Failed to create new database tables");
         return;
     }
-    conn->table_operation (table_list, drop_backup);
-    LEAVE ("book=%p", book);
+    conn->table_operation (TableOpType::drop_backup);
+    LEAVE ("book=%p", m_book);
 }
 /* ================================================================= */
 static void

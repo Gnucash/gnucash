@@ -81,12 +81,10 @@ public:
     bool verify() noexcept override;
     bool retry_connection(const char* msg) noexcept override;
     dbi_result table_manage_backup(const std::string& table_name, TableOpType op);
-    bool table_operation (const StrVec& table_name_list,
-                          TableOpType op) noexcept;
+    bool table_operation (TableOpType op) noexcept;
     std::string add_columns_ddl(const std::string& table_name,
                                 const ColVec& info_vec) const noexcept;
-    friend void gnc_dbi_safe_sync_all (QofBackend* qbe, QofBook* book);
-
+    bool drop_indexes() noexcept;
 private:
     QofBackend* m_qbe;
     dbi_conn m_conn;
