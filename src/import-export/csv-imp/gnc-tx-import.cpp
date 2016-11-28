@@ -530,7 +530,6 @@ static void trans_add_split (Transaction* trans, Account* account, QofBook* book
  * and its iterator (a pair)
  */
 using prop_pair_t = std::pair<GncTransPropType, std::shared_ptr<GncTransProperty>>;
-using prop_map_t = std::map<GncTransPropType, std::shared_ptr<GncTransProperty>>;
 
 /** Tests a TransPropertyList for having enough essential properties.
  * Essential properties are
@@ -754,6 +753,59 @@ void GncTxImport::adjust_balances (Account *account)
 
 }
 
+void GncTxImport::parse_line_to_trans (StrVec& line, prop_map_t& trans_props)
+{
+    /* Convert this import line into a map of transaction/split properties. */
+    auto col_types_it = column_types.cbegin();
+    auto line_it = line.cbegin();
+    for (col_types_it, line_it;
+            col_types_it != column_types.cend() &&
+            line_it != line.cend();
+            ++col_types_it, ++line_it)
+    {
+        std::shared_ptr<GncTransProperty> property;
+        switch (*col_types_it)
+        {
+            case GncTransPropType::DATE:
+                property = GncTransPropImpl<time64*>::make_new (*line_it, date_format);
+            break;
+
+            case GncTransPropType::DESCRIPTION:
+            case GncTransPropType::NOTES:
+            case GncTransPropType::MEMO:
+            case GncTransPropType::OMEMO:
+            case GncTransPropType::NUM:
+                property = GncTransPropImpl<std::string*>::make_new (*line_it);
+                break;
+
+            case GncTransPropType::ACCOUNT:
+            case GncTransPropType::OACCOUNT:
+                property = GncTransPropImpl<Account*>::make_new (*line_it);
+                break;
+
+            case GncTransPropType::BALANCE:
+            case GncTransPropType::DEPOSIT:
+            case GncTransPropType::WITHDRAWAL:
+                property = GncTransPropImpl<gnc_numeric*>::make_new (*line_it, currency_format);
+                break;
+
+            default:
+                continue; /* We do nothing with "None"-type columns. */
+                break;
+        }
+
+        if (property->m_valid)
+            trans_props.insert(prop_pair_t(*col_types_it, property));
+        else
+        {
+            std::string error_message {_(gnc_csv_col_type_strs[*col_types_it])};
+            error_message += _(" column could not be understood.");
+            throw std::invalid_argument (error_message);
+        }
+    }
+
+}
+
 /** Creates a list of transactions from parsed data. Transactions that
  * could be created from rows are placed in transactions;
  * rows that fail are placed in error_lines. (Note: there
@@ -811,68 +863,22 @@ int GncTxImport::parse_to_trans (Account* account,
            (!redo_errors && skip_rows && odd_line))
             continue;
 
-        auto line = std::get<0>(orig_line);
-        GncCsvTransLine* trans_line = NULL;
-
-        /* Convert this import line into a map of transaction/split properties. */
-        auto loop_err = false;
-        auto col_types_it = column_types.cbegin();
-        auto line_it = line.cbegin();
-        for (col_types_it, line_it;
-                col_types_it != column_types.cend() &&
-                line_it != line.cend();
-                ++col_types_it, ++line_it)
+        try
         {
-            std::shared_ptr<GncTransProperty> property;
-            switch (*col_types_it)
-            {
-                case GncTransPropType::DATE:
-                    property = GncTransPropImpl<time64*>::make_new (*line_it, date_format);
-                break;
-
-                case GncTransPropType::DESCRIPTION:
-                case GncTransPropType::NOTES:
-                case GncTransPropType::MEMO:
-                case GncTransPropType::OMEMO:
-                case GncTransPropType::NUM:
-                    property = GncTransPropImpl<std::string*>::make_new (*line_it);
-                    break;
-
-                case GncTransPropType::ACCOUNT:
-                case GncTransPropType::OACCOUNT:
-                    property = GncTransPropImpl<Account*>::make_new (*line_it);
-                    if (*col_types_it == GncTransPropType::ACCOUNT)
-                        home_account = dynamic_cast<GncTransPropImpl<Account*>*>(property.get())->m_value;
-                    break;
-
-                case GncTransPropType::BALANCE:
-                case GncTransPropType::DEPOSIT:
-                case GncTransPropType::WITHDRAWAL:
-                    property = GncTransPropImpl<gnc_numeric*>::make_new (*line_it, currency_format);
-                    break;
-
-                default:
-                    continue; /* We do nothing with "None"-type columns. */
-                    break;
-            }
-
-            if (property->m_valid)
-                trans_props.insert(prop_pair_t(*col_types_it, property));
-            else
-            {
-                parse_errors = loop_err = true;
-                std::string error_message {_(gnc_csv_col_type_strs[*col_types_it])};
-                error_message += _(" column could not be understood.");
-                std::get<1>(orig_line) = std::move(error_message);
-                break;
-            }
+            parse_line_to_trans (std::get<0>(orig_line), trans_props);
+        }
+        catch (const std::invalid_argument& e)
+        {
+            parse_errors = true;
+            std::get<1>(orig_line) = e.what();
+            continue;
         }
 
-        if (loop_err)
-            continue;
-
         // Add an ACCOUNT property with the default account if no account column was set by the user
-        if (std::find (column_types.begin(), column_types.end(), GncTransPropType::ACCOUNT) == column_types.end())
+        auto acct_prop_it = trans_props.find (GncTransPropType::ACCOUNT);
+        if (acct_prop_it != trans_props.end())
+            home_account = dynamic_cast<GncTransPropImpl<Account*>*>(acct_prop_it->second.get())->m_value;
+        else
         {
             // If there is no ACCOUNT property by now, try to use the default account passed in
             if (account)
@@ -893,7 +899,7 @@ int GncTxImport::parse_to_trans (Account* account,
 
         /* If column parsing was successful, convert trans properties into a trans line. */
         gchar *error_message = NULL;
-        trans_line = trans_properties_to_trans (trans_props, &error_message);
+        auto trans_line = trans_properties_to_trans (trans_props, &error_message);
         if (trans_line == NULL)
         {
             parse_errors = true;
