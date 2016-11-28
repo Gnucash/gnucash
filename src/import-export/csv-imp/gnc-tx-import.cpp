@@ -307,7 +307,7 @@ void GncTxImport::parse (bool guessColTypes)
     orig_lines.clear();
     for (auto tokenized_line : tokenizer->get_tokens())
     {
-        orig_lines.push_back (std::make_pair (tokenized_line, std::string()));
+        orig_lines.push_back (std::make_tuple (tokenized_line, std::string()));
         auto length = tokenized_line.size();
         if (length > max_cols)
             max_cols = length;
@@ -771,7 +771,7 @@ int GncTxImport::parse_to_trans (Account* account,
     if (!redo_errors) /* If we're redoing errors, we save freeing until the end. */
     {
         for (auto orig_line : orig_lines)
-            orig_line.second.clear();
+            std::get<1>(orig_line).clear();
 
         /* FIXME handle memory leak here!
          * Existing transactions in the map should probably removed before emptying the map
@@ -798,6 +798,7 @@ int GncTxImport::parse_to_trans (Account* account,
             ++orig_lines_it, odd_line = !odd_line)
     {
         prop_map_t trans_props;
+        auto orig_line = *orig_lines_it;
 
         /* Skip current line if:
            1. only looking for lines with error AND no error on current line
@@ -805,11 +806,11 @@ int GncTxImport::parse_to_trans (Account* account,
            2. looking for all lines AND
               skip_rows is enabled AND
               current line is an odd line */
-        if ((redo_errors && orig_lines_it->second.empty()) ||
+        if ((redo_errors && std::get<1>(orig_line).empty()) ||
            (!redo_errors && skip_rows && odd_line))
             continue;
 
-        auto line = orig_lines_it->first;
+        auto line = std::get<0>(orig_line);
         GncCsvTransLine* trans_line = NULL;
 
         /* Convert this import line into a map of transaction/split properties. */
@@ -861,7 +862,7 @@ int GncTxImport::parse_to_trans (Account* account,
                 parse_errors = loop_err = true;
                 std::string error_message {_(gnc_csv_col_type_strs[*col_types_it])};
                 error_message += _(" column could not be understood.");
-                orig_lines_it->second = std::move(error_message);
+                std::get<1>(orig_line) = std::move(error_message);
                 break;
             }
         }
@@ -884,7 +885,7 @@ int GncTxImport::parse_to_trans (Account* account,
                 // Oops - the user didn't select an Account column *and* we didn't get a default value either!
                 // Note if you get here this suggests a bug in the code!
                 parse_errors = true;
-                orig_lines_it->second = _("No account column selected and no default account specified either.");
+                std::get<1>(orig_line) = _("No account column selected and no default account specified either.");
                 continue;
             }
         }
@@ -895,7 +896,7 @@ int GncTxImport::parse_to_trans (Account* account,
         if (trans_line == NULL)
         {
             parse_errors = true;
-            orig_lines_it->second = error_message;
+            std::get<1>(orig_line) = error_message;
             g_free (error_message);
             continue;
         }
