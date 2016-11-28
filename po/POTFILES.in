@@ -482,7 +482,7 @@ src/libqof/qof/gnc-timezone.cpp
 src/libqof/qof/guid.cpp
 src/libqof/qof/kvp_frame.cpp
 src/libqof/qof/kvp-value.cpp
-src/libqof/qof/qofbackend.cpp
+src/libqof/qof/qof-backend.cpp
 src/libqof/qof/qofbook.cpp
 src/libqof/qof/qofchoice.cpp
 src/libqof/qof/qofclass.cpp

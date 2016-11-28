@@ -14,9 +14,7 @@ test_qof_SOURCES = \
 	test-qofbook.c \
 	test-qofinstance.cpp \
 	test-qofobject.c \
-	test-qofsession-old.cpp \
 	test-qof-string-cache.c \
-	test-gnc-guid-old.cpp \
 	${top_srcdir}/src/test-core/unittest-support.c
 
 test_qof_HEADERS = \

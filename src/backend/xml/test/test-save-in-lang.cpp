@@ -32,11 +32,12 @@ extern "C"
 
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
-#include "test-file-stuff.h"
 
 #include "gnc-engine.h"
 #include "TransLog.h"
 }
+
+#include "test-file-stuff.h"
 #include "io-gncxml-v2.h"
 
 const char* possible_envs[] =

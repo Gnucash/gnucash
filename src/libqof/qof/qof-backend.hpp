@@ -1,5 +1,6 @@
 /********************************************************************\
- * qofbackend-p.h -- private api for data storage backend           *
+ * qof-backend.hpp Declare QofBackend class                         *
+ * Copyright 2016 John Ralls <jralls@ceridwen.us>                   *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -38,81 +39,26 @@
    @author Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
 @{ */
 
-#ifndef QOF_BACKEND_P_H
-#define QOF_BACKEND_P_H
-
+#ifndef __QOF_BACKEND_HPP__
+#define __QOF_BACKEND_HPP__
+extern "C"
+{
 #include "qofbackend.h"
 #include "qofbook.h"
 #include "qofinstance-p.h"
 #include "qofquery.h"
 #include "qofsession.h"
+#include <gmodule.h>
+}
 
-/**
- * The backend_new routine sets the functions that will be used
- *    by the backend to perform the actions required by QOF. A
- *    basic minimum is session_begin, session_end, load and
- *    sync. Any unused functions should be set to NULL. If the
- *    backend uses configuration options, backend_new must ensure
- *    that these are set to usable defaults before returning. To use
- *    configuration options, load_config and get_config must also
- *    be defined.
- *
- * The session_begin() routine gives the backend a second initialization
- *    opportunity.  It is suggested that the backend check that
- *    the URL is syntactically correct, and that it is actually
- *    reachable.  This is probably(?) a good time to initialize
- *    the actual network connection.
- *
- *    The 'ignore_lock' argument indicates whether the single-user
- *    lock on the backend should be cleared.  The typical GUI sequence
- *    leading to this is: (1) GUI attempts to open the backend
- *    by calling this routine with FALSE==ignore_lock.  (2) If backend
- *    error'ed BACKEND_LOCK, then GUI asks user what to do. (3) if user
- *    answers 'break & enter' then this routine is called again with
- *    TRUE==ignore_lock.
- *
- *    The 'create_if_nonexistent' argument indicates whether this
- *    routine should create a new 'database', if it doesn't already
- *    exist. For example, for a file-backend, this would create the
- *    file, if it didn't already exist.  For an SQL backend, this
- *    would create the database (the schema) if it didn't already
- *    exist.  This flag is used to implement the 'SaveAs' GUI, where
- *    the user requests to save data to a new backend.
- *
- * The load() routine should load the minimal set of application data
- *    needed for the application to be operable at initial startup.
- *    It is assumed that the application will perform a 'run_query()'
- *    to obtain any additional data that it needs.  For file-based
- *    backends, it is acceptable for the backend to return all data
- *    at load time; for SQL-based backends, it is acceptable for the
- *    backend to return no data.
- *
- *    Thus, for example, the GnuCash postgres backend returned
- *    the account tree, all currencies, and the pricedb, as these
- *    were needed at startup.  It did not have to return any
- *    transactions whatsoever, as these were obtained at a later stage
- *    when a user opened a register, resulting in a query being sent to
- *    the backend.
- *
- *    (Its OK to send over entities at this point, but one should
- *    be careful of the network load; also, its possible that whatever
- *    is sent is not what the user wanted anyway, which is why its
- *    better to wait for the query).
- *
- * The begin() routine is called when the engine is about to
- *    make a change to a data structure. It can provide an advisory
- *    lock on data.
- *
- * The commit() routine commits the changes from the engine to the
- *    backend data storage.
- *
- * The rollback() routine is used to revert changes in the engine
- *    and unlock the backend.
- *
- *    If the second user tries to modify an entity that
- *    the first user deleted, then the backend should set the error
- *    to ERR_BACKEND_MOD_DESTROY from this routine, so that the
- *    engine can properly clean up.
+#include <string>
+#include <algorithm>
+#include <vector>
+/* NOTE: The following comments were musings by the original developer about how
+ * some additional API might work. The compile/free/run_query functions were
+ * implemented for the DBI backend but never put into use; the rest were never
+ * implemented. They're here as something to consider if we ever decide to
+ * implement them.
  *
  * The compile_query() method compiles a QOF query object into
  *    a backend-specific data structure and returns the compiled
@@ -140,22 +86,6 @@
  *    continue functioning even when disconnected from the server:
  *    this is because it will have its local cache of data from which to work.
  *
- * The sync() routine synchronizes the engine contents to the backend.
- *    This should done by using version numbers (hack alert -- the engine
- *    does not currently contain version numbers).
- *    If the engine contents are newer than what is in the backend, the
- *    data is stored to the backend. If the engine contents are older,
- *    then the engine contents are updated.
- *
- *    Note that this sync operation is only meant to apply to the
- *    current contents of the engine. This routine is not intended
- *    to be used to fetch entity data from the backend.
- *
- *    File based backends tend to use sync as if it was called dump.
- *    Data is written out into the backend, overwriting the previous
- *    data. Database backends should implement a more intelligent
- *    solution.
- *
  * The events_pending() routines should return true if there are
  *    external events which need to be processed to bring the
  *    engine up to date with the backend.
@@ -163,10 +93,6 @@
  * The process_events() routine should process any events indicated
  *    by the events_pending() routine. It should return TRUE if
  *    the engine was changed while engine events were suspended.
- *
- * The last_err member indicates the last error that occurred.
- *    It should probably be implemented as an array (actually,
- *    a stack) of all the errors that have occurred.
  *
  * For support of book partitioning, use special "Book"  begin_edit()
  *    and commit_edit() QOF_ID types.
@@ -242,80 +168,147 @@ typedef enum
     LOAD_TYPE_LOAD_ALL
 } QofBackendLoadType;
 
-struct QofBackend_s
+using GModuleVec = std::vector<GModule*>;
+struct QofBackend
 {
-    void (*session_begin) (QofBackend *be,
-                           QofSession *session,
-                           const char *book_id,
-                           gboolean ignore_lock,
-                           gboolean create,
-                           gboolean force);
-    void (*session_end) (QofBackend *);
-    void (*destroy_backend) (/*@ only @*/ QofBackend *);
-
-    void (*load) (QofBackend *, /*@ dependent @*/ QofBook *, QofBackendLoadType);
-
-    void (*begin) (QofBackend *, QofInstance *);
-    void (*commit) (QofBackend *, QofInstance *);
-    void (*rollback) (QofBackend *, QofInstance *);
-
-    void (*sync) (QofBackend *, /*@ dependent @*/ QofBook *);
-    void (*safe_sync) (QofBackend *, /*@ dependent @*/ QofBook *);
-    /* This is implented only in the XML backend where it exports only a chart
-     * of accounts.
+public:
+    /* For reasons that aren't a bit clear, using the default constructor
+     * sometimes initializes m_last_err incorrectly with Xcode8 and a 32-bit
+     * build unless the initialization is stepped-through in a debugger.
      */
-    void (*export_fn) (QofBackend *, QofBook *);
-    QofBePercentageFunc percentage;
-
-    QofBackendError last_err;
-    char * error_msg;
-
-    gint config_count;
+    QofBackend() :
+        m_percentage{nullptr}, m_fullpath{}, m_last_err{ERR_BACKEND_NO_ERR},
+        m_error_msg{} {}
+    QofBackend(const QofBackend&) = delete;
+    QofBackend(const QofBackend&&) = delete;
+    virtual ~QofBackend() = default;
+/**
+ *    Open the file or connect to the server.
+ *    @param session The QofSession that will control the backend.
+ *    @param book_id The book's string identifier.
+ *    @param ignore_lock indicates whether the single-user lock on the backend
+ *    should be cleared.  The typical GUI sequence leading to this is:
+ *    (1) GUI attempts to open the backend by calling this routine with
+ *    ignore_lock false.
+ *    (2) If backend error'ed BACKEND_LOCK, then GUI asks user what to do.
+ *    (3) if user answers 'break & enter' then this routine is called again with
+ *    ignore_lock true.
+ *    @param create indicates whether this routine should create a new
+ *    'database', if it doesn't already exist. For example, for a file-backend,
+ *    this would create the file, if it didn't already exist.  For an SQL
+ *    backend, this would create the database (the schema) if it didn't already
+ *    exist.  This flag is used to implement the 'SaveAs' GUI, where the user
+ *    requests to save data to a new backend.
+ *
+ *    @param force works with create to force creating a new database even if
+ *    one already exists at the same URI.
+ */
+    virtual void session_begin(QofSession *session, const char* book_id,
+                               bool ignore_lock, bool create, bool force) = 0;
+    virtual void session_end() = 0;
+/**
+ *    Load the minimal set of application data needed for the application to be
+ *    operable at initial startup.  It is assumed that the application will
+ *    perform a 'run_query()' to obtain any additional data that it needs.  For
+ *    file-based backends, it is acceptable for the backend to return all data
+ *    at load time; for SQL-based backends, it is acceptable for the backend to
+ *    return no data.
+ *
+ *    Thus, for example, the old GnuCash postgres backend returned the account
+ *    tree, all currencies, and the pricedb, as these were needed at startup.
+ *    It did not have to return any transactions whatsoever, as these were
+ *    obtained at a later stage when a user opened a register, resulting in a
+ *    query being sent to the backend. The current DBI backend on the other hand
+ *    loads the entire database into memory.
+ *
+ *    (Its OK to send over entities at this point, but one should
+ *    be careful of the network load; also, its possible that whatever
+ *    is sent is not what the user wanted anyway, which is why its
+ *    better to wait for the query).
+ */
+    virtual void load (QofBook*, QofBackendLoadType) = 0;
+/**
+ *    Called when the engine is about to make a change to a data structure. It
+ *    could provide an advisory lock on data, but no backend does this.
+ */
+    virtual void begin(QofInstance*) {}
+/**
+ *    Commits the changes from the engine to the backend data storage.
+ */
+    virtual void commit (QofInstance*) {}
+/**
+ *    Revert changes in the engine and unlock the backend.
+ */
+    virtual void rollback(QofInstance*) {}
+/**
+ *    Synchronizes the engine contents to the backend.
+ *    This should done by using version numbers (hack alert -- the engine
+ *    does not currently contain version numbers).
+ *    If the engine contents are newer than what is in the backend, the
+ *    data is stored to the backend. If the engine contents are older,
+ *    then the engine contents are updated.
+ *
+ *    Note that this sync operation is only meant to apply to the
+ *    current contents of the engine. This routine is not intended
+ *    to be used to fetch entity data from the backend.
+ *
+ *    File based backends tend to use sync as if it was called dump.
+ *    Data is written out into the backend, overwriting the previous
+ *    data. Database backends should implement a more intelligent
+ *    solution.
+ */
+    virtual void sync(QofBook *) = 0;
+/** Perform a sync in a way that prevents data loss on a DBI backend.
+ */
+    virtual void safe_sync(QofBook *) = 0;
+/**   Extract the chart of accounts from the current database and create a new
+ *   database with it. Implemented only in the XML backend at present.
+ */
+    virtual void export_coa(QofBook *) {}
+/** Set the error value only if there isn't already an error already.
+ */
+    void set_error(QofBackendError err);
+/** Retrieve the currently-stored error and clear it.
+ */
+    QofBackendError get_error();
+/** Report if there is an error.
+ */
+    bool check_error();
+/** Set a descriptive message that can be displayed to the user when there's an
+ * error.
+ */
+    void set_message(std::string&&);
+/** Retrieve and clear the stored error message.
+ */
+    const std::string&& get_message();
+/** Store and retrieve a backend-specific function for determining the progress
+ * in completing a long operation, for use with a progress meter.
+ */
+    void set_percentage(QofBePercentageFunc pctfn) { m_percentage = pctfn; }
+    QofBePercentageFunc get_percentage() { return m_percentage; }
+/** Retrieve the backend's storage URI.
+ */
+    std::string get_uri() { return m_fullpath; }
+/**
+ * Class methods for dynamically loading the several backends and for freeing
+ * them at shutdown.
+ */
+    static bool register_backend(const char*, const char*);
+    static void release_backends();
+protected:
+    QofBePercentageFunc m_percentage;
     /** Each backend resolves a fully-qualified file path.
      * This holds the filepath and communicates it to the frontends.
      */
-    char * fullpath;
+    std::string m_fullpath;
+private:
+    static GModuleVec c_be_registry;
+    QofBackendError m_last_err;
+    std::string m_error_msg;
 };
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-/** The qof_backend_set_message() assigns a string to the backend error message.
- */
-void qof_backend_set_message(QofBackend *be, const char *format, ...);
-
-/** The qof_backend_get_message() pops the error message string from
- *  the Backend.  This string should be freed with g_free().
- */
-char * qof_backend_get_message(QofBackend *be);
-
-void qof_backend_init(QofBackend *be);
-void qof_backend_destroy(QofBackend *be);
-
-/** Allow backends to see if the book is open
-
-@return 'y' if book is open, otherwise 'n'.
-*/
-gchar qof_book_get_open_marker(const QofBook *book);
-
-/** get the book version
-
-used for tracking multiuser updates in backends.
-
-@return -1 if no book exists, 0 if the book is
-new, otherwise the book version number.
-*/
-gint32 qof_book_get_version (const QofBook *book);
-
-void qof_book_set_version (QofBook *book, gint32 version);
-
 /* @} */
 /* @} */
 /* @} */
-#ifdef __cplusplus
-}
-#endif
 
-#endif /* QOF_BACKEND_P_H */
+#endif /* __QOF_BACKEND_HPP__ */

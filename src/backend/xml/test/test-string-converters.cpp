@@ -26,9 +26,9 @@ extern "C"
 
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
-#include "test-file-stuff.h"
 }
 
+#include "test-file-stuff.h"
 #include "sixtp-dom-parsers.h"
 #include "sixtp-dom-generators.h"
 

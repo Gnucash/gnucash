@@ -32,12 +32,12 @@ extern "C"
 
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
-#include "test-file-stuff.h"
 #include "cashobjects.h"
 #include "gnc-engine.h"
 #include "gnc-commodity.h"
 }
 
+#include "test-file-stuff.h"
 #include "gnc-xml-helper.h"
 #include "sixtp.h"
 #include "sixtp-parsers.h"

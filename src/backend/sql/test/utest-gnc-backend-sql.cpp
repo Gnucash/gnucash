@@ -34,6 +34,17 @@ extern "C"
 
 static const gchar* suitename = "/backend/sql/gnc-backend-sql";
 void test_suite_gnc_backend_sql (void);
+
+class GncMockSqlBackend : public GncSqlBackend
+{
+public:
+    GncMockSqlBackend(GncSqlConnection* conn, QofBook* book) :
+        GncSqlBackend(conn, book) {}
+    void session_begin(QofSession*, const char*, bool, bool, bool) override {}
+    void session_end() override {}
+    void safe_sync(QofBook* book) override { sync(book); }
+};
+
 class GncMockSqlConnection;
 
 class GncMockSqlResult : public GncSqlResult
@@ -265,7 +276,7 @@ test_gnc_sql_commit_edit (void)
     guint dirty_called = 0;
     GncMockSqlConnection conn;
     const char* msg1 =
-        "[GncSqlBackend::commit_edit()] Unknown object type 'null'\n";
+        "[GncSqlBackend::commit()] Unknown object type 'null'\n";
     GLogLevelFlags loglevel = static_cast<decltype (loglevel)>
                               (G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     const char* logdomain = "gnc.backend.sql";
@@ -281,7 +292,8 @@ test_gnc_sql_commit_edit (void)
 
     qof_object_initialize ();
     auto book = qof_book_new();
-    GncSqlBackend sql_be (&conn, book);
+    auto sql_be = new GncMockSqlBackend
+        (&conn, book);
     inst  = static_cast<decltype (inst)> (g_object_new (QOF_TYPE_INSTANCE, NULL));
     qof_instance_init_data (inst, QOF_ID_NULL, book);
     qof_book_set_dirty_cb (book, test_dirty_cb, &dirty_called);
@@ -291,7 +303,7 @@ test_gnc_sql_commit_edit (void)
     g_assert (qof_instance_get_dirty_flag (inst));
     g_assert (qof_book_session_not_saved (book));
     g_assert_cmpint (dirty_called, == , 1);
-    sql_be.commit_edit (inst);
+    sql_be->commit(inst);
     g_assert (!qof_instance_get_dirty_flag (inst));
     g_assert (!qof_book_session_not_saved (book));
     g_assert_cmpint (dirty_called, == , 0);
@@ -302,7 +314,7 @@ test_gnc_sql_commit_edit (void)
     g_assert (!qof_instance_get_dirty_flag (QOF_INSTANCE (book)));
     g_assert (qof_book_session_not_saved (book));
     g_assert_cmpint (dirty_called, == , 1);
-    sql_be.commit_edit (QOF_INSTANCE (book));
+    sql_be->commit(QOF_INSTANCE (book));
     g_assert (!qof_instance_get_dirty_flag (QOF_INSTANCE (book)));
     g_assert (qof_book_session_not_saved (book));
     g_assert_cmpint (dirty_called, == , 1);
@@ -313,7 +325,7 @@ test_gnc_sql_commit_edit (void)
     g_assert (qof_instance_get_dirty_flag (QOF_INSTANCE (book)));
     g_assert (qof_book_session_not_saved (book));
     g_assert_cmpint (dirty_called, == , 1);
-    sql_be.commit_edit(QOF_INSTANCE (book));
+    sql_be->commit(QOF_INSTANCE (book));
     g_assert (!qof_instance_get_dirty_flag (QOF_INSTANCE (book)));
     g_assert (!qof_book_session_not_saved (book));
     g_assert_cmpint (dirty_called, == , 0);
@@ -322,6 +334,7 @@ test_gnc_sql_commit_edit (void)
     g_log_remove_handler (logdomain, hdlr1);
     g_object_unref (inst);
     g_object_unref (book);
+    delete sql_be;
 }
 /* handle_and_term
 static void

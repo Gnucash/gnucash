@@ -32,7 +32,7 @@ libgnc_qof_la_SOURCES =  \
    guid.cpp            \
    kvp_frame.cpp       \
    kvp-value.cpp       \
-   qofbackend.cpp      \
+   qof-backend.cpp      \
    qofbook.cpp         \
    qofchoice.cpp       \
    qofclass.cpp        \
@@ -61,7 +61,7 @@ qofinclude_HEADERS = \
    kvp_frame.hpp     \
    kvp-value.hpp     \
    qof.h             \
-   qofbackend-p.h    \
+   qof-backend.hpp   \
    qofbackend.h      \
    qofbook.h         \
    qofbookslots.h    \

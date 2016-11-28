@@ -43,6 +43,7 @@ extern "C"
 #include "sixtp.h"
 #include <vector>
 
+class GncXmlBackend;
 
 /**
  * Struct used to pass in a new data type for XML storage.  This contains
@@ -84,7 +85,7 @@ typedef struct
 } gnc_template_xaction_data;
 
 /** read in an account group from a file */
-gboolean qof_session_load_from_xml_file_v2 (FileBackend*, QofBook*,
+gboolean qof_session_load_from_xml_file_v2 (GncXmlBackend*, QofBook*,
                                             QofBookFileType);
 
 /* write all book info to a file */
@@ -154,20 +155,20 @@ gint gnc_xml2_find_ambiguous (
  * @param subst hash table with keys and values of type gchar*
  */
 gboolean gnc_xml2_parse_with_subst (
-    FileBackend* fbe, QofBook* book, GHashTable* subst);
+    GncXmlBackend* xml_be, QofBook* book, GHashTable* subst);
 #ifdef __cplusplus
 }
 typedef struct
 {
-    int		version;	/* backend version number */
-    const char *	type_name;	/* The XML tag for this type */
+    int         version;        /* backend version number */
+    const char *        type_name;      /* The XML tag for this type */
 
-    sixtp *	(*create_parser) (void);
-    gboolean	(*add_item)(sixtp_gdv2 *, gpointer obj);
-    int	      (*get_count) (QofBook *);
-    gboolean	(*write) (FILE*, QofBook*);
-    void		(*scrub) (QofBook *);
-    gboolean	(*ns) (FILE*);
+    sixtp *     (*create_parser) (void);
+    gboolean    (*add_item)(sixtp_gdv2 *, gpointer obj);
+    int       (*get_count) (QofBook *);
+    gboolean    (*write) (FILE*, QofBook*);
+    void                (*scrub) (QofBook *);
+    gboolean    (*ns) (FILE*);
 } GncXmlDataType_t;
 
 void gnc_xml_register_backend(GncXmlDataType_t&);

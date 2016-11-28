@@ -27,7 +27,6 @@
 extern "C"
 {
 #include <qof.h>
-#include "qofbackend-p.h"
 }
 #include <memory>
 #include <vector>

@@ -80,10 +80,8 @@ static EntryVec version_table
 };
 
 GncSqlBackend::GncSqlBackend(GncSqlConnection *conn, QofBook* book) :
-    qof_be {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
-            nullptr, nullptr, nullptr, nullptr, ERR_BACKEND_NO_ERR, nullptr, 0,
-            nullptr}, m_conn{conn}, m_book{book}, m_loading{false},
-        m_in_query{false}, m_is_pristine_db{false}
+    QofBackend {}, m_conn{conn}, m_book{book}, m_loading{false},
+    m_in_query{false}, m_is_pristine_db{false}
 {
     if (conn != nullptr)
         connect (conn);
@@ -188,15 +186,15 @@ GncSqlBackend::add_columns_to_table(const std::string& table_name,
 void
 GncSqlBackend::update_progress() const noexcept
 {
-    if (qof_be.percentage != nullptr)
-        (qof_be.percentage) (nullptr, 101.0);
+    if (m_percentage != nullptr)
+        (m_percentage) (nullptr, 101.0);
 }
 
 void
 GncSqlBackend::finish_progress() const noexcept
 {
-    if (qof_be.percentage != nullptr)
-        (qof_be.percentage) (nullptr, -1.0);
+    if (m_percentage != nullptr)
+        (m_percentage) (nullptr, -1.0);
 }
 
 void
@@ -441,7 +439,7 @@ GncSqlBackend::write_schedXactions()
 #pragma GCC diagnostic warning "-Wformat-nonliteral"
 
 void
-GncSqlBackend::sync_all(QofBook* book)
+GncSqlBackend::sync(QofBook* book)
 {
     g_return_if_fail (book != NULL);
 
@@ -500,8 +498,7 @@ GncSqlBackend::sync_all(QofBook* book)
     }
     else
     {
-        if (!qof_backend_check_error (&qof_be))
-            qof_backend_set_error (&qof_be, ERR_BACKEND_SERVER_ERR);
+        set_error (ERR_BACKEND_SERVER_ERR);
         is_ok = m_conn->rollback_transaction ();
     }
     finish_progress();
@@ -512,7 +509,7 @@ GncSqlBackend::sync_all(QofBook* book)
 /* Routines to deal with the creation of multiple books. */
 
 void
-GncSqlBackend::begin_edit (QofInstance* inst)
+GncSqlBackend::begin(QofInstance* inst)
 {
     g_return_if_fail (inst != NULL);
 
@@ -521,7 +518,7 @@ GncSqlBackend::begin_edit (QofInstance* inst)
 }
 
 void
-GncSqlBackend::rollback_edit(QofInstance* inst)
+GncSqlBackend::rollback(QofInstance* inst)
 {
     g_return_if_fail (inst != NULL);
 
@@ -546,7 +543,7 @@ GncSqlBackend::get_object_backend(const std::string& type) const noexcept
  * type and call its commit handler
  */
 void
-GncSqlBackend::commit_edit (QofInstance* inst)
+GncSqlBackend::commit (QofInstance* inst)
 {
     sql_backend be_data;
     gboolean is_dirty;
@@ -557,7 +554,7 @@ GncSqlBackend::commit_edit (QofInstance* inst)
 
     if (qof_book_is_readonly(m_book))
     {
-        qof_backend_set_error (&qof_be, ERR_BACKEND_READONLY);
+        set_error (ERR_BACKEND_READONLY);
         (void)m_conn->rollback_transaction ();
         return;
     }

@@ -127,15 +127,8 @@ typedef enum
     ERR_RPC_FAILED,               /**< Operation failed */
     ERR_RPC_NOT_ADDED,            /**< object not added */
 } QofBackendError;
-/** \brief Pseudo-object providing an interface between the
- * engine and a persistant data store (e.g. a server, a database,
- * or a file).
- *
- * There are no backend functions that are 'public' to users of the
- * engine.  The backend can, however, report errors to the GUI & other
- * front-end users.
- */
-    typedef struct QofBackend_s QofBackend;
+
+typedef struct QofBackend QofBackend;
 
     /* The following functions are used in C files. */
 /** Get the last backend error. */
@@ -143,7 +136,7 @@ typedef enum
 /** Set the error on the specified QofBackend. */
     void qof_backend_set_error (QofBackend*, QofBackendError);
 
-/* Temporary wrapper so that we don't have to expose qofbackend-p.h to Transaction.c */
+/* Temporary wrapper so that we don't have to expose qof-backend.hpp to Transaction.c */
     gboolean qof_backend_can_rollback (QofBackend*);
     void qof_backend_rollback_instance (QofBackend*, QofInstance*);
 
@@ -173,30 +166,7 @@ typedef void (*QofBePercentageFunc) (/*@ null @*/ const char *message, double pe
 
 #ifdef __cplusplus
 }
-
-/** @name Allow access to the begin routine for this backend. */
-//@{
-
-void qof_backend_run_begin(QofBackend *be, QofInstance *inst);
-
-gboolean qof_backend_begin_exists(const QofBackend *be);
-
-void qof_backend_run_commit(QofBackend *be, QofInstance *inst);
-
-gboolean qof_backend_commit_exists(const QofBackend *be);
-//@}
-
-/** Report if the backend is in an error state.
- *  Since get_error resets the error state, its use for branching as the backend
- *  bubbles back up to the session would make the session think that there was
- *  no error.
- * \param be The backend being tested.
- * \return TRUE if the backend has an error set.
- */
-gboolean qof_backend_check_error (QofBackend *be);
-
 #endif
-
 #endif /* QOF_BACKEND_H */
 /** @} */
 /** @} */
