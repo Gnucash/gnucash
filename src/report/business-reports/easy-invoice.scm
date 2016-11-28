@@ -728,7 +728,8 @@
 
     (if (not (null? invoice))
       (let* ((book (gncInvoiceGetBook invoice))
-             (date-format (gnc:fancy-date-info book gnc:*fancy-date-format*)))
+             (date-format (gnc:options-fancy-date book)))
+
         ; invoice number and ID String table
         (add-html! document "<table width='100%'><tr>")
         (add-html! document "<td align='left'>")

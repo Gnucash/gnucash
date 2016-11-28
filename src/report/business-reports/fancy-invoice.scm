@@ -798,10 +798,11 @@
     (if (not (null? invoice))
         (let* ((book (gncInvoiceGetBook invoice))
                (date-object #f)
-               (date-format (gnc:fancy-date-info book gnc:*fancy-date-format*))
+               (date-format (gnc:options-fancy-date book))
                (helper-table (gnc:make-html-table))
                (title (title-string default-title custom-title)))
-	  (set! table (make-entry-table invoice
+
+   (set! table (make-entry-table invoice
 					(gnc:report-options report-obj)
 					add-order cust-doc? credit-note?))
 

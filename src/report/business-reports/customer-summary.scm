@@ -704,7 +704,7 @@
          (income-accounts (opt-val pagename-incomeaccounts optname-incomeaccounts))
          (all-accounts (append income-accounts expense-accounts))
          (book (gnc-account-get-book (car all-accounts)))
-         (date-format (gnc:fancy-date-info book gnc:*fancy-date-format*))
+         (date-format (gnc:options-fancy-date book))
          (type (opt-val "__reg" "owner-type"))
          (reverse? (opt-val "__reg" "reverse?"))
          (ownerlist (gncBusinessGetOwnerList
