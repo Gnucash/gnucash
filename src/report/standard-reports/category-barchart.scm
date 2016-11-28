@@ -89,6 +89,7 @@ developing over time"))
 (define optname-slices (N_ "Maximum Bars"))
 (define optname-plot-width (N_ "Plot Width"))
 (define optname-plot-height (N_ "Plot Height"))
+
 (define optname-sort-method (N_ "Sort Method"))
 
 (define optname-averaging (N_ "Show Average"))
@@ -205,11 +206,11 @@ developing over time"))
 
     (gnc:options-add-plot-size! 
      options gnc:pagename-display 
-     optname-plot-width optname-plot-height "e" 400 400)
+     optname-plot-width optname-plot-height "f" (cons 'percent 100.0) (cons 'percent 100.0))
 
     (gnc:options-add-sort-method! 
      options gnc:pagename-display
-     optname-sort-method "f" 'amount)
+     optname-sort-method "g" 'amount)
 
     (gnc:options-set-default-section options gnc:pagename-general)
 
@@ -494,6 +495,7 @@ developing over time"))
                                  (_ "Balances %s to %s"))
                              (jqplot-escape-string (gnc-print-date from-date-tp))
                              (jqplot-escape-string (gnc-print-date to-date-tp))))
+
                  (gnc:html-barchart-set-width! chart width)
                  (gnc:html-barchart-set-height! chart height)
 
@@ -519,9 +521,10 @@ developing over time"))
                                  (_ "Balances %s to %s"))
                              (jqplot-escape-string (gnc-print-date from-date-tp))
                              (jqplot-escape-string (gnc-print-date to-date-tp))))
+
                  (gnc:html-linechart-set-width! chart width)
                  (gnc:html-linechart-set-height! chart height)
-             
+
                  ;; row labels etc.
                  (gnc:html-linechart-set-row-labels! chart date-iso-string-list)
                  ;; FIXME: axis labels are not yet supported by

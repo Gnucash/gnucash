@@ -57,7 +57,7 @@
   (record-constructor <html-barchart>))
 
 (define (gnc:make-html-barchart)
-  (gnc:make-html-barchart-internal -1 -1 #f #f #f #f '() '() '() 
+  (gnc:make-html-barchart-internal '(pixels . -1) '(pixels . -1) #f #f #f #f '() '() '() 
 				   #f #f #f '() #f #f #f #f #f #f))
 
 (define gnc:html-barchart-data
@@ -392,12 +392,16 @@
             (push (gnc:html-js-include "jqplot/jqplot.canvasAxisTickRenderer.js"))
 
             (push (gnc:html-css-include "jqplot/jquery.jqplot.css"))
-
             (push "<div id=\"")(push chart-id)(push "\" style=\"width:")
-            (push (gnc:html-barchart-width barchart))
-            (push "px;height:")
-            (push (gnc:html-barchart-height barchart))
-            (push "px;\"></div>\n")
+            (push (cdr (gnc:html-barchart-width barchart)))
+            (if (eq? 'pixels (car (gnc:html-barchart-width barchart)))
+                 (push "px;height:")
+                 (push "%;height:"))
+
+            (push (cdr (gnc:html-barchart-height barchart)))
+            (if (eq? 'pixels (car (gnc:html-barchart-height barchart)))
+                 (push "px;\"></div>\n")
+                 (push "%;\"></div>\n"))
             (push "<script id=\"source\">\n$(function () {")
 
             (push "var data = [];")
