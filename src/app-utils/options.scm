@@ -1351,14 +1351,17 @@
      (lambda () (def-value))
      (gnc:restore-form-generator value->string)
      (lambda (b p)
-       (qof-book-set-option
-        b (symbol->string (car value)) (append p '("fmt")))
-       (qof-book-set-option
-        b (symbol->string (cadr value)) (append p '("month")))
-       (qof-book-set-option
-        b (if (caddr value) 1 0) (append p '("years")))
-       (qof-book-set-option
-        b (cadddr value) (append p '("custom"))))
+       (if (eq? (car value) 'unset)
+           (qof-book-options-delete b p );; delete the kvp when unset
+       (begin
+         (qof-book-set-option
+          b (symbol->string (car value)) (append p '("fmt")))
+         (qof-book-set-option
+          b (symbol->string (cadr value)) (append p '("month")))
+         (qof-book-set-option
+          b (if (caddr value) 1 0) (append p '("years")))
+         (qof-book-set-option
+          b (cadddr value) (append p '("custom"))))))
      (lambda (f p)
        (let ((fmt (qof-book-get-option f (append p '("fmt"))))
              (month (qof-book-get-option f (append p '("month"))))
@@ -1843,9 +1846,15 @@
 (define (gnc:generate-restore-forms options options-string)
   ((options 'generate-restore-forms) options-string))
 
+(define (gnc:options-fancy-date book)
+  (let ((date-format (gnc:fancy-date-info book gnc:*fancy-date-format*)))
+    (if (boolean? date-format) ;; date-format does not exist
+        (qof-date-format-get-string (qof-date-format-get))
+       date-format)))
+
 (define (gnc:options-scm->kvp options book clear-option?)
   (if clear-option?
-      (qof-book-options-delete book))
+      (qof-book-options-delete book '()))
   ((options 'scm->kvp) book))
 
 (define (gnc:options-kvp->scm options book)

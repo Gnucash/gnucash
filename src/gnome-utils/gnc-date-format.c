@@ -477,6 +477,7 @@ gnc_date_format_refresh (GNCDateFormat *gdf)
         enable_custom = TRUE;
         break;
 
+    case QOF_DATE_FORMAT_UNSET:
     case QOF_DATE_FORMAT_LOCALE:
     case QOF_DATE_FORMAT_UTC:
         format = g_strdup(qof_date_format_get_string(sel_option));
