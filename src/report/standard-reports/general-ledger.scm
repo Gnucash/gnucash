@@ -118,7 +118,9 @@
     
     ;; set options in the general tab...
     (set-option!
-     gnc:pagename-general (N_ "Style") 'single)
+     gnc:pagename-display (N_ "Detail Level") 'single)
+
+
     ;; we can't (currently) set the Report name here
     ;; because it is automatically set to the template
     ;; name... :(
