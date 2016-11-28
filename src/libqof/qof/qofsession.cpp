@@ -122,6 +122,7 @@ QofSessionImpl::QofSessionImpl () noexcept
     : m_book {qof_book_new ()},
     m_book_id {},
     m_saving {false},
+    m_last_err {},
     m_error_message {}
 {
     clear_error ();
@@ -157,10 +158,7 @@ QofSessionImpl::destroy_backend () noexcept
     if (backend)
     {
         clear_error ();
-        if (backend->destroy_backend)
-            backend->destroy_backend (backend);
-        else
-            g_free(backend);
+        delete backend;
         qof_book_set_backend (m_book, nullptr);
     }
 }
@@ -218,7 +216,7 @@ QofSessionImpl::load (QofPercentageFunc percentage_func) noexcept
     * top-level account group out of the backend, and that is a
     * generic, backend-independent operation.
     */
-    QofBackend * be {qof_book_get_backend (oldbook)};
+    auto be (qof_book_get_backend (oldbook));
     qof_book_set_backend (newbook, be);
 
     /* Starting the session should result in a bunch of accounts
@@ -227,12 +225,9 @@ QofSessionImpl::load (QofPercentageFunc percentage_func) noexcept
     */
     if (be)
     {
-        be->percentage = percentage_func;
-        if (be->load)
-        {
-            be->load (be, newbook, LOAD_TYPE_INITIAL_LOAD);
-            push_error (qof_backend_get_error(be), {});
-        }
+        be->set_percentage(percentage_func);
+        be->load (newbook, LOAD_TYPE_INITIAL_LOAD);
+        push_error (be->get_error(), {});
     }
 
     /* XXX if the load fails, then we try to restore the old set of books;
@@ -262,7 +257,8 @@ QofSessionImpl::load (QofPercentageFunc percentage_func) noexcept
 }
 
 void
-QofSessionImpl::begin (std::string new_book_id, bool ignore_lock, bool create, bool force) noexcept
+QofSessionImpl::begin (std::string new_book_id, bool ignore_lock,
+                       bool create, bool force) noexcept
 {
     ENTER (" sess=%p ignore_lock=%d, book-id=%s",
            this, ignore_lock, new_book_id.c_str ());
@@ -313,7 +309,8 @@ QofSessionImpl::begin (std::string new_book_id, bool ignore_lock, bool create, b
     g_free (scheme);
 
     /* No backend was found. That's bad. */
-    if (!qof_book_get_backend (m_book))
+    auto backend = qof_book_get_backend (m_book);
+    if (backend == nullptr)
     {
         m_book_id = {};
         if (ERR_BACKEND_NO_ERR == get_error ())
@@ -324,26 +321,22 @@ QofSessionImpl::begin (std::string new_book_id, bool ignore_lock, bool create, b
     }
 
     /* If there's a begin method, call that. */
-    if (qof_book_get_backend (m_book)->session_begin)
+    backend->session_begin(this, m_book_id.c_str(), ignore_lock, create, force);
+    PINFO ("Done running session_begin on backend");
+    QofBackendError const err {backend->get_error()};
+    auto msg (backend->get_message());
+    if (err != ERR_BACKEND_NO_ERR)
     {
-        auto backend = qof_book_get_backend (m_book);
-        (backend->session_begin) (backend, this, m_book_id.c_str (), ignore_lock, create, force);
-        PINFO ("Done running session_begin on backend");
-        QofBackendError const err {qof_backend_get_error (backend)};
-        char * msg {qof_backend_get_message (backend)};
-        if (err != ERR_BACKEND_NO_ERR)
-        {
-            m_book_id = {};
-            push_error (err, msg ? msg : "");
-            LEAVE (" backend error %d %s", err, msg ? msg : "(null)");
-            return;
-        }
-        if (msg != nullptr)
-        {
-            PWARN("%s", msg);
-            g_free(msg);
-        }
+        m_book_id = {};
+        push_error (err, msg);
+        LEAVE (" backend error %d %s", err, msg.empty() ? "(null)" : msg.c_str());
+        return;
     }
+    if (!msg.empty())
+    {
+        PWARN("%s", msg.c_str());
+    }
+
     LEAVE (" sess=%p book-id=%s", this,  new_book_id.c_str ());
 }
 
@@ -352,10 +345,10 @@ QofSessionImpl::end () noexcept
 {
     ENTER ("sess=%p book_id=%s", this, m_book_id.c_str ());
     auto backend = qof_book_get_backend (m_book);
-    if (backend && backend->session_end)
-        (backend->session_end) (backend);
+    if (backend != nullptr)
+        backend->session_end();
     clear_error ();
-    m_book_id = {};
+    m_book_id.clear();
     LEAVE ("sess=%p book_id=%s", this, m_book_id.c_str ());
 }
 
@@ -368,12 +361,12 @@ QofSessionImpl::clear_error () noexcept
     m_error_message = {};
 
     /* pop the stack on the backend as well. */
-    if (qof_book_get_backend (m_book))
+    if (auto backend = qof_book_get_backend (m_book))
     {
-        QofBackendError err;
+        QofBackendError err = ERR_BACKEND_NO_ERR;
         do
-            err = qof_backend_get_error (qof_book_get_backend (m_book));
-        while (ERR_BACKEND_NO_ERR != err);
+            err = backend->get_error();
+        while (err != ERR_BACKEND_NO_ERR);
     }
 }
 
@@ -388,12 +381,12 @@ QofBackendError
 QofSessionImpl::get_error () noexcept
 {
     /* if we have a local error, return that. */
-    if (ERR_BACKEND_NO_ERR != m_last_err)
+    if (m_last_err != ERR_BACKEND_NO_ERR)
         return m_last_err;
+    auto qof_be = qof_book_get_backend (m_book);
+    if (qof_be == nullptr) return ERR_BACKEND_NO_ERR;
 
-    if (!qof_book_get_backend (m_book)) return ERR_BACKEND_NO_ERR;
-
-    m_last_err = qof_backend_get_error (qof_book_get_backend (m_book));
+    m_last_err = qof_be->get_error();
     return m_last_err;
 }
 
@@ -431,8 +424,9 @@ QofSession::get_backend () const noexcept
 std::string
 QofSessionImpl::get_file_path () const noexcept
 {
-    if (!qof_book_get_backend (m_book)) return nullptr;
-    return qof_book_get_backend (m_book)->fullpath;
+    auto backend = qof_book_get_backend (m_book);
+    if (!backend) return nullptr;
+    return backend->get_uri();
 }
 
 std::string const &
@@ -469,17 +463,14 @@ QofSessionImpl::save (QofPercentageFunc percentage_func) noexcept
     {
         /* if invoked as SaveAs(), then backend not yet set */
         qof_book_set_backend (m_book, backend);
-        backend->percentage = percentage_func;
-        if (backend->sync)
+        backend->set_percentage(percentage_func);
+        backend->sync(m_book);
+        auto err = backend->get_error();
+        if (err != ERR_BACKEND_NO_ERR)
         {
-            (backend->sync)(backend, m_book);
-            QofBackendError err {qof_backend_get_error (backend)};
-            if (ERR_BACKEND_NO_ERR != err)
-            {
-                push_error (err, {});
-                m_saving = false;
-                return;
-            }
+            push_error (err, {});
+            m_saving = false;
+            return;
         }
         /* If we got to here, then the backend saved everything
         * just fine, and we are done. So return. */
@@ -499,17 +490,15 @@ QofSessionImpl::safe_save (QofPercentageFunc percentage_func) noexcept
 {
     auto backend = qof_book_get_backend (m_book);
     if (!backend) return;
-    if (!backend->safe_sync) return;
-    backend->percentage = percentage_func;
-    (backend->safe_sync) (backend, get_book ());
-    auto err = qof_backend_get_error (qof_book_get_backend (m_book));
-    auto msg = qof_backend_get_message (qof_book_get_backend (m_book));
+    backend->set_percentage(percentage_func);
+    backend->safe_sync(get_book ());
+    auto err = backend->get_error();
+    auto msg = backend->get_message();
     if (err != ERR_BACKEND_NO_ERR)
     {
-        m_book_id = {};
-        push_error (err, msg ? msg : "");
+        m_book_id = nullptr;
+        push_error (err, msg);
     }
-    g_free (msg);
 }
 
 void
@@ -517,9 +506,8 @@ QofSessionImpl::ensure_all_data_loaded () noexcept
 {
     auto backend = qof_book_get_backend (m_book);
     if (!backend) return;
-    if (!backend->load) return;
-    backend->load(backend, get_book (), LOAD_TYPE_LOAD_ALL);
-    push_error (qof_backend_get_error (backend), {});
+    backend->load(m_book, LOAD_TYPE_LOAD_ALL);
+    push_error (backend->get_error(), {});
 }
 
 void
@@ -552,7 +540,8 @@ QofSessionImpl::process_events () const noexcept
  * book-closing is implemented.
  */
 bool
-QofSessionImpl::export_session (QofSessionImpl & real_session, QofPercentageFunc percentage_func) noexcept
+QofSessionImpl::export_session (QofSessionImpl & real_session,
+                                QofPercentageFunc percentage_func) noexcept
 {
     auto real_book = real_session.get_book ();
     ENTER ("tmp_session=%p real_session=%p book=%p book_id=%s",
@@ -564,12 +553,11 @@ QofSessionImpl::export_session (QofSessionImpl & real_session, QofPercentageFunc
     auto backend2 = qof_book_get_backend(m_book);
     if (!backend2) return false;
 
-    backend2->percentage = percentage_func;
-    if (!backend2->export_fn) return true;
+    backend2->set_percentage(percentage_func);
 
-    (backend2->export_fn)(backend2, real_book);
-    auto err = qof_backend_get_error(backend2);
-    if (ERR_BACKEND_NO_ERR != err)
+    backend2->export_coa(real_book);
+    auto err = backend2->get_error();
+    if (err != ERR_BACKEND_NO_ERR)
         return false;
     return true;
 }
@@ -749,4 +737,3 @@ qof_session_get_error (QofSession * session)
     if (!session) return ERR_BACKEND_NO_BACKEND;
     return session->get_error();
 }
-

@@ -124,7 +124,7 @@ GncDbiSqlConnection::lock_database (bool ignore_lock)
         std::string err{"SQL Backend failed to obtain a transaction: "};
         err += errstr;
         qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
-        qof_backend_set_message (m_qbe, err.c_str());
+        m_qbe->set_message (err.c_str());
         return false;
     }
     dbi_result_free(result);
@@ -147,7 +147,7 @@ GncDbiSqlConnection::lock_database (bool ignore_lock)
         if (!result)
         {
             qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
-            qof_backend_set_message (m_qbe, "Failed to delete lock record");
+            m_qbe->set_message("Failed to delete lock record");
             result = dbi_conn_query (m_conn, "ROLLBACK");
             if (result)
                 dbi_result_free (result);
@@ -165,7 +165,7 @@ GncDbiSqlConnection::lock_database (bool ignore_lock)
     if (!result)
     {
         qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
-        qof_backend_set_message (m_qbe, "Failed to create lock record");
+        m_qbe->set_message("Failed to create lock record");
         result = dbi_conn_query (m_conn, "ROLLBACK");
         if (result)
             dbi_result_free (result);
@@ -179,7 +179,7 @@ GncDbiSqlConnection::lock_database (bool ignore_lock)
         qof_backend_set_error(m_qbe, ERR_BACKEND_SERVER_ERR);
         std::string err{"Failed to commit transaction: "};
         err += errstr;
-        qof_backend_set_message(m_qbe, err.c_str());
+        m_qbe->set_message(err.c_str());
         return false;
     }
     dbi_result_free (result);
@@ -189,8 +189,6 @@ GncDbiSqlConnection::lock_database (bool ignore_lock)
 void
 GncDbiSqlConnection::unlock_database ()
 {
-    GncDbiBackend* qe = reinterpret_cast<decltype(qe)>(m_qbe);
-
     if (m_conn == nullptr) return;
     g_return_if_fail (dbi_conn_error (m_conn, nullptr) == 0);
 
@@ -225,7 +223,7 @@ GncDbiSqlConnection::unlock_database ()
             if (!result)
             {
                 PERR ("Failed to delete the lock entry");
-                qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
+                m_qbe->set_error (ERR_BACKEND_SERVER_ERR);
                 result = dbi_conn_query (m_conn, "ROLLBACK");
                 if (result)
                 {
@@ -262,7 +260,7 @@ GncDbiSqlConnection::unlock_database ()
         result = nullptr;
     }
     PWARN ("Unable to get a lock on LOCK, so failed to clear the lock entry.");
-    qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
+    m_qbe->set_error (ERR_BACKEND_SERVER_ERR);
 }
 
 GncDbiSqlConnection::~GncDbiSqlConnection()

@@ -86,47 +86,49 @@ typedef struct
     Account *gains_acc;
 } GainsFixture;
 
-typedef struct
+class MockBackend : public QofBackend
 {
-    QofBackend be;
-    gchar last_call[12];
-    QofBackendError result_err;
-} MockBackend;
-
-static void
-mock_backend_set_error (MockBackend *mbe, QofBackendError err)
-{
-    mbe->result_err = err;
-}
-
-static void
-mock_backend_rollback (QofBackend *be, QofInstance *foo)
-{
-    MockBackend *mbe = (MockBackend *)be;
-    g_strlcpy (mbe->last_call, "rollback", sizeof (mbe->last_call));
-    mbe->be.last_err = mbe->result_err;
-}
-
-static MockBackend*
-mock_backend_new (void)
-{
-    MockBackend *mbe = g_new0 (MockBackend, 1);
-    mbe->be.rollback = mock_backend_rollback;
-    memset (mbe->last_call, 0, sizeof (mbe->last_call));
-    return mbe;
-}
+public:
+    MockBackend() : QofBackend(), m_last_call{"Constructor"},
+                    m_result_err{ERR_BACKEND_NO_ERR} {}
+    void session_begin(QofSession*, const char*, bool, bool, bool) override {
+        m_last_call = "session_begin";
+    }
+    void session_end() override {
+        m_last_call = "session_end";
+    }
+    void load(QofBook*, QofBackendLoadType) override {
+        m_last_call = "load";
+    }
+    void sync(QofBook*) override {
+        m_last_call = "sync";
+    }
+    void safe_sync(QofBook*) override {
+        m_last_call = "safe_sync";
+    }
+    void rollback(QofInstance*) override {
+        set_error(m_result_err);
+        m_last_call = "rollback";
+    }
+    void inject_error(QofBackendError err) {
+        m_result_err = err;
+    }
+    std::string m_last_call;
+private:
+    QofBackendError m_result_err;
+};
 
 static void
 setup (Fixture *fixture, gconstpointer pData)
 {
     QofBook *book = qof_book_new ();
-    MockBackend *mbe = mock_backend_new ();
+    MockBackend *mbe = new MockBackend;
     Transaction *txn;
     Timespec entered = gnc_dmy2timespec (20, 4, 2012);
     Timespec posted = gnc_dmy2timespec (21, 4, 2012);
     auto frame = new KvpFrame ();
 
-    qof_book_set_backend (book, (QofBackend*)mbe);
+    qof_book_set_backend (book, mbe);
     auto split1 = xaccMallocSplit (book);
     auto split2 = xaccMallocSplit (book);
     txn = xaccMallocTransaction (book);
@@ -211,14 +213,14 @@ static void
 teardown (Fixture *fixture, gconstpointer pData)
 {
     QofBook *book = qof_instance_get_book (QOF_INSTANCE (fixture->txn));
-    MockBackend *mbe = (MockBackend *)qof_book_get_backend (book);
+    auto mbe = static_cast<MockBackend*>(qof_book_get_backend (book));
 
     test_destroy (fixture->txn);
     test_destroy (fixture->acc1);
     test_destroy (fixture->acc2);
     test_destroy (fixture->curr);
     test_destroy (fixture->comm);
-    g_free (mbe);
+    delete mbe;
     qof_book_destroy(book);
     g_slist_free_full (fixture->hdlrs, test_free_log_handler);
     test_clear_error_list();
@@ -1695,7 +1697,7 @@ test_xaccTransRollbackEdit (Fixture *fixture, gconstpointer pData)
     KvpFrame *base_frame = NULL;
     auto sig_account = test_signal_new (QOF_INSTANCE (fixture->acc1),
                               GNC_EVENT_ITEM_CHANGED, NULL);
-    MockBackend *mbe = (MockBackend*)qof_book_get_backend (book);
+    auto mbe = static_cast<MockBackend*>(qof_book_get_backend (book));
     auto split_00 = static_cast<Split*>(txn->splits->data);
     auto split_01 = static_cast<Split*>(txn->splits->next->data);
     auto split_02 = xaccMallocSplit (book);
@@ -1743,7 +1745,7 @@ test_xaccTransRollbackEdit (Fixture *fixture, gconstpointer pData)
                               FALSE, FALSE, FALSE));
     g_assert (xaccSplitEqual (static_cast<Split*>(txn->splits->next->data),
                               split_10, FALSE, FALSE, FALSE));
-    g_assert_cmpstr (mbe->last_call, ==, "rollback");
+    g_assert_cmpstr (mbe->m_last_call.c_str(), ==, "rollback");
     g_assert_cmpuint (qof_instance_get_editlevel (QOF_INSTANCE (txn)), ==, 0);
     g_assert (qof_instance_get_destroying (txn) == FALSE);
     test_signal_free (sig_account);
@@ -1757,7 +1759,7 @@ test_xaccTransRollbackEdit (Fixture *fixture, gconstpointer pData)
 static void
 test_xaccTransRollbackEdit_BackendErrors (Fixture *fixture, gconstpointer pData)
 {
-    MockBackend *mbe = (MockBackend*)qof_book_get_backend (qof_instance_get_book (fixture->txn));
+    auto mbe = static_cast<MockBackend*>(qof_book_get_backend (qof_instance_get_book (fixture->txn)));
     auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     auto msg = "[xaccTransRollbackEdit()] Rollback Failed.  Ouch!";
     auto check = test_error_struct_new ("gnc.engine", loglevel, msg);
@@ -1765,16 +1767,16 @@ test_xaccTransRollbackEdit_BackendErrors (Fixture *fixture, gconstpointer pData)
                      (GLogFunc)test_checked_handler);
     g_object_ref (fixture->txn);
     xaccTransBeginEdit (fixture->txn);
-    mock_backend_set_error (mbe, ERR_BACKEND_MODIFIED);
+    mbe->inject_error(ERR_BACKEND_MODIFIED);
     xaccTransRollbackEdit (fixture->txn);
     g_assert_cmpint (check->hits, ==, 1);
-    g_assert_cmpstr (mbe->last_call, ==, "rollback");
-    memset (mbe->last_call, 0, sizeof (mbe->last_call));
+    g_assert_cmpstr (mbe->m_last_call.c_str(), ==, "rollback");
+    mbe->m_last_call.clear();
     xaccTransBeginEdit (fixture->txn);
-    mock_backend_set_error (mbe, ERR_BACKEND_MOD_DESTROY);
+    mbe->inject_error (ERR_BACKEND_MOD_DESTROY);
     xaccTransRollbackEdit (fixture->txn);
     g_assert_cmpint (GPOINTER_TO_INT(fixture->txn->num), ==, 1);
-    g_assert_cmpstr (mbe->last_call, ==, "rollback");
+    g_assert_cmpstr (mbe->m_last_call.c_str(), ==, "rollback");
 
 }
 /* xaccTransIsOpen C: 23 in 7 SCM: 1  Local: 0:0:0
@@ -1941,7 +1943,7 @@ test_xaccTransReverse (Fixture *fixture, gconstpointer pData)
     g_assert (guid_equal (frame->get_slot(TRANS_REVERSED_BY)->get<GncGUID*>(),
                           xaccTransGetGUID (rev)));
 
-    g_assert (qof_instance_is_dirty (QOF_INSTANCE (rev)));
+    g_assert (!qof_instance_is_dirty (QOF_INSTANCE (rev))); //Cleared by commit
     g_assert_cmpint (g_list_length (fixture->txn->splits), ==,
                      g_list_length (rev->splits));
     for (orig_splits = fixture->txn->splits,

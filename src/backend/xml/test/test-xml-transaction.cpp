@@ -52,7 +52,7 @@ extern "C"
 #include "../sixtp-parsers.h"
 #include "../sixtp-dom-parsers.h"
 #include "../io-gncxml-gen.h"
-#include <test-file-stuff.h>
+#include "test-file-stuff.h"
 
 static QofBook* book;
 

@@ -698,7 +698,6 @@ qof_session_load_from_xml_file_v2_full (
     QofBookFileType type)
 {
     Account* root;
-    QofBackend* qof_be = reinterpret_cast<decltype(qof_be)>(xml_be);
     sixtp_gdv2* gd;
     sixtp* top_parser;
     sixtp* main_parser;
@@ -707,7 +706,8 @@ qof_session_load_from_xml_file_v2_full (
     gboolean retval;
     char* v2type = NULL;
 
-    gd = gnc_sixtp_gdv2_new (book, FALSE, file_rw_feedback, qof_be->percentage);
+    gd = gnc_sixtp_gdv2_new (book, FALSE, file_rw_feedback,
+                             xml_be->get_percentage());
 
     top_parser = sixtp_new ();
     main_parser = sixtp_new ();
@@ -1340,7 +1340,8 @@ gnc_book_write_to_xml_filehandle_v2 (QofBook* book, FILE* out)
         return FALSE;
 
     qof_be = qof_book_get_backend (book);
-    gd = gnc_sixtp_gdv2_new (book, FALSE, file_rw_feedback, qof_be->percentage);
+    gd = gnc_sixtp_gdv2_new (book, FALSE, file_rw_feedback,
+                             qof_be->get_percentage());
     gd->counter.commodities_total =
         gnc_commodity_table_get_size (gnc_commodity_table_get_table (book));
     gd->counter.accounts_total = 1 +
@@ -1386,7 +1387,8 @@ gnc_book_write_accounts_to_xml_filehandle_v2 (QofBackend* qof_be, QofBook* book,
         || !write_counts (out, "commodity", ncom, "account", nacc, NULL))
         return FALSE;
 
-    gd = gnc_sixtp_gdv2_new (book, TRUE, file_rw_feedback, qof_be->percentage);
+    gd = gnc_sixtp_gdv2_new (book, TRUE, file_rw_feedback,
+                             qof_be->get_percentage());
     gd->counter.commodities_total = ncom;
     gd->counter.accounts_total = nacc;
 
@@ -1651,10 +1653,8 @@ gnc_book_write_to_xml_file_v2 (
  * postgress or anything else.
  */
 gboolean
-gnc_book_write_accounts_to_xml_file_v2 (
-    QofBackend* qof_be,
-    QofBook* book,
-    const char* filename)
+gnc_book_write_accounts_to_xml_file_v2 (QofBackend* qof_be, QofBook* book,
+                                        const char* filename)
 {
     FILE* out;
     gboolean success = TRUE;
@@ -1671,7 +1671,7 @@ gnc_book_write_accounts_to_xml_file_v2 (
     if (out && fclose (out))
         success = FALSE;
 
-    if (!success && !qof_backend_check_error (qof_be))
+    if (!success && !qof_be->check_error())
     {
 
         /* Use a generic write error code */

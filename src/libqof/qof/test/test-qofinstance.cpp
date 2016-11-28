@@ -41,10 +41,85 @@ static gboolean is_called;
 #define _Q "`"
 #endif
 
+static struct
+{
+    QofInstance *m_inst = nullptr;
+    QofBackend *m_be = nullptr;
+
+    bool m_commit_called = false;
+    bool m_commit_with_err_called = false;
+    bool m_on_error_called = false;
+    bool m_on_free_called = false;
+    bool m_on_done_called = false;
+    QofBackendError m_err = ERR_BACKEND_NO_ERR;
+} commit_test;
+
+
+class MockBackend : public QofBackend
+{
+public:
+    MockBackend() : m_qof_error{ERR_BACKEND_NO_ERR} {
+        commit_test.m_be = this;
+    }
+    void session_begin(QofSession* sess, const char* book_name,
+                       bool ignore_lock, bool create, bool force) override {}
+    void session_end() override {}
+    void load(QofBook*, QofBackendLoadType) override {}
+    void sync(QofBook* book) override {}
+    void safe_sync(QofBook* book) override {}
+    void begin(QofInstance* inst) override {
+        g_assert(inst);
+        g_assert(QOF_IS_INSTANCE(inst));
+        commit_test.m_inst = inst;
+    }
+    void set_error(QofBackendError err) {
+        QofBackend::set_error(err);
+        commit_test.m_err = err;
+    }
+    void commit(QofInstance* inst) override {
+        g_assert( inst );
+        g_assert( QOF_IS_INSTANCE( inst ) );
+        g_assert( commit_test.m_inst == inst );
+        g_assert( commit_test.m_be == this );
+        commit_test.m_commit_called = true;
+        set_error(m_qof_error);
+
+    }
+    void rollback(QofInstance* inst) override {}
+    void inject_error(QofBackendError err) {
+        m_qof_error = err;
+    }
+private:
+    QofBackendError m_qof_error;
+
+};
+
 typedef struct
 {
     QofInstance *inst;
 } Fixture;
+
+static void
+on_error(QofInstance* inst, QofBackendError err) {
+    g_assert( inst );
+    g_assert( QOF_IS_INSTANCE( inst ) );
+    g_assert( commit_test.m_err == err );
+    commit_test.m_on_error_called = true;
+}
+static void
+on_done(QofInstance* inst) {
+    g_assert( inst );
+    g_assert( QOF_IS_INSTANCE( inst ) );
+    g_assert( commit_test.m_inst == inst );
+    commit_test.m_on_done_called = true;
+}
+static void
+on_free(QofInstance* inst) {
+    g_assert( inst );
+    g_assert( QOF_IS_INSTANCE( inst ) );
+    g_assert(commit_test.m_inst == inst );
+    commit_test.m_on_free_called = true;
+}
 
 /* use g_free on error_message after this function been called */
 static gboolean
@@ -423,7 +498,6 @@ mock_backend_begin( QofBackend *be, QofInstance *inst )
 {
     g_assert( be );
     g_assert( inst );
-    g_assert( be->begin == mock_backend_begin );
     g_assert_cmpstr( inst->e_type, == , "test type" );
     is_called = TRUE;
 }
@@ -431,14 +505,12 @@ mock_backend_begin( QofBackend *be, QofInstance *inst )
 static void
 test_instance_begin_edit( Fixture *fixture, gconstpointer pData )
 {
-    QofBackend *be;
     QofBook *book;
     gboolean result;
 
     /* setup */
-    be = g_new0( QofBackend, 1 );
+    auto be = new MockBackend;
     g_assert( be );
-    qof_backend_init( be );
     book = qof_book_new();
     g_assert( book );
     g_assert( QOF_IS_BOOK( book ) );
@@ -467,22 +539,19 @@ test_instance_begin_edit( Fixture *fixture, gconstpointer pData )
 
     g_test_message( "Test when instance's editlevel is <= 0 and backend is set" );
     result = FALSE;
-    is_called = FALSE;
     qof_instance_reset_editlevel( fixture->inst );
     qof_instance_set_dirty_flag( fixture->inst, FALSE );
     qof_instance_set_book( fixture->inst, book );
-    be->begin = mock_backend_begin;
     result = qof_begin_edit( fixture->inst );
     g_assert( result == TRUE );
     g_assert_cmpint( qof_instance_get_editlevel( fixture->inst ), == , 1 );
     g_assert( qof_instance_get_dirty_flag( fixture->inst ) == FALSE );
-    g_assert( is_called );
 
     /* clean up */
     qof_book_set_backend( book, NULL );
     qof_book_destroy( book );
-    qof_backend_destroy( be );
-    g_free( be );
+    delete be;
+
 }
 
 static void
@@ -527,82 +596,16 @@ test_instance_commit_edit( Fixture *fixture, gconstpointer pData )
 
 /* backend commit test start */
 
-static struct
-{
-    gpointer inst;
-    gpointer be;
-
-    gboolean commit_called;
-    gboolean commit_with_err_called;
-    gboolean on_error_called;
-    gboolean on_free_called;
-    gboolean on_done_called;
-    QofBackendError err;
-} commit_test_part2;
-
-static void
-mock_backend_commit( QofBackend *be, QofInstance *inst )
-{
-    g_assert( inst );
-    g_assert( be );
-    g_assert( QOF_IS_INSTANCE( inst ) );
-    g_assert( commit_test_part2.inst == inst );
-    g_assert( commit_test_part2.be == be );
-    commit_test_part2.commit_called = TRUE;
-}
-
-static void
-mock_backend_commit_with_error( QofBackend *be, QofInstance *inst )
-{
-    g_assert( inst );
-    g_assert( be );
-    g_assert( QOF_IS_INSTANCE( inst ) );
-    g_assert( commit_test_part2.inst == inst );
-    g_assert( commit_test_part2.be == be );
-    qof_backend_set_error( be, ERR_BACKEND_NO_HANDLER );
-    commit_test_part2.err = ERR_BACKEND_NO_HANDLER;
-    commit_test_part2.commit_with_err_called = TRUE;
-}
-
-
-static void
-mock_on_error( QofInstance *inst, QofBackendError be_error )
-{
-    g_assert( inst );
-    g_assert( QOF_IS_INSTANCE( inst ) );
-    g_assert( commit_test_part2.err == be_error );
-    commit_test_part2.on_error_called = TRUE;
-}
-
-static void
-mock_on_done( QofInstance *inst )
-{
-    g_assert( inst );
-    g_assert( QOF_IS_INSTANCE( inst ) );
-    g_assert( commit_test_part2.inst == inst );
-    commit_test_part2.on_done_called = TRUE;
-}
-
-static void
-mock_on_free( QofInstance *inst )
-{
-    g_assert( inst );
-    g_assert( QOF_IS_INSTANCE( inst ) );
-    g_assert( commit_test_part2.inst == inst );
-    commit_test_part2.on_free_called = TRUE;
-}
 
 static void
 test_instance_commit_edit_part2( Fixture *fixture, gconstpointer pData )
 {
-    QofBackend *be;
     QofBook *book;
     gboolean result;
 
     /* setup */
-    be = g_new0( QofBackend, 1 );
+    auto be = new MockBackend;
     g_assert( be );
-    qof_backend_init( be );
     book = qof_book_new();
     g_assert( book );
     g_assert( QOF_IS_BOOK( book ) );
@@ -610,13 +613,13 @@ test_instance_commit_edit_part2( Fixture *fixture, gconstpointer pData )
 
     /* init */
     result = FALSE;
-    commit_test_part2.commit_called = FALSE;
-    commit_test_part2.commit_with_err_called = FALSE;
-    commit_test_part2.on_error_called = FALSE;
-    commit_test_part2.on_free_called = FALSE;
-    commit_test_part2.on_done_called = FALSE;
-    commit_test_part2.inst = fixture->inst;
-    commit_test_part2.be = be;
+    commit_test.m_commit_called = false;
+    commit_test.m_commit_with_err_called = false;
+    commit_test.m_on_error_called = false;
+    commit_test.m_on_free_called = false;
+    commit_test.m_on_done_called = false;
+    commit_test.m_inst = fixture->inst;
+    commit_test.m_be = be;
     qof_instance_set_dirty_flag( fixture->inst, TRUE );
 
     g_test_message( "Test when instance's backend not set, callbacks not set" );
@@ -626,70 +629,67 @@ test_instance_commit_edit_part2( Fixture *fixture, gconstpointer pData )
     g_assert( result );
     g_assert( qof_instance_get_dirty_flag( fixture->inst ) );
     g_assert( !qof_instance_get_infant( fixture->inst ) );
-    g_assert( !commit_test_part2.commit_called );
-    g_assert( !commit_test_part2.commit_with_err_called );
-    g_assert( !commit_test_part2.on_error_called );
-    g_assert( !commit_test_part2.on_free_called );
-    g_assert( !commit_test_part2.on_done_called );
+    g_assert( !commit_test.m_commit_called );
+    g_assert( !commit_test.m_commit_with_err_called );
+    g_assert( !commit_test.m_on_error_called );
+    g_assert( !commit_test.m_on_free_called );
+    g_assert( !commit_test.m_on_done_called );
 
-    g_test_message( "Test when instance's backend not set, do_free is true" );
+    g_test_message( "Test when instance's backend not set, do_free is false" );
     qof_instance_set_destroying( fixture->inst, TRUE );
-    result = qof_commit_edit_part2( fixture->inst, mock_on_error, mock_on_done, mock_on_free );
+    result = qof_commit_edit_part2( fixture->inst, on_error, on_done, on_free );
     g_assert( result );
     g_assert( qof_instance_get_dirty_flag( fixture->inst ) );
-    g_assert( !commit_test_part2.commit_called );
-    g_assert( !commit_test_part2.commit_with_err_called );
-    g_assert( !commit_test_part2.on_error_called );
-    g_assert( commit_test_part2.on_free_called );
-    g_assert( !commit_test_part2.on_done_called );
+    g_assert( !commit_test.m_commit_called );
+    g_assert( !commit_test.m_commit_with_err_called );
+    g_assert( !commit_test.m_on_error_called );
+    g_assert( commit_test.m_on_free_called );
+    g_assert( !commit_test.m_on_done_called );
 
     g_test_message( "Test when instance's backend not set, do_free is false" );
     qof_instance_set_destroying( fixture->inst, FALSE );
-    commit_test_part2.on_free_called = FALSE;
-    result = qof_commit_edit_part2( fixture->inst, mock_on_error, mock_on_done, mock_on_free );
+    commit_test.m_on_free_called = false;
+    result = qof_commit_edit_part2( fixture->inst, on_error, on_done, on_free );
     g_assert( result );
     g_assert( qof_instance_get_dirty_flag( fixture->inst ) );
-    g_assert( !commit_test_part2.commit_called );
-    g_assert( !commit_test_part2.commit_with_err_called );
-    g_assert( !commit_test_part2.on_error_called );
-    g_assert( !commit_test_part2.on_free_called );
-    g_assert( commit_test_part2.on_done_called );
+    g_assert( !commit_test.m_commit_called );
+    g_assert( !commit_test.m_commit_with_err_called );
+    g_assert( !commit_test.m_on_error_called );
+    g_assert( !commit_test.m_on_free_called );
+    g_assert( commit_test.m_on_done_called );
 
     g_test_message( "Test when instance's backend is set, all cb set, no error produced" );
     qof_instance_set_book( fixture->inst, book );
     qof_instance_set_destroying( fixture->inst, FALSE );
-    commit_test_part2.on_done_called = FALSE;
-    be->commit = mock_backend_commit;
-    result = qof_commit_edit_part2( fixture->inst, mock_on_error, mock_on_done, mock_on_free );
+    commit_test.m_on_done_called = false;
+    result = qof_commit_edit_part2( fixture->inst, on_error, on_done, on_free );
     g_assert( result );
     g_assert( !qof_instance_get_dirty_flag( fixture->inst ) );
-    g_assert( commit_test_part2.commit_called );
-    g_assert( !commit_test_part2.commit_with_err_called );
-    g_assert( !commit_test_part2.on_error_called );
-    g_assert( !commit_test_part2.on_free_called );
-    g_assert( commit_test_part2.on_done_called );
+    g_assert( commit_test.m_commit_called );
+    g_assert( !commit_test.m_commit_with_err_called );
+    g_assert( !commit_test.m_on_error_called );
+    g_assert( !commit_test.m_on_free_called );
+    g_assert( commit_test.m_on_done_called );
 
     g_test_message( "Test when instance's backend is set, all cb set, error produced" );
-    commit_test_part2.commit_called = FALSE;
-    commit_test_part2.on_done_called = FALSE;
-    be->commit = mock_backend_commit_with_error;
+    commit_test.m_commit_called = false;
+    commit_test.m_on_done_called = false;
+    be->inject_error(ERR_BACKEND_NO_HANDLER);
     qof_instance_set_dirty_flag( fixture->inst, TRUE );
     qof_instance_set_destroying( fixture->inst, TRUE );
-    result = qof_commit_edit_part2( fixture->inst, mock_on_error, mock_on_done, mock_on_free );
+    result = qof_commit_edit_part2( fixture->inst, on_error, on_done, on_free );
     g_assert( !result );
     g_assert( qof_instance_get_dirty_flag( fixture->inst ) );
     g_assert( !qof_instance_get_destroying( fixture->inst ) );
-    g_assert( !commit_test_part2.commit_called );
-    g_assert( commit_test_part2.commit_with_err_called );
-    g_assert( commit_test_part2.on_error_called );
-    g_assert( !commit_test_part2.on_free_called );
-    g_assert( !commit_test_part2.on_done_called );
+    g_assert( commit_test.m_commit_called );
+    g_assert( commit_test.m_on_error_called );
+    g_assert( !commit_test.m_on_free_called );
+    g_assert( !commit_test.m_on_done_called );
 
     /* clean up */
     qof_book_set_backend( book, NULL );
     qof_book_destroy( book );
-    qof_backend_destroy( be );
-    g_free( be );
+    delete be;
 }
 
 /* backend commit test end */

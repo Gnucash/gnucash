@@ -25,16 +25,13 @@
 extern "C"
 {
 
-#include "config.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <regex.h>
-#include <glib.h>
-#include <gmodule.h>
-#include <errno.h>
+#include <config.h>
 #include "qof.h"
 }
+
+#include <string>
+#include <algorithm>
+#include <vector>
 
 #include "qof-backend.hpp"
 
@@ -47,238 +44,128 @@ G_GNUC_UNUSED static QofLogModule log_module = QOF_MOD_BACKEND;
  * error handling                                                   *
 \********************************************************************/
 
-void
-qof_backend_set_error (QofBackend *be, QofBackendError err)
-{
-    if (!be) return;
+GModuleVec QofBackend::c_be_registry{};
 
+void
+QofBackend::set_error(QofBackendError err)
+{
     /* use stack-push semantics. Only the earliest error counts */
-    if (ERR_BACKEND_NO_ERR != be->last_err) return;
-    be->last_err = err;
+    if (m_last_err != ERR_BACKEND_NO_ERR) return;
+    m_last_err = err;
 }
 
 QofBackendError
-qof_backend_get_error (QofBackend *be)
+QofBackend::get_error()
 {
-    QofBackendError err;
-    if (!be) return ERR_BACKEND_NO_BACKEND;
-
     /* use 'stack-pop' semantics */
-    err = be->last_err;
-    be->last_err = ERR_BACKEND_NO_ERR;
+    auto err = m_last_err;
+    m_last_err = ERR_BACKEND_NO_ERR;
     return err;
 }
 
-gboolean
-qof_backend_check_error (QofBackend *be)
+bool
+QofBackend::check_error()
 {
-    g_return_val_if_fail (be != NULL, TRUE);
-    return be->last_err != ERR_BACKEND_NO_ERR;
-}
-
-gboolean
-qof_backend_can_rollback (QofBackend* be)
-{
-    if (be == nullptr) return FALSE;
-    return be->rollback != nullptr;
+    return m_last_err != ERR_BACKEND_NO_ERR;
 }
 
 void
-qof_backend_rollback_instance (QofBackend* be, QofInstance* inst)
+QofBackend::set_message (std::string&& msg)
 {
-    if (be == nullptr || be->rollback == nullptr) return;
-    (be->rollback)(be, inst);
+    m_error_msg = msg;
 }
 
-void
-qof_backend_set_message (QofBackend *be, const char *format, ...)
+const std::string&&
+QofBackend::get_message ()
 {
-    va_list args;
-    char * buffer;
-
-    if (!be) return;
-
-    /* If there's already something here, free it */
-    if (be->error_msg) g_free(be->error_msg);
-
-    if (!format)
-    {
-        be->error_msg = NULL;
-        return;
-    }
-
-    va_start(args, format);
-    buffer = (char *)g_strdup_vprintf(format, args);
-    va_end(args);
-
-    be->error_msg = buffer;
+    return std::move(m_error_msg);
 }
 
-char *
-qof_backend_get_message (QofBackend *be)
+bool
+QofBackend::register_backend(const char* directory, const char* module_name)
 {
-    char * msg;
-
-    if (!be) return g_strdup("ERR_BACKEND_NO_BACKEND");
-    if (!be->error_msg) return NULL;
-
-    /*
-     * Just return the contents of the error_msg and then set it to
-     * NULL. This is necessary, because the Backends don't seem to
-     * have a destroy_backend function to take care of freeing stuff
-     * up. The calling function should free the copy.
-     * Also, this is consistent with the qof_backend_get_error() popping.
-     */
-
-    msg = be->error_msg;
-    be->error_msg = NULL;
-    return msg;
-}
-
-/***********************************************************************/
-/* Get a clean backend */
-void
-qof_backend_init(QofBackend *be)
-{
-    be->session_begin = NULL;
-    be->session_end = NULL;
-    be->destroy_backend = NULL;
-
-    be->load = NULL;
-
-    be->begin = NULL;
-    be->commit = NULL;
-    be->rollback = NULL;
-
-    be->sync = NULL;
-    be->safe_sync = NULL;
-
-    be->export_fn = NULL;
-
-    be->last_err = ERR_BACKEND_NO_ERR;
-    if (be->error_msg) g_free (be->error_msg);
-    be->error_msg = NULL;
-    be->percentage = NULL;
-}
-
-void
-qof_backend_destroy(QofBackend *be)
-{
-    g_free(be->error_msg);
-    be->error_msg = NULL;
-}
-
-void
-qof_backend_run_begin(QofBackend *be, QofInstance *inst)
-{
-    if (!be || !inst)
+    if (!g_module_supported ())
     {
-        return;
+        PWARN("Modules not supported.");
+        return false;
     }
-    if (!be->begin)
-    {
-        return;
-    }
-    (be->begin) (be, inst);
-}
-
-gboolean
-qof_backend_begin_exists(const QofBackend *be)
-{
-    if (be->begin)
-    {
-        return TRUE;
-    }
-    else
-    {
-        return FALSE;
-    }
-}
-
-void
-qof_backend_run_commit(QofBackend *be, QofInstance *inst)
-{
-    if (!be || !inst)
-    {
-        return;
-    }
-    if (!be->commit)
-    {
-        return;
-    }
-    (be->commit) (be, inst);
-}
-
-
-gboolean
-qof_backend_commit_exists(const QofBackend *be)
-{
-    if (!be)
-    {
-        return FALSE;
-    }
-    if (be->commit)
-    {
-        return TRUE;
-    }
-    else
-    {
-        return FALSE;
-    }
-}
-
-static GSList* backend_module_list = NULL;
-
-gboolean
-qof_load_backend_library (const char *directory, const char* module_name)
-{
-    gchar *fullpath;
-    GModule *backend;
-    void (*module_init_func) (void);
-
-    g_return_val_if_fail(g_module_supported (), FALSE);
-    fullpath = g_module_build_path (directory, module_name);
+    auto fullpath = g_module_build_path (directory, module_name);
 /* Darwin modules can have either .so or .dylib for a suffix */
     if (!g_file_test (fullpath, G_FILE_TEST_EXISTS) &&
 	g_strcmp0 (G_MODULE_SUFFIX, "so") == 0)
     {
-	gchar *modname = g_strdup_printf ("lib%s.dylib", module_name);
+	auto modname = g_strdup_printf ("lib%s.dylib", module_name);
 	g_free (fullpath);
 	fullpath = g_build_filename (directory, modname, NULL);
 	g_free (modname);
     }
-    backend = g_module_open (fullpath, G_MODULE_BIND_LAZY);
+    auto backend = g_module_open (fullpath, G_MODULE_BIND_LAZY);
     g_free (fullpath);
     if (!backend)
     {
-        g_message ("%s: %s\n", PACKAGE, g_module_error ());
-        return FALSE;
+        PINFO ("%s: %s\n", PACKAGE, g_module_error ());
+        return false;
     }
+    void (*module_init_func)(void);
     if (g_module_symbol (backend, "qof_backend_module_init",
-			 reinterpret_cast<void**>(&module_init_func)))
+                         reinterpret_cast<void**>(&module_init_func)))
         module_init_func ();
 
     g_module_make_resident (backend);
-    backend_module_list = g_slist_prepend (backend_module_list, backend);
+    c_be_registry.push_back(backend);
     return TRUE;
+}
+
+void
+QofBackend::release_backends()
+{
+    for (auto backend : c_be_registry)
+    {
+        void (*module_finalize_func)(void);
+        if (g_module_symbol(backend, "qof_backend_module_finalize",
+                            reinterpret_cast<void**>(&module_finalize_func)))
+            module_finalize_func();
+    }
+}
+/***********************************************************************/
+QofBackendError
+qof_backend_get_error (QofBackend* qof_be)
+{
+    if (qof_be == nullptr) return ERR_BACKEND_NO_ERR;
+    return ((QofBackend*)qof_be)->get_error();
+}
+
+void
+qof_backend_set_error (QofBackend* qof_be, QofBackendError err)
+{
+    if (qof_be == nullptr) return;
+    ((QofBackend*)qof_be)->set_error(err);
+}
+
+gboolean
+qof_backend_can_rollback (QofBackend* qof_be)
+{
+    if (qof_be == nullptr) return FALSE;
+    return true;
+}
+
+void
+qof_backend_rollback_instance (QofBackend* qof_be, QofInstance* inst)
+{
+    if (qof_be == nullptr) return;
+    ((QofBackend*)qof_be)->rollback(inst);
+}
+
+gboolean
+qof_load_backend_library (const char *directory, const char* module_name)
+{
+    return QofBackend::register_backend(directory, module_name);
 }
 
 void
 qof_finalize_backend_libraries(void)
 {
-    GSList* node;
-    GModule* backend;
-    void (*module_finalize_func) (void);
-
-    for (node = backend_module_list; node != NULL; node = node->next)
-    {
-        backend = (GModule*)node->data;
-
-        if (g_module_symbol(backend, "qof_backend_module_finalize",
-                            reinterpret_cast<void**>(&module_finalize_func)))
-            module_finalize_func();
-
-    }
+    QofBackend::release_backends();
 }
 
 /************************* END OF FILE ********************************/

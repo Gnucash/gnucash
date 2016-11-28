@@ -35,51 +35,51 @@ static bool sync_called {false};
 static bool load_error {true};
 static bool hook_called {false};
 static bool data_loaded {false};
+
+class MockBackend : public QofBackend
+{
+public:
+    MockBackend() = default;
+    MockBackend(const MockBackend&) = delete;
+    MockBackend(const MockBackend&&) = delete;
+    virtual ~MockBackend() = default;
+    void session_begin(QofSession*, const char*, bool, bool, bool) {}
+    void session_end() {}
+    void load(QofBook*, QofBackendLoadType);
+    void sync(QofBook*);
+    void safe_sync(QofBook*);
+    void export_coa(QofBook*);
+};
+
 void example_hook (QofSession & session)
 {
     hook_called = true;
 }
 
-void test_load (QofBackend * be, QofBook *, QofBackendLoadType)
+void MockBackend::load (QofBook *, QofBackendLoadType)
 {
-    if (load_error) be->last_err = ERR_BACKEND_NO_BACKEND;
+    if (load_error) set_error(ERR_BACKEND_NO_BACKEND);
     data_loaded = true;
 }
 
-void test_safe_sync (QofBackend *, QofBook *)
+void MockBackend::safe_sync (QofBook *)
 {
     safe_sync_called = true;
 }
 
-void test_sync (QofBackend *, QofBook *)
+void MockBackend::sync (QofBook *)
 {
     sync_called = true;
 }
 
-void test_export_fn (QofBackend *, QofBook * book)
+void MockBackend::export_coa(QofBook * book)
 {
     exported_book = book;
 }
 
 QofBackend * test_backend_factory ()
 {
-    QofBackend * ret = (QofBackend*) std::malloc (sizeof (QofBackend));
-    ret->session_begin = nullptr;
-    ret->session_end = nullptr;
-    ret->destroy_backend = nullptr;
-    ret->load = &test_load;
-    ret->sync = &test_sync;
-    ret->safe_sync = &test_safe_sync;
-    ret->export_fn = &test_export_fn;
-    ret->error_msg = nullptr;
-    ret->fullpath = nullptr;
-    ret->last_err = ERR_BACKEND_NO_ERR;
-    ret->begin = nullptr;
-    ret->commit = nullptr;
-    ret->rollback = nullptr;
-    ret->percentage = nullptr;
-    ret->config_count = 0;
-    return ret;
+    return new MockBackend;
 }
 
 struct MockProvider : public QofBackendProvider

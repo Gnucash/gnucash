@@ -273,7 +273,7 @@ qof_close(void)
 {
     qof_query_shutdown ();
     qof_object_shutdown ();
-    qof_finalize_backend_libraries();
+    QofBackend::release_backends();
     qof_string_cache_destroy ();
     qof_log_shutdown();
 }

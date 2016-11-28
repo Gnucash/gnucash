@@ -108,41 +108,10 @@ struct QofXmlBackendProvider : public QofBackendProvider
     QofXmlBackendProvider(QofXmlBackendProvider&&) = delete;
     QofXmlBackendProvider operator=(QofXmlBackendProvider&&) = delete;
     ~QofXmlBackendProvider () = default;
-    QofBackend* create_backend(void);
+    QofBackend* create_backend(void) { return new GncXmlBackend; }
     bool type_check(const char* type);
 
 };
-
-
-static void
-xml_session_begin (QofBackend* qof_be, QofSession* session,
-                   const char* book_id, gboolean ignore_lock,
-                   gboolean create, gboolean force)
-{
-    GncXmlBackend* xml_be = (GncXmlBackend*) qof_be;
-
-    ENTER (" ");
-    xml_be->session_begin(session, book_id, ignore_lock, create, force);
-    LEAVE (" ");
-    return;
-}
-
-/* ================================================================= */
-
-static void
-xml_session_end (QofBackend* qof_be)
-{
-    GncXmlBackend* xml_be = (GncXmlBackend*)qof_be;
-    ENTER (" ");
-    xml_be->session_end();
-    LEAVE (" ");
-}
-
-static void
-xml_destroy_backend (QofBackend* qof_be)
-{
-    delete reinterpret_cast<GncXmlBackend*>(qof_be);
-}
 
 bool
 QofXmlBackendProvider::type_check (const char *uri)
@@ -201,85 +170,7 @@ det_exit:
     return result;
 }
 
-static void
-xml_sync_all (QofBackend* qof_be, QofBook* book)
-{
-    GncXmlBackend* xml_be = reinterpret_cast<decltype(xml_be)>(qof_be);
-    xml_be->sync(book);
-    ENTER ("book=%p, xml_be->m_book=%p", book, xml_be->get_book());
-
-    LEAVE ("book=%p", book);
-}
-
-
-static void
-xml_begin_edit (QofBackend* qof_be, QofInstance* inst)
-{
-    GncXmlBackend* xml_be = (GncXmlBackend*) qof_be;
-    xml_be->begin(inst);
-}
-
-static void
-xml_rollback_edit (QofBackend* qof_be, QofInstance* inst)
-{
-
-    GncXmlBackend* xml_be = (GncXmlBackend*) qof_be;
-    xml_be->rollback(inst);
-}
-
-/* ---------------------------------------------------------------------- */
-
-
-/* Load financial data from a file into the book, automatically
-   detecting the format of the file, if possible.  Return FALSE on
-   error, and set the error parameter to indicate what went wrong if
-   it's not NULL.  This function does not manage file locks in any
-   way. */
-
-static void
-gnc_xml_be_load_from_file (QofBackend* qof_be, QofBook* book,
-                           QofBackendLoadType loadType)
-{
-    GncXmlBackend* xml_be = (GncXmlBackend*) qof_be;
-    xml_be->load(book, loadType);
-}
-
-/* ---------------------------------------------------------------------- */
-
-
-
-static void
-gnc_xml_be_write_accounts_to_file (QofBackend* qof_be, QofBook* book)
-{
-    auto datafile = ((GncXmlBackend*)qof_be)->get_filename();
-    gnc_book_write_accounts_to_xml_file_v2 (qof_be, book, datafile);
-}
-
 /* ================================================================= */
-
-QofBackend*
-QofXmlBackendProvider::create_backend(void)
-{
-
-    auto xml_be = new GncXmlBackend;
-    auto qof_be = xml_be->get_qof_be();
-    qof_be->session_begin = xml_session_begin;
-    qof_be->session_end = xml_session_end;
-    qof_be->destroy_backend = xml_destroy_backend;
-
-    qof_be->load = gnc_xml_be_load_from_file;
-
-    /* The file backend treats accounting periods transactionally. */
-    qof_be->begin = xml_begin_edit;
-    qof_be->commit = NULL;
-    qof_be->rollback = xml_rollback_edit;
-
-    qof_be->sync = xml_sync_all;
-
-    qof_be->export_fn = gnc_xml_be_write_accounts_to_file;
-
-    return qof_be;
-}
 
 static void
 business_core_xml_init (void)

@@ -958,7 +958,6 @@ gboolean
 qof_begin_edit (QofInstance *inst)
 {
     QofInstancePrivate *priv;
-    QofBackend * be;
 
     if (!inst) return FALSE;
 
@@ -968,9 +967,9 @@ qof_begin_edit (QofInstance *inst)
     if (0 >= priv->editlevel)
         priv->editlevel = 1;
 
-    be = qof_book_get_backend(priv->book);
-    if (be && qof_backend_begin_exists(be))
-        qof_backend_run_begin(be, inst);
+    auto be = qof_book_get_backend(priv->book);
+    if (be)
+        be->begin(inst);
     else
         priv->dirty = TRUE;
 
@@ -1002,7 +1001,6 @@ qof_commit_edit_part2(QofInstance *inst,
                       void (*on_free)(QofInstance *))
 {
     QofInstancePrivate *priv;
-    QofBackend * be;
 
     priv = GET_PRIVATE(inst);
 
@@ -1013,27 +1011,27 @@ qof_commit_edit_part2(QofInstance *inst,
     }
 
     /* See if there's a backend.  If there is, invoke it. */
-    be = qof_book_get_backend(priv->book);
-    if (be && qof_backend_commit_exists(be))
+    auto be = qof_book_get_backend(priv->book);
+    if (be)
     {
         QofBackendError errcode;
 
         /* clear errors */
         do
         {
-            errcode = qof_backend_get_error(be);
+            errcode = be->get_error();
         }
-        while (ERR_BACKEND_NO_ERR != errcode);
+        while (errcode != ERR_BACKEND_NO_ERR);
 
-        qof_backend_run_commit(be, inst);
-        errcode = qof_backend_get_error(be);
-        if (ERR_BACKEND_NO_ERR != errcode)
+        be->commit(inst);
+        errcode = be->get_error();
+        if (errcode != ERR_BACKEND_NO_ERR)
         {
             /* XXX Should perform a rollback here */
             priv->do_free = FALSE;
 
             /* Push error back onto the stack */
-            qof_backend_set_error (be, errcode);
+            be->set_error (errcode);
             if (on_error)
                 on_error(inst, errcode);
             return FALSE;

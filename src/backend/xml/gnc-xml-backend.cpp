@@ -23,6 +23,7 @@ extern "C"
 #include <windows.h>
 #endif
 #include <errno.h>
+#include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -48,21 +49,8 @@ extern "C"
 #define FILE_URI_PREFIX "file://"
 static QofLogModule log_module = GNC_MOD_BACKEND;
 
-GncXmlBackend::GncXmlBackend()
-{
-    memset(&qof_be, 0, sizeof(qof_be));
-    qof_backend_init(&qof_be);
-}
-
-GncXmlBackend::~GncXmlBackend()
-{
-    /* Stop transaction logging */
-    xaccLogSetBaseName (NULL);
-    qof_backend_destroy (&qof_be);
-}
-
 bool
-check_path (const char* fullpath, QofBackend* qof_be, bool create)
+GncXmlBackend::check_path (const char* fullpath, bool create)
 {
     struct stat statbuf;
     char* dirname = g_path_get_dirname (fullpath);
@@ -78,9 +66,9 @@ check_path (const char* fullpath, QofBackend* qof_be, bool create)
     {
         /* Error on stat or if it isn't a directory means we
            cannot find this filename */
-        qof_backend_set_error (qof_be, ERR_FILEIO_FILE_NOT_FOUND);
-        qof_backend_set_message (qof_be, "Couldn't find directory for %s",
-                                 fullpath);
+        set_error(ERR_FILEIO_FILE_NOT_FOUND);
+        std::string msg {"Couldn't find directory for "};
+        set_message(msg + fullpath);
         PWARN ("Couldn't find directory for %s", fullpath);
         g_free(dirname);
         return false;
@@ -91,8 +79,9 @@ check_path (const char* fullpath, QofBackend* qof_be, bool create)
     if ((rc != 0) && (!create))
     {
         /* Error on stat means the file doesn't exist */
-        qof_backend_set_error (qof_be, ERR_FILEIO_FILE_NOT_FOUND);
-        qof_backend_set_message (qof_be, "Couldn't find %s", fullpath);
+        set_error(ERR_FILEIO_FILE_NOT_FOUND);
+        std::string msg {"Couldn't find "};
+        set_message(msg + fullpath);
         PWARN ("Couldn't find %s", fullpath);
         g_free(dirname);
         return false;
@@ -105,8 +94,10 @@ check_path (const char* fullpath, QofBackend* qof_be, bool create)
 #endif
         )
     {
-        qof_backend_set_error (qof_be, ERR_FILEIO_UNKNOWN_FILE_TYPE);
-        qof_backend_set_message (qof_be, "Path %s is a directory", fullpath);
+        set_error(ERR_FILEIO_UNKNOWN_FILE_TYPE);
+        std::string msg {"Path "};
+        msg += fullpath;
+        set_message(msg +  " is a directory");
         PWARN ("Path %s is a directory", fullpath);
         g_free(dirname);
         return false;
@@ -123,20 +114,19 @@ GncXmlBackend::session_begin(QofSession* session, const char* book_id,
 
     if (m_fullpath.empty())
     {
-        qof_backend_set_error (&qof_be, ERR_FILEIO_FILE_NOT_FOUND);
-        qof_backend_set_message (&qof_be, "No path specified");
+        set_error(ERR_FILEIO_FILE_NOT_FOUND);
+        set_message("No path specified");
         return;
     }
     if (create && !force && save_may_clobber_data())
     {
-        qof_backend_set_error (&qof_be, ERR_BACKEND_STORE_EXISTS);
+        set_error(ERR_BACKEND_STORE_EXISTS);
         PWARN ("Might clobber, no force");
         return;
     }
 
-    if (!check_path(m_fullpath.c_str(), &qof_be, create))
+    if (!check_path(m_fullpath.c_str(), create))
         return;
-    qof_be.fullpath = const_cast<char*>(m_fullpath.c_str());
     m_dirname = g_path_get_dirname (m_fullpath.c_str());
 
 
@@ -159,7 +149,7 @@ GncXmlBackend::session_begin(QofSession* session, const char* book_id,
 
         if (force)
         {
-            QofBackendError berror = qof_backend_get_error (&qof_be);
+            QofBackendError berror = get_error();
             if (berror == ERR_BACKEND_LOCKED || berror == ERR_BACKEND_READONLY)
             {
                 // Even though we couldn't get the lock, we were told to force
@@ -169,7 +159,7 @@ GncXmlBackend::session_begin(QofSession* session, const char* book_id,
             else
             {
                 // Unknown error. Push it again on the error stack.
-                qof_backend_set_error (&qof_be, berror);
+                set_error(berror);
             }
         }
     }
@@ -181,7 +171,7 @@ GncXmlBackend::session_end()
 {
     if (m_book && qof_book_is_readonly (m_book))
     {
-        qof_backend_set_error (&qof_be, ERR_BACKEND_READONLY);
+        set_error(ERR_BACKEND_READONLY);
         return;
     }
 
@@ -307,7 +297,7 @@ GncXmlBackend::load(QofBook* book, QofBackendLoadType loadType)
 
     if (error != ERR_BACKEND_NO_ERR)
     {
-        qof_backend_set_error (&qof_be, error);
+        set_error(error);
     }
 
     /* We just got done loading, it can't possibly be dirty !! */
@@ -329,7 +319,7 @@ GncXmlBackend::sync(QofBook* book)
     if (qof_book_is_readonly (m_book))
     {
         /* Are we read-only? Don't continue in this case. */
-        qof_backend_set_error (&qof_be, ERR_BACKEND_READONLY);
+        set_error(ERR_BACKEND_READONLY);
         return;
     }
 
@@ -348,6 +338,20 @@ GncXmlBackend::save_may_clobber_data()
 
 }
 
+void
+GncXmlBackend::export_coa(QofBook* book)
+{
+    auto out = fopen(m_fullpath.c_str(), "w");
+    if (out == NULL)
+    {
+        set_error(ERR_FILEIO_WRITE_ERROR);
+        set_message(strerror(errno));
+        return;
+    }
+    gnc_book_write_accounts_to_xml_filehandle_v2(this, book, out);
+    fclose(out);
+}
+
 bool
 GncXmlBackend::write_to_file (bool make_backup)
 {
@@ -358,7 +362,7 @@ GncXmlBackend::write_to_file (bool make_backup)
     if (m_book && qof_book_is_readonly (m_book))
     {
         /* Are we read-only? Don't continue in this case. */
-        qof_backend_set_error (&qof_be, ERR_BACKEND_READONLY);
+        set_error(ERR_BACKEND_READONLY);
         LEAVE ("");
         return FALSE;
     }
@@ -374,8 +378,8 @@ GncXmlBackend::write_to_file (bool make_backup)
 
     if (!mktemp (tmp_name))
     {
-        qof_backend_set_error (&qof_be, ERR_BACKEND_MISC);
-        qof_backend_set_message (&qof_be, "Failed to make temp file");
+        set_error(ERR_BACKEND_MISC);
+        set_message("Failed to make temp file");
         LEAVE ("");
         return FALSE;
     }
@@ -403,8 +407,8 @@ GncXmlBackend::write_to_file (bool make_backup)
             /* Use the permissions from the original data file */
             if (g_chmod (tmp_name, statbuf.st_mode) != 0)
             {
-                /* qof_backend_set_error(&qof_be, ERR_BACKEND_PERM); */
-                /* qof_backend_set_message(&qof_be, "Failed to chmod filename %s", tmp_name ); */
+                /* set_error(ERR_BACKEND_PERM); */
+                /* set_message("Failed to chmod filename %s", tmp_name ); */
                 /* Even if the chmod did fail, the save
                    nevertheless completed successfully. It is
                    therefore wrong to signal the ERR_BACKEND_PERM
@@ -423,8 +427,8 @@ GncXmlBackend::write_to_file (bool make_backup)
                that. */
             if (chown (tmp_name, -1, statbuf.st_gid) != 0)
             {
-                /* qof_backend_set_error(&qof_be, ERR_BACKEND_PERM); */
-                /* qof_backend_set_message(&qof_be, "Failed to chown filename %s", tmp_name ); */
+                /* set_error(ERR_BACKEND_PERM); */
+                /* set_message("Failed to chown filename %s", tmp_name ); */
                 /* A failed chown doesn't mean that the saving itself
                 failed. So don't abort with an error here! */
                 PWARN ("unable to chown filename %s: %s",
@@ -439,7 +443,7 @@ GncXmlBackend::write_to_file (bool make_backup)
         }
         if (g_unlink (m_fullpath.c_str()) != 0 && errno != ENOENT)
         {
-            qof_backend_set_error (&qof_be, ERR_BACKEND_READONLY);
+            set_error(ERR_BACKEND_READONLY);
             PWARN ("unable to unlink filename %s: %s",
                    m_fullpath.empty() ? "(null)" : m_fullpath.c_str(),
                    g_strerror (errno) ? g_strerror (errno) : "");
@@ -449,16 +453,16 @@ GncXmlBackend::write_to_file (bool make_backup)
         }
         if (!link_or_make_backup (tmp_name, m_fullpath))
         {
-            qof_backend_set_error (&qof_be, ERR_FILEIO_BACKUP_ERROR);
-            qof_backend_set_message (&qof_be, "Failed to make backup file %s",
-                                     m_fullpath.empty() ? "NULL" : m_fullpath.c_str());
+            set_error(ERR_FILEIO_BACKUP_ERROR);
+            std::string msg{"Failed to make backup file "};
+            set_message(msg + (m_fullpath.empty() ? "NULL" : m_fullpath));
             g_free (tmp_name);
             LEAVE ("");
             return FALSE;
         }
         if (g_unlink (tmp_name) != 0)
         {
-            qof_backend_set_error (&qof_be, ERR_BACKEND_PERM);
+            set_error(ERR_BACKEND_PERM);
             PWARN ("unable to unlink temp filename %s: %s",
                    tmp_name ? tmp_name : "(null)",
                    g_strerror (errno) ? g_strerror (errno) : "");
@@ -492,7 +496,7 @@ GncXmlBackend::write_to_file (bool make_backup)
                 be_err = ERR_BACKEND_MISC;
                 break;
             }
-            qof_backend_set_error (&qof_be, be_err);
+            set_error(be_err);
             PWARN ("unable to unlink temp_filename %s: %s",
                    tmp_name ? tmp_name : "(null)",
                    g_strerror (errno) ? g_strerror (errno) : "");
@@ -501,9 +505,9 @@ GncXmlBackend::write_to_file (bool make_backup)
         else
         {
             /* Use a generic write error code */
-            qof_backend_set_error (&qof_be, ERR_FILEIO_WRITE_ERROR);
-            qof_backend_set_message (&qof_be, "Unable to write to temp file %s",
-                                     tmp_name ? tmp_name : "NULL");
+            set_error(ERR_FILEIO_WRITE_ERROR);
+            std::string msg{"Unable to write to temp file "};
+            set_message(msg + (tmp_name ? tmp_name : "NULL"));
         }
         g_free (tmp_name);
         LEAVE ("");
@@ -519,8 +523,8 @@ copy_file (const std::string& orig, const std::string& bkup)
     constexpr size_t buf_size = 1024;
     char buf[buf_size];
     int flags = 0;
-    ssize_t count_write;
-    ssize_t count_read;
+    ssize_t count_write = 0;
+    ssize_t count_read = 0;
 
 
 #ifdef G_OS_WIN32
@@ -542,7 +546,7 @@ copy_file (const std::string& orig, const std::string& bkup)
 
     do
     {
-        auto count_read = read (orig_fd, buf, buf_size);
+        count_read = read (orig_fd, buf, buf_size);
         if (count_read == -1 && errno != EINTR)
         {
             close (orig_fd);
@@ -602,7 +606,7 @@ GncXmlBackend::link_or_make_backup (const std::string& orig,
 
         if (!copy_success)
         {
-            qof_backend_set_error (&qof_be, ERR_FILEIO_BACKUP_ERROR);
+            set_error(ERR_FILEIO_BACKUP_ERROR);
             PWARN ("unable to make file backup from %s to %s: %s",
                    orig.c_str(), bkup.c_str(), g_strerror (errno) ? g_strerror (errno) : "");
             return false;
@@ -626,7 +630,7 @@ GncXmlBackend::get_file_lock ()
     if (!rc)
     {
         /* oops .. file is locked by another user  .. */
-        qof_backend_set_error (&qof_be, ERR_BACKEND_LOCKED);
+        set_error(ERR_BACKEND_LOCKED);
         return false;
     }
 
@@ -648,7 +652,7 @@ GncXmlBackend::get_file_lock ()
             be_err = ERR_BACKEND_LOCKED;
             break;
         }
-        qof_backend_set_error (&qof_be, be_err);
+        set_error(be_err);
         return false;
     }
 
@@ -693,7 +697,7 @@ GncXmlBackend::get_file_lock ()
         }
 
         /* Otherwise, something else is wrong. */
-        qof_backend_set_error (&qof_be, ERR_BACKEND_LOCKED);
+        set_error(ERR_BACKEND_LOCKED);
         g_unlink (linkfile.str().c_str());
         close (m_lockfd);
         g_unlink (m_lockfile.c_str());
@@ -704,9 +708,9 @@ GncXmlBackend::get_file_lock ()
     if (rc)
     {
         /* oops .. stat failed!  This can't happen! */
-        qof_backend_set_error (&qof_be, ERR_BACKEND_LOCKED);
-        qof_backend_set_message (&qof_be, "Failed to stat lockfile %s",
-                                 m_lockfile.c_str());
+        set_error(ERR_BACKEND_LOCKED);
+        std::string msg{"Failed to stat lockfile "};
+        set_message(msg + m_lockfile);
         g_unlink (linkfile.str().c_str());
         close (m_lockfd);
         g_unlink (m_lockfile.c_str());
@@ -715,7 +719,7 @@ GncXmlBackend::get_file_lock ()
 
     if (statbuf.st_nlink != 2)
     {
-        qof_backend_set_error (&qof_be, ERR_BACKEND_LOCKED);
+        set_error(ERR_BACKEND_LOCKED);
         g_unlink (linkfile.str().c_str());
         close (m_lockfd);
         g_unlink (m_lockfile.c_str());

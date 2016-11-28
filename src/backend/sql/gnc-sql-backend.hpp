@@ -62,11 +62,41 @@ typedef enum
  *
  * Main SQL backend structure.
  */
-class GncSqlBackend
+class GncSqlBackend : public QofBackend
 {
 public:
     GncSqlBackend(GncSqlConnection *conn, QofBook* book);
     virtual ~GncSqlBackend() = default;
+    /**
+     * Load the contents of an SQL database into a book.
+     *
+     * @param book Book to be loaded
+     */
+    void load(QofBook*, QofBackendLoadType) override;
+    /**
+     * Save the contents of a book to an SQL database.
+     *
+     * @param book Book to be saved
+     */
+    void sync(QofBook*) override;
+    /**
+     * An object is about to be edited.
+     *
+     * @param inst Object being edited
+     */
+    void begin(QofInstance*) override;
+    /**
+     * Object editting is complete and the object should be saved.
+     *
+     * @param inst Object being edited
+     */
+    void commit(QofInstance*) override;
+    /**
+     * Object editing has been cancelled.
+     *
+     * @param inst Object being edited
+     */
+    void rollback(QofInstance*) override;
     /** Connect the backend to a GncSqlConnection.
      * Sets up version info. Calling with nullptr clears the connection and
      * destroys the version info.
@@ -158,36 +188,6 @@ public:
     uint_t get_table_version(const std::string& table_name) const noexcept;
     bool set_table_version (const std::string& table_name, uint_t version) noexcept;
     /**
-     * Load the contents of an SQL database into a book.
-     *
-     * @param book Book to be loaded
-     */
-    void load(QofBook*, QofBackendLoadType);
-    /**
-     * Save the contents of a book to an SQL database.
-     *
-     * @param book Book to be saved
-     */
-    void sync_all(QofBook*);
-    /**
-     * An object is about to be edited.
-     *
-     * @param inst Object being edited
-     */
-    void begin_edit(QofInstance*);
-    /**
-     * Object editting is complete and the object should be saved.
-     *
-     * @param inst Object being edited
-     */
-    void commit_edit(QofInstance*);
-    /**
-     * Object editing has been cancelled.
-     *
-     * @param inst Object being edited
-     */
-    void rollback_edit(QofInstance*);
-    /**
      * Register a commodity to be committed after loading is complete.
      *
      * Necessary to save corrections made while loading.
@@ -241,7 +241,6 @@ public:
     void finish_progress() const noexcept;
 
 protected:
-    QofBackend qof_be;           /**< QOF backend. Not a pointer, nor really a member */
     GncSqlConnection* m_conn;  /**< SQL connection */
     QofBook* m_book;           /**< The primary, main open book */
     bool m_loading;        /**< We are performing an initial load */

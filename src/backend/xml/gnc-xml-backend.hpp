@@ -26,28 +26,26 @@ extern "C"
 #include <string>
 #include <qof-backend.hpp>
 
-class GncXmlBackend
+class GncXmlBackend : public QofBackend
 {
 public:
-    GncXmlBackend();
+    GncXmlBackend() = default;
     GncXmlBackend(const GncXmlBackend&) = delete;
     GncXmlBackend operator=(const GncXmlBackend&) = delete;
     GncXmlBackend(const GncXmlBackend&&) = delete;
     GncXmlBackend operator=(const GncXmlBackend&&) = delete;
-    ~GncXmlBackend();
+    ~GncXmlBackend() = default;
     void session_begin(QofSession* session, const char* book_id,
-                       bool ignore_lock, bool create, bool force);
-    void session_end();
-    void load(QofBook* book, QofBackendLoadType loadType);
+                       bool ignore_lock, bool create, bool force) override;
+    void session_end() override;
+    void load(QofBook* book, QofBackendLoadType loadType) override;
     /* The XML backend isn't able to do anything with individual instances. */
-    void begin(QofInstance* inst) {}
-    void commit(QofInstance* inst) {}
-    void rollback(QofInstance* inst) {}
-    void sync(QofBook* book);
-    QofBackend* get_qof_be() { return &qof_be; }
+    void export_coa(QofBook*) override;
+    void sync(QofBook* book) override;
+    void safe_sync(QofBook* book) override { sync(book); } // XML sync is inherently safe.
     const char * get_filename() { return m_fullpath.c_str(); }
     QofBook* get_book() { return m_book; }
-    
+
 private:
     bool save_may_clobber_data();
     bool get_file_lock();
@@ -56,10 +54,9 @@ private:
     bool write_to_file(bool make_backup);
     void remove_old_files();
     void write_accounts(QofBook* book);
-    QofBackend qof_be;
+    bool check_path(const char* fullpath, bool create);
 
     std::string m_dirname;
-    std::string m_fullpath;  /* Fully qualified path to book */
     std::string m_lockfile;
     std::string m_linkfile;
     int m_lockfd;

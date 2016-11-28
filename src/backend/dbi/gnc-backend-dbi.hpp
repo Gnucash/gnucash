@@ -84,14 +84,22 @@ enum class DbType
 /**
  * Implementations of GncSqlBackend.
  */
+struct UriStrings;
+
+template <DbType Type>
 class GncDbiBackend : public GncSqlBackend
 {
 public:
     GncDbiBackend(GncSqlConnection *conn, QofBook* book) :
         GncSqlBackend(conn, book), m_exists{false} {}
+    ~GncDbiBackend();
+    void session_begin(QofSession*, const char*, bool, bool, bool) override;
+    void session_end() override;
+    void load(QofBook*, QofBackendLoadType) override;
+    void safe_sync(QofBook*) override;
     bool connected() const noexcept { return m_conn != nullptr; }
     /** FIXME: Just a pass-through to m_conn: */
-    void set_error(int error, unsigned int repeat,  bool retry) noexcept
+    void set_dbi_error(int error, unsigned int repeat,  bool retry) noexcept
     {
         m_conn->set_error(error, repeat, retry);
     }
@@ -102,14 +110,13 @@ public:
     /*-----*/
     bool exists() { return m_exists; }
     void set_exists(bool exists) { m_exists = exists; }
-    friend void gnc_dbi_load(QofBackend*, QofBook*, QofBackendLoadType);
-    friend void gnc_dbi_safe_sync_all(QofBackend*, QofBook*);
 private:
+    dbi_conn conn_setup(PairVec& options, UriStrings& uri);
+    bool conn_test_dbi_library(dbi_conn conn);
+    bool set_standard_connection_options(dbi_conn conn, const UriStrings& uri);
+    bool create_database(dbi_conn conn, const char* db);
     bool m_exists;         // Does the database exist?
 };
-
-
-void gnc_dbi_safe_sync_all (QofBackend* qbe, QofBook* book);
 
 /* external access required for tests */
 std::string adjust_sql_options_string(const std::string&);
