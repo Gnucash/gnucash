@@ -1486,7 +1486,7 @@ gnc_main_window_generate_title (GncMainWindow *window)
                ? g_strdup_printf(" %s", readonly_text)
                : g_strdup("");
 
-    if (!book_id)
+    if (!book_id || g_strcmp0 (book_id, "") == 0)
         filename = g_strdup(_("Unsaved Book"));
     else
     {
