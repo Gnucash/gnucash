@@ -553,11 +553,10 @@
 		       (gnc:date-option-absolute-time
 			(opt-val gnc:pagename-general (N_ "To")))))
 	 (book (gnc-account-get-book account))
-         (date-format (gnc:fancy-date-info book gnc:*fancy-date-format*))
+         (date-format (gnc:options-fancy-date book))
 	 (type (opt-val "__reg" "owner-type"))
 	 (type-str "")
          (report-title-str ""))
-
     (cond
       ((eqv? type GNC-OWNER-CUSTOMER)
        (set! type-str (N_ "Customer"))

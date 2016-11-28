@@ -47,7 +47,7 @@
            (currency     (gncInvoiceGetCurrency   opt-invoice))
            (entries      (gncInvoiceGetEntries    opt-invoice))
            (splits      '());'
-           (dateformat   (gnc:fancy-date-info book gnc:*fancy-date-format*))
+           (dateformat   (gnc:options-fancy-date book))
            (coyname      (gnc:company-info book gnc:*company-name*))
            (coycontact   (gnc:company-info book gnc:*company-contact*))
            (coyaddr      (gnc:company-info book gnc:*company-addy*))

@@ -757,10 +757,10 @@
                (gnc:date-option-absolute-time
                (opt-val gnc:pagename-general optname-to-date))))
      (book (gnc-account-get-book account))
-     (date-format (gnc:fancy-date-info book gnc:*fancy-date-format*))
+     (date-format (gnc:options-fancy-date book))
      (type (opt-val "__reg" "owner-type"))
      (owner-descr (owner-string type))
-     (date-type (opt-val gnc:pagename-general optname-date-driver)) 
+     (date-type (opt-val gnc:pagename-general optname-date-driver))
      (owner (opt-val owner-page owner-descr))
      (report-title (string-append (doctype-str type) " " (_ "Report"))))
 
