@@ -58,7 +58,7 @@
   (record-constructor <html-scatter>))
 
 (define (gnc:make-html-scatter)
-  (gnc:make-html-scatter-internal -1 -1 #f #f #f #f '() #f #f))
+  (gnc:make-html-scatter-internal '(pixels . -1) '(pixels . -1) #f #f #f #f '() #f #f))
 
 (define gnc:html-scatter-width
   (record-accessor <html-scatter> 'width))
@@ -156,10 +156,15 @@
             (push (gnc:html-css-include "jqplot/jquery.jqplot.css"))
 
             (push "<div id=\"")(push chart-id)(push "\" style=\"width:")
-            (push (gnc:html-scatter-width scatter))
-            (push "px;height:")
-            (push (gnc:html-scatter-height scatter))
-            (push "px;\"></div>\n")
+            (push (cdr (gnc:html-scatter-width scatter)))
+            (if (eq? 'pixels (car (gnc:html-scatter-width scatter)))
+                 (push "px;height:")
+                 (push "%;height:"))
+
+            (push (cdr (gnc:html-scatter-height scatter)))
+            (if (eq? 'pixels (car (gnc:html-scatter-height scatter)))
+                 (push "px;\"></div>\n")
+                 (push "%;\"></div>\n"))
             (push "<script id=\"source\">\n$(function () {")
 
             (push "var data = [];")
