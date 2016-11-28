@@ -134,9 +134,9 @@
       "c" (N_ "Display a table of the selected data.")
       #f))
 
-    (gnc:options-add-plot-size!
-     options gnc:pagename-display
-     optname-plot-width optname-plot-height "d" 500 400)
+    (gnc:options-add-plot-size! 
+     options gnc:pagename-display 
+     optname-plot-width optname-plot-height "d" (cons 'percent 100.0) (cons 'percent 100.0))
 
     (gnc:options-set-default-section options gnc:pagename-general)
 
@@ -328,9 +328,9 @@
        ;; Determine whether we have enough space for horizontal labels
        ;; -- kind of a hack. Assumptions: y-axis labels and legend
        ;; require 200 pixels, and each x-axes label needs 60 pixels.
-       (gnc:html-barchart-set-row-labels-rotated?!
-        chart (< (/ (- width 200)
-                    (length date-string-list)) 60))
+       ;;(gnc:html-barchart-set-row-labels-rotated?!
+       ;; chart (< (/ (- width 200)
+       ;;             (length date-string-list)) 60))
 
        ;; Add the data
        (if show-sep?
