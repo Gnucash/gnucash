@@ -39,6 +39,7 @@ extern "C" {
 #include <vector>
 #include <map>
 #include <memory>
+#include <boost/optional.hpp>
 
 #include "gnc-tokenizer.hpp"
 
@@ -93,8 +94,34 @@ extern const gchar* currency_format_user[];
 extern const int num_date_formats;
 extern const gchar* date_format_user[];
 
-/** Tuple to hold a tokenized line of input and an optional error string */
-using parse_line_t = std::tuple<StrVec, std::string>;
+struct GncPreTrans
+{
+    boost::optional<time64> m_date;
+    boost::optional<std::string> m_num;
+    boost::optional<std::string> m_desc;
+    boost::optional<std::string> m_notes;
+};
+
+struct GncPreSplit
+{
+    boost::optional<Account*> m_account;
+    boost::optional<gnc_numeric> m_deposit;
+    boost::optional<gnc_numeric> m_withdrawal;
+    boost::optional<gnc_numeric> m_balance;
+    boost::optional<std::string> m_memo;
+    boost::optional<Account*> m_oaccount;
+    boost::optional<std::string> m_omemo;
+};
+
+/** Tuple to hold
+ *  - a tokenized line of input
+ *  - an optional error string
+ *  - a struct to hold user selected properties for a transaction
+ *  - a struct to hold user selected properties for one or two splits in the above transaction */
+using parse_line_t = std::tuple<StrVec,
+                                std::string,
+                                std::shared_ptr<GncPreTrans>,
+                                std::shared_ptr<GncPreSplit>>;
 
 /** The actual TxImport class
  * It's intended to use in the following sequence of actions:
