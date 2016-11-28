@@ -53,7 +53,7 @@
   (record-constructor <html-piechart>))
 
 (define (gnc:make-html-piechart)
-  (gnc:make-html-piechart-internal -1 -1 #f #f #f #f #f #f #f #f #f #f #f))
+  (gnc:make-html-piechart-internal '(pixels . -1) '(pixels . -1) #f #f #f #f #f #f #f #f #f #f #f))
 
 (define gnc:html-piechart-data
   (record-accessor <html-piechart> 'data))
@@ -212,10 +212,15 @@
             (push (gnc:html-css-include "jqplot/jquery.jqplot.css"))
 
             (push "<div id=\"")(push chart-id)(push "\" style=\"width:")
-            (push (gnc:html-piechart-width piechart))
-            (push "px;height:")
-            (push (gnc:html-piechart-height piechart))
-            (push "px;\"></div>\n")
+            (push (cdr (gnc:html-piechart-width piechart)))
+            (if (eq? 'pixels (car (gnc:html-piechart-width piechart)))
+                 (push "px;height:")
+                 (push "%;height:"))
+
+            (push (cdr (gnc:html-piechart-height piechart)))
+            (if (eq? 'pixels (car (gnc:html-piechart-height piechart)))
+                 (push "px;\"></div>\n")
+                 (push "%;\"></div>\n"))
             (push "<script id=\"source\">\n$(function () {")
 
             (push "var data = [];\n")

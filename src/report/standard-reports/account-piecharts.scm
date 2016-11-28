@@ -183,7 +183,7 @@ balance at a given time"))
 
     (gnc:options-add-plot-size! 
      options gnc:pagename-display 
-     optname-plot-width optname-plot-height "d" 500 350)
+     optname-plot-width optname-plot-height "d" (cons 'percent 100.0) (cons 'percent 100.0))
 
     (gnc:options-add-sort-method! 
      options gnc:pagename-display
