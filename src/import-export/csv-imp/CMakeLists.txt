@@ -17,6 +17,7 @@ SET(csv_import_SOURCES
   gnc-dummy-tokenizer.cpp
   gnc-fw-tokenizer.cpp
   gnc-tokenizer.cpp
+  gnc-trans-props.cpp
   gnc-tx-import.cpp
   ${CMAKE_SOURCE_DIR}/lib/stf/stf-parse.c
   ${CMAKE_SOURCE_DIR}/lib/goffice/go-charmap-sel.c
@@ -42,6 +43,7 @@ SET(csv_import_noinst_HEADERS
   gnc-dummy-tokenizer.hpp
   gnc-fw-tokenizer.hpp
   gnc-tokenizer.hpp
+  gnc-trans-props.hpp
   gnc-tx-import.hpp
   ${CMAKE_SOURCE_DIR}/lib/stf/stf-parse.h
   ${CMAKE_SOURCE_DIR}/lib/goffice/go-charmap-sel.h

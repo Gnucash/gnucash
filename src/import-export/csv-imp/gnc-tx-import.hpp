@@ -39,35 +39,10 @@ extern "C" {
 #include <vector>
 #include <map>
 #include <memory>
-#include <boost/optional.hpp>
 
 #include "gnc-tokenizer.hpp"
+#include "gnc-trans-props.hpp"
 
-
-/** Enumeration for column types. These are the different types of
- * columns that can exist in a CSV/Fixed-Width file. There should be
- * no two columns with the same type except for the GncTransPropType::NONE
- * type. */
-enum class GncTransPropType {
-    NONE,
-    DATE,
-    NUM,
-    DESCRIPTION,
-    NOTES,
-    ACCOUNT,
-    DEPOSIT,
-    WITHDRAWAL,
-    BALANCE,
-    MEMO,
-    OACCOUNT,
-    OMEMO
-};
-
-/** Maps all column types to a string representation.
- *  The actual definition is in gnc-tx-import.cpp.
- *  Attention: that definition should be adjusted for any
- *  changes to enum class GncTransPropType ! */
-extern std::map<GncTransPropType, const char*> gnc_csv_col_type_strs;
 
 /* TODO We now sort transactions by date, not line number, so we
  * should probably get rid of this struct and uses of it. */
@@ -94,25 +69,6 @@ extern const gchar* currency_format_user[];
 extern const int num_date_formats;
 extern const gchar* date_format_user[];
 
-struct GncPreTrans
-{
-    boost::optional<time64> m_date;
-    boost::optional<std::string> m_num;
-    boost::optional<std::string> m_desc;
-    boost::optional<std::string> m_notes;
-};
-
-struct GncPreSplit
-{
-    boost::optional<Account*> m_account;
-    boost::optional<gnc_numeric> m_deposit;
-    boost::optional<gnc_numeric> m_withdrawal;
-    boost::optional<gnc_numeric> m_balance;
-    boost::optional<std::string> m_memo;
-    boost::optional<Account*> m_oaccount;
-    boost::optional<std::string> m_omemo;
-};
-
 /** Tuple to hold
  *  - a tokenized line of input
  *  - an optional error string
@@ -122,9 +78,6 @@ using parse_line_t = std::tuple<StrVec,
                                 std::string,
                                 std::shared_ptr<GncPreTrans>,
                                 std::shared_ptr<GncPreSplit>>;
-
-struct GncTransProperty;
-using prop_map_t = std::map<GncTransPropType, std::shared_ptr<GncTransProperty>>;
 
 /** The actual TxImport class
  * It's intended to use in the following sequence of actions:
@@ -165,12 +118,12 @@ public:
     bool parse_errors;          /**< Indicates whether the last parse_to_trans run had any errors */
 
 private:
-    void parse_line_to_trans (StrVec& line, prop_map_t& trans_props);
+    void parse_line_to_trans (parse_line_t& orig_line);
     void adjust_balances (Account *account);
 
     GncImpFileFormat file_fmt = GncImpFileFormat::UNKNOWN;
+    Account *home_account = NULL;
 };
 
-time64 parse_date (const std::string &date_str, int format);
 
 #endif
