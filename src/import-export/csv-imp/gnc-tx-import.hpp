@@ -49,6 +49,8 @@ extern "C" {
  *  the user had selected a balance column. */
 struct DraftTransaction
 {
+    DraftTransaction (Transaction* tx) : trans(tx), balance(gnc_numeric_zero()), balance_set(false) {}
+    ~DraftTransaction () { if (trans) { xaccTransDestroy (trans); trans = nullptr; } }
     Transaction* trans;
     gnc_numeric balance;  /**< The expected balance after this transaction takes place */
     bool balance_set;     /**< true if balance has been set from user data, false otherwise */
@@ -108,7 +110,7 @@ public:
                                                      Per line also holds possible error messages and objects with extracted transaction
                                                      and split properties. */
     std::vector<GncTransPropType> column_types; /**< Vector of values from the GncCsvColumnType enumeration */
-    std::multimap <time64, <DraftTransaction*> transactions;  /**< map of transaction objects created
+    std::multimap <time64, std::shared_ptr<DraftTransaction>> transactions;  /**< map of transaction objects created
                                                      from parsed_lines and column_types, ordered by date */
     int date_format;            /**< The format of the text in the date columns from date_format_internal. */
     guint start_row;            /**< The start row to generate transactions from. */

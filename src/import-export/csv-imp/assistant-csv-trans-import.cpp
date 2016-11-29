@@ -2463,7 +2463,11 @@ csv_import_trans_assistant_match_page_prepare (GtkAssistant *assistant,
             for (auto trans_it : info->parse_data->transactions)
             {
                 auto draft_trans = trans_it.second;
-                gnc_gen_trans_list_add_trans (info->gnc_csv_importer_gui, draft_trans->trans);
+                if (draft_trans->trans)
+                {
+                    gnc_gen_trans_list_add_trans (info->gnc_csv_importer_gui, draft_trans->trans);
+                    draft_trans->trans = nullptr;
+                }
             }
         }
     }
