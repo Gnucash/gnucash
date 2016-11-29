@@ -240,9 +240,9 @@ static void trans_properties_verify_essentials (parse_line_t& parsed_line)
  * Note: this function assumes all properties have been verified
  *       to be valid and the required properties are available.
  * @param parsed_line The current line being parsed
- * @return On success, a DraftTransaction; on failure a nullptr
+ * @return On success, a shared pointer to a DraftTransaction object; on failure a nullptr
  */
-static DraftTransaction* trans_properties_to_trans (parse_line_t& parsed_line)
+static std::shared_ptr<DraftTransaction> trans_properties_to_trans (parse_line_t& parsed_line)
 {
     std::string error_message;
     std::shared_ptr<GncPreTrans> trans_props;
@@ -258,10 +258,7 @@ static DraftTransaction* trans_properties_to_trans (parse_line_t& parsed_line)
     if (!trans)
         return nullptr;
 
-    DraftTransaction* draft_trans = g_new (DraftTransaction, 1);
-    draft_trans->balance_set = false;
-    draft_trans->balance = gnc_numeric_zero();
-
+    auto draft_trans = std::make_shared<DraftTransaction>(trans);
     auto balance = split_props->create_split(trans);
     if (balance)
     {
@@ -390,7 +387,7 @@ void GncTxImport::create_transaction (parse_line_t& parsed_line)
         if (draft_trans)
         {
             auto trans_date = xaccTransGetDate (draft_trans->trans);
-            transactions.insert (std::pair<time64, DraftTransaction*>(trans_date,draft_trans));
+            transactions.insert (std::pair<time64, std::shared_ptr<DraftTransaction>>(trans_date,std::move(draft_trans)));
         }
     }
     catch (const std::invalid_argument& e)
@@ -420,11 +417,8 @@ void GncTxImport::create_transactions (Account* account,
         for (auto orig_line : parsed_lines)
             std::get<1>(orig_line).clear();
 
-        /* FIXME handle memory leak here!
-         * Existing transactions in the map should probably removed before emptying the map
-         */
-        if (!transactions.empty())
-            transactions.clear();
+        /* Drop all existing draft transactions on a full run */
+        transactions.clear();
     }
 
     /* compute start and end iterators based on user-set restrictions */
