@@ -30,26 +30,13 @@ extern "C" {
 #endif
 
 #include <glib/gi18n.h>
-
-#include "gnc-csv-account-map.h"
-#include "gnc-ui-util.h"
-#include "engine-helpers.h"
-
-#include <string.h>
-
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <stdlib.h>
-#include <math.h>
 }
 
-#include <algorithm>
 #include <boost/regex.hpp>
 #include <boost/regex/icu.hpp>
 
 #include "gnc-tx-import.hpp"
+#include "gnc-trans-props.hpp"
 #include "gnc-csv-tokenizer.hpp"
 #include "gnc-fw-tokenizer.hpp"
 
@@ -63,131 +50,12 @@ G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 //                                   N_("m-d")
 //                                  };
 //
-/* Regular expressions used to parse dates per date format */
-const char* date_regex[] = {
-                             "(?:"                                   // either y-m-d
-                                 "(?<YEAR>[0-9]+)[-/.' ]+"
-                                 "(?<MONTH>[0-9]+)[-/.' ]+"
-                                 "(?<DAY>[0-9]+)"
-                             "|"                                     // or CCYYMMDD
-                                 "(?<YEAR>[0-9]{4})"
-                                 "(?<MONTH>[0-9]{2})"
-                                 "(?<DAY>[0-9]{2})"
-                             ")",
-
-                             "(?:"                                   // either d-m-y
-                                 "(?<DAY>[0-9]+)[-/.' ]+"
-                                 "(?<MONTH>[0-9]+)[-/.' ]+"
-                                 "(?<YEAR>[0-9]+)"
-                             "|"                                     // or DDMMCCYY
-                                 "(?<DAY>[0-9]{2})"
-                                 "(?<MONTH>[0-9]{2})"
-                                 "(?<YEAR>[0-9]{4})"
-                             ")",
-
-                             "(?:"                                   // either m-d-y
-                                 "(?<MONTH>[0-9]+)[-/.' ]+"
-                                 "(?<DAY>[0-9]+)[-/.' ]+"
-                                 "(?<YEAR>[0-9]+)"
-                             "|"                                     // or MMDDCCYY
-                                 "(?<MONTH>[0-9]{2})"
-                                 "(?<DAY>[0-9]{2})"
-                                 "(?<YEAR>[0-9]{4})"
-                             ")",
-
-                             "(?:"                                   // either d-m(-y)
-                                 "(?<DAY>[0-9]+)[-/.' ]+"
-                                 "(?<MONTH>[0-9]+)(?:[-/.' ]+"
-                                 "(?<YEAR>[0-9]+))?"
-                             "|"                                     // or DDMM(CCYY)
-                                 "(?<DAY>[0-9]{2})"
-                                 "(?<MONTH>[0-9]{2})"
-                                 "(?<YEAR>[0-9]+)?"
-                             ")",
-
-                             "(?:"                                   // either m-d(-y)
-                                 "(?<MONTH>[0-9]+)[-/.' ]+"
-                                 "(?<DAY>[0-9]+)(?:[-/.' ]+"
-                                 "(?<YEAR>[0-9]+))?"
-                             "|"                                     // or MMDD(CCYY)
-                                 "(?<MONTH>[0-9]{2})"
-                                 "(?<DAY>[0-9]{2})"
-                                 "(?<YEAR>[0-9]+)?"
-                             ")",
-};
 //const int num_currency_formats = 3;
 //const gchar* currency_format_user[] = {N_("Locale"),
 //                                       N_("Period: 123,456.78"),
 //                                       N_("Comma: 123.456,78")
 //                                      };
 //
-/* This map contains a set of strings representing the different column types. */
-std::map<GncTransPropType, const char*> gnc_csv_col_type_strs = {
-        { GncTransPropType::NONE, N_("None") },
-        { GncTransPropType::DATE, N_("Date") },
-        { GncTransPropType::NUM, N_("Num") },
-        { GncTransPropType::DESCRIPTION, N_("Description") },
-        { GncTransPropType::NOTES, N_("Notes") },
-        { GncTransPropType::ACCOUNT, N_("Account") },
-        { GncTransPropType::DEPOSIT, N_("Deposit") },
-        { GncTransPropType::WITHDRAWAL, N_("Withdrawal") },
-        { GncTransPropType::BALANCE, N_("Balance") },
-        { GncTransPropType::MEMO, N_("Memo") },
-        { GncTransPropType::OACCOUNT, N_("Other Account") },
-        { GncTransPropType::OMEMO, N_("Other Memo") }
-};
-
-/** Parses a string into a date, given a format. This function
- * requires only knowing the order in which the year, month and day
- * appear. For example, 01-02-2003 will be parsed the same way as
- * 01/02/2003.
- * @param date_str The string containing a date being parsed
- * @param format An index specifying a format in date_format_user
- * @exception std::invalid_argument if the string can't be parsed into a date.
- * @return The parsed value of date_str on success or -1 on failure
- */
-time64 parse_date (const std::string &date_str, int format)
-{
-    boost::regex r(date_regex[format]);
-    boost::smatch what;
-    if(!boost::regex_search(date_str, what, r))
-        throw std::invalid_argument ("String doesn't appear to be formatted as a date.");  // regex didn't find a match
-
-    // Attention: different behavior from 2.6.x series !
-    // If date format without year was selected, the match
-    // should NOT have found a year.
-    if ((format >= 3) && (what.length("YEAR") != 0))
-        throw std::invalid_argument ("String appears to contain a year while the selected format forbids this.");
-
-    auto day = std::stoi (what.str("DAY"));
-    auto month = std::stoi (what.str("MONTH"));
-
-    int year;
-    if (format < 3)
-    {
-        /* The input dates have a year, so use that one */
-        year = std::stoi (what.str("YEAR"));
-
-        /* Handle two-digit years. */
-        if (year < 100)
-        {
-            /* We allow two-digit years in the range 1969 - 2068. */
-            if (year < 69)
-                year += 2000;
-            else
-                year += 1900;
-        }
-    }
-    else
-    {
-        /* The input dates don't have a year, so work with today's year.
-         */
-        gnc_timespec2dmy(timespec_now(), nullptr, nullptr, &year);
-    }
-
-    auto ts = gnc_dmy2timespec_neutral(day, month, year);
-    return ts.tv_sec;
-}
 
 /** Constructor for GncTxImport.
  * @return Pointer to a new GncCSvParseData
@@ -337,367 +205,72 @@ void GncTxImport::parse (bool guessColTypes)
 }
 
 
-/** Convert str into a time64 using the user-specified (import) date format.
- * @param str The string to be parsed
- * @param date_format The date format to use.
- * @return a pointer to a time64 on success, nullptr on failure
- */
-static time64* convert_date_col_str (const std::string &str, int date_format)
-{
-    try
-    {
-        auto parsed_date = parse_date (str.c_str(), date_format);
-        auto mydate = new time64;
-        *mydate = parsed_date;
-        return mydate;
-    }
-    catch (std::invalid_argument)
-    {
-        return nullptr;
-    }
-}
-
-
-/** Convert str into a gnc_numeric using the user-specified (import) currency format.
- * @param str The string to be parsed
- * @param currency_format The currency format to use.
- * @return a pointer to a gnc_numeric on success, nullptr on failure
- */
-static gnc_numeric* convert_amount_col_str (const std::string &str, int currency_format)
-{
-    /* If a cell is empty or just spaces return 0 as amount */
-    if(!boost::regex_search(str, boost::regex("[0-9]")))
-        return nullptr;
-
-    auto expr = boost::make_u32regex("[[:Sc:]]");
-    std::string str_no_symbols = boost::u32regex_replace(str, expr, "");
-
-    /* Convert based on user chosen currency format */
-    gnc_numeric val;
-    char *endptr;
-    switch (currency_format)
-    {
-    case 0:
-        /* Currency locale */
-        if (!(xaccParseAmount (str_no_symbols.c_str(), TRUE, &val, &endptr)))
-            return nullptr;
-        break;
-    case 1:
-        /* Currency decimal period */
-        if (!(xaccParseAmountExtended (str_no_symbols.c_str(), TRUE, '-', '.', ',', "\003\003", "$+", &val, &endptr)))
-            return nullptr;
-        break;
-    case 2:
-        /* Currency decimal comma */
-        if (!(xaccParseAmountExtended (str_no_symbols.c_str(), TRUE, '-', ',', '.', "\003\003", "$+", &val, &endptr)))
-            return nullptr;
-        break;
-    }
-
-    auto amount = new gnc_numeric;
-    *amount = val;
-    return amount;
-}
-
-/* Define a class hierarchy to temporarily store transaction/split properties
- * found in one import line. There is a generic parent class and an implementation
- * template class. This template class is further specialized for each data type
- * we support (currently time64, Account, string and gnc_numeric).
- */
-struct GncTransProperty
-{
-    virtual ~GncTransProperty()
-      //Remove pure designation.
-        {}
-    bool m_valid = false;
-};
-
-template<class T>
-struct GncTransPropImpl
-: public GncTransProperty
-{
-public:
-    ~GncTransPropImpl(){};
-    GncTransPropImpl(const std::string& val, int fmt)
-    {
-        m_valid = false;
-    };
-
-    static GncTransProperty* make_new(const std::string& val,int fmt = 0)
-        { return nullptr; }
-
-    T m_value;
-};
-
-template<>
-struct GncTransPropImpl<time64*>
-: public GncTransProperty
-{
-    GncTransPropImpl(const std::string& val, int fmt)
-    {
-        m_value = convert_date_col_str (val, fmt);
-        m_valid = (m_value != nullptr);
-    }
-    ~GncTransPropImpl()
-        { if (m_value) delete m_value; }
-
-    static std::shared_ptr<GncTransProperty> make_new(const std::string& val,int fmt)
-    { return std::shared_ptr<GncTransProperty>(new GncTransPropImpl<time64*>(val, fmt)); }
-
-    time64* m_value;
-};
-
-
-template<>
-struct GncTransPropImpl<std::string*>
-: public GncTransProperty
-{
-    GncTransPropImpl(const std::string& val, int fmt = 0)
-    {
-        m_value = new std::string(val);
-        m_valid = (m_value != nullptr);
-    }
-    ~GncTransPropImpl()
-        { if (m_value) delete m_value; }
-
-    static std::shared_ptr<GncTransProperty> make_new(const std::string& val,int fmt = 0)
-        { return std::shared_ptr<GncTransProperty>(new GncTransPropImpl<std::string*>(val)); } /* Note fmt is not used for strings */
-
-    std::string* m_value;
-};
-
-template<>
-struct GncTransPropImpl<Account *>
-: public GncTransProperty
-{
-    GncTransPropImpl(const std::string& val, int fmt = 0)
-    {
-        m_value = gnc_csv_account_map_search (val.c_str());
-        m_valid = (m_value != nullptr);
-    }
-    GncTransPropImpl(Account* val)
-        { m_value = val; }
-    ~GncTransPropImpl(){};
-
-    static std::shared_ptr<GncTransProperty> make_new(const std::string& val,int fmt = 0)
-        { return std::shared_ptr<GncTransProperty>(new GncTransPropImpl<Account*>(val)); } /* Note fmt is not used in for accounts */
-
-    Account * m_value;
-};
-
-template<>
-struct GncTransPropImpl<gnc_numeric *>
-: public GncTransProperty
-{
-    GncTransPropImpl(const std::string& val, int fmt)
-    {
-        m_value = convert_amount_col_str (val, fmt);
-        m_valid = (m_value != nullptr);
-    }
-    ~GncTransPropImpl()
-        { if (m_value) delete m_value; }
-
-    static std::shared_ptr<GncTransProperty> make_new(const std::string& val,int fmt)
-    { return std::shared_ptr<GncTransProperty>(new GncTransPropImpl<gnc_numeric*>(val, fmt)); }
-
-    gnc_numeric * m_value;
-};
-
-/** Adds a split to a transaction.
- * @param trans The transaction to add a split to
- * @param account The account used for the split
- * @param book The book where the split should be stored
- * @param amount The amount of the split
- */
-static void trans_add_split (Transaction* trans, Account* account, QofBook* book,
-                            gnc_numeric amount, const std::string& num, const std::string& memo)
-{
-    auto split = xaccMallocSplit (book);
-    xaccSplitSetAccount (split, account);
-    xaccSplitSetParent (split, trans);
-    xaccSplitSetAmount (split, amount);
-    xaccSplitSetValue (split, amount);
-    if (!memo.empty())
-        xaccSplitSetMemo (split, memo.c_str());
-    /* set tran-num and/or split-action per book option
-     * note this function does nothing if num is NULL also */
-    if (!num.empty())
-        gnc_set_num_action (trans, split, num.c_str(), NULL);
-}
-
-
-/* Shorthand aliases for the container to keep track of property types (a map)
- * and its iterator (a pair)
- */
-using prop_pair_t = std::pair<GncTransPropType, std::shared_ptr<GncTransProperty>>;
-
-/** Tests a TransPropertyList for having enough essential properties.
+/** Checks whether the parsed line contains all essential properties.
  * Essential properties are
  * - "Date"
  * - at least one of "Balance", "Deposit", or "Withdrawal"
  * - "Account"
  * Note account isn't checked for here as this has been done before
- * @param list The list we are checking
- * @param error Contains an error message on failure
- * @return true if there are enough essentials; false otherwise
+ * @param parse_line The line we are checking
+ * @exception std::invalid_argument in an essential property is missing
  */
-static bool trans_properties_verify_essentials (prop_map_t& trans_props, gchar** error)
+static void trans_properties_verify_essentials (parse_line_t& orig_line)
 {
-    /* Make sure this is a transaction with all the columns we need. */
-    bool have_date = (trans_props.find (GncTransPropType::DATE) != trans_props.end());
-    bool have_amount = ((trans_props.find (GncTransPropType::DEPOSIT) != trans_props.end()) ||
-                        (trans_props.find (GncTransPropType::WITHDRAWAL) != trans_props.end()) ||
-                        (trans_props.find (GncTransPropType::BALANCE) != trans_props.end()));
+    std::string error_message;
+    std::shared_ptr<GncPreTrans> trans_props;
+    std::shared_ptr<GncPreSplit> split_props;
 
-    std::string error_message {""};
-    if (!have_date)
-        error_message += N_("No date column.");
-    if (!have_amount)
+    std::tie(std::ignore, error_message, trans_props, split_props) = orig_line;
+
+    auto trans_error = trans_props->verify_essentials();
+    auto split_error = split_props->verify_essentials();
+
+    error_message.clear();
+    if (!trans_error.empty())
     {
-        if (!have_date)
+        error_message = trans_error;
+        if (!split_error.empty())
             error_message += "\n";
-        error_message += N_("No balance, deposit, or withdrawal column.");
     }
-    if (!have_date || !have_amount)
-        *error = g_strdup (error_message.c_str());
+    if (!split_error.empty())
+        error_message += split_error;
 
-    return have_amount && have_date;
+    if (!error_message.empty())
+        throw std::invalid_argument(error_message);
 }
-
 /** Create a Transaction from a map of transaction properties.
  * Note: this function assumes all properties in the map have been verified
  *       to be valid. No further checks are performed here other than that
  *       the required properties are in the map
- * @param transprops The map of transaction properties
- * @param error Contains an error on failure
+ * @param orig_line The current line being parsed
  * @return On success, a GncCsvTransLine; on failure, the trans pointer is NULL
  */
-static GncCsvTransLine* trans_properties_to_trans (prop_map_t& trans_props, gchar** error)
+static GncCsvTransLine* trans_properties_to_trans (parse_line_t& orig_line)
 {
-
-    if (!trans_properties_verify_essentials(trans_props, error))
-        return NULL;
-
-    auto property = trans_props.find (GncTransPropType::ACCOUNT)->second;
-    auto account = dynamic_cast<GncTransPropImpl<Account*>*>(property.get())->m_value;
-
-    GncCsvTransLine* trans_line = g_new (GncCsvTransLine, 1);
-
-    /* The balance is 0 by default. */
-    trans_line->balance_set = false;
-    trans_line->balance = double_to_gnc_numeric (0.0, xaccAccountGetCommoditySCU (account),
-                          GNC_HOW_RND_ROUND_HALF_UP);
+    std::string error_message;
+    std::shared_ptr<GncPreTrans> trans_props;
+    std::shared_ptr<GncPreSplit> split_props;
+    std::tie(std::ignore, error_message, trans_props, split_props) = orig_line;
+    auto account = split_props->get_account();
 
     QofBook* book = gnc_account_get_book (account);
     gnc_commodity* currency = xaccAccountGetCommodity (account);
-    trans_line->trans = xaccMallocTransaction (book);
-    xaccTransBeginEdit (trans_line->trans);
-    xaccTransSetCurrency (trans_line->trans, currency);
 
-    /* Go through each of the properties and edit the transaction accordingly. */
-    std::string num;
-    std::string memo;
-    std::string omemo;
-    Account *oaccount = NULL;
-    bool amount_set = false;
-    gnc_numeric amount = trans_line->balance;
+    auto trans = trans_props->create_trans (book, currency);
 
-    for (auto prop_pair : trans_props)
+    if (!trans)
+        return nullptr;
+
+    GncCsvTransLine* trans_line = g_new (GncCsvTransLine, 1);
+    trans_line->balance_set = false;
+    trans_line->balance = gnc_numeric_zero();
+
+    auto balance = split_props->create_split(trans);
+    if (balance)
     {
-        auto type = prop_pair.first;
-        auto prop = prop_pair.second;
-        switch (type)
-        {
-        case GncTransPropType::DATE:
-            {
-                auto transdate = dynamic_cast<GncTransPropImpl<time64*>*>(prop.get())->m_value;
-                xaccTransSetDatePostedSecsNormalized (trans_line->trans, *transdate);
-            }
-            break;
-
-        case GncTransPropType::DESCRIPTION:
-            {
-                auto propstring = dynamic_cast<GncTransPropImpl<std::string*>*>(prop.get())->m_value;
-                xaccTransSetDescription (trans_line->trans, propstring->c_str());
-            }
-            break;
-
-        case GncTransPropType::NOTES:
-            {
-                auto propstring = dynamic_cast<GncTransPropImpl<std::string*>*>(prop.get())->m_value;
-                xaccTransSetNotes (trans_line->trans, propstring->c_str());
-            }
-            break;
-
-        case GncTransPropType::OACCOUNT:
-            oaccount = dynamic_cast<GncTransPropImpl<Account*>*>(prop.get())->m_value;
-            break;
-
-        case GncTransPropType::MEMO:
-            memo = *dynamic_cast<GncTransPropImpl<std::string*>*>(prop.get())->m_value;
-            break;
-
-        case GncTransPropType::OMEMO:
-            omemo = *dynamic_cast<GncTransPropImpl<std::string*>*>(prop.get())->m_value;
-            break;
-
-        case GncTransPropType::NUM:
-            /* the 'num' is saved and passed to 'trans_add_split' below where
-             * 'gnc_set_num_action' is used to set tran-num and/or split-action
-             * per book option */
-            num = *dynamic_cast<GncTransPropImpl<std::string*>*>(prop.get())->m_value;
-            break;
-
-        case GncTransPropType::DEPOSIT: /* Add deposits to the existing amount. */
-            {
-                auto propval = dynamic_cast<GncTransPropImpl<gnc_numeric*>*>(prop.get())->m_value;
-                amount = gnc_numeric_add (*propval,
-                                         amount,
-                                         xaccAccountGetCommoditySCU (account),
-                                         GNC_HOW_RND_ROUND_HALF_UP);
-                amount_set = true;
-                /* We will use the "Deposit" and "Withdrawal" columns in preference to "Balance". */
-                trans_line->balance_set = false;
-            }
-            break;
-
-        case GncTransPropType::WITHDRAWAL: /* Withdrawals are just negative deposits. */
-            {
-                auto propval = dynamic_cast<GncTransPropImpl<gnc_numeric*>*>(prop.get())->m_value;
-                amount = gnc_numeric_add (gnc_numeric_neg(*propval),
-                                         amount,
-                                         xaccAccountGetCommoditySCU (account),
-                                         GNC_HOW_RND_ROUND_HALF_UP);
-                amount_set = true;
-                /* We will use the "Deposit" and "Withdrawal" columns in preference to "Balance". */
-                trans_line->balance_set = false;
-            }
-            break;
-
-        case GncTransPropType::BALANCE: /* The balance gets stored in a separate field in trans_line. */
-            /* We will use the "Deposit" and "Withdrawal" columns in preference to "Balance". */
-            if (!amount_set)
-            {
-                auto propval = dynamic_cast<GncTransPropImpl<gnc_numeric*>*>(prop.get())->m_value;
-                /* This gets put into the actual transaction at the end of gnc_csv_parse_to_trans. */
-                trans_line->balance = *propval;
-                trans_line->balance_set = true;
-            }
-            break;
-        default:
-            break;
-        }
+        trans_line->balance_set = true;
+        trans_line->balance = *balance;
     }
-
-    /* Add a split with the cumulative amount value. */
-    trans_add_split (trans_line->trans, account, book, amount, num, memo);
-
-    if (oaccount)
-        /* Note: the current importer assumes at most 2 splits. This means the second split amount
-         * will be the negative of the the first split amount. We also only set the num field once,
-         * for the first split.
-         */
-        trans_add_split (trans_line->trans, oaccount, book, gnc_numeric_neg(amount), "", omemo);
 
     return trans_line;
 }
@@ -753,8 +326,15 @@ void GncTxImport::adjust_balances (Account *account)
 
 }
 
-void GncTxImport::parse_line_to_trans (StrVec& line, prop_map_t& trans_props)
+void GncTxImport::parse_line_to_trans (parse_line_t& orig_line)
 {
+    StrVec line;
+    std::string error_message;
+    std::shared_ptr<GncPreTrans> trans_props;
+    std::shared_ptr<GncPreSplit> split_props;
+    std::tie(line, error_message, trans_props, split_props) = orig_line;
+    error_message.clear();
+
     /* Convert this import line into a map of transaction/split properties. */
     auto col_types_it = column_types.cbegin();
     auto line_it = line.cbegin();
@@ -763,48 +343,67 @@ void GncTxImport::parse_line_to_trans (StrVec& line, prop_map_t& trans_props)
             line_it != line.cend();
             ++col_types_it, ++line_it)
     {
-        std::shared_ptr<GncTransProperty> property;
-        switch (*col_types_it)
+        try
         {
-            case GncTransPropType::DATE:
-                property = GncTransPropImpl<time64*>::make_new (*line_it, date_format);
-            break;
-
-            case GncTransPropType::DESCRIPTION:
-            case GncTransPropType::NOTES:
-            case GncTransPropType::MEMO:
-            case GncTransPropType::OMEMO:
-            case GncTransPropType::NUM:
-                property = GncTransPropImpl<std::string*>::make_new (*line_it);
-                break;
-
-            case GncTransPropType::ACCOUNT:
-            case GncTransPropType::OACCOUNT:
-                property = GncTransPropImpl<Account*>::make_new (*line_it);
-                break;
-
-            case GncTransPropType::BALANCE:
-            case GncTransPropType::DEPOSIT:
-            case GncTransPropType::WITHDRAWAL:
-                property = GncTransPropImpl<gnc_numeric*>::make_new (*line_it, currency_format);
-                break;
-
-            default:
+            if (*col_types_it == GncTransPropType::NONE)
                 continue; /* We do nothing with "None"-type columns. */
-                break;
+            else if  (*col_types_it <= GncTransPropType::TRANS_PROPS)
+                trans_props->set_property(*col_types_it, *line_it, date_format);
+            else
+                split_props->set_property(*col_types_it, *line_it, currency_format);
         }
-
-        if (property->m_valid)
-            trans_props.insert(prop_pair_t(*col_types_it, property));
-        else
+        catch (const std::invalid_argument&)
         {
-            std::string error_message {_(gnc_csv_col_type_strs[*col_types_it])};
+            parse_errors = true;
+            error_message += _(gnc_csv_col_type_strs[*col_types_it]);
             error_message += _(" column could not be understood.");
-            throw std::invalid_argument (error_message);
+            error_message += "\n";
         }
     }
 
+    if (!error_message.empty())
+        throw std::invalid_argument(error_message);
+
+    // Add an ACCOUNT property with the default account if no account column was set by the user
+    auto line_acct = split_props->get_account();
+    if (!line_acct)
+    {
+        if (home_account)
+            split_props->set_account(home_account);
+        else
+        {
+            // Oops - the user didn't select an Account column *and* we didn't get a default value either!
+            // Note if you get here this suggests a bug in the code!
+            parse_errors = true;
+            error_message = _("No account column selected and no default account specified either.\n"
+                                       "This should never happen. Please report this as a bug.");
+            throw std::invalid_argument(error_message);
+        }
+    }
+
+    /* If column parsing was successful, convert trans properties into a trans line. */
+    try
+    {
+        trans_properties_verify_essentials (orig_line);
+
+        /* If all went well, add this transaction to the list. */
+        /* We want to keep the transactions sorted by date in case we have
+         * to calculate the transaction's amount based on the user provided balances.
+         * The multimap should deal with this for us. */
+        auto trans_line = trans_properties_to_trans (orig_line);
+        if (trans_line)
+        {
+            auto trans_date = xaccTransGetDate (trans_line->trans);
+            transactions.insert (std::pair<time64, GncCsvTransLine*>(trans_date,trans_line));
+        }
+    }
+    catch (const std::invalid_argument& e)
+    {
+        parse_errors = true;
+        error_message = e.what();
+    }
 }
+
 
 /** Creates a list of transactions from parsed data. Transactions that
  * could be created from rows are placed in transactions;
@@ -843,14 +442,13 @@ int GncTxImport::parse_to_trans (Account* account,
     else
         std::advance(orig_lines_max, end_row);
 
-    Account *home_account = NULL;
+    home_account = account;
     auto odd_line = false;
     parse_errors = false;
     for (orig_lines_it, odd_line;
             orig_lines_it != orig_lines_max;
             ++orig_lines_it, odd_line = !odd_line)
     {
-        prop_map_t trans_props;
         auto orig_line = *orig_lines_it;
 
         /* Skip current line if:
@@ -865,60 +463,17 @@ int GncTxImport::parse_to_trans (Account* account,
 
         try
         {
-            parse_line_to_trans (std::get<0>(orig_line), trans_props);
+            parse_line_to_trans (orig_line);
         }
-        catch (const std::invalid_argument& e)
+        catch (const std::invalid_argument&)
         {
-            parse_errors = true;
-            std::get<1>(orig_line) = e.what();
             continue;
         }
-
-        // Add an ACCOUNT property with the default account if no account column was set by the user
-        auto acct_prop_it = trans_props.find (GncTransPropType::ACCOUNT);
-        if (acct_prop_it != trans_props.end())
-            home_account = dynamic_cast<GncTransPropImpl<Account*>*>(acct_prop_it->second.get())->m_value;
-        else
-        {
-            // If there is no ACCOUNT property by now, try to use the default account passed in
-            if (account)
-            {
-                auto property = std::shared_ptr<GncTransProperty>(new GncTransPropImpl<Account*>(account));
-                trans_props.insert(prop_pair_t(GncTransPropType::ACCOUNT, property));
-                home_account = account;
-            }
-            else
-            {
-                // Oops - the user didn't select an Account column *and* we didn't get a default value either!
-                // Note if you get here this suggests a bug in the code!
-                parse_errors = true;
-                std::get<1>(orig_line) = _("No account column selected and no default account specified either.");
-                continue;
-            }
-        }
-
-        /* If column parsing was successful, convert trans properties into a trans line. */
-        gchar *error_message = NULL;
-        auto trans_line = trans_properties_to_trans (trans_props, &error_message);
-        if (trans_line == NULL)
-        {
-            parse_errors = true;
-            std::get<1>(orig_line) = error_message;
-            g_free (error_message);
-            continue;
-        }
-
-        /* If all went well, add this transaction to the list. */
-        /* We want to keep the transactions sorted by date in case we have
-         * to calculate the transaction's amount based on the user provided balances.
-         * The multimap should deal with this for us. */
-        auto trans_date = xaccTransGetDate (trans_line->trans);
-        transactions.insert (std::pair<time64, GncCsvTransLine*>(trans_date,trans_line));
     }
 
     if (std::find(column_types.begin(),column_types.end(), GncTransPropType::BALANCE) !=
         column_types.end()) // This is only used if we have one home account
-        adjust_balances (account ? account : home_account);
+        adjust_balances (home_account);
 
     return 0;
 }
