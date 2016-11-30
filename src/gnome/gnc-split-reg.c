@@ -1042,24 +1042,24 @@ gsr_default_associate_handler_file( GNCSplitReg *gsr, gpointer data )
     if (is_trans_readonly_and_warn(trans))
         return;
 
-	dialog = gtk_file_chooser_dialog_new ("Associate File with Transaction",
+    dialog = gtk_file_chooser_dialog_new ("Associate File with Transaction",
                                      GTK_WINDOW(gsr->window),
                                      GTK_FILE_CHOOSER_ACTION_OPEN,
                                      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
                                      NULL);
 
-	gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER(dialog), 0);
-	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
- 	{
-		char *uri;
+    gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER(dialog), 0);
+    if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+    {
+        char *uri;
 
-	    uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
+        uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
         DEBUG("File URI: %s\n", uri);
-	    xaccTransSetAssociation(trans, uri);
+        xaccTransSetAssociation(trans, uri);
     }
 
-	gtk_widget_destroy (dialog);
+    gtk_widget_destroy (dialog);
 
 }
 
