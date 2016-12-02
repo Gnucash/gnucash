@@ -36,6 +36,12 @@
 #define CSV_NAME         "Name"
 #define CSV_FORMAT       "CsvFormat"
 #define CSV_ALT_ROWS     "AltRows"
+#define CSV_SKIP_START   "SkipStartRows"
+#define CSV_SKIP_END     "SkipEndRows"
+
+/* The following two key names are only used by gnucash 2.6
+ * They have been superseded by CSV_SKIP_START and CSV_SKIP_END.
+ */
 #define CSV_START_ROW    "StartRow"
 #define CSV_END_ROWS     "EndRows"
 
@@ -105,14 +111,14 @@ gnc_csv_trans_find_settings (GtkTreeModel *settings_store)
     GKeyFile   *keyfile;
     gchar     **groups = NULL;
     gint        i;
-    gsize       grouplenght;
+    gsize       grouplength;
     GError     *key_error = NULL;
 
     // Get the Key file
     keyfile = gnc_state_get_current ();
 
     // Find all Groups
-    groups = g_key_file_get_groups (keyfile, &grouplenght);
+    groups = g_key_file_get_groups (keyfile, &grouplength);
 
     // Clear the list store
     gtk_list_store_clear (GTK_LIST_STORE(settings_store));
@@ -122,7 +128,7 @@ gnc_csv_trans_find_settings (GtkTreeModel *settings_store)
     gtk_list_store_set (GTK_LIST_STORE(settings_store), &iter, SET_GROUP, NULL, SET_NAME, _("No Settings"), -1);
 
     // Search all Groups for ones starting with prefix
-    for (i=0; i < grouplenght; i++)
+    for (i=0; i < grouplength; i++)
     {
         if (g_str_has_prefix (groups[i], CSV_GROUP_PREFIX))
         {
@@ -147,18 +153,26 @@ gnc_csv_trans_find_settings (GtkTreeModel *settings_store)
 
 
 /**************************************************
- * load_error
+ * handle_load_error
  *
- * record the error in the log file
+ * record possible errors in the log file
+ * ignore key-not-found errors though. We'll just
+ * use a default value and go on.
  **************************************************/
 static gboolean
-load_error (GError **key_error, gchar *group)
+handle_load_error (GError **key_error, gchar *group)
 {
-    GError *kerror;
-    kerror = g_error_copy (*key_error);
-    g_warning ("Error reading group '%s' : %s", group, kerror->message);
+    if (!*key_error)
+        return FALSE;
+
+    if ((*key_error)->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND)
+    {
+        g_clear_error (key_error);
+        return FALSE;
+    }
+
+    g_warning ("Error reading group '%s' : %s", group, (*key_error)->message);
     g_clear_error (key_error);
-    g_error_free (kerror);
     return TRUE;
 }
 
@@ -181,25 +195,49 @@ gnc_csv_trans_load_settings (CsvSettings *settings_data, gchar *group)
     // Get the Key file
     keyfile = gnc_state_get_current ();
 
-    key_int = g_key_file_get_integer (keyfile, group, CSV_START_ROW, &key_error);
-    settings_data->header_rows = (key_error) ? 1 : key_int;
+    key_int = g_key_file_get_integer (keyfile, group, CSV_SKIP_START, &key_error);
+    settings_data->header_rows = (key_error) ? 0 : key_int;
     if (key_error)
-       error = load_error (&key_error, group);
+    {
 
-    key_int = g_key_file_get_integer (keyfile, group, CSV_END_ROWS, &key_error);
+       /* If the key was not found (in contrast to failing to interpret its value)
+        * perhaps the file still uses the 2.6 key format. Let's check */
+       gboolean tmp_err = handle_load_error (&key_error, group);
+       if (!tmp_err)
+       {
+           key_int = g_key_file_get_integer (keyfile, group, CSV_START_ROW, &key_error);
+           settings_data->header_rows = (key_error) ? 0 : key_int - 1; // Old key was 1-based, new key is 0-based !
+           error |= handle_load_error (&key_error, group);
+       }
+       else
+           error |= tmp_err;
+
+    }
+
+    key_int = g_key_file_get_integer (keyfile, group, CSV_SKIP_END, &key_error);
     settings_data->footer_rows = (key_error) ? 0 : key_int;
     if (key_error)
-       error = load_error (&key_error, group);
+    {
+       /* If the key was not found (in contrast to failing to interpret its value)
+        * perhaps the file still uses the 2.6 key format. Let's check */
+       gboolean tmp_err = handle_load_error (&key_error, group);
+       if (!tmp_err)
+       {
+           key_int = g_key_file_get_integer (keyfile, group, CSV_END_ROWS, &key_error);
+           settings_data->footer_rows = (key_error) ? 0 : key_int; // Old key and new key are both 0-based !
+           error |= handle_load_error (&key_error, group);
+       }
+       else
+           error |= tmp_err;
+    }
 
     key_boolean = g_key_file_get_boolean (keyfile, group, CSV_ALT_ROWS, &key_error);
     settings_data->skip_alt_rows = (key_error) ? FALSE : key_boolean;
-    if (key_error)
-       error = load_error (&key_error, group);
+    error |= handle_load_error (&key_error, group);
 
     key_boolean = g_key_file_get_boolean (keyfile, group, CSV_FORMAT, &key_error);
     settings_data->csv_format = (key_error) ? TRUE : key_boolean;
-    if (key_error)
-       error = load_error (&key_error, group);
+    error |= handle_load_error (&key_error, group);
 
     for (i = 0; i < SEP_NUM_OF_TYPES; i++)
     {
@@ -207,42 +245,34 @@ gnc_csv_trans_load_settings (CsvSettings *settings_data, gchar *group)
         sep = g_strdup_printf ("%s%d", CSV_SEP, i);
         key_boolean = g_key_file_get_boolean (keyfile, group, sep, &key_error);
         settings_data->separator[i] = (key_error) ? FALSE : key_boolean;
-        if (key_error)
-           error = load_error (&key_error, group);
+        error |= handle_load_error (&key_error, group);
         g_free (sep);
     }
 
     key_boolean = g_key_file_get_boolean (keyfile, group, CSV_CUSTOM, &key_error);
     settings_data->custom = (key_error) ? FALSE : key_boolean;
-    if (key_error)
-       error = load_error (&key_error, group);
+    error |= handle_load_error (&key_error, group);
 
     settings_data->custom_entry = g_key_file_get_string (keyfile, group, CSV_CUSTOM_ENTRY, &key_error);
-    if (key_error)
-       error = load_error (&key_error, group);
+    error |= handle_load_error (&key_error, group);
 
     key_int = g_key_file_get_integer (keyfile, group, CSV_DATE, &key_error);
     settings_data->date_active = (key_error) ? 0 : key_int;
-    if (key_error)
-       error = load_error (&key_error, group);
+    error |= handle_load_error (&key_error, group);
 
     key_int = g_key_file_get_integer (keyfile, group, CSV_CURRENCY, &key_error);
     settings_data->currency_active = (key_error) ? 0 : key_int;
-    if (key_error)
-       error = load_error (&key_error, group);
+    error |= handle_load_error (&key_error, group);
 
     key_char = g_key_file_get_string (keyfile, group, CSV_ENCODING, &key_error);
     settings_data->encoding = g_strdup((key_error) ? "UTF-8" : key_char);
-    if (key_error)
-       error = load_error (&key_error, group);
+    error |= handle_load_error (&key_error, group);
 
     settings_data->column_types = g_key_file_get_string (keyfile, group, CSV_COL_TYPES, &key_error);
-    if (key_error)
-       error = load_error (&key_error, group);
+    error |= handle_load_error (&key_error, group);
 
     settings_data->column_widths = g_key_file_get_string (keyfile, group, CSV_COL_WIDTHS, &key_error);
-    if (key_error)
-       error = load_error (&key_error, group);
+    error |= handle_load_error (&key_error, group);
 
     g_free (key_char);
     return error;
@@ -304,8 +334,8 @@ gnc_csv_trans_save_settings (CsvSettings *settings_data, gchar *settings_name)
     // Start Saving the settings
     g_key_file_set_string (keyfile, group, CSV_NAME, settings_name);
 
-    g_key_file_set_integer (keyfile, group, CSV_START_ROW, settings_data->header_rows);
-    g_key_file_set_integer (keyfile, group, CSV_END_ROWS, settings_data->footer_rows);
+    g_key_file_set_integer (keyfile, group, CSV_SKIP_START, settings_data->header_rows);
+    g_key_file_set_integer (keyfile, group, CSV_SKIP_END, settings_data->footer_rows);
     g_key_file_set_boolean (keyfile, group, CSV_ALT_ROWS, settings_data->skip_alt_rows);
     g_key_file_set_boolean (keyfile, group, CSV_FORMAT, settings_data->csv_format);
 

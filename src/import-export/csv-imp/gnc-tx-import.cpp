@@ -68,9 +68,9 @@ GncTxImport::GncTxImport(GncImpFileFormat format)
      * initialized, only the data that needs to be freed is freed. */
     date_format = -1;
     currency_format = 0;
-    start_row = 0;
-    end_row = 1000;
-    skip_rows = FALSE;
+    skip_start_lines = 0;
+    skip_end_lines = 0;
+    skip_alt_lines = FALSE;
     parse_errors = false;
 
     file_fmt = format;
@@ -423,13 +423,10 @@ void GncTxImport::create_transactions (Account* account,
 
     /* compute start and end iterators based on user-set restrictions */
     auto parsed_lines_it = parsed_lines.begin();
-    std::advance(parsed_lines_it, start_row);
+    std::advance(parsed_lines_it, skip_start_lines);
 
     auto parsed_lines_max = parsed_lines.begin();
-    if (end_row > parsed_lines.size())
-        parsed_lines_max = parsed_lines.end();
-    else
-        std::advance(parsed_lines_max, end_row);
+    std::advance(parsed_lines_max, parsed_lines.size() - skip_end_lines);
 
     base_account = account;
     auto odd_line = false;
@@ -437,7 +434,7 @@ void GncTxImport::create_transactions (Account* account,
 
     /* Iterate over all parsed lines */
     for (parsed_lines_it, odd_line;
-            parsed_lines_it != parsed_lines_max;
+            parsed_lines_it < parsed_lines_max;
             ++parsed_lines_it, odd_line = !odd_line)
     {
         auto parsed_line = *parsed_lines_it;
@@ -449,7 +446,7 @@ void GncTxImport::create_transactions (Account* account,
               skip_rows is enabled AND
               current line is an odd line */
         if ((redo_errors && std::get<1>(parsed_line).empty()) ||
-           (!redo_errors && skip_rows && odd_line))
+           (!redo_errors && skip_alt_lines && odd_line))
             continue;
 
         try

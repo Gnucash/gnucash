@@ -84,18 +84,15 @@ typedef struct
     GtkWidget       *preview_page;                  /**< Assistant preview page widget */
     GtkWidget       *settings_combo;                /**< The Settings Combo */
     GtkWidget       *combo_hbox;                    /**< The Settings Combo hbox */
-    GtkWidget       *check_label;                   /**< The widget for the check label */
     GtkWidget       *check_butt;                    /**< The widget for the check label button */
     GtkWidget       *start_row_spin;                /**< The widget for the start row spinner */
     GtkWidget       *end_row_spin;                  /**< The widget for the end row spinner */
     GtkWidget       *skip_rows;                     /**< The widget for Skip alternate rows from start row */
     GtkWidget       *csv_button;                    /**< The widget for the CSV button */
     GtkWidget       *fixed_button;                  /**< The widget for the Fixed Width button */
-    int              start_row;                     /**< The liststore start row, smallest is 0 */
-    int              end_row;                       /**< The liststore end row, max number of rows -1 */
     int              home_account_number;           /**< The number of unique home account strings */
 
-    GncTxImport *parse_data;                    /**< The actual data we are previewing */
+    GncTxImport     *parse_data;                    /**< The actual data we are previewing */
     CsvSettings     *settings_data;                 /**< The settings to be saved and loaded */
     GOCharmapSel    *encselector;                   /**< The widget for selecting the encoding */
     GtkCheckButton  *sep_buttons[SEP_NUM_OF_TYPES]; /**< Checkbuttons for common separators */
@@ -116,8 +113,6 @@ typedef struct
                                                        * 2. encoding_selected is called twice,
                                                        * each time decrementing this by 1. */
     bool             skip_errors;                   /**< This is false until the user checks the skip errors. */
-    int              num_of_rows;                   /**< The number of rows in the store */
-    int              longest_line;                  /**< The length of the longest row */
     int              fixed_context_col;             /**< The number of the column whose the user has clicked */
     int              fixed_context_dx;              /**< The horizontal coordinate of the pixel in the header of the column
                                                        * the user has clicked */
@@ -233,18 +228,21 @@ csv_import_trans_load_settings (CsvImportTrans *info)
     g_free (group);
 
     // Set start row
-    info->parse_data->start_row = info->settings_data->header_rows;
+    info->parse_data->skip_start_lines = info->settings_data->header_rows;
     GtkAdjustment *adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(info->start_row_spin));
-    gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->start_row_spin), info->settings_data->header_rows);
+    gtk_adjustment_set_upper (adj, info->parse_data->parsed_lines.size());
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->start_row_spin),
+            info->settings_data->header_rows);
 
     // Set end row
-    info->parse_data->end_row = info->num_of_rows - info->settings_data->footer_rows;
+    info->parse_data->skip_end_lines = info->settings_data->footer_rows;
     adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(info->end_row_spin));
-    gtk_adjustment_set_upper (adj, info->num_of_rows);
-    gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->end_row_spin), info->num_of_rows - info->settings_data->footer_rows);
+    gtk_adjustment_set_upper (adj, info->parse_data->parsed_lines.size());
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->end_row_spin),
+            info->settings_data->footer_rows);
 
     // Set Alternate rows
-    info->parse_data->skip_rows = info->settings_data->skip_alt_rows;
+    info->parse_data->skip_alt_lines = info->settings_data->skip_alt_rows;
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->skip_rows), info->settings_data->skip_alt_rows);
 
     // Set Import Format
@@ -539,7 +537,7 @@ csv_import_trans_save_settings_cb (GtkWidget *button, CsvImportTrans *info)
 
         /* This section deals with the header and rows */
         info->settings_data->header_rows = gtk_spin_button_get_value (GTK_SPIN_BUTTON(info->start_row_spin));
-        info->settings_data->footer_rows = info->num_of_rows - gtk_spin_button_get_value (GTK_SPIN_BUTTON(info->end_row_spin));
+        info->settings_data->footer_rows = gtk_spin_button_get_value (GTK_SPIN_BUTTON(info->end_row_spin));
         info->settings_data->skip_alt_rows = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(info->skip_rows));
         info->settings_data->csv_format = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(info->csv_button));
 
@@ -718,6 +716,17 @@ csv_import_trans_file_chooser_confirm_cb (GtkWidget *button, CsvImportTrans *inf
     info->parse_data = parse_data;
     info->previewing_errors = false; /* We're looking at all the data. */
     info->skip_errors = false; // Set skip_errors to False
+
+    /* Reset a couple of widgets on the preview page */
+    // - leading and trailing lines to skip = 0
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->start_row_spin), 0);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->end_row_spin), 0);
+
+    /* Get settings store and populate */
+    GtkTreeModel   *settings_store = gtk_combo_box_get_model (GTK_COMBO_BOX(info->settings_combo));
+    gnc_csv_trans_find_settings (settings_store);
+    gtk_combo_box_set_active (GTK_COMBO_BOX(info->settings_combo), 0);
+
     gtk_assistant_set_page_complete (assistant, page, TRUE);
     gtk_assistant_set_current_page (assistant, num + 1);
 }
@@ -731,73 +740,25 @@ csv_import_trans_file_chooser_confirm_cb (GtkWidget *button, CsvImportTrans *inf
 static
 void row_selection_update (CsvImportTrans* info)
 {
-    GtkListStore *store;
     GtkTreeIter iter;
-    bool valid;
-    int i = 0;
+    auto store = GTK_LIST_STORE(gtk_tree_view_get_model (info->treeview));
 
-    store = GTK_LIST_STORE(gtk_tree_view_get_model (info->treeview));
-
-    /* Start of file */
-    for (i = 0; i <= info->start_row; i++)
+    /* Colorize rows that will be skipped */
+    for (uint i = 0; i < info->parse_data->parsed_lines.size(); i++)
     {
-        /* Modify background color of rows less than start row */
-        if (info->start_row == i)
-        {
-            valid = gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(store), &iter, NULL, i);
-            if (valid)
-                gtk_list_store_set (store, &iter, 0, NULL, -1);
-        }
+        const char *color = NULL;
+        if ((i < info->parse_data->skip_start_lines) ||             // start rows to skip
+            (i >= info->parse_data->parsed_lines.size()
+                    - info->parse_data->skip_end_lines) ||          // end rows to skip
+            (((i - info->parse_data->skip_start_lines) % 2 == 1) && // skip every second row...
+             info->parse_data->skip_alt_lines))                   // ...if requested
+            color = "pink";
         else
-        {
-            valid = gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(store), &iter, NULL, i);
-            if (valid)
-                gtk_list_store_set (store, &iter, 0, "pink", -1);
-            valid = gtk_tree_model_iter_next (GTK_TREE_MODEL(store), &iter);
-            if (valid)
-                gtk_list_store_set (store, &iter, 0, NULL, -1);
-        }
-    }
+            color = NULL;                                           // all other rows
 
-    /* End of File */
-    for (i = info->num_of_rows - 1; i >= info->end_row; i--)
-    {
-        /* Modify background color of rows more than end row */
-        if (i == info->end_row)
-        {
-            valid = gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(store), &iter, NULL, i);
-            if (valid)
-                gtk_list_store_set (store, &iter, 0, NULL, -1);
-        }
-        else
-        {
-            valid = gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(store), &iter, NULL, i);
-            if (valid)
-                gtk_list_store_set (store, &iter, 0, "pink", -1);
-            valid = gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(store), &iter, NULL, i - 1);
-            if (valid)
-                gtk_list_store_set (store, &iter, 0, NULL, -1);
-        }
-    }
-
-    /* Remove background color from the start row to end row */
-    for (i = info->start_row + 1; i <= info->end_row; i++)
-    {
-        valid = gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(store), &iter, NULL, i);
+        bool valid = gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(store), &iter, NULL, i);
         if (valid)
-            gtk_list_store_set (store, &iter, 0, NULL, -1);
-    }
-
-    /* Skip rows */
-    if (info->parse_data->skip_rows)
-    {
-        for (i = info->start_row + 1; i <= info->end_row; i = i + 2)
-        {
-            /* Modify background color of alternate rows from the start row */
-            valid = gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(store), &iter, NULL, i);
-            if (valid)
-                gtk_list_store_set (store, &iter, 0, "pink", -1);
-        }
+            gtk_list_store_set (store, &iter, 0, color, -1);
     }
 }
 
@@ -812,13 +773,13 @@ void csv_import_trans_srow_cb (GtkWidget *spin, gpointer user_data)
     CsvImportTrans *info = (CsvImportTrans*) user_data;
     GtkAdjustment *adj;
 
-    /* Get number of rows for header */
-    info->start_row = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(spin)) - 1;
+    /* Get number of lines to skip at the beginning */
+    info->parse_data->skip_start_lines = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(spin));
 
-    info->parse_data->start_row = info->start_row;
-
+    /* And adjust maximum number of lines that can be skipped at the end accordingly */
     adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(info->end_row_spin));
-    gtk_adjustment_set_lower (adj, info->start_row + 1);
+    gtk_adjustment_set_upper (adj, info->parse_data->parsed_lines.size()
+            - info->parse_data->skip_start_lines);
 
     /* Refresh the row highlighting */
     row_selection_update (info);
@@ -835,13 +796,13 @@ void csv_import_trans_erow_cb (GtkWidget *spin, gpointer user_data)
     CsvImportTrans *info = (CsvImportTrans*) user_data;
     GtkAdjustment *adj;
 
-    /* Get number of rows for header */
-    info->end_row = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(spin)) - 1;
+    /* Get number of lines to skip at the end */
+    info->parse_data->skip_end_lines = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(spin));
 
-    info->parse_data->end_row = info->end_row + 1;
-
+    /* And adjust maximum number of lines that can be skipped at the beginning accordingly */
     adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(info->start_row_spin));
-    gtk_adjustment_set_upper (adj, info->end_row + 1);
+    gtk_adjustment_set_upper (adj, info->parse_data->parsed_lines.size()
+            - info->parse_data->skip_end_lines);
 
     /* Refresh the row highlighting */
     row_selection_update (info);
@@ -873,8 +834,8 @@ void csv_import_trans_skiprows_cb (GtkWidget *checkbox, gpointer user_data)
 {
     CsvImportTrans *info = (CsvImportTrans*) user_data;
 
-    /* Set the skip_rows variable */
-    info->parse_data->skip_rows = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(checkbox));
+    /* Set the skip_alt_lines variable */
+    info->parse_data->skip_alt_lines = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(checkbox));
 
     /* Refresh the row highlighting */
     row_selection_update (info);
@@ -1470,7 +1431,7 @@ bool preview_settings_valid (CsvImportTrans* info)
     gtk_tree_model_get_iter_first (ctstore, &iter1);
 
     /* Get an iterator for the first required row in the data store. */
-    gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(datastore), &iter2, NULL, info->start_row);
+    gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(datastore), &iter2, NULL, info->parse_data->skip_start_lines);
 
     /* Go through each of the columns. */
     for (i = 0; i < ncols; i++)
@@ -1602,7 +1563,7 @@ check_for_duplicates (GtkListStore *liststore, const gchar *string)
  */
 bool get_list_of_accounts (CsvImportTrans* info, GtkTreeModel *store)
 {
-    int      i, j, ncols = info->parse_data->column_types.size(); /* ncols is the number of columns in the data. */
+    int      i, ncols = info->parse_data->column_types.size(); /* ncols is the number of columns in the data. */
     bool     have_accounts = false;
     gint     home_account_number = 0;
     gint     other_account_number = 0;
@@ -1617,7 +1578,9 @@ bool get_list_of_accounts (CsvImportTrans* info, GtkTreeModel *store)
     /* Get an iterator for the first (and only) row of the column store. */
     gtk_tree_model_get_iter_first (ctstore, &iter1);
 
-    for (j = info->start_row; j <= info->end_row; j++)
+    for (uint j = info->parse_data->skip_start_lines;
+            j < info->parse_data->parsed_lines.size() - info->parse_data->skip_end_lines - 1;
+            j++)
     {
         /* Go through each of the columns. */
         for (i = 0; i < ncols; i++)
@@ -1723,7 +1686,6 @@ static void gnc_csv_preview_update_assist (CsvImportTrans* info)
     g_free (bodytypes);
 
     /* Fill the data liststore with data from the file. */
-    info->num_of_rows = info->parse_data->parsed_lines.size();
     for (auto parse_line : info->parse_data->parsed_lines)
     {
         // When previewing errors skip all lines that don't have errors
@@ -1870,12 +1832,13 @@ void gnc_csv_reset_preview_setting (CsvImportTrans *info, bool block)
 
     // Reset Start Row
     adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(info->start_row_spin));
-    gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->start_row_spin), 1);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->start_row_spin), 0);
+    gtk_adjustment_set_upper (adj, info->parse_data->parsed_lines.size());
 
     // Reset End Row
     adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(info->end_row_spin));
-    gtk_adjustment_set_upper (adj, info->num_of_rows);
-    gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->end_row_spin), info->num_of_rows);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->end_row_spin), 0);
+    gtk_adjustment_set_upper (adj, info->parse_data->parsed_lines.size());
 
     // Reset Skip Rows
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->skip_rows), FALSE);
@@ -1927,7 +1890,6 @@ void gnc_csv_reset_preview_setting (CsvImportTrans *info, bool block)
 static
 void load_settings (CsvImportTrans *info)
 {
-    info->start_row = 0;
     info->match_parse_run = false;
     if (!info->file_name.empty())
         info->file_name.clear();
@@ -1971,8 +1933,6 @@ csv_import_trans_assistant_file_page_prepare (GtkAssistant *assistant,
         gpointer user_data)
 {
     CsvImportTrans *info = (CsvImportTrans*) user_data;
-    GtkAdjustment  *adj;
-    GtkTreeModel   *settings_store;
     gint            num = gtk_assistant_get_current_page (assistant);
     GtkWidget      *page = gtk_assistant_get_nth_page (assistant, num);
 
@@ -1982,19 +1942,6 @@ csv_import_trans_assistant_file_page_prepare (GtkAssistant *assistant,
     /* Set the default directory */
     if (info->starting_dir.size())
         gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(info->file_chooser), info->starting_dir.c_str());
-
-    /* Reset start row to first row 1 */
-    adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(info->start_row_spin));
-    gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->start_row_spin), 1);
-
-    /* Reset upper value to 999 */
-    adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(info->end_row_spin));
-    gtk_adjustment_set_upper (adj, 999);
-
-    /* Get settings store and populate */
-    settings_store = gtk_combo_box_get_model (GTK_COMBO_BOX(info->settings_combo));
-    gnc_csv_trans_find_settings (settings_store);
-    gtk_combo_box_set_active (GTK_COMBO_BOX(info->settings_combo), 0);
 
     /* Disable the Forward Assistant Button */
     gtk_assistant_set_page_complete (assistant, page, FALSE);
@@ -2006,13 +1953,11 @@ csv_import_trans_assistant_preview_page_prepare (GtkAssistant *assistant,
         gpointer user_data)
 {
     CsvImportTrans *info = (CsvImportTrans*) user_data;
-    GtkAdjustment *adj;
 
     g_signal_connect (G_OBJECT(info->treeview), "size-allocate",
                      G_CALLBACK(treeview_resized), (gpointer)info);
 
-    // Hide the check button label and toggle
-    gtk_widget_hide (GTK_WIDGET(info->check_label));
+    // Hide the skip errors check button
     gtk_widget_hide (GTK_WIDGET(info->check_butt));
 
     if (info->previewing_errors) // We are looking at errors to display
@@ -2030,19 +1975,18 @@ csv_import_trans_assistant_preview_page_prepare (GtkAssistant *assistant,
         gtk_widget_show (GTK_WIDGET(info->instructions_image));
         gtk_widget_show (GTK_WIDGET(info->instructions_label));
 
-        /* Reset start row */
-        adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(info->start_row_spin));
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->start_row_spin), 1);
+        /* Reset start and end row */
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->start_row_spin), 0);
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->end_row_spin), 0);
 
         /* Set spin buttons and settings combo hbox not sensitive */
         gtk_widget_set_sensitive (info->combo_hbox, FALSE);
         gtk_widget_set_sensitive (info->start_row_spin, FALSE);
         gtk_widget_set_sensitive (info->end_row_spin, FALSE);
         gtk_widget_set_sensitive (info->skip_rows, FALSE);
-        info->parse_data->skip_rows = FALSE;
+        info->parse_data->skip_alt_lines = FALSE;
 
-        /* Show the check button label and toggle */
-        gtk_widget_show (GTK_WIDGET(info->check_label));
+        /* Show the skip errors check button */
         gtk_widget_show (GTK_WIDGET(info->check_butt));
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->check_butt), FALSE);
     }
@@ -2060,12 +2004,12 @@ csv_import_trans_assistant_preview_page_prepare (GtkAssistant *assistant,
     gnc_csv_preview_update_assist (info);
 
     /* Set the upper limit of spin button to number of rows */
+    GtkAdjustment *adj;
     adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(info->end_row_spin));
-    if (gtk_adjustment_get_upper (adj) != info->num_of_rows)
-    {
-        gtk_adjustment_set_upper (adj, info->num_of_rows);
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->end_row_spin), info->num_of_rows);
-    }
+    gtk_adjustment_set_upper (adj, info->parse_data->parsed_lines.size());
+    adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(info->start_row_spin));
+    gtk_adjustment_set_upper (adj, info->parse_data->parsed_lines.size());
+    if (gtk_adjustment_get_upper (adj) != info->parse_data->parsed_lines.size())
 
     /* Update the row selection highlight */
     row_selection_update (info);
@@ -2816,9 +2760,8 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
                                           "semicolon_cbutton",
                                           "hyphen_cbutton"
         };
-        GtkContainer *date_format_container, *currency_format_container;
+        GtkContainer *date_format_container, *currency_format_container, *encoding_container;
         int           i;
-        GtkTable     *enctable;
         GtkListStore *settings_store;
 
         info->preview_page = GTK_WIDGET(gtk_builder_get_object (builder, "preview_page"));
@@ -2852,17 +2795,11 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
         g_signal_connect (G_OBJECT(del_button), "clicked",
                          G_CALLBACK(csv_import_trans_delete_settings_cb), (gpointer)info);
 
-        /* The table containing info->encselector and the separator configuration widgets */
+        /* The table containing the separator configuration widgets */
         info->start_row_spin = GTK_WIDGET(gtk_builder_get_object (builder, "start_row"));
         info->end_row_spin = GTK_WIDGET(gtk_builder_get_object (builder, "end_row"));
         info->skip_rows = GTK_WIDGET(gtk_builder_get_object (builder, "skip_rows"));
-        info->check_label = GTK_WIDGET(gtk_builder_get_object (builder, "check_label"));
         info->check_butt = GTK_WIDGET(gtk_builder_get_object (builder, "check_butt"));
-
-        info->encselector = GO_CHARMAP_SEL(go_charmap_sel_new(GO_CHARMAP_SEL_TO_UTF8));
-        /* Connect the selector to the encoding_selected event handler. */
-        g_signal_connect (G_OBJECT(info->encselector), "charmap_changed",
-                         G_CALLBACK(encoding_selected), (gpointer)info);
 
         /* Load the separator buttons from the glade builder file into the
          * info->sep_buttons array. */
@@ -2888,12 +2825,16 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
         g_signal_connect (G_OBJECT(info->custom_entry), "changed",
                          G_CALLBACK(sep_button_clicked), (gpointer)info);
 
-        /* Get the table from the Glade builder file. */
-        enctable = GTK_TABLE(gtk_builder_get_object (builder, "enctable"));
-        /* Put the selector in at the top. */
-        gtk_table_attach_defaults (enctable, GTK_WIDGET(info->encselector), 1, 2, 0, 1);
-        /* Show the table in all its glory. */
-        gtk_widget_show_all (GTK_WIDGET(enctable));
+
+        /* Create the encoding selector widget and add it to the assistant */
+        info->encselector = GO_CHARMAP_SEL(go_charmap_sel_new(GO_CHARMAP_SEL_TO_UTF8));
+        /* Connect the selector to the encoding_selected event handler. */
+        g_signal_connect (G_OBJECT(info->encselector), "charmap_changed",
+                         G_CALLBACK(encoding_selected), (gpointer)info);
+
+        encoding_container = GTK_CONTAINER(gtk_builder_get_object (builder, "encoding_container"));
+        gtk_container_add (encoding_container, GTK_WIDGET(info->encselector));
+        gtk_widget_show_all (GTK_WIDGET(encoding_container));
 
         /* The instructions label and image */
         info->instructions_label = GTK_LABEL(gtk_builder_get_object (builder, "instructions_label"));

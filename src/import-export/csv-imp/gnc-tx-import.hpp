@@ -113,9 +113,9 @@ public:
     std::multimap <time64, std::shared_ptr<DraftTransaction>> transactions;  /**< map of transaction objects created
                                                      from parsed_lines and column_types, ordered by date */
     int date_format;            /**< The format of the text in the date columns from date_format_internal. */
-    guint start_row;            /**< The start row to generate transactions from. */
-    guint end_row;              /**< The end row to generate transactions from. */
-    gboolean skip_rows;         /**< Skip Alternate Rows from start row. */
+    guint skip_start_lines;     /**< Number of lines to skip at the beginning of the parse data. */
+    guint skip_end_lines;       /**< Number of lines to skip at the end of the parse data. */
+    gboolean skip_alt_lines;         /**< Skip Alternate Rows from start row. */
     int currency_format;        /**< The currency format, 0 for locale, 1 for comma dec and 2 for period */
     bool parse_errors;          /**< Indicates whether the last parse_to_trans run had any errors */
 
