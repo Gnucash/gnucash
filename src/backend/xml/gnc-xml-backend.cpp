@@ -160,10 +160,11 @@ GncXmlBackend::session_begin(QofSession* session, const char* book_id,
             {
                 // Unknown error. Push it again on the error stack.
                 set_error(berror);
+                return;
             }
         }
     }
-
+    m_book = nullptr;
 }
 
 void
@@ -334,8 +335,7 @@ GncXmlBackend::save_may_clobber_data()
         return false;
     struct stat statbuf;
     auto rc = g_stat (m_fullpath.c_str(), &statbuf);
-    return rc != 0;
-
+    return rc == 0;
 }
 
 void
