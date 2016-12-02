@@ -377,6 +377,7 @@ Select location and file name for the Import, then click 'OK'...
 When Multi-split is enabled the importer will assume multiple consecutive lines together hold the information for one transaction. Each line provides information for exactly one split. The first line should also provide the information for the transaction.
 To know which lines belong to the same transaction, the importer will compare the provided transaction information in each line. If that information is empty or the same as the first transaction line the importer will consider this line part of the same transaction.</property>
                                     <property name="draw_indicator">True</property>
+                                    <signal name="toggled" handler="csv_import_trans_multisplit_cb" swapped="no"/>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>

@@ -90,6 +90,7 @@ typedef struct
     GtkWidget       *skip_rows;                     /**< The widget for Skip alternate rows from start row */
     GtkWidget       *csv_button;                    /**< The widget for the CSV button */
     GtkWidget       *fixed_button;                  /**< The widget for the Fixed Width button */
+    GtkWidget       *multi_split_cbutton;           /**< The widget for Multi-split */
     int              home_account_number;           /**< The number of unique home account strings */
 
     GncTxImport     *parse_data;                    /**< The actual data we are previewing */
@@ -159,6 +160,7 @@ void csv_import_trans_srow_cb (GtkWidget *spin, gpointer user_data);
 void csv_import_trans_erow_cb (GtkWidget *spin, gpointer user_data);
 void csv_import_trans_skip_errors_cb (GtkWidget *cb, gpointer user_data);
 void csv_import_trans_skiprows_cb (GtkWidget *checkbox, gpointer user_data);
+void csv_import_trans_multisplit_cb (GtkWidget *checkbox, gpointer user_data);
 void csv_import_trans_auto_cb (GtkWidget *cb, gpointer user_data);
 void csv_import_trans_file_chooser_confirm_cb (GtkWidget *button, CsvImportTrans *info);
 
@@ -244,6 +246,10 @@ csv_import_trans_load_settings (CsvImportTrans *info)
     // Set Alternate rows
     info->parse_data->skip_alt_lines = info->settings_data->skip_alt_rows;
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->skip_rows), info->settings_data->skip_alt_rows);
+
+    // Set Multi-split indicator
+    info->parse_data->multi_split = info->settings_data->multi_split;
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->multi_split_cbutton), info->settings_data->multi_split);
 
     // Set Import Format
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->csv_button), info->settings_data->csv_format);
@@ -553,6 +559,7 @@ csv_import_trans_save_settings_cb (GtkWidget *button, CsvImportTrans *info)
         info->settings_data->date_active = gtk_combo_box_get_active (GTK_COMBO_BOX(info->date_format_combo));
         info->settings_data->currency_active = gtk_combo_box_get_active (GTK_COMBO_BOX(info->currency_format_combo));
         info->settings_data->encoding = go_charmap_sel_get_encoding (info->encselector);
+        info->settings_data->multi_split = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(info->multi_split_cbutton));
 
         /* This section deals with the Treeview column names */
         columns = gtk_tree_view_get_columns (GTK_TREE_VIEW(info->ctreeview));
@@ -822,6 +829,20 @@ void csv_import_trans_skip_errors_cb (GtkWidget *cb, gpointer user_data)
         info->skip_errors = true;
     else
         info->skip_errors = false;
+}
+
+
+/*******************************************************
+ * csv_import_trans_multisplit_cb
+ *
+ * call back for import multi-split checkbox
+ *******************************************************/
+void csv_import_trans_multisplit_cb (GtkWidget *checkbox, gpointer user_data)
+{
+    CsvImportTrans *info = (CsvImportTrans*) user_data;
+
+    /* Set the skip_alt_lines variable */
+    info->parse_data->multi_split = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(checkbox));
 }
 
 
@@ -1603,6 +1624,8 @@ bool get_list_of_accounts (CsvImportTrans* info, GtkTreeModel *store)
                 if (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(datastore), &iter2, NULL, j))
                 {
                     gtk_tree_model_get (datastore, &iter2, i + 1, &accstr, -1);
+                    if (!accstr || *accstr == '\0')
+                        continue;
 
                     // Append the entry
                     if (!check_for_duplicates (GTK_LIST_STORE(store), accstr))
@@ -1843,6 +1866,9 @@ void gnc_csv_reset_preview_setting (CsvImportTrans *info, bool block)
     // Reset Skip Rows
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->skip_rows), FALSE);
 
+    // Reset Multi-split
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->multi_split_cbutton), FALSE);
+
     // Reset Import Format
     g_signal_handlers_block_by_func (info->csv_button, (gpointer) separated_or_fixed_selected, info);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->csv_button), TRUE);
@@ -1984,6 +2010,7 @@ csv_import_trans_assistant_preview_page_prepare (GtkAssistant *assistant,
         gtk_widget_set_sensitive (info->start_row_spin, FALSE);
         gtk_widget_set_sensitive (info->end_row_spin, FALSE);
         gtk_widget_set_sensitive (info->skip_rows, FALSE);
+        gtk_widget_set_sensitive (info->multi_split_cbutton, FALSE);
         info->parse_data->skip_alt_lines = FALSE;
 
         /* Show the skip errors check button */
@@ -2800,6 +2827,7 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
         info->end_row_spin = GTK_WIDGET(gtk_builder_get_object (builder, "end_row"));
         info->skip_rows = GTK_WIDGET(gtk_builder_get_object (builder, "skip_rows"));
         info->check_butt = GTK_WIDGET(gtk_builder_get_object (builder, "check_butt"));
+        info->multi_split_cbutton = GTK_WIDGET(gtk_builder_get_object (builder, "multi_split_button"));
 
         /* Load the separator buttons from the glade builder file into the
          * info->sep_buttons array. */

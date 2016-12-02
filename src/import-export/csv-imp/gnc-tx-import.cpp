@@ -72,6 +72,7 @@ GncTxImport::GncTxImport(GncImpFileFormat format)
     skip_end_lines = 0;
     skip_alt_lines = FALSE;
     parse_errors = false;
+    multi_split = false;
 
     file_fmt = format;
     tokenizer = gnc_tokenizer_factory(file_fmt);
@@ -242,8 +243,9 @@ static void trans_properties_verify_essentials (parse_line_t& parsed_line)
  * @param parsed_line The current line being parsed
  * @return On success, a shared pointer to a DraftTransaction object; on failure a nullptr
  */
-static std::shared_ptr<DraftTransaction> trans_properties_to_trans (parse_line_t& parsed_line)
+std::shared_ptr<DraftTransaction> GncTxImport::trans_properties_to_trans (parse_line_t& parsed_line)
 {
+    auto created_trans = false;
     std::string error_message;
     std::shared_ptr<GncPreTrans> trans_props;
     std::shared_ptr<GncPreSplit> split_props;
@@ -255,18 +257,31 @@ static std::shared_ptr<DraftTransaction> trans_properties_to_trans (parse_line_t
 
     auto trans = trans_props->create_trans (book, currency);
 
+    if (trans)
+    {
+        current_draft = std::make_shared<DraftTransaction>(trans);
+        created_trans = true;
+    }
+    else if (multi_split)  // in multi_split mode create_trans will return a nullptr for all but the first split
+        trans = current_draft->trans;
+    else // in non-multi-split mode each line should be a transaction, so not having one here is an error
+        throw std::invalid_argument ("Failed to create transaction from selected columns.");
+
     if (!trans)
         return nullptr;
 
-    auto draft_trans = std::make_shared<DraftTransaction>(trans);
     auto balance = split_props->create_split(trans);
     if (balance)
     {
-        draft_trans->balance_set = true;
-        draft_trans->balance = *balance;
+        current_draft->balance_set = true;
+        current_draft->balance = *balance;
     }
 
-    return draft_trans;
+    /* Only return the draft transaction if we really created a new one
+     * The return value will be added to a list for further processing,
+     * we want each transaction to appear only once in that list.
+     */
+    return created_trans ? current_draft : nullptr;
 }
 
 void GncTxImport::adjust_balances (void)
@@ -341,7 +356,11 @@ void GncTxImport::create_transaction (parse_line_t& parsed_line)
             if (*col_types_it == GncTransPropType::NONE)
                 continue; /* We do nothing with "None"-type columns. */
             else if  (*col_types_it <= GncTransPropType::TRANS_PROPS)
+            {
+                if (multi_split && line_it->empty())
+                    continue; // In multi-split mode, transaction properties can be empty
                 trans_props->set_property(*col_types_it, *line_it, date_format);
+            }
             else
                 split_props->set_property(*col_types_it, *line_it, currency_format);
         }
@@ -351,6 +370,7 @@ void GncTxImport::create_transaction (parse_line_t& parsed_line)
             error_message += _(gnc_csv_col_type_strs[*col_types_it]);
             error_message += _(" column could not be understood.");
             error_message += "\n";
+            PINFO("User warning: %s", error_message.c_str());
         }
     }
 
@@ -370,11 +390,30 @@ void GncTxImport::create_transaction (parse_line_t& parsed_line)
             parse_errors = true;
             error_message = _("No account column selected and no default account specified either.\n"
                                        "This should never happen. Please report this as a bug.");
+            PINFO("User warning: %s", error_message.c_str());
             throw std::invalid_argument(error_message);
         }
     }
 
-    /* If column parsing was successful, convert trans properties into a trans line. */
+    /* For multi-split input data, we need to check whether this line is part of a transaction that
+     * has already be started by a previous line. */
+    if (multi_split)
+    {
+        if (trans_props->is_part_of(parent))
+        {
+            /* So this line is part of a already started transaction
+             * continue with that one instead to make sure the split from this line
+             * gets added to the proper transaction */
+            //trans_props = parent;
+            std::get<2>(parsed_line) = parent;
+        }
+        else
+            /* This line starts a new transaction, set it as parent for
+             * subsequent lines. */
+            parent = trans_props;
+    }
+
+    /* If column parsing was successful, convert trans properties into a draft transaction. */
     try
     {
         trans_properties_verify_essentials (parsed_line);
@@ -394,6 +433,7 @@ void GncTxImport::create_transaction (parse_line_t& parsed_line)
     {
         parse_errors = true;
         error_message = e.what();
+        PINFO("User warning: %s", error_message.c_str());
     }
 }
 
@@ -431,6 +471,7 @@ void GncTxImport::create_transactions (Account* account,
     base_account = account;
     auto odd_line = false;
     parse_errors = false;
+    parent = nullptr;
 
     /* Iterate over all parsed lines */
     for (parsed_lines_it, odd_line;
