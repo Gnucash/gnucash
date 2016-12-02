@@ -49,6 +49,7 @@ std::map<GncTransPropType, const char*> gnc_csv_col_type_strs = {
         { GncTransPropType::DATE, N_("Date") },
         { GncTransPropType::NUM, N_("Num") },
         { GncTransPropType::DESCRIPTION, N_("Description") },
+        { GncTransPropType::UNIQUE_ID, N_("Transaction ID") },
         { GncTransPropType::NOTES, N_("Notes") },
         { GncTransPropType::ACCOUNT, N_("Account") },
         { GncTransPropType::DEPOSIT, N_("Deposit") },
@@ -228,6 +229,13 @@ void GncPreTrans::set_property (GncTransPropType prop_type, const std::string& v
                 m_notes = boost::none;
             break;
 
+        case GncTransPropType::UNIQUE_ID:
+            if (!value.empty())
+                m_differ = value;
+            else
+                m_differ = boost::none;
+            break;
+
         default:
             /* Issue a warning for all other prop_types. */
             PWARN ("%d is an invalid property for a transaction", static_cast<int>(prop_type));
@@ -266,6 +274,16 @@ Transaction* GncPreTrans::create_trans (QofBook* book, gnc_commodity* currency)
     return trans;
 }
 
+bool GncPreTrans::is_part_of (std::shared_ptr<GncPreTrans> parent)
+{
+    if (!parent)
+        return false;
+
+    return (!m_date || m_date == parent->m_date) &&
+            (!m_desc || m_desc == parent->m_desc) &&
+            (!m_notes || m_notes == parent->m_notes) &&
+            (!m_differ || m_differ == parent->m_differ);
+}
 
 void GncPreSplit::set_property (GncTransPropType prop_type, const std::string& value, int currency_format)
 {

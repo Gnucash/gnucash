@@ -42,6 +42,7 @@ typedef struct
     int           footer_rows;                  // Number of footer rows
     gboolean      csv_format;                   // CSV import Format
     gboolean      skip_alt_rows;                // Skip alternate rows
+    gboolean      multi_split;                  // Assume multiple lines per transaction
 
     const gchar  *encoding;                     // File encoding
 

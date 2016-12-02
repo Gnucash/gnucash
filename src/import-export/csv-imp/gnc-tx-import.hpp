@@ -116,6 +116,12 @@ public:
     guint skip_start_lines;     /**< Number of lines to skip at the beginning of the parse data. */
     guint skip_end_lines;       /**< Number of lines to skip at the end of the parse data. */
     gboolean skip_alt_lines;         /**< Skip Alternate Rows from start row. */
+    bool multi_split;           /**< If false, each line in the import data defines exactly one transaction.
+                                     If true, a transaction can span multiple lines, with each line defining exactly one split.
+                                     In this case the first line should hold the transaction related details in
+                                     addition to the first split details. On each following line for the same
+                                     transaction the transaction related columns should be empty or have
+                                     the same value as the first line. */
     int currency_format;        /**< The currency format, 0 for locale, 1 for comma dec and 2 for period */
     bool parse_errors;          /**< Indicates whether the last parse_to_trans run had any errors */
 
@@ -133,12 +139,19 @@ private:
      */
     void adjust_balances (void);
 
+    /* Internal helper function that does the actual conversion from property lists
+     * to real (possibly unbalanced) transaction with splits.
+     */
+    std::shared_ptr<DraftTransaction> trans_properties_to_trans (parse_line_t& parsed_line);
+
     GncImpFileFormat file_fmt = GncImpFileFormat::UNKNOWN;
 
-    /* The variables below are only used during while creating
+    /* The variables below are only used while creating
      * transactions. They keep state information during the conversion.
      */
     Account *base_account = nullptr;
+    std::shared_ptr<GncPreTrans> parent = nullptr;
+    std::shared_ptr<DraftTransaction> current_draft = nullptr;
 };
 
 

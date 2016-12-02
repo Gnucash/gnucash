@@ -45,7 +45,8 @@ enum class GncTransPropType {
     DATE,
     DESCRIPTION,
     NOTES,
-    TRANS_PROPS = NOTES,
+    UNIQUE_ID,
+    TRANS_PROPS = UNIQUE_ID,
 
     // num is strictly speaking a trans prop and not a split prop
     // however due to the num/action swap user option, it can only be
@@ -77,10 +78,27 @@ public:
     std::string verify_essentials (void);
     Transaction *create_trans (QofBook* book, gnc_commodity* currency);
 
+    /** Check whether the harvested transaction properties for this instance
+     *  match those of another one (the "parent"). Note this function is *not*
+     *  symmetrical. This instance can have empty properties and still be considered
+     *  part of the parent if the other properties match the parent's.
+     *  A fully empty instance will will equally be considered part of the parent.
+     *
+     *  This function is intended to discover multi-split transaction lines in an import
+     *  file where the first line defines the transaction (with a first split) and subsequent
+     *  lines add splits. These subsequent lines can either have all transaction related
+     *  columns be empty or the same as the first line.
+     *
+     *  @param parent the parent transaction property object to test against
+     *  @returns true if this object is considered to be part of the parent, false otherwise.
+     */
+    bool is_part_of (std::shared_ptr<GncPreTrans> parent);
+
 private:
     boost::optional<time64> m_date;
     boost::optional<std::string> m_desc;
     boost::optional<std::string> m_notes;
+    boost::optional<std::string> m_differ;
     bool created = false;
 };
 

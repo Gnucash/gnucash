@@ -38,6 +38,7 @@
 #define CSV_ALT_ROWS     "AltRows"
 #define CSV_SKIP_START   "SkipStartRows"
 #define CSV_SKIP_END     "SkipEndRows"
+#define CSV_MULTI_SPLIT  "MultiSplit"
 
 /* The following two key names are only used by gnucash 2.6
  * They have been superseded by CSV_SKIP_START and CSV_SKIP_END.
@@ -70,6 +71,7 @@ CsvSettings * gnc_csv_trans_new_settings_data (void)
 
     settings_data->header_rows = 1;
     settings_data->skip_alt_rows = FALSE;
+    settings_data->multi_split = FALSE;
     settings_data->csv_format = TRUE;
 
     settings_data->encoding = "UTF-8";
@@ -235,6 +237,10 @@ gnc_csv_trans_load_settings (CsvSettings *settings_data, gchar *group)
     settings_data->skip_alt_rows = (key_error) ? FALSE : key_boolean;
     error |= handle_load_error (&key_error, group);
 
+    key_boolean = g_key_file_get_boolean (keyfile, group, CSV_MULTI_SPLIT, &key_error);
+    settings_data->multi_split = (key_error) ? FALSE : key_boolean;
+    error |= handle_load_error (&key_error, group);
+
     key_boolean = g_key_file_get_boolean (keyfile, group, CSV_FORMAT, &key_error);
     settings_data->csv_format = (key_error) ? TRUE : key_boolean;
     error |= handle_load_error (&key_error, group);
@@ -334,6 +340,7 @@ gnc_csv_trans_save_settings (CsvSettings *settings_data, gchar *settings_name)
     // Start Saving the settings
     g_key_file_set_string (keyfile, group, CSV_NAME, settings_name);
 
+    g_key_file_set_boolean (keyfile, group, CSV_MULTI_SPLIT, settings_data->multi_split);
     g_key_file_set_integer (keyfile, group, CSV_SKIP_START, settings_data->header_rows);
     g_key_file_set_integer (keyfile, group, CSV_SKIP_END, settings_data->footer_rows);
     g_key_file_set_boolean (keyfile, group, CSV_ALT_ROWS, settings_data->skip_alt_rows);
