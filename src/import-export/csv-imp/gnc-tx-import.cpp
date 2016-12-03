@@ -212,13 +212,13 @@ void GncTxImport::tokenize (bool guessColTypes)
  * @param parsed_line The line we are checking
  * @exception std::invalid_argument in an essential property is missing
  */
-static void trans_properties_verify_essentials (parse_line_t& parsed_line)
+static void trans_properties_verify_essentials (std::vector<parse_line_t>::iterator& parsed_line)
 {
     std::string error_message;
     std::shared_ptr<GncPreTrans> trans_props;
     std::shared_ptr<GncPreSplit> split_props;
 
-    std::tie(std::ignore, error_message, trans_props, split_props) = parsed_line;
+    std::tie(std::ignore, error_message, trans_props, split_props) = *parsed_line;
 
     auto trans_error = trans_props->verify_essentials();
     auto split_error = split_props->verify_essentials();
@@ -243,13 +243,13 @@ static void trans_properties_verify_essentials (parse_line_t& parsed_line)
  * @param parsed_line The current line being parsed
  * @return On success, a shared pointer to a DraftTransaction object; on failure a nullptr
  */
-std::shared_ptr<DraftTransaction> GncTxImport::trans_properties_to_trans (parse_line_t& parsed_line)
+std::shared_ptr<DraftTransaction> GncTxImport::trans_properties_to_trans (std::vector<parse_line_t>::iterator& parsed_line)
 {
     auto created_trans = false;
     std::string error_message;
     std::shared_ptr<GncPreTrans> trans_props;
     std::shared_ptr<GncPreSplit> split_props;
-    std::tie(std::ignore, error_message, trans_props, split_props) = parsed_line;
+    std::tie(std::ignore, error_message, trans_props, split_props) = *parsed_line;
     auto account = split_props->get_account();
 
     QofBook* book = gnc_account_get_book (account);
@@ -334,13 +334,13 @@ void GncTxImport::adjust_balances (void)
 
 }
 
-void GncTxImport::create_transaction (parse_line_t& parsed_line)
+void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parsed_line)
 {
     StrVec line;
     std::string error_message;
     std::shared_ptr<GncPreTrans> trans_props;
     std::shared_ptr<GncPreSplit> split_props;
-    std::tie(line, error_message, trans_props, split_props) = parsed_line;
+    std::tie(line, error_message, trans_props, split_props) = *parsed_line;
     error_message.clear();
 
     /* Convert all tokens in this line into transaction/split properties. */
@@ -364,18 +364,42 @@ void GncTxImport::create_transaction (parse_line_t& parsed_line)
             else
                 split_props->set_property(*col_types_it, *line_it, currency_format);
         }
-        catch (const std::invalid_argument&)
+        catch (const std::exception& e)
         {
             parse_errors = true;
+            if (!error_message.empty())
+                error_message += "\n";
             error_message += _(gnc_csv_col_type_strs[*col_types_it]);
             error_message += _(" column could not be understood.");
-            error_message += "\n";
             PINFO("User warning: %s", error_message.c_str());
         }
     }
 
+    /* For multi-split input data, we need to check whether this line is part of a transaction that
+     * has already be started by a previous line. */
+    if (multi_split)
+    {
+        if (trans_props->is_part_of(parent))
+        {
+            /* This line is part of an already started transaction
+             * continue with that one instead to make sure the split from this line
+             * gets added to the proper transaction */
+            std::get<2>(*parsed_line) = parent;
+
+            /* Check if the parent line is ready for conversion. If not,
+             * this child line can't be converted either.
+             */
+            if (!parent->verify_essentials().empty())
+                error_message = _("First line of this transaction has errors.");
+        }
+        else
+            /* This line starts a new transaction, set it as parent for
+             * subsequent lines. */
+            parent = trans_props;
+    }
+
     if (!error_message.empty())
-        throw std::invalid_argument(error_message);
+        throw std::invalid_argument (error_message);
 
     // Add an ACCOUNT property with the default account if no account column was set by the user
     auto line_acct = split_props->get_account();
@@ -393,24 +417,6 @@ void GncTxImport::create_transaction (parse_line_t& parsed_line)
             PINFO("User warning: %s", error_message.c_str());
             throw std::invalid_argument(error_message);
         }
-    }
-
-    /* For multi-split input data, we need to check whether this line is part of a transaction that
-     * has already be started by a previous line. */
-    if (multi_split)
-    {
-        if (trans_props->is_part_of(parent))
-        {
-            /* So this line is part of a already started transaction
-             * continue with that one instead to make sure the split from this line
-             * gets added to the proper transaction */
-            //trans_props = parent;
-            std::get<2>(parsed_line) = parent;
-        }
-        else
-            /* This line starts a new transaction, set it as parent for
-             * subsequent lines. */
-            parent = trans_props;
     }
 
     /* If column parsing was successful, convert trans properties into a draft transaction. */
@@ -478,24 +484,23 @@ void GncTxImport::create_transactions (Account* account,
             parsed_lines_it < parsed_lines_max;
             ++parsed_lines_it, odd_line = !odd_line)
     {
-        auto parsed_line = *parsed_lines_it;
-
         /* Skip current line if:
            1. only looking for lines with error AND no error on current line
            OR
            2. looking for all lines AND
               skip_rows is enabled AND
               current line is an odd line */
-        if ((redo_errors && std::get<1>(parsed_line).empty()) ||
+        if ((redo_errors && std::get<1>(*parsed_lines_it).empty()) ||
            (!redo_errors && skip_alt_lines && odd_line))
             continue;
 
         try
         {
-            create_transaction (parsed_line);
+            create_transaction (parsed_lines_it);
         }
-        catch (const std::invalid_argument&)
+        catch (const std::invalid_argument& e)
         {
+            std::get<1>(*parsed_lines_it) = e.what();
             continue;
         }
     }
