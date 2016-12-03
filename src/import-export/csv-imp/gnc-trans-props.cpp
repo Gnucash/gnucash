@@ -248,7 +248,7 @@ std::string GncPreTrans::verify_essentials (void)
 {
     /* Make sure this transaction has the minimum required set of properties defined */
     if (!m_date)
-        return N_("No date column.");
+        return _("No date column.");
     else
         return std::string();
 }
@@ -349,7 +349,7 @@ std::string GncPreSplit::verify_essentials (void)
 {
     /* Make sure this split has the minimum required set of properties defined. */
     if (!m_deposit && !m_withdrawal && !m_balance)
-        return N_("No balance, deposit, or withdrawal column.");
+        return _("No balance, deposit, or withdrawal column.");
     else
         return std::string();
 }

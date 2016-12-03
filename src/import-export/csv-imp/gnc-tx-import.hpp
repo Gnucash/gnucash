@@ -130,7 +130,7 @@ private:
      *  to convert a single tokenized line into a transaction using
      *  the column types the user has set.
      */
-    void create_transaction (parse_line_t& parsed_line);
+    void create_transaction (std::vector<parse_line_t>::iterator& parsed_line);
 
     /** A helper function used by create_transactions. If the input data has
      *  a balance column (an no deposit and withdrawal columns)
@@ -142,7 +142,7 @@ private:
     /* Internal helper function that does the actual conversion from property lists
      * to real (possibly unbalanced) transaction with splits.
      */
-    std::shared_ptr<DraftTransaction> trans_properties_to_trans (parse_line_t& parsed_line);
+    std::shared_ptr<DraftTransaction> trans_properties_to_trans (std::vector<parse_line_t>::iterator& parsed_line);
 
     GncImpFileFormat file_fmt = GncImpFileFormat::UNKNOWN;
 
