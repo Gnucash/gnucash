@@ -56,8 +56,6 @@ gpointer g_error_cb_data;
 static void
 gnc_engine_init_part1()
 {
-    if (1 == engine_is_initialized) return;
-
     /* initialize QOF */
     qof_init();
 
@@ -137,6 +135,8 @@ gnc_engine_init_part3(int argc, char ** argv)
 void
 gnc_engine_init(int argc, char ** argv)
 {
+    if (1 == engine_is_initialized) return;
+
     gnc_engine_init_part1();
     gnc_engine_init_part2();
     gnc_engine_init_part3(argc, argv);
@@ -145,6 +145,8 @@ gnc_engine_init(int argc, char ** argv)
 void
 gnc_engine_init_static(int argc, char ** argv)
 {
+    if (1 == engine_is_initialized) return;
+
     gnc_engine_init_part1();
     gnc_engine_init_part3(argc, argv);
 }
