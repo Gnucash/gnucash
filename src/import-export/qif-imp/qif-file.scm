@@ -96,6 +96,25 @@
                           (string-append str "\n" (_ "Read aborted.")))
           (set! abort-read #t)))
 
+      (define (strip-bom)
+	(let ((c1 (read-char)))
+	  (if (char=? c1 (integer->char #xEF))
+	    (let ((c2 (read-char)))
+	      (if (char=? c2 (integer->char #xBB))
+		  (let ((c3 (read-char)))
+		    (if (char=? c3 (integer->char #xBF)) #t
+			(begin
+			  (unread-char c3)
+			  (unread-char c2)
+			  (unread-char c1)
+			#f)))
+		  (begin
+		    (unread-char c2)
+		    (unread-char c1)
+		    #f)))
+	    (begin
+	      (unread-char c1)
+	      #f))))
 
       (qif-file:set-path! self path)
       (if (not (access? path R_OK))
@@ -112,6 +131,7 @@
 
       (with-input-from-file path
         (lambda ()
+	  (strip-bom)
           ;; loop over lines
           (let line-loop ()
             (set! line (read-delimited delimiters))
