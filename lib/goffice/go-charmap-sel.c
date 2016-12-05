@@ -584,6 +584,34 @@ static void cs_class_init(GtkWidgetClass *widget_klass)
     }
 }
 
+GType
+go_charmap_sel_get_type (void)
+{
+    static GType go_charmap_sel_type = 0;
+
+    if (go_charmap_sel_type == 0)
+    {
+        GTypeInfo go_charmap_sel_info =
+        {
+            sizeof (GOCharmapSelClass),
+            NULL,
+            NULL,
+            (GClassInitFunc) cs_class_init,
+            NULL,
+            NULL,
+            sizeof (GOCharmapSel),
+            0,
+            (GInstanceInitFunc) cs_init
+        };
+
+        go_charmap_sel_type = g_type_register_static (GTK_TYPE_HBOX,
+                           "GOCharmapSel",
+                           &go_charmap_sel_info, 0);
+    }
+
+    return go_charmap_sel_type;
+}
+
 GtkWidget *
 go_charmap_sel_new(GOCharmapSelTestDirection test)
 {

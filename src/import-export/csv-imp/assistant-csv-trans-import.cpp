@@ -54,7 +54,7 @@ extern "C"
 #include "gnc-csv-account-map.h"
 
 #include "gnc-csv-gnumeric-popup.h"
-#include <goffice/go-charmap-sel.h>
+#include "go-charmap-sel.h"
 }
 
 #include "gnc-tx-import.hpp"

@@ -4,13 +4,12 @@ ADD_SUBDIRECTORY(test)
 SET(csv_import_SOURCES
   gncmod-csv-import.c
   assistant-csv-account-import.c
-  assistant-csv-fixed-trans-import.c
+  assistant-csv-fixed-trans-import.cpp
   assistant-csv-trans-import.cpp
   gnc-plugin-csv-import.c
   csv-account-import.c
-  csv-fixed-trans-import.c
+  csv-fixed-trans-import.cpp
   gnc-csv-account-map.c
-  gnc-csv-model.c
   gnc-csv-gnumeric-popup.c
   gnc-csv-tokenizer.cpp
   gnc-csv-trans-settings.c
@@ -18,7 +17,6 @@ SET(csv_import_SOURCES
   gnc-fw-tokenizer.cpp
   gnc-tokenizer.cpp
   gnc-tx-import.cpp
-  ${CMAKE_SOURCE_DIR}/lib/stf/stf-parse.c
   ${CMAKE_SOURCE_DIR}/lib/goffice/go-glib-extras.c
 )
 
@@ -33,7 +31,6 @@ SET(csv_import_noinst_HEADERS
   csv-account-import.h
   csv-fixed-trans-import.h
   gnc-csv-account-map.h
-  gnc-csv-model.h
   gnc-csv-gnumeric-popup.h
   gnc-csv-tokenizer.hpp
   gnc-csv-trans-settings.h
@@ -41,20 +38,20 @@ SET(csv_import_noinst_HEADERS
   gnc-fw-tokenizer.hpp
   gnc-tokenizer.hpp
   gnc-tx-import.hpp
-  ${CMAKE_SOURCE_DIR}/lib/stf/stf-parse.h
   ${CMAKE_SOURCE_DIR}/lib/goffice/go-glib-extras.h
 )
 
 ADD_LIBRARY(gncmod-csv-import ${csv_import_noinst_HEADERS} ${csv_import_SOURCES})
 
-TARGET_LINK_LIBRARIES(gncmod-csv-import ${GOFFICE_LDFLAGS} ${Boost_LIBRARIES} gncmod-generic-import gncmod-gnome-utils
+TARGET_LINK_LIBRARIES(gncmod-csv-import ${Boost_LIBRARIES} gncmod-generic-import gncmod-gnome-utils
                  gncmod-app-utils gncmod-engine gnc-core-utils gnc-module)
 
 
 TARGET_COMPILE_DEFINITIONS(gncmod-csv-import PRIVATE -DG_LOG_DOMAIN=\"gnc.import.csv\")
 
 TARGET_INCLUDE_DIRECTORIES(gncmod-csv-import PRIVATE
-     ${CMAKE_SOURCE_DIR}/lib ${GOFFICE_INCLUDE_DIRS}
+     ${CMAKE_SOURCE_DIR}/lib
+     ${CMAKE_SOURCE_DIR}/lib/goffice
 )
 
 INSTALL(TARGETS gncmod-csv-import

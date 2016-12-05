@@ -1,5 +1,5 @@
 if GNUCASH_ENABLE_GUI
-SUBDIRS = libc stf goffice
+SUBDIRS = libc goffice
 else
 SUBDIRS = libc
 endif

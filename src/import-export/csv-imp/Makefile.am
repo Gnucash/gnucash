@@ -5,13 +5,12 @@ pkglib_LTLIBRARIES=libgncmod-csv-import.la
 libgncmod_csv_import_la_SOURCES = \
   gncmod-csv-import.c \
   assistant-csv-account-import.c \
-  assistant-csv-fixed-trans-import.c \
+  assistant-csv-fixed-trans-import.cpp \
   assistant-csv-trans-import.cpp \
   gnc-plugin-csv-import.c \
   csv-account-import.c \
-  csv-fixed-trans-import.c \
+  csv-fixed-trans-import.cpp \
   gnc-csv-account-map.c \
-  gnc-csv-model.c \
   gnc-csv-tokenizer.cpp \
   gnc-csv-gnumeric-popup.c \
   gnc-dummy-tokenizer.cpp \
@@ -29,7 +28,6 @@ noinst_HEADERS = \
   csv-account-import.h \
   csv-fixed-trans-import.h \
   gnc-csv-account-map.h \
-  gnc-csv-model.h \
   gnc-csv-tokenizer.hpp \
   gnc-csv-gnumeric-popup.h \
   gnc-dummy-tokenizer.hpp \
@@ -49,10 +47,10 @@ libgncmod_csv_import_la_LIBADD = \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/lib/goffice/libgnc-goffice.la \
-  ${top_builddir}/lib/stf/libgnc-stf.la \
   ${top_builddir}/lib/libc/libc-missing.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GLIB_LIBS} \
+  ${GTK_LIBS} \
   ${BOOST_LDFLAGS} \
   -lboost_regex \
   -lboost_locale
@@ -68,10 +66,11 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/import-export \
   -I${top_srcdir}/src/libqof/qof \
   -I${top_srcdir}/lib/libc \
+  -I${top_srcdir}/lib/goffice \
   -I${top_srcdir}/lib \
   ${GUILE_CFLAGS} \
   ${GLIB_CFLAGS} \
-  $(GOFFICE_CFLAGS) \
+  ${GTK_CFLAGS} \
   ${BOOST_CPPFLAGS}
 
 uidir = $(GNC_UI_DIR)
