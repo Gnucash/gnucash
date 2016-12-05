@@ -47,7 +47,7 @@ extern "C"
 #include "gnc-state.h"
 
 #include "assistant-csv-trans-import.h"
-#include "gnc-csv-trans-settings.h"
+#include "gnc-csv-trans-settings.hpp"
 
 #include "import-account-matcher.h"
 #include "import-main-matcher.h"
@@ -94,7 +94,7 @@ typedef struct
     int              home_account_number;           /**< The number of unique home account strings */
 
     GncTxImport     *parse_data;                    /**< The actual data we are previewing */
-    CsvSettings     *settings_data;                 /**< The settings to be saved and loaded */
+    CsvTransSettings settings_data;                 /**< The settings to be saved and loaded */
     GOCharmapSel    *encselector;                   /**< The widget for selecting the encoding */
     GtkCheckButton  *sep_buttons[SEP_NUM_OF_TYPES]; /**< Checkbuttons for common separators */
     GtkCheckButton  *custom_cbutton;                /**< The checkbutton for a custom separator */
@@ -203,10 +203,8 @@ csv_import_trans_load_settings (CsvImportTrans *info)
     if (!gtk_combo_box_get_active_iter (GTK_COMBO_BOX(info->settings_combo), &iter))
         return;
 
-    GtkTreeModel *model;
     gchar *group = NULL;
-
-    model = gtk_combo_box_get_model (GTK_COMBO_BOX(info->settings_combo));
+    GtkTreeModel *model = gtk_combo_box_get_model (GTK_COMBO_BOX(info->settings_combo));
     gtk_tree_model_get (model, &iter, SET_GROUP, &group, -1);
 
     // Test for default selection, return
@@ -214,7 +212,9 @@ csv_import_trans_load_settings (CsvImportTrans *info)
         return;
 
     // Load the settings from the keyfile
-    if (gnc_csv_trans_load_settings (info->settings_data, group))
+    auto group_str = std::string{group};
+    g_free (group);
+    if (info->settings_data.load (group_str))
     {
         const gchar *title = _("Load the Import Settings.");
         GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW(info->window),
@@ -227,54 +227,53 @@ csv_import_trans_load_settings (CsvImportTrans *info)
         gtk_dialog_run (GTK_DIALOG (dialog));
         gtk_widget_destroy (dialog);
     }
-    g_free (group);
 
     // Set start row
-    info->parse_data->skip_start_lines = info->settings_data->header_rows;
+    info->parse_data->skip_start_lines = info->settings_data.header_rows;
     GtkAdjustment *adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(info->start_row_spin));
     gtk_adjustment_set_upper (adj, info->parse_data->parsed_lines.size());
     gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->start_row_spin),
-            info->settings_data->header_rows);
+            info->settings_data.header_rows);
 
     // Set end row
-    info->parse_data->skip_end_lines = info->settings_data->footer_rows;
+    info->parse_data->skip_end_lines = info->settings_data.footer_rows;
     adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(info->end_row_spin));
     gtk_adjustment_set_upper (adj, info->parse_data->parsed_lines.size());
     gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->end_row_spin),
-            info->settings_data->footer_rows);
+            info->settings_data.footer_rows);
 
     // Set Alternate rows
-    info->parse_data->skip_alt_lines = info->settings_data->skip_alt_rows;
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->skip_rows), info->settings_data->skip_alt_rows);
+    info->parse_data->skip_alt_lines = info->settings_data.skip_alt_rows;
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->skip_rows), info->settings_data.skip_alt_rows);
 
     // Set Multi-split indicator
-    info->parse_data->multi_split = info->settings_data->multi_split;
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->multi_split_cbutton), info->settings_data->multi_split);
+    info->parse_data->multi_split = info->settings_data.multi_split;
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->multi_split_cbutton), info->settings_data.multi_split);
 
     // Set Import Format
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->csv_button), info->settings_data->csv_format);
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->fixed_button), !info->settings_data->csv_format);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->csv_button), info->settings_data.csv_format);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->fixed_button), !info->settings_data.csv_format);
 
     // This section deals with the combo's and character encoding
-    info->parse_data->date_format = info->settings_data->date_active;
-    gtk_combo_box_set_active (GTK_COMBO_BOX(info->date_format_combo), info->settings_data->date_active);
+    info->parse_data->date_format = info->settings_data.date_active;
+    gtk_combo_box_set_active (GTK_COMBO_BOX(info->date_format_combo), info->settings_data.date_active);
 
-    info->parse_data->currency_format = info->settings_data->currency_active;
-    gtk_combo_box_set_active (GTK_COMBO_BOX(info->currency_format_combo), info->settings_data->currency_active);
-    info->parse_data->convert_encoding (info->settings_data->encoding);
-    go_charmap_sel_set_encoding (info->encselector, info->settings_data->encoding);
+    info->parse_data->currency_format = info->settings_data.currency_active;
+    gtk_combo_box_set_active (GTK_COMBO_BOX(info->currency_format_combo), info->settings_data.currency_active);
+    info->parse_data->convert_encoding (info->settings_data.encoding);
+    go_charmap_sel_set_encoding (info->encselector, info->settings_data.encoding);
 
     try
     {
-        if (info->settings_data->csv_format)
+        if (info->settings_data.csv_format)
         {
             // Handle separators, only relevant if the file format is csv
             info->parse_data->file_format (GncImpFileFormat::CSV);
             for (int i = 0; i < SEP_NUM_OF_TYPES; i++)
-                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->sep_buttons[i]), info->settings_data->separator[i]);
-            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->custom_cbutton), info->settings_data->custom);
-            if (info->settings_data->custom)
-                gtk_entry_set_text (GTK_ENTRY(info->custom_entry), info->settings_data->custom_entry);
+                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->sep_buttons[i]), info->settings_data.separator[i]);
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->custom_cbutton), info->settings_data.custom);
+            if (info->settings_data.custom)
+                gtk_entry_set_text (GTK_ENTRY(info->custom_entry), info->settings_data.custom_entry);
             else
                 gtk_entry_set_text (GTK_ENTRY(info->custom_entry), "");
 
@@ -285,8 +284,8 @@ csv_import_trans_load_settings (CsvImportTrans *info)
             // Handle column widths, only relevant if the file format is fixed width
             info->parse_data->file_format (GncImpFileFormat::FIXED_WIDTH);
             GncFwTokenizer *fwtok = dynamic_cast<GncFwTokenizer*>(info->parse_data->tokenizer.get());
-            if (info->settings_data->column_widths, NULL)
-                fwtok->cols_from_string (std::string(info->settings_data->column_widths));
+            if (info->settings_data.column_widths, NULL)
+                fwtok->cols_from_string (std::string(info->settings_data.column_widths));
 
             info->parse_data->tokenize (false);
             gnc_csv_preview_update_assist (info);
@@ -305,7 +304,7 @@ csv_import_trans_load_settings (CsvImportTrans *info)
     }
 
     // This section deals with the column types
-    if (info->settings_data->column_types)
+    if (info->settings_data.column_types)
     {
         GtkTreeModel *ctstore;
         GtkTreeIter   iter;
@@ -313,7 +312,7 @@ csv_import_trans_load_settings (CsvImportTrans *info)
         uint          i;
         bool          error = false;
 
-        columns = g_strsplit (info->settings_data->column_types, ",", -1);
+        columns = g_strsplit (info->settings_data.column_types, ",", -1);
 
         // ctstore contains the column types and their (translated) string representation appearing in the column types treeview.
         ctstore = gtk_tree_view_get_model (info->ctreeview);
@@ -406,7 +405,7 @@ csv_import_trans_delete_settings_cb (GtkWidget *button, CsvImportTrans *info)
             if (response == GTK_RESPONSE_OK)
             {
                 g_key_file_remove_group (keyfile, group, NULL);
-                gnc_csv_trans_find_settings (model);
+                info->settings_data.find (model);
                 gtk_combo_box_set_active (GTK_COMBO_BOX(info->settings_combo), 0); // Default
                 gnc_csv_reset_preview_setting (info, false); // Reset the widgets
             }
@@ -542,24 +541,24 @@ csv_import_trans_save_settings_cb (GtkWidget *button, CsvImportTrans *info)
         gchar        *details = NULL;
 
         /* This section deals with the header and rows */
-        info->settings_data->header_rows = gtk_spin_button_get_value (GTK_SPIN_BUTTON(info->start_row_spin));
-        info->settings_data->footer_rows = gtk_spin_button_get_value (GTK_SPIN_BUTTON(info->end_row_spin));
-        info->settings_data->skip_alt_rows = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(info->skip_rows));
-        info->settings_data->csv_format = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(info->csv_button));
+        info->settings_data.header_rows = gtk_spin_button_get_value (GTK_SPIN_BUTTON(info->start_row_spin));
+        info->settings_data.footer_rows = gtk_spin_button_get_value (GTK_SPIN_BUTTON(info->end_row_spin));
+        info->settings_data.skip_alt_rows = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(info->skip_rows));
+        info->settings_data.csv_format = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(info->csv_button));
 
         /* This Section deals with the separators */
         for (i = 0; i < SEP_NUM_OF_TYPES; i++)
         {
-            info->settings_data->separator[i] = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(info->sep_buttons[i]));
+            info->settings_data.separator[i] = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(info->sep_buttons[i]));
         }
-        info->settings_data->custom = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(info->custom_cbutton));
-        info->settings_data->custom_entry = gtk_entry_get_text (GTK_ENTRY(info->custom_entry));
+        info->settings_data.custom = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(info->custom_cbutton));
+        info->settings_data.custom_entry = gtk_entry_get_text (GTK_ENTRY(info->custom_entry));
 
         /* This section deals with the combo's and character encoding */
-        info->settings_data->date_active = gtk_combo_box_get_active (GTK_COMBO_BOX(info->date_format_combo));
-        info->settings_data->currency_active = gtk_combo_box_get_active (GTK_COMBO_BOX(info->currency_format_combo));
-        info->settings_data->encoding = go_charmap_sel_get_encoding (info->encselector);
-        info->settings_data->multi_split = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(info->multi_split_cbutton));
+        info->settings_data.date_active = gtk_combo_box_get_active (GTK_COMBO_BOX(info->date_format_combo));
+        info->settings_data.currency_active = gtk_combo_box_get_active (GTK_COMBO_BOX(info->currency_format_combo));
+        info->settings_data.encoding = go_charmap_sel_get_encoding (info->encselector);
+        info->settings_data.multi_split = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(info->multi_split_cbutton));
 
         /* This section deals with the Treeview column names */
         columns = gtk_tree_view_get_columns (GTK_TREE_VIEW(info->ctreeview));
@@ -594,20 +593,20 @@ csv_import_trans_save_settings_cb (GtkWidget *button, CsvImportTrans *info)
         }
         g_list_free (columns);
 
-        info->settings_data->column_types = g_strdup (details);
+        info->settings_data.column_types = g_strdup (details);
         g_free (details);
 
         /* Save the column widths in fixed mode */
-        if (info->settings_data->csv_format)
-            info->settings_data->column_widths = "5,10,15";
+        if (info->settings_data.csv_format)
+            info->settings_data.column_widths = "5,10,15";
         else
         {
             GncFwTokenizer *fwtok = dynamic_cast<GncFwTokenizer*>(info->parse_data->tokenizer.get());
-            info->settings_data->column_widths = g_strdup (fwtok->cols_to_string().c_str());
+            info->settings_data.column_widths = g_strdup (fwtok->cols_to_string().c_str());
         }
 
         // Save the settings
-        if (!gnc_csv_trans_save_settings (info->settings_data, g_strdup (entry_text)))
+        if (!info->settings_data.save (g_strdup (entry_text)))
         {
             GtkTreeModel *model;
             GtkTreeIter   iter;
@@ -625,7 +624,7 @@ csv_import_trans_save_settings_cb (GtkWidget *button, CsvImportTrans *info)
 
             // Update the settings store
             model = gtk_combo_box_get_model (GTK_COMBO_BOX(info->settings_combo));
-            gnc_csv_trans_find_settings (model);
+            info->settings_data.find (model);
 
             // Get the first entry in model
             valid = gtk_tree_model_get_iter_first (model, &iter);
@@ -731,7 +730,7 @@ csv_import_trans_file_chooser_confirm_cb (GtkWidget *button, CsvImportTrans *inf
 
     /* Get settings store and populate */
     GtkTreeModel   *settings_store = gtk_combo_box_get_model (GTK_COMBO_BOX(info->settings_combo));
-    gnc_csv_trans_find_settings (settings_store);
+    info->settings_data.find (settings_store);
     gtk_combo_box_set_active (GTK_COMBO_BOX(info->settings_combo), 0);
 
     gtk_assistant_set_page_complete (assistant, page, TRUE);
@@ -1922,9 +1921,6 @@ void load_settings (CsvImportTrans *info)
     if (!info->error_text.empty())
         info->error_text.clear();
 
-    /* Init Settings data. */
-    info->settings_data = gnc_csv_trans_new_settings_data();
-
     /* The default directory for the user to select files. */
     info->starting_dir = gnc_get_default_directory (GNC_PREFS_GROUP);
 }
@@ -2691,9 +2687,6 @@ csv_import_trans_close_handler (gpointer user_data)
     /* Free the memory we allocated. */
     if (!(info->parse_data == NULL))
         delete info->parse_data;
-
-    if (!(info->settings_data == NULL))
-        gnc_csv_trans_settings_data_free (info->settings_data);
 
     if (!(info->account_picker == NULL))
         info->account_picker = NULL;

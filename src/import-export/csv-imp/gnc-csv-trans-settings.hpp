@@ -27,6 +27,12 @@
 #ifndef GNC_CSV_TRANS_SETTINGS_H
 #define GNC_CSV_TRANS_SETTINGS_H
 
+extern "C" {
+#include <gtk/gtk.h>
+}
+
+#include <string>
+
 /** Enumeration for separator checkbutton types. These are the
  *  different types of checkbuttons that the user can click to
  *  configure separators in a delimited file. */
@@ -36,66 +42,64 @@ enum SEP_BUTTON_TYPES {SEP_SPACE, SEP_TAB, SEP_COMMA, SEP_COLON, SEP_SEMICOLON, 
 /** Enumeration for the settings combo's */
 enum SETTINGS_COL {SET_GROUP, SET_NAME};
 
-typedef struct
+struct CsvTransSettings
 {
-    int           header_rows;                  // Number of header rows
-    int           footer_rows;                  // Number of footer rows
-    gboolean      csv_format;                   // CSV import Format
-    gboolean      skip_alt_rows;                // Skip alternate rows
-    gboolean      multi_split;                  // Assume multiple lines per transaction
+    CsvTransSettings() : header_rows{0}, footer_rows{0}, csv_format (true),
+                    skip_alt_rows (false), multi_split (false),
+                    encoding {"UTF-8"}, custom {false}, custom_entry {nullptr},
+                    date_active {0}, currency_active {0},
+                    column_types{nullptr}, column_widths{nullptr}
+                    {
+                        for (uint i = 0; i < SEP_NUM_OF_TYPES; i++)
+                        {
+                            separator[i] = false;
+                        }
+                    }
 
-    const gchar  *encoding;                     // File encoding
-
-    gboolean      separator[SEP_NUM_OF_TYPES];  // The separators
-
-    gboolean      custom;                       // Custom entry set
-    const gchar  *custom_entry;                 // Custom Entry
-
-    int           date_active;                  // Date Active id
-    int           currency_active;              // Currency Active id
-    const gchar  *column_types;                 // The Column types in order
-    const gchar  *column_widths;                // The Column widths
-} CsvSettings;
-
-/** Finds CSV settings entries in the key file and populates the
+/** Finds CSV settings entries in the state key file and populates the
  *  tree model.
  *
  *  @param settings_store The liststore that is used for the combo's
  *  which holds the key name and visual text.
  */
-void gnc_csv_trans_find_settings (GtkTreeModel *settings_store);
+void find (GtkTreeModel *settings_store);
 
 /** Save the gathered widget properties to a key File.
  *
- *  @param settings_data The settings structure where all the settings
- *  are located.
- *
  *  @param settings_name The name the settings will be stored under.
  *
- *  @return TRUE if there was a problem in saving.
+ *  @return true if there was a problem in saving.
  */
-gboolean gnc_csv_trans_save_settings (CsvSettings *settings_data, gchar *settings_name);
+bool save (const std::string& settings_name);
 
 /** Load the widget properties from a key File.
- *
- *  @param settings_data The settings structure where all the settings
- *  are located.
  *
  *  @param group The group name where the settings are stored in the
  *  key file.
  *
- *  @return TRUE if there was a problem.
+ *  @return true if there was a problem.
  */
-gboolean gnc_csv_trans_load_settings (CsvSettings *settings_data, gchar *group);
+bool load (const std::string& group);
 
-/** Create a new CsvSettings structure and set default values.
- *
- *  @return CsvSettings settings structure.
- */
-CsvSettings * gnc_csv_trans_new_settings_data (void);
 
-/** Free the CsvSettings structure.
- */
-void gnc_csv_trans_settings_data_free (CsvSettings *settings_data);
+int           header_rows;                  // Number of header rows
+int           footer_rows;                  // Number of footer rows
+bool          csv_format;                   // CSV import Format
+bool          skip_alt_rows;                // Skip alternate rows
+bool          multi_split;                  // Assume multiple lines per transaction
+
+const gchar  *encoding;                     // File encoding
+
+bool          separator[SEP_NUM_OF_TYPES];  // The separators
+
+bool          custom;                       // Custom entry set
+const gchar  *custom_entry;                 // Custom Entry
+
+int           date_active;                  // Date Active id
+int           currency_active;              // Currency Active id
+const gchar  *column_types;                 // The Column types in order
+const gchar  *column_widths;                // The Column widths
+
+};
 
 #endif
