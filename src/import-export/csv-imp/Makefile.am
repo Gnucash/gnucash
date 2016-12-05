@@ -18,7 +18,7 @@ libgncmod_csv_import_la_SOURCES = \
   gnc-tokenizer.cpp \
   gnc-tx-import.cpp \
   gnc-trans-props.cpp \
-  gnc-csv-trans-settings.c
+  gnc-csv-trans-settings.cpp
 
 noinst_HEADERS = \
   assistant-csv-account-import.h \
@@ -35,7 +35,7 @@ noinst_HEADERS = \
   gnc-tokenizer.hpp \
   gnc-tx-import.hpp \
   gnc-trans-props.hpp \
-  gnc-csv-trans-settings.h
+  gnc-csv-trans-settings.hpp
 
 libgncmod_csv_import_la_LDFLAGS = -avoid-version
 
