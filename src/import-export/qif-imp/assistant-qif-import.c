@@ -1703,7 +1703,7 @@ gnc_ui_qif_import_load_progress_start_cb(GtkButton * button,
     SCM parse_results   = scm_c_eval_string("qif-file:parse-fields-results");
     SCM scm_qiffile;
     SCM imported_files = SCM_EOL;
-    SCM load_return, parse_return;
+    SCM load_return = SCM_BOOL_F, parse_return = SCM_BOOL_F;
     SCM progress;
 
     /* Raise the busy flag so the assistant can't be canceled unexpectedly. */
@@ -1809,11 +1809,15 @@ gnc_ui_qif_import_load_progress_start_cb(GtkButton * button,
      */
 
     /* This step will fill the remainder of the bar. */
-    gnc_progress_dialog_push(wind->load_progress, 1);
-    parse_return = scm_call_2(qif_file_parse, SCM_CAR(imported_files), progress);
-    gnc_progress_dialog_pop(wind->load_progress);
-    wind->ask_date_format = FALSE;
-    wind->date_format = NULL;
+    if (!wind->load_stop)
+    {
+	gnc_progress_dialog_push(wind->load_progress, 1);
+	parse_return = scm_call_2(qif_file_parse, SCM_CAR(imported_files),
+				  progress);
+	gnc_progress_dialog_pop(wind->load_progress);
+	wind->ask_date_format = FALSE;
+	wind->date_format = NULL;
+    }
     if (parse_return == SCM_BOOL_T)
     {
         /* Canceled by the user. */

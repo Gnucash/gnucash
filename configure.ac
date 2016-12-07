@@ -1913,7 +1913,7 @@ AC_CONFIG_FILES([src/gnc-module/test/test-scm-multi],
 AC_CONFIG_FILES([src/gnome-utils/test/test-load-module],
                 [chmod +x src/gnome-utils/test/test-load-module])
 AC_CONFIG_FILES([src/report/locale-specific/us/test/test-load-module],
-                [src/report/locale-specific/us/test/test-load-module])
+                [chmod +x src/report/locale-specific/us/test/test-load-module])
 AC_CONFIG_FILES([src/report/report-gnome/test/test-load-module],
                 [chmod +x src/report/report-gnome/test/test-load-module])
 AC_CONFIG_FILES([src/report/report-system/test/test-load-module],
