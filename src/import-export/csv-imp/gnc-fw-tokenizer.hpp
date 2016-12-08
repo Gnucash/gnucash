@@ -58,6 +58,7 @@ public:
     ~GncFwTokenizer() = default;                                // destructor
 
     void columns(const std::vector<uint>& cols = std::vector<uint>());
+    std::vector<uint> get_columns();
     uint get_column (uint num);
 
     // Column manipulators
@@ -69,9 +70,6 @@ public:
     void col_widen (uint col_num);
     bool col_can_split (uint col_num, uint position);
     void col_split (uint col_num, uint position);
-
-    std::string cols_to_string();
-    void cols_from_string(const std::string& col_str);
 
     void load_file (const std::string& path) override;
     int  tokenize() override;

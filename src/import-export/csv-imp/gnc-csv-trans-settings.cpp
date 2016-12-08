@@ -213,8 +213,15 @@ CsvTransSettings::load (const std::string& group)
         }
     }
 
-    column_widths = g_key_file_get_string (keyfile, group.c_str(), CSV_COL_WIDTHS, &key_error);
+    column_widths.clear();
+    gsize list_len;
+    gint *col_widths_int = g_key_file_get_integer_list (keyfile, group.c_str(), CSV_COL_WIDTHS,
+            &list_len, &key_error);
+    for (uint i = 0; i < list_len; i++)
+        column_widths.push_back(col_widths_int[i]);
     error |= handle_load_error (&key_error, group);
+    if (col_widths_int)
+        g_free (col_widths_int);
 
     return error;
 }
@@ -265,7 +272,10 @@ CsvTransSettings::save (const std::string& settings_name)
     }
 
     g_key_file_set_string (keyfile, group.c_str(), CSV_COL_TYPES, ss.str().c_str());
-    g_key_file_set_string (keyfile, group.c_str(), CSV_COL_WIDTHS, column_widths);
+
+    if (!column_widths.emtpy())
+        g_key_file_set_integer_list (keyfile, group.c_str(), CSV_COL_WIDTHS,
+                (gint*)(column_widths.data()), column_widths.size());
 
     // Do a test read of column types
     GError *key_error = nullptr;

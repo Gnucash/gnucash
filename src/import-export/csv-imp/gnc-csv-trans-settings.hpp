@@ -49,7 +49,7 @@ struct CsvTransSettings
     CsvTransSettings() : header_rows{0}, footer_rows{0}, csv_format (true),
                     skip_alt_rows (false), multi_split (false),
                     encoding {"UTF-8"}, custom {false}, custom_entry {nullptr},
-                    date_active {0}, currency_active {0}, column_widths{nullptr}
+                    date_active {0}, currency_active {0}
                     {
                         for (uint i = 0; i < SEP_NUM_OF_TYPES; i++)
                         {
@@ -99,7 +99,7 @@ std::string   custom_entry;                 // Custom Entry
 int           date_active;                  // Date Active id
 int           currency_active;              // Currency Active id
 std::vector<GncTransPropType>  column_types;// The Column types in order
-const gchar  *column_widths;                // The Column widths
+std::vector<uint> column_widths;            // The Column widths
 
 };
 
