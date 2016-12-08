@@ -135,78 +135,68 @@ handle_load_error (GError **key_error, const std::string& group)
 /**************************************************
  * load
  *
- * load the settings from a key file
+ * load the settings from a state key file
  **************************************************/
 bool
 CsvTransSettings::load (const std::string& group)
 {
-    GKeyFile   *keyfile;
-    gint        i;
-    GError     *key_error = NULL;
-    bool        key_boolean = false;
-    int         key_int = 0;
-    gchar      *key_char = nullptr;
-    bool        error = false;
+    GError *key_error = nullptr;
+    bool error = false;
+    auto keyfile = gnc_state_get_current ();
 
-    // Get the Key file
-    keyfile = gnc_state_get_current ();
-
-    key_int = g_key_file_get_integer (keyfile, group.c_str(), CSV_SKIP_START, &key_error);
-    header_rows = (key_error) ? 0 : key_int;
+    header_rows = g_key_file_get_integer (keyfile, group.c_str(), CSV_SKIP_START, &key_error);
     error |= handle_load_error (&key_error, group);
 
-    key_int = g_key_file_get_integer (keyfile, group.c_str(), CSV_SKIP_END, &key_error);
-    footer_rows = (key_error) ? 0 : key_int;
+    footer_rows = g_key_file_get_integer (keyfile, group.c_str(), CSV_SKIP_END, &key_error);
     error |= handle_load_error (&key_error, group);
 
-    key_boolean = g_key_file_get_boolean (keyfile, group.c_str(), CSV_ALT_ROWS, &key_error);
-    skip_alt_rows = (key_error) ? false : key_boolean;
+    skip_alt_rows = g_key_file_get_boolean (keyfile, group.c_str(), CSV_ALT_ROWS, &key_error);
     error |= handle_load_error (&key_error, group);
 
-    key_boolean = g_key_file_get_boolean (keyfile, group.c_str(), CSV_MULTI_SPLIT, &key_error);
-    multi_split = (key_error) ? false : key_boolean;
+    multi_split = g_key_file_get_boolean (keyfile, group.c_str(), CSV_MULTI_SPLIT, &key_error);
     error |= handle_load_error (&key_error, group);
 
-    key_boolean = g_key_file_get_boolean (keyfile, group.c_str(), CSV_FORMAT, &key_error);
-    csv_format = (key_error) ? true : key_boolean;
+    csv_format = g_key_file_get_boolean (keyfile, group.c_str(), CSV_FORMAT, &key_error);
+    if (key_error) csv_format = true; // default to true, but above command will return false in case of error
     error |= handle_load_error (&key_error, group);
 
-    for (i = 0; i < SEP_NUM_OF_TYPES; i++)
+    for (uint i = 0; i < SEP_NUM_OF_TYPES; i++)
     {
         gchar *sep;
         sep = g_strdup_printf ("%s%d", CSV_SEP, i);
-        key_boolean = g_key_file_get_boolean (keyfile, group.c_str(), sep, &key_error);
-        separator[i] = (key_error) ? false : key_boolean;
+        separator[i] = g_key_file_get_boolean (keyfile, group.c_str(), sep, &key_error);
         error |= handle_load_error (&key_error, group);
         g_free (sep);
     }
 
-    key_boolean = g_key_file_get_boolean (keyfile, group.c_str(), CSV_CUSTOM, &key_error);
-    custom = (key_error) ? false : key_boolean;
+    custom = g_key_file_get_boolean (keyfile, group.c_str(), CSV_CUSTOM, &key_error);
     error |= handle_load_error (&key_error, group);
 
-    custom_entry = std::string(g_key_file_get_string (keyfile, group.c_str(), CSV_CUSTOM_ENTRY, &key_error));
+    gchar *key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_CUSTOM_ENTRY, &key_error);
+    custom_entry = key_char;
+    error |= handle_load_error (&key_error, group);
+    if (key_char)
+        g_free (key_char);
+
+    date_active = g_key_file_get_integer (keyfile, group.c_str(), CSV_DATE, &key_error);
     error |= handle_load_error (&key_error, group);
 
-    key_int = g_key_file_get_integer (keyfile, group.c_str(), CSV_DATE, &key_error);
-    date_active = (key_error) ? 0 : key_int;
-    error |= handle_load_error (&key_error, group);
-
-    key_int = g_key_file_get_integer (keyfile, group.c_str(), CSV_CURRENCY, &key_error);
-    currency_active = (key_error) ? 0 : key_int;
+    currency_active = g_key_file_get_integer (keyfile, group.c_str(), CSV_CURRENCY, &key_error);
     error |= handle_load_error (&key_error, group);
 
     key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_ENCODING, &key_error);
     encoding = (key_error) ? "UTF-8" : key_char;
     error |= handle_load_error (&key_error, group);
-    g_free (key_char);
+    if (key_char)
+        g_free (key_char);
 
-    column_types.clear();
     key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_COL_TYPES, &key_error);
     error |= handle_load_error (&key_error, group);
     auto col_types_str = std::string { key_char };
-    g_free (key_char);
+    if (key_char)
+        g_free (key_char);
 
+    column_types.clear();
     if (!col_types_str.empty())
     {
         using Tokenizer = boost::tokenizer< boost::escaped_list_separator<char>>;
@@ -280,7 +270,9 @@ CsvTransSettings::save (const std::string& settings_name)
     // Do a test read of column types
     GError *key_error = nullptr;
     bool error = false;
-    std::string test_string = g_key_file_get_string (keyfile, group.c_str(), CSV_COL_TYPES, &key_error);
+    auto col_types_val = g_key_file_get_string (keyfile, group.c_str(), CSV_COL_TYPES, &key_error);
+    auto test_string = std::string{col_types_val};
+    g_free (col_types_val);
 
     if ((key_error) || (test_string != ss.str()))
     {
