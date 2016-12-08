@@ -47,7 +47,6 @@ extern "C"
 #include "gnc-state.h"
 
 #include "assistant-csv-trans-import.h"
-#include "gnc-csv-trans-settings.hpp"
 
 #include "import-account-matcher.h"
 #include "import-main-matcher.h"
@@ -57,6 +56,7 @@ extern "C"
 #include "go-charmap-sel.h"
 }
 
+#include "gnc-csv-trans-settings.hpp"
 #include "gnc-tx-import.hpp"
 #include "gnc-fw-tokenizer.hpp"
 #include "gnc-csv-tokenizer.hpp"
@@ -261,7 +261,7 @@ csv_import_trans_load_settings (CsvImportTrans *info)
     info->parse_data->currency_format = info->settings_data.currency_active;
     gtk_combo_box_set_active (GTK_COMBO_BOX(info->currency_format_combo), info->settings_data.currency_active);
     info->parse_data->convert_encoding (info->settings_data.encoding);
-    go_charmap_sel_set_encoding (info->encselector, info->settings_data.encoding);
+    go_charmap_sel_set_encoding (info->encselector, info->settings_data.encoding.c_str());
 
     try
     {
@@ -273,7 +273,7 @@ csv_import_trans_load_settings (CsvImportTrans *info)
                 gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->sep_buttons[i]), info->settings_data.separator[i]);
             gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->custom_cbutton), info->settings_data.custom);
             if (info->settings_data.custom)
-                gtk_entry_set_text (GTK_ENTRY(info->custom_entry), info->settings_data.custom_entry);
+                gtk_entry_set_text (GTK_ENTRY(info->custom_entry), info->settings_data.custom_entry.c_str());
             else
                 gtk_entry_set_text (GTK_ENTRY(info->custom_entry), "");
 
@@ -303,53 +303,43 @@ csv_import_trans_load_settings (CsvImportTrans *info)
         PWARN("Got an error during file loading");
     }
 
-    // This section deals with the column types
-    if (info->settings_data.column_types)
+    // Set column types on the import data table to what's in the loaded preset
+    // Note we can only set types for actual columns in the data. If the loaded
+    // preset has more column types, these will be discarded.
+    // First get an iterator for the first (and only) row of ctstore, which
+    // contains the column types and their (translated) string representation
+    // appearing in the column types treeview.
+    GtkTreeModel *ctstore = gtk_tree_view_get_model (info->ctreeview);
+    gtk_tree_model_get_iter_first (ctstore, &iter);
+
+    bool          error = false;
+    for (uint i=0; i < info->settings_data.column_types.size() && i < info->parse_data->column_types.size(); i++)
     {
-        GtkTreeModel *ctstore;
-        GtkTreeIter   iter;
-        gchar       **columns;
-        uint          i;
-        bool          error = false;
+        auto col_type = GncTransPropType::NONE;
+        auto saved_col_type = info->settings_data.column_types.at(i);
 
-        columns = g_strsplit (info->settings_data.column_types, ",", -1);
-
-        // ctstore contains the column types and their (translated) string representation appearing in the column types treeview.
-        ctstore = gtk_tree_view_get_model (info->ctreeview);
-
-        // Get an iterator for the first (and only) row.
-        gtk_tree_model_get_iter_first (ctstore, &iter);
-
-        for (i=0; columns[i] != NULL && i < info->parse_data->column_types.size(); i++)
+        if (saved_col_type >= GncTransPropType::NONE &&
+            saved_col_type <= GncTransPropType::TMEMO)
         {
-            auto col_type = GncTransPropType::NONE;
-            int saved_col_type = atoi (columns[i]);
-
-            if (saved_col_type >= static_cast<int>(GncTransPropType::NONE) &&
-                saved_col_type <= static_cast<int>(GncTransPropType::TMEMO))
-            {
-                col_type = static_cast<GncTransPropType>(saved_col_type);
-                info->parse_data->column_types.at(i) = col_type;
-                /* Set the column type. Store is arranged so that every two
-                 * columns is a pair of
-                 * - the column type as a user visible (translated) string
-                 * - the internal type for this column
-                 * So ctstore looks like:
-                 * col_type_str 0, col_type, col_type_str 1, col_type 1, ..., col_type_str ncols, col_type ncols. */
-                if ((2 * i + 1) < static_cast<uint>(gtk_tree_model_get_n_columns (ctstore)))
-                    gtk_list_store_set (GTK_LIST_STORE(ctstore), &iter,
-                            2 * i, _(gnc_csv_col_type_strs[col_type]),
-                            2 * i + 1, col_type,
-                            -1);
-            }
-            else
-                error = true;
+            col_type = saved_col_type;
+            info->parse_data->column_types.at(i) = col_type;
+            /* Set the column type. Store is arranged so that every two
+             * columns is a pair of
+             * - the column type as a user visible (translated) string
+             * - the internal type for this column
+             * So ctstore looks like:
+             * col_type_str 0, col_type, col_type_str 1, col_type 1, ..., col_type_str ncols, col_type ncols. */
+            if ((2 * i + 1) < static_cast<uint>(gtk_tree_model_get_n_columns (ctstore)))
+                gtk_list_store_set (GTK_LIST_STORE(ctstore), &iter,
+                        2 * i, _(gnc_csv_col_type_strs[col_type]),
+                        2 * i + 1, col_type,
+                        -1);
         }
-        if (error)
-            gnc_error_dialog (NULL, "%s", _("There was a problem with the column types, please review."));
-
-        g_strfreev (columns);
+        else
+            error = true;
     }
+    if (error)
+        gnc_error_dialog (NULL, "%s", _("There was a problem with the column types, please review."));
 }
 
 
@@ -538,7 +528,6 @@ csv_import_trans_save_settings_cb (GtkWidget *button, CsvImportTrans *info)
         GList        *column;
         GtkTreeModel *ctstore;
         GtkTreeIter   iter;
-        gchar        *details = NULL;
 
         /* This section deals with the header and rows */
         info->settings_data.header_rows = gtk_spin_button_get_value (GTK_SPIN_BUTTON(info->start_row_spin));
@@ -567,6 +556,7 @@ csv_import_trans_save_settings_cb (GtkWidget *button, CsvImportTrans *info)
         // Get an iterator for the first (and only) row.
         gtk_tree_model_get_iter_first (ctstore, &iter);
 
+        info->settings_data.column_types.clear();
         for (column = columns, i = 0; column; column = g_list_next (column), i++)
         {
             auto col_type = GncTransPropType::NONE;
@@ -579,22 +569,10 @@ csv_import_trans_save_settings_cb (GtkWidget *button, CsvImportTrans *info)
              * So ctstore looks like:
              * col_type_str 0, col_type, col_type_str 1, col_type 1, ..., col_type_str ncols, col_type ncols. */
             gtk_tree_model_get (ctstore, &iter, 2 * i + 1, &col_type, -1);
+            info->settings_data.column_types.push_back(col_type);
 
-            col_type_str = g_strdup_printf ("%i", static_cast<int>(col_type));
-            if (!details)
-                details = col_type_str;
-            else
-            {
-                gchar *details_prev = details;
-                details = g_strjoin (",", details_prev, col_type_str, NULL);
-                g_free (details_prev);
-                g_free (col_type_str);
-            }
         }
         g_list_free (columns);
-
-        info->settings_data.column_types = g_strdup (details);
-        g_free (details);
 
         /* Save the column widths in fixed mode */
         if (info->settings_data.csv_format)

@@ -31,6 +31,9 @@ extern "C" {
 #endif
 
 #include <glib/gi18n.h>
+
+#include "Account.h"
+#include "Transaction.h"
 }
 
 #include <string>
