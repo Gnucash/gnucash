@@ -284,8 +284,7 @@ csv_import_trans_load_settings (CsvImportTrans *info)
             // Handle column widths, only relevant if the file format is fixed width
             info->parse_data->file_format (GncImpFileFormat::FIXED_WIDTH);
             GncFwTokenizer *fwtok = dynamic_cast<GncFwTokenizer*>(info->parse_data->tokenizer.get());
-            if (info->settings_data.column_widths, NULL)
-                fwtok->cols_from_string (std::string(info->settings_data.column_widths));
+            fwtok->columns(info->settings_data.column_widths);
 
             info->parse_data->tokenize (false);
             gnc_csv_preview_update_assist (info);
@@ -575,12 +574,10 @@ csv_import_trans_save_settings_cb (GtkWidget *button, CsvImportTrans *info)
         g_list_free (columns);
 
         /* Save the column widths in fixed mode */
-        if (info->settings_data.csv_format)
-            info->settings_data.column_widths = "5,10,15";
-        else
+        if (!info->settings_data.csv_format)
         {
             GncFwTokenizer *fwtok = dynamic_cast<GncFwTokenizer*>(info->parse_data->tokenizer.get());
-            info->settings_data.column_widths = g_strdup (fwtok->cols_to_string().c_str());
+            info->settings_data.column_widths = fwtok->get_columns();
         }
 
         // Save the settings
