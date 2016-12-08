@@ -32,6 +32,8 @@ extern "C" {
 }
 
 #include <string>
+#include <vector>
+#include "gnc-trans-props.hpp"
 
 /** Enumeration for separator checkbutton types. These are the
  *  different types of checkbuttons that the user can click to
@@ -47,8 +49,7 @@ struct CsvTransSettings
     CsvTransSettings() : header_rows{0}, footer_rows{0}, csv_format (true),
                     skip_alt_rows (false), multi_split (false),
                     encoding {"UTF-8"}, custom {false}, custom_entry {nullptr},
-                    date_active {0}, currency_active {0},
-                    column_types{nullptr}, column_widths{nullptr}
+                    date_active {0}, currency_active {0}, column_widths{nullptr}
                     {
                         for (uint i = 0; i < SEP_NUM_OF_TYPES; i++)
                         {
@@ -88,16 +89,16 @@ bool          csv_format;                   // CSV import Format
 bool          skip_alt_rows;                // Skip alternate rows
 bool          multi_split;                  // Assume multiple lines per transaction
 
-const gchar  *encoding;                     // File encoding
+std::string   encoding;                     // File encoding
 
 bool          separator[SEP_NUM_OF_TYPES];  // The separators
 
 bool          custom;                       // Custom entry set
-const gchar  *custom_entry;                 // Custom Entry
+std::string   custom_entry;                 // Custom Entry
 
 int           date_active;                  // Date Active id
 int           currency_active;              // Currency Active id
-const gchar  *column_types;                 // The Column types in order
+std::vector<GncTransPropType>  column_types;// The Column types in order
 const gchar  *column_widths;                // The Column widths
 
 };

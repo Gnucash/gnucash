@@ -36,7 +36,11 @@ extern "C"
 #include "gnc-state.h"
 }
 
+#include <sstream>
+#include <boost/tokenizer.hpp>
+
 const std::string csv_group_prefix{"CSV - "};
+const std::string no_settings{N_("No Settings")};
 #define CSV_NAME         "Name"
 #define CSV_FORMAT       "CsvFormat"
 #define CSV_ALT_ROWS     "AltRows"
@@ -72,7 +76,7 @@ CsvTransSettings::find (GtkTreeModel *settings_store)
     // Append the default entry
     GtkTreeIter iter;
     gtk_list_store_append (GTK_LIST_STORE(settings_store), &iter);
-    gtk_list_store_set (GTK_LIST_STORE(settings_store), &iter, SET_GROUP, NULL, SET_NAME, _("No Settings"), -1);
+    gtk_list_store_set (GTK_LIST_STORE(settings_store), &iter, SET_GROUP, NULL, SET_NAME, _(no_settings.c_str()), -1);
 
     // Search all Groups in the state key file for ones starting with prefix
     GKeyFile   *keyfile = gnc_state_get_current ();
@@ -141,7 +145,7 @@ CsvTransSettings::load (const std::string& group)
     GError     *key_error = NULL;
     bool        key_boolean = false;
     int         key_int = 0;
-    gchar      *key_char = NULL;
+    gchar      *key_char = nullptr;
     bool        error = false;
 
     // Get the Key file
@@ -181,7 +185,7 @@ CsvTransSettings::load (const std::string& group)
     custom = (key_error) ? false : key_boolean;
     error |= handle_load_error (&key_error, group);
 
-    custom_entry = g_key_file_get_string (keyfile, group.c_str(), CSV_CUSTOM_ENTRY, &key_error);
+    custom_entry = std::string(g_key_file_get_string (keyfile, group.c_str(), CSV_CUSTOM_ENTRY, &key_error));
     error |= handle_load_error (&key_error, group);
 
     key_int = g_key_file_get_integer (keyfile, group.c_str(), CSV_DATE, &key_error);
@@ -193,16 +197,35 @@ CsvTransSettings::load (const std::string& group)
     error |= handle_load_error (&key_error, group);
 
     key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_ENCODING, &key_error);
-    encoding = g_strdup((key_error) ? "UTF-8" : key_char);
+    encoding = (key_error) ? "UTF-8" : key_char;
     error |= handle_load_error (&key_error, group);
+    g_free (key_char);
 
-    column_types = g_key_file_get_string (keyfile, group.c_str(), CSV_COL_TYPES, &key_error);
+    column_types.clear();
+    key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_COL_TYPES, &key_error);
     error |= handle_load_error (&key_error, group);
+    auto col_types_str = std::string { key_char };
+    g_free (key_char);
+
+    if (!col_types_str.empty())
+    {
+        using Tokenizer = boost::tokenizer< boost::escaped_list_separator<char>>;
+        boost::escaped_list_separator<char> sep("\\", ",", "\"");
+        Tokenizer tok(col_types_str, sep);
+        for (auto col_type_str : tok)
+        {
+            auto col_type = std::stoi(col_type_str);
+            if (col_type >= static_cast<int>(GncTransPropType::NONE) &&
+                col_type <= static_cast<int>(GncTransPropType::SPLIT_PROPS))
+                column_types.push_back (static_cast<GncTransPropType>(col_type));
+            else
+                column_types.push_back (GncTransPropType::NONE);
+        }
+    }
 
     column_widths = g_key_file_get_string (keyfile, group.c_str(), CSV_COL_WIDTHS, &key_error);
     error |= handle_load_error (&key_error, group);
 
-    g_free (key_char);
     return error;
 }
 
@@ -238,19 +261,28 @@ CsvTransSettings::save (const std::string& settings_name)
     }
 
     g_key_file_set_boolean (keyfile, group.c_str(), CSV_CUSTOM, custom);
-    g_key_file_set_string (keyfile, group.c_str(), CSV_CUSTOM_ENTRY, custom_entry);
+    g_key_file_set_string (keyfile, group.c_str(), CSV_CUSTOM_ENTRY, custom_entry.c_str());
     g_key_file_set_integer (keyfile, group.c_str(), CSV_DATE, date_active);
     g_key_file_set_integer (keyfile, group.c_str(), CSV_CURRENCY, currency_active);
-    g_key_file_set_string (keyfile, group.c_str(), CSV_ENCODING, encoding);
-    g_key_file_set_string (keyfile, group.c_str(), CSV_COL_TYPES, column_types);
+    g_key_file_set_string (keyfile, group.c_str(), CSV_ENCODING, encoding.c_str());
+
+    std::stringstream ss;
+    for (auto col_type : column_types)
+    {
+        if (!ss.str().empty())
+            ss << ",";
+        ss << static_cast<uint>(col_type);
+    }
+
+    g_key_file_set_string (keyfile, group.c_str(), CSV_COL_TYPES, ss.str().c_str());
     g_key_file_set_string (keyfile, group.c_str(), CSV_COL_WIDTHS, column_widths);
 
     // Do a test read of column types
     GError *key_error = nullptr;
     bool error = false;
-    gchar *test_string = g_key_file_get_string (keyfile, group.c_str(), CSV_COL_TYPES, &key_error);
+    std::string test_string = g_key_file_get_string (keyfile, group.c_str(), CSV_COL_TYPES, &key_error);
 
-    if ((key_error) || (g_strcmp0 (test_string, column_types) != 0))
+    if ((key_error) || (test_string != ss.str()))
     {
         if (key_error)
         {
@@ -258,9 +290,8 @@ CsvTransSettings::save (const std::string& settings_name)
             g_error_free (key_error);
         }
         else
-            g_warning ("Error comparing group %s key %s: '%s' and '%s'", group.c_str(), CSV_COL_TYPES, test_string, group.c_str());
+            g_warning ("Error comparing group %s key %s: '%s' and '%s'", group.c_str(), CSV_COL_TYPES, test_string.c_str(), group.c_str());
         error = true;
     }
-    g_free (test_string);
     return error;
 }
