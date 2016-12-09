@@ -514,6 +514,15 @@ var plot = $.jqplot('")(push chart-id)(push"', data, options);
 var int_chart_width = document.getElementById(\"")(push chart-id)(push"\").getElementsByClassName(\"jqplot-zoom-canvas\")[0].width;
 plot.axes.xaxis.ticks = getVisualTicks(int_chart_width);
 plot.replot();
+var timer;
+$(window).resize(function () {
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+        plot.replot({resetAxes: true });
+        plot.axes.xaxis.ticks = getVisualTicks(int_chart_width);
+        plot.replot();
+    }, 100);
+    });
 });
 
 function formatTooltip(str, seriesIndex, pointIndex) {
