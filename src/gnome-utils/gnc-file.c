@@ -206,7 +206,12 @@ show_session_error (QofBackendError io_error,
     else if (! gnc_uri_is_file_uri (newfile)) /* Hide the db password in error messages */
         displayname = gnc_uri_normalize_uri ( newfile, FALSE);
     else
-        displayname = g_strdup (newfile);
+    {
+        /* Strip the protocol from the file name. */
+        char *uri = gnc_uri_normalize_uri(newfile, FALSE);
+        displayname = gnc_uri_get_path(uri);
+        g_free(uri);
+    }
 
     switch (io_error)
     {
@@ -366,7 +371,7 @@ show_session_error (QofBackendError io_error,
         }
         else
         {
-            fmt = _("The file %s could not be found.");
+            fmt = _("The file/URI %s could not be found.");
             gnc_error_dialog (parent, fmt, displayname);
         }
         break;
