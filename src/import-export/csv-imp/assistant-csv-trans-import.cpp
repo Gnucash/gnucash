@@ -540,7 +540,9 @@ csv_import_trans_save_settings_cb (GtkWidget *button, CsvImportTrans *info)
             info->settings_data.separator[i] = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(info->sep_buttons[i]));
         }
         info->settings_data.custom = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(info->custom_cbutton));
-        info->settings_data.custom_entry = gtk_entry_get_text (GTK_ENTRY(info->custom_entry));
+        auto tmp_text = gtk_entry_get_text (GTK_ENTRY(info->custom_entry));
+        if (tmp_text && *tmp_text != '\0')
+            info->settings_data.custom_entry = tmp_text;
 
         /* This section deals with the combo's and character encoding */
         info->settings_data.date_active = gtk_combo_box_get_active (GTK_COMBO_BOX(info->date_format_combo));

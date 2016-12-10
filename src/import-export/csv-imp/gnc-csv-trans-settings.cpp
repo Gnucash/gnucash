@@ -170,7 +170,8 @@ CsvTransSettings::load (const std::string& group)
     error |= handle_load_error (&key_error, group);
 
     gchar *key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_CUSTOM_ENTRY, &key_error);
-    custom_entry = key_char;
+    if (key_char && *key_char != '\0')
+        custom_entry = key_char;
     error |= handle_load_error (&key_error, group);
     if (key_char)
         g_free (key_char);
@@ -182,7 +183,10 @@ CsvTransSettings::load (const std::string& group)
     error |= handle_load_error (&key_error, group);
 
     key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_ENCODING, &key_error);
-    encoding = (key_error) ? "UTF-8" : key_char;
+    if (key_char && *key_char != '\0')
+        encoding = key_char;
+    else
+        "UTF-8";
     error |= handle_load_error (&key_error, group);
     if (key_char)
         g_free (key_char);
