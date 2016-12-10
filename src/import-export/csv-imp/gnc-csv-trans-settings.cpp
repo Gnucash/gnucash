@@ -36,9 +36,6 @@ extern "C"
 #include "gnc-state.h"
 }
 
-#include <sstream>
-#include <boost/tokenizer.hpp>
-
 const std::string csv_group_prefix{"CSV - "};
 const std::string no_settings{N_("No Settings")};
 #define CSV_NAME         "Name"
@@ -190,35 +187,28 @@ CsvTransSettings::load (const std::string& group)
     if (key_char)
         g_free (key_char);
 
-    key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_COL_TYPES, &key_error);
-    error |= handle_load_error (&key_error, group);
-    auto col_types_str = std::string { key_char };
-    if (key_char)
-        g_free (key_char);
-
     column_types.clear();
-    if (!col_types_str.empty())
+    gsize list_len;
+    gchar** col_types_str = g_key_file_get_string_list (keyfile, group.c_str(), CSV_COL_TYPES,
+            &list_len, &key_error);
+    for (uint i = 0; i < list_len; i++)
     {
-        using Tokenizer = boost::tokenizer< boost::escaped_list_separator<char>>;
-        boost::escaped_list_separator<char> sep("\\", ",", "\"");
-        Tokenizer tok(col_types_str, sep);
-        for (auto col_type_str : tok)
-        {
-            auto col_type = std::stoi(col_type_str);
-            if (col_type >= static_cast<int>(GncTransPropType::NONE) &&
-                col_type <= static_cast<int>(GncTransPropType::SPLIT_PROPS))
-                column_types.push_back (static_cast<GncTransPropType>(col_type));
-            else
-                column_types.push_back (GncTransPropType::NONE);
-        }
+        auto col_types_it = std::find_if (gnc_csv_col_type_strs.begin(),
+                gnc_csv_col_type_strs.end(), test_prop_type_str (col_types_str[i]));
+        if (col_types_it != gnc_csv_col_type_strs.end())
+            column_types.push_back(col_types_it->first);
     }
+    if (col_types_str)
+        g_strfreev (col_types_str);
 
     column_widths.clear();
-    gsize list_len;
     gint *col_widths_int = g_key_file_get_integer_list (keyfile, group.c_str(), CSV_COL_WIDTHS,
             &list_len, &key_error);
     for (uint i = 0; i < list_len; i++)
-        column_widths.push_back(col_widths_int[i]);
+    {
+        if (col_widths_int[i] > 0)
+            column_widths.push_back(col_widths_int[i]);
+    }
     error |= handle_load_error (&key_error, group);
     if (col_widths_int)
         g_free (col_widths_int);
@@ -263,28 +253,27 @@ CsvTransSettings::save (const std::string& settings_name)
     g_key_file_set_integer (keyfile, group.c_str(), CSV_CURRENCY, currency_active);
     g_key_file_set_string (keyfile, group.c_str(), CSV_ENCODING, encoding.c_str());
 
-    std::stringstream ss;
+    std::vector<const char*> col_types_str;
     for (auto col_type : column_types)
-    {
-        if (!ss.str().empty())
-            ss << ",";
-        ss << static_cast<uint>(col_type);
-    }
+        col_types_str.push_back(gnc_csv_col_type_strs[col_type]);
 
-    g_key_file_set_string (keyfile, group.c_str(), CSV_COL_TYPES, ss.str().c_str());
+    if (!col_types_str.empty())
+        g_key_file_set_string_list (keyfile, group.c_str(), CSV_COL_TYPES,
+                col_types_str.data(), col_types_str.size());
 
-    if (!column_widths.emtpy())
+    if (!column_widths.empty())
         g_key_file_set_integer_list (keyfile, group.c_str(), CSV_COL_WIDTHS,
                 (gint*)(column_widths.data()), column_widths.size());
 
-    // Do a test read of column types
+    // Do a test read of encoding
     GError *key_error = nullptr;
     bool error = false;
-    auto col_types_val = g_key_file_get_string (keyfile, group.c_str(), CSV_COL_TYPES, &key_error);
-    auto test_string = std::string{col_types_val};
-    g_free (col_types_val);
+    auto enc_val = g_key_file_get_string (keyfile, group.c_str(), CSV_ENCODING, &key_error);
+    auto enc_str = std::string{enc_val};
+    if (enc_val)
+        g_free (enc_val);
 
-    if ((key_error) || (test_string != ss.str()))
+    if ((key_error) || (enc_str != encoding.c_str()))
     {
         if (key_error)
         {
@@ -292,7 +281,7 @@ CsvTransSettings::save (const std::string& settings_name)
             g_error_free (key_error);
         }
         else
-            g_warning ("Error comparing group %s key %s: '%s' and '%s'", group.c_str(), CSV_COL_TYPES, test_string.c_str(), group.c_str());
+            g_warning ("Error comparing group %s key %s: '%s' and '%s'", group.c_str(), CSV_COL_TYPES, enc_str.c_str(), group.c_str());
         error = true;
     }
     return error;
