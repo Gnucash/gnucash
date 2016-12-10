@@ -1972,14 +1972,30 @@ test_gnc_dmy2timespec_end (void)
     g_date_time_unref (gdt4);
 }
 
+static GDateTime*
+offset_adjust(GDateTime *gdt)
+{
+     Testfuncs *tf = gnc_date_load_funcs();
+     GTimeZone *zone = tf->timezone_new_local();
+     int interval = g_time_zone_find_interval(zone, G_TIME_TYPE_STANDARD,
+					      g_date_time_to_unix(gdt));
+     int offset = g_time_zone_get_offset(zone, interval) / 60;
+     int off_hr = (offset / 60) + (offset % 60 ? (offset < 0 ? -1 : 1) : 0);
+     int correction = off_hr < -10 ? -10 - off_hr : off_hr > 13 ? 13 - off_hr : 0;
+     GDateTime* new_gdt = g_date_time_add_hours(gdt, correction);
+     g_date_time_unref(gdt);
+     g_slice_free(Testfuncs, tf);
+     return new_gdt;
+}
+
 /*gnc_dmy2timespec_neutral*/
 static void
 test_gnc_dmy2timespec_neutral (void)
 {
-    GDateTime *gdt1 = gncdt.new_utc (1999, 7, 21, 10, 59, 0);
-    GDateTime *gdt2 = gncdt.new_utc (1918, 3, 31, 10, 59, 0);
-    GDateTime *gdt3 = gncdt.new_utc (1918, 4, 1, 10, 59, 0);
-    GDateTime *gdt4 = gncdt.new_utc (2057, 11, 20, 10, 59, 0);
+    GDateTime *gdt1 = offset_adjust(gncdt.new_utc (1999, 7, 21, 10, 59, 0));
+    GDateTime *gdt2 = offset_adjust(gncdt.new_utc (1918, 3, 31, 10, 59, 0));
+    GDateTime *gdt3 = offset_adjust(gncdt.new_utc (1918, 4, 1, 10, 59, 0));
+    GDateTime *gdt4 = offset_adjust(gncdt.new_utc (2057, 11, 20, 10, 59, 0));
 
     gint day, mon, yr;
     Timespec t, r_t;
@@ -2132,10 +2148,10 @@ Timespec gdate_to_timespec (GDate d)// C: 7 in 6  Local: 0:0:0
 static void
 test_gdate_to_timespec (void)
 {
-    GDateTime *gdt1 = gncdt.new_utc (1999, 7, 21, 10, 59, 0);
-    GDateTime *gdt2 = gncdt.new_utc (1918, 3, 31, 10, 59, 0);
-    GDateTime *gdt3 = gncdt.new_utc (1918, 4, 1, 10, 59, 0);
-    GDateTime *gdt4 = gncdt.new_utc (2057, 11, 20, 10, 59, 0);
+    GDateTime *gdt1 = offset_adjust(gncdt.new_utc (1999, 7, 21, 10, 59, 0));
+    GDateTime *gdt2 = offset_adjust(gncdt.new_utc (1918, 3, 31, 10, 59, 0));
+    GDateTime *gdt3 = offset_adjust(gncdt.new_utc (1918, 4, 1, 10, 59, 0));
+    GDateTime *gdt4 = offset_adjust(gncdt.new_utc (2057, 11, 20, 10, 59, 0));
 
     gint day, mon, yr;
     Timespec t, r_t;
@@ -2415,7 +2431,6 @@ void
 test_suite_gnc_date (void)
 {
     _gnc_date_time_init (&gncdt);
-
 
     GNC_TEST_ADD_FUNC (suitename, "gnc localtime", test_gnc_localtime);
     GNC_TEST_ADD_FUNC (suitename, "gnc gmtime", test_gnc_gmtime);

@@ -1581,16 +1581,17 @@ gnc_dmy2timespec_neutral (int day, int month, int year)
     struct tm date;
     Timespec ts = {0, 0};
     GTimeZone *zone = gnc_g_time_zone_new_local();
-    GDateTime *gdt = gnc_g_date_time_new_local (year, month, day, 12, 0, 0.0);
+    GDateTime *gdt = gnc_g_date_time_new_local (year, month, day, 10, 59, 0.0);
     int interval = g_time_zone_find_interval (zone, G_TIME_TYPE_STANDARD,
                                               g_date_time_to_unix(gdt));
-    int offset = g_time_zone_get_offset(zone, interval) / 3600;
+    int offset = g_time_zone_get_offset(zone, interval) / 60;
+    int off_hr = (offset / 60) + (offset % 60 ? (offset < 0 ? -1 : 1) : 0);
     g_date_time_unref (gdt);
     memset (&date, 0, sizeof(struct tm));
     date.tm_year = year - 1900;
     date.tm_mon = month - 1;
     date.tm_mday = day;
-    date.tm_hour = offset < -11 ? -offset : offset > 13 ? 23 - offset : 10;
+    date.tm_hour = off_hr < -10 ? -off_hr : off_hr > 13 ? 23 - off_hr : 10;
     date.tm_min = 59;
     date.tm_sec = 0;
 
@@ -1813,5 +1814,6 @@ gnc_date_load_funcs (void)
 {
     Testfuncs *tf = g_slice_new (Testfuncs);
     tf->timespec_normalize = timespec_normalize;
+    tf->timezone_new_local = gnc_g_time_zone_new_local;
     return tf;
 }
