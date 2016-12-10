@@ -431,7 +431,9 @@ gnc_g_date_time_new_from_timespec_local (Timespec ts)
 {
     GDateTime *gdt1 = gnc_g_date_time_new_from_unix_local (ts.tv_sec);
     double nsecs = ((double)ts.tv_nsec + 0.5)/ 1000000000.0L;
-    GDateTime *gdt2 = g_date_time_add_seconds (gdt1, nsecs);
+    GDateTime *gdt2 = NULL;
+    g_return_val_if_fail (gdt1 != NULL, NULL);
+    gdt2 = g_date_time_add_seconds (gdt1, nsecs);
     g_date_time_unref (gdt1);
     g_assert (g_date_time_to_unix (gdt2) == ts.tv_sec + (nsecs >= 1.0 ? (gint64)nsecs : 0));
     return gdt2;
@@ -1486,8 +1488,11 @@ gnc_iso8601_to_timespec_gmt(const char *str)
 	gdt = g_date_time_new_utc (year, month, day, hour, minute, second);
     }
 
-    time.tv_sec = g_date_time_to_unix (gdt);
-    time.tv_nsec = g_date_time_get_microsecond (gdt) * 1000;
+    if (gdt != NULL)
+    {
+	time.tv_sec = g_date_time_to_unix (gdt);
+	time.tv_nsec = g_date_time_get_microsecond (gdt) * 1000;
+    }
     g_date_time_unref (gdt);
     return time;
 }
