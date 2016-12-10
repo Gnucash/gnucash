@@ -74,6 +74,21 @@ enum class GncTransPropType {
  *  changes to enum class GncTransPropType ! */
 extern std::map<GncTransPropType, const char*> gnc_csv_col_type_strs;
 
+
+/** Functor to check if the above map has an element of which
+ *  the value equals name. To be used with std::find_if.
+ */
+struct test_prop_type_str
+{
+    test_prop_type_str( const char* name ) : m_name(name) {}
+    bool operator()( const std::pair<GncTransPropType, const char*>& v ) const
+    {
+        return !g_strcmp0(v.second, m_name);
+    }
+private:
+    const char *m_name;
+};
+
 time64 parse_date (const std::string &date_str, int format);
 
 struct GncPreTrans
@@ -132,7 +147,5 @@ private:
     boost::optional<std::string> m_num;
     bool created = false;
 };
-
-
 
 #endif
