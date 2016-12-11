@@ -379,20 +379,22 @@ std::string GncPreSplit::verify_essentials (void)
  * @param book The book where the split should be stored
  * @param amount The amount of the split
  */
-static void trans_add_split (Transaction* trans, Account* account, QofBook* book,
-                            gnc_numeric amount, const std::string& action, const std::string& memo)
+static void trans_add_split (Transaction* trans, Account* account,
+                            gnc_numeric amount, const boost::optional<std::string>& action,
+                            const boost::optional<std::string>& memo)
 {
+    auto book = xaccTransGetBook (trans);
     auto split = xaccMallocSplit (book);
     xaccSplitSetAccount (split, account);
     xaccSplitSetParent (split, trans);
     xaccSplitSetAmount (split, amount);
     xaccSplitSetValue (split, amount);
-    if (!memo.empty())
-        xaccSplitSetMemo (split, memo.c_str());
+    if (memo)
+        xaccSplitSetMemo (split, memo->c_str());
     /* Note, this function assumes the num/action switch is done at a higher level
      * if needed by the book option */
-    if (!action.empty())
-        xaccSplitSetAction (split, action.c_str());
+    if (action)
+        xaccSplitSetAction (split, action->c_str());
 }
 
 boost::optional<gnc_numeric> GncPreSplit::create_split (Transaction* trans)
@@ -400,11 +402,6 @@ boost::optional<gnc_numeric> GncPreSplit::create_split (Transaction* trans)
     if (created)
         return boost::none;
 
-    auto book = xaccTransGetBook (trans);
-    std::string action;
-    std::string taction;
-    std::string memo;
-    std::string tmemo;
     Account *account = nullptr;
     Account *taccount = nullptr;
     bool amount_set = false;
@@ -412,18 +409,10 @@ boost::optional<gnc_numeric> GncPreSplit::create_split (Transaction* trans)
     gnc_numeric withdrawal = { 0, 1 };
     gnc_numeric amount = { 0, 1 };
 
-    if (m_taction)
-        taction = *m_taction;
-    if (m_action)
-        action = *m_action;
     if (m_account)
         account = *m_account;
     if (m_taccount)
         taccount = *m_taccount;
-    if (m_memo)
-        memo = *m_memo;
-    if (m_tmemo)
-        tmemo = *m_tmemo;
     if (m_deposit)
     {
         deposit = *m_deposit;
@@ -440,13 +429,13 @@ boost::optional<gnc_numeric> GncPreSplit::create_split (Transaction* trans)
                 GNC_HOW_RND_ROUND_HALF_UP);
 
     /* Add a split with the cumulative amount value. */
-    trans_add_split (trans, account, book, amount, action, memo);
+    trans_add_split (trans, account, amount, m_action, m_memo);
 
     if (taccount)
         /* Note: the current importer assumes at most 2 splits. This means the second split amount
          * will be the negative of the the first split amount.
          */
-        trans_add_split (trans, taccount, book, gnc_numeric_neg(amount), taction, tmemo);
+        trans_add_split (trans, taccount, gnc_numeric_neg(amount), m_taction, m_tmemo);
 
 
     created = true;
