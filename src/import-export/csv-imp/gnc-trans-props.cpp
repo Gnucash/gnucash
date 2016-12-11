@@ -26,6 +26,7 @@ extern "C" {
 #include <windows.h>
 #endif
 
+#include <glib.h>
 #include <glib/gi18n.h>
 
 #include "engine-helpers.h"
@@ -33,6 +34,7 @@ extern "C" {
 #include "gnc-ui-util.h"
 #include "Account.h"
 #include "Transaction.h"
+#include "gnc-pricedb.h"
 
 }
 
@@ -51,12 +53,14 @@ std::map<GncTransPropType, const char*> gnc_csv_col_type_strs = {
         { GncTransPropType::NUM, N_("Num") },
         { GncTransPropType::DESCRIPTION, N_("Description") },
         { GncTransPropType::NOTES, N_("Notes") },
+        { GncTransPropType::COMMODITY, N_("Transaction Commodity") },
         { GncTransPropType::VOID_REASON, N_("Void Reason") },
         { GncTransPropType::ACTION, N_("Action") },
         { GncTransPropType::ACCOUNT, N_("Account") },
         { GncTransPropType::DEPOSIT, N_("Deposit") },
         { GncTransPropType::WITHDRAWAL, N_("Withdrawal") },
         { GncTransPropType::BALANCE, N_("Balance") },
+        { GncTransPropType::PRICE, N_("Price") },
         { GncTransPropType::MEMO, N_("Memo") },
         { GncTransPropType::REC_STATE, N_("Reconciled") },
         { GncTransPropType::REC_DATE, N_("Reconcile Date") },
@@ -229,10 +233,57 @@ static char parse_reconciled (const std::string& reconcile)
         throw std::invalid_argument ("String can't be parsed into a valid reconcile state.");
 }
 
+static gnc_commodity* parse_commodity (const std::string& comm_str)
+{
+    if (comm_str.empty())
+        return nullptr;
+
+    auto table = gnc_commodity_table_get_table (gnc_get_current_book());
+    gnc_commodity* comm = nullptr;
+
+    /* First try commodity as a unique name. */
+    if (comm_str.find("::"))
+        comm = gnc_commodity_table_lookup_unique (table, comm_str.c_str());
+
+    /* Then try mnemonic in the currency namespace */
+    if (!comm)
+        comm = gnc_commodity_table_lookup (table,
+                GNC_COMMODITY_NS_CURRENCY, comm_str.c_str());
+
+    if (!comm)
+    {
+        /* If that fails try mnemonic in all other namespaces */
+        auto namespaces = gnc_commodity_table_get_namespaces(table);
+        for (auto ns = namespaces; ns; ns = ns->next)
+        {
+            gchar* ns_str = (gchar*)ns->data;
+            if (g_utf8_collate(ns_str, GNC_COMMODITY_NS_CURRENCY) == 0)
+                continue;
+
+            comm = gnc_commodity_table_lookup (table,
+                    ns_str, comm_str.c_str());
+            if (comm)
+                break;
+        }
+    }
+
+    if (!comm)
+        throw std::invalid_argument ("String can't be parsed into a valid commodity.");
+    else
+        return comm;
+}
+
 void GncPreTrans::set_property (GncTransPropType prop_type, const std::string& value)
 {
     switch (prop_type)
     {
+        case GncTransPropType::UNIQUE_ID:
+            if (!value.empty())
+                m_differ = value;
+            else
+                m_differ = boost::none;
+            break;
+
         case GncTransPropType::DATE:
             m_date = parse_date (value, m_date_format); // Throws if parsing fails
             break;
@@ -258,11 +309,8 @@ void GncPreTrans::set_property (GncTransPropType prop_type, const std::string& v
                 m_notes = boost::none;
             break;
 
-        case GncTransPropType::UNIQUE_ID:
-            if (!value.empty())
-                m_differ = value;
-            else
-                m_differ = boost::none;
+        case GncTransPropType::COMMODITY:
+            m_commodity = parse_commodity (value); // Throws if parsing fails
             break;
 
         case GncTransPropType::VOID_REASON:
@@ -306,8 +354,7 @@ Transaction* GncPreTrans::create_trans (QofBook* book, gnc_commodity* currency)
 
     auto trans = xaccMallocTransaction (book);
     xaccTransBeginEdit (trans);
-    xaccTransSetCurrency (trans, currency);
-
+    xaccTransSetCurrency (trans, m_commodity ? *m_commodity : currency);
     xaccTransSetDatePostedSecsNormalized (trans, *m_date);
 
     if (m_num)
@@ -319,6 +366,7 @@ Transaction* GncPreTrans::create_trans (QofBook* book, gnc_commodity* currency)
     if (m_notes)
         xaccTransSetNotes (trans, m_notes->c_str());
 
+
     created = true;
     return trans;
 }
@@ -328,10 +376,13 @@ bool GncPreTrans::is_part_of (std::shared_ptr<GncPreTrans> parent)
     if (!parent)
         return false;
 
-    return (!m_date || m_date == parent->m_date) &&
+    return (!m_differ || m_differ == parent->m_differ) &&
+            (!m_date || m_date == parent->m_date) &&
+            (!m_num || m_num == parent->m_num) &&
             (!m_desc || m_desc == parent->m_desc) &&
             (!m_notes || m_notes == parent->m_notes) &&
-            (!m_differ || m_differ == parent->m_differ);
+            (!m_commodity || m_commodity == parent->m_commodity) &&
+            (!m_void_reason || m_void_reason == parent->m_void_reason);
 }
 
 void GncPreSplit::set_property (GncTransPropType prop_type, const std::string& value)
@@ -391,6 +442,10 @@ void GncPreSplit::set_property (GncTransPropType prop_type, const std::string& v
             break;
         case GncTransPropType::WITHDRAWAL:
             m_withdrawal = parse_amount (value, m_currency_format); // Will throw if parsing fails
+            break;
+
+        case GncTransPropType::PRICE:
+            m_price = parse_amount (value, m_currency_format); // Will throw if parsing fails
             break;
 
         case GncTransPropType::REC_STATE:
@@ -454,14 +509,48 @@ static void trans_add_split (Transaction* trans, Account* account, gnc_numeric a
                             const boost::optional<std::string>& action,
                             const boost::optional<std::string>& memo,
                             const boost::optional<char>& rec_state,
-                            const boost::optional<time64> rec_date)
+                            const boost::optional<time64> rec_date,
+                            const boost::optional<gnc_numeric> price)
 {
-    auto book = xaccTransGetBook (trans);
+    QofBook* book = xaccTransGetBook (trans);
     auto split = xaccMallocSplit (book);
     xaccSplitSetAccount (split, account);
     xaccSplitSetParent (split, trans);
     xaccSplitSetAmount (split, amount);
-    xaccSplitSetValue (split, amount);
+    auto trans_curr = xaccTransGetCurrency(trans);
+    auto acct_comm = xaccAccountGetCommodity(account);
+    if (gnc_commodity_equiv(trans_curr, acct_comm))
+        xaccSplitSetValue (split, amount);
+    else if (price)
+    {
+        gnc_numeric value = gnc_numeric_mul (amount, *price, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND);
+        xaccSplitSetValue (split, value);
+    }
+    else
+    {
+        auto tts = xaccTransRetDatePostedTS (trans);
+        /* Import data didn't specify price, let's lookup the nearest in time */
+        auto nprice = gnc_pricedb_lookup_nearest_in_time(gnc_pricedb_get_db(book),
+                acct_comm, trans_curr, tts);
+        if (!nprice)
+        {
+            PWARN("No price found, using a price of 1.");
+            xaccSplitSetValue (split, amount);
+        }
+        else
+        {
+            /* Found a usable price. Let's check if the conversion direction is right */
+            gnc_numeric rate = {0, 1};
+            if (gnc_commodity_equiv(gnc_price_get_currency(nprice), trans_curr))
+                rate = gnc_price_get_value(nprice);
+            else
+                rate = gnc_numeric_invert(gnc_price_get_value(nprice));
+
+            gnc_numeric value = gnc_numeric_mul (amount, rate, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND);
+            xaccSplitSetValue (split, value);
+        }
+    }
+
     if (memo)
         xaccSplitSetMemo (split, memo->c_str());
     /* Note, this function assumes the num/action switch is done at a higher level
@@ -518,13 +607,18 @@ boost::optional<gnc_numeric> GncPreSplit::create_split (Transaction* trans)
                 GNC_HOW_RND_ROUND_HALF_UP);
 
     /* Add a split with the cumulative amount value. */
-    trans_add_split (trans, account, amount, m_action, m_memo, m_rec_state, m_rec_date);
+    trans_add_split (trans, account, amount, m_action, m_memo, m_rec_state, m_rec_date, m_price);
 
     if (taccount)
+    {
         /* Note: the current importer assumes at most 2 splits. This means the second split amount
          * will be the negative of the the first split amount.
          */
-        trans_add_split (trans, taccount, gnc_numeric_neg(amount), m_taction, m_tmemo, m_trec_state, m_trec_date);
+        auto inv_price = m_price;
+        if (inv_price)
+            inv_price = gnc_numeric_invert(*inv_price);
+        trans_add_split (trans, taccount, gnc_numeric_neg(amount), m_taction, m_tmemo, m_trec_state, m_trec_date, inv_price);
+    }
 
 
     created = true;
