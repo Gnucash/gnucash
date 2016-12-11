@@ -34,6 +34,7 @@ extern "C" {
 
 #include "Account.h"
 #include "Transaction.h"
+#include "gnc-commodity.h"
 }
 
 #include <string>
@@ -52,6 +53,7 @@ enum class GncTransPropType {
     NUM,
     DESCRIPTION,
     NOTES,
+    COMMODITY,
     VOID_REASON,
     TRANS_PROPS = VOID_REASON,
 
@@ -60,6 +62,7 @@ enum class GncTransPropType {
     DEPOSIT,
     WITHDRAWAL,
     BALANCE,
+    PRICE,
     MEMO,
     REC_STATE,
     REC_DATE,
@@ -127,6 +130,7 @@ private:
     boost::optional<std::string> m_num;
     boost::optional<std::string> m_desc;
     boost::optional<std::string> m_notes;
+    boost::optional<gnc_commodity*> m_commodity;
     boost::optional<std::string> m_void_reason;
     bool created = false;
 };
@@ -151,6 +155,7 @@ private:
     boost::optional<gnc_numeric> m_deposit;
     boost::optional<gnc_numeric> m_withdrawal;
     boost::optional<gnc_numeric> m_balance;
+    boost::optional<gnc_numeric> m_price;
     boost::optional<std::string> m_memo;
     boost::optional<char> m_rec_state;
     boost::optional<time64> m_rec_date;
