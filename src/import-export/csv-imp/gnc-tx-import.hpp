@@ -44,20 +44,13 @@ extern "C" {
 #include "gnc-trans-props.hpp"
 
 
-/* TODO We now sort transactions by date, not line number, so we
- * should probably get rid of this struct and uses of it. */
-
-/** Struct pairing a transaction with a line number. This struct is
- * used to keep the transactions in order. When rows are separated
- * into "valid" and "error" lists (in case some of the rows have cells
- * that are unparseable), we want the user to still be able to
- * "correct" the error list. If we keep the line numbers of valid
- * transactions, we can then put transactions created from the newly
- * corrected rows into the right places. */
-struct GncCsvTransLine
+/** This struct stores a possibly incomplete transaction
+ *  optionally together with its intended balance in case
+ *  the user had selected a balance column. */
+struct DraftTransaction
 {
     Transaction* trans;
-    gnc_numeric balance;  /**< The (supposed) balance after this transaction takes place */
+    gnc_numeric balance;  /**< The expected balance after this transaction takes place */
     bool balance_set;     /**< true if balance has been set from user data, false otherwise */
 };
 
@@ -102,14 +95,21 @@ public:
     void load_file (const std::string& filename);
     void convert_encoding (const std::string& encoding);
 
-    void parse (bool guessColTypes);
-    int parse_to_trans (Account* account, bool redo_errors);
+    void tokenize (bool guessColTypes);
+
+    /** This function will attempt to convert all tokenized lines into
+     *  transactions using the column types the user has set.
+     */
+    void create_transactions (Account* account, bool redo_errors);
     bool check_for_column_type (GncTransPropType type);
 
     std::unique_ptr<GncTokenizer> tokenizer;    /**< Will handle file loading/encoding conversion/splitting into fields */
-    std::vector<parse_line_t> orig_lines;      /**< file_str parsed into a two-dimensional array of strings */
-    std::vector<GncTransPropType> column_types;       /**< Vector of values from the GncCsvColumnType enumeration */
-    std::multimap <time64, GncCsvTransLine*> transactions;        /**< List of GncCsvTransLine*s created using orig_lines and column_types */
+    std::vector<parse_line_t> parsed_lines;     /**< source file parsed into a two-dimensional array of strings.
+                                                     Per line also holds possible error messages and objects with extracted transaction
+                                                     and split properties. */
+    std::vector<GncTransPropType> column_types; /**< Vector of values from the GncCsvColumnType enumeration */
+    std::multimap <time64, <DraftTransaction*> transactions;  /**< map of transaction objects created
+                                                     from parsed_lines and column_types, ordered by date */
     int date_format;            /**< The format of the text in the date columns from date_format_internal. */
     guint start_row;            /**< The start row to generate transactions from. */
     guint end_row;              /**< The end row to generate transactions from. */
@@ -118,11 +118,25 @@ public:
     bool parse_errors;          /**< Indicates whether the last parse_to_trans run had any errors */
 
 private:
-    void parse_line_to_trans (parse_line_t& orig_line);
-    void adjust_balances (Account *account);
+    /** A helper function used by create_transactions. It will attempt
+     *  to convert a single tokenized line into a transaction using
+     *  the column types the user has set.
+     */
+    void create_transaction (parse_line_t& parsed_line);
+
+    /** A helper function used by create_transactions. If the input data has
+     *  a balance column (an no deposit and withdrawal columns)
+     *  it will iterate over all created transactions
+     *  to set the split amount(s) based on the desired balance for that line.
+     */
+    void adjust_balances (void);
 
     GncImpFileFormat file_fmt = GncImpFileFormat::UNKNOWN;
-    Account *home_account = NULL;
+
+    /* The variables below are only used during while creating
+     * transactions. They keep state information during the conversion.
+     */
+    Account *base_account = nullptr;
 };
 
 

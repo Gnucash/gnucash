@@ -55,8 +55,8 @@ std::map<GncTransPropType, const char*> gnc_csv_col_type_strs = {
         { GncTransPropType::WITHDRAWAL, N_("Withdrawal") },
         { GncTransPropType::BALANCE, N_("Balance") },
         { GncTransPropType::MEMO, N_("Memo") },
-        { GncTransPropType::OACCOUNT, N_("Other Account") },
-        { GncTransPropType::OMEMO, N_("Other Memo") }
+        { GncTransPropType::TACCOUNT, N_("Transfer Account") },
+        { GncTransPropType::TMEMO, N_("Transfer Memo") }
 };
 
 /* Regular expressions used to parse dates per date format */
@@ -171,7 +171,7 @@ time64 parse_date (const std::string &date_str, int format)
  * @param currency_format The currency format to use.
  * @return a gnc_numeric on success, boost::none on failure
  */
-static boost::optional<gnc_numeric> convert_amount_col_str (const std::string &str, int currency_format)
+static boost::optional<gnc_numeric> parse_amount (const std::string &str, int currency_format)
 {
     /* If a cell is empty or just spaces return invalid amount */
     if(!boost::regex_search(str, boost::regex("[0-9]")))
@@ -206,24 +206,24 @@ static boost::optional<gnc_numeric> convert_amount_col_str (const std::string &s
 }
 
 
-void GncPreTrans::set_property (GncTransPropType prop_type, const std::string& prop_value_str, int date_format)
+void GncPreTrans::set_property (GncTransPropType prop_type, const std::string& value, int date_format)
 {
     switch (prop_type)
     {
         case GncTransPropType::DATE:
-            m_date = parse_date (prop_value_str.c_str(), date_format); // Throws if parsing fails
+            m_date = parse_date (value.c_str(), date_format); // Throws if parsing fails
             break;
 
         case GncTransPropType::DESCRIPTION:
-            if (!prop_value_str.empty())
-                m_desc = prop_value_str;
+            if (!value.empty())
+                m_desc = value;
             else
                 m_desc = boost::none;
             break;
 
         case GncTransPropType::NOTES:
-            if (!prop_value_str.empty())
-                m_notes = prop_value_str;
+            if (!value.empty())
+                m_notes = value;
             else
                 m_notes = boost::none;
             break;
@@ -267,56 +267,56 @@ Transaction* GncPreTrans::create_trans (QofBook* book, gnc_commodity* currency)
 }
 
 
-void GncPreSplit::set_property (GncTransPropType prop_type, const std::string& prop_value_str, int currency_format)
+void GncPreSplit::set_property (GncTransPropType prop_type, const std::string& value, int currency_format)
 {
     Account *acct = nullptr;
     switch (prop_type)
     {
         case GncTransPropType::ACCOUNT:
-            acct = gnc_csv_account_map_search (prop_value_str.c_str());
+            acct = gnc_csv_account_map_search (value.c_str());
             if (acct)
                 m_account = acct;
             else
                 throw std::invalid_argument ("String can't be mapped back to an account.");
             break;
 
-        case GncTransPropType::OACCOUNT:
-            acct = gnc_csv_account_map_search (prop_value_str.c_str());
+        case GncTransPropType::TACCOUNT:
+            acct = gnc_csv_account_map_search (value.c_str());
             if (acct)
-                m_oaccount = acct;
+                m_taccount = acct;
             else
                 throw std::invalid_argument ("String can't be mapped back to an account.");
             break;
 
         case GncTransPropType::MEMO:
-            if (!prop_value_str.empty())
-                m_memo = prop_value_str;
+            if (!value.empty())
+                m_memo = value;
             else
                 m_memo = boost::none;
             break;
 
-        case GncTransPropType::OMEMO:
-            if (!prop_value_str.empty())
-                m_omemo = prop_value_str;
+        case GncTransPropType::TMEMO:
+            if (!value.empty())
+                m_tmemo = value;
             else
-                m_omemo = boost::none;
+                m_tmemo = boost::none;
             break;
 
         case GncTransPropType::NUM:
-            if (!prop_value_str.empty())
-                m_num = prop_value_str;
+            if (!value.empty())
+                m_num = value;
             else
                 m_num = boost::none;
             break;
 
         case GncTransPropType::BALANCE:
-            m_balance = convert_amount_col_str (prop_value_str, currency_format); // Will throw if parsing fails
+            m_balance = parse_amount (value, currency_format); // Will throw if parsing fails
             break;
         case GncTransPropType::DEPOSIT:
-            m_deposit = convert_amount_col_str (prop_value_str, currency_format); // Will throw if parsing fails
+            m_deposit = parse_amount (value, currency_format); // Will throw if parsing fails
             break;
         case GncTransPropType::WITHDRAWAL:
-            m_withdrawal = convert_amount_col_str (prop_value_str, currency_format); // Will throw if parsing fails
+            m_withdrawal = parse_amount (value, currency_format); // Will throw if parsing fails
             break;
 
         default:
@@ -366,9 +366,9 @@ boost::optional<gnc_numeric> GncPreSplit::create_split (Transaction* trans)
     auto book = xaccTransGetBook (trans);
     std::string num;
     std::string memo;
-    std::string omemo;
+    std::string tmemo;
     Account *account = nullptr;
-    Account *oaccount = nullptr;
+    Account *taccount = nullptr;
     bool amount_set = false;
     gnc_numeric deposit = { 0, 1 };
     gnc_numeric withdrawal = { 0, 1 };
@@ -376,12 +376,12 @@ boost::optional<gnc_numeric> GncPreSplit::create_split (Transaction* trans)
 
     if (m_account)
         account = *m_account;
-    if (m_oaccount)
-        oaccount = *m_oaccount;
+    if (m_taccount)
+        taccount = *m_taccount;
     if (m_memo)
         memo = *m_memo;
-    if (m_omemo)
-        omemo = *m_omemo;
+    if (m_tmemo)
+        tmemo = *m_tmemo;
     if (m_num)
         num = *m_num;
     if (m_deposit)
@@ -402,12 +402,12 @@ boost::optional<gnc_numeric> GncPreSplit::create_split (Transaction* trans)
     /* Add a split with the cumulative amount value. */
     trans_add_split (trans, account, book, amount, num, memo);
 
-    if (oaccount)
+    if (taccount)
         /* Note: the current importer assumes at most 2 splits. This means the second split amount
          * will be the negative of the the first split amount. We also only set the num field once,
          * for the first split.
          */
-        trans_add_split (trans, oaccount, book, gnc_numeric_neg(amount), "", omemo);
+        trans_add_split (trans, taccount, book, gnc_numeric_neg(amount), "", tmemo);
 
 
     created = true;
