@@ -267,6 +267,16 @@ Transaction* GncPreTrans::create_trans (QofBook* book, gnc_commodity* currency)
     if (created)
         return nullptr;
 
+    /* Gently refuse to create the transaction if the basics are not set correctly
+     * This should have been tested before calling this function though!
+     */
+    auto check = verify_essentials();
+    if (!check.empty())
+    {
+        PWARN ("Refusing to create transaction because essentials not set properly: %s", check.c_str());
+        return nullptr;
+    }
+
     auto trans = xaccMallocTransaction (book);
     xaccTransBeginEdit (trans);
     xaccTransSetCurrency (trans, currency);
@@ -403,6 +413,16 @@ boost::optional<gnc_numeric> GncPreSplit::create_split (Transaction* trans)
 {
     if (created)
         return boost::none;
+
+    /* Gently refuse to create the split if the basics are not set correctly
+     * This should have been tested before calling this function though!
+     */
+    auto check = verify_essentials();
+    if (!check.empty())
+    {
+        PWARN ("Refusing to create split because essentials not set properly: %s", check.c_str());
+        return boost::none;
+    }
 
     Account *account = nullptr;
     Account *taccount = nullptr;
