@@ -51,11 +51,13 @@ std::map<GncTransPropType, const char*> gnc_csv_col_type_strs = {
         { GncTransPropType::DESCRIPTION, N_("Description") },
         { GncTransPropType::UNIQUE_ID, N_("Transaction ID") },
         { GncTransPropType::NOTES, N_("Notes") },
+        { GncTransPropType::ACTION, N_("Action") },
         { GncTransPropType::ACCOUNT, N_("Account") },
         { GncTransPropType::DEPOSIT, N_("Deposit") },
         { GncTransPropType::WITHDRAWAL, N_("Withdrawal") },
         { GncTransPropType::BALANCE, N_("Balance") },
         { GncTransPropType::MEMO, N_("Memo") },
+        { GncTransPropType::TACTION, N_("Transfer Action") },
         { GncTransPropType::TACCOUNT, N_("Transfer Account") },
         { GncTransPropType::TMEMO, N_("Transfer Memo") }
 };
@@ -215,6 +217,13 @@ void GncPreTrans::set_property (GncTransPropType prop_type, const std::string& v
             m_date = parse_date (value.c_str(), date_format); // Throws if parsing fails
             break;
 
+        case GncTransPropType::NUM:
+            if (!value.empty())
+                m_num = value;
+            else
+                m_num = boost::none;
+            break;
+
         case GncTransPropType::DESCRIPTION:
             if (!value.empty())
                 m_desc = value;
@@ -264,6 +273,9 @@ Transaction* GncPreTrans::create_trans (QofBook* book, gnc_commodity* currency)
 
     xaccTransSetDatePostedSecsNormalized (trans, *m_date);
 
+    if (m_num)
+        xaccTransSetNum (trans, m_num->c_str());
+
     if (m_desc)
         xaccTransSetDescription (trans, m_desc->c_str());
 
@@ -290,6 +302,20 @@ void GncPreSplit::set_property (GncTransPropType prop_type, const std::string& v
     Account *acct = nullptr;
     switch (prop_type)
     {
+        case GncTransPropType::ACTION:
+            if (!value.empty())
+                m_action = value;
+            else
+                m_action = boost::none;
+            break;
+
+        case GncTransPropType::TACTION:
+            if (!value.empty())
+                m_taction = value;
+            else
+                m_taction = boost::none;
+            break;
+
         case GncTransPropType::ACCOUNT:
             acct = gnc_csv_account_map_search (value.c_str());
             if (acct)
@@ -320,13 +346,6 @@ void GncPreSplit::set_property (GncTransPropType prop_type, const std::string& v
                 m_tmemo = boost::none;
             break;
 
-        case GncTransPropType::NUM:
-            if (!value.empty())
-                m_num = value;
-            else
-                m_num = boost::none;
-            break;
-
         case GncTransPropType::BALANCE:
             m_balance = parse_amount (value, currency_format); // Will throw if parsing fails
             break;
@@ -349,8 +368,8 @@ std::string GncPreSplit::verify_essentials (void)
 {
     /* Make sure this split has the minimum required set of properties defined. */
     if ((m_deposit == boost::none) &&
-        (m_deposit == boost::none) &&
-        (m_deposit == boost::none))
+        (m_withdrawal == boost::none) &&
+        (m_balance == boost::none))
         return _("No balance, deposit, or withdrawal column.");
     else
         return std::string();
@@ -363,7 +382,7 @@ std::string GncPreSplit::verify_essentials (void)
  * @param amount The amount of the split
  */
 static void trans_add_split (Transaction* trans, Account* account, QofBook* book,
-                            gnc_numeric amount, const std::string& num, const std::string& memo)
+                            gnc_numeric amount, const std::string& action, const std::string& memo)
 {
     auto split = xaccMallocSplit (book);
     xaccSplitSetAccount (split, account);
@@ -372,10 +391,10 @@ static void trans_add_split (Transaction* trans, Account* account, QofBook* book
     xaccSplitSetValue (split, amount);
     if (!memo.empty())
         xaccSplitSetMemo (split, memo.c_str());
-    /* set tran-num and/or split-action per book option
-     * note this function does nothing if num is NULL also */
-    if (!num.empty())
-        gnc_set_num_action (trans, split, num.c_str(), NULL);
+    /* Note, this function assumes the num/action switch is done at a higher level
+     * if needed by the book option */
+    if (!action.empty())
+        xaccSplitSetAction (split, action.c_str());
 }
 
 boost::optional<gnc_numeric> GncPreSplit::create_split (Transaction* trans)
@@ -384,7 +403,8 @@ boost::optional<gnc_numeric> GncPreSplit::create_split (Transaction* trans)
         return boost::none;
 
     auto book = xaccTransGetBook (trans);
-    std::string num;
+    std::string action;
+    std::string taction;
     std::string memo;
     std::string tmemo;
     Account *account = nullptr;
@@ -394,6 +414,10 @@ boost::optional<gnc_numeric> GncPreSplit::create_split (Transaction* trans)
     gnc_numeric withdrawal = { 0, 1 };
     gnc_numeric amount = { 0, 1 };
 
+    if (m_taction)
+        taction = *m_taction;
+    if (m_action)
+        action = *m_action;
     if (m_account)
         account = *m_account;
     if (m_taccount)
@@ -402,8 +426,6 @@ boost::optional<gnc_numeric> GncPreSplit::create_split (Transaction* trans)
         memo = *m_memo;
     if (m_tmemo)
         tmemo = *m_tmemo;
-    if (m_num)
-        num = *m_num;
     if (m_deposit)
     {
         deposit = *m_deposit;
@@ -420,14 +442,13 @@ boost::optional<gnc_numeric> GncPreSplit::create_split (Transaction* trans)
                 GNC_HOW_RND_ROUND_HALF_UP);
 
     /* Add a split with the cumulative amount value. */
-    trans_add_split (trans, account, book, amount, num, memo);
+    trans_add_split (trans, account, book, amount, action, memo);
 
     if (taccount)
         /* Note: the current importer assumes at most 2 splits. This means the second split amount
-         * will be the negative of the the first split amount. We also only set the num field once,
-         * for the first split.
+         * will be the negative of the the first split amount.
          */
-        trans_add_split (trans, taccount, book, gnc_numeric_neg(amount), "", tmemo);
+        trans_add_split (trans, taccount, book, gnc_numeric_neg(amount), taction, tmemo);
 
 
     created = true;
