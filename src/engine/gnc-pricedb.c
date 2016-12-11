@@ -28,6 +28,7 @@
 #include <string.h>
 #include "gnc-pricedb-p.h"
 #include <qofinstance-p.h>
+#include "Recurrence.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_PRICE;
@@ -1274,6 +1275,10 @@ gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p)
            qof_instance_get_destroying(p));
 
     gnc_price_ref(p);
+
+    DEBUG("Remove Date is %s, Commodity is %s, Source is %s", gnc_print_date (gnc_price_get_time (p)),
+           gnc_commodity_get_fullname (gnc_price_get_commodity (p)), gnc_price_get_source_string (p));
+
     rc = remove_price (db, p, TRUE);
     gnc_pricedb_begin_edit(db);
     qof_instance_set_dirty(&db->inst);
@@ -1293,8 +1298,9 @@ typedef struct
 {
     GNCPriceDB *db;
     Timespec cutoff;
+    gboolean delete_fq;
     gboolean delete_user;
-    gboolean delete_last;
+    gboolean delete_all;
     GSList *list;
 } remove_info;
 
@@ -1308,12 +1314,18 @@ check_one_price_date (GNCPrice *price, gpointer user_data)
     ENTER("price %p (%s), data %p", price,
           gnc_commodity_get_mnemonic(gnc_price_get_commodity(price)),
           user_data);
-    if (!data->delete_user)
+
+    if (!data->delete_all)
     {
         source = gnc_price_get_source (price);
-        if (source != PRICE_SOURCE_FQ)
+        
+        if ((source == PRICE_SOURCE_FQ) && data->delete_fq)
+            PINFO ("Delete Quote Source");
+        else if ((source == PRICE_SOURCE_USER_PRICE) && data->delete_user)
+            PINFO ("Delete User Source");
+        else
         {
-            LEAVE("Not an automatic quote");
+            LEAVE("Not a matching source");
             return TRUE;
         }
     }
@@ -1344,10 +1356,6 @@ pricedb_remove_foreach_pricelist (gpointer key,
 
     ENTER("key %p, value %p, data %p", key, val, user_data);
 
-    /* The most recent price is the first in the list */
-    if (!data->delete_last)
-        node = g_list_next(node);
-
     /* now check each item in the list */
     g_list_foreach(node, (GFunc)check_one_price_date, data);
 
@@ -1355,57 +1363,144 @@ pricedb_remove_foreach_pricelist (gpointer key,
 }
 
 static void
-pricedb_remove_foreach_currencies_hash (gpointer key,
-                                        gpointer val,
-                                        gpointer user_data)
+free_data (gpointer data)
 {
-    GHashTable *currencies_hash = (GHashTable *) val;
-
-    ENTER("key %p, value %p, data %p", key, val, user_data);
-    g_hash_table_foreach(currencies_hash,
-                         pricedb_remove_foreach_pricelist, user_data);
-    LEAVE(" ");
+    g_free (data);
 }
 
+GHashTable *
+gnc_pricedb_get_remove_dates (Timespec first, Timespec cutoff, gboolean leave_month)
+{
+    GHashTable* hash_dates = g_hash_table_new_full (g_str_hash, g_str_equal, free_data, NULL);
+    Recurrence *r;
+    int nperiods = 0;
+    GDate period_begin, period_end, date_old, date_now;
+
+    GDateWeekday selected_day_of_week = G_DATE_FRIDAY;
+    GDate day_of_week_date;
+
+    period_begin = timespec_to_gdate (first);
+    period_end = timespec_to_gdate (cutoff);
+
+    day_of_week_date = period_begin;
+
+    r = g_new (Recurrence, 1);
+
+    DEBUG("Period Begin date is %d/%d/%d and End date is %d/%d/%d", g_date_get_day (&period_begin),
+           g_date_get_month (&period_begin), g_date_get_year (&period_begin), g_date_get_day (&period_end),
+           g_date_get_month (&period_end), g_date_get_year (&period_end));
+
+    g_date_set_day (&day_of_week_date, 1); // set date to 1st of month
+
+    while (g_date_get_weekday (&day_of_week_date) != selected_day_of_week)
+        g_date_subtract_days (&day_of_week_date, 1); // go back till we find last Friday of month
+
+    if (leave_month)
+        recurrenceSet (r, 1, PERIOD_LAST_WEEKDAY, &day_of_week_date, WEEKEND_ADJ_NONE); // Month set begin on last friday of month
+    else
+        recurrenceSet (r, 1, PERIOD_WEEK, &day_of_week_date, WEEKEND_ADJ_NONE); // Week set to begin on Friday of week
+
+    date_now = date_old = day_of_week_date;
+
+    while (g_date_compare (&period_end, &date_now ) > 0)
+    {
+        gchar *date_str;
+        
+        nperiods ++;
+        recurrenceNextInstance (r, &date_old, &date_now);
+        date_str = g_strdup_printf ("%d/%d/%d", g_date_get_day (&date_old), g_date_get_month (&date_old), g_date_get_year (&date_old));
+
+        DEBUG("Date Old string for hash table insert is %s", date_str);
+
+        g_hash_table_insert (hash_dates, date_str, "Keep");
+
+        date_old = date_now;
+    }
+    g_free (r);
+
+    return hash_dates;
+}
 
 gboolean
-gnc_pricedb_remove_old_prices(GNCPriceDB *db,
-                              Timespec cutoff,
-                              gboolean delete_user,
-                              gboolean delete_last)
+gnc_pricedb_remove_old_prices (GNCPriceDB *db, GList *comm_list,
+                              Timespec first, Timespec cutoff,
+                              gchar const *source,
+                              gchar const *leave)
 {
+    GHashTable *hash_dates = NULL;
     remove_info data;
     GSList *item;
+    GList  *node;
+
+    gboolean leave_none = FALSE;
+    gboolean leave_month = FALSE;
+    gboolean leave_week = FALSE;
 
     data.db = db;
     data.cutoff = cutoff;
-    data.delete_user = delete_user;
-    data.delete_last = delete_last;
     data.list = NULL;
+    data.delete_fq = FALSE;
+    data.delete_user = FALSE;
+    data.delete_all = FALSE;
 
-    ENTER("db %p, delet_user %d, delete_last %d", db, delete_user, delete_last);
+    ENTER("Remove Prices for Source %s, leaving %s", source, leave);
+
+    // setup the options
+    if (g_strcmp0 (source, "all") == 0)
+        data.delete_all = TRUE;
+    else
     {
-        gchar buf[40];
-        gnc_timespec_to_iso8601_buff(cutoff, buf);
-        DEBUG("checking date %s", buf);
+        data.delete_fq = g_str_has_prefix (source,"fq");
+        data.delete_user = g_str_has_suffix (source,"user");
     }
 
-    /* Traverse the database once building up an external list of prices
-     * to be deleted */
-    g_hash_table_foreach(db->commodity_hash,
-                         pricedb_remove_foreach_currencies_hash,
-                         &data);
+    if (g_strcmp0 (leave, "month") == 0)
+        leave_month = TRUE;
+    else if (g_strcmp0 (leave, "week") == 0)
+        leave_week = TRUE;
+    else
+        leave_none = TRUE;
+
+    // Walk the list of commodities
+    for (node = g_list_first (comm_list); node; node = g_list_next (node))
+    {
+        GHashTable *currencies_hash = g_hash_table_lookup (db->commodity_hash, node->data);
+        g_hash_table_foreach (currencies_hash, pricedb_remove_foreach_pricelist, &data);
+    }
 
     if (data.list == NULL)
+    {
+        LEAVE("Empty price list");
         return FALSE;
+    }
+    DEBUG("Number of Prices in list is %d", g_slist_length (data.list));
+
+    if (leave_none != TRUE)
+        hash_dates = gnc_pricedb_get_remove_dates (first, cutoff, leave_month);
+
+    DEBUG("There are %d keys in the hash_dates", g_hash_table_size (hash_dates));
 
     /* Now run this external list deleting prices */
     for (item = data.list; item; item = g_slist_next(item))
     {
-        gnc_pricedb_remove_price(db, item->data);
-    }
+        GDate price_date = timespec_to_gdate (gnc_price_get_time (item->data));
+        gboolean found = FALSE;
+        gchar *date_str; 
 
-    g_slist_free(data.list);
+        if (g_hash_table_size (hash_dates) != 0)
+        {
+            date_str = g_strdup_printf ("%d/%d/%d", g_date_get_day(&price_date), g_date_get_month(&price_date), g_date_get_year(&price_date));
+            found = g_hash_table_contains (hash_dates, date_str);
+
+            DEBUG("Looking for date string in hash_dates %s, found is %d", date_str, found);
+            g_free (date_str);
+        }
+        if (!found)
+            gnc_pricedb_remove_price (db, item->data);
+    }
+    g_hash_table_unref (hash_dates);
+    g_slist_free (data.list);
+
     LEAVE(" ");
     return TRUE;
 }
