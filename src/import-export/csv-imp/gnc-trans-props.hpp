@@ -60,9 +60,13 @@ enum class GncTransPropType {
     WITHDRAWAL,
     BALANCE,
     MEMO,
+    REC_STATE,
+    REC_DATE,
     TACTION,
     TACCOUNT,
     TMEMO,
+    TREC_STATE,
+    TREC_DATE,
     SPLIT_PROPS = TMEMO
 };
 
@@ -145,9 +149,13 @@ private:
     boost::optional<gnc_numeric> m_withdrawal;
     boost::optional<gnc_numeric> m_balance;
     boost::optional<std::string> m_memo;
+    boost::optional<char> m_rec_state;
+    boost::optional<time64> m_rec_date;
     boost::optional<std::string> m_taction;
     boost::optional<Account*> m_taccount;
     boost::optional<std::string> m_tmemo;
+    boost::optional<char> m_trec_state;
+    boost::optional<time64> m_trec_date;
     bool created = false;
 };
 
