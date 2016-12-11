@@ -259,7 +259,21 @@ std::shared_ptr<DraftTransaction> GncTxImport::trans_properties_to_trans (std::v
 
     if (trans)
     {
+        /* We're about to continue with a new transaction
+         * Time to do some closing actions on the previous one
+         */
+        if (current_draft && current_draft->void_reason)
+        {
+            /* The import data specifies this transaction was voided.
+             * So void the created transaction as well.
+             * Attention: this assumes the imported transaction was balanced.
+             * If not, this will cause an imbalance split to be added automatically!
+             */
+            xaccTransCommitEdit (current_draft->trans);
+            xaccTransVoid (current_draft->trans, current_draft->void_reason->c_str());
+        }
         current_draft = std::make_shared<DraftTransaction>(trans);
+        current_draft->void_reason = trans_props->get_void_reason();
         created_trans = true;
     }
     else if (multi_split)  // in multi_split mode create_trans will return a nullptr for all but the first split
