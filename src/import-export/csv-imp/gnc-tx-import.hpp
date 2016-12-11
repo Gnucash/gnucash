@@ -54,6 +54,7 @@ struct DraftTransaction
     Transaction* trans;
     gnc_numeric balance;  /**< The expected balance after this transaction takes place */
     bool balance_set;     /**< true if balance has been set from user data, false otherwise */
+    boost::optional<std::string> void_reason;
 };
 
 /* A set of currency formats that the user sees. */

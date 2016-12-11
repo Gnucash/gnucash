@@ -46,11 +46,12 @@ G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 /* This map contains a set of strings representing the different column types. */
 std::map<GncTransPropType, const char*> gnc_csv_col_type_strs = {
         { GncTransPropType::NONE, N_("None") },
+        { GncTransPropType::UNIQUE_ID, N_("Transaction ID") },
         { GncTransPropType::DATE, N_("Date") },
         { GncTransPropType::NUM, N_("Num") },
         { GncTransPropType::DESCRIPTION, N_("Description") },
-        { GncTransPropType::UNIQUE_ID, N_("Transaction ID") },
         { GncTransPropType::NOTES, N_("Notes") },
+        { GncTransPropType::VOID_REASON, N_("Void Reason") },
         { GncTransPropType::ACTION, N_("Action") },
         { GncTransPropType::ACCOUNT, N_("Account") },
         { GncTransPropType::DEPOSIT, N_("Deposit") },
@@ -262,6 +263,13 @@ void GncPreTrans::set_property (GncTransPropType prop_type, const std::string& v
                 m_differ = value;
             else
                 m_differ = boost::none;
+            break;
+
+        case GncTransPropType::VOID_REASON:
+            if (!value.empty())
+                m_void_reason = value;
+            else
+                m_void_reason = boost::none;
             break;
 
         default:

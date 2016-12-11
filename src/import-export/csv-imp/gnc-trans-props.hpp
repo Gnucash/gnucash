@@ -47,12 +47,13 @@ extern "C" {
  * type. */
 enum class GncTransPropType {
     NONE,
+    UNIQUE_ID,
     DATE,
     NUM,
     DESCRIPTION,
     NOTES,
-    UNIQUE_ID,
-    TRANS_PROPS = UNIQUE_ID,
+    VOID_REASON,
+    TRANS_PROPS = VOID_REASON,
 
     ACTION,
     ACCOUNT,
@@ -117,14 +118,16 @@ public:
      *  @returns true if this object is considered to be part of the parent, false otherwise.
      */
     bool is_part_of (std::shared_ptr<GncPreTrans> parent);
+    boost::optional<std::string> get_void_reason() { return m_void_reason; }
 
 private:
     int m_date_format;
+    boost::optional<std::string> m_differ;
     boost::optional<time64> m_date;
     boost::optional<std::string> m_num;
     boost::optional<std::string> m_desc;
     boost::optional<std::string> m_notes;
-    boost::optional<std::string> m_differ;
+    boost::optional<std::string> m_void_reason;
     bool created = false;
 };
 
