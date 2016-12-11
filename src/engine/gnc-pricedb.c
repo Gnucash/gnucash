@@ -1368,7 +1368,7 @@ free_data (gpointer data)
     g_free (data);
 }
 
-GHashTable *
+static GHashTable *
 gnc_pricedb_get_remove_dates (Timespec first, Timespec cutoff, gboolean leave_month)
 {
     GHashTable* hash_dates = g_hash_table_new_full (g_str_hash, g_str_equal, free_data, NULL);
