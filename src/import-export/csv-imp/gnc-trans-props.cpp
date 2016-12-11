@@ -209,12 +209,12 @@ static boost::optional<gnc_numeric> parse_amount (const std::string &str, int cu
 }
 
 
-void GncPreTrans::set_property (GncTransPropType prop_type, const std::string& value, int date_format)
+void GncPreTrans::set_property (GncTransPropType prop_type, const std::string& value)
 {
     switch (prop_type)
     {
         case GncTransPropType::DATE:
-            m_date = parse_date (value.c_str(), date_format); // Throws if parsing fails
+            m_date = parse_date (value, m_date_format); // Throws if parsing fails
             break;
 
         case GncTransPropType::NUM:
@@ -297,7 +297,7 @@ bool GncPreTrans::is_part_of (std::shared_ptr<GncPreTrans> parent)
             (!m_differ || m_differ == parent->m_differ);
 }
 
-void GncPreSplit::set_property (GncTransPropType prop_type, const std::string& value, int currency_format)
+void GncPreSplit::set_property (GncTransPropType prop_type, const std::string& value)
 {
     Account *acct = nullptr;
     switch (prop_type)
@@ -347,13 +347,13 @@ void GncPreSplit::set_property (GncTransPropType prop_type, const std::string& v
             break;
 
         case GncTransPropType::BALANCE:
-            m_balance = parse_amount (value, currency_format); // Will throw if parsing fails
+            m_balance = parse_amount (value, m_currency_format); // Will throw if parsing fails
             break;
         case GncTransPropType::DEPOSIT:
-            m_deposit = parse_amount (value, currency_format); // Will throw if parsing fails
+            m_deposit = parse_amount (value, m_currency_format); // Will throw if parsing fails
             break;
         case GncTransPropType::WITHDRAWAL:
-            m_withdrawal = parse_amount (value, currency_format); // Will throw if parsing fails
+            m_withdrawal = parse_amount (value, m_currency_format); // Will throw if parsing fails
             break;
 
         default:

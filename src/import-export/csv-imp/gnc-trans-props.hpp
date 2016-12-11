@@ -92,7 +92,9 @@ time64 parse_date (const std::string &date_str, int format);
 struct GncPreTrans
 {
 public:
-    void set_property (GncTransPropType prop_type, const std::string& value, int date_format = 0);
+    GncPreTrans(int date_format) : m_date_format{date_format} {};
+
+    void set_property (GncTransPropType prop_type, const std::string& value);
     std::string verify_essentials (void);
     Transaction *create_trans (QofBook* book, gnc_commodity* currency);
 
@@ -113,6 +115,7 @@ public:
     bool is_part_of (std::shared_ptr<GncPreTrans> parent);
 
 private:
+    int m_date_format;
     boost::optional<time64> m_date;
     boost::optional<std::string> m_num;
     boost::optional<std::string> m_desc;
@@ -124,7 +127,9 @@ private:
 struct GncPreSplit
 {
 public:
-    void set_property (GncTransPropType prop_type, const std::string& value, int currency_format = 0);
+    GncPreSplit (int date_format, int currency_format) : m_date_format{date_format},
+        m_currency_format{currency_format}{};
+    void set_property (GncTransPropType prop_type, const std::string& value);
     std::string verify_essentials (void);
     boost::optional<gnc_numeric> create_split(Transaction* trans);
 
@@ -132,6 +137,8 @@ public:
     void set_account (Account* acct) { if (acct) m_account = acct; else m_account = boost::none; }
 
 private:
+    int m_date_format;
+    int m_currency_format;
     boost::optional<std::string> m_action;
     boost::optional<Account*> m_account;
     boost::optional<gnc_numeric> m_deposit;

@@ -174,7 +174,7 @@ void GncTxImport::tokenize (bool guessColTypes)
     for (auto tokenized_line : tokenizer->get_tokens())
     {
         parsed_lines.push_back (std::make_tuple (tokenized_line, std::string(),
-                std::make_shared<GncPreTrans>(), std::make_shared<GncPreSplit>()));
+                nullptr, nullptr));
         auto length = tokenized_line.size();
         if (length > max_cols)
             max_cols = length;
@@ -338,9 +338,9 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
 {
     StrVec line;
     std::string error_message;
-    std::shared_ptr<GncPreTrans> trans_props;
-    std::shared_ptr<GncPreSplit> split_props;
-    std::tie(line, error_message, trans_props, split_props) = *parsed_line;
+    auto trans_props = std::make_shared<GncPreTrans>(date_format);
+    auto split_props = std::make_shared<GncPreSplit>(date_format, currency_format);
+    std::tie(line, error_message, std::ignore, std::ignore) = *parsed_line;
     error_message.clear();
 
     /* Convert all tokens in this line into transaction/split properties. */
@@ -359,10 +359,10 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
             {
                 if (multi_split && line_it->empty())
                     continue; // In multi-split mode, transaction properties can be empty
-                trans_props->set_property(*col_types_it, *line_it, date_format);
+                trans_props->set_property(*col_types_it, *line_it);
             }
             else
-                split_props->set_property(*col_types_it, *line_it, currency_format);
+                split_props->set_property(*col_types_it, *line_it);
         }
         catch (const std::exception& e)
         {
@@ -393,9 +393,12 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
                 error_message = _("First line of this transaction has errors.");
         }
         else
+        {
+            std::get<2>(*parsed_line) = trans_props;
             /* This line starts a new transaction, set it as parent for
              * subsequent lines. */
             parent = trans_props;
+        }
     }
 
     if (!error_message.empty())
@@ -418,6 +421,7 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
             throw std::invalid_argument(error_message);
         }
     }
+    std::get<3>(*parsed_line) = split_props;
 
     /* If column parsing was successful, convert trans properties into a draft transaction. */
     try
