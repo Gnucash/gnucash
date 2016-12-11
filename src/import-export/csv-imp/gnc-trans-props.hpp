@@ -57,9 +57,9 @@ enum class GncTransPropType {
     WITHDRAWAL,
     BALANCE,
     MEMO,
-    OACCOUNT,
-    OMEMO,
-    SPLIT_PROPS = OMEMO
+    TACCOUNT,
+    TMEMO,
+    SPLIT_PROPS = TMEMO
 };
 
 /** Maps all column types to a string representation.
@@ -73,7 +73,7 @@ time64 parse_date (const std::string &date_str, int format);
 struct GncPreTrans
 {
 public:
-    void set_property (GncTransPropType prop_type, const std::string& prop_value_str, int date_format = 0);
+    void set_property (GncTransPropType prop_type, const std::string& value, int date_format = 0);
     std::string verify_essentials (void);
     Transaction *create_trans (QofBook* book, gnc_commodity* currency);
 
@@ -87,7 +87,7 @@ private:
 struct GncPreSplit
 {
 public:
-    void set_property (GncTransPropType prop_type, const std::string& prop_value_str, int currency_format = 0);
+    void set_property (GncTransPropType prop_type, const std::string& value, int currency_format = 0);
     std::string verify_essentials (void);
     boost::optional<gnc_numeric> create_split(Transaction* trans);
 
@@ -100,8 +100,8 @@ private:
     boost::optional<gnc_numeric> m_withdrawal;
     boost::optional<gnc_numeric> m_balance;
     boost::optional<std::string> m_memo;
-    boost::optional<Account*> m_oaccount;
-    boost::optional<std::string> m_omemo;
+    boost::optional<Account*> m_taccount;
+    boost::optional<std::string> m_tmemo;
 
     // Strictly speaking num is a transaction property
     // However due to the option to swap num and action fields

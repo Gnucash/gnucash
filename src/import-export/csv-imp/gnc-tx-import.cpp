@@ -57,6 +57,7 @@ G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 //                                      };
 //
 
+
 /** Constructor for GncTxImport.
  * @return Pointer to a new GncCSvParseData
  */
@@ -87,7 +88,7 @@ GncTxImport::~GncTxImport()
  *  previously set file format was different and a
  *  filename was already set.
  *  @param format the new format to set
- *  @exception the reloading of the file may throw std::ifstream::failure
+ *  @exception std::ifstream::failure if file reloading fails
  */
 void GncTxImport::file_format(GncImpFileFormat format)
 {
@@ -112,6 +113,7 @@ void GncTxImport::file_format(GncImpFileFormat format)
     tokenizer->encoding(new_encoding);
     load_file(new_imp_file);
 }
+
 GncImpFileFormat GncTxImport::file_format()
 {
     return file_fmt;
@@ -120,7 +122,6 @@ GncImpFileFormat GncTxImport::file_format()
 /** Converts raw file data using a new encoding. This function must be
  * called after load_file only if load_file guessed
  * the wrong encoding.
- * @param parse_data Data that is being parsed
  * @param encoding Encoding that data should be translated using
  */
 void GncTxImport::convert_encoding (const std::string& encoding)
@@ -131,13 +132,8 @@ void GncTxImport::convert_encoding (const std::string& encoding)
 }
 
 /** Loads a file into a GncTxImport. This is the first function
- * that must be called after creating a new GncTxImport. If this
- * fails because the file couldn't be opened, no more functions can be
- * called on the parse data until this succeeds (or until it fails
- * because of an encoding guess error). If it fails because the
- * encoding could not be guessed, gnc_csv_convert_encoding must be
- * called until it succeeds.
- * @param parse_data Data that is being parsed
+ * that must be called after creating a new GncTxImport. As long as
+ * this function didn't run successfully, the importer can't proceed.
  * @param filename Name of the file that should be opened
  * @exception may throw std::ifstream::failure on any io error
  */
@@ -158,24 +154,25 @@ void GncTxImport::load_file (const std::string& filename)
     }
 }
 
-/** Parses a file into cells. This requires having an encoding that
- * works (see gnc_csv_convert_encoding). options should be
- * set according to how the user wants before calling this
- * function. (Note: this function must be called with guessColTypes as
- * TRUE before it is ever called with it as FALSE.) (Note: if
- * guessColTypes is TRUE, all the column types will be GncTransPropType::NONE
- * right now.)
- * @param guessColTypes TRUE to guess what the types of columns are based on the cell contents
- * @exception throws std::range_error if parsing failed
+/** Splits a file into cells. This requires having an encoding that
+ * works (see GncTxImport::convert_encoding). Tokenizing related options
+ * should be set to the user's selections before calling this
+ * function.
+ * Notes: - this function must be called with guessColTypes set to true once
+ *          before calling it with guessColTypes set to false.
+ *        - if guessColTypes is TRUE, all the column types will be set
+ *          GncTransPropType::NONE right now as real guessing isn't implemented yet
+ * @param guessColTypes true to guess what the types of columns are based on the cell contents
+ * @exception std::range_error if tokenizing failed
  */
-void GncTxImport::parse (bool guessColTypes)
+void GncTxImport::tokenize (bool guessColTypes)
 {
     uint max_cols = 0;
     tokenizer->tokenize();
-    orig_lines.clear();
+    parsed_lines.clear();
     for (auto tokenized_line : tokenizer->get_tokens())
     {
-        orig_lines.push_back (std::make_tuple (tokenized_line, std::string(),
+        parsed_lines.push_back (std::make_tuple (tokenized_line, std::string(),
                 std::make_shared<GncPreTrans>(), std::make_shared<GncPreSplit>()));
         auto length = tokenized_line.size();
         if (length > max_cols)
@@ -183,9 +180,9 @@ void GncTxImport::parse (bool guessColTypes)
     }
 
     /* If it failed, generate an error. */
-    if (orig_lines.size() == 0)
+    if (parsed_lines.size() == 0)
     {
-        throw (std::range_error ("Parsing failed."));
+        throw (std::range_error ("Tokenizing failed."));
         return;
     }
 
@@ -211,16 +208,16 @@ void GncTxImport::parse (bool guessColTypes)
  * - at least one of "Balance", "Deposit", or "Withdrawal"
  * - "Account"
  * Note account isn't checked for here as this has been done before
- * @param parse_line The line we are checking
+ * @param parsed_line The line we are checking
  * @exception std::invalid_argument in an essential property is missing
  */
-static void trans_properties_verify_essentials (parse_line_t& orig_line)
+static void trans_properties_verify_essentials (parse_line_t& parsed_line)
 {
     std::string error_message;
     std::shared_ptr<GncPreTrans> trans_props;
     std::shared_ptr<GncPreSplit> split_props;
 
-    std::tie(std::ignore, error_message, trans_props, split_props) = orig_line;
+    std::tie(std::ignore, error_message, trans_props, split_props) = parsed_line;
 
     auto trans_error = trans_props->verify_essentials();
     auto split_error = split_props->verify_essentials();
@@ -238,19 +235,19 @@ static void trans_properties_verify_essentials (parse_line_t& orig_line)
     if (!error_message.empty())
         throw std::invalid_argument(error_message);
 }
-/** Create a Transaction from a map of transaction properties.
- * Note: this function assumes all properties in the map have been verified
- *       to be valid. No further checks are performed here other than that
- *       the required properties are in the map
- * @param orig_line The current line being parsed
- * @return On success, a GncCsvTransLine; on failure, the trans pointer is NULL
+
+/** Create a transaction and splits from a pair of trans and split property objects.
+ * Note: this function assumes all properties have been verified
+ *       to be valid and the required properties are available.
+ * @param parsed_line The current line being parsed
+ * @return On success, a DraftTransaction; on failure a nullptr
  */
-static GncCsvTransLine* trans_properties_to_trans (parse_line_t& orig_line)
+static DraftTransaction* trans_properties_to_trans (parse_line_t& parsed_line)
 {
     std::string error_message;
     std::shared_ptr<GncPreTrans> trans_props;
     std::shared_ptr<GncPreSplit> split_props;
-    std::tie(std::ignore, error_message, trans_props, split_props) = orig_line;
+    std::tie(std::ignore, error_message, trans_props, split_props) = parsed_line;
     auto account = split_props->get_account();
 
     QofBook* book = gnc_account_get_book (account);
@@ -261,30 +258,29 @@ static GncCsvTransLine* trans_properties_to_trans (parse_line_t& orig_line)
     if (!trans)
         return nullptr;
 
-    GncCsvTransLine* trans_line = g_new (GncCsvTransLine, 1);
-    trans_line->balance_set = false;
-    trans_line->balance = gnc_numeric_zero();
+    DraftTransaction* draft_trans = g_new (DraftTransaction, 1);
+    draft_trans->balance_set = false;
+    draft_trans->balance = gnc_numeric_zero();
 
     auto balance = split_props->create_split(trans);
     if (balance)
     {
-        trans_line->balance_set = true;
-        trans_line->balance = *balance;
+        draft_trans->balance_set = true;
+        draft_trans->balance = *balance;
     }
 
-    return trans_line;
+    return draft_trans;
 }
 
-void GncTxImport::adjust_balances (Account *account)
+void GncTxImport::adjust_balances (void)
 {
-    Split      *split, *osplit;
+    Split      *split, *tsplit;
 
     /* balance_offset is how much the balance currently in the account
      * differs from what it will be after the transactions are
      * imported. This will be sum of all the previous transactions for
      * any given transaction. */
-    auto balance_offset = double_to_gnc_numeric (0.0, xaccAccountGetCommoditySCU (account),
-                                 GNC_HOW_RND_ROUND_HALF_UP);
+    auto balance_offset = gnc_numeric_zero();
     for (auto trans_iter : transactions)
     {
         auto trans_line = trans_iter.second;
@@ -293,25 +289,25 @@ void GncTxImport::adjust_balances (Account *account)
             time64 date = xaccTransGetDate (trans_line->trans);
             /* Find what the balance should be by adding the offset to the actual balance. */
             gnc_numeric existing_balance = gnc_numeric_add (balance_offset,
-                                           xaccAccountGetBalanceAsOfDate (account, date),
-                                           xaccAccountGetCommoditySCU (account),
+                                           xaccAccountGetBalanceAsOfDate (base_account, date),
+                                           xaccAccountGetCommoditySCU (base_account),
                                            GNC_HOW_RND_ROUND_HALF_UP);
 
             /* The amount of the transaction is the difference between the new and existing balance. */
             gnc_numeric amount = gnc_numeric_sub (trans_line->balance,
                                                  existing_balance,
-                                                 xaccAccountGetCommoditySCU (account),
+                                                 xaccAccountGetCommoditySCU (base_account),
                                                  GNC_HOW_RND_ROUND_HALF_UP);
 
             // Find home account split
-            split  = xaccTransFindSplitByAccount (trans_line->trans, account);
+            split  = xaccTransFindSplitByAccount (trans_line->trans, base_account);
             xaccSplitSetAmount (split, amount);
             xaccSplitSetValue (split, amount);
 
             // If we have two splits, change other side
             if (xaccTransCountSplits (trans_line->trans) == 2)
             {
-                osplit = xaccSplitGetOtherSplit (split);
+                tsplit = xaccSplitGetOtherSplit (split);
                 xaccSplitSetAmount (split, amount);
                 xaccSplitSetValue (split, gnc_numeric_neg (amount));
             }
@@ -319,23 +315,23 @@ void GncTxImport::adjust_balances (Account *account)
             /* This new transaction needs to be added to the balance offset. */
             balance_offset = gnc_numeric_add (balance_offset,
                                              amount,
-                                             xaccAccountGetCommoditySCU (account),
+                                             xaccAccountGetCommoditySCU (base_account),
                                              GNC_HOW_RND_ROUND_HALF_UP);
         }
     }
 
 }
 
-void GncTxImport::parse_line_to_trans (parse_line_t& orig_line)
+void GncTxImport::create_transaction (parse_line_t& parsed_line)
 {
     StrVec line;
     std::string error_message;
     std::shared_ptr<GncPreTrans> trans_props;
     std::shared_ptr<GncPreSplit> split_props;
-    std::tie(line, error_message, trans_props, split_props) = orig_line;
+    std::tie(line, error_message, trans_props, split_props) = parsed_line;
     error_message.clear();
 
-    /* Convert this import line into a map of transaction/split properties. */
+    /* Convert all tokens in this line into transaction/split properties. */
     auto col_types_it = column_types.cbegin();
     auto line_it = line.cbegin();
     for (col_types_it, line_it;
@@ -368,8 +364,8 @@ void GncTxImport::parse_line_to_trans (parse_line_t& orig_line)
     auto line_acct = split_props->get_account();
     if (!line_acct)
     {
-        if (home_account)
-            split_props->set_account(home_account);
+        if (base_account)
+            split_props->set_account(base_account);
         else
         {
             // Oops - the user didn't select an Account column *and* we didn't get a default value either!
@@ -384,17 +380,17 @@ void GncTxImport::parse_line_to_trans (parse_line_t& orig_line)
     /* If column parsing was successful, convert trans properties into a trans line. */
     try
     {
-        trans_properties_verify_essentials (orig_line);
+        trans_properties_verify_essentials (parsed_line);
 
         /* If all went well, add this transaction to the list. */
         /* We want to keep the transactions sorted by date in case we have
          * to calculate the transaction's amount based on the user provided balances.
          * The multimap should deal with this for us. */
-        auto trans_line = trans_properties_to_trans (orig_line);
-        if (trans_line)
+        auto draft_trans = trans_properties_to_trans (parsed_line);
+        if (draft_trans)
         {
-            auto trans_date = xaccTransGetDate (trans_line->trans);
-            transactions.insert (std::pair<time64, GncCsvTransLine*>(trans_date,trans_line));
+            auto trans_date = xaccTransGetDate (draft_trans->trans);
+            transactions.insert (std::pair<time64, DraftTransaction*>(trans_date,draft_trans));
         }
     }
     catch (const std::invalid_argument& e)
@@ -406,23 +402,22 @@ void GncTxImport::parse_line_to_trans (parse_line_t& orig_line)
 
 
 /** Creates a list of transactions from parsed data. Transactions that
- * could be created from rows are placed in transactions;
- * rows that fail are placed in error_lines. (Note: there
- * is no way for this function to "fail," i.e. it only returns 0, so
- * it may be changed to a void function in the future.)
- * @param parse_data Data that is being parsed
+ * could be created from rows are placed in transactions; Lines that couldn't
+ * be converted are marked with the failure reason. These can be redone in
+ * a subsequent run with redo_errors set to true.
  * @param account Account with which transactions are created
- * @param redo_errors TRUE to convert only error data, FALSE for all data
- * @return 0 on success, 1 on failure
+ * @param redo_errors true to convert only error data, false to convert all data
  */
-int GncTxImport::parse_to_trans (Account* account,
-                                     bool redo_errors)
+void GncTxImport::create_transactions (Account* account,
+                                       bool redo_errors)
 {
-    /* Free error_lines and transactions if they
-     * already exist. */
-    if (!redo_errors) /* If we're redoing errors, we save freeing until the end. */
+    /* If a full conversion is requested (as opposed to only
+     * attempting to convers the lines which had errors in the previous run)
+     * clear all errors and possibly already created transactions. */
+    if (!redo_errors)
     {
-        for (auto orig_line : orig_lines)
+        /* Clear error messages on full run */
+        for (auto orig_line : parsed_lines)
             std::get<1>(orig_line).clear();
 
         /* FIXME handle memory leak here!
@@ -433,23 +428,25 @@ int GncTxImport::parse_to_trans (Account* account,
     }
 
     /* compute start and end iterators based on user-set restrictions */
-    auto orig_lines_it = orig_lines.begin();
-    std::advance(orig_lines_it, start_row);
+    auto parsed_lines_it = parsed_lines.begin();
+    std::advance(parsed_lines_it, start_row);
 
-    auto orig_lines_max = orig_lines.begin();
-    if (end_row > orig_lines.size())
-        orig_lines_max = orig_lines.end();
+    auto parsed_lines_max = parsed_lines.begin();
+    if (end_row > parsed_lines.size())
+        parsed_lines_max = parsed_lines.end();
     else
-        std::advance(orig_lines_max, end_row);
+        std::advance(parsed_lines_max, end_row);
 
-    home_account = account;
+    base_account = account;
     auto odd_line = false;
     parse_errors = false;
-    for (orig_lines_it, odd_line;
-            orig_lines_it != orig_lines_max;
-            ++orig_lines_it, odd_line = !odd_line)
+
+    /* Iterate over all parsed lines */
+    for (parsed_lines_it, odd_line;
+            parsed_lines_it != parsed_lines_max;
+            ++parsed_lines_it, odd_line = !odd_line)
     {
-        auto orig_line = *orig_lines_it;
+        auto parsed_line = *parsed_lines_it;
 
         /* Skip current line if:
            1. only looking for lines with error AND no error on current line
@@ -457,13 +454,13 @@ int GncTxImport::parse_to_trans (Account* account,
            2. looking for all lines AND
               skip_rows is enabled AND
               current line is an odd line */
-        if ((redo_errors && std::get<1>(orig_line).empty()) ||
+        if ((redo_errors && std::get<1>(parsed_line).empty()) ||
            (!redo_errors && skip_rows && odd_line))
             continue;
 
         try
         {
-            parse_line_to_trans (orig_line);
+            create_transaction (parsed_line);
         }
         catch (const std::invalid_argument&)
         {
@@ -473,9 +470,7 @@ int GncTxImport::parse_to_trans (Account* account,
 
     if (std::find(column_types.begin(),column_types.end(), GncTransPropType::BALANCE) !=
         column_types.end()) // This is only used if we have one home account
-        adjust_balances (home_account);
-
-    return 0;
+        adjust_balances ();
 }
 
 

@@ -284,7 +284,7 @@ csv_import_trans_load_settings (CsvImportTrans *info)
             if (info->settings_data->column_widths, NULL)
                 fwtok->cols_from_string (std::string(info->settings_data->column_widths));
 
-            info->parse_data->parse (false);
+            info->parse_data->tokenize (false);
             gnc_csv_preview_update_assist (info);
         }
     }
@@ -323,7 +323,7 @@ csv_import_trans_load_settings (CsvImportTrans *info)
             int saved_col_type = atoi (columns[i]);
 
             if (saved_col_type >= static_cast<int>(GncTransPropType::NONE) &&
-                saved_col_type <= static_cast<int>(GncTransPropType::OMEMO))
+                saved_col_type <= static_cast<int>(GncTransPropType::TMEMO))
             {
                 col_type = static_cast<GncTransPropType>(saved_col_type);
                 info->parse_data->column_types.at(i) = col_type;
@@ -693,7 +693,7 @@ csv_import_trans_file_chooser_confirm_cb (GtkWidget *button, CsvImportTrans *inf
     {
         parse_data->file_format (GncImpFileFormat::CSV);
         parse_data->load_file (info->file_name);
-        parse_data->parse (true);
+        parse_data->tokenize (true);
     }
     catch (std::ifstream::failure& e)
     {
@@ -939,7 +939,7 @@ void sep_button_clicked (GtkWidget* widget, CsvImportTrans* info)
      * configurations intact. */
     try
     {
-        info->parse_data->parse (false);
+        info->parse_data->tokenize (false);
     }
     catch (std::range_error &e)
     {
@@ -999,7 +999,7 @@ static void separated_or_fixed_selected (GtkToggleButton* csv_button, CsvImportT
         info->parse_data->file_format (GncImpFileFormat::FIXED_WIDTH);
 
         /* Reparse the data. */
-        info->parse_data->parse (false);
+        info->parse_data->tokenize (false);
 
         /* Show the new data. */
         gnc_csv_preview_update_assist (info);
@@ -1050,7 +1050,7 @@ static void encoding_selected (GOCharmapSel* selector, const char* encoding,
         try
         {
             info->parse_data->convert_encoding (encoding);
-            info->parse_data->parse (false);
+            info->parse_data->tokenize (false);
         }
         catch (...)
         {
@@ -1209,7 +1209,7 @@ fixed_context_menu_handler (GnumericPopupMenuElement const *element,
 
     try
     {
-        info->parse_data->parse (false);
+        info->parse_data->tokenize (false);
     }
     catch(std::range_error& e)
     {
@@ -1394,7 +1394,7 @@ split_column (CsvImportTrans* info, int col, int dx)
     fwtok->col_split (col, rel_pos);
     try
     {
-        info->parse_data->parse (false);
+        info->parse_data->tokenize (false);
     }
     catch (std::range_error& e)
     {
@@ -1520,11 +1520,11 @@ bool preview_settings_valid (CsvImportTrans* info)
             weight = weight + 1;
             break;
 
-        case GncTransPropType::OACCOUNT:
+        case GncTransPropType::TACCOUNT:
             oweight = oweight + 100;
             break;
 
-        case GncTransPropType::OMEMO:
+        case GncTransPropType::TMEMO:
             oweight = oweight + 1;
             break;
         default:
@@ -1634,7 +1634,7 @@ bool get_list_of_accounts (CsvImportTrans* info, GtkTreeModel *store)
             gtk_tree_model_get (ctstore, &iter1, 2 * i + 1, &col_type, -1);
 
             /* We're only interested in columns of type ACCOUNT and OACCOUNT. */
-            if ((col_type == GncTransPropType::ACCOUNT) || (col_type == GncTransPropType::OACCOUNT))
+            if ((col_type == GncTransPropType::ACCOUNT) || (col_type == GncTransPropType::TACCOUNT))
             {
                 /* Get an iterator for the row in the data store. */
                 if (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(datastore), &iter2, NULL, j))
@@ -1723,8 +1723,8 @@ static void gnc_csv_preview_update_assist (CsvImportTrans* info)
     g_free (bodytypes);
 
     /* Fill the data liststore with data from the file. */
-    info->num_of_rows = info->parse_data->orig_lines.size();
-    for (auto parse_line : info->parse_data->orig_lines)
+    info->num_of_rows = info->parse_data->parsed_lines.size();
+    for (auto parse_line : info->parse_data->parsed_lines)
     {
         // When previewing errors skip all lines that don't have errors
         if (info->previewing_errors && std::get<1>(parse_line).empty())
@@ -2462,8 +2462,8 @@ csv_import_trans_assistant_match_page_prepare (GtkAssistant *assistant,
             /* Copy all of the transactions to the importer GUI. */
             for (auto trans_it : info->parse_data->transactions)
             {
-                auto trans_line = trans_it.second;
-                gnc_gen_trans_list_add_trans (info->gnc_csv_importer_gui, trans_line->trans);
+                auto draft_trans = trans_it.second;
+                gnc_gen_trans_list_add_trans (info->gnc_csv_importer_gui, draft_trans->trans);
             }
         }
     }
@@ -2563,7 +2563,7 @@ csv_import_trans_forward_page_func (gint current_page, gpointer user_data)
 
                 // Check to see if we have an account / other account columns
                 if (info->parse_data->check_for_column_type (GncTransPropType::ACCOUNT) ||
-                        info->parse_data->check_for_column_type (GncTransPropType::OACCOUNT))
+                        info->parse_data->check_for_column_type (GncTransPropType::TACCOUNT))
                     next_page = 4;
                 else
                     next_page = 5;
@@ -2593,7 +2593,7 @@ csv_import_trans_forward_page_func (gint current_page, gpointer user_data)
             {
                 /* Create transactions from the parsed data, first time with false
                    Subsequent times with true */
-                    info->parse_data->parse_to_trans (info->account, info->match_parse_run);
+                    info->parse_data->create_transactions (info->account, info->match_parse_run);
 
                 /* if there are errors, we jump back to preview to correct */
                 if (info->parse_data->parse_errors && !info->skip_errors)
