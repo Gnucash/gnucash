@@ -57,9 +57,13 @@ std::map<GncTransPropType, const char*> gnc_csv_col_type_strs = {
         { GncTransPropType::WITHDRAWAL, N_("Withdrawal") },
         { GncTransPropType::BALANCE, N_("Balance") },
         { GncTransPropType::MEMO, N_("Memo") },
+        { GncTransPropType::REC_STATE, N_("Reconciled") },
+        { GncTransPropType::REC_DATE, N_("Reconcile Date") },
         { GncTransPropType::TACTION, N_("Transfer Action") },
         { GncTransPropType::TACCOUNT, N_("Transfer Account") },
-        { GncTransPropType::TMEMO, N_("Transfer Memo") }
+        { GncTransPropType::TMEMO, N_("Transfer Memo") },
+        { GncTransPropType::TREC_STATE, N_("Transfer Reconciled") },
+        { GncTransPropType::TREC_DATE, N_("Transfer Reconcile Date") }
 };
 
 /* Regular expressions used to parse dates per date format */
@@ -208,6 +212,21 @@ static boost::optional<gnc_numeric> parse_amount (const std::string &str, int cu
     return val;
 }
 
+static char parse_reconciled (const std::string& reconcile)
+{
+    if (g_strcmp0 (reconcile.c_str(), _("n")) == 0) // Not reconciled
+        return NREC;
+    else if (g_strcmp0 (reconcile.c_str(), _("c")) == 0) // Cleared
+        return CREC;
+    else if (g_strcmp0 (reconcile.c_str(), _("y")) == 0) // Reconciled
+        return YREC;
+    else if (g_strcmp0 (reconcile.c_str(), _("f")) == 0) // Frozen
+        return FREC;
+    else if (g_strcmp0 (reconcile.c_str(), _("v")) == 0) // Voided will be handled at the transaction level
+        return NREC;                                      // so return not reconciled here
+    else
+        throw std::invalid_argument ("String can't be parsed into a valid reconcile state.");
+}
 
 void GncPreTrans::set_property (GncTransPropType prop_type, const std::string& value)
 {
@@ -366,6 +385,23 @@ void GncPreSplit::set_property (GncTransPropType prop_type, const std::string& v
             m_withdrawal = parse_amount (value, m_currency_format); // Will throw if parsing fails
             break;
 
+        case GncTransPropType::REC_STATE:
+            m_rec_state = parse_reconciled (value); // Throws if parsing fails
+            break;
+
+        case GncTransPropType::TREC_STATE:
+            m_trec_state = parse_reconciled (value); // Throws if parsing fails
+            break;
+
+        case GncTransPropType::REC_DATE:
+            if (!value.empty())
+                m_rec_date = parse_date (value, m_date_format); // Throws if parsing fails
+            break;
+
+        case GncTransPropType::TREC_DATE:
+            m_trec_date = parse_date (value, m_date_format); // Throws if parsing fails
+            break;
+
         default:
             /* Issue a warning for all other prop_types. */
             PWARN ("%d is an invalid property for a split", static_cast<int>(prop_type));
@@ -376,13 +412,28 @@ void GncPreSplit::set_property (GncTransPropType prop_type, const std::string& v
 
 std::string GncPreSplit::verify_essentials (void)
 {
+    auto err_msg = std::string();
     /* Make sure this split has the minimum required set of properties defined. */
     if ((m_deposit == boost::none) &&
         (m_withdrawal == boost::none) &&
         (m_balance == boost::none))
-        return _("No balance, deposit, or withdrawal column.");
-    else
-        return std::string();
+        err_msg = _("No balance, deposit, or withdrawal column.");
+
+    if (m_rec_state && *m_rec_state == YREC && !m_rec_date)
+    {
+        if (!err_msg.empty())
+            err_msg += "\n";
+        err_msg += _("Split is reconciled but reconcile date column is missing or invalid.");
+    }
+
+    if (m_trec_state && *m_trec_state == YREC && !m_trec_date)
+    {
+        if (!err_msg.empty())
+            err_msg += "\n";
+        err_msg += _("Transfer split is reconciled but transfer reconcile date column is missing or invalid.");
+    }
+
+    return err_msg;
 }
 
 /** Adds a split to a transaction.
@@ -391,9 +442,11 @@ std::string GncPreSplit::verify_essentials (void)
  * @param book The book where the split should be stored
  * @param amount The amount of the split
  */
-static void trans_add_split (Transaction* trans, Account* account,
-                            gnc_numeric amount, const boost::optional<std::string>& action,
-                            const boost::optional<std::string>& memo)
+static void trans_add_split (Transaction* trans, Account* account, gnc_numeric amount,
+                            const boost::optional<std::string>& action,
+                            const boost::optional<std::string>& memo,
+                            const boost::optional<char>& rec_state,
+                            const boost::optional<time64> rec_date)
 {
     auto book = xaccTransGetBook (trans);
     auto split = xaccMallocSplit (book);
@@ -407,6 +460,12 @@ static void trans_add_split (Transaction* trans, Account* account,
      * if needed by the book option */
     if (action)
         xaccSplitSetAction (split, action->c_str());
+
+    if (rec_state && *rec_state != ' ')
+        xaccSplitSetReconcile (split, *rec_state);
+    if (rec_state && *rec_state == YREC)
+        xaccSplitSetDateReconciledSecs (split, *rec_date);
+
 }
 
 boost::optional<gnc_numeric> GncPreSplit::create_split (Transaction* trans)
@@ -451,13 +510,13 @@ boost::optional<gnc_numeric> GncPreSplit::create_split (Transaction* trans)
                 GNC_HOW_RND_ROUND_HALF_UP);
 
     /* Add a split with the cumulative amount value. */
-    trans_add_split (trans, account, amount, m_action, m_memo);
+    trans_add_split (trans, account, amount, m_action, m_memo, m_rec_state, m_rec_date);
 
     if (taccount)
         /* Note: the current importer assumes at most 2 splits. This means the second split amount
          * will be the negative of the the first split amount.
          */
-        trans_add_split (trans, taccount, gnc_numeric_neg(amount), m_taction, m_tmemo);
+        trans_add_split (trans, taccount, gnc_numeric_neg(amount), m_taction, m_tmemo, m_trec_state, m_trec_date);
 
 
     created = true;

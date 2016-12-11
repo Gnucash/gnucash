@@ -226,7 +226,7 @@ static void trans_properties_verify_essentials (std::vector<parse_line_t>::itera
     error_message.clear();
     if (!trans_error.empty())
     {
-        error_message = trans_error;
+        error_message += trans_error;
         if (!split_error.empty())
             error_message += "\n";
     }
