@@ -12,7 +12,7 @@
 
 (define (test-split-in-list?)
   (let* ((env (create-test-env))
-	 (today (gnc:date->timepair (localtime (current-time))))
+	 (today (gnc:date->timepair (gnc-localtime (current-time))))
 	 (account-alist (env-create-test-accounts env))
 	 (bank-account (cdr (assoc "Bank" account-alist)))
 	 (expense-account (cdr (assoc "Expenses" account-alist)))

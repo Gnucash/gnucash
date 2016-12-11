@@ -35,10 +35,10 @@
   (cons secs 0))
 
 (define (gnc:timepair->date tp)
-  (localtime (gnc:timepair->secs tp)))
+  (gnc-localtime (gnc:timepair->secs tp)))
 
 (define (gnc:date->timepair date)
-  (gnc:secs->timepair (car (mktime date))))
+  (gnc:secs->timepair (gnc-mktime date)))
 
 (define (gnc:timepair? date)
   (and (number? (car date))
@@ -143,15 +143,15 @@
 ;; convert a date in seconds since 1970 into # of years since 1970 as
 ;; a fraction.
 (define (gnc:date-to-year-fraction caltime)
-  (let ((lt (localtime caltime)))
+  (let ((lt (gnc-localtime caltime)))
     (+ (- (gnc:date-get-year lt) 1970)
        (/ (- (gnc:date-get-year-day lt) 1.0)
 	  (* 1.0 (gnc:days-in-year (gnc:date-get-year lt)))))))
 
 ;; return the number of years (in floating point format) between two dates.
 (define (gnc:date-year-delta caltime1 caltime2)
-  (let* ((lt1 (localtime caltime1))
-	 (lt2 (localtime caltime2))
+  (let* ((lt1 (gnc-localtime caltime1))
+	 (lt2 (gnc-localtime caltime2))
 	 (day1 (gnc:date-get-year-day lt1))
 	 (day2 (gnc:date-get-year-day lt2))
 	 (year1 (gnc:date-get-year lt1))
@@ -180,7 +180,7 @@
 
 ;; convert a date in seconds since 1970 into # of months since 1970
 (define (gnc:date-to-month-fraction caltime)
-  (let ((lt (localtime caltime)))
+  (let ((lt (gnc-localtime caltime)))
     (+ (* 12 (- (gnc:date-get-year lt) 1970.0))
        (gnc:date-get-month lt) -1
        (/ (- (gnc:date-get-month-day lt) 1.0) (gnc:days-in-month 
@@ -315,7 +315,7 @@
 ; Note: use of eval is evil... by making this a generator function, 
 ; each delta function gets its own instance of Zero Date
 (define (make-zdate) 
-  (let ((zd (localtime 0)))
+  (let ((zd (gnc-localtime (current-time))))
     (set-tm:hour zd 0)
     (set-tm:min zd 0)
     (set-tm:sec zd 0)
@@ -479,7 +479,7 @@
     (gnc:reldate-get-desc rel-date-info)))
 
 (define (gnc:get-start-cal-year)
-  (let ((now (localtime (current-time))))
+  (let ((now (gnc-localtime (current-time))))
     (set-tm:sec now 0)
     (set-tm:min now 0)
     (set-tm:hour now 0)
@@ -489,7 +489,7 @@
     (gnc:date->timepair now)))
 
 (define (gnc:get-end-cal-year)
-  (let ((now (localtime (current-time))))
+  (let ((now (gnc-localtime (current-time))))
     (set-tm:sec now 59)
     (set-tm:min now 59)
     (set-tm:hour now 23)
@@ -499,7 +499,7 @@
     (gnc:date->timepair now)))
 
 (define (gnc:get-start-prev-year)
-  (let ((now (localtime (current-time))))
+  (let ((now (gnc-localtime (current-time))))
     (set-tm:sec now 0)
     (set-tm:min now 0)
     (set-tm:hour now 0)
@@ -510,7 +510,7 @@
     (gnc:date->timepair now)))
 
 (define (gnc:get-end-prev-year)
-  (let ((now (localtime (current-time))))
+  (let ((now (gnc-localtime (current-time))))
     (set-tm:sec now 59)
     (set-tm:min now 59)
     (set-tm:hour now 23)
@@ -521,7 +521,7 @@
     (gnc:date->timepair now)))
 
 (define (gnc:get-start-next-year)
-  (let ((now (localtime (current-time))))
+  (let ((now (gnc-localtime (current-time))))
     (set-tm:sec now 0)
     (set-tm:min now 0)
     (set-tm:hour now 0)
@@ -532,7 +532,7 @@
     (gnc:date->timepair now)))
 
 (define (gnc:get-end-next-year)
-  (let ((now (localtime (current-time))))
+  (let ((now (gnc-localtime (current-time))))
     (set-tm:sec now 59)
     (set-tm:min now 59)
     (set-tm:hour now 23)
@@ -549,7 +549,7 @@
   (gnc:secs->timepair (gnc-accounting-period-fiscal-end)))
 
 (define (gnc:get-start-this-month)
-  (let ((now (localtime (current-time))))
+  (let ((now (gnc-localtime (current-time))))
     (set-tm:sec now 0)
     (set-tm:min now 0)
     (set-tm:hour now 0)
@@ -558,7 +558,7 @@
     (gnc:date->timepair now)))
 
 (define (gnc:get-end-this-month)
-  (let ((now (localtime (current-time))))
+  (let ((now (gnc-localtime (current-time))))
     (set-tm:sec now 59)
     (set-tm:min now 59) 
     (set-tm:hour now 23)
@@ -568,7 +568,7 @@
     (gnc:date->timepair now)))
     
 (define (gnc:get-start-prev-month)
-  (let ((now (localtime (current-time))))
+  (let ((now (gnc-localtime (current-time))))
     (set-tm:sec now 0)
     (set-tm:min now 0)
     (set-tm:hour now 0)
@@ -582,7 +582,7 @@
     (gnc:date->timepair now)))
 
 (define (gnc:get-end-prev-month)
-  (let ((now (localtime (current-time))))
+  (let ((now (gnc-localtime (current-time))))
     (set-tm:sec now 59)
     (set-tm:min now 59) 
     (set-tm:hour now 23)
@@ -597,7 +597,7 @@
     (gnc:date->timepair now)))
     
 (define (gnc:get-start-next-month)
-  (let ((now (localtime (current-time))))
+  (let ((now (gnc-localtime (current-time))))
     (set-tm:sec now 0)
     (set-tm:min now 0)
     (set-tm:hour now 0)
@@ -611,7 +611,7 @@
     (gnc:date->timepair now)))
 
 (define (gnc:get-end-next-month)
-  (let ((now (localtime (current-time))))
+  (let ((now (gnc-localtime (current-time))))
     (set-tm:sec now 59)
     (set-tm:min now 59) 
     (set-tm:hour now 23)
@@ -626,7 +626,7 @@
     (gnc:date->timepair now)))
     
 (define (gnc:get-start-current-quarter)
-  (let ((now (localtime (current-time))))
+  (let ((now (gnc-localtime (current-time))))
     (set-tm:sec now 0)
     (set-tm:min now 0)
     (set-tm:hour now 0)
@@ -636,7 +636,7 @@
     (gnc:date->timepair now)))
 
 (define (gnc:get-end-current-quarter)
-  (let ((now (localtime (current-time))))
+  (let ((now (gnc-localtime (current-time))))
     (set-tm:sec now 59)
     (set-tm:min now 59)
     (set-tm:hour now 23)
@@ -648,7 +648,7 @@
     (gnc:date->timepair now)))
 
 (define (gnc:get-start-prev-quarter)
-  (let ((now (localtime (current-time))))
+  (let ((now (gnc-localtime (current-time))))
     (set-tm:sec now 0)
     (set-tm:min now 0)
     (set-tm:hour now 0)
@@ -663,7 +663,7 @@
     (gnc:date->timepair now)))
 
 (define (gnc:get-end-prev-quarter)
-  (let ((now (localtime (current-time))))
+  (let ((now (gnc-localtime (current-time))))
     (set-tm:sec now 59)
     (set-tm:min now 59)
     (set-tm:hour now 23)
@@ -679,7 +679,7 @@
     (gnc:date->timepair now)))
 
 (define (gnc:get-start-next-quarter)
-  (let ((now (localtime (current-time))))
+  (let ((now (gnc-localtime (current-time))))
     (set-tm:sec now 0)
     (set-tm:min now 0)
     (set-tm:hour now 0)
@@ -693,7 +693,7 @@
     (gnc:date->timepair now)))
 
 (define (gnc:get-end-next-quarter)
-  (let ((now (localtime (current-time))))
+  (let ((now (gnc-localtime (current-time))))
     (set-tm:sec now 59)
     (set-tm:min now 59)
     (set-tm:hour now 23)
@@ -712,7 +712,7 @@
   (cons (current-time) 0))
 
 (define (gnc:get-one-month-ago)
-  (let ((now (localtime (current-time))))
+  (let ((now (gnc-localtime (current-time))))
     (if (= (tm:mon now) 0)
 	(begin
 	  (set-tm:mon now 11)
@@ -726,7 +726,7 @@
       (gnc:date->timepair now))))
 
 (define (gnc:get-three-months-ago)
-  (let ((now (localtime (current-time))))
+  (let ((now (gnc-localtime (current-time))))
     (if (< (tm:mon now) 3)
 	(begin
 	  (set:tm-mon now (+ (tm:mon now) 12))
@@ -740,7 +740,7 @@
       (gnc:date->timepair now))))
 
 (define (gnc:get-six-months-ago)
-  (let ((now (localtime (current-time))))
+  (let ((now (gnc-localtime (current-time))))
     (if (< (tm:mon now) 6)
 	(begin
 	  (set:tm-mon now (+ (tm:mon now) 12))
@@ -754,7 +754,7 @@
       (gnc:date->timepair now))))
 
 (define (gnc:get-one-year-ago)
-  (let ((now (localtime (current-time))))
+  (let ((now (gnc-localtime (current-time))))
     (set:tm-year now (- (tm:year now) 1))
     (let ((month-days (gnc:days-in-month (+ (tm:mon now) 1)
                                           (+ (tm:year now) 1900))))
@@ -764,7 +764,7 @@
       (gnc:date->timepair now))))
 
 (define (gnc:get-one-month-ahead)
-  (let ((now (localtime (current-time))))
+  (let ((now (gnc-localtime (current-time))))
     (if (= (tm:mon now) 11)
 	(begin
 	  (set-tm:mon now 0)
@@ -778,7 +778,7 @@
       (gnc:date->timepair now))))
 
 (define (gnc:get-three-months-ahead)
-  (let ((now (localtime (current-time))))
+  (let ((now (gnc-localtime (current-time))))
     (if (> (tm:mon now) 8)
 	(begin
 	  (set:tm-mon now (- (tm:mon now) 9))
@@ -792,7 +792,7 @@
       (gnc:date->timepair now))))
 
 (define (gnc:get-six-months-ahead)
-  (let ((now (localtime (current-time))))
+  (let ((now (gnc-localtime (current-time))))
     (if (> (tm:mon now) 5)
 	(begin
 	  (set:tm-mon now (- (tm:mon now) 6))
@@ -806,7 +806,7 @@
       (gnc:date->timepair now))))
 
 (define (gnc:get-one-year-ahead)
-  (let ((now (localtime (current-time))))
+  (let ((now (gnc-localtime (current-time))))
     (set:tm-year now (+ (tm:year now) 1))
     (let ((month-days (gnc:days-in-month (+ (tm:mon now) 1)
                                           (+ (tm:year now) 1900))))

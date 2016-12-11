@@ -670,7 +670,7 @@
     ;; for the invoice date/due date fields
     ;; I could have taken the format from the report options, but... ;)
     (string-expand (strftime (gnc-default-strftime-date-format)
-                             (localtime (car date)))
+                             (gnc-localtime (car date)))
                    #\space "&nbsp;")
     ;;(string-expand (gnc-print-date date) #\space "&nbsp;")
     )))
@@ -762,7 +762,7 @@
 ;;    (gnc:html-table-append-row! table (list
 ;;				       (strftime
 ;;					date-format
-;;					(localtime (car (gnc:get-today))))))
+;;					(gnc-localtime (car (gnc:get-today))))))
     table))
 
 (define (make-break! document)

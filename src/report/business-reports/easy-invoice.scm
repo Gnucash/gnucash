@@ -813,7 +813,7 @@
 				      (_ "INVOICE NOT POSTED")
 				      "</font>"))))
             ;(add-html! document (strftime (opt-val "Text" "Today Date Format")
-            ;             (localtime (car (gnc:get-today))))))
+            ;             (gnc-localtime (car (gnc:get-today))))))
 
         (make-break! document)
 
