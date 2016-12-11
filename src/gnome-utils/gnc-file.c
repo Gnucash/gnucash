@@ -174,12 +174,15 @@ gnc_file_dialog (const char * title,
     {
         /* look for constructs like postgres://foo */
         internal_name = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER (file_box));
-        if (strstr (internal_name, "file://") == internal_name)
+        if (internal_name != NULL)
         {
-            /* nope, a local file name */
-            internal_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (file_box));
+            if (strstr (internal_name, "file://") == internal_name)
+            {
+                /* nope, a local file name */
+                internal_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (file_box));
+            }
+            file_name = g_strdup(internal_name);
         }
-        file_name = g_strdup(internal_name);
     }
     gtk_widget_destroy(GTK_WIDGET(file_box));
     LEAVE("%s", file_name ? file_name : "(null)");
