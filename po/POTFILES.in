@@ -428,12 +428,9 @@ src/import-export/csv-exp/gnc-plugin-csv-export.c
 [type: gettext/gsettings]src/import-export/csv-exp/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in.in
 src/import-export/csv-imp/assistant-csv-account-import.c
 src/import-export/csv-imp/assistant-csv-account-import.glade
-src/import-export/csv-imp/assistant-csv-fixed-trans-import.cpp
-src/import-export/csv-imp/assistant-csv-fixed-trans-import.glade
 src/import-export/csv-imp/assistant-csv-trans-import.cpp
 src/import-export/csv-imp/assistant-csv-trans-import.glade
 src/import-export/csv-imp/csv-account-import.c
-src/import-export/csv-imp/csv-fixed-trans-import.cpp
 src/import-export/csv-imp/gnc-csv-account-map.c
 src/import-export/csv-imp/gnc-csv-gnumeric-popup.c
 src/import-export/csv-imp/gnc-csv-tokenizer.cpp

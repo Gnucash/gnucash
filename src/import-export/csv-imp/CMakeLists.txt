@@ -4,11 +4,9 @@ ADD_SUBDIRECTORY(test)
 SET(csv_import_SOURCES
   gncmod-csv-import.c
   assistant-csv-account-import.c
-  assistant-csv-fixed-trans-import.cpp
   assistant-csv-trans-import.cpp
   gnc-plugin-csv-import.c
   csv-account-import.c
-  csv-fixed-trans-import.cpp
   gnc-csv-account-map.c
   gnc-csv-gnumeric-popup.c
   gnc-csv-tokenizer.cpp
@@ -28,11 +26,9 @@ SET_SOURCE_FILES_PROPERTIES (${csv_import_SOURCES} PROPERTIES OBJECT_DEPENDS ${C
 
 SET(csv_import_noinst_HEADERS
   assistant-csv-account-import.h
-  assistant-csv-fixed-trans-import.h
   assistant-csv-trans-import.h
   gnc-plugin-csv-import.h
   csv-account-import.h
-  csv-fixed-trans-import.h
   gnc-csv-account-map.h
   gnc-csv-gnumeric-popup.h
   gnc-csv-tokenizer.hpp
@@ -67,7 +63,7 @@ INSTALL(TARGETS gncmod-csv-import
 
 # No headers to install
 
-SET(csv_import_GLADE assistant-csv-account-import.glade assistant-csv-fixed-trans-import.glade
+SET(csv_import_GLADE assistant-csv-account-import.glade
       assistant-csv-trans-import.glade)
 
 INSTALL(FILES ${csv_import_GLADE} DESTINATION share/gnucash/gtkbuilder)
