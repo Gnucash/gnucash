@@ -5,11 +5,9 @@ pkglib_LTLIBRARIES=libgncmod-csv-import.la
 libgncmod_csv_import_la_SOURCES = \
   gncmod-csv-import.c \
   assistant-csv-account-import.c \
-  assistant-csv-fixed-trans-import.cpp \
   assistant-csv-trans-import.cpp \
   gnc-plugin-csv-import.c \
   csv-account-import.c \
-  csv-fixed-trans-import.cpp \
   gnc-csv-account-map.c \
   gnc-csv-tokenizer.cpp \
   gnc-csv-gnumeric-popup.c \
@@ -22,11 +20,9 @@ libgncmod_csv_import_la_SOURCES = \
 
 noinst_HEADERS = \
   assistant-csv-account-import.h \
-  assistant-csv-fixed-trans-import.h \
   assistant-csv-trans-import.h \
   gnc-plugin-csv-import.h \
   csv-account-import.h \
-  csv-fixed-trans-import.h \
   gnc-csv-account-map.h \
   gnc-csv-tokenizer.hpp \
   gnc-csv-gnumeric-popup.h \
@@ -80,7 +76,6 @@ ui_DATA = \
 gtkbuilderdir = ${GNC_GTKBUILDER_DIR}
 gtkbuilder_DATA = \
 	assistant-csv-account-import.glade \
-        assistant-csv-fixed-trans-import.glade \
 	assistant-csv-trans-import.glade
 
 EXTRA_DIST = $(ui_DATA) $(gtkbuilder_DATA)
