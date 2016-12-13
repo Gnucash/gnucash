@@ -38,6 +38,7 @@ extern "C"
 
 const std::string csv_group_prefix{"CSV - "};
 const std::string no_settings{N_("No Settings")};
+const std::string gnc_exp{N_("GnuCash Export Format")};
 #define CSV_NAME         "Name"
 #define CSV_FORMAT       "CsvFormat"
 #define CSV_ALT_ROWS     "AltRows"
@@ -59,50 +60,108 @@ const std::string no_settings{N_("No Settings")};
 
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 
+preset_vec presets;
+
+static std::shared_ptr<CsvTransSettings> create_int_no_preset(void)
+{
+    auto preset = std::make_shared<CsvTransSettings>();
+    preset->name = no_settings;
+
+    return preset;
+}
+
+static std::shared_ptr<CsvTransSettings> create_int_gnc_exp_preset(void)
+{
+    auto preset = std::make_shared<CsvTransSettings>();
+    preset->name = gnc_exp;
+    preset->header_rows = 1;
+    preset->multi_split = true;
+
+    preset->separator[SEP_COMMA] = true;
+
+    /* FIXME date and currency format should still be aligned with export format!
+     * That's currently hard to do, because the export uses whatever the user
+     * had set as preference.
+    preset->date_active = 0;
+    preset->currency_active = 0;
+    */
+    preset->column_types = {
+            GncTransPropType::DATE,
+            GncTransPropType::UNIQUE_ID,
+            GncTransPropType::NUM,
+            GncTransPropType::DESCRIPTION,
+            GncTransPropType::NOTES,
+            GncTransPropType::COMMODITY,
+            GncTransPropType::VOID_REASON,
+            GncTransPropType::ACTION,
+            GncTransPropType::MEMO,
+            GncTransPropType::ACCOUNT,
+            GncTransPropType::NONE,
+            GncTransPropType::NONE,
+            GncTransPropType::DEPOSIT,
+            GncTransPropType::REC_STATE,
+            GncTransPropType::REC_DATE,
+            GncTransPropType::PRICE
+    };
+
+    return preset;
+}
+
 /**************************************************
  * find
  *
  * find all settings entries in the state key file
  **************************************************/
-void
-CsvTransSettings::find (GtkTreeModel *settings_store)
+const preset_vec& get_trans_presets (void)
 {
 
-    // Clear the list store
-    gtk_list_store_clear (GTK_LIST_STORE(settings_store));
-
-    // Append the default entry
-    GtkTreeIter iter;
-    gtk_list_store_append (GTK_LIST_STORE(settings_store), &iter);
-    gtk_list_store_set (GTK_LIST_STORE(settings_store), &iter, SET_GROUP, NULL, SET_NAME, _(no_settings.c_str()), -1);
-
     // Search all Groups in the state key file for ones starting with prefix
-    GKeyFile   *keyfile = gnc_state_get_current ();
+    auto preset_names = std::vector<std::string>();
+    auto keyfile = gnc_state_get_current ();
     gsize grouplength;
     gchar **groups = g_key_file_get_groups (keyfile, &grouplength);
 
+    /* Start by building a sorted list of candidate presets as found in the state file */
     for (gsize i=0; i < grouplength; i++)
     {
-        if (g_str_has_prefix (groups[i], csv_group_prefix.c_str()))
-        {
-            GError *key_error = nullptr;
-            gchar *name = g_key_file_get_string (keyfile, groups[i], CSV_NAME, &key_error);
+        auto group = std::string(groups[i]);
+        auto pos = group.find(csv_group_prefix);
+        if (pos == std::string::npos)
+            continue;
 
-            if (!key_error)
-            {
-                gtk_list_store_append (GTK_LIST_STORE(settings_store), &iter);
-                gtk_list_store_set (GTK_LIST_STORE(settings_store), &iter, SET_GROUP, groups[i], SET_NAME, name, -1);
-            }
-            else
-            {
-                g_warning ("Error reading group '%s' name '%s': %s", groups[i], CSV_NAME, key_error->message);
-                g_clear_error (&key_error);
-            }
-            g_free (name);
-        }
+        preset_names.push_back(group.substr(csv_group_prefix.size()));
     }
-    // free the strings
+    // string array from the state file is no longer needed now.
     g_strfreev (groups);
+
+    /* We want our settings to appear sorted alphabetically to the user */
+    std::sort(preset_names.begin(), preset_names.end());
+
+    /* Now add each preset to our global list */
+    presets.clear();
+
+    /* Start with the internally generated ones */
+    presets.push_back(create_int_no_preset());
+    presets.push_back(create_int_gnc_exp_preset());
+
+    /* Then add all the ones we found in the state file */
+    for (auto preset_name : preset_names)
+    {
+        auto preset = std::make_shared<CsvTransSettings>();
+        preset->name = preset_name;
+        preset->load();
+        presets.push_back(preset);
+    }
+
+    return presets;
+}
+
+bool trans_preset_is_reserved_name (const std::string& name)
+{
+    return ((name == no_settings) ||
+            (name == _(no_settings.c_str())) ||
+            (name == gnc_exp) ||
+            (name == _(gnc_exp.c_str())));
 }
 
 
@@ -136,59 +195,63 @@ handle_load_error (GError **key_error, const std::string& group)
  * load the settings from a state key file
  **************************************************/
 bool
-CsvTransSettings::load (const std::string& group)
+CsvTransSettings::load (void)
 {
+    if (trans_preset_is_reserved_name (name))
+        return true;
+
     GError *key_error = nullptr;
-    bool error = false;
+    load_error = false;
+    auto group = csv_group_prefix + name;
     auto keyfile = gnc_state_get_current ();
 
     header_rows = g_key_file_get_integer (keyfile, group.c_str(), CSV_SKIP_START, &key_error);
-    error |= handle_load_error (&key_error, group);
+    load_error |= handle_load_error (&key_error, group);
 
     footer_rows = g_key_file_get_integer (keyfile, group.c_str(), CSV_SKIP_END, &key_error);
-    error |= handle_load_error (&key_error, group);
+    load_error |= handle_load_error (&key_error, group);
 
     skip_alt_rows = g_key_file_get_boolean (keyfile, group.c_str(), CSV_ALT_ROWS, &key_error);
-    error |= handle_load_error (&key_error, group);
+    load_error |= handle_load_error (&key_error, group);
 
     multi_split = g_key_file_get_boolean (keyfile, group.c_str(), CSV_MULTI_SPLIT, &key_error);
-    error |= handle_load_error (&key_error, group);
+    load_error |= handle_load_error (&key_error, group);
 
     csv_format = g_key_file_get_boolean (keyfile, group.c_str(), CSV_FORMAT, &key_error);
     if (key_error) csv_format = true; // default to true, but above command will return false in case of error
-    error |= handle_load_error (&key_error, group);
+    load_error |= handle_load_error (&key_error, group);
 
     for (uint i = 0; i < SEP_NUM_OF_TYPES; i++)
     {
         gchar *sep;
         sep = g_strdup_printf ("%s%d", CSV_SEP, i);
         separator[i] = g_key_file_get_boolean (keyfile, group.c_str(), sep, &key_error);
-        error |= handle_load_error (&key_error, group);
+        load_error |= handle_load_error (&key_error, group);
         g_free (sep);
     }
 
     custom = g_key_file_get_boolean (keyfile, group.c_str(), CSV_CUSTOM, &key_error);
-    error |= handle_load_error (&key_error, group);
+    load_error |= handle_load_error (&key_error, group);
 
     gchar *key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_CUSTOM_ENTRY, &key_error);
     if (key_char && *key_char != '\0')
         custom_entry = key_char;
-    error |= handle_load_error (&key_error, group);
+    load_error |= handle_load_error (&key_error, group);
     if (key_char)
         g_free (key_char);
 
     date_active = g_key_file_get_integer (keyfile, group.c_str(), CSV_DATE, &key_error);
-    error |= handle_load_error (&key_error, group);
+    load_error |= handle_load_error (&key_error, group);
 
     currency_active = g_key_file_get_integer (keyfile, group.c_str(), CSV_CURRENCY, &key_error);
-    error |= handle_load_error (&key_error, group);
+    load_error |= handle_load_error (&key_error, group);
 
     key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_ENCODING, &key_error);
     if (key_char && *key_char != '\0')
         encoding = key_char;
     else
         "UTF-8";
-    error |= handle_load_error (&key_error, group);
+    load_error |= handle_load_error (&key_error, group);
     if (key_char)
         g_free (key_char);
 
@@ -223,11 +286,11 @@ CsvTransSettings::load (const std::string& group)
         if (col_widths_int[i] > 0)
             column_widths.push_back(col_widths_int[i]);
     }
-    error |= handle_load_error (&key_error, group);
+    load_error |= handle_load_error (&key_error, group);
     if (col_widths_int)
         g_free (col_widths_int);
 
-    return error;
+    return load_error;
 }
 
 
@@ -237,16 +300,22 @@ CsvTransSettings::load (const std::string& group)
  * save settings to a key file
  **************************************************/
 bool
-CsvTransSettings::save (const std::string& settings_name)
+CsvTransSettings::save (void)
 {
+    if (trans_preset_is_reserved_name (name))
+    {
+        PWARN ("Ignoring attempt to save to reserved name '%s'", name.c_str());
+        return true;
+    }
+
     auto keyfile = gnc_state_get_current ();
-    std::string group = csv_group_prefix + settings_name;
+    auto group = csv_group_prefix + name;
 
     // Drop previous saved settings with this name
     g_key_file_remove_group (keyfile, group.c_str(), nullptr);
 
     // Start Saving the settings
-    g_key_file_set_string (keyfile, group.c_str(), CSV_NAME, settings_name.c_str());
+    g_key_file_set_string (keyfile, group.c_str(), CSV_NAME, name.c_str());
     g_key_file_set_boolean (keyfile, group.c_str(), CSV_MULTI_SPLIT, multi_split);
     g_key_file_set_integer (keyfile, group.c_str(), CSV_SKIP_START, header_rows);
     g_key_file_set_integer (keyfile, group.c_str(), CSV_SKIP_END, footer_rows);
@@ -299,4 +368,25 @@ CsvTransSettings::save (const std::string& settings_name)
         error = true;
     }
     return error;
+}
+
+void
+CsvTransSettings::remove (void)
+{
+    if (trans_preset_is_reserved_name (name))
+        return;
+
+    auto keyfile = gnc_state_get_current ();
+    auto group = csv_group_prefix + name;
+    g_key_file_remove_group (keyfile, group.c_str(), nullptr);
+}
+
+
+bool
+CsvTransSettings::read_only (void)
+{
+    return ((name == no_settings) ||
+            (name == _(no_settings.c_str())) ||
+            (name == gnc_exp) ||
+            (name == _(gnc_exp.c_str())));
 }
