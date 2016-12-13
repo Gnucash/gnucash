@@ -206,7 +206,7 @@ void GncTxImport::tokenize (bool guessColTypes)
 /** Checks whether the parsed line contains all essential properties.
  * Essential properties are
  * - "Date"
- * - at least one of "Balance", "Deposit", or "Withdrawal"
+ * - at least one of "Deposit", or "Withdrawal"
  * - "Account"
  * Note account isn't checked for here as this has been done before
  * @param parsed_line The line we are checking
@@ -284,68 +284,13 @@ std::shared_ptr<DraftTransaction> GncTxImport::trans_properties_to_trans (std::v
     if (!trans)
         return nullptr;
 
-    auto balance = split_props->create_split(trans);
-    if (balance)
-    {
-        current_draft->balance_set = true;
-        current_draft->balance = *balance;
-    }
+    split_props->create_split(trans);
 
     /* Only return the draft transaction if we really created a new one
      * The return value will be added to a list for further processing,
      * we want each transaction to appear only once in that list.
      */
     return created_trans ? current_draft : nullptr;
-}
-
-void GncTxImport::adjust_balances (void)
-{
-    Split      *split, *tsplit;
-
-    /* balance_offset is how much the balance currently in the account
-     * differs from what it will be after the transactions are
-     * imported. This will be sum of all the previous transactions for
-     * any given transaction. */
-    auto balance_offset = gnc_numeric_zero();
-    for (auto trans_iter : transactions)
-    {
-        auto trans_line = trans_iter.second;
-        if (trans_line->balance_set)
-        {
-            time64 date = xaccTransGetDate (trans_line->trans);
-            /* Find what the balance should be by adding the offset to the actual balance. */
-            gnc_numeric existing_balance = gnc_numeric_add (balance_offset,
-                                           xaccAccountGetBalanceAsOfDate (base_account, date),
-                                           xaccAccountGetCommoditySCU (base_account),
-                                           GNC_HOW_RND_ROUND_HALF_UP);
-
-            /* The amount of the transaction is the difference between the new and existing balance. */
-            gnc_numeric amount = gnc_numeric_sub (trans_line->balance,
-                                                 existing_balance,
-                                                 xaccAccountGetCommoditySCU (base_account),
-                                                 GNC_HOW_RND_ROUND_HALF_UP);
-
-            // Find home account split
-            split  = xaccTransFindSplitByAccount (trans_line->trans, base_account);
-            xaccSplitSetAmount (split, amount);
-            xaccSplitSetValue (split, amount);
-
-            // If we have two splits, change other side
-            if (xaccTransCountSplits (trans_line->trans) == 2)
-            {
-                tsplit = xaccSplitGetOtherSplit (split);
-                xaccSplitSetAmount (split, amount);
-                xaccSplitSetValue (split, gnc_numeric_neg (amount));
-            }
-
-            /* This new transaction needs to be added to the balance offset. */
-            balance_offset = gnc_numeric_add (balance_offset,
-                                             amount,
-                                             xaccAccountGetCommoditySCU (base_account),
-                                             GNC_HOW_RND_ROUND_HALF_UP);
-        }
-    }
-
 }
 
 void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parsed_line)
@@ -443,9 +388,6 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
         trans_properties_verify_essentials (parsed_line);
 
         /* If all went well, add this transaction to the list. */
-        /* We want to keep the transactions sorted by date in case we have
-         * to calculate the transaction's amount based on the user provided balances.
-         * The multimap should deal with this for us. */
         auto draft_trans = trans_properties_to_trans (parsed_line);
         if (draft_trans)
         {
@@ -522,10 +464,6 @@ void GncTxImport::create_transactions (Account* account,
             continue;
         }
     }
-
-    if (std::find(column_types.begin(),column_types.end(), GncTransPropType::BALANCE) !=
-        column_types.end()) // This is only used if we have one home account
-        adjust_balances ();
 }
 
 

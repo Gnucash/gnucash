@@ -1418,7 +1418,6 @@ bool preview_settings_valid (CsvImportTrans* info)
     int weight = 0;
     int oweight = 0;
     bool valid = true;
-    bool havebalance = false;
     /* ctstore contains the actual strings appearing in the column types treeview. */
     GtkTreeModel* ctstore = gtk_tree_view_get_model (info->ctreeview);
     /* datastore contains the actual strings appearing in the preview treeview. */
@@ -1459,10 +1458,6 @@ bool preview_settings_valid (CsvImportTrans* info)
         case GncTransPropType::DESCRIPTION:
             weight = weight + 100;
             break;
-
-        case GncTransPropType::BALANCE:
-            havebalance = true;
-            /* No break */
         case GncTransPropType::DEPOSIT:
         case GncTransPropType::WITHDRAWAL:
             weight = weight + 10;
@@ -1491,13 +1486,6 @@ bool preview_settings_valid (CsvImportTrans* info)
 
         /* Free the type string created by gtk_tree_model_get() */
         g_free (prevstr);
-    }
-
-    if (havebalance && (info->home_account_number > 1))
-    {
-        info->error_text = _("There are problems with the import settings!\nIf you have a Balance column "
-                             "and an Account column there must be only one account listed...");
-        return false;
     }
 
     if ((oweight > 0) && (oweight < 99))
