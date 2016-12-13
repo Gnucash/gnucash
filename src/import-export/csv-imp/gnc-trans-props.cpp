@@ -59,7 +59,6 @@ std::map<GncTransPropType, const char*> gnc_csv_col_type_strs = {
         { GncTransPropType::ACCOUNT, N_("Account") },
         { GncTransPropType::DEPOSIT, N_("Deposit") },
         { GncTransPropType::WITHDRAWAL, N_("Withdrawal") },
-        { GncTransPropType::BALANCE, N_("Balance") },
         { GncTransPropType::PRICE, N_("Price") },
         { GncTransPropType::MEMO, N_("Memo") },
         { GncTransPropType::REC_STATE, N_("Reconciled") },
@@ -434,9 +433,6 @@ void GncPreSplit::set_property (GncTransPropType prop_type, const std::string& v
                 m_tmemo = boost::none;
             break;
 
-        case GncTransPropType::BALANCE:
-            m_balance = parse_amount (value, m_currency_format); // Will throw if parsing fails
-            break;
         case GncTransPropType::DEPOSIT:
             m_deposit = parse_amount (value, m_currency_format); // Will throw if parsing fails
             break;
@@ -478,9 +474,8 @@ std::string GncPreSplit::verify_essentials (void)
     auto err_msg = std::string();
     /* Make sure this split has the minimum required set of properties defined. */
     if ((m_deposit == boost::none) &&
-        (m_withdrawal == boost::none) &&
-        (m_balance == boost::none))
-        err_msg = _("No balance, deposit, or withdrawal column.");
+        (m_withdrawal == boost::none))
+        err_msg = _("No deposit or withdrawal column.");
 
     if (m_rec_state && *m_rec_state == YREC && !m_rec_date)
     {
@@ -565,10 +560,10 @@ static void trans_add_split (Transaction* trans, Account* account, gnc_numeric a
 
 }
 
-boost::optional<gnc_numeric> GncPreSplit::create_split (Transaction* trans)
+void GncPreSplit::create_split (Transaction* trans)
 {
     if (created)
-        return boost::none;
+        return;
 
     /* Gently refuse to create the split if the basics are not set correctly
      * This should have been tested before calling this function though!
@@ -576,8 +571,8 @@ boost::optional<gnc_numeric> GncPreSplit::create_split (Transaction* trans)
     auto check = verify_essentials();
     if (!check.empty())
     {
-        PWARN ("Refusing to create split because essentials not set properly: %s", check.c_str());
-        return boost::none;
+        PWARN ("Not creating split because essentials not set properly: %s", check.c_str());
+        return;
     }
 
     Account *account = nullptr;
@@ -620,11 +615,5 @@ boost::optional<gnc_numeric> GncPreSplit::create_split (Transaction* trans)
         trans_add_split (trans, taccount, gnc_numeric_neg(amount), m_taction, m_tmemo, m_trec_state, m_trec_date, inv_price);
     }
 
-
     created = true;
-
-    if (amount_set)
-        return boost::none;
-    else
-        return m_balance;
 }

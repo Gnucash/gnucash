@@ -61,7 +61,6 @@ enum class GncTransPropType {
     ACCOUNT,
     DEPOSIT,
     WITHDRAWAL,
-    BALANCE,
     PRICE,
     MEMO,
     REC_STATE,
@@ -142,7 +141,7 @@ public:
         m_currency_format{currency_format}{};
     void set_property (GncTransPropType prop_type, const std::string& value);
     std::string verify_essentials (void);
-    boost::optional<gnc_numeric> create_split(Transaction* trans);
+    void create_split(Transaction* trans);
 
     Account* get_account () { if (m_account) return *m_account; else return nullptr; }
     void set_account (Account* acct) { if (acct) m_account = acct; else m_account = boost::none; }
@@ -154,7 +153,6 @@ private:
     boost::optional<Account*> m_account;
     boost::optional<gnc_numeric> m_deposit;
     boost::optional<gnc_numeric> m_withdrawal;
-    boost::optional<gnc_numeric> m_balance;
     boost::optional<gnc_numeric> m_price;
     boost::optional<std::string> m_memo;
     boost::optional<char> m_rec_state;
