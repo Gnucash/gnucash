@@ -229,25 +229,21 @@ csv_import_trans_load_settings (CsvImportTrans *info)
     }
 
     // Set start row
-    info->parse_data->skip_start_lines = info->settings_data.header_rows;
     GtkAdjustment *adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(info->start_row_spin));
     gtk_adjustment_set_upper (adj, info->parse_data->parsed_lines.size());
     gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->start_row_spin),
             info->settings_data.header_rows);
 
     // Set end row
-    info->parse_data->skip_end_lines = info->settings_data.footer_rows;
     adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(info->end_row_spin));
     gtk_adjustment_set_upper (adj, info->parse_data->parsed_lines.size());
     gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->end_row_spin),
             info->settings_data.footer_rows);
 
     // Set Alternate rows
-    info->parse_data->skip_alt_lines = info->settings_data.skip_alt_rows;
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->skip_rows), info->settings_data.skip_alt_rows);
 
     // Set Multi-split indicator
-    info->parse_data->multi_split = info->settings_data.multi_split;
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->multi_split_cbutton), info->settings_data.multi_split);
 
     // Set Import Format
@@ -818,7 +814,9 @@ void csv_import_trans_multisplit_cb (GtkWidget *checkbox, gpointer user_data)
     CsvImportTrans *info = (CsvImportTrans*) user_data;
 
     /* Set the skip_alt_lines variable */
-    info->parse_data->multi_split = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(checkbox));
+    auto multi_split = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(checkbox));
+    info->parse_data->set_multi_split (multi_split);
+    gnc_csv_preview_update_assist (info);
 }
 
 
@@ -1289,7 +1287,7 @@ static void column_type_changed (GtkCellRenderer* renderer, gchar* path,
     g_object_get (renderer, "model", &model, "text-column", &textColumn, NULL);
     gtk_tree_model_get (model, new_text_iter,
             textColumn, &new_text,
-            1, &new_col_type,            // Invisible column in the combobox' model containing the colum type
+            1, &new_col_type,            // Invisible column in the combobox' model containing the column type
             -1);
 
     /* Get an iterator for the first (and only) row. */
@@ -1615,9 +1613,7 @@ bool get_list_of_accounts (CsvImportTrans* info, GtkTreeModel *store)
 }
 
 
-/* Loads the preview's data into its data treeview. not_empty is true
- * when the data treeview already contains data, false otherwise
- * (e.g. the first time this function is called on a preview).
+/* Loads the preview's data into its data treeview.
  *
  * @param info The data being previewed
  */
@@ -1717,11 +1713,17 @@ static void gnc_csv_preview_update_assist (CsvImportTrans* info)
     auto combostore = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_INT);
     for (auto col_type : gnc_csv_col_type_strs)
     {
-        GtkTreeIter iter;
-        gtk_list_store_append (combostore, &iter);
-        gtk_list_store_set (combostore, &iter, 0, _(col_type.second),
-                                               1, static_cast<int>(col_type.first),
-                                               -1);
+        /* Only add column types that make sense in
+         * the chosen import mode (multi-split vs two-split).
+         */
+        if (sanitize_trans_prop(col_type.first, info->parse_data->multi_split) == col_type.first)
+        {
+            GtkTreeIter iter;
+            gtk_list_store_append (combostore, &iter);
+            gtk_list_store_set (combostore, &iter, 0, _(col_type.second),
+                                                   1, static_cast<int>(col_type.first),
+                                                   -1);
+        }
     }
 
     /* Insert columns into the data and column type treeviews. */

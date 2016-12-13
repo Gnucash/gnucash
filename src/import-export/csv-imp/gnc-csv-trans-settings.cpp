@@ -57,6 +57,7 @@ const std::string no_settings{N_("No Settings")};
 #define CSV_COL_TYPES    "ColumnTypes"
 #define CSV_COL_WIDTHS   "ColumnWidths"
 
+G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 
 /**************************************************
  * find
@@ -200,7 +201,16 @@ CsvTransSettings::load (const std::string& group)
         auto col_types_it = std::find_if (gnc_csv_col_type_strs.begin(),
                 gnc_csv_col_type_strs.end(), test_prop_type_str (col_types_str[i]));
         if (col_types_it != gnc_csv_col_type_strs.end())
-            column_types.push_back(col_types_it->first);
+        {
+            /* Found a valid column type. Now check whether it is allowed
+             * in the selected mode (two-split vs multi-split) */
+            auto prop = sanitize_trans_prop (col_types_it->first, multi_split);
+                column_types.push_back(prop);
+            if (prop != col_types_it->first)
+                PWARN("Found column type '%s', but this is blacklisted when multi-split mode is %s. "
+                        "Inserting column type 'NONE' instead'.",
+                        col_types_it->second, multi_split ? "enabled" : "disabled");
+        }
     }
     if (col_types_str)
         g_strfreev (col_types_str);

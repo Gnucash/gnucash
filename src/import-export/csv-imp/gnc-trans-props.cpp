@@ -70,6 +70,29 @@ std::map<GncTransPropType, const char*> gnc_csv_col_type_strs = {
         { GncTransPropType::TREC_DATE, N_("Transfer Reconcile Date") }
 };
 
+/* Below two vectors define which properties the user *can't* select
+ * in two-split or multi-split mode (mostly because they don't make
+ * sense in that context).
+ */
+std::vector<GncTransPropType> twosplit_blacklist = {
+        GncTransPropType::UNIQUE_ID };
+std::vector<GncTransPropType> multisplit_blacklist = {
+        GncTransPropType::TACTION,
+        GncTransPropType::TACCOUNT,
+        GncTransPropType::TMEMO,
+        GncTransPropType::TREC_STATE,
+        GncTransPropType::TREC_DATE
+};
+
+GncTransPropType sanitize_trans_prop (GncTransPropType prop, bool multi_split)
+{
+    auto bl = multi_split ? multisplit_blacklist : twosplit_blacklist;
+    if (std::find(bl.begin(), bl.end(), prop) == bl.end())
+        return prop;
+    else
+        return GncTransPropType::NONE;
+}
+
 /* Regular expressions used to parse dates per date format */
 const char* date_regex[] = {
                              "(?:"                                   // either y-m-d

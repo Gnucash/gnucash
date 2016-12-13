@@ -57,7 +57,6 @@ const gchar* currency_format_user[] = {N_("Locale"),
                                       };
 
 
-
 /** Constructor for GncTxImport.
  * @return Pointer to a new GncCSvParseData
  */
@@ -130,6 +129,24 @@ void GncTxImport::convert_encoding (const std::string& encoding)
     // TODO investigate if we can catch conversion errors and report them
     if (tokenizer)
         tokenizer->encoding(encoding);
+}
+
+/** Toggles the multi-split state of the importer and will subsequently
+ *  sanitize the column_types list. All types that don't make sense
+ *  in the new state are reset to type GncTransPropType::NONE.
+ * @param multi_split_val Boolean value with desired state (multi-split
+ * vs two-split).
+ */
+void GncTxImport::set_multi_split (bool multi_split_val)
+{
+    multi_split = multi_split_val;
+    for (auto col_it = column_types.begin(); col_it != column_types.end();
+            col_it++)
+    {
+        auto san_prop = sanitize_trans_prop (*col_it, multi_split);
+        if (san_prop != *col_it)
+            *col_it = san_prop;
+    }
 }
 
 /** Loads a file into a GncTxImport. This is the first function
