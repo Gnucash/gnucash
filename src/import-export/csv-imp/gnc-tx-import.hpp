@@ -98,6 +98,8 @@ public:
     void load_file (const std::string& filename);
     void convert_encoding (const std::string& encoding);
 
+    void set_multi_split (bool multi_split_val);
+
     void tokenize (bool guessColTypes);
 
     /** This function will attempt to convert all tokenized lines into

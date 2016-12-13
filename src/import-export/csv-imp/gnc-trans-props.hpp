@@ -79,7 +79,6 @@ enum class GncTransPropType {
  *  changes to enum class GncTransPropType ! */
 extern std::map<GncTransPropType, const char*> gnc_csv_col_type_strs;
 
-
 /** Functor to check if the above map has an element of which
  *  the value equals name. To be used with std::find_if.
  */
@@ -93,6 +92,15 @@ struct test_prop_type_str
 private:
     const char *m_name;
 };
+
+/** Some properties only make sense in a multi-split context.
+ *  Inversely some also only make sense in a two-split context.
+ *  Below function will test a property against a given context
+ *  and will return that property if it makes sense
+ *  or GncTransPropType::NONE if not.
+ */
+GncTransPropType sanitize_trans_prop (GncTransPropType prop, bool multi_split);
+
 
 time64 parse_date (const std::string &date_str, int format);
 
