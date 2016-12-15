@@ -2100,6 +2100,26 @@ gnc_commodity_is_currency(const gnc_commodity *cm)
  * list commodities in a give namespace
  ********************************************************************/
 
+static CommodityList*
+commodity_table_get_all_noncurrency_commodities(const gnc_commodity_table* table)
+{
+    GList *node = NULL, *nslist = gnc_commodity_table_get_namespaces(table);
+    CommodityList *retval = NULL;
+    for (node = nslist; node; node=g_list_next(node))
+    {
+        gnc_commodity_namespace *ns = NULL;
+        if (g_strcmp0((char*)(node->data), GNC_COMMODITY_NS_CURRENCY) == 0
+            || g_strcmp0((char*)(node->data), "template") == 0)
+            continue;
+        ns = gnc_commodity_table_find_namespace(table, (char*)(node->data));
+        if (!ns)
+            continue;
+            retval = g_list_concat(g_hash_table_values(ns->cm_table), retval);
+    }
+    g_list_free(nslist);
+    return retval;
+}
+
 CommodityList *
 gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
                                     const char * name_space)
@@ -2108,7 +2128,8 @@ gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
 
     if (!table)
         return NULL;
-
+    if (g_strcmp0(name_space, GNC_COMMODITY_NS_NONCURRENCY) == 0)
+        return commodity_table_get_all_noncurrency_commodities(table);
     ns = gnc_commodity_table_find_namespace(table, name_space);
     if (!ns)
         return NULL;

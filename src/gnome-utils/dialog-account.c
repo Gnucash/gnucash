@@ -188,7 +188,7 @@ gnc_account_commodity_from_type (AccountWindow * aw, gboolean update)
     if (aw->type == ACCT_TYPE_TRADING)
         new_mode = DIAG_COMM_ALL;
     else if ((aw->type == ACCT_TYPE_STOCK) || (aw->type == ACCT_TYPE_MUTUAL))
-        new_mode = DIAG_COMM_NON_CURRENCY;
+        new_mode = DIAG_COMM_NON_CURRENCY_SELECT;
     else
         new_mode = DIAG_COMM_CURRENCY;
 

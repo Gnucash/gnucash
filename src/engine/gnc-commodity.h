@@ -104,6 +104,7 @@ GType gnc_commodity_namespace_get_type(void);
 #define GNC_COMMODITY_NS_MUTUAL "FUND"
 #define GNC_COMMODITY_NS_AMEX   "AMEX"
 #define GNC_COMMODITY_NS_ASX    "ASX"
+#define GNC_COMMODITY_NS_NONCURRENCY _("ALL NON-CURRENCY")
 
 typedef GList CommodityList;
 
