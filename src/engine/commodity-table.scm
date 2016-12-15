@@ -25,7 +25,7 @@
 
 
 
-(define GNC_COMMODITY_NS_CURRENCY "CURRENCY")
+(define GNC_COMMODITY_NS_CURRENCY (gettext "CURRENCY"))
 
 ;; If you change the C side, change this too.
 (define GNC_COMMODITY_NS_AMEX "AMEX")

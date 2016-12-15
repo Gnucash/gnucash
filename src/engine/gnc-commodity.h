@@ -97,7 +97,7 @@ GType gnc_commodity_namespace_get_type(void);
 #define GNC_COMMODITY_NS_LEGACY "GNC_LEGACY_CURRENCIES"
 /* The ISO define is deprecated in favor of CURRENCY */
 #define GNC_COMMODITY_NS_ISO    "ISO4217"
-#define GNC_COMMODITY_NS_CURRENCY "CURRENCY"
+#define GNC_COMMODITY_NS_CURRENCY _("CURRENCY")
 #define GNC_COMMODITY_NS_NASDAQ "NASDAQ"
 #define GNC_COMMODITY_NS_NYSE   "NYSE"
 #define GNC_COMMODITY_NS_EUREX  "EUREX"
