@@ -51,6 +51,7 @@ extern "C"
 #include "import-account-matcher.h"
 #include "import-main-matcher.h"
 #include "gnc-csv-account-map.h"
+#include "gnc-account-sel.h"
 
 #include "gnc-csv-gnumeric-popup.h"
 #include "go-charmap-sel.h"
@@ -85,6 +86,7 @@ typedef struct
     GtkWidget       *settings_combo;                /**< The Settings Combo */
     GtkWidget       *save_button;                   /**< The Save Settings button */
     GtkWidget       *del_button;                    /**< The Delete Settings button */
+    GtkWidget       *acct_selector;                 /**< The Account selector */
     GtkWidget       *combo_hbox;                    /**< The Settings Combo hbox */
     GtkWidget       *check_butt;                    /**< The widget for the check label button */
     GtkWidget       *start_row_spin;                /**< The widget for the start row spinner */
@@ -170,6 +172,7 @@ void csv_import_trans_save_settings_cb (GtkWidget *button, CsvImportTrans *info)
 void csv_import_trans_changed_settings_cb (GtkWidget *combo, CsvImportTrans *info);
 void csv_import_trans_changed_settings_text_cb (GtkWidget *entry, CsvImportTrans *info);
 void sep_button_clicked (GtkWidget* widget, CsvImportTrans* info);
+void account_selected_cb (GtkWidget* widget, CsvImportTrans* info);
 }
 
 void csv_import_trans_assistant_start_page_prepare (GtkAssistant *gtkassistant, gpointer user_data);
@@ -351,6 +354,16 @@ csv_import_trans_load_settings (CsvImportTrans *info)
                         2 * i, _(gnc_csv_col_type_strs[col_type]),
                         2 * i + 1, col_type,
                         -1);
+    }
+
+    /* The user can't both select a base account and an account column.
+     * So now the column_types vector is updated also update the base account
+     * selector's availability.
+     */
+    if (info->parse_data->check_for_column_type(GncTransPropType::ACCOUNT))
+    {
+        gnc_account_sel_set_account(GNC_ACCOUNT_SEL(info->acct_selector), nullptr, false);
+        info->parse_data->set_base_account(nullptr);
     }
 }
 
@@ -911,6 +924,16 @@ void sep_button_clicked (GtkWidget* widget, CsvImportTrans* info)
     row_selection_update (info);
 }
 
+void account_selected_cb (GtkWidget* widget, CsvImportTrans* info)
+{
+
+    auto acct = gnc_account_sel_get_account( GNC_ACCOUNT_SEL(widget) );
+    info->parse_data->set_base_account(acct);
+    /* Update the preview. */
+    gnc_csv_preview_update_assist (info);
+}
+
+
 
 /** Event handler for clicking one of the format type radio
  * buttons. This occurs if the format (Fixed-Width or CSV) is changed.
@@ -1313,6 +1336,7 @@ static void column_type_changed (GtkCellRenderer* renderer, gchar* path,
                         2 * i, _(gnc_csv_col_type_strs[GncTransPropType::NONE]),
                         2 * i + 1, GncTransPropType::NONE,
                         -1);
+                info->parse_data->column_types.at(i) = GncTransPropType::NONE;
             }
         }
         else /* If this is the column that was changed ... */
@@ -1324,7 +1348,18 @@ static void column_type_changed (GtkCellRenderer* renderer, gchar* path,
                     2 * i, new_text,
                     2 * i + 1, new_col_type,
                     -1);
+            info->parse_data->column_types.at(i) = new_col_type;
         }
+    }
+
+    /* The user can't both select a base account and an account column.
+     * So now the column_types vector is updated also update the base account
+     * selector's availability.
+     */
+    if (info->parse_data->check_for_column_type(GncTransPropType::ACCOUNT))
+    {
+        gnc_account_sel_set_account(GNC_ACCOUNT_SEL(info->acct_selector), nullptr, false);
+        info->parse_data->set_base_account(nullptr);
     }
 }
 
@@ -1426,9 +1461,6 @@ bool preview_settings_valid (CsvImportTrans* info)
          * So ctstore looks like:
          * col_type_str 0, col_type, col_type_str 1, col_type 1, ..., col_type_str ncols, col_type ncols. */
         gtk_tree_model_get (ctstore, &iter1, 2 * i + 1, &col_type, -1);
-
-        /* Set the column_types array appropriately*/
-        info->parse_data->column_types[i] = col_type;
 
         switch (col_type)
         {
@@ -2803,6 +2835,16 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
         info->custom_entry = (GtkEntry*)GTK_WIDGET(gtk_builder_get_object (builder, "custom_entry"));
         g_signal_connect (G_OBJECT(info->custom_entry), "changed",
                          G_CALLBACK(sep_button_clicked), (gpointer)info);
+
+        /* Add account selection widget */
+        info->acct_selector = gnc_account_sel_new();
+        auto account_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "account_hbox"));
+        gtk_box_pack_start (GTK_BOX(account_hbox), info->acct_selector, TRUE, TRUE, 6);
+        gtk_widget_show (info->acct_selector);
+
+
+        g_signal_connect(G_OBJECT(info->acct_selector), "account_sel_changed",
+                         G_CALLBACK(account_selected_cb), (gpointer)info);
 
 
         /* Create the encoding selector widget and add it to the assistant */
