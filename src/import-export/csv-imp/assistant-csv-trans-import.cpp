@@ -1779,6 +1779,9 @@ static void gnc_csv_preview_update_assist (CsvImportTrans* info)
     gtk_widget_show_all (GTK_WIDGET(info->treeview));
     gtk_widget_show_all (GTK_WIDGET(info->ctreeview));
 
+    /* Update skipped lines visual feedback */
+    row_selection_update (info);
+
     /* Set the encoding selector to the right encoding. */
     info->code_encoding_calls = 2;
     go_charmap_sel_set_encoding (info->encselector, info->parse_data->tokenizer->encoding().c_str());
