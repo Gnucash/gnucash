@@ -147,6 +147,32 @@ void GncTxImport::set_multi_split (bool multi_split_val)
         if (san_prop != *col_it)
             *col_it = san_prop;
     }
+    if (multi_split)
+        base_account = nullptr;
+}
+
+/** Sets a base account. This is the account all import data relates to.
+ *  As such at least one split of each transaction that will be generated
+ *  will be in this account.
+ *  When a base account is set, there can't be an account column selected
+ *  in the import data.
+ *  In multi-split mode the user has to select an account column so in
+ *  that mode the base_account can't be set.
+ * @param base_acct Pointer to an account or NULL.
+ */
+void GncTxImport::set_base_account (Account* base_acct)
+{
+    if (multi_split)
+        return;
+
+    base_account = base_acct;
+
+    if (base_account)
+    {
+        auto col_type = std::find (column_types.begin(), column_types.end(), GncTransPropType::ACCOUNT);
+        if (col_type != column_types.end())
+            *col_type = GncTransPropType::NONE;
+    }
 }
 
 /** Loads a file into a GncTxImport. This is the first function
@@ -350,6 +376,7 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
             PINFO("User warning: %s", error_message.c_str());
         }
     }
+    std::get<2>(*parsed_line) = trans_props;
 
     /* For multi-split input data, we need to check whether this line is part of a transaction that
      * has already be started by a previous line. */
@@ -370,7 +397,6 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
         }
         else
         {
-            std::get<2>(*parsed_line) = trans_props;
             /* This line starts a new transaction, set it as parent for
              * subsequent lines. */
             parent = trans_props;
@@ -428,8 +454,7 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
  * @param account Account with which transactions are created
  * @param redo_errors true to convert only error data, false to convert all data
  */
-void GncTxImport::create_transactions (Account* account,
-                                       bool redo_errors)
+void GncTxImport::create_transactions (bool redo_errors)
 {
     /* If a full conversion is requested (as opposed to only
      * attempting to convers the lines which had errors in the previous run)
@@ -451,7 +476,6 @@ void GncTxImport::create_transactions (Account* account,
     auto parsed_lines_max = parsed_lines.begin();
     std::advance(parsed_lines_max, parsed_lines.size() - skip_end_lines);
 
-    base_account = account;
     auto odd_line = false;
     parse_errors = false;
     parent = nullptr;

@@ -274,6 +274,10 @@ CsvTransSettings::load (void)
                         "Inserting column type 'NONE' instead'.",
                         col_types_it->second, multi_split ? "enabled" : "disabled");
         }
+        else
+            PWARN("Found invalid column type '%s'. Inserting column type 'NONE' instead'.",
+                    col_types_str[i]);
+
     }
     if (col_types_str)
         g_strfreev (col_types_str);

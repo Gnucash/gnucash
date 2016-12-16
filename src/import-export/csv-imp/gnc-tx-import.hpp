@@ -99,13 +99,14 @@ public:
     void convert_encoding (const std::string& encoding);
 
     void set_multi_split (bool multi_split_val);
+    void set_base_account (Account *base_acct);
 
     void tokenize (bool guessColTypes);
 
     /** This function will attempt to convert all tokenized lines into
      *  transactions using the column types the user has set.
      */
-    void create_transactions (Account* account, bool redo_errors);
+    void create_transactions (bool redo_errors);
     bool check_for_column_type (GncTransPropType type);
 
     std::unique_ptr<GncTokenizer> tokenizer;    /**< Will handle file loading/encoding conversion/splitting into fields */
