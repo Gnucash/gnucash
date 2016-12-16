@@ -2729,21 +2729,10 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
 
     /* Preview Settings Page */
     {
-        const char* sep_button_names[] = {"space_cbutton",
-                                          "tab_cbutton",
-                                          "comma_cbutton",
-                                          "colon_cbutton",
-                                          "semicolon_cbutton",
-                                          "hyphen_cbutton"
-        };
-        GtkContainer *date_format_container, *currency_format_container, *encoding_container;
-        int           i;
-        GtkListStore *settings_store;
-
         info->preview_page = GTK_WIDGET(gtk_builder_get_object (builder, "preview_page"));
 
         // Add Settings combo
-        settings_store = gtk_list_store_new (2, G_TYPE_POINTER, G_TYPE_STRING);
+        auto settings_store = gtk_list_store_new (2, G_TYPE_POINTER, G_TYPE_STRING);
         info->settings_combo = gtk_combo_box_new_with_model_and_entry (GTK_TREE_MODEL(settings_store));
         gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX(info->settings_combo), SET_NAME);
         gtk_combo_box_set_active (GTK_COMBO_BOX(info->settings_combo), 0);
@@ -2785,7 +2774,15 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
 
         /* Load the separator buttons from the glade builder file into the
          * info->sep_buttons array. */
-        for (i = 0; i < SEP_NUM_OF_TYPES; i++)
+        const char* sep_button_names[] = {
+                "space_cbutton",
+                "tab_cbutton",
+                "comma_cbutton",
+                "colon_cbutton",
+                "semicolon_cbutton",
+                "hyphen_cbutton"
+            };
+        for (int i = 0; i < SEP_NUM_OF_TYPES; i++)
         {
             info->sep_buttons[i]
                 = (GtkCheckButton*)GTK_WIDGET(gtk_builder_get_object (builder, sep_button_names[i]));
@@ -2814,7 +2811,7 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
         g_signal_connect (G_OBJECT(info->encselector), "charmap_changed",
                          G_CALLBACK(encoding_selected), (gpointer)info);
 
-        encoding_container = GTK_CONTAINER(gtk_builder_get_object (builder, "encoding_container"));
+        auto encoding_container = GTK_CONTAINER(gtk_builder_get_object (builder, "encoding_container"));
         gtk_container_add (encoding_container, GTK_WIDGET(info->encselector));
         gtk_widget_show_all (GTK_WIDGET(encoding_container));
 
@@ -2824,7 +2821,7 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
 
         /* Add in the date format combo box and hook it up to an event handler. */
         info->date_format_combo = GTK_COMBO_BOX_TEXT(gtk_combo_box_text_new());
-        for (i = 0; i < num_date_formats; i++)
+        for (int i = 0; i < num_date_formats; i++)
         {
             gtk_combo_box_text_append_text (info->date_format_combo, _(date_format_user[i]));
         }
@@ -2833,13 +2830,13 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
                          G_CALLBACK(date_format_selected), (gpointer)info);
 
         /* Add it to the assistant. */
-        date_format_container = GTK_CONTAINER(gtk_builder_get_object (builder, "date_format_container"));
+        auto date_format_container = GTK_CONTAINER(gtk_builder_get_object (builder, "date_format_container"));
         gtk_container_add (date_format_container, GTK_WIDGET(info->date_format_combo));
         gtk_widget_show_all (GTK_WIDGET(date_format_container));
 
         /* Add in the currency format combo box and hook it up to an event handler. */
         info->currency_format_combo = GTK_COMBO_BOX_TEXT(gtk_combo_box_text_new());
-        for (i = 0; i < num_currency_formats; i++)
+        for (int i = 0; i < num_currency_formats; i++)
         {
             gtk_combo_box_text_append_text (info->currency_format_combo, _(currency_format_user[i]));
         }
@@ -2849,7 +2846,7 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
                          G_CALLBACK(currency_format_selected), (gpointer)info);
 
         /* Add it to the assistant. */
-        currency_format_container = GTK_CONTAINER(gtk_builder_get_object (builder, "currency_format_container"));
+        auto currency_format_container = GTK_CONTAINER(gtk_builder_get_object (builder, "currency_format_container"));
         gtk_container_add (currency_format_container, GTK_WIDGET(info->currency_format_combo));
         gtk_widget_show_all (GTK_WIDGET(currency_format_container));
 
