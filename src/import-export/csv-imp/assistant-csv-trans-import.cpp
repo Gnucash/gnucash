@@ -95,7 +95,6 @@ typedef struct
     GtkWidget       *csv_button;                    /**< The widget for the CSV button */
     GtkWidget       *fixed_button;                  /**< The widget for the Fixed Width button */
     GtkWidget       *multi_split_cbutton;           /**< The widget for Multi-split */
-    int              home_account_number;           /**< The number of unique home account strings */
 
     GncTxImport     *parse_data;                    /**< The actual data we are previewing */
     GOCharmapSel    *encselector;                   /**< The widget for selecting the encoding */
@@ -120,11 +119,6 @@ typedef struct
     int              fixed_context_col;             /**< The number of the column whose the user has clicked */
     int              fixed_context_dx;              /**< The horizontal coordinate of the pixel in the header of the column
                                                        * the user has clicked */
-
-    GtkWidget            *account_page;             /**< Assistant account page widget, to be packed with account picker */
-    GtkWidget            *account_label;            /**< The account page label at bottom of page */
-    AccountPickerDialog  *account_picker;           /**< The AccountPickerDialog structure */
-    Account              *account;                  /**< Account returned by AccountPickerDialog */
 
     GtkWidget            *account_match_page;       /**< Assistant account matcher page widget */
     GtkWidget            *account_match_view;       /**< Assistant account matcher view widget */
@@ -178,7 +172,6 @@ void account_selected_cb (GtkWidget* widget, CsvImportTrans* info);
 void csv_import_trans_assistant_start_page_prepare (GtkAssistant *gtkassistant, gpointer user_data);
 void csv_import_trans_assistant_file_page_prepare (GtkAssistant *assistant, gpointer user_data);
 void csv_import_trans_assistant_preview_page_prepare (GtkAssistant *gtkassistant, gpointer user_data);
-void csv_import_trans_assistant_account_page_prepare (GtkAssistant *assistant, gpointer user_data);
 void csv_import_trans_assistant_account_match_page_prepare (GtkAssistant *assistant, gpointer user_data);
 void csv_import_trans_assistant_doc_page_prepare (GtkAssistant *assistant, gpointer user_data);
 void csv_import_trans_assistant_match_page_prepare (GtkAssistant *assistant, gpointer user_data);
@@ -1567,8 +1560,6 @@ bool get_list_of_accounts (CsvImportTrans* info, GtkTreeModel *store)
 {
     int      i, ncols = info->parse_data->column_types.size(); /* ncols is the number of columns in the data. */
     bool     have_accounts = false;
-    gint     home_account_number = 0;
-    gint     other_account_number = 0;
 
     /* ctstore contains the actual strings appearing in the column types treeview. */
     GtkTreeModel* ctstore = gtk_tree_view_get_model (info->ctreeview);
@@ -1611,11 +1602,6 @@ bool get_list_of_accounts (CsvImportTrans* info, GtkTreeModel *store)
                     // Append the entry
                     if (!check_for_duplicates (GTK_LIST_STORE(store), accstr))
                     {
-                        if (col_type == GncTransPropType::ACCOUNT) // Count the number of unique account strings
-                            home_account_number = home_account_number + 1;
-                        else
-                            other_account_number = other_account_number + 1;
-
                         gtk_list_store_append (GTK_LIST_STORE(store), &iter3);
                         gtk_list_store_set (GTK_LIST_STORE(store), &iter3, MAPPING_STRING, accstr,
                                             MAPPING_FULLPATH, _("No Linked Account"), MAPPING_ACCOUNT, NULL, -1);
@@ -1626,7 +1612,6 @@ bool get_list_of_accounts (CsvImportTrans* info, GtkTreeModel *store)
             }
         }
     }
-    info->home_account_number = home_account_number;
 
     return have_accounts;
 }
@@ -1821,6 +1806,17 @@ static void gnc_csv_preview_update_assist (CsvImportTrans* info)
     /* Set the date format to what's in the combo box (since we don't
      * necessarily know if this will always be the same). */
     info->parse_data->date_format = gtk_combo_box_get_active (GTK_COMBO_BOX(info->date_format_combo));
+
+    /* Set the upper limit of spin button to number of rows */
+    GtkAdjustment *adj;
+    adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(info->end_row_spin));
+    gtk_adjustment_set_upper (adj, info->parse_data->parsed_lines.size());
+    adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(info->start_row_spin));
+    gtk_adjustment_set_upper (adj, info->parse_data->parsed_lines.size());
+    if (gtk_adjustment_get_upper (adj) != info->parse_data->parsed_lines.size())
+
+    /* Update the row selection highlight */
+    row_selection_update (info);
 }
 
 
@@ -2009,73 +2005,11 @@ csv_import_trans_assistant_preview_page_prepare (GtkAssistant *assistant,
         // Load the account strings into the store
         store = gtk_tree_view_get_model (GTK_TREE_VIEW(info->account_match_view));
         gtk_list_store_clear (GTK_LIST_STORE(store)); // Clear list of accounts unless we are looking at errors
-        info->account = NULL; // Reset home account unless we are looking at errors
     }
 
     /* Load the data into the treeview. */
     gnc_csv_preview_update_assist (info);
 
-    /* Set the upper limit of spin button to number of rows */
-    GtkAdjustment *adj;
-    adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(info->end_row_spin));
-    gtk_adjustment_set_upper (adj, info->parse_data->parsed_lines.size());
-    adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(info->start_row_spin));
-    gtk_adjustment_set_upper (adj, info->parse_data->parsed_lines.size());
-    if (gtk_adjustment_get_upper (adj) != info->parse_data->parsed_lines.size())
-
-    /* Update the row selection highlight */
-    row_selection_update (info);
-}
-
-
-void
-csv_import_trans_assistant_account_page_prepare (GtkAssistant *assistant,
-        gpointer user_data)
-{
-    CsvImportTrans *info = (CsvImportTrans*) user_data;
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
-    gchar *text, *mtext;
-
-    info->settings_valid = preview_settings_valid (info);
-
-    if (!info->settings_valid && !info->skip_errors)
-    {
-        mtext = g_strdup_printf ("<span size=\"medium\" color=\"red\"><b>%s</b></span>", info->error_text.c_str());
-        gtk_label_set_markup (GTK_LABEL(info->account_label), mtext);
-        g_free (mtext);
-
-        // Disable the account picker when we have an error
-        gnc_import_account_assist_disable (info->account_picker, TRUE);
-        gtk_assistant_set_page_complete (assistant, page, FALSE);
-    }
-    else
-    {
-        // Check to see if we do not have an account column
-        if (!info->parse_data->check_for_column_type (GncTransPropType::ACCOUNT))
-        {
-            text = g_strdup_printf (gettext ("No Account column present, to select import account double click on the required account and then click Forward to proceed."));
-            mtext = g_strdup_printf ("<span size=\"medium\" color=\"red\"><b>%s</b></span>", text);
-            gtk_label_set_markup (GTK_LABEL(info->account_label), mtext);
-            g_free (mtext);
-            g_free (text);
-
-            // Enable the account picker, possibly after an error
-            gnc_import_account_assist_disable (info->account_picker, FALSE);
-            gtk_widget_set_sensitive (info->account_page, TRUE);
-
-            // Get account from picker, will be null to start but have value if we come back
-            info->account = gnc_import_account_assist_update (info->account_picker);
-
-            // If we have a valid account enable forward button
-            if (info->account == NULL)
-                gtk_assistant_set_page_complete (assistant, page, FALSE);
-            else
-                gtk_assistant_set_page_complete (assistant, page, TRUE);
-        }
-        else
-            gtk_assistant_set_page_complete (assistant, page, TRUE);
-    }
 }
 
 
@@ -2332,10 +2266,12 @@ csv_import_trans_assistant_account_match_page_prepare (GtkAssistant *assistant,
     }
     else
     {
-        GtkTreeModel *store;
+        auto store = gtk_tree_view_get_model (GTK_TREE_VIEW(info->account_match_view));
+
+        // Load the account strings into the store
+        get_list_of_accounts (info, store);
 
         // Match the account strings to the mappings
-        store = gtk_tree_view_get_model (GTK_TREE_VIEW(info->account_match_view));
         gnc_csv_account_map_load_mappings (store);
 
         text = g_strdup_printf (gettext ("To change mapping, Double Click on a row or select a row and press the button..."));
@@ -2491,46 +2427,15 @@ csv_import_trans_forward_page_func (gint current_page, gpointer user_data)
         case 2: //from preview page
             if (info->callcount == 1)
             {
-                GtkTreeModel *store;
-                bool          valid;
-
-                // Load the account strings into the store
-                store = gtk_tree_view_get_model (GTK_TREE_VIEW(info->account_match_view));
-                valid = get_list_of_accounts (info, store);
-
-                info->settings_valid = preview_settings_valid (info);
-
-                // Check to see if we have an account column
-                if (info->parse_data->check_for_column_type (GncTransPropType::ACCOUNT))
-                    next_page = 4;
-                else
-                    next_page = 3;
-
                 // Skip Errors set, goto to doc page
                 if (info->skip_errors)
-                    next_page = 5;
-
-                info->next_page = next_page;
-            }
-            else
-                next_page = info->next_page;
-            break;
-
-        case 3: //from account page
-            if (info->callcount == 1)
-            {
-                info->account = gnc_import_account_assist_update (info->account_picker);
-
+                    next_page = 4;
                 // Check to see if we have an account / other account columns
-                if (info->parse_data->check_for_column_type (GncTransPropType::ACCOUNT) ||
+                else if (info->parse_data->check_for_column_type (GncTransPropType::ACCOUNT) ||
                         info->parse_data->check_for_column_type (GncTransPropType::TACCOUNT))
-                    next_page = 4;
+                    next_page = 3;
                 else
-                    next_page = 5;
-
-                // Skip Errors set, goto to doc page
-                if (info->skip_errors)
-                    next_page = 5;
+                    next_page = 4;
 
                 info->next_page = next_page;
             }
@@ -2538,22 +2443,22 @@ csv_import_trans_forward_page_func (gint current_page, gpointer user_data)
                 next_page = info->next_page;
             break;
 
-        case 4: //from account match page
+        case 3: //from account match page
             if (info->callcount == 1)
             {
-                next_page = 5;
+                next_page = 4;
                 info->next_page = next_page;
             }
             else
                 next_page = info->next_page;
             break;
 
-        case 5: //from doc page
+        case 4: //from doc page
             if (info->callcount == 1)
             {
                 /* Create transactions from the parsed data, first time with false
                    Subsequent times with true */
-                    info->parse_data->create_transactions (info->account, info->match_parse_run);
+                    info->parse_data->create_transactions (info->match_parse_run);
 
                 /* if there are errors, we jump back to preview to correct */
                 if (info->parse_data->parse_errors && !info->skip_errors)
@@ -2562,7 +2467,7 @@ csv_import_trans_forward_page_func (gint current_page, gpointer user_data)
                     next_page = 2;
                 }
                 else
-                    next_page = 6;
+                    next_page = 5;
 
                 info->next_page = next_page;
             }
@@ -2570,20 +2475,20 @@ csv_import_trans_forward_page_func (gint current_page, gpointer user_data)
                 next_page = info->next_page;
             break;
 
-        case 6: //from match page
+        case 5: //from match page
+            if (info->callcount == 1)
+            {
+                next_page = 6;
+                info->next_page = next_page;
+            }
+            else
+                next_page = info->next_page;
+            break;
+
+        case 6: //from summary page
             if (info->callcount == 1)
             {
                 next_page = 7;
-                info->next_page = next_page;
-            }
-            else
-                next_page = info->next_page;
-            break;
-
-        case 7: //from summary page
-            if (info->callcount == 1)
-            {
-                next_page = 8;
                 info->next_page = next_page;
             }
             else
@@ -2612,8 +2517,6 @@ csv_import_trans_assistant_prepare (GtkAssistant *assistant, GtkWidget *page,
         csv_import_trans_assistant_file_page_prepare (assistant, user_data);
     else if (page == info->preview_page)
         csv_import_trans_assistant_preview_page_prepare (assistant, user_data);
-    else if (page == info->account_page)
-        csv_import_trans_assistant_account_page_prepare (assistant, user_data);
     else if (page == info->account_match_page)
         csv_import_trans_assistant_account_match_page_prepare (assistant, user_data);
     else if (page == info->doc_page)
@@ -2676,9 +2579,6 @@ csv_import_trans_close_handler (gpointer user_data)
     /* Free the memory we allocated. */
     if (!(info->parse_data == NULL))
         delete info->parse_data;
-
-    if (!(info->account_picker == NULL))
-        info->account_picker = NULL;
 
     if (!(info->gnc_csv_importer_gui == NULL))
         info->gnc_csv_importer_gui = NULL;
@@ -2908,12 +2808,6 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
          * set it initially to false. */
         info->encoding_selected_called = false;
     }
-
-    /* Account page */
-    /* Initialize the Account Picker and add to the Assistant */
-    info->account_page  = GTK_WIDGET(gtk_builder_get_object (builder, "account_page"));
-    info->account_picker = gnc_import_account_assist_setup (info->account_page);
-    info->account_label = GTK_WIDGET(gtk_builder_get_object (builder, "account_page_label"));
 
     /* Account Match Page */
     info->account_match_page  = GTK_WIDGET(gtk_builder_get_object (builder, "account_match_page"));
