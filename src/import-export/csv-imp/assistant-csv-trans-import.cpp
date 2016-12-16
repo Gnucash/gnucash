@@ -140,7 +140,6 @@ typedef struct
     bool                  new_book;                 /**< Are we importing into a new book?; if yes, call book options */
     int                   callcount;                /**< Number of times the assistant page forward function called */
     int                   next_page;                /**< The saved assistant next page number */
-    bool                  settings_valid;           /**< Are the settings valid */
 
 } CsvImportTrans;
 
@@ -179,9 +178,9 @@ void csv_import_trans_assistant_summary_page_prepare (GtkAssistant *assistant, g
 
 void csv_import_trans_load_settings (CsvImportTrans *info);
 
-static void gnc_csv_preview_update_assist (CsvImportTrans* info);
+void csv_import_refresh_preview_table (CsvImportTrans* info);
+void csv_import_validate_preview_settings (CsvImportTrans* info);
 void gnc_csv_reset_preview_setting (CsvImportTrans* info, bool block);
-bool preview_settings_valid (CsvImportTrans *info);
 bool get_list_of_accounts (CsvImportTrans* info, GtkTreeModel *store);
 
 /*************************************************************************/
@@ -308,7 +307,7 @@ csv_import_trans_load_settings (CsvImportTrans *info)
             fwtok->columns(preset->column_widths);
 
             info->parse_data->tokenize (false);
-            gnc_csv_preview_update_assist (info);
+            csv_import_refresh_preview_table (info);
         }
     }
     catch (std::range_error &e)
@@ -402,6 +401,7 @@ csv_import_trans_changed_settings_cb (GtkWidget *combo, CsvImportTrans *info)
 {
     csv_import_trans_load_settings (info);
     handle_save_del_sensitivity (combo, info);
+    csv_import_validate_preview_settings (info);
 }
 
 
@@ -755,6 +755,8 @@ void csv_import_trans_srow_cb (GtkWidget *spin, gpointer user_data)
 
     /* Refresh the row highlighting */
     row_selection_update (info);
+
+    csv_import_validate_preview_settings (info);
 }
 
 
@@ -778,6 +780,8 @@ void csv_import_trans_erow_cb (GtkWidget *spin, gpointer user_data)
 
     /* Refresh the row highlighting */
     row_selection_update (info);
+
+    csv_import_validate_preview_settings (info);
 }
 
 
@@ -794,6 +798,8 @@ void csv_import_trans_skip_errors_cb (GtkWidget *cb, gpointer user_data)
         info->skip_errors = true;
     else
         info->skip_errors = false;
+
+    csv_import_validate_preview_settings (info);
 }
 
 
@@ -809,7 +815,8 @@ void csv_import_trans_multisplit_cb (GtkWidget *checkbox, gpointer user_data)
     /* Set the skip_alt_lines variable */
     auto multi_split = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(checkbox));
     info->parse_data->set_multi_split (multi_split);
-    gnc_csv_preview_update_assist (info);
+    csv_import_refresh_preview_table (info);
+    csv_import_validate_preview_settings (info);
 }
 
 
@@ -827,6 +834,8 @@ void csv_import_trans_skiprows_cb (GtkWidget *checkbox, gpointer user_data)
 
     /* Refresh the row highlighting */
     row_selection_update (info);
+
+    csv_import_validate_preview_settings (info);
 }
 
 
@@ -911,10 +920,8 @@ void sep_button_clicked (GtkWidget* widget, CsvImportTrans* info)
     }
 
     /* If we parsed successfully, redisplay the data. */
-    gnc_csv_preview_update_assist (info);
-
-    /* Refresh the row highlighting */
-    row_selection_update (info);
+    csv_import_refresh_preview_table (info);
+    csv_import_validate_preview_settings (info);
 }
 
 void account_selected_cb (GtkWidget* widget, CsvImportTrans* info)
@@ -923,7 +930,9 @@ void account_selected_cb (GtkWidget* widget, CsvImportTrans* info)
     auto acct = gnc_account_sel_get_account( GNC_ACCOUNT_SEL(widget) );
     info->parse_data->set_base_account(acct);
     /* Update the preview. */
-    gnc_csv_preview_update_assist (info);
+    csv_import_refresh_preview_table (info);
+
+    csv_import_validate_preview_settings (info);
 }
 
 
@@ -961,10 +970,8 @@ static void separated_or_fixed_selected (GtkToggleButton* csv_button, CsvImportT
         info->parse_data->tokenize (false);
 
         /* Show the new data. */
-        gnc_csv_preview_update_assist (info);
-
-        /* Refresh the row highlighting */
-        row_selection_update (info);
+        csv_import_refresh_preview_table (info);
+        csv_import_validate_preview_settings (info);
     }
     catch (std::range_error &e)
     {
@@ -1020,10 +1027,8 @@ static void encoding_selected (GOCharmapSel* selector, const char* encoding,
             return;
         }
 
-        gnc_csv_preview_update_assist (info);
-
-        /* Refresh the row highlighting */
-        row_selection_update (info);
+        csv_import_refresh_preview_table (info);
+        csv_import_validate_preview_settings (info);
 
         info->encoding_selected_called = false;
     }
@@ -1041,6 +1046,8 @@ static void encoding_selected (GOCharmapSel* selector, const char* encoding,
 static void date_format_selected (GtkComboBoxText* format_selector, CsvImportTrans* info)
 {
     info->parse_data->date_format = gtk_combo_box_get_active (GTK_COMBO_BOX(format_selector));
+
+    csv_import_validate_preview_settings (info);
 }
 
 
@@ -1051,6 +1058,8 @@ static void date_format_selected (GtkComboBoxText* format_selector, CsvImportTra
 static void currency_format_selected (GtkComboBoxText* currency_selector, CsvImportTrans* info)
 {
     info->parse_data->currency_format = gtk_combo_box_get_active (GTK_COMBO_BOX(currency_selector));
+
+    csv_import_validate_preview_settings (info);
 }
 
 
@@ -1175,10 +1184,8 @@ fixed_context_menu_handler (GnumericPopupMenuElement const *element,
         gnc_error_dialog (NULL, "%s", e.what());
         return FALSE;
     }
-    gnc_csv_preview_update_assist (info);
-
-    /* Refresh the row highlighting */
-    row_selection_update (info);
+    csv_import_refresh_preview_table (info);
+    csv_import_validate_preview_settings (info);
     return TRUE;
 }
 static void
@@ -1354,6 +1361,8 @@ static void column_type_changed (GtkCellRenderer* renderer, gchar* path,
         gnc_account_sel_set_account(GNC_ACCOUNT_SEL(info->acct_selector), nullptr, false);
         info->parse_data->set_base_account(nullptr);
     }
+
+    csv_import_validate_preview_settings (info);
 }
 
 static void
@@ -1372,10 +1381,8 @@ split_column (CsvImportTrans* info, int col, int dx)
         gnc_error_dialog (NULL, "%s", e.what());
         return;
     }
-    gnc_csv_preview_update_assist (info);
-
-    /* Refresh the row highlighting */
-    row_selection_update (info);
+    csv_import_refresh_preview_table (info);
+    csv_import_validate_preview_settings (info);
 }
 
 
@@ -1416,103 +1423,6 @@ static void header_button_press_handler (GtkWidget* button, GdkEventButton* even
     {
         fixed_context_menu (info, event, col, (int)event->x - offset);
     }
-}
-
-
-/* Test for the required minimum number of columns selected and
- * a valid date format.
- * Returns true if we do or false if we don't.
- *
- * @param info The data being previewed
- */
-bool preview_settings_valid (CsvImportTrans* info)
-{
-    int i, ncols = info->parse_data->column_types.size(); /* ncols is the number of columns in the data. */
-    int weight = 0;
-    int oweight = 0;
-    bool valid = true;
-    /* ctstore contains the actual strings appearing in the column types treeview. */
-    GtkTreeModel* ctstore = gtk_tree_view_get_model (info->ctreeview);
-    /* datastore contains the actual strings appearing in the preview treeview. */
-    GtkTreeModel* datastore = gtk_tree_view_get_model (info->treeview);
-    GtkTreeIter iter1, iter2;
-    /* Get an iterator for the first (and only) row. */
-    gtk_tree_model_get_iter_first (ctstore, &iter1);
-
-    /* Get an iterator for the first required row in the data store. */
-    gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(datastore), &iter2, NULL, info->parse_data->skip_start_lines);
-
-    /* Go through each of the columns. */
-    for (i = 0; i < ncols; i++)
-    {
-        gchar* prevstr = NULL; /* The string in this column from datastore. */
-        auto col_type = GncTransPropType::NONE;
-        /* Get the column type. Store is arranged so that every two
-         * columns is a pair of
-         * - the column type as a user visible (translated) string
-         * - the internal type for this column
-         * So ctstore looks like:
-         * col_type_str 0, col_type, col_type_str 1, col_type 1, ..., col_type_str ncols, col_type ncols. */
-        gtk_tree_model_get (ctstore, &iter1, 2 * i + 1, &col_type, -1);
-
-        switch (col_type)
-        {
-        case GncTransPropType::DATE:
-            weight = weight + 1000;
-            gtk_tree_model_get (datastore, &iter2, i + 1, &prevstr, -1);
-
-            if (parse_date (prevstr, info->parse_data->date_format) == -1)
-                valid = false;
-            break;
-
-        case GncTransPropType::DESCRIPTION:
-            weight = weight + 100;
-            break;
-        case GncTransPropType::DEPOSIT:
-        case GncTransPropType::WITHDRAWAL:
-            weight = weight + 10;
-            break;
-
-        case GncTransPropType::NUM:
-        case GncTransPropType::NOTES:
-        case GncTransPropType::MEMO:
-            weight = weight + 1;
-            break;
-
-        case GncTransPropType::ACCOUNT:
-            weight = weight + 1;
-            break;
-
-        case GncTransPropType::TACCOUNT:
-            oweight = oweight + 100;
-            break;
-
-        case GncTransPropType::TMEMO:
-            oweight = oweight + 1;
-            break;
-        default:
-            break;
-        }
-
-        /* Free the type string created by gtk_tree_model_get() */
-        g_free (prevstr);
-    }
-
-    if ((oweight > 0) && (oweight < 99))
-    {
-        info->error_text = _("There are problems with the import settings!\nIf you have an Other Memo column "
-                             "you must have an Other Account column...");
-        return false;
-    }
-
-    if (weight < 1109 || !valid)
-    {
-        info->error_text = _("There are problems with the import settings!\nThe date format could be wrong "
-                             "or there are not enough columns set...");
-        return false;
-    }
-    else
-        return true;
 }
 
 
@@ -1621,7 +1531,7 @@ bool get_list_of_accounts (CsvImportTrans* info, GtkTreeModel *store)
  *
  * @param info The data being previewed
  */
-static void gnc_csv_preview_update_assist (CsvImportTrans* info)
+void csv_import_refresh_preview_table (CsvImportTrans* info)
 {
     /* ncols is the number of columns in the file data. */
     auto ncols = info->parse_data->column_types.size();
@@ -1817,6 +1727,17 @@ static void gnc_csv_preview_update_assist (CsvImportTrans* info)
 
     /* Update the row selection highlight */
     row_selection_update (info);
+
+}
+
+
+void csv_import_validate_preview_settings (CsvImportTrans* info)
+{
+    /* Allow the user to proceed only if there are no inconsistencies in the settings */
+    auto error_msg = info->parse_data->verify();
+    gtk_assistant_set_page_complete (GTK_ASSISTANT(info->window), info->preview_page, error_msg.empty());
+    gtk_label_set_text(GTK_LABEL(info->instructions_label), error_msg.c_str());
+    gtk_widget_set_visible (GTK_WIDGET(info->instructions_image), !error_msg.empty());
 }
 
 
@@ -2007,8 +1928,14 @@ csv_import_trans_assistant_preview_page_prepare (GtkAssistant *assistant,
         gtk_list_store_clear (GTK_LIST_STORE(store)); // Clear list of accounts unless we are looking at errors
     }
 
+    /* Disable the Forward Assistant Button */
+    auto num = gtk_assistant_get_current_page (assistant);
+    auto page = gtk_assistant_get_nth_page (assistant, num);
+    gtk_assistant_set_page_complete (assistant, page, false);
+
     /* Load the data into the treeview. */
-    gnc_csv_preview_update_assist (info);
+    csv_import_refresh_preview_table (info);
+    csv_import_validate_preview_settings (info);
 
 }
 
@@ -2251,45 +2178,29 @@ csv_import_trans_assistant_account_match_page_prepare (GtkAssistant *assistant,
     gint            num = gtk_assistant_get_current_page (assistant);
     gchar          *text, *mtext;
 
-    info->settings_valid = preview_settings_valid (info);
+    auto store = gtk_tree_view_get_model (GTK_TREE_VIEW(info->account_match_view));
 
-    if (!info->settings_valid && !info->skip_errors)
-    {
-        mtext = g_strdup_printf ("<span size=\"medium\" color=\"red\"><b>%s</b></span>", info->error_text.c_str());
-        gtk_label_set_markup (GTK_LABEL(info->account_match_label), mtext);
-        g_free (mtext);
+    // Load the account strings into the store
+    get_list_of_accounts (info, store);
 
-        // Disable the view when we have an error
-        gtk_widget_set_sensitive (info->account_match_view, FALSE);
-        gtk_widget_set_sensitive (info->account_match_btn, FALSE);
-        gtk_assistant_set_page_complete (assistant, info->account_match_page, FALSE);
-    }
+    // Match the account strings to the mappings
+    gnc_csv_account_map_load_mappings (store);
+
+    text = g_strdup_printf (gettext ("To change mapping, Double Click on a row or select a row and press the button..."));
+    mtext = g_strdup_printf ("<span size=\"medium\" color=\"red\"><b>%s</b></span>", text);
+    gtk_label_set_markup (GTK_LABEL(info->account_match_label), mtext);
+    g_free (mtext);
+    g_free (text);
+
+    // Enable the view, possibly after an error
+    gtk_widget_set_sensitive (info->account_match_view, TRUE);
+    gtk_widget_set_sensitive (info->account_match_btn, TRUE);
+
+    /* Enable the Forward Assistant Button */
+    if (import_account_check_all (store))
+       gtk_assistant_set_page_complete (assistant, info->account_match_page, TRUE);
     else
-    {
-        auto store = gtk_tree_view_get_model (GTK_TREE_VIEW(info->account_match_view));
-
-        // Load the account strings into the store
-        get_list_of_accounts (info, store);
-
-        // Match the account strings to the mappings
-        gnc_csv_account_map_load_mappings (store);
-
-        text = g_strdup_printf (gettext ("To change mapping, Double Click on a row or select a row and press the button..."));
-        mtext = g_strdup_printf ("<span size=\"medium\" color=\"red\"><b>%s</b></span>", text);
-        gtk_label_set_markup (GTK_LABEL(info->account_match_label), mtext);
-        g_free (mtext);
-        g_free (text);
-
-        // Enable the view, possibly after an error
-        gtk_widget_set_sensitive (info->account_match_view, TRUE);
-        gtk_widget_set_sensitive (info->account_match_btn, TRUE);
-
-        /* Enable the Forward Assistant Button */
-        if (import_account_check_all (store))
-           gtk_assistant_set_page_complete (assistant, info->account_match_page, TRUE);
-        else
-            gtk_assistant_set_page_complete (assistant, info->account_match_page, FALSE);
-    }
+        gtk_assistant_set_page_complete (assistant, info->account_match_page, FALSE);
 }
 
 
@@ -2621,9 +2532,6 @@ csv_import_trans_assistant_create (CsvImportTrans *info)
                                      FALSE);
     gtk_assistant_set_page_complete (GTK_ASSISTANT(window),
                                      GTK_WIDGET(gtk_builder_get_object (builder, "preview_page")),
-                                     TRUE);
-    gtk_assistant_set_page_complete (GTK_ASSISTANT(window),
-                                     GTK_WIDGET(gtk_builder_get_object (builder, "account_page")),
                                      FALSE);
     gtk_assistant_set_page_complete (GTK_ASSISTANT(window),
                                      GTK_WIDGET(gtk_builder_get_object (builder, "account_match_page")),

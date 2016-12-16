@@ -103,6 +103,8 @@ public:
 
     void tokenize (bool guessColTypes);
 
+    std::string verify(void);
+
     /** This function will attempt to convert all tokenized lines into
      *  transactions using the column types the user has set.
      */
