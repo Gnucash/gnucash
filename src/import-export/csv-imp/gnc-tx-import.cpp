@@ -245,6 +245,118 @@ void GncTxImport::tokenize (bool guessColTypes)
     }
 }
 
+/* Test for the required minimum number of columns selected and
+ * a valid date format.
+ * @return An empty string if all checks passed or the reason
+ *         verification failed otherwise.
+ */
+std::string GncTxImport::verify (void)
+{
+    auto newline = std::string();
+    auto error_text = std::string();
+
+    /* Check if the import file did actually contain any information */
+    if (parsed_lines.size() == 0)
+    {
+        error_text = _("No valid data found in the selected file. It may be empty or the selected encoding is wrong.");
+        return error_text;
+    }
+
+    /* Check if at least one line is selected for importing */
+    auto skip_alt_offset = skip_alt_lines ? 1 : 0;
+    if (skip_start_lines + skip_end_lines + skip_alt_offset >= parsed_lines.size())
+    {
+        error_text = _("No lines are selected for importing. Please reduce the number of lines to skip.");
+        return error_text;
+    }
+
+    /* Verify if a date column is selected and it's parsable.
+     */
+    if (!check_for_column_type(GncTransPropType::DATE))
+    {
+        error_text += newline + _("Please select a date column.");
+        newline = "\n";
+    }
+    else
+        /* Attempt to parse the date column for each selected line */
+        try
+        {
+            auto date_col = std::find(column_types.begin(),
+                    column_types.end(), GncTransPropType::DATE) -
+                            column_types.begin();
+            for (uint i = 0; i < parsed_lines.size(); i++)
+            {
+                if ((i < skip_start_lines) ||             // start rows to skip
+                    (i >= parsed_lines.size()
+                            - skip_end_lines) ||          // end rows to skip
+                    (((i - skip_start_lines) % 2 == 1) && // skip every second row...
+                     skip_alt_lines))                     // ...if requested
+                    continue;
+                else
+                {
+                    auto first_line = std::get<0>(parsed_lines[i]);
+                    auto date_str = first_line[date_col];
+                    if (!date_str.empty())
+                        parse_date (date_str, date_format);
+                }
+            }
+        }
+        catch (...)
+        {
+            error_text += newline + _("Not all dates could be parsed. Please verify your chosen date format or adjust the lines to skip.");
+            newline = "\n";
+        }
+
+    /* Verify if an account is selected either in the base account selector
+     * or via a column in the import data.
+     */
+    if (!check_for_column_type(GncTransPropType::ACCOUNT))
+    {
+        if (multi_split)
+        {
+            error_text += newline + _("Please select an account column.");
+            newline = "\n";
+        }
+        else if (!base_account)
+        {
+            error_text += newline + _("Please select an account column or set a base account in the Account field.");
+            newline = "\n";
+        }
+    }
+
+    /* Verify a description column is selected.
+     */
+    if (!check_for_column_type(GncTransPropType::DESCRIPTION))
+    {
+        error_text += newline + _("Please select a description column.");
+        newline = "\n";
+    }
+
+    /* Verify at least one amount column (deposit or withdrawal) column is selected.
+     */
+    if (!check_for_column_type(GncTransPropType::DEPOSIT) &&
+        !check_for_column_type(GncTransPropType::WITHDRAWAL))
+    {
+        error_text += newline + _("Please select a deposit or withdrawal column.");
+        newline = "\n";
+    }
+
+    /* Verify a transfer account is selected if any of the other transfer properties
+     * are selected.
+     */
+    if ((check_for_column_type(GncTransPropType::TACTION) ||
+         check_for_column_type(GncTransPropType::TMEMO) ||
+         check_for_column_type(GncTransPropType::TREC_STATE) ||
+         check_for_column_type(GncTransPropType::TREC_DATE)) &&
+        !check_for_column_type(GncTransPropType::TACCOUNT))
+    {
+        error_text += newline + _("Please select a transfer account column or remove the other transfer related columns.");
+        newline = "\n";
+    }
+
+    return error_text;
+}
+
 
 /** Checks whether the parsed line contains all essential properties.
  * Essential properties are
