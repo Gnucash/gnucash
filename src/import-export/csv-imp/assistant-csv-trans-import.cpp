@@ -336,16 +336,9 @@ csv_import_trans_load_settings (CsvImportTrans *info)
     GtkTreeModel *ctstore = gtk_tree_view_get_model (info->ctreeview);
     gtk_tree_model_get_iter_first (ctstore, &iter);
 
-    bool          error = false;
     for (uint i=0; i < preset->column_types.size() && i < info->parse_data->column_types.size(); i++)
     {
-        auto col_type = GncTransPropType::NONE;
-        auto saved_col_type = preset->column_types.at(i);
-
-        if (saved_col_type >= GncTransPropType::NONE &&
-            saved_col_type <= GncTransPropType::TMEMO)
-        {
-            col_type = saved_col_type;
+        auto col_type = preset->column_types.at(i);
             info->parse_data->column_types.at(i) = col_type;
             /* Set the column type. Store is arranged so that every two
              * columns is a pair of
@@ -358,13 +351,10 @@ csv_import_trans_load_settings (CsvImportTrans *info)
                         2 * i, _(gnc_csv_col_type_strs[col_type]),
                         2 * i + 1, col_type,
                         -1);
-        }
-        else
-            error = true;
     }
-    if (error)
-        gnc_error_dialog (NULL, "%s", _("There was a problem with the column types, please review."));
-}static void handle_save_del_sensitivity (GtkWidget* combo, CsvImportTrans *info)
+}
+
+static void handle_save_del_sensitivity (GtkWidget* combo, CsvImportTrans *info)
 {
     GtkTreeIter iter;
     auto can_delete = false;
