@@ -42,6 +42,7 @@ extern "C" {
 
 #include "gnc-tokenizer.hpp"
 #include "gnc-trans-props.hpp"
+#include "gnc-csv-trans-settings.hpp"
 
 
 /** This struct stores a possibly incomplete transaction
@@ -95,40 +96,60 @@ public:
     void file_format(GncImpFileFormat format);
     GncImpFileFormat file_format();
 
-    void load_file (const std::string& filename);
-    void convert_encoding (const std::string& encoding);
+    void multi_split (bool multi_split);
+    bool multi_split ();
 
-    void set_multi_split (bool multi_split_val);
-    void set_base_account (Account *base_acct);
+    void base_account (Account *base_account);
+    Account *base_account ();
+
+    void currency_format (int currency_format);
+    int currency_format ();
+
+    void date_format (int date_format);
+    int date_format ();
+
+    void encoding (const std::string& encoding);
+    std::string encoding ();
+
+    void skip_start_lines (uint num);
+    uint skip_start_lines ();
+
+    void skip_end_lines (uint num);
+    uint skip_end_lines ();
+
+    void skip_alt_lines (bool skip);
+    bool skip_alt_lines ();
+
+    void separators (std::string separators);
+    std::string separators ();
+
+    void settings (const CsvTransSettings& settings);
+    bool save_settings ();
+
+    void settings_name (std::string name);
+    std::string settings_name ();
+
+
+    void load_file (const std::string& filename);
 
     void tokenize (bool guessColTypes);
 
-    std::string verify(void);
+    std::string verify();
 
     /** This function will attempt to convert all tokenized lines into
      *  transactions using the column types the user has set.
      */
     void create_transactions (bool redo_errors);
     bool check_for_column_type (GncTransPropType type);
+    void set_column_type (uint position, GncTransPropType type);
+    std::vector<GncTransPropType> column_types ();
 
     std::unique_ptr<GncTokenizer> tokenizer;    /**< Will handle file loading/encoding conversion/splitting into fields */
     std::vector<parse_line_t> parsed_lines;     /**< source file parsed into a two-dimensional array of strings.
                                                      Per line also holds possible error messages and objects with extracted transaction
                                                      and split properties. */
-    std::vector<GncTransPropType> column_types; /**< Vector of values from the GncCsvColumnType enumeration */
     std::multimap <time64, std::shared_ptr<DraftTransaction>> transactions;  /**< map of transaction objects created
                                                      from parsed_lines and column_types, ordered by date */
-    int date_format;            /**< The format of the text in the date columns from date_format_internal. */
-    guint skip_start_lines;     /**< Number of lines to skip at the beginning of the parse data. */
-    guint skip_end_lines;       /**< Number of lines to skip at the end of the parse data. */
-    gboolean skip_alt_lines;         /**< Skip Alternate Rows from start row. */
-    bool multi_split;           /**< If false, each line in the import data defines exactly one transaction.
-                                     If true, a transaction can span multiple lines, with each line defining exactly one split.
-                                     In this case the first line should hold the transaction related details in
-                                     addition to the first split details. On each following line for the same
-                                     transaction the transaction related columns should be empty or have
-                                     the same value as the first line. */
-    int currency_format;        /**< The currency format, 0 for locale, 1 for comma dec and 2 for period */
     bool parse_errors;          /**< Indicates whether the last parse_to_trans run had any errors */
 
 private:
@@ -150,12 +171,12 @@ private:
      */
     std::shared_ptr<DraftTransaction> trans_properties_to_trans (std::vector<parse_line_t>::iterator& parsed_line);
 
-    GncImpFileFormat file_fmt = GncImpFileFormat::UNKNOWN;
+    struct CsvTranSettings;
+    CsvTransSettings m_settings;
 
-    /* The variables below are only used while creating
+    /* The parameters below are only used while creating
      * transactions. They keep state information during the conversion.
      */
-    Account *base_account = nullptr;
     std::shared_ptr<GncPreTrans> parent = nullptr;
     std::shared_ptr<DraftTransaction> current_draft = nullptr;
 };
