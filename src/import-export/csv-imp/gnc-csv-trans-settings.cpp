@@ -24,6 +24,7 @@
     @brief CSV Import Settings
     @author Copyright (c) 2014 Robert Fewell
 */
+
 #include "gnc-csv-trans-settings.hpp"
 
 extern "C"
@@ -33,7 +34,9 @@ extern "C"
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
+#include "Account.h"
 #include "gnc-state.h"
+#include "gnc-ui-util.h"
 }
 
 const std::string csv_group_prefix{"CSV - "};
@@ -41,22 +44,23 @@ const std::string no_settings{N_("No Settings")};
 const std::string gnc_exp{N_("GnuCash Export Format")};
 #define CSV_NAME         "Name"
 #define CSV_FORMAT       "CsvFormat"
-#define CSV_ALT_ROWS     "AltRows"
-#define CSV_SKIP_START   "SkipStartRows"
-#define CSV_SKIP_END     "SkipEndRows"
+#define CSV_SKIP_ALT     "SkipAltLines"
+#define CSV_SKIP_START   "SkipStartLines"
+#define CSV_SKIP_END     "SkipEndLines"
 #define CSV_MULTI_SPLIT  "MultiSplit"
 
-#define CSV_SEP          "Separator"
+#define CSV_SEP          "Separators"
 
 #define CSV_CUSTOM       "Custom"
 #define CSV_CUSTOM_ENTRY "CustomEntry"
 
-#define CSV_DATE         "DateActive"
-#define CSV_CURRENCY     "CurrencyActive"
+#define CSV_DATE         "DateFormat"
+#define CSV_CURRENCY     "CurrencyFormat"
 
 #define CSV_ENCODING     "Encoding"
 #define CSV_COL_TYPES    "ColumnTypes"
 #define CSV_COL_WIDTHS   "ColumnWidths"
+#define CSV_ACCOUNT      "BaseAccount"
 
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 
@@ -74,14 +78,12 @@ static std::shared_ptr<CsvTransSettings> create_int_gnc_exp_preset(void)
 {
     auto preset = std::make_shared<CsvTransSettings>();
     preset->name = gnc_exp;
-    preset->header_rows = 1;
+    preset->skip_start_lines = 1;
     preset->multi_split = true;
-
-    preset->separator[SEP_COMMA] = true;
 
     /* FIXME date and currency format should still be aligned with export format!
      * That's currently hard to do, because the export uses whatever the user
-     * had set as preference.
+     * had set as global preference.
     preset->date_active = 0;
     preset->currency_active = 0;
     */
@@ -205,45 +207,37 @@ CsvTransSettings::load (void)
     auto group = csv_group_prefix + name;
     auto keyfile = gnc_state_get_current ();
 
-    header_rows = g_key_file_get_integer (keyfile, group.c_str(), CSV_SKIP_START, &key_error);
+    skip_start_lines = g_key_file_get_integer (keyfile, group.c_str(), CSV_SKIP_START, &key_error);
     load_error |= handle_load_error (&key_error, group);
 
-    footer_rows = g_key_file_get_integer (keyfile, group.c_str(), CSV_SKIP_END, &key_error);
+    skip_end_lines = g_key_file_get_integer (keyfile, group.c_str(), CSV_SKIP_END, &key_error);
     load_error |= handle_load_error (&key_error, group);
 
-    skip_alt_rows = g_key_file_get_boolean (keyfile, group.c_str(), CSV_ALT_ROWS, &key_error);
+    skip_alt_lines = g_key_file_get_boolean (keyfile, group.c_str(), CSV_SKIP_ALT, &key_error);
     load_error |= handle_load_error (&key_error, group);
 
     multi_split = g_key_file_get_boolean (keyfile, group.c_str(), CSV_MULTI_SPLIT, &key_error);
     load_error |= handle_load_error (&key_error, group);
 
-    csv_format = g_key_file_get_boolean (keyfile, group.c_str(), CSV_FORMAT, &key_error);
+    auto csv_format = g_key_file_get_boolean (keyfile, group.c_str(), CSV_FORMAT, &key_error);
     if (key_error) csv_format = true; // default to true, but above command will return false in case of error
     load_error |= handle_load_error (&key_error, group);
+    if (csv_format)
+        file_format = GncImpFileFormat::CSV;
+    else
+        file_format = GncImpFileFormat::FIXED_WIDTH;
 
-    for (uint i = 0; i < SEP_NUM_OF_TYPES; i++)
-    {
-        gchar *sep;
-        sep = g_strdup_printf ("%s%d", CSV_SEP, i);
-        separator[i] = g_key_file_get_boolean (keyfile, group.c_str(), sep, &key_error);
-        load_error |= handle_load_error (&key_error, group);
-        g_free (sep);
-    }
-
-    custom = g_key_file_get_boolean (keyfile, group.c_str(), CSV_CUSTOM, &key_error);
-    load_error |= handle_load_error (&key_error, group);
-
-    gchar *key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_CUSTOM_ENTRY, &key_error);
+    gchar *key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_SEP, &key_error);
     if (key_char && *key_char != '\0')
-        custom_entry = key_char;
+        separators = key_char;
     load_error |= handle_load_error (&key_error, group);
     if (key_char)
         g_free (key_char);
 
-    date_active = g_key_file_get_integer (keyfile, group.c_str(), CSV_DATE, &key_error);
+    date_format = g_key_file_get_integer (keyfile, group.c_str(), CSV_DATE, &key_error);
     load_error |= handle_load_error (&key_error, group);
 
-    currency_active = g_key_file_get_integer (keyfile, group.c_str(), CSV_CURRENCY, &key_error);
+    currency_format = g_key_file_get_integer (keyfile, group.c_str(), CSV_CURRENCY, &key_error);
     load_error |= handle_load_error (&key_error, group);
 
     key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_ENCODING, &key_error);
@@ -251,6 +245,13 @@ CsvTransSettings::load (void)
         encoding = key_char;
     else
         "UTF-8";
+    load_error |= handle_load_error (&key_error, group);
+    if (key_char)
+        g_free (key_char);
+
+    key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_ACCOUNT, &key_error);
+    if (key_char && *key_char != '\0')
+        base_account = gnc_account_lookup_by_full_name (gnc_get_current_root_account(), key_char);
     load_error |= handle_load_error (&key_error, group);
     if (key_char)
         g_free (key_char);
@@ -321,24 +322,19 @@ CsvTransSettings::save (void)
     // Start Saving the settings
     g_key_file_set_string (keyfile, group.c_str(), CSV_NAME, name.c_str());
     g_key_file_set_boolean (keyfile, group.c_str(), CSV_MULTI_SPLIT, multi_split);
-    g_key_file_set_integer (keyfile, group.c_str(), CSV_SKIP_START, header_rows);
-    g_key_file_set_integer (keyfile, group.c_str(), CSV_SKIP_END, footer_rows);
-    g_key_file_set_boolean (keyfile, group.c_str(), CSV_ALT_ROWS, skip_alt_rows);
-    g_key_file_set_boolean (keyfile, group.c_str(), CSV_FORMAT, csv_format);
+    g_key_file_set_integer (keyfile, group.c_str(), CSV_SKIP_START, skip_start_lines);
+    g_key_file_set_integer (keyfile, group.c_str(), CSV_SKIP_END, skip_end_lines);
+    g_key_file_set_boolean (keyfile, group.c_str(), CSV_SKIP_ALT, skip_alt_lines);
+    g_key_file_set_boolean (keyfile, group.c_str(), CSV_FORMAT,
+        (file_format == GncImpFileFormat::CSV) ? true : false);
 
-    for (guint i = 0; i < SEP_NUM_OF_TYPES; i++)
-    {
-        gchar *sep;
-        sep = g_strdup_printf ("%s%d", CSV_SEP, i);
-        g_key_file_set_boolean (keyfile, group.c_str(), sep, separator[i]);
-        g_free (sep);
-    }
-
-    g_key_file_set_boolean (keyfile, group.c_str(), CSV_CUSTOM, custom);
-    g_key_file_set_string (keyfile, group.c_str(), CSV_CUSTOM_ENTRY, custom_entry.c_str());
-    g_key_file_set_integer (keyfile, group.c_str(), CSV_DATE, date_active);
-    g_key_file_set_integer (keyfile, group.c_str(), CSV_CURRENCY, currency_active);
+    g_key_file_set_string (keyfile, group.c_str(), CSV_SEP, separators.c_str());
+    g_key_file_set_integer (keyfile, group.c_str(), CSV_DATE, date_format);
+    g_key_file_set_integer (keyfile, group.c_str(), CSV_CURRENCY, currency_format);
     g_key_file_set_string (keyfile, group.c_str(), CSV_ENCODING, encoding.c_str());
+
+    if (base_account)
+        g_key_file_set_string (keyfile, group.c_str(), CSV_ACCOUNT, gnc_account_get_full_name(base_account));
 
     std::vector<const char*> col_types_str;
     for (auto col_type : column_types)
