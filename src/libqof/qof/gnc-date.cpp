@@ -1442,6 +1442,5 @@ gnc_date_load_funcs (void)
 {
     Testfuncs *tf = g_slice_new (Testfuncs);
     tf->timespec_normalize = timespec_normalize;
-    tf->timezone_new_local = gnc_g_time_zone_new_local;
     return tf;
 }
