@@ -19,7 +19,7 @@
 
 (define (test-account-get-trans-type-splits-interval)
   (let* ((env (create-test-env))
-         (ts-now (localtime (current-time)))
+         (ts-now (gnc-localtime (current-time)))
          (test-day (tm:mday ts-now))
          (test-month (+ 1 (tm:mon ts-now)))
          (test-year (+ 1900 (tm:year ts-now)))

@@ -186,7 +186,7 @@
     
     (gnc:options-add-price-source! 
      options pagename-commodities
-     optname-price-source "b" 'average-cost)
+     optname-price-source "b" 'pricedb-nearest)
     
     (add-option 
      (gnc:make-simple-boolean-option

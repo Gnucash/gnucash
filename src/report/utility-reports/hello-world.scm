@@ -273,12 +273,12 @@ option like this.")
     ;; these are samples of different date options. for a simple
     ;; date with day, month, and year but no time you should use
     ;; gnc-print-date
-    (let ((time-string (strftime "%X" (localtime (current-time))))
-          (date-string (strftime "%x" (localtime (car date-val))))
-          (date-string2 (strftime "%x %X" (localtime (car date2-val))))
-          (rel-date-string (strftime "%x" (localtime (car rel-date-val))))
+    (let ((time-string (strftime "%X" (gnc-localtime (current-time))))
+          (date-string (strftime "%x" (gnc-localtime (car date-val))))
+          (date-string2 (strftime "%x %X" (gnc-localtime (car date2-val))))
+          (rel-date-string (strftime "%x" (gnc-localtime (car rel-date-val))))
           (combo-date-string
-           (strftime "%x" (localtime (car combo-date-val)))))
+           (strftime "%x" (gnc-localtime (car combo-date-val)))))
 
       ;; Here's where we fill the report document with content.  We
       ;; do this by adding 'html objects' such as text, tables, and

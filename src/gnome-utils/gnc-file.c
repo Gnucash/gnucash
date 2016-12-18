@@ -174,12 +174,15 @@ gnc_file_dialog (const char * title,
     {
         /* look for constructs like postgres://foo */
         internal_name = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER (file_box));
-        if (strstr (internal_name, "file://") == internal_name)
+        if (internal_name != NULL)
         {
-            /* nope, a local file name */
-            internal_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (file_box));
+            if (strstr (internal_name, "file://") == internal_name)
+            {
+                /* nope, a local file name */
+                internal_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (file_box));
+            }
+            file_name = g_strdup(internal_name);
         }
-        file_name = g_strdup(internal_name);
     }
     gtk_widget_destroy(GTK_WIDGET(file_box));
     LEAVE("%s", file_name ? file_name : "(null)");
@@ -206,7 +209,12 @@ show_session_error (QofBackendError io_error,
     else if (! gnc_uri_is_file_uri (newfile)) /* Hide the db password in error messages */
         displayname = gnc_uri_normalize_uri ( newfile, FALSE);
     else
-        displayname = g_strdup (newfile);
+    {
+        /* Strip the protocol from the file name. */
+        char *uri = gnc_uri_normalize_uri(newfile, FALSE);
+        displayname = gnc_uri_get_path(uri);
+        g_free(uri);
+    }
 
     switch (io_error)
     {
@@ -366,7 +374,7 @@ show_session_error (QofBackendError io_error,
         }
         else
         {
-            fmt = _("The file %s could not be found.");
+            fmt = _("The file/URI %s could not be found.");
             gnc_error_dialog (parent, fmt, displayname);
         }
         break;

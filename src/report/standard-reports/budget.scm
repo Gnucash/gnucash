@@ -154,7 +154,7 @@
     ;; optname-from-date optname-to-date "a")
 
     (gnc:options-add-price-source!
-     options gnc:pagename-general optname-price-source "c" 'average-cost)
+     options gnc:pagename-general optname-price-source "c" 'pricedb-nearest)
 
     ;;(gnc:register-option
     ;; options

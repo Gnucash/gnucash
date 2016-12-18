@@ -659,9 +659,13 @@
    table
    (list
     (string-append label ":&nbsp;")
-    (string-expand (strftime date-format
-                             (localtime (car date)))
-                             #\space "&nbsp;")
+    ;; oli-custom - modified to display a custom format
+    ;; for the invoice date/due date fields
+    ;; I could have taken the format from the report options, but... ;)
+    (string-expand (strftime (gnc-default-strftime-date-format)
+                             (gnc-localtime (car date)))
+                   #\space "&nbsp;")
+    ;;(string-expand (gnc-print-date date) #\space "&nbsp;")
     )))
 
 (define (make-date-table)
@@ -729,6 +733,14 @@
 				     ""))
 		  #\newline "<br>" )
 		 (if url (string-append (_ "Web:") " " url) "")))
+
+;; oli-custom - I didn't want today's date on the invoice.
+;; The invoice already has a date.
+;; Today's date can be in the email, fax or letter accompanying the invoice.
+;;    (gnc:html-table-append-row! table (list
+;;				       (strftime
+;;					date-format
+;;					(gnc-localtime (car (gnc:get-today))))))
     table))
 
 (define (make-break! document)

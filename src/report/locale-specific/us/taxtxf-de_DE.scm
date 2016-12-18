@@ -101,7 +101,7 @@
     (set-tm:isdst result -1)
     result))
 
-(define tax-day (cons (car (mktime bdtm)) 0))
+(define tax-day (cons (gnc-mktime bdtm) 0))
 
 (define after-tax-day (gnc:timepair-later tax-day today))
 
@@ -322,10 +322,10 @@
         (let* ((type (xaccAccountGetType account))
                (code (gnc:account-get-txf-code account))
                (date-str (if date
-                             (strftime "%d.%m.%Y" (localtime (car date)))
+                             (strftime "%d.%m.%Y" (gnc-localtime (car date)))
                              #f))
                (x-date-str (if x-date
-                               (strftime "%d.%m.%Y" (localtime (car x-date)))
+                               (strftime "%d.%m.%Y" (gnc-localtime (car x-date)))
                                #f))
                ;; Only formats 1,3 implemented now! Others are treated as 1.
                (format (gnc:get-txf-format code (eq? type ACCT-TYPE-INCOME)))
@@ -410,7 +410,7 @@
 (define (render-level-x-account table level max-level account lx-value
                                 suppress-0 full-names txf-date)
   (let* ((account-name (if txf-date	; special split
-                           (strftime "%d.%m.%Y" (localtime (car txf-date)))
+                           (strftime "%d.%m.%Y" (gnc-localtime (car txf-date)))
                            (if (or full-names (equal? level 1))
                                (gnc-account-get-full-name account)
                                (xaccAccountGetName account))))
@@ -547,7 +547,7 @@
                               ((4th-est 4th-last) ; Oct 1
                                (set-tm:mon bdtm 9))))
                         (set-tm:isdst bdtm -1)
-                        (cons (car (mktime bdtm)) 0))))
+                        (cons (gnc-mktime bdtm) 0))))
 
          (to-value (gnc:timepair-end-day-time
                     (let ((bdtm from-date))
@@ -590,7 +590,7 @@
                             (else 
                              (set! bdtm (gnc:timepair->date to-value)))))
                       (set-tm:isdst bdtm -1)
-                      (cons (car (mktime bdtm)) 0))))
+                      (cons (gnc-mktime bdtm) 0))))
 
          (txf-feedback-str-lst '())
          (doc (gnc:make-html-document))
@@ -603,8 +603,8 @@
                (txf-special-split? (gnc:account-get-txf-code account)))
           (let* 
               ((full-year?
-                (let ((bdto (localtime (car to-value)))
-                      (bdfrom (localtime (car from-value))))
+                (let ((bdto (gnc-localtime (car to-value)))
+                      (bdfrom (gnc-localtime (car from-value))))
                   (and (equal? (tm:year bdto) (tm:year bdfrom))
                        (equal? (tm:mon bdfrom) 0)
                        (equal? (tm:mday bdfrom) 1)
@@ -619,7 +619,7 @@
                                (set-tm:mday bdtm 1) ; 01
                                (set-tm:mon bdtm 2) ; Mar
                                (set-tm:isdst bdtm -1)
-                               (cons (car (mktime bdtm)) 0))
+                               (cons (gnc-mktime bdtm) 0))
                              from-value))
                (to-est (if full-year?
                            (let* ((bdtm (gnc:timepair->date
@@ -629,7 +629,7 @@
                              (set-tm:mon bdtm 1) ; Feb
                              (set-tm:year bdtm (+ (tm:year bdtm) 1))
                              (set-tm:isdst bdtm -1)
-                             (cons (car (mktime bdtm)) 0))
+                             (cons (gnc-mktime bdtm) 0))
                            to-value)))
             (list from-est to-est full-year?))
           #f))
@@ -765,11 +765,11 @@
             ;; Ignore
             '())))
 
-    (let ((from-date  (strftime "%d.%m.%Y" (localtime (car from-value))))
-          (to-date    (strftime "%d.%m.%Y" (localtime (car to-value))))
-	  (to-year    (strftime "%Y" (localtime (car to-value))))
+    (let ((from-date  (strftime "%d.%m.%Y" (gnc-localtime (car from-value))))
+          (to-date    (strftime "%d.%m.%Y" (gnc-localtime (car to-value))))
+	  (to-year    (strftime "%Y" (gnc-localtime (car to-value))))
           (today-date (strftime "%d.%m.%Y" 
-                                (localtime 
+                                (gnc-localtime 
                                  (car (timespecCanonicalDayTime
                                        (cons (current-time) 0))))))
 	  (tax-nr (or

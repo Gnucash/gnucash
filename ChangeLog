@@ -1,10 +1,270 @@
+2016-12-17 John Ralls 
+
+	* Update Danish and Serbian translations from the Translation Project. (HEAD, maint)
+
+2016-12-17 Phil Davis 
+
+	* README typo (origin/maint)
+
+2016-12-13 John Ralls 
+
+	* Bug 775912 - Tips of the Day shows content only once very 3 times
+
+2016-12-11 John Ralls 
+
+	* Remove QIF importer error “Dates earlier than 1970 are not supported”.
+
+2016-12-11 John Ralls 
+
+	* Bug 685329 - Crashes on non-existent date
+
+2016-12-11 John Ralls 
+
+	* Bug 772369 - Replace use of guile's internal date/time functions
+
+2016-12-11 John Ralls 
+
+	* Bug 773808 - Export Report Crash
+
+2016-12-10 John Ralls 
+
+	* Bug 772484 - Segfault on Transaction edit
+
+2016-12-10 John Ralls 
+
+	* Bug 774237 - FTBFS under some timezones (eg. GMT-14)
+
+2016-12-09 John Ralls 
+
+	* Bug 775385 - Confusing error message which includes the text "file file"
+
+2016-12-09 John Ralls 
+
+	* Bug 775368 - "Average cost" price source problem
+
+2016-12-09 John Ralls 
+
+	* Change the default price-source from Average Cost to Nearest in Time.
+
+2016-12-09 John Ralls 
+
+	* Calculate rates only for buy transactions in the report commodity for cost totals.
+
+2016-12-04 John Ralls 
+
+	* Single functions for gnc:make-exchange-alist and gnc:get-exchange-totals.
+
+2016-12-01 John Ralls 
+
+	* Move checks for no split amount and trading accounts to get-match-commodity-splits.
+
+2016-12-01 John Ralls 
+
+	* Clean up whitespace in commodity-utilities.scm.
+
+2016-12-06 Ryan Tucker 
+
+	* fix missing chmod +x in configure.ac
+
+2016-12-04 John Ralls 
+
+	* Bug 775567 - Importing QIF file from PayPal crashes GnuCash 2.6.14 on Windows XP service pack 3
+
+2016-12-03 John Ralls 
+
+	* Prevent crash when there's an error loading a qif import file.
+
+2016-11-19 Robert Fewell 
+
+	* Bug 516920 Scheduled trasaction calendar popup off screen
+
+2016-11-30 Geert Janssens 
+
+	* Fix compiler warning about misleading indentation
+
+2016-11-28 Geert Janssens 
+
+	* Fix report html header
+
+2016-11-16 Robert Fewell 
+
+	* Changed the default value for date format
+
+2016-11-16 Robert Fewell 
+
+	* Fix check printing custom preference value
+
+2016-11-16 Robert Fewell 
+
+	* Correct the default options if default invalid
+
+2016-11-16 Robert Fewell 
+
+	* Add an unset option to date-format
+
+2016-11-15 Robert Fewell 
+
+	* Added a default currency to the currency option
+
+2016-11-15 Robert Fewell 
+
+	* Add plot size option for future compatibility
+
+2016-11-15 Robert Fewell 
+
+	* Fix warning from glib when saving reports.
+
+2016-11-15 Robert Fewell 
+
+	* Change report resizing when not in view
+
+2016-11-15 Robert Fewell 
+
+	* Forgot to add the png file to previous commit
+
+2016-11-15 Robert Fewell 
+
+	* Add an image for the report tab
+
+2016-11-15 Robert Fewell 
+
+	* Change the reload to include using web_view_reload
+
+2016-11-15 Robert Fewell 
+
+	* Track visibility of the view scroll bars
+
+2016-11-15 Robert Fewell 
+
+	* Add progress bar updates for reload / Update
+
+2016-11-15 Robert Fewell 
+
+	* Add call back to track page size changes
+
+2016-11-15 Robert Fewell 
+
+	* Stop the progress bar changing height
+
+2016-11-15 Robert Fewell 
+
+	* Add idle function to load report
+
+2016-11-15 Robert Fewell 
+
+	* Remove macros/as-scrub-include.m4 from makefile
+
+2016-11-13 Geert Janssens 
+
+	* Fix make check after commit 673888dee7c
+
+2016-11-12 Geert Janssens 
+
+	* Bug 770364 - Sign of Value in Lots in Account window seems inconsistent
+
+2016-11-12 Geert Janssens 
+
+	* Use G_MAXINT64 instead of 0 to indicate an invalid date
+
+2016-11-11 Geert Janssens 
+
+	* Show empty business splits in lot viewer
+
+2016-11-11 Geert Janssens 
+
+	* Check more splits while running check & repair on business accounts
+
+2016-11-11 Geert Janssens 
+
+	* Business check & repair - correct lot invoice state
+
+2016-11-09 Geert Janssens 
+
+	* Various small improvements to check & repair on business accounts
+
+2016-11-06 Geert Janssens 
+
+	* When juggling business splits while scrubbing set both value and amount
+
+2016-11-06 Geert Janssens 
+
+	* Update progress bar while running Check & Repair
+
+2016-11-09 Geert Janssens 
+
+	* Remove lot from account while deleting the lot
+
+2016-11-10 John Ralls 
+
+	* Ensure that the Namespace combo box is initialized to a valid iter.
+
+2016-10-24 John Ralls 
+
+	* Bug 769124 - Australian (GMT-10) OFX transactions imported have previous
+
+2016-10-20 John Ralls 
+
+	* Bug 769124 - Australian (GMT-10) OFX transactions imported have previous days date.
+
+2016-10-14 Rob.Gowin 
+
+	* Remove configuration of HAVE_PUTENV.
+
+2016-10-10 Geert Janssens 
+
+	* Bug 771617 - Build fails because test test-report-utilities is sensitive to time of day/timezone
+
+2016-10-10 Geert Janssens 
+
+	* Bug 771617 - Build fails because test test-report-utilities is sensitive to time of day/timezone
+
+2016-10-04 John Ralls 
+
+	* Fix CSV importer to handle GMT + 13 Timezone (New Zealand Daylight Time).
+
+2016-10-04 John Ralls 
+
+	* Bug 772382 - Date off-by-one after DST change
+
+2016-09-28 Ralf Habacker 
+
+	* Fix broken german account template 'Kontenrahmen für Wohnungswirtschaft'.
+
+2016-10-03 Geert Janssens 
+
+	* Bug 771617 - Build fails because test test-report-utilities is sensitive to time of day/timezone
+
+2016-10-02 Geert Janssens 
+
+	* Bug 772313 - Invalid DOCTYPE in report generation
+
+2016-09-27 Rob Gowin 
+
+	* Use default PKG_CHECK_MODULES for CMake version > 3.4
+
+2016-09-25 John Ralls 
+
+	* Remove obsolete AS_SCRUB_INCLUDES macro.
+
+2016-09-25 Mike Evans 
+
+	* Bug 771246 - Set Invoice/Bill items date correctly from imported CSV.
+
+2016-09-17 John Ralls 
+
+	* Fix version in CMakeLists.txt. (tag: 2.6.14a)
+
 2016-09-16 John Ralls 
 
-	* Synchronize translation project. (HEAD, maint)
+	* Release 2.6.14 (tag: 2.6.14)
+
+2016-09-16 John Ralls 
+
+	* Synchronize translation project.
 
 2016-09-15 John Ralls 
 
-	* Bug 769746 - Zero interest loan formula fails. (origin/maint)
+	* Bug 769746 - Zero interest loan formula fails.
 
 2016-08-01 Robert Fewell 
 

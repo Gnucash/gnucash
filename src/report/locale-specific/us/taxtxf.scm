@@ -132,7 +132,7 @@
     (set-tm:isdst result -1)
     result))
 
-(define tax-day (cons (car (mktime bdtm)) 0))
+(define tax-day (cons (gnc-mktime bdtm) 0))
 
 (define after-tax-day (gnc:timepair-later tax-day today))
 
@@ -552,10 +552,10 @@
     (if (and txf?
              (not (gnc-numeric-zero-p account-value)))
         (let* ((date-str (if date
-                             (strftime "%m/%d/%Y" (localtime (car date)))
+                             (strftime "%m/%d/%Y" (gnc-localtime (car date)))
                              #f))
                (x-date-str (if x-date
-                               (strftime "%m/%d/%Y" (localtime (car x-date)))
+                               (strftime "%m/%d/%Y" (gnc-localtime (car x-date)))
                                #f))
                ;; Only formats 1,3,4,6 implemented now! Others are treated as 1.
                (format (get-acct-txf-info 'format type code))
@@ -825,7 +825,7 @@
                                (string-append
                                  " on "
                                  (strftime "%Y-%b-%d"
-                                    (localtime (car pricedb-lookup-price-time)))
+                                    (gnc-localtime (car pricedb-lookup-price-time)))
                                  ")"
                                )
                                ""))
@@ -978,7 +978,7 @@
                                                     "Not Available"))
                                              (list (gnc:make-html-table-cell/markup
                                                     "text-cell-center"
-                                                  (strftime "%Y-%b-%d" (localtime
+                                                  (strftime "%Y-%b-%d" (gnc-localtime
                                                             (car trans-date)))))
                                              (list (gnc:make-html-table-cell/markup
                                                     "number-cell-bot"
@@ -1264,7 +1264,7 @@
                             ""
                             (string-append "Balance on "
                                          (strftime "%Y-%b-%d"
-                                            (localtime (car
+                                            (gnc-localtime (car
                                                (gnc:timepair-previous-day
                                                                   from-value))))
                                          (if (string=? curr-conv-note "")
@@ -1498,8 +1498,8 @@
                             (gnc:make-html-table-cell/markup
                                          "date-cell"
                                          (strftime "%Y-%b-%d"
-                                                 (localtime (car trans-date)))))
-                       (gnc:html-table-set-style! num-table "table"
+                                                 (gnc-localtime (car trans-date)))))
+                       (gnc:html-table-set-style! num-table "table" 
                                           'attribute (list "border" "0")
                                           'attribute (list "cellspacing" "0")
                                           'attribute (list "cellpadding" "0"))
@@ -1689,14 +1689,14 @@
                                     #f
                                     (if (txf-beg-bal-only? tax-code)
                                         (string-append "Balance on "
-                                           (strftime "%Y-%b-%d" (localtime (car
+                                           (strftime "%Y-%b-%d" (gnc-localtime (car
                                                 (gnc:timepair-previous-day
                                                                   from-value))))
                                            " For "
                                         )
                                         (string-append "Balance on "
                                            (strftime "%Y-%b-%d"
-                                                     (localtime (car to-value)))
+                                                     (gnc-localtime (car to-value)))
                                            " For "
                                         )
                                     )
@@ -2121,7 +2121,7 @@
                               ((4th-est 4th-last) ; Oct 1
                                (set-tm:mon bdtm 9))))
                         (set-tm:isdst bdtm -1)
-                        (cons (car (mktime bdtm)) 0))))
+                        (cons (gnc-mktime bdtm) 0))))
 
          (to-value (gnc:timepair-end-day-time
                     (let ((bdtm from-date))
@@ -2165,7 +2165,7 @@
                             (else
                              (set! bdtm (gnc:timepair->date to-value)))))
                       (set-tm:isdst bdtm -1)
-                      (cons (car (mktime bdtm)) 0))))
+                      (cons (gnc-mktime bdtm) 0))))
 
          (form-line-acct-header-printed? #f)
          (form-schedule-header-printed? #f)
@@ -2182,8 +2182,8 @@
                (txf-special-date? (gnc:account-get-txf-code account)))
           (let*
               ((full-year?
-                (let ((bdto (localtime (car to-value)))
-                      (bdfrom (localtime (car from-value))))
+                (let ((bdto (gnc-localtime (car to-value)))
+                      (bdfrom (gnc-localtime (car from-value))))
                   (and (equal? (tm:year bdto) (tm:year bdfrom))
                        (equal? (tm:mon bdfrom) 0)
                        (equal? (tm:mday bdfrom) 1)
@@ -2198,7 +2198,7 @@
                                (set-tm:mday bdtm 1) ; 01
                                (set-tm:mon bdtm 2) ; Mar
                                (set-tm:isdst bdtm -1)
-                               (cons (car (mktime bdtm)) 0))
+                               (cons (gnc-mktime bdtm) 0))
                              from-value))
                (to-est (if full-year?
                            (let* ((bdtm (gnc:timepair->date
@@ -2208,7 +2208,7 @@
                              (set-tm:mon bdtm 1) ; Feb
                              (set-tm:year bdtm (+ (tm:year bdtm) 1))
                              (set-tm:isdst bdtm -1)
-                             (cons (car (mktime bdtm)) 0))
+                             (cons (gnc-mktime bdtm) 0))
                            to-value)))
             (list from-est to-est full-year?))
           #f))
@@ -2396,13 +2396,13 @@
           ) ;; end of let*
     )
 
-    (let ((from-date  (strftime "%Y-%b-%d" (localtime (car from-value))))
-          (to-date    (strftime "%Y-%b-%d" (localtime (car to-value))))
+    (let ((from-date  (strftime "%Y-%b-%d" (gnc-localtime (car from-value))))
+          (to-date    (strftime "%Y-%b-%d" (gnc-localtime (car to-value))))
           (today-date (strftime "D%m/%d/%Y"
-                                (localtime
+                                (gnc-localtime
                                  (car (timespecCanonicalDayTime
                                        (cons (current-time) 0))))))
-          (tax-year   (strftime "%Y" (localtime (car from-value))))
+          (tax-year   (strftime "%Y" (gnc-localtime (car from-value))))
           (tax-entity-type (gnc-get-current-book-tax-type))
           (tax-entity-type-valid? #f)
           (prior-form-schedule "")

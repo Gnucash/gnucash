@@ -621,7 +621,7 @@
     (gnc:html-table-append-row! table (list
 				       (strftime
 					date-format
-					(localtime (car (gnc:get-today))))))
+					(gnc-localtime (car (gnc:get-today))))))
     table))
 
 (define (make-break! document)

@@ -1,5 +1,52 @@
 Version history:
 ------- -------
+2.6.15 - 18 December 2016
+Announcement: GnuCash 2.6.15 Release 2016-12-18
+GnuCash 2.6.14 released
+
+The GnuCash development team proudly announces GnuCash 2.6.15, the
+fifteenth maintenance release in the 2.6-stable series.
+
+The following bugs are fixed:
+
+      Bug 340991 - Default price source for reports not good.
+      Bug 516920 - Scheduled trasaction calendar popup off screen.
+      Bug 685329 - Crashes on non-existent date.
+      Bug 769124 - Australian (GMT-10) OFX transactions imported have
+                   previous day's date.
+      Bug 770364 - Sign of Value in Lots in Account window seems inconsistent.
+      Bug 771246 - Set Invoice/Bill items date correctly from imported CSV.
+      Bug 771617 - Build fails because test test-report-utilities is
+    	           sensitive to time of day/timezone.
+      Bug 772313 - Invalid DOCTYPE in report generation.
+      Bug 772369 - Replace use of guile's internal date/time functions.
+      Bug 772382 - Date off-by-one after DST change.
+      Bug 772484 - Segfault on Transaction edit.
+      Bug 773808 - Export Report Crash.
+      Bug 774237 - FTBFS under some timezones (eg. GMT-14).
+      Bug 775368 - "Average cost" price source problem.
+      Bug 775385 - Confusing error message which includes the text "file file".
+      Bug 775567 - Importing QIF file from PayPal crashes GnuCash 2.6.14
+                   on Windows XP service pack 3/
+      Bug 775912 - Tips of the Day shows content only once very 3 times.
+
+Other repairs that weren't marked as bugs in git:
+      Fix report html header
+      Changed the default value for date format in Business Options
+      Change report resizing when not in view
+      Add an image for the report tab
+      Show empty business splits in lot viewer
+      Business check & repair - correct lot invoice state
+      When juggling business splits while scrubbing set both value and amount
+      Update progress bar while running Check & Repair
+      Remove lot from account while deleting the lot
+      Ensure that the Namespace combo box is initialized to a valid iter.
+      Fix CSV importer to handle GMT + 13 Timezone (New Zealand Daylight
+      Fix broken german account template 'Kontenrahmen für
+           Wohnungswirtschaft'.Time).
+
+Translation Updates: Danish, German, Serbian
+
 2.6.14 - 17 September 2016
 Announcement: GnuCash 2.6.14 Release 2016-09-17
 GnuCash 2.6.14 released

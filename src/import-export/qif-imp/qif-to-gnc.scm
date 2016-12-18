@@ -481,15 +481,7 @@
                "Missing transaction date."
                #f
                #f))
-      ((< (list-ref qif-date 2) 1970)
-        (qif-import:log progress-dialog
-                        "qif-import:qif-xtn-to-gnc-xtn"
-                        (_ "Dates earlier than 1970 are not supported."))
-        (throw 'bad-date
-               "qif-import:qif-xtn-to-gnc-xtn"
-               "Invalid transaction year (~A)."
-               (list (list-ref qif-date 2))
-               #f))
+ 
       (else
         (apply xaccTransSetDate gnc-xtn (qif-xtn:date qif-xtn))))
 

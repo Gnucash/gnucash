@@ -139,11 +139,8 @@
      ;; 2000 => 100.)  We also want to allow full year specifications,
      ;; (i.e. 1999, 2001, etc) and there's a point at which you can't
      ;; determine which is which.  this should eventually be another
-     ;; field in the qif-file struct but not yet.  mktime in scheme
-     ;; doesn't deal with dates before December 14, 1901, at least for
-     ;; now, so let's give ourselves until at least 3802 before this
-     ;; does the wrong thing.
-     ((and (integer? post-read-value)
+     ;; field in the qif-file struct but not yet.
+          ((and (integer? post-read-value)
            (< post-read-value 1902))
       (set! y2k-fixed-value (+ 1900 post-read-value)))
 
@@ -643,7 +640,7 @@
     (if all-ok parsed #f)))
 
 (define (qif-parse:print-date date-list)
-  (let ((tm (localtime (current-time))))
+  (let ((tm (gnc-localtime (current-time))))
     (set-tm:mday tm (car date-list))
     (set-tm:mon tm (- (cadr date-list) 1))
     (set-tm:year tm (- (caddr date-list) 1900))

@@ -1837,6 +1837,22 @@ test_gnc_dmy2timespec_end (FixtureB *f, gconstpointer pData)
     }
 }
 
+static GDateTime*
+offset_adjust(GDateTime *gdt)
+{
+     Testfuncs *tf = gnc_date_load_funcs();
+     GTimeZone *zone = tf->timezone_new_local();
+     int interval = g_time_zone_find_interval(zone, G_TIME_TYPE_STANDARD,
+					      g_date_time_to_unix(gdt));
+     int offset = g_time_zone_get_offset(zone, interval) / 60;
+     int off_hr = (offset / 60) + (offset % 60 ? (offset < 0 ? -1 : 1) : 0);
+     int correction = off_hr < -10 ? -10 - off_hr : off_hr > 13 ? 13 - off_hr : 0;
+     GDateTime* new_gdt = g_date_time_add_hours(gdt, correction);
+     g_date_time_unref(gdt);
+     g_slice_free(Testfuncs, tf);
+     return new_gdt;
+}
+
 /*gnc_dmy2timespec_neutral*/
 static void
 test_gnc_dmy2timespec_neutral (FixtureB *f, gconstpointer pData)

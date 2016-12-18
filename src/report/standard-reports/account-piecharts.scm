@@ -108,7 +108,7 @@ balance at a given time"))
     
     (gnc:options-add-price-source! 
      options gnc:pagename-general
-     optname-price-source "c" 'average-cost)
+     optname-price-source "c" 'pricedb-nearest)
 
     (if do-intervals?
         (add-option

@@ -2047,9 +2047,15 @@ xaccTransSetDate (Transaction *trans, int day, int mon, int year)
     GDate *date;
     if (!trans) return;
     date = g_date_new_dmy(day, mon, year);
-    g_assert(g_date_valid(date));
+    if (!g_date_valid(date))
+    {
+        PWARN("Attempted to set invalid date %d-%d-%d; set today's date instead.",
+              year, mon, day);
+        g_free(date);
+        date = gnc_g_date_new_today();
+    }
     xaccTransSetDatePostedGDate(trans, *date);
-    g_date_free(date);
+    g_free(date);
 }
 
 void
