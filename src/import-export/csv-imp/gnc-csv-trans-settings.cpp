@@ -69,7 +69,7 @@ preset_vec presets;
 static std::shared_ptr<CsvTransSettings> create_int_no_preset(void)
 {
     auto preset = std::make_shared<CsvTransSettings>();
-    preset->name = no_settings;
+    preset->m_name = no_settings;
 
     return preset;
 }
@@ -77,9 +77,9 @@ static std::shared_ptr<CsvTransSettings> create_int_no_preset(void)
 static std::shared_ptr<CsvTransSettings> create_int_gnc_exp_preset(void)
 {
     auto preset = std::make_shared<CsvTransSettings>();
-    preset->name = gnc_exp;
-    preset->skip_start_lines = 1;
-    preset->multi_split = true;
+    preset->m_name = gnc_exp;
+    preset->m_skip_start_lines = 1;
+    preset->m_multi_split = true;
 
     /* FIXME date and currency format should still be aligned with export format!
      * That's currently hard to do, because the export uses whatever the user
@@ -87,7 +87,7 @@ static std::shared_ptr<CsvTransSettings> create_int_gnc_exp_preset(void)
     preset->date_active = 0;
     preset->currency_active = 0;
     */
-    preset->column_types = {
+    preset->m_column_types = {
             GncTransPropType::DATE,
             GncTransPropType::UNIQUE_ID,
             GncTransPropType::NUM,
@@ -150,7 +150,7 @@ const preset_vec& get_trans_presets (void)
     for (auto preset_name : preset_names)
     {
         auto preset = std::make_shared<CsvTransSettings>();
-        preset->name = preset_name;
+        preset->m_name = preset_name;
         preset->load();
         presets.push_back(preset);
     }
@@ -199,64 +199,64 @@ handle_load_error (GError **key_error, const std::string& group)
 bool
 CsvTransSettings::load (void)
 {
-    if (trans_preset_is_reserved_name (name))
+    if (trans_preset_is_reserved_name (m_name))
         return true;
 
     GError *key_error = nullptr;
-    load_error = false;
-    auto group = csv_group_prefix + name;
+    m_load_error = false;
+    auto group = csv_group_prefix + m_name;
     auto keyfile = gnc_state_get_current ();
 
-    skip_start_lines = g_key_file_get_integer (keyfile, group.c_str(), CSV_SKIP_START, &key_error);
-    load_error |= handle_load_error (&key_error, group);
+    m_skip_start_lines = g_key_file_get_integer (keyfile, group.c_str(), CSV_SKIP_START, &key_error);
+    m_load_error |= handle_load_error (&key_error, group);
 
-    skip_end_lines = g_key_file_get_integer (keyfile, group.c_str(), CSV_SKIP_END, &key_error);
-    load_error |= handle_load_error (&key_error, group);
+    m_skip_end_lines = g_key_file_get_integer (keyfile, group.c_str(), CSV_SKIP_END, &key_error);
+    m_load_error |= handle_load_error (&key_error, group);
 
-    skip_alt_lines = g_key_file_get_boolean (keyfile, group.c_str(), CSV_SKIP_ALT, &key_error);
-    load_error |= handle_load_error (&key_error, group);
+    m_skip_alt_lines = g_key_file_get_boolean (keyfile, group.c_str(), CSV_SKIP_ALT, &key_error);
+    m_load_error |= handle_load_error (&key_error, group);
 
-    multi_split = g_key_file_get_boolean (keyfile, group.c_str(), CSV_MULTI_SPLIT, &key_error);
-    load_error |= handle_load_error (&key_error, group);
+    m_multi_split = g_key_file_get_boolean (keyfile, group.c_str(), CSV_MULTI_SPLIT, &key_error);
+    m_load_error |= handle_load_error (&key_error, group);
 
     auto csv_format = g_key_file_get_boolean (keyfile, group.c_str(), CSV_FORMAT, &key_error);
     if (key_error) csv_format = true; // default to true, but above command will return false in case of error
-    load_error |= handle_load_error (&key_error, group);
+    m_load_error |= handle_load_error (&key_error, group);
     if (csv_format)
-        file_format = GncImpFileFormat::CSV;
+        m_file_format = GncImpFileFormat::CSV;
     else
-        file_format = GncImpFileFormat::FIXED_WIDTH;
+        m_file_format = GncImpFileFormat::FIXED_WIDTH;
 
     gchar *key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_SEP, &key_error);
     if (key_char && *key_char != '\0')
-        separators = key_char;
-    load_error |= handle_load_error (&key_error, group);
+        m_separators = key_char;
+    m_load_error |= handle_load_error (&key_error, group);
     if (key_char)
         g_free (key_char);
 
-    date_format = g_key_file_get_integer (keyfile, group.c_str(), CSV_DATE, &key_error);
-    load_error |= handle_load_error (&key_error, group);
+    m_date_format = g_key_file_get_integer (keyfile, group.c_str(), CSV_DATE, &key_error);
+    m_load_error |= handle_load_error (&key_error, group);
 
-    currency_format = g_key_file_get_integer (keyfile, group.c_str(), CSV_CURRENCY, &key_error);
-    load_error |= handle_load_error (&key_error, group);
+    m_currency_format = g_key_file_get_integer (keyfile, group.c_str(), CSV_CURRENCY, &key_error);
+    m_load_error |= handle_load_error (&key_error, group);
 
     key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_ENCODING, &key_error);
     if (key_char && *key_char != '\0')
-        encoding = key_char;
+        m_encoding = key_char;
     else
         "UTF-8";
-    load_error |= handle_load_error (&key_error, group);
+    m_load_error |= handle_load_error (&key_error, group);
     if (key_char)
         g_free (key_char);
 
     key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_ACCOUNT, &key_error);
     if (key_char && *key_char != '\0')
-        base_account = gnc_account_lookup_by_full_name (gnc_get_current_root_account(), key_char);
-    load_error |= handle_load_error (&key_error, group);
+        m_base_account = gnc_account_lookup_by_full_name (gnc_get_current_root_account(), key_char);
+    m_load_error |= handle_load_error (&key_error, group);
     if (key_char)
         g_free (key_char);
 
-    column_types.clear();
+    m_column_types.clear();
     gsize list_len;
     gchar** col_types_str = g_key_file_get_string_list (keyfile, group.c_str(), CSV_COL_TYPES,
             &list_len, &key_error);
@@ -268,12 +268,12 @@ CsvTransSettings::load (void)
         {
             /* Found a valid column type. Now check whether it is allowed
              * in the selected mode (two-split vs multi-split) */
-            auto prop = sanitize_trans_prop (col_types_it->first, multi_split);
-                column_types.push_back(prop);
+            auto prop = sanitize_trans_prop (col_types_it->first, m_multi_split);
+                m_column_types.push_back(prop);
             if (prop != col_types_it->first)
                 PWARN("Found column type '%s', but this is blacklisted when multi-split mode is %s. "
                         "Inserting column type 'NONE' instead'.",
-                        col_types_it->second, multi_split ? "enabled" : "disabled");
+                        col_types_it->second, m_multi_split ? "enabled" : "disabled");
         }
         else
             PWARN("Found invalid column type '%s'. Inserting column type 'NONE' instead'.",
@@ -283,19 +283,19 @@ CsvTransSettings::load (void)
     if (col_types_str)
         g_strfreev (col_types_str);
 
-    column_widths.clear();
+    m_column_widths.clear();
     gint *col_widths_int = g_key_file_get_integer_list (keyfile, group.c_str(), CSV_COL_WIDTHS,
             &list_len, &key_error);
     for (uint i = 0; i < list_len; i++)
     {
         if (col_widths_int[i] > 0)
-            column_widths.push_back(col_widths_int[i]);
+            m_column_widths.push_back(col_widths_int[i]);
     }
-    load_error |= handle_load_error (&key_error, group);
+    m_load_error |= handle_load_error (&key_error, group);
     if (col_widths_int)
         g_free (col_widths_int);
 
-    return load_error;
+    return m_load_error;
 }
 
 
@@ -307,46 +307,46 @@ CsvTransSettings::load (void)
 bool
 CsvTransSettings::save (void)
 {
-    if (trans_preset_is_reserved_name (name))
+    if (trans_preset_is_reserved_name (m_name))
     {
-        PWARN ("Ignoring attempt to save to reserved name '%s'", name.c_str());
+        PWARN ("Ignoring attempt to save to reserved name '%s'", m_name.c_str());
         return true;
     }
 
     auto keyfile = gnc_state_get_current ();
-    auto group = csv_group_prefix + name;
+    auto group = csv_group_prefix + m_name;
 
     // Drop previous saved settings with this name
     g_key_file_remove_group (keyfile, group.c_str(), nullptr);
 
     // Start Saving the settings
-    g_key_file_set_string (keyfile, group.c_str(), CSV_NAME, name.c_str());
-    g_key_file_set_boolean (keyfile, group.c_str(), CSV_MULTI_SPLIT, multi_split);
-    g_key_file_set_integer (keyfile, group.c_str(), CSV_SKIP_START, skip_start_lines);
-    g_key_file_set_integer (keyfile, group.c_str(), CSV_SKIP_END, skip_end_lines);
-    g_key_file_set_boolean (keyfile, group.c_str(), CSV_SKIP_ALT, skip_alt_lines);
+    g_key_file_set_string (keyfile, group.c_str(), CSV_NAME, m_name.c_str());
+    g_key_file_set_boolean (keyfile, group.c_str(), CSV_MULTI_SPLIT, m_multi_split);
+    g_key_file_set_integer (keyfile, group.c_str(), CSV_SKIP_START, m_skip_start_lines);
+    g_key_file_set_integer (keyfile, group.c_str(), CSV_SKIP_END, m_skip_end_lines);
+    g_key_file_set_boolean (keyfile, group.c_str(), CSV_SKIP_ALT, m_skip_alt_lines);
     g_key_file_set_boolean (keyfile, group.c_str(), CSV_FORMAT,
-        (file_format == GncImpFileFormat::CSV) ? true : false);
+        (m_file_format == GncImpFileFormat::CSV) ? true : false);
 
-    g_key_file_set_string (keyfile, group.c_str(), CSV_SEP, separators.c_str());
-    g_key_file_set_integer (keyfile, group.c_str(), CSV_DATE, date_format);
-    g_key_file_set_integer (keyfile, group.c_str(), CSV_CURRENCY, currency_format);
-    g_key_file_set_string (keyfile, group.c_str(), CSV_ENCODING, encoding.c_str());
+    g_key_file_set_string (keyfile, group.c_str(), CSV_SEP, m_separators.c_str());
+    g_key_file_set_integer (keyfile, group.c_str(), CSV_DATE, m_date_format);
+    g_key_file_set_integer (keyfile, group.c_str(), CSV_CURRENCY, m_currency_format);
+    g_key_file_set_string (keyfile, group.c_str(), CSV_ENCODING, m_encoding.c_str());
 
-    if (base_account)
-        g_key_file_set_string (keyfile, group.c_str(), CSV_ACCOUNT, gnc_account_get_full_name(base_account));
+    if (m_base_account)
+        g_key_file_set_string (keyfile, group.c_str(), CSV_ACCOUNT, gnc_account_get_full_name(m_base_account));
 
     std::vector<const char*> col_types_str;
-    for (auto col_type : column_types)
+    for (auto col_type : m_column_types)
         col_types_str.push_back(gnc_csv_col_type_strs[col_type]);
 
     if (!col_types_str.empty())
         g_key_file_set_string_list (keyfile, group.c_str(), CSV_COL_TYPES,
                 col_types_str.data(), col_types_str.size());
 
-    if (!column_widths.empty())
+    if (!m_column_widths.empty())
         g_key_file_set_integer_list (keyfile, group.c_str(), CSV_COL_WIDTHS,
-                (gint*)(column_widths.data()), column_widths.size());
+                (gint*)(m_column_widths.data()), m_column_widths.size());
 
     // Do a test read of encoding
     GError *key_error = nullptr;
@@ -356,7 +356,7 @@ CsvTransSettings::save (void)
     if (enc_val)
         g_free (enc_val);
 
-    if ((key_error) || (enc_str != encoding.c_str()))
+    if ((key_error) || (enc_str != m_encoding.c_str()))
     {
         if (key_error)
         {
@@ -373,11 +373,11 @@ CsvTransSettings::save (void)
 void
 CsvTransSettings::remove (void)
 {
-    if (trans_preset_is_reserved_name (name))
+    if (trans_preset_is_reserved_name (m_name))
         return;
 
     auto keyfile = gnc_state_get_current ();
-    auto group = csv_group_prefix + name;
+    auto group = csv_group_prefix + m_name;
     g_key_file_remove_group (keyfile, group.c_str(), nullptr);
 }
 
@@ -385,8 +385,8 @@ CsvTransSettings::remove (void)
 bool
 CsvTransSettings::read_only (void)
 {
-    return ((name == no_settings) ||
-            (name == _(no_settings.c_str())) ||
-            (name == gnc_exp) ||
-            (name == _(gnc_exp.c_str())));
+    return ((m_name == no_settings) ||
+            (m_name == _(no_settings.c_str())) ||
+            (m_name == gnc_exp) ||
+            (m_name == _(gnc_exp.c_str())));
 }

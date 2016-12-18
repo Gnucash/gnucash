@@ -144,13 +144,13 @@ public:
     void set_column_type (uint position, GncTransPropType type);
     std::vector<GncTransPropType> column_types ();
 
-    std::unique_ptr<GncTokenizer> tokenizer;    /**< Will handle file loading/encoding conversion/splitting into fields */
-    std::vector<parse_line_t> parsed_lines;     /**< source file parsed into a two-dimensional array of strings.
+    std::unique_ptr<GncTokenizer> m_tokenizer;    /**< Will handle file loading/encoding conversion/splitting into fields */
+    std::vector<parse_line_t> m_parsed_lines;     /**< source file parsed into a two-dimensional array of strings.
                                                      Per line also holds possible error messages and objects with extracted transaction
                                                      and split properties. */
-    std::multimap <time64, std::shared_ptr<DraftTransaction>> transactions;  /**< map of transaction objects created
+    std::multimap <time64, std::shared_ptr<DraftTransaction>> m_transactions;  /**< map of transaction objects created
                                                      from parsed_lines and column_types, ordered by date */
-    bool parse_errors;          /**< Indicates whether the last parse_to_trans run had any errors */
+    bool m_parse_errors;          /**< Indicates whether the last parse_to_trans run had any errors */
 
 private:
     /** A helper function used by create_transactions. It will attempt
@@ -177,8 +177,8 @@ private:
     /* The parameters below are only used while creating
      * transactions. They keep state information during the conversion.
      */
-    std::shared_ptr<GncPreTrans> parent = nullptr;
-    std::shared_ptr<DraftTransaction> current_draft = nullptr;
+    std::shared_ptr<GncPreTrans> m_parent = nullptr;
+    std::shared_ptr<DraftTransaction> m_current_draft = nullptr;
 };
 
 
