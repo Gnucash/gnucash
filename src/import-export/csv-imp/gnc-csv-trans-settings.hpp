@@ -48,11 +48,11 @@ enum SETTINGS_COL {SET_GROUP, SET_NAME};
 
 struct CsvTransSettings
 {
-    CsvTransSettings() : file_format (GncImpFileFormat::CSV), encoding {"UTF-8"},
-            multi_split (false), date_format {0}, currency_format {0},
-            skip_start_lines{0}, skip_end_lines{0}, skip_alt_lines (false),
-            separators {","}, base_account {nullptr},
-            load_error {false}, internal {false} { }
+    CsvTransSettings() : m_file_format (GncImpFileFormat::CSV), m_encoding {"UTF-8"},
+            m_multi_split (false), m_date_format {0}, m_currency_format {0},
+            m_skip_start_lines{0}, m_skip_end_lines{0}, m_skip_alt_lines (false),
+            m_separators {","}, m_base_account {nullptr},
+            m_load_error {false} { }
 
 /** Save the gathered widget properties to a key File.
  *
@@ -82,23 +82,22 @@ void remove (void);
 bool read_only (void);
 
 
-std::string   name;                         // Name given to this preset by the user
-GncImpFileFormat file_format;               // CSV import Format
-std::string   encoding;                     // File encoding
-bool          multi_split;                  // Assume multiple lines per transaction
-int           date_format;                  // Date Active id
-int           currency_format;              // Currency Active id
-uint           skip_start_lines;             // Number of header rows to skip
-uint           skip_end_lines;               // Number of footer rows to skip
-bool          skip_alt_lines;                // Skip alternate rows
-std::string   separators;                   // Separators for csv format
+std::string   m_name;                         // Name given to this preset by the user
+GncImpFileFormat m_file_format;               // CSV import Format
+std::string   m_encoding;                     // File encoding
+bool          m_multi_split;                  // Assume multiple lines per transaction
+int           m_date_format;                  // Date Active id
+int           m_currency_format;              // Currency Active id
+uint          m_skip_start_lines;             // Number of header rows to skip
+uint          m_skip_end_lines;               // Number of footer rows to skip
+bool          m_skip_alt_lines;               // Skip alternate rows
+std::string   m_separators;                   // Separators for csv format
 
-Account      *base_account;                 // Base account
-std::vector<GncTransPropType>  column_types;// The Column types in order
-std::vector<uint> column_widths;            // The Column widths
+Account      *m_base_account;                 // Base account
+std::vector<GncTransPropType> m_column_types; // The Column types in order
+std::vector<uint> m_column_widths;            // The Column widths
 
-bool          load_error;                   // Was there an error while parsing the state file ?
-bool          internal;                     // true for internally generated presets
+bool          m_load_error;                   // Was there an error while parsing the state file ?
 };
 
 using preset_vec = std::vector<std::shared_ptr<CsvTransSettings>>;

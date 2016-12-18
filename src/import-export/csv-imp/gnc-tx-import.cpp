@@ -66,8 +66,8 @@ GncTxImport::GncTxImport(GncImpFileFormat format)
     /* All of the data pointers are initially NULL. This is so that, if
      * gnc_csv_parse_data_free is called before all of the data is
      * initialized, only the data that needs to be freed is freed. */
-    parse_errors = false;
-    file_format(m_settings.file_format = format);
+    m_parse_errors = false;
+    file_format(m_settings.m_file_format = format);
 }
 
 /** Destructor for GncTxImport.
@@ -85,31 +85,31 @@ GncTxImport::~GncTxImport()
  */
 void GncTxImport::file_format(GncImpFileFormat format)
 {
-    if (tokenizer && m_settings.file_format == format)
+    if (m_tokenizer && m_settings.m_file_format == format)
         return;
 
     auto new_encoding = std::string("UTF-8");
     auto new_imp_file = std::string();
 
     // Recover common settings from old tokenizer
-    if (tokenizer)
+    if (m_tokenizer)
     {
-        new_encoding = tokenizer->encoding();
-        new_imp_file = tokenizer->current_file();
+        new_encoding = m_tokenizer->encoding();
+        new_imp_file = m_tokenizer->current_file();
     }
 
-    m_settings.file_format = format;
-    tokenizer = gnc_tokenizer_factory(m_settings.file_format);
+    m_settings.m_file_format = format;
+    m_tokenizer = gnc_tokenizer_factory(m_settings.m_file_format);
 
     // Set up new tokenizer with common settings
     // recovered from old tokenizer
-    tokenizer->encoding(new_encoding);
+    m_tokenizer->encoding(new_encoding);
     load_file(new_imp_file);
 }
 
 GncImpFileFormat GncTxImport::file_format()
 {
-    return m_settings.file_format;
+    return m_settings.m_file_format;
 }
 
 /** Toggles the multi-split state of the importer and will subsequently
@@ -120,19 +120,19 @@ GncImpFileFormat GncTxImport::file_format()
  */
 void GncTxImport::multi_split (bool multi_split)
 {
-    m_settings.multi_split = multi_split;
-    for (auto col_it = m_settings.column_types.begin(); col_it != m_settings.column_types.end();
+    m_settings.m_multi_split = multi_split;
+    for (auto col_it = m_settings.m_column_types.begin(); col_it != m_settings.m_column_types.end();
             col_it++)
     {
-        auto san_prop = sanitize_trans_prop (*col_it, m_settings.multi_split);
+        auto san_prop = sanitize_trans_prop (*col_it, m_settings.m_multi_split);
         if (san_prop != *col_it)
             *col_it = san_prop;
     }
-    if (m_settings.multi_split)
-        m_settings.base_account = nullptr;
+    if (m_settings.m_multi_split)
+        m_settings.m_base_account = nullptr;
 }
 
-bool GncTxImport::multi_split () { return m_settings.multi_split; }
+bool GncTxImport::multi_split () { return m_settings.m_multi_split; }
 
 /** Sets a base account. This is the account all import data relates to.
  *  As such at least one split of each transaction that will be generated
@@ -145,32 +145,32 @@ bool GncTxImport::multi_split () { return m_settings.multi_split; }
  */
 void GncTxImport::base_account (Account* base_account)
 {
-    if (m_settings.multi_split)
+    if (m_settings.m_multi_split)
     {
-        m_settings.base_account = nullptr;
+        m_settings.m_base_account = nullptr;
         return;
     }
 
-    m_settings.base_account = base_account;
+    m_settings.m_base_account = base_account;
 
-    if (m_settings.base_account)
+    if (m_settings.m_base_account)
     {
-        auto col_type = std::find (m_settings.column_types.begin(),
-                m_settings.column_types.end(), GncTransPropType::ACCOUNT);
-        if (col_type != m_settings.column_types.end())
+        auto col_type = std::find (m_settings.m_column_types.begin(),
+                m_settings.m_column_types.end(), GncTransPropType::ACCOUNT);
+        if (col_type != m_settings.m_column_types.end())
             *col_type = GncTransPropType::NONE;
     }
 }
 
-Account *GncTxImport::base_account () { return m_settings.base_account; }
+Account *GncTxImport::base_account () { return m_settings.m_base_account; }
 
 void GncTxImport::currency_format (int currency_format)
-    { m_settings.currency_format = currency_format; }
-int GncTxImport::currency_format () { return m_settings.currency_format; }
+    { m_settings.m_currency_format = currency_format; }
+int GncTxImport::currency_format () { return m_settings.m_currency_format; }
 
 void GncTxImport::date_format (int date_format)
-    { m_settings.date_format = date_format; }
-int GncTxImport::date_format () { return m_settings.date_format; }
+    { m_settings.m_date_format = date_format; }
+int GncTxImport::date_format () { return m_settings.m_date_format; }
 
 /** Converts raw file data using a new encoding. This function must be
  * called after load_file only if load_file guessed
@@ -181,45 +181,45 @@ void GncTxImport::encoding (const std::string& encoding)
 {
 
     // TODO investigate if we can catch conversion errors and report them
-    if (tokenizer)
-        tokenizer->encoding(encoding); // May throw
+    if (m_tokenizer)
+        m_tokenizer->encoding(encoding); // May throw
 
-    m_settings.encoding = encoding;
+    m_settings.m_encoding = encoding;
 }
 
-std::string GncTxImport::encoding () { return m_settings.encoding; }
+std::string GncTxImport::encoding () { return m_settings.m_encoding; }
 
 void GncTxImport::skip_start_lines (uint num)
-    { m_settings.skip_start_lines = num; }
-uint GncTxImport::skip_start_lines () { return m_settings.skip_start_lines; }
+    { m_settings.m_skip_start_lines = num; }
+uint GncTxImport::skip_start_lines () { return m_settings.m_skip_start_lines; }
 
-void GncTxImport::skip_end_lines (uint num) { m_settings.skip_end_lines = num; }
-uint GncTxImport::skip_end_lines () { return m_settings.skip_end_lines; }
+void GncTxImport::skip_end_lines (uint num) { m_settings.m_skip_end_lines = num; }
+uint GncTxImport::skip_end_lines () { return m_settings.m_skip_end_lines; }
 
 void GncTxImport::skip_alt_lines (bool skip)
-    { m_settings.skip_alt_lines = skip; }
-bool GncTxImport::skip_alt_lines () { return m_settings.skip_alt_lines; }
+    { m_settings.m_skip_alt_lines = skip; }
+bool GncTxImport::skip_alt_lines () { return m_settings.m_skip_alt_lines; }
 
 void GncTxImport::separators (std::string separators)
 {
     if (file_format() != GncImpFileFormat::CSV)
         return;
 
-    m_settings.separators = separators;
-    auto csvtok = dynamic_cast<GncCsvTokenizer*>(tokenizer.get());
+    m_settings.m_separators = separators;
+    auto csvtok = dynamic_cast<GncCsvTokenizer*>(m_tokenizer.get());
     csvtok->set_separators (separators);
 
 }
-std::string GncTxImport::separators () { return m_settings.separators; }
+std::string GncTxImport::separators () { return m_settings.m_separators; }
 
 void GncTxImport::settings (const CsvTransSettings& settings)
 {
     m_settings = settings;
-    file_format (m_settings.file_format);
-    multi_split (m_settings.multi_split);
-    base_account (m_settings.base_account);
-    encoding (m_settings.encoding);
-    separators (m_settings.separators);
+    file_format (m_settings.m_file_format);
+    multi_split (m_settings.m_multi_split);
+    base_account (m_settings.m_base_account);
+    encoding (m_settings.m_encoding);
+    separators (m_settings.m_separators);
     try
     {
         tokenize(false);
@@ -232,13 +232,13 @@ void GncTxImport::settings (const CsvTransSettings& settings)
 bool GncTxImport::save_settings ()
 {
 
-    if (trans_preset_is_reserved_name (m_settings.name))
+    if (trans_preset_is_reserved_name (m_settings.m_name))
         return true;
     return m_settings.save();
 }
 
-void GncTxImport::settings_name (std::string name) { m_settings.name = name; }
-std::string GncTxImport::settings_name () { return m_settings.name; }
+void GncTxImport::settings_name (std::string name) { m_settings.m_name = name; }
+std::string GncTxImport::settings_name () { return m_settings.m_name; }
 
 /** Loads a file into a GncTxImport. This is the first function
  * that must be called after creating a new GncTxImport. As long as
@@ -252,7 +252,7 @@ void GncTxImport::load_file (const std::string& filename)
     /* Get the raw data first and handle an error if one occurs. */
     try
     {
-        tokenizer->load_file (filename);
+        m_tokenizer->load_file (filename);
         return;
     }
     catch (std::ifstream::failure& ios_err)
@@ -276,15 +276,15 @@ void GncTxImport::load_file (const std::string& filename)
  */
 void GncTxImport::tokenize (bool guessColTypes)
 {
-    if (!tokenizer)
+    if (!m_tokenizer)
         return;
 
     uint max_cols = 0;
-    tokenizer->tokenize();
-    parsed_lines.clear();
-    for (auto tokenized_line : tokenizer->get_tokens())
+    m_tokenizer->tokenize();
+    m_parsed_lines.clear();
+    for (auto tokenized_line : m_tokenizer->get_tokens())
     {
-        parsed_lines.push_back (std::make_tuple (tokenized_line, std::string(),
+        m_parsed_lines.push_back (std::make_tuple (tokenized_line, std::string(),
                 nullptr, nullptr));
         auto length = tokenized_line.size();
         if (length > max_cols)
@@ -292,13 +292,13 @@ void GncTxImport::tokenize (bool guessColTypes)
     }
 
     /* If it failed, generate an error. */
-    if (parsed_lines.size() == 0)
+    if (m_parsed_lines.size() == 0)
     {
         throw (std::range_error ("Tokenizing failed."));
         return;
     }
 
-    m_settings.column_types.resize(max_cols, GncTransPropType::NONE);
+    m_settings.m_column_types.resize(max_cols, GncTransPropType::NONE);
 
     if (guessColTypes)
     {
@@ -319,15 +319,15 @@ std::string GncTxImport::verify ()
     auto error_text = std::string();
 
     /* Check if the import file did actually contain any information */
-    if (parsed_lines.size() == 0)
+    if (m_parsed_lines.size() == 0)
     {
         error_text = _("No valid data found in the selected file. It may be empty or the selected encoding is wrong.");
         return error_text;
     }
 
     /* Check if at least one line is selected for importing */
-    auto skip_alt_offset = m_settings.skip_alt_lines ? 1 : 0;
-    if (m_settings.skip_start_lines + m_settings.skip_end_lines + skip_alt_offset >= parsed_lines.size())
+    auto skip_alt_offset = m_settings.m_skip_alt_lines ? 1 : 0;
+    if (m_settings.m_skip_start_lines + m_settings.m_skip_end_lines + skip_alt_offset >= m_parsed_lines.size())
     {
         error_text = _("No lines are selected for importing. Please reduce the number of lines to skip.");
         return error_text;
@@ -344,20 +344,20 @@ std::string GncTxImport::verify ()
         /* Attempt to parse the date column for each selected line */
         try
         {
-            auto date_col = std::find(m_settings.column_types.begin(),
-                    m_settings.column_types.end(), GncTransPropType::DATE) -
-                            m_settings.column_types.begin();
-            for (uint i = 0; i < parsed_lines.size(); i++)
+            auto date_col = std::find(m_settings.m_column_types.begin(),
+                    m_settings.m_column_types.end(), GncTransPropType::DATE) -
+                            m_settings.m_column_types.begin();
+            for (uint i = 0; i < m_parsed_lines.size(); i++)
             {
-                if ((i < m_settings.skip_start_lines) ||             // start rows to skip
-                    (i >= parsed_lines.size()
-                            - m_settings.skip_end_lines) ||          // end rows to skip
-                    (((i - m_settings.skip_start_lines) % 2 == 1) && // skip every second row...
-                            m_settings.skip_alt_lines))              // ...if requested
+                if ((i < m_settings.m_skip_start_lines) ||             // start rows to skip
+                    (i >= m_parsed_lines.size()
+                            - m_settings.m_skip_end_lines) ||          // end rows to skip
+                    (((i - m_settings.m_skip_start_lines) % 2 == 1) && // skip every second row...
+                            m_settings.m_skip_alt_lines))              // ...if requested
                     continue;
                 else
                 {
-                    auto first_line = std::get<0>(parsed_lines[i]);
+                    auto first_line = std::get<0>(m_parsed_lines[i]);
                     auto date_str = first_line[date_col];
                     if (!date_str.empty())
                         parse_date (date_str, date_format());
@@ -375,12 +375,12 @@ std::string GncTxImport::verify ()
      */
     if (!check_for_column_type(GncTransPropType::ACCOUNT))
     {
-        if (m_settings.multi_split)
+        if (m_settings.m_multi_split)
         {
             error_text += newline + _("Please select an account column.");
             newline = "\n";
         }
-        else if (!m_settings.base_account)
+        else if (!m_settings.m_base_account)
         {
             error_text += newline + _("Please select an account column or set a base account in the Account field.");
             newline = "\n";
@@ -480,22 +480,22 @@ std::shared_ptr<DraftTransaction> GncTxImport::trans_properties_to_trans (std::v
         /* We're about to continue with a new transaction
          * Time to do some closing actions on the previous one
          */
-        if (current_draft && current_draft->void_reason)
+        if (m_current_draft && m_current_draft->void_reason)
         {
             /* The import data specifies this transaction was voided.
              * So void the created transaction as well.
              * Attention: this assumes the imported transaction was balanced.
              * If not, this will cause an imbalance split to be added automatically!
              */
-            xaccTransCommitEdit (current_draft->trans);
-            xaccTransVoid (current_draft->trans, current_draft->void_reason->c_str());
+            xaccTransCommitEdit (m_current_draft->trans);
+            xaccTransVoid (m_current_draft->trans, m_current_draft->void_reason->c_str());
         }
-        current_draft = std::make_shared<DraftTransaction>(trans);
-        current_draft->void_reason = trans_props->get_void_reason();
+        m_current_draft = std::make_shared<DraftTransaction>(trans);
+        m_current_draft->void_reason = trans_props->get_void_reason();
         created_trans = true;
     }
-    else if (m_settings.multi_split)  // in multi_split mode create_trans will return a nullptr for all but the first split
-        trans = current_draft->trans;
+    else if (m_settings.m_multi_split)  // in multi_split mode create_trans will return a nullptr for all but the first split
+        trans = m_current_draft->trans;
     else // in non-multi-split mode each line should be a transaction, so not having one here is an error
         throw std::invalid_argument ("Failed to create transaction from selected columns.");
 
@@ -508,7 +508,7 @@ std::shared_ptr<DraftTransaction> GncTxImport::trans_properties_to_trans (std::v
      * The return value will be added to a list for further processing,
      * we want each transaction to appear only once in that list.
      */
-    return created_trans ? current_draft : nullptr;
+    return created_trans ? m_current_draft : nullptr;
 }
 
 void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parsed_line)
@@ -521,10 +521,10 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
     error_message.clear();
 
     /* Convert all tokens in this line into transaction/split properties. */
-    auto col_types_it = m_settings.column_types.cbegin();
+    auto col_types_it = m_settings.m_column_types.cbegin();
     auto line_it = line.cbegin();
     for (col_types_it, line_it;
-            col_types_it != m_settings.column_types.cend() &&
+            col_types_it != m_settings.m_column_types.cend() &&
             line_it != line.cend();
             ++col_types_it, ++line_it)
     {
@@ -534,7 +534,7 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
                 continue; /* We do nothing with "None"-type columns. */
             else if  (*col_types_it <= GncTransPropType::TRANS_PROPS)
             {
-                if (m_settings.multi_split && line_it->empty())
+                if (m_settings.m_multi_split && line_it->empty())
                     continue; // In multi-split mode, transaction properties can be empty
                 trans_props->set_property(*col_types_it, *line_it);
             }
@@ -543,7 +543,7 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
         }
         catch (const std::exception& e)
         {
-            parse_errors = true;
+            m_parse_errors = true;
             if (!error_message.empty())
                 error_message += "\n";
             error_message += _(gnc_csv_col_type_strs[*col_types_it]);
@@ -555,26 +555,26 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
 
     /* For multi-split input data, we need to check whether this line is part of a transaction that
      * has already be started by a previous line. */
-    if (m_settings.multi_split)
+    if (m_settings.m_multi_split)
     {
-        if (trans_props->is_part_of(parent))
+        if (trans_props->is_part_of(m_parent))
         {
             /* This line is part of an already started transaction
              * continue with that one instead to make sure the split from this line
              * gets added to the proper transaction */
-            std::get<2>(*parsed_line) = parent;
+            std::get<2>(*parsed_line) = m_parent;
 
             /* Check if the parent line is ready for conversion. If not,
              * this child line can't be converted either.
              */
-            if (!parent->verify_essentials().empty())
+            if (!m_parent->verify_essentials().empty())
                 error_message = _("First line of this transaction has errors.");
         }
         else
         {
             /* This line starts a new transaction, set it as parent for
              * subsequent lines. */
-            parent = trans_props;
+            m_parent = trans_props;
         }
     }
 
@@ -585,13 +585,13 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
     auto line_acct = split_props->get_account();
     if (!line_acct)
     {
-        if (m_settings.base_account)
-            split_props->set_account(m_settings.base_account);
+        if (m_settings.m_base_account)
+            split_props->set_account(m_settings.m_base_account);
         else
         {
             // Oops - the user didn't select an Account column *and* we didn't get a default value either!
             // Note if you get here this suggests a bug in the code!
-            parse_errors = true;
+            m_parse_errors = true;
             error_message = _("No account column selected and no default account specified either.\n"
                                        "This should never happen. Please report this as a bug.");
             PINFO("User warning: %s", error_message.c_str());
@@ -610,12 +610,12 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
         if (draft_trans)
         {
             auto trans_date = xaccTransGetDate (draft_trans->trans);
-            transactions.insert (std::pair<time64, std::shared_ptr<DraftTransaction>>(trans_date,std::move(draft_trans)));
+            m_transactions.insert (std::pair<time64, std::shared_ptr<DraftTransaction>>(trans_date,std::move(draft_trans)));
         }
     }
     catch (const std::invalid_argument& e)
     {
-        parse_errors = true;
+        m_parse_errors = true;
         error_message = e.what();
         PINFO("User warning: %s", error_message.c_str());
     }
@@ -637,23 +637,23 @@ void GncTxImport::create_transactions (bool redo_errors)
     if (!redo_errors)
     {
         /* Clear error messages on full run */
-        for (auto orig_line : parsed_lines)
+        for (auto orig_line : m_parsed_lines)
             std::get<1>(orig_line).clear();
 
         /* Drop all existing draft transactions on a full run */
-        transactions.clear();
+        m_transactions.clear();
     }
 
     /* compute start and end iterators based on user-set restrictions */
-    auto parsed_lines_it = parsed_lines.begin();
+    auto parsed_lines_it = m_parsed_lines.begin();
     std::advance(parsed_lines_it, skip_start_lines());
 
-    auto parsed_lines_max = parsed_lines.begin();
-    std::advance(parsed_lines_max, parsed_lines.size() - skip_end_lines());
+    auto parsed_lines_max = m_parsed_lines.begin();
+    std::advance(parsed_lines_max, m_parsed_lines.size() - skip_end_lines());
 
     auto odd_line = false;
-    parse_errors = false;
-    parent = nullptr;
+    m_parse_errors = false;
+    m_parent = nullptr;
 
     /* Iterate over all parsed lines */
     for (parsed_lines_it, odd_line;
@@ -686,21 +686,21 @@ void GncTxImport::create_transactions (bool redo_errors)
 bool
 GncTxImport::check_for_column_type (GncTransPropType type)
 {
-    return (std::find (m_settings.column_types.begin(),
-                       m_settings.column_types.end(), type)
-                        != m_settings.column_types.end());
+    return (std::find (m_settings.m_column_types.begin(),
+                       m_settings.m_column_types.end(), type)
+                        != m_settings.m_column_types.end());
 }
 
 void
 GncTxImport::set_column_type (uint position, GncTransPropType type)
 {
-    if (position >= m_settings.column_types.size())
+    if (position >= m_settings.m_column_types.size())
         return;
 
     // Column types should be unique, so remove any previous occurrence of the new type
-    std::replace(m_settings.column_types.begin(), m_settings.column_types.end(),
+    std::replace(m_settings.m_column_types.begin(), m_settings.m_column_types.end(),
             type, GncTransPropType::NONE);
-    m_settings.column_types.at (position) = type;
+    m_settings.m_column_types.at (position) = type;
 
     // If the user has set an Account column, we can't have a base account set
     if (type == GncTransPropType::ACCOUNT)
@@ -709,5 +709,5 @@ GncTxImport::set_column_type (uint position, GncTransPropType type)
 
 std::vector<GncTransPropType> GncTxImport::column_types ()
 {
-    return m_settings.column_types;
+    return m_settings.m_column_types;
 }

@@ -18,10 +18,11 @@
     <property name="title" translatable="yes">CSV Transaction Import</property>
     <property name="default_width">400</property>
     <property name="default_height">500</property>
-    <signal name="close" handler="csv_import_trans_assistant_close" swapped="no"/>
-    <signal name="apply" handler="csv_import_trans_assistant_finish" swapped="no"/>
-    <signal name="prepare" handler="csv_import_trans_assistant_prepare" swapped="no"/>
-    <signal name="cancel" handler="csv_import_trans_assistant_cancel" swapped="no"/>
+    <signal name="close" handler="csv_tximp_assist_close_cb" swapped="no"/>
+    <signal name="apply" handler="csv_tximp_assist_finish_cb" swapped="no"/>
+    <signal name="prepare" handler="csv_tximp_assist_prepare_cb" swapped="no"/>
+    <signal name="cancel" handler="csv_tximp_assist_cancel_cb" swapped="no"/>
+    <signal name="destroy" handler="csv_tximp_assist_destroy_cb" swapped="no"/>
     <child>
       <object class="GtkLabel" id="start_page">
         <property name="visible">True</property>
@@ -116,7 +117,7 @@ Select location and file name for the Import, then click 'OK'...
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="tooltip_text" translatable="yes">Delete Settings</property>
-                            <signal name="clicked" handler="csv_import_trans_delete_settings_cb" swapped="no"/>
+                            <signal name="clicked" handler="csv_tximp_preview_del_settings_cb" swapped="no"/>
                             <child>
                               <object class="GtkImage" id="image2">
                                 <property name="visible">True</property>
@@ -141,7 +142,7 @@ Select location and file name for the Import, then click 'OK'...
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="tooltip_text" translatable="yes">Save Settings</property>
-                            <signal name="clicked" handler="csv_import_trans_save_settings_cb" swapped="no"/>
+                            <signal name="clicked" handler="csv_tximp_preview_save_settings_cb" swapped="no"/>
                             <child>
                               <object class="GtkImage" id="image1">
                                 <property name="visible">True</property>
@@ -206,6 +207,7 @@ Select location and file name for the Import, then click 'OK'...
                             <property name="receives_default">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="top_attach">2</property>
@@ -222,6 +224,7 @@ Select location and file name for the Import, then click 'OK'...
                             <property name="receives_default">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -241,6 +244,7 @@ Select location and file name for the Import, then click 'OK'...
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -259,6 +263,7 @@ Select location and file name for the Import, then click 'OK'...
                             <property name="receives_default">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="top_attach">3</property>
@@ -275,6 +280,7 @@ Select location and file name for the Import, then click 'OK'...
                             <property name="receives_default">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -293,6 +299,7 @@ Select location and file name for the Import, then click 'OK'...
                             <property name="receives_default">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -311,6 +318,7 @@ Select location and file name for the Import, then click 'OK'...
                             <property name="receives_default">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="top_attach">4</property>
@@ -330,6 +338,7 @@ Select location and file name for the Import, then click 'OK'...
                             <property name="secondary_icon_activatable">False</property>
                             <property name="primary_icon_sensitive">True</property>
                             <property name="secondary_icon_sensitive">True</property>
+                            <signal name="changed" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -349,6 +358,7 @@ Select location and file name for the Import, then click 'OK'...
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="csv_tximp_preview_sep_fixed_sel_cb" swapped="no"/>
                           </object>
                         </child>
                         <child>
@@ -401,7 +411,7 @@ Select location and file name for the Import, then click 'OK'...
 When Multi-split is enabled the importer will assume multiple consecutive lines together hold the information for one transaction. Each line provides information for exactly one split. The first line should also provide the information for the transaction.
 To know which lines belong to the same transaction, the importer will compare the provided transaction information in each line. If that information is empty or the same as the first transaction line the importer will consider this line part of the same transaction.</property>
                             <property name="draw_indicator">True</property>
-                            <signal name="toggled" handler="csv_import_trans_multisplit_cb" swapped="no"/>
+                            <signal name="toggled" handler="csv_tximp_preview_multisplit_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="right_attach">3</property>
@@ -578,7 +588,7 @@ To know which lines belong to the same transaction, the importer will compare th
                                     <property name="secondary_icon_sensitive">True</property>
                                     <property name="adjustment">start_row_adj</property>
                                     <property name="numeric">True</property>
-                                    <signal name="value-changed" handler="csv_import_trans_srow_cb" swapped="no"/>
+                                    <signal name="value-changed" handler="csv_tximp_preview_srow_cb" swapped="no"/>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -613,7 +623,7 @@ To know which lines belong to the same transaction, the importer will compare th
                                     <property name="secondary_icon_sensitive">True</property>
                                     <property name="adjustment">end_row_adj</property>
                                     <property name="numeric">True</property>
-                                    <signal name="value-changed" handler="csv_import_trans_erow_cb" swapped="no"/>
+                                    <signal name="value-changed" handler="csv_tximp_preview_erow_cb" swapped="no"/>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -661,7 +671,7 @@ For example
 * if 'Leading Lines to Skip' is set to 3, the first line to import will be line 4. Lines 5, 7, 9,... will be skipped.
 * if 'Leading Lines to Skip' is set to 4, the first line to import will be line 5. Lines 6, 8, 10,... will be skipped.</property>
                             <property name="draw_indicator">True</property>
-                            <signal name="toggled" handler="csv_import_trans_skiprows_cb" swapped="no"/>
+                            <signal name="toggled" handler="csv_tximp_preview_skiprows_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -839,7 +849,7 @@ For example
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkCheckButton" id="check_butt">
+              <object class="GtkCheckButton" id="skip_errors_button">
                 <property name="label" translatable="yes">Skip Errors</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -847,7 +857,7 @@ For example
                 <property name="image_position">right</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
-                <signal name="toggled" handler="csv_import_trans_skip_errors_cb" swapped="no"/>
+                <signal name="toggled" handler="csv_tximp_preview_skiperrors_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -932,6 +942,7 @@ For example
                     </child>
                   </object>
                 </child>
+                <signal name="button_press_event" handler="csv_tximp_acct_match_view_clicked_cb" swapped="no"/>
               </object>
             </child>
           </object>
@@ -965,6 +976,7 @@ For example
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <signal name="clicked" handler="csv_tximp_acct_match_button_clicked_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
