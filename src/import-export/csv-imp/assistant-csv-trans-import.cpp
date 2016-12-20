@@ -74,8 +74,6 @@ struct  CsvImportTrans
 
     GtkAssistant    *csv_imp_asst;
 
-    GtkWidget       *start_page;                    /**< Assistant start page widget */
-
     GtkWidget       *file_page;                     /**< Assistant file page widget */
     GtkWidget       *file_chooser;                  /**< The widget for the file chooser */
     std::string      file_name;                     /**< The import file name */
@@ -178,7 +176,7 @@ void csv_tximp_preview_row_sel_update (CsvImportTrans* info);
 void csv_tximp_preview_refresh_table (CsvImportTrans* info);
 void csv_tximp_preview_refresh (CsvImportTrans *info);
 void csv_tximp_preview_validate_settings (CsvImportTrans* info);
-bool csv_tximp_acct_match_get_list_of_accounts (CsvImportTrans* info, GtkTreeModel *store);
+void csv_tximp_acct_match_set_accounts (CsvImportTrans* info);
 
 /*************************************************************************/
 
@@ -1314,97 +1312,24 @@ void csv_tximp_preview_validate_settings (CsvImportTrans* info)
  * Code related to the account match page
  **************************************************/
 
-/* Test for the string being in the liststore
- * Returns true if it is or false if not.
- *
- * @param liststore The data being reviewed
- * @param string to check for
- */
-static bool
-csv_tximp_acct_match_check_for_duplicates (GtkListStore *liststore, const gchar *string)
-{
-    GtkTreeIter iter;
-    auto valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL(liststore), &iter);
-    while (valid)
-    {
-        gchar *text;
-        // Walk through the list, reading each row of column string
-        gtk_tree_model_get (GTK_TREE_MODEL(liststore), &iter, MAPPING_STRING, &text, -1);
-
-        if(!(g_strcmp0 (text, string)))
-        {
-            g_free (text);
-            return true;
-        }
-        g_free (text);
-
-        valid = gtk_tree_model_iter_next (GTK_TREE_MODEL(liststore), &iter);
-    }
-    return false;
-}
-
-
-/* Get the list of accounts
- * Returns true if we have any accounts
+/* Populates the account match view with all potential
+ * account names found in the parse data.
  *
  * @param info The data being previewed
- * @param store for the account match page
  */
-bool csv_tximp_acct_match_get_list_of_accounts (CsvImportTrans* info, GtkTreeModel *store)
+void csv_tximp_acct_match_set_accounts (CsvImportTrans* info)
 {
-    /* ctstore contains the actual strings appearing in the column types treeview. */
-    auto ctstore = gtk_tree_view_get_model (info->ctreeview);
-    GtkTreeIter ct_iter;
-    gtk_tree_model_get_iter_first (ctstore, &ct_iter);
+    auto store = gtk_tree_view_get_model (GTK_TREE_VIEW(info->account_match_view));
+    gtk_list_store_clear (GTK_LIST_STORE(store));
 
-    /* datastore contains the actual strings appearing in the preview treeview. */
-    auto datastore = gtk_tree_view_get_model (info->treeview);
-    auto have_accounts = false;
-    for (uint j = info->tx_imp->skip_start_lines();
-            j < info->tx_imp->m_parsed_lines.size() - info->tx_imp->skip_end_lines() - 1;
-            j++)
+    auto accts = info->tx_imp->accounts();
+    for (auto acct : accts)
     {
-        /* Go through each of the columns. */
-        for (uint i = 0; i < info->tx_imp->column_types().size(); i++)
-        {
-            auto col_type = GncTransPropType::NONE;
-
-            /* Get the column type. Store is arranged so that every two
-             * columns is a pair of
-             * - the column type as a user visible (translated) string
-             * - the internal type for this column
-             * So store looks like:
-             * col_type_str 0, col_type, col_type_str 1, col_type 1, ..., col_type_str ncols, col_type ncols. */
-            gtk_tree_model_get (ctstore, &ct_iter, 2 * i + 1, &col_type, -1);
-
-            /* We're only interested in columns of type ACCOUNT and OACCOUNT. */
-            if ((col_type == GncTransPropType::ACCOUNT) || (col_type == GncTransPropType::TACCOUNT))
-            {
-                /* Get an iterator for the row in the data store. */
-                GtkTreeIter data_iter;
-                if (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(datastore), &data_iter, nullptr, j))
-                {
-                    gchar* accstr = nullptr;   /* The string in this column from datastore. */
-                    gtk_tree_model_get (datastore, &data_iter, i + 1, &accstr, -1);
-                    if (!accstr || *accstr == '\0')
-                        continue;
-
-                    // Append the entry
-                    if (!csv_tximp_acct_match_check_for_duplicates (GTK_LIST_STORE(store), accstr))
-                    {
-                        GtkTreeIter acct_iter;
-                        gtk_list_store_append (GTK_LIST_STORE(store), &acct_iter);
-                        gtk_list_store_set (GTK_LIST_STORE(store), &acct_iter, MAPPING_STRING, accstr,
-                                            MAPPING_FULLPATH, _("No Linked Account"), MAPPING_ACCOUNT, nullptr, -1);
-                        have_accounts = true;
-                    }
-                    g_free (accstr);
-                }
-            }
-        }
+        GtkTreeIter acct_iter;
+        gtk_list_store_append (GTK_LIST_STORE(store), &acct_iter);
+        gtk_list_store_set (GTK_LIST_STORE(store), &acct_iter, MAPPING_STRING, acct.c_str(),
+                            MAPPING_FULLPATH, _("No Linked Account"), MAPPING_ACCOUNT, nullptr, -1);
     }
-
-    return have_accounts;
 }
 
 
@@ -1416,111 +1341,70 @@ csv_tximp_acct_match_check_all (GtkTreeModel *model)
     auto valid = gtk_tree_model_get_iter_first (model, &iter);
 
     // Walk through the store looking for nullptr accounts
-    auto ret = true;
     while (valid)
     {
         Account *account;
-
-        // Walk through the list, reading each row
         gtk_tree_model_get (model, &iter, MAPPING_ACCOUNT, &account, -1);
-
-        if (account == nullptr)
-            ret = false;
+        if (!account)
+            return false;
 
         valid = gtk_tree_model_iter_next (model, &iter);
     }
-    return ret;
+    return true;
 }
 
 
-/* Parse the text splitting into a path and the last_part based on
- * account separator. If the path is valid, add the last_part and
- * return this. If the path is invalid, use the new separator path
- * with the last_part and return that so there is only one new
- * account dialog.
+/* Evaluate acct_name as a full account name. Try if it
+ * contains a path to an existing parent account. If not,
+ * alter the full path name to use a fake separator to
+ * avoid calling multiple new account windows for each
+ * non-existent parent account.
  */
-static gchar *
-csv_tximp_acct_match_text_parse (gchar *text)
+static std::string
+csv_tximp_acct_match_text_parse (std::string acct_name)
 {
-    // Split the incoming string by current separator
     auto sep = gnc_get_account_separator_string ();
-    auto names = g_strsplit (text, sep, -1);
+    auto sep_pos = acct_name.rfind(sep);
+    if (sep_pos == std::string::npos)
+        // No separators found in acct_name -> return as is
+        return acct_name;
 
-    /* find the last_part and count parts */
-    int count = 0;
-    gchar *last_part = nullptr;
-    for (auto ptr = names; *ptr; ptr++)
-    {
-        if (g_strcmp0 (*ptr,"") != 0) //separator is last in string
-        {
-            if (last_part)
-                g_free (last_part);
-            last_part = g_strdup (*ptr);
-            count = count + 1;
-        }
-    }
+    auto parent = acct_name.substr(0, sep_pos);
+    auto root = gnc_get_current_root_account ();
 
-    // If count is 1 we have no path
-    gchar *ret_string = nullptr;
-    if (count == 1)
-        ret_string = g_strdup (last_part);
+    if (gnc_account_lookup_by_full_name (root, parent.c_str()))
+        // acct_name's parent matches an existing account -> acct_name as is
+        return acct_name;
     else
     {
-        // Start to create two paths based on current and possibly new separator
-        auto sep_path = g_strdup (names[0]);
-        auto newsep_path = g_strdup (names[0]);
-
-        // Setup an alternative separator
+        // Acct name doesn't match an existing account
+        // -> return the name with a fake separator to avoid
+        // asking the user to create each intermediary account as well
         const gchar *alt_sep;
         if (g_strcmp0 (sep,":") == 0)
             alt_sep = "-";
         else
             alt_sep = ":";
-
-        // Join the parts together apart from last_part which could be account name
-        for (int i = 1; i < count - 1; i++)
-        {
-            gchar *temp_sep_path, *temp_newsep_path;
-
-            temp_sep_path = g_strdup (sep_path);
-            temp_newsep_path = g_strdup (newsep_path);
-            g_free (sep_path);
-            g_free (newsep_path);
-            sep_path = g_strconcat (temp_sep_path, sep, names[i], nullptr);
-            newsep_path = g_strconcat (temp_newsep_path, alt_sep, names[i], nullptr);
-            g_free (temp_sep_path);
-            g_free (temp_newsep_path);
-        }
-        auto book = gnc_get_current_book ();
-        auto account = gnc_account_lookup_by_full_name (gnc_book_get_root_account (book), sep_path);
-
-        if (!account) // path not found
-            ret_string = g_strconcat (newsep_path, alt_sep, last_part, nullptr);
-        else
-            ret_string = g_strconcat (sep_path, sep, last_part, nullptr);
-
-        g_free (sep_path);
-        g_free (newsep_path);
+        sep_pos = acct_name.find(sep);
+        for (sep_pos = acct_name.find(sep); sep_pos != std::string::npos;
+                sep_pos = acct_name.find(sep))
+            acct_name.replace (sep_pos, strlen(sep), alt_sep);
+        return acct_name;
     }
-    g_free (last_part);
-    g_strfreev (names);
-    return ret_string;
 }
 
 static void
 csv_tximp_acct_match_select_internal(CsvImportTrans* info, GtkTreeModel *model, GtkTreeIter& iter)
 {
-    // Get the the String
+    // Get the the stored string and account (if any)
     gchar *text = nullptr;
-    gtk_tree_model_get (model, &iter, MAPPING_STRING, &text, -1);
-
-    // Get the pointer to the Account
     Account *account = nullptr;
-    gtk_tree_model_get (model, &iter, MAPPING_ACCOUNT, &account, -1);
+    gtk_tree_model_get (model, &iter, MAPPING_STRING, &text,
+                                      MAPPING_ACCOUNT, &account, -1);
 
-    auto parsed_text = csv_tximp_acct_match_text_parse (text);
+    auto acct_name = csv_tximp_acct_match_text_parse (text);
     auto gnc_acc = gnc_import_select_account (nullptr, nullptr, true,
-            parsed_text, nullptr, ACCT_TYPE_NONE, account, nullptr);
+            acct_name.c_str(), nullptr, ACCT_TYPE_NONE, account, nullptr);
 
     if (gnc_acc) // We may have canceled
     {
@@ -1535,10 +1419,9 @@ csv_tximp_acct_match_select_internal(CsvImportTrans* info, GtkTreeModel *model, 
         g_free (fullpath);
     }
     g_free (text);
-    g_free (parsed_text);
 
-    if (csv_tximp_acct_match_check_all (model))
-        gtk_assistant_set_page_complete (info->csv_imp_asst, info->account_match_page, true);
+    gtk_assistant_set_page_complete (info->csv_imp_asst, info->account_match_page,
+            csv_tximp_acct_match_check_all (model));
 
 }
 
@@ -1663,11 +1546,10 @@ csv_tximp_assist_account_match_page_prepare (GtkAssistant *assistant,
         CsvImportTrans* info)
 {
     // Load the account strings into the store
-    auto store = gtk_tree_view_get_model (GTK_TREE_VIEW(info->account_match_view));
-    gtk_list_store_clear (GTK_LIST_STORE(store));
-    csv_tximp_acct_match_get_list_of_accounts (info, store);
+    csv_tximp_acct_match_set_accounts (info);
 
     // Match the account strings to the mappings
+    auto store = gtk_tree_view_get_model (GTK_TREE_VIEW(info->account_match_view));
     gnc_csv_account_map_load_mappings (store);
 
     auto text = std::string ("<span size=\"medium\" color=\"red\"><b>");
@@ -1978,9 +1860,6 @@ csv_tximp_assist_create (CsvImportTrans *info)
     gtk_assistant_set_page_complete (info->csv_imp_asst,
                                      GTK_WIDGET(gtk_builder_get_object (builder, "summary_page")),
                                      TRUE);
-
-    /* Start Page */
-    info->start_page = GTK_WIDGET(gtk_builder_get_object (builder, "start_page"));
 
     /* File chooser Page */
     info->file_page = GTK_WIDGET(gtk_builder_get_object (builder, "file_page"));

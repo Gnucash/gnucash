@@ -37,6 +37,7 @@ extern "C" {
 }
 
 #include <vector>
+#include <set>
 #include <map>
 #include <memory>
 
@@ -143,6 +144,8 @@ public:
     bool check_for_column_type (GncTransPropType type);
     void set_column_type (uint position, GncTransPropType type);
     std::vector<GncTransPropType> column_types ();
+
+    std::set<std::string> accounts ();
 
     std::unique_ptr<GncTokenizer> m_tokenizer;    /**< Will handle file loading/encoding conversion/splitting into fields */
     std::vector<parse_line_t> m_parsed_lines;     /**< source file parsed into a two-dimensional array of strings.

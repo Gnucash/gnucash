@@ -711,3 +711,43 @@ std::vector<GncTransPropType> GncTxImport::column_types ()
 {
     return m_settings.m_column_types;
 }
+
+std::set<std::string>
+GncTxImport::accounts ()
+{
+    auto accts = std::set<std::string>();
+    auto acct_col_it = std::find (m_settings.m_column_types.begin(),
+                           m_settings.m_column_types.end(), GncTransPropType::ACCOUNT);
+    uint acct_col = acct_col_it - m_settings.m_column_types.begin();
+    auto tacct_col_it = std::find (m_settings.m_column_types.begin(),
+                           m_settings.m_column_types.end(), GncTransPropType::TACCOUNT);
+    uint tacct_col = tacct_col_it - m_settings.m_column_types.begin();
+
+    /* compute start and end iterators based on user-set restrictions */
+    auto parsed_lines_it = m_parsed_lines.begin();
+    std::advance(parsed_lines_it, skip_start_lines());
+
+    auto parsed_lines_max = m_parsed_lines.begin();
+    std::advance(parsed_lines_max, m_parsed_lines.size() - skip_end_lines());
+
+    /* Iterate over all parsed lines */
+    auto odd_line = false;
+    for (parsed_lines_it, odd_line;
+            parsed_lines_it < parsed_lines_max;
+            ++parsed_lines_it, odd_line = !odd_line)
+    {
+        /* Skip current line if
+           skip_rows is enabled AND
+           current line is an odd line */
+        if (skip_alt_lines() && odd_line)
+            continue;
+
+        auto col_strs = std::get<0>(*parsed_lines_it);
+        if ((acct_col_it != m_settings.m_column_types.end()) && !col_strs[acct_col].empty())
+            accts.insert(col_strs[acct_col]);
+        if ((tacct_col_it != m_settings.m_column_types.end()) && !col_strs[tacct_col].empty())
+            accts.insert(col_strs[tacct_col]);
+    }
+
+    return accts;
+}
