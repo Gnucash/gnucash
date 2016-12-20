@@ -165,7 +165,6 @@ void csv_tximp_acct_match_button_clicked_cb (GtkWidget *widget, CsvImportTrans* 
 bool csv_tximp_acct_match_view_clicked_cb (GtkWidget *widget, GdkEventButton *event, CsvImportTrans* info);
 }
 
-void csv_tximp_assist_start_page_prepare (GtkAssistant *gtkassistant, CsvImportTrans* info);
 void csv_tximp_assist_file_page_prepare (GtkAssistant *assistant, CsvImportTrans* info);
 void csv_tximp_assist_preview_page_prepare (GtkAssistant *gtkassistant, CsvImportTrans* info);
 void csv_tximp_assist_account_match_page_prepare (GtkAssistant *assistant, CsvImportTrans* info);
@@ -195,10 +194,7 @@ bool csv_tximp_acct_match_get_list_of_accounts (CsvImportTrans* info, GtkTreeMod
 void
 csv_tximp_file_confirm_cb (GtkWidget *button, CsvImportTrans *info)
 {
-    auto num = gtk_assistant_get_current_page (info->csv_imp_asst);
-    auto page = gtk_assistant_get_nth_page (info->csv_imp_asst, num);
-
-    gtk_assistant_set_page_complete (info->csv_imp_asst, page, false);
+    gtk_assistant_set_page_complete (info->csv_imp_asst, info->account_match_page, false);
 
     auto file_name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(info->file_chooser));
     if (!file_name)
@@ -252,7 +248,8 @@ csv_tximp_file_confirm_cb (GtkWidget *button, CsvImportTrans *info)
     csv_tximp_preview_populate_settings_combo(info->settings_combo);
     gtk_combo_box_set_active (info->settings_combo, 0);
 
-    gtk_assistant_set_page_complete (info->csv_imp_asst, page, true);
+    gtk_assistant_set_page_complete (info->csv_imp_asst, info->account_match_page, true);
+    auto num = gtk_assistant_get_current_page (info->csv_imp_asst);
     gtk_assistant_set_current_page (info->csv_imp_asst, num + 1);
 }
 
@@ -1522,7 +1519,7 @@ csv_tximp_acct_match_select_internal(CsvImportTrans* info, GtkTreeModel *model, 
     gtk_tree_model_get (model, &iter, MAPPING_ACCOUNT, &account, -1);
 
     auto parsed_text = csv_tximp_acct_match_text_parse (text);
-    auto gnc_acc = gnc_import_select_account (nullptr, nullptr, 1,
+    auto gnc_acc = gnc_import_select_account (nullptr, nullptr, true,
             parsed_text, nullptr, ACCT_TYPE_NONE, account, nullptr);
 
     if (gnc_acc) // We may have canceled
@@ -1592,28 +1589,9 @@ csv_tximp_acct_match_view_clicked_cb (GtkWidget *widget, GdkEventButton *event, 
  *******************************************************/
 
 void
-csv_tximp_assist_start_page_prepare (GtkAssistant *assistant,
-        CsvImportTrans* info)
-{
-    auto num = gtk_assistant_get_current_page (assistant);
-    auto page = gtk_assistant_get_nth_page (assistant, num);
-
-    // Clear the treemodel list store
-    auto store = gtk_tree_view_get_model (GTK_TREE_VIEW(info->account_match_view));
-    gtk_list_store_clear (GTK_LIST_STORE(store));
-
-    /* Enable the Assistant Buttons */
-    gtk_assistant_set_page_complete (assistant, page, true);
-}
-
-
-void
 csv_tximp_assist_file_page_prepare (GtkAssistant *assistant,
         CsvImportTrans* info)
 {
-    auto num = gtk_assistant_get_current_page (assistant);
-    auto page = gtk_assistant_get_nth_page (assistant, num);
-
     info->previewing_errors = false; // We're looking at all the data.
     info->skip_errors = false; // Set skip_errors to False to start with.
 
@@ -1626,7 +1604,7 @@ csv_tximp_assist_file_page_prepare (GtkAssistant *assistant,
     }
 
     /* Disable the Forward Assistant Button */
-    gtk_assistant_set_page_complete (assistant, page, false);
+    gtk_assistant_set_page_complete (assistant, info->account_match_page, false);
 }
 
 
@@ -1670,17 +1648,9 @@ csv_tximp_assist_preview_page_prepare (GtkAssistant *assistant,
         gtk_widget_show (GTK_WIDGET(info->skip_errors_button));
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->skip_errors_button), FALSE);
     }
-    else
-    {
-        // Load the account strings into the store
-        auto store = gtk_tree_view_get_model (GTK_TREE_VIEW(info->account_match_view));
-        gtk_list_store_clear (GTK_LIST_STORE(store)); // Clear list of accounts unless we are looking at errors
-    }
 
     /* Disable the Forward Assistant Button */
-    auto num = gtk_assistant_get_current_page (assistant);
-    auto page = gtk_assistant_get_nth_page (assistant, num);
-    gtk_assistant_set_page_complete (assistant, page, false);
+    gtk_assistant_set_page_complete (assistant, info->preview_page, false);
 
     /* Load the data into the treeview. */
     csv_tximp_preview_refresh_table (info);
@@ -1694,6 +1664,7 @@ csv_tximp_assist_account_match_page_prepare (GtkAssistant *assistant,
 {
     // Load the account strings into the store
     auto store = gtk_tree_view_get_model (GTK_TREE_VIEW(info->account_match_view));
+    gtk_list_store_clear (GTK_LIST_STORE(store));
     csv_tximp_acct_match_get_list_of_accounts (info, store);
 
     // Match the account strings to the mappings
@@ -1901,9 +1872,7 @@ csv_tximp_assist_prepare_cb (GtkAssistant *assistant, GtkWidget *page,
     // Reset callcount on every prepare
     info->callcount = 0;
 
-    if (page == info->start_page)
-        csv_tximp_assist_start_page_prepare (assistant, info);
-    else if (page == info->file_page)
+    if (page == info->file_page)
         csv_tximp_assist_file_page_prepare (assistant, info);
     else if (page == info->preview_page)
         csv_tximp_assist_preview_page_prepare (assistant, info);
@@ -1990,7 +1959,7 @@ csv_tximp_assist_create (CsvImportTrans *info)
     /* Enable buttons on all page. */
     gtk_assistant_set_page_complete (info->csv_imp_asst,
                                      GTK_WIDGET(gtk_builder_get_object (builder, "start_page")),
-                                     TRUE);
+                                     true);
     gtk_assistant_set_page_complete (info->csv_imp_asst,
                                      GTK_WIDGET(gtk_builder_get_object (builder, "file_page")),
                                      FALSE);
