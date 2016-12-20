@@ -173,268 +173,25 @@ void csv_tximp_assist_doc_page_prepare (GtkAssistant *assistant, CsvImportTrans*
 void csv_tximp_assist_match_page_prepare (GtkAssistant *assistant, CsvImportTrans* info);
 void csv_tximp_assist_summary_page_prepare (GtkAssistant *assistant, CsvImportTrans* info);
 
+void csv_tximp_preview_populate_settings_combo(GtkComboBox* combo);
+void csv_tximp_preview_handle_save_del_sensitivity (GtkComboBox* combo, CsvImportTrans *info);
+void csv_tximp_preview_row_sel_update (CsvImportTrans* info);
 void csv_tximp_preview_refresh_table (CsvImportTrans* info);
 void csv_tximp_preview_refresh (CsvImportTrans *info);
-void csv_tximp_validate_preview_settings (CsvImportTrans* info);
-bool get_list_of_accounts (CsvImportTrans* info, GtkTreeModel *store);
+void csv_tximp_preview_validate_settings (CsvImportTrans* info);
+bool csv_tximp_acct_match_get_list_of_accounts (CsvImportTrans* info, GtkTreeModel *store);
 
 /*************************************************************************/
 
 
-
-/*******************************************************
- * populate_settings_combo
- *
- * Set the available presets in the settings combo box
- *******************************************************/
-
-static void populate_settings_combo(GtkComboBox* combo)
-{
-    // Clear the list store
-    auto model = gtk_combo_box_get_model (combo);
-    gtk_list_store_clear (GTK_LIST_STORE(model));
-
-    // Append the default entry
-
-    auto presets = get_trans_presets ();
-    for (auto preset : presets)
-    {
-        GtkTreeIter iter;
-        gtk_list_store_append (GTK_LIST_STORE(model), &iter);
-        /* FIXME we store the raw pointer to the preset, while it's
-         * managed by a shared pointer. This is dangerous because
-         * when the shared pointer goes out of scope, our pointer will dangle.
-         * For now this is safe, because the shared pointers in this case are
-         * long-lived, but this may need refactoring.
-         */
-        gtk_list_store_set (GTK_LIST_STORE(model), &iter, SET_GROUP, preset.get(), SET_NAME, preset->m_name.c_str(), -1);
-    }
-}
-
-
-static void handle_save_del_sensitivity (GtkComboBox* combo, CsvImportTrans *info)
-{
-    GtkTreeIter iter;
-    auto can_delete = false;
-    auto can_save = false;
-    auto entry = gtk_bin_get_child (GTK_BIN(combo));
-    auto entry_text = gtk_entry_get_text (GTK_ENTRY(entry));
-    /* Handle sensitivity of the delete and save button */
-    if (gtk_combo_box_get_active_iter (combo, &iter))
-    {
-        CsvTransSettings *preset;
-        GtkTreeModel *model = gtk_combo_box_get_model (combo);
-        gtk_tree_model_get (model, &iter, SET_GROUP, &preset, -1);
-
-        if (preset && !trans_preset_is_reserved_name (preset->m_name))
-        {
-            /* Current preset is not read_only, so buttons can be enabled */
-            can_delete = true;
-            can_save = true;
-        }
-    }
-    else if (entry_text && (strlen (entry_text) > 0) &&
-            !trans_preset_is_reserved_name (std::string(entry_text)))
-        can_save = true;
-
-    gtk_widget_set_sensitive (info->save_button, can_save);
-    gtk_widget_set_sensitive (info->del_button, can_delete);
-
-}
-
-
-/*******************************************************
- * csv_tximp_preview_settings_sel_changed_cb
- *
- * Triggered when a preset is selected in the settings combo.
- *******************************************************/
-void
-csv_tximp_preview_settings_sel_changed_cb (GtkComboBox *combo, CsvImportTrans *info)
-{
-    // Get the Active Selection
-    GtkTreeIter iter;
-    if (!gtk_combo_box_get_active_iter (combo, &iter))
-        return;
-
-    CsvTransSettings *preset = nullptr;
-    auto model = gtk_combo_box_get_model (combo);
-    gtk_tree_model_get (model, &iter, SET_GROUP, &preset, -1);
-
-    if (!preset)
-        return;
-
-    info->tx_imp->settings (*preset);
-    if (preset->m_load_error)
-    {
-        auto dialog = gtk_message_dialog_new (GTK_WINDOW(info->csv_imp_asst),
-                                    (GtkDialogFlags) 0,
-                                    GTK_MESSAGE_ERROR,
-                                    GTK_BUTTONS_OK,
-                                    "%s", _("Load the Import Settings."));
-        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-            "%s", _("There were problems reading some saved settings, continuing to load.\n Please review and save again."));
-        gtk_dialog_run (GTK_DIALOG (dialog));
-        gtk_widget_destroy (dialog);
-    }
-
-    csv_tximp_preview_refresh (info);
-    handle_save_del_sensitivity (combo, info);
-    csv_tximp_validate_preview_settings (info);
-}
-
-
-/*******************************************************
- * csv_tximp_preview_settings_text_changed_cb
- *
- * Triggered while the user is editing text the settings combo.
- *******************************************************/
-void
-csv_tximp_preview_settings_text_changed_cb (GtkEntry *entry, CsvImportTrans *info)
-{
-    auto text = gtk_entry_get_text (entry);
-    if (text)
-        info->tx_imp->settings_name(text);
-
-    auto combo = gtk_widget_get_parent (GTK_WIDGET(entry));
-    handle_save_del_sensitivity (GTK_COMBO_BOX(combo), info);
-}
-
-
-/*******************************************************
- * csv_tximp_preview_del_settings_cb
- *
- * call back to delete a settings entry
- *******************************************************/
-void
-csv_tximp_preview_del_settings_cb (GtkWidget *button, CsvImportTrans *info)
-{
-    // Get the Active Selection
-    GtkTreeIter iter;
-    if (!gtk_combo_box_get_active_iter (info->settings_combo, &iter))
-        return;
-
-    CsvTransSettings *preset = nullptr;
-    auto model = gtk_combo_box_get_model (info->settings_combo);
-    gtk_tree_model_get (model, &iter, SET_GROUP, &preset, -1);
-
-    auto dialog = gtk_message_dialog_new (GTK_WINDOW(info->csv_imp_asst),
-                                (GtkDialogFlags) 0,
-                                GTK_MESSAGE_QUESTION,
-                                GTK_BUTTONS_OK_CANCEL,
-                                "%s", _("Delete the Import Settings."));
-    gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-        "%s", _("Do you really want to delete the selection?"));
-    auto response = gtk_dialog_run (GTK_DIALOG (dialog));
-    gtk_widget_destroy (dialog);
-
-    if (response == GTK_RESPONSE_OK)
-    {
-        preset->remove();
-        populate_settings_combo(info->settings_combo);
-        gtk_combo_box_set_active (info->settings_combo, 0); // Default
-        csv_tximp_preview_refresh (info); // Reset the widgets
-    }
-}
-
-/*******************************************************
- * csv_tximp_preview_save_settings_cb
- *
- * Save the settings to a Key File.
- *******************************************************/
-void
-csv_tximp_preview_save_settings_cb (GtkWidget *button, CsvImportTrans *info)
-{
-    auto title = _("Save the Import Settings.");
-    auto new_name = info->tx_imp->settings_name();
-
-    /* Check if the entry text matches an already existing preset */
-    GtkTreeIter iter;
-    if (!gtk_combo_box_get_active_iter (info->settings_combo, &iter))
-    {
-
-        auto model = gtk_combo_box_get_model (info->settings_combo);
-        bool valid = gtk_tree_model_get_iter_first (model, &iter);
-        while (valid)
-        {
-            // Walk through the list, reading each row
-            CsvTransSettings *preset;
-            gtk_tree_model_get (model, &iter, SET_GROUP, &preset, -1);
-
-            if (preset && (preset->m_name == std::string(new_name)))
-            {
-                auto dialog = gtk_message_dialog_new (GTK_WINDOW(info->csv_imp_asst),
-                                        (GtkDialogFlags) 0,
-                                        GTK_MESSAGE_QUESTION,
-                                        GTK_BUTTONS_OK_CANCEL,
-                                        "%s", title);
-                gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                "%s", _("Setting name already exists, over write?"));
-                auto response = gtk_dialog_run (GTK_DIALOG (dialog));
-                gtk_widget_destroy (dialog);
-
-                if (response != GTK_RESPONSE_OK)
-                    return;
-
-                break;
-            }
-            valid = gtk_tree_model_iter_next (model, &iter);
-        }
-    }
-
-    /* All checks passed, let's save this preset */
-    if (!info->tx_imp->save_settings())
-    {
-        auto dialog = gtk_message_dialog_new (GTK_WINDOW(info->csv_imp_asst),
-                                    (GtkDialogFlags) 0,
-                                    GTK_MESSAGE_INFO,
-                                    GTK_BUTTONS_OK,
-                                    "%s", title);
-        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-            "%s", _("The settings have been saved."));
-        gtk_dialog_run (GTK_DIALOG (dialog));
-        gtk_widget_destroy (dialog);
-
-        // Update the settings store
-        populate_settings_combo(info->settings_combo);
-        auto model = gtk_combo_box_get_model (info->settings_combo);
-
-        // Get the first entry in model
-        GtkTreeIter   iter;
-        bool valid = gtk_tree_model_get_iter_first (model, &iter);
-        while (valid)
-        {
-            // Walk through the list, reading each row
-            gchar *name = nullptr;
-            gtk_tree_model_get (model, &iter, SET_NAME, &name, -1);
-
-            if (g_strcmp0 (name, new_name.c_str()) == 0) // Set Active, the one Saved.
-                gtk_combo_box_set_active_iter (info->settings_combo, &iter);
-
-            g_free (name);
-
-            valid = gtk_tree_model_iter_next (model, &iter);
-        }
-    }
-    else
-    {
-        auto dialog = gtk_message_dialog_new (GTK_WINDOW(info->csv_imp_asst),
-                                    (GtkDialogFlags) 0,
-                                    GTK_MESSAGE_ERROR,
-                                    GTK_BUTTONS_OK,
-                                    "%s", title);
-        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-            "%s", _("There was a problem saving the settings, please try again."));
-        gtk_dialog_run (GTK_DIALOG (dialog));
-        gtk_widget_destroy (dialog);
-    }
-}
-
-
 /**************************************************
- * csv_tximp_file_confirm_cb
+ * Code related to the file chooser page
+ **************************************************/
+
+/* csv_tximp_file_confirm_cb
  *
  * call back for ok button in file chooser widget
- **************************************************/
+ */
 void
 csv_tximp_file_confirm_cb (GtkWidget *button, CsvImportTrans *info)
 {
@@ -492,7 +249,7 @@ csv_tximp_file_confirm_cb (GtkWidget *button, CsvImportTrans *info)
     csv_tximp_preview_refresh (info);
 
     /* Get settings store and populate */
-    populate_settings_combo(info->settings_combo);
+    csv_tximp_preview_populate_settings_combo(info->settings_combo);
     gtk_combo_box_set_active (info->settings_combo, 0);
 
     gtk_assistant_set_page_complete (info->csv_imp_asst, page, true);
@@ -501,113 +258,243 @@ csv_tximp_file_confirm_cb (GtkWidget *button, CsvImportTrans *info)
 
 
 /**************************************************
- * csv_tximp_row_sel_update
- *
- * refresh the start and end row highlighting
+ * Code related to the preview page
  **************************************************/
-static
-void csv_tximp_preview_row_sel_update (CsvImportTrans* info)
+
+/* Set the available presets in the settings combo box
+ */
+void csv_tximp_preview_populate_settings_combo(GtkComboBox* combo)
+{
+    // Clear the list store
+    auto model = gtk_combo_box_get_model (combo);
+    gtk_list_store_clear (GTK_LIST_STORE(model));
+
+    // Append the default entry
+
+    auto presets = get_trans_presets ();
+    for (auto preset : presets)
+    {
+        GtkTreeIter iter;
+        gtk_list_store_append (GTK_LIST_STORE(model), &iter);
+        /* FIXME we store the raw pointer to the preset, while it's
+         * managed by a shared pointer. This is dangerous because
+         * when the shared pointer goes out of scope, our pointer will dangle.
+         * For now this is safe, because the shared pointers in this case are
+         * long-lived, but this may need refactoring.
+         */
+        gtk_list_store_set (GTK_LIST_STORE(model), &iter, SET_GROUP, preset.get(), SET_NAME, preset->m_name.c_str(), -1);
+    }
+}
+
+/* Enable or disable the save and delete settings buttons
+ * depending on what is selected and entered as settings name
+ */
+void csv_tximp_preview_handle_save_del_sensitivity (GtkComboBox* combo, CsvImportTrans *info)
 {
     GtkTreeIter iter;
-    auto store = GTK_LIST_STORE(gtk_tree_view_get_model (info->treeview));
-
-    /* Colorize rows that will be skipped */
-    for (uint i = 0; i < info->tx_imp->m_parsed_lines.size(); i++)
+    auto can_delete = false;
+    auto can_save = false;
+    auto entry = gtk_bin_get_child (GTK_BIN(combo));
+    auto entry_text = gtk_entry_get_text (GTK_ENTRY(entry));
+    /* Handle sensitivity of the delete and save button */
+    if (gtk_combo_box_get_active_iter (combo, &iter))
     {
-        const char *color = nullptr;
-        if ((i < info->tx_imp->skip_start_lines()) ||             // start rows to skip
-            (i >= info->tx_imp->m_parsed_lines.size()
-                    - info->tx_imp->skip_end_lines()) ||          // end rows to skip
-            (((i - info->tx_imp->skip_start_lines()) % 2 == 1) && // skip every second row...
-             info->tx_imp->skip_alt_lines()))                     // ...if requested
-            color = "pink";
-        else
-            color = nullptr;                                          // all other rows
+        CsvTransSettings *preset;
+        GtkTreeModel *model = gtk_combo_box_get_model (combo);
+        gtk_tree_model_get (model, &iter, SET_GROUP, &preset, -1);
 
-        bool valid = gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(store), &iter, nullptr, i);
-        if (valid)
-            gtk_list_store_set (store, &iter, 0, color, -1);
-    }
-}
-
-/*******************************************************
- * csv_import_preview_refresh
- *
- * Update the preview page based on the current state of the importer.
- * Should be called when settings are changed.
- *******************************************************/
-void
-csv_tximp_preview_refresh (CsvImportTrans *info)
-{
-    // Set start row
-    auto adj = gtk_spin_button_get_adjustment (info->start_row_spin);
-    gtk_adjustment_set_upper (adj, info->tx_imp->m_parsed_lines.size());
-    gtk_spin_button_set_value (info->start_row_spin,
-            info->tx_imp->skip_start_lines());
-
-    // Set end row
-    adj = gtk_spin_button_get_adjustment (info->end_row_spin);
-    gtk_adjustment_set_upper (adj, info->tx_imp->m_parsed_lines.size());
-    gtk_spin_button_set_value (info->end_row_spin,
-            info->tx_imp->skip_end_lines());
-
-    // Set Alternate rows
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->skip_alt_rows_button),
-            info->tx_imp->skip_alt_lines());
-
-    // Set multi-split indicator
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->multi_split_cbutton),
-            info->tx_imp->multi_split());
-
-    // Set Import Format
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->csv_button),
-            (info->tx_imp->file_format() == GncImpFileFormat::CSV));
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->fixed_button),
-            (info->tx_imp->file_format() != GncImpFileFormat::CSV));
-
-    // This section deals with the combo's and character encoding
-    gtk_combo_box_set_active (GTK_COMBO_BOX(info->date_format_combo),
-            info->tx_imp->date_format());
-    gtk_combo_box_set_active (GTK_COMBO_BOX(info->currency_format_combo),
-            info->tx_imp->currency_format());
-    go_charmap_sel_set_encoding (info->encselector, info->tx_imp->encoding().c_str());
-
-    gnc_account_sel_set_account(GNC_ACCOUNT_SEL(info->acct_selector),
-            info->tx_imp->base_account() , false);
-
-    // Handle separator checkboxes and custom field, only relevant if the file format is csv
-    if (info->tx_imp->file_format() == GncImpFileFormat::CSV)
-    {
-        auto separators = info->tx_imp->separators();
-        const auto stock_sep_chars = std::string (" \t,:;-");
-        for (int i = 0; i < SEP_NUM_OF_TYPES; i++)
-            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->sep_button[i]),
-                separators.find (stock_sep_chars[i]) != std::string::npos);
-
-        // If there are any other separators in the separators string,
-        // add them as custom separators
-        auto pos = separators.find_first_of (stock_sep_chars);
-        while (!separators.empty() && pos != std::string::npos)
+        if (preset && !trans_preset_is_reserved_name (preset->m_name))
         {
-            separators.erase(pos);
-            pos = separators.find_first_of (stock_sep_chars);
+            /* Current preset is not read_only, so buttons can be enabled */
+            can_delete = true;
+            can_save = true;
         }
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->custom_cbutton),
-                !separators.empty());
-        gtk_entry_set_text (GTK_ENTRY(info->custom_entry), separators.c_str());
     }
+    else if (entry_text && (strlen (entry_text) > 0) &&
+            !trans_preset_is_reserved_name (std::string(entry_text)))
+        can_save = true;
 
-    // Repopulate the parsed data table
-    csv_tximp_preview_refresh_table (info);
+    gtk_widget_set_sensitive (info->save_button, can_save);
+    gtk_widget_set_sensitive (info->del_button, can_delete);
+
 }
 
 
+/* Use selected preset to configure the import. Triggered when
+ * a preset is selected in the settings combo.
+ */
+void
+csv_tximp_preview_settings_sel_changed_cb (GtkComboBox *combo, CsvImportTrans *info)
+{
+    // Get the Active Selection
+    GtkTreeIter iter;
+    if (!gtk_combo_box_get_active_iter (combo, &iter))
+        return;
 
-/*******************************************************
- * csv_tximp_preview_srow_cb
- *
- * call back for import start row
- *******************************************************/
+    CsvTransSettings *preset = nullptr;
+    auto model = gtk_combo_box_get_model (combo);
+    gtk_tree_model_get (model, &iter, SET_GROUP, &preset, -1);
+
+    if (!preset)
+        return;
+
+    info->tx_imp->settings (*preset);
+    if (preset->m_load_error)
+    {
+        auto dialog = gtk_message_dialog_new (GTK_WINDOW(info->csv_imp_asst),
+                                    (GtkDialogFlags) 0,
+                                    GTK_MESSAGE_ERROR,
+                                    GTK_BUTTONS_OK,
+                                    "%s", _("Load the Import Settings."));
+        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+            "%s", _("There were problems reading some saved settings, continuing to load.\n Please review and save again."));
+        gtk_dialog_run (GTK_DIALOG (dialog));
+        gtk_widget_destroy (dialog);
+    }
+
+    csv_tximp_preview_refresh (info);
+    csv_tximp_preview_handle_save_del_sensitivity (combo, info);
+    csv_tximp_preview_validate_settings (info);
+}
+
+
+/* Callback triggered while the user is editing text the settings combo.
+ */
+void
+csv_tximp_preview_settings_text_changed_cb (GtkEntry *entry, CsvImportTrans *info)
+{
+    auto text = gtk_entry_get_text (entry);
+    if (text)
+        info->tx_imp->settings_name(text);
+
+    auto combo = gtk_widget_get_parent (GTK_WIDGET(entry));
+    csv_tximp_preview_handle_save_del_sensitivity (GTK_COMBO_BOX(combo), info);
+}
+
+
+/* Callback to delete a settings entry
+ */
+void
+csv_tximp_preview_del_settings_cb (GtkWidget *button, CsvImportTrans *info)
+{
+    // Get the Active Selection
+    GtkTreeIter iter;
+    if (!gtk_combo_box_get_active_iter (info->settings_combo, &iter))
+        return;
+
+    CsvTransSettings *preset = nullptr;
+    auto model = gtk_combo_box_get_model (info->settings_combo);
+    gtk_tree_model_get (model, &iter, SET_GROUP, &preset, -1);
+
+    auto dialog = gtk_message_dialog_new (GTK_WINDOW(info->csv_imp_asst),
+                                (GtkDialogFlags) 0,
+                                GTK_MESSAGE_QUESTION,
+                                GTK_BUTTONS_OK_CANCEL,
+                                "%s", _("Delete the Import Settings."));
+    gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+        "%s", _("Do you really want to delete the selection?"));
+    auto response = gtk_dialog_run (GTK_DIALOG (dialog));
+    gtk_widget_destroy (dialog);
+
+    if (response == GTK_RESPONSE_OK)
+    {
+        preset->remove();
+        csv_tximp_preview_populate_settings_combo(info->settings_combo);
+        gtk_combo_box_set_active (info->settings_combo, 0); // Default
+        csv_tximp_preview_refresh (info); // Reset the widgets
+    }
+}
+
+/* Callback to save the current settings to the gnucash state file.
+ */
+void
+csv_tximp_preview_save_settings_cb (GtkWidget *button, CsvImportTrans *info)
+{
+    auto title = _("Save the Import Settings.");
+    auto new_name = info->tx_imp->settings_name();
+
+    /* Check if the entry text matches an already existing preset */
+    GtkTreeIter iter;
+    if (!gtk_combo_box_get_active_iter (info->settings_combo, &iter))
+    {
+
+        auto model = gtk_combo_box_get_model (info->settings_combo);
+        bool valid = gtk_tree_model_get_iter_first (model, &iter);
+        while (valid)
+        {
+            // Walk through the list, reading each row
+            CsvTransSettings *preset;
+            gtk_tree_model_get (model, &iter, SET_GROUP, &preset, -1);
+
+            if (preset && (preset->m_name == std::string(new_name)))
+            {
+                auto dialog = gtk_message_dialog_new (GTK_WINDOW(info->csv_imp_asst),
+                                        (GtkDialogFlags) 0,
+                                        GTK_MESSAGE_QUESTION,
+                                        GTK_BUTTONS_OK_CANCEL,
+                                        "%s", title);
+                gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                "%s", _("Setting name already exists, over write?"));
+                auto response = gtk_dialog_run (GTK_DIALOG (dialog));
+                gtk_widget_destroy (dialog);
+
+                if (response != GTK_RESPONSE_OK)
+                    return;
+
+                break;
+            }
+            valid = gtk_tree_model_iter_next (model, &iter);
+        }
+    }
+
+    /* All checks passed, let's save this preset */
+    if (!info->tx_imp->save_settings())
+    {
+        auto dialog = gtk_message_dialog_new (GTK_WINDOW(info->csv_imp_asst),
+                                    (GtkDialogFlags) 0,
+                                    GTK_MESSAGE_INFO,
+                                    GTK_BUTTONS_OK,
+                                    "%s", title);
+        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+            "%s", _("The settings have been saved."));
+        gtk_dialog_run (GTK_DIALOG (dialog));
+        gtk_widget_destroy (dialog);
+
+        // Update the settings store
+        csv_tximp_preview_populate_settings_combo(info->settings_combo);
+        auto model = gtk_combo_box_get_model (info->settings_combo);
+
+        // Get the first entry in model
+        GtkTreeIter   iter;
+        bool valid = gtk_tree_model_get_iter_first (model, &iter);
+        while (valid)
+        {
+            // Walk through the list, reading each row
+            gchar *name = nullptr;
+            gtk_tree_model_get (model, &iter, SET_NAME, &name, -1);
+
+            if (g_strcmp0 (name, new_name.c_str()) == 0) // Set Active, the one Saved.
+                gtk_combo_box_set_active_iter (info->settings_combo, &iter);
+
+            g_free (name);
+
+            valid = gtk_tree_model_iter_next (model, &iter);
+        }
+    }
+    else
+    {
+        auto dialog = gtk_message_dialog_new (GTK_WINDOW(info->csv_imp_asst),
+                                    (GtkDialogFlags) 0,
+                                    GTK_MESSAGE_ERROR,
+                                    GTK_BUTTONS_OK,
+                                    "%s", title);
+        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+            "%s", _("There was a problem saving the settings, please try again."));
+        gtk_dialog_run (GTK_DIALOG (dialog));
+        gtk_widget_destroy (dialog);
+    }
+}/* Callback triggered when user adjusts skip start lines
+ */
 void csv_tximp_preview_srow_cb (GtkSpinButton *spin, CsvImportTrans *info)
 {
 
@@ -620,15 +507,12 @@ void csv_tximp_preview_srow_cb (GtkSpinButton *spin, CsvImportTrans *info)
             - info->tx_imp->skip_start_lines());
 
     csv_tximp_preview_row_sel_update (info);
-    csv_tximp_validate_preview_settings (info);
+    csv_tximp_preview_validate_settings (info);
 }
 
 
-/*******************************************************
- * csv_tximp_preview_erow_cb
- *
- * call back for import end row
- *******************************************************/
+/* Callback triggered when user adjusts skip end lines
+ */
 void csv_tximp_preview_erow_cb (GtkSpinButton *spin, CsvImportTrans *info)
 {
     /* Get number of lines to skip at the end */
@@ -640,45 +524,36 @@ void csv_tximp_preview_erow_cb (GtkSpinButton *spin, CsvImportTrans *info)
             - info->tx_imp->skip_end_lines());
 
     csv_tximp_preview_row_sel_update (info);
-    csv_tximp_validate_preview_settings (info);
+    csv_tximp_preview_validate_settings (info);
 }
 
 
-/*******************************************************
- * csv_tximp_preview_skiperrors_cb
- *
- * call back for Skip Errors
- *******************************************************/
+/* Callback triggered when user clicks the skip errors button
+ */
 void csv_tximp_preview_skiperrors_cb (GtkToggleButton *checkbox, CsvImportTrans *info)
 {
     info->skip_errors = gtk_toggle_button_get_active (checkbox);
-    csv_tximp_validate_preview_settings (info);
+    csv_tximp_preview_validate_settings (info);
 }
 
 
-/*******************************************************
- * csv_tximp_preview_multisplit_cb
- *
- * call back for import multi-split checkbox
- *******************************************************/
+/* Callback triggered when user clicks the multi split button
+ */
 void csv_tximp_preview_multisplit_cb (GtkToggleButton *checkbox, CsvImportTrans *info)
 {
     info->tx_imp->multi_split (gtk_toggle_button_get_active (checkbox));
     csv_tximp_preview_refresh_table (info);
-    csv_tximp_validate_preview_settings (info);
+    csv_tximp_preview_validate_settings (info);
 }
 
 
-/*******************************************************
- * csv_tximp_preview_skiprows_cb
- *
- * call back for import skip rows checkbox
- *******************************************************/
+/* Callback triggered when user clicks the skip alternating lines button
+ */
 void csv_tximp_preview_skiprows_cb (GtkToggleButton *checkbox, CsvImportTrans *info)
 {
     info->tx_imp->skip_alt_lines (gtk_toggle_button_get_active (checkbox));
     csv_tximp_preview_row_sel_update (info);
-    csv_tximp_validate_preview_settings (info);
+    csv_tximp_preview_validate_settings (info);
 }
 
 
@@ -739,7 +614,7 @@ void csv_tximp_preview_sep_button_cb (GtkWidget* widget, CsvImportTrans* info)
     {
         info->tx_imp->tokenize (false);
         csv_tximp_preview_refresh_table (info);
-        csv_tximp_validate_preview_settings (info);
+        csv_tximp_preview_validate_settings (info);
     }
     catch (std::range_error &e)
     {
@@ -762,13 +637,15 @@ void csv_tximp_preview_sep_button_cb (GtkWidget* widget, CsvImportTrans* info)
     }
 }
 
+/* Callback triggered when user selects an account in the account selection
+ */
 void csv_tximp_preview_acct_sel_cb (GtkWidget* widget, CsvImportTrans* info)
 {
 
     auto acct = gnc_account_sel_get_account( GNC_ACCOUNT_SEL(widget) );
     info->tx_imp->base_account(acct);
     csv_tximp_preview_refresh_table (info);
-    csv_tximp_validate_preview_settings (info);
+    csv_tximp_preview_validate_settings (info);
 }
 
 
@@ -789,7 +666,7 @@ void csv_tximp_preview_sep_fixed_sel_cb (GtkToggleButton* csv_button, CsvImportT
 
         info->tx_imp->tokenize (false);
         csv_tximp_preview_refresh_table (info);
-        csv_tximp_validate_preview_settings (info);
+        csv_tximp_preview_validate_settings (info);
     }
     catch (std::range_error &e)
     {
@@ -830,7 +707,7 @@ void csv_tximp_preview_enc_sel_cb (GOCharmapSel* selector, const char* encoding,
             info->tx_imp->tokenize (false);
 
             csv_tximp_preview_refresh_table (info);
-            csv_tximp_validate_preview_settings (info);
+            csv_tximp_preview_validate_settings (info);
 
             info->encoding_selected_called = false;
         }
@@ -856,7 +733,7 @@ void csv_tximp_preview_enc_sel_cb (GOCharmapSel* selector, const char* encoding,
 static void csv_tximp_preview_date_fmt_sel_cb (GtkComboBox* format_selector, CsvImportTrans* info)
 {
     info->tx_imp->date_format (gtk_combo_box_get_active (format_selector));
-    csv_tximp_validate_preview_settings (info);
+    csv_tximp_preview_validate_settings (info);
 }
 
 
@@ -867,9 +744,64 @@ static void csv_tximp_preview_date_fmt_sel_cb (GtkComboBox* format_selector, Csv
 static void csv_tximp_preview_currency_fmt_sel_cb (GtkComboBox* currency_selector, CsvImportTrans* info)
 {
     info->tx_imp->currency_format (gtk_combo_box_get_active (currency_selector));
-    csv_tximp_validate_preview_settings (info);
+    csv_tximp_preview_validate_settings (info);
 }
 
+
+/** Event handler for the data treeview being resized. When the data
+ * treeview is resized, the column types treeview's columns are also resized to
+ * match.
+ * @param widget The data treeview
+ * @param allocation The size of the data treeview
+ * @param info The display of the data being imported
+ */
+static void csv_tximp_preview_treeview_resized_cb (GtkWidget* widget, GtkAllocation* allocation, CsvImportTrans* info)
+{
+    /* Go through each column except for the last. (We don't want to set
+     * the width of the last column because the user won't be able to
+     * shrink the dialog back if it's expanded.) */
+    for (uint i = 0; i < info->tx_imp->column_types().size() - 1; i++)
+    {
+        /* Get the width. */
+        auto col_width = gtk_tree_view_column_get_width (gtk_tree_view_get_column (info->treeview, i));
+        /* Set the minimum width for a column so that drop down selector can be seen. */
+        if (col_width < MIN_COL_WIDTH)
+            col_width = MIN_COL_WIDTH;
+        auto pcol = gtk_tree_view_get_column (info->treeview, i);
+        gtk_tree_view_column_set_min_width (pcol, col_width);
+        /* Set ccol's width the same. */
+        auto ccol = gtk_tree_view_get_column (info->ctreeview, i);
+        gtk_tree_view_column_set_min_width (ccol, col_width);
+        gtk_tree_view_column_set_max_width (ccol, col_width);
+    }
+}
+
+
+/** Event handler for the user selecting a new column type. When the
+ * user selects a new column type, that column's text must be changed
+ * to that selection, and any other columns containing that selection
+ * must be changed to "None" because we don't allow duplicates.
+ * @param renderer The renderer of the column the user changed
+ * @param path There is only 1 row in info->ctreeview, so this is always 0.
+ * @param new_text The text the user selected
+ * @param info The display of the data being imported
+ */
+static void csv_tximp_preview_col_type_changed_cb (GtkCellRenderer* renderer, gchar* path,
+                                GtkTreeIter* new_text_iter, CsvImportTrans* info)
+{
+    /* Get the new text */
+    auto col_num = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT(renderer), "col-num"));
+    GtkTreeModel* model;
+    g_object_get (renderer, "model", &model, nullptr);
+    auto new_col_type = GncTransPropType::NONE;
+    gtk_tree_model_get (model, new_text_iter,
+            1, &new_col_type, // Invisible column in the combobox' model containing the column type
+            -1);
+
+    info->tx_imp->set_column_type (col_num, new_col_type);
+    csv_tximp_preview_refresh_table (info);
+    csv_tximp_preview_validate_settings (info);
+}
 
 /*======================================================================*/
 /*================== Beginning of Gnumeric Code ========================*/
@@ -992,7 +924,7 @@ fixed_context_menu_handler (GnumericPopupMenuElement const *element,
         return false;
     }
     csv_tximp_preview_refresh_table (info);
-    csv_tximp_validate_preview_settings (info);
+    csv_tximp_preview_validate_settings (info);
     return true;
 }
 static void
@@ -1035,64 +967,8 @@ fixed_context_menu (CsvImportTrans* info, GdkEventButton *event,
 /*===================== End of Gnumeric Code ===========================*/
 /*======================================================================*/
 
-
-/** Event handler for the data treeview being resized. When the data
- * treeview is resized, the column types treeview's columns are also resized to
- * match.
- * @param widget The data treeview
- * @param allocation The size of the data treeview
- * @param info The display of the data being imported
- */
-static void csv_tximp_preview_treeview_resized_cb (GtkWidget* widget, GtkAllocation* allocation, CsvImportTrans* info)
-{
-    /* Go through each column except for the last. (We don't want to set
-     * the width of the last column because the user won't be able to
-     * shrink the dialog back if it's expanded.) */
-    for (uint i = 0; i < info->tx_imp->column_types().size() - 1; i++)
-    {
-        /* Get the width. */
-        auto col_width = gtk_tree_view_column_get_width (gtk_tree_view_get_column (info->treeview, i));
-        /* Set the minimum width for a column so that drop down selector can be seen. */
-        if (col_width < MIN_COL_WIDTH)
-            col_width = MIN_COL_WIDTH;
-        auto pcol = gtk_tree_view_get_column (info->treeview, i);
-        gtk_tree_view_column_set_min_width (pcol, col_width);
-        /* Set ccol's width the same. */
-        auto ccol = gtk_tree_view_get_column (info->ctreeview, i);
-        gtk_tree_view_column_set_min_width (ccol, col_width);
-        gtk_tree_view_column_set_max_width (ccol, col_width);
-    }
-}
-
-
-/** Event handler for the user selecting a new column type. When the
- * user selects a new column type, that column's text must be changed
- * to that selection, and any other columns containing that selection
- * must be changed to "None" because we don't allow duplicates.
- * @param renderer The renderer of the column the user changed
- * @param path There is only 1 row in info->ctreeview, so this is always 0.
- * @param new_text The text the user selected
- * @param info The display of the data being imported
- */
-static void csv_tximp_preview_col_type_changed_cb (GtkCellRenderer* renderer, gchar* path,
-                                GtkTreeIter* new_text_iter, CsvImportTrans* info)
-{
-    /* Get the new text */
-    auto col_num = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT(renderer), "col-num"));
-    GtkTreeModel* model;
-    g_object_get (renderer, "model", &model, nullptr);
-    auto new_col_type = GncTransPropType::NONE;
-    gtk_tree_model_get (model, new_text_iter,
-            1, &new_col_type, // Invisible column in the combobox' model containing the column type
-            -1);
-
-    info->tx_imp->set_column_type (col_num, new_col_type);
-    csv_tximp_preview_refresh_table (info);
-    csv_tximp_validate_preview_settings (info);
-}
-
 static void
-split_column (CsvImportTrans* info, int col, int dx)
+csv_tximp_preview_split_column (CsvImportTrans* info, int col, int dx)
 {
     auto rel_pos = get_new_col_rel_pos (info, col, dx);
     auto fwtok = dynamic_cast<GncFwTokenizer*>(info->tx_imp->m_tokenizer.get());
@@ -1107,7 +983,7 @@ split_column (CsvImportTrans* info, int col, int dx)
         return;
     }
     csv_tximp_preview_refresh_table (info);
-    csv_tximp_validate_preview_settings (info);
+    csv_tximp_preview_validate_settings (info);
 }
 
 
@@ -1118,7 +994,8 @@ split_column (CsvImportTrans* info, int col, int dx)
  * @param event The event that happened (where the user clicked)
  * @param info The data being configured
  */
-static void header_button_press_handler (GtkWidget* button, GdkEventButton* event,
+static void
+csv_tximp_preview_header_clicked_cb (GtkWidget* button, GdkEventButton* event,
                                         CsvImportTrans* info)
 {
     /* Find the column that was clicked. */
@@ -1134,106 +1011,37 @@ static void header_button_press_handler (GtkWidget* button, GdkEventButton* even
     auto offset = alloc.x - alloc.x;
     if (event->type == GDK_2BUTTON_PRESS && event->button == 1)
         /* Double clicks can split columns. */
-        split_column (info, col, (int)event->x - offset);
+        csv_tximp_preview_split_column (info, col, (int)event->x - offset);
     else if (event->type == GDK_BUTTON_PRESS && event->button == 3)
         /* Right clicking brings up a context menu. */
         fixed_context_menu (info, event, col, (int)event->x - offset);
 }
 
 
-/* Test for the string being in the liststore
- * Returns true if it is or false if not.
- *
- * @param liststore The data being reviewed
- *
- * @param string to check for
+/* visualize skipped lines
  */
-static bool
-check_for_duplicates (GtkListStore *liststore, const gchar *string)
+void csv_tximp_preview_row_sel_update (CsvImportTrans* info)
 {
     GtkTreeIter iter;
-    auto valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL(liststore), &iter);
-    while (valid)
+    auto store = GTK_LIST_STORE(gtk_tree_view_get_model (info->treeview));
+
+    /* Colorize rows that will be skipped */
+    for (uint i = 0; i < info->tx_imp->m_parsed_lines.size(); i++)
     {
-        gchar *text;
-        // Walk through the list, reading each row of column string
-        gtk_tree_model_get (GTK_TREE_MODEL(liststore), &iter, MAPPING_STRING, &text, -1);
+        const char *color = nullptr;
+        if ((i < info->tx_imp->skip_start_lines()) ||             // start rows to skip
+            (i >= info->tx_imp->m_parsed_lines.size()
+                    - info->tx_imp->skip_end_lines()) ||          // end rows to skip
+            (((i - info->tx_imp->skip_start_lines()) % 2 == 1) && // skip every second row...
+             info->tx_imp->skip_alt_lines()))                     // ...if requested
+            color = "pink";
+        else
+            color = nullptr;                                          // all other rows
 
-        if(!(g_strcmp0 (text, string)))
-        {
-            g_free (text);
-            return true;
-        }
-        g_free (text);
-
-        valid = gtk_tree_model_iter_next (GTK_TREE_MODEL(liststore), &iter);
+        bool valid = gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(store), &iter, nullptr, i);
+        if (valid)
+            gtk_list_store_set (store, &iter, 0, color, -1);
     }
-    return false;
-}
-
-
-/* Get the list of accounts
- * Returns true if we have any accounts
- *
- * @param info The data being previewed
- *
- * @param store for the account match page
- */
-bool get_list_of_accounts (CsvImportTrans* info, GtkTreeModel *store)
-{
-    /* ctstore contains the actual strings appearing in the column types treeview. */
-    auto ctstore = gtk_tree_view_get_model (info->ctreeview);
-    GtkTreeIter ct_iter;
-    gtk_tree_model_get_iter_first (ctstore, &ct_iter);
-
-    /* datastore contains the actual strings appearing in the preview treeview. */
-    auto datastore = gtk_tree_view_get_model (info->treeview);
-    auto have_accounts = false;
-    for (uint j = info->tx_imp->skip_start_lines();
-            j < info->tx_imp->m_parsed_lines.size() - info->tx_imp->skip_end_lines() - 1;
-            j++)
-    {
-        /* Go through each of the columns. */
-        for (uint i = 0; i < info->tx_imp->column_types().size(); i++)
-        {
-            auto col_type = GncTransPropType::NONE;
-
-            /* Get the column type. Store is arranged so that every two
-             * columns is a pair of
-             * - the column type as a user visible (translated) string
-             * - the internal type for this column
-             * So store looks like:
-             * col_type_str 0, col_type, col_type_str 1, col_type 1, ..., col_type_str ncols, col_type ncols. */
-            gtk_tree_model_get (ctstore, &ct_iter, 2 * i + 1, &col_type, -1);
-
-            /* We're only interested in columns of type ACCOUNT and OACCOUNT. */
-            if ((col_type == GncTransPropType::ACCOUNT) || (col_type == GncTransPropType::TACCOUNT))
-            {
-                /* Get an iterator for the row in the data store. */
-                GtkTreeIter data_iter;
-                if (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(datastore), &data_iter, nullptr, j))
-                {
-                    gchar* accstr = nullptr;   /* The string in this column from datastore. */
-                    gtk_tree_model_get (datastore, &data_iter, i + 1, &accstr, -1);
-                    if (!accstr || *accstr == '\0')
-                        continue;
-
-                    // Append the entry
-                    if (!check_for_duplicates (GTK_LIST_STORE(store), accstr))
-                    {
-                        GtkTreeIter acct_iter;
-                        gtk_list_store_append (GTK_LIST_STORE(store), &acct_iter);
-                        gtk_list_store_set (GTK_LIST_STORE(store), &acct_iter, MAPPING_STRING, accstr,
-                                            MAPPING_FULLPATH, _("No Linked Account"), MAPPING_ACCOUNT, nullptr, -1);
-                        have_accounts = true;
-                    }
-                    g_free (accstr);
-                }
-            }
-        }
-    }
-
-    return have_accounts;
 }
 
 
@@ -1386,7 +1194,7 @@ void csv_tximp_preview_refresh_table (CsvImportTrans* info)
         g_object_set (G_OBJECT(col), "clickable", TRUE, nullptr);
         auto button = gtk_tree_view_column_get_widget(col);
         g_signal_connect (G_OBJECT(button), "button_press_event",
-                         G_CALLBACK(header_button_press_handler), (gpointer)info);
+                         G_CALLBACK(csv_tximp_preview_header_clicked_cb), (gpointer)info);
         /* Store the column number in the button to know which one was clicked later on */
         g_object_set_data (G_OBJECT(button), "col-num",GINT_TO_POINTER(i));
     }
@@ -1425,8 +1233,77 @@ void csv_tximp_preview_refresh_table (CsvImportTrans* info)
 
 }
 
+/* Update the preview page based on the current state of the importer.
+ * Should be called when settings are changed.
+ */
+void
+csv_tximp_preview_refresh (CsvImportTrans *info)
+{
+    // Set start row
+    auto adj = gtk_spin_button_get_adjustment (info->start_row_spin);
+    gtk_adjustment_set_upper (adj, info->tx_imp->m_parsed_lines.size());
+    gtk_spin_button_set_value (info->start_row_spin,
+            info->tx_imp->skip_start_lines());
 
-void csv_tximp_validate_preview_settings (CsvImportTrans* info)
+    // Set end row
+    adj = gtk_spin_button_get_adjustment (info->end_row_spin);
+    gtk_adjustment_set_upper (adj, info->tx_imp->m_parsed_lines.size());
+    gtk_spin_button_set_value (info->end_row_spin,
+            info->tx_imp->skip_end_lines());
+
+    // Set Alternate rows
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->skip_alt_rows_button),
+            info->tx_imp->skip_alt_lines());
+
+    // Set multi-split indicator
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->multi_split_cbutton),
+            info->tx_imp->multi_split());
+
+    // Set Import Format
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->csv_button),
+            (info->tx_imp->file_format() == GncImpFileFormat::CSV));
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->fixed_button),
+            (info->tx_imp->file_format() != GncImpFileFormat::CSV));
+
+    // This section deals with the combo's and character encoding
+    gtk_combo_box_set_active (GTK_COMBO_BOX(info->date_format_combo),
+            info->tx_imp->date_format());
+    gtk_combo_box_set_active (GTK_COMBO_BOX(info->currency_format_combo),
+            info->tx_imp->currency_format());
+    go_charmap_sel_set_encoding (info->encselector, info->tx_imp->encoding().c_str());
+
+    gnc_account_sel_set_account(GNC_ACCOUNT_SEL(info->acct_selector),
+            info->tx_imp->base_account() , false);
+
+    // Handle separator checkboxes and custom field, only relevant if the file format is csv
+    if (info->tx_imp->file_format() == GncImpFileFormat::CSV)
+    {
+        auto separators = info->tx_imp->separators();
+        const auto stock_sep_chars = std::string (" \t,:;-");
+        for (int i = 0; i < SEP_NUM_OF_TYPES; i++)
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->sep_button[i]),
+                separators.find (stock_sep_chars[i]) != std::string::npos);
+
+        // If there are any other separators in the separators string,
+        // add them as custom separators
+        auto pos = separators.find_first_of (stock_sep_chars);
+        while (!separators.empty() && pos != std::string::npos)
+        {
+            separators.erase(pos);
+            pos = separators.find_first_of (stock_sep_chars);
+        }
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->custom_cbutton),
+                !separators.empty());
+        gtk_entry_set_text (GTK_ENTRY(info->custom_entry), separators.c_str());
+    }
+
+    // Repopulate the parsed data table
+    csv_tximp_preview_refresh_table (info);
+}
+
+/* Check if all selected data can be parsed sufficiently to continue
+ */
+void csv_tximp_preview_validate_settings (CsvImportTrans* info)
 {
     /* Allow the user to proceed only if there are no inconsistencies in the settings */
     auto error_msg = info->tx_imp->verify();
@@ -1435,12 +1312,285 @@ void csv_tximp_validate_preview_settings (CsvImportTrans* info)
     gtk_widget_set_visible (GTK_WIDGET(info->instructions_image), !error_msg.empty());
 }
 
-/*======================================================================*/
-/*======================================================================*/
+
+/**************************************************
+ * Code related to the account match page
+ **************************************************/
+
+/* Test for the string being in the liststore
+ * Returns true if it is or false if not.
+ *
+ * @param liststore The data being reviewed
+ * @param string to check for
+ */
+static bool
+csv_tximp_acct_match_check_for_duplicates (GtkListStore *liststore, const gchar *string)
+{
+    GtkTreeIter iter;
+    auto valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL(liststore), &iter);
+    while (valid)
+    {
+        gchar *text;
+        // Walk through the list, reading each row of column string
+        gtk_tree_model_get (GTK_TREE_MODEL(liststore), &iter, MAPPING_STRING, &text, -1);
+
+        if(!(g_strcmp0 (text, string)))
+        {
+            g_free (text);
+            return true;
+        }
+        g_free (text);
+
+        valid = gtk_tree_model_iter_next (GTK_TREE_MODEL(liststore), &iter);
+    }
+    return false;
+}
+
+
+/* Get the list of accounts
+ * Returns true if we have any accounts
+ *
+ * @param info The data being previewed
+ * @param store for the account match page
+ */
+bool csv_tximp_acct_match_get_list_of_accounts (CsvImportTrans* info, GtkTreeModel *store)
+{
+    /* ctstore contains the actual strings appearing in the column types treeview. */
+    auto ctstore = gtk_tree_view_get_model (info->ctreeview);
+    GtkTreeIter ct_iter;
+    gtk_tree_model_get_iter_first (ctstore, &ct_iter);
+
+    /* datastore contains the actual strings appearing in the preview treeview. */
+    auto datastore = gtk_tree_view_get_model (info->treeview);
+    auto have_accounts = false;
+    for (uint j = info->tx_imp->skip_start_lines();
+            j < info->tx_imp->m_parsed_lines.size() - info->tx_imp->skip_end_lines() - 1;
+            j++)
+    {
+        /* Go through each of the columns. */
+        for (uint i = 0; i < info->tx_imp->column_types().size(); i++)
+        {
+            auto col_type = GncTransPropType::NONE;
+
+            /* Get the column type. Store is arranged so that every two
+             * columns is a pair of
+             * - the column type as a user visible (translated) string
+             * - the internal type for this column
+             * So store looks like:
+             * col_type_str 0, col_type, col_type_str 1, col_type 1, ..., col_type_str ncols, col_type ncols. */
+            gtk_tree_model_get (ctstore, &ct_iter, 2 * i + 1, &col_type, -1);
+
+            /* We're only interested in columns of type ACCOUNT and OACCOUNT. */
+            if ((col_type == GncTransPropType::ACCOUNT) || (col_type == GncTransPropType::TACCOUNT))
+            {
+                /* Get an iterator for the row in the data store. */
+                GtkTreeIter data_iter;
+                if (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(datastore), &data_iter, nullptr, j))
+                {
+                    gchar* accstr = nullptr;   /* The string in this column from datastore. */
+                    gtk_tree_model_get (datastore, &data_iter, i + 1, &accstr, -1);
+                    if (!accstr || *accstr == '\0')
+                        continue;
+
+                    // Append the entry
+                    if (!csv_tximp_acct_match_check_for_duplicates (GTK_LIST_STORE(store), accstr))
+                    {
+                        GtkTreeIter acct_iter;
+                        gtk_list_store_append (GTK_LIST_STORE(store), &acct_iter);
+                        gtk_list_store_set (GTK_LIST_STORE(store), &acct_iter, MAPPING_STRING, accstr,
+                                            MAPPING_FULLPATH, _("No Linked Account"), MAPPING_ACCOUNT, nullptr, -1);
+                        have_accounts = true;
+                    }
+                    g_free (accstr);
+                }
+            }
+        }
+    }
+
+    return have_accounts;
+}
+
+
+static bool
+csv_tximp_acct_match_check_all (GtkTreeModel *model)
+{
+    // Set iter to first entry of store
+    GtkTreeIter iter;
+    auto valid = gtk_tree_model_get_iter_first (model, &iter);
+
+    // Walk through the store looking for nullptr accounts
+    auto ret = true;
+    while (valid)
+    {
+        Account *account;
+
+        // Walk through the list, reading each row
+        gtk_tree_model_get (model, &iter, MAPPING_ACCOUNT, &account, -1);
+
+        if (account == nullptr)
+            ret = false;
+
+        valid = gtk_tree_model_iter_next (model, &iter);
+    }
+    return ret;
+}
+
+
+/* Parse the text splitting into a path and the last_part based on
+ * account separator. If the path is valid, add the last_part and
+ * return this. If the path is invalid, use the new separator path
+ * with the last_part and return that so there is only one new
+ * account dialog.
+ */
+static gchar *
+csv_tximp_acct_match_text_parse (gchar *text)
+{
+    // Split the incoming string by current separator
+    auto sep = gnc_get_account_separator_string ();
+    auto names = g_strsplit (text, sep, -1);
+
+    /* find the last_part and count parts */
+    int count = 0;
+    gchar *last_part = nullptr;
+    for (auto ptr = names; *ptr; ptr++)
+    {
+        if (g_strcmp0 (*ptr,"") != 0) //separator is last in string
+        {
+            if (last_part)
+                g_free (last_part);
+            last_part = g_strdup (*ptr);
+            count = count + 1;
+        }
+    }
+
+    // If count is 1 we have no path
+    gchar *ret_string = nullptr;
+    if (count == 1)
+        ret_string = g_strdup (last_part);
+    else
+    {
+        // Start to create two paths based on current and possibly new separator
+        auto sep_path = g_strdup (names[0]);
+        auto newsep_path = g_strdup (names[0]);
+
+        // Setup an alternative separator
+        const gchar *alt_sep;
+        if (g_strcmp0 (sep,":") == 0)
+            alt_sep = "-";
+        else
+            alt_sep = ":";
+
+        // Join the parts together apart from last_part which could be account name
+        for (int i = 1; i < count - 1; i++)
+        {
+            gchar *temp_sep_path, *temp_newsep_path;
+
+            temp_sep_path = g_strdup (sep_path);
+            temp_newsep_path = g_strdup (newsep_path);
+            g_free (sep_path);
+            g_free (newsep_path);
+            sep_path = g_strconcat (temp_sep_path, sep, names[i], nullptr);
+            newsep_path = g_strconcat (temp_newsep_path, alt_sep, names[i], nullptr);
+            g_free (temp_sep_path);
+            g_free (temp_newsep_path);
+        }
+        auto book = gnc_get_current_book ();
+        auto account = gnc_account_lookup_by_full_name (gnc_book_get_root_account (book), sep_path);
+
+        if (!account) // path not found
+            ret_string = g_strconcat (newsep_path, alt_sep, last_part, nullptr);
+        else
+            ret_string = g_strconcat (sep_path, sep, last_part, nullptr);
+
+        g_free (sep_path);
+        g_free (newsep_path);
+    }
+    g_free (last_part);
+    g_strfreev (names);
+    return ret_string;
+}
+
+static void
+csv_tximp_acct_match_select_internal(CsvImportTrans* info, GtkTreeModel *model, GtkTreeIter& iter)
+{
+    // Get the the String
+    gchar *text = nullptr;
+    gtk_tree_model_get (model, &iter, MAPPING_STRING, &text, -1);
+
+    // Get the pointer to the Account
+    Account *account = nullptr;
+    gtk_tree_model_get (model, &iter, MAPPING_ACCOUNT, &account, -1);
+
+    auto parsed_text = csv_tximp_acct_match_text_parse (text);
+    auto gnc_acc = gnc_import_select_account (nullptr, nullptr, 1,
+            parsed_text, nullptr, ACCT_TYPE_NONE, account, nullptr);
+
+    if (gnc_acc) // We may have canceled
+    {
+        auto fullpath = gnc_account_get_full_name (gnc_acc);
+        gtk_list_store_set (GTK_LIST_STORE(model), &iter,
+                MAPPING_ACCOUNT, gnc_acc,
+                MAPPING_FULLPATH, fullpath, -1);
+
+        // Update the account kvp mappings
+        gnc_csv_account_map_change_mappings (account, gnc_acc, text);
+
+        g_free (fullpath);
+    }
+    g_free (text);
+    g_free (parsed_text);
+
+    if (csv_tximp_acct_match_check_all (model))
+        gtk_assistant_set_page_complete (info->csv_imp_asst, info->account_match_page, true);
+
+}
+
+void
+csv_tximp_acct_match_button_clicked_cb (GtkWidget *widget, CsvImportTrans* info)
+{
+    auto model = gtk_tree_view_get_model (GTK_TREE_VIEW(info->account_match_view));
+    auto selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(info->account_match_view));
+
+    GtkTreeIter iter;
+    if (gtk_tree_selection_get_selected (selection, &model, &iter))
+        csv_tximp_acct_match_select_internal (info, model, iter);
+}
+
+
+/* This is the callback for the mouse click */
+bool
+csv_tximp_acct_match_view_clicked_cb (GtkWidget *widget, GdkEventButton *event, CsvImportTrans* info)
+{
+    /* This is for a double click */
+    if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)
+    {
+        auto window = gtk_tree_view_get_bin_window (GTK_TREE_VIEW (info->account_match_view));
+        if (event->window != window)
+            return false;
+
+        /* Get tree path for row that was clicked, true if row exists */
+        GtkTreePath *path;
+        if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (info->account_match_view), (gint) event->x, (gint) event->y,
+                                             &path, nullptr, nullptr, nullptr))
+        {
+            DEBUG("event->x is %d and event->y is %d", (gint)event->x, (gint)event->y);
+
+            auto model = gtk_tree_view_get_model (GTK_TREE_VIEW(info->account_match_view));
+            GtkTreeIter iter;
+            if (gtk_tree_model_get_iter (model, &iter, path))
+                csv_tximp_acct_match_select_internal (info, model, iter);
+            gtk_tree_path_free (path);
+        }
+        return true;
+    }
+    return false;
+}
+
 
 /*******************************************************
  * Assistant page prepare functions
  *******************************************************/
+
 void
 csv_tximp_assist_start_page_prepare (GtkAssistant *assistant,
         CsvImportTrans* info)
@@ -1534,186 +1684,9 @@ csv_tximp_assist_preview_page_prepare (GtkAssistant *assistant,
 
     /* Load the data into the treeview. */
     csv_tximp_preview_refresh_table (info);
-    csv_tximp_validate_preview_settings (info);
+    csv_tximp_preview_validate_settings (info);
 
 }
-
-
-static bool
-import_account_check_all (GtkTreeModel *model)
-{
-    // Set iter to first entry of store
-    GtkTreeIter iter;
-    auto valid = gtk_tree_model_get_iter_first (model, &iter);
-
-    // Walk through the store looking for nullptr accounts
-    auto ret = true;
-    while (valid)
-    {
-        Account *account;
-
-        // Walk through the list, reading each row
-        gtk_tree_model_get (model, &iter, MAPPING_ACCOUNT, &account, -1);
-
-        if (account == nullptr)
-            ret = false;
-
-        valid = gtk_tree_model_iter_next (model, &iter);
-    }
-    return ret;
-}
-
-
-/*****************************************************************
- * Parse the text splitting into a path and the last_part based on
- * account separator. If the path is valid, add the last_part and
- * return this. If the path is invalid, use the new separator path
- * with the last_part and return that so there is only one new
- * account dialog.
- *****************************************************************/
-static gchar *
-import_account_text_parse (gchar *text)
-{
-    // Split the incoming string by current separator
-    auto sep = gnc_get_account_separator_string ();
-    auto names = g_strsplit (text, sep, -1);
-
-    /* find the last_part and count parts */
-    int count = 0;
-    gchar *last_part = nullptr;
-    for (auto ptr = names; *ptr; ptr++)
-    {
-        if (g_strcmp0 (*ptr,"") != 0) //separator is last in string
-        {
-            if (last_part)
-                g_free (last_part);
-            last_part = g_strdup (*ptr);
-            count = count + 1;
-        }
-    }
-
-    // If count is 1 we have no path
-    gchar *ret_string = nullptr;
-    if (count == 1)
-        ret_string = g_strdup (last_part);
-    else
-    {
-        // Start to create two paths based on current and possibly new separator
-        auto sep_path = g_strdup (names[0]);
-        auto newsep_path = g_strdup (names[0]);
-
-        // Setup an alternative separator
-        const gchar *alt_sep;
-        if (g_strcmp0 (sep,":") == 0)
-            alt_sep = "-";
-        else
-            alt_sep = ":";
-
-        // Join the parts together apart from last_part which could be account name
-        for (int i = 1; i < count - 1; i++)
-        {
-            gchar *temp_sep_path, *temp_newsep_path;
-
-            temp_sep_path = g_strdup (sep_path);
-            temp_newsep_path = g_strdup (newsep_path);
-            g_free (sep_path);
-            g_free (newsep_path);
-            sep_path = g_strconcat (temp_sep_path, sep, names[i], nullptr);
-            newsep_path = g_strconcat (temp_newsep_path, alt_sep, names[i], nullptr);
-            g_free (temp_sep_path);
-            g_free (temp_newsep_path);
-        }
-        auto book = gnc_get_current_book ();
-        auto account = gnc_account_lookup_by_full_name (gnc_book_get_root_account (book), sep_path);
-
-        if (!account) // path not found
-            ret_string = g_strconcat (newsep_path, alt_sep, last_part, nullptr);
-        else
-            ret_string = g_strconcat (sep_path, sep, last_part, nullptr);
-
-        g_free (sep_path);
-        g_free (newsep_path);
-    }
-    g_free (last_part);
-    g_strfreev (names);
-    return ret_string;
-}
-
-static void import_account_select_internal(CsvImportTrans* info, GtkTreeModel *model, GtkTreeIter& iter)
-{
-    // Get the the String
-    gchar *text = nullptr;
-    gtk_tree_model_get (model, &iter, MAPPING_STRING, &text, -1);
-
-    // Get the pointer to the Account
-    Account *account = nullptr;
-    gtk_tree_model_get (model, &iter, MAPPING_ACCOUNT, &account, -1);
-
-    auto parsed_text = import_account_text_parse (text);
-    auto gnc_acc = gnc_import_select_account (nullptr, nullptr, 1,
-            parsed_text, nullptr, ACCT_TYPE_NONE, account, nullptr);
-
-    if (gnc_acc) // We may have canceled
-    {
-        auto fullpath = gnc_account_get_full_name (gnc_acc);
-        gtk_list_store_set (GTK_LIST_STORE(model), &iter,
-                MAPPING_ACCOUNT, gnc_acc,
-                MAPPING_FULLPATH, fullpath, -1);
-
-        // Update the account kvp mappings
-        gnc_csv_account_map_change_mappings (account, gnc_acc, text);
-
-        g_free (fullpath);
-    }
-    g_free (text);
-    g_free (parsed_text);
-
-    if (import_account_check_all (model))
-        gtk_assistant_set_page_complete (info->csv_imp_asst, info->account_match_page, true);
-
-}
-
-void
-csv_tximp_acct_match_button_clicked_cb (GtkWidget *widget, CsvImportTrans* info)
-{
-    auto model = gtk_tree_view_get_model (GTK_TREE_VIEW(info->account_match_view));
-    auto selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(info->account_match_view));
-
-    GtkTreeIter iter;
-    if (gtk_tree_selection_get_selected (selection, &model, &iter))
-        import_account_select_internal (info, model, iter);
-}
-
-
-/* This is the callback for the mouse click */
-bool
-csv_tximp_acct_match_view_clicked_cb (GtkWidget *widget, GdkEventButton *event, CsvImportTrans* info)
-{
-    /* This is for a double click */
-    if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)
-    {
-        auto window = gtk_tree_view_get_bin_window (GTK_TREE_VIEW (info->account_match_view));
-        if (event->window != window)
-            return false;
-
-        /* Get tree path for row that was clicked, true if row exists */
-        GtkTreePath *path;
-        if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (info->account_match_view), (gint) event->x, (gint) event->y,
-                                             &path, nullptr, nullptr, nullptr))
-        {
-            DEBUG("event->x is %d and event->y is %d", (gint)event->x, (gint)event->y);
-
-            auto model = gtk_tree_view_get_model (GTK_TREE_VIEW(info->account_match_view));
-            GtkTreeIter iter;
-            if (gtk_tree_model_get_iter (model, &iter, path))
-                import_account_select_internal (info, model, iter);
-            gtk_tree_path_free (path);
-        }
-        return true;
-    }
-    return false;
-}
-
 
 void
 csv_tximp_assist_account_match_page_prepare (GtkAssistant *assistant,
@@ -1721,7 +1694,7 @@ csv_tximp_assist_account_match_page_prepare (GtkAssistant *assistant,
 {
     // Load the account strings into the store
     auto store = gtk_tree_view_get_model (GTK_TREE_VIEW(info->account_match_view));
-    get_list_of_accounts (info, store);
+    csv_tximp_acct_match_get_list_of_accounts (info, store);
 
     // Match the account strings to the mappings
     gnc_csv_account_map_load_mappings (store);
@@ -1737,7 +1710,7 @@ csv_tximp_assist_account_match_page_prepare (GtkAssistant *assistant,
 
     /* Enable the Forward Assistant Button */
        gtk_assistant_set_page_complete (assistant, info->account_match_page,
-               import_account_check_all (store));
+               csv_tximp_acct_match_check_all (store));
 }
 
 
