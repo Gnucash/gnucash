@@ -77,6 +77,8 @@ using parse_line_t = std::tuple<StrVec,
                                 std::shared_ptr<GncPreTrans>,
                                 std::shared_ptr<GncPreSplit>>;
 
+struct ErrorList;
+
 /** The actual TxImport class
  * It's intended to use in the following sequence of actions:
  * - set a file format
@@ -162,12 +164,8 @@ private:
      */
     void create_transaction (std::vector<parse_line_t>::iterator& parsed_line);
 
-    /** A helper function used by create_transactions. If the input data has
-     *  a balance column (an no deposit and withdrawal columns)
-     *  it will iterate over all created transactions
-     *  to set the split amount(s) based on the desired balance for that line.
-     */
-    void adjust_balances (void);
+    void verify_column_selections (ErrorList& error_msg);
+    void verify_data(ErrorList& error_msg);
 
     /* Internal helper function that does the actual conversion from property lists
      * to real (possibly unbalanced) transaction with splits.

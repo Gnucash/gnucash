@@ -103,6 +103,8 @@ GncTransPropType sanitize_trans_prop (GncTransPropType prop, bool multi_split);
 
 
 time64 parse_date (const std::string &date_str, int format);
+gnc_commodity* parse_commodity (const std::string& comm_str);
+gnc_numeric parse_amount (const std::string &str, int currency_format);
 
 struct GncPreTrans
 {

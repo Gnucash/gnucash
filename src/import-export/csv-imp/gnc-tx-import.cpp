@@ -308,67 +308,157 @@ void GncTxImport::tokenize (bool guessColTypes)
     }
 }
 
-/* Test for the required minimum number of columns selected and
- * a valid date format.
- * @return An empty string if all checks passed or the reason
- *         verification failed otherwise.
- */
-std::string GncTxImport::verify ()
+
+struct ErrorList
 {
-    auto newline = std::string();
-    auto error_text = std::string();
+public:
+    void add_error (std::string msg);
+    std::string str();
+    bool empty() { return m_error.empty(); }
+private:
+    std::string m_error;
+};
 
-    /* Check if the import file did actually contain any information */
-    if (m_parsed_lines.size() == 0)
+void ErrorList::add_error (std::string msg)
+{
+    m_error += "- " + msg + "\n";
+}
+
+std::string ErrorList::str()
+{
+    return m_error.substr(0, m_error.size() - 1);
+}
+
+void GncTxImport::verify_data(ErrorList& error_msg)
+{
+    auto have_date_errors = false;
+    auto have_amount_errors = false;
+    for (uint i = 0; i < m_parsed_lines.size(); i++)
     {
-        error_text = _("No valid data found in the selected file. It may be empty or the selected encoding is wrong.");
-        return error_text;
+        if ((i < m_settings.m_skip_start_lines) ||             // start rows to skip
+            (i >= m_parsed_lines.size()
+                    - m_settings.m_skip_end_lines) ||          // end rows to skip
+            (((i - m_settings.m_skip_start_lines) % 2 == 1) && // skip every second row...
+                    m_settings.m_skip_alt_lines))              // ...if requested
+        {
+            std::get<1>(m_parsed_lines[i]).clear();
+            continue;
+        }
+        else
+        {
+            auto line_err = ErrorList();
+            auto line_data = std::get<0>(m_parsed_lines[i]);
+
+            /* Attempt to parse date column values */
+            auto date_col_it = std::find(m_settings.m_column_types.begin(),
+                m_settings.m_column_types.end(), GncTransPropType::DATE);
+            if (date_col_it != m_settings.m_column_types.end())
+            try
+            {
+                auto date_col = date_col_it -m_settings.m_column_types.begin();
+                auto date_str = line_data[date_col];
+                if (!m_settings.m_multi_split || !date_str.empty())
+                    parse_date (date_str, date_format());
+            }
+            catch (...)
+            {
+                have_date_errors = true;
+                line_err.add_error(_("Date could not be understood"));
+            }
+
+            /* Attempt to parse reconcile date column values */
+            date_col_it = std::find(m_settings.m_column_types.begin(),
+                m_settings.m_column_types.end(), GncTransPropType::REC_DATE);
+            if (date_col_it != m_settings.m_column_types.end())
+            try
+            {
+                auto date_col = date_col_it -m_settings.m_column_types.begin();
+                auto date_str = line_data[date_col];
+                if (!date_str.empty())
+                    parse_date (date_str, date_format());
+            }
+            catch (...)
+            {
+                have_date_errors = true;
+                line_err.add_error(_("Reconcile date could not be understood"));
+            }
+
+            /* Attempt to parse transfer reconcile date column values */
+            date_col_it = std::find(m_settings.m_column_types.begin(),
+                m_settings.m_column_types.end(), GncTransPropType::REC_DATE);
+            if (date_col_it != m_settings.m_column_types.end())
+            try
+            {
+                auto date_col = date_col_it -m_settings.m_column_types.begin();
+                auto date_str = line_data[date_col];
+                if (!date_str.empty())
+                    parse_date (date_str, date_format());
+            }
+            catch (...)
+            {
+                have_date_errors = true;
+                line_err.add_error(_("Transfer reconcile date could not be understood"));
+            }
+
+            /* Attempt to parse deposit column values */
+            auto num_col_it = std::find(m_settings.m_column_types.begin(),
+                m_settings.m_column_types.end(), GncTransPropType::DEPOSIT);
+            if (num_col_it != m_settings.m_column_types.end())
+            try
+            {
+                auto num_col = num_col_it -m_settings.m_column_types.begin();
+                auto num_str = line_data[num_col];
+                if (!m_settings.m_multi_split || !num_str.empty())
+                    parse_amount (num_str, currency_format());
+            }
+            catch (...)
+            {
+                have_amount_errors = true;
+                line_err.add_error(_("Deposit amount could not be understood"));
+            }
+
+            /* Attempt to parse withdrawal column values */
+            num_col_it = std::find(m_settings.m_column_types.begin(),
+                m_settings.m_column_types.end(), GncTransPropType::WITHDRAWAL);
+            if (num_col_it != m_settings.m_column_types.end())
+            try
+            {
+                auto num_col = num_col_it -m_settings.m_column_types.begin();
+                auto num_str = line_data[num_col];
+                if (!m_settings.m_multi_split || !num_str.empty())
+                    parse_amount (num_str, currency_format());
+            }
+            catch (...)
+            {
+                have_amount_errors = true;
+                line_err.add_error(_("Withdrawal amount could not be understood"));
+            }
+
+            if (!line_err.empty())
+                std::get<1>(m_parsed_lines[i]) = line_err.str();
+            else
+                std::get<1>(m_parsed_lines[i]).clear();
+        }
     }
 
-    /* Check if at least one line is selected for importing */
-    auto skip_alt_offset = m_settings.m_skip_alt_lines ? 1 : 0;
-    if (m_settings.m_skip_start_lines + m_settings.m_skip_end_lines + skip_alt_offset >= m_parsed_lines.size())
-    {
-        error_text = _("No lines are selected for importing. Please reduce the number of lines to skip.");
-        return error_text;
-    }
+    if (have_date_errors)
+        error_msg.add_error( _("Not all dates could be parsed. Please verify your chosen date format or adjust the lines to skip."));
+    if (have_amount_errors)
+        error_msg.add_error( _("Not all amounts could be parsed. Please verify your chosen currency format or adjust the lines to skip."));
+}
+
+
+/* Test for the required minimum number of columns selected and
+ * the selection is consistent.
+ * @param An ErrorList object to which all found issues are added.
+ */
+void GncTxImport::verify_column_selections (ErrorList& error_msg)
+{
 
     /* Verify if a date column is selected and it's parsable.
      */
     if (!check_for_column_type(GncTransPropType::DATE))
-    {
-        error_text += newline + _("Please select a date column.");
-        newline = "\n";
-    }
-    else
-        /* Attempt to parse the date column for each selected line */
-        try
-        {
-            auto date_col = std::find(m_settings.m_column_types.begin(),
-                    m_settings.m_column_types.end(), GncTransPropType::DATE) -
-                            m_settings.m_column_types.begin();
-            for (uint i = 0; i < m_parsed_lines.size(); i++)
-            {
-                if ((i < m_settings.m_skip_start_lines) ||             // start rows to skip
-                    (i >= m_parsed_lines.size()
-                            - m_settings.m_skip_end_lines) ||          // end rows to skip
-                    (((i - m_settings.m_skip_start_lines) % 2 == 1) && // skip every second row...
-                            m_settings.m_skip_alt_lines))              // ...if requested
-                    continue;
-                else
-                {
-                    auto first_line = std::get<0>(m_parsed_lines[i]);
-                    auto date_str = first_line[date_col];
-                    if (!date_str.empty())
-                        parse_date (date_str, date_format());
-                }
-            }
-        }
-        catch (...)
-        {
-            error_text += newline + _("Not all dates could be parsed. Please verify your chosen date format or adjust the lines to skip.");
-            newline = "\n";
-        }
+        error_msg.add_error( _("Please select a date column."));
 
     /* Verify if an account is selected either in the base account selector
      * or via a column in the import data.
@@ -376,33 +466,21 @@ std::string GncTxImport::verify ()
     if (!check_for_column_type(GncTransPropType::ACCOUNT))
     {
         if (m_settings.m_multi_split)
-        {
-            error_text += newline + _("Please select an account column.");
-            newline = "\n";
-        }
+            error_msg.add_error( _("Please select an account column."));
         else if (!m_settings.m_base_account)
-        {
-            error_text += newline + _("Please select an account column or set a base account in the Account field.");
-            newline = "\n";
-        }
+            error_msg.add_error( _("Please select an account column or set a base account in the Account field."));
     }
 
     /* Verify a description column is selected.
      */
     if (!check_for_column_type(GncTransPropType::DESCRIPTION))
-    {
-        error_text += newline + _("Please select a description column.");
-        newline = "\n";
-    }
+        error_msg.add_error( _("Please select a description column."));
 
     /* Verify at least one amount column (deposit or withdrawal) column is selected.
      */
     if (!check_for_column_type(GncTransPropType::DEPOSIT) &&
         !check_for_column_type(GncTransPropType::WITHDRAWAL))
-    {
-        error_text += newline + _("Please select a deposit or withdrawal column.");
-        newline = "\n";
-    }
+        error_msg.add_error( _("Please select a deposit or withdrawal column."));
 
     /* Verify a transfer account is selected if any of the other transfer properties
      * are selected.
@@ -412,12 +490,38 @@ std::string GncTxImport::verify ()
          check_for_column_type(GncTransPropType::TREC_STATE) ||
          check_for_column_type(GncTransPropType::TREC_DATE)) &&
         !check_for_column_type(GncTransPropType::TACCOUNT))
+        error_msg.add_error( _("Please select a transfer account column or remove the other transfer related columns."));
+}
+
+
+/* Test for the required minimum number of columns selected and
+ * a valid date format.
+ * @return An empty string if all checks passed or the reason
+ *         verification failed otherwise.
+ */
+std::string GncTxImport::verify ()
+{
+    auto newline = std::string();
+    auto error_msg = ErrorList();
+
+    /* Check if the import file did actually contain any information */
+    if (m_parsed_lines.size() == 0)
     {
-        error_text += newline + _("Please select a transfer account column or remove the other transfer related columns.");
-        newline = "\n";
+        error_msg.add_error(_("No valid data found in the selected file. It may be empty or the selected encoding is wrong."));
+        return error_msg.str();
     }
 
-    return error_text;
+    /* Check if at least one line is selected for importing */
+    auto skip_alt_offset = m_settings.m_skip_alt_lines ? 1 : 0;
+    if (m_settings.m_skip_start_lines + m_settings.m_skip_end_lines + skip_alt_offset >= m_parsed_lines.size())
+    {
+        error_msg.add_error(_("No lines are selected for importing. Please reduce the number of lines to skip."));
+        return error_msg.str();
+    }
+
+    verify_column_selections (error_msg);
+    verify_data (error_msg);
+    return error_msg.str();
 }
 
 
