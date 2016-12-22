@@ -349,7 +349,6 @@ csv_tximp_preview_settings_sel_changed_cb (GtkComboBox *combo, CsvImportTrans *i
 
     csv_tximp_preview_refresh (info);
     csv_tximp_preview_handle_save_del_sensitivity (combo, info);
-    csv_tximp_preview_validate_settings (info);
 }
 
 
@@ -501,8 +500,7 @@ void csv_tximp_preview_srow_cb (GtkSpinButton *spin, CsvImportTrans *info)
     gtk_adjustment_set_upper (adj, info->tx_imp->m_parsed_lines.size()
             - info->tx_imp->skip_start_lines());
 
-    csv_tximp_preview_row_sel_update (info);
-    csv_tximp_preview_validate_settings (info);
+    csv_tximp_preview_refresh_table (info);
 }
 
 
@@ -518,8 +516,7 @@ void csv_tximp_preview_erow_cb (GtkSpinButton *spin, CsvImportTrans *info)
     gtk_adjustment_set_upper (adj, info->tx_imp->m_parsed_lines.size()
             - info->tx_imp->skip_end_lines());
 
-    csv_tximp_preview_row_sel_update (info);
-    csv_tximp_preview_validate_settings (info);
+    csv_tximp_preview_refresh_table (info);
 }
 
 
@@ -538,7 +535,6 @@ void csv_tximp_preview_multisplit_cb (GtkToggleButton *checkbox, CsvImportTrans 
 {
     info->tx_imp->multi_split (gtk_toggle_button_get_active (checkbox));
     csv_tximp_preview_refresh_table (info);
-    csv_tximp_preview_validate_settings (info);
 }
 
 
@@ -547,8 +543,7 @@ void csv_tximp_preview_multisplit_cb (GtkToggleButton *checkbox, CsvImportTrans 
 void csv_tximp_preview_skiprows_cb (GtkToggleButton *checkbox, CsvImportTrans *info)
 {
     info->tx_imp->skip_alt_lines (gtk_toggle_button_get_active (checkbox));
-    csv_tximp_preview_row_sel_update (info);
-    csv_tximp_preview_validate_settings (info);
+    csv_tximp_preview_refresh_table (info);
 }
 
 
@@ -609,7 +604,6 @@ void csv_tximp_preview_sep_button_cb (GtkWidget* widget, CsvImportTrans* info)
     {
         info->tx_imp->tokenize (false);
         csv_tximp_preview_refresh_table (info);
-        csv_tximp_preview_validate_settings (info);
     }
     catch (std::range_error &e)
     {
@@ -640,7 +634,6 @@ void csv_tximp_preview_acct_sel_cb (GtkWidget* widget, CsvImportTrans* info)
     auto acct = gnc_account_sel_get_account( GNC_ACCOUNT_SEL(widget) );
     info->tx_imp->base_account(acct);
     csv_tximp_preview_refresh_table (info);
-    csv_tximp_preview_validate_settings (info);
 }
 
 
@@ -661,7 +654,6 @@ void csv_tximp_preview_sep_fixed_sel_cb (GtkToggleButton* csv_button, CsvImportT
 
         info->tx_imp->tokenize (false);
         csv_tximp_preview_refresh_table (info);
-        csv_tximp_preview_validate_settings (info);
     }
     catch (std::range_error &e)
     {
@@ -702,7 +694,6 @@ void csv_tximp_preview_enc_sel_cb (GOCharmapSel* selector, const char* encoding,
             info->tx_imp->tokenize (false);
 
             csv_tximp_preview_refresh_table (info);
-            csv_tximp_preview_validate_settings (info);
 
             info->encoding_selected_called = false;
         }
@@ -728,7 +719,7 @@ void csv_tximp_preview_enc_sel_cb (GOCharmapSel* selector, const char* encoding,
 static void csv_tximp_preview_date_fmt_sel_cb (GtkComboBox* format_selector, CsvImportTrans* info)
 {
     info->tx_imp->date_format (gtk_combo_box_get_active (format_selector));
-    csv_tximp_preview_validate_settings (info);
+    csv_tximp_preview_refresh_table (info);
 }
 
 
@@ -739,7 +730,7 @@ static void csv_tximp_preview_date_fmt_sel_cb (GtkComboBox* format_selector, Csv
 static void csv_tximp_preview_currency_fmt_sel_cb (GtkComboBox* currency_selector, CsvImportTrans* info)
 {
     info->tx_imp->currency_format (gtk_combo_box_get_active (currency_selector));
-    csv_tximp_preview_validate_settings (info);
+    csv_tximp_preview_refresh_table (info);
 }
 
 
@@ -795,7 +786,6 @@ static void csv_tximp_preview_col_type_changed_cb (GtkCellRenderer* renderer, gc
 
     info->tx_imp->set_column_type (col_num, new_col_type);
     csv_tximp_preview_refresh_table (info);
-    csv_tximp_preview_validate_settings (info);
 }
 
 /*======================================================================*/
@@ -919,7 +909,6 @@ fixed_context_menu_handler (GnumericPopupMenuElement const *element,
         return false;
     }
     csv_tximp_preview_refresh_table (info);
-    csv_tximp_preview_validate_settings (info);
     return true;
 }
 static void
@@ -978,7 +967,6 @@ csv_tximp_preview_split_column (CsvImportTrans* info, int col, int dx)
         return;
     }
     csv_tximp_preview_refresh_table (info);
-    csv_tximp_preview_validate_settings (info);
 }
 
 
@@ -1046,6 +1034,8 @@ void csv_tximp_preview_row_sel_update (CsvImportTrans* info)
  */
 void csv_tximp_preview_refresh_table (CsvImportTrans* info)
 {
+    csv_tximp_preview_validate_settings (info);
+
     /* ncols is the number of columns in the file data. */
     auto column_types = info->tx_imp->column_types();
     auto ncols = column_types.size();
@@ -1194,20 +1184,17 @@ void csv_tximp_preview_refresh_table (CsvImportTrans* info)
         g_object_set_data (G_OBJECT(button), "col-num",GINT_TO_POINTER(i));
     }
 
-    /* Add a column for the error messages when reviewing errors */
-    if (info->previewing_errors)
-    {
-        auto crenderer = gtk_cell_renderer_text_new();
-        gtk_tree_view_insert_column_with_attributes (info->ctreeview,
-                -1, "", crenderer, "text", 2 * ncols, nullptr);
+    /* Add a column for the error messages */
+    auto crenderer = gtk_cell_renderer_text_new();
+    gtk_tree_view_insert_column_with_attributes (info->ctreeview,
+            0, "", crenderer, "text", 2 * ncols, nullptr);
 
-        auto renderer = gtk_cell_renderer_text_new();
-        auto col = gtk_tree_view_column_new_with_attributes ("", renderer, "background", 0,
-                                                             "text", ncols + 1, nullptr);
-        gtk_tree_view_insert_column (info->treeview, col, -1);
-        /* Enable resizing of the columns. */
-        gtk_tree_view_column_set_resizable (col, TRUE);
-    }
+    auto renderer = gtk_cell_renderer_text_new();
+    auto col = gtk_tree_view_column_new_with_attributes ("", renderer, "background", 0,
+                                                         "text", ncols + 1, nullptr);
+    gtk_tree_view_insert_column (info->treeview, col, 0);
+    /* Enable resizing of the columns. */
+    gtk_tree_view_column_set_resizable (col, TRUE);
 
     /* Select the header row */
     gtk_tree_model_get_iter_first (GTK_TREE_MODEL(ctstore), &iter);
@@ -1303,7 +1290,7 @@ void csv_tximp_preview_validate_settings (CsvImportTrans* info)
     /* Allow the user to proceed only if there are no inconsistencies in the settings */
     auto error_msg = info->tx_imp->verify();
     gtk_assistant_set_page_complete (info->csv_imp_asst, info->preview_page, error_msg.empty());
-    gtk_label_set_text(GTK_LABEL(info->instructions_label), error_msg.c_str());
+    gtk_label_set_markup(GTK_LABEL(info->instructions_label), error_msg.c_str());
     gtk_widget_set_visible (GTK_WIDGET(info->instructions_image), !error_msg.empty());
 }
 
@@ -1537,7 +1524,6 @@ csv_tximp_assist_preview_page_prepare (GtkAssistant *assistant,
 
     /* Load the data into the treeview. */
     csv_tximp_preview_refresh_table (info);
-    csv_tximp_preview_validate_settings (info);
 
 }
 
@@ -1766,8 +1752,6 @@ csv_tximp_assist_prepare_cb (GtkAssistant *assistant, GtkWidget *page,
         csv_tximp_assist_match_page_prepare (assistant, info);
     else if (page == info->summary_page)
         csv_tximp_assist_summary_page_prepare (assistant, info);
-    else
-        g_assert_not_reached();
 }
 
 

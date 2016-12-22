@@ -203,9 +203,10 @@ time64 parse_date (const std::string &date_str, int format)
 /** Convert str into a gnc_numeric using the user-specified (import) currency format.
  * @param str The string to be parsed
  * @param currency_format The currency format to use.
- * @return a gnc_numeric on success, boost::none on failure
+ * @return a gnc_numeric
+ * @exception May throw std::invalid argument if string can't be parsed properly
  */
-static boost::optional<gnc_numeric> parse_amount (const std::string &str, int currency_format)
+gnc_numeric parse_amount (const std::string &str, int currency_format)
 {
     /* If a cell is empty or just spaces return invalid amount */
     if(!boost::regex_search(str, boost::regex("[0-9]")))
@@ -255,7 +256,7 @@ static char parse_reconciled (const std::string& reconcile)
         throw std::invalid_argument ("String can't be parsed into a valid reconcile state.");
 }
 
-static gnc_commodity* parse_commodity (const std::string& comm_str)
+gnc_commodity* parse_commodity (const std::string& comm_str)
 {
     if (comm_str.empty())
         return nullptr;
@@ -575,9 +576,9 @@ static void trans_add_split (Transaction* trans, Account* account, gnc_numeric a
     if (action)
         xaccSplitSetAction (split, action->c_str());
 
-    if (rec_state && *rec_state != ' ')
+    if (rec_state && *rec_state != 'n')
         xaccSplitSetReconcile (split, *rec_state);
-    if (rec_state && *rec_state == YREC)
+    if (rec_state && *rec_state == YREC && rec_date)
         xaccSplitSetDateReconciledSecs (split, *rec_date);
 
 }
