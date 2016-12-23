@@ -66,7 +66,7 @@ GncTxImport::GncTxImport(GncImpFileFormat format)
     /* All of the data pointers are initially NULL. This is so that, if
      * gnc_csv_parse_data_free is called before all of the data is
      * initialized, only the data that needs to be freed is freed. */
-    m_parse_errors = false;
+    m_skip_errors = false;
     file_format(m_settings.m_file_format = format);
 }
 
@@ -189,16 +189,50 @@ void GncTxImport::encoding (const std::string& encoding)
 
 std::string GncTxImport::encoding () { return m_settings.m_encoding; }
 
+void GncTxImport::update_skipped_lines()
+{
+    for (uint i = 0; i < m_parsed_lines.size(); i++)
+    {
+        std::get<4>(m_parsed_lines[i]) =
+            ((i < skip_start_lines()) ||             // start rows to skip
+             (i >= m_parsed_lines.size() - skip_end_lines()) ||          // end rows to skip
+             (((i - skip_start_lines()) % 2 == 1) && // skip every second row...
+                  skip_alt_lines()) ||                   // ...if requested
+             (m_skip_errors && !std::get<1>(m_parsed_lines[i]).empty())); // skip lines with errors
+    }
+}
+
 void GncTxImport::skip_start_lines (uint num)
-    { m_settings.m_skip_start_lines = num; }
+{
+    m_settings.m_skip_start_lines = num;
+    update_skipped_lines();
+}
+
 uint GncTxImport::skip_start_lines () { return m_settings.m_skip_start_lines; }
 
-void GncTxImport::skip_end_lines (uint num) { m_settings.m_skip_end_lines = num; }
+void GncTxImport::skip_end_lines (uint num)
+{
+    m_settings.m_skip_end_lines = num;
+    update_skipped_lines();
+}
+
 uint GncTxImport::skip_end_lines () { return m_settings.m_skip_end_lines; }
 
 void GncTxImport::skip_alt_lines (bool skip)
-    { m_settings.m_skip_alt_lines = skip; }
+{
+    m_settings.m_skip_alt_lines = skip;
+    update_skipped_lines();
+}
+
 bool GncTxImport::skip_alt_lines () { return m_settings.m_skip_alt_lines; }
+
+void GncTxImport::skip_errors (bool skip)
+{
+    m_skip_errors = skip;
+    update_skipped_lines();
+}
+
+bool GncTxImport::skip_errors () { return m_skip_errors; }
 
 void GncTxImport::separators (std::string separators)
 {
@@ -285,7 +319,7 @@ void GncTxImport::tokenize (bool guessColTypes)
     for (auto tokenized_line : m_tokenizer->get_tokens())
     {
         m_parsed_lines.push_back (std::make_tuple (tokenized_line, std::string(),
-                nullptr, nullptr));
+                nullptr, nullptr, false));
         auto length = tokenized_line.size();
         if (length > max_cols)
             max_cols = length;
@@ -335,15 +369,8 @@ void GncTxImport::verify_data(ErrorList& error_msg)
     auto have_amount_errors = false;
     for (uint i = 0; i < m_parsed_lines.size(); i++)
     {
-        if ((i < m_settings.m_skip_start_lines) ||             // start rows to skip
-            (i >= m_parsed_lines.size()
-                    - m_settings.m_skip_end_lines) ||          // end rows to skip
-            (((i - m_settings.m_skip_start_lines) % 2 == 1) && // skip every second row...
-                    m_settings.m_skip_alt_lines))              // ...if requested
-        {
-            std::get<1>(m_parsed_lines[i]).clear();
+        if (std::get<4>(m_parsed_lines[i])) // Ignore skipped lines
             continue;
-        }
         else
         {
             auto line_err = ErrorList();
@@ -540,7 +567,7 @@ static void trans_properties_verify_essentials (std::vector<parse_line_t>::itera
     std::shared_ptr<GncPreTrans> trans_props;
     std::shared_ptr<GncPreSplit> split_props;
 
-    std::tie(std::ignore, error_message, trans_props, split_props) = *parsed_line;
+    std::tie(std::ignore, error_message, trans_props, split_props, std::ignore) = *parsed_line;
 
     auto trans_error = trans_props->verify_essentials();
     auto split_error = split_props->verify_essentials();
@@ -571,7 +598,7 @@ std::shared_ptr<DraftTransaction> GncTxImport::trans_properties_to_trans (std::v
     std::string error_message;
     std::shared_ptr<GncPreTrans> trans_props;
     std::shared_ptr<GncPreSplit> split_props;
-    std::tie(std::ignore, error_message, trans_props, split_props) = *parsed_line;
+    std::tie(std::ignore, error_message, trans_props, split_props, std::ignore) = *parsed_line;
     auto account = split_props->get_account();
 
     QofBook* book = gnc_account_get_book (account);
@@ -621,7 +648,7 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
     std::string error_message;
     auto trans_props = std::make_shared<GncPreTrans>(date_format());
     auto split_props = std::make_shared<GncPreSplit>(date_format(), currency_format());
-    std::tie(line, error_message, std::ignore, std::ignore) = *parsed_line;
+    std::tie(line, error_message, std::ignore, std::ignore, std::ignore) = *parsed_line;
     error_message.clear();
 
     /* Convert all tokens in this line into transaction/split properties. */
@@ -647,7 +674,6 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
         }
         catch (const std::exception& e)
         {
-            m_parse_errors = true;
             if (!error_message.empty())
                 error_message += "\n";
             error_message += _(gnc_csv_col_type_strs[*col_types_it]);
@@ -695,7 +721,6 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
         {
             // Oops - the user didn't select an Account column *and* we didn't get a default value either!
             // Note if you get here this suggests a bug in the code!
-            m_parse_errors = true;
             error_message = _("No account column selected and no default account specified either.\n"
                                        "This should never happen. Please report this as a bug.");
             PINFO("User warning: %s", error_message.c_str());
@@ -719,59 +744,38 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
     }
     catch (const std::invalid_argument& e)
     {
-        m_parse_errors = true;
         error_message = e.what();
         PINFO("User warning: %s", error_message.c_str());
     }
 }
 
 
-/** Creates a list of transactions from parsed data. Transactions that
- * could be created from rows are placed in transactions; Lines that couldn't
- * be converted are marked with the failure reason. These can be redone in
- * a subsequent run with redo_errors set to true.
- * @param account Account with which transactions are created
- * @param redo_errors true to convert only error data, false to convert all data
+/** Creates a list of transactions from parsed data. The parsed data
+ * will first be validated. If any errors are found this function will
+ * throw an error unless skip_errors was set.
+ * @param skip_errors true skip over lines with errors
+ * @exception throws std::invalid_argument if data validation fails and
+ *            skip_errors wasn't set.
  */
-void GncTxImport::create_transactions (bool redo_errors)
+void GncTxImport::create_transactions ()
 {
-    /* If a full conversion is requested (as opposed to only
-     * attempting to convers the lines which had errors in the previous run)
-     * clear all errors and possibly already created transactions. */
-    if (!redo_errors)
-    {
-        /* Clear error messages on full run */
-        for (auto orig_line : m_parsed_lines)
-            std::get<1>(orig_line).clear();
+    /* Start with verifying the current data. */
+    auto verify_result = verify();
+    if (!verify_result.empty() && !m_skip_errors)
+        throw std::invalid_argument (verify_result);
 
-        /* Drop all existing draft transactions on a full run */
-        m_transactions.clear();
-    }
+    /* Drop all existing draft transactions */
+    m_transactions.clear();
 
-    /* compute start and end iterators based on user-set restrictions */
-    auto parsed_lines_it = m_parsed_lines.begin();
-    std::advance(parsed_lines_it, skip_start_lines());
-
-    auto parsed_lines_max = m_parsed_lines.begin();
-    std::advance(parsed_lines_max, m_parsed_lines.size() - skip_end_lines());
-
-    auto odd_line = false;
-    m_parse_errors = false;
     m_parent = nullptr;
 
     /* Iterate over all parsed lines */
-    for (parsed_lines_it, odd_line;
-            parsed_lines_it < parsed_lines_max;
-            ++parsed_lines_it, odd_line = !odd_line)
+    for (auto parsed_lines_it = m_parsed_lines.begin();
+            parsed_lines_it != m_parsed_lines.end();
+            ++parsed_lines_it)
     {
-        /* Skip current line if:
-           1. only looking for lines with error AND no error on current line
-           OR
-           2. looking for all lines AND
-              skip_rows is enabled AND
-              current line is an odd line */
-        if ((redo_errors && std::get<1>(*parsed_lines_it).empty()) ||
-           (!redo_errors && skip_alt_lines() && odd_line))
+        /* Skip current line if the user specified so */
+        if ((std::get<4>(*parsed_lines_it)))
             continue;
 
         try
@@ -827,26 +831,15 @@ GncTxImport::accounts ()
                            m_settings.m_column_types.end(), GncTransPropType::TACCOUNT);
     uint tacct_col = tacct_col_it - m_settings.m_column_types.begin();
 
-    /* compute start and end iterators based on user-set restrictions */
-    auto parsed_lines_it = m_parsed_lines.begin();
-    std::advance(parsed_lines_it, skip_start_lines());
-
-    auto parsed_lines_max = m_parsed_lines.begin();
-    std::advance(parsed_lines_max, m_parsed_lines.size() - skip_end_lines());
-
     /* Iterate over all parsed lines */
     auto odd_line = false;
-    for (parsed_lines_it, odd_line;
-            parsed_lines_it < parsed_lines_max;
-            ++parsed_lines_it, odd_line = !odd_line)
+    for (auto parsed_line : m_parsed_lines)
     {
-        /* Skip current line if
-           skip_rows is enabled AND
-           current line is an odd line */
-        if (skip_alt_lines() && odd_line)
+        /* Skip current line if the user specified so */
+        if ((std::get<4>(parsed_line)))
             continue;
 
-        auto col_strs = std::get<0>(*parsed_lines_it);
+        auto col_strs = std::get<0>(parsed_line);
         if ((acct_col_it != m_settings.m_column_types.end()) && !col_strs[acct_col].empty())
             accts.insert(col_strs[acct_col]);
         if ((tacct_col_it != m_settings.m_column_types.end()) && !col_strs[tacct_col].empty())

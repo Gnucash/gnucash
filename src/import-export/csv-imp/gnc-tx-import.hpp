@@ -75,7 +75,8 @@ extern const gchar* date_format_user[];
 using parse_line_t = std::tuple<StrVec,
                                 std::string,
                                 std::shared_ptr<GncPreTrans>,
-                                std::shared_ptr<GncPreSplit>>;
+                                std::shared_ptr<GncPreSplit>,
+                                bool>;
 
 struct ErrorList;
 
@@ -123,6 +124,9 @@ public:
     void skip_alt_lines (bool skip);
     bool skip_alt_lines ();
 
+    void skip_errors (bool skip);
+    bool skip_errors ();
+
     void separators (std::string separators);
     std::string separators ();
 
@@ -142,7 +146,7 @@ public:
     /** This function will attempt to convert all tokenized lines into
      *  transactions using the column types the user has set.
      */
-    void create_transactions (bool redo_errors);
+    void create_transactions ();
     bool check_for_column_type (GncTransPropType type);
     void set_column_type (uint position, GncTransPropType type);
     std::vector<GncTransPropType> column_types ();
@@ -155,7 +159,6 @@ public:
                                                      and split properties. */
     std::multimap <time64, std::shared_ptr<DraftTransaction>> m_transactions;  /**< map of transaction objects created
                                                      from parsed_lines and column_types, ordered by date */
-    bool m_parse_errors;          /**< Indicates whether the last parse_to_trans run had any errors */
 
 private:
     /** A helper function used by create_transactions. It will attempt
@@ -167,6 +170,8 @@ private:
     void verify_column_selections (ErrorList& error_msg);
     void verify_data(ErrorList& error_msg);
 
+    void update_skipped_lines();
+
     /* Internal helper function that does the actual conversion from property lists
      * to real (possibly unbalanced) transaction with splits.
      */
@@ -174,6 +179,7 @@ private:
 
     struct CsvTranSettings;
     CsvTransSettings m_settings;
+    bool m_skip_errors;
 
     /* The parameters below are only used while creating
      * transactions. They keep state information during the conversion.

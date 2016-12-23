@@ -84,7 +84,6 @@ struct  CsvImportTrans
     GtkWidget       *del_button;                    /**< The Delete Settings button */
     GtkWidget       *acct_selector;                 /**< The Account selector */
     GtkWidget       *combo_hbox;                    /**< The Settings Combo hbox */
-    GtkWidget       *skip_errors_button;            /**< The widget for the check label button */
     GtkSpinButton   *start_row_spin;                /**< The widget for the start row spinner */
     GtkSpinButton   *end_row_spin;                  /**< The widget for the end row spinner */
     GtkWidget       *skip_alt_rows_button;          /**< The widget for Skip alternate rows from start row */
@@ -102,8 +101,6 @@ struct  CsvImportTrans
     GtkLabel        *instructions_label;            /**< The instructions label */
     GtkImage        *instructions_image;            /**< The instructions image */
     bool             encoding_selected_called;      /**< Before encoding_selected is first called, this is false.
-                                                       * (See description of encoding_selected.) */
-    bool             previewing_errors;             /**< true if the dialog is displaying
                                                        * error lines, instead of all the file data. */
     bool             skip_errors;                   /**< This is false until the user checks the skip errors. */
     int              fixed_context_col;             /**< The number of the column whose the user has clicked */
@@ -129,8 +126,6 @@ struct  CsvImportTrans
 
     bool                  new_book;                 /**< Are we importing into a new book?; if yes, call book options */
     GncTxImport          *tx_imp;                   /**< The actual data we are previewing */
-    int                   callcount;                /**< Number of times the assistant page forward function called */
-    int                   next_page;                /**< The saved assistant next page number */
 
 };
 
@@ -238,8 +233,6 @@ csv_tximp_file_confirm_cb (GtkWidget *button, CsvImportTrans *info)
     if (info->tx_imp) // Free parse_data if we have come back here
         delete info->tx_imp;
     info->tx_imp = parse_data;
-    info->previewing_errors = false; /* We're looking at all the data. */
-    info->skip_errors = false; // Set skip_errors to False
     csv_tximp_preview_refresh (info);
 
     /* Get settings store and populate */
@@ -524,8 +517,8 @@ void csv_tximp_preview_erow_cb (GtkSpinButton *spin, CsvImportTrans *info)
  */
 void csv_tximp_preview_skiperrors_cb (GtkToggleButton *checkbox, CsvImportTrans *info)
 {
-    info->skip_errors = gtk_toggle_button_get_active (checkbox);
-    csv_tximp_preview_validate_settings (info);
+    info->tx_imp->skip_errors(gtk_toggle_button_get_active (checkbox));
+    csv_tximp_preview_refresh_table (info);
 }
 
 
@@ -1009,14 +1002,11 @@ void csv_tximp_preview_row_sel_update (CsvImportTrans* info)
     auto store = GTK_LIST_STORE(gtk_tree_view_get_model (info->treeview));
 
     /* Colorize rows that will be skipped */
-    for (uint i = 0; i < info->tx_imp->m_parsed_lines.size(); i++)
+    int i = 0;
+    for (auto parsed_line : info->tx_imp->m_parsed_lines)
     {
         const char *color = nullptr;
-        if ((i < info->tx_imp->skip_start_lines()) ||             // start rows to skip
-            (i >= info->tx_imp->m_parsed_lines.size()
-                    - info->tx_imp->skip_end_lines()) ||          // end rows to skip
-            (((i - info->tx_imp->skip_start_lines()) % 2 == 1) && // skip every second row...
-             info->tx_imp->skip_alt_lines()))                     // ...if requested
+        if ((std::get<4>(parsed_line)))
             color = "pink";
         else
             color = nullptr;                                          // all other rows
@@ -1024,6 +1014,7 @@ void csv_tximp_preview_row_sel_update (CsvImportTrans* info)
         bool valid = gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(store), &iter, nullptr, i);
         if (valid)
             gtk_list_store_set (store, &iter, 0, color, -1);
+        i++;
     }
 }
 
@@ -1089,10 +1080,6 @@ void csv_tximp_preview_refresh_table (CsvImportTrans* info)
     /* Fill the data liststore with data from the file. */
     for (auto parse_line : info->tx_imp->m_parsed_lines)
     {
-        // When previewing errors skip all lines that don't have errors
-        if (info->previewing_errors && std::get<1>(parse_line).empty())
-            continue;
-
         GtkTreeIter iter;
         gtk_list_store_append (store, &iter);
 
@@ -1106,7 +1093,10 @@ void csv_tximp_preview_refresh_table (CsvImportTrans* info)
             gtk_list_store_set (store, &iter, pos, cell_str_it->c_str(), -1);
         }
         /* Add the optional error messages in the last column of the store */
-        gtk_list_store_set (store, &iter, ncols + 1, std::get<1>(parse_line).c_str(), -1);
+        auto err_msg = std::string();
+        if (!std::get<4>(parse_line))
+            err_msg = std::get<1>(parse_line);
+        gtk_list_store_set (store, &iter, ncols + 1, err_msg.c_str(), -1);
     }
     gtk_tree_view_set_model (info->treeview, GTK_TREE_MODEL(store));
 
@@ -1292,6 +1282,12 @@ void csv_tximp_preview_validate_settings (CsvImportTrans* info)
     gtk_assistant_set_page_complete (info->csv_imp_asst, info->preview_page, error_msg.empty());
     gtk_label_set_markup(GTK_LABEL(info->instructions_label), error_msg.c_str());
     gtk_widget_set_visible (GTK_WIDGET(info->instructions_image), !error_msg.empty());
+
+    /* Show or hide the account match page based on whether there are
+     * accounts in the user data according to the importer configuration
+     */
+    gtk_widget_set_visible (GTK_WIDGET(info->account_match_page),
+            !info->tx_imp->accounts().empty());
 }
 
 
@@ -1462,9 +1458,6 @@ void
 csv_tximp_assist_file_page_prepare (GtkAssistant *assistant,
         CsvImportTrans* info)
 {
-    info->previewing_errors = false; // We're looking at all the data.
-    info->skip_errors = false; // Set skip_errors to False to start with.
-
     /* Set the default directory */
     auto starting_dir = gnc_get_default_directory (GNC_PREFS_GROUP);
     if (starting_dir)
@@ -1485,46 +1478,11 @@ csv_tximp_assist_preview_page_prepare (GtkAssistant *assistant,
     g_signal_connect (G_OBJECT(info->treeview), "size-allocate",
                      G_CALLBACK(csv_tximp_preview_treeview_resized_cb), (gpointer)info);
 
-    // Hide the skip errors check button
-    gtk_widget_hide (GTK_WIDGET(info->skip_errors_button));
-
-    if (info->previewing_errors) // We are looking at errors to display
-    {
-        /* Block going back */
-        gtk_assistant_commit (info->csv_imp_asst);
-
-        gchar* name;
-        GtkIconSize size;
-        gtk_image_get_stock (info->instructions_image, &name, &size);
-        gtk_image_set_from_stock (info->instructions_image, GTK_STOCK_DIALOG_ERROR, size);
-        gtk_label_set_text (info->instructions_label,
-                           _("The rows displayed below had errors which are in the last column. You can attempt to correct them by changing the configuration."));
-        gtk_widget_show (GTK_WIDGET(info->instructions_image));
-        gtk_widget_show (GTK_WIDGET(info->instructions_label));
-
-        /* Reset start and end row */
-        gtk_spin_button_set_value (info->start_row_spin, 0);
-        gtk_spin_button_set_value (info->end_row_spin, 0);
-
-        /* Set spin buttons and settings combo hbox not sensitive */
-        gtk_widget_set_sensitive (info->combo_hbox, FALSE);
-        gtk_widget_set_sensitive (GTK_WIDGET(info->start_row_spin), FALSE);
-        gtk_widget_set_sensitive (GTK_WIDGET(info->end_row_spin), FALSE);
-        gtk_widget_set_sensitive (info->skip_alt_rows_button, FALSE);
-        gtk_widget_set_sensitive (info->multi_split_cbutton, FALSE);
-        info->tx_imp->skip_alt_lines (false);
-
-        /* Show the skip errors check button */
-        gtk_widget_show (GTK_WIDGET(info->skip_errors_button));
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->skip_errors_button), FALSE);
-    }
-
     /* Disable the Forward Assistant Button */
     gtk_assistant_set_page_complete (assistant, info->preview_page, false);
 
     /* Load the data into the treeview. */
     csv_tximp_preview_refresh_table (info);
-
 }
 
 void
@@ -1582,40 +1540,61 @@ void
 csv_tximp_assist_match_page_prepare (GtkAssistant *assistant,
         CsvImportTrans* info)
 {
+    /* Create transactions from the parsed data */
+    try
+    {
+        info->tx_imp->create_transactions ();
+    }
+    catch (const std::invalid_argument& err)
+    {
+        /* Oops! This shouldn't happen when using the import assistant !
+         * Inform the user and go back to the preview page.
+         */
+        auto dialog = gtk_message_dialog_new (GTK_WINDOW(info->csv_imp_asst),
+                                    (GtkDialogFlags) 0,
+                                    GTK_MESSAGE_ERROR,
+                                    GTK_BUTTONS_OK,
+                                    "%s", _("Import Error"));
+        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+            _("An unexpected error has occurred. Please report this as a bug.\n\n"
+              "Error message:\n%s"), err.what());
+        gtk_dialog_run (GTK_DIALOG (dialog));
+        gtk_widget_destroy (dialog);
+        gtk_assistant_set_current_page (info->csv_imp_asst, 2);
+    }
+
     /* Block going back */
     gtk_assistant_commit (info->csv_imp_asst);
 
-    if (!info->tx_imp->m_parse_errors || info->skip_errors)
+    auto text = std::string( "<span size=\"medium\" color=\"red\"><b>");
+    text += _("Double click on rows to change, then click on Apply to Import");
+    text += "</b></span>";
+    gtk_label_set_markup (GTK_LABEL(info->match_label), text.c_str());
+
+    if (!info->gnc_csv_importer_gui)
     {
-        auto text = std::string( "<span size=\"medium\" color=\"red\"><b>");
-        text += _("Double click on rows to change, then click on Apply to Import");
-        text += "</b></span>";
-        gtk_label_set_markup (GTK_LABEL(info->match_label), text.c_str());
+        /* Create the generic transaction importer GUI. */
+        info->gnc_csv_importer_gui = gnc_gen_trans_assist_new (info->match_page, nullptr, false, 42);
 
-        if (!info->gnc_csv_importer_gui)
+        /* Add the help button for the matcher */
+        info->help_button = gtk_button_new_with_mnemonic (_("_Help"));
+        gtk_assistant_add_action_widget (assistant, info->help_button);
+        g_signal_connect (info->help_button, "clicked",
+                         G_CALLBACK(on_matcher_help_clicked), info->gnc_csv_importer_gui);
+        gtk_widget_show (GTK_WIDGET(info->help_button));
+
+        /* Copy all of the transactions to the importer GUI. */
+        for (auto trans_it : info->tx_imp->m_transactions)
         {
-            /* Create the generic transaction importer GUI. */
-            info->gnc_csv_importer_gui = gnc_gen_trans_assist_new (info->match_page, nullptr, false, 42);
-
-            /* Add the help button for the matcher */
-            info->help_button = gtk_button_new_with_mnemonic (_("_Help"));
-            gtk_assistant_add_action_widget (assistant, info->help_button);
-            g_signal_connect (info->help_button, "clicked",
-                             G_CALLBACK(on_matcher_help_clicked), info->gnc_csv_importer_gui);
-            gtk_widget_show (GTK_WIDGET(info->help_button));
-
-            /* Copy all of the transactions to the importer GUI. */
-            for (auto trans_it : info->tx_imp->m_transactions)
+            auto draft_trans = trans_it.second;
+            if (draft_trans->trans)
             {
-                auto draft_trans = trans_it.second;
-                if (draft_trans->trans)
-                {
-                    gnc_gen_trans_list_add_trans (info->gnc_csv_importer_gui, draft_trans->trans);
-                    draft_trans->trans = nullptr;
-                }
+                gnc_gen_trans_list_add_trans (info->gnc_csv_importer_gui, draft_trans->trans);
+                draft_trans->trans = nullptr;
             }
         }
     }
+
     /* Enable the Forward Assistant Button */
     gtk_assistant_set_page_complete (assistant, info->match_page, true);
 }
@@ -1636,110 +1615,10 @@ csv_tximp_assist_summary_page_prepare (GtkAssistant *assistant,
 }
 
 
-static gint
-csv_tximp_forward_page_func (gint current_page, gpointer user_data)
-{
-    auto info = (CsvImportTrans*)user_data;
-
-    /* Note: This function gets called multiple times by the GtkAssistant code and so
-       as we need to run tests only once I have used a counter that gets incremented on
-       every call but the tests only get run when the counter is at 1 */
-    info->callcount = info->callcount + 1;
-
-    auto next_page = info->next_page;
-    switch (current_page)
-    {
-	case 0: //from start page
-            if (info->callcount == 1)
-            {
-                next_page = 1;
-                info->next_page = next_page;
-            }
-            break;
-
-        case 1: //from file page
-            if (info->callcount == 1)
-            {
-                next_page = 2;
-                info->next_page = next_page;
-            }
-            break;
-
-        case 2: //from preview page
-            if (info->callcount == 1)
-            {
-                // Skip Errors set, goto to doc page
-                if (info->skip_errors)
-                    next_page = 4;
-                // Check to see if we have an account / other account columns
-                else if (info->tx_imp->check_for_column_type (GncTransPropType::ACCOUNT) ||
-                        info->tx_imp->check_for_column_type (GncTransPropType::TACCOUNT))
-                    next_page = 3;
-                else
-                    next_page = 4;
-
-                info->next_page = next_page;
-            }
-            break;
-
-        case 3: //from account match page
-            if (info->callcount == 1)
-            {
-                next_page = 4;
-                info->next_page = next_page;
-            }
-            break;
-
-        case 4: //from doc page
-            if (info->callcount == 1)
-            {
-                /* Create transactions from the parsed data, first time with false
-                   Subsequent times with true */
-                info->tx_imp->create_transactions (info->match_parse_run);
-
-                /* if there are errors, we jump back to preview to correct */
-                if (info->tx_imp->m_parse_errors && !info->skip_errors)
-                {
-                    info->previewing_errors = true; /* We're looking at errors. */
-                    next_page = 2;
-                }
-                else
-                    next_page = 5;
-
-                info->next_page = next_page;
-            }
-            break;
-
-        case 5: //from match page
-            if (info->callcount == 1)
-            {
-                next_page = 6;
-                info->next_page = next_page;
-            }
-            break;
-
-        case 6: //from summary page
-            if (info->callcount == 1)
-            {
-                next_page = 7;
-                info->next_page = next_page;
-            }
-            break;
-
-        default:
-            next_page = -1;
-    }
-    return next_page;
-}
-
-
 void
 csv_tximp_assist_prepare_cb (GtkAssistant *assistant, GtkWidget *page,
         CsvImportTrans* info)
 {
-    // Reset callcount on every prepare
-    info->callcount = 0;
-
     if (page == info->file_page)
         csv_tximp_assist_file_page_prepare (assistant, info);
     else if (page == info->preview_page)
@@ -1819,9 +1698,6 @@ csv_tximp_assist_create (CsvImportTrans *info)
     gnc_builder_add_from_file  (builder , "assistant-csv-trans-import.glade", "CSV Transaction Assistant");
     info->csv_imp_asst = GTK_ASSISTANT(gtk_builder_get_object (builder, "CSV Transaction Assistant"));
 
-    /* Set the forward function */
-    gtk_assistant_set_forward_page_func (info->csv_imp_asst, csv_tximp_forward_page_func, info, nullptr);
-
     /* Enable buttons on all page. */
     gtk_assistant_set_page_complete (info->csv_imp_asst,
                                      GTK_WIDGET(gtk_builder_get_object (builder, "start_page")),
@@ -1895,7 +1771,6 @@ csv_tximp_assist_create (CsvImportTrans *info)
         info->start_row_spin = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "start_row"));
         info->end_row_spin = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "end_row"));
         info->skip_alt_rows_button = GTK_WIDGET(gtk_builder_get_object (builder, "skip_rows"));
-        info->skip_errors_button = GTK_WIDGET(gtk_builder_get_object (builder, "skip_errors_button"));
         info->multi_split_cbutton = GTK_WIDGET(gtk_builder_get_object (builder, "multi_split_button"));
 
         /* Load the separator buttons from the glade builder file into the
