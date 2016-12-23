@@ -855,7 +855,6 @@ For example
                 <property name="receives_default">False</property>
                 <property name="xalign">1</property>
                 <property name="image_position">right</property>
-                <property name="active">True</property>
                 <property name="draw_indicator">True</property>
                 <signal name="toggled" handler="csv_tximp_preview_skiperrors_cb" swapped="no"/>
               </object>
