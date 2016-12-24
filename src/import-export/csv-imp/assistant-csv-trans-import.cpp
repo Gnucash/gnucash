@@ -325,17 +325,9 @@ csv_tximp_preview_settings_sel_changed_cb (GtkComboBox *combo, CsvImpTransAssist
 
     info->tx_imp->settings (*preset);
     if (preset->m_load_error)
-    {
-        auto dialog = gtk_message_dialog_new (GTK_WINDOW(info->csv_imp_asst),
-                                    (GtkDialogFlags) 0,
-                                    GTK_MESSAGE_ERROR,
-                                    GTK_BUTTONS_OK,
-                                    "%s", _("Load the Import Settings."));
-        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-            "%s", _("There were problems reading some saved settings, continuing to load.\n Please review and save again."));
-        gtk_dialog_run (GTK_DIALOG (dialog));
-        gtk_widget_destroy (dialog);
-    }
+        gnc_error_dialog (GTK_WIDGET(info->csv_imp_asst),
+            "%s", _("There were problems reading some saved settings, continuing to load.\n"
+                    "Please review and save again."));
 
     info->preview_refresh ();
     info->preview_handle_save_del_sensitivity (combo);
@@ -370,16 +362,9 @@ csv_tximp_preview_del_settings_cb (GtkWidget *button, CsvImpTransAssist *info)
     auto model = gtk_combo_box_get_model (info->settings_combo);
     gtk_tree_model_get (model, &iter, SET_GROUP, &preset, -1);
 
-    auto dialog = gtk_message_dialog_new (GTK_WINDOW(info->csv_imp_asst),
-                                (GtkDialogFlags) 0,
-                                GTK_MESSAGE_QUESTION,
-                                GTK_BUTTONS_OK_CANCEL,
+    auto response = gnc_ok_cancel_dialog (GTK_WIDGET(info->csv_imp_asst),
+                                GTK_RESPONSE_CANCEL,
                                 "%s", _("Delete the Import Settings."));
-    gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-        "%s", _("Do you really want to delete the selection?"));
-    auto response = gtk_dialog_run (GTK_DIALOG (dialog));
-    gtk_widget_destroy (dialog);
-
     if (response == GTK_RESPONSE_OK)
     {
         preset->remove();
@@ -412,16 +397,9 @@ csv_tximp_preview_save_settings_cb (GtkWidget *button, CsvImpTransAssist *info)
 
             if (preset && (preset->m_name == std::string(new_name)))
             {
-                auto dialog = gtk_message_dialog_new (GTK_WINDOW(info->csv_imp_asst),
-                                        (GtkDialogFlags) 0,
-                                        GTK_MESSAGE_QUESTION,
-                                        GTK_BUTTONS_OK_CANCEL,
-                                        "%s", title);
-                gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                "%s", _("Setting name already exists, over write?"));
-                auto response = gtk_dialog_run (GTK_DIALOG (dialog));
-                gtk_widget_destroy (dialog);
-
+                auto response = gnc_ok_cancel_dialog (GTK_WIDGET(info->csv_imp_asst),
+                        GTK_RESPONSE_OK,
+                        "%s", _("Setting name already exists, over write?"));
                 if (response != GTK_RESPONSE_OK)
                     return;
 
@@ -434,15 +412,8 @@ csv_tximp_preview_save_settings_cb (GtkWidget *button, CsvImpTransAssist *info)
     /* All checks passed, let's save this preset */
     if (!info->tx_imp->save_settings())
     {
-        auto dialog = gtk_message_dialog_new (GTK_WINDOW(info->csv_imp_asst),
-                                    (GtkDialogFlags) 0,
-                                    GTK_MESSAGE_INFO,
-                                    GTK_BUTTONS_OK,
-                                    "%s", title);
-        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+        gnc_info_dialog (GTK_WIDGET(info->csv_imp_asst),
             "%s", _("The settings have been saved."));
-        gtk_dialog_run (GTK_DIALOG (dialog));
-        gtk_widget_destroy (dialog);
 
         // Update the settings store
         info->preview_populate_settings_combo();
@@ -466,17 +437,8 @@ csv_tximp_preview_save_settings_cb (GtkWidget *button, CsvImpTransAssist *info)
         }
     }
     else
-    {
-        auto dialog = gtk_message_dialog_new (GTK_WINDOW(info->csv_imp_asst),
-                                    (GtkDialogFlags) 0,
-                                    GTK_MESSAGE_ERROR,
-                                    GTK_BUTTONS_OK,
-                                    "%s", title);
-        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+        gnc_error_dialog (GTK_WIDGET(info->csv_imp_asst),
             "%s", _("There was a problem saving the settings, please try again."));
-        gtk_dialog_run (GTK_DIALOG (dialog));
-        gtk_widget_destroy (dialog);
-    }
 }/* Callback triggered when user adjusts skip start lines
  */
 void csv_tximp_preview_srow_cb (GtkSpinButton *spin, CsvImpTransAssist *info)
@@ -1538,16 +1500,9 @@ CsvImpTransAssist::assist_match_page_prepare ()
         /* Oops! This shouldn't happen when using the import assistant !
          * Inform the user and go back to the preview page.
          */
-        auto dialog = gtk_message_dialog_new (GTK_WINDOW(csv_imp_asst),
-                                    (GtkDialogFlags) 0,
-                                    GTK_MESSAGE_ERROR,
-                                    GTK_BUTTONS_OK,
-                                    "%s", _("Import Error"));
-        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+        gnc_error_dialog (GTK_WIDGET(csv_imp_asst),
             _("An unexpected error has occurred. Please report this as a bug.\n\n"
               "Error message:\n%s"), err.what());
-        gtk_dialog_run (GTK_DIALOG (dialog));
-        gtk_widget_destroy (dialog);
         gtk_assistant_set_current_page (csv_imp_asst, 2);
     }
 
