@@ -189,8 +189,18 @@ void GncTxImport::encoding (const std::string& encoding)
 
 std::string GncTxImport::encoding () { return m_settings.m_encoding; }
 
-void GncTxImport::update_skipped_lines()
+void GncTxImport::update_skipped_lines(boost::optional<uint> start, boost::optional<uint> end,
+        boost::optional<bool> alt, boost::optional<bool> errors)
 {
+    if (start)
+        m_settings.m_skip_start_lines = *start;
+    if (end)
+        m_settings.m_skip_end_lines = *end;
+    if (alt)
+        m_settings.m_skip_alt_lines = *alt;
+    if (errors)
+        m_skip_errors = *errors;
+
     for (uint i = 0; i < m_parsed_lines.size(); i++)
     {
         std::get<4>(m_parsed_lines[i]) =
@@ -202,37 +212,10 @@ void GncTxImport::update_skipped_lines()
     }
 }
 
-void GncTxImport::skip_start_lines (uint num)
-{
-    m_settings.m_skip_start_lines = num;
-    update_skipped_lines();
-}
-
 uint GncTxImport::skip_start_lines () { return m_settings.m_skip_start_lines; }
-
-void GncTxImport::skip_end_lines (uint num)
-{
-    m_settings.m_skip_end_lines = num;
-    update_skipped_lines();
-}
-
 uint GncTxImport::skip_end_lines () { return m_settings.m_skip_end_lines; }
-
-void GncTxImport::skip_alt_lines (bool skip)
-{
-    m_settings.m_skip_alt_lines = skip;
-    update_skipped_lines();
-}
-
 bool GncTxImport::skip_alt_lines () { return m_settings.m_skip_alt_lines; }
-
-void GncTxImport::skip_errors (bool skip)
-{
-    m_skip_errors = skip;
-    update_skipped_lines();
-}
-
-bool GncTxImport::skip_errors () { return m_skip_errors; }
+bool GncTxImport::skip_err_lines () { return m_skip_errors; }
 
 void GncTxImport::separators (std::string separators)
 {

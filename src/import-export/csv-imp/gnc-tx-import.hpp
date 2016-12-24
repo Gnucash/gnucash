@@ -44,6 +44,7 @@ extern "C" {
 #include "gnc-tokenizer.hpp"
 #include "gnc-trans-props.hpp"
 #include "gnc-csv-trans-settings.hpp"
+#include <boost/optional.hpp>
 
 
 /** This struct stores a possibly incomplete transaction
@@ -115,17 +116,12 @@ public:
     void encoding (const std::string& encoding);
     std::string encoding ();
 
-    void skip_start_lines (uint num);
+    void update_skipped_lines (boost::optional<uint> start, boost::optional<uint> end,
+                               boost::optional<bool> alt, boost::optional<bool> errors);
     uint skip_start_lines ();
-
-    void skip_end_lines (uint num);
     uint skip_end_lines ();
-
-    void skip_alt_lines (bool skip);
     bool skip_alt_lines ();
-
-    void skip_errors (bool skip);
-    bool skip_errors ();
+    bool skip_err_lines ();
 
     void separators (std::string separators);
     std::string separators ();
@@ -169,8 +165,6 @@ private:
 
     void verify_column_selections (ErrorList& error_msg);
     void verify_data(ErrorList& error_msg);
-
-    void update_skipped_lines();
 
     /* Internal helper function that does the actual conversion from property lists
      * to real (possibly unbalanced) transaction with splits.
