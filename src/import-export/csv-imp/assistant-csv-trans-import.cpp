@@ -143,7 +143,7 @@ struct  CsvImpTransAssist
     GtkWidget            *summary_label;            /**< The summary text */
 
     bool                  new_book;                 /**< Are we importing into a new book?; if yes, call book options */
-    GncTxImport          *tx_imp;                   /**< The actual data we are previewing */
+    std::unique_ptr<GncTxImport> tx_imp;            /**< The actual data we are previewing */
 };
 
 
@@ -209,32 +209,27 @@ csv_tximp_file_confirm_cb (GtkWidget *button, CsvImpTransAssist *info)
     g_free (starting_dir);
 
     /* Load the file into parse_data. */
-    auto parse_data = new GncTxImport;
+    info->tx_imp = std::unique_ptr<GncTxImport>(new GncTxImport);
     /* Assume data is CSV. User can later override to Fixed Width if needed */
     try
     {
-        parse_data->file_format (GncImpFileFormat::CSV);
-        parse_data->load_file (info->file_name);
-        parse_data->tokenize (true);
+        info->tx_imp->file_format (GncImpFileFormat::CSV);
+        info->tx_imp->load_file (info->file_name);
+        info->tx_imp->tokenize (true);
     }
     catch (std::ifstream::failure& e)
     {
         /* File loading failed ... */
-        gnc_error_dialog (nullptr, "%s", e.what());
-            delete parse_data;
-            return;
+        gnc_error_dialog (GTK_WIDGET(info->csv_imp_asst), "%s", e.what());
+        return;
     }
     catch (std::range_error &e)
     {
         /* Parsing failed ... */
-        gnc_error_dialog (nullptr, "%s", e.what());
-        delete parse_data;
+        gnc_error_dialog (GTK_WIDGET(info->csv_imp_asst), "%s", e.what());
         return;
     }
 
-    if (info->tx_imp) // Free parse_data if we have come back here
-        delete info->tx_imp;
-    info->tx_imp = parse_data;
     info->preview_refresh ();
 
     /* Get settings store and populate */
@@ -1662,10 +1657,6 @@ static void
 csv_tximp_close_handler (gpointer user_data)
 {
     auto info = (CsvImpTransAssist*)user_data;
-
-    /* Free the memory we allocated. */
-    if (info->tx_imp)
-        delete info->tx_imp;
 
     if (info->gnc_csv_importer_gui)
         info->gnc_csv_importer_gui = nullptr;
