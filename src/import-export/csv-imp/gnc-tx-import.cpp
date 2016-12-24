@@ -352,103 +352,103 @@ void GncTxImport::verify_data(ErrorList& error_msg)
     auto have_amount_errors = false;
     for (uint i = 0; i < m_parsed_lines.size(); i++)
     {
-        if (std::get<4>(m_parsed_lines[i])) // Ignore skipped lines
-            continue;
-        else
+        auto line_err = ErrorList();
+        auto line_data = std::get<0>(m_parsed_lines[i]);
+
+        /* Attempt to parse date column values */
+        auto date_col_it = std::find(m_settings.m_column_types.begin(),
+            m_settings.m_column_types.end(), GncTransPropType::DATE);
+        if (date_col_it != m_settings.m_column_types.end())
+        try
         {
-            auto line_err = ErrorList();
-            auto line_data = std::get<0>(m_parsed_lines[i]);
-
-            /* Attempt to parse date column values */
-            auto date_col_it = std::find(m_settings.m_column_types.begin(),
-                m_settings.m_column_types.end(), GncTransPropType::DATE);
-            if (date_col_it != m_settings.m_column_types.end())
-            try
-            {
-                auto date_col = date_col_it -m_settings.m_column_types.begin();
-                auto date_str = line_data[date_col];
-                if (!m_settings.m_multi_split || !date_str.empty())
-                    parse_date (date_str, date_format());
-            }
-            catch (...)
-            {
-                have_date_errors = true;
-                line_err.add_error(_("Date could not be understood"));
-            }
-
-            /* Attempt to parse reconcile date column values */
-            date_col_it = std::find(m_settings.m_column_types.begin(),
-                m_settings.m_column_types.end(), GncTransPropType::REC_DATE);
-            if (date_col_it != m_settings.m_column_types.end())
-            try
-            {
-                auto date_col = date_col_it -m_settings.m_column_types.begin();
-                auto date_str = line_data[date_col];
-                if (!date_str.empty())
-                    parse_date (date_str, date_format());
-            }
-            catch (...)
-            {
-                have_date_errors = true;
-                line_err.add_error(_("Reconcile date could not be understood"));
-            }
-
-            /* Attempt to parse transfer reconcile date column values */
-            date_col_it = std::find(m_settings.m_column_types.begin(),
-                m_settings.m_column_types.end(), GncTransPropType::REC_DATE);
-            if (date_col_it != m_settings.m_column_types.end())
-            try
-            {
-                auto date_col = date_col_it -m_settings.m_column_types.begin();
-                auto date_str = line_data[date_col];
-                if (!date_str.empty())
-                    parse_date (date_str, date_format());
-            }
-            catch (...)
-            {
-                have_date_errors = true;
-                line_err.add_error(_("Transfer reconcile date could not be understood"));
-            }
-
-            /* Attempt to parse deposit column values */
-            auto num_col_it = std::find(m_settings.m_column_types.begin(),
-                m_settings.m_column_types.end(), GncTransPropType::DEPOSIT);
-            if (num_col_it != m_settings.m_column_types.end())
-            try
-            {
-                auto num_col = num_col_it -m_settings.m_column_types.begin();
-                auto num_str = line_data[num_col];
-                if (!m_settings.m_multi_split || !num_str.empty())
-                    parse_amount (num_str, currency_format());
-            }
-            catch (...)
-            {
-                have_amount_errors = true;
-                line_err.add_error(_("Deposit amount could not be understood"));
-            }
-
-            /* Attempt to parse withdrawal column values */
-            num_col_it = std::find(m_settings.m_column_types.begin(),
-                m_settings.m_column_types.end(), GncTransPropType::WITHDRAWAL);
-            if (num_col_it != m_settings.m_column_types.end())
-            try
-            {
-                auto num_col = num_col_it -m_settings.m_column_types.begin();
-                auto num_str = line_data[num_col];
-                if (!m_settings.m_multi_split || !num_str.empty())
-                    parse_amount (num_str, currency_format());
-            }
-            catch (...)
-            {
-                have_amount_errors = true;
-                line_err.add_error(_("Withdrawal amount could not be understood"));
-            }
-
-            if (!line_err.empty())
-                std::get<1>(m_parsed_lines[i]) = line_err.str();
-            else
-                std::get<1>(m_parsed_lines[i]).clear();
+            auto date_col = date_col_it -m_settings.m_column_types.begin();
+            auto date_str = line_data[date_col];
+            if (!m_settings.m_multi_split || !date_str.empty())
+                parse_date (date_str, date_format());
         }
+        catch (...)
+        {
+            if (!std::get<4>(m_parsed_lines[i])) // Skipped lines don't trigger a global error
+                have_date_errors = true;
+            line_err.add_error(_("Date could not be understood"));
+        }
+
+        /* Attempt to parse reconcile date column values */
+        date_col_it = std::find(m_settings.m_column_types.begin(),
+            m_settings.m_column_types.end(), GncTransPropType::REC_DATE);
+        if (date_col_it != m_settings.m_column_types.end())
+        try
+        {
+            auto date_col = date_col_it -m_settings.m_column_types.begin();
+            auto date_str = line_data[date_col];
+            if (!date_str.empty())
+                parse_date (date_str, date_format());
+        }
+        catch (...)
+        {
+            if (!std::get<4>(m_parsed_lines[i])) // Skipped lines don't trigger a global error
+                have_date_errors = true;
+            line_err.add_error(_("Reconcile date could not be understood"));
+        }
+
+        /* Attempt to parse transfer reconcile date column values */
+        date_col_it = std::find(m_settings.m_column_types.begin(),
+            m_settings.m_column_types.end(), GncTransPropType::TREC_DATE);
+        if (date_col_it != m_settings.m_column_types.end())
+        try
+        {
+            auto date_col = date_col_it -m_settings.m_column_types.begin();
+            auto date_str = line_data[date_col];
+            if (!date_str.empty())
+                parse_date (date_str, date_format());
+        }
+        catch (...)
+        {
+            if (!std::get<4>(m_parsed_lines[i])) // Skipped lines don't trigger a global error
+                have_date_errors = true;
+            line_err.add_error(_("Transfer reconcile date could not be understood"));
+        }
+
+        /* Attempt to parse deposit column values */
+        auto num_col_it = std::find(m_settings.m_column_types.begin(),
+            m_settings.m_column_types.end(), GncTransPropType::DEPOSIT);
+        if (num_col_it != m_settings.m_column_types.end())
+        try
+        {
+            auto num_col = num_col_it -m_settings.m_column_types.begin();
+            auto num_str = line_data[num_col];
+            if (!m_settings.m_multi_split || !num_str.empty())
+                parse_amount (num_str, currency_format());
+        }
+        catch (...)
+        {
+            if (!std::get<4>(m_parsed_lines[i])) // Skipped lines don't trigger a global error
+                have_amount_errors = true;
+            line_err.add_error(_("Deposit amount could not be understood"));
+        }
+
+        /* Attempt to parse withdrawal column values */
+        num_col_it = std::find(m_settings.m_column_types.begin(),
+            m_settings.m_column_types.end(), GncTransPropType::WITHDRAWAL);
+        if (num_col_it != m_settings.m_column_types.end())
+        try
+        {
+            auto num_col = num_col_it -m_settings.m_column_types.begin();
+            auto num_str = line_data[num_col];
+            if (!m_settings.m_multi_split || !num_str.empty())
+                parse_amount (num_str, currency_format());
+        }
+        catch (...)
+        {
+            if (!std::get<4>(m_parsed_lines[i])) // Skipped lines don't trigger a global error
+                have_amount_errors = true;
+            line_err.add_error(_("Withdrawal amount could not be understood"));
+        }
+
+        if (!line_err.empty())
+            std::get<1>(m_parsed_lines[i]) = line_err.str();
+        else
+            std::get<1>(m_parsed_lines[i]).clear();
     }
 
     if (have_date_errors)
