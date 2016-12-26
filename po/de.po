@@ -7829,8 +7829,8 @@ msgid ""
 "status of the account. The setting \"none\" doesn't reverse the sign on any "
 "balances."
 msgstr ""
-"Diese Einstellung wählt die Umkehrung der Betrags-Vorzeichen für manche "
-"Kontentypen. Mögliche Werte sind »income_expense« für Vorzeichenumkehr bei "
+"Diese Einstellung erlauben bestimmten Konten die Umkehrung der Betrags-Vorzeichen" 
+"Mögliche Werte sind »income_expense« für Vorzeichenumkehr bei "
 "Einnahme-/Ausgabenkonten, »credit« für Aktiv-/Passivkonten und »none« für "
 "keine Vorzeichenumkehr."
 
@@ -26022,14 +26022,13 @@ msgstr ""
 "zum Erstellen eines Kontenplans finden Sie im GnuCash Online-Handbuch. "
 
 #: ../doc/tip_of_the_day.list.in:20
-#, fuzzy
 msgid ""
 "Click the right mouse button (control-click in Mac OS X) in the Accounts tab "
 "of the main window to bring up the account menu options. Within each "
 "register, clicking the right mouse button brings up the transaction menu "
 "options."
 msgstr ""
-"Ein Klick mit der rechten Maustaste im Hauptfenster öffnet die »Konto« "
+"Ein Klick mit der rechten Maustaste im Hauptfenster (STRG-Maustaste unter Mac OSX) öffnet die »Konto« "
 "Menüpunkte. Ein Klick mit der rechten Maustaste im Kontobuch öffnet die "
 "Menüpunkte zum »Buchungssatz«."
 
@@ -26085,15 +26084,14 @@ msgstr ""
 "Aktiva:Bargeld)."
 
 #: ../doc/tip_of_the_day.list.in:46
-#, fuzzy
 msgid ""
 "Want to see all your subaccount transactions in one register? From the "
 "Accounts tab in the main window, highlight the parent account and select "
 "View -> Open Subaccounts from the menu."
 msgstr ""
-"Sie können alle Buchungssätze von mehreren Unterkonten in einem Kontobuch "
-"ansehen: Wählen Sie im Kontenhierarchie-Fenster das übergeordnete Konto und "
-"klicken Sie auf den Menüpunkt Konten -> Unterkonten öffnen."
+"So können Sie alle Buchungssätze Ihrer Unterkonten in einem Kontobuch "
+"ansehen. Markieren Sie Sie im Kontenhierarchie-Fenster das übergeordnete Konto und "
+"wählen Sie den Menüpunkt Bearbeiten -> Unterkonten öffnen."
 
 #: ../doc/tip_of_the_day.list.in:50
 msgid ""
@@ -26190,16 +26188,15 @@ msgstr ""
 "Standardhäufigkeit wählen und dann 'Alle 12 Monate'."
 
 #: ../doc/tip_of_the_day.list.in:87
-#, fuzzy
 msgid ""
 "If you work overnight, you should close and reopen your working registers "
 "after midnight, to get the new date as default for new transactions. It is "
 "not necessary to restart GnuCash."
 msgstr ""
-"Wenn Sie GnuCash über Mitternacht hinaus geöffnet halten, sollten Sie "
-"entweder das ganze Programm oder die verwendeten Kontofenster einmal "
-"schließen und wieder öffnen, damit das neue Datum als voreingestelltes "
-"Buchungsdatum vorhanden ist."
+"Wenn Sie GnuCash über Mitternacht hinaus arbeiten, sollten Sie nach Mitternacht die "
+"verwendeten Kontofenster einmal schließen und wieder öffnen, damit "
+"das neue Datum als voreingestelltes Buchungsdatum vorhanden ist."
+"Es ist nicht notwendig, GnuCash neu zu starten."
 
 #: ../doc/tip_of_the_day.list.in:91
 msgid ""
@@ -26244,6 +26241,9 @@ msgid ""
 "select Window -> New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
+"Um den Inhalt zweiter Reiter in einem der Reiter optisch zu vergleichen,"
+"wählen Sie im Menü 'Fenster -> Neues Fenster mit Seite', um diesen "
+"Reiter in einem neuen Fenster anzuzeigen "
 
 #~ msgid "Owner Name"
 #~ msgstr "Inhabername"
