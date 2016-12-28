@@ -23,6 +23,7 @@
 /** @file gnc-csv-trans-settings.h
     @brief CSV Import Settings
     @author Copyright (c) 2014 Robert Fewell
+    @author Copyright (c) 2016 Geert Janssens
 */
 #ifndef GNC_CSV_TRANS_SETTINGS_H
 #define GNC_CSV_TRANS_SETTINGS_H
