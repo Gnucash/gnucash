@@ -650,10 +650,10 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
             {
                 if (m_settings.m_multi_split && line_it->empty())
                     continue; // In multi-split mode, transaction properties can be empty
-                trans_props->set_property(*col_types_it, *line_it);
+                trans_props->set(*col_types_it, *line_it);
             }
             else
-                split_props->set_property(*col_types_it, *line_it);
+                split_props->set(*col_types_it, *line_it);
         }
         catch (const std::exception& e)
         {

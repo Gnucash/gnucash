@@ -111,7 +111,8 @@ struct GncPreTrans
 public:
     GncPreTrans(int date_format) : m_date_format{date_format} {};
 
-    void set_property (GncTransPropType prop_type, const std::string& value);
+    void set (GncTransPropType prop_type, const std::string& value);
+    void reset (GncTransPropType prop_type);
     std::string verify_essentials (void);
     Transaction *create_trans (QofBook* book, gnc_commodity* currency);
 
@@ -149,7 +150,8 @@ struct GncPreSplit
 public:
     GncPreSplit (int date_format, int currency_format) : m_date_format{date_format},
         m_currency_format{currency_format}{};
-    void set_property (GncTransPropType prop_type, const std::string& value);
+    void set (GncTransPropType prop_type, const std::string& value);
+    void reset (GncTransPropType prop_type);
     std::string verify_essentials (void);
     void create_split(Transaction* trans);
 
