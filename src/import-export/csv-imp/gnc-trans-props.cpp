@@ -296,51 +296,51 @@ gnc_commodity* parse_commodity (const std::string& comm_str)
         return comm;
 }
 
-void GncPreTrans::set_property (GncTransPropType prop_type, const std::string& value)
+void GncPreTrans::set (GncTransPropType prop_type, const std::string& value)
 {
+    gnc_commodity *comm = nullptr;
     switch (prop_type)
     {
         case GncTransPropType::UNIQUE_ID:
+            m_differ = boost::none;
             if (!value.empty())
                 m_differ = value;
-            else
-                m_differ = boost::none;
             break;
 
         case GncTransPropType::DATE:
+            m_date = boost::none;
             m_date = parse_date (value, m_date_format); // Throws if parsing fails
             break;
 
         case GncTransPropType::NUM:
+            m_num = boost::none;
             if (!value.empty())
                 m_num = value;
-            else
-                m_num = boost::none;
             break;
 
         case GncTransPropType::DESCRIPTION:
+            m_desc = boost::none;
             if (!value.empty())
                 m_desc = value;
-            else
-                m_desc = boost::none;
             break;
 
         case GncTransPropType::NOTES:
+            m_notes = boost::none;
             if (!value.empty())
                 m_notes = value;
-            else
-                m_notes = boost::none;
             break;
 
         case GncTransPropType::COMMODITY:
-            m_commodity = parse_commodity (value); // Throws if parsing fails
+            m_commodity = boost::none;
+            comm = parse_commodity (value); // Throws if parsing fails
+            if (comm)
+                m_commodity = comm;
             break;
 
         case GncTransPropType::VOID_REASON:
+            m_void_reason = boost::none;
             if (!value.empty())
                 m_void_reason = value;
-            else
-                m_void_reason = boost::none;
             break;
 
         default:
@@ -349,6 +349,19 @@ void GncPreTrans::set_property (GncTransPropType prop_type, const std::string& v
             break;
     }
 
+}
+
+void GncPreTrans::reset (GncTransPropType prop_type)
+{
+    try
+    {
+        set (prop_type, std::string());
+    }
+    catch (...)
+    {
+        // Set with an empty string will effectively clear the property
+        // but also throw in many cases. For a reset this is fine, so catch it here.
+    }
 }
 
 std::string GncPreTrans::verify_essentials (void)
@@ -408,26 +421,25 @@ bool GncPreTrans::is_part_of (std::shared_ptr<GncPreTrans> parent)
             (!m_void_reason || m_void_reason == parent->m_void_reason);
 }
 
-void GncPreSplit::set_property (GncTransPropType prop_type, const std::string& value)
+void GncPreSplit::set (GncTransPropType prop_type, const std::string& value)
 {
     Account *acct = nullptr;
     switch (prop_type)
     {
         case GncTransPropType::ACTION:
+            m_action = boost::none;
             if (!value.empty())
                 m_action = value;
-            else
-                m_action = boost::none;
             break;
 
         case GncTransPropType::TACTION:
+            m_taction = boost::none;
             if (!value.empty())
                 m_taction = value;
-            else
-                m_taction = boost::none;
             break;
 
         case GncTransPropType::ACCOUNT:
+            m_account = boost::none;
             acct = gnc_csv_account_map_search (value.c_str());
             if (acct)
                 m_account = acct;
@@ -436,6 +448,7 @@ void GncPreSplit::set_property (GncTransPropType prop_type, const std::string& v
             break;
 
         case GncTransPropType::TACCOUNT:
+            m_taccount = boost::none;
             acct = gnc_csv_account_map_search (value.c_str());
             if (acct)
                 m_taccount = acct;
@@ -444,45 +457,51 @@ void GncPreSplit::set_property (GncTransPropType prop_type, const std::string& v
             break;
 
         case GncTransPropType::MEMO:
+            m_memo = boost::none;
             if (!value.empty())
                 m_memo = value;
-            else
-                m_memo = boost::none;
             break;
 
         case GncTransPropType::TMEMO:
+            m_tmemo = boost::none;
             if (!value.empty())
                 m_tmemo = value;
-            else
-                m_tmemo = boost::none;
             break;
 
         case GncTransPropType::DEPOSIT:
+            m_deposit = boost::none;
             m_deposit = parse_amount (value, m_currency_format); // Will throw if parsing fails
             break;
         case GncTransPropType::WITHDRAWAL:
+            m_withdrawal = boost::none;
             m_withdrawal = parse_amount (value, m_currency_format); // Will throw if parsing fails
             break;
 
         case GncTransPropType::PRICE:
+            m_price = boost::none;
             m_price = parse_amount (value, m_currency_format); // Will throw if parsing fails
             break;
 
         case GncTransPropType::REC_STATE:
+            m_rec_state = boost::none;
             m_rec_state = parse_reconciled (value); // Throws if parsing fails
             break;
 
         case GncTransPropType::TREC_STATE:
+            m_trec_state = boost::none;
             m_trec_state = parse_reconciled (value); // Throws if parsing fails
             break;
 
         case GncTransPropType::REC_DATE:
+            m_rec_date = boost::none;
             if (!value.empty())
                 m_rec_date = parse_date (value, m_date_format); // Throws if parsing fails
             break;
 
         case GncTransPropType::TREC_DATE:
-            m_trec_date = parse_date (value, m_date_format); // Throws if parsing fails
+            m_trec_date = boost::none;
+            if (!value.empty())
+                m_trec_date = parse_date (value, m_date_format); // Throws if parsing fails
             break;
 
         default:
@@ -491,6 +510,19 @@ void GncPreSplit::set_property (GncTransPropType prop_type, const std::string& v
             break;
     }
 
+}
+
+void GncPreSplit::reset (GncTransPropType prop_type)
+{
+    try
+    {
+        set (prop_type, std::string());
+    }
+    catch (...)
+    {
+        // Set with an empty string will effectively clear the property
+        // but also throw in many cases. For a reset this is fine, so catch it here.
+    }
 }
 
 std::string GncPreSplit::verify_essentials (void)
