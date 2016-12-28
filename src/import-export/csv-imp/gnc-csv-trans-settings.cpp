@@ -23,6 +23,7 @@
 /** @file gnc-csv-trans-settings.c
     @brief CSV Import Settings
     @author Copyright (c) 2014 Robert Fewell
+    @author Copyright (c) 2016 Geert Janssens
 */
 
 #include "gnc-csv-trans-settings.hpp"
