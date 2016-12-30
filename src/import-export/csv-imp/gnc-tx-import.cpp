@@ -67,6 +67,7 @@ GncTxImport::GncTxImport(GncImpFileFormat format)
      * gnc_csv_parse_data_free is called before all of the data is
      * initialized, only the data that needs to be freed is freed. */
     m_skip_errors = false;
+    m_req_mapped_accts = true;
     file_format(m_settings.m_file_format = format);
 }
 
@@ -115,18 +116,30 @@ GncImpFileFormat GncTxImport::file_format()
 /** Toggles the multi-split state of the importer and will subsequently
  *  sanitize the column_types list. All types that don't make sense
  *  in the new state are reset to type GncTransPropType::NONE.
+ *  Additionally the interpretation of the columns with transaction
+ *  properties changes when changing multi-split mode. So this function
+ *  will force a reparsing of the transaction properties (if there are
+ *  any) by resetting the first column with a transaction property
+ *  it encounters.
  * @param multi_split_val Boolean value with desired state (multi-split
  * vs two-split).
  */
 void GncTxImport::multi_split (bool multi_split)
 {
+    auto trans_prop_seen = false;
     m_settings.m_multi_split = multi_split;
-    for (auto col_it = m_settings.m_column_types.begin(); col_it != m_settings.m_column_types.end();
-            col_it++)
+    for (uint i = 0; i < m_settings.m_column_types.size(); i++)
     {
-        auto san_prop = sanitize_trans_prop (*col_it, m_settings.m_multi_split);
-        if (san_prop != *col_it)
-            *col_it = san_prop;
+        auto old_prop = m_settings.m_column_types[i];
+        auto is_trans_prop = ((old_prop > GncTransPropType::NONE)
+                && (old_prop <= GncTransPropType::TRANS_PROPS));
+        auto san_prop = sanitize_trans_prop (old_prop, m_settings.m_multi_split);
+        if (san_prop != old_prop)
+            set_column_type (i, san_prop);
+        else if (is_trans_prop && !trans_prop_seen)
+            set_column_type (i, old_prop, true);
+        trans_prop_seen |= is_trans_prop;
+
     }
     if (m_settings.m_multi_split)
         m_settings.m_base_account = nullptr;
@@ -158,18 +171,52 @@ void GncTxImport::base_account (Account* base_account)
         auto col_type = std::find (m_settings.m_column_types.begin(),
                 m_settings.m_column_types.end(), GncTransPropType::ACCOUNT);
         if (col_type != m_settings.m_column_types.end())
-            *col_type = GncTransPropType::NONE;
+            set_column_type(col_type -m_settings.m_column_types.begin(),
+                            GncTransPropType::NONE);
+
+        /* Set default account for each line's split properties */
+        for (auto line : m_parsed_lines)
+            std::get<3>(line)->set_account (m_settings.m_base_account);
+
+
     }
 }
 
 Account *GncTxImport::base_account () { return m_settings.m_base_account; }
 
+void GncTxImport::reset_formatted_column (std::vector<GncTransPropType>& col_types)
+{
+    for (auto col_type: col_types)
+    {
+        auto col = std::find (m_settings.m_column_types.begin(),
+                m_settings.m_column_types.end(), col_type);
+        if (col != m_settings.m_column_types.end())
+            set_column_type (col - m_settings.m_column_types.begin(), col_type, true);
+    }
+}
+
 void GncTxImport::currency_format (int currency_format)
-    { m_settings.m_currency_format = currency_format; }
+{
+    m_settings.m_currency_format = currency_format;
+
+    /* Reparse all currency related columns */
+    std::vector<GncTransPropType> commodities = { GncTransPropType::DEPOSIT,
+            GncTransPropType::WITHDRAWAL,
+            GncTransPropType::PRICE};
+    reset_formatted_column (commodities);
+}
 int GncTxImport::currency_format () { return m_settings.m_currency_format; }
 
 void GncTxImport::date_format (int date_format)
-    { m_settings.m_date_format = date_format; }
+{
+    m_settings.m_date_format = date_format;
+
+    /* Reparse all date related columns */
+    std::vector<GncTransPropType> dates = { GncTransPropType::DATE,
+            GncTransPropType::REC_DATE,
+            GncTransPropType::TREC_DATE};
+    reset_formatted_column (dates);
+}
 int GncTxImport::date_format () { return m_settings.m_date_format; }
 
 /** Converts raw file data using a new encoding. This function must be
@@ -182,7 +229,15 @@ void GncTxImport::encoding (const std::string& encoding)
 
     // TODO investigate if we can catch conversion errors and report them
     if (m_tokenizer)
+    {
         m_tokenizer->encoding(encoding); // May throw
+        try
+        {
+            tokenize(false);
+        }
+        catch (...)
+        { };
+    }
 
     m_settings.m_encoding = encoding;
 }
@@ -286,7 +341,7 @@ void GncTxImport::load_file (const std::string& filename)
  * function.
  * Notes: - this function must be called with guessColTypes set to true once
  *          before calling it with guessColTypes set to false.
- *        - if guessColTypes is TRUE, all the column types will be set
+ *        - if guessColTypes is true, all the column types will be set
  *          GncTransPropType::NONE right now as real guessing isn't implemented yet
  * @param guessColTypes true to guess what the types of columns are based on the cell contents
  * @exception std::range_error if tokenizing failed
@@ -302,7 +357,9 @@ void GncTxImport::tokenize (bool guessColTypes)
     for (auto tokenized_line : m_tokenizer->get_tokens())
     {
         m_parsed_lines.push_back (std::make_tuple (tokenized_line, std::string(),
-                nullptr, nullptr, false));
+                std::make_shared<GncPreTrans>(date_format()),
+                std::make_shared<GncPreSplit>(date_format(), currency_format()),
+                false));
         auto length = tokenized_line.size();
         if (length > max_cols)
             max_cols = length;
@@ -316,6 +373,15 @@ void GncTxImport::tokenize (bool guessColTypes)
     }
 
     m_settings.m_column_types.resize(max_cols, GncTransPropType::NONE);
+
+    /* Force reinterpretation of already set columns and/or base_account */
+    for (uint i = 0; i < m_settings.m_column_types.size(); i++)
+        set_column_type (i, m_settings.m_column_types[i], true);
+    if (m_settings.m_base_account)
+    {
+        for (auto line : m_parsed_lines)
+            std::get<3>(line)->set_account (m_settings.m_base_account);
+    }
 
     if (guessColTypes)
     {
@@ -344,117 +410,6 @@ void ErrorList::add_error (std::string msg)
 std::string ErrorList::str()
 {
     return m_error.substr(0, m_error.size() - 1);
-}
-
-void GncTxImport::verify_data(ErrorList& error_msg)
-{
-    auto have_date_errors = false;
-    auto have_amount_errors = false;
-    for (uint i = 0; i < m_parsed_lines.size(); i++)
-    {
-        auto line_err = ErrorList();
-        auto line_data = std::get<0>(m_parsed_lines[i]);
-
-        /* Attempt to parse date column values */
-        auto date_col_it = std::find(m_settings.m_column_types.begin(),
-            m_settings.m_column_types.end(), GncTransPropType::DATE);
-        if (date_col_it != m_settings.m_column_types.end())
-        try
-        {
-            auto date_col = date_col_it -m_settings.m_column_types.begin();
-            auto date_str = line_data[date_col];
-            if (!m_settings.m_multi_split || !date_str.empty())
-                parse_date (date_str, date_format());
-        }
-        catch (...)
-        {
-            if (!std::get<4>(m_parsed_lines[i])) // Skipped lines don't trigger a global error
-                have_date_errors = true;
-            line_err.add_error(_("Date could not be understood"));
-        }
-
-        /* Attempt to parse reconcile date column values */
-        date_col_it = std::find(m_settings.m_column_types.begin(),
-            m_settings.m_column_types.end(), GncTransPropType::REC_DATE);
-        if (date_col_it != m_settings.m_column_types.end())
-        try
-        {
-            auto date_col = date_col_it -m_settings.m_column_types.begin();
-            auto date_str = line_data[date_col];
-            if (!date_str.empty())
-                parse_date (date_str, date_format());
-        }
-        catch (...)
-        {
-            if (!std::get<4>(m_parsed_lines[i])) // Skipped lines don't trigger a global error
-                have_date_errors = true;
-            line_err.add_error(_("Reconcile date could not be understood"));
-        }
-
-        /* Attempt to parse transfer reconcile date column values */
-        date_col_it = std::find(m_settings.m_column_types.begin(),
-            m_settings.m_column_types.end(), GncTransPropType::TREC_DATE);
-        if (date_col_it != m_settings.m_column_types.end())
-        try
-        {
-            auto date_col = date_col_it -m_settings.m_column_types.begin();
-            auto date_str = line_data[date_col];
-            if (!date_str.empty())
-                parse_date (date_str, date_format());
-        }
-        catch (...)
-        {
-            if (!std::get<4>(m_parsed_lines[i])) // Skipped lines don't trigger a global error
-                have_date_errors = true;
-            line_err.add_error(_("Transfer reconcile date could not be understood"));
-        }
-
-        /* Attempt to parse deposit column values */
-        auto num_col_it = std::find(m_settings.m_column_types.begin(),
-            m_settings.m_column_types.end(), GncTransPropType::DEPOSIT);
-        if (num_col_it != m_settings.m_column_types.end())
-        try
-        {
-            auto num_col = num_col_it -m_settings.m_column_types.begin();
-            auto num_str = line_data[num_col];
-            if (!m_settings.m_multi_split || !num_str.empty())
-                parse_amount (num_str, currency_format());
-        }
-        catch (...)
-        {
-            if (!std::get<4>(m_parsed_lines[i])) // Skipped lines don't trigger a global error
-                have_amount_errors = true;
-            line_err.add_error(_("Deposit amount could not be understood"));
-        }
-
-        /* Attempt to parse withdrawal column values */
-        num_col_it = std::find(m_settings.m_column_types.begin(),
-            m_settings.m_column_types.end(), GncTransPropType::WITHDRAWAL);
-        if (num_col_it != m_settings.m_column_types.end())
-        try
-        {
-            auto num_col = num_col_it -m_settings.m_column_types.begin();
-            auto num_str = line_data[num_col];
-            if (!m_settings.m_multi_split || !num_str.empty())
-                parse_amount (num_str, currency_format());
-        }
-        catch (...)
-        {
-            if (!std::get<4>(m_parsed_lines[i])) // Skipped lines don't trigger a global error
-                have_amount_errors = true;
-            line_err.add_error(_("Withdrawal amount could not be understood"));
-        }
-
-        if (!line_err.empty())
-            std::get<1>(m_parsed_lines[i]) = line_err.str();
-        else
-            std::get<1>(m_parsed_lines[i]).clear();
-    }
-
-    if (have_date_errors)
-        error_msg.add_error( _("Not all dates could be parsed. Please verify your chosen date format or adjust the lines to skip."));
-    if (have_amount_errors)
-        error_msg.add_error( _("Not all amounts could be parsed. Please verify your chosen currency format or adjust the lines to skip."));
 }
 
 
@@ -504,8 +459,11 @@ void GncTxImport::verify_column_selections (ErrorList& error_msg)
 }
 
 
-/* Test for the required minimum number of columns selected and
- * a valid date format.
+/* Check whether the chosen settings can successfully parse
+ * the import data. This will check:
+ * - there's at least one line selected for import
+ * - the minimum number of columns is selected
+ * - the values in the selected columns can be parsed meaningfully.
  * @return An empty string if all checks passed or the reason
  *         verification failed otherwise.
  */
@@ -530,7 +488,22 @@ std::string GncTxImport::verify ()
     }
 
     verify_column_selections (error_msg);
-    verify_data (error_msg);
+
+    update_skipped_lines (boost::none, boost::none, boost::none, boost::none);
+
+    auto have_line_errors = false;
+    for (auto line : m_parsed_lines)
+    {
+        if (!std::get<4>(line) && !std::get<1>(line).empty())
+        {
+            have_line_errors = true;
+            break;
+        }
+    }
+
+    if (have_line_errors)
+        error_msg.add_error( _("Not all fields could be parsed. Please correct the issues reported for each line or adjust the lines to skip."));
+
     return error_msg.str();
 }
 
@@ -629,70 +602,15 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
 {
     StrVec line;
     std::string error_message;
-    auto trans_props = std::make_shared<GncPreTrans>(date_format());
-    auto split_props = std::make_shared<GncPreSplit>(date_format(), currency_format());
-    std::tie(line, error_message, std::ignore, std::ignore, std::ignore) = *parsed_line;
+    std::shared_ptr<GncPreTrans> trans_props = nullptr;
+    std::shared_ptr<GncPreSplit> split_props = nullptr;
+    bool skip_line = false;
+    std::tie(line, error_message, trans_props, split_props, skip_line) = *parsed_line;
+
+    if (skip_line)
+        return;
+
     error_message.clear();
-
-    /* Convert all tokens in this line into transaction/split properties. */
-    auto col_types_it = m_settings.m_column_types.cbegin();
-    auto line_it = line.cbegin();
-    for (col_types_it, line_it;
-            col_types_it != m_settings.m_column_types.cend() &&
-            line_it != line.cend();
-            ++col_types_it, ++line_it)
-    {
-        try
-        {
-            if (*col_types_it == GncTransPropType::NONE)
-                continue; /* We do nothing with "None"-type columns. */
-            else if  (*col_types_it <= GncTransPropType::TRANS_PROPS)
-            {
-                if (m_settings.m_multi_split && line_it->empty())
-                    continue; // In multi-split mode, transaction properties can be empty
-                trans_props->set(*col_types_it, *line_it);
-            }
-            else
-                split_props->set(*col_types_it, *line_it);
-        }
-        catch (const std::exception& e)
-        {
-            if (!error_message.empty())
-                error_message += "\n";
-            error_message += _(gnc_csv_col_type_strs[*col_types_it]);
-            error_message += _(" column could not be understood.");
-            PINFO("User warning: %s", error_message.c_str());
-        }
-    }
-    std::get<2>(*parsed_line) = trans_props;
-
-    /* For multi-split input data, we need to check whether this line is part of a transaction that
-     * has already be started by a previous line. */
-    if (m_settings.m_multi_split)
-    {
-        if (trans_props->is_part_of(m_parent))
-        {
-            /* This line is part of an already started transaction
-             * continue with that one instead to make sure the split from this line
-             * gets added to the proper transaction */
-            std::get<2>(*parsed_line) = m_parent;
-
-            /* Check if the parent line is ready for conversion. If not,
-             * this child line can't be converted either.
-             */
-            if (!m_parent->verify_essentials().empty())
-                error_message = _("First line of this transaction has errors.");
-        }
-        else
-        {
-            /* This line starts a new transaction, set it as parent for
-             * subsequent lines. */
-            m_parent = trans_props;
-        }
-    }
-
-    if (!error_message.empty())
-        throw std::invalid_argument (error_message);
 
     // Add an ACCOUNT property with the default account if no account column was set by the user
     auto line_acct = split_props->get_account();
@@ -710,7 +628,6 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
             throw std::invalid_argument(error_message);
         }
     }
-    std::get<3>(*parsed_line) = split_props;
 
     /* If column parsing was successful, convert trans properties into a draft transaction. */
     try
@@ -734,17 +651,17 @@ void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parse
 
 
 /** Creates a list of transactions from parsed data. The parsed data
- * will first be validated. If any errors are found this function will
- * throw an error unless skip_errors was set.
+ * will first be validated. If any errors are found in lines that are marked
+ * for processing (ie not marked to skip) this function will
+ * throw an error.
  * @param skip_errors true skip over lines with errors
- * @exception throws std::invalid_argument if data validation fails and
- *            skip_errors wasn't set.
+ * @exception throws std::invalid_argument if data validation or processing fails.
  */
 void GncTxImport::create_transactions ()
 {
     /* Start with verifying the current data. */
     auto verify_result = verify();
-    if (!verify_result.empty() && !m_skip_errors)
+    if (!verify_result.empty())
         throw std::invalid_argument (verify_result);
 
     /* Drop all existing draft transactions */
@@ -761,15 +678,8 @@ void GncTxImport::create_transactions ()
         if ((std::get<4>(*parsed_lines_it)))
             continue;
 
-        try
-        {
-            create_transaction (parsed_lines_it);
-        }
-        catch (const std::invalid_argument& e)
-        {
-            std::get<1>(*parsed_lines_it) = e.what();
-            continue;
-        }
+        /* Should not throw anymore, otherwise verify needs revision */
+        create_transaction (parsed_lines_it);
     }
 }
 
@@ -782,20 +692,157 @@ GncTxImport::check_for_column_type (GncTransPropType type)
                         != m_settings.m_column_types.end());
 }
 
+/* A helper function intended to be called only from set_column_type */
+void GncTxImport::update_pre_trans_props (uint row, uint col, GncTransPropType prop_type)
+{
+    if ((prop_type == GncTransPropType::NONE) || (prop_type > GncTransPropType::TRANS_PROPS))
+        return; /* Only deal with transaction related properties. */
+
+    auto trans_props = std::make_shared<GncPreTrans> (*(std::get<2>(m_parsed_lines[row])).get());
+    auto value = std::string();
+
+    if (col < std::get<0>(m_parsed_lines[row]).size())
+        value = std::get<0>(m_parsed_lines[row]).at(col);
+
+    if (value.empty())
+        trans_props->reset (prop_type);
+    else
+    {
+        try
+        {
+            trans_props->set(prop_type, value);
+        }
+        catch (const std::exception& e)
+        {
+            /* Do nothing, just prevent the exception from escalating up
+             * However log the error if it happens on a row that's not skipped
+             */
+            if (!std::get<4>(m_parsed_lines[row]))
+                PINFO("User warning: %s", e.what());
+        }
+    }
+
+    /* Store the result */
+    std::get<2>(m_parsed_lines[row]) = trans_props;
+
+    /* For multi-split input data, we need to check whether this line is part of
+     * a transaction that has already been started by a previous line. */
+    if (m_settings.m_multi_split)
+    {
+        if (trans_props->is_part_of(m_parent))
+        {
+            /* This line is part of an already started transaction
+             * continue with that one instead to make sure the split from this line
+             * gets added to the proper transaction */
+            std::get<2>(m_parsed_lines[row]) = m_parent;
+        }
+        else
+        {
+            /* This line starts a new transaction, set it as parent for
+             * subsequent lines. */
+            m_parent = trans_props;
+        }
+    }
+}
+
+/* A helper function intended to be called only from set_column_type */
+void GncTxImport::update_pre_split_props (uint row, uint col, GncTransPropType prop_type)
+{
+    if ((prop_type > GncTransPropType::SPLIT_PROPS) || (prop_type <= GncTransPropType::TRANS_PROPS))
+        return; /* Only deal with split related properties. */
+
+    auto split_props = std::get<3>(m_parsed_lines[row]);
+    auto value = std::string();
+
+    if (col < std::get<0>(m_parsed_lines[row]).size())
+        value = std::get<0>(m_parsed_lines[row]).at(col);
+
+    if (value.empty())
+        split_props->reset (prop_type);
+    else
+    {
+        try
+        {
+            split_props->set(prop_type, value);
+        }
+        catch (const std::exception& e)
+        {
+            /* Do nothing, just prevent the exception from escalating up
+             * However log the error if it happens on a row that's not skipped
+             */
+            if (!std::get<4>(m_parsed_lines[row]))
+                PINFO("User warning: %s", e.what());
+        }
+    }
+}
+
+
 void
-GncTxImport::set_column_type (uint position, GncTransPropType type)
+GncTxImport::set_column_type (uint position, GncTransPropType type, bool force)
 {
     if (position >= m_settings.m_column_types.size())
         return;
 
+    auto old_type = m_settings.m_column_types[position];
+    if ((type == old_type) && !force)
+        return; /* Nothing to do */
+
     // Column types should be unique, so remove any previous occurrence of the new type
     std::replace(m_settings.m_column_types.begin(), m_settings.m_column_types.end(),
             type, GncTransPropType::NONE);
+
     m_settings.m_column_types.at (position) = type;
 
     // If the user has set an Account column, we can't have a base account set
     if (type == GncTransPropType::ACCOUNT)
         base_account (nullptr);
+
+    /* Update the preparsed data */
+    m_parent = nullptr;
+    for (auto parsed_lines_it = m_parsed_lines.begin();
+            parsed_lines_it != m_parsed_lines.end();
+            ++parsed_lines_it)
+    {
+        /* Reset date and currency formats for each trans/split props object
+         * to ensure column updates use the most recent one
+         */
+        std::get<2>(*parsed_lines_it)->set_date_format (m_settings.m_date_format);
+        std::get<3>(*parsed_lines_it)->set_date_format (m_settings.m_date_format);
+        std::get<3>(*parsed_lines_it)->set_currency_format (m_settings.m_currency_format);
+
+        uint row = parsed_lines_it - m_parsed_lines.begin();
+
+        /* If the column type actually changed, first reset the property
+         * represented by the old column type
+         */
+        if (old_type != type)
+        {
+            auto old_col = std::get<0>(*parsed_lines_it).size(); // Deliberately out of bounds to trigger a reset!
+            if ((old_type > GncTransPropType::NONE)
+                    && (old_type <= GncTransPropType::TRANS_PROPS))
+                update_pre_trans_props (row, old_col, old_type);
+            else if ((old_type > GncTransPropType::TRANS_PROPS)
+                    && (old_type <= GncTransPropType::SPLIT_PROPS))
+                update_pre_split_props (row, old_col, old_type);
+        }
+
+        /* Then set the property represented by the new column type */
+        if ((type > GncTransPropType::NONE)
+                && (type <= GncTransPropType::TRANS_PROPS))
+            update_pre_trans_props (row, position, type);
+        else if ((type > GncTransPropType::TRANS_PROPS)
+                && (type <= GncTransPropType::SPLIT_PROPS))
+            update_pre_split_props (row, position, type);
+
+        /* Report errors if there are any */
+        auto trans_errors = std::get<2>(*parsed_lines_it)->errors();
+        auto split_errors = std::get<3>(*parsed_lines_it)->errors(m_req_mapped_accts);
+        std::get<1>(*parsed_lines_it) =
+                trans_errors +
+                (trans_errors.empty() && split_errors.empty() ? std::string() : "\n") +
+                split_errors;
+
+    }
 }
 
 std::vector<GncTransPropType> GncTxImport::column_types ()

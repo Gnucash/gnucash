@@ -112,6 +112,7 @@ public:
     GncPreTrans(int date_format) : m_date_format{date_format} {};
 
     void set (GncTransPropType prop_type, const std::string& value);
+    void set_date_format (int date_format) { m_date_format = date_format ;}
     void reset (GncTransPropType prop_type);
     std::string verify_essentials (void);
     Transaction *create_trans (QofBook* book, gnc_commodity* currency);
@@ -132,6 +133,7 @@ public:
      */
     bool is_part_of (std::shared_ptr<GncPreTrans> parent);
     boost::optional<std::string> get_void_reason() { return m_void_reason; }
+    std::string errors();
 
 private:
     int m_date_format;
@@ -143,6 +145,8 @@ private:
     boost::optional<gnc_commodity*> m_commodity;
     boost::optional<std::string> m_void_reason;
     bool created = false;
+
+    std::map<GncTransPropType, std::string> m_errors;
 };
 
 struct GncPreSplit
@@ -152,11 +156,14 @@ public:
         m_currency_format{currency_format}{};
     void set (GncTransPropType prop_type, const std::string& value);
     void reset (GncTransPropType prop_type);
+    void set_date_format (int date_format) { m_date_format = date_format ;}
+    void set_currency_format (int currency_format) { m_currency_format = currency_format; }
     std::string verify_essentials (void);
     void create_split(Transaction* trans);
 
     Account* get_account () { if (m_account) return *m_account; else return nullptr; }
     void set_account (Account* acct) { if (acct) m_account = acct; else m_account = boost::none; }
+    std::string errors(bool check_accts_mapped);
 
 private:
     int m_date_format;
@@ -175,6 +182,8 @@ private:
     boost::optional<char> m_trec_state;
     boost::optional<time64> m_trec_date;
     bool created = false;
+
+    std::map<GncTransPropType, std::string> m_errors;
 };
 
 #endif

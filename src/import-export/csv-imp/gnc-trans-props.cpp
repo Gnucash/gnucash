@@ -161,13 +161,13 @@ time64 parse_date (const std::string &date_str, int format)
     boost::regex r(date_regex[format]);
     boost::smatch what;
     if(!boost::regex_search(date_str, what, r))
-        throw std::invalid_argument ("String doesn't appear to be formatted as a date.");  // regex didn't find a match
+        throw std::invalid_argument (_("Value can't be parsed into a date using the selected date format."));  // regex didn't find a match
 
     // Attention: different behavior from 2.6.x series !
     // If date format without year was selected, the match
     // should NOT have found a year.
     if ((format >= 3) && (what.length("YEAR") != 0))
-        throw std::invalid_argument ("String appears to contain a year while the selected format forbids this.");
+        throw std::invalid_argument (_("Value appears to contain a year while the selected format forbids this."));
 
     auto day = std::stoi (what.str("DAY"));
     auto month = std::stoi (what.str("MONTH"));
@@ -210,7 +210,7 @@ gnc_numeric parse_amount (const std::string &str, int currency_format)
 {
     /* If a cell is empty or just spaces return invalid amount */
     if(!boost::regex_search(str, boost::regex("[0-9]")))
-        throw std::invalid_argument ("String doesn't appear to contain a valid number.");
+        throw std::invalid_argument (_("Value doesn't appear to contain a valid number."));
 
     auto expr = boost::make_u32regex("[[:Sc:]]");
     std::string str_no_symbols = boost::u32regex_replace(str, expr, "");
@@ -223,17 +223,17 @@ gnc_numeric parse_amount (const std::string &str, int currency_format)
     case 0:
         /* Currency locale */
         if (!(xaccParseAmount (str_no_symbols.c_str(), TRUE, &val, &endptr)))
-            throw std::invalid_argument ("String can't be parsed into a number using the selected currency format.");
+            throw std::invalid_argument (_("Value can't be parsed into a number using the selected currency format."));
         break;
     case 1:
         /* Currency decimal period */
         if (!(xaccParseAmountExtended (str_no_symbols.c_str(), TRUE, '-', '.', ',', "\003\003", "$+", &val, &endptr)))
-            throw std::invalid_argument ("String can't be parsed into a number using the selected currency format.");
+            throw std::invalid_argument (_("Value can't be parsed into a number using the selected currency format."));
         break;
     case 2:
         /* Currency decimal comma */
         if (!(xaccParseAmountExtended (str_no_symbols.c_str(), TRUE, '-', ',', '.', "\003\003", "$+", &val, &endptr)))
-            throw std::invalid_argument ("String can't be parsed into a number using the selected currency format.");
+            throw std::invalid_argument (_("Value can't be parsed into a number using the selected currency format."));
         break;
     }
 
@@ -253,7 +253,7 @@ static char parse_reconciled (const std::string& reconcile)
     else if (g_strcmp0 (reconcile.c_str(), _("v")) == 0) // Voided will be handled at the transaction level
         return NREC;                                      // so return not reconciled here
     else
-        throw std::invalid_argument ("String can't be parsed into a valid reconcile state.");
+        throw std::invalid_argument (_("Value can't be parsed into a valid reconcile state."));
 }
 
 gnc_commodity* parse_commodity (const std::string& comm_str)
@@ -291,62 +291,84 @@ gnc_commodity* parse_commodity (const std::string& comm_str)
     }
 
     if (!comm)
-        throw std::invalid_argument ("String can't be parsed into a valid commodity.");
+        throw std::invalid_argument (_("Value can't be parsed into a valid commodity."));
     else
         return comm;
 }
 
 void GncPreTrans::set (GncTransPropType prop_type, const std::string& value)
 {
-    gnc_commodity *comm = nullptr;
-    switch (prop_type)
+    try
     {
-        case GncTransPropType::UNIQUE_ID:
-            m_differ = boost::none;
-            if (!value.empty())
-                m_differ = value;
-            break;
+        // Drop any existing error for the prop_type we're about to set
+        m_errors.erase(prop_type);
 
-        case GncTransPropType::DATE:
-            m_date = boost::none;
-            m_date = parse_date (value, m_date_format); // Throws if parsing fails
-            break;
+        gnc_commodity *comm = nullptr;
+        switch (prop_type)
+        {
+            case GncTransPropType::UNIQUE_ID:
+                m_differ = boost::none;
+                if (!value.empty())
+                    m_differ = value;
+                break;
 
-        case GncTransPropType::NUM:
-            m_num = boost::none;
-            if (!value.empty())
-                m_num = value;
-            break;
+            case GncTransPropType::DATE:
+                m_date = boost::none;
+                m_date = parse_date (value, m_date_format); // Throws if parsing fails
+                break;
 
-        case GncTransPropType::DESCRIPTION:
-            m_desc = boost::none;
-            if (!value.empty())
-                m_desc = value;
-            break;
+            case GncTransPropType::NUM:
+                m_num = boost::none;
+                if (!value.empty())
+                    m_num = value;
+                break;
 
-        case GncTransPropType::NOTES:
-            m_notes = boost::none;
-            if (!value.empty())
-                m_notes = value;
-            break;
+            case GncTransPropType::DESCRIPTION:
+                m_desc = boost::none;
+                if (!value.empty())
+                    m_desc = value;
+                break;
 
-        case GncTransPropType::COMMODITY:
-            m_commodity = boost::none;
-            comm = parse_commodity (value); // Throws if parsing fails
-            if (comm)
-                m_commodity = comm;
-            break;
+            case GncTransPropType::NOTES:
+                m_notes = boost::none;
+                if (!value.empty())
+                    m_notes = value;
+                break;
 
-        case GncTransPropType::VOID_REASON:
-            m_void_reason = boost::none;
-            if (!value.empty())
-                m_void_reason = value;
-            break;
+            case GncTransPropType::COMMODITY:
+                m_commodity = boost::none;
+                comm = parse_commodity (value); // Throws if parsing fails
+                if (comm)
+                    m_commodity = comm;
+                break;
 
-        default:
-            /* Issue a warning for all other prop_types. */
-            PWARN ("%d is an invalid property for a transaction", static_cast<int>(prop_type));
-            break;
+            case GncTransPropType::VOID_REASON:
+                m_void_reason = boost::none;
+                if (!value.empty())
+                    m_void_reason = value;
+                break;
+
+            default:
+                /* Issue a warning for all other prop_types. */
+                PWARN ("%d is an invalid property for a transaction", static_cast<int>(prop_type));
+                break;
+        }
+    }
+    catch (const std::invalid_argument& e)
+    {
+        auto err_str = std::string(_(gnc_csv_col_type_strs[prop_type])) +
+                       std::string(_(" could not be understood.\n")) +
+                       e.what();
+        m_errors.emplace(prop_type, err_str);
+        throw std::invalid_argument (err_str);
+    }
+    catch (const std::out_of_range& e)
+    {
+        auto err_str = std::string(_(gnc_csv_col_type_strs[prop_type])) +
+                       std::string(_(" could not be understood.\n")) +
+                       e.what();
+        m_errors.emplace(prop_type, err_str);
+        throw std::invalid_argument (err_str);
     }
 
 }
@@ -360,7 +382,8 @@ void GncPreTrans::reset (GncTransPropType prop_type)
     catch (...)
     {
         // Set with an empty string will effectively clear the property
-        // but also throw in many cases. For a reset this is fine, so catch it here.
+        // but can also set an error for the property. Clear that error here.
+        m_errors.erase(prop_type);
     }
 }
 
@@ -418,98 +441,151 @@ bool GncPreTrans::is_part_of (std::shared_ptr<GncPreTrans> parent)
             (!m_desc || m_desc == parent->m_desc) &&
             (!m_notes || m_notes == parent->m_notes) &&
             (!m_commodity || m_commodity == parent->m_commodity) &&
-            (!m_void_reason || m_void_reason == parent->m_void_reason);
+            (!m_void_reason || m_void_reason == parent->m_void_reason) &&
+            parent->m_errors.empty(); // A GncPreTrans with errors can never be a parent
+}
+
+/* Declare two translatable error strings here as they will be used in several places */
+const char *bad_acct = N_("Account value can't be mapped back to an account.");
+const char *bad_tacct = N_("Transfer account value can't be mapped back to an account.");
+
+static std::string gen_err_str (std::map<GncTransPropType, std::string>& errors,
+        bool check_accts_mapped = false)
+{
+    auto full_error = std::string();
+    for (auto error : errors)
+    {
+        auto err_str = error.second;
+        if (!check_accts_mapped &&
+                ((err_str.find (_(bad_acct)) != std::string::npos) ||
+                 (err_str.find (_(bad_tacct)) != std::string::npos)))
+            continue;
+        full_error += (full_error.empty() ? "" : "\n") + error.second;
+    }
+
+    return full_error;
+}
+
+std::string GncPreTrans::errors ()
+{
+    return gen_err_str (m_errors);
 }
 
 void GncPreSplit::set (GncTransPropType prop_type, const std::string& value)
 {
-    Account *acct = nullptr;
-    switch (prop_type)
+    try
     {
-        case GncTransPropType::ACTION:
-            m_action = boost::none;
-            if (!value.empty())
-                m_action = value;
-            break;
+        // Drop any existing error for the prop_type we're about to set
+        m_errors.erase(prop_type);
 
-        case GncTransPropType::TACTION:
-            m_taction = boost::none;
-            if (!value.empty())
-                m_taction = value;
-            break;
+        Account *acct = nullptr;
+        switch (prop_type)
+        {
+            case GncTransPropType::ACTION:
+                m_action = boost::none;
+                if (!value.empty())
+                    m_action = value;
+                break;
 
-        case GncTransPropType::ACCOUNT:
-            m_account = boost::none;
-            acct = gnc_csv_account_map_search (value.c_str());
-            if (acct)
-                m_account = acct;
-            else
-                throw std::invalid_argument ("String can't be mapped back to an account.");
-            break;
+            case GncTransPropType::TACTION:
+                m_taction = boost::none;
+                if (!value.empty())
+                    m_taction = value;
+                break;
 
-        case GncTransPropType::TACCOUNT:
-            m_taccount = boost::none;
-            acct = gnc_csv_account_map_search (value.c_str());
-            if (acct)
-                m_taccount = acct;
-            else
-                throw std::invalid_argument ("String can't be mapped back to an account.");
-            break;
+            case GncTransPropType::ACCOUNT:
+                m_account = boost::none;
+                if (value.empty())
+                    throw std::invalid_argument (_("Account value can't be empty."));
+                acct = gnc_csv_account_map_search (value.c_str());
+                if (acct)
+                    m_account = acct;
+                else
+                    throw std::invalid_argument (_(bad_acct));
+                break;
 
-        case GncTransPropType::MEMO:
-            m_memo = boost::none;
-            if (!value.empty())
-                m_memo = value;
-            break;
+            case GncTransPropType::TACCOUNT:
+                m_taccount = boost::none;
+                if (value.empty())
+                    throw std::invalid_argument (_("Transfer account value can't be empty."));
 
-        case GncTransPropType::TMEMO:
-            m_tmemo = boost::none;
-            if (!value.empty())
-                m_tmemo = value;
-            break;
+                acct = gnc_csv_account_map_search (value.c_str());
+                if (acct)
+                    m_taccount = acct;
+                else
+                    throw std::invalid_argument (_(bad_tacct));
+                break;
 
-        case GncTransPropType::DEPOSIT:
-            m_deposit = boost::none;
-            m_deposit = parse_amount (value, m_currency_format); // Will throw if parsing fails
-            break;
-        case GncTransPropType::WITHDRAWAL:
-            m_withdrawal = boost::none;
-            m_withdrawal = parse_amount (value, m_currency_format); // Will throw if parsing fails
-            break;
+            case GncTransPropType::MEMO:
+                m_memo = boost::none;
+                if (!value.empty())
+                    m_memo = value;
+                break;
 
-        case GncTransPropType::PRICE:
-            m_price = boost::none;
-            m_price = parse_amount (value, m_currency_format); // Will throw if parsing fails
-            break;
+            case GncTransPropType::TMEMO:
+                m_tmemo = boost::none;
+                if (!value.empty())
+                    m_tmemo = value;
+                break;
 
-        case GncTransPropType::REC_STATE:
-            m_rec_state = boost::none;
-            m_rec_state = parse_reconciled (value); // Throws if parsing fails
-            break;
+            case GncTransPropType::DEPOSIT:
+                m_deposit = boost::none;
+                m_deposit = parse_amount (value, m_currency_format); // Will throw if parsing fails
+                break;
+            case GncTransPropType::WITHDRAWAL:
+                m_withdrawal = boost::none;
+                m_withdrawal = parse_amount (value, m_currency_format); // Will throw if parsing fails
+                break;
 
-        case GncTransPropType::TREC_STATE:
-            m_trec_state = boost::none;
-            m_trec_state = parse_reconciled (value); // Throws if parsing fails
-            break;
+            case GncTransPropType::PRICE:
+                m_price = boost::none;
+                m_price = parse_amount (value, m_currency_format); // Will throw if parsing fails
+                break;
 
-        case GncTransPropType::REC_DATE:
-            m_rec_date = boost::none;
-            if (!value.empty())
-                m_rec_date = parse_date (value, m_date_format); // Throws if parsing fails
-            break;
+            case GncTransPropType::REC_STATE:
+                m_rec_state = boost::none;
+                m_rec_state = parse_reconciled (value); // Throws if parsing fails
+                break;
 
-        case GncTransPropType::TREC_DATE:
-            m_trec_date = boost::none;
-            if (!value.empty())
-                m_trec_date = parse_date (value, m_date_format); // Throws if parsing fails
-            break;
+            case GncTransPropType::TREC_STATE:
+                m_trec_state = boost::none;
+                m_trec_state = parse_reconciled (value); // Throws if parsing fails
+                break;
 
-        default:
-            /* Issue a warning for all other prop_types. */
-            PWARN ("%d is an invalid property for a split", static_cast<int>(prop_type));
-            break;
+            case GncTransPropType::REC_DATE:
+                m_rec_date = boost::none;
+                if (!value.empty())
+                    m_rec_date = parse_date (value, m_date_format); // Throws if parsing fails
+                break;
+
+            case GncTransPropType::TREC_DATE:
+                m_trec_date = boost::none;
+                if (!value.empty())
+                    m_trec_date = parse_date (value, m_date_format); // Throws if parsing fails
+                break;
+
+            default:
+                /* Issue a warning for all other prop_types. */
+                PWARN ("%d is an invalid property for a split", static_cast<int>(prop_type));
+                break;
+        }
     }
-
+    catch (const std::invalid_argument& e)
+    {
+        auto err_str = std::string(_(gnc_csv_col_type_strs[prop_type])) +
+                       std::string(_(" could not be understood.\n")) +
+                       e.what();
+        m_errors.emplace(prop_type, err_str);
+        throw std::invalid_argument (err_str);
+    }
+    catch (const std::out_of_range& e)
+    {
+        auto err_str = std::string(_(gnc_csv_col_type_strs[prop_type])) +
+                       std::string(_(" could not be understood.\n")) +
+                       e.what();
+        m_errors.emplace(prop_type, err_str);
+        throw std::invalid_argument (err_str);
+    }
 }
 
 void GncPreSplit::reset (GncTransPropType prop_type)
@@ -521,7 +597,8 @@ void GncPreSplit::reset (GncTransPropType prop_type)
     catch (...)
     {
         // Set with an empty string will effectively clear the property
-        // but also throw in many cases. For a reset this is fine, so catch it here.
+        // but can also set an error for the property. Clear that error here.
+        m_errors.erase(prop_type);
     }
 }
 
@@ -672,4 +749,9 @@ void GncPreSplit::create_split (Transaction* trans)
     }
 
     created = true;
+}
+
+std::string GncPreSplit::errors (bool check_accts_mapped)
+{
+    return gen_err_str (m_errors, check_accts_mapped);
 }
