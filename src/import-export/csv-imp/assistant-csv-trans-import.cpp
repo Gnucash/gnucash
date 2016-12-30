@@ -1309,12 +1309,7 @@ void CsvImpTransAssist::preview_row_sel_update ()
  */
 void CsvImpTransAssist::preview_refresh_table ()
 {
-    auto save_skip_errors = tx_imp->skip_err_lines();
-    tx_imp->update_skipped_lines (boost::none, boost::none,
-        boost::none, false);
     preview_validate_settings ();
-    tx_imp->update_skipped_lines (boost::none, boost::none,
-        boost::none, save_skip_errors);
 
     /* ncols is the number of columns in the file data. */
     auto column_types = tx_imp->column_types();
@@ -1766,6 +1761,8 @@ CsvImpTransAssist::assist_preview_page_prepare ()
     g_signal_connect (G_OBJECT(treeview), "size-allocate",
                      G_CALLBACK(csv_tximp_preview_treeview_resized_cb), (gpointer)this);
 
+    tx_imp->req_mapped_accts (false);
+
     /* Disable the Forward Assistant Button */
     gtk_assistant_set_page_complete (csv_imp_asst, preview_page, false);
 
@@ -1776,6 +1773,8 @@ CsvImpTransAssist::assist_preview_page_prepare ()
 void
 CsvImpTransAssist::assist_account_match_page_prepare ()
 {
+    tx_imp->req_mapped_accts(true);
+
     // Load the account strings into the store
     acct_match_set_accounts ();
 
@@ -1803,6 +1802,36 @@ CsvImpTransAssist::assist_doc_page_prepare ()
 {
     /* Block going back */
     gtk_assistant_commit (csv_imp_asst);
+
+    /* At this stage in the assistant each account should be mapped so
+     * complete the split properties with this information. If this triggers
+     * an exception it indicates a logic error in the code.
+     */
+    try
+    {
+        auto col_types = tx_imp->column_types();
+        auto acct_col = std::find (col_types.begin(),
+                col_types.end(), GncTransPropType::ACCOUNT);
+        if (acct_col != col_types.end())
+            tx_imp->set_column_type (acct_col - col_types.begin(),
+                    GncTransPropType::ACCOUNT, true);
+        acct_col = std::find (col_types.begin(),
+                col_types.end(), GncTransPropType::TACCOUNT);
+        if (acct_col != col_types.end())
+            tx_imp->set_column_type (acct_col - col_types.begin(),
+                    GncTransPropType::TACCOUNT, true);
+    }
+    catch (const std::invalid_argument& err)
+    {
+        /* Oops! This shouldn't happen when using the import assistant !
+         * Inform the user and go back to the preview page.
+         */
+        gnc_error_dialog (GTK_WIDGET(csv_imp_asst),
+            _("An unexpected error has occurred while mapping accounts. Please report this as a bug.\n\n"
+              "Error message:\n%s"), err.what());
+        gtk_assistant_set_current_page (csv_imp_asst, 2);
+
+    }
 
     /* Before creating transactions, if this is a new book, let user specify
      * book options, since they affect how transactions are created */
@@ -1832,7 +1861,7 @@ CsvImpTransAssist::assist_match_page_prepare ()
          * Inform the user and go back to the preview page.
          */
         gnc_error_dialog (GTK_WIDGET(csv_imp_asst),
-            _("An unexpected error has occurred. Please report this as a bug.\n\n"
+            _("An unexpected error has occurred while creating transactions. Please report this as a bug.\n\n"
               "Error message:\n%s"), err.what());
         gtk_assistant_set_current_page (csv_imp_asst, 2);
     }

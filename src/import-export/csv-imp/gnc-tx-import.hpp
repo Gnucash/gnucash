@@ -123,6 +123,8 @@ public:
     bool skip_alt_lines ();
     bool skip_err_lines ();
 
+    void req_mapped_accts (bool val) {m_req_mapped_accts = val; }
+
     void separators (std::string separators);
     std::string separators ();
 
@@ -144,7 +146,7 @@ public:
      */
     void create_transactions ();
     bool check_for_column_type (GncTransPropType type);
-    void set_column_type (uint position, GncTransPropType type);
+    void set_column_type (uint position, GncTransPropType type, bool force = false);
     std::vector<GncTransPropType> column_types ();
 
     std::set<std::string> accounts ();
@@ -164,19 +166,29 @@ private:
     void create_transaction (std::vector<parse_line_t>::iterator& parsed_line);
 
     void verify_column_selections (ErrorList& error_msg);
-    void verify_data(ErrorList& error_msg);
+
+    /* Internal helper function to force reparsing of columns subject to format changes */
+    void reset_formatted_column (std::vector<GncTransPropType>& col_types);
 
     /* Internal helper function that does the actual conversion from property lists
      * to real (possibly unbalanced) transaction with splits.
      */
     std::shared_ptr<DraftTransaction> trans_properties_to_trans (std::vector<parse_line_t>::iterator& parsed_line);
 
+    /* Two internal helper functions that should only be called from within
+     * set_column_type for consistency (otherwise error messages may not be (re)set)
+     */
+    void update_pre_trans_props (uint row, uint col, GncTransPropType prop_type);
+    void update_pre_split_props (uint row, uint col, GncTransPropType prop_type);
+
     struct CsvTranSettings;
     CsvTransSettings m_settings;
     bool m_skip_errors;
+    bool m_req_mapped_accts;
 
     /* The parameters below are only used while creating
-     * transactions. They keep state information during the conversion.
+     * transactions. They keep state information while processing multi-split
+     * transactions.
      */
     std::shared_ptr<GncPreTrans> m_parent = nullptr;
     std::shared_ptr<DraftTransaction> m_current_draft = nullptr;
