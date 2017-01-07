@@ -725,23 +725,26 @@ AC_SUBST(GNC_SCM_INSTALL_DIR)
 AC_SUBST(GNC_SHAREDIR)
 AC_SUBST(GNC_LIBEXECDIR)
 
+dnl is DEBUG_MEMORY still used somewhere?
 AC_ARG_ENABLE( debug,
   [AS_HELP_STRING([--enable-debug],[compile with debugging flags set])],
   [
+  if test x$enableval = xyes; then
      # remove any optimization flags...
      CFLAGS=`echo ${CFLAGS} | sed -e 's,-O.,,g'`
      # ...except for those the user wants.
      CFLAGS="${CFLAGS} -g ${USER_OPTIMIZATION}"
      LDFLAGS="${LDFLAGS} -g"
      AC_DEFINE(DEBUG_MEMORY,1,[Enable debug memory])
-  ],
-  [     AC_DEFINE(DEBUG_MEMORY,0,[Enable debug memory])
+  fi
   ])
 
 AC_ARG_ENABLE( profile,
   [AS_HELP_STRING([--enable-profile],[compile with profiling set])],
-  CFLAGS="${CFLAGS} -pg"
-  LDFLAGS="${LDFLAGS} -pg")
+  if test x$enableval = xyes; then
+    CFLAGS="${CFLAGS} -pg"
+    LDFLAGS="${LDFLAGS} -pg"
+  fi)
 
 ### --------------------------------------------------------------------------
 ### Register2
@@ -908,7 +911,11 @@ LANGINFO_D_FMT_CHECK
 dnl Enable locale-specific tax-related information in the accounts
 AC_ARG_ENABLE( locale-specific-tax,
   [AS_HELP_STRING([--enable-locale-specific-tax],[enable localized tax categories (experimental, but used by the german SKR04 account chart)])],
-  AC_DEFINE(LOCALE_SPECIFIC_TAX,1,Enable the experimental locale-specific tax categories) )
+  [
+  if test x$enableval = xyes; then
+    AC_DEFINE(LOCALE_SPECIFIC_TAX,1,Enable the experimental locale-specific tax categories)
+  fi
+  ])
 
 dnl Make sure we have a proper gettext installed
 AC_MSG_CHECKING(for a valid gettext/gmsgfmt installation)
