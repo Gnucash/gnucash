@@ -2097,7 +2097,7 @@ gnc_commodity_is_currency(const gnc_commodity *cm)
 
 /********************************************************************
  * gnc_commodity_table_get_commodities
- * list commodities in a give namespace
+ * list commodities in a given namespace
  ********************************************************************/
 
 static CommodityList*
@@ -2114,7 +2114,7 @@ commodity_table_get_all_noncurrency_commodities(const gnc_commodity_table* table
         ns = gnc_commodity_table_find_namespace(table, (char*)(node->data));
         if (!ns)
             continue;
-            retval = g_list_concat(g_hash_table_values(ns->cm_table), retval);
+        retval = g_list_concat(g_hash_table_values(ns->cm_table), retval);
     }
     g_list_free(nslist);
     return retval;
