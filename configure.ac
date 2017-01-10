@@ -725,7 +725,6 @@ AC_SUBST(GNC_SCM_INSTALL_DIR)
 AC_SUBST(GNC_SHAREDIR)
 AC_SUBST(GNC_LIBEXECDIR)
 
-dnl is DEBUG_MEMORY still used somewhere?
 AC_ARG_ENABLE( debug,
   [AS_HELP_STRING([--enable-debug],[compile with debugging flags set])],
   [
@@ -735,7 +734,6 @@ AC_ARG_ENABLE( debug,
      # ...except for those the user wants.
      CFLAGS="${CFLAGS} -g ${USER_OPTIMIZATION}"
      LDFLAGS="${LDFLAGS} -g"
-     AC_DEFINE(DEBUG_MEMORY,1,[Enable debug memory])
   fi
   ])
 
