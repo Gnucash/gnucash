@@ -151,7 +151,7 @@ TEST_F (KvpFrameTest, GetKeys)
     auto k3 = "second";
 
     auto keys = t_root.get_keys ();
-    EXPECT_EQ (keys.size (), 1);
+    EXPECT_EQ (keys.size (), 1ul);
 
     assert_contains (keys, k1);
     auto frameval = t_root.get_slot(k1);
