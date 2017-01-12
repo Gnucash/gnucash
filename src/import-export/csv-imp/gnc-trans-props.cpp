@@ -153,7 +153,7 @@ const char* date_regex[] = {
  * @param date_str The string containing a date being parsed
  * @param format An index specifying a format in date_format_user
  * @exception std::invalid_argument if the string can't be parsed into a date.
- * @return The parsed value of date_str on success or -1 on failure
+ * @return The parsed value of date_str
  */
 
 time64 parse_date (const std::string &date_str, int format)
