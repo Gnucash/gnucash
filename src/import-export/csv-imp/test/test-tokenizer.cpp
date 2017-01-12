@@ -39,14 +39,14 @@
 typedef struct
 {
     const char *csv_line;
-    int         num_fields;
+    uint        num_fields;
     const char *fields [8];
 } tokenize_csv_test_data;
 
 typedef struct
 {
     const char *fw_line;
-    int         num_fields;
+    uint        num_fields;
     uint        field_widths[8];
     const char *fields [8];
 } tokenize_fw_test_data;
@@ -123,9 +123,9 @@ TEST_F (GncTokenizerTest, tokenize_from_csv_file)
     csv_tok->load_file (file);
     csv_tok->tokenize();
     auto tokens = csv_tok->get_tokens();
-    EXPECT_EQ(2, tokens.size());
-    EXPECT_EQ(8, tokens[0].size());
-    EXPECT_EQ(8, tokens[1].size());
+    EXPECT_EQ(2ul, tokens.size());
+    EXPECT_EQ(8ul, tokens[0].size());
+    EXPECT_EQ(8ul, tokens[1].size());
     EXPECT_EQ(std::string("Date"), tokens.at(0).at(0));
     EXPECT_EQ(std::string("1,100.00"), tokens.at(1).at(6));
 }
@@ -162,7 +162,7 @@ GncTokenizerTest::test_gnc_tokenize_helper (const std::string& separators, token
         // The tests only come with one line, so get the first row only
         auto line_tok = csv_tok->get_tokens().front();
         EXPECT_EQ (cur_line.num_fields, line_tok.size());
-        for (int j=0; j < cur_line.num_fields; j++)
+        for (auto j = 0ul; j < cur_line.num_fields; j++)
         {
             EXPECT_EQ (std::string (cur_line.fields[j]), line_tok[j]);
         }
@@ -208,7 +208,7 @@ GncTokenizerTest::test_gnc_tokenize_helper (tokenize_fw_test_data* test_data)
         tokenize_fw_test_data cur_line = test_data[i];
         set_utf8_contents (fw_tok, std::string(cur_line.fw_line));
         auto columns = std::vector<uint>();
-        for (int j=0; j < cur_line.num_fields; j++)
+        for (auto j = 0ul; j < cur_line.num_fields; j++)
             columns.push_back (cur_line.field_widths[j]);
         fwtok->columns (columns);
         fw_tok->tokenize();
@@ -216,7 +216,7 @@ GncTokenizerTest::test_gnc_tokenize_helper (tokenize_fw_test_data* test_data)
         // The tests only come with one line, so get the first row only
         auto line_tok = fw_tok->get_tokens().front();
         EXPECT_EQ (cur_line.num_fields, line_tok.size());
-        for (int j=0; j < cur_line.num_fields; j++)
+        for (auto j = 0ul; j < cur_line.num_fields; j++)
         {
             EXPECT_EQ (std::string (cur_line.fields[j]), line_tok[j]);
         }
