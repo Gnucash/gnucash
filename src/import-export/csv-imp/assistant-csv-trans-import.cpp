@@ -196,6 +196,8 @@ void csv_tximp_file_confirm_cb (GtkWidget *button, CsvImpTransAssist *info);
 void csv_tximp_preview_del_settings_cb (GtkWidget *button, CsvImpTransAssist *info);
 void csv_tximp_preview_save_settings_cb (GtkWidget *button, CsvImpTransAssist *info);
 void csv_tximp_preview_settings_sel_changed_cb (GtkComboBox *combo, CsvImpTransAssist *info);
+void csv_tximp_preview_settings_text_inserted_cb (GtkEditable *entry, gchar *new_text,
+        gint new_text_length, gint *position, CsvImpTransAssist *info);
 void csv_tximp_preview_settings_text_changed_cb (GtkEntry *entry, CsvImpTransAssist *info);
 void csv_tximp_preview_srow_cb (GtkSpinButton *spin, CsvImpTransAssist *info);
 void csv_tximp_preview_erow_cb (GtkSpinButton *spin, CsvImpTransAssist *info);
@@ -263,6 +265,27 @@ void csv_tximp_preview_save_settings_cb (GtkWidget *button, CsvImpTransAssist *i
 void csv_tximp_preview_settings_sel_changed_cb (GtkComboBox *combo, CsvImpTransAssist *info)
 {
     info->preview_settings_load();
+}
+
+void
+csv_tximp_preview_settings_text_inserted_cb (GtkEditable *entry, gchar *new_text,
+        gint new_text_length, gint *position, CsvImpTransAssist *info)
+{
+    if (!new_text)
+        return;
+
+    /* Prevent entering [], which are invalid characters in key files */
+    auto base_txt = std::string (new_text);
+    auto mod_txt = base_txt;
+    std::replace (mod_txt.begin(), mod_txt.end(), '[', '(');
+    std::replace (mod_txt.begin(), mod_txt.end(), ']', ')');
+    if (base_txt == mod_txt)
+        return;
+    g_signal_handlers_block_by_func (entry, (gpointer) csv_tximp_preview_settings_text_inserted_cb, info);
+    gtk_editable_insert_text (entry, mod_txt.c_str(), mod_txt.size() , position);
+    g_signal_handlers_unblock_by_func (entry, (gpointer) csv_tximp_preview_settings_text_inserted_cb, info);
+
+    g_signal_stop_emission_by_name (entry, "insert_text");
 }
 
 void
@@ -431,6 +454,8 @@ CsvImpTransAssist::CsvImpTransAssist ()
         auto emb_entry = gtk_bin_get_child (GTK_BIN (settings_combo));
         g_signal_connect (G_OBJECT(emb_entry), "changed",
                          G_CALLBACK(csv_tximp_preview_settings_text_changed_cb), this);
+        g_signal_connect (G_OBJECT(emb_entry), "insert-text",
+                         G_CALLBACK(csv_tximp_preview_settings_text_inserted_cb), this);
 
         // Add Save Settings button
         save_button = GTK_WIDGET(gtk_builder_get_object (builder, "save_settings"));

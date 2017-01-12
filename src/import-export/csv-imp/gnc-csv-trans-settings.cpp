@@ -314,6 +314,12 @@ CsvTransSettings::save (void)
         return true;
     }
 
+    if ((m_name.find('[') != std::string::npos))
+    {
+        PWARN ("Name '%s' contains invalid characters '[]'. Refusing to save", m_name.c_str());
+        return true;
+    }
+
     auto keyfile = gnc_state_get_current ();
     auto group = csv_group_prefix + m_name;
 
