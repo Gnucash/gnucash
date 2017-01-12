@@ -951,6 +951,7 @@ if test x$enable_google_test = xyes; then
    else
       if test -n "${GMOCK_ROOT}" -a -r "${GMOCK_ROOT}/src/gmock-all.cc"; then
          ac_cv_gmock_src_path=${GMOCK_ROOT}/src
+	 ac_cv_gmock_root=${GMOCK_ROOT}
       elif test "x$ac_cv_gtest_system_install" = "xyes"; then
          if test "x$ac_cv_file__usr_src_gmock_src_gmock_all_cc" = xyes; then
             ac_cv_gmock_src_path="/usr/src/gmock/src"

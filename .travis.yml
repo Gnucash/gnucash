@@ -14,4 +14,5 @@ install:
   - sudo apt-get install -qq swig
   - sudo apt-get install -qq libboost-all-dev
   - sudo apt-get --reinstall install -qq language-pack-en language-pack-fr
-script: ./autogen.sh && ./configure && make && TZ="America/Los_Angeles" make check
+  - git clone https://github.com/google/googletest ~/gtest
+script: ./autogen.sh && ./configure GTEST_ROOT=~/gtest/googletest GMOCK_ROOT=~/gtest/googlemock && make && TZ="America/Los_Angeles" make check
