@@ -681,16 +681,24 @@ TimeZoneProvider::TimeZoneProvider(const std::string& tzname) :  zone_vector {}
         }
         catch(const std::exception& err)
         {
-            std::cerr << "Unable to use either provided tzname or TZ environment variable. Resorting to /etc/localtime.\n";
             try
             {
-                parse_file("/etc/localtime");
+                parse_file(getenv("TZ"));
             }
-            catch(const std::invalid_argument& env)
+            catch(const std::exception& err)
             {
-                std::cerr << "/etc/localtime invalid, resorting to GMT.";
-                TZ_Ptr zone(new PTZ("UTC0"));
-                zone_vector.push_back(std::make_pair(max_year, zone));
+
+                std::cerr << "Unable to use either provided tzname or TZ environment variable. Resorting to /etc/localtime.\n";
+                try
+                {
+                    parse_file("/etc/localtime");
+                }
+                catch(const std::invalid_argument& env)
+                {
+                    std::cerr << "/etc/localtime invalid, resorting to GMT.";
+                    TZ_Ptr zone(new PTZ("UTC0"));
+                    zone_vector.push_back(std::make_pair(max_year, zone));
+                }
             }
         }
     }
