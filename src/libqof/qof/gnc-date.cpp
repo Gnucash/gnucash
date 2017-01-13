@@ -1248,14 +1248,29 @@ gnc_dmy2timespec_neutral (int day, int month, int year)
     date.tm_min = 59;
     date.tm_sec = 0;
 
-    GncDateTime gncdt(date);
-    auto offset = gncdt.offset() / 3600;
-    if (offset < -11)
-        date.tm_hour = -offset;
-    if (offset > 13)
-        date.tm_hour = 23 - offset;
+    try
+    {
+        GncDateTime gncdt(date);
+        auto offset = gncdt.offset() / 3600;
+        if (offset < -11)
+            date.tm_hour = -offset;
+        if (offset > 13)
+            date.tm_hour = 23 - offset;
 
-    return {gnc_timegm(&date), 0};
+        return {gnc_timegm(&date), 0};
+    }
+    catch(const std::logic_error& err)
+    {
+        PWARN("Date computation error from Y-M-D %d-%d-%d: %s",
+              year, month, day, err.what());
+        return {INT64_MAX, 0};
+    }
+    catch(const std::runtime_error& err)
+    {
+        PWARN("Date computation error from Y-M-D %d-%d-%d: %s",
+              year, month, day, err.what());
+        return {INT64_MAX, 0};
+    }
 }
 /********************************************************************\
 \********************************************************************/

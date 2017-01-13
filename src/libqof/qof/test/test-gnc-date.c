@@ -110,7 +110,7 @@ typedef struct
 
 typedef struct
 {
-    TimeMap test[4];
+    TimeMap test[8];
 } FixtureB;
 
 static void
@@ -120,6 +120,10 @@ setup_begin(FixtureB *f, gconstpointer pData)
     f->test[1] = (TimeMap){1918, 3, 31, INT64_C(-1633305600)};
     f->test[2] = (TimeMap){1918, 4, 1, INT64_C(-1633219200)};
     f->test[3] = (TimeMap){2057, 11, 20, INT64_C(2773440000)};
+    f->test[4] = (TimeMap){1257, 07, 02, INT64_C(21695385600)}; /*invalid year*/
+    f->test[5] = (TimeMap){2017, 02, 29, INT64_C(1488326400)}; /*invalid day*/
+    f->test[6] = (TimeMap){2017, 02, 33, INT64_C(1488672000)}; /*invalid day*/
+    f->test[7] = (TimeMap){2017, 13, 29, INT64_C(1517184000)}; /*invalid month*/
 }
 
 static void
@@ -129,6 +133,10 @@ setup_neutral(FixtureB *f, gconstpointer pData)
     f->test[1] = (TimeMap){1918, 3, 31, INT64_C(-1633266060)};
     f->test[2] = (TimeMap){1918, 4, 1, INT64_C(-1633179660)};
     f->test[3] = (TimeMap){2057, 11, 20, INT64_C(2773479540)};
+    f->test[4] = (TimeMap){1257, 07, 02, INT64_MAX};
+    f->test[5] = (TimeMap){2017, 02, 29, INT64_MAX};
+    f->test[6] = (TimeMap){2017, 02, 33, INT64_MAX};
+    f->test[7] = (TimeMap){2017, 13, 29, INT64_MAX};
 }
 
 static void
@@ -138,6 +146,10 @@ setup_end(FixtureB *f, gconstpointer pData)
     f->test[1] = (TimeMap){1918, 3, 31, INT64_C(-1633219201)};
     f->test[2] = (TimeMap){1918, 4, 1, INT64_C(-1633132801)};
     f->test[3] = (TimeMap){2057, 11, 20, INT64_C(2773526399)};
+    f->test[4] = (TimeMap){1257, 07, 02, INT64_C(21695471999)};
+    f->test[5] = (TimeMap){2017, 02, 29, INT64_C(1488412799)};
+    f->test[6] = (TimeMap){2017, 02, 33, INT64_C(1488758399)};
+    f->test[7] = (TimeMap){2017, 13, 29, INT64_C(1517270399)};
 }
 
 void test_suite_gnc_date ( void );
