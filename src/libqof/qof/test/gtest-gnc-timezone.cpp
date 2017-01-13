@@ -74,6 +74,6 @@ TEST(gnc_timezone_constructors, test_bogus_time_constructor)
 {
     TimeZoneProvider tzp ("New York Standard Time");
     TimeZoneProvider machine ("");
-    EXPECT_TRUE(machine.get(2006)->std_zone_abbrev() ==
-                tzp.get(2006)->std_zone_abbrev());
+    EXPECT_EQ(machine.get(2006)->std_zone_abbrev(),
+	      tzp.get(2006)->std_zone_abbrev());
 }
