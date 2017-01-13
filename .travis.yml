@@ -1,6 +1,9 @@
 # Test
 sudo: required
 dist: trusty
+branches:
+  except:
+    - trunk
 language: c++
 compiler:
   - gcc
