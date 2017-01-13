@@ -19,3 +19,4 @@ install:
   - sudo apt-get --reinstall install -qq language-pack-en language-pack-fr
   - git clone https://github.com/google/googletest ~/gtest && cd ~/gtest && git checkout release-1.8.0 && cd -
 script: ./autogen.sh && ./configure GTEST_ROOT=~/gtest/googletest GMOCK_ROOT=~/gtest/googlemock && make && TZ="America/Los_Angeles" make check
+after_failure: "cat src/libqof/qof/test/test-gnc-timezone.log" 
