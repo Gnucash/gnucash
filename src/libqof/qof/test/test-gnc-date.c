@@ -1869,6 +1869,12 @@ offset_adjust(GDateTime *gdt)
 static void
 test_gnc_dmy2timespec_neutral (FixtureB *f, gconstpointer pData)
 {
+    gchar *msg1 = "[qof_dmy2timespec_neutral()] Date computation error from Y-M-D 1257-7-2: Time value is outside the supported year range.";
+    gint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
+    gchar *logdomain = "qof.engine";
+    TestErrorStruct check = {loglevel, logdomain, msg1, 0};
+    GLogFunc hdlr = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
+    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
     for (int i = 0; i < sizeof(f->test)/sizeof(TimeMap); ++i)
     {
         Timespec r_t = gnc_dmy2timespec_neutral (f->test[i].day, f->test[i].mon,
@@ -1876,6 +1882,7 @@ test_gnc_dmy2timespec_neutral (FixtureB *f, gconstpointer pData)
 
         g_assert_cmpint (r_t.tv_sec, ==, f->test[i].secs);
     }
+    g_log_set_default_handler (hdlr, 0);
 }
 
 /* gnc_timezone
@@ -1964,6 +1971,13 @@ Timespec gdate_to_timespec (GDate d)// C: 7 in 6  Local: 0:0:0
 static void
 test_gdate_to_timespec (FixtureB *f, gconstpointer pData)
 {
+    
+    gchar *msg = "g_date_set_dmy: assertion 'g_date_valid_dmy (day, m, y)' failed";
+    gint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
+    gchar *logdomain = G_LOG_DOMAIN;
+    TestErrorStruct check = {loglevel, logdomain, msg, 0};
+    GLogFunc hdlr = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
+    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
     for (int i = 0; i < sizeof(f->test)/sizeof(TimeMap); ++i)
     {
         GDate gd;
@@ -1973,6 +1987,7 @@ test_gdate_to_timespec (FixtureB *f, gconstpointer pData)
         r_t = gdate_to_timespec(gd);
         g_assert_cmpint (r_t.tv_sec, ==, f->test[i].secs);
     }
+    g_log_set_default_handler (hdlr, 0);
 }
 /* gnc_tm_get_day_start
 static void
