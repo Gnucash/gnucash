@@ -69,7 +69,7 @@ time64 parse_date (const char* date_str, int format)// C: 14 in 7 SCM: 9 in 2 Lo
 */
 TEST(GncTxImportTest, parse_date)
 {
-    time64 rawtime = gnc_time (NULL);
+    time64 rawtime = gnc_time (nullptr);
     struct tm *tm = gnc_gmtime (&rawtime);
     int curr_year = tm->tm_year;
 
@@ -177,16 +177,18 @@ TEST(GncTxImportTest, parse_date)
         gboolean success = TRUE;
         int got_year = 0, got_month = 0, got_day = 0;
 
-        rawtime = parse_date (std::string(test_dates[i].date_str), test_dates[i].date_fmt);
-        if (rawtime == -1)
-            got_year = got_month = got_day = -1;
-        else
+        try
         {
+            rawtime = parse_date (std::string(test_dates[i].date_str), test_dates[i].date_fmt);
             tm = gnc_gmtime (&rawtime);
             got_year = tm->tm_year;
             got_month = tm->tm_mon;
             got_day = tm->tm_mday;
             gnc_tm_free(tm);
+        }
+        catch (std::invalid_argument)
+        {
+            got_year = got_month = got_day = -1;
         }
 
         if ((got_year  != test_dates[i].exp_year) ||
