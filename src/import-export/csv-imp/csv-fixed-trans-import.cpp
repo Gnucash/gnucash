@@ -25,6 +25,10 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+#include <guid.hpp>
+
+extern "C"
+{
 #include "config.h"
 
 #include <glib.h>
@@ -36,11 +40,12 @@
 #include "Account.h"
 #include "gnc-component-manager.h"
 #include "csv-fixed-trans-import.h"
-#include "gnc-csv-model.h"
 #include "gnc-ui-util.h"
 #include "engine-helpers.h"
 #include "gnc-gdate-utils.h"
+}
 
+#include "gnc-trans-props.hpp"
 /* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule log_module = GNC_MOD_ASSISTANT;
 
@@ -91,7 +96,7 @@ csv_fixed_trans_import_read_file (const gchar *filename, const gchar *parser_reg
     GMatchInfo *match_info = NULL;
     GRegex     *regexpat = NULL;
     GError     *err;
-    gint       row = 0;
+    guint       row = 0;
     gboolean   match_found = FALSE;
 
     // model
@@ -109,7 +114,7 @@ csv_fixed_trans_import_read_file (const gchar *filename, const gchar *parser_reg
     // compile the regular expression and check for errors
     err = NULL;
     regexpat =
-        g_regex_new (parser_regexp, G_REGEX_OPTIMIZE, 0, &err);
+        g_regex_new (parser_regexp, G_REGEX_OPTIMIZE, static_cast<GRegexMatchFlags>(0), &err);
     if (err != NULL)
     {
         GtkWidget *dialog;
@@ -131,7 +136,7 @@ csv_fixed_trans_import_read_file (const gchar *filename, const gchar *parser_reg
         return RESULT_ERROR_IN_REGEXP;
     }
 
-    g_regex_match (regexpat, contents, 0, &match_info);
+    g_regex_match (regexpat, contents, static_cast<GRegexMatchFlags>(0), &match_info);
     while (g_match_info_matches (match_info))
     {
         match_found = TRUE;
@@ -278,10 +283,15 @@ csv_fixed_trans_test_one_line (CsvFTImportInfo *info)
 
         if (g_strcmp0 (row_type, "T") == 0) // We have the Transaction line
         {
-            if (parse_date (date, info->date_format) == -1) // invalid date
-                date_ok = FALSE;
-            else
+            try
+            {
                 date_ok = TRUE;
+                parse_date (date, info->date_format);
+            }
+            catch (...)
+            {
+                date_ok = FALSE;
+            }
             trans_found = TRUE;
         }
 
@@ -342,9 +352,9 @@ check_for_existing_trans (CsvFTImportInfo *info, Account *acc, Transaction *tran
     qof_query_set_book (q, book);
 
     /* Sort by transaction date */
-    p1 = g_slist_prepend (NULL, TRANS_DATE_POSTED);
-    p1 = g_slist_prepend (p1, SPLIT_TRANS);
-    p2 = g_slist_prepend (NULL, QUERY_DEFAULT_SORT);
+    p1 = g_slist_prepend (NULL, gpointer(TRANS_DATE_POSTED));
+    p1 = g_slist_prepend (p1, gpointer(SPLIT_TRANS));
+    p2 = g_slist_prepend (NULL, gpointer(QUERY_DEFAULT_SORT));
     qof_query_set_sort_order (q, p1, p2, NULL);
 
     xaccQueryAddSingleAccountMatch (q, acc, QOF_QUERY_AND);
@@ -380,7 +390,7 @@ check_for_existing_trans (CsvFTImportInfo *info, Account *acc, Transaction *tran
     {
         Split *split;
         GList *first_split = g_list_first (splits);
-        split = first_split->data; 
+        split = static_cast<Split*>(first_split->data);
         if (xaccTransGetTxnType (trans) == xaccTransGetTxnType (xaccSplitGetParent (split)))
             ret = TRUE;
         else
@@ -475,9 +485,17 @@ csv_fixed_trans_import (CsvFTImportInfo *info)
             new_trans = NULL; // Reset new_trans to NULL
             trow = row; //record the row the Transaction was on
 
-            if (parse_date (date, info->date_format) == -1) // invalid date
+            time64 tdate = 0;
+            time64 idate = 0;
+            try
             {
-                save_error_text (info, row, _("Date is invalid for Transaction"));
+                tdate = parse_date (date, info->date_format);
+                if (g_strcmp0 (type, "I") == 0) // Invoice Transaction Type
+                    idate = parse_date (sdate, info->date_format);
+            }
+            catch (...)
+            {
+                save_error_text (info, row, _("Date or invoice date is invalid for Transaction"));
                 trans_error = TRUE;
             }
 
@@ -503,7 +521,7 @@ csv_fixed_trans_import (CsvFTImportInfo *info)
 
                 xaccTransBeginEdit (new_trans);
                 xaccTransSetCurrency (new_trans, trans_commodity);
-                xaccTransSetDatePostedSecsNormalized (new_trans, parse_date (date, info->date_format));
+                xaccTransSetDatePostedSecsNormalized (new_trans, tdate);
                 if (g_strcmp0 (description, "") != 0)
                     xaccTransSetDescription (new_trans, description);
                 if (g_strcmp0 (notes, "") != 0)
@@ -514,7 +532,7 @@ csv_fixed_trans_import (CsvFTImportInfo *info)
                 if (g_strcmp0 (type, "I") == 0) // Invoice Transaction Type
                 {
                     Timespec ts;
-                    timespecFromTime64 (&ts, parse_date (sdate, info->date_format));
+                    timespecFromTime64 (&ts, idate);
                     xaccTransSetTxnType (new_trans, 'I');
                     xaccTransSetDateDueTS (new_trans, &ts);
                 }
@@ -559,6 +577,18 @@ csv_fixed_trans_import (CsvFTImportInfo *info)
             if (!gnc_commodity_equal (split_commodity, xaccAccountGetCommodity (acct))) // non matching commodity
             {
                 save_error_text (info, row, _("Commodity does not match account for Split"));
+                split_error = TRUE;
+            }
+
+            time64 rdate = 0;
+            try
+            {
+                if (g_strcmp0 (reconcile, _("y")) == 0) // Reconciled
+                    rdate = parse_date (sdate, info->date_format);
+            }
+            catch (...)
+            {
+                save_error_text (info, row, _("Reconcile date is invalid for Split"));
                 split_error = TRUE;
             }
 
@@ -622,7 +652,7 @@ csv_fixed_trans_import (CsvFTImportInfo *info)
                 else if (g_strcmp0 (reconcile, _("y")) == 0) // Reconciled
                 {
                     Timespec ts;
-                    timespecFromTime64 (&ts, parse_date (sdate, info->date_format));
+                    timespecFromTime64 (&ts, rdate);
                     xaccSplitSetDateReconciledTS (split, &ts);
                     rec = 'y';
                 }

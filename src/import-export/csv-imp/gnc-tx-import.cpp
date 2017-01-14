@@ -42,20 +42,20 @@ extern "C" {
 
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 
-//const int num_date_formats = 5;
-//const gchar* date_format_user[] = {N_("y-m-d"),
-//                                   N_("d-m-y"),
-//                                   N_("m-d-y"),
-//                                   N_("d-m"),
-//                                   N_("m-d")
-//                                  };
-//
-//const int num_currency_formats = 3;
-//const gchar* currency_format_user[] = {N_("Locale"),
-//                                       N_("Period: 123,456.78"),
-//                                       N_("Comma: 123.456,78")
-//                                      };
-//
+const int num_date_formats = 5;
+const gchar* date_format_user[] = {N_("y-m-d"),
+                                   N_("d-m-y"),
+                                   N_("m-d-y"),
+                                   N_("d-m"),
+                                   N_("m-d")
+                                  };
+
+const int num_currency_formats = 3;
+const gchar* currency_format_user[] = {N_("Locale"),
+                                       N_("Period: 123,456.78"),
+                                       N_("Comma: 123.456,78")
+                                      };
+
 
 
 /** Constructor for GncTxImport.

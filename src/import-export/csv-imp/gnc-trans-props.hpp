@@ -34,6 +34,8 @@ extern "C" {
 }
 
 #include <string>
+#include <map>
+#include <memory>
 #include <boost/optional.hpp>
 
 /** Enumeration for column types. These are the different types of

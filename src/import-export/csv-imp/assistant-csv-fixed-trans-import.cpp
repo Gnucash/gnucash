@@ -25,6 +25,12 @@
     @brief CSV Import Assistant
     @author Copyright (c) 2012 Robert Fewell
 */
+
+#include <guid.hpp>
+
+extern "C"
+{
+
 #include "config.h"
 
 #include <gtk/gtk.h>
@@ -39,7 +45,9 @@
 
 #include "assistant-csv-fixed-trans-import.h"
 #include "csv-fixed-trans-import.h"
-#include "gnc-csv-model.h"
+}
+
+#include "gnc-tx-import.hpp"
 
 #define GNC_PREFS_GROUP "dialogs.import.csv"
 #define ASSISTANT_CSV_FIXED_TRANS_IMPORT_CM_CLASS "assistant-csv-fixed-trans-import"
@@ -49,6 +57,8 @@ static QofLogModule log_module = GNC_MOD_ASSISTANT;
 
 /*************************************************************************/
 
+extern "C"
+{
 void csv_fixed_trans_import_assistant_prepare (GtkAssistant *assistant, GtkWidget *page, gpointer user_data);
 void csv_fixed_trans_import_assistant_finish (GtkAssistant *gtkassistant, gpointer user_data);
 void csv_fixed_trans_import_assistant_cancel (GtkAssistant *gtkassistant, gpointer user_data);
@@ -64,6 +74,7 @@ void csv_fixed_trans_import_sep_cb (GtkWidget *radio, gpointer user_data );
 void csv_fixed_trans_import_hrows_cb (GtkWidget *spin, gpointer user_data );
 
 void csv_fixed_trans_import_file_chooser_confirm_cb (GtkWidget *button, CsvFTImportInfo *info);
+}
 
 static gchar *gnc_input_dialog (GtkWidget *parent, const gchar *title, const gchar *msg, const gchar *default_input);
 
@@ -93,7 +104,7 @@ static gchar *mnemonic_escape (const gchar *source)
     g_return_val_if_fail (source != NULL, NULL);
 
     p = (guchar *) source;
-    q = dest = g_malloc (strlen (source) * 2 + 1);
+    q = dest = (char *)g_malloc (strlen (source) * 2 + 1);
 
     while (*p)
     {
@@ -201,7 +212,7 @@ csv_fixed_trans_import_file_chooser_confirm_cb (GtkWidget *button, CsvFTImportIn
  *******************************************************/
 void csv_fixed_trans_import_hrows_cb (GtkWidget *spin, gpointer user_data)
 {
-    CsvFTImportInfo *info = user_data;
+    CsvFTImportInfo *info = (CsvFTImportInfo*)user_data;
 
     GtkTreeIter iter;
     gboolean valid;
@@ -242,10 +253,10 @@ void csv_fixed_trans_import_hrows_cb (GtkWidget *spin, gpointer user_data)
  *******************************************************/
 void csv_fixed_trans_import_sep_cb (GtkWidget *radio, gpointer user_data)
 {
-    CsvFTImportInfo *info = user_data;
+    CsvFTImportInfo *info = (CsvFTImportInfo*)user_data;
     const gchar *name;
     gchar *temp;
-    gchar *sep = NULL;
+    const gchar *sep = NULL;
 
     if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(radio)))
     {
@@ -322,7 +333,7 @@ static void
 load_settings (CsvFTImportInfo *info)
 {
     info->header_rows = 0;
-    info->error = "";
+    info->error = g_strdup("");
     info->starting_dir = NULL;
     info->file_name = NULL;
     info->date_format = 0;
@@ -362,7 +373,7 @@ gnc_input_dialog (GtkWidget *parent, const gchar *title, const gchar *msg, const
 
     /* Create the widgets */
     dialog = gtk_dialog_new_with_buttons (title, GTK_WINDOW(parent),
-                                          GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                          (GtkDialogFlags)(GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT),
                                           GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
                                           GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
                                           NULL);
@@ -422,7 +433,7 @@ void
 csv_fixed_trans_import_file_page_prepare (GtkAssistant *assistant,
                                         gpointer user_data)
 {
-    CsvFTImportInfo *info = user_data;
+    CsvFTImportInfo *info = (CsvFTImportInfo*)user_data;
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
@@ -441,7 +452,7 @@ void
 csv_fixed_trans_import_view_page_prepare (GtkAssistant *assistant,
         gpointer user_data)
 {
-    CsvFTImportInfo *info = user_data;
+    CsvFTImportInfo *info = (CsvFTImportInfo*)user_data;
 
     gtk_list_store_clear (info->store);
 
@@ -462,7 +473,7 @@ void
 csv_fixed_trans_import_finish_page_prepare (GtkAssistant *assistant,
         gpointer user_data)
 {
-    CsvFTImportInfo *info = user_data;
+    CsvFTImportInfo *info = (CsvFTImportInfo*)user_data;
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
     gchar *text;
@@ -497,7 +508,7 @@ void
 csv_fixed_trans_import_summary_page_prepare (GtkAssistant *assistant,
         gpointer user_data)
 {
-    CsvFTImportInfo *info = user_data;
+    CsvFTImportInfo *info = (CsvFTImportInfo*)user_data;
     gchar *text, *errtext, *mtext;
 
     /* Before creating accounts, if this is a new book, let user specify
@@ -567,7 +578,7 @@ csv_fixed_trans_import_assistant_prepare (GtkAssistant *assistant, GtkWidget *pa
 static void
 csv_fixed_trans_import_assistant_destroy_cb (GtkObject *object, gpointer user_data)
 {
-    CsvFTImportInfo *info = user_data;
+    CsvFTImportInfo *info = (CsvFTImportInfo*)user_data;
     gnc_unregister_gui_component_by_data (ASSISTANT_CSV_FIXED_TRANS_IMPORT_CM_CLASS, info);
     g_free (info);
 }
@@ -575,21 +586,21 @@ csv_fixed_trans_import_assistant_destroy_cb (GtkObject *object, gpointer user_da
 void
 csv_fixed_trans_import_assistant_cancel (GtkAssistant *assistant, gpointer user_data)
 {
-    CsvFTImportInfo *info = user_data;
+    CsvFTImportInfo *info = (CsvFTImportInfo*)user_data;
     gnc_close_gui_component_by_data (ASSISTANT_CSV_FIXED_TRANS_IMPORT_CM_CLASS, info);
 }
 
 void
 csv_fixed_trans_import_assistant_close (GtkAssistant *assistant, gpointer user_data)
 {
-    CsvFTImportInfo *info = user_data;
+    CsvFTImportInfo *info = (CsvFTImportInfo*)user_data;
     gnc_close_gui_component_by_data (ASSISTANT_CSV_FIXED_TRANS_IMPORT_CM_CLASS, info);
 }
 
 void
 csv_fixed_trans_import_assistant_finish (GtkAssistant *assistant, gpointer user_data)
 {
-    CsvFTImportInfo *info = user_data;
+    CsvFTImportInfo *info = (CsvFTImportInfo*)user_data;
 
     gtk_list_store_clear (info->store);
     csv_fixed_trans_import_read_file (info->file_name, info->regexp->str, info->store, 0 );
@@ -599,7 +610,7 @@ csv_fixed_trans_import_assistant_finish (GtkAssistant *assistant, gpointer user_
 static void
 csv_fixed_trans_import_close_handler (gpointer user_data)
 {
-    CsvFTImportInfo *info = user_data;
+    CsvFTImportInfo *info = (CsvFTImportInfo*)user_data;
 
     g_free (info->starting_dir);
     g_free (info->file_name);

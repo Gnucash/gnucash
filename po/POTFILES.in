@@ -96,6 +96,7 @@ src/backend/xml/gnc-schedxaction-xml-v2.cpp
 src/backend/xml/gnc-tax-table-xml-v2.cpp
 src/backend/xml/gnc-transaction-xml-v2.cpp
 src/backend/xml/gnc-vendor-xml-v2.cpp
+src/backend/xml/gnc-xml-backend.cpp
 src/backend/xml/gnc-xml-helper.cpp
 src/backend/xml/io-example-account.cpp
 src/backend/xml/io-gncxml-gen.cpp
@@ -427,22 +428,23 @@ src/import-export/csv-exp/gnc-plugin-csv-export.c
 [type: gettext/gsettings]src/import-export/csv-exp/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in.in
 src/import-export/csv-imp/assistant-csv-account-import.c
 src/import-export/csv-imp/assistant-csv-account-import.glade
-src/import-export/csv-imp/assistant-csv-fixed-trans-import.c
+src/import-export/csv-imp/assistant-csv-fixed-trans-import.cpp
 src/import-export/csv-imp/assistant-csv-fixed-trans-import.glade
-src/import-export/csv-imp/assistant-csv-trans-import.c
+src/import-export/csv-imp/assistant-csv-trans-import.cpp
 src/import-export/csv-imp/assistant-csv-trans-import.glade
 src/import-export/csv-imp/csv-account-import.c
-src/import-export/csv-imp/csv-fixed-trans-import.c
+src/import-export/csv-imp/csv-fixed-trans-import.cpp
 src/import-export/csv-imp/gnc-csv-account-map.c
 src/import-export/csv-imp/gnc-csv-gnumeric-popup.c
-src/import-export/csv-imp/gnc-csv-imp-trans.cpp
-src/import-export/csv-imp/gnc-csv-model.c
 src/import-export/csv-imp/gnc-csv-tokenizer.cpp
 src/import-export/csv-imp/gnc-csv-trans-settings.c
+src/import-export/csv-imp/gnc-dummy-tokenizer.cpp
 src/import-export/csv-imp/gnc-fw-tokenizer.cpp
 src/import-export/csv-imp/gncmod-csv-import.c
 src/import-export/csv-imp/gnc-plugin-csv-import.c
 src/import-export/csv-imp/gnc-tokenizer.cpp
+src/import-export/csv-imp/gnc-trans-props.cpp
+src/import-export/csv-imp/gnc-tx-import.cpp
 [type: gettext/gsettings]src/import-export/csv-imp/gschemas/org.gnucash.dialogs.import.csv.gschema.xml.in.in
 src/import-export/dialog-import.glade
 src/import-export/gncmod-generic-import.c
