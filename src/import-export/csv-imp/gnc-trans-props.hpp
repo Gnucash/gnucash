@@ -48,21 +48,19 @@ extern "C" {
 enum class GncTransPropType {
     NONE,
     DATE,
+    NUM,
     DESCRIPTION,
     NOTES,
     UNIQUE_ID,
     TRANS_PROPS = UNIQUE_ID,
 
-    // num is strictly speaking a trans prop and not a split prop
-    // however due to the num/action swap user option, it can only be
-    // set while creating splits...
-    NUM,
-
+    ACTION,
     ACCOUNT,
     DEPOSIT,
     WITHDRAWAL,
     BALANCE,
     MEMO,
+    TACTION,
     TACCOUNT,
     TMEMO,
     SPLIT_PROPS = TMEMO
@@ -116,6 +114,7 @@ public:
 
 private:
     boost::optional<time64> m_date;
+    boost::optional<std::string> m_num;
     boost::optional<std::string> m_desc;
     boost::optional<std::string> m_notes;
     boost::optional<std::string> m_differ;
@@ -133,18 +132,15 @@ public:
     void set_account (Account* acct) { if (acct) m_account = acct; else m_account = boost::none; }
 
 private:
+    boost::optional<std::string> m_action;
     boost::optional<Account*> m_account;
     boost::optional<gnc_numeric> m_deposit;
     boost::optional<gnc_numeric> m_withdrawal;
     boost::optional<gnc_numeric> m_balance;
     boost::optional<std::string> m_memo;
+    boost::optional<std::string> m_taction;
     boost::optional<Account*> m_taccount;
     boost::optional<std::string> m_tmemo;
-
-    // Strictly speaking num is a transaction property
-    // However due to the option to swap num and action fields
-    // This can only be set when splits are created
-    boost::optional<std::string> m_num;
     bool created = false;
 };
 
