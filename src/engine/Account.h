@@ -65,11 +65,6 @@ typedef struct
     QofInstanceClass parent_class;
 } AccountClass;
 
-typedef struct
-{
-    Account *acc;
-    QofBook *book;
-} GncImportMatchMap;
 
 /* --- type macros --- */
 #define GNC_TYPE_ACCOUNT            (gnc_account_get_type ())
@@ -1381,70 +1376,6 @@ int gnc_account_tree_staged_transaction_traversal(const Account *account,
 
 int xaccAccountTreeForEachTransaction(Account *acc,
                                       TransactionCallback proc, void *data);
-
-/** Obtain an ImportMatchMap object from an Account or a Book
- */
-GncImportMatchMap *gnc_account_imap_create_imap (Account *acc);
-
-/* Look up an Account in the map non Baysian
- */
-Account* gnc_account_imap_find_account (GncImportMatchMap *imap, const char* category,
-                                        const char *key);
-
-/* Store an Account in the map non Baysian
- */
-void gnc_account_imap_add_account (GncImportMatchMap *imap, const char *category,
-                                   const char *key, Account *acc);
-
-/* Remove a reference to an Account in the map non Baysian
- */
-void gnc_account_imap_delete_account (GncImportMatchMap *imap, const char *category,
-                                      const char *key);
-
-/** Look up an Account in the map using Baysian
- */
-Account* gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList* tokens);
-
-/** Updates the imap for a given account using a list of tokens
- */
-void gnc_account_imap_add_account_bayes (GncImportMatchMap *imap, GList* tokens,
-                                         Account *acc);
-
-typedef struct imap_info
-{
-    Account        *source_account;
-    Account        *map_account;
-    GList          *list;
-    char           *category_head;
-    char           *full_category;
-    char           *match_string;
-    char           *count;
-}GncImapInfo;
-
-/** Returns a GList of structure imap_info of all Bayesian mappings for
- *  required Account
- */
-GList *gnc_account_imap_get_info_bayes (Account *acc);
-
-/** Returns a GList of structure imap_info of all Non Bayesian mappings for
- *  required Account
- */
-GList *gnc_account_imap_get_info (Account *acc, const char *category);
-
-/** Returns the text string pointed to by full_category for the Account, free
- *  the returned text
- */
-gchar *gnc_account_get_map_entry (Account *acc, const char *full_category);
-
-/** Delete the entry for Account pointed to by full_category, if empty is TRUE then use
- *  delete if empty, full_category is freed
- */
-void gnc_account_delete_map_entry (Account *acc, char *full_category, gboolean empty);
-
-/** Search for Bayesian entries with mappings based on full account name and change
- *  them to be based on the account guid
- */
-void gnc_account_imap_convert_bayes (QofBook *book);
 
 /** @} */
 

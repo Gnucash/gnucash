@@ -32,6 +32,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
 #include "Account.h"
+#include "Account-Imap.h"
 #include "gnc-file.h"
 #include "gnc-features.h"
 #include "gnc-filepath-utils.h"

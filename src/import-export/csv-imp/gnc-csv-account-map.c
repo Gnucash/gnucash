@@ -32,6 +32,7 @@
 #include "qof.h"
 #include "gnc-ui-util.h"
 #include "gnc-csv-account-map.h"
+#include "Account-Imap.h"
 
 #define CSV_CATEGORY         "csv-account-map"
 
@@ -41,20 +42,6 @@
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
-
-/**************************************************
- * account_imap_destroy
- *
- * Destroy an import map. But all stored entries will
- * still continue to exist in the underlying kvp frame
- * of the account.
- **************************************************/
-static void
-account_imap_destroy (GncImportMatchMap *imap)
-{
-    if (!imap) return;
-    g_free (imap);
-}
 
 /**************************************************
  * gnc_csv_account_map_search
@@ -81,10 +68,10 @@ Account * gnc_csv_account_map_search (gchar *map_string)
         if (gnc_account_imap_find_account (tmp_imap, CSV_CATEGORY, map_string) != NULL)
         {
             account = ptr->data;
-            account_imap_destroy (tmp_imap);
+            gnc_account_imap_delete_imap (tmp_imap);
             break;
         }
-        account_imap_destroy (tmp_imap);
+        gnc_account_imap_delete_imap (tmp_imap);
     }
     g_list_free (accts);
 
@@ -155,13 +142,13 @@ gnc_csv_account_map_change_mappings (Account *old_account, Account *new_account,
     {
         tmp_imap = gnc_account_imap_create_imap (old_account);
         gnc_account_imap_delete_account (tmp_imap, CSV_CATEGORY, map_string);
-        account_imap_destroy (tmp_imap);
+        gnc_account_imap_delete_imap (tmp_imap);
     }
 
     if (new_account != NULL)
     {
         tmp_imap = gnc_account_imap_create_imap (new_account);
 	gnc_account_imap_add_account (tmp_imap, CSV_CATEGORY, map_string, new_account);
-        account_imap_destroy (tmp_imap);
+        gnc_account_imap_delete_imap (tmp_imap);
     }
 }
