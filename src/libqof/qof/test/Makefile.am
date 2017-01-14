@@ -108,6 +108,18 @@ nodist_test_gnc_int128_SOURCES = \
 endif
 check_PROGRAMS += test-gnc-int128
 
+test_gnc_rational_SOURCES = \
+        $(top_srcdir)/${MODULEPATH}/gnc-rational.cpp \
+        gtest-gnc-rational.cpp
+test_gnc_rational_CPPFLAGS = -I${GTEST_HEADERS}
+
+test_gnc_rational_LDADD = ${GTEST_LIBS}
+if !GOOGLE_TEST_LIBS
+nodist_test_gnc_rational_SOURCES = \
+        ${GTEST_SRC}/src/gtest_main.cc
+endif
+check_PROGRAMS += test-gnc-rational
+
 test_gnc_timezone_SOURCES = \
         $(top_srcdir)/${MODULEPATH}/gnc-timezone.cpp \
         gtest-gnc-timezone.cpp

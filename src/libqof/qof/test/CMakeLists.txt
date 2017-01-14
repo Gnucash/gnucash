@@ -61,6 +61,13 @@ IF (NOT WIN32)
   GNC_ADD_TEST(test-gnc-int128 "${test_gnc_int128_SOURCES}"
     gtest_qof_INCLUDES gtest_qof_LIBS)
 
+  SET(test_gnc_rational_SOURCES
+    ${MODULEPATH}/gnc-rational.cpp
+    gtest-gnc-rational.cpp
+    ${GTEST_SRC})
+  GNC_ADD_TEST(test-gnc-rational "${test_gnc_rational_SOURCES}"
+    gtest_qof_INCLUDES gtest_qof_LIBS)
+
   SET(test_gnc_timezone_SOURCES
     ${MODULEPATH}/gnc-timezone.cpp
     gtest-gnc-timezone.cpp
