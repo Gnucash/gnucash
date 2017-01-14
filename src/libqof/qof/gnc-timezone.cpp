@@ -666,7 +666,8 @@ TimeZoneProvider::parse_file(const std::string& tzname)
         zone_vector.push_back(zone_from_rule(max_year, last_rule));
 }
 
-TimeZoneProvider::TimeZoneProvider(const std::string& tzname) :  zone_vector {}
+bool
+TimeZoneProvider::construct(const std::string& tzname)
 {
     try
     {
@@ -679,28 +680,32 @@ TimeZoneProvider::TimeZoneProvider(const std::string& tzname) :  zone_vector {}
             TZ_Ptr zone(new PTZ(tzname));
             zone_vector.push_back(std::make_pair(max_year, zone));
         }
-        catch(const std::exception& err)
+        catch(std::exception& err)
         {
-            try
-            {
-                parse_file(getenv("TZ"));
-            }
-            catch(const std::exception& err)
-            {
-
-                std::cerr << "Unable to use either provided tzname or TZ environment variable. Resorting to /etc/localtime.\n";
-                try
-                {
-                    parse_file("/etc/localtime");
-                }
-                catch(const std::invalid_argument& env)
-                {
-                    std::cerr << "/etc/localtime invalid, resorting to GMT.";
-                    TZ_Ptr zone(new PTZ("UTC0"));
-                    zone_vector.push_back(std::make_pair(max_year, zone));
-                }
-            }
+            return false;
         }
+    }
+    return true;
+}
+
+TimeZoneProvider::TimeZoneProvider(const std::string& tzname) :  zone_vector {}
+{
+    if(construct(tzname))
+        return;
+    std::cerr << tzname << " invalid, trying TZ environment variable.\n";
+    const char* tz_env = getenv("TZ");
+    if(tz_env && construct(tz_env))
+        return;
+    std::cerr << "No valid $TZ, resorting to /etc/localtime.\n";
+    try
+    {
+        parse_file("/etc/localtime");
+    }
+    catch(const std::invalid_argument& env)
+    {
+        std::cerr << "/etc/localtime invalid, resorting to GMT.";
+        TZ_Ptr zone(new PTZ("UTC0"));
+        zone_vector.push_back(std::make_pair(max_year, zone));
     }
 }
 #endif
