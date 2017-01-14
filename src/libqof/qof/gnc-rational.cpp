@@ -47,11 +47,6 @@ GncRational::GncRational (gnc_numeric n) noexcept :
     }
 }
 
-GncRational::GncRational (GncInt128 num, GncInt128 den) noexcept :
-    m_num (num), m_den (den), m_error {}
-{
-}
-
 GncRational::operator gnc_numeric () const noexcept
 {
     if (m_num.isOverflow() || m_num.isNan() ||

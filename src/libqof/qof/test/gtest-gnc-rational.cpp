@@ -58,3 +58,12 @@ TEST(gncrational_constructors, test_implicit_int_constructor)
     EXPECT_EQ(value.m_den, 456);
     EXPECT_EQ(value.m_error, GNC_ERROR_OK);
 }
+
+TEST(gncrational_constructors, test_with_error_code)
+{
+    int num(123), denom(456);
+    GncRational value(num, denom, GNC_ERROR_OVERFLOW);
+    EXPECT_EQ(value.m_num, 123);
+    EXPECT_EQ(value.m_den, 456);
+    EXPECT_EQ(value.m_error, GNC_ERROR_OVERFLOW);
+}
