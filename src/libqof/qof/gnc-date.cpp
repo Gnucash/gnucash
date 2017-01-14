@@ -46,6 +46,8 @@ extern "C"
 #endif
 }
 
+#include <cinttypes>
+
 #include "gnc-date.h"
 #include "gnc-date-p.h"
 #include "gnc-datetime.hpp"
@@ -344,13 +346,26 @@ gnc_date_string_to_monthformat(const char *fmt_str, GNCDateMonthFormat *format)
 char*
 gnc_print_time64(time64 time, const char* format)
 {
-    GncDateTime gncdt(time);
-    auto sstr = gncdt.format(format);
-    //ugly C allocation so that the ptr can be freed at the other end
-    char* cstr = static_cast<char*>(malloc(sstr.length() + 1));
-    memset(cstr, 0, sstr.length() + 1);
-    strncpy(cstr, sstr.c_str(), sstr.length());
-    return cstr;
+    try
+    {
+        GncDateTime gncdt(time);
+        auto sstr = gncdt.format(format);
+        //ugly C allocation so that the ptr can be freed at the other end
+        char* cstr = static_cast<char*>(malloc(sstr.length() + 1));
+        memset(cstr, 0, sstr.length() + 1);
+        strncpy(cstr, sstr.c_str(), sstr.length());
+        return cstr;
+    }
+    catch(std::runtime_error& err)
+    {
+        PWARN("Error processing time64 %" PRId64 ": %s", time, err.what());
+        return nullptr;
+    }
+    catch(std::logic_error& err)
+    {
+        PWARN("Error processing time64 %" PRId64 ": %s", time, err.what());
+        return nullptr;
+    }
 }
 
 /********************************************************************\
@@ -602,12 +617,24 @@ size_t
 qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)
 {
     if (!buff) return 0;
-
-    GncDate date(year, month, day);
-    std::string str = date.format(qof_date_format_get_string(dateFormat));
-    strncpy(buff, str.c_str(), len);
-    if (str.length() >= len)
-	buff[len - 1] = '\0';
+    try
+    {
+        GncDate date(year, month, day);
+        std::string str = date.format(qof_date_format_get_string(dateFormat));
+        strncpy(buff, str.c_str(), len);
+        if (str.length() >= len)
+            buff[len - 1] = '\0';
+    }
+    catch(std::logic_error& err)
+    {
+        PWARN("Error processing year-month-day %d-%d-%d: %s",
+              year, month, day, err.what());
+    }
+    catch(std::runtime_error& err)
+    {
+        PWARN("Error processing year-month-day %d-%d-%d: %s",
+              year, month, day, err.what());
+    }
     return strlen(buff);
 }
 
@@ -616,11 +643,22 @@ qof_print_date_buff (char * buff, size_t len, time64 t)
 {
     if (!buff) return 0;
 
-    GncDateTime gncdt(t);
-    std::string str = gncdt.format(qof_date_format_get_string(dateFormat));
-    strncpy(buff, str.c_str(), len);
-    if (str.length() >= len)
-	buff[len - 1] = '\0';
+    try
+    {
+        GncDateTime gncdt(t);
+        std::string str = gncdt.format(qof_date_format_get_string(dateFormat));
+        strncpy(buff, str.c_str(), len);
+        if (str.length() >= len)
+            buff[len - 1] = '\0';
+    }
+    catch(std::logic_error& err)
+    {
+        PWARN("Error processing time64 %" PRId64 ": %s", t, err.what());
+    }
+    catch(std::runtime_error& err)
+    {
+        PWARN("Error processing time64 %" PRId64 ": %s", t, err.what());
+    }
     return strlen(buff);
 }
 
@@ -1158,8 +1196,14 @@ gnc_iso8601_to_timespec_gmt(const char *cstr)
         GncDateTime gncdt(cstr);
         return {static_cast<time64>(gncdt), 0};
     }
-    catch(...)
+    catch(std::logic_error& err)
     {
+        PWARN("Error processing %s: %s", cstr, err.what());
+        return {0, 0};
+    }
+    catch(std::runtime_error& err)
+    {
+        PWARN("Error processing time64 %s: %s", cstr, err.what());
         return {0, 0};
     }
 }
@@ -1174,13 +1218,26 @@ gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
     const char* format = "%Y-%m-%d %H:%M:%s %q";
 
     if (! buff) return NULL;
+    try
+    {
+        GncDateTime gncdt(ts.tv_sec);
+        auto sstr = gncdt.format(format);
 
-    GncDateTime gncdt(ts.tv_sec);
-    auto sstr = gncdt.format(format);
+        memset(buff, 0, sstr.length() + 1);
+        strncpy(buff, sstr.c_str(), sstr.length());
+        return buff + sstr.length();
+    }
+    catch(std::logic_error& err)
+    {
+        PWARN("Error processing time64 %" PRId64 ": %s", ts.tv_sec, err.what());
+        return buff;
+    }
+    catch(std::runtime_error& err)
+    {
+        PWARN("Error processing time64 %" PRId64 ": %s", ts.tv_sec, err.what());
+        return buff;
+    }
 
-    memset(buff, 0, sstr.length() + 1);
-    strncpy(buff, sstr.c_str(), sstr.length());
-    return buff + sstr.length();
 }
 
 void
