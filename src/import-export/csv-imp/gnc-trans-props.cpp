@@ -200,13 +200,13 @@ time64 parse_date (const std::string &date_str, int format)
 }
 
 
-/** Convert str into a gnc_numeric using the user-specified (import) currency format.
+/** Convert str into a GncRational using the user-specified (import) currency format.
  * @param str The string to be parsed
  * @param currency_format The currency format to use.
- * @return a gnc_numeric
+ * @return a GncRational
  * @exception May throw std::invalid argument if string can't be parsed properly
  */
-gnc_numeric parse_amount (const std::string &str, int currency_format)
+GncRational parse_amount (const std::string &str, int currency_format)
 {
     /* If a cell is empty or just spaces return invalid amount */
     if(!boost::regex_search(str, boost::regex("[0-9]")))
@@ -237,7 +237,7 @@ gnc_numeric parse_amount (const std::string &str, int currency_format)
         break;
     }
 
-    return val;
+    return GncRational(val);
 }
 
 static char parse_reconciled (const std::string& reconcile)
@@ -632,25 +632,26 @@ std::string GncPreSplit::verify_essentials (void)
  * @param book The book where the split should be stored
  * @param amount The amount of the split
  */
-static void trans_add_split (Transaction* trans, Account* account, gnc_numeric amount,
+static void trans_add_split (Transaction* trans, Account* account, GncRational amount,
                             const boost::optional<std::string>& action,
                             const boost::optional<std::string>& memo,
                             const boost::optional<char>& rec_state,
                             const boost::optional<time64> rec_date,
-                            const boost::optional<gnc_numeric> price)
+                            const boost::optional<GncRational> price)
 {
     QofBook* book = xaccTransGetBook (trans);
     auto split = xaccMallocSplit (book);
     xaccSplitSetAccount (split, account);
     xaccSplitSetParent (split, trans);
-    xaccSplitSetAmount (split, amount);
+    xaccSplitSetAmount (split, static_cast<gnc_numeric>(amount));
     auto trans_curr = xaccTransGetCurrency(trans);
     auto acct_comm = xaccAccountGetCommodity(account);
     if (gnc_commodity_equiv(trans_curr, acct_comm))
-        xaccSplitSetValue (split, amount);
+        xaccSplitSetValue (split, static_cast<gnc_numeric>(amount));
     else if (price)
     {
-        gnc_numeric value = gnc_numeric_mul (amount, *price, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND);
+        auto value = gnc_numeric_mul (static_cast<gnc_numeric>(amount),
+                static_cast<gnc_numeric>(*price), GNC_DENOM_AUTO, GNC_HOW_RND_ROUND);
         xaccSplitSetValue (split, value);
     }
     else
@@ -659,12 +660,7 @@ static void trans_add_split (Transaction* trans, Account* account, gnc_numeric a
         /* Import data didn't specify price, let's lookup the nearest in time */
         auto nprice = gnc_pricedb_lookup_nearest_in_time(gnc_pricedb_get_db(book),
                 acct_comm, trans_curr, tts);
-        if (!nprice)
-        {
-            PWARN("No price found, using a price of 1.");
-            xaccSplitSetValue (split, amount);
-        }
-        else
+        if (nprice)
         {
             /* Found a usable price. Let's check if the conversion direction is right */
             gnc_numeric rate = {0, 1};
@@ -673,8 +669,14 @@ static void trans_add_split (Transaction* trans, Account* account, gnc_numeric a
             else
                 rate = gnc_numeric_invert(gnc_price_get_value(nprice));
 
-            gnc_numeric value = gnc_numeric_mul (amount, rate, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND);
+            auto value = gnc_numeric_mul (static_cast<gnc_numeric>(amount),
+                    rate, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND);
             xaccSplitSetValue (split, value);
+        }
+        else
+        {
+            PWARN("No price found, using a price of 1.");
+            xaccSplitSetValue (split, static_cast<gnc_numeric>(amount));
         }
     }
 
@@ -709,29 +711,23 @@ void GncPreSplit::create_split (Transaction* trans)
 
     Account *account = nullptr;
     Account *taccount = nullptr;
-    bool amount_set = false;
-    gnc_numeric deposit = { 0, 1 };
-    gnc_numeric withdrawal = { 0, 1 };
-    gnc_numeric amount = { 0, 1 };
+    auto deposit = GncRational (0, 1);
+    auto withdrawal = GncRational (0, 1);
+    auto amount = GncRational (0, 1);
 
     if (m_account)
         account = *m_account;
     if (m_taccount)
         taccount = *m_taccount;
     if (m_deposit)
-    {
         deposit = *m_deposit;
-        amount_set = true;
-    }
     if (m_withdrawal)
-    {
         withdrawal = *m_withdrawal;
-        amount_set = true;
-    }
-    if (amount_set)
-        amount = gnc_numeric_add (deposit, withdrawal,
-                xaccAccountGetCommoditySCU (account),
-                GNC_HOW_RND_ROUND_HALF_UP);
+
+    amount = GncRational(gnc_numeric_add (static_cast<gnc_numeric>(deposit),
+            static_cast<gnc_numeric>(withdrawal),
+            xaccAccountGetCommoditySCU (account),
+            GNC_HOW_RND_ROUND_HALF_UP));
 
     /* Add a split with the cumulative amount value. */
     trans_add_split (trans, account, amount, m_action, m_memo, m_rec_state, m_rec_date, m_price);
@@ -742,8 +738,8 @@ void GncPreSplit::create_split (Transaction* trans)
          * will be the negative of the the first split amount.
          */
         auto inv_price = m_price;
-        if (inv_price)
-            inv_price = gnc_numeric_invert(*inv_price);
+        if (m_price)
+            inv_price = m_price->inv();
         trans_add_split (trans, taccount, gnc_numeric_neg(amount), m_taction, m_tmemo, m_trec_state, m_trec_date, inv_price);
     }
 
