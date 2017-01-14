@@ -14,6 +14,9 @@ SET(csv_import_SOURCES
   gnc-csv-gnumeric-popup.c
   gnc-csv-trans-settings.c
   ${CMAKE_SOURCE_DIR}/lib/stf/stf-parse.c
+  ${CMAKE_SOURCE_DIR}/lib/goffice/go-charmap-sel.c
+  ${CMAKE_SOURCE_DIR}/lib/goffice/go-optionmenu.c
+  ${CMAKE_SOURCE_DIR}/lib/goffice/go-glib-extras.c
 )
 
 # Add dependency on config.h
@@ -31,6 +34,9 @@ SET(csv_import_noinst_HEADERS
   gnc-csv-gnumeric-popup.h
   gnc-csv-trans-settings.h
   ${CMAKE_SOURCE_DIR}/lib/stf/stf-parse.h
+  ${CMAKE_SOURCE_DIR}/lib/goffice/go-charmap-sel.h
+  ${CMAKE_SOURCE_DIR}/lib/goffice/go-optionmenu.h
+  ${CMAKE_SOURCE_DIR}/lib/goffice/go-glib-extras.h
 )
 
 ADD_LIBRARY(gncmod-csv-import ${csv_import_noinst_HEADERS} ${csv_import_SOURCES})

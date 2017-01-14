@@ -50,7 +50,7 @@
 
 #include "gnc-csv-model.h"
 #include "gnc-csv-gnumeric-popup.h"
-#include <goffice/gtk/go-charmap-sel.h>
+#include <goffice/go-charmap-sel.h>
 
 #define MIN_COL_WIDTH 70
 #define GNC_PREFS_GROUP "dialogs.import.csv"

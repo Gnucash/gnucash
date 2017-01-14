@@ -27,6 +27,7 @@
 #ifndef GNC_CSV_ACCOUNT_MAP_H
 #define GNC_CSV_ACCOUNT_MAP_H
 
+#include <gtk/gtk.h>
 #include "Account.h"
 
 /** Enumeration for the mappings liststore */
