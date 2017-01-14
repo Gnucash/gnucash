@@ -40,7 +40,8 @@ TEST(gnc_date_constructors, test_ymd_constructor)
 TEST(gnc_datetime_constructors, test_default_constructor)
 {
     GncDateTime atime;
-    EXPECT_EQ(static_cast<time64>(atime), static_cast<time64>(INT64_C(0)));
+    long time_now = time(nullptr);
+    EXPECT_EQ(static_cast<time64>(atime), static_cast<time64>(time_now));
 }
 
 TEST(gnc_datetime_constructors, test_time64_constructor)

@@ -63,7 +63,7 @@ static constexpr auto ticks_per_second = INT64_C(1000000000);
 class GncDateImpl
 {
 public:
-    GncDateImpl(): m_greg(unix_epoch.date()) {}
+    GncDateImpl(): m_greg(boost::gregorian::day_clock::local_day()) {}
     GncDateImpl(const int year, const int month, const int day) :
         m_greg(year, static_cast<Month>(month), day) {}
     GncDateImpl(Date d) : m_greg(d) {}
@@ -134,7 +134,7 @@ LDT_from_struct_tm(const struct tm tm)
 class GncDateTimeImpl
 {
 public:
-    GncDateTimeImpl() : m_time(unix_epoch, tzp.get(unix_epoch.date().year())) {}
+    GncDateTimeImpl() : m_time(boost::local_time::local_sec_clock::local_time(tzp.get(boost::gregorian::day_clock::local_day().year()))) {}
     GncDateTimeImpl(const time64 time) : m_time(LDT_from_unix_local(time)) {}
     GncDateTimeImpl(const struct tm tm) : m_time(LDT_from_struct_tm(tm)) {}
     GncDateTimeImpl(const std::string str);

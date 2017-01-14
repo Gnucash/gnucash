@@ -237,7 +237,6 @@ time64
 gnc_time (time64 *tbuf)
 {
     GncDateTime gncdt;
-    gncdt.now();
     auto time = static_cast<time64>(gncdt);
     if (tbuf != NULL)
         *tbuf = time;
@@ -1316,7 +1315,6 @@ GDate timespec_to_gdate (Timespec ts)
 GDate* gnc_g_date_new_today ()
 {
     GncDate gncd;
-    gncd.today();
     auto ymd = gncd.year_month_day();
     auto month = static_cast<GDateMonth>(ymd.month);
     auto result = g_date_new_dmy (ymd.day, month, ymd.year);
