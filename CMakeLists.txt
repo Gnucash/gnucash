@@ -122,7 +122,7 @@ IF (WIN32)
   #
 
   SET(CMAKE_FRAMEWORK_PATH_TMP ${CMAKE_PREFIX_PATH})
-  SET(DEV_SUBDIRS aqbanking gnome goffice guile gwenhywfar libgsf libofx libsoup libxslt webkit)
+  SET(DEV_SUBDIRS aqbanking gnome guile gwenhywfar libgsf libofx libsoup libxslt webkit)
   FOREACH(subdir ${DEV_SUBDIRS})
     LIST(APPEND CMAKE_FRAMEWORK_PATH_TMP ${CMAKE_PREFIX_PATH}/${subdir})
   ENDFOREACH()
@@ -175,7 +175,6 @@ GNC_PKG_CHECK_MODULES (LIBXSLT REQUIRED libxslt)
 GNC_PKG_CHECK_MODULES (WEBKIT REQUIRED webkit-1.0>=1.2)
 IF (WITH_GNUCASH)
   GNC_PKG_CHECK_MODULES (GTK2 REQUIRED gtk+-2.0>=2.24.0)
-  GNC_PKG_CHECK_MODULES (GOFFICE REQUIRED libgoffice-0.8>=0.8.17)
 ENDIF (WITH_GNUCASH)
 
 GNC_PKG_CHECK_MODULES (ZLIB REQUIRED zlib)
@@ -420,7 +419,7 @@ ENDIF()
 SET (Boost_USE_MULTITHREADED ON)
 SET (Boost_FIND_QUIETLY ON)
 
-FIND_PACKAGE (Boost 1.54.0 REQUIRED COMPONENTS date_time regex)
+FIND_PACKAGE (Boost 1.54.0 REQUIRED COMPONENTS date_time regex locale)
 
 IF (Boost_FOUND)
   include_directories(${Boost_INCLUDE_DIRS})
