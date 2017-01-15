@@ -45,25 +45,26 @@ TEST(gncrational_constructors, test_gnc_int128_constructor)
 {
     GncInt128 num(123), denom(456);
     GncRational value(num, denom);
-    EXPECT_EQ(value.m_num, 123);
-    EXPECT_EQ(value.m_den, 456);
-    EXPECT_EQ(value.m_error, GNC_ERROR_OK);
+    EXPECT_EQ(123, value.m_num);
+    EXPECT_EQ(456, value.m_den);
+    EXPECT_EQ(GNC_ERROR_OK, value.m_error);
 }
 
 TEST(gncrational_constructors, test_implicit_int_constructor)
 {
     int num(123), denom(456);
     GncRational value(num, denom);
-    EXPECT_EQ(value.m_num, 123);
-    EXPECT_EQ(value.m_den, 456);
-    EXPECT_EQ(value.m_error, GNC_ERROR_OK);
+    EXPECT_EQ(123, value.m_num);
+    EXPECT_EQ(456, value.m_den);
+    EXPECT_EQ(GNC_ERROR_OK, value.m_error);
 }
 
 TEST(gncrational_constructors, test_with_error_code)
 {
     int num(123), denom(456);
     GncRational value(num, denom, GNC_ERROR_OVERFLOW);
-    EXPECT_EQ(value.m_num, 123);
-    EXPECT_EQ(value.m_den, 456);
-    EXPECT_EQ(value.m_error, GNC_ERROR_OVERFLOW);
+    EXPECT_EQ(123, value.m_num);
+    EXPECT_EQ(456, value.m_den);
+    EXPECT_EQ(GNC_ERROR_OVERFLOW, value.m_error);
+}
 }
