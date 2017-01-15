@@ -52,7 +52,10 @@ public:
     GncRational& div(GncRational b, GncDenom& d) noexcept;
     GncRational& add(const GncRational& b, GncDenom& d) noexcept;
     GncRational& sub(const GncRational& b, GncDenom& d) noexcept;
-
+    void operator+=(GncRational b);
+    void operator-=(GncRational b);
+    void operator*=(GncRational b);
+    void operator/=(GncRational b);
 /** Inverts the number, equivalent of /= {1, 1} */
     GncRational& inv() noexcept;
 
@@ -60,6 +63,12 @@ public:
     GncInt128 m_den;
     GNCNumericErrorCode m_error;
 };
+
+GncRational operator+(GncRational a, GncRational b);
+GncRational operator-(GncRational a, GncRational b);
+GncRational operator*(GncRational a, GncRational b);
+GncRational operator/(GncRational a, GncRational b);
+
 
 /** Encapsulates the rounding specifications computations. */
 struct GncDenom

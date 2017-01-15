@@ -83,17 +83,114 @@ GncRational::inv () noexcept
     return *this;
 }
 
+GncRational
+operator+(GncRational a, GncRational b)
+{
+    if (a.m_error || b.m_error)
+    {
+        if (b.m_error)
+            return GncRational(0, 1, b.m_error);
+        return GncRational(0, 1, a.m_error);
+    }
+    GncInt128 lcm = a.m_den.lcm(b.m_den);
+    GncInt128 num(a.m_num * lcm / a.m_den + b.m_num * lcm / b.m_den);
+    if (lcm.isOverflow() || lcm.isNan() || num.isOverflow() || num.isNan())
+        return GncRational(0, 1, GNC_ERROR_OVERFLOW);
+    GncRational retval(num, lcm);
+    return retval;
+}
+
+GncRational
+operator-(GncRational a, GncRational b)
+{
+    GncRational retval = -a + b;
+    return retval;
+}
+
+GncRational
+operator*(GncRational a, GncRational b)
+{
+    if (a.m_error || b.m_error)
+    {
+        if (b.m_error)
+            return GncRational(0, 1, b.m_error);
+        return GncRational(0, 1, a.m_error);
+    }
+    GncInt128 num (a.m_num * b.m_num), den(a.m_den * b.m_den);
+    if (num.isOverflow() || num.isNan() || den.isOverflow() || den.isNan())
+        return GncRational(0, 1, GNC_ERROR_OVERFLOW);
+    GncRational retval(num, den);
+    return retval;
+}
+
+GncRational
+operator/(GncRational a, GncRational b)
+{
+    if (a.m_error || b.m_error)
+    {
+        if (b.m_error)
+            return GncRational(0, 1, b.m_error);
+        return GncRational(0, 1, a.m_error);
+    }
+    if (b.m_num.isNeg())
+    {
+        a.m_num = -a.m_num;
+        b.m_num = -b.m_num;
+    }
+
+   /* q = (a_num * b_den)/(b_num * a_den). If a_den == b_den they cancel out
+     * and it's just a_num/b_num.
+     */
+    if (a.m_den == b.m_den)
+        return GncRational(a.m_num, b.m_num);
+
+    /* Protect against possibly preventable overflow: */
+    if (a.m_num.isBig() || a.m_den.isBig() ||
+        b.m_num.isBig() || b.m_den.isBig())
+    {
+        GncInt128 gcd = b.m_den.gcd(a.m_den);
+        b.m_den /= gcd;
+        a.m_den /= gcd;
+    }
+
+    GncInt128 num(a.m_num * b.m_den), den(a.m_den * b.m_num);
+    if (num.isOverflow() || num.isNan() || den.isOverflow() || den.isNan())
+        return GncRational(0, 1, GNC_ERROR_OVERFLOW);
+    return GncRational(num, den);
+}
+
+void
+GncRational::operator+=(GncRational b)
+{
+    GncRational new_val = *this + b;
+    *this = std::move(new_val);
+}
+
+void
+GncRational::operator-=(GncRational b)
+{
+    GncRational new_val = *this - b;
+    *this = std::move(new_val);
+}
+
+void
+GncRational::operator*=(GncRational b)
+{
+    GncRational new_val = *this * b;
+    *this = std::move(new_val);
+}
+
+void
+GncRational::operator/=(GncRational b)
+{
+    GncRational new_val = *this / b;
+    *this = std::move(new_val);
+}
+
 GncRational&
 GncRational::mul (const GncRational& b, GncDenom& d) noexcept
 {
-    if (m_error || b.m_error)
-    {
-        if (b.m_error)
-            m_error = b.m_error;
-        return *this;
-    }
-    m_num *= b.m_num;
-    m_den *= b.m_den;
+    *this *= b;
     round (d);
     return *this;
 }
@@ -101,39 +198,7 @@ GncRational::mul (const GncRational& b, GncDenom& d) noexcept
 GncRational&
 GncRational::div (GncRational b, GncDenom& d) noexcept
 {
-    if (m_error || b.m_error)
-    {
-        if (b.m_error)
-            m_error = b.m_error;
-        return *this;
-    }
-
-     if (b.m_num.isNeg())
-    {
-        m_num = -m_num;
-        b.m_num = -b.m_num;
-    }
-
-   /* q = (a_num * b_den)/(b_num * a_den). If a_den == b_den they cancel out
-     * and it's just a_num/b_num.
-     */
-    if (m_den == b.m_den)
-    {
-        m_den = b.m_num;
-        round(d);
-        return *this;
-    }
-    /* Protect against possibly preventable overflow: */
-    if (m_num.isBig() || m_den.isBig() ||
-        b.m_num.isBig() || b.m_den.isBig())
-    {
-        GncInt128 gcd = b.m_den.gcd(m_den);
-        b.m_den /= gcd;
-        m_den /= gcd;
-    }
-
-    m_num *= b.m_den;
-    m_den *= b.m_num;
+    *this /= b;
     round (d);
     return *this;
 }
@@ -141,15 +206,7 @@ GncRational::div (GncRational b, GncDenom& d) noexcept
 GncRational&
 GncRational::add (const GncRational& b, GncDenom& d) noexcept
 {
-    if (m_error || b.m_error)
-    {
-        if (b.m_error)
-            m_error = b.m_error;
-        return *this;
-    }
-    GncInt128 lcm = m_den.lcm (b.m_den);
-    m_num = m_num * lcm / m_den + b.m_num * lcm / b.m_den;
-    m_den = lcm;
+    *this += b;
     round (d);
     return *this;
 }
