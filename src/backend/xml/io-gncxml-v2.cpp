@@ -232,7 +232,7 @@ add_account_local (sixtp_gdv2* data, Account* act)
     xaccAccountScrubCommodity (act);
     xaccAccountScrubKvp (act);
 
-    /* Backwards compatability.  If there's no parent, see if this
+    /* Backwards compatibility.  If there's no parent, see if this
      * account is of type ROOT.  If not, find or create a ROOT
      * account and make that the parent. */
     type = xaccAccountGetType (act);
@@ -1138,7 +1138,7 @@ write_pricedb (FILE* out, QofBook* book, sixtp_gdv2* gd)
         return FALSE;
 
     /* We create our own output buffer so we can call xmlNodeDumpOutput to get
-       the indendation correct. */
+       the indentation correct. */
     outbuf = xmlOutputBufferCreateFile (out, NULL);
     if (outbuf == NULL)
     {

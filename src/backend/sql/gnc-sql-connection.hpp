@@ -56,7 +56,7 @@ using GncSqlStatementPtr = std::unique_ptr<GncSqlStatement>;
 
 /**
  * Encapsulate the connection to the database. This is an abstract class; the
- * implmentation is database-specific.
+ * implementation is database-specific.
  */
 class GncSqlConnection
 {

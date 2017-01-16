@@ -607,7 +607,7 @@
                                   (begin 
                                     (gnc:html-table-set-cell/tag!
                                      html-table 1 current-col "centered-label-cell"
-                                     (_ "Diff")) ;; Translators: Abbrevation for "Difference"
+                                     (_ "Diff")) ;; Translators: Abbreviation for "Difference"
                                     (set! current-col (+ current-col 1))
                                   )
                                 )
@@ -622,7 +622,7 @@
         ;; When period is found it's passed to adjuster that is responsible for final calculation of period.
         ;; 
         ;; If budget in future then first period of bundget is returned, if it in past, then the last period is returned
-        ;; if adjuster produced period number that is less then first period or greater then last period, the same rules apply.
+        ;; if adjuster produced period number that is less then first period or greater than last period, the same rules apply.
         ;;
         ;; Parameters:
         ;;   budget - budget to use

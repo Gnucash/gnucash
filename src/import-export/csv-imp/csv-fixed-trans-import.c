@@ -81,7 +81,7 @@ fill_model_with_match (GMatchInfo *match_info,
 /*******************************************************
  * csv_fixed_trans_import_read_file
  *
- * Parse the file for a correctly formated file
+ * Parse the file for a correctly formatted file
  *******************************************************/
 csv_fixed_trans_import_result
 csv_fixed_trans_import_read_file (const gchar *filename, const gchar *parser_regexp,

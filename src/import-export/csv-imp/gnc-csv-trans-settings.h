@@ -45,7 +45,7 @@ typedef struct
 
     const gchar  *encoding;                     // File encoding
 
-    gboolean      separator[SEP_NUM_OF_TYPES];  // The seperators
+    gboolean      separator[SEP_NUM_OF_TYPES];  // The separators
 
     gboolean      custom;                       // Custom entry set
     const gchar  *custom_entry;                 // Custom Entry

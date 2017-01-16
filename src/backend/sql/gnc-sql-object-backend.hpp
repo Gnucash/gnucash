@@ -45,7 +45,7 @@ using EntryVec = std::vector<GncSqlColumnTableEntryPtr>;
  * commit a changed front-end object (note that database transaction semantics
  * are not yet implemented; edit/commit applies to the front-end object!) and
  * write all front-end objects of the type to the database. Additional functions
- * for creating and runing queries existed but were unused and untested. They've
+ * for creating and running queries existed but were unused and untested. They've
  * been temporarily removed until the front end is ready to use them.
  */
 class GncSqlObjectBackend

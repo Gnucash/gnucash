@@ -216,7 +216,7 @@ set_options(dbi_conn conn, const PairVec& options)
  * Sets standard db options in a dbi_conn.
  *
  * @param conn dbi_conn connection
- * @param uri UriStrings containing the needed paramters.
+ * @param uri UriStrings containing the needed parameters.
  * @return TRUE if successful, FALSE if error
  */
 template <DbType Type> bool

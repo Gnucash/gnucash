@@ -407,7 +407,7 @@ GNCPrice   * gnc_pricedb_lookup_latest(GNCPriceDB *db,
 PriceList * gnc_pricedb_lookup_latest_any_currency(GNCPriceDB *db,
         const gnc_commodity *commodity);
 
-/** @brief Report wether the pricedb contains prices for one commodity in
+/** @brief Report whether the pricedb contains prices for one commodity in
  * another.
  *
  * Does *not* check the reverse direction.

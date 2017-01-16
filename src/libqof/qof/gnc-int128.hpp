@@ -140,7 +140,7 @@ enum // Values for m_flags
     int cmp (const GncInt128& b) const noexcept;
 
 /**
- * Computes the Greatest Common Divisor between the object and paramter
+ * Computes the Greatest Common Divisor between the object and parameter
  *
  * @return A GncInt128 having the GCD.
  */
@@ -203,7 +203,7 @@ enum // Values for m_flags
  */
     bool isOverflow () const noexcept;
 /**
- * @return true if an illegal calculation has occured.
+ * @return true if an illegal calculation has occurred.
  */
     bool isNan () const noexcept;
 /**

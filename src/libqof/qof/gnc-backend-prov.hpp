@@ -69,7 +69,7 @@ struct QofBackendProvider
 
 using QofBackendProvider_ptr = std::unique_ptr<QofBackendProvider>;
 
-/** Let the sytem know about a new provider of backends.  This function
+/** Let the system know about a new provider of backends.  This function
  *  is typically called by the provider library at library load time.
  *  This function allows the backend library to tell the QOF infrastructure
  *  that it can handle URL's of a certain type.  Note that a single
