@@ -602,7 +602,7 @@ menuitem_response_cb (GtkMenuItem *item, gpointer *user_data )
     gtk_label_set_text(GTK_LABEL(priv->label), label_text);
     gtk_misc_set_alignment (GTK_MISC(priv->label), 0, 0.5);
 
-    /* Get the coresponding entry in the list store */
+    /* Get the corresponding entry in the list store */
     valid = gtk_tree_model_get_iter_first (priv->model, &iter);
     while (valid)
     {
@@ -690,7 +690,7 @@ gnc_combott_set_active (GncCombott *combott, gint index)
             }
             else
             {
-                /* Get the coresponding entry in the list store */
+                /* Get the corresponding entry in the list store */
                 valid = gtk_tree_model_get_iter_first (priv->model, &iter);
                 while (valid)
                 {

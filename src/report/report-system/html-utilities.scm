@@ -370,7 +370,7 @@
 ;; according to their types and show a subtotal for each group.
 ;;
 ;; <bool> show-parent-balance?: Specify whether to show balances of
-;; non-leaf accounts seperately.
+;; non-leaf accounts separately.
 ;;
 ;; <bool> show-parent-total?: Whether to show a line with the label
 ;; e.g. "Total My-Assets" and the subtotal for this account and its

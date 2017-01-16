@@ -449,7 +449,7 @@ inline bool operator!=(const GncSqlColumnInfo& l,
  * @param setter The function to set the property.
  * The void* is an obvious wart occasioned by the fact that we're using GLists
  * to hold objects. As the rewrite progresses we'll replace that with another
- * template paramter.
+ * template parameter.
  */
 template <typename T, typename P, typename F>
 void set_parameter(T object, P item, F& setter)

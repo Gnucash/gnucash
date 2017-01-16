@@ -852,7 +852,7 @@ get_element_widget (GNCSearchWindow *sw, GNCSearchCoreType *element)
     data->dialog = GTK_DIALOG (sw->dialog);
 
     hbox = gtk_hbox_new (FALSE, 0);
-    /* only set to automaticaly clean up the memory */
+    /* only set to automatically clean up the memory */
     g_object_set_data_full (G_OBJECT (hbox), "data", data, g_free);
 
     p = gnc_search_core_type_get_widget (element);

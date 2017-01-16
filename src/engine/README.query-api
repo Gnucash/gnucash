@@ -114,7 +114,7 @@ predicate d, you will get (ad + bd + cd).
 STRUCTURE OF A QUERY: A Query is a logical function of any number of
 QueryTerms.  A QueryTerm consists of a C function pointer (the
 Predicate) and a PredicateData structure containing data passed to the
-predicate funtion.  The PredicateData structure is a constant
+predicate function.  The PredicateData structure is a constant
 associated with the Term and is identical for every Split that is
 tested.
 
@@ -158,7 +158,7 @@ PD_AMOUNT : match a numeric amount.  Specify an amount (always
 positive), a funds-flow direction (credit, debit, or either), and
 "how", specifying the type of amount comparison to be used :
 
-  AMT_MATCH_ATLEAST : split >= pd amount  
+  AMT_MATCH_AT LEAST : split >= pd amount  
   AMT_MATCH_ATMOST  : split >= pd amount 
   AMT_MATCH_EXACTLY : split == pd amount
 

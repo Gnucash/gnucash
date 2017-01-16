@@ -1,5 +1,5 @@
 /* This file is part of:
- *    Jalali, a Gregorian to Jalali and inverse date convertor
+ *    Jalali, a Gregorian to Jalali and inverse date converter
  * Copyright (C) 2001  Roozbeh Pournader <roozbeh@sharif.edu>
  * Copyright (C) 2001  Mohammad Toossi <mohammad@bamdad.org>
  *

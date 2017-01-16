@@ -31,7 +31,7 @@
 
 #include "qofquerycore.h"
 
-/* Initalize the Query Core registry and install the default type handlers */
+/* Initialize the Query Core registry and install the default type handlers */
 void qof_query_core_init(void);
 void qof_query_core_shutdown (void);
 

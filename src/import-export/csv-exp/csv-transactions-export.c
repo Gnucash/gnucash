@@ -61,7 +61,7 @@ enum GncCsvLineType {TRANS_SIMPLE,
  * write_line_to_file
  *
  * write a text string to a file pointer, return TRUE if
- * successfull.
+ * successful.
  *******************************************************/
 static
 gboolean write_line_to_file (FILE *fh, char * line)

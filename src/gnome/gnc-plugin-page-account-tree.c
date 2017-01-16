@@ -555,7 +555,7 @@ gnc_plugin_page_account_tree_open (Account *account, GtkWindow *win)
 
         g_hash_table_insert (priv->fd.filter_override, account, account);
 
-        // make sure we overide all the parent accounts to root
+        // make sure we override all the parent accounts to root
         while (parent_account != root_account)
         {
             parent_account = gnc_account_get_parent (temp_account);

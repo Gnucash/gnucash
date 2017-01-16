@@ -212,7 +212,7 @@ void gnc_xfer_dialog_set_txn_cb(XferDialog *xferData,
    specified by xfer_com.
 
    The 'exch_rate' argument is used to set the initial value of the
-   rate.  If the dialog completes sucessfully 'FALSE' is returned and
+   rate.  If the dialog completes successfully 'FALSE' is returned and
    'exch_rate' is also used to store the converted value.  Otherwise,
    TRUE is returned and the 'exch_rate' argument is undefined.
 */

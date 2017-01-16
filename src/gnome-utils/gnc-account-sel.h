@@ -3,7 +3,7 @@
  *
  * Note that this widget will track changes in the account tree, and update
  * itself accordingly.  If an account with the same name exists in the
- * freshly-retreived account list, the widget will re-select that account.
+ * freshly-retrieved account list, the widget will re-select that account.
  *
  * Copyright (C) 2002 Joshua Sled <jsled@asynchronous.org>
  * Copyright (c) 2006 David Hampton <hampton@employees.org>

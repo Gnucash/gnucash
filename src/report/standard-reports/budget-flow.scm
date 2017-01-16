@@ -112,7 +112,7 @@
 )))
 
 ;; For each account in acct-table:
-;; Retrive the budgeted and actual amount
+;; Retrieve the budgeted and actual amount
 ;; Display the row
 ;; 
 ;; Display the grand total for acct-table
@@ -140,7 +140,7 @@
         ;; If acct has children do nto display (see above)
         (if (null? (gnc-account-get-children acct))
           (let* (
-              ;; Retrive the budgeted and actual amount and convert to <gnc:monetary>
+              ;; Retrieve the budgeted and actual amount and convert to <gnc:monetary>
               (comm (xaccAccountGetCommodity acct))
               (bgt-numeric (gnc-budget-get-account-period-value budget acct (- period 1)))
               (bgt-monetary (gnc:make-gnc-monetary comm bgt-numeric))
@@ -261,7 +261,7 @@
 
 (define (budget-renderer report-obj)
 
-  ;; Helper function retrives options
+  ;; Helper function retrieves options
   (define (get-option pagename optname)
     (gnc:option-value
       (gnc:lookup-option

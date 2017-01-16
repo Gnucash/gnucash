@@ -606,7 +606,7 @@
 
                                 ((split-account-type? s ACCT-TYPE-ASSET)
                                  ;; If all the asset accounts mentioned in the transaction are siblings of each other
-                                 ;; keep track of the money transfered to them if it is in the correct currency
+                                 ;; keep track of the money transferred to them if it is in the correct currency
                                  (if (not trans-drp-account)
                                      (begin
                                        (set! trans-drp-account (xaccSplitGetAccount s))

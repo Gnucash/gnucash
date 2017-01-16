@@ -86,7 +86,7 @@ public:
      */
     void begin(QofInstance*) override;
     /**
-     * Object editting is complete and the object should be saved.
+     * Object editing is complete and the object should be saved.
      *
      * @param inst Object being edited
      */
@@ -118,7 +118,7 @@ public:
      * to qof and nullptr is returned.
      *
      * @param statement Statement
-     * @return Results, or nullptr if an error has occured
+     * @return Results, or nullptr if an error has occurred
      */
     GncSqlResultPtr execute_select_statement(const GncSqlStatementPtr& stmt) const noexcept;
     int execute_nonselect_statement(const GncSqlStatementPtr& stmt) const noexcept;

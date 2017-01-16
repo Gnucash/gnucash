@@ -633,7 +633,7 @@ guid_match_predicate (gpointer object, QofParam *getter,
         }
 
         /*
-         * The match is complete.  If node == NULL then we've succesfully
+         * The match is complete.  If node == NULL then we've successfully
          * found a match for all the guids in the predicate.  Return
          * appropriately below.
          */
@@ -1437,7 +1437,7 @@ choice_match_predicate (gpointer object, QofParam *getter,
         }
 
         /*
-         * The match is complete.  If node == NULL then we've succesfully
+         * The match is complete.  If node == NULL then we've successfully
          * found a match for all the guids in the predicate.  Return
          * appropriately below.
          */

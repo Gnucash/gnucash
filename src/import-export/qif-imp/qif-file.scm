@@ -556,7 +556,7 @@
 ;;  no default from-account by this time, we need to set one.  In that
 ;;  case, we set the default account based on the file name.
 ;;
-;;  If we DO know the account already, and this is a tranfer to it,
+;;  If we DO know the account already, and this is a transfer to it,
 ;;  it's also an opening balance regardless of the payee.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

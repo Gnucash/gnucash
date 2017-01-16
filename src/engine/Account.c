@@ -5143,7 +5143,7 @@ gnc_account_imap_delete_account (GncImportMatchMap *imap,
 struct account_token_count
 {
     char* account_guid;
-    gint64 token_count; /**< occurances of a given token for this account_guid */
+    gint64 token_count; /**< occurrences of a given token for this account_guid */
 };
 
 /** total_count and the token_count for a given account let us calculate the

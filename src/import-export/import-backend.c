@@ -429,7 +429,7 @@ TransactionGetTokens(GNCImportTransInfo *info)
     text = xaccTransGetDescription(transaction);
     tokens = tokenize_string(tokens, text);
 
-    /* The day of week the transaction occured is a good indicator of
+    /* The day of week the transaction occurred is a good indicator of
      * what account this transaction belongs in.  Get the date and covert
      * it to day of week as a token
      */
@@ -647,7 +647,7 @@ static void split_find_match (GNCImportTransInfo * trans_info,
         {
             /* If a transaction's amount doesn't match within the
                threshold, it's very unlikely to be the same transaction
-               so we give it an extra -5 penality */
+               so we give it an extra -5 penalty */
             prob = prob - 5;
             /* DEBUG("heuristics:  probability - 1 (amount)"); */
         }
@@ -721,7 +721,7 @@ static void split_find_match (GNCImportTransInfo * trans_info,
                 else if (strlen(new_trans_str) > 0 && strlen(split_str) > 0)
                 {
                     /* If both number are not empty yet do not match, add a
-                    		 little extra penality */
+                    		 little extra penalty */
                     prob -= 2;
                 }
             }
@@ -837,11 +837,11 @@ void gnc_import_find_split_matches(GNCImportTransInfo *trans_info,
                                  TRUE, download_time + match_date_hardlimit * 86400,
                                  QOF_QUERY_AND);
         list_element = qof_query_run (query);
-        /* Sigh. Doesnt help too much. We still create and run one query
+        /* Sigh. Doesn't help too much. We still create and run one query
            for each imported transaction. Maybe it would improve
            performance further if there is one single (master-)query at
            the beginning, matching the full date range and all accounts in
-           question. However, this doesnt quite work because this function
+           question. However, this doesn't quite work because this function
            here is called from each gnc_gen_trans_list_add_trans(), which
            is called one at a time. Therefore the whole importer would
            have to change its behaviour: Accept the imported txns via

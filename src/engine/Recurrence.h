@@ -110,7 +110,7 @@ guint recurrenceGetMultiplier(const Recurrence *r);
 GDate recurrenceGetDate(const Recurrence *r);
 WeekendAdjust recurrenceGetWeekendAdjust(const Recurrence *r);
 
-/* Get the occurence immediately after refDate.
+/* Get the occurrence immediately after refDate.
  *
  * This function has strict and precise post-conditions:
  *
@@ -133,7 +133,7 @@ void recurrenceNextInstance(const Recurrence *r, const GDate *refDate,
 /* Zero-based.  n == 1 gets the instance after the start date. */
 void recurrenceNthInstance(const Recurrence *r, guint n, GDate *date);
 
-/* Get a time coresponding to the beginning (or end if 'end' is true)
+/* Get a time corresponding to the beginning (or end if 'end' is true)
    of the nth instance of the recurrence. Also zero-based. */
 time64 recurrenceGetPeriodTime(const Recurrence *r, guint n, gboolean end);
 
@@ -144,7 +144,7 @@ time64 recurrenceGetPeriodTime(const Recurrence *r, guint n, gboolean end);
 gnc_numeric recurrenceGetAccountPeriodValue(const Recurrence *r,
         Account *acct, guint n);
 
-/** @return the earliest of the next occurances -- a "composite" recurrence **/
+/** @return the earliest of the next occurrences -- a "composite" recurrence **/
 void recurrenceListNextInstance(const GList *r, const GDate *refDate,
                                 GDate *nextDate);
 

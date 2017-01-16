@@ -338,7 +338,7 @@ const char * gnc_commodity_get_namespace(const gnc_commodity * cm);
  *  a pointer to a null terminated string of the form "AMEX",
  *  "NASDAQ", etc.  The only difference between function and
  *  gnc_commodity_get_namespace() is that this function returns
- *  ISO4217 instead of CURRENCY for backward compatability with the
+ *  ISO4217 instead of CURRENCY for backward compatibility with the
  *  1.8 data files.
  *
  *  @param cm A pointer to a commodity data structure.

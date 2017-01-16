@@ -380,10 +380,10 @@ Things not kept in sync:
 The posted date is kept in sync using a data-constraint scheme.
 If xaccTransactionSetDatePosted() is called, the date change is
 accepted, and the split is marked date-dirty.  When the transaction
-is commited (using xaccTransCommitEdit()), the date-dirty flag
+is committed (using xaccTransCommitEdit()), the date-dirty flag
 is evaluated, and, if needed, the date changes are propagated/rolled
 back on the appropriate gains splits.  Currently, one can only change
-the date on the gains-source transaction; the date on teh
+the date on the gains-source transaction; the date on the
 gains-recording split cannot be changed.
 
 The value recorded by the gains transaction is updated whenever
@@ -397,14 +397,14 @@ dirty flags are used to track these.
 If the amount of a plit changes, then the lot that its in becomes
 potentially unbalanced.  This requires the lot membership to be 
 recomputed; this in turn may require the split to be split into
-peices, or to be recombined into one from several pieces.
+pieces, or to be recombined into one from several pieces.
 
 \section lotstodo TODO
 - need to copy void status when source split date changes.
 - its possible for the the price, as recorded by one split
    to vary wildly from that in another split in the same
    transaction.  That's bad, prices should be normalized.
-   Theres a routine to do this, xaccScrubSubSplitPrice()
+   There's a routine to do this, xaccScrubSubSplitPrice()
    but its not currently used.
 - write automated test cases to handle each situation.
 

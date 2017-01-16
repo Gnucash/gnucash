@@ -48,7 +48,7 @@
      ((account-same? (car accounts) account) #t)
      (else (account-in-list? account (cdr accounts))))))
 
-;; Optimized version of accout-in-list if we know
+;; Optimized version of account-in-list if we know
 ;; the list in advance.
 (define (account-in-list-pred accounts)
   (define (my-assoc str alist)
