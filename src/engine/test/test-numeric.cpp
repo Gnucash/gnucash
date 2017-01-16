@@ -401,9 +401,6 @@ check_add_subtract (void)
 {
     int i;
     gnc_numeric a, b, c, d, z;
-#if CHECK_ERRORS_TOO
-    gnc_numeric c;
-#endif
 
     a = gnc_numeric_create(2, 6);
     b = gnc_numeric_create(1, 4);
@@ -498,22 +495,6 @@ check_add_subtract (void)
     check_binary_op (gnc_numeric_create(-8, 100),
                      gnc_numeric_sub(a, b, 100, GNC_HOW_RND_ROUND),
                      a, b, "expected %s got %s = %s - %s for sub 100ths (banker's)");
-
-    /* ------------------------------------------------------------ */
-#if CHECK_ERRORS_TOO
-    c = gnc_numeric_add_with_error(a, b, 100, GNC_HOW_RND_ROUND, &err);
-    printf("add 100ths/error : %s + %s = %s + (error) %s\n\n",
-           gnc_numeric_print(a), gnc_numeric_print(b),
-           gnc_numeric_print(c),
-           gnc_numeric_print(err));
-
-    c = gnc_numeric_sub_with_error(a, b, 100, GNC_HOW_RND_FLOOR, &err);
-    printf("sub 100ths/error : %s - %s = %s + (error) %s\n\n",
-           gnc_numeric_print(a), gnc_numeric_print(b),
-           gnc_numeric_print(c),
-           gnc_numeric_print(err));
-
-#endif
 
     /* ------------------------------------------------------------ */
     /* Add and subtract some random numbers */
@@ -721,22 +702,6 @@ check_mult_div (void)
     check_binary_op (gnc_numeric_create(133, 100),
                      gnc_numeric_div(a, b, 100, GNC_HOW_RND_ROUND),
                      a, b, "expected %s got %s = %s * %s for div 100th's");
-
-#if CHECK_ERRORS_TOO
-    gnc_numeric c;
-    c = gnc_numeric_mul_with_error(a, b, 100, GNC_HOW_RND_ROUND, &err);
-    printf("mul 100ths/error : %s * %s = %s + (error) %s\n\n",
-           gnc_numeric_print(a), gnc_numeric_print(b),
-           gnc_numeric_print(c),
-           gnc_numeric_print(err));
-
-    c = gnc_numeric_div_with_error(a, b, 100, GNC_HOW_RND_ROUND, &err);
-    printf("div 100ths/error : %s / %s = %s + (error) %s\n\n",
-           gnc_numeric_print(a), gnc_numeric_print(b),
-           gnc_numeric_print(c),
-           gnc_numeric_print(err));
-
-#endif
 
     /* Check for math with 2^63 < num*num < 2^64 which previously failed
      * see http://bugzilla.gnome.org/show_bug.cgi?id=144980

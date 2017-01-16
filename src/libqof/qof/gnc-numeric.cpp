@@ -595,93 +595,6 @@ gnc_numeric_error(GNCNumericErrorCode error_code)
 }
 
 
-/* *******************************************************************
- *  gnc_numeric_add_with_error
- ********************************************************************/
-
-gnc_numeric
-gnc_numeric_add_with_error(gnc_numeric a, gnc_numeric b,
-                           gint64 denom, gint how,
-                           gnc_numeric * error)
-{
-
-    gnc_numeric sum   = gnc_numeric_add(a, b, denom, how);
-    gnc_numeric exact = gnc_numeric_add(a, b, GNC_DENOM_AUTO,
-                                        GNC_HOW_DENOM_REDUCE);
-    gnc_numeric err   = gnc_numeric_sub(sum, exact, GNC_DENOM_AUTO,
-                                        GNC_HOW_DENOM_REDUCE);
-
-    if (error)
-    {
-        *error = err;
-    }
-    return sum;
-}
-
-/* *******************************************************************
- *  gnc_numeric_sub_with_error
- ********************************************************************/
-
-gnc_numeric
-gnc_numeric_sub_with_error(gnc_numeric a, gnc_numeric b,
-                           gint64 denom, gint how,
-                           gnc_numeric * error)
-{
-    gnc_numeric diff  = gnc_numeric_sub(a, b, denom, how);
-    gnc_numeric exact = gnc_numeric_sub(a, b, GNC_DENOM_AUTO,
-                                        GNC_HOW_DENOM_REDUCE);
-    gnc_numeric err   = gnc_numeric_sub(diff, exact, GNC_DENOM_AUTO,
-                                        GNC_HOW_DENOM_REDUCE);
-    if (error)
-    {
-        *error = err;
-    }
-    return diff;
-}
-
-
-/* *******************************************************************
- *  gnc_numeric_mul_with_error
- ********************************************************************/
-
-gnc_numeric
-gnc_numeric_mul_with_error(gnc_numeric a, gnc_numeric b,
-                           gint64 denom, gint how,
-                           gnc_numeric * error)
-{
-    gnc_numeric prod  = gnc_numeric_mul(a, b, denom, how);
-    gnc_numeric exact = gnc_numeric_mul(a, b, GNC_DENOM_AUTO,
-                                        GNC_HOW_DENOM_REDUCE);
-    gnc_numeric err   = gnc_numeric_sub(prod, exact, GNC_DENOM_AUTO,
-                                        GNC_HOW_DENOM_REDUCE);
-    if (error)
-    {
-        *error = err;
-    }
-    return prod;
-}
-
-
-/* *******************************************************************
- *  gnc_numeric_div_with_error
- ********************************************************************/
-
-gnc_numeric
-gnc_numeric_div_with_error(gnc_numeric a, gnc_numeric b,
-                           gint64 denom, gint how,
-                           gnc_numeric * error)
-{
-    gnc_numeric quot  = gnc_numeric_div(a, b, denom, how);
-    gnc_numeric exact = gnc_numeric_div(a, b, GNC_DENOM_AUTO,
-                                        GNC_HOW_DENOM_REDUCE);
-    gnc_numeric err   = gnc_numeric_sub(quot, exact,
-                                        GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
-    if (error)
-    {
-        *error = err;
-    }
-    return quot;
-}
 
 /* *******************************************************************
  *  gnc_numeric text IO
@@ -802,29 +715,6 @@ main(int argc, char ** argv)
 
     gnc_numeric err;
 
-    c = gnc_numeric_add_with_error(a, b, 100, GNC_HOW_RND_ROUND, &err);
-    printf("add 100ths/error : %s + %s = %s + (error) %s\n\n",
-           gnc_numeric_print(a), gnc_numeric_print(b),
-           gnc_numeric_print(c),
-           gnc_numeric_print(err));
-
-    c = gnc_numeric_sub_with_error(a, b, 100, GNC_HOW_RND_FLOOR, &err);
-    printf("sub 100ths/error : %s - %s = %s + (error) %s\n\n",
-           gnc_numeric_print(a), gnc_numeric_print(b),
-           gnc_numeric_print(c),
-           gnc_numeric_print(err));
-
-    c = gnc_numeric_mul_with_error(a, b, 100, GNC_HOW_RND_ROUND, &err);
-    printf("mul 100ths/error : %s * %s = %s + (error) %s\n\n",
-           gnc_numeric_print(a), gnc_numeric_print(b),
-           gnc_numeric_print(c),
-           gnc_numeric_print(err));
-
-    c = gnc_numeric_div_with_error(a, b, 100, GNC_HOW_RND_ROUND, &err);
-    printf("div 100ths/error : %s / %s = %s + (error) %s\n\n",
-           gnc_numeric_print(a), gnc_numeric_print(b),
-           gnc_numeric_print(c),
-           gnc_numeric_print(err));
 
     printf("multiply (EXACT): %s * %s = %s\n",
            gnc_numeric_print(a), gnc_numeric_print(b),

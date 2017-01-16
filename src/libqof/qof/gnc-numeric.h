@@ -450,35 +450,6 @@ gnc_numeric gnc_numeric_sub_fixed(gnc_numeric a, gnc_numeric b)
 }
 /** @} */
 
-/** @name Arithmetic Functions with Exact Error Returns
- @{
-*/
-/** The same as gnc_numeric_add, but uses 'error' for accumulating
- *  conversion roundoff error. */
-gnc_numeric gnc_numeric_add_with_error(gnc_numeric a, gnc_numeric b,
-                                       gint64 denom, gint how,
-                                       gnc_numeric * error);
-
-/** The same as gnc_numeric_sub, but uses error for accumulating
- *  conversion roundoff error. */
-gnc_numeric gnc_numeric_sub_with_error(gnc_numeric a, gnc_numeric b,
-                                       gint64 denom, gint how,
-                                       gnc_numeric * error);
-
-/** The same as gnc_numeric_mul, but uses error for
- *  accumulating conversion roundoff error.
- */
-gnc_numeric gnc_numeric_mul_with_error(gnc_numeric a, gnc_numeric b,
-                                       gint64 denom, gint how,
-                                       gnc_numeric * error);
-
-/** The same as gnc_numeric_div, but uses error for
- *  accumulating conversion roundoff error.
- */
-gnc_numeric gnc_numeric_div_with_error(gnc_numeric a, gnc_numeric b,
-                                       gint64 denom, gint how,
-                                       gnc_numeric * error);
-/** @} */
 
 /** @name Change Denominator
  @{
