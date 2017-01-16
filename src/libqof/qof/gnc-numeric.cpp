@@ -44,20 +44,20 @@ extern "C"
 using GncNumeric = GncRational;
 
 static const gint64 pten[] = { 1, 10, 100, 1000, 10000, 100000, 1000000,
-			       10000000, 100000000, 1000000000,
-			       INT64_C(10000000000), INT64_C(100000000000),
-			       INT64_C(1000000000000), INT64_C(10000000000000),
-			       INT64_C(100000000000000),
-			       INT64_C(10000000000000000),
-			       INT64_C(100000000000000000),
-			       INT64_C(1000000000000000000)};
+                               10000000, 100000000, 1000000000,
+                               INT64_C(10000000000), INT64_C(100000000000),
+                               INT64_C(1000000000000), INT64_C(10000000000000),
+                               INT64_C(100000000000000),
+                               INT64_C(10000000000000000),
+                               INT64_C(100000000000000000),
+                               INT64_C(1000000000000000000)};
 #define POWTEN_OVERFLOW -5
 
 static inline gint64
 powten (int exp)
 {
     if (exp > 18 || exp < -18)
-	return POWTEN_OVERFLOW;
+        return POWTEN_OVERFLOW;
     return exp < 0 ? -pten[-exp] : pten[exp];
 }
 
@@ -507,7 +507,7 @@ double_to_gnc_numeric(double in, gint64 denom, gint how)
     double sigfigs;
 
     if (isnan (in) || fabs (in) > 1e18)
-	return gnc_numeric_error (GNC_ERROR_OVERFLOW);
+        return gnc_numeric_error (GNC_ERROR_OVERFLOW);
 
     if ((denom == GNC_DENOM_AUTO) && (how & GNC_HOW_DENOM_SIGFIG))
     {
@@ -522,7 +522,7 @@ double_to_gnc_numeric(double in, gint64 denom, gint how)
                         (floor(logval) + 1.0) : (ceil(logval)));
         }
         sigfigs  = GNC_HOW_GET_SIGFIGS(how);
-	if ((denom = powten (sigfigs - logval)) == POWTEN_OVERFLOW)
+        if ((denom = powten (sigfigs - logval)) == POWTEN_OVERFLOW)
             return gnc_numeric_error(GNC_ERROR_OVERFLOW);
 
         how =  how & ~GNC_HOW_DENOM_SIGFIG & ~GNC_NUMERIC_SIGFIGS_MASK;
