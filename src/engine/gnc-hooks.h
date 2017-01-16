@@ -26,7 +26,7 @@
 #define GNC_HOOKS_H
 
 /**
- * Create a new hook.  Not a common occurrance, but...
+ * Create a new hook.  Not a common occurrence, but...
  * The returned string is just the 'name' argument,
  * which belongs to the caller.
  */

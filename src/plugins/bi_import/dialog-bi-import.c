@@ -224,7 +224,7 @@ gnc_bi_import_read_file (const gchar * filename, const gchar * parser_regexp,
 
 //! \brief try to fix some common errors in the csv representation of invoices
 //! * corrects the date format
-//! * corrects ambigous values in multi line invoices
+//! * corrects ambiguous values in multi line invoices
 //! * ensures customer exists
 //! * if quantity is unset, set to 1
 //! * if price is unset, delete row

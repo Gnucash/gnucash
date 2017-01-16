@@ -73,11 +73,11 @@ extern "C" {
         GtkTreeViewClass view_class;
 
         /* This signal is emitted when a toggle happens, the pointer has
-           an interger value for the active setting of the toggle */
+           an integer value for the active setting of the toggle */
         void (*column_toggled) (GNCQueryView *qview, gpointer item);
 
         /* This signal is emitted when a row is selected, the pointer has
-           an interger value for the number of rows selected */
+           an integer value for the number of rows selected */
         void (*row_selected) (GNCQueryView *qview, gpointer item);
 
         /* This signal is emitted when a row is double clicked, the pointer has

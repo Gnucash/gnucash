@@ -140,7 +140,7 @@ run_test (void)
     }
 
     /*
-     * Retore the transaction to its former glory.
+     * Restore the transaction to its former glory.
      */
     xaccTransUnvoid(transaction);
 

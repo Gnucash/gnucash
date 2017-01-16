@@ -65,7 +65,7 @@ struct _QofQuerySort
      * convert types.
      */
     gboolean            use_default;
-    GSList *            param_fcns;     /* Chain of paramters to walk */
+    GSList *            param_fcns;     /* Chain of parameters to walk */
     QofSortFunc         obj_cmp;        /* In case you are comparing objects */
     QofCompareFunc      comp_fcn;       /* When you are comparing core types */
 };
@@ -305,7 +305,7 @@ static int cmp_func (const QofQuerySort *sort, QofSortFunc default_sort,
         if (!node->next && !sort->obj_cmp)
             break;
 
-        /* Do the converstions */
+        /* Do the conversions */
         conva = (param->param_getfcn) (conva, param);
         convb = (param->param_getfcn) (convb, param);
     }

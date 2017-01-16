@@ -10,7 +10,7 @@ Engine architecture.
 
 The only remaining architecture flaw is related to the GnuCash XML v2
 backend modularisation. QofSession includes a dynamic method of loading
-a QofBackend that supercedes the use of gnc_module_load that currently
+a QofBackend that supersedes the use of gnc_module_load that currently
 loads the module using guile/scheme. When the old XML backend is replaced
 by Sqlite, this will be resolved.
 
@@ -168,7 +168,7 @@ Many programmers are used to a different interface, e.g.
     }  
 \endverbatim
 Because of this, it is important to explain why the former design was 
-choosen over the latter.  Let us begin by listing how the choosen design 
+chosen over the latter.  Let us begin by listing how the chosen design 
 is as good as, and in many ways can be better to the later design.
 
 -# Allows programmer to check for errors asynchronously, e.g. outside
@@ -182,7 +182,7 @@ is as good as, and in many ways can be better to the later design.
 
 The right implementation for (2) is to implement not a single
 variable, but a stack or a ring (circular queue) on which error codes
-are placed, and from which error codes can be retreived.  The right
+are placed, and from which error codes can be retrieved.  The right
 implementation for (3) is the use pthread_getspecific() to define a
 per-thread global and/or ring/queue.
 
@@ -303,20 +303,20 @@ course-grained account-group level.
 
 There is a rudimentary level of "TP" build in, via the routines
 xaccTransBeginEdit(), xaccTransRollbackEdit(), and xaccTransCommitEdit(),
-which allow changes to be made to a transaction, and then commited,
+which allow changes to be made to a transaction, and then committed,
 or rejected at the end.  Handy for the GUI, if the user makes a bunch
 of changes which they don't want to keep; also handy for an SQL back end,
 where the Commit() routine triggers the actual update of the SQL database.
 
 Note: 'Commit' is sometimes called 'post' in other systems:  The
-act of 'commiting' a transaction is the same as 'posting' the
+act of 'committing' a transaction is the same as 'posting' the
 transaction to the general ledger.
 
 Some important implementation details to understand:  the GUI currently
 uses begin/end as a convenience, and thus, may hold a transaction in
 the 'edit' state for a portentially long time (minutes or hours).
 Thus, begin/end should not map naively to a table-lock/unlock.
-Instead, an optimistic-locking scheme, as below, is prefered.
+Instead, an optimistic-locking scheme, as below, is preferred.
 
 The SQL back-end should implement posting entirely in the 
 'Commit()' routine.  The pseudo-algorithms should look as follows:

@@ -40,7 +40,7 @@ Note that some financial constraints are so core, so key to GnuCash
 that they are woven into the object design itself.  For example, the 
 posted date is a part of the transaction: different splits cannot 
 possibly have different posted dates, as there is no mechanism to 
-represent this.  All splits get thier posted date from thier parent 
+represent this.  All splits get their posted date from their parent 
 transaction.
 
 The constraints that we are most interested in are the ones that 
@@ -50,7 +50,7 @@ run at specific times and alter the data to be self-consistent in
 certain ways.   The 'double-entry' constraint belongs to this class:
 it computes the total value of all the splits in a transaction, and 
 adds one, if needed, to bring the total to zero.  This constraint
-runs when the transaction is commited.   Although this is an important
+runs when the transaction is committed.   Although this is an important
 cosntraint, there is no (easy) way to reflect it directly in the
 object design; thus, it acts as a rule that must be periodically
 imposed.
@@ -92,7 +92,7 @@ they are, and how they work.
    See the document 'lots.txt', section 'Cap Gains Actual Implementation' 
    for details.
 - Value of Gains Transaction
-   The value recorded by teh gains transaction is kept in sync with
+   The value recorded by the gains transaction is kept in sync with
    the value
 
 */

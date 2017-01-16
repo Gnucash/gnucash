@@ -863,7 +863,7 @@ static void treeview_resized (GtkWidget* widget, GtkAllocation* allocation, CsvI
 
         /* Get the width. */
         col_width = gtk_tree_view_column_get_width (gtk_tree_view_get_column (info->treeview, i));
-        /* Set the minumum width for a column so that drop down selector can be seen. */
+        /* Set the minimum width for a column so that drop down selector can be seen. */
         if (col_width < MIN_COL_WIDTH)
         {
             col_width = MIN_COL_WIDTH;
@@ -1141,7 +1141,7 @@ static void gnc_csv_preview_update_assist (CsvImportTrans* info)
         GList *tv_columns, *tv_columns_begin, *ctv_columns, *ctv_columns_begin;
         tv_columns = tv_columns_begin = gtk_tree_view_get_columns (info->treeview);
         ctv_columns = ctv_columns_begin = gtk_tree_view_get_columns (info->ctreeview);
-        /* Clear out exisiting columns in info->treeview. */
+        /* Clear out existing columns in info->treeview. */
         while (tv_columns != NULL)
         {
             gtk_tree_view_remove_column (info->treeview, GTK_TREE_VIEW_COLUMN(tv_columns->data));

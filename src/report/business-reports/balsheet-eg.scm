@@ -474,7 +474,7 @@
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;;; accrec-related routines
     ;;;
-    ;;; The accrec record stucture (defined above) and the following
+    ;;; The accrec record structure (defined above) and the following
     ;;; routines provide the basis for easy access to accounts
     ;;; from the main part of the report
 

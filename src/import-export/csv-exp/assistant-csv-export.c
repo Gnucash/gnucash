@@ -600,7 +600,7 @@ csv_export_end_date_cb (GtkWidget *radio, gpointer user_data)
 /*******************************************************************
  * get_earliest_in_book
  *
- * Find the earliest date occuring in the book.  Do this by making
+ * Find the earliest date occurring in the book.  Do this by making
  * a query and sorting by date. Since the truncated sort returns
  * only the *last* search results, sort in decreasing order.
  *******************************************************************/

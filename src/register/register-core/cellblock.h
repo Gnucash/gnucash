@@ -81,7 +81,7 @@ void        gnc_cellblock_destroy (CellBlock *cellblock);
 
 /** Add a cell to the CellBlock at the specified coordinates. The CellBlock
  * takes ownership of the Cell. If there's already a Cell at the location it
- * will be leaked, so callers shoud first call gnc_cellblock_get_cell() and
+ * will be leaked, so callers should first call gnc_cellblock_get_cell() and
  * delete the result if it's not NULL.
  * @param cellblock The CellBlock
  * @param row The row at which to add the cell

@@ -50,7 +50,7 @@ test_strings strs[] =
         G_DIR_SEPARATOR_S "tmp" G_DIR_SEPARATOR_S "test-account-name2", 0
     },
     /* TODO Figure out how to write tests that actually verify the relative
-     * pathname resolution. The above tests only test absolut pathnames */
+     * pathname resolution. The above tests only test absolute pathnames */
     { NULL, NULL, 0 },
 };
 

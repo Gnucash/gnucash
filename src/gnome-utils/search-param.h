@@ -156,7 +156,7 @@ void			gnc_search_param_override_param_type (GNCSearchParamSimple *param,
  * Helper functions ..
  */
 
-/* Create a paramter and prepend it to a GSList */
+/* Create a parameter and prepend it to a GSList */
 GList *			gnc_search_param_prepend (GList *list, char const *title,
         QofIdTypeConst type_override,
         QofIdTypeConst search_type,
@@ -176,7 +176,7 @@ GList *         gnc_search_param_prepend_compound (GList *list, char const *titl
 
 /* set a lookup function for this parameter (in lieu of setting the
  * param path) if you want to specify a direct lookup function when
- * using the compute_value interface.  Note that this wont work with
+ * using the compute_value interface.  Note that this won't work with
  * sorting or other query interfaces, it's only useful for the
  * query-list.
  */

@@ -408,7 +408,7 @@
       )
     ;; (gnc:sum-collector-stocks balance report-commodity exchange-fn)
     ;; Hey! Look at that! This rolls the stocks into the balance!
-    ;; Can anyone think of a reason why this would be desireable?
+    ;; Can anyone think of a reason why this would be desirable?
     ;; None come to (my) mind.  Perhaps this should be a report option?
     
     ;; Wrapper around gnc:html-table-append-ruler! since we call it so

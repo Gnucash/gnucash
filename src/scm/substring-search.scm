@@ -79,7 +79,7 @@
 ;;; Provides the generic facility to split based on *any* character
 ;;; We make use of splitting on spaces and on colons...
 
-;;; Find the next occurance of [somechar] in the string [string] 
+;;; Find the next occurrence of [somechar] in the string [string] 
 ;;; starting at [startpos]
 
 

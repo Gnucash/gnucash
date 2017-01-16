@@ -116,7 +116,7 @@ AC_PROG_INSTALL
 PKG_PROG_PKG_CONFIG
 
 dnl clang wants to check file encodings, and we need to tell it not to
-dnl becuase of the unicode currency symbols. But older versions of GCC
+dnl because of the unicode currency symbols. But older versions of GCC
 dnl don't like the warning suppression option, so we need to set it only
 dnl with clang.
 
@@ -506,7 +506,7 @@ the libtool(-ltdl) development package?])])
 # version 2.0.10 of SWIG, because that's the first version that supports
 # guile 2.
 #
-# For a guile 1.8 build we accept an older version, but wont allow you
+# For a guile 1.8 build we accept an older version, but won't allow you
 # to build the dist because we need to apply a patch to the swig
 # generated files that needs to go into the release tarball. At that
 # point we don't know yet which version of guile will be used together
@@ -628,7 +628,7 @@ then
       [[GNC_DBD_DIR="$with_dbi_dbd_dir"
        EXTRA_SEARCH_LIBS=$GNC_DBD_DIR]],
       [[GNC_DBD_DIR=""
-        # pkg-config is new in libdbi 0.9. Use it if avaiable
+        # pkg-config is new in libdbi 0.9. Use it if available
         # Otherwise fall back to our previous hard coded values
         pkg-config --exists dbi
         if test $? -eq 0; then

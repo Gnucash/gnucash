@@ -141,7 +141,7 @@ gnc_import_choose_fmt(const char* msg, GncImportFormat fmts, gpointer data)
 
     g_return_val_if_fail(fmts, FALSE);
 
-    /* if there is only one format availble, just return it */
+    /* if there is only one format available, just return it */
     if (!(fmts & (fmts - 1)))
     {
         return fmts;

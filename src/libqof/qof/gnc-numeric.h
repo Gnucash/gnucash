@@ -73,7 +73,7 @@ typedef struct _gnc_numeric gnc_numeric;
     allows the results of financial and other rational computations to be
     properly rounded to the appropriate units.
 
-    Watch out: You \e must specifiy a rounding policy such as
+    Watch out: You \e must specify a rounding policy such as
     GNC_HOW_RND_NEVER, otherwise the fractional part of the input
     value might silently get discarded!
 
@@ -131,7 +131,7 @@ typedef struct _gnc_numeric gnc_numeric;
  *  "3/4" but the specified denominator for the return value is 2, should
  *  the return value be "1/2" or "2/2"?
  *
- * Watch out: You \e must specifiy a rounding policy such as
+ * Watch out: You \e must specify a rounding policy such as
  * GNC_HOW_RND_NEVER, otherwise the fractional part of the input value
  * might silently get discarded!
  *
@@ -282,7 +282,7 @@ gnc_numeric gnc_numeric_zero(void)
  * value will be ignored.
  *
  * \param how Describes the rounding policy and output
- * denominator. Watch out: You \e must specifiy a rounding policy such
+ * denominator. Watch out: You \e must specify a rounding policy such
  * as GNC_HOW_RND_NEVER, otherwise the fractional part of the input
  * value is silently discarded! Common values for 'how' are
  * (GNC_HOW_DENOM_REDUCE|GNC_HOW_RND_NEVER) or

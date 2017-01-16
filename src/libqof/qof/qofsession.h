@@ -24,7 +24,7 @@
  *
  * The QOF Session
  * encapsulates a connection to a storage backend.  That is, it
- * manages the connection to a persistant data store; whereas
+ * manages the connection to a persistent data store; whereas
  * the backend is the thing that performs the actual datastore
  * access.
  *
@@ -160,7 +160,7 @@ void qof_session_begin (QofSession *session, const char * book_id,
  *    to make the book actually usable; it would not cause *all* of the
  *    data to be loaded.
  *
- * XXX the current design tries to accomodate multiple calls to 'load'
+ * XXX the current design tries to accommodate multiple calls to 'load'
  * for each session, each time wiping out the old books; this seems
  * wrong to me, and should be restricted to allow only one load per
  * session.

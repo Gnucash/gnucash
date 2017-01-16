@@ -52,7 +52,7 @@ static QofLogModule log_module = GNC_MOD_ASSISTANT;
  * write_line_to_file
  *
  * write a text string to a file pointer, return TRUE if
- * successfull.
+ * successful.
  *******************************************************/
 static
 gboolean write_line_to_file (FILE *fh, char * line)

@@ -37,7 +37,7 @@
 #include "qof.h"
 
 /* FIXME: eventually, we probably need to add an error stack
-   accessable via gnc_book_get_xml_io_error() a la binfile. */
+   accessible via gnc_book_get_xml_io_error() a la binfile. */
 
 /** Read in an account group from a file */
 gboolean qof_session_load_from_xml_file(QofBook *, const char * filename);

@@ -438,7 +438,7 @@ Split * gnc_split_register_duplicate_current (SplitRegister *reg);
 void gnc_split_register_copy_current (SplitRegister *reg);
 
 /** Equivalent to copying the current entity and the deleting it with
- *    the approriate delete method. */
+ *    the appropriate delete method. */
 void gnc_split_register_cut_current (SplitRegister *reg);
 
 /** Pastes a previous copied entity onto the current entity, but only

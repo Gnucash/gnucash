@@ -143,7 +143,7 @@ void gnc_gen_trans_list_delete (GNCImportMainMatcher *info);
  * @param trans The Transaction to add.  The must contain at least one
  * split, and this split must have been associated with an account
  * Only the first split will be used for matching.  The transaction
- * must NOT be commited. The Importer takes over ownership of the
+ * must NOT be committed. The Importer takes over ownership of the
  * passed transaction.
  */
 void gnc_gen_trans_list_add_trans(GNCImportMainMatcher *gui, Transaction *trans);
@@ -158,7 +158,7 @@ void gnc_gen_trans_list_add_trans(GNCImportMainMatcher *gui, Transaction *trans)
  * @param trans The Transaction to add.  The must contain at least one
  * split, and this split must have been associated with an account
  * Only the first split will be used for matching.  The transaction
- * must NOT be commited. The Importer takes over ownership of the
+ * must NOT be committed. The Importer takes over ownership of the
  * passed transaction.
  *
  * @param ref_id Reference id which links an external object to the transaction.

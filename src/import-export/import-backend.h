@@ -106,7 +106,7 @@ gnc_import_TransInfo_init_matches (GNCImportTransInfo *trans_info,
  * and processes each ImportTransInfo according to its selected action:
  * For GNCImport_ADD, the transaction is added etc. etc.
  *
- * Each succesful match is also stored in the given ImportMatchMap,
+ * Each successful match is also stored in the given ImportMatchMap,
  * or, if that argument is NULL, in the ImportMatchMap of each
  * originating account.
  *

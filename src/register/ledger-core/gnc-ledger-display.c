@@ -405,7 +405,7 @@ gnc_ledger_display_gl (void)
 
     /* In lieu of not "mis-using" some portion of the infrastructure by writing
      * a bunch of new code, we just filter out the accounts of the template
-     * transactions.  While these are in a seperate Account trees just for this
+     * transactions.  While these are in a separate Account trees just for this
      * reason, the query engine makes no distinction between Account trees.
      * See Gnome Bug 86302.
      *         -- jsled */

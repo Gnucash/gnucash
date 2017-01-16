@@ -1469,7 +1469,7 @@ read_one_check_format(PrintCheckDialog *pcd, const gchar *groupname,
 
 
 /* Iterate over a single check directory, throwing out any backup files and
- * then calling a helper function to read and parse the check format withing
+ * then calling a helper function to read and parse the check format within
  * the file.
  */
 static void

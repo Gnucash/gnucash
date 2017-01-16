@@ -245,7 +245,7 @@ editor_ok_button_clicked_cb (GtkButton *b, GncSxEditorDialog2 *sxed)
     gnc_sxed_save_sx (sxed);
 
     /* add to list */
-    // @@fixme -- forget 'new'-flag: check for existance of the SX [?]
+    // @@fixme -- forget 'new'-flag: check for existence of the SX [?]
     if ( sxed->newsxP )
     {
         book = gnc_get_current_book ();
@@ -1066,7 +1066,7 @@ scheduledxaction_editor_dialog_destroy (GtkWidget *object, gpointer data)
     {
         /* FIXME: WTF???
          *
-         * "WTF" explaination: in the "new" click from the caller, we
+         * "WTF" explanation: in the "new" click from the caller, we
          * set this flag.  When "ok" is pressed on the dialog, we set
          * this flag to false, and thus leave the SX live.  If
          * "Cancel" is clicked, the flag will still be true, and this

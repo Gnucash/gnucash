@@ -1088,10 +1088,10 @@ gnc_tree_view_account_get_view_info (GncTreeViewAccount *account_view,
  * Set the account view info data in use by the specified tree to
  * match the callers request.
  *
- * DRH - COMPATABILITY WARNING
+ * DRH - COMPATIBILITY WARNING
  *
  * This function does not do anything with the 'include_type' field.
- * Should there be a automatic filter for backward compatability
+ * Should there be a automatic filter for backward compatibility
  * that uses these flags, or should all uses of this be converted to
  * a GtkTreeModelFilter?
  *

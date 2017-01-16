@@ -1501,7 +1501,7 @@ gnc_commodity_increment_usage_count(gnc_commodity *cm)
             && gnc_commodity_get_auto_quote_control_flag(cm)
             && gnc_commodity_is_iso(cm))
     {
-        /* compatability hack - Gnucash 1.8 gets currency quotes when a
+        /* compatibility hack - Gnucash 1.8 gets currency quotes when a
            non-default currency is assigned to an account.  */
         gnc_commodity_begin_edit(cm);
         gnc_commodity_set_quote_flag(cm, TRUE);
@@ -1783,7 +1783,7 @@ gnc_commodity_table_lookup(const gnc_commodity_table * table,
     if (nsp)
     {
         /*
-         * Backward compatability support for currencies that have
+         * Backward compatibility support for currencies that have
          * recently changed.
          */
         if (nsp->iso4217)
@@ -1907,7 +1907,7 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
             return c;
         }
 
-        /* Backward compatability support for currencies that have
+        /* Backward compatibility support for currencies that have
          * recently changed. */
         if (priv->name_space->iso4217)
         {

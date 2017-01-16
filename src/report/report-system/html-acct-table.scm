@@ -82,7 +82,7 @@
 ;; option may have.
 ;; 
 ;; The list of accounts which are to be placed in the
-;; gnc:html-acct-table object can be controled with the
+;; gnc:html-acct-table object can be controlled with the
 ;; gnc:make-html-acct-table/accts, gnc:make-html-acct-table/env/accts,
 ;; and gnc:html-table-add-accts!  functions.  But you should only use
 ;; one of these methods to add accounts.
@@ -338,7 +338,7 @@
 ;;         account-depth when depth-limit-behavior is 'flatten.
 ;;         unlike in gnc:html-build-acct-table, the first level of
 ;;         accounts is level 0. this means that display-depth is also
-;;         the number of empty cells which should preceed the account
+;;         the number of empty cells which should preced the account
 ;;         name in the gnc:html-table being generated.
 ;; 
 ;;     indented-depth: integer
@@ -368,7 +368,7 @@
 ;;         value of display-tree-depth, plus indent plus zero, if
 ;;         parent-account-subotal-mode is not 'canonically-tabbed, or,
 ;;         if parent-account-subtotal-mode is 'canonically-tabbed,
-;;         plus one.  dont you just love english?
+;;         plus one.  don't you just love english?
 ;; 
 ;;     account-colspan: integer
 ;; 
@@ -440,7 +440,7 @@
 ;; widget.  While, when selecting whole subtrees of accounts, this may
 ;; be tedious, this really is a GUI problem.  The ideal solution would
 ;; be to give the Account selection widget a "recursively select"
-;; option which selects (i.e., hilights) both the account selected and
+;; option which selects (i.e., highlights) both the account selected and
 ;; all its subaccounts.  Note that, as a worst-case workaround, the
 ;; user could always use the spacebar and arrow keys to select entire
 ;; subtrees rather rapidly.  It order to make this shortcoming as
@@ -874,7 +874,7 @@
 		   )
 		 )
 	     ;; Recurse:
-	     ;; Dive into an account even if it isnt selected!
+	     ;; Dive into an account even if it isn't selected!
 	     ;; why? because some subaccts may be selected.
 	     (set! children-displayed?
 	           (traverse-accounts! subaccts

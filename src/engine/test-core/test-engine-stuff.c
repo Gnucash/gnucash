@@ -2,7 +2,7 @@
  * @file test-engine-stuff.c
  * @brief tools to set up random, but finanically consistent books.
  * Create transactions with random values, random accounts, random
- * account heirarchies, etc.
+ * account hierarchies, etc.
  *
  * XXX We should modify routines to create really, ugly, dirty
  * transactions

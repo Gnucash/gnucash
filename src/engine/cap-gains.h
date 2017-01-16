@@ -99,7 +99,7 @@ gnc_numeric xaccSplitGetCapGains(Split *);
  *    indicated account is used in the trading of commodities.
  *    A 'trading' account will contain transactions whose
  *    transaction currency is not the same as the account
- *    commodity.  The existance of such transactions is
+ *    commodity.  The existence of such transactions is
  *    the very definition of a 'trade'.   This routine returns
  *    TRUE if this is a trading account, else it returns
  *    FALSE.

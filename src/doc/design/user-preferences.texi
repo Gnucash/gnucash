@@ -41,7 +41,7 @@ returns a new, empty options database that you can then add options to.
 
 Options are organised into sections, which are each given a title string
 such as "Register" or "International".  The UI displays each section on
-a seperate page.  Each section has a number of options.  Each option has
+a separate page.  Each section has a number of options.  Each option has
 a name that uniquely identifies it in that section, and an alphabetic
 @dfn{sort tag} that determines the relative ordering of the options for
 display.
@@ -52,7 +52,7 @@ display.
 Sometimes, GnuCash requires the user to specify true/false properties.
 Others properties most easily specified by selections from a list,
 others from a number, others still by selecting dates, or one or more
-accounts in the account hierachy, or even colors.  GnuCash supports all
+accounts in the account hierarchy, or even colors.  GnuCash supports all
 of these and more:
 
 @table @code
@@ -85,7 +85,7 @@ in relative or absolute terms.
 @item account-list
 
 For selecting a particular account or accounts.  The UI displays a tree
-of the account hierachy.
+of the account hierarchy.
 
 @item multichoice
 

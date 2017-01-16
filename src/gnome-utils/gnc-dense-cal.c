@@ -962,7 +962,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
     }
     LOG_AND_RESET(timer, "alternating month colors");
 
-    /* Hilight the marked days. */
+    /* Highlight the marked days. */
     {
         int i;
         int x1, x2, y1, y2;
@@ -1015,7 +1015,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
         cairo_rectangle (cr, x + 0.5, y + 0.5, w, h);
         cairo_stroke (cr);
 
-        /* draw the week seperations */
+        /* draw the week separations */
         for (j = 0; j < num_weeks_per_col(dcal); j++)
         {
             gint wy = y + (j * week_height(dcal));
@@ -1024,7 +1024,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
             cairo_stroke (cr);
         }
 
-        /* draw the day seperations */
+        /* draw the day separations */
         for (j = 1; j < 7; j++)
         {
             gint dx = x + (j * day_width(dcal));

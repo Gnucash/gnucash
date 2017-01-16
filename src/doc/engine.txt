@@ -22,7 +22,7 @@ pointer chasing between different types of existing C structs,
 or whether it more naturally can hang with some existing object.
 
 If it seems to be an independent concept, it can still be placed
-in the KVP tree of the book, which gives it a 'top-level' existance.
+in the KVP tree of the book, which gives it a 'top-level' existence.
 
 If the concept is used only infrequently, then it probably belongs 
 in a KVP tree.  If the concept has performance-critical requriements,
@@ -33,7 +33,7 @@ can be queried efficiently and rapidly.
 \subsection terms Terminology:
 
 - First-class object:  something that has a C struct associated with it,
-and has its own specialized backend infrastructure for storing/quering
+and has its own specialized backend infrastructure for storing/querying
 it.
 
 - Second-class object: something that lives entirely in a KVP tree.

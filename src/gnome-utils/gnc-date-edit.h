@@ -4,7 +4,7 @@
  * Copyright (C) 1997, 1998, 1999, 2000 Free Software Foundation
  * All rights reserved.
  *
- * This file was part of the Gnome Library. It was modifed by
+ * This file was part of the Gnome Library. It was modified by
  * Dave Peticolas <dave@krondo.com> for use in GnuCash.
  *
  * GnuCash is free software; you can redistribute it and/or modify

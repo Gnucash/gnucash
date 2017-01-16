@@ -1486,7 +1486,7 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
         if ((view->priv->current_trans == trans) && view->priv->show_extra_dates_on_selection)
             show_extra_dates = TRUE;
 
-        // Show the extra dates allways
+        // Show the extra dates always
         if (view->show_extra_dates == TRUE)
             show_extra_dates = TRUE;
 
@@ -3600,7 +3600,7 @@ gtv_sr_button_cb (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
         if (event->window != window)
             return FALSE;
 
-        // Make sure we have stoped editing.
+        // Make sure we have stopped editing.
         gnc_tree_view_split_reg_finish_edit (view);
 
         // This prevents the cell changing.
@@ -5111,7 +5111,7 @@ gtv_sr_num_cb (GtkEntry    *entry,
 }
 
 
-/* Callback for Account seperator key */
+/* Callback for Account separator key */
 static void
 gtv_sr_acct_cb (GtkEntry    *entry,
                           const gchar *text,

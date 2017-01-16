@@ -146,7 +146,7 @@ void qof_instance_increase_editlevel (gpointer ptr);
 void qof_instance_decrease_editlevel (gpointer ptr);
 void qof_instance_reset_editlevel (gpointer ptr);
 
-/** Compare two instances, based on thier last update times.
+/** Compare two instances, based on their last update times.
  *  Returns a negative, zero or positive value, respectively,
  *  if 'left' is earlier, same as or later than 'right'.
  *  Accepts NULL pointers, NULL's are by definition earlier

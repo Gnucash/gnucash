@@ -171,10 +171,10 @@
  * For support of book partitioning, use special "Book"  begin_edit()
  *    and commit_edit() QOF_ID types.
  *
- *    Call the book begin() at the begining of a book partitioning.  A
+ *    Call the book begin() at the beginning of a book partitioning.  A
  *    'partitioning' is the splitting off of a chunk of the current
  *    book into a second book by means of a query.  Every transaction
- *    in that query is to be moved ('transfered') to the second book
+ *    in that query is to be moved ('transferred') to the second book
  *    from the existing book.  The argument of this routine is a
  *    pointer to the second book, where the results of the query
  *    should go.
@@ -216,7 +216,7 @@
  *    this scenario, the engine will attempt to transfer those
  *    entities that it does know about.  It does not, however,
  *    need to know about all the other entities that also would
- *    be transfered over.  In this way, a backend could perform
+ *    be transferred over.  In this way, a backend could perform
  *    a mass transfer of entities between books without having
  *    to actually move much (or any) data to the engine.
  *

@@ -136,7 +136,7 @@ gnc_table_destroy (Table * table)
     gnc_table_model_destroy (table->model);
     table->model = NULL;
 
-    /* intialize vars to null value so that any access is voided. */
+    /* initialize vars to null value so that any access is voided. */
     gnc_table_init (table);
 
     g_free (table);

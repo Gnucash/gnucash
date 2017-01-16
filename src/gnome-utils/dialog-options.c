@@ -1483,7 +1483,7 @@ gnc_options_dialog_new_modal(gboolean modal, gchar *title)
         gtk_widget_hide (apply_button);
     }
 
-    /* glade doesn't suport a notebook with zero pages */
+    /* glade doesn't support a notebook with zero pages */
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "notebook placeholder"));
     retval->notebook = gtk_notebook_new();
     gtk_widget_show(retval->notebook);

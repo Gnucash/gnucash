@@ -96,7 +96,7 @@ void     ap_assistant_cancel            (GtkAssistant *gtkassistant, gpointer us
 void     ap_assistant_close             (GtkAssistant *gtkassistant, gpointer user_data);
 
 /* =============================================================== */
-/* Find the earliest date occuring in the book.  Do this by making
+/* Find the earliest date occurring in the book.  Do this by making
  * a query and sorting by date. Since the truncated sort returns
  * only the *last* search results, sort in decreasing order.
  */
@@ -139,7 +139,7 @@ get_earliest_in_book (QofBook *book)
 }
 
 /* =============================================================== */
-/* Find the number of transactions occuring before the indicated date.
+/* Find the number of transactions occurring before the indicated date.
  * Do this by making a query and counting the results.
  */
 
@@ -294,7 +294,7 @@ ap_assistant_menu_prepare (GtkAssistant *assistant, gpointer user_data)
         period_begin = period_end;
         recurrenceListNextInstance(info->period, &period_begin, &period_end);
 
-        /* FIXME Check for valid period_end, not sure why it wont be!!! */
+        /* FIXME Check for valid period_end, not sure why it won't be!!! */
         if (g_date_valid (&period_end) != TRUE)
             break;
     }
@@ -493,7 +493,7 @@ ap_assistant_finish (GtkAssistant *assistant, gpointer user_data)
 				&info->closing_date);
 
 
-    /* FIXME Test for valid closing date, not sure why it wont be!!! */
+    /* FIXME Test for valid closing date, not sure why it won't be!!! */
     if (g_date_valid(&info->closing_date) == TRUE)
     {
         /* If the next closing date is in the future, then we are done. */

@@ -153,7 +153,7 @@ typedef struct amort_sched_yr
 amort_sched_yr;
 
 /* structure used by amortization routines for passing and storing
- * infomation on a particular amortization transaction */
+ * information on a particular amortization transaction */
 typedef struct amort_sched *amort_sched_ptr;
 typedef struct amort_sched
 {
@@ -202,7 +202,7 @@ typedef struct amort_sched
     double delayed_int;		/* interest due to delayed initial payment  */
     double fixed_pmt;		/* fixed prepayment amount for amortization */
     unsigned new_n;		/* new number of periods to amortize due to
-                                   delayed intial payment */
+                                   delayed initial payment */
     unsigned fv_case;		/* fv case flag */
     unsigned long Eff_Date_jdn;
     unsigned yday_E;

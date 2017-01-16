@@ -704,7 +704,7 @@ refresh_model_row (GNCImportMainMatcher *gui,
 
     /*Actions*/
 
-    /* Action informations */
+    /* Action information */
     ro_text = text = color = NULL;
     switch (gnc_import_TransInfo_get_action(info))
     {

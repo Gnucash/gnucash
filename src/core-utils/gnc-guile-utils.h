@@ -58,7 +58,7 @@ SCM    gnc_scm_call_1_to_procedure(SCM func, SCM arg);
 SCM    gnc_scm_call_1_to_list(SCM func, SCM arg);
 SCM    gnc_scm_call_1_to_vector(SCM func, SCM arg);
 
-/* Deprectated functions, will be removed soon */
+/* Deprecated functions, will be removed soon */
 #define gnc_guile_call1_to_string gnc_scm_call_1_to_string
 #define gnc_guile_call1_symbol_to_string gnc_scm_call_1_symbol_to_string
 #define gnc_guile_call1_to_procedure gnc_scm_call_1_to_procedure

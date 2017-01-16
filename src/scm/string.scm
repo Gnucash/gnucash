@@ -97,7 +97,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  gnc:substring-replace-from-to
 ;;  same as gnc:substring-replace extended by:
-;;  start: from which occurrance onwards the replacement shall start
+;;  start: from which occurrence onwards the replacement shall start
 ;;  end-after: max. number times the replacement should executed
 ;;
 ;;  Example: (gnc:substring-replace-from-to "foobarfoobarfoobar" "bar" "xyz" 2 2)

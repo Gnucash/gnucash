@@ -641,7 +641,7 @@
          (overwrite-ok? (and (gnc:report-template-is-custom/template-guid? custom-template-id) overwrite?))
          ;; Generate a serialized report-template with a random guid
          (saved-form (gnc:report-template-serialize-from-report report))
-         ;; Immediatly evaluate the serialized report template to
+         ;; Immediately evaluate the serialized report template to
          ;; - check if it's error free and can be deserialized
          ;; - load it into the runtime for immediate use by the user
          ;; (Bug #342206)

@@ -17,7 +17,7 @@ far.
 
 gnc-module                  The module system (actually not a module itself)
 
-calculation                 Low-level expresion parsing & financial
+calculation                 Low-level expression parsing & financial
                             equation solving.
 
 engine                      The engine module, without any backends

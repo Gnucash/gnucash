@@ -121,7 +121,7 @@
  * and payment periods, and the term must be expressed as the total number  of
  * payments (or compounding periods if there are no payments). Loans,  leases,
  * mortgages, annuities, savings plans, appreciation, and compound growth  are
- * amoung the many financial problems that can be defined in these terms. Some
+ * among the many financial problems that can be defined in these terms. Some
  * transactions do not involve payments, but  all of the other factors play  a
  * part in "time value of money" transactions. When any one of the five  (four
  * - if no payments are involved)  factors is unknown, it can be  derived from
@@ -138,13 +138,13 @@
  *  If payments are a part of the transaction, the number of payments
  *  must * equal the number of periods (n).
  *
- *  Payments may be represented as occuring at the end or beginning of
+ *  Payments may be represented as occurring at the end or beginning of
  *  the * periods.
  *
  *  Diagram to visualize the positive and negative cash flows (cash
  *  flow * diagrams):
  *
- *  Amounts shown above the line are positve, received, and amounts
+ *  Amounts shown above the line are positive, received, and amounts
  *  shown below the line are negative, paid out.
  *
  * 1)
@@ -555,8 +555,8 @@
  * Constant payment to principal loan
  *
  *   In this loan, each total payment is different, with each
- *   succeeding payment less than the preceeding payment. Each payment
- *   is the total of the constant ammount to the principal plus the
+ *   succeeding payment less than the preceding payment. Each payment
+ *   is the total of the constant amount to the principal plus the
  *   interest for the period. The constant payment to the principal is
  *   computed as:
  *
@@ -622,7 +622,7 @@
  *   first payment period for end of period payments.
  *
  *   This is not always true. IP may be delayed for financial reasons
- *   such as cash flow or accounting calender. The subsequent payments
+ *   such as cash flow or accounting calendar. The subsequent payments
  *   then follow the agreed upon periodicity. Since money has a time
  *   value, the "delayed" IP must be accounted for. Computing an
  *   "Effective PV", pve, is one means of handling a delayed IP.
@@ -758,7 +758,7 @@
  *
  * ===========================================================================
  *   NOTE: For Payment Frequencies, PF, semi-monthly or less, i.e., PF
- *   == 12 or PF == 24, a 360 day calender year and 30 day month are
+ *   == 12 or PF == 24, a 360 day calendar year and 30 day month are
  *   used. For Payment Frequencies, PF, greater than semi-monthly, PF
  *   > 24, the actual number of days per year and per payment period
  *   are used. The actual values are computed using the built-in
@@ -766,10 +766,10 @@
  *
  * ****************************************************************************
  *
- * Note: in the following examples, the user input is preceeded by the
+ * Note: in the following examples, the user input is preceded by the
  * prompt "<>". The result of evaluating the input expression is then
  * displayed.  I have taken the liberty of including comments in the
- * example input/output sessions by preceeding with ' *'. Thus, for
+ * example input/output sessions by preceding with ' *'. Thus, for
  * the line: <>n=5 *set number of periods the comment that setting the
  * number of periods is not really input and the true input is only:
  * <>n=5
@@ -1575,12 +1575,12 @@ set_default (fi_ptr fi)
 
 }				/* set_default */
 
-/* compute Julian Day Number from calender date
+/* compute Julian Day Number from calendar date
  */
 unsigned long
 julian_day_number (unsigned year, unsigned month, unsigned day)
 {
-    /*  Gregorian/Julian Calender Flag.
+    /*  Gregorian/Julian Calendar Flag.
      *  TRUE  == Julian
      *  FALSE == Gregorian
      */

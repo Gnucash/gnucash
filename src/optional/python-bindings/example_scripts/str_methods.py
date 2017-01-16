@@ -6,7 +6,7 @@
    Import this module and str(Object) and unicode(Object) where Object is Transaction, Split,Invoice
    or Entry leads to human readable results. That is handy when using @code print object @endcode
 
-   I chose to put these functions/methods in a seperate file to develop them like this and maybe if
+   I chose to put these functions/methods in a separate file to develop them like this and maybe if
    they prove to be useful they can be put in gnucash_core.py.
 
    I am searching to find the best way to serialize these complex objects. Ideally this serialization

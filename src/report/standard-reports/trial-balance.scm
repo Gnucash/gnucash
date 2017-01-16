@@ -969,7 +969,7 @@
 				     credit-entry
 				     )
 				    )
-				;; update the corresponing running total
+				;; update the corresponding running total
 				(and bal
 				     (begin
 				       (if credit?
@@ -1111,7 +1111,7 @@
 		)
 	      )
 	  
-	  ;; ...and thats a complete trial balance/work sheet
+	  ;; ...and that's a complete trial balance/work sheet
 	  
 	  (gnc:html-document-add-object! doc build-table)
 	  

@@ -507,7 +507,7 @@ gnc_account_end_handler(gpointer data_for_children,
          */
         xaccAccountBeginEdit(acc);
 
-        /* Backwards compatability.  If there's no parent, see if this
+        /* Backwards compatibility.  If there's no parent, see if this
          * account is of type ROOT.  If not, find or create a ROOT
          * account and make that the parent. */
         parent = gnc_account_get_parent(acc);

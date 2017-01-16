@@ -103,7 +103,7 @@ typedef struct _split_record
 \********************************************************************/
 
 static char *olds;
-/* This version of strtok will only match SINGLE occurence of delim,
+/* This version of strtok will only match SINGLE occurrence of delim,
    returning a 0 length valid string between two consecutive ocurence of delim.
    It will also return a 0 length string instead of NULL when it reaches the end of s
 */
@@ -353,7 +353,7 @@ static void dump_split_record(split_record record)
     }
 }
 
-/* File pointer must already be at the begining of a record */
+/* File pointer must already be at the beginning of a record */
 static void  process_trans_record(  FILE *log_file)
 {
     char read_buf[2048];

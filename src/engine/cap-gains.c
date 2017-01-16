@@ -419,7 +419,7 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
      * implemented accounting policies should be giving us splits
      * that make lots larger.  One a lot is open, the FIFO/LIFO
      * policies should be working only to make the lot smaller.
-     * We can remove teh warning emssage come the day we have
+     * We can remove the warning emssage come the day we have
      * fancier policies.
      */
     baln_is_positive = gnc_numeric_positive_p (baln);

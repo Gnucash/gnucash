@@ -172,7 +172,7 @@ void qof_close (void);
  *  and the given user_data parameter. */
 void g_hash_table_foreach_sorted(GHashTable *hash_table, GHFunc func, gpointer user_data, GCompareFunc compare_func);
 
-/** Search for an occurence of the substring needle in the string
+/** Search for an occurrence of the substring needle in the string
  * haystack, ignoring case. Return TRUE if one is found or FALSE
  * otherwise. */
 gboolean qof_utf8_substr_nocase (const gchar *haystack, const gchar *needle);

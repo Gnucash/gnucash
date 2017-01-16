@@ -328,7 +328,7 @@ every component watching for that event is invoked.
 @deftypefun void gnc_resume_gui_refresh (void)
 Resume the invocation of refresh handlers by the Component Manager.
 Each call reduces the suspend counter by one. When the counter reaches
-zero, all events which have occured since the last refresh are collected
+zero, all events which have occurred since the last refresh are collected
 and passed to refresh handlers via the @var{changes} argument. Refresh
 handlers will still be excluded based on their watches.
 @end deftypefun

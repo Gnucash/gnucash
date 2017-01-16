@@ -43,7 +43,7 @@
 ;; template. The most common used templates will be distributed with
 ;; gnucash.
 
-;; Modifed to use settable options instead of the hard coded ones.
+;; Modified to use settable options instead of the hard coded ones.
 ;; modified by Brian Dolbec <dol-sen at telus dot net> Feb. 6, 2006
 
 (define-module (gnucash report fancy-invoice))

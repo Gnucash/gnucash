@@ -218,7 +218,7 @@
  *
  * are recognized. All numerics are initially recognized as positive
  * numbers. If negative, the unary '-' operator is applied. This saves
- * the logic of having to recogize strings as
+ * the logic of having to recognize strings as
  *
  *   -123
  *
@@ -272,7 +272,7 @@
  *
  * There are six parser functions needed to use the parser/evaluator:
  *
- * Note: in the last five functions, in the function paramter (void
+ * Note: in the last five functions, in the function parameter (void
  * *vp), "vp" is the pointer returned by the "init_parser" function.
  *
  * void *init_parser(var_store_ptr  predefined_vars,
@@ -304,7 +304,7 @@
  *         in subsequent calls to the parser.  -- the third parameter
  *         is the optional character used for grouping digits to the
  *         left of the radix.  -- The fourth, fifth, sixth and seventh
- *         parameters are the functions I descibed above for the
+ *         parameters are the functions I described above for the
  *         internal numeric representation desired by the calling
  *         function(s).
  *
@@ -579,7 +579,7 @@ delete_var (char *var_name, parser_env_ptr pe)
 /* parse string passed using parser environment passed return
  * evaluated value in numeric structure passed, return NULL if no
  * parse error. If parse error, return pointer to character at which
- * error occured. */
+ * error occurred. */
 char *
 parse_string (var_store_ptr value, const char *string, parser_env_ptr pe)
 {

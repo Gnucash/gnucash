@@ -24,7 +24,7 @@
 /** @addtogroup Backend
 
     The QOF Backend is a pseudo-object providing an interface between the
-    engine and a persistant data store (e.g. a server, a database, or
+    engine and a persistent data store (e.g. a server, a database, or
     a file).   Backends are not meant to be used directly by an
     application; instead the Session should be used to make a
     connection with some particular backend.

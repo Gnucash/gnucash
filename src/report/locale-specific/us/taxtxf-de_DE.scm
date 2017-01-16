@@ -40,7 +40,7 @@
 ;; Optionally prints brief or full account names
 ;;
 ;; NOTE: setting of specific dates is squirly! and seems to be
-;; current-date dependant!  Actually, time of day dependant!  Just
+;; current-date dependent!  Actually, time of day dependent!  Just
 ;; after midnight gives different dates than just before!  Referencing
 ;; all times to noon seems to fix this.  Subtracting 1 year sometimes
 ;; subtracts 2!  see "(to-value"

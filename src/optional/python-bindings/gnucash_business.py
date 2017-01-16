@@ -72,7 +72,7 @@ class Employee(GnuCashBusinessEntity): pass
 class Vendor(GnuCashBusinessEntity): pass
 
 class Job(GnuCashBusinessEntity):
-    # override the superclass contructor, as Job doesn't require
+    # override the superclass constructor, as Job doesn't require
     # a currency but it does require an owner
     def __init__(self, book=None, id=None, owner=None, name=None,
                  instance=None):

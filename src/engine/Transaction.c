@@ -168,9 +168,9 @@ struct timeval
  *    which would generate a flurry of (needless) events, if they
  *    weren't saved up till the commit.
  * 2) Technically, its incorrect to use transaction data
- *    until the transaction is commited.  The GUI element that
+ *    until the transaction is committed.  The GUI element that
  *    is changing the data can look at it, but all of the rest
- *    of the GUI should ignore the data until its commited.
+ *    of the GUI should ignore the data until its committed.
  */
 
 const char *trans_notes_str = "notes";

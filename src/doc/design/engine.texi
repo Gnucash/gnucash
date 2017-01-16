@@ -145,7 +145,7 @@ disadvantages:
 @itemize
 
 @item
-Pointers cannot be used in data files and are not persistant across
+Pointers cannot be used in data files and are not persistent across
 different program invocations.
 
 @item
@@ -193,7 +193,7 @@ GUIDs can be efficiently encoded in a string representation.
 @cindex When to use GUIDs
 
 Although GUIDs are very flexible, the engine structures like Accounts
-will probably continue to use C pointers for the forseeable future,
+will probably continue to use C pointers for the foreseeable future,
 since they are much faster (and in certain respects more convenient)
 than using GUIDs. In general, however, it is much safer to use GUIDs.
 In particular, you should consider using GUIDs if any of the following
@@ -406,7 +406,7 @@ GnuCash code should use @code{xaccGUIDNew}.
 @tindex gnc_numeric
 
 =============== The documentation below for gnc_numeric is obsolete
-  and has been superseeded by the gnc_numeric docs in the header file.
+  and has been superseded by the gnc_numeric docs in the header file.
 =========================================
 
 Financial quantities in GnuCash (Split quantities and values) are stored
@@ -447,7 +447,7 @@ functions have not been implemented for @code{gnc_numeric} objects.
 @cindex Standard Numeric Arguments
 
 =============== The documentation below for gnc_numeric is obsolete
-  and has been superseeded by the gnc_numeric docs in the header file.
+  and has been superseded by the gnc_numeric docs in the header file.
 =========================================
 
 It is useful to specify a denominator in cases where it is known that
@@ -580,7 +580,7 @@ GNC_RND_NEVER} as @var{how}.
 @node Creating Numeric Objects, Basic Arithmetic Operations, Standard Numeric Arguments, Numeric Library
 
 =============== The documentation below for gnc_numeric is obsolete
-  and has been superseeded by the gnc_numeric docs in the header file.
+  and has been superseded by the gnc_numeric docs in the header file.
 =========================================
 
 @subsection Creating Numeric Objects
@@ -706,7 +706,7 @@ Arguments} and compare numerators of the result.
 
 @node Numeric Denominator Conversion, Numeric Floating Point Conversion, Numeric Comparisons and Predicates, Numeric Library
 =============== The documentation below for gnc_numeric is obsolete
-  and has been superseeded by the gnc_numeric docs in the header file.
+  and has been superseded by the gnc_numeric docs in the header file.
 =========================================
 
 @subsection Numeric Denominator Conversion
@@ -799,7 +799,7 @@ noted by @var{error_code} rather than a number.
 @cindex Numeric Example
 
 =============== The documentation below for gnc_numeric is obsolete
-  and has been superseeded by the gnc_numeric docs in the header file.
+  and has been superseded by the gnc_numeric docs in the header file.
 =========================================
 
 The following program finds the best @code{gnc_numeric} approximation to
@@ -1000,7 +1000,7 @@ path does not exist, it is created.
 Works like @code{kvp_frame_get_frame}, but the frame path is specified
 as a single string where the keys are separated by slashes; thus, for
 example: @code{/this/is/a/valid/path} and @code{///so//is////this/}.
-Multiple slashes are compresed and a leading slash is optional. The
+Multiple slashes are compressed and a leading slash is optional. The
 pointers @code{.} and @code{..} are @emph{not} followed/obeyed. (This
 is arguably a bug that needs fixing).
 @end deftypefun
@@ -1941,7 +1941,7 @@ Set the share price of @var{split} to @var{price}.
 
 @deftypefun void xaccSplitSetSharePriceAndAmount (Split * @var{split}, gnc_numeric @var{price}, gnc_numeric @var{amount})
 Set both the share price and share quantity of @var{split}. This routine
-is more efficent than calling @code{xaccSplitSetShareAmount} and
+is more efficient than calling @code{xaccSplitSetShareAmount} and
 @code{xaccSplitSetSharePrice} in succesion.
 @end deftypefun
 
@@ -2722,7 +2722,7 @@ of what a file system is, or where they want to keep their data files.
 The current implementation assumes the use of files and file locks;
 however, the API was designed to be general enough to allow the use
 of generic URL's, and/or implementation on top of SQL or other
-database/persistant object technology.
+database/persistent object technology.
 
 @menu
 * GNCBook API::                 
@@ -2743,7 +2743,7 @@ memory associated with it.
 @end deftypefun
 
 @deftypefun gboolean gnc_book_begin (GNCBook * @var{book}, const char * @var{book_id}, gboolean ignore_lock, gboolean create_if_nonexistent)
-Begins a new book editing sesssion. It takes as an argument the book id.
+Begins a new book editing session. It takes as an argument the book id.
 The book id must be a string in the form of a URI/URL.  In the current
 implementation, only one type of URI is supported, and that is the file
 URI: anything of the form @url{file:/home/somewhere/somedir/file.xac}

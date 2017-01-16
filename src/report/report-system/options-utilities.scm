@@ -24,7 +24,7 @@
 (use-modules (gnucash gettext))
 
 ;; These are just a bunch of options which were useful in several
-;; reports and hence they got defined in a seperate function.
+;; reports and hence they got defined in a separate function.
 
 ;; This is one single end-date of a report.
 (define (gnc:options-add-report-date!

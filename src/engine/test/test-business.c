@@ -63,7 +63,7 @@ static void test_business (void)
         do_test (gncBusinessLookup (TEST_MODULE_NAME) == &bus_obj,
                  "lookup our installed object");
         do_test (gncBusinessLookup ("snm98sn snml say  dyikh9y9ha") == NULL,
-                 "lookup non-existant business object");
+                 "lookup non-existent business object");
 
         do_test (!g_strcmp0 (gncBusinessGetTypeLabel (TEST_MODULE_NAME),
                              _(TEST_MODULE_DESC)),

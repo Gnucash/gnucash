@@ -573,7 +573,7 @@ subst_insert_amb (gchar *byte_sequence, GList *conv_list, GncXmlImportData *data
         }
         else
         {
-            /* no conversion avaiable, stop filling of subst */
+            /* no conversion available, stop filling of subst */
             g_hash_table_destroy (data->subst);
             data->subst = NULL;
         }
@@ -1078,7 +1078,7 @@ gxi_parse_file (GncXmlImportData *data)
     io_err = qof_session_get_error (session);
     if (io_err == ERR_BACKEND_NO_ERR)
     {
-        /* loaded sucessfully now. strange, but ok */
+        /* loaded successfully now. strange, but ok */
         success = TRUE;
         goto cleanup_parse_file;
     }
