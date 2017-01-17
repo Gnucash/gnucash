@@ -814,24 +814,24 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                                                  text2bool (accumulatesplits),
                                                  auto_pay);
                             PWARN("Invoice %s posted",id);
-                             g_string_append_printf (info, "Invoice %s posted.\n",id);
+                             g_string_append_printf (info, _("Invoice %s posted.\n"),id);
                         }
                         else // No match! Don't post it.
                         {
                             PWARN("Invoice %s NOT posted because currencies don't match", id);
-                            g_string_append_printf (info,"Invoice %s NOT posted because currencies don't match.\n", id);
+                            g_string_append_printf (info,_("Invoice %s NOT posted because currencies don't match.\n"), id);
                         }
                     }
                     else
                     {
                         PWARN("Cannot post invoice %s because account name \"%s\" is invalid!",id,account_posted);
-                        g_string_append_printf (info,"Cannot post invoice %s because account name \"%s\" is invalid!\n",id,account_posted);
+                        g_string_append_printf (info,_("Cannot post invoice %s because account name \"%s\" is invalid!\n"),id,account_posted);
                     }
                 }
                 else
                 {
                     PWARN("Invoice %s NOT posted because it requires currency conversion.",id);
-                    g_string_append_printf (info,"Invoice %s NOT posted because it requires currency conversion.\n",id);
+                    g_string_append_printf (info,_("Invoice %s NOT posted because it requires currency conversion.\n"),id);
                 }
                 g_hash_table_unref (foreign_currs);
             }
