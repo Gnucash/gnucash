@@ -23,6 +23,7 @@
 
 #include "gnc-euro.h"
 
+#include <glib/gi18n.h>
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>

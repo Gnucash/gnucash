@@ -56,7 +56,7 @@ print "\n\n";
 @funds = ("FGRXX");
 %quotes = $quoter->fetch("fidelity",@funds);
 
-print "Not all funds have a NAV; some have Yeilds:\n";
+print "Not all funds have a NAV; some have Yields:\n";
 foreach $f (@funds) {
      $name = $quotes {$f, "name"};
      $yield = $quotes {$f, "yield"};

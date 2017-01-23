@@ -49,6 +49,10 @@ typedef enum
 			       of a currency. */
     DIAG_COMM_NON_CURRENCY, /**< Dialog box should allow selection of
 			       anything but a currency. */
+    DIAG_COMM_NON_CURRENCY_SELECT, /**< Dialog box should allow selection of
+                                    * anything but a currency and should include
+                                    * the "ALL" namespace to display all such
+                                    * commodities in a single list. */
     DIAG_COMM_ALL,	  /**< Dialog box should allow selection of
 			       anything. */
 } dialog_commodity_mode;

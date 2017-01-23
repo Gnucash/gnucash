@@ -12,7 +12,7 @@
 ;; deductible expenses and the accounts need to be referenced to the tax codes.
 ;; However, there is no need to limit tax codes to just one account. For codes
 ;; like N286 (Dividend, Ordinary) that can have the "payer" printed on
-;; Schedule B on seperate lines, to have amounts from different accounts
+;; Schedule B on separate lines, to have amounts from different accounts
 ;; summarized together for one "payer" line, the accounts referenced to the
 ;; same tax code for a given "payer" need to be adjacent to each other in the
 ;; account hierarchy.
@@ -65,7 +65,7 @@
 ;;
 ;; From prior version:
 ;; NOTE: setting of specific dates is squirly! and seems
-;; to be current-date dependant!  Actually, time of day dependant!  Just
+;; to be current-date dependent!  Actually, time of day dependent!  Just
 ;; after midnight gives diffenent dates than just before!  Referencing
 ;; all times to noon seems to fix this.  Subtracting 1 year sometimes
 ;; subtracts 2!  see "(to-value"

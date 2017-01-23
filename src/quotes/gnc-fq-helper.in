@@ -294,7 +294,7 @@ sub parse_input_line {
   my $dq = '"';
   my @symbols;
 
-  # Make sure we have an opening ( preceeded only by whitespace.
+  # Make sure we have an opening ( preceded only by whitespace.
   # and followed by a one word method name composed of [a-z_]+.
   # Also allow the '.' and '^' characters for stock indices.
   # Kill off the whitespace if we do and grab the command.

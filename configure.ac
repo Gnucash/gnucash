@@ -118,7 +118,7 @@ AC_PROG_INSTALL
 PKG_PROG_PKG_CONFIG
 
 dnl clang wants to check file encodings, and we need to tell it not to
-dnl becuase of the unicode currency symbols. But older versions of GCC
+dnl because of the unicode currency symbols. But older versions of GCC
 dnl don't like the warning suppression option, so we need to set it only
 dnl with clang.
 
@@ -596,7 +596,7 @@ the libtool(-ltdl) development package?])])
 # version 2.0.10 of SWIG, because that's the first version that supports
 # guile 2.
 #
-# For a guile 1.8 build we accept an older version, but wont allow you
+# For a guile 1.8 build we accept an older version, but won't allow you
 # to build the dist because we need to apply a patch to the swig
 # generated files that needs to go into the release tarball. At that
 # point we don't know yet which version of guile will be used together
@@ -718,7 +718,7 @@ then
       [[GNC_DBD_DIR="$with_dbi_dbd_dir"
        EXTRA_SEARCH_LIBS=$GNC_DBD_DIR]],
       [[GNC_DBD_DIR=""
-        # pkg-config is new in libdbi 0.9. Use it if avaiable
+        # pkg-config is new in libdbi 0.9. Use it if available
         # Otherwise fall back to our previous hard coded values
         pkg-config --exists dbi
         if test $? -eq 0; then
@@ -818,6 +818,7 @@ AC_SUBST(GNC_LIBEXECDIR)
 AC_ARG_ENABLE( debug,
   [AS_HELP_STRING([--enable-debug],[compile with debugging flags set])],
   [
+  if test x$enableval = xyes; then
      # remove any optimization flags...
      CFLAGS=`echo ${CFLAGS} | sed -e 's,-O.,,g'`
      # ...except for those the user wants.
@@ -826,16 +827,16 @@ AC_ARG_ENABLE( debug,
      CXXFLAGS=`echo ${CXXFLAGS} | sed -e 's,-O.,,g'`
      CXXFLAGS="${CXXFLAGS} -g ${USER_OPTIMIZATION}"
      LDFLAGS="${LDFLAGS} -g"
-     AC_DEFINE(DEBUG_MEMORY,1,[Enable debug memory])
-  ],
-  [     AC_DEFINE(DEBUG_MEMORY,0,[Enable debug memory])
+  fi
   ])
 
 AC_ARG_ENABLE( profile,
   [AS_HELP_STRING([--enable-profile],[compile with profiling set])],
-  AM_CFLAGS="${AM_CFLAGS} -pg"
-  AM_CXXFLAGS="${AM_CXXFLAGS} -pg"
-  AM_LDFLAGS="${AM_LDFLAGS} -pg")
+  if test x$enableval = xyes; then
+      AM_CFLAGS="${AM_CFLAGS} -pg"
+      AM_CXXFLAGS="${AM_CXXFLAGS} -pg"
+      AM_LDFLAGS="${AM_LDFLAGS} -pg"
+  fi)
 
 ###---------------------------------------------------------------------------
 ### Google Profiler Support: https://code.google.com/p/gperftools/
@@ -1181,7 +1182,11 @@ LANGINFO_D_FMT_CHECK
 dnl Enable locale-specific tax-related information in the accounts
 AC_ARG_ENABLE( locale-specific-tax,
   [AS_HELP_STRING([--enable-locale-specific-tax],[enable localized tax categories (experimental, but used by the german SKR04 account chart)])],
-  AC_DEFINE(LOCALE_SPECIFIC_TAX,1,Enable the experimental locale-specific tax categories) )
+  [
+  if test x$enableval = xyes; then
+    AC_DEFINE(LOCALE_SPECIFIC_TAX,1,Enable the experimental locale-specific tax categories)
+  fi
+  ])
 
 dnl Make sure we have a proper gettext installed
 AC_MSG_CHECKING(for a valid gettext/gmsgfmt installation)

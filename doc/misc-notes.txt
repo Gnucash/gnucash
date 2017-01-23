@@ -35,7 +35,7 @@ as of the date of this split.
 -- Are these questions supposed to be answered by company A,
    or do I just 'guess'?
 
-Note there is still an invarient:
+Note there is still an invariant:
 (old price of A) * 20s == (new price of A) *20s + (price of B) * 1s
 
 \section Depreciation, Sinking Funds ...

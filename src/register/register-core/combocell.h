@@ -95,7 +95,7 @@ void         gnc_combo_cell_set_autosize (ComboCell *cell, gboolean autosize);
  *  of the cpu is spent building the multi-thousand entry quickfill.
  *  When a shared quickfill is specified, the combo-cell will not add to
  *  nor delete the quickfill; it is the users resonsibility to manage the
- *  quickfill object.  The combocell will *not* make a copy of teh quickfill.
+ *  quickfill object.  The combocell will *not* make a copy of the quickfill.
  */
 void gnc_combo_cell_use_quickfill_cache (ComboCell *cell, QuickFill *shared_qf);
 

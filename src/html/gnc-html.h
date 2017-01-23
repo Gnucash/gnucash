@@ -79,7 +79,7 @@ typedef gboolean (* GncHTMLUrlCB)(const gchar* location, const gchar* label,
 
 /**
  * Registers a new URLType.
- * returns TRUE if succesful, FALSE if type already exists.
+ * returns TRUE if successful, FALSE if type already exists.
  *
  * @param type New URL type
  * @param prococol Protocol - should be an empty string if there is no corresponding protocol.

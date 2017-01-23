@@ -224,7 +224,7 @@ gnc_bi_import_read_file (const gchar * filename, const gchar * parser_regexp,
 
 //! \brief try to fix some common errors in the csv representation of invoices
 //! * corrects the date format
-//! * corrects ambigous values in multi line invoices
+//! * corrects ambiguous values in multi line invoices
 //! * ensures customer exists
 //! * if quantity is unset, set to 1
 //! * if price is unset, delete row
@@ -525,7 +525,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
     gint day, month, year;
     gnc_numeric value;
     GncOwner *owner;
-    Account *acc;
+    Account *acc = NULL;
     enum update {YES = GTK_RESPONSE_YES, NO = GTK_RESPONSE_NO} update;
     GtkWidget *dialog;
     Timespec today;
@@ -533,6 +533,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
     gchar *new_id = NULL;
     gint64 denom = 0;
     gnc_commodity *currency;
+    Transaction * txn;
 
     // these arguments are needed
     g_return_if_fail (store && book);
@@ -633,14 +634,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             (*n_invoices_created)++;
             update = YES;
 
-            // open new bill / invoice in a tab, if requested
-            if (g_ascii_strcasecmp(open_mode, "ALL") == 0
-                    || (g_ascii_strcasecmp(open_mode, "NOT_POSTED") == 0
-                        && strlen(date_posted) == 0))
-            {
-                iw =  gnc_ui_invoice_edit (invoice);
-                gnc_plugin_page_invoice_new (iw);
-            }
+            
             gncInvoiceCommitEdit (invoice);
         }
 // I want to warn the user that an existing billvoice exists, but not every
@@ -745,7 +739,6 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             gncEntrySetBillTaxable (entry, text2bool (taxable));
             gncEntrySetBillTaxIncluded (entry, text2bool (taxincluded));
             gncEntrySetBillTaxTable (entry, gncTaxTableLookupByName (book, tax_table));
-            gncEntryCommitEdit(entry);
             gncBillAddEntry (invoice, entry);
         }
         else if (g_ascii_strcasecmp (type, "INVOICE") == 0)
@@ -766,12 +759,12 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             gncEntrySetInvDiscount (entry, value);
             gncEntrySetInvDiscountType (entry, text2disc_type (disc_type));
             gncEntrySetInvDiscountHow (entry, text2disc_how (disc_how));
-            gncEntryCommitEdit(entry);
             gncInvoiceAddEntry (invoice, entry);
         }
+        gncEntryCommitEdit(entry);
         valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
         // handle auto posting of invoices
-
+        
         new_id = NULL;
        
         if (valid)
@@ -779,30 +772,81 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
         if (g_strcmp0 (id, new_id) != 0)
         {
             // the next invoice id is different => try to autopost this invoice
-            if (qof_scan_date (date_posted, &day, &month, &year))
+            if (strlen(date_posted) != 0)
             {
                 // autopost this invoice
+                GHashTable *foreign_currs;
                 gboolean auto_pay;
-                Timespec d1, d2;
-
+                Timespec p_date, d_date;
+                guint curr_count;
+                gboolean scan_date_r;
+                scan_date_r = qof_scan_date (date_posted, &day, &month, &year);
+                DEBUG("Invoice %s is marked to be posted because...", id);
+                DEBUG("qof_scan_date = %d", scan_date_r);
                 if (g_ascii_strcasecmp (type, "INVOICE") == 0)
                     auto_pay = gnc_prefs_get_bool (GNC_PREFS_GROUP_INVOICE, GNC_PREF_AUTO_PAY);
                 else
                     auto_pay = gnc_prefs_get_bool (GNC_PREFS_GROUP_BILL, GNC_PREF_AUTO_PAY);
-
-                d1 = gnc_dmy2timespec (day, month, year);
-                // FIXME: Must check for the return value of qof_scan_date!
-                qof_scan_date (due_date, &day, &month, &year);	// obtains the due date, or leaves it at date_posted
-                d2 = gnc_dmy2timespec (day, month, year);
-                acc = gnc_account_lookup_for_register
-                      (gnc_get_current_root_account (), account_posted);
-                gncInvoicePostToAccount (invoice, acc, &d1, &d2,
-                                         memo_posted,
-                                         text2bool (accumulatesplits),
-                                         auto_pay);
-                DEBUG("Invoice %s posted",id);
+                // Do we have any foreign currencies to deal with?
+                foreign_currs = gncInvoiceGetForeignCurrencies (invoice);
+                curr_count = g_hash_table_size (foreign_currs);
+                DEBUG("curr_count = %d",curr_count);
+                // Only auto-post if there's a single currency involved
+                if(curr_count == 0)
+                {
+                    p_date = gnc_dmy2timespec (day, month, year);
+                    // Check for the return value of qof_scan_date
+                    if(qof_scan_date (due_date, &day, &month, &year)) // obtains the due date, or leaves it at date_posted
+                    {	
+                        d_date = gnc_dmy2timespec (day, month, year);
+                    }
+                    else
+                        d_date = p_date;
+                    acc = gnc_account_lookup_for_register
+                          (gnc_get_current_root_account (), account_posted);
+                    if(acc != NULL) // Is the account real?
+                    {                        
+                        // Check if the currencies match
+                        if(gncInvoiceGetCurrency(invoice) == gnc_account_get_currency_or_parent(acc))
+                        {
+                            gncInvoicePostToAccount (invoice, acc, &p_date, &d_date,
+                                                 memo_posted,
+                                                 text2bool (accumulatesplits),
+                                                 auto_pay);
+                            PWARN("Invoice %s posted",id);
+                             g_string_append_printf (info, _("Invoice %s posted.\n"),id);
+                        }
+                        else // No match! Don't post it.
+                        {
+                            PWARN("Invoice %s NOT posted because currencies don't match", id);
+                            g_string_append_printf (info,_("Invoice %s NOT posted because currencies don't match.\n"), id);
+                        }
+                    }
+                    else
+                    {
+                        PWARN("Cannot post invoice %s because account name \"%s\" is invalid!",id,account_posted);
+                        g_string_append_printf (info,_("Cannot post invoice %s because account name \"%s\" is invalid!\n"),id,account_posted);
+                    }
+                }
+                else
+                {
+                    PWARN("Invoice %s NOT posted because it requires currency conversion.",id);
+                    g_string_append_printf (info,_("Invoice %s NOT posted because it requires currency conversion.\n"),id);
+                }
+                g_hash_table_unref (foreign_currs);
             }
-
+            else
+            {
+                PWARN("Invoice %s is NOT marked for posting",id);
+            }
+        }
+        // open new bill / invoice in a tab, if requested
+        if (g_ascii_strcasecmp(open_mode, "ALL") == 0
+                || (g_ascii_strcasecmp(open_mode, "NOT_POSTED") == 0
+                    && strlen(date_posted) == 0))
+        {
+            iw =  gnc_ui_invoice_edit (invoice);
+            gnc_plugin_page_invoice_new (iw);
         }
 
 
@@ -831,6 +875,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
     g_free (account_posted);
     g_free (memo_posted);
     g_free (accumulatesplits);
+    
 
 }
 

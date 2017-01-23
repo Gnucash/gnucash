@@ -1043,7 +1043,7 @@ impl_webkit_copy_to_clipboard( GncHtml* self )
  *
  * @param self GncHtmlWebkit object
  * @param filepath Where to write the HTML
- * @return TRUE if successful, FALSE if unsucessful
+ * @return TRUE if successful, FALSE if unsuccessful
  **************************************************************/
 static gboolean
 impl_webkit_export_to_file( GncHtml* self, const char *filepath )

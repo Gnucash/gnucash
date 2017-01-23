@@ -636,7 +636,7 @@ qif_is_bad_numeric_string(const char* line)
  * from-account by this time we need to set one.  In that case we set
  * the default account based on the file name.
  *
- * If we DO know the account already, and this is a tranfer to it,
+ * If we DO know the account already, and this is a transfer to it,
  * it's also an opening balance regardless of the payee.
  *
  * In the end make sure that the context 'current account' is set.
@@ -1233,7 +1233,7 @@ qif_invst_txn_setup_splits(QifContext ctx, QifTxn txn)
         break;
     }
 
-    /* If we dont have a far acct (or far category) then reset the flag */
+    /* If we don't have a far acct (or far category) then reset the flag */
     if (!itxn->far_cat.obj)
         itxn->far_cat_is_acct = FALSE;
 

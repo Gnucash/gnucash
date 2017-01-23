@@ -33,7 +33,7 @@ One practical problem is that backup copies of files containing
 GnuCash data will have the same GUID's as the 'live data'.  Because
 the user may have modified the object, if one looked at the backup 
 copy, one would find more-or-less the same object, but it might
-have different values (for the amount, the value, teh date, the 
+have different values (for the amount, the value, the date, the 
 title, etc.)  Thus, a single value for a GUID can be associated
 with several different but similar 'objects'.
 

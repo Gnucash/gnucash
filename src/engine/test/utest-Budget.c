@@ -657,7 +657,7 @@ test_gnc_book_set_get_root_account (Fixture *fixture, gconstpointer pData)
     g_assert (acc1);
     g_assert (acc1 != fixture->acct);
     /* Now try to set the book's root account to the fixture
-     * accout. Should throw an error.
+     * account. Should throw an error.
      */
     oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler,

@@ -59,7 +59,7 @@ struct _genimportsettings
        this will be added as new by default */
     int add_threshold;
     /**Transaction's match probability must be at least this much to be
-       displayed in the match list.  Dont set this to 0 except for
+       displayed in the match list.  Don't set this to 0 except for
        debugging purposes, otherwise all transactions of every accounts
        will be shown in the list */
     int display_threshold;

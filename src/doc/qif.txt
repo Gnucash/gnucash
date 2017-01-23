@@ -164,7 +164,7 @@ gboolean qif_file_needs_account(QifFile file);
 void qif_file_set_default_account(QifFile file, const char *acct_name);
 
 /** Parse the qif file values; may require some callbacks to let the
- *  user choose from ambigious data formats
+ *  user choose from ambiguous data formats
  *  XXX: Is there a better way to callback from here?
  *       Do we need progress-bar info here?
  */

@@ -43,7 +43,7 @@ void gnc_exp_parser_init (void);
 /**
  * The real init function, which takes an option to add the pre-defined vars
  * to the variable table.  This option is used by
- * gnc_exp_parser_parse_seperate_vars [itself used by the Scheduled
+ * gnc_exp_parser_parse_separate_vars [itself used by the Scheduled
  * Transaction code] to parse without using any "predefined" application
  * variables.
  **/

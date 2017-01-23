@@ -285,6 +285,7 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
         text = _("_Security/currency:");
         break;
     case DIAG_COMM_NON_CURRENCY:
+    case DIAG_COMM_NON_CURRENCY_SELECT:
         title = _("Select security");
         text = _("_Security:");
         break;
@@ -664,6 +665,7 @@ gnc_ui_update_namespace_picker (GtkWidget *cbwe,
         break;
 
     case DIAG_COMM_NON_CURRENCY:
+    case DIAG_COMM_NON_CURRENCY_SELECT:
         namespaces =
             gnc_commodity_table_get_namespaces (gnc_get_current_commodities());
         node = g_list_find_custom (namespaces, GNC_COMMODITY_NS_CURRENCY, collate);
@@ -682,7 +684,13 @@ gnc_ui_update_namespace_picker (GtkWidget *cbwe,
         namespaces = g_list_prepend (NULL, GNC_COMMODITY_NS_CURRENCY);
         break;
     }
-
+/* First insert "ALL" */
+    if (mode == DIAG_COMM_NON_CURRENCY_SELECT || mode == DIAG_COMM_ALL)
+    {
+        gtk_list_store_append(GTK_LIST_STORE(model), &iter);
+        gtk_list_store_set (GTK_LIST_STORE(model), &iter, 0,
+                            GNC_COMMODITY_NS_NONCURRENCY, -1);
+    }
     /* add them to the combobox */
     namespaces = g_list_sort(namespaces, collate);
     for (node = namespaces; node; node = node->next)

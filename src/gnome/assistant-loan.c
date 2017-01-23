@@ -582,7 +582,7 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                 GList *allowableAccounts;
             } gas_data[] =
             {
-                /* These ints are the GtkTable boundries */
+                /* These ints are the GtkTable boundaries */
                 { &ldd->prmAccountGAS,     ldd->prmTable, TRUE,  1, 4, 0, 1, liabilityAcct },
                 { &ldd->repAssetsFromGAS,  ldd->repTable, TRUE,  1, 4, 2, 3, paymentFromAccts },
                 { &ldd->repPrincToGAS,     ldd->repTable, TRUE,  1, 2, 3, 4, paymentToAccts  },
@@ -644,7 +644,7 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                 int left, right, top, bottom;
             } gde_data[] =
             {
-                /* These ints are the GtkTable boundries */
+                /* These ints are the GtkTable boundaries */
                 { &ldd->prmStartDateGDE, ldd->prmTable, 1, 2, 4, 5 },
                 { &ldd->revStartDate,    ldd->revTable, 1, 2, 0, 1 },
                 { &ldd->revEndDate,      ldd->revTable, 1, 2, 1, 2 },

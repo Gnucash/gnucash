@@ -1521,7 +1521,7 @@ gnc_commodity_increment_usage_count(gnc_commodity *cm)
             && gnc_commodity_get_auto_quote_control_flag(cm)
             && gnc_commodity_is_iso(cm))
     {
-        /* compatability hack - Gnucash 1.8 gets currency quotes when a
+        /* compatibility hack - Gnucash 1.8 gets currency quotes when a
            non-default currency is assigned to an account.  */
         gnc_commodity_begin_edit(cm);
         gnc_commodity_set_quote_flag(cm, TRUE);
@@ -1803,7 +1803,7 @@ gnc_commodity_table_lookup(const gnc_commodity_table * table,
     if (nsp)
     {
         /*
-         * Backward compatability support for currencies that have
+         * Backward compatibility support for currencies that have
          * recently changed.
          */
         if (nsp->iso4217)
@@ -1927,7 +1927,7 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
             return c;
         }
 
-        /* Backward compatability support for currencies that have
+        /* Backward compatibility support for currencies that have
          * recently changed. */
         if (priv->name_space->iso4217)
         {
@@ -2117,8 +2117,28 @@ gnc_commodity_is_currency(const gnc_commodity *cm)
 
 /********************************************************************
  * gnc_commodity_table_get_commodities
- * list commodities in a give namespace
+ * list commodities in a given namespace
  ********************************************************************/
+
+static CommodityList*
+commodity_table_get_all_noncurrency_commodities(const gnc_commodity_table* table)
+{
+    GList *node = NULL, *nslist = gnc_commodity_table_get_namespaces(table);
+    CommodityList *retval = NULL;
+    for (node = nslist; node; node=g_list_next(node))
+    {
+        gnc_commodity_namespace *ns = NULL;
+        if (g_strcmp0((char*)(node->data), GNC_COMMODITY_NS_CURRENCY) == 0
+            || g_strcmp0((char*)(node->data), "template") == 0)
+            continue;
+        ns = gnc_commodity_table_find_namespace(table, (char*)(node->data));
+        if (!ns)
+            continue;
+        retval = g_list_concat(g_hash_table_values(ns->cm_table), retval);
+    }
+    g_list_free(nslist);
+    return retval;
+}
 
 CommodityList *
 gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
@@ -2128,7 +2148,8 @@ gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
 
     if (!table)
         return NULL;
-
+    if (g_strcmp0(name_space, GNC_COMMODITY_NS_NONCURRENCY) == 0)
+        return commodity_table_get_all_noncurrency_commodities(table);
     ns = gnc_commodity_table_find_namespace(table, name_space);
     if (!ns)
         return NULL;

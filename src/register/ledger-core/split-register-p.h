@@ -90,7 +90,7 @@ struct sr_info
     /** The last date recorded in the blank split */
     time64 last_date_entered;
 
-    /** true if the current blank split has been edited and commited */
+    /** true if the current blank split has been edited and committed */
     gboolean blank_split_edited;
 
     /** true if the demarcation between 'past' and 'future' transactions

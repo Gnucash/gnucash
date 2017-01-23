@@ -36,7 +36,7 @@
     operate on engine data structures, so they don't belong in
     src/engine/Period.c.  Putting them into src/engine/gnc-date.c
     would be the best place for them, but then that creates a new
-    dependancy from the src/engine directory to the src/core-utils
+    dependency from the src/engine directory to the src/core-utils
     directory that doesn't currently exist.  Since that might be a
     problem for CashUtils, the app-file directory was chosen.
 */

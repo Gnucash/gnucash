@@ -107,7 +107,7 @@ static GncSxInstances* _gnc_sx_slr_tree_model_adapter_get_sx_instances(GncSxSlrT
 /** @return null if the iter is not actually an GncSxInstance. **/
 GncSxInstance* gnc_sx_slr_model_get_instance(GncSxSlrTreeModelAdapter *model, GtkTreeIter *iter);
 static GncSxInstance* _gnc_sx_slr_model_get_instance(GncSxSlrTreeModelAdapter *model, GtkTreeIter *iter, gboolean check_depth);
-/** @return false if the iter is not actaully an GncSxInstance's variable. **/
+/** @return false if the iter is not actually an GncSxInstance's variable. **/
 gboolean gnc_sx_slr_model_get_instance_and_variable(GncSxSlrTreeModelAdapter *model, GtkTreeIter *iter, GncSxInstance **instance_loc, GncSxVariable **var_loc);
 
 void gnc_sx_slr_model_effect_change(GncSxSlrTreeModelAdapter *model, gboolean auto_create_only, GList **created_transaction_guids, GList **creation_errors);

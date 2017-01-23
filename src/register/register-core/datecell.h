@@ -52,13 +52,13 @@
  *     '[':    decrment month
  *
  *     'M':
- *     'm':    begining of month
+ *     'm':    beginning of month
  *
  *     'H':
  *     'h':    end of month
  *
  *     'Y':
- *     'y':    begining of year
+ *     'y':    beginning of year
  *
  *     'R':
  *     'r':    end of year

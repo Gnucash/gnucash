@@ -97,13 +97,14 @@ GType gnc_commodity_namespace_get_type(void);
 #define GNC_COMMODITY_NS_LEGACY "GNC_LEGACY_CURRENCIES"
 /* The ISO define is deprecated in favor of CURRENCY */
 #define GNC_COMMODITY_NS_ISO    "ISO4217"
-#define GNC_COMMODITY_NS_CURRENCY "CURRENCY"
+#define GNC_COMMODITY_NS_CURRENCY _("CURRENCY")
 #define GNC_COMMODITY_NS_NASDAQ "NASDAQ"
 #define GNC_COMMODITY_NS_NYSE   "NYSE"
 #define GNC_COMMODITY_NS_EUREX  "EUREX"
 #define GNC_COMMODITY_NS_MUTUAL "FUND"
 #define GNC_COMMODITY_NS_AMEX   "AMEX"
 #define GNC_COMMODITY_NS_ASX    "ASX"
+#define GNC_COMMODITY_NS_NONCURRENCY _("ALL NON-CURRENCY")
 
 typedef GList CommodityList;
 
@@ -338,7 +339,7 @@ const char * gnc_commodity_get_namespace(const gnc_commodity * cm);
  *  a pointer to a null terminated string of the form "AMEX",
  *  "NASDAQ", etc.  The only difference between function and
  *  gnc_commodity_get_namespace() is that this function returns
- *  ISO4217 instead of CURRENCY for backward compatability with the
+ *  ISO4217 instead of CURRENCY for backward compatibility with the
  *  1.8 data files.
  *
  *  @param cm A pointer to a commodity data structure.

@@ -12,7 +12,7 @@
 <cstim> How are you printing balances right now?
  I guess you plug a \a gnc-numeric into the html code.
  If you do a s/\a gnc-numeric/\a gnc-monetary/
- ... then everything would be multi-currency compilant
+ ... then everything would be multi-currency compliant
  Of course the \a gnc-monetary needs the actual currency specified. 
  Would that lead to problems?
 Definition of \a gnc-monetary is in src/scm/gnc-numeric.scm

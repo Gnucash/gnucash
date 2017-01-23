@@ -52,7 +52,7 @@
 #
 #   @subsection swigworks What SWIG does
 #
-#   SWIG extracts informations from the c-sources and provides access to the structures
+#   SWIG extracts information from the c-sources and provides access to the structures
 #   to python. It's work is controlled by interface files :
 # 
 #   @li gnucash_core.i

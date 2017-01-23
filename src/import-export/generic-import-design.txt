@@ -30,7 +30,7 @@ enum gnc_match_probability {
 	}
 
 Here is the pseudocode of the gnc_import_add_trans function:
-Variables:  matches (a list of possible match with likelyhood)
+Variables:  matches (a list of possible match with likelihood)
 	split_to_match = trans's first split.
 
 In split_to_match's parent account; for each split where date >= split_to_match.date - 2 months:
@@ -49,7 +49,7 @@ In split_to_match's parent account; for each split where date >= split_to_match.
 		else
 			add to matches using UNLIKELY
 
-Present the list of matches to the user in decreasing order of likelyhood.  User has the option of selecting one of the match or creating a new transaction.
+Present the list of matches to the user in decreasing order of likelihood.  User has the option of selecting one of the match or creating a new transaction.
 Add transaction_online_id to selected split
 Erase from other CERTAIN splits
 if transaction not balanced

@@ -7,9 +7,6 @@
 /* Include pthread support for binary relocation? */
 #cmakedefine BR_PTHREAD 1
 
-/* Enable debug memory */
-#cmakedefine01 DEBUG_MEMORY
-
 /* Use binary relocation? */
 #cmakedefine ENABLE_BINRELOC
 

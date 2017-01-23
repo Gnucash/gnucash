@@ -45,7 +45,7 @@ the subaccount (e.g. A:C for Assets:Cash.)")
 
  N_( "Want to see all your subaccount transactions in one register? \
 From the Accounts tab in the main window, highlight the parent account \
-and select View -> Open Subaccounts from the menu.")
+and select Edit -> Open Subaccounts from the menu.")
 
  N_( "When entering dates, you can type '+' or '-' to increment or \
 decrement the selected date. You can use '+' and '-' to increment and \

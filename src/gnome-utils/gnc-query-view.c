@@ -344,7 +344,7 @@ gnc_query_view_init_view (GNCQueryView *qview)
         else if (((GNCSearchParam *) param)->justify == GTK_JUSTIFY_RIGHT)
             algn = 1.0;
 
-        /* Set column resizeable */
+        /* Set column resizable */
         if (((GNCSearchParam *) param)->non_resizeable)
         {
             gtk_tree_view_column_set_resizable (col, FALSE);

@@ -234,7 +234,7 @@ void gnc_suspend_gui_refresh (void);
  *   Resume refresh handlers by the component manager.
  *   Each call reduces the suspend counter by one. When
  *   the counter reaches zero, all changes which have
- *   occured since the last refresh are collected and
+ *   occurred since the last refresh are collected and
  *   passed to the components in refresh handlers.
  */
 void gnc_resume_gui_refresh (void);

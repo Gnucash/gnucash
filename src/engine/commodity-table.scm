@@ -25,7 +25,7 @@
 
 
 
-(define GNC_COMMODITY_NS_CURRENCY "CURRENCY")
+(define GNC_COMMODITY_NS_CURRENCY (gettext "CURRENCY"))
 
 ;; If you change the C side, change this too.
 (define GNC_COMMODITY_NS_AMEX "AMEX")
@@ -33,3 +33,5 @@
 (define GNC_COMMODITY_NS_NASDAQ "NASDAQ")
 (define GNC_COMMODITY_NS_EUREX "EUREX")
 (define GNC_COMMODITY_NS_MUTUAL "FUND")
+(define GNC_COMMODITY_NS_ASX "ASX")
+(define GNC_COMMODITY_NS_NONCURRENCY (gettext "ALL NON-CURRENCY"))

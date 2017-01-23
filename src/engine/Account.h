@@ -784,7 +784,7 @@ gint gnc_account_get_current_depth (const Account *account);
 
 /** Return the number of levels of descendants accounts below the
  *  specified account.  The returned number does not include the
- *  specifed account itself.
+ *  specified account itself.
  *
  *  @param account The account to query.
  *

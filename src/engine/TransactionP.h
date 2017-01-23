@@ -153,11 +153,11 @@ QofBackend * xaccTransactionGetBackend (Transaction *trans);
 /* The xaccEnable/DisableDataScrubbing() routines affect what
  *   happens during transaction commit.  When scrubbing is enabled,
  *   then transactions are fixed up during transaction commit,
- *   so that only consistent transactions are commited to the engine.
+ *   so that only consistent transactions are committed to the engine.
  *   However, when data is being loaded from a backend (in particular,
  *   from the file backend), the data might not be consistent until
  *   its completely loaded.   In particular, gains transactions might
- *   be loaded at a different time than the transactions that casued
+ *   be loaded at a different time than the transactions that caused
  *   the gains.  Thus, scrubbing needs do be disabled during file
  *   load.  These routines enable that.
  */

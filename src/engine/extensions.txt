@@ -37,7 +37,7 @@ The xaccPeriodClose() subroutine performs the following:
 - find the equity account (what if there is more than one equity account
    ?? what if equity has sub-accounts ?? )
 - transfer all income/expense to equity  (shouldn't the equity account
-   match the income/expense heirarchy?)
+   match the income/expense hierarchy?)
 - return a new account group with new opening balances ...
 
 \section transactionchanges Changes to Transaction Structure

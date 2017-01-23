@@ -10,10 +10,10 @@ Bob Drzyzgula
 
 At this point, this document contains my personal thoughts about possible
 design criteria for a budgeting engine in GnuCash. These should not
-at this writing be taken as concensus opinion, and may in places be
+at this writing be taken as consensus opinion, and may in places be
 at odds with conventions inside GnuCash code (and with general accounting
 principals... I am in no way an accountant), and thus may not be practical.
-However, I believe that they provide a self-consistant view of how
+However, I believe that they provide a self-consistent view of how
 one might do this, and I hope that this document will serve to continue
 the discussion that began on the GnuCash/Xacc mailing list.
 
@@ -97,7 +97,7 @@ here.
 
 \subsection budgetdocs Documenting the Budget
 
-One possible way to document a budget might be as a classic ``input-ouput
+One possible way to document a budget might be as a classic ``input-output
 table''. Consider the following table:
 \verbatim
 +---------+----------+---------+-----+------+------+-----+------+------+
@@ -195,7 +195,7 @@ Where I'm headed for the rest of it is this:
  $0.40 on Friday because they have burritos on
  Friday and she hates them and brings her lunch but
  still needs milk" into something usable as a
- budget -or- as a schedule (these being two seperate
+ budget -or- as a schedule (these being two separate
  outputs).
 - While I expect that such an engine would be extremely
  useful for about 80% of the data that would go into
