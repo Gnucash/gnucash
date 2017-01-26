@@ -24,6 +24,7 @@
 #define GNUCASH_DATE_PICKER_H
 
 #include <libgnomecanvas/libgnomecanvas.h>
+#include "gnucash-calendar.h"
 /** @ingroup Register
  * @addtogroup Gnome
  * @{
@@ -40,7 +41,7 @@ typedef struct
 {
     GnomeCanvasWidget canvas_widget;
 
-    GtkCalendar *calendar;
+    GncCalendar *calendar;
 } GNCDatePicker;
 
 

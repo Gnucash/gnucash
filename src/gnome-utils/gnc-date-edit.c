@@ -36,7 +36,7 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
-#include <glib/gi18n.h>
+
 #include <gdk/gdkkeysyms.h>
 #include <string.h>
 #include <stdlib.h> /* atoi */
@@ -48,6 +48,8 @@
 #include "gnc-engine.h"
 #include "dialog-utils.h"
 #include "gnc-date-edit.h"
+
+#include "gnucash-calendar.h"
 
 enum
 {
@@ -163,12 +165,12 @@ gnc_date_edit_popdown(GNCDateEdit *gde)
 }
 
 static void
-day_selected (GtkCalendar *calendar, GNCDateEdit *gde)
+day_selected (GncCalendar *calendar, GNCDateEdit *gde)
 {
     Timespec t;
     guint year, month, day;
     gde->in_selected_handler = TRUE;
-    gtk_calendar_get_date (calendar, &year, &month, &day);
+    gnc_calendar_get_date (calendar, &year, &month, &day);
     /* GtkCalendar returns a 0-based month */
     t = gnc_dmy2timespec (day, month + 1, year);
     gnc_date_edit_set_time_ts (gde, t);
@@ -296,10 +298,10 @@ gnc_date_edit_popup (GNCDateEdit *gde)
     gnc_tm_set_day_start(&mtm);
 
     /* Set the calendar.  */
-    gtk_calendar_select_day (GTK_CALENDAR (gde->calendar), 1);
-    gtk_calendar_select_month (GTK_CALENDAR (gde->calendar), mtm.tm_mon,
-                               1900 + mtm.tm_year);
-    gtk_calendar_select_day (GTK_CALENDAR (gde->calendar), mtm.tm_mday);
+    gnc_calendar_select_day (GNC_CALENDAR (gde->calendar), 1);
+    gnc_calendar_select_month (GNC_CALENDAR (gde->calendar), mtm.tm_mon,
+                               (guint) (1900 + mtm.tm_year));
+    gnc_calendar_select_day (GNC_CALENDAR (gde->calendar), mtm.tm_mday);
 
     /* Make sure we'll get notified of clicks outside the popup
      * window so we can properly pop down if that happens. */
@@ -520,10 +522,10 @@ gnc_date_edit_set_time_internal (GNCDateEdit *gde, time64 the_time)
     /* Update the calendar. */
     if (!gde->in_selected_handler)
     {
-	gtk_calendar_select_day(GTK_CALENDAR (gde->calendar), 1);
-	gtk_calendar_select_month(GTK_CALENDAR (gde->calendar),
-				  mytm->tm_mon, 1900 + mytm->tm_year);
-	gtk_calendar_select_day(GTK_CALENDAR (gde->calendar), mytm->tm_mday);
+	gnc_calendar_select_day(GNC_CALENDAR (gde->calendar), 1);
+	gnc_calendar_select_month(GNC_CALENDAR (gde->calendar),
+                              (guint) mytm->tm_mon, 1900 + mytm->tm_year);
+	gnc_calendar_select_day(GNC_CALENDAR (gde->calendar), mytm->tm_mday);
     }
 
     /* Set the time of day. */
@@ -935,11 +937,12 @@ create_children (GNCDateEdit *gde)
     gtk_container_add (GTK_CONTAINER (gde->cal_popup), frame);
     gtk_widget_show (GTK_WIDGET(frame));
 
-    gde->calendar = gtk_calendar_new ();
-    gtk_calendar_set_display_options
-    (GTK_CALENDAR (gde->calendar),
-     (GTK_CALENDAR_SHOW_DAY_NAMES
-      | GTK_CALENDAR_SHOW_HEADING));
+    gde->calendar = gnc_calendar_new ();
+    gnc_calendar_set_calendar_type(GNC_CALENDAR(gde->calendar),gnc_calendar_type_get ());
+    gnc_calendar_set_display_options
+    (GNC_CALENDAR (gde->calendar),
+     (GNC_CALENDAR_SHOW_DAY_NAMES
+      | GNC_CALENDAR_SHOW_HEADING));
     g_signal_connect (gde->calendar, "button-release-event",
                       G_CALLBACK(gnc_date_edit_button_released), gde);
     g_signal_connect (G_OBJECT (gde->calendar), "day-selected",

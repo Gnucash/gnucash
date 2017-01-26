@@ -1227,6 +1227,7 @@ gnc_preferences_dialog_create(void)
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "retain_days_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "tab_width_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "date_formats");
+    gnc_builder_add_from_file (builder, "dialog-preferences.glade", "calendar_types");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "GnuCash Preferences");
 
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "GnuCash Preferences"));

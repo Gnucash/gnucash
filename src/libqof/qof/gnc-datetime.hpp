@@ -28,6 +28,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include "gnc-jalali.h"
 
 typedef struct
 {
@@ -36,6 +37,13 @@ typedef struct
     int day; //1-31
 } ymd;
 
+typedef struct
+{
+    int year;
+    int month;
+    int day;
+    int  calender_type; // calnedar type
+} masked_date_structure;
 class GncDateImpl;
 class GncDateTimeImpl;
 using time64 = int64_t;
@@ -67,6 +75,7 @@ public:/** Construct a GncDate representing the current day.
     GncDate& operator=(GncDate&&);
 /** Set the date object to the computer clock's current day. */
     void today();
+    std::string format_masked_date(const char * format);
 /** Get the year, month, and day from the date as a ymd.
     @return ymd struct
  */
@@ -85,6 +94,7 @@ public:/** Construct a GncDate representing the current day.
 
 private:
     std::unique_ptr<GncDateImpl> m_impl;
+    masked_date_structure masked_date;
 };
 
 /** GnuCash DateTime class
@@ -171,8 +181,11 @@ public:
  */
     std::string format_zulu(const char* format) const;
 
+    std::string format_masked(const gchar *string);
+
 private:
     std::unique_ptr<GncDateTimeImpl> m_impl;
+    masked_date_structure masked_date;
 };
 
 #endif // __GNC_DATETIME_HPP__

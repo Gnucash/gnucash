@@ -26,6 +26,8 @@ extern "C"
 {
 #include "config.h"
 #include "platform.h"
+#include "gnc-jalali.h"
+#include "gnc-date.h"
 }
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
@@ -69,12 +71,39 @@ public:
     GncDateImpl(Date d) : m_greg(d) {}
 
     void today() { m_greg = boost::gregorian::day_clock::local_day(); }
+    masked_date_structure update_masked_date();
     ymd year_month_day() const;
     std::string format(const char* format) const;
     std::string format_zulu(const char* format) const;
 private:
     Date m_greg;
+    masked_date_structure masked_date;
 };
+
+masked_date_structure
+GncDateImpl::update_masked_date()
+{
+    int y;
+    int m ;
+    int d;
+
+    switch (gnc_calendar_type_get ())
+    {
+        case GNC_CALENDAR_TYPE_JALALI:
+        gnc_gregorian_to_jalali(&y,&m,&d,m_greg.year(),m_greg.month(),m_greg.day());
+            break;
+        default:
+            y=m_greg.year();
+            m=m_greg.month();
+            d=m_greg.day();
+    }
+
+    this->masked_date.year=y;
+    this->masked_date.month=m;
+    this->masked_date.day=d;
+    masked_date.calender_type=gnc_calendar_type_get ();
+    return masked_date;
+}
 
 ymd
 GncDateImpl::year_month_day() const
@@ -86,13 +115,50 @@ GncDateImpl::year_month_day() const
 std::string
 GncDateImpl::format(const char* format) const
 {
-    using Facet = boost::gregorian::date_facet;
-    std::stringstream ss;
-    //The stream destructor frees the facet, so it must be heap-allocated.
-    auto output_facet(new Facet(format));
-    ss.imbue(std::locale(std::locale(), output_facet));
-    ss << m_greg;
-    return ss.str();
+    if (gnc_use_mask ())
+        {
+        const_cast<GncDateImpl *>(this)->update_masked_date ();
+        std::string str;
+        for (u_int i = 0; i < sizeof (format); i++)
+            {
+             if (format[i] == '%')
+            {
+            continue;
+            }
+        else if (format[i] == 'd' || format[i] == 'D')
+            {
+            str.append (boost::lexical_cast<std::string> (masked_date.day));
+
+            // work on day
+            }
+        else if (format[i] == 'm' || format[i] == 'M')
+            {
+            str.append (boost::lexical_cast<std::string> (masked_date.month));
+
+            }
+        else if (format[i] == 'y' || format[i] == 'Y')
+            {
+            str.append (boost::lexical_cast<std::string> (masked_date.year));
+
+            }
+        else
+            {
+            str += format[i];
+
+            }
+            }
+        return str;
+        }
+    else
+        {
+        using Facet = boost::gregorian::date_facet;
+        std::stringstream ss;
+        //The stream destructor frees the facet, so it must be heap-allocated.
+        auto output_facet (new Facet (format));
+        ss.imbue (std::locale (std::locale (), output_facet));
+        ss << m_greg;
+        return ss.str ();
+        }
 }
 
 /** Private implementation of GncDateTime. See the documentation for that class.
@@ -249,13 +315,60 @@ GncDateTimeImpl::date() const
 std::string
 GncDateTimeImpl::format(const char* format) const
 {
-    using Facet = boost::local_time::local_time_facet;
-    std::stringstream ss;
-    //The stream destructor frees the facet, so it must be heap-allocated.
-    auto output_facet(new Facet(format));
-    ss.imbue(std::locale(std::locale(), output_facet));
-    ss << m_time;
-    return ss.str();
+    if(gnc_use_mask ()){
+        std::string str;
+        int c_y;
+        int c_m;
+        int c_d;
+        switch (gnc_calendar_type_get ())
+            {
+            case GNC_CALENDAR_TYPE_JALALI:
+                gnc_gregorian_to_jalali(&c_y,&c_m,&c_d,m_time.date().year(),m_time.date().month(),m_time.date().day());
+            break;
+            default:
+                c_y=m_time.date().year();
+            c_m=m_time.date().month();
+            c_d=m_time.date().day();
+            break;
+            }
+
+
+
+        for ( u_int i=0;i< sizeof(format);i++)
+            {
+            if( format[i] == '%') {
+            continue;
+            }
+        else if ( format[i] == 'd' || format[i] == 'D') {
+            str.append(boost::lexical_cast<std::string>(c_d));
+
+            // work on day
+            }
+        else if (format[i] == 'm' || format[i] == 'M') {
+            str.append(boost::lexical_cast<std::string>(c_m));
+
+            }
+        else if ( format[i] =='y' || format[i] == 'Y') {
+            str.append(boost::lexical_cast<std::string>(c_y));
+
+            }
+        else {
+            str+=format[i];
+
+            }
+            }
+
+        return str;
+        }
+    else{
+        using Facet = boost::local_time::local_time_facet;
+        std::stringstream ss;
+        //The stream destructor frees the facet, so it must be heap-allocated.
+        auto output_facet(new Facet(format));
+        ss.imbue(std::locale(std::locale(), output_facet));
+        ss << m_time;
+        return ss.str();
+        }
 }
 
 std::string

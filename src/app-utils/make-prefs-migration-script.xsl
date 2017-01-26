@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:df="http://dateformats.data">
+                xmlns:df="http://dateformats.data"
+                xmlns:ct="http://calendartypes.data">
 <xsl:output method="text" encoding="UTF8"/>
 
 <!-- Configure lookup table for date format -->
 <xsl:key name="datefmt-lookup" match="df:dateformat" use="df:name"/>
+<xsl:key name="calendartyp-lookup" match="ct:calendartype" use="ct:name"/>
 <xsl:variable name="dateformats-top" select="document('')/*/df:dateformats"/>
+<xsl:variable name="calendartypes-top" select="document('')/*/ct:calendartypes"/>
 
 <!-- Primary template - process each prefence group -->
 <xsl:template match="/">
@@ -114,6 +117,19 @@
 )
    </xsl:if></xsl:when>
 
+   <xsl:when test="$curr-pref/gschematype = 'calendartyp'"><xsl:if test="./stringvalue">
+;; Gconf value (string): "<xsl:value-of select="./stringvalue"/>" -> gsettings (integer)
+(gnc-prefs-set-int
+    ; preference group
+    "<xsl:value-of select="$curr-pref/../gschemaid"/>"
+    ; preference name
+    "<xsl:value-of select="$curr-pref/gschemaname"/>"
+    ; preference value
+    <xsl:apply-templates select="$calendartypes-top">
+     <xsl:with-param name="curr-entry" select="."/>
+    </xsl:apply-templates>
+)
+   </xsl:if></xsl:when>
 
    <xsl:when test="$curr-pref/gschematype = '(dd)'">
 ;; Type: pair of decimals (stored in Gconf as list of floats)
@@ -216,5 +232,10 @@
   <df:dateformat><df:name>iso</df:name><df:index>3</df:index></df:dateformat>
   <df:dateformat><df:name>locale</df:name><df:index>4</df:index></df:dateformat>
 </df:dateformats>
+
+<ct:calendartypes>
+    <ct:calendartype><ct:name>gregorian</ct:name><ct:index>0</ct:index></ct:calendartype>
+    <ct:calendartype><ct:name>jalali</ct:name><ct:index>1</ct:index></ct:calendartype>
+</ct:calendartypes>
 
 </xsl:stylesheet>

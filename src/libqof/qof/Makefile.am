@@ -45,7 +45,8 @@ libgnc_qof_la_SOURCES =  \
    qofquerycore.cpp    \
    qofsession.cpp      \
    qof-string-cache.cpp  \
-   qofutil.cpp
+   qofutil.cpp \
+   gnc-jalali.c
 
 qofincludedir = ${pkgincludedir}
 
@@ -80,7 +81,8 @@ qofinclude_HEADERS = \
    qofsession.hpp    \
    qof-string-cache.h  \
    qofutil.h         \
-   qof-gobject.h
+   qof-gobject.h \
+   gnc-jalali.h
 
 noinst_HEADERS = \
    gnc-backend-prov.hpp \

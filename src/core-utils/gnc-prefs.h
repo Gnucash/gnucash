@@ -65,6 +65,7 @@
 #define GNC_PREF_NEGATIVE_IN_RED     "negative-in-red"
 #define GNC_PREF_NUM_SOURCE          "num-source"
 #define GNC_PREF_DATE_FORMAT         "date-format"
+#define GNC_PREF_CALANDER_TYPE        "calendar-types"
 #define GNC_PREF_DATE_COMPL_THISYEAR "date-completion-thisyear"
 #define GNC_PREF_DATE_COMPL_SLIDING  "date-completion-sliding"
 #define GNC_PREF_DATE_BACKMONTHS     "date-backmonths"

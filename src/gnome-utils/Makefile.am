@@ -106,7 +106,8 @@ libgncmod_gnome_utils_la_SOURCES = \
   search-param.c \
   print-session.c \
   swig-gnome-utils.c \
-  window-main-summarybar.c
+  window-main-summarybar.c \
+  gnucash-calendar.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
@@ -182,7 +183,8 @@ gncinclude_HEADERS = \
   misc-gnome-utils.h \
   tree-view-utils.h \
   print-session.h \
-  window-main-summarybar.h
+  window-main-summarybar.h \
+  gnucash-calendar.h
 
 noinst_HEADERS = \
   dialog-tax-table.h \
