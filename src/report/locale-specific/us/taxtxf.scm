@@ -3,9 +3,9 @@
 ;;
 ;; updated by  J. Alex Aycinena, July 2008, October 2009
 ;;
-;; This report prints transaction detail and account totals for Tax-related
-;; accounts sorted by form/schedule, copy, line and tax code, and exports TXF
-;; files for import to TaxCut, TurboTax, etc.
+;; This report prints transaction details and account totals for accounts
+;; relevant to United States taxes, sorted by form/schedule, copy, line
+;; and tax code, and exports TXF files for import to TaxCut, TurboTax, etc.
 ;;
 ;; For this to work, the user has to segregate taxable and not taxable
 ;; income to different accounts, as well as deductible and non-
