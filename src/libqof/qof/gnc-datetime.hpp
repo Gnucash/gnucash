@@ -181,7 +181,7 @@ public:
  */
     std::string format_zulu(const char* format) const;
 
-    std::string format_masked(const gchar *string);
+    
 
 private:
     std::unique_ptr<GncDateTimeImpl> m_impl;
