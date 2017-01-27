@@ -263,12 +263,6 @@
 /* Define to 1 if you have the <wctype.h> header file. */
 #cmakedefine HAVE_WCTYPE_H 1
 
-/* webkit_web_frame_print_full exists */
-#cmakedefine HAVE_WEBKIT_WEB_FRAME_PRINT_FULL 1
-
-/* Define to 1 if you have the `webkit_web_view_load_uri' function. */
-#cmakedefine HAVE_WEBKIT_WEB_VIEW_LOAD_URI 1
-
 /* Define to 1 if you have the <X11/Xlib.h> header file. */
 #cmakedefine HAVE_X11_XLIB_H 1
 

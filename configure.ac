@@ -1127,35 +1127,7 @@ then
 
     webkit)
       PKG_CHECK_MODULES(WEBKIT, webkit-1.0 >= "1.2")
-      case "$platform" in
-        win32)
-          # 1.1.90 has both functions
-          AC_DEFINE(HAVE_WEBKIT_WEB_VIEW_LOAD_URI,1,[webkit_web_view_load_uri exists])
-          AC_DEFINE(HAVE_WEBKIT_WEB_FRAME_PRINT_FULL,1,[webkit_web_frame_print_full exists])
-          ;;
-        *)
-          # Unsure - check functions exist
-          oLIBS="$LIBS"
-          LIBS="$LIBS ${WEBKIT_LIBS}"
-          AC_CHECK_FUNCS(webkit_web_view_load_uri)
-          LIBS="$oLIBS"
-          AC_MSG_CHECKING(for webkit_web_frame_print_full)
-          saved_CFLAGS="${CFLAGS}"
-          saved_LIBS="${LIBS}"
-          CFLAGS="${CFLAGS} ${WEBKIT_CFLAGS}"
-          LIBS="${LIBS} ${WEBKIT_LIBS}"
-          AC_LINK_IFELSE(
-              [AC_LANG_PROGRAM(
-                  [[#include <webkit/webkit.h>]],
-                  [[webkit_web_frame_print_full( 0, 0, 0, 0 );]])],
-                  [AC_MSG_RESULT(yes)
-                   AC_DEFINE(HAVE_WEBKIT_WEB_FRAME_PRINT_FULL,1,[webkit_web_frame_print_full exists])],
-                  [AC_MSG_RESULT(no)])
-          CFLAGS="${saved_CFLAGS}"
-          LIBS="${saved_LIBS}"
-          ;;
-        esac
-        ;;
+      ;;
 
     *) AC_MSG_ERROR([Invalid HTML engine: must be webkit]) ;;
   esac
