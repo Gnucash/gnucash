@@ -103,3 +103,5 @@ src/scm/gnucash/price-quotes.scm
 src/scm/gnucash/printf.scm
 src/tax/us/gnucash/tax/de_DE.scm
 src/tax/us/gnucash/tax/us.scm
+src/core-utils/calendar-gregorian-lib.c
+src/gnome-utils/gnucash-calendar.c
