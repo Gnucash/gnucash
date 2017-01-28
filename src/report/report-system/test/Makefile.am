@@ -58,7 +58,9 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/src/gnc-module
 
 $(SCM_TESTS): %: $(srcdir)/%.scm Makefile .scm-links
-	echo '${GUILE} --debug -l $(srcdir)/$*.scm -c "(exit (run-test))"' > $@
+	echo 'export GNC_BUILDDIR="${abs_top_builddir}";' > $@
+	echo 'export GNC_UNINSTALLED=yes;' >> $@
+	echo '${GUILE} --debug -l $(srcdir)/$*.scm -c "(exit (run-test))"' >> $@
 	chmod a+x $@
 
 TESTS_ENVIRONMENT = \
