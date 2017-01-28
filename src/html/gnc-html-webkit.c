@@ -42,6 +42,7 @@
 #include <webkit/webkit.h>
 
 #include "Account.h"
+#include "gnc-prefs.h"
 #include "gnc-gui-query.h"
 #include "gnc-engine.h"
 #include "gnc-html.h"
@@ -81,6 +82,7 @@ static char error_404_title[] = N_("Not found");
 static char error_404_body[] = N_("The specified URL could not be loaded.");
 
 #define BASE_URI_NAME "base-uri"
+#define GNC_PREF_RPT_DFLT_ZOOM "default-zoom"
 
 static WebKitNavigationResponse webkit_navigation_requested_cb(
     WebKitWebView* web_view,
@@ -110,6 +112,7 @@ static gboolean impl_webkit_export_to_file( GncHtml* self, const gchar* filepath
 static void impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf );
 static void impl_webkit_cancel( GncHtml* self );
 static void impl_webkit_set_parent( GncHtml* self, GtkWindow* parent );
+static void impl_webkit_default_zoom_changed(gpointer prefs, gchar *pref, gpointer user_data);
 
 static void
 gnc_html_webkit_init( GncHtmlWebkit* self )
@@ -119,6 +122,7 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
 
     WebKitWebSettings* webkit_settings = NULL;
     const char* default_font_family = NULL;
+    gdouble zoom = 1.0;
 
     new_priv = g_realloc( GNC_HTML(self)->priv, sizeof(GncHtmlWebkitPrivate) );
     priv = self->priv = new_priv;
@@ -126,6 +130,7 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
 
     priv->html_string = NULL;
     priv->web_view = WEBKIT_WEB_VIEW(webkit_web_view_new());
+
 
     /* Get the default font family from GtkStyle of a GtkWidget(priv-web_view). */
     default_font_family = pango_font_description_get_family( gtk_rc_get_style(GTK_WIDGET(priv->web_view))->font_desc );
@@ -144,6 +149,11 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
                       NULL);
         PINFO("webkit_settings: Set default font to [%s]", default_font_family);
     }
+    /* Scale everything up */
+    zoom = gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL_REPORT, GNC_PREF_RPT_DFLT_ZOOM);
+    webkit_web_view_set_full_content_zoom (priv->web_view, TRUE);
+    webkit_web_view_set_zoom_level (priv->web_view, zoom);
+
 
     gtk_container_add( GTK_CONTAINER(priv->base.container),
                        GTK_WIDGET(priv->web_view) );
@@ -180,6 +190,11 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
                       G_CALLBACK(gnc_html_submit_cb),
                       self);
 #endif
+
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL_REPORT,
+            GNC_PREF_RPT_DFLT_ZOOM,
+            impl_webkit_default_zoom_changed,
+                           self);
 
     LEAVE("retval %p", self);
 }
@@ -221,6 +236,11 @@ gnc_html_webkit_dispose( GObject* obj )
         g_free( priv->html_string );
         priv->html_string = NULL;
     }
+
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL_REPORT,
+            GNC_PREF_RPT_DFLT_ZOOM,
+            impl_webkit_default_zoom_changed,
+                                 obj);
 
     G_OBJECT_CLASS(gnc_html_webkit_parent_class)->dispose( obj );
 }
@@ -1283,4 +1303,18 @@ impl_webkit_set_parent( GncHtml* self, GtkWindow* parent )
 
     priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
     priv->base.parent = GTK_WIDGET(parent);
+}
+
+static void
+impl_webkit_default_zoom_changed(gpointer prefs, gchar *pref, gpointer user_data)
+{
+    gdouble zoom = 1.0;
+    GncHtmlWebkit* self = GNC_HTML_WEBKIT(user_data);
+    GncHtmlWebkitPrivate* priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
+
+    g_return_if_fail(user_data != NULL);
+
+    zoom = gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL_REPORT, GNC_PREF_RPT_DFLT_ZOOM);
+    webkit_web_view_set_zoom_level (priv->web_view, zoom);
+
 }

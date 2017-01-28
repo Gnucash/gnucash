@@ -328,6 +328,11 @@
       <summary>Default currency for new reports</summary>
       <description>This setting controls the default currency used for reports. If set to "locale" then GnuCash will retrieve the default currency from the user's locale setting. If set to "other", GnuCash will use the setting specified by the currency-other key.</description>
     </key>
+    <key name="default-zoom" type="d">
+      <default>1.0</default>
+      <summary>Zoom factor to use by default for reports.</summary>
+      <description>On high-resolution displays the reports will be unreadable by default. Setting a zoom factor to a number bigger than 1.0 can help improve this situation.</description>
+    </key>
     <child name="pdf-export" schema="org.gnucash.general.report.pdf-export"/>
   </schema>
   <schema id="org.gnucash.general.report.pdf-export" path="/org/gnucash/general/report/pdf-export/">
