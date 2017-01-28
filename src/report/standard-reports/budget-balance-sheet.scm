@@ -566,7 +566,7 @@
 
           ;; Budgeted liabilities are liability repayments (negative liabilities).
           (set! liability-repayments
-            (gnc:get-assoc-account-balances-total liability-account-budget-balances))
+            (get-assoc-account-balances-total-negated liability-account-budget-balances))
 
           ;; New liabilities are then negated liability repayments.
           (set! new-liabilities
