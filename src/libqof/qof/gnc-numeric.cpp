@@ -328,14 +328,7 @@ GncNumeric::to_decimal(unsigned int max_places) const
         return GncNumeric(m_num / excess, powten(max_places));
     }
     GncRational rr(*this);
-    rr.round(powten(max_places), RoundType::never);
-    if (rr.m_error)
-    {
-        std::ostringstream msg;
-        msg << "GncNumeric " << *this
-            << " could not be represented as a decimal without rounding.\n";
-        throw std::range_error(msg.str());
-    }
+    rr.round(powten(max_places), RoundType::never); //May throw
     /* rr might have gotten reduced a bit too much; if so, put it back: */
     unsigned int pwr{1};
     for (; pwr <= max_places && !(rr.m_den % powten(pwr)); ++pwr);
@@ -804,11 +797,8 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
         GncRational ar(a), br(b);
         auto sum = ar + br;
         sum.round(denom, static_cast<RoundType>(how & GNC_NUMERIC_RND_MASK));
-        if (sum.m_error)
-            return gnc_numeric_error(sum.m_error);
-        if (sum.m_num.isBig() || sum.m_den.isBig() ||
-            sum.m_num.isOverflow() || sum.m_den.isOverflow() ||
-            sum.m_num.isNan() || sum.m_den.isNan())
+
+        if (sum.is_big() || !sum.valid())
             return gnc_numeric_error(GNC_ERROR_OVERFLOW);
         return GncNumeric(sum);
     }
@@ -826,6 +816,11 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
     {
         PWARN("%s", err.what());
         return gnc_numeric_error(GNC_ERROR_OVERFLOW);
+    }
+    catch (const std::domain_error& err)
+    {
+        PWARN("%s", err.what());
+        return gnc_numeric_error(GNC_ERROR_REMAINDER);
     }
 }
 
@@ -854,11 +849,7 @@ gnc_numeric_sub(gnc_numeric a, gnc_numeric b,
         GncRational ar(a), br(b);
         auto sum = ar - br;
         sum.round(denom, static_cast<RoundType>(how & GNC_NUMERIC_RND_MASK));
-        if (sum.m_error)
-            return gnc_numeric_error(sum.m_error);
-         if (sum.m_num.isBig() || sum.m_den.isBig() ||
-            sum.m_num.isOverflow() || sum.m_den.isOverflow() ||
-            sum.m_num.isNan() || sum.m_den.isNan())
+        if (sum.is_big() || !sum.valid())
             return gnc_numeric_error(GNC_ERROR_OVERFLOW);
        return GncNumeric(sum);
     }
@@ -876,6 +867,11 @@ gnc_numeric_sub(gnc_numeric a, gnc_numeric b,
     {
         PWARN("%s", err.what());
         return gnc_numeric_error(GNC_ERROR_OVERFLOW);
+    }
+    catch (const std::domain_error& err)
+    {
+        PWARN("%s", err.what());
+        return gnc_numeric_error(GNC_ERROR_REMAINDER);
     }
 }
 
@@ -903,11 +899,7 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
         GncRational ar(a), br(b);
         auto prod = ar * br;
         prod.round(denom, static_cast<RoundType>(how & GNC_NUMERIC_RND_MASK));
-        if (prod.m_error)
-            return gnc_numeric_error(prod.m_error);
-        if (prod.m_num.isBig() || prod.m_den.isBig() ||
-            prod.m_num.isOverflow() || prod.m_den.isOverflow() ||
-            prod.m_num.isNan() || prod.m_den.isNan())
+        if (prod.is_big() || !prod.valid())
             return gnc_numeric_error(GNC_ERROR_OVERFLOW);
         return GncNumeric(prod);
      }
@@ -925,6 +917,11 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
     {
         PWARN("%s", err.what());
         return gnc_numeric_error(GNC_ERROR_OVERFLOW);
+    }
+    catch (const std::domain_error& err)
+    {
+        PWARN("%s", err.what());
+        return gnc_numeric_error(GNC_ERROR_REMAINDER);
     }
 }
 
@@ -953,11 +950,7 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
         GncRational ar(a), br(b);
         auto quot = ar / br;
         quot.round(denom, static_cast<RoundType>(how & GNC_NUMERIC_RND_MASK));
-        if (quot.m_error)
-            return gnc_numeric_error(quot.m_error);
-        if (quot.m_num.isBig() || quot.m_den.isBig() ||
-            quot.m_num.isOverflow() || quot.m_den.isOverflow() ||
-            quot.m_num.isNan() || quot.m_den.isNan())
+        if (quot.is_big() || !quot.valid())
             return gnc_numeric_error(GNC_ERROR_OVERFLOW);
         return GncNumeric(quot);
     }
@@ -975,6 +968,11 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
     {
         PWARN("%s", err.what());
         return gnc_numeric_error(GNC_ERROR_OVERFLOW);
+    }
+    catch (const std::domain_error& err)
+    {
+        PWARN("%s", err.what());
+        return gnc_numeric_error(GNC_ERROR_REMAINDER);
     }
 }
 
@@ -1056,7 +1054,11 @@ gnc_numeric_reduce(gnc_numeric in)
         PWARN("%s", err.what());
         return gnc_numeric_error(GNC_ERROR_ARG);
     }
-
+    catch (const std::domain_error& err)
+    {
+        PWARN("%s", err.what());
+        return gnc_numeric_error(GNC_ERROR_REMAINDER);
+    }
 }
 
 
@@ -1112,6 +1114,11 @@ gnc_numeric_invert(gnc_numeric num)
         PWARN("%s", err.what());
         return gnc_numeric_error(GNC_ERROR_ARG);
     }
+    catch (const std::domain_error& err)
+    {
+        PWARN("%s", err.what());
+        return gnc_numeric_error(GNC_ERROR_REMAINDER);
+    }
 }
 
 /* *******************************************************************
@@ -1143,6 +1150,11 @@ double_to_gnc_numeric(double in, gint64 denom, gint how)
     {
         PWARN("%s", err.what());
         return gnc_numeric_error(GNC_ERROR_ARG);
+    }
+    catch (const std::domain_error& err)
+    {
+        PWARN("%s", err.what());
+        return gnc_numeric_error(GNC_ERROR_REMAINDER);
     }
 }
 

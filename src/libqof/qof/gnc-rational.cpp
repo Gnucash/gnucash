@@ -26,7 +26,7 @@
 
 
 GncRational::GncRational(GncNumeric n) noexcept :
-    m_num(n.num()), m_den(n.denom()), m_error(GNC_ERROR_OK)
+    m_num(n.num()), m_den(n.denom())
 {
     if (m_den.isNeg())
     {
@@ -36,7 +36,7 @@ GncRational::GncRational(GncNumeric n) noexcept :
 }
 
 GncRational::GncRational (gnc_numeric n) noexcept :
-    m_num (n.num), m_den (n.denom), m_error {GNC_ERROR_OK}
+    m_num (n.num), m_den (n.denom)
 {
     if (m_den.isNeg())
     {
@@ -45,13 +45,26 @@ GncRational::GncRational (gnc_numeric n) noexcept :
     }
 }
 
+bool
+GncRational::valid() const noexcept
+{
+    if (m_num.valid() && m_den.valid())
+        return true;
+    return false;
+}
+
+bool
+GncRational::is_big() const noexcept
+{
+    if (m_num.isBig() || m_den.isBig())
+        return true;
+    return false;
+}
+
 GncRational::operator gnc_numeric () const noexcept
 {
-     if (m_num.isOverflow() || m_num.isNan() ||
-        m_den.isOverflow() || m_den.isNan())
+    if (!valid())
         return gnc_numeric_error(GNC_ERROR_OVERFLOW);
-    if (m_error != GNC_ERROR_OK)
-        return gnc_numeric_error (m_error);
     try
     {
         return {static_cast<int64_t>(m_num), static_cast<int64_t>(m_den)};
@@ -87,16 +100,12 @@ GncRational::inv () noexcept
 GncRational
 operator+(GncRational a, GncRational b)
 {
-    if (a.m_error || b.m_error)
-    {
-        if (b.m_error)
-            return GncRational(0, 1, b.m_error);
-        return GncRational(0, 1, a.m_error);
-    }
+    if (!(a.valid() && b.valid()))
+        throw std::range_error("Operator+ called with out-of-range operand.");
     GncInt128 lcm = a.m_den.lcm(b.m_den);
     GncInt128 num(a.m_num * lcm / a.m_den + b.m_num * lcm / b.m_den);
-    if (lcm.isOverflow() || lcm.isNan() || num.isOverflow() || num.isNan())
-        return GncRational(0, 1, GNC_ERROR_OVERFLOW);
+    if (!(lcm.valid() && num.valid()))
+        throw std::overflow_error("Operator+ overflowed.");
     GncRational retval(num, lcm);
     return retval;
 }
@@ -111,15 +120,11 @@ operator-(GncRational a, GncRational b)
 GncRational
 operator*(GncRational a, GncRational b)
 {
-    if (a.m_error || b.m_error)
-    {
-        if (b.m_error)
-            return GncRational(0, 1, b.m_error);
-        return GncRational(0, 1, a.m_error);
-    }
+    if (!(a.valid() && b.valid()))
+        throw std::range_error("Operator* called with out-of-range operand.");
     GncInt128 num (a.m_num * b.m_num), den(a.m_den * b.m_den);
-    if (num.isOverflow() || num.isNan() || den.isOverflow() || den.isNan())
-        return GncRational(0, 1, GNC_ERROR_OVERFLOW);
+    if (!(num.valid() && den.valid()))
+        throw std::overflow_error("Operator* overflowed.");
     GncRational retval(num, den);
     return retval;
 }
@@ -127,12 +132,10 @@ operator*(GncRational a, GncRational b)
 GncRational
 operator/(GncRational a, GncRational b)
 {
-    if (a.m_error || b.m_error)
-    {
-        if (b.m_error)
-            return GncRational(0, 1, b.m_error);
-        return GncRational(0, 1, a.m_error);
-    }
+    if (!(a.valid() && b.valid()))
+        throw std::range_error("Operator/ called with out-of-range operand.");
+    if (b.m_num == 0)
+        throw std::underflow_error("Divide by 0.");
     if (b.m_num.isNeg())
     {
         a.m_num = -a.m_num;
@@ -155,8 +158,8 @@ operator/(GncRational a, GncRational b)
     }
 
     GncInt128 num(a.m_num * b.m_den), den(a.m_den * b.m_num);
-    if (num.isOverflow() || num.isNan() || den.isOverflow() || den.isNan())
-        return GncRational(0, 1, GNC_ERROR_OVERFLOW);
+    if (!(num.valid() && den.valid()))
+        throw std::overflow_error("Operator/ overflowed.");
     return GncRational(num, den);
 }
 
@@ -261,8 +264,7 @@ GncRational::round (GncInt128 new_den, RoundType rtype)
     switch (rtype)
     {
     case RoundType::never:
-        m_error = GNC_ERROR_REMAINDER;
-        return;
+        throw std::domain_error("Rounding required when 'never round' specified.");
     case RoundType::floor:
         if (new_num.isNeg()) ++new_num;
         break;

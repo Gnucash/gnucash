@@ -212,6 +212,12 @@ GncInt128::isNan () const noexcept
 }
 
 bool
+GncInt128::valid() const noexcept
+{
+    return !(m_flags & (overflow | NaN));
+}
+
+bool
 GncInt128::isZero() const noexcept
 {
     return ((m_flags & (overflow | NaN)) == 0 &&  m_hi == 0 && m_lo == 0);

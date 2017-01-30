@@ -28,118 +28,109 @@
 
 TEST(gncrational_constructors, test_default_constructor)
 {
-    GncRational value;
-    EXPECT_EQ(value.m_num, 0);
-    EXPECT_EQ(value.m_den, 1);
-    EXPECT_EQ(value.m_error, GNC_ERROR_OK);
+    EXPECT_NO_THROW({
+            GncRational value;
+            EXPECT_EQ(value.m_num, 0);
+            EXPECT_EQ(value.m_den, 1);
+        });
 }
 
 TEST(gncrational_constructors, test_gnc_numeric_constructor)
 {
     gnc_numeric input = gnc_numeric_create(123, 456);
-    GncRational value(input);
-    EXPECT_EQ(input.num, value.m_num);
-    EXPECT_EQ(input.denom, value.m_den);
-    EXPECT_EQ(value.m_error, GNC_ERROR_OK);
+    EXPECT_NO_THROW({
+            GncRational value(input);
+            EXPECT_EQ(input.num, value.m_num);
+            EXPECT_EQ(input.denom, value.m_den);
+        });
 }
 
 TEST(gncrational_constructors, test_gnc_int128_constructor)
 {
     GncInt128 num(123), denom(456);
-    GncRational value(num, denom);
-    EXPECT_EQ(123, value.m_num);
-    EXPECT_EQ(456, value.m_den);
-    EXPECT_EQ(GNC_ERROR_OK, value.m_error);
+    EXPECT_NO_THROW({
+            GncRational value(num, denom);
+            EXPECT_EQ(123, value.m_num);
+            EXPECT_EQ(456, value.m_den);
+        });
 }
 
 TEST(gncrational_constructors, test_implicit_int_constructor)
 {
     int num(123), denom(456);
-    GncRational value(num, denom);
-    EXPECT_EQ(123, value.m_num);
-    EXPECT_EQ(456, value.m_den);
-    EXPECT_EQ(GNC_ERROR_OK, value.m_error);
-}
-
-TEST(gncrational_constructors, test_with_error_code)
-{
-    int num(123), denom(456);
-    GncRational value(num, denom, GNC_ERROR_OVERFLOW);
-    EXPECT_EQ(123, value.m_num);
-    EXPECT_EQ(456, value.m_den);
-    EXPECT_EQ(GNC_ERROR_OVERFLOW, value.m_error);
+    EXPECT_NO_THROW({
+            GncRational value(num, denom);
+            EXPECT_EQ(123, value.m_num);
+            EXPECT_EQ(456, value.m_den);
+        });
 }
 
 TEST(gncrational_operators, test_addition)
 {
-    GncRational a(123456789987654321, 1000000000);
-    GncRational b(65432198765432198, 100000000);
-    GncRational c = a + b;
-    EXPECT_EQ (777778777641976301, c.m_num);
-    EXPECT_EQ (1000000000, c.m_den);
-    EXPECT_EQ (GNC_ERROR_OK, c.m_error);
-    a += b;
-    EXPECT_EQ (777778777641976301, a.m_num);
-    EXPECT_EQ (1000000000, a.m_den);
-    EXPECT_EQ (GNC_ERROR_OK, a.m_error);
+    EXPECT_NO_THROW({
+            GncRational a(123456789987654321, 1000000000);
+            GncRational b(65432198765432198, 100000000);
+            GncRational c = a + b;
+            EXPECT_EQ (777778777641976301, c.m_num);
+            EXPECT_EQ (1000000000, c.m_den);
+            a += b;
+            EXPECT_EQ (777778777641976301, a.m_num);
+            EXPECT_EQ (1000000000, a.m_den);
+        });
 }
 
 TEST(gncrational_operators, test_subtraction)
 {
-    GncRational a(123456789987654321, 1000000000);
-    GncRational b(65432198765432198, 100000000);
-    GncRational c = a - b;
-    EXPECT_EQ (-530865197666667659, c.m_num);
-    EXPECT_TRUE(c.m_num.isNeg());
-    EXPECT_EQ (1000000000, c.m_den);
-    EXPECT_EQ (GNC_ERROR_OK, c.m_error);
-    c = b - a;
-    EXPECT_EQ (530865197666667659, c.m_num);
-    EXPECT_FALSE(c.m_num.isNeg());
-    EXPECT_EQ (1000000000, c.m_den);
-    EXPECT_EQ (GNC_ERROR_OK, c.m_error);
-    a -= b;
-    EXPECT_EQ (-530865197666667659, a.m_num);
-    EXPECT_TRUE(a.m_num.isNeg());
-    EXPECT_EQ (1000000000, a.m_den);
-    EXPECT_EQ (GNC_ERROR_OK, a.m_error);
+    EXPECT_NO_THROW({
+            GncRational a(123456789987654321, 1000000000);
+            GncRational b(65432198765432198, 100000000);
+            GncRational c = a - b;
+            EXPECT_EQ (-530865197666667659, c.m_num);
+            EXPECT_TRUE(c.m_num.isNeg());
+            EXPECT_EQ (1000000000, c.m_den);
+            c = b - a;
+            EXPECT_EQ (530865197666667659, c.m_num);
+            EXPECT_FALSE(c.m_num.isNeg());
+            EXPECT_EQ (1000000000, c.m_den);
+            a -= b;
+            EXPECT_EQ (-530865197666667659, a.m_num);
+            EXPECT_TRUE(a.m_num.isNeg());
+            EXPECT_EQ (1000000000, a.m_den);
+        });
 }
 
 TEST(gncrational_operators, test_multiplication)
 {
-    GncRational a(123456789987654321, 1000000000);
-    GncRational b(65432198765432198, 100000000);
-    GncRational c = a * b;
-    EXPECT_EQ (GncInt128(UINT64_C(437911925765117),
-                         UINT64_C(8081008345983448486)), c.m_num);
-    EXPECT_EQ (100000000000000000, c.m_den);
-    EXPECT_EQ (GNC_ERROR_OK, c.m_error);
-    a *= b;
-    EXPECT_EQ (GncInt128(UINT64_C(437911925765117),
-                         UINT64_C(8081008345983448486)), a.m_num);
-    EXPECT_EQ (100000000000000000, a.m_den);
-    EXPECT_EQ (GNC_ERROR_OK, a.m_error);
-
+    EXPECT_NO_THROW({
+            GncRational a(123456789987654321, 1000000000);
+            GncRational b(65432198765432198, 100000000);
+            GncRational c = a * b;
+            EXPECT_EQ (GncInt128(UINT64_C(437911925765117),
+                                 UINT64_C(8081008345983448486)), c.m_num);
+            EXPECT_EQ (100000000000000000, c.m_den);
+            a *= b;
+            EXPECT_EQ (GncInt128(UINT64_C(437911925765117),
+                                 UINT64_C(8081008345983448486)), a.m_num);
+            EXPECT_EQ (100000000000000000, a.m_den);
+        });
 }
 
 TEST(gncrational_operators, test_division)
 {
-    GncRational a(123456789987654321, 1000000000);
-    GncRational b(65432198765432198, 100000000);
-    GncRational c = a / b;
-    EXPECT_EQ (GncInt128(UINT64_C(669260), UINT64_C(11059994577585475840)),
-               c.m_num);
-    EXPECT_EQ (GncInt128(UINT64_C(3547086), UINT64_C(11115994079396609024)),
-               c.m_den);
-    EXPECT_EQ (GNC_ERROR_OK, c.m_error);
-
-    a /= b;
-    EXPECT_EQ (GncInt128(UINT64_C(669260), UINT64_C(11059994577585475840)),
-               a.m_num);
-    EXPECT_EQ (GncInt128(UINT64_C(3547086), UINT64_C(11115994079396609024)),
-               a.m_den);
-    EXPECT_EQ (GNC_ERROR_OK, c.m_error);
-
+    EXPECT_NO_THROW({
+            GncRational a(123456789987654321, 1000000000);
+            GncRational b(65432198765432198, 100000000);
+            GncRational c = a / b;
+            EXPECT_EQ (GncInt128(UINT64_C(669260),
+                                 UINT64_C(11059994577585475840)), c.m_num);
+            EXPECT_EQ (GncInt128(UINT64_C(3547086),
+                                 UINT64_C(11115994079396609024)), c.m_den);
+            a /= b;
+            EXPECT_EQ (GncInt128(UINT64_C(669260),
+                                 UINT64_C(11059994577585475840)), a.m_num);
+            EXPECT_EQ (GncInt128(UINT64_C(3547086),
+                                 UINT64_C(11115994079396609024)), a.m_den);
+        });
 }
 
 TEST(gncrational_functions, test_round_to_numeric)

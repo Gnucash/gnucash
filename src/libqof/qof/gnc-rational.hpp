@@ -37,16 +37,23 @@ enum class DenomType;
 class GncRational
 {
 public:
-    GncRational() : m_num(0), m_den(1), m_error(GNC_ERROR_OK) {}
+    GncRational() : m_num(0), m_den(1) {}
     GncRational (gnc_numeric n) noexcept;
     GncRational(GncNumeric n) noexcept;
-    GncRational (GncInt128 num, GncInt128 den,
-                 GNCNumericErrorCode err=GNC_ERROR_OK) noexcept
-        : m_num(num), m_den(den), m_error(err) {}
+    GncRational (GncInt128 num, GncInt128 den) noexcept
+        : m_num(num), m_den(den) {}
     GncRational(const GncRational& rhs) = default;
     GncRational(GncRational&& rhs) = default;
     GncRational& operator=(const GncRational& rhs) = default;
     GncRational& operator=(GncRational&& rhs) = default;
+/** Report if both members are valid numbers.
+ * \return true if neither numerator nor denominator are Nan or Overflowed.
+ */
+    bool valid() const noexcept;
+/** Report if either numerator or denominator are too big to fit in an int64_t.
+ * \return true if either is too big.
+ */
+    bool is_big() const noexcept;
 /** Conversion operator; use static_cast<gnc_numeric>(foo). */
     operator gnc_numeric() const noexcept;
 /** Make a new GncRational with the opposite sign. */
@@ -78,7 +85,6 @@ public:
 
     GncInt128 m_num;
     GncInt128 m_den;
-    GNCNumericErrorCode m_error;
 };
 
 GncRational operator+(GncRational a, GncRational b);

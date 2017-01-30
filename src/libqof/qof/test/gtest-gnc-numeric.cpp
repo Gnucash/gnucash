@@ -499,7 +499,7 @@ TEST(gnc_numeric_functions, test_conversion_to_decimal)
     EXPECT_EQ(1000, r.denom());
     EXPECT_THROW(r = a.to_decimal(2), std::range_error);
     GncNumeric b(123456789, 456);
-    EXPECT_THROW(r = b.to_decimal(), std::range_error);
+    EXPECT_THROW(r = b.to_decimal(), std::domain_error);
     GncNumeric c(123456789, 450);
     EXPECT_NO_THROW(r = c.to_decimal());
     EXPECT_EQ(27434842, r.num());

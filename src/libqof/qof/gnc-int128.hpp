@@ -210,6 +210,10 @@ enum // Values for m_flags
  * @return true if the object represents 0.
  */
     bool isZero() const noexcept;
+/**
+ * @return true if neither the overflow nor nan flags are set.
+ */
+    bool valid() const noexcept;
 
 /**
  * @return the number of bits used to represent the value
