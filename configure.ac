@@ -1385,30 +1385,9 @@ then
   AC_SUBST(GOFFICE_LIBS)
 
   ### --------------------------------------------------------------------------
-  ### determine the HTML engine
+  ### checks for webkit
 
-  AC_MSG_CHECKING([the html engine])
-  AC_ARG_WITH(html_engine,
-              AS_HELP_STRING([--with-html-engine=@<:@webkit@:>@],
-                             [Obsolete: Only webkit is used as HTML engine now]),
-              [],[with_html_engine="webkit"])
-
-  AC_MSG_RESULT([$with_html_engine])
-
-  case "$with_html_engine" in
-
-    gtkhtml)
-      # No more gtkhtml in gnucash-2.5.0
-      AC_MSG_ERROR([gtkhtml is no longer sufficient for gnucash, as we now require the CSS/javascript features using webkit. Please remove your --with-html-engine argument from configure.])
-      ;;
-
-    webkit)
-      PKG_CHECK_MODULES(WEBKIT, webkit-1.0 >= "1.2")
-      ;;
-
-    *) AC_MSG_ERROR([Invalid HTML engine: must be webkit]) ;;
-  esac
-
+  PKG_CHECK_MODULES(WEBKIT, webkit-1.0 >= "1.2")
   AC_SUBST(WEBKIT_CFLAGS)
   AC_SUBST(WEBKIT_LIBS)
 
