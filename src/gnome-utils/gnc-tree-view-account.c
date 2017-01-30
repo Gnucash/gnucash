@@ -678,6 +678,7 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
     GncTreeViewAccountPrivate *priv;
     GtkTreeViewColumn *tax_info_column, *acc_color_column;
     GtkCellRenderer *renderer;
+    GList *col_list = NULL, *node = NULL;
 
     ENTER(" ");
     /* Create our view */
@@ -720,14 +721,6 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
                                         GNC_TREE_MODEL_ACCOUNT_COL_NAME,
                                         GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                         sort_by_string);
-
-    renderer = gnc_tree_view_column_get_renderer(priv->name_column);
-
-    gtk_tree_view_column_set_cell_data_func(priv->name_column,
-                                            renderer,
-                                            acc_color_data_func,
-                                            GTK_TREE_VIEW(view),
-                                            NULL);
 
     gnc_tree_view_add_text_column(view, _("Type"), "type", NULL, sample_type,
                                   GNC_TREE_MODEL_ACCOUNT_COL_TYPE,
@@ -870,17 +863,10 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
                                         GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                         NULL);
 
-    renderer = gnc_tree_view_column_get_renderer(acc_color_column);
-
     /* Add the full title to the object for menu creation */
     g_object_set_data_full(G_OBJECT(acc_color_column), REAL_TITLE,
                            g_strdup(_("Account Color")), g_free);
 
-    gtk_tree_view_column_set_cell_data_func(acc_color_column,
-                                            renderer,
-                                            acc_color_data_func,
-                                            GTK_TREE_VIEW(view),
-                                            NULL);
     priv->notes_column
         = gnc_tree_view_add_text_column(view, _("Notes"), "notes", NULL,
                                         "Sample account notes.",
@@ -910,6 +896,19 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
                                     GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                     sort_by_placeholder,
                                     gnc_tree_view_account_placeholder_toggled);
+
+    /* Add function to each column that optionally sets a background color for accounts */
+    col_list = gtk_tree_view_get_columns(GTK_TREE_VIEW(view));
+    for (node = col_list; node; node = node->next)
+    {
+        renderer = gnc_tree_view_column_get_renderer(node->data);
+        gtk_tree_view_column_set_cell_data_func(node->data,
+                renderer,
+                acc_color_data_func,
+                GTK_TREE_VIEW(view),
+                NULL);
+    }
+    g_list_free (col_list);
 
     /* Update column titles to use the currency name. */
     gtva_update_column_names(view);
