@@ -154,33 +154,33 @@ TEST(qofint128_functions, test_int_functions)
     EXPECT_EQ (static_cast<uint64_t>(arg), static_cast<uint64_t>(value1));
 
     GncInt128 value2 (UINT64_C(0), uarg);
-    EXPECT_THROW (static_cast<int64_t>(value2), std::overflow_error);
+    EXPECT_THROW (auto v = static_cast<int64_t>(value2), std::overflow_error);
     EXPECT_EQ (uarg, static_cast<uint64_t>(value2));
 
     GncInt128 value3 (UINT64_C(0), uarg, GncInt128::neg);
-    EXPECT_THROW (static_cast<int64_t>(value3), std::underflow_error);
-    EXPECT_THROW (static_cast<uint64_t>(value3), std::underflow_error);
+    EXPECT_THROW (auto v = static_cast<int64_t>(value3), std::underflow_error);
+    EXPECT_THROW (auto v = static_cast<uint64_t>(value3), std::underflow_error);
 
     GncInt128 value4 (UINT64_C(0), uarg, GncInt128::overflow);
-    EXPECT_THROW (static_cast<int64_t>(value4), std::overflow_error);
-    EXPECT_THROW (static_cast<uint64_t>(value4), std::overflow_error);
+    EXPECT_THROW (auto v = static_cast<int64_t>(value4), std::overflow_error);
+    EXPECT_THROW (auto v = static_cast<uint64_t>(value4), std::overflow_error);
 
     GncInt128 value5 (UINT64_C(0), uarg, GncInt128::NaN);
-    EXPECT_THROW (static_cast<int64_t>(value5), std::overflow_error);
-    EXPECT_THROW (static_cast<uint64_t>(value5), std::overflow_error);
+    EXPECT_THROW (auto v = static_cast<int64_t>(value5), std::overflow_error);
+    EXPECT_THROW (auto v = static_cast<uint64_t>(value5), std::overflow_error);
 
     GncInt128 value6 (INT64_C(1), arg);
-    EXPECT_THROW (static_cast<int64_t>(value6), std::overflow_error);
+    EXPECT_THROW (auto v = static_cast<int64_t>(value6), std::overflow_error);
     EXPECT_EQ (arg + (UINT64_C(0x1) << 63), static_cast<uint64_t>(value6));
 
     GncInt128 value7 (INT64_C(-1), arg);
     EXPECT_EQ (-static_cast<int64_t>((UINT64_C(0x1) << 63) - arg),
                static_cast<int64_t>(value7));
-    EXPECT_THROW (static_cast<uint64_t>(value7), std::underflow_error);
+    EXPECT_THROW (auto v = static_cast<uint64_t>(value7), std::underflow_error);
 
     GncInt128 value8 (INT64_C(0), narg);
     EXPECT_EQ (narg, static_cast<int64_t>(value8));
-    EXPECT_THROW (static_cast<uint64_t>(value8), std::underflow_error);
+    EXPECT_THROW (auto v = static_cast<uint64_t>(value8), std::underflow_error);
 
     GncInt128 value9 (INT64_C(1), narg);
     EXPECT_EQ (static_cast<int64_t>((UINT64_C(0x1) << 63) + narg),
@@ -188,8 +188,9 @@ TEST(qofint128_functions, test_int_functions)
     EXPECT_EQ ((UINT64_C(0x1) << 63) + narg, static_cast<uint64_t>(value9));
 
     GncInt128 value10 (INT64_C(-2), arg);
-    EXPECT_THROW (static_cast<int64_t>(value10), std::underflow_error);
-    EXPECT_THROW (static_cast<uint64_t>(value10), std::underflow_error);
+    EXPECT_THROW (auto v = static_cast<int64_t>(value10), std::underflow_error);
+    EXPECT_THROW (auto v = static_cast<uint64_t>(value10),
+                  std::underflow_error);
 
 }
 
