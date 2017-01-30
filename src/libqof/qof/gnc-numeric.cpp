@@ -21,11 +21,9 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
  *******************************************************************/
-#ifdef __cplusplus
+
 extern "C"
 {
-#endif
-
 #include "config.h"
 
 #include <glib.h>
@@ -33,10 +31,10 @@ extern "C"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef __cplusplus
+
 #include "qof.h"
 }
-#endif
+
 #include <stdint.h>
 
 #include "gnc-numeric.h"
