@@ -39,10 +39,14 @@ class GncRational
 public:
     GncRational() : m_num(0), m_den(1), m_error(GNC_ERROR_OK) {}
     GncRational (gnc_numeric n) noexcept;
+    GncRational(GncNumeric n) noexcept;
     GncRational (GncInt128 num, GncInt128 den,
                  GNCNumericErrorCode err=GNC_ERROR_OK) noexcept
         : m_num(num), m_den(den), m_error(err) {}
-
+    GncRational(const GncRational& rhs) = default;
+    GncRational(GncRational&& rhs) = default;
+    GncRational& operator=(const GncRational& rhs) = default;
+    GncRational& operator=(GncRational&& rhs) = default;
 /** Conversion operator; use static_cast<gnc_numeric>(foo). */
     operator gnc_numeric() const noexcept;
 /** Make a new GncRational with the opposite sign. */

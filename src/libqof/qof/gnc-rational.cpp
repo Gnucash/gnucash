@@ -24,6 +24,17 @@
 #include "gnc-rational.hpp"
 #include "gnc-numeric.hpp"
 
+
+GncRational::GncRational(GncNumeric n) noexcept :
+    m_num(n.num()), m_den(n.denom()), m_error(GNC_ERROR_OK)
+{
+    if (m_den.isNeg())
+    {
+        m_num *= -m_den;
+        m_den = 1;
+    }
+}
+
 GncRational::GncRational (gnc_numeric n) noexcept :
     m_num (n.num), m_den (n.denom), m_error {GNC_ERROR_OK}
 {
