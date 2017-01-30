@@ -87,18 +87,18 @@ TEST(gncrational_operators, test_subtraction)
     GncRational a(123456789987654321, 1000000000);
     GncRational b(65432198765432198, 100000000);
     GncRational c = a - b;
-    EXPECT_EQ (530865197666667659, c.m_num);
-    EXPECT_FALSE(c.m_num.isNeg());
-    EXPECT_EQ (1000000000, c.m_den);
-    EXPECT_EQ (GNC_ERROR_OK, c.m_error);
-    c = b - a;
     EXPECT_EQ (-530865197666667659, c.m_num);
     EXPECT_TRUE(c.m_num.isNeg());
     EXPECT_EQ (1000000000, c.m_den);
     EXPECT_EQ (GNC_ERROR_OK, c.m_error);
+    c = b - a;
+    EXPECT_EQ (530865197666667659, c.m_num);
+    EXPECT_FALSE(c.m_num.isNeg());
+    EXPECT_EQ (1000000000, c.m_den);
+    EXPECT_EQ (GNC_ERROR_OK, c.m_error);
     a -= b;
-    EXPECT_EQ (530865197666667659, a.m_num);
-    EXPECT_FALSE(a.m_num.isNeg());
+    EXPECT_EQ (-530865197666667659, a.m_num);
+    EXPECT_TRUE(a.m_num.isNeg());
     EXPECT_EQ (1000000000, a.m_den);
     EXPECT_EQ (GNC_ERROR_OK, a.m_error);
 }

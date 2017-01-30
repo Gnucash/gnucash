@@ -103,7 +103,7 @@ operator+(GncRational a, GncRational b)
 GncRational
 operator-(GncRational a, GncRational b)
 {
-    GncRational retval = -a + b;
+    GncRational retval = a + (-b);
     return retval;
 }
 
