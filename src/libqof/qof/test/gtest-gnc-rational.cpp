@@ -22,7 +22,9 @@
  *******************************************************************/
 
 #include <gtest/gtest.h>
+#include <random>
 #include "../gnc-rational.hpp"
+#include "../gnc-numeric.hpp" //for RoundType
 
 TEST(gncrational_constructors, test_default_constructor)
 {
@@ -117,6 +119,7 @@ TEST(gncrational_operators, test_multiplication)
                          UINT64_C(8081008345983448486)), a.m_num);
     EXPECT_EQ (100000000000000000, a.m_den);
     EXPECT_EQ (GNC_ERROR_OK, a.m_error);
+
 }
 
 TEST(gncrational_operators, test_division)
@@ -137,4 +140,29 @@ TEST(gncrational_operators, test_division)
                a.m_den);
     EXPECT_EQ (GNC_ERROR_OK, c.m_error);
 
+}
+
+TEST(gncrational_functions, test_round_to_numeric)
+{
+    std::default_random_engine dre;
+    std::uniform_int_distribution<int64_t> di{INT64_C(0x10000000000000),
+            INT64_C(0x7fffffffffffff)};
+    static const int reps{25};
+    for (auto i = 0; i < reps; ++i)
+    {
+        GncRational a(di(dre), di(dre));
+        GncRational b(di(dre), 100);
+        auto c = a * b;
+        auto expected = c;
+        expected.round(100, RoundType::bankers);
+        auto rounded = c.round_to_numeric();
+        rounded.round(100, RoundType::bankers);
+        EXPECT_EQ(0, expected.m_num - rounded.m_num);
+        EXPECT_FALSE(rounded.m_num.isBig());
+        EXPECT_FALSE(rounded.m_den.isBig());
+        EXPECT_FALSE(rounded.m_num.isNan());
+        EXPECT_FALSE(rounded.m_den.isNan());
+        EXPECT_FALSE(rounded.m_num.isOverflow());
+        EXPECT_FALSE(rounded.m_den.isOverflow());
+    }
 }
