@@ -309,10 +309,16 @@ GncInt128::operator<<= (unsigned int i) noexcept
         m_lo = 0;
         return *this;
     }
-    uint64_t carry {(m_lo & (((UINT64_C(1) << i) - 1) << (legbits - i)))};
-    m_lo <<= i;
-    m_hi <<= i;
-    m_hi += carry;
+    if (i < legbits)
+    {
+        uint64_t carry {(m_lo & (((UINT64_C(1) << i) - 1) << (legbits - i)))};
+        m_lo <<= i;
+        m_hi <<= i;
+        m_hi += carry;
+        return *this;
+    }
+    m_hi = m_lo << (i - legbits);
+    m_lo = 0;
     return *this;
 }
 
@@ -326,10 +332,16 @@ GncInt128::operator>>= (unsigned int i) noexcept
         m_lo = 0;
         return *this;
     }
-    uint64_t carry {(m_hi & ((UINT64_C(1) << i) - 1))};
-    m_lo >>= i;
-    m_hi >>= i;
-    m_lo += (carry << (legbits - i));
+    if (i < legbits)
+    {
+        uint64_t carry {(m_hi & ((UINT64_C(1) << i) - 1))};
+        m_lo >>= i;
+        m_hi >>= i;
+        m_lo += (carry << (legbits - i));
+        return *this;
+    }
+    m_lo = m_hi >> (i - legbits);
+    m_hi = 0;
     return *this;
 }
 
