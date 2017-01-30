@@ -20,6 +20,7 @@
  *                                                                  *
  *******************************************************************/
 
+#include <sstream>
 #include "gnc-rational.hpp"
 
 static const gint64 pten[] = { 1, 10, 100, 1000, 10000, 100000, 1000000,
@@ -332,6 +333,62 @@ GncRational::round (GncDenom& denom) noexcept
     m_num = new_num;
     m_den = new_den;
     return;
+}
+
+GncRational
+GncRational::reduce() const
+{
+    auto gcd = m_den.gcd(m_num);
+    if (gcd.isNan() || gcd.isOverflow())
+        throw std::overflow_error("Reduce failed, calculation of gcd overflowed.");
+    return GncRational(m_num / gcd, m_den / gcd);
+}
+
+GncRational
+GncRational::round_to_numeric() const
+{
+    if (m_num.isZero())
+        return GncRational(); //Default constructor makes 0/1
+    if (!(m_num.isBig() || m_den.isBig()))
+        return *this;
+    if (m_num.abs() > m_den)
+    {
+        auto quot(m_num / m_den);
+        if (quot.isBig())
+        {
+            std::ostringstream msg;
+            msg << " Cannot be represented as a "
+                << "GncNumeric. Its integer value is too large.\n";
+            throw std::overflow_error(msg.str());
+        }
+        GncRational new_rational(*this);
+        GncRational scratch(1, 1);
+        auto divisor = static_cast<int64_t>(m_den / (m_num.abs() >> 62));
+        GncDenom gnc_denom(new_rational, scratch, divisor,
+                           GNC_HOW_RND_ROUND_HALF_DOWN);
+        new_rational.round(gnc_denom);
+        return new_rational;
+    }
+    auto quot(m_den / m_num);
+    if (quot.isBig())
+        return GncRational(); //Smaller than can be represented as a GncNumeric
+    auto divisor = m_den >> 62;
+    if (m_num.isBig())
+    {
+        GncInt128 oldnum(m_num), num, rem;
+        oldnum.div(divisor, num, rem);
+        auto den = m_den / divisor;
+        num += rem * 2 >= den ? 1 : 0;
+        GncRational new_rational(num, den);
+        return new_rational;
+    }
+    GncRational new_rational(*this);
+    GncRational scratch(1, 1);
+    auto int_div = static_cast<int64_t>(m_den / divisor);
+    GncDenom gnc_denom(new_rational, scratch, int_div,
+                       GNC_HOW_RND_ROUND_HALF_DOWN);
+    new_rational.round(gnc_denom);
+    return new_rational;
 }
 
 GncDenom::GncDenom (GncRational& a, GncRational& b,

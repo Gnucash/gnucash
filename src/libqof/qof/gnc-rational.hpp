@@ -45,6 +45,20 @@ public:
     operator gnc_numeric() const noexcept;
 /** Make a new GncRational with the opposite sign. */
     GncRational operator-() const noexcept;
+/**
+ * Reduce this to an equivalent fraction with the least common multiple as the
+ * denominator.
+ *
+ * @return reduced GncRational
+ */
+    GncRational reduce() const;
+/**
+ * Round to fit an int64_t, finding the closest possible approximation.
+ *
+ * Throws std::overflow_error if m_den is 1 and m_num is big.
+ * @return rounded GncRational
+ */
+    GncRational round_to_numeric() const;
 /** Round/convert this to the denominator provided by d, according to d's
  * m_round value.
  */
