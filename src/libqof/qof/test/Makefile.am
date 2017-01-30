@@ -132,15 +132,42 @@ check_PROGRAMS += test-gnc-int128
 
 test_gnc_rational_SOURCES = \
         $(top_srcdir)/${MODULEPATH}/gnc-rational.cpp \
+        $(top_srcdir)/${MODULEPATH}/gnc-numeric.cpp \
+        $(top_srcdir)/${MODULEPATH}/gnc-int128.cpp \
         gtest-gnc-rational.cpp
-test_gnc_rational_CPPFLAGS = -I${GTEST_HEADERS}
 
-test_gnc_rational_LDADD = ${GTEST_LIBS}
+test_gnc_rational_CPPFLAGS = \
+        -I${GTEST_HEADERS} \
+        ${GLIB_CFLAGS}
+
+test_gnc_rational_LDADD = \
+        ${GTEST_LIBS} \
+        ${GLIB_LIBS}
+
 if !GOOGLE_TEST_LIBS
 nodist_test_gnc_rational_SOURCES = \
         ${GTEST_SRC}/src/gtest_main.cc
 endif
 check_PROGRAMS += test-gnc-rational
+check_PROGRAMS += test-gnc-int128
+
+test_gnc_numeric_SOURCES = \
+        $(top_srcdir)/${MODULEPATH}/gnc-rational.cpp \
+        $(top_srcdir)/${MODULEPATH}/gnc-int128.cpp \
+        $(top_srcdir)/${MODULEPATH}/gnc-numeric.cpp \
+        gtest-gnc-numeric.cpp
+test_gnc_numeric_CPPFLAGS = \
+        -I${GTEST_HEADERS} \
+        ${GLIB_CFLAGS}
+
+test_gnc_numeric_LDADD = \
+        ${GTEST_LIBS} \
+        ${GLIB_LIBS}
+if !GOOGLE_TEST_LIBS
+nodist_test_gnc_numeric_SOURCES = \
+        ${GTEST_SRC}/src/gtest_main.cc
+endif
+check_PROGRAMS += test-gnc-numeric
 
 test_gnc_timezone_SOURCES = \
         $(top_srcdir)/${MODULEPATH}/gnc-timezone.cpp \

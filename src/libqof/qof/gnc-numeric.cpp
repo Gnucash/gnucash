@@ -36,12 +36,14 @@ extern "C"
 }
 
 #include <stdint.h>
+#include <regex>
+#include <sstream>
+#include <cstdlib>
 
-#include "gnc-numeric.h"
+#include "gnc-numeric.hpp"
 #include "gnc-rational.hpp"
 
-using GncNumeric = GncRational;
-
+static QofLogModule log_module = "qof";
 static const gint64 pten[] = { 1, 10, 100, 1000, 10000, 100000, 1000000,
                                10000000, 100000000, 1000000000,
                                INT64_C(10000000000), INT64_C(100000000000),
@@ -52,14 +54,538 @@ static const gint64 pten[] = { 1, 10, 100, 1000, 10000, 100000, 1000000,
                                INT64_C(1000000000000000000)};
 #define POWTEN_OVERFLOW -5
 
-static inline gint64
-powten (int exp)
+int64_t
+powten (int64_t exp)
 {
     if (exp > 18 || exp < -18)
         return POWTEN_OVERFLOW;
     return exp < 0 ? -pten[-exp] : pten[exp];
 }
 
+GncNumeric::GncNumeric(GncRational rr)
+{
+    if (rr.m_num.isNan() || rr.m_den.isNan())
+        throw std::underflow_error("Operation resulted in NaN.");
+    if (rr.m_num.isOverflow() || rr.m_den.isOverflow())
+        throw std::overflow_error("Operation overflowed a 128-bit int.");
+    if (rr.m_num.isBig() || rr.m_den.isBig())
+    {
+        GncRational reduced(rr.reduce());
+        rr = reduced.round_to_numeric(); // A no-op if it's already small.
+    }
+    m_num = static_cast<int64_t>(rr.m_num);
+    m_den = static_cast<int64_t>(rr.m_den);
+}
+
+GncNumeric::GncNumeric(double d) : m_num(0), m_den(1)
+{
+    if (isnan(d) || fabs(d) > 1e18)
+    {
+        std::ostringstream msg;
+        msg << "Unable to construct a GncNumeric from " << d << ".\n";
+        throw std::invalid_argument(msg.str());
+    }
+    constexpr auto max_denom = INT64_MAX / 10;
+    auto logval = log10(fabs(d));
+    int64_t den;
+    if (logval > 0.0)
+        den = powten(18 - static_cast<int>(floor(logval) + 1.0));
+    else
+        den = powten(17);
+    auto num = static_cast<int64_t>(floor(static_cast<double>(den) * d));
+
+    if (num == 0)
+        return;
+    GncNumeric q(num, den);
+    auto r = q.reduce();
+    m_num = r.num();
+    m_den = r.denom();
+}
+
+GncNumeric::GncNumeric(const std::string& str, bool autoround)
+{
+    static const std::string numer_frag("(-?[0-9]+)");
+    static const std::string denom_frag("([0-9]+)");
+    static const std::string hex_frag("(0x[a-f0-9]+)");
+    static const std::string slash( "[ \\t]*/[ \\t]*");
+    /* The llvm standard C++ library refused to recognize the - in the
+     * numer_frag patter with the default ECMAScript syntax so we use the awk
+     * syntax.
+     */
+    static const std::regex numeral(numer_frag, std::regex::awk);
+    static const std::regex hex(hex_frag, std::regex::awk);
+    static const std::regex numeral_rational(numer_frag + slash + denom_frag,
+                                             std::regex::awk);
+    static const std::regex hex_rational(hex_frag + slash + hex_frag,
+                                         std::regex::awk);
+    static const std::regex hex_over_num(hex_frag + slash + denom_frag,
+                                         std::regex::awk);
+    static const std::regex num_over_hex(numer_frag + slash + hex_frag,
+                                         std::regex::awk);
+    static const std::regex decimal(numer_frag + "[.,]" + denom_frag,
+                                    std::regex::awk);
+    std::smatch m;
+/* The order of testing the regexes is from the more restrictve to the less
+ * restrictive, as less-restrictive ones will match patterns that would also
+ * match the more-restrictive and so invoke the wrong construction.
+ */
+    if (str.empty())
+        throw std::invalid_argument("Can't construct a GncNumeric from an empty string.");
+    if (std::regex_search(str, m, hex_rational))
+    {
+        GncNumeric n(stoll(m[1].str(), nullptr, 16),
+                     stoll(m[2].str(), nullptr, 16));
+        m_num = n.num();
+        m_den = n.denom();
+        return;
+    }
+    if (std::regex_search(str, m, hex_over_num))
+    {
+        GncNumeric n(stoll(m[1].str(), nullptr, 16),
+                     stoll(m[2].str()));
+        m_num = n.num();
+        m_den = n.denom();
+        return;
+    }
+    if (std::regex_search(str, m, num_over_hex))
+    {
+        GncNumeric n(stoll(m[1].str()),
+                     stoll(m[2].str(), nullptr, 16));
+        m_num = n.num();
+        m_den = n.denom();
+        return;
+    }
+    if (std::regex_search(str, m, numeral_rational))
+    {
+        GncNumeric n(stoll(m[1].str()), stoll(m[2].str()));
+        m_num = n.num();
+        m_den = n.denom();
+        return;
+    }
+    if (std::regex_search(str, m, decimal))
+    {
+        GncInt128 high(stoll(m[1].str()));
+        GncInt128 low(stoll(m[2].str()));
+        int64_t d = powten(m[2].str().length());
+        GncInt128 n = high * d + (high > 0 ? low : -low);
+        if (!autoround && n.isBig())
+        {
+            std::ostringstream errmsg;
+            errmsg << "Decimal string " << m[1].str() << "." << m[2].str()
+                   << "can't be represented in a GncNumeric without rounding.";
+            throw std::overflow_error(errmsg.str());
+        }
+        while (n.isBig() && d > 0)
+        {
+            n >>= 1;
+            d >>= 1;
+        }
+        if (n.isBig()) //Shouldn't happen, of course
+        {
+            std::ostringstream errmsg;
+            errmsg << "Decimal string " << m[1].str() << "." << m[2].str()
+            << " can't be represented in a GncNumeric, even after reducing denom to " << d;
+            throw std::overflow_error(errmsg.str());
+        }
+        GncNumeric gncn(static_cast<int64_t>(n), d);
+        m_num = gncn.num();
+        m_den = gncn.denom();
+        return;
+    }
+    if (std::regex_search(str, m, hex))
+    {
+        GncNumeric n(stoll(m[1].str(), nullptr, 16),INT64_C(1));
+        m_num = n.num();
+        m_den = n.denom();
+        return;
+    }
+    if (std::regex_search(str, m, numeral))
+    {
+        GncNumeric n(stoll(m[1].str()), INT64_C(1));
+        m_num = n.num();
+        m_den = n.denom();
+        return;
+    }
+    std::ostringstream errmsg;
+    errmsg << "String " << str << " contains no recognizable numeric value.";
+    throw std::invalid_argument(errmsg.str());
+}
+
+GncNumeric::operator gnc_numeric() const noexcept
+{
+    return {m_num, m_den};
+}
+
+GncNumeric::operator double() const noexcept
+{
+    return static_cast<double>(m_num) / static_cast<double>(m_den);
+}
+
+GncNumeric
+GncNumeric::operator-() const noexcept
+{
+    GncNumeric b(*this);
+    b.m_num = - b.m_num;
+    return b;
+}
+
+GncNumeric
+GncNumeric::inv() const noexcept
+{
+    if (m_num == 0)
+        return *this;
+    if (m_num < 0)
+        return GncNumeric(-m_den, -m_num);
+    return GncNumeric(m_den, m_num);
+}
+
+GncNumeric
+GncNumeric::abs() const noexcept
+{
+    if (m_num < 0)
+        return -*this;
+    return *this;
+}
+
+GncNumeric
+GncNumeric::reduce() const noexcept
+{
+    return static_cast<GncNumeric>(GncRational(*this).reduce());
+}
+
+GncNumeric::round_param
+GncNumeric::prepare_conversion(int64_t new_denom) const
+{
+    if (new_denom == m_den || new_denom == GNC_DENOM_AUTO)
+        return {m_num, m_den, 0};
+    GncRational conversion(new_denom, m_den);
+    auto red_conv = conversion.reduce();
+    GncInt128 old_num(m_num);
+    auto new_num = old_num * red_conv.m_num;
+    auto rem = new_num % red_conv.m_den;
+    new_num /= red_conv.m_den;
+    if (new_num.isBig())
+    {
+        GncRational rr(new_num, new_denom);
+        GncNumeric nn(rr);
+        rr.round(new_denom, RoundType::truncate);
+        return {static_cast<int64_t>(rr.m_num), new_denom, 0};
+    }
+    return {static_cast<int64_t>(new_num), static_cast<int64_t>(red_conv.m_den),
+            static_cast<int64_t>(rem)};
+}
+
+int64_t
+GncNumeric::sigfigs_denom(unsigned figs) const noexcept
+{
+    int64_t num_abs{std::abs(m_num)};
+    bool not_frac = num_abs > m_den;
+    int64_t val{ not_frac ? num_abs / m_den : m_den / num_abs };
+    unsigned digits{};
+    while (val >= 10)
+    {
+        ++digits;
+        val /= 10;
+    }
+    return not_frac ? powten(figs - digits - 1) : powten(figs + digits);
+}
+
+std::string
+GncNumeric::to_string() const noexcept
+{
+    std::ostringstream out;
+    out << *this;
+    return out.str();
+}
+
+GncNumeric
+GncNumeric::to_decimal(unsigned int max_places) const
+{
+    if (max_places > 17)
+        max_places = 17;
+    bool is_pwr_ten = true;
+    for (int pwr = 1; pwr <= 17 && m_den > powten(pwr); ++pwr)
+        if (m_den % powten(pwr))
+        {
+            is_pwr_ten = false;
+            break;
+        }
+
+    if (m_num == 0 || (is_pwr_ten && m_den < powten(max_places)))
+        return *this; // Nothing to do.
+    if (is_pwr_ten)
+    {
+        /* See if we can reduce m_num to fit in max_places */
+        auto excess = m_den / powten(max_places);
+        if (m_num % excess)
+        {
+            std::ostringstream msg;
+            msg << "GncNumeric " << *this
+                << " could not be represented in " << max_places
+                << " decimal places without rounding.\n";
+            throw std::range_error(msg.str());
+        }
+        return GncNumeric(m_num / excess, powten(max_places));
+    }
+    GncRational rr(*this);
+    rr.round(powten(max_places), RoundType::never);
+    if (rr.m_error)
+    {
+        std::ostringstream msg;
+        msg << "GncNumeric " << *this
+            << " could not be represented as a decimal without rounding.\n";
+        throw std::range_error(msg.str());
+    }
+    /* rr might have gotten reduced a bit too much; if so, put it back: */
+    unsigned int pwr{1};
+    for (; pwr <= max_places && !(rr.m_den % powten(pwr)); ++pwr);
+    if (rr.m_den % powten(pwr))
+    {
+        auto factor(powten(pwr) / rr.m_den);
+        rr.m_num *= factor;
+        rr.m_den *= factor;
+    }
+    while (rr.m_num % 10 == 0)
+    {
+        rr.m_num /= 10;
+        rr.m_den /= 10;
+    }
+    try
+    {
+        /* Construct from the parts to avoid the GncRational constructor's
+         * automatic rounding.
+         */
+        return {static_cast<int64_t>(rr.m_num), static_cast<int64_t>(rr.m_den)};
+    }
+    catch (const std::invalid_argument& err)
+    {
+        std::ostringstream msg;
+        msg << "GncNumeric " << *this
+            << " could not be represented as a decimal without rounding.\n";
+        throw std::range_error(msg.str());
+    }
+    catch (const std::overflow_error& err)
+    {
+        std::ostringstream msg;
+        msg << "GncNumeric " << *this
+            << " overflows when attempting to convert it to decimal.\n";
+        throw std::range_error(msg.str());
+    }
+}
+
+void
+GncNumeric::operator+=(GncNumeric b)
+{
+    *this = *this + b;
+}
+
+void
+GncNumeric::operator-=(GncNumeric b)
+{
+    *this = *this - b;
+}
+
+void
+GncNumeric::operator*=(GncNumeric b)
+{
+    *this = *this * b;
+}
+
+void
+GncNumeric::operator/=(GncNumeric b)
+{
+    *this = *this / b;
+}
+
+int
+GncNumeric::cmp(GncNumeric b)
+{
+    if (m_den == b.denom())
+    {
+        auto b_num = b.num();
+        return m_num < b_num ? -1 : b_num < m_num ? 1 : 0;
+    }
+//    GncInt128 a_den(m_den), b_den(b.denom());
+//    auto lcm = a_den.gcd(b_den);
+//    GncInt128 a_num(m_num * gcd / a_den), b_num(b.num() * gcd / b_den);
+//    return a_num < b_num ? -1 : b_num < a_num ? 1 : 0;
+    GncRational an(*this), bn(b);
+    return (an.m_num * bn.m_den).cmp(bn.m_num * an.m_den);
+}
+
+GncNumeric
+operator+(GncNumeric a, GncNumeric b)
+{
+    if (a.num() == 0)
+        return b;
+    if (b.num() == 0)
+        return a;
+    GncRational ar(a), br(b);
+    auto rr = ar + br;
+    return static_cast<GncNumeric>(rr);
+}
+
+GncNumeric
+operator-(GncNumeric a, GncNumeric b)
+{
+    return a + (-b);
+}
+
+GncNumeric
+operator*(GncNumeric a, GncNumeric b)
+{
+    if (a.num() == 0 || b.num() == 0)
+    {
+        GncNumeric retval;
+        return retval;
+    }
+    GncRational ar(a), br(b);
+    auto rr = ar * br;
+    return static_cast<GncNumeric>(rr);
+}
+
+GncNumeric
+operator/(GncNumeric a, GncNumeric b)
+{
+    if (a.num() == 0)
+    {
+        GncNumeric retval;
+        return retval;
+    }
+    if (b.num() == 0)
+        throw std::underflow_error("Attempt to divide by zero.");
+
+    GncRational ar(a), br(b);
+    auto rr = ar / br;
+    return static_cast<GncNumeric>(rr);
+}
+
+int
+cmp(GncNumeric a, GncNumeric b)
+{
+    return a.cmp(b);
+}
+
+bool
+operator<(GncNumeric a, GncNumeric b)
+{
+    return a.cmp(b) < 0;
+}
+
+bool
+operator>(GncNumeric a, GncNumeric b)
+{
+    return a.cmp(b) > 0;
+}
+
+bool
+operator==(GncNumeric a, GncNumeric b)
+{
+    return a.cmp(b) == 0;
+}
+
+bool
+operator<=(GncNumeric a, GncNumeric b)
+{
+    return a.cmp(b) <= 0;
+}
+
+bool
+operator>=(GncNumeric a, GncNumeric b)
+{
+    return a.cmp(b) >= 0;
+}
+
+bool
+operator!=(GncNumeric a, GncNumeric b)
+{
+    return a.cmp(b) != 0;
+}
+
+static gnc_numeric
+convert(GncNumeric num, int64_t new_denom, int how)
+{
+//    std::cout << "Converting " << num << ".\n";
+    auto rtype = static_cast<RoundType>(how & GNC_NUMERIC_RND_MASK);
+    unsigned int figs = GNC_HOW_GET_SIGFIGS(how);
+
+    auto dtype = static_cast<DenomType>(how & GNC_NUMERIC_DENOM_MASK);
+    bool sigfigs = dtype == DenomType::sigfigs;
+    if (dtype == DenomType::reduce)
+        num = num.reduce();
+    try
+    {
+        switch (rtype)
+        {
+            case RoundType::floor:
+                if (sigfigs)
+                    return static_cast<gnc_numeric>(num.convert_sigfigs<RoundType::floor>(figs));
+                else
+                    return static_cast<gnc_numeric>(num.convert<RoundType::floor>(new_denom));
+            case RoundType::ceiling:
+                if (sigfigs)
+                    return static_cast<gnc_numeric>(num.convert_sigfigs<RoundType::ceiling>(figs));
+                else
+                    return static_cast<gnc_numeric>(num.convert<RoundType::ceiling>(new_denom));
+            case RoundType::truncate:
+                if (sigfigs)
+                    return static_cast<gnc_numeric>(num.convert_sigfigs<RoundType::truncate>(figs));
+                else
+                    return static_cast<gnc_numeric>(num.convert<RoundType::truncate>(new_denom));
+            case RoundType::promote:
+                if (sigfigs)
+                    return static_cast<gnc_numeric>(num.convert_sigfigs<RoundType::promote>(figs));
+                else
+                    return static_cast<gnc_numeric>(num.convert<RoundType::promote>(new_denom));
+            case RoundType::half_down:
+                if (sigfigs)
+                    return static_cast<gnc_numeric>(num.convert_sigfigs<RoundType::half_down>(figs));
+                else
+                    return static_cast<gnc_numeric>(num.convert<RoundType::half_down>(new_denom));
+            case RoundType::half_up:
+                if (sigfigs)
+                    return static_cast<gnc_numeric>(num.convert_sigfigs<RoundType::half_up>(figs));
+                else
+                    return static_cast<gnc_numeric>(num.convert<RoundType::half_up>(new_denom));
+            case RoundType::bankers:
+                if (sigfigs)
+                    return static_cast<gnc_numeric>(num.convert_sigfigs<RoundType::bankers>(figs));
+                else
+                    return static_cast<gnc_numeric>(num.convert<RoundType::bankers>(new_denom));
+            case RoundType::never:
+                if (sigfigs)
+                    return static_cast<gnc_numeric>(num.convert_sigfigs<RoundType::never>(figs));
+                else
+                    return static_cast<gnc_numeric>(num.convert<RoundType::never>(new_denom));
+            default:
+/* round-truncate just returns the numerator unchanged. The old gnc-numeric
+ * convert had no "default" behavior at rounding that had the same result, but
+ * we need to make it explicit here to run the rest of the conversion code.
+ */
+                if (sigfigs)
+                    return static_cast<gnc_numeric>(num.convert_sigfigs<RoundType::truncate>(figs));
+                else
+                    return static_cast<gnc_numeric>(num.convert<RoundType::truncate>(new_denom));
+
+//                return static_cast<gnc_numeric>(num);
+        }
+    }
+    catch (const std::domain_error& err)
+    {
+        PWARN("%s", err.what());
+        return gnc_numeric_error(GNC_ERROR_REMAINDER);
+    }
+    catch (const std::overflow_error& err)
+    {
+        PWARN("%s", err.what());
+        return gnc_numeric_error(GNC_ERROR_OVERFLOW);
+    }
+    catch (const std::exception& err)
+    {
+        PWARN("%s", err.what());
+        return gnc_numeric_error(GNC_ERROR_ARG);
+    }
+}
 
 /* =============================================================== */
 /* This function is small, simple, and used everywhere below,
@@ -182,7 +708,7 @@ gnc_numeric_compare(gnc_numeric a, gnc_numeric b)
         return -1;
     }
 
-    GncNumeric an (a), bn (b);
+    GncRational an (a), bn (b);
 
     return (an.m_num * bn.m_den).cmp(bn.m_num * an.m_den);
 }
@@ -256,7 +782,7 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
         return gnc_numeric_error(GNC_ERROR_ARG);
     }
 
-    GncNumeric an (a), bn (b);
+    GncRational an (a), bn (b);
     GncDenom new_denom (an, bn, denom, how);
     if (new_denom.m_error)
         return gnc_numeric_error (new_denom.m_error);
@@ -303,7 +829,7 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
         return gnc_numeric_error(GNC_ERROR_ARG);
     }
 
-    GncNumeric an (a), bn (b);
+    GncRational an (a), bn (b);
     GncDenom new_denom (an, bn, denom, how);
     if (new_denom.m_error)
         return gnc_numeric_error (new_denom.m_error);
@@ -332,7 +858,7 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
         return gnc_numeric_error(GNC_ERROR_ARG);
     }
 
-    GncNumeric an (a), bn (b);
+    GncRational an (a), bn (b);
     GncDenom new_denom (an, bn, denom, how);
     if (new_denom.m_error)
         return gnc_numeric_error (new_denom.m_error);
@@ -384,7 +910,7 @@ gnc_numeric_abs(gnc_numeric a)
 gnc_numeric
 gnc_numeric_convert(gnc_numeric in, int64_t denom, int how)
 {
-    GncNumeric a (in), b (gnc_numeric_zero());
+    GncRational a (in), b (gnc_numeric_zero());
     GncDenom d (a, b, denom, how);
     try
     {
@@ -415,7 +941,7 @@ gnc_numeric_reduce(gnc_numeric in)
 
     if (in.denom < 0) /* Negative denoms multiply num, can't be reduced. */
         return in;
-    GncNumeric a (in), b (gnc_numeric_zero());
+    GncRational a (in), b (gnc_numeric_zero());
     GncDenom d (a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE | GNC_HOW_RND_ROUND);
     try
     {
@@ -521,7 +1047,7 @@ gnc_numeric_invert(gnc_numeric num)
 {
     if (num.num == 0)
         return gnc_numeric_zero();
-    return static_cast<gnc_numeric>(GncNumeric(num).inv());
+    return static_cast<gnc_numeric>(GncRational(num).inv());
 }
 /* *******************************************************************
  *  double_to_gnc_numeric

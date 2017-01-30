@@ -27,28 +27,8 @@
 #include "gnc-int128.hpp"
 
 struct GncDenom;
-
-enum class RoundType
-{
-    floor = GNC_HOW_RND_FLOOR,
-    ceiling = GNC_HOW_RND_CEIL,
-    truncate = GNC_HOW_RND_TRUNC,
-    promote = GNC_HOW_RND_PROMOTE,
-    half_down = GNC_HOW_RND_ROUND_HALF_DOWN,
-    half_up = GNC_HOW_RND_ROUND_HALF_UP,
-    bankers = GNC_HOW_RND_ROUND,
-    never = GNC_HOW_RND_NEVER,
-};
-
-enum class DenomType
-{
-    den_auto = GNC_DENOM_AUTO,
-    exact = GNC_HOW_DENOM_EXACT,
-    reduce = GNC_HOW_DENOM_REDUCE,
-    lcd = GNC_HOW_DENOM_LCD,
-    fixed = GNC_HOW_DENOM_FIXED,
-    sigfigs = GNC_HOW_DENOM_SIGFIG,
-};
+enum class RoundType;
+enum class DenomType;
 
 /** @ingroup QOF
  *  @brief Rational number class using GncInt128 for the numerator and denominator.

@@ -92,6 +92,13 @@ IF (NOT WIN32)
   GNC_ADD_TEST(test-gnc-rational "${test_gnc_rational_SOURCES}"
     gtest_qof_INCLUDES gtest_qof_LIBS)
 
+  SET(test_gnc_numeric_SOURCES
+    ${MODULEPATH}/gnc-numeric.cpp
+    gtest-gnc-numeric.cpp
+    ${GTEST_SRC})
+  GNC_ADD_TEST(test-gnc-numeric "${test_gnc_numeric_SOURCES}"
+    gtest_qof_INCLUDES gtest_qof_LIBS)
+
   SET(test_gnc_timezone_SOURCES
     ${MODULEPATH}/gnc-timezone.cpp
     gtest-gnc-timezone.cpp

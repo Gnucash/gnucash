@@ -22,21 +22,7 @@
 
 #include <sstream>
 #include "gnc-rational.hpp"
-
-static const gint64 pten[] = { 1, 10, 100, 1000, 10000, 100000, 1000000,
-			       10000000, 100000000, 1000000000, 10000000000,
-			       100000000000, 1000000000000, 10000000000000,
-			       100000000000000, 10000000000000000,
-			       100000000000000000, 1000000000000000000};
-static const int POWTEN_OVERFLOW {-5};
-
-static inline gint64
-powten (int exp)
-{
-    if (exp > 18 || exp < -18)
-	return POWTEN_OVERFLOW;
-    return exp < 0 ? -pten[-exp] : pten[exp];
-}
+#include "gnc-numeric.hpp"
 
 GncRational::GncRational (gnc_numeric n) noexcept :
     m_num (n.num), m_den (n.denom), m_error {GNC_ERROR_OK}
