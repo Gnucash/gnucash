@@ -33,7 +33,7 @@ extern "C"
 #include "gnc-numeric.h"
 }
 
-#define NREPS 2000
+#define NREPS 2
 
 static char *
 gnc_numeric_print(gnc_numeric in)
@@ -774,30 +774,30 @@ check_mult_div (void)
         }
     }
 
-    a = gnc_numeric_create(782592055622866ULL, 89025);
-    b = gnc_numeric_create(2222554708930978ULL, 85568);
+    a = gnc_numeric_create(INT64_C(1173888083434299), 93773);
+    b = gnc_numeric_create(INT64_C(2222554708930978), 89579);
     /* Dividing the above pair overflows, in that after
      * the division the denominator won't fit into a
      * 64-bit quantity.  This can be seen from
-     * the factorization int primes:
-     * 782592055622866 = 2 * 2283317 * 171371749
+     * the factorization into primes:
+     * 1173888083434299 = 3 * 2283317 * 171371749
      * (yes, thats a seven and a nine digit prime)
      * 2222554708930978 = 2 * 1111277354465489
      * (yes, that's a sixteen-digit prime number)
-     * 89025 = 3*5*5*1187
-     * 85568= 64*7*191
+     * 93773 = 79*1187
+     * 89579 = 67*7*191
      * If the rounding method is exact/no-round, then
      * an overflow error should be signalled; else the
      * divide routine should shift down the results till
      * the overflow is eliminated.
      */
-/* Doesn't overflow any more! */
+
     check_binary_op (gnc_numeric_error (GNC_ERROR_REMAINDER),
                      gnc_numeric_div(a, b, GNC_DENOM_AUTO,
                                      GNC_HOW_RND_NEVER | GNC_HOW_DENOM_EXACT),
                      a, b, "expected %s got %s = %s / %s for div exact");
 
-    check_binary_op (gnc_numeric_create(338441, 1000000),
+    check_binary_op (gnc_numeric_create(504548, 1000000),
                      gnc_numeric_div(a, b, GNC_DENOM_AUTO,
                                      GNC_HOW_DENOM_SIGFIGS(6) | GNC_HOW_RND_ROUND),
                      a, b, "expected %s got %s = %s / %s for div round");
@@ -841,7 +841,7 @@ check_mult_div (void)
     val_tot = gnc_numeric_create (-4280656418LL, 19873);
     val_a = gnc_numeric_mul (frac, val_tot,
                              gnc_numeric_denom(val_tot),
-                             GNC_HOW_RND_ROUND | GNC_HOW_DENOM_EXACT);
+                             GNC_HOW_RND_ROUND | GNC_HOW_DENOM_REDUCE);
     check_binary_op (gnc_numeric_create(-2939846940LL, 19873),
                      val_a, val_tot, frac,
                      "expected %s got %s = %s * %s for mult round");
@@ -850,7 +850,7 @@ check_mult_div (void)
     val_tot = gnc_numeric_create (467013515494988LL, 100);
     val_a = gnc_numeric_mul (frac, val_tot,
                              gnc_numeric_denom(val_tot),
-                             GNC_HOW_RND_ROUND | GNC_HOW_DENOM_EXACT);
+                             GNC_HOW_RND_ROUND | GNC_HOW_DENOM_REDUCE);
     check_binary_op (gnc_numeric_create(562854124919LL, 100),
                      val_a, val_tot, frac,
                      "expected %s got %s = %s * %s for mult round");
@@ -869,81 +869,6 @@ check_mult_div (void)
 
 }
 
-static void
-check_reciprocal(void)
-{
-    gnc_numeric a, b, ans, val;
-    double flo;
-
-    val = gnc_numeric_create(-60, 20);
-    check_unary_op (gnc_numeric_eq, gnc_numeric_create (-3, -1),
-                    gnc_numeric_convert(val, GNC_DENOM_RECIPROCAL(1),
-                                        GNC_HOW_RND_NEVER),
-                    val, "expected %s got %s = (%s as RECIP(1))");
-
-    a = gnc_numeric_create(200, 100);
-    b = gnc_numeric_create(300, 100);
-
-    /* 2 + 3 = 5 */
-    ans = gnc_numeric_add(a, b, GNC_DENOM_RECIPROCAL(1), GNC_HOW_RND_NEVER);
-    check_binary_op (gnc_numeric_create(5, -1),
-                     ans, a, b, "expected %s got %s = %s + %s for reciprocal");
-
-    /* 2 + 3 = 5 */
-    a = gnc_numeric_create(2, -1);
-    b = gnc_numeric_create(300, 100);
-    ans = gnc_numeric_add(a, b, GNC_DENOM_RECIPROCAL(1), GNC_HOW_RND_NEVER);
-    check_binary_op (gnc_numeric_create(5, -1),
-                     ans, a, b, "expected %s got %s = %s + %s for reciprocal");
-
-    /* check gnc_numeric_to_double */
-    flo = gnc_numeric_to_double(gnc_numeric_create(5, -1));
-    do_test ((5.0 == flo), "reciprocal conversion");
-
-    /* check gnc_numeric_compare */
-    a = gnc_numeric_create(2, 1);
-    b = gnc_numeric_create(2, -1);
-    do_test((0 == gnc_numeric_compare(a, b)), " 2 == 2 ");
-    a = gnc_numeric_create(2, 1);
-    b = gnc_numeric_create(3, -1);
-    do_test((-1 == gnc_numeric_compare(a, b)), " 2 < 3 ");
-    a = gnc_numeric_create(-2, 1);
-    b = gnc_numeric_create(2, -1);
-    do_test((-1 == gnc_numeric_compare(a, b)), " -2 < 2 ");
-    a = gnc_numeric_create(2, -1);
-    b = gnc_numeric_create(3, -1);
-    do_test((-1 == gnc_numeric_compare(a, b)), " 2 < 3 ");
-
-    /* check for equality */
-    a = gnc_numeric_create(2, 1);
-    b = gnc_numeric_create(2, -1);
-    do_test(gnc_numeric_equal(a, b), " 2 == 2 ");
-
-    /* check gnc_numeric_mul */
-    a = gnc_numeric_create(2, 1);
-    b = gnc_numeric_create(3, -1);
-    ans = gnc_numeric_mul(a, b, GNC_DENOM_RECIPROCAL(1), GNC_HOW_RND_NEVER);
-    check_binary_op (gnc_numeric_create(6, -1),
-                     ans, a, b, "expected %s got %s = %s * %s for reciprocal");
-
-    /* check gnc_numeric_div */
-    /* -60 / 20 = -3 */
-    a = gnc_numeric_create(-60, 1);
-    b = gnc_numeric_create(2, -10);
-    ans = gnc_numeric_div(a, b, GNC_DENOM_RECIPROCAL(1), GNC_HOW_RND_NEVER);
-    check_binary_op (gnc_numeric_create(-3, -1),
-                     ans, a, b, "expected %s got %s = %s / %s for reciprocal");
-
-    /* 60 / 20 = 3 */
-    a = gnc_numeric_create(60, 1);
-    b = gnc_numeric_create(2, -10);
-    ans = gnc_numeric_div(a, b, GNC_DENOM_RECIPROCAL(1), GNC_HOW_RND_NEVER);
-    check_binary_op (gnc_numeric_create(3, -1),
-                     ans, a, b, "expected %s got %s = %s / %s for reciprocal");
-
-
-}
-
 /* ======================================================= */
 
 static void
@@ -958,7 +883,6 @@ run_test (void)
     check_add_subtract();
     check_add_subtract_overflow ();
     check_mult_div ();
-    check_reciprocal();
 }
 
 int

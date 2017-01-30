@@ -27,7 +27,6 @@ ADD_DEPENDENCIES(check test-link)
 
 ADD_ENGINE_TEST(test-load-engine test-load-engine.c)
 ADD_ENGINE_TEST(test-guid test-guid.cpp)
-ADD_ENGINE_TEST(test-numeric test-numeric.cpp)
 ADD_ENGINE_TEST(test-date test-date.cpp)
 ADD_ENGINE_TEST(test-object test-object.c)
 ADD_ENGINE_TEST(test-commodities test-commodities.cpp)

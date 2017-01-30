@@ -25,7 +25,29 @@ test_qof_HEADERS = \
 	$(top_srcdir)/${MODULEPATH}/qofsession.h \
 	$(top_srcdir)/src/test-core/unittest-support.h
 
+test_numeric_SOURCES = \
+        ${top_srcdir}/src/engine/cashobjects.c \
+        ${top_srcdir}/src/test-core/test-stuff.c \
+        ${top_srcdir}/src/engine/test-core/test-engine-stuff.cpp \
+        ${top_srcdir}/${MODULEPATH}/gnc-numeric.cpp \
+        ${top_srcdir}/${MODULEPATH}/gnc-rational.cpp \
+        ${top_srcdir}/${MODULEPATH}/gnc-int128.cpp \
+        ${top_srcdir}/${MODULEPATH}/test/test-numeric.cpp
+
+test_numeric_CPPFLAGS = \
+       -I${top_srcdir}/src/engine \
+       -I${top_srcdir}/src/test-core \
+       -I${top_srcdir}/src/engine/test-core \
+       -I${top_srcdir}/src \
+       -I${top_srcdir}/${MODULEPATH} \
+       ${GLIB_CFLAGS}
+
+test_numeric_LDADD = \
+      ${top_builddir}/src/engine/libgncmod-engine.la \
+      ${GLIB_LIBS}
+
 check_PROGRAMS = \
+  test-numeric \
   test-qof
 
 TESTS = ${check_PROGRAMS}

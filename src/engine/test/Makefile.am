@@ -33,7 +33,6 @@ TEST_GROUP_1 = \
   test-link \
   test-load-engine \
   test-guid \
-  test-numeric \
   test-date \
   test-object \
   test-commodities \
@@ -88,7 +87,7 @@ test_commodities_SOURCES = test-commodities.cpp
 test_date_SOURCES = test-date.cpp
 test_group_vs_book_SOURCES = test-group-vs-book.cpp
 test_lots_SOURCES = test-lots.cpp
-test_numeric_SOURCES = test-numeric.cpp
+
 test_query_SOURCES = test-query.cpp
 test_scm_query_SOURCES = test-scm-query.cpp
 test_split_vs_account_SOURCES = test-split-vs-account.cpp

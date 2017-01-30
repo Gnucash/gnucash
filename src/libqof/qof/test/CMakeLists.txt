@@ -19,6 +19,30 @@ SET(test_qof_SOURCES
   ${CMAKE_SOURCE_DIR}/src/test-core/unittest-support.c
 )
 
+SET(TEST_ENGINE_INCLUDE_DIRS
+  ${TEST_QOF_INCLUDE_DIRS}
+  ${CMAKE_SOURCE_DIR}/src/engine
+  ${CMAKE_SOURCE_DIR}/src/engine/test-core
+  ${CMAKE_BINARY_DIR}/src # for config.h
+  )
+
+SET(TEST_ENGINE_LIBS
+  ${TEST_QOF_LIBS}
+  gncmod-test-engine
+  )
+
+SET(test_numeric_SOURCES
+  ${CMAKE_SOURCE_DIR}/src/engine/cashobjects.c
+  ${CMAKE_SOURCE_DIR}/src/engine/test-core/test-engine-stuff.cpp
+  ${CMAKE_SOURCE_DIR}/src/libqof/qof/gnc-numeric.cpp
+  ${CMAKE_SOURCE_DIR}/src/libqof/qof/gnc-rational.cpp
+  ${CMAKE_SOURCE_DIR}/src/libqof/qof/gnc-int128.cpp
+  ${CMAKE_SOURCE_DIR}/src/libqof/qof/test/test-numeric.cpp
+)
+
+
+GNC_ADD_TEST(test-numeric "${test_numeric_SOURCES}" TEST_ENGINE_INCLUDE_DIRS TEST_ENGINE_LIBS)
+
 # This test does not on Win32. Worse, it causes a dialog box to
 # pop up due to an assertion. This interferes with running the tests
 # unattended.
