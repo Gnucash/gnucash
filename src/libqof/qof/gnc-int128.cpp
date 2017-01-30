@@ -78,9 +78,9 @@ GncInt128::zero () noexcept
 GncInt128::operator int64_t() const
 {
     if ((m_flags & neg) && isBig())
-        throw std::underflow_error ("Negative value to large to represent as int64_t");
+        throw std::underflow_error ("Negative value too large to represent as int64_t");
     if ((m_flags & (overflow | NaN)) || isBig())
-        throw std::overflow_error ("Value to large to represent as int64_t");
+        throw std::overflow_error ("Value too large to represent as int64_t");
     int64_t retval = static_cast<int64_t>(m_lo);
     return m_flags & neg ? -retval : retval;
 }

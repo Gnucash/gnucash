@@ -88,7 +88,7 @@ enum // Values for m_flags
 /** Default constructor. Makes 0. */
     GncInt128();
     template <typename T>
-    GncInt128(T lower) : GncInt128 {INT64_C(0), static_cast<int64_t>(lower)}
+    GncInt128(T lower) : GncInt128(INT64_C(0), static_cast<int64_t>(lower))
     {
         static_assert (std::is_integral<T>(),
                        "GncInt128 can be constructed only with "
@@ -278,6 +278,7 @@ GncInt128 gcd (int64_t a, int64_t b);
 /** Compute the least common multiple of two integers
  */
 GncInt128 lcm (int64_t a, int64_t b);
+
 #endif //GNCINT128_H
 
 /** @} */
