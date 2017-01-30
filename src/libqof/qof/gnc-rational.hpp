@@ -28,6 +28,28 @@
 
 struct GncDenom;
 
+enum class RoundType
+{
+    floor = GNC_HOW_RND_FLOOR,
+    ceiling = GNC_HOW_RND_CEIL,
+    truncate = GNC_HOW_RND_TRUNC,
+    promote = GNC_HOW_RND_PROMOTE,
+    half_down = GNC_HOW_RND_ROUND_HALF_DOWN,
+    half_up = GNC_HOW_RND_ROUND_HALF_UP,
+    bankers = GNC_HOW_RND_ROUND,
+    never = GNC_HOW_RND_NEVER,
+};
+
+enum class DenomType
+{
+    den_auto = GNC_DENOM_AUTO,
+    exact = GNC_HOW_DENOM_EXACT,
+    reduce = GNC_HOW_DENOM_REDUCE,
+    lcd = GNC_HOW_DENOM_LCD,
+    fixed = GNC_HOW_DENOM_FIXED,
+    sigfigs = GNC_HOW_DENOM_SIGFIG,
+};
+
 /** @ingroup QOF
  *  @brief Rational number class using GncInt128 for the numerator and denominator.
  */
@@ -62,14 +84,14 @@ public:
 /** Round/convert this to the denominator provided by d, according to d's
  * m_round value.
  */
-    void round (GncDenom& d) noexcept;
 /* These are mutators; in other words, they implement the equivalent of
  * operators *=, /=, +=, and -=. They return a reference to this for chaining.
  */
-    GncRational& mul(const GncRational& b, GncDenom& d) noexcept;
-    GncRational& div(GncRational b, GncDenom& d) noexcept;
-    GncRational& add(const GncRational& b, GncDenom& d) noexcept;
-    GncRational& sub(const GncRational& b, GncDenom& d) noexcept;
+    GncRational& mul(const GncRational& b, GncDenom& d);
+    GncRational& div(GncRational b, GncDenom& d);
+    GncRational& add(const GncRational& b, GncDenom& d);
+    GncRational& sub(const GncRational& b, GncDenom& d);
+    void round (GncInt128 new_den, RoundType rtype);
     void operator+=(GncRational b);
     void operator-=(GncRational b);
     void operator*=(GncRational b);
@@ -94,26 +116,6 @@ struct GncDenom
     GncDenom (GncRational& a, GncRational& b, int64_t spec, unsigned int how) noexcept;
     void reduce (const GncRational& a) noexcept;
     GncInt128 get () const noexcept { return m_value; }
-
-    enum class RoundType : int
-    {
-        floor = GNC_HOW_RND_FLOOR,
-            ceiling = GNC_HOW_RND_CEIL,
-            truncate = GNC_HOW_RND_TRUNC,
-            promote = GNC_HOW_RND_PROMOTE,
-            half_down = GNC_HOW_RND_ROUND_HALF_DOWN,
-            half_up = GNC_HOW_RND_ROUND_HALF_UP,
-            bankers = GNC_HOW_RND_ROUND,
-            never = GNC_HOW_RND_NEVER,
-    };
-    enum class DenomType : int
-    {
-        exact = GNC_HOW_DENOM_EXACT,
-            reduce = GNC_HOW_DENOM_REDUCE,
-            lcd = GNC_HOW_DENOM_LCD,
-            fixed = GNC_HOW_DENOM_FIXED,
-            sigfigs = GNC_HOW_DENOM_SIGFIG,
-    };
 
     GncInt128 m_value;
     RoundType m_round;

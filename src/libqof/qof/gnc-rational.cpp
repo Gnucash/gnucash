@@ -189,45 +189,41 @@ GncRational::operator/=(GncRational b)
 }
 
 GncRational&
-GncRational::mul (const GncRational& b, GncDenom& d) noexcept
+GncRational::mul (const GncRational& b, GncDenom& d)
 {
     *this *= b;
-    round (d);
+    d.reduce(*this);
+    round (d.get(), d.m_round);
     return *this;
 }
 
 GncRational&
-GncRational::div (GncRational b, GncDenom& d) noexcept
+GncRational::div (GncRational b, GncDenom& d)
 {
     *this /= b;
-    round (d);
+    d.reduce(*this);
+    round (d.get(), d.m_round);
     return *this;
 }
 
 GncRational&
-GncRational::add (const GncRational& b, GncDenom& d) noexcept
+GncRational::add (const GncRational& b, GncDenom& d)
 {
     *this += b;
-    round (d);
+    d.reduce(*this);
+    round (d.get(), d.m_round);
     return *this;
 }
 
 GncRational&
-GncRational::sub (const GncRational& b, GncDenom& d) noexcept
+GncRational::sub (const GncRational& b, GncDenom& d)
 {
     return add(-b, d);
 }
 
 void
-GncRational::round (GncDenom& denom) noexcept
+GncRational::round (GncInt128 new_den, RoundType rtype)
 {
-    denom.reduce (*this);
-    if (m_error == GNC_ERROR_OK && denom.m_error != GNC_ERROR_OK)
-    {
-        m_error = denom.m_error;
-        return;
-    }
-    GncInt128 new_den = denom.get();
     if (new_den == 0) new_den = m_den;
     if (!(m_num.isBig() || new_den.isBig() ))
     {
@@ -243,9 +239,20 @@ GncRational::round (GncDenom& denom) noexcept
     GncInt128 new_num {}, remainder {};
     if (new_den.isNeg())
         m_num.div(-new_den * m_den, new_num, remainder);
-    else
+    else if (new_den != m_den)
         (m_num * new_den).div(m_den, new_num, remainder);
-
+    else
+    {
+        new_num = m_num;
+        new_den = m_den;
+        remainder = 0;
+    }
+    if (new_num.isOverflow() || new_den.isOverflow() || remainder.isOverflow())
+        throw std::overflow_error("Overflow during rounding.");
+    if (new_num.isNan() || new_den.isNan() || remainder.isNan())
+    {
+        throw std::underflow_error("Underflow during rounding.");
+    }
     if (remainder.isZero() && !(new_num.isBig() || new_den.isBig()))
     {
         m_num = new_num;
@@ -255,49 +262,52 @@ GncRational::round (GncDenom& denom) noexcept
 
     if (new_num.isBig() || new_den.isBig())
     {
-        if (!denom.m_auto)
-        {
-            m_error = GNC_ERROR_OVERFLOW;
-            return;
-        }
-
       /* First, try to reduce it */
         GncInt128 gcd = new_num.gcd(new_den);
+        if (!(gcd.isNan() || gcd.isOverflow()))
+        {
         new_num /= gcd;
         new_den /= gcd;
         remainder /= gcd;
+        }
 
-/* if that didn't work, shift both num and den down until neither is "big", th
+/* if that didn't work, shift both num and den down until neither is "big", then
  * fall through to rounding.
  */
-        while (new_num && new_num.isBig() && new_den && new_den.isBig())
+        while (rtype != RoundType::never && new_num && new_num.isBig() &&
+               new_den && new_den.isBig())
         {
             new_num >>= 1;
             new_den >>= 1;
             remainder >>= 1;
         }
     }
-
+    if (remainder == 0)
+    {
+        m_num = new_num;
+        m_den = new_den;
+        return;
+    }
 /* If we got here, then we can't exactly represent the rational with
  * new_denom. We must either round or punt.
  */
-    switch (denom.m_round)
+    switch (rtype)
     {
-    case GncDenom::RoundType::never:
+    case RoundType::never:
         m_error = GNC_ERROR_REMAINDER;
         return;
-    case GncDenom::RoundType::floor:
+    case RoundType::floor:
         if (new_num.isNeg()) ++new_num;
         break;
-    case GncDenom::RoundType::ceiling:
+    case RoundType::ceiling:
         if (! new_num.isNeg()) ++new_num;
         break;
-    case GncDenom::RoundType::truncate:
+    case RoundType::truncate:
         break;
-    case GncDenom::RoundType::promote:
+    case RoundType::promote:
         new_num += new_num.isNeg() ? -1 : 1;
         break;
-    case GncDenom::RoundType::half_down:
+    case RoundType::half_down:
         if (new_den.isNeg())
         {
             if (remainder * 2 > m_den * new_den)
@@ -306,7 +316,7 @@ GncRational::round (GncDenom& denom) noexcept
         else if (remainder * 2 > m_den)
             new_num += new_num.isNeg() ? -1 : 1;
         break;
-    case GncDenom::RoundType::half_up:
+    case RoundType::half_up:
         if (new_den.isNeg())
         {
             if (remainder * 2 >= m_den * new_den)
@@ -315,7 +325,7 @@ GncRational::round (GncDenom& denom) noexcept
         else if (remainder * 2 >= m_den)
             new_num += new_num.isNeg() ? -1 : 1;
         break;
-    case GncDenom::RoundType::bankers:
+    case RoundType::bankers:
         if (new_den.isNeg())
         {
             if (remainder * 2 > m_den * -new_den ||
@@ -366,7 +376,7 @@ GncRational::round_to_numeric() const
         auto divisor = static_cast<int64_t>(m_den / (m_num.abs() >> 62));
         GncDenom gnc_denom(new_rational, scratch, divisor,
                            GNC_HOW_RND_ROUND_HALF_DOWN);
-        new_rational.round(gnc_denom);
+        new_rational.round(gnc_denom.get(), gnc_denom.m_round);
         return new_rational;
     }
     auto quot(m_den / m_num);
@@ -387,15 +397,15 @@ GncRational::round_to_numeric() const
     auto int_div = static_cast<int64_t>(m_den / divisor);
     GncDenom gnc_denom(new_rational, scratch, int_div,
                        GNC_HOW_RND_ROUND_HALF_DOWN);
-    new_rational.round(gnc_denom);
+    new_rational.round(gnc_denom.get(), gnc_denom.m_round);
     return new_rational;
 }
 
 GncDenom::GncDenom (GncRational& a, GncRational& b,
                     int64_t spec, unsigned int how) noexcept :
     m_value (spec),
-    m_round (static_cast<GncDenom::RoundType>(how & GNC_NUMERIC_RND_MASK)),
-    m_type (static_cast<GncDenom::DenomType>(how & GNC_NUMERIC_DENOM_MASK)),
+    m_round (static_cast<RoundType>(how & GNC_NUMERIC_RND_MASK)),
+    m_type (static_cast<DenomType>(how & GNC_NUMERIC_DENOM_MASK)),
     m_auto (spec == GNC_DENOM_AUTO),
     m_sigfigs ((how & GNC_NUMERIC_SIGFIGS_MASK) >> 8),
     m_error (GNC_ERROR_OK)

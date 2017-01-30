@@ -34,6 +34,7 @@ extern "C"
 #include <stdlib.h>
 #include <string.h>
 #ifdef __cplusplus
+#include "qof.h"
 }
 #endif
 #include <stdint.h>
@@ -262,8 +263,14 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
     if (new_denom.m_error)
         return gnc_numeric_error (new_denom.m_error);
 
-
-    return static_cast<gnc_numeric>(an.add(bn, new_denom));
+    try
+    {
+        return static_cast<gnc_numeric>(an.add(bn, new_denom));
+    }
+    catch (const std::overflow_error& err)
+    {
+        return gnc_numeric_error(GNC_ERROR_OVERFLOW);
+    }
 }
 
 /* *******************************************************************
@@ -302,8 +309,15 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
     GncDenom new_denom (an, bn, denom, how);
     if (new_denom.m_error)
         return gnc_numeric_error (new_denom.m_error);
+    try
+    {
+        return static_cast<gnc_numeric>(an.mul(bn, new_denom));
+    }
+    catch (const std::overflow_error& err)
+    {
+        return gnc_numeric_error(GNC_ERROR_OVERFLOW);
+    }
 
-    return static_cast<gnc_numeric>(an.mul(bn, new_denom));
 }
 
 
@@ -324,8 +338,14 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
     GncDenom new_denom (an, bn, denom, how);
     if (new_denom.m_error)
         return gnc_numeric_error (new_denom.m_error);
-
-    return static_cast<gnc_numeric>(an.div(bn, new_denom));
+    try
+    {
+        return static_cast<gnc_numeric>(an.div(bn, new_denom));
+    }
+    catch (const std::overflow_error& err)
+    {
+        return gnc_numeric_error(GNC_ERROR_OVERFLOW);
+    }
 }
 
 /* *******************************************************************
@@ -368,8 +388,16 @@ gnc_numeric_convert(gnc_numeric in, int64_t denom, int how)
 {
     GncNumeric a (in), b (gnc_numeric_zero());
     GncDenom d (a, b, denom, how);
-    a.round (d);
-    return static_cast<gnc_numeric>(a);
+    try
+    {
+        d.reduce(a);
+        a.round (d.get(), d.m_round);
+        return static_cast<gnc_numeric>(a);
+    }
+    catch (const std::overflow_error& err)
+    {
+        return gnc_numeric_error(GNC_ERROR_OVERFLOW);
+    }
 }
 
 
@@ -391,8 +419,16 @@ gnc_numeric_reduce(gnc_numeric in)
         return in;
     GncNumeric a (in), b (gnc_numeric_zero());
     GncDenom d (a, b, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE | GNC_HOW_RND_ROUND);
-    a.round (d);
-    return static_cast<gnc_numeric>(a);
+    try
+    {
+        d.reduce(a);
+        a.round (d.get(), d.m_round);
+        return static_cast<gnc_numeric>(a);
+    }
+    catch (const std::overflow_error& err)
+    {
+        return gnc_numeric_error(GNC_ERROR_OVERFLOW);
+    }
 }
 
 

@@ -792,7 +792,7 @@ check_mult_div (void)
      * the overflow is eliminated.
      */
 
-    check_binary_op (gnc_numeric_error (GNC_ERROR_REMAINDER),
+    check_binary_op (gnc_numeric_error (GNC_ERROR_OVERFLOW),
                      gnc_numeric_div(a, b, GNC_DENOM_AUTO,
                                      GNC_HOW_RND_NEVER | GNC_HOW_DENOM_EXACT),
                      a, b, "expected %s got %s = %s / %s for div exact");
