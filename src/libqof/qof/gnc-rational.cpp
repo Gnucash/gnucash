@@ -47,7 +47,7 @@ GncRational::GncRational (gnc_numeric n) noexcept :
 
 GncRational::operator gnc_numeric () const noexcept
 {
-    if (m_num.isOverflow() || m_num.isNan() ||
+     if (m_num.isOverflow() || m_num.isNan() ||
         m_den.isOverflow() || m_den.isNan())
         return gnc_numeric_error(GNC_ERROR_OVERFLOW);
     if (m_error != GNC_ERROR_OK)
@@ -73,11 +73,14 @@ GncRational::operator-() const noexcept
 GncRational&
 GncRational::inv () noexcept
 {
+    if (m_den < 0)
+    {
+        m_num *= -m_den;
+        m_den = 1;
+    }
     std::swap(m_num, m_den);
 
-    GncRational b {1, 1};
-    GncDenom d {*this, b, INT64_C(0), GNC_HOW_RND_NEVER };
-    d.reduce(*this);
+    reduce();
     return *this;
 }
 
@@ -185,39 +188,6 @@ GncRational::operator/=(GncRational b)
     *this = std::move(new_val);
 }
 
-GncRational&
-GncRational::mul (const GncRational& b, GncDenom& d)
-{
-    *this *= b;
-    d.reduce(*this);
-    round (d.get(), d.m_round);
-    return *this;
-}
-
-GncRational&
-GncRational::div (GncRational b, GncDenom& d)
-{
-    *this /= b;
-    d.reduce(*this);
-    round (d.get(), d.m_round);
-    return *this;
-}
-
-GncRational&
-GncRational::add (const GncRational& b, GncDenom& d)
-{
-    *this += b;
-    d.reduce(*this);
-    round (d.get(), d.m_round);
-    return *this;
-}
-
-GncRational&
-GncRational::sub (const GncRational& b, GncDenom& d)
-{
-    return add(-b, d);
-}
-
 void
 GncRational::round (GncInt128 new_den, RoundType rtype)
 {
@@ -263,9 +233,9 @@ GncRational::round (GncInt128 new_den, RoundType rtype)
         GncInt128 gcd = new_num.gcd(new_den);
         if (!(gcd.isNan() || gcd.isOverflow()))
         {
-        new_num /= gcd;
-        new_den /= gcd;
-        remainder /= gcd;
+            new_num /= gcd;
+            new_den /= gcd;
+            remainder /= gcd;
         }
 
 /* if that didn't work, shift both num and den down until neither is "big", then
@@ -370,10 +340,7 @@ GncRational::round_to_numeric() const
         }
         GncRational new_rational(*this);
         GncRational scratch(1, 1);
-        auto divisor = static_cast<int64_t>(m_den / (m_num.abs() >> 62));
-        GncDenom gnc_denom(new_rational, scratch, divisor,
-                           GNC_HOW_RND_ROUND_HALF_DOWN);
-        new_rational.round(gnc_denom.get(), gnc_denom.m_round);
+        new_rational.round(m_den / (m_num.abs() >> 62), RoundType::half_down);
         return new_rational;
     }
     auto quot(m_den / m_num);
@@ -391,88 +358,6 @@ GncRational::round_to_numeric() const
     }
     GncRational new_rational(*this);
     GncRational scratch(1, 1);
-    auto int_div = static_cast<int64_t>(m_den / divisor);
-    GncDenom gnc_denom(new_rational, scratch, int_div,
-                       GNC_HOW_RND_ROUND_HALF_DOWN);
-    new_rational.round(gnc_denom.get(), gnc_denom.m_round);
+    new_rational.round(m_den / divisor, RoundType::half_down);
     return new_rational;
-}
-
-GncDenom::GncDenom (GncRational& a, GncRational& b,
-                    int64_t spec, unsigned int how) noexcept :
-    m_value (spec),
-    m_round (static_cast<RoundType>(how & GNC_NUMERIC_RND_MASK)),
-    m_type (static_cast<DenomType>(how & GNC_NUMERIC_DENOM_MASK)),
-    m_auto (spec == GNC_DENOM_AUTO),
-    m_sigfigs ((how & GNC_NUMERIC_SIGFIGS_MASK) >> 8),
-    m_error (GNC_ERROR_OK)
-
-{
-
-    if (!m_auto)
-        return;
-    switch (m_type)
-    {
-    case DenomType::fixed:
-        if (a.m_den == b.m_den)
-        {
-            m_value = a.m_den;
-        }
-        else if (b.m_num == 0)
-        {
-            m_value = a.m_den;
-            b.m_den = a.m_den;
-        }
-        else if (a.m_num == 0)
-        {
-            m_value = b.m_den;
-            a.m_den = b.m_den;
-        }
-        else
-        {
-            m_error = GNC_ERROR_DENOM_DIFF;
-        }
-        m_auto = false;
-        break;
-
-    case DenomType::lcd:
-        m_value = a.m_den.lcm(b.m_den);
-        m_auto = false;
-        break;
-    default:
-        break;
-
-    }
-}
-
-void
-GncDenom::reduce (const GncRational& a) noexcept
-{
-    if (!m_auto)
-        return;
-    switch (m_type)
-    {
-    default:
-        break;
-    case DenomType::reduce:
-        m_value = a.m_den / a.m_num.gcd(a.m_den);
-        break;
-
-    case DenomType::sigfigs:
-        GncInt128 val {};
-        if (a.m_num.abs() > a.m_den)
-            val = a.m_num.abs() / a.m_den;
-        else
-            val = a.m_den / a.m_num.abs();
-        unsigned int digits {};
-        while (val >= 10)
-        {
-            ++digits;
-            val /= 10;
-        }
-        m_value = (a.m_num.abs() > a.m_den ? powten (m_sigfigs - digits - 1) :
-                   powten (m_sigfigs + digits));
-        m_auto = false;
-        break;
-    }
 }

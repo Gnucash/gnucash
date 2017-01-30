@@ -39,22 +39,12 @@ test_num_print_info (gnc_numeric n, GNCPrintAmountInfo print_info, int line)
     const char *s;
     gboolean ok, print_ok;
 
-    auto msg = "[PrintAmountInternal()] Bad numeric from rounding: GNC_ERROR_OVERFLOW.";
-    auto log_domain = "gnc.gui";
-    auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_WARNING);
-    auto check = test_error_struct_new (log_domain, loglevel, msg);
-
-    /* Throws overflows during rounding step in xaccPrintAmount when the "fraction" is high. See bug 665707. */
-    auto hdlr = g_log_set_handler (log_domain, loglevel,
-                              (GLogFunc)test_checked_handler, &check);
     s = xaccPrintAmount (n, print_info);
     print_ok = (s && s[0] != '\0');
     if (!print_ok)
         return;
 
     ok = xaccParseAmount (s, print_info.monetary, &n_parsed, NULL);
-    g_log_remove_handler (log_domain, hdlr);
-
 
     do_test_args (ok, "parsing failure", __FILE__, __LINE__,
                   "num: %s, string %s (line %d)", gnc_numeric_to_string (n), s, line);
@@ -64,8 +54,6 @@ test_num_print_info (gnc_numeric n, GNCPrintAmountInfo print_info, int line)
                   "start: %s, string %s, finish: %s (line %d)",
                   gnc_numeric_to_string (n), s,
                   gnc_numeric_to_string (n_parsed), line);
-    test_error_struct_free (check);
-
 }
 
 static void
@@ -90,7 +78,8 @@ test_num (gnc_numeric n)
         print_info.force_fit = 0;
         print_info.round = 0;
 
-        n1 = gnc_numeric_convert (n, fraction, GNC_HOW_RND_ROUND_HALF_UP);
+        n1 = gnc_numeric_convert (n, fraction, GNC_HOW_DENOM_EXACT |
+                                  GNC_HOW_RND_ROUND_HALF_UP);
         if (gnc_numeric_check(n1))
         {
             do_test_args((gnc_numeric_check(n1) == GNC_ERROR_OVERFLOW),
@@ -133,6 +122,20 @@ static void
 run_tests (void)
 {
     int i;
+    auto msg1 = "[gnc_numeric_mul()]  Cannot be represented as a GncNumeric. Its integer value is too large.\n";
+    auto msg2 = "[gnc_numeric_mul()] Overflow during rounding.";
+    auto msg3 = "[convert()] Value too large to represent as int64_t";
+    const char* log_domain = "qof";
+    auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_WARNING);
+    auto check1 = test_error_struct_new (log_domain, loglevel, msg1);
+    auto check2 = test_error_struct_new (log_domain, loglevel, msg2);
+    auto check3 = test_error_struct_new (log_domain, loglevel, msg3);
+    test_add_error(check1);
+    test_add_error(check2);
+    test_add_error(check3);
+    /* Throws overflows during rounding step in xaccPrintAmount when the "fraction" is high. See bug 665707. */
+    auto hdlr = g_log_set_handler (log_domain, loglevel,
+                              (GLogFunc)test_list_handler, nullptr);
 
     for (i = 0; i < 50; i++)
     {
@@ -147,10 +150,13 @@ run_tests (void)
         IS_VALID_NUM(n1, n);
         test_num (n);
 
-        n1 = gnc_numeric_mul (n, n, n.denom, GNC_HOW_RND_ROUND_HALF_UP);
+        n1 = gnc_numeric_mul (n, n, n.denom,
+                              GNC_HOW_DENOM_EXACT | GNC_HOW_RND_ROUND_HALF_UP);
         IS_VALID_NUM(n1, n);
         test_num (n);
     }
+    g_log_remove_handler (log_domain, hdlr);
+    test_clear_error_list();
 }
 
 int

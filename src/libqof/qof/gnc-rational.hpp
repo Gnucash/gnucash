@@ -26,7 +26,7 @@
 #include "gnc-numeric.h"
 #include "gnc-int128.hpp"
 
-struct GncDenom;
+class GncNumeric;
 enum class RoundType;
 enum class DenomType;
 
@@ -68,13 +68,6 @@ public:
 /** Round/convert this to the denominator provided by d, according to d's
  * m_round value.
  */
-/* These are mutators; in other words, they implement the equivalent of
- * operators *=, /=, +=, and -=. They return a reference to this for chaining.
- */
-    GncRational& mul(const GncRational& b, GncDenom& d);
-    GncRational& div(GncRational b, GncDenom& d);
-    GncRational& add(const GncRational& b, GncDenom& d);
-    GncRational& sub(const GncRational& b, GncDenom& d);
     void round (GncInt128 new_den, RoundType rtype);
     void operator+=(GncRational b);
     void operator-=(GncRational b);
@@ -93,19 +86,4 @@ GncRational operator-(GncRational a, GncRational b);
 GncRational operator*(GncRational a, GncRational b);
 GncRational operator/(GncRational a, GncRational b);
 
-
-/** Encapsulates the rounding specifications computations. */
-struct GncDenom
-{
-    GncDenom (GncRational& a, GncRational& b, int64_t spec, unsigned int how) noexcept;
-    void reduce (const GncRational& a) noexcept;
-    GncInt128 get () const noexcept { return m_value; }
-
-    GncInt128 m_value;
-    RoundType m_round;
-    DenomType m_type;
-    bool m_auto;
-    unsigned int m_sigfigs;
-    GNCNumericErrorCode m_error;
-};
 #endif //__GNC_RATIONAL_HPP__

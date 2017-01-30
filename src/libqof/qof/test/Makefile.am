@@ -134,9 +134,15 @@ test_gnc_rational_SOURCES = \
         $(top_srcdir)/${MODULEPATH}/gnc-rational.cpp \
         $(top_srcdir)/${MODULEPATH}/gnc-numeric.cpp \
         $(top_srcdir)/${MODULEPATH}/gnc-int128.cpp \
+	$(top_srcdir)/$(MODULEPATH)/gnc-datetime.cpp \
+	$(top_srcdir)/$(MODULEPATH)/gnc-timezone.cpp \
+	$(top_srcdir)/$(MODULEPATH)/gnc-date.cpp \
+        $(top_srcdir)/${MODULEPATH}/qoflog.cpp \
         gtest-gnc-rational.cpp
 
 test_gnc_rational_CPPFLAGS = \
+        -I${top_srcdir}/src \
+        -I${top_srcdir}/src/libqof/qof \
         -I${GTEST_HEADERS} \
         ${GLIB_CFLAGS}
 
@@ -155,8 +161,14 @@ test_gnc_numeric_SOURCES = \
         $(top_srcdir)/${MODULEPATH}/gnc-rational.cpp \
         $(top_srcdir)/${MODULEPATH}/gnc-int128.cpp \
         $(top_srcdir)/${MODULEPATH}/gnc-numeric.cpp \
+	$(top_srcdir)/$(MODULEPATH)/gnc-datetime.cpp \
+	$(top_srcdir)/$(MODULEPATH)/gnc-timezone.cpp \
+	$(top_srcdir)/$(MODULEPATH)/gnc-date.cpp \
+        $(top_srcdir)/${MODULEPATH}/qoflog.cpp \
         gtest-gnc-numeric.cpp
 test_gnc_numeric_CPPFLAGS = \
+        -I${top_srcdir}/src \
+        -I${top_srcdir}/src/libqof/qof \
         -I${GTEST_HEADERS} \
         ${GLIB_CFLAGS}
 

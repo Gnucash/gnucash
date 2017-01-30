@@ -419,6 +419,10 @@ TEST(qofint128_functions, divide)
     EXPECT_EQ (zero, q);
     EXPECT_EQ (big, r);
 
+    big.div (big - 1, q, r);
+    EXPECT_EQ(one, q);
+    EXPECT_EQ(one, r);
+    
     EXPECT_EQ (big, big %= bigger);
     EXPECT_EQ (two, bigger /= big);
 }

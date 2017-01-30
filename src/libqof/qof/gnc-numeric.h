@@ -245,9 +245,6 @@ typedef enum
  */
 #define GNC_DENOM_AUTO 0
 
-/** Use the value 1/n as the denominator of the output value. */
-#define GNC_DENOM_RECIPROCAL( a ) (- ( a ))
-
 /**  @} */
 
 /** @name Constructors
