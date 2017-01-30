@@ -605,7 +605,7 @@ div_single_leg (uint64_t* u, size_t m, uint64_t v, GncInt128& q, GncInt128& r) n
 }// namespace
 
  void
-GncInt128::div (const GncInt128& b, GncInt128& q, GncInt128& r) noexcept
+GncInt128::div (const GncInt128& b, GncInt128& q, GncInt128& r) const noexcept
 {
     if (isOverflow() || b.isOverflow())
     {

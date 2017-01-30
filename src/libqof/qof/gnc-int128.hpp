@@ -170,7 +170,7 @@ enum // Values for m_flags
  * @param q The quotient; will be NaN if divisor = 0
  * @param r The remainder; will be 0 if divisor = 0
  */
-    void div (const GncInt128& d, GncInt128& q, GncInt128& r) noexcept;
+    void div (const GncInt128& d, GncInt128& q, GncInt128& r) const noexcept;
 
 /**
  * Explicit conversion to int64_t.
