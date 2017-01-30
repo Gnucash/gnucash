@@ -19,8 +19,12 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
  *******************************************************************/
-#include "gnc-int128.hpp"
+
+#ifndef __GNC_RATIONAL_HPP__
+#define __GNC_RATIONAL_HPP__
+
 #include "gnc-numeric.h"
+#include "gnc-int128.hpp"
 
 struct GncDenom;
 
@@ -104,3 +108,4 @@ struct GncDenom
     unsigned int m_sigfigs;
     GNCNumericErrorCode m_error;
 };
+#endif //__GNC_RATIONAL_HPP__
