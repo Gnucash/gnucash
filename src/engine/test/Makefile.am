@@ -96,7 +96,9 @@ test_transaction_reversal_SOURCES = test-transaction-reversal.cpp
 test_transaction_voiding_SOURCES = test-transaction-voiding.cpp
 
 $(SCM_TESTS): %: $(srcdir)/%.scm Makefile .scm-links
-	echo '${GUILE} --debug -l $(srcdir)/$*.scm -c "(exit (run-test))"' > $@
+	echo 'export GNC_BUILDDIR="${abs_top_builddir}";' > $@
+	echo 'export GNC_UNINSTALLED=yes;' >> $@
+	echo '${GUILE} --debug -l $(srcdir)/$*.scm -c "(exit (run-test))"' >> $@
 	chmod a+x $@
 
 TESTS_ENVIRONMENT = \
