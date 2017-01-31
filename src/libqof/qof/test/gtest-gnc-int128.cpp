@@ -24,6 +24,8 @@
 #include <gtest/gtest.h>
 #include "../gnc-int128.hpp"
 
+static constexpr uint64_t UPPER_MAX{2305843009213693951};
+
 TEST(qofint128_constructors, test_default_constructor)
 {
     GncInt128 value {};
@@ -36,112 +38,146 @@ TEST(qofint128_constructors, test_default_constructor)
 
 TEST(qofint128_constructors, test_single_arg_constructor)
 {
-    GncInt128 value1 (INT64_C(0));
-    EXPECT_TRUE (value1.isZero());
-    EXPECT_FALSE (value1.isNeg());
-    EXPECT_FALSE (value1.isBig());
-    EXPECT_FALSE (value1.isOverflow());
-    EXPECT_FALSE (value1.isNan());
+    EXPECT_NO_THROW({
+            GncInt128 value1 (INT64_C(0));
+            EXPECT_TRUE (value1.isZero());
+            EXPECT_FALSE (value1.isNeg());
+            EXPECT_FALSE (value1.isBig());
+            EXPECT_FALSE (value1.isOverflow());
+            EXPECT_FALSE (value1.isNan());
+        });
 
-    GncInt128 value2 (INT64_C(567894392130486208));
-    EXPECT_FALSE (value2.isZero());
-    EXPECT_FALSE (value2.isNeg());
-    EXPECT_FALSE (value2.isBig());
-    EXPECT_FALSE (value2.isOverflow());
-    EXPECT_FALSE (value2.isNan());
+    EXPECT_NO_THROW({
+            GncInt128 value2 (INT64_C(567894392130486208));
+            EXPECT_FALSE (value2.isZero());
+            EXPECT_FALSE (value2.isNeg());
+            EXPECT_FALSE (value2.isBig());
+            EXPECT_FALSE (value2.isOverflow());
+            EXPECT_FALSE (value2.isNan());
+        });
 
-    GncInt128 value3 (INT64_C(-567894392130486208));
-    EXPECT_FALSE (value3.isZero());
-    EXPECT_TRUE (value3.isNeg());
-    EXPECT_FALSE (value3.isBig());
-    EXPECT_FALSE (value3.isOverflow());
-    EXPECT_FALSE (value3.isNan());
+    EXPECT_NO_THROW({
+            GncInt128 value3 (INT64_C(-567894392130486208));
+            EXPECT_FALSE (value3.isZero());
+            EXPECT_TRUE (value3.isNeg());
+            EXPECT_FALSE (value3.isBig());
+            EXPECT_FALSE (value3.isOverflow());
+            EXPECT_FALSE (value3.isNan());
+        });
 
-    GncInt128 value4 (UINT64_C(13567894392130486208));
-    EXPECT_FALSE (value4.isZero());
-    EXPECT_FALSE (value4.isNeg());
-    EXPECT_TRUE (value4.isBig());
-    EXPECT_FALSE (value4.isOverflow());
-    EXPECT_FALSE (value4.isNan());
+    EXPECT_NO_THROW({
+            GncInt128 value4 (UINT64_C(13567894392130486208));
+            EXPECT_FALSE (value4.isZero());
+            EXPECT_FALSE (value4.isNeg());
+            EXPECT_TRUE (value4.isBig());
+            EXPECT_FALSE (value4.isOverflow());
+            EXPECT_FALSE (value4.isNan());
+        });
 }
 
 TEST(qofint128_constructors, test_double_arg_constructor)
 {
-    GncInt128 value1 (INT64_C(0), INT64_C(0));
-    EXPECT_TRUE (value1.isZero());
-    EXPECT_FALSE (value1.isNeg());
-    EXPECT_FALSE (value1.isBig());
-    EXPECT_FALSE (value1.isOverflow());
-    EXPECT_FALSE (value1.isNan());
+    EXPECT_NO_THROW({
+            GncInt128 value1 (INT64_C(0), INT64_C(0));
+            EXPECT_TRUE (value1.isZero());
+            EXPECT_FALSE (value1.isNeg());
+            EXPECT_FALSE (value1.isBig());
+            EXPECT_FALSE (value1.isOverflow());
+            EXPECT_FALSE (value1.isNan());
+        });
 
-    GncInt128 value2 (INT64_C(0), INT64_C(567894392130486208));
-    EXPECT_FALSE (value2.isZero());
-    EXPECT_FALSE (value2.isNeg());
-    EXPECT_FALSE (value2.isBig());
-    EXPECT_FALSE (value2.isOverflow());
-    EXPECT_FALSE (value2.isNan());
+    EXPECT_NO_THROW({
+            GncInt128 value2 (INT64_C(0), INT64_C(567894392130486208));
+            EXPECT_FALSE (value2.isZero());
+            EXPECT_FALSE (value2.isNeg());
+            EXPECT_FALSE (value2.isBig());
+            EXPECT_FALSE (value2.isOverflow());
+            EXPECT_FALSE (value2.isNan());
+        });
 
-    GncInt128 value3 (INT64_C(567894392130486208), INT64_C(0));
-    EXPECT_FALSE (value3.isZero());
-    EXPECT_FALSE (value3.isNeg());
-    EXPECT_TRUE (value3.isBig());
-    EXPECT_FALSE (value3.isOverflow());
-    EXPECT_FALSE (value3.isNan());
+    EXPECT_NO_THROW({
+            GncInt128 value3 (INT64_C(567894392130486208), INT64_C(0));
+            EXPECT_FALSE (value3.isZero());
+            EXPECT_FALSE (value3.isNeg());
+            EXPECT_TRUE (value3.isBig());
+            EXPECT_FALSE (value3.isOverflow());
+            EXPECT_FALSE (value3.isNan());
+        });
 
-    GncInt128 value4 (INT64_C(567894392130486208), INT64_C(567894392130486208));
-    EXPECT_FALSE (value4.isZero());
-    EXPECT_FALSE (value4.isNeg());
-    EXPECT_TRUE (value4.isBig());
-    EXPECT_FALSE (value4.isOverflow());
-    EXPECT_FALSE (value4.isNan());
+    EXPECT_NO_THROW({
+            GncInt128 value4 (INT64_C(567894392130486208),
+                              INT64_C(567894392130486208));
+            EXPECT_FALSE (value4.isZero());
+            EXPECT_FALSE (value4.isNeg());
+            EXPECT_TRUE (value4.isBig());
+            EXPECT_FALSE (value4.isOverflow());
+            EXPECT_FALSE (value4.isNan());
+        });
 
-    GncInt128 value5 (INT64_C(567894392130486208),
-                      INT64_C(-567894392130486208));
-    EXPECT_FALSE (value5.isZero());
-    EXPECT_FALSE (value5.isNeg());
-    EXPECT_TRUE (value5.isBig());
-    EXPECT_FALSE (value5.isOverflow());
-    EXPECT_FALSE (value5.isNan());
+    EXPECT_NO_THROW({
+            GncInt128 value5 (INT64_C(567894392130486208),
+                              INT64_C(-567894392130486208));
+            EXPECT_FALSE (value5.isZero());
+            EXPECT_FALSE (value5.isNeg());
+            EXPECT_TRUE (value5.isBig());
+            EXPECT_FALSE (value5.isOverflow());
+            EXPECT_FALSE (value5.isNan());
+        });
 
-    GncInt128 value6 (INT64_C(-567894392130486208),
-                      INT64_C(567894392130486208));
-    EXPECT_FALSE (value6.isZero());
-    EXPECT_TRUE (value6.isNeg());
-    EXPECT_TRUE (value6.isBig());
-    EXPECT_FALSE (value6.isOverflow());
-    EXPECT_FALSE (value6.isNan());
+    EXPECT_NO_THROW({
+            GncInt128 value6 (INT64_C(-567894392130486208),
+                              INT64_C(567894392130486208));
+            EXPECT_FALSE (value6.isZero());
+            EXPECT_TRUE (value6.isNeg());
+            EXPECT_TRUE (value6.isBig());
+            EXPECT_FALSE (value6.isOverflow());
+            EXPECT_FALSE (value6.isNan());
+        });
 
-    GncInt128 value7 (UINT64_C(13567894392130486208),
-                      UINT64_C(13567894392130486208), GncInt128::pos);
-    EXPECT_FALSE (value7.isZero());
-    EXPECT_FALSE (value7.isNeg());
-    EXPECT_TRUE (value7.isBig());
-    EXPECT_FALSE (value7.isOverflow());
-    EXPECT_FALSE (value7.isNan());
+    EXPECT_NO_THROW({
+            GncInt128 value7 (UINT64_C(1695986799016310843),
+                              UINT64_C(13567894392130486208), GncInt128::pos);
+            EXPECT_FALSE (value7.isZero());
+            EXPECT_FALSE (value7.isNeg());
+            EXPECT_TRUE (value7.isBig());
+            EXPECT_FALSE (value7.isOverflow());
+            EXPECT_FALSE (value7.isNan());
+        });
 
-    GncInt128 value8 (UINT64_C(13567894392130486208),
-                      UINT64_C(13567894392130486208), GncInt128::neg);
-    EXPECT_FALSE (value8.isZero());
-    EXPECT_TRUE (value8.isNeg());
-    EXPECT_TRUE (value8.isBig());
-    EXPECT_FALSE (value8.isOverflow());
-    EXPECT_FALSE (value8.isNan());
+    EXPECT_NO_THROW({
+            GncInt128 value8 (UINT64_C(1695986799016310843),
+                              UINT64_C(13567894392130486208), GncInt128::neg);
+            EXPECT_FALSE (value8.isZero());
+            EXPECT_TRUE (value8.isNeg());
+            EXPECT_TRUE (value8.isBig());
+            EXPECT_FALSE (value8.isOverflow());
+            EXPECT_FALSE (value8.isNan());
+        });
 
-    GncInt128 value9 (UINT64_C(13567894392130486208),
-                      UINT64_C(13567894392130486208), GncInt128::overflow);
-    EXPECT_FALSE (value9.isZero());
-    EXPECT_FALSE (value9.isNeg());
-    EXPECT_TRUE (value9.isBig());
-    EXPECT_TRUE (value9.isOverflow());
-    EXPECT_FALSE (value9.isNan());
+    EXPECT_NO_THROW({
+            GncInt128 value9 (UINT64_C(1695986799016310843),
+                              UINT64_C(13567894392130486208),
+                              GncInt128::overflow);
+            EXPECT_FALSE (value9.isZero());
+            EXPECT_FALSE (value9.isNeg());
+            EXPECT_TRUE (value9.isBig());
+            EXPECT_TRUE (value9.isOverflow());
+            EXPECT_FALSE (value9.isNan());
+        });
 
-   GncInt128 value10 (UINT64_C(13567894392130486208),
-                      UINT64_C(13567894392130486208), GncInt128::NaN);
-    EXPECT_FALSE (value10.isZero());
-    EXPECT_FALSE (value10.isNeg());
-    EXPECT_TRUE (value10.isBig());
-    EXPECT_FALSE (value10.isOverflow());
-    EXPECT_TRUE (value10.isNan());
+    EXPECT_NO_THROW({
+            GncInt128 value10 (UINT64_C(1695986799016310843),
+                               UINT64_C(13567894392130486208), GncInt128::NaN);
+            EXPECT_FALSE (value10.isZero());
+            EXPECT_FALSE (value10.isNeg());
+            EXPECT_TRUE (value10.isBig());
+            EXPECT_FALSE (value10.isOverflow());
+            EXPECT_TRUE (value10.isNan());
+        });
+
+    EXPECT_THROW(GncInt128 value10 (UINT64_C(13567894392130486208),
+                                    UINT64_C(13567894392130486208)),
+                 std::overflow_error);
 }
 
 TEST(qofint128_functions, test_int_functions)
@@ -149,9 +185,13 @@ TEST(qofint128_functions, test_int_functions)
     int64_t arg {INT64_C(567894392130486208)};
     int64_t narg {INT64_C(-567894392130486208)};
     uint64_t uarg {UINT64_C(13567894392130486208)};
-    GncInt128 value1 (INT64_C(0), arg);
-    EXPECT_EQ (arg, static_cast<int64_t>(value1));
-    EXPECT_EQ (static_cast<uint64_t>(arg), static_cast<uint64_t>(value1));
+
+    EXPECT_NO_THROW({
+            GncInt128 value1 (INT64_C(0), arg);
+            EXPECT_EQ (arg, static_cast<int64_t>(value1));
+            EXPECT_EQ (static_cast<uint64_t>(arg),
+                       static_cast<uint64_t>(value1));
+        });
 
     GncInt128 value2 (UINT64_C(0), uarg);
     EXPECT_THROW (auto v = static_cast<int64_t>(value2), std::overflow_error);
@@ -291,19 +331,22 @@ TEST(qofint128_functions, add_and_subtract)
 {
     /* UINT64_MAX = 18,446,744,073,709,551,615
      * INT64_MAX  =  9,223,372,036,854,775,807
-     * barg + sarg = INT64_MAX
+     * upper leg max = 2,305,843,009,213,693,951
+     * barg + marg = INT64_MAX
      * barg + uarg = UINT64_MAX
+     * marg + sarg = upper leg max
      */
     int64_t barg {INT64_C(4878849681579065407)};
-    int64_t sarg {INT64_C(4344522355275710400)};
+    int64_t marg {INT64_C(4344522355275710400)};
+    int64_t sarg {INT64_C(267163663151677502)};
     uint64_t uarg {UINT64_C(13567894392130486208)};
 
-    GncInt128 smallest (sarg + 100);
+    GncInt128 smallest (marg + 100);
     GncInt128 smaller (barg + 500);
     GncInt128 small (uarg);
     GncInt128 big (sarg, barg);
-    GncInt128 bigger (static_cast<uint64_t>(barg), uarg);
-    GncInt128 biggest (uarg, static_cast<uint64_t>(barg));
+    GncInt128 bigger (marg, barg);
+    GncInt128 biggest (sarg, static_cast<uint64_t>(barg) + uarg);
     GncInt128 nsmall (UINT64_C(0), uarg, GncInt128::neg);
 
     EXPECT_EQ (GncInt128(INT64_C(2), INT64_C(499)), small += smaller);
@@ -311,12 +354,11 @@ TEST(qofint128_functions, add_and_subtract)
                nsmall -= smaller);
 
     EXPECT_EQ (GncInt128(uarg), small -= smaller);
-    EXPECT_EQ (GncInt128(static_cast<uint64_t>(barg + sarg/2), UINT64_MAX),
+    EXPECT_EQ (GncInt128(UINT64_C(2305843009213693951),
+                         UINT64_C(9757699363158130814)),
                bigger += big);
-    EXPECT_EQ (GncInt128(static_cast<uint64_t>(barg), uarg), bigger -= big);
+    EXPECT_EQ (GncInt128(marg, barg), bigger -= big);
     bigger += biggest;
-    EXPECT_EQ (GncInt128(UINT64_MAX, UINT64_MAX), bigger);
-    bigger += smallest;
     EXPECT_TRUE (bigger.isOverflow());
     bigger -= biggest;
     EXPECT_TRUE (bigger.isOverflow());
@@ -325,38 +367,70 @@ TEST(qofint128_functions, add_and_subtract)
 TEST(qofint128_functions, multiply)
 {
     int64_t barg {INT64_C(4878849681579065407)};
-    int64_t sarg {INT64_C(4344522355275710400)};
+    int64_t marg {INT64_C(4344522355275710400)};
+    int64_t sarg {INT64_C(267163663151677502)};
     uint64_t uarg {UINT64_C(13567894392130486208)};
 
-    GncInt128 smallest (sarg);
+    GncInt128 smallest (marg);
     GncInt128 smaller (barg);
     GncInt128 small (uarg);
     GncInt128 big (sarg, barg);
-    GncInt128 bigger (static_cast<uint64_t>(barg), uarg);
+    GncInt128 bigger (sarg, uarg);
+    GncInt128 nsmaller (-barg);
+    GncInt128 nsmallest (-marg);
+    GncInt128 tiny (53);
+    GncInt128 teensy (37);
 
-    small *= big;
-    EXPECT_TRUE (small.isOverflow());
-    big *= bigger;
-    EXPECT_TRUE (big.isOverflow());
-    EXPECT_EQ (GncInt128(UINT64_C(1149052180967758316), UINT64_C(6323251814974894144)), smallest *= smaller);
-    EXPECT_FALSE (smallest.isOverflow());
+    EXPECT_NO_THROW({
+            small *= big;
+            EXPECT_TRUE (small.isOverflow());
+            big *= bigger;
+            EXPECT_TRUE (big.isOverflow());
+            EXPECT_EQ(1961, tiny * teensy);
+            EXPECT_EQ(-1961, -tiny * teensy);
+            EXPECT_EQ(-1961, tiny * -teensy);
+            EXPECT_EQ(1961, -tiny * -teensy);
+            EXPECT_EQ (GncInt128(INT64_C(1149052180967758316),
+                                 UINT64_C(6323251814974894144)),
+                       smallest * smaller);
+            EXPECT_EQ (GncInt128(INT64_C(-1149052180967758316),
+                                 UINT64_C(6323251814974894144)),
+                       -smallest * smaller);
+            EXPECT_EQ (GncInt128(INT64_C(-1149052180967758316),
+                                 UINT64_C(6323251814974894144)),
+                       smallest * -smaller);
+            EXPECT_EQ (GncInt128(INT64_C(1149052180967758316),
+                                 UINT64_C(6323251814974894144)),
+                       -smallest * -smaller);
+            EXPECT_EQ (GncInt128(INT64_C(-1149052180967758316),
+                                 UINT64_C(6323251814974894144)),
+                       nsmallest * smaller);
+            EXPECT_EQ (GncInt128(INT64_C(-1149052180967758316),
+                                 UINT64_C(6323251814974894144)),
+                       smallest * nsmaller);
+            EXPECT_EQ (GncInt128(INT64_C(1149052180967758316),
+                                 UINT64_C(6323251814974894144)),
+                       nsmallest * nsmaller);
+            EXPECT_FALSE (smallest.isOverflow());
+        });
 
 }
 
 TEST(qofint128_functions, divide)
 {
     int64_t barg {INT64_C(4878849681579065407)};
-    int64_t sarg {INT64_C(4344522355275710400)};
+    int64_t marg {INT64_C(4344522355275710400)};
+    int64_t sarg {INT64_C(267163663151677502)};
     uint64_t uarg {UINT64_C(13567894392130486208)};
 
     GncInt128 zero (INT64_C(0));
     GncInt128 one (INT64_C(1));
     GncInt128 two (INT64_C(2));
-    GncInt128 smallest (sarg);
+    GncInt128 smallest (marg);
     GncInt128 smaller (barg);
     GncInt128 small (uarg);
     GncInt128 big (sarg, barg);
-    GncInt128 bigger (static_cast<uint64_t>(barg), uarg);
+    GncInt128 bigger (static_cast<uint64_t>(sarg), uarg);
     GncInt128 nsmall = -small;
     GncInt128 nbig = -bigger;
 
@@ -392,28 +466,24 @@ TEST(qofint128_functions, divide)
     EXPECT_EQ (zero, r);
 
     big.div (smaller, q, r);
-    EXPECT_EQ (GncInt128(INT64_C(8213236443097627766)), q);
-    EXPECT_EQ (GncInt128(INT64_C(3162679692459777845)), r);
+    EXPECT_EQ (GncInt128(INT64_C(505067796878574019)), q);
+    EXPECT_EQ (GncInt128(INT64_C(1659575984014676290)), r);
 
     bigger.div (big, q, r);
     EXPECT_EQ (two, q);
-    EXPECT_EQ (GncInt128(UINT64_C(534327326303355007),
-                         UINT64_C(3810195028972355394)), r);
+    EXPECT_EQ (GncInt128(UINT64_C(3810195028972355394)), r);
 
     bigger.div (-big, q, r);
     EXPECT_EQ (-two, q);
-    EXPECT_EQ (GncInt128(UINT64_C(534327326303355007),
-                         UINT64_C(3810195028972355394)), r);
+    EXPECT_EQ (GncInt128(UINT64_C(3810195028972355394)), r);
 
     nbig.div (-big, q, r);
     EXPECT_EQ (two, q);
-    EXPECT_EQ (GncInt128(UINT64_C(534327326303355007),
-                         UINT64_C(3810195028972355394)), r);
+    EXPECT_EQ (GncInt128(UINT64_C(3810195028972355394)), r);
 
     nbig.div (-big, q, r);
     EXPECT_EQ (two, q);
-    EXPECT_EQ (GncInt128(UINT64_C(534327326303355007),
-                         UINT64_C(3810195028972355394)), r);
+    EXPECT_EQ (GncInt128(UINT64_C(3810195028972355394)), r);
 
     big.div (bigger, q, r);
     EXPECT_EQ (zero, q);
@@ -422,7 +492,7 @@ TEST(qofint128_functions, divide)
     big.div (big - 1, q, r);
     EXPECT_EQ(one, q);
     EXPECT_EQ(one, r);
-    
+
     EXPECT_EQ (big, big %= bigger);
     EXPECT_EQ (two, bigger /= big);
 }
@@ -430,24 +500,27 @@ TEST(qofint128_functions, divide)
 TEST(qofint128_functions, GCD)
 {
     int64_t barg {INT64_C(4878849681579065407)};
-    int64_t sarg {INT64_C(4344522355275710401)};
+    int64_t marg {INT64_C(4344522355275710400)};
+    int64_t sarg {INT64_C(267163663151677502)};
     uint64_t uarg {UINT64_C(13567894392130486208)};
 
     GncInt128 one (INT64_C(1));
     GncInt128 smallest (sarg);
-    GncInt128 smaller (barg);
-    GncInt128 small (uarg);
+    GncInt128 smaller (marg);
+    GncInt128 small (barg);
 
-    GncInt128 big = smaller * smallest;
-    GncInt128 bigger = small * smaller;
+    EXPECT_NO_THROW({
+            GncInt128 big = smaller * smallest;
+            GncInt128 bigger = small * smaller;
 
-    EXPECT_EQ (smaller, big.gcd(smaller));
-    EXPECT_EQ (smallest, big.gcd(smallest));
-    EXPECT_EQ (small, bigger.gcd(small));
-    EXPECT_EQ (smaller, bigger.gcd(smaller));
-    EXPECT_EQ (one, big.gcd (small));
-    EXPECT_EQ (one, bigger.gcd (smallest));
-    EXPECT_EQ (big, smaller.lcm (smallest));
+            EXPECT_EQ (smaller, big.gcd(smaller));
+            EXPECT_EQ (smallest, big.gcd(smallest));
+            EXPECT_EQ (small, bigger.gcd(small));
+            EXPECT_EQ (smaller, bigger.gcd(smaller));
+            EXPECT_EQ (one, big.gcd (small));
+            EXPECT_EQ (2, bigger.gcd (smallest));
+            EXPECT_EQ (big >> 1, smaller.lcm (smallest));
+        });
 }
 
 TEST(qofint128_functions, pow)

@@ -48,19 +48,21 @@ extern "C"
 /** @addtogroup GncInt128
  * @ingroup QOF
  * @{
- * @brief provides a 128-bit int as a base class for GncNumeric.
+ * @brief provides a 125-bit int as a base class for GncNumeric.
  *
- * All the usual operators are provided. Only the explicit integer
- * conversions throw; all other errors are indicated by the overflow
- * and NaN ("Not a Number") flags. Note that performing any operation
- * on an overflowed or NaN Gncint128 will yield an overflowed or NaN
- * result, so calling routines need not check until the end of a
- * chained calculation.
+ * In order to make space for the status flags the upper leg is limited to
+ * 0x1fffffffffffffff. Attempting to construct a GncInt128 with a larger upper
+ * leg will throw a std::overflow_error.
+ *
+ * All the usual operators are provided. Only the constructors and explicit
+ * integer conversions throw; all other errors are indicated by the overflow and
+ * NaN ("Not a Number") flags. Note that performing any operation on an
+ * overflowed or NaN Gncint128 will yield an overflowed or NaN result, so
+ * calling routines need not check until the end of a chained calculation.
  * GncInt128 uses implicit copy and move constructors and implicit destructor.
  */
 class GncInt128
 {
-    unsigned char m_flags;
     uint64_t m_hi;
     uint64_t m_lo;
 

@@ -32,6 +32,7 @@ extern "C"
 #include <utility>
 #include <cassert>
 #include <cstdio>
+#include <sstream>
 
 /* All algorithms from Donald E. Knuth, "The Art of Computer
  * Programming, Volume 2: Seminumerical Algorithms", 3rd Ed.,
@@ -42,13 +43,29 @@ namespace {
     static const unsigned int sublegs = GncInt128::numlegs * 2;
     static const unsigned int sublegbits = GncInt128::legbits / 2;
     static const uint64_t sublegmask = (UINT64_C(1) << sublegbits) - 1;
+    static const uint64_t flagmask = UINT64_C(0xe000000000000000);
+    static const uint64_t nummask = UINT64_C(0x1fffffffffffffff);
+/* Assumes that the high bits represent old flags to be replaced.
+ * Any overflow must be detected first!
+ */
+    static inline uint64_t set_flags(uint64_t leg, uint8_t flags)
+    {
+        auto flag_part = static_cast<uint64_t>(flags) << 61;
+        return flag_part + (leg & nummask);
+    }
+    static inline uint8_t get_flags(uint64_t leg)
+    {
+        return (leg & flagmask) >> 61;
+    }
+    static inline uint64_t get_num(uint64_t leg)
+    {
+        return leg & nummask;
+    }
 }
 
-GncInt128::GncInt128 () : m_flags {}, m_hi {0}, m_lo {0}{}
+GncInt128::GncInt128 () : m_hi {0}, m_lo {0}{}
 
-GncInt128::GncInt128 (int64_t upper, int64_t lower, unsigned char flags) :
-    m_flags {static_cast<unsigned char>(flags ^ (upper < 0 ? neg :
-                                                 upper == 0 && lower < 0 ? neg : pos))},
+GncInt128::GncInt128 (int64_t upper, int64_t lower, uint8_t flags) :
     m_hi {static_cast<uint64_t>(upper < 0 ? -upper : upper)},
     m_lo {static_cast<uint64_t>(lower < 0 ? -lower : lower)}
 {
@@ -58,38 +75,75 @@ GncInt128::GncInt128 (int64_t upper, int64_t lower, unsigned char flags) :
         m_lo += (m_hi << 63);
 
     m_hi >>= 1;
+    if (m_hi & flagmask)
+    {
+        std::ostringstream ss;
+        ss << "Constructing GncInt128 with int64_t " << upper
+           << " which is too big.";
+        throw std::overflow_error(ss.str());
+    }
+    flags ^= (upper < 0 ? neg : upper == 0 && lower < 0 ? neg : pos);
+    m_hi = set_flags(m_hi, flags);
 }
 
-GncInt128::GncInt128 (int64_t upper, uint64_t lower, unsigned char flags) :
-    m_flags {static_cast<unsigned char>(flags ^ (upper < 0 ? neg : pos))},
-    m_hi {static_cast<uint64_t>(upper < 0 ? -upper : upper)}, m_lo {lower} {}
+GncInt128::GncInt128 (int64_t upper, uint64_t lower, uint8_t flags) :
+    m_hi {static_cast<uint64_t>(upper < 0 ? -upper : upper)}, m_lo {lower}
+{
+    if (m_hi & flagmask)
+    {
+        std::ostringstream ss;
+        ss << "Constructing GncInt128 with int64_t " << upper
+           << " which is too big when lower is unsigned.";
+        throw std::overflow_error(ss.str());
+    }
+    flags ^= (upper < 0 ? neg : pos);
+    m_hi = set_flags(m_hi, flags);
+}
 
-GncInt128::GncInt128 (uint64_t upper, uint64_t lower, unsigned char flags) :
-    m_flags {flags}, m_hi {upper}, m_lo {lower} {}
+GncInt128::GncInt128 (uint64_t upper, uint64_t lower, uint8_t flags) :
+    m_hi {upper}, m_lo {lower}
+ {
+     /* somewhere in the bowels of gnc_module.scm compilation this gets called
+      * with upper=INT64_MAX, which would otherwise throw. Make it our max value
+      * instead.
+      */
+    if (m_hi == UINT64_MAX)
+         m_hi = nummask;
+     if (m_hi & flagmask)
+    {
+        std::ostringstream ss;
+        ss << "Constructing GncInt128 with uint64_t " << upper
+           << " which is too big.";
+        throw std::overflow_error(ss.str());
+    }
+
+     m_hi = set_flags(m_hi, flags);
+}
 
 GncInt128&
 GncInt128::zero () noexcept
 {
-    m_flags = 0;
     m_lo = m_hi = UINT64_C(0);
     return *this;
 }
 
 GncInt128::operator int64_t() const
 {
-    if ((m_flags & neg) && isBig())
+    auto flags = get_flags(m_hi);
+    if ((flags & neg) && isBig())
         throw std::underflow_error ("Negative value too large to represent as int64_t");
-    if ((m_flags & (overflow | NaN)) || isBig())
+    if ((flags & (overflow | NaN)) || isBig())
         throw std::overflow_error ("Value too large to represent as int64_t");
     int64_t retval = static_cast<int64_t>(m_lo);
-    return m_flags & neg ? -retval : retval;
+    return flags & neg ? -retval : retval;
 }
 
 GncInt128::operator uint64_t() const
 {
-    if (m_flags & neg)
+    auto flags = get_flags(m_hi);
+    if (flags & neg)
         throw std::underflow_error ("Can't represent negative value as uint64_t");
-    if ((m_flags & (overflow | NaN)) || (m_hi || m_lo > UINT64_MAX))
+    if ((flags & (overflow | NaN)) || (m_hi || m_lo > UINT64_MAX))
         throw std::overflow_error ("Value to large to represent as uint64_t");
     return m_lo;
 }
@@ -98,22 +152,25 @@ GncInt128::operator uint64_t() const
 int
 GncInt128::cmp (const GncInt128& b) const noexcept
 {
-    if (m_flags & (overflow | NaN))
+    auto flags = get_flags(m_hi);
+    if (flags & (overflow | NaN))
         return -1;
     if (b.isOverflow () || b.isNan ())
         return 1;
-    if (m_flags & neg)
+    auto hi = get_num(m_hi);
+    auto bhi = get_num(b.m_hi);
+    if (flags & neg)
     {
 	if (!b.isNeg()) return -1;
-	if (m_hi > b.m_hi) return -1;
-	if (m_hi < b.m_hi) return 1;
+	if (hi > bhi) return -1;
+	if (hi < bhi) return 1;
 	if (m_lo > b.m_lo) return -1;
 	if (m_lo < b.m_lo) return 1;
 	return 0;
     }
     if (b.isNeg()) return 1;
-    if (m_hi < b.m_hi) return -1;
-    if (m_hi > b.m_hi) return 1;
+    if (hi < bhi) return -1;
+    if (hi > bhi) return 1;
     if (m_lo < b.m_lo) return -1;
     if (m_lo > b.m_lo) return 1;
     return 0;
@@ -190,37 +247,38 @@ GncInt128::pow(unsigned int b) const noexcept
 bool
 GncInt128::isNeg () const noexcept
 {
-    return (m_flags & neg);
+    return (get_flags(m_hi) & neg);
 }
 
 bool
 GncInt128::isBig () const noexcept
 {
-    return (m_hi || m_lo > INT64_MAX);
+    return (get_num(m_hi) || m_lo > INT64_MAX);
 }
 
 bool
 GncInt128::isOverflow () const noexcept
 {
-    return (m_flags & overflow);
+    return (get_flags(m_hi) & overflow);
 }
 
 bool
 GncInt128::isNan () const noexcept
 {
-    return (m_flags & NaN);
+    return (get_flags(m_hi) & NaN);
 }
 
 bool
 GncInt128::valid() const noexcept
 {
-    return !(m_flags & (overflow | NaN));
+    return !(get_flags(m_hi) & (overflow | NaN));
 }
 
 bool
 GncInt128::isZero() const noexcept
 {
-    return ((m_flags & (overflow | NaN)) == 0 &&  m_hi == 0 && m_lo == 0);
+    return ((get_flags(m_hi) & (overflow | NaN)) == 0 &&
+            get_num(m_hi) == 0 && m_lo == 0);
 }
 
 GncInt128
@@ -235,8 +293,9 @@ GncInt128::abs() const noexcept
 unsigned int
 GncInt128::bits() const noexcept
 {
-    unsigned int bits {static_cast<unsigned int>(m_hi == 0 ? 0 : 64)};
-    uint64_t temp {(m_hi == 0 ? m_lo : m_hi)};
+    auto hi = get_num(m_hi);
+    unsigned int bits {static_cast<unsigned int>(hi == 0 ? 0 : 64)};
+    uint64_t temp {(hi == 0 ? m_lo : hi)};
     for (;temp > 0; temp >>= 1)
         ++bits;
     return bits;
@@ -247,10 +306,12 @@ GncInt128
 GncInt128::operator-() const noexcept
 {
     auto retval = *this;
+    auto flags = get_flags(retval.m_hi);
     if (isNeg())
-	retval.m_flags ^= neg;
+	flags ^= neg;
     else
-	retval.m_flags |= neg;
+	flags |= neg;
+    retval.m_hi = set_flags(retval.m_hi, flags);
     return retval;
 }
 
@@ -286,11 +347,12 @@ GncInt128::operator-- (int) noexcept
 GncInt128&
 GncInt128::operator+= (const GncInt128& b) noexcept
 {
+    auto flags = get_flags(m_hi);
     if (b.isOverflow())
-        m_flags |= overflow;
+        flags |= overflow;
     if (b.isNan())
-        m_flags |= NaN;
-
+        flags |= NaN;
+    m_hi = set_flags(m_hi, flags);
     if (isOverflow() || isNan())
         return *this;
     if ((isNeg () && !b.isNeg ()) || (!isNeg () && b.isNeg ()))
@@ -298,32 +360,38 @@ GncInt128::operator+= (const GncInt128& b) noexcept
     uint64_t result = m_lo + b.m_lo;
     uint64_t carry = static_cast<int64_t>(result < m_lo);  //Wrapping
     m_lo = result;
-    result = m_hi + b.m_hi + carry;
-    if (result < m_hi)
-	m_flags |= overflow;
-    m_hi = result;
+    auto hi = get_num(m_hi);
+    auto bhi = get_num(b.m_hi);
+    result = hi + bhi + carry;
+    if (result < hi || result & flagmask)
+	flags |= overflow;
+    m_hi = set_flags(result, flags);
     return *this;
 }
 
 GncInt128&
 GncInt128::operator<<= (unsigned int i) noexcept
 {
+    auto flags = get_flags(m_hi);
     if (i > maxbits)
     {
-        m_flags &= 0xfe;
-        m_hi = 0;
+        flags &= 0xfe;
+        m_hi = set_flags(0, flags);
         m_lo = 0;
         return *this;
     }
+    auto hi = get_num(m_hi);
     if (i < legbits)
     {
         uint64_t carry {(m_lo & (((UINT64_C(1) << i) - 1) << (legbits - i)))};
         m_lo <<= i;
-        m_hi <<= i;
-        m_hi += carry;
+        hi <<= i;
+        hi += carry;
+        m_hi = set_flags(hi, flags);
         return *this;
     }
-    m_hi = m_lo << (i - legbits);
+    hi = m_lo << (i - legbits);
+    m_hi = set_flags(hi, flags);
     m_lo = 0;
     return *this;
 }
@@ -331,33 +399,38 @@ GncInt128::operator<<= (unsigned int i) noexcept
 GncInt128&
 GncInt128::operator>>= (unsigned int i) noexcept
 {
+    auto flags = get_flags(m_hi);
     if (i > maxbits)
     {
-        m_flags &= 0xfe;
-        m_hi = 0;
+        flags &= 0xfe;
+        m_hi = set_flags(0, flags);
         m_lo = 0;
         return *this;
     }
+    auto hi = get_num(m_hi);
     if (i < legbits)
     {
-        uint64_t carry {(m_hi & ((UINT64_C(1) << i) - 1))};
+        uint64_t carry {(hi & ((UINT64_C(1) << i) - 1))};
         m_lo >>= i;
-        m_hi >>= i;
+        hi >>= i;
         m_lo += (carry << (legbits - i));
+        m_hi = set_flags(hi, flags);
         return *this;
     }
-    m_lo = m_hi >> (i - legbits);
-    m_hi = 0;
+    m_lo = hi >> (i - legbits);
+    m_hi = set_flags(0, flags);
     return *this;
 }
 
 GncInt128&
 GncInt128::operator-= (const GncInt128& b) noexcept
 {
+    auto flags = get_flags(m_hi);
     if (b.isOverflow())
-        m_flags |= overflow;
+        flags |= overflow;
     if (b.isNan())
-        m_flags |= NaN;
+        flags |= NaN;
+    m_hi = set_flags(m_hi, flags);
 
     if (isOverflow() || isNan())
         return *this;
@@ -365,10 +438,11 @@ GncInt128::operator-= (const GncInt128& b) noexcept
     if ((!isNeg() && b.isNeg()) || (isNeg() && !b.isNeg()))
 	return this->operator+= (-b);
     bool operand_bigger {abs().cmp (b.abs()) < 0};
+    auto hi = get_num(m_hi);
+    auto far_hi = get_num(b.m_hi);
     if (operand_bigger)
     {
-        m_flags ^= neg; // ^= flips the bit
-        uint64_t far_hi {b.m_hi};
+        flags ^= neg; // ^= flips the bit
         if (m_lo > b.m_lo)
         {
             /* The + 1 on the end is because we really want to use 2^64, or
@@ -379,20 +453,20 @@ GncInt128::operator-= (const GncInt128& b) noexcept
         }
         else
             m_lo = b.m_lo - m_lo;
-
-        m_hi = far_hi - m_hi;
+        hi = far_hi - hi;
+        m_hi = set_flags(hi, flags);
         return *this;
     }
     if (m_lo < b.m_lo)
     {
         m_lo = UINT64_MAX - b.m_lo + m_lo + 1; //See UINT64_MAX comment above
-        --m_hi; //borrow
+        --hi; //borrow
     }
     else
         m_lo -= b.m_lo;
 
-    m_hi -= b.m_hi;
-
+    hi -= far_hi;
+    m_hi = set_flags(hi, flags);
     return *this;
 }
 
@@ -400,38 +474,45 @@ GncInt128&
 GncInt128::operator*= (const GncInt128& b) noexcept
 {
     /* Test for 0 first */
+    auto flags = get_flags(m_hi);
     if (isZero() || b.isZero())
     {
-        m_hi = m_lo = 0;
+        m_lo = 0;
+        m_hi = set_flags(0, flags);
         return *this;
     }
     if (b.isOverflow())
-        m_flags |= overflow;
+        flags |= overflow;
     if (b.isNan())
-        m_flags |= NaN;
-
+        flags |= NaN;
+    m_hi = set_flags(m_hi, flags);
     if (isOverflow() || isNan())
         return *this;
 
     /* Test for overflow before spending time on the calculation */
-    if (m_hi && b.m_hi)
+    auto hi = get_num(m_hi);
+    auto bhi = get_num(b.m_hi);
+    if (hi && bhi)
     {
-        m_flags |= overflow;
+        flags |= overflow;
+        m_hi = set_flags(hi, flags);
         return *this;
     }
 
     unsigned int abits {bits()}, bbits {b.bits()};
     if (abits + bbits > maxbits)
     {
-        m_flags |= overflow;
+        flags |= overflow;
+        m_hi = set_flags(m_hi, flags);
         return *this;
     }
     /* Handle the sign; ^ flips if b is negative */
-    m_flags ^= (b.m_flags & neg);
+    flags ^= (get_flags(b.m_hi) & neg);
     /* The trivial case */
     if (abits + bbits <= legbits)
     {
         m_lo *= b.m_lo;
+        m_hi = set_flags(m_hi, flags);
         return *this;
     }
 
@@ -448,9 +529,9 @@ GncInt128::operator*= (const GncInt128& b) noexcept
  */
 
     uint64_t av[sublegs] {(m_lo & sublegmask), (m_lo >> sublegbits),
-            (m_hi & sublegmask), (m_hi >> sublegbits)};
+            (hi & sublegmask), (hi >> sublegbits)};
     uint64_t bv[sublegs] {(b.m_lo & sublegmask), (b.m_lo >> sublegbits),
-            (b.m_hi & sublegmask), (b.m_hi >> sublegbits)};
+            (bhi & sublegmask), (bhi >> sublegbits)};
     uint64_t rv[sublegs] {};
     uint64_t carry {}, scratch {};
 
@@ -478,19 +559,23 @@ GncInt128::operator*= (const GncInt128& b) noexcept
 
     if (carry) //Shouldn't happen because of the checks above
     {
-        m_flags |= overflow;
+        flags |= overflow;
+        m_hi = set_flags(m_hi, flags);
         return *this;
     }
 
     m_lo = rv[0] + (rv[1] << sublegbits);
     carry = rv[1] >> sublegbits;
     carry += (rv[1] << sublegbits) > m_lo || rv[0] > m_lo ? 1 : 0;
-    m_hi = rv[2] + (rv[3] << sublegbits) + carry;
-    if ((rv[3] << sublegbits) > m_hi || rv[2] > m_hi || (rv[3] >> sublegbits))
+    hi = rv[2] + (rv[3] << sublegbits) + carry;
+    if ((rv[3] << sublegbits) > hi || rv[2] > hi || (rv[3] >> sublegbits) ||
+        hi & flagmask)
     {
-        m_flags |= overflow;
+        flags |= overflow;
+        m_hi = set_flags(hi, flags);
         return *this;
     }
+    m_hi = set_flags(hi, flags);
     return *this;
 }
 
@@ -501,7 +586,8 @@ namespace {
  */
 /* We're using arrays here instead of vectors to avoid an alloc. */
 void
-div_multi_leg (uint64_t* u, size_t m, uint64_t* v, size_t n, GncInt128& q, GncInt128& r) noexcept
+div_multi_leg (uint64_t* u, size_t m, uint64_t* v, size_t n,
+               GncInt128& q, GncInt128& r) noexcept
 {
 /* D1, Normalization */
     uint64_t qv[sublegs] {};
@@ -598,7 +684,8 @@ div_multi_leg (uint64_t* u, size_t m, uint64_t* v, size_t n, GncInt128& q, GncIn
 }
 
 void
-div_single_leg (uint64_t* u, size_t m, uint64_t v, GncInt128& q, GncInt128& r) noexcept
+div_single_leg (uint64_t* u, size_t m, uint64_t v,
+                GncInt128& q, GncInt128& r) noexcept
 {
     uint64_t qv[sublegs] {};
     uint64_t carry {};
@@ -625,17 +712,23 @@ div_single_leg (uint64_t* u, size_t m, uint64_t v, GncInt128& q, GncInt128& r) n
  void
 GncInt128::div (const GncInt128& b, GncInt128& q, GncInt128& r) const noexcept
 {
+    auto qflags = get_flags(q.m_hi);
+    auto rflags = get_flags(r.m_hi);
     if (isOverflow() || b.isOverflow())
     {
-        q.m_flags |= overflow;
-        r.m_flags |= overflow;
+        qflags |= overflow;
+        rflags |= overflow;
+        q.m_hi = set_flags(q.m_hi, qflags);
+        r.m_hi = set_flags(r.m_hi, rflags);
         return;
     }
 
     if (isNan() || b.isNan())
     {
-        q.m_flags |= NaN;
-        r.m_flags |= NaN;
+        qflags |= NaN;
+        rflags |= NaN;
+        q.m_hi = set_flags(q.m_hi, qflags);
+        r.m_hi = set_flags(r.m_hi, rflags);
         return;
     }
     assert (&q != this);
@@ -646,23 +739,28 @@ GncInt128::div (const GncInt128& b, GncInt128& q, GncInt128& r) const noexcept
     q.zero(), r.zero();
     if (b.isZero())
     {
-        q.m_flags |= NaN;
-        r.m_flags |= NaN;
+        qflags |= NaN;
+        rflags |= NaN;
+        q.m_hi = set_flags(q.m_hi, qflags);
+        r.m_hi = set_flags(r.m_hi, rflags);
         return;
     }
 
     if (isNeg())
-        q.m_flags |= neg;
+        qflags |= neg;
 
     if (b.isNeg())
-        q.m_flags ^= neg;
+        qflags ^= neg;
 
     if (abs() < b.abs())
     {
         r = *this;
         return;
     }
-    if (m_hi == 0 && b.m_hi == 0) //let the hardware do it
+    auto hi = get_num(m_hi);
+    auto bhi = get_num(b.m_hi);
+    q.m_hi = set_flags(hi, qflags);
+    if (hi == 0 && bhi == 0) //let the hardware do it
     {
         q.m_lo = m_lo / b.m_lo;
         r.m_lo = m_lo % b.m_lo;
@@ -670,9 +768,9 @@ GncInt128::div (const GncInt128& b, GncInt128& q, GncInt128& r) const noexcept
     }
 
     uint64_t u[sublegs + 2] {(m_lo & sublegmask), (m_lo >> sublegbits),
-            (m_hi & sublegmask), (m_hi >> sublegbits), 0, 0};
+            (hi & sublegmask), (hi >> sublegbits), 0, 0};
     uint64_t v[sublegs] {(b.m_lo & sublegmask), (b.m_lo >> sublegbits),
-            (b.m_hi & sublegmask), (b.m_hi >> sublegbits)};
+            (bhi & sublegmask), (bhi >> sublegbits)};
     auto m = u[3] ? 4 : u[2] ? 3 : u[1] ? 2 : u[0] ? 1 : 0;
     auto n = v[3] ? 4 : v[2] ? 3 : v[1] ? 2 : v[0] ? 1 : 0;
     if (m == 0 || n == 0) //Shouldn't happen
@@ -699,30 +797,35 @@ GncInt128::operator%= (const GncInt128& b) noexcept
     div(b, q, r);
     std::swap (*this, r);
     if (q.isNan())
-        m_flags |= NaN;
+        m_hi = set_flags(m_hi, (get_flags(m_hi) | NaN));
     return *this;
 }
 
 GncInt128&
 GncInt128::operator&= (const GncInt128& b) noexcept
 {
+    auto flags = get_flags(m_hi);
     if (b.isOverflow())
-        m_flags |= overflow;
+        flags |= overflow;
     if (b.isNan())
-        m_flags |= NaN;
-
+        flags |= NaN;
+    m_hi = set_flags(m_hi, flags);
     if (isOverflow() || isNan())
         return *this;
-
-    m_hi &= b.m_hi;
+    auto hi = get_num(m_hi);
+    hi &= get_num(b.m_hi);
     m_lo &= b.m_lo;
+    m_hi = set_flags(hi, flags);
     return *this;
 }
 
 GncInt128&
 GncInt128::operator|= (const GncInt128& b) noexcept
 {
-    m_hi ^= b.m_hi;
+    auto flags = get_flags(m_hi);
+    auto hi = get_num(m_hi);
+    hi  ^= get_num(b.m_hi);
+    m_hi = set_flags(hi, flags);
     m_lo ^= b.m_lo;
     return *this;
 }
@@ -730,15 +833,17 @@ GncInt128::operator|= (const GncInt128& b) noexcept
 GncInt128&
 GncInt128::operator^= (const GncInt128& b) noexcept
 {
+    auto flags = get_flags(m_hi);
     if (b.isOverflow())
-        m_flags |= overflow;
+        flags |= overflow;
     if (b.isNan())
-        m_flags |= NaN;
-
+        flags |= NaN;
+    m_hi = set_flags(m_hi, flags);
     if (isOverflow() || isNan())
         return *this;
-
-    m_hi ^= b.m_hi;
+    auto hi = get_num(m_hi);
+    hi ^= get_num(b.m_hi);
+    m_hi = set_flags(hi, flags);
     m_lo ^= b.m_lo;
     return *this;
 }
@@ -801,7 +906,7 @@ GncInt128::asCharBufR(char* buf) const noexcept
         return buf;
     }
     uint64_t d[dec_array_size] {};
-    decimal_from_binary(d, m_hi, m_lo);
+    decimal_from_binary(d, get_num(m_hi), m_lo);
     char* next = buf;
     char neg {'-'};
 
