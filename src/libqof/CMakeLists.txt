@@ -6,10 +6,12 @@ SET (gnc_qof_HEADERS
     qof/gnc-aqbanking-templates.h
     qof/gnc-date-p.h
     qof/gnc-date.h
-    qof/gnc-numeric.h
     qof/gnc-datetime.hpp
-    qof/gnc-rational.hpp
     qof/gnc-timezone.hpp
+    qof/gnc-numeric.h
+    qof/gnc-numeric.hpp
+    qof/gnc-rational.hpp
+    qof/gnc-rational-rounding.hpp
     qof/guid.h
     qof/kvp_frame.hpp
     qof/kvp-value.hpp

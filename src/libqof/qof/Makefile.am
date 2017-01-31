@@ -54,7 +54,9 @@ qofinclude_HEADERS = \
    gnc-date-p.h      \
    gnc-date.h        \
    gnc-numeric.h     \
+   gnc-numeric.hpp   \
    gnc-rational.hpp  \
+   gnc-rational-rounding.hpp \
    gnc-timezone.hpp  \
    gnc-datetime.hpp  \
    guid.h            \
