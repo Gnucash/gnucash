@@ -11975,7 +11975,7 @@ msgstr "_Отобразить тикер"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-file-access.glade.h:1
 msgid "<b>Data Format:</b>"
-msgstr "<b>Формат даты:</b>"
+msgstr "<b>Формат данных:</b>"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-file-access.glade.h:2
 msgid "Open _Read-Only"
