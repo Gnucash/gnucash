@@ -1890,7 +1890,7 @@ msgstr[2] "Следующие %d счетов должны быть оплаче
 
 #: ../src/business/business-gnome/dialog-invoice.c:3274
 msgid "Due Bills Reminder"
-msgstr "Напоминание платежах"
+msgstr "Напоминание о платежах"
 
 #: ../src/business/business-gnome/dialog-job.c:135
 msgid "The Job must be given a name."
@@ -2719,7 +2719,7 @@ msgid ""
 "Are you sure you want to do this?"
 msgstr ""
 "Владелец %s будет удален.\n"
-" Вы уверены, что хотите это сделать?"
+"Вы уверены, что хотите это сделать?"
 
 #. * @}
 #. * @}
@@ -11975,7 +11975,7 @@ msgstr "_Отобразить тикер"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-file-access.glade.h:1
 msgid "<b>Data Format:</b>"
-msgstr "<b>Формат даты:</b>"
+msgstr "<b>Формат данных:</b>"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-file-access.glade.h:2
 msgid "Open _Read-Only"
