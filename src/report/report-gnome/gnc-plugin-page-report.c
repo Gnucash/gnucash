@@ -674,7 +674,7 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
     priv->reloading = FALSE;
 }
 
-/* FIXME: This function does... nothing.  */
+/* FIXME: This function does... nothing?  */
 static void
 gnc_plugin_page_report_history_destroy_cb(gnc_html_history_node * node,
         gpointer user_data)
