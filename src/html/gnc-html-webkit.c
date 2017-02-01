@@ -973,17 +973,16 @@ impl_webkit_show_url( GncHtml* self, URLType type,
 static void
 impl_webkit_reload( GncHtml* self, gboolean force_rebuild )
 {
-    gnc_html_history_node * n;
     GncHtmlWebkitPrivate* priv;
 
     g_return_if_fail( self != NULL );
     g_return_if_fail( GNC_IS_HTML_WEBKIT(self) );
 
     priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
-    n = gnc_html_history_get_current( priv->base.history );
 
     if ( force_rebuild )
     {
+        gnc_html_history_node *n = gnc_html_history_get_current( priv->base.history );
         if ( n != NULL )
             gnc_html_show_url( self, n->type, n->location, n->label, 0 );
     }

@@ -160,7 +160,7 @@ static int gnc_plugin_page_report_check_urltype(URLType t);
 static void gnc_plugin_page_report_load_cb(GncHtml * html, URLType type,
         const gchar * location, const gchar * label,
         gpointer data);
-static gboolean gnc_plugin_page_report_expose_event_cb(GtkWidget *widget, GdkEventExpose *event, gpointer user_data);
+static void gnc_plugin_page_report_selected_cb(GObject *object, gpointer user_data);
 static void gnc_plugin_page_report_refresh (gpointer data);
 static void gnc_plugin_page_report_set_fwd_button(GncPluginPageReport * page, int enabled);
 static void gnc_plugin_page_report_set_back_button(GncPluginPageReport * page, int enabled);
@@ -453,8 +453,8 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     /* load uri when view idle */
     g_idle_add ((GSourceFunc)gnc_plugin_page_report_load_uri, page);
 
-    g_signal_connect(priv->container, "expose-event",
-                     G_CALLBACK(gnc_plugin_page_report_expose_event_cb), report);
+    g_signal_connect (G_OBJECT (page), "selected",
+                      G_CALLBACK (gnc_plugin_page_report_selected_cb), report);
 
     gtk_widget_show_all( GTK_WIDGET(priv->container) );
 
@@ -731,26 +731,27 @@ gnc_plugin_page_report_history_destroy_cb(gnc_html_history_node * node,
 #endif
 }
 
-/* We got a draw event.  See if we need to reload the report */
-static gboolean
-gnc_plugin_page_report_expose_event_cb(GtkWidget *widget, GdkEventExpose *event, gpointer user_data)
+/* This page got selected by the user.  See if we need to reload the report.
+ * This may  be needed in case the window got resized while this page was not selected.*/
+static void
+gnc_plugin_page_report_selected_cb (GObject *object, gpointer user_data)
 {
-    GncPluginPageReport *page = user_data;
+    GncPluginPageReport *page = GNC_PLUGIN_PAGE_REPORT(user_data);
     GncPluginPageReportPrivate *priv;
 
-    g_return_val_if_fail(GNC_IS_PLUGIN_PAGE_REPORT(page), FALSE);
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REPORT(page));
 
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(page);
     ENTER( "report_draw" );
     if (!priv->need_reload)
     {
         LEAVE( "no reload needed" );
-        return FALSE;
+        return;
     }
     priv->need_reload = FALSE;
     gnc_html_reload(priv->html, FALSE);
     LEAVE( "reload forced" );
-    return FALSE;
+    return;
 }
 
 // @param data is actually GncPluginPageReportPrivate
