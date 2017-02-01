@@ -511,15 +511,14 @@
             (push "$.jqplot.config.enablePlugins = true;\n")
             (push "$(document).ready(function() {
 var plot = $.jqplot('")(push chart-id)(push"', data, options);
-var int_chart_width = document.getElementById(\"")(push chart-id)(push"\").getElementsByClassName(\"jqplot-zoom-canvas\")[0].width;
-plot.axes.xaxis.ticks = getVisualTicks(int_chart_width);
+plot.axes.xaxis.ticks = getVisualTicks();
 plot.replot();
 var timer;
 $(window).resize(function () {
     clearTimeout(timer);
     timer = setTimeout(function () {
         plot.replot({resetAxes: true });
-        plot.axes.xaxis.ticks = getVisualTicks(int_chart_width);
+        plot.axes.xaxis.ticks = getVisualTicks();
         plot.replot();
     }, 100);
     });
@@ -534,7 +533,8 @@ function formatTooltip(str, seriesIndex, pointIndex) {
     return options.series[seriesIndex].label + '<br/>' + x + '<br/><b>' + y + '</b>';
 }
 
-function getVisualTicks(chart_width) {
+function getVisualTicks() {
+    var chart_width = document.getElementById(\"")(push chart-id)(push"\").getElementsByClassName(\"jqplot-zoom-canvas\")[0].width;
     var num_ticks = all_ticks.length;
     var label_width = 25;
     var num_labels = chart_width / label_width;
