@@ -120,9 +120,6 @@ typedef struct GncPluginPageReportPrivate
      * the window is closed. */
     SCM          edited_reports;
 
-    /* This is set to mark the fact that we need to reload the html */
-    gboolean	need_reload;
-
     /* The page is in the process of reloading the html */
     gboolean	reloading;
 
@@ -158,7 +155,6 @@ static int gnc_plugin_page_report_check_urltype(URLType t);
 static void gnc_plugin_page_report_load_cb(GncHtml * html, URLType type,
         const gchar * location, const gchar * label,
         gpointer data);
-static void gnc_plugin_page_report_selected_cb(GObject *object, gpointer user_data);
 static void gnc_plugin_page_report_refresh (gpointer data);
 static void gnc_plugin_page_report_set_fwd_button(GncPluginPageReport * page, int enabled);
 static void gnc_plugin_page_report_set_back_button(GncPluginPageReport * page, int enabled);
@@ -426,9 +422,6 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     /* load uri when view idle */
     g_idle_add ((GSourceFunc)gnc_plugin_page_report_load_uri, page);
 
-    g_signal_connect (G_OBJECT (page), "selected",
-                      G_CALLBACK (gnc_plugin_page_report_selected_cb), report);
-
     gtk_widget_show_all( GTK_WIDGET(priv->container) );
 
     LEAVE("container %p", priv->container);
@@ -661,23 +654,24 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
     /* it's probably already dirty, but make sure */
     scm_call_2(dirty_report, priv->cur_report, SCM_BOOL_T);
 
-    /* Now queue the fact that we need to reload this report */
-    priv->need_reload = TRUE;
-    // jsled: this doesn't seem to cause any effect.
-    gtk_widget_queue_draw( GTK_WIDGET(priv->container) );
-    // jsled: this does.
+    // prevent closing this page while loading...
+    priv->reloading = TRUE;
+
     // this sets the window for the progressbar
     gnc_window_set_progressbar_window( GNC_WINDOW(page->window) );
 
     // this sets the minimum size of the progressbar to that allocated
     gnc_plugin_page_report_set_progressbar( page, TRUE );
 
+    /* Now queue the fact that we need to reload this report */
     gnc_html_reload( priv->html, TRUE ); //reload by rebuild
 
     gnc_plugin_page_report_set_progressbar( page, FALSE );
 
     // this resets the window for the progressbar to NULL
     gnc_window_set_progressbar_window( NULL );
+
+    priv->reloading = FALSE;
 }
 
 /* FIXME: This function does... nothing.  */
@@ -707,32 +701,6 @@ gnc_plugin_page_report_history_destroy_cb(gnc_html_history_node * node,
         return;
     }
 #endif
-}
-
-/* This page got selected by the user.  See if we need to reload the report.
- * This may  be needed in case the window got resized while this page was not selected.*/
-static void
-gnc_plugin_page_report_selected_cb (GObject *object, gpointer user_data)
-{
-    GncPluginPageReport *page = GNC_PLUGIN_PAGE_REPORT(user_data);
-    GncPluginPageReportPrivate *priv;
-
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REPORT(page));
-
-    priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(page);
-    ENTER( "report_draw" );
-    if (!priv->need_reload)
-    {
-        LEAVE( "no reload needed" );
-        return;
-    }
-
-    priv->need_reload = FALSE;
-    gnc_window_set_progressbar_window( GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window) );
-    gnc_html_reload (priv->html, FALSE); //reload by view
-    gnc_window_set_progressbar_window( NULL );
-    LEAVE( "reload forced" );
-    return;
 }
 
 // @param data is actually GncPluginPageReportPrivate
@@ -1368,13 +1336,9 @@ gnc_plugin_page_report_reload_cb( GtkAction *action, GncPluginPageReport *report
     dirty_report = scm_c_eval_string("gnc:report-set-dirty?!");
     scm_call_2(dirty_report, priv->cur_report, SCM_BOOL_T);
 
-    priv->need_reload = TRUE;
     /* now queue the fact that we need to reload this report */
 
-    // this doens't seem to do anything...
-    gtk_widget_queue_draw( GTK_WIDGET(priv->container) );
-
-    // this does...
+    // prevent closing this page while loading...
     priv->reloading = TRUE;
     // this sets the window for the progressbar
     gnc_window_set_progressbar_window( GNC_WINDOW(page->window) );
