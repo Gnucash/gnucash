@@ -120,6 +120,9 @@ typedef struct GncPluginPageReportPrivate
      * the window is closed. */
     SCM          edited_reports;
 
+    /* This is set to mark the fact that we need to reload the html */
+    gboolean	need_reload;
+
     /* The page is in the process of reloading the html */
     gboolean	reloading;
 
@@ -129,9 +132,6 @@ typedef struct GncPluginPageReportPrivate
 
     // keep the view size
     gint view_width, view_height;
-
-    // This is set to mark that we need to reload the html
-    gboolean need_reload;
 
     /// the container the above HTML widget is in.
     GtkContainer *container;
@@ -334,7 +334,8 @@ gnc_plugin_page_report_view_size (GtkWidget *widget, GtkAllocation *allocation, 
 
     if ((allocation->width != priv->view_width)||(allocation->height != priv->view_height))
     {
-        priv->need_reload = TRUE;
+        gnc_html_reload (priv->html, FALSE); //reload by view
+
         priv->view_width = allocation->width;
         priv->view_height = allocation->height;
     }
@@ -427,7 +428,6 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
 
     priv->view_width = 0; // default
     priv->view_height = 0; // default
-    priv->need_reload = FALSE;
 
     gnc_html_history_set_node_destroy_cb(gnc_html_get_history(priv->html),
                                          gnc_plugin_page_report_history_destroy_cb,
@@ -689,6 +689,11 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
     /* it's probably already dirty, but make sure */
     scm_call_2(dirty_report, priv->cur_report, SCM_BOOL_T);
 
+    /* Now queue the fact that we need to reload this report */
+    priv->need_reload = TRUE;
+    // jsled: this doesn't seem to cause any effect.
+    gtk_widget_queue_draw( GTK_WIDGET(priv->container) );
+    // jsled: this does.
     // this sets the window for the progressbar
     gnc_window_set_progressbar_window( GNC_WINDOW(page->window) );
 
@@ -749,8 +754,11 @@ gnc_plugin_page_report_selected_cb (GObject *object, gpointer user_data)
         LEAVE( "no reload needed" );
         return;
     }
+
     priv->need_reload = FALSE;
-    gnc_html_reload(priv->html, FALSE);
+    gnc_window_set_progressbar_window( GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window) );
+    gnc_html_reload (priv->html, FALSE); //reload by view
+    gnc_window_set_progressbar_window( NULL );
     LEAVE( "reload forced" );
     return;
 }
@@ -1388,9 +1396,14 @@ gnc_plugin_page_report_reload_cb( GtkAction *action, GncPluginPageReport *report
     dirty_report = scm_c_eval_string("gnc:report-set-dirty?!");
     scm_call_2(dirty_report, priv->cur_report, SCM_BOOL_T);
 
+    priv->need_reload = TRUE;
     /* now queue the fact that we need to reload this report */
-    priv->reloading = TRUE;
 
+    // this doens't seem to do anything...
+    gtk_widget_queue_draw( GTK_WIDGET(priv->container) );
+
+    // this does...
+    priv->reloading = TRUE;
     // this sets the window for the progressbar
     gnc_window_set_progressbar_window( GNC_WINDOW(page->window) );
 
