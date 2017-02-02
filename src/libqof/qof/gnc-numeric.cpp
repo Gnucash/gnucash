@@ -455,7 +455,6 @@ operator/(GncNumeric a, GncNumeric b)
 template <typename T, typename I> T
 convert(T num, I new_denom, int how)
 {
-//    std::cout << "Converting " << num << ".\n";
     auto rtype = static_cast<RoundType>(how & GNC_NUMERIC_RND_MASK);
     unsigned int figs = GNC_HOW_GET_SIGFIGS(how);
 
