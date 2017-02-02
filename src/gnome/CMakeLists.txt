@@ -41,13 +41,13 @@ SET (gnc_gnome_noinst_HEADERS
 
 IF (BUILDING_FROM_VCS)
   SET (SWIG_GNOME_C ${CMAKE_CURRENT_BINARY_DIR}/swig-gnome.c)
-  GNC_ADD_SWIG_COMMAND (${SWIG_GNOME_C} ${CMAKE_CURRENT_SOURCE_DIR}/gnome.i ${gnc_gnome_HEADERS})
+  GNC_ADD_SWIG_COMMAND (swig-gnome-c ${SWIG_GNOME_C} ${CMAKE_CURRENT_SOURCE_DIR}/gnome.i ${gnc_gnome_HEADERS})
 ELSE()
   SET (SWIG_GNOME_C swig-gnome.c)
 ENDIF()
 
 SET (gnc_gnome_SOURCES 
-  ${SWIG_GNOME_C}
+
   assistant-acct-period.c
   assistant-hierarchy.c
   assistant-loan.c
@@ -91,8 +91,7 @@ IF (WIN32)
   SET (gnc_gnome_SOURCES ${gnc_gnome_SOURCES} ${CMAKE_SOURCE_DIR}/lib/libc/strfmon.c)
 ENDIF(WIN32)
 
-ADD_LIBRARY (gnc-gnome ${gnc_gnome_SOURCES} ${gnc_gnome_noinst_HEADERS})
-
+ADD_LIBRARY (gnc-gnome ${gnc_gnome_SOURCES} ${gnc_gnome_noinst_HEADERS} ${SWIG_GNOME_C})
 TARGET_LINK_LIBRARIES(gnc-gnome gncmod-gnome-search gncmod-ledger-core gncmod-report-gnome gncmod-report-system
     gncmod-register-gnome gncmod-register-core gncmod-engine ${GTK2_LDFLAGS} ${GTK_MAC_LDFLAGS})
 
@@ -154,3 +153,8 @@ ADD_CUSTOM_COMMAND(
 ADD_CUSTOM_TARGET(gnucash-desktop ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop)
 
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop DESTINATION share/applications)
+
+SET_LOCAL_DIST(gnome_DIST_local
+        CMakeLists.txt Makefile.am gnome.i gnucash.appdata.xml.in gnucash.desktop.in.in
+        ${gnc_gnome_noinst_HEADERS} ${gnc_gnome_SOURCES})
+SET(gnome_DIST ${gnome_DIST_local} ${gnome_ui_DIST} ${gnome_gschema_DIST} ${gnome_gtkbuilder_DIST} PARENT_SCOPE)

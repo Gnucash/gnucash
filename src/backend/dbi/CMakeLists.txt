@@ -11,6 +11,10 @@ SET (backend_dbi_noinst_HEADERS
   gnc-backend-dbi.h gnc-backend-dbi-priv.h
 )
 
+SET_LOCAL_DIST(backend_dbi_DIST_local
+        ${backend_dbi_SOURCES} ${backend_dbi_noinst_HEADERS} CMakeLists.txt Makefile.am)
+SET(backend_dbi_DIST ${backend_dbi_DIST_local} ${test_dbi_backend_DIST} PARENT_SCOPE)
+
 # Add dependency on config.h
 SET_SOURCE_FILES_PROPERTIES (${backend_dbi_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 

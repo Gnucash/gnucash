@@ -30,3 +30,6 @@ INSTALL(TARGETS gncmod-customer_import
   ARCHIVE DESTINATION lib/gnucash
   RUNTIME DESTINATION bin)
 # No headers to install.
+
+SET_LOCAL_DIST(customer_import_DIST_local CMakeLists.txt Makefile.am ${customer_import_SOURCES} ${customer_import_noinst_HEADERS})
+SET(customer_import_DIST ${customer_import_DIST_local} ${customer_import_glade_DIST} ${customer_import_ui_DIST} PARENT_SCOPE)

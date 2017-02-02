@@ -1,4 +1,7 @@
 # CMakeLists.txt for src/optional/gtkmm
+#ADD_SUBDIRECTORY(gncmm)
+ADD_SUBDIRECTORY(test)
+
 
 ADD_DEFINITIONS (-DG_LOG_DOMAIN=\"gnc.gtkmm\")
 
@@ -44,7 +47,18 @@ SET (libgncmod_gtkmm_SOURCES
   gncmm/wrap_init.cpp
 )
 
-ADD_LIBRARY (libgncmod-gtkmm
-  ${libgncmod_gtkmm_SOURCES}
-  ${libgncmod_gtkmm_HEADERS}
+SET(gnc_plugin_SOURCES gnc-plugin-gtkmm.cpp gncmod-gtkmm.cpp)
+SET(gnc_plugin_noinst_SOURCES gnc-plugin-gtkmm.hpp)
+SET(gnc_plugin_UI gnc-plugin-gtkmm-ui.xml)
+
+IF (WITH_CUTECASH)
+  ADD_LIBRARY (libgncmod-gtkmm
+    ${libgncmod_gtkmm_SOURCES}
+    ${libgncmod_gtkmm_HEADERS}
   )
+ENDIF()
+
+SET_LOCAL_DIST(gtkmm_DIST_local CMakeLists.txt Makefile.am
+        ${libgncmod_gtkmm_SOURCES} ${libgncmod_gtkmm_HEADERS}
+        ${gnc_plugin_SOURCES} ${gnc_plugin_noinst_SOURCES} ${gnc_plugin_UI})
+SET(gtkmm_DIST ${gtkmm_DIST_local} ${test_gtkmm_DIST} PARENT_SCOPE)

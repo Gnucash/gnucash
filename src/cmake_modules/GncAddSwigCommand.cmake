@@ -4,13 +4,15 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-MACRO (GNC_ADD_SWIG_COMMAND _target _input)
+MACRO (GNC_ADD_SWIG_COMMAND _target _output _input)
 
 ADD_CUSTOM_COMMAND (
-  OUTPUT ${_target}
+  OUTPUT ${_output}
   DEPENDS ${_input} ${CMAKE_SOURCE_DIR}/src/base-typemaps.i ${ARGN}
-COMMAND ${SWIG_EXECUTABLE} -guile ${SWIG_ARGS} -Linkage module -I${CMAKE_SOURCE_DIR}/src/libqof/qof -I${CMAKE_SOURCE_DIR}/src  -o ${_target} ${_input}
+COMMAND ${SWIG_EXECUTABLE} -guile ${SWIG_ARGS} -Linkage module -I${CMAKE_SOURCE_DIR}/src/libqof/qof -I${CMAKE_SOURCE_DIR}/src  -o ${_output} ${_input}
 )
+
+ADD_CUSTOM_TARGET(${_target} DEPENDS ${_output})
 
 ENDMACRO (GNC_ADD_SWIG_COMMAND)
 

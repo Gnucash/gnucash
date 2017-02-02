@@ -10,6 +10,6 @@ SET(checks_DATA
 
 INSTALL(FILES ${checks_DATA} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/gnucash/checks)
 
-IF (GNC_BUILD_AS_INSTALL)
-  FILE(COPY ${checks_DATA} DESTINATION ${DATADIR_BUILD}/gnucash/checks)
-ENDIF()
+FILE(COPY ${checks_DATA} DESTINATION ${DATADIR_BUILD}/gnucash/checks)
+
+SET_DIST_LIST(checks_DIST CMakeLists.txt Makefile.am ${checks_DATA})

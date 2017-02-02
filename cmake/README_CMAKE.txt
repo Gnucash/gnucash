@@ -29,10 +29,17 @@ faster that using the default Makefile generator to me.)
 
 == Scope
 
-The scope of the current work is to duplicate the `make`,
-`make check` and `make install` actions as the Autotools system would.
-Currently, there is no support for `make dist`, `make distcheck` or
-similar targets. Other limitations include:
+The scope of the current work is to duplicate these actions as
+the Autotools system would:
+
+   * make
+   * make check
+   * make install
+   * make uninstall
+   * make dist
+   * make distcheck
+
+Limitations include:
 
   * Not all options available in `./configure` have been ported to
     this CMake system.
@@ -44,20 +51,10 @@ similar targets. Other limitations include:
   * The Xcode build only supports the Debug configuration. Others such
     as Release are not supported yet.
 
-  * Python support has not been ported over.
-
   * Visual Studio support is out of scope. While CMake supports
     generating build files for Visual Studio on Windows, it is not
     likely at this point that either GnuCash or all of its
     dependencies can be built using the Microsoft compiler tool chain.
-
-== Known Issues
-
-* Sometimes the Tip of the Day is empty. I've got a stray
-  carriage return somewhere.
-
-* Clicking on 'Start AqBanking Wizard' in the AqBanking setup will
-  cause a crash. I have not yet investigated this.
 
 == Using CMake on Linux, OS X,  etc.
 
@@ -71,7 +68,7 @@ will have advice on how to do this.
 
 You will need to have CMake and optionally Ninja installed, either
 from distro package repositories or by hand. You need at least version
-3.1 of CMake.
+3.0 of CMake.
 
 === Running CMake
 
@@ -180,9 +177,20 @@ directly from the build directory:
 In you chose to install, you can switch to the install directory and
 do the same.
 
+=== Building a Distribution Tarball
+
+To create a distribution, use the 'dist' and 'distcheck' targets.
+For ninja, use:
+
+   $ ninja dist
+   $ ninja distcheck
+
+For Makefiles:
+
+   $ make dist
+   $ make distcheck
 
 == Using CMake and Ninja on Windows
-
 
 For Windows, follow the instructions at
 https://github.com/Gnucash/gnucash-on-windows to the point where you

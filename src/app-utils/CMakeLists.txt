@@ -36,10 +36,11 @@ SET (app_utils_HEADERS
 
 )
 
+
 IF (BUILDING_FROM_VCS)
   # Command to generate the swig-app-utils.c wrapper file
   SET (SWIG_APP_UTILS_GUILE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-app-utils-guile.c)
-  GNC_ADD_SWIG_COMMAND (${SWIG_APP_UTILS_GUILE_C} ${CMAKE_CURRENT_SOURCE_DIR}/app-utils.i)
+  GNC_ADD_SWIG_COMMAND (swig-apputils-guile-c ${SWIG_APP_UTILS_GUILE_C} ${CMAKE_CURRENT_SOURCE_DIR}/app-utils.i)
   SET (SWIG_APP_UTILS_PYTHON_C ${CMAKE_CURRENT_BINARY_DIR}/swig-app-utils-python.c)
   GNC_ADD_SWIG_PYTHON_COMMAND (swig-app-utils-python ${SWIG_APP_UTILS_PYTHON_C} ${CMAKE_CURRENT_SOURCE_DIR}/app-utils.i)
 ELSE()
@@ -73,7 +74,6 @@ SET (app_utils_SOURCES
   gncmod-app-utils.c
   guile-util.c
   option-util.c
-  ${SWIG_APP_UTILS_GUILE_C}
 )
 
 SET_SOURCE_FILES_PROPERTIES (${app_utils_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
@@ -89,7 +89,8 @@ IF (WIN32)
   LIST(APPEND app_utils_ALL_INCLUDES ${HTMLHELP_INCLUDE_PATH})
 ENDIF()
 
-ADD_LIBRARY (gncmod-app-utils ${app_utils_ALL_SOURCES})
+
+ADD_LIBRARY (gncmod-app-utils ${app_utils_ALL_SOURCES} ${SWIG_APP_UTILS_GUILE_C})
 TARGET_LINK_LIBRARIES(gncmod-app-utils ${app_utils_ALL_LIBRARIES})
 
 TARGET_INCLUDE_DIRECTORIES (gncmod-app-utils
@@ -126,16 +127,20 @@ ENDIF()
 
 INSTALL(FILES ${app_utils_HEADERS} DESTINATION include/gnucash)
 
-FILE(READ ${CMAKE_SOURCE_DIR}/src/import-export/ofx/migratable-prefs-ofx.xml MIGRATABLE_PREFS_OFX)
-FILE(READ ${CMAKE_SOURCE_DIR}/src/import-export/aqb/migratable-prefs-aqbanking.xml MIGRATABLE_PREFS_AQBANKING)
-
-SET(MIGRATABLE_PREFS_XML ${CMAKE_CURRENT_BINARY_DIR}/migratable-prefs.xml)
-IF (GNC_BUILD_AS_INSTALL)
-  SET(MIGRATABLE_PREFS_XML ${DATADIR_BUILD}/gnucash/migratable-prefs.xml)
-  FILE(COPY make-prefs-migration-script.xsl DESTINATION ${DATADIR_BUILD}/gnucash)
+IF (WITH_OFX)
+  FILE(READ ${CMAKE_SOURCE_DIR}/src/import-export/ofx/migratable-prefs-ofx.xml MIGRATABLE_PREFS_OFX)
 ENDIF()
 
+IF (WITH_AQBANKING)
+  FILE(READ ${CMAKE_SOURCE_DIR}/src/import-export/aqb/migratable-prefs-aqbanking.xml MIGRATABLE_PREFS_AQBANKING)
+ENDIF()
+
+SET(MIGRATABLE_PREFS_XML ${DATADIR_BUILD}/gnucash/migratable-prefs.xml)
+FILE(COPY make-prefs-migration-script.xsl DESTINATION ${DATADIR_BUILD}/gnucash)
+
 CONFIGURE_FILE(migratable-prefs.xml.in ${MIGRATABLE_PREFS_XML})
+# This configure_file is to generate the file for autotools
+CONFIGURE_FILE(migratable-prefs.xml.in migratable-prefs.xml)
 
 INSTALL(FILES ${MIGRATABLE_PREFS_XML} DESTINATION share/gnucash)
 INSTALL(FILES make-prefs-migration-script.xsl DESTINATION share/gnucash)
@@ -208,3 +213,10 @@ GNC_ADD_SCHEME_TARGETS(scm-app-utils-3
 )
 
 ADD_CUSTOM_TARGET(scm-app-utils ALL DEPENDS scm-app-utils-3 scm-app-utils-2 scm-app-utils-1 scm-gettext)
+
+
+SET_LOCAL_DIST(app_utils_DIST_local
+        ${app_utils_ALL_SOURCES} gettext.scm ${app_utils_SCHEME_1} ${app_utils_SCHEME_2} ${app_utils_SCHEME_3}
+        app-utils.i CMakeLists.txt gnc-help-utils.c Makefile.am
+        make-prefs-migration-script.xsl migratable-prefs.xml.in README)
+SET(app_utils_DIST ${app_utils_DIST_local} ${test_app_utils_DIST} PARENT_SCOPE)

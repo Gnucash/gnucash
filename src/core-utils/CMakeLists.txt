@@ -4,7 +4,7 @@ ADD_SUBDIRECTORY(test)
 
 IF (BUILDING_FROM_VCS)
   SET (SWIG_CORE_UTILS_GUILE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-core-utils-guile.c)
-  GNC_ADD_SWIG_COMMAND (${SWIG_CORE_UTILS_GUILE_C} ${CMAKE_CURRENT_SOURCE_DIR}/core-utils.i)
+  GNC_ADD_SWIG_COMMAND (swig-core-utils-guile-c ${SWIG_CORE_UTILS_GUILE_C} ${CMAKE_CURRENT_SOURCE_DIR}/core-utils.i)
   SET (SWIG_CORE_UTILS_PYTHON_C ${CMAKE_CURRENT_BINARY_DIR}/swig-core-utils-python.c)
   GNC_ADD_SWIG_PYTHON_COMMAND (swig-core-utils-python ${SWIG_CORE_UTILS_PYTHON_C} ${CMAKE_CURRENT_SOURCE_DIR}/core-utils.i)
 ELSE()
@@ -31,12 +31,16 @@ SET (core_utils_SOURCES
 # Add dependency on config.h
 SET_SOURCE_FILES_PROPERTIES (${core_utils_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
-# Command to generate the swig-runtime.h header
-ADD_CUSTOM_COMMAND (
- OUTPUT ${SWIG_RUNTIME_H}
- DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
- COMMAND ${SWIG_EXECUTABLE} -guile -external-runtime ${SWIG_RUNTIME_H}
-)
+IF (BUILDING_FROM_VCS)
+  # Command to generate the swig-runtime.h header
+  ADD_CUSTOM_COMMAND (
+    OUTPUT ${SWIG_RUNTIME_H}
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
+    COMMAND ${SWIG_EXECUTABLE} -guile -external-runtime ${SWIG_RUNTIME_H}
+  )
+ENDIF()
+
+ADD_CUSTOM_TARGET(swig-runtime-h DEPENDS ${SWIG_RUNTIME_H})
 
 # Add dependency on swig-runtime.h
 SET_SOURCE_FILES_PROPERTIES (gnc-guile-utils.c PROPERTIES OBJECT_DEPENDS ${SWIG_RUNTIME_H})
@@ -83,11 +87,21 @@ FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/version.cmake
   CONFIGURE_FILE(\${SRC} \${DST} @ONLY)
 ")
 
-ADD_CUSTOM_TARGET(gnc-vcs-info ALL
-  ${CMAKE_COMMAND} -D SRC=${CMAKE_CURRENT_BINARY_DIR}/gnc-vcs-info.h.in
-                   -D DST=${CMAKE_CURRENT_BINARY_DIR}/gnc-vcs-info.h
-                   -P ${CMAKE_CURRENT_BINARY_DIR}/version.cmake
-)
+IF (${CMAKE_VERSION} VERSION_GREATER "3.1")
+  ADD_CUSTOM_TARGET(gnc-vcs-info ALL
+    BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/gnc-vcs-info.h
+    COMMAND ${CMAKE_COMMAND} -D SRC=${CMAKE_CURRENT_BINARY_DIR}/gnc-vcs-info.h.in
+                     -D DST=${CMAKE_CURRENT_BINARY_DIR}/gnc-vcs-info.h
+                     -P ${CMAKE_CURRENT_BINARY_DIR}/version.cmake
+  )
+ELSE()
+  # BYPRODUCTS keyword not supported below 3.2
+  ADD_CUSTOM_TARGET(gnc-vcs-info ALL
+    COMMAND ${CMAKE_COMMAND} -D SRC=${CMAKE_CURRENT_BINARY_DIR}/gnc-vcs-info.h.in
+                     -D DST=${CMAKE_CURRENT_BINARY_DIR}/gnc-vcs-info.h
+                     -P ${CMAKE_CURRENT_BINARY_DIR}/version.cmake
+  )
+ENDIF()
 
 ### Compile library
 
@@ -112,6 +126,9 @@ SET(core_utils_ALL_SOURCES ${core_utils_SOURCES} ${core_utils_noinst_HEADERS})
 SET(core_utils_ALL_LIBRARIES gnc-qof ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS} ${GOBJECT_LDFLAGS} ${GTK_MAC_LDFLAGS})
 SET(core_utils_ALL_INCLUDES ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}
                             ${GUILE_INCLUDE_DIRS} ${GTK_MAC_INCLUDE_DIRS})
+
+SET_LOCAL_DIST(core_utils_DIST_local ${core_utils_ALL_SOURCES} CMakeLists.txt Makefile.am core-utils.i core-utils.scm gncla-dir.h.in)
+SET(core_utils_DIST ${core_utils_DIST_local} ${test_core_utils_DIST} PARENT_SCOPE)
 
 IF (MAC_INTEGRATION)
   LIST(APPEND core_utils_ALL_LIBRARIES ${OSX_EXTRA_LIBRARIES})

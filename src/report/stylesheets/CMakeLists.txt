@@ -5,7 +5,7 @@ SET(stylesheets_SOURCES
   gncmod-stylesheets.c
 )
 
-SET(stylesheet_noinst_HEADERS
+SET(stylesheets_noinst_HEADERS
   gnc-plugin-stylesheets.h
 )
 
@@ -74,7 +74,11 @@ SET(stylesheets_UI gnc-plugin-stylesheets-ui.xml)
 
 INSTALL(FILES ${stylesheets_UI} DESTINATION share/gnucash/ui)
 
-IF (GNC_BUILD_AS_INSTALL)
-  FILE(COPY ${stylesheets_UI}
-    DESTINATION ${DATADIR_BUILD}/gnucash/ui)
-ENDIF()
+FILE(COPY ${stylesheets_UI}
+  DESTINATION ${DATADIR_BUILD}/gnucash/ui)
+
+SET_LOCAL_DIST(stylesheets_DIST_local CMakeLists.txt Makefile.am
+        ${stylesheets_SOURCES} ${stylesheets_noinst_HEADERS}
+        ${stylesheets_SCHEME_1} ${stylesheets_SCHEME_2}  ${stylesheets_UI})
+
+SET(stylesheets_DIST ${stylesheets_DIST_local} ${test_stylesheets_DIST} PARENT_SCOPE)

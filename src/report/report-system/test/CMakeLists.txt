@@ -1,3 +1,4 @@
+
 SET(REPORT_SYSTEM_TEST_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/src/gnc-module
   ${GUILE_INCLUDE_DIRS}
@@ -24,3 +25,8 @@ GNC_ADD_SCHEME_TARGETS(scm-test-report-system
   "scm-gnc-module;scm-test-engine;scm-report-system-3"
   FALSE
 )
+
+CONFIGURE_FILE(test-load-module.in test-load-module @ONLY)
+
+SET_DIST_LIST(test_report_system_DIST CMakeLists.txt Makefile.am test-collectors.scm test-extras.scm test-link-module.c
+        test-load-module.in test-report-utilities.scm test-list-extras.scm)

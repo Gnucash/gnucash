@@ -1,4 +1,7 @@
 
-SET(aqb_GSCHEMA org.gnucash.dialogs.import.hbci.gschema.xml)
+IF (WITH_AQBANKING)
+  SET(aqb_GSCHEMA org.gnucash.dialogs.import.hbci.gschema.xml)
+  ADD_GSCHEMA_TARGETS(aqb-gschema "${aqb_GSCHEMA}")
+ENDIF(WITH_AQBANKING)  
 
-ADD_GSCHEMA_TARGETS(aqb-gschema "${aqb_GSCHEMA}")
+SET_DIST_LIST(aqbanking_gschema_DIST CMakeLists.txt Makefile.am org.gnucash.dialogs.import.hbci.gschema.xml.in.in)

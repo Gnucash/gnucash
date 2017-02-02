@@ -20,6 +20,10 @@ SET(test_dbi_backend_SOURCES
   test-dbi-stuff.c
 )
 
+SET(test_dbi_backend_HEADERS test-dbi-business-stuff.h test-dbi-stuff.h)
+
+SET_DIST_LIST(test_dbi_backend_DIST ${test_dbi_backend_SOURCES} ${test_dbi_backend_HEADERS} test-dbi.xml CMakeLists.txt Makefile.am)
+
 # This test does not work on Win32
 IF (NOT WIN32)
   GNC_ADD_TEST(test-backend-dbi "${test_dbi_backend_SOURCES}"

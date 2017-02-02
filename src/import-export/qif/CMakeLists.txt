@@ -1,6 +1,6 @@
 
 #Tests for this directory are not run.
-#ADD_SUBDIRECTORY(test)
+ADD_SUBDIRECTORY(test)
 
 SET(qif_SOURCES
   qif-context.c
@@ -34,3 +34,6 @@ INSTALL(TARGETS gncmod-qif
   ARCHIVE DESTINATION lib/gnucash
   RUNTIME DESTINATION bin)
 # No headers to install.
+
+SET_LOCAL_DIST(qif_DIST_local CMakeLists.txt Makefile.am ${qif_SOURCES} ${qif_noinst_HEADERS})
+SET(qif_DIST ${qif_DIST_local} ${test_qif_DIST} PARENT_SCOPE)

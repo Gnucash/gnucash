@@ -52,3 +52,8 @@ GNC_ADD_SCHEME_TARGETS(scm-report-locale-specific-2
   "scm-report-locale-specific-1;${GUILE_DEPENDS}"
   FALSE
 )
+
+SET_LOCAL_DIST(locale_specific_us_DIST_local CMakeLists.txt Makefile.am
+        ${locale_reports_us_SOURCES} ${gncmod_local_reports_us_SCHEME_1} ${gncmod_local_reports_us_SCHEME_2})
+
+SET(locale_specific_us_DIST ${locale_specific_us_DIST_local} ${test_locale_specific_us_DIST} PARENT_SCOPE)

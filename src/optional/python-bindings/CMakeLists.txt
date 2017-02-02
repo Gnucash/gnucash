@@ -1,4 +1,5 @@
-
+ADD_SUBDIRECTORY(example_scripts)
+ADD_SUBDIRECTORY(tests)
 
 IF (BUILDING_FROM_VCS)
   SET(SWIG_FILES ${CMAKE_CURRENT_SOURCE_DIR}/gnucash_core.i ${CMAKE_CURRENT_SOURCE_DIR}/timespec.i)
@@ -101,3 +102,18 @@ IF(WITH_PYTHON)
   )
 
 ENDIF()
+
+SET(python_bindings_DATA
+        __init__.py
+        function_class.py
+        gnucash_business.py
+        gnucash_core.i
+        gnucash_core.py
+        sqlite3test.c
+        timespec.i)
+
+SET_LOCAL_DIST(python_bindings_DIST_local CMakeLists.txt Makefile.am ${python_bindings_DATA})
+
+SET(python_bindings_DIST ${python_bindings_DIST_local} ${test_python_bindings_DIST} ${example_scripts_DIST} PARENT_SCOPE)
+
+

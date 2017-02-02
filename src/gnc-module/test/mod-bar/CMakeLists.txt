@@ -1,9 +1,9 @@
 
 IF (BUILDING_FROM_VCS)
   SET (SWIG_BAR_C ${CMAKE_CURRENT_BINARY_DIR}/swig-bar.c)
-  GNC_ADD_SWIG_COMMAND (${SWIG_BAR_C} ${CMAKE_CURRENT_SOURCE_DIR}/bar.i bar.h)
+  GNC_ADD_SWIG_COMMAND (swig-bar-c ${SWIG_BAR_C} ${CMAKE_CURRENT_SOURCE_DIR}/bar.i bar.h)
 ELSE()
-  SET (SWIG_BAR_C swig-bar.c)
+  SET (SWIG_BAR_C ${CMAKE_CURRENT_SOURCE_DIR}/swig-bar.c)
 ENDIF()
 
 ADD_LIBRARY(bar EXCLUDE_FROM_ALL bar.c bar.h)
@@ -20,3 +20,5 @@ TARGET_INCLUDE_DIRECTORIES(gncmodbar PRIVATE
   ${GLIB2_INCLUDE_DIRS}
   ${GUILE_INCLUDE_DIRS}
 )
+
+SET_DIST_LIST(mod_bar_DIST CMakeLists.txt Makefile.am bar.c gnucash/bar.scm bar.h bar.i gnc-mod-bar.c)

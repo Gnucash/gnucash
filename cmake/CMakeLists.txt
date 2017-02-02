@@ -10,22 +10,25 @@ IF (APPLE)
 ENDIF(APPLE)
 
 
-IF (GNC_BUILD_AS_INSTALL)
-  SET(CMAKE_COMMAND_TMP "")
-  IF (${CMAKE_VERSION} VERSION_GREATER 3.1)
-    SET(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
-  ENDIF()
-  SET(schema-targets aqb-gschema business-gnome-gschema csv-exp-gschema csv-imp-gschema
-      generic-import-gschema gnome-gschema gnome-utils-gschema ofx-gschema qif-imp-gschema)
+SET(CMAKE_COMMAND_TMP "")
+IF (${CMAKE_VERSION} VERSION_GREATER 3.1)
+  SET(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
+ENDIF()
 
-  SET(SCHEMA_DIRECTORY ${DATADIR_BUILD}/glib-2.0/schemas)
-  ADD_CUSTOM_COMMAND(
-    OUTPUT ${SCHEMA_DIRECTORY}/gschemas.compiled
-    COMMAND ${CMAKE_COMMAND_TMP} ${GLIB_COMPILE_SCHEMAS} ${SCHEMA_DIRECTORY}
-    DEPENDS ${schema-targets}
-  )
+SET(schema-targets business-gnome-gschema csv-exp-gschema csv-imp-gschema
+    generic-import-gschema gnome-gschema gnome-utils-gschema ofx-gschema qif-imp-gschema)
 
-  ADD_CUSTOM_TARGET(compiled-schemas ALL DEPENDS ${SCHEMA_DIRECTORY}/gschemas.compiled)
+IF (WITH_AQBANKING)
+  LIST(APPEND schema_targets aqb-gschema)
+ENDIF (WITH_AQBANKING)
+    
+SET(SCHEMA_DIRECTORY ${DATADIR_BUILD}/glib-2.0/schemas)
+ADD_CUSTOM_COMMAND(
+  OUTPUT ${SCHEMA_DIRECTORY}/gschemas.compiled
+  COMMAND ${CMAKE_COMMAND_TMP} ${GLIB_COMPILE_SCHEMAS} ${SCHEMA_DIRECTORY}
+  DEPENDS ${schema-targets}
+)
 
-ENDIF(GNC_BUILD_AS_INSTALL)
+ADD_CUSTOM_TARGET(compiled-schemas ALL DEPENDS ${SCHEMA_DIRECTORY}/gschemas.compiled)
 
+SET_DIST_LIST(cmake_DIST CMakeLists.txt README_CMAKE.txt cmake_uninstall.cmake.in)

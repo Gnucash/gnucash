@@ -17,7 +17,7 @@ SET (scm_SCHEME_4
 IF (HAVE_GUILE1)
   GNC_CONFIGURE(build-config.scm.in build-config.scm)
 ELSE()
-  GNC_CONFIGURE2(build-config.scm.in build-config.scm)
+  GNC_CONFIGURE2(build-config-scm build-config.scm.in build-config.scm)
 ENDIF()
 
 # CONFIGURE_FILE(build-config.scm.in ${BUILD_CONFIG_SCM})
@@ -62,5 +62,9 @@ GNC_ADD_SCHEME_TARGETS(scm-scm-3
 ADD_CUSTOM_TARGET(scm-scm ALL DEPENDS scm-scm-3 scm-scm-2 scm-scm-1 scm-scm-0 scm-gnumeric)
 
 INSTALL(FILES config DESTINATION etc/gnucash)
+
+SET_LOCAL_DIST(scm_DIST_local config CMakeLists.txt Makefile.am fin.scm string.scm build-config.scm.in substring-search.scm
+                              xml-generator.scm main.scm price-quotes.scm printf.scm ${scm_SCHEME_4})
+SET(scm_DIST ${scm_DIST_local} ${scm_gnumeric_DIST} PARENT_SCOPE)
 
 
