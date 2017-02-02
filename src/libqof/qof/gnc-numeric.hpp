@@ -135,7 +135,11 @@ public:
      * std::invalid_argument.
      */
     GncNumeric(const std::string& str, bool autoround=false);
-
+    GncNumeric(const GncNumeric& rhs) = default;
+    GncNumeric(GncNumeric&& rhs) = default;
+    GncNumeric& operator=(const GncNumeric& rhs) = default;
+    GncNumeric& operator=(GncNumeric&& rhs) = default;
+    ~GncNumeric() = default;
     /**
      * gnc_numeric conversion. Use static_cast<gnc_numeric>(foo)
      */
@@ -206,7 +210,7 @@ public:
      * and the appropriate power-of-ten denominator.
      */
     template <RoundType RT>
-    GncNumeric convert_sigfigs(int figs) const
+    GncNumeric convert_sigfigs(unsigned int figs) const
     {
         auto new_denom(sigfigs_denom(figs));
         auto params = prepare_conversion(new_denom);
@@ -360,6 +364,6 @@ bool operator!=(GncNumeric a, GncNumeric b);
  * \param digits The desired exponent. Maximum value is 17.
  * \return 10**digits
  */
-int64_t powten(int64_t digits);
+int64_t powten(unsigned int digits);
 
 #endif // __GNC_NUMERIC_HPP__

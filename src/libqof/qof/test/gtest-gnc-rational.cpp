@@ -145,9 +145,9 @@ TEST(gncrational_functions, test_round_to_numeric)
         GncRational b(di(dre), 100);
         auto c = a * b;
         auto expected = c;
-        expected.round(100, RoundType::bankers);
+        expected = expected.convert<RoundType::bankers>(100);
         auto rounded = c.round_to_numeric();
-        rounded.round(100, RoundType::bankers);
+        rounded = rounded.convert<RoundType::bankers>(100);
         EXPECT_EQ(0, expected.m_num - rounded.m_num);
         EXPECT_FALSE(rounded.m_num.isBig());
         EXPECT_FALSE(rounded.m_den.isBig());

@@ -191,127 +191,33 @@ GncRational::operator/=(GncRational b)
     *this = std::move(new_val);
 }
 
-void
-GncRational::round (GncInt128 new_den, RoundType rtype)
+GncRational::round_param
+GncRational::prepare_conversion (GncInt128 new_denom) const
 {
-    if (new_den == 0) new_den = m_den;
-    if (!(m_num.isBig() || new_den.isBig() ))
-    {
-        if (m_den == new_den)
-            return;
+    if (new_denom == m_den || new_denom == GNC_DENOM_AUTO)
+        return {m_num, m_den, 0};
+    GncRational conversion(new_denom, m_den);
+    auto red_conv = conversion.reduce();
+    GncInt128 old_num(m_num);
+    auto new_num = old_num * red_conv.m_num;
+    auto rem = new_num % red_conv.m_den;
+    new_num /= red_conv.m_den;
+    return {new_num, red_conv.m_den, rem};
+}
 
-        if (m_num.isZero())
-        {
-            m_den = new_den;
-            return;
-        }
-    }
-    GncInt128 new_num {}, remainder {};
-    if (new_den.isNeg())
-        m_num.div(-new_den * m_den, new_num, remainder);
-    else if (new_den != m_den)
-        (m_num * new_den).div(m_den, new_num, remainder);
-    else
+GncInt128
+GncRational::sigfigs_denom(unsigned figs) const noexcept
+{
+    auto num_abs = m_num.abs();
+    bool not_frac = num_abs > m_den;
+    int64_t val{ not_frac ? num_abs / m_den : m_den / num_abs };
+    unsigned digits{};
+    while (val >= 10)
     {
-        new_num = m_num;
-        new_den = m_den;
-        remainder = 0;
+        ++digits;
+        val /= 10;
     }
-    if (new_num.isOverflow() || new_den.isOverflow() || remainder.isOverflow())
-        throw std::overflow_error("Overflow during rounding.");
-    if (new_num.isNan() || new_den.isNan() || remainder.isNan())
-    {
-        throw std::underflow_error("Underflow during rounding.");
-    }
-    if (remainder.isZero() && !(new_num.isBig() || new_den.isBig()))
-    {
-        m_num = new_num;
-        m_den = new_den;
-        return;
-    }
-
-    if (new_num.isBig() || new_den.isBig())
-    {
-      /* First, try to reduce it */
-        GncInt128 gcd = new_num.gcd(new_den);
-        if (!(gcd.isNan() || gcd.isOverflow()))
-        {
-            new_num /= gcd;
-            new_den /= gcd;
-            remainder /= gcd;
-        }
-
-/* if that didn't work, shift both num and den down until neither is "big", then
- * fall through to rounding.
- */
-        while (rtype != RoundType::never && new_num && new_num.isBig() &&
-               new_den && new_den.isBig())
-        {
-            new_num >>= 1;
-            new_den >>= 1;
-            remainder >>= 1;
-        }
-    }
-    if (remainder == 0)
-    {
-        m_num = new_num;
-        m_den = new_den;
-        return;
-    }
-/* If we got here, then we can't exactly represent the rational with
- * new_denom. We must either round or punt.
- */
-    switch (rtype)
-    {
-    case RoundType::never:
-        throw std::domain_error("Rounding required when 'never round' specified.");
-    case RoundType::floor:
-        if (new_num.isNeg()) ++new_num;
-        break;
-    case RoundType::ceiling:
-        if (! new_num.isNeg()) ++new_num;
-        break;
-    case RoundType::truncate:
-        break;
-    case RoundType::promote:
-        new_num += new_num.isNeg() ? -1 : 1;
-        break;
-    case RoundType::half_down:
-        if (new_den.isNeg())
-        {
-            if (remainder * 2 > m_den * new_den)
-                new_num += new_num.isNeg() ? -1 : 1;
-        }
-        else if (remainder * 2 > m_den)
-            new_num += new_num.isNeg() ? -1 : 1;
-        break;
-    case RoundType::half_up:
-        if (new_den.isNeg())
-        {
-            if (remainder * 2 >= m_den * new_den)
-                new_num += new_num.isNeg() ? -1 : 1;
-        }
-        else if (remainder * 2 >= m_den)
-            new_num += new_num.isNeg() ? -1 : 1;
-        break;
-    case RoundType::bankers:
-        if (new_den.isNeg())
-        {
-            if (remainder * 2 > m_den * -new_den ||
-                (remainder * 2 == m_den * -new_den && new_num % 2))
-                new_num += new_num.isNeg() ? -1 : 1;
-        }
-        else
-        {
-            if (remainder * 2 > m_den ||
-                (remainder * 2 == m_den && new_num % 2))
-                new_num += new_num.isNeg() ? -1 : 1;
-        }
-        break;
-    }
-    m_num = new_num;
-    m_den = new_den;
-    return;
+    return not_frac ? powten(figs - digits - 1) : powten(figs + digits);
 }
 
 GncRational
@@ -340,10 +246,9 @@ GncRational::round_to_numeric() const
                 << "GncNumeric. Its integer value is too large.\n";
             throw std::overflow_error(msg.str());
         }
-        GncRational new_rational(*this);
-        GncRational scratch(1, 1);
-        new_rational.round(m_den / (m_num.abs() >> 62), RoundType::half_down);
-        return new_rational;
+        GncRational new_v(*this);
+        new_v = new_v.convert<RoundType::half_down>(m_den / (m_num.abs() >> 62));
+        return new_v;
     }
     auto quot(m_den / m_num);
     if (quot.isBig())
@@ -358,8 +263,7 @@ GncRational::round_to_numeric() const
         GncRational new_rational(num, den);
         return new_rational;
     }
-    GncRational new_rational(*this);
-    GncRational scratch(1, 1);
-    new_rational.round(m_den / divisor, RoundType::half_down);
-    return new_rational;
+    GncRational new_v(*this);
+    new_v = new_v.convert<RoundType::half_down>(m_den / divisor);
+    return new_v;
 }

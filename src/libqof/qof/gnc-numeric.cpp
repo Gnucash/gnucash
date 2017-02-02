@@ -44,7 +44,7 @@ extern "C"
 #include "gnc-rational.hpp"
 
 static QofLogModule log_module = "qof";
-static const gint64 pten[] = { 1, 10, 100, 1000, 10000, 100000, 1000000,
+static const int64_t pten[] = { 1, 10, 100, 1000, 10000, 100000, 1000000,
                                10000000, 100000000, 1000000000,
                                INT64_C(10000000000), INT64_C(100000000000),
                                INT64_C(1000000000000), INT64_C(10000000000000),
@@ -55,11 +55,11 @@ static const gint64 pten[] = { 1, 10, 100, 1000, 10000, 100000, 1000000,
 #define POWTEN_OVERFLOW -5
 
 int64_t
-powten (int64_t exp)
+powten (unsigned int exp)
 {
-    if (exp > 18 || exp < -18)
-        return POWTEN_OVERFLOW;
-    return exp < 0 ? -pten[-exp] : pten[exp];
+    if (exp > 17)
+        exp = 17;
+    return pten[exp];
 }
 
 GncNumeric::GncNumeric(GncRational rr)
@@ -268,7 +268,7 @@ GncNumeric::prepare_conversion(int64_t new_denom) const
     {
         GncRational rr(new_num, new_denom);
         GncNumeric nn(rr);
-        rr.round(new_denom, RoundType::truncate);
+        rr = rr.convert<RoundType::truncate>(new_denom);
         return {static_cast<int64_t>(rr.m_num), new_denom, 0};
     }
     return {static_cast<int64_t>(new_num), static_cast<int64_t>(red_conv.m_den),
@@ -328,13 +328,14 @@ GncNumeric::to_decimal(unsigned int max_places) const
         return GncNumeric(m_num / excess, powten(max_places));
     }
     GncRational rr(*this);
-    rr.round(powten(max_places), RoundType::never); //May throw
+    rr = rr.convert<RoundType::never>(powten(max_places)); //May throw
     /* rr might have gotten reduced a bit too much; if so, put it back: */
     unsigned int pwr{1};
     for (; pwr <= max_places && !(rr.m_den % powten(pwr)); ++pwr);
-    if (rr.m_den % powten(pwr))
+    auto reduce_to = powten(pwr);
+    if (rr.m_den % reduce_to)
     {
-        auto factor(powten(pwr) / rr.m_den);
+        auto factor(reduce_to / rr.m_den);
         rr.m_num *= factor;
         rr.m_den *= factor;
     }
@@ -495,8 +496,9 @@ operator!=(GncNumeric a, GncNumeric b)
     return a.cmp(b) != 0;
 }
 
-static gnc_numeric
-convert(GncNumeric num, int64_t new_denom, int how)
+
+template <typename T, typename I> T
+convert(T num, I new_denom, int how)
 {
 //    std::cout << "Converting " << num << ".\n";
     auto rtype = static_cast<RoundType>(how & GNC_NUMERIC_RND_MASK);
@@ -506,77 +508,60 @@ convert(GncNumeric num, int64_t new_denom, int how)
     bool sigfigs = dtype == DenomType::sigfigs;
     if (dtype == DenomType::reduce)
         num = num.reduce();
-    try
-    {
-        switch (rtype)
-        {
-            case RoundType::floor:
-                if (sigfigs)
-                    return static_cast<gnc_numeric>(num.convert_sigfigs<RoundType::floor>(figs));
-                else
-                    return static_cast<gnc_numeric>(num.convert<RoundType::floor>(new_denom));
-            case RoundType::ceiling:
-                if (sigfigs)
-                    return static_cast<gnc_numeric>(num.convert_sigfigs<RoundType::ceiling>(figs));
-                else
-                    return static_cast<gnc_numeric>(num.convert<RoundType::ceiling>(new_denom));
-            case RoundType::truncate:
-                if (sigfigs)
-                    return static_cast<gnc_numeric>(num.convert_sigfigs<RoundType::truncate>(figs));
-                else
-                    return static_cast<gnc_numeric>(num.convert<RoundType::truncate>(new_denom));
-            case RoundType::promote:
-                if (sigfigs)
-                    return static_cast<gnc_numeric>(num.convert_sigfigs<RoundType::promote>(figs));
-                else
-                    return static_cast<gnc_numeric>(num.convert<RoundType::promote>(new_denom));
-            case RoundType::half_down:
-                if (sigfigs)
-                    return static_cast<gnc_numeric>(num.convert_sigfigs<RoundType::half_down>(figs));
-                else
-                    return static_cast<gnc_numeric>(num.convert<RoundType::half_down>(new_denom));
-            case RoundType::half_up:
-                if (sigfigs)
-                    return static_cast<gnc_numeric>(num.convert_sigfigs<RoundType::half_up>(figs));
-                else
-                    return static_cast<gnc_numeric>(num.convert<RoundType::half_up>(new_denom));
-            case RoundType::bankers:
-                if (sigfigs)
-                    return static_cast<gnc_numeric>(num.convert_sigfigs<RoundType::bankers>(figs));
-                else
-                    return static_cast<gnc_numeric>(num.convert<RoundType::bankers>(new_denom));
-            case RoundType::never:
-                if (sigfigs)
-                    return static_cast<gnc_numeric>(num.convert_sigfigs<RoundType::never>(figs));
-                else
-                    return static_cast<gnc_numeric>(num.convert<RoundType::never>(new_denom));
-            default:
-/* round-truncate just returns the numerator unchanged. The old gnc-numeric
- * convert had no "default" behavior at rounding that had the same result, but
- * we need to make it explicit here to run the rest of the conversion code.
- */
-                if (sigfigs)
-                    return static_cast<gnc_numeric>(num.convert_sigfigs<RoundType::truncate>(figs));
-                else
-                    return static_cast<gnc_numeric>(num.convert<RoundType::truncate>(new_denom));
 
-//                return static_cast<gnc_numeric>(num);
-        }
-    }
-    catch (const std::domain_error& err)
+    switch (rtype)
     {
-        PWARN("%s", err.what());
-        return gnc_numeric_error(GNC_ERROR_REMAINDER);
-    }
-    catch (const std::overflow_error& err)
-    {
-        PWARN("%s", err.what());
-        return gnc_numeric_error(GNC_ERROR_OVERFLOW);
-    }
-    catch (const std::exception& err)
-    {
-        PWARN("%s", err.what());
-        return gnc_numeric_error(GNC_ERROR_ARG);
+        case RoundType::floor:
+            if (sigfigs)
+                return num.template convert_sigfigs<RoundType::floor>(figs);
+            else
+                return num.template convert<RoundType::floor>(new_denom);
+        case RoundType::ceiling:
+            if (sigfigs)
+                return num.template convert_sigfigs<RoundType::ceiling>(figs);
+            else
+                return num.template convert<RoundType::ceiling>(new_denom);
+        case RoundType::truncate:
+            if (sigfigs)
+                return num.template convert_sigfigs<RoundType::truncate>(figs);
+            else
+                return num.template convert<RoundType::truncate>(new_denom);
+        case RoundType::promote:
+            if (sigfigs)
+                return num.template convert_sigfigs<RoundType::promote>(figs);
+            else
+                return num.template convert<RoundType::promote>(new_denom);
+        case RoundType::half_down:
+            if (sigfigs)
+                return num.template convert_sigfigs<RoundType::half_down>(figs);
+            else
+                return num.template convert<RoundType::half_down>(new_denom);
+        case RoundType::half_up:
+            if (sigfigs)
+                return num.template convert_sigfigs<RoundType::half_up>(figs);
+            else
+                return num.template convert<RoundType::half_up>(new_denom);
+        case RoundType::bankers:
+            if (sigfigs)
+                return num.template convert_sigfigs<RoundType::bankers>(figs);
+            else
+                return num.template convert<RoundType::bankers>(new_denom);
+        case RoundType::never:
+            if (sigfigs)
+                return num.template convert_sigfigs<RoundType::never>(figs);
+            else
+                return num.template convert<RoundType::never>(new_denom);
+        default:
+            /* round-truncate just returns the numerator unchanged. The old
+             * gnc-numeric convert had no "default" behavior at rounding that
+             * had the same result, but we need to make it explicit here to
+             * run the rest of the conversion code.
+             */
+            if (sigfigs)
+                return num.template convert_sigfigs<RoundType::truncate>(figs);
+            else
+                return num.template convert<RoundType::truncate>(new_denom);
+
     }
 }
 
@@ -791,16 +776,18 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
         if ((how & GNC_NUMERIC_DENOM_MASK) != GNC_HOW_DENOM_EXACT)
         {
             GncNumeric an (a), bn (b);
-            auto sum = an + bn;
-            return convert(sum, denom, how);
+            GncNumeric sum = an + bn;
+            return static_cast<gnc_numeric>(convert(sum, denom, how));
         }
         GncRational ar(a), br(b);
         auto sum = ar + br;
-        sum.round(denom, static_cast<RoundType>(how & GNC_NUMERIC_RND_MASK));
-
+        if (denom == GNC_DENOM_AUTO &&
+            (how & GNC_NUMERIC_RND_MASK) != GNC_HOW_RND_NEVER)
+            return static_cast<gnc_numeric>(sum.round_to_numeric());
+        sum = convert(sum, denom, how);
         if (sum.is_big() || !sum.valid())
             return gnc_numeric_error(GNC_ERROR_OVERFLOW);
-        return GncNumeric(sum);
+        return static_cast<gnc_numeric>(sum);
     }
     catch (const std::overflow_error& err)
     {
@@ -844,14 +831,17 @@ gnc_numeric_sub(gnc_numeric a, gnc_numeric b,
         {
             GncNumeric an (a), bn (b);
             auto sum = an - bn;
-            return convert(sum, denom, how);
+            return static_cast<gnc_numeric>(convert(sum, denom, how));
         }
         GncRational ar(a), br(b);
         auto sum = ar - br;
-        sum.round(denom, static_cast<RoundType>(how & GNC_NUMERIC_RND_MASK));
+        if (denom == GNC_DENOM_AUTO &&
+            (how & GNC_NUMERIC_RND_MASK) != GNC_HOW_RND_NEVER)
+            return static_cast<gnc_numeric>(sum.round_to_numeric());
+        sum = convert(sum, denom, how);
         if (sum.is_big() || !sum.valid())
             return gnc_numeric_error(GNC_ERROR_OVERFLOW);
-       return GncNumeric(sum);
+        return static_cast<gnc_numeric>(sum);
     }
     catch (const std::overflow_error& err)
     {
@@ -894,14 +884,17 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
         {
             GncNumeric an (a), bn (b);
             auto prod = an * bn;
-            return convert(prod, denom, how);
+            return static_cast<gnc_numeric>(convert(prod, denom, how));
         }
         GncRational ar(a), br(b);
         auto prod = ar * br;
-        prod.round(denom, static_cast<RoundType>(how & GNC_NUMERIC_RND_MASK));
+        if (denom == GNC_DENOM_AUTO &&
+            (how & GNC_NUMERIC_RND_MASK) != GNC_HOW_RND_NEVER)
+            return static_cast<gnc_numeric>(prod.round_to_numeric());
+        prod = convert(prod, denom, how);
         if (prod.is_big() || !prod.valid())
             return gnc_numeric_error(GNC_ERROR_OVERFLOW);
-        return GncNumeric(prod);
+        return static_cast<gnc_numeric>(prod);
      }
     catch (const std::overflow_error& err)
     {
@@ -945,14 +938,17 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
         {
             GncNumeric an (a), bn (b);
             auto quot = an / bn;
-            return convert(quot, denom, how);
+            return static_cast<gnc_numeric>(convert(quot, denom, how));
         }
         GncRational ar(a), br(b);
         auto quot = ar / br;
-        quot.round(denom, static_cast<RoundType>(how & GNC_NUMERIC_RND_MASK));
+        if (denom == GNC_DENOM_AUTO &&
+            (how & GNC_NUMERIC_RND_MASK) != GNC_HOW_RND_NEVER)
+            return static_cast<gnc_numeric>(quot.round_to_numeric());
+        quot =  static_cast<gnc_numeric>(convert(quot, denom, how));
         if (quot.is_big() || !quot.valid())
             return gnc_numeric_error(GNC_ERROR_OVERFLOW);
-        return GncNumeric(quot);
+        return static_cast<gnc_numeric>(quot);
     }
     catch (const std::overflow_error& err)
     {
@@ -1014,7 +1010,14 @@ gnc_numeric_abs(gnc_numeric a)
 gnc_numeric
 gnc_numeric_convert(gnc_numeric in, int64_t denom, int how)
 {
-    return convert(GncNumeric(in), denom, how);
+    try
+    {
+        return convert(GncNumeric(in), denom, how);
+    }
+    catch (const std::overflow_error& err)
+    {
+        return gnc_numeric_error(GNC_ERROR_OVERFLOW);
+    }
 }
 
 
