@@ -25,56 +25,53 @@ SET(test_qof_SOURCES
 IF (NOT WIN32)
   GNC_ADD_TEST(test-qof "${test_qof_SOURCES}" TEST_QOF_INCLUDE_DIRS TEST_QOF_LIBS)
   TARGET_COMPILE_DEFINITIONS(test-qof PRIVATE TESTPROG=test_qof)
-  IF(GTEST_FOUND)
-    SET(MODULEPATH ${CMAKE_SOURCE_DIR}/src/libqof/qof)
-    SET(gtest_qof_LIBS gnc-qof ${GLIB2_LDFLAGS} ${Boost_LIBRARIES} ${GTEST_LIB})
-    SET(gtest_qof_INCLUDES
-      ${MODULEPATH}
-      ${GLIB2_INCLUDE_DIRS}
-      ${GTEST_INCLUDE_DIR})
+  SET(MODULEPATH ${CMAKE_SOURCE_DIR}/src/libqof/qof)
+  SET(gtest_qof_LIBS gnc-qof ${GLIB2_LDFLAGS} ${Boost_LIBRARIES} ${GTEST_LIB})
+  SET(gtest_qof_INCLUDES
+    ${MODULEPATH}
+    ${GLIB2_INCLUDE_DIRS}
+    ${GTEST_INCLUDE_DIR})
 
-    SET(test_gnc_guid_SOURCES
-      ${MODULEPATH}/guid.cpp
-      test-gnc-guid.cpp
-      ${GTEST_SRC})
-    GNC_ADD_TEST(test-gnc-guid "${test_gnc_guid_SOURCES}"
-      gtest_qof_INCLUDES gtest_qof_LIBS)
+  SET(test_gnc_guid_SOURCES
+    ${MODULEPATH}/guid.cpp
+    test-gnc-guid.cpp
+    ${GTEST_SRC})
+  GNC_ADD_TEST(test-gnc-guid "${test_gnc_guid_SOURCES}"
+    gtest_qof_INCLUDES gtest_qof_LIBS)
 
-    SET(test_kvp_value_SOURCES
-      ${MODULEPATH}/kvp-value.cpp
-      test-kvp-value.cpp
-      test-kvp-frame.cpp
-      ${GTEST_SRC})
-    GNC_ADD_TEST(test-kvp-value "${test_kvp_value_SOURCES}"
-      gtest_qof_INCLUDES gtest_qof_LIBS)
+  SET(test_kvp_value_SOURCES
+    ${MODULEPATH}/kvp-value.cpp
+    test-kvp-value.cpp
+    test-kvp-frame.cpp
+    ${GTEST_SRC})
+  GNC_ADD_TEST(test-kvp-value "${test_kvp_value_SOURCES}"
+    gtest_qof_INCLUDES gtest_qof_LIBS)
 
-    SET(test_qofsession_SOURCES
-      ${MODULEPATH}/qofsession.cpp
-      test-qofsession.cpp
-      ${GTEST_SRC})
-    GNC_ADD_TEST(test-qofsession "${test_qofsession_SOURCES}"
-      gtest_qof_INCLUDES gtest_qof_LIBS)
+  SET(test_qofsession_SOURCES
+    ${MODULEPATH}/qofsession.cpp
+    test-qofsession.cpp
+    ${GTEST_SRC})
+  GNC_ADD_TEST(test-qofsession "${test_qofsession_SOURCES}"
+    gtest_qof_INCLUDES gtest_qof_LIBS)
 
-    SET(test_gnc_int128_SOURCES
-      ${MODULEPATH}/gnc-int128.cpp
-      gtest-gnc-int128.cpp
-      ${GTEST_SRC})
-    GNC_ADD_TEST(test-gnc-int128 "${test_gnc_int128_SOURCES}"
-      gtest_qof_INCLUDES gtest_qof_LIBS)
+  SET(test_gnc_int128_SOURCES
+    ${MODULEPATH}/gnc-int128.cpp
+    gtest-gnc-int128.cpp
+    ${GTEST_SRC})
+  GNC_ADD_TEST(test-gnc-int128 "${test_gnc_int128_SOURCES}"
+    gtest_qof_INCLUDES gtest_qof_LIBS)
 
-    SET(test_gnc_timezone_SOURCES
-      ${MODULEPATH}/gnc-timezone.cpp
-      gtest-gnc-timezone.cpp
-      ${GTEST_SRC})
-    GNC_ADD_TEST(test-gnc-timezone "${test_gnc_timezone_SOURCES}"
-      gtest_qof_INCLUDES gtest_qof_LIBS)
+  SET(test_gnc_timezone_SOURCES
+    ${MODULEPATH}/gnc-timezone.cpp
+    gtest-gnc-timezone.cpp
+    ${GTEST_SRC})
+  GNC_ADD_TEST(test-gnc-timezone "${test_gnc_timezone_SOURCES}"
+    gtest_qof_INCLUDES gtest_qof_LIBS)
 
-    SET(test_gnc_datetime_SOURCES
-      ${MODULEPATH}/gnc-datetime.cpp
-      gtest-gnc-datetime.cpp
-      ${GTEST_SRC})
-    GNC_ADD_TEST(test-gnc-datetime "${test_gnc_datetime_SOURCES}"
-      gtest_qof_INCLUDES gtest_qof_LIBS)
-
-  ENDIF()
+  SET(test_gnc_datetime_SOURCES
+    ${MODULEPATH}/gnc-datetime.cpp
+    gtest-gnc-datetime.cpp
+    ${GTEST_SRC})
+  GNC_ADD_TEST(test-gnc-datetime "${test_gnc_datetime_SOURCES}"
+    gtest_qof_INCLUDES gtest_qof_LIBS)
 ENDIF()

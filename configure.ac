@@ -861,26 +861,22 @@ ac_cv_gtest_headers=""
 ac_cv_gtest_libs=""
 ac_cv_gmock_libs=""
 
-AC_ARG_ENABLE( google-test,
-   [AS_HELP_STRING([--disable-google-test], [do not build the Google Test and Google Mock static libraries and enable C++ Unit Tests])],,[enable_google_test=yes])
-if test x$enable_google_test != xno; then
-   AC_CHECK_LIB([gtest_main], [main],
-      [AC_CHECK_FILES([/usr/src/gmock/gmock-all.cc
-		       /usr/include/gtest/gtest.h
-		       /usr/include/gmock/gmock.h
-               /usr/src/gmock/src/gmock-all.cc
-               /usr/src/gtest/src/gtest-all.cc],
-      	[ac_cv_gtest_system_install=yes] [ac_cv_have_gtest_libs=yes],
-	[ac_cv_gtest_system_install=no])],
-      [AC_CHECK_FILES([/usr/src/gtest/src/gtest-all.cc
-		       /usr/src/gtest/gtest-main.cc
-		       /usr/src/gmock/src/gmock-all.cc
-		       /usr/include/gtest/gtest.h
-		       /usr/include/gmock/gmock.h],
-        [ac_cv_gtest_system_install=yes] [ac_cv_have_gtest_libs=no],
-        [ac_cv_gtest_system_install=no])]
+AC_CHECK_LIB([gtest_main], [main],
+    [AC_CHECK_FILES([/usr/src/gmock/gmock-all.cc
+                     /usr/include/gtest/gtest.h
+                     /usr/include/gmock/gmock.h
+                     /usr/src/gmock/src/gmock-all.cc
+                     /usr/src/gtest/src/gtest-all.cc],
+                    [ac_cv_gtest_system_install=yes] [ac_cv_have_gtest_libs=yes],
+                    [ac_cv_gtest_system_install=no])],
+    [AC_CHECK_FILES([/usr/src/gtest/src/gtest-all.cc
+                     /usr/src/gtest/gtest-main.cc
+                     /usr/src/gmock/src/gmock-all.cc
+                     /usr/include/gtest/gtest.h
+                     /usr/include/gmock/gmock.h],
+                    [ac_cv_gtest_system_install=yes] [ac_cv_have_gtest_libs=no],
+                    [ac_cv_gtest_system_install=no])]
    )
-fi
 if test x$ac_cv_file__usr_include_gmock_gmock_h = xyes -a x$ac_cv_file__usr_include_gtest_gtest_h = xyes; then
   if test x$ac_cv_file__usr_src_gmock_src_gmock_all_cc = xyes -a x$ac_cv_file__usr_src_gtest_src_gtest_all_cc = xyes; then
      ac_cv_gtest_system_install=yes
@@ -904,95 +900,102 @@ AC_ARG_WITH([gmock-headers],
     [AS_HELP_STRING([--with-gmock-headers=PATH], [location of the google test header files if not in gmock-root])],
     [ac_cv_gmock_headers="$with_gmock_headers"])
 
-if test x$enable_google_test = xyes; then
-   AC_MSG_CHECKING([whether Google Test is available])
-   if test -n "$ac_cv_gtest_root" -a -r "$ac_cv_gtest_root/src/gtest-all.cc"; then
-     AC_MSG_WARN([Skipped setting ac_cv_gtest_root, value $ac_cv_gtest_root])
+google_test_found=yes
+AC_MSG_CHECKING([whether Google Test is available])
+if test -n "$ac_cv_gtest_root" -a -r "$ac_cv_gtest_root/src/gtest-all.cc"; then
+    AC_MSG_WARN([Skipped setting ac_cv_gtest_root, value $ac_cv_gtest_root])
+else
+   if test -n "${GTEST_ROOT}" -a -r "${GTEST_ROOT}/src/gtest-all.cc"; then
+      ac_cv_gtest_root=${GTEST_ROOT}
+   elif test "x$ac_cv_gtest_system_install" = "xyes"; then
+      ac_cv_gtest_root="/usr/src/gtest"
    else
-      if test -n "${GTEST_ROOT}" -a -r "${GTEST_ROOT}/src/gtest-all.cc"; then
-         ac_cv_gtest_root=${GTEST_ROOT}
-      elif test "x$ac_cv_gtest_system_install" = "xyes"; then
-         ac_cv_gtest_root="/usr/src/gtest"
-      else
-         ac_cv_gtest_root=""
-      fi
+      ac_cv_gtest_root=""
    fi
-   if test -z "$ac_cv_gtest_root" -a -z "$ac_cv_gtest_libs"; then
-      AC_MSG_RESULT([No gtest-root])
-      enable_google_test=no
-   else
-      if test ! -r "$ac_cv_gtest_root/include/gtest/gtest.h"; then
-         if test -n "$ac_cv_gtest_headers" -a -r "$ac_cv_gtest_headers/gtest/gtest.h"; then
-            AC_MSG_WARN([Skipped setting ac_cv_gtest_headers, value $ac_cv_gtest_headers])
+fi
+if test -z "$ac_cv_gtest_root" -a -z "$ac_cv_gtest_libs"; then
+   AC_MSG_RESULT([No gtest-root])
+   google_test_found=no
+else
+   if test ! -r "$ac_cv_gtest_root/include/gtest/gtest.h"; then
+      if test -n "$ac_cv_gtest_headers" -a -r "$ac_cv_gtest_headers/gtest/gtest.h"; then
+         AC_MSG_WARN([Skipped setting ac_cv_gtest_headers, value $ac_cv_gtest_headers])
+      else
+         if test  -n "${GTEST_HEADERS}" -a -r "${GTEST_HEADERS}/gtest/gtest.h"; then
+            ac_cv_gtest_headers=${GTEST_HEADERS}
+         elif test "x$ac_cv_gtest_system_install" = "xyes"; then
+            ac_cv_gtest_headers="/usr/include"
          else
-            if test  -n "${GTEST_HEADERS}" -a -r "${GTEST_HEADERS}/gtest/gtest.h"; then
-               ac_cv_gtest_headers=${GTEST_HEADERS}
-            elif test "x$ac_cv_gtest_system_install" = "xyes"; then
-               ac_cv_gtest_headers="/usr/include"
-            else
-               ac_cv_gtest_headers=""
-            fi
+            ac_cv_gtest_headers=""
          fi
-         if test -z "$ac_cv_gtest_headers"; then
-            AC_MSG_RESULT([No gtest-headers])
-            enable_google_test=no
-         fi
-      else
-         ac_cv_gtest_headers=$ac_cv_gtest_root/include
       fi
+      if test -z "$ac_cv_gtest_headers"; then
+         AC_MSG_RESULT([No gtest-headers])
+         google_test_found=no
+      fi
+   else
+      ac_cv_gtest_headers=$ac_cv_gtest_root/include
    fi
+fi
 
 
-   if test -n "$ac_cv_gmock_root" -a -r "$ac_cv_gmock_root/gmock-all.cc"; then
-      ac_cv_gmock_src_path="$ac_cv_gmock_root"
-      AC_MSG_WARN([Skipped setting ac_cv_gmock_root, value $ac_cv_gmock_root])
-   elif test -n "$ac_cv_gmock_root" -a -r "$ac_cv_gmock_root/src/gmock-all.cc"; then
-      ac_cv_gmock_src_path="$ac_cv_gmock_root/src"
-      AC_MSG_WARN([Skipped setting ac_cv_gmock_root, value $ac_cv_gmock_root])
+if test -n "$ac_cv_gmock_root" -a -r "$ac_cv_gmock_root/gmock-all.cc"; then
+   ac_cv_gmock_src_path="$ac_cv_gmock_root"
+   AC_MSG_WARN([Skipped setting ac_cv_gmock_root, value $ac_cv_gmock_root])
+elif test -n "$ac_cv_gmock_root" -a -r "$ac_cv_gmock_root/src/gmock-all.cc"; then
+   ac_cv_gmock_src_path="$ac_cv_gmock_root/src"
+   AC_MSG_WARN([Skipped setting ac_cv_gmock_root, value $ac_cv_gmock_root])
+else
+   if test -n "${GMOCK_ROOT}" -a -r "${GMOCK_ROOT}/src/gmock-all.cc"; then
+       ac_cv_gmock_src_path=${GMOCK_ROOT}/src
+       ac_cv_gmock_root=${GMOCK_ROOT}
+   elif test "x$ac_cv_gtest_system_install" = "xyes"; then
+       if test "x$ac_cv_file__usr_src_gmock_src_gmock_all_cc" = xyes; then
+         ac_cv_gmock_src_path="/usr/src/gmock/src"
+       elif test "x$ac_cv_file__usr_src_gmock_gmock_all_cc" = xyes; then
+          ac_cv_gmock_src_path="/usr/src/gmock"
+       else
+          ac_cv_gmock_src_path=""
+       fi
+       ac_cv_gmock_root="/usr/src/gmock"
    else
-      if test -n "${GMOCK_ROOT}" -a -r "${GMOCK_ROOT}/src/gmock-all.cc"; then
-         ac_cv_gmock_src_path=${GMOCK_ROOT}/src
-	 ac_cv_gmock_root=${GMOCK_ROOT}
-      elif test "x$ac_cv_gtest_system_install" = "xyes"; then
-         if test "x$ac_cv_file__usr_src_gmock_src_gmock_all_cc" = xyes; then
-            ac_cv_gmock_src_path="/usr/src/gmock/src"
-	 elif test "x$ac_cv_file__usr_src_gmock_gmock_all_cc" = xyes; then
-	    ac_cv_gmock_src_path="/usr/src/gmock"
-	 else
-	    ac_cv_gmock_src_path=""
-	 fi
-	 ac_cv_gmock_root="/usr/src/gmock"
-      else
-         ac_cv_gmock_root=""
-      fi
+      ac_cv_gmock_root=""
    fi
-   if test -z "$ac_cv_gmock_root"; then
-      AC_MSG_RESULT([No gmock-root])
-      enable_google_test=no
-   else
-      if test ! -r "$ac_cv_gmock_root/include/gmock/gmock.h"; then
-         if test -n "$ac_cv_gmock_headers" -a -r "$ac_cv_gmock_headers/gmock/gmock.h"; then
-            AC_MSG_WARN([Skipped setting ac_cv_gmock_headers, value $ac_cv_gmock_headers])
+fi
+if test -z "$ac_cv_gmock_root"; then
+   AC_MSG_RESULT([No gmock-root])
+   google_test_found=no
+else
+   if test ! -r "$ac_cv_gmock_root/include/gmock/gmock.h"; then
+      if test -n "$ac_cv_gmock_headers" -a -r "$ac_cv_gmock_headers/gmock/gmock.h"; then
+         AC_MSG_WARN([Skipped setting ac_cv_gmock_headers, value $ac_cv_gmock_headers])
+      else
+         if test -n "${GMOCK_HEADERS}" -a -r "${GMOCK_HEADERS}/gmock/gmock.h"; then
+            ac_cv_gmock_headers=${GMOCK_HEADERS}
+         elif test "x$ac_cv_gtest_system_install" = "xyes"; then
+            ac_cv_gmock_headers="/usr/include"
          else
-            if test -n "${GMOCK_HEADERS}" -a -r "${GMOCK_HEADERS}/gmock/gmock.h"; then
-               ac_cv_gmock_headers=${GMOCK_HEADERS}
-            elif test "x$ac_cv_gtest_system_install" = "xyes"; then
-               ac_cv_gmock_headers="/usr/include"
-            else
-               ac_cv_gmock_headers=""
-            fi
+            ac_cv_gmock_headers=""
          fi
-         if test -z "$ac_cv_gmock_headers"; then
-	    AC_MSG_RESULT([No gmock-headers])
-            enable_google_test=no
-         fi
-      else
-         ac_cv_gmock_headers="$ac_cv_gmock_root/include"
       fi
+      if test -z "$ac_cv_gmock_headers"; then
+         AC_MSG_RESULT([No gmock-headers])
+         google_test_found=no
+      fi
+   else
+      ac_cv_gmock_headers="$ac_cv_gmock_root/include"
    fi
-   if test "x$enable_google_test" = "xyes"; then
-       AC_MSG_RESULT([Yes])
-   fi
+fi
+
+if test "x$google_test_found" = "xyes"; then
+    AC_MSG_RESULT([Yes])
+else
+    AC_MSG_ERROR([
+
+ Unable to find the Google test framework. Either install gtest/gmock
+ packages or point to the base directories of the sources using
+ GTEST_ROOT and GMOCK_ROOT environment variables.
+])
 fi
 
 if test "x$ac_cv_have_gtest_libs" = xyes; then
@@ -1002,10 +1005,9 @@ dnl Google test requires pthreads and this seems the easiest way to check.
     AX_PTHREAD([
     ac_cv_gtest_libs="\$(top_builddir)/src/test-core/libgtest.a $PTHREAD_CFLAGS"
     ],[
-    AC_MSG_WARN(
-      [Disabling GTest because pthreads, which it requires, wasn't found.])
+    AC_MSG_ERROR(
+      [GTest requires pthreads, but this wasn't found.])
       dnl Google test requires pthreads and this seems the easiest way to check.
-    enable_google_test="no"
     ])
 fi
 
@@ -1015,7 +1017,6 @@ AC_SUBST([GTEST_HEADERS], [$ac_cv_gtest_headers])
 AC_SUBST([GMOCK_SRC_PATH], [$ac_cv_gmock_src_path])
 AC_SUBST([GMOCK_SRC], [$ac_cv_gmock_root])
 AC_SUBST([GMOCK_HEADERS], [$ac_cv_gmock_headers])
-AM_CONDITIONAL([WITH_GOOGLE_TEST], [test "x$enable_google_test" = "xyes"])
 AM_CONDITIONAL([GOOGLE_TEST_LIBS], [test "x$ac_cv_have_gtest_libs" == "xyes"])
 ### --------------------------------------------------------------------------
 ### Register2

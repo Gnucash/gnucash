@@ -30,7 +30,6 @@ check_PROGRAMS = \
 
 TESTS = ${check_PROGRAMS}
 
-if WITH_GOOGLE_TEST
 test_gnc_guid_SOURCES = \
 	$(top_srcdir)/$(MODULEPATH)/guid.cpp \
 	test-gnc-guid.cpp
@@ -152,7 +151,6 @@ nodist_test_gnc_datetime_SOURCES = \
 endif
 check_PROGRAMS += test-gnc-datetime
 
-endif
 
 test_qofdir = ${GNC_LIBEXECDIR}/${MODULEPATH}/test
 

@@ -183,7 +183,6 @@ libutest_Trans_la_SOURCES = \
 
 libutest_Trans_la_LIBADD = $(LDADD)
 
-if WITH_GOOGLE_TEST
 test_import_map_SOURCES = \
         gtest-import-map.cpp
 test_import_map_LDADD = \
@@ -205,7 +204,6 @@ test_import_map_CPPFLAGS = \
         ${GLIB_CFLAGS}
 
 TEST_GROUP_1 += test-import-map
-endif
 
 
 CLEANFILES = .scm-links

@@ -62,7 +62,7 @@ OPTION (ENABLE_DEBUG "compile with debugging flags set" OFF)
 OPTION (ENABLE_REGISTER2 "compile with register2 enabled" OFF)
 OPTION (DISABLE_NLS "do not use Native Language Support" OFF)
 OPTION (DISABLE_DEPRECATED_GLIB "don't use deprecated glib functions" OFF)
-OPTION (DISABLE_DEPRECATED_GTK "don't use deprectacted gtk, gdk or gdk-pixbuf functions" OFF)
+OPTION (DISABLE_DEPRECATED_GTK "don't use deprecated gtk, gdk or gdk-pixbuf functions" OFF)
 OPTION (DISABLE_DEPRECATED_GNOME "don't use deprecated gnome functions" OFF)
 OPTION (GNC_BUILD_AS_INSTALL "Make build directory structure mirror install" ON)
 # ############################################################
@@ -405,7 +405,7 @@ FIND_PROGRAM(POD2MAN_EXECUTABLE pod2man HINTS ${PERL_DIR})
 IF (APPLE)
   # I suppose I would rather use the shared Boost libraries here, but the Boost install procedure
   # does not set RPATH for it's shared library correctly. It uses a 'naked' RPATH, which requires
-  # that DYLD_FALLBACK_LIBRARY_PATH be set. There is supposedly a dll-path option so set RPATH, but
+  # that DYLD_FALLBACK_LIBRARY_PATH be set. There is supposedly a dll-path option to set RPATH, but
   # I can't get it to work (http://www.boost.org/build/doc/html/bbv2/faq/dll-path.html) and neither
   # can some other random person on the internet:
   # http://stackoverflow.com/questions/33667795/dll-path-has-no-effect-when-building-boost
