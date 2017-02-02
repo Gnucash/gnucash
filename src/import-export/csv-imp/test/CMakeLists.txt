@@ -23,3 +23,4 @@ IF (NOT WIN32)
   )
 ENDIF()
 
+SET_DIST_LIST(test_csv_import_DIST CMakeLists.txt Makefile.am sample1.csv ${test_csv_imp_SOURCES})

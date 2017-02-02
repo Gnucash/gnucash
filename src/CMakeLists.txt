@@ -131,14 +131,12 @@ ADD_DEFINITIONS (-DHAVE_CONFIG_H)
 SET (CONFIG_H ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 CONFIGURE_FILE (${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake.in ${CONFIG_H})
 
-SET (SWIG_RUNTIME_H ${CMAKE_CURRENT_BINARY_DIR}/swig-runtime.h)
+IF (BUILDING_FROM_VCS)
+  SET (SWIG_RUNTIME_H ${CMAKE_CURRENT_BINARY_DIR}/swig-runtime.h)
+ELSE()
+  SET (SWIG_RUNTIME_H ${CMAKE_CURRENT_SOURCE_DIR}/swig-runtime.h)
+ENDIF()
 
-#ADD_CUSTOM_COMMAND (
-#  OUTPUT ${SWIG_RUNTIME_H}
-#  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
-#  COMMAND ${SWIG_EXECUTABLE} -guile -external-runtime ${SWIG_RUNTIME_H}
-#)
-# ############################################################
 
 SET(SCHEME_INSTALLED_SOURCE_DIR ${CMAKE_INSTALL_PREFIX}/share/gnucash/scm)
 SET(SCHEME_INSTALLED_CACHE_DIR ${CMAKE_INSTALL_PREFIX}/lib/gnucash/scm/ccache/${GUILE_EFFECTIVE_VERSION})
@@ -148,42 +146,48 @@ ADD_SUBDIRECTORY (libqof)
 ADD_SUBDIRECTORY (core-utils)
 ADD_SUBDIRECTORY (gnc-module)
 ADD_SUBDIRECTORY (engine)
-ADD_SUBDIRECTORY (backend/xml)
+ADD_SUBDIRECTORY (backend)
 ADD_SUBDIRECTORY (app-utils)
 ADD_SUBDIRECTORY (import-export)
-IF (WITH_SQL)
-  ADD_SUBDIRECTORY (backend/dbi)
-  ADD_SUBDIRECTORY (backend/sql)
-ENDIF (WITH_SQL)
 
 IF (WITH_GNUCASH)
   ADD_SUBDIRECTORY (bin)
-  ADD_SUBDIRECTORY (business/business-ledger)
-  ADD_SUBDIRECTORY (business/business-gnome)
-  ADD_SUBDIRECTORY (doc/design)
+  ADD_SUBDIRECTORY (business)
+  ADD_SUBDIRECTORY (cmake_modules)
+  ADD_SUBDIRECTORY (debug)
+  ADD_SUBDIRECTORY (doc)
   ADD_SUBDIRECTORY (gnome)
   ADD_SUBDIRECTORY (gnome-utils)
   ADD_SUBDIRECTORY (gnome-search)
   ADD_SUBDIRECTORY (html)
-  ADD_SUBDIRECTORY (optional/python-bindings)
-  ADD_SUBDIRECTORY (plugins/bi_import)
-  ADD_SUBDIRECTORY (plugins/customer_import)
+  ADD_SUBDIRECTORY (optional)
+  ADD_SUBDIRECTORY (plugins)
   ADD_SUBDIRECTORY (pixmaps)
-IF (WITH_PYTHON)
   ADD_SUBDIRECTORY (python)
-ENDIF()
   ADD_SUBDIRECTORY (quotes)
-  ADD_SUBDIRECTORY (register/ledger-core)
-  ADD_SUBDIRECTORY (register/register-core)
-  ADD_SUBDIRECTORY (register/register-gnome)
+  ADD_SUBDIRECTORY (register)
   ADD_SUBDIRECTORY(report)
   ADD_SUBDIRECTORY (scm)
-  ADD_SUBDIRECTORY (tax/us)
+  ADD_SUBDIRECTORY (tax)
   ADD_SUBDIRECTORY (test-core)
 ENDIF (WITH_GNUCASH)
 
 IF (WITH_CUTECASH)
-  ADD_SUBDIRECTORY (optional/gtkmm)
   ADD_SUBDIRECTORY (gnc)
 ENDIF (WITH_CUTECASH)
 
+SET(src_EXTRA_DIST
+        base-typemaps.i
+        config.h.cmake.in
+        gnc-test-env.pl
+        guile-mappings.h
+        platform.h
+        README
+        README.modules)
+
+SET_LOCAL_DIST(src_DIST_local CMakeLists.txt Makefile.am ${src_EXTRA_DIST})
+
+SET(src_DIST ${src_DIST_local} ${app_utils_DIST} ${backend_DIST} ${bin_DIST} ${business_DIST} ${cmake_modules_DIST}
+             ${core_utils_DIST} ${debug_DIST} ${doc_DIST} ${engine_DIST} ${gnc_module_DIST} ${gnome_DIST} ${gnome_search_DIST}
+             ${gnome_utils_DIST} ${html_DIST} ${import_export_DIST} ${libqof_DIST} ${optional_DIST} ${plugins_DIST} ${pixmaps_DIST} ${python_DIST}
+             ${quotes_DIST} ${register_DIST} ${report_DIST} ${scm_DIST} ${tax_DIST} ${test_core_DIST} PARENT_SCOPE)

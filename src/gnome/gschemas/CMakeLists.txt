@@ -17,3 +17,9 @@ SET(gnome_GSCHEMA
 
 
 ADD_GSCHEMA_TARGETS(gnome-gschema "${gnome_GSCHEMA}")
+
+SET(gnome_gschema_DIST_local "")
+FOREACH(file ${gnome_GSCHEMA})
+    LIST(APPEND gnome_gschema_DIST_local ${file}.in.in)
+ENDFOREACH()
+SET_DIST_LIST(gnome_gschema_DIST CMakeLists.txt Makefile.am ${gnome_gschema_DIST_local})

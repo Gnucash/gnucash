@@ -22,3 +22,5 @@ SET(examples_DATA
 )
 
 INSTALL(FILES ${examples_DATA} DESTINATION share/doc/gnucash)
+
+SET_DIST_LIST(examples_DIST ${examples_DATA} CMakeLists.txt Makefile.am)

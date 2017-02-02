@@ -65,8 +65,13 @@ GNC_ADD_TEST(test-dynload test-dynload.c
 )
 
 SET(GUILE ${GUILE_EXECUTABLE})
-CONFIGURE_FILE(test-gwrapped-c.in test-gwrapped-c)
-CONFIGURE_FILE(test-scm-module.in test-scm-module)
+CONFIGURE_FILE(test-gwrapped-c.in test-gwrapped-c @ONLY)
+CONFIGURE_FILE(test-scm-module.in test-scm-module @ONLY)
+CONFIGURE_FILE(test-load-deps.in test-load-deps @ONLY)
+CONFIGURE_FILE(test-load-scm.in test-load-scm @ONLY)
+CONFIGURE_FILE(test-scm-dynload.in test-scm-dynload @ONLY)
+CONFIGURE_FILE(test-scm-init.in test-scm-init @ONLY)
+CONFIGURE_FILE(test-scm-multi.in test-scm-multi @ONLY)
 
 FUNCTION(RUN_GUILE_SHELL_TEST _TARGET _SOURCE_FILE)
   GET_GUILE_ENV()
@@ -85,3 +90,26 @@ RUN_GUILE_SHELL_TEST(test-gwrapped-c ${CMAKE_CURRENT_BINARY_DIR}/test-gwrapped-c
 
 RUN_GUILE_SHELL_TEST(test-scm-module ${CMAKE_CURRENT_BINARY_DIR}/test-scm-module)
 
+SET(test_gnc_module_SOURCE_DIST
+  test-agedver.c
+  test-dynload.c
+  test-incompatdep.c
+  test-load-c.c
+  test-modsysver.c
+)
+
+SET(test_gnc_module_EXTRA_DIST
+  README
+  test-gwrapped-c.in
+  test-load-deps.in
+  test-load-scm.in
+  test-scm-dynload.in
+  test-scm-init.in
+  test-scm-module.in
+  test-scm-multi.in
+)
+
+SET_LOCAL_DIST(test_gnc_module_DIST_local CMakeLists.txt Makefile.am README ${test_gnc_module_SOURCE_DIST} ${test_gnc_module_EXTRA_DIST})
+
+SET(test_gnc_module_DIST ${test_gnc_module_DIST_local} ${misc_mods_DIST}
+                         ${mod_bar_DIST} ${mod_baz_DIST} ${mod_foo_DIST} PARENT_SCOPE)

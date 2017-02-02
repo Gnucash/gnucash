@@ -9,7 +9,6 @@ SET(csv_import_SOURCES
   csv-account-import.c
   gnc-csv-model.c
   gnc-csv-gnumeric-popup.c
-  ${CMAKE_SOURCE_DIR}/lib/stf/stf-parse.c
 )
 
 # Add dependency on config.h
@@ -22,10 +21,10 @@ SET(csv_import_noinst_HEADERS
   csv-account-import.h
   gnc-csv-model.h
   gnc-csv-gnumeric-popup.h
-  ${CMAKE_SOURCE_DIR}/lib/stf/stf-parse.h
 )
 
-ADD_LIBRARY(gncmod-csv-import ${csv_import_noinst_HEADERS} ${csv_import_SOURCES})
+ADD_LIBRARY(gncmod-csv-import ${csv_import_noinst_HEADERS} ${csv_import_SOURCES}
+        ${CMAKE_SOURCE_DIR}/lib/stf/stf-parse.h ${CMAKE_SOURCE_DIR}/lib/stf/stf-parse.c)
 
 TARGET_LINK_LIBRARIES(gncmod-csv-import ${GOFFICE_LDFLAGS} gncmod-generic-import gncmod-gnome-utils
                  gncmod-app-utils gncmod-engine gnc-core-utils gnc-module)
@@ -53,9 +52,12 @@ SET(csv_import_UI gnc-plugin-csv-import-ui.xml)
 
 INSTALL(FILES ${csv_import_UI} DESTINATION share/gnucash/ui)
 
-IF (GNC_BUILD_AS_INSTALL)
-  FILE(COPY ${csv_import_UI}
-    DESTINATION ${DATADIR_BUILD}/gnucash/ui)
-  FILE(COPY ${csv_import_GLADE}
-    DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder)
-ENDIF()
+FILE(COPY ${csv_import_UI}
+  DESTINATION ${DATADIR_BUILD}/gnucash/ui)
+FILE(COPY ${csv_import_GLADE}
+  DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder)
+
+SET_LOCAL_DIST(csv_import_DIST_local CMakeLists.txt Makefile.am
+        ${csv_import_SOURCES} ${csv_import_noinst_HEADERS}
+        ${csv_import_GLADE} ${csv_import_UI})
+SET(csv_import_DIST ${csv_import_DIST_local} ${test_csv_import_DIST} ${csv_import_gschema_DIST} PARENT_SCOPE)

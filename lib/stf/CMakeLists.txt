@@ -1,0 +1,1 @@
+SET_DIST_LIST(stf_DIST CMakeLists.txt Makefile.am README stf-parse.c stf-parse.h)

@@ -11,7 +11,7 @@ SET (html_HEADERS
 
 IF (BUILDING_FROM_VCS)
   SET (SWIG_GNC_HTML_C ${CMAKE_CURRENT_BINARY_DIR}/swig-gnc-html.c)
-  GNC_ADD_SWIG_COMMAND (${SWIG_GNC_HTML_C} ${CMAKE_CURRENT_SOURCE_DIR}/gnc-html.i ${gncmod_html_HEADERS})
+  GNC_ADD_SWIG_COMMAND (swig-gnc-html-c ${SWIG_GNC_HTML_C} ${CMAKE_CURRENT_SOURCE_DIR}/gnc-html.i "${gncmod_html_HEADERS}")
 ELSE()
   SET (SWIG_GNC_HTML_C swig-gnc-html.c)
 ENDIF()
@@ -22,11 +22,13 @@ SET (html_SOURCES
   gnc-html-history.c
   gnc-html-factory.c
   gnc-html-webkit.c
-  ${SWIG_GNC_HTML_C}
 )
+
+SET_DIST_LIST(html_DIST CMakeLists.txt Makefile.am ${html_HEADERS} ${html_SOURCES} gnc-html.i)
 
 ADD_LIBRARY (gncmod-html
   ${html_SOURCES}
+  ${SWIG_GNC_HTML_C}
   ${html_HEADERS}
 )
 

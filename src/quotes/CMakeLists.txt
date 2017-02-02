@@ -12,18 +12,16 @@ FILE(WRITE ${_TMPDIR}/copy_with_perms.cmake
 SET(_BIN_FILES "")
 FOREACH(file gnc-fq-check.in gnc-fq-helper.in gnc-fq-update.in gnc-fq-dump)
   STRING(REPLACE ".in" "" _OUTPUT_FILE_NAME ${file})
-  GNC_CONFIGURE2(${file} ${_OUTPUT_FILE_NAME})
+  GNC_CONFIGURE2(${file}-target ${file} ${_OUTPUT_FILE_NAME})
   SET(_ABS_OUTPUT_FILE ${CMAKE_CURRENT_BINARY_DIR}/${_OUTPUT_FILE_NAME})
   LIST(APPEND _BIN_FILES ${_ABS_OUTPUT_FILE})
-  IF (GNC_BUILD_AS_INSTALL)
-    ADD_CUSTOM_COMMAND(
-      OUTPUT ${_ABS_OUTPUT_FILE}
-      APPEND
-      COMMAND ${CMAKE_COMMAND} -D SRC=${_ABS_OUTPUT_FILE}
-                               -D DST=${BINDIR_BUILD}
-                               -P ${_TMPDIR}/copy_with_perms.cmake
-    )
-  ENDIF()
+  ADD_CUSTOM_COMMAND(
+    OUTPUT ${_ABS_OUTPUT_FILE}
+    APPEND
+    COMMAND ${CMAKE_COMMAND} -D SRC=${_ABS_OUTPUT_FILE}
+                             -D DST=${BINDIR_BUILD}
+                             -P ${_TMPDIR}/copy_with_perms.cmake
+  )
 ENDFOREACH(file)
 
 SET(CMAKE_COMMAND_TMP "")
@@ -45,10 +43,11 @@ FOREACH(file gnc-fq-dump gnc-fq-helper)
   )
 ENDFOREACH(file)
 
-# I don't bother copying the man pages for GNC_BUILD_AS_INSTALL. I probably should for completeness.
 
 ADD_CUSTOM_TARGET(quotes-man ALL DEPENDS ${_MAN_FILES})
 ADD_CUSTOM_TARGET(quotes-bin ALL DEPENDS gnc-fq-check gnc-fq-update)
 INSTALL(FILES ${_MAN_FILES} DESTINATION share/man/man1)
 INSTALL(PROGRAMS ${_BIN_FILES} DESTINATION bin)
 
+SET_DIST_LIST(quotes_DIST CMakeLists.txt gnc-fq-check.in gnc-fq-dump gnc-fq-helper.in gnc-fq-update.in
+        gnc-value-portfolio Makefile.am Quote_example.pl README)

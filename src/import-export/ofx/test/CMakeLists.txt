@@ -6,3 +6,5 @@ SET(OFX_TEST_INCLUDE_DIRS
 SET(OFX_TEST_LIBS)
 
 GNC_ADD_TEST(test-link-ofx test-link.c OFX_TEST_INCLUDE_DIRS OFX_TEST_LIBS)
+
+SET_DIST_LIST(test_ofx_DIST CMakeLists.txt Makefile.am test-link.c)

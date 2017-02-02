@@ -19,13 +19,16 @@ SET(test_qof_SOURCES
   test-qofobject.c
   test-qofsession.c
   test-qof-string-cache.c
-  ${CMAKE_SOURCE_DIR}/src/test-core/unittest-support.c
 )
 
 # This test does not on Win32. Worse, it causes a dialog box to
 # pop up due to an assertion. This interferes with running the tests
 # unattended.
 IF (NOT WIN32)
-  GNC_ADD_TEST(test-qof "${test_qof_SOURCES}" TEST_QOF_INCLUDE_DIRS TEST_QOF_LIBS)
+  SET(SOURCES ${test_qof_SOURCES} ${CMAKE_SOURCE_DIR}/src/test-core/unittest-support.c)
+  GNC_ADD_TEST(test-qof "${SOURCES}"
+          TEST_QOF_INCLUDE_DIRS TEST_QOF_LIBS)
   TARGET_COMPILE_DEFINITIONS(test-qof PRIVATE TESTPROG=test_qof)
 ENDIF()
+
+SET_DIST_LIST(test_qof_DIST CMakeLists.txt Makefile.am ${test_qof_SOURCES})

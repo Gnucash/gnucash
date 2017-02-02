@@ -1,7 +1,4 @@
-# CMakeLists.txt for the cutecash sub-project of gnucash
-
-# This is very EXPERIMENTAL! We will see how far this project will
-# get.
+# CMakeLists.txt for GnuCash
 
 IF (WIN32)
   CMAKE_MINIMUM_REQUIRED (VERSION 3.3.2)
@@ -46,13 +43,14 @@ INCLUDE (GncAddSchemeTargets)
 INCLUDE (GncConfigure)
 INCLUDE (GncAddGSchemaTargets)
 INCLUDE (GncAddTest)
+INCLUDE (MakeDistFiles)
 
 # ############################################################
 # These options are settable from the CMake command line. For example, to disable
 # SQL, put -D WITH_SQL=OFF on the command line.
 
 OPTION (WITH_SQL "Build this project with SQL (libdbi) support" ON)
-OPTION (WITH_AQBANKING "Build this project with aqbanking (online banking) support" ON )
+OPTION (WITH_AQBANKING "Build this project with aqbanking (online banking) support" OFF )
 OPTION (WITH_GNUCASH "Build all of GnuCash, not just cutecash" ON)
 OPTION (WITH_CUTECASH "Also build cutecash" OFF)
 OPTION (WITH_OFX "compile with ofx support (needs LibOFX)" ON)
@@ -64,7 +62,11 @@ OPTION (DISABLE_NLS "do not use Native Language Support" OFF)
 OPTION (DISABLE_DEPRECATED_GLIB "don't use deprecated glib functions" OFF)
 OPTION (DISABLE_DEPRECATED_GTK "don't use deprectacted gtk, gdk or gdk-pixbuf functions" OFF)
 OPTION (DISABLE_DEPRECATED_GNOME "don't use deprecated gnome functions" OFF)
-OPTION (GNC_BUILD_AS_INSTALL "Make build directory structure mirror install" ON)
+
+# If AUTOTOOLS_IN_DIST is OFF, then 'dist' wont run autogen.sh, and 'distcheck'
+# won't run the autotools distcheck. Note that various Makefile.am files are still
+# included in the dist when this is OFF. I'll fix that at some point.
+OPTION (AUTOTOOLS_IN_DIST "Add autotools support to distribution tarballs." ON)
 # ############################################################
 
 # These are also settable from the command line in a similar way.
@@ -84,13 +86,10 @@ SET(TEST_MYSQL_URL "" CACHE STRING "MySQL database URL for testing")
 SET(TEST_PGSQL_URL "" CACHE STRING "PgSQL database URL for testing")
 SET(HTMLHELP_DIR ${CMAKE_PREFIX_PATH}/hh CACHE PATH "Specify location of Win32 HTMLHELP library")
 
-IF(GNC_BUILD_AS_INSTALL)
-  SET(DATADIR_BUILD    ${CMAKE_BINARY_DIR}/${DATADIRNAME})
-  SET(LIBDIR_BUILD     ${CMAKE_BINARY_DIR}/lib)
-  SET(SYSCONFDIR_BUILD ${CMAKE_BINARY_DIR}/etc)
-  SET(BINDIR_BUILD     ${CMAKE_BINARY_DIR}/bin)
-
-ENDIF()
+SET(DATADIR_BUILD    ${CMAKE_BINARY_DIR}/${DATADIRNAME})
+SET(LIBDIR_BUILD     ${CMAKE_BINARY_DIR}/lib)
+SET(SYSCONFDIR_BUILD ${CMAKE_BINARY_DIR}/etc)
+SET(BINDIR_BUILD     ${CMAKE_BINARY_DIR}/bin)
 
 SET(SHELL_FROM_ENV $ENV{SHELL})
 SET(SHELL /bin/bash)
@@ -112,7 +111,14 @@ EXECUTE_PROCESS(
 SET(BUILDING_FROM_VCS "NO")
 IF (GNC_VCS_INFO_RESULT EQUAL 0)
   SET(BUILDING_FROM_VCS "YES")
+  # IF building from VCS, we need git
+  find_package(Git)
+  IF (NOT GIT_FOUND)
+    MESSAGE(SEND_ERROR "Looks like we're building from vesion control, but can't find git executable. Please set GIT_EXECUTABLE.")
+  ENDIF()
 ENDIF()
+
+
 
 IF (WIN32)
   # Help Windows find the various dependencies. We assume here that the standard advice for building
@@ -429,33 +435,26 @@ ENDIF()
 
 SET(BUILD_SHARED_LIBS ON)
 
-IF (GNC_BUILD_AS_INSTALL)
-  # Most libraries are installed to lib/gnucash, so set that as the default.
-  # For the handful that are installed to lib, we override the properies below
-  # (after the targets have been read in).
+# Most libraries are installed to lib/gnucash, so set that as the default.
+# For the handful that are installed to lib, we override the properies below
+# (after the targets have been read in).
 
 
-  SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY         ${CMAKE_BINARY_DIR}/lib/gnucash)
-  IF (XCODE_VERSION)
-    # FIXME: These settings break the ability to manipulate different configurations (Debug,
-    # FIXME: Release, etc.) in Xcode. We'll need to change the module loading C code if
-    # we want to support multi config.
-    SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG   ${CMAKE_BINARY_DIR}/lib/gnucash)
-    SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/lib/gnucash)
-  ENDIF()
-  # For binarines
-  SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY         ${CMAKE_BINARY_DIR}/bin)
-  IF (XCODE_VERSION)
-    SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG   ${CMAKE_BINARY_DIR}/bin)
-    SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/bin)
-  ENDIF()
+SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY         ${CMAKE_BINARY_DIR}/lib/gnucash)
+IF (XCODE_VERSION)
+  # FIXME: These settings break the ability to manipulate different configurations (Debug,
+  # FIXME: Release, etc.) in Xcode. We'll need to change the module loading C code if
+  # we want to support multi config.
+  SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG   ${CMAKE_BINARY_DIR}/lib/gnucash)
+  SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/lib/gnucash)
+ENDIF()
+# For binarines
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY         ${CMAKE_BINARY_DIR}/bin)
+IF (XCODE_VERSION)
+  SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG   ${CMAKE_BINARY_DIR}/bin)
+  SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/bin)
 ENDIF()
 # ############################################################
-
-SET(CMAKE_CTEST_COMMAND ctest)
-IF (XCODE_VERSION)
-  SET(CMAKE_CTEST_COMMAND ctest -C Debug)
-ENDIF()
 
 # There are targets that need to build before tests will run
 ADD_CUSTOM_TARGET(check
@@ -465,50 +464,16 @@ ADD_CUSTOM_TARGET(check
      scm-test-core scm-test-report-system scm-standard-reports-2
      scm-test-standard-reports foo gncmodfoo baz gncmodbaz
      bar gncmodbar gncmod_agedver gncmod_incompatdep
-     gncmod_futuremodsys test-core-guile
+     gncmod_futuremodsys check-po test-core-guile
 )
 IF (NOT WIN32)
   ADD_DEPENDENCIES(check gncmod-backend-xml-link)
 ENDIF()
 
-# The subdirectories
-ADD_SUBDIRECTORY (accounts)
-ADD_SUBDIRECTORY (checks)
-ADD_SUBDIRECTORY (doc)
-ADD_SUBDIRECTORY (packaging)
-ADD_SUBDIRECTORY (po)
-ADD_SUBDIRECTORY (src)
-
-# This cmake subdir must be the last add_subdirectory() call because
-# it contains post-install actions to execute.
-ADD_SUBDIRECTORY(cmake)
-
-IF (GNC_BUILD_AS_INSTALL)
-  SET_TARGET_PROPERTIES(gnc-qof gnc-core-utils gnc-module gnc-backend-sql gnc-backend-xml-utils
-    gnc-business-ledger gnc-gnome PROPERTIES
-    LIBRARY_OUTPUT_DIRECTORY         ${CMAKE_BINARY_DIR}/lib
-    IF (XCODE_VERSION)
-      LIBRARY_OUTPUT_DIRECTORY_DEBUG   ${CMAKE_BINARY_DIR}/lib
-      LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/lib
-    ENDIF()
-
-    RUNTIME_OUTPUT_DIRECTORY         ${CMAKE_BINARY_DIR}/bin
-    IF (XCODE_VERSION)
-      RUNTIME_OUTPUT_DIRECTORY_DEBUG   ${CMAKE_BINARY_DIR}/bin
-      RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/bin
-    ENDIF()
-  )
-  IF (WIN32)
-    SET_TARGET_PROPERTIES(gncmod-backend-xml gncmod-stylesheets gncmod-utility-reports PROPERTIES
-      LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
-    )
-  ENDIF()
-ENDIF()
 
 
 SET(gnucash_DOCS
     AUTHORS
-    ChangeLog
     ChangeLog.1999
     ChangeLog.2000
     ChangeLog.2001
@@ -532,7 +497,150 @@ SET(gnucash_DOCS
     README.dependencies
 )
 
+
 INSTALL(FILES ${gnucash_DOCS} DESTINATION share/doc/gnucash)
+
+# The subdirectories
+ADD_SUBDIRECTORY (accounts)
+ADD_SUBDIRECTORY (checks)
+ADD_SUBDIRECTORY (doc)
+ADD_SUBDIRECTORY (lib)
+ADD_SUBDIRECTORY (macros)
+ADD_SUBDIRECTORY (packaging)
+ADD_SUBDIRECTORY (po)
+ADD_SUBDIRECTORY (src)
+ADD_SUBDIRECTORY (test-templates)
+ADD_SUBDIRECTORY (util)
+
+# This cmake subdir must be the last add_subdirectory() call because
+# it contains post-install actions to execute.
+ADD_SUBDIRECTORY(cmake)
+
+############################ BEGIN MAKE DIST #################
+
+
+
+SET(PACKAGE_PREFIX "${PACKAGE}-${PACKAGE_VERSION}")
+SET(DIST_FILE "${PACKAGE_PREFIX}.tar")
+
+SET(gnucash_DIST_local ${gnucash_DOCS} ChangeLog.2015 ChangeLog.2016 CMakeLists.txt configure.ac Makefile.am
+        make-gnucash-potfiles.in README TODO)
+
+IF(BUILDING_FROM_VCS AND AUTOTOOLS_IN_DIST)
+  SET(gnucash_DIST_local ${gnucash_DIST_local} autogen.sh)
+ENDIF()
+
+SET_LOCAL_DIST(gnucash_DIST ${gnucash_DIST_local})
+
+# Each subdirectory is responsible for reporting its list of distribution files to its parent, up to here.
+#
+# Leaf directories use the SET_DIST_LIST() function to report their distribution files. See
+# the bottom of src/app-utils/test/CMakeLists.txt for an example.
+#
+# A non leaf directories uses the SET_LOCAL_DIST() function to specify its distribution files local that dir,
+# then uses a (SET ${foo_DIST} ${locals....} PARENT_SCOPE) command to report up. See the bottom of
+# src/app-utils/CMakeLists.txt for an example of this.
+
+SET(ALL_DIST ${accounts_DIST} ${checks_DIST} ${cmake_DIST} ${doc_DIST} ${lib_DIST} ${macros_DIST} ${packaging_DIST}
+        ${po_DIST} ${src_DIST} ${gnucash_DIST} ${test_templates_DIST} ${util_DIST})
+
+
+IF (BUILDING_FROM_VCS)
+  SET(BUILD_SOURCE_DIR ${CMAKE_BINARY_DIR})
+ELSE()
+  SET(BUILD_SOURCE_DIR ${CMAKE_SOURCE_DIR})
+  IF(AUTOTOOLS_IN_DIST)
+    # Include autotools generated file in the dist
+    LIST(APPEND ALL_DIST compile config.guess config.sub configure depcomp install-sh missing
+            src/doc/design/mdate-sh src/doc/design/texinfo.tex)
+    IF (EXISTS ${CMAKE_SOURCE_DIR}/test-driver)  # test-driver only created for automake 1.12+.
+      LIST(APPEND ALL_DIST test-driver)
+    ENDIF()
+  ENDIF()
+ENDIF()
+
+# Write a dist manifest
+STRING(REPLACE ";" "\n" ALL_DIST_LINES "${ALL_DIST}")
+FILE(WRITE ${CMAKE_BINARY_DIR}/dist_manifest.txt ${ALL_DIST_LINES})
+
+SET(DIST_GENERATED_FILES "")
+FOREACH(file ${COPY_FROM_BUILD})
+  LIST(APPEND DIST_GENERATED_FILES2 ${BUILD_SOURCE_DIR}/${file})
+ENDFOREACH()
+
+
+ADD_CUSTOM_COMMAND(OUTPUT ${DIST_FILE}.gz ${DIST_FILE}.bz2
+        COMMAND ${CMAKE_COMMAND}
+           -D CMAKE_MODULE_PATH=${CMAKE_SOURCE_DIR}/src/cmake_modules
+           -D PACKAGE_PREFIX=${PACKAGE_PREFIX}
+           -D GNUCASH_SOURCE_DIR=${CMAKE_SOURCE_DIR}
+           -D BUILD_SOURCE_DIR=${BUILD_SOURCE_DIR}
+           -D BUILDING_FROM_VCS=${BUILDING_FROM_VCS}
+           -D SHELL=${SHELL}
+           -D AUTOTOOLS_IN_DIST=${AUTOTOOLS_IN_DIST}
+           -P ${CMAKE_SOURCE_DIR}/src/cmake_modules/MakeDist.cmake
+
+        DEPENDS
+          ${ALL_DIST} ${DIST_GENERATED_FILES2} gnc-vcs-info iso-4217-c gnc-warnings-c build-config-scm gnucash-design-info ChangeLog
+        )
+
+ADD_CUSTOM_TARGET(dist DEPENDS ${DIST_FILE}.gz ${DIST_FILE}.bz2)
+
+ADD_CUSTOM_TARGET(distcheck DEPENDS dist
+        COMMAND ${CMAKE_COMMAND}
+            -D CMAKE_MODULE_PATH=${CMAKE_SOURCE_DIR}/src/cmake_modules
+            -D CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
+            -D PACKAGE_PREFIX=${PACKAGE_PREFIX}
+            -D CMAKE_C_FLAGS=${CMAKE_C_FLAGS}
+            -D CMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
+            -D AUTOTOOLS_IN_DIST=${AUTOTOOLS_IN_DIST}
+            -P ${CMAKE_SOURCE_DIR}/src/cmake_modules/MakeDistCheck.cmake
+        )
+
+
+
+############################# END MAKE DIST #################
+
+# uninstall target
+configure_file(
+        "${CMAKE_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+        @ONLY)
+
+add_custom_target(uninstall
+        COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
+
+SET_TARGET_PROPERTIES(gnc-qof gnc-core-utils gnc-module gnc-backend-sql gnc-backend-xml-utils
+  gnc-business-ledger gnc-gnome PROPERTIES
+  LIBRARY_OUTPUT_DIRECTORY         ${CMAKE_BINARY_DIR}/lib
+  IF (XCODE_VERSION)
+    LIBRARY_OUTPUT_DIRECTORY_DEBUG   ${CMAKE_BINARY_DIR}/lib
+    LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/lib
+  ENDIF()
+
+  RUNTIME_OUTPUT_DIRECTORY         ${CMAKE_BINARY_DIR}/bin
+  IF (XCODE_VERSION)
+    RUNTIME_OUTPUT_DIRECTORY_DEBUG   ${CMAKE_BINARY_DIR}/bin
+    RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/bin
+  ENDIF()
+)
+
+IF (WIN32)
+  SET_TARGET_PROPERTIES(gncmod-backend-xml gncmod-stylesheets gncmod-utility-reports PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+  )
+ENDIF()
+
+# Generate the ChangeLog
+
+IF (BUILDING_FROM_VCS)
+  ADD_CUSTOM_TARGET(ChangeLog ALL
+    COMMAND ${GIT_EXECUTABLE} log --format=\"%ad %aN %n%n%x09* %s%d%n\" --date=short --since=2016-01-01 > ${CMAKE_BINARY_DIR}/ChangeLog
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  )
+ELSE()
+  FILE(COPY ChangeLog DESTINATION ChangeLog)
+ENDIF()
 
 #Link LICENSE to COPYING so that people expecting to find it,
 #will. COPYING is normally linked by autogen.sh to the latest
@@ -554,14 +662,10 @@ INSTALL(CODE
 IF (WIN32)
   SET(MINGW_DLLS ${CMAKE_PREFIX_PATH}/mingw/bin/libstdc++-6.dll ${CMAKE_PREFIX_PATH}/mingw/bin/libgcc_s_dw2-1.dll)
   INSTALL(PROGRAMS ${MINGW_DLLS} DESTINATION bin)
-  IF (GNC_BUILD_AS_INSTALL)
-    FILE(COPY ${MINGW_DLLS} DESTINATION ${BINDIR_BUILD}
-      # Do permissions matter for windows?
-      FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
-    )
-  ENDIF()
-
-
+  FILE(COPY ${MINGW_DLLS} DESTINATION ${BINDIR_BUILD}
+    # Do permissions matter for windows?
+    FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+  )
 ENDIF()
 # ############################################################
 # Package creation rules

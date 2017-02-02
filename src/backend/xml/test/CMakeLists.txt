@@ -1,4 +1,5 @@
 # Common stuff
+ADD_SUBDIRECTORY(test-files)
 
 SET(XML_TEST_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/src/backend/xml
@@ -55,7 +56,17 @@ SET(test_backend_xml_module_SOURCES
   ${CMAKE_SOURCE_DIR}/src/backend/xml/gnc-pricedb-xml-v2.c
 )
 
+SET_LOCAL_DIST(test_backend_xml_DIST_local CMakeLists.txt grab-types.pl Makefile.am README test-date-converting.c
+        test-dom-converters1.c test-dom-parser1.c test-file-stuff.c test-file-stuff.h test-kvp-frames.c
+        test-load-backend.c test-load-example-account.c  test-load-xml2.c test-save-in-lang.c test-string-converters.c
+        test-xml2-is-file.c test-xml-account.c test-real-data.sh.in test-xml-commodity.c test-xml-pricedb.c
+        test-xml-transaction.c)
+SET(test_backend_xml_DIST ${test_backend_xml_DIST_local} ${test_backend_xml_test_files_DIST} PARENT_SCOPE)
+
 # The test test-dom-parser1.c is not run by Makefile.am
+
+# This line for autotools
+CONFIGURE_FILE(test-real-data.sh.in test-real-data.sh)
 
 ADD_XML_TEST(test-date-converting "${test_backend_xml_base_SOURCES};test-date-converting.c")
 ADD_XML_TEST(test-dom-converters1 "${test_backend_xml_base_SOURCES};test-dom-converters1.c")

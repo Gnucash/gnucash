@@ -1,9 +1,9 @@
 
 IF (BUILDING_FROM_VCS)
   SET (SWIG_BAZ_C ${CMAKE_CURRENT_BINARY_DIR}/swig-baz.c)
-  GNC_ADD_SWIG_COMMAND (${SWIG_BAZ_C} ${CMAKE_CURRENT_SOURCE_DIR}/baz.i baz.h)
+  GNC_ADD_SWIG_COMMAND (swig-baz-c ${SWIG_BAZ_C} ${CMAKE_CURRENT_SOURCE_DIR}/baz.i baz.h)
 ELSE()
-  SET (SWIG_BAZ_C swig-baz.c)
+  SET (SWIG_BAZ_C ${CMAKE_CURRENT_SOURCE_DIR}/swig-baz.c)
 ENDIF()
 
 ADD_LIBRARY(baz EXCLUDE_FROM_ALL baz.c baz.h)
@@ -26,3 +26,5 @@ TARGET_INCLUDE_DIRECTORIES(gncmodbaz PRIVATE
   ${GLIB2_INCLUDE_DIRS}
   ${GUILE_INCLUDE_DIRS}
 )
+
+SET_DIST_LIST(mod_baz_DIST CMakeLists.txt Makefile.am baz.c gnucash/baz.scm baz.h baz.i gnc-mod-baz.c)

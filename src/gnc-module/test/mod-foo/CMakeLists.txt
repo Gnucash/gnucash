@@ -1,9 +1,9 @@
 
 IF (BUILDING_FROM_VCS)
   SET (SWIG_FOO_C ${CMAKE_CURRENT_BINARY_DIR}/swig-foo.c)
-  GNC_ADD_SWIG_COMMAND (${SWIG_FOO_C} ${CMAKE_CURRENT_SOURCE_DIR}/foo.i foo.h)
+  GNC_ADD_SWIG_COMMAND (swig-foo-c ${SWIG_FOO_C} ${CMAKE_CURRENT_SOURCE_DIR}/foo.i foo.h)
 ELSE()
-  SET (SWIG_FOO_C swig-foo.c)
+  SET (SWIG_FOO_C ${CMAKE_CURRENT_SOURCE_DIR}/swig-foo.c)
 ENDIF()
 
 ADD_LIBRARY(foo EXCLUDE_FROM_ALL foo.c foo.h)
@@ -20,3 +20,5 @@ TARGET_INCLUDE_DIRECTORIES(gncmodfoo PRIVATE
   ${GLIB2_INCLUDE_DIRS}
   ${GUILE_INCLUDE_DIRS}
 )
+
+SET_DIST_LIST(mod_foo_DIST CMakeLists.txt Makefile.am foo.i gnucash/foo.scm foo.c foo.h gnc-mod-foo.c)

@@ -17,26 +17,28 @@ SET(ofx_noinst_HEADERS
   gnc-plugin-ofx.h
 )
 
-ADD_LIBRARY(gncmod-ofx ${ofx_SOURCES} ${ofx_noinst_HEADERS})
+SET(ofx_UI gnc-plugin-ofx-ui.xml)
 
-TARGET_LINK_LIBRARIES(gncmod-ofx gncmod-generic-import gncmod-engine gncmod-app-utils gnc-core-utils
+IF (WITH_OFX)
+  ADD_LIBRARY(gncmod-ofx ${ofx_SOURCES} ${ofx_noinst_HEADERS})
+
+  TARGET_LINK_LIBRARIES(gncmod-ofx gncmod-generic-import gncmod-engine gncmod-app-utils gnc-core-utils
                     gncmod-gnome-utils gnc-qof ${LIBOFX_LDFLAGS})
 
-TARGET_COMPILE_DEFINITIONS(gncmod-ofx PRIVATE -DG_LOG_DOMAIN=\"gnc.import.ofx\")
+  TARGET_COMPILE_DEFINITIONS(gncmod-ofx PRIVATE -DG_LOG_DOMAIN=\"gnc.import.ofx\")
 
-TARGET_INCLUDE_DIRECTORIES(gncmod-ofx PRIVATE ${LIBOFX_INCLUDE_DIRS})
+  TARGET_INCLUDE_DIRECTORIES(gncmod-ofx PRIVATE ${LIBOFX_INCLUDE_DIRS})
 
-INSTALL(TARGETS gncmod-ofx
+  INSTALL(TARGETS gncmod-ofx
   LIBRARY DESTINATION lib/gnucash
   ARCHIVE DESTINATION lib/gnucash
   RUNTIME DESTINATION bin)
 
-SET(ofx_UI gnc-plugin-ofx-ui.xml)
+  INSTALL(FILES ${ofx_UI} DESTINATION share/gnucash/ui)
 
-INSTALL(FILES ${ofx_UI} DESTINATION share/gnucash/ui)
-
-
-IF (GNC_BUILD_AS_INSTALL)
   FILE(COPY ${ofx_UI}
     DESTINATION ${DATADIR_BUILD}/gnucash/ui)
 ENDIF()
+
+SET_LOCAL_DIST(ofx_DIST_local CMakeLists.txt Makefile.am migratable-prefs-ofx.xml ${ofx_SOURCES} ${ofx_noinst_HEADERS} ${ofx_UI})
+SET(ofx_DIST ${ofx_DIST_local} ${test_ofx_DIST} ${ofx_gschema_DIST} PARENT_SCOPE)

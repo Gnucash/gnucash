@@ -10,13 +10,12 @@ SET (report_gnome_HEADERS
 
 IF (BUILDING_FROM_VCS)
   SET (SWIG_REPORT_GNOME_C ${CMAKE_CURRENT_BINARY_DIR}/swig-report-gnome.c)
-  GNC_ADD_SWIG_COMMAND (${SWIG_REPORT_GNOME_C} ${CMAKE_CURRENT_SOURCE_DIR}/report-gnome.i ${report_gnome_HEADERS})
+  GNC_ADD_SWIG_COMMAND (swig-report-gnome-c ${SWIG_REPORT_GNOME_C} ${CMAKE_CURRENT_SOURCE_DIR}/report-gnome.i ${report_gnome_HEADERS})
 ELSE()
   SET (SWIG_REPORT_GNOME_C swig-report-gnome.c)
 ENDIF()
 
 SET (report_gnome_SOURCES
-  ${SWIG_REPORT_GNOME_C}
   dialog-report-column-view.c
   dialog-custom-report.c
   dialog-report-style-sheet.c
@@ -28,6 +27,7 @@ SET (report_gnome_SOURCES
 ADD_LIBRARY (gncmod-report-gnome
   ${report_gnome_SOURCES}
   ${report_gnome_HEADERS}
+  ${SWIG_REPORT_GNOME_C}
 )
 TARGET_LINK_LIBRARIES(gncmod-report-gnome gncmod-report-system gncmod-html gncmod-gnome-utils
       gnc-qof ${GUILE_LDFLAGS} ${GTK2_LDFLAGS})
@@ -73,9 +73,9 @@ SET(report_gnome_UI gnc-plugin-page-report-ui.xml)
 
 INSTALL(FILES ${report_gnome_UI} DESTINATION share/gnucash/ui)
 
-IF (GNC_BUILD_AS_INSTALL)
-  FILE(COPY ${report_gnome_UI}
-    DESTINATION ${DATADIR_BUILD}/gnucash/ui)
-  FILE(COPY ${report_gnome_GLADE}
-    DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder)
-ENDIF()
+FILE(COPY ${report_gnome_UI} DESTINATION ${DATADIR_BUILD}/gnucash/ui)
+FILE(COPY ${report_gnome_GLADE} DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder)
+
+SET_LOCAL_DIST(report_gnome_DIST_local CMakeLists.txt Makefile.am report-gnome.i ${report_gnome_HEADERS} ${report_gnome_SOURCES}
+        ${report_gnome_SCHEME} ${report_gnome_GLADE} ${report_gnome_UI})
+SET(report_gnome_DIST ${report_gnome_DIST_local} ${test_report_gnome_DIST} PARENT_SCOPE)

@@ -30,7 +30,8 @@ SET(log_replay_UI gnc-plugin-log-replay-ui.xml)
 
 INSTALL(FILES ${log_replay_UI} DESTINATION share/gnucash/ui)
 
-IF (GNC_BUILD_AS_INSTALL)
-  FILE(COPY ${log_replay_UI}
-    DESTINATION ${DATADIR_BUILD}/gnucash/ui)
-ENDIF()
+FILE(COPY ${log_replay_UI}
+  DESTINATION ${DATADIR_BUILD}/gnucash/ui)
+
+SET_DIST_LIST(log_report_DIST CMakeLists.txt Makefile.am
+        ${log_replay_SOURCES} ${log_replay_noinst_HEADERS} ${log_replay_UI})
