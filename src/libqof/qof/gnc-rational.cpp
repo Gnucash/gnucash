@@ -78,89 +78,25 @@ GncRational::operator gnc_numeric () const noexcept
 GncRational
 GncRational::operator-() const noexcept
 {
-    GncRational b(*this);
-    b.m_num = - b.m_num;
-    return b;
+    return GncRational(-m_num, m_den);
 }
 
-GncRational&
-GncRational::inv () noexcept
+GncRational
+GncRational::inv () const noexcept
 {
-    if (m_den < 0)
-    {
-        m_num *= -m_den;
-        m_den = 1;
-    }
-    std::swap(m_num, m_den);
+    if (m_num == 0)
+        return *this;
+    if (m_num < 0)
+        return GncRational(-m_den, -m_num);
+    return GncRational(m_den, m_num);
+}
 
-    reduce();
+GncRational
+GncRational::abs() const noexcept
+{
+    if (m_num < 0)
+        return -*this;
     return *this;
-}
-
-GncRational
-operator+(GncRational a, GncRational b)
-{
-    if (!(a.valid() && b.valid()))
-        throw std::range_error("Operator+ called with out-of-range operand.");
-    GncInt128 lcm = a.m_den.lcm(b.m_den);
-    GncInt128 num(a.m_num * lcm / a.m_den + b.m_num * lcm / b.m_den);
-    if (!(lcm.valid() && num.valid()))
-        throw std::overflow_error("Operator+ overflowed.");
-    GncRational retval(num, lcm);
-    return retval;
-}
-
-GncRational
-operator-(GncRational a, GncRational b)
-{
-    GncRational retval = a + (-b);
-    return retval;
-}
-
-GncRational
-operator*(GncRational a, GncRational b)
-{
-    if (!(a.valid() && b.valid()))
-        throw std::range_error("Operator* called with out-of-range operand.");
-    GncInt128 num (a.m_num * b.m_num), den(a.m_den * b.m_den);
-    if (!(num.valid() && den.valid()))
-        throw std::overflow_error("Operator* overflowed.");
-    GncRational retval(num, den);
-    return retval;
-}
-
-GncRational
-operator/(GncRational a, GncRational b)
-{
-    if (!(a.valid() && b.valid()))
-        throw std::range_error("Operator/ called with out-of-range operand.");
-    if (b.m_num == 0)
-        throw std::underflow_error("Divide by 0.");
-    if (b.m_num.isNeg())
-    {
-        a.m_num = -a.m_num;
-        b.m_num = -b.m_num;
-    }
-
-   /* q = (a_num * b_den)/(b_num * a_den). If a_den == b_den they cancel out
-     * and it's just a_num/b_num.
-     */
-    if (a.m_den == b.m_den)
-        return GncRational(a.m_num, b.m_num);
-
-    /* Protect against possibly preventable overflow: */
-    if (a.m_num.isBig() || a.m_den.isBig() ||
-        b.m_num.isBig() || b.m_den.isBig())
-    {
-        GncInt128 gcd = b.m_den.gcd(a.m_den);
-        b.m_den /= gcd;
-        a.m_den /= gcd;
-    }
-
-    GncInt128 num(a.m_num * b.m_den), den(a.m_den * b.m_num);
-    if (!(num.valid() && den.valid()))
-        throw std::overflow_error("Operator/ overflowed.");
-    return GncRational(num, den);
 }
 
 void
@@ -191,6 +127,19 @@ GncRational::operator/=(GncRational b)
     *this = std::move(new_val);
 }
 
+int
+GncRational::cmp(GncRational b)
+{
+    if (m_den == b.denom())
+    {
+        auto b_num = b.num();
+        return m_num < b_num ? -1 : b_num < m_num ? 1 : 0;
+    }
+    auto gcd = m_den.gcd(b.denom());
+    GncInt128 a_num(m_num * b.denom() / gcd), b_num(b.num() * m_den / gcd);
+    return a_num < b_num ? -1 : b_num < a_num ? 1 : 0;
+}
+
 GncRational::round_param
 GncRational::prepare_conversion (GncInt128 new_denom) const
 {
@@ -199,10 +148,10 @@ GncRational::prepare_conversion (GncInt128 new_denom) const
     GncRational conversion(new_denom, m_den);
     auto red_conv = conversion.reduce();
     GncInt128 old_num(m_num);
-    auto new_num = old_num * red_conv.m_num;
-    auto rem = new_num % red_conv.m_den;
-    new_num /= red_conv.m_den;
-    return {new_num, red_conv.m_den, rem};
+    auto new_num = old_num * red_conv.num();
+    auto rem = new_num % red_conv.denom();
+    new_num /= red_conv.denom();
+    return {new_num, red_conv.denom(), rem};
 }
 
 GncInt128
@@ -266,4 +215,71 @@ GncRational::round_to_numeric() const
     GncRational new_v(*this);
     new_v = new_v.convert<RoundType::half_down>(m_den / divisor);
     return new_v;
+}
+
+GncRational
+operator+(GncRational a, GncRational b)
+{
+    if (!(a.valid() && b.valid()))
+        throw std::range_error("Operator+ called with out-of-range operand.");
+    GncInt128 lcm = a.denom().lcm(b.denom());
+    GncInt128 num(a.num() * lcm / a.denom() + b.num() * lcm / b.denom());
+    if (!(lcm.valid() && num.valid()))
+        throw std::overflow_error("Operator+ overflowed.");
+    GncRational retval(num, lcm);
+    return retval;
+}
+
+GncRational
+operator-(GncRational a, GncRational b)
+{
+    GncRational retval = a + (-b);
+    return retval;
+}
+
+GncRational
+operator*(GncRational a, GncRational b)
+{
+    if (!(a.valid() && b.valid()))
+        throw std::range_error("Operator* called with out-of-range operand.");
+    GncInt128 num (a.num() * b.num()), den(a.denom() * b.denom());
+    if (!(num.valid() && den.valid()))
+        throw std::overflow_error("Operator* overflowed.");
+    GncRational retval(num, den);
+    return retval;
+}
+
+GncRational
+operator/(GncRational a, GncRational b)
+{
+    if (!(a.valid() && b.valid()))
+        throw std::range_error("Operator/ called with out-of-range operand.");
+    auto a_num = a.num(), b_num = b.num(), a_den = a.denom(), b_den = b.denom();
+    if (b_num == 0)
+        throw std::underflow_error("Divide by 0.");
+    if (b_num.isNeg())
+    {
+        a_num = -a_num;
+        b_num = -b_num;
+    }
+
+   /* q = (a_num * b_den)/(b_num * a_den). If a_den == b_den they cancel out
+     * and it's just a_num/b_num.
+     */
+    if (a_den == b_den)
+        return GncRational(a_num, b_num);
+
+    /* Protect against possibly preventable overflow: */
+    if (a_num.isBig() || a_den.isBig() ||
+        b_num.isBig() || b_den.isBig())
+    {
+        GncInt128 gcd = b_den.gcd(a_den);
+        b_den /= gcd;
+        a_den /= gcd;
+    }
+
+    GncInt128 num(a_num * b_den), den(a_den * b_num);
+    if (!(num.valid() && den.valid()))
+        throw std::overflow_error("Operator/ overflowed.");
+    return GncRational(num, den);
 }

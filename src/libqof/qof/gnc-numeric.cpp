@@ -64,17 +64,18 @@ powten (unsigned int exp)
 
 GncNumeric::GncNumeric(GncRational rr)
 {
-    if (rr.m_num.isNan() || rr.m_den.isNan())
+    /* Can't use isValid here because we want to throw different exceptions. */
+    if (rr.num().isNan() || rr.denom().isNan())
         throw std::underflow_error("Operation resulted in NaN.");
-    if (rr.m_num.isOverflow() || rr.m_den.isOverflow())
+    if (rr.num().isOverflow() || rr.denom().isOverflow())
         throw std::overflow_error("Operation overflowed a 128-bit int.");
-    if (rr.m_num.isBig() || rr.m_den.isBig())
+    if (rr.num().isBig() || rr.denom().isBig())
     {
         GncRational reduced(rr.reduce());
         rr = reduced.round_to_numeric(); // A no-op if it's already small.
     }
-    m_num = static_cast<int64_t>(rr.m_num);
-    m_den = static_cast<int64_t>(rr.m_den);
+    m_num = static_cast<int64_t>(rr.num());
+    m_den = static_cast<int64_t>(rr.denom());
 }
 
 GncNumeric::GncNumeric(double d) : m_num(0), m_den(1)
@@ -261,18 +262,18 @@ GncNumeric::prepare_conversion(int64_t new_denom) const
     GncRational conversion(new_denom, m_den);
     auto red_conv = conversion.reduce();
     GncInt128 old_num(m_num);
-    auto new_num = old_num * red_conv.m_num;
-    auto rem = new_num % red_conv.m_den;
-    new_num /= red_conv.m_den;
+    auto new_num = old_num * red_conv.num();
+    auto rem = new_num % red_conv.denom();
+    new_num /= red_conv.denom();
     if (new_num.isBig())
     {
         GncRational rr(new_num, new_denom);
         GncNumeric nn(rr);
         rr = rr.convert<RoundType::truncate>(new_denom);
-        return {static_cast<int64_t>(rr.m_num), new_denom, 0};
+        return {static_cast<int64_t>(rr.num()), new_denom, 0};
     }
-    return {static_cast<int64_t>(new_num), static_cast<int64_t>(red_conv.m_den),
-            static_cast<int64_t>(rem)};
+    return {static_cast<int64_t>(new_num),
+            static_cast<int64_t>(red_conv.denom()), static_cast<int64_t>(rem)};
 }
 
 int64_t
@@ -331,25 +332,26 @@ GncNumeric::to_decimal(unsigned int max_places) const
     rr = rr.convert<RoundType::never>(powten(max_places)); //May throw
     /* rr might have gotten reduced a bit too much; if so, put it back: */
     unsigned int pwr{1};
-    for (; pwr <= max_places && !(rr.m_den % powten(pwr)); ++pwr);
+    for (; pwr <= max_places && !(rr.denom() % powten(pwr)); ++pwr);
     auto reduce_to = powten(pwr);
-    if (rr.m_den % reduce_to)
+    GncInt128 rr_num(rr.num()), rr_den(rr.denom());
+    if (rr_den % reduce_to)
     {
-        auto factor(reduce_to / rr.m_den);
-        rr.m_num *= factor;
-        rr.m_den *= factor;
+        auto factor(reduce_to / rr.denom());
+        rr_num *= factor;
+        rr_den *= factor;
     }
-    while (rr.m_num % 10 == 0)
+    while (rr_num % 10 == 0)
     {
-        rr.m_num /= 10;
-        rr.m_den /= 10;
+        rr_num /= 10;
+        rr_den /= 10;
     }
     try
     {
         /* Construct from the parts to avoid the GncRational constructor's
          * automatic rounding.
          */
-        return {static_cast<int64_t>(rr.m_num), static_cast<int64_t>(rr.m_den)};
+        return {static_cast<int64_t>(rr_num), static_cast<int64_t>(rr_den)};
     }
     catch (const std::invalid_argument& err)
     {
@@ -399,12 +401,8 @@ GncNumeric::cmp(GncNumeric b)
         auto b_num = b.num();
         return m_num < b_num ? -1 : b_num < m_num ? 1 : 0;
     }
-//    GncInt128 a_den(m_den), b_den(b.denom());
-//    auto lcm = a_den.gcd(b_den);
-//    GncInt128 a_num(m_num * gcd / a_den), b_num(b.num() * gcd / b_den);
-//    return a_num < b_num ? -1 : b_num < a_num ? 1 : 0;
     GncRational an(*this), bn(b);
-    return (an.m_num * bn.m_den).cmp(bn.m_num * an.m_den);
+    return an.cmp(bn);
 }
 
 GncNumeric
@@ -453,49 +451,6 @@ operator/(GncNumeric a, GncNumeric b)
     auto rr = ar / br;
     return static_cast<GncNumeric>(rr);
 }
-
-int
-cmp(GncNumeric a, GncNumeric b)
-{
-    return a.cmp(b);
-}
-
-bool
-operator<(GncNumeric a, GncNumeric b)
-{
-    return a.cmp(b) < 0;
-}
-
-bool
-operator>(GncNumeric a, GncNumeric b)
-{
-    return a.cmp(b) > 0;
-}
-
-bool
-operator==(GncNumeric a, GncNumeric b)
-{
-    return a.cmp(b) == 0;
-}
-
-bool
-operator<=(GncNumeric a, GncNumeric b)
-{
-    return a.cmp(b) <= 0;
-}
-
-bool
-operator>=(GncNumeric a, GncNumeric b)
-{
-    return a.cmp(b) >= 0;
-}
-
-bool
-operator!=(GncNumeric a, GncNumeric b)
-{
-    return a.cmp(b) != 0;
-}
-
 
 template <typename T, typename I> T
 convert(T num, I new_denom, int how)

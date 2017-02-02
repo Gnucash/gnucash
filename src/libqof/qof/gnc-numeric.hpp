@@ -29,8 +29,8 @@
 
 class GncRational;
 
-/**
- * The primary numeric class for representing amounts and values.
+/**@ingroup QOF
+ *  @brief The primary numeric class for representing amounts and values.
  *
  * Calculations are generally performed in 128-bit (by converting to
  * GncRational) and reducing the result. If the result would overflow a 64-bit
@@ -255,6 +255,7 @@ public:
      *  @return -1 if this < b, 0 if ==, 1 if this > b.
      */
     int cmp(GncNumeric b);
+    int cmp(int64_t b) { return cmp(GncNumeric(b, 1)); }
 private:
     struct round_param
     {
@@ -274,7 +275,7 @@ private:
 
 /**
  * \defgroup gnc_numeric_arithmetic_operators
- *
+ * @{
  * Normal arithmetic operators. The class arithmetic operators are implemented
  * in terms of these operators. They use GncRational operators internally then
  * call the GncNumeric(GncRational&) constructor which will silently round
@@ -285,12 +286,45 @@ private:
  *
  * \param a The right-side operand
  * \param b The left-side operand
- * \return A new GncNumeric computed from the sum.
+ * \return A GncNumeric computed from the operation.
  */
 GncNumeric operator+(GncNumeric a, GncNumeric b);
+inline GncNumeric operator+(GncNumeric a, int64_t b)
+{
+    return a + GncNumeric(b, 1);
+}
+inline GncNumeric operator+(int64_t a, GncNumeric b)
+{
+    return b + GncNumeric(a, 1);
+}
 GncNumeric operator-(GncNumeric a, GncNumeric b);
+inline GncNumeric operator-(GncNumeric a, int64_t b)
+{
+    return a - GncNumeric(b, 1);
+}
+inline GncNumeric operator-(int64_t a, GncNumeric b)
+{
+    return b - GncNumeric(a, 1);
+}
 GncNumeric operator*(GncNumeric a, GncNumeric b);
+inline GncNumeric operator*(GncNumeric a, int64_t b)
+{
+    return a * GncNumeric(b, 1);
+}
+inline GncNumeric operator*(int64_t a, GncNumeric b)
+{
+    return b * GncNumeric(a, 1);
+}
 GncNumeric operator/(GncNumeric a, GncNumeric b);
+inline GncNumeric operator/(GncNumeric a, int64_t b)
+{
+    return a / GncNumeric(b, 1);
+}
+inline GncNumeric operator/(int64_t a, GncNumeric b)
+{
+    return b / GncNumeric(a, 1);
+}
+/** @} */
 /**
  * std::stream output operator. Uses standard integer operator<< so should obey
  * locale rules. Numbers are presented as integers if the denominator is 1, as a
@@ -346,18 +380,33 @@ std::basic_istream<charT, traits>& operator>>(std::basic_istream<charT, traits>&
 /**
  * @return -1 if a < b, 0 if a == b, 1 if a > b.
  */
-int cmp(GncNumeric a, GncNumeric b);
+inline int cmp(GncNumeric a, GncNumeric b) { return a.cmp(b); }
+inline int cmp(GncNumeric a, int64_t b) { return a.cmp(b); }
+inline int cmp(int64_t a, GncNumeric b) { return GncNumeric(a, 1).cmp(b); }
+
 /**
  * \defgroup gnc_numeric_comparison_operators
  * @{
  * Standard comparison operators, which do what one would expect.
  */
-bool operator<(GncNumeric a, GncNumeric b);
-bool operator>(GncNumeric a, GncNumeric b);
-bool operator==(GncNumeric a, GncNumeric b);
-bool operator<=(GncNumeric a, GncNumeric b);
-bool operator>=(GncNumeric a, GncNumeric b);
-bool operator!=(GncNumeric a, GncNumeric b);
+inline bool operator<(GncNumeric a, GncNumeric b) { return cmp(a, b) < 0; }
+inline bool operator<(GncNumeric a, int64_t b) { return cmp(a, b) < 0; }
+inline bool operator<(int64_t a, GncNumeric b) { return cmp(a, b) < 0; }
+inline bool operator>(GncNumeric a, GncNumeric b) { return cmp(a, b) > 0; }
+inline bool operator>(GncNumeric a, int64_t b) { return cmp(a, b) > 0; }
+inline bool operator>(int64_t a, GncNumeric b) { return cmp(a, b) > 0; }
+inline bool operator==(GncNumeric a, GncNumeric b) { return cmp(a, b) == 0; }
+inline bool operator==(GncNumeric a, int64_t b) { return cmp(a, b) == 0; }
+inline bool operator==(int64_t a, GncNumeric b) { return cmp(a, b) == 0; }
+inline bool operator<=(GncNumeric a, GncNumeric b) { return cmp(a, b) <= 0; }
+inline bool operator<=(GncNumeric a, int64_t b) { return cmp(a, b) <= 0; }
+inline bool operator<=(int64_t a, GncNumeric b) { return cmp(a, b) <= 0; }
+inline bool operator>=(GncNumeric a, GncNumeric b) { return cmp(a, b) >= 0; }
+inline bool operator>=(GncNumeric a, int64_t b) { return cmp(a, b) >= 0; }
+inline bool operator>=(int64_t a, GncNumeric b) { return cmp(a, b) >= 0; }
+inline bool operator!=(GncNumeric a, GncNumeric b) { return cmp(a, b) != 0; }
+inline bool operator!=(GncNumeric a, int64_t b) { return cmp(a, b) != 0; }
+inline bool operator!=(int64_t a, GncNumeric b) { return cmp(a, b) != 0; }
 /** @} */
 /**
  * Convenience function to quickly return 10**digits.

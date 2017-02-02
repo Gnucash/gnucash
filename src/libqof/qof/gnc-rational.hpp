@@ -34,16 +34,43 @@ enum class DenomType;
 /** @ingroup QOF
  *  @brief Rational number class using GncInt128 for the numerator
  *  and denominator.
+ *
+ * This class provides far greater overflow protection compared to GncNumeric at
+ * the expense of doubling the size, so GncNumeric is preferred for storage into
+ * objects. Furthermore the backends are not able to store GncRational numbers;
+ * storage in SQL would require using BLOBs which would preclude calculations in
+ * queries. GncRational exists *primarily* as a more overflow-resistant
+ * calculation facility for GncNumeric. It's available for cases where one needs
+ * an error instead of an automatically rounded value for a calculation that
+ * produces a result that won't fit into an int64 without rounding.
+
+ * Errors: Errors are signalled by exceptions as follows:
+ * * A zero denominator will raise a std::invalid_argument.
+ * * Division by zero will raise a std::underflow_error.
+ * * Overflowing 128 bits will raise a std::overflow_error.
+ * * Failure to convert a number as specified by the arguments to convert() will
+ * raise a std::domain_error.
+ *
  */
+
 
 class GncRational
 {
 public:
+    /**
+     * Default constructor provides the zero value.
+     */
     GncRational() : m_num(0), m_den(1) {}
-    GncRational (gnc_numeric n) noexcept;
-    GncRational(GncNumeric n) noexcept;
+    /**
+     * GncInt128 constructor. This will take any flavor of built-in integer
+     * thanks to implicit construction of the GncInt128s.
+     */
     GncRational (GncInt128 num, GncInt128 den) noexcept
         : m_num(num), m_den(den) {}
+    /** Convenience constructor from the C API's gnc_numeric. */
+    GncRational (gnc_numeric n) noexcept;
+    /** GncNumeric constructor. */
+    GncRational(GncNumeric n) noexcept;
     GncRational(const GncRational& rhs) = default;
     GncRational(GncRational&& rhs) = default;
     GncRational& operator=(const GncRational& rhs) = default;
@@ -122,6 +149,10 @@ public:
                                 params.rem, RT2T<RT>()), new_denom);
     }
 
+    /** Numerator accessor */
+    GncInt128 num() { return m_num; }
+    /** Denominator accessor */
+    GncInt128 denom() { return m_den; }
     /** @defgroup gnc_rational_mutators
      *  @{
      * Standard mutating arithmetic operators.
@@ -132,10 +163,17 @@ public:
     void operator/=(GncRational b);
     /** @} */
     /** Inverts the number, equivalent of /= {1, 1} */
-    GncRational& inv() noexcept;
+    GncRational inv() const noexcept;
+    /** Absolute value; return value is always >= 0 and of same magnitude. */
+    GncRational abs() const noexcept;
+    /** Compare function
+     *
+     * @param b GncNumeric or integer value to compare to.
+     * @return -1 if < b, 0 if equal, 1 if > b.
+     */
+    int cmp(GncRational b);
+    int cmp(GncInt128 b) { return cmp(GncRational(b, 1)); }
 
-    GncInt128 m_num;
-    GncInt128 m_den;
 private:
     struct round_param
     {
@@ -152,11 +190,90 @@ private:
      * finish computing a GncNumeric with the new denominator.
      */
     round_param prepare_conversion(GncInt128 new_denom) const;
+    GncInt128 m_num;
+    GncInt128 m_den;
 };
 
-GncRational operator+(GncRational a, GncRational b);
-GncRational operator-(GncRational a, GncRational b);
-GncRational operator*(GncRational a, GncRational b);
-GncRational operator/(GncRational a, GncRational b);
+/**
+ * @return -1 if a < b, 0 if a == b, 1 if a > b.
+ */
+inline int cmp(GncRational a, GncRational b) { return a.cmp(b); }
+inline int cmp(GncRational a, GncInt128 b) { return a.cmp(b); }
+inline int cmp(GncInt128 a, GncRational b) { return GncRational(a, 1).cmp(b); }
 
+/**
+ * \defgroup gnc_rational_comparison_operators
+ * @{
+ * Standard comparison operators, which do what one would expect.
+ */
+inline bool operator<(GncRational a, GncRational b) { return cmp(a, b) < 0; }
+inline bool operator<(GncRational a, GncInt128 b) { return cmp(a, b) < 0; }
+inline bool operator<(GncInt128 a, GncRational b) { return cmp(a, b) < 0; }
+inline bool operator>(GncRational a, GncRational b) { return cmp(a, b) > 0; }
+inline bool operator>(GncRational a, GncInt128 b) { return cmp(a, b) > 0; }
+inline bool operator>(GncInt128 a, GncRational b) { return cmp(a, b) > 0; }
+inline bool operator==(GncRational a, GncRational b) { return cmp(a, b) == 0; }
+inline bool operator==(GncRational a, GncInt128 b) { return cmp(a, b) == 0; }
+inline bool operator==(GncInt128 a, GncRational b) { return cmp(a, b) == 0; }
+inline bool operator<=(GncRational a, GncRational b) { return cmp(a, b) <= 0; }
+inline bool operator<=(GncRational a, GncInt128 b) { return cmp(a, b) <= 0; }
+inline bool operator<=(GncInt128 a, GncRational b) { return cmp(a, b) <= 0; }
+inline bool operator>=(GncRational a, GncRational b) { return cmp(a, b) >= 0; }
+inline bool operator>=(GncRational a, GncInt128 b) { return cmp(a, b) >= 0; }
+inline bool operator>=(GncInt128 a, GncRational b) { return cmp(a, b) >= 0; }
+inline bool operator!=(GncRational a, GncRational b) { return cmp(a, b) != 0; }
+inline bool operator!=(GncRational a, GncInt128 b) { return cmp(a, b) != 0; }
+inline bool operator!=(GncInt128 a, GncRational b) { return cmp(a, b) != 0; }
+/** @} */
+
+/**
+ * \defgroup gnc_rational_arithmetic_operators
+ *
+ * Normal arithmetic operators. The class arithmetic operators are implemented
+ * in terms of these operators.
+ *
+ * These operators can throw std::overflow_error, std::underflow_error, or
+ * std::invalid argument as indicated in the class documentation.
+ *
+ * \param a The right-side operand
+ * \param b The left-side operand
+ * \return A GncRational computed from the operation.
+ */
+GncRational operator+(GncRational a, GncRational b);
+inline GncRational operator+(GncRational a, GncInt128 b)
+{
+    return a + GncRational(b, 1);
+}
+inline GncRational operator+(GncInt128 a, GncRational b)
+{
+    return b + GncRational(a, 1);
+}
+GncRational operator-(GncRational a, GncRational b);
+inline GncRational operator-(GncRational a, GncInt128 b)
+{
+    return a - GncRational(b, 1);
+}
+inline GncRational operator-(GncInt128 a, GncRational b)
+{
+    return b - GncRational(a, 1);
+}
+GncRational operator*(GncRational a, GncRational b);
+inline GncRational operator*(GncRational a, GncInt128 b)
+{
+    return a * GncRational(b, 1);
+}
+inline GncRational operator*(GncInt128 a, GncRational b)
+{
+    return b * GncRational(a, 1);
+}
+GncRational operator/(GncRational a, GncRational b);
+inline GncRational operator/(GncRational a, GncInt128 b)
+{
+    return a / GncRational(b, 1);
+}
+inline GncRational operator/(GncInt128 a, GncRational b)
+{
+    return b / GncRational(a, 1);
+}
+/** @} */
 #endif //__GNC_RATIONAL_HPP__
