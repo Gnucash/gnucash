@@ -1052,7 +1052,7 @@ gnc_numeric_invert(gnc_numeric num)
 {
     if (num.num == 0)
         return gnc_numeric_zero();
-        try
+    try
     {
         return static_cast<gnc_numeric>(GncNumeric(num).inv());
     }
