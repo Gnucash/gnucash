@@ -36,7 +36,7 @@ extern "C"
 }
 
 #include <stdint.h>
-#include <regex>
+#include <boost/regex.hpp>
 #include <sstream>
 #include <cstdlib>
 
@@ -103,6 +103,9 @@ GncNumeric::GncNumeric(double d) : m_num(0), m_den(1)
     m_den = r.denom();
 }
 
+using boost::regex;
+using boost::smatch;
+using boost::regex_search;
 GncNumeric::GncNumeric(const std::string& str, bool autoround)
 {
     static const std::string numer_frag("(-?[0-9]+)");
@@ -113,26 +116,21 @@ GncNumeric::GncNumeric(const std::string& str, bool autoround)
      * numer_frag patter with the default ECMAScript syntax so we use the awk
      * syntax.
      */
-    static const std::regex numeral(numer_frag, std::regex::awk);
-    static const std::regex hex(hex_frag, std::regex::awk);
-    static const std::regex numeral_rational(numer_frag + slash + denom_frag,
-                                             std::regex::awk);
-    static const std::regex hex_rational(hex_frag + slash + hex_frag,
-                                         std::regex::awk);
-    static const std::regex hex_over_num(hex_frag + slash + denom_frag,
-                                         std::regex::awk);
-    static const std::regex num_over_hex(numer_frag + slash + hex_frag,
-                                         std::regex::awk);
-    static const std::regex decimal(numer_frag + "[.,]" + denom_frag,
-                                    std::regex::awk);
-    std::smatch m;
+    static const regex numeral(numer_frag);
+    static const regex hex(hex_frag);
+    static const regex numeral_rational(numer_frag + slash + denom_frag);
+    static const regex hex_rational(hex_frag + slash + hex_frag);
+    static const regex hex_over_num(hex_frag + slash + denom_frag);
+    static const regex num_over_hex(numer_frag + slash + hex_frag);
+    static const regex decimal(numer_frag + "[.,]" + denom_frag);
+    smatch m;
 /* The order of testing the regexes is from the more restrictve to the less
  * restrictive, as less-restrictive ones will match patterns that would also
  * match the more-restrictive and so invoke the wrong construction.
  */
     if (str.empty())
         throw std::invalid_argument("Can't construct a GncNumeric from an empty string.");
-    if (std::regex_search(str, m, hex_rational))
+    if (regex_search(str, m, hex_rational))
     {
         GncNumeric n(stoll(m[1].str(), nullptr, 16),
                      stoll(m[2].str(), nullptr, 16));
@@ -140,7 +138,7 @@ GncNumeric::GncNumeric(const std::string& str, bool autoround)
         m_den = n.denom();
         return;
     }
-    if (std::regex_search(str, m, hex_over_num))
+    if (regex_search(str, m, hex_over_num))
     {
         GncNumeric n(stoll(m[1].str(), nullptr, 16),
                      stoll(m[2].str()));
@@ -148,7 +146,7 @@ GncNumeric::GncNumeric(const std::string& str, bool autoround)
         m_den = n.denom();
         return;
     }
-    if (std::regex_search(str, m, num_over_hex))
+    if (regex_search(str, m, num_over_hex))
     {
         GncNumeric n(stoll(m[1].str()),
                      stoll(m[2].str(), nullptr, 16));
@@ -156,14 +154,14 @@ GncNumeric::GncNumeric(const std::string& str, bool autoround)
         m_den = n.denom();
         return;
     }
-    if (std::regex_search(str, m, numeral_rational))
+    if (regex_search(str, m, numeral_rational))
     {
         GncNumeric n(stoll(m[1].str()), stoll(m[2].str()));
         m_num = n.num();
         m_den = n.denom();
         return;
     }
-    if (std::regex_search(str, m, decimal))
+    if (regex_search(str, m, decimal))
     {
         GncInt128 high(stoll(m[1].str()));
         GncInt128 low(stoll(m[2].str()));
@@ -193,14 +191,14 @@ GncNumeric::GncNumeric(const std::string& str, bool autoround)
         m_den = gncn.denom();
         return;
     }
-    if (std::regex_search(str, m, hex))
+    if (regex_search(str, m, hex))
     {
         GncNumeric n(stoll(m[1].str(), nullptr, 16),INT64_C(1));
         m_num = n.num();
         m_den = n.denom();
         return;
     }
-    if (std::regex_search(str, m, numeral))
+    if (regex_search(str, m, numeral))
     {
         GncNumeric n(stoll(m[1].str()), INT64_C(1));
         m_num = n.num();
