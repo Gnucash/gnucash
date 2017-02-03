@@ -44,6 +44,7 @@ test_numeric_CPPFLAGS = \
 
 test_numeric_LDADD = \
       ${top_builddir}/src/engine/libgncmod-engine.la \
+      ${top_builddir}/${MODULEPATH}/libgnc-qof.la \
       ${GLIB_LIBS}
 
 check_PROGRAMS = \
