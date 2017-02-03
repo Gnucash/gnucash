@@ -311,7 +311,7 @@
             (inv-total (gnc:make-commodity-collector)))
         (for entry in entries do
             (let ((qty       (gncEntryGetDocQuantity entry credit-note?))
-                  (each      (gncEntryGetInvPrice entry)) 
+                  (each      (if opt-netprice (gncEntryGetInvNetPrice entry) (gncEntryGetInvPrice entry))) 
                   (action    (gncEntryGetAction entry)) 
                   (rval      (gncEntryGetDocValue entry #t #t credit-note?)) 
                   (rdiscval  (gncEntryGetDocDiscountValue entry #t #t credit-note?)) 

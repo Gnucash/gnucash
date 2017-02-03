@@ -1071,12 +1071,12 @@ GncOrder * gncEntryGetOrder (const GncEntry *entry)
  * The discount return value is just for entertainment -- you may want
  * to let a consumer know how much they saved.
  */
-void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
-                           const GncTaxTable *tax_table, gboolean tax_included,
-                           gnc_numeric discount, GncAmountType discount_type,
-                           GncDiscountHow discount_how, int SCU,
-                           gnc_numeric *value, gnc_numeric *discount_value,
-                           GList **tax_value)
+static void gncEntryComputeValueInt (gnc_numeric qty, gnc_numeric price,
+				    const GncTaxTable *tax_table, gboolean tax_included,
+				    gnc_numeric discount, GncAmountType discount_type,
+				    GncDiscountHow discount_how, int SCU,
+				    gnc_numeric *value, gnc_numeric *discount_value,
+				    GList **tax_value, gnc_numeric *net_price)
 {
     gnc_numeric aggregate;
     gnc_numeric pretax;
@@ -1085,6 +1085,7 @@ void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
     gnc_numeric percent = gnc_numeric_create (100, 1);
     gnc_numeric tpercent = gnc_numeric_zero ();
     gnc_numeric tvalue = gnc_numeric_zero ();
+    gnc_numeric i_net_price = price;
 
     GList     * entries = gncTaxTableGetEntries (tax_table);
     GList     * node;
@@ -1136,6 +1137,10 @@ void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
                                           gnc_numeric_create (1, 1),
                                           GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD),
                                   GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+	if (!gnc_numeric_zero_p(qty))
+	{
+	  i_net_price = gnc_numeric_div (pretax, qty, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+	}
     }
     else
     {
@@ -1260,7 +1265,24 @@ void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
         *tax_value = taxes;
     }
 
+    if (net_price != NULL)
+    {
+      if (SCU) i_net_price = gnc_numeric_convert(i_net_price, SCU, GNC_HOW_RND_ROUND_HALF_UP);
+      *net_price = i_net_price;
+    }
+
     return;
+}
+
+void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
+                           const GncTaxTable *tax_table, gboolean tax_included,
+                           gnc_numeric discount, GncAmountType discount_type,
+                           GncDiscountHow discount_how, int SCU,
+                           gnc_numeric *value, gnc_numeric *discount_value,
+                           GList **tax_value)
+{
+  gncEntryComputeValueInt (qty, price, tax_table, tax_included, discount, discount_type,
+			   discount_how, SCU, value, discount_value, tax_value, NULL);
 }
 
 static int
@@ -1399,6 +1421,28 @@ static gnc_numeric gncEntryGetIntDiscountValue (GncEntry *entry, gboolean round,
         return (is_cust_doc ? entry->i_disc_value_rounded : gnc_numeric_zero());
     else
         return (is_cust_doc ? entry->i_disc_value : gnc_numeric_zero());
+}
+
+gnc_numeric gncEntryGetInvNetPrice (const GncEntry *entry)
+{
+    gnc_numeric result = gnc_numeric_zero();
+    if (entry)
+    {
+	int denom;
+	
+	/* Determine the commodity denominator */
+	denom = get_entry_commodity_denom (entry);
+      
+	/* Compute the invoice values */
+	gncEntryComputeValueInt (entry->quantity, entry->i_price,
+				 (entry->i_taxable ? entry->i_tax_table : NULL),
+				 entry->i_taxincluded,
+				 entry->i_discount, entry->i_disc_type,
+				 entry->i_disc_how,
+				 denom,
+				 NULL, NULL, NULL, &result);
+    }
+    return result;
 }
 
 gnc_numeric gncEntryGetDocValue (GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn)
