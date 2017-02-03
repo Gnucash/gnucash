@@ -133,12 +133,25 @@ TEST(gncrational_operators, test_division)
         });
 }
 
+static bool
+rounding_predicate(GncInt128 expected, GncInt128 result)
+{
+    static const uint64_t threshold{0x1fffffffffffff};
+
+    if (expected < threshold)
+        return expected == result;
+    auto difference = expected - result;
+    if (difference >= -1 && difference <= 1)
+        return true;
+    return false;
+}
+
 TEST(gncrational_functions, test_round_to_numeric)
 {
     std::default_random_engine dre;
-    std::uniform_int_distribution<int64_t> di{INT64_C(0x10000000000000),
+    std::uniform_int_distribution<int64_t> di{INT64_C(0x100000000000),
             INT64_C(0x7fffffffffffff)};
-    static const int reps{25};
+    static const int reps{100};
     for (auto i = 0; i < reps; ++i)
     {
         GncRational a(di(dre), di(dre));
@@ -148,12 +161,13 @@ TEST(gncrational_functions, test_round_to_numeric)
         expected = expected.convert<RoundType::bankers>(100);
         auto rounded = c.round_to_numeric();
         rounded = rounded.convert<RoundType::bankers>(100);
-        EXPECT_EQ(0, expected.num() - rounded.num());
-        EXPECT_FALSE(rounded.num().isBig());
-        EXPECT_FALSE(rounded.denom().isBig());
-        EXPECT_FALSE(rounded.num().isNan());
-        EXPECT_FALSE(rounded.denom().isNan());
-        EXPECT_FALSE(rounded.num().isOverflow());
-        EXPECT_FALSE(rounded.denom().isOverflow());
+        if (rounded.is_big())
+        {
+            --i;
+            continue;
+        }
+        EXPECT_PRED2(rounding_predicate, expected.num(), rounded.num());
+        EXPECT_TRUE(rounded.valid());
+
     }
 }
