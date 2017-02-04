@@ -221,6 +221,64 @@ gnc_dbi_verify_conn( GncDbiSqlConnection* dbi_conn )
     return dbi_conn->conn_ok;
 }
 
+static gboolean
+gnc_dbi_transaction_begin(QofBackend* qbe, dbi_conn conn)
+{
+    dbi_result result;
+    result = dbi_conn_queryf(conn, "BEGIN");
+    if (result != NULL)
+    {
+        if(dbi_result_free(result) != 0)
+        {
+            PERR( "Error in dbi_result_free() result\n" );
+            qof_backend_set_error(qbe, ERR_BACKEND_SERVER_ERR);
+        }
+        return TRUE;
+    }
+    PERR( "BEGIN transaction failed()\n" );
+    qof_backend_set_error(qbe, ERR_BACKEND_SERVER_ERR);
+    return FALSE;
+}
+
+static gboolean
+gnc_dbi_transaction_commit(QofBackend *qbe, dbi_conn conn)
+{
+    dbi_result result;
+    result = dbi_conn_queryf(conn, "COMMIT");
+    if (result != NULL)
+    {
+        if(dbi_result_free(result) != 0)
+        {
+            PERR( "Error in dbi_result_free() result\n" );
+            qof_backend_set_error(qbe, ERR_BACKEND_SERVER_ERR);
+        }
+        return TRUE;
+    }
+    PERR( "COMMIT transaction failed()\n" );
+    qof_backend_set_error(qbe, ERR_BACKEND_SERVER_ERR);
+    return FALSE;
+}
+
+static gboolean
+gnc_dbi_transaction_rollback(QofBackend *qbe, dbi_conn conn)
+{
+    dbi_result result;
+    DEBUG( "ROLLBACK\n" );
+    result = dbi_conn_queryf(conn, "ROLLBACK");
+    if (result != NULL)
+    {
+        if(dbi_result_free(result) != 0)
+        {
+            PERR( "Error in dbi_result_free() result\n" );
+            qof_backend_set_error(qbe, ERR_BACKEND_SERVER_ERR );
+        }
+        return TRUE;
+    }
+    PERR( "ROLLBACK transaction failed()\n" );
+    qof_backend_set_error(qbe, ERR_BACKEND_SERVER_ERR );
+    return FALSE;
+}
+
 /* ================================================================= */
 
 static void
@@ -620,9 +678,8 @@ gnc_dbi_lock_database ( QofBackend* qbe, gboolean ignore_lock )
         dbi_result_free( result );
         result = NULL;
     }
-
     /* Protect everything with a single transaction to prevent races */
-    if ( (result = dbi_conn_query( dcon, "BEGIN" )) )
+    if (gnc_dbi_transaction_begin(qbe, dcon))
     {
         /* Check for an existing entry; delete it if ignore_lock is true, otherwise fail */
         gchar hostname[ GNC_HOST_NAME_MAX + 1 ];
@@ -640,7 +697,7 @@ gnc_dbi_lock_database ( QofBackend* qbe, gboolean ignore_lock )
             {
                 qof_backend_set_error( qbe, ERR_BACKEND_LOCKED );
                 /* FIXME: After enhancing the qof_backend_error mechanism, report in the dialog what is the hostname of the machine holding the lock. */
-                dbi_conn_query( dcon, "ROLLBACK" );
+                gnc_dbi_transaction_rollback(qbe, dcon);
                 return FALSE;
             }
             result = dbi_conn_queryf( dcon, "DELETE FROM %s", lock_table );
@@ -648,12 +705,7 @@ gnc_dbi_lock_database ( QofBackend* qbe, gboolean ignore_lock )
             {
                 qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
                 qof_backend_set_message( qbe, "Failed to delete lock record" );
-                result = dbi_conn_query( dcon, "ROLLBACK" );
-                if (result)
-                {
-                    dbi_result_free( result );
-                    result = NULL;
-                }
+                gnc_dbi_transaction_rollback(qbe, dcon);
                 return FALSE;
             }
             if (result)
@@ -672,12 +724,7 @@ gnc_dbi_lock_database ( QofBackend* qbe, gboolean ignore_lock )
         {
             qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
             qof_backend_set_message( qbe, "Failed to create lock record" );
-            result = dbi_conn_query( dcon, "ROLLBACK" );
-            if (result)
-            {
-                dbi_result_free( result );
-                result = NULL;
-            }
+            gnc_dbi_transaction_rollback(qbe, dcon);
             return FALSE;
         }
         if (result)
@@ -685,22 +732,14 @@ gnc_dbi_lock_database ( QofBackend* qbe, gboolean ignore_lock )
             dbi_result_free( result );
             result = NULL;
         }
-        result = dbi_conn_query( dcon, "COMMIT" );
-        if (result)
-        {
-            dbi_result_free( result );
-            result = NULL;
-        }
-        return TRUE;
+        if (gnc_dbi_transaction_commit(qbe, dcon))
+            return TRUE;
+        /* Uh-oh, abort! */
+        gnc_dbi_transaction_rollback(qbe, dcon);
     }
-    /* Couldn't get a transaction (probably couldn't get a lock), so fail */
+    /* Couldn't get a transaction (probably couldn't get a lock) so fail */
     qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-    qof_backend_set_message( qbe, "SQL Backend failed to obtain a transaction" );
-    if (result)
-    {
-        dbi_result_free( result );
-        result = NULL;
-    }
+    qof_backend_set_message( qbe, "SQL Backend failed to get a transaction");
     return FALSE;
 }
 static void
@@ -729,67 +768,49 @@ gnc_dbi_unlock( QofBackend *qbe )
         return;
     }
     dbi_result_free( result );
+    result = NULL;
 
-    result = dbi_conn_query( dcon, "BEGIN" );
-    if ( result )
+    if (!gnc_dbi_transaction_begin(qbe, dcon))
     {
-        /* Delete the entry if it's our hostname and PID */
-        gchar hostname[ GNC_HOST_NAME_MAX + 1 ];
+        PWARN("Unable to get a lock on LOCK, so failed to clear the lock entry.");
+        qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+    }
 
-        dbi_result_free( result );
-        result = NULL;
-        memset( hostname, 0, sizeof(hostname) );
-        gethostname( hostname, GNC_HOST_NAME_MAX );
-        result = dbi_conn_queryf( dcon, "SELECT * FROM %s WHERE Hostname = '%s' AND PID = '%d'", lock_table, hostname, (int)GETPID() );
-        if ( result && dbi_result_get_numrows( result ) )
-        {
-            if (result)
-            {
-                dbi_result_free( result );
-                result = NULL;
-            }
-            result = dbi_conn_queryf( dcon, "DELETE FROM %s", lock_table );
-            if ( !result)
-            {
-                PERR("Failed to delete the lock entry");
-                qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-                result = dbi_conn_query( dcon, "ROLLBACK" );
-                if (result)
-                {
-                    dbi_result_free( result );
-                    result = NULL;
-                }
-                return;
-            }
-            else
-            {
-                dbi_result_free( result );
-                result = NULL;
-            }
-            result = dbi_conn_query( dcon, "COMMIT" );
-            if (result)
-            {
-                dbi_result_free( result );
-                result = NULL;
-            }
-            return;
-        }
-        result = dbi_conn_query( dcon, "ROLLBACK" );
+    /* Delete the entry if it's our hostname and PID */
+    gchar hostname[ GNC_HOST_NAME_MAX + 1 ];
+    memset( hostname, 0, sizeof(hostname) );
+    gethostname( hostname, GNC_HOST_NAME_MAX );
+    result = dbi_conn_queryf( dcon, "SELECT * FROM %s WHERE Hostname = '%s' AND PID = '%d'", lock_table, hostname, (int)GETPID() );
+    if ( result && dbi_result_get_numrows( result ) )
+    {
         if (result)
         {
             dbi_result_free( result );
             result = NULL;
         }
-        PWARN("There was no lock entry in the Lock table");
+        result = dbi_conn_queryf( dcon, "DELETE FROM %s", lock_table );
+        if ( !result)
+        {
+            PERR("Failed to delete the lock entry");
+            qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+            gnc_dbi_transaction_rollback(qbe, dcon);
+        }
+        else
+        {
+            dbi_result_free( result );
+            result = NULL;
+        }
+        if (!gnc_dbi_transaction_commit(qbe, dcon))
+        {
+            gnc_dbi_transaction_rollback(qbe, dcon);
+            PWARN("Failed to unlock the database, unable to commit the SQL transaction.");
+        }
         return;
     }
-    if (result)
-    {
-        dbi_result_free( result );
-        result = NULL;
-    }
-    PWARN("Unable to get a lock on LOCK, so failed to clear the lock entry.");
-    qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+
+    gnc_dbi_transaction_rollback(qbe, dcon);
+    PWARN("There was no lock entry in the Lock table");
+    return;
 }
 
 #define SQL_OPTION_TO_REMOVE "NO_ZERO_DATE"
@@ -2543,38 +2564,22 @@ static gboolean
 conn_begin_transaction( /*@ unused @*/ GncSqlConnection* conn )
 {
     GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
-    dbi_result result;
     gint status;
     gboolean success = FALSE;
 
     DEBUG( "BEGIN\n" );
-
     if ( !gnc_dbi_verify_conn (dbi_conn) )
     {
         PERR( "gnc_dbi_verify_conn() failed\n" );
         qof_backend_set_error( dbi_conn->qbe, ERR_BACKEND_SERVER_ERR );
         return FALSE;
     }
-
     do
     {
         gnc_dbi_init_error( dbi_conn );
-        result = dbi_conn_queryf( dbi_conn->conn, "BEGIN" );
+        success = gnc_dbi_transaction_begin(dbi_conn->qbe, dbi_conn->conn);
     }
     while ( dbi_conn->retry );
-
-    success = ( result != NULL );
-    status = dbi_result_free( result );
-    if ( status < 0 )
-    {
-        PERR( "Error in dbi_result_free() result\n" );
-        qof_backend_set_error( dbi_conn->qbe, ERR_BACKEND_SERVER_ERR );
-    }
-    if ( !success )
-    {
-        PERR( "BEGIN transaction failed()\n" );
-        qof_backend_set_error( dbi_conn->qbe, ERR_BACKEND_SERVER_ERR );
-    }
 
     return success;
 }
@@ -2583,54 +2588,14 @@ static gboolean
 conn_rollback_transaction( /*@ unused @*/ GncSqlConnection* conn )
 {
     GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
-    dbi_result result;
-    gint status;
-    gboolean success = FALSE;
-
-    DEBUG( "ROLLBACK\n" );
-    result = dbi_conn_queryf( dbi_conn->conn, "ROLLBACK" );
-    success = ( result != NULL );
-
-    status = dbi_result_free( result );
-    if ( status < 0 )
-    {
-        PERR( "Error in dbi_result_free() result\n" );
-        qof_backend_set_error( dbi_conn->qbe, ERR_BACKEND_SERVER_ERR );
-    }
-    if ( !success )
-    {
-        PERR( "Error in conn_rollback_transaction()\n" );
-        qof_backend_set_error( dbi_conn->qbe, ERR_BACKEND_SERVER_ERR );
-    }
-
-    return success;
+    return gnc_dbi_transaction_rollback(dbi_conn->qbe, dbi_conn->conn);
 }
 
 static gboolean
 conn_commit_transaction( /*@ unused @*/ GncSqlConnection* conn )
 {
     GncDbiSqlConnection* dbi_conn = (GncDbiSqlConnection*)conn;
-    dbi_result result;
-    gint status;
-    gboolean success = FALSE;
-
-    DEBUG( "COMMIT\n" );
-    result = dbi_conn_queryf( dbi_conn->conn, "COMMIT" );
-    success = ( result != NULL );
-
-    status = dbi_result_free( result );
-    if ( status < 0 )
-    {
-        PERR( "Error in dbi_result_free() result\n" );
-        qof_backend_set_error( dbi_conn->qbe, ERR_BACKEND_SERVER_ERR );
-    }
-    if ( !success )
-    {
-        PERR( "Error in conn_commit_transaction()\n" );
-        qof_backend_set_error( dbi_conn->qbe, ERR_BACKEND_SERVER_ERR );
-    }
-
-    return success;
+    return gnc_dbi_transaction_commit(dbi_conn->qbe, dbi_conn->conn);
 }
 
 static /*@ null @*/ gchar*
