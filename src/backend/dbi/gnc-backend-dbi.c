@@ -673,6 +673,14 @@ gnc_dbi_lock_database ( QofBackend* qbe, gboolean ignore_lock )
     dbi_conn dcon = qe->conn;
     dbi_result result;
     const gchar *dbname = dbi_conn_get_option( dcon, "dbname" );
+    gchar hostname[ GNC_HOST_NAME_MAX + 1 ];
+
+    if (!gnc_dbi_transaction_begin(qbe, dcon))
+    {
+        qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+        qof_backend_set_message( qbe, "SQL Backend lock database failed, couldn't obtain a transaction." );
+        return FALSE;
+    }
     /* Create the table if it doesn't exist */
     result = dbi_conn_get_table_list( dcon, dbname, lock_table);
     if (!( result && dbi_result_get_numrows( result ) ))
@@ -707,16 +715,8 @@ gnc_dbi_lock_database ( QofBackend* qbe, gboolean ignore_lock )
         dbi_result_free( result );
         result = NULL;
     }
-    /* Protect everything with a single transaction to prevent races */
-    if (gnc_dbi_transaction_begin(qbe, dcon))
-    {
+
         /* Check for an existing entry; delete it if ignore_lock is true, otherwise fail */
-        gchar hostname[ GNC_HOST_NAME_MAX + 1 ];
-        if (result)
-        {
-            dbi_result_free( result );
-            result = NULL;
-        }
         result = dbi_conn_queryf( dcon, "SELECT * FROM %s", lock_table );
         if ( result && dbi_result_get_numrows( result ) )
         {
@@ -765,12 +765,12 @@ gnc_dbi_lock_database ( QofBackend* qbe, gboolean ignore_lock )
             return TRUE;
         /* Uh-oh, abort! */
         gnc_dbi_transaction_rollback(qbe, dcon);
-    }
-    /* Couldn't get a transaction (probably couldn't get a lock) so fail */
+    /* Couldn't commit the transaction, database isn't locked! */
     qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-    qof_backend_set_message( qbe, "SQL Backend failed to get a transaction");
+    qof_backend_set_message( qbe, "SQL Backend failed to lock the database, it was unable to commit the SQL transaction." );
     return FALSE;
 }
+
 static void
 gnc_dbi_unlock( QofBackend *qbe )
 {
@@ -778,6 +778,7 @@ gnc_dbi_unlock( QofBackend *qbe )
     dbi_conn dcon = qe->conn;
     dbi_result result;
     const gchar *dbname = NULL;
+    gchar hostname[ GNC_HOST_NAME_MAX + 1 ];
 
     g_return_if_fail( dcon != NULL );
     g_return_if_fail( dbi_conn_error( dcon, NULL ) == 0 );
@@ -806,7 +807,6 @@ gnc_dbi_unlock( QofBackend *qbe )
     }
 
     /* Delete the entry if it's our hostname and PID */
-    gchar hostname[ GNC_HOST_NAME_MAX + 1 ];
     memset( hostname, 0, sizeof(hostname) );
     gethostname( hostname, GNC_HOST_NAME_MAX );
     result = dbi_conn_queryf( dcon, "SELECT * FROM %s WHERE Hostname = '%s' AND PID = '%d'", lock_table, hostname, (int)GETPID() );
@@ -1134,7 +1134,6 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
             gnc_sql_connection_dispose( be->sql_be.conn );
         }
         be->sql_be.conn = create_dbi_connection( GNC_DBI_PROVIDER_MYSQL, qbe, be->conn );
-    }
     be->sql_be.timespec_format = MYSQL_TIMESPEC_STR_FORMAT;
 
     /* We should now have a proper session set up.
@@ -1143,7 +1142,7 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
     translog_path = gnc_build_translog_path (basename);
     xaccLogSetBaseName (translog_path);
     PINFO ("logpath=%s", translog_path ? translog_path : "(null)");
-
+    }
 exit:
     g_free( protocol );
     g_free( host );
@@ -1486,7 +1485,6 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
             gnc_sql_connection_dispose( be->sql_be.conn );
         }
         be->sql_be.conn = create_dbi_connection( GNC_DBI_PROVIDER_PGSQL, qbe, be->conn );
-    }
     be->sql_be.timespec_format = PGSQL_TIMESPEC_STR_FORMAT;
 
     /* We should now have a proper session set up.
@@ -1495,7 +1493,7 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
     translog_path = gnc_build_translog_path (basename);
     xaccLogSetBaseName (translog_path);
     PINFO ("logpath=%s", translog_path ? translog_path : "(null)");
-
+    }
 exit:
     g_free( protocol );
     g_free( host );
