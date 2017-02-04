@@ -220,12 +220,20 @@ gnc_dbi_verify_conn( GncDbiSqlConnection* dbi_conn )
 
     return dbi_conn->conn_ok;
 }
+static unsigned int sql_savepoint = 0;
 
 static gboolean
 gnc_dbi_transaction_begin(QofBackend* qbe, dbi_conn conn)
 {
     dbi_result result;
+    if (sql_savepoint == 0)
     result = dbi_conn_queryf(conn, "BEGIN");
+    else
+    {
+        char *savepoint  = g_strdup_printf("savepoint_%d", sql_savepoint);
+        result = dbi_conn_queryf(conn, "SAVEPOINT %s", savepoint);
+        g_free(savepoint);
+    }
     if (result != NULL)
     {
         if(dbi_result_free(result) != 0)
@@ -233,6 +241,7 @@ gnc_dbi_transaction_begin(QofBackend* qbe, dbi_conn conn)
             PERR( "Error in dbi_result_free() result\n" );
             qof_backend_set_error(qbe, ERR_BACKEND_SERVER_ERR);
         }
+        ++sql_savepoint;
         return TRUE;
     }
     PERR( "BEGIN transaction failed()\n" );
@@ -244,7 +253,16 @@ static gboolean
 gnc_dbi_transaction_commit(QofBackend *qbe, dbi_conn conn)
 {
     dbi_result result;
+    g_return_val_if_fail(sql_savepoint > 0, FALSE);
+    if (sql_savepoint == 1)
     result = dbi_conn_queryf(conn, "COMMIT");
+    else
+    {
+        char *savepoint  = g_strdup_printf("savepoint_%d", sql_savepoint - 1);
+        result = dbi_conn_queryf(conn, "RELEASE SAVEPOINT %s",
+                                 savepoint);
+        g_free(savepoint);
+    }
     if (result != NULL)
     {
         if(dbi_result_free(result) != 0)
@@ -252,6 +270,7 @@ gnc_dbi_transaction_commit(QofBackend *qbe, dbi_conn conn)
             PERR( "Error in dbi_result_free() result\n" );
             qof_backend_set_error(qbe, ERR_BACKEND_SERVER_ERR);
         }
+        --sql_savepoint;
         return TRUE;
     }
     PERR( "COMMIT transaction failed()\n" );
@@ -264,7 +283,16 @@ gnc_dbi_transaction_rollback(QofBackend *qbe, dbi_conn conn)
 {
     dbi_result result;
     DEBUG( "ROLLBACK\n" );
+    g_return_val_if_fail(sql_savepoint > 0, FALSE);
+    if (sql_savepoint == 1)
     result = dbi_conn_queryf(conn, "ROLLBACK");
+    else
+    {
+        char *savepoint  = g_strdup_printf("savepoint_%d", sql_savepoint - 1);
+        result = dbi_conn_queryf(conn, "ROLLBACK TO SAVEPOINT %s",
+                                 savepoint);
+        g_free(savepoint);
+    }
     if (result != NULL)
     {
         if(dbi_result_free(result) != 0)
@@ -272,6 +300,7 @@ gnc_dbi_transaction_rollback(QofBackend *qbe, dbi_conn conn)
             PERR( "Error in dbi_result_free() result\n" );
             qof_backend_set_error(qbe, ERR_BACKEND_SERVER_ERR );
         }
+        --sql_savepoint;
         return TRUE;
     }
     PERR( "ROLLBACK transaction failed()\n" );
