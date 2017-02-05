@@ -101,13 +101,16 @@ static GSList* conn_get_table_list_sqlite3( dbi_conn conn, const gchar* dbname )
 static void append_sqlite3_col_def( GString* ddl, GncSqlColumnInfo* info );
 static GSList *conn_get_index_list_sqlite3( dbi_conn conn );
 static void conn_drop_index_sqlite3 (dbi_conn conn, const gchar *index );
+static void conn_safe_sync_sqlite3 (QofBackend* qbe, QofBook *book);
+
 static provider_functions_t provider_sqlite3 =
 {
     conn_create_table_ddl_sqlite3,
     conn_get_table_list_sqlite3,
     append_sqlite3_col_def,
     conn_get_index_list_sqlite3,
-    conn_drop_index_sqlite3
+    conn_drop_index_sqlite3,
+    conn_safe_sync_sqlite3
 };
 #define SQLITE3_TIMESPEC_STR_FORMAT "%04d%02d%02d%02d%02d%02d"
 
@@ -117,13 +120,16 @@ static /*@ null @*/ gchar* conn_create_table_ddl_mysql( GncSqlConnection* conn,
 static void append_mysql_col_def( GString* ddl, GncSqlColumnInfo* info );
 static GSList *conn_get_index_list_mysql( dbi_conn conn );
 static void conn_drop_index_mysql (dbi_conn conn, const gchar *index );
+static void conn_safe_sync_mysql (QofBackend* qbe, QofBook *book);
+
 static provider_functions_t provider_mysql =
 {
     conn_create_table_ddl_mysql,
     conn_get_table_list,
     append_mysql_col_def,
     conn_get_index_list_mysql,
-    conn_drop_index_mysql
+    conn_drop_index_mysql,
+    conn_safe_sync_mysql
 };
 #define MYSQL_TIMESPEC_STR_FORMAT "%04d%02d%02d%02d%02d%02d"
 
@@ -134,6 +140,7 @@ static GSList* conn_get_table_list_pgsql( dbi_conn conn, const gchar* dbname );
 static void append_pgsql_col_def( GString* ddl, GncSqlColumnInfo* info );
 static GSList *conn_get_index_list_pgsql( dbi_conn conn );
 static void conn_drop_index_pgsql (dbi_conn conn, const gchar *index );
+static void conn_safe_sync_pgsql (QofBackend* qbe, QofBook *book);
 
 static provider_functions_t provider_pgsql =
 {
@@ -141,14 +148,18 @@ static provider_functions_t provider_pgsql =
     conn_get_table_list_pgsql,
     append_pgsql_col_def,
     conn_get_index_list_pgsql,
-    conn_drop_index_pgsql
+    conn_drop_index_pgsql,
+    conn_safe_sync_pgsql
 };
 #define PGSQL_TIMESPEC_STR_FORMAT "%04d%02d%02d %02d%02d%02d"
 
 static gboolean gnc_dbi_lock_database( QofBackend *qbe, gboolean ignore_lock );
 static void gnc_dbi_unlock( QofBackend *qbe );
+static gboolean gnc_dbi_check_and_rollback_failed_save(QofBackend *qbe);
 static gboolean save_may_clobber_data( QofBackend* qbe );
-
+static gboolean gnc_dbi_do_safe_sync_all(QofBackend* qbe, QofBook *book);
+static gboolean conn_table_operation(GncSqlConnection *sql_conn,
+				     GSList *table_name_list, TableOpType op);
 static /*@ null @*/ gchar* create_index_ddl( GncSqlConnection* conn,
         const gchar* index_name,
         const gchar* table_name,
@@ -227,7 +238,7 @@ gnc_dbi_transaction_begin(QofBackend* qbe, dbi_conn conn)
 {
     dbi_result result;
     if (sql_savepoint == 0)
-    result = dbi_conn_queryf(conn, "BEGIN");
+        result = dbi_conn_queryf(conn, "BEGIN");
     else
     {
         char *savepoint  = g_strdup_printf("savepoint_%d", sql_savepoint);
@@ -255,7 +266,7 @@ gnc_dbi_transaction_commit(QofBackend *qbe, dbi_conn conn)
     dbi_result result;
     g_return_val_if_fail(sql_savepoint > 0, FALSE);
     if (sql_savepoint == 1)
-    result = dbi_conn_queryf(conn, "COMMIT");
+        result = dbi_conn_queryf(conn, "COMMIT");
     else
     {
         char *savepoint  = g_strdup_printf("savepoint_%d", sql_savepoint - 1);
@@ -285,7 +296,7 @@ gnc_dbi_transaction_rollback(QofBackend *qbe, dbi_conn conn)
     DEBUG( "ROLLBACK\n" );
     g_return_val_if_fail(sql_savepoint > 0, FALSE);
     if (sql_savepoint == 1)
-    result = dbi_conn_queryf(conn, "ROLLBACK");
+        result = dbi_conn_queryf(conn, "ROLLBACK");
     else
     {
         char *savepoint  = g_strdup_printf("savepoint_%d", sql_savepoint - 1);
@@ -308,6 +319,60 @@ gnc_dbi_transaction_rollback(QofBackend *qbe, dbi_conn conn)
     return FALSE;
 }
 
+static gboolean
+gnc_dbi_do_safe_sync_all(QofBackend* qbe, QofBook* book)
+{
+     GncDbiBackend *be = (GncDbiBackend*)qbe;
+     GncDbiSqlConnection *conn = (GncDbiSqlConnection*)(((GncSqlBackend*)be)->conn);
+    GSList *table_list, *index_list, *iter;
+    const gchar* dbname = NULL;
+   dbname = dbi_conn_get_option( be->conn, "dbname" );
+    table_list = conn->provider->get_table_list( conn->conn, dbname );
+    if ( !conn_table_operation( (GncSqlConnection*)conn, table_list,
+                                backup ) )
+    {
+        qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+        conn_table_operation( (GncSqlConnection*)conn, table_list,
+                              rollback );
+        LEAVE( "Failed to rename tables" );
+        gnc_table_slist_free( table_list );
+        return FALSE;
+    }
+    index_list = conn->provider->get_index_list( conn->conn );
+    for ( iter = index_list; iter != NULL; iter = g_slist_next( iter) )
+    {
+        const char *errmsg;
+        conn->provider->drop_index (conn->conn, iter->data);
+        if ( DBI_ERROR_NONE != dbi_conn_error( conn->conn, &errmsg ) )
+        {
+            qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+            gnc_table_slist_free( index_list );
+            conn_table_operation( (GncSqlConnection*)conn, table_list,
+                                  rollback );
+            gnc_table_slist_free( table_list );
+            LEAVE( "Failed to drop indexes %s", errmsg  );
+            return FALSE;
+        }
+    }
+    gnc_table_slist_free( index_list );
+
+    be->is_pristine_db = TRUE;
+    be->primary_book = book;
+
+    gnc_sql_sync_all( &be->sql_be, book );
+    if (qof_backend_check_error (qbe))
+    {
+        conn_table_operation( (GncSqlConnection*)conn, table_list,
+                              rollback );
+        gnc_dbi_transaction_rollback(qbe, be->conn);
+        LEAVE( "Failed to create new database tables" );
+        return FALSE;
+    }
+    conn_table_operation( (GncSqlConnection*)conn, table_list,
+                          drop_backup );
+    gnc_table_slist_free( table_list );
+    return TRUE;
+}
 /* ================================================================= */
 
 static void
@@ -469,14 +534,17 @@ gnc_dbi_sqlite3_session_begin( QofBackend *qbe, QofSession *session,
         msg = "Locked";
         goto exit;
     }
-
     if ( be->sql_be.conn != NULL )
     {
         gnc_sql_connection_dispose( be->sql_be.conn );
     }
     be->sql_be.conn = create_dbi_connection( GNC_DBI_PROVIDER_SQLITE, qbe, be->conn );
     be->sql_be.timespec_format = SQLITE3_TIMESPEC_STR_FORMAT;
-
+    if (! gnc_dbi_check_and_rollback_failed_save(qbe))
+    {
+        gnc_sql_connection_dispose(be->sql_be.conn);
+        goto exit;
+    }
     /* We should now have a proper session set up.
      * Let's start logging */
     xaccLogSetBaseName (filepath);
@@ -517,6 +585,24 @@ conn_drop_index_sqlite3 (dbi_conn conn, const gchar *index )
     dbi_result result = dbi_conn_queryf (conn, "DROP INDEX %s", index);
     if ( result )
         dbi_result_free( result );
+}
+
+static void
+conn_safe_sync_sqlite3 (QofBackend* qbe, QofBook *book)
+{
+    GncDbiBackend *be = (GncDbiBackend*)qbe;
+    if (!gnc_dbi_transaction_begin(qbe, be->conn))
+    {
+        qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+        qof_backend_set_message(qbe, "Backend save failed, couldn't obtain the lock.");
+    }
+    if (!gnc_dbi_do_safe_sync_all(qbe, book))
+	 gnc_dbi_transaction_rollback(qbe, be->conn);
+    else if (!gnc_dbi_transaction_commit(qbe, be->conn))
+    {
+        qof_backend_set_error(qbe, ERR_BACKEND_SERVER_ERR);
+        qof_backend_set_message(qbe, "Save failed, unable to commit the SQL transaction.");
+    }
 }
 
 static void
@@ -716,43 +802,24 @@ gnc_dbi_lock_database ( QofBackend* qbe, gboolean ignore_lock )
         result = NULL;
     }
 
-        /* Check for an existing entry; delete it if ignore_lock is true, otherwise fail */
-        result = dbi_conn_queryf( dcon, "SELECT * FROM %s", lock_table );
-        if ( result && dbi_result_get_numrows( result ) )
+    /* Check for an existing entry; delete it if ignore_lock is true, otherwise fail */
+    result = dbi_conn_queryf( dcon, "SELECT * FROM %s", lock_table );
+    if ( result && dbi_result_get_numrows( result ) )
+    {
+        dbi_result_free( result );
+        result = NULL;
+        if ( !ignore_lock )
         {
-            dbi_result_free( result );
-            result = NULL;
-            if ( !ignore_lock )
-            {
-                qof_backend_set_error( qbe, ERR_BACKEND_LOCKED );
-                /* FIXME: After enhancing the qof_backend_error mechanism, report in the dialog what is the hostname of the machine holding the lock. */
-                gnc_dbi_transaction_rollback(qbe, dcon);
-                return FALSE;
-            }
-            result = dbi_conn_queryf( dcon, "DELETE FROM %s", lock_table );
-            if ( !result)
-            {
-                qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-                qof_backend_set_message( qbe, "Failed to delete lock record" );
-                gnc_dbi_transaction_rollback(qbe, dcon);
-                return FALSE;
-            }
-            if (result)
-            {
-                dbi_result_free( result );
-                result = NULL;
-            }
+            qof_backend_set_error( qbe, ERR_BACKEND_LOCKED );
+            /* FIXME: After enhancing the qof_backend_error mechanism, report in the dialog what is the hostname of the machine holding the lock. */
+            gnc_dbi_transaction_rollback(qbe, dcon);
+            return FALSE;
         }
-        /* Add an entry and commit the transaction */
-        memset( hostname, 0, sizeof(hostname) );
-        gethostname( hostname, GNC_HOST_NAME_MAX );
-        result = dbi_conn_queryf( dcon,
-                                  "INSERT INTO %s VALUES ('%s', '%d')",
-                                  lock_table, hostname, (int)GETPID() );
+        result = dbi_conn_queryf( dcon, "DELETE FROM %s", lock_table );
         if ( !result)
         {
             qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-            qof_backend_set_message( qbe, "Failed to create lock record" );
+            qof_backend_set_message( qbe, "Failed to delete lock record" );
             gnc_dbi_transaction_rollback(qbe, dcon);
             return FALSE;
         }
@@ -761,10 +828,29 @@ gnc_dbi_lock_database ( QofBackend* qbe, gboolean ignore_lock )
             dbi_result_free( result );
             result = NULL;
         }
-        if (gnc_dbi_transaction_commit(qbe, dcon))
-            return TRUE;
-        /* Uh-oh, abort! */
+    }
+    /* Add an entry and commit the transaction */
+    memset( hostname, 0, sizeof(hostname) );
+    gethostname( hostname, GNC_HOST_NAME_MAX );
+    result = dbi_conn_queryf( dcon,
+                              "INSERT INTO %s VALUES ('%s', '%d')",
+                              lock_table, hostname, (int)GETPID() );
+    if ( !result)
+    {
+        qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+        qof_backend_set_message( qbe, "Failed to create lock record" );
         gnc_dbi_transaction_rollback(qbe, dcon);
+        return FALSE;
+    }
+    if (result)
+    {
+        dbi_result_free( result );
+        result = NULL;
+    }
+    if (gnc_dbi_transaction_commit(qbe, dcon))
+        return TRUE;
+    /* Uh-oh, abort! */
+    gnc_dbi_transaction_rollback(qbe, dcon);
     /* Couldn't commit the transaction, database isn't locked! */
     qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
     qof_backend_set_message( qbe, "SQL Backend failed to lock the database, it was unable to commit the SQL transaction." );
@@ -1134,14 +1220,18 @@ gnc_dbi_mysql_session_begin( QofBackend* qbe, QofSession *session,
             gnc_sql_connection_dispose( be->sql_be.conn );
         }
         be->sql_be.conn = create_dbi_connection( GNC_DBI_PROVIDER_MYSQL, qbe, be->conn );
-    be->sql_be.timespec_format = MYSQL_TIMESPEC_STR_FORMAT;
-
-    /* We should now have a proper session set up.
-     * Let's start logging */
-    basename = g_strjoin("_", protocol, host, username, dbname, NULL);
-    translog_path = gnc_build_translog_path (basename);
-    xaccLogSetBaseName (translog_path);
-    PINFO ("logpath=%s", translog_path ? translog_path : "(null)");
+	be->sql_be.timespec_format = MYSQL_TIMESPEC_STR_FORMAT;
+	if (! gnc_dbi_check_and_rollback_failed_save(qbe))
+	{
+	     gnc_sql_connection_dispose(be->sql_be.conn);
+	     goto exit;
+	}
+	/* We should now have a proper session set up.
+	 * Let's start logging */
+	basename = g_strjoin("_", protocol, host, username, dbname, NULL);
+	translog_path = gnc_build_translog_path (basename);
+	xaccLogSetBaseName (translog_path);
+	PINFO ("logpath=%s", translog_path ? translog_path : "(null)");
     }
 exit:
     g_free( protocol );
@@ -1216,6 +1306,18 @@ conn_drop_index_mysql (dbi_conn conn, const gchar *index )
         dbi_result_free( result );
 
     g_strfreev (index_table_split);
+}
+
+/* MySQL automatically commits after any operation that changes a
+ * database's structure, like CREATE_TABLE or DROP_TABLE. Even if one
+ * disables that the changes can't be rolled back, so there's
+ * no way to make the save atomic. If the save doesn't complete we
+ * must rely on gnc_dbi_check_and_rollback_failed_save.
+ */
+static void
+conn_safe_sync_mysql (QofBackend* qbe, QofBook *book)
+{
+    gnc_dbi_do_safe_sync_all(qbe, book);
 }
 
 static void
@@ -1480,19 +1582,23 @@ gnc_dbi_postgres_session_begin( QofBackend *qbe, QofSession *session,
     }
     if ( success )
     {
-        if ( be->sql_be.conn != NULL )
-        {
-            gnc_sql_connection_dispose( be->sql_be.conn );
-        }
-        be->sql_be.conn = create_dbi_connection( GNC_DBI_PROVIDER_PGSQL, qbe, be->conn );
-    be->sql_be.timespec_format = PGSQL_TIMESPEC_STR_FORMAT;
-
-    /* We should now have a proper session set up.
-     * Let's start logging */
-    basename = g_strjoin("_", protocol, host, username, dbname, NULL);
-    translog_path = gnc_build_translog_path (basename);
-    xaccLogSetBaseName (translog_path);
-    PINFO ("logpath=%s", translog_path ? translog_path : "(null)");
+	 if ( be->sql_be.conn != NULL )
+	 {
+	      gnc_sql_connection_dispose( be->sql_be.conn );
+	 }
+	 be->sql_be.conn = create_dbi_connection( GNC_DBI_PROVIDER_PGSQL, qbe, be->conn );
+	 be->sql_be.timespec_format = PGSQL_TIMESPEC_STR_FORMAT;
+	 if (! gnc_dbi_check_and_rollback_failed_save(qbe))
+	 {
+	      gnc_sql_connection_dispose(be->sql_be.conn);
+	      goto exit;
+	 }
+	 /* We should now have a proper session set up.
+	  * Let's start logging */
+	 basename = g_strjoin("_", protocol, host, username, dbname, NULL);
+	 translog_path = gnc_build_translog_path (basename);
+	 xaccLogSetBaseName (translog_path);
+	 PINFO ("logpath=%s", translog_path ? translog_path : "(null)");
     }
 exit:
     g_free( protocol );
@@ -1539,6 +1645,23 @@ conn_drop_index_pgsql (dbi_conn conn, const gchar *index )
         dbi_result_free( result );
 }
 
+static void
+conn_safe_sync_pgsql (QofBackend* qbe, QofBook *book)
+{
+    GncDbiBackend *be = (GncDbiBackend*)qbe;
+    if (!gnc_dbi_transaction_begin(qbe, be->conn))
+    {
+        qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
+        qof_backend_set_message(qbe, "Backend save failed, couldn't obtain the lock.");
+    }
+    if (!gnc_dbi_do_safe_sync_all(qbe, book))
+	 gnc_dbi_transaction_rollback(qbe, be->conn);
+    else if (!gnc_dbi_transaction_commit(qbe, be->conn))
+    {
+        qof_backend_set_error(qbe, ERR_BACKEND_SERVER_ERR);
+        qof_backend_set_message(qbe, "Save failed, unable to commit the SQL transaction.");
+    }
+}
 
 /* ================================================================= */
 
@@ -1791,59 +1914,63 @@ gnc_dbi_safe_sync_all( QofBackend *qbe, QofBook *book )
 {
     GncDbiBackend *be = (GncDbiBackend*)qbe;
     GncDbiSqlConnection *conn = (GncDbiSqlConnection*)(((GncSqlBackend*)be)->conn);
-    GSList *table_list, *index_list, *iter;
-    const gchar* dbname = NULL;
-
     g_return_if_fail( be != NULL );
     g_return_if_fail( book != NULL );
-
+    conn->provider->safe_sync(qbe, book);
     ENTER( "book=%p, primary=%p", book, be->primary_book );
-    dbname = dbi_conn_get_option( be->conn, "dbname" );
-    table_list = conn->provider->get_table_list( conn->conn, dbname );
-    if ( !conn_table_operation( (GncSqlConnection*)conn, table_list,
-                                backup ) )
-    {
-        qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-        conn_table_operation( (GncSqlConnection*)conn, table_list,
-                              rollback );
-        LEAVE( "Failed to rename tables" );
-        gnc_table_slist_free( table_list );
-        return;
-    }
-    index_list = conn->provider->get_index_list( conn->conn );
-    for ( iter = index_list; iter != NULL; iter = g_slist_next( iter) )
-    {
-        const char *errmsg;
-        conn->provider->drop_index (conn->conn, iter->data);
-        if ( DBI_ERROR_NONE != dbi_conn_error( conn->conn, &errmsg ) )
-        {
-            qof_backend_set_error( qbe, ERR_BACKEND_SERVER_ERR );
-            gnc_table_slist_free( index_list );
-            conn_table_operation( (GncSqlConnection*)conn, table_list,
-                                  rollback );
-            gnc_table_slist_free( table_list );
-            LEAVE( "Failed to drop indexes %s", errmsg  );
-            return;
-        }
-    }
-    gnc_table_slist_free( index_list );
-
-    be->is_pristine_db = TRUE;
-    be->primary_book = book;
-
-    gnc_sql_sync_all( &be->sql_be, book );
-    if (qof_backend_check_error (qbe))
-    {
-        conn_table_operation( (GncSqlConnection*)conn, table_list,
-                              rollback );
-        LEAVE( "Failed to create new database tables" );
-        return;
-    }
-    conn_table_operation( (GncSqlConnection*)conn, table_list,
-                          drop_backup );
-    gnc_table_slist_free( table_list );
     LEAVE("book=%p", book);
 }
+
+static int
+find_backup_cb(gconstpointer data, gconstpointer user)
+{
+    char* table_name = (char*)data;
+    char* suffix = (char*)user;
+    if (g_str_has_suffix(table_name, suffix))
+        return 0;
+    return 1;
+}
+
+static gboolean
+gnc_dbi_check_and_rollback_failed_save(QofBackend *qbe)
+{
+    GncDbiBackend *be = (GncDbiBackend*)qbe;
+    GncSqlConnection *conn = (GncSqlConnection*)(((GncSqlBackend*)be)->conn);
+    dbi_result result;
+    GSList *table_list = NULL;
+    const gchar* dbname = NULL;
+    static const char* suffix = "%back";
+    g_return_val_if_fail(be != NULL, FALSE);
+    g_return_val_if_fail(conn != NULL, FALSE);
+
+    dbname = dbi_conn_get_option(be->conn, "dbname");
+    result = dbi_conn_get_table_list(be->conn, dbname, suffix);
+    while (dbi_result_next_row(result) != 0)
+    {
+        const char *table_name = dbi_result_get_string_idx(result, 1);
+        table_list = g_slist_prepend(table_list, g_strdup(table_name));
+    }
+    if (result)
+        dbi_result_free(result);
+    if (table_list == NULL)
+        return TRUE;
+    if (!gnc_dbi_transaction_begin(qbe, be->conn))
+    {
+        qof_backend_set_message(qbe, "Backup tables found from a failed safe sync, unable to lock the database to restore them.");
+        g_slist_free_full(table_list, g_free);
+        return FALSE;
+    }
+    conn_table_operation((GncSqlConnection*)conn, table_list, rollback);
+    g_slist_free_full(table_list, g_free);
+    if (!gnc_dbi_transaction_commit(qbe, be->conn))
+    {
+        qof_backend_set_message(qbe, "Backup tables found from a failed safe sync, unable to commit the restoration transaction.");
+        gnc_dbi_transaction_rollback(qbe, be->conn);
+        return FALSE;
+    }
+    return TRUE;
+}
+
 /* ================================================================= */
 static void
 gnc_dbi_begin_edit( QofBackend *qbe, QofInstance *inst )
