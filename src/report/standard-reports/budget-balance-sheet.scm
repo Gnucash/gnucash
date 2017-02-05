@@ -522,7 +522,7 @@
             (get-assoc-account-balances-budget
               budget
               liability-accounts
-              get-budget-account-budget-balance))
+              get-budget-account-budget-balance-negated))
 
           (set! liability-get-balance-fn
             (lambda (account start-date end-date)
@@ -566,7 +566,7 @@
 
           ;; Budgeted liabilities are liability repayments (negative liabilities).
           (set! liability-repayments
-            (get-assoc-account-balances-total-negated liability-account-budget-balances))
+            (gnc:get-assoc-account-balances-total liability-account-budget-balances))
 
           ;; New liabilities are then negated liability repayments.
           (set! new-liabilities
