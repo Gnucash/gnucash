@@ -66,7 +66,7 @@ public:
      *
      * Unfortunately specifying a default for denom causes ambiguity errors with
      * the other single-argument constructors on older versions of gcc, so one
-     * must always specify both argumets.
+     * must always specify both arguments.
      *
      * \param num The Numerator
      * \param denom The Denominator
@@ -145,7 +145,7 @@ public:
      */
     operator gnc_numeric() const noexcept;
     /**
-     * gnc_numeric conversion. Use static_cast<double>(foo)
+     * double conversion. Use static_cast<double>(foo)
      */
     operator double() const noexcept;
 
