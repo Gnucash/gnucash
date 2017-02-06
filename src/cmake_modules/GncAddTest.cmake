@@ -116,11 +116,15 @@ FUNCTION(GNC_GTEST_CONFIGURE)
   MESSAGE(STATUS "Checking for GMOCK")
   FIND_PATH(GMOCK_INCLUDE_DIR gmock/gmock.h
     PATHS ${GMOCK_ROOT}/include /usr/include)
-  FIND_PATH(GMOCK_SRC_DIR src/gmock-all.cc
-    PATHS ${GMOCK_ROOT} /usr/src/gmock)
+  FIND_PATH(GMOCK_SRC_DIR gmock-all.cc
+    PATHS ${GMOCK_ROOT}/src /usr/src/gmock/src)
+  if (NOT GMOC_SRC_DIR)
+    FIND_PATH(GMOCK_SRC_DIR gmock-all.cc
+      PATHS ${GMOCK_ROOT} /usr/src/gmock)
+  endif()
   if (GMOCK_INCLUDE_DIR AND GMOCK_SRC_DIR)
     SET(GMOCK_FOUND YES PARENT_SCOPE)
-    SET(GMOCK_SRC "${GMOCK_SRC_DIR}/src/gmock_main.cc" PARENT_SCOPE)
+    SET(GMOCK_SRC "${GMOCK_SRC_DIR}/gmock_main.cc" PARENT_SCOPE)
     SET(GMOCK_LIB "${CMAKE_BINARY_DIR}/src/test-core/libgmock.a" PARENT_SCOPE)
   ELSE()
     MESSAGE(FATAL_ERROR "GMOCK not found. Please install it or set GMOCK_ROOT")
