@@ -99,15 +99,13 @@ public:
     void preview_update_encoding (const char* encoding);
     void preview_update_date_format ();
     void preview_update_currency_format ();
-    void preview_update_col_type (GtkCellRenderer* renderer,
-            GtkTreeIter* new_text_iter);
-    void preview_update_fw_columns (GtkWidget* button, GdkEventButton* event);
+    void preview_update_col_type (GtkComboBox* cbox);
+    bool preview_update_fw_columns (GtkTreeView* treeview, GdkEventButton* event);
 
     void preview_populate_settings_combo();
     void preview_handle_save_del_sensitivity (GtkComboBox* combo);
-    void preview_resize_treeview();
     void preview_row_sel_update ();
-    void preview_split_column (int col, int dx);
+    void preview_split_column (int col, int offset);
     void preview_refresh_table ();
     void preview_refresh ();
     void preview_validate_settings ();
@@ -122,7 +120,7 @@ public:
             gpointer userdata);
 private:
     /* member functions to manage the context menu for fixed with columns */
-    uint get_new_col_rel_pos (int col, int dx);
+    uint get_new_col_rel_pos (GtkTreeViewColumn *tcol, int dx);
     void fixed_context_menu (GdkEventButton *event, int col, int dx);
 
     GtkAssistant    *csv_imp_asst;
@@ -151,13 +149,12 @@ private:
     GtkComboBoxText *date_format_combo;             /**< The Combo Text widget for selecting the date format */
     GtkComboBoxText *currency_format_combo;         /**< The Combo Text widget for selecting the currency format */
     GtkTreeView     *treeview;                      /**< The treeview containing the data */
-    GtkTreeView     *ctreeview;                     /**< The treeview containing the column types */
     GtkLabel        *instructions_label;            /**< The instructions label */
     GtkImage        *instructions_image;            /**< The instructions image */
     bool             encoding_selected_called;      /**< Before encoding_selected is first called, this is false.
                                                        * error lines, instead of all the file data. */
-    int              fixed_context_col;             /**< The number of the column whose the user has clicked */
-    int              fixed_context_dx;              /**< The horizontal coordinate of the pixel in the header of the column
+    int              fixed_context_col;             /**< The number of the column the user has clicked */
+    int              fixed_context_offset;          /**< The offset (in characters) in the column
                                                        * the user has clicked */
 
     GtkWidget            *account_match_page;       /**< Assistant account matcher page widget */
@@ -350,22 +347,16 @@ static void csv_tximp_preview_currency_fmt_sel_cb (GtkComboBox* format_selector,
     info->preview_update_currency_format();
 }
 
-void csv_tximp_preview_treeview_resized_cb (GtkWidget* widget, GtkAllocation* allocation, CsvImpTransAssist* info)
+void csv_tximp_preview_col_type_changed_cb (GtkComboBox* cbox, CsvImpTransAssist* info)
 {
-    info->preview_resize_treeview();
+    info->preview_update_col_type (cbox);
 }
 
-void csv_tximp_preview_col_type_changed_cb (GtkCellRenderer* renderer, gchar* path,
-                                GtkTreeIter* new_text_iter, CsvImpTransAssist* info)
-{
-    info->preview_update_col_type (renderer, new_text_iter);
-}
-
-void
-csv_tximp_preview_header_clicked_cb (GtkWidget* button, GdkEventButton* event,
+gboolean
+csv_tximp_preview_treeview_clicked_cb (GtkTreeView* treeview, GdkEventButton* event,
                                         CsvImpTransAssist* info)
 {
-    info->preview_update_fw_columns(button, event);
+    return info->preview_update_fw_columns(treeview, event);
 }
 
 
@@ -554,9 +545,7 @@ CsvImpTransAssist::CsvImpTransAssist ()
 
         /* Load the data treeview and connect it to its resizing event handler. */
         treeview = (GtkTreeView*)GTK_WIDGET(gtk_builder_get_object (builder, "treeview"));
-
-        /* Load the column type treeview. */
-        ctreeview = (GtkTreeView*)GTK_WIDGET(gtk_builder_get_object (builder, "ctreeview"));
+        gtk_tree_view_set_headers_clickable (treeview, true);
 
         /* This is true only after encoding_selected is called, so we must
          * set it initially to false. */
@@ -961,9 +950,19 @@ void CsvImpTransAssist::preview_update_file_format ()
     try
     {
         if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(csv_button)))
+        {
             tx_imp->file_format (GncImpFileFormat::CSV);
+            g_signal_handlers_disconnect_by_func(G_OBJECT(treeview),
+                    (gpointer)csv_tximp_preview_treeview_clicked_cb, (gpointer)this);
+        }
         else
+        {
             tx_imp->file_format (GncImpFileFormat::FIXED_WIDTH);
+            /* Enable context menu for adding/removing columns. */
+            g_signal_connect (G_OBJECT(treeview), "button_press_event",
+                    G_CALLBACK(csv_tximp_preview_treeview_clicked_cb), (gpointer)this);
+
+        }
 
         tx_imp->tokenize (false);
         preview_refresh_table ();
@@ -1040,33 +1039,21 @@ CsvImpTransAssist::preview_update_currency_format ()
     preview_refresh_table ();
 }
 
-
-/** Event handler for the data treeview being resized. When the data
- * treeview is resized, the column types treeview's columns are also resized to
- * match.
- */
-void
-CsvImpTransAssist::preview_resize_treeview ()
+gboolean
+csv_imp_preview_queue_rebuild_table (CsvImpTransAssist *assist)
 {
-    /* Go through each column except for the last. (We don't want to set
-     * the width of the last column because the user won't be able to
-     * shrink the dialog back if it's expanded.) */
-    for (uint i = 0; i < tx_imp->column_types().size() - 1; i++)
-    {
-        /* Get the width. */
-        auto col_width = gtk_tree_view_column_get_width (gtk_tree_view_get_column (treeview, i));
-        /* Set the minimum width for a column so that drop down selector can be seen. */
-        if (col_width < MIN_COL_WIDTH)
-            col_width = MIN_COL_WIDTH;
-        auto pcol = gtk_tree_view_get_column (treeview, i);
-        gtk_tree_view_column_set_min_width (pcol, col_width);
-        /* Set ccol's width the same. */
-        auto ccol = gtk_tree_view_get_column (ctreeview, i);
-        gtk_tree_view_column_set_min_width (ccol, col_width);
-        gtk_tree_view_column_set_max_width (ccol, col_width);
-    }
+    assist->preview_refresh_table ();
+    return false;
 }
 
+/* Internally used enum to access the columns in the comboboxes
+ * the user can click to set a type for each column of the data
+ */
+enum PreviewHeaderComboCols { COL_TYPE_NAME, COL_TYPE_ID };
+/* Internally used enum to access the first two (fixed) columns
+ * in the model used to display the prased data.
+ */
+enum PreviewDataTableCols { PREV_COL_COLOR, PREV_COL_ERROR, PREV_N_FIXED_COLS };
 
 /** Event handler for the user selecting a new column type. When the
  * user selects a new column type, that column's text must be changed
@@ -1077,20 +1064,23 @@ CsvImpTransAssist::preview_resize_treeview ()
  * @param new_text The text the user selected
  * @param info The display of the data being imported
  */
-void CsvImpTransAssist::preview_update_col_type (GtkCellRenderer* renderer,
-                                GtkTreeIter* new_text_iter)
+void CsvImpTransAssist::preview_update_col_type (GtkComboBox* cbox)
 {
     /* Get the new text */
-    auto col_num = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT(renderer), "col-num"));
-    GtkTreeModel* model;
-    g_object_get (renderer, "model", &model, nullptr);
+    GtkTreeIter iter;
+    auto model = gtk_combo_box_get_model (cbox);
+    gtk_combo_box_get_active_iter (cbox, &iter);
     auto new_col_type = GncTransPropType::NONE;
-    gtk_tree_model_get (model, new_text_iter,
-            1, &new_col_type, // Invisible column in the combobox' model containing the column type
-            -1);
+    gtk_tree_model_get (model, &iter, COL_TYPE_ID, &new_col_type, -1);
 
+    auto col_num = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT(cbox), "col-num"));
     tx_imp->set_column_type (col_num, new_col_type);
-    preview_refresh_table ();
+
+    /* Delay rebuilding our data table to avoid critical warnings due to
+     * pending events still acting on them after this event is processed.
+     */
+    g_idle_add ((GSourceFunc)csv_imp_preview_queue_rebuild_table, this);
+
 }
 
 /*======================================================================*/
@@ -1156,9 +1146,9 @@ static GnumericPopupMenuElement const popup_elements[] =
     { nullptr, nullptr, 0, 0, 0 },
 };
 
-uint CsvImpTransAssist::get_new_col_rel_pos (int col, int dx)
+uint CsvImpTransAssist::get_new_col_rel_pos (GtkTreeViewColumn *tcol, int dx)
 {
-    auto renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT(gtk_tree_view_get_column (treeview, col)));
+    auto renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT(tcol));
     auto cell = GTK_CELL_RENDERER(renderers->data);
     g_list_free (renderers);
     PangoFontDescription *font_desc;
@@ -1181,26 +1171,24 @@ fixed_context_menu_handler (GnumericPopupMenuElement const *element,
         gpointer userdata)
 {
     auto info = (CsvImpTransAssist*)userdata;
-    auto col = info->fixed_context_col;
-    auto rel_pos = info->get_new_col_rel_pos (col, info->fixed_context_dx);
     auto fwtok = dynamic_cast<GncFwTokenizer*>(info->tx_imp->m_tokenizer.get());
 
     switch (element->index)
     {
     case CONTEXT_STF_IMPORT_MERGE_LEFT:
-        fwtok->col_delete (col - 1);
+        fwtok->col_delete (info->fixed_context_col - 1);
         break;
     case CONTEXT_STF_IMPORT_MERGE_RIGHT:
-        fwtok->col_delete (col);
+        fwtok->col_delete (info->fixed_context_col);
         break;
     case CONTEXT_STF_IMPORT_SPLIT:
-        fwtok->col_split (col, rel_pos);
+        fwtok->col_split (info->fixed_context_col, info->fixed_context_offset);
         break;
     case CONTEXT_STF_IMPORT_WIDEN:
-        fwtok->col_widen (col);
+        fwtok->col_widen (info->fixed_context_col);
         break;
     case CONTEXT_STF_IMPORT_NARROW:
-        fwtok->col_narrow (col);
+        fwtok->col_narrow (info->fixed_context_col);
         break;
     default:
         ; /* Nothing */
@@ -1221,30 +1209,23 @@ fixed_context_menu_handler (GnumericPopupMenuElement const *element,
 
 void
 CsvImpTransAssist::fixed_context_menu (GdkEventButton *event,
-                    int col, int dx)
+                    int col, int offset)
 {
     auto fwtok = dynamic_cast<GncFwTokenizer*>(tx_imp->m_tokenizer.get());
     fixed_context_col = col;
-    fixed_context_dx = dx;
-    uint rel_pos = get_new_col_rel_pos (col, dx);
+    fixed_context_offset = offset;
 
     int sensitivity_filter = 0;
     if (!fwtok->col_can_delete (col - 1))
         sensitivity_filter |= (1 << CONTEXT_STF_IMPORT_MERGE_LEFT);
     if (!fwtok->col_can_delete (col))
         sensitivity_filter |= (1 << CONTEXT_STF_IMPORT_MERGE_RIGHT);
-    if (!fwtok->col_can_split (col, rel_pos))
+    if (!fwtok->col_can_split (col, offset))
         sensitivity_filter |= (1 << CONTEXT_STF_IMPORT_SPLIT);
     if (!fwtok->col_can_widen (col))
         sensitivity_filter |= (1 << CONTEXT_STF_IMPORT_WIDEN);
     if (!fwtok->col_can_narrow (col))
         sensitivity_filter |= (1 << CONTEXT_STF_IMPORT_NARROW);
-
-    if (col >= 0)
-    {
-        auto column = gtk_tree_view_get_column (treeview, col);
-        gtk_widget_grab_focus (gtk_tree_view_column_get_widget(column));
-    }
 
     gnumeric_create_popup_menu (popup_elements, &fixed_context_menu_handler,
                                 this, 0,
@@ -1253,13 +1234,11 @@ CsvImpTransAssist::fixed_context_menu (GdkEventButton *event,
 
 /*===================== End of Gnumeric Code ===========================*/
 /*======================================================================*/
-
 void
-CsvImpTransAssist::preview_split_column (int col, int dx)
+CsvImpTransAssist::preview_split_column (int col, int offset)
 {
-    auto rel_pos = get_new_col_rel_pos (col, dx);
     auto fwtok = dynamic_cast<GncFwTokenizer*>(tx_imp->m_tokenizer.get());
-    fwtok->col_split (col, rel_pos);
+    fwtok->col_split (col, offset);
     try
     {
         tx_imp->tokenize (false);
@@ -1269,7 +1248,7 @@ CsvImpTransAssist::preview_split_column (int col, int dx)
         gnc_error_dialog (nullptr, "%s", e.what());
         return;
     }
-    preview_refresh_table ();
+    preview_refresh_table();
 }
 
 
@@ -1279,27 +1258,49 @@ CsvImpTransAssist::preview_split_column (int col, int dx)
  * @param button The button at the top of a column of the treeview
  * @param event The event that happened (where the user clicked)
  * @param info The data being configured
+ * @returns true if further processing of this even should stop, false
+ *               if other event handlers can have a go at this as well
  */
-void
-CsvImpTransAssist::preview_update_fw_columns (GtkWidget* button, GdkEventButton* event)
+bool
+CsvImpTransAssist::preview_update_fw_columns (GtkTreeView* treeview, GdkEventButton* event)
 {
+    /* Nothing to do if this was not triggered on our treeview body */
+    if (event->window != gtk_tree_view_get_bin_window (treeview))
+        return false;
+
     /* Find the column that was clicked. */
-    auto col = GPOINTER_TO_UINT(g_object_get_data (G_OBJECT(button), "col-num"));
+    GtkTreeViewColumn *tcol = nullptr;
+    int cell_x = 0;
+    auto success = gtk_tree_view_get_path_at_pos (treeview,
+            (int)event->x, (int)event->y,
+            nullptr, &tcol, &cell_x, nullptr);
+    if (!success)
+        return false;
 
-    /* Don't let the user affect the last column if it has error messages. */
-    if (col == tx_imp->column_types().size())
-        return;
+    /* Stop if no column found in this treeview (-1) or
+     * if column is the error messages column (0) */
+    auto tcol_list = gtk_tree_view_get_columns(treeview);
+    auto tcol_num = g_list_index (tcol_list, tcol);
+    g_list_free (tcol_list);
+    if (tcol_num <= 0)
+        return false;
 
-    /*  calculate offset to compensate for the button indentation. */
-    GtkAllocation alloc;
-    gtk_widget_get_allocation (gtk_bin_get_child (GTK_BIN(button)), &alloc);
-    auto offset = alloc.x - alloc.x;
+    /* Data columns in the treeview are offset by one
+     * because the first column is the error column
+     */
+    auto dcol = tcol_num - 1;
+    auto offset = get_new_col_rel_pos (tcol, cell_x);
     if (event->type == GDK_2BUTTON_PRESS && event->button == 1)
+    {
         /* Double clicks can split columns. */
-        preview_split_column (col, (int)event->x - offset);
+        preview_split_column (dcol, offset);
+        return true; // Stop processing here !
+    }
     else if (event->type == GDK_BUTTON_PRESS && event->button == 3)
         /* Right clicking brings up a context menu. */
-        fixed_context_menu (event, col, (int)event->x - offset);
+        fixed_context_menu (event, dcol, offset);
+
+    return false;
 }
 
 
@@ -1322,11 +1323,43 @@ void CsvImpTransAssist::preview_row_sel_update ()
 
         bool valid = gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(store), &iter, nullptr, i);
         if (valid)
-            gtk_list_store_set (store, &iter, 0, color, -1);
+            gtk_list_store_set (store, &iter, PREV_COL_COLOR, color, -1);
         i++;
     }
 }
 
+/* Helper function that creates a combo_box using a model
+ * with valid column types and selects the given column type
+ */
+static GtkWidget*
+cbox_factory (GtkTreeModel* model, GncTransPropType col_type)
+{
+    GtkTreeIter iter;
+    auto cbox = gtk_combo_box_new_with_model(model);
+
+    /* Set up a renderer for this combobox. */
+    auto renderer = gtk_cell_renderer_text_new();
+    gtk_cell_layout_pack_start (GTK_CELL_LAYOUT(cbox),
+            renderer, true);
+    gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT(cbox),
+            renderer, "text", COL_TYPE_NAME);
+
+    auto valid = gtk_tree_model_get_iter_first (model, &iter);
+    while (valid)
+    {
+        gint stored_col_type;
+        gtk_tree_model_get (model, &iter,
+                COL_TYPE_ID, &stored_col_type, -1);
+        if (stored_col_type == static_cast<int>(col_type))
+            break;
+        valid = gtk_tree_model_iter_next(model, &iter);
+    }
+    if (valid)
+        gtk_combo_box_set_active_iter (GTK_COMBO_BOX(cbox), &iter);
+
+    gtk_widget_show (cbox);
+    return cbox;
+}
 
 /* Loads the preview's data into its data treeview.
  *
@@ -1337,54 +1370,17 @@ void CsvImpTransAssist::preview_refresh_table ()
     preview_validate_settings ();
 
     /* ncols is the number of columns in the file data. */
-    auto column_types = tx_imp->column_types();
-    auto ncols = column_types.size();
-
-    // Set up the header liststore
-
-    /* ctstore will be the liststore for the header row, which displays the user's
-     * column type selection
-     * its related treeview is info->ctreeview
-     * ctstore is arranged so that every two
-     * columns form a pair of
-     * - the column type as a user visible (translated) string
-     * - the internal type for this column
-     * So store looks like:
-     * col_type_str 0, col_type, col_type_str 1, col_type 1, ..., col_type_str ncols, col_type ncols.
-     * And then a final column is added for the Error column (which doesn't require a col_type) */
-    auto headertypes = g_new (GType, 2 * ncols + 1);
-    for (guint i = 0; i < 2 * ncols; i += 2)
-    {
-        headertypes[i] = G_TYPE_STRING;
-        headertypes[i+1] = G_TYPE_INT;
-    }
-    headertypes[2 * ncols] = G_TYPE_STRING;
-    auto ctstore = gtk_list_store_newv (2 * ncols + 1, headertypes);
-    g_free (headertypes);
-
-    /* Set all the column types to what's in the parse data. */
-    GtkTreeIter iter;
-    gtk_list_store_append (ctstore, &iter);
-    for (guint i = 0; i < ncols; i++)
-    {
-        gtk_list_store_set (ctstore, &iter,
-                2 * i, _(gnc_csv_col_type_strs[column_types[i]]),
-                2 * i + 1, static_cast<int>(column_types[i]),
-                -1);
-    }
-    gtk_list_store_set (ctstore, &iter, 2 * ncols, _("Errors"), -1);
-    gtk_tree_view_set_model (ctreeview, GTK_TREE_MODEL(ctstore));
-
+    auto ncols = PREV_N_FIXED_COLS + tx_imp->column_types().size();
 
     // Set up file data liststore
 
     /* store is a liststore to hold the data from the file being imported.
        it contains only strings. */
-    auto bodytypes = g_new (GType, ncols + 2);
-    for (guint i = 0; i <  ncols + 2; i++)
-        bodytypes[i] = G_TYPE_STRING;
-    auto store = gtk_list_store_newv (ncols + 2, bodytypes);
-    g_free (bodytypes);
+    auto model_col_types = g_new (GType, ncols);
+    for (guint i = 0; i <  ncols; i++)
+        model_col_types[i] = G_TYPE_STRING;
+    auto store = gtk_list_store_newv (ncols, model_col_types);
+    g_free (model_col_types);
 
     /* Fill the data liststore with data from the file. */
     for (auto parse_line : tx_imp->m_parsed_lines)
@@ -1393,32 +1389,25 @@ void CsvImpTransAssist::preview_refresh_table ()
         gtk_list_store_append (store, &iter);
 
         /* Row Color column */
-        gtk_list_store_set (store, &iter, 0, nullptr, -1);
+        gtk_list_store_set (store, &iter, PREV_COL_COLOR, nullptr, -1);
+
+        /* Add the optional error messages to the store */
+        auto err_msg = std::string();
+        if (!std::get<4>(parse_line))
+            err_msg = std::get<1>(parse_line);
+        gtk_list_store_set (store, &iter, PREV_COL_ERROR, err_msg.c_str(), -1);
 
         for (auto cell_str_it = std::get<0>(parse_line).cbegin(); cell_str_it != std::get<0>(parse_line).cend(); cell_str_it++)
         {
             /* Set the value of the proper column in the list store. */
-            uint pos = cell_str_it - std::get<0>(parse_line).cbegin() + 1;
+            uint pos = PREV_N_FIXED_COLS + cell_str_it - std::get<0>(parse_line).cbegin();
             gtk_list_store_set (store, &iter, pos, cell_str_it->c_str(), -1);
         }
-        /* Add the optional error messages in the last column of the store */
-        auto err_msg = std::string();
-        if (!std::get<4>(parse_line))
-            err_msg = std::get<1>(parse_line);
-        gtk_list_store_set (store, &iter, ncols + 1, err_msg.c_str(), -1);
     }
     gtk_tree_view_set_model (treeview, GTK_TREE_MODEL(store));
 
-    // Set up the two header and file data treeviews using the liststores created above
-
-    /* Clear any columns from a previous invocation */
-    auto column = gtk_tree_view_get_column (ctreeview, 0);
-    while (column)
-    {
-        gtk_tree_view_remove_column (ctreeview, column);
-        column = gtk_tree_view_get_column (ctreeview, 0);
-    }
-    column = gtk_tree_view_get_column (treeview, 0);
+    // Set up the file data treeview using the created model above
+    auto column = gtk_tree_view_get_column (treeview, 0);
     while (column)
     {
         gtk_tree_view_remove_column (treeview, column);
@@ -1437,30 +1426,15 @@ void CsvImpTransAssist::preview_refresh_table ()
         {
             GtkTreeIter iter;
             gtk_list_store_append (combostore, &iter);
-            gtk_list_store_set (combostore, &iter, 0, _(col_type.second),
-                                                   1, static_cast<int>(col_type.first),
-                                                   -1);
+            gtk_list_store_set (combostore, &iter,
+                    COL_TYPE_NAME, _(col_type.second),
+                    COL_TYPE_ID, static_cast<int>(col_type.first), -1);
         }
     }
 
-    /* Insert columns into the data and column type treeviews. */
-    for (uint i = 0; i < ncols ; i++)
+    /* Insert columns into the data treeview. */
+    for (uint i = 0; i < tx_imp->column_types().size() ; i++)
     {
-        /* The header cells are combobox entries. They all use the same
-         * common model for the dropdown list while their text value
-         * comes from the header liststore (ctstore). */
-        auto crenderer = gtk_cell_renderer_combo_new();
-        /* Set the properties for the dropdown list */
-        g_object_set (G_OBJECT(crenderer), "model", combostore, "text-column", 0,
-                     "editable", TRUE, "has-entry", FALSE, nullptr);
-        g_object_set_data (G_OBJECT(crenderer),
-                           "col-num", GUINT_TO_POINTER(i));
-        g_signal_connect (G_OBJECT(crenderer), "changed",
-                         G_CALLBACK(csv_tximp_preview_col_type_changed_cb), (gpointer)this);
-        /* Insert the column */
-        gtk_tree_view_insert_column_with_attributes (ctreeview,
-                -1, "", crenderer, "text", 2 * i, nullptr);
-
         /* The file data treeview cells are simple text cells. */
         auto renderer = gtk_cell_renderer_text_new();
         /* We want a monospace font for the data in case of fixed-width data. */
@@ -1468,46 +1442,35 @@ void CsvImpTransAssist::preview_refresh_table ()
 
         /* Add a single column for the treeview. */
         auto col = gtk_tree_view_column_new_with_attributes ("", renderer, "background", 0,
-                                                             "text", i + 1, nullptr);
-        gtk_tree_view_insert_column (treeview, col, -1);
+                "text", PREV_N_FIXED_COLS + i, nullptr);
+        gtk_tree_view_append_column (treeview, col);
         /* Enable resizing of the columns. */
-        gtk_tree_view_column_set_resizable (col, TRUE);
+        gtk_tree_view_column_set_resizable (col, true);
+        gtk_tree_view_column_set_clickable (col, true);
 
-        /* We need to allow clicking on the file data's column headers for
-         * fixed-width column splitting and merging. */
-        g_object_set (G_OBJECT(col), "clickable", TRUE, nullptr);
-        auto button = gtk_tree_view_column_get_widget(col);
-        g_signal_connect (G_OBJECT(button), "button_press_event",
-                         G_CALLBACK(csv_tximp_preview_header_clicked_cb), (gpointer)this);
-        /* Store the column number in the button to know which one was clicked later on */
-        g_object_set_data (G_OBJECT(button), "col-num",GINT_TO_POINTER(i));
+        /* Add a combobox to select column types as column header. Each uses the same
+         * common model for the dropdown list. The selected value is taken
+         * from the column_types vector. */
+        auto cbox = cbox_factory (GTK_TREE_MODEL(combostore), tx_imp->column_types()[i]);
+        g_object_set_data (G_OBJECT(cbox), "col-num", GUINT_TO_POINTER(i));
+        g_signal_connect (G_OBJECT(cbox), "changed",
+                         G_CALLBACK(csv_tximp_preview_col_type_changed_cb), (gpointer)this);
+        gtk_tree_view_column_set_widget (col, cbox);
     }
 
     /* Add a column for the error messages */
-    auto crenderer = gtk_cell_renderer_text_new();
-    gtk_tree_view_insert_column_with_attributes (ctreeview,
-            0, "", crenderer, "text", 2 * ncols, nullptr);
-
     auto renderer = gtk_cell_renderer_text_new();
-    auto col = gtk_tree_view_column_new_with_attributes ("", renderer, "background", 0,
-                                                         "text", ncols + 1, nullptr);
+    auto col = gtk_tree_view_column_new_with_attributes (_("Errors"), renderer,
+            "background", PREV_COL_COLOR, "text", PREV_COL_ERROR, nullptr);
     gtk_tree_view_insert_column (treeview, col, 0);
-    /* Enable resizing of the columns. */
-    gtk_tree_view_column_set_resizable (col, TRUE);
-
-    /* Select the header row */
-    gtk_tree_model_get_iter_first (GTK_TREE_MODEL(ctstore), &iter);
-    auto selection = gtk_tree_view_get_selection (ctreeview);
-    gtk_tree_selection_select_iter (selection, &iter);
+    gtk_tree_view_column_set_resizable (col, true);
 
     /* Release our reference for the stores to allow proper memory management. */
     g_object_unref (store);
-    g_object_unref (ctstore);
     g_object_unref (combostore);
 
     /* Make the things actually appear. */
     gtk_widget_show_all (GTK_WIDGET(treeview));
-    gtk_widget_show_all (GTK_WIDGET(ctreeview));
 
     /* Update the row selection highlight */
     preview_row_sel_update ();
@@ -1783,9 +1746,6 @@ CsvImpTransAssist::assist_file_page_prepare ()
 void
 CsvImpTransAssist::assist_preview_page_prepare ()
 {
-    g_signal_connect (G_OBJECT(treeview), "size-allocate",
-                     G_CALLBACK(csv_tximp_preview_treeview_resized_cb), (gpointer)this);
-
     tx_imp->req_mapped_accts (false);
 
     /* Disable the Forward Assistant Button */
