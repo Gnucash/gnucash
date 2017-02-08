@@ -104,7 +104,6 @@ public:
 
     void preview_populate_settings_combo();
     void preview_handle_save_del_sensitivity (GtkComboBox* combo);
-    void preview_row_sel_update ();
     void preview_split_column (int col, int offset);
     void preview_refresh_table ();
     void preview_refresh ();
@@ -122,6 +121,9 @@ private:
     /* member functions to manage the context menu for fixed with columns */
     uint get_new_col_rel_pos (GtkTreeViewColumn *tcol, int dx);
     void fixed_context_menu (GdkEventButton *event, int col, int dx);
+    /* member function to calculate row colors for the preview table (to visualize status) */
+    void preview_row_fill_state_cells (GtkListStore *store, GtkTreeIter *iter,
+            std::string& err_msg, bool skip);
 
     GtkAssistant    *csv_imp_asst;
 
@@ -1053,7 +1055,13 @@ enum PreviewHeaderComboCols { COL_TYPE_NAME, COL_TYPE_ID };
 /* Internally used enum to access the first two (fixed) columns
  * in the model used to display the prased data.
  */
-enum PreviewDataTableCols { PREV_COL_COLOR, PREV_COL_ERROR, PREV_N_FIXED_COLS };
+enum PreviewDataTableCols {
+    PREV_COL_FCOLOR,
+    PREV_COL_BCOLOR,
+    PREV_COL_STRIKE,
+    PREV_COL_ERROR,
+    PREV_COL_ERR_ICON,
+    PREV_N_FIXED_COLS };
 
 /** Event handler for the user selecting a new column type. When the
  * user selects a new column type, that column's text must be changed
@@ -1304,28 +1312,29 @@ CsvImpTransAssist::preview_update_fw_columns (GtkTreeView* treeview, GdkEventBut
 }
 
 
-/* visualize skipped lines
- */
-void CsvImpTransAssist::preview_row_sel_update ()
+/* Convert state info (errors/skipped) in visual feedback to decorate the preview table */
+void
+CsvImpTransAssist::preview_row_fill_state_cells (GtkListStore *store, GtkTreeIter *iter,
+        std::string& err_msg, bool skip)
 {
-    GtkTreeIter iter;
-    auto store = GTK_LIST_STORE(gtk_tree_view_get_model (treeview));
-
-    /* Colorize rows that will be skipped */
-    int i = 0;
-    for (auto parsed_line : tx_imp->m_parsed_lines)
+    /* Extract error status for all non-skipped lines */
+    const char *c_err_msg = nullptr;
+    const char *icon_name = nullptr;
+    const char *fcolor = nullptr;
+    const char *bcolor = nullptr;
+    if (!skip && !err_msg.empty())
     {
-        const char *color = nullptr;
-        if ((std::get<4>(parsed_line)))
-            color = "pink";
-        else
-            color = nullptr;                                          // all other rows
-
-        bool valid = gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(store), &iter, nullptr, i);
-        if (valid)
-            gtk_list_store_set (store, &iter, PREV_COL_COLOR, color, -1);
-        i++;
+        fcolor = "black";
+        bcolor = "pink";
+        c_err_msg = err_msg.c_str();
+        icon_name = GTK_STOCK_DIALOG_ERROR;
     }
+    gtk_list_store_set (store, iter,
+            PREV_COL_FCOLOR, fcolor,
+            PREV_COL_BCOLOR, bcolor,
+            PREV_COL_STRIKE, skip,
+            PREV_COL_ERROR, c_err_msg,
+            PREV_COL_ERR_ICON, icon_name, -1);
 }
 
 /* Helper function that creates a combo_box using a model
@@ -1369,42 +1378,39 @@ void CsvImpTransAssist::preview_refresh_table ()
 {
     preview_validate_settings ();
 
-    /* ncols is the number of columns in the file data. */
+    /* Create a new liststore to hold status and data from the file being imported.
+       The first columns hold status information (row-color, row-errors, row-error-icon,...
+       All following columns represent the tokenized data as strings. */
     auto ncols = PREV_N_FIXED_COLS + tx_imp->column_types().size();
-
-    // Set up file data liststore
-
-    /* store is a liststore to hold the data from the file being imported.
-       it contains only strings. */
     auto model_col_types = g_new (GType, ncols);
-    for (guint i = 0; i <  ncols; i++)
+    model_col_types[PREV_COL_FCOLOR] = G_TYPE_STRING;
+    model_col_types[PREV_COL_BCOLOR] = G_TYPE_STRING;
+    model_col_types[PREV_COL_ERROR] = G_TYPE_STRING;
+    model_col_types[PREV_COL_ERR_ICON] = G_TYPE_STRING;
+    model_col_types[PREV_COL_STRIKE] = G_TYPE_BOOLEAN;
+    for (guint i = PREV_N_FIXED_COLS; i <  ncols; i++)
         model_col_types[i] = G_TYPE_STRING;
     auto store = gtk_list_store_newv (ncols, model_col_types);
     g_free (model_col_types);
 
-    /* Fill the data liststore with data from the file. */
+    /* Fill the data liststore with data from importer object. */
     for (auto parse_line : tx_imp->m_parsed_lines)
     {
+        /* Fill the state cells */
         GtkTreeIter iter;
         gtk_list_store_append (store, &iter);
+        preview_row_fill_state_cells (store, &iter,
+                std::get<1>(parse_line), std::get<4>(parse_line));
 
-        /* Row Color column */
-        gtk_list_store_set (store, &iter, PREV_COL_COLOR, nullptr, -1);
-
-        /* Add the optional error messages to the store */
-        auto err_msg = std::string();
-        if (!std::get<4>(parse_line))
-            err_msg = std::get<1>(parse_line);
-        gtk_list_store_set (store, &iter, PREV_COL_ERROR, err_msg.c_str(), -1);
-
+        /* Fill the data cells. */
         for (auto cell_str_it = std::get<0>(parse_line).cbegin(); cell_str_it != std::get<0>(parse_line).cend(); cell_str_it++)
         {
-            /* Set the value of the proper column in the list store. */
             uint pos = PREV_N_FIXED_COLS + cell_str_it - std::get<0>(parse_line).cbegin();
             gtk_list_store_set (store, &iter, pos, cell_str_it->c_str(), -1);
         }
     }
     gtk_tree_view_set_model (treeview, GTK_TREE_MODEL(store));
+    gtk_tree_view_set_tooltip_column (treeview, PREV_COL_ERROR);
 
     // Set up the file data treeview using the created model above
     auto column = gtk_tree_view_get_column (treeview, 0);
@@ -1441,7 +1447,10 @@ void CsvImpTransAssist::preview_refresh_table ()
         g_object_set (G_OBJECT(renderer), "family", "monospace", nullptr);
 
         /* Add a single column for the treeview. */
-        auto col = gtk_tree_view_column_new_with_attributes ("", renderer, "background", 0,
+        auto col = gtk_tree_view_column_new_with_attributes ("", renderer,
+                "foreground", PREV_COL_FCOLOR,
+                "background", PREV_COL_BCOLOR,
+                "strikethrough", PREV_COL_STRIKE,
                 "text", PREV_N_FIXED_COLS + i, nullptr);
         gtk_tree_view_append_column (treeview, col);
         /* Enable resizing of the columns. */
@@ -1459,9 +1468,12 @@ void CsvImpTransAssist::preview_refresh_table ()
     }
 
     /* Add a column for the error messages */
-    auto renderer = gtk_cell_renderer_text_new();
-    auto col = gtk_tree_view_column_new_with_attributes (_("Errors"), renderer,
-            "background", PREV_COL_COLOR, "text", PREV_COL_ERROR, nullptr);
+    auto renderer = gtk_cell_renderer_pixbuf_new();
+    g_object_set (G_OBJECT(renderer), "stock-size", GTK_ICON_SIZE_MENU, nullptr);
+    auto col = gtk_tree_view_column_new_with_attributes (nullptr, renderer,
+            "stock-id", PREV_COL_ERR_ICON, nullptr);
+    g_object_set (G_OBJECT(col), "sizing", GTK_TREE_VIEW_COLUMN_FIXED,
+            "fixed-width", 20, nullptr);
     gtk_tree_view_insert_column (treeview, col, 0);
     gtk_tree_view_column_set_resizable (col, true);
 
@@ -1471,10 +1483,6 @@ void CsvImpTransAssist::preview_refresh_table ()
 
     /* Make the things actually appear. */
     gtk_widget_show_all (GTK_WIDGET(treeview));
-
-    /* Update the row selection highlight */
-    preview_row_sel_update ();
-
 }
 
 /* Update the preview page based on the current state of the importer.
