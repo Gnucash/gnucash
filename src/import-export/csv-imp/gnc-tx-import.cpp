@@ -286,18 +286,34 @@ std::string GncTxImport::separators () { return m_settings.m_separators; }
 
 void GncTxImport::settings (const CsvTransSettings& settings)
 {
+    /* First apply file format as this may recreate the tokenizer */
+    file_format (settings.m_file_format);
+    /* Only then apply the other settings */
     m_settings = settings;
-    file_format (m_settings.m_file_format);
     multi_split (m_settings.m_multi_split);
     base_account (m_settings.m_base_account);
     encoding (m_settings.m_encoding);
-    separators (m_settings.m_separators);
+
+    if (file_format() == GncImpFileFormat::CSV)
+        separators (m_settings.m_separators);
+    else if (file_format() == GncImpFileFormat::FIXED_WIDTH)
+    {
+        auto fwtok = dynamic_cast<GncFwTokenizer*>(m_tokenizer.get());
+        fwtok->columns (m_settings.m_column_widths);
+    }
     try
     {
         tokenize(false);
     }
     catch (...)
     { };
+
+    /* Tokenizing will clear column types, reset them here
+     * based on the loaded settings.
+     */
+    std::copy_n (settings.m_column_types.begin(),
+            std::min (m_settings.m_column_types.size(), settings.m_column_types.size()),
+            m_settings.m_column_types.begin());
 
 }
 
@@ -306,6 +322,17 @@ bool GncTxImport::save_settings ()
 
     if (trans_preset_is_reserved_name (m_settings.m_name))
         return true;
+
+    /* separators are already copied to m_settings in the separators
+     * function above. However this is not the case for the column
+     * widths in fw mode, so do this now.
+     */
+    if (file_format() == GncImpFileFormat::FIXED_WIDTH)
+    {
+        auto fwtok = dynamic_cast<GncFwTokenizer*>(m_tokenizer.get());
+        m_settings.m_column_widths = fwtok->get_columns();
+    }
+
     return m_settings.save();
 }
 

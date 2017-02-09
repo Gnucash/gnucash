@@ -77,7 +77,7 @@ public:
 
 private:
     std::vector<uint> m_col_vec;
-    uint m_longest_line;
+    uint m_longest_line = 0;
 };
 
 #endif
