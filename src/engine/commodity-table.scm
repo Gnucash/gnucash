@@ -24,8 +24,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-
-(define GNC_COMMODITY_NS_CURRENCY (gettext "CURRENCY"))
+(define GNC_COMMODITY_NS_CURRENCY
+;; Translators: Namespaces of commodities
+   (gettext "CURRENCY"))
 
 ;; If you change the C side, change this too.
 (define GNC_COMMODITY_NS_AMEX "AMEX")
