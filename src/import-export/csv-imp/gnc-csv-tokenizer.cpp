@@ -59,14 +59,8 @@ int GncCsvTokenizer::tokenize()
 
         Tokenizer tok(line, sep);
         vec.assign(tok.begin(),tok.end());
-
-        line.clear(); // clear here, next check could fail
-
-        // example checking
-        // for correctly parsed 3 fields per record
-        // if (vec.size() < 3) continue;
-
         m_tokenized_contents.push_back(vec);
+        line.clear();
     }
 
     return 0;

@@ -172,20 +172,9 @@ int GncFwTokenizer::tokenize()
         Tokenizer tok(line, sep);
         vec.clear();
         for (auto token : tok)
-            vec.push_back (boost::trim_copy(token));
-        //vec.assign(tok.begin(),tok.end());
-
-        // Trim all leading and trailing whitespace
-        //for (auto token : vec)
-        //    boost::trim(token);
-
-        line.clear(); // clear here, next check could fail
-
-        // example checking
-        // for correctly parsed 3 fields per record
-        // if (vec.size() < 3) continue;
-
+            vec.push_back (boost::trim_copy(token)); // strips newlines as well as whitespace
         m_tokenized_contents.push_back(vec);
+        line.clear(); // clear here, next check could fail
     }
 
     return 0;
