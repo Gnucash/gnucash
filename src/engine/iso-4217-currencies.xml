@@ -37,6 +37,18 @@
 
 
 <currencylist>
+<!-- "BTC" - "Bitcoin" -->
+<currency
+  isocode="BTC"
+  fullname="Bitcoin"
+  unitname="bitcoin"
+  partname="satoshi"
+  namespace="ISO4217"
+  exchange-code="nil"
+  parts-per-unit="100000000"
+  smallest-fraction="100000000"
+  local-symbol="฿"
+/>
 <!-- "ADF" - "Andorran Franc"
   2002-01-01 "FRF" 1  ;; = 1/1 French Franc replaced by EUR
 -->
