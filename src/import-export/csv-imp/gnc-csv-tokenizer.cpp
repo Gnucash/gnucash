@@ -9,6 +9,7 @@
 
 #include <boost/tokenizer.hpp>
 #include <boost/locale.hpp>
+#include <boost/algorithm/string.hpp>
 
 void
 GncCsvTokenizer::set_separators(const std::string& separators)
@@ -36,6 +37,7 @@ int GncCsvTokenizer::tokenize()
     while (std::getline (in_stream, buffer))
     {
         // --- deal with line breaks in quoted strings
+        buffer = boost::trim_copy (buffer); // Removes trailing newline and spaces
         last_quote = buffer.find_first_of('"');
         while (last_quote != std::string::npos)
         {
@@ -50,7 +52,7 @@ int GncCsvTokenizer::tokenize()
         line.append(buffer);
         if (inside_quotes)
         {
-            line.append("\n");
+            line.append(" ");
             continue;
         }
         // ---
