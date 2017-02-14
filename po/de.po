@@ -5,9 +5,9 @@
 # Christian Stimming <stimming@tuhh.de>, 2001-2014.
 # Christian Meyer <chrisime@gnome.org>, 2000, 2001.
 # Herbert Thoma <tma@iis.fhg.de>, 2001.
-# Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2007, 2009-2016.
+# Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2007, 2009-2017.
 # Rolf Leggewie, 2008
-# Mechtilde Stehmann <ooo@mechtilde.de>, 2014-2016
+# Mechtilde Stehmann <ooo@mechtilde.de>, 2014-2017
 #
 msgid ""
 msgstr ""
@@ -7753,7 +7753,6 @@ msgid "Don't sign reverse any accounts."
 msgstr "Keine Vorzeichenumkehr"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:29
-#, fuzzy
 msgid ""
 "This setting allows certain accounts to have their balances reversed in sign "
 "from positive to negative, or vice versa. The setting \"income-expense\" is "
@@ -7762,8 +7761,8 @@ msgid ""
 "status of the account. The setting \"none\" doesn't reverse the sign on any "
 "balances."
 msgstr ""
-"Diese Einstellung erlauben bestimmten Konten die Umkehrung der Betrags-"
-"VorzeichenMögliche Werte sind »income_expense« für Vorzeichenumkehr bei "
+"Diese Einstellung erlaubt für bestimmte Konten die Umkehrung der Betrags-"
+"Vorzeichen. Mögliche Werte sind »income_expense« für Vorzeichenumkehr bei "
 "Einnahme-/Ausgabenkonten, »credit« für Aktiv-/Passivkonten und »none« für "
 "keine Vorzeichenumkehr."
 
@@ -25925,7 +25924,7 @@ msgid ""
 "View -> Open Subaccounts from the menu."
 msgstr ""
 "So können Sie alle Buchungssätze Ihrer Unterkonten in einem Kontobuch "
-"ansehen. Markieren Sie Sie im Kontenhierarchie-Fenster das übergeordnete "
+"ansehen. Markieren Sie im Kontenhierarchie-Fenster das übergeordnete "
 "Konto und wählen Sie den Menüpunkt Bearbeiten -> Unterkonten öffnen."
 
 #: ../doc/tip_of_the_day.list.in:50
