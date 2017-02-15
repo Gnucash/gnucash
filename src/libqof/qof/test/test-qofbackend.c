@@ -20,7 +20,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#include <glib/glib.h>
+#include <glib.h>
 
 static const gchar *suitename = "qof/qofbackend";
 
