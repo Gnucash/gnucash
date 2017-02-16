@@ -117,21 +117,12 @@ GncDbiSqlConnection::lock_database (bool ignore_lock)
     }
 
     /* Protect everything with a single transaction to prevent races */
-    auto result = dbi_conn_query (m_conn, "BEGIN");
-    if (dbi_conn_error (m_conn, &errstr))
-    {
-    /* Couldn't get a transaction (probably couldn't get a lock), so fail */
-        std::string err{"SQL Backend failed to obtain a transaction: "};
-        err += errstr;
-        qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
-        m_qbe->set_message (err.c_str());
+    if (!begin_transaction())
         return false;
-    }
-    dbi_result_free(result);
-    result = nullptr;
     /* Check for an existing entry; delete it if ignore_lock is true, otherwise fail */
     char hostname[ GNC_HOST_NAME_MAX + 1 ];
-    result = dbi_conn_queryf (m_conn, "SELECT * FROM %s", lock_table.c_str());
+    auto result = dbi_conn_queryf (m_conn, "SELECT * FROM %s",
+                                   lock_table.c_str());
     if (result && dbi_result_get_numrows (result))
     {
         dbi_result_free (result);
@@ -140,7 +131,7 @@ GncDbiSqlConnection::lock_database (bool ignore_lock)
         {
             qof_backend_set_error (m_qbe, ERR_BACKEND_LOCKED);
             /* FIXME: After enhancing the qof_backend_error mechanism, report in the dialog what is the hostname of the machine holding the lock. */
-            dbi_conn_query (m_conn, "ROLLBACK");
+            rollback_transaction();
             return false;
         }
         result = dbi_conn_queryf (m_conn, "DELETE FROM %s", lock_table.c_str());
@@ -148,9 +139,7 @@ GncDbiSqlConnection::lock_database (bool ignore_lock)
         {
             qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
             m_qbe->set_message("Failed to delete lock record");
-            result = dbi_conn_query (m_conn, "ROLLBACK");
-            if (result)
-                dbi_result_free (result);
+            rollback_transaction();
             return false;
         }
         dbi_result_free (result);
@@ -166,24 +155,11 @@ GncDbiSqlConnection::lock_database (bool ignore_lock)
     {
         qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
         m_qbe->set_message("Failed to create lock record");
-        result = dbi_conn_query (m_conn, "ROLLBACK");
-        if (result)
-            dbi_result_free (result);
+        rollback_transaction();
         return false;
     }
     dbi_result_free (result);
-    result = dbi_conn_query (m_conn, "COMMIT");
-    if (!result)
-    {
-        auto errnum = dbi_conn_error(m_conn, &errstr);
-        qof_backend_set_error(m_qbe, ERR_BACKEND_SERVER_ERR);
-        std::string err{"Failed to commit transaction: "};
-        err += errstr;
-        m_qbe->set_message(err.c_str());
-        return false;
-    }
-    dbi_result_free (result);
-    return true;
+    return commit_transaction();
 }
 
 void
@@ -198,18 +174,17 @@ GncDbiSqlConnection::unlock_database ()
         PWARN ("No lock table in database, so not unlocking it.");
         return;
     }
-    auto result = dbi_conn_query (m_conn, "BEGIN");
-    if (result)
+    if (begin_transaction())
     {
         /* Delete the entry if it's our hostname and PID */
         char hostname[ GNC_HOST_NAME_MAX + 1 ];
 
-        dbi_result_free (result);
-        result = nullptr;
         memset (hostname, 0, sizeof (hostname));
         gethostname (hostname, GNC_HOST_NAME_MAX);
-        result = dbi_conn_queryf (m_conn,
-                                  "SELECT * FROM %s WHERE Hostname = '%s' AND PID = '%d'", lock_table.c_str(), hostname,
+        auto result = dbi_conn_queryf (m_conn,
+                                       "SELECT * FROM %s WHERE Hostname = '%s' "
+                                       "AND PID = '%d'", lock_table.c_str(),
+                                       hostname,
                                   (int)GETPID ());
         if (result && dbi_result_get_numrows (result))
         {
@@ -224,12 +199,7 @@ GncDbiSqlConnection::unlock_database ()
             {
                 PERR ("Failed to delete the lock entry");
                 m_qbe->set_error (ERR_BACKEND_SERVER_ERR);
-                result = dbi_conn_query (m_conn, "ROLLBACK");
-                if (result)
-                {
-                    dbi_result_free (result);
-                    result = nullptr;
-                }
+                rollback_transaction();
                 return;
             }
             else
@@ -237,27 +207,12 @@ GncDbiSqlConnection::unlock_database ()
                 dbi_result_free (result);
                 result = nullptr;
             }
-            result = dbi_conn_query (m_conn, "COMMIT");
-            if (result)
-            {
-                dbi_result_free (result);
-                result = nullptr;
-            }
+            commit_transaction();
             return;
         }
-        result = dbi_conn_query (m_conn, "ROLLBACK");
-        if (result)
-        {
-            dbi_result_free (result);
-            result = nullptr;
-        }
+        rollback_transaction();
         PWARN ("There was no lock entry in the Lock table");
         return;
-    }
-    if (result)
-    {
-        dbi_result_free (result);
-        result = nullptr;
     }
     PWARN ("Unable to get a lock on LOCK, so failed to clear the lock entry.");
     m_qbe->set_error (ERR_BACKEND_SERVER_ERR);
