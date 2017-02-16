@@ -509,7 +509,7 @@
   <act:parent type="new">1eca26f16967a1627df155e49b44a609</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>設備租賃</act:name>
+  <act:name>租賃</act:name>
   <act:id type="new">c8e75ad8eb7085ac73b3b626d02a3c44</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
@@ -517,7 +517,7 @@
     <cmdty:id>TWD</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>設備租賃</act:description>
+  <act:description>租賃</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
