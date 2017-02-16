@@ -31,6 +31,7 @@ extern "C"
 
 #include <string>
 #include <regex>
+#include <sstream>
 
 #include "gnc-dbisqlconnection.hpp"
 
@@ -86,7 +87,7 @@ GncDbiSqlConnection::GncDbiSqlConnection (DbType type, QofBackend* qbe,
             make_dbi_provider<DbType::DBI_MYSQL>() :
             make_dbi_provider<DbType::DBI_PGSQL>()},
     m_conn_ok{true}, m_last_error{ERR_BACKEND_NO_ERR}, m_error_repeat{0},
-    m_retry{false}
+    m_retry{false}, m_sql_savepoint{0}
 {
     if (!lock_database(ignore_lock))
         throw std::runtime_error("Failed to lock database!");
@@ -185,7 +186,7 @@ GncDbiSqlConnection::unlock_database ()
                                        "SELECT * FROM %s WHERE Hostname = '%s' "
                                        "AND PID = '%d'", lock_table.c_str(),
                                        hostname,
-                                  (int)GETPID ());
+                                       (int)GETPID ());
         if (result && dbi_result_get_numrows (result))
         {
             if (result)
@@ -303,75 +304,104 @@ GncDbiSqlConnection::begin_transaction () noexcept
     {
         PERR ("gnc_dbi_verify_conn() failed\n");
         qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
-        return FALSE;
+        return false;
     }
 
     do
     {
         init_error ();
-        result = dbi_conn_queryf (m_conn, "BEGIN");
+        if (m_sql_savepoint == 0)
+            result = dbi_conn_queryf (m_conn, "BEGIN");
+        else
+        {
+            std::ostringstream savepoint("savepoint_");
+            savepoint << m_sql_savepoint;
+            result = dbi_conn_queryf(m_conn, "SAVEPOINT %s",
+                                     savepoint.str().c_str());
+        }
     }
     while (m_retry);
 
-    auto success = (result != nullptr);
-    auto status = dbi_result_free (result);
-    if (status < 0)
-    {
-        PERR ("Error in dbi_result_free() result\n");
-        qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
-    }
-    if (!success)
+    if (!result)
     {
         PERR ("BEGIN transaction failed()\n");
         qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
+        return false;
     }
-
-    return success;
-}
-
-bool
-GncDbiSqlConnection::rollback_transaction () const noexcept
-{
-    DEBUG ("ROLLBACK\n");
-    const char* command =  "ROLLBACK";
-    auto result = dbi_conn_query (m_conn, command);
-    auto success = (result != nullptr);
-
-    auto status = dbi_result_free (result);
-    if (status < 0)
+    if (dbi_result_free (result) < 0)
     {
         PERR ("Error in dbi_result_free() result\n");
         qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
+        return false;
     }
-    if (!success)
+    ++m_sql_savepoint;
+    return true;
+}
+
+bool
+GncDbiSqlConnection::rollback_transaction () noexcept
+{
+    DEBUG ("ROLLBACK\n");
+    if (m_sql_savepoint == 0) return false;
+    dbi_result result;
+    if (m_sql_savepoint == 1)
+        result = dbi_conn_query (m_conn, "ROLLBACK");
+    else
+    {
+        std::ostringstream savepoint("savepoint_");
+        savepoint << m_sql_savepoint;
+        result = dbi_conn_queryf(m_conn, "ROLLBACK TO SAVEPOINT %s",
+                                 savepoint.str().c_str());
+    }
+    if (!result)
     {
         PERR ("Error in conn_rollback_transaction()\n");
         qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
+        return false;
     }
 
-    return success;
-}
-
-bool
-GncDbiSqlConnection::commit_transaction () const noexcept
-{
-    DEBUG ("COMMIT\n");
-    auto result = dbi_conn_queryf (m_conn, "COMMIT");
-    auto success = (result != nullptr);
-
-    auto status = dbi_result_free (result);
-    if (status < 0)
+    if (dbi_result_free (result) < 0)
     {
         PERR ("Error in dbi_result_free() result\n");
         qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
+        return false;
     }
-    if (!success)
+
+    --m_sql_savepoint;
+    return true;
+}
+
+bool
+GncDbiSqlConnection::commit_transaction () noexcept
+{
+    DEBUG ("COMMIT\n");
+    if (m_sql_savepoint == 0) return false;
+    dbi_result result;
+    if (m_sql_savepoint == 1)
+        result = dbi_conn_queryf (m_conn, "COMMIT");
+    else
+    {
+        std::ostringstream savepoint("savepoint_");
+        savepoint << m_sql_savepoint;
+        result = dbi_conn_queryf(m_conn, "RELEASE SAVEPOINT %s",
+                                 savepoint.str().c_str());
+    }
+
+    if (!result)
     {
         PERR ("Error in conn_commit_transaction()\n");
         qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
+        return false;
     }
 
-    return success;
+    if (dbi_result_free (result) < 0)
+    {
+        PERR ("Error in dbi_result_free() result\n");
+        qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
+        return false;
+    }
+    --m_sql_savepoint;
+    return true;
 }
 
 

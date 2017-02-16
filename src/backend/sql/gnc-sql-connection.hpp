@@ -75,9 +75,9 @@ public:
     /** Returns TRUE if successful, false if error */
     virtual bool begin_transaction () noexcept = 0;
     /** Returns TRUE if successful, FALSE if error */
-    virtual bool rollback_transaction () const noexcept = 0;
+    virtual bool rollback_transaction () noexcept = 0;
     /** Returns TRUE if successful, FALSE if error */
-    virtual bool commit_transaction () const noexcept = 0;
+    virtual bool commit_transaction () noexcept = 0;
     /** Returns TRUE if successful, FALSE if error */
     virtual bool create_table (const std::string&, const ColVec&)
         const noexcept = 0;

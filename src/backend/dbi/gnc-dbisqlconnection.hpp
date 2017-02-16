@@ -52,8 +52,8 @@ public:
         const noexcept override;
     bool does_table_exist (const std::string&) const noexcept override;
     bool begin_transaction () noexcept override;
-    bool rollback_transaction () const noexcept override;
-    bool commit_transaction () const noexcept override;
+    bool rollback_transaction () noexcept override;
+    bool commit_transaction () noexcept override;
     bool create_table (const std::string&, const ColVec&) const noexcept override;
     bool create_index (const std::string&, const std::string&, const EntryVec&)
         const noexcept override;
@@ -65,7 +65,7 @@ public:
     QofBackend* qbe () const noexcept { return m_qbe; }
     dbi_conn conn() const noexcept { return m_conn; }
     inline void set_error(int error, unsigned int repeat,
-			  bool retry) noexcept override
+                          bool retry) noexcept override
     {
         m_last_error = error;
         m_error_repeat = repeat;
@@ -103,10 +103,11 @@ private:
      */
     unsigned int m_error_repeat;
     /** Signals the calling function that it should retry (the error handler
-     * detected transient error and managed to resolve it, but it can't run the
-     * original query)
+     * detected a transient error and managed to resolve it, but it can't run
+     * the original query)
      */
-    gboolean m_retry;
+    bool m_retry;
+    unsigned int m_sql_savepoint;
     bool lock_database(bool ignore_lock);
     void unlock_database();
 

@@ -107,8 +107,8 @@ public:
     bool does_table_exist (const std::string&) const noexcept override {
         return true; }
     bool begin_transaction () noexcept override { return true;}
-    bool rollback_transaction () const noexcept override { return true; }
-    bool commit_transaction () const noexcept override { return true; }
+    bool rollback_transaction () noexcept override { return true; }
+    bool commit_transaction () noexcept override { return true; }
     bool create_table (const std::string&, const ColVec&)
         const noexcept override { return false; }
     bool create_index (const std::string&, const std::string&,
