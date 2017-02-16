@@ -97,6 +97,9 @@ bool
 GncDbiSqlConnection::lock_database (bool ignore_lock)
 {
     const char *errstr;
+    /* Protect everything with a single transaction to prevent races */
+    if (!begin_transaction())
+        return false;
     auto tables = m_provider->get_table_list(m_conn, lock_table);
     if (tables.empty())
     {
@@ -117,9 +120,6 @@ GncDbiSqlConnection::lock_database (bool ignore_lock)
         }
     }
 
-    /* Protect everything with a single transaction to prevent races */
-    if (!begin_transaction())
-        return false;
     /* Check for an existing entry; delete it if ignore_lock is true, otherwise fail */
     char hostname[ GNC_HOST_NAME_MAX + 1 ];
     auto result = dbi_conn_queryf (m_conn, "SELECT * FROM %s",
