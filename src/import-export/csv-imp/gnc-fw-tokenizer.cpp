@@ -1,5 +1,6 @@
 #include "gnc-fw-tokenizer.hpp"
 
+#include <codecvt>
 #include <iostream>
 #include <fstream>      // fstream
 #include <vector>
@@ -153,26 +154,34 @@ void GncFwTokenizer::load_file(const std::string& path)
     }
 }
 
-
+/* Fixed width tokenizer uses wide characters internally instead of
+ * narrow (possibly multi-byte) characters. With multi-byte characters
+ * the character offsets are incorrectly interpreted as byte offsets and
+ * multi-byte characters (like the € sign in utf-8) could be inadvertently
+ * split. This doesn't happen with wide characters.
+ */
 int GncFwTokenizer::tokenize()
 {
-    using Tokenizer = boost::tokenizer< boost::offset_separator > ;
+    using Tokenizer = boost::tokenizer< boost::offset_separator,
+            std::wstring::const_iterator, std::wstring > ;
 
     boost::offset_separator sep(m_col_vec.begin(), m_col_vec.end(), false);
 
+    std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
+    std::wstring wchar_contents = conv.from_bytes(m_utf8_contents);
+
     StrVec vec;
-    std::string line;
-    std::string buffer;
+    std::wstring line;
 
     m_tokenized_contents.clear();
-    std::istringstream in_stream(m_utf8_contents);
+    std::wistringstream in_stream(wchar_contents);
 
     while (std::getline (in_stream, line))
     {
         Tokenizer tok(line, sep);
         vec.clear();
         for (auto token : tok)
-            vec.push_back (boost::trim_copy(token)); // strips newlines as well as whitespace
+            vec.push_back (conv.to_bytes(boost::trim_copy(token))); // strips newlines as well as whitespace
         m_tokenized_contents.push_back(vec);
         line.clear(); // clear here, next check could fail
     }
