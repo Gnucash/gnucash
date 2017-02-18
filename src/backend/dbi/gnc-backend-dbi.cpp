@@ -867,6 +867,49 @@ GncDbiBackend<Type>::safe_sync (QofBook* book)
     g_return_if_fail (book != nullptr);
 
     ENTER ("book=%p, primary=%p", book, m_book);
+    if (!conn->begin_transaction())
+    {
+        LEAVE("Failed to obtain a transaction.");
+        return;
+    }
+    if (!conn->table_operation (TableOpType::backup))
+    {
+        conn->rollback_transaction();
+        LEAVE ("Failed to rename tables");
+        return;
+    }
+    if (!conn->drop_indexes())
+    {
+        conn->rollback_transaction();
+        LEAVE ("Failed to drop indexes");
+        return;
+    }
+
+    sync(m_book);
+    if (check_error())
+    {
+        conn->rollback_transaction();
+        LEAVE ("Failed to create new database tables");
+        return;
+    }
+    conn->table_operation (TableOpType::drop_backup);
+    conn->commit_transaction();
+    LEAVE ("book=%p", m_book);
+}
+/* MySQL commits the transaction and all savepoints after the first CREATE
+ * TABLE, crashing when we try to RELEASE SAVEPOINT because the savepoint
+ * doesn't exist after the commit. We must run without a wrapping transaction in
+ * that case.
+ */
+template <> void
+GncDbiBackend<DbType::DBI_MYSQL>::safe_sync (QofBook* book)
+{
+    auto conn = dynamic_cast<GncDbiSqlConnection*>(m_conn);
+
+    g_return_if_fail (conn != nullptr);
+    g_return_if_fail (book != nullptr);
+
+    ENTER ("book=%p, primary=%p", book, m_book);
     if (!conn->table_operation (TableOpType::backup))
     {
         set_error(ERR_BACKEND_SERVER_ERR);

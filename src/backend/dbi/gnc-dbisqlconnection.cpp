@@ -91,6 +91,11 @@ GncDbiSqlConnection::GncDbiSqlConnection (DbType type, QofBackend* qbe,
 {
     if (!lock_database(ignore_lock))
         throw std::runtime_error("Failed to lock database!");
+    if (!check_and_rollback_failed_save())
+    {
+        unlock_database();
+        throw std::runtime_error("A failed safe-save was detected and rolling it back failed.");
+    }
 }
 
 bool
@@ -219,6 +224,15 @@ GncDbiSqlConnection::unlock_database ()
     m_qbe->set_error (ERR_BACKEND_SERVER_ERR);
 }
 
+bool
+GncDbiSqlConnection::check_and_rollback_failed_save()
+{
+    auto backup_tables = m_provider->get_table_list(m_conn, "%back");
+    if (backup_tables.empty())
+        return true;
+    return table_operation(rollback);
+}
+
 GncDbiSqlConnection::~GncDbiSqlConnection()
 {
     if (m_conn)
@@ -314,8 +328,8 @@ GncDbiSqlConnection::begin_transaction () noexcept
             result = dbi_conn_queryf (m_conn, "BEGIN");
         else
         {
-            std::ostringstream savepoint("savepoint_");
-            savepoint << m_sql_savepoint;
+            std::ostringstream savepoint;
+            savepoint << "savepoint_" << m_sql_savepoint;
             result = dbi_conn_queryf(m_conn, "SAVEPOINT %s",
                                      savepoint.str().c_str());
         }
@@ -348,8 +362,8 @@ GncDbiSqlConnection::rollback_transaction () noexcept
         result = dbi_conn_query (m_conn, "ROLLBACK");
     else
     {
-        std::ostringstream savepoint("savepoint_");
-        savepoint << m_sql_savepoint;
+        std::ostringstream savepoint;
+        savepoint << "savepoint_" << m_sql_savepoint - 1;
         result = dbi_conn_queryf(m_conn, "ROLLBACK TO SAVEPOINT %s",
                                  savepoint.str().c_str());
     }
@@ -381,8 +395,8 @@ GncDbiSqlConnection::commit_transaction () noexcept
         result = dbi_conn_queryf (m_conn, "COMMIT");
     else
     {
-        std::ostringstream savepoint("savepoint_");
-        savepoint << m_sql_savepoint;
+        std::ostringstream savepoint;
+        savepoint << "savepoint_" << m_sql_savepoint - 1;
         result = dbi_conn_queryf(m_conn, "RELEASE SAVEPOINT %s",
                                  savepoint.str().c_str());
     }

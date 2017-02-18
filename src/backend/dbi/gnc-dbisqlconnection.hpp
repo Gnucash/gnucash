@@ -110,6 +110,7 @@ private:
     unsigned int m_sql_savepoint;
     bool lock_database(bool ignore_lock);
     void unlock_database();
+    bool check_and_rollback_failed_save();
 
 };
 

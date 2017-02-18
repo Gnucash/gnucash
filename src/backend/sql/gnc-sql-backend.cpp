@@ -673,9 +673,7 @@ GncSqlBackend::init_version_info() noexcept
 bool
 GncSqlBackend::reset_version_info() noexcept
 {
-    bool ok = true;
-    if (!m_conn->does_table_exist (VERSION_TABLE_NAME))
-        ok = create_table (VERSION_TABLE_NAME, version_table);
+    bool ok = create_table (VERSION_TABLE_NAME, version_table);
     m_versions.clear();
     set_table_version ("Gnucash", gnc_prefs_get_long_version ());
     set_table_version ("Gnucash-Resave", GNUCASH_RESAVE_VERSION);
