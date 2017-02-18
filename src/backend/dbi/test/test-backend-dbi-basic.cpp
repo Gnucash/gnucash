@@ -329,7 +329,7 @@ teardown (Fixture* fixture, gconstpointer pData)
     auto lockfile = g_strdup_printf ("%s/test-dbi.xml.LCK",
                                      g_path_get_dirname (DBI_TEST_XML_FILENAME));
     auto msg =
-        g_strdup_printf ("[xml_session_end()] Error on g_unlink(%s): 2: No such file or directory",
+        g_strdup_printf ("[GncXmlBackend::session_end()] Error on g_unlink(%s): 2: No such file or directory",
                          lockfile);
     auto logdomain = "gnc.backend";
     auto loglevel = static_cast<GLogLevelFlags> (G_LOG_LEVEL_WARNING |
@@ -382,8 +382,8 @@ test_dbi_store_and_reload (Fixture* fixture, gconstpointer pData)
     QofSession* session_2;
     QofSession* session_3;
 
-    auto msg = "[gnc_dbi_unlock()] There was no lock entry in the Lock table";
-    auto log_domain = "gnc.backend.dbi";
+    auto msg = "[GncDbiSqlConnection::unlock_database()] There was no lock entry in the Lock table";
+    auto log_domain = nullptr;
     auto loglevel = static_cast<GLogLevelFlags> (G_LOG_LEVEL_WARNING |
                                                  G_LOG_FLAG_FATAL);
     TestErrorStruct* check = test_error_struct_new (log_domain, loglevel, msg);
@@ -434,8 +434,8 @@ test_dbi_safe_save (Fixture* fixture, gconstpointer pData)
     auto url = (gchar*)pData;
     QofSession* session_1 = NULL, *session_2 = NULL;
 
-    auto msg = "[gnc_dbi_unlock()] There was no lock entry in the Lock table";
-    auto log_domain = "gnc.backend.dbi";
+    auto msg = "[GncDbiSqlConnection::unlock_database()] There was no lock entry in the Lock table";
+    auto log_domain = nullptr;
     auto loglevel = static_cast<GLogLevelFlags> (G_LOG_LEVEL_WARNING |
                                                  G_LOG_FLAG_FATAL);
     TestErrorStruct* check = test_error_struct_new (log_domain, loglevel, msg);
@@ -573,8 +573,8 @@ test_dbi_business_store_and_reload (Fixture* fixture, gconstpointer pData)
     QofSession* session_3;
     const gchar* url = (gchar*)pData;
 
-    auto msg = "[gnc_dbi_unlock()] There was no lock entry in the Lock table";
-    auto log_domain = "gnc.backend.dbi";
+    auto msg = "[GncDbiSqlConnection::unlock_database()] There was no lock entry in the Lock table";
+    auto log_domain = nullptr;
     auto loglevel = static_cast<GLogLevelFlags> (G_LOG_LEVEL_WARNING |
                                                  G_LOG_FLAG_FATAL);
     TestErrorStruct* check = test_error_struct_new (log_domain, loglevel, msg);
