@@ -97,6 +97,12 @@ void GncTxImport::file_format(GncImpFileFormat format)
     {
         new_encoding = m_tokenizer->encoding();
         new_imp_file = m_tokenizer->current_file();
+        if (file_format() == GncImpFileFormat::FIXED_WIDTH)
+        {
+            auto fwtok = dynamic_cast<GncFwTokenizer*>(m_tokenizer.get());
+            if (!fwtok->get_columns().empty())
+                m_settings.m_column_widths = fwtok->get_columns();
+        }
     }
 
     m_settings.m_file_format = format;
@@ -106,6 +112,18 @@ void GncTxImport::file_format(GncImpFileFormat format)
     // recovered from old tokenizer
     m_tokenizer->encoding(new_encoding);
     load_file(new_imp_file);
+
+    // Restore potentially previously set separators or column_widths
+    if ((file_format() == GncImpFileFormat::CSV)
+        && !m_settings.m_separators.empty())
+        separators (m_settings.m_separators);
+    else if ((file_format() == GncImpFileFormat::FIXED_WIDTH)
+        && !m_settings.m_column_widths.empty())
+    {
+        auto fwtok = dynamic_cast<GncFwTokenizer*>(m_tokenizer.get());
+        fwtok->columns (m_settings.m_column_widths);
+    }
+
 }
 
 GncImpFileFormat GncTxImport::file_format()
