@@ -1174,6 +1174,7 @@ dbi_library_test (dbi_conn conn)
         resultulonglong = dbi_result_get_ulonglong (result, "test_unsigned");
         resultdouble = dbi_result_get_double (result, "test_double");
     }
+    dbi_conn_query (conn, "DROP TABLE numtest");
     gnc_pop_locale (LC_NUMERIC);
     if (testlonglong != resultlonglong)
     {
