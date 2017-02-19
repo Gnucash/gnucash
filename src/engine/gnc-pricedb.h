@@ -372,15 +372,16 @@ gboolean     gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p);
 
 /** @brief Remove and unref prices older than a certain time.
  * @param db The pricedb
+ * @param comm_list A list of commodities
+ * @param first The oldest price time in the pricedb 
  * @param cutoff The time before which prices should be deleted.
- * @param delete_user Whether user-created (i.e. not Finance::Quote) prices
- * should be deleted.
- * @param delete_last Whether a price should be deleted if it's the only
- * remaining price for its commodity.
+ * @param source Whether Finance::Quote, user or all prices should be deleted.
+ * @param leave Whether monthly, weekly or no prices should be left.
  */
-gboolean     gnc_pricedb_remove_old_prices(GNCPriceDB *db, Timespec cutoff,
-                                           const gboolean delete_user,
-                                           gboolean delete_last);
+gboolean     gnc_pricedb_remove_old_prices(GNCPriceDB *db, GList *comm_list,
+                                           Timespec first, Timespec cutoff,
+                                           gchar const *source,
+                                           gchar const *leave);
 
 /** @brief Find the most recent price between the two commodities.
  *
