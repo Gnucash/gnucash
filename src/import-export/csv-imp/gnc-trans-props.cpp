@@ -196,6 +196,9 @@ time64 parse_date (const std::string &date_str, int format)
     }
 
     auto ts = gnc_dmy2timespec_neutral(day, month, year);
+    if (ts.tv_sec == INT64_MAX)
+        throw std::invalid_argument (_("Value can't be parsed into a date using the selected date format."));
+
     return ts.tv_sec;
 }
 
