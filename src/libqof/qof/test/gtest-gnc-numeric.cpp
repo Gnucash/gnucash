@@ -211,6 +211,16 @@ TEST(gncnumeric_stream, output_stream)
     GncNumeric rational_string(123, 456);
     output << rational_string;
     EXPECT_EQ("123/456", output.str());
+    output.imbue(std::locale("de_DE"));
+    output.str("");
+    output << simple_int;
+    EXPECT_EQ("123456", output.str());
+    output.str("");
+    output << decimal_string;
+    EXPECT_EQ("123,456", output.str());
+    output.str("");
+    output << rational_string;
+    EXPECT_EQ("123/456", output.str());
 }
 
 TEST(gncnumeric_stream, input_stream)
@@ -489,6 +499,14 @@ TEST(gncnumeric_functions, test_convert)
     ASSERT_NO_THROW(c = GncNumeric(1545, 1000).convert<RoundType::bankers>(100));
     EXPECT_EQ(154, c.num());
     EXPECT_EQ(100, c.denom());
+}
+
+TEST(gnc_numeric_functions, test_is_decimal)
+{
+    EXPECT_TRUE(GncNumeric(123, 1).is_decimal());
+    EXPECT_FALSE(GncNumeric(123, 3).is_decimal());
+    EXPECT_TRUE(GncNumeric(123, 1000).is_decimal());
+    EXPECT_FALSE(GncNumeric(123, 3200).is_decimal());
 }
 
 TEST(gnc_numeric_functions, test_conversion_to_decimal)

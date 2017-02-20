@@ -90,8 +90,8 @@ public:
     /** Make a new GncRational with the opposite sign. */
     GncRational operator-() const noexcept;
     /**
-     * Reduce this to an equivalent fraction with the least common multiple as
-     * the denominator.
+     * Return an equivalent fraction with all common factors between the
+     * numerator and the denominator removed.
      *
      * @return reduced GncRational
      */
@@ -246,7 +246,7 @@ inline GncRational operator+(GncRational a, GncInt128 b)
 }
 inline GncRational operator+(GncInt128 a, GncRational b)
 {
-    return b + GncRational(a, 1);
+    return GncRational(a, 1) + a;
 }
 GncRational operator-(GncRational a, GncRational b);
 inline GncRational operator-(GncRational a, GncInt128 b)
@@ -255,7 +255,7 @@ inline GncRational operator-(GncRational a, GncInt128 b)
 }
 inline GncRational operator-(GncInt128 a, GncRational b)
 {
-    return b - GncRational(a, 1);
+    return GncRational(a, 1) - b;
 }
 GncRational operator*(GncRational a, GncRational b);
 inline GncRational operator*(GncRational a, GncInt128 b)
@@ -264,7 +264,7 @@ inline GncRational operator*(GncRational a, GncInt128 b)
 }
 inline GncRational operator*(GncInt128 a, GncRational b)
 {
-    return b * GncRational(a, 1);
+    return GncRational(a, 1) * b;
 }
 GncRational operator/(GncRational a, GncRational b);
 inline GncRational operator/(GncRational a, GncInt128 b)
@@ -273,7 +273,7 @@ inline GncRational operator/(GncRational a, GncInt128 b)
 }
 inline GncRational operator/(GncInt128 a, GncRational b)
 {
-    return b / GncRational(a, 1);
+    return GncRational(a, 1) / b;
 }
 /** @} */
 #endif //__GNC_RATIONAL_HPP__

@@ -44,6 +44,8 @@ extern "C"
 #include "gnc-rational.hpp"
 
 static QofLogModule log_module = "qof";
+
+static const uint8_t max_leg_digits{17};
 static const int64_t pten[] = { 1, 10, 100, 1000, 10000, 100000, 1000000,
                                10000000, 100000000, 1000000000,
                                INT64_C(10000000000), INT64_C(100000000000),
@@ -57,8 +59,8 @@ static const int64_t pten[] = { 1, 10, 100, 1000, 10000, 100000, 1000000,
 int64_t
 powten (unsigned int exp)
 {
-    if (exp > 17)
-        exp = 17;
+    if (exp > max_leg_digits)
+        exp = max_leg_digits;
     return pten[exp];
 }
 
@@ -80,7 +82,8 @@ GncNumeric::GncNumeric(GncRational rr)
 
 GncNumeric::GncNumeric(double d) : m_num(0), m_den(1)
 {
-    if (isnan(d) || fabs(d) > 1e18)
+    static uint64_t max_leg_value{INT64_C(1000000000000000000)};
+    if (isnan(d) || fabs(d) > max_leg_value)
     {
         std::ostringstream msg;
         msg << "Unable to construct a GncNumeric from " << d << ".\n";
@@ -90,9 +93,9 @@ GncNumeric::GncNumeric(double d) : m_num(0), m_den(1)
     auto logval = log10(fabs(d));
     int64_t den;
     if (logval > 0.0)
-        den = powten(18 - static_cast<int>(floor(logval) + 1.0));
+        den = powten((max_leg_digits + 1) - static_cast<int>(floor(logval) + 1.0));
     else
-        den = powten(17);
+        den = powten(max_leg_digits);
     auto num = static_cast<int64_t>(floor(static_cast<double>(den) * d));
 
     if (num == 0)
@@ -297,23 +300,28 @@ GncNumeric::to_string() const noexcept
     return out.str();
 }
 
+bool
+GncNumeric::is_decimal() const noexcept
+{
+    for (unsigned pwr = 0; pwr < max_leg_digits && m_den >= pten[pwr]; ++pwr)
+    {
+        if (m_den == pten[pwr])
+            return true;
+        if (m_den % pten[pwr])
+            return false;
+    }
+    return false;
+}
+
 GncNumeric
 GncNumeric::to_decimal(unsigned int max_places) const
 {
-    if (max_places > 17)
-        max_places = 17;
-    bool is_pwr_ten = true;
-    for (int pwr = 1; pwr <= 17 && m_den > powten(pwr); ++pwr)
-        if (m_den % powten(pwr))
-        {
-            is_pwr_ten = false;
-            break;
-        }
-
-    if (m_num == 0 || (is_pwr_ten && m_den < powten(max_places)))
-        return *this; // Nothing to do.
-    if (is_pwr_ten)
+    if (max_places > max_leg_digits)
+        max_places = max_leg_digits;
+    if (is_decimal())
     {
+        if (m_num == 0 || m_den < powten(max_places))
+            return *this; // Nothing to do.
         /* See if we can reduce m_num to fit in max_places */
         auto excess = m_den / powten(max_places);
         if (m_num % excess)
@@ -1029,7 +1037,8 @@ gnc_numeric_reduce(gnc_numeric in)
 gboolean
 gnc_numeric_to_decimal(gnc_numeric *a, guint8 *max_decimal_places)
 {
-    int max_places =  max_decimal_places == NULL ? 17 : *max_decimal_places;
+    int max_places =  max_decimal_places == NULL ? max_leg_digits :
+        *max_decimal_places;
     try
     {
         GncNumeric an (*a);

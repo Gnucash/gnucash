@@ -25,6 +25,7 @@
 
 #include <string>
 #include <iostream>
+#include <locale>
 #include "gnc-rational-rounding.hpp"
 
 class GncRational;
@@ -170,8 +171,8 @@ public:
      */
     GncNumeric abs() const noexcept;
     /**
-     * Reduce this to an equivalent fraction with the least common multiple as
-     * the denominator.
+     * Return an equivalent fraction with all common factors between the
+     * numerator and the denominator removed.
      *
      * @return reduced GncNumeric
      */
@@ -227,8 +228,12 @@ public:
      */
     std::string to_string() const noexcept;
     /**
+     * @return true if the denominator is a power of ten, false otherwise.
+     */
+    bool is_decimal() const noexcept;
+    /**
      * Convert the numeric to have a power-of-10 denominator if possible without
-     * rounding. Throws a std::rane_error on failure; the message will explain
+     * rounding. Throws a std::range_error on failure; the message will explain
      * the details.
      *
      * @param max_places exponent of the largest permissible denominator.
@@ -250,12 +255,14 @@ public:
     void operator/=(GncNumeric b);
     /* @} */
     /** Compare function
-     *
+     *  \defgroup gnc_numeric_comparison
      *  @param b GncNumeric or int to compare to.
      *  @return -1 if this < b, 0 if ==, 1 if this > b.
+     * @{
      */
     int cmp(GncNumeric b);
     int cmp(int64_t b) { return cmp(GncNumeric(b, 1)); }
+    /** @} */
 private:
     struct round_param
     {
@@ -339,12 +346,21 @@ template <typename charT, typename traits>
 std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& s, GncNumeric n)
 {
     std::basic_ostringstream<charT, traits> ss;
+    std::locale loc = s.getloc();
+    ss.imbue(loc);
+    char dec_pt = '.';
+    try
+    {
+        dec_pt = std::use_facet<std::numpunct<char>>(loc).decimal_point();
+    }
+    catch(const std::bad_cast& err) {} //Don't do anything, num_sep is already set.
+
     ss.copyfmt(s);
     ss.width(0);
     if (n.denom() == 1)
          ss << n.num();
-    else if (n.denom() % 10 == 0)
-        ss << n.num() / n.denom() << "."
+    else if (n.is_decimal())
+        ss << n.num() / n.denom() << dec_pt
            << (n.num() > 0 ? n.num() : -n.num()) % n.denom();
     else
         ss << n.num() << "/" << n.denom();
@@ -369,7 +385,6 @@ std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>&
 template <typename charT, typename traits>
 std::basic_istream<charT, traits>& operator>>(std::basic_istream<charT, traits>& s, GncNumeric& n)
 {
-
     std::string instr;
     s >> instr;
     if (s)
