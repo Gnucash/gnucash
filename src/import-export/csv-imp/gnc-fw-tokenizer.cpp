@@ -1,6 +1,5 @@
 #include "gnc-fw-tokenizer.hpp"
 
-#include <codecvt>
 #include <iostream>
 #include <fstream>      // fstream
 #include <vector>
@@ -162,13 +161,14 @@ void GncFwTokenizer::load_file(const std::string& path)
  */
 int GncFwTokenizer::tokenize()
 {
+    using boost::locale::conv::utf_to_utf;
     using Tokenizer = boost::tokenizer< boost::offset_separator,
             std::wstring::const_iterator, std::wstring > ;
 
     boost::offset_separator sep(m_col_vec.begin(), m_col_vec.end(), false);
 
-    std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
-    std::wstring wchar_contents = conv.from_bytes(m_utf8_contents);
+    std::wstring wchar_contents = utf_to_utf<wchar_t>(m_utf8_contents.c_str(),
+        m_utf8_contents.c_str() + m_utf8_contents.size());
 
     StrVec vec;
     std::wstring line;
@@ -181,7 +181,12 @@ int GncFwTokenizer::tokenize()
         Tokenizer tok(line, sep);
         vec.clear();
         for (auto token : tok)
-            vec.push_back (conv.to_bytes(boost::trim_copy(token))); // strips newlines as well as whitespace
+        {
+            auto stripped = boost::trim_copy(token); // strips newlines as well as whitespace
+            auto narrow = utf_to_utf<char>(stripped.c_str(), stripped.c_str()
+                + stripped.size());
+            vec.push_back (narrow);
+        }
         m_tokenized_contents.push_back(vec);
         line.clear(); // clear here, next check could fail
     }
