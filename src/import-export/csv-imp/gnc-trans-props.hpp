@@ -41,7 +41,7 @@ extern "C" {
 #include <map>
 #include <memory>
 #include <boost/optional.hpp>
-#include <gnc-rational.hpp>
+#include <gnc-numeric.hpp>
 
 /** Enumeration for column types. These are the different types of
  * columns that can exist in a CSV/Fixed-Width file. There should be
@@ -105,7 +105,7 @@ GncTransPropType sanitize_trans_prop (GncTransPropType prop, bool multi_split);
 
 time64 parse_date (const std::string &date_str, int format);
 gnc_commodity* parse_commodity (const std::string& comm_str);
-GncRational parse_amount (const std::string &str, int currency_format);
+GncNumeric parse_amount (const std::string &str, int currency_format);
 
 struct GncPreTrans
 {
@@ -171,9 +171,9 @@ private:
     int m_currency_format;
     boost::optional<std::string> m_action;
     boost::optional<Account*> m_account;
-    boost::optional<GncRational> m_deposit;
-    boost::optional<GncRational> m_withdrawal;
-    boost::optional<GncRational> m_price;
+    boost::optional<GncNumeric> m_deposit;
+    boost::optional<GncNumeric> m_withdrawal;
+    boost::optional<GncNumeric> m_price;
     boost::optional<std::string> m_memo;
     boost::optional<char> m_rec_state;
     boost::optional<time64> m_rec_date;
