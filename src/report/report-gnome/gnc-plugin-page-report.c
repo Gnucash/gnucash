@@ -341,7 +341,6 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
 {
     GncPluginPageReport *report;
     GncPluginPageReportPrivate *priv;
-    GtkAllocation allocation;
     URLType type;
     char * id_name;
     char * child_name;
@@ -351,6 +350,8 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
     report = GNC_PLUGIN_PAGE_REPORT(page);
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
 
+    // FIXME.  This is f^-1(f(x)), isn't it?
+    DEBUG( "Load uri id=%d", priv->reportId );
     id_name = g_strdup_printf("id=%d", priv->reportId );
     child_name = gnc_build_url( URL_TYPE_REPORT, id_name, NULL );
     type = gnc_html_parse_url( priv->html, child_name, &url_location, &url_label);
@@ -361,6 +362,8 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
 
     g_free(id_name);
     g_free(child_name);
+
+    gtk_widget_show_all( GTK_WIDGET(priv->container) );
 
     // this sets the window for the progressbar
     gnc_window_set_progressbar_window( GNC_WINDOW(page->window) );
@@ -376,7 +379,20 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
     // this resets the window for the progressbar to NULL
     gnc_window_set_progressbar_window( NULL );
 
+    gtk_widget_show_all( GTK_WIDGET(priv->container) );
     return FALSE;
+}
+
+static void
+gnc_plugin_page_report_realize_uri (GtkWidget *widget, GncPluginPage *page)
+{
+    GtkAllocation allocation;
+
+    gtk_widget_get_allocation (widget, &allocation);
+    PINFO("Realized Container size is %dw x %dh", allocation.width, allocation.height);
+
+    /* load uri when view idle */
+    g_idle_add ((GSourceFunc)gnc_plugin_page_report_load_uri, page);
 }
 
 static
@@ -386,6 +402,11 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     GncPluginPageReport *report;
     GncPluginPageReportPrivate *priv;
     GtkWindow *topLvl;
+    URLType type;
+    char * id_name;
+    char * child_name;
+    char * url_location = NULL;
+    char * url_label = NULL;
 
     ENTER("page %p", page);
 
@@ -416,16 +437,25 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     gnc_html_set_urltype_cb(priv->html, gnc_plugin_page_report_check_urltype);
     gnc_html_set_load_cb(priv->html, gnc_plugin_page_report_load_cb, report);
 
+    /* We need to call the load call back so the report appears to of been run
+     so it will get saved properly if the report is not realized in session */
+    id_name = g_strdup_printf("id=%d", priv->reportId );
+    child_name = gnc_build_url( URL_TYPE_REPORT, id_name, NULL );
+    type = gnc_html_parse_url( priv->html, child_name, &url_location, &url_label);
+
+    gnc_plugin_page_report_load_cb (priv->html, type, id_name, url_label, report);
+    g_free(id_name);
+    g_free(child_name);
+
     // FIXME.  This is f^-1(f(x)), isn't it?
     DEBUG( "id=%d", priv->reportId );
 
-    /* load uri when view idle */
-    g_idle_add ((GSourceFunc)gnc_plugin_page_report_load_uri, page);
+    /* load uri when view is realized */
+    g_signal_connect (G_OBJECT(GTK_WIDGET(priv->container)), "realize",
+                      G_CALLBACK(gnc_plugin_page_report_realize_uri), page);
 
     gtk_widget_show_all( GTK_WIDGET(priv->container) );
-
     LEAVE("container %p", priv->container);
-
     return GTK_WIDGET( priv->container );
 }
 
