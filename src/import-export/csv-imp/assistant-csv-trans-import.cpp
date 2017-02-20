@@ -1521,6 +1521,12 @@ void CsvImpTransAssist::preview_refresh_table ()
     g_object_unref (store);
     g_object_unref (combostore);
 
+    /* Also reset the base account combo box as it's value may have changed due to column changes here */
+    g_signal_handlers_block_by_func (acct_selector, (gpointer) csv_tximp_preview_acct_sel_cb, this);
+    gnc_account_sel_set_account(GNC_ACCOUNT_SEL(acct_selector),
+            tx_imp->base_account() , false);
+    g_signal_handlers_unblock_by_func (acct_selector, (gpointer) csv_tximp_preview_acct_sel_cb, this);
+
     /* Make the things actually appear. */
     gtk_widget_show_all (GTK_WIDGET(treeview));
 }
@@ -1550,6 +1556,7 @@ CsvImpTransAssist::preview_refresh ()
     // Set multi-split indicator
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(multi_split_cbutton),
             tx_imp->multi_split());
+    gtk_widget_set_sensitive (acct_selector, !tx_imp->multi_split());
 
     // Set Import Format
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(csv_button),
@@ -1563,10 +1570,6 @@ CsvImpTransAssist::preview_refresh ()
     gtk_combo_box_set_active (GTK_COMBO_BOX(currency_format_combo),
             tx_imp->currency_format());
     go_charmap_sel_set_encoding (encselector, tx_imp->encoding().c_str());
-
-    gnc_account_sel_set_account(GNC_ACCOUNT_SEL(acct_selector),
-            tx_imp->base_account() , false);
-    gtk_widget_set_sensitive (acct_selector, !tx_imp->multi_split());
 
     // Handle separator checkboxes and custom field, only relevant if the file format is csv
     if (tx_imp->file_format() == GncImpFileFormat::CSV)
