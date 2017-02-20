@@ -552,15 +552,49 @@
             (push (qof-date-format-get-string (qof-date-format-get)))
             (push "';\n")
 
-            (push "$.jqplot.config.enablePlugins = true;")
-            (push "var plot = $.jqplot('")(push chart-id)(push"', data, options);
+            (push "$.jqplot.config.enablePlugins = true;\n")
+            (push "$(document).ready(function() {
+var plot = $.jqplot('")(push chart-id)(push"', data, options);
+plot.replot();
+var timer;
+var load_timer;
 
-  function formatTooltip(str, seriesIndex, pointIndex) {
-      x = $.jqplot.DateTickFormatter (options.axes.xaxis.tickOptions.formatString,
-                                      data[seriesIndex][pointIndex][0]);
-      y = data[seriesIndex][pointIndex][1].toFixed(2);
-      return options.series[seriesIndex].label + ' ' + x + '<br><b>' + y + '</b>';
-  }\n") 
+// var win_width = $(window).width();
+// var win_height = $(window).height();
+// console.log( 'Window Width ' + win_width + ' Height ' + win_height);
+
+// var doc_width = document.body.clientWidth;
+// var doc_height = document.body.clientHeight;
+// console.log( 'Doc Width ' + doc_width + ' Height ' + doc_height);
+
+$(window).resize(function () {
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+//        console.log( 'Resize Timer!' );
+        plot.replot();
+    }, 100);
+    });
+
+$(window).on('load', function () {
+    var hasVScroll = document.body.scrollHeight > document.body.clientHeight;
+    clearTimeout(load_timer);
+    load_timer = setTimeout(function () {
+//        console.log( 'Load Timer!' );
+        if(hasVScroll)
+        {
+//            console.log( 'Load Timer Replot!' );
+            plot.replot();
+        }
+    },100);
+    });
+});
+
+function formatTooltip(str, seriesIndex, pointIndex) {
+    x = $.jqplot.DateTickFormatter (options.axes.xaxis.tickOptions.formatString,
+                                    data[seriesIndex][pointIndex][0]);
+    y = data[seriesIndex][pointIndex][1].toFixed(2);
+    return options.series[seriesIndex].label + ' ' + x + '<br><b>' + y + '</b>';
+}\n")
 
             (push "});\n</script>")
 

@@ -229,7 +229,27 @@
 
 
             (push "$.jqplot.config.enablePlugins = true;\n")
-            (push "var plot = $.jqplot('")(push chart-id)(push "', [data], options);\n")
+            (push "$(document).ready(function() {
+var plot = $.jqplot('")(push chart-id)(push "', [data], options);
+plot.replot();
+var timer;
+
+// var win_width = $(window).width();
+// var win_height = $(window).height();
+// console.log( 'Window Width ' + win_width + ' Height ' + win_height);
+
+// var doc_width = document.body.clientWidth;
+// var doc_height = document.body.clientHeight;
+// console.log( 'Doc Width ' + doc_width + ' Height ' + doc_height);
+
+$(window).resize(function () {
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+//        console.log( 'Resize Timer!' );
+        plot.replot();
+    }, 100);
+    });
+});\n")
 
             (push "});\n</script>"))
         (begin

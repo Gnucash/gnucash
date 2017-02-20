@@ -514,13 +514,40 @@ var plot = $.jqplot('")(push chart-id)(push"', data, options);
 plot.axes.xaxis.ticks = getVisualTicks();
 plot.replot();
 var timer;
+var load_timer;
+
+// var win_width = $(window).width();
+// var win_height = $(window).height();
+// console.log( 'Window Width ' + win_width + ' Height ' + win_height);
+
+// var doc_width = document.body.clientWidth;
+// var doc_height = document.body.clientHeight;
+// console.log( 'Doc Width ' + doc_width + ' Height ' + doc_height);
+
 $(window).resize(function () {
     clearTimeout(timer);
     timer = setTimeout(function () {
         plot.replot({resetAxes: true });
+        $.each(plot.series, function(index, series) {
+            series.barWidth = undefined;
+        });
         plot.axes.xaxis.ticks = getVisualTicks();
+//        console.log( 'Resize Timer!' );
         plot.replot();
     }, 100);
+    });
+
+$(window).on('load', function () {
+    var hasVScroll = document.body.scrollHeight > document.body.clientHeight;
+    clearTimeout(load_timer);
+    load_timer = setTimeout(function () {
+//        console.log( 'Load Timer!' );
+        if(hasVScroll)
+        {
+//            console.log( 'Load Timer Replot!' );
+            plot.replot();
+        }
+    },100);
     });
 });
 
@@ -549,6 +576,7 @@ function getVisualTicks() {
         else
             visual_ticks.push (' ');
     }
+//    console.log( 'getVis chart_width ' + chart_width );
     return visual_ticks;
 }\n")
 
