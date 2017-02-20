@@ -116,6 +116,7 @@ FUNCTION(GNC_GTEST_CONFIGURE)
   MESSAGE(STATUS "Checking for GMOCK")
   FIND_PATH(GMOCK_INCLUDE_DIR gmock/gmock.h
     PATHS ${GMOCK_ROOT}/include /usr/include)
+  unset(GMOCK_SRC_DIR CACHE)
   FIND_PATH(GMOCK_SRC_DIR src/gmock-all.cc
     PATHS ${GMOCK_ROOT} /usr/src/gmock)
   if (GMOCK_SRC_DIR)
