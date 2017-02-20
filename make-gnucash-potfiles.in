@@ -46,7 +46,7 @@ sub sort_func
 }
 
 my @possible_files = sort sort_func
-                      `cd @-SRCDIR-@ && find src -name '*.c' \\
+                      `cd @-SRCDIR-@ && find src lib -name '*.c' \\
                       -o -name '*.cpp' -o -name '*.glade' \\
                       -o -name '*.desktop.in' -o -name '*.keys.in' \\
                       -o -name '*.gschema.xml.in.in' -o -name '*.scm'`;

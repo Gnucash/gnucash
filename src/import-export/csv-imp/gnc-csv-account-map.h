@@ -27,6 +27,7 @@
 #ifndef GNC_CSV_ACCOUNT_MAP_H
 #define GNC_CSV_ACCOUNT_MAP_H
 
+#include <gtk/gtk.h>
 #include "Account.h"
 
 /** Enumeration for the mappings liststore */
@@ -40,12 +41,12 @@ void gnc_csv_account_map_load_mappings (GtkTreeModel *mappings_store);
 /** Update the import mappings.
  *
  */
-void gnc_csv_account_map_change_mappings (Account *old_account, Account *new_account, gchar *map_string);
+void gnc_csv_account_map_change_mappings (Account *old_account, Account *new_account, const gchar *map_string);
 
 /** Returns a pointer to the account that matches the import string.
  *
  * @return A pointer to an account.
  */
-Account * gnc_csv_account_map_search (gchar *map_string);
+Account * gnc_csv_account_map_search (const gchar *map_string);
 
 #endif

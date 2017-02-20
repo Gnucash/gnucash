@@ -10,42 +10,30 @@ MODULEPATH = src/import-export/csv-imp
 
 #The test program. You'll need to add to this if you have more than one module above.
 
-check_PROGRAMS = test-csv-imp
+check_PROGRAMS = test-tokenizer \
+                 test-tx-import
 
 TESTS = ${check_PROGRAMS}
-
-test_csv_impdir = ${top_srcdir}/${MODULEPATH}/test
 
 #Program files for tests go here. It's probably best to have one for
 #each file in the parent directory. Include
 #test_foo_support.c if you have one and aren't building the
 #support library.
-test_csv_imp_SOURCES = \
-  test-csv-imp.c \
-  utest-gnc-csv-model.c
+test_tokenizer_SOURCES = \
+    test-tokenizer.cpp
 
-test_csv_imp_HEADERS =
+test_tx_import_SOURCES = \
+    test-tx-import.cpp
 
-#The tests might require more libraries, but try to keep them
-#as independent as possible.
-test_csv_imp_LDADD = \
-  ${top_builddir}/${MODULEPATH}/libgncmod-csv-import.la \
-  ${top_builddir}/src/import-export/libgncmod-generic-import.la \
-  ${top_builddir}/src/gnome/libgnc-gnome.la \
-  ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
-  ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
-  ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
-  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
-  ${top_builddir}/src/backend/xml/libgnc-backend-xml-utils.la \
-  ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/core-utils/libgnc-core-utils.la \
-  ${top_builddir}/src/gnc-module/libgnc-module.la \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
-  ${top_builddir}/lib/stf/libgnc-stf.la \
-  ${GLIB_LIBS}
+if !GOOGLE_TEST_LIBS
+nodist_test_tokenizer_SOURCES = \
+        ${GTEST_SRC}/src/gtest_main.cc
 
-test_csv_imp_CFLAGS = \
-	-DTESTPROG=test_csv-imp \
+nodist_test_tx_import_SOURCES = \
+        ${GTEST_SRC}/src/gtest_main.cc
+endif
+
+IMP_TEST_CPPFLAGS =  \
 	${DEFAULT_INCLUDES} \
 	-I$(top_srcdir)/${MODULEPATH}/ \
   -I${top_srcdir}/src/test-core \
@@ -64,7 +52,42 @@ test_csv_imp_CFLAGS = \
   -I${top_srcdir}/lib/libc \
   -I${top_srcdir}/lib \
   ${GTK_CFLAGS} \
-  ${GLIB_CFLAGS}
+  ${GLIB_CFLAGS} \
+  $(BOOST_CPPFLAGS)
+
+test_tokenizer_CPPFLAGS = \
+  -I$(GTEST_HEADERS) \
+  $(IMP_TEST_CPPFLAGS)
+
+test_tx_import_CPPFLAGS = \
+  -I$(GTEST_HEADERS) \
+  $(IMP_TEST_CPPFLAGS)
+
+#The tests might require more libraries, but try to keep them
+#as independent as possible.
+IMP_TEST_LDFLAGS = \
+  ${top_builddir}/${MODULEPATH}/libgncmod-csv-import.la \
+  ${top_builddir}/src/import-export/libgncmod-generic-import.la \
+  ${top_builddir}/src/gnome/libgnc-gnome.la \
+  ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
+  ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_builddir}/src/backend/xml/libgnc-backend-xml-utils.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/core-utils/libgnc-core-utils.la \
+  ${top_builddir}/src/gnc-module/libgnc-module.la \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
+  ${GLIB_LIBS} \
+  $(BOOST_LDFLAGS)
+
+test_tokenizer_LDADD = \
+  ${IMP_TEST_LDFLAGS} \
+  $(GTEST_LIBS)
+
+test_tx_import_LDADD = \
+  ${IMP_TEST_LDFLAGS} \
+  $(GTEST_LIBS)
 
 GNC_TEST_DEPS = \
 --library-dir    ${top_builddir}/${MODULEPATH} \
@@ -90,6 +113,7 @@ TESTS_ENVIRONMENT = \
   SRCDIR=${srcdir} \
   G_DEBUG= \
   $(shell ${abs_top_srcdir}/src/gnc-test-env.pl --noexports ${GNC_TEST_DEPS})
+
 
 EXTRA_DIST= \
   sample1.csv

@@ -1382,11 +1382,6 @@ then
   AC_SUBST(GDK_PIXBUF_CFLAGS)
   AC_SUBST(GDK_PIXBUF_LIBS)
 
-   # checks for goffice
-  PKG_CHECK_MODULES(GOFFICE, libgoffice-0.8 >= 0.7.0 libgoffice-0.8 < 0.9.0, [goffice=1], [AC_MSG_ERROR([Cannot find libgoffice >= 0.7.0 and < 0.9.0])])
-  AC_SUBST(GOFFICE_CFLAGS)
-  AC_SUBST(GOFFICE_LIBS)
-
   ### --------------------------------------------------------------------------
   ### checks for webkit
 
@@ -1697,8 +1692,8 @@ AC_CONFIG_FILES(
   doc/Makefile
   doc/examples/Makefile
   lib/Makefile
+  lib/goffice/Makefile
   lib/libc/Makefile
-  lib/stf/Makefile
   packaging/Makefile
   src/Makefile
   src/app-utils/Makefile
