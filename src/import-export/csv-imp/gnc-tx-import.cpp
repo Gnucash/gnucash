@@ -186,10 +186,10 @@ void GncTxImport::base_account (Account* base_account)
 
     if (m_settings.m_base_account)
     {
-        auto col_type = std::find (m_settings.m_column_types.begin(),
+        auto col_type_it = std::find (m_settings.m_column_types.begin(),
                 m_settings.m_column_types.end(), GncTransPropType::ACCOUNT);
-        if (col_type != m_settings.m_column_types.end())
-            set_column_type(col_type -m_settings.m_column_types.begin(),
+        if (col_type_it != m_settings.m_column_types.end())
+            set_column_type(col_type_it - m_settings.m_column_types.begin(),
                             GncTransPropType::NONE);
 
         /* Set default account for each line's split properties */
