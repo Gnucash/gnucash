@@ -149,7 +149,9 @@ private:
     GtkWidget       *fixed_button;                  /**< The widget for the Fixed Width button */
     GtkWidget       *multi_split_cbutton;           /**< The widget for Multi-split */
     GOCharmapSel    *encselector;                   /**< The widget for selecting the encoding */
+    GtkWidget       *separator_table;               /**< Container for the separator checkboxes */
     GtkCheckButton  *sep_button[SEP_NUM_OF_TYPES];  /**< Checkbuttons for common separators */
+    GtkWidget       *fw_instructions_hbox;          /**< Container for fixed-width instructions */
     GtkCheckButton  *custom_cbutton;                /**< The checkbutton for a custom separator */
     GtkEntry        *custom_entry;                  /**< The entry for custom separators */
     GtkComboBoxText *date_format_combo;             /**< The Combo Text widget for selecting the date format */
@@ -467,6 +469,8 @@ CsvImpTransAssist::CsvImpTransAssist ()
         skip_alt_rows_button = GTK_WIDGET(gtk_builder_get_object (builder, "skip_rows"));
         skip_errors_button = GTK_WIDGET(gtk_builder_get_object (builder, "skip_errors_button"));
         multi_split_cbutton = GTK_WIDGET(gtk_builder_get_object (builder, "multi_split_button"));
+        separator_table = GTK_WIDGET(gtk_builder_get_object (builder, "separator_table"));
+        fw_instructions_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "fw_instructions_hbox"));
 
         /* Load the separator buttons from the glade builder file into the
          * sep_buttons array. */
@@ -961,6 +965,8 @@ void CsvImpTransAssist::preview_update_file_format ()
             tx_imp->file_format (GncImpFileFormat::CSV);
             g_signal_handlers_disconnect_by_func(G_OBJECT(treeview),
                     (gpointer)csv_tximp_preview_treeview_clicked_cb, (gpointer)this);
+            gtk_widget_set_visible (separator_table, true);
+            gtk_widget_set_visible (fw_instructions_hbox, false);
         }
         else
         {
@@ -968,6 +974,8 @@ void CsvImpTransAssist::preview_update_file_format ()
             /* Enable context menu for adding/removing columns. */
             g_signal_connect (G_OBJECT(treeview), "button-press-event",
                     G_CALLBACK(csv_tximp_preview_treeview_clicked_cb), (gpointer)this);
+            gtk_widget_set_visible (separator_table, false);
+            gtk_widget_set_visible (fw_instructions_hbox, true);
 
         }
 
