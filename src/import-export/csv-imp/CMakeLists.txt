@@ -45,8 +45,16 @@ SET(csv_import_noinst_HEADERS
 
 ADD_LIBRARY(gncmod-csv-import ${csv_import_noinst_HEADERS} ${csv_import_SOURCES})
 
-TARGET_LINK_LIBRARIES(gncmod-csv-import ${Boost_LIBRARIES} gncmod-generic-import gncmod-gnome-utils
-                 gncmod-app-utils gncmod-engine gnc-core-utils gnc-module)
+TARGET_LINK_LIBRARIES(
+  gncmod-csv-import
+  ${Boost_LIBRARIES}
+  gncmod-generic-import
+  gncmod-gnome-utils
+  gncmod-app-utils
+  gncmod-engine
+  gnc-core-utils
+  gnc-module
+  icuuc icui18n icudata)
 
 
 TARGET_COMPILE_DEFINITIONS(gncmod-csv-import PRIVATE -DG_LOG_DOMAIN=\"gnc.import.csv\")
