@@ -6,10 +6,12 @@ SET (gnc_qof_HEADERS
     qof/gnc-aqbanking-templates.h
     qof/gnc-date-p.h
     qof/gnc-date.h
-    qof/gnc-numeric.h
     qof/gnc-datetime.hpp
-    qof/gnc-rational.hpp
     qof/gnc-timezone.hpp
+    qof/gnc-numeric.h
+    qof/gnc-numeric.hpp
+    qof/gnc-rational.hpp
+    qof/gnc-rational-rounding.hpp
     qof/guid.h
     qof/kvp_frame.hpp
     qof/kvp-value.hpp
@@ -93,7 +95,7 @@ ADD_LIBRARY	(gnc-qof
   ${gnc_qof_noinst_HEADERS}
 )
 
-TARGET_LINK_LIBRARIES(gnc-qof ${Boost_DATE_TIME_LIBRARIES} ${REGEX_LDFLAGS} ${GMODULE_LDFLAGS} ${GLIB2_LDFLAGS} ${GOBJECT_LDFLAGS})
+TARGET_LINK_LIBRARIES(gnc-qof ${Boost_DATE_TIME_LIBRARIES}  ${Boost_REGEX_LIBRARIES} ${REGEX_LDFLAGS} ${GMODULE_LDFLAGS} ${GLIB2_LDFLAGS} ${GOBJECT_LDFLAGS})
 
 TARGET_COMPILE_DEFINITIONS (gnc-qof PRIVATE -DG_LOG_DOMAIN=\"qof\")
 

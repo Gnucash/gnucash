@@ -11,6 +11,7 @@ libgnc_qof_la_LDFLAGS= \
 libgnc_qof_common_libs =  \
   $(GLIB_LIBS) \
   $(REGEX_LIBS) \
+  ${BOOST_LDFLAGS} -lboost_regex \
   $(top_builddir)/lib/libc/libc-missing.la
 
 libgnc_qof_la_LIBADD = $(libgnc_qof_common_libs)
@@ -54,7 +55,9 @@ qofinclude_HEADERS = \
    gnc-date-p.h      \
    gnc-date.h        \
    gnc-numeric.h     \
+   gnc-numeric.hpp   \
    gnc-rational.hpp  \
+   gnc-rational-rounding.hpp \
    gnc-timezone.hpp  \
    gnc-datetime.hpp  \
    guid.h            \

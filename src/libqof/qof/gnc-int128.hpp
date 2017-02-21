@@ -48,19 +48,21 @@ extern "C"
 /** @addtogroup GncInt128
  * @ingroup QOF
  * @{
- * @brief provides a 128-bit int as a base class for GncNumeric.
+ * @brief provides a 125-bit int as a base class for GncNumeric.
  *
- * All the usual operators are provided. Only the explicit integer
- * conversions throw; all other errors are indicated by the overflow
- * and NaN ("Not a Number") flags. Note that performing any operation
- * on an overflowed or NaN Gncint128 will yield an overflowed or NaN
- * result, so calling routines need not check until the end of a
- * chained calculation.
+ * In order to make space for the status flags the upper leg is limited to
+ * 0x1fffffffffffffff. Attempting to construct a GncInt128 with a larger upper
+ * leg will throw a std::overflow_error.
+ *
+ * All the usual operators are provided. Only the constructors and explicit
+ * integer conversions throw; all other errors are indicated by the overflow and
+ * NaN ("Not a Number") flags. Note that performing any operation on an
+ * overflowed or NaN Gncint128 will yield an overflowed or NaN result, so
+ * calling routines need not check until the end of a chained calculation.
  * GncInt128 uses implicit copy and move constructors and implicit destructor.
  */
 class GncInt128
 {
-    unsigned char m_flags;
     uint64_t m_hi;
     uint64_t m_lo;
 
@@ -88,7 +90,7 @@ enum // Values for m_flags
 /** Default constructor. Makes 0. */
     GncInt128();
     template <typename T>
-    GncInt128(T lower) : GncInt128 {INT64_C(0), static_cast<int64_t>(lower)}
+    GncInt128(T lower) : GncInt128(INT64_C(0), static_cast<int64_t>(lower))
     {
         static_assert (std::is_integral<T>(),
                        "GncInt128 can be constructed only with "
@@ -170,7 +172,7 @@ enum // Values for m_flags
  * @param q The quotient; will be NaN if divisor = 0
  * @param r The remainder; will be 0 if divisor = 0
  */
-    void div (const GncInt128& d, GncInt128& q, GncInt128& r) noexcept;
+    void div (const GncInt128& d, GncInt128& q, GncInt128& r) const noexcept;
 
 /**
  * Explicit conversion to int64_t.
@@ -210,6 +212,10 @@ enum // Values for m_flags
  * @return true if the object represents 0.
  */
     bool isZero() const noexcept;
+/**
+ * @return true if neither the overflow nor nan flags are set.
+ */
+    bool valid() const noexcept;
 
 /**
  * @return the number of bits used to represent the value
@@ -278,6 +284,7 @@ GncInt128 gcd (int64_t a, int64_t b);
 /** Compute the least common multiple of two integers
  */
 GncInt128 lcm (int64_t a, int64_t b);
+
 #endif //GNCINT128_H
 
 /** @} */

@@ -20,25 +20,23 @@
  *                                                                  *
  *******************************************************************/
 
+#include <sstream>
 #include "gnc-rational.hpp"
+#include "gnc-numeric.hpp"
 
-static const gint64 pten[] = { 1, 10, 100, 1000, 10000, 100000, 1000000,
-			       10000000, 100000000, 1000000000, 10000000000,
-			       100000000000, 1000000000000, 10000000000000,
-			       100000000000000, 10000000000000000,
-			       100000000000000000, 1000000000000000000};
-static const int POWTEN_OVERFLOW {-5};
 
-static inline gint64
-powten (int exp)
+GncRational::GncRational(GncNumeric n) noexcept :
+    m_num(n.num()), m_den(n.denom())
 {
-    if (exp > 18 || exp < -18)
-	return POWTEN_OVERFLOW;
-    return exp < 0 ? -pten[-exp] : pten[exp];
+    if (m_den.isNeg())
+    {
+        m_num *= -m_den;
+        m_den = 1;
+    }
 }
 
 GncRational::GncRational (gnc_numeric n) noexcept :
-    m_num (n.num), m_den (n.denom), m_error {GNC_ERROR_OK}
+    m_num (n.num), m_den (n.denom)
 {
     if (m_den.isNeg())
     {
@@ -47,18 +45,26 @@ GncRational::GncRational (gnc_numeric n) noexcept :
     }
 }
 
-GncRational::GncRational (GncInt128 num, GncInt128 den) noexcept :
-    m_num (num), m_den (den), m_error {}
+bool
+GncRational::valid() const noexcept
 {
+    if (m_num.valid() && m_den.valid())
+        return true;
+    return false;
+}
+
+bool
+GncRational::is_big() const noexcept
+{
+    if (m_num.isBig() || m_den.isBig())
+        return true;
+    return false;
 }
 
 GncRational::operator gnc_numeric () const noexcept
 {
-    if (m_num.isOverflow() || m_num.isNan() ||
-        m_den.isOverflow() || m_den.isNan())
+    if (!valid())
         return gnc_numeric_error(GNC_ERROR_OVERFLOW);
-    if (m_error != GNC_ERROR_OK)
-        return gnc_numeric_error (m_error);
     try
     {
         return {static_cast<int64_t>(m_num), static_cast<int64_t>(m_den)};
@@ -72,291 +78,208 @@ GncRational::operator gnc_numeric () const noexcept
 GncRational
 GncRational::operator-() const noexcept
 {
-    GncRational b(*this);
-    b.m_num = - b.m_num;
-    return b;
+    return GncRational(-m_num, m_den);
 }
 
-GncRational&
-GncRational::inv () noexcept
+GncRational
+GncRational::inv () const noexcept
 {
-    std::swap(m_num, m_den);
+    if (m_num == 0)
+        return *this;
+    if (m_num < 0)
+        return GncRational(-m_den, -m_num);
+    return GncRational(m_den, m_num);
+}
 
-    GncRational b {1, 1};
-    GncDenom d {*this, b, INT64_C(0), GNC_HOW_RND_NEVER };
-    d.reduce(*this);
+GncRational
+GncRational::abs() const noexcept
+{
+    if (m_num < 0)
+        return -*this;
     return *this;
 }
 
-GncRational&
-GncRational::mul (const GncRational& b, GncDenom& d) noexcept
+void
+GncRational::operator+=(GncRational b)
 {
-    if (m_error || b.m_error)
-    {
-        if (b.m_error)
-            m_error = b.m_error;
-        return *this;
-    }
-    m_num *= b.m_num;
-    m_den *= b.m_den;
-    round (d);
-    return *this;
+    GncRational new_val = *this + b;
+    *this = std::move(new_val);
 }
 
-GncRational&
-GncRational::div (GncRational b, GncDenom& d) noexcept
+void
+GncRational::operator-=(GncRational b)
 {
-    if (m_error || b.m_error)
-    {
-        if (b.m_error)
-            m_error = b.m_error;
-        return *this;
-    }
+    GncRational new_val = *this - b;
+    *this = std::move(new_val);
+}
 
-     if (b.m_num.isNeg())
+void
+GncRational::operator*=(GncRational b)
+{
+    GncRational new_val = *this * b;
+    *this = std::move(new_val);
+}
+
+void
+GncRational::operator/=(GncRational b)
+{
+    GncRational new_val = *this / b;
+    *this = std::move(new_val);
+}
+
+int
+GncRational::cmp(GncRational b)
+{
+    if (m_den == b.denom())
     {
-        m_num = -m_num;
-        b.m_num = -b.m_num;
+        auto b_num = b.num();
+        return m_num < b_num ? -1 : b_num < m_num ? 1 : 0;
+    }
+    auto gcd = m_den.gcd(b.denom());
+    GncInt128 a_num(m_num * b.denom() / gcd), b_num(b.num() * m_den / gcd);
+    return a_num < b_num ? -1 : b_num < a_num ? 1 : 0;
+}
+
+GncRational::round_param
+GncRational::prepare_conversion (GncInt128 new_denom) const
+{
+    if (new_denom == m_den || new_denom == GNC_DENOM_AUTO)
+        return {m_num, m_den, 0};
+    GncRational conversion(new_denom, m_den);
+    auto red_conv = conversion.reduce();
+    GncInt128 old_num(m_num);
+    auto new_num = old_num * red_conv.num();
+    auto rem = new_num % red_conv.denom();
+    new_num /= red_conv.denom();
+    return {new_num, red_conv.denom(), rem};
+}
+
+GncInt128
+GncRational::sigfigs_denom(unsigned figs) const noexcept
+{
+    auto num_abs = m_num.abs();
+    bool not_frac = num_abs > m_den;
+    int64_t val{ not_frac ? num_abs / m_den : m_den / num_abs };
+    unsigned digits{};
+    while (val >= 10)
+    {
+        ++digits;
+        val /= 10;
+    }
+    return not_frac ? powten(figs - digits - 1) : powten(figs + digits);
+}
+
+GncRational
+GncRational::reduce() const
+{
+    auto gcd = m_den.gcd(m_num);
+    if (gcd.isNan() || gcd.isOverflow())
+        throw std::overflow_error("Reduce failed, calculation of gcd overflowed.");
+    return GncRational(m_num / gcd, m_den / gcd);
+}
+
+GncRational
+GncRational::round_to_numeric() const
+{
+    if (m_num.isZero())
+        return GncRational(); //Default constructor makes 0/1
+    if (!(m_num.isBig() || m_den.isBig()))
+        return *this;
+    if (m_num.abs() > m_den)
+    {
+        auto quot(m_num / m_den);
+        if (quot.isBig())
+        {
+            std::ostringstream msg;
+            msg << " Cannot be represented as a "
+                << "GncNumeric. Its integer value is too large.\n";
+            throw std::overflow_error(msg.str());
+        }
+        GncRational new_v(*this);
+        new_v = new_v.convert<RoundType::half_down>(m_den / (m_num.abs() >> 62));
+        return new_v;
+    }
+    auto quot(m_den / m_num);
+    if (quot.isBig())
+        return GncRational(); //Smaller than can be represented as a GncNumeric
+    auto divisor = m_den >> 62;
+    if (m_num.isBig())
+    {
+        GncInt128 oldnum(m_num), num, rem;
+        oldnum.div(divisor, num, rem);
+        auto den = m_den / divisor;
+        num += rem * 2 >= den ? 1 : 0;
+        GncRational new_rational(num, den);
+        return new_rational;
+    }
+    GncRational new_v(*this);
+    new_v = new_v.convert<RoundType::half_down>(m_den / divisor);
+    return new_v;
+}
+
+GncRational
+operator+(GncRational a, GncRational b)
+{
+    if (!(a.valid() && b.valid()))
+        throw std::range_error("Operator+ called with out-of-range operand.");
+    GncInt128 lcm = a.denom().lcm(b.denom());
+    GncInt128 num(a.num() * lcm / a.denom() + b.num() * lcm / b.denom());
+    if (!(lcm.valid() && num.valid()))
+        throw std::overflow_error("Operator+ overflowed.");
+    GncRational retval(num, lcm);
+    return retval;
+}
+
+GncRational
+operator-(GncRational a, GncRational b)
+{
+    GncRational retval = a + (-b);
+    return retval;
+}
+
+GncRational
+operator*(GncRational a, GncRational b)
+{
+    if (!(a.valid() && b.valid()))
+        throw std::range_error("Operator* called with out-of-range operand.");
+    GncInt128 num (a.num() * b.num()), den(a.denom() * b.denom());
+    if (!(num.valid() && den.valid()))
+        throw std::overflow_error("Operator* overflowed.");
+    GncRational retval(num, den);
+    return retval;
+}
+
+GncRational
+operator/(GncRational a, GncRational b)
+{
+    if (!(a.valid() && b.valid()))
+        throw std::range_error("Operator/ called with out-of-range operand.");
+    auto a_num = a.num(), b_num = b.num(), a_den = a.denom(), b_den = b.denom();
+    if (b_num == 0)
+        throw std::underflow_error("Divide by 0.");
+    if (b_num.isNeg())
+    {
+        a_num = -a_num;
+        b_num = -b_num;
     }
 
    /* q = (a_num * b_den)/(b_num * a_den). If a_den == b_den they cancel out
      * and it's just a_num/b_num.
      */
-    if (m_den == b.m_den)
-    {
-        m_den = b.m_num;
-        round(d);
-        return *this;
-    }
+    if (a_den == b_den)
+        return GncRational(a_num, b_num);
+
     /* Protect against possibly preventable overflow: */
-    if (m_num.isBig() || m_den.isBig() ||
-        b.m_num.isBig() || b.m_den.isBig())
+    if (a_num.isBig() || a_den.isBig() ||
+        b_num.isBig() || b_den.isBig())
     {
-        GncInt128 gcd = b.m_den.gcd(m_den);
-        b.m_den /= gcd;
-        m_den /= gcd;
+        GncInt128 gcd = b_den.gcd(a_den);
+        b_den /= gcd;
+        a_den /= gcd;
     }
 
-    m_num *= b.m_den;
-    m_den *= b.m_num;
-    round (d);
-    return *this;
-}
-
-GncRational&
-GncRational::add (const GncRational& b, GncDenom& d) noexcept
-{
-    if (m_error || b.m_error)
-    {
-        if (b.m_error)
-            m_error = b.m_error;
-        return *this;
-    }
-    GncInt128 lcm = m_den.lcm (b.m_den);
-    m_num = m_num * lcm / m_den + b.m_num * lcm / b.m_den;
-    m_den = lcm;
-    round (d);
-    return *this;
-}
-
-GncRational&
-GncRational::sub (const GncRational& b, GncDenom& d) noexcept
-{
-    return add(-b, d);
-}
-
-void
-GncRational::round (GncDenom& denom) noexcept
-{
-    denom.reduce (*this);
-    if (m_error == GNC_ERROR_OK && denom.m_error != GNC_ERROR_OK)
-    {
-        m_error = denom.m_error;
-        return;
-    }
-    GncInt128 new_den = denom.get();
-    if (new_den == 0) new_den = m_den;
-    if (!(m_num.isBig() || new_den.isBig() ))
-    {
-        if (m_den == new_den)
-            return;
-
-        if (m_num.isZero())
-        {
-            m_den = new_den;
-            return;
-        }
-    }
-    GncInt128 new_num {}, remainder {};
-    if (new_den.isNeg())
-        m_num.div(-new_den * m_den, new_num, remainder);
-    else
-        (m_num * new_den).div(m_den, new_num, remainder);
-
-    if (remainder.isZero() && !(new_num.isBig() || new_den.isBig()))
-    {
-        m_num = new_num;
-        m_den = new_den;
-        return;
-    }
-
-    if (new_num.isBig() || new_den.isBig())
-    {
-        if (!denom.m_auto)
-        {
-            m_error = GNC_ERROR_OVERFLOW;
-            return;
-        }
-
-      /* First, try to reduce it */
-        GncInt128 gcd = new_num.gcd(new_den);
-        new_num /= gcd;
-        new_den /= gcd;
-        remainder /= gcd;
-
-/* if that didn't work, shift both num and den down until neither is "big", th
- * fall through to rounding.
- */
-        while (new_num && new_num.isBig() && new_den && new_den.isBig())
-        {
-            new_num >>= 1;
-            new_den >>= 1;
-            remainder >>= 1;
-        }
-    }
-
-/* If we got here, then we can't exactly represent the rational with
- * new_denom. We must either round or punt.
- */
-    switch (denom.m_round)
-    {
-    case GncDenom::RoundType::never:
-        m_error = GNC_ERROR_REMAINDER;
-        return;
-    case GncDenom::RoundType::floor:
-        if (new_num.isNeg()) ++new_num;
-        break;
-    case GncDenom::RoundType::ceiling:
-        if (! new_num.isNeg()) ++new_num;
-        break;
-    case GncDenom::RoundType::truncate:
-        break;
-    case GncDenom::RoundType::promote:
-        new_num += new_num.isNeg() ? -1 : 1;
-        break;
-    case GncDenom::RoundType::half_down:
-        if (new_den.isNeg())
-        {
-            if (remainder * 2 > m_den * new_den)
-                new_num += new_num.isNeg() ? -1 : 1;
-        }
-        else if (remainder * 2 > m_den)
-            new_num += new_num.isNeg() ? -1 : 1;
-        break;
-    case GncDenom::RoundType::half_up:
-        if (new_den.isNeg())
-        {
-            if (remainder * 2 >= m_den * new_den)
-                new_num += new_num.isNeg() ? -1 : 1;
-        }
-        else if (remainder * 2 >= m_den)
-            new_num += new_num.isNeg() ? -1 : 1;
-        break;
-    case GncDenom::RoundType::bankers:
-        if (new_den.isNeg())
-        {
-            if (remainder * 2 > m_den * -new_den ||
-                (remainder * 2 == m_den * -new_den && new_num % 2))
-                new_num += new_num.isNeg() ? -1 : 1;
-        }
-        else
-        {
-            if (remainder * 2 > m_den ||
-                (remainder * 2 == m_den && new_num % 2))
-                new_num += new_num.isNeg() ? -1 : 1;
-        }
-        break;
-    }
-    m_num = new_num;
-    m_den = new_den;
-    return;
-}
-
-GncDenom::GncDenom (GncRational& a, GncRational& b,
-                    int64_t spec, unsigned int how) noexcept :
-    m_value (spec),
-    m_round (static_cast<GncDenom::RoundType>(how & GNC_NUMERIC_RND_MASK)),
-    m_type (static_cast<GncDenom::DenomType>(how & GNC_NUMERIC_DENOM_MASK)),
-    m_auto (spec == GNC_DENOM_AUTO),
-    m_sigfigs ((how & GNC_NUMERIC_SIGFIGS_MASK) >> 8),
-    m_error (GNC_ERROR_OK)
-
-{
-
-    if (!m_auto)
-        return;
-    switch (m_type)
-    {
-    case DenomType::fixed:
-        if (a.m_den == b.m_den)
-        {
-            m_value = a.m_den;
-        }
-        else if (b.m_num == 0)
-        {
-            m_value = a.m_den;
-            b.m_den = a.m_den;
-        }
-        else if (a.m_num == 0)
-        {
-            m_value = b.m_den;
-            a.m_den = b.m_den;
-        }
-        else
-        {
-            m_error = GNC_ERROR_DENOM_DIFF;
-        }
-        m_auto = false;
-        break;
-
-    case DenomType::lcd:
-        m_value = a.m_den.lcm(b.m_den);
-        m_auto = false;
-        break;
-    default:
-        break;
-
-    }
-}
-
-void
-GncDenom::reduce (const GncRational& a) noexcept
-{
-    if (!m_auto)
-        return;
-    switch (m_type)
-    {
-    default:
-        break;
-    case DenomType::reduce:
-        m_value = a.m_den / a.m_num.gcd(a.m_den);
-        break;
-
-    case DenomType::sigfigs:
-        GncInt128 val {};
-        if (a.m_num.abs() > a.m_den)
-            val = a.m_num.abs() / a.m_den;
-        else
-            val = a.m_den / a.m_num.abs();
-        unsigned int digits {};
-        while (val >= 10)
-        {
-            ++digits;
-            val /= 10;
-        }
-        m_value = (a.m_num.abs() > a.m_den ? powten (m_sigfigs - digits - 1) :
-                   powten (m_sigfigs + digits));
-        m_auto = false;
-        break;
-    }
+    GncInt128 num(a_num * b_den), den(a_den * b_num);
+    if (!(num.valid() && den.valid()))
+        throw std::overflow_error("Operator/ overflowed.");
+    return GncRational(num, den);
 }
