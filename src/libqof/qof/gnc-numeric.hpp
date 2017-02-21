@@ -26,6 +26,7 @@
 #include <string>
 #include <iostream>
 #include <locale>
+#include <typeinfo> // For std::bad_cast exception
 #include "gnc-rational-rounding.hpp"
 
 class GncRational;
@@ -349,12 +350,13 @@ std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>&
     std::locale loc = s.getloc();
     ss.imbue(loc);
     char dec_pt = '.';
+#if __GNUC__ >= 5
     try
     {
         dec_pt = std::use_facet<std::numpunct<char>>(loc).decimal_point();
     }
     catch(const std::bad_cast& err) {} //Don't do anything, num_sep is already set.
-
+#endif
     ss.copyfmt(s);
     ss.width(0);
     if (n.denom() == 1)
