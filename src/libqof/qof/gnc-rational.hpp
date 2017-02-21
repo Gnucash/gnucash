@@ -246,7 +246,7 @@ inline GncRational operator+(GncRational a, GncInt128 b)
 }
 inline GncRational operator+(GncInt128 a, GncRational b)
 {
-    return GncRational(a, 1) + a;
+    return GncRational(a, 1) + b;
 }
 GncRational operator-(GncRational a, GncRational b);
 inline GncRational operator-(GncRational a, GncInt128 b)
