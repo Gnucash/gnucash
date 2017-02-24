@@ -50,7 +50,7 @@ struct _GnucashSheet
     gint num_virt_rows;
     gint num_virt_cols;
 
-    GnomeCanvasItem *header_item;
+    GtkWidget *header_item;
     GnomeCanvasItem *cursor;
     GnomeCanvasItem *grid;
 
@@ -136,10 +136,8 @@ struct _GnucashRegister
 {
     GtkTable table;
 
-    GtkWidget *vscrollbar;
     GtkWidget *hscrollbar;
     GtkWidget *sheet;
-    GtkWidget *header_canvas;
     gboolean  hscrollbar_visible;
 };
 

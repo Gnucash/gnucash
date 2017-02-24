@@ -168,4 +168,15 @@ gnucash_color_init (void)
     color_inited = 1;
 }
 
+void
+to_cairo_rgb (GdkColor *gdk_col, cairo_rgb *c_col)
+{
+    g_return_if_fail(gdk_col != NULL);
+    g_return_if_fail(c_col != NULL);
+
+    c_col->red   = gdk_col->red   / 65535.0;
+    c_col->green = gdk_col->green / 65535.0;
+    c_col->blue  = gdk_col->blue  / 65535.0;
+}
+
 

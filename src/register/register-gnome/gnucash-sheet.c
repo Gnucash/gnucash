@@ -3016,7 +3016,7 @@ GtkWidget *
 gnucash_register_new (Table *table)
 {
     GnucashRegister *reg;
-    GtkWidget *header_canvas;
+    GtkWidget *header;
     GtkWidget *widget;
     GtkWidget *sheet;
     GtkWidget *scrollbar;
@@ -3029,15 +3029,14 @@ gnucash_register_new (Table *table)
     reg->sheet = sheet;
     GNUCASH_SHEET(sheet)->reg = widget;
 
-    header_canvas = gnc_header_new (GNUCASH_SHEET(sheet));
-    reg->header_canvas = header_canvas;
+    header = gnc_header_new (GNUCASH_SHEET(sheet));
 
-    gtk_table_attach (GTK_TABLE(widget), header_canvas,
+    gtk_table_attach (GTK_TABLE(widget), header,
                       0, 1, 0, 1,
                       GTK_FILL | GTK_EXPAND | GTK_SHRINK,
                       GTK_FILL,
                       0, 0);
-    gtk_widget_show(header_canvas);
+    gtk_widget_show(header);
 
     gtk_table_attach (GTK_TABLE(widget), sheet,
                       0, 1, 1, 2,
@@ -3060,7 +3059,6 @@ gnucash_register_new (Table *table)
                       GTK_FILL,
                       GTK_EXPAND | GTK_SHRINK | GTK_FILL,
                       0, 0);
-    reg->vscrollbar = scrollbar;
     gtk_widget_show(scrollbar);
 
     scrollbar = gtk_hscrollbar_new(GNUCASH_SHEET(sheet)->hadj);

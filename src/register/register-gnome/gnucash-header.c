@@ -40,7 +40,7 @@
 
 #include "gnucash-header.h"
 
-static GnomeCanvasItem *parent_class;
+static GtkLayout *parent_class;
 
 enum
 {
@@ -49,40 +49,36 @@ enum
     PROP_CURSOR_NAME, /* the name of the current cursor */
 };
 
-
-static void
-gnc_header_update (GnomeCanvasItem *item, double *affine,
-                   ArtSVP *clip_path, int flags)
+static gboolean
+gnc_header_expose (GtkWidget *header,
+                   GdkEventExpose *event)
 {
-    if (GNOME_CANVAS_ITEM_CLASS (parent_class)->update)
-        (*GNOME_CANVAS_ITEM_CLASS (parent_class)->update)
-        (item, affine, clip_path, flags);
+    cairo_t *cr;
+    GdkWindow *binwin = gtk_layout_get_bin_window(GTK_LAYOUT(header));
 
-    item->x1 = 0;
-    item->y1 = 0;
-    item->x2 = (INT_MAX / 2) - 1;
-    item->y2 = (INT_MAX / 2) - 1;
+    cr = gdk_cairo_create (binwin);
+    cairo_set_source_surface (cr, GNC_HEADER(header)->surface, 0, 0);
+    cairo_paint (cr);
+    cairo_destroy (cr);
+
+    GTK_WIDGET_CLASS (parent_class)->expose_event (header, event);
+
+    return TRUE;
 }
 
-
 static void
-gnc_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
-                 int x, int y, int width, int height)
+gnc_header_draw (GncHeader *header)
 {
-    GncHeader *header = GNC_HEADER(item);
     SheetBlockStyle *style = header->style;
     Table *table = header->sheet->table;
     VirtualLocation virt_loc;
     VirtualCell *vcell;
-    CellDimensions *cd;
-    GdkColor *bg_color, *fg_color;
-    int xpaint, ypaint;
-    const char *text;
+    GdkColor *gdk_bg_col, *gdk_fg_col;
+    cairo_rgb fg_color, bg_color;
+    int row_offset;
     CellBlock *cb;
-    guint32 argb, color_type;
-    int i, j;
-    int w, h;
-    PangoLayout *layout;
+    int i;
+    cairo_t *cr;
 
     virt_loc.vcell_loc.virt_row = 0;
     virt_loc.vcell_loc.virt_col = 0;
@@ -91,53 +87,50 @@ gnc_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 
     if (header->sheet->use_theme_colors)
     {
-        color_type = gnc_table_get_gtkrc_bg_color (table, virt_loc,
-                     NULL);
-        bg_color = get_gtkrc_color(header->sheet, color_type);
+        guint32 color_type;
+        color_type = gnc_table_get_gtkrc_bg_color (table, virt_loc, NULL);
+        gdk_bg_col = get_gtkrc_color(header->sheet, color_type);
         color_type = gnc_table_get_gtkrc_fg_color (table, virt_loc);
-        fg_color = get_gtkrc_color(header->sheet, color_type);
+        gdk_fg_col = get_gtkrc_color(header->sheet, color_type);
     }
     else
     {
+        guint32 argb;
         argb = gnc_table_get_bg_color (table, virt_loc, NULL);
-        bg_color = gnucash_color_argb_to_gdk (argb);
+        gdk_bg_col = gnucash_color_argb_to_gdk (argb);
         argb = gnc_table_get_fg_color (table, virt_loc);
-        fg_color = gnucash_color_argb_to_gdk (argb);
+        gdk_fg_col = gnucash_color_argb_to_gdk (argb);
     }
 
-    h = style->dimensions->height;
-    h *= header->num_phys_rows;
-    h /= header->style->nrows;
+    to_cairo_rgb(gdk_fg_col, &fg_color);
+    to_cairo_rgb(gdk_bg_col, &bg_color);
 
-    gdk_gc_set_foreground (header->gc, bg_color);
+    if (header->surface)
+        cairo_surface_destroy (header->surface);
+    header->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                                header->width,
+                                                header->height);
 
-    gdk_draw_rectangle (drawable, header->gc, TRUE, 0, 0,
-                        style->dimensions->width, h);
+    cr = cairo_create (header->surface);
+    cairo_rectangle (cr, 0.5, 0.5, header->width - 1.0, header->height - 1.0);
+    cairo_set_source_rgb (cr, bg_color.red, bg_color.green, bg_color.blue);
+    cairo_fill_preserve (cr);
+    cairo_set_source_rgb (cr, fg_color.red, fg_color.green, fg_color.blue);
+    cairo_set_line_width (cr, 1.0);
+    cairo_stroke (cr);
+//    cairo_set_line_width (cr, 1.0);
 
-    gdk_gc_set_line_attributes (header->gc, 1, GDK_LINE_SOLID, GDK_CAP_NOT_LAST, GDK_JOIN_MITER);
-    gdk_gc_set_foreground (header->gc, fg_color);
-
-    gdk_draw_rectangle (drawable, header->gc, FALSE, -x, -y,
-                        style->dimensions->width, h);
-
-    gdk_draw_line (drawable, header->gc, 0, h + 1,
-                   style->dimensions->width, h + 1);
-
-    gdk_gc_set_line_attributes (header->gc, 1, GDK_LINE_SOLID, GDK_CAP_NOT_LAST, GDK_JOIN_MITER);
-    gdk_gc_set_background (header->gc, &gn_white);
-    gdk_gc_set_foreground (header->gc, fg_color);
     /*font = gnucash_register_font;*/
 
     vcell = gnc_table_get_virtual_cell
             (table, table->current_cursor_loc.vcell_loc);
     cb = vcell ? vcell->cellblock : NULL;
-
-    ypaint = -y;
-    h = 0;
+    row_offset = 0;
 
     for (i = 0; i < style->nrows; i++)
     {
-        xpaint = -x;
+        int col_offset = 0;
+        int h = 0, j;
         virt_loc.phys_row_offset = i;
 
         /* TODO: This routine is duplicated in several places.
@@ -147,14 +140,17 @@ gnc_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 
         for (j = 0; j < style->ncols; j++)
         {
-            /*                        gint x_offset, y_offset;*/
-            GdkRectangle rect;
+            CellDimensions *cd;
+            double text_x, text_y, text_w, text_h;
             BasicCell *cell;
+            const char *text;
+            int w;
+            PangoLayout *layout;
 
             virt_loc.phys_col_offset = j;
 
             cd = gnucash_style_get_cell_dimensions (style, i, j);
-
+            h = cd->pixel_height;
             if (header->in_resize && (j == header->resize_col))
                 w = header->resize_col_width;
             else
@@ -163,14 +159,12 @@ gnc_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
             cell = gnc_cellblock_get_cell (cb, i, j);
             if (!cell || !cell->cell_name)
             {
-                xpaint += w;
+                col_offset += w;
                 continue;
             }
 
-            h = cd->pixel_height;
-
-            gdk_draw_rectangle (drawable, header->gc, FALSE,
-                                xpaint, ypaint, w, h);
+            cairo_rectangle (cr, col_offset + 0.5, row_offset + 0.5, w, h);
+            cairo_stroke (cr);
 
             virt_loc.vcell_loc =
                 table->current_cursor_loc.vcell_loc;
@@ -179,12 +173,6 @@ gnc_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                 text = "";
 
             layout = gtk_widget_create_pango_layout (GTK_WIDGET (header->sheet), text);
-
-            /*y_offset = ((h / 2) +
-                                    (((font->ascent + font->descent) / 2) -
-                                     font->descent));
-                        y_offset++;*/
-
             switch (gnc_table_get_align (table, virt_loc))
             {
             default:
@@ -201,81 +189,57 @@ gnc_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                 break;
             }
 
-            rect.x = xpaint + CELL_HPADDING;
-            rect.y = ypaint + 1;
-            rect.width = MAX (0, w - (2 * CELL_HPADDING));
-            rect.height = h - 2;
-
-            gdk_gc_set_clip_rectangle (header->gc, &rect);
-
-            gdk_draw_layout (drawable,
-                             header->gc,
-                             xpaint + CELL_HPADDING,
-                             ypaint + 1,
-                             layout);
-
+            text_x = col_offset + CELL_HPADDING;
+            text_y = row_offset + 1;
+            text_w = MAX (0, w - (2 * CELL_HPADDING));
+            text_h = h - 2;
+            cairo_save (cr);
+            cairo_rectangle (cr, text_x, text_y, text_w, text_h);
+            cairo_clip (cr);
+            cairo_move_to (cr, text_x, text_y);
+            pango_cairo_show_layout (cr, layout);
+            cairo_restore (cr);
             g_object_unref (layout);
 
-            gdk_gc_set_clip_rectangle (header->gc, NULL);
-
-            xpaint += w;
+            col_offset += w;
         }
 
-        ypaint += h;
+        row_offset += h;
     }
+
+    cairo_destroy (cr);
 }
 
 
 void
 gnc_header_request_redraw (GncHeader *header)
 {
-    GnomeCanvas *canvas = GNOME_CANVAS_ITEM(header)->canvas;
-
-    if (header->style == NULL)
+    if (!header->style)
         return;
 
-    gnome_canvas_request_redraw (canvas, 0, 0,
-                                 header->width + 1,
-                                 header->height + 1);
+    gnc_header_draw (header);
+    gtk_widget_queue_draw (GTK_WIDGET(header));
 }
 
 
 static void
-gnc_header_realize (GnomeCanvasItem *item)
+gnc_header_unrealize (GtkWidget *widget)
 {
-    GncHeader *header = GNC_HEADER (item);
-    GdkWindow *window;
+    GncHeader *header = GNC_HEADER (widget);
+    if (header->surface)
+        cairo_surface_destroy (header->surface);
+    header->surface = NULL;
 
-    if (GNOME_CANVAS_ITEM_CLASS (parent_class)->realize)
-        GNOME_CANVAS_ITEM_CLASS (parent_class)->realize (item);
-
-    window = gtk_widget_get_window (GTK_WIDGET (item->canvas));
-
-    header->gc = gdk_gc_new (window);
-}
-
-
-static void
-gnc_header_unrealize (GnomeCanvasItem *item)
-{
-    GncHeader *header = GNC_HEADER (item);
-
-    if (header->gc != NULL)
-    {
-        g_object_unref (header->gc);
-        header->gc = NULL;
-    }
-
-    if (header->resize_cursor != NULL)
+    if (header->resize_cursor)
         gdk_cursor_unref (header->resize_cursor);
     header->resize_cursor = NULL;
 
-    if (header->normal_cursor != NULL)
+    if (header->normal_cursor)
         gdk_cursor_unref (header->normal_cursor);
     header->normal_cursor = NULL;
 
-    if (GNOME_CANVAS_ITEM_CLASS (parent_class)->unrealize)
-        GNOME_CANVAS_ITEM_CLASS (parent_class)->unrealize (item);
+    if (GTK_WIDGET_CLASS (parent_class)->unrealize)
+        GTK_WIDGET_CLASS (parent_class)->unrealize (GTK_WIDGET(header));
 }
 
 
@@ -296,7 +260,6 @@ gnc_header_finalize (GObject *object)
 void
 gnc_header_reconfigure (GncHeader *header)
 {
-    GnomeCanvas *canvas;
     GnucashSheet *sheet;
     SheetBlockStyle *old_style;
     int w, h;
@@ -304,7 +267,6 @@ gnc_header_reconfigure (GncHeader *header)
     g_return_if_fail (header != NULL);
     g_return_if_fail (GNC_IS_HEADER (header));
 
-    canvas = GNOME_CANVAS_ITEM(header)->canvas;
     sheet = GNUCASH_SHEET(header->sheet);
     old_style = header->style;
 
@@ -328,12 +290,8 @@ gnc_header_reconfigure (GncHeader *header)
     {
         header->height = h;
         header->width = w;
-
-        gnome_canvas_set_scroll_region (GNOME_CANVAS(canvas),
-                                        0, 0, w, h);
-
-        gtk_widget_set_size_request (GTK_WIDGET(canvas), -1, h);
-
+        gtk_layout_set_size(GTK_LAYOUT(header), w, h);
+        gtk_widget_set_size_request(GTK_WIDGET(header), -1, h);
         gnc_header_request_redraw (header);
     }
 }
@@ -348,22 +306,13 @@ gnc_header_set_header_rows (GncHeader *header,
     header->num_phys_rows = num_phys_rows;
 }
 
-static double
-gnc_header_point (GnomeCanvasItem *item,
-                  double x, double y, int cx, int cy,
-                  GnomeCanvasItem **actual_item)
-{
-    *actual_item = item;
-    return 0.0;
-}
-
 /*
  *  Returns FALSE if pointer not on a resize line, else returns
  *  TRUE. Returns the index of the column to the left in the col
  *  argument.
  */
 static gboolean
-pointer_on_resize_line (GncHeader *header, int x, int y, int *col)
+pointer_on_resize_line (GncHeader *header, int x, G_GNUC_UNUSED int y, int *col)
 {
     SheetBlockStyle *style = header->style;
     gboolean on_the_line = FALSE;
@@ -426,11 +375,10 @@ gnc_header_resize_column (GncHeader *header, gint col, gint width)
     gnucash_cursor_configure (GNUCASH_CURSOR(sheet->cursor));
     gnc_item_edit_configure (gnucash_sheet_get_item_edit (sheet));
 
-    gnc_header_reconfigure (header);
     gnucash_sheet_set_scroll_region (sheet);
     gnucash_sheet_update_adjustments (sheet);
 
-    gnc_header_request_redraw (header);
+    gnc_header_reconfigure (header);
     gnucash_sheet_redraw_all (sheet);
 }
 
@@ -445,36 +393,22 @@ gnc_header_auto_resize_column (GncHeader *header, gint col)
 }
 
 static gint
-gnc_header_event (GnomeCanvasItem *item, GdkEvent *event)
+gnc_header_event (GtkWidget *widget, GdkEvent *event)
 {
-    GncHeader *header = GNC_HEADER(item);
-    GnomeCanvas *canvas = item->canvas;
+    GncHeader *header = GNC_HEADER(widget);
     int x, y;
     int col;
 
     switch (event->type)
     {
     case GDK_MOTION_NOTIFY:
-
-        gnome_canvas_w2c (canvas, event->motion.x, event->motion.y,
-                          &x, &y);
+        x = event->motion.x;
+        y = event->motion.y;
 
         if (header->in_resize)
         {
             int change = x - header->resize_x;
-            int new_width;
-
-            if (!header->needs_ungrab)
-            {
-                gnome_canvas_item_grab (item,
-                                        GDK_POINTER_MOTION_MASK |
-                                        GDK_BUTTON_RELEASE_MASK,
-                                        header->resize_cursor,
-                                        event->button.time);
-                header->needs_ungrab = TRUE;
-            }
-
-            new_width = header->resize_col_width + change;
+            int new_width = header->resize_col_width + change;
 
             if (new_width >= 0)
             {
@@ -488,10 +422,10 @@ gnc_header_event (GnomeCanvasItem *item, GdkEvent *event)
 
         if (pointer_on_resize_line(header, x, y, &col) &&
                 gnucash_style_col_is_resizable (header->style, col))
-            gdk_window_set_cursor (gtk_widget_get_window (GTK_WIDGET(canvas)),
+            gdk_window_set_cursor (gtk_widget_get_window (widget),
                                    header->resize_cursor);
         else
-            gdk_window_set_cursor (gtk_widget_get_window (GTK_WIDGET(canvas)),
+            gdk_window_set_cursor (gtk_widget_get_window (widget),
                                    header->normal_cursor);
         break;
 
@@ -502,8 +436,8 @@ gnc_header_event (GnomeCanvasItem *item, GdkEvent *event)
         if (event->button.button != 1)
             break;
 
-        gnome_canvas_w2c (canvas, event->button.x, event->button.y,
-                          &x, &y);
+        x = event->button.x;
+        y = event->button.y;
 
         if (pointer_on_resize_line (header, x, y, &col))
             col = find_resize_col (header, col);
@@ -530,22 +464,15 @@ gnc_header_event (GnomeCanvasItem *item, GdkEvent *event)
         if (event->button.button != 1)
             break;
 
-        gnome_canvas_w2c (canvas, event->button.x, event->button.y,
-                          &x, &y);
+        x = event->button.x;
+        y = event->button.y;
 
         if (header->in_resize)
         {
-            if (header->needs_ungrab)
-            {
-                gnome_canvas_item_ungrab (item,
-                                          event->button.time);
-                header->needs_ungrab = FALSE;
-
-                gnc_header_resize_column
+            gnc_header_resize_column
                 (header,
                  header->resize_col,
                  header->resize_col_width);
-            }
             header->in_resize = FALSE;
             header->resize_col = -1;
         }
@@ -562,8 +489,8 @@ gnc_header_event (GnomeCanvasItem *item, GdkEvent *event)
         if (event->button.button != 1)
             break;
 
-        gnome_canvas_w2c (canvas, event->button.x, event->button.y,
-                          &x, &y);
+        x = event->button.x;
+        y = event->button.y;
 
         on_line = pointer_on_resize_line (header, x, y, &ptr_col);
 
@@ -578,13 +505,6 @@ gnc_header_event (GnomeCanvasItem *item, GdkEvent *event)
         {
             header->in_resize = FALSE;
             header->resize_col = -1;
-            if (header->needs_ungrab)
-            {
-                gnome_canvas_item_ungrab (item,
-                                          event->button.time);
-                header->needs_ungrab = FALSE;
-            }
-
             gnc_header_auto_resize_column (header, resize_col);
         }
 
@@ -595,7 +515,7 @@ gnc_header_event (GnomeCanvasItem *item, GdkEvent *event)
         break;
     }
 
-    return TRUE;
+    return FALSE;
 }
 
 
@@ -634,7 +554,7 @@ gnc_header_set_property (GObject *object,
                          GParamSpec *pspec)
 {
     GncHeader *header = GNC_HEADER (object);
-    GtkLayout *layout = GTK_LAYOUT (GNOME_CANVAS_ITEM (header)->canvas);
+    GtkLayout *layout = GTK_LAYOUT (header);
     gboolean needs_update = FALSE;
     gchar *old_name;
 
@@ -675,6 +595,16 @@ gnc_header_init (GncHeader *header)
     header->height = 20;
     header->width = 400;
     header->style = NULL;
+
+    gtk_widget_add_events(GTK_WIDGET(header), (GDK_EXPOSURE_MASK
+                          | GDK_BUTTON_PRESS_MASK
+                          | GDK_BUTTON_RELEASE_MASK
+                          | GDK_POINTER_MOTION_MASK
+                          | GDK_POINTER_MOTION_HINT_MASK));
+
+    g_signal_connect(G_OBJECT(header), "configure_event",
+                     G_CALLBACK(gnc_header_reconfigure), NULL);
+    gtk_widget_show_all (GTK_WIDGET(header));
 }
 
 
@@ -682,7 +612,7 @@ static void
 gnc_header_class_init (GncHeaderClass *header_class)
 {
     GObjectClass  *object_class = G_OBJECT_CLASS (header_class);
-    GnomeCanvasItemClass *item_class = GNOME_CANVAS_ITEM_CLASS (header_class);
+    GtkWidgetClass *item_class = GTK_WIDGET_CLASS (header_class);
 
     parent_class = g_type_class_peek_parent (header_class);
 
@@ -706,12 +636,11 @@ gnc_header_class_init (GncHeaderClass *header_class)
                                              G_PARAM_READWRITE));
 
 
-    item_class->realize   = gnc_header_realize;
     item_class->unrealize = gnc_header_unrealize;
-    item_class->update    = gnc_header_update;
-    item_class->draw      = gnc_header_draw;
+//    item_class->update    = gnc_header_update;
+    item_class->expose_event = gnc_header_expose;
     item_class->event     = gnc_header_event;
-    item_class->point     = gnc_header_point;
+//    item_class->point     = gnc_header_point;
 }
 
 
@@ -735,7 +664,7 @@ gnc_header_get_type (void)
             (GInstanceInitFunc) gnc_header_init
         };
 
-        gnc_header_type = g_type_register_static (gnome_canvas_item_get_type (),
+        gnc_header_type = g_type_register_static (GTK_TYPE_LAYOUT,
                           "GncHeader",
                           &gnc_header_info, 0);
     }
@@ -744,40 +673,18 @@ gnc_header_get_type (void)
 }
 
 
-static void
-gnc_header_realized (GtkWidget *widget, gpointer data)
-{
-    gdk_window_set_back_pixmap (gtk_layout_get_bin_window (GTK_LAYOUT (widget)),
-                                NULL, FALSE);
-}
-
-
 GtkWidget *
 gnc_header_new (GnucashSheet *sheet)
 {
-    GnomeCanvasGroup *group;
-    GnomeCanvasItem *item;
-    GtkWidget *canvas;
+    GtkWidget *layout;
 
-    canvas = gnome_canvas_new ();
+    layout = g_object_new (GNC_TYPE_HEADER,
+                           "sheet", sheet,
+                           "cursor_name", CURSOR_HEADER,
+                           NULL);
 
-    g_signal_connect (G_OBJECT (canvas), "realize",
-                      G_CALLBACK (gnc_header_realized),
-                      NULL);
-
-    group = GNOME_CANVAS_GROUP (GNOME_CANVAS (canvas)->root);
-
-    item = gnome_canvas_item_new (group,
-                                  gnc_header_get_type (),
-                                  "sheet", sheet,
-                                  "cursor_name", CURSOR_HEADER,
-                                  NULL);
-
-    sheet->header_item = item;
-
-    gtk_widget_show (canvas);
-
-    return canvas;
+    sheet->header_item = layout;
+    return layout;
 }
 
 

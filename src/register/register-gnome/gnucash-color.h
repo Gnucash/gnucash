@@ -40,6 +40,16 @@ void      gnucash_color_alloc_name  (const char *name, GdkColor *color);
 void      gnucash_color_alloc_gdk   (GdkColor *color);
 GdkColor *gnucash_color_argb_to_gdk (guint32 argb);
 
+
+typedef struct
+{
+    double red;
+    double green;
+    double blue;
+} cairo_rgb;
+
+void to_cairo_rgb (GdkColor *gdk_col, cairo_rgb *c_col);
+
 extern GdkColor gn_white, gn_light_gray, gn_dark_gray;
 extern GdkColor gn_black, gn_blue, gn_red, gn_yellow;
 /** @} */
