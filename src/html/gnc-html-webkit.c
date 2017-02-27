@@ -96,16 +96,6 @@ static WebKitNavigationResponse webkit_navigation_requested_cb(
 static void webkit_on_url_cb( WebKitWebView* web_view, gchar* title, gchar* url,
                               gpointer data );
 static gchar* handle_embedded_object( GncHtmlWebkit* self, gchar* html_str );
-#if 0
-static void gnc_html_set_base_cb( GtkHTML* gtkhtml, const gchar* base, gpointer data );
-static void gnc_html_link_clicked_cb( GtkHTML* html, const gchar* url, gpointer data );
-static gboolean gnc_html_object_requested_cb( GtkHTML* html, GtkHTMLEmbedded* eb,
-        gpointer data );
-#endif
-#if 0 /* Not Used */
-static int gnc_html_button_press_cb( GtkWidget* widg, GdkEventButton* event,
-                                     gpointer user_data );
-#endif /* Not Used */
 static void impl_webkit_show_url( GncHtml* self, URLType type,
                                   const gchar* location, const gchar* label,
                                   gboolean new_window_hint );
@@ -187,28 +177,6 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
     g_signal_connect( priv->web_view, "console-message",
             G_CALLBACK(webkit_console_msg_cb),
             self);
-
-#if 0
-    g_signal_connect( priv->html, "set_base",
-                      G_CALLBACK(gnc_html_set_base_cb),
-                      self);
-
-    g_signal_connect(priv->html, "link_clicked",
-                     G_CALLBACK(gnc_html_link_clicked_cb),
-                     self);
-
-    g_signal_connect (priv->html, "object_requested",
-                      G_CALLBACK (gnc_html_object_requested_cb),
-                      self);
-
-    g_signal_connect (priv->html, "button_press_event",
-                      G_CALLBACK (gnc_html_button_press_cb),
-                      self);
-
-    g_signal_connect (priv->html, "submit",
-                      G_CALLBACK(gnc_html_submit_cb),
-                      self);
-#endif
 
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL_REPORT,
             GNC_PREF_RPT_DFLT_ZOOM,
@@ -581,27 +549,6 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
     while ( FALSE );
 }
 
-#if 0
-/********************************************************************
- * gnc_html_link_clicked_cb - called when user left-clicks on html
- * anchor.
- ********************************************************************/
-
-static void
-gnc_html_link_clicked_cb( GtkHTML* html, const gchar* url, gpointer data )
-{
-    URLType type;
-    gchar* location = NULL;
-    gchar* label = NULL;
-    GncHtmlWebkit* self = GNC_HTML_WEBKIT(data);
-
-    DEBUG("Clicked %s", url);
-    type = gnc_html_parse_url( GNC_HTML(self), url, &location, &label );
-    gnc_html_show_url( GNC_HTML(self), type, location, label, 0 );
-    g_free( location );
-    g_free( label );
-}
-#endif
 
 /********************************************************************
  * webkit_navigation_requested_cb - called when a URL needs to be
@@ -641,33 +588,6 @@ webkit_navigation_requested_cb( WebKitWebView* web_view, WebKitWebFrame* frame,
     return WEBKIT_NAVIGATION_RESPONSE_IGNORE;
 }
 
-#if 0
-/********************************************************************
- * gnc_html_object_requested_cb - called when an applet needs to be
- * loaded.
- ********************************************************************/
-
-static gboolean
-gnc_html_object_requested_cb( GtkHTML* html, GtkHTMLEmbedded* eb,
-                              gpointer data )
-{
-    GncHtmlWebkit* self = GNC_HTML_WEBKIT(data);
-    GncHTMLObjectCB h;
-
-    DEBUG( " " );
-    if ( !eb || !(eb->classid) || !gnc_html_object_handlers ) return FALSE;
-
-    h = g_hash_table_lookup( gnc_html_object_handlers, eb->classid );
-    if ( h )
-    {
-        return h( GNC_HTML(self), eb, data );
-    }
-    else
-    {
-        return FALSE;
-    }
-}
-#endif
 
 /********************************************************************
  * webkit_on_url_cb - called when user rolls over html anchor
@@ -688,57 +608,6 @@ webkit_on_url_cb( WebKitWebView* web_view, gchar* title, gchar* url, gpointer da
     }
 }
 
-#if 0
-/********************************************************************
- * gnc_html_set_base_cb
- ********************************************************************/
-
-static void
-gnc_html_set_base_cb( GtkHTML* gtkhtml, const gchar* base,
-                      gpointer data )
-{
-    GncHtmlWebkit* self = GNC_HTML_WEBKIT(data);
-    GncHtmlWebkitPrivate* priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
-    URLType type;
-    gchar* location = NULL;
-    gchar* label = NULL;
-
-    DEBUG( "Setting base location to %s", base );
-    type = gnc_html_parse_url( GNC_HTML(self), base, &location, &label );
-
-    g_free( priv->base.base_location );
-    g_free( label );
-
-    priv->base.base_type = type;
-    priv->base.base_location = location;
-}
-#endif
-
-/********************************************************************
- * gnc_html_button_press_cb
- * mouse button callback (if any)
- ********************************************************************/
-
-#if 0 /* Not Used */
-static int
-gnc_html_button_press_cb( GtkWidget* widg, GdkEventButton* event,
-                          gpointer user_data )
-{
-    GncHtmlWebkit* self = GNC_HTML_WEBKIT(user_data);
-    GncHtmlWebkitPrivate* priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
-
-    DEBUG( "Button Press" );
-    if ( priv->base.button_cb != NULL )
-    {
-        (priv->base.button_cb)( GNC_HTML(self), event, priv->base.button_cb_data );
-        return TRUE;
-    }
-    else
-    {
-        return FALSE;
-    }
-}
-#endif /* Not Used */
 
 /********************************************************************
  * gnc_html_open_scm
