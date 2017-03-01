@@ -379,7 +379,6 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
     // this resets the window for the progressbar to NULL
     gnc_window_set_progressbar_window( NULL );
 
-    gtk_widget_show_all( GTK_WIDGET(priv->container) );
     return FALSE;
 }
 
