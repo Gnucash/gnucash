@@ -29,7 +29,6 @@
  */
 
 #include "config.h"
-#include <libgnomecanvas/libgnomecanvas.h>
 
 #include "gnucash-color.h"
 #include "gnucash-cursor.h"
@@ -38,14 +37,13 @@
 #include "gnucash-sheetP.h"
 #include "gnucash-style.h"
 
-static GnomeCanvasItem *gnucash_cursor_parent_class;
-static GnomeCanvasItem *gnucash_item_cursor_parent_class;
+static GtkDrawingArea *gnucash_cursor_parent_class;
+static GtkDrawingArea *gnucash_item_cursor_parent_class;
 
 enum
 {
     PROP_0,
     PROP_SHEET,
-    PROP_GRID,
 };
 
 
@@ -62,8 +60,7 @@ gnucash_cursor_get_pixel_coords (GnucashCursor *cursor,
     SheetBlock *block;
     gint col;
 
-    item_cursor =
-        GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_BLOCK]);
+    item_cursor = cursor->cursor[GNUCASH_CURSOR_BLOCK];
 
     vcell_loc.virt_row = item_cursor->row;
     vcell_loc.virt_col = item_cursor->col;
@@ -115,15 +112,13 @@ gnucash_cursor_get_pixel_coords (GnucashCursor *cursor,
 static void
 gnucash_cursor_request_redraw (GnucashCursor *cursor)
 {
-    GnomeCanvas *canvas = GNOME_CANVAS_ITEM(cursor)->canvas;
-    int x, y, w, h;
-
-    x = cursor->x;
-    y = cursor->y;
-    w = cursor->w;
-    h = cursor->h;
-
-    gnome_canvas_request_redraw (canvas, x, y, x + w + 1, y + h + 1);
+    GnucashItemCursor *ic;
+    gtk_widget_queue_draw_area (GTK_WIDGET(cursor),
+                                cursor->x, cursor->y, cursor->w, cursor->h);
+    ic = cursor->cursor[GNUCASH_CURSOR_BLOCK];
+    gtk_widget_queue_draw_area (GTK_WIDGET(ic), ic->x, ic->y, ic->w, ic->h);
+    ic = cursor->cursor[GNUCASH_CURSOR_CELL];
+    gtk_widget_queue_draw_area (GTK_WIDGET(ic), ic->x, ic->y, ic->w, ic->h);
 }
 
 
@@ -143,94 +138,76 @@ gnucash_cursor_get_virt (GnucashCursor *cursor, VirtualLocation *virt_loc)
     g_return_if_fail (cursor != NULL);
     g_return_if_fail (GNUCASH_IS_CURSOR (cursor));
 
-    virt_loc->vcell_loc.virt_row =
-        GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_BLOCK])->row;
-    virt_loc->vcell_loc.virt_col =
-        GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_BLOCK])->col;
+    virt_loc->vcell_loc.virt_row = cursor->cursor[GNUCASH_CURSOR_BLOCK]->row;
+    virt_loc->vcell_loc.virt_col = cursor->cursor[GNUCASH_CURSOR_BLOCK]->col;
 
-    virt_loc->phys_row_offset =
-        GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_CELL])->row;
-    virt_loc->phys_col_offset =
-        GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_CELL])->col;
+    virt_loc->phys_row_offset = cursor->cursor[GNUCASH_CURSOR_CELL]->row;
+    virt_loc->phys_col_offset = cursor->cursor[GNUCASH_CURSOR_CELL]->col;
 }
 
 
 void
 gnucash_cursor_configure (GnucashCursor *cursor)
 {
-    GnomeCanvasItem *item;
     GnucashItemCursor *block_cursor;
     GnucashItemCursor *cell_cursor;
-    GnomeCanvas *canvas;
+    GtkLayout *layout;
     gint x, y, w, h;
-    double wx, wy;
 
     g_return_if_fail (cursor != NULL);
     g_return_if_fail (GNUCASH_IS_CURSOR (cursor));
 
-    canvas = GNOME_CANVAS(GNOME_CANVAS_ITEM(cursor)->canvas);
+    if (!cursor->sheet)
+        return;
 
-    item = GNOME_CANVAS_ITEM (cursor);
+    g_return_if_fail (GTK_IS_LAYOUT (cursor->sheet));
+    layout = GTK_LAYOUT(cursor->sheet);
 
     gnucash_cursor_get_pixel_coords (cursor, &x, &y, &w, &h);
-    gnome_canvas_item_set (GNOME_CANVAS_ITEM(cursor),
-                           "GnomeCanvasGroup::x", (double)x,
-                           "GnomeCanvasGroup::y", (double)y,
-                           NULL);
-
+    cursor->x = x;
+    cursor->y = y;
     cursor->w = w;
     cursor->h = h + 1;
 
-    item->x1 = cursor->x = x;
-    item->y1 = cursor->y = y;
-    item->x2 = x + w;
-    item->y2 = y + h + 1;
+    gtk_layout_move (layout, GTK_WIDGET(cursor), cursor->x, cursor->y);
+    gtk_widget_set_size_request(GTK_WIDGET(cursor), cursor->w, cursor->h);
 
-    item = cursor->cursor[GNUCASH_CURSOR_BLOCK];
-    block_cursor = GNUCASH_ITEM_CURSOR (item);
+    block_cursor = cursor->cursor[GNUCASH_CURSOR_BLOCK];
+    block_cursor->x = cursor->x;
+    block_cursor->y = cursor->y;
+    block_cursor->w = cursor->w;
+    block_cursor->h = cursor->h;
 
-    wx = 0;
-    wy = 0;
+    gtk_layout_move (layout, GTK_WIDGET(block_cursor),
+                     block_cursor->x, block_cursor->y);
+    gtk_widget_set_size_request(GTK_WIDGET(block_cursor),
+                                block_cursor->w, block_cursor->h);
 
-    gnome_canvas_item_i2w (item, &wx, &wy);
-    gnome_canvas_w2c (canvas, wx, wy, &block_cursor->x, &block_cursor->y);
-    block_cursor->w = w;
-    block_cursor->h = h + 1;
-
-    item->x1 = block_cursor->x;
-    item->y1 = block_cursor->y;
-    item->x2 = block_cursor->x + w;
-    item->y2 = block_cursor->y + h + 1;
-
-    item = cursor->cursor[GNUCASH_CURSOR_CELL];
-    cell_cursor = GNUCASH_ITEM_CURSOR(item);
-
+    cell_cursor = cursor->cursor[GNUCASH_CURSOR_CELL];
     gnucash_sheet_style_get_cell_pixel_rel_coords (cursor->style,
-            cell_cursor->row,
-            cell_cursor->col,
+            cell_cursor->row,  cell_cursor->col,
             &x, &y, &w, &h);
-    wx = x - block_cursor->x;
-    wy = y;
-
-    gnome_canvas_item_i2w (item, &wx, &wy);
-    gnome_canvas_w2c (canvas, wx, wy, &cell_cursor->x, &cell_cursor->y);
+    cell_cursor->x = x - block_cursor->x;
+    cell_cursor->y = y;
     cell_cursor->w = w;
     cell_cursor->h = h;
 
-    item->x1 = cell_cursor->x;
-    item->y1 = cell_cursor->y;
-    item->x2 = cell_cursor->x + w;
-    item->y2 = cell_cursor->y + h;
+    gtk_layout_move (layout, GTK_WIDGET(cell_cursor),
+                     cell_cursor->x, cell_cursor->y);
+    gtk_widget_set_size_request(GTK_WIDGET(cell_cursor),
+                                cell_cursor->w, cell_cursor->h);
 }
 
 
-static void
-gnucash_item_cursor_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
-                          int x, int y, int width, int height)
+static gboolean
+gnucash_item_cursor_draw (GtkWidget *widget, GdkEventExpose *event)
 {
-    GnucashItemCursor *item_cursor = GNUCASH_ITEM_CURSOR (item);
-    GnucashCursor *cursor = GNUCASH_CURSOR(item->parent);
+    GnucashItemCursor *item_cursor = GNUCASH_ITEM_CURSOR(widget);
+    GnucashCursor *cursor = GNUCASH_CURSOR(item_cursor->parent);
     gint dx, dy, dw, dh;
+    int x = event->area.x;
+    int y = event->area.y;
+    GdkDrawable *drawable = GDK_DRAWABLE (gtk_layout_get_bin_window (GTK_LAYOUT(widget)));
 
     switch (item_cursor->type)
     {
@@ -269,6 +246,7 @@ gnucash_item_cursor_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                             dx, dy, dw, dh);
         break;
     }
+    return TRUE;
 }
 
 
@@ -282,8 +260,7 @@ gnucash_cursor_set_block (GnucashCursor *cursor, VirtualCellLocation vcell_loc)
     g_return_if_fail (GNUCASH_IS_CURSOR (cursor));
 
     sheet = cursor->sheet;
-    item_cursor =
-        GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_BLOCK]);
+    item_cursor = cursor->cursor[GNUCASH_CURSOR_BLOCK];
 
     if (vcell_loc.virt_row < 0 ||
             vcell_loc.virt_row >= sheet->num_virt_rows ||
@@ -307,7 +284,7 @@ gnucash_cursor_set_cell (GnucashCursor *cursor, gint cell_row, gint cell_col)
     g_return_if_fail (cursor != NULL);
     g_return_if_fail (GNUCASH_IS_CURSOR (cursor));
 
-    item_cursor = GNUCASH_ITEM_CURSOR(cursor->cursor[GNUCASH_CURSOR_CELL]);
+    item_cursor = cursor->cursor[GNUCASH_CURSOR_CELL];
     style = cursor->style;
 
     if (cell_row < 0 || cell_row >= style->nrows ||
@@ -350,38 +327,31 @@ gnucash_cursor_set (GnucashCursor *cursor, VirtualLocation virt_loc)
 static void
 gnucash_item_cursor_init (GnucashItemCursor *cursor)
 {
-    GnomeCanvasItem *item = GNOME_CANVAS_ITEM (cursor);
-
-    item->x1 = 0;
-    item->y1 = 0;
-    item->x2 = 1;
-    item->y2 = 1;
-
     cursor->col = 0;
     cursor->row   = 0;
 }
 
 
 static void
-gnucash_cursor_realize (GnomeCanvasItem *item)
+gnucash_cursor_realize (GtkWidget *widget)
 {
-    GnucashCursor *cursor = GNUCASH_CURSOR (item);
+    GnucashCursor *cursor = GNUCASH_CURSOR (widget);
     GdkWindow *window;
 
-    if (GNOME_CANVAS_ITEM_CLASS (gnucash_cursor_parent_class)->realize)
-        (*GNOME_CANVAS_ITEM_CLASS
-         (gnucash_cursor_parent_class)->realize)(item);
+    if (GTK_WIDGET_CLASS (gnucash_cursor_parent_class)->realize)
+        (GTK_WIDGET_CLASS
+         (gnucash_cursor_parent_class)->realize)(widget);
 
-    window = gtk_widget_get_window (GTK_WIDGET (item->canvas));
+    window = gtk_widget_get_window (widget);
 
     cursor->gc = gdk_gc_new (window);
 }
 
 
 static void
-gnucash_cursor_unrealize (GnomeCanvasItem *item)
+gnucash_cursor_unrealize (GtkWidget *widget)
 {
-    GnucashCursor *cursor = GNUCASH_CURSOR (item);
+    GnucashCursor *cursor = GNUCASH_CURSOR (widget);
 
     if (cursor->gc != NULL)
     {
@@ -389,23 +359,23 @@ gnucash_cursor_unrealize (GnomeCanvasItem *item)
         cursor->gc = NULL;
     }
 
-    if (GNOME_CANVAS_ITEM_CLASS (gnucash_cursor_parent_class)->unrealize)
-        (*GNOME_CANVAS_ITEM_CLASS
-         (gnucash_cursor_parent_class)->unrealize)(item);
+    if (GTK_WIDGET_CLASS (gnucash_cursor_parent_class)->unrealize)
+        (GTK_WIDGET_CLASS
+         (gnucash_cursor_parent_class)->unrealize)(widget);
 }
 
 
 static void
 gnucash_item_cursor_class_init (GnucashItemCursorClass *klass)
 {
-    GnomeCanvasItemClass *item_class;
+    GtkWidgetClass *widget_class;
 
-    item_class = GNOME_CANVAS_ITEM_CLASS (klass);
+    widget_class = GTK_WIDGET_CLASS (klass);
 
     gnucash_item_cursor_parent_class = g_type_class_peek_parent (klass);
 
-    /* GnomeCanvasItem method overrides */
-    item_class->draw = gnucash_item_cursor_draw;
+    /* Widget method overrides */
+    widget_class->expose_event = gnucash_item_cursor_draw;
 }
 
 
@@ -430,7 +400,7 @@ gnucash_item_cursor_get_type (void)
         };
 
         gnucash_item_cursor_type =
-            g_type_register_static (gnome_canvas_item_get_type (),
+            g_type_register_static (GTK_TYPE_DRAWING_AREA,
                                     "GnucashItemCursor",
                                     &gnucash_item_cursor_info, 0);
     }
@@ -454,10 +424,6 @@ gnucash_cursor_set_property (GObject         *object,
     case PROP_SHEET:
         cursor->sheet =
             GNUCASH_SHEET (g_value_get_object (value));
-        break;
-    case PROP_GRID:
-        cursor->grid =
-            GNUCASH_GRID (g_value_get_object (value));
         break;
     default:
         break;
@@ -484,9 +450,6 @@ gnucash_cursor_get_property (GObject         *object,
     case PROP_SHEET:
         g_value_take_object (value, cursor->sheet);
         break;
-    case PROP_GRID:
-        g_value_take_object (value, cursor->grid);
-        break;
     default:
         break;
     }
@@ -494,25 +457,13 @@ gnucash_cursor_get_property (GObject         *object,
 
 
 static void
-gnucash_cursor_init (GnucashCursor *cursor)
-{
-    GnomeCanvasItem *item = GNOME_CANVAS_ITEM (cursor);
-
-    item->x1 = 0;
-    item->y1 = 0;
-    item->x2 = 1;
-    item->y2 = 1;
-}
-
-
-static void
 gnucash_cursor_class_init (GnucashCursorClass *klass)
 {
     GObjectClass  *object_class;
-    GnomeCanvasItemClass *item_class;
+    GtkWidgetClass *widget_class;
 
     object_class = G_OBJECT_CLASS (klass);
-    item_class = GNOME_CANVAS_ITEM_CLASS (klass);
+    widget_class = GTK_WIDGET_CLASS (klass);
 
     gnucash_cursor_parent_class = g_type_class_peek_parent (klass);
 
@@ -520,9 +471,9 @@ gnucash_cursor_class_init (GnucashCursorClass *klass)
     object_class->set_property = gnucash_cursor_set_property;
     object_class->get_property = gnucash_cursor_get_property;
 
-    /* GnomeCanvasItem method overrides */
-    item_class->realize     = gnucash_cursor_realize;
-    item_class->unrealize   = gnucash_cursor_unrealize;
+    /* GtkWidget method overrides */
+    widget_class->realize     = gnucash_cursor_realize;
+    widget_class->unrealize   = gnucash_cursor_unrealize;
 
     /* properties */
     g_object_class_install_property
@@ -532,14 +483,6 @@ gnucash_cursor_class_init (GnucashCursorClass *klass)
                           "Sheet Value",
                           "Sheet Value",
                           GNUCASH_TYPE_SHEET,
-                          G_PARAM_READWRITE));
-    g_object_class_install_property
-    (object_class,
-     PROP_GRID,
-     g_param_spec_object ("grid",
-                          "Grid Value",
-                          "Grid Value",
-                          GNUCASH_TYPE_GRID,
                           G_PARAM_READWRITE));
 }
 
@@ -561,11 +504,11 @@ gnucash_cursor_get_type (void)
             NULL,		/* class_data */
             sizeof (GnucashCursor),
             0,		/* n_preallocs */
-            (GInstanceInitFunc) gnucash_cursor_init
+            NULL        /* instance intialization */
         };
 
         gnucash_cursor_type =
-            g_type_register_static (gnome_canvas_group_get_type (),
+            g_type_register_static (GTK_TYPE_DRAWING_AREA,
                                     "GnucashCursor",
                                     &gnucash_cursor_info, 0);
     }
@@ -574,42 +517,34 @@ gnucash_cursor_get_type (void)
 }
 
 
-GnomeCanvasItem *
-gnucash_cursor_new (GnomeCanvasGroup *parent)
+GtkWidget *
+gnucash_cursor_new (GnucashSheet *sheet)
 {
-    GnomeCanvasItem *item;
-    GnomeCanvasItem *cursor_item;
     GnucashCursor *cursor;
     GnucashItemCursor *item_cursor;
 
-    g_return_val_if_fail (parent != NULL, NULL);
-    g_return_val_if_fail (GNOME_IS_CANVAS_GROUP(parent), NULL);
+    cursor = GNUCASH_CURSOR(
+        g_object_new (gnucash_cursor_get_type(),
+                      "sheet", sheet,
+                      NULL));
+    gtk_layout_put (GTK_LAYOUT(sheet), GTK_WIDGET(cursor), 0, 0);
 
-    item = gnome_canvas_item_new (parent,
-                                  gnucash_cursor_get_type(),
-                                  NULL);
-
-    cursor = GNUCASH_CURSOR(item);
-
-    cursor_item = gnome_canvas_item_new (GNOME_CANVAS_GROUP(item),
-                                         gnucash_item_cursor_get_type(),
-                                         NULL);
-
-    item_cursor = GNUCASH_ITEM_CURSOR (cursor_item);
+    item_cursor = GNUCASH_ITEM_CURSOR (
+        g_object_new (gnucash_item_cursor_get_type(), NULL));
     item_cursor->type = GNUCASH_CURSOR_CELL;
+    item_cursor->parent = GTK_WIDGET(cursor);
+    gtk_layout_put (GTK_LAYOUT(sheet), GTK_WIDGET(item_cursor), 0, 0);
+    cursor->cursor[GNUCASH_CURSOR_CELL] = item_cursor;
 
-    cursor->cursor[GNUCASH_CURSOR_CELL] = cursor_item;
 
-    cursor_item = gnome_canvas_item_new (GNOME_CANVAS_GROUP(item),
-                                         gnucash_item_cursor_get_type(),
-                                         NULL);
-
-    item_cursor = GNUCASH_ITEM_CURSOR (cursor_item);
+    item_cursor = GNUCASH_ITEM_CURSOR (
+        g_object_new (gnucash_item_cursor_get_type(), NULL));
     item_cursor->type = GNUCASH_CURSOR_BLOCK;
+    item_cursor->parent = GTK_WIDGET(cursor);
+    gtk_layout_put (GTK_LAYOUT(sheet), GTK_WIDGET(item_cursor), 0, 0);
+    cursor->cursor[GNUCASH_CURSOR_BLOCK] = item_cursor;
 
-    cursor->cursor[GNUCASH_CURSOR_BLOCK] = cursor_item;
-
-    return item;
+    return GTK_WIDGET (cursor);
 }
 
 

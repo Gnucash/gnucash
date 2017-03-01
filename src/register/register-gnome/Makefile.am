@@ -13,7 +13,7 @@ libgncmod_register_gnome_la_LIBADD = \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GLIB_LIBS} \
-  ${GNOMECANVAS_LIBS}
+  ${GTK_LIBS}
 
 libgncmod_register_gnome_la_SOURCES = \
   gncmod-register-gnome.c \
@@ -62,7 +62,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/register/register-core \
   -I${top_srcdir}/src/libqof/qof \
   ${GLIB_CFLAGS} \
-  ${GTK_XIM_FLAGS} \
-  ${GNOMECANVAS_CFLAGS}
+  ${GTK_CFLAGS} \
+  ${GTK_XIM_FLAGS}
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.register.gnome\"

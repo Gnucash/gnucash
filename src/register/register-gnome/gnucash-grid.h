@@ -21,6 +21,7 @@
 #ifndef GNUCASH_GRID_H
 #define GNUCASH_GRID_H
 
+#include <gtk/gtk.h>
 #include "table-allgui.h"
 #include "gnucash-sheet.h"
 
@@ -49,5 +50,6 @@ gboolean   gnucash_grid_find_loc_by_pixel (GnucashGrid *grid, gint x, gint y,
 
 void       gnucash_draw_hatching (GdkDrawable *drawable, GdkGC *gc,
                                   int x, int y, int width, int height);
+void       gnc_grid_configure (GtkWidget *widget);
 /** @} */
 #endif /* GNUCASH_GRID_H */

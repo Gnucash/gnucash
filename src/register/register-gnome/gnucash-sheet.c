@@ -32,7 +32,6 @@
 #include <glib.h>
 #include <glib/gprintf.h>
 #include <gdk/gdkkeysyms.h>
-#include <libgnomecanvas/libgnomecanvas.h>
 
 #include "gnucash-sheet.h"
 #include "gnucash-sheetP.h"
@@ -72,8 +71,8 @@ enum
 
 /* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule log_module = GNC_MOD_REGISTER;
-static GnomeCanvasClass *sheet_parent_class;
-static GtkTableClass *register_parent_class;
+static GtkLayout *sheet_parent_class;
+static GtkTable *register_parent_class;
 static guint register_signals[LAST_SIGNAL];
 
 
@@ -195,7 +194,7 @@ gnucash_sheet_hide_editing_cursor (GnucashSheet *sheet)
     if (sheet->item_editor == NULL)
         return;
 
-    gnome_canvas_item_hide (GNOME_CANVAS_ITEM (sheet->item_editor));
+    gtk_widget_hide (sheet->item_editor);
     gnc_item_edit_hide_popup (GNC_ITEM_EDIT(sheet->item_editor));
 }
 
@@ -348,7 +347,7 @@ gnucash_sheet_cursor_move (GnucashSheet *sheet, VirtualLocation virt_loc)
     gnucash_sheet_make_cell_visible (sheet, virt_loc);
 
     changed_cells = !virt_loc_equal (virt_loc, old_virt_loc);
-    
+
     /* If we've changed cells, redraw the headers */
     if (changed_cells)
         gnc_header_request_redraw (GNC_HEADER(sheet->header_item));
@@ -390,6 +389,7 @@ gnucash_sheet_compute_visible_range (GnucashSheet *sheet)
 {
     VirtualCellLocation vcell_loc;
     GtkAllocation alloc;
+    GtkAdjustment *adj;
     gint height;
     gint cy;
     gint old_visible_blocks, old_visible_rows;
@@ -400,7 +400,8 @@ gnucash_sheet_compute_visible_range (GnucashSheet *sheet)
     gtk_widget_get_allocation (GTK_WIDGET(sheet), &alloc);
     height = alloc.height;
 
-    gnome_canvas_get_scroll_offsets (GNOME_CANVAS(sheet), NULL, &cy);
+    adj = gtk_layout_get_vadjustment(GTK_LAYOUT(sheet));
+    cy = gtk_adjustment_get_value(adj);
 
     sheet->top_block = gnucash_sheet_y_pixel_to_block (sheet, cy);
 
@@ -452,6 +453,7 @@ gnucash_sheet_show_row (GnucashSheet *sheet, gint virt_row)
     VirtualCellLocation vcell_loc = { virt_row, 0 };
     SheetBlock *block;
     GtkAllocation alloc;
+    GtkAdjustment *adj;
     gint block_height;
     gint height;
     gint cx, cy;
@@ -465,7 +467,10 @@ gnucash_sheet_show_row (GnucashSheet *sheet, gint virt_row)
     vcell_loc.virt_row = MIN (vcell_loc.virt_row,
                               sheet->num_virt_rows - 1);
 
-    gnome_canvas_get_scroll_offsets (GNOME_CANVAS(sheet), &cx, &cy);
+    adj = gtk_layout_get_hadjustment(GTK_LAYOUT(sheet));
+    cx = gtk_adjustment_get_value(adj);
+    adj = gtk_layout_get_vadjustment(GTK_LAYOUT(sheet));
+    cy = gtk_adjustment_get_value(adj);
     x = cx;
 
     gtk_widget_get_allocation (GTK_WIDGET(sheet), &alloc);
@@ -524,6 +529,7 @@ gnucash_sheet_show_range (GnucashSheet *sheet,
     SheetBlock *start_block;
     SheetBlock *end_block;
     GtkAllocation alloc;
+    GtkAdjustment *adj;
     gint block_height;
     gint height;
     gint cx, cy;
@@ -540,7 +546,10 @@ gnucash_sheet_show_range (GnucashSheet *sheet,
     end_loc.virt_row = MIN (end_loc.virt_row,
                             sheet->num_virt_rows - 1);
 
-    gnome_canvas_get_scroll_offsets (GNOME_CANVAS(sheet), &cx, &cy);
+    adj = gtk_layout_get_hadjustment(GTK_LAYOUT(sheet));
+    cx = gtk_adjustment_get_value(adj);
+    adj = gtk_layout_get_vadjustment(GTK_LAYOUT(sheet));
+    cy = gtk_adjustment_get_value(adj);
     x = cx;
 
     gtk_widget_get_allocation (GTK_WIDGET(sheet), &alloc);
@@ -644,8 +653,7 @@ gnucash_sheet_redraw_all (GnucashSheet *sheet)
     g_return_if_fail (sheet != NULL);
     g_return_if_fail (GNUCASH_IS_SHEET(sheet));
 
-    gnome_canvas_request_redraw (GNOME_CANVAS (sheet), 0, 0,
-                                 sheet->width + 1, sheet->height + 1);
+    gtk_widget_queue_draw (GTK_WIDGET (sheet));
 
     g_signal_emit_by_name (sheet->reg, "redraw_all");
 }
@@ -663,14 +671,11 @@ void
 gnucash_sheet_redraw_block (GnucashSheet *sheet, VirtualCellLocation vcell_loc)
 {
     gint x, y, w, h;
-    GnomeCanvas *canvas;
     SheetBlock *block;
     GtkAllocation alloc;
 
     g_return_if_fail (sheet != NULL);
     g_return_if_fail (GNUCASH_IS_SHEET(sheet));
-
-    canvas = GNOME_CANVAS(sheet);
 
     block = gnucash_sheet_get_block (sheet, vcell_loc);
     if (!block || !block->style)
@@ -684,7 +689,7 @@ gnucash_sheet_redraw_block (GnucashSheet *sheet, VirtualCellLocation vcell_loc)
     w = MIN(block->style->dimensions->width,
             alloc.width);
 
-    gnome_canvas_request_redraw (canvas, x, y, x + w + 1, y + h + 1);
+    gtk_widget_queue_draw_area (GTK_WIDGET(sheet), x, y, w + 1, h + 1);
 }
 
 static void
@@ -735,18 +740,14 @@ static GnucashSheet *
 gnucash_sheet_create (Table *table)
 {
     GnucashSheet *sheet;
-    GnomeCanvas  *canvas;
 
     ENTER("table=%p", table);
 
     sheet = g_object_new (GNUCASH_TYPE_SHEET, NULL);
-    canvas = GNOME_CANVAS (sheet);
-
     sheet->table = table;
     sheet->entry = NULL;
-
-    sheet->vadj = gtk_layout_get_vadjustment (GTK_LAYOUT(canvas));
-    sheet->hadj = gtk_layout_get_hadjustment (GTK_LAYOUT(canvas));
+    sheet->vadj = gtk_layout_get_vadjustment (GTK_LAYOUT(sheet));
+    sheet->hadj = gtk_layout_get_hadjustment (GTK_LAYOUT(sheet));
 
     g_signal_connect (G_OBJECT (sheet->vadj), "value_changed",
                       G_CALLBACK (gnucash_sheet_vadjustment_value_changed), sheet);
@@ -1228,7 +1229,7 @@ gnucash_sheet_start_editing_at_cursor (GnucashSheet *sheet)
     text = gnc_table_get_entry (sheet->table, virt_loc);
 
     gnc_item_edit_configure (GNC_ITEM_EDIT(sheet->item_editor));
-    gnome_canvas_item_show (GNOME_CANVAS_ITEM (sheet->item_editor));
+    gtk_widget_show (GTK_WIDGET (sheet->item_editor));
 
     gtk_entry_set_text (GTK_ENTRY(sheet->entry), text);
 
@@ -2426,10 +2427,10 @@ gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col)
 void
 gnucash_sheet_set_scroll_region (GnucashSheet *sheet)
 {
-    int height, width;
+    guint new_h, new_w;
     GtkWidget *widget;
     GtkAllocation alloc;
-    double x, y;
+    guint old_h, old_w;
 
     if (!sheet)
         return;
@@ -2439,16 +2440,17 @@ gnucash_sheet_set_scroll_region (GnucashSheet *sheet)
     if (!sheet->header_item || !GNC_HEADER(sheet->header_item)->style)
         return;
 
-    gnome_canvas_get_scroll_region (GNOME_CANVAS(sheet),
-                                    NULL, NULL, &x, &y);
+    gtk_layout_get_size (GTK_LAYOUT(sheet), &old_w, &old_h);
 
     gtk_widget_get_allocation (GTK_WIDGET(sheet), &alloc);
-    height = MAX (sheet->height, alloc.height);
-    width  = MAX (sheet->width, alloc.width);
+    new_h = MAX (sheet->height, alloc.height);
+    new_w  = MAX (sheet->width, alloc.width);
 
-    if (width != (int)x || height != (int)y)
-        gnome_canvas_set_scroll_region (GNOME_CANVAS(sheet),
-                                        0, 0, width, height);
+    if (new_w != old_w || new_h != old_h)
+        gtk_layout_set_size (GTK_LAYOUT(sheet), new_w, new_h);
+
+    if (sheet->grid)
+        gnc_grid_configure (sheet->grid);
 }
 
 static void
@@ -2772,10 +2774,8 @@ gnucash_sheet_class_init (GnucashSheetClass *klass)
 static void
 gnucash_sheet_init (GnucashSheet *sheet)
 {
-    GnomeCanvas *canvas = GNOME_CANVAS (sheet);
-
-    gtk_widget_set_can_focus (GTK_WIDGET(canvas), TRUE);
-    gtk_widget_set_can_default (GTK_WIDGET(canvas), TRUE);
+    gtk_widget_set_can_focus (GTK_WIDGET(sheet), TRUE);
+    gtk_widget_set_can_default (GTK_WIDGET(sheet), TRUE);
 
     sheet->top_block = 1;
     sheet->bottom_block = 1;
@@ -2802,6 +2802,12 @@ gnucash_sheet_init (GnucashSheet *sheet)
     sheet->blocks = g_table_new (sizeof (SheetBlock),
                                  gnucash_sheet_block_construct,
                                  gnucash_sheet_block_destroy, NULL);
+
+    gtk_widget_add_events(GTK_WIDGET(sheet), (GDK_EXPOSURE_MASK
+    | GDK_BUTTON_PRESS_MASK
+    | GDK_BUTTON_RELEASE_MASK
+    | GDK_POINTER_MOTION_MASK
+    | GDK_POINTER_MOTION_HINT_MASK));
 
     /* setup IMContext */
     sheet->im_context = gtk_im_multicontext_new ();
@@ -2843,7 +2849,7 @@ gnucash_sheet_get_type (void)
         };
 
         gnucash_sheet_type =
-            g_type_register_static (gnome_canvas_get_type (),
+            g_type_register_static (GTK_TYPE_LAYOUT,
                                     "GnucashSheet",
                                     &gnucash_sheet_info, 0);
     }
@@ -2855,34 +2861,19 @@ GtkWidget *
 gnucash_sheet_new (Table *table)
 {
     GnucashSheet *sheet;
-    GnomeCanvasItem *item;
-    GnomeCanvasGroup *sheet_group;
 
     g_return_val_if_fail (table != NULL, NULL);
 
     sheet = gnucash_sheet_create (table);
 
-    /* handy shortcuts */
-    sheet_group = gnome_canvas_root (GNOME_CANVAS(sheet));
-
     /* The grid */
-    item = gnome_canvas_item_new (sheet_group,
-                                  gnucash_grid_get_type (),
+    sheet->grid = g_object_new (GNUCASH_TYPE_GRID,
                                   "sheet", sheet,
                                   NULL);
-    sheet->grid = item;
-
-    /* some register data */
-    sheet->dimensions_hash_table = g_hash_table_new_full (g_int_hash,
-                                   g_int_equal,
-                                   g_free, NULL);
+    gtk_widget_show (sheet->grid);
 
     /* The cursor */
-    sheet->cursor = gnucash_cursor_new (sheet_group);
-    gnome_canvas_item_set (sheet->cursor,
-                           "sheet", sheet,
-                           "grid", sheet->grid,
-                           NULL);
+    sheet->cursor = gnucash_cursor_new (sheet);
 
     /* The entry widget */
     sheet->entry = gtk_entry_new ();
@@ -2891,9 +2882,12 @@ gnucash_sheet_new (Table *table)
     /*gtk_layout_put (GTK_LAYOUT (sheet), sheet->entry, 0, 0);*/
 
     /* set up the editor */
-    sheet->item_editor = gnc_item_edit_new(sheet_group, sheet, sheet->entry);
+    sheet->item_editor = gnc_item_edit_new(sheet);
 
-    gnome_canvas_item_hide (GNOME_CANVAS_ITEM(sheet->item_editor));
+    /* some register data */
+    sheet->dimensions_hash_table = g_hash_table_new_full (g_int_hash,
+                                   g_int_equal,
+                                   g_free, NULL);
 
     /* The GtkEntry must be realized in order to send events to
      * it.  We don't want to show it on the screen, but can't

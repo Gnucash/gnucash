@@ -25,7 +25,6 @@
  */
 
 #include "config.h"
-#include <libgnomecanvas/libgnomecanvas.h>
 #include <gdk/gdkkeysyms.h>
 #include "gnucash-date-picker.h"
 
@@ -35,11 +34,10 @@ enum
 {
     DATE_SELECTED,
     DATE_PICKED,
-    KEY_PRESS_EVENT,
     LAST_SIGNAL
 };
 
-static GnomeCanvasWidgetClass *gnc_date_picker_parent_class;
+static GtkHBox *gnc_date_picker_parent_class;
 static guint gnc_date_picker_signals[LAST_SIGNAL];
 
 
@@ -110,8 +108,7 @@ gnc_date_picker_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
     /* These go to the sheet */
     g_signal_stop_emission_by_name (widget, "key_press_event");
 
-    g_signal_emit (date_picker,
-                   gnc_date_picker_signals[KEY_PRESS_EVENT], 0, event);
+    g_signal_emit_by_name (date_picker, "key_press_event", 0, event);
 
     return TRUE;
 }
@@ -144,19 +141,8 @@ gnc_date_picker_class_init (GNCDatePickerClass *date_picker_class)
                      g_cclosure_marshal_VOID__VOID,
                      G_TYPE_NONE, 0);
 
-    gnc_date_picker_signals[KEY_PRESS_EVENT] =
-        g_signal_new ("key_press_event",
-                      G_TYPE_FROM_CLASS(object_class),
-                      G_SIGNAL_RUN_LAST,
-                      G_STRUCT_OFFSET(GNCDatePickerClass, key_press_event),
-                      NULL, NULL,
-                      g_cclosure_marshal_VOID__BOXED,
-                      G_TYPE_NONE, 1,
-                      GDK_TYPE_EVENT);
-
     date_picker_class->date_selected = NULL;
     date_picker_class->date_picked = NULL;
-    date_picker_class->key_press_event = NULL;
 }
 
 GType
@@ -180,7 +166,7 @@ gnc_date_picker_get_type (void)
         };
 
         gnc_date_picker_type =
-            g_type_register_static (gnome_canvas_widget_get_type(),
+            g_type_register_static (GTK_TYPE_HBOX,
                                     "GNCDatePicker",
                                     &type_info, 0);
     }
@@ -202,46 +188,29 @@ day_selected_double_click (GtkCalendar *calendar, GNCDatePicker *gdp)
 }
 
 
-GnomeCanvasItem *
-gnc_date_picker_new (GnomeCanvasGroup *parent)
+GtkWidget *
+gnc_date_picker_new (void)
 {
     GtkWidget *calendar;
-    GnomeCanvasItem *item;
     GNCDatePicker *date_picker;
+    GtkAllocation allocation;
+    GtkRequisition requisition;
+
+    date_picker = g_object_new (GNC_TYPE_DATE_PICKER,
+                                "homogeneous", FALSE,
+                                NULL);
 
     calendar = gtk_calendar_new ();
-
-    {
-        GtkWidget *hbox;
-        GtkAllocation allocation;
-        GtkRequisition requisition;
-
-        hbox = gtk_hbox_new (FALSE, 0);
-
-        gtk_widget_set_direction (hbox, GTK_TEXT_DIR_LTR);
-        gtk_box_pack_start (GTK_BOX(hbox), calendar, TRUE, TRUE, 0);
-
-        item = gnome_canvas_item_new (parent, gnc_date_picker_get_type (),
-                                      "widget", hbox,
-                                      "size_pixels", TRUE,
-                                      "x", -10000.0,
-                                      "y", -10000.0,
-                                      NULL);
-        gtk_widget_show_all( hbox );
-
-        gtk_widget_size_request (calendar, &requisition);
-
-        allocation.x = 0;
-        allocation.y = 0;
-        allocation.width = requisition.width;
-        allocation.height = requisition.height;
-
-        gtk_widget_size_allocate (calendar, &allocation);
-    }
-
-    date_picker = GNC_DATE_PICKER (item);
-
     date_picker->calendar = GTK_CALENDAR (calendar);
+
+    gtk_box_pack_start (GTK_BOX(date_picker), calendar, TRUE, TRUE, 0);
+
+    gtk_widget_size_request (calendar, &requisition);
+    allocation.x = 0;
+    allocation.y = 0;
+    allocation.width = requisition.width;
+    allocation.height = requisition.height;
+    gtk_widget_size_allocate (calendar, &allocation);
 
     g_signal_connect_after (calendar, "button_press_event",
                             G_CALLBACK (gnc_date_picker_button_event),
@@ -259,5 +228,5 @@ gnc_date_picker_new (GnomeCanvasGroup *parent)
                       G_CALLBACK (day_selected_double_click),
                       date_picker);
 
-    return item;
+    return GTK_WIDGET(date_picker);
 }

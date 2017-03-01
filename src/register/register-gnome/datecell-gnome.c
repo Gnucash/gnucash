@@ -608,6 +608,8 @@ gnc_date_cell_realize (BasicCell *bcell, gpointer data)
     box->sheet = sheet;
     box->item_edit = item_edit;
     box->date_picker = gnc_item_edit_new_date_picker (box->item_edit);
+    gtk_layout_put (GTK_LAYOUT(sheet),
+                    GTK_WIDGET(box->date_picker), 0, 0);
     g_object_ref_sink(box->date_picker);
 
     /* to mark cell as realized, remove the realize method */
@@ -631,12 +633,12 @@ gnc_date_cell_move (BasicCell *bcell)
 }
 
 static int
-get_popup_height (GnomeCanvasItem *item,
-                  int space_available,
-                  int row_height,
-                  gpointer user_data)
+get_popup_height (GtkWidget *widget,
+                  G_GNUC_UNUSED int space_available,
+                  G_GNUC_UNUSED int row_height,
+                  G_GNUC_UNUSED gpointer user_data)
 {
-    GtkWidget *cal = GTK_WIDGET (GNC_DATE_PICKER (item)->calendar);
+    GtkWidget *cal = GTK_WIDGET (GNC_DATE_PICKER (widget)->calendar);
     GtkRequisition req;
 
     req.height = 0;
@@ -648,22 +650,22 @@ get_popup_height (GnomeCanvasItem *item,
 }
 
 static void
-popup_set_focus (GnomeCanvasItem *item,
-                 gpointer user_data)
+popup_set_focus (GtkWidget *widget,
+                 G_GNUC_UNUSED gpointer user_data)
 {
-    gtk_widget_grab_focus (GTK_WIDGET (GNC_DATE_PICKER (item)->calendar));
+    gtk_widget_grab_focus (GTK_WIDGET (GNC_DATE_PICKER (widget)->calendar));
 }
 
 static gboolean
 gnc_date_cell_enter (BasicCell *bcell,
-                     int *cursor_position,
+                     G_GNUC_UNUSED int *cursor_position,
                      int *start_selection,
                      int *end_selection)
 {
     DateCell *cell = (DateCell *) bcell;
     PopBox *box = bcell->gui_private;
 
-    gnc_item_edit_set_popup (box->item_edit, GNOME_CANVAS_ITEM (box->date_picker),
+    gnc_item_edit_set_popup (box->item_edit, GTK_WIDGET (box->date_picker),
                              get_popup_height, NULL, popup_set_focus,
                              NULL, NULL, NULL);
 

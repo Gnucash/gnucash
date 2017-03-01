@@ -30,7 +30,6 @@
 #include "config.h"
 
 #include <string.h>
-#include <libgnomecanvas/libgnomecanvas.h>
 
 #include "gnucash-sheet.h"
 #include "gnucash-sheetP.h"
@@ -41,7 +40,7 @@
 
 struct _GnucashGrid
 {
-    GnomeCanvasItem canvas_item;
+    GtkDrawingArea area;
 
     GnucashSheet *sheet;
 
@@ -65,10 +64,10 @@ struct _GnucashGrid
 
 struct _GnucashGridClass
 {
-    GnomeCanvasItemClass parent_class;
+    GtkDrawingAreaClass parent_class;
 };
 
-static GnomeCanvasItem *gnucash_grid_parent_class;
+static GtkDrawingAreaClass *gnucash_grid_parent_class;
 
 /* Our arguments */
 enum
@@ -78,19 +77,50 @@ enum
 };
 
 
+static gboolean
+gnc_grid_configure_cb (GtkWidget *widget,
+                       G_GNUC_UNUSED GdkEventConfigure *event)
+{
+    gnc_grid_configure (widget);
+
+    return TRUE;
+}
+
+void
+gnc_grid_configure (GtkWidget *widget)
+{
+    GnucashGrid *grid = GNUCASH_GRID(widget);
+    GtkRequisition cur_rec;
+    gint cur_x, cur_y;
+    guint w , h;
+
+    gtk_container_child_get(GTK_CONTAINER(grid->sheet),
+                            widget,
+                            "x", &cur_x, "y", &cur_y, NULL);
+    if ((cur_x != 0) || (cur_y != 0))
+        gtk_layout_move (GTK_LAYOUT(grid->sheet),
+                         GTK_WIDGET(grid), 0, 0);
+
+    gtk_layout_get_size (GTK_LAYOUT(grid->sheet), &w, &h);
+    gtk_widget_get_requisition(GTK_WIDGET(grid), &cur_rec);
+    if ((cur_rec.height != h) || (cur_rec.width != w))
+        gtk_widget_set_size_request(GTK_WIDGET(grid), w, h);
+
+}
+
 static void
-gnucash_grid_realize (GnomeCanvasItem *item)
+gnucash_grid_realize (GtkWidget *widget)
 {
     GdkWindow *window;
     GnucashGrid *gnucash_grid;
     GdkGC *gc;
 
-    if (GNOME_CANVAS_ITEM_CLASS (gnucash_grid_parent_class)->realize)
-        (GNOME_CANVAS_ITEM_CLASS
-         (gnucash_grid_parent_class)->realize)(item);
+    if (GTK_WIDGET_CLASS (gnucash_grid_parent_class)->realize)
+        (GTK_WIDGET_CLASS
+         (gnucash_grid_parent_class)->realize)(widget);
 
-    gnucash_grid = GNUCASH_GRID (item);
-    window = gtk_widget_get_window (GTK_WIDGET (item->canvas));
+    gnucash_grid = GNUCASH_GRID (widget);
+    window = gtk_widget_get_window (widget);
 
     /* Configure the default grid gc */
     gnucash_grid->grid_gc = gc = gdk_gc_new (window);
@@ -109,13 +139,15 @@ gnucash_grid_realize (GnomeCanvasItem *item)
                            &gnucash_grid->background);
     gdk_gc_set_background (gnucash_grid->fill_gc,
                            &gnucash_grid->grid_color);
+
+    gnc_grid_configure_cb (widget, NULL);
 }
 
 
 static void
-gnucash_grid_unrealize (GnomeCanvasItem *item)
+gnucash_grid_unrealize (GtkWidget *widget)
 {
-    GnucashGrid *gnucash_grid = GNUCASH_GRID (item);
+    GnucashGrid *gnucash_grid = GNUCASH_GRID (widget);
 
     if (gnucash_grid->grid_gc != NULL)
     {
@@ -135,26 +167,10 @@ gnucash_grid_unrealize (GnomeCanvasItem *item)
         gnucash_grid->gc = NULL;
     }
 
-    if (GNOME_CANVAS_ITEM_CLASS (gnucash_grid_parent_class)->unrealize)
-        (*GNOME_CANVAS_ITEM_CLASS
-         (gnucash_grid_parent_class)->unrealize)(item);
+    if (GTK_WIDGET_CLASS (gnucash_grid_parent_class)->unrealize)
+        (GTK_WIDGET_CLASS
+         (gnucash_grid_parent_class)->unrealize)(widget);
 }
-
-
-static void
-gnucash_grid_update (GnomeCanvasItem *item, double *affine,
-                     ArtSVP *clip_path, int flags)
-{
-    if (GNOME_CANVAS_ITEM_CLASS (gnucash_grid_parent_class)->update)
-        (* GNOME_CANVAS_ITEM_CLASS (gnucash_grid_parent_class)->update)
-        (item, affine, clip_path, flags);
-
-    item->x1 = 0;
-    item->y1 = 0;
-    item->x2 = INT_MAX / 2 - 1;
-    item->y2 = INT_MAX / 2 - 1;
-}
-
 
 /*
  * Sets virt_row, virt_col to the block coordinates for the
@@ -628,7 +644,7 @@ draw_cell (GnucashGrid *grid,
 
     text = gnc_table_get_entry (table, virt_loc);
 
-    layout = gtk_widget_create_pango_layout (GTK_WIDGET (grid->sheet), text);
+    layout = gtk_widget_create_pango_layout (GTK_WIDGET (grid), text);
     // We don't need word wrap or line wrap
     pango_layout_set_width (layout, -1);
     context = pango_layout_get_context (layout);
@@ -775,27 +791,31 @@ draw_block (GnucashGrid *grid,
                 continue;
 
             draw_cell (grid, block, virt_loc, drawable,
-                       x_paint - x, y_paint - y, w, h);
+                       x_paint, y_paint, w, h);
         }
     }
 }
 
-static void
-gnucash_grid_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
-                   int x, int y, int width, int height)
+static gboolean
+gnucash_grid_draw (GtkWidget *widget, GdkEventExpose *event)
 {
-    GnucashGrid *grid = GNUCASH_GRID (item);
+    GnucashGrid *grid = GNUCASH_GRID (widget);
     VirtualLocation virt_loc;
     SheetBlock *sheet_block;
+    int x = event->area.x;
+    int y = event->area.y;
+    int width = event->area.width;
+    int height = event->area.height;
+    GdkDrawable *drawable = GDK_DRAWABLE (gtk_widget_get_window (widget));
 
     if (x < 0 || y < 0)
-        return;
+        return FALSE;
 
     /* compute our initial values where we start drawing */
     sheet_block = gnucash_grid_find_block_by_pixel (grid, x, y,
                   &virt_loc.vcell_loc);
     if (!sheet_block || !sheet_block->style)
-        return;
+        return FALSE;
 
     for ( ; virt_loc.vcell_loc.virt_row < grid->sheet->num_virt_rows;
             virt_loc.vcell_loc.virt_row++ )
@@ -806,7 +826,7 @@ gnucash_grid_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                           (grid->sheet, virt_loc.vcell_loc);
 
             if (!sheet_block || !sheet_block->style)
-                return;
+                return TRUE;
 
             if (sheet_block->visible)
                 break;
@@ -815,24 +835,19 @@ gnucash_grid_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
         }
 
         if (y + height < sheet_block->origin_y)
-            return;
+            return TRUE;
 
         draw_block (grid, sheet_block, virt_loc, drawable,
                     x, y, width, height);
     }
+
+    return TRUE;
 }
 
 
 static void
 gnucash_grid_init (GnucashGrid *grid)
 {
-    GnomeCanvasItem *item = GNOME_CANVAS_ITEM (grid);
-
-    item->x1 = 0;
-    item->y1 = 0;
-    item->x2 = 0;
-    item->y2 = 0;
-
     grid->top_block  = 0;
     grid->top_offset = 0;
     grid->left_offset = 0;
@@ -850,8 +865,12 @@ gnucash_grid_set_property (GObject         *object,
     switch (prop_id)
     {
     case PROP_SHEET:
+        if (grid->sheet)
+            gtk_container_remove(GTK_CONTAINER(grid->sheet), GTK_WIDGET(grid));
         grid->sheet =
             GNUCASH_SHEET (g_value_get_object (value));
+        if (grid->sheet)
+            gtk_layout_put (GTK_LAYOUT(grid->sheet), GTK_WIDGET(grid), 0, 0);
         break;
     default:
         break;
@@ -888,10 +907,10 @@ static void
 gnucash_grid_class_init (GnucashGridClass *klass)
 {
     GObjectClass  *object_class;
-    GnomeCanvasItemClass *item_class;
+    GtkWidgetClass *widget_class;
 
     object_class = G_OBJECT_CLASS (klass);
-    item_class = GNOME_CANVAS_ITEM_CLASS (klass);
+    widget_class = GTK_WIDGET_CLASS (klass);
 
     gnucash_grid_parent_class = g_type_class_peek_parent (klass);
 
@@ -899,11 +918,11 @@ gnucash_grid_class_init (GnucashGridClass *klass)
     object_class->set_property = gnucash_grid_set_property;
     object_class->get_property = gnucash_grid_get_property;
 
-    /* GnomeCanvasItem method overrides */
-    item_class->update      = gnucash_grid_update;
-    item_class->realize     = gnucash_grid_realize;
-    item_class->unrealize   = gnucash_grid_unrealize;
-    item_class->draw        = gnucash_grid_draw;
+    /* GtkWidget method overrides */
+//    widget_class->configure_event = gnc_grid_configure_cb;
+    widget_class->realize      = gnucash_grid_realize;
+    widget_class->unrealize    = gnucash_grid_unrealize;
+    widget_class->expose_event = gnucash_grid_draw;
 
     /* properties */
     g_object_class_install_property
@@ -938,7 +957,7 @@ gnucash_grid_get_type (void)
         };
 
         gnucash_grid_type =
-            g_type_register_static (gnome_canvas_item_get_type (),
+            g_type_register_static (GTK_TYPE_DRAWING_AREA,
                                     "GnucashGrid",
                                     &gnucash_grid_info, 0);
     }

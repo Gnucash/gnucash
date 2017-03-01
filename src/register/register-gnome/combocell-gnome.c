@@ -756,6 +756,8 @@ gnc_combo_cell_gui_realize (BasicCell *bcell, gpointer data)
         box->item_list = gnc_item_edit_new_list(box->item_edit, cell->shared_store);
     else
         box->item_list = gnc_item_edit_new_list(box->item_edit, box->tmp_store);
+    gtk_layout_put (GTK_LAYOUT(sheet),
+                    GTK_WIDGET(box->item_list), 0, 0);
     g_object_ref_sink(box->item_list);
 
     /* to mark cell as realized, remove the realize method */
@@ -782,7 +784,7 @@ gnc_combo_cell_gui_move (BasicCell *bcell)
 }
 
 static int
-get_popup_height (GnomeCanvasItem *item,
+get_popup_height (G_GNUC_UNUSED GtkWidget *widget,
                   int space_available,
                   int row_height,
                   gpointer user_data)
@@ -795,7 +797,7 @@ get_popup_height (GnomeCanvasItem *item,
 }
 
 static int
-popup_autosize (GnomeCanvasItem *item,
+popup_autosize (GtkWidget *widget,
                 int max_width,
                 gpointer user_data)
 {
@@ -804,37 +806,37 @@ popup_autosize (GnomeCanvasItem *item,
     if (!box || !box->autosize)
         return max_width;
 
-    return gnc_item_list_autosize (GNC_ITEM_LIST (item)) + 20;
+    return gnc_item_list_autosize (GNC_ITEM_LIST (widget)) + 20;
 }
 
 static void
-popup_set_focus (GnomeCanvasItem *item,
-                 gpointer user_data)
+popup_set_focus (GtkWidget *widget,
+                 G_GNUC_UNUSED gpointer user_data)
 {
-    gtk_widget_grab_focus (GTK_WIDGET (GNC_ITEM_LIST (item)->tree_view));
+    gtk_widget_grab_focus (GTK_WIDGET (GNC_ITEM_LIST (widget)->tree_view));
 }
 
 static void
-popup_post_show (GnomeCanvasItem *item,
-                 gpointer user_data)
+popup_post_show (GtkWidget *widget,
+                 G_GNUC_UNUSED gpointer user_data)
 {
     /* What the hell is this doing here? Well, under gtk+ 1.2.9,
      * the scrollbars never appear without it. Why does it work?
      * Why are you asking so many questions? There's nothing to
      * see here. These aren't the droids you're looking for.
      * Move along. */
-    gtk_widget_size_request (GNC_ITEM_LIST (item)->frame, NULL);
+    gtk_widget_size_request (widget, NULL);
 
-    gnc_item_list_autosize (GNC_ITEM_LIST (item));
-    gnc_item_list_show_selected (GNC_ITEM_LIST (item));
+    gnc_item_list_autosize (GNC_ITEM_LIST (widget));
+    gnc_item_list_show_selected (GNC_ITEM_LIST (widget));
 }
 
 static int
-popup_get_width (GnomeCanvasItem *item,
-                 gpointer user_data)
+popup_get_width (GtkWidget *widget,
+                 G_GNUC_UNUSED gpointer user_data)
 {
     GtkAllocation alloc;
-    gtk_widget_get_allocation (GTK_WIDGET (GNC_ITEM_LIST (item)->tree_view), &alloc);
+    gtk_widget_get_allocation (GTK_WIDGET (GNC_ITEM_LIST (widget)->tree_view), &alloc);
     return alloc.width;
 }
 
@@ -856,7 +858,7 @@ gnc_combo_cell_enter (BasicCell *bcell,
         return FALSE;
 
     gnc_item_edit_set_popup (box->item_edit,
-                             GNOME_CANVAS_ITEM (box->item_list),
+                             GTK_WIDGET(box->item_list),
                              get_popup_height, popup_autosize,
                              popup_set_focus, popup_post_show,
                              popup_get_width, box);

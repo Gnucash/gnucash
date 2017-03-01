@@ -62,7 +62,7 @@ enum
     TARGET_COMPOUND_TEXT
 };
 
-static GnomeCanvasItemClass *gnc_item_edit_parent_class;
+static GtkDrawingArea *gnc_item_edit_parent_class;
 static GdkAtom clipboard_atom = GDK_NONE;
 
 
@@ -239,7 +239,7 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
         cursor_byte_pos = g_utf8_offset_to_pointer (text, cursor_pos) - text;
     }
 
-    info->layout = gtk_widget_create_pango_layout (GTK_WIDGET (item_edit->sheet), text);
+    info->layout = gtk_widget_create_pango_layout (GTK_WIDGET (item_edit), text);
 
     /* IMContext attributes*/
     if (sheet->preedit_length && sheet->preedit_attrs != NULL)
@@ -283,16 +283,16 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
     dx = xd - x;
     dy = yd - y;
 
-    info->bg_rect.x      = dx + CELL_HPADDING;
-    info->bg_rect.y      = dy + 1;
+    info->bg_rect.x      = CELL_HPADDING;
+    info->bg_rect.y      = 1;
     info->bg_rect.width  = wd - (2 * CELL_HPADDING);
     info->bg_rect.height = hd - 2;
 
     toggle_space = item_edit->is_popup ?
                    item_edit->popup_toggle.toggle_offset : 0;
 
-    info->text_rect.x      = dx;
-    info->text_rect.y      = dy + 1;
+    info->text_rect.x      = 0;
+    info->text_rect.y      = 1;
     info->text_rect.width  = wd - toggle_space;
     info->text_rect.height = hd - 2;
 
@@ -304,15 +304,15 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
 
     pango_layout_get_cursor_pos (info->layout, cursor_byte_pos, &strong_pos, NULL);
 
-    info->cursor_rect.x = dx + PANGO_PIXELS (strong_pos.x);
-    info->cursor_rect.y = dy + PANGO_PIXELS (strong_pos.y);
+    info->cursor_rect.x = PANGO_PIXELS (strong_pos.x);
+    info->cursor_rect.y = PANGO_PIXELS (strong_pos.y);
     info->cursor_rect.width = PANGO_PIXELS (strong_pos.width);
     info->cursor_rect.height = PANGO_PIXELS (strong_pos.height);
 
     if (info->hatching)
     {
-        info->hatch_rect.x = dx;
-        info->hatch_rect.y = dy;
+        info->hatch_rect.x = 0;
+        info->hatch_rect.y = 0;
         info->hatch_rect.width = wd;
         info->hatch_rect.height = hd;
     }
@@ -323,8 +323,12 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
     {
         gint xoff, yoff;
         GdkRectangle rect;
+        GtkAdjustment *adj;
         rect = info->cursor_rect;
-        gnome_canvas_get_scroll_offsets(GNOME_CANVAS(sheet), &xoff, &yoff);
+        adj = gtk_layout_get_hadjustment(GTK_LAYOUT(sheet));
+        xoff = gtk_adjustment_get_value(adj);
+        adj = gtk_layout_get_vadjustment(GTK_LAYOUT(sheet));
+        yoff = gtk_adjustment_get_value(adj);
         rect.x += (x - xoff + item_edit->x_offset);
         rect.y += (y - yoff);
         gtk_im_context_set_cursor_location (sheet->im_context, &rect);
@@ -341,17 +345,19 @@ gnc_item_edit_free_draw_info_members(TextDrawInfo *info)
     g_object_unref (info->layout);
 }
 
-static void
-gnc_item_edit_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
-                    int x, int y, int width, int height)
+static gboolean
+gnc_item_edit_draw (GtkWidget *widget, GdkEventExpose *event)
 {
-    GncItemEdit *item_edit = GNC_ITEM_EDIT (item);
+    GncItemEdit *item_edit = GNC_ITEM_EDIT (widget);
     TextDrawInfo info;
+    int x = event->area.x;
+    int y = event->area.y;
+    GdkDrawable *drawable = GDK_DRAWABLE (gtk_widget_get_window (widget));
 
     /* be sure we're valid */
     if (item_edit->virt_loc.vcell_loc.virt_row < 0 ||
             item_edit->virt_loc.vcell_loc.virt_col < 0)
-        return;
+        return TRUE;
 
     /* Get the measurements for drawing */
     gnc_item_edit_draw_info (item_edit, x, y, &info);
@@ -390,24 +396,7 @@ gnc_item_edit_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
     gdk_gc_set_clip_rectangle (item_edit->gc, NULL);
 
     gnc_item_edit_free_draw_info_members (&info);
-}
-
-
-static double
-gnc_item_edit_point (GnomeCanvasItem *item, double c_x, double c_y, int cx, int cy,
-                     GnomeCanvasItem **actual_item)
-{
-    int x, y, w, h;
-
-    gnc_item_edit_get_pixel_coords (GNC_ITEM_EDIT (item), &x, &y, &w, &h);
-
-    *actual_item = NULL;
-    if ((cx < x) || (cy < y) || (cx > x + w) || (cy > y + w))
-        return 10000.0;
-
-    *actual_item = item;
-
-    return 0.0;
+    return TRUE;
 }
 
 
@@ -419,23 +408,24 @@ gnc_item_edit_get_toggle_offset (int row_height)
 }
 
 static void
-gnc_item_edit_update (GnomeCanvasItem *item, double *affine, ArtSVP *clip_path,
-                      int flags)
+gnc_item_edit_update (GncItemEdit *item_edit)
 {
-    GncItemEdit *item_edit = GNC_ITEM_EDIT (item);
+    GtkRequisition cur_rec;
     gint toggle_x, toggle_y, toggle_width, toggle_height;
-    gint x, y, w, h;
-
-    if (GNOME_CANVAS_ITEM_CLASS (gnc_item_edit_parent_class)->update)
-        (*GNOME_CANVAS_ITEM_CLASS(gnc_item_edit_parent_class)->update)
-        (item, affine, clip_path, flags);
+    gint x, y, w, h, cur_x, cur_y;
 
     gnc_item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
 
-    item->x1 = x;
-    item->y1 = y;
-    item->x2 = x + w;
-    item->y2 = y + h;
+    gtk_container_child_get(GTK_CONTAINER(item_edit->sheet),
+                            GTK_WIDGET(item_edit),
+                            "x", &cur_x, "y", &cur_y, NULL);
+    if ((cur_x != x) || (cur_y != y))
+        gtk_layout_move (GTK_LAYOUT(item_edit->sheet),
+                         GTK_WIDGET(item_edit), x, y);
+
+    gtk_widget_get_requisition(GTK_WIDGET(item_edit), &cur_rec);
+    if ((cur_rec.height != h) || (cur_rec.width != w))
+        gtk_widget_set_size_request(GTK_WIDGET(item_edit), w, h);
 
     if (!item_edit->is_popup)
         return;
@@ -457,29 +447,31 @@ gnc_item_edit_update (GnomeCanvasItem *item, double *affine, ArtSVP *clip_path,
 
 
 static void
-gnc_item_edit_realize (GnomeCanvasItem *item)
+gnc_item_edit_realize (GtkWidget *widget)
 {
-    GnomeCanvas *canvas = item->canvas;
     GdkWindow *window;
-    GncItemEdit *item_edit;
+    GncItemEdit *item_edit = GNC_ITEM_EDIT (widget);
 
-    if (GNOME_CANVAS_ITEM_CLASS (gnc_item_edit_parent_class)->realize)
-        (*GNOME_CANVAS_ITEM_CLASS
-         (gnc_item_edit_parent_class)->realize) (item);
+    if (GTK_WIDGET_CLASS (gnc_item_edit_parent_class)->realize)
+        (GTK_WIDGET_CLASS
+         (gnc_item_edit_parent_class)->realize) (widget);
 
-    item_edit = GNC_ITEM_EDIT (item);
-    window = gtk_widget_get_window (GTK_WIDGET (canvas));
-
+    window = gtk_widget_get_window (widget);
     item_edit->gc = gdk_gc_new (window);
 }
 
 
 static void
-gnc_item_edit_unrealize (GnomeCanvasItem *item)
+gnc_item_edit_unrealize (GtkWidget *widget)
 {
-    if (GNOME_CANVAS_ITEM_CLASS (gnc_item_edit_parent_class)->unrealize)
-        (*GNOME_CANVAS_ITEM_CLASS
-         (gnc_item_edit_parent_class)->unrealize) (item);
+    GncItemEdit *item_edit = GNC_ITEM_EDIT (widget);
+    if (item_edit->gc)
+        gdk_gc_destroy(item_edit->gc);
+    item_edit->gc = NULL;
+
+    if (GTK_WIDGET_CLASS (gnc_item_edit_parent_class)->unrealize)
+        (GTK_WIDGET_CLASS
+        (gnc_item_edit_parent_class)->unrealize) (widget);
 }
 
 void
@@ -564,24 +556,15 @@ gnc_item_edit_reset_offset (GncItemEdit *item_edit)
 static void
 gnc_item_edit_init (GncItemEdit *item_edit)
 {
-    GnomeCanvasItem *item = GNOME_CANVAS_ITEM (item_edit);
-
-    item->x1 = 0;
-    item->y1 = 0;
-    item->x2 = 1;
-    item->y2 = 1;
-
     /* Set invalid values so that we know when we have been fully
     	   initialized */
     item_edit->sheet = NULL;
-    item_edit->parent = NULL;
     item_edit->editor = NULL;
 
     item_edit->is_popup = FALSE;
     item_edit->show_popup = FALSE;
 
     item_edit->popup_toggle.toggle_button = NULL;
-    item_edit->popup_toggle.toggle_button_item = NULL;
     item_edit->popup_toggle.toggle_offset = 0;
     item_edit->popup_toggle.arrow = NULL;
     item_edit->popup_toggle.signals_connected = FALSE;
@@ -606,12 +589,7 @@ gnc_item_edit_init (GncItemEdit *item_edit)
 static void
 queue_sync (GncItemEdit *item_edit)
 {
-    GnomeCanvas *canvas = GNOME_CANVAS_ITEM (item_edit)->canvas;
-    int x, y, w, h;
-
-    gnc_item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
-
-    gnome_canvas_request_redraw (canvas, x, y, x + w + 1, y + h + 1);
+    gtk_widget_queue_draw(GTK_WIDGET(item_edit));
 }
 
 void
@@ -764,14 +742,22 @@ gnc_item_edit_set_editor (GncItemEdit *item_edit, void *data)
 }
 
 
+static gboolean
+gnc_item_edit_configure_cb (GtkWidget *widget,
+                            G_GNUC_UNUSED GdkEventConfigure *event)
+{
+    g_return_val_if_fail(GNC_IS_ITEM_EDIT(widget), FALSE);
+    gnc_item_edit_configure (GNC_ITEM_EDIT(widget));
+    return TRUE;
+}
+
 void
 gnc_item_edit_configure (GncItemEdit *item_edit)
 {
     GnucashSheet *sheet = item_edit->sheet;
     GnucashItemCursor *cursor;
 
-    cursor = GNUCASH_ITEM_CURSOR
-             (GNUCASH_CURSOR(sheet->cursor)->cursor[GNUCASH_CURSOR_BLOCK]);
+    cursor = GNUCASH_CURSOR(sheet->cursor)->cursor[GNUCASH_CURSOR_BLOCK];
 
     if (item_edit->virt_loc.vcell_loc.virt_row != cursor->row)
     {
@@ -789,8 +775,7 @@ gnc_item_edit_configure (GncItemEdit *item_edit)
         gnucash_sheet_get_style (item_edit->sheet,
                                  item_edit->virt_loc.vcell_loc);
 
-    cursor = GNUCASH_ITEM_CURSOR
-             (GNUCASH_CURSOR(sheet->cursor)->cursor[GNUCASH_CURSOR_CELL]);
+    cursor = GNUCASH_CURSOR(sheet->cursor)->cursor[GNUCASH_CURSOR_CELL];
 
     if (item_edit->virt_loc.phys_row_offset != cursor->row)
     {
@@ -808,7 +793,7 @@ gnc_item_edit_configure (GncItemEdit *item_edit)
         gnc_item_edit_set_popup (item_edit, NULL, NULL, NULL,
                                  NULL, NULL, NULL, NULL);
 
-    gnc_item_edit_update (GNOME_CANVAS_ITEM(item_edit), NULL, NULL, 0);
+    gnc_item_edit_update (item_edit);
 }
 
 
@@ -911,18 +896,14 @@ gnc_item_edit_show_popup_toggle (GncItemEdit *item_edit,
                                  gint width, gint height,
                                  GtkAnchorType anchor)
 {
+    GtkWidget *toggle;
     g_return_if_fail (GNC_IS_ITEM_EDIT (item_edit));
 
-    gnome_canvas_item_raise_to_top
-    (item_edit->popup_toggle.toggle_button_item);
-
-    gnome_canvas_item_set (item_edit->popup_toggle.toggle_button_item,
-                           "x", (gdouble) x,
-                           "y", (gdouble) y,
-                           "width", (gdouble) width,
-                           "height", (gdouble) height,
-                           "anchor", anchor,
-                           NULL);
+    toggle = GTK_WIDGET(item_edit->popup_toggle.toggle_button);
+    gtk_layout_move(GTK_LAYOUT(item_edit->sheet), toggle, x, y);
+    gtk_widget_set_size_request(toggle, width, height);
+    gtk_widget_show_all (toggle);
+    // FIXME What was the anchortype used for in GnomeCanvas ?
 }
 
 
@@ -931,9 +912,8 @@ gnc_item_edit_hide_popup_toggle (GncItemEdit *item_edit)
 {
     g_return_if_fail (GNC_IS_ITEM_EDIT(item_edit));
 
-    /* safely out of the way */
-    gnome_canvas_item_set (item_edit->popup_toggle.toggle_button_item,
-                           "x", -10000.0, NULL);
+    if (item_edit->popup_toggle.toggle_button)
+        gtk_widget_hide (GTK_WIDGET(item_edit->popup_toggle.toggle_button));
 }
 
 
@@ -1116,12 +1096,12 @@ static void
 gnc_item_edit_class_init (GncItemEditClass *gnc_item_edit_class)
 {
     GObjectClass  *object_class;
-    GnomeCanvasItemClass *item_class;
+    GtkWidgetClass *widget_class;
 
     gnc_item_edit_parent_class = g_type_class_peek_parent (gnc_item_edit_class);
 
     object_class = G_OBJECT_CLASS (gnc_item_edit_class);
-    item_class = GNOME_CANVAS_ITEM_CLASS (gnc_item_edit_class);
+    widget_class = GTK_WIDGET_CLASS (gnc_item_edit_class);
 
     object_class->get_property = gnc_item_edit_get_property;
     object_class->set_property = gnc_item_edit_set_property;
@@ -1143,13 +1123,11 @@ gnc_item_edit_class_init (GncItemEditClass *gnc_item_edit_class)
                                              GTK_TYPE_ENTRY,
                                              G_PARAM_READWRITE));
 
-    /* GnomeCanvasItem method overrides */
-    item_class->update      = gnc_item_edit_update;
-    item_class->draw        = gnc_item_edit_draw;
-    item_class->point       = gnc_item_edit_point;
-    item_class->realize     = gnc_item_edit_realize;
-    item_class->unrealize   = gnc_item_edit_unrealize;
-    //item_class->event       = gnc_item_edit_event;
+    /* GtkWidget method overrides */
+    widget_class->configure_event = gnc_item_edit_configure_cb;
+    widget_class->expose_event    = gnc_item_edit_draw;
+    widget_class->realize         = gnc_item_edit_realize;
+    widget_class->unrealize       = gnc_item_edit_unrealize;
 }
 
 
@@ -1175,7 +1153,7 @@ gnc_item_edit_get_type (void)
         };
 
         gnc_item_edit_type =
-            g_type_register_static(gnome_canvas_item_get_type (),
+            g_type_register_static(GTK_TYPE_DRAWING_AREA,
                                    "GncItemEdit",
                                    &gnc_item_edit_info, 0);
     }
@@ -1185,30 +1163,27 @@ gnc_item_edit_get_type (void)
 
 
 static void
-create_popup_toggle(GnomeCanvasGroup *parent, PopupToggle *pt)
+create_popup_toggle(GncItemEdit *item_edit)
 {
-    GtkWidget *button, *arrow;
+    GnucashSheet *sheet = item_edit->sheet;
 
-    arrow = gtk_arrow_new(GTK_ARROW_DOWN, GTK_SHADOW_IN);
-    gtk_misc_set_alignment(GTK_MISC(arrow), 0.5, 0.5);
-    pt->arrow = GTK_ARROW(arrow);
+    item_edit->popup_toggle.arrow = GTK_ARROW(gtk_arrow_new(GTK_ARROW_DOWN,
+                                                            GTK_SHADOW_IN));
+    gtk_misc_set_alignment(GTK_MISC(item_edit->popup_toggle.arrow), 0.5, 0.5);
 
-    button = gtk_toggle_button_new();
-    pt->toggle_button = GTK_TOGGLE_BUTTON(button);
-    gtk_container_add(GTK_CONTAINER(button), arrow);
+    item_edit->popup_toggle.toggle_button =
+        GTK_TOGGLE_BUTTON(gtk_toggle_button_new());
+    gtk_container_add(GTK_CONTAINER(item_edit->popup_toggle.toggle_button),
+                      GTK_WIDGET(item_edit->popup_toggle.arrow));
+    gtk_widget_set_no_show_all(GTK_WIDGET(item_edit->popup_toggle.toggle_button), TRUE);
 
-    gtk_widget_show_all( GTK_WIDGET(pt->toggle_button) );
-
-    pt->toggle_button_item =
-        gnome_canvas_item_new(parent, gnome_canvas_widget_get_type(),
-                              "widget", button,
-                              "size-pixels", TRUE,
-                              NULL);
+    gtk_layout_put(GTK_LAYOUT(sheet),
+                   GTK_WIDGET(item_edit->popup_toggle.toggle_button), 0, 0);
 }
 
 
-GnomeCanvasItem *
-gnc_item_edit_new (GnomeCanvasGroup *parent, GnucashSheet *sheet, GtkWidget *entry)
+GtkWidget *
+gnc_item_edit_new (GnucashSheet *sheet)
 {
     static const GtkTargetEntry targets[] =
     {
@@ -1219,20 +1194,15 @@ gnc_item_edit_new (GnomeCanvasGroup *parent, GnucashSheet *sheet, GtkWidget *ent
     };
     static const gint n_targets = sizeof(targets) / sizeof(targets[0]);
 
-    GnomeCanvasItem *item;
-    GncItemEdit *item_edit;
+    GncItemEdit *item_edit =
+            g_object_new (GNC_TYPE_ITEM_EDIT,
+                           "sheet", sheet,
+                           "editor", sheet->entry,
+                           NULL);
+    gtk_layout_put (GTK_LAYOUT(sheet), GTK_WIDGET(item_edit), 0, 0);
+    gtk_widget_set_no_show_all(GTK_WIDGET(item_edit), TRUE);
 
-    item = gnome_canvas_item_new (parent,
-                                  GNC_TYPE_ITEM_EDIT,
-                                  "sheet", sheet,
-                                  "editor", sheet->entry,
-                                  NULL);
-
-    item_edit = GNC_ITEM_EDIT(item);
-
-    item_edit->parent = parent;
-
-    create_popup_toggle (parent, &item_edit->popup_toggle);
+    create_popup_toggle (item_edit);
 
     if (clipboard_atom == GDK_NONE)
         clipboard_atom = gdk_atom_intern ("CLIPBOARD", FALSE);
@@ -1245,7 +1215,7 @@ gnc_item_edit_new (GnomeCanvasGroup *parent, GnucashSheet *sheet, GtkWidget *ent
                                clipboard_atom,
                                targets, n_targets);
 
-    return item;
+    return GTK_WIDGET(item_edit);
 }
 
 
@@ -1256,8 +1226,7 @@ gnc_item_edit_new_list (GncItemEdit *item_edit, GtkListStore *shared_store)
 
     g_return_val_if_fail (GNC_IS_ITEM_EDIT(item_edit), NULL);
 
-    item_list = GNC_ITEM_LIST (gnc_item_list_new (item_edit->parent,
-                               shared_store));
+    item_list = GNC_ITEM_LIST (gnc_item_list_new (shared_store));
 
     return item_list;
 }
@@ -1269,7 +1238,7 @@ gnc_item_edit_new_date_picker (GncItemEdit *item_edit)
 
     g_return_val_if_fail (GNC_IS_ITEM_EDIT (item_edit), NULL);
 
-    gdp = GNC_DATE_PICKER (gnc_date_picker_new (item_edit->parent));
+    gdp = GNC_DATE_PICKER (gnc_date_picker_new ());
 
     return gdp;
 }
@@ -1279,14 +1248,15 @@ void
 gnc_item_edit_show_popup (GncItemEdit *item_edit)
 {
     GtkToggleButton *toggle;
+    GtkAdjustment *vadj;
     GtkAnchorType popup_anchor;
     GtkAllocation alloc;
     GnucashSheet *sheet;
     gint x, y, w, h;
     gint y_offset;
     gint popup_x, popup_y;
-    gint popup_width;
-    gint popup_height;
+    gint popup_w;
+    gint popup_h;
     gint popup_max_width;
     gint view_height;
     gint view_width;
@@ -1305,7 +1275,8 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
     view_height = alloc.height;
     view_width  = alloc.width;
 
-    gnome_canvas_get_scroll_offsets (GNOME_CANVAS(sheet), NULL, &y_offset);
+    vadj = gtk_layout_get_vadjustment(GTK_LAYOUT(sheet));
+    y_offset = gtk_adjustment_get_value(vadj);
     gnc_item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
 
     popup_x = x;
@@ -1317,45 +1288,34 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
     {
         popup_y = y;
         popup_anchor = GTK_ANCHOR_SW;
-        popup_height = up_height;
+        popup_h = up_height;
     }
     else
     {
         popup_y = y + h;
         popup_anchor = GTK_ANCHOR_NW;
-        popup_height = down_height;
+        popup_h = down_height;
     }
 
     popup_max_width = view_width - popup_x;
 
     if (item_edit->get_popup_height)
-        popup_height = item_edit->get_popup_height
-                       (item_edit->popup_item, popup_height, h,
+        popup_h = item_edit->get_popup_height
+                       (item_edit->popup_item, popup_h, h,
                         item_edit->popup_user_data);
 
     if (item_edit->popup_autosize)
-        popup_width =
+        popup_w =
             item_edit->popup_autosize (item_edit->popup_item,
                                        popup_max_width,
                                        item_edit->popup_user_data);
     else
-        popup_width = 0;
+        popup_w = -1;
 
-    if (popup_width > 0)
-        gnome_canvas_item_set (item_edit->popup_item,
-                               "x", (gdouble) popup_x,
-                               "y", (gdouble) popup_y,
-                               "height", (gdouble) popup_height,
-                               "width", (gdouble) popup_width,
-                               "anchor", popup_anchor,
-                               NULL);
-    else
-        gnome_canvas_item_set (item_edit->popup_item,
-                               "x", (gdouble) popup_x,
-                               "y", (gdouble) popup_y,
-                               "height", (gdouble) popup_height,
-                               "anchor", popup_anchor,
-                               NULL);
+    gtk_layout_move (GTK_LAYOUT(sheet), item_edit->popup_item,
+                     popup_x, popup_y);
+    gtk_widget_set_size_request(item_edit->popup_item, popup_w, popup_h);
+    // FIXME what about the GtkAnchorType that the GNOME_CANVAS_ITEM used ?
 
     toggle = item_edit->popup_toggle.toggle_button;
 
@@ -1389,10 +1349,8 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
         {
             popup_x -= popup_width - popup_max_width;
             popup_x = MAX (0, popup_x);
-
-            gnome_canvas_item_set (item_edit->popup_item,
-                                   "x", (gdouble) popup_x,
-                                   NULL);
+            gtk_layout_move (GTK_LAYOUT(sheet), item_edit->popup_item,
+                             popup_x, popup_y);
         }
     }
 }
@@ -1407,7 +1365,7 @@ gnc_item_edit_hide_popup (GncItemEdit *item_edit)
     if (!item_edit->is_popup)
         return;
 
-    gnome_canvas_item_set (item_edit->popup_item, "x", -10000.0, NULL);
+    gtk_widget_hide (item_edit->popup_item);
 
     gtk_arrow_set (item_edit->popup_toggle.arrow,
                    GTK_ARROW_DOWN, GTK_SHADOW_IN);
@@ -1419,14 +1377,14 @@ gnc_item_edit_hide_popup (GncItemEdit *item_edit)
 }
 
 void
-gnc_item_edit_set_popup (GncItemEdit        *item_edit,
-                         GnomeCanvasItem *popup_item,
-                         GetPopupHeight   get_popup_height,
-                         PopupAutosize    popup_autosize,
-                         PopupSetFocus    popup_set_focus,
-                         PopupPostShow    popup_post_show,
-                         PopupGetWidth    popup_get_width,
-                         gpointer         popup_user_data)
+gnc_item_edit_set_popup (GncItemEdit    *item_edit,
+                         GtkWidget      *popup_item,
+                         GetPopupHeight  get_popup_height,
+                         PopupAutosize   popup_autosize,
+                         PopupSetFocus   popup_set_focus,
+                         PopupPostShow   popup_post_show,
+                         PopupGetWidth   popup_get_width,
+                         gpointer        popup_user_data)
 {
     g_return_if_fail (GNC_IS_ITEM_EDIT(item_edit));
 
@@ -1453,7 +1411,7 @@ gnc_item_edit_set_popup (GncItemEdit        *item_edit,
         gnc_item_edit_hide_popup_toggle (item_edit);
     }
 
-    gnc_item_edit_update (GNOME_CANVAS_ITEM (item_edit), NULL, NULL, 0);
+    gnc_item_edit_update (item_edit);
 }
 
 void

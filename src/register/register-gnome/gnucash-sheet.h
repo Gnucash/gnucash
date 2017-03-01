@@ -21,7 +21,6 @@
 #ifndef GNUCASH_SHEET_H
 #define GNUCASH_SHEET_H
 
-
 #include <gtk/gtk.h>
 #include "split-register-model.h"
 #include "table-allgui.h"

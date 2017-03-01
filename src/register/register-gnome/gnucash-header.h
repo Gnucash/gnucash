@@ -21,6 +21,8 @@
 #ifndef GNUCASH_HEADER_H
 #define GNUCASH_HEADER_H
 
+#include <gtk/gtk.h>
+
 /** @ingroup Register
  * @addtogroup Gnome
  * @{

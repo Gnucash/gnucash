@@ -21,9 +21,9 @@
 #ifndef GNUCASH_CURSOR_H
 #define GNUCASH_CURSOR_H
 
+#include <gtk/gtk.h>
 #include "gnucash-grid.h"
 #include "gnucash-sheet.h"
-#include <libgnomecanvas/libgnomecanvas.h>
 
 /** @ingroup Register
  * @addtogroup Gnome
@@ -57,7 +57,8 @@ enum
 
 typedef struct
 {
-    GnomeCanvasItem canvas_item;
+    GtkDrawingArea area;
+    GtkWidget *parent;
 
     gint type;
 
@@ -71,12 +72,10 @@ typedef struct
 
 typedef struct
 {
-    GnomeCanvasGroup canvas_group;
+    GtkDrawingArea area;
 
-    GnomeCanvasItem *cursor[GNUCASH_CURSOR_NUM];
-
+    GnucashItemCursor *cursor[GNUCASH_CURSOR_NUM];
     GnucashSheet *sheet;
-    GnucashGrid *grid;
 
     /* precomputed pixel coords for the block cursor*/
     gint x, y, w, h;
@@ -88,17 +87,17 @@ typedef struct
 
 typedef struct
 {
-    GnomeCanvasItemClass parent_class;
+    GtkDrawingAreaClass parent_class;
 } GnucashItemCursorClass;
 
 
 typedef struct
 {
-    GnomeCanvasGroupClass parent_class;
+    GtkDrawingAreaClass parent_class;
 } GnucashCursorClass;
 
 
-GnomeCanvasItem *gnucash_cursor_new (GnomeCanvasGroup *parent);
+GtkWidget *gnucash_cursor_new (GnucashSheet *sheet);
 
 void gnucash_cursor_get_virt (GnucashCursor *cursor,
                               VirtualLocation *virt_loc);

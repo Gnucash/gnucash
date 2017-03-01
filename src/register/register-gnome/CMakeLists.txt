@@ -43,13 +43,13 @@ SET_SOURCE_FILES_PROPERTIES (${register_gnome_SOURCES} PROPERTIES OBJECT_DEPENDS
 
 ADD_LIBRARY (gncmod-register-gnome ${register_gnome_SOURCES} ${register_gnome_noinst_HEADERS})
 
-TARGET_LINK_LIBRARIES(gncmod-register-gnome gncmod-register-core gnc-qof ${GNOMECANVAS_LDFLAGS} ${GTK2_LDFLAGS})
+TARGET_LINK_LIBRARIES(gncmod-register-gnome gncmod-register-core gnc-qof ${GTK2_LDFLAGS})
 
 TARGET_COMPILE_DEFINITIONS(gncmod-register-gnome PRIVATE -DG_LOG_DOMAIN=\"gnc.register.gnome\")
 
 TARGET_INCLUDE_DIRECTORIES(gncmod-register-gnome
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
-    PRIVATE ${CMAKE_SOURCE_DIR}/src/register/ledger-core ${GNOMECANVAS_INCLUDE_DIRS}
+    PRIVATE ${CMAKE_SOURCE_DIR}/src/register/ledger-core ${GTK2_INCLUDE_DIRS}
 )
 
 INSTALL(TARGETS gncmod-register-gnome
