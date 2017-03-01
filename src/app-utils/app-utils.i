@@ -66,6 +66,7 @@ typedef int GNCOptionDBHandle;
 void gnc_prefs_init();
 
 QofBook * gnc_get_current_book (void);
+QofSession * gnc_get_current_session (void);
 const gchar * gnc_get_current_book_tax_name (void);
 const gchar * gnc_get_current_book_tax_type (void);
 Account * gnc_get_current_root_account (void);

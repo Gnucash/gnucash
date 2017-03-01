@@ -20,7 +20,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 # Autoconf initialization
 AC_PREREQ(2.60)
-AC_INIT([GnuCash], [2.6.15], [gnucash-devel@gnucash.org])
+AC_INIT([GnuCash], [2.6.15], [https://bugzilla.gnome.org/page.cgi?id=browse.html&product=GnuCash], , [http://www.gnucash.org/])
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_SRCDIR(src/engine/Transaction.h)
 AC_CONFIG_MACRO_DIR([macros])
@@ -90,11 +90,13 @@ AC_DEFINE_UNQUOTED(GNUCASH_RESAVE_VERSION, $GNUCASH_RESAVE_VERSION,
 AC_DEFINE_UNQUOTED(GNUCASH_LATEST_STABLE_SERIES, "$GNUCASH_LATEST_STABLE_SERIES",
     [Most recent stable GnuCash series])
 
-dnl Set of available languages.
+dnl Set of available languages:
+dnl managed at the Translation Project:
 TP_LINGUAS="az ca cs da eu fa ja nl rw sk sr sv tr uk zh_CN"
 dnl already marked as external at TP:
 GC_LINGUAS="ar bg de el en_GB es fi fr gu he hi hu it kn ko lt lv mr nb ne pl pt pt_BR ro ru ta te ur vi zh_TW "
-dnl not marked or no TP team:
+dnl New or unmarked: The release manager should announce them to TP 
+dnl and when listed there move in the respective group above.
 NEW_LINGUAS="as brx doi es_NI kok kok@latin ks mai mni mni@bengali"
 
 ALL_LINGUAS="$TP_LINGUAS $GC_LINGUAS $NEW_LINGUAS"

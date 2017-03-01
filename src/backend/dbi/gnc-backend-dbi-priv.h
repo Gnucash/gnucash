@@ -63,6 +63,7 @@ typedef GSList* (*GET_TABLE_LIST_FN)    ( dbi_conn conn, const gchar* dbname );
 typedef void    (*APPEND_COLUMN_DEF_FN) ( GString* ddl, GncSqlColumnInfo* info );
 typedef GSList* (*GET_INDEX_LIST_FN)    ( dbi_conn conn );
 typedef void    (*DROP_INDEX_FN)        ( dbi_conn conn, const gchar* index );
+typedef void    (*SAFE_SYNC)            ( QofBackend *qbe, QofBook * book );
 typedef struct
 {
     CREATE_TABLE_DDL_FN     create_table_ddl;
@@ -70,6 +71,7 @@ typedef struct
     APPEND_COLUMN_DEF_FN    append_col_def;
     GET_INDEX_LIST_FN       get_index_list;
     DROP_INDEX_FN           drop_index;
+    SAFE_SYNC               safe_sync;
 } provider_functions_t;
 
 
