@@ -83,7 +83,7 @@ GncNumeric::GncNumeric(GncRational rr)
 GncNumeric::GncNumeric(double d) : m_num(0), m_den(1)
 {
     static uint64_t max_leg_value{INT64_C(1000000000000000000)};
-    if (isnan(d) || fabs(d) > max_leg_value)
+    if (std::isnan(d) || fabs(d) > max_leg_value)
     {
         std::ostringstream msg;
         msg << "Unable to construct a GncNumeric from " << d << ".\n";
