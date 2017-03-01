@@ -1423,25 +1423,34 @@ static gnc_numeric gncEntryGetIntDiscountValue (GncEntry *entry, gboolean round,
         return (is_cust_doc ? entry->i_disc_value : gnc_numeric_zero());
 }
 
-gnc_numeric gncEntryGetInvNetPrice (const GncEntry *entry)
+gnc_numeric gncEntryGetPrice (const GncEntry *entry, gboolean cust_doc, gboolean net)
 {
-    gnc_numeric result = gnc_numeric_zero();
-    if (entry)
-    {
-	int denom;
+    gnc_numeric result;
+    int denom;
+
+    if (!entry) return gnc_numeric_zero();
+    if (!net) return (cust_doc ? entry->i_price : entry->b_price);
 	
-	/* Determine the commodity denominator */
-	denom = get_entry_commodity_denom (entry);
+    /* Determine the commodity denominator */
+    denom = get_entry_commodity_denom (entry);
       
-	/* Compute the invoice values */
-	gncEntryComputeValueInt (entry->quantity, entry->i_price,
-				 (entry->i_taxable ? entry->i_tax_table : NULL),
-				 entry->i_taxincluded,
-				 entry->i_discount, entry->i_disc_type,
-				 entry->i_disc_how,
-				 denom,
-				 NULL, NULL, NULL, &result);
-    }
+    /* Compute the net price */
+    if (cust_doc)
+        gncEntryComputeValueInt (entry->quantity, entry->i_price,
+                                 (entry->i_taxable ? entry->i_tax_table : NULL),
+                                 entry->i_taxincluded,
+                                 entry->i_discount, entry->i_disc_type,
+                                 entry->i_disc_how,
+                                 denom,
+                                 NULL, NULL, NULL, &result);
+    else
+        gncEntryComputeValueInt (entry->quantity, entry->b_price,
+                                 (entry->b_taxable ? entry->b_tax_table : NULL),
+                                 entry->b_taxincluded,
+                                 gnc_numeric_zero(), GNC_AMT_TYPE_VALUE, GNC_DISC_PRETAX,
+                                 denom,
+                                 NULL, NULL, NULL, &result);
+
     return result;
 }
 
