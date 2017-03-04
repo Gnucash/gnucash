@@ -182,6 +182,7 @@ gnc_numeric gncEntryGetDocQuantity (const GncEntry *entry, gboolean is_cn);
  @{ */
 Account * gncEntryGetInvAccount (const GncEntry *entry);
 gnc_numeric gncEntryGetInvPrice (const GncEntry *entry);
+gnc_numeric gncEntryGetPrice (const GncEntry *entry, const gboolean cust_doc, const gboolean net);
 gnc_numeric gncEntryGetInvDiscount (const GncEntry *entry);
 GncAmountType gncEntryGetInvDiscountType (const GncEntry *entry);
 GncDiscountHow gncEntryGetInvDiscountHow (const GncEntry *entry);
