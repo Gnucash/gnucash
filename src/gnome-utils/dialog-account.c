@@ -1373,7 +1373,7 @@ gnc_account_window_create(AccountWindow *aw)
     gtk_label_set_mnemonic_widget (GTK_LABEL(label), amount);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "opening_balance_date_box"));
-    date_edit = gnc_date_edit_new (gnc_time (NULL), 1, 1);
+    date_edit = gnc_date_edit_new (gnc_time (NULL), 0, 0);
     aw->opening_balance_date_edit = date_edit;
     gtk_box_pack_start(GTK_BOX(box), date_edit, TRUE, TRUE, 0);
     gtk_widget_show (date_edit);
