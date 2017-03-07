@@ -56,9 +56,6 @@ enum
 
 typedef struct
 {
-    GtkDrawingArea area;
-    GtkWidget *parent;
-
     gint type;
 
     gint row;
@@ -66,29 +63,24 @@ typedef struct
 
     /* precomputed pixel coords for the item cursor*/
     gint x, y, w, h;
-} GnucashItemCursor;
+} GnucashCursorCell;
 
 
 typedef struct
 {
     GtkDrawingArea area;
 
-    GnucashItemCursor *cursor[GNUCASH_CURSOR_NUM];
+    GnucashCursorCell cell;
     GnucashSheet *sheet;
 
+    gint row;
+    gint col;
     /* precomputed pixel coords for the block cursor*/
     gint x, y, w, h;
 
-    GdkGC *gc;
+    cairo_surface_t *surface;
     SheetBlockStyle *style;
 } GnucashCursor;
-
-
-typedef struct
-{
-    GtkDrawingAreaClass parent_class;
-} GnucashItemCursorClass;
-
 
 typedef struct
 {

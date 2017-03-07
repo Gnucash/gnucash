@@ -754,9 +754,9 @@ void
 gnc_item_edit_configure (GncItemEdit *item_edit)
 {
     GnucashSheet *sheet = item_edit->sheet;
-    GnucashItemCursor *cursor;
+    GnucashCursor *cursor;
 
-    cursor = GNUCASH_CURSOR(sheet->cursor)->cursor[GNUCASH_CURSOR_BLOCK];
+    cursor = GNUCASH_CURSOR(sheet->cursor);
 
     if (item_edit->virt_loc.vcell_loc.virt_row != cursor->row)
     {
@@ -774,17 +774,16 @@ gnc_item_edit_configure (GncItemEdit *item_edit)
         gnucash_sheet_get_style (item_edit->sheet,
                                  item_edit->virt_loc.vcell_loc);
 
-    cursor = GNUCASH_CURSOR(sheet->cursor)->cursor[GNUCASH_CURSOR_CELL];
 
-    if (item_edit->virt_loc.phys_row_offset != cursor->row)
+    if (item_edit->virt_loc.phys_row_offset != cursor->cell.row)
     {
-        item_edit->virt_loc.phys_row_offset = cursor->row;
+        item_edit->virt_loc.phys_row_offset = cursor->cell.row;
         item_edit->reset_pos = TRUE;
     }
 
-    if (item_edit->virt_loc.phys_col_offset != cursor->col)
+    if (item_edit->virt_loc.phys_col_offset != cursor->cell.col)
     {
-        item_edit->virt_loc.phys_col_offset = cursor->col;
+        item_edit->virt_loc.phys_col_offset = cursor->cell.col;
         item_edit->reset_pos = TRUE;
     }
 

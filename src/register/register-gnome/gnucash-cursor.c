@@ -37,7 +37,6 @@
 #include "gnucash-style.h"
 
 static GtkDrawingArea *gnucash_cursor_parent_class;
-static GtkDrawingArea *gnucash_item_cursor_parent_class;
 
 enum
 {
@@ -52,17 +51,14 @@ gnucash_cursor_get_pixel_coords (GnucashCursor *cursor,
                                  gint *w, gint *h)
 {
     GnucashSheet *sheet = cursor->sheet;
-    GnucashItemCursor *item_cursor;
     VirtualCellLocation vcell_loc;
     CellDimensions *cd;
     VirtualCell *vcell;
     SheetBlock *block;
     gint col;
 
-    item_cursor = cursor->cursor[GNUCASH_CURSOR_BLOCK];
-
-    vcell_loc.virt_row = item_cursor->row;
-    vcell_loc.virt_col = item_cursor->col;
+    vcell_loc.virt_row = cursor->row;
+    vcell_loc.virt_col = cursor->col;
 
     block = gnucash_sheet_get_block (sheet, vcell_loc);
     if (!block)
@@ -111,13 +107,8 @@ gnucash_cursor_get_pixel_coords (GnucashCursor *cursor,
 static void
 gnucash_cursor_request_redraw (GnucashCursor *cursor)
 {
-    GnucashItemCursor *ic;
     gtk_widget_queue_draw_area (GTK_WIDGET(cursor),
                                 cursor->x, cursor->y, cursor->w, cursor->h);
-    ic = cursor->cursor[GNUCASH_CURSOR_BLOCK];
-    gtk_widget_queue_draw_area (GTK_WIDGET(ic), ic->x, ic->y, ic->w, ic->h);
-    ic = cursor->cursor[GNUCASH_CURSOR_CELL];
-    gtk_widget_queue_draw_area (GTK_WIDGET(ic), ic->x, ic->y, ic->w, ic->h);
 }
 
 
@@ -137,19 +128,62 @@ gnucash_cursor_get_virt (GnucashCursor *cursor, VirtualLocation *virt_loc)
     g_return_if_fail (cursor != NULL);
     g_return_if_fail (GNUCASH_IS_CURSOR (cursor));
 
-    virt_loc->vcell_loc.virt_row = cursor->cursor[GNUCASH_CURSOR_BLOCK]->row;
-    virt_loc->vcell_loc.virt_col = cursor->cursor[GNUCASH_CURSOR_BLOCK]->col;
+    virt_loc->vcell_loc.virt_row = cursor->row;
+    virt_loc->vcell_loc.virt_col = cursor->col;
 
-    virt_loc->phys_row_offset = cursor->cursor[GNUCASH_CURSOR_CELL]->row;
-    virt_loc->phys_col_offset = cursor->cursor[GNUCASH_CURSOR_CELL]->col;
+    virt_loc->phys_row_offset = cursor->cell.row;
+    virt_loc->phys_col_offset = cursor->cell.col;
+}
+
+static void
+gnucash_cursor_draw_offscreen (GnucashCursor *cursor)
+{
+    GnucashCursorCell *cc = &(cursor->cell);
+    gint cx, cy;
+    cairo_rgb fg_color;
+    cairo_t *cr;
+
+    if (cursor->surface)
+        cairo_surface_destroy (cursor->surface);
+    cursor->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                                  cursor->w, cursor->h);
+
+    cr = cairo_create (cursor->surface);
+    to_cairo_rgb(&gn_black, &fg_color);
+
+    /* Clear the background area.
+     * FIXME doesn't work as written */
+    cairo_save (cr);
+    cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+    cairo_paint (cr);
+    cairo_restore (cr);
+
+    /* draw the rectangle around the entire active
+     virtual *row */
+    cairo_rectangle (cr, 0.5, 0.5, cursor->w - 1.0, cursor->h - 1.0);
+    cairo_move_to (cr, 0, cursor->h - 1.5);
+    cairo_rel_line_to (cr, cursor->w, 0);
+    cairo_set_source_rgb (cr, fg_color.red, fg_color.green, fg_color.blue);
+    cairo_set_line_width (cr, 1.0);
+    cairo_stroke (cr);
+
+
+    // Draw the cursor's cell frame
+    cx = cc->x - cursor->x;
+    cy = cc->y - cursor->y;
+
+    cairo_rectangle (cr, cx + 0.5, cy + 0.5, cc->w - 1.0, cc->h - 1.0);
+    cairo_set_source_rgb (cr, fg_color.red, fg_color.green, fg_color.blue);
+    cairo_set_line_width (cr, 1.0);
+    cairo_stroke (cr);
+
+    cairo_destroy (cr);
 }
 
 
 void
 gnucash_cursor_configure (GnucashCursor *cursor)
 {
-    GnucashItemCursor *block_cursor;
-    GnucashItemCursor *cell_cursor;
     GtkLayout *layout;
     gint x, y, w, h;
 
@@ -166,85 +200,34 @@ gnucash_cursor_configure (GnucashCursor *cursor)
     cursor->x = x;
     cursor->y = y;
     cursor->w = w;
-    cursor->h = h + 1;
+    cursor->h = h + 2;
 
     gtk_layout_move (layout, GTK_WIDGET(cursor), cursor->x, cursor->y);
     gtk_widget_set_size_request(GTK_WIDGET(cursor), cursor->w, cursor->h);
 
-    block_cursor = cursor->cursor[GNUCASH_CURSOR_BLOCK];
-    block_cursor->x = cursor->x;
-    block_cursor->y = cursor->y;
-    block_cursor->w = cursor->w;
-    block_cursor->h = cursor->h;
-
-    gtk_layout_move (layout, GTK_WIDGET(block_cursor),
-                     block_cursor->x, block_cursor->y);
-    gtk_widget_set_size_request(GTK_WIDGET(block_cursor),
-                                block_cursor->w, block_cursor->h);
-
-    cell_cursor = cursor->cursor[GNUCASH_CURSOR_CELL];
     gnucash_sheet_style_get_cell_pixel_rel_coords (cursor->style,
-            cell_cursor->row,  cell_cursor->col,
+            cursor->cell.row,  cursor->cell.col,
             &x, &y, &w, &h);
-    cell_cursor->x = x - block_cursor->x;
-    cell_cursor->y = y;
-    cell_cursor->w = w;
-    cell_cursor->h = h;
+    cursor->cell.x = x - cursor->x;
+    cursor->cell.y = y;
+    cursor->cell.w = w;
+    cursor->cell.h = h;
 
-    gtk_layout_move (layout, GTK_WIDGET(cell_cursor),
-                     cell_cursor->x, cell_cursor->y);
-    gtk_widget_set_size_request(GTK_WIDGET(cell_cursor),
-                                cell_cursor->w, cell_cursor->h);
+    gnucash_cursor_draw_offscreen (cursor);
 }
 
 
 static gboolean
-gnucash_item_cursor_draw (GtkWidget *widget, GdkEventExpose *event)
+gnucash_cursor_draw (GtkWidget *widget, GdkEventExpose *event)
 {
-    GnucashItemCursor *item_cursor = GNUCASH_ITEM_CURSOR(widget);
-    GnucashCursor *cursor = GNUCASH_CURSOR(item_cursor->parent);
-    gint dx, dy, dw, dh;
-    int x = event->area.x;
-    int y = event->area.y;
-    GdkDrawable *drawable = GDK_DRAWABLE (gtk_layout_get_bin_window (GTK_LAYOUT(widget)));
+    cairo_t *cr;
+    GdkWindow *binwin = gtk_widget_get_window(widget);
 
-    switch (item_cursor->type)
-    {
-    case GNUCASH_CURSOR_BLOCK:
-        dx = item_cursor->x - x;
-        dy = item_cursor->y - y;
-        dw = item_cursor->w;
-        dh = item_cursor->h;
+    cr = gdk_cairo_create (binwin);
+    cairo_set_source_surface (cr, GNUCASH_CURSOR(widget)->surface, 0, 0);
+    cairo_paint (cr);
+    cairo_destroy (cr);
 
-        /* draw the rectangle around the entire active
-           virtual row */
-        gdk_gc_set_line_attributes (cursor->gc, 1,
-                                    GDK_LINE_SOLID, GDK_CAP_NOT_LAST, GDK_JOIN_MITER);
-
-        gdk_gc_set_foreground (cursor->gc, &gn_black);
-
-        gdk_draw_rectangle (drawable, cursor->gc, FALSE,
-                            dx, dy, dw, dh - 1);
-        gdk_draw_line (drawable, cursor->gc,
-                       dx, dy + dh, dx + dw, dy + dh);
-
-        break;
-
-    case GNUCASH_CURSOR_CELL:
-        dx = item_cursor->x - x;
-        dy = item_cursor->y - y;
-        dw = item_cursor->w;
-        dh = item_cursor->h;
-
-        gdk_gc_set_line_attributes (cursor->gc, 1,
-                                    GDK_LINE_SOLID, GDK_CAP_NOT_LAST, GDK_JOIN_MITER);
-
-        gdk_gc_set_foreground (cursor->gc, &gn_black);
-
-        gdk_draw_rectangle (drawable, cursor->gc, FALSE,
-                            dx, dy, dw, dh);
-        break;
-    }
     return TRUE;
 }
 
@@ -253,13 +236,11 @@ static void
 gnucash_cursor_set_block (GnucashCursor *cursor, VirtualCellLocation vcell_loc)
 {
     GnucashSheet *sheet;
-    GnucashItemCursor *item_cursor;
 
     g_return_if_fail (cursor != NULL);
     g_return_if_fail (GNUCASH_IS_CURSOR (cursor));
 
     sheet = cursor->sheet;
-    item_cursor = cursor->cursor[GNUCASH_CURSOR_BLOCK];
 
     if (vcell_loc.virt_row < 0 ||
             vcell_loc.virt_row >= sheet->num_virt_rows ||
@@ -268,30 +249,27 @@ gnucash_cursor_set_block (GnucashCursor *cursor, VirtualCellLocation vcell_loc)
         return;
 
     cursor->style = gnucash_sheet_get_style (sheet, vcell_loc);
-
-    item_cursor->row = vcell_loc.virt_row;
-    item_cursor->col = vcell_loc.virt_col;
+    cursor->row = vcell_loc.virt_row;
+    cursor->col = vcell_loc.virt_col;
 }
 
 
 static void
 gnucash_cursor_set_cell (GnucashCursor *cursor, gint cell_row, gint cell_col)
 {
-    GnucashItemCursor *item_cursor;
     SheetBlockStyle *style;
 
     g_return_if_fail (cursor != NULL);
     g_return_if_fail (GNUCASH_IS_CURSOR (cursor));
 
-    item_cursor = cursor->cursor[GNUCASH_CURSOR_CELL];
     style = cursor->style;
 
     if (cell_row < 0 || cell_row >= style->nrows ||
             cell_col < 0 || cell_col >= style->ncols)
         return;
 
-    item_cursor->row = cell_row;
-    item_cursor->col = cell_col;
+    cursor->cell.row = cell_row;
+    cursor->cell.col = cell_col;
 }
 
 
@@ -305,7 +283,8 @@ gnucash_cursor_set (GnucashCursor *cursor, VirtualLocation virt_loc)
 
     sheet = cursor->sheet;
 
-    gnucash_cursor_request_redraw (cursor);
+    gtk_widget_queue_draw_area(GTK_WIDGET(sheet->grid), cursor->x, cursor->y,
+        cursor->w, cursor->h);
 
     gnucash_cursor_set_block (cursor, virt_loc.vcell_loc);
     gnucash_cursor_set_cell (cursor,
@@ -324,17 +303,8 @@ gnucash_cursor_set (GnucashCursor *cursor, VirtualLocation virt_loc)
 
 
 static void
-gnucash_item_cursor_init (GnucashItemCursor *cursor)
-{
-    cursor->col = 0;
-    cursor->row   = 0;
-}
-
-
-static void
 gnucash_cursor_realize (GtkWidget *widget)
 {
-    GnucashCursor *cursor = GNUCASH_CURSOR (widget);
     GdkWindow *window;
 
     if (GTK_WIDGET_CLASS (gnucash_cursor_parent_class)->realize)
@@ -342,8 +312,8 @@ gnucash_cursor_realize (GtkWidget *widget)
          (gnucash_cursor_parent_class)->realize)(widget);
 
     window = gtk_widget_get_window (widget);
-
-    cursor->gc = gdk_gc_new (window);
+    gdk_window_set_back_pixmap (window, NULL, FALSE);
+    gnucash_cursor_draw_offscreen(GNUCASH_CURSOR(widget));
 }
 
 
@@ -352,59 +322,13 @@ gnucash_cursor_unrealize (GtkWidget *widget)
 {
     GnucashCursor *cursor = GNUCASH_CURSOR (widget);
 
-    if (cursor->gc != NULL)
-    {
-        g_object_unref (cursor->gc);
-        cursor->gc = NULL;
-    }
+    if (cursor->surface)
+        cairo_surface_destroy (cursor->surface);
+    cursor->surface = NULL;
 
     if (GTK_WIDGET_CLASS (gnucash_cursor_parent_class)->unrealize)
         (GTK_WIDGET_CLASS
          (gnucash_cursor_parent_class)->unrealize)(widget);
-}
-
-
-static void
-gnucash_item_cursor_class_init (GnucashItemCursorClass *klass)
-{
-    GtkWidgetClass *widget_class;
-
-    widget_class = GTK_WIDGET_CLASS (klass);
-
-    gnucash_item_cursor_parent_class = g_type_class_peek_parent (klass);
-
-    /* Widget method overrides */
-    widget_class->expose_event = gnucash_item_cursor_draw;
-}
-
-
-GType
-gnucash_item_cursor_get_type (void)
-{
-    static GType gnucash_item_cursor_type = 0;
-
-    if (!gnucash_item_cursor_type)
-    {
-        static const GTypeInfo gnucash_item_cursor_info =
-        {
-            sizeof (GnucashItemCursorClass),
-            NULL,		/* base_init */
-            NULL,		/* base_finalize */
-            (GClassInitFunc) gnucash_item_cursor_class_init,
-            NULL,		/* class_finalize */
-            NULL,		/* class_data */
-            sizeof (GnucashItemCursor),
-            0,		/* n_preallocs */
-            (GInstanceInitFunc) gnucash_item_cursor_init
-        };
-
-        gnucash_item_cursor_type =
-            g_type_register_static (GTK_TYPE_DRAWING_AREA,
-                                    "GnucashItemCursor",
-                                    &gnucash_item_cursor_info, 0);
-    }
-
-    return gnucash_item_cursor_type;
 }
 
 
@@ -473,6 +397,7 @@ gnucash_cursor_class_init (GnucashCursorClass *klass)
     /* GtkWidget method overrides */
     widget_class->realize     = gnucash_cursor_realize;
     widget_class->unrealize   = gnucash_cursor_unrealize;
+    widget_class->expose_event = gnucash_cursor_draw;
 
     /* properties */
     g_object_class_install_property
@@ -520,28 +445,16 @@ GtkWidget *
 gnucash_cursor_new (GnucashSheet *sheet)
 {
     GnucashCursor *cursor;
-    GnucashItemCursor *item_cursor;
 
     cursor = GNUCASH_CURSOR(
         g_object_new (gnucash_cursor_get_type(),
                       "sheet", sheet,
                       NULL));
+/* FIXME doesn't seem to work as it should...
+    gtk_widget_set_app_paintable(GTK_WIDGET(cursor), TRUE);*/
     gtk_layout_put (GTK_LAYOUT(sheet), GTK_WIDGET(cursor), 0, 0);
 
-    item_cursor = GNUCASH_ITEM_CURSOR (
-        g_object_new (gnucash_item_cursor_get_type(), NULL));
-    item_cursor->type = GNUCASH_CURSOR_CELL;
-    item_cursor->parent = GTK_WIDGET(cursor);
-    gtk_layout_put (GTK_LAYOUT(sheet), GTK_WIDGET(item_cursor), 0, 0);
-    cursor->cursor[GNUCASH_CURSOR_CELL] = item_cursor;
-
-
-    item_cursor = GNUCASH_ITEM_CURSOR (
-        g_object_new (gnucash_item_cursor_get_type(), NULL));
-    item_cursor->type = GNUCASH_CURSOR_BLOCK;
-    item_cursor->parent = GTK_WIDGET(cursor);
-    gtk_layout_put (GTK_LAYOUT(sheet), GTK_WIDGET(item_cursor), 0, 0);
-    cursor->cursor[GNUCASH_CURSOR_BLOCK] = item_cursor;
+    gtk_widget_show (GTK_WIDGET (cursor));
 
     return GTK_WIDGET (cursor);
 }
