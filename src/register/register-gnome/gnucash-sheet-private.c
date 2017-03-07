@@ -670,3 +670,29 @@ gnucash_sheet_draw_internal (GnucashSheet *sheet, cairo_t *cr,
 
     return TRUE;
 }
+
+
+void
+gnucash_sheet_draw_cursor (GnucashCursor *cursor, cairo_t *cr)
+{
+    GnucashCursorCell *cc = &(cursor->cell);
+    cairo_rgb fg_color;
+
+    to_cairo_rgb(&gn_black, &fg_color);
+
+    /* draw the rectangle around the entire active
+     *    virtual *row */
+    cairo_rectangle (cr, cursor->x + 0.5, cursor->y + 0.5,
+                     cursor->w - 1.0, cursor->h - 1.0);
+    cairo_move_to (cr, cursor->x, cursor->y + cursor->h - 1.5);
+    cairo_rel_line_to (cr, cursor->w, 0);
+    cairo_set_source_rgb (cr, fg_color.red, fg_color.green, fg_color.blue);
+    cairo_set_line_width (cr, 1.0);
+    cairo_stroke (cr);
+
+    cairo_rectangle (cr, cc->x + 0.5, cursor->y + cc->y + 0.5,
+                     cc->w - 1.0, cc->h - 1.0);
+    cairo_set_source_rgb (cr, fg_color.red, fg_color.green, fg_color.blue);
+    cairo_set_line_width (cr, 1.0);
+    cairo_stroke (cr);
+}

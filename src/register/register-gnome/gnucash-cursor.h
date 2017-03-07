@@ -21,7 +21,7 @@
 #ifndef GNUCASH_CURSOR_H
 #define GNUCASH_CURSOR_H
 
-#include <gtk/gtk.h>
+#include <glib-2.0/glib.h>
 #include "gnucash-sheet.h"
 
 /** @ingroup Register
@@ -56,8 +56,6 @@ enum
 
 typedef struct
 {
-    gint type;
-
     gint row;
     gint col;
 
@@ -68,7 +66,7 @@ typedef struct
 
 typedef struct
 {
-    GtkDrawingArea area;
+    GObject obj;
 
     GnucashCursorCell cell;
     GnucashSheet *sheet;
@@ -78,17 +76,16 @@ typedef struct
     /* precomputed pixel coords for the block cursor*/
     gint x, y, w, h;
 
-    cairo_surface_t *surface;
     SheetBlockStyle *style;
 } GnucashCursor;
 
 typedef struct
 {
-    GtkDrawingAreaClass parent_class;
+    GObjectClass parent_class;
 } GnucashCursorClass;
 
 
-GtkWidget *gnucash_cursor_new (GnucashSheet *sheet);
+GnucashCursor *gnucash_cursor_new (GnucashSheet *sheet);
 
 void gnucash_cursor_get_virt (GnucashCursor *cursor,
                               VirtualLocation *virt_loc);

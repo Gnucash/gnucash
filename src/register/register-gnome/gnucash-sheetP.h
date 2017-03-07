@@ -24,6 +24,7 @@
 #include <gtk/gtk.h>
 #include "gnucash-sheet.h"
 #include "gnucash-item-edit.h"
+#include "gnucash-cursor.h"
 
 /** @ingroup Register
  * @addtogroup Gnome
@@ -50,7 +51,7 @@ struct _GnucashSheet
     gint num_virt_cols;
 
     GtkWidget *header_item;
-    GtkWidget *cursor;
+    GnucashCursor *cursor;
 
     GHashTable *cursor_styles;
 
@@ -158,7 +159,8 @@ GncItemEdit *gnucash_sheet_get_item_edit (GnucashSheet *sheet);
 gboolean   gnucash_sheet_find_loc_by_pixel (GnucashSheet *sheet, gint x, gint y,
                                            VirtualLocation *vcell_loc);
 gboolean gnucash_sheet_draw_internal (GnucashSheet *sheet, cairo_t *cr,
-                            int x, int y, int width, int height);
+                                      int x, int y, int width, int height);
+void gnucash_sheet_draw_cursor (GnucashCursor *cursor, cairo_t *cr);
 
 
 /** @} */

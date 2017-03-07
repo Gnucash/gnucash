@@ -149,7 +149,15 @@ gnucash_sheet_cursor_set (GnucashSheet *sheet, VirtualLocation virt_loc)
     g_return_if_fail (virt_loc.vcell_loc.virt_col >= 0 ||
                       virt_loc.vcell_loc.virt_col <= sheet->num_virt_cols);
 
+    gtk_widget_queue_draw_area (GTK_WIDGET(sheet),
+                                sheet->cursor->x, sheet->cursor->y,
+                                sheet->cursor->w, sheet->cursor->h);
+
     gnucash_cursor_set (GNUCASH_CURSOR(sheet->cursor), virt_loc);
+
+    gtk_widget_queue_draw_area (GTK_WIDGET(sheet),
+                                sheet->cursor->x, sheet->cursor->y,
+                                sheet->cursor->w, sheet->cursor->h);
 }
 
 void
@@ -1125,6 +1133,9 @@ gnucash_sheet_draw (GtkWidget *widget, GdkEventExpose *event)
 
     cr = gdk_cairo_create (binwin);
     result = gnucash_sheet_draw_internal (sheet, cr, x, y, width, height);
+
+    gnucash_sheet_draw_cursor (sheet->cursor, cr);
+
     cairo_destroy(cr);
 
     return result;
