@@ -102,6 +102,7 @@
 (define optname-jobnumber-text		(N_ "Job Number text"))
 (define optname-jobname-show		(N_ "Show Job name"))
 (define optname-jobnumber-show		(N_ "Show Job number"))
+(define optname-netprice		(N_ "Show net price"))
 (define optname-invnum-next-to-title	(N_ "Invoice number next to title"))
 (define optname-border-collapse		(N_ "table-border-collapse"))
 (define optname-border-color-th		(N_ "table-header-border-color"))
@@ -170,6 +171,7 @@
 (add-option (gnc:make-simple-boolean-option	elementspage	optname-invnum-next-to-title	"h" (N_ "Invoice Number next to title?") #f))
 (add-option (gnc:make-simple-boolean-option	elementspage	optname-jobname-show		"i" (N_ "Display Job name?") #t))
 (add-option (gnc:make-simple-boolean-option	elementspage	optname-jobnumber-show		"j" (N_ "Invoice Job number?") #f))
+(add-option (gnc:make-simple-boolean-option	elementspage	optname-netprice		"k" (N_ "Show net price?") #f))
 
   ;; Display options
   (add-option (gnc:make-string-option displaypage optname-template-file "a" 
@@ -282,6 +284,7 @@
          (opt-invnum-next-to-title  (opt-value elementspage  optname-invnum-next-to-title))
          (opt-jobname-show          (opt-value elementspage  optname-jobname-show))
          (opt-jobnumber-show        (opt-value elementspage  optname-jobnumber-show))
+         (opt-netprice              (opt-value elementspage  optname-netprice))
          (opt-report-currency       (opt-value gnc:pagename-general optname-report-currency))
          (opt-css-border-collapse   (if (opt-value displaypage optname-border-collapse) "border-collapse:collapse;"))
          (opt-css-border-color-th   (opt-value displaypage optname-border-color-th))
