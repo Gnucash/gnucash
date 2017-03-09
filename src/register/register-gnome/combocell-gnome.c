@@ -753,9 +753,10 @@ gnc_combo_cell_gui_realize (BasicCell *bcell, gpointer data)
     box->sheet = sheet;
     box->item_edit = item_edit;
     if (cell->shared_store)
-        box->item_list = gnc_item_edit_new_list(box->item_edit, cell->shared_store);
+        box->item_list = GNC_ITEM_LIST (gnc_item_list_new (cell->shared_store));
     else
-        box->item_list = gnc_item_edit_new_list(box->item_edit, box->tmp_store);
+        box->item_list = GNC_ITEM_LIST (gnc_item_list_new (box->tmp_store));
+    gtk_widget_show_all (GTK_WIDGET(box->item_list));
     gtk_layout_put (GTK_LAYOUT(sheet),
                     GTK_WIDGET(box->item_list), 0, 0);
     g_object_ref_sink(box->item_list);

@@ -117,9 +117,6 @@ void gnc_item_edit_get_pixel_coords (GncItemEdit *item_edit,
 
 GtkWidget *gnc_item_edit_new (GnucashSheet *sheet);
 
-GncItemList * gnc_item_edit_new_list (GncItemEdit *item_edit, GtkListStore *shared_store);
-GNCDatePicker * gnc_item_edit_new_date_picker (GncItemEdit *item_edit);
-
 void gnc_item_edit_set_popup (GncItemEdit    *item_edit,
                               GtkWidget      *popup_item,
                               GetPopupHeight  get_popup_height,

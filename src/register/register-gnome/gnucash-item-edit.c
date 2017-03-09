@@ -1217,31 +1217,6 @@ gnc_item_edit_new (GnucashSheet *sheet)
 }
 
 
-GncItemList *
-gnc_item_edit_new_list (GncItemEdit *item_edit, GtkListStore *shared_store)
-{
-    GncItemList *item_list;
-
-    g_return_val_if_fail (GNC_IS_ITEM_EDIT(item_edit), NULL);
-
-    item_list = GNC_ITEM_LIST (gnc_item_list_new (shared_store));
-
-    return item_list;
-}
-
-GNCDatePicker *
-gnc_item_edit_new_date_picker (GncItemEdit *item_edit)
-{
-    GNCDatePicker *gdp;
-
-    g_return_val_if_fail (GNC_IS_ITEM_EDIT (item_edit), NULL);
-
-    gdp = GNC_DATE_PICKER (gnc_date_picker_new ());
-
-    return gdp;
-}
-
-
 void
 gnc_item_edit_show_popup (GncItemEdit *item_edit)
 {

@@ -52,7 +52,7 @@
 typedef struct _PopBox
 {
     GnucashSheet  *sheet;
-    GncItemEdit      *item_edit;
+    GncItemEdit   *item_edit;
     GNCDatePicker *date_picker;
 
     gboolean signals_connected; /* date picker signals connected? */
@@ -607,7 +607,8 @@ gnc_date_cell_realize (BasicCell *bcell, gpointer data)
     /* initialize gui-specific, private data */
     box->sheet = sheet;
     box->item_edit = item_edit;
-    box->date_picker = gnc_item_edit_new_date_picker (box->item_edit);
+    box->date_picker = GNC_DATE_PICKER (gnc_date_picker_new ());
+    gtk_widget_show_all (GTK_WIDGET(box->date_picker));
     gtk_layout_put (GTK_LAYOUT(sheet),
                     GTK_WIDGET(box->date_picker), 0, 0);
     g_object_ref_sink(box->date_picker);
