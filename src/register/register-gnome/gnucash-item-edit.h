@@ -59,8 +59,8 @@ typedef int (*PopupGetWidth) (GtkWidget *item,
 typedef struct _PopupToggle PopupToggle;
 struct _PopupToggle
 {
-    GtkToggleButton *toggle_button;
-    gint toggle_offset;
+    GtkWidget *ebox;
+    GtkWidget *tbutton;
     GtkArrow *arrow;
     gboolean signals_connected;
 };
@@ -68,19 +68,16 @@ struct _PopupToggle
 
 typedef struct
 {
-    GtkDrawingArea edit_area;
+    GtkHBox hbox;
     GnucashSheet *sheet;
 
     /* The editor whose status we reflect on the sheet */
     GtkWidget *editor;
 
-    gboolean has_selection;
-
     gboolean is_popup;
     gboolean show_popup;
 
     PopupToggle popup_toggle;
-
     GtkWidget *popup_item;
     GetPopupHeight   get_popup_height;
     PopupAutosize    popup_autosize;
@@ -88,12 +85,6 @@ typedef struct
     PopupPostShow    popup_post_show;
     PopupGetWidth    popup_get_width;
     gpointer         popup_user_data;
-
-    GdkGC *gc;
-
-    gboolean reset_pos;
-    gint x_offset;
-    gint anchor_pos;
 
     /* Where are we */
     VirtualLocation virt_loc;
@@ -103,7 +94,7 @@ typedef struct
 
 typedef struct
 {
-    GtkDrawingAreaClass parent_class;
+    GtkHBoxClass parent_class;
 } GncItemEditClass;
 
 
@@ -131,23 +122,13 @@ void gnc_item_edit_hide_popup (GncItemEdit *item_edit);
 
 int gnc_item_edit_get_toggle_offset (int row_height);
 
-gboolean gnc_item_edit_set_cursor_pos (GncItemEdit *item_edit,
-                                       VirtualLocation virt_loc, int x,
-                                       gboolean changed_cells,
-                                       gboolean extend_selection);
+void gnc_item_edit_cut_clipboard (GncItemEdit *item_edit);
+void gnc_item_edit_copy_clipboard (GncItemEdit *item_edit);
+void gnc_item_edit_paste_clipboard (GncItemEdit *item_edit);
 
-void gnc_item_edit_redraw (GncItemEdit *item_edit);
-
-void gnc_item_edit_cut_clipboard (GncItemEdit *item_edit, guint32 time);
-void gnc_item_edit_copy_clipboard (GncItemEdit *item_edit, guint32 time);
-void gnc_item_edit_paste_selection (GncItemEdit *item_edit, GdkAtom selection,
-                                    guint32 time);
-
-void gnc_item_edit_set_has_selection (GncItemEdit *item_edit, gboolean has_selection);
 gboolean gnc_item_edit_get_has_selection (GncItemEdit *item_edit);
 void gnc_item_edit_focus_in (GncItemEdit *item_edit);
 void gnc_item_edit_focus_out (GncItemEdit *item_edit);
 
-void gnc_item_edit_reset_offset (GncItemEdit *item_edit);
 /** @} */
 #endif /* GNUCASH_ITEM_EDIT_H */
