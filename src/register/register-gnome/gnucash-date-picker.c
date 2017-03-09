@@ -83,6 +83,7 @@ static gboolean
 gnc_date_picker_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
     GNCDatePicker *date_picker = GNC_DATE_PICKER (data);
+    gboolean retval;
 
     switch (event->keyval)
     {
@@ -108,9 +109,9 @@ gnc_date_picker_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
     /* These go to the sheet */
     g_signal_stop_emission_by_name (widget, "key_press_event");
 
-    g_signal_emit_by_name (date_picker, "key_press_event", 0, event);
+    g_signal_emit_by_name (date_picker, "key_press_event", event, &retval);
 
-    return TRUE;
+    return retval;
 }
 
 static void

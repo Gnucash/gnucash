@@ -302,6 +302,7 @@ gnc_item_list_key_event (GtkWidget *widget, GdkEventKey *event, gpointer data)
     GtkTreeIter iter;
     GtkTreeModel *model;
     gchar *string;
+    gboolean retval;
 
     switch (event->keyval)
     {
@@ -330,9 +331,9 @@ gnc_item_list_key_event (GtkWidget *widget, GdkEventKey *event, gpointer data)
     /* These go to the sheet */
     g_signal_stop_emission_by_name (G_OBJECT (widget), "key_press_event");
 
-    g_signal_emit_by_name (G_OBJECT (item_list), "key_press_event", 0, event);
+    g_signal_emit_by_name (G_OBJECT (item_list), "key_press_event", event, &retval);
 
-    return TRUE;
+    return retval;
 }
 
 
