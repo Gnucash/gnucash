@@ -45,7 +45,7 @@ enum
     LAST_SIGNAL
 };
 
-static GtkFrame *gnc_item_list_parent_class;
+static GtkEventBoxClass *gnc_item_list_parent_class;
 static guint gnc_item_list_signals[LAST_SIGNAL];
 
 gboolean _gnc_item_find_selection(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data);
@@ -402,7 +402,7 @@ gnc_item_list_get_type (void)
         };
 
         gnc_item_list_type =
-            g_type_register_static (GTK_TYPE_FRAME, "GncItemList",
+            g_type_register_static (GTK_TYPE_EVENT_BOX, "GncItemList",
                                     &gnc_item_list_info, 0);
     }
 

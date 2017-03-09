@@ -39,7 +39,7 @@
 
 typedef struct
 {
-    GtkFrame frame;
+    GtkEventBox ebox;
 
     GtkTreeView *tree_view;
     GtkListStore *list_store; /* Contains the list items */
@@ -47,7 +47,7 @@ typedef struct
 
 typedef struct
 {
-    GtkFrameClass parent_class;
+    GtkEventBoxClass parent_class;
 
     void (*select_item) (GncItemList *item_list,
                          char        *item_string);
