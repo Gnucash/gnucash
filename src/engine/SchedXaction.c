@@ -1039,6 +1039,7 @@ xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
          * xaccTransSetNum with these arguments */
         gnc_set_num_action(new_trans, NULL,
                         gnc_ttinfo_get_num(tti), NULL);
+        xaccTransSetNotes (new_trans, gnc_ttinfo_get_notes (tti));
         xaccTransSetCurrency( new_trans,
                               gnc_ttinfo_get_currency(tti) );
 

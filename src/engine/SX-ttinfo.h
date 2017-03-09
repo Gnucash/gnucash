@@ -41,7 +41,7 @@ void gnc_ttinfo_free(TTInfo *info);
 /* these two deep-copy their arguments */
 void gnc_ttinfo_set_description(TTInfo *tti, const char *description);
 void gnc_ttinfo_set_num(TTInfo *tti, const char *num);
-
+void gnc_ttinfo_set_notes (TTInfo *tti, const char *notes);
 
 /* this one points to a persistent pointer so ownership isn't relevant */
 void gnc_ttinfo_set_currency(TTInfo *tti, gnc_commodity *common_currency);
@@ -52,6 +52,7 @@ void gnc_ttinfo_set_template_splits(TTInfo *tti, GList *splits);
 
 const char    * gnc_ttinfo_get_description(TTInfo *tti);
 const char    * gnc_ttinfo_get_num(TTInfo *tti);
+const char *gnc_ttinfo_get_notes (TTInfo *tti);
 gnc_commodity * gnc_ttinfo_get_currency(TTInfo *tti);
 GList         * gnc_ttinfo_get_template_splits(TTInfo *tti);
 
