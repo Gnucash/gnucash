@@ -1465,7 +1465,11 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
             /* If this is a bill, and the entry came from an invoice originally, copy the price */
             if (gncEntryGetBillable (entry))
-                gncEntrySetInvPrice (entry, gncEntryGetBillPrice (entry));
+            {
+                /* We need to set the net price since it may be another tax rate for invoices than bills */
+                gncEntrySetInvPrice (entry, gncEntryGetPrice (entry, FALSE, TRUE));
+                gncEntrySetInvTaxIncluded (entry, FALSE);
+            }
         }
         gncEntryCommitEdit (entry);
 
