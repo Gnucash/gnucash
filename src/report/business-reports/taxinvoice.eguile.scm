@@ -82,18 +82,30 @@
                          (< (car (gnc-transaction-get-date-posted t1))
                             (car (gnc-transaction-get-date-posted t2))))))))
 
+
+      ;; Is this an invoice or something else
+      (if (not (null? opt-invoice))
+          (begin
+            (set! owner (gncInvoiceGetOwner  opt-invoice))
+            (let ((type (gncInvoiceGetType  opt-invoice)))
+              (cond
+               ((eqv? type GNC-INVOICE-CUST-INVOICE)
+                (set! cust-doc? #t))
+               
+               ))))
+      
       ; pre-scan invoice entries to look for discounts and taxes
       (for entry in entries do
           (let ((action    (gncEntryGetAction entry))
                 (qty       (gncEntryGetDocQuantity entry credit-note?))
                 (discount  (gncEntryGetInvDiscount entry))
-                (taxable?   (gncEntryGetInvTaxable entry))
-                (taxtable  (gncEntryGetInvTaxTable entry)))
+                (taxable?  (if cust-doc? (gncEntryGetInvTaxable entry) (gncEntryGetBillTaxable entry)))
+                (taxtable  (if cust-doc? (gncEntryGetInvTaxTable entry) (gncEntryGetBillTaxTable entry))))
             (if (not (string=? action ""))
               (set! units? #t))
             (if (not (= (gnc-numeric-to-double qty) 1.0))
               (set! qty? #t))
-            (if (not (gnc-numeric-zero-p discount)) (set! discount? #t))
+            (if (not (or cust-doc? (gnc-numeric-zero-p discount))) (set! discount? #t))
             ;(if taxable - no, this flag is redundant
             (if taxable? ; Also check if the taxable flag is set
               (if  (not (eq? taxtable '()))
@@ -106,16 +118,6 @@
             (if (not (equal? t txn))
               (set! payments? #t))))
 
-  ;; Is this an invoice or something else
-  (if (not (null? opt-invoice))
-    (begin
-      (set! owner (gncInvoiceGetOwner  opt-invoice))
-      (let ((type (gncInvoiceGetType  opt-invoice)))
-        (cond
-          ((eqv? type GNC-INVOICE-CUST-INVOICE)
-           (set! cust-doc? #t))
-
-  ))))
 
 ?>
 
@@ -331,11 +333,11 @@
                   (rval      (gncEntryGetDocValue entry #t cust-doc? credit-note?))
                   (rdiscval  (gncEntryGetDocDiscountValue entry #t cust-doc? credit-note?))
                   (rtaxval   (gncEntryGetDocTaxValue entry #t cust-doc? credit-note?))
-                  (disc  (if cust-doc? (gncEntryGetInvDiscount entry)))
+                  (disc      (if cust-doc? (gncEntryGetInvDiscount entry)))
                   (disctype  (gncEntryGetInvDiscountType entry))
                   (acc       (if cust-doc? (gncEntryGetInvAccount entry)(gncEntryGetBillAccount entry)))
                   (taxable   (if cust-doc? (gncEntryGetInvTaxable entry)(gncEntryGetBillTaxable entry)))
-                  (taxtable  (if cust-doc? (gncEntryGetInvTaxTable entry)(gncEntryGetBillTaxable entry))))
+                  (taxtable  (if cust-doc? (gncEntryGetInvTaxTable entry)(gncEntryGetBillTaxTable entry))))
               (inv-total 'add currency rval)
               (inv-total 'add currency rtaxval)
               (tax-total 'add currency rtaxval)
