@@ -928,7 +928,7 @@ get_currency_denom(const Split * s)
     }
     else if (!s->parent || !s->parent->common_currency)
     {
-        return 100000;
+        return 1000000; /* Max supported denom to avoid premature rounding. */
     }
     else
     {
@@ -945,7 +945,7 @@ get_commodity_denom(const Split * s)
     }
     else if (!s->acc)
     {
-        return 100000;
+        return 1000000; /* Max supported denom to avoid premature rounding. */
     }
     else
     {
