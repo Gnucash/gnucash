@@ -33,6 +33,7 @@
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
 #include "qof.h"
+#include "gnucash-register.h"
 #include "gnucash-sheet.h"
 #include "dialog-search.h"
 #include "search-param.h"
@@ -641,8 +642,8 @@ gnc_order_new_window (QofBook *bookp, OrderDialogType type,
     //  gnc_entry_ledger_load (entry_ledger, entries);
 
     /* Watch the order of operations, here... */
-    regWidget = gnucash_register_new (gnc_entry_ledger_get_table (entry_ledger));
-    gnc_table_init_gui( regWidget, NULL);
+    regWidget = gnucash_register_new (gnc_entry_ledger_get_table (entry_ledger),
+                                      NULL);
     ow->reg = GNUCASH_REGISTER (regWidget);
     gnucash_sheet_set_window (gnucash_register_get_sheet (ow->reg), ow->dialog);
     gnc_entry_ledger_set_parent (entry_ledger, ow->dialog);

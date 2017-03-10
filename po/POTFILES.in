@@ -557,6 +557,7 @@ src/register/register-gnome/gnucash-date-picker.c
 src/register/register-gnome/gnucash-header.c
 src/register/register-gnome/gnucash-item-edit.c
 src/register/register-gnome/gnucash-item-list.c
+src/register/register-gnome/gnucash-register.c
 src/register/register-gnome/gnucash-scrolled-window.c
 src/register/register-gnome/gnucash-sheet.c
 src/register/register-gnome/gnucash-sheet-private.c

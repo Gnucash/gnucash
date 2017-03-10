@@ -42,6 +42,7 @@
 #include "gnc-date-edit.h"
 #include "gnc-amount-edit.h"
 #include "gnucash-sheet.h"
+#include "gnucash-register.h"
 #include "window-report.h"
 #include "dialog-search.h"
 #include "search-param.h"
@@ -2417,9 +2418,8 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
 
         /* Watch the order of operations, here... */
         regWidget = gnucash_register_new (gnc_entry_ledger_get_table
-                                          (entry_ledger));
+                                          (entry_ledger), NULL);
         gtk_widget_show(regWidget);
-        gnc_table_init_gui( regWidget, NULL);
 
         frame = GTK_WIDGET (gtk_builder_get_object (builder, "ledger_frame"));
         gtk_container_add (GTK_CONTAINER (frame), regWidget);

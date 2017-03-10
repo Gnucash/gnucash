@@ -11,6 +11,7 @@ SET (register_gnome_SOURCES
   gnucash-header.c
   gnucash-item-edit.c
   gnucash-item-list.c
+  gnucash-register.c
   gnucash-scrolled-window.c
   gnucash-sheet-private.c
   gnucash-sheet.c
@@ -28,6 +29,7 @@ SET (register_gnome_noinst_HEADERS
   gnucash-header.h
   gnucash-item-edit.h
   gnucash-item-list.h
+  gnucash-register.h
   gnucash-scrolled-window.h
   gnucash-sheet.h
   gnucash-sheetP.h

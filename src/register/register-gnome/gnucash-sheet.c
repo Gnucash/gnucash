@@ -50,10 +50,10 @@
 # include <gdk/gdkwin32.h>
 #endif
 
-#define DEFAULT_REGISTER_HEIGHT 400
-#define DEFAULT_REGISTER_WIDTH  400
-/* Used to calculate the minimum preferred height of the register window: */
-#define DEFAULT_REGISTER_INITIAL_ROWS 10
+#define DEFAULT_SHEET_HEIGHT 400
+#define DEFAULT_SHEET_WIDTH  400
+/* Used to calculate the minimum preferred height of the sheet layout: */
+#define DEFAULT_SHEET_INITIAL_ROWS 10
 
 
 /* Register signals */
@@ -71,8 +71,6 @@ enum
 /* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule log_module = GNC_MOD_REGISTER;
 static GtkLayout *sheet_parent_class;
-static GtkTable *register_parent_class;
-static guint register_signals[LAST_SIGNAL];
 
 
 /** Prototypes *********************************************************/
@@ -181,7 +179,7 @@ gnucash_sheet_cursor_set_from_table (GnucashSheet *sheet, gboolean do_scroll)
 }
 
 
-static void
+void
 gnucash_sheet_set_popup (GnucashSheet *sheet, GtkWidget *popup, gpointer data)
 {
     if (popup)
@@ -623,37 +621,6 @@ gnucash_sheet_vadjustment_value_changed (GtkAdjustment *adj,
 }
 
 
-static void
-gnucash_sheet_hadjustment_changed (GtkAdjustment *adj,
-                                   GnucashSheet *sheet)
-{
-    GnucashRegister *reg;
-
-    g_return_if_fail (sheet != NULL);
-    g_return_if_fail (GNUCASH_IS_SHEET(sheet));
-    reg = GNUCASH_REGISTER(sheet->reg);
-    g_return_if_fail (reg != NULL);
-
-    if (gtk_adjustment_get_upper (adj) - gtk_adjustment_get_lower (adj)
-        > gtk_adjustment_get_page_size (adj))
-    {
-        if (!reg->hscrollbar_visible)
-        {
-            gtk_widget_show(reg->hscrollbar);
-            reg->hscrollbar_visible = TRUE;
-        }
-    }
-    else
-    {
-        if (reg->hscrollbar_visible)
-        {
-            gtk_widget_hide(reg->hscrollbar);
-            reg->hscrollbar_visible = FALSE;
-        }
-    }
-}
-
-
 void
 gnucash_sheet_redraw_all (GnucashSheet *sheet)
 {
@@ -742,8 +709,6 @@ gnucash_sheet_create (Table *table)
 
     g_signal_connect (G_OBJECT (sheet->vadj), "value_changed",
                       G_CALLBACK (gnucash_sheet_vadjustment_value_changed), sheet);
-    g_signal_connect (G_OBJECT (sheet->hadj), "changed",
-                      G_CALLBACK (gnucash_sheet_hadjustment_changed), sheet);
 
     LEAVE("%p", sheet);
     return sheet;
@@ -752,7 +717,7 @@ gnucash_sheet_create (Table *table)
 static gint
 compute_optimal_width (GnucashSheet *sheet)
 {
-    return DEFAULT_REGISTER_WIDTH;
+    return DEFAULT_SHEET_WIDTH;
 }
 
 
@@ -765,19 +730,19 @@ compute_optimal_height (GnucashSheet *sheet)
     gint row_height;
 
     if (!sheet)
-        return DEFAULT_REGISTER_HEIGHT;
+        return DEFAULT_SHEET_HEIGHT;
 
     style = gnucash_sheet_get_style_from_cursor (sheet, CURSOR_HEADER);
     if (!style)
-        return DEFAULT_REGISTER_HEIGHT;
+        return DEFAULT_SHEET_HEIGHT;
 
     cd = gnucash_style_get_cell_dimensions (style, 0, 0);
     if (cd == NULL)
-        return DEFAULT_REGISTER_HEIGHT;
+        return DEFAULT_SHEET_HEIGHT;
 
     row_height = cd->pixel_height;
 
-    return row_height * DEFAULT_REGISTER_INITIAL_ROWS;
+    return row_height * DEFAULT_SHEET_INITIAL_ROWS;
 }
 
 
@@ -1356,7 +1321,6 @@ static gboolean
 gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
 {
     GnucashSheet *sheet;
-    GtkEditable *editable;
     VirtualCell *vcell;
     gboolean changed_cells;
 
@@ -1458,67 +1422,7 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
     return button_1 || do_popup;
 }
 
-gboolean
-gnucash_register_has_selection (GnucashRegister *reg)
-{
-    GnucashSheet *sheet;
-    GncItemEdit *item_edit;
-
-    g_return_val_if_fail((reg != NULL), FALSE);
-    g_return_val_if_fail(GNUCASH_IS_REGISTER(reg), FALSE);
-
-    sheet = GNUCASH_SHEET(reg->sheet);
-    item_edit = GNC_ITEM_EDIT(sheet->item_editor);
-
-    return gnc_item_edit_get_has_selection(item_edit);
-}
-
 void
-gnucash_register_cut_clipboard (GnucashRegister *reg)
-{
-    GnucashSheet *sheet;
-    GncItemEdit *item_edit;
-
-    g_return_if_fail(reg != NULL);
-    g_return_if_fail(GNUCASH_IS_REGISTER(reg));
-
-    sheet = GNUCASH_SHEET(reg->sheet);
-    item_edit = GNC_ITEM_EDIT(sheet->item_editor);
-
-    gnc_item_edit_cut_clipboard(item_edit);
-}
-
-void
-gnucash_register_copy_clipboard (GnucashRegister *reg)
-{
-    GnucashSheet *sheet;
-    GncItemEdit *item_edit;
-
-    g_return_if_fail(reg != NULL);
-    g_return_if_fail(GNUCASH_IS_REGISTER(reg));
-
-    sheet = GNUCASH_SHEET(reg->sheet);
-    item_edit = GNC_ITEM_EDIT(sheet->item_editor);
-
-    gnc_item_edit_copy_clipboard(item_edit);
-}
-
-void
-gnucash_register_paste_clipboard (GnucashRegister *reg)
-{
-    GnucashSheet *sheet;
-    GncItemEdit *item_edit;
-
-    g_return_if_fail(reg != NULL);
-    g_return_if_fail(GNUCASH_IS_REGISTER(reg));
-
-    sheet = GNUCASH_SHEET(reg->sheet);
-    item_edit = GNC_ITEM_EDIT(sheet->item_editor);
-
-    gnc_item_edit_paste_clipboard (item_edit);
-}
-
-static void
 gnucash_sheet_refresh_from_prefs (GnucashSheet *sheet)
 {
     g_return_if_fail(sheet != NULL);
@@ -1530,18 +1434,6 @@ gnucash_sheet_refresh_from_prefs (GnucashSheet *sheet)
                                                      GNC_PREF_DRAW_HOR_LINES);
     sheet->use_vertical_lines = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER,
                                                    GNC_PREF_DRAW_VERT_LINES);
-}
-
-void
-gnucash_register_refresh_from_prefs (GnucashRegister *reg)
-{
-    GnucashSheet *sheet;
-
-    g_return_if_fail(reg != NULL);
-    g_return_if_fail(GNUCASH_IS_REGISTER(reg));
-
-    sheet = GNUCASH_SHEET(reg->sheet);
-    gnucash_sheet_refresh_from_prefs(sheet);
 }
 
 static gboolean
@@ -2102,7 +1994,7 @@ gnucash_sheet_delete_surrounding_cb (GtkIMContext *context, gint offset,
 }
 
 
-static void
+void
 gnucash_sheet_goto_virt_loc (GnucashSheet *sheet, VirtualLocation virt_loc)
 {
     Table *table;
@@ -2125,111 +2017,6 @@ gnucash_sheet_goto_virt_loc (GnucashSheet *sheet, VirtualLocation virt_loc)
         return;
 
     gnucash_sheet_cursor_move (sheet, virt_loc);
-}
-
-
-void
-gnucash_register_goto_virt_cell (GnucashRegister *reg,
-                                 VirtualCellLocation vcell_loc)
-{
-    GnucashSheet *sheet;
-    VirtualLocation virt_loc;
-
-    g_return_if_fail(reg != NULL);
-    g_return_if_fail(GNUCASH_IS_REGISTER(reg));
-
-    sheet = GNUCASH_SHEET(reg->sheet);
-
-    virt_loc.vcell_loc = vcell_loc;
-    virt_loc.phys_row_offset = 0;
-    virt_loc.phys_col_offset = 0;
-
-    gnucash_sheet_goto_virt_loc(sheet, virt_loc);
-}
-
-void
-gnucash_register_goto_virt_loc (GnucashRegister *reg,
-                                VirtualLocation virt_loc)
-{
-    GnucashSheet *sheet;
-
-    g_return_if_fail(reg != NULL);
-    g_return_if_fail(GNUCASH_IS_REGISTER(reg));
-
-    sheet = GNUCASH_SHEET(reg->sheet);
-
-    gnucash_sheet_goto_virt_loc(sheet, virt_loc);
-}
-
-void
-gnucash_register_goto_next_virt_row (GnucashRegister *reg)
-{
-    GnucashSheet *sheet;
-    VirtualLocation virt_loc;
-    int start_virt_row;
-
-    g_return_if_fail (reg != NULL);
-    g_return_if_fail (GNUCASH_IS_REGISTER(reg));
-
-    sheet = GNUCASH_SHEET(reg->sheet);
-
-    gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &virt_loc);
-
-    /* Move down one physical row at a time until we
-     * reach the next visible virtual cell. */
-    start_virt_row = virt_loc.vcell_loc.virt_row;
-    do
-    {
-        if (!gnc_table_move_vertical_position (sheet->table, &virt_loc, 1))
-            return;
-    }
-    while (start_virt_row == virt_loc.vcell_loc.virt_row);
-
-    if (virt_loc.vcell_loc.virt_row >= sheet->num_virt_rows)
-        return;
-
-    virt_loc.phys_row_offset = 0;
-    virt_loc.phys_col_offset = 0;
-
-    gnucash_sheet_goto_virt_loc (sheet, virt_loc);
-}
-
-void
-gnucash_register_goto_next_matching_row (GnucashRegister *reg,
-        VirtualLocationMatchFunc match,
-        gpointer user_data)
-{
-    GnucashSheet *sheet;
-    SheetBlockStyle *style;
-    VirtualLocation virt_loc;
-
-    g_return_if_fail (reg != NULL);
-    g_return_if_fail (GNUCASH_IS_REGISTER(reg));
-    g_return_if_fail (match != NULL);
-
-    sheet = GNUCASH_SHEET (reg->sheet);
-
-    gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &virt_loc);
-
-    do
-    {
-        if (!gnc_table_move_vertical_position (sheet->table,
-                                               &virt_loc, 1))
-            return;
-
-        if (virt_loc.vcell_loc.virt_row >= sheet->num_virt_rows)
-            return;
-
-        style = gnucash_sheet_get_style (sheet, virt_loc.vcell_loc);
-        if (!style || !style->cursor)
-            return;
-    }
-    while (!match (virt_loc, user_data));
-
-    virt_loc.phys_row_offset = 0;
-    virt_loc.phys_col_offset = 0;
-
-    gnucash_sheet_goto_virt_loc (sheet, virt_loc);
 }
 
 SheetBlock *
@@ -2823,204 +2610,3 @@ gnucash_sheet_new (Table *table)
 
     return GTK_WIDGET(sheet);
 }
-
-
-static void
-gnucash_register_class_init (GnucashRegisterClass *klass)
-{
-    GObjectClass *gobject_class;
-
-    gobject_class = G_OBJECT_CLASS (klass);
-
-    register_parent_class = g_type_class_peek_parent (klass);
-
-    register_signals[ACTIVATE_CURSOR] =
-        g_signal_new("activate_cursor",
-                     G_TYPE_FROM_CLASS(gobject_class),
-                     G_SIGNAL_RUN_LAST,
-                     G_STRUCT_OFFSET(GnucashRegisterClass,
-                                     activate_cursor),
-                     NULL, NULL,
-                     g_cclosure_marshal_VOID__VOID,
-                     G_TYPE_NONE, 0);
-
-    register_signals[REDRAW_ALL] =
-        g_signal_new("redraw_all",
-                     G_TYPE_FROM_CLASS(gobject_class),
-                     G_SIGNAL_RUN_LAST,
-                     G_STRUCT_OFFSET(GnucashRegisterClass,
-                                     redraw_all),
-                     NULL, NULL,
-                     g_cclosure_marshal_VOID__VOID,
-                     G_TYPE_NONE, 0);
-
-    register_signals[REDRAW_HELP] =
-        g_signal_new("redraw_help",
-                     G_TYPE_FROM_CLASS(gobject_class),
-                     G_SIGNAL_RUN_LAST,
-                     G_STRUCT_OFFSET(GnucashRegisterClass,
-                                     redraw_help),
-                     NULL, NULL,
-                     g_cclosure_marshal_VOID__VOID,
-                     G_TYPE_NONE, 0);
-
-    klass->activate_cursor = NULL;
-    klass->redraw_all = NULL;
-    klass->redraw_help = NULL;
-}
-
-
-static void
-gnucash_register_init (GnucashRegister *g_reg)
-{
-    GtkTable *table = GTK_TABLE(g_reg);
-
-    gtk_widget_set_can_focus (GTK_WIDGET(table), FALSE);
-    gtk_widget_set_can_default (GTK_WIDGET(table), FALSE);
-
-    gtk_table_set_homogeneous (table, FALSE);
-    gtk_table_resize (table, 3, 2);
-}
-
-
-GType
-gnucash_register_get_type (void)
-{
-    static GType gnucash_register_type = 0;
-
-    if (!gnucash_register_type)
-    {
-        static const GTypeInfo gnucash_register_info =
-        {
-            sizeof (GnucashRegisterClass),
-            NULL,		/* base_init */
-            NULL,		/* base_finalize */
-            (GClassInitFunc) gnucash_register_class_init,
-            NULL,		/* class_finalize */
-            NULL,		/* class_data */
-            sizeof (GnucashRegister),
-            0,		/* n_preallocs */
-            (GInstanceInitFunc) gnucash_register_init,
-        };
-
-        gnucash_register_type = g_type_register_static
-                                (gtk_table_get_type (),
-                                 "GnucashRegister",
-                                 &gnucash_register_info, 0);
-    }
-
-    return gnucash_register_type;
-}
-
-
-void
-gnucash_register_attach_popup (GnucashRegister *reg,
-                               GtkWidget *popup,
-                               gpointer data)
-{
-    g_return_if_fail (GNUCASH_IS_REGISTER(reg));
-    g_return_if_fail (reg->sheet != NULL);
-    if (popup)
-        g_return_if_fail (GTK_IS_WIDGET(popup));
-
-    gnucash_sheet_set_popup (GNUCASH_SHEET (reg->sheet), popup, data);
-}
-
-
-GtkWidget *
-gnucash_register_new (Table *table)
-{
-    GnucashRegister *reg;
-    GtkWidget *header;
-    GtkWidget *widget;
-    GtkWidget *sheet;
-    GtkWidget *scrollbar;
-    GtkWidget *box;
-
-    reg = g_object_new (GNUCASH_TYPE_REGISTER, NULL);
-    widget = GTK_WIDGET(reg);
-
-    sheet = gnucash_sheet_new (table);
-    reg->sheet = sheet;
-    GNUCASH_SHEET(sheet)->reg = widget;
-
-    header = gnc_header_new (GNUCASH_SHEET(sheet));
-
-    gtk_table_attach (GTK_TABLE(widget), header,
-                      0, 1, 0, 1,
-                      GTK_FILL | GTK_EXPAND | GTK_SHRINK,
-                      GTK_FILL,
-                      0, 0);
-    gtk_widget_show(header);
-
-    gtk_table_attach (GTK_TABLE(widget), sheet,
-                      0, 1, 1, 2,
-                      GTK_FILL | GTK_EXPAND | GTK_SHRINK,
-                      GTK_FILL | GTK_EXPAND | GTK_SHRINK,
-                      0, 0);
-    gtk_widget_show(sheet);
-
-    scrollbar = gtk_vscrollbar_new(GNUCASH_SHEET(sheet)->vadj);
-    gtk_table_attach (GTK_TABLE(widget), GTK_WIDGET(scrollbar),
-                      1, 2, 0, 3,
-                      GTK_FILL,
-                      GTK_EXPAND | GTK_SHRINK | GTK_FILL,
-                      0, 0);
-    gtk_widget_show(scrollbar);
-
-    scrollbar = gtk_hscrollbar_new(GNUCASH_SHEET(sheet)->hadj);
-    gtk_table_attach (GTK_TABLE(widget), GTK_WIDGET(scrollbar),
-                      0, 1, 2, 3,
-                      GTK_EXPAND | GTK_SHRINK | GTK_FILL,
-                      GTK_FILL,
-                      0, 0);
-    reg->hscrollbar = scrollbar;
-    gtk_widget_show(scrollbar);
-    reg->hscrollbar_visible = TRUE;
-
-    /* The gtkrc color helper widgets need to be part of a window
-     * hierarchy so they can be realized. Stick them in a box
-     * underneath the register, but don't show the box to the
-     * user. */
-    box = gtk_hbox_new(FALSE, 0);
-    gtk_widget_set_no_show_all(GTK_WIDGET(box), TRUE);
-    gtk_box_pack_start(GTK_BOX(box),
-                                GNUCASH_SHEET(sheet)->header_color, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(box),
-                                GNUCASH_SHEET(sheet)->primary_color, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(box),
-                                GNUCASH_SHEET(sheet)->secondary_color, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(box),
-                                GNUCASH_SHEET(sheet)->split_color, TRUE, TRUE, 0);
-
-    gtk_table_attach (GTK_TABLE(widget), box,
-                      0, 1, 4, 5,
-                      GTK_FILL | GTK_EXPAND | GTK_SHRINK,
-                      GTK_FILL | GTK_EXPAND | GTK_SHRINK,
-                      0, 0);
-
-    return widget;
-}
-
-
-void gnucash_register_set_moved_cb (GnucashRegister *reg,
-                                    GFunc cb, gpointer cb_data)
-{
-    GnucashSheet *sheet;
-
-    if (!reg || !reg->sheet)
-        return;
-    sheet = GNUCASH_SHEET(reg->sheet);
-    sheet->moved_cb = cb;
-    sheet->moved_cb_data = cb_data;
-}
-
-
-GnucashSheet *gnucash_register_get_sheet (GnucashRegister *reg)
-{
-    g_return_val_if_fail (reg != NULL, NULL);
-    g_return_val_if_fail (GNUCASH_IS_REGISTER(reg), NULL);
-
-    return GNUCASH_SHEET(reg->sheet);
-}
-

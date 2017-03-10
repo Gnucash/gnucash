@@ -52,6 +52,7 @@
 #include "gnc-ui.h"
 #include "gnome-utils/gnc-warnings.h"
 #include "gnucash-sheet.h"
+#include "gnucash-register.h"
 #include "table-allgui.h"
 
 #include "dialog-utils.h"
@@ -401,9 +402,8 @@ gsr_create_table( GNCSplitReg *gsr )
 
     /* FIXME: We'd really rather pass this down... */
     sr = gnc_ledger_display_get_split_register( gsr->ledger );
-    register_widget = gnucash_register_new( sr->table );
+    register_widget = gnucash_register_new( sr->table, state_section );
     gsr->reg = GNUCASH_REGISTER( register_widget );
-    gnc_table_init_gui( GTK_WIDGET(gsr->reg), state_section);
     g_free (state_section);
     gtk_box_pack_start (GTK_BOX (gsr), GTK_WIDGET(gsr->reg), TRUE, TRUE, 0);
     gnucash_sheet_set_window (gnucash_register_get_sheet (gsr->reg), gsr->window);
