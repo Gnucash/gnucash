@@ -39,7 +39,6 @@
 #include "dialog-utils.h"
 #include "gnc-prefs.h"
 #include "gnucash-color.h"
-#include "gnucash-grid.h"
 #include "gnucash-cursor.h"
 #include "gnucash-style.h"
 #include "gnucash-header.h"
@@ -1112,6 +1111,25 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
     g_string_free (new_text_gs, TRUE);
 }
 
+static gboolean
+gnucash_sheet_draw (GtkWidget *widget, GdkEventExpose *event)
+{
+    GnucashSheet *sheet = GNUCASH_SHEET (widget);
+    int x = event->area.x;
+    int y = event->area.y;
+    int width = event->area.width;
+    int height = event->area.height;
+    GdkWindow *binwin = gtk_layout_get_bin_window(GTK_LAYOUT(sheet));
+    cairo_t *cr;
+    gboolean result;
+
+    cr = gdk_cairo_create (binwin);
+    result = gnucash_sheet_draw_internal (sheet, cr, x, y, width, height);
+    cairo_destroy(cr);
+
+    return result;
+}
+
 
 static void
 gnucash_sheet_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
@@ -1435,7 +1453,7 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
 
     gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &cur_virt_loc);
 
-    if (!gnucash_grid_find_loc_by_pixel(GNUCASH_GRID(sheet->grid),
+    if (!gnucash_sheet_find_loc_by_pixel(sheet,
                                         event->x, event->y, &new_virt_loc))
         return TRUE;
 
@@ -2448,9 +2466,6 @@ gnucash_sheet_set_scroll_region (GnucashSheet *sheet)
 
     if (new_w != old_w || new_h != old_h)
         gtk_layout_set_size (GTK_LAYOUT(sheet), new_w, new_h);
-
-    if (sheet->grid)
-        gnc_grid_configure (sheet->grid);
 }
 
 static void
@@ -2768,6 +2783,8 @@ gnucash_sheet_class_init (GnucashSheetClass *klass)
     widget_class->motion_notify_event = gnucash_motion_event;
     widget_class->scroll_event = gnucash_scroll_event;
 
+    widget_class->expose_event = gnucash_sheet_draw;
+
 }
 
 
@@ -2865,12 +2882,6 @@ gnucash_sheet_new (Table *table)
     g_return_val_if_fail (table != NULL, NULL);
 
     sheet = gnucash_sheet_create (table);
-
-    /* The grid */
-    sheet->grid = g_object_new (GNUCASH_TYPE_GRID,
-                                  "sheet", sheet,
-                                  NULL);
-    gtk_widget_show (sheet->grid);
 
     /* The cursor */
     sheet->cursor = gnucash_cursor_new (sheet);

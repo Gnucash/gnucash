@@ -22,7 +22,6 @@
 #define GNUCASH_CURSOR_H
 
 #include <gtk/gtk.h>
-#include "gnucash-grid.h"
 #include "gnucash-sheet.h"
 
 /** @ingroup Register

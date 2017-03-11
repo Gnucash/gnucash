@@ -34,7 +34,6 @@
 #include "gnucash-sheetP.h"
 #include "gnucash-color.h"
 #include "gnucash-style.h"
-#include "gnucash-grid.h"
 #include "gnucash-cursor.h"
 #include "gnucash-item-edit.h"
 

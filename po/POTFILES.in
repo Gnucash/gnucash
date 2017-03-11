@@ -554,12 +554,12 @@ src/register/register-gnome/gncmod-register-gnome.c
 src/register/register-gnome/gnucash-color.c
 src/register/register-gnome/gnucash-cursor.c
 src/register/register-gnome/gnucash-date-picker.c
-src/register/register-gnome/gnucash-grid.c
 src/register/register-gnome/gnucash-header.c
 src/register/register-gnome/gnucash-item-edit.c
 src/register/register-gnome/gnucash-item-list.c
 src/register/register-gnome/gnucash-scrolled-window.c
 src/register/register-gnome/gnucash-sheet.c
+src/register/register-gnome/gnucash-sheet-private.c
 src/register/register-gnome/gnucash-style.c
 src/register/register-gnome/pricecell-gnome.c
 src/register/register-gnome/quickfillcell-gnome.c

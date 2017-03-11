@@ -51,7 +51,6 @@ struct _GnucashSheet
 
     GtkWidget *header_item;
     GtkWidget *cursor;
-    GtkWidget *grid;
 
     GHashTable *cursor_styles;
 
@@ -155,6 +154,12 @@ GncItemEdit *gnucash_sheet_get_item_edit (GnucashSheet *sheet);
 //Table       *gnucash_sheet_get_table (GnucashSheet *sheet);
 //gint         gnucash_sheet_get_num_virt_rows (GnucashSheet *sheet);
 //gint         gnucash_sheet_get_num_virt_cols (GnucashSheet *sheet);
+
+gboolean   gnucash_sheet_find_loc_by_pixel (GnucashSheet *sheet, gint x, gint y,
+                                           VirtualLocation *vcell_loc);
+gboolean gnucash_sheet_draw_internal (GnucashSheet *sheet, cairo_t *cr,
+                            int x, int y, int width, int height);
+
 
 /** @} */
 #endif
