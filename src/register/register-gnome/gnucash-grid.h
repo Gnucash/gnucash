@@ -48,8 +48,8 @@ GtkWidget *gnucash_grid_new 	 (GnucashSheet *sheet);
 gboolean   gnucash_grid_find_loc_by_pixel (GnucashGrid *grid, gint x, gint y,
         VirtualLocation *vcell_loc);
 
-void       gnucash_draw_hatching (GdkDrawable *drawable, GdkGC *gc,
-                                  int x, int y, int width, int height);
+void       gnucash_draw_hatching (cairo_t *cr,
+                                  double x, double y, double width, double height);
 void       gnc_grid_configure (GtkWidget *widget);
 /** @} */
 #endif /* GNUCASH_GRID_H */
