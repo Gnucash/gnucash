@@ -107,7 +107,6 @@ GNC_TEST_DEPS = \
 --library-dir    ${top_builddir}/src/core-utils \
 --library-dir    ${top_builddir}/src/gnc-module \
 --library-dir    ${top_builddir}/src/libqof/qof \
---library-dir    ${top_builddir}/lib/stf
 
 TESTS_ENVIRONMENT = \
   SRCDIR=${srcdir} \
