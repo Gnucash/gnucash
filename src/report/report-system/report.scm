@@ -755,8 +755,8 @@
        (if report
 	   (begin 
 	     (set! html (gnc:report-render-html report #t))
-             (set! html (gnc:substring-replace-from-to html "jquery.min.js" "" 2 -1))
-             (set! html (gnc:substring-replace-from-to html "jquery.jqplot.js" "" 2 -1))
+             (set! html (gnc:substring-replace-from-to html (gnc:html-js-include "jqplot/jquery.min.js") "" 2 -1))
+             (set! html (gnc:substring-replace-from-to html (gnc:html-js-include "jqplot/jquery.jqplot.js") "" 2 -1))
            ))))
     (gnc-unset-busy-cursor '())
     html))
