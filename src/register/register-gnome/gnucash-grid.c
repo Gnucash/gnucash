@@ -355,16 +355,33 @@ gnucash_draw_hatching (cairo_t *cr,
 }
 
 static void
-gnucash_draw_divider_line (cairo_t *cr,
-                           double x, double y, double width, cairo_rgb *fg_color)
+grid_draw_divider_line (cairo_t *cr, VirtualLocation virt_loc,
+                        int div_row, int n_phys_rows, cairo_rgb *fg_color,
+                        double x, double y, double width, double height)
 {
+    double offset;
+    if (div_row < 0)
+        return;
+
+    /* Test if divider line should be drawn before the current row */
+    if ((virt_loc.phys_row_offset == 0) &&
+        (virt_loc.vcell_loc.virt_row == div_row))
+        offset = 0.0;
+    /* Test if divider line should be drawn after the current row */
+    else if ((virt_loc.phys_row_offset == n_phys_rows - 1) &&
+        (virt_loc.vcell_loc.virt_row == div_row - 1))
+        offset = height;
+    else
+        return;
+
     cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
 
     cairo_set_line_width (cr, 3.0);
-    cairo_move_to (cr, x, y);
-    cairo_line_to (cr, x + width, y);
+    cairo_move_to (cr, x, y + 0.5 + offset);
+    cairo_rel_line_to (cr, width, 0);
     cairo_stroke (cr);
 }
+
 
 #ifdef READONLY_LINES_WITH_CHANGED_FG_COLOR
 /** For a given byte value, multiply the difference to 0xFF by a rational number,
@@ -506,53 +523,20 @@ draw_cell (GnucashGrid *grid,
 
     /* dividing line upper (red) */
     to_cairo_rgb (&gn_red, &fg_color);
-    if ((virt_loc.phys_row_offset == 0) &&
-            (table->model->dividing_row_upper >= 0) &&
-            (virt_loc.vcell_loc.virt_row == table->model->dividing_row_upper))
-    {
-        gnucash_draw_divider_line(cr, x, y + 0.5, x + width, &fg_color);
-    }
-
-    if ((virt_loc.phys_row_offset == (block->style->nrows - 1)) &&
-            (table->model->dividing_row_upper >= 0) &&
-            (virt_loc.vcell_loc.virt_row ==
-                (table->model->dividing_row_upper - 1)))
-    {
-        gnucash_draw_divider_line(cr, x, y + height + 0.5, x + width, &fg_color);
-    }
+    grid_draw_divider_line(cr, virt_loc,
+                           table->model->dividing_row_upper, block->style->nrows,
+                           &fg_color, x, y, width, height);
 
     /* dividing line (blue) */
     to_cairo_rgb (&gn_blue, &fg_color);
-    if ((virt_loc.phys_row_offset == 0) &&
-            (table->model->dividing_row >= 0) &&
-            (virt_loc.vcell_loc.virt_row == table->model->dividing_row))
-    {
-        gnucash_draw_divider_line(cr, x, y + 0.5, x + width, &fg_color);
-    }
-
-    if ((virt_loc.phys_row_offset == (block->style->nrows - 1)) &&
-            (table->model->dividing_row >= 0) &&
-            (virt_loc.vcell_loc.virt_row ==
-                (table->model->dividing_row - 1)))
-    {
-        gnucash_draw_divider_line(cr, x, y + height + 0.5, x + width, &fg_color);
-    }
+    grid_draw_divider_line(cr, virt_loc,
+                           table->model->dividing_row, block->style->nrows,
+                           &fg_color, x, y, width, height);
 
     /* dividing line lower (blue) */
-    if ((virt_loc.phys_row_offset == 0) &&
-            (table->model->dividing_row_lower >= 0) &&
-            (virt_loc.vcell_loc.virt_row == table->model->dividing_row_lower))
-    {
-        gnucash_draw_divider_line(cr, x, y + 0.5, x + width, &fg_color);
-    }
-
-    if ((virt_loc.phys_row_offset == (block->style->nrows - 1)) &&
-            (table->model->dividing_row_lower >= 0) &&
-            (virt_loc.vcell_loc.virt_row ==
-                (table->model->dividing_row_lower - 1)))
-    {
-        gnucash_draw_divider_line(cr, x, y + height + 0.5, x + width, &fg_color);
-    }
+    grid_draw_divider_line(cr, virt_loc,
+                           table->model->dividing_row_lower, block->style->nrows,
+                           &fg_color, x, y, width, height);
 
     text = gnc_table_get_entry (table, virt_loc);
 
