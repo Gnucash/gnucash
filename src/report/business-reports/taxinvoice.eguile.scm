@@ -105,7 +105,8 @@
               (set! units? #t))
             (if (not (= (gnc-numeric-to-double qty) 1.0))
               (set! qty? #t))
-            (if (not (or cust-doc? (gnc-numeric-zero-p discount))) (set! discount? #t))
+            (if cust-doc? ; Only invoices have discounts
+                (if (not (gnc-numeric-zero-p discount)) (set! discount? #t)))
             ;(if taxable - no, this flag is redundant
             (if taxable? ; Also check if the taxable flag is set
               (if  (not (eq? taxtable '()))
