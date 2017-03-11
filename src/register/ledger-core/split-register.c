@@ -1833,6 +1833,7 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
     char *account_name;
     ComboCell *cell = (ComboCell *) bcell;
     Account *account;
+    static gboolean creating_account = FALSE;
 
     if (!name || (strlen(name) == 0))
         return NULL;
@@ -1842,15 +1843,16 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
     if (!account)
         account = gnc_account_lookup_by_code(gnc_get_current_root_account(), name);
 
-    if (!account)
+    if (!account && !creating_account)
     {
         /* Ask if they want to create a new one. */
         if (!gnc_verify_dialog (gnc_split_register_get_parent (reg),
                                 TRUE, missing, name))
             return NULL;
-
+        creating_account = TRUE;
         /* User said yes, they want to create a new account. */
         account = gnc_ui_new_accounts_from_name_window (name);
+        creating_account = FALSE;
         if (!account)
             return NULL;
     }

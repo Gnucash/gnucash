@@ -29,9 +29,9 @@
 
 struct TTInfo_s
 {
-    /* FIXME add notes field */
     char *description; /* owned by us */
     char *num;         /* owned  by us */
+    char *notes;
     gnc_commodity *common_currency; /* not freed */
 
     GList *splits; /* list of template splits, owned by us */
@@ -65,6 +65,7 @@ void gnc_ttinfo_free(TTInfo *info)
 
     g_free(info->description);
     g_free(info->num);
+    g_free (info->notes);
     g_list_foreach(info->splits,
                    delete_splitinfo,
                    NULL);
@@ -125,6 +126,28 @@ gnc_ttinfo_get_num(TTInfo *tti)
     return tti->num;
 }
 
+void
+gnc_ttinfo_set_notes (TTInfo *tti, const char *notes)
+{
+    g_return_if_fail (tti);
+
+    if (tti->notes)
+    {
+        g_free (tti->notes);
+    }
+
+    tti->notes = g_strdup (notes);
+
+    return;
+}
+
+const char*
+gnc_ttinfo_get_notes (TTInfo *tti)
+{
+    g_return_val_if_fail (tti, NULL);
+
+    return tti->notes;
+}
 
 void
 gnc_ttinfo_set_currency(TTInfo *tti, gnc_commodity *common_currency)

@@ -221,6 +221,7 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
 
     gnc_ttinfo_set_description(tti, xaccTransGetDescription(tr));
     gnc_ttinfo_set_num(tti, gnc_get_num_action(tr, NULL));
+    gnc_ttinfo_set_notes (tti, xaccTransGetNotes (tr));
     gnc_ttinfo_set_currency(tti, xaccTransGetCurrency(tr));
 
     for (splits = xaccTransGetSplitList(tr); splits; splits = splits->next)
