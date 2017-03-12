@@ -12,19 +12,19 @@
 #include <boost/algorithm/string.hpp>
 
 void
-GncFwTokenizer::columns(const std::vector<uint>& cols)
+GncFwTokenizer::columns(const std::vector<uint32_t>& cols)
 {
     m_col_vec = cols;
 }
 
-std::vector<uint>
+std::vector<uint32_t>
 GncFwTokenizer::get_columns()
 {
     return m_col_vec;
 }
 
 
-bool GncFwTokenizer::col_can_delete (uint col_num)
+bool GncFwTokenizer::col_can_delete (uint32_t col_num)
 {
     auto last_col = m_col_vec.size() - 1;
     if (col_num >= last_col)
@@ -33,7 +33,7 @@ bool GncFwTokenizer::col_can_delete (uint col_num)
         return true;
 }
 
-void GncFwTokenizer::col_delete (uint col_num)
+void GncFwTokenizer::col_delete (uint32_t col_num)
 {
     if (!col_can_delete (col_num))
         return;
@@ -42,7 +42,7 @@ void GncFwTokenizer::col_delete (uint col_num)
     m_col_vec.erase (m_col_vec.begin() + col_num);
 }
 
-bool GncFwTokenizer::col_can_narrow (uint col_num)
+bool GncFwTokenizer::col_can_narrow (uint32_t col_num)
 {
     // Can't narrow the last column, it always sticks to the end of the parseable data
     auto last_col = m_col_vec.size() - 1;
@@ -52,7 +52,7 @@ bool GncFwTokenizer::col_can_narrow (uint col_num)
         return true;
 }
 
-void GncFwTokenizer::col_narrow (uint col_num)
+void GncFwTokenizer::col_narrow (uint32_t col_num)
 {
     if (!col_can_narrow (col_num))
         return;
@@ -65,7 +65,7 @@ void GncFwTokenizer::col_narrow (uint col_num)
         m_col_vec.erase (m_col_vec.begin() + col_num);
 }
 
-bool GncFwTokenizer::col_can_widen (uint col_num)
+bool GncFwTokenizer::col_can_widen (uint32_t col_num)
 {
     // Can't widen the last column, it always sticks to the end of the parseable data
     auto last_col = m_col_vec.size() - 1;
@@ -75,7 +75,7 @@ bool GncFwTokenizer::col_can_widen (uint col_num)
         return true;
 }
 
-void GncFwTokenizer::col_widen (uint col_num)
+void GncFwTokenizer::col_widen (uint32_t col_num)
 {
     if (!col_can_widen (col_num))
         return;
@@ -88,20 +88,20 @@ void GncFwTokenizer::col_widen (uint col_num)
         m_col_vec.erase (m_col_vec.begin() + col_num + 1);
 }
 
-bool GncFwTokenizer::col_can_split (uint col_num, uint position)
+bool GncFwTokenizer::col_can_split (uint32_t col_num, uint32_t position)
 {
     auto last_col = m_col_vec.size() - 1;
     if (col_num > last_col)
         return false;
 
-    uint col_end = m_col_vec[col_num];
+    uint32_t col_end = m_col_vec[col_num];
     if (position < 1 || position >= col_end)
         return false;
     else
         return true;
 }
 
-void GncFwTokenizer::col_split (uint col_num, uint position)
+void GncFwTokenizer::col_split (uint32_t col_num, uint32_t position)
 {
     if (col_can_split (col_num, position))
     {
@@ -138,7 +138,7 @@ void GncFwTokenizer::load_file(const std::string& path)
          * - widening the last column to widen to the longest line or
          * - deleting columns/narrowing the last one to reduce to the longest line
          */
-        uint total_width = 0;
+        uint32_t total_width = 0;
         for (auto col_width : m_col_vec)
             total_width += col_width;
 

@@ -116,10 +116,10 @@ public:
     void encoding (const std::string& encoding);
     std::string encoding ();
 
-    void update_skipped_lines (boost::optional<uint> start, boost::optional<uint> end,
+    void update_skipped_lines (boost::optional<uint32_t> start, boost::optional<uint32_t> end,
                                boost::optional<bool> alt, boost::optional<bool> errors);
-    uint skip_start_lines ();
-    uint skip_end_lines ();
+    uint32_t skip_start_lines ();
+    uint32_t skip_end_lines ();
     bool skip_alt_lines ();
     bool skip_err_lines ();
 
@@ -146,7 +146,7 @@ public:
      */
     void create_transactions ();
     bool check_for_column_type (GncTransPropType type);
-    void set_column_type (uint position, GncTransPropType type, bool force = false);
+    void set_column_type (uint32_t position, GncTransPropType type, bool force = false);
     std::vector<GncTransPropType> column_types ();
 
     std::set<std::string> accounts ();
@@ -178,8 +178,8 @@ private:
     /* Two internal helper functions that should only be called from within
      * set_column_type for consistency (otherwise error messages may not be (re)set)
      */
-    void update_pre_trans_props (uint row, uint col, GncTransPropType prop_type);
-    void update_pre_split_props (uint row, uint col, GncTransPropType prop_type);
+    void update_pre_trans_props (uint32_t row, uint32_t col, GncTransPropType prop_type);
+    void update_pre_split_props (uint32_t row, uint32_t col, GncTransPropType prop_type);
 
     struct CsvTranSettings;
     CsvTransSettings m_settings;

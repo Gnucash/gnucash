@@ -57,27 +57,27 @@ public:
     GncFwTokenizer& operator=(GncFwTokenizer&&) = default;      // move assignment
     ~GncFwTokenizer() = default;                                // destructor
 
-    void columns(const std::vector<uint>& cols = std::vector<uint>());
-    std::vector<uint> get_columns();
-    uint get_column (uint num);
+    void columns(const std::vector<uint32_t>& cols = std::vector<uint32_t>());
+    std::vector<uint32_t> get_columns();
+    uint32_t get_column (uint32_t num);
 
     // Column manipulators
-    bool col_can_delete (uint col_num);
-    void col_delete (uint col_num);
-    bool col_can_narrow (uint col_num);
-    void col_narrow (uint col_num);
-    bool col_can_widen (uint col_num);
-    void col_widen (uint col_num);
-    bool col_can_split (uint col_num, uint position);
-    void col_split (uint col_num, uint position);
+    bool col_can_delete (uint32_t col_num);
+    void col_delete (uint32_t col_num);
+    bool col_can_narrow (uint32_t col_num);
+    void col_narrow (uint32_t col_num);
+    bool col_can_widen (uint32_t col_num);
+    void col_widen (uint32_t col_num);
+    bool col_can_split (uint32_t col_num, uint32_t position);
+    void col_split (uint32_t col_num, uint32_t position);
 
     void load_file (const std::string& path) override;
     int  tokenize() override;
 
 
 private:
-    std::vector<uint> m_col_vec;
-    uint m_longest_line = 0;
+    std::vector<uint32_t> m_col_vec;
+    uint32_t m_longest_line = 0;
 };
 
 #endif

@@ -119,15 +119,15 @@ public:
             gpointer userdata);
 private:
     /* helper functions to manage the context menu for fixed with columns */
-    uint get_new_col_rel_pos (GtkTreeViewColumn *tcol, int dx);
+    uint32_t get_new_col_rel_pos (GtkTreeViewColumn *tcol, int dx);
     void fixed_context_menu (GdkEventButton *event, int col, int dx);
     /* helper function to calculate row colors for the preview table (to visualize status) */
     void preview_row_fill_state_cells (GtkListStore *store, GtkTreeIter *iter,
             std::string& err_msg, bool skip);
     /* helper function to create preview header cell combo boxes listing available column types */
-    GtkWidget* preview_cbox_factory (GtkTreeModel* model, uint colnum);
+    GtkWidget* preview_cbox_factory (GtkTreeModel* model, uint32_t colnum);
     /* helper function to set rendering parameters for preview data columns */
-    void preview_style_column (uint col_num, GtkTreeModel* model);
+    void preview_style_column (uint32_t col_num, GtkTreeModel* model);
 
     GtkAssistant    *csv_imp_asst;
 
@@ -1167,7 +1167,7 @@ static GnumericPopupMenuElement const popup_elements[] =
     { nullptr, nullptr, 0, 0, 0 },
 };
 
-uint CsvImpTransAssist::get_new_col_rel_pos (GtkTreeViewColumn *tcol, int dx)
+uint32_t CsvImpTransAssist::get_new_col_rel_pos (GtkTreeViewColumn *tcol, int dx)
 {
     auto renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT(tcol));
     auto cell = GTK_CELL_RENDERER(renderers->data);
@@ -1180,7 +1180,7 @@ uint CsvImpTransAssist::get_new_col_rel_pos (GtkTreeViewColumn *tcol, int dx)
     int width;
     pango_layout_get_pixel_size (layout, &width, nullptr);
     if (width < 1) width = 1;
-    uint charindex = (dx + width / 2) / width;
+    uint32_t charindex = (dx + width / 2) / width;
     g_object_unref (layout);
     pango_font_description_free (font_desc);
 
@@ -1349,7 +1349,7 @@ CsvImpTransAssist::preview_row_fill_state_cells (GtkListStore *store, GtkTreeIte
  * with valid column types and selects the given column type
  */
 GtkWidget*
-CsvImpTransAssist::preview_cbox_factory (GtkTreeModel* model, uint colnum)
+CsvImpTransAssist::preview_cbox_factory (GtkTreeModel* model, uint32_t colnum)
 {
     GtkTreeIter iter;
     auto cbox = gtk_combo_box_new_with_model(model);
@@ -1383,7 +1383,7 @@ CsvImpTransAssist::preview_cbox_factory (GtkTreeModel* model, uint colnum)
 }
 
 void
-CsvImpTransAssist::preview_style_column (uint col_num, GtkTreeModel* model)
+CsvImpTransAssist::preview_style_column (uint32_t col_num, GtkTreeModel* model)
 {
     auto col = gtk_tree_view_get_column (treeview, col_num);
     auto renderer = static_cast<GtkCellRenderer*>(gtk_tree_view_column_get_cell_renderers(col)->data);
@@ -1479,7 +1479,7 @@ void CsvImpTransAssist::preview_refresh_table ()
         /* Fill the data cells. */
         for (auto cell_str_it = std::get<0>(parse_line).cbegin(); cell_str_it != std::get<0>(parse_line).cend(); cell_str_it++)
         {
-            uint pos = PREV_N_FIXED_COLS + cell_str_it - std::get<0>(parse_line).cbegin();
+            uint32_t pos = PREV_N_FIXED_COLS + cell_str_it - std::get<0>(parse_line).cbegin();
             gtk_list_store_set (store, &iter, pos, cell_str_it->c_str(), -1);
         }
     }
@@ -1522,7 +1522,7 @@ void CsvImpTransAssist::preview_refresh_table ()
 
     /* Reset column attributes as they are undefined after recreating the model */
     auto combostore = make_column_header_model (tx_imp->multi_split());
-    for (uint i = 0; i < ntcols; i++)
+    for (uint32_t i = 0; i < ntcols; i++)
         preview_style_column (i, combostore);
 
     /* Release our reference for the stores to allow proper memory management. */

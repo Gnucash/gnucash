@@ -146,7 +146,7 @@ void GncTxImport::multi_split (bool multi_split)
 {
     auto trans_prop_seen = false;
     m_settings.m_multi_split = multi_split;
-    for (uint i = 0; i < m_settings.m_column_types.size(); i++)
+    for (uint32_t i = 0; i < m_settings.m_column_types.size(); i++)
     {
         auto old_prop = m_settings.m_column_types[i];
         auto is_trans_prop = ((old_prop > GncTransPropType::NONE)
@@ -262,7 +262,7 @@ void GncTxImport::encoding (const std::string& encoding)
 
 std::string GncTxImport::encoding () { return m_settings.m_encoding; }
 
-void GncTxImport::update_skipped_lines(boost::optional<uint> start, boost::optional<uint> end,
+void GncTxImport::update_skipped_lines(boost::optional<uint32_t> start, boost::optional<uint32_t> end,
         boost::optional<bool> alt, boost::optional<bool> errors)
 {
     if (start)
@@ -274,7 +274,7 @@ void GncTxImport::update_skipped_lines(boost::optional<uint> start, boost::optio
     if (errors)
         m_skip_errors = *errors;
 
-    for (uint i = 0; i < m_parsed_lines.size(); i++)
+    for (uint32_t i = 0; i < m_parsed_lines.size(); i++)
     {
         std::get<4>(m_parsed_lines[i]) =
             ((i < skip_start_lines()) ||             // start rows to skip
@@ -285,8 +285,8 @@ void GncTxImport::update_skipped_lines(boost::optional<uint> start, boost::optio
     }
 }
 
-uint GncTxImport::skip_start_lines () { return m_settings.m_skip_start_lines; }
-uint GncTxImport::skip_end_lines () { return m_settings.m_skip_end_lines; }
+uint32_t GncTxImport::skip_start_lines () { return m_settings.m_skip_start_lines; }
+uint32_t GncTxImport::skip_end_lines () { return m_settings.m_skip_end_lines; }
 bool GncTxImport::skip_alt_lines () { return m_settings.m_skip_alt_lines; }
 bool GncTxImport::skip_err_lines () { return m_skip_errors; }
 
@@ -396,7 +396,7 @@ void GncTxImport::tokenize (bool guessColTypes)
     if (!m_tokenizer)
         return;
 
-    uint max_cols = 0;
+    uint32_t max_cols = 0;
     m_tokenizer->tokenize();
     m_parsed_lines.clear();
     for (auto tokenized_line : m_tokenizer->get_tokens())
@@ -420,7 +420,7 @@ void GncTxImport::tokenize (bool guessColTypes)
     m_settings.m_column_types.resize(max_cols, GncTransPropType::NONE);
 
     /* Force reinterpretation of already set columns and/or base_account */
-    for (uint i = 0; i < m_settings.m_column_types.size(); i++)
+    for (uint32_t i = 0; i < m_settings.m_column_types.size(); i++)
         set_column_type (i, m_settings.m_column_types[i], true);
     if (m_settings.m_base_account)
     {
@@ -738,7 +738,7 @@ GncTxImport::check_for_column_type (GncTransPropType type)
 }
 
 /* A helper function intended to be called only from set_column_type */
-void GncTxImport::update_pre_trans_props (uint row, uint col, GncTransPropType prop_type)
+void GncTxImport::update_pre_trans_props (uint32_t row, uint32_t col, GncTransPropType prop_type)
 {
     if ((prop_type == GncTransPropType::NONE) || (prop_type > GncTransPropType::TRANS_PROPS))
         return; /* Only deal with transaction related properties. */
@@ -791,7 +791,7 @@ void GncTxImport::update_pre_trans_props (uint row, uint col, GncTransPropType p
 }
 
 /* A helper function intended to be called only from set_column_type */
-void GncTxImport::update_pre_split_props (uint row, uint col, GncTransPropType prop_type)
+void GncTxImport::update_pre_split_props (uint32_t row, uint32_t col, GncTransPropType prop_type)
 {
     if ((prop_type > GncTransPropType::SPLIT_PROPS) || (prop_type <= GncTransPropType::TRANS_PROPS))
         return; /* Only deal with split related properties. */
@@ -823,7 +823,7 @@ void GncTxImport::update_pre_split_props (uint row, uint col, GncTransPropType p
 
 
 void
-GncTxImport::set_column_type (uint position, GncTransPropType type, bool force)
+GncTxImport::set_column_type (uint32_t position, GncTransPropType type, bool force)
 {
     if (position >= m_settings.m_column_types.size())
         return;
@@ -855,7 +855,7 @@ GncTxImport::set_column_type (uint position, GncTransPropType type, bool force)
         std::get<3>(*parsed_lines_it)->set_date_format (m_settings.m_date_format);
         std::get<3>(*parsed_lines_it)->set_currency_format (m_settings.m_currency_format);
 
-        uint row = parsed_lines_it - m_parsed_lines.begin();
+        uint32_t row = parsed_lines_it - m_parsed_lines.begin();
 
         /* If the column type actually changed, first reset the property
          * represented by the old column type
@@ -901,10 +901,10 @@ GncTxImport::accounts ()
     auto accts = std::set<std::string>();
     auto acct_col_it = std::find (m_settings.m_column_types.begin(),
                            m_settings.m_column_types.end(), GncTransPropType::ACCOUNT);
-    uint acct_col = acct_col_it - m_settings.m_column_types.begin();
+    uint32_t acct_col = acct_col_it - m_settings.m_column_types.begin();
     auto tacct_col_it = std::find (m_settings.m_column_types.begin(),
                            m_settings.m_column_types.end(), GncTransPropType::TACCOUNT);
-    uint tacct_col = tacct_col_it - m_settings.m_column_types.begin();
+    uint32_t tacct_col = tacct_col_it - m_settings.m_column_types.begin();
 
     /* Iterate over all parsed lines */
     auto odd_line = false;

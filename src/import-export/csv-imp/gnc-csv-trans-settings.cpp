@@ -261,7 +261,7 @@ CsvTransSettings::load (void)
     gsize list_len;
     gchar** col_types_str = g_key_file_get_string_list (keyfile, group.c_str(), CSV_COL_TYPES,
             &list_len, &key_error);
-    for (uint i = 0; i < list_len; i++)
+    for (uint32_t i = 0; i < list_len; i++)
     {
         auto col_types_it = std::find_if (gnc_csv_col_type_strs.begin(),
                 gnc_csv_col_type_strs.end(), test_prop_type_str (col_types_str[i]));
@@ -287,7 +287,7 @@ CsvTransSettings::load (void)
     m_column_widths.clear();
     gint *col_widths_int = g_key_file_get_integer_list (keyfile, group.c_str(), CSV_COL_WIDTHS,
             &list_len, &key_error);
-    for (uint i = 0; i < list_len; i++)
+    for (uint32_t i = 0; i < list_len; i++)
     {
         if (col_widths_int[i] > 0)
             m_column_widths.push_back(col_widths_int[i]);

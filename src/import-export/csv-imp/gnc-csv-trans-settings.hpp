@@ -89,14 +89,14 @@ std::string   m_encoding;                     // File encoding
 bool          m_multi_split;                  // Assume multiple lines per transaction
 int           m_date_format;                  // Date Active id
 int           m_currency_format;              // Currency Active id
-uint          m_skip_start_lines;             // Number of header rows to skip
-uint          m_skip_end_lines;               // Number of footer rows to skip
+uint32_t          m_skip_start_lines;             // Number of header rows to skip
+uint32_t          m_skip_end_lines;               // Number of footer rows to skip
 bool          m_skip_alt_lines;               // Skip alternate rows
 std::string   m_separators;                   // Separators for csv format
 
 Account      *m_base_account;                 // Base account
 std::vector<GncTransPropType> m_column_types; // The Column types in order
-std::vector<uint> m_column_widths;            // The Column widths
+std::vector<uint32_t> m_column_widths;            // The Column widths
 
 bool          m_load_error;                   // Was there an error while parsing the state file ?
 };
