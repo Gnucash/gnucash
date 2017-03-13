@@ -49,24 +49,18 @@ enum
 };
 
 static gboolean
-gnc_header_expose (GtkWidget *header,
-                   GdkEventExpose *event)
+gnc_header_draw (GtkWidget *header, cairo_t *cr)
 {
-    cairo_t *cr;
-    GdkWindow *binwin = gtk_layout_get_bin_window(GTK_LAYOUT(header));
-
-    cr = gdk_cairo_create (binwin);
+    cairo_save (cr);
     cairo_set_source_surface (cr, GNC_HEADER(header)->surface, 0, 0);
     cairo_paint (cr);
-    cairo_destroy (cr);
-
-    GTK_WIDGET_CLASS (parent_class)->expose_event (header, event);
+    cairo_restore (cr);
 
     return TRUE;
 }
 
 static void
-gnc_header_draw (GncHeader *header)
+gnc_header_draw_offscreen (GncHeader *header)
 {
     SheetBlockStyle *style = header->style;
     Table *table = header->sheet->table;
@@ -216,7 +210,7 @@ gnc_header_request_redraw (GncHeader *header)
     if (!header->style)
         return;
 
-    gnc_header_draw (header);
+    gnc_header_draw_offscreen (header);
     gtk_widget_queue_draw (GTK_WIDGET(header));
 }
 
@@ -636,10 +630,8 @@ gnc_header_class_init (GncHeaderClass *header_class)
 
 
     item_class->unrealize = gnc_header_unrealize;
-//    item_class->update    = gnc_header_update;
-    item_class->expose_event = gnc_header_expose;
+    item_class->draw      = gnc_header_draw;
     item_class->event     = gnc_header_event;
-//    item_class->point     = gnc_header_point;
 }
 
 

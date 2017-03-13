@@ -83,7 +83,7 @@ static void gnc_dense_cal_dispose(GObject *object);
 static void gnc_dense_cal_realize(GtkWidget *widget, gpointer user_data);
 static void gnc_dense_cal_configure(GtkWidget *widget, GdkEventConfigure *event, gpointer user_data);
 static void gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal);
-static gboolean gnc_dense_cal_expose(GtkWidget *widget, GdkEventExpose *event, gpointer user_data);
+static gboolean gnc_dense_cal_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data);
 
 static void gdc_reconfig(GncDenseCal *dcal);
 
@@ -300,7 +300,7 @@ gnc_dense_cal_init(GncDenseCal *dcal)
                           | GDK_POINTER_MOTION_MASK
                           | GDK_POINTER_MOTION_HINT_MASK));
     gtk_box_pack_start(GTK_BOX(dcal), GTK_WIDGET(dcal->cal_drawing_area), TRUE, TRUE, 0);
-    g_signal_connect(G_OBJECT(dcal->cal_drawing_area), "expose_event", G_CALLBACK(gnc_dense_cal_expose), (gpointer)dcal);
+    g_signal_connect(G_OBJECT(dcal->cal_drawing_area), "draw", G_CALLBACK(gnc_dense_cal_draw), (gpointer)dcal);
     g_signal_connect(G_OBJECT(dcal->cal_drawing_area), "realize", G_CALLBACK(gnc_dense_cal_realize), (gpointer)dcal);
     g_signal_connect(G_OBJECT(dcal->cal_drawing_area), "configure_event", G_CALLBACK(gnc_dense_cal_configure), (gpointer)dcal);
 
@@ -865,25 +865,18 @@ free_rect(gpointer data, gpointer ud)
 }
 
 static gboolean
-gnc_dense_cal_expose(GtkWidget *widget,
-                     GdkEventExpose *event,
-                     gpointer user_data)
+gnc_dense_cal_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
 {
     GncDenseCal *dcal;
-    cairo_t *cr;
 
     g_return_val_if_fail(widget != NULL, FALSE);
     g_return_val_if_fail(GNC_IS_DENSE_CAL(user_data), FALSE);
-    g_return_val_if_fail(event != NULL, FALSE);
-
-    if (event->count > 0)
-        return FALSE;
 
     dcal = GNC_DENSE_CAL(user_data);
-    cr = gdk_cairo_create (gtk_widget_get_window (GTK_WIDGET(dcal->cal_drawing_area)));
+    cairo_save (cr);;
     cairo_set_source_surface (cr, dcal->surface, 0, 0);
     cairo_paint (cr);
-    cairo_destroy (cr);
+    cairo_restore (cr);
 
     return TRUE;
 }

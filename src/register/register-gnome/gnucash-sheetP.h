@@ -135,7 +135,7 @@ void gnucash_sheet_refresh_from_prefs (GnucashSheet *sheet);
 gboolean   gnucash_sheet_find_loc_by_pixel (GnucashSheet *sheet, gint x, gint y,
                                            VirtualLocation *vcell_loc);
 gboolean gnucash_sheet_draw_internal (GnucashSheet *sheet, cairo_t *cr,
-                                      int x, int y, int width, int height);
+                                      GtkAllocation *alloc);
 void gnucash_sheet_draw_cursor (GnucashCursor *cursor, cairo_t *cr);
 
 

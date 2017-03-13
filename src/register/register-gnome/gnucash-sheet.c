@@ -697,45 +697,42 @@ gnucash_sheet_create (Table *table)
     return sheet;
 }
 
-static gint
-compute_optimal_width (GnucashSheet *sheet)
+static void
+gnucash_sheet_get_preferred_width (G_GNUC_UNUSED GtkWidget *widget,
+                                   gint *minimal_width,
+                                   gint *natural_width)
 {
-    return DEFAULT_SHEET_WIDTH;
+    *minimal_width = *natural_width = DEFAULT_SHEET_WIDTH;
 }
 
 
 /* Compute the height needed to show DEFAULT_REGISTER_INITIAL_ROWS rows */
-static gint
-compute_optimal_height (GnucashSheet *sheet)
+static void
+gnucash_sheet_get_preferred_height (G_GNUC_UNUSED GtkWidget *widget,
+                                    gint *minimal_width,
+                                    gint *natural_width)
 {
+    GnucashSheet *sheet = GNUCASH_SHEET(widget);
     SheetBlockStyle *style;
     CellDimensions *cd;
     gint row_height;
 
+    *minimal_width = *natural_width = DEFAULT_SHEET_HEIGHT;
+
     if (!sheet)
-        return DEFAULT_SHEET_HEIGHT;
+        return;
 
     style = gnucash_sheet_get_style_from_cursor (sheet, CURSOR_HEADER);
     if (!style)
-        return DEFAULT_SHEET_HEIGHT;
+        return;
 
     cd = gnucash_style_get_cell_dimensions (style, 0, 0);
     if (cd == NULL)
-        return DEFAULT_SHEET_HEIGHT;
+        return;
 
     row_height = cd->pixel_height;
 
-    return row_height * DEFAULT_SHEET_INITIAL_ROWS;
-}
-
-
-static void
-gnucash_sheet_size_request (GtkWidget *widget, GtkRequisition *requisition)
-{
-    GnucashSheet *sheet = GNUCASH_SHEET(widget);
-
-    requisition->width = compute_optimal_width (sheet);
-    requisition->height = compute_optimal_height (sheet);
+    *minimal_width = *natural_width =  row_height * DEFAULT_SHEET_INITIAL_ROWS;
 }
 
 const char *
@@ -1050,23 +1047,17 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
 }
 
 static gboolean
-gnucash_sheet_draw (GtkWidget *widget, GdkEventExpose *event)
+gnucash_sheet_draw (GtkWidget *widget, cairo_t *cr)
 {
     GnucashSheet *sheet = GNUCASH_SHEET (widget);
-    int x = event->area.x;
-    int y = event->area.y;
-    int width = event->area.width;
-    int height = event->area.height;
-    GdkWindow *binwin = gtk_layout_get_bin_window(GTK_LAYOUT(sheet));
-    cairo_t *cr;
+    GtkAllocation alloc;
+    gtk_widget_get_allocation(widget, &alloc);
     gboolean result;
 
-    cr = gdk_cairo_create (binwin);
-    result = gnucash_sheet_draw_internal (sheet, cr, x, y, width, height);
-
+    cairo_save (cr);
+    result = gnucash_sheet_draw_internal (sheet, cr, &alloc);
     gnucash_sheet_draw_cursor (sheet->cursor, cr);
-
-    cairo_destroy(cr);
+    cairo_restore (cr);
 
     return result;
 }
@@ -2457,7 +2448,8 @@ gnucash_sheet_class_init (GnucashSheetClass *klass)
     /* Method override */
     gobject_class->finalize = gnucash_sheet_finalize;
 
-    widget_class->size_request = gnucash_sheet_size_request;
+    widget_class->get_preferred_width = gnucash_sheet_get_preferred_width;
+    widget_class->get_preferred_height = gnucash_sheet_get_preferred_height;
     widget_class->size_allocate = gnucash_sheet_size_allocate;
 
     widget_class->focus_in_event = gnucash_sheet_focus_in_event;
@@ -2469,7 +2461,7 @@ gnucash_sheet_class_init (GnucashSheetClass *klass)
     widget_class->button_release_event = gnucash_button_release_event;
     widget_class->scroll_event = gnucash_scroll_event;
 
-    widget_class->expose_event = gnucash_sheet_draw;
+    widget_class->draw = gnucash_sheet_draw;
 
 }
 
