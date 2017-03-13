@@ -140,6 +140,10 @@ AM_CONDITIONAL([CLANG], [test "x$ac_cv_CLANG" = "xyes"])
 ###--------------------------------------------------------
 ### Begin C++ dependencies
 ###--------------------------------------------------------
+PKG_CHECK_MODULES(ICU4C, icu-uc, [ac_cv_ICU4C=yes], [ac_cv_ICU4C=no])
+PKG_CHECK_MODULES(ICU4C_I18N, icu-i18n, [ac_cv_ICU4C=yes], [ac_cv_ICU4C=no])
+if test x$ac_cv_ICU4C != xyes; then
+    AC_MSG_ERROR([ICU4C was not found and is required to build GnuCash.])
 AX_BOOST_BASE([1.53.0], [ac_cv_BOOST=yes], [ac_cv_BOOST=no])
 if test x$ac_cv_BOOST != xyes; then
     AC_MSG_ERROR([Boost 1.53.0 or later was not found and is required to build GnuCash])

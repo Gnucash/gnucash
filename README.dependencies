@@ -69,7 +69,10 @@ libgnomecanvas		2.0
 [lib]goffice		0.7.0
 libxml2			2.5.10
 libxslt
-boost			1.50.0
+ICU                                             International Compnents for
+                                                Unicode
+boost			1.50.0                  locale and regex libs must be
+                                                built with ICU support.
 swig			2.0.10			Only required to build from git
 						or SVN.
 webkit			1.0

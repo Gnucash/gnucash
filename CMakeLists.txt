@@ -345,6 +345,8 @@ IF(APPLE)
   ENDIF()
 ENDIF(APPLE)
 
+# FIND_PACKAGE(LibXslt) eats PKG_CONFIG_EXECUTABLE, so preserve it.
+SET(GNC_PKG_CONFIG_EXE ${PKG_CONFIG_EXECUTABLE})
 # ############################################################
 
 # xsltproc
@@ -354,6 +356,7 @@ IF (NOT LIBXSLT_FOUND)
    MESSAGE(SEND_ERROR "libxslt library not found.")
 ENDIF(NOT LIBXSLT_FOUND)
 # ############################################################
+SET(PKG_CONFIG_EXECUTABLE ${GNC_PKG_CONFIG_EXE})
 
 # libdbi
 FIND_PATH (LIBDBI_INCLUDE_PATH dbi/dbi.h HINTS ${CMAKE_PREFIX_PATH}/libdbi/include)
@@ -398,6 +401,10 @@ ENDIF(NOT PERL_FOUND)
 GET_FILENAME_COMPONENT(PERL_DIR ${PERL_EXECUTABLE} DIRECTORY)
 
 FIND_PROGRAM(POD2MAN_EXECUTABLE pod2man HINTS ${PERL_DIR})
+
+#ICU
+GNC_PKG_CHECK_MODULES (ICU4C REQUIRED icu-uc)
+GNC_PKG_CHECK_MODULES (ICU4C_I18N REQUIRED icu-i18n)
 
 #BOOST
 IF (APPLE)

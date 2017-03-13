@@ -47,6 +47,7 @@ libgncmod_csv_import_la_LIBADD = \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GLIB_LIBS} \
   ${GTK_LIBS} \
+  ${ICU4C_I18N_LIBS} \
   ${BOOST_LDFLAGS} \
   -lboost_regex \
   -lboost_locale
@@ -67,6 +68,7 @@ AM_CPPFLAGS = \
   ${GUILE_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GTK_CFLAGS} \
+  ${ICU4C_I18N_CFLAGS} \
   ${BOOST_CPPFLAGS}
 
 uidir = $(GNC_UI_DIR)
