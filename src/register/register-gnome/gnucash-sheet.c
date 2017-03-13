@@ -353,9 +353,12 @@ gnucash_sheet_cursor_move (GnucashSheet *sheet, VirtualLocation virt_loc)
 
     changed_cells = !virt_loc_equal (virt_loc, old_virt_loc);
 
-    /* If we've changed cells, redraw the headers */
+    /* If we've changed cells, redraw the headers and sheet */
     if (changed_cells)
+    {
         gnc_header_request_redraw (GNC_HEADER(sheet->header_item));
+        gtk_widget_queue_draw (GTK_WIDGET(sheet));
+    }
 
     /* Now turn on the editing controls. */
     gnucash_sheet_activate_cursor_cell (sheet, changed_cells);
@@ -438,17 +441,6 @@ gnucash_sheet_compute_visible_range (GnucashSheet *sheet)
     /* FIXME */
     sheet->left_block = 0;
     sheet->right_block = 0;
-
-    if ((old_visible_blocks > sheet->num_visible_blocks) ||
-            (old_visible_rows > sheet->num_visible_phys_rows))
-    {
-        /* Reach up and tell the parent widget to redraw as
-         * well.  The sheet doesn't occupy all the visible
-         * area in the notebook page, and this will cause the
-         * parent to color in the empty grey space after the
-         * area occupied by the sheet. */
-        gtk_widget_queue_draw(gtk_widget_get_parent(GTK_WIDGET(sheet)));
-    }
 }
 
 
