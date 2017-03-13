@@ -746,7 +746,8 @@ gnc_item_edit_set_popup (GncItemEdit    *item_edit,
         gnc_item_edit_hide_popup_toggle (item_edit);
     }
 
-    gnc_item_edit_update (item_edit);
+    if (gtk_widget_get_realized(GTK_WIDGET(item_edit)))
+        gnc_item_edit_update (item_edit);
 }
 
 gboolean

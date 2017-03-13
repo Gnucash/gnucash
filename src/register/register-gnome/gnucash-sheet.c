@@ -687,10 +687,6 @@ gnucash_sheet_finalize (GObject *object)
     /* Clean up IMContext and unref */
     gnucash_sheet_im_context_reset(sheet);
     g_object_unref (sheet->im_context);
-
-    /* This has to come after the parent destroy, so the item edit
-       destruction can do its disconnects. */
-    g_object_unref (sheet->entry);
 }
 
 
@@ -1413,8 +1409,6 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
 
     if (button_1)
         gnucash_sheet_check_grab (sheet);
-
-    gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &new_virt_loc);
 
     if (do_popup)
         gtk_menu_popup(GTK_MENU(sheet->popup), NULL, NULL, NULL,
