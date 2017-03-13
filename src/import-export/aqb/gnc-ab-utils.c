@@ -1046,6 +1046,23 @@ gnc_ab_import_context(AB_IMEXPORTER_CONTEXT *context,
         AB_ImExporterContext_AccountInfoForEach(context, bal_accountinfo_cb,
                                                 data);
 
+    /* Check bank-messages */
+    {
+        AB_MESSAGE * bankmsg = AB_ImExporterContext_GetFirstMessage(context);
+        while (bankmsg)
+        {
+            const char* subject = AB_Message_GetSubject(bankmsg);
+            const char* text = AB_Message_GetText(bankmsg);
+            gnc_info_dialog(data->parent, "%s\n%s %s\n%s",
+                            _("The bank has sent a message in its response."),
+                            _("Subject:"),
+                            subject,
+                            text);
+
+            bankmsg = AB_ImExporterContext_GetNextMessage(context); // The interator is incremented within aqbanking
+        }
+    }
+
     return data;
 }
 
