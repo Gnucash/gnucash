@@ -374,8 +374,17 @@ show_session_error (QofBackendError io_error,
         }
         else
         {
-            fmt = _("The file/URI %s could not be found.");
-            gnc_error_dialog (parent, fmt, displayname);
+            if (gnc_history_test_for_file (displayname))
+            {
+                fmt = _("The file/URI %s could not be found.\n\nThe file is in the history list, do you want to remove it?");
+                if (gnc_verify_dialog (parent, FALSE, fmt, displayname))
+                    gnc_history_remove_file (displayname);
+            }
+            else
+            {
+                fmt = _("The file/URI %s could not be found.");
+                gnc_error_dialog (parent, fmt, displayname);
+            }
         }
         break;
 

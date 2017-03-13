@@ -67,6 +67,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 /* Command callbacks */
 static void gnc_plugin_file_history_cmd_open_file (GtkAction *action, GncMainWindowActionData *data);
 
+static gboolean file_from_history = FALSE;
 
 /** The label given to the main window for this plugin. */
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-file-history-actions"
@@ -262,6 +263,38 @@ gnc_history_remove_file (const char *oldfile)
     }
 }
 
+
+/** Test for a file name existing in the history list.
+ *
+ *  @param oldfile The name of the file to remove from the list.
+ */
+gboolean gnc_history_test_for_file (const char *oldfile)
+{
+    gchar *filename, *from;
+    gint i;
+    gboolean found = FALSE;
+
+    if (!oldfile)
+        return FALSE;
+    if (!g_utf8_validate(oldfile, -1, NULL))
+        return FALSE;
+
+    for (i = 0; i < MAX_HISTORY_FILES; i++)
+    {
+        from = gnc_history_index_to_pref_name(i);
+        filename = gnc_prefs_get_string(GNC_PREFS_GROUP_HISTORY, from);
+
+        if (filename && file_from_history)
+        {
+            if (g_utf8_collate(oldfile, filename) == 0)
+                found = TRUE;
+        }
+        g_free(from);
+    }
+    return found;
+}
+
+
 /*  Retrieve the name of the file most recently accessed.  This is the
  *  name at the front of the list.  Since the "list" is actually a
  *  sequence of up to ten preference names, this is the value of the first preference.
@@ -278,6 +311,14 @@ gnc_history_get_last (void)
     return filename;
 }
 
+
+/* Set the source of the open file, True for History.
+ */
+void
+gnc_history_set_file_from_history (gboolean set)
+{
+    file_from_history = set;
+}
 
 /************************************************************
  *                     Other Functions                      *
@@ -662,10 +703,12 @@ gnc_plugin_file_history_cmd_open_file (GtkAction *action,
      * Which progress bar should we be using? One in a window, or
      * in a new "file loading" dialog???
      */
+    file_from_history = TRUE;
     filename = g_object_get_data(G_OBJECT(action), FILENAME_STRING);
     gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
     /* also opens new account page */
     gnc_file_open_file (filename, /*open_readonly*/ FALSE);
+    file_from_history = FALSE;
     gnc_window_set_progressbar_window (NULL);
 }
 
