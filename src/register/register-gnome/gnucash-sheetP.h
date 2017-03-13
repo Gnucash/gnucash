@@ -73,11 +73,6 @@ struct _GnucashSheet
 
     gboolean input_cancelled;
 
-    gint top_block;  /* maybe not fully visible */
-    gint bottom_block;
-    gint left_block;
-    gint right_block;
-
     gint num_visible_blocks;
     gint num_visible_phys_rows;
 
@@ -86,8 +81,6 @@ struct _GnucashSheet
 
     gint window_height;
     gint window_width;
-
-    gint cell_borders;
 
     gint editing;
 

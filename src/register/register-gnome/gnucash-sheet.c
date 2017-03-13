@@ -400,6 +400,7 @@ gnucash_sheet_compute_visible_range (GnucashSheet *sheet)
     GtkAdjustment *adj;
     gint height;
     gint cy;
+    gint top_block;
     gint old_visible_blocks, old_visible_rows;
 
     g_return_if_fail (sheet != NULL);
@@ -411,14 +412,14 @@ gnucash_sheet_compute_visible_range (GnucashSheet *sheet)
     adj = gtk_layout_get_vadjustment(GTK_LAYOUT(sheet));
     cy = gtk_adjustment_get_value(adj);
 
-    sheet->top_block = gnucash_sheet_y_pixel_to_block (sheet, cy);
+    top_block = gnucash_sheet_y_pixel_to_block (sheet, cy);
 
     old_visible_blocks = sheet->num_visible_blocks;
     old_visible_rows = sheet->num_visible_phys_rows;
     sheet->num_visible_blocks = 0;
     sheet->num_visible_phys_rows = 0;
 
-    for ( vcell_loc.virt_row = sheet->top_block, vcell_loc.virt_col = 0;
+    for ( vcell_loc.virt_row = top_block, vcell_loc.virt_col = 0;
             vcell_loc.virt_row < sheet->num_virt_rows;
             vcell_loc.virt_row++ )
     {
@@ -435,12 +436,6 @@ gnucash_sheet_compute_visible_range (GnucashSheet *sheet)
                 >= height)
             break;
     }
-
-    sheet->bottom_block = vcell_loc.virt_row;
-
-    /* FIXME */
-    sheet->left_block = 0;
-    sheet->right_block = 0;
 }
 
 
@@ -1677,14 +1672,10 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
     /* Forward the keystroke to the input line */
     if (pass_on)
     {
-        GValue gval = {0,};
         gboolean result;
-        g_value_init (&gval, G_TYPE_BOOLEAN);
-        g_value_set_boolean (&gval, TRUE);
-        g_object_set_property (G_OBJECT (sheet->entry), "editable", &gval);
+        gtk_editable_set_editable(GTK_EDITABLE(sheet->entry), TRUE);
         result = gtk_widget_event (sheet->entry, (GdkEvent *) event);
-        g_value_set_boolean (&gval, FALSE);
-        g_object_set_property (G_OBJECT (sheet->entry), "editable", &gval);
+        gtk_editable_set_editable(GTK_EDITABLE(sheet->entry), FALSE);
         return result;
     }
 
@@ -2489,8 +2480,6 @@ gnucash_sheet_init (GnucashSheet *sheet)
     gtk_widget_set_can_focus (GTK_WIDGET(sheet), TRUE);
     gtk_widget_set_can_default (GTK_WIDGET(sheet), TRUE);
 
-    sheet->top_block = 1;
-    sheet->bottom_block = 1;
     sheet->num_visible_blocks = 1;
     sheet->num_visible_phys_rows = 1;
 
