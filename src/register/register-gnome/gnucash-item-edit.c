@@ -197,16 +197,6 @@ gnc_item_edit_init (GncItemEdit *item_edit)
     gnc_virtual_location_init(&item_edit->virt_loc);
 }
 
-
-static gboolean
-gnc_item_edit_configure_cb (GtkWidget *widget,
-                            G_GNUC_UNUSED GdkEventConfigure *event)
-{
-    g_return_val_if_fail(GNC_IS_ITEM_EDIT(widget), FALSE);
-    gnc_item_edit_configure (GNC_ITEM_EDIT(widget));
-    return TRUE;
-}
-
 void
 gnc_item_edit_configure (GncItemEdit *item_edit)
 {
@@ -511,7 +501,6 @@ gnc_item_edit_class_init (GncItemEditClass *gnc_item_edit_class)
                                              G_PARAM_READWRITE));
 
     /* GtkWidget method overrides */
-    widget_class->configure_event = gnc_item_edit_configure_cb;
 }
 
 
