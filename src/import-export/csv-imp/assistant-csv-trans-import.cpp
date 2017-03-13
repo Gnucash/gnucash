@@ -1276,11 +1276,7 @@ CsvImpTransAssist::preview_split_column (int col, int offset)
 /** Event handler for clicking on column headers. This function is
  * called whenever the user clicks on column headers in
  * preview->treeview to modify columns when in fixed-width mode.
- * @param button The button at the top of a column of the treeview
  * @param event The event that happened (where the user clicked)
- * @param info The data being configured
- * @returns true if further processing of this even should stop, false
- *               if other event handlers can have a go at this as well
  */
 void
 CsvImpTransAssist::preview_update_fw_columns (GtkTreeView* treeview, GdkEventButton* event)
