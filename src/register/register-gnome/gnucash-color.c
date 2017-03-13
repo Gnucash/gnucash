@@ -38,15 +38,14 @@
 #include <config.h>
 #endif
 
-#include <gtk/gtk.h>
 #include <gdk/gdk.h>
 #include "gnucash-color.h"
 
 static int color_inited;
 
 /* Public Colors */
-GdkColor gn_white, gn_black, gn_light_gray;
-GdkColor gn_dark_gray, gn_blue, gn_red, gn_yellow;
+GdkRGBA gn_white, gn_black, gn_light_gray;
+GdkRGBA gn_dark_gray, gn_blue, gn_red, gn_yellow;
 
 static GHashTable *color_hash_table = NULL;
 
@@ -69,61 +68,14 @@ color_equal (gconstpointer v, gconstpointer w)
 }
 
 
-gulong
-gnucash_color_alloc (gushort red, gushort green, gushort blue)
-{
-    GdkColormap *colormap = gtk_widget_get_default_colormap ();
-    GdkColor *c;
-
-    if (!color_inited)
-        gnucash_color_init ();
-
-    c = g_new0 (GdkColor, 1);
-    c->red = red;
-    c->green = green;
-    c->blue = blue;
-
-    g_return_val_if_fail (gdk_colormap_alloc_color (colormap, c, FALSE, TRUE), 0);
-
-    return c->pixel;
-}
-
-
-void
-gnucash_color_alloc_gdk (GdkColor *c)
-{
-    GdkColormap *colormap = gtk_widget_get_default_colormap ();
-
-    g_return_if_fail (c != NULL);
-
-    g_assert (gdk_colormap_alloc_color (colormap, c,
-                                        FALSE, TRUE));
-}
-
-
-void
-gnucash_color_alloc_name (const char *name, GdkColor *c)
-{
-    GdkColormap *colormap = gtk_widget_get_default_colormap ();
-
-    g_return_if_fail (name != NULL);
-    g_return_if_fail (c != NULL);
-
-    gdk_color_parse (name, c);
-    c->pixel = 0;
-    g_assert (gdk_colormap_alloc_color (colormap, c,
-                                        FALSE, TRUE));
-}
-
-
 /* This function takes an argb spec for a color and returns an
- *  allocated GdkColor.  We take care of allocating and managing
+ *  allocated GdkRGBA.  We take care of allocating and managing
  *  the colors.  Caller must not touch the returned color.
  */
-GdkColor *
+GdkRGBA *
 gnucash_color_argb_to_gdk (guint32 argb)
 {
-    GdkColor *color;
+    GdkRGBA *color;
     const guint32 key = argb;
     guint32 *newkey;
 
@@ -132,16 +84,15 @@ gnucash_color_argb_to_gdk (guint32 argb)
     if (color)
         return color;
 
-    color = g_new0(GdkColor, 1);
+    color = g_new0(GdkRGBA, 1);
     newkey = g_new0(guint32, 1);
 
     *newkey = key;
 
-    color->red = (argb & 0xff0000) >> 8;
-    color->green = argb & 0xff00;
-    color->blue = (argb & 0xff) << 8;
-
-    gnucash_color_alloc_gdk(color);
+    color->red   = ((argb & 0xff0000) >> 8)/ 65535.0;
+    color->green = (argb & 0xff00) / 65535.0;
+    color->blue  = ((argb & 0xff) << 8) / 65535.0;
+    color->alpha = 1.0;
 
     g_hash_table_insert (color_hash_table, newkey, color);
 
@@ -153,30 +104,19 @@ void
 gnucash_color_init (void)
 {
     /* Allocate the default colors */
-    gnucash_color_alloc_name ("white",  &gn_white);
-    gnucash_color_alloc_name ("black",  &gn_black);
+    gdk_rgba_parse (&gn_white, "white");
+    gdk_rgba_parse (&gn_black, "black");
 
-    gnucash_color_alloc_name ("gray60", &gn_light_gray);
-    gnucash_color_alloc_name ("gray40", &gn_dark_gray);
-    gnucash_color_alloc_name ("blue",   &gn_blue);
-    gnucash_color_alloc_name ("red",    &gn_red);
-    gnucash_color_alloc_name ("yellow", &gn_yellow);
+    gdk_rgba_parse (&gn_light_gray, "gray60");
+    gdk_rgba_parse (&gn_dark_gray,  "gray40");
+    gdk_rgba_parse (&gn_blue,       "blue");
+    gdk_rgba_parse (&gn_red,        "red");
+    gdk_rgba_parse (&gn_yellow,     "yellow");
 
     if (!color_hash_table)
         color_hash_table = g_hash_table_new (color_hash, color_equal);
 
     color_inited = 1;
-}
-
-void
-to_cairo_rgb (GdkColor *gdk_col, cairo_rgb *c_col)
-{
-    g_return_if_fail(gdk_col != NULL);
-    g_return_if_fail(c_col != NULL);
-
-    c_col->red   = gdk_col->red   / 65535.0;
-    c_col->green = gdk_col->green / 65535.0;
-    c_col->blue  = gdk_col->blue  / 65535.0;
 }
 
 

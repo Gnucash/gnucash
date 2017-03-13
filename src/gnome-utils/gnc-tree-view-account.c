@@ -600,7 +600,7 @@ acc_color_data_func (GtkTreeViewColumn *col,
     GncTreeViewAccountPrivate *priv;
     gchar                     *acc_color = NULL, *acc_cond_color = NULL;
     gchar                     *item;
-    GdkColor                   color;
+    GdkRGBA                    color;
     gchar                     *column_name;
     GList                     *renderers;
 
@@ -616,7 +616,7 @@ acc_color_data_func (GtkTreeViewColumn *col,
     g_free (item);
 
     /* Test if the color string represents a valid color */
-    if (acc_color && (!gdk_color_parse(acc_color, &color)))
+    if (acc_color && (!gdk_rgba_parse(&color, acc_color)))
     {
         g_free (acc_color);
         acc_color = NULL;

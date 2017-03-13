@@ -133,18 +133,6 @@ gnc_option_get_gtk_widget (GNCOption *option)
     return (GtkWidget *)gnc_option_get_widget(option);
 }
 
-static inline gint
-color_d_to_i16 (double d)
-{
-    return (d * 0xFFFF);
-}
-
-static inline double
-color_i16_to_d (gint i16)
-{
-    return ((double)i16 / 0xFFFF);
-}
-
 static void
 gnc_options_dialog_changed_internal (GtkWidget *widget, gboolean sensitive)
 {
@@ -2917,22 +2905,19 @@ static gboolean
 gnc_option_set_ui_value_color (GNCOption *option, gboolean use_default,
                                GtkWidget *widget, SCM value)
 {
-    gdouble red, green, blue, alpha;
 
+    GdkRGBA color;
     if (gnc_option_get_color_info(option, use_default,
-                                  &red, &green, &blue, &alpha))
+                                  &color.red, &color.green,
+                                  &color.blue, &color.alpha))
     {
-        GtkColorButton *color_button;
-        GdkColor color;
+        GtkColorChooser *color_button;
 
-        DEBUG("red %f, green %f, blue %f, alpha %f", red, green, blue, alpha);
-        color_button = GTK_COLOR_BUTTON(widget);
+        DEBUG("red %f, green %f, blue %f, alpha %f",
+              color.red, color.green, color.blue, color.alpha);
+        color_button = GTK_COLOR_CHOOSER(widget);
 
-        color.red   = color_d_to_i16(red);
-        color.green = color_d_to_i16(green);
-        color.blue  = color_d_to_i16(blue);
-        gtk_color_button_set_color(color_button, &color);
-        gtk_color_button_set_alpha(color_button, color_d_to_i16(alpha));
+        gtk_color_chooser_set_rgba(color_button, &color);
         return FALSE;
     }
 
@@ -3488,28 +3473,23 @@ static SCM
 gnc_option_get_ui_value_color (GNCOption *option, GtkWidget *widget)
 {
     SCM result;
-    GtkColorButton *color_button;
-    GdkColor color;
-    gdouble red, green, blue, alpha;
+    GtkColorChooser *color_button;
+    GdkRGBA color;
     gdouble scale;
 
     ENTER("option %p(%s), widget %p",
           option, gnc_option_name(option), widget);
 
-    color_button = GTK_COLOR_BUTTON(widget);
-    gtk_color_button_get_color(color_button, &color);
-    red   = color_i16_to_d(color.red);
-    green = color_i16_to_d(color.green);
-    blue  = color_i16_to_d(color.blue);
-    alpha = color_i16_to_d(gtk_color_button_get_alpha(color_button));
+    color_button = GTK_COLOR_CHOOSER(widget);
+    gtk_color_chooser_get_rgba(color_button, &color);
 
     scale = gnc_option_color_range(option);
 
     result = SCM_EOL;
-    result = scm_cons(scm_from_double (alpha * scale), result);
-    result = scm_cons(scm_from_double (blue * scale), result);
-    result = scm_cons(scm_from_double (green * scale), result);
-    result = scm_cons(scm_from_double (red * scale), result);
+    result = scm_cons(scm_from_double (color.alpha * scale), result);
+    result = scm_cons(scm_from_double (color.blue * scale), result);
+    result = scm_cons(scm_from_double (color.green * scale), result);
+    result = scm_cons(scm_from_double (color.red * scale), result);
     return result;
 }
 

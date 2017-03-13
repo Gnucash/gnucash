@@ -208,7 +208,7 @@ gnc_account_to_ui(AccountWindow *aw)
     Account *account;
     gnc_commodity * commodity;
     const char *string;
-    GdkColor color;
+    GdkRGBA color;
     gboolean flag, nonstd_scu;
     gint index;
 
@@ -230,9 +230,9 @@ gnc_account_to_ui(AccountWindow *aw)
 
     string = xaccAccountGetColor (account);
     if (string == NULL) string = "";
-    if (gdk_color_parse(string, &color))
+    if (gdk_rgba_parse(&color, string))
     {
-        gtk_color_button_set_color(GTK_COLOR_BUTTON(aw->color_entry_button), &color);
+        gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(aw->color_entry_button), &color);
     }
 
     commodity = xaccAccountGetCommodity (account);
@@ -337,7 +337,7 @@ gnc_ui_to_account(AccountWindow *aw)
     Account *parent_account;
     const char *old_string;
     const char *string;
-    GdkColor color;
+    GdkRGBA color;
     gboolean flag;
     gnc_numeric balance;
     gboolean use_equity, nonstd;
@@ -376,8 +376,8 @@ gnc_ui_to_account(AccountWindow *aw)
     if (g_strcmp0 (string, old_string) != 0)
         xaccAccountSetDescription (account, string);
 
-    gtk_color_button_get_color(GTK_COLOR_BUTTON(aw->color_entry_button), &color );
-    string = gdk_color_to_string(&color);
+    gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(aw->color_entry_button), &color );
+    string = gdk_rgba_to_string(&color);
     if (g_strcmp0 (string, DEFAULT_COLOR) == 0)
         string = "Not Set";
 
@@ -1219,11 +1219,11 @@ gnc_account_name_changed_cb(GtkWidget *widget, gpointer data)
 void
 gnc_account_color_default_cb(GtkWidget *widget, gpointer data)
 {
-    GdkColor color;
+    GdkRGBA color;
     AccountWindow *aw = data;
 
-    gdk_color_parse( DEFAULT_COLOR, &color);
-    gtk_color_button_set_color(GTK_COLOR_BUTTON(aw->color_entry_button), &color);
+    gdk_rgba_parse(&color, DEFAULT_COLOR);
+    gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(aw->color_entry_button), &color);
 
 }
 

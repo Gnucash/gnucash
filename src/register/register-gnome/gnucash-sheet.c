@@ -2311,31 +2311,27 @@ gnucash_sheet_realize_entry (GnucashSheet *sheet, GtkWidget *entry)
  */
 
 /** Map a cell type to a gtkrc specified color. */
-GdkColor *
+GdkRGBA *
 get_gtkrc_color (GnucashSheet *sheet,
                  RegisterColor field_type)
 {
     GtkWidget *widget = NULL;
-    GtkStyle *style;
-    GdkColor *white, *black, *red;
-    GdkColor *color = NULL;
+    GtkStyleContext *stylectxt;
+    GdkRGBA color;
 
-    white = gnucash_color_argb_to_gdk (0xFFFFFF);
-    black = gnucash_color_argb_to_gdk (0x000000);
-    red   = gnucash_color_argb_to_gdk (0xFF0000); /* Hardcoded...*/
     switch (field_type)
     {
     default:
-        return white;
+        return gdk_rgba_copy (&gn_white);
 
     case COLOR_UNKNOWN_BG:
-        return white;
+        return gdk_rgba_copy (&gn_white);
 
     case COLOR_UNKNOWN_FG:
-        return black;
+        return gdk_rgba_copy (&gn_black);
 
     case COLOR_NEGATIVE:
-        return red;
+        return gdk_rgba_copy (&gn_red);  // FIXME shouldn't be hardcoded...
 
     case COLOR_HEADER_BG:
     case COLOR_HEADER_FG:
@@ -2364,44 +2360,43 @@ get_gtkrc_color (GnucashSheet *sheet,
         break;
     }
 
-    style = gtk_widget_get_style(widget);
-    if (!style)
-        return white;
+    stylectxt = gtk_widget_get_style_context (widget);
+    if (!stylectxt)
+        return gdk_rgba_copy (&gn_white);
 
     switch (field_type)
     {
     default:
-        return white;
+        return gdk_rgba_copy (&gn_white);
 
     case COLOR_HEADER_BG:
     case COLOR_PRIMARY_BG:
     case COLOR_SECONDARY_BG:
     case COLOR_SPLIT_BG:
-        color = &style->base[GTK_STATE_NORMAL];
+        gtk_style_context_get_background_color(stylectxt, GTK_STATE_FLAG_NORMAL, &color);
         break;
 
     case COLOR_PRIMARY_BG_ACTIVE:
     case COLOR_SECONDARY_BG_ACTIVE:
     case COLOR_SPLIT_BG_ACTIVE:
-        color = &style->base[GTK_STATE_SELECTED];
+        gtk_style_context_get_background_color(stylectxt, GTK_STATE_FLAG_SELECTED, &color);
         break;
 
     case COLOR_HEADER_FG:
     case COLOR_PRIMARY_FG:
     case COLOR_SECONDARY_FG:
     case COLOR_SPLIT_FG:
-        color = &style->text[GTK_STATE_NORMAL];
+        gtk_style_context_get_color(stylectxt, GTK_STATE_FLAG_NORMAL, &color);
         break;
 
     case COLOR_PRIMARY_FG_ACTIVE:
     case COLOR_SECONDARY_FG_ACTIVE:
     case COLOR_SPLIT_FG_ACTIVE:
-        color = &style->text[GTK_STATE_SELECTED];
+        gtk_style_context_get_color(stylectxt, GTK_STATE_FLAG_SELECTED, &color);
         break;
     }
 
-    gnucash_color_alloc_gdk(color);
-    return color;
+    return gdk_rgba_copy (&color);
 }
 
 /** Create the entries used for nameing register colors in gtkrc. */

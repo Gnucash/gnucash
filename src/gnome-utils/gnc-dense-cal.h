@@ -84,7 +84,7 @@ struct _GncDenseCal
 
     gdc_month_coords monthPositions[12];
 
-    GdkColor weekColors[MAX_COLORS];
+    GdkRGBA weekColors[MAX_COLORS];
 
     guint label_width;
     guint label_height;

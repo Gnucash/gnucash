@@ -283,34 +283,34 @@ static guint32 dec_intensity_10percent(guint32 argb)
 /* Actual drawing routines */
 
 G_INLINE_FUNC void
-draw_cell_line (cairo_t *cr, cairo_rgb *bg_color,
+draw_cell_line (cairo_t *cr, GdkRGBA *bg_color,
                 double x1, double y1, double x2, double y2,
                 PhysicalCellBorderLineStyle style);
 
 void
-draw_cell_line (cairo_t *cr, cairo_rgb *bg_color,
+draw_cell_line (cairo_t *cr, GdkRGBA *bg_color,
                 double x1, double y1, double x2, double y2,
                 PhysicalCellBorderLineStyle style)
 {
-    cairo_rgb fg_color;
+    GdkRGBA *fg_color;
 
     switch (style)
     {
         case CELL_BORDER_LINE_NONE:
-            fg_color = *bg_color;
+            fg_color = bg_color;
             break;
 
         case CELL_BORDER_LINE_LIGHT:
-            to_cairo_rgb (&gn_light_gray, &fg_color);
+            fg_color = &gn_light_gray;
             break;
 
         case CELL_BORDER_LINE_NORMAL:
         case CELL_BORDER_LINE_HEAVY:
-            to_cairo_rgb (&gn_black, &fg_color);
+            fg_color = &gn_black;
             break;
 
         case CELL_BORDER_LINE_HIGHLIGHT:
-            to_cairo_rgb (&gn_red, &fg_color);
+            fg_color = &gn_red;
             break;
 
         default:
@@ -318,7 +318,7 @@ draw_cell_line (cairo_t *cr, cairo_rgb *bg_color,
     }
 
     cairo_set_line_width (cr, 1.0);
-    cairo_set_source_rgb (cr, fg_color.red, fg_color.green, fg_color.blue);
+    cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
     cairo_move_to (cr, x1, y1);
     cairo_line_to (cr, x2, y2);
     cairo_stroke (cr);
@@ -328,14 +328,14 @@ static void
 draw_hatching (cairo_t *cr,
                double x, double y, G_GNUC_UNUSED double width, double height)
 {
-    cairo_rgb fg_color;
+    GdkRGBA *fg_color;
     double h_x = x + 2.5;
     double h_y = y + 2.5;
     double h_size = height / 3 - 1;
 
     cairo_set_line_width (cr, 1.0);
-    to_cairo_rgb(&gn_light_gray, &fg_color);
-    cairo_set_source_rgb (cr, fg_color.red, fg_color.green, fg_color.blue);
+    fg_color = &gn_light_gray;
+    cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
 
     cairo_rectangle (cr, h_x, h_y, h_size, h_size);
 
@@ -349,7 +349,7 @@ draw_hatching (cairo_t *cr,
 
 static void
 draw_divider_line (cairo_t *cr, VirtualLocation virt_loc,
-                   int div_row, int n_phys_rows, cairo_rgb *fg_color,
+                   int div_row, int n_phys_rows, GdkRGBA *fg_color,
                    double x, double y, double width, double height)
 {
     double offset;
@@ -389,8 +389,7 @@ draw_cell (GnucashSheet *sheet,
     PangoContext *context;
     PangoFontDescription *font;
     PangoRectangle logical_rect;
-    GdkColor *gdk_bg_color, *gdk_fg_color;
-    cairo_rgb bg_color, fg_color;
+    GdkRGBA *bg_color, *fg_color;
     GdkRectangle rect;
     gboolean hatching;
     guint32 argb, color_type;
@@ -400,7 +399,7 @@ draw_cell (GnucashSheet *sheet,
     {
         color_type = gnc_table_get_gtkrc_bg_color (table, virt_loc,
                      &hatching);
-        gdk_bg_color = get_gtkrc_color(sheet, color_type);
+        bg_color = get_gtkrc_color(sheet, color_type);
     }
     else
     {
@@ -412,18 +411,17 @@ draw_cell (GnucashSheet *sheet,
         {
             argb = dec_intensity_10percent(argb);
         }
-        gdk_bg_color = gnucash_color_argb_to_gdk (argb);
+        bg_color = gnucash_color_argb_to_gdk (argb);
     }
-    to_cairo_rgb(gdk_bg_color, &bg_color);
 
-    cairo_set_source_rgb (cr, bg_color.red, bg_color.green, bg_color.blue);
+    cairo_set_source_rgb (cr, bg_color->red, bg_color->green, bg_color->blue);
     cairo_rectangle (cr, x, y, width, height);
     cairo_fill (cr);
 
     get_cell_borders (sheet, virt_loc, &borders);
 
     /* top */
-    draw_cell_line (cr, &bg_color,
+    draw_cell_line (cr, bg_color,
                     (borders.top >= borders.left ? x : x + 1.0),
                     y + 0.5,
                     (borders.top >= borders.right ?
@@ -432,7 +430,7 @@ draw_cell (GnucashSheet *sheet,
                     borders.top);
 
     /* bottom */
-    draw_cell_line (cr, &bg_color,
+    draw_cell_line (cr, bg_color,
                     (borders.bottom >= borders.left ? x : x + 1),
                     y + height + 0.5,
                     (borders.bottom >= borders.right ?
@@ -441,7 +439,7 @@ draw_cell (GnucashSheet *sheet,
                     borders.bottom);
 
     /* left */
-    draw_cell_line (cr, &bg_color,
+    draw_cell_line (cr, bg_color,
                     x + 0.5,
                     (borders.left > borders.top ? y : y + 1),
                     x + 0.5,
@@ -450,7 +448,7 @@ draw_cell (GnucashSheet *sheet,
                     borders.left);
 
     /* right */
-    draw_cell_line (cr, &bg_color,
+    draw_cell_line (cr, bg_color,
                     x + width + 0.5,
                     (borders.right > borders.top ? y : y + 1),
                     x + width + 0.5,
@@ -463,21 +461,21 @@ draw_cell (GnucashSheet *sheet,
                                x, y, width, height);
 
     /* dividing line upper (red) */
-    to_cairo_rgb (&gn_red, &fg_color);
+    fg_color = &gn_red;
     draw_divider_line(cr, virt_loc,
                            table->model->dividing_row_upper, block->style->nrows,
-                           &fg_color, x, y, width, height);
+                           fg_color, x, y, width, height);
 
     /* dividing line (blue) */
-    to_cairo_rgb (&gn_blue, &fg_color);
+    fg_color = &gn_blue;
     draw_divider_line(cr, virt_loc,
                            table->model->dividing_row, block->style->nrows,
-                           &fg_color, x, y, width, height);
+                           fg_color, x, y, width, height);
 
     /* dividing line lower (blue) */
     draw_divider_line(cr, virt_loc,
                            table->model->dividing_row_lower, block->style->nrows,
-                           &fg_color, x, y, width, height);
+                           fg_color, x, y, width, height);
 
     text = gnc_table_get_entry (table, virt_loc);
 
@@ -490,7 +488,7 @@ draw_cell (GnucashSheet *sheet,
     if (sheet->use_theme_colors)
     {
         color_type = gnc_table_get_gtkrc_fg_color (table, virt_loc);
-        gdk_fg_color = get_gtkrc_color(sheet, color_type);
+        fg_color = get_gtkrc_color(sheet, color_type);
     }
     else
     {
@@ -504,10 +502,8 @@ draw_cell (GnucashSheet *sheet,
             argb = inc_intensity_10percent(argb);
         }
 #endif
-        gdk_fg_color = gnucash_color_argb_to_gdk (argb);
+        fg_color = gnucash_color_argb_to_gdk (argb);
     }
-
-    to_cairo_rgb (gdk_fg_color, &fg_color);
 
     /* If this is the currently open transaction and
        there is no text in this cell */
@@ -518,12 +514,12 @@ draw_cell (GnucashSheet *sheet,
         text = gnc_table_get_label (table, virt_loc);
         if ((text == NULL) || (*text == '\0'))
             goto exit;
-        to_cairo_rgb (&gn_light_gray, &fg_color);
+        fg_color = &gn_light_gray;
         pango_layout_set_text (layout, text, strlen (text));
         pango_font_description_set_style (font, PANGO_STYLE_ITALIC);
         pango_context_set_font_description (context, font);
     }
-    cairo_set_source_rgb (cr, fg_color.red, fg_color.green, fg_color.blue);
+    cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
 
     if ((text == NULL) || (*text == '\0'))
     {
@@ -575,6 +571,12 @@ exit:
     pango_context_set_font_description (context, font);
     pango_font_description_free (font);
     g_object_unref (layout);
+
+    if (sheet->use_theme_colors)
+    {
+        gdk_rgba_free(bg_color);
+        gdk_rgba_free(fg_color);
+    }
 }
 
 static void
@@ -680,9 +682,9 @@ void
 gnucash_sheet_draw_cursor (GnucashCursor *cursor, cairo_t *cr)
 {
     GnucashCursorCell *cc = &(cursor->cell);
-    cairo_rgb fg_color;
+    GdkRGBA *fg_color;
 
-    to_cairo_rgb(&gn_black, &fg_color);
+    fg_color = &gn_black;
 
     /* draw the rectangle around the entire active
      *    virtual *row */
@@ -690,13 +692,13 @@ gnucash_sheet_draw_cursor (GnucashCursor *cursor, cairo_t *cr)
                      cursor->w - 1.0, cursor->h - 1.0);
     cairo_move_to (cr, cursor->x, cursor->y + cursor->h - 1.5);
     cairo_rel_line_to (cr, cursor->w, 0);
-    cairo_set_source_rgb (cr, fg_color.red, fg_color.green, fg_color.blue);
+    cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
     cairo_set_line_width (cr, 1.0);
     cairo_stroke (cr);
 
     cairo_rectangle (cr, cc->x + 0.5, cursor->y + cc->y + 0.5,
                      cc->w - 1.0, cc->h - 1.0);
-    cairo_set_source_rgb (cr, fg_color.red, fg_color.green, fg_color.blue);
+    cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
     cairo_set_line_width (cr, 1.0);
     cairo_stroke (cr);
 }

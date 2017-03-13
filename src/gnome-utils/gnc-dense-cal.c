@@ -346,39 +346,33 @@ gnc_dense_cal_init(GncDenseCal *dcal)
         gtk_widget_realize(GTK_WIDGET(dcal->transPopup));
     }
 
-    gdk_color_parse(MONTH_THIS_COLOR,  &dcal->weekColors[MONTH_THIS]);
-    gdk_color_parse(MONTH_THAT_COLOR,  &dcal->weekColors[MONTH_THAT]);
+    gdk_rgba_parse(&dcal->weekColors[MONTH_THIS], MONTH_THIS_COLOR);
+    gdk_rgba_parse(&dcal->weekColors[MONTH_THAT], MONTH_THAT_COLOR);
 
     /* success array must be as big as number of colors */
     g_assert(MAX_COLORS == (sizeof(colorAllocSuccess)/sizeof(gboolean)));
-
-    if (gdk_colormap_alloc_colors(gdk_colormap_get_system(),
-                                  dcal->weekColors,
-                                  MAX_COLORS, TRUE, TRUE,
-                                  colorAllocSuccess) > 0)
-    {
-        g_error("error allocating colors");
-    }
 
     /* Deal with the various label sizes. */
     {
         gint i;
         gint maxWidth, maxHeight;
-        GtkStyle *style;
         PangoLayout *layout;
         PangoFontDescription *font_desc;
         gint font_size;
         gint font_size_reduction_units = 1;
+        GtkStyleContext *stylectxt;
+        GtkStateFlags state_flags;
 
         layout = gtk_widget_create_pango_layout(GTK_WIDGET(dcal), NULL);
 
-        style = gtk_widget_get_style(GTK_WIDGET(dcal));
-
-        font_desc = pango_font_description_copy(style->font_desc);
+        stylectxt = gtk_widget_get_style_context (GTK_WIDGET(dcal));
+        state_flags = gtk_style_context_get_state (stylectxt);
+        gtk_style_context_get (stylectxt, state_flags,
+                               GTK_STYLE_PROPERTY_FONT, &font_desc, NULL);
         font_size = pango_font_description_get_size(font_desc);
         font_size -= font_size_reduction_units * PANGO_SCALE;
         pango_font_description_set_size(font_desc, font_size);
-        gtk_widget_modify_font(GTK_WIDGET(dcal), font_desc);
+        gtk_widget_override_font(GTK_WIDGET(dcal), font_desc);
         pango_font_description_free(font_desc);
 
         maxWidth = maxHeight = 0;
@@ -707,10 +701,6 @@ gnc_dense_cal_realize (GtkWidget *widget, gpointer user_data)
 
     recompute_x_y_scales(dcal);
     gdc_reconfig(dcal);
-
-    gtk_style_set_background(gtk_widget_get_style (widget),
-                             gtk_widget_get_window (widget),
-                             GTK_STATE_ACTIVE);
 }
 
 static void
@@ -887,8 +877,10 @@ static void
 gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
 {
     GtkWidget *widget;
+    GtkStyleContext *stylectxt;
+    GtkStateFlags state_flags;
     GtkAllocation alloc;
-    GdkColor color;
+    GdkRGBA color;
     gint i;
     int maxWidth;
     PangoLayout *layout;
@@ -908,10 +900,10 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
     LOG_AND_RESET(timer, "create_pango_layout");
 
     gtk_widget_get_allocation (GTK_WIDGET(dcal->cal_drawing_area), &alloc);
-    color = gtk_widget_get_style (widget)->white;
-    cairo_set_source_rgb (cr, color.red   / 65535.0,
-                              color.green / 65535.0,
-                              color.blue  / 65535.0);
+    stylectxt = gtk_widget_get_style_context (widget);
+    state_flags = gtk_style_context_get_state (stylectxt);
+    gtk_style_context_get_background_color (stylectxt, state_flags, &color);
+    cairo_set_source_rgb (cr, color.red, color.green, color.blue);
     cairo_rectangle (cr, 0, 0,
                      cairo_image_surface_get_width (dcal->surface),
                      cairo_image_surface_get_height (dcal->surface));
@@ -942,9 +934,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
             {
                 rect = (GdkRectangle*)mcListIter->data;
                 color = dcal->weekColors[ i % 2 ];
-                cairo_set_source_rgb (cr, color.red   / 65535.0,
-                              color.green / 65535.0,
-                              color.blue  / 65535.0);
+                cairo_set_source_rgb (cr, color.red, color.green, color.blue);
                 cairo_rectangle (cr, rect->x, rect->y,
                                      rect->width, rect->height);
                 cairo_fill (cr);
@@ -960,11 +950,8 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
         int i;
         int x1, x2, y1, y2;
 
-        gdk_color_parse(MARK_COLOR, &color);
-        gdk_colormap_alloc_color(gdk_colormap_get_system(), &color, TRUE, TRUE);
-        cairo_set_source_rgb (cr, color.red   / 65535.0,
-                                  color.green / 65535.0,
-                                  color.blue  / 65535.0);
+        gdk_rgba_parse(&color, MARK_COLOR);
+        cairo_set_source_rgb (cr, color.red, color.green, color.blue);
 
         for (i = 0; i < dcal->numMarks; i++)
         {
@@ -1000,11 +987,9 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
         h = col_height(dcal);
 
         /* draw the outside border [inside the month labels] */
-        color = gtk_widget_get_style (widget)->fg[gtk_widget_get_state (widget)];
+        gtk_style_context_get_border_color (stylectxt, state_flags, &color);
+        cairo_set_source_rgb (cr, color.red, color.green, color.blue);
         cairo_set_line_width (cr, 1);
-        cairo_set_source_rgb (cr, color.red   / 65535.0,
-                                  color.green / 65535.0,
-                                  color.blue  / 65535.0);
         cairo_rectangle (cr, x + 0.5, y + 0.5, w, h);
         cairo_stroke (cr);
 
@@ -1048,10 +1033,8 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
                                  - (day_label_width / 2);
                 label_y_offset = y - dcal->dayLabelHeight;
                 pango_layout_set_text(layout, day_label_str, -1);
-                color = gtk_widget_get_style (widget)->text[gtk_widget_get_state (widget)];
-                cairo_set_source_rgb (cr, color.red   / 65535.0,
-                                          color.green / 65535.0,
-                                          color.blue  / 65535.0);
+                gtk_style_context_get_color (stylectxt, state_flags, &color);
+                cairo_set_source_rgb (cr, color.red, color.green, color.blue);
                 cairo_move_to (cr, label_x_offset, label_y_offset);
                 pango_cairo_show_layout (cr, layout);
             }

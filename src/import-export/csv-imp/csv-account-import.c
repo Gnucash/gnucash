@@ -179,7 +179,7 @@ csv_account_import (CsvImportInfo *info)
     QofBook       *book;
     Account       *acc, *parent, *root;
     gboolean       valid;
-    GdkColor       testcolor;
+    GdkRGBA       testcolor;
     GtkTreeIter    iter;
     gchar         *type, *full_name, *name, *code, *description, *color;
     gchar         *notes, *commoditym, *commodityn, *hidden, *tax, *place_holder;
@@ -271,7 +271,7 @@ csv_account_import (CsvImportInfo *info)
 
                     if (g_strcmp0 (color, "") != 0)
                     {
-                        if (gdk_color_parse (color, &testcolor))
+                        if (gdk_rgba_parse (&testcolor, color))
                             xaccAccountSetColor (acc, color);
                     }
 
@@ -311,7 +311,7 @@ csv_account_import (CsvImportInfo *info)
             info->num_updates = info->num_updates + 1;
             if (g_strcmp0 (color, "") != 0)
             {
-                if (gdk_color_parse (color, &testcolor))
+                if (gdk_rgba_parse (&testcolor, color))
                     xaccAccountSetColor (acc, color);
             }
 

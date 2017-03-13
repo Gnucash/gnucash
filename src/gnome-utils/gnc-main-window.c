@@ -35,6 +35,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <gdk/gdk.h>
 #include <gdk/gdkkeysyms.h>
 
 #include "gnc-plugin.h"
@@ -2259,7 +2260,7 @@ main_window_update_page_color (GncPluginPage *page,
     GncMainWindow *window;
     GncMainWindowPrivate *priv;
     GtkWidget *tab_widget;
-    GdkColor tab_color;
+    GdkRGBA tab_color;
     gchar *color_string = NULL;
     gboolean want_color = FALSE;
 
@@ -2281,7 +2282,7 @@ main_window_update_page_color (GncPluginPage *page,
     main_window_find_tab_widget (window, page, &tab_widget);
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
-    if (want_color && gdk_color_parse(color_string, &tab_color) && priv->show_color_tabs)
+    if (want_color && gdk_rgba_parse(&tab_color, color_string) && priv->show_color_tabs)
     {
         if (!GTK_IS_EVENT_BOX (tab_widget))
         {
@@ -2293,8 +2294,8 @@ main_window_update_page_color (GncPluginPage *page,
             g_object_unref (tab_widget);
             tab_widget = event_box;
         }
-        gtk_widget_modify_bg(tab_widget, GTK_STATE_NORMAL, &tab_color);
-        gtk_widget_modify_bg(tab_widget, GTK_STATE_ACTIVE, &tab_color);
+        gtk_widget_override_background_color (tab_widget, GTK_STATE_NORMAL, &tab_color);
+        gtk_widget_override_background_color (tab_widget, GTK_STATE_ACTIVE, &tab_color);
     }
     else
     {
@@ -2856,7 +2857,6 @@ gnc_main_window_open_page (GncMainWindow *window,
     GtkWidget *image;
     GList *tmp;
     gint width;
-    GdkColor tab_color;
 
     ENTER("window %p, page %p", window, page);
     if (window)

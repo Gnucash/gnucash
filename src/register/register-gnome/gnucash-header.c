@@ -66,8 +66,7 @@ gnc_header_draw_offscreen (GncHeader *header)
     Table *table = header->sheet->table;
     VirtualLocation virt_loc;
     VirtualCell *vcell;
-    GdkColor *gdk_bg_col, *gdk_fg_col;
-    cairo_rgb fg_color, bg_color;
+    GdkRGBA *fg_color, *bg_color;
     int row_offset;
     CellBlock *cb;
     int i;
@@ -82,21 +81,18 @@ gnc_header_draw_offscreen (GncHeader *header)
     {
         guint32 color_type;
         color_type = gnc_table_get_gtkrc_bg_color (table, virt_loc, NULL);
-        gdk_bg_col = get_gtkrc_color(header->sheet, color_type);
+        bg_color = get_gtkrc_color(header->sheet, color_type);
         color_type = gnc_table_get_gtkrc_fg_color (table, virt_loc);
-        gdk_fg_col = get_gtkrc_color(header->sheet, color_type);
+        fg_color = get_gtkrc_color(header->sheet, color_type);
     }
     else
     {
         guint32 argb;
         argb = gnc_table_get_bg_color (table, virt_loc, NULL);
-        gdk_bg_col = gnucash_color_argb_to_gdk (argb);
+        bg_color = gnucash_color_argb_to_gdk (argb);
         argb = gnc_table_get_fg_color (table, virt_loc);
-        gdk_fg_col = gnucash_color_argb_to_gdk (argb);
+        fg_color = gnucash_color_argb_to_gdk (argb);
     }
-
-    to_cairo_rgb(gdk_fg_col, &fg_color);
-    to_cairo_rgb(gdk_bg_col, &bg_color);
 
     if (header->surface)
         cairo_surface_destroy (header->surface);
@@ -106,9 +102,9 @@ gnc_header_draw_offscreen (GncHeader *header)
 
     cr = cairo_create (header->surface);
     cairo_rectangle (cr, 0.5, 0.5, header->width - 1.0, header->height - 1.0);
-    cairo_set_source_rgb (cr, bg_color.red, bg_color.green, bg_color.blue);
+    cairo_set_source_rgb (cr, bg_color->red, bg_color->green, bg_color->blue);
     cairo_fill_preserve (cr);
-    cairo_set_source_rgb (cr, fg_color.red, fg_color.green, fg_color.blue);
+    cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
     cairo_set_line_width (cr, 1.0);
     cairo_stroke (cr);
 //    cairo_set_line_width (cr, 1.0);
@@ -200,6 +196,11 @@ gnc_header_draw_offscreen (GncHeader *header)
         row_offset += h;
     }
 
+    if (header->sheet->use_theme_colors)
+    {
+        gdk_rgba_free(bg_color);
+        gdk_rgba_free(fg_color);
+    }
     cairo_destroy (cr);
 }
 

@@ -57,9 +57,9 @@ struct _main_matcher_info
     GtkWidget *assistant;
     GtkTreeView *view;
     GNCImportSettings *user_settings;
-    GdkColor color_back_red;
-    GdkColor color_back_green;
-    GdkColor color_back_yellow;
+    GdkRGBA color_back_red;
+    GdkRGBA color_back_green;
+    GdkRGBA color_back_yellow;
     int selected_row;
     GNCTransactionProcessedCB transaction_processed_cb;
     gpointer user_data;
@@ -215,11 +215,14 @@ on_matcher_help_clicked (GtkButton *button, gpointer user_data)
     gnc_builder_add_from_file (builder, "dialog-import.glade", "matcher_help");
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "red"));
-    gtk_widget_modify_bg(box, GTK_STATE_NORMAL, &info->color_back_red);
+    gtk_widget_override_background_color(box, GTK_STATE_FLAG_NORMAL,
+                                         &info->color_back_red);
     box = GTK_WIDGET(gtk_builder_get_object (builder, "yellow"));
-    gtk_widget_modify_bg(box, GTK_STATE_NORMAL, &info->color_back_yellow);
+    gtk_widget_override_background_color(box, GTK_STATE_FLAG_NORMAL,
+                                         &info->color_back_yellow);
     box = GTK_WIDGET(gtk_builder_get_object (builder, "green"));
-    gtk_widget_modify_bg(box, GTK_STATE_NORMAL, &info->color_back_green);
+    gtk_widget_override_background_color(box, GTK_STATE_FLAG_NORMAL,
+                                         &info->color_back_green);
 
     help_dialog = GTK_WIDGET(gtk_builder_get_object (builder, "matcher_help"));
     gtk_window_set_transient_for(GTK_WINDOW(help_dialog),
@@ -546,9 +549,9 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     			  GTK_WINDOW (parent));*/
 
     /*Initialise the colors */
-    gdk_color_parse(COLOR_RED,    &info->color_back_red);
-    gdk_color_parse(COLOR_YELLOW, &info->color_back_yellow);
-    gdk_color_parse(COLOR_GREEN,  &info->color_back_green);
+    gdk_rgba_parse(&info->color_back_red,    COLOR_RED);
+    gdk_rgba_parse(&info->color_back_yellow, COLOR_YELLOW);
+    gdk_rgba_parse(&info->color_back_green,  COLOR_GREEN);
 
     if (heading)
         gtk_label_set_text (GTK_LABEL (heading_label), heading);
@@ -608,9 +611,9 @@ GNCImportMainMatcher * gnc_gen_trans_assist_new (GtkWidget *parent,
     g_assert (heading_label != NULL);
 
     /*Initialise the colors */
-    gdk_color_parse(COLOR_RED,    &info->color_back_red);
-    gdk_color_parse(COLOR_YELLOW, &info->color_back_yellow);
-    gdk_color_parse(COLOR_GREEN,  &info->color_back_green);
+    gdk_rgba_parse(&info->color_back_red,    COLOR_RED);
+    gdk_rgba_parse(&info->color_back_yellow, COLOR_YELLOW);
+    gdk_rgba_parse(&info->color_back_green,  COLOR_GREEN);
 
     if (heading)
         gtk_label_set_text (GTK_LABEL (heading_label), heading);
