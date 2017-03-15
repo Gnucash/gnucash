@@ -211,10 +211,20 @@ TEST(gncnumeric_stream, output_stream)
     GncNumeric rational_string(123, 456);
     output << rational_string;
     EXPECT_EQ("123/456", output.str());
-    output.imbue(std::locale("fr_FR.utf8"));
-    output.str("");
-    output << simple_int;
-    EXPECT_EQ("123 456", output.str());
+    try
+    {
+        output.imbue(std::locale("fr_FR.utf8"));
+        output.str("");
+        output << simple_int;
+        EXPECT_EQ("123 456", output.str());
+    }
+    catch (std::runtime_error)
+    {
+        output.imbue(std::locale("fr_FR"));
+        output.str("");
+        output << simple_int;
+        EXPECT_EQ("123456", output.str());
+    }
     output.str("");
     output << decimal_string;
     EXPECT_EQ("123,456", output.str());
