@@ -173,7 +173,7 @@ zone_from_regtzi (const RegTZI& regtzi, time_zone_names names)
 	}
 	catch (boost::gregorian::bad_month& err)
 	{
-	    PWARN("Caught Bad Month Exception. Daylight Bias: %d  "
+	    PWARN("Caught Bad Month Exception. Daylight Bias: %ld  "
 		  "Standard Month : %d  Daylight Month: %d",
 		  regtzi.DaylightBias, regtzi.StandardDate.wMonth,
 		  regtzi.DaylightDate.wMonth);

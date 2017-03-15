@@ -168,7 +168,9 @@ QofSessionImpl::destroy_backend () noexcept
 void
 QofSessionImpl::load_backend (std::string access_method) noexcept
 {
-    ENTER (" list=%lu", s_providers.size ());
+    std::ostringstream s;
+    s << " list=" << s_providers.size();
+    ENTER ("%s", s.str().c_str());
     for (auto const & prov : s_providers)
     {
         if (!boost::iequals (access_method, prov->access_method))

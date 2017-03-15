@@ -70,7 +70,7 @@ AM_PROG_CC_C_O
 AC_GNU_SOURCE
 AC_PROG_INTLTOOL
 # Ensure the compiler supports C++ 11:
-AX_CXX_COMPILE_STDCXX_11(noext)
+AX_CXX_COMPILE_STDCXX_11(ext)
 AC_PROG_CC_C99
 
 AC_SUBST(GNUCASH_MAJOR_VERSION)
@@ -196,7 +196,7 @@ oldcflags="$CFLAGS"
 CFLAGS=
 AC_LANG_PUSH([C++])
 oldcxxflags="$CXXFLAGS"
-CXXFLAGS="-Werror -std=c++11 $BOOST_CPPFLAGS"
+CXXFLAGS="-Werror -std=gnu++11 $BOOST_CPPFLAGS"
 AC_MSG_CHECKING([boost/date_time/local_time/custom_time_zone.hpp])
 AC_COMPILE_IFELSE([
     AC_LANG_SOURCE([
@@ -1634,6 +1634,13 @@ then
 else
   warnFLAGS=none
 fi
+# Workaround for bug in gtest on mingw, see
+# https://github.com/google/googletest/issues/893
+# https://github.com/google/googletest/issues/920
+case $host_os in
+    mingw*)
+      AM_CXXFLAGS="${AM_CXXFLAGS} -DWINVER=0x0500 -D_EMULATE_GLIBC=0"
+esac
 AC_SUBST(AM_CFLAGS)
 AC_SUBST(AM_CXXFLAGS)
 AC_MSG_RESULT($warnFLAGS)
