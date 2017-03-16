@@ -334,8 +334,15 @@ AM_BINRELOC
 ### Glib checks.
 
 # We require glib >= 2.40
-PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.40 gthread-2.0
-                        gobject-2.0 gmodule-2.0)
+# 2.46 deprecates g_settings_list_keys
+PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.46 gio-2.0 gthread-2.0 gobject-2.0 gmodule-2.0,
+      [
+        AC_DEFINE([HAVE_GLIB_2_46], [1], [Configure g_settings_list_keys deprecation])
+      ],
+      [
+        PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.40 gio-2.0 gthread-2.0
+                                gobject-2.0 gmodule-2.0)
+      ])
 
 AC_CHECK_HEADERS(dirent.h dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
 
