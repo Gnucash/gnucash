@@ -69,9 +69,13 @@ AC_PROG_CC
 AM_PROG_CC_C_O
 AC_GNU_SOURCE
 AC_PROG_INTLTOOL
-# Ensure the compiler supports C++ 11:
+# Ensure the C++ compiler supports C++ 11:
 AX_CXX_COMPILE_STDCXX_11(ext)
-AC_PROG_CC_C99
+# Ensure the C compiler supports C11
+AX_CHECK_COMPILE_FLAG([-std=gnu11],
+                      [AX_APPEND_FLAG([-std=gnu11])],
+                      [AC_MSG_ERROR([The compiler doesn't support the C11 (gnu11) standard.])
+                      ])
 
 AC_SUBST(GNUCASH_MAJOR_VERSION)
 AC_SUBST(GNUCASH_MINOR_VERSION)
@@ -329,46 +333,10 @@ AM_BINRELOC
 ### --------------------------------------------------------------------------
 ### Glib checks.
 
-# We require glib >= 2.28, released together with gtk-2.24;
-# We first check for other versions due to required C standard and deprecations.
-# 2.44 requires C11.
-# 2.36 deprecated g_type_init
-# 2.32 deprecated some gthread functions
-PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.44 gio-2.0 >= 2.25 gthread-2.0
-                        gobject-2.0 gmodule-2.0,
-[
-  AC_DEFINE([HAVE_GLIB_2_38], [1], [Configure leading quote around assertions])
-  AC_DEFINE([HAVE_GLIB_2_36], [1], [Configure g_type_init deprecation])
-  AC_DEFINE([HAVE_GLIB_2_32], [1], [Configure gthread deprecations])
-],
-[
-  PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.38 gio-2.0 >= 2.25 gthread-2.0
-                          gobject-2.0 gmodule-2.0,
-  [
-    AC_DEFINE([HAVE_GLIB_2_38], [1], [Configure leading quote around assertions])
-    AC_DEFINE([HAVE_GLIB_2_36], [1], [Configure g_type_init deprecation])
-    AC_DEFINE([HAVE_GLIB_2_32], [1], [Configure gthread deprecations])
-  ],
-  [
-    PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.36 gio-2.0 >= 2.25 gthread-2.0
-			    gobject-2.0 gmodule-2.0,
-   [
-      AC_DEFINE([HAVE_GLIB_2_36], [1], [Configure g_type_init deprecation])
-      AC_DEFINE([HAVE_GLIB_2_32], [1], [Configure gthread deprecations])
-   ],
-   [
-      PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.32 gio-2.0 >= 2.25 gthread-2.0
-                              gobject-2.0 gmodule-2.0,
-      [
-        AC_DEFINE([HAVE_GLIB_2_32], [1], [Configure gthread deprecations])
-      ],
-      [
-	PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.28 gio-2.0 >= 2.25 gthread-2.0
-	                        gobject-2.0 gmodule-2.0)
-      ])
-    ])
-  ])
-])
+# We require glib >= 2.40
+PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.40 gthread-2.0
+                        gobject-2.0 gmodule-2.0)
+
 AC_CHECK_HEADERS(dirent.h dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
 
 GLIB_GSETTINGS
@@ -393,18 +361,8 @@ AC_TRY_RUN([
 ],[
   AC_MSG_RESULT(assuming yes)
 ])
-dnl Check for redefinition of typedef GListStore, briefly in GLib 2.44.
-dnl Redefinition of typdefs is a C11 feature.
-dnl Note that We use gnu99 or gnu11 because strdup is a gnu extension in gcc.
-CFLAGS="${CFLAGS} -Werror"
-AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-#include <gio/gio.h>
-])], [ac_cv_cstd=gnu99], [ac_cv_cstd=gnu11])
 CFLAGS="$GNC_OLDCFLAGS"
 LDFLAGS="$GNC_OLDLDFLAGS"
-dnl First remove any existing -std= setting from CFLAGS then add the one we want.
-CFLAGS=`echo ${CFLAGS} | sed -E -e "s,-std=[[a-z0-9]]+,,g"`
-CFLAGS="${CFLAGS} -std=${ac_cv_cstd}"
 
 # Gnucash replaced dlopen/dlsym by the g_module functions; dlsym
 # is needed optionally in one place for BSD linkers, though.

@@ -1109,17 +1109,6 @@ static const gchar *
 iter_to_string (GtkTreeIter *iter)
 {
 #ifdef G_THREADS_ENABLED
-#ifndef HAVE_GLIB_2_32
-    static GStaticPrivate gtmits_buffer_key = G_STATIC_PRIVATE_INIT;
-    gchar *string;
-
-    string = g_static_private_get (&gtmits_buffer_key);
-    if (string == NULL)
-    {
-        string = g_malloc (ITER_STRING_LEN + 1);
-        g_static_private_set (&gtmits_buffer_key, string, g_free);
-    }
-#else
     static GPrivate gtmits_buffer_key = G_PRIVATE_INIT (g_free);
     gchar *string;
 
@@ -1129,7 +1118,6 @@ iter_to_string (GtkTreeIter *iter)
         string = g_malloc (ITER_STRING_LEN + 1);
         g_private_set (&gtmits_buffer_key, string);
     }
-#endif
 #else
     static char string[ITER_STRING_LEN + 1];
 #endif

@@ -258,9 +258,6 @@ static gboolean qof_util_str_equal(gconstpointer v, gconstpointer v2)
 void
 qof_init (void)
 {
-#ifndef HAVE_GLIB_2_36
-    g_type_init(); /* Automatic as of GLib 2.36 */
-#endif
     qof_log_init();
     qof_string_cache_init();
     qof_object_initialize ();

@@ -163,7 +163,7 @@ IF (NOT PKG_CONFIG_FOUND)
 ENDIF (NOT PKG_CONFIG_FOUND)
 
 # glib et al.
-GNC_PKG_CHECK_MODULES (GLIB2 REQUIRED glib-2.0>=2.20)
+GNC_PKG_CHECK_MODULES (GLIB2 REQUIRED glib-2.0>=2.40)
 GNC_PKG_CHECK_MODULES (GOBJECT REQUIRED gobject-2.0>=2.20)
 GNC_PKG_CHECK_MODULES (GMODULE REQUIRED gmodule-2.0>=2.20)
 GNC_PKG_CHECK_MODULES (GTHREAD REQUIRED gthread-2.0>=2.20)
@@ -452,11 +452,11 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")  # FIXME: should be -std=
 
 IF (UNIX)
   SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wdeclaration-after-statement -Wno-pointer-sign -Wall -Wunused -Wmissing-prototypes -Wmissing-declarations  -Wno-unused")
-  SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-error=deprecated-declarations -std=gnu99")
+  SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-error=deprecated-declarations -std=gnu11")
   SET( CMAKE_C_FLAGS_RELEASE "-O3 ${CMAKE_C_FLAGS} -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2")
 ENDIF (UNIX)
 IF (MINGW)
-  SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wdeclaration-after-statement -Wno-pointer-sign -Wall -Wunused -Wmissing-prototypes -Wmissing-declarations  -Wno-unused -std=gnu99")
+  SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wdeclaration-after-statement -Wno-pointer-sign -Wall -Wunused -Wmissing-prototypes -Wmissing-declarations  -Wno-unused -std=gnu11")
   SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWINVER=0x0500") # Workaround for bug in gtest on mingw, see https://github.com/google/googletest/issues/893
 ENDIF (MINGW)
 IF (APPLE)

@@ -36,11 +36,6 @@ extern "C"
 #include "../gnc-event.h"
 #include <qof.h>
 
-#ifdef HAVE_GLIB_2_38
-#define _Q "'"
-#else
-#define _Q "`"
-#endif
 #if defined(__clang__) && (__clang_major__ == 5 || (__clang_major__ == 3 && __clang_minor__ < 5))
 #define USE_CLANG_FUNC_SIG 1
 #endif
@@ -423,7 +418,7 @@ test_gnc_transaction_set_get_property (Fixture *fixture, gconstpointer pData)
     char buff[80];
     strftime (buff, 80, "%a %b %d %H:%M:%S %Y", localtime(&secs));
 
-    auto msg1 = "g_object_set_valist: object class " _Q "Transaction' has no property named " _Q "bogus'";
+    auto msg1 = "g_object_set_valist: object class 'Transaction' has no property named 'bogus'";
     auto msg2 = g_strdup_printf ("[xaccTransSetDateInternal] addr=%p set date to %" G_GUINT64_FORMAT ".%09ld %s\n",
                                    txn, now.tv_sec, now.tv_nsec, buff);
 
@@ -463,7 +458,7 @@ test_gnc_transaction_set_get_property (Fixture *fixture, gconstpointer pData)
     g_assert_cmpint (check2->hits, ==, 2);
 
     g_free (check1->msg);
-    check1->msg = g_strdup ("g_object_get_valist: object class " _Q "Transaction' has no property named " _Q "bogus'");
+    check1->msg = g_strdup ("g_object_get_valist: object class 'Transaction' has no property named 'bogus'");
     g_object_get (G_OBJECT (txn),
                   "num", &t_num,
                   "description", &t_desc,
@@ -501,7 +496,7 @@ test_xaccMallocTransaction (Fixture *fixture, gconstpointer pData)
 #else
 #define _func "xaccMallocTransaction"
 #endif
-    auto msg = _func ": assertion " _Q "book' failed";
+    auto msg = _func ": assertion 'book' failed";
 #undef _func
     auto logdomain = "gnc.engine";
     auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
@@ -1288,7 +1283,7 @@ test_xaccTransGetAccountBalance (Fixture *fixture, gconstpointer pData)
 #else
 #define _func "xaccTransGetAccountBalance"
 #endif
-    auto msg1 = _func ": assertion " _Q "account && trans' failed";
+    auto msg1 = _func ": assertion 'account && trans' failed";
 #undef _func
     auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     auto check = test_error_struct_new ("gnc.engine", loglevel, msg1);

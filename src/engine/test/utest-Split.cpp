@@ -37,11 +37,6 @@ extern "C"
 #include <gnc-event.h>
 #include <qofinstance-p.h>
 
-#ifdef HAVE_GLIB_2_38
-#define _Q "'"
-#else
-#define _Q "`"
-#endif
 #if defined(__clang__) && (__clang_major__ == 5 || (__clang_major__ == 3 && __clang_minor__ < 5))
 #define USE_CLANG_FUNC_SIG 1
 #endif
@@ -1290,7 +1285,7 @@ test_get_corr_account_split (Fixture *fixture, gconstpointer pData)
 #else
 #define _func "get_corr_account_split"
 #endif
-    gchar *msg = _func ": assertion " _Q "sa' failed";
+    gchar *msg = _func ": assertion 'sa' failed";
 #undef _func
     GLogLevelFlags loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     TestErrorStruct *check = test_error_struct_new ("gnc.engine",

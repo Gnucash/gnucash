@@ -35,12 +35,6 @@ extern "C" void test_suite_qofinstance ( void );
 static gchar* error_message;
 static gboolean is_called;
 
-#ifdef HAVE_GLIB_2_38
-#define _Q "'"
-#else
-#define _Q "`"
-#endif
-
 static struct
 {
     QofInstance *m_inst = nullptr;
@@ -201,10 +195,10 @@ test_instance_new_destroy( void )
     QofInstanceClass *klass;
     /* test var */
     Timespec *timespec_priv;
-    const char *msg1 = "qof_instance_get_collection: assertion " _Q "QOF_IS_INSTANCE(ptr)' failed";
-    const char *msg2 = "qof_instance_get_editlevel: assertion " _Q "QOF_IS_INSTANCE(ptr)' failed";
-    const char *msg3 = "qof_instance_get_destroying: assertion " _Q "QOF_IS_INSTANCE(ptr)' failed";
-    const char *msg4 = "qof_instance_get_dirty_flag: assertion " _Q "QOF_IS_INSTANCE(ptr)' failed";
+    const char *msg1 = "qof_instance_get_collection: assertion 'QOF_IS_INSTANCE(ptr)' failed";
+    const char *msg2 = "qof_instance_get_editlevel: assertion 'QOF_IS_INSTANCE(ptr)' failed";
+    const char *msg3 = "qof_instance_get_destroying: assertion 'QOF_IS_INSTANCE(ptr)' failed";
+    const char *msg4 = "qof_instance_get_dirty_flag: assertion 'QOF_IS_INSTANCE(ptr)' failed";
     const char *log_domain = "qof";
     auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     auto check = test_error_struct_new(log_domain, loglevel, msg1);
@@ -244,25 +238,25 @@ test_instance_new_destroy( void )
     auto hdlr = g_log_set_handler (log_domain, loglevel,
                                    (GLogFunc)test_checked_handler, check);
     g_assert( qof_instance_get_collection( inst ) == NULL );
-    g_assert( g_strrstr( error_message, "assertion " _Q "QOF_IS_INSTANCE(ptr)' failed" ) != NULL );
+    g_assert( g_strrstr( error_message, "assertion 'QOF_IS_INSTANCE(ptr)' failed" ) != NULL );
     g_free( error_message );
 
     g_free(check->msg);
     check->msg = g_strdup(msg2);
     g_assert_cmpint( qof_instance_get_editlevel( inst ), == , 0 );
-    g_assert( g_strrstr( error_message, "assertion " _Q "QOF_IS_INSTANCE(ptr)' failed" ) != NULL );
+    g_assert( g_strrstr( error_message, "assertion 'QOF_IS_INSTANCE(ptr)' failed" ) != NULL );
     g_free( error_message );
 
     g_free(check->msg);
     check->msg = g_strdup(msg3);
     g_assert( !qof_instance_get_destroying( inst ) );
-    g_assert( g_strrstr( error_message, "assertion " _Q "QOF_IS_INSTANCE(ptr)' failed" ) != NULL );
+    g_assert( g_strrstr( error_message, "assertion 'QOF_IS_INSTANCE(ptr)' failed" ) != NULL );
     g_free( error_message );
 
     g_free(check->msg);
     check->msg = g_strdup(msg4);
     g_assert( !qof_instance_get_dirty_flag( inst ) );
-    g_assert( g_strrstr( error_message, "assertion " _Q "QOF_IS_INSTANCE(ptr)' failed" ) != NULL );
+    g_assert( g_strrstr( error_message, "assertion 'QOF_IS_INSTANCE(ptr)' failed" ) != NULL );
     g_free( error_message );
     g_log_remove_handler (log_domain, hdlr);
     test_error_struct_free(check);

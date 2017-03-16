@@ -35,11 +35,6 @@ extern "C"
 #include "../Transaction.h"
 #include "../gnc-lot.h"
 
-#ifdef HAVE_GLIB_2_38
-#define _Q "'"
-#else
-#define _Q "`"
-#endif
 #if defined(__clang__) && (__clang_major__ == 5 || (__clang_major__ == 3 && __clang_minor__ < 5))
 #define USE_CLANG_FUNC_SIG 1
 #endif
@@ -477,7 +472,7 @@ test_gnc_account_list_name_violations (Fixture *fixture, gconstpointer pData)
 #else
 #define _func "gnc_account_list_name_violations"
 #endif
-    auto msg = _func ": assertion " _Q "separator != NULL' failed";
+    auto msg = _func ": assertion 'separator != NULL' failed";
 #undef _func
     auto check = test_error_struct_new(log_domain, log_level, msg);
     GList *results, *res_iter;
@@ -763,8 +758,8 @@ test_xaccCloneAccount (Fixture *fixture, gconstpointer pData)
 #else
 #define _func "xaccCloneAccount"
 #endif
-    auto msg1 = _func ": assertion " _Q "GNC_IS_ACCOUNT(from)' failed";
-    auto msg2 = _func ": assertion " _Q "QOF_IS_BOOK(book)' failed";
+    auto msg1 = _func ": assertion 'GNC_IS_ACCOUNT(from)' failed";
+    auto msg2 = _func ": assertion 'QOF_IS_BOOK(book)' failed";
 #undef _func
     auto check = test_error_struct_new("gnc.engine", loglevel, msg1);
     AccountPrivate *acct_p, *clone_p;
@@ -868,7 +863,7 @@ test_xaccFreeAccount (Fixture *fixture, gconstpointer pData)
 #else
 #define _func "xaccTransGetSplitIndex"
 #endif
-    auto msg2 = _func ": assertion " _Q "trans && split' failed";
+    auto msg2 = _func ": assertion 'trans && split' failed";
 #undef _func
     auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     auto check1 = test_error_struct_new("gnc.account", loglevel, msg1);
@@ -982,7 +977,7 @@ test_xaccAccountCommitEdit (Fixture *fixture, gconstpointer pData)
 #else
 #define _func "xaccTransGetSplitIndex"
 #endif
-    auto msg2 = _func ": assertion " _Q "trans && split' failed";
+    auto msg2 = _func ": assertion 'trans && split' failed";
 #undef _func
     auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     auto check1 = test_error_struct_new("gnc.account", loglevel, msg1);
@@ -1099,8 +1094,8 @@ test_gnc_account_insert_remove_split (Fixture *fixture, gconstpointer pData)
 #else
 #define _func "gnc_account_insert_split"
 #endif
-    auto msg1 = _func ": assertion " _Q "GNC_IS_ACCOUNT(acc)' failed";
-    auto msg2 = _func ": assertion " _Q "GNC_IS_SPLIT(s)' failed";
+    auto msg1 = _func ": assertion 'GNC_IS_ACCOUNT(acc)' failed";
+    auto msg2 = _func ": assertion 'GNC_IS_SPLIT(s)' failed";
 #undef _func
     auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
 //    auto log_domain = "gnc.engine";

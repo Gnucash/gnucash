@@ -37,12 +37,6 @@ extern "C"
 #include "../qofbook-p.h"
 #include "../qofbookslots.h"
 
-#ifdef HAVE_GLIB_2_38
-#define _Q "'"
-#else
-#define _Q "`"
-#endif
-
 static const gchar *suitename = "/qof/qofbook";
 void test_suite_qofbook ( void );
 
@@ -782,8 +776,8 @@ test_book_foreach_collection( Fixture *fixture, gconstpointer pData )
 #define _func "void qof_book_foreach_collection(const QofBook*, QofCollectionForeachCB, gpointer)"
 //#define _func "qof_book_foreach_collection"
 #endif
-    gchar *msg1 = _func ": assertion " _Q "book' failed";
-    gchar *msg2 = _func ": assertion " _Q "cb' failed";
+    gchar *msg1 = _func ": assertion 'book' failed";
+    gchar *msg2 = _func ": assertion 'cb' failed";
 #undef _func
     gchar *log_domain = "qof";
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL, hdlr;

@@ -63,11 +63,6 @@
 #include "business/business-gnome/dialog-invoice.h"
 #include "business/business-gnome/business-gnome-utils.h"
 
-
-//#ifdef HAVE_GLIB_2_14
-// glib >= 2.14.0
-// perl regular expressions are available
-
 // this helper macro takes a regexp match and fills the model
 #define FILL_IN_HELPER(match_name,column) \
             temp = g_match_info_fetch_named (match_info, match_name); \
