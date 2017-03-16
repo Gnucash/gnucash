@@ -259,7 +259,7 @@
                             <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="tooltip_text" translatable="yes">Use Edit-&gt;Tax Report Options to set the tax-related flag and assign a tax code to this account.</property>
+                            <property name="tooltip_text" translatable="yes" comments="Translators: use the same words here as in 'Ta_x Report Options'.">Use Edit-&gt;Tax Report Options to set the tax-related flag and assign a tax code to this account.</property>
                             <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
                           </object>

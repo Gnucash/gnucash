@@ -144,6 +144,8 @@ static GtkActionEntry gnc_plugin_actions [] =
     },
     {
         "EditTaxOptionsAction", NULL,
+        /* Translators: remember to reuse this *
+         * translation in dialog-account.glade */
         N_("Ta_x Report Options"), NULL,
         /* Translators: currently implemented are *
          * US: income tax and                     *
