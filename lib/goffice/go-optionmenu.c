@@ -193,8 +193,8 @@ static gint go_option_menu_key_press(GtkWidget *widget, GdkEventKey *event)
 
     switch (event->keyval)
     {
-    case GDK_KP_Space:
-    case GDK_space:
+    case GDK_KEY_KP_Space:
+    case GDK_KEY_space:
         gtk_menu_popup(GTK_MENU(option_menu->menu), NULL, NULL,
                 go_option_menu_position, option_menu, 0, event->time);
         return TRUE;

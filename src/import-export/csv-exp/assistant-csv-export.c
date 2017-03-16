@@ -852,7 +852,7 @@ csv_export_assistant_create (CsvExportInfo *info)
         info->csva.account_treeview = GTK_WIDGET(tree_view);
 
         selection = gtk_tree_view_get_selection (tree_view);
-        gtk_tree_selection_set_mode (selection, GTK_SELECTION_EXTENDED);
+        gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
         g_signal_connect (G_OBJECT(selection), "changed",
                           G_CALLBACK(csv_export_account_changed_cb), info);
 

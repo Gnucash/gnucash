@@ -1382,7 +1382,7 @@ void
 CsvImpTransAssist::preview_style_column (uint32_t col_num, GtkTreeModel* model)
 {
     auto col = gtk_tree_view_get_column (treeview, col_num);
-    auto renderer = static_cast<GtkCellRenderer*>(gtk_tree_view_column_get_cell_renderers(col)->data);
+    auto renderer = static_cast<GtkCellRenderer*>(gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(col))->data);
     /* First column -the error status column- is rendered differently */
     if (col_num == 0)
     {
