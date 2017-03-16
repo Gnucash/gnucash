@@ -243,6 +243,10 @@
                     legend: {
                          show: true,
                          placement: \"outsideGrid\", },
+                    highlighter: {
+                         show: false },
+                    cursor: {
+                         showTooltip: false },
                    };\n")
 
             (if title
