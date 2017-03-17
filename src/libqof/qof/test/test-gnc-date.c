@@ -104,7 +104,7 @@ typedef struct
 
 typedef struct
 {
-    TimeMap test[8];
+    TimeMap test[9];
 } FixtureB;
 
 static void
@@ -118,6 +118,7 @@ setup_begin(FixtureB *f, gconstpointer pData)
     f->test[5] = (TimeMap){2017, 02, 29, INT64_C(1488326400)}; /*invalid day*/
     f->test[6] = (TimeMap){2017, 02, 33, INT64_C(1488672000)}; /*invalid day*/
     f->test[7] = (TimeMap){2017, 13, 29, INT64_C(1517184000)}; /*invalid month*/
+    f->test[8] = (TimeMap){2017, 03, 16, INT64_C(1489622400)};
 }
 
 static void
@@ -131,6 +132,7 @@ setup_neutral(FixtureB *f, gconstpointer pData)
     f->test[5] = (TimeMap){2017, 02, 29, INT64_MAX};
     f->test[6] = (TimeMap){2017, 02, 33, INT64_MAX};
     f->test[7] = (TimeMap){2017, 13, 29, INT64_MAX};
+    f->test[8] = (TimeMap){2017, 03, 16, INT64_C(1489661940)};
 }
 
 static void
@@ -144,6 +146,7 @@ setup_end(FixtureB *f, gconstpointer pData)
     f->test[5] = (TimeMap){2017, 02, 29, INT64_C(1488412799)};
     f->test[6] = (TimeMap){2017, 02, 33, INT64_C(1488758399)};
     f->test[7] = (TimeMap){2017, 13, 29, INT64_C(1517270399)};
+    f->test[8] = (TimeMap){2017, 03, 16, INT64_C(1489708799)};
 }
 
 void test_suite_gnc_date ( void );
@@ -1965,7 +1968,7 @@ Timespec gdate_to_timespec (GDate d)// C: 7 in 6  Local: 0:0:0
 static void
 test_gdate_to_timespec (FixtureB *f, gconstpointer pData)
 {
-    
+
     gchar *msg = "g_date_set_dmy: assertion 'g_date_valid_dmy (day, m, y)' failed";
     gint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
     gchar *logdomain = G_LOG_DOMAIN;
@@ -1974,12 +1977,18 @@ test_gdate_to_timespec (FixtureB *f, gconstpointer pData)
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
     for (int i = 0; i < sizeof(f->test)/sizeof(TimeMap); ++i)
     {
-        GDate gd;
+        GDate gd, gd2;
         Timespec r_t;
         g_date_clear(&gd, 1);
+        g_date_clear(&gd2, 1);
         g_date_set_dmy(&gd, f->test[i].day, f->test[i].mon, f->test[i].yr);
         r_t = gdate_to_timespec(gd);
         g_assert_cmpint (r_t.tv_sec, ==, f->test[i].secs);
+        if (f->test[i].secs < INT64_MAX)
+        {
+            gd2 = timespec_to_gdate(r_t);
+            g_assert (g_date_compare (&gd2, &gd) == 0);
+        }
     }
     g_log_set_default_handler (hdlr, 0);
 }

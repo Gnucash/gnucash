@@ -692,18 +692,18 @@ TimeZoneProvider::TimeZoneProvider(const std::string& tzname) :  zone_vector {}
 {
     if(construct(tzname))
         return;
-    std::cerr << tzname << " invalid, trying TZ environment variable.\n";
+    DEBUG("%s invalid, trying TZ environment variable.\n", tzname.c_str());
     const char* tz_env = getenv("TZ");
     if(tz_env && construct(tz_env))
         return;
-    std::cerr << "No valid $TZ, resorting to /etc/localtime.\n";
+    DEBUG("No valid $TZ, resorting to /etc/localtime.\n");
     try
     {
         parse_file("/etc/localtime");
     }
     catch(const std::invalid_argument& env)
     {
-        std::cerr << "/etc/localtime invalid, resorting to GMT.";
+        DEBUG("/etc/localtime invalid, resorting to GMT.");
         TZ_Ptr zone(new PTZ("UTC0"));
         zone_vector.push_back(std::make_pair(max_year, zone));
     }
@@ -714,15 +714,12 @@ TimeZoneProvider::TimeZoneProvider(const std::string& tzname) :  zone_vector {}
 TZ_Ptr
 TimeZoneProvider::get(int year) const noexcept
 {
-    auto iter = find_if(zone_vector.begin(), zone_vector.end(),
-			[=](TZ_Entry e) { return e.first >= year; });
-    if (iter == zone_vector.end())
+    auto iter = find_if(zone_vector.rbegin(), zone_vector.rend(),
+			[=](TZ_Entry e) { return e.first <= year; });
+    if (iter == zone_vector.rend())
     {
-        /* This shouldn't happen, but if it does: */
-        PERR("TimeZoneProvider::get was unable to get a timezone for year %d",
-             year);
         if (!zone_vector.empty())
-            return zone_vector.back().second;
+            return zone_vector.front().second;
         return TZ_Ptr(new PTZ("UTC0"));
     }
     return iter->second;

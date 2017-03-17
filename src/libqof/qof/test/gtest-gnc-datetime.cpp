@@ -95,3 +95,14 @@ TEST(gnc_datetime_functions, test_date)
     EXPECT_EQ(ymd.month, 11);
     EXPECT_EQ(ymd.day, 13);
 }
+
+TEST(gnc_datetime_functions, test_timezone_offset)
+{
+
+    GncDateTime gncdt1(1488797940); //6 Mar 2017
+    EXPECT_EQ(-28800, gncdt1.offset());
+    GncDateTime gncdt2(1489661940);  //16 Mar 2017 10:59 Z
+    EXPECT_EQ(-25200, gncdt2.offset());
+    GncDateTime gncdt3(1490525940);  //26 Mar 2017
+    EXPECT_EQ(-25200, gncdt3.offset());
+}

@@ -44,8 +44,8 @@ TEST(gnc_timezone_constructors, test_pacific_time_constructor)
     std::string timezone("America/Los_Angeles");
 #endif
     TimeZoneProvider tzp (timezone);
-    EXPECT_NO_THROW (tzp.get(2006));
-    TZ_Ptr tz = tzp.get (2006);
+    EXPECT_NO_THROW (tzp.get(2012));
+    TZ_Ptr tz = tzp.get (2012);
 
     EXPECT_FALSE(tz->std_zone_abbrev().empty());
 #if PLATFORM(WINDOWS)
@@ -54,7 +54,9 @@ TEST(gnc_timezone_constructors, test_pacific_time_constructor)
     EXPECT_TRUE(tz->std_zone_abbrev() == "PST");
     EXPECT_TRUE(tz->dst_zone_abbrev() == "PDT");
 #endif
-    EXPECT_TRUE(tz->base_utc_offset().hours() == -8);
+    EXPECT_EQ(-8, tz->base_utc_offset().hours());
+
+    EXPECT_EQ(12, tz->dst_local_start_time (2017).date().day());
 }
 
 #if !PLATFORM(WINDOWS)
