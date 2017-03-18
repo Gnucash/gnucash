@@ -5412,7 +5412,7 @@ msgstr "Create a new budget"
 
 #: ../src/gnome/gnc-plugin-budget.c:65
 msgid "Open Budget"
-msgstr "Open budget"
+msgstr "Open Budget"
 
 #: ../src/gnome/gnc-plugin-budget.c:66
 msgid "Open an existing Budget"
