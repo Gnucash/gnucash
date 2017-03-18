@@ -40,6 +40,7 @@
 #include "gnc-euro.h"
 #include "gnc-ui-util.h"
 #include "gnc-prefs.h"
+#include "gnc-combott.h"
 #include "guile-util.h"
 #include "gnc-main-window.h"
 #include <gnc-gdate-utils.h>
@@ -580,8 +581,8 @@ gnc_dialog_run (GtkDialog *dialog, const gchar *pref_name)
 
 /* If this is a new book, this function can be used to display book options
  * dialog so user can specify options, before any transactions can be
- * imported/entered, since they can affect how transactions are created
- * Note: This dialog is modal! */
+ * imported/entered, since the book options can affect how transactions are
+ * created. Note: This dialog is modal! */
 gboolean
 gnc_new_book_option_display (GtkWidget *parent)
 {
@@ -603,3 +604,52 @@ gnc_new_book_option_display (GtkWidget *parent)
     }
     return TRUE;
 }
+
+/* This function returns a widget for selecting a cost policy
+ */
+GtkWidget *
+gnc_cost_policy_select_new (void)
+{
+    GtkWidget *cost_policy_widget = NULL;
+    GList *list_of_policies = NULL;
+
+    list_of_policies = gnc_get_valid_policy_list();
+
+    g_return_val_if_fail(g_list_length (list_of_policies) >= 0, NULL);
+    if (list_of_policies)
+    {
+        GtkListStore *store;
+        GtkTreeIter  iter;
+        const char *description;
+        const char *hintstring;
+        GList *l = NULL;
+
+        store = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
+        /* Add values to the list store, entry and tooltip */
+        for (l = list_of_policies; l != NULL; l = l->next)
+        {
+            GNCPolicy *pcy = l->data;
+            description = PolicyGetDescription(pcy);
+            hintstring = PolicyGetHint(pcy);
+            gtk_list_store_append (store, &iter);
+            gtk_list_store_set
+                   (store,
+                    &iter,
+                    0,
+                    (description && *description) ? _(description) : "",
+                    1,
+                    (hintstring && *hintstring) ? _(hintstring) : "",
+                    -1);
+        }
+        g_list_free(list_of_policies);
+        /* Create the new Combo with tooltip and add the store */
+        cost_policy_widget = GTK_WIDGET(gnc_combott_new());
+        g_object_set( G_OBJECT( cost_policy_widget ),
+                      "model",
+                      GTK_TREE_MODEL(store),
+                      NULL );
+        g_object_unref(store);
+    }
+    return cost_policy_widget;
+}
+

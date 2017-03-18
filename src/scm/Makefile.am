@@ -50,7 +50,6 @@ GUILE_COMPILE_ENV = \
   --library-dir    ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/libqof/qof
 
-
 %.go : %.scm .scm-links
 	$(shell ${abs_top_srcdir}/src/gnc-test-env.pl --noexports ${GUILE_COMPILE_ENV}) \
 	$(GUILD) compile -o $@ $<

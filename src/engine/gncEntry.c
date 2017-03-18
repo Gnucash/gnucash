@@ -25,9 +25,10 @@
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <glib.h>
+#include <qofinstance-p.h>
 
 #include "gnc-commodity.h"
 
@@ -211,7 +212,32 @@ void mark_entry (GncEntry *entry)
 enum
 {
     PROP_0,
-    PROP_DESCRIPTION
+//  PROP_DATE,		/* Table */
+//  PROP_DATE_ENTERED,	/* Table */
+    PROP_DESCRIPTION,	/* Table */
+//  PROP_ACTION,	/* Table */
+//  PROP_NOTES,		/* Table */
+//  PROP_QUANTITY,	/* Table (numeric) */
+//  PROP_I_ACCT,	/* Table */
+//  PROP_I_PRICE,	/* Table (numeric) */
+//  PROP_I_DISCOUNT,	/* Table (numeric) */
+//  PROP_INVOICE,	/* Table */
+//  PROP_I_DISC_TYPE,	/* Table */
+//  PROP_I_DISC_HOW,	/* Table */
+//  PROP_I_TAXABLE,	/* Table */
+//  PROP_I_TAX_INCL,	/* Table */
+//  PROP_I_TAXTABLE,	/* Table */
+//  PROP_B_ACCT,	/* Table */
+//  PROP_B_PRICE,	/* Table (numeric) */
+//  PROP_BILL,		/* Table */
+//  PROP_B_TAXTABLE_1,	/* Table */
+//  PROP_B_TAX_INCL,	/* Table */
+//  PROP_B_TAXTABLE,	/* Table */
+//  PROP_B_PAYTYPE,	/* Table */
+//  PROP_BILLABLE,	/* Table */
+//  PROP_BILLTO_TYPE,	/* Table */
+//  PROP_BILLTO,	/* Table */
+//  PROP_ORDER,		/* Table */
 };
 
 /* GObject Initialization */
@@ -267,6 +293,8 @@ gnc_entry_set_property (GObject         *object,
     g_return_if_fail(GNC_IS_ENTRY(object));
 
     entry = GNC_ENTRY(object);
+    g_assert (qof_instance_get_editlevel(entry));
+
     switch (prop_id)
     {
     case PROP_DESCRIPTION:
@@ -1557,8 +1585,9 @@ static void entry_free (QofInstance *inst)
 void gncEntryCommitEdit (GncEntry *entry)
 {
     /* GnuCash 2.6.3 and earlier didn't handle entry kvp's... */
-    if (!kvp_frame_is_empty (entry->inst.kvp_data))
-        gnc_features_set_used (qof_instance_get_book (QOF_INSTANCE (entry)), GNC_FEATURE_KVP_EXTRA_DATA);
+    if (qof_instance_has_kvp(QOF_INSTANCE(entry)))
+        gnc_features_set_used (qof_instance_get_book (QOF_INSTANCE (entry)),
+                               GNC_FEATURE_KVP_EXTRA_DATA);
 
     if (!qof_commit_edit (QOF_INSTANCE(entry))) return;
     qof_commit_edit_part2 (&entry->inst, gncEntryOnError,

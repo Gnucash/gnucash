@@ -19,20 +19,23 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "config.h"
 #include <string.h>
 #include <glib.h>
 #include <inttypes.h>
 #include <unittest-support.h>
+#ifdef __cplusplus
+}
+#endif
+
 #include "../qof.h"
 #include "../qofbook-p.h"
 #include "../qofbookslots.h"
-
-#ifdef HAVE_GLIB_2_38
-#define _Q "'"
-#else
-#define _Q "`"
-#endif
 
 static const gchar *suitename = "/qof/qofbook";
 void test_suite_qofbook ( void );
@@ -341,7 +344,7 @@ test_book_get_counter_format ( Fixture *fixture, gconstpointer pData )
     const char *counter_name = "Counter name";
     const char *err_no_book = "No book";
     const char *err_invalid_cnt = "Invalid counter name";
-    gchar *r;
+    const char *r;
 
     /* need this as long as we have fatal warnings enabled */
     g_test_log_set_fatal_handler ( ( GTestLogFatalFunc )handle_faults, NULL );
@@ -379,8 +382,8 @@ test_book_increment_and_format_counter ( Fixture *fixture, gconstpointer pData )
     const char *counter_name = "Counter name";
     const char *err_no_book = "No book";
     const char *err_invalid_cnt = "Invalid counter name";
-    gchar *format;
-    gchar *r;
+    const char *format;
+    char *r;
     gint64 counter;
 
     /* need this as long as we have fatal warnings enabled */
@@ -426,99 +429,185 @@ test_book_increment_and_format_counter ( Fixture *fixture, gconstpointer pData )
 }
 
 static void
-test_book_kvp_changed( Fixture *fixture, gconstpointer pData )
-{
-    g_test_message( "Testing book is marked dirty after kvp_changed" );
-    g_assert( !qof_instance_is_dirty (QOF_INSTANCE (fixture->book)) );
-    qof_book_kvp_changed( fixture->book );
-    g_assert( qof_instance_is_dirty (QOF_INSTANCE (fixture->book)) );
-}
-
-static void
 test_book_use_trading_accounts( Fixture *fixture, gconstpointer pData )
 {
-    const char *slot_path;
-
-    /* create correct slot path */
-    slot_path = (const char *) g_strconcat( KVP_OPTION_PATH, "/", OPTION_SECTION_ACCOUNTS, "/", OPTION_NAME_TRADING_ACCOUNTS, NULL );
-    g_assert( slot_path != NULL );
-
-    g_test_message( "Testing when no trading accounts are used" );
-    g_assert( qof_book_use_trading_accounts( fixture-> book ) == FALSE );
-
-    g_test_message( "Testing with incorrect slot path and correct value - t" );
-    qof_book_set_string_option( fixture->book, OPTION_NAME_TRADING_ACCOUNTS, "t" );
     g_assert( qof_book_use_trading_accounts( fixture-> book ) == FALSE );
 
     g_test_message( "Testing with existing trading accounts set to true - t" );
-    qof_book_set_string_option( fixture->book, slot_path, "t" );
+    qof_book_begin_edit (fixture->book);
+    qof_instance_set (QOF_INSTANCE (fixture->book),
+		      "trading-accts", "t",
+		      NULL);
     g_assert( qof_book_use_trading_accounts( fixture-> book ) == TRUE );
 
     g_test_message( "Testing with existing trading accounts and incorrect value - tt" );
-    qof_book_set_string_option( fixture->book, slot_path, "tt" );
+    qof_instance_set (QOF_INSTANCE (fixture->book),
+		      "trading-accts", "tt",
+		      NULL);
     g_assert( qof_book_use_trading_accounts( fixture-> book ) == FALSE );
+    qof_book_commit_edit (fixture->book);
 
+}
+
+static void
+test_book_use_book_currency( Fixture *fixture, gconstpointer pData )
+{
+    const gchar *cur;
+    const gchar *pol;
+    GncGUID *acct;
+    const GncGUID *acct2;
+
+    cur = qof_book_get_book_currency_name( fixture-> book );
+    g_assert_cmpstr( cur, == , NULL );
+    pol = qof_book_get_default_gains_policy( fixture-> book );
+    g_assert_cmpstr( pol, == , NULL );
+    acct2 = qof_book_get_default_gain_loss_acct_guid( fixture-> book );
+    g_assert (acct2 == NULL );
+
+    g_test_message( "Testing with existing trading accounts set to true - t" );
+    qof_book_begin_edit (fixture->book);
+    qof_instance_set (QOF_INSTANCE (fixture->book),
+		      "trading-accts", "t",
+		      NULL);
+    cur = qof_book_get_book_currency_name( fixture-> book );
+    g_assert_cmpstr( cur, == , NULL );
+    pol = qof_book_get_default_gains_policy( fixture-> book );
+    g_assert_cmpstr( pol, == , NULL );
+    acct2 = qof_book_get_default_gain_loss_acct_guid( fixture-> book );
+    g_assert (acct2 == NULL );
+    qof_book_commit_edit (fixture->book);
+
+    qof_book_destroy( fixture->book );
+    fixture->book = qof_book_new();
+
+    g_test_message( "Testing with book-currency set and no default-gains-policy or account" );
+    qof_book_begin_edit (fixture->book);
+    qof_instance_set (QOF_INSTANCE (fixture->book),
+		      "book-currency", "USD",
+		      NULL);
+    cur = qof_book_get_book_currency_name( fixture-> book );
+    g_assert_cmpstr( cur, == , "USD" );
+    pol = qof_book_get_default_gains_policy( fixture-> book );
+    g_assert_cmpstr( pol, == , NULL );
+    acct2 = qof_book_get_default_gain_loss_acct_guid( fixture-> book );
+    g_assert (acct2 == NULL );
+    qof_book_commit_edit (fixture->book);
+
+    qof_book_destroy( fixture->book );
+    fixture->book = qof_book_new();
+
+    g_test_message( "Testing with default-gains-policy set and no book-currency" );
+    qof_book_begin_edit (fixture->book);
+    qof_instance_set (QOF_INSTANCE (fixture->book),
+		      "default-gains-policy", "fifo",
+		      NULL);
+    cur = qof_book_get_book_currency_name( fixture-> book );
+    g_assert_cmpstr( cur, == , NULL );
+    pol = qof_book_get_default_gains_policy( fixture-> book );
+    g_assert_cmpstr( pol, == , "fifo" );
+    acct2 = qof_book_get_default_gain_loss_acct_guid( fixture-> book );
+    g_assert (acct2 == NULL );
+    qof_book_commit_edit (fixture->book);
+
+    qof_book_destroy( fixture->book );
+    fixture->book = qof_book_new();
+
+    g_test_message( "Testing with book-currency and default-gains-policy set to nonsense" );
+    qof_book_begin_edit (fixture->book);
+    qof_instance_set (QOF_INSTANCE (fixture->book),
+		      "book-currency", "myMoney",
+		      NULL);
+    qof_instance_set (QOF_INSTANCE (fixture->book),
+		      "default-gains-policy", "random",
+		      NULL);
+    cur = qof_book_get_book_currency_name( fixture-> book );
+    g_assert_cmpstr( cur, == , "myMoney" );
+    pol = qof_book_get_default_gains_policy( fixture-> book );
+    g_assert_cmpstr( pol, == , "random" );
+    acct2 = qof_book_get_default_gain_loss_acct_guid( fixture-> book );
+    g_assert (acct2 == NULL );
+    qof_book_commit_edit (fixture->book);
+
+    qof_book_destroy( fixture->book );
+    fixture->book = qof_book_new();
+
+    g_test_message( "Testing with book-currency, default-gains-policy and default-gains-account set to valid values" );
+    qof_book_begin_edit (fixture->book);
+    qof_instance_set (QOF_INSTANCE (fixture->book),
+		      "book-currency", "USD",
+		      NULL);
+    qof_instance_set (QOF_INSTANCE (fixture->book),
+		      "default-gains-policy", "fifo",
+		      NULL);
+    acct = guid_new();
+    qof_instance_set (QOF_INSTANCE (fixture->book),
+		      "default-gain-loss-account-guid", acct,
+		      NULL);
+    cur = qof_book_get_book_currency_name( fixture-> book );
+    g_assert_cmpstr( cur, == , "USD" );
+    pol = qof_book_get_default_gains_policy( fixture-> book );
+    g_assert_cmpstr( pol, == , "fifo" );
+    acct2 = qof_book_get_default_gain_loss_acct_guid( fixture-> book );
+    g_assert_cmpstr( guid_to_string (acct), == , guid_to_string (acct2) );
+    g_assert (guid_equal(acct, acct2));
+    guid_free (acct);
+    qof_book_commit_edit (fixture->book);
 }
 
 static void
 test_book_get_num_days_autofreeze( Fixture *fixture, gconstpointer pData )
 {
-    const char *slot_path;
-
-    /* create correct slot path */
-    slot_path = (const char *) g_strconcat( KVP_OPTION_PATH, "/", OPTION_SECTION_ACCOUNTS, "/", OPTION_NAME_AUTO_READONLY_DAYS, NULL );
-    g_assert( slot_path != NULL );
-
     g_test_message( "Testing default: No auto-freeze days are set" );
     g_assert( qof_book_uses_autoreadonly( fixture-> book ) == FALSE );
     g_assert( qof_book_get_num_days_autoreadonly( fixture-> book ) == 0 );
 
-    g_test_message( "Testing with incorrect slot path and some correct value - 17" );
-    kvp_frame_set_double(qof_book_get_slots(fixture->book), OPTION_NAME_AUTO_READONLY_DAYS, 17);
     g_assert( qof_book_uses_autoreadonly( fixture-> book ) == FALSE );
     g_assert( qof_book_get_num_days_autoreadonly( fixture-> book ) == 0 );
 
-    g_test_message( "Testing when setting this correctly with some correct value - 17" );
-    kvp_frame_set_double(qof_book_get_slots(fixture->book), slot_path, 17);
+    qof_book_begin_edit (fixture->book);
+    qof_instance_set (QOF_INSTANCE (fixture->book),
+		      "autoreadonly-days", (gdouble)17,
+		      NULL);
     g_assert( qof_book_uses_autoreadonly( fixture-> book ) == TRUE );
     g_assert( qof_book_get_num_days_autoreadonly( fixture-> book ) == 17 );
 
     g_test_message( "Testing when setting this correctly to zero again" );
-    kvp_frame_set_double(qof_book_get_slots(fixture->book), slot_path, 0);
+
+    qof_instance_set (QOF_INSTANCE (fixture->book),
+		      "autoreadonly-days", (gdouble)0,
+		      NULL);
     g_assert( qof_book_uses_autoreadonly( fixture-> book ) == FALSE );
     g_assert( qof_book_get_num_days_autoreadonly( fixture-> book ) == 0 );
 
-    g_test_message( "Testing when setting this correctly with some correct value - 32" );
-    kvp_frame_set_double(qof_book_get_slots(fixture->book), slot_path, 32);
+    qof_instance_set (QOF_INSTANCE (fixture->book),
+		      "autoreadonly-days", (gdouble)32,
+		      NULL);
     g_assert( qof_book_uses_autoreadonly( fixture-> book ) == TRUE );
     g_assert( qof_book_get_num_days_autoreadonly( fixture-> book ) == 32 );
 
+    qof_book_commit_edit (fixture->book);
 }
 
 static void
 test_book_use_split_action_for_num_field( Fixture *fixture, gconstpointer pData )
 {
-    const char *slot_path;
-
-    /* create correct slot path */
-    slot_path = (const char *) g_strconcat( KVP_OPTION_PATH, "/",
-                                            OPTION_SECTION_ACCOUNTS, "/", OPTION_NAME_NUM_FIELD_SOURCE, NULL );
-    g_assert( slot_path != NULL );
-
     g_test_message( "Testing default: No selection has been specified" );
     g_assert( qof_book_use_split_action_for_num_field( fixture-> book ) == FALSE );
 
-    g_test_message( "Testing with incorrect slot path and correct value - t" );
-    qof_book_set_string_option( fixture->book, OPTION_NAME_NUM_FIELD_SOURCE, "t" );
-    g_assert( qof_book_use_split_action_for_num_field( fixture-> book ) == FALSE );
-
     g_test_message( "Testing with existing use split action for num set to true - t" );
-    qof_book_set_string_option( fixture->book, slot_path, "t" );
+
+    qof_book_begin_edit (fixture->book);
+    qof_instance_set (QOF_INSTANCE (fixture->book),
+		      "split-action-num-field", "t",
+		      NULL);
     g_assert( qof_book_use_split_action_for_num_field( fixture-> book ) == TRUE );
 
     g_test_message( "Testing with existing use split action for num and incorrect value - tt" );
-    qof_book_set_string_option( fixture->book, slot_path, "tt" );
+    qof_instance_set (QOF_INSTANCE (fixture->book),
+		      "split-action-num-field", "tt",
+		      NULL);
     g_assert( qof_book_use_split_action_for_num_field( fixture-> book ) == FALSE );
+    qof_book_commit_edit (fixture->book);
 }
 
 static void
@@ -681,13 +770,14 @@ test_book_foreach_collection( Fixture *fixture, gconstpointer pData )
     QofIdType my_type = "my_type", my_type2 = "my_type2";
     guint param = (guint) g_test_rand_int();
     /* GLib assertion messages which aren't filtered to make clang's output like gcc's */
-#if defined(__clang__) && __clang_major__ < 6
+#if defined(__clang__)
 #define _func "void qof_book_foreach_collection(const QofBook *, QofCollectionForeachCB, gpointer)"
 #else
-#define _func "qof_book_foreach_collection"
+#define _func "void qof_book_foreach_collection(const QofBook*, QofCollectionForeachCB, gpointer)"
+//#define _func "qof_book_foreach_collection"
 #endif
-    gchar *msg1 = _func ": assertion " _Q "book' failed";
-    gchar *msg2 = _func ": assertion " _Q "cb' failed";
+    gchar *msg1 = _func ": assertion 'book' failed";
+    gchar *msg2 = _func ": assertion 'cb' failed";
 #undef _func
     gchar *log_domain = "qof";
     guint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL, hdlr;
@@ -835,8 +925,8 @@ test_suite_qofbook ( void )
     GNC_TEST_ADD( suitename, "get counter", Fixture, NULL, setup, test_book_get_counter, teardown );
     GNC_TEST_ADD( suitename, "get counter format", Fixture, NULL, setup, test_book_get_counter_format, teardown );
     GNC_TEST_ADD( suitename, "increment and format counter", Fixture, NULL, setup, test_book_increment_and_format_counter, teardown );
-    GNC_TEST_ADD( suitename, "kvp changed", Fixture, NULL, setup, test_book_kvp_changed, teardown );
     GNC_TEST_ADD( suitename, "use trading accounts", Fixture, NULL, setup, test_book_use_trading_accounts, teardown );
+    GNC_TEST_ADD( suitename, "use book-currency", Fixture, NULL, setup, test_book_use_book_currency, teardown );
     GNC_TEST_ADD( suitename, "get autofreeze days", Fixture, NULL, setup, test_book_get_num_days_autofreeze, teardown );
     GNC_TEST_ADD( suitename, "use split action for num field", Fixture, NULL, setup, test_book_use_split_action_for_num_field, teardown );
     GNC_TEST_ADD( suitename, "mark session dirty", Fixture, NULL, setup, test_book_mark_session_dirty, teardown );

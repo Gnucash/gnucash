@@ -980,16 +980,16 @@ owner_cell_kvp_data_func (GtkTreeViewColumn *tree_column,
                           gpointer key)
 {
     GncOwner *owner;
-    kvp_frame * frame;
+    GValue v = G_VALUE_INIT;
 
     g_return_if_fail (GTK_IS_TREE_MODEL_SORT (s_model));
     owner = gnc_tree_view_owner_get_owner_from_iter(s_model, s_iter);
-    frame = gncOwnerGetSlots(owner);
-
-    g_object_set (G_OBJECT (cell),
-                  "text", kvp_frame_get_string(frame, (gchar *)key),
-                  "xalign", 0.0,
-                  NULL);
+    qof_instance_get_kvp (QOF_INSTANCE (owner), (gchar*)key, &v);
+    if (G_VALUE_HOLDS_STRING)
+         g_object_set (G_OBJECT (cell),
+                       "text", g_value_get_string (&v),
+                       "xalign", 0.0,
+                       NULL);
 
 }
 

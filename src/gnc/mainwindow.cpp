@@ -577,7 +577,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
          * transactions during shutdown would cause massive redraws */
         qof_event_suspend ();
 
-        qof_session_call_close_hooks(m_session.gobj());
         gnc_hook_run(HOOK_BOOK_CLOSED, m_session.gobj());
 
         qof_session_destroy(m_session.gobj());
@@ -602,7 +601,6 @@ void MainWindow::newFile()
              * disable events so we don't gobj spammed by redraws. */
             qof_event_suspend ();
 
-            m_session.call_close_hooks();
             gnc_hook_run(HOOK_BOOK_CLOSED, m_session.gobj());
 
             qof_session_destroy(m_session.gobj());

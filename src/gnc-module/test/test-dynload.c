@@ -61,7 +61,7 @@ guile_main(void *closure, int argc, char ** argv)
     {
         modpath = g_module_build_path (libdir, "gnc-module");
     }
-#elif defined(PLATFORM_OSX)
+#elif defined(GNC_PLATFORM_OSX)
 /* We build libgnc-module as a shared library for testing, and on OSX
  * that means that g_module_build_path (), which uses ".so", doesn't
  * build the right path name.

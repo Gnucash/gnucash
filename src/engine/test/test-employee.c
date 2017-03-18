@@ -24,9 +24,11 @@
  *
  *********************************************************************/
 
-#include "config.h"
+#include <config.h>
 #include <glib.h>
-#include "qof.h"
+#include <qof.h>
+#include <qofinstance-p.h>
+
 #include "gncEmployeeP.h"
 #include "gncCustomerP.h"
 #include "gncJobP.h"
@@ -94,7 +96,7 @@ test_employee (void)
 
         do_test (gncEmployeeGetAddr (employee) != NULL, "Addr");
 
-        guid_new (&guid);
+        guid_replace (&guid);
         employee = gncEmployeeCreate (book);
         count++;
         gncEmployeeSetGUID (employee, &guid);

@@ -50,6 +50,7 @@
 #include "gnc-plugin-page-report.h"
 
 #include "dialog-account.h"
+#include "dialog-find-account.h"
 #include "dialog-find-transactions.h"
 #include "dialog-print-check.h"
 #include "dialog-transfer.h"
@@ -141,6 +142,7 @@ static void gnc_plugin_page_register_cmd_cut (GtkAction *action, GncPluginPageRe
 static void gnc_plugin_page_register_cmd_copy (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_paste (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_edit_account (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_find_account (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_find_transactions (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_cut_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_copy_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
@@ -223,7 +225,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
     /* File menu */
 
     {
-        "FilePrintAction", GTK_STOCK_PRINT, N_("_Print Checks..."), "<control>p", NULL,
+        "FilePrintAction", GTK_STOCK_PRINT, N_("_Print Checks..."), "<primary>p", NULL,
         G_CALLBACK (gnc_plugin_page_register_cmd_print_check)
     },
 
@@ -245,12 +247,17 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
         G_CALLBACK (gnc_plugin_page_register_cmd_paste)
     },
     {
-        "EditEditAccountAction", GNC_STOCK_EDIT_ACCOUNT, N_("Edit _Account"), "<control>e",
+        "EditEditAccountAction", GNC_STOCK_EDIT_ACCOUNT, N_("Edit _Account"), "<primary>e",
         N_("Edit the selected account"),
         G_CALLBACK (gnc_plugin_page_register_cmd_edit_account)
     },
     {
-        "EditFindTransactionsAction", GTK_STOCK_FIND, N_("_Find..."), "<control>f",
+        "EditFindAccountAction", GTK_STOCK_FIND, N_("F_ind Account"), "<primary>i",
+        N_("Find an account"),
+        G_CALLBACK (gnc_plugin_page_register_cmd_find_account)
+    },
+    {
+        "EditFindTransactionsAction", GTK_STOCK_FIND, N_("_Find..."), "<primary>f",
         N_("Find transactions with a search"),
         G_CALLBACK (gnc_plugin_page_register_cmd_find_transactions)
     },
@@ -339,7 +346,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
     /* Actions menu */
 
     {
-        "ActionsTransferAction", GNC_STOCK_TRANSFER, N_("_Transfer..."), "<control>t",
+        "ActionsTransferAction", GNC_STOCK_TRANSFER, N_("_Transfer..."), "<primary>t",
         N_("Transfer funds from one account to another"),
         G_CALLBACK (gnc_plugin_page_register_cmd_transfer)
     },
@@ -364,7 +371,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
         G_CALLBACK (gnc_plugin_page_register_cmd_lots)
     },
     {
-        "BlankTransactionAction", GTK_STOCK_GOTO_BOTTOM, N_("_Blank Transaction"), "<control>Page_Down",
+        "BlankTransactionAction", GTK_STOCK_GOTO_BOTTOM, N_("_Blank Transaction"), "<primary>Page_Down",
         N_("Move to the blank transaction at the bottom of the register"),
         G_CALLBACK (gnc_plugin_page_register_cmd_blank_transaction)
     },
@@ -758,7 +765,7 @@ gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
     parent = GNC_PLUGIN_PAGE(plugin_page);
     use_new = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_USE_NEW);
     g_object_set(G_OBJECT(plugin_page),
-                 "page-name",      _("General Ledger"),
+                 "page-name",      _("General Journal"),
                  "page-uri",       "default:",
                  "ui-description", "gnc-plugin-page-register-ui.xml",
                  "use-new-window", use_new,
@@ -940,7 +947,10 @@ gnc_plugin_page_register_ui_update (gpointer various, GncPluginPageRegister *pag
     uri = xaccTransGetAssociation(trans);
     action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
                                          "ExecAssociatedTransactionAction");
-    gtk_action_set_sensitive (GTK_ACTION(action), uri ? TRUE:FALSE);
+    if (g_strcmp0 (uri, "") != 0 && g_strcmp0 (uri, NULL) != 0)
+        gtk_action_set_sensitive (GTK_ACTION(action), TRUE);
+    else
+        gtk_action_set_sensitive (GTK_ACTION(action), FALSE);
 
     /* If we are in a readonly book, make any modifying action inactive */
     if (qof_book_is_readonly(gnc_get_current_book()))
@@ -1337,7 +1347,7 @@ gnc_plugin_page_register_save_page (GncPluginPage *plugin_page,
         g_key_file_set_string(key_file, group_name, KEY_ACCOUNT_NAME, name);
         g_free(name);
     }
-    else if (reg->type == GENERAL_LEDGER)
+    else if (reg->type == GENERAL_JOURNAL)
     {
         g_key_file_set_string(key_file, group_name, KEY_REGISTER_TYPE,
                               LABEL_GL);
@@ -1612,9 +1622,9 @@ gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page)
     case LD_GL:
         switch (reg->type)
         {
-        case GENERAL_LEDGER:
+        case GENERAL_JOURNAL:
         case INCOME_LEDGER:
-            return g_strdup(_("General Ledger"));
+            return g_strdup(_("General Journal"));
         case PORTFOLIO_LEDGER:
             return g_strdup(_("Portfolio"));
         case SEARCH_LEDGER:
@@ -1849,6 +1859,24 @@ gnc_plugin_page_register_summarybar_position_changed (gpointer prefs, gchar* pre
     gtk_box_reorder_child (GTK_BOX (priv->widget),
                           plugin_page->summarybar,
                           (position == GTK_POS_TOP ? 0 : -1) );
+}
+
+/** This function is called to get the query associated with this
+ *  plugin page.
+ *
+ *  @param page A pointer to the GncPluginPage.
+ */
+Query *
+gnc_plugin_page_register_get_query (GncPluginPage *plugin_page)
+{
+    GncPluginPageRegister *page;
+    GncPluginPageRegisterPrivate *priv;
+
+    g_return_val_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page), NULL);
+
+    page = GNC_PLUGIN_PAGE_REGISTER (plugin_page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+    return gnc_ledger_display_get_query (priv->ledger);
 }
 
 /************************************************************/
@@ -2600,10 +2628,10 @@ gnc_reg_get_name (GNCLedgerDisplay *ledger, gboolean for_window)
 
     switch (reg->type)
     {
-    case GENERAL_LEDGER:
+    case GENERAL_JOURNAL:
     case INCOME_LEDGER:
         if (for_window)
-            reg_name = _("General Ledger");
+            reg_name = _("General Journal");
         else
             reg_name = _("Transaction Report");
         break;
@@ -2682,7 +2710,7 @@ report_helper (GNCLedgerDisplay *ledger, Split *split, Query *query)
     arg = SCM_BOOL (reg->use_double_line);
     args = scm_cons (arg, args);
 
-    arg = SCM_BOOL (reg->type == GENERAL_LEDGER || reg->type == INCOME_LEDGER
+    arg = SCM_BOOL (reg->type == GENERAL_JOURNAL || reg->type == INCOME_LEDGER
                                                 || reg->type == SEARCH_LEDGER);
     args = scm_cons (arg, args);
 
@@ -2902,6 +2930,21 @@ gnc_plugin_page_register_cmd_edit_account (GtkAction *action,
         gnc_ui_edit_account_window (account);
     LEAVE(" ");
 }
+
+
+static void
+gnc_plugin_page_register_cmd_find_account (GtkAction *action,
+        GncPluginPageRegister *page)
+{
+    GtkWidget *window;
+
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
+
+    window = gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page));
+
+    gnc_find_account_dialog (window, NULL);
+}
+
 
 
 static void
@@ -3514,10 +3557,9 @@ gnc_plugin_page_register_cmd_associate_file_transaction (GtkAction *action,
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
-    gsr_default_associate_handler_file(priv->gsr, NULL);
+    gsr_default_associate_handler (priv->gsr, TRUE);
     gnc_plugin_page_register_ui_update (NULL, plugin_page);
     LEAVE(" ");
-
 }
 
 static void
@@ -3531,10 +3573,9 @@ gnc_plugin_page_register_cmd_associate_location_transaction (GtkAction *action,
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
-    gsr_default_associate_handler_location(priv->gsr, NULL);
+    gsr_default_associate_handler (priv->gsr, FALSE);
     gnc_plugin_page_register_ui_update (NULL, plugin_page);
     LEAVE(" ");
-
 }
 
 static void

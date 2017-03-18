@@ -26,6 +26,7 @@
 // gnucash includes
 #include "config.h" // required by qof/qofutil.h
 #include <glib/gi18n.h>
+#include "libqof/qof/guid.hpp"
 extern "C"
 {
 #include "qof.h"
@@ -99,14 +100,6 @@ public:
     {
         qof_session_save(gobj(), percentage_func);
     }
-
-
-    void call_close_hooks ()
-    {
-        qof_session_call_close_hooks (gobj());
-    }
-
-
 };
 
 std::pair<QString, QString> errorToStringPair(QofBackendError err);

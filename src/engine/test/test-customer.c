@@ -24,9 +24,11 @@
  *
  *********************************************************************/
 
-#include "config.h"
+#include <config.h>
 #include <glib.h>
-#include "qof.h"
+#include <qof.h>
+#include <qofinstance-p.h>
+
 #include "cashobjects.h"
 #include "gncCustomerP.h"
 #include "gncInvoiceP.h"
@@ -88,7 +90,7 @@ test_customer (void)
         do_test (gncCustomerGetAddr (customer) != NULL, "Addr");
         do_test (gncCustomerGetShipAddr (customer) != NULL, "ShipAddr");
 
-        guid_new (&guid);
+        guid_replace (&guid);
         customer = gncCustomerCreate (book);
         count++;
         gncCustomerSetGUID (customer, &guid);

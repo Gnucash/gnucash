@@ -39,10 +39,6 @@
     @ingroup QOF
 */
 /**
-    @addtogroup Math128 Math128: 128-bit Integer Math Library
-    @ingroup QOF
-*/
-/**
     @addtogroup Numeric Numeric: Rational Number Handling w/ Rounding Error Control
     @ingroup QOF
 */
@@ -79,12 +75,8 @@
 #include "gnc-numeric.h"
 #include "qofutil.h"
 #include "guid.h"
-#include "kvp_frame.h"
-#include "kvp-util.h"
-#include "kvp-util-p.h"
 #include "qofbackend.h"
 #include "qofid-p.h"
-#include "qofinstance-p.h"
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofevent.h"
@@ -93,7 +85,6 @@
 #include "qofquerycore.h"
 #include "qofsession.h"
 #include "qofchoice.h"
-#include "qofreference.h"
 #include "qof-string-cache.h"
 
 #endif /* QOF_H_ */

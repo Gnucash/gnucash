@@ -16,14 +16,14 @@ ENABLE_TESTING()
 # Version number of gnucash
 SET (GNUCASH_MAJOR_VERSION 2)
 SET (GNUCASH_MINOR_VERSION 6)
-SET (GNUCASH_MICRO_VERSION 15)
+SET (GNUCASH_MICRO_VERSION 99)
 SET (GNUCASH_NANO_VERSION 0)
 SET (VERSION "${GNUCASH_MAJOR_VERSION}.${GNUCASH_MINOR_VERSION}.${GNUCASH_MICRO_VERSION}")
 SET (GNUCASH_LATEST_STABLE_SERIES 2.6)
 
 SET (PACKAGE gnucash)
 SET (PACKAGE_NAME GnuCash)
-SET (PACKAGE_VERSION ${VERSION})
+SET (PACKAGE_VERSION 2.6.99)
 SET (PACKAGE_BUGREPORT gnucash-devel@gnucash.org)
 SET (PACKAGE_TARNAME ${PACKAGE})
 SET (PACKAGE_STRING "${PACKAGE_NAME} ${PACKAGE_VERSION}")
@@ -62,7 +62,7 @@ OPTION (ENABLE_DEBUG "compile with debugging flags set" OFF)
 OPTION (ENABLE_REGISTER2 "compile with register2 enabled" OFF)
 OPTION (DISABLE_NLS "do not use Native Language Support" OFF)
 OPTION (DISABLE_DEPRECATED_GLIB "don't use deprecated glib functions" OFF)
-OPTION (DISABLE_DEPRECATED_GTK "don't use deprectacted gtk, gdk or gdk-pixbuf functions" OFF)
+OPTION (DISABLE_DEPRECATED_GTK "don't use deprecated gtk, gdk or gdk-pixbuf functions" OFF)
 OPTION (DISABLE_DEPRECATED_GNOME "don't use deprecated gnome functions" OFF)
 OPTION (GNC_BUILD_AS_INSTALL "Make build directory structure mirror install" ON)
 # ############################################################
@@ -122,7 +122,7 @@ IF (WIN32)
   #
 
   SET(CMAKE_FRAMEWORK_PATH_TMP ${CMAKE_PREFIX_PATH})
-  SET(DEV_SUBDIRS aqbanking gnome goffice guile gwenhywfar libgsf libofx libsoup libxslt webkit)
+  SET(DEV_SUBDIRS aqbanking gnome guile gwenhywfar libgsf libofx libsoup libxslt webkit)
   FOREACH(subdir ${DEV_SUBDIRS})
     LIST(APPEND CMAKE_FRAMEWORK_PATH_TMP ${CMAKE_PREFIX_PATH}/${subdir})
   ENDFOREACH()
@@ -131,7 +131,6 @@ IF (WIN32)
   SET(CMAKE_FRAMEWORK_PATH "${CMAKE_FRAMEWORK_PATH_TMP}")
   SET(PKG_CONFIG_EXECUTABLE ${CMAKE_PREFIX_PATH}/gnome/bin/pkg-config.exe)
   SET(SWIG_EXECUTABLE ${CMAKE_PREFIX_PATH}/swig/swig.exe)
-  SET(BOOST_ROOT ${CMAKE_PREFIX_PATH}/boost)
   SET(REGEX_INCLUDE_PATH ${CMAKE_PREFIX_PATH}/regex/include)
   SET(REGEX_LDFLAGS "-L${CMAKE_PREFIX_PATH}/regex/lib -lregex")
   SET(LIBXSLT_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/libxslt/include)
@@ -164,7 +163,7 @@ IF (NOT PKG_CONFIG_FOUND)
 ENDIF (NOT PKG_CONFIG_FOUND)
 
 # glib et al.
-GNC_PKG_CHECK_MODULES (GLIB2 REQUIRED glib-2.0>=2.20)
+GNC_PKG_CHECK_MODULES (GLIB2 REQUIRED glib-2.0>=2.40)
 GNC_PKG_CHECK_MODULES (GOBJECT REQUIRED gobject-2.0>=2.20)
 GNC_PKG_CHECK_MODULES (GMODULE REQUIRED gmodule-2.0>=2.20)
 GNC_PKG_CHECK_MODULES (GTHREAD REQUIRED gthread-2.0>=2.20)
@@ -175,7 +174,6 @@ GNC_PKG_CHECK_MODULES (LIBXSLT REQUIRED libxslt)
 GNC_PKG_CHECK_MODULES (WEBKIT REQUIRED webkit-1.0>=1.2)
 IF (WITH_GNUCASH)
   GNC_PKG_CHECK_MODULES (GTK2 REQUIRED gtk+-2.0>=2.24.0)
-  GNC_PKG_CHECK_MODULES (GOFFICE REQUIRED libgoffice-0.8>=0.8.17)
 ENDIF (WITH_GNUCASH)
 
 GNC_PKG_CHECK_MODULES (ZLIB REQUIRED zlib)
@@ -347,6 +345,8 @@ IF(APPLE)
   ENDIF()
 ENDIF(APPLE)
 
+# FIND_PACKAGE(LibXslt) eats PKG_CONFIG_EXECUTABLE, so preserve it.
+SET(GNC_PKG_CONFIG_EXE ${PKG_CONFIG_EXECUTABLE})
 # ############################################################
 
 # xsltproc
@@ -356,6 +356,7 @@ IF (NOT LIBXSLT_FOUND)
    MESSAGE(SEND_ERROR "libxslt library not found.")
 ENDIF(NOT LIBXSLT_FOUND)
 # ############################################################
+SET(PKG_CONFIG_EXECUTABLE ${GNC_PKG_CONFIG_EXE})
 
 # libdbi
 FIND_PATH (LIBDBI_INCLUDE_PATH dbi/dbi.h HINTS ${CMAKE_PREFIX_PATH}/libdbi/include)
@@ -401,7 +402,41 @@ GET_FILENAME_COMPONENT(PERL_DIR ${PERL_EXECUTABLE} DIRECTORY)
 
 FIND_PROGRAM(POD2MAN_EXECUTABLE pod2man HINTS ${PERL_DIR})
 
-# Boost stuff removed, not required on maint.
+#ICU
+GNC_PKG_CHECK_MODULES (ICU4C REQUIRED icu-uc)
+GNC_PKG_CHECK_MODULES (ICU4C_I18N REQUIRED icu-i18n)
+
+#BOOST
+IF (APPLE)
+  # I suppose I would rather use the shared Boost libraries here, but the Boost install procedure
+  # does not set RPATH for it's shared library correctly. It uses a 'naked' RPATH, which requires
+  # that DYLD_FALLBACK_LIBRARY_PATH be set. There is supposedly a dll-path option to set RPATH, but
+  # I can't get it to work (http://www.boost.org/build/doc/html/bbv2/faq/dll-path.html) and neither
+  # can some other random person on the internet:
+  # http://stackoverflow.com/questions/33667795/dll-path-has-no-effect-when-building-boost
+  # Using static libs simplifies things.
+  SET (Boost_USE_STATIC_LIBS ON)
+  SET (Boost_USE_STATIC_RUNTIME ON)
+ELSE()
+  SET (Boost_USE_STATIC_LIBS OFF)
+  SET (Boost_USE_STATIC_RUNTIME OFF)
+ENDIF()
+
+SET (Boost_USE_MULTITHREADED ON)
+SET (Boost_FIND_QUIETLY ON)
+
+IF (NOT DEFINED ${BOOST_ROOT})
+  SET(BOOST_ROOT $ENV{BOOST_ROOT})
+ENDIF()
+FIND_PACKAGE (Boost 1.54.0 REQUIRED COMPONENTS date_time regex locale)
+
+IF (Boost_FOUND)
+  include_directories(${Boost_INCLUDE_DIRS})
+  SET(HAVE_BOOST 1)
+ELSE (Boost_FOUND)
+  MESSAGE (SEND_ERROR "Boost 1.54.0 or later is not installed, and is required. Please install it and ensure that the following libraries are built: chrono, date_time, filesystem, log, program_options, regex, signals, system, and test.")
+ENDIF (Boost_FOUND)
+
 
 # Compiler flags
 
@@ -416,15 +451,19 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")  # FIXME: should be -std=
 
 
 IF (UNIX)
-  SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wdeclaration-after-statement -Wno-pointer-sign -D_FORTIFY_SOURCE=2 -Wall -Wunused -Wmissing-prototypes -Wmissing-declarations -Wno-unused -std=gnu99")
-  SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-error=deprecated-declarations")
+  SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wdeclaration-after-statement -Wno-pointer-sign -Wall -Wunused -Wmissing-prototypes -Wmissing-declarations  -Wno-unused")
+  SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-error=deprecated-declarations -std=gnu11")
+  SET( CMAKE_C_FLAGS_RELEASE "-O3 ${CMAKE_C_FLAGS} -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2")
 ENDIF (UNIX)
 IF (MINGW)
-  SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wdeclaration-after-statement -Wno-pointer-sign -Wall -Wunused -Wmissing-prototypes -Wmissing-declarations  -Wno-unused -std=gnu99")
+  SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wdeclaration-after-statement -Wno-pointer-sign -Wall -Wunused -Wmissing-prototypes -Wmissing-declarations  -Wno-unused -std=gnu11")
+  SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWINVER=0x0500") # Workaround for bug in gtest on mingw, see https://github.com/google/googletest/issues/893
 ENDIF (MINGW)
 IF (APPLE)
   SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-local-typedef")
 ENDIF(APPLE)
+SET( CMAKE_C_FLAGS_DEBUG "-O0 -g ${CMAKE_C_FLAGS}")
+SET( CMAKE_CXX_FLAGS_DEBUG "-O0 -g ${CMAKE_CXX_FLAGS}")
 
 IF (APPLE AND WITH_GNUCASH)
   SET(CMAKE_MACOSX_RPATH ON)
@@ -432,7 +471,7 @@ ENDIF (APPLE AND WITH_GNUCASH)
 
 IF (UNIX AND NOT APPLE)
   SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/lib/gnucash")
-ENDIF()    
+ENDIF()
 
 SET(BUILD_SHARED_LIBS ON)
 
@@ -458,6 +497,8 @@ IF (GNC_BUILD_AS_INSTALL)
   ENDIF()
 ENDIF()
 # ############################################################
+
+GNC_GTEST_CONFIGURE()
 
 SET(CMAKE_CTEST_COMMAND ctest)
 IF (XCODE_VERSION)
@@ -511,7 +552,7 @@ IF (GNC_BUILD_AS_INSTALL)
     )
   ENDIF()
 ENDIF()
-
+# Install DOC files from top level directory
 
 SET(gnucash_DOCS
     AUTHORS

@@ -24,7 +24,11 @@
  ********************************************************************/
 
 #include "config.h"
-#include "platform.h"
+
+#include <platform.h>
+#if PLATFORM(WINDOWS)
+#include <windows.h>
+#endif
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
@@ -114,6 +118,17 @@ static void impl_webkit_cancel( GncHtml* self );
 static void impl_webkit_set_parent( GncHtml* self, GtkWindow* parent );
 static void impl_webkit_default_zoom_changed(gpointer prefs, gchar *pref, gpointer user_data);
 
+static gboolean
+webkit_console_msg_cb (GtkWidget*   web_view,
+                                    const gchar* message,
+                                    guint        line,
+                                    const gchar* source_id,
+                                    GncHtmlWebkit*  view)
+{
+    PWARN ("JS: %s (%u): %s", source_id, line, message);
+    return TRUE;
+}
+
 static void
 gnc_html_webkit_init( GncHtmlWebkit* self )
 {
@@ -168,6 +183,10 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
     g_signal_connect( priv->web_view, "hovering-over-link",
                       G_CALLBACK(webkit_on_url_cb),
                       self );
+
+    g_signal_connect( priv->web_view, "console-message",
+            G_CALLBACK(webkit_console_msg_cb),
+            self);
 
 #if 0
     g_signal_connect( priv->html, "set_base",

@@ -2,8 +2,6 @@ noinst_LTLIBRARIES = libc-missing.la
 
 # All header files must be listed.
 noinst_HEADERS = \
-  gmtime_r.h \
-  localtime_r.h \
   setenv.h \
   strfmon.h \
   strptime.h \
@@ -13,8 +11,6 @@ noinst_HEADERS = \
 libc_missing_la_SOURCES = libc-missing-noop.c
 
 EXTRA_libc_missing_la_SOURCES = \
-  gmtime_r.c \
-  localtime_r.c \
   setenv.c \
   strfmon.c \
   strptime.c

@@ -24,9 +24,11 @@
  *
  *********************************************************************/
 
-#include "config.h"
+#include <config.h>
 #include <glib.h>
-#include "qof.h"
+#include <qof.h>
+#include <qofinstance-p.h>
+
 #include "gncJobP.h"
 #include "gncInvoiceP.h"
 #include "gncCustomerP.h"
@@ -40,12 +42,10 @@ test_string_fcn (QofBook *book, const char *message,
                  void (*set) (GncJob *, const char *str),
                  const char * (*get)(const GncJob *));
 
-#if 0
 static void
 test_numeric_fcn (QofBook *book, const char *message,
                   void (*set) (GncJob *, gnc_numeric),
                   gnc_numeric (*get)(const GncJob *));
-#endif
 
 static void
 test_bool_fcn (QofBook *book, const char *message,
@@ -87,10 +87,11 @@ test_job (void)
         test_string_fcn (book, "Id", gncJobSetID, gncJobGetID);
         test_string_fcn (book, "Name", gncJobSetName, gncJobGetName);
         test_string_fcn (book, "Reference", gncJobSetReference, gncJobGetReference);
+        test_numeric_fcn (book, "Rate", gncJobSetRate, gncJobGetRate);
 
         test_bool_fcn (book, "Active", gncJobSetActive, gncJobGetActive);
 
-        guid_new (&guid);
+        guid_replace (&guid);
         job = gncJobCreate (book);
         count++;
         gncJobSetGUID (job, &guid);
@@ -172,7 +173,6 @@ test_string_fcn (QofBook *book, const char *message,
     count++;
 }
 
-#if 0
 static void
 test_numeric_fcn (QofBook *book, const char *message,
                   void (*set) (GncJob *, gnc_numeric),
@@ -197,7 +197,6 @@ test_numeric_fcn (QofBook *book, const char *message,
     gncJobSetActive (job, FALSE);
     count++;
 }
-#endif
 
 static void
 test_bool_fcn (QofBook *book, const char *message,

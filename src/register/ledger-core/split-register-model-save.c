@@ -660,7 +660,6 @@ gnc_template_register_save_xfrm_cell (BasicCell * cell,
     SRInfo *info = gnc_split_register_get_info (reg);
     Account *template_acc;
     const GncGUID *acctGUID;
-    kvp_frame *kvpf;
     Account *acct;
 
     g_return_if_fail (gnc_basic_cell_has_name (cell, XFRM_CELL));
@@ -674,16 +673,14 @@ gnc_template_register_save_xfrm_cell (BasicCell * cell,
     }
 
     acctGUID = xaccAccountGetGUID (acct);
-    kvpf = xaccSplitGetSlots (sd->split);
-    kvp_frame_set_slot_path (kvpf, kvp_value_new_guid(acctGUID),
-                             GNC_SX_ID, GNC_SX_ACCOUNT, NULL);
-
+    qof_instance_set (QOF_INSTANCE (sd->split),
+		      "sx-account", acctGUID,
+		      NULL);
     template_acc = xaccAccountLookup (&info->template_account,
                                       gnc_get_current_book ());
 
     /* set the actual account to the fake account for these templates */
     xaccAccountInsertSplit (template_acc, sd->split);
-    qof_instance_set_dirty (QOF_INSTANCE (sd->split));
 }
 
 static void
@@ -700,10 +697,9 @@ gnc_template_register_save_debcred_cell (BasicCell * cell,
 {
     SRSaveData *sd = save_data;
     SplitRegister *reg = user_data;
-    kvp_frame *kvpf;
-    const char *value;
+    const char *formula;
     char *error_loc;
-    gnc_numeric new_amount;
+    gnc_numeric amount;
     gboolean parse_result;
     GHashTable *parser_vars = g_hash_table_new(g_str_hash, g_str_equal);
 
@@ -713,69 +709,59 @@ gnc_template_register_save_debcred_cell (BasicCell * cell,
     if (sd->handled_dc)
         return;
 
-    kvpf = xaccSplitGetSlots (sd->split);
-
-    DEBUG ("kvp_frame before: %s\n", kvp_frame_to_string (kvpf));
-
     /* amountStr = gnc_numeric_to_string (new_amount); */
 
-    value = gnc_table_layout_get_cell_value (reg->table->layout, FCRED_CELL);
-    kvp_frame_set_slot_path (kvpf, kvp_value_new_string (value),
-                             GNC_SX_ID,
-                             GNC_SX_CREDIT_FORMULA,
-                             NULL);
-
-    /* If the value can be parsed into a numeric result (without any
+    formula = gnc_table_layout_get_cell_value (reg->table->layout, FCRED_CELL);
+   /* If the value can be parsed into a numeric result (without any
      * further variable definitions), store that numeric value
      * additionally in the kvp. Otherwise store a zero numeric
      * there.*/
-    parse_result = gnc_exp_parser_parse_separate_vars(value, &new_amount,
+    parse_result = gnc_exp_parser_parse_separate_vars(formula, &amount,
                                                       &error_loc, parser_vars);
     if (g_hash_table_size(parser_vars) == 0)
     {
         if (!parse_result)
         {
-            new_amount = gnc_numeric_zero();
+            amount = gnc_numeric_zero();
         }
-        kvp_frame_set_slot_path (kvpf, kvp_value_new_numeric (new_amount),
-                                 GNC_SX_ID,
-                                 GNC_SX_CREDIT_NUMERIC,
-                                 NULL);
+        qof_instance_set (QOF_INSTANCE (sd->split),
+			  "sx-credit-formula", formula,
+                          "sx-credit-numeric", &amount,
+                          NULL);
     }
     else
     {
+	qof_instance_set (QOF_INSTANCE (sd->split),
+			  "sx-credit-formula", formula,
+			  NULL);
         g_hash_table_destroy(parser_vars);
         parser_vars = g_hash_table_new (g_str_hash, g_str_equal);
     }
-    value = gnc_table_layout_get_cell_value (reg->table->layout, FDEBT_CELL);
-
-    kvp_frame_set_slot_path (kvpf,
-                             kvp_value_new_string (value),
-                             GNC_SX_ID,
-                             GNC_SX_DEBIT_FORMULA,
-                             NULL);
+    formula = gnc_table_layout_get_cell_value (reg->table->layout, FDEBT_CELL);
 
     /* If the value can be parsed into a numeric result, store that
      * numeric value additionally. See above comment.*/
-    parse_result = gnc_exp_parser_parse_separate_vars(value, &new_amount,
+    parse_result = gnc_exp_parser_parse_separate_vars(formula, &amount,
                                                       &error_loc, parser_vars);
     if (parser_vars == NULL)
     {
         if (!parse_result)
         {
-            new_amount = gnc_numeric_zero();
+            amount = gnc_numeric_zero();
         }
-        kvp_frame_set_slot_path (kvpf, kvp_value_new_numeric (new_amount),
-                                 GNC_SX_ID,
-                                 GNC_SX_DEBIT_NUMERIC,
-                                 NULL);
+        qof_instance_set (QOF_INSTANCE (sd->split),
+			  "sx-debit-formula", formula,
+                          "sx-debit-numeric", &amount,
+                          NULL);
     }
     else
     {
+	qof_instance_set (QOF_INSTANCE (sd->split),
+			  "sx-debit-formula", formula,
+			  NULL);
         g_hash_table_destroy(parser_vars);
         parser_vars = NULL;
     }
-    DEBUG ("kvp_frame  after: %s\n", kvp_frame_to_string (kvpf));
 
     /* set the amount to an innocuous value */
     /* Note that this marks the split dirty */
@@ -790,24 +776,13 @@ gnc_template_register_save_shares_cell (BasicCell * cell,
                                         gpointer user_data)
 {
     SRSaveData *sd = save_data;
-    kvp_frame *kvpf;
     char *sharesStr = "(x + y)/42";
 
     g_return_if_fail (gnc_basic_cell_has_name (cell, SHRS_CELL));
-
-    kvpf = xaccSplitGetSlots (sd->split);
-
     /* FIXME: shares cells are numeric by definition. */
-    DEBUG ("kvp_frame before: %s\n", kvp_frame_to_string (kvpf));
-
-    /* sharesStr = gnc_numeric_to_string( sharesStr ); */
-    kvp_frame_set_slot_path (kvpf,
-                             kvp_value_new_string (sharesStr),
-                             GNC_SX_ID,
-                             GNC_SX_SHARES,
-                             NULL);
-
-    DEBUG ("kvp_frame  after: %s\n", kvp_frame_to_string (kvpf));
+    qof_instance_set (QOF_INSTANCE (sd->split),
+		      "sx-shares", sharesStr,
+		      NULL);
 
     /* set the shares to an innocuous value */
     /* Note that this marks the split dirty */

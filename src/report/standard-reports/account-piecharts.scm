@@ -38,6 +38,7 @@
 (define menuname-income (N_ "Income Piechart"))
 (define menuname-expense (N_ "Expense Piechart"))
 (define menuname-assets (N_ "Asset Piechart"))
+(define menuname-securities (N_ "Security Piechart"))
 (define menuname-liabilities (N_ "Liability Piechart"))
 ;; The names are used in the menu
 
@@ -48,6 +49,8 @@
   (N_ "Shows a piechart with the Expenses per given time interval"))
 (define menutip-assets 
   (N_ "Shows a piechart with the Assets balance at a given time"))
+(define menutip-securities
+  (N_ "Shows a piechart with distribution of assets over securities"))
 (define menutip-liabilities 
   (N_ "Shows a piechart with the Liabilities \
 balance at a given time"))
@@ -58,6 +61,7 @@ balance at a given time"))
 (define reportname-income (N_ "Income Accounts"))
 (define reportname-expense (N_ "Expense Accounts"))
 (define reportname-assets (N_ "Assets"))
+(define reportname-securities (N_ "Securities"))
 (define reportname-liabilities (N_ "Liabilities"))
 
 (define optname-from-date (N_ "Start Date"))
@@ -68,7 +72,7 @@ balance at a given time"))
 (define optname-accounts (N_ "Accounts"))
 (define optname-levels (N_ "Show Accounts until level"))
 
-(define optname-fullname (N_ "Show long account names"))
+(define optname-fullname (N_ "Show long names"))
 (define optname-show-total (N_ "Show Totals"))
 (define optname-show-percent (N_ "Show Percents"))
 (define optname-slices (N_ "Maximum Slices"))
@@ -82,7 +86,7 @@ balance at a given time"))
 ;; The option-generator. The only dependance on the type of piechart
 ;; is the list of account types that the account selection option
 ;; accepts.
-(define (options-generator account-types reverse-balance? do-intervals?)
+(define (options-generator account-types reverse-balance? do-intervals? depth-based?)
   (let* ((options (gnc:new-options)) 
          (add-option 
           (lambda (new-option)
@@ -144,15 +148,20 @@ balance at a given time"))
                accounts)))
       #t))
 
-    (gnc:options-add-account-levels! 
-     options gnc:pagename-accounts optname-levels "b" 
-     (N_ "Show accounts to this depth and not further.") 
-     2)
+    (if depth-based?
+      (gnc:options-add-account-levels!
+       options gnc:pagename-accounts optname-levels "b"
+       (N_ "Show accounts to this depth and not further.")
+       2))
 
     (add-option
      (gnc:make-simple-boolean-option
       gnc:pagename-display optname-fullname
-      "a" (N_ "Show the full account name in legend?") #f))
+      "a"
+      (N_ (if depth-based?
+              "Show the full account name in legend?"
+              "Show the full security name in the legend?"))
+      #f))
 
     (add-option
      (gnc:make-simple-boolean-option
@@ -172,9 +181,9 @@ balance at a given time"))
       "c" (N_ "Maximum number of slices in pie.") 7
       2 24 0 1))
 
-    (gnc:options-add-plot-size!
+    (gnc:options-add-plot-size! 
      options gnc:pagename-display 
-     optname-plot-width optname-plot-height "d" 500 350)
+     optname-plot-width optname-plot-height "d" (cons 'percent 100.0) (cons 'percent 100.0))
 
     (gnc:options-add-sort-method! 
      options gnc:pagename-display
@@ -184,14 +193,171 @@ balance at a given time"))
 
     options))
 
+;; Set slice URLs for the depth-based chart types.
+(define (set-slice-urls!
+          report-obj uuid show-fullname? tree-depth other-anchor accts chart)
+  (let
+      ((urls
+        (map
+         (lambda (pair)
+           (if (string? (cadr pair))
+               other-anchor
+               (let* ((acct (cadr pair))
+                      (subaccts (gnc-account-get-children acct)))
+                 (if (null? subaccts)
+                     ;; if leaf-account, make this an anchor
+                     ;; to the register.
+                     (gnc:account-anchor-text (cadr pair))
+                     ;; if non-leaf account, make this a link
+                     ;; to another report which is run on the
+                     ;; immediate subaccounts of this account
+                     ;; (and including this account).
+                     (gnc:make-report-anchor
+                      uuid
+                      report-obj
+                      (list
+                       (list gnc:pagename-accounts optname-accounts
+                             (cons acct subaccts))
+                       (list gnc:pagename-accounts optname-levels
+                             (+ 1 tree-depth))
+                       (list gnc:pagename-general
+                             gnc:optname-reportname
+                             ((if show-fullname?
+                                  gnc-account-get-full-name
+                                  xaccAccountGetName) acct))))))))
+         accts)))
+    (gnc:html-piechart-set-button-1-slice-urls!
+     chart urls)
+    (gnc:html-piechart-set-button-1-legend-urls!
+     chart urls)))
+
+;; Get display name for account-based reports.
+(define (display-name-accounts show-fullname? acc)
+  ((if show-fullname?
+       gnc-account-get-full-name
+       xaccAccountGetName) acc))
+
+;; Get display name for security-based report.
+(define (display-name-security show-fullname? sec)
+  ((if show-fullname?
+       gnc-commodity-get-fullname
+       gnc-commodity-get-mnemonic) sec))
+
+
+;; Sort comparator for account-based reports.
+(define (sort-comparator-accounts sort-method show-fullname?)
+  (cond
+   ((eq? sort-method 'acct-code)
+    (lambda (a b)
+      (string<? (xaccAccountGetCode (cadr a))
+                (xaccAccountGetCode (cadr b)))))
+   ((eq? sort-method 'alphabetical)
+    (lambda (a b)
+      (string<? (display-name-accounts show-fullname? (cadr a))
+                (display-name-accounts show-fullname? (cadr b)))))
+   (else
+    (lambda (a b) (> (car a) (car b))))))
+
+;; Sort comparator for security-based report.
+(define (sort-comparator-security sort-method show-fullname?)
+  (cond
+   ((eq? sort-method 'acct-code)
+    (lambda (a b)
+      (string<? (gnc-commodity-get-mnemonic (cadr a))
+                (gnc-commodity-get-mnemonic (cadr b)))))
+   ((eq? sort-method 'alphabetical)
+    (lambda (a b)
+      (string<? (display-name-security show-fullname? (cadr a))
+                (display-name-security show-fullname? (cadr b)))))
+   (else
+    (lambda (a b) (> (car a) (car b))))))
+
+;; Calculates all account's balances. Returns a list of
+;; balance <=> account pairs, like '((10.0 Earnings) (142.5
+;; Gifts)). If current-depth >= tree-depth, then the balances
+;; are calculated *with* subaccount's balances. Else only the
+;; current account is regarded. Note: All accounts in accts
+;; and all their subaccounts are processed, but a balances is
+;; calculated and returned *only* for those accounts where
+;; show-acct? is true. This is necessary because otherwise we
+;; would forget an account that is selected but not its
+;; parent.
+(define (traverse-accounts account-balance show-acct? work-to-do tree-depth
+                           work-done current-depth accts)
+  (if (< current-depth tree-depth)
+      (let iter ((res '())
+                 (remaining accts)
+                 (cur-work-done work-done))
+        (if (null? remaining)
+            (cons cur-work-done res)
+            (begin
+              (gnc:report-percent-done (* 100 (/ cur-work-done (work-to-do))))
+              (let* ((cur (car remaining))
+                     (tail (cdr remaining))
+                     (subaccts-data (traverse-accounts
+                                      account-balance show-acct?
+                                      work-to-do tree-depth
+                                      cur-work-done
+                                      (1+ current-depth)
+                                      (gnc-account-get-children cur)))
+                     (subaccts-work (car subaccts-data))
+                     (subaccts (cdr subaccts-data)))
+                (iter
+                  (append
+                    subaccts
+                    (if (show-acct? cur)
+                        (cons (list (account-balance cur #f) cur) res)
+                        res))
+                  tail
+                  (1+ subaccts-work))))))
+      (let* ((proc-account (lambda (a)
+                              (set! work-done (1+ work-done))
+                              (gnc:report-percent-done
+                                (* 100 (/ work-done (work-to-do))))
+                              (list (account-balance a #t) a)))
+             (new-accts (map proc-account (filter show-acct? accts))))
+        (cons work-done new-accts))))
+
+;; Calculate balances to show grouped by security.  This works similarly
+;; to traverse-accounts, but it does not consider the depth and also does not
+;; construct data based on the accounts.  Instead, it builds up a map
+;; indexed by securities and sums up all balances for each security.
+(define (sum-securities account-balance show-acct? work-to-do tree-depth
+                        work-done current-depth accts)
+
+  (define table (make-hash-table))
+  (define (add! sec balance)
+    (let* ((key (gnc-commodity-get-unique-name sec))
+           (handle (hash-create-handle! table key (cons 0 sec)))
+           (val (cadr handle)))
+      (hash-set! table key (cons (+ val balance) sec))))
+
+  (define (traverse! remaining initial-work)
+    (if (null? remaining)
+      initial-work
+      (let* ((cur (car remaining))
+             (tail (cdr remaining))
+             (cur-work-done (1+ initial-work))
+             (subaccts (gnc-account-get-children cur)))
+        (gnc:report-percent-done (* 100 (/ cur-work-done (work-to-do))))
+        (if (show-acct? cur)
+          (add! (xaccAccountGetCommodity cur) (account-balance cur #f)))
+        (traverse! tail (traverse! subaccts cur-work-done)))))
+
+  (define (translate key value)
+    (list (car value) (cdr value)))
+
+  (let ((final-work (traverse! accts work-done)))
+    (cons final-work (hash-map->list translate table))))
 
 ;; The rendering function. Since it works for a bunch of different
 ;; account settings, you have to give the reportname, the
 ;; account-types to work on and whether this report works on
 ;; intervals as arguments.
 (define (piechart-renderer report-obj reportname report-guid
-                           account-types do-intervals?)
-  
+                           account-types do-intervals? depth-based?
+                           display-name sort-comparator get-data)
+
   ;; This is a helper function for looking up option values.
   (define (get-option section name)
     (gnc:option-value 
@@ -211,7 +377,10 @@ balance at a given time"))
 					optname-from-date)))
                           '()))
         (accounts (get-option gnc:pagename-accounts optname-accounts))
-        (account-levels (get-option gnc:pagename-accounts optname-levels))
+        (account-levels
+          (if depth-based?
+            (get-option gnc:pagename-accounts optname-levels)
+            'all))
         (report-currency (get-option gnc:pagename-general
 				     optname-report-currency))
         (price-source (get-option gnc:pagename-general
@@ -233,8 +402,6 @@ balance at a given time"))
 	(sort-method (get-option gnc:pagename-display optname-sort-method))
 	(reverse-balance? (get-option "__report" "reverse-balance?"))
 
-	(work-done 0)
-	(work-to-do 0)
         (document (gnc:make-html-document))
         (chart (gnc:make-html-piechart))
         (topl-accounts (gnc:filter-accountlist-type 
@@ -313,52 +480,30 @@ balance at a given time"))
             exchange-fn)))
          averaging-multiplier))
 
+      ;; Get balance of an account as double number, already converted
+      ;; to the report's currency.
+      (define (account-balance a subaccts?)
+        (collector->double (profit-fn a subaccts?)))
+
       (define (count-accounts current-depth accts)
 	(if (< current-depth tree-depth)
-	    (let ((sum 0))
-	      (for-each
-	       (lambda (a)
-		 (set! sum (+ sum (+ 1 (count-accounts (+ 1 current-depth)
-						       (gnc-account-get-children a))))))
-	       accts)
-	      sum)
+            (let iter ((sum 0)
+                       (remaining accts))
+              (if (null? remaining)
+                  sum
+                  (let* ((cur (car remaining))
+                         (tail (cdr remaining))
+                         (subaccts (count-accounts (1+ current-depth)
+                                                   (gnc-account-get-children cur))))
+                    (iter (+ sum (1+ subaccts)) tail))))
 	    (length (filter show-acct? accts))))
 
-      ;; Calculates all account's balances. Returns a list of
-      ;; balance <=> account pairs, like '((10.0 Earnings) (142.5
-      ;; Gifts)). If current-depth >= tree-depth, then the balances
-      ;; are calculated *with* subaccount's balances. Else only the
-      ;; current account is regarded. Note: All accounts in accts
-      ;; and all their subaccounts are processed, but a balances is
-      ;; calculated and returned *only* for those accounts where
-      ;; show-acct? is true. This is necessary because otherwise we
-      ;; would forget an account that is selected but not its
-      ;; parent.
-      (define (traverse-accounts current-depth accts)
-        (if (< current-depth tree-depth)
-            (let ((res '()))
-              (for-each
-               (lambda (a)
-                 (begin
-		   (set! work-done (+ 1 work-done))
-		   (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
-                   (if (show-acct? a)
-                       (set! res (cons (list (collector->double 
-                                              (profit-fn a #f)) a)
-                                       res)))
-                   (set! res (append
-                              (traverse-accounts
-                               (+ 1 current-depth)
-                               (gnc-account-get-children a))
-                              res))))
-               accts)
-              res)
-            (map
-             (lambda (a)
-	       (set! work-done (+ 1 work-done))
-	       (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
-               (list (collector->double (profit-fn a #t)) a))
-             (filter show-acct? accts))))
+      ;; Get base data to be plotted.
+      (define work-to-do (lambda () (count-accounts 1 topl-accounts)))
+ 
+      (define base-data (lambda ()
+        (get-data account-balance show-acct? work-to-do tree-depth
+                  0 1 topl-accounts)))
 
       (define (fix-signs combined)
         (map (lambda (pair)
@@ -371,26 +516,10 @@ balance at a given time"))
 
       (if (not (null? accounts))
           (begin
-	    (set! work-to-do (count-accounts 1 topl-accounts))
             (set! combined
 		  (sort (filter (lambda (pair) (not (>= 0.0 (car pair))))
-				(fix-signs
-                                 (traverse-accounts 1 topl-accounts)))
-			(cond
-			 ((eq? sort-method 'acct-code)
-			  (lambda (a b) 
-			    (string<? (xaccAccountGetCode (cadr a))
-				      (xaccAccountGetCode (cadr b)))))
-			 ((eq? sort-method 'alphabetical)
-			  (lambda (a b) 
-			    (string<? ((if show-fullname?
-					   gnc-account-get-full-name
-					   xaccAccountGetName) (cadr a))
-				      ((if show-fullname?
-					   gnc-account-get-full-name
-					   xaccAccountGetName) (cadr b)))))
-			 (else
-			  (lambda (a b) (> (car a) (car b)))))))
+				(fix-signs (cdr (base-data))))
+                        (sort-comparator sort-method show-fullname?)))
 
             ;; if too many slices, condense them to an 'other' slice
             ;; and add a link to a new pie report with just those
@@ -402,55 +531,25 @@ balance at a given time"))
                   (set! combined
                         (append start
                                 (list (list sum (_ "Other")))))
-                  (let ((options (gnc:make-report-options report-guid))
-                        (id #f))
-                    ;; now copy all the options
-                    (gnc:options-copy-values (gnc:report-options report-obj)
-                                             options)
-                    ;; and set the destination accounts
-                    (gnc:option-set-value
-                     (gnc:lookup-option options gnc:pagename-accounts 
-                                        optname-accounts)
-                     (map cadr finish))
-                    (set! id (gnc:make-report report-guid options))
-                    ;; set the URL.
-                    (set! other-anchor (gnc:report-anchor-text id)))))
+                  (if depth-based?
+                    (let ((options (gnc:make-report-options report-guid))
+                          (id #f))
+                      ;; now copy all the options
+                      (gnc:options-copy-values (gnc:report-options report-obj)
+                                               options)
+                      ;; and set the destination accounts
+                      (gnc:option-set-value
+                       (gnc:lookup-option options gnc:pagename-accounts
+                                          optname-accounts)
+                       (map cadr finish))
+                      (set! id (gnc:make-report report-guid options))
+                      ;; set the URL.
+                      (set! other-anchor (gnc:report-anchor-text id))))))
             
             ;; set the URLs; the slices are links to other reports
-            (let 
-                ((urls
-                  (map 
-                   (lambda (pair)
-                     (if (string? (cadr pair))
-                         other-anchor
-                         (let* ((acct (cadr pair))
-                                (subaccts (gnc-account-get-children acct)))
-                           (if (null? subaccts)
-                               ;; if leaf-account, make this an anchor
-                               ;; to the register.
-                               (gnc:account-anchor-text (cadr pair))
-                               ;; if non-leaf account, make this a link
-                               ;; to another report which is run on the
-                               ;; immediate subaccounts of this account
-                               ;; (and including this account).
-                               (gnc:make-report-anchor
-                                report-guid
-                                report-obj
-                                (list
-                                 (list gnc:pagename-accounts optname-accounts
-                                       (cons acct subaccts))
-                                 (list gnc:pagename-accounts optname-levels
-                                       (+ 1 tree-depth))
-                                 (list gnc:pagename-general 
-                                       gnc:optname-reportname
-                                       ((if show-fullname?
-                                            gnc-account-get-full-name
-                                            xaccAccountGetName) acct))))))))
-                   combined)))
-              (gnc:html-piechart-set-button-1-slice-urls! 
-               chart urls)
-              (gnc:html-piechart-set-button-1-legend-urls! 
-               chart urls))
+            (if depth-based?
+                (set-slice-urls! report-obj report-guid show-fullname?
+                                 tree-depth other-anchor combined chart))
 
             (if 
              (not (null? combined))
@@ -491,9 +590,7 @@ balance at a given time"))
                          (string-append
                            (if (string? (cadr pair))
 			       (cadr pair)
-			       ((if show-fullname?
-				    gnc-account-get-full-name
-				    xaccAccountGetName) (cadr pair)))
+                               (display-name show-fullname? (cadr pair)))
 			   (if show-total?
 			       (string-append 
 				" - "
@@ -502,7 +599,7 @@ balance at a given time"))
 				  (car pair)
 				  (gnc-commodity-get-fraction report-currency)
 				  GNC-RND-ROUND)
- 				 print-info)
+				 print-info)
  				 )
  			       "")
  			   (if show-percent?
@@ -529,39 +626,78 @@ balance at a given time"))
       (gnc:report-finished)
       document)))
 
-(for-each 
- (lambda (l)
-   (let ((tip-and-rev (cddddr l)))
-     (gnc:define-report
-      'version 1
-      'name (car l)
-      'report-guid (car (reverse l))
-      'menu-path (if (caddr l)
-		     (list gnc:menuname-income-expense)
-		     (list gnc:menuname-asset-liability)) 
-      'menu-name (cadddr l) 
-      'menu-tip (car tip-and-rev)
-      'options-generator (lambda () (options-generator (cadr l)  
-						       (cadr tip-and-rev)
-						       (caddr l)))
-      'renderer (lambda (report-obj)
-		  (piechart-renderer report-obj 
-				     (car l) 
-				     (car (reverse l))
-				     (cadr l)
-				     (caddr l))))))
- (list 
-  ;; reportname, account-types, do-intervals?, 
-  ;; menu-reportname, menu-tip
-  (list reportname-income (list ACCT-TYPE-INCOME) #t menuname-income menutip-income (lambda (x) #t) "e1bd09b8a1dd49dd85760db9d82b045c")
-  (list reportname-expense (list ACCT-TYPE-EXPENSE) #t menuname-expense menutip-expense (lambda (x) #f) "9bf1892805cb4336be6320fe48ce5446")
-  (list reportname-assets
-        (list ACCT-TYPE-ASSET ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CHECKING
-              ACCT-TYPE-SAVINGS ACCT-TYPE-MONEYMRKT
-              ACCT-TYPE-RECEIVABLE ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL
-              ACCT-TYPE-CURRENCY)
-        #f menuname-assets menutip-assets (lambda (x) #f) "5c7fd8a1fe9a4cd38884ff54214aa88a")
-  (list reportname-liabilities 
-        (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE ACCT-TYPE-CREDIT
-              ACCT-TYPE-CREDITLINE)
-        #f menuname-liabilities menutip-liabilities (lambda (x) #t) "3fe6dce77da24c66bdc8f8efdea7f9ac")))
+(define (build-report!
+          name acct-types income-expense? depth-based? menuname menutip
+          reverse-balance? uuid)
+  (gnc:define-report
+    'version 1
+    'name name
+    'report-guid uuid
+    'menu-path (if income-expense?
+                   (list gnc:menuname-income-expense)
+                   (list gnc:menuname-asset-liability))
+    'menu-name menuname
+    'menu-tip menutip
+    'options-generator (lambda () (options-generator acct-types
+                                                     reverse-balance?
+                                                     income-expense?
+                                                     depth-based?))
+    'renderer (lambda (report-obj)
+                (piechart-renderer report-obj name uuid
+                                   acct-types income-expense? depth-based?
+                                   (if depth-based?
+                                       display-name-accounts
+                                       display-name-security)
+                                   (if depth-based?
+                                       sort-comparator-accounts
+                                       sort-comparator-security)
+                                   (if depth-based?
+                                       traverse-accounts
+                                       sum-securities)))))
+
+(build-report!
+  reportname-income
+  (list ACCT-TYPE-INCOME)
+  #t #t
+  menuname-income menutip-income
+  (lambda (x) #t)
+  "e1bd09b8a1dd49dd85760db9d82b045c")
+
+(build-report!
+  reportname-expense
+  (list ACCT-TYPE-EXPENSE)
+  #t #t
+  menuname-expense menutip-expense
+  (lambda (x) #f)
+  "9bf1892805cb4336be6320fe48ce5446")
+
+(build-report!
+  reportname-assets
+  (list ACCT-TYPE-ASSET ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CHECKING
+        ACCT-TYPE-SAVINGS ACCT-TYPE-MONEYMRKT
+        ACCT-TYPE-RECEIVABLE ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL
+        ACCT-TYPE-CURRENCY)
+  #f #t
+  menuname-assets menutip-assets
+  (lambda (x) #f)
+  "5c7fd8a1fe9a4cd38884ff54214aa88a")
+
+(build-report!
+  reportname-securities
+  (list ACCT-TYPE-ASSET ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CHECKING
+        ACCT-TYPE-SAVINGS ACCT-TYPE-MONEYMRKT
+        ACCT-TYPE-RECEIVABLE ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL
+        ACCT-TYPE-CURRENCY)
+  #f #f
+  menuname-securities menutip-securities
+  (lambda (x) #f)
+  "e9418ff64f2c11e5b61d1c7508d793ed")
+
+(build-report!
+  reportname-liabilities
+  (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE ACCT-TYPE-CREDIT
+        ACCT-TYPE-CREDITLINE)
+  #f #t
+  menuname-liabilities menutip-liabilities
+  (lambda (x) #t)
+  "3fe6dce77da24c66bdc8f8efdea7f9ac")

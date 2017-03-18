@@ -29,7 +29,6 @@
 #define TRANSACTION_MATCHER_H
 
 #include "Transaction.h"
-#include "import-match-map.h"
 #include "import-settings.h"
 
 typedef struct _transactioninfo GNCImportTransInfo;

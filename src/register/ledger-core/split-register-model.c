@@ -77,7 +77,7 @@ gnc_split_register_get_rbaln (VirtualLocation virt_loc, gpointer user_data, gboo
     /* Get a list of accounts for matching */
     account = gnc_split_register_get_default_account(reg);
     if (!account)
-        /* Register has no account (perhaps general ledger) so it has no
+        /* Register has no account (perhaps general journal) so it has no
            well defined balance, return zero. */
         return balance;
 
@@ -258,7 +258,7 @@ gnc_split_register_get_tran_num_label (VirtualLocation virt_loc,
     case RECEIVABLE_REGISTER:
     case PAYABLE_REGISTER:
         return _("T-Ref");
-    case GENERAL_LEDGER:
+    case GENERAL_JOURNAL:
     case INCOME_LEDGER:
     case SEARCH_LEDGER:
     {
@@ -1529,7 +1529,7 @@ get_trans_total_amount_subaccounts (SplitRegister *reg, Transaction *trans)
     /* Get a list of all subaccounts for matching */
     parent = gnc_split_register_get_default_account(reg);
     if (!parent)
-        /* Register has no account, perhaps it's the general ledger.  If it
+        /* Register has no account, perhaps it's the general journal.  If it
            has no account then we have no way of picking out the desired splits,
            return zero. */
         return total;
@@ -1565,7 +1565,7 @@ gnc_split_register_get_tdebcred_entry (VirtualLocation virt_loc,
 
     switch (reg->type)
     {
-    case GENERAL_LEDGER:
+    case GENERAL_JOURNAL:
     case INCOME_LEDGER:
         total = get_trans_total_amount_subaccounts (reg, xaccSplitGetParent (split));
         break;
@@ -1607,7 +1607,7 @@ gnc_split_reg_has_rate_cell (SplitRegisterType type)
     case EXPENSE_REGISTER:
     case EQUITY_REGISTER:
     case TRADING_REGISTER:
-    case GENERAL_LEDGER:
+    case GENERAL_JOURNAL:
     case INCOME_LEDGER:
     case SEARCH_LEDGER:
         return TRUE;
@@ -2118,31 +2118,23 @@ gnc_template_register_get_xfrm_entry (VirtualLocation virt_loc,
     static char *name = NULL;
 
     SplitRegister *reg = user_data;
-    kvp_frame *kvpf;
     Split *split;
+    Account *account;
+    GncGUID *guid = NULL;
 
     split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
     if (!split)
         return NULL;
-
-    kvpf = xaccSplitGetSlots (split);
-
+    /* Caller either uses the return as a temporary in a boolean
+     * expression or g_strdups it, so we keep it static and free the
+     * old one on every call to avoid leaks. Ugly, but it works.
+     */
     g_free (name);
-
-    if (kvpf)
-    {
-        Account *account;
-        GncGUID *guid;
-
-        guid = kvp_value_get_guid(
-                   kvp_frame_get_slot_path(kvpf, "sched-xaction", "account", NULL));
-
-        account = xaccAccountLookup (guid, gnc_get_current_book ());
-
-        name = account ? gnc_get_account_name_for_register (account) : NULL;
-    }
-    else
-        name = NULL;
+    qof_instance_get (QOF_INSTANCE (split),
+		      "sx-account", &guid,
+		      NULL);
+    account = xaccAccountLookup (guid, gnc_get_current_book ());
+    name = account ? gnc_get_account_name_for_register (account) : NULL;
 
     return name;
 }
@@ -2155,10 +2147,16 @@ gnc_template_register_get_fdebt_entry (VirtualLocation virt_loc,
 {
     SplitRegister *reg = user_data;
     Split *split = gnc_split_register_get_split(reg, virt_loc.vcell_loc);
-    kvp_frame *kvpf = xaccSplitGetSlots(split);
+    char *formula = NULL;
 
-    return kvp_value_get_string(
-               kvp_frame_get_slot_path (kvpf, "sched-xaction", "debit-formula", NULL));
+    if (split)
+    {
+        qof_instance_get (QOF_INSTANCE (split),
+                  "sx-debit-formula", &formula,
+                  NULL);
+    }
+
+    return formula;
 }
 
 static char *
@@ -2182,14 +2180,18 @@ gnc_template_register_get_fcred_entry (VirtualLocation virt_loc,
                                        gpointer user_data)
 {
     SplitRegister *reg = user_data;
-    kvp_frame *kvpf;
-    Split *split;
+    Split *split = gnc_split_register_get_split(reg, virt_loc.vcell_loc);
+    char *formula = NULL;
 
-    split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
-    kvpf = xaccSplitGetSlots (split);
+    if (split)
+    {
+        qof_instance_get (QOF_INSTANCE (split),
+                  "sx-credit-formula", &formula,
+                  NULL);
+    }
 
-    return kvp_value_get_string(
-               kvp_frame_get_slot_path (kvpf, "sched-xaction", "credit-formula", NULL));
+    return formula;
+
 }
 
 static char *
@@ -2215,6 +2217,14 @@ gnc_split_register_get_default_help (VirtualLocation virt_loc,
     return g_strdup (help);
 }
 
+/* This function has been #if-zeroed for a year; in all released versions since
+ * 2001 it has issued dire warnings about being wrong, and returned nothing
+ * because it was querying a non-existent slot.
+ *
+ * Now it retrieves the sx-debit-numeric or sx-credit-numeric properties from
+ * the split. I'm not sure that it's what was originally intended, but at least
+ * it can do something now.	<jralls, 8 June 2015>
+ */
 static const char *
 gnc_template_register_get_debcred_entry (VirtualLocation virt_loc,
         gboolean translate,
@@ -2222,8 +2232,9 @@ gnc_template_register_get_debcred_entry (VirtualLocation virt_loc,
         gpointer user_data)
 {
     SplitRegister *reg = user_data;
-    kvp_frame *kvpf;
     Split *split;
+    gnc_numeric *amount;
+    const char * cell_name;
 
     split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
     if (!split)
@@ -2232,42 +2243,20 @@ gnc_template_register_get_debcred_entry (VirtualLocation virt_loc,
                 conditionally_changed,
                 user_data);
 
-    kvpf = xaccSplitGetSlots (split);
-    PWARN( "We're very close to \"wrong\".  \"Fix it immediately!!!\"" );
+    cell_name = gnc_table_get_cell_name (reg->table, virt_loc);
+    if (gnc_cell_name_equal (cell_name, DEBT_CELL))
+        qof_instance_get (QOF_INSTANCE (split),
+                          "sx-debit-numeric", &amount,
+                          NULL);
+    else
+        qof_instance_get (QOF_INSTANCE (split),
+                          "sx-credit-numeric", &amount,
+                          NULL);
+    if (gnc_numeric_zero_p (*amount))
+        return "";
 
-    if (kvpf)
-    {
-        gnc_numeric amount;
-        const char * cell_name;
-        char *str;
-
-        PWARN("This code is wrong.  Fix it immediately!!!!");
-        str = kvp_value_get_string(
-                  kvp_frame_get_slot_path(kvpf, "sched-xaction", "amnt", NULL));
-
-        amount = gnc_numeric_zero ();
-        string_to_gnc_numeric (str, &amount);
-
-        if (gnc_numeric_zero_p (amount))
-            return "";
-
-        cell_name = gnc_table_get_cell_name (reg->table, virt_loc);
-
-        if (gnc_numeric_negative_p (amount) &&
-                gnc_cell_name_equal (cell_name, DEBT_CELL))
-            return "";
-
-        if (gnc_numeric_positive_p (amount) &&
-                gnc_cell_name_equal (cell_name, CRED_CELL))
-            return "";
-
-        amount = gnc_numeric_abs (amount);
-
-        /* FIXME: This should be fixed to be correct for the "fake" account. */
-        return xaccPrintAmount (amount, gnc_default_print_info (FALSE));
-    }
-
-    return NULL;
+    *amount = gnc_numeric_abs (*amount);
+    return xaccPrintAmount (*amount, gnc_default_print_info (FALSE));
 }
 
 static void

@@ -28,11 +28,20 @@
 
 #ifndef GNC_SCHEDXACTION_SQL_H
 #define GNC_SCHEDXACTION_SQL_H
-
+extern "C"
+{
 #include "qof.h"
-#include "gnc-backend-sql.h"
+}
+#include "gnc-sql-object-backend.hpp"
 
-void gnc_sql_init_schedxaction_handler( void );
-gboolean gnc_sql_save_schedxaction( GncSqlBackend* be, QofInstance* inst );
+class GncSqlSchedXactionBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlSchedXactionBackend();
+    void load_all(GncSqlBackend*) override;
+    bool commit (GncSqlBackend* sql_be, QofInstance* inst) override;
+};
+
+gboolean gnc_sql_save_schedxaction (GncSqlBackend* sql_be, QofInstance* inst);
 
 #endif /* GNC_SCHEDXACTION_SQL_H */

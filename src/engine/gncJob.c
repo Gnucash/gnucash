@@ -26,10 +26,11 @@
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <glib.h>
 #include <string.h>
+#include <qofinstance-p.h>
 
 #include "gnc-features.h"
 #include "gncInvoice.h"
@@ -55,6 +56,7 @@ struct _gncJobClass
 static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME        GNC_ID_JOB
+#define GNC_JOB_RATE         "job-rate"
 
 /* ================================================================== */
 /* misc inline functions */
@@ -71,7 +73,13 @@ void mark_job (GncJob *job)
 enum
 {
     PROP_0,
-    PROP_NAME
+//  PROP_ID,            /* Table */
+    PROP_NAME,          /* Table */
+//  PROP_REFERENCE,     /* Table */
+//  PROP_ACTIVE,        /* Table */
+//  PROP_OWNER_TYPE,    /* Table */
+//  PROP_OWNER,         /* Table */
+    PROP_PDF_DIRNAME,   /* KVP */
 };
 
 /* GObject Initialization */
@@ -101,6 +109,7 @@ gnc_job_get_property (GObject         *object,
                       GParamSpec      *pspec)
 {
     GncJob *job;
+    gchar *key;
 
     g_return_if_fail(GNC_IS_JOB(object));
 
@@ -109,6 +118,10 @@ gnc_job_get_property (GObject         *object,
     {
     case PROP_NAME:
         g_value_set_string(value, job->name);
+        break;
+    case PROP_PDF_DIRNAME:
+        key = OWNER_EXPORT_PDF_DIRNAME;
+        qof_instance_get_kvp (QOF_INSTANCE (job), key, value);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -123,14 +136,21 @@ gnc_job_set_property (GObject         *object,
                       GParamSpec      *pspec)
 {
     GncJob *job;
+    gchar *key;
 
     g_return_if_fail(GNC_IS_JOB(object));
 
     job = GNC_JOB(object);
+    g_assert (qof_instance_get_editlevel(job));
+
     switch (prop_id)
     {
     case PROP_NAME:
         gncJobSetName(job, g_value_get_string(value));
+        break;
+    case PROP_PDF_DIRNAME:
+        key = OWNER_EXPORT_PDF_DIRNAME;
+        qof_instance_set_kvp (QOF_INSTANCE (job), key, value);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -175,6 +195,19 @@ gnc_job_class_init (GncJobClass *klass)
                           "assigned by the user.  It is intended to "
                           "a short character string that is displayed "
                           "by the GUI as the job mnemonic.",
+                          NULL,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_PDF_DIRNAME,
+     g_param_spec_string ("export-pdf-dir",
+                          "Export PDF Directory Name",
+                          "A subdirectory for exporting PDF reports which is "
+                          "appended to the target directory when writing them "
+                          "out. It is retrieved from preferences and stored on "
+                          "each 'Owner' object which prints items after "
+                          "printing.",
                           NULL,
                           G_PARAM_READWRITE));
 }
@@ -274,6 +307,27 @@ void gncJobSetReference (GncJob *job, const char *desc)
     gncJobCommitEdit (job);
 }
 
+void gncJobSetRate (GncJob *job, gnc_numeric rate)
+{
+    if (!job) return;
+    if (gnc_numeric_equal (gncJobGetRate(job), rate)) return;
+
+    gncJobBeginEdit (job);
+    if (!gnc_numeric_zero_p(rate))
+    {
+        GValue v = G_VALUE_INIT;
+        g_value_init (&v, GNC_TYPE_NUMERIC);
+        g_value_set_boxed (&v, &rate);
+        qof_instance_set_kvp (QOF_INSTANCE (job), GNC_JOB_RATE, &v);
+    }
+    else
+    {
+        qof_instance_set_kvp (QOF_INSTANCE (job), GNC_JOB_RATE, NULL);
+    }
+    mark_job (job);
+    gncJobCommitEdit (job);
+}
+
 void gncJobSetOwner (GncJob *job, GncOwner *owner)
 {
     if (!job) return;
@@ -368,7 +422,7 @@ static void gncJobOnDone (QofInstance *qof) { }
 void gncJobCommitEdit (GncJob *job)
 {
     /* GnuCash 2.6.3 and earlier didn't handle job kvp's... */
-    if (!kvp_frame_is_empty (job->inst.kvp_data))
+    if (qof_instance_has_kvp (QOF_INSTANCE (job)))
         gnc_features_set_used (qof_instance_get_book (QOF_INSTANCE (job)), GNC_FEATURE_KVP_EXTRA_DATA);
 
     if (!qof_commit_edit (QOF_INSTANCE(job))) return;
@@ -395,6 +449,19 @@ const char * gncJobGetReference (const GncJob *job)
 {
     if (!job) return NULL;
     return job->desc;
+}
+
+gnc_numeric gncJobGetRate (const GncJob *job)
+{
+    GValue v = G_VALUE_INIT;
+    gnc_numeric *rate = NULL;
+    if (!job) return gnc_numeric_zero ();
+    qof_instance_get_kvp (QOF_INSTANCE (job), GNC_JOB_RATE, &v);
+    if (G_VALUE_HOLDS_BOXED (&v))
+        rate = (gnc_numeric*)g_value_get_boxed (&v);
+    if (rate)
+        return *rate;
+    return gnc_numeric_zero();
 }
 
 GncOwner * gncJobGetOwner (GncJob *job)
@@ -456,6 +523,12 @@ gboolean gncJobEqual(const GncJob * a, const GncJob *b)
         return FALSE;
     }
 
+    if (!gnc_numeric_equal(gncJobGetRate(a), gncJobGetRate(b)))
+    {
+        PWARN("Rates differ");
+        return FALSE;
+    }
+
     if (a->active != b->active)
     {
         PWARN("Active flags differ");
@@ -504,6 +577,7 @@ gboolean gncJobRegister (void)
         { JOB_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetName, (QofSetterFunc)gncJobSetName },
         { JOB_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetActive, (QofSetterFunc)gncJobSetActive },
         { JOB_REFERENCE, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetReference, (QofSetterFunc)gncJobSetReference },
+        { JOB_RATE, QOF_TYPE_NUMERIC, (QofAccessFunc)gncJobGetRate, (QofSetterFunc)gncJobSetRate },
 #ifdef GNUCASH_MAJOR_VERSION
         { JOB_OWNER, GNC_ID_OWNER, (QofAccessFunc)gncJobGetOwner, NULL },
 #else

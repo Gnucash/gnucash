@@ -41,10 +41,6 @@
 #include "dialog-utils.h"
 #include "gnc-engine.h"
 
-#ifndef HAVE_LOCALTIME_R
-# include "localtime_r.h"
-#endif
-
 /* Perhaps it's better just to use MAX_DATE_LENGTH defined in gnc-date.h */
 #define MAX_DATE_LEN 80
 
@@ -481,6 +477,7 @@ gnc_date_format_refresh (GNCDateFormat *gdf)
         enable_custom = TRUE;
         break;
 
+    case QOF_DATE_FORMAT_UNSET:
     case QOF_DATE_FORMAT_LOCALE:
     case QOF_DATE_FORMAT_UTC:
         format = g_strdup(qof_date_format_get_string(sel_option));

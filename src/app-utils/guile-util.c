@@ -20,6 +20,11 @@
 
 #include "config.h"
 
+#include <platform.h>
+#if PLATFORM(WINDOWS)
+#include <windows.h>
+#endif
+
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <string.h>
@@ -297,7 +302,7 @@ gnc_is_trans_scm(SCM scm)
 void
 gnc_split_scm_set_account(SCM split_scm, Account *account)
 {
-    const char *guid_string;
+    gchar guid_string[GUID_ENCODING_LENGTH+1];
     SCM arg;
 
     initialize_scm_functions();
@@ -307,8 +312,8 @@ gnc_split_scm_set_account(SCM split_scm, Account *account)
     if (account == NULL)
         return;
 
-    guid_string = guid_to_string(xaccAccountGetGUID(account));
-    if (guid_string == NULL)
+    guid_to_string_buff(xaccAccountGetGUID(account), guid_string);
+    if (strlen(guid_string) == 0)
         return;
 
     arg = scm_from_utf8_string(guid_string);
@@ -657,6 +662,7 @@ gnc_copy_trans_scm_onto_trans_swap_accounts(SCM trans_scm,
     }
     else
     {
+        gchar guidstr[GUID_ENCODING_LENGTH+1];
         SCM from, to;
         SCM map = SCM_EOL;
         SCM args = SCM_EOL;
@@ -668,8 +674,10 @@ gnc_copy_trans_scm_onto_trans_swap_accounts(SCM trans_scm,
 
         args = scm_cons(commit, args);
 
-        from = scm_from_utf8_string(guid_to_string(guid_1));
-        to = scm_from_utf8_string(guid_to_string(guid_2));
+        guid_to_string_buff(guid_1, guidstr);
+        from = scm_from_utf8_string(guidstr);
+        guid_to_string_buff(guid_2, guidstr);
+        to = scm_from_utf8_string(guidstr);
 
         map = scm_cons(scm_cons(from, to), map);
         map = scm_cons(scm_cons(to, from), map);

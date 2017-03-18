@@ -134,9 +134,9 @@
       "c" (N_ "Display a table of the selected data.")
       #f))
 
-    (gnc:options-add-plot-size!
-     options gnc:pagename-display
-     optname-plot-width optname-plot-height "d" 500 400)
+    (gnc:options-add-plot-size! 
+     options gnc:pagename-display 
+     optname-plot-width optname-plot-height "d" (cons 'percent 100.0) (cons 'percent 100.0))
 
     (gnc:options-set-default-section options gnc:pagename-general)
 
@@ -328,9 +328,9 @@
        ;; Determine whether we have enough space for horizontal labels
        ;; -- kind of a hack. Assumptions: y-axis labels and legend
        ;; require 200 pixels, and each x-axes label needs 60 pixels.
-       (gnc:html-barchart-set-row-labels-rotated?!
-        chart (< (/ (- width 200)
-                    (length date-string-list)) 60))
+       ;;(gnc:html-barchart-set-row-labels-rotated?!
+       ;; chart (< (/ (- width 200)
+       ;;             (length date-string-list)) 60))
 
        ;; Add the data
        (if show-sep?
@@ -364,39 +364,39 @@
                    '("green") '())))
 
        ;; URLs for income/expense or asset/liabilities bars.
-       (if show-sep?
-           (let ((urls
-                  (list
-                   (gnc:make-report-anchor
-                    (if inc-exp?
-                        category-barchart-income-uuid
-                        category-barchart-asset-uuid)
-                    report-obj
-                    (list
-                     (list gnc:pagename-display
-                           "Use Stacked Bars" #t)
-                     (list gnc:pagename-general
-                           gnc:optname-reportname
-                           (if inc-exp?
-                               (_ "Income Chart")
-                               (_ "Asset Chart")))))
-                   (gnc:make-report-anchor
-                    (if inc-exp?
-                        category-barchart-expense-uuid
-                        category-barchart-liability-uuid)
-                    report-obj
-                    (list
-                     (list gnc:pagename-display
-                           "Use Stacked Bars" #t)
-                     (list gnc:pagename-general
-                           gnc:optname-reportname
-                           (if inc-exp?
-                               (_ "Expense Chart")
-                               (_ "Liability Chart"))))))))
-             (gnc:html-barchart-set-button-1-bar-urls!
-              chart urls)
-             (gnc:html-barchart-set-button-1-legend-urls!
-              chart urls)))
+;;       (if show-sep?
+;;           (let ((urls
+;;                  (list
+;;                   (gnc:make-report-anchor
+;;                    (if inc-exp?
+;;                        category-barchart-income-uuid
+;;                        category-barchart-asset-uuid)
+;;                    report-obj
+;;                    (list
+;;                     (list gnc:pagename-display
+;;                           "Use Stacked Bars" #t)
+;;                     (list gnc:pagename-general
+;;                           gnc:optname-reportname
+;;                           (if inc-exp?
+;;                               (_ "Income Chart")
+;;                               (_ "Asset Chart")))))
+;;                   (gnc:make-report-anchor
+;;                    (if inc-exp?
+;;                        category-barchart-expense-uuid
+;;                        category-barchart-liability-uuid)
+;;                    report-obj
+;;                    (list
+;;                     (list gnc:pagename-display
+;;                           "Use Stacked Bars" #t)
+;;                     (list gnc:pagename-general
+;;                           gnc:optname-reportname
+;;                           (if inc-exp?
+;;                               (_ "Expense Chart")
+;;                               (_ "Liability Chart"))))))))
+;;             (gnc:html-barchart-set-button-1-bar-urls!
+;;              chart urls)
+;;             (gnc:html-barchart-set-button-1-legend-urls!
+;;              chart urls)))
 
        ;; Test for all-zero data here.
        (if non-zeros
@@ -474,7 +474,7 @@
  'version 1
  'name reportname
  'report-guid income-expense-barchart-uuid
- 'menu-name (N_ "Income & Expense Chart")
+ 'menu-name (N_ "Income & Expense Barchart")
  'menu-path (list gnc:menuname-income-expense)
  'options-generator (lambda () (options-generator #t))
  'renderer (lambda (report-obj) (net-renderer report-obj #t)))

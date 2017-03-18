@@ -38,6 +38,12 @@
 #include "qof.h"
 #include "Account.h"
 
+/* KVP key for report PDF directories */
+#define OWNER_EXPORT_PDF_DIRNAME "export-pdf-directory"
+#define LAST_POSTED_TO_ACCT "last-posted-to-acct"
+#define GNC_PAYMENT "payment"
+#define GNC_LAST_ACCOUNT "last_acct"
+
 /* @deprecated backwards-compat definitions */
 #define GNC_BILLTERM_MODULE_NAME GNC_ID_BILLTERM
 #define GNC_CUSTOMER_MODULE_NAME GNC_ID_CUSTOMER

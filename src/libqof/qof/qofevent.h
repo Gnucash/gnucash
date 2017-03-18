@@ -36,6 +36,11 @@
 
 #include "qof.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /** Define the type of events allowed. */
 typedef gint QofEventId;
 
@@ -133,6 +138,10 @@ void qof_event_suspend (void);
 
 /** Resume engine event generation. */
 void qof_event_resume (void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /** @} */

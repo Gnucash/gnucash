@@ -85,8 +85,6 @@ void gnc_invoice_save_page (InvoiceWindow *iw, GKeyFile *key_file, const gchar *
 
 GtkWidget * gnc_invoice_create_page (InvoiceWindow *iw, gpointer page);
 
-DialogQueryView *gnc_invoice_show_bills_due (QofBook *book, double days_in_advance);
-
 GtkWidget *gnc_invoice_get_register(InvoiceWindow *iw);
 
 /* definitions for CB functions */

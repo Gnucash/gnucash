@@ -49,6 +49,10 @@ See \ref gncnumericexample
 
 #ifndef GNC_NUMERIC_H
 #define GNC_NUMERIC_H
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #include <glib-object.h>
 
@@ -240,9 +244,6 @@ typedef enum
  *  the 'how' argument will specify how to compute the denominator.
  */
 #define GNC_DENOM_AUTO 0
-
-/** Use the value 1/n as the denominator of the output value. */
-#define GNC_DENOM_RECIPROCAL( a ) (- ( a ))
 
 /**  @} */
 
@@ -446,35 +447,6 @@ gnc_numeric gnc_numeric_sub_fixed(gnc_numeric a, gnc_numeric b)
 }
 /** @} */
 
-/** @name Arithmetic Functions with Exact Error Returns
- @{
-*/
-/** The same as gnc_numeric_add, but uses 'error' for accumulating
- *  conversion roundoff error. */
-gnc_numeric gnc_numeric_add_with_error(gnc_numeric a, gnc_numeric b,
-                                       gint64 denom, gint how,
-                                       gnc_numeric * error);
-
-/** The same as gnc_numeric_sub, but uses error for accumulating
- *  conversion roundoff error. */
-gnc_numeric gnc_numeric_sub_with_error(gnc_numeric a, gnc_numeric b,
-                                       gint64 denom, gint how,
-                                       gnc_numeric * error);
-
-/** The same as gnc_numeric_mul, but uses error for
- *  accumulating conversion roundoff error.
- */
-gnc_numeric gnc_numeric_mul_with_error(gnc_numeric a, gnc_numeric b,
-                                       gint64 denom, gint how,
-                                       gnc_numeric * error);
-
-/** The same as gnc_numeric_div, but uses error for
- *  accumulating conversion roundoff error.
- */
-gnc_numeric gnc_numeric_div_with_error(gnc_numeric a, gnc_numeric b,
-                                       gint64 denom, gint how,
-                                       gnc_numeric * error);
-/** @} */
 
 /** @name Change Denominator
  @{
@@ -519,12 +491,8 @@ gnc_numeric gnc_numeric_invert (gnc_numeric num);
 GType gnc_numeric_get_type( void );
 #define GNC_TYPE_NUMERIC (gnc_numeric_get_type ())
 
-/** @} */
-/** Int 64 exponentiation. Faster and more robust than casting the result of pow().
- * @param op The number to raise to exp.
- * @param exp The exponent
- * @return A gint64
- */
-gint64 pwr64 (gint64 op, int exp);
-/** @} */
+#ifdef __cplusplus
+}
+#endif
+
 #endif

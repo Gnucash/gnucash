@@ -62,6 +62,8 @@ static gint gnc_AB_BANKING_refcount = 0;
 static gpointer join_ab_strings_cb(const gchar *str, gpointer user_data);
 static Account *gnc_ab_accinfo_to_gnc_acc(
     AB_IMEXPORTER_ACCOUNTINFO *account_info);
+static Account *gnc_ab_txn_to_gnc_acc(
+    const AB_TRANSACTION *transaction);
 static const AB_TRANSACTION *txn_transaction_cb(
     const AB_TRANSACTION *element, gpointer user_data);
 static AB_IMEXPORTER_ACCOUNTINFO *txn_accountinfo_cb(
@@ -506,7 +508,7 @@ gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc)
     else
         g_warning("transaction_cb: Oops, date 'valuta_date' was NULL");
 
-    xaccTransSetDateEnteredSecs(gnc_trans, gnc_time_utc (NULL));
+    xaccTransSetDateEnteredSecs(gnc_trans, gnc_time (NULL));
 
     /* Currency.  We take simply the default currency of the gnucash account */
     xaccTransSetCurrency(gnc_trans, xaccAccountGetCommodity(gnc_acc));
@@ -605,17 +607,59 @@ gnc_ab_accinfo_to_gnc_acc(AB_IMEXPORTER_ACCOUNTINFO *acc_info)
     return gnc_acc;
 }
 
+
+/**
+ * Call gnc_import_select_account() on the online id constructed using
+ * the local information in @a transaction.
+ *
+ * @param transaction AB_TRANSACTION
+ * @return A GnuCash account, or NULL otherwise
+ */
+static Account *
+gnc_ab_txn_to_gnc_acc(const AB_TRANSACTION *transaction)
+{
+    const gchar *bankcode, *accountnumber;
+    gchar *online_id;
+    Account *gnc_acc;
+
+    g_return_val_if_fail(transaction, NULL);
+
+    bankcode = AB_Transaction_GetLocalBankCode(transaction);
+    accountnumber = AB_Transaction_GetLocalAccountNumber(transaction);
+    if (!bankcode && !accountnumber)
+    {
+        return NULL;
+    }
+
+    online_id = g_strconcat(bankcode ? bankcode : "",
+                            accountnumber ? accountnumber : "",
+                            (gchar*)NULL);
+    gnc_acc = gnc_import_select_account(
+                  NULL, online_id, 1, AB_Transaction_GetLocalName(transaction),
+                  NULL, ACCT_TYPE_NONE, NULL, NULL);
+    if (!gnc_acc)
+    {
+        g_warning("gnc_ab_txn_to_gnc_acc: Could not determine source account"
+                  " for online_id %s", online_id);
+    }
+    g_free(online_id);
+
+    return gnc_acc;
+}
+
 static const AB_TRANSACTION *
 txn_transaction_cb(const AB_TRANSACTION *element, gpointer user_data)
 {
     GncABImExContextImport *data = user_data;
     Transaction *gnc_trans;
     GncABTransType trans_type;
+    Account* txnacc;
 
     g_return_val_if_fail(element && data, NULL);
 
     /* Create a GnuCash transaction from ab_trans */
-    gnc_trans = gnc_ab_trans_to_gnc(element, data->gnc_acc);
+    txnacc = gnc_ab_txn_to_gnc_acc(element);
+    gnc_trans = gnc_ab_trans_to_gnc(element, txnacc ? txnacc : data->gnc_acc);
 
     if (data->execute_txns && data->ab_acc)
     {

@@ -3,6 +3,7 @@
     <menu name="Edit" action="EditAction">
       <placeholder name="EditAllSelectedPlaceholder">
         <menuitem name="EditEditAccount"        action="EditEditAccountAction"/>
+        <menuitem name="EditFindAccount"        action="EditFindAccountAction"/>
       </placeholder>
     </menu>
 

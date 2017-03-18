@@ -1426,6 +1426,23 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkCheckButton" id="show_unused">
+                    <property name="label" translatable="yes">Show _unused accounts</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="tooltip_text" translatable="yes">Show accounts which do not have any transactions.</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                    <signal name="toggled" handler="gppat_filter_show_unused_toggled_cb"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
                   <placeholder/>
                 </child>
               </object>

@@ -30,8 +30,10 @@ libgnc_gnome_la_SOURCES = \
   assistant-stock-split.c \
   dialog-commodities.c \
   dialog-fincalc.c \
+  dialog-find-account.c \
   dialog-find-transactions.c \
   dialog-find-transactions2.c \
+  dialog-imap-editor.c \
   dialog-lot-viewer.c \
   dialog-new-user.c \
   dialog-price-editor.c \
@@ -43,6 +45,7 @@ libgnc_gnome_la_SOURCES = \
   dialog-sx-from-trans.c \
   dialog-sx-since-last-run.c \
   dialog-tax-info.c \
+  dialog-trans-assoc.c \
   gnc-budget-view.c \
   gnc-plugin-account-tree.c \
   gnc-plugin-basic-commands.c \
@@ -81,8 +84,10 @@ noinst_HEADERS = \
   assistant-loan.h \
   assistant-stock-split.h \
   dialog-fincalc.h \
+  dialog-find-account.h \
   dialog-find-transactions.h \
   dialog-find-transactions2.h \
+  dialog-imap-editor.h \
   dialog-lot-viewer.h \
   dialog-new-user.h \
   dialog-print-check.h \
@@ -91,6 +96,7 @@ noinst_HEADERS = \
   dialog-sx-editor2.h \
   dialog-sx-from-trans.h \
   dialog-sx-since-last-run.h \
+  dialog-trans-assoc.h \
   gnc-budget-view.h \
   gnc-plugin-account-tree.h \
   gnc-plugin-basic-commands.h \

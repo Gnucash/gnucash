@@ -1,4 +1,4 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; category-barchart.scm: shows barchart of income/expense categories
 ;;  
 ;; By Christian Stimming <stimming@tu-harburg.de>
@@ -44,23 +44,23 @@
 ;; spelling errors. The *reportnames* are defined here (and not only
 ;; once at the very end) because I need them to define the "other"
 ;; report, thus needing them twice.
-(define menuname-income (N_ "Income Barchart"))
-(define menuname-expense (N_ "Expense Barchart"))
-(define menuname-assets (N_ "Asset Barchart"))
-(define menuname-liabilities (N_ "Liability Barchart"))
+(define menuname-income (N_ "Income Chart"))
+(define menuname-expense (N_ "Expense Chart"))
+(define menuname-assets (N_ "Asset Chart"))
+(define menuname-liabilities (N_ "Liability Chart"))
 ;; The names are used in the menu
 
 ;; The menu statusbar tips.
 (define menutip-income 
-  (N_ "Shows a barchart with the Income per interval \
+  (N_ "Shows a chart with the Income per interval \
 developing over time"))
 (define menutip-expense 
-  (N_ "Shows a barchart with the Expenses per interval \
+  (N_ "Shows a chart with the Expenses per interval \
 developing over time"))
 (define menutip-assets 
-  (N_ "Shows a barchart with the Assets developing over time"))
+  (N_ "Shows a chart with the Assets developing over time"))
 (define menutip-liabilities 
-  (N_ "Shows a barchart with the Liabilities \
+  (N_ "Shows a chart with the Liabilities \
 developing over time"))
 
 ;; The names here are used 1. for internal identification, 2. as
@@ -82,10 +82,14 @@ developing over time"))
 (define optname-levels (N_ "Show Accounts until level"))
 
 (define optname-fullname (N_ "Show long account names"))
-(define optname-stacked (N_ "Use Stacked Bars"))
+
+(define optname-chart-type (N_ "Chart Type"))
+
+(define optname-stacked (N_ "Use Stacked Charts"))
 (define optname-slices (N_ "Maximum Bars"))
 (define optname-plot-width (N_ "Plot Width"))
 (define optname-plot-height (N_ "Plot Height"))
+
 (define optname-sort-method (N_ "Sort Method"))
 
 (define optname-averaging (N_ "Show Average"))
@@ -166,32 +170,47 @@ developing over time"))
       "a" (N_ "Show the full account name in legend?") #f))
 
     (add-option
+      (gnc:make-multichoice-option
+        gnc:pagename-display optname-chart-type
+        "b" "Select which chart type to use"
+        'barchart
+        (list (vector 'barchart
+                       (N_ "Bar Chart")
+                       (N_ "Use bar charts."))
+               (vector 'linechart
+                       (N_ "Line Chart")
+                       (N_ "Use line charts."))
+        )
+      )
+    )
+
+    (add-option
      (gnc:make-simple-boolean-option
       gnc:pagename-display optname-stacked
-      "b" 
-      (N_ "Show barchart as stacked barchart?") 
+      "c"
+      (N_ "Show charts as stacked charts?")
       #t))
 
     (add-option
      (gnc:make-number-range-option
       gnc:pagename-display optname-slices
-      "c" (N_ "Maximum number of bars in the chart.") 8
+      "d" (N_ "Maximum number of stacks in the chart.") 8
       2 24 0 1))
 
     (add-option
      (gnc:make-simple-boolean-option
       gnc:pagename-display
       (N_ "Show table")
-      "d" (N_ "Display a table of the selected data.")
+      "e" (N_ "Display a table of the selected data.")
       #f))
 
     (gnc:options-add-plot-size! 
      options gnc:pagename-display 
-     optname-plot-width optname-plot-height "e" 400 400)
+     optname-plot-width optname-plot-height "f" (cons 'percent 100.0) (cons 'percent 100.0))
 
     (gnc:options-add-sort-method! 
      options gnc:pagename-display
-     optname-sort-method "f" 'amount)
+     optname-sort-method "g" 'amount)
 
     (gnc:options-set-default-section options gnc:pagename-general)
 
@@ -218,7 +237,7 @@ developing over time"))
       (gnc:report-options report-obj) section name)))
   
   (gnc:report-starting reportname)
-  (let ((to-date-tp (gnc:timepair-end-day-time 
+  (let* ((to-date-tp (gnc:timepair-end-day-time
                      (gnc:date-option-absolute-time
                       (get-option gnc:pagename-general 
                                   optname-to-date))))
@@ -240,7 +259,8 @@ developing over time"))
 
         (accounts (get-option gnc:pagename-accounts optname-accounts))
         (account-levels (get-option gnc:pagename-accounts optname-levels))
-        
+
+        (chart-type (get-option gnc:pagename-display optname-chart-type))
         (stacked? (get-option gnc:pagename-display optname-stacked))
         (show-fullname? (get-option gnc:pagename-display optname-fullname))
         (max-slices (inexact->exact
@@ -252,7 +272,11 @@ developing over time"))
 
         (show-table? (get-option gnc:pagename-display (N_ "Show table")))
         (document (gnc:make-html-document))
-        (chart (gnc:make-html-barchart))
+        (chart
+             (if  (eqv? chart-type 'barchart)
+               (gnc:make-html-barchart)
+               (gnc:make-html-linechart)
+             ))
         (table (gnc:make-html-table))
         (topl-accounts (gnc:filter-accountlist-type 
                         account-types
@@ -311,16 +335,20 @@ developing over time"))
                                 (gnc:deltasym-to-delta interval))))
                ;; Here the date strings for the x-axis labels are
                ;; created.
-               (date-string-list
-                (map (lambda (date-list-item)
-                       (gnc-print-date
-                        (if do-intervals?
-                            (car date-list-item)
-                            date-list-item)))
-                     dates-list))
+               (date-string-list '())
+               (date-iso-string-list '())
+               (save-fmt (qof-date-format-get))
                (other-anchor "")
                (all-data '()))
-          
+
+          (define (datelist->stringlist dates-list)
+            (map (lambda (date-list-item)
+                         (gnc-print-date
+                          (if do-intervals?
+                              (car date-list-item)
+                              date-list-item)))
+                 dates-list))
+
           ;; Converts a commodity-collector into one single double
           ;; number, depending on the report's currency and the
           ;; exchange-fn calculated above. Returns a double, multiplied
@@ -452,30 +480,65 @@ developing over time"))
            (and (not (null? all-data))
                 (gnc:not-all-zeros (map cadr all-data)))
            (begin 
+             (set! date-string-list (datelist->stringlist dates-list))
+             (qof-date-format-set QOF-DATE-FORMAT-ISO)
+             (set! date-iso-string-list (datelist->stringlist dates-list))
+             (qof-date-format-set save-fmt)
              ;; Set chart title, subtitle etc.
-             (gnc:html-barchart-set-title! chart report-title)
-             (gnc:html-barchart-set-subtitle!
-              chart (sprintf #f
+             (if  (eqv? chart-type 'barchart)
+               (begin
+                 (gnc:html-barchart-set-title! chart report-title)
+                 (gnc:html-barchart-set-subtitle!
+                   chart (sprintf #f
                              (if do-intervals?
                                  (_ "%s to %s")
                                  (_ "Balances %s to %s"))
                              (jqplot-escape-string (gnc-print-date from-date-tp))
                              (jqplot-escape-string (gnc-print-date to-date-tp))))
-             (gnc:html-barchart-set-width! chart width)
-             (gnc:html-barchart-set-height! chart height)
-             
-             ;; row labels etc.
-             (gnc:html-barchart-set-row-labels! chart date-string-list)
-             ;; FIXME: axis labels are not yet supported by
-             ;; libguppitank.
-             (gnc:html-barchart-set-y-axis-label!
-              chart (gnc-commodity-get-mnemonic report-currency))
-             (gnc:html-barchart-set-row-labels-rotated?! chart #t)
-             (gnc:html-barchart-set-stacked?! chart stacked?)
-             ;; If this is a stacked barchart, then reverse the legend.
-	     ;; Doesn't do what you'd expect. - DRH
-	     ;; It does work, but needs Guppi 0.40.4. - cstim
-             (gnc:html-barchart-set-legend-reversed?! chart stacked?)
+
+                 (gnc:html-barchart-set-width! chart width)
+                 (gnc:html-barchart-set-height! chart height)
+
+                 ;; row labels etc.
+                 (gnc:html-barchart-set-row-labels! chart date-string-list)
+                 ;; FIXME: axis labels are not yet supported by
+                 ;; libguppitank.
+                 (gnc:html-barchart-set-y-axis-label!
+                   chart (gnc-commodity-get-mnemonic report-currency))
+                 (gnc:html-barchart-set-row-labels-rotated?! chart #t)
+                 (gnc:html-barchart-set-stacked?! chart stacked?)
+                 ;; If this is a stacked barchart, then reverse the legend.
+	         ;; Doesn't do what you'd expect. - DRH
+	         ;; It does work, but needs Guppi 0.40.4. - cstim
+                 (gnc:html-barchart-set-legend-reversed?! chart stacked?)
+               )
+               (begin
+                 (gnc:html-linechart-set-title! chart report-title)
+                 (gnc:html-linechart-set-subtitle!
+                   chart (sprintf #f
+                             (if do-intervals?
+                                 (_ "%s to %s")
+                                 (_ "Balances %s to %s"))
+                             (jqplot-escape-string (gnc-print-date from-date-tp))
+                             (jqplot-escape-string (gnc-print-date to-date-tp))))
+
+                 (gnc:html-linechart-set-width! chart width)
+                 (gnc:html-linechart-set-height! chart height)
+
+                 ;; row labels etc.
+                 (gnc:html-linechart-set-row-labels! chart date-iso-string-list)
+                 ;; FIXME: axis labels are not yet supported by
+                 ;; libguppitank.
+                 (gnc:html-linechart-set-y-axis-label!
+                   chart (gnc-commodity-get-mnemonic report-currency))
+                 (gnc:html-linechart-set-row-labels-rotated?! chart #t)
+                 (gnc:html-linechart-set-stacked?! chart stacked?)
+                 ;; If this is a stacked linechart, then reverse the legend.
+	         ;; Doesn't do what you'd expect. - DRH
+	         ;; It does work, but needs Guppi 0.40.4. - cstim
+                 (gnc:html-linechart-set-legend-reversed?! chart stacked?)
+               )
+             )
              
              ;; If we have too many categories, we sum them into a new
              ;; 'other' category and add a link to a new report with just
@@ -508,64 +571,100 @@ developing over time"))
              ;; transposes the data, i.e. swaps rows and columns. Pretty
              ;; cool, eh? Courtesy of dave_p.
 	     (gnc:report-percent-done 92)
-             (if (not (null? all-data))
-                 (gnc:html-barchart-set-data! 
-                  chart 
-                  (apply zip (map cadr all-data))))
+             (if  (eqv? chart-type 'barchart)
+               (begin ;; bar chart
+                 (if (not (null? all-data))
+                     (gnc:html-barchart-set-data!
+                      chart
+                      (apply zip (map cadr all-data))))
              
-             ;; Labels and colors
-	     (gnc:report-percent-done 94)
-             (gnc:html-barchart-set-col-labels!
-              chart (map (lambda (pair)
+                 ;; Labels and colors
+	         (gnc:report-percent-done 94)
+                 (gnc:html-barchart-set-col-labels!
+                   chart (map (lambda (pair)
                            (if (string? (car pair))
                                (car pair)
                                ((if show-fullname?
                                     gnc-account-get-full-name
                                     xaccAccountGetName) (car pair))))
-                         all-data))
-             (gnc:html-barchart-set-col-colors! 
-              chart
-              (gnc:assign-colors (length all-data)))
+                          all-data))
+                 (gnc:html-barchart-set-col-colors!
+                   chart
+                   (gnc:assign-colors (length all-data)))
+               )
+               (begin ;; line chart
+                 (if (not (null? all-data))
+                     (gnc:html-linechart-set-data!
+                      chart
+                      (apply zip (map cadr all-data))))
+
+                 ;; Labels and colors
+	         (gnc:report-percent-done 94)
+                 (gnc:html-linechart-set-col-labels!
+                   chart (map (lambda (pair)
+                           (if (string? (car pair))
+                               (car pair)
+                               ((if show-fullname?
+                                    gnc-account-get-full-name
+                                    xaccAccountGetName) (car pair))))
+                          all-data))
+                 (gnc:html-linechart-set-col-colors!
+                   chart
+                   (gnc:assign-colors (length all-data)))
+               )
+             )
              
              ;; set the URLs; the slices are links to other reports
-	     (gnc:report-percent-done 96)
-             (let 
-                 ((urls
-                   (map 
-                    (lambda (pair)
-                      (if 
-                       (string? (car pair))
-                       other-anchor
-                       (let* ((acct (car pair))
-                              (subaccts 
-                               (gnc-account-get-children acct)))
-                         (if (null? subaccts)
-                             ;; if leaf-account, make this an anchor
-                             ;; to the register.
-                             (gnc:account-anchor-text acct)
-                             ;; if non-leaf account, make this a link
-                             ;; to another report which is run on the
-                             ;; immediate subaccounts of this account
-                             ;; (and including this account).
-                             (gnc:make-report-anchor
-                              reportguid
-                              report-obj
-                              (list
-                               (list gnc:pagename-accounts optname-accounts
-                                     (cons acct subaccts))
-                               (list gnc:pagename-accounts optname-levels
-                                     (+ 1 tree-depth))
-                               (list gnc:pagename-general 
-                                     gnc:optname-reportname
-                                     ((if show-fullname?
-                                          gnc-account-get-full-name
-                                          xaccAccountGetName) acct))))))))
-                    all-data)))
-               (gnc:html-barchart-set-button-1-bar-urls! 
-                chart (append urls urls))
-               ;; The legend urls do the same thing.
-               (gnc:html-barchart-set-button-1-legend-urls! 
-                chart (append urls urls)))
+;;	     (gnc:report-percent-done 96)
+;;             (let
+;;                 ((urls
+;;                   (map
+;;                    (lambda (pair)
+;;                      (if
+;;                       (string? (car pair))
+;;                       other-anchor
+;;                       (let* ((acct (car pair))
+;;                              (subaccts
+;;                               (gnc-account-get-children acct)))
+;;                         (if (null? subaccts)
+;;                             ;; if leaf-account, make this an anchor
+;;                             ;; to the register.
+;;                             (gnc:account-anchor-text acct)
+;;                             ;; if non-leaf account, make this a link
+;;                             ;; to another report which is run on the
+;;                             ;; immediate subaccounts of this account
+;;                             ;; (and including this account).
+;;                             (gnc:make-report-anchor
+;;                              reportguid
+;;                              report-obj
+;;                              (list
+;;                               (list gnc:pagename-accounts optname-accounts
+;;                                     (cons acct subaccts))
+;;                               (list gnc:pagename-accounts optname-levels
+;;                                     (+ 1 tree-depth))
+;;                               (list gnc:pagename-general
+;;                                     gnc:optname-reportname
+;;                                     ((if show-fullname?
+;;                                          gnc-account-get-full-name
+;;                                          xaccAccountGetName) acct))))))))
+;;                    all-data)))
+;;               (if  (eqv? chart-type 'barchart)
+;;                 (begin ;; bar chart
+;;                   (gnc:html-barchart-set-button-1-bar-urls!
+;;                    chart (append urls urls))
+;;                    ;; The legend urls do the same thing.
+;;                    (gnc:html-barchart-set-button-1-legend-urls!
+;;                      chart (append urls urls))
+;;                 )
+;;                 (begin ;; line chart
+;;                   (gnc:html-linechart-set-button-1-line-urls!
+;;                    chart (append urls urls))
+;;                    ;; The legend urls do the same thing.
+;;                    (gnc:html-linechart-set-button-1-legend-urls!
+;;                      chart (append urls urls))
+;;                 )
+;;               )
+;;             )
              
 	     (gnc:report-percent-done 98)
              (gnc:html-document-add-object! document chart)

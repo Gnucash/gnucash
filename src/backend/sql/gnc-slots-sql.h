@@ -28,64 +28,81 @@
 
 #ifndef GNC_SLOTS_SQL_H
 #define GNC_SLOTS_SQL_H
-
+extern "C"
+{
 #include <glib.h>
 #include "guid.h"
-#include "kvp_frame.h"
 #include "qof.h"
-#include "gnc-backend-sql.h"
+}
+#include "gnc-sql-object-backend.hpp"
+
+/**
+ * Slots are neither loadable nor committable. Note that the default
+ * write() implementation is also a no-op.
+ */
+class GncSqlSlotsBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlSlotsBackend();
+    void load_all(GncSqlBackend*) override { return; }
+    void create_tables(GncSqlBackend*) override;
+    bool commit(GncSqlBackend*, QofInstance*) override { return false; }
+};
 
 /**
  * gnc_sql_slots_save - Saves slots for an object to the db.
  *
- * @param be SQL backend
+ * @param sql_be SQL backend
  * @param guid Object guid
  * @param is_infant Is this an infant object?
- * @param pFrame Top-level KVP frame
+ * @param inst The QodInstance owning the slots.
  * @return TRUE if successful, FALSE if error
  */
-gboolean gnc_sql_slots_save( GncSqlBackend* be, const GncGUID* guid,
-                             gboolean is_infant, KvpFrame* pFrame );
+gboolean gnc_sql_slots_save (GncSqlBackend* sql_be, const GncGUID* guid,
+                             gboolean is_infant, QofInstance* inst);
 
 /**
  * gnc_sql_slots_delete - Deletes slots for an object from the db.
  *
- * @param be SQL backend
+ * @param sql_be SQL backend
  * @param guid Object guid
  * @return TRUE if successful, FALSE if error
  */
-gboolean gnc_sql_slots_delete( GncSqlBackend* be, const GncGUID* guid );
+gboolean gnc_sql_slots_delete (GncSqlBackend* sql_be, const GncGUID* guid);
 
 /** Loads slots for an object from the db.
  *
- * @param be SQL backend
+ * @param sql_be SQL backend
  */
-void gnc_sql_slots_load( GncSqlBackend* be, QofInstance* inst );
+void gnc_sql_slots_load (GncSqlBackend* sql_be, QofInstance* inst);
 
 /**
- * gnc_sql_slots_load_for_list - Loads slots for a list of objects from the db.
- * Loading slots for a list of objects can be faster than loading for one object
+ * gnc_sql_slots_load_for_instancevec - Loads slots for a set of QofInstance*
+ * from the db.  Loading slots for a set is faster than loading for one object
  * at a time because fewer SQL queries are used.
  *
- * @param be SQL backend
+ * @param sql_be SQL backend
  * @param list List of objects
  */
-void gnc_sql_slots_load_for_list( GncSqlBackend* be, GList* list );
+void gnc_sql_slots_load_for_instancevec (GncSqlBackend* sql_be,
+                                         InstanceVec& instances);
 
-typedef QofInstance* (*BookLookupFn)( const GncGUID* guid, const QofBook* book );
+typedef QofInstance* (*BookLookupFn) (const GncGUID* guid,
+                                      const QofBook* book);
 
 /**
  * gnc_sql_slots_load_for_sql_subquery - Loads slots for all objects whose guid is
  * supplied by a subquery.  The subquery should be of the form "SELECT DISTINCT guid FROM ...".
  * This is faster than loading for one object at a time because fewer SQL queries * are used.
  *
- * @param be SQL backend
+ * @param sql_be SQL backend
  * @param subquery Subquery SQL string
  * @param lookup_fn Lookup function to get the right object from the book
  */
-void gnc_sql_slots_load_for_sql_subquery( GncSqlBackend* be, const gchar* subquery,
-        BookLookupFn lookup_fn );
+void gnc_sql_slots_load_for_sql_subquery (GncSqlBackend* sql_be,
+                                          const gchar* subquery,
+                                          BookLookupFn lookup_fn);
 
-void gnc_sql_init_slots_handler( void );
+void gnc_sql_init_slots_handler (void);
 
 #endif /* GNC_SLOTS_SQL_H */

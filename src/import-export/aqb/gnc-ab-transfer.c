@@ -35,12 +35,12 @@
 #include <gtk/gtk.h>
 #include <aqbanking/banking.h>
 
-#include "Transaction.h"
+#include <gnc-aqbanking-templates.h>
+#include <Transaction.h>
 #include "dialog-transfer.h"
 #include "gnc-ab-transfer.h"
 #include "gnc-ab-kvp.h"
 #include "gnc-ab-utils.h"
-#include "gnc-ab-trans-templ.h"
 #include "gnc-gwen-gui.h"
 #include "gnc-ui.h"
 
@@ -62,8 +62,7 @@ save_templates(GtkWidget *parent, Account *gnc_acc, GList *templates,
                   "but you cancelled the transfer dialog. "
                   "Do you nevertheless want to store the changes?")))
     {
-        GList *kvp_list = gnc_ab_trans_templ_list_to_kvp_list(templates);
-        gnc_ab_set_book_template_list(gnc_account_get_book(gnc_acc), kvp_list);
+        gnc_ab_set_book_template_list(gnc_account_get_book(gnc_acc), templates);
     }
 }
 
@@ -119,8 +118,8 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
     }
 
     /* Get list of template transactions */
-    templates = gnc_ab_trans_templ_list_new_from_kvp_list(
-                    gnc_ab_get_book_template_list(gnc_account_get_book(gnc_acc)));
+    templates = gnc_ab_trans_templ_list_new_from_book(
+         gnc_account_get_book(gnc_acc));
 
     /* Create new ABTransDialog */
     td = gnc_ab_trans_dialog_new(parent, ab_acc,
@@ -158,12 +157,6 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
         /* Let the user enter the values */
         result = gnc_ab_trans_dialog_run_until_ok(td);
 
-        if (result != GNC_RESPONSE_NOW && result != GNC_RESPONSE_LATER)
-        {
-            aborted = TRUE;
-            goto repeat;
-        }
-
         /* Save the templates */
         templates = gnc_ab_trans_dialog_get_templ(td, &changed);
         if (changed)
@@ -171,6 +164,12 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
                            (result == GNC_RESPONSE_NOW));
         g_list_free(templates);
         templates = NULL;
+
+        if (result != GNC_RESPONSE_NOW && result != GNC_RESPONSE_LATER)
+        {
+            aborted = TRUE;
+            goto repeat;
+        }
 
         /* Get a job and enqueue it */
         ab_trans = gnc_ab_trans_dialog_get_ab_trans(td);

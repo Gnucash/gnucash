@@ -50,6 +50,7 @@
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "gnc-commodity.h"
+#include <qofinstance-p.h>
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.engine.scrub"
@@ -1225,16 +1226,18 @@ xaccAccountScrubCommodity (Account *account)
 
 /* ================================================================ */
 
+/* EFFECTIVE FRIEND FUNCTION declared in qofinstance-p.h */
+extern void qof_instance_set_dirty (QofInstance*);
+
 static void
 xaccAccountDeleteOldData (Account *account)
 {
     if (!account) return;
     xaccAccountBeginEdit (account);
-
-    kvp_frame_set_slot_nc (account->inst.kvp_data, "old-currency", NULL);
-    kvp_frame_set_slot_nc (account->inst.kvp_data, "old-security", NULL);
-    kvp_frame_set_slot_nc (account->inst.kvp_data, "old-currency-scu", NULL);
-    kvp_frame_set_slot_nc (account->inst.kvp_data, "old-security-scu", NULL);
+    qof_instance_set_kvp (QOF_INSTANCE (account), "old-currency", NULL);
+    qof_instance_set_kvp (QOF_INSTANCE (account), "old-security", NULL);
+    qof_instance_set_kvp (QOF_INSTANCE (account), "old-currency-scu", NULL);
+    qof_instance_set_kvp (QOF_INSTANCE (account), "old-security-scu", NULL);
     qof_instance_set_dirty (QOF_INSTANCE (account));
     xaccAccountCommitEdit (account);
 }
@@ -1335,30 +1338,28 @@ xaccAccountTreeScrubQuoteSources (Account *root, gnc_commodity_table *table)
 void
 xaccAccountScrubKvp (Account *account)
 {
+    GValue v = G_VALUE_INIT;
     const gchar *str;
     gchar *str2;
-    kvp_frame *frame;
 
     if (!account) return;
 
-    str = kvp_frame_get_string(account->inst.kvp_data, "notes");
-    if (str)
+    qof_instance_get_kvp (QOF_INSTANCE (account), "notes", &v);
+    if (G_VALUE_HOLDS_STRING (&v))
     {
-        str2 = g_strstrip(g_strdup(str));
+        str2 = g_strstrip(g_value_dup_string(&v));
         if (strlen(str2) == 0)
-            kvp_frame_set_slot_nc (account->inst.kvp_data, "notes", NULL);
+            qof_instance_slot_delete (QOF_INSTANCE (account), "notes");
         g_free(str2);
     }
 
-    str = kvp_frame_get_string(account->inst.kvp_data, "placeholder");
-    if (str && strcmp(str, "false") == 0)
-        kvp_frame_set_slot_nc (account->inst.kvp_data, "placeholder", NULL);
+    qof_instance_get_kvp (QOF_INSTANCE (account), "placeholder", &v);
+    if ((G_VALUE_HOLDS_STRING (&v) &&
+        strcmp(g_value_get_string (&v), "false") == 0) ||
+        (G_VALUE_HOLDS_BOOLEAN (&v) && ! g_value_get_boolean (&v)))
+        qof_instance_slot_delete (QOF_INSTANCE (account), "placeholder");
 
-    frame = kvp_frame_get_frame(account->inst.kvp_data, "hbci");
-    if (frame && kvp_frame_is_empty(frame))
-    {
-        kvp_frame_set_frame_nc(account->inst.kvp_data, "hbci", NULL);
-    }
+    qof_instance_slot_delete_if_empty (QOF_INSTANCE (account), "hbci");
 }
 
 /* ================================================================ */

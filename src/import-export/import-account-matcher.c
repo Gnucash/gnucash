@@ -76,7 +76,7 @@ static AccountPickerDialog* gnc_import_new_account_picker(void)
 /**************************************************
  * test_acct_online_id_match
  *
- * test for match of kvp_frame of account
+ * test for match of account online_ids.
  **************************************************/
 static gpointer test_acct_online_id_match(Account *acct, gpointer param_online_id)
 {
@@ -114,8 +114,8 @@ build_acct_tree(AccountPickerDialog *picker)
     g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
 
     /* Add our custom column. */
-    col = gnc_tree_view_account_add_kvp_column (picker->account_tree,
-            _("Account ID"), "online_id");
+    col = gnc_tree_view_account_add_property_column (picker->account_tree,
+            _("Account ID"), "online-id");
     g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
 
     gtk_container_add(GTK_CONTAINER(picker->account_tree_sw),
@@ -342,8 +342,18 @@ Account * gnc_import_select_account(GtkWidget *parent,
             response = gtk_dialog_run(GTK_DIALOG(picker->dialog));
             switch (response)
             {
+            case GNC_RESPONSE_NEW:
+                gnc_import_add_account(NULL, picker);
+                response = GTK_RESPONSE_OK;
+                /* no break */
+
             case GTK_RESPONSE_OK:
                 retval = gnc_tree_view_account_get_selected_account(picker->account_tree);
+                if (retval == NULL)
+                {
+                    response = GNC_RESPONSE_NEW;
+                    break;
+                }
                 if (retval)
                     retval_name = xaccAccountGetName(retval);
                 if (!retval_name)
@@ -368,10 +378,7 @@ Account * gnc_import_select_account(GtkWidget *parent,
                 }
                 ok_pressed_retval = TRUE;
                 break;
-            case GNC_RESPONSE_NEW:
-                gnc_import_add_account(NULL, picker);
-                ok_pressed_retval = TRUE;
-                break;
+
             default:
                 ok_pressed_retval = FALSE;
                 break;
@@ -412,7 +419,7 @@ AccountPickerDialog* gnc_import_account_assist_setup(GtkWidget *parent)
 {
     AccountPickerDialog * picker;
     GtkBuilder *builder;
-    GtkWidget  *button, *box, *h_box;
+    GtkWidget  *box, *h_box;
 
     /* Init the account picker structure */
     picker = gnc_import_new_account_picker();
@@ -435,13 +442,13 @@ AccountPickerDialog* gnc_import_account_assist_setup(GtkWidget *parent)
     picker->account_online_id_label = GTK_WIDGET(gtk_builder_get_object (builder, "online_id_label"));
 
     /* Add the New Account Button */
-    button = gtk_button_new_with_mnemonic ("_New Account");
+    picker->new_button = gtk_button_new_with_mnemonic ("_New Account");
     h_box = gtk_hbox_new(TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(h_box), button, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(h_box), picker->new_button, FALSE, FALSE, 0);
     gtk_box_pack_start( GTK_BOX(box), h_box, FALSE, FALSE, 6);
-    gtk_button_set_use_stock (GTK_BUTTON(button), TRUE);
-    gtk_widget_show (button);
-    g_signal_connect(button, "clicked",
+    gtk_button_set_use_stock (GTK_BUTTON(picker->new_button), TRUE);
+    gtk_widget_show (picker->new_button);
+    g_signal_connect(picker->new_button, "clicked",
                      G_CALLBACK(gnc_import_add_account), picker);
 
     build_acct_tree(picker);
@@ -451,6 +458,19 @@ AccountPickerDialog* gnc_import_account_assist_setup(GtkWidget *parent)
 
     g_object_unref(G_OBJECT(builder));
     return picker;
+}
+
+
+/*******************************************************
+ * gnc_import_account_assist_disable
+ *
+ * disables account picker input.
+ *******************************************************/
+void
+gnc_import_account_assist_disable (AccountPickerDialog *picker, gboolean disable)
+{
+    gtk_widget_set_sensitive (picker->account_tree_sw, !disable);
+    gtk_widget_set_sensitive (picker->new_button, !disable);
 }
 
 

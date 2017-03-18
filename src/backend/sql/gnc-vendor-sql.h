@@ -30,6 +30,16 @@
 #ifndef GNC_VENDOR_SQL_H
 #define GNC_VENDOR_SQL_H
 
-void gnc_vendor_sql_initialize( void );
+#include "gnc-sql-object-backend.hpp"
+
+class GncSqlVendorBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlVendorBackend();
+    void load_all(GncSqlBackend*) override;
+    bool commit(GncSqlBackend*, QofInstance*) override;
+    bool write(GncSqlBackend*) override;
+};
+
 
 #endif /* GNC_VENDOR_SQL_H */

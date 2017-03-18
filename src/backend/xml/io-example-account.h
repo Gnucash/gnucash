@@ -24,35 +24,39 @@
 
 #ifndef IO_EXAMPLE_ACCOUNT_H
 #define IO_EXAMPLE_ACCOUNT_H
-
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 #include <glib.h>
 
-#include "sixtp.h"
 #include "gnc-engine.h"
 
 struct GncExampleAccount_struct
 {
-    gchar *title;
-    gchar *filename;
-    QofBook *book;
-    Account *root;
-    gchar *short_description;
-    gchar *long_description;
+    gchar* title;
+    gchar* filename;
+    QofBook* book;
+    Account* root;
+    gchar* short_description;
+    gchar* long_description;
     gboolean exclude_from_select_all;
     gboolean start_selected;
 };
 typedef struct GncExampleAccount_struct GncExampleAccount;
 
-void gnc_destroy_example_account(GncExampleAccount *gea);
+void gnc_destroy_example_account (GncExampleAccount* gea);
 
-gboolean gnc_write_example_account(GncExampleAccount *gea,
-                                   const gchar *filename);
-GncExampleAccount *gnc_read_example_account(const gchar *filename);
+gboolean gnc_write_example_account (GncExampleAccount* gea,
+                                    const gchar* filename);
+GncExampleAccount* gnc_read_example_account (const gchar* filename);
 
 
-void gnc_free_example_account_list(GSList *list);
-GSList* gnc_load_example_account_list(const char *dirname);
-
+void gnc_free_example_account_list (GSList* list);
+GSList* gnc_load_example_account_list (const char* dirname);
+#ifdef __cplusplus
+}
+#endif
 /* gboolean gnc_is_example_account_xml(const gchar *name); */
 
 #endif /* IO_EXAMPLE_ACCOUNT_H */

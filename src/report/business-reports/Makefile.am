@@ -5,6 +5,7 @@ gncscmmod_DATA = \
    easy-invoice.scm \
    fancy-invoice.scm \
    taxinvoice.scm \
+   receipt.scm \
    invoice.scm \
    job-report.scm \
    owner-report.scm \
@@ -20,6 +21,8 @@ gncscmtpldir = ${GNC_SCM_INSTALL_DIR}/gnucash/report
 gncscmtpl_DATA = \
    taxinvoice.eguile.scm \
    taxinvoice.css \
+   receipt.eguile.scm \
+   receipt.css \
    balsheet-eg.css \
    balsheet-eg.eguile.scm
 

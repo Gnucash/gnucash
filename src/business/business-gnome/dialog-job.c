@@ -27,6 +27,7 @@
 #include <glib/gi18n.h>
 
 #include "dialog-utils.h"
+#include "gnc-amount-edit.h"
 #include "gnc-component-manager.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
@@ -75,6 +76,7 @@ struct _job_window
     GtkWidget *	cust_edit;
     GtkWidget *	name_entry;
     GtkWidget *	desc_entry;
+    GtkWidget *	rate_entry;
     GtkWidget *	active_check;
 
     JobDialogType	dialog_type;
@@ -109,6 +111,8 @@ static void gnc_ui_to_job (JobWindow *jw, GncJob *job)
                    0, -1));
     gncJobSetReference (job, gtk_editable_get_chars
                         (GTK_EDITABLE (jw->desc_entry), 0, -1));
+    gncJobSetRate (job, gnc_amount_edit_get_amount
+                        (GNC_AMOUNT_EDIT (jw->rate_entry)));
     gncJobSetActive (job, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON
                      (jw->active_check)));
     {
@@ -302,7 +306,7 @@ gnc_job_new_window (QofBook *bookp, GncOwner *owner, GncJob *job)
 {
     JobWindow *jw;
     GtkBuilder *builder;
-    GtkWidget *owner_box, *owner_label;
+    GtkWidget *owner_box, *owner_label, *edit, *hbox;
 
     /*
      * Find an existing window for this job.  If found, bring it to
@@ -345,6 +349,15 @@ gnc_job_new_window (QofBook *bookp, GncOwner *owner, GncJob *job)
     owner_box = GTK_WIDGET(gtk_builder_get_object (builder, "customer_hbox"));
     owner_label = GTK_WIDGET(gtk_builder_get_object (builder, "owner_label"));
 
+    edit = gnc_amount_edit_new();
+    gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
+
+    jw->rate_entry = edit;
+    gtk_widget_show (edit);
+
+    hbox = GTK_WIDGET(gtk_builder_get_object (builder, "rate_entry"));
+    gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+
     /* Setup signals */
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, jw);
 
@@ -361,6 +374,8 @@ gnc_job_new_window (QofBook *bookp, GncOwner *owner, GncJob *job)
         gtk_entry_set_text (GTK_ENTRY (jw->id_entry), gncJobGetID (job));
         gtk_entry_set_text (GTK_ENTRY (jw->name_entry), gncJobGetName (job));
         gtk_entry_set_text (GTK_ENTRY (jw->desc_entry), gncJobGetReference (job));
+        gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (jw->rate_entry),
+                                      gncJobGetRate (job));
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (jw->active_check),
                                       gncJobGetActive (job));
 
@@ -561,6 +576,8 @@ gnc_job_search (GncJob *start, GncOwner *owner, QofBook *book)
                                            JOB_ACTIVE, NULL);
         params = gnc_search_param_prepend (params, _("Billing ID"), NULL, type,
                                            JOB_REFERENCE, NULL);
+        params = gnc_search_param_prepend (params, _("Rate"), NULL, type,
+                                           JOB_RATE, NULL);
         params = gnc_search_param_prepend (params, _("Job Number"), NULL, type,
                                            JOB_ID, NULL);
         params = gnc_search_param_prepend (params, _("Job Name"), NULL, type,
@@ -572,6 +589,8 @@ gnc_job_search (GncJob *start, GncOwner *owner, QofBook *book)
     {
         columns = gnc_search_param_prepend (columns, _("Billing ID"), NULL, type,
                                             JOB_REFERENCE, NULL);
+        columns = gnc_search_param_prepend (columns, _("Rate"), NULL, type,
+                                            JOB_RATE, NULL);
         columns = gnc_search_param_prepend (columns, _("Company"), NULL, type,
                                             JOB_OWNER, OWNER_NAME, NULL);
         columns = gnc_search_param_prepend (columns, _("Job Name"), NULL, type,

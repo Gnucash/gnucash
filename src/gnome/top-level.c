@@ -309,7 +309,7 @@ static void
 gnc_save_all_state (gpointer session, gpointer unused)
 {
     QofBook *book;
-    const gchar *guid_string;
+    gchar guid_string[GUID_ENCODING_LENGTH+1];
     const GncGUID *guid;
     GError *error = NULL;
     GKeyFile *keyfile = NULL;
@@ -338,7 +338,7 @@ gnc_save_all_state (gpointer session, gpointer unused)
     /* Store the book's GncGUID in the top level group */
     book = qof_session_get_book(session);
     guid = qof_entity_get_guid(QOF_INSTANCE(book));
-    guid_string = guid_to_string(guid);
+    guid_to_string_buff(guid, guid_string);
     g_key_file_set_string(keyfile, STATE_FILE_TOP, STATE_FILE_BOOK_GUID,
                           guid_string);
 

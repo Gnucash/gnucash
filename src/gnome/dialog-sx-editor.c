@@ -638,11 +638,12 @@ gnc_sxed_split_check_account (GncSxEditorDialog *sxed, Split *s,
 {
     gnc_commodity *split_cmdty = NULL;
     gnc_numeric split_amount = gnc_numeric_zero ();
-    Account *acct;
-    KvpFrame *f = xaccSplitGetSlots (s);
-    KvpValue *v = kvp_frame_get_slot_path(f, GNC_SX_ID, GNC_SX_ACCOUNT, NULL);
-    GncGUID *acct_guid = kvp_value_get_guid (v);
-    acct = xaccAccountLookup( acct_guid, gnc_get_current_book ());
+    Account *acct = NULL;
+    GncGUID *acct_guid = NULL;
+    qof_instance_get (QOF_INSTANCE (s),
+                      "sx-account", &acct_guid,
+                      NULL);
+    acct = xaccAccountLookup (acct_guid, gnc_get_current_book ());
     if (acct == NULL)
         return FALSE;
     split_cmdty = xaccAccountGetCommodity(acct);
@@ -661,13 +662,12 @@ gnc_sxed_split_calculate_formula (GncSxEditorDialog *sxed, Split *s,
                                   GHashTable *vars, const char *key,
                                   txnCreditDebitSums *tcds)
 {
-    KvpFrame *f = xaccSplitGetSlots (s);
-    KvpValue *v = kvp_frame_get_slot_path (f, GNC_SX_ID, key, NULL);
     gnc_numeric tmp = gnc_numeric_zero ();
     char *str = NULL;
-
-    if (v == NULL || (str = kvp_value_get_string(v)) == NULL ||
-        strlen(str) == 0)
+    qof_instance_get (QOF_INSTANCE (s),
+                      key, &str,
+                      NULL);
+    if (str == NULL || strlen(str) == 0)
         return TRUE; /* No formula no foul */
     if (gnc_sx_parse_vars_from_formula (str, vars, &tmp) < 0)
     {
@@ -678,7 +678,7 @@ gnc_sxed_split_calculate_formula (GncSxEditorDialog *sxed, Split *s,
 
         return FALSE;
     }
-    if (g_strcmp0 (key, GNC_SX_CREDIT_FORMULA) == 0)
+    if (g_strcmp0 (key, "sx-credit-formula") == 0)
         tcds->creditSum = gnc_numeric_add(tcds->creditSum, tmp, 100,
                                           GNC_DENOM_AUTO | GNC_HOW_DENOM_LCD);
     else
@@ -748,7 +748,7 @@ check_transaction_splits (Transaction *txn, gpointer data)
         }
 
         if (!gnc_sxed_split_calculate_formula (sd->sxed, s, sd->vars,
-                                               GNC_SX_CREDIT_FORMULA,
+                                               "sx-credit-formula",
                                                sd->tcds))
         {
             gchar *message = g_strdup_printf
@@ -763,7 +763,7 @@ check_transaction_splits (Transaction *txn, gpointer data)
         }
 
         if (!gnc_sxed_split_calculate_formula (sd->sxed, s, sd->vars,
-                                               GNC_SX_DEBIT_FORMULA,
+                                               "sx-debit-formula",
                                                sd->tcds))
 
         {
@@ -1317,9 +1317,7 @@ schedXact_editor_create_ledger( GncSxEditorDialog *sxed )
     GtkWidget *main_vbox;
 
     /* Create the ledger */
-    /* THREAD-UNSAFE */
-    sxed->sxGUIDstr = g_strdup( guid_to_string(
-                                    xaccSchedXactionGetGUID(sxed->sx) ) );
+    sxed->sxGUIDstr = guid_to_string( xaccSchedXactionGetGUID(sxed->sx) );
     sxed->ledger = gnc_ledger_display_template_gl( sxed->sxGUIDstr );
     splitreg = gnc_ledger_display_get_split_register( sxed->ledger );
 

@@ -108,20 +108,23 @@ void xaccQueryAddSingleAccountMatch(QofQuery *, Account *, QofQueryOp);
 
 void xaccQueryAddStringMatch (QofQuery* q, const char *matchstring,
                               gboolean case_sens, gboolean use_regexp,
-                              QofQueryOp op,
+                              QofQueryCompare how, QofQueryOp op,
                               const char * path, ...);
 void
 xaccQueryAddDescriptionMatch(QofQuery *q, const char *m, gboolean c, gboolean r,
-                             QofQueryOp o);
+                             QofQueryCompare how, QofQueryOp o);
+void
+xaccQueryAddNotesMatch(QofQuery *q, const char *m, gboolean c, gboolean r,
+                             QofQueryCompare how, QofQueryOp o);
 void
 xaccQueryAddNumberMatch(QofQuery *q, const char *m, gboolean c, gboolean r,
-                        QofQueryOp o);
+                        QofQueryCompare how, QofQueryOp o);
 void
 xaccQueryAddActionMatch(QofQuery *q, const char *m, gboolean c, gboolean r,
-                        QofQueryOp o);
+                        QofQueryCompare how, QofQueryOp o);
 void
 xaccQueryAddMemoMatch(QofQuery *q, const char *m, gboolean c, gboolean r,
-                      QofQueryOp o);
+                      QofQueryCompare how, QofQueryOp o);
 void
 xaccQueryAddValueMatch(QofQuery *q, gnc_numeric amt, QofNumericMatch sgn,
                        QofQueryCompare how, QofQueryOp op);
@@ -183,10 +186,6 @@ void xaccQueryAddClearedMatch(QofQuery * q, cleared_match_t how, QofQueryOp op);
 void xaccQueryAddGUIDMatch(QofQuery * q, const GncGUID *guid,
                            QofIdType id_type, QofQueryOp op);
 
-/** given kvp value is on right side of comparison */
-void xaccQueryAddKVPMatch(QofQuery *q, GSList *path, const KvpValue *value,
-                          QofQueryCompare how, QofIdType id_type,
-                          QofQueryOp op);
 
 /*******************************************************************
  *  compatibility interface with old QofQuery API

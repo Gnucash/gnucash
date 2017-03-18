@@ -26,9 +26,10 @@
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <glib.h>
+#include <qofinstance-p.h>
 
 #include "gnc-engine.h"
 #include "gncBillTermP.h"
@@ -192,6 +193,8 @@ gnc_billterm_set_property (GObject         *object,
     g_return_if_fail(GNC_IS_BILLTERM(object));
 
     bt = GNC_BILLTERM(object);
+    g_assert (qof_instance_get_editlevel(bt));
+
     switch (prop_id)
     {
     case PROP_NAME:
@@ -263,9 +266,10 @@ GncBillTerm * gncBillTermCreate (QofBook *book)
 
 void gncBillTermDestroy (GncBillTerm *term)
 {
+    gchar guidstr[GUID_ENCODING_LENGTH+1];
     if (!term) return;
-    DEBUG("destroying bill term %s (%p)",
-          guid_to_string(qof_instance_get_guid(&term->inst)), term);
+    guid_to_string_buff(qof_instance_get_guid(&term->inst),guidstr);
+    DEBUG("destroying bill term %s (%p)", guidstr, term);
     qof_instance_set_destroying(term, TRUE);
     qof_instance_set_dirty (&term->inst);
     gncBillTermCommitEdit (term);
@@ -760,7 +764,7 @@ compute_monthyear (const GncBillTerm *term, Timespec post_date,
     gnc_timespec2dmy (post_date, &iday, &imonth, &iyear);
 
     if (cutoff <= 0)
-        cutoff += gnc_date_get_last_mday (imonth, iyear);
+        cutoff += gnc_date_get_last_mday (imonth - 1, iyear);
 
     if (iday <= cutoff)
     {
@@ -807,7 +811,7 @@ compute_time (const GncBillTerm *term, Timespec post_date, int days)
         break;
     case GNC_TERM_TYPE_PROXIMO:
         compute_monthyear (term, post_date, &month, &year);
-        day = gnc_date_get_last_mday (month, year);
+        day = gnc_date_get_last_mday (month - 1, year);
         if (days < day)
             day = days;
         res = gnc_dmy2timespec (day, month, year);

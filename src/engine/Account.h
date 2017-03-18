@@ -65,6 +65,12 @@ typedef struct
     QofInstanceClass parent_class;
 } AccountClass;
 
+typedef struct
+{
+    Account *acc;
+    QofBook *book;
+} GncImportMatchMap;
+
 /* --- type macros --- */
 #define GNC_TYPE_ACCOUNT            (gnc_account_get_type ())
 #define GNC_ACCOUNT(o)              \
@@ -421,6 +427,17 @@ void xaccAccountSortSplits (Account *acc, gboolean force);
  */
 gchar * gnc_account_get_full_name (const Account *account);
 
+/** Retrieve the gains account used by this account for the indicated
+ * currency, creating and recording a new one if necessary.
+ *
+ * FIXME: There is at present no interface to designate an existing
+ * account, and the new account name is hard coded to
+ * "Orphaned Gains -- CUR"
+ *
+ * FIXME: There is no provision for creating separate accounts for
+ * anything other than currency, e.g. holding period of a security.
+ */
+Account * xaccAccountGainsAccount (Account *acc, gnc_commodity *curr);
 /** Set a string that identifies the Finance::Quote backend that
  *  should be used to retrieve online prices.  See price-quotes.scm
  *  for more information
@@ -864,8 +881,6 @@ gboolean xaccAccountGetReconcileChildrenStatus(const Account *account);
  */
 gboolean xaccAccountHasAncestor(const Account *acc, const Account *ancestor);
 
-#define xaccAccountGetSlots(X) qof_instance_get_slots(QOF_INSTANCE(X))
-
 /** @} */
 
 /** @name Lookup Accounts and Subaccounts by name or code
@@ -978,6 +993,16 @@ gboolean xaccAccountIsEquityType(GNCAccountType t);
  * internal data structure used by this object.
  */
 SplitList* xaccAccountGetSplitList (const Account *account);
+
+
+/** The xaccAccountCountSplits() routine returns the number of all
+ *    the splits in the account.
+ * @param acc the account for which to count the splits
+ *
+ * @param include_children also count splits in descendants (TRUE) or
+ *        for this account only (FALSE).
+ */
+gint64 xaccAccountCountSplits (const Account *acc, gboolean include_children);
 
 /** The xaccAccountMoveAllSplits() routine reassigns each of the splits
  *  in accfrom to accto. */
@@ -1356,6 +1381,70 @@ int gnc_account_tree_staged_transaction_traversal(const Account *account,
 
 int xaccAccountTreeForEachTransaction(Account *acc,
                                       TransactionCallback proc, void *data);
+
+/** Obtain an ImportMatchMap object from an Account or a Book
+ */
+GncImportMatchMap *gnc_account_imap_create_imap (Account *acc);
+
+/* Look up an Account in the map non Baysian
+ */
+Account* gnc_account_imap_find_account (GncImportMatchMap *imap, const char* category,
+                                        const char *key);
+
+/* Store an Account in the map non Baysian
+ */
+void gnc_account_imap_add_account (GncImportMatchMap *imap, const char *category,
+                                   const char *key, Account *acc);
+
+/* Remove a reference to an Account in the map non Baysian
+ */
+void gnc_account_imap_delete_account (GncImportMatchMap *imap, const char *category,
+                                      const char *key);
+
+/** Look up an Account in the map using Baysian
+ */
+Account* gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList* tokens);
+
+/** Updates the imap for a given account using a list of tokens
+ */
+void gnc_account_imap_add_account_bayes (GncImportMatchMap *imap, GList* tokens,
+                                         Account *acc);
+
+typedef struct imap_info
+{
+    Account        *source_account;
+    Account        *map_account;
+    GList          *list;
+    char           *category_head;
+    char           *full_category;
+    char           *match_string;
+    char           *count;
+}GncImapInfo;
+
+/** Returns a GList of structure imap_info of all Bayesian mappings for
+ *  required Account
+ */
+GList *gnc_account_imap_get_info_bayes (Account *acc);
+
+/** Returns a GList of structure imap_info of all Non Bayesian mappings for
+ *  required Account
+ */
+GList *gnc_account_imap_get_info (Account *acc, const char *category);
+
+/** Returns the text string pointed to by full_category for the Account, free
+ *  the returned text
+ */
+gchar *gnc_account_get_map_entry (Account *acc, const char *full_category);
+
+/** Delete the entry for Account pointed to by full_category, if empty is TRUE then use
+ *  delete if empty, full_category is freed
+ */
+void gnc_account_delete_map_entry (Account *acc, char *full_category, gboolean empty);
+
+/** Search for Bayesian entries with mappings based on full account name and change
+ *  them to be based on the account guid
+ */
+void gnc_account_imap_convert_bayes (QofBook *book);
 
 /** @} */
 

@@ -1,4 +1,3 @@
-
 SET(test_core_SOURCES
   test-stuff.c
   unittest-support.c
@@ -64,6 +63,16 @@ GNC_ADD_SCHEME_TARGETS(scm-test-core
   "${GUILE_LIBRARY_DIRS}"
   "${GUILE_DEPENDS}"
   FALSE
-)
+  )
 
+IF(NOT GTEST_SHARED_LIB)
+  SET (lib_gtest_SOURCES ${GTEST_SRC_DIR}/src/gtest-all.cc)
+  ADD_LIBRARY(gtest STATIC  ${lib_gtest_SOURCES})
+  TARGET_INCLUDE_DIRECTORIES(gtest PUBLIC ${GTEST_INCLUDE_DIR} ${GTEST_SRC_DIR})
+ENDIF()
+SET (lib_gmock_SOURCES ${GMOCK_SRC})
+ADD_LIBRARY(gmock STATIC  ${lib_gmock_SOURCES})
+TARGET_INCLUDE_DIRECTORIES(gmock PUBLIC
+  ${GTEST_INCLUDE_DIR} ${GTEST_SRC_DIR}
+  ${GMOCK_INCLUDE_DIR} ${GMOCK_SRC_DIR})
 INSTALL(FILES unittest-support.h DESTINATION libexec/gnucash/src/libqof/qof/test)

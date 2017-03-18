@@ -140,6 +140,7 @@
 ;; options generator
 (define (income-statement-options-generator-internal reportname)
   (let* ((options (gnc:new-options))
+         (book (gnc-get-current-book)) ; XXX Find a way to get the book that opened the report
          (add-option 
           (lambda (new-option)
             (gnc:register-option options new-option))))
@@ -151,7 +152,7 @@
     (add-option
       (gnc:make-string-option
       gnc:pagename-general optname-party-name
-      "b" opthelp-party-name (or (gnc:company-info gnc:*company-name*) "")))
+      "b" opthelp-party-name (or (gnc:company-info book gnc:*company-name*) "")))
     
     ;; period over which to report income
     (gnc:options-add-date-interval!

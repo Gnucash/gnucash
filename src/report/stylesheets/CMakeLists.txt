@@ -36,6 +36,7 @@ SET(stylesheets_SCHEME_1
   stylesheet-fancy.scm
   stylesheet-footer.scm
   stylesheet-easy.scm
+  stylesheet-head-or-tail.scm
 )
 
 SET(stylesheets_SCHEME_2

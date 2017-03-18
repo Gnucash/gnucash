@@ -406,13 +406,7 @@
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display Columns") amount-header
-    "hb" (N_ "Display the transaction amount?") #t)) 
-
-  (gnc:register-inv-option
-   (gnc:make-string-option
-    gnc:pagename-general (N_ "Today Date Format")
-    "p" (N_ "The format for the date->string conversion for today's date.")
-    (gnc-default-strftime-date-format)))
+    "hb" (N_ "Display the transaction amount?") #t))
 
   (gnc:options-set-default-section gnc:*report-options* "General")
 
@@ -514,13 +508,8 @@
 
 (define (make-myname-table book date-format)
   (let* ((table (gnc:make-html-table))
-	 (slots (qof-book-get-slots book))
-	 (name (kvp-frame-get-slot-path-gslist
-		slots (append gnc:*kvp-option-path*
-			      (list gnc:*business-label* gnc:*company-name*))))
-	 (addy (kvp-frame-get-slot-path-gslist
-		slots (append gnc:*kvp-option-path*
-			      (list gnc:*business-label* gnc:*company-addy*)))))
+	 (name (gnc:company-info book gnc:*company-name*))
+	 (addy (gnc:company-info book gnc:*company-addy*)))
 
     (gnc:html-table-set-style!
      table "table"
@@ -563,11 +552,11 @@
 	 (end-date (gnc:timepair-end-day-time 
 		       (gnc:date-option-absolute-time
 			(opt-val gnc:pagename-general (N_ "To")))))
-	 (book (gnc-get-current-book)) ;XXX Grab this from elsewhere
+	 (book (gnc-account-get-book account))
+         (date-format (gnc:options-fancy-date book))
 	 (type (opt-val "__reg" "owner-type"))
 	 (type-str "")
          (report-title-str ""))
-
     (cond
       ((eqv? type GNC-OWNER-CUSTOMER)
        (set! type-str (N_ "Customer"))
@@ -617,7 +606,7 @@
 
 	  (gnc:html-document-add-object!
 	   document
-	   (make-myname-table book (opt-val gnc:pagename-general (N_ "Today Date Format"))))
+	   (make-myname-table book date-format))
 
 	  (gnc:html-document-add-object!
 	   document

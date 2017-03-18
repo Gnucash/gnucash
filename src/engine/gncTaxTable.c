@@ -26,9 +26,10 @@
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <glib.h>
+#include <qofinstance-p.h>
 
 #include "gnc-features.h"
 #include "gncTaxTableP.h"
@@ -208,9 +209,10 @@ gncTaxTableRemoveChild (GncTaxTable *table, const GncTaxTable *child)
 enum
 {
     PROP_0,
-    PROP_NAME,
-    PROP_INVISIBLE,
-    PROP_REFCOUNT
+    PROP_NAME,		/* Table */
+    PROP_INVISIBLE,	/* Table */
+    PROP_REFCOUNT,	/* Table */
+//  PROP_PARENT,	/* Table */
 };
 
 /* GObject Initialization */
@@ -272,6 +274,8 @@ gnc_taxtable_set_property (GObject         *object,
     g_return_if_fail(GNC_IS_TAXTABLE(object));
 
     tt = GNC_TAXTABLE(object);
+    g_assert (qof_instance_get_editlevel(tt));
+
     switch (prop_id)
     {
     case PROP_NAME:
@@ -651,8 +655,9 @@ static void table_free (QofInstance *inst)
 void gncTaxTableCommitEdit (GncTaxTable *table)
 {
     /* GnuCash 2.6.3 and earlier didn't handle taxtable kvp's... */
-    if (!kvp_frame_is_empty (table->inst.kvp_data))
-        gnc_features_set_used (qof_instance_get_book (QOF_INSTANCE (table)), GNC_FEATURE_KVP_EXTRA_DATA);
+     if (qof_instance_has_kvp (QOF_INSTANCE (table)))
+          gnc_features_set_used (qof_instance_get_book (QOF_INSTANCE (table)),
+                                 GNC_FEATURE_KVP_EXTRA_DATA);
 
     if (!qof_commit_edit (QOF_INSTANCE(table))) return;
     qof_commit_edit_part2 (&table->inst, gncTaxTableOnError,

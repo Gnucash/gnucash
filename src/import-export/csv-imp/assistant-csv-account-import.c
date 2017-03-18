@@ -68,17 +68,16 @@ static gchar *gnc_input_dialog (GtkWidget *parent, const gchar *title, const gch
 
 static const gchar *finish_tree_string = N_(
             "The accounts will be imported from the file '%s' when you click 'Apply'.\n\n"
-            "You can also go back and verify your selections by clicking on 'Back'"
-            " or 'Cancel' to Abort Import.\n");
+            "You can verify your selections by clicking on 'Back' or 'Cancel' to Abort Import.\n");
 
 static const gchar *new_book_finish_tree_string = N_(
             "The accounts will be imported from the file '%s' when you click 'Apply'.\n\n"
-            "You can also go back and verify your selections by clicking on 'Back'"
-            " or 'Cancel' to Abort Import.\n\n"
+            "You can verify your selections by clicking on 'Back' or 'Cancel' to Abort Import.\n\n"
             "If this is your initial import into a new file, you will first see "
             "a dialog for setting book options, since these can affect how "
-            "imported data are converted to GnuCash transactions. If this is an "
-            "existing file, the dialog will not be shown.\n");
+            "imported data is converted to GnuCash transactions.\n"
+            "Note: After import, you may need to use 'View / Filter By / Other' menu option "
+            "and select to show unused Accounts.\n");
 
 /* Escape '_' in string */
 static gchar *mnemonic_escape (const gchar *source);
@@ -464,7 +463,7 @@ csv_import_assistant_summary_page_prepare (GtkAssistant *assistant,
 
         buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(info->summary_error_view));
         text = g_strdup_printf (gettext ("Import completed but with errors!\n\nThe number of Accounts added was %u and "
-                                        "updated was %u.\n\nSee below for errors..." ), info->num_new, info->num_updates );
+                                        "%u were updated.\n\nSee below for errors..."), info->num_new, info->num_updates);
         errtext = g_strdup_printf ("%s", info->error);
         gtk_text_buffer_set_text (buffer, errtext, -1);
         g_free (errtext);
@@ -472,7 +471,7 @@ csv_import_assistant_summary_page_prepare (GtkAssistant *assistant,
     }
     else
         text = g_strdup_printf (gettext ("Import completed successfully!\n\nThe number of Accounts added was %u and "
-                                        "updated was %u.\n" ), info->num_new, info->num_updates );
+                                        "%u were updated.\n"), info->num_new, info->num_updates);
 
     mtext = g_strdup_printf ("<span size=\"medium\"><b>%s</b></span>", text);
     gtk_label_set_markup (GTK_LABEL(info->summary_label), mtext);

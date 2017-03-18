@@ -1,5 +1,5 @@
 /*
- * gnc-plugin_page-account-tree.h --
+ * gnc-plugin-page-account-tree.h --
  *
  * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
  * Copyright (C) 2003 David Hampton <hampton@employees.org>
@@ -93,6 +93,16 @@ GncPluginPage *gnc_plugin_page_account_tree_new  (void);
  *  selected.
  */
 Account * gnc_plugin_page_account_tree_get_current_account (GncPluginPageAccountTree *page);
+
+
+/** Given a pointer to an account, the account tree will open
+ *  and the account will be selected (if any).
+ *
+ *  @param account The "account" to be selected.
+ *
+ *  @param win The "window" where the account tree is to be selected.
+ */
+void gnc_plugin_page_account_tree_open (Account *account, GtkWindow *win);
 
 G_END_DECLS
 

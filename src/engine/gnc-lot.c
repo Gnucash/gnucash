@@ -39,10 +39,11 @@
  * Copyright (c) 2002,2003 Linas Vepstas <linas@linas.org>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <glib.h>
 #include <glib/gi18n.h>
+#include <qofinstance-p.h>
 
 #include "Account.h"
 #include "AccountP.h"
@@ -63,8 +64,15 @@ struct gnc_lot_s
 enum
 {
     PROP_0,
-    PROP_IS_CLOSED,
-    PROP_MARKER
+//  PROP_ACCOUNT,       /* Table */
+    PROP_IS_CLOSED,     /* Table */
+
+    PROP_INVOICE,       /* KVP */
+    PROP_OWNER_TYPE,    /* KVP */
+    PROP_OWNER_GUID,    /* KVP */
+
+    PROP_RUNTIME_0,
+    PROP_MARKER,        /* Runtime */
 };
 
 typedef struct LotPrivate
@@ -90,6 +98,11 @@ typedef struct LotPrivate
     (G_TYPE_INSTANCE_GET_PRIVATE((o), GNC_TYPE_LOT, LotPrivate))
 
 #define gnc_lot_set_guid(L,G)  qof_instance_set_guid(QOF_INSTANCE(L),&(G))
+
+/* ============================================================= */
+
+static void gnc_lot_set_invoice (GNCLot* lot, GncGUID *guid);
+static GncGUID *gnc_lot_get_invoice (GNCLot* lot);
 
 /* ============================================================= */
 
@@ -125,6 +138,8 @@ gnc_lot_get_property(GObject* object, guint prop_id, GValue* value, GParamSpec* 
 {
     GNCLot* lot;
     LotPrivate* priv;
+    gchar *key;
+    GValue *temp;
 
     g_return_if_fail(GNC_IS_LOT(object));
 
@@ -138,18 +153,40 @@ gnc_lot_get_property(GObject* object, guint prop_id, GValue* value, GParamSpec* 
     case PROP_MARKER:
         g_value_set_int(value, priv->marker);
         break;
+    case PROP_INVOICE:
+        key = GNC_INVOICE_ID "/" GNC_INVOICE_GUID;
+        qof_instance_get_kvp (QOF_INSTANCE (lot), key, value);
+        break;
+    case PROP_OWNER_TYPE:
+        key = GNC_OWNER_ID"/" GNC_OWNER_TYPE;
+        qof_instance_get_kvp (QOF_INSTANCE (lot), key, value);
+        break;
+    case PROP_OWNER_GUID:
+        key = GNC_OWNER_ID "/" GNC_OWNER_GUID;
+        qof_instance_get_kvp (QOF_INSTANCE (lot), key, value);
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+        break;
     }
 }
 
 static void
-gnc_lot_set_property(GObject* object, guint prop_id, const GValue* value, GParamSpec* pspec)
+gnc_lot_set_property (GObject* object,
+                      guint prop_id,
+                      const GValue* value,
+                      GParamSpec* pspec)
 {
     GNCLot* lot;
     LotPrivate* priv;
+    gchar *key = NULL;
 
     g_return_if_fail(GNC_IS_LOT(object));
 
     lot = GNC_LOT(object);
+    if (prop_id < PROP_RUNTIME_0)
+        g_assert (qof_instance_get_editlevel(lot));
+
     priv = GET_PRIVATE(lot);
     switch (prop_id)
     {
@@ -159,7 +196,22 @@ gnc_lot_set_property(GObject* object, guint prop_id, const GValue* value, GParam
     case PROP_MARKER:
         priv->marker = g_value_get_int(value);
         break;
-    }
+    case PROP_INVOICE:
+        key = GNC_INVOICE_ID"/" GNC_INVOICE_GUID;
+        qof_instance_set_kvp (QOF_INSTANCE (lot), key, value);
+        break;
+    case PROP_OWNER_TYPE:
+        key = GNC_OWNER_ID "/" GNC_OWNER_TYPE;
+        qof_instance_set_kvp (QOF_INSTANCE (lot), key, value);
+        break;
+    case PROP_OWNER_GUID:
+        key = GNC_OWNER_ID "/" GNC_OWNER_GUID;
+        qof_instance_set_kvp (QOF_INSTANCE (lot), key, value);
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+        break;
+     }
 }
 
 static void
@@ -193,8 +245,32 @@ gnc_lot_class_init(GNCLotClass* klass)
                          0, G_MAXINT8, 0,
                          G_PARAM_READWRITE));
 
+     g_object_class_install_property(
+       gobject_class,
+        PROP_INVOICE,
+        g_param_spec_boxed("invoice",
+                           "Invoice attached to lot",
+                           "Used by GncInvoice",
+                           GNC_TYPE_GUID,
+                           G_PARAM_READWRITE));
 
+     g_object_class_install_property(
+       gobject_class,
+        PROP_OWNER_TYPE,
+        g_param_spec_int64("owner-type",
+                           "Owning Entity Type of  lot",
+                           "Used by GncOwner",
+                           0, G_MAXINT64, 0,
+                           G_PARAM_READWRITE));
 
+     g_object_class_install_property(
+       gobject_class,
+        PROP_OWNER_GUID,
+        g_param_spec_boxed("owner-guid",
+                           "Owner attached to lot",
+                           "Used by GncOwner",
+                           GNC_TYPE_GUID,
+                           G_PARAM_READWRITE));
 }
 
 GNCLot *
@@ -338,12 +414,6 @@ gnc_lot_set_closed_unknown(GNCLot* lot)
     }
 }
 
-KvpFrame *
-gnc_lot_get_slots (const GNCLot *lot)
-{
-    return qof_instance_get_slots(QOF_INSTANCE(lot));
-}
-
 SplitList *
 gnc_lot_get_split_list (const GNCLot *lot)
 {
@@ -367,34 +437,48 @@ gint gnc_lot_count_splits (const GNCLot *lot)
 const char *
 gnc_lot_get_title (const GNCLot *lot)
 {
+    GValue v = G_VALUE_INIT;
     if (!lot) return NULL;
-    return kvp_frame_get_string (gnc_lot_get_slots(lot), "/title");
+    qof_instance_get_kvp (QOF_INSTANCE (lot), "/title", &v);
+    if (G_VALUE_HOLDS_STRING (&v))
+        return g_value_get_string (&v);
+    return NULL;
 }
 
 const char *
 gnc_lot_get_notes (const GNCLot *lot)
 {
+    GValue v = G_VALUE_INIT;
     if (!lot) return NULL;
-    return kvp_frame_get_string (gnc_lot_get_slots(lot), "/notes");
+    qof_instance_get_kvp (QOF_INSTANCE (lot), "/notes", &v);
+    if (G_VALUE_HOLDS_STRING (&v))
+        return g_value_get_string (&v);
+    return NULL;
 }
 
 void
 gnc_lot_set_title (GNCLot *lot, const char *str)
 {
+    GValue v = G_VALUE_INIT;
     if (!lot) return;
     qof_begin_edit(QOF_INSTANCE(lot));
+    g_value_init (&v, G_TYPE_STRING);
+    g_value_set_string (&v, str);
+    qof_instance_set_kvp (QOF_INSTANCE (lot), "/title", &v);
     qof_instance_set_dirty(QOF_INSTANCE(lot));
-    kvp_frame_set_str (gnc_lot_get_slots(lot), "/title", str);
     gnc_lot_commit_edit(lot);
 }
 
 void
 gnc_lot_set_notes (GNCLot *lot, const char *str)
 {
+    GValue v = G_VALUE_INIT;
     if (!lot) return;
-    gnc_lot_begin_edit(lot);
+    qof_begin_edit(QOF_INSTANCE(lot));
+    g_value_init (&v, G_TYPE_STRING);
+    g_value_set_string (&v, str);
+    qof_instance_set_kvp (QOF_INSTANCE (lot), "/notes", &v);
     qof_instance_set_dirty(QOF_INSTANCE(lot));
-    kvp_frame_set_str (gnc_lot_get_slots(lot), "/notes", str);
     gnc_lot_commit_edit(lot);
 }
 
@@ -424,6 +508,7 @@ gnc_lot_get_balance (GNCLot *lot)
         Split *s = node->data;
         gnc_numeric amt = xaccSplitGetAmount (s);
         baln = gnc_numeric_add_fixed (baln, amt);
+        g_assert (gnc_numeric_check (baln) == GNC_ERROR_OK);
     }
 
     /* cache a zero balance as a closed lot */
@@ -681,20 +766,20 @@ gboolean gnc_lot_register (void)
 GNCLot * gnc_lot_make_default (Account *acc)
 {
     GNCLot * lot;
-    gint64 id;
-    char buff[200];
+    gint64 id = 0;
+    gchar *buff;
 
     lot = gnc_lot_new (qof_instance_get_book(acc));
 
     /* Provide a reasonable title for the new lot */
     xaccAccountBeginEdit (acc);
-    id = kvp_frame_get_gint64 (xaccAccountGetSlots (acc), "/lot-mgmt/next-id");
-    snprintf (buff, 200, ("%s %" G_GINT64_FORMAT), _("Lot"), id);
-    kvp_frame_set_str (gnc_lot_get_slots (lot), "/title", buff);
+    qof_instance_get (QOF_INSTANCE (acc), "lot-next-id", &id, NULL);
+    buff = g_strdup_printf ("%s %" G_GINT64_FORMAT, _("Lot"), id);
+    gnc_lot_set_title (lot, buff);
     id ++;
-    kvp_frame_set_gint64 (xaccAccountGetSlots (acc), "/lot-mgmt/next-id", id);
-    qof_instance_set_dirty (QOF_INSTANCE(acc));
+    qof_instance_set (QOF_INSTANCE (acc), "lot-next-id", id, NULL);
     xaccAccountCommitEdit (acc);
+    g_free (buff);
     return lot;
 }
 

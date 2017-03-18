@@ -107,11 +107,10 @@ void gsr_default_copy_txn_handler ( GNCSplitReg *w, gpointer ud );
 void gsr_default_paste_handler    ( GNCSplitReg *w, gpointer ud );
 void gsr_default_paste_txn_handler( GNCSplitReg *w, gpointer ud );
 void gsr_default_void_txn_handler ( GNCSplitReg *w, gpointer ud );
-void gsr_default_unvoid_txn_handler  ( GNCSplitReg *w, gpointer ud );
+void gsr_default_unvoid_txn_handler ( GNCSplitReg *w, gpointer ud );
 void gsr_default_reverse_txn_handler ( GNCSplitReg *w, gpointer ud );
-void gsr_default_associate_handler_file   ( GNCSplitReg *w, gpointer ud );
-void gsr_default_associate_handler_location   ( GNCSplitReg *w, gpointer ud );
-void gsr_default_execassociated_handler   ( GNCSplitReg *w, gpointer ud );
+void gsr_default_associate_handler ( GNCSplitReg *w, gboolean uri_is_file );
+void gsr_default_execassociated_handler ( GNCSplitReg *w, gpointer ud );
 
 static void gsr_emit_simple_signal( GNCSplitReg *gsr, const char *sigName );
 static void gsr_emit_help_changed( GnucashRegister *reg, gpointer user_data );
@@ -383,16 +382,15 @@ static
 void
 gsr_create_table( GNCSplitReg *gsr )
 {
-    GtkWidget *register_widget;
-    SplitRegister *sr;
+    GtkWidget *register_widget = NULL;
+    SplitRegister *sr = NULL;
 
-    gchar *state_section;
-    const GncGUID * guid;
-    Account * account;
-
-    account = gnc_ledger_display_leader(gsr->ledger);
-    guid = xaccAccountGetGUID(account);
-    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", (gchar*)guid_to_string (guid), NULL);
+    Account * account = gnc_ledger_display_leader(gsr->ledger);
+    const GncGUID * guid = xaccAccountGetGUID(account);
+    gchar guidstr[GUID_ENCODING_LENGTH+1];
+    gchar *state_section = NULL;
+    guid_to_string_buff(guid, guidstr);
+    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", guidstr, NULL);
 
     ENTER("gsr=%p", gsr);
 
@@ -496,49 +494,6 @@ gsr_update_summary_label( GtkWidget *label,
     gtk_label_set_text( GTK_LABEL(label), string );
 }
 
-static GNCPrice *
-account_latest_price (Account *account)
-{
-    QofBook *book;
-    GNCPriceDB *pdb;
-    gnc_commodity *commodity;
-    gnc_commodity *currency;
-
-    if (!account) return NULL;
-    commodity = xaccAccountGetCommodity (account);
-    currency = gnc_default_currency ();
-
-    book = gnc_account_get_book (account);
-    pdb = gnc_pricedb_get_db (book);
-
-    return gnc_pricedb_lookup_latest (pdb, commodity, currency);
-}
-
-static GNCPrice *
-account_latest_price_any_currency (Account *account)
-{
-    QofBook *book;
-    GNCPriceDB *pdb;
-    gnc_commodity *commodity;
-    GList *price_list;
-    GNCPrice *result;
-
-    if (!account) return NULL;
-    commodity = xaccAccountGetCommodity (account);
-
-    book = gnc_account_get_book (account);
-    pdb = gnc_pricedb_get_db (book);
-
-    price_list = gnc_pricedb_lookup_latest_any_currency (pdb, commodity);
-    if (!price_list) return NULL;
-
-    result = gnc_price_clone((GNCPrice *)(price_list->data), book);
-
-    gnc_price_list_destroy(price_list);
-
-    return result;
-}
-
 static
 void
 gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
@@ -547,7 +502,6 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     gnc_commodity * commodity;
     GNCPrintAmountInfo print_info;
     gnc_numeric amount;
-    char string[256];
     Account *leader;
     gboolean reverse;
     gboolean euro;
@@ -584,18 +538,18 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     gsr_update_summary_label( gsr->projectedminimum_label,
                               xaccAccountGetProjectedMinimumBalance,
                               leader, print_info, commodity, reverse, euro );
+    if (gsr->shares_label == NULL && gsr->value_label == NULL)
+        return;
+    amount = xaccAccountGetBalance( leader );
+    if (reverse)
+        amount = gnc_numeric_neg( amount );
 
-    /* Print the summary share amount */
+   /* Print the summary share amount */
     if (gsr->shares_label != NULL)
     {
+        char string[256];
         print_info = gnc_account_print_info( leader, TRUE );
-
-        amount = xaccAccountGetBalance( leader );
-        if (reverse)
-            amount = gnc_numeric_neg( amount );
-
         xaccSPrintAmount( string, amount, print_info );
-
         gnc_set_label_color( gsr->shares_label, amount );
         gtk_label_set_text( GTK_LABEL(gsr->shares_label), string );
     }
@@ -603,86 +557,18 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     /* Print the summary share value */
     if (gsr->value_label != NULL)
     {
-        GNCPrice *price;
+        char string[256];
+        QofBook *book = gnc_account_get_book (leader);
+        GNCPriceDB *pricedb = gnc_pricedb_get_db (book);
+        gnc_commodity *currency = gnc_default_currency ();
+        gnc_numeric currency_value =
+            gnc_pricedb_convert_balance_latest_price(pricedb, amount,
+                                                     commodity, currency);
+        print_info = gnc_commodity_print_info (currency, TRUE);
+        xaccSPrintAmount (string, amount, print_info);
+        gnc_set_label_color (gsr->value_label, amount);
+        gtk_label_set_text (GTK_LABEL (gsr->value_label), string);
 
-        amount = xaccAccountGetBalance (leader);
-        if (reverse) amount = gnc_numeric_neg (amount);
-
-        price = account_latest_price (leader);
-        if (!price)
-        {
-            /* If the balance is zero, then print zero. */
-            if (gnc_numeric_equal(amount, gnc_numeric_zero()))
-            {
-                gnc_commodity *currency = gnc_default_currency ();
-                print_info = gnc_commodity_print_info (currency, TRUE);
-                amount = gnc_numeric_zero ();
-
-                xaccSPrintAmount (string, amount, print_info);
-
-                gnc_set_label_color (gsr->value_label, amount);
-                gtk_label_set_text (GTK_LABEL (gsr->value_label), string);
-            }
-            else
-            {
-                /* else try to do a double-price-conversion :-( */
-                price = account_latest_price_any_currency (leader);
-                if (!price)
-                {
-                    gnc_set_label_color (gsr->value_label, gnc_numeric_zero ());
-                    gtk_label_set_text (GTK_LABEL (gsr->value_label),
-                                        _("<No information>"));
-                }
-                else
-                {
-                    gnc_commodity *currency = gnc_price_get_currency (price);
-                    gnc_commodity *default_currency = gnc_default_currency ();
-                    gnc_numeric currency_amount;
-                    gnc_numeric default_currency_amount;
-
-                    print_info = gnc_commodity_print_info (currency, TRUE);
-
-                    currency_amount =
-                        xaccAccountConvertBalanceToCurrency(leader, amount,
-                                                            commodity, currency);
-                    xaccSPrintAmount (string, currency_amount, print_info);
-
-                    default_currency_amount =
-                        xaccAccountConvertBalanceToCurrency(leader, amount,
-                                                            commodity,
-                                                            default_currency);
-                    if (!gnc_numeric_zero_p(default_currency_amount))
-                    {
-                        strcat( string, " / " );
-                        print_info = gnc_commodity_print_info (default_currency, TRUE);
-                        xaccSPrintAmount( string + strlen( string ), default_currency_amount,
-                                          print_info);
-                    }
-
-                    gnc_set_label_color (gsr->value_label, amount);
-                    gtk_label_set_text (GTK_LABEL (gsr->value_label), string);
-
-                    gnc_price_unref (price);
-                }
-            }
-        }
-        else
-        {
-            gnc_commodity *currency = gnc_price_get_currency (price);
-
-            print_info = gnc_commodity_print_info (currency, TRUE);
-
-            amount = gnc_numeric_mul (amount, gnc_price_get_value (price),
-                                      gnc_commodity_get_fraction (currency),
-                                      GNC_HOW_RND_ROUND_HALF_UP);
-
-            xaccSPrintAmount (string, amount, print_info);
-
-            gnc_set_label_color (gsr->value_label, amount);
-            gtk_label_set_text (GTK_LABEL (gsr->value_label), string);
-
-            gnc_price_unref (price);
-        }
     }
 }
 
@@ -691,13 +577,14 @@ gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger )
 {
     GNCSplitReg *gsr = gnc_ledger_display_get_user_data( ledger );
 
+    Account * account = gnc_ledger_display_leader(ledger);
+    const GncGUID * guid = xaccAccountGetGUID(account);
+    gchar guidstr[GUID_ENCODING_LENGTH+1];
     gchar *state_section;
-    const GncGUID * guid;
-    Account * account;
 
-    account = gnc_ledger_display_leader(ledger);
-    guid = xaccAccountGetGUID(account);
-    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ",(gchar*)guid_to_string (guid), NULL);
+    guid_to_string_buff(guid, guidstr);
+
+    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", guidstr, NULL);
 
     if (gsr)
     {
@@ -1011,156 +898,209 @@ gnc_split_reg_reinitialize_trans_cb(GtkWidget *widget, gpointer data)
     gsr_emit_simple_signal( gsr, "reinit_ent" );
 }
 
-/**
- * Associates a file URI with the current transaction.
- **/
-void
-gsr_default_associate_handler_file( GNCSplitReg *gsr, gpointer data )
+static void
+gsr_default_associate_handler_file (GNCSplitReg *gsr, Transaction *trans, gboolean have_uri)
 {
-    CursorClass cursor_class;
-    SplitRegister *reg;
-    Transaction *trans;
-    Split *split;
     GtkWidget *dialog;
+    gint       response;
+    gboolean   valid_path_head = FALSE;
+    gchar     *path_head = gnc_prefs_get_string (GNC_PREFS_GROUP_GENERAL, "assoc-head");
 
-    reg = gnc_ledger_display_get_split_register( gsr->ledger );
-
-    /* get the current split based on cursor position */
-    split = gnc_split_register_get_current_split(reg);
-    if (split == NULL)
-    {
-        gnc_split_register_cancel_cursor_split_changes (reg);
-        return;
-    }
-
-    trans = xaccSplitGetParent(split);
-    cursor_class = gnc_split_register_get_current_cursor_class (reg);
-
-    if (cursor_class == CURSOR_CLASS_NONE)
-        return;
-
-    if (is_trans_readonly_and_warn(trans))
-        return;
-
-    dialog = gtk_file_chooser_dialog_new ("Associate File with Transaction",
+    dialog = gtk_file_chooser_dialog_new (_("Associate File with Transaction"),
                                      GTK_WINDOW(gsr->window),
                                      GTK_FILE_CHOOSER_ACTION_OPEN,
+                                     GTK_STOCK_REMOVE, GTK_RESPONSE_REJECT,
                                      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                                     GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                                     GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
                                      NULL);
 
-    gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER(dialog), 0);
-    if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+    gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER(dialog), FALSE);
+
+    if ((path_head != NULL) && (g_strcmp0 (path_head, "") != 0)) // not default entry
+        valid_path_head = TRUE;
+
+    if (have_uri)
     {
-        char *uri;
+        gchar *new_uri;
+        gchar *uri_label;
+        gchar *filename;
 
-        uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
-        DEBUG("File URI: %s\n", uri);
-        xaccTransSetAssociation(trans, uri);
+        const gchar *uri = xaccTransGetAssociation (trans);
+
+        if (valid_path_head && g_str_has_prefix (uri,"file:/") && !g_str_has_prefix (uri,"file://")) 
+        {
+            const gchar *part = uri + strlen ("file:");
+            new_uri = g_strconcat (path_head, part, NULL);
+        }
+        else
+            new_uri = g_strdup (uri);
+
+        filename = g_uri_unescape_string (new_uri, NULL);
+        uri_label = g_strconcat (_("Existing Association is "), filename, NULL);
+        gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER(dialog), gtk_label_new (uri_label));
+        gtk_file_chooser_set_uri (GTK_FILE_CHOOSER(dialog), new_uri);
+
+        g_free (uri_label);
+        g_free (new_uri);
+        g_free (filename);
     }
+    response = gtk_dialog_run (GTK_DIALOG (dialog));
 
+    if (response == GTK_RESPONSE_REJECT)
+        xaccTransSetAssociation (trans, "");
+
+    if (response == GTK_RESPONSE_ACCEPT)
+    {
+	gchar *dialog_uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
+
+        PINFO("Dialog File URI: %s\n", dialog_uri);
+
+        if (valid_path_head && g_str_has_prefix (dialog_uri, path_head))
+        {
+            gchar *part = dialog_uri + strlen (path_head);
+            gchar *new_uri = g_strconcat ("file:", part, NULL);
+            xaccTransSetAssociation (trans, new_uri);
+            g_free (new_uri);
+        }
+        else
+            xaccTransSetAssociation (trans, dialog_uri);
+
+        g_free (dialog_uri);
+    }
+    g_free (path_head);
     gtk_widget_destroy (dialog);
-
 }
 
-/**
- * Associates a location URI with the current transaction.
- **/
-void
-gsr_default_associate_handler_location( GNCSplitReg *gsr, gpointer data )
+static void
+gsr_default_associate_handler_location (GNCSplitReg *gsr, Transaction *trans, gboolean have_uri)
 {
-    CursorClass cursor_class;
-    SplitRegister *reg;
-    Transaction *trans;
-    Split *split;
     GtkWidget *dialog, *entry, *label, *content_area;
+    gint response;
 
-    reg = gnc_ledger_display_get_split_register( gsr->ledger );
-
-    /* get the current split based on cursor position */
-    split = gnc_split_register_get_current_split(reg);
-    if (split == NULL)
-    {
-        gnc_split_register_cancel_cursor_split_changes (reg);
-        return;
-    }
-
-    trans = xaccSplitGetParent(split);
-    cursor_class = gnc_split_register_get_current_cursor_class (reg);
-
-    if (cursor_class == CURSOR_CLASS_NONE)
-        return;
-
-    if (is_trans_readonly_and_warn(trans))
-        return;
-
-    dialog = gtk_dialog_new_with_buttons ("Associate Location with Transaction",
+    dialog = gtk_dialog_new_with_buttons (_("Associate Location with Transaction"),
                                      GTK_WINDOW(gsr->window),
                                      GTK_DIALOG_MODAL,
+                                     GTK_STOCK_REMOVE, GTK_RESPONSE_REJECT,
                                      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                                     GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                                     GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
                                      NULL);
 
     content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
-    // add a label
-    label = gtk_label_new ("Please enter URL:");
-    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
-    gtk_container_add (GTK_CONTAINER (content_area), label);
-
     // add the entry text
     entry = gtk_entry_new ();
-    gtk_entry_set_width_chars(GTK_ENTRY (entry), 80);
-    gtk_entry_set_activates_default(GTK_ENTRY (entry), TRUE);
+    gtk_entry_set_width_chars (GTK_ENTRY (entry), 80);
+    gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
+
+    // add a label and set entry text if required
+    if (have_uri)
+    {
+        label = gtk_label_new (_("Amend URL:"));
+        gtk_entry_set_text (GTK_ENTRY (entry), xaccTransGetAssociation (trans));
+    }
+    else
+        label = gtk_label_new (_("Enter URL:"));
+
+    // pack label and entry to content area
+    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_container_add (GTK_CONTAINER (content_area), label);
     gtk_container_add (GTK_CONTAINER (content_area), entry);
 
     // set spacings
     gtk_container_set_border_width (GTK_CONTAINER (dialog), 12);
-    gtk_container_set_border_width (GTK_CONTAINER (label), 5);
-    gtk_container_set_border_width (GTK_CONTAINER (content_area), 5);
 
     // set the default response
-    gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
+    gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
 
-    // run the dialog
     gtk_widget_show_all (dialog);
 
-    if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+    // run the dialog
+    response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+    if (response == GTK_RESPONSE_REJECT)
+        xaccTransSetAssociation (trans, "");
+
+    if (response == GTK_RESPONSE_ACCEPT)
     {
-		const char *uri;
-
-        uri = gtk_entry_get_text (GTK_ENTRY (entry));
-        DEBUG("Location URI: %s\n", uri);
-        xaccTransSetAssociation(trans, uri);
+        const gchar *dialog_uri = gtk_entry_get_text (GTK_ENTRY (entry));
+        DEBUG("Location URI: %s\n", dialog_uri);
+        xaccTransSetAssociation (trans, dialog_uri);
     }
-
-     gtk_widget_destroy (dialog);
-
+    gtk_widget_destroy (dialog);
 }
+
 /**
- * Executes the associated link with the current transaction.
+ * Associates a URI with the current transaction.
  **/
 void
-gsr_default_execassociated_handler( GNCSplitReg *gsr, gpointer data )
+gsr_default_associate_handler (GNCSplitReg *gsr, gboolean uri_is_file)
 {
-    CursorClass cursor_class;
-    SplitRegister *reg;
+    SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
+    Split *split = gnc_split_register_get_current_split (reg);
     Transaction *trans;
-    Split *split;
-    GtkWidget *dialog;
-    const char *uri;
-
-    reg = gnc_ledger_display_get_split_register( gsr->ledger );
+    CursorClass cursor_class;
+    const gchar *uri;
+    gboolean have_uri = FALSE;
 
     /* get the current split based on cursor position */
-    split = gnc_split_register_get_current_split(reg);
     if (split == NULL)
     {
         gnc_split_register_cancel_cursor_split_changes (reg);
         return;
     }
 
-    trans = xaccSplitGetParent(split);
+    trans = xaccSplitGetParent (split);
+    cursor_class = gnc_split_register_get_current_cursor_class (reg);
+
+    if (cursor_class == CURSOR_CLASS_NONE)
+        return;
+
+    if (is_trans_readonly_and_warn (trans))
+        return;
+
+    // get the existing uri
+    uri = xaccTransGetAssociation (trans);
+
+    // Check for uri is empty or NULL
+    if (g_strcmp0 (uri, "") != 0 && g_strcmp0 (uri, NULL) != 0)
+    {
+        have_uri = TRUE;
+
+        if (g_str_has_prefix (uri, "file:")) // use the correct dialog
+            uri_is_file = TRUE;
+        else
+            uri_is_file = FALSE;
+    }
+
+    if (uri_is_file == TRUE)
+        gsr_default_associate_handler_file (gsr, trans, have_uri);
+    else
+        gsr_default_associate_handler_location (gsr, trans, have_uri);
+}
+
+/**
+ * Executes the associated link with the current transaction.
+ **/
+void
+gsr_default_execassociated_handler (GNCSplitReg *gsr, gpointer data)
+{
+    CursorClass cursor_class;
+    SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
+    Transaction *trans;
+    Split *split = gnc_split_register_get_current_split (reg);
+    GtkWidget *dialog;
+    const char *uri;
+    const char *run_uri;
+    gchar *uri_scheme;
+
+    /* get the current split based on cursor position */
+    if (split == NULL)
+    {
+        gnc_split_register_cancel_cursor_split_changes (reg);
+        return;
+    }
+
+    trans = xaccSplitGetParent (split);
     cursor_class = gnc_split_register_get_current_cursor_class (reg);
 
     if (cursor_class == CURSOR_CLASS_NONE)
@@ -1171,19 +1111,37 @@ gsr_default_execassociated_handler( GNCSplitReg *gsr, gpointer data )
         xaccTransDump (trans, "ExecAssociated");
 #endif
 
-    uri = xaccTransGetAssociation(trans);
-    if (!uri)
-    {
-        const gchar *message =
-            _("This transaction is not associated with a URI.");
-        gnc_error_dialog(NULL, "%s", message);
-        return;
-    }
+    uri = xaccTransGetAssociation (trans);
+
+    if (g_strcmp0 (uri, "") == 0 && g_strcmp0 (uri, NULL) == 0)
+        gnc_error_dialog (NULL, "%s", _("This transaction is not associated with a URI."));
     else
     {
-        gnc_launch_assoc(uri);
-    }
+        if (g_str_has_prefix (uri,"file:/") && !g_str_has_prefix (uri,"file://")) // Check for relative path
+        {
+            gchar *path_head = gnc_prefs_get_string (GNC_PREFS_GROUP_GENERAL, "assoc-head");
 
+            if ((path_head != NULL) && (g_strcmp0 (path_head, "") != 0)) // not default entry
+            {
+                const gchar *part = uri + strlen ("file:");
+                run_uri = g_strconcat (path_head, part, NULL);
+            }
+            else
+                run_uri = g_strdup (uri);
+        }
+        else
+            run_uri = g_strdup (uri);
+
+        uri_scheme = g_uri_parse_scheme (run_uri);
+
+        if (uri_scheme != NULL) // make sure we have a scheme entry
+        {
+            gnc_launch_assoc (run_uri);
+            g_free (uri_scheme);
+        }
+        else
+            gnc_error_dialog (NULL, "%s", _("This transaction is not associated with a valid URI."));
+    }
     return;
 }
 
@@ -1385,38 +1343,29 @@ gsr_default_schedule_handler( GNCSplitReg *gsr, gpointer data )
     /* If the transaction has a sched-xact KVP frame, then go to the editor
      * for the existing SX; otherwise, do the sx-from-trans dialog. */
     {
-        kvp_frame *txn_frame;
-        kvp_value *kvp_val;
-        /* set a kvp-frame element in the transaction indicating and
-         * pointing-to the SX this was created from. */
-        txn_frame = xaccTransGetSlots( pending_trans );
-        if ( txn_frame != NULL )
-        {
-            kvp_val = kvp_frame_get_slot( txn_frame, "from-sched-xaction" );
-            if ( kvp_val )
-            {
-                GncGUID *fromSXId = kvp_value_get_guid( kvp_val );
-                SchedXaction *theSX = NULL;
-                GList *sxElts;
+	GncGUID *fromSXId = NULL;
+	SchedXaction *theSX = NULL;
+	GList *sxElts;
+	qof_instance_get (QOF_INSTANCE (pending_trans),
+			  "from-sched-xaction", &fromSXId,
+			  NULL);
 
-                /* Get the correct SX */
-                for ( sxElts = gnc_book_get_schedxactions(gnc_get_current_book())->sx_list;
-                        (!theSX) && sxElts;
-                        sxElts = sxElts->next )
-                {
-                    SchedXaction *sx = (SchedXaction*)sxElts->data;
-                    theSX =
-                        ( ( guid_equal( xaccSchedXactionGetGUID( sx ), fromSXId ) )
-                          ? sx : NULL );
-                }
+	/* Get the correct SX */
+	for ( sxElts = gnc_book_get_schedxactions (gnc_get_current_book())->sx_list;
+	      (!theSX) && sxElts;
+	      sxElts = sxElts->next )
+	{
+	    SchedXaction *sx = (SchedXaction*)sxElts->data;
+	    theSX =
+		((guid_equal (xaccSchedXactionGetGUID (sx), fromSXId))
+		 ? sx : NULL);
+	}
 
-                if ( theSX )
-                {
-                    gnc_ui_scheduled_xaction_editor_dialog_create(theSX, FALSE);
-                    return;
-                }
-            }
-        }
+	if ( theSX )
+	{
+	    gnc_ui_scheduled_xaction_editor_dialog_create(theSX, FALSE);
+	    return;
+	}
     }
 
     gnc_sx_create_from_trans(pending_trans);
@@ -1619,7 +1568,7 @@ create_balancing_transaction(QofBook *book, Account *account,
     // fill Transaction
     xaccTransSetCurrency(trans, gnc_account_or_default_currency(account, NULL));
     xaccTransSetDatePostedSecsNormalized(trans, statement_date);
-    xaccTransSetDescription(trans, _("Balancing entry from reconcilation"));
+    xaccTransSetDescription(trans, _("Balancing entry from reconciliation"));
     /* We also must set a new DateEntered on the new entry
      * because otherwise the ordering is not deterministic */
     xaccTransSetDateEnteredSecs(trans, gnc_time(NULL));
@@ -2112,7 +2061,7 @@ gnc_split_reg_get_placeholder( GNCSplitReg *gsr )
 
     switch (reg->type)
     {
-    case GENERAL_LEDGER:
+    case GENERAL_JOURNAL:
     case INCOME_LEDGER:
     case PORTFOLIO_LEDGER:
     case SEARCH_LEDGER:

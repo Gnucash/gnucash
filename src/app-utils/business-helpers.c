@@ -33,7 +33,7 @@ GncTaxTable* gnc_business_get_default_tax_table (QofBook *book, GncOwnerType own
     GNCOptionDB *odb;
 
     odb = gnc_option_db_new_for_type (GNC_ID_BOOK);
-    gnc_option_db_load_from_kvp (odb, qof_book_get_slots (book));
+    qof_book_load_options (book, gnc_option_db_load, odb);
 
     switch (ownertype)
     {

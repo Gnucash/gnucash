@@ -32,6 +32,11 @@
 #ifndef QOF_UTIL_H
 #define QOF_UTIL_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <stddef.h>
 #include "qof.h"
 #include "qoflog.h"
@@ -149,15 +154,15 @@
 
 /** \brief Initialise the Query Object Framework
 
-Use in place of separate init functions (like guid_init()
-and qof_query_init() etc.) to protect against future changes.
+Use in place of separate init functions (like qof_query_init(),
+etc.) to protect against future changes.
 */
 void qof_init (void);
 
 /** \brief Safely close down the Query Object Framework
 
 Use in place of separate close / shutdown functions
-(like guid_shutdown(), qof_query_shutdown() etc.) to protect
+(like qof_query_shutdown(), etc.) to protect
 against future changes.
 */
 void qof_close (void);
@@ -257,6 +262,10 @@ qof_commit_edit_part2(QofInstance *inst,
                       void (*on_error)(QofInstance *, QofBackendError),
                       void (*on_done)(QofInstance *),
                       void (*on_free)(QofInstance *));
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* QOF_UTIL_H */
 /** @} */

@@ -32,6 +32,10 @@
 
 #ifndef IO_GNCXML_H
 #define IO_GNCXML_H
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #include <glib.h>
 #include "qof.h"
@@ -40,11 +44,14 @@
    accessible via gnc_book_get_xml_io_error() a la binfile. */
 
 /** Read in an account group from a file */
-gboolean qof_session_load_from_xml_file(QofBook *, const char * filename);
+gboolean qof_session_load_from_xml_file (QofBook*, const char* filename);
 
 /** The is_gncxml_file() routine checks to see if the first few
  * chars of the file look like gnc-xml data.
  */
-gboolean gnc_is_xml_data_file(const gchar *name);
+gboolean gnc_is_xml_data_file (const gchar* name);
 
+#ifdef __cplusplus
+}
+#endif
 #endif /* IO_GNCXML_H */

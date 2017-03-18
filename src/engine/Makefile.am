@@ -10,7 +10,9 @@ AM_CPPFLAGS = \
 	-I${top_srcdir}/src/gnc-module \
 	-I${top_srcdir}/src/libqof/qof \
 	${GLIB_CFLAGS} \
-	${GUILE_CFLAGS}
+	${GUILE_CFLAGS} \
+	$(BOOST_CPPFLAGS)
+
 
 libgncmod_engine_la_SOURCES = \
   Account.c \
@@ -38,7 +40,7 @@ libgncmod_engine_la_SOURCES = \
   gnc-session.c \
   gncmod-engine.c \
   swig-engine.c \
-  kvp-scm.c \
+  kvp-scm.cpp \
   engine-helpers.c \
   glib-helpers.c  \
   policy.c \
@@ -129,8 +131,13 @@ noinst_HEADERS = \
   policy-p.h
 
 libgncmod_engine_la_LDFLAGS = -avoid-version
+if PLATFORM_WIN32
+libgncmod_engine_la_LDFLAGS += -Wl,-export-all-symbols
+endif
 if CLANG
-libgncmod_engine_la_CFLAGS = -Wno-invalid-source-encoding
+libgncmod_engine_la_CFLAGS = ${AM_CFLAGS} -Wno-invalid-source-encoding
+else
+libgncmod_engine_la_CFLAGS = ${AM_CFLAGS}
 endif
 libgncmod_engine_la_LIBADD = \
   ../gnc-module/libgnc-module.la \
@@ -194,7 +201,6 @@ GUILE_COMPILE_ENV = \
   --library-dir    ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/libqof/qof
-
 
 %.go : %.scm .scm-links $(pkglib_LTLIBRARIES)
 	GNC_UNINSTALLED=yes \

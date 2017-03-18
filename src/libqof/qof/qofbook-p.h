@@ -36,12 +36,15 @@
 #ifndef QOF_BOOK_P_H
 #define QOF_BOOK_P_H
 
-#include "kvp_frame.h"
 #include "qofbackend.h"
 #include "qofbook.h"
 #include "qofid.h"
 #include "qofid-p.h"
 #include "qofinstance-p.h"
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 /*
  *    qof_book_set_backend() is used by backends to
@@ -81,4 +84,8 @@ void qof_book_print_dirty (const QofBook *book);
 /* @} */
 /* @} */
 /* @} */
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* QOF_BOOK_P_H */

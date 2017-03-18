@@ -356,12 +356,6 @@
      "v" (N_ "Extra notes to put on the invoice (simple HTML is accepted).")
      (_ "Thank you for your patronage!")))
 
-  (gnc:register-inv-option
-   (gnc:make-string-option
-    (N_ "Text") (N_ "Today Date Format")
-    "x" (N_ "The format for the date->string conversion for today's date.")
-    (gnc-default-strftime-date-format)))
-
   (gnc:options-set-default-section gnc:*report-options* "General")
 
   gnc:*report-options*)
@@ -611,12 +605,14 @@
      'attribute (list "valign" "top"))
     table))
 
-(define (make-date-row! table label date)
+(define (make-date-row! table label date date-format)
   (gnc:html-table-append-row!
    table
    (list
     (string-append label ":&nbsp;")
-    (string-expand (gnc-print-date date) #\space "&nbsp;"))))
+    (string-expand (strftime date-format
+                             (localtime (car date)))
+                             #\space "&nbsp;"))))
 
 (define (make-date-table)
   (let ((table (gnc:make-html-table)))
@@ -631,13 +627,8 @@
 
 (define (make-myname-table book)
   (let* ((table (gnc:make-html-table))
-	 (slots (qof-book-get-slots book))
-	 (name (kvp-frame-get-slot-path-gslist
-		slots (append gnc:*kvp-option-path*
-			      (list gnc:*business-label* gnc:*company-name*))))
-	 (addy (kvp-frame-get-slot-path-gslist
-		slots (append gnc:*kvp-option-path*
-			      (list gnc:*business-label* gnc:*company-addy*)))))
+	 (name (gnc:company-info book gnc:*company-name*))
+	 (addy (gnc:company-info book gnc:*company-addy*)))
 
     (gnc:html-table-set-style!
      table "table"
@@ -736,7 +727,9 @@
     (add-html! document "<tr><td align='left'>")
 
     (if (not (null? invoice))
-      (begin
+      (let* ((book (gncInvoiceGetBook invoice))
+             (date-format (gnc:options-fancy-date book)))
+
         ; invoice number and ID String table
         (add-html! document "<table width='100%'><tr>")
         (add-html! document "<td align='left'>")
@@ -748,11 +741,7 @@
         (add-html! document "<td align='right'>")
 
         (if (opt-val "Display" "My Company ID")
-          (let* ((book (gncInvoiceGetBook invoice))
-                 (slots (qof-book-get-slots book))
-	         (taxid (kvp-frame-get-slot-path-gslist
-		    slots (append gnc:*kvp-option-path*
-		                  (list gnc:*business-label* gnc:*company-id*)))))
+          (let* ((taxid (gnc:company-info book gnc:*company-id*)))
                  (if (and taxid (> (string-length taxid) 0))
                    (begin
                      (add-html! document taxid)
@@ -788,32 +777,20 @@
         )
 
         ; add the date
-        (let ((post-date (gncInvoiceGetDatePosted invoice))
+        (let ((date-table #f)
+              (post-date (gncInvoiceGetDatePosted invoice))
               (due-date (gncInvoiceGetDateDue invoice)))
           (if (not (equal? post-date (cons 0 0)))
             (begin
-              (add-html! document "<table border=0><tr>")
-              (add-html! document "<td>")
-              (add-html! document (string-append (_ "Date") ": "))
-              (add-html! document "</td>")
-              (add-html! document "<td>")
-              (add-html! document (gnc-print-date post-date))
-              (add-html! document "</td>")
+              (set! date-table (make-date-table))
+              (make-date-row! date-table (_ "Date") post-date date-format)
               (if (opt-val "Display" "Due Date")
-                (begin
-                  (add-html! document "<tr><td>")
-                  (add-html! document (string-append (_ "Due") ": "))
-                  (add-html! document "</td>")
-                  (add-html! document "<td>")
-                  (add-html! document (gnc-print-date due-date))
-                  (add-html! document "</td>")))
-              (add-html! document "</tr></table>"))
+                  (make-date-row! date-table (_ "Due") due-date date-format))
+              (gnc:html-document-add-object! document date-table))
             (add-html! document
 		       (string-append "<font color='red'>"
 				      (_ "INVOICE NOT POSTED")
 				      "</font>"))))
-            ;(add-html! document (strftime (opt-val "Text" "Today Date Format")
-            ;             (gnc-localtime (car (gnc:get-today))))))
 
         (make-break! document)
 

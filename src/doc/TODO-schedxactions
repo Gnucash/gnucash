@@ -28,7 +28,7 @@ Main Scheduled Transaction todo list
 X create a template register
   X store account and amount data in kvp_frames.
   . find a way to list multiple registers for template transaction purposes.
-    . this is a "normal" general ledger + a "stock" general ledger
+    . this is a "normal" general journal + a "stock" general journal
       . warlord's business stuff may extend this to more ledgers...
     . this is going to be: a tabbed notebook in which the tabs contain
       the number of transactions the GL they hold contain.

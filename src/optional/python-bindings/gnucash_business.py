@@ -35,7 +35,7 @@ from function_class import \
 
 from gnucash_core import \
      GnuCashCoreClass, GncNumeric, GncCommodity, Transaction, \
-     Split, Book, GncLot, Account
+     Split, Book, GncLot, Account, GUID
 
 from gnucash_core_c import GNC_OWNER_CUSTOMER, GNC_OWNER_JOB, \
     GNC_OWNER_EMPLOYEE, GNC_OWNER_VENDOR, \
@@ -217,8 +217,7 @@ class Entry(GnuCashCoreClass):
             if invoice != None:
                 invoice.AddEntry(self)
         else:
-
-            GnuCashCoreClass.__init__(self, instance=instance)
+            GnuCashCoreClass.__init__(self, instance=instance)    
 
     def test_type(self, invoice):
         if invoice.GetTypeString() == "Invoice" and self.GetInvoice() == None:
@@ -226,11 +225,11 @@ class Entry(GnuCashCoreClass):
         if invoice.GetTypeString() == "Bill" and self.GetBill() == None:
             raise Exception("Entry type error. Check that Entry type matches Bill.")
 
-
 # Owner
 GnuCashBusinessEntity.add_methods_with_prefix('gncOwner')
 
 owner_dict = {
+                    'GetGUID' : GUID,
                     'GetCustomer' : Customer,
                     'GetVendor' : Vendor,
                     'GetEmployee' : Employee,
@@ -249,6 +248,7 @@ methods_return_instance_lists(
 
 # Customer
 Customer.add_constructor_and_methods_with_prefix('gncCustomer', 'Create')
+Customer.add_method('gncOwnerApplyPayment', 'ApplyPayment')
 
 customer_dict = {
                     'GetAddr' : Address,
@@ -326,6 +326,8 @@ Invoice.add_constructor_and_methods_with_prefix('gncInvoice', 'Create')
 methods_return_instance_lists(
     Invoice, { 'GetEntries': Entry })
 
+Invoice.add_method('gncInvoiceRemoveEntry', 'RemoveEntry')
+
 # Bill
 Bill.add_methods_with_prefix('gncBill')
 
@@ -351,7 +353,11 @@ Invoice.decorate_functions(
 # Entry
 Entry.add_constructor_and_methods_with_prefix('gncEntry', 'Create')
 
+Entry.add_method('gncEntryGetGUID', 'GetGUID')
+Entry.add_method('gncEntryDestroy', 'Destroy')
+
 entry_dict = {
+                 'GetGUID' : GUID,
                  'GetQuantity': GncNumeric,
                  'GetInvAccount': Account,
                  'GetInvPrice': GncNumeric,

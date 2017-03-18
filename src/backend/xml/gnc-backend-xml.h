@@ -30,18 +30,20 @@
 
 #ifndef GNC_BACKEND_XML_H_
 #define GNC_BACKEND_XML_H_
-
-#include "qof.h"
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+#include <qof.h>
 #include <gmodule.h>
-
-#include "qofbackend-p.h"
 
 typedef enum
 {
     XML_RETAIN_NONE,
     XML_RETAIN_DAYS,
     XML_RETAIN_ALL
-} XMLFileRetentionType;
+}
+XMLFileRetentionType;
 
 typedef enum
 {
@@ -53,27 +55,9 @@ typedef enum
     GNC_BOOK_POST_XML2_0_0_FILE
 } QofBookFileType;
 
-struct FileBackend_struct
-{
-    QofBackend be;
-
-    char *dirname;
-    char *fullpath;  /* Fully qualified path to book */
-    char *lockfile;
-    char *linkfile;
-    int lockfd;
-
-    QofBook *book;  /* The primary, main open book */
-};
-
-typedef struct FileBackend_struct FileBackend;
-
-// This is now a static inside the module
-//QofBackend * libgncmod_backend_file_LTX_gnc_backend_new(void);
-
 /** Initialization function which can be used when this module is
  * statically linked into the application. */
-void gnc_module_init_backend_xml(void);
+void gnc_module_init_backend_xml (void);
 
 #ifndef GNC_NO_LOADABLE_MODULES
 /** This is the standarized initialization function of a qof_backend
@@ -81,7 +65,10 @@ void gnc_module_init_backend_xml(void);
  * GNC_NO_LOADABLE_MODULES. This one simply calls
  * gnc_module_init_backend_file(). */
 G_MODULE_EXPORT
-void qof_backend_module_init(void);
+void qof_backend_module_init (void);
 #endif
-
+#ifdef __cplusplus
+}
+#include <qof-backend.hpp>
+#endif
 #endif /* GNC_BACKEND_XML_H_ */

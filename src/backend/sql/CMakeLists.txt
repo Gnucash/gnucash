@@ -3,34 +3,35 @@
 ADD_SUBDIRECTORY(test)
 
 SET (backend_sql_SOURCES
-  gnc-backend-sql.c
-  gnc-account-sql.c
-  gnc-address-sql.c
-  gnc-bill-term-sql.c
-  gnc-book-sql.c
-  gnc-budget-sql.c
-  gnc-commodity-sql.c
-  gnc-customer-sql.c
-  gnc-employee-sql.c
-  gnc-entry-sql.c
-  gnc-invoice-sql.c
-  gnc-job-sql.c
-  gnc-lots-sql.c
-  gnc-order-sql.c
-  gnc-owner-sql.c
-  gnc-price-sql.c
-  gnc-recurrence-sql.c
-  gnc-schedxaction-sql.c
-  gnc-slots-sql.c
-  gnc-tax-table-sql.c
-  gnc-transaction-sql.c
-  gnc-vendor-sql.c
-  escape.c
+  gnc-account-sql.cpp
+  gnc-address-sql.cpp
+  gnc-bill-term-sql.cpp
+  gnc-book-sql.cpp
+  gnc-budget-sql.cpp
+  gnc-commodity-sql.cpp
+  gnc-customer-sql.cpp
+  gnc-employee-sql.cpp
+  gnc-entry-sql.cpp
+  gnc-invoice-sql.cpp
+  gnc-job-sql.cpp
+  gnc-lots-sql.cpp
+  gnc-order-sql.cpp
+  gnc-owner-sql.cpp
+  gnc-price-sql.cpp
+  gnc-recurrence-sql.cpp
+  gnc-schedxaction-sql.cpp
+  gnc-slots-sql.cpp
+  gnc-tax-table-sql.cpp
+  gnc-transaction-sql.cpp
+  gnc-vendor-sql.cpp
+  gnc-sql-backend.cpp
+  gnc-sql-result.cpp
+  gnc-sql-column-table-entry.cpp
+  gnc-sql-object-backend.cpp
+  escape.cpp
 )
 SET (backend_sql_noinst_HEADERS
   gnc-account-sql.h
-  gnc-address-sql.h
-  gnc-backend-sql.h
   gnc-bill-term-sql.h
   gnc-book-sql.h
   gnc-budget-sql.h
@@ -42,7 +43,6 @@ SET (backend_sql_noinst_HEADERS
   gnc-job-sql.h
   gnc-lots-sql.h
   gnc-order-sql.h
-  gnc-owner-sql.h
   gnc-price-sql.h
   gnc-recurrence-sql.h
   gnc-schedxaction-sql.h
@@ -50,6 +50,11 @@ SET (backend_sql_noinst_HEADERS
   gnc-tax-table-sql.h
   gnc-transaction-sql.h
   gnc-vendor-sql.h
+  gnc-sql-backend.hpp
+  gnc-sql-connection.hpp
+  gnc-sql-result.hpp
+  gnc-sql-column-table-entry.hpp
+  gnc-sql-object-backend.hpp
   escape.h
 )
 

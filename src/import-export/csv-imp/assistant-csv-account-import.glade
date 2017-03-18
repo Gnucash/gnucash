@@ -24,7 +24,9 @@
             <property name="label" translatable="yes">
 This assistant will help you import Accounts from a file.
 
-The file must be in the same format as that exported as this is a fixed format import. If the account is missing, based on the full account name, it will be added as long as the security / currency specified exists. If the account exists, then four fields will be updated. These are code, description, notes and color.
+The file must be in the same format as that exported as this is a fixed format import which can be seen by looking at a file created by using the Account Tree export menu option.
+
+If the account is missing, based on the full account name, it will be added as long as the security / currency specified exists. If the account exists, then four fields will be updated. These are code, description, notes and color.
 
 Click on 'Forward' to proceed or 'Cancel' to Abort Import.
 </property>

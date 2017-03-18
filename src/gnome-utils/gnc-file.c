@@ -374,8 +374,17 @@ show_session_error (QofBackendError io_error,
         }
         else
         {
-            fmt = _("The file/URI %s could not be found.");
-            gnc_error_dialog (parent, fmt, displayname);
+            if (gnc_history_test_for_file (displayname))
+            {
+                fmt = _("The file/URI %s could not be found.\n\nThe file is in the history list, do you want to remove it?");
+                if (gnc_verify_dialog (parent, FALSE, fmt, displayname))
+                    gnc_history_remove_file (displayname);
+            }
+            else
+            {
+                fmt = _("The file/URI %s could not be found.");
+                gnc_error_dialog (parent, fmt, displayname);
+            }
         }
         break;
 
@@ -500,7 +509,7 @@ gnc_add_history (QofSession * session)
     if (!session) return;
 
     url = qof_session_get_url ( session );
-    if ( !url )
+    if ( !strlen (url) )
         return;
 
     if ( gnc_uri_is_file_uri ( url ) )
@@ -535,7 +544,6 @@ gnc_file_new (void)
          * disable events so we don't get spammed by redraws. */
         qof_event_suspend ();
 
-        qof_session_call_close_hooks(session);
         gnc_hook_run(HOOK_BOOK_CLOSED, session);
 
         gnc_close_gui_component_by_session (session);
@@ -714,7 +722,6 @@ RESTART:
     if (gnc_current_session_exist())
     {
         current_session = gnc_get_current_session();
-        qof_session_call_close_hooks(current_session);
         gnc_hook_run(HOOK_BOOK_CLOSED, current_session);
         gnc_close_gui_component_by_session (current_session);
         gnc_state_save (current_session);
@@ -1010,6 +1017,11 @@ RESTART:
         g_free ( message );
     }
 
+    // Convert imap mappings from account full name to guid strings
+    qof_event_suspend();
+    gnc_account_imap_convert_bayes (gnc_get_current_book());
+    qof_event_resume();
+
     return TRUE;
 }
 
@@ -1193,7 +1205,7 @@ gnc_file_do_export(const char * filename)
      * file. If so, prevent the export from happening to avoid killing this file */
     current_session = gnc_get_current_session ();
     oldfile = qof_session_get_url(current_session);
-    if (oldfile && (strcmp(oldfile, newfile) == 0))
+    if (strlen (oldfile) && (strcmp(oldfile, newfile) == 0))
     {
         g_free (newfile);
         show_session_error (ERR_FILEIO_WRITE_ERROR, filename,
@@ -1276,7 +1288,7 @@ gnc_file_save (void)
     /* If we don't have a filename/path to save to get one. */
     session = gnc_get_current_session ();
 
-    if (!qof_session_get_url(session))
+    if (!strlen (qof_session_get_url (session)))
     {
         gnc_file_save_as ();
         return;
@@ -1425,7 +1437,7 @@ gnc_file_do_save_as (const char* filename)
      * file. If so, then just do a simple save, instead of a full save as */
     session = gnc_get_current_session ();
     oldfile = qof_session_get_url(session);
-    if (oldfile && (strcmp(oldfile, newfile) == 0))
+    if (strlen (oldfile) && (strcmp(oldfile, newfile) == 0))
     {
         g_free (newfile);
         gnc_file_save ();
@@ -1583,7 +1595,7 @@ gnc_file_revert (void)
 
     session = gnc_get_current_session();
     fileurl = qof_session_get_url(session);
-    if (fileurl == NULL)
+    if (!strlen (fileurl))
         fileurl = _("<unknown>");
     if ((tmp = strrchr(fileurl, '/')) != NULL)
         filename = tmp + 1;
@@ -1608,7 +1620,6 @@ gnc_file_quit (void)
      * transactions during shutdown would cause massive redraws */
     qof_event_suspend ();
 
-    qof_session_call_close_hooks(session);
     gnc_hook_run(HOOK_BOOK_CLOSED, session);
     gnc_close_gui_component_by_session (session);
     gnc_state_save (session);

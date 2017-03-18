@@ -41,10 +41,10 @@
 #include <aqbanking/jobsepatransfer.h>
 #include <aqbanking/jobsepadebitnote.h>
 
+#include <gnc-aqbanking-templates.h>
 #include "dialog-ab-trans.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
-#include "gnc-ab-trans-templ.h"
 #include "gnc-ab-utils.h"
 #include "gnc-amount-edit.h"
 #include "gnc-ui.h"

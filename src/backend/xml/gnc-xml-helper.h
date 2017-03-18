@@ -24,7 +24,8 @@
 
 #ifndef GNC_XML_HELPER_H
 #define GNC_XML_HELPER_H
-
+extern "C"
+{
 #include <libxml/xmlversion.h>
 
 #  include <libxml/SAX.h>
@@ -32,6 +33,7 @@
 #  include <libxml/parser.h>
 #  include <libxml/xmlmemory.h>
 #  include <libxml/parserInternals.h>
+}
 #  ifndef xmlChildrenNode
 #    define xmlChildrenNode children
 #  endif /* ifndef xmlChildrenNode */
@@ -42,6 +44,6 @@
 #    define xmlAttrPropertyValue children
 #  endif /* ifndef xmlAttrPropertyValue */
 
-xmlChar* checked_char_cast (gchar *val);
+xmlChar* checked_char_cast (gchar* val);
 
 #endif /* _GNC_XML_HELPER_H_ */

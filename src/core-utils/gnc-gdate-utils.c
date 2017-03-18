@@ -37,11 +37,10 @@ gnc_gdate_set_today (GDate* gd)
 void
 gnc_gdate_set_time64 (GDate* gd, time64 time)
 {
-    GDateTime *gdt = gnc_g_date_time_new_from_unix_local (time);
-    gint y, m, d;
-    g_date_time_get_ymd (gdt, &y, &m, &d);
-    g_date_set_dmy (gd, d, m, y);
-    g_date_time_unref (gdt);
+    struct tm tm;
+    gnc_localtime_r(&time, &tm);
+    g_date_set_dmy (gd, tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
+
 }
 
 gboolean

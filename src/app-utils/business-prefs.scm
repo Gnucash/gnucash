@@ -121,22 +121,16 @@
 
   (reg-option
    (gnc:make-dateformat-option
-    gnc:*business-label* (N_ "Fancy Date Format")
+    gnc:*business-label* gnc:*fancy-date-label*
     "g" (N_ "The default date format used for fancy printed dates.")
     #f))
 
   ;; Accounts tab
 
-  (reg-option 
-   (gnc:make-simple-boolean-option
-    gnc:*option-section-accounts* gnc:*option-name-trading-accounts*
-    "a" (N_ "Check to have trading accounts used for transactions involving more than one currency or commodity.")
-    #f))
-
   (reg-option
    (gnc:make-number-range-option
 	gnc:*option-section-accounts* gnc:*option-name-auto-readonly-days*
-	"b" (N_ "Choose the number of days after which transactions will be read-only and cannot be edited anymore. This threshold is marked by a red line in the account register windows. If zero, all transactions can be edited and none are read-only.")
+	"a" (N_ "Choose the number of days after which transactions will be read-only and cannot be edited anymore. This threshold is marked by a red line in the account register windows. If zero, all transactions can be edited and none are read-only.")
 	0 ;; default
 	0 ;; lower bound
 	3650 ;; upper bound
@@ -147,8 +141,29 @@
   (reg-option 
    (gnc:make-simple-boolean-option
     gnc:*option-section-accounts* gnc:*option-name-num-field-source*
-    "c" (N_ "Check to have split action field used in registers for 'Num' field in place of transaction number; transaction number shown as 'T-Num' on second line of register. Has corresponding effect on business features, reporting and imports/exports.")
+    "b" (N_ "Check to have split action field used in registers for 'Num' field in place of transaction number; transaction number shown as 'T-Num' on second line of register. Has corresponding effect on business features, reporting and imports/exports.")
     #f))
+
+ (reg-option
+   (gnc:make-currency-accounting-option
+    gnc:*option-section-accounts* gnc:*option-name-currency-accounting*
+    "c"
+    (N_ "Select the currency accounting method to use for transactions involving more than one currency or commodity.")
+    'neither
+    (list
+      (vector 'trading
+              (N_ "Use Trading Accounts")
+              (N_ "Check to have trading accounts used for transactions involving more than one currency or commodity."))
+      (vector 'book-currency
+              (N_ "Use a Book-Currency")
+              (N_ "Check to use a book-currency for transactions involving more than one currency or commodity."))
+      (vector 'neither
+              (N_ "Use neither Trading Accounts nor a Book-Currency")
+              (N_ "Check to use neither trading accounts nor a book-currency for transactions involving more than one currency or commodity.")))
+    (N_ "Select the book-currency which is to be used to track costs of transactions involving currencies or commodities other than the book-currency.")
+    (gnc-default-currency)
+    (N_ "Select the default gains policy; this policy will be used unless over-ridden at the account level.")
+    'fifo))
 
   ;; Budgeting Tab
 

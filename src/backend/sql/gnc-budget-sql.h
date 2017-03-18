@@ -29,6 +29,18 @@
 #ifndef GNC_BUDGET_SQL_H
 #define GNC_BUDGET_SQL_H
 
-void gnc_sql_init_budget_handler( void );
+#include "gnc-sql-object-backend.hpp"
+
+class GncSqlBudgetBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlBudgetBackend();
+    void load_all(GncSqlBackend*) override;
+    void create_tables(GncSqlBackend*) override;
+    bool commit (GncSqlBackend* sql_be, QofInstance* inst) override;
+    bool write(GncSqlBackend*) override;
+private:
+    static void save(QofInstance*, void*);
+};
 
 #endif /* GNC_BUDGET_SQL_H */

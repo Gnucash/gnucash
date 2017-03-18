@@ -146,7 +146,8 @@ struct _SplitClass
  */
 void  xaccFreeSplit (Split *split);    /* frees memory */
 
-Split * xaccSplitClone (const Split *s);
+Split *xaccSplitCloneNoKvp (const Split *s);
+void xaccSplitCopyKvp (const Split *from, Split *to);
 
 Split *xaccDupeSplit (const Split *s);
 void mark_split (Split *s);

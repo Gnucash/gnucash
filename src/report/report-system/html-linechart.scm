@@ -62,9 +62,32 @@
   (record-constructor <html-linechart>))
 
 (define (gnc:make-html-linechart)
-  (gnc:make-html-linechart-internal -1 -1 #f #f #f #f '() '() '()
-                                    #f #f #f #f #f #f '()
-                                    #f #f #f #f #f #f -1 ))
+  (gnc:make-html-linechart-internal
+    '(pixels . -1)  ;;width
+    '(pixels . -1)  ;;height
+    #f   ;;title
+    #f   ;;subtitle
+    #f   ;;x-axis-label
+    #f   ;;y-axis-label
+    '()  ;;col-labels
+    '()  ;;row-labels
+    '()  ;;col-colors
+    #f   ;;legend-reversed?
+    #f   ;;row-labels-rotated?
+    #f   ;;stacked?
+    #t   ;;markers?
+    #t   ;;major-grid?
+    #t   ;;minor-grid?
+    '()  ;;data
+    #f   ;;button-1-line-urls
+    #f   ;;button-2-line-urls
+    #f   ;;button-3-line-urls
+    #f   ;;button-1-legend-urls
+    #f   ;;button-2-legend-urls
+    #f   ;;button-3-legend-urls
+    1.5  ;;line-width
+  )
+)
 
 (define gnc:html-linechart-data
   (record-accessor <html-linechart> 'data))
@@ -143,7 +166,6 @@
 
 (define gnc:html-linechart-set-col-colors!
   (record-modifier <html-linechart> 'col-colors))
-
 
 (define gnc:html-linechart-legend-reversed?
   (record-accessor <html-linechart> 'legend-reversed?))
@@ -373,12 +395,12 @@
                          (push "var d")
                          (push series-index)
                          (push " = [];\n")))
-         (series-data-add (lambda (series-index x y)
+         (series-data-add (lambda (series-index date y)
                          (push (string-append
                                "  d"
                                (number->string series-index)
                                ".push(["
-                               (number->string x)
+                               "\"" date "\""
                                ", "
                                (number->string y)
                                "]);\n"))))
@@ -398,16 +420,23 @@
         (begin
             (push (gnc:html-js-include "jqplot/jquery.min.js"))
             (push (gnc:html-js-include "jqplot/jquery.jqplot.js"))
+            (push (gnc:html-js-include "jqplot/jqplot.cursor.js"))
+            (push (gnc:html-js-include "jqplot/jqplot.dateAxisRenderer.js"))
             (push (gnc:html-js-include "jqplot/jqplot.highlighter.js"))
             (push (gnc:html-js-include "jqplot/jqplot.canvasTextRenderer.js"))
             (push (gnc:html-js-include "jqplot/jqplot.canvasAxisTickRenderer.js"))
             (push (gnc:html-css-include "jqplot/jquery.jqplot.css"))
 
             (push "<div id=\"")(push chart-id)(push "\" style=\"width:")
-            (push (gnc:html-linechart-width linechart))
-            (push "px;height:")
-            (push (gnc:html-linechart-height linechart))
-            (push "px;\"></div>\n")
+            (push (cdr (gnc:html-linechart-width linechart)))
+            (if (eq? 'pixels (car (gnc:html-linechart-width linechart)))
+                 (push "px;height:")
+                 (push "%;height:"))
+
+            (push (cdr (gnc:html-linechart-height linechart)))
+            (if (eq? 'pixels (car (gnc:html-linechart-height linechart)))
+                 (push "px;\"></div>\n")
+                 (push "%;\"></div>\n"))
             (push "<script id=\"source\">\n$(function () {")
 
             (push "var data = [];")
@@ -416,20 +445,24 @@
             (if (and data (list? data))
               (let ((rows (length data))
                     (cols 0))
-                (let loop ((col 0) (rowcnt 1))
+                (let loop ((col 0) (rowcnt 0))
                   (series-data-start col)
                   (if (list? (car data))
                       (begin 
                         (set! cols (length (car data)))))    
                   (for-each
                     (lambda (row)
-                      (series-data-add col rowcnt
-                                       (ensure-numeric (list-ref-safe row col)))
+                      (if (< rowcnt rows)
+                        (series-data-add col
+                          (list-ref (gnc:html-linechart-row-labels linechart) rowcnt)
+                          (ensure-numeric (list-ref-safe row col))
+                        )
+                      )
                       (set! rowcnt (+ rowcnt 1)))
                     data)
                   (series-data-end col (list-ref-safe (gnc:html-linechart-col-labels linechart) col))
                   (if (< col (- cols 1))
-                      (loop (+ 1 col) 1)))))
+                      (loop (+ 1 col) 0)))))
 
 
             (push "var options = {
@@ -441,7 +474,7 @@
                         lineWidth: ")
             (push (ensure-numeric line-width))
             (push ",
-                        showMarker: false,
+                        showMarker: true,
                    },
                    series: series,
                    axesDefaults: {
@@ -450,6 +483,7 @@
                    },
                    axes: {
                        xaxis: {
+                           renderer:$.jqplot.DateAxisRenderer,
                            tickRenderer: $.jqplot.CanvasAxisTickRenderer,
                            tickOptions: {
                                angle: -30,
@@ -463,6 +497,10 @@
                    highlighter: {
                        tooltipContentEditor: formatTooltip,
                        tooltipLocation: 'ne',
+                   },
+                   cursor: {
+                       show: true,
+                       zoom: true
                    }
                 };\n")
 
@@ -494,9 +532,9 @@
 
             (if subtitle
               (begin 
-                (push "  options.title += \" (")
-                (push (jqplot-escape-string subtitle))
-                (push ")\";\n")))
+                (push "  options.title += \" <br />")
+                (push subtitle)
+                (push "\";\n")))
 
             (if (and (string? x-label) (> (string-length x-label) 0))
               (begin 
@@ -508,31 +546,55 @@
                 (push "  options.axes.yaxis.label = \"")
                 (push y-label)
                 (push "\";\n")))
-            (if (and (string? row-labels) (> (string-length row-labels) 0))
-              (begin
-                (let ((tick-count 1))
-                  (push "  options.axes.xaxis.ticks = [")
-                  (for-each 
-                    (lambda (val)
-                            (push "[")(push tick-count)
-                            (push ",\"")(push val)
-                            (push "\"],")
-                            (set! tick-count (+ tick-count 1)))
-                    (gnc:html-linechart-row-labels linechart))
-                (push "];\n"))))
 
+            ;; adjust the date string format to the one given by the preferences
+            (push "  options.axes.xaxis.tickOptions.formatString = '")
+            (push (qof-date-format-get-string (qof-date-format-get)))
+            (push "';\n")
 
-            (push "$.jqplot.config.enablePlugins = true;")
-            (push "var plot = $.jqplot('")(push chart-id)(push"', data, options);
+            (push "$.jqplot.config.enablePlugins = true;\n")
+            (push "$(document).ready(function() {
+var plot = $.jqplot('")(push chart-id)(push"', data, options);
+plot.replot();
+var timer;
+var load_timer;
 
-  function formatTooltip(str, seriesIndex, pointIndex) {
-      if (options.axes.xaxis.ticks[pointIndex] !== undefined)
-          x = options.axes.xaxis.ticks[pointIndex][1];
-      else
-          x = pointIndex;
-      y = data[seriesIndex][pointIndex][1].toFixed(2);
-      return options.series[seriesIndex].label + ' ' + x + '<br><b>' + y + '</b>';
-  }\n") 
+// var win_width = $(window).width();
+// var win_height = $(window).height();
+// console.log( 'Window Width ' + win_width + ' Height ' + win_height);
+
+// var doc_width = document.body.clientWidth;
+// var doc_height = document.body.clientHeight;
+// console.log( 'Doc Width ' + doc_width + ' Height ' + doc_height);
+
+$(window).resize(function () {
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+//        console.log( 'Resize Timer!' );
+        plot.replot();
+    }, 100);
+    });
+
+$(window).on('load', function () {
+    var hasVScroll = document.body.scrollHeight > document.body.clientHeight;
+    clearTimeout(load_timer);
+    load_timer = setTimeout(function () {
+//        console.log( 'Load Timer!' );
+        if(hasVScroll)
+        {
+//            console.log( 'Load Timer Replot!' );
+            plot.replot();
+        }
+    },100);
+    });
+});
+
+function formatTooltip(str, seriesIndex, pointIndex) {
+    x = $.jqplot.DateTickFormatter (options.axes.xaxis.tickOptions.formatString,
+                                    data[seriesIndex][pointIndex][0]);
+    y = data[seriesIndex][pointIndex][1].toFixed(2);
+    return options.series[seriesIndex].label + ' ' + x + '<br><b>' + y + '</b>';
+}\n")
 
             (push "});\n</script>")
 

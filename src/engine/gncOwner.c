@@ -29,11 +29,12 @@
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <string.h>		/* for memcpy() */
+#include <qofinstance-p.h>
 
 #include "gncCustomerP.h"
 #include "gncEmployeeP.h"
@@ -51,8 +52,6 @@
 #define _GNC_MOD_NAME   GNC_ID_OWNER
 
 #define GNC_OWNER_ID    "gncOwner"
-#define GNC_OWNER_TYPE  "owner-type"
-#define GNC_OWNER_GUID  "owner-guid"
 
 static QofLogModule log_module = GNC_MOD_ENGINE;
 
@@ -102,6 +101,36 @@ void gncOwnerBeginEdit (GncOwner *owner)
     }
 }
 
+void gncOwnerCommitEdit (GncOwner *owner)
+{
+    if (!owner) return;
+    switch (owner->type)
+    {
+    case GNC_OWNER_NONE :
+    case GNC_OWNER_UNDEFINED :
+        break;
+    case GNC_OWNER_CUSTOMER :
+    {
+        gncCustomerCommitEdit(owner->owner.customer);
+        break;
+    }
+    case GNC_OWNER_JOB :
+    {
+        gncJobCommitEdit(owner->owner.job);
+        break;
+    }
+    case GNC_OWNER_VENDOR :
+    {
+        gncVendorCommitEdit(owner->owner.vendor);
+        break;
+    }
+    case GNC_OWNER_EMPLOYEE :
+    {
+        gncEmployeeCommitEdit(owner->owner.employee);
+        break;
+    }
+    }
+}
 
 void gncOwnerDestroy (GncOwner *owner)
 {
@@ -570,52 +599,33 @@ const GncGUID * gncOwnerGetEndGUID (const GncOwner *owner)
 
 void gncOwnerAttachToLot (const GncOwner *owner, GNCLot *lot)
 {
-    KvpFrame *kvp;
-    KvpValue *value;
-
-    if (!owner || !lot)
+     if (!owner || !lot)
         return;
 
-    kvp = gnc_lot_get_slots (lot);
     gnc_lot_begin_edit (lot);
 
-    value = kvp_value_new_gint64 (gncOwnerGetType (owner));
-    kvp_frame_set_slot_path (kvp, value, GNC_OWNER_ID, GNC_OWNER_TYPE, NULL);
-    kvp_value_delete (value);
-
-    value = kvp_value_new_guid (gncOwnerGetGUID (owner));
-    kvp_frame_set_slot_path (kvp, value, GNC_OWNER_ID, GNC_OWNER_GUID, NULL);
-    qof_instance_set_dirty (QOF_INSTANCE (lot));
+    qof_instance_set (QOF_INSTANCE (lot),
+		      GNC_OWNER_TYPE, (gint64)gncOwnerGetType (owner),
+		      GNC_OWNER_GUID, gncOwnerGetGUID (owner),
+		      NULL);
     gnc_lot_commit_edit (lot);
-    kvp_value_delete (value);
-
 }
 
 gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner)
 {
-    KvpFrame *kvp;
-    KvpValue *value;
-    GncGUID *guid;
+    GncGUID *guid = NULL;
     QofBook *book;
-    GncOwnerType type;
+    GncOwnerType type = GNC_OWNER_NONE;
+    guint64 type64 = 0;
 
     if (!lot || !owner) return FALSE;
 
     book = gnc_lot_get_book (lot);
-    kvp = gnc_lot_get_slots (lot);
-
-    value = kvp_frame_get_slot_path (kvp, GNC_OWNER_ID, GNC_OWNER_TYPE, NULL);
-    if (!value) return FALSE;
-
-    type = kvp_value_get_gint64 (value);
-
-    value = kvp_frame_get_slot_path (kvp, GNC_OWNER_ID, GNC_OWNER_GUID, NULL);
-    if (!value) return FALSE;
-
-    guid = kvp_value_get_guid (value);
-    if (!guid)
-        return FALSE;
-
+    qof_instance_get (QOF_INSTANCE (lot),
+		      GNC_OWNER_TYPE, &type64,
+		      GNC_OWNER_GUID, &guid,
+		      NULL);
+    type = (GncOwnerType) type64;
     switch (type)
     {
     case GNC_OWNER_CUSTOMER:
@@ -666,23 +676,6 @@ gboolean gncOwnerIsValid (const GncOwner *owner)
 {
     if (!owner) return FALSE;
     return (owner->owner.undefined != NULL);
-}
-
-KvpFrame* gncOwnerGetSlots(GncOwner* owner)
-{
-    if (!owner) return NULL;
-
-    switch (gncOwnerGetType(owner))
-    {
-    case GNC_OWNER_CUSTOMER:
-    case GNC_OWNER_VENDOR:
-    case GNC_OWNER_EMPLOYEE:
-        return qof_instance_get_slots(QOF_INSTANCE(owner->owner.undefined));
-    case GNC_OWNER_JOB:
-        return gncOwnerGetSlots(gncJobGetOwner(gncOwnerGetJob(owner)));
-    default:
-        return NULL;
-    }
 }
 
 gboolean

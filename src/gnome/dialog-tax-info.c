@@ -1402,7 +1402,7 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
         ti_dialog->account_treeview = GTK_WIDGET(tree_view);
 
         selection = gtk_tree_view_get_selection (tree_view);
-        gtk_tree_selection_set_mode (selection, GTK_SELECTION_EXTENDED);
+        gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
         g_signal_connect (G_OBJECT (selection), "changed",
                           G_CALLBACK (gnc_tax_info_account_changed_cb),
                           ti_dialog);

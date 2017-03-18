@@ -265,6 +265,124 @@ gnc_book_option_num_field_source_change_cb (gboolean num_action)
     gnc_resume_gui_refresh ();
 }
 
+/** Calls gnc_book_option_book_currency_selected to initiate registered
+  * callbacks when currency accounting book option changes to book-currency so
+  * that registers/reports can update themselves; sets feature flag */
+void
+gnc_book_option_book_currency_selected_cb (gboolean use_book_currency)
+{
+    gnc_suspend_gui_refresh ();
+    if (use_book_currency)
+    {
+    /* Set a feature flag in the book for use of book currency. This will
+     * prevent older GnuCash versions that don't support this feature from
+     * opening this file. */
+        gnc_features_set_used (gnc_get_current_book(),
+                                GNC_FEATURE_BOOK_CURRENCY);
+    }
+    gnc_book_option_book_currency_selected (use_book_currency);
+    gnc_resume_gui_refresh ();
+}
+
+/** Returns TRUE if both book-currency and default gain/loss policy KVPs exist
+  * and are valid and trading accounts are not used. */
+gboolean
+gnc_book_use_book_currency (QofBook *book)
+{
+    const gchar *policy;
+    const gchar *currency;
+
+    if (!book) return FALSE;
+
+    policy = qof_book_get_default_gains_policy (book);
+    currency = qof_book_get_book_currency_name (book);
+
+    /* If either a default gain/loss policy or a book-currency does not exist,
+       book-currency accounting method not valid */
+    if (!policy || !currency)
+       return FALSE;
+
+    /* If both exist, both must be valid */
+    if (!gnc_valid_policy_name (policy) || !gnc_commodity_table_lookup
+                                            (gnc_commodity_table_get_table
+                                              (gnc_get_current_book()),
+                                                GNC_COMMODITY_NS_CURRENCY,
+                                                 currency))
+       return FALSE;
+
+    /* If both exist and are valid, there must be no trading accounts flag */
+    if (qof_book_use_trading_accounts (book))
+       return FALSE;
+
+    return TRUE;
+}
+
+/** Returns pointer to Book Currency name for book or NULL; determines
+  * that both book-currency and default gain/loss policy KVPs exist and that
+  * both are valid, a requirement for the 'book-currency' currency accounting
+  * method to apply. */
+const gchar *
+gnc_book_get_book_currency_name (QofBook *book)
+{
+    if (!book) return NULL;
+
+    if (gnc_book_use_book_currency (book))
+        return qof_book_get_book_currency_name (book);
+
+    return NULL;
+}
+
+/** Returns pointer to Book Currency for book or NULL; determines
+  * that both book-currency and default gain/loss policy KVPs exist and that
+  * both are valid, a requirement for the 'book-currency' currency accounting
+  * method to apply. */
+gnc_commodity *
+gnc_book_get_book_currency (QofBook *book)
+{
+    if (!book) return NULL;
+
+    if (gnc_book_use_book_currency (book))
+        return gnc_commodity_table_lookup
+                    (gnc_commodity_table_get_table(book),
+                     GNC_COMMODITY_NS_CURRENCY,
+                     qof_book_get_book_currency_name (book));
+
+    return NULL;
+}
+
+/** Returns pointer to default gain/loss policy for book or NULL; determines
+  * that both book-currency and default gain/loss policy KVPs exist and that
+  * both are valid, a requirement for the 'book-currency' currency accounting
+  * method to apply. */
+const gchar *
+gnc_book_get_default_gains_policy (QofBook *book)
+{
+    if (!book) return NULL;
+
+    if (gnc_book_use_book_currency (book))
+        return qof_book_get_default_gains_policy (book);
+
+    return NULL;
+}
+
+/** Returns pointer to default gain/loss account for book or NULL; determines
+  * that both book-currency and default gain/loss policy KVPs exist and that
+  * both are valid, a requirement for the 'book-currency' currency accounting
+  * method to apply. */
+Account *
+gnc_book_get_default_gain_loss_acct (QofBook *book)
+{
+    Account *gains_account = NULL;
+
+    if (!book) return NULL;
+
+    if (gnc_book_use_book_currency (book))
+        gains_account = xaccAccountLookup
+                        (qof_book_get_default_gain_loss_acct_guid (book), book);
+
+    return gains_account;
+}
+
 Account *
 gnc_get_current_root_account (void)
 {
@@ -913,6 +1031,9 @@ gnc_default_currency_common (gchar *requested_currency,
                                           GNC_COMMODITY_NS_CURRENCY,
                                           requested_currency);
 
+    if (gnc_book_use_book_currency (gnc_get_current_book ()))
+        return gnc_book_get_book_currency (gnc_get_current_book ());
+
     if (gnc_prefs_get_bool (section, GNC_PREF_CURRENCY_CHOICE_OTHER))
     {
         mnemonic = gnc_prefs_get_string(section, GNC_PREF_CURRENCY_OTHER);
@@ -1257,8 +1378,9 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     {
         rounding.num = 5; /* Limit the denom to 10^13 ~= 2^44, leaving max at ~524288 */
         rounding.denom = pow(10, max_dp + 1);
-        val = gnc_numeric_add(val, rounding, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-        /* Yes, rounding up can cause overflow.  Check for it. */
+        val = gnc_numeric_add(val, rounding, val.denom,
+                              GNC_HOW_DENOM_EXACT | GNC_HOW_RND_TRUNC);
+
         if (gnc_numeric_check(val))
         {
             PWARN ("Bad numeric from rounding: %s.",
@@ -1839,7 +1961,7 @@ A: Because scanf and printf use different symbols for 64-bit numbers.
 gboolean
 xaccParseAmountExtended (const char * in_str, gboolean monetary,
                          gunichar negative_sign, gunichar decimal_point,
-                         gunichar group_separator, char *group, char *ignore_list,
+                         gunichar group_separator, const char *group, const char *ignore_list,
                          gnc_numeric *result, char **endstr)
 {
     gboolean is_negative;

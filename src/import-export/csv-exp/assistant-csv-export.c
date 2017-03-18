@@ -44,8 +44,8 @@
 #include "csv-tree-export.h"
 #include "csv-transactions-export.h"
 
-#define GNC_PREFS_GROUP    "dialogs.export.csv"
-#define GNC_PREF_PANED_POS "paned-position"
+#define GNC_PREFS_GROUP               "dialogs.export.csv"
+#define GNC_PREF_PANED_POS            "paned-position"
 #define ASSISTANT_CSV_EXPORT_CM_CLASS "assistant-csv-export"
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -65,6 +65,7 @@ void csv_export_assistant_finish_page_prepare (GtkAssistant *assistant, gpointer
 void csv_export_assistant_summary_page_prepare (GtkAssistant *assistant, gpointer user_data);
 
 void csv_export_quote_cb (GtkToggleButton *button, gpointer user_data);
+void csv_export_simple_cb (GtkToggleButton *button, gpointer user_data);
 void csv_export_sep_cb (GtkWidget *radio, gpointer user_data);
 void csv_export_custom_entry_cb (GtkWidget *widget, gpointer user_data);
 
@@ -77,23 +78,44 @@ void csv_export_file_chooser_confirm_cb (GtkWidget *button, CsvExportInfo *info)
 static const gchar *finish_tree_string = N_(
             /* Translators: %s is the file name string. */
             "The account tree will be exported to the file '%s' when you click 'Apply'.\n\n"
-            "You can also go back and verify your selections by clicking on 'Back'"
-            " or 'Cancel' to Abort Export.\n");
+            "You can also verify your selections by clicking on 'Back' or 'Cancel' to Abort Export.\n");
 
 static const gchar *finish_trans_string = N_(
             /* Translators: %s is the file name string and %u the number of accounts. */
             "When you click 'Apply', the transactions will be exported to the file '%s' and"
-            " the number of accounts exported is %u.\n\n"
-            "You can also go back and verify your selections by clicking on 'Back'"
-            " or 'Cancel' to Abort Export.\n");
+            " the number of accounts exported will be %u.\n\n"
+            "You can also verify your selections by clicking on 'Back' or 'Cancel' to Abort Export.\n");
+
+static const gchar *finish_trans_search_gl_string = N_(
+            /* Translators: %s is the file name string. */
+            "When you click 'Apply', the transactions will be exported to the file '%s.\n\n"
+            "You can also verify your selections by clicking on 'Back' or 'Cancel' to Abort Export.\n");
 
 static const gchar *start_tree_string = N_(
-        "This assistant will help you export the Account Tree to a file.\n\n"
-        "Select the settings you require for the file and then click 'Forward' to proceed"
-        " or 'Cancel' to Abort Export.\n");
+            "This assistant will help you export the Account Tree to a file\n"
+            " with the separator specified below.\n\n"
+            "Select the settings you require for the file and then click 'Forward' to proceed"
+            " or 'Cancel' to Abort Export.\n");
 
 static const gchar *start_trans_string = N_(
-            "This assistant will help you export the Transactions to a file.\n\n"
+            "This assistant will help you export the Transactions to a file\n"
+            " with the separator specified below.\n\n"
+            "There will be multiple rows for each transaction and may"
+            " require further manipulation to get them in a format you can use.\n\n"
+            "Each Transaction will appear once in the export and will be listed in"
+            " the order the accounts were processed\n\n"
+            "Select the settings you require for the file and then click 'Forward' to proceed"
+            " or 'Cancel' to Abort Export.\n");
+
+static const gchar *start_trans_simple_string = N_(
+            "This assistant will help you export the Transactions to a file\n"
+            " with the separator specified below.\n\n"
+            "There will be multiple rows for each transaction and may require further"
+            " manipulation to get them in a format you can use. Each Transaction will"
+            " appear once in the export and will be listed in the order the accounts"
+            " were processed\n\n"
+            "By selecting the simple layout, the output will be equivalent to a single"
+            " row register view and as such some of the transfer detail could be lost.\n\n"
             "Select the settings you require for the file and then click 'Forward' to proceed"
             " or 'Cancel' to Abort Export.\n");
 
@@ -156,7 +178,8 @@ csv_export_file_chooser_confirm_cb (GtkWidget *button, CsvExportInfo *info)
  *
  * call back for type of separartor required
  *******************************************************/
-void csv_export_sep_cb (GtkWidget *radio, gpointer user_data)
+void
+csv_export_sep_cb (GtkWidget *radio, gpointer user_data)
 {
     CsvExportInfo *info = user_data;
     const gchar *name;
@@ -199,7 +222,8 @@ void csv_export_sep_cb (GtkWidget *radio, gpointer user_data)
  *
  * call back for use of quotes
  *******************************************************/
-void csv_export_quote_cb (GtkToggleButton *button, gpointer user_data)
+void
+csv_export_quote_cb (GtkToggleButton *button, gpointer user_data)
 {
     CsvExportInfo *info = user_data;
 
@@ -209,13 +233,29 @@ void csv_export_quote_cb (GtkToggleButton *button, gpointer user_data)
         info->use_quotes = FALSE;
 }
 
+/*******************************************************
+ * csv_export_simple_cb
+ *
+ * call back for use of simple_layout
+ *******************************************************/
+void
+csv_export_simple_cb (GtkToggleButton *button, gpointer user_data)
+{
+    CsvExportInfo *info = user_data;
+
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(button)))
+        info->simple_layout = TRUE;
+    else
+        info->simple_layout = FALSE;
+}
 
 /*******************************************************
  * csv_export_custom_entry_cb
  *
  * call back for custom separator
  *******************************************************/
-void csv_export_custom_entry_cb (GtkWidget *widget, gpointer user_data)
+void
+csv_export_custom_entry_cb (GtkWidget *widget, gpointer user_data)
 {
     CsvExportInfo *info = user_data;
     const gchar *custom_str;
@@ -240,13 +280,15 @@ void csv_export_custom_entry_cb (GtkWidget *widget, gpointer user_data)
  *
  * load the default settings for the assistant
  *******************************************************/
-static
-void load_settings (CsvExportInfo *info)
+static void
+load_settings (CsvExportInfo *info)
 {
     info->use_quotes = FALSE;
+    info->simple_layout = FALSE;
     info->separator_str = ",";
     info->file_name = NULL;
     info->starting_dir = NULL;
+    info->trans_list = NULL;
 
     /* The default directory for the user to select files. */
     info->starting_dir = gnc_get_default_directory (GNC_PREFS_GROUP);
@@ -297,59 +339,23 @@ show_acct_type_accounts (CsvExportInfo *info)
 
     for (type = 0; type < NUM_ACCOUNT_TYPES; type++) /* from Account.h */
     {
-        if (info->csva.account_type == ACCT_TYPE_EXPENSE)
-            Viewinfo.include_type[type] = (type == ACCT_TYPE_EXPENSE);
-        else if (info->csva.account_type == ACCT_TYPE_INCOME)
-            Viewinfo.include_type[type] = (type == ACCT_TYPE_INCOME);
-        else if (info->csva.account_type == ACCT_TYPE_ASSET)
-            Viewinfo.include_type[type] = ((type == ACCT_TYPE_BANK)  ||
-                                           (type == ACCT_TYPE_CASH)      ||
-                                           (type == ACCT_TYPE_ASSET)     ||
-                                           (type == ACCT_TYPE_STOCK)     ||
-                                           (type == ACCT_TYPE_MUTUAL)    ||
-                                           (type == ACCT_TYPE_RECEIVABLE));
-        else if (info->csva.account_type == ACCT_TYPE_LIABILITY)
-            Viewinfo.include_type[type] = ((type == ACCT_TYPE_CREDIT) ||
-                                           (type == ACCT_TYPE_LIABILITY) ||
-                                           (type == ACCT_TYPE_EQUITY)    ||
-                                           (type == ACCT_TYPE_PAYABLE));
-        else
-            Viewinfo.include_type[type] = FALSE;
+        Viewinfo.include_type[type] = ((type == ACCT_TYPE_BANK)      ||
+                                       (type == ACCT_TYPE_CASH)      ||
+                                       (type == ACCT_TYPE_CREDIT)    ||
+                                       (type == ACCT_TYPE_ASSET)     ||
+                                       (type == ACCT_TYPE_LIABILITY) ||
+                                       (type == ACCT_TYPE_STOCK)     ||
+                                       (type == ACCT_TYPE_MUTUAL)    ||
+                                       (type == ACCT_TYPE_INCOME)    ||
+                                       (type == ACCT_TYPE_EXPENSE)   ||
+                                       (type == ACCT_TYPE_EQUITY)    ||
+                                       (type == ACCT_TYPE_RECEIVABLE)||
+                                       (type == ACCT_TYPE_PAYABLE)   ||
+                                       (type == ACCT_TYPE_ROOT)      ||
+                                       (type == ACCT_TYPE_TRADING));
     }
     gnc_tree_view_account_set_view_info (tree, &Viewinfo);
     csv_export_cursor_changed_cb (GTK_WIDGET(tree), info);
-}
-
-
-/*******************************************************
- * account_filter_func
- *
- * update filter for account tree
- *******************************************************/
-static gboolean
-account_filter_func (Account *account, gpointer user_data)
-{
-    CsvExportInfo *info = user_data;
-    gboolean included = FALSE;
-
-    if ((info->csva.account_type == ACCT_TYPE_INCOME) ||
-            (info->csva.account_type == ACCT_TYPE_EXPENSE))
-        included = (xaccAccountGetType (account) == info->csva.account_type);
-    else if (info->csva.account_type == ACCT_TYPE_ASSET)
-        included = ((xaccAccountGetType (account) == ACCT_TYPE_BANK) ||
-                    (xaccAccountGetType (account) == ACCT_TYPE_CASH) ||
-                    (xaccAccountGetType (account) == ACCT_TYPE_ASSET) ||
-                    (xaccAccountGetType (account) == ACCT_TYPE_STOCK) ||
-                    (xaccAccountGetType (account) == ACCT_TYPE_MUTUAL) ||
-                    (xaccAccountGetType (account) == ACCT_TYPE_RECEIVABLE));
-    else if (info->csva.account_type == ACCT_TYPE_LIABILITY)
-        included = ((xaccAccountGetType (account) == ACCT_TYPE_CREDIT) ||
-                    (xaccAccountGetType (account) == ACCT_TYPE_LIABILITY) ||
-                    (xaccAccountGetType (account) == ACCT_TYPE_EQUITY) ||
-                    (xaccAccountGetType (account) == ACCT_TYPE_PAYABLE));
-    else
-        included = FALSE;
-    return included;
 }
 
 
@@ -432,41 +438,6 @@ csv_export_select_subaccounts_clicked_cb (GtkWidget *widget, gpointer user_data)
     gnc_tree_view_account_select_subaccounts (account_tree, account);
 
     gtk_widget_grab_focus (info->csva.account_treeview);
-}
-
-
-/*******************************************************
- * csv_export_info_acct_type_cb
- *
- * select which type of accounts to display
- *******************************************************/
-static void
-csv_export_info_acct_type_cb (GtkWidget *w, gpointer user_data)
-{
-    CsvExportInfo *info = user_data;
-    const gchar *button_name;
-
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)))
-    {
-        button_name = gtk_buildable_get_name(GTK_BUILDABLE(w));
-        if (g_strcmp0 (button_name, "income_radio") == 0)
-            info->csva.account_type = ACCT_TYPE_INCOME;
-        else if (g_strcmp0 (button_name, "expense_radio") == 0)
-            info->csva.account_type = ACCT_TYPE_EXPENSE;
-        else if (g_strcmp0 (button_name, "asset_radio") == 0)
-            info->csva.account_type = ACCT_TYPE_ASSET;
-        else if (g_strcmp0 (button_name, "liab_eq_radio") == 0)
-            info->csva.account_type = ACCT_TYPE_LIABILITY;
-        else
-            return;
-
-        show_acct_type_accounts (info);
-        gnc_tree_view_account_refilter
-        (GNC_TREE_VIEW_ACCOUNT (info->csva.account_treeview));
-        update_accounts_tree (info);
-    }
-    else
-        return;
 }
 
 /* =============================================================== */
@@ -661,7 +632,13 @@ csv_export_assistant_start_page_prepare (GtkAssistant *assistant,
     if (info->export_type == XML_EXPORT_TREE)
         gtk_label_set_text (GTK_LABEL(info->start_label), gettext (start_tree_string));
     else
-        gtk_label_set_text (GTK_LABEL(info->start_label), gettext (start_trans_string));
+    {
+        /* General Journal and search registers are always multi-line exported */
+        if ((info->export_type == XML_EXPORT_REGISTER) && (info->account == NULL))
+            gtk_label_set_text (GTK_LABEL(info->start_label), gettext (start_trans_string));
+        else
+            gtk_label_set_text (GTK_LABEL(info->start_label), gettext (start_trans_simple_string));
+    }
 
     /* Enable the Assistant Buttons */
     gtk_assistant_set_page_complete (assistant, page, TRUE);
@@ -715,8 +692,12 @@ csv_export_assistant_finish_page_prepare (GtkAssistant *assistant,
     if (info->export_type == XML_EXPORT_TREE)
         text = g_strdup_printf (gettext (finish_tree_string), info->file_name);
     else
-        text = g_strdup_printf (gettext (finish_trans_string), info->file_name, info->csva.num_accounts);
-
+    {
+        if ((info->export_type == XML_EXPORT_REGISTER) && (info->account == NULL))
+            text = g_strdup_printf (gettext (finish_trans_search_gl_string), info->file_name);
+        else
+            text = g_strdup_printf (gettext (finish_trans_string), info->file_name, info->csva.num_accounts);
+    }
     gtk_label_set_text (GTK_LABEL(info->finish_label), text);
     g_free (text);
 
@@ -812,6 +793,8 @@ csv_export_close_handler (gpointer user_data)
 
     g_free (info->file_name);
     g_free (info->starting_dir);
+    if (info->mid_sep)
+        g_free (info->mid_sep);
 
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(info->window));
     gtk_widget_destroy (info->window);
@@ -847,25 +830,29 @@ csv_export_assistant_create (CsvExportInfo *info)
     /* Account Page */
     info->account_page = GTK_WIDGET(gtk_builder_get_object(builder, "account_page"));
 
-    if (info->export_type == XML_EXPORT_TREE)
+    if ((info->export_type == XML_EXPORT_TREE) || (info->export_type == XML_EXPORT_REGISTER))
+    {
+        GtkWidget *chkbox = GTK_WIDGET(gtk_builder_get_object(builder, "simple_layout"));
+
+        // Don't provide simple export layout for search registers and General Journal
+        if ((info->export_type == XML_EXPORT_TREE) || (info->account == NULL))
+            gtk_widget_destroy (chkbox);
         gtk_widget_destroy (info->account_page);
+    }
     else
     {
         GtkTreeView *tree_view;
         GtkTreeSelection *selection;
-        GtkWidget *income_radio, *expense_radio, *asset_radio,
-                  *liab_eq_radio, *box, *label;
+        GtkWidget *box, *label;
 
         info->csva.acct_info = GTK_WIDGET(gtk_builder_get_object (builder, "acct_info_vbox"));
         info->csva.num_acct_label = GTK_WIDGET(gtk_builder_get_object (builder, "num_accounts_label"));
 
         tree_view = gnc_tree_view_account_new (FALSE);
-        gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT(tree_view),
-                                          account_filter_func, info, NULL);
         info->csva.account_treeview = GTK_WIDGET(tree_view);
 
         selection = gtk_tree_view_get_selection (tree_view);
-        gtk_tree_selection_set_mode (selection, GTK_SELECTION_EXTENDED);
+        gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
         g_signal_connect (G_OBJECT(selection), "changed",
                           G_CALLBACK(csv_export_account_changed_cb), info);
 
@@ -875,25 +862,6 @@ csv_export_assistant_create (CsvExportInfo *info)
 
         label = GTK_WIDGET(gtk_builder_get_object (builder, "accounts_label"));
         gtk_label_set_mnemonic_widget (GTK_LABEL(label), GTK_WIDGET(tree_view));
-
-        income_radio = GTK_WIDGET(gtk_builder_get_object (builder, "income_radio"));
-        expense_radio = GTK_WIDGET(gtk_builder_get_object (builder, "expense_radio"));
-        info->csva.expense_radio = expense_radio;
-        asset_radio = GTK_WIDGET(gtk_builder_get_object (builder, "asset_radio"));
-        info->csva.asset_radio = asset_radio;
-        liab_eq_radio = GTK_WIDGET(gtk_builder_get_object (builder, "liab_eq_radio"));
-        info->csva.liab_eq_radio = liab_eq_radio;
-        info->csva.account_type = ACCT_TYPE_EXPENSE;
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(expense_radio), TRUE);
-
-        g_signal_connect (G_OBJECT(income_radio), "toggled",
-                          G_CALLBACK(csv_export_info_acct_type_cb), info);
-        g_signal_connect (G_OBJECT(expense_radio), "toggled",
-                          G_CALLBACK(csv_export_info_acct_type_cb), info);
-        g_signal_connect (G_OBJECT(asset_radio), "toggled",
-                          G_CALLBACK(csv_export_info_acct_type_cb), info);
-        g_signal_connect (G_OBJECT(liab_eq_radio), "toggled",
-                          G_CALLBACK(csv_export_info_acct_type_cb), info);
 
         /* select subaccounts button */
         button = GTK_WIDGET(gtk_builder_get_object (builder, "select_subaccounts_button"));
@@ -984,6 +952,29 @@ csv_export_assistant_create (CsvExportInfo *info)
     return window;
 }
 
+static void
+gnc_file_csv_export_internal (CsvExportType export_type, Query *q, Account *acc)
+{
+    CsvExportInfo *info;
+
+    info = g_new0 (CsvExportInfo, 1);
+    info->export_type = export_type;
+
+    if (q)
+        info->query = q;
+    if (acc)
+        info->account = acc;
+    if ((export_type == XML_EXPORT_REGISTER) && acc)
+        info->csva.num_accounts = 1;
+
+    csv_export_assistant_create (info);
+    gnc_register_gui_component (ASSISTANT_CSV_EXPORT_CM_CLASS,
+                                NULL, csv_export_close_handler,
+                                info);
+    gtk_widget_show_all (info->window);
+    gnc_window_adjust_for_screen (GTK_WINDOW(info->window));
+}
+
 
 /********************************************************************\
  * gnc_file_csv_export                                              *
@@ -995,14 +986,20 @@ csv_export_assistant_create (CsvExportInfo *info)
 void
 gnc_file_csv_export (CsvExportType export_type)
 {
-    CsvExportInfo *info;
+    gnc_file_csv_export_internal (export_type, NULL, NULL);
+}
 
-    info = g_new0 (CsvExportInfo, 1);
-    info->export_type = export_type;
-    csv_export_assistant_create (info);
-    gnc_register_gui_component (ASSISTANT_CSV_EXPORT_CM_CLASS,
-                                NULL, csv_export_close_handler,
-                                info);
-    gtk_widget_show_all (info->window);
-    gnc_window_adjust_for_screen (GTK_WINDOW(info->window));
+
+/********************************************************************\
+ * gnc_file_csv_export_register                                     *
+ * opens up a assistant to export register transactions based.      *
+ * Args:   export_type                                              *
+ * Args:   Query                                                    *
+ * Args:   Account                                                  *
+ * Return: nothing                                                  *
+\********************************************************************/
+void
+gnc_file_csv_export_register (CsvExportType export_type, Query *q, Account *acc)
+{
+    gnc_file_csv_export_internal (export_type, q, acc);
 }

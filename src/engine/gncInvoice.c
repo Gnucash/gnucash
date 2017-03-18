@@ -27,10 +27,11 @@
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <glib.h>
 #include <glib/gi18n.h>
+#include <qofinstance-p.h>
 
 #include "Transaction.h"
 #include "Account.h"
@@ -81,8 +82,6 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME     GNC_ID_INVOICE
 
-#define GNC_INVOICE_ID    "gncInvoice"
-#define GNC_INVOICE_GUID  "invoice-guid"
 #define GNC_INVOICE_IS_CN "credit-note"
 
 #define SET_STR(obj, member, str) { \
@@ -113,7 +112,22 @@ QofBook * gncInvoiceGetBook(GncInvoice *x)
 enum
 {
     PROP_0,
-    PROP_NOTES
+//  PROP_ID,		/* Table */
+//  PROP_DATE_OPENED,	/* Table */
+//  PROP_DATE_POSTED,	/* Table */
+    PROP_NOTES,		/* Table */
+//  PROP_ACTIVE,	/* Table */
+//  PROP_CURRENCY,	/* Table */
+//  PROP_OWNER_TYPE,	/* Table */
+//  PROP_OWNER,		/* Table */
+//  PROP_TERMS,		/* Table */
+//  PROP_BILLING_ID,	/* Table */
+//  PROP_POST_TXN,	/* Table */
+//  PROP_POST_LOT,	/* Table */
+//  PROP_POST_ACCOUNT,	/* Table */
+//  PROP_BILLTO_TYPE,	/* Table */
+//  PROP_BILLTO,	/* Table */
+//  PROP_CHARGE_AMOUNT, /* Table, (numeric) */
 };
 
 /* GObject Initialization */
@@ -169,6 +183,8 @@ gnc_invoice_set_property (GObject         *object,
     g_return_if_fail(GNC_IS_INVOICE(object));
 
     inv = GNC_INVOICE(object);
+    g_assert (qof_instance_get_editlevel(inv));
+
     switch (prop_id)
     {
     case PROP_NOTES:
@@ -322,7 +338,7 @@ GncInvoice *gncInvoiceCopy (const GncInvoice *from)
     GncInvoice *invoice;
     QofBook* book;
     GList *node;
-    gint64 is_cn;
+    GValue v = G_VALUE_INIT;
 
     g_assert(from);
     book = qof_instance_get_book(from);
@@ -338,8 +354,9 @@ GncInvoice *gncInvoiceCopy (const GncInvoice *from)
     invoice->billing_id = CACHE_INSERT (from->billing_id);
     invoice->active = from->active;
 
-    is_cn = kvp_frame_get_gint64(from->inst.kvp_data, GNC_INVOICE_IS_CN);
-    kvp_frame_set_gint64(invoice->inst.kvp_data, GNC_INVOICE_IS_CN, is_cn);
+    qof_instance_get_kvp (QOF_INSTANCE (from), GNC_INVOICE_IS_CN, &v);
+    if (G_VALUE_HOLDS_INT64 (&v))
+         qof_instance_set_kvp (QOF_INSTANCE (invoice), GNC_INVOICE_IS_CN, &v);
 
     invoice->terms = from->terms;
     gncBillTermIncRef (invoice->terms);
@@ -529,10 +546,12 @@ void gncInvoiceSetActive (GncInvoice *invoice, gboolean active)
 
 void gncInvoiceSetIsCreditNote (GncInvoice *invoice, gboolean credit_note)
 {
+     GValue v = G_VALUE_INIT;
     if (!invoice) return;
     gncInvoiceBeginEdit (invoice);
-    kvp_frame_set_gint64(invoice->inst.kvp_data, GNC_INVOICE_IS_CN,
-                         credit_note ? 1 : 0);
+    g_value_init (&v, G_TYPE_INT64);
+    g_value_set_int64(&v, credit_note ? 1 : 0);
+    qof_instance_set_kvp (QOF_INSTANCE (invoice), GNC_INVOICE_IS_CN, &v);
     mark_invoice (invoice);
     gncInvoiceCommitEdit (invoice);
 
@@ -1019,8 +1038,10 @@ gboolean gncInvoiceGetActive (const GncInvoice *invoice)
 
 gboolean gncInvoiceGetIsCreditNote (const GncInvoice *invoice)
 {
+    GValue v = G_VALUE_INIT;
     if (!invoice) return FALSE;
-    if (kvp_frame_get_gint64(invoice->inst.kvp_data, GNC_INVOICE_IS_CN))
+    qof_instance_get_kvp (QOF_INSTANCE(invoice), GNC_INVOICE_IS_CN, &v);
+    if (G_VALUE_HOLDS_INT64(&v) && g_value_get_int64(&v))
         return TRUE;
     else
         return FALSE;
@@ -1133,71 +1154,51 @@ qofInvoiceSetJob (GncInvoice *invoice, GncJob *job)
 void
 gncInvoiceDetachFromLot (GNCLot *lot)
 {
-    KvpFrame *kvp;
-
     if (!lot) return;
+
     gnc_lot_begin_edit (lot);
-    kvp = gnc_lot_get_slots (lot);
-    kvp_frame_set_slot_path (kvp, NULL, GNC_INVOICE_ID, GNC_INVOICE_GUID, NULL);
-    qof_instance_set_dirty (QOF_INSTANCE (lot));
+    qof_instance_set (QOF_INSTANCE (lot), "invoice", NULL, NULL);
     gnc_lot_commit_edit (lot);
 }
 
 void
 gncInvoiceAttachToLot (GncInvoice *invoice, GNCLot *lot)
 {
-    KvpFrame *kvp;
-    KvpValue *value;
-
+    GncGUID *guid;
     if (!invoice || !lot)
         return;
 
     if (invoice->posted_lot) return;	/* Cannot reset invoice's lot */
-
+    guid  = (GncGUID*)qof_instance_get_guid (QOF_INSTANCE (invoice));
     gnc_lot_begin_edit (lot);
-    kvp = gnc_lot_get_slots (lot);
-    value = kvp_value_new_guid (qof_instance_get_guid (QOF_INSTANCE(invoice)));
-    kvp_frame_set_slot_path (kvp, value, GNC_INVOICE_ID, GNC_INVOICE_GUID, NULL);
-    qof_instance_set_dirty (QOF_INSTANCE (lot));
+    qof_instance_set (QOF_INSTANCE (lot), "invoice", guid, NULL);
     gnc_lot_commit_edit (lot);
-    kvp_value_delete (value);
     gncInvoiceSetPostedLot (invoice, lot);
 }
 
 GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot)
 {
-    KvpFrame *kvp;
-    KvpValue *value;
-    GncGUID *guid;
+    GncGUID *guid = NULL;
     QofBook *book;
 
     if (!lot) return NULL;
 
     book = gnc_lot_get_book (lot);
-    kvp = gnc_lot_get_slots (lot);
-    value = kvp_frame_get_slot_path (kvp, GNC_INVOICE_ID, GNC_INVOICE_GUID, NULL);
-    if (!value) return NULL;
-
-    guid = kvp_value_get_guid (value);
+    qof_instance_get (QOF_INSTANCE (lot), "invoice", &guid, NULL);
     return gncInvoiceLookup(book, guid);
 }
 
 void
 gncInvoiceAttachToTxn (GncInvoice *invoice, Transaction *txn)
 {
-    KvpFrame *kvp;
-    KvpValue *value;
-
     if (!invoice || !txn)
         return;
 
     if (invoice->posted_txn) return;	/* Cannot reset invoice's txn */
 
     xaccTransBeginEdit (txn);
-    kvp = xaccTransGetSlots (txn);
-    value = kvp_value_new_guid (qof_instance_get_guid(QOF_INSTANCE(invoice)));
-    kvp_frame_set_slot_path (kvp, value, GNC_INVOICE_ID, GNC_INVOICE_GUID, NULL);
-    kvp_value_delete (value);
+    qof_instance_set (QOF_INSTANCE (txn), "invoice", //Prop INVOICE
+		      qof_instance_get_guid (QOF_INSTANCE (invoice)), NULL);
     xaccTransSetTxnType (txn, TXN_TYPE_INVOICE);
     xaccTransCommitEdit (txn);
     gncInvoiceSetPostedTxn (invoice, txn);
@@ -1206,19 +1207,13 @@ gncInvoiceAttachToTxn (GncInvoice *invoice, Transaction *txn)
 GncInvoice *
 gncInvoiceGetInvoiceFromTxn (const Transaction *txn)
 {
-    KvpFrame *kvp;
-    KvpValue *value;
-    GncGUID *guid;
+    GncGUID *guid = NULL;
     QofBook *book;
 
     if (!txn) return NULL;
 
     book = xaccTransGetBook (txn);
-    kvp = xaccTransGetSlots (txn);
-    value = kvp_frame_get_slot_path (kvp, GNC_INVOICE_ID, GNC_INVOICE_GUID, NULL);
-    if (!value) return NULL;
-
-    guid = kvp_value_get_guid (value);
+    qof_instance_get (QOF_INSTANCE (txn), "invoice", &guid, NULL);
     return gncInvoiceLookup(book, guid);
 }
 

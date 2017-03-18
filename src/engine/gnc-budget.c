@@ -22,29 +22,31 @@
  *                                                                  *
 \********************************************************************/
 
-#include "config.h"
+#include <config.h>
 #include <glib.h>
 #include <glib/gprintf.h>
 #include <glib/gi18n.h>
 #include <time.h>
-#include "qof.h"
-#include "qofbookslots.h"
+#include <qof.h>
+#include <qofbookslots.h>
+#include <gnc-gdate-utils.h>
+#include <qofinstance-p.h>
 
 #include "Account.h"
 
 #include "gnc-budget.h"
 #include "gnc-commodity.h"
-#include "gnc-gdate-utils.h"
 
 static QofLogModule log_module = GNC_MOD_ENGINE;
 
 enum
 {
     PROP_0,
-    PROP_NAME,
-    PROP_DESCRIPTION,
-    PROP_NUM_PERIODS,
-    PROP_RECURRENCE,
+    PROP_NAME,                  /* Table */
+    PROP_DESCRIPTION,           /* Table */
+    PROP_NUM_PERIODS,           /* Table */
+    PROP_RUNTIME_0,
+    PROP_RECURRENCE,            /* Cached pointer; Recurrence table holds budget guid */
 };
 
 struct budget_s
@@ -156,6 +158,9 @@ gnc_budget_set_property( GObject* object,
     g_return_if_fail(GNC_IS_BUDGET(object));
 
     budget = GNC_BUDGET(object);
+    if (prop_id < PROP_RUNTIME_0)
+        g_assert (qof_instance_get_editlevel(budget));
+
     switch ( prop_id )
     {
     case PROP_NAME:
@@ -471,24 +476,29 @@ gnc_budget_get_num_periods(const GncBudget* budget)
 #define BUF_SIZE (10 + GUID_ENCODING_LENGTH + \
    GNC_BUDGET_MAX_NUM_PERIODS_DIGITS)
 
+static inline void
+make_period_path (const Account *account, guint period_num, char *path)
+{
+    const GncGUID *guid;
+    gchar *bufend;
+    guid = xaccAccountGetGUID(account);
+    bufend = guid_to_string_buff(guid, path);
+    g_sprintf(bufend, "/%d", period_num);
+}
 /* period_num is zero-based */
 /* What happens when account is deleted, after we have an entry for it? */
 void
 gnc_budget_unset_account_period_value(GncBudget *budget, const Account *account,
                                       guint period_num)
 {
-    const GncGUID *guid;
-    KvpFrame *frame;
     gchar path[BUF_SIZE];
-    gchar *bufend;
+
+    g_return_if_fail (budget != NULL);
+    g_return_if_fail (account != NULL);
+    make_period_path (account, period_num, path);
 
     gnc_budget_begin_edit(budget);
-    frame = qof_instance_get_slots(QOF_INSTANCE(budget));
-    guid = xaccAccountGetGUID(account);
-    bufend = guid_to_string_buff(guid, path);
-    g_sprintf(bufend, "/%d", period_num);
-
-    kvp_frame_set_value(frame, path, NULL);
+    qof_instance_set_kvp (QOF_INSTANCE (budget), path, NULL);
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
 
@@ -502,10 +512,7 @@ void
 gnc_budget_set_account_period_value(GncBudget *budget, const Account *account,
                                     guint period_num, gnc_numeric val)
 {
-    const GncGUID *guid;
-    KvpFrame *frame;
     gchar path[BUF_SIZE];
-    gchar *bufend;
 
     /* Watch out for an off-by-one error here:
      * period_num starts from 0 while num_periods starts from 1 */
@@ -515,16 +522,21 @@ gnc_budget_set_account_period_value(GncBudget *budget, const Account *account,
         return;
     }
 
-    gnc_budget_begin_edit(budget);
-    frame = qof_instance_get_slots(QOF_INSTANCE(budget));
-    guid = xaccAccountGetGUID(account);
-    bufend = guid_to_string_buff(guid, path);
-    g_sprintf(bufend, "/%d", period_num);
+    g_return_if_fail (budget != NULL);
+    g_return_if_fail (account != NULL);
 
+    make_period_path (account, period_num, path);
+
+    gnc_budget_begin_edit(budget);
     if (gnc_numeric_check(val))
-        kvp_frame_set_value(frame, path, NULL);
+        qof_instance_set_kvp (QOF_INSTANCE (budget), path, NULL);
     else
-        kvp_frame_set_numeric(frame, path, val);
+    {
+        GValue v = G_VALUE_INIT;
+        g_value_init (&v, GNC_TYPE_NUMERIC);
+        g_value_set_boxed (&v, &val);
+        qof_instance_set_kvp (QOF_INSTANCE (budget), path, &v);
+    }
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
 
@@ -536,42 +548,44 @@ gnc_budget_set_account_period_value(GncBudget *budget, const Account *account,
    Maybe this should move to Account.h */
 
 gboolean
-gnc_budget_is_account_period_value_set(const GncBudget *budget, const Account *account,
+gnc_budget_is_account_period_value_set(const GncBudget *budget,
+                                       const Account *account,
                                        guint period_num)
 {
+    GValue v = G_VALUE_INIT;
     gchar path[BUF_SIZE];
-    gchar *bufend;
-    KvpFrame *frame;
+    gconstpointer ptr = NULL;
 
     g_return_val_if_fail(GNC_IS_BUDGET(budget), FALSE);
     g_return_val_if_fail(account, FALSE);
 
-    frame = qof_instance_get_slots(QOF_INSTANCE(budget));
-    bufend = guid_to_string_buff(xaccAccountGetGUID(account), path);
-    g_sprintf(bufend, "/%d", period_num);
-    return (kvp_frame_get_value(frame, path) != NULL);
+    make_period_path (account, period_num, path);
+    qof_instance_get_kvp (QOF_INSTANCE (budget), path, &v);
+    if (G_VALUE_HOLDS_BOXED (&v))
+        ptr = g_value_get_boxed (&v);
+    return (ptr != NULL);
 }
 
 gnc_numeric
-gnc_budget_get_account_period_value(const GncBudget *budget, const Account *account,
+gnc_budget_get_account_period_value(const GncBudget *budget,
+                                    const Account *account,
                                     guint period_num)
 {
-    gnc_numeric numeric;
+    gnc_numeric *numeric = NULL;
     gchar path[BUF_SIZE];
-    gchar *bufend;
-    KvpFrame *frame;
+    GValue v = G_VALUE_INIT;
 
-    numeric = gnc_numeric_zero();
-    g_return_val_if_fail(GNC_IS_BUDGET(budget), numeric);
-    g_return_val_if_fail(account, numeric);
+    g_return_val_if_fail(GNC_IS_BUDGET(budget), gnc_numeric_zero());
+    g_return_val_if_fail(account, gnc_numeric_zero());
 
-    frame = qof_instance_get_slots(QOF_INSTANCE(budget));
-    bufend = guid_to_string_buff(xaccAccountGetGUID(account), path);
-    g_sprintf(bufend, "/%d", period_num);
+    make_period_path (account, period_num, path);
+    qof_instance_get_kvp (QOF_INSTANCE (budget), path, &v);
+    if (G_VALUE_HOLDS_BOXED (&v))
+        numeric = (gnc_numeric*)g_value_get_boxed (&v);
 
-    numeric = kvp_frame_get_numeric(frame, path);
-    /* This still returns zero if unset, but callers can check for that. */
-    return numeric;
+    if (numeric)
+        return *numeric;
+    return gnc_numeric_zero();
 }
 
 
@@ -628,31 +642,21 @@ gnc_budget_get_default (QofBook *book)
 {
     QofCollection *col;
     GncBudget *bgt = NULL;
-    kvp_value *kvp_default_budget;
-    const GncGUID *default_budget_guid;
+    const GncGUID *default_budget_guid = NULL;
 
     g_return_val_if_fail(book, NULL);
 
-    /* See if there is a budget selected in the KVP perferences */
-
-    kvp_default_budget = kvp_frame_get_slot_path(qof_book_get_slots (book),
-                         KVP_OPTION_PATH,
-                         OPTION_SECTION_BUDGETING,
-                         OPTION_NAME_DEFAULT_BUDGET,
-                         NULL);
-
-    if (kvp_default_budget != NULL )
+    qof_instance_get (QOF_INSTANCE (book),
+                      "default-budget", &default_budget_guid,
+                      NULL);
+    if (default_budget_guid != NULL)
     {
-        default_budget_guid = kvp_value_get_guid(kvp_default_budget);
-        if (default_budget_guid != NULL)
-        {
-            col = qof_book_get_collection(book, GNC_ID_BUDGET);
-            bgt = (GncBudget *) qof_collection_lookup_entity(col,
-                    default_budget_guid);
-        }
+        col = qof_book_get_collection(book, GNC_ID_BUDGET);
+        bgt = (GncBudget *) qof_collection_lookup_entity(col,
+                                                         default_budget_guid);
     }
 
-    /* Revert to 2.2.x behavior if there is no defined budget in KVP */
+    /* Revert to 2.2.x behavior if the book has no default budget. */
 
     if ( bgt == NULL )
     {

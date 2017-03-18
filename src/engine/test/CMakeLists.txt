@@ -26,20 +26,21 @@ ADD_DEPENDENCIES(check test-link)
 #################################################
 
 ADD_ENGINE_TEST(test-load-engine test-load-engine.c)
-ADD_ENGINE_TEST(test-guid test-guid.c)
-ADD_ENGINE_TEST(test-numeric test-numeric.c)
-ADD_ENGINE_TEST(test-date test-date.c)
+ADD_ENGINE_TEST(test-guid test-guid.cpp)
+ADD_ENGINE_TEST(test-date test-date.cpp)
 ADD_ENGINE_TEST(test-object test-object.c)
-ADD_ENGINE_TEST(test-commodities test-commodities.c)
+ADD_ENGINE_TEST(test-commodities test-commodities.cpp)
 
 SET(test_engine_SOURCES
   test-engine.c
-  utest-Account.c
+  utest-Account.cpp
   utest-Budget.c
   utest-Entry.c
   utest-Invoice.c
-  utest-Split.c
-  utest-Transaction.c
+  utest-Split.cpp
+  utest-Transaction.cpp
+  test-engine-kvp-properties.c
+  utest-gnc-pricedb.c
 )
 
 # This test does not run on Win32
@@ -48,14 +49,14 @@ IF (NOT WIN32)
   TARGET_COMPILE_OPTIONS(test-engine PRIVATE -Wno-write-strings)
 ENDIF()
 
-ADD_ENGINE_TEST(test-account-object test-account-object.c)
-ADD_ENGINE_TEST(test-group-vs-book test-group-vs-book.c)
-ADD_ENGINE_TEST(test-lots test-lots.c)
+ADD_ENGINE_TEST(test-account-object test-account-object.cpp)
+ADD_ENGINE_TEST(test-group-vs-book test-group-vs-book.cpp)
+ADD_ENGINE_TEST(test-lots test-lots.cpp)
 ADD_ENGINE_TEST(test-querynew test-querynew.c)
-ADD_ENGINE_TEST(test-query test-query.c)
-ADD_ENGINE_TEST(test-split-vs-account test-split-vs-account.c)
-ADD_ENGINE_TEST(test-transaction-reversal test-transaction-reversal.c)
-ADD_ENGINE_TEST(test-transaction-voiding test-transaction-voiding.c)
+ADD_ENGINE_TEST(test-query test-query.cpp)
+ADD_ENGINE_TEST(test-split-vs-account test-split-vs-account.cpp)
+ADD_ENGINE_TEST(test-transaction-reversal test-transaction-reversal.cpp)
+ADD_ENGINE_TEST(test-transaction-voiding test-transaction-voiding.cpp)
 ADD_ENGINE_TEST(test-recurrence test-recurrence.c)
 ADD_ENGINE_TEST(test-business test-business.c)
 ADD_ENGINE_TEST(test-address test-address.c)
@@ -67,7 +68,7 @@ ADD_ENGINE_TEST(test-vendor test-vendor.c)
 ############################
 # This is a C test that needs GUILE environment variables set.
 # It does not pass on Win32.
-GNC_ADD_TEST_WITH_GUILE(test-scm-query test-scm-query.c ENGINE_TEST_INCLUDE_DIRS ENGINE_TEST_LIBS)
+GNC_ADD_TEST_WITH_GUILE(test-scm-query test-scm-query.cpp ENGINE_TEST_INCLUDE_DIRS ENGINE_TEST_LIBS)
 ############################
 
 GNC_ADD_SCHEME_TEST(scm-test-account test-account.scm)

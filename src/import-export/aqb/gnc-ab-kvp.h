@@ -43,9 +43,7 @@ G_BEGIN_DECLS
  *  @{ */
 
 /**
- * Return a non-copied pointer to the accountid string in the Account @a a.
- * The gchar* is still owned by the kvp_frame, so don't free it until you want
- * to delete the whole kvp_frame.
+ * Return accountid string in the Account @a a.
  *
  * @param a Account
  * @return Account ID
@@ -62,9 +60,7 @@ const gchar *gnc_ab_get_account_accountid(const Account *a);
 void gnc_ab_set_account_accountid(Account *a, const gchar *id);
 
 /**
- * Return a non-copied pointer to the bankcode string in the Account @a a.  The
- * gchar* is still owned by the kvp_frame, so don't free it until you want to
- * delete the whole kvp_frame.
+ * Return the bankcode string in the Account @a a.
  *
  * @param a Account
  * @return Bank code
@@ -114,35 +110,6 @@ Timespec gnc_ab_get_account_trans_retrieval(const Account *a);
  */
 void gnc_ab_set_account_trans_retrieval(Account *a, Timespec time);
 
-/** @} */
-
-/** @name Book
- *  @{ */
-
-/**
- * Return a non-copied pointer to the GList of kvp_frames which eventually are
- * the template transactions, stored in the given book.
- *
- * @param b Book
- * @return Template list
- */
-GList *gnc_ab_get_book_template_list(QofBook *b);
-
-/**
- * Set the GList of kvp_frames of template transactions in the Book @a b to @a
- * template_list.  No copy of the GList will be stored, the callee becomes the
- * owner and the caller must not free it.  The book will be marked "dirty".
- *
- * @param b Book
- * @param template_list Template list
- */
-void gnc_ab_set_book_template_list(QofBook *b, GList *template_list);
-
-/** @} */
-
-G_END_DECLS
-
-/** @} */
 /** @} */
 
 #endif /* GNC_AB_KVP_H */

@@ -272,14 +272,14 @@ static GtkActionEntry gnc_menu_actions [] =
     { "FileImportAction", NULL, N_("_Import"), NULL, NULL, NULL },
     { "FileExportAction", NULL, N_("_Export"), NULL, NULL, NULL },
     {
-        "FilePrintAction", GTK_STOCK_PRINT, N_("_Print..."), "<control>p",
+        "FilePrintAction", GTK_STOCK_PRINT, N_("_Print..."), "<primary>p",
         N_("Print the currently active page"), NULL
     },
 #ifndef GTK_STOCK_PAGE_SETUP
 #    define GTK_STOCK_PAGE_SETUP NULL
 #endif
     {
-        "FilePageSetupAction", GTK_STOCK_PAGE_SETUP, N_("Pa_ge Setup..."), "<control><shift>p",
+        "FilePageSetupAction", GTK_STOCK_PAGE_SETUP, N_("Pa_ge Setup..."), "<primary><shift>p",
         N_("Specify the page size and orientation for printing"),
         G_CALLBACK (gnc_main_window_cmd_page_setup)
     },
@@ -333,7 +333,7 @@ static GtkActionEntry gnc_menu_actions [] =
         N_("Select the account types that should be displayed."), NULL
     },
     {
-        "ViewRefreshAction", GTK_STOCK_REFRESH, N_("_Refresh"), "<control>r",
+        "ViewRefreshAction", GTK_STOCK_REFRESH, N_("_Refresh"), "<primary>r",
         N_("Refresh this window"),
         G_CALLBACK (gnc_main_window_cmd_view_refresh)
     },
@@ -1216,7 +1216,7 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
     session = gnc_get_current_session();
     book = qof_session_get_book(session);
     filename = qof_session_get_url(session);
-    if (filename == NULL)
+    if (!strlen (filename))
         filename = _("<unknown>");
     if ((tmp = strrchr(filename, '/')) != NULL)
         filename = tmp + 1;
@@ -1486,7 +1486,7 @@ gnc_main_window_generate_title (GncMainWindow *window)
                ? g_strdup_printf(" %s", readonly_text)
                : g_strdup("");
 
-    if (!book_id)
+    if (!book_id || g_strcmp0 (book_id, "") == 0)
         filename = g_strdup(_("Unsaved Book"));
     else
     {
@@ -1626,7 +1626,7 @@ static gchar *generate_statusbar_lastmodified_message()
         book_id = qof_session_get_url (gnc_get_current_session ());
     }
 
-    if (!book_id)
+    if (!strlen (book_id))
         return NULL;
     else
     {
@@ -1642,31 +1642,19 @@ static gchar *generate_statusbar_lastmodified_message()
                 int r = stat(filepath, &statbuf);
                 if (r == 0)
                 {
-                    // File mtime could be accessed ok
-                    gint64 mtime = statbuf.st_mtime;
-                    GDateTime *gdt = gnc_g_date_time_new_from_unix_local (mtime);
-                    gchar *dummy_strftime_has_ampm = g_date_time_format (gdt, "%P");
                     /* Translators: This is the date and time that is shown in
                     the status bar after opening a file: The date and time of
-                    last modification. The string is the format string for
-                    glib's function g_date_time_format(), see there for an
-                    explanation of the modifiers. First string is for a locale
-                    that has the a.m. or p.m. string in its locale, second
-                    string is for locales that do not have that string. */
-                    gchar *time_string =
-                        g_date_time_format (gdt, (dummy_strftime_has_ampm &&
-						  strlen(dummy_strftime_has_ampm) > 0)
-                                            ? _("Last modified on %a, %b %e, %Y at %I:%M%P")
-                                            : _("Last modified on %x %X"));
-
-                    g_date_time_unref (gdt);
-
+                    last modification. The string is a format string using
+                    boost::date_time's format flags, see the boost docs for an
+                    explanation of the modifiers. */
+                    char *time_string =
+			gnc_print_time64(statbuf.st_mtime,
+					 _("Last modified on %a, %b %d, %Y at %I:%M %p"));
                     //g_warning("got time %ld, str=%s\n", mtime, time_string);
                     /* Translators: This message appears in the status bar after opening the file. */
                     message = g_strdup_printf(_("File %s opened. %s"),
                                               filename, time_string);
-                    g_free(time_string);
-                    g_free(dummy_strftime_has_ampm);
+                    free(time_string);
                 }
                 else
                 {
@@ -3935,28 +3923,51 @@ gnc_main_window_cmd_page_setup (GtkAction *action,
     gnc_ui_page_setup(gtk_window);
 }
 
+gboolean
+gnc_book_options_dialog_apply_helper(GNCOptionDB * options)
+{
+    QofBook *book = gnc_get_current_book ();
+    gboolean use_split_action_for_num_before =
+        qof_book_use_split_action_for_num_field (book);
+    gboolean use_book_currency_before =
+        gnc_book_use_book_currency (book);
+    gboolean use_split_action_for_num_after;
+    gboolean use_book_currency_after;
+    gboolean return_val = FALSE;
+
+    if (!options) return return_val;
+
+    gnc_option_db_commit (options);
+    qof_book_begin_edit (book);
+    qof_book_save_options (book, gnc_option_db_save, options, TRUE);
+    use_split_action_for_num_after =
+        qof_book_use_split_action_for_num_field (book);
+    use_book_currency_after = gnc_book_use_book_currency (book);
+    if (use_split_action_for_num_before != use_split_action_for_num_after)
+    {
+        gnc_book_option_num_field_source_change_cb (
+                                                use_split_action_for_num_after);
+        return_val = TRUE;
+    }
+    if (use_book_currency_before != use_book_currency_after)
+    {
+        gnc_book_option_book_currency_selected_cb (use_book_currency_after);
+        return_val = TRUE;
+    }
+    qof_book_commit_edit (book);
+    return return_val;
+}
+
 static void
 gnc_book_options_dialog_apply_cb(GNCOptionWin * optionwin,
                                  gpointer user_data)
 {
     GNCOptionDB * options = user_data;
-    kvp_frame *slots = qof_book_get_slots (gnc_get_current_book ());
-    gboolean use_split_action_for_num_before =
-        qof_book_use_split_action_for_num_field (gnc_get_current_book ());
-    gboolean use_split_action_for_num_after;
 
     if (!options) return;
 
-    gnc_option_db_commit (options);
-    gnc_option_db_save_to_kvp (options, slots, TRUE);
-    qof_book_kvp_changed (gnc_get_current_book());
-    use_split_action_for_num_after =
-        qof_book_use_split_action_for_num_field (gnc_get_current_book ());
-    if (use_split_action_for_num_before != use_split_action_for_num_after)
-    {
-        gnc_book_option_num_field_source_change_cb (use_split_action_for_num_after);
+    if (gnc_book_options_dialog_apply_helper (options))
         gnc_gui_refresh_all ();
-    }
 }
 
 static void
@@ -3972,12 +3983,12 @@ gnc_book_options_dialog_close_cb(GNCOptionWin * optionwin,
 GtkWidget *
 gnc_book_options_dialog_cb (gboolean modal, gchar *title)
 {
-    kvp_frame *slots = qof_book_get_slots (gnc_get_current_book ());
+    QofBook *book = gnc_get_current_book ();
     GNCOptionDB *options;
     GNCOptionWin *optionwin;
 
     options = gnc_option_db_new_for_type (QOF_ID_BOOK);
-    gnc_option_db_load_from_kvp (options, slots);
+    qof_book_load_options (book, gnc_option_db_load, options);
     gnc_option_db_clean (options);
 
     optionwin = gnc_options_dialog_new_modal (modal,

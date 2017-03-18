@@ -31,8 +31,8 @@
    an pass it in as (don't put anything into parent_data)
    you must deal with the xml tree in *result.
 */
-sixtp* sixtp_dom_parser_new(sixtp_end_handler ender,
-                            sixtp_result_handler cleanup_result_by_default_func,
-                            sixtp_result_handler cleanup_result_on_fail_func);
+sixtp* sixtp_dom_parser_new (sixtp_end_handler ender,
+                             sixtp_result_handler cleanup_result_by_default_func,
+                             sixtp_result_handler cleanup_result_on_fail_func);
 
 #endif /* _SIXTP_PARSERS_H_ */

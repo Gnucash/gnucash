@@ -1350,8 +1350,23 @@ many months before the current month:</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">6</property>
-                <property name="n_rows">25</property>
+                <property name="n_rows">27</property>
                 <property name="n_columns">4</property>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
                 <child>
                   <placeholder/>
                 </child>
@@ -1771,8 +1786,8 @@ many months before the current month:</property>
                     <property name="use_markup">True</property>
                   </object>
                   <packing>
-                    <property name="top_attach">23</property>
-                    <property name="bottom_attach">24</property>
+                    <property name="top_attach">25</property>
+                    <property name="bottom_attach">26</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"/>
                   </packing>
@@ -1787,8 +1802,8 @@ many months before the current month:</property>
                     <property name="mnemonic_widget">pref/dialogs.search/new-search-limit</property>
                   </object>
                   <packing>
-                    <property name="top_attach">24</property>
-                    <property name="bottom_attach">25</property>
+                    <property name="top_attach">26</property>
+                    <property name="bottom_attach">27</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"/>
                     <property name="x_padding">12</property>
@@ -1813,8 +1828,8 @@ many months before the current month:</property>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
-                    <property name="top_attach">24</property>
-                    <property name="bottom_attach">25</property>
+                    <property name="top_attach">26</property>
+                    <property name="bottom_attach">27</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"/>
                   </packing>
@@ -2086,19 +2101,77 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label19">
+                  <object class="GtkLabel" id="label22">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="top_attach">22</property>
                     <property name="bottom_attach">23</property>
-                    <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label23">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">24</property>
+                    <property name="bottom_attach">25</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkHBox" id="pref/general/assoc-head">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_markup">Path head for Transaction Associated files </property>
+                    <property name="tooltip_text" translatable="yes">Path head for Transaction Associated files </property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">23</property>
+                    <property name="bottom_attach">24</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <object class="GtkHBox" id="hbox6">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkLabel" id="label19">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Path head for Transaction Association Files</property>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="path_head_error">
+                        <property name="can_focus">False</property>
+                        <property name="stock">gtk-dialog-warning</property>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="top_attach">23</property>
+                    <property name="bottom_attach">24</property>
                   </packing>
                 </child>
               </object>
@@ -2334,8 +2407,8 @@ many months before the current month:</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">If checked, pressing the &amp;apos;Enter&amp;apos; key will move to the blank transaction at the bottom of the register. If clear, pressing the &amp;apos;Enter&amp;apos; key will move down one row.</property>
-                    <property name="tooltip_text" translatable="yes">If checked, pressing the 'Enter' key will move to the blank transaction at the bottom of the register. If clear, pressing the 'Enter' key will move down one row.</property>
+                    <property name="tooltip_markup">If checked, pressing the &amp;apos;Enter&amp;apos; key will move to the location of the blank transaction in the register. If clear, pressing the &amp;apos;Enter&amp;apos; key will move down one row.</property>
+                    <property name="tooltip_text" translatable="yes">If checked, pressing the 'Enter' key will move to the location of the blank transaction in the register. If clear, pressing the 'Enter' key will move down one row.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -2511,6 +2584,71 @@ many months before the current month:</property>
                     <property name="right_attach">4</property>
                     <property name="top_attach">15</property>
                     <property name="bottom_attach">16</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"/>
+                    <property name="x_padding">12</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label46">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">16</property>
+                    <property name="bottom_attach">17</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label47">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Layout&lt;/b&gt;</property>
+                    <property name="use_markup">True</property>
+                  </object>
+                  <packing>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">17</property>
+                    <property name="bottom_attach">18</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="pref/general.register/future-after-blank-transaction">
+                    <property name="label" translatable="yes">_Future transactions after blank transaction</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">If checked, transactions with a date in the future will be displayed at the bottom of the register after the blank transaction. If clear, the blank transaction will be at the bottom of the register after all transactions.</property>
+                    <property name="tooltip_text" translatable="yes">If checked, transactions with a date in the future will be displayed at the bottom of the register after the blank transaction. If clear, the blank transaction will be at the bottom of the register after all transactions.</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="right_attach">4</property>
+                    <property name="top_attach">18</property>
+                    <property name="bottom_attach">19</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"/>
                     <property name="x_padding">12</property>

@@ -98,7 +98,7 @@ static GOptionEntry options[] =
 
     {
         "debug", '\0', 0, G_OPTION_ARG_NONE, &debugging,
-        N_("Enable debugging mode: increasing logging to provide deep detail."), NULL
+        N_("Enable debugging mode: provide deep detail in the logs.\nThis is equivalent to: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""), NULL
     },
 
     {
@@ -108,7 +108,7 @@ static GOptionEntry options[] =
 
     {
         "log", '\0', 0, G_OPTION_ARG_STRING_ARRAY, &log_flags,
-        N_("Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,error}\""),
+        N_("Log level overrides, of the form \"modulename={debug,info,warn,crit,error}\"\nExamples: \"--log qof=debug\" or \"--log gnc.backend.file.sx=info\"\nThis can be invoked multiple times."),
         NULL
     },
 
@@ -605,7 +605,10 @@ get_file_to_load()
     if (file_to_load)
         return g_strdup(file_to_load);
     else
+    {
+        gnc_history_set_file_from_history(TRUE);
         return gnc_history_get_last();
+    }
 }
 
 static void
@@ -654,6 +657,7 @@ inner_main (void *closure, int argc, char **argv)
     {
         gnc_update_splash_screen(_("Loading data..."), GNC_SPLASH_PERCENTAGE_UNKNOWN);
         gnc_file_open_file(fn, /*open_readonly*/ FALSE);
+        gnc_history_set_file_from_history(FALSE);
         g_free(fn);
     }
     else if (gnc_prefs_get_bool(GNC_PREFS_GROUP_NEW_USER, GNC_PREF_FIRST_STARTUP))
@@ -741,9 +745,6 @@ main(int argc, char ** argv)
     gchar *sys_locale = NULL;
 #if !defined(G_THREADS_ENABLED) || defined(G_THREADS_IMPL_NONE)
 #    error "No GLib thread implementation available!"
-#endif
-#ifndef HAVE_GLIB_2_32 /* Automatic after GLib 2-32 */
-    g_thread_init(NULL);
 #endif
 #ifdef ENABLE_BINRELOC
     {

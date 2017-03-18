@@ -169,7 +169,8 @@ typedef enum
     PRICE_SOURCE_SPLIT_REG,        // "user:split-register"
     PRICE_SOURCE_STOCK_SPLIT,      // "user:stock-split"
     PRICE_SOURCE_INVOICE,          // "user:invoice-post"
-    PRICE_SOURCE_INVALID,
+    PRICE_SOURCE_TEMP,             // "temporary"
+    PRICE_SOURCE_INVALID,          // "invalid"
 } PriceSource;
 
 #define PRICE_TYPE_LAST "last"
@@ -188,6 +189,17 @@ GNCPrice *gnc_price_create(QofBook *book);
    content-wise duplicate of the given price, p.  The returned clone
    will have a reference count of 1. */
 GNCPrice *gnc_price_clone(GNCPrice* p, QofBook *book);
+
+/** Return a newly-allocated price that's the inverse of the given price, p.
+ *
+ * Inverse means that the commodity and currency are swapped and the value is
+ * the numeric inverse of the original's. The source is set to PRICE_SOURCE_TEMP
+ * to prevent it being saved in the pricedb.
+ * @param p The price to invert
+ * @return a new price, with a ref-count of 1. Don't forget to unref it!
+ */
+GNCPrice *gnc_price_invert(GNCPrice *p);
+
 /**  @} */
 
 /* ------------------ */
@@ -310,142 +322,302 @@ gboolean gnc_price_list_equal(PriceList *prices1, PriceList *prices2);
 /** Data type */
 typedef struct gnc_price_db_s GNCPriceDB;
 
-/** return the pricedb associated with the book */
-/*@ dependent @*/
+/** @brief Return the pricedb associated with the book
+ * @param book The QofBook holding the pricedb
+ * @return The GNCPriceDB associated with the book.
+ */
 GNCPriceDB * gnc_pricedb_get_db(QofBook *book);
+/** @brief Return the pricedb via the Book's collection.
+ * @param col The QofCollection holding the pricedb
+ * @return The GNCPriceDB in the QofCollection
+ */
 GNCPriceDB * gnc_collection_get_pricedb(QofCollection *col);
 
-/** gnc_pricedb_destroy - destroy the given pricedb and unref all of
-     the prices it contains.  This may not deallocate all of those
-     prices.  Other code may still be holding references to them. */
+/** @brief Destroy the given pricedb and unref all of the prices it contains.
+ *
+ * This may not deallocate all of those prices.  Other code may still be holding
+ * references to them.
+ * @param db The pricedb to destroy.
+ */
 void gnc_pricedb_destroy(GNCPriceDB *db);
 
-/** Used for editing the pricedb en-mass */
+/** @brief Begin an edit. */
 void gnc_pricedb_begin_edit (GNCPriceDB *);
+/** @brief Commit an edit. */
 void gnc_pricedb_commit_edit (GNCPriceDB *);
 
-/** Indicate whether or not the database is in the middle of a bulk
- *  update.  Setting this flag will disable checks for duplicate
- *  entries. */
+/** @brief Set flag to indicate whether duplication checks should be performed.
+ *
+ * Normally used at load time to speed up loading the pricedb.
+ * @param db The pricedb
+ * @param bulk_update TRUE to disable duplication checks, FALSE to enable them.
+ */
 void gnc_pricedb_set_bulk_update(GNCPriceDB *db, gboolean bulk_update);
 
-/** gnc_pricedb_add_price - add a price to the pricedb, you may drop
-     your reference to the price (i.e. call unref) after this
-     succeeds, whenever you're finished with the price. */
+/** @brief Add a price to the pricedb.
+ *
+ * You may drop your reference to the price (i.e. call unref) after this
+ * succeeds, whenever you're finished with the price.
+ * @param db The pricedb
+ * @param p The GNCPrice to add.
+ * @return TRUE if the price was added, FALSE otherwise.
+ */
 gboolean     gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p);
 
-/** gnc_pricedb_remove_price - removes the given price, p, from the
-     pricedb.   Returns TRUE if successful, FALSE otherwise. */
+/** @brief Remove a price from the pricedb and unref the price.
+ * @param db The Pricedb
+ * @param p The price to remove.
+ */
 gboolean     gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p);
 
+/** @brief Remove and unref prices older than a certain time.
+ * @param db The pricedb
+ * @param cutoff The time before which prices should be deleted.
+ * @param delete_user Whether user-created (i.e. not Finance::Quote) prices
+ * should be deleted.
+ * @param delete_last Whether a price should be deleted if it's the only
+ * remaining price for its commodity.
+ */
 gboolean     gnc_pricedb_remove_old_prices(GNCPriceDB *db, Timespec cutoff,
-        const gboolean delete_user, gboolean delete_last);
+                                           const gboolean delete_user,
+                                           gboolean delete_last);
 
-/** gnc_pricedb_lookup_latest - find the most recent price for the
-     given commodity in the given currency.  Returns NULL on
-     failure. */
+/** @brief Find the most recent price between the two commodities.
+ *
+ * The returned GNCPrice may be in either direction so check to ensure that its
+ * value is correctly applied.
+ * @param db The pricedb
+ * @param commodity The first commodity
+ * @param currency The second commodity
+ * @return A GNCPrice or NULL if no price exists.
+ */
 GNCPrice   * gnc_pricedb_lookup_latest(GNCPriceDB *db,
                                        const gnc_commodity *commodity,
                                        const gnc_commodity *currency);
 
-/** gnc_pricedb_lookup_latest_any_currency - find the most recent prices
-     for the given commodity in any available currency. Prices will be
-     returned as a GNCPrice list (see above). */
+/** @brief Find the most recent price between a commodity and all other
+ * commodities
+ *
+ * The returned GNCPrices may be in either direction so check to ensure that
+ * their values are correctly applied.
+ * @param db The pricedb
+ * @param commodity The commodity for which to obtain prices
+ * @return A PriceList of prices found, or NULL if none found.
+ */
 PriceList * gnc_pricedb_lookup_latest_any_currency(GNCPriceDB *db,
         const gnc_commodity *commodity);
 
-/** gnc_pricedb_has_prices - return an indication of whether or not
-    there are any prices for a given commodity in the given currency.
-    Returns TRUE if there are prices, FALSE otherwise. */
+/** @brief Report whether the pricedb contains prices for one commodity in
+ * another.
+ *
+ * Does *not* check the reverse direction.
+ * @param db The pricedb to check
+ * @param commodity The commodity to check for the existence of prices
+ * @param currency The commodity in which prices are sought. If NULL reports all
+ * commodities.
+ * @return TRUE if matching prices are found, FALSE otherwise.
+ */
 gboolean     gnc_pricedb_has_prices(GNCPriceDB *db,
                                     const gnc_commodity *commodity,
                                     const gnc_commodity *currency);
 
-/** gnc_pricedb_get_prices - return all the prices for a given
-     commodity in the given currency.  Returns NULL on failure.  The
-     result is a GNCPrice list (see above).  */
+/** @brief Return all the prices for a given commodity in another.
+ *
+ * Does *not* retrieve reverse prices, i.e. prices of the second commodity in
+ * the first.
+ * @param db The pricedb from which to retrieve prices.
+ * @param commodity The commodity for which prices should be retrieved.
+ * @param currency The commodity in which prices should be quoted. If NULL, all
+ * prices in any commodity are included.
+ * @return A PriceList of matching prices or NULL if none were found.
+*/
 PriceList * gnc_pricedb_get_prices(GNCPriceDB *db,
                                    const gnc_commodity *commodity,
                                    const gnc_commodity *currency);
 
-/** gnc_pricedb_lookup_at_time - return all prices that match the given
-     commodity, currency, and timespec.  Prices will be returned as a
-     GNCPrice list (see above). */
-PriceList * gnc_pricedb_lookup_at_time(GNCPriceDB *db,
+/** @brief Find the price between two commodities at a timespec.
+ *
+ * The returned GNCPrice may be in either direction so check to ensure that its
+ * value is correctly applied.
+ * @param db The pricedb
+ * @param commodity The first commodity
+ * @param currency The second commodity
+ * @param t The timespec at which to retrieve the price.
+ * @return A GNCPrice or NULL if none matches.
+ */
+/* NOT USED */
+GNCPrice * gnc_pricedb_lookup_at_time(GNCPriceDB *db,
                                        const gnc_commodity *commodity,
                                        const gnc_commodity *currency,
                                        Timespec t);
 
-/** gnc_pricedb_lookup_day - return the price that matchex the given
-     commodity, currency, and timespec which is on the same day.
-     If no prices are on that day, returns a null value. */
+/** @brief Return the price between the two commodities on the indicated
+ * day. Note that the notion of day might be distorted by changes in timezone.
+ *
+ * The returned GNCPrice may be in either direction so check to ensure that its
+ * value is correctly applied.
+ * @param db The pricedb
+ * @param commodity The first commodity
+ * @param currency The second commodity
+ * @param t A time. The price returned will be in the same day as this time
+ * according to the local timezone.
+ * @return A GNCPrice or NULL on failure.
+ */
 GNCPrice * gnc_pricedb_lookup_day(GNCPriceDB *db,
                                   const gnc_commodity *commodity,
                                   const gnc_commodity *currency,
                                   Timespec t);
 
 
-/** gnc_pricedb_lookup_nearest_in_time - return the price for the given
-     commodity in the given currency nearest to the given time t. */
+/** @brief Return the price between the two commoditiesz nearest to the given
+ * time.
+ *
+ * The returned GNCPrice may be in either direction so check to ensure that its
+ * value is correctly applied.
+ * @param db The pricedb
+ * @param c The first commodity
+ * @param currency The second commodity
+ * @param t The time nearest to which the returned price should be.
+ * @return A GNCPrice or NULL if no prices exist between the two commodities.
+ */
 GNCPrice   * gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
         const gnc_commodity *c,
         const gnc_commodity *currency,
         Timespec t);
 
-/** gnc_pricedb_lookup_nearest_in_time_any_currency - return all prices that
-     match the given commodity and timespec in any available currency. Prices
-     will be returned as a GNCPrice list (see above). */
+/** @brief Return the price nearest in time to that given between the given
+ * commodity and every other.
+ *
+ * The returned GNCPrices may be in either direction so check to ensure that
+ * their values are correctly applied.
+ *
+ * @param db, The pricedb
+ * @param c, The commodity for which prices should be obtained.
+ * @param t, The time nearest to which the prices should be obtained.
+ * @return A PriceList of prices for each commodity pair found or NULL if none
+ * are.
+ */
 PriceList * gnc_pricedb_lookup_nearest_in_time_any_currency(GNCPriceDB *db,
         const gnc_commodity *c,
         Timespec t);
-/** gnc_pricedb_lookup_latest_before - return the latest price for the given commodity
-    in the given currency up to and including time t. */
+
+/** @brief Return the latest price between the given commodities before the
+ * given time.
+ *
+ * The returned GNCPrice may be in either direction so check to ensure that its
+ * value is correctly applied.
+ * @param db The pricedb
+ * @param c The first commodity
+ * @param currency The second commodity
+ * @param t The time before which to find the price
+ * @return A GNCPrice or NULL if no prices are found before t.
+ */
+/* NOT USED, but see bug 743753 */
 GNCPrice * gnc_pricedb_lookup_latest_before(GNCPriceDB *db,
         gnc_commodity *c,
         gnc_commodity *currency,
         Timespec t);
 
-/** gnc_pricedb_lookup_latest_before_any_currency - return recent prices that
-     match the given commodity up to and including time t in any available currency. Prices
-     will be returned as a GNCPrice list (see above). */
+/** @brief Return the latest price between the given commodity and any other
+ * before the given time.
+ *
+ * The returned GNCPrice may be in either direction so check to ensure that its
+ * value is correctly applied.
+ * @param db The pricedb
+ * @param c The commodity
+ * @param t The time before which to find prices
+ * @return A PriceList of prices for each commodity found or NULL if none are.
+ */
+/* NOT USED, but see bug 743753 */
 PriceList * gnc_pricedb_lookup_latest_before_any_currency(GNCPriceDB *db,
-        gnc_commodity *c,
-        Timespec t);
+                                                         const gnc_commodity *c,
+                                                          Timespec t);
 
 
-/** gnc_pricedb_convert_balance_latest_price - Convert a balance
-    from one currency to another. */
+/** @brief Convert a balance from one currency to another using the most recent
+ * price between the two.
+ * @param pdb The pricedb
+ * @param balance The balance to be converted
+ * @param balance_currency The commodity in which the balance is currently
+ * expressed
+ * @param new_currency The commodity to which the balance should be converted
+ * @return A new balance or gnc_numeric_zero if no price is available.
+ */
 gnc_numeric
 gnc_pricedb_convert_balance_latest_price(GNCPriceDB *pdb,
-        gnc_numeric balance,
-        const gnc_commodity *balance_currency,
-        const gnc_commodity *new_currency);
+                                         gnc_numeric balance,
+                                         const gnc_commodity *balance_currency,
+                                         const gnc_commodity *new_currency);
 
-/** gnc_pricedb_convert_balance_nearest_price - Convert a balance
-    from one currency to another. */
+/** @brief Convert a balance from one currency to another using the price
+ * nearest to the given time.
+ * @param pdb The pricedb
+ * @param balance The balance to be converted
+ * @param balance_currency The commodity in which the balance is currently
+ * expressed
+ * @param new_currency The commodity to which the balance should be converted
+ * @param t The time nearest to which price should be used.
+ * @return A new balance or gnc_numeric_zero if no price is available.
+ */
 gnc_numeric
 gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,
-        gnc_numeric balance,
-        const gnc_commodity *balance_currency,
-        const gnc_commodity *new_currency,
-        Timespec t);
+                                          gnc_numeric balance,
+                                          const gnc_commodity *balance_currency,
+                                          const gnc_commodity *new_currency,
+                                          Timespec t);
 
-/** gnc_pricedb_foreach_price - call f once for each price in db, until
-     and unless f returns FALSE.  If stable_order is not FALSE, make
-     sure the ordering of the traversal is stable (i.e. the same order
-     every time given the same db contents -- stable traversals may be
-     less efficient).  */
+typedef gboolean (*GncPriceForeachFunc)(GNCPrice *p, gpointer user_data);
+
+/** @brief Call a GncPriceForeachFunction once for each price in db, until the
+ * function returns FALSE.
+ *
+ * If stable_order is not FALSE, make sure the ordering of the traversal is
+ * stable (i.e. the same order every time given the same db contents -- stable
+ * traversals may be less efficient).
+ * @param db The pricedb
+ * @param f The function to call
+ * @param user_data A data to pass to each invocation of f
+ * @param stable_order Ensure that the traversal is performed in the same order
+ * each time.
+ * @return TRUE if all calls to f succeeded (unstable) or if the order of
+ * processing was the same as the previous invocation (stable), FALSE otherwise.
+ */
 gboolean     gnc_pricedb_foreach_price(GNCPriceDB *db,
-                                       gboolean (*f)(GNCPrice *p,
-                                               gpointer user_data),
+                                       GncPriceForeachFunc f,
                                        gpointer user_data,
                                        gboolean stable_order);
 
+/** @brief Get the number of prices, in any currency, for a given commodity.
+ * @param db The pricedb
+ * @param c The commodity
+ * @return The number of prices in the database for this commody, zero if none
+ */
+int
+gnc_pricedb_num_prices(GNCPriceDB *db,
+                       const gnc_commodity *c);
+
+/** @brief Get the nth price for the given commodity in  reverse date order
+ * @param db The pricedb
+ * @param c The commodity whose nth price is needed
+ * @param n Zero based index of the price wanted
+ * @return The nth price for this commodity in reverse chronological order, without
+ * regard for what currency the price is in
+ */
+GNCPrice *
+gnc_pricedb_nth_price (GNCPriceDB *db,
+                       const gnc_commodity *c,
+                       const int n);
+
 /* The following two convenience functions are used to test the xml backend */
-/** gnc_pricedb_get_num_prices - return the number of prices
-   in the database. */
+/** @brief Return the number of prices in the database.
+ *
+ * For XML Backend Testing
+ */
 guint gnc_pricedb_get_num_prices(GNCPriceDB *db);
-/** gnc_pricedb_equal - test equality of two pricedbs */
+
+/** @brief Test equality of two pricedbs
+ *
+ * For XML Backend Testing */
 gboolean gnc_pricedb_equal (GNCPriceDB *db1, GNCPriceDB *db2);
 
 /** @name Internal/Debugging

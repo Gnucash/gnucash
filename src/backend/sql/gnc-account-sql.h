@@ -29,10 +29,14 @@
 #ifndef GNC_ACCOUNT_SQL_H
 #define GNC_ACCOUNT_SQL_H
 
-#include "gnc-backend-sql.h"
-#include "qof.h"
+#include "gnc-sql-object-backend.hpp"
 
-void gnc_sql_init_account_handler( void );
-gboolean gnc_sql_save_account( GncSqlBackend* be, QofInstance* inst );
+class GncSqlAccountBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlAccountBackend();
+    void load_all(GncSqlBackend*) override;
+    bool commit(GncSqlBackend*, QofInstance*) override;
+};
 
 #endif /* GNC_ACCOUNT_SQL_H */

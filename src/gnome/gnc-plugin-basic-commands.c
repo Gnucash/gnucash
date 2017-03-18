@@ -44,8 +44,10 @@
 #include "dialog-fincalc.h"
 #include "dialog-find-transactions.h"
 #include "dialog-find-transactions2.h"
+#include "dialog-imap-editor.h"
 #include "dialog-sx-since-last-run.h"
 #include "dialog-totd.h"
+#include "dialog-trans-assoc.h"
 #include "assistant-acct-period.h"
 #include "assistant-loan.h"
 #include "gnc-engine.h"
@@ -88,6 +90,8 @@ static void gnc_main_window_cmd_tools_financial_calculator (GtkAction *action, G
 static void gnc_main_window_cmd_tools_close_book (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_tools_find_transactions (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_tools_price_editor (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_main_window_cmd_tools_imap_editor (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_main_window_cmd_tools_trans_assoc (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_tools_commodity_editor (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_help_totd (GtkAction *action, GncMainWindowActionData *data);
 
@@ -104,22 +108,22 @@ static GtkActionEntry gnc_plugin_actions [] =
     /* File menu */
 
     {
-        "FileNewAction", GTK_STOCK_NEW, N_("New _File"), "<control>n",
+        "FileNewAction", GTK_STOCK_NEW, N_("New _File"), "<primary>n",
         N_("Create a new file"),
         G_CALLBACK (gnc_main_window_cmd_file_new)
     },
     {
-        "FileOpenAction", GTK_STOCK_OPEN, N_("_Open..."), "<control>o",
+        "FileOpenAction", GTK_STOCK_OPEN, N_("_Open..."), "<primary>o",
         N_("Open an existing GnuCash file"),
         G_CALLBACK (gnc_main_window_cmd_file_open)
     },
     {
-        "FileSaveAction", GTK_STOCK_SAVE, N_("_Save"), "<control>s",
+        "FileSaveAction", GTK_STOCK_SAVE, N_("_Save"), "<primary>s",
         N_("Save the current file"),
         G_CALLBACK (gnc_main_window_cmd_file_save)
     },
     {
-        "FileSaveAsAction", GTK_STOCK_SAVE_AS, N_("Save _As..."), "<shift><control>s",
+        "FileSaveAsAction", GTK_STOCK_SAVE_AS, N_("Save _As..."), "<shift><primary>s",
         N_("Save this file with a different name"),
         G_CALLBACK (gnc_main_window_cmd_file_save_as)
     },
@@ -138,7 +142,7 @@ static GtkActionEntry gnc_plugin_actions [] =
     /* Edit menu */
 
     {
-        "EditFindTransactionsAction", GTK_STOCK_FIND, N_("_Find..."), "<control>f",
+        "EditFindTransactionsAction", GTK_STOCK_FIND, N_("_Find..."), "<primary>f",
         N_("Find transactions with a search"),
         G_CALLBACK (gnc_main_window_cmd_tools_find_transactions)
     },
@@ -182,10 +186,7 @@ static GtkActionEntry gnc_plugin_actions [] =
 
     /* Tools menu */
     {
-    	/* Translators: This entry opens the Price Database window
-    	 * and will be renamed to "_Price Database" in v.2.8 */
-
-    	"ToolsPriceEditorAction", NULL, N_("_Price Editor"), NULL,
+        "ToolsPriceEditorAction", NULL, N_("_Price Database"), NULL,
         N_("View and edit the prices for stocks and mutual funds"),
         G_CALLBACK (gnc_main_window_cmd_tools_price_editor)
     },
@@ -203,6 +204,16 @@ static GtkActionEntry gnc_plugin_actions [] =
         "ToolsBookCloseAction", NULL, N_("_Close Book"), NULL,
         N_("Close the Book at the end of the Period"),
         G_CALLBACK (gnc_main_window_cmd_tools_close_book)
+    },
+    {
+        "ToolsImapEditorAction", NULL, N_("_Import Map Editor"), NULL,
+        N_("View and Delete Bayesian and Non Bayesian information"),
+        G_CALLBACK (gnc_main_window_cmd_tools_imap_editor)
+    },
+    {
+        "ToolsTransAssocAction", NULL, N_("_Transaction Associations"), NULL,
+        N_("View all Transaction Associations"),
+        G_CALLBACK (gnc_main_window_cmd_tools_trans_assoc)
     },
 
     /* Help menu */
@@ -604,6 +615,22 @@ gnc_main_window_cmd_actions_close_books (GtkAction *action, GncMainWindowActionD
     gnc_acct_period_dialog();
 }
 #endif /* CLOSE_BOOKS_ACTUALLY_WORKS */
+
+static void
+gnc_main_window_cmd_tools_imap_editor (GtkAction *action, GncMainWindowActionData *data)
+{
+    gnc_set_busy_cursor(NULL, TRUE);
+    gnc_imap_dialog (NULL);
+    gnc_unset_busy_cursor(NULL);
+}
+
+static void
+gnc_main_window_cmd_tools_trans_assoc (GtkAction *action, GncMainWindowActionData *data)
+{
+    gnc_set_busy_cursor (NULL, TRUE);
+    gnc_trans_assoc_dialog ();
+    gnc_unset_busy_cursor (NULL);
+}
 
 static void
 gnc_main_window_cmd_tools_price_editor (GtkAction *action, GncMainWindowActionData *data)

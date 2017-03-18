@@ -15,7 +15,8 @@ AM_CPPFLAGS = \
   -DTEST_MYSQL_URL=\"${TEST_MYSQL_URL}\" \
   -DTEST_PGSQL_URL=\"${TEST_PGSQL_URL}\" \
   ${GLIB_CFLAGS} \
-  ${GUILE_CFLAGS}
+  ${GUILE_CFLAGS} \
+  ${BOOST_CPPFLAGS}
 
 LDADD = ${top_builddir}/src/test-core/libtest-core.la \
         ${top_builddir}/src/gnc-module/libgnc-module.la \
@@ -47,33 +48,35 @@ EXTRA_DIST += \
     test-dbi-business-stuff.h \
     test-dbi.xml
 
-TEST_PROGS += \
-    test-backend-dbi
+check_PROGRAMS = test-backend-dbi
 
-noinst_PROGRAMS = ${TEST_PROGS} ${CHECK_PROGS}
-
+TESTS = ${check_PROGRAMS}
 
 if CUSTOM_GNC_DBD_DIR
 gnc_dbd_dir_override = GNC_DBD_DIR="@GNC_DBD_DIR@"
 endif
 
 test_backend_dbi_SOURCES = \
-    test-backend-dbi.c \
-    test-backend-dbi-basic.c \
-    test-dbi-stuff.c \
-    test-dbi-business-stuff.c \
-    ../gnc-backend-dbi.c
+    test-backend-dbi.cpp \
+    test-backend-dbi-basic.cpp \
+    test-dbi-stuff.cpp \
+    test-dbi-business-stuff.cpp \
+    ../gnc-dbisqlconnection.cpp \
+    ../gnc-backend-dbi.cpp \
+    ../gnc-dbisqlresult.cpp
 
-test_backend_dbi_LDFLAGS="-ldbi"
 test_backend_dbi_CPPFLAGS = \
 	-DDBI_TEST_XML_FILENAME=\"${srcdir}/test-dbi.xml\" \
 	${AM_CPPFLAGS}
 
-
+test_backend_dbi_LDADD = \
+    ${BOOST_LDFLAGS} -lboost_regex \
+    ${LIBDBI_LIBS} \
+    ${LDADD}
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.backend.dbi\"
 
 # If you let make run parallel builds it complains that there is no rule to make
 # libgncmod-test-dbi.la.  This is wrong, but I can't figure out how to fix it
 # so I'll turn off parallel builds
-.NOTPARALLEL:
+#.NOTPARALLEL:

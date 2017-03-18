@@ -29,6 +29,7 @@
 #include <glib/gi18n.h>
 #include <glib.h>
 #include <libguile.h>
+#include "libqof/qof/guid.hpp"
 extern "C"
 {
 #include "gnc-module/gnc-module.h"

@@ -2069,15 +2069,9 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value,
         return;
     gnc_date_cell_get_date ((DateCell*)cell, &ts);
     price = gnc_pricedb_lookup_day (pricedb, comm, curr, ts);
-    if (!price)
-    {
-        price = gnc_pricedb_lookup_day (pricedb, curr, comm, ts);
-        if (price)
-/* It might be better to raise an error here: We shouldn't be creating
- * currency->commodity prices.
- */
+    if (gnc_commodity_equiv (comm, gnc_price_get_currency (price)))
             swap = TRUE;
-    }
+
     if (price)
     {
         price_value = gnc_price_get_value(price);
@@ -2337,7 +2331,7 @@ gnc_split_register_type_to_account_type (SplitRegisterType sr_type)
         return ACCT_TYPE_CURRENCY;
     case TRADING_REGISTER:
         return ACCT_TYPE_TRADING;
-    case GENERAL_LEDGER:
+    case GENERAL_JOURNAL:
         return ACCT_TYPE_NONE;
     case EQUITY_REGISTER:
         return ACCT_TYPE_EQUITY;
@@ -2543,7 +2537,7 @@ gnc_split_register_config_action (SplitRegister *reg)
         gnc_combo_cell_add_menu_item (cell, _("Buy"));
         gnc_combo_cell_add_menu_item (cell, _("Sell"));
         break;
-    case GENERAL_LEDGER:
+    case GENERAL_JOURNAL:
     case EQUITY_REGISTER:
         gnc_combo_cell_add_menu_item (cell, _("Buy"));
         gnc_combo_cell_add_menu_item (cell, _("Sell"));

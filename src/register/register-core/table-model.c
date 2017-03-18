@@ -143,6 +143,7 @@ gnc_table_model_new (void)
     model->read_only = FALSE;
     model->dividing_row_upper = -1;
     model->dividing_row = -1;
+    model->dividing_row_lower = -1;
 
     return model;
 }

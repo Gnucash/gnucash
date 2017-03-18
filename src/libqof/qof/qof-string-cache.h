@@ -33,6 +33,11 @@
 #ifndef QOF_STRING_UTIL_H
 #define QOF_STRING_UTIL_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #define QOF_MOD_UTIL "qof.utilities"
 
 /** The QOF String Cache:
@@ -98,6 +103,10 @@ gpointer qof_string_cache_insert(gconstpointer key);
     } while (0)
 
 #define QOF_CACHE_NEW(void) qof_string_cache_insert("")
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* QOF_STRING_CACHE_H */
 /** @} */

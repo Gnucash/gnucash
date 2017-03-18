@@ -90,8 +90,6 @@
 #define GNC_PREF_ACCUM_SPLITS    "accumulate-splits"
 #define GNC_PREF_DAYS_IN_ADVANCE "days-in-advance"
 
-#define LAST_POSTED_TO_ACCT "last-posted-to-acct"
-
 void gnc_invoice_window_ok_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_cancel_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_help_cb (GtkWidget *widget, gpointer data);
@@ -112,6 +110,12 @@ FROM_STRING_DEC(InvoiceDialogType, ENUM_INVOICE_TYPE)
 
 FROM_STRING_FUNC(InvoiceDialogType, ENUM_INVOICE_TYPE)
 AS_STRING_FUNC(InvoiceDialogType, ENUM_INVOICE_TYPE)
+
+typedef enum
+{
+    DUE_FOR_VENDOR,     // show bills due
+    DUE_FOR_CUSTOMER,   // show invoices due
+} GncWhichDueType;
 
 struct _invoice_select_window
 {
@@ -203,6 +207,7 @@ struct _invoice_window
 void gnc_invoice_window_closeCB (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_active_toggled_cb (GtkWidget *widget, gpointer data);
 gboolean gnc_invoice_window_leave_notes_cb (GtkWidget *widget, GdkEventFocus *event, gpointer data);
+DialogQueryView *gnc_invoice_show_bills_due (QofBook *book, double days_in_advance, GncWhichDueType duetype);
 
 #define INV_WIDTH_PREFIX "invoice_reg"
 #define BILL_WIDTH_PREFIX "bill_reg"
@@ -682,7 +687,6 @@ gnc_dialog_post_invoice(InvoiceWindow *iw, char *message,
     GList * acct_types = NULL;
     GList * acct_commodities = NULL;
     QofInstance *owner_inst;
-    KvpFrame *kvpf;
     EntryList *entries, *entries_iter;
 
     invoice = iw_get_invoice (iw);
@@ -727,12 +731,14 @@ gnc_dialog_post_invoice(InvoiceWindow *iw, char *message,
     /* Get the due date and posted account */
     *ddue = *postdate;
     *memo = NULL;
-
-    owner_inst = qofOwnerGetOwner (gncOwnerGetEndOwner (&(iw->owner)));
-    kvpf = qof_instance_get_slots (owner_inst);
-    *acc = xaccAccountLookup (kvp_frame_get_guid (kvpf, LAST_POSTED_TO_ACCT),
-                              iw->book);
-
+    {
+	GncGUID *guid = NULL;
+	owner_inst = qofOwnerGetOwner (gncOwnerGetEndOwner (&(iw->owner)));
+	qof_instance_get (owner_inst,
+			  "invoice-last-posted-account", &guid,
+			  NULL);
+	*acc = xaccAccountLookup (guid, iw->book);
+    }
     /* Get the default for the accumulate option */
     *accumulate = gnc_prefs_get_bool(GNC_PREFS_GROUP_INVOICE, GNC_PREF_ACCUM_SPLITS);
 
@@ -763,8 +769,6 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
     Timespec ddue, postdate;
     gboolean accumulate;
     QofInstance *owner_inst;
-    KvpFrame *kvpf;
-    KvpValue *kvp_val;
     const char *text;
     GHashTable *foreign_currs;
     GHashTableIter foreign_currs_iter;
@@ -905,7 +909,7 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
             gnc_price_set_commodity (convprice, account_currency);
             gnc_price_set_currency (convprice, gncInvoiceGetCurrency (invoice));
             gnc_price_set_time (convprice, postdate);
-            gnc_price_set_source (convprice, PRICE_SOURCE_INVOICE);
+            gnc_price_set_source (convprice, PRICE_SOURCE_TEMP);
             gnc_price_set_typestr (convprice, PRICE_TYPE_LAST);
             gnc_price_set_value (convprice, exch_rate);
             gncInvoiceAddPrice(invoice, convprice);
@@ -920,14 +924,18 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
     }
 
 
-    /* Save account as last used account in the kvp frame of the invoice owner */
+    /* Save account as last used account in the owner's
+     * invoice-last-posted-account property.
+     */
     owner_inst = qofOwnerGetOwner (gncOwnerGetEndOwner (&(iw->owner)));
-    kvpf = qof_instance_get_slots (owner_inst);
-    kvp_val = kvp_value_new_guid (qof_instance_get_guid (QOF_INSTANCE (acc)));;
-    qof_begin_edit (owner_inst);
-    kvp_frame_set_slot_nc (kvpf, LAST_POSTED_TO_ACCT, kvp_val);
-    qof_instance_set_dirty (owner_inst);
-    qof_commit_edit (owner_inst);
+    {
+	const GncGUID *guid = qof_instance_get_guid (QOF_INSTANCE (acc));
+	qof_begin_edit (owner_inst);
+	qof_instance_set (owner_inst,
+			  "invoice-last-posted-account", guid,
+			  NULL);
+	qof_commit_edit (owner_inst);
+    }
 
     /* ... post it ... */
     if (is_cust_doc)
@@ -2205,24 +2213,25 @@ gnc_invoice_save_page (InvoiceWindow *iw,
                        GKeyFile *key_file,
                        const gchar *group_name)
 {
+    gchar guidstr[GUID_ENCODING_LENGTH+1];
+    guid_to_string_buff(&iw->invoice_guid, guidstr);
     g_key_file_set_string(key_file, group_name, KEY_INVOICE_TYPE,
                           InvoiceDialogTypeasString(iw->dialog_type));
-    g_key_file_set_string(key_file, group_name, KEY_INVOICE_GUID,
-                          guid_to_string(&iw->invoice_guid));
+    g_key_file_set_string(key_file, group_name, KEY_INVOICE_GUID, guidstr);
 
     if (gncOwnerGetJob (&(iw->job)))
     {
         g_key_file_set_string(key_file, group_name, KEY_OWNER_TYPE,
                           qofOwnerGetType(&iw->job));
-        g_key_file_set_string(key_file, group_name, KEY_OWNER_GUID,
-                          guid_to_string(gncOwnerGetGUID(&iw->job)));
+        guid_to_string_buff(gncOwnerGetGUID(&iw->job), guidstr);
+        g_key_file_set_string(key_file, group_name, KEY_OWNER_GUID, guidstr);
     }
     else
     {
         g_key_file_set_string(key_file, group_name, KEY_OWNER_TYPE,
                           qofOwnerGetType(&iw->owner));
-        g_key_file_set_string(key_file, group_name, KEY_OWNER_GUID,
-                          guid_to_string(gncOwnerGetGUID(&iw->owner)));
+        guid_to_string_buff(gncOwnerGetGUID(&iw->owner), guidstr);
+        g_key_file_set_string(key_file, group_name, KEY_OWNER_GUID, guidstr);
     }
 }
 
@@ -3254,21 +3263,28 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
 }
 
 DialogQueryView *
-gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
+gnc_invoice_show_bills_due (QofBook *book, double days_in_advance, GncWhichDueType duetype)
 {
     QofIdType type = GNC_INVOICE_MODULE_NAME;
     Query *q;
     QofQueryPredData* pred_data;
     time64 end_date;
     GList *res;
-    gchar *message;
+    gchar *message, *title;
     DialogQueryView *dialog;
     gint len;
     Timespec ts;
+    QofQueryCompare comparetype;
     static GList *param_list = NULL;
-    static GNCDisplayViewButton buttons[] =
+    static GNCDisplayViewButton vendorbuttons[] =
     {
         { N_("View/Edit Bill"), edit_invoice_direct },
+        { N_("Process Payment"), pay_invoice_direct },
+        { NULL },
+    };
+    static GNCDisplayViewButton customerbuttons[] =
+    {
+        { N_("View/Edit Invoice"), edit_invoice_direct },
         { N_("Process Payment"), pay_invoice_direct },
         { NULL },
     };
@@ -3293,12 +3309,24 @@ gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
     qof_query_search_for(q, GNC_INVOICE_MODULE_NAME);
     qof_query_set_book (q, book);
 
-    /* We want to find all invoices where:
+    /* For vendor bills we want to find all invoices where:
      *      invoice -> is_posted == TRUE
      * AND  invoice -> lot -> is_closed? == FALSE
      * AND  invoice -> type != customer invoice
      * AND  invoice -> type != customer credit note
      * AND  invoice -> due <= (today + days_in_advance)
+     */
+
+    /* For customer invoices we want to find all invoices where:
+     *      invoice -> is_posted == TRUE
+     * AND  invoice -> lot -> is_closed? == FALSE
+     * AND  invoice -> type != vendor bill
+     * AND  invoice -> type != vendor credit note
+     * AND  invoice -> type != employee voucher
+     * AND  invoice -> type != employee credit note
+     * AND  invoice -> due <= (today + days_in_advance)
+     * This could probably also be done by searching for customer invoices OR customer credit notes
+     * but that would make a more complicated query to compose.
      */
 
     qof_query_add_boolean_match (q, g_slist_prepend(NULL, INVOICE_IS_POSTED), TRUE,
@@ -3307,11 +3335,29 @@ gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
     qof_query_add_boolean_match (q, g_slist_prepend(g_slist_prepend(NULL, LOT_IS_CLOSED),
                                  INVOICE_POST_LOT), FALSE, QOF_QUERY_AND);
 
-    pred_data = qof_query_int32_predicate (QOF_COMPARE_NEQ, GNC_INVOICE_CUST_INVOICE);
-    qof_query_add_term (q, g_slist_prepend(NULL, INVOICE_TYPE), pred_data, QOF_QUERY_AND);
 
-    pred_data = qof_query_int32_predicate (QOF_COMPARE_NEQ, GNC_INVOICE_CUST_CREDIT_NOTE);
-    qof_query_add_term (q, g_slist_prepend(NULL, INVOICE_TYPE), pred_data, QOF_QUERY_AND);
+    if (duetype == DUE_FOR_VENDOR)
+    {
+        pred_data = qof_query_int32_predicate (QOF_COMPARE_NEQ, GNC_INVOICE_CUST_INVOICE);
+        qof_query_add_term (q, g_slist_prepend(NULL, INVOICE_TYPE), pred_data, QOF_QUERY_AND);
+
+        pred_data = qof_query_int32_predicate (QOF_COMPARE_NEQ, GNC_INVOICE_CUST_CREDIT_NOTE);
+        qof_query_add_term (q, g_slist_prepend(NULL, INVOICE_TYPE), pred_data, QOF_QUERY_AND);
+    }
+    else
+    {
+        pred_data = qof_query_int32_predicate (QOF_COMPARE_NEQ, GNC_INVOICE_VEND_INVOICE);
+        qof_query_add_term (q, g_slist_prepend(NULL, INVOICE_TYPE), pred_data, QOF_QUERY_AND);
+
+        pred_data = qof_query_int32_predicate (QOF_COMPARE_NEQ, GNC_INVOICE_VEND_CREDIT_NOTE);
+        qof_query_add_term (q, g_slist_prepend(NULL, INVOICE_TYPE), pred_data, QOF_QUERY_AND);
+
+        pred_data = qof_query_int32_predicate (QOF_COMPARE_NEQ, GNC_INVOICE_EMPL_INVOICE);
+        qof_query_add_term (q, g_slist_prepend(NULL, INVOICE_TYPE), pred_data, QOF_QUERY_AND);
+
+        pred_data = qof_query_int32_predicate (QOF_COMPARE_NEQ, GNC_INVOICE_EMPL_CREDIT_NOTE);
+        qof_query_add_term (q, g_slist_prepend(NULL, INVOICE_TYPE), pred_data, QOF_QUERY_AND);
+    }
 
     end_date = gnc_time (NULL);
     if (days_in_advance < 0)
@@ -3331,19 +3377,36 @@ gnc_invoice_show_bills_due (QofBook *book, double days_in_advance)
         return NULL;
     }
 
-    message = g_strdup_printf
-              (/* Translators: %d is the number of bills due. This is a
-                     ngettext(3) message. */
-                  ngettext("The following bill is due:",
-                           "The following %d bills are due:",
-                           len),
-                  len);
+    if (duetype == DUE_FOR_VENDOR)
+    {
+        message = g_strdup_printf
+                  (/* Translators: %d is the number of bills/credit notes due. This is a
+                         ngettext(3) message. */
+                      ngettext("The following vendor document is due:",
+                               "The following %d vendor documents are due:",
+                               len),
+                      len);
+        title = _("Due Bills Reminder");
+    }
+    else
+    {
+        message = g_strdup_printf
+                  (/* Translators: %d is the number of invoices/credit notes due. This is a
+                         ngettext(3) message. */
+                      ngettext("The following customer document is due:",
+                               "The following %d customer documents are due:",
+                               len),
+                      len);
+        title = _("Due Invoices Reminder");
+    }
     dialog = gnc_dialog_query_view_create(param_list, q,
-                                          _("Due Bills Reminder"),
+                                          title,
                                           message,
                                           TRUE, FALSE,
                                           1, GTK_SORT_ASCENDING,
-                                          buttons, NULL);
+                                          duetype == DUE_FOR_VENDOR ?
+                                                  vendorbuttons :
+                                                  customerbuttons, NULL);
 
     g_free(message);
     qof_query_destroy(q);
@@ -3360,7 +3423,20 @@ gnc_invoice_remind_bills_due (void)
     book = qof_session_get_book(gnc_get_current_session());
     days = gnc_prefs_get_float(GNC_PREFS_GROUP_BILL, GNC_PREF_DAYS_IN_ADVANCE);
 
-    gnc_invoice_show_bills_due(book, days);
+    gnc_invoice_show_bills_due(book, days, DUE_FOR_VENDOR);
+}
+
+void
+gnc_invoice_remind_invoices_due (void)
+{
+    QofBook *book;
+    gint days;
+
+    if (!gnc_current_session_exist()) return;
+    book = qof_session_get_book(gnc_get_current_session());
+    days = gnc_prefs_get_float(GNC_PREFS_GROUP_INVOICE, GNC_PREF_DAYS_IN_ADVANCE);
+
+    gnc_invoice_show_bills_due(book, days, DUE_FOR_CUSTOMER);
 }
 
 void
@@ -3370,4 +3446,13 @@ gnc_invoice_remind_bills_due_cb (void)
         return;
 
     gnc_invoice_remind_bills_due();
+}
+
+void
+gnc_invoice_remind_invoices_due_cb (void)
+{
+    if (!gnc_prefs_get_bool(GNC_PREFS_GROUP_INVOICE, GNC_PREF_NOTIFY_WHEN_DUE))
+        return;
+
+    gnc_invoice_remind_invoices_due();
 }

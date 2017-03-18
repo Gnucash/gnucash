@@ -263,34 +263,18 @@ lookup_price(PriceReq *pr, PriceDate pd)
         case SAME_DAY:
             prc = gnc_pricedb_lookup_day (pr->pricedb, pr->from,
                                           pr->to, pr->ts);
-            if (!prc)
-            {
-                prc = gnc_pricedb_lookup_day (pr->pricedb, pr->to,
-                                              pr->from, pr->ts);
-                pr->reverse = TRUE;
-            }
-        break;
+            break;
         case NEAREST:
             prc = gnc_pricedb_lookup_nearest_in_time (pr->pricedb, pr->from,
                                                       pr->to, pr->ts);
-            if (!prc)
-            {
-                prc = gnc_pricedb_lookup_nearest_in_time (pr->pricedb, pr->to,
-                                                          pr->from, pr->ts);
-                pr->reverse = TRUE;
-            }
-        break;
+            break;
         case LATEST:
             prc = gnc_pricedb_lookup_latest (pr->pricedb, pr->from, pr->to);
-            if (!prc)
-            {
-                prc = gnc_pricedb_lookup_latest (pr->pricedb, pr->to, pr->from);
-                pr->reverse = TRUE;
-            }
             break;
     }
-    if (pr->reverse)
+    if (gnc_commodity_equiv(gnc_price_get_currency(prc), pr->from))
     {
+        pr->reverse = TRUE;
         PINFO("Found reverse price: 1 %s = %f %s",
               gnc_commodity_get_mnemonic(pr->to),
               gnc_numeric_to_double(gnc_price_get_value(prc)),
@@ -1710,7 +1694,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
     if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->amount_edit)))
     {
         gnc_parse_error_dialog (xferData, _("You must enter a valid amount."));
-        LEAVE("no account");
+        LEAVE("no amount");
         return;
     }
 

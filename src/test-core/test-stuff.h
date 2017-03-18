@@ -57,21 +57,6 @@ Otherwise, only failures are printed out.
 #include <glib.h>
 #include <stdlib.h>
 
-/**
- * Use this to indicate the result of a test.
- * The result is TRUE for success, FALSE for failure.
- * title describes the test
- * Tests are automatically identified by their source file and line.
- */
-#define do_test( result, title ) do_test_call( result, title, __FILE__, __LINE__ )
-#define success( title ) success_call( title, __FILE__, __LINE__ );
-#define failure( title ) failure_call( title, __FILE__, __LINE__ );
-
-/** This one doesn't work because macros can't take a variable number of arguments.
- * well, apparently gcc can, but it's non-standard.
- * Apparently C99 can, too, but it's not exactly standard either.
-#define do_test_args( result, title, format ) do_test_call( result, title, __FILE__, __LINE__, format, ... );
-*/
 
 
 /* Privately used to indicate a test result. You may use these if you
@@ -136,6 +121,22 @@ void failure_args(
     int line,
     const char *format,
     ... );
+
+/**
+ * Use this to indicate the result of a test.
+ * The result is TRUE for success, FALSE for failure.
+ * title describes the test
+ * Tests are automatically identified by their source file and line.
+ */
+#define do_test( result, title ) do_test_call( result, title, __FILE__, __LINE__ )
+#define success( title ) success_call( title, __FILE__, __LINE__ );
+#define failure( title ) failure_call( title, __FILE__, __LINE__ );
+
+/** This one doesn't work because macros can't take a variable number of arguments.
+ * well, apparently gcc can, but it's non-standard.
+ * Apparently C99 can, too, but it's not exactly standard either.
+#define do_test_args( result, title, format ) do_test_call( result, title, __FILE__, __LINE__, format, ... );
+*/
 
 gboolean get_random_boolean(void);
 gint get_random_int_in_range(int start, int end);

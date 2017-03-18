@@ -1,23 +1,12 @@
 # These are files that we don't want to translate, because they are
 # not distributed.
-src/network-utils/gnc-gpg.c
-src/import-export/csv/gnc-csv2glist.c
-src/business/business-core/gncBusPeriod.c
-src/backend/dwi/qofmap.c
-src/gnome-utils/gnctreemodelsort.c
-src/gnome-utils/gtktreedatalist.c
-src/gnome-utils/gnc-tree-model-selection.c
 src/backend/dbi/gncmod-backend-dbi.c
-src/backend/file/io-gncbin-r.c
 src/backend/xml/gncmod-backend-xml.c
-src/import-export/binary-import/binary-import.glade
-src/import-export/binary-import/druid-commodity.c
-src/import-export/binary-import/gncmod-binary-import.c
-src/gnome-utils/glade/dialog-database-connection.glade
-src/libqof/qof/qofgobj.c
-src/libqof/qof/qofquery-deserial.c
-src/libqof/qof/qofquery-serialize.c
-src/libqof/qof/qofsql.c
+src/gnome-utils/gnc-tree-model-selection.c
+
+# These we don't want to translate because they're experimental:
+src/gnc/.*
+src/optional/gtkmm/.*
 
 # Skip softlinks to scm files. These softlinks are created in builddir
 # for testing purposes, intltool-extract isn't smart enough to ignore
@@ -54,6 +43,8 @@ src/report/business-reports/gnucash/report/invoice.scm
 src/report/business-reports/gnucash/report/job-report.scm
 src/report/business-reports/gnucash/report/owner-report.scm
 src/report/business-reports/gnucash/report/payables.scm
+src/report/business-reports/gnucash/report/receipt.eguile.scm
+src/report/business-reports/gnucash/report/receipt.scm
 src/report/business-reports/gnucash/report/receivables.scm
 src/report/business-reports/gnucash/report/taxinvoice.eguile.scm
 src/report/business-reports/gnucash/report/taxinvoice.scm
@@ -98,6 +89,7 @@ src/report/standard-reports/gnucash/report/standard-reports/trial-balance.scm
 src/report/stylesheets/gnucash/report/stylesheet-easy.scm
 src/report/stylesheets/gnucash/report/stylesheet-fancy.scm
 src/report/stylesheets/gnucash/report/stylesheet-footer.scm
+src/report/stylesheets/gnucash/report/stylesheet-head-or-tail.scm
 src/report/stylesheets/gnucash/report/stylesheet-plain.scm
 src/report/stylesheets/gnucash/report/stylesheets.scm
 src/report/utility-reports/gnucash/report/hello-world.scm

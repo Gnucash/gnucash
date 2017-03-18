@@ -2,16 +2,16 @@
 ;; portfolio.scm
 ;; by Robert Merkel (rgmerk@mira.net)
 ;;
-;; This program is free software; you can redistribute it and/or    
-;; modify it under the terms of the GNU General Public License as   
-;; published by the Free Software Foundation; either version 2 of   
-;; the License, or (at your option) any later version.              
-;;                                                                  
-;; This program is distributed in the hope that it will be useful,  
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
-;; GNU General Public License for more details.                     
-;;                                                                  
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; if not, contact:
 ;;
@@ -39,23 +39,23 @@
 (define optname-zero-shares (N_ "Include accounts with no shares"))
 
 (define (options-generator)
-  (let* ((options (gnc:new-options)) 
+  (let* ((options (gnc:new-options))
          ;; This is just a helper function for making options.
          ;; See gnucash/src/scm/options.scm for details.
-         (add-option 
+         (add-option
           (lambda (new-option)
             (gnc:register-option options new-option))))
 
     ;; General Tab
     ;; date at which to report balance
     (gnc:options-add-report-date!
-     options gnc:pagename-general 
+     options gnc:pagename-general
      (N_ "Date") "a")
 
-    (gnc:options-add-currency! 
+    (gnc:options-add-currency!
      options gnc:pagename-general (N_ "Report's currency") "c")
 
-    (gnc:options-add-price-source! 
+    (gnc:options-add-price-source!
      options gnc:pagename-general
      optname-price-source "d" 'pricedb-latest)
 
@@ -74,18 +74,18 @@
       (lambda () (filter gnc:account-is-stock?
                          (gnc-account-get-descendants-sorted
                           (gnc-get-current-root-account))))
-      (lambda (accounts) (list  #t 
+      (lambda (accounts) (list  #t
                                 (filter gnc:account-is-stock? accounts)))
       #t))
 
-    (gnc:register-option 
-     options 
+    (gnc:register-option
+     options
      (gnc:make-simple-boolean-option
-      gnc:pagename-accounts optname-zero-shares "e" 
+      gnc:pagename-accounts optname-zero-shares "e"
       (N_ "Include accounts that have a zero share balances.")
       #f))
-    
-    (gnc:options-set-default-section options gnc:pagename-general)      
+
+    (gnc:options-set-default-section options gnc:pagename-general)
     options))
 
 ;; This is the rendering function. It accepts a database of options
@@ -98,14 +98,14 @@
 
  (let ((work-done 0)
        (work-to-do 0))
-  
+
   ;; These are some helper functions for looking up option values.
   (define (get-op section name)
     (gnc:lookup-option (gnc:report-options report-obj) section name))
-  
+
   (define (get-option section name)
     (gnc:option-value (get-op section name)))
-  
+
   (define (table-add-stock-rows table accounts to-date currency
                                 exchange-fn price-fn include-empty collector)
 
@@ -149,7 +149,7 @@
 			      (gnc:make-html-table-header-cell/markup "text-cell" ticker-symbol)
 			      (gnc:make-html-table-header-cell/markup "text-cell" listing)
 			      (gnc:make-html-table-header-cell/markup
-			       "number-cell" 
+			       "number-cell"
 			       (xaccPrintAmount units share-print-info))
 			      (gnc:make-html-table-header-cell/markup
 			       "number-cell"
@@ -176,7 +176,7 @@
                       (get-option gnc:pagename-general "Date")))
         (accounts    (get-option gnc:pagename-accounts "Accounts"))
         (currency    (get-option gnc:pagename-general "Report's currency"))
-        (report-title (get-option gnc:pagename-general 
+        (report-title (get-option gnc:pagename-general
                                   gnc:optname-reportname))
         (price-source (get-option gnc:pagename-general
                                   optname-price-source))
@@ -189,55 +189,67 @@
         (document (gnc:make-html-document)))
 
     (gnc:html-document-set-title!
-     document (string-append 
+     document (string-append
                report-title
                (sprintf #f " %s" (gnc-print-date to-date))))
 
     ;(gnc:debug "accounts" accounts)
     (if (not (null? accounts))
-        (let* ((commodity-list (gnc:accounts-get-commodities 
-                                (append 
-                                 (gnc:acccounts-get-all-subaccounts 
+        (let* ((commodity-list (gnc:accounts-get-commodities
+                                (append
+                                 (gnc:acccounts-get-all-subaccounts
                                   accounts) accounts) currency))
                (pricedb (gnc-pricedb-get-db (gnc-get-current-book)))
 	       (exchange-fn (gnc:case-exchange-fn price-source currency to-date))
                (price-fn
                 (case price-source
-                  ((weighted-average average-cost) 
+                  ((weighted-average average-cost)
                    (lambda (foreign date)
                     (cons #f (gnc-numeric-div
-                               (gnc:gnc-monetary-amount 
-                                  (exchange-fn (gnc:make-gnc-monetary foreign 
+                               (gnc:gnc-monetary-amount
+                                  (exchange-fn (gnc:make-gnc-monetary foreign
                                                   (gnc-numeric-create 10000 1))
                                                   currency))
-                               (gnc-numeric-create 10000 1) 
+                               (gnc-numeric-create 10000 1)
                                GNC-DENOM-AUTO
                                (logior (GNC-DENOM-SIGFIGS 5) GNC-RND-ROUND)))))
-                  ((pricedb-latest) 
-                   (lambda (foreign date) 
+                  ((pricedb-latest)
+                   (lambda (foreign date)
                      (let* ((price
                              (gnc-pricedb-lookup-latest-any-currency
                               pricedb foreign))
                             (fn (if (and price (> (length price) 0))
-                                        (let ((v (gnc-price-get-value (car price))))
+                                    (let* ((the_price
+                                            (if (gnc-commodity-equiv
+                                                 foreign
+                                                 (gnc-price-get-commodity (car price)))
+                                                (car price)
+                                                (gnc-price-invert (car price))))
+                                           (v (gnc-price-get-value the_price)))
                                           (gnc-price-ref (car price))
                                           (cons (car price) v))
                                         (cons #f (gnc-numeric-zero)))))
                        (if price (gnc-price-list-destroy price))
                        fn)))
-                  ((pricedb-nearest) 
-                   (lambda (foreign date) 
+                  ((pricedb-nearest)
+                   (lambda (foreign date)
                      (let*  ((price
                              (gnc-pricedb-lookup-nearest-in-time-any-currency
                               pricedb foreign (timespecCanonicalDayTime date)))
                             (fn (if (and price (> (length price) 0))
-                                         (let ((v (gnc-price-get-value (car price))))
+                                    (let* ((the_price
+                                            (if (gnc-commodity-equiv
+                                                 foreign
+                                                 (gnc-price-get-commodity (car price)))
+                                                (car price)
+                                                (gnc-price-invert (car price))))
+                                           (v (gnc-price-get-value (car price))))
                                            (gnc-price-ref (car price))
                                            (cons (car price) v))
                                          (cons #f (gnc-numeric-zero)))))
                        (if price (gnc-price-list-destroy price))
                        fn))))))
-          
+
           (gnc:html-table-set-col-headers!
            table
            (list (_ "Account")
@@ -246,22 +258,22 @@
                  (_ "Units")
                  (_ "Price")
                  (_ "Value")))
-          
+
           (table-add-stock-rows
-           table accounts to-date currency 
+           table accounts to-date currency
            exchange-fn price-fn include-empty collector)
-          
+
           (gnc:html-table-append-row/markup!
            table
            "grand-total"
            (list
             (gnc:make-html-table-cell/size
              1 6 (gnc:make-html-text (gnc:html-markup-hr)))))
-          
+
           (collector
-           'format 
+           'format
            (lambda (currency amount)
-             (gnc:html-table-append-row/markup! 
+             (gnc:html-table-append-row/markup!
               table
               "grand-total"
               (list (gnc:make-html-table-cell/markup
@@ -270,15 +282,15 @@
                      1 5 "total-number-cell"
                      (gnc:make-gnc-monetary currency amount)))))
            #f)
-          
+
           (gnc:html-document-add-object! document table))
 
                                         ;if no accounts selected.
         (gnc:html-document-add-object!
          document
-	 (gnc:html-make-no-account-warning 
+	 (gnc:html-make-no-account-warning
 	  report-title (gnc:report-id report-obj))))
-    
+
     (gnc:report-finished)
     document)))
 

@@ -405,7 +405,7 @@ gnc_plugin_ab_account_selected(GncPluginPage *plugin_page, Account *account,
  * current page is an "account tree" page, get the account corresponding to the
  * selected account.  (What if multiple accounts are selected?)  If the current
  * page is a "register" page, get the head account for the register. (Returns
- * NULL for a general ledger or search register.)
+ * NULL for a general journal or search register.)
  *
  * @param window A pointer to a GncMainWindow object.
  * @return A pointer to an account, if one can be determined from the current

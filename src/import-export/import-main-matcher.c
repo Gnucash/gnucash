@@ -44,7 +44,6 @@
 #include "gnc-ui-util.h"
 #include "gnc-engine.h"
 #include "import-settings.h"
-#include "import-match-map.h"
 #include "import-match-picker.h"
 #include "import-backend.h"
 #include "import-account-matcher.h"

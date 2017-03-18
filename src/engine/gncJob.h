@@ -65,6 +65,7 @@ void gncJobDestroy (GncJob *job);
 void gncJobSetID (GncJob *job, const char *id);
 void gncJobSetName (GncJob *job, const char *jobname);
 void gncJobSetReference (GncJob *job, const char *owner_reference);
+void gncJobSetRate (GncJob *job, gnc_numeric rate);
 void gncJobSetOwner (GncJob *job, GncOwner *owner);
 void gncJobSetActive (GncJob *job, gboolean active);
 
@@ -79,6 +80,7 @@ void gncJobCommitEdit (GncJob *job);
 const char * gncJobGetID (const GncJob *job);
 const char * gncJobGetName (const GncJob *job);
 const char * gncJobGetReference (const GncJob *job);
+gnc_numeric  gncJobGetRate (const GncJob *job);
 GncOwner   * gncJobGetOwner (GncJob *job);
 gboolean     gncJobGetActive (const GncJob *job);
 
@@ -103,6 +105,7 @@ gboolean gncJobEqual(const GncJob *a, const GncJob *b);
 #define JOB_ID          "id"
 #define JOB_NAME        "name"
 #define JOB_REFERENCE   "reference"
+#define JOB_RATE        "rate"
 #define JOB_OWNER       "owner"
 #define Q_JOB_OWNER     "owner_collection"
 #define JOB_ACTIVE      "active"

@@ -123,7 +123,7 @@ SET (engine_SOURCES
   gnc-pricedb.c
   gnc-session.c
   gncmod-engine.c
-  kvp-scm.c
+  kvp-scm.cpp
   engine-helpers.c
   glib-helpers.c
   policy.c

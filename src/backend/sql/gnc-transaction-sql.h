@@ -29,45 +29,38 @@
 #ifndef GNC_TRANSACTION_SQL_H
 #define GNC_TRANSACTION_SQL_H
 
-#include "gnc-backend-sql.h"
+extern "C"
+{
 #include "Transaction.h"
 #include "qof.h"
 #include "Account.h"
+}
+class GncSqlTransBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlTransBackend();
+    void load_all(GncSqlBackend*) override;
+    void create_tables(GncSqlBackend*) override;
+    bool commit (GncSqlBackend* sql_be, QofInstance* inst) override;
+};
 
-void gnc_sql_init_transaction_handler( void );
-
-/**
- * Commits all of the splits for a transaction.
- *
- * @param be SQL backend
- * @param pTx Transaction
- */
-void gnc_sql_transaction_commit_splits( GncSqlBackend* be, Transaction* pTx );
-
-/**
- * Saves a transaction to the db.
- *
- * @param be SQL backend
- * @param inst Transaction instance
- * @return TRUE if successful, FALSE if unsuccessful
- */
-gboolean gnc_sql_save_transaction( GncSqlBackend* be, QofInstance* inst );
+class GncSqlSplitBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlSplitBackend();
+    void load_all(GncSqlBackend*) override { return; } // loaded by transaction.
+    void create_tables(GncSqlBackend*) override;
+    bool commit (GncSqlBackend* sql_be, QofInstance* inst) override;
+};
 
 /**
  * Loads all transactions which have splits for a specific account.
  *
- * @param be SQL backend
+ * @param sql_be SQL backend
  * @param account Account
  */
-void gnc_sql_transaction_load_tx_for_account( GncSqlBackend* be, Account* account );
-
-/**
- * Loads all transactions.
- *
- * @param be SQL backend
- */
-void gnc_sql_transaction_load_all_tx( GncSqlBackend* be );
-
+void gnc_sql_transaction_load_tx_for_account (GncSqlBackend* sql_be,
+                                              Account* account);
 typedef struct
 {
     Account* acct;
@@ -80,10 +73,9 @@ typedef struct
  * Returns a list of acct_balances_t structures, one for each account which
  * has splits.
  *
- * @param be SQL backend
+ * @param sql_be SQL backend
  * @return GSList of acct_balances_t structures
  */
-/*@ null @*/
-GSList* gnc_sql_get_account_balances_slist( GncSqlBackend* be );
+GSList* gnc_sql_get_account_balances_slist (GncSqlBackend* sql_be);
 
 #endif /* GNC_TRANSACTION_SQL_H */

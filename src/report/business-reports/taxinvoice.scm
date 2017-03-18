@@ -76,12 +76,6 @@
         (display-comm-coll-total amttot #f))
       (if (and (not amt?) (not pc?)) (display (_ "n/a"))))))        ; neither
 
-(define (coy-info slots key)
-  ;; Extract a value from the company info key-value pairs
-  (kvp-frame-get-slot-path-gslist
-    slots 
-    (append gnc:*kvp-option-path* (list gnc:*business-label* key))))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Define all the options
 
@@ -108,6 +102,7 @@
 (define optname-jobnumber-text		(N_ "Job Number text"))
 (define optname-jobname-show		(N_ "Show Job name"))
 (define optname-jobnumber-show		(N_ "Show Job number"))
+(define optname-netprice		(N_ "Show net price"))
 (define optname-invnum-next-to-title	(N_ "Invoice number next to title"))
 (define optname-border-collapse		(N_ "table-border-collapse"))
 (define optname-border-color-th		(N_ "table-header-border-color"))
@@ -176,6 +171,7 @@
 (add-option (gnc:make-simple-boolean-option	elementspage	optname-invnum-next-to-title	"h" (N_ "Invoice Number next to title?") #f))
 (add-option (gnc:make-simple-boolean-option	elementspage	optname-jobname-show		"i" (N_ "Display Job name?") #t))
 (add-option (gnc:make-simple-boolean-option	elementspage	optname-jobnumber-show		"j" (N_ "Invoice Job number?") #f))
+(add-option (gnc:make-simple-boolean-option	elementspage	optname-netprice		"k" (N_ "Show net price?") #f))
 
   ;; Display options
   (add-option (gnc:make-string-option displaypage optname-template-file "a" 
@@ -228,7 +224,7 @@
                 headingpage2 optname-amount-due "b" "" (_ "Amount Due")))
   (add-option (gnc:make-string-option
                 headingpage2 optname-payment-recd "c" "" 
-                (_ "Payment received, thank you")))
+                (_ "Payment received, thank you.")))
   (add-option (gnc:make-string-option	headingpage2	optname-invoice-number-text
     "d" "" (N_ "Invoice number: ")))
   (add-option (gnc:make-string-option	headingpage2	optname-to-text
@@ -288,6 +284,7 @@
          (opt-invnum-next-to-title  (opt-value elementspage  optname-invnum-next-to-title))
          (opt-jobname-show          (opt-value elementspage  optname-jobname-show))
          (opt-jobnumber-show        (opt-value elementspage  optname-jobnumber-show))
+         (opt-netprice              (opt-value elementspage  optname-netprice))
          (opt-report-currency       (opt-value gnc:pagename-general optname-report-currency))
          (opt-css-border-collapse   (if (opt-value displaypage optname-border-collapse) "border-collapse:collapse;"))
          (opt-css-border-color-th   (opt-value displaypage optname-border-color-th))
@@ -342,3 +339,31 @@
   'options-generator options-generator
   'renderer report-renderer)
 
+(define (au-tax-options-generator)
+  (define (set-opt options page name value)
+    (let ((option (gnc:lookup-option options page name)))
+         (gnc:option-set-value option value)))
+
+  (let ((options (options-generator)))
+       (set-opt options headingpage optname-report-title (_ "Tax Invoice"))
+       ;(gnc:warn "title: " (gnc:option-value title-op))
+       (set-opt options headingpage optname-unit-price (_ "Unit"))
+       ;(gnc:warn "unitprice: " (gnc:option-value unit-price-op))
+       (set-opt options headingpage optname-tax-rate (_ "GST Rate"))
+       (set-opt options headingpage optname-tax-amount (_ "GST Amount"))
+       (set-opt options headingpage2 optname-amount-due (_ "Amount Due (inc GST)"))
+       (set-opt options headingpage2 optname-invoice-number-text (_ "Invoice #: "))
+       (set-opt options headingpage2 optname-ref-text (_ "Reference: "))
+       (set-opt options headingpage2 optname-jobname-text (_ "Engagement: "))
+       (set-opt options notespage optname-extra-css "h1.coyname { text-align: right; margin-bottom: 0px ; font-size: 200%; } h2.invoice { text-align: left; margin-bottom: 0px ; font-size: 500%; }")
+       options))
+
+(gnc:define-report
+  'version 1
+  'name (N_ "Australian Tax Invoice")
+  'report-guid "3dbbc2584da64e7a8674355bc3fbfe3d"
+  'menu-name (N_ "Australian Tax Invoice")
+  'menu-tip (N_ "Display an Australian customer invoice with tax columns (using eguile template)")
+  'menu-path (list gnc:menuname-business-reports)
+  'options-generator au-tax-options-generator
+  'renderer report-renderer)

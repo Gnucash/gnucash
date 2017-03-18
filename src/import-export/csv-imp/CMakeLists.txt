@@ -4,12 +4,21 @@ ADD_SUBDIRECTORY(test)
 SET(csv_import_SOURCES
   gncmod-csv-import.c
   assistant-csv-account-import.c
-  assistant-csv-trans-import.c
+  assistant-csv-trans-import.cpp
   gnc-plugin-csv-import.c
   csv-account-import.c
-  gnc-csv-model.c
+  gnc-csv-account-map.c
   gnc-csv-gnumeric-popup.c
-  ${CMAKE_SOURCE_DIR}/lib/stf/stf-parse.c
+  gnc-csv-tokenizer.cpp
+  gnc-csv-trans-settings.cpp
+  gnc-dummy-tokenizer.cpp
+  gnc-fw-tokenizer.cpp
+  gnc-tokenizer.cpp
+  gnc-trans-props.cpp
+  gnc-tx-import.cpp
+  ${CMAKE_SOURCE_DIR}/lib/goffice/go-charmap-sel.c
+  ${CMAKE_SOURCE_DIR}/lib/goffice/go-optionmenu.c
+  ${CMAKE_SOURCE_DIR}/lib/goffice/go-glib-extras.c
 )
 
 # Add dependency on config.h
@@ -20,21 +29,40 @@ SET(csv_import_noinst_HEADERS
   assistant-csv-trans-import.h
   gnc-plugin-csv-import.h
   csv-account-import.h
-  gnc-csv-model.h
+  gnc-csv-account-map.h
   gnc-csv-gnumeric-popup.h
-  ${CMAKE_SOURCE_DIR}/lib/stf/stf-parse.h
+  gnc-csv-tokenizer.hpp
+  gnc-csv-trans-settings.hpp
+  gnc-dummy-tokenizer.hpp
+  gnc-fw-tokenizer.hpp
+  gnc-tokenizer.hpp
+  gnc-trans-props.hpp
+  gnc-tx-import.hpp
+  ${CMAKE_SOURCE_DIR}/lib/goffice/go-charmap-sel.h
+  ${CMAKE_SOURCE_DIR}/lib/goffice/go-optionmenu.h
+  ${CMAKE_SOURCE_DIR}/lib/goffice/go-glib-extras.h
 )
 
 ADD_LIBRARY(gncmod-csv-import ${csv_import_noinst_HEADERS} ${csv_import_SOURCES})
 
-TARGET_LINK_LIBRARIES(gncmod-csv-import ${GOFFICE_LDFLAGS} gncmod-generic-import gncmod-gnome-utils
-                 gncmod-app-utils gncmod-engine gnc-core-utils gnc-module)
+TARGET_LINK_LIBRARIES(
+  gncmod-csv-import
+  ${Boost_LIBRARIES}
+  ${ICU4C_I18N_LDFLAGS}
+  gncmod-generic-import
+  gncmod-gnome-utils
+  gncmod-app-utils
+  gncmod-engine
+  gnc-core-utils
+  gnc-module)
 
 
 TARGET_COMPILE_DEFINITIONS(gncmod-csv-import PRIVATE -DG_LOG_DOMAIN=\"gnc.import.csv\")
 
 TARGET_INCLUDE_DIRECTORIES(gncmod-csv-import PRIVATE
-     ${CMAKE_SOURCE_DIR}/lib ${GOFFICE_INCLUDE_DIRS}
+     ${ICU4C_I18N_INCLUDE_DIRS}
+     ${CMAKE_SOURCE_DIR}/lib
+     ${CMAKE_SOURCE_DIR}/lib/goffice
 )
 
 INSTALL(TARGETS gncmod-csv-import

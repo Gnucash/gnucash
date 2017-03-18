@@ -24,12 +24,15 @@
 
 #ifndef IO_GNCXML_GEN_H
 #define IO_GNCXML_GEN_H
-
+extern "C"
+{
 #include <glib.h>
+}
+
 #include "sixtp.h"
 
-typedef gboolean (*gxpf_callback)(const char *tag, gpointer parsedata,
-                                  gpointer data);
+typedef gboolean (*gxpf_callback) (const char* tag, gpointer parsedata,
+                                   gpointer data);
 
 struct gxpf_data_struct
 {
@@ -41,13 +44,13 @@ struct gxpf_data_struct
 typedef struct gxpf_data_struct gxpf_data;
 
 gboolean
-gnc_xml_parse_file(sixtp *top_parser, const char *filename,
-                   gxpf_callback callback, gpointer parsedata,
-                   gpointer bookdata);
+gnc_xml_parse_file (sixtp* top_parser, const char* filename,
+                    gxpf_callback callback, gpointer parsedata,
+                    gpointer bookdata);
 
 gboolean
-gnc_xml_parse_fd(sixtp *top_parser, FILE *fd,
-                 gxpf_callback callback, gpointer parsedata,
-                 gpointer bookdata);
+gnc_xml_parse_fd (sixtp* top_parser, FILE* fd,
+                  gxpf_callback callback, gpointer parsedata,
+                  gpointer bookdata);
 
 #endif /* IO_GNCXML_GEN_H */

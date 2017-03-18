@@ -39,6 +39,7 @@
 
 #include "gnc-plugin-account-tree.h"
 #include "gnc-plugin-page-account-tree.h"
+#include "dialog-find-account.h"
 
 static void gnc_plugin_account_tree_class_init (GncPluginAccountTreeClass *klass);
 static void gnc_plugin_account_tree_init (GncPluginAccountTree *plugin);
@@ -46,7 +47,7 @@ static void gnc_plugin_account_tree_finalize (GObject *object);
 
 /* Command callbacks */
 static void gnc_plugin_account_tree_cmd_new_account_tree (GtkAction *action, GncMainWindowActionData *data);
-
+static void gnc_plugin_account_tree_cmd_find_account (GtkAction *action, GncMainWindowActionData *data);
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-account-tree-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-account-tree-ui.xml"

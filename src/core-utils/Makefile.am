@@ -117,7 +117,6 @@ GUILE_COMPILE_ENV = \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/libqof/qof
 
-
 %.go : %.scm .scm-links $(lib_LTLIBRARIES)
 	GNC_UNINSTALLED=yes \
 	GNC_BUILDDIR=${top_builddir} \

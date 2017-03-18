@@ -32,6 +32,11 @@
 
 #include "qofid.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /* This file defines an engine-only API for using QOF entity
  * identifiers. */
 
@@ -49,4 +54,8 @@ void qof_collection_print_dirty (const QofCollection *col, gpointer dummy);
 /* @} */
 /* @} */
 /* @} */
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* QOF_ID_P_H */

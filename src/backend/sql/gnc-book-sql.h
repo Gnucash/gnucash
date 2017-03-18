@@ -29,10 +29,14 @@
 #ifndef GNC_BOOK_SQL_H
 #define GNC_BOOK_SQL_H
 
-#include "gnc-backend-sql.h"
-#include "qof.h"
+#include "gnc-sql-object-backend.hpp"
 
-void gnc_sql_init_book_handler( void );
-gboolean gnc_sql_save_book( GncSqlBackend* be, QofInstance* inst );
+class GncSqlBookBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlBookBackend();
+    void load_all(GncSqlBackend*) override;
+};
+
 
 #endif /* GNC_BOOK_SQL_H */

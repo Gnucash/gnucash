@@ -103,11 +103,16 @@
 #include "qofclass.h"
 #include "qofobject.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #define QOF_MOD_SESSION "qof.session"
 
 /* PROTOTYPES ******************************************************/
 
-typedef struct _QofSession    QofSession;
+typedef struct QofSessionImpl QofSession;
 
 QofSession * qof_session_new (void);
 void         qof_session_destroy (QofSession *session);
@@ -151,7 +156,6 @@ void qof_session_begin (QofSession *session, const char * book_id,
                         gboolean ignore_lock, gboolean create,
                         gboolean force);
 
-
 /**
  * The qof_session_load() method causes the QofBook to be made ready to
  *    to use with this URL/datastore.   When the URL points at a file,
@@ -190,7 +194,6 @@ const char * qof_session_get_error_message(const QofSession *session);
 QofBackendError qof_session_pop_error (QofSession *session);
 /** @} */
 
-
 /** Returns the QofBook of this session. */
 QofBook * qof_session_get_book (const QofSession *session);
 
@@ -218,6 +221,11 @@ const char * qof_session_get_url (const QofSession *session);
  */
 /* gboolean qof_session_not_saved(const QofSession *session); <- unimplemented */
 gboolean qof_session_save_in_progress(const QofSession *session);
+
+/**
+ * Returns the qof session's backend.
+ */
+QofBackend * qof_session_get_backend(const QofSession *session);
 
 /** The qof_session_save() method will commit all changes that have been
  *    made to the session. For the file backend, this is nothing
@@ -284,20 +292,6 @@ gboolean qof_session_events_pending (const QofSession *session);
 gboolean qof_session_process_events (QofSession *session);
 /** @} */
 
-/** Register a function to be called just before a session is closed.
- *
- *  @param fn The function to be called.  The function definition must
- *  be func(gpointer session, gpointer user_data);
- *
- *  @param data The data to be passed to the function. */
-void qof_session_add_close_hook (GFunc fn, gpointer data);
-
-/** Call all registered session close hooks, informing them that the
- *  specified session is about to be closed.
- *
- *  @param session A pointer to the session being closed. */
-void qof_session_call_close_hooks (QofSession *session);
-
 gboolean qof_session_export (QofSession *tmp_session,
                              QofSession *real_session,
                              QofPercentageFunc percentage_func);
@@ -310,6 +304,10 @@ GList* qof_backend_get_registered_access_method_list(void);
 /** Ensure all of the data is loaded from the session.
  */
 void qof_session_ensure_all_data_loaded(QofSession* session);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* QOF_SESSION_H */
 /** @} */

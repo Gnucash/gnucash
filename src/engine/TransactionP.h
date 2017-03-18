@@ -164,13 +164,6 @@ QofBackend * xaccTransactionGetBackend (Transaction *trans);
 void xaccEnableDataScrubbing(void);
 void xaccDisableDataScrubbing(void);
 
-/** Set the KvpFrame slots of this transaction to the given frm by
- *  * directly using the frm pointer (i.e. non-copying).
- *   * XXX this is wrong, nedds to be replaced with a transactional thingy
- *   in kvp + qofinstance. for now, this is a quasi-unctional placeholder.
- *    */
-#define xaccTransSetSlots_nc(T,F) qof_instance_set_slots(QOF_INSTANCE(T),F)
-
 void xaccTransRemoveSplit (Transaction *trans, const Split *split);
 void check_open (const Transaction *trans);
 
@@ -186,6 +179,7 @@ typedef struct
     void (*trans_on_error)(Transaction*, QofBackendError);
     void (*trans_cleanup_commit)(Transaction*);
     void (*xaccTransScrubGainsDate)(Transaction*);
+    Transaction *(*dupe_trans)(const Transaction*);
 
 } TransTestFunctions;
 

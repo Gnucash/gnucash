@@ -36,6 +36,7 @@
 #include "Transaction.h"
 #include "gnc-engine.h"
 #include "engine-helpers.h"
+#include "qofinstance-p.h"
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.engine.sx"
@@ -43,19 +44,19 @@
 enum
 {
     PROP_0,
-    PROP_NAME,
-    PROP_ENABLED,
-    PROP_NUM_OCCURANCE,
-    PROP_REM_OCCURANCE,
-    PROP_AUTO_CREATE,
-    PROP_AUTO_CREATE_NOTIFY,
-    PROP_ADVANCE_CREATION_DAYS,
-    PROP_ADVANCE_REMINDER_DAYS,
-    PROP_START_DATE,
-    PROP_END_DATE,
-    PROP_LAST_OCCURANCE_DATE,
-    PROP_INSTANCE_COUNT,
-    PROP_TEMPLATE_ACCOUNT
+    PROP_NAME,				/* Table */
+    PROP_ENABLED,			/* Table */
+    PROP_START_DATE,			/* Table */
+    PROP_END_DATE,			/* Table */
+    PROP_LAST_OCCURANCE_DATE,		/* Table */
+    PROP_NUM_OCCURANCE,			/* Table */
+    PROP_REM_OCCURANCE,			/* Table */
+    PROP_AUTO_CREATE,			/* Table */
+    PROP_AUTO_CREATE_NOTIFY,		/* Table */
+    PROP_ADVANCE_CREATION_DAYS,		/* Table */
+    PROP_ADVANCE_REMINDER_DAYS,		/* Table */
+    PROP_INSTANCE_COUNT,		/* Table */
+    PROP_TEMPLATE_ACCOUNT		/* Table */
 };
 
 /* GObject initialization */
@@ -173,6 +174,8 @@ gnc_schedxaction_set_property (GObject         *object,
     g_return_if_fail(GNC_IS_SCHEDXACTION(object));
 
     sx = GNC_SCHEDXACTION(object);
+    g_assert (qof_instance_get_editlevel(sx));
+
     switch (prop_id)
     {
     case PROP_NAME:
@@ -377,6 +380,7 @@ xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
 {
     Account        *ra;
     const GncGUID *guid;
+    gchar guidstr[GUID_ENCODING_LENGTH+1];
 
     qof_instance_init_data (&sx->inst, GNC_ID_SCHEDXACTION, book);
 
@@ -384,7 +388,8 @@ xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
     sx->template_acct = xaccMallocAccount(book);
     guid = qof_instance_get_guid( sx );
     xaccAccountBeginEdit( sx->template_acct );
-    xaccAccountSetName( sx->template_acct, guid_to_string( guid ));
+    guid_to_string_buff( guid, guidstr );
+    xaccAccountSetName( sx->template_acct, guidstr);
     xaccAccountSetCommodity
     (sx->template_acct,
      gnc_commodity_table_lookup( gnc_commodity_table_get_table(book),
@@ -633,7 +638,7 @@ xaccSchedXactionSetEndDate( SchedXaction *sx, const GDate *newEnd )
  * the SX is to run "forever". See gnc_sxed_save_sx() and
  * schedXact_editor_populate() in dialog-sx-editor.c.
  */
-    if (newEnd == NULL ||
+    if (newEnd == NULL || 
         (g_date_valid(newEnd) && g_date_compare( newEnd, &sx->start_date ) < 0 ))
     {
         /* XXX: I reject the bad data - is this the right
@@ -951,8 +956,8 @@ pack_split_info (TTSplitInfo *s_info, Account *parent_acct,
                  Transaction *parent_trans, QofBook *book)
 {
     Split *split;
-    KvpFrame *split_frame;
-    KvpValue *tmp_value;
+    const gchar *credit_formula;
+    const gchar *debit_formula;
     const GncGUID *acc_guid;
 
     split = xaccMallocSplit(book);
@@ -968,40 +973,14 @@ pack_split_info (TTSplitInfo *s_info, Account *parent_acct,
     xaccAccountInsertSplit(parent_acct,
                            split);
 
-    split_frame = xaccSplitGetSlots(split);
-
-    tmp_value
-    = kvp_value_new_string(gnc_ttsplitinfo_get_credit_formula(s_info));
-
-    kvp_frame_set_slot_path(split_frame,
-                            tmp_value,
-                            GNC_SX_ID,
-                            GNC_SX_CREDIT_FORMULA,
-                            NULL);
-    kvp_value_delete(tmp_value);
-
-    tmp_value
-    = kvp_value_new_string(gnc_ttsplitinfo_get_debit_formula(s_info));
-
-    kvp_frame_set_slot_path(split_frame,
-                            tmp_value,
-                            GNC_SX_ID,
-                            GNC_SX_DEBIT_FORMULA,
-                            NULL);
-
-    kvp_value_delete(tmp_value);
-
+    credit_formula = gnc_ttsplitinfo_get_credit_formula(s_info);
+    debit_formula = gnc_ttsplitinfo_get_debit_formula(s_info);
     acc_guid = qof_entity_get_guid(QOF_INSTANCE(gnc_ttsplitinfo_get_account(s_info)));
-
-    tmp_value = kvp_value_new_guid(acc_guid);
-
-    kvp_frame_set_slot_path(split_frame,
-                            tmp_value,
-                            GNC_SX_ID,
-                            GNC_SX_ACCOUNT,
-                            NULL);
-
-    kvp_value_delete(tmp_value);
+    qof_instance_set (QOF_INSTANCE (split),
+		      "sx-credit-formula", credit_formula,
+		      "sx-debit-formula", debit_formula,
+		      "sx-account", acc_guid,
+		      NULL);
 
     return split;
 }

@@ -69,6 +69,7 @@
 #include "window-autoclear.h"
 #include "window-main-summarybar.h"
 #include "dialog-object-references.h"
+#include "dialog-find-account.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -137,6 +138,8 @@ static void gnc_plugin_page_account_tree_cmd_file_new_hierarchy (GtkAction *acti
 static void gnc_plugin_page_account_tree_cmd_open_account (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_open_subaccounts (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_edit_account (GtkAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_find_account (GtkAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_find_account_popup (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_renumber_accounts (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_view_filter_by (GtkAction *action, GncPluginPageAccountTree *plugin_page);
@@ -212,7 +215,7 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
 
     /* Edit menu */
     {
-        "EditEditAccountAction", GNC_STOCK_EDIT_ACCOUNT, N_("Edit _Account"), "<control>e",
+        "EditEditAccountAction", GNC_STOCK_EDIT_ACCOUNT, N_("Edit _Account"), "<primary>e",
         N_("Edit the selected account"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_edit_account)
     },
@@ -220,6 +223,16 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
         "EditDeleteAccountAction", GNC_STOCK_DELETE_ACCOUNT, N_("_Delete Account..."), "Delete",
         N_("Delete selected account"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_delete_account)
+    },
+    {
+        "EditFindAccountAction", GTK_STOCK_FIND, N_("F_ind Account"), "<primary>i",
+        N_("Find an account"),
+        G_CALLBACK (gnc_plugin_page_account_tree_cmd_find_account)
+    },
+    {
+        "EditFindAccountPopupAction", GTK_STOCK_FIND, N_("F_ind Account"), "<primary>i",
+        N_("Find an account"),
+        G_CALLBACK (gnc_plugin_page_account_tree_cmd_find_account_popup)
     },
     {
         "EditRenumberSubaccountsAction", NULL, N_("_Renumber Subaccounts..."), NULL,
@@ -245,7 +258,7 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_autoclear)
     },
     {
-        "ActionsTransferAction", NULL, N_("_Transfer..."), "<control>t",
+        "ActionsTransferAction", NULL, N_("_Transfer..."), "<primary>t",
         N_("Transfer funds from one account to another"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_transfer)
     },
@@ -473,7 +486,9 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
     /* Visible types */
     priv->fd.visible_types = -1; /* Start with all types */
     priv->fd.show_hidden = FALSE;
+    priv->fd.show_unused = TRUE;
     priv->fd.show_zero_total = TRUE;
+    priv->fd.filter_override = g_hash_table_new (g_direct_hash, g_direct_equal);
 
     LEAVE("page %p, priv %p, action group %p",
           plugin_page, priv, action_group);
@@ -493,6 +508,64 @@ gnc_plugin_page_account_tree_finalize (GObject *object)
 
     G_OBJECT_CLASS (parent_class)->finalize (object);
     LEAVE(" ");
+}
+
+void
+gnc_plugin_page_account_tree_open (Account *account, GtkWindow *win)
+{
+    GncPluginPageAccountTreePrivate *priv;
+    GncPluginPageAccountTree *page;
+    GncPluginPage *plugin_page = NULL;
+    const GList *page_list;
+    GtkWidget   *window;
+
+    /* Find Accounts page */
+    page_list = gnc_gobject_tracking_get_list(GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME);
+
+    // If we have a window, look for account page in that window
+    if (g_list_length ((GList*)page_list) != 0)
+    {
+        if (win != NULL)
+        {
+            for ( ; page_list; page_list = g_list_next(page_list))
+            {
+                plugin_page = GNC_PLUGIN_PAGE(page_list->data);
+                if (GTK_WINDOW(plugin_page->window) == win)
+                    break;
+            }
+        }
+        else // if no window, open first account page in list
+            plugin_page = GNC_PLUGIN_PAGE(page_list->data);
+    }
+    else // we have no account pages, create one
+        plugin_page = gnc_plugin_page_account_tree_new ();
+
+    window = plugin_page->window;
+
+    gnc_main_window_open_page (GNC_MAIN_WINDOW(window), plugin_page);
+
+    page = GNC_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page);
+    priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
+
+    if (account != NULL)
+    {
+        Account *root_account = gnc_get_current_root_account ();
+        Account *parent_account = NULL;
+        Account *temp_account = account;
+
+        g_hash_table_insert (priv->fd.filter_override, account, account);
+
+        // make sure we override all the parent accounts to root
+        while (parent_account != root_account)
+        {
+            parent_account = gnc_account_get_parent (temp_account);
+
+            g_hash_table_insert (priv->fd.filter_override, parent_account, parent_account);
+            temp_account = parent_account;
+        }
+        gnc_tree_view_account_refilter (GNC_TREE_VIEW_ACCOUNT(priv->tree_view));
+        gnc_tree_view_account_set_selected_account (GNC_TREE_VIEW_ACCOUNT(priv->tree_view), account);
+    }
 }
 
 Account *
@@ -654,6 +727,9 @@ gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page)
                                  GNC_PREF_SUMMARYBAR_POSITION_BOTTOM,
                                  gnc_plugin_page_account_tree_summarybar_position_changed,
                                  page);
+
+    // Destroy the filter override hash table
+    g_hash_table_destroy(priv->fd.filter_override);
 
     if (priv->widget)
     {
@@ -1009,7 +1085,6 @@ gnc_plugin_page_account_tree_cmd_open2_subaccounts (GtkAction *action,
 }
 /*################## Added for Reg2 #################*/
 
-
 static void
 gnc_plugin_page_account_tree_cmd_edit_account (GtkAction *action, GncPluginPageAccountTree *page)
 {
@@ -1021,6 +1096,35 @@ gnc_plugin_page_account_tree_cmd_edit_account (GtkAction *action, GncPluginPageA
     g_return_if_fail (account != NULL);
 
     gnc_ui_edit_account_window (account);
+    LEAVE(" ");
+}
+
+static void
+gnc_plugin_page_account_tree_cmd_find_account (GtkAction *action, GncPluginPageAccountTree *page)
+{
+    GtkWidget *window;
+
+    ENTER("action %p, page %p", action, page);
+
+    window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page));
+
+    gnc_find_account_dialog (window, NULL);
+    LEAVE(" ");
+}
+
+static void
+gnc_plugin_page_account_tree_cmd_find_account_popup (GtkAction *action, GncPluginPageAccountTree *page)
+{
+    Account *account = NULL;
+    GtkWidget *window;
+
+    ENTER("action %p, page %p", action, page);
+
+    account = gnc_plugin_page_account_tree_get_current_account (page);
+
+    window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page));
+
+    gnc_find_account_dialog (window, account);
     LEAVE(" ");
 }
 
@@ -1399,7 +1503,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
         {
             GList *acct_list, *ptr;
             const GncGUID *guid;
-            const gchar *guid_str;
+            gchar guidstr[GUID_ENCODING_LENGTH+1];
 
             gnc_set_busy_cursor(NULL, TRUE);
             gnc_suspend_gui_refresh ();
@@ -1437,16 +1541,16 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
             for (ptr = acct_list; ptr; ptr = g_list_next(ptr))
             {
                 guid = xaccAccountGetGUID (ptr->data);
-                guid_str = guid_to_string (guid);
-                gnc_state_drop_sections_for (guid_str);
+                guid_to_string_buff (guid, guidstr);
+                gnc_state_drop_sections_for (guidstr);
             }
             g_list_free(acct_list);
 
             /* Drop all references from the state file for this account
              */
             guid = xaccAccountGetGUID (account);
-            guid_str = guid_to_string (guid);
-            gnc_state_drop_sections_for (guid_str);
+            guid_to_string_buff (guid, guidstr);
+            gnc_state_drop_sections_for (guidstr);
 
             /*
              * Finally, delete the account, any subaccounts it may still

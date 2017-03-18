@@ -1,16 +1,20 @@
-TESTS = \
+include $(top_srcdir)/test-templates/Makefile.decl
+
+check_PROGRAMS = \
   test-link-module \
-  test-load-module \
   test-exp-parser \
   test-scm-query-string \
   test-print-parse-amount \
-  test-sx
+  test-sx \
+  test-app-utils
 
-test_exp_parser_SOURCES = \
-  test-exp-parser.c
+TESTS =  \
+  test-load-module \
+  ${check_PROGRAMS}
 
-test_print_parse_amount_SOURCES = \
-  test-print-parse-amount.c
+test_scm_query_string_SOURCES = test-scm-query-string.cpp
+test_sx_SOURCES = test-sx.cpp
+test_print_parse_amount_SOURCES = test-print-parse-amount.cpp
 
 GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/app-utils \
@@ -44,15 +48,7 @@ LDADD = \
    ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
    ${GUILE_LIBS}
 
-check_PROGRAMS = \
-  test-link-module \
-  test-exp-parser \
-  test-print-parse-amount \
-  test-scm-query-string \
-  test-print-queries \
-  test-sx
-
-EXTRA_DIST = \
+EXTRA_DIST += \
   test-load-module
 
 AM_CPPFLAGS = \
@@ -65,4 +61,16 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/libqof/qof \
   ${GUILE_CFLAGS} \
-  ${GLIB_CFLAGS}
+  ${GLIB_CFLAGS} \
+  ${BOOST_CPPFLAGS}
+
+test_app_utils_SOURCES = \
+	test-app-utils.c \
+	test-option-util.cpp \
+	test-gnc-ui-util.c
+
+test_app_utils_CXXFLAGS = \
+	${DEFAULT_INCLUDES} \
+	-I${top_srcdir}/${MODULEPATH}/ \
+	-DTESTPROG=test_app_utils \
+	${GLIB_CFLAGS}

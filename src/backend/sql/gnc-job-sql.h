@@ -30,6 +30,14 @@
 #ifndef GNC_JOB_SQL_H
 #define GNC_JOB_SQL_H
 
-void gnc_job_sql_initialize( void );
+#include "gnc-sql-object-backend.hpp"
+
+class GncSqlJobBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlJobBackend();
+    void load_all(GncSqlBackend*) override;
+    bool write(GncSqlBackend*) override;
+};
 
 #endif /* GNC_JOB_SQL_H */

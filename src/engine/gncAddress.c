@@ -25,9 +25,10 @@
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <glib.h>
+#include <qofinstance-p.h>
 
 #include "gncAddress.h"
 #include "gncAddressP.h"
@@ -496,7 +497,7 @@ static void address_free (QofInstance *inst)
 void gncAddressCommitEdit (GncAddress *addr)
 {
     /* GnuCash 2.6.3 and earlier didn't handle address kvp's... */
-    if (!kvp_frame_is_empty (addr->inst.kvp_data))
+     if (qof_instance_has_kvp(QOF_INSTANCE(addr)))
         gnc_features_set_used (qof_instance_get_book (QOF_INSTANCE (addr)), GNC_FEATURE_KVP_EXTRA_DATA);
 
     if (!qof_commit_edit (QOF_INSTANCE(addr))) return;

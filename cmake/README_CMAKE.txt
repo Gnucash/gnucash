@@ -107,6 +107,11 @@ Then decide what cmake command line options you will need:
    the top-level `CMakeLists.txt` file.  For example, you can disable
    SQL using these options.
 
+ * Google Test will work without setting options in most Linux distros, but if
+   it doesn't you may need to set GMOCK_ROOT or GTEST_ROOT to the root of the
+   respective sources. Set GTEST_DISABLE to prevent Google Test based tests from
+   running.
+
 Some examples:
 
  * Build on Linux, don't want to install, use the Makefile generator:
@@ -124,6 +129,11 @@ Some examples:
  * The same, but use the Xcode generator:
 
    $ cmake -D CMAKE_INSTALL_PREFIX=/tmp/gnucash -D CMAKE_PREFIX_PATH=$HOME/gnucash-unstable -G Xcode ../gnucash
+
+  * Again, this time pointing to a gmock-1.7.0 source directory:
+
+   $ cmake -D CMAKE_INSTALL_PREFIX=/tmp/gnucash -D
+   CMAKE_PREFIX_PATH=$HOME/gnucash-unstable -D GMOCK_ROOT=$HOME/gmock-1.7.0 -D GTEST_ROOT=$HOME/gmock-1.7.0/gtest -G Xcode ../gnucash
 
 === Building
 

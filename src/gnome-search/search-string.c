@@ -262,6 +262,7 @@ make_menu (GNCSearchCoreType *fe)
     combo = GTK_COMBO_BOX(gnc_combo_box_new_search());
 
     gnc_combo_box_search_add(combo, _("contains"), SEARCH_STRING_CONTAINS);
+    gnc_combo_box_search_add(combo, _("equals"), SEARCH_STRING_EQUAL);
     gnc_combo_box_search_add(combo, _("matches regex"),
                              SEARCH_STRING_MATCHES_REGEX);
     gnc_combo_box_search_add(combo, _("does not match regex"),
@@ -350,12 +351,18 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
         is_regex = TRUE;
         /* FALL THROUGH */
     case SEARCH_STRING_CONTAINS:
+        how = QOF_COMPARE_CONTAINS;
+        break;
+    case SEARCH_STRING_EQUAL:
         how = QOF_COMPARE_EQUAL;
         break;
     case SEARCH_STRING_NOT_MATCHES_REGEX:
         is_regex = TRUE;
         /* FALL THROUGH */
     case SEARCH_STRING_NOT_CONTAINS:
+        how = QOF_COMPARE_NCONTAINS;
+        break;
+    case SEARCH_STRING_NOT_EQUAL:
         how = QOF_COMPARE_NEQ;
         break;
     default:

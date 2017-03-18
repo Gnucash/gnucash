@@ -34,6 +34,7 @@
 #include "gnc-hooks-scm.h"
 #include "engine-helpers.h"
 #include "engine-helpers-guile.h"
+#include "policy.h"
 #include "SX-book.h"
 #include "kvp-scm.h"
 #include "glib-helpers.h"
@@ -156,14 +157,11 @@ functions. */
 %typemap(in) char * num;
 %typemap(in) char * action;
 
+%include <policy.h>
 %include <gnc-pricedb.h>
 
 QofSession * qof_session_new (void);
 QofBook * qof_session_get_book (QofSession *session);
-
-// TODO: Maybe unroll
-void qof_book_kvp_changed (QofBook *book);
-
 // TODO: Unroll/remove
 const char *qof_session_get_url (QofSession *session);
 
@@ -194,7 +192,6 @@ SplitList * qof_query_run_subquery (QofQuery *q, const QofQuery *q);
 %include <qofbookslots.h>
 %include <qofbook.h>
 
-KvpFrame* qof_book_get_slots(QofBook* book);
 %ignore GNC_DENOM_AUTO;
 %ignore GNCNumericErrorCodes;
 %ignore GNC_ERROR_OK;
@@ -250,12 +247,14 @@ Account * gnc_book_get_template_root(QofBook *book);
 %typemap(out) KvpValue * " $result = gnc_kvp_value_ptr_to_scm($1); "
 %typemap(in) GSList *key_path " $1 = gnc_scm_to_gslist_string($input);"
 
-void gnc_kvp_frame_delete_at_path(KvpFrame *frame, GSList *key_path);
-void kvp_frame_set_slot_path_gslist(
-   KvpFrame *frame, const KvpValue *new_value, GSList *key_path);
-KvpValue * kvp_frame_get_slot_path_gslist (KvpFrame *frame, GSList *key_path);
+void qof_book_options_delete (QofBook *book, GSList *key_path);
+void qof_book_set_option (QofBook *book, KvpValue *new_value, GSList *key_path);
+KvpValue* qof_book_get_option (QofBook *book, GSList *key_path);
 
 %clear GSList *key_path;
+
+const char* qof_book_get_string_option(const QofBook* book, const char* opt_name);
+void qof_book_set_string_option(QofBook* book, const char* opt_name, const char* opt_val);
 
 #if defined(SWIGGUILE)
 %init {
@@ -310,6 +309,8 @@ KvpValue * kvp_frame_get_slot_path_gslist (KvpFrame *frame, GSList *key_path);
     SET_ENUM("QOF-COMPARE-GT");
     SET_ENUM("QOF-COMPARE-GTE");
     SET_ENUM("QOF-COMPARE-NEQ");
+    SET_ENUM("QOF-COMPARE-CONTAINS");
+    SET_ENUM("QOF-COMPARE-NCONTAINS");
 
     SET_ENUM("QOF-NUMERIC-MATCH-ANY");
     SET_ENUM("QOF-NUMERIC-MATCH-CREDIT");
@@ -360,6 +361,9 @@ KvpValue * kvp_frame_get_slot_path_gslist (KvpFrame *frame, GSList *key_path);
 
     SET_ENUM("OPTION-SECTION-ACCOUNTS");
     SET_ENUM("OPTION-NAME-TRADING-ACCOUNTS");
+    SET_ENUM("OPTION-NAME-CURRENCY-ACCOUNTING");
+    SET_ENUM("OPTION-NAME-BOOK-CURRENCY");
+    SET_ENUM("OPTION-NAME-DEFAULT-GAINS-POLICY");
     SET_ENUM("OPTION-NAME-AUTO-READONLY-DAYS");
     SET_ENUM("OPTION-NAME-NUM-FIELD-SOURCE");
 
@@ -382,8 +386,17 @@ KvpValue * kvp_frame_get_slot_path_gslist (KvpFrame *frame, GSList *key_path);
     SET_ENUM("PRICE-SOURCE-XFER-DLG-VAL");
     SET_ENUM("PRICE-SOURCE-SPLIT-REG");
     SET_ENUM("PRICE-SOURCE-STOCK-SPLIT");
-    SET_ENUM("PRICE-SOURCE-INVOICE");
+    SET_ENUM("PRICE-SOURCE-TEMP");
     SET_ENUM("PRICE-SOURCE-INVALID");
+
+    SET_ENUM("QOF-DATE-FORMAT-US");
+    SET_ENUM("QOF-DATE-FORMAT-UK");
+    SET_ENUM("QOF-DATE-FORMAT-CE");
+    SET_ENUM("QOF-DATE-FORMAT-ISO");
+    SET_ENUM("QOF-DATE-FORMAT-LOCALE");
+    SET_ENUM("QOF-DATE-FORMAT-UTC");
+    SET_ENUM("QOF-DATE-FORMAT-CUSTOM");
+
 
 #undef SET_ENUM
   }

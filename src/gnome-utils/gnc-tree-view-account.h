@@ -78,12 +78,15 @@ typedef	struct
     GtkWidget           *dialog;
     GtkTreeModel        *model;
     GncTreeViewAccount  *tree_view;
+    GHashTable          *filter_override;
     guint32              visible_types;
     guint32              original_visible_types;
     gboolean             show_hidden;
     gboolean             original_show_hidden;
     gboolean             show_zero_total;
     gboolean             original_show_zero_total;
+    gboolean             show_unused;
+    gboolean             original_show_unused;
 } AccountFilterDialog;
 
 void account_filter_dialog_create(AccountFilterDialog *fd,
@@ -96,6 +99,8 @@ gboolean gnc_plugin_page_account_tree_filter_accounts (Account *account,
 void gppat_filter_show_hidden_toggled_cb (GtkToggleButton *togglebutton,
         AccountFilterDialog *fd);
 void gppat_filter_show_zero_toggled_cb (GtkToggleButton *togglebutton,
+                                        AccountFilterDialog *fd);
+void gppat_filter_show_unused_toggled_cb (GtkToggleButton *togglebutton,
                                         AccountFilterDialog *fd);
 void gppat_filter_clear_all_cb (GtkWidget *button, AccountFilterDialog *fd);
 void gppat_filter_select_all_cb (GtkWidget *button, AccountFilterDialog *fd);
@@ -203,20 +208,19 @@ void gnc_tree_view_account_notes_edited_cb(Account *account, GtkTreeViewColumn *
 
 /** Add a new column to the set of columns in an account tree view.
  *  This column will be visible as soon as it is added and will
- *  display the contents of the specified KVP slot.
+ *  display the contents of the specified account property
  *
  *  @param view A pointer to an account tree view.
  *
  *  @param column_title The title for this new column.
  *
- *  @param kvp_key The lookup key to use for looking up data in the
- *  account KVP structures. The value associated with this key is what
- *  will be displayed in the column.
+ *  @param propname The g_object_property name of the desired
+ *  value. This must be a string property.
  */
 GtkTreeViewColumn *
-gnc_tree_view_account_add_kvp_column (GncTreeViewAccount *view,
-                                      const gchar *column_title,
-                                      const gchar *kvp_key);
+gnc_tree_view_account_add_property_column (GncTreeViewAccount *view,
+					   const gchar *column_title,
+					   const gchar *propname);
 
 /** @} */
 

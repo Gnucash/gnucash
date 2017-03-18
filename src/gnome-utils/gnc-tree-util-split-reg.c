@@ -90,38 +90,16 @@ static gnc_numeric
 gtu_sr_get_rate_from_db (gnc_commodity *from, gnc_commodity *to)
 {
     GNCPrice *prc;
-    gnc_numeric rate_split;
-    gboolean have_rate = FALSE;
     QofBook *book = gnc_get_current_book ();
 
-    /* Do we have a rate allready */
     prc = gnc_pricedb_lookup_latest (gnc_pricedb_get_db (book), from, to);
-    if (prc)
-    {
-        rate_split = gnc_price_get_value (prc);
-        gnc_price_unref (prc);
-        have_rate = TRUE;
-    }
 
-    /* Lets try reversing the commodities */
-    if (!have_rate)
-    {
-        prc = gnc_pricedb_lookup_latest (gnc_pricedb_get_db (book), to, from);
-        if (prc)
-        {
-            rate_split = gnc_numeric_div (gnc_numeric_create (100, 100), gnc_price_get_value (prc),
-                                 GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
+    if (!prc)
+        return gnc_numeric_create (100, 100);
 
-            gnc_price_unref (prc);
-            have_rate = TRUE;
-        }
-    }
-
-    /* No rate, set to 1/1 */
-    if (!have_rate)
-        rate_split = gnc_numeric_create (100, 100);
-
-    return rate_split;
+    if (gnc_commodity_equiv(from, gnc_price_get_currency(prc)))
+        return gnc_numeric_invert(gnc_price_get_value(prc));
+    return gnc_price_get_value(prc);
 }
 
 
@@ -298,7 +276,7 @@ gnc_tree_util_split_reg_has_rate (GncTreeViewSplitReg *view)
     case EXPENSE_REGISTER2:
     case EQUITY_REGISTER2:
     case TRADING_REGISTER2:
-    case GENERAL_LEDGER2:
+    case GENERAL_JOURNAL2:
     case INCOME_LEDGER2:
     case SEARCH_LEDGER2:
         return TRUE;
@@ -397,30 +375,20 @@ const char *
 gnc_tree_util_split_reg_template_get_transfer_entry (Split *split)
 {
     static char *name = NULL;
+    Account *account;
+    GncGUID *guid = NULL;
 
-    kvp_frame *kvpf;
+    /* Callers either g_strdup the return or use it as a temp for comparison,
+       so we keep our static ref and free it on every call. */
+    g_free (name);
 
     if (!split)
         return NULL;
-
-    kvpf = xaccSplitGetSlots (split);
-
-    g_free (name);
-
-    if (kvpf)
-    {
-        Account *account;
-        GncGUID *guid;
-
-        guid = kvp_value_get_guid(
-                   kvp_frame_get_slot_path (kvpf, "sched-xaction", "account", NULL));
-
-        account = xaccAccountLookup (guid, gnc_get_current_book ());
-
-        name = account ? gnc_get_account_name_for_register (account) : NULL;
-    }
-    else
-        name = NULL;
+    qof_instance_get (QOF_INSTANCE (split),
+		      "sx-account", &guid,
+		      NULL);
+    account = xaccAccountLookup (guid, gnc_get_current_book ());
+    name = account ? gnc_get_account_name_for_register (account) : NULL;
 
     return name;
 }
@@ -429,20 +397,27 @@ gnc_tree_util_split_reg_template_get_transfer_entry (Split *split)
 const char *
 gnc_tree_util_split_reg_template_get_fdebt_entry (Split *split)
 {
-    kvp_frame *kvpf = xaccSplitGetSlots (split);
+    gchar *formula = NULL;
 
-    return kvp_value_get_string(
-               kvp_frame_get_slot_path (kvpf, "sched-xaction", "debit-formula", NULL));
+    g_return_val_if_fail (split != NULL, NULL);
+    qof_instance_get (QOF_INSTANCE (split),
+		      "sx-debit-formula", &formula,
+		      NULL);
+
+    return formula;
 }
-
 
 const char *
 gnc_tree_util_split_reg_template_get_fcred_entry (Split *split)
 {
-    kvp_frame *kvpf = xaccSplitGetSlots (split);
+    gchar *formula = NULL;
 
-    return kvp_value_get_string(
-               kvp_frame_get_slot_path (kvpf, "sched-xaction", "credit-formula", NULL));
+    g_return_val_if_fail (split != NULL, NULL);
+    qof_instance_get (QOF_INSTANCE (split),
+		      "sx-credit-formula", &formula,
+		      NULL);
+
+    return formula;
 }
 
 

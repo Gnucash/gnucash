@@ -49,7 +49,9 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/src/backend/sql \
   --library-dir    ${top_builddir}/src/gnome-utils \
   --library-dir    ${top_builddir}/src/html \
-  --library-dir    ${top_builddir}/src/report/report-system
+  --library-dir    ${top_builddir}/src/report/report-system \
+  --library-dir    ${top_builddir}/src/report/report-gnome
+
 
 TESTS_ENVIRONMENT = \
   GUILE_WARN_DEPRECATED=no \

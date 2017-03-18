@@ -1,4 +1,4 @@
-SUBDIRS = . gschemas
+SUBDIRS = . gschemas test
 
 pkglib_LTLIBRARIES = libgncmod-aqbanking.la
 
@@ -9,7 +9,6 @@ libgncmod_aqbanking_la_SOURCES = \
   gnc-ab-getbalance.c \
   gnc-ab-gettrans.c \
   gnc-ab-kvp.c \
-  gnc-ab-trans-templ.c \
   gnc-ab-transfer.c \
   gnc-ab-utils.c \
   gnc-file-aqb-import.c \
@@ -24,7 +23,6 @@ noinst_HEADERS = \
   gnc-ab-getbalance.h \
   gnc-ab-gettrans.h \
   gnc-ab-kvp.h \
-  gnc-ab-trans-templ.h \
   gnc-ab-transfer.h \
   gnc-ab-utils.h \
   gnc-file-aqb-import.h \

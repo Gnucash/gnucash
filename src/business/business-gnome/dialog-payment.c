@@ -485,23 +485,16 @@ gnc_payment_dialog_owner_changed (PaymentWindow *pw)
 {
     Account *last_acct = NULL;
     GncGUID *guid = NULL;
-    KvpValue* value;
-    KvpFrame* slots;
     GncOwner *owner = &pw->owner;
 
     /* If the owner changed, the initial invoice is no longer valid */
     pw->invoice = NULL;
 
     /* Now handle the account tree */
-    slots = gncOwnerGetSlots(owner);
-    if (slots)
-    {
-        value = kvp_frame_get_slot_path(slots, "payment", "last_acct", NULL);
-        if (value)
-        {
-            guid = kvp_value_get_guid(value);
-        }
-    }
+    if (gncOwnerIsValid(owner))
+        qof_instance_get (qofOwnerGetOwner (owner),
+                          "payment-last-account", &guid,
+                          NULL);
 
     /* refresh the post and acc available accounts, but cleanup first */
     if (pw->acct_types)
@@ -551,20 +544,17 @@ gnc_payment_dialog_post_to_changed (PaymentWindow *pw)
 static void
 gnc_payment_dialog_remember_account (PaymentWindow *pw, Account *acc)
 {
-    KvpValue* value;
-    KvpFrame* slots = gncOwnerGetSlots(&pw->owner);
+     QofInstance *owner = qofOwnerGetOwner (&pw->owner);
+    const GncGUID *guid;
 
     if (!acc) return;
-    if (!slots) return;
 
-    value = kvp_value_new_guid(xaccAccountGetGUID(acc));
-    if (!value) return;
-
-    xaccAccountBeginEdit (acc);
-    kvp_frame_set_slot_path(slots, value, "payment", "last_acct", NULL);
-    qof_instance_set_dirty (QOF_INSTANCE (acc));
-    xaccAccountCommitEdit (acc);
-    kvp_value_delete(value);
+    guid = xaccAccountGetGUID(acc);
+    qof_begin_edit (owner);
+    qof_instance_set (owner,
+		      "payment-last-account", guid,
+		      NULL);
+    qof_commit_edit (owner);
 }
 
 

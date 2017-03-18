@@ -45,6 +45,9 @@
 
 #define GNC_PREFS_GROUP "dialogs.log-replay"
 
+/* EFFECTIVE FRIEND FUNCTION */
+void qof_instance_set_guid (gpointer inst, const GncGUID *guid);
+
 /* NW: If you want a new log_module, just define
 a unique string either in gnc-engine.h or
 locally.*/
@@ -281,11 +284,13 @@ static void dump_split_record(split_record record)
     }
     if (record.trans_guid_present)
     {
-        DEBUG("Transaction GncGUID: %s", guid_to_string (&(record.trans_guid)));
+        guid_to_string_buff(&record.trans_guid, string_buf);
+        DEBUG("Transaction GncGUID: %s", string_buf);
     }
     if (record.split_guid_present)
     {
-        DEBUG("Split GncGUID: %s", guid_to_string (&(record.split_guid)));
+        guid_to_string_buff(&record.split_guid, string_buf);
+        DEBUG("Split GncGUID: %s", string_buf);
     }
     if (record.log_date_present)
     {
@@ -304,7 +309,8 @@ static void dump_split_record(split_record record)
     }
     if (record.acc_guid_present)
     {
-        DEBUG("Account GncGUID: %s", guid_to_string (&(record.acc_guid)));
+        guid_to_string_buff(&record.trans_guid, string_buf);
+        DEBUG("Account GncGUID: %s", string_buf);
     }
     if (record.acc_name_present)
     {
@@ -435,7 +441,8 @@ static void  process_trans_record(  FILE *log_file)
                             xaccTransBeginEdit(trans);
                         }
 
-                        xaccTransSetGUID (trans, &(record.trans_guid));
+                        qof_instance_set_guid (QOF_INSTANCE (trans),
+					       &(record.trans_guid));
                         /*Fill the transaction info*/
                         if (record.date_entered_present)
                         {

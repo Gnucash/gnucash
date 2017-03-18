@@ -12,7 +12,8 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/libqof/qof \
   -I${top_srcdir}/src/core-utils \
   ${GUILE_CFLAGS} \
-  ${GLIB_CFLAGS}
+  ${GLIB_CFLAGS} \
+  ${BOOST_CPPFLAGS}
 
 LDADD = \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
@@ -23,18 +24,21 @@ LDADD = \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${GLIB_LIBS}
 
+test_guid_SOURCES = test-guid.cpp
+
 # these tests are ordered kind more or less in the order
 # that they should be executed, with more basic tests coming first.
 #
-TESTS = \
+TEST_GROUP_1 = \
   test-link \
   test-load-engine \
   test-guid \
-  test-numeric \
   test-date \
   test-object \
   test-commodities \
-  test-create-account \
+  test-engine
+
+TEST_GROUP_2 = \
   test-account-object \
   test-group-vs-book \
   test-lots \
@@ -50,8 +54,7 @@ TESTS = \
   test-customer \
   test-employee \
   test-job \
-  test-vendor \
-  $(SCM_TESTS)
+  test-vendor
 
 SCM_TESTS = \
   test-test-extras \
@@ -79,6 +82,18 @@ GNC_TEST_DEPS = \
   --library-dir    ${top_builddir}/src/backend/sql \
   --library-dir    ${top_builddir}/src/engine/test
 
+test_account_object_SOURCES = test-account-object.cpp
+test_commodities_SOURCES = test-commodities.cpp
+test_date_SOURCES = test-date.cpp
+test_group_vs_book_SOURCES = test-group-vs-book.cpp
+test_lots_SOURCES = test-lots.cpp
+
+test_query_SOURCES = test-query.cpp
+test_scm_query_SOURCES = test-scm-query.cpp
+test_split_vs_account_SOURCES = test-split-vs-account.cpp
+test_transaction_reversal_SOURCES = test-transaction-reversal.cpp
+test_transaction_voiding_SOURCES = test-transaction-voiding.cpp
+
 $(SCM_TESTS): %: $(srcdir)/%.scm Makefile .scm-links
 	echo 'export GNC_BUILDDIR="${abs_top_builddir}";' > $@
 	echo 'export GNC_UNINSTALLED=yes;' >> $@
@@ -92,36 +107,18 @@ TESTS_ENVIRONMENT = \
   GNC_BUILDDIR="${abs_top_builddir}" \
   $(shell ${abs_top_srcdir}/src/gnc-test-env.pl --noexports ${GNC_TEST_DEPS})
 
-check_PROGRAMS = \
-  test-link \
-  test-commodities \
-  test-date \
-  test-recurrence \
-  test-guid \
-  test-account-object \
-  test-group-vs-book \
-  test-load-engine \
-  test-lots \
-  test-numeric \
-  test-object \
-  test-query \
-  test-querynew \
-  test-scm-query \
-  test-split-vs-account \
-  test-transaction-reversal \
-  test-transaction-voiding \
-  test-business \
-  test-address \
-  test-customer \
-  test-employee \
-  test-job \
-  test-vendor
+check_PROGRAMS = ${TEST_GROUP_1} ${TEST_GROUP_2}
 
+TESTS = ${TEST_GROUP_1} test-create-account ${TEST_GROUP_2} ${SCM_TESTS}
 
 test_link_SOURCES = test-link.c
 test_link_LDADD = ../libgncmod-engine.la \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la
+
+if WITH_GOOGLE_PROFILER
+LDADD += -lprofiler
+endif
 
 SCM_TEST_HELPERS = test-extras.scm
 
@@ -150,10 +147,13 @@ noinst_DATA: .scm-links
 
 test_engine_SOURCES = \
 	test-engine.c \
-	utest-Account.c \
+	utest-Account.cpp \
 	utest-Budget.c \
 	utest-Entry.c \
-	utest-Invoice.c
+	utest-Invoice.c \
+	test-engine-kvp-properties.c \
+	utest-gnc-pricedb.c \
+	dummy.cpp
 
 test_engine_LDADD = \
 	libutest-Split.la \
@@ -163,23 +163,47 @@ test_engine_CFLAGS = \
 	${DEFAULT_INCLUDES} \
 	-I${top_srcdir}/${MODULEPATH}/ \
 	-DTESTPROG=test_engine \
-	${GLIB_CFLAGS}
+	${GLIB_CFLAGS} \
+	${AM_CFLAGS}
 
 noinst_LTLIBRARIES = \
 	libutest-Split.la \
 	libutest-Trans.la
 
 libutest_Split_la_SOURCES = \
-	utest-Split.c \
-	${top_srcdir}/src/libqof/qof/gnc-numeric.c
-
+	utest-Split.cpp \
+	${top_srcdir}/src/libqof/qof/gnc-numeric.cpp
+libutest_Split_la_CXXFLAGS = -Wno-write-strings $(AM_CXXFLAGS)
 
 libutest_Split_la_LIBADD = $(LDADD)
 
 libutest_Trans_la_SOURCES = \
-	utest-Transaction.c
+	utest-Transaction.cpp
 
 libutest_Trans_la_LIBADD = $(LDADD)
+
+test_import_map_SOURCES = \
+        gtest-import-map.cpp
+test_import_map_LDADD = \
+        ${top_builddir}/src/libqof/qof/libgnc-qof.la \
+        ${top_builddir}/src/engine/libgncmod-engine.la \
+        ${GLIB_LIBS} \
+        ${GTEST_LIBS}
+
+if !GOOGLE_TEST_LIBS
+nodist_test_import_map_SOURCES = \
+        ${GTEST_SRC}/src/gtest_main.cc
+endif
+
+test_import_map_CPPFLAGS = \
+        -I${GTEST_HEADERS} \
+        -I${top_srcdir}/${MODULEPATH} \
+        -I${top_srcdir}/src/libqof/qof \
+        -I${top_srcdir}/src/core-utils \
+        ${GLIB_CFLAGS}
+
+TEST_GROUP_1 += test-import-map
+
 
 CLEANFILES = .scm-links
 DISTCLEANFILES = $(SCM_TESTS)

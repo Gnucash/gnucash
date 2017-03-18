@@ -331,12 +331,6 @@
      "u" (N_ "Extra notes to put on the invoice.")
      (_ "Thank you for your patronage!")))
 
-  (gnc:register-inv-option
-   (gnc:make-string-option
-    (N_ "Display") (N_ "Today Date Format")
-    "v" (N_ "The format for the date->string conversion for today's date.")
-    (gnc-default-strftime-date-format)))
-
   (gnc:options-set-default-section gnc:*report-options* "General")
 
   gnc:*report-options*)
@@ -587,12 +581,15 @@
      'attribute (list "valign" "top"))
     table))
 
-(define (make-date-row! table label date)
+(define (make-date-row! table label date date-format)
   (gnc:html-table-append-row!
    table
    (list
     (string-append label ":&nbsp;")
-    (string-expand (gnc-print-date date) #\space "&nbsp;"))))
+    (string-expand (strftime date-format
+                             (localtime (car date)))
+                             #\space "&nbsp;")
+    )))
 
 (define (make-date-table)
   (let ((table (gnc:make-html-table)))
@@ -607,13 +604,8 @@
 
 (define (make-myname-table book date-format)
   (let* ((table (gnc:make-html-table))
-	 (slots (qof-book-get-slots book))
-	 (name (kvp-frame-get-slot-path-gslist
-		slots (append gnc:*kvp-option-path*
-			      (list gnc:*business-label* gnc:*company-name*))))
-	 (addy (kvp-frame-get-slot-path-gslist
-		slots (append gnc:*kvp-option-path*
-			      (list gnc:*business-label* gnc:*company-addy*)))))
+	 (name (gnc:company-info book gnc:*company-name*))
+	 (addy (gnc:company-info book gnc:*company-addy*)))
 
     (gnc:html-table-set-style!
      table "table"
@@ -670,7 +662,7 @@
 
     (if (not (null? invoice))
 	(begin
-	  (set! owner (gncInvoiceGetOwner invoice)) 
+          (set! owner (gncInvoiceGetOwner invoice))
 	  (let ((type (gncInvoiceGetType invoice)))
 	    (cond
 	      ((eqv? type GNC-INVOICE-CUST-INVOICE)
@@ -699,7 +691,9 @@
 						    (gncInvoiceGetID invoice)))
 
     (if (not (null? invoice))
-	(let ((book (gncInvoiceGetBook invoice)))
+	(let* ((book (gncInvoiceGetBook invoice))
+               (date-format (gnc:options-fancy-date book)))
+
 	  (set! table (make-entry-table invoice
 					(gnc:report-options report-obj)
 					add-order cust-doc? credit-note?))
@@ -712,7 +706,7 @@
 
 	  (gnc:html-document-add-object!
 	   document
-	   (make-myname-table book (opt-val "Display" "Today Date Format")))
+	   (make-myname-table book date-format))
 
 	  (let ((date-table #f)
 		(post-date (gncInvoiceGetDatePosted invoice))
@@ -721,8 +715,8 @@
 	    (if (not (equal? post-date (cons 0 0)))
 		(begin
 		  (set! date-table (make-date-table))
-		  (make-date-row! date-table (string-append title " " (_ "Date")) post-date)
-		  (make-date-row! date-table (_ "Due Date") due-date)
+		  (make-date-row! date-table (string-append title " " (_ "Date")) post-date date-format)
+		  (make-date-row! date-table (_ "Due Date") due-date date-format)
 		  (gnc:html-document-add-object! document date-table))
 		(gnc:html-document-add-object!
 		 document

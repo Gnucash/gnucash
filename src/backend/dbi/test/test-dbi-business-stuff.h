@@ -26,5 +26,5 @@
 #ifndef _TEST_DBI_BUSINESS_STUFF_H_
 #define _TEST_DBI_BUSINESS_STUFF_H_
 
-void compare_business_books( QofBook* book_1, QofBook* book_2 );
+void compare_business_books (QofBook* book_1, QofBook* book_2);
 #endif

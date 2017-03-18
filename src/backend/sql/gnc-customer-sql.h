@@ -30,6 +30,15 @@
 #ifndef GNC_CUSTOMER_SQL_H
 #define GNC_CUSTOMER_SQL_H
 
-void gnc_customer_sql_initialize( void );
+#include "gnc-sql-object-backend.hpp"
+
+class GncSqlCustomerBackend : public GncSqlObjectBackend
+{
+public:
+    GncSqlCustomerBackend();
+    void load_all(GncSqlBackend*) override;
+    void create_tables(GncSqlBackend*) override;
+    bool write(GncSqlBackend*) override;
+};
 
 #endif /* GNC_CUSTOMER_SQL_H */

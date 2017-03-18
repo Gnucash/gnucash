@@ -20,7 +20,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 # Autoconf initialization
 AC_PREREQ(2.60)
-AC_INIT([GnuCash], [2.6.15], [https://bugzilla.gnome.org/page.cgi?id=browse.html&product=GnuCash], , [http://www.gnucash.org/])
+AC_INIT([GnuCash], [2.6.99], [gnucash-devel@gnucash.org])
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_SRCDIR(src/engine/Transaction.h)
 AC_CONFIG_MACRO_DIR([macros])
@@ -34,11 +34,11 @@ GNUCASH_NANO_VERSION=0
 #src/backend/dbi/gnc-backend-dbi.c:gnc_dbi_load.
 GNUCASH_RESAVE_VERSION=19920
 # Initialize automake -- make sure we have at least version 1.9 Note:
-# Automake 1.14 issues a ton of warnings about subdir-objects, which
+# Automake 1.14 & 1.15 issue a ton of warnings about subdir-objects, which
 # will become the default in automake 2.0; unfortunately this option
 # is broken and prevents building without passing
 # --disable-dependency-tracking to configure, which make-distcheck
-# doesn't do. See
+# doesn't do. Fixes are in git and expected in Automake-1.16. See
 # http://lists.gnu.org/archive/html/automake/2014-04/msg00002.html and
 # http://debbugs.gnu.org/cgi/bugreport.cgi?bug=13928 for details.
 # In the meantime the best option is to use Automake 1.13 or earlier.
@@ -69,7 +69,13 @@ AC_PROG_CC
 AM_PROG_CC_C_O
 AC_GNU_SOURCE
 AC_PROG_INTLTOOL
-
+# Ensure the C++ compiler supports C++ 11:
+AX_CXX_COMPILE_STDCXX_11(ext)
+# Ensure the C compiler supports C11
+AX_CHECK_COMPILE_FLAG([-std=gnu11],
+                      [AX_APPEND_FLAG([-std=gnu11])],
+                      [AC_MSG_ERROR([The compiler doesn't support the C11 (gnu11) standard.])
+                      ])
 
 AC_SUBST(GNUCASH_MAJOR_VERSION)
 AC_SUBST(GNUCASH_MINOR_VERSION)
@@ -136,6 +142,18 @@ AC_MSG_RESULT([$ac_cv_CLANG])
 AM_CONDITIONAL([CLANG], [test "x$ac_cv_CLANG" = "xyes"])
 
 ###--------------------------------------------------------
+### Begin C++ dependencies
+###--------------------------------------------------------
+PKG_CHECK_MODULES(ICU4C, icu-uc, [ac_cv_ICU4C=yes], [ac_cv_ICU4C=no])
+PKG_CHECK_MODULES(ICU4C_I18N, icu-i18n, [ac_cv_ICU4C=yes], [ac_cv_ICU4C=no])
+if test x$ac_cv_ICU4C != xyes; then
+    AC_MSG_ERROR([ICU4C was not found and is required to build GnuCash.])
+fi
+AX_BOOST_BASE([1.53.0], [ac_cv_BOOST=yes], [ac_cv_BOOST=no])
+if test x$ac_cv_BOOST != xyes; then
+    AC_MSG_ERROR([Boost 1.53.0 or later was not found and is required to build GnuCash])
+fi
+###--------------------------------------------------------
 ### Optionally enable gtkmm plugin (requires c++ compiler)
 ###--------------------------------------------------------
 enable_GTKMM=false
@@ -180,6 +198,57 @@ AC_HEADER_STDC
 AC_CHECK_HEADERS(limits.h sys/time.h sys/times.h sys/wait.h pow.h)
 oldcflags="$CFLAGS"
 CFLAGS=
+AC_LANG_PUSH([C++])
+oldcxxflags="$CXXFLAGS"
+CXXFLAGS="-Werror -std=gnu++11 $BOOST_CPPFLAGS"
+AC_MSG_CHECKING([boost/date_time/local_time/custom_time_zone.hpp])
+AC_COMPILE_IFELSE([
+    AC_LANG_SOURCE([
+#include <boost/date_time/local_time/local_time.hpp>
+
+using duration = boost::posix_time::time_duration;
+using time_zone = boost::local_time::custom_time_zone;
+using dst_offsets = boost::local_time::dst_adjustment_offsets;
+using TZ_Ptr = boost::local_time::time_zone_ptr;
+using time_zone_names = boost::local_time::time_zone_names;
+
+struct TTInfo
+{
+int32_t gmtoff;
+uint8_t isdst;
+uint8_t abbrind;
+};
+
+struct TZInfo
+{
+TTInfo info;
+std::string name;
+bool isstd;
+bool isgmt;
+};
+
+static TZ_Ptr
+zone_no_dst(int year, TZInfo *std_info)
+{
+    time_zone_names names(std_info->name, std_info->name, "", "");
+    duration std_off(0, 0, std_info->info.gmtoff);
+    dst_offsets offsets({0, 0, 0}, {0, 0, 0}, {0, 0, 0});
+    boost::local_time::dst_calc_rule_ptr calc_rule(nullptr);
+    TZ_Ptr tz(new time_zone(names, std_off, offsets, calc_rule));
+    return tz;
+}
+
+	 ])],
+	 [AC_MSG_RESULT([yes])],
+	 [AC_MSG_FAILURE([
+Boost Header Fails to compile with C++11. To fix this, open
+date_time/local_time/custom_time_zone.hpp, perhaps as root,
+in your boost include directory (/usr/include/boost in most cases)
+and change line 67 to
+      return (bool) dst_calc_rules_; //if calc_rule is set the tz has dst
+])])
+CXXFLAGS="$oldcxxflags"
+AC_LANG_POP([C++])
 oldldflags="$LDFLAGS"
 LDFLAGS=
 AC_CHECK_FUNCS(stpcpy memcpy timegm towupper)
@@ -264,35 +333,17 @@ AM_BINRELOC
 ### --------------------------------------------------------------------------
 ### Glib checks.
 
-# We require glib >= 2.28, released together with gtk-2.24;
-# We first check for other versions due to deprecations.
-# 2.36 deprecated g_type_init
-# 2.32 deprecated some gthread functions
-PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.38 gio-2.0 >= 2.25 gthread-2.0 gobject-2.0 gmodule-2.0,
-[
-  AC_DEFINE([HAVE_GLIB_2_38], [1], [Configure leading quote around assertions])
-  AC_DEFINE([HAVE_GLIB_2_36], [1], [Configure g_type_init deprecation])
-  AC_DEFINE([HAVE_GLIB_2_32], [1], [Configure gthread deprecations])
-],
-[
-  PKG_CHECK_MODULES(GLIB,
-                        glib-2.0 >= 2.36 gio-2.0 >= 2.25 gthread-2.0 gobject-2.0 gmodule-2.0,
-  [
-    AC_DEFINE([HAVE_GLIB_2_36], [1], [Configure g_type_init deprecation])
-    AC_DEFINE([HAVE_GLIB_2_32], [1], [Configure gthread deprecations])
-  ],
-  [
-    PKG_CHECK_MODULES(GLIB,
-                        glib-2.0 >= 2.32 gio-2.0 >= 2.25 gthread-2.0 gobject-2.0 gmodule-2.0,
-    [
-        AC_DEFINE([HAVE_GLIB_2_32], [1], [Configure gthread deprecations])
-    ],
-    [
-	PKG_CHECK_MODULES(GLIB,
-                        glib-2.0 >= 2.28 gio-2.0 >= 2.25 gthread-2.0 gobject-2.0 gmodule-2.0)
-    ])
-  ])
-])
+# We require glib >= 2.40
+# 2.46 deprecates g_settings_list_keys
+PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.46 gio-2.0 gthread-2.0 gobject-2.0 gmodule-2.0,
+      [
+        AC_DEFINE([HAVE_GLIB_2_46], [1], [Configure g_settings_list_keys deprecation])
+      ],
+      [
+        PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.40 gio-2.0 gthread-2.0
+                                gobject-2.0 gmodule-2.0)
+      ])
+
 AC_CHECK_HEADERS(dirent.h dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
 
 GLIB_GSETTINGS
@@ -319,9 +370,6 @@ AC_TRY_RUN([
 ])
 CFLAGS="$GNC_OLDCFLAGS"
 LDFLAGS="$GNC_OLDLDFLAGS"
-dnl First remove any existing -std= setting from CFLAGS then add the one we want.
-CFLAGS=`echo ${CFLAGS} | sed -E -e "s,-std=[[a-z0-9]]+,,g"`
-CFLAGS="${CFLAGS} -std=gnu99"
 
 # Gnucash replaced dlopen/dlsym by the g_module functions; dlsym
 # is needed optionally in one place for BSD linkers, though.
@@ -347,6 +395,7 @@ AC_SUBST(SED)
 
 # Set some defaults, they may be overridden below
 REGEX_LIBS=""
+GCC_VERSION=`${CC} -dumpversion`
 
 AC_MSG_CHECKING(operating system)
 #NOUNDEF for use with mingw
@@ -359,13 +408,16 @@ update to latest  darwin])
     ;;
   darwin*)
     platform=darwin
-    AC_DEFINE(PLATFORM_OSX,1,[Running on OSX, either X11 or Quartz])
+    AC_DEFINE(GNC_PLATFORM_OSX, 1,[Running on OSX, either X11 or Quartz])
+    AC_DEFINE(GNC_PLATFORM_POSIX, 1, [POSIX-compliant OS])
+    AC_DEFINE(GNC_PLATFORM_DARWIN, 1, [Darwin-based OS])
     AC_MSG_RESULT($platform)
     AC_MSG_CHECKING(For GDK-Quartz)
     platform=osx
     _gdk_tgt=`$PKG_CONFIG --variable=target gdk-2.0`
     if test "x$_gdk_tgt" = xquartz; then
       platform=darwin/quartz
+      AC_DEFINE(GNC_PLATFORM_COCOA, 1, [Cocoa/Nexstep/GnuStep framework])
       AC_MSG_RESULT(yes)
       AC_DEFINE(GDK_QUARTZ,,[Using GDK Quartz (not X11)])
       PKG_CHECK_MODULES([GTK_MAC], gtk-mac-integration-gtk2,
@@ -373,7 +425,13 @@ update to latest  darwin])
       if test "x$_gtk_mac" = xyes; then
         GTK_MAC_LIBS="${GTK_MAC_LIBS} -lobjc -framework Cocoa"
         GTK_MAC_CFLAGS="${GTK_MAC_CFLAGS} -xobjective-c"
-      fi
+ 	if test "`echo ${GCC_VERSION} | cut -d. -f1`" -eq 4; then
+	   if test "`echo ${GCC_VERSION} | cut -d. -f2`" -ge 8; then
+      	   # This is gcc >= 4.8.x
+	      GTK_MAC_CFLAGS="${GTK_MAC_CFLAGS} -fobjc-exceptions"
+	   fi
+	fi
+     fi
       AC_MSG_RESULT(${_gtk_mac})
       AC_SUBST(GTK_MAC_LIBS)
       AC_SUBST(GTK_MAC_CFLAGS)
@@ -384,6 +442,7 @@ update to latest  darwin])
   mingw*|cygwin*)
     platform=win32
     AC_MSG_RESULT($platform)
+    AC_DEFINE(GNC_PLATFORM_WINDOWS, 1, [Microsoft Windows OS])
     LT_PROG_RC
 
     AC_MSG_CHECKING(for native win32)
@@ -425,6 +484,7 @@ update to latest  darwin])
 
   *)
     platform=linux/other
+    AC_DEFINE(GNC_PLATFORM_POSIX, 1, [POSIX-compliant OS])
     AC_MSG_RESULT($platform)
     ;;
 esac
@@ -735,6 +795,9 @@ AC_ARG_ENABLE( debug,
      CFLAGS=`echo ${CFLAGS} | sed -e 's,-O.,,g'`
      # ...except for those the user wants.
      CFLAGS="${CFLAGS} -g ${USER_OPTIMIZATION}"
+     # Do the same for C++
+     CXXFLAGS=`echo ${CXXFLAGS} | sed -e 's,-O.,,g'`
+     CXXFLAGS="${CXXFLAGS} -g ${USER_OPTIMIZATION}"
      LDFLAGS="${LDFLAGS} -g"
   fi
   ])
@@ -742,10 +805,191 @@ AC_ARG_ENABLE( debug,
 AC_ARG_ENABLE( profile,
   [AS_HELP_STRING([--enable-profile],[compile with profiling set])],
   if test x$enableval = xyes; then
-    CFLAGS="${CFLAGS} -pg"
-    LDFLAGS="${LDFLAGS} -pg"
+      AM_CFLAGS="${AM_CFLAGS} -pg"
+      AM_CXXFLAGS="${AM_CXXFLAGS} -pg"
+      AM_LDFLAGS="${AM_LDFLAGS} -pg"
   fi)
 
+###---------------------------------------------------------------------------
+### Google Profiler Support: https://code.google.com/p/gperftools/
+###---------------------------------------------------------------------------
+enable_google_profile=no
+AC_ARG_ENABLE( google-profiler,
+  [AS_HELP_STRING([--enable-google-profiler], [link in Google Performance Tools profiler; allows enabling profiling by setting $CPUPROFILE=/path/to/logfile.])],
+  [AC_MSG_CHECKING([Google PerfTools Profiler])
+   AC_CHECK_LIB([profiler], [ProfilerEnable], [enable_google_profile=yes],
+      [AC_MSG_WARN([Google Profiling Enabled but the library was not found.])])
+])
+AM_CONDITIONAL(WITH_GOOGLE_PROFILER, [test x$enable_google_profile = xyes])
+
+###---------------------------------------------------------------------------
+### Google Test and Mock Support: https://code.google.com/p/googletest/ and
+### https://code.google.com/p/googlemock/
+### ---------------------------------------------------------------------------
+ac_cv_gmock_root=""
+ac_cv_gmock_headers=""
+ac_cv_gtest_root=""
+ac_cv_gtest_headers=""
+ac_cv_gtest_libs=""
+ac_cv_gmock_libs=""
+
+AC_CHECK_LIB([gtest_main], [main],
+    [AC_CHECK_FILES([/usr/src/gmock/gmock-all.cc
+                     /usr/include/gtest/gtest.h
+                     /usr/include/gmock/gmock.h
+                     /usr/src/gmock/src/gmock-all.cc
+                     /usr/src/gtest/src/gtest-all.cc],
+                    [ac_cv_gtest_system_install=yes] [ac_cv_have_gtest_libs=yes],
+                    [ac_cv_gtest_system_install=no])],
+    [AC_CHECK_FILES([/usr/src/gtest/src/gtest-all.cc
+                     /usr/src/gtest/gtest-main.cc
+                     /usr/src/gmock/src/gmock-all.cc
+                     /usr/include/gtest/gtest.h
+                     /usr/include/gmock/gmock.h],
+                    [ac_cv_gtest_system_install=yes] [ac_cv_have_gtest_libs=no],
+                    [ac_cv_gtest_system_install=no])]
+   )
+if test x$ac_cv_file__usr_include_gmock_gmock_h = xyes -a x$ac_cv_file__usr_include_gtest_gtest_h = xyes; then
+  if test x$ac_cv_file__usr_src_gmock_src_gmock_all_cc = xyes -a x$ac_cv_file__usr_src_gtest_src_gtest_all_cc = xyes; then
+     ac_cv_gtest_system_install=yes
+  elif test "x$ac_cv_have_gtest_libs" = xyes; then
+     ac_cv_gtest_system_install=yes
+  else
+     ac_cv_gtest_system_install=no
+  fi
+fi
+
+AC_ARG_WITH([gtest-root],
+    [AS_HELP_STRING([--with-gtest-root=PATH], [location of the google test sources])],
+    [ac_cv_gtest_root="$with_gtest_root"])
+AC_ARG_WITH([gtest-headers],
+    [AS_HELP_STRING([--with-gtest-headers=PATH], [location of the google test header files if not in gtest-root])],
+    [ac_cv_gtest_headers="$with_gtest_headers"])
+AC_ARG_WITH([gmock-root],
+    [AS_HELP_STRING([--with-gmock-root=PATH], [location of the google mock sources])],
+    [ac_cv_gmock_root="$with_gmock_root"])
+AC_ARG_WITH([gmock-headers],
+    [AS_HELP_STRING([--with-gmock-headers=PATH], [location of the google test header files if not in gmock-root])],
+    [ac_cv_gmock_headers="$with_gmock_headers"])
+
+google_test_found=yes
+AC_MSG_CHECKING([whether Google Test is available])
+if test -n "$ac_cv_gtest_root" -a -r "$ac_cv_gtest_root/src/gtest-all.cc"; then
+    AC_MSG_WARN([Skipped setting ac_cv_gtest_root, value $ac_cv_gtest_root])
+else
+   if test -n "${GTEST_ROOT}" -a -r "${GTEST_ROOT}/src/gtest-all.cc"; then
+      ac_cv_gtest_root=${GTEST_ROOT}
+   elif test "x$ac_cv_gtest_system_install" = "xyes"; then
+      ac_cv_gtest_root="/usr/src/gtest"
+   else
+      ac_cv_gtest_root=""
+   fi
+fi
+if test -z "$ac_cv_gtest_root" -a -z "$ac_cv_gtest_libs"; then
+   AC_MSG_RESULT([No gtest-root])
+   google_test_found=no
+else
+   if test ! -r "$ac_cv_gtest_root/include/gtest/gtest.h"; then
+      if test -n "$ac_cv_gtest_headers" -a -r "$ac_cv_gtest_headers/gtest/gtest.h"; then
+         AC_MSG_WARN([Skipped setting ac_cv_gtest_headers, value $ac_cv_gtest_headers])
+      else
+         if test  -n "${GTEST_HEADERS}" -a -r "${GTEST_HEADERS}/gtest/gtest.h"; then
+            ac_cv_gtest_headers=${GTEST_HEADERS}
+         elif test "x$ac_cv_gtest_system_install" = "xyes"; then
+            ac_cv_gtest_headers="/usr/include"
+         else
+            ac_cv_gtest_headers=""
+         fi
+      fi
+      if test -z "$ac_cv_gtest_headers"; then
+         AC_MSG_RESULT([No gtest-headers])
+         google_test_found=no
+      fi
+   else
+      ac_cv_gtest_headers=$ac_cv_gtest_root/include
+   fi
+fi
+
+
+if test -n "$ac_cv_gmock_root" -a -r "$ac_cv_gmock_root/gmock-all.cc"; then
+   ac_cv_gmock_src_path="$ac_cv_gmock_root"
+   AC_MSG_WARN([Skipped setting ac_cv_gmock_root, value $ac_cv_gmock_root])
+elif test -n "$ac_cv_gmock_root" -a -r "$ac_cv_gmock_root/src/gmock-all.cc"; then
+   ac_cv_gmock_src_path="$ac_cv_gmock_root/src"
+   AC_MSG_WARN([Skipped setting ac_cv_gmock_root, value $ac_cv_gmock_root])
+else
+   if test -n "${GMOCK_ROOT}" -a -r "${GMOCK_ROOT}/src/gmock-all.cc"; then
+       ac_cv_gmock_src_path=${GMOCK_ROOT}/src
+       ac_cv_gmock_root=${GMOCK_ROOT}
+   elif test "x$ac_cv_gtest_system_install" = "xyes"; then
+       if test "x$ac_cv_file__usr_src_gmock_src_gmock_all_cc" = xyes; then
+         ac_cv_gmock_src_path="/usr/src/gmock/src"
+       elif test "x$ac_cv_file__usr_src_gmock_gmock_all_cc" = xyes; then
+          ac_cv_gmock_src_path="/usr/src/gmock"
+       else
+          ac_cv_gmock_src_path=""
+       fi
+       ac_cv_gmock_root="/usr/src/gmock"
+   else
+      ac_cv_gmock_root=""
+   fi
+fi
+if test -z "$ac_cv_gmock_root"; then
+   AC_MSG_RESULT([No gmock-root])
+   google_test_found=no
+else
+   if test ! -r "$ac_cv_gmock_root/include/gmock/gmock.h"; then
+      if test -n "$ac_cv_gmock_headers" -a -r "$ac_cv_gmock_headers/gmock/gmock.h"; then
+         AC_MSG_WARN([Skipped setting ac_cv_gmock_headers, value $ac_cv_gmock_headers])
+      else
+         if test -n "${GMOCK_HEADERS}" -a -r "${GMOCK_HEADERS}/gmock/gmock.h"; then
+            ac_cv_gmock_headers=${GMOCK_HEADERS}
+         elif test "x$ac_cv_gtest_system_install" = "xyes"; then
+            ac_cv_gmock_headers="/usr/include"
+         else
+            ac_cv_gmock_headers=""
+         fi
+      fi
+      if test -z "$ac_cv_gmock_headers"; then
+         AC_MSG_RESULT([No gmock-headers])
+         google_test_found=no
+      fi
+   else
+      ac_cv_gmock_headers="$ac_cv_gmock_root/include"
+   fi
+fi
+
+if test "x$google_test_found" = "xyes"; then
+    AC_MSG_RESULT([Yes])
+else
+    AC_MSG_ERROR([
+
+ Unable to find the Google test framework. Either install gtest/gmock
+ packages or point to the base directories of the sources using
+ GTEST_ROOT and GMOCK_ROOT environment variables.
+])
+fi
+
+if test "x$ac_cv_have_gtest_libs" = xyes; then
+   ac_cv_gtest_libs="-lgtest -lgtest_main"
+else
+dnl Google test requires pthreads and this seems the easiest way to check.
+    AX_PTHREAD([
+    ac_cv_gtest_libs="\$(top_builddir)/src/test-core/libgtest.a $PTHREAD_CFLAGS"
+    ],[
+    AC_MSG_ERROR(
+      [GTest requires pthreads, but this wasn't found.])
+      dnl Google test requires pthreads and this seems the easiest way to check.
+    ])
+fi
+
+AC_SUBST([GTEST_LIBS], [$ac_cv_gtest_libs])
+AC_SUBST([GTEST_SRC], [$ac_cv_gtest_root])
+AC_SUBST([GTEST_HEADERS], [$ac_cv_gtest_headers])
+AC_SUBST([GMOCK_SRC_PATH], [$ac_cv_gmock_src_path])
+AC_SUBST([GMOCK_SRC], [$ac_cv_gmock_root])
+AC_SUBST([GMOCK_HEADERS], [$ac_cv_gmock_headers])
+AM_CONDITIONAL([GOOGLE_TEST_LIBS], [test "x$ac_cv_have_gtest_libs" == "xyes"])
 ### --------------------------------------------------------------------------
 ### Register2
 AC_ARG_ENABLE( register2,
@@ -1089,8 +1333,12 @@ then
   then
     enable_compile_warnings="yes"
   fi
+#Save CFLAGS so that we can put the warnings in AM_CFLAGS
+  __cflags="$CFLAGS"
+  CFLAGS=
   COMPILE_WARNINGS
-
+  AM_CFLAGS="$CFLAGS"
+  CFLAGS="$__cflags"
 
   PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.24.0)
   AC_SUBST(GTK_CFLAGS)
@@ -1104,43 +1352,14 @@ then
   AC_SUBST(GDK_PIXBUF_CFLAGS)
   AC_SUBST(GDK_PIXBUF_LIBS)
 
-   # checks for goffice
-  PKG_CHECK_MODULES(GOFFICE, libgoffice-0.8 >= 0.7.0 libgoffice-0.8 < 0.9.0, [goffice=1], [AC_MSG_ERROR([Cannot find libgoffice >= 0.7.0 and < 0.9.0])])
-  AC_SUBST(GOFFICE_CFLAGS)
-  AC_SUBST(GOFFICE_LIBS)
-
   ### --------------------------------------------------------------------------
-  ### determine the HTML engine
+  ### checks for webkit
 
-  AC_MSG_CHECKING([the html engine])
-  AC_ARG_WITH(html_engine,
-              AS_HELP_STRING([--with-html-engine=@<:@webkit@:>@],
-                             [Obsolete: Only webkit is used as HTML engine now]),
-              [],[with_html_engine="webkit"])
-
-  AC_MSG_RESULT([$with_html_engine])
-
-  case "$with_html_engine" in
-
-    gtkhtml)
-      # No more gtkhtml in gnucash-2.5.0
-      AC_MSG_ERROR([gtkhtml is no longer sufficient for gnucash, as we now require the CSS/javascript features using webkit. Please remove your --with-html-engine argument from configure.])
-      ;;
-
-    webkit)
-      PKG_CHECK_MODULES(WEBKIT, webkit-1.0 >= "1.2")
-      ;;
-
-    *) AC_MSG_ERROR([Invalid HTML engine: must be webkit]) ;;
-  esac
-
+  PKG_CHECK_MODULES(WEBKIT, webkit-1.0 >= "1.2")
   AC_SUBST(WEBKIT_CFLAGS)
   AC_SUBST(WEBKIT_LIBS)
 
-  dnl if Mac OSX, also scrub /sw/include
-  dnl GIVEN_CFLAGS=$(echo $GIVEN_CFLAGS | sed -e "s;-I/sw/include ;;" | sed -e "s;-I/sw/include$;;")
-
-  ###-----------------------------------------------------------------------
+    ###-----------------------------------------------------------------------
   ## Find a suitable password store
   AC_ARG_ENABLE([password-storage],
                 AS_HELP_STRING([--disable-password-storage], [Ignore system wide password stores such as gnome-keyring, libsecret or Apple's keychain]))
@@ -1197,6 +1416,7 @@ then
 
   GNOME=1
   AC_DEFINE(GNOME,,using GNOME)
+  AM_CXXFLAGS="${AM_CXXFLAGS} -Wall"
 
 else
   # COMPILE_WARNINGS will add -Wall; no need to set it again.
@@ -1204,7 +1424,8 @@ else
   if test ${GCC}x = yesx
   then
     # We should always see these errors...
-    CFLAGS="${CFLAGS} -Wall"
+    AM_CFLAGS="${AM_CFLAGS} -Wall"
+    AM_CXXFLAGS="${AM_CXXFLAGS} -Wall"
   fi
 
 fi
@@ -1261,20 +1482,8 @@ then
   AC_DEFINE(GNOME_DISABLE_DEPRECATED,1, [Don't use deprecated gnome functions])
 fi
 
-###-------------------------------------------------------------------------
-### Stuff from Mac OS X Port
-###-------------------------------------------------------------------------
-
 AC_CHECK_FUNCS(pthread_mutex_init)
-case $host_os in
-  darwin*)
-    AC_REPLACE_FUNCS(localtime_r gmtime_r)
-    AC_LIBOBJ(strptime)
-    ;;
-  *)
-    AC_REPLACE_FUNCS(strptime localtime_r gmtime_r strfmon)
-    ;;
-esac
+AC_REPLACE_FUNCS(strptime strfmon)
 
 if test x$am_cv_val_LC_MESSAGES = "xno"; then
   LC_MESSAGES_ENUM="LC_ALL"
@@ -1324,12 +1533,22 @@ AC_ARG_ENABLE(python-bindings,
 ### Additional compiler warnings (or not) if we're running GCC
 ###-------------------------------------------------------------------------
 
+
 # This has to come after AC_PROG_CC _AND_ COMPILE_WARNINGS
+AC_LANG([C++])
+AX_CHECK_COMPILE_FLAG([-Wno-deprecated-register],
+    [AM_CXXFLAGS="${AM_CXXFLAGS} -Wno-unused -Wno-deprecated-register"],
+    [AM_CXXFLAGS="${AM_CXXFLAGS} -Wno-unused"], [-Werror])
+AC_LANG([C])
+
 AC_MSG_CHECKING(what extra warning flags to pass to the C compiler)
 if test ${GCC}x = yesx
 then
   warnFLAGS=
-  CFLAGS="${CFLAGS} -Wno-unused"
+  warnXXFLAGS=
+  #We have a lot of unused variables. Don't warn until someone gets
+  #around to cleaning them up.
+  AM_CFLAGS="${AM_CFLAGS} -Wno-unused"
   # other flags...
   # These next two are included in the COMPILE_WARNINGS
   #warnFLAGS="${warnFLAGS} -Wmissing-prototypes"
@@ -1351,45 +1570,44 @@ then
   AC_ARG_ENABLE(error-on-warning,
     [AS_HELP_STRING([--disable-error-on-warning],[disable treating compile warnings as errors])],
     [case "${enableval}" in
-       yes) warnFLAGS="${warnFLAGS} -Werror" ; gnc_error_on_warning=yes ;;
+       yes) warnFLAGS="${warnFLAGS} -Werror" ; warnXXFLAGS="${warnXXFLAGS} -Werror" ; gnc_error_on_warning=yes ;;
        no)  gnc_error_on_warning=no ;;
        *) AC_MSG_ERROR(bad value ${enableval} for --enable-error-on-warning) ;;
      esac],
     [ if test "${error_on_warning_as_default}" = "yes"; then
         warnFLAGS="${warnFLAGS} -Werror";
+        warnXXFLAGS="${warnXXFLAGS} -Werror";
         gnc_error_on_warning=auto
       else
         gnc_error_on_warning=no
       fi
     ])
 
-  # For gcc >= 3.4.x, specifically enable the new warning switch
-  # -Wdeclaration-after-statement in order to preserve source code
-  # compatibility to gcc 2.95 and other compilers.
-  GCC_VERSION=`${CC} -dumpversion`
-  if test "`echo ${GCC_VERSION} | cut -d. -f1`" -eq 3; then
-    # This is gcc 3.x.x
-    if test "`echo ${GCC_VERSION} | cut -d. -f2`" -ge 4; then
-      # This is gcc >= 3.4.x
-      warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement"
-    fi
-  elif test "`echo ${GCC_VERSION} | cut -d. -f1`" -ge 4; then
-         # This is gcc >= 4.x.x
-         warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement -Wno-pointer-sign"
-         # rpmbuild on FC4 forces this flag. Only add it when optimizing
-	 cflags_save="$CFLAGS"
-	 CFLAGS="$AM_CFLAGS $CFLAGS -Werror -D_FORTIFY_SOURCE=2"
-	 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+  warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement -Wno-pointer-sign"
+  # rpmbuild on FC4 forces this flag. Can't hurt to always compile with it.
+  cflags_save="$CFLAGS"
+  CFLAGS="$AM_CFLAGS $CFLAGS -Werror -D_FORTIFY_SOURCE=2"
+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <stdio.h>
 	 ]],
-	  [[ printf( "%s\n", "Hello World!");]])],
-            [warnFLAGS="${warnFLAGS} -D_FORTIFY_SOURCE=2"])
-	 CFLAGS="$cflags_save"
-  fi
-  CFLAGS="${warnFLAGS} ${CFLAGS}"
+	 [[ printf( "%s\n", "Hello World!");]])],
+	 [warnFLAGS="${warnFLAGS} -D_FORTIFY_SOURCE=2"])
+  CFLAGS="$cflags_save"
+
+  AM_CFLAGS="${warnFLAGS} ${AM_CFLAGS}"
+  AM_CXXFLAGS="${warnXXFLAGS} ${AM_CXXFLAGS}"
 else
   warnFLAGS=none
 fi
+# Workaround for bug in gtest on mingw, see
+# https://github.com/google/googletest/issues/893
+# https://github.com/google/googletest/issues/920
+case $host_os in
+    mingw*)
+      AM_CXXFLAGS="${AM_CXXFLAGS} -DWINVER=0x0500 -D_EMULATE_GLIBC=0"
+esac
+AC_SUBST(AM_CFLAGS)
+AC_SUBST(AM_CXXFLAGS)
 AC_MSG_RESULT($warnFLAGS)
 
 ### --------------------------------------------------------------------------
@@ -1451,8 +1669,8 @@ AC_CONFIG_FILES(
   doc/Makefile
   doc/examples/Makefile
   lib/Makefile
+  lib/goffice/Makefile
   lib/libc/Makefile
-  lib/stf/Makefile
   packaging/Makefile
   src/Makefile
   src/app-utils/Makefile
@@ -1515,6 +1733,7 @@ AC_CONFIG_FILES(
   src/import-export/log-replay/Makefile
   src/import-export/aqb/Makefile
   src/import-export/aqb/gschemas/Makefile
+  src/import-export/aqb/test/Makefile
   src/libqof/Makefile
   src/libqof/qof/Makefile
   src/libqof/qof/test/Makefile
@@ -1657,6 +1876,7 @@ AC_MSG_RESULT([
   Extra Warnings ....... : $warnFLAGS
   CPPFLAGS ............. : $CPPFLAGS
   CFLAGS ............... : $CFLAGS
+  CXXFLAGS ............. : $CXXFLAGS
   LDFLAGS .............. : $LDFLAGS
   prefix................ : ${prefix}
 

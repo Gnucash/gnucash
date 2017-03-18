@@ -23,6 +23,11 @@
 #ifndef QOF_ID_H
 #define QOF_ID_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /** @addtogroup Entity
     @{ */
 /** @addtogroup Entities
@@ -232,6 +237,10 @@ qof_collection_from_glist (QofIdType type, const GList *glist);
 
 /** @} */
 /** @} */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* QOF_ID_H */
 /** @} */

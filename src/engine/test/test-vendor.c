@@ -24,8 +24,10 @@
  *
  *********************************************************************/
 
-#include "config.h"
+#include <config.h>
 #include <glib.h>
+#include <qofinstance-p.h>
+
 #include "gncInvoiceP.h"
 #include "gncCustomerP.h"
 #include "gncJobP.h"
@@ -94,7 +96,7 @@ test_vendor (void)
 
         do_test (gncVendorGetAddr (vendor) != NULL, "Addr");
 
-        guid_new (&guid);
+        guid_replace (&guid);
         vendor = gncVendorCreate (book);
         count++;
         gncVendorSetGUID (vendor, &guid);

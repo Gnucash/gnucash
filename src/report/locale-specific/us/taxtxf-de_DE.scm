@@ -507,6 +507,7 @@
                                 (validate (reverse 
                                            (gnc-account-get-children-sorted
                                             (gnc-get-current-root-account))))))
+         (book (gnc:account-get-book (car selected-accounts)))
          (generations (if (pair? selected-accounts)
                           (apply max (map (lambda (x) (num-generations x 1))
                                           selected-accounts))
@@ -771,11 +772,8 @@
                                 (gnc-localtime 
                                  (car (timespecCanonicalDayTime
                                        (cons (current-time) 0))))))
-	  (tax-nr (or 
-		   (kvp-frame-get-slot-path-gslist
-		    (qof-book-get-slots (gnc-get-current-book))
-		    (append gnc:*kvp-option-path*
-			    (list gnc:*tax-label* gnc:*tax-nr-label*)))
+	  (tax-nr (or
+                   (gnc:option-get-value book gnc:*tax-label* gnc:*tax-nr-label*)
 		   ""))
 	  )
 

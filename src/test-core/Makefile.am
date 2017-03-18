@@ -52,7 +52,8 @@ libtest_core_guile_la_LIBADD = \
 
 libtest_core_guile_la_CFLAGS = \
 	${libtest_core_la_CPPFLAGS} \
-	${GUILE_CFLAGS}
+	${GUILE_CFLAGS} \
+	${AM_CFLAGS}
 
 libtest_core_guile_la_LDFLAGS = \
   -rpath ${exec-prefix}/lib
@@ -78,6 +79,18 @@ _unittest_support_la_LIBADD = \
 
 endif
 
+if GOOGLE_TEST_LIBS
+noinst_LIBRARIES = libgmock.a
+else
+noinst_LIBRARIES = \
+        libgtest.a \
+        libgmock.a
+nodist_libgtest_a_SOURCES = ${GTEST_SRC}/src/gtest-all.cc
+libgtest_a_CPPFLAGS = ${AM_CPPFLAGS} -I${GTEST_HEADERS} -I${GTEST_SRC}
+endif
+nodist_libgmock_a_SOURCES = ${GMOCK_SRC_PATH}/gmock-all.cc
+libgmock_a_CPPFLAGS = ${libgtest_a_CPPFLAGS} -I${GMOCK_HEADERS} -I${GMOCK_SRC}
+
 gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash
 gncscmmod_DATA = unittest-support.scm
 
@@ -101,7 +114,6 @@ if GNC_HAVE_GUILE_2
 GUILE_COMPILE_ENV = \
   --library-dir    ${top_builddir}/src/test-core \
   --library-dir    ${top_builddir}/src/libqof/qof
-
 
 %.go : %.scm .scm-links $(noinst_LTLIBRARIES)
 	GNC_UNINSTALLED=yes \

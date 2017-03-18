@@ -57,6 +57,7 @@
 #include "gnc-html.h"
 #include "gnc-html-factory.h"
 #include "gnc-file.h"
+#include "gnc-filepath-utils.h"
 #include "gnc-plugin.h"
 #include "gnc-plugin-page-report.h"
 #include "gnc-plugin-file-history.h"
@@ -126,12 +127,6 @@ typedef struct GncPluginPageReportPrivate
 //        gnc_html *html;
     GncHtml *html;
 
-    // keep the view size
-    gint view_width, view_height;
-
-    // This is set to mark that we need to reload the html
-    gboolean need_reload;
-
     /// the container the above HTML widget is in.
     GtkContainer *container;
 } GncPluginPageReportPrivate;
@@ -160,7 +155,6 @@ static int gnc_plugin_page_report_check_urltype(URLType t);
 static void gnc_plugin_page_report_load_cb(GncHtml * html, URLType type,
         const gchar * location, const gchar * label,
         gpointer data);
-static void gnc_plugin_page_report_selected_cb(GObject *object, gpointer user_data);
 static void gnc_plugin_page_report_refresh (gpointer data);
 static void gnc_plugin_page_report_set_fwd_button(GncPluginPageReport * page, int enabled);
 static void gnc_plugin_page_report_set_back_button(GncPluginPageReport * page, int enabled);
@@ -327,19 +321,6 @@ gnc_plugin_page_report_finalize (GObject *object)
 }
 
 static void
-gnc_plugin_page_report_view_size (GtkWidget *widget, GtkAllocation *allocation, gpointer user_data)
-{
-    GncPluginPageReportPrivate *priv = user_data;
-
-    if ((allocation->width != priv->view_width)||(allocation->height != priv->view_height))
-    {
-        priv->need_reload = TRUE;
-        priv->view_width = allocation->width;
-        priv->view_height = allocation->height;
-    }
-}
-
-static void
 gnc_plugin_page_report_set_progressbar (GncPluginPage *page, gboolean set)
 {
     GtkWidget *progressbar;
@@ -360,7 +341,6 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
 {
     GncPluginPageReport *report;
     GncPluginPageReportPrivate *priv;
-    GtkAllocation allocation;
     URLType type;
     char * id_name;
     char * child_name;
@@ -370,14 +350,8 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
     report = GNC_PLUGIN_PAGE_REPORT(page);
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
 
-    gtk_widget_get_allocation (GTK_WIDGET(gnc_html_get_widget(priv->html)), &allocation); 
-
-    priv->view_width = allocation.width;
-    priv->view_height = allocation.height;
-
-    g_signal_connect(GTK_WIDGET(gnc_html_get_widget(priv->html)), "size-allocate",
-                     G_CALLBACK(gnc_plugin_page_report_view_size), priv);
-
+    // FIXME.  This is f^-1(f(x)), isn't it?
+    DEBUG( "Load uri id=%d", priv->reportId );
     id_name = g_strdup_printf("id=%d", priv->reportId );
     child_name = gnc_build_url( URL_TYPE_REPORT, id_name, NULL );
     type = gnc_html_parse_url( priv->html, child_name, &url_location, &url_label);
@@ -388,6 +362,8 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
 
     g_free(id_name);
     g_free(child_name);
+
+    gtk_widget_show_all( GTK_WIDGET(priv->container) );
 
     // this sets the window for the progressbar
     gnc_window_set_progressbar_window( GNC_WINDOW(page->window) );
@@ -406,6 +382,18 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
     return FALSE;
 }
 
+static void
+gnc_plugin_page_report_realize_uri (GtkWidget *widget, GncPluginPage *page)
+{
+    GtkAllocation allocation;
+
+    gtk_widget_get_allocation (widget, &allocation);
+    PINFO("Realized Container size is %dw x %dh", allocation.width, allocation.height);
+
+    /* load uri when view idle */
+    g_idle_add ((GSourceFunc)gnc_plugin_page_report_load_uri, page);
+}
+
 static
 GtkWidget*
 gnc_plugin_page_report_create_widget( GncPluginPage *page )
@@ -413,6 +401,11 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     GncPluginPageReport *report;
     GncPluginPageReportPrivate *priv;
     GtkWindow *topLvl;
+    URLType type;
+    char * id_name;
+    char * child_name;
+    char * url_location = NULL;
+    char * url_label = NULL;
 
     ENTER("page %p", page);
 
@@ -423,10 +416,6 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
 //        priv->html = gnc_html_new( topLvl );
     priv->html = gnc_html_factory_create_html();
     gnc_html_set_parent( priv->html, topLvl );
-
-    priv->view_width = 0; // default
-    priv->view_height = 0; // default
-    priv->need_reload = FALSE;
 
     gnc_html_history_set_node_destroy_cb(gnc_html_get_history(priv->html),
                                          gnc_plugin_page_report_history_destroy_cb,
@@ -447,19 +436,25 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     gnc_html_set_urltype_cb(priv->html, gnc_plugin_page_report_check_urltype);
     gnc_html_set_load_cb(priv->html, gnc_plugin_page_report_load_cb, report);
 
+    /* We need to call the load call back so the report appears to of been run
+     so it will get saved properly if the report is not realized in session */
+    id_name = g_strdup_printf("id=%d", priv->reportId );
+    child_name = gnc_build_url( URL_TYPE_REPORT, id_name, NULL );
+    type = gnc_html_parse_url( priv->html, child_name, &url_location, &url_label);
+
+    gnc_plugin_page_report_load_cb (priv->html, type, id_name, url_label, report);
+    g_free(id_name);
+    g_free(child_name);
+
     // FIXME.  This is f^-1(f(x)), isn't it?
     DEBUG( "id=%d", priv->reportId );
 
-    /* load uri when view idle */
-    g_idle_add ((GSourceFunc)gnc_plugin_page_report_load_uri, page);
-
-    g_signal_connect (G_OBJECT (page), "selected",
-                      G_CALLBACK (gnc_plugin_page_report_selected_cb), report);
+    /* load uri when view is realized */
+    g_signal_connect (G_OBJECT(GTK_WIDGET(priv->container)), "realize",
+                      G_CALLBACK(gnc_plugin_page_report_realize_uri), page);
 
     gtk_widget_show_all( GTK_WIDGET(priv->container) );
-
     LEAVE("container %p", priv->container);
-
     return GTK_WIDGET( priv->container );
 }
 
@@ -688,21 +683,27 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
     /* it's probably already dirty, but make sure */
     scm_call_2(dirty_report, priv->cur_report, SCM_BOOL_T);
 
+    // prevent closing this page while loading...
+    priv->reloading = TRUE;
+
     // this sets the window for the progressbar
     gnc_window_set_progressbar_window( GNC_WINDOW(page->window) );
 
     // this sets the minimum size of the progressbar to that allocated
     gnc_plugin_page_report_set_progressbar( page, TRUE );
 
+    /* Now queue the fact that we need to reload this report */
     gnc_html_reload( priv->html, TRUE ); //reload by rebuild
 
     gnc_plugin_page_report_set_progressbar( page, FALSE );
 
     // this resets the window for the progressbar to NULL
     gnc_window_set_progressbar_window( NULL );
+
+    priv->reloading = FALSE;
 }
 
-/* FIXME: This function does... nothing.  */
+/* FIXME: This function does... nothing?  */
 static void
 gnc_plugin_page_report_history_destroy_cb(gnc_html_history_node * node,
         gpointer user_data)
@@ -729,29 +730,6 @@ gnc_plugin_page_report_history_destroy_cb(gnc_html_history_node * node,
         return;
     }
 #endif
-}
-
-/* This page got selected by the user.  See if we need to reload the report.
- * This may  be needed in case the window got resized while this page was not selected.*/
-static void
-gnc_plugin_page_report_selected_cb (GObject *object, gpointer user_data)
-{
-    GncPluginPageReport *page = GNC_PLUGIN_PAGE_REPORT(user_data);
-    GncPluginPageReportPrivate *priv;
-
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REPORT(page));
-
-    priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(page);
-    ENTER( "report_draw" );
-    if (!priv->need_reload)
-    {
-        LEAVE( "no reload needed" );
-        return;
-    }
-    priv->need_reload = FALSE;
-    gnc_html_reload(priv->html, FALSE);
-    LEAVE( "reload forced" );
-    return;
 }
 
 // @param data is actually GncPluginPageReportPrivate
@@ -1080,84 +1058,6 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * priv)
         scm_gc_unprotect_object(priv->edited_reports);
 }
 
-static GtkActionEntry report_actions[] =
-{
-    {
-        "FilePrintAction", GTK_STOCK_PRINT, N_("_Print Report..."), "<control>p",
-        N_("Print the current report"),
-        G_CALLBACK(gnc_plugin_page_report_print_cb)
-    },
-    {
-        "FilePrintPDFAction", GNC_STOCK_PDF_EXPORT, N_("Export as P_DF..."), NULL,
-        N_("Export the current report as a PDF document"),
-        G_CALLBACK(gnc_plugin_page_report_exportpdf_cb)
-    },
-    {
-        "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), NULL,
-        N_("Cut the current selection and copy it to clipboard"),
-        NULL
-    },
-    {
-        "EditCopyAction", GTK_STOCK_COPY, N_("_Copy"), NULL,
-        N_("Copy the current selection to clipboard"),
-        G_CALLBACK(gnc_plugin_page_report_copy_cb)
-    },
-    {
-        "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), NULL,
-        N_("Paste the clipboard content at the cursor position"),
-        NULL
-    },
-    {
-        "ViewRefreshAction", GTK_STOCK_REFRESH, N_("_Refresh"), "<control>r",
-        N_("Refresh this window"),
-        G_CALLBACK (gnc_plugin_page_report_reload_cb)
-    },
-    {
-        "ReportSaveAction", GTK_STOCK_SAVE, N_("Save _Report Configuration"), "<control><alt>s",
-        N_("Update the current report's saved configuration. "
-        "The report will be saved in the file ~/.gnucash/saved-reports-2.4. "),
-        G_CALLBACK(gnc_plugin_page_report_save_cb)
-    },
-    {
-        "ReportSaveAsAction", GTK_STOCK_SAVE_AS, N_("Save Report Configuration As..."), "<control><alt><shift>s",
-        N_("Add the current report's configuration to the `Saved Report Configurations' menu. "
-        "The report will be saved in the file ~/.gnucash/saved-reports-2.4. "),
-        G_CALLBACK(gnc_plugin_page_report_save_as_cb)
-    },
-    {
-        "ReportExportAction", GTK_STOCK_CONVERT, N_("Export _Report"), NULL,
-        N_("Export HTML-formatted report to file"),
-        G_CALLBACK(gnc_plugin_page_report_export_cb)
-    },
-    {
-        "ReportOptionsAction", GTK_STOCK_PROPERTIES, N_("_Report Options"), NULL,
-        N_("Edit report options"),
-        G_CALLBACK(gnc_plugin_page_report_options_cb)
-    },
-
-    {
-        "ReportBackAction", GTK_STOCK_GO_BACK, N_("Back"), NULL,
-        N_("Move back one step in the history"),
-        G_CALLBACK(gnc_plugin_page_report_back_cb)
-    },
-    {
-        "ReportForwAction", GTK_STOCK_GO_FORWARD, N_("Forward"), NULL,
-        N_("Move forward one step in the history"),
-        G_CALLBACK(gnc_plugin_page_report_forw_cb)
-    },
-    {
-        "ReportReloadAction", GTK_STOCK_REFRESH, N_("Reload"), NULL,
-        N_("Reload the current page"),
-        G_CALLBACK(gnc_plugin_page_report_reload_cb)
-    },
-    {
-        "ReportStopAction", GTK_STOCK_STOP, N_("Stop"), NULL,
-        N_("Cancel outstanding HTML requests"),
-        G_CALLBACK(gnc_plugin_page_report_stop_cb)
-    },
-};
-static guint num_report_actions = G_N_ELEMENTS( report_actions );
-
 /** Short labels for use on the toolbar buttons. */
 static action_toolbar_labels toolbar_labels[] =
 {
@@ -1213,6 +1113,87 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
     GncPluginPage *parent;
     gboolean use_new;
     gchar *name;
+    gchar *saved_reports_path = gnc_build_dotgnucash_path (SAVED_REPORTS_FILE);
+    gchar *report_save_str = g_strdup_printf (
+        _("Update the current report's saved configuration. "
+        "The report will be saved in the file %s. "), saved_reports_path);
+    gchar *report_saveas_str = g_strdup_printf (
+        _("Add the current report's configuration to the `Saved Report Configurations' menu. "
+        "The report will be saved in the file %s. "), saved_reports_path);
+
+    GtkActionEntry report_actions[] =
+    {
+        {
+            "FilePrintAction", GTK_STOCK_PRINT, N_("_Print Report..."), "<primary>p",
+            N_("Print the current report"),
+            G_CALLBACK(gnc_plugin_page_report_print_cb)
+        },
+        {
+            "FilePrintPDFAction", GNC_STOCK_PDF_EXPORT, N_("Export as P_DF..."), NULL,
+            N_("Export the current report as a PDF document"),
+            G_CALLBACK(gnc_plugin_page_report_exportpdf_cb)
+        },
+        {
+            "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), NULL,
+            N_("Cut the current selection and copy it to clipboard"),
+            NULL
+        },
+        {
+            "EditCopyAction", GTK_STOCK_COPY, N_("_Copy"), NULL,
+            N_("Copy the current selection to clipboard"),
+            G_CALLBACK(gnc_plugin_page_report_copy_cb)
+        },
+        {
+            "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), NULL,
+            N_("Paste the clipboard content at the cursor position"),
+            NULL
+        },
+        {
+            "ViewRefreshAction", GTK_STOCK_REFRESH, N_("_Refresh"), "<primary>r",
+            N_("Refresh this window"),
+            G_CALLBACK (gnc_plugin_page_report_reload_cb)
+        },
+        {
+            "ReportSaveAction", GTK_STOCK_SAVE, N_("Save _Report Configuration"), "<primary><alt>s",
+            report_save_str, G_CALLBACK(gnc_plugin_page_report_save_cb)
+        },
+        {
+            "ReportSaveAsAction", GTK_STOCK_SAVE_AS, N_("Save Report Configuration As..."), "<primary><alt><shift>s",
+            report_saveas_str, G_CALLBACK(gnc_plugin_page_report_save_as_cb)
+        },
+        {
+            "ReportExportAction", GTK_STOCK_CONVERT, N_("Export _Report"), NULL,
+            N_("Export HTML-formatted report to file"),
+            G_CALLBACK(gnc_plugin_page_report_export_cb)
+        },
+        {
+            "ReportOptionsAction", GTK_STOCK_PROPERTIES, N_("_Report Options"), NULL,
+            N_("Edit report options"),
+            G_CALLBACK(gnc_plugin_page_report_options_cb)
+        },
+
+        {
+            "ReportBackAction", GTK_STOCK_GO_BACK, N_("Back"), NULL,
+            N_("Move back one step in the history"),
+            G_CALLBACK(gnc_plugin_page_report_back_cb)
+        },
+        {
+            "ReportForwAction", GTK_STOCK_GO_FORWARD, N_("Forward"), NULL,
+            N_("Move forward one step in the history"),
+            G_CALLBACK(gnc_plugin_page_report_forw_cb)
+        },
+        {
+            "ReportReloadAction", GTK_STOCK_REFRESH, N_("Reload"), NULL,
+            N_("Reload the current page"),
+            G_CALLBACK(gnc_plugin_page_report_reload_cb)
+        },
+        {
+            "ReportStopAction", GTK_STOCK_STOP, N_("Stop"), NULL,
+            N_("Cancel outstanding HTML requests"),
+            G_CALLBACK(gnc_plugin_page_report_stop_cb)
+        },
+    };
+    guint num_report_actions = G_N_ELEMENTS( report_actions );
 
     DEBUG( "property reportId=%d", reportId );
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(plugin_page);
@@ -1247,6 +1228,10 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
                               initially_insensitive_actions,
                               "sensitive", FALSE);
     gnc_plugin_init_short_names (action_group, toolbar_labels);
+
+    g_free (saved_reports_path);
+    g_free (report_save_str);
+    g_free (report_saveas_str);
 }
 
 GncPluginPage*
@@ -1381,8 +1366,9 @@ gnc_plugin_page_report_reload_cb( GtkAction *action, GncPluginPageReport *report
     scm_call_2(dirty_report, priv->cur_report, SCM_BOOL_T);
 
     /* now queue the fact that we need to reload this report */
-    priv->reloading = TRUE;
 
+    // prevent closing this page while loading...
+    priv->reloading = TRUE;
     // this sets the window for the progressbar
     gnc_window_set_progressbar_window( GNC_WINDOW(page->window) );
 
@@ -1679,24 +1665,13 @@ static void
 gnc_plugin_page_report_options_cb( GtkAction *action, GncPluginPageReport *report )
 {
     GncPluginPageReportPrivate *priv;
-    SCM start_editor = scm_c_eval_string("gnc:report-edit-options");
-    SCM result;
 
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
     if (priv->cur_report == SCM_BOOL_F)
         return;
 
-    result = gfec_apply(start_editor, scm_cons(priv->cur_report, SCM_EOL),
-                        error_handler);
-    if (result == SCM_BOOL_F || result == SCM_UNDEFINED)
-    {
-        gnc_warning_dialog(GTK_WIDGET(gnc_ui_get_toplevel()), "%s",
-                           _("There are no options for this report."));
-    }
-    else
-    {
+    if (gnc_report_edit_options (priv->cur_report))
         gnc_plugin_page_report_add_edited_report(priv, priv->cur_report);
-    }
 }
 
 static GncInvoice *lookup_invoice(GncPluginPageReportPrivate *priv)
@@ -1864,8 +1839,6 @@ gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report 
     g_free (job_name);
 }
 
-#define KVP_OWNER_EXPORT_PDF_DIRNAME "export-pdf-directory"
-
 static void
 gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *report )
 {
@@ -1873,7 +1846,6 @@ gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *rep
     gchar *job_name = report_create_jobname(priv);
     GncInvoice *invoice;
     GncOwner *owner = NULL;
-    KvpFrame *kvp = NULL;
 
     // Do we have an invoice report?
     invoice = lookup_invoice(priv);
@@ -1883,20 +1855,19 @@ gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *rep
         owner = (GncOwner*) gncInvoiceGetOwner(invoice);
         if (owner)
         {
+	    QofInstance *inst = qofOwnerGetOwner (owner);
+	    gchar *dirname = NULL;
+	    qof_instance_get (inst, "export-pdf-dir", &dirname, NULL);
             // Yes. In the kvp, look up the key for the Export-PDF output
             // directory. If it exists, prepend this to the job name so that
             // we can export to PDF.
-            kvp = gncOwnerGetSlots(owner);
-            if (kvp)
-            {
-                const char *dirname = kvp_frame_get_string(kvp, KVP_OWNER_EXPORT_PDF_DIRNAME);
-                if (dirname && g_file_test(dirname, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
-                {
-                    gchar *tmp = g_build_filename(dirname, job_name, NULL);
-                    g_free(job_name);
-                    job_name = tmp;
-                }
-            }
+	    if (dirname && g_file_test(dirname,
+				       G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
+	    {
+		gchar *tmp = g_build_filename(dirname, job_name, NULL);
+		g_free(job_name);
+		job_name = tmp;
+	    }
         }
     }
 
@@ -1904,10 +1875,12 @@ gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *rep
 
     gnc_html_print(priv->html, job_name, TRUE);
 
-    if (owner && kvp)
+    if (owner)
     {
-        // As this is an invoice report with some owner, we will try to look up the
-        // chosen output directory from the print settings and store it again in the owner kvp.
+	/* As this is an invoice report with some owner, we will try
+	 * to look up the chosen output directory from the print
+	 * settings and store it again in the owner kvp.
+	 */
         GtkPrintSettings *print_settings = gnc_print_get_settings();
         if (print_settings &&
 	    gtk_print_settings_has_key(print_settings,
@@ -1918,15 +1891,10 @@ gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *rep
             // Only store the directory if it exists.
             if (g_file_test(dirname, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
             {
-                QofInstance *qofinstance = qofOwnerGetOwner(owner);
-                if (qofinstance)
-		{
-		    gncOwnerBeginEdit(owner);
-		    kvp_frame_set_string(kvp, KVP_OWNER_EXPORT_PDF_DIRNAME,
-					 dirname);
-                    qof_instance_set_dirty(qofinstance);
-		    qof_commit_edit (qofinstance);
-		}
+                QofInstance *inst = qofOwnerGetOwner(owner);
+                gncOwnerBeginEdit(owner);
+		qof_instance_set (inst, "export-pdf-dir", dirname);
+		gncOwnerCommitEdit(owner);
             }
         }
     }

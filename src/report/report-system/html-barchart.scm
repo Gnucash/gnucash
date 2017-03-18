@@ -57,7 +57,7 @@
   (record-constructor <html-barchart>))
 
 (define (gnc:make-html-barchart)
-  (gnc:make-html-barchart-internal -1 -1 #f #f #f #f '() '() '() 
+  (gnc:make-html-barchart-internal '(pixels . -1) '(pixels . -1) #f #f #f #f '() '() '() 
 				   #f #f #f '() #f #f #f #f #f #f))
 
 (define gnc:html-barchart-data
@@ -392,12 +392,16 @@
             (push (gnc:html-js-include "jqplot/jqplot.canvasAxisTickRenderer.js"))
 
             (push (gnc:html-css-include "jqplot/jquery.jqplot.css"))
-
             (push "<div id=\"")(push chart-id)(push "\" style=\"width:")
-            (push (gnc:html-barchart-width barchart))
-            (push "px;height:")
-            (push (gnc:html-barchart-height barchart))
-            (push "px;\"></div>\n")
+            (push (cdr (gnc:html-barchart-width barchart)))
+            (if (eq? 'pixels (car (gnc:html-barchart-width barchart)))
+                 (push "px;height:")
+                 (push "%;height:"))
+
+            (push (cdr (gnc:html-barchart-height barchart)))
+            (if (eq? 'pixels (car (gnc:html-barchart-height barchart)))
+                 (push "px;\"></div>\n")
+                 (push "%;\"></div>\n"))
             (push "<script id=\"source\">\n$(function () {")
 
             (push "var data = [];")
@@ -507,9 +511,44 @@
             (push "$.jqplot.config.enablePlugins = true;\n")
             (push "$(document).ready(function() {
 var plot = $.jqplot('")(push chart-id)(push"', data, options);
-var int_chart_width = document.getElementById(\"")(push chart-id)(push"\").getElementsByClassName(\"jqplot-zoom-canvas\")[0].width;
-plot.axes.xaxis.ticks = getVisualTicks(int_chart_width);
+plot.axes.xaxis.ticks = getVisualTicks();
 plot.replot();
+var timer;
+var load_timer;
+
+// var win_width = $(window).width();
+// var win_height = $(window).height();
+// console.log( 'Window Width ' + win_width + ' Height ' + win_height);
+
+// var doc_width = document.body.clientWidth;
+// var doc_height = document.body.clientHeight;
+// console.log( 'Doc Width ' + doc_width + ' Height ' + doc_height);
+
+$(window).resize(function () {
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+        plot.replot({resetAxes: true });
+        $.each(plot.series, function(index, series) {
+            series.barWidth = undefined;
+        });
+        plot.axes.xaxis.ticks = getVisualTicks();
+//        console.log( 'Resize Timer!' );
+        plot.replot();
+    }, 100);
+    });
+
+$(window).on('load', function () {
+    var hasVScroll = document.body.scrollHeight > document.body.clientHeight;
+    clearTimeout(load_timer);
+    load_timer = setTimeout(function () {
+//        console.log( 'Load Timer!' );
+        if(hasVScroll)
+        {
+//            console.log( 'Load Timer Replot!' );
+            plot.replot();
+        }
+    },100);
+    });
 });
 
 function formatTooltip(str, seriesIndex, pointIndex) {
@@ -521,7 +560,8 @@ function formatTooltip(str, seriesIndex, pointIndex) {
     return options.series[seriesIndex].label + '<br/>' + x + '<br/><b>' + y + '</b>';
 }
 
-function getVisualTicks(chart_width) {
+function getVisualTicks() {
+    var chart_width = document.getElementById(\"")(push chart-id)(push"\").getElementsByClassName(\"jqplot-zoom-canvas\")[0].width;
     var num_ticks = all_ticks.length;
     var label_width = 25;
     var num_labels = chart_width / label_width;
@@ -536,6 +576,7 @@ function getVisualTicks(chart_width) {
         else
             visual_ticks.push (' ');
     }
+//    console.log( 'getVis chart_width ' + chart_width );
     return visual_ticks;
 }\n")
 

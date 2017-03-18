@@ -372,13 +372,6 @@
     "ub2" (N_ "The phrase used to introduce the company contact.")
     (_ "Direct all inquiries to")))
 
-; not used
-;  (gnc:register-inv-option
-;   (gnc:make-string-option
-;    (N_ "Display") (N_ "Today Date Format")
-;    "v" (N_ "The format for the date->string conversion for today's date.")
-;    (gnc-default-strftime-date-format)))
-
   (gnc:options-set-default-section gnc:*report-options* "General")
 
   gnc:*report-options*)
@@ -661,7 +654,7 @@
      'attribute (list "valign" "top"))
     table))
 
-(define (make-date-row! table label date)
+(define (make-date-row! table label date date-format)
   (gnc:html-table-append-row!
    table
    (list
@@ -686,30 +679,15 @@
      'attribute (list "valign" "top"))
     table))
 
-(define (make-myname-table book date-format title)
+(define (make-myname-table book title)
   (let* ((table (gnc:make-html-table))
-	 (slots (qof-book-get-slots book))
-	 (name (kvp-frame-get-slot-path-gslist
-		slots (append gnc:*kvp-option-path*
-			      (list gnc:*business-label* gnc:*company-name*))))
-;;	 (contact (kvp-frame-get-slot-path-gslist
-;;		slots (append gnc:*kvp-option-path*
-;;			      (list gnc:*business-label* gnc:*company-contact*))))
-	 (addy (kvp-frame-get-slot-path-gslist
-		slots (append gnc:*kvp-option-path*
-			      (list gnc:*business-label* gnc:*company-addy*))))
-	 (id (kvp-frame-get-slot-path-gslist
-		slots (append gnc:*kvp-option-path*
-			      (list gnc:*business-label* gnc:*company-id*))))
-	 (phone (kvp-frame-get-slot-path-gslist
-		slots (append gnc:*kvp-option-path*
-			      (list gnc:*business-label* gnc:*company-phone*))))
-	 (fax (kvp-frame-get-slot-path-gslist
-		slots (append gnc:*kvp-option-path*
-			      (list gnc:*business-label* gnc:*company-fax*))))
-	 (url (kvp-frame-get-slot-path-gslist
-		slots (append gnc:*kvp-option-path*
-			      (list gnc:*business-label* gnc:*company-url*))))
+	 (name (gnc:company-info book gnc:*company-name*))
+;;	 (contact (gnc:company-info book gnc:*company-contact*))
+	 (addy (gnc:company-info book gnc:*company-addy*))
+	 (id (gnc:company-info book gnc:*company-id*))
+	 (phone (gnc:company-info book gnc:*company-phone*))
+	 (fax (gnc:company-info book gnc:*company-fax*))
+	 (url (gnc:company-info book gnc:*company-url*))
 	 (invoice-cell (gnc:make-html-table-cell))
 	 (name-cell (gnc:make-html-table-cell))
 
@@ -830,12 +808,13 @@
 
 
     (if (not (null? invoice))
-	(let* ((book (gncInvoiceGetBook invoice))
-	      (slots (qof-book-get-slots book))
-	      (date-object #f)
-	      (helper-table (gnc:make-html-table))
-	      (title (title-string default-title custom-title)))
-	  (set! table (make-entry-table invoice
+        (let* ((book (gncInvoiceGetBook invoice))
+               (date-object #f)
+               (date-format (gnc:options-fancy-date book))
+               (helper-table (gnc:make-html-table))
+               (title (title-string default-title custom-title)))
+
+   (set! table (make-entry-table invoice
 					(gnc:report-options report-obj)
 					add-order cust-doc? credit-note?))
 
@@ -863,8 +842,7 @@
 
 	  (gnc:html-document-add-object!
 	   document (make-myname-table
-		     book ;;(opt-val "Display" "Today Date Format")))
-		     "" title))
+		     book title))
 
 	  (make-break! document)
 	  (make-break! document)
@@ -894,8 +872,8 @@
                   ;; options. This string sucks for i18n, but I don't
                   ;; have a better solution right now without breaking
                   ;; other people's invoices.
-		  (make-date-row! date-table (sprintf #f (_ "%s&nbsp;Date") title) post-date)
-		  (make-date-row! date-table (_ "Due Date") due-date)
+		  (make-date-row! date-table (sprintf #f (_ "%s&nbsp;Date") title) post-date date-format)
+		  (make-date-row! date-table (_ "Due&nbsp;Date") due-date date-format)
 		  date-table)
 		(gnc:make-html-text
 		  ;; oli-custom - FIXME: I have a feeling I broke a
@@ -964,10 +942,7 @@
 	  (make-break! document)
 
 	  (if (opt-val "Display" "Payable to")
-	      (let* ((name (kvp-frame-get-slot-path-gslist
-			    slots (append gnc:*kvp-option-path*
-					  (list gnc:*business-label*
-						gnc:*company-name*))))
+	      (let* ((name (gnc:company-info book gnc:*company-name*))
 		     (name-str (opt-val "Display" "Payable to string")))
 		(if (and name (> (string-length name) 0))
 		(gnc:html-document-add-object!
@@ -979,10 +954,7 @@
 	  (make-break! document)
 
 	  (if (opt-val "Display" "Company contact")
-	      (let* ((contact (kvp-frame-get-slot-path-gslist
-			       slots (append gnc:*kvp-option-path*
-					     (list gnc:*business-label*
-						   gnc:*company-contact*))))
+	      (let* ((contact (gnc:company-info book gnc:*company-contact*))
 		     (contact-str (opt-val "Display" "Company contact string")))
 		(if (and contact (> (string-length contact) 0))
 	        (gnc:html-document-add-object!

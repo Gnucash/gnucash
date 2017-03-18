@@ -31,39 +31,28 @@ static const char *KEY_ASSOC_INCOME_ACCOUNT = "ofx/associated-income-account";
 
 Account *gnc_ofx_kvp_get_assoc_account(const Account* investment_account)
 {
-    kvp_frame * acc_frame;
-    kvp_value * kvp_val;
     Account *result = NULL;
-
+    GncGUID *income_guid= NULL;
     g_assert(investment_account);
-
-    acc_frame = xaccAccountGetSlots(investment_account);
-    kvp_val = kvp_frame_get_slot(acc_frame, KEY_ASSOC_INCOME_ACCOUNT);
-    if (kvp_val != NULL)
-    {
-        result = xaccAccountLookup(kvp_value_get_guid(kvp_val),
-                                   gnc_account_get_book(investment_account));
-    }
-    return result;
+    qof_instance_get (QOF_INSTANCE (investment_account),
+		      KEY_ASSOC_INCOME_ACCOUNT, &income_guid,
+		      NULL);
+    return xaccAccountLookup(income_guid,
+			       gnc_account_get_book(investment_account));
 }
 
 void gnc_ofx_kvp_set_assoc_account(Account* investment_account,
                                    const Account *income_account)
 {
-    kvp_frame * acc_frame;
-    kvp_value * kvp_val;
     const GncGUID * income_acc_guid;
 
     g_assert(investment_account);
     g_assert(income_account);
 
-    acc_frame = xaccAccountGetSlots(investment_account);
-    g_assert(acc_frame); // Must not be NULL, but the QofInstance doc is unclear about this
     income_acc_guid = xaccAccountGetGUID(income_account);
-    kvp_val = kvp_value_new_guid(income_acc_guid);
     xaccAccountBeginEdit(investment_account);
-    kvp_frame_set_slot_nc(acc_frame, KEY_ASSOC_INCOME_ACCOUNT,
-                          kvp_val);
-    qof_instance_set_dirty(QOF_INSTANCE (investment_account));
+    qof_instance_set (QOF_INSTANCE (investment_account),
+		      KEY_ASSOC_INCOME_ACCOUNT, income_acc_guid,
+		      NULL);
     xaccAccountCommitEdit(investment_account);
 }
