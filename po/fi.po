@@ -6,10 +6,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 2.2.6\n"
+"Project-Id-Version: GnuCash 2.6.15\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-10 15:21+0200\n"
-"PO-Revision-Date: 2012-01-22 20:59+0200\n"
+"PO-Revision-Date: 2017-03-13 20:59+0200\n"
 "Last-Translator: Tuomo Hartikainen <tth@harski.org>\n"
 "Language-Team: UNKNOWN\n"
 "Language: fi\n"
