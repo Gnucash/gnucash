@@ -645,8 +645,6 @@ _monthly_append_when(Recurrence *r, GString *buf)
         gnc_dow_abbrev(day_name_buf, abbrev_day_name_bufsize, g_date_get_weekday(&date) % 7);
         day_of_month_index = g_date_get_day(&date) - 1;
         week = day_of_month_index / 7 > 3 ? 3 : day_of_month_index / 7;
-        if (week > 0 && day_of_month_index % 7 == 0)
-            --week;
         /* translators: %s is the string 1st, 2nd, 3rd and so on, and
          * %s is an already-localized form of the day of the week. */
         g_string_append_printf(buf, _("%s %s"), _(numerals[week]), day_name_buf);

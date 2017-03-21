@@ -434,8 +434,6 @@ _get_monthly_combobox_index(Recurrence *r)
     else if (recurrenceGetPeriodType(r) == PERIOD_NTH_WEEKDAY)
     {
         week = day_of_month_index / 7 > 3 ? 3 : day_of_month_index / 7;
-        if (week > 0 && day_of_month_index % 7 == 0)
-            --week;
         day_of_month_index = LAST_DAY_OF_MONTH_OPTION_INDEX + 7 +
                              g_date_get_weekday(&recurrence_date) + 7 * week;
 
