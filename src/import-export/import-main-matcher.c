@@ -587,6 +587,7 @@ GNCImportMainMatcher * gnc_gen_trans_assist_new (GtkWidget *parent,
     gboolean show_update;
 
     info = g_new0 (GNCImportMainMatcher, 1);
+    info->pending_matches = gnc_import_PendingMatches_new();
 
     /* Initialize user Settings. */
     info->user_settings = gnc_import_Settings_new ();
@@ -901,15 +902,16 @@ void gnc_gen_trans_list_add_trans_with_ref_id(GNCImportMainMatcher *gui, Transac
 
         gnc_import_TransInfo_init_matches(transaction_info,
                                           gui->user_settings);
-        
+
         selected_match =
             gnc_import_TransInfo_get_selected_match(transaction_info);
         match_selected_manually =
             gnc_import_TransInfo_get_match_selected_manually(transaction_info);
-            
-        gnc_import_PendingMatches_add_match(gui->pending_matches,
-                                            selected_match,
-                                            match_selected_manually);        
+
+        if (selected_match)
+            gnc_import_PendingMatches_add_match(gui->pending_matches,
+                                                selected_match,
+                                                match_selected_manually);
 
         model = gtk_tree_view_get_model(gui->view);
         gtk_list_store_append(GTK_LIST_STORE(model), &iter);

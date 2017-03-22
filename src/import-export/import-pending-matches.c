@@ -52,8 +52,8 @@ GNCImportPendingMatches *gnc_import_PendingMatches_new (void)
 
 void gnc_import_PendingMatches_delete (GNCImportPendingMatches *map)
 {
-    g_assert (map);
-    
+    g_return_if_fail (map);
+
     g_hash_table_destroy (map);
 }
 
@@ -62,12 +62,12 @@ gnc_import_PendingMatches_get_key (GNCImportMatchInfo *match_info)
 {
     Split *split;
     const GncGUID *match_guid;
-    
-    g_assert (match_info);
-    
+
+    g_return_val_if_fail (match_info, NULL);
+
     split = gnc_import_MatchInfo_get_split (match_info);
     match_guid = qof_instance_get_guid (split);
-    
+
     return match_guid;
 }
 
@@ -77,14 +77,14 @@ gnc_import_PendingMatches_get_value (GNCImportPendingMatches *map,
 {
     GNCPendingMatches *pending_matches;
     const GncGUID *match_guid;
-    
-    g_assert (map);
-    g_assert (match_info);
-    
+
+    g_return_val_if_fail (map, NULL);
+    g_return_val_if_fail (match_info, NULL);
+
     match_guid = gnc_import_PendingMatches_get_key (match_info);
-    
+
     pending_matches = g_hash_table_lookup (map, match_guid);
-    
+
     return pending_matches;
 }
 
@@ -96,14 +96,14 @@ gnc_import_PendingMatches_add_match (GNCImportPendingMatches *map,
     GNCPendingMatches *pending_matches;
     const GncGUID *match_guid;
     GncGUID *key;
-    
-    g_assert (map);
-    g_assert (match_info);
-    
-    
+
+    g_return_if_fail (map);
+    g_return_if_fail (match_info);
+
+
     pending_matches = gnc_import_PendingMatches_get_value (map, match_info);
     match_guid = gnc_import_PendingMatches_get_key (match_info);
-    
+
     if (pending_matches == NULL)
     {
         pending_matches = g_new0 (GNCPendingMatches, 1);
@@ -111,7 +111,7 @@ gnc_import_PendingMatches_add_match (GNCImportPendingMatches *map,
         *key = *match_guid;
         g_hash_table_insert (map, key, pending_matches);
     }
-    
+
     if (selected_manually)
     {
         pending_matches->num_manual_matches++;
@@ -128,14 +128,14 @@ gnc_import_PendingMatches_remove_match (GNCImportPendingMatches *map,
                                         gboolean selected_manually)
 {
     GNCPendingMatches *pending_matches;
-    
-    g_assert (map);
-    g_assert (match_info);
-    
+
+    g_return_if_fail (map);
+    g_return_if_fail (match_info);
+
     pending_matches = gnc_import_PendingMatches_get_value (map, match_info);
-    
-    g_assert (pending_matches);
-    
+
+    g_return_if_fail (pending_matches);
+
     if (selected_manually)
     {
         pending_matches->num_manual_matches--;
@@ -144,7 +144,7 @@ gnc_import_PendingMatches_remove_match (GNCImportPendingMatches *map,
     {
         pending_matches->num_auto_matches--;
     }
-    
+
     if (pending_matches->num_auto_matches == 0 &&
         pending_matches->num_manual_matches == 0)
     {
@@ -159,27 +159,27 @@ gnc_import_PendingMatches_get_match_type (GNCImportPendingMatches *map,
                                           GNCImportMatchInfo *match_info)
 {
     GNCPendingMatches *pending_matches;
-    
-    g_assert (map);
-    g_assert (match_info);
-    
+
+    g_return_val_if_fail (map, GNCImportPending_NONE);
+    g_return_val_if_fail (match_info, GNCImportPending_NONE);
+
     pending_matches = gnc_import_PendingMatches_get_value (map, match_info);
-    
+
     if (pending_matches == NULL)
     {
         return GNCImportPending_NONE;
     }
-    
+
     if (pending_matches->num_manual_matches > 0)
     {
         return GNCImportPending_MANUAL;
     }
-    
+
     if (pending_matches->num_auto_matches > 0)
     {
         return GNCImportPending_AUTO;
     }
-    
+
     g_assert_not_reached();
 }
 

@@ -429,6 +429,7 @@ src/import-export/import-main-matcher.c
 src/import-export/import-match-map.c
 src/import-export/import-match-picker.c
 src/import-export/import-parse.c
+src/import-export/import-pending-matches.c
 src/import-export/import-settings.c
 src/import-export/import-utilities.c
 src/import-export/log-replay/gnc-log-replay.c
