@@ -4547,11 +4547,11 @@ msgstr ""
 #. Translators: Namespaces of commodities
 #: ../src/engine/commodity-table.scm:29
 msgid "CURRENCY"
-msgstr ""
+msgstr "WÄHRUNG"
 
 #: ../src/engine/commodity-table.scm:38
 msgid "ALL NON-CURRENCY"
-msgstr ""
+msgstr "ALLE NICHT-WÄHRUNGEN"
 
 #: ../src/engine/gnc-budget.c:93 ../src/gnome/gnc-plugin-page-budget.c:840
 msgid "Unnamed Budget"
@@ -5438,35 +5438,33 @@ msgstr ""
 "können nicht automatisch erstellt werden."
 
 #: ../src/gnome/dialog-sx-editor.c:674
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't parse %s for split \"%s\"."
 msgstr ""
-"Die Berechnungsformel für die Mehrungsbuchung konnte nicht verarbeitet "
-"werden im Buchungsteil »%s«. "
+"%s konnte nicht verarbeitet werden im Buchungsteil »%s«. "
 
 #: ../src/gnome/dialog-sx-editor.c:740
 #, c-format
 msgid "Split with memo %s has an invalid account."
-msgstr ""
+msgstr "Der Buchungsteil mit Buchungstext %s hat ein ungültiges Konto."
 
 #: ../src/gnome/dialog-sx-editor.c:743
-#, fuzzy
 msgid "Invalid Account in Split"
-msgstr "Summe Devisenhandel anzeigen"
+msgstr "Ungültiges Konto in Buchungsteil"
 
 #: ../src/gnome/dialog-sx-editor.c:755
 #, c-format
 msgid "Split with memo %s has an unparseable Credit Formula."
-msgstr ""
+msgstr "Der Buchungsteil mit Buchungstext %s hat eine für das Programm unverständliche Haben-Formel"
 
 #: ../src/gnome/dialog-sx-editor.c:758 ../src/gnome/dialog-sx-editor.c:774
 msgid "Unparsable Formula in Split"
-msgstr ""
+msgstr "Unverständliche Formel in Buchungsteil"
 
 #: ../src/gnome/dialog-sx-editor.c:771
 #, c-format
 msgid "Split with memo %s has an unparseable Debit Formula."
-msgstr ""
+msgstr "Der Buchungsteil mit Buchungstext %s hat eine für das Programm unverständliche Soll-Formel"
 
 #: ../src/gnome/dialog-sx-from-trans.c:558
 msgid ""
@@ -5515,9 +5513,8 @@ msgid "(Need Value)"
 msgstr "(Wert benötigt)"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:816
-#, fuzzy
 msgid "Invalid Transactions"
-msgstr "Ungültige Buchung wieder_herstellen"
+msgstr "Ungültige Buchungen"
 
 #: ../src/gnome/dialog-sx-since-last-run.c:863
 #, c-format
@@ -5794,13 +5791,14 @@ msgstr "»Tipp des Tages« anzeigen"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:505
 #: ../src/gnome-utils/gnc-file.c:1579
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Reverting will discard all unsaved changes to %s. Are you sure you want to "
 "proceed ?"
 msgstr ""
-"Die Datei »%s« existiert bereits. Sind Sie sicher, dass sie überschrieben "
-"werden soll?"
+"»Änderungen verwerfen« wird alle ungespeicherten Änderungen an »%s« "
+"verwerfen und die Datei neu laden.\n"
+"Sind Sie sicher, dass sie fortfahren wollen?"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:554
 msgid "There are no Scheduled Transactions to be entered at this time."
@@ -8335,14 +8333,16 @@ msgstr "Standardwährung, die bei neuen Berichten verwendet wird"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:111
 msgid "Zoom factor to use by default for reports."
-msgstr ""
+msgstr "Vorgabe der Vergrößerung in Berichten."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:112
 msgid ""
 "On high-resolution displays the reports will be unreadable by default. "
 "Setting a zoom factor to a number bigger than 1.0 can help improve this "
 "situation."
-msgstr ""
+msgstr "Auf hochauflösenden Monitoren können Berichte in der "
+"Standardeinstellung schwer lesbar sein. Das Setzen eines "
+"Vergrößerungsfaktors größer 1 kann dann eine ABhilfe sein."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:113
 msgid "PDF export file name format"
@@ -8365,7 +8365,6 @@ msgid "PDF export file name date format choice"
 msgstr "PDF-Export Dateinamen Datumsformat"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:117
-#, fuzzy
 msgid ""
 "This setting chooses the way dates are used in the filename of PDF export. "
 "Possible values for this setting are \"locale\" to use the system locale "
@@ -8376,7 +8375,7 @@ msgstr ""
 "Diese Einstellung wählt die Darstellungsart für ein Datum in GnuCash. "
 "Mögliche Werte sind »locale« für die systemweite Vorgabe, »ce« für "
 "Kontinentaleuropa, »iso« für den ISO-8601 Standard, »uk« für Großbritannien "
-"und »us« für den USA-Stil für die Datumsanzeige."
+"und »us« für den USA-Stil der Datumsanzeige."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:118
 msgid "Allow file incompatibility with older versions."
@@ -10870,13 +10869,12 @@ msgstr ""
 "Anfangsbestand benutzen."
 
 #: ../src/gnome-utils/dialog-account.c:1311
-#, fuzzy
 msgid ""
 "This Account contains Transactions.\n"
 "Changing this option is not possible."
 msgstr ""
-"Dieses Konto enthält schreibgeschützte Buchungen. Sie können diese nicht "
-"löschen."
+"Dieses Konto enthält Buchungen. Daher kann diese Option nicht geändert "
+"werden."
 
 #: ../src/gnome-utils/dialog-account.c:1488
 msgid "Edit Account"
@@ -13457,9 +13455,9 @@ msgid ""
 "Use Edit->Tax Report Options to set the tax-related flag and assign a tax "
 "code to this account."
 msgstr ""
-"Benutzen Sie den Menüpunkt »Bearbeiten -> Steuerrelevante Informationen«, um "
-"dieses Konto als »steuerrelevant« zu markieren und diesem Konto einen Steuer-"
-"Code zuzuweisen."
+"Benutzen Sie den Menüpunkt »Bearbeiten -> Optionen Steuerbericht«, um "
+"dieses Konto als »steuerrelevant« zu markieren und diesem Konto einen "
+"Steuerschlüssel zuzuweisen."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:22
 msgid "Placeholde_r"
@@ -14533,9 +14531,8 @@ msgstr ""
 "Ansonsten wird er in dem aktuellen Fenster geöffnet."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:178
-#, fuzzy
 msgid "<b>Default zoom level</b>"
-msgstr "<b>Voreinstellung Buchungsansicht</b>"
+msgstr "<b>Vorgabe Vergrößerung</b>"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:179
 msgid ""
@@ -14543,7 +14540,10 @@ msgid ""
 "This option allows you to scale reports up by the set factor.\n"
 "For example setting this to 2.0 will display reports at twice their typical "
 "size."
-msgstr ""
+msgstr "Auf hochauflösenden Bildschirmen können Berichte schwer zu lesen sein.\n"
+"Diese Option erlaubt ihr Skalieren um den gewählten Faktor.\n"
+"Z.B. wird das Setzen auf 2 die Berichte mit der Doppelten "
+"ihrer ursprünglichen Größe darstellen."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:182
 msgid "Reports"
@@ -16314,11 +16314,9 @@ msgid "Reconcile account now?"
 msgstr "Konto jetzt abgleichen?"
 
 #: ../src/import-export/aqb/gnc-ab-utils.c:1057
-#, fuzzy
 msgid "The bank has sent a message in its response."
 msgstr ""
-"Der Bank-Server hat Kontosalden in seiner Antwort mitgeschickt. \n"
-"Wollen Sie diese jetzt importieren?"
+"Die Bank hat eine Nachricht in ihrer Antwort mitgeschickt"
 
 #: ../src/import-export/aqb/gnc-ab-utils.c:1058
 msgid "Subject:"
@@ -18850,24 +18848,24 @@ msgid "Are you sure you have bills/invoices to update?"
 msgstr "Sind Sie sicher, dass Rechnungen aktualisiert werden sollen?"
 
 #: ../src/plugins/bi_import/dialog-bi-import.c:817
-#, fuzzy, c-format
+#, c-format
 msgid "Invoice %s posted.\n"
-msgstr "Bemerkungen Rechnung"
+msgstr "Rechnung %s wurde eingebucht.\n"
 
 #: ../src/plugins/bi_import/dialog-bi-import.c:822
 #, c-format
 msgid "Invoice %s NOT posted because currencies don't match.\n"
-msgstr ""
+msgstr "Rechnung %s wurde nicht eingebucht, da die Währungen nicht übereinstimmen.\n"
 
 #: ../src/plugins/bi_import/dialog-bi-import.c:828
 #, c-format
 msgid "Cannot post invoice %s because account name \"%s\" is invalid!\n"
-msgstr ""
+msgstr "Rechnung %s kann nicht eingebucht werden, da die Kontenbezeichnung \"%s\" ungültig ist!\n"
 
 #: ../src/plugins/bi_import/dialog-bi-import.c:834
 #, c-format
 msgid "Invoice %s NOT posted because it requires currency conversion.\n"
-msgstr ""
+msgstr "Rechnung %s wurde nicht eingebucht, da sie eine Währungkonversion benötigt.\n"
 
 #: ../src/plugins/bi_import/dialog-bi-import-gui.c:182
 msgid "Import Bills or Invoices from csv"
@@ -26034,7 +26032,6 @@ msgstr ""
 "Aktiva:Bargeld)."
 
 #: ../doc/tip_of_the_day.list.in:46
-#, fuzzy
 msgid ""
 "Want to see all your subaccount transactions in one register? From the "
 "Accounts tab in the main window, highlight the parent account and select "
@@ -26042,7 +26039,7 @@ msgid ""
 msgstr ""
 "So können Sie alle Buchungssätze Ihrer Unterkonten in einem Kontobuch "
 "ansehen. Markieren Sie im Kontenhierarchie-Fenster das übergeordnete Konto "
-"und wählen Sie den Menüpunkt Bearbeiten -> Unterkonten öffnen."
+"und wählen Sie den Menüpunkt »Bearbeiten -> Unterkonten öffnen«."
 
 #: ../doc/tip_of_the_day.list.in:50
 msgid ""
