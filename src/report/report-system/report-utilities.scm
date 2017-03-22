@@ -332,7 +332,10 @@
     ;; If no pair with this commodity exists, we will create one.
     (define (add-commodity-value commodity value)
       ;; lookup the corresponding pair
-      (let ((pair (assoc commodity commoditylist)))
+      (let ((pair (assoc commodity commoditylist))
+            (rvalue (gnc-numeric-convert
+                     value
+                     (gnc-commodity-get-fraction commodity) GNC-RND-ROUND)))
 	(if (not pair)
 	    (begin
 	      ;; create a new pair, using the gnc:numeric-collector
@@ -340,7 +343,7 @@
 	      ;; and add it to the alist
 	      (set! commoditylist (cons pair commoditylist))))
 	;; add the value
-	(gnc:numeric-collector-add (cadr pair) value)))
+	(gnc:numeric-collector-add (cadr pair) rvalue)))
     
     ;; helper function to walk an association list, adding each
     ;; (commodity -> collector) pair to our list at the appropriate 
