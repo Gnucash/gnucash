@@ -30,7 +30,7 @@ setup (Fixture *fixture, gconstpointer pData)
     fixture->split = get_random_split (fixture->book, fixture->account1,
                                        fixture->txn);
     fixture->match_info = g_new0 (GNCImportMatchInfo, 1);
-    
+
     fixture->match_info->split = fixture->split;
 }
 
@@ -45,30 +45,33 @@ teardown (Fixture *fixture, gconstpointer pData)
     xaccAccountBeginEdit (fixture->account2);
     xaccAccountDestroy (fixture->account2);
     qof_book_destroy (fixture->book);
-    
+
     test_clear_error_list();
 }
 
+/* The exluded tests all rely on g_assert_true wich was only introduced
+ * in glib 2.38 */
+#ifdef HAVE_GLIB_2_38
 static void
 test_pending_matches_match_types (Fixture *fixture, gconstpointer pData)
 {
     GNCImportPendingMatches *matches = gnc_import_PendingMatches_new();
     GNCImportPendingMatchType match_types;
-    
+
     match_types = gnc_import_PendingMatches_get_match_type (matches,
                                                             fixture->match_info);
     g_assert_true (match_types == GNCImportPending_NONE);
-    
+
     gnc_import_PendingMatches_add_match (matches, fixture->match_info, FALSE);    
     match_types = gnc_import_PendingMatches_get_match_type (matches,
                                                             fixture->match_info);
     g_assert_true (match_types == GNCImportPending_AUTO);
-    
+
     gnc_import_PendingMatches_add_match (matches, fixture->match_info, TRUE);    
     match_types = gnc_import_PendingMatches_get_match_type (matches,
                                                             fixture->match_info);
     g_assert_true (match_types == GNCImportPending_MANUAL);
-    
+
     gnc_import_PendingMatches_delete (matches);
 }
 
@@ -81,9 +84,9 @@ test_pending_matches_prefer_manual_match (Fixture *fixture, gconstpointer pData)
     gnc_import_PendingMatches_add_match (matches, fixture->match_info, FALSE);
     match_type = gnc_import_PendingMatches_get_match_type (matches,
                                                            fixture->match_info);
-    
+
     g_assert_true (match_type == GNCImportPending_MANUAL);
-    
+
     gnc_import_PendingMatches_delete (matches);
 }
 
@@ -93,24 +96,25 @@ test_pending_matches_keeps_count (Fixture *fixture, gconstpointer pData)
     GNCImportPendingMatchType auto_match;
     GNCImportPendingMatchType no_match;
     GNCImportPendingMatches *matches = gnc_import_PendingMatches_new();
-    
+
     gnc_import_PendingMatches_add_match (matches, fixture->match_info, TRUE);
     gnc_import_PendingMatches_add_match (matches, fixture->match_info, TRUE);
     gnc_import_PendingMatches_remove_match (matches, fixture->match_info, TRUE);
-    
+
     auto_match = gnc_import_PendingMatches_get_match_type (matches,
                                                            fixture->match_info);
-    
+
     gnc_import_PendingMatches_remove_match (matches, fixture->match_info, TRUE);
-    
+
     no_match = gnc_import_PendingMatches_get_match_type (matches,
                                                          fixture->match_info);
-    
+
     g_assert_true (auto_match != no_match);
     g_assert_true (no_match == GNCImportPending_NONE);
-    
+
     gnc_import_PendingMatches_delete (matches);
 }
+#endif
 
 int
 main (int argc, char *argv[])
@@ -118,14 +122,18 @@ main (int argc, char *argv[])
     int result;
     qof_init();
     g_test_init (&argc, &argv, NULL);
-    
+
+    /* The exluded tests all rely on g_assert_true wich was only introduced
+     * in glib 2.38 */
+#ifdef HAVE_GLIB_2_38
     GNC_TEST_ADD (suitename, "match_types", Fixture, NULL, setup,
                   test_pending_matches_match_types, teardown);
     GNC_TEST_ADD (suitename, "prefer_manual_match", Fixture, NULL, setup,
                   test_pending_matches_prefer_manual_match, teardown);
     GNC_TEST_ADD (suitename, "keeps_count", Fixture, NULL, setup,
                   test_pending_matches_keeps_count, teardown);
+#endif
     result =  g_test_run();
-    
+
     qof_close();
 }
