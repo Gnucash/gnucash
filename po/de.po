@@ -1,6 +1,7 @@
-# translation of de.po to German
+# German translations for GnuCash
 # Messages in Deutsch für GnuCash
 # Copyright (C) 1999-2001, 2004 Free Software Foundation, Inc.
+# This file is distributed under the same license as the GnuCash package.
 # Jan-Uwe Finck <Jan-Uwe.Finck@bigfoot.de>, 1999.
 # Christian Stimming <stimming@tuhh.de>, 2001-2014.
 # Christian Meyer <chrisime@gnome.org>, 2000, 2001.
@@ -11,10 +12,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash-2.0\n"
+"Project-Id-Version: GnuCash 2.6.15\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-22 02:17+0100\n"
-"PO-Revision-Date: 2016-01-02 22:42+0100\n"
+"PO-Revision-Date: 2017-03-22 14:22+0100\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: de\n"
@@ -6037,9 +6038,8 @@ msgstr ""
 #. Extensions Menu
 #: ../src/gnome/gnc-plugin-page-account-tree.c:279
 #: ../src/gnome/gnc-plugin-register2.c:64
-#, fuzzy
 msgid "_Register2"
-msgstr "Kontobuch"
+msgstr "_Kontobuch Vers. 2"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:342
 #, fuzzy
@@ -6864,9 +6864,8 @@ msgid "Edit the selected scheduled transaction"
 msgstr "Ausgewählte terminierte Buchung bearbeiten"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:152
-#, fuzzy
 msgid "_Edit 2"
-msgstr "_Bearbeiten"
+msgstr "_Bearbeiten (neu)"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:153
 msgid "Edit the selected scheduled transaction 2"
@@ -6907,24 +6906,20 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-register2.c:66
 #: ../src/gnome/gnc-plugin-register2.c:67
-#, fuzzy
 msgid "Register2 Open GL Account"
-msgstr "_Konto öffnen"
+msgstr "_Konto öffnen (OpenGL)"
 
 #: ../src/gnome/gnc-plugin-register.c:54
-#, fuzzy
 msgid "Old St_yle General Ledger"
-msgstr "_Journal"
+msgstr "_Journal (klassisch)"
 
 #: ../src/gnome/gnc-plugin-register.c:55
-#, fuzzy
 msgid "Open an old style general ledger window"
 msgstr ""
-"Journal-Fenster öffnen (Alle Buchungssätze aller Konten in einem einzigen "
+"Klassisches Journal-Fenster öffnen (Alle Buchungssätze aller Konten in einem einzigen "
 "Journal)"
 
 #: ../src/gnome/gnc-plugin-register.c:59
-#, fuzzy
 msgid "Open general ledger window"
 msgstr ""
 "Journal-Fenster öffnen (Alle Buchungssätze aller Konten in einem einzigen "
@@ -6978,7 +6973,7 @@ msgid ""
 msgstr ""
 "Dieses Kontofenster ist für die Kontoarten Offene Forderungen / "
 "Verbindlichkeiten. Die Einträge sollten nicht von Hand geändert werden, "
-"sondern nur über die Menüpunkte im »Geschäftlich«-Menü."
+"sondern nur über die Menüpunkte im »Geschäft«-Menü."
 
 #: ../src/gnome/gnc-split-reg2.c:1069 ../src/gnome/gnc-split-reg.c:2158
 msgid "This account register is read-only."
@@ -7104,18 +7099,16 @@ msgstr ""
 "löschen würden. Dies bedeutet, dass ihr abgeglichener Saldo verändert wird."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:1
-#, fuzzy
 msgid "GUID of predefined check format to use"
-msgstr "Gewählte Nummer des mitgelieferten Scheckformats"
+msgstr "Global eindeutige Nummer des mitgelieferten Scheckformats"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:2
-#, fuzzy
 msgid ""
 "This value specifies the predefined check format to use. The number is the "
 "guid of a known check format."
 msgstr ""
-"Dieser Wert wählt eines der voreingestellten Scheckformate. Die Zahl ist der "
-"Index des gewünschten Formats, mit 0 anfangend."
+"Dieser Wert bestimmt das zu verwendende vordefinierte Scheckformat. Die Zahl ist der "
+"global eindeutige Schlüssel (GUID) eines bekannten Scheckformats."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:3
 msgid "Which check position to print"
@@ -7148,15 +7141,15 @@ msgid "Custom date format"
 msgstr "Benutzerdefiniertes Datumsformat"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:9
-#, fuzzy
 msgid ""
 "If the date format is set to indicate a custom date format, this value is "
 "used as an argument to strftime to produce the date to be printed. It may be "
 "any valid strftime string; for more information about this format, read the "
 "manual page of strftime by \"man 3 strftime\"."
 msgstr ""
-"Wenn das Datumsformat auf Benutzerdefiniert gesetzt ist, kann in dieser "
-"Einstellung das strftime-Format angegeben werden. Für mehr Informationen "
+"Wenn das Datumsformat auf Benutzerdefiniert gesetzt ist, kann in dieser Ausdruck"
+"als Argument an das strftime-Format übergegeben werden. Es kann eine beliebige "
+"gültige strftime Zeichenkette sein. Für mehr Informationen "
 "lesen Sie die Ausgabe von »man 3 strftime«."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:10
@@ -7271,58 +7264,50 @@ msgstr ""
 "werden von der linken unteren Ecke aus gemessen."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:28
-#, fuzzy
 msgid "Rotation angle"
-msgstr "_Drehung"
+msgstr "Drehwinkel"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:29
-#, fuzzy
 msgid "Number of degrees to rotate the check."
-msgstr "Zahlenüberschrift"
+msgstr "Anzahl der Grade, um die der Scheck gedreht werden soll"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:30
-#, fuzzy
 msgid "Position of split's amount in numbers"
-msgstr "Position vom Scheckbetrag in Zahlen"
+msgstr "Position vdes Scheckbetrags in Zahlen"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:31
-#, fuzzy
 msgid ""
 "This value contains the X,Y coordinates for the start of the split's amount "
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
 msgstr ""
-"Dieser Wert enthält die X/Y-Koordinaten für die Zeile des Betrags in Worten "
-"auf dem Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
+"Dieser Wert enthält die X/Y-Koordinaten für den Zeilenanfang des Betrags in Worten "
+"auf dem Scheck. Die Koordinaten werden von der linken unteren Ecke aus gemessen."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:32
-#, fuzzy
 msgid "Position of split's memo line"
 msgstr "Position der Verwendungszweck-Zeile"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:33
-#, fuzzy
 msgid ""
 "This value contains the X,Y coordinates for the start of the split's memo "
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
 msgstr ""
-"Dieser Wert enthält die X/Y-Koordinaten für die Verwendungszweck-Zeile auf "
-"dem Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
+"Dieser Wert enthält die X/Y-Koordinaten für den Verwendungszweck-Zeilenanfang "
+"auf dem Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:34
-#, fuzzy
 msgid "Position of split's account line"
-msgstr "Position der Datumszeile"
+msgstr "Position der Kontozeile"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:35
-#, fuzzy
 msgid ""
 "This value contains the X,Y coordinates for the start of the split's account "
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
 msgstr ""
-"Dieser Wert enthält die X/Y-Koordinaten für die Zeile des Betrags in Worten "
+"Dieser Wert enthält die X/Y-Koordinaten für den Zeileanfang der Kontobezeichnung "
 "auf dem Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:36
@@ -7358,9 +7343,8 @@ msgid "Show currencies in this dialog"
 msgstr "Währungen in diesem Dialog anzeigen"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.gschema.xml.in.in.h:3
-#, fuzzy
 msgid "Position of the horizontal pane divider."
-msgstr "Position des Scheckvordrucks auf der Seite"
+msgstr "Position des horizontalen Bereichstrenners"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.gschema.xml.in.in.h:5
 msgid ""
@@ -7482,31 +7466,27 @@ msgstr ""
 "Vorgabe gewählt, unabhängig von früheren Abgleichen-Daten."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in.in.h:3
-#, fuzzy
 msgid "Run \"since last run\" dialog when a file is opened."
 msgstr ""
-"Das Fenster »Seit letztem Aufruf« anzeigen, wenn eine Datei geöffnet wird "
-"oder beim Programmstart von GnuCash."
+"»Seit letztem Aufruf« starten, wenn eine Datei geöffnet wird."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in.in.h:4
-#, fuzzy
 msgid ""
 "This setting controls whether the scheduled transactions \"since last run\" "
 "processing is run automatically when a data file is opened. This includes "
 "the initial opening of the data file when GnuCash starts. If this setting is "
 "active, run the \"since last run\" process, otherwise it is not run."
 msgstr ""
-"Ob das Fenster »Seit letztem Aufruf« beim Öffnen einer Datei angezeigt wird."
+"Diese Einstellung bestimmt, ob die Aktion »Terminierte Buchungen -> Seit "
+"letztem Aufruf...« beim Öffnen einer Datei automatisch ausgeführt wird. "
+"Nur wenn die Einstellung aktiviert ist, wird der Prozeß gestartet."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in.in.h:5
-#, fuzzy
 msgid "Show \"since last run\" notification dialog when a file is opened."
 msgstr ""
-"Das Fenster »Seit letztem Aufruf« anzeigen, wenn eine Datei geöffnet wird "
-"oder beim Programmstart von GnuCash."
+"Das Fenster »Seit letztem Aufruf« anzeigen, wenn eine Datei geöffnet wird."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in.in.h:6
-#, fuzzy
 msgid ""
 "This setting controls whether the scheduled transactions notification-only "
 "\"since last run\" dialog is shown when a data file is opened (if \"since "
@@ -7514,7 +7494,10 @@ msgid ""
 "opening of the data file when GnuCash starts. If this setting is active, "
 "show the dialog, otherwise it is not shown."
 msgstr ""
-"Ob das Fenster »Seit letztem Aufruf« beim Öffnen einer Datei angezeigt wird."
+"Diese Einstellung bestimmt, ob nur der Benachrichtigungsdialog »Seit letztem "
+"Aufruf...« der terminierten Buchungen beim Öffnen einer Datei angezeigt wird, "
+"wenn die »Seit letztem Aufruf«-Verarbeitung aktiviert ist. "
+"Nur wenn diese Einstellung aktiviert ist,  wird der Dialog angezeigt."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in.in.h:7
 msgid "Set the \"auto create\" flag by default"
@@ -8193,7 +8176,6 @@ msgstr ""
 "sichtbar sind."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:90
-#, fuzzy
 msgid ""
 "Show two lines of information for each transaction in a register. This is "
 "the default setting for when a register is first opened. The setting can be "
@@ -8201,7 +8183,7 @@ msgid ""
 msgstr ""
 "Zwei Zeilen für jede Buchung im Kontofenster anzeigen. Dies ist die "
 "Voreinstellung, wenn ein Kontofenster das erste Mal geöffnet wird. Für jedes "
-"Kontofenster kann diese Einstellung jederzeit über das Menü »Anzeige/Zwei "
+"Kontofenster kann diese Einstellung jederzeit über das Menü »Anzeige-&gt;Zwei "
 "Zeilen« geändert werden."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:91
@@ -8239,11 +8221,9 @@ msgstr "Zeigt eingegebenen und abgeglichenen Daten in der Selektion"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:96
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:170
-#, fuzzy
 msgid "Show the entered date and reconciled date on transaction selection."
 msgstr ""
-"Wählen Sie »Abgl+Ü«, um eine existierende Buchung abzugleichen und die Daten "
-"zu übernehmen."
+"Zeigt eingegebenen und abgeglichenen Daten in der Buchungsauswahl."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:97
 msgid "Show the calendar buttons"
@@ -9307,9 +9287,10 @@ msgid "Enter any notes you want to make about this lot."
 msgstr ""
 "Geben Sie hier alle Notizen ein, die Sie zu diesem Posten speichern wollen."
 
+# N wird für neu verwendet.
 #: ../src/gnome/gtkbuilder/dialog-lot-viewer.glade.h:5
 msgid "<b>_Title</b>"
-msgstr "<b>_Name</b>"
+msgstr "<b>N_ame</b>"
 
 #: ../src/gnome/gtkbuilder/dialog-lot-viewer.glade.h:6
 msgid "<b>_Lots in This Account</b>"
@@ -9320,9 +9301,8 @@ msgid "Show only open lots"
 msgstr "Nur offene Posten anzeigen"
 
 #: ../src/gnome/gtkbuilder/dialog-lot-viewer.glade.h:8
-#, fuzzy
 msgid "<b>Splits _free</b>"
-msgstr "<b>Buchungsinformationen</b>"
+msgstr "<b>_Freie Buchungsteile</b>"
 
 #: ../src/gnome/gtkbuilder/dialog-lot-viewer.glade.h:9
 msgid ">>"
@@ -9333,9 +9313,8 @@ msgid "<<"
 msgstr "<<"
 
 #: ../src/gnome/gtkbuilder/dialog-lot-viewer.glade.h:11
-#, fuzzy
 msgid "<b>Splits _in lot</b>"
-msgstr "<b>Buchungsinformationen</b>"
+msgstr "<b>Buchungsteile _in Posten</b>"
 
 #: ../src/gnome/gtkbuilder/dialog-lot-viewer.glade.h:12
 msgid "_New Lot"
@@ -9402,11 +9381,10 @@ msgid "_Open the new user tutorial"
 msgstr "Die _Einführung für neue Benutzer öffnen"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:1
-#, fuzzy
 msgid ""
 "Delete all stock prices before the date below based upon the following "
 "criteria:"
-msgstr "Alle Kurse mit folgenden Kriterien löschen:"
+msgstr "Alle Kursdaten vor dem Datum nach folgenden Kriterien löschen:"
 
 #: ../src/gnome/gtkbuilder/dialog-price.glade.h:2
 msgid "Delete _manually entered prices"
@@ -10186,12 +10164,11 @@ msgid "S_tatement Date"
 msgstr "_Datum des Kontoauszugs:"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:34
-#, fuzzy
 msgid ""
 "Sort by the statement date (and group by cleared, unreconciled, reconciled)."
 msgstr ""
-"Nach Datum des Abgleichens/Kontoauszugs sortieren (nicht abgeglichene "
-"Einträge zuletzt)"
+"Nach Datum des Auszugs sortieren und gruppieren (bestätigt, nicht "
+"abgeglichen, abgeglichen)"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:35
 msgid "Num_ber"
@@ -10321,9 +10298,8 @@ msgid "New Transaction"
 msgstr "Neue Buchung"
 
 #: ../src/gnome-search/dialog-search.c:1087
-#, fuzzy
 msgid "New Split"
-msgstr "Vollständig"
+msgstr "Neuer Buchungsteil"
 
 #: ../src/gnome-search/dialog-search.c:1096
 msgid ""
@@ -11181,7 +11157,8 @@ msgstr "Fehler"
 msgid ""
 "Retrieve the current online quote. This will fail if there is a manually-"
 "created price for today."
-msgstr ""
+msgstr "Den Online-Kurs abrufen. Das klappt nicht, wenn für heute schon "
+"ein Kurs manuell erstellt wurde."
 
 #: ../src/gnome-utils/dialog-transfer.c:1332
 msgid "Finance::Quote must be installed to enable this button."
@@ -11557,9 +11534,9 @@ msgid "The file %s is empty."
 msgstr "Die Datei »%s« ist leer."
 
 #: ../src/gnome-utils/gnc-file.c:377
-#, fuzzy, c-format
+#, c-format
 msgid "The file/URI %s could not be found."
-msgstr "Die Datei »%s« konnte nicht gefunden werden."
+msgstr "Die Datei/URI »%s« konnte nicht gefunden werden."
 
 #: ../src/gnome-utils/gnc-file.c:383
 msgid "This file is from an older version of GnuCash. Do you want to continue?"
@@ -12334,7 +12311,9 @@ msgid ""
 "The entered date of the duplicated transaction is older than the \"Read-Only "
 "Threshold\" set for this book. This setting can be changed in File -> "
 "Properties -> Accounts."
-msgstr ""
+msgstr "Das eingegebene Datum der duplizierten Buchung ist älter als die "
+"\"Nur-Lese Schwelle\" dieser Datei. Diese Einstellung kann in Datei -> "
+"Eigenschaften -> Konten geändert werden."
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1725
 #, fuzzy
@@ -12352,7 +12331,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1738
 msgid "_Return"
-msgstr "Kapitalverzinsung"
+msgstr "Kapitalertrag"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1781
 #: ../src/register/ledger-core/split-register-control.c:1835
