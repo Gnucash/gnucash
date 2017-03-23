@@ -99,7 +99,7 @@ void gnc_history_remove_file (const char *oldfile);
 
 /** Test for a file name existing in the history list.
  *
- *  @param oldfile The name of the file to remove from the list.
+ *  @param oldfile The name of the file to test in the list.
  */
 gboolean gnc_history_test_for_file (const char *oldfile);
 
@@ -111,10 +111,6 @@ gboolean gnc_history_test_for_file (const char *oldfile);
  *  responsible for freeing this string.
  */
 char * gnc_history_get_last (void);
-
-/** Set the source of the open file, True for History.
- */
-void gnc_history_set_file_from_history (gboolean set);
 
 G_END_DECLS
 

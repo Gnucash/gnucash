@@ -605,10 +605,7 @@ get_file_to_load()
     if (file_to_load)
         return g_strdup(file_to_load);
     else
-    {
-        gnc_history_set_file_from_history(TRUE);
         return gnc_history_get_last();
-    }
 }
 
 static void
@@ -657,7 +654,6 @@ inner_main (void *closure, int argc, char **argv)
     {
         gnc_update_splash_screen(_("Loading data..."), GNC_SPLASH_PERCENTAGE_UNKNOWN);
         gnc_file_open_file(fn, /*open_readonly*/ FALSE);
-        gnc_history_set_file_from_history(FALSE);
         g_free(fn);
     }
     else if (gnc_prefs_get_bool(GNC_PREFS_GROUP_NEW_USER, GNC_PREF_FIRST_STARTUP))
