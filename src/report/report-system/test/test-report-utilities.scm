@@ -27,8 +27,7 @@
          (start-date-tp (NDayDelta end-date-tp 10))
          (q-end-date-tp (gnc-dmy2timespec-end test-day test-month test-year))
          (q-start-date-tp (gnc-dmy2timespec test-day test-month test-year))
-;; Queries 5 days because start time is 00:00:00 and end time is 23:59:59.
-         (q-start-date-tp (NDayDelta q-start-date-tp 4)))
+         (q-start-date-tp (NDayDelta q-start-date-tp 5)))
 
     (let* ((accounts (env-create-account-structure-alist env (list "Assets"
 								   (list (cons 'type ACCT-TYPE-ASSET))
@@ -43,9 +42,4 @@
 							      ACCT-TYPE-ASSET
 							      q-start-date-tp q-end-date-tp)))
 	;; 10 is the right number (5 days, two splits per tx)
-	(if (and (equal? 10 (length splits))) #t
-            (begin
-              (format #t "~a~a~a~a~%" "Creation Start: " (strftime "%F %T" (localtime (car start-date-tp))) " Creation End: " (strftime "%F %T" (localtime (car end-date-tp))))
-              (format #t "~a~a~a~a~%" "Query Start: " (strftime "%F %T" (localtime (car q-start-date-tp))) " Query End: " (strftime "%F %T" (localtime (car q-end-date-tp))))
-              (format #t "~a~a~%" "Incorrect number of splits " (length splits))
-              #f))))))
+	(and (equal? 10 (length splits)))))))
