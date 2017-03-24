@@ -694,6 +694,40 @@ gnc_template_register_save_mxfrm_cell (BasicCell * cell,
 }
 
 static void
+save_cell (SplitRegister *reg, kvp_frame *kvpf, const char *cell_name)
+{
+    const gboolean is_credit = g_strcmp0 (cell_name, FCRED_CELL) == 0;
+    const char *formula = is_credit ?
+        GNC_SX_CREDIT_FORMULA : GNC_SX_DEBIT_FORMULA;
+    const char *numeric = is_credit ?
+        GNC_SX_CREDIT_NUMERIC : GNC_SX_DEBIT_NUMERIC;
+    const char *value = gnc_table_layout_get_cell_value (reg->table->layout,
+                                                         cell_name);
+    gnc_numeric new_amount = gnc_numeric_zero ();
+    GHashTable *parser_vars = g_hash_table_new (g_str_hash, g_str_equal);
+    char *error_loc;
+
+    /* If the value can be parsed into a numeric result (without any
+     * further variable definitions), store that numeric value
+     * additionally in the kvp. Otherwise store a zero numeric
+     * there.*/
+    const gboolean parse_result =
+        gnc_exp_parser_parse_separate_vars (value, &new_amount,
+                                            &error_loc, parser_vars);
+    if (!parse_result || g_hash_table_size (parser_vars) != 0)
+        new_amount = gnc_numeric_zero ();
+    g_hash_table_unref (parser_vars);
+    kvp_frame_set_slot_path (kvpf, kvp_value_new_numeric (new_amount),
+                             GNC_SX_ID,
+                             numeric,
+                             NULL);
+    kvp_frame_set_slot_path (kvpf, kvp_value_new_string (value),
+                             GNC_SX_ID,
+                             formula,
+                             NULL);
+}
+
+static void
 gnc_template_register_save_debcred_cell (BasicCell * cell,
         gpointer save_data,
         gpointer user_data)
@@ -701,11 +735,6 @@ gnc_template_register_save_debcred_cell (BasicCell * cell,
     SRSaveData *sd = save_data;
     SplitRegister *reg = user_data;
     kvp_frame *kvpf;
-    const char *value;
-    char *error_loc;
-    gnc_numeric new_amount;
-    gboolean parse_result;
-    GHashTable *parser_vars = g_hash_table_new(g_str_hash, g_str_equal);
 
     g_return_if_fail (gnc_basic_cell_has_name (cell, FDEBT_CELL) ||
                       gnc_basic_cell_has_name (cell, FCRED_CELL));
@@ -716,65 +745,8 @@ gnc_template_register_save_debcred_cell (BasicCell * cell,
     kvpf = xaccSplitGetSlots (sd->split);
 
     DEBUG ("kvp_frame before: %s\n", kvp_frame_to_string (kvpf));
-
-    /* amountStr = gnc_numeric_to_string (new_amount); */
-
-    value = gnc_table_layout_get_cell_value (reg->table->layout, FCRED_CELL);
-    kvp_frame_set_slot_path (kvpf, kvp_value_new_string (value),
-                             GNC_SX_ID,
-                             GNC_SX_CREDIT_FORMULA,
-                             NULL);
-
-    /* If the value can be parsed into a numeric result (without any
-     * further variable definitions), store that numeric value
-     * additionally in the kvp. Otherwise store a zero numeric
-     * there.*/
-    parse_result = gnc_exp_parser_parse_separate_vars(value, &new_amount,
-                                                      &error_loc, parser_vars);
-    if (g_hash_table_size(parser_vars) == 0)
-    {
-        if (!parse_result)
-        {
-            new_amount = gnc_numeric_zero();
-        }
-        kvp_frame_set_slot_path (kvpf, kvp_value_new_numeric (new_amount),
-                                 GNC_SX_ID,
-                                 GNC_SX_CREDIT_NUMERIC,
-                                 NULL);
-    }
-    else
-    {
-        g_hash_table_destroy(parser_vars);
-        parser_vars = g_hash_table_new (g_str_hash, g_str_equal);
-    }
-    value = gnc_table_layout_get_cell_value (reg->table->layout, FDEBT_CELL);
-
-    kvp_frame_set_slot_path (kvpf,
-                             kvp_value_new_string (value),
-                             GNC_SX_ID,
-                             GNC_SX_DEBIT_FORMULA,
-                             NULL);
-
-    /* If the value can be parsed into a numeric result, store that
-     * numeric value additionally. See above comment.*/
-    parse_result = gnc_exp_parser_parse_separate_vars(value, &new_amount,
-                                                      &error_loc, parser_vars);
-    if (parser_vars == NULL)
-    {
-        if (!parse_result)
-        {
-            new_amount = gnc_numeric_zero();
-        }
-        kvp_frame_set_slot_path (kvpf, kvp_value_new_numeric (new_amount),
-                                 GNC_SX_ID,
-                                 GNC_SX_DEBIT_NUMERIC,
-                                 NULL);
-    }
-    else
-    {
-        g_hash_table_destroy(parser_vars);
-        parser_vars = NULL;
-    }
+    save_cell (reg, kvpf, FCRED_CELL);
+    save_cell (reg, kvpf, FDEBT_CELL);
     DEBUG ("kvp_frame  after: %s\n", kvp_frame_to_string (kvpf));
 
     /* set the amount to an innocuous value */

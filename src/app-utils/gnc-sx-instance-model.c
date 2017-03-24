@@ -69,6 +69,58 @@ static void _gnc_sx_instance_event_handler(QofInstance *ent, QofEventId event_ty
 
 /* ------------------------------------------------------------ */
 
+static gboolean
+scrub_sx_split_numeric (kvp_frame *kvp, const char *debcred)
+{
+    const gboolean is_credit = g_strcmp0 (debcred, "credit") == 0;
+    const char *formula = is_credit ?
+        GNC_SX_CREDIT_FORMULA : GNC_SX_DEBIT_FORMULA;
+    const char *numeric = is_credit ?
+        GNC_SX_CREDIT_NUMERIC : GNC_SX_DEBIT_NUMERIC;
+    const KvpValue *val = kvp_frame_get_slot_path (kvp,
+                                                   GNC_SX_ID, formula,
+                                                   NULL);
+    const KvpValue *num = kvp_frame_get_slot_path (kvp,
+                                                   GNC_SX_ID, numeric,
+                                                   NULL);
+    const char *value = kvp_value_get_string (val);
+    GHashTable *parser_vars = g_hash_table_new (g_str_hash, g_str_equal);
+    char *error_loc;
+    gnc_numeric amount = gnc_numeric_zero ();
+    const gboolean parse_result =
+        gnc_exp_parser_parse_separate_vars (value, &amount,
+                                            &error_loc, parser_vars);
+    if (!parse_result || g_hash_table_size (parser_vars) != 0)
+        amount = gnc_numeric_zero ();
+    g_hash_table_unref (parser_vars);
+    if (gnc_numeric_eq (amount, kvp_value_get_numeric (num)))
+        return FALSE;
+    kvp_frame_set_slot_path (kvp, kvp_value_new_numeric (amount),
+                             GNC_SX_ID,
+                             numeric,
+                             NULL);
+    return TRUE;
+}
+
+/* Fixes error in pre-2.6.16 where the numeric slot wouldn't get changed if the
+ * formula slot was edited.
+ */
+void
+gnc_sx_scrub_split_numerics (gpointer psplit, gpointer puser)
+{
+    Split *split = GNC_SPLIT (psplit);
+    kvp_frame *kvp = xaccSplitGetSlots (split);
+    Transaction *trans = xaccSplitGetParent (split);
+    gboolean changed;
+    xaccTransBeginEdit (trans);
+    changed = scrub_sx_split_numeric (kvp, "credit") +
+        scrub_sx_split_numeric (kvp, "debit");
+    if (!changed)
+        xaccTransRollbackEdit (trans);
+    else
+        xaccTransCommitEdit (trans);
+}
+
 static void
 _sx_var_to_raw_numeric(gchar *name, GncSxVariable *var, GHashTable *parser_var_hash)
 {

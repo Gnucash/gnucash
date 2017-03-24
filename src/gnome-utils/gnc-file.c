@@ -49,7 +49,8 @@
 #include "gnc-session.h"
 #include "gnc-state.h"
 #include "gnc-autosave.h"
-
+#include <gnc-sx-instance-model.h>
+#include <SX-book.h>
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -936,7 +937,10 @@ RESTART:
         /* test for unknown features. */
         if (!uh_oh)
         {
-            gchar *msg = gnc_features_test_unknown(qof_session_get_book (new_session));
+            QofBook *book = qof_session_get_book (new_session);
+            gchar *msg = gnc_features_test_unknown (book);
+            Account *template_root = gnc_book_get_template_root (book);
+            GList *child = NULL;
 
             if (msg)
             {
@@ -945,6 +949,20 @@ RESTART:
                 // XXX: should pull out the file name here */
                 gnc_error_dialog(gnc_ui_get_toplevel(), msg, "");
                 g_free (msg);
+            }
+            if (template_root != NULL)
+            {
+                GList *child = NULL;
+                GList *children = gnc_account_get_descendants (template_root);
+
+                for (child = children; child; child = g_list_next (child))
+                {
+                    Account *acc = GNC_ACCOUNT (child->data);
+                    GList *splits = xaccAccountGetSplitList (acc);
+                    g_list_foreach (splits,
+                                    (GFunc)gnc_sx_scrub_split_numerics, NULL);
+                }
+                g_list_free (children);
             }
         }
     }

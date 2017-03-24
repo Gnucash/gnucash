@@ -136,6 +136,13 @@ GncSxInstanceModel* gnc_sx_get_instances(const GDate *range_end, gboolean includ
 void gnc_sx_instance_model_update_sx_instances(GncSxInstanceModel *model, SchedXaction *sx);
 void gnc_sx_instance_model_remove_sx_instances(GncSxInstanceModel *model, SchedXaction *sx);
 
+/** Fix up numerics where they've gotten out-of-sync with the formulas.
+ *
+ * Ideally this would be done at load time, but it requires gnc_exp_parser to
+ * work and neither engine nor the backends can depend on it.
+ */
+void gnc_sx_scrub_split_numerics (gpointer psplit, gpointer user);
+
 /** @return GList<GncSxVariable*>. Caller owns the list, but not the items. **/
 GList *gnc_sx_instance_get_variables(GncSxInstance *inst);
 
