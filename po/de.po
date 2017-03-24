@@ -3601,7 +3601,7 @@ msgstr "Habenkonto"
 #: ../src/business/business-gnome/gtkbuilder/dialog-employee.glade.h:19
 #: ../src/report/business-reports/receivables.scm:71
 msgid "Billing"
-msgstr "Rechnung ausstellen"
+msgstr "Rechnung"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-employee.glade.h:20
 #: ../src/business/business-gnome/search-owner.c:240
@@ -12316,18 +12316,16 @@ msgstr "Das eingegebene Datum der duplizierten Buchung ist älter als die "
 "Eigenschaften -> Konten geändert werden."
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1725
-#, fuzzy
 msgid "Not enough information for Blank Transaction?"
-msgstr "Nicht genug Informationen für eine ..."
+msgstr "Nicht genug Informationen für eine neue Buchung?"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1727
-#, fuzzy
 msgid ""
 "The blank transaction does not have enough information to save it. Would you "
 "like to return to the transaction to update, or cancel the save?"
 msgstr ""
-"Die aktuelle Buchung wurde geändert. Möchten Sie vor dem Kopieren die "
-"Änderungen in der Buchung speichern, oder möchten Sie abbrechen?"
+"Die neue Buchung hat nicht genügend Informationen, gespeichert werden zu können. Möchten Sie zur "
+"Bearbeitung der Buchung zurückkehren oder das Speichern abbrechen?"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1738
 msgid "_Return"
@@ -12781,26 +12779,23 @@ msgid "Timezone"
 msgstr "Zeitzone"
 
 #: ../src/gnome-utils/gnc-tree-view-owner.c:381
-#, fuzzy
 msgid "Customer Number"
-msgstr "Kundennummer: "
+msgstr "Kundennummer"
 
 #: ../src/gnome-utils/gnc-tree-view-owner.c:389
-#, fuzzy
 msgid "Vendor Number"
-msgstr "Lieferantennummer: "
+msgstr "Lieferantennummer"
 
 #: ../src/gnome-utils/gnc-tree-view-owner.c:393
-#, fuzzy
 msgid "Employee Number"
-msgstr "Mitarbeiternummer: "
+msgstr "Mitarbeiternummer"
 
 #. Billing or Shipping addresses
 #: ../src/gnome-utils/gnc-tree-view-owner.c:445
 #: ../src/report/business-reports/aging.scm:50
 #: ../src/report/business-reports/aging.scm:697
 msgid "Address Name"
-msgstr "Adressname "
+msgstr "Adressbezeichnung"
 
 #: ../src/gnome-utils/gnc-tree-view-owner.c:450
 #: ../src/report/business-reports/aging.scm:51
@@ -13024,9 +13019,8 @@ msgid "Enter the number of shares bought or sold"
 msgstr "Geben Sie die verkaufte Anzahl von Aktien ein"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3391
-#, fuzzy
 msgid "* Indicates the transaction Commodity."
-msgstr "Anzeigen des Buchungsbetrags?"
+msgstr "* Zeigt die Buchungswährung."
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3401
 msgid "Enter the rate"
@@ -13109,7 +13103,6 @@ msgstr ""
 "selben Zeit zu drucken."
 
 #: ../src/gnome-utils/gschemas/org.gnucash.warnings.gschema.xml.in.in.h:3
-#, fuzzy
 msgid "Commit changes to a invoice entry"
 msgstr "Änderungen an einer Rechnungszeile speichern"
 
@@ -14820,9 +14813,8 @@ msgid "UTC - Coordinated Universal Time"
 msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:21
-#, fuzzy
 msgid "No Fancy Date Format"
-msgstr "Ausführliches Datumsformat"
+msgstr "Kein ausführliches Datumsformat"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:3
 msgid "Not scheduled"
@@ -15991,7 +15983,6 @@ msgstr "IBAN des Zahlungsempfängers"
 msgid "Credited BIC (Bank Code)"
 msgstr "BIC des Zahlungsempfängers"
 
-# c-format
 #: ../src/import-export/aqb/dialog-ab-trans.c:497
 #, c-format
 msgid ""
@@ -16299,7 +16290,7 @@ msgstr ""
 
 #: ../src/import-export/aqb/gnc-ab-utils.c:1058
 msgid "Subject:"
-msgstr ""
+msgstr "Betreff:"
 
 #: ../src/import-export/aqb/gnc-file-aqb-import.c:94
 msgid "Select a file to import"
@@ -16904,7 +16895,11 @@ msgid ""
 "The number of Accounts added was %u and updated was %u.\n"
 "\n"
 "See below for errors..."
-msgstr ""
+msgstr "Import mit Fehlern abgeschlossen!\n"
+"\n"
+"%u Konten wurden hinzugefügt und %u aktualisiert.\n"
+"\n"
+"Folgende Fehler traten auf:"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.c:474
 #, c-format
@@ -16912,7 +16907,9 @@ msgid ""
 "Import completed successfully!\n"
 "\n"
 "The number of Accounts added was %u and updated was %u.\n"
-msgstr ""
+msgstr "Import fehlerfrei abgeschlossen!\n"
+"\n"
+"%u Konten wurden hinzugefügt und %u aktualisiert.\n"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.glade.h:1
 msgid "CSV Import Assistant"
@@ -17033,33 +17030,33 @@ msgid "_Narrow this column"
 msgstr "Spalte ver_kleinern"
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.c:1379
-#, fuzzy
 msgid ""
 "The rows displayed below had errors which are in the last column. You can "
 "attempt to correct them by changing the configuration."
 msgstr ""
-"In den angezeigten Zeilen traten Fehler auf. Sie können versuchen, durch "
-"veränderte Einstellungen die Fehler zu beheben."
+"Die unten angezeigten Zeilen zeigen Fehler in der letzten Spalte. "
+"Sie können versuchen, die Fehler durch veränderte Einstellungen zu beheben."
 
 #. Set check button label
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.c:1390
-#, fuzzy
 msgid "Skip Errors"
-msgstr "Fehler"
+msgstr "Fehler überspringen"
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.c:1426
 #, c-format
 msgid ""
 "There are problems with the import settings!\n"
 "The date format could be wrong or there are not enough columns set..."
-msgstr ""
+msgstr "Es gibt Probleme mit den Importeinstellungen!\n"
+"Das Datumformat könnte falsch sein oder die Spaltenzahl ist zu klein..."
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.c:1437
 #, c-format
 msgid ""
 "To Change the account, double click on the required account, click Forward "
 "to proceed."
-msgstr ""
+msgstr "Um das KOnto zu wechseln, doppleklicken Sie auf das gewünschte Konto, "
+"dann "
 
 #. A list of the transactions we create
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.c:1520
@@ -19167,7 +19164,7 @@ msgstr "Ref"
 
 #: ../src/register/ledger-core/split-register-model.c:260
 msgid "T-Ref"
-msgstr ""
+msgstr "B.-Ref."
 
 #: ../src/register/ledger-core/split-register-model.c:269
 #: ../src/report/standard-reports/register.scm:144
@@ -19378,24 +19375,20 @@ msgstr "Fälligkeits- oder Buchungsdatum"
 #. Display tab options
 #: ../src/report/business-reports/aging.scm:49
 #: ../src/report/business-reports/receivables.scm:40
-#, fuzzy
 msgid "Address Source"
-msgstr "Adresse 1 "
+msgstr "Adressart"
 
 #: ../src/report/business-reports/aging.scm:55
-#, fuzzy
 msgid "Address Phone"
-msgstr "Adresse 1 "
+msgstr "Telelefon "
 
 #: ../src/report/business-reports/aging.scm:56
-#, fuzzy
 msgid "Address Fax"
-msgstr "Adresse 1 "
+msgstr "Fax"
 
 #: ../src/report/business-reports/aging.scm:57
-#, fuzzy
 msgid "Address Email"
-msgstr "Adresse 1 "
+msgstr "Email"
 
 #: ../src/report/business-reports/aging.scm:226
 msgid ""
