@@ -19475,47 +19475,41 @@ msgstr "Das Buchungsdatum wird als Stichtag verwendet."
 msgid ""
 "Display Address Name. This, and other fields, may be useful if copying this "
 "report to a spreadsheet for use in a mail merge."
-msgstr ""
+msgstr "Adressbezeichnung anzeigen. Dieses Feld mag neben anderen nützlich "
+"sein, wenn man den Bericht zur Weiterverarbeitung in die "
+"Tabellenkalkulation kopiert."
 
 #: ../src/report/business-reports/aging.scm:428
-#, fuzzy
 msgid "Display Address 1."
-msgstr "Anzeigen der Adresse?"
+msgstr "Anzeigen der Adresszeile 1."
 
 #: ../src/report/business-reports/aging.scm:436
-#, fuzzy
 msgid "Display Address 2."
-msgstr "Anzeigen der Adresse?"
+msgstr "Anzeigen der Adresszeile 2."
 
 #: ../src/report/business-reports/aging.scm:444
-#, fuzzy
 msgid "Display Address 3."
-msgstr "Anzeigen der Adresse?"
+msgstr "Anzeigen der Adresszeile 3."
 
 #: ../src/report/business-reports/aging.scm:452
-#, fuzzy
 msgid "Display Address 4."
-msgstr "Anzeigen der Adresse?"
+msgstr "Anzeigen der Adresszeile 4."
 
 #: ../src/report/business-reports/aging.scm:460
-#, fuzzy
 msgid "Display Phone."
-msgstr "Hilfe anzeigen"
+msgstr "Telefonnummer anzeigen."
 
 #: ../src/report/business-reports/aging.scm:468
-#, fuzzy
 msgid "Display Fax."
-msgstr "Anzeige"
+msgstr "Faxnummer anzeigen."
 
 #: ../src/report/business-reports/aging.scm:476
-#, fuzzy
 msgid "Display Email."
-msgstr "Anzeigesymbol"
+msgstr "Email-Adresse anzeigen."
 
 #: ../src/report/business-reports/aging.scm:484
-#, fuzzy
 msgid "Display Active status."
-msgstr "Anzeigen der Gesamtsumme"
+msgstr "Anzeigen des Aktiv-Status."
 
 #: ../src/report/business-reports/aging.scm:557
 #: ../src/report/business-reports/owner-report.scm:253
@@ -19553,10 +19547,9 @@ msgstr "E-Mail"
 
 #: ../src/report/business-reports/aging.scm:789
 msgid "Y"
-msgstr ""
+msgstr "Ja"
 
 #: ../src/report/business-reports/aging.scm:789
-#, fuzzy
 msgid "N"
 msgstr "Nein"
 
@@ -20745,23 +20738,20 @@ msgid "The receivables account you wish to examine."
 msgstr "Das Konto der Forderungen, welche Sie untersuchen wollen."
 
 #: ../src/report/business-reports/receivables.scm:68
-#, fuzzy
 msgid "Address source."
-msgstr "Adressname "
+msgstr "Art der Anschrift."
 
 #: ../src/report/business-reports/receivables.scm:71
-#, fuzzy
 msgid "Address fields from billing address."
-msgstr "Sie müssen eine Rechnungsadresse eingeben."
+msgstr "Felder aus der Rechnungsanschrift."
 
 #: ../src/report/business-reports/receivables.scm:72
-#, fuzzy
 msgid "Shipping"
 msgstr "Lieferadresse"
 
 #: ../src/report/business-reports/receivables.scm:72
 msgid "Address fields from shipping address."
-msgstr ""
+msgstr "Felder aus der Lieferadresse"
 
 #: ../src/report/business-reports/receivables.scm:91
 msgid "Receivable Aging"
@@ -20849,7 +20839,7 @@ msgstr "Text Rechnungsnummer"
 
 #: ../src/report/business-reports/taxinvoice.scm:105
 msgid "To text"
-msgstr "Text »An«"
+msgstr "Text 'An'"
 
 #: ../src/report/business-reports/taxinvoice.scm:106
 msgid "Ref text"
@@ -21053,7 +21043,7 @@ msgstr "An: "
 
 #: ../src/report/business-reports/taxinvoice.scm:237
 msgid "Your ref: "
-msgstr "Ihr_Zeichen: "
+msgstr "Ihr Zeichen: "
 
 #: ../src/report/business-reports/taxinvoice.scm:239
 msgid "Job number: "
@@ -21145,9 +21135,8 @@ msgstr "Letztes Jahr"
 
 #: ../src/report/locale-specific/us/taxtxf-de_DE.scm:171
 #: ../src/report/locale-specific/us/taxtxf.scm:196
-#, fuzzy
 msgid "Last Year."
-msgstr "Letztes Jahr"
+msgstr "Letztes Jahr."
 
 #: ../src/report/locale-specific/us/taxtxf-de_DE.scm:173
 #: ../src/report/locale-specific/us/taxtxf.scm:198
@@ -21713,9 +21702,8 @@ msgid "Display the %s report"
 msgstr "%s-Bericht anzeigen"
 
 #: ../src/report/report-gnome/report-gnome.scm:143
-#, fuzzy
 msgid "Manage and run saved report configurations"
-msgstr "Benutzerdefinierte Berichte bearbeiten und erstellen"
+msgstr "Benutzerdefinierte Berichte verwalten und ausführen"
 
 #: ../src/report/report-gnome/report-gnome.scm:163
 msgid "Welcome Sample Report"
@@ -22883,7 +22871,6 @@ msgid "LIFO"
 msgstr ""
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:97
-#, fuzzy
 msgid "Use last-in first-out method for basis."
 msgstr ""
 "Verwende die First-In First-Out-Zuordnung (zuerst erworbene werden zuerst "
@@ -23675,9 +23662,8 @@ msgid "Include Trading Accounts in report"
 msgstr "Summe Devisenhandel anzeigen"
 
 #: ../src/report/standard-reports/cash-flow.scm:106
-#, fuzzy
 msgid "Include transfers to and from Trading Accounts in the report."
-msgstr "Nur Buchungen von/nach Filter-Konten einschließen."
+msgstr "Buchungen von und nach Handelskonten in den Bericht einschließen."
 
 #: ../src/report/standard-reports/cash-flow.scm:241
 msgid "%s and subaccounts"
