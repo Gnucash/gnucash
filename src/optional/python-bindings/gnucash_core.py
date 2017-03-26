@@ -523,10 +523,6 @@ gncnumeric_dict =   {
                         'abs' : GncNumeric,
                         'add_fixed' : GncNumeric,
                         'sub_fixed' : GncNumeric,
-                        'add_with_error' : GncNumeric,
-                        'sub_with_error' : GncNumeric,
-                        'mul_with_error' : GncNumeric,
-                        'div_with_error' : GncNumeric,
                         'convert' : GncNumeric,
                         'reduce' : GncNumeric
                     }
