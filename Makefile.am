@@ -15,6 +15,7 @@ dist_doc_DATA = \
   AUTHORS \
   COPYING \
   ChangeLog \
+  ChangeLog.2016 \
   ChangeLog.2015 \
   ChangeLog.2014 \
   ChangeLog.2013 \
@@ -219,7 +220,7 @@ ChangeLog: NEWS
 	    --stringparam include-rev "yes" $(abs_srcdir)/macros/svn2cl.xsl - > $(abs_builddir)/$@ ; \
 	else \
 	  if test x$(VCS_TYPE) = xgit ; then \
-	    "$(GIT_CMD)" log --format="%ad %aN %n%n%x09* %s%d%n" --date=short --since=2016-01-01 > $(abs_builddir)/$@ ; \
+	    "$(GIT_CMD)" log --format="%ad %aN %n%n%x09* %s%d%n" --date=short --since=2017-01-01 > $(abs_builddir)/$@ ; \
 	  else \
 	    touch $(abs_builddir)/$@ ; \
 	    echo "Note: not in svn or git. ChangeLog not regenerated." ; \
