@@ -83,7 +83,7 @@ scrub_sx_split_numeric (Split* split, const char *debcred)
     char *error_loc;
     gnc_numeric amount = gnc_numeric_zero ();
     gboolean parse_result = FALSE;
-    g_object_get (G_OBJECT (split),
+    qof_instance_get (QOF_INSTANCE (split),
 		  formula, &formval,
 		  numeric, &numval,
 		  NULL);
@@ -95,7 +95,7 @@ scrub_sx_split_numeric (Split* split, const char *debcred)
     g_hash_table_unref (parser_vars);
     if (gnc_numeric_eq (amount, numval))
         return FALSE;
-    g_object_set (G_OBJECT (split),
+    qof_instance_set (QOF_INSTANCE (split),
 		  numeric, amount,
 		  NULL);
     return TRUE;
