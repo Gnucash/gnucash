@@ -27,6 +27,7 @@
 #define GNC_GEN_MATCH_PICKER_H
 
 #include "import-backend.h"
+#include "import-pending-matches.h"
 
 typedef struct _transpickerdialog GNCImportMatchPicker;
 
@@ -50,7 +51,8 @@ typedef struct _transpickerdialog GNCImportMatchPicker;
  * @param transaction_info The TransInfo for which the user is supposed to
  * pick a matching transaction. */
 void
-gnc_import_match_picker_run_and_close (GNCImportTransInfo *transaction_info);
+gnc_import_match_picker_run_and_close (GNCImportTransInfo *transaction_info,
+                                       GNCImportPendingMatches *pending_matches);
 /**@}*/
 
 

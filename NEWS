@@ -1,11 +1,58 @@
 Version history:
 ------- -------
-2.6.15 - 18 December 2016
-Announcement: GnuCash 2.6.15 Release 2016-12-18
-GnuCash 2.6.14 released
+2.6.16 - 26 March 2017
 
-The GnuCash development team proudly announces GnuCash 2.6.15, the
-fifteenth maintenance release in the 2.6-stable series.
+The following bugs are fixed:
+      Bug 516920 - Calendar Pop up disappears of the left side.
+      Bug 603379 - Prevent changing some Account Options if it has transactions
+      Bug 670731 - Future Value not working with Loan Scheduled transaction
+      Bug 739571 - Matching imported transactions doesn't indicate previously
+                   matched entries
+      Bug 759934 - Tiny reports in HiDPI (workaround).
+      Bug 766630 - gui dialog for sorting transactions to accounts after aqbanking
+                   import broken
+      Bug 767032 - Bad invoices from importing "posted" needing currency conversion
+                   Only auto-post if the posted_to account name is valid, there's
+		   no currency conversion, or the invoice customer's currency
+		   matches the A/R account currency. Tell the user what happened
+		   with a dialog.
+      Bug 773945 - Select Security Dialog Not User Friendly:
+                   Add a new namespace “ALL NON-CURRENCY” to the namespace (type)
+		   selector lists on the security picker and price editor which
+		   causes the commodity list to include all non-security
+		   commodities.
+      Bug 776247 - PriceEditor thinks Currency XXX is an actual currency and
+                   tries to retrieve prices for it.
+      Bug 776380 - Gross value of bills charged back instead of net value
+      Bug 776494 - Wrong menu entry in Tip of the day
+      Bug 776517 - Trial Balance Report: Total Debits Issue re $0 Commodity
+                   Accounts and Price Source Mode Set to "Nearest in Time" or
+		   "Most Recent"
+      Bug 776564 - Creating a scheduled transaction from an existing transaction
+                   does not include the notes field.
+      Bug 778208 - Scheduling 2nd, 3rd or 4th Wed doesn't seem to work.
+      Bug 779217 - Transactions rounded to 5 decimal places when opening file.
+      Bug 779411 - jqplot fixes for piechart and syntax error.
+      Bug 777875 - Reports with charts are flickering in certain circumstances
+      Bug 777949 - Accounts implicitly created in ledger attempt creation twice
+
+Other repairs not marked as bugs in git:
+      Use "Billing Information" as in other biz modules
+      Update local symbol for MUR.
+      Online banking: Add output of bank messages that might occasionally be
+             received.
+      Allow only date entry for opening balances on new accounts.
+      Enable taxinvoice to show net price: Add gncEntryGetNetPrice. Create an
+             option in taxinvoice to either use gncEntryGetNetPrice or
+             gncEntryGetPrice
+      Make SQL full-DB sync safer and clean up automatically if it's interrupted
+             by a system or network failure.
+      Extend account color to all columns in the account hierarchy page
+      Localize the word “CURRENCY” used in the commodity namespace selectors.
+
+The following translations have been updated: Catalan, Dutch, Finnish, German. Portuguese, Russian, Serbian.
+
+2.6.15 - 18 December 2016
 
 The following bugs are fixed:
 
@@ -48,11 +95,6 @@ Other repairs that weren't marked as bugs in git:
 Translation Updates: Danish, German, Serbian
 
 2.6.14 - 17 September 2016
-Announcement: GnuCash 2.6.14 Release 2016-09-17
-GnuCash 2.6.14 released
-
-The GnuCash development team proudly announces GnuCash 2.6.14, the
-fourteenth maintenance release in the 2.6-stable series.
 
 The following bugs are fixed:
     Bug 643025 - RFE: Ability to select and open multiple invoices.
@@ -92,11 +134,6 @@ Other repairs that weren't marked as bugs in git:
 Translation Updates: Dutch, German, Serbian, Spanish
 
 2.6.13 - 28 June 2016
-Announcement: GnuCash 2.6.13 Release 2016-06-28
-GnuCash 2.6.13 released
-
-The GnuCash development team proudly announces GnuCash 2.6.13, the
-thirteenth maintenance release in the 2.6-stable series.
 
 The following bugs are fixed:
     Bug 637004 - Optionally allow customer and vendor address info to display.
@@ -154,11 +191,6 @@ Translation Updates: Dutch, Russian, Serbian
 Standard Chart-of-Accounts Localizations Updates: Finnish, Sweden_Finnish, and 	Åland Islands Finnish.
 
 2.6.12 - 26 March 2016
-Announcement: GnuCash 2.6.12 Release 2016-03-26
-GnuCash 2.6.12 released
-
-The GnuCash development team proudly announces GnuCash 2.6.12, the
-twelfth maintenance release in the 2.6-stable series.
 
 The following bugs are fixed:
      Bug 482186 - Customer and vendor report for partners who get invoiced/paid
@@ -219,12 +251,8 @@ Translation Updates: Azeri, Basque, Catalan, Chinese (Simplified), Czech,
 		     Slovak, Serbian, Swedish, Turkish, Ukrainian.
 
 2.6.11 - 11 January 2016
-Announcement: GnuCash 2.6.11 Release 2016-01-11
-GnuCash 2.6.11 released
 
-The GnuCash development team announces GnuCash 2.6.11, a snap release
-to correct a QIF import regression and the eleventh maintenance
-release in the 2.6-stable series.
+This is a snap release to correct a QIF import regression.
 
 The following bugs are fixed:
      Bug 680104 - Scheduled Tranaction formula not calculated when variables
@@ -250,11 +278,6 @@ Other repairs that weren't marked as bugs in git:
 Updated Translations: German
 
 2.6.10 - 20 December 2015
-Announcement: GnuCash 2.6.10 Release 2015-12-20
-GnuCash 2.6.10 released
-
-The GnuCash development team proudly announces GnuCash 2.6.10, the
-tenth maintenance release in the 2.6-stable series.
 
 The following bugs are fixed:
      Bug 627692 - Report options, Account Selection, "select all" => not all
@@ -308,12 +331,6 @@ Updated Translations:
      Arabic, German
 
 2.6.9 - 5 October 2015
-Announcement: GnuCash 2.6.8 Release 2015-10-05
-GnuCash 2.6.9 released
-
-The GnuCash development team humbly announces GnuCash 2.6.9, the ninth
-maintenance release in the 2.6-stable series, a snap release to repair
-a serious bug on Microsoft Windows.
 
 The following bugs are fixed:
      Bug 755920 - Crash (Freeze) when using File Save As.. in Windows OS
@@ -324,13 +341,8 @@ The following bugs are fixed:
 
 Updated Translations:
      German
+
 2.6.8 - 27 September 2015
-Announcement: GnuCash 2.6.8 Release 2015-09-27
-GnuCash 2.6.8 released
-
-The GnuCash development team proudly announces GnuCash 2.6.8, the
-eighth maintenance release in the 2.6-stable series.
-
 The following bugs are fixed:
 
      Bug 724738 - Value in "Display Symbol" field not saved.
@@ -377,13 +389,8 @@ Other repairs that weren't marked as bugs in git:
 
 Updated Translations:
      Danish, Dutch, French, German
+
 2.6.7 - 28 June 2015
-Announcement: GnuCash 2.6.7 Release 2015-06-28
-GnuCash 2.6.7 released
-
-The GnuCash development team proudly announces GnuCash 2.6.7, the
-seventh maintenance release in the 2.6-stable series.
-
 The following bugs are fixed:
      681225 - income statement displays blank base currency entries when
      	      trading account transactions are present during the report period.
@@ -417,12 +424,6 @@ Updated Translations:
 New Translations: Serbian
 
 2.6.6 - 29 March 2015
-Announcement: GnuCash 2.6.6 Release 2015-03-29
-GnuCash 2.6.6 released
-
-The GnuCash development team proudly announces GnuCash 2.6.6, the
-sixth maintenance release in the 2.6-stable series.
-
 The following bugs are fixed:
 	619899 - Use normal gettext or intltool toolchain also for scm files
 	649933 - Creating cash flow report takes a long tim
@@ -471,12 +472,6 @@ New Translations: Maithili, Manipuri-Bengali Script, Manipuri-Meetei Mayek Scrip
 
 
 2.6.5 - 16 December 2014
-Announcement: GnuCash 2.6.5 Release 2014-12-16
-GnuCash 2.6.5 released
-
-The GnuCash development team proudly announces GnuCash 2.6.5, the
-fifth maintenance release in the 2.6-stable series.
-
 The primary reason for this release is that the problems which plagued 2.6.4 on Microsoft Windows have been resolved.
 
 We've also fixed the following bugs:
@@ -509,14 +504,6 @@ Updated Translations: Assamese Indic, Danish, German, Gujarati Indic, Italian, K
 
 
 2.6.4 - 28 September 2014
-
-Announcement: GnuCash 2.6.4 Release 2014-09-28
-GnuCash 2.6.4 released
-
-The GnuCash development team proudly announces GnuCash 2.6.4, the
-third maintenance release in the 2.6-stable series. Please take the
-tour of all the new features. 
-
 Between 2.6.3 and 2.6.4, the following bugfixes were accomplished:
 
     120199 - Incorrect sort order in "Sort by Statement Date".
@@ -636,11 +623,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 
 
 2.6.3 - 30 March 2014
-       The GnuCash development team proudly announces GnuCash 2.6.3,
-       the latest stable release of the GnuCash Free Accounting
-       Software.
-
-       Bugs Fixed:
+   Bugs Fixed:
        721196 - Cannot import lines with empty fields for deposit or withdrawal
        	       in bank transaction download.
        721654 - Style sheet preference is not saved for a Preconfigured Report
@@ -650,7 +633,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
        726430 - Python: account.getName() raises TypeError
        726891 - segmentation fault on session.end()
 
-       Other Changes:
+   Other Changes:
        Fix resizing of columns in budget view
        Fix guile 2 stack overflow errors for large reports
        Fix basis calculation for FIFO or LIFO when less than one lot is sold.
@@ -663,15 +646,11 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
        Translations Updated: Catalan, Danish, Italian
 
 2.6.2 - 2 March 2014
-       The GnuCash development team proudly announces GnuCash 2.6.2,
-       the latest stable release of the GnuCash Free Accounting
-       Software.
-
        This is a maintenance release; there are no new features, but
        Mike Alexander has extensively reworked the Advanced Portfolio
        Report.
 
-       Bugs Fixed:
+   Bugs Fixed:
        497831 - Can't change the date of a transaction with certain locales
        721472 - Fix Reconcile description column.
        721677 - Customer Summary does not include inactive customers
@@ -693,16 +672,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
       Translations Updated: Catalan, Italian
 
 2.6.1 - 1 January 2014
-       The GnuCash development team proudly announces GnuCash 2.6.1,
-       the latest stable release of the GnuCash Free Accounting
-       Software.
-
-       This is a maintenance release; there are no new features, but
-       Mike Alexander has extensively reworked the Advanced Portfolio
-       Report.
-
-       Bugs Fixed:
-
+   Bugs Fixed:
        454827 - Reports: Incorrect share value of stocks in foreign currency
        553020 - Reports: Incorrect share value of stocks in foreign currency
        555182 - Security Type template hidden

@@ -3417,9 +3417,7 @@ many months before the current month:</property>
                       <object class="GtkSpinButton" id="pref/general.report/default-zoom">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="tooltip_text" translatable="yes">On high resolution screens reports tend to be hard to read.
-This option allows you to scale reports up by the set factor.
-For example setting this to 2.0 will display reports at twice their typical size.</property>
+                        <property name="tooltip_text" translatable="yes">On high resolution screens reports tend to be hard to read. This option allows you to scale reports up by the set factor. For example setting this to 2.0 will display reports at twice their typical size.</property>
                         <property name="max_length">4</property>
                         <property name="invisible_char">●</property>
                         <property name="primary_icon_activatable">False</property>

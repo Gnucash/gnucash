@@ -52,6 +52,11 @@
         The numbers are the X and Y coordinates of the top left corner of the window
         followed by the width and height of the window.</description>
     </key>
+    <key name="display-reconciled" type="b">
+     <default>true</default>
+     <summary>Display or hide reconciled matches</summary>
+     <description>Shows or hides transactions from the match picker which are already of some reconciled state.</description>
+   </key>
   </schema>
 
   <schema id="org.gnucash.dialogs.import.generic.transaction-list" path="/org/gnucash/dialogs/import/generic/transaction-list/">

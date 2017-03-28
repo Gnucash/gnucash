@@ -691,6 +691,36 @@ gnc_template_register_save_mxfrm_cell (BasicCell * cell,
 }
 
 static void
+save_cell (SplitRegister *reg, Split* split, const char *cell_name)
+{
+    const gboolean is_credit = g_strcmp0 (cell_name, FCRED_CELL) == 0;
+    const char *formula = is_credit ?
+        "sx-credit-formula" : "sx-debit-formula";
+    const char *numeric = is_credit ?
+        "sx-credit-numeric" : "sx-debit-numeric";
+    const char *value = gnc_table_layout_get_cell_value (reg->table->layout,
+                                                         cell_name);
+    gnc_numeric new_amount = gnc_numeric_zero ();
+    GHashTable *parser_vars = g_hash_table_new (g_str_hash, g_str_equal);
+    char *error_loc;
+
+    /* If the value can be parsed into a numeric result (without any
+     * further variable definitions), store that numeric value
+     * additionally in the kvp. Otherwise store a zero numeric
+     * there.*/
+    const gboolean parse_result =
+        gnc_exp_parser_parse_separate_vars (value, &new_amount,
+                                            &error_loc, parser_vars);
+    if (!parse_result || g_hash_table_size (parser_vars) != 0)
+        new_amount = gnc_numeric_zero ();
+    g_hash_table_unref (parser_vars);
+    qof_instance_set (QOF_INSTANCE (split),
+		  numeric, new_amount,
+		  formula, value,
+		  NULL);
+}
+
+static void
 gnc_template_register_save_debcred_cell (BasicCell * cell,
         gpointer save_data,
         gpointer user_data)
@@ -709,59 +739,8 @@ gnc_template_register_save_debcred_cell (BasicCell * cell,
     if (sd->handled_dc)
         return;
 
-    /* amountStr = gnc_numeric_to_string (new_amount); */
-
-    formula = gnc_table_layout_get_cell_value (reg->table->layout, FCRED_CELL);
-   /* If the value can be parsed into a numeric result (without any
-     * further variable definitions), store that numeric value
-     * additionally in the kvp. Otherwise store a zero numeric
-     * there.*/
-    parse_result = gnc_exp_parser_parse_separate_vars(formula, &amount,
-                                                      &error_loc, parser_vars);
-    if (g_hash_table_size(parser_vars) == 0)
-    {
-        if (!parse_result)
-        {
-            amount = gnc_numeric_zero();
-        }
-        qof_instance_set (QOF_INSTANCE (sd->split),
-			  "sx-credit-formula", formula,
-                          "sx-credit-numeric", &amount,
-                          NULL);
-    }
-    else
-    {
-	qof_instance_set (QOF_INSTANCE (sd->split),
-			  "sx-credit-formula", formula,
-			  NULL);
-        g_hash_table_destroy(parser_vars);
-        parser_vars = g_hash_table_new (g_str_hash, g_str_equal);
-    }
-    formula = gnc_table_layout_get_cell_value (reg->table->layout, FDEBT_CELL);
-
-    /* If the value can be parsed into a numeric result, store that
-     * numeric value additionally. See above comment.*/
-    parse_result = gnc_exp_parser_parse_separate_vars(formula, &amount,
-                                                      &error_loc, parser_vars);
-    if (parser_vars == NULL)
-    {
-        if (!parse_result)
-        {
-            amount = gnc_numeric_zero();
-        }
-        qof_instance_set (QOF_INSTANCE (sd->split),
-			  "sx-debit-formula", formula,
-                          "sx-debit-numeric", &amount,
-                          NULL);
-    }
-    else
-    {
-	qof_instance_set (QOF_INSTANCE (sd->split),
-			  "sx-debit-formula", formula,
-			  NULL);
-        g_hash_table_destroy(parser_vars);
-        parser_vars = NULL;
-    }
+    save_cell (reg, sd->split, FCRED_CELL);
+    save_cell (reg, sd->split, FDEBT_CELL);
 
     /* set the amount to an innocuous value */
     /* Note that this marks the split dirty */

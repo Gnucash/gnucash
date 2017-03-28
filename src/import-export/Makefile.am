@@ -19,6 +19,7 @@ libgncmod_generic_import_la_SOURCES = \
 	import-utilities.c \
 	import-settings.c \
 	import-main-matcher.c \
+	import-pending-matches.c \
 	gncmod-generic-import.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
@@ -32,6 +33,7 @@ noinst_HEADERS = \
   import-main-matcher.h \
   import-match-picker.h \
   import-settings.h \
+  import-pending-matches.h \
   import-utilities.h
 
 libgncmod_generic_import_la_LDFLAGS = -avoid-version

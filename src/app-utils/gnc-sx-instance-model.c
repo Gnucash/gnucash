@@ -69,6 +69,56 @@ static void _gnc_sx_instance_event_handler(QofInstance *ent, QofEventId event_ty
 
 /* ------------------------------------------------------------ */
 
+static gboolean
+scrub_sx_split_numeric (Split* split, const char *debcred)
+{
+    const gboolean is_credit = g_strcmp0 (debcred, "credit") == 0;
+    const char *formula = is_credit ?
+        "sx-credit-formula" : "sx-debit-formula";
+    const char *numeric = is_credit ?
+        "sx-credit-numeric" : "sx-debit-numeric";
+    char *formval;
+    gnc_numeric numval;
+    GHashTable *parser_vars = g_hash_table_new (g_str_hash, g_str_equal);
+    char *error_loc;
+    gnc_numeric amount = gnc_numeric_zero ();
+    gboolean parse_result = FALSE;
+    g_object_get (G_OBJECT (split),
+		  formula, &formval,
+		  numeric, &numval,
+		  NULL);
+    parse_result =
+        gnc_exp_parser_parse_separate_vars (formval, &amount,
+                                            &error_loc, parser_vars);
+    if (!parse_result || g_hash_table_size (parser_vars) != 0)
+        amount = gnc_numeric_zero ();
+    g_hash_table_unref (parser_vars);
+    if (gnc_numeric_eq (amount, numval))
+        return FALSE;
+    g_object_set (G_OBJECT (split),
+		  numeric, amount,
+		  NULL);
+    return TRUE;
+}
+
+/* Fixes error in pre-2.6.16 where the numeric slot wouldn't get changed if the
+ * formula slot was edited.
+ */
+void
+gnc_sx_scrub_split_numerics (gpointer psplit, gpointer puser)
+{
+    Split *split = GNC_SPLIT (psplit);
+    Transaction *trans = xaccSplitGetParent (split);
+    gboolean changed;
+    xaccTransBeginEdit (trans);
+    changed = scrub_sx_split_numeric (split, "credit") +
+        scrub_sx_split_numeric (split, "debit");
+    if (!changed)
+        xaccTransRollbackEdit (trans);
+    else
+        xaccTransCommitEdit (trans);
+}
+
 static void
 _sx_var_to_raw_numeric(gchar *name, GncSxVariable *var, GHashTable *parser_var_hash)
 {

@@ -222,7 +222,11 @@
 	     ct))
 	   (commodity-list #f)
 	   (currency-list (filter
-			   (lambda (a) (not (gnc-commodity-equiv (cadr a) (caddr a))))
+			   (lambda (a)
+                             (and
+                              (not (gnc-commodity-equiv (cadr a) (caddr a)))
+                              (not (string=? "XXX" (gnc-commodity-get-mnemonic (cadr a))))
+                              ))
 			   (call-with-values
                                (lambda () (partition!
                                            (lambda (cmd)
