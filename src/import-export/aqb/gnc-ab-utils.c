@@ -369,12 +369,14 @@ gnc_ab_get_purpose(const AB_TRANSACTION *ab_trans)
 
     g_return_val_if_fail(ab_trans, g_strdup(""));
 
-    /* According to AqBanking, some of the non-swift lines have a special
-     * meaning. Some banks place valuable text into the transaction text,
-     * hence we put this text in front of the purpose. */
-    ab_transactionText = AB_Transaction_GetTransactionText(ab_trans);
-    if (ab_transactionText)
-        gnc_description = g_strdup(ab_transactionText);
+    if (gnc_prefs_get_bool(GNC_PREFS_GROUP_AQBANKING, GNC_PREF_USE_TRANSACTION_TXT)) {
+        /* According to AqBanking, some of the non-swift lines have a special
+         * meaning. Some banks place valuable text into the transaction text,
+         * hence we put this text in front of the purpose. */
+        ab_transactionText = AB_Transaction_GetTransactionText(ab_trans);
+        if (ab_transactionText)
+            gnc_description = g_strdup(ab_transactionText);
+    }
 
     ab_purpose = AB_Transaction_GetPurpose(ab_trans);
     if (ab_purpose)
