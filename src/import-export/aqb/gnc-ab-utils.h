@@ -70,11 +70,12 @@ G_BEGIN_DECLS
 # define AQBANKING_VERSION_4_EXACTLY
 #endif
 
-#define GNC_PREFS_GROUP_AQBANKING "dialogs.import.hbci"
-#define GNC_PREF_FORMAT_SWIFT940  "format-swift-mt940"
-#define GNC_PREF_FORMAT_SWIFT942  "format-swift-mt942"
-#define GNC_PREF_FORMAT_DTAUS     "format-dtaus"
-#define GNC_PREF_VERBOSE_DEBUG    "verbose-debug"
+#define GNC_PREFS_GROUP_AQBANKING       "dialogs.import.hbci"
+#define GNC_PREF_FORMAT_SWIFT940        "format-swift-mt940"
+#define GNC_PREF_FORMAT_SWIFT942        "format-swift-mt942"
+#define GNC_PREF_FORMAT_DTAUS           "format-dtaus"
+#define GNC_PREF_USE_TRANSACTION_TXT    "use-ns-transaction-text"
+#define GNC_PREF_VERBOSE_DEBUG          "verbose-debug"
 
 typedef struct _GncABImExContextImport GncABImExContextImport;
 
