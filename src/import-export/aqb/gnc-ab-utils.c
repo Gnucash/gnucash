@@ -319,7 +319,7 @@ join_ab_strings_cb(const gchar *str, gpointer user_data)
 
     if (!str || !*str)
         return NULL;
-
+ 
     tmp = g_strdup(str);
     g_strstrip(tmp);
     gnc_utf8_strip_invalid(tmp);
@@ -364,9 +364,20 @@ gchar *
 gnc_ab_get_purpose(const AB_TRANSACTION *ab_trans)
 {
     const GWEN_STRINGLIST *ab_purpose;
+    const char *ab_transactionText = NULL;
     gchar *gnc_description = NULL;
 
     g_return_val_if_fail(ab_trans, g_strdup(""));
+
+    if (gnc_prefs_get_bool(GNC_PREFS_GROUP_AQBANKING, GNC_PREF_USE_TRANSACTION_TXT)) 
+    {
+        /* According to AqBanking, some of the non-swift lines have a special
+         * meaning. Some banks place valuable text into the transaction text,
+         * hence we put this text in front of the purpose. */
+        ab_transactionText = AB_Transaction_GetTransactionText(ab_trans);
+        if (ab_transactionText)
+            gnc_description = g_strdup(ab_transactionText);
+    }
 
     ab_purpose = AB_Transaction_GetPurpose(ab_trans);
     if (ab_purpose)
