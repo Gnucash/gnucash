@@ -197,7 +197,7 @@ gnumeric_popup_menu (GtkMenu *menu, GdkEventButton *event)
 
     if (event)
         gtk_menu_set_screen (menu,
-                             gdk_drawable_get_screen (event->window));
+                             gdk_window_get_screen (event->window));
 
     g_signal_connect (G_OBJECT (menu),
                       "hide",

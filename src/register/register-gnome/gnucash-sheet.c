@@ -1051,9 +1051,9 @@ gnucash_sheet_draw (GtkWidget *widget, cairo_t *cr)
 {
     GnucashSheet *sheet = GNUCASH_SHEET (widget);
     GtkAllocation alloc;
-    gtk_widget_get_allocation(widget, &alloc);
     gboolean result;
 
+    gtk_widget_get_allocation(widget, &alloc);
     cairo_save (cr);
     result = gnucash_sheet_draw_internal (sheet, cr, &alloc);
     gnucash_sheet_draw_cursor (sheet->cursor, cr);
@@ -1275,11 +1275,13 @@ gnucash_sheet_check_grab (GnucashSheet *sheet)
 {
     GdkModifierType mods;
     GdkDevice *device;
+    GdkDeviceManager *device_manager;
 
     if (!sheet->grabbed)
         return;
 
-    device = gdk_device_get_core_pointer ();
+    device_manager = gdk_display_get_device_manager(gdk_display_get_default());
+    device = gdk_device_manager_get_client_pointer (device_manager);
 
     gdk_device_get_state (device, gtk_widget_get_window (GTK_WIDGET(sheet)),
                           0, &mods);

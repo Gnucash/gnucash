@@ -1769,7 +1769,6 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
                      G_CALLBACK(gnc_reconcile_window_popup_menu_cb), recnData);
 
     statusbar = gtk_statusbar_new();
-    gtk_statusbar_set_has_resize_grip(GTK_STATUSBAR(statusbar), TRUE);
     gtk_box_pack_end(GTK_BOX(vbox), statusbar, FALSE, FALSE, 0);
 
     g_signal_connect (recnData->window, "destroy",
