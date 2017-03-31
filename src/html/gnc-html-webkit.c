@@ -43,7 +43,7 @@
 #include <regex.h>
 #include <libguile.h>
 
-#include <webkit/webkit.h>
+#include <webkit2/webkit2.h>
 
 #include "Account.h"
 #include "gnc-prefs.h"
@@ -88,13 +88,22 @@ static char error_404_body[] = N_("The specified URL could not be loaded.");
 #define BASE_URI_NAME "base-uri"
 #define GNC_PREF_RPT_DFLT_ZOOM "default-zoom"
 
-static WebKitNavigationResponse webkit_navigation_requested_cb(
-     WebKitWebView* web_view,
-     WebKitWebFrame* frame,
-     WebKitNetworkRequest* request,
-     gpointer user_data );
-static void webkit_on_url_cb( WebKitWebView* web_view, gchar* title, gchar* url,
-                              gpointer data );
+static gboolean webkit_decide_policy_cb (WebKitWebView* web_view,
+					 WebKitPolicyDecision *decision,
+					 WebKitPolicyDecisionType decision_type,
+					 gpointer user_data);
+static void webkit_mouse_target_cb (WebKitWebView* web_view,
+				    WebKitHitTestResult *hit,
+				    guint modifiers, gpointer data);
+#if WEBKIT_MINOR_VERSION >= 8
+static gboolean webkit_notification_cb (WebKitWebView *web_view,
+					WebKitNotification *note,
+					gpointer user_data);
+#endif
+static gboolean webkit_load_failed_cb (WebKitWebView *web_view,
+				       WebKitLoadEvent event,
+				       gchar *uri, GError *error,
+				       gpointer user_data);
 static gchar* handle_embedded_object( GncHtmlWebkit* self, gchar* html_str );
 static void impl_webkit_show_url( GncHtml* self, URLType type,
                                   const gchar* location, const gchar* label,
@@ -103,20 +112,50 @@ static void impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen
 static void impl_webkit_reload( GncHtml* self, gboolean force_rebuild );
 static void impl_webkit_copy_to_clipboard( GncHtml* self );
 static gboolean impl_webkit_export_to_file( GncHtml* self, const gchar* filepath );
-static void impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf );
+static void impl_webkit_print (GncHtml* self);
 static void impl_webkit_cancel( GncHtml* self );
 static void impl_webkit_set_parent( GncHtml* self, GtkWindow* parent );
 static void impl_webkit_default_zoom_changed(gpointer prefs, gchar *pref, gpointer user_data);
 
-static gboolean
-webkit_console_msg_cb (GtkWidget*   web_view,
-                       const gchar* message,
-                       guint        line,
-                       const gchar* source_id,
-                       GncHtmlWebkit*  view)
+static GtkWidget*
+gnc_html_webkit_webview_new (void)
 {
-     PWARN ("JS: %s (%u): %s", source_id, line, message);
-     return TRUE;
+     GtkWidget *view = webkit_web_view_new ();
+     WebKitSettings *webkit_settings = NULL;
+     const char *default_font_family = NULL;
+     GtkStyleContext *style = gtk_widget_get_style_context (view);
+     GValue val = G_VALUE_INIT;
+     GtkStateFlags state = gtk_style_context_get_state (style);
+     gtk_style_context_get_property (style, GTK_STYLE_PROPERTY_FONT,
+				     state, &val);
+
+     if (G_VALUE_HOLDS_BOXED (&val))
+     {
+	  const PangoFontDescription *font =
+	       (const PangoFontDescription*)g_value_get_boxed (&val);
+	  default_font_family = pango_font_description_get_family (font);
+	  g_value_unset (&val);
+     }
+/* Set default webkit settings */
+     webkit_settings = webkit_web_view_get_settings (WEBKIT_WEB_VIEW (view));
+     g_object_set (G_OBJECT(webkit_settings),
+                   "default-charset", "utf-8",
+                   "allow-file-access-from-file-urls", TRUE,
+                   "allow-universal-access-from-file-urls", TRUE,
+                   "enable-java", FALSE,
+                   "enable-page-cache", FALSE,
+                   "enable-plugins", FALSE,
+                   "enable-site-specific-quirks", FALSE,
+                   "enable-xss-auditor", FALSE,
+                   "enable-developer-extras", TRUE,
+                   NULL);
+     if (default_font_family != NULL)
+     {
+	  g_object_set (G_OBJECT (webkit_settings),
+			"default-font-family", default_font_family,
+			NULL);
+     }
+     return view;
 }
 
 static void
@@ -124,39 +163,19 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
 {
      GncHtmlWebkitPrivate* priv;
      GncHtmlWebkitPrivate* new_priv;
-
-     WebKitWebSettings* webkit_settings = NULL;
-     const char* default_font_family = NULL;
      gdouble zoom = 1.0;
 
-     new_priv = g_realloc( GNC_HTML(self)->priv, sizeof(GncHtmlWebkitPrivate) );
+     new_priv = g_realloc (GNC_HTML(self)->priv, sizeof(GncHtmlWebkitPrivate));
      priv = self->priv = new_priv;
      GNC_HTML(self)->priv = (GncHtmlPrivate*)priv;
 
      priv->html_string = NULL;
-     priv->web_view = WEBKIT_WEB_VIEW(webkit_web_view_new());
+     priv->web_view = WEBKIT_WEB_VIEW (gnc_html_webkit_webview_new ());
 
 
-     /* Get the default font family from GtkStyle of a GtkWidget(priv-web_view). */
-     default_font_family = pango_font_description_get_family( gtk_rc_get_style(GTK_WIDGET(priv->web_view))->font_desc );
-
-     /* Set default webkit settings */
-     webkit_settings = webkit_web_view_get_settings (priv->web_view);
-     g_object_set (G_OBJECT(webkit_settings), "default-encoding", "utf-8", NULL);
-     if (default_font_family == NULL)
-     {
-          PWARN("webkit_settings: Cannot get default font family.");
-     }
-     else
-     {
-          g_object_set (G_OBJECT(webkit_settings),
-                        "default-font-family", default_font_family,
-                        NULL);
-          PINFO("webkit_settings: Set default font to [%s]", default_font_family);
-     }
      /* Scale everything up */
-     zoom = gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL_REPORT, GNC_PREF_RPT_DFLT_ZOOM);
-     webkit_web_view_set_full_content_zoom (priv->web_view, TRUE);
+     zoom = gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL_REPORT,
+				 GNC_PREF_RPT_DFLT_ZOOM);
      webkit_web_view_set_zoom_level (priv->web_view, zoom);
 
 
@@ -166,17 +185,23 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
      g_object_ref_sink( priv->base.container );
 
      /* signals */
-     g_signal_connect( priv->web_view, "navigation-requested",
-                       G_CALLBACK(webkit_navigation_requested_cb),
+     g_signal_connect (priv->web_view, "decide-policy",
+                       G_CALLBACK (webkit_decide_policy_cb),
                        self);
 
-     g_signal_connect( priv->web_view, "hovering-over-link",
-                       G_CALLBACK(webkit_on_url_cb),
-                       self );
-
-     g_signal_connect( priv->web_view, "console-message",
-                       G_CALLBACK(webkit_console_msg_cb),
+     g_signal_connect (priv->web_view, "mouse-target-changed",
+                       G_CALLBACK (webkit_mouse_target_cb),
                        self);
+
+#if WEBKIT_MINOR_VERSION >= 8
+     g_signal_connect (priv->web_view, "show-notification",
+                       G_CALLBACK (webkit_notification_cb),
+                       self);
+#endif
+
+     g_signal_connect (priv->web_view, "load-failed",
+		       G_CALLBACK (webkit_load_failed_cb),
+		       self);
 
      gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL_REPORT,
                             GNC_PREF_RPT_DFLT_ZOOM,
@@ -460,8 +485,10 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
                {
                     fdata = fdata ? fdata : g_strdup( "" );
 
-                    // Until webkitgtk supports download requests, look for "<object classid="
-                    // indicating the beginning of an embedded graph.  If found, handle it
+                    // Until webkitgtk supports download requests,
+                    // look for "<object classid=" indicating the
+                    // beginning of an embedded graph.  If found,
+                    // handle it
                     if ( g_strstr_len( fdata, -1, "<object classid=" ) != NULL )
                     {
                          gchar* new_fdata;
@@ -477,14 +504,16 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
                     }
                     priv->html_string = g_strdup( fdata );
                     impl_webkit_show_data( GNC_HTML(self), fdata, strlen(fdata) );
-//                webkit_web_view_load_html_string( priv->web_view, fdata, BASE_URI_NAME );
+//                webkit_web_view_load_html (priv->web_view, fdata,
+//                                           BASE_URI_NAME);
                }
                else
                {
                     fdata = fdata ? fdata :
                          g_strdup_printf( error_404_format,
                                           _(error_404_title), _(error_404_body) );
-                    webkit_web_view_load_html_string( priv->web_view, fdata, BASE_URI_NAME );
+                    webkit_web_view_load_html (priv->web_view, fdata,
+					       BASE_URI_NAME);
                }
 
                g_free( fdata );
@@ -541,7 +570,7 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
                       label ? label : "(null)" );
                fdata = g_strdup_printf( error_404_format,
                                         _(error_404_title), _(error_404_body) );
-               webkit_web_view_load_html_string( priv->web_view, fdata, BASE_URI_NAME );
+               webkit_web_view_load_html (priv->web_view, fdata, BASE_URI_NAME);
                g_free( fdata );
           }
 
@@ -555,60 +584,71 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
  * loaded within the loading of a page (embedded image).
  ********************************************************************/
 
-static WebKitNavigationResponse
-webkit_navigation_requested_cb( WebKitWebView* web_view, WebKitWebFrame* frame,
-                                WebKitNetworkRequest* request,
-                                gpointer data )
+static gboolean
+webkit_decide_policy_cb (WebKitWebView *web_view,
+			 WebKitPolicyDecision *decision,
+			 WebKitPolicyDecisionType decision_type,
+			 gpointer user_data)
 {
-     URLType type;
-     gchar* location = NULL;
-     gchar* label = NULL;
-     GncHtmlWebkit* self = GNC_HTML_WEBKIT(data);
-     const gchar* url = webkit_network_request_get_uri( request );
-
-     ENTER( "requesting %s", url );
-     if ( strcmp( url, BASE_URI_NAME ) == 0 )
-     {
-          LEAVE("URI is %s", BASE_URI_NAME);
-          return WEBKIT_NAVIGATION_RESPONSE_ACCEPT;
-     }
-
-     type = gnc_html_parse_url( GNC_HTML(self), url, &location, &label );
-     if ( strcmp( type, "file" ) == 0 )
-     {
-          LEAVE("URI type is 'file'");
-          return WEBKIT_NAVIGATION_RESPONSE_ACCEPT;
-     }
-     gnc_html_show_url( GNC_HTML(self), type, location, label, 0 );
-//      load_to_stream( self, type, location, label );
-     g_free( location );
-     g_free( label );
-
-     LEAVE("");
-     return WEBKIT_NAVIGATION_RESPONSE_IGNORE;
+     /* Just in case the default decision was doing the wrong thing at
+      * some point...
+      */
+     webkit_policy_decision_use (decision);
+     return TRUE;
 }
-
-
-/********************************************************************
- * webkit_on_url_cb - called when user rolls over html anchor
- ********************************************************************/
 
 static void
-webkit_on_url_cb( WebKitWebView* web_view, gchar* title, gchar* url, gpointer data )
+webkit_mouse_target_cb (WebKitWebView *web_view, WebKitHitTestResult *hit,
+			guint modifiers, gpointer user_data)
 {
-     GncHtmlWebkit* self = GNC_HTML_WEBKIT(data);
-     GncHtmlWebkitPrivate* priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
+     GncHtmlWebkitPrivate* priv;
+     GncHtmlWebkit *self = (GncHtmlWebkit*)user_data;
+     gchar *uri;
 
-     DEBUG( "Rollover %s", url ? url : "(null)" );
-     g_free( priv->base.current_link );
-     priv->base.current_link = g_strdup( url );
-     if ( priv->base.flyover_cb )
+     if (!webkit_hit_test_result_context_is_link (hit))
+	  return;
+
+     priv = GNC_HTML_WEBKIT_GET_PRIVATE (self);
+     uri = g_strdup (webkit_hit_test_result_get_link_uri (hit));
+     g_free (priv->base.current_link);
+     priv->base.current_link = uri;
+     if (priv->base.flyover_cb)
      {
-          (priv->base.flyover_cb)( GNC_HTML(self), url, priv->base.flyover_cb_data );
+          (priv->base.flyover_cb) (GNC_HTML (self), uri,
+				   priv->base.flyover_cb_data);
      }
 }
+#if WEBKIT_MINOR_VERSION >= 8
+static gboolean
+webkit_notification_cb (WebKitWebView* web_view, WebKitNotification *note,
+			gpointer user_data)
+{
+     GtkWindow *top = NULL;
+     GtkWidget *dialog = NULL;
+     g_return_val_if_fail (self != NULL, FALSE);
+     g_return_val_if_fail (note != NULL, FALSE);
 
+     top = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (web_view)));
+     dialog = gtk_message_dialog_new (top, GTK_DIALOG_MODAL,
+                                      GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE,
+                                      "%s\n%s",
+                                      webkit_notification_get_title (note),
+                                      webkit_notification_get_body (note));
+     gtk_dialog_run (GTK_DIALOG (dialog));
+     gtk_widget_destroy (dialog);
+     return TRUE;
+}
+#endif
 
+static gboolean
+webkit_load_failed_cb (WebKitWebView *web_view, WebKitLoadEvent event,
+		       gchar *uri, GError *error, gpointer user_data)
+{
+     char *msg = g_strdup_printf ("Failed to load %s: %s", uri, error->message);
+     webkit_web_view_load_plain_text(web_view, msg);
+     g_free (msg);
+     return FALSE;
+}
 /********************************************************************
  * gnc_html_open_scm
  * insert some scheme-generated HTML
@@ -929,10 +969,8 @@ impl_webkit_copy_to_clipboard( GncHtml* self )
      g_return_if_fail( GNC_IS_HTML_WEBKIT(self) );
 
      priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
-     if ( webkit_web_view_can_copy_clipboard( priv->web_view ) )
-     {
-          webkit_web_view_copy_clipboard( priv->web_view );
-     }
+     webkit_web_view_execute_editing_command (priv->web_view,
+					      WEBKIT_EDITING_COMMAND_COPY);
 }
 
 /**************************************************************
@@ -979,205 +1017,35 @@ impl_webkit_export_to_file( GncHtml* self, const char *filepath )
      }
 }
 
-/**
- * Prints the current page.
+/* The webkit1 comment was
+ * If printing on WIN32, in order to prevent the font from being tiny, (see bug
+ * #591177), A GtkPrintOperation object needs to be created so that the unit can
+ * be set, and then webkit_web_frame_print_full() needs to be called to use that
+ * GtkPrintOperation.  On other platforms (specifically linux - not sure about
+ * MacOSX), the version of webkit may not contain the function
+ * webkit_web_frame_print_full(), so webkit_web_frame_print() is called instead
+ * (the font size problem doesn't show up on linux).
  *
- * If printing on WIN32, in order to prevent the font from being tiny, (see bug #591177),
- * A GtkPrintOperation object needs to be created so that the unit can be set, and then
- * webkit_web_frame_print_full() needs to be called to use that GtkPrintOperation.  On
- * other platforms (specifically linux - not sure about MacOSX), the version of webkit may
- * not contain the function webkit_web_frame_print_full(), so webkit_web_frame_print() is
- * called instead (the font size problem doesn't show up on linux).
- *
- * @param self HTML renderer object
+ * Webkit2 exposes only a very simple WebKitPrintOperation API. In order to
+ * implement the above if it proves still to be necessary we'll have to use
+ * GtkPrintOperation instead, passing it the results of
+ * webkit_web_view_get_snapshot for each page.
  */
 static void
-impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
+impl_webkit_print (GncHtml* self)
 {
-     gchar *export_filename = NULL;
-     GncHtmlWebkitPrivate* priv;
-     WebKitWebFrame* frame;
-     GtkPrintOperation* op = gtk_print_operation_new();
-     GError* error = NULL;
-     GtkPrintSettings *print_settings;
+     WebKitPrintOperation *op = NULL;
+     GtkWindow *top = NULL;
+     GncHtmlWebkitPrivate *priv;
 
-     priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
-     frame = webkit_web_view_get_main_frame( priv->web_view );
+     g_return_if_fail (self != NULL);
+     g_return_if_fail (GNC_IS_HTML_WEBKIT (self));
 
-     gnc_print_operation_init( op, jobname );
-     print_settings = gtk_print_operation_get_print_settings (op);
-     if (!print_settings)
-     {
-          print_settings = gtk_print_settings_new();
-          gtk_print_operation_set_print_settings(op, print_settings);
-     }
-#ifdef G_OS_WIN32
-     gtk_print_operation_set_unit( op, GTK_UNIT_POINTS );
-#endif
-
-     // Make sure to generate a full export filename
-     if (g_str_has_suffix(jobname, ".pdf"))
-     {
-          export_filename = g_strdup(jobname);
-     }
-     else
-     {
-          export_filename = g_strconcat(jobname, ".pdf", NULL);
-     }
-
-     // Two different modes of operation. Either export to PDF, or run the
-     // normal print dialog
-     if (export_pdf)
-     {
-          GtkWidget *dialog;
-          gint result;
-          gchar *export_dirname = NULL;
-          gchar* basename;
-
-          // Before we save the PDF file, we always as the user for the export
-          // file name. We will store the chosen directory in the gtk print settings
-          // as well.
-          dialog = gtk_file_chooser_dialog_new (_("Export to PDF File"),
-                                                NULL,
-                                                GTK_FILE_CHOOSER_ACTION_SAVE,
-                                                GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                                                GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
-                                                NULL);
-          gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
-
-          // Does the jobname look like a valid full file path?
-          basename = g_path_get_basename(jobname);
-          if (strcmp(basename, jobname) != 0)
-          {
-               gchar *tmp_basename;
-               gchar *tmp_dirname = g_path_get_dirname(jobname);
-
-               if (g_file_test(tmp_dirname, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
-               {
-                    // Yes, the jobname starts with a directory name that actually
-                    // exists. Hence we use this as output directory.
-                    export_dirname = tmp_dirname;
-                    tmp_dirname = NULL;
-
-                    // As the prefix part of the "jobname" is the directory path, we
-                    // need to extract the suffix part for the filename.
-                    tmp_basename = g_path_get_basename(export_filename);
-                    g_free(export_filename);
-                    export_filename = tmp_basename;
-               }
-               g_free(tmp_dirname);
-          }
-          g_free(basename);
-
-          // Set the output file name from the given jobname
-          gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER(dialog), export_filename);
-
-          // Do we have a stored output directory?
-          if (!export_dirname && gtk_print_settings_has_key(print_settings, GNC_GTK_PRINT_SETTINGS_EXPORT_DIR))
-          {
-               const char* tmp_dirname = gtk_print_settings_get(print_settings,
-                                                                GNC_GTK_PRINT_SETTINGS_EXPORT_DIR);
-               // Only use the directory subsequently if it exists.
-               if (g_file_test(tmp_dirname, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
-               {
-                    export_dirname = g_strdup(tmp_dirname);
-               }
-          }
-
-          // If we have an already existing directory, propose it now.
-          if (export_dirname)
-          {
-               gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), export_dirname);
-          }
-          g_free(export_dirname);
-
-          result = gtk_dialog_run (GTK_DIALOG (dialog));
-          // Weird. In gtk_dialog_run, the gtk code will run a fstat() on the
-          // proposed new output filename, which of course fails with "file not
-          // found" as this file doesn't exist. It will still show a warning output
-          // in the trace file, though.
-
-          if (result == GTK_RESPONSE_ACCEPT)
-          {
-               // The user pressed "Ok", so use the file name for the actual file output.
-               gchar *dirname;
-               char *tmp = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-               g_free(export_filename);
-               export_filename = tmp;
-
-               // Store the directory part of the file for later
-               dirname = g_path_get_dirname(export_filename);
-               if (g_file_test(dirname, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
-               {
-                    gtk_print_settings_set(print_settings, GNC_GTK_PRINT_SETTINGS_EXPORT_DIR, dirname);
-               }
-               g_free(dirname);
-          }
-          gtk_widget_destroy (dialog);
-
-          if (result != GTK_RESPONSE_ACCEPT)
-          {
-               // User pressed cancel - no saving of the PDF file here.
-               g_free(export_filename);
-               g_object_unref( op );
-               return;
-          }
-
-          // This function expects the full filename including (absolute?) path
-          gtk_print_operation_set_export_filename(op, export_filename);
-
-          // Run the "Export to PDF" print operation
-          webkit_web_frame_print_full( frame, op, GTK_PRINT_OPERATION_ACTION_EXPORT, &error );
-     }
-     else
-     {
-
-          // Also store this export file name as output URI in the settings
-          if (gtk_print_settings_has_key(print_settings, GTK_PRINT_SETTINGS_OUTPUT_URI))
-          {
-               // Get the previous output URI, extract the directory part, and
-               // append the current filename.
-               const gchar *olduri = gtk_print_settings_get(print_settings, GTK_PRINT_SETTINGS_OUTPUT_URI);
-               gchar *dirname = g_path_get_dirname(olduri);
-               gchar *newuri = (g_strcmp0(dirname, ".") == 0)
-                    ? g_strdup(export_filename)
-                    : g_build_filename(dirname, export_filename, NULL);
-               //g_warning("olduri=%s newuri=%s", olduri, newuri);
-
-               // This function expects the full filename including protocol, path, and name
-               gtk_print_settings_set(print_settings, GTK_PRINT_SETTINGS_OUTPUT_URI, newuri);
-
-               g_free(newuri);
-               g_free(dirname);
-          }
-          else
-          {
-               // No stored output URI from the print settings, so just set our export filename
-               gtk_print_settings_set(print_settings, GTK_PRINT_SETTINGS_OUTPUT_URI, export_filename);
-          }
-
-          // Run the normal printing dialog
-          webkit_web_frame_print_full( frame, op, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, &error );
-     }
-
-     if ( error != NULL )
-     {
-          GtkWidget* window = gtk_widget_get_toplevel( GTK_WIDGET(priv->web_view) );
-          GtkWidget* dialog = gtk_message_dialog_new( gtk_widget_is_toplevel(window) ? GTK_WINDOW(window) : NULL,
-                                                      GTK_DIALOG_DESTROY_WITH_PARENT,
-                                                      GTK_MESSAGE_ERROR,
-                                                      GTK_BUTTONS_CLOSE,
-                                                      "%s", error->message );
-          g_error_free( error );
-
-          g_signal_connect( dialog, "response", G_CALLBACK(gtk_widget_destroy), NULL);
-          gtk_widget_show( dialog );
-     }
-
-     // Remember to save the printing settings after this print job
-     gnc_print_operation_save_print_settings(op);
-     g_object_unref( op );
-     g_free(export_filename);
+     priv = GNC_HTML_WEBKIT_GET_PRIVATE (self);
+     op = webkit_print_operation_new (priv->web_view);
+     top = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (self)));
+     webkit_print_operation_run_dialog (op, top);
+     g_object_unref (op);
 }
 
 static void

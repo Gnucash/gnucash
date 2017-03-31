@@ -1351,7 +1351,7 @@ then
   ### --------------------------------------------------------------------------
   ### checks for webkit
 
-  PKG_CHECK_MODULES(WEBKIT, webkit-1.0 >= "1.2")
+  PKG_CHECK_MODULES(WEBKIT, webkit2gtk-4.0 >= "2.6.0")
   AC_SUBST(WEBKIT_CFLAGS)
   AC_SUBST(WEBKIT_LIBS)
 

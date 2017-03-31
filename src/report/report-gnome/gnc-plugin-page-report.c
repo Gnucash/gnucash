@@ -1834,7 +1834,7 @@ gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report 
 
     //g_warning("Setting job name=%s", job_name);
 
-    gnc_html_print(priv->html, job_name, FALSE);
+    gnc_html_print (priv->html);
 
     g_free (job_name);
 }
@@ -1873,7 +1873,7 @@ gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *rep
 
     //g_warning("Setting job name=%s", job_name);
 
-    gnc_html_print(priv->html, job_name, TRUE);
+    gnc_html_print (priv->html);
 
     if (owner)
     {

@@ -532,14 +532,14 @@ gnc_html_export_to_file( GncHtml* self, const gchar* filepath )
 }
 
 void
-gnc_html_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
+gnc_html_print (GncHtml* self)
 {
     g_return_if_fail( self != NULL );
     g_return_if_fail( GNC_IS_HTML(self) );
 
     if ( GNC_HTML_GET_CLASS(self)->print != NULL )
     {
-        GNC_HTML_GET_CLASS(self)->print( self, jobname, export_pdf );
+        GNC_HTML_GET_CLASS(self)->print (self);
     }
     else
     {
