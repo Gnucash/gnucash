@@ -578,6 +578,31 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
      while ( FALSE );
 }
 
+static gboolean
+perform_navigation_policy (WebKitWebView *web_view,
+			   WebKitNavigationPolicyDecision *decision,
+			   GncHtml *self)
+{
+     WebKitURIRequest *req = NULL;
+     const gchar* uri; // Can't init it here.
+     gchar *scheme = NULL, *location = NULL, *label = NULL;
+     WebKitNavigationAction *action =
+	  webkit_navigation_policy_decision_get_navigation_action (decision);
+     if (webkit_navigation_action_get_navigation_type (action) !=
+	 WEBKIT_NAVIGATION_TYPE_LINK_CLICKED)
+     {
+	  webkit_policy_decision_use ((WebKitPolicyDecision*)decision);
+	  return TRUE;
+     }
+     req = webkit_navigation_action_get_request (action);
+     uri = webkit_uri_request_get_uri (req);
+     scheme =  gnc_html_parse_url (self, uri, &location, &label);
+     impl_webkit_show_url (self, scheme, location, label, FALSE);
+     g_free (location);
+     g_free (label);
+     webkit_policy_decision_ignore ((WebKitPolicyDecision*)decision);
+     return TRUE;
+}
 
 /********************************************************************
  * webkit_navigation_requested_cb - called when a URL needs to be
@@ -590,11 +615,15 @@ webkit_decide_policy_cb (WebKitWebView *web_view,
 			 WebKitPolicyDecisionType decision_type,
 			 gpointer user_data)
 {
-     /* Just in case the default decision was doing the wrong thing at
-      * some point...
-      */
-     webkit_policy_decision_use (decision);
-     return TRUE;
+/* This turns out to be the signal to intercept for handling a link-click. */
+     if (decision_type != WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION)
+     {
+	  webkit_policy_decision_use (decision);
+	  return TRUE;
+     }
+     return perform_navigation_policy (
+	  web_view, (WebKitNavigationPolicyDecision*) decision,
+	  GNC_HTML (user_data));
 }
 
 static void
