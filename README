@@ -333,7 +333,7 @@ Before you start developing GnuCash, you should do the following:
 1. Read http://wiki.gnucash.org/wiki/Development
 
 2. Look over the doxygen-generated documentation at
-    http://code.gnucash.org/docs/HEAD/
+    http://code.gnucash.org/docs/MAINT/
 
 3. Go to the GnuCash website and skim the archives of the GnuCash
    development mailing list.
