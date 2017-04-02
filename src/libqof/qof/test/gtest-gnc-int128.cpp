@@ -495,6 +495,53 @@ TEST(qofint128_functions, divide)
 
     EXPECT_EQ (big, big %= bigger);
     EXPECT_EQ (two, bigger /= big);
+    EXPECT_NO_THROW({
+            GncInt128 a(2, INT64_C(5501995774277214867));
+            GncInt128 b(0, INT64_C(2086443244332180413));
+            GncInt128 c = a / b;
+            EXPECT_EQ(11, c);
+            EXPECT_FALSE(c.isBig());
+            GncInt128 d(-2, INT64_C(5501995774277214867));
+            GncInt128 e(0, INT64_C(1995728320665563874));
+            c = d / e;
+            EXPECT_EQ(-15, c);
+            EXPECT_FALSE(c.isBig());
+            GncInt128 f(2, INT64_C(-5501995774277214867));
+            GncInt128 g(0, INT64_C(2086443244332180413));
+            c = f / g;
+            EXPECT_EQ(15, c);
+            EXPECT_FALSE(c.isBig());
+            GncInt128 h(2, INT64_C(5501995774277214867));
+            GncInt128 i(0, INT64_C(-2086443244332180413));
+            c = h / i;
+            EXPECT_EQ(-11, c);
+            EXPECT_FALSE(c.isBig());
+            GncInt128 j(-2, INT64_C(-5501995774277214867));
+            GncInt128 k(0, INT64_C(2086443244332180413));
+            c = j / k;
+            EXPECT_EQ(-11, c);
+            EXPECT_FALSE(c.isBig());
+            GncInt128 l(-2, INT64_C(-5501995774277214867));
+            GncInt128 m(0, INT64_C(-2086443244332180413));
+            c = l / m;
+            EXPECT_EQ(11, c);
+            EXPECT_FALSE(c.isBig());
+            GncInt128 n(2, INT64_C(5501995774277214867), GncInt128::neg);
+            GncInt128 o(0, INT64_C(2086443244332180413));
+            c = n / o;
+            EXPECT_EQ(-11, c);
+            EXPECT_FALSE(c.isBig());
+            GncInt128 p(2, INT64_C(5501995774277214867));
+            GncInt128 q(0, INT64_C(2086443244332180413), GncInt128::neg);
+            c = p / q;
+            EXPECT_EQ(-11, c);
+            EXPECT_FALSE(c.isBig());
+            GncInt128 r(2, INT64_C(5501995774277214867), GncInt128::neg);
+            GncInt128 s(0, INT64_C(2086443244332180413), GncInt128::neg);
+            c = r / s;
+            EXPECT_EQ(11, c);
+            EXPECT_FALSE(c.isBig());
+      });
 }
 
 TEST(qofint128_functions, GCD)
