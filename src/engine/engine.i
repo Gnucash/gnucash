@@ -107,6 +107,9 @@ functions. */
 %newobject xaccSplitGetCorrAccountFullName;
 %newobject gnc_numeric_to_string;
 
+%newobject gnc_localtime;
+%newobject gnc_gmtime;
+
 /* Parse the header file to generate wrappers */
 %inline {
   static QofIdType QOF_ID_BOOK_SCM (void) { return QOF_ID_BOOK; }
@@ -168,6 +171,7 @@ void qof_book_kvp_changed (QofBook *book);
 const char *qof_session_get_url (QofSession *session);
 
 %ignore qof_print_date_time_buff;
+%ignore gnc_tm_free;
 %include <gnc-date.h>
 extern const char *gnc_default_strftime_date_format;
 
