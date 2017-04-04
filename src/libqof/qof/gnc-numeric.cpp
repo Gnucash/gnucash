@@ -970,6 +970,8 @@ gnc_numeric_abs(gnc_numeric a)
 gnc_numeric
 gnc_numeric_convert(gnc_numeric in, int64_t denom, int how)
 {
+    if (gnc_numeric_check(in))
+        return in;
     try
     {
         return convert(GncNumeric(in), denom, how);
