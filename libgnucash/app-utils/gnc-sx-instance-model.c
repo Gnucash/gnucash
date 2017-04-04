@@ -52,6 +52,7 @@
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.app-utils.sx"
+static QofLogModule log_module = G_LOG_DOMAIN;
 
 /** Report errors bilingual:
  *  in g_critical untranslated and
