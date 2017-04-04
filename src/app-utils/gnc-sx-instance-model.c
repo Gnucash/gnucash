@@ -96,7 +96,7 @@ scrub_sx_split_numeric (Split* split, const char *debcred)
     if (gnc_numeric_eq (amount, numval))
         return FALSE;
     qof_instance_set (QOF_INSTANCE (split),
-		  numeric, amount,
+		  numeric, &amount,
 		  NULL);
     return TRUE;
 }
