@@ -116,8 +116,10 @@ GType gnc_pricedb_get_type(void);
       many strings in users' databases, so this string must be
       translated on output instead of always being used in untranslated
       form).
-    - type: the type of quote - types possible right now are bid, ask,
-      last, nav, and unknown.
+    - type: the type of quote - types possible right now are bid, ask, last,
+      nav, transaction, and unknown. 'Transaction' is set when the price is
+      created from an amount and value in a Split and is not available for users
+      to set via the GUI.
 
     \par Implementation Details:
 

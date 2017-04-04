@@ -225,7 +225,8 @@ gnc_price_class_init(GNCPriceClass *klass)
                           "Quote type",
                           "The quote type is a string describing the "
                           "type of a price quote.  Types possible now "
-                          "are 'bid', 'ask', 'last', 'nav' and 'unknown'.",
+                          "are 'bid', 'ask', 'last', 'nav', 'transaction', "
+                          "and 'unknown'.",
                           NULL,
                           G_PARAM_READWRITE));
 

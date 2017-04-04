@@ -199,7 +199,7 @@ Price = element price {
 
 # from the doc string of gnc_price_class_init in src/engine/gnc-pricedb.c
 
-  element price:type { "bid" | "ask" | "last" | "nav" | "unknown" }?,
+  element price:type { "bid" | "ask" | "last" | "nav" | "transaction" | "unknown" }?,
 
   element price:value { GncNumeric }
 }
