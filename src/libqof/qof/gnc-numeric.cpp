@@ -280,6 +280,9 @@ GncNumeric::prepare_conversion(int64_t new_denom) const
 int64_t
 GncNumeric::sigfigs_denom(unsigned figs) const noexcept
 {
+    if (m_num == 0)
+        return 1;
+
     int64_t num_abs{std::abs(m_num)};
     bool not_frac = num_abs > m_den;
     int64_t val{ not_frac ? num_abs / m_den : m_den / num_abs };

@@ -159,6 +159,9 @@ GncRational::prepare_conversion (GncInt128 new_denom) const
 GncInt128
 GncRational::sigfigs_denom(unsigned figs) const noexcept
 {
+    if (m_num == 0)
+        return 1;
+
     auto num_abs = m_num.abs();
     bool not_frac = num_abs > m_den;
     int64_t val{ not_frac ? num_abs / m_den : m_den / num_abs };
