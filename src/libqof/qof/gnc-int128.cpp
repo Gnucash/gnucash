@@ -40,6 +40,7 @@ extern "C"
  */
 
 namespace {
+    static const unsigned int upper_num_bits = 61;
     static const unsigned int sublegs = GncInt128::numlegs * 2;
     static const unsigned int sublegbits = GncInt128::legbits / 2;
     static const uint64_t sublegmask = (UINT64_C(1) << sublegbits) - 1;
@@ -50,12 +51,12 @@ namespace {
  */
     static inline uint64_t set_flags(uint64_t leg, uint8_t flags)
     {
-        auto flag_part = static_cast<uint64_t>(flags) << 61;
+        auto flag_part = static_cast<uint64_t>(flags) << upper_num_bits;
         return flag_part + (leg & nummask);
     }
     static inline uint8_t get_flags(uint64_t leg)
     {
-        return (leg & flagmask) >> 61;
+        return (leg & flagmask) >> upper_num_bits;
     }
     static inline uint64_t get_num(uint64_t leg)
     {
