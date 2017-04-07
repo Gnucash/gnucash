@@ -384,7 +384,7 @@ GncInt128::operator<<= (unsigned int i) noexcept
     auto hi = get_num(m_hi);
     if (i < legbits)
     {
-        uint64_t carry {(m_lo & (((UINT64_C(1) << i) - 1) << (legbits - i)))};
+        uint64_t carry {(m_lo & (((UINT64_C(1) << i) - 1) << (legbits - i))) >> (legbits - i)};
         m_lo <<= i;
         hi <<= i;
         hi += carry;
