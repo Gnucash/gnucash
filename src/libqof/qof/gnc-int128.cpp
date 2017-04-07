@@ -501,7 +501,12 @@ GncInt128::operator*= (const GncInt128& b) noexcept
     }
 
     unsigned int abits {bits()}, bbits {b.bits()};
-    if (abits + bbits > maxbits)
+    /* If the product of the high bytes < 7fff then the result will have abits +
+     * bbits -1 bits and won't actually overflow. It's not worth the effort to
+     * work that out for this corner-case, so we'll take the risk and calculate
+     * the product and catch the overflow later.
+     */
+    if (abits + bbits - 1 > maxbits)
     {
         flags |= overflow;
         m_hi = set_flags(m_hi, flags);

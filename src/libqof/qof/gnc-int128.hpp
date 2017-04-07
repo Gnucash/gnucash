@@ -67,9 +67,10 @@ class GncInt128
     uint64_t m_lo;
 
 public:
+    static const unsigned int flagbits = 3;
     static const unsigned int numlegs = 2;
     static const unsigned int legbits = 64;
-    static const unsigned int maxbits = legbits * numlegs;
+    static const unsigned int maxbits = legbits * numlegs - flagbits;
 
 enum // Values for m_flags
 {
