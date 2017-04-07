@@ -149,25 +149,31 @@ rounding_predicate(GncInt128 expected, GncInt128 result)
 TEST(gncrational_functions, test_round_to_numeric)
 {
     std::default_random_engine dre;
-    std::uniform_int_distribution<int64_t> di{INT64_C(0x100000000000),
-            INT64_C(0x7fffffffffffff)};
+    std::uniform_int_distribution<int64_t> di{INT64_C(0x1000000000000),
+            INT64_C(0x7ffffffffffffff)};
     static const int reps{100};
     for (auto i = 0; i < reps; ++i)
     {
         GncRational a(di(dre), di(dre));
         GncRational b(di(dre), 100);
-        auto c = a * b;
-        auto expected = c;
-        expected = expected.convert<RoundType::bankers>(100);
-        auto rounded = c.round_to_numeric();
-        rounded = rounded.convert<RoundType::bankers>(100);
-        if (rounded.is_big())
-        {
-            --i;
-            continue;
+        try {
+            auto c = a * b;
+            auto expected = c;
+            expected = expected.convert<RoundType::bankers>(100);
+            auto rounded = c.round_to_numeric();
+            rounded = rounded.convert<RoundType::bankers>(100);
+            if (rounded.is_big())
+            {
+                --i;
+                continue;
+            }
+            EXPECT_PRED2(rounding_predicate, expected.num(), rounded.num());
+            EXPECT_TRUE(rounded.valid());
         }
-        EXPECT_PRED2(rounding_predicate, expected.num(), rounded.num());
-        EXPECT_TRUE(rounded.valid());
+        catch (const std::overflow_error& err)
+        {
+            std::cerr << "Overflow error from " << a << " * " << b << ".\n";
+        }
 
     }
 }

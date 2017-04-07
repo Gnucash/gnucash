@@ -332,17 +332,22 @@ TEST(gncnumeric_operators, test_multiplication)
     GncNumeric a(123456789987654321, 1000000000);
     GncNumeric b(65432198765432198, 100000000);
     GncNumeric c = a * b;
-    EXPECT_EQ (4604488056206217807, c.num());
-    EXPECT_EQ (57, c.denom());
+    EXPECT_EQ (9208976112412435614, c.num());
+    EXPECT_EQ (114, c.denom());
     a *= b;
-    EXPECT_EQ (4604488056206217807, a.num());
-    EXPECT_EQ (57, a.denom());
+    EXPECT_EQ (9208976112412435614, a.num());
+    EXPECT_EQ (114, a.denom());
 
     GncNumeric d(215815575996, 269275978715);
     GncNumeric e(1002837599929, 1);
     GncNumeric f, g;
     EXPECT_NO_THROW(f = d * e);
     EXPECT_NO_THROW(g = f.convert<RoundType::half_up>(1));
+    GncNumeric h(133499999999, 136499999999);
+    GncNumeric i(60000000003, 100000000);
+    GncNumeric j;
+    EXPECT_NO_THROW(j = gnc_numeric_mul(h, i, 100000000, GNC_HOW_RND_ROUND));
+    EXPECT_EQ(58681318684, j.num());
 
 }
 

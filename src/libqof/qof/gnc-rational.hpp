@@ -150,9 +150,9 @@ public:
     }
 
     /** Numerator accessor */
-    GncInt128 num() { return m_num; }
+    GncInt128 num() const noexcept { return m_num; }
     /** Denominator accessor */
-    GncInt128 denom() { return m_den; }
+    GncInt128 denom() const noexcept { return m_den; }
     /** @defgroup gnc_rational_mutators
      *  @{
      * Standard mutating arithmetic operators.
@@ -274,6 +274,12 @@ inline GncRational operator/(GncRational a, GncInt128 b)
 inline GncRational operator/(GncInt128 a, GncRational b)
 {
     return GncRational(a, 1) / b;
+}
+
+inline std::ostream& operator<<(std::ostream& stream, const GncRational& val) noexcept
+{
+    stream << val.num() << "/" << val.denom();
+    return stream;
 }
 /** @} */
 #endif //__GNC_RATIONAL_HPP__

@@ -581,6 +581,7 @@ TEST(qofint128_functions, pow)
 
     EXPECT_EQ (GncInt128(1), little.pow(0));
     EXPECT_EQ (GncInt128(0), GncInt128(0).pow(123));
+    auto really_big = big * big;
     EXPECT_EQ (big * big, big.pow(2));
     EXPECT_EQ (GncInt128(UINT64_C(66326033898754),
                          UINT64_C(10251549987585143605)), little.pow(7));
@@ -589,4 +590,18 @@ TEST(qofint128_functions, pow)
                minus.pow(7));
     auto over = minus.pow(9);
     EXPECT_TRUE(over.isOverflow());
+}
+
+TEST(qofint128_functions, shift)
+{
+    GncInt128 a (UINT64_C(0xabcdabcd), UINT64_C(0xfe89fe89fe89fe89), 0);
+    EXPECT_EQ(GncInt128(UINT64_C(0xabcdabcdfe89), UINT64_C(0xfe89fe89fe890000), 0), a << 16);
+    EXPECT_EQ(GncInt128(UINT64_C(0xabcd), UINT64_C(0xabcdfe89fe89fe89), 0), a >> 16);
+    EXPECT_EQ(GncInt128(UINT64_C(0x1e89fe89fe89fe89), UINT64_C(0), 0), a << 64);
+    EXPECT_EQ(GncInt128(UINT64_C(0), UINT64_C(0xabcdabcd), 0), a >> 64);
+    GncInt128 b (UINT64_C(0xabcdabcd), UINT64_C(0xfe89fe89fe89fe89), 1);
+    EXPECT_EQ(GncInt128(UINT64_C(0xabcdabcdfe89), UINT64_C(0xfe89fe89fe890000), 1), b << 16);
+    EXPECT_EQ(GncInt128(UINT64_C(0xabcd), UINT64_C(0xabcdfe89fe89fe89), 1), b >> 16);
+    EXPECT_EQ(GncInt128(UINT64_C(0x1e89fe89fe89fe89), UINT64_C(0), 1), b << 64);
+    EXPECT_EQ(GncInt128(UINT64_C(0), UINT64_C(0xabcdabcd), 1), b >> 64);
 }

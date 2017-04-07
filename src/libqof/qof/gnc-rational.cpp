@@ -149,6 +149,8 @@ GncRational::prepare_conversion (GncInt128 new_denom) const
     auto red_conv = conversion.reduce();
     GncInt128 old_num(m_num);
     auto new_num = old_num * red_conv.num();
+    if (new_num.isOverflow())
+        throw std::overflow_error("Conversion overflow");
     auto rem = new_num % red_conv.denom();
     new_num /= red_conv.denom();
     return {new_num, red_conv.denom(), rem};
@@ -181,6 +183,7 @@ GncRational::reduce() const
 GncRational
 GncRational::round_to_numeric() const
 {
+    unsigned int ll_bits = GncInt128::legbits;
     if (m_num.isZero())
         return GncRational(); //Default constructor makes 0/1
     if (!(m_num.isBig() || m_den.isBig()))
@@ -195,25 +198,53 @@ GncRational::round_to_numeric() const
                 << "GncNumeric. Its integer value is too large.\n";
             throw std::overflow_error(msg.str());
         }
-        GncRational new_v(*this);
-        new_v = new_v.convert<RoundType::half_down>(m_den / (m_num.abs() >> 62));
+        GncRational new_v;
+        while (new_v.num().isZero())
+        {
+            try
+            {
+                new_v = convert<RoundType::half_down>(m_den / (m_num.abs() >> ll_bits));
+                if (new_v.is_big())
+                {
+                    --ll_bits;
+                    new_v = GncRational();
+                }
+            }
+            catch(const std::overflow_error& err)
+            {
+                --ll_bits;
+            }
+        }
         return new_v;
     }
     auto quot(m_den / m_num);
     if (quot.isBig())
         return GncRational(); //Smaller than can be represented as a GncNumeric
-    auto divisor = m_den >> 62;
-    if (m_num.isBig())
+    GncRational new_v;
+    while (new_v.num().isZero())
     {
-        GncInt128 oldnum(m_num), num, rem;
-        oldnum.div(divisor, num, rem);
-        auto den = m_den / divisor;
-        num += rem * 2 >= den ? 1 : 0;
-        GncRational new_rational(num, den);
-        return new_rational;
+        auto divisor = m_den >> ll_bits;
+        if (m_num.isBig())
+        {
+            GncInt128 oldnum(m_num), num, rem;
+            oldnum.div(divisor, num, rem);
+            auto den = m_den / divisor;
+            num += rem * 2 >= den ? 1 : 0;
+            if (num.isBig() || den.isBig())
+            {
+                --ll_bits;
+                continue;
+            }
+            GncRational new_rational(num, den);
+            return new_rational;
+        }
+        new_v = convert<RoundType::half_down>(m_den / divisor);
+        if (new_v.is_big())
+        {
+            --ll_bits;
+            new_v = GncRational();
+        }
     }
-    GncRational new_v(*this);
-    new_v = new_v.convert<RoundType::half_down>(m_den / divisor);
     return new_v;
 }
 
