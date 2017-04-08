@@ -26,7 +26,7 @@
 
 static constexpr uint64_t UPPER_MAX{2305843009213693951};
 
-TEST(qofint128_constructors, test_default_constructor)
+TEST(GncInt128_constructors, test_default_constructor)
 {
     GncInt128 value {};
     EXPECT_TRUE (value.isZero());
@@ -36,7 +36,7 @@ TEST(qofint128_constructors, test_default_constructor)
     EXPECT_FALSE (value.isNan());
 }
 
-TEST(qofint128_constructors, test_single_arg_constructor)
+TEST(GncInt128_constructors, test_single_arg_constructor)
 {
     EXPECT_NO_THROW({
             GncInt128 value1 (INT64_C(0));
@@ -75,7 +75,7 @@ TEST(qofint128_constructors, test_single_arg_constructor)
         });
 }
 
-TEST(qofint128_constructors, test_double_arg_constructor)
+TEST(GncInt128_constructors, test_double_arg_constructor)
 {
     EXPECT_NO_THROW({
             GncInt128 value1 (INT64_C(0), INT64_C(0));
@@ -180,7 +180,7 @@ TEST(qofint128_constructors, test_double_arg_constructor)
                  std::overflow_error);
 }
 
-TEST(qofint128_functions, test_int_functions)
+TEST(GncInt128_functions, test_int_functions)
 {
     int64_t arg {INT64_C(567894392130486208)};
     int64_t narg {INT64_C(-567894392130486208)};
@@ -234,7 +234,7 @@ TEST(qofint128_functions, test_int_functions)
 
 }
 
-TEST(qofint128_functions, test_compare)
+TEST(GncInt128_functions, test_compare)
 {
     int64_t barg {INT64_C(567894392130486208)};
     int64_t nbarg {INT64_C(-567894392130486208)};
@@ -299,7 +299,7 @@ TEST(qofint128_functions, test_compare)
     EXPECT_EQ (0, neg_really_big.cmp(-really_big));
 }
 
-TEST(qofint128_functions, stream_output)
+TEST(GncInt128_functions, stream_output)
 {
     int64_t barg {INT64_C(567894392130486208)};
     int64_t sarg {INT64_C(567894392130486207)};
@@ -327,7 +327,7 @@ TEST(qofint128_functions, stream_output)
     EXPECT_STREQ("NaN", not_a_number.asCharBufR (buf));
 }
 
-TEST(qofint128_functions, add_and_subtract)
+TEST(GncInt128_functions, add_and_subtract)
 {
     /* UINT64_MAX = 18,446,744,073,709,551,615
      * INT64_MAX  =  9,223,372,036,854,775,807
@@ -364,7 +364,7 @@ TEST(qofint128_functions, add_and_subtract)
     EXPECT_TRUE (bigger.isOverflow());
  }
 
-TEST(qofint128_functions, multiply)
+TEST(GncInt128_functions, multiply)
 {
     int64_t barg {INT64_C(4878849681579065407)};
     int64_t marg {INT64_C(4344522355275710400)};
@@ -416,7 +416,7 @@ TEST(qofint128_functions, multiply)
 
 }
 
-TEST(qofint128_functions, divide)
+TEST(GncInt128_functions, divide)
 {
     int64_t barg {INT64_C(4878849681579065407)};
     int64_t marg {INT64_C(4344522355275710400)};
@@ -544,7 +544,7 @@ TEST(qofint128_functions, divide)
       });
 }
 
-TEST(qofint128_functions, GCD)
+TEST(GncInt128_functions, GCD)
 {
     int64_t barg {INT64_C(4878849681579065407)};
     int64_t marg {INT64_C(4344522355275710400)};
@@ -570,7 +570,7 @@ TEST(qofint128_functions, GCD)
         });
 }
 
-TEST(qofint128_functions, pow)
+TEST(GncInt128_functions, pow)
 {
 
     int64_t sarg {INT64_C(53309)};
@@ -592,7 +592,7 @@ TEST(qofint128_functions, pow)
     EXPECT_TRUE(over.isOverflow());
 }
 
-TEST(qofint128_functions, shift)
+TEST(GncInt128_functions, shift)
 {
     GncInt128 a (UINT64_C(0xabcdabcd), UINT64_C(0xfe89fe89fe89fe89), 0);
     EXPECT_EQ(GncInt128(UINT64_C(0xabcdabcdfe89), UINT64_C(0xfe89fe89fe890000), 0), a << 16);
