@@ -215,7 +215,6 @@ GncRational::round_to_numeric() const
                 --ll_bits;
             }
         }
-        std::cout << "Rounded with " << ll_bits << " bits.\n";
         return new_v;
     }
     auto quot(m_den / m_num);
@@ -237,7 +236,6 @@ GncRational::round_to_numeric() const
                 continue;
             }
             GncRational new_rational(num, den);
-            std::cout << "Divisor converted with " << ll_bits << "bits.\n";
             return new_rational;
         }
         new_v = convert<RoundType::half_down>(m_den / divisor);
@@ -247,7 +245,6 @@ GncRational::round_to_numeric() const
             new_v = GncRational();
         }
     }
-    std::cout << "Divisor rounded with " << ll_bits << "bits.\n";
     return new_v;
 }
 
