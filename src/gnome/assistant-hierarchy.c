@@ -31,7 +31,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#ifdef PLATFORM_OSX
+#ifdef MAC_INTEGRATION
 #include <Foundation/Foundation.h>
 #endif
 
@@ -186,7 +186,7 @@ set_final_balance (GHashTable *hash, Account *account, gnc_numeric in_balance)
     g_hash_table_insert (hash, account, balance);
 }
 
-#ifdef PLATFORM_OSX
+#ifdef MAC_INTEGRATION
 /* Repeat retrieving the locale from defaults in case it was overridden in
  * gnucash-bin because it wasn't a supported POSIX locale.
  */
@@ -246,7 +246,7 @@ gnc_get_ea_locale_dir(const char *top_dir)
             locale = g_strdup ("C");
         }
     }
-#elif defined PLATFORM_OSX
+#elif defined MAC_INTEGRATION
     locale = mac_locale();
 # else
     locale = g_strdup(setlocale(LC_MESSAGES, NULL));
