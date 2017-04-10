@@ -20,6 +20,11 @@
       <summary>Remember the PIN in memory</summary>
       <description>If active, the PIN for HBCI/AqBanking actions will be remembered in memory during a session. Otherwise it will have to be entered again each time during a session when it is needed.</description>
     </key>
+    <key name="use-ns-transaction-text" type="b">
+      <default>true</default>
+      <summary>Put the transaction text in front of the purpose of a transaction.</summary>
+      <description>Some banks place part of transaction description as "transaction text" in the MT940 file. Normally GNUcash ignores this text. However by activating this option, the transaction text is used for the transaction description too.</description>
+    </key>
     <key name="verbose-debug" type="b">
       <default>false</default>
       <summary>Verbose HBCI debug messages</summary>
