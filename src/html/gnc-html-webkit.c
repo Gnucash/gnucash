@@ -654,6 +654,7 @@ webkit_notification_cb (WebKitWebView* web_view, WebKitNotification *note,
 {
      GtkWindow *top = NULL;
      GtkWidget *dialog = NULL;
+     GncHtmlWebkit *self = (GncHtmlWebkit*)user_data;
      g_return_val_if_fail (self != NULL, FALSE);
      g_return_val_if_fail (note != NULL, FALSE);
 
