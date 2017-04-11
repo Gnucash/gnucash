@@ -636,8 +636,8 @@ gnucash_sheet_draw_internal (GnucashSheet* sheet, cairo_t* cr,
 {
     VirtualLocation virt_loc;
     SheetBlock *sheet_block;
-    int x = alloc->x;
-    int y = alloc->y;
+    int x = 0;
+    int y = 0;
     int width = alloc->width;
     int height = alloc->height;
 
