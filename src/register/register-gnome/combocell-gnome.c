@@ -757,8 +757,6 @@ gnc_combo_cell_gui_realize (BasicCell *bcell, gpointer data)
     else
         box->item_list = GNC_ITEM_LIST (gnc_item_list_new (box->tmp_store));
     gtk_widget_show_all (GTK_WIDGET(box->item_list));
-    gtk_layout_put (GTK_LAYOUT(sheet),
-                    GTK_WIDGET(box->item_list), 0, 0);
     g_object_ref_sink(box->item_list);
 
     /* to mark cell as realized, remove the realize method */

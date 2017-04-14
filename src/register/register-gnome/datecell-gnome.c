@@ -609,8 +609,6 @@ gnc_date_cell_realize (BasicCell *bcell, gpointer data)
     box->item_edit = item_edit;
     box->date_picker = GNC_DATE_PICKER (gnc_date_picker_new ());
     gtk_widget_show_all (GTK_WIDGET(box->date_picker));
-    gtk_layout_put (GTK_LAYOUT(sheet),
-                    GTK_WIDGET(box->date_picker), 0, 0);
     g_object_ref_sink(box->date_picker);
 
     /* to mark cell as realized, remove the realize method */

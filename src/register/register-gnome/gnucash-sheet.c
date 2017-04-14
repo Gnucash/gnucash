@@ -97,6 +97,8 @@ static gboolean gnucash_sheet_delete_surrounding_cb (GtkIMContext *context,
         GnucashSheet *sheet);
 static gboolean gnucash_sheet_check_direct_update_cell(GnucashSheet *sheet,
         const VirtualLocation virt_loc);
+gboolean gnucash_sheet_draw_cb (GtkWidget *widget, cairo_t *cr,
+                                G_GNUC_UNUSED gpointer data);
 
 /** Implementation *****************************************************/
 
@@ -692,6 +694,8 @@ gnucash_sheet_create (Table *table)
 
     g_signal_connect (G_OBJECT (sheet->vadj), "value_changed",
                       G_CALLBACK (gnucash_sheet_vadjustment_value_changed), sheet);
+    g_signal_connect (G_OBJECT (sheet), "draw",
+                      G_CALLBACK (gnucash_sheet_draw_cb), sheet);
 
     LEAVE("%p", sheet);
     return sheet;
@@ -1046,20 +1050,20 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
     g_string_free (new_text_gs, TRUE);
 }
 
-static gboolean
-gnucash_sheet_draw (GtkWidget *widget, cairo_t *cr)
+gboolean
+gnucash_sheet_draw_cb (GtkWidget *widget, cairo_t *cr, G_GNUC_UNUSED gpointer data)
 {
     GnucashSheet *sheet = GNUCASH_SHEET (widget);
+    GtkStyleContext *context = gtk_widget_get_style_context (widget);
     GtkAllocation alloc;
     gboolean result;
 
     gtk_widget_get_allocation(widget, &alloc);
-    cairo_save (cr);
+    gtk_render_background (context, cr, alloc.x, alloc.y, alloc.width, alloc.height);
     result = gnucash_sheet_draw_internal (sheet, cr, &alloc);
     gnucash_sheet_draw_cursor (sheet->cursor, cr);
-    cairo_restore (cr);
 
-    return result;
+    return FALSE;
 }
 
 
@@ -2457,9 +2461,6 @@ gnucash_sheet_class_init (GnucashSheetClass *klass)
     widget_class->button_press_event = gnucash_button_press_event;
     widget_class->button_release_event = gnucash_button_release_event;
     widget_class->scroll_event = gnucash_scroll_event;
-
-    widget_class->draw = gnucash_sheet_draw;
-
 }
 
 
