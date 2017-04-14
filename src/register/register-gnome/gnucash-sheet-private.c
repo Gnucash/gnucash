@@ -604,12 +604,12 @@ draw_block (GnucashSheet *sheet,
                   virt_loc.phys_row_offset,
                   virt_loc.phys_col_offset);
 
-            x_paint = block->origin_x + cd->origin_x;
-            if (x_paint > x + width)
+            x_paint = block->origin_x + cd->origin_x - x;
+            if (x_paint > width)
                 break;
 
-            y_paint = block->origin_y + cd->origin_y;
-            if (y_paint > y + height)
+            y_paint = block->origin_y + cd->origin_y - y;
+            if (y_paint > height)
                 return;
 
             h = cd->pixel_height;
@@ -618,10 +618,10 @@ draw_block (GnucashSheet *sheet,
             if (w == 0)
                 continue;
 
-            if (x_paint + w < x)
+            if (x_paint + w < 0)
                 continue;
 
-            if (y_paint + h < y)
+            if (y_paint + h < 0)
                 continue;
 
             draw_cell (sheet, block, virt_loc, cr,
@@ -640,6 +640,12 @@ gnucash_sheet_draw_internal (GnucashSheet* sheet, cairo_t* cr,
     int y = 0;
     int width = alloc->width;
     int height = alloc->height;
+    GtkAdjustment * adj;
+
+    adj = gtk_scrollable_get_hadjustment(GTK_SCROLLABLE (sheet));
+    x = (gint) gtk_adjustment_get_value(adj);
+    adj = gtk_scrollable_get_vadjustment(GTK_SCROLLABLE (sheet));
+    y = (gint) gtk_adjustment_get_value(adj);
 
     if (x < 0 || y < 0)
         return FALSE;
@@ -683,20 +689,28 @@ gnucash_sheet_draw_cursor (GnucashCursor *cursor, cairo_t *cr)
 {
     GnucashCursorCell *cc = &(cursor->cell);
     GdkRGBA *fg_color;
+    int x = 0;
+    int y = 0;
+    GtkAdjustment * adj;
+
+    adj = gtk_scrollable_get_hadjustment(GTK_SCROLLABLE (cursor->sheet));
+    x = (gint) gtk_adjustment_get_value(adj);
+    adj = gtk_scrollable_get_vadjustment(GTK_SCROLLABLE (cursor->sheet));
+    y = (gint) gtk_adjustment_get_value(adj);
 
     fg_color = &gn_black;
 
     /* draw the rectangle around the entire active
      *    virtual *row */
-    cairo_rectangle (cr, cursor->x + 0.5, cursor->y + 0.5,
+    cairo_rectangle (cr, cursor->x - x + 0.5, cursor->y - y + 0.5,
                      cursor->w - 1.0, cursor->h - 1.0);
-    cairo_move_to (cr, cursor->x, cursor->y + cursor->h - 1.5);
+    cairo_move_to (cr, cursor->x - x, cursor->y - y + cursor->h - 1.5);
     cairo_rel_line_to (cr, cursor->w, 0);
     cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
     cairo_set_line_width (cr, 1.0);
     cairo_stroke (cr);
 
-    cairo_rectangle (cr, cc->x + 0.5, cursor->y + cc->y + 0.5,
+    cairo_rectangle (cr, cc->x - x + 0.5, cursor->y + cc->y - y + 0.5,
                      cc->w - 1.0, cc->h - 1.0);
     cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
     cairo_set_line_width (cr, 1.0);
