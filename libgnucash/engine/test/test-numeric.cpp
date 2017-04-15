@@ -370,6 +370,22 @@ check_double (void)
                                           GNC_HOW_RND_ROUND),
                     val, "expected %s = %s double 6 figs");
 
+    check_unary_op (gnc_numeric_eq,
+                    gnc_numeric_create (961600000, 10000000),
+                    double_to_gnc_numeric(96.16,
+                                          GNC_DENOM_AUTO,
+                                          GNC_HOW_DENOM_SIGFIGS(9) |
+                                          GNC_HOW_RND_ROUND),
+                    val, "expected %s = %s GncNumeric from 96.16");
+
+    check_unary_op (gnc_numeric_eq,
+                    gnc_numeric_create (9616000000, 1),
+                    double_to_gnc_numeric(9616000000.0,
+                                          GNC_DENOM_AUTO,
+                                          GNC_HOW_DENOM_SIGFIGS(9) |
+                                          GNC_HOW_RND_ROUND),
+                    val, "expected %s = %s GncNumeric from 9616000000.0");
+
     flo = gnc_numeric_to_double(gnc_numeric_create(7, 16));
     do_test ((0.4375 == flo), "float pt conversion");
 }
