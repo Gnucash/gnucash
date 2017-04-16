@@ -715,7 +715,7 @@ save_cell (SplitRegister *reg, Split* split, const char *cell_name)
         new_amount = gnc_numeric_zero ();
     g_hash_table_unref (parser_vars);
     qof_instance_set (QOF_INSTANCE (split),
-		  numeric, new_amount,
+		  numeric, &new_amount,
 		  formula, value,
 		  NULL);
 }
