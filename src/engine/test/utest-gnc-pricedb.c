@@ -1,5 +1,5 @@
 /********************************************************************
- * utest-gnc-pricedb.c: GLib g_test test suite for gnc-pricedb.c.		    *
+ * utest-gnc-pricedb.c: GLib g_test test suite for gnc-pricedb.c.   *
  * Copyright 2015 John Ralls <jralls@ceridwen.us>		    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -416,6 +416,10 @@ create_some_prices (PriceDBFixture *fixture)
                                               PRICE_SOURCE_FQ,
                                             gnc_numeric_create(131190, 10000)));
     gnc_pricedb_add_price(db, construct_price(book, c->usd, c->aud,
+                                              gnc_dmy2timespec(12, 4, 2009),
+                                              PRICE_SOURCE_USER_PRICE,
+                                            gnc_numeric_create(131190, 10000)));
+    gnc_pricedb_add_price(db, construct_price(book, c->usd, c->aud,
                                               gnc_dmy2timespec(21, 8, 2010),
                                               PRICE_SOURCE_FQ,
                                             gnc_numeric_create(111794, 10000)));
@@ -650,7 +654,7 @@ static void
 test_gnc_pricedb_get_num_prices (PriceDBFixture *fixture, gconstpointer pData)
 {
     int num = gnc_pricedb_get_num_prices(fixture->pricedb);
-    g_assert_cmpint(num, ==, 32);
+    g_assert_cmpint(num, ==, 33);
 }
 /* pricedb_equal_foreach_pricelist
 static void
@@ -743,11 +747,49 @@ gnc_pricedb_remove_old_prices(GNCPriceDB *db,// C: 1  Local: 0:0:0
 */
 static void test_gnc_pricedb_remove_old_prices (PriceDBFixture *fixture, gconstpointer pData)
 {
-    Timespec t = gnc_dmy2timespec(1, 1, 2013);
-    g_assert(gnc_pricedb_remove_old_prices(fixture->pricedb, t, FALSE, FALSE));
-    g_assert_cmpint(gnc_pricedb_get_num_prices(fixture->pricedb), ==, 11);
-    g_assert(gnc_pricedb_remove_old_prices(fixture->pricedb, t, FALSE, TRUE));
-    g_assert_cmpint(gnc_pricedb_get_num_prices(fixture->pricedb), ==, 10);
+    GList *comm_list = NULL;
+    Commodities *c = fixture->com;
+
+    Timespec t_old = gnc_dmy2timespec(11, 4, 2009);
+    Timespec t_cut = gnc_dmy2timespec(1, 1, 2010);
+    Timespec t_cut2 = gnc_dmy2timespec(1, 1, 2013);
+
+    comm_list = g_list_append (comm_list, c->usd);
+    comm_list = g_list_append (comm_list, c->gbp);
+
+    g_assert (gnc_pricedb_remove_old_prices(fixture->pricedb, comm_list,
+                                           t_old, t_cut,
+                                           PRICE_REMOVE_DEFAULT, // source is FQ
+                                           PRICE_REMOVE_DEFAULT)); // leave none
+
+    g_assert_cmpint (gnc_pricedb_num_prices(fixture->pricedb, c->gbp), ==, 12);
+    g_assert_cmpint (gnc_pricedb_num_prices(fixture->pricedb, c->usd), ==, 9);
+
+    g_assert_cmpint (gnc_pricedb_get_num_prices(fixture->pricedb), ==, 29);
+
+    g_assert (gnc_pricedb_remove_old_prices(fixture->pricedb, comm_list,
+                                           t_old, t_cut,
+                                           PRICE_REMOVE_USER, // source is USER
+                                           PRICE_REMOVE_DEFAULT)); // leave none
+
+    g_assert_cmpint (gnc_pricedb_get_num_prices(fixture->pricedb), ==, 28);
+
+    // there should be no prices before cutoff, returns false
+    g_assert (!gnc_pricedb_remove_old_prices(fixture->pricedb, comm_list,
+                                           t_old, t_cut,
+                                           PRICE_REMOVE_ALL, // source is ALL
+                                           PRICE_REMOVE_DEFAULT)); // leave none
+
+    g_assert_cmpint (gnc_pricedb_get_num_prices(fixture->pricedb), ==, 28);
+
+    g_assert (gnc_pricedb_remove_old_prices(fixture->pricedb, comm_list,
+                                           t_old, t_cut2,
+                                           PRICE_REMOVE_DEFAULT, // source is FQ
+                                           PRICE_REMOVE_SCALED)); // leave scaled
+
+    g_assert_cmpint (gnc_pricedb_get_num_prices(fixture->pricedb), ==, 16);
+
+    g_list_free (comm_list);
 }
 /* price_list_from_hashtable
 static PriceList *
@@ -958,7 +1000,7 @@ test_gnc_pricedb_get_prices (PriceDBFixture *fixture, gconstpointer pData)
     PriceList *prices = gnc_pricedb_get_prices(fixture->pricedb,
                                                fixture->com->usd,
                                                fixture->com->aud);
-    g_assert_cmpint(g_list_length(prices), ==, 4);
+    g_assert_cmpint(g_list_length(prices), ==, 5);
     gnc_price_list_destroy(prices);
 }
 /* gnc_pricedb_lookup_day
