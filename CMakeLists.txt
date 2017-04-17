@@ -457,7 +457,7 @@ IF (UNIX)
 ENDIF (UNIX)
 IF (MINGW)
   SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wdeclaration-after-statement -Wno-pointer-sign -Wall -Wunused -Wmissing-prototypes -Wmissing-declarations  -Wno-unused -std=gnu11")
-  SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWINVER=0x0500") # Workaround for bug in gtest on mingw, see https://github.com/google/googletest/issues/893
+  SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWINVER=0x0500 -D_EMULATE_GLIBC=0") # Workaround for bug in gtest on mingw, see https://github.com/google/googletest/issues/893 and https://github.com/google/googletest/issues/920
 ENDIF (MINGW)
 IF (APPLE)
   SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-local-typedef")
