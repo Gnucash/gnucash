@@ -242,7 +242,7 @@ date_picked_cb (GNCDatePicker *gdp, gpointer data)
     guint day, month, year;
     char buffer[DATE_BUF];
 
-    gtk_calendar_get_date (gdp->calendar, &year, &month, &day);
+    gnc_calendar_get_date (gdp->calendar, &year, &month, &day);
 
     qof_print_date_dmy_buff (buffer, MAX_DATE_LENGTH, day, month + 1, year);
 
@@ -262,7 +262,7 @@ date_selected_cb (GNCDatePicker *gdp, gpointer data)
     guint day, month, year;
     char buffer[DATE_BUF];
 
-    gtk_calendar_get_date (gdp->calendar, &year, &month, &day);
+    gnc_calendar_get_date (gdp->calendar, &year, &month, &day);
 
     qof_print_date_dmy_buff (buffer, MAX_DATE_LENGTH, day, month + 1, year);
 

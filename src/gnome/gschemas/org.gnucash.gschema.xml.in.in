@@ -145,6 +145,11 @@
       <summary>Use 24 hour time format</summary>
       <description>If active, use a 24 hour time format. Otherwise use a 12 hour time format.</description>
     </key>
+    <key name="calendar-types" type="i">
+      <default>0</default>
+      <summary>Calendar type choice</summary>
+      <description>This setting chooses the way dates are displayed in GnuCash. Possible values for this setting are "locale" to use the system locale setting, "ce" for Continental Europe style dates, "iso" for ISO 8601 standard dates , "uk" for United Kingdom style dates, and "us" for United States style dates.</description>
+    </key>
     <key name="date-format" type="i">
       <default>4</default>
       <summary>Date format choice</summary>

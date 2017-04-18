@@ -386,6 +386,11 @@
       <gconfkey>24hour_clock</gconfkey>
     </pref>
     <pref>
+      <gschemaname>calendar-types</gschemaname>
+      <gschematype>calendartyp</gschematype>
+      <gconfkey>calendar_types</gconfkey>
+    </pref>
+    <pref>
       <gschemaname>date-format</gschemaname>
       <gschematype>datefmt</gschematype>
       <gconfkey>date_format</gconfkey>

@@ -35,6 +35,7 @@ SET (gnc_qof_HEADERS
     qof/qofutil.h
     qof/qof-gobject.h
     qof/qof-string-cache.h
+    qof/gnc-jalali.h
 )
 SET (gnc_qof_noinst_HEADERS
     qof/gnc-backend-prov.hpp
@@ -75,6 +76,7 @@ SET (gnc_qof_SOURCES
    qof/qofsession.cpp
    qof/qofutil.cpp
    qof/qof-string-cache.cpp
+   qof/gnc-jalali.c
 )
 
 IF (WIN32)

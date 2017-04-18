@@ -34,6 +34,7 @@ extern "C"
 #include <stdlib.h>
 #include "platform.h"
 #include "qof.h"
+#include "gnc-jalali.h"
 
 #ifdef HAVE_LANGINFO_D_FMT
 # include <langinfo.h>
@@ -85,6 +86,9 @@ const char *gnc_default_strftime_date_format =
 /* This is now user configured through the gnome options system() */
 static QofDateFormat dateFormat = QOF_DATE_FORMAT_LOCALE;
 static QofDateFormat prevQofDateFormat = QOF_DATE_FORMAT_LOCALE;
+
+static GncCalendarType calendarType = GNC_CALENDAR_TYPE_GREGORIAN;
+static GncCalendarType prevQofCalendarType = GNC_CALENDAR_TYPE_GREGORIAN;
 
 static QofDateCompletion dateCompletion = QOF_DATE_COMPLETION_THISYEAR;
 static int dateCompletionBackMonths = 6;
@@ -519,6 +523,30 @@ void qof_date_format_set(QofDateFormat df)
     return;
 }
 
+GncCalendarType gnc_calendar_type_get (void)
+{
+    return calendarType;
+}
+
+void gnc_calendar_type_set (GncCalendarType df)
+{
+    if (df >= CALENDAR_TYPE_FIRST && df <= CALENDAR_TYPE_LAST)
+    {
+        prevQofCalendarType = calendarType;
+        calendarType = df;
+    }
+    else
+    {
+        /* hack alert - Use a neutral default. */
+        PERR("non-existent calendar type set attempted. Setting Gregorian Calendar");
+        prevQofCalendarType = calendarType;
+        calendarType = GNC_CALENDAR_TYPE_GREGORIAN;
+    }
+
+    return;
+}
+
+
 /* set date completion method
 
 set dateCompletion to one of QOF_DATE_COMPLETION_THISYEAR (for
@@ -697,6 +725,11 @@ gnc_print_date (Timespec ts)
     return buff;
 }
 
+gboolean
+gnc_use_mask ()
+{
+    return calendarType != GNC_CALENDAR_TYPE_GREGORIAN;
+}
 /* ============================================================== */
 
 /* return the greatest integer <= a/b; works for b > 0 and positive or
@@ -742,7 +775,9 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
 {
     char *dupe, *tmp, *first_field, *second_field, *third_field;
     int iday, imonth, iyear;
+    int masked_day,masked_month,masked_year;
     int now_day, now_month, now_year;
+    int masked_now_day,masked_now_month,masked_now_year;
     struct tm *now, utc;
     time64 secs;
 
@@ -792,12 +827,43 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
     now_day = now->tm_mday;
     now_month = now->tm_mon + 1;
     now_year = now->tm_year + 1900;
+    if(gnc_use_mask ())
+    {
+        switch (gnc_calendar_type_get ())
+        {
+            case GNC_CALENDAR_TYPE_JALALI:
+                gnc_gregorian_to_jalali(&masked_now_year,&masked_now_month,&masked_now_day,now_year,now_month,now_day);
+                break;
+            // all other calendars type filter ( we just handle Jalali calendar)
+            case GNC_UNDEFINED_CALENDAR_TYPE:
+            case GNC_CALENDAR_TYPE_GREGORIAN:
+              masked_now_day=-1;
+              masked_now_month=-1;
+              masked_now_year=-1;
+              break;
+        }
+    }
+    else
+    {
+        masked_now_day=-1;
+        masked_now_month=-1;
+        masked_now_year=-1;
+    }
     gnc_tm_free (now);
 
     /* set defaults: if day or month appear to be blank, use today's date */
-    iday = now_day;
-    imonth = now_month;
-    iyear = -1;
+    if(gnc_use_mask ())
+    {
+        iday = masked_now_day;
+        imonth = masked_now_month;
+        iyear = -1;
+    }
+    else
+    {
+        iday = now_day;
+        imonth = now_month;
+        iyear = -1;
+    }
 
     /* get numeric values */
     switch (which_format)
@@ -969,20 +1035,67 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
     {
         if (dateCompletion == QOF_DATE_COMPLETION_THISYEAR)
         {
-            iyear = now_year;  /* use the current year */
+            if(gnc_use_mask ())
+            {
+                iyear = masked_now_year;  /* use the current year */
+            }
+            else
+            {
+                iyear = now_year;  /* use the current year */
+            }
+
         }
         else
         {
-            iyear = now_year - floordiv(imonth - now_month +
-                                        dateCompletionBackMonths, 12);
+            if(gnc_use_mask ())
+            {
+                iyear = masked_now_year - floordiv(imonth - masked_now_month +
+                                            dateCompletionBackMonths, 12);
+            }
+            else
+            {
+                iyear = now_year - floordiv(imonth - now_month +
+                                            dateCompletionBackMonths, 12);
+            }
+
         }
     }
 
     /* If the year entered is smaller than 100, assume we mean the current
        century (and are not revising some roman emperor's books) */
     if (iyear < 100)
-        iyear += ((int) ((now_year + 50 - iyear) / 100)) * 100;
+    {
+        if(gnc_use_mask ())
+        {
+            iyear += ((int) ((masked_now_year + 50 - iyear) / 100)) * 100;
+        }
+        else
+        {
+            iyear += ((int) ((now_year + 50 - iyear) / 100)) * 100;
+        }
+    }
 
+
+    // now return back to unmasked date !
+    if(gnc_use_mask ())
+    {
+        switch (gnc_calendar_type_get ())
+        {
+            case GNC_CALENDAR_TYPE_JALALI:
+                gnc_jalali_to_gregorian(&masked_year,&masked_month,&masked_day,iyear,imonth,iday);
+                break;
+            case GNC_CALENDAR_TYPE_GREGORIAN:
+            case GNC_UNDEFINED_CALENDAR_TYPE:
+              masked_year=iyear;
+              masked_month=imonth;
+              masked_day=iday;
+              break;
+        }
+
+        iyear=masked_year;
+        imonth=masked_month;
+        iday=masked_day;
+    }
     if (year) *year = iyear;
     if (month) *month = imonth;
     if (day) *day = iday;

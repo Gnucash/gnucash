@@ -116,6 +116,7 @@ SET (gnome_utils_SOURCES
   ${SWIG_GNOME_UTILS_C}
   swig-gnome-utils.c
   window-main-summarybar.c
+  gnucash-calendar.c
 )
 
 SET(gnome_utils_noinst_HEADERS
@@ -201,6 +202,7 @@ SET (gnome_utils_HEADERS
   tree-view-utils.h
   print-session.h
   window-main-summarybar.h
+  gnucash-calendar.h
 )
 
 ADD_LIBRARY (gncmod-gnome-utils

@@ -15,6 +15,24 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkListStore" id="calendar_types">
+    <columns>
+      <!-- column-name name -->
+      <column type="gchararray"/>
+      <!-- column-name example -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Gregorian</col>
+        <col id="1" translatable="yes">07/31/2013</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Jalali</col>
+        <col id="1" translatable="yes">05/09/1392</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkAdjustment" id="date_backmonth_adj">
     <property name="upper">11</property>
     <property name="value">6</property>
@@ -1018,8 +1036,35 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">6</property>
-                <property name="n_rows">14</property>
+                <property name="n_rows">17</property>
                 <property name="n_columns">4</property>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
                 <child>
                   <placeholder/>
                 </child>
@@ -1110,8 +1155,8 @@
                   </object>
                   <packing>
                     <property name="right_attach">4</property>
-                    <property name="top_attach">6</property>
-                    <property name="bottom_attach">7</property>
+                    <property name="top_attach">9</property>
+                    <property name="bottom_attach">10</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"/>
                   </packing>
@@ -1123,8 +1168,8 @@
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="top_attach">5</property>
-                    <property name="bottom_attach">6</property>
+                    <property name="top_attach">8</property>
+                    <property name="bottom_attach">9</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"/>
                   </packing>
@@ -1139,8 +1184,8 @@
                   </object>
                   <packing>
                     <property name="right_attach">4</property>
-                    <property name="top_attach">3</property>
-                    <property name="bottom_attach">4</property>
+                    <property name="top_attach">6</property>
+                    <property name="bottom_attach">7</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"/>
                   </packing>
@@ -1201,8 +1246,8 @@
                     <property name="use_markup">True</property>
                   </object>
                   <packing>
-                    <property name="top_attach">8</property>
-                    <property name="bottom_attach">9</property>
+                    <property name="top_attach">11</property>
+                    <property name="bottom_attach">12</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"/>
                   </packing>
@@ -1217,8 +1262,8 @@
                   </object>
                   <packing>
                     <property name="right_attach">4</property>
-                    <property name="top_attach">9</property>
-                    <property name="bottom_attach">10</property>
+                    <property name="top_attach">12</property>
+                    <property name="bottom_attach">13</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"/>
                   </packing>
@@ -1244,8 +1289,8 @@
                   </object>
                   <packing>
                     <property name="right_attach">2</property>
-                    <property name="top_attach">10</property>
-                    <property name="bottom_attach">11</property>
+                    <property name="top_attach">13</property>
+                    <property name="bottom_attach">14</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"/>
                     <property name="x_padding">12</property>
@@ -1267,8 +1312,8 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="right_attach">2</property>
-                    <property name="top_attach">11</property>
-                    <property name="bottom_attach">12</property>
+                    <property name="top_attach">14</property>
+                    <property name="bottom_attach">15</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"/>
                     <property name="x_padding">12</property>
@@ -1294,8 +1339,8 @@ many months before the current month:</property>
                     <property name="climb_rate">1</property>
                   </object>
                   <packing>
-                    <property name="top_attach">12</property>
-                    <property name="bottom_attach">13</property>
+                    <property name="top_attach">15</property>
+                    <property name="bottom_attach">16</property>
                     <property name="x_options"/>
                     <property name="y_options"/>
                   </packing>
@@ -1317,6 +1362,62 @@ many months before the current month:</property>
                     </child>
                     <child>
                       <object class="GtkCellRendererText" id="example_renderer"/>
+                      <attributes>
+                        <attribute name="text">1</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="top_attach">7</property>
+                    <property name="bottom_attach">8</property>
+                    <property name="y_options">GTK_FILL</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label22">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">5</property>
+                    <property name="bottom_attach">6</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label23">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Calendar Type&lt;/b&gt;</property>
+                    <property name="use_markup">True</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">3</property>
+                    <property name="bottom_attach">4</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="pref/general/calendar-types">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">Use the date format specified by the system locale.</property>
+                    <property name="tooltip_text" translatable="yes">Use the date format specified by the system locale.</property>
+                    <property name="model">calendar_types</property>
+                    <property name="active">0</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="name_calendar"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                    <child>
+                      <object class="GtkCellRendererText" id="example_calendar"/>
                       <attributes>
                         <attribute name="text">1</attribute>
                       </attributes>

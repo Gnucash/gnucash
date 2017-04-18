@@ -338,43 +338,37 @@ gnc_handle_date_accelerator (GdkEventKey *event,
     case GDK_KEY_braceright:
     case GDK_KEY_bracketright:
         /* increment month */
-        g_date_add_months (&gdate, 1);
+        gnc_gdate_next_month(&gdate);
         break;
 
     case GDK_KEY_braceleft:
     case GDK_KEY_bracketleft:
         /* decrement month */
-        g_date_subtract_months (&gdate, 1);
+        gnc_gdate_prev_month (&gdate);
         break;
 
     case GDK_KEY_M:
     case GDK_KEY_m:
         /* beginning of month */
-        g_date_set_day (&gdate, 1);
+        gnc_gdate_set_month_start(&gdate);
         break;
 
     case GDK_KEY_H:
     case GDK_KEY_h:
         /* end of month */
-        g_date_set_day (&gdate, 1);
-        g_date_add_months (&gdate, 1);
-        g_date_subtract_days (&gdate, 1);
+        gnc_gdate_set_month_end(&gdate);
         break;
 
     case GDK_KEY_Y:
     case GDK_KEY_y:
         /* beginning of year */
-        g_date_set_day (&gdate, 1);
-        g_date_set_month (&gdate, 1);
+        gnc_gdate_set_year_start(&gdate);
         break;
 
     case GDK_KEY_R:
     case GDK_KEY_r:
         /* end of year */
-        g_date_set_day (&gdate, 1);
-        g_date_set_month (&gdate, 1);
-        g_date_add_years (&gdate, 1);
-        g_date_subtract_days (&gdate, 1);
+        gnc_gdate_set_year_end(&gdate);
         break;
 
     case GDK_KEY_T:

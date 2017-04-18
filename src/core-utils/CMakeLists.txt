@@ -22,10 +22,11 @@ SET (core_utils_SOURCES
   gnc-gkeyfile-utils.c
   gnc-glib-utils.c
   gnc-guile-utils.c
-  gnc-jalali.c
   gnc-locale-utils.c
   gnc-path.c
   gnc-uri-utils.c
+  calendar-gregorian-lib.c
+  calendar-jalali-lib.c
 )
 
 # Add dependency on config.h
@@ -102,10 +103,12 @@ SET(core_utils_noinst_HEADERS
   gnc-gkeyfile-utils.h
   gnc-glib-utils.h
   gnc-guile-utils.h
-  gnc-jalali.h
   gnc-locale-utils.h
   gnc-path.h
   gnc-uri-utils.h
+  calendar-lib.h
+  calendar-jalali-lib.h
+  calendar-gregorian-lib.h
 )
 
 SET(core_utils_ALL_SOURCES ${core_utils_SOURCES} ${core_utils_noinst_HEADERS})

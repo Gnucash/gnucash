@@ -236,6 +236,77 @@ void gnc_gdate_set_prev_fiscal_year_start (GDate *date, const GDate *year_end);
  *  fiscal year.  The year field of this argument is ignored. */
 void gnc_gdate_set_prev_fiscal_year_end (GDate *date, const GDate *year_end);
 
+
+// used in Calendar widget
+
+/// gnc_gdate_next_month - calculate the next month based Selected Calendar,
+///           the input is a Gregorian Date and the output will be in Gregorian
+/// \param date GDate Object , a gregorian date
+void gnc_gdate_next_month(GDate *date);
+
+/// gnc_gdate_prev_month - calculate the previous month base on selected calendar,
+///           the input is in a Gregorian Date and the output will be in Gregorian
+/// \param date GDate Object , a gregorian date
+void gnc_gdate_prev_month(GDate *date);
+
+
+// used in Recurrence
+
+///gnc_date_subtract_days - subtract days from the specefic date,
+///         the input date is a gregorian date and the return value will be a gregorian date
+/// \param date   GDate Object,
+/// \param n_days guint , the number of days that want to subtract from date
+void         gnc_date_subtract_days         (GDate       *date,
+                                             guint        n_days);
+/// gnc_date_add_days - add days to the specefic date,
+///         the input date is a gregorian date and the return value will be a gregorian date
+/// \param date   GDate Object,
+/// \param n_days guint , the number of days that want to added to date
+void         gnc_date_add_days              (GDate       *date,
+                                            guint        n_days);
+/// gnc_date_set_day - set a masked day to the gregorian date
+///                 this routin set a day that valid in the
+///                 masked date in the Gregorian format date
+///                 that passed to this routin
+/// \param date  GDate    , a Gregorian Date
+/// \param day   GDateDay , a day that valid in Masked Date
+void         gnc_date_set_day               (GDate       *date,
+                                             GDateDay     day);
+/// gnc_date_get_day - get a masked day from the gregorian date
+///                 this routin get return the day in Masked
+///                 Calendar format
+/// \param date  GDate Object , a gregorian date
+/// \return       GDateDay    , return the day in masked format
+GDateDay     gnc_date_get_day               (const GDate *date);
+
+/// gnc_date_get_days_in_month - get the month in masked calendar
+/// \param day      GDateDay  , day part from Gregorian Date
+/// \param month    GDateMonth, month part from Gregorian Date
+/// \param year     GDateYear , year part from Gregorian Date
+/// \return         guint8    , the month in Masked Date format
+guint8       gnc_date_get_days_in_month     (GDateDay     day,
+                                             GDateMonth   month,
+                                             GDateYear    year) G_GNUC_CONST;
+
+///gnc_date_subtract_months - subtract n months from
+///         the gregorian date in Masked Calendar format
+/// \param date GDate , a gregorian date
+/// \param n_months   , n months that should be subtract
+void         gnc_date_subtract_months       (GDate       *date,
+                                             guint        n_months);
+
+/// gnc_date_add_months - add n months to
+///         the gregorian date in Masked Calendar format
+/// \param date    GDate , a gregorian date
+/// \param n_months guint , n months that should be add
+void         gnc_date_add_months            (GDate       *date,
+                                             guint        n_months);
+/// gnc_date_is_last_of_month - check that the passed date
+///                     is last day of month in Masked format
+/// \param date GDate    , a gregorian date
+/// \return     GBoolean , true if the passed date is last day in masked calendar
+gboolean     gnc_date_is_last_of_month      (const GDate *date);
+
 /** @} */
 
 #endif /* GNC_GDATE_UTILS_H */

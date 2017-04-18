@@ -261,3 +261,4 @@ DerivedData/
 xcuserdata/
 messages.mo
 /.settings/
+.idea/*.*
