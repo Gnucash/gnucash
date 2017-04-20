@@ -1,13 +1,14 @@
 
-accountdir = ${GNC_ACCOUNTS_DIR}/cs
+accountdir = ${GNC_ACCOUNTS_DIR}/ko_KR
 
 account_DATA = \
   acctchrt_brokerage.gnucash-xea \
+  acctchrt_business.gnucash-xea \
   acctchrt_carloan.gnucash-xea \
   acctchrt_cdmoneymkt.gnucash-xea \
+  acctchrt_checkbook.gnucash-xea \
   acctchrt_childcare.gnucash-xea \
   acctchrt_common.gnucash-xea \
-  acctchrt_currency.gnucash-xea \
   acctchrt_eduloan.gnucash-xea \
   acctchrt_fixedassets.gnucash-xea \
   acctchrt_homeloan.gnucash-xea \

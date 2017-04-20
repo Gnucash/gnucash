@@ -1414,8 +1414,8 @@ AC_CONFIG_FILES(
   Makefile
   accounts/Makefile
   accounts/C/Makefile
-  accounts/cs/Makefile
-  accounts/da/Makefile
+  accounts/cs_CZ/Makefile
+  accounts/da_DK/Makefile
   accounts/de_AT/Makefile
   accounts/de_CH/Makefile
   accounts/de_DE/Makefile
@@ -1429,11 +1429,11 @@ AC_CONFIG_FILES(
   accounts/fr_FR/Makefile
   accounts/hu_HU/Makefile
   accounts/it/Makefile
-  accounts/ja/Makefile
-  accounts/ko/Makefile
+  accounts/ja_JP/Makefile
+  accounts/ko_KR/Makefile
   accounts/lt/Makefile
   accounts/lv/Makefile
-  accounts/nb/Makefile
+  accounts/nb_NO/Makefile
   accounts/nl/Makefile
   accounts/pl/Makefile
   accounts/pt_BR/Makefile

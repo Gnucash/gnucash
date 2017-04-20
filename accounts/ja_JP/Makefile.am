@@ -1,5 +1,5 @@
 
-accountdir = ${GNC_ACCOUNTS_DIR}/ko
+accountdir = ${GNC_ACCOUNTS_DIR}/ja_JP
 
 account_DATA = \
   acctchrt_brokerage.gnucash-xea \
@@ -11,6 +11,7 @@ account_DATA = \
   acctchrt_common.gnucash-xea \
   acctchrt_eduloan.gnucash-xea \
   acctchrt_fixedassets.gnucash-xea \
+  acctchrt_full.gnucash-xea \
   acctchrt_homeloan.gnucash-xea \
   acctchrt_homeown.gnucash-xea \
   acctchrt_otherloan.gnucash-xea \

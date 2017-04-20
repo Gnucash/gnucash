@@ -1,8 +1,8 @@
 
 SUBDIRS = \
 	C \
-	cs \
-	da \
+	cs_CZ \
+	da_DK \
 	de_AT \
 	de_CH \
 	de_DE \
@@ -16,11 +16,11 @@ SUBDIRS = \
 	fr_FR \
 	hu_HU \
 	it \
-	ja \
-	ko \
+	ja_JP \
+	ko_KR \
 	lt \
 	lv \
-	nb \
+	nb_NO \
 	nl \
 	pl \
 	pt_BR \
