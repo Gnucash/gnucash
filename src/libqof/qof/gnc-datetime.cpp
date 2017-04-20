@@ -58,43 +58,6 @@ static constexpr auto ticks_per_second = INT64_C(1000000);
 static constexpr auto ticks_per_second = INT64_C(1000000000);
 #endif
 
-/** Private implementation of GncDate. See the documentation for that class.
- */
-class GncDateImpl
-{
-public:
-    GncDateImpl(): m_greg(boost::gregorian::day_clock::local_day()) {}
-    GncDateImpl(const int year, const int month, const int day) :
-        m_greg(year, static_cast<Month>(month), day) {}
-    GncDateImpl(Date d) : m_greg(d) {}
-
-    void today() { m_greg = boost::gregorian::day_clock::local_day(); }
-    ymd year_month_day() const;
-    std::string format(const char* format) const;
-    std::string format_zulu(const char* format) const;
-private:
-    Date m_greg;
-};
-
-ymd
-GncDateImpl::year_month_day() const
-{
-    auto boost_ymd = m_greg.year_month_day();
-    return {boost_ymd.year, boost_ymd.month.as_number(), boost_ymd.day};
-}
-
-std::string
-GncDateImpl::format(const char* format) const
-{
-    using Facet = boost::gregorian::date_facet;
-    std::stringstream ss;
-    //The stream destructor frees the facet, so it must be heap-allocated.
-    auto output_facet(new Facet(format));
-    ss.imbue(std::locale(std::locale(), output_facet));
-    ss << m_greg;
-    return ss.str();
-}
-
 /** Private implementation of GncDateTime. See the documentation for that class.
  */
 static LDT
@@ -153,6 +116,26 @@ private:
     LDT m_time;
 };
 
+/** Private implementation of GncDate. See the documentation for that class.
+ */
+class GncDateImpl
+{
+public:
+    GncDateImpl(): m_greg(boost::gregorian::day_clock::local_day()) {}
+    GncDateImpl(const int year, const int month, const int day) :
+    m_greg(year, static_cast<Month>(month), day) {}
+    GncDateImpl(Date d) : m_greg(d) {}
+
+    void today() { m_greg = boost::gregorian::day_clock::local_day(); }
+    ymd year_month_day() const;
+    std::string format(const char* format) const;
+    std::string format_zulu(const char* format) const;
+private:
+    Date m_greg;
+};
+
+/* Member function definitions for GncDateTimeImpl.
+ */
 GncDateTimeImpl::GncDateTimeImpl(const std::string str) :
     m_time(unix_epoch, utc_zone)
 {
@@ -270,37 +253,28 @@ GncDateTimeImpl::format_zulu(const char* format) const
     return ss.str();
 }
 
-/* =================== Presentation-class Implementations ====================*/
-/* GncDate */
-GncDate::GncDate() : m_impl{new GncDateImpl} {}
-GncDate::GncDate(int year, int month, int day) :
-    m_impl(new GncDateImpl(year, month, day)) {}
-GncDate::GncDate(std::unique_ptr<GncDateImpl> impl) :
-    m_impl(std::move(impl)) {}
-GncDate::GncDate(GncDate&&) = default;
-GncDate::~GncDate() = default;
-
-GncDate&
-GncDate::operator=(GncDate&&) = default;
-
-void
-GncDate::today()
+/* Member function definitions for GncDateTimeImpl.
+ */
+ymd
+GncDateImpl::year_month_day() const
 {
-    m_impl->today();
+    auto boost_ymd = m_greg.year_month_day();
+    return {boost_ymd.year, boost_ymd.month.as_number(), boost_ymd.day};
 }
 
 std::string
-GncDate::format(const char* format)
+GncDateImpl::format(const char* format) const
 {
-    return m_impl->format(format);
+    using Facet = boost::gregorian::date_facet;
+    std::stringstream ss;
+    //The stream destructor frees the facet, so it must be heap-allocated.
+    auto output_facet(new Facet(format));
+    ss.imbue(std::locale(std::locale(), output_facet));
+    ss << m_greg;
+    return ss.str();
 }
 
-ymd
-GncDate::year_month_day() const
-{
-    return m_impl->year_month_day();
-}
-
+/* =================== Presentation-class Implementations ====================*/
 /* GncDateTime */
 
 GncDateTime::GncDateTime() : m_impl(new GncDateTimeImpl) {}
@@ -356,4 +330,34 @@ std::string
 GncDateTime::format_zulu(const char* format) const
 {
     return m_impl->format_zulu(format);
+}
+
+/* GncDate */
+GncDate::GncDate() : m_impl{new GncDateImpl} {}
+GncDate::GncDate(int year, int month, int day) :
+m_impl(new GncDateImpl(year, month, day)) {}
+GncDate::GncDate(std::unique_ptr<GncDateImpl> impl) :
+m_impl(std::move(impl)) {}
+GncDate::GncDate(GncDate&&) = default;
+GncDate::~GncDate() = default;
+
+GncDate&
+GncDate::operator=(GncDate&&) = default;
+
+void
+GncDate::today()
+{
+    m_impl->today();
+}
+
+std::string
+GncDate::format(const char* format)
+{
+    return m_impl->format(format);
+}
+
+ymd
+GncDate::year_month_day() const
+{
+    return m_impl->year_month_day();
 }

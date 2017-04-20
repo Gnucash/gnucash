@@ -36,56 +36,12 @@ typedef struct
     int day; //1-31
 } ymd;
 
-class GncDateImpl;
 class GncDateTimeImpl;
+class GncDateImpl;
+class GncDate;
 using time64 = int64_t;
 constexpr const time64 MINTIME = -17987443200;
 constexpr const time64 MAXTIME = 253402214400;
-
-class GncDate
-{
-public:/** Construct a GncDate representing the current day.
- */
-    GncDate();;
-/** Construct a GncDate representing the given year, month, and day in
- * the proleptic Gregorian calendar.
- *
- * Years are constrained to be from 1400 - 9999 CE inclusive. Dates
- * will be normalized if the day or month values are outside of the
- * normal ranges. e.g. 1994, -3, 47 will be normalized to 1993-10-17.
- *
- * @param year: The year in the Common Era.
- * @param month: The month, where 1 is January and 12 is December.
- * @param day: The day of the month, beginning with 1.
- * @exception std::invalid_argument if the calculated year is outside
- * of the constrained range.
- */
-    GncDate(int year, int month, int day);
-    GncDate(std::unique_ptr<GncDateImpl> impl);
-    GncDate(GncDate&&);
-    ~GncDate();
-    GncDate& operator=(GncDate&&);
-/** Set the date object to the computer clock's current day. */
-    void today();
-/** Get the year, month, and day from the date as a ymd.
-    @return ymd struct
- */
-    ymd year_month_day() const;
-/** Format the GncDate into a std::string
- *  @param format: A cstr describing the way the date and time are
- *  presented. Code letters preceded with % stand in for arguments;
- *  most are the same as described in strftime(3), but there are a few
- *  differences. Consult the boost::date_time documentation.
- *  @return a std::string containing a representation of the date
- *  according to the format.
- */
-    std::string format(const char* format);
-/** Test that the Date has an implementation. */
-    bool isnull (void) { return m_impl == nullptr; }
-
-private:
-    std::unique_ptr<GncDateImpl> m_impl;
-};
 
 /** GnuCash DateTime class
  *
@@ -173,6 +129,51 @@ public:
 
 private:
     std::unique_ptr<GncDateTimeImpl> m_impl;
+};
+
+class GncDate
+{
+    public:/** Construct a GncDate representing the current day.
+        */
+        GncDate();;
+        /** Construct a GncDate representing the given year, month, and day in
+         * the proleptic Gregorian calendar.
+         *
+         * Years are constrained to be from 1400 - 9999 CE inclusive. Dates
+         * will be normalized if the day or month values are outside of the
+         * normal ranges. e.g. 1994, -3, 47 will be normalized to 1993-10-17.
+         *
+         * @param year: The year in the Common Era.
+         * @param month: The month, where 1 is January and 12 is December.
+         * @param day: The day of the month, beginning with 1.
+         * @exception std::invalid_argument if the calculated year is outside
+         * of the constrained range.
+         */
+        GncDate(int year, int month, int day);
+        GncDate(std::unique_ptr<GncDateImpl> impl);
+        GncDate(GncDate&&);
+        ~GncDate();
+        GncDate& operator=(GncDate&&);
+        /** Set the date object to the computer clock's current day. */
+        void today();
+        /** Get the year, month, and day from the date as a ymd.
+         *  @return ymd struct
+         */
+        ymd year_month_day() const;
+        /** Format the GncDate into a std::string
+         *  @param format: A cstr describing the way the date and time are
+         *  presented. Code letters preceded with % stand in for arguments;
+         *  most are the same as described in strftime(3), but there are a few
+         *  differences. Consult the boost::date_time documentation.
+         *  @return a std::string containing a representation of the date
+         *  according to the format.
+         */
+        std::string format(const char* format);
+        /** Test that the Date has an implementation. */
+        bool isnull (void) { return m_impl == nullptr; }
+
+private:
+    std::unique_ptr<GncDateImpl> m_impl;
 };
 
 #endif // __GNC_DATETIME_HPP__
