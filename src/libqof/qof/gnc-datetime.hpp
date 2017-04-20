@@ -36,6 +36,12 @@ typedef struct
     int day; //1-31
 } ymd;
 
+enum class DayPart {
+    start,  // 00:00
+    neutral,  // 10:59
+    end,  // 23:59
+};
+
 class GncDateTimeImpl;
 class GncDateImpl;
 class GncDate;
@@ -77,6 +83,21 @@ public:
  * @exception std::invalid_argument if the year is outside the constraints.
  */
     GncDateTime(const struct tm tm);
+/** Construct a GncDateTime from a GncDate. As a GncDate doesn't contain time
+ * information, the time will be set depending on the second parameter
+ * to start of day, neutral or end of day.
+ * @param date: A GncDate representing a date.
+ * @param part: An optinoal DayPart indicating which time to use in the conversion.
+ * This can be "DayPart::start" for start of day (00:00 local time),
+ *             "DayPart::neutral" for a neutral time (10:59 UTC, chosen to have the
+ *              least chance of date changes when crossing timezone borders),
+ *             "DayPart::end" for end of day (23:59 local time).
+ * If omitted part defaults to DayPart::neutral.
+ * Note the different timezone used for DayPart::neutral compared to the other
+ * two options!
+ * @exception std::invalid_argument if the year is outside the constraints.
+ */
+    GncDateTime(const GncDate& date, DayPart part = DayPart::neutral);
 /** Construct a GncDateTime
  * @param str: A string representing the date and time in some
  * recognizable format. Note that if a timezone is not specified the
@@ -174,6 +195,8 @@ class GncDate
 
 private:
     std::unique_ptr<GncDateImpl> m_impl;
+
+    friend GncDateTime::GncDateTime(const GncDate&, DayPart);
 };
 
 #endif // __GNC_DATETIME_HPP__

@@ -71,6 +71,35 @@ TEST(gnc_datetime_constructors, test_struct_tm_constructor)
     EXPECT_EQ(tm1.tm_min, tm.tm_min);
 }
 
+/* Note: the following tests for the constructor taking a GncDate as input parameter
+ * use GncDateTime's format() member function to simplify the result checking.
+ * If there's a bug in this member function, these tests may fail in addition
+ * to the format test later in the test suite. Be sure to check that later
+ * test as well in case any of the below constructor tests fails. */
+
+TEST(gnc_datetime_constructors, test_gncdate_start_constructor)
+{
+    const ymd aymd = { 2017, 04, 20 };
+    GncDateTime atime(GncDate(aymd.year, aymd.month, aymd.day), DayPart::start);
+    //Skipping timezone information as this can't be controlled.
+    EXPECT_EQ(atime.format("%d-%m-%Y %H:%M:%S"), "20-04-2017 00:00:00");
+}
+
+TEST(gnc_datetime_constructors, test_gncdate_end_constructor)
+{
+    const ymd aymd = { 2046, 11, 06 };
+    GncDateTime atime(GncDate(aymd.year, aymd.month, aymd.day), DayPart::end);
+    //Skipping timezone information as this can't be controlled.
+    EXPECT_EQ(atime.format("%d-%m-%Y %H:%M:%S"), "06-11-2046 23:59:00");
+}
+
+TEST(gnc_datetime_constructors, test_gncdate_neutral_constructor)
+{
+    const ymd aymd = { 2017, 04, 20 };
+    GncDateTime atime(GncDate(aymd.year, aymd.month, aymd.day), DayPart::neutral);
+    EXPECT_EQ(atime.format("%d-%m-%Y %H:%M:%S %z"), "20-04-2017 10:59:00 UTC");
+}
+
 TEST(gnc_datetime_functions, test_format)
 {
     GncDateTime atime(2394187200); //2045-11-13 12:00:00 Z

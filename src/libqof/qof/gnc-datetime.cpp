@@ -100,6 +100,7 @@ public:
     GncDateTimeImpl() : m_time(boost::local_time::local_sec_clock::local_time(tzp.get(boost::gregorian::day_clock::local_day().year()))) {}
     GncDateTimeImpl(const time64 time) : m_time(LDT_from_unix_local(time)) {}
     GncDateTimeImpl(const struct tm tm) : m_time(LDT_from_struct_tm(tm)) {}
+    GncDateTimeImpl(const GncDateImpl& date, DayPart part = DayPart::neutral);
     GncDateTimeImpl(const std::string str);
     GncDateTimeImpl(PTime&& pt) : m_time(pt, tzp.get(pt.date().year())) {}
     GncDateTimeImpl(LDT&& ldt) : m_time(ldt) {}
@@ -132,10 +133,46 @@ public:
     std::string format_zulu(const char* format) const;
 private:
     Date m_greg;
+
+    friend GncDateTimeImpl::GncDateTimeImpl(const GncDateImpl&, DayPart);
 };
 
 /* Member function definitions for GncDateTimeImpl.
  */
+GncDateTimeImpl::GncDateTimeImpl(const GncDateImpl& date, DayPart part) :
+    m_time(unix_epoch, utc_zone)
+{
+    using TD = boost::posix_time::time_duration;
+    static const TD start(0, 0, 0);
+    static const TD neutral(10, 59, 0);
+    static const TD end(23,59, 0);
+    TD time_of_day;
+    switch (part)
+    {
+        case DayPart::start:
+            time_of_day = start;
+            break;
+        case DayPart::neutral:
+            time_of_day = neutral;
+            break;
+        case DayPart::end:
+            time_of_day = end;
+            break;
+    }
+
+    try
+    {
+        auto tz = utc_zone;
+        if (part != DayPart::neutral)
+            tz = tzp.get(date.m_greg.year());
+        m_time = LDT(date.m_greg, time_of_day, tz, LDT::EXCEPTION_ON_ERROR);
+    }
+    catch(boost::gregorian::bad_year)
+    {
+        throw(std::invalid_argument("Time value is outside the supported year range."));
+    }
+}
+
 GncDateTimeImpl::GncDateTimeImpl(const std::string str) :
     m_time(unix_epoch, utc_zone)
 {
@@ -285,6 +322,9 @@ GncDateTime::GncDateTime(const struct tm tm) :
 GncDateTime::GncDateTime(const std::string str) :
     m_impl(new GncDateTimeImpl(str)) {}
 GncDateTime::~GncDateTime() = default;
+
+GncDateTime::GncDateTime(const GncDate& date, DayPart part) :
+    m_impl(new GncDateTimeImpl(*(date.m_impl), part)) {}
 
 void
 GncDateTime::now()
