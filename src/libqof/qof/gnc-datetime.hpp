@@ -71,13 +71,13 @@ public:
     GncDateTime();
 /** Construct a GncDateTime in the current timezone representing the
  * timestamp as seconds from the POSIX epoch (1970-01-01T00:00:00UTC).
- * @param time: Seconds from the POSIX epoch.
+ * @param time Seconds from the POSIX epoch.
  * @exception std::invalid_argument if the year is outside the constraints.
  */
     GncDateTime(const time64 time);
 /** Construct a GncDateTime in the current timezone representing the
  * standard struct tm provided.
- * @param tm: A C-standard struct tm representing the date and
+ * @param tm A C-standard struct tm representing the date and
  * time. Note that the timezone and offset are ignored on those
  * systems which include them in struct tm.
  * @exception std::invalid_argument if the year is outside the constraints.
@@ -86,8 +86,8 @@ public:
 /** Construct a GncDateTime from a GncDate. As a GncDate doesn't contain time
  * information, the time will be set depending on the second parameter
  * to start of day, neutral or end of day.
- * @param date: A GncDate representing a date.
- * @param part: An optinoal DayPart indicating which time to use in the conversion.
+ * @param date A GncDate representing a date.
+ * @param part An optinoal DayPart indicating which time to use in the conversion.
  * This can be "DayPart::start" for start of day (00:00 local time),
  *             "DayPart::neutral" for a neutral time (10:59 UTC, chosen to have the
  *              least chance of date changes when crossing timezone borders),
@@ -99,7 +99,7 @@ public:
  */
     GncDateTime(const GncDate& date, DayPart part = DayPart::neutral);
 /** Construct a GncDateTime
- * @param str: A string representing the date and time in some
+ * @param str A string representing the date and time in some
  * recognizable format. Note that if a timezone is not specified the
  * default is UTC, not the local one.
  * @exception std::invalid_argument if the year is outside the constraints.
@@ -130,7 +130,7 @@ public:
 /** Test if the GncDateTime has a member pointer. Testing only. */
     bool isnull (void) { return m_impl == nullptr; }
 /** Format the GncDateTime into a std::string
- *  @param format: A cstr describing the way the date and time are
+ *  @param format A cstr describing the way the date and time are
  *  presented. Code letters preceded with % stand in for arguments;
  *  most are the same as described in strftime(3), but there are a few
  *  differences. Consult the boost::date_time documentation.
@@ -139,7 +139,7 @@ public:
  */
     std::string format(const char* format) const;
 /** Format the GncDateTime into a std::string in GMT
- *  @param format: A cstr describing the way the date and time are
+ *  @param format A cstr describing the way the date and time are
  *  presented. Code letters preceded with % stand in for arguments;
  *  most are the same as described in strftime(3), but there are a few
  *  differences. Consult the boost::date_time documentation.
@@ -164,9 +164,9 @@ class GncDate
          * will be normalized if the day or month values are outside of the
          * normal ranges. e.g. 1994, -3, 47 will be normalized to 1993-10-17.
          *
-         * @param year: The year in the Common Era.
-         * @param month: The month, where 1 is January and 12 is December.
-         * @param day: The day of the month, beginning with 1.
+         * @param year The year in the Common Era.
+         * @param month The month, where 1 is January and 12 is December.
+         * @param day The day of the month, beginning with 1.
          * @exception std::invalid_argument if the calculated year is outside
          * of the constrained range.
          */
@@ -182,7 +182,7 @@ class GncDate
          */
         ymd year_month_day() const;
         /** Format the GncDate into a std::string
-         *  @param format: A cstr describing the way the date and time are
+         *  @param format A cstr describing the way the date and time are
          *  presented. Code letters preceded with % stand in for arguments;
          *  most are the same as described in strftime(3), but there are a few
          *  differences. Consult the boost::date_time documentation.
