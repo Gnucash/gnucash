@@ -37,6 +37,152 @@ TEST(gnc_date_constructors, test_ymd_constructor)
     EXPECT_FALSE(date.isnull());
 }
 
+typedef struct
+{
+    const char* date_fmt;
+    const char* date_str;
+    int         exp_year;
+    int         exp_month;
+    int         exp_day;
+} parse_date_data;
+
+/* parse_date
+ * time64 parse_date (const char* date_str, int format)// C: 14 in 7 SCM: 9 in 2 Local: 1:0:0
+ */
+TEST(gnc_date_constructors, test_str_format_constructor)
+{
+    auto today = GncDate();
+    auto today_ymd = today.year_month_day();
+    auto curr_year = today_ymd.year;
+
+    parse_date_data test_dates[] =
+    {
+        // supported combinations  -/.'
+        { "y-m-d", "2013-08-01", 2013,  8,  1},
+        { "y-m-d",  "2013-8-01", 2013,  8,  1},
+        { "y-m-d",  "2013-08-1", 2013,  8,  1},
+        { "y-m-d",   "2013-8-1", 2013,  8,  1},
+        { "y-m-d",   "13-08-01", 2013,  8,  1},
+        { "y-m-d",    "13-8-01", 2013,  8,  1},
+        { "y-m-d",    "13-08-1", 2013,  8,  1},
+        { "y-m-d",     "13-8-1", 2013,  8,  1},
+        { "y-m-d", "2009/11/04", 2009, 11,  4},
+        { "y-m-d",  "1985.3.12", 1985,  3, 12},
+        { "y-m-d",      "3'6'8", 2003,  6,  8},
+        { "y-m-d",   "20130801", 2013,  8,  1},
+        { "d-m-y", "01-08-2013", 2013,  8,  1},
+        { "d-m-y",  "01-8-2013", 2013,  8,  1},
+        { "d-m-y",  "1-08-2013", 2013,  8,  1},
+        { "d-m-y",   "1-8-2013", 2013,  8,  1},
+        { "d-m-y",   "01-08-13", 2013,  8,  1},
+        { "d-m-y",    "01-8-13", 2013,  8,  1},
+        { "d-m-y",    "1-08-13", 2013,  8,  1},
+        { "d-m-y",     "1-8-13", 2013,  8,  1},
+        { "d-m-y", "04/11/2009", 2009, 11,  4},
+        { "d-m-y",  "12.3.1985", 1985,  3, 12},
+        { "d-m-y",      "8'6'3", 2003,  6,  8},
+        { "d-m-y",   "01082013", 2013,  8,  1},
+        { "m-d-y", "08-01-2013", 2013,  8,  1},
+        { "m-d-y",  "8-01-2013", 2013,  8,  1},
+        { "m-d-y",  "08-1-2013", 2013,  8,  1},
+        { "m-d-y",   "8-1-2013", 2013,  8,  1},
+        { "m-d-y",   "08-01-13", 2013,  8,  1},
+        { "m-d-y",    "8-01-13", 2013,  8,  1},
+        { "m-d-y",    "08-1-13", 2013,  8,  1},
+        { "m-d-y",     "8-1-13", 2013,  8,  1},
+        { "m-d-y", "11/04/2009", 2009, 11,  4},
+        { "m-d-y",  "3.12.1985", 1985,  3, 12},
+        { "m-d-y",      "6'8'3", 2003,  6,  8},
+        { "m-d-y",   "08012013", 2013,  8,  1},
+        {   "d-m",      "01-08",   curr_year,  8,  1},
+        {   "d-m",       "01-8",   curr_year,  8,  1},
+        {   "d-m",       "1-08",   curr_year,  8,  1},
+        {   "d-m",        "1-8",   curr_year,  8,  1},
+        {   "d-m",      "04/11",   curr_year, 11,  4},
+        {   "d-m",       "12.3",   curr_year,  3, 12},
+        {   "d-m",        "8'6",   curr_year,  6,  8},
+        {   "d-m",       "0108",   curr_year,  8,  1},
+        {   "m-d",      "08-01",   curr_year,  8,  1},
+        {   "m-d",       "8-01",   curr_year,  8,  1},
+        {   "m-d",       "08-1",   curr_year,  8,  1},
+        {   "m-d",        "8-1",   curr_year,  8,  1},
+        {   "m-d",      "11/04",   curr_year, 11,  4},
+        {   "m-d",       "3.12",   curr_year,  3, 12},
+        {   "m-d",        "6'8",   curr_year,  6,  8},
+        {   "m-d",       "0801",   curr_year,  8,  1},
+
+        // ambiguous date formats
+        // current parser doesn't know how to disambiguate
+        // and hence refuses to parse
+        // can possibly improved with a smarter parser
+        { "y-m-d",     "130801",          -1,     -1, -1},
+        { "d-m-y",     "010813",          -1,     -1, -1},
+        { "m-d-y",     "080113",          -1,     -1, -1},
+
+        // Combinations that don't make sense
+        // but can still be entered by a user
+        // Should ideally all result in refusal to parse...
+        { "y-m-d",      "08-01",          -1,     -1, -1},
+        { "y-m-d",       "0801",          -1,     -1, -1},
+        { "d-m-y",      "01-08",          -1,     -1, -1},
+        { "d-m-y",       "0108",          -1,     -1, -1},
+        { "m-d-y",      "08-01",          -1,     -1, -1},
+        { "m-d-y",       "0801",          -1,     -1, -1},
+        {   "d-m", "01-08-2013",          -1,     -1, -1},
+        {   "d-m",   "01-08-13",          -1,     -1, -1},
+        {   "d-m",   "08-08-08",          -1,     -1, -1},
+        {   "d-m",   "01082013",          -1,     -1, -1},
+        {   "d-m",     "010813",          -1,     -1, -1},
+        {   "d-m",   "20130108",          -1,     -1, -1},
+        {   "m-d", "08-01-2013",          -1,     -1, -1},
+        {   "m-d",   "08-01-13",          -1,     -1, -1},
+        {   "m-d", "2013-08-01",          -1,     -1, -1},
+        {   "m-d",   "09-08-01",          -1,     -1, -1},
+        {   "m-d",   "08012013",          -1,     -1, -1},
+        {   "m-d",     "080113",          -1,     -1, -1},
+        {   "m-d",   "20130801",          -1,     -1, -1},
+
+        // Unknown date format specifier should also trigger an exception
+        {   "y-d-m H:M:S",   "20130801",          -1,     -1, -1},
+
+        // Sentinel to mark the end of available tests
+        { "y-m-d",         NULL,           0,      0,  0},
+
+    };
+    int i = 0;
+
+    while (test_dates[i].date_str)
+    {
+        int got_year = 0, got_month = 0, got_day = 0;
+
+        try
+        {
+            auto test_date = GncDate (std::string(test_dates[i].date_str), test_dates[i].date_fmt);
+            auto test_ymd = test_date.year_month_day();
+            got_year = test_ymd.year;
+            got_month = test_ymd.month;
+            got_day = test_ymd.day;
+        }
+        catch (const std::invalid_argument& e)
+        {
+            got_year = got_month = got_day = -1;
+        }
+
+        EXPECT_TRUE ((got_year  == test_dates[i].exp_year) &&
+                     (got_month == test_dates[i].exp_month) &&
+                     (got_day   == test_dates[i].exp_day))
+            << "GncDate constructor failed for str " << test_dates[i].date_str
+            << " and fmt " << test_dates[i].date_fmt << ".\n"
+            << "Expected: year " << test_dates[i].exp_year
+                   << ", month " << test_dates[i].exp_month
+                     << ", day " << test_dates[i].exp_day << "\n"
+            << "Actual:   year " << got_year << ", month "
+                    << got_month << ", day " << got_day << "\n";
+
+        i++;
+    }
+}
+
 TEST(gnc_datetime_constructors, test_default_constructor)
 {
     GncDateTime atime;

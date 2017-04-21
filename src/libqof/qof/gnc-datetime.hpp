@@ -28,6 +28,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <vector>
 
 typedef struct
 {
@@ -152,11 +153,28 @@ private:
     std::unique_ptr<GncDateTimeImpl> m_impl;
 };
 
+class GncDateFormat
+{
+public:
+    GncDateFormat (const char* fmt, const char* re) :
+    m_fmt(fmt), m_re(re) {}
+    const std::string m_fmt;
+private:
+    const std::string m_re;
+
+    friend class GncDateImpl;
+};
+
+
 class GncDate
 {
-    public:/** Construct a GncDate representing the current day.
-        */
-        GncDate();;
+    public:
+        /** A vector with all the date formats supported by the string constructor
+         */
+        static const std::vector<GncDateFormat> c_formats;
+        /** Construct a GncDate representing the current day.
+         */
+        GncDate();
         /** Construct a GncDate representing the given year, month, and day in
          * the proleptic Gregorian calendar.
          *
@@ -171,6 +189,23 @@ class GncDate
          * of the constrained range.
          */
         GncDate(int year, int month, int day);
+        /** Construct a GncDate by parsing a string assumed to be in the format
+         * passed in.
+         *
+         * The currently recognized formats are d-m-y, m-d-y, y-m-d, m-d, d-m.
+         * Note while the format descriptions use "-" as separator any of
+         * "-" (hyphen), "/" (slash), "'" (single quote), " " (space) or
+         * "." will be accepted.
+         *
+         * @param str The string to be interpreted.
+         * @param fmt The expected date format of the string passed in.
+         * @exception std::invalid_argument if
+         * - the string couldn't be parsed using the provided format
+         * - any of the date components is outside of its limit
+         *   (like month being 13, or day being 31 in February)
+         * - fmt doesn't specify a year, yet a year was found in the string
+         */
+        GncDate(const std::string str, const std::string fmt);
         GncDate(std::unique_ptr<GncDateImpl> impl);
         GncDate(GncDate&&);
         ~GncDate();

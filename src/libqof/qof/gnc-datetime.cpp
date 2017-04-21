@@ -29,12 +29,18 @@ extern "C"
 }
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/regex.hpp>
+#include <libintl.h>
+#include <map>
 #include <memory>
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <vector>
 #include "gnc-timezone.hpp"
 #include "gnc-datetime.hpp"
+
+#define N_(string) string //So that xgettext will find it
 
 using Date = boost::gregorian::date;
 using Month = boost::gregorian::greg_month;
@@ -57,6 +63,77 @@ static constexpr auto ticks_per_second = INT64_C(1000000);
 #else
 static constexpr auto ticks_per_second = INT64_C(1000000000);
 #endif
+
+/* Vector of date formats understood by gnucash and corresponding regex
+ * to parse each from an external source
+ * Note: while the format names are using a "-" as separator, the
+ * regexes will accept any of "-/.' " and will also work for dates
+ * without separators.
+ */
+const std::vector<GncDateFormat> GncDate::c_formats ({
+    GncDateFormat {
+        N_("y-m-d"),
+        "(?:"                                   // either y-m-d
+        "(?<YEAR>[0-9]+)[-/.' ]+"
+        "(?<MONTH>[0-9]+)[-/.' ]+"
+        "(?<DAY>[0-9]+)"
+        "|"                                     // or CCYYMMDD
+        "(?<YEAR>[0-9]{4})"
+        "(?<MONTH>[0-9]{2})"
+        "(?<DAY>[0-9]{2})"
+        ")"
+    },
+    GncDateFormat {
+        N_("d-m-y"),
+        "(?:"                                   // either d-m-y
+        "(?<DAY>[0-9]+)[-/.' ]+"
+        "(?<MONTH>[0-9]+)[-/.' ]+"
+        "(?<YEAR>[0-9]+)"
+        "|"                                     // or DDMMCCYY
+        "(?<DAY>[0-9]{2})"
+        "(?<MONTH>[0-9]{2})"
+        "(?<YEAR>[0-9]{4})"
+        ")"
+    },
+    GncDateFormat {
+        N_("m-d-y"),
+        "(?:"                                   // either m-d-y
+        "(?<MONTH>[0-9]+)[-/.' ]+"
+        "(?<DAY>[0-9]+)[-/.' ]+"
+        "(?<YEAR>[0-9]+)"
+        "|"                                     // or MMDDCCYY
+        "(?<MONTH>[0-9]{2})"
+        "(?<DAY>[0-9]{2})"
+        "(?<YEAR>[0-9]{4})"
+        ")"
+    },
+    // Note year is still checked for in the regexes below
+    // This is to be able to raise an error if one is found for a yearless date format
+    GncDateFormat {
+        (N_("d-m")),
+        "(?:"                                   // either d-m(-y)
+        "(?<DAY>[0-9]+)[-/.' ]+"
+        "(?<MONTH>[0-9]+)(?:[-/.' ]+"
+        "(?<YEAR>[0-9]+))?"
+        "|"                                     // or DDMM(CCYY)
+        "(?<DAY>[0-9]{2})"
+        "(?<MONTH>[0-9]{2})"
+        "(?<YEAR>[0-9]+)?"
+        ")"
+    },
+    GncDateFormat {
+        (N_("m-d")),
+        "(?:"                                   // either m-d(-y)
+        "(?<MONTH>[0-9]+)[-/.' ]+"
+        "(?<DAY>[0-9]+)(?:[-/.' ]+"
+        "(?<YEAR>[0-9]+))?"
+        "|"                                     // or MMDD(CCYY)
+        "(?<MONTH>[0-9]{2})"
+        "(?<DAY>[0-9]{2})"
+        "(?<YEAR>[0-9]+)?"
+        ")"
+    }
+});
 
 /** Private implementation of GncDateTime. See the documentation for that class.
  */
@@ -126,6 +203,7 @@ public:
     GncDateImpl(const int year, const int month, const int day) :
     m_greg(year, static_cast<Month>(month), day) {}
     GncDateImpl(Date d) : m_greg(d) {}
+    GncDateImpl(const std::string str, const std::string fmt);
 
     void today() { m_greg = boost::gregorian::day_clock::local_day(); }
     ymd year_month_day() const;
@@ -290,8 +368,46 @@ GncDateTimeImpl::format_zulu(const char* format) const
     return ss.str();
 }
 
-/* Member function definitions for GncDateTimeImpl.
+/* Member function definitions for GncDateImpl.
  */
+GncDateImpl::GncDateImpl(const std::string str, const std::string fmt) :
+    m_greg(boost::gregorian::day_clock::local_day()) /* Temporarily initialized to today, will be used and adjusted in the code below */
+{
+    auto iter = std::find_if(GncDate::c_formats.cbegin(), GncDate::c_formats.cend(),
+                             [&fmt](const GncDateFormat& v){ return (v.m_fmt == fmt); } );
+    if (iter == GncDate::c_formats.cend())
+        throw std::invalid_argument(N_("Unknown date format specifier passed as argument."));
+
+    boost::regex r(iter->m_re);
+    boost::smatch what;
+    if(!boost::regex_search(str, what, r))  // regex didn't find a match
+        throw std::invalid_argument (N_("Value can't be parsed into a date using the selected date format."));
+
+    // Bail out if a year was found with a yearless format specifier
+    auto fmt_has_year = (fmt.find('y') != std::string::npos);
+    if (!fmt_has_year && (what.length("YEAR") != 0))
+        throw std::invalid_argument (N_("Value appears to contain a year while the selected format forbids this."));
+
+    int year;
+    if (fmt_has_year)
+    {
+        /* The input dates have a year, so use that one */
+        year = std::stoi (what.str("YEAR"));
+
+        /* We assume two-digit years to be in the range 1969 - 2068. */
+        if (year < 69)
+                year += 2000;
+        else if (year < 100)
+                year += 1900;
+    }
+    else /* The input dates have no year, so use current year */
+        year = m_greg.year(); // Can use m_greg here as it was already initialized in the initializer list earlier
+
+    m_greg = Date(year,
+                  static_cast<Month>(std::stoi (what.str("MONTH"))),
+                  std::stoi (what.str("DAY")));
+}
+
 ymd
 GncDateImpl::year_month_day() const
 {
@@ -376,6 +492,8 @@ GncDateTime::format_zulu(const char* format) const
 GncDate::GncDate() : m_impl{new GncDateImpl} {}
 GncDate::GncDate(int year, int month, int day) :
 m_impl(new GncDateImpl(year, month, day)) {}
+GncDate::GncDate(const std::string str, const std::string fmt) :
+m_impl(new GncDateImpl(str, fmt)) {}
 GncDate::GncDate(std::unique_ptr<GncDateImpl> impl) :
 m_impl(std::move(impl)) {}
 GncDate::GncDate(GncDate&&) = default;
