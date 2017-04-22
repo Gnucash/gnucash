@@ -793,7 +793,6 @@ CsvImpTransAssist::preview_settings_delete ()
 void
 CsvImpTransAssist::preview_settings_save ()
 {
-    auto title = _("Save the Import Settings.");
     auto new_name = tx_imp->settings_name();
 
     /* Check if the entry text matches an already existing preset */
@@ -889,7 +888,6 @@ void CsvImpTransAssist::preview_multi_split (bool multi)
  * separator checkbuttons or the custom separator entry) is
  * changed.
  * @param widget The widget that was changed
- * @param info The data that is being configured
  */
 void CsvImpTransAssist::preview_update_separators (GtkWidget* widget)
 {
@@ -952,8 +950,6 @@ void CsvImpTransAssist::preview_update_separators (GtkWidget* widget)
 
 /** Event handler for clicking one of the format type radio
  * buttons. This occurs if the format (Fixed-Width or CSV) is changed.
- * @param csv_button The "Separated" radio button
- * @param info The display of the data being imported
  */
 void CsvImpTransAssist::preview_update_file_format ()
 {
@@ -1007,7 +1003,6 @@ void CsvImpTransAssist::preview_update_account ()
 /** Event handler for a new encoding. This is called when the user
  * selects a new encoding; the data is reparsed and shown to the
  * user.
- * @param selector The widget the user uses to select a new encoding
  * @param encoding The encoding that the user selected
  */
 void
@@ -1080,10 +1075,7 @@ enum PreviewDataTableCols {
  * user selects a new column type, that column's text must be changed
  * to the selection, and any other columns containing that selection
  * must be changed to "None" because we don't allow duplicates.
- * @param renderer The renderer of the column the user changed
- * @param path There is only 1 row in info->ctreeview, so this is always 0.
- * @param new_text The text the user selected
- * @param info The display of the data being imported
+ * @param cbox The combo box the user just clicked to make a change
  */
 void CsvImpTransAssist::preview_update_col_type (GtkComboBox* cbox)
 {
@@ -1470,12 +1462,12 @@ void CsvImpTransAssist::preview_refresh_table ()
         GtkTreeIter iter;
         gtk_list_store_append (store, &iter);
         preview_row_fill_state_cells (store, &iter,
-                std::get<1>(parse_line), std::get<4>(parse_line));
+                std::get<PL_ERROR>(parse_line), std::get<PL_SKIP>(parse_line));
 
         /* Fill the data cells. */
-        for (auto cell_str_it = std::get<0>(parse_line).cbegin(); cell_str_it != std::get<0>(parse_line).cend(); cell_str_it++)
+        for (auto cell_str_it = std::get<PL_INPUT>(parse_line).cbegin(); cell_str_it != std::get<PL_INPUT>(parse_line).cend(); cell_str_it++)
         {
-            uint32_t pos = PREV_N_FIXED_COLS + cell_str_it - std::get<0>(parse_line).cbegin();
+            uint32_t pos = PREV_N_FIXED_COLS + cell_str_it - std::get<PL_INPUT>(parse_line).cbegin();
             gtk_list_store_set (store, &iter, pos, cell_str_it->c_str(), -1);
         }
     }

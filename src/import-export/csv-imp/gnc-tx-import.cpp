@@ -59,7 +59,6 @@ const gchar* currency_format_user[] = {N_("Locale"),
 
 
 /** Constructor for GncTxImport.
- * @return Pointer to a new GncCSvParseData
  */
 GncTxImport::GncTxImport(GncImpFileFormat format)
 {
@@ -139,7 +138,7 @@ GncImpFileFormat GncTxImport::file_format()
  *  will force a reparsing of the transaction properties (if there are
  *  any) by resetting the first column with a transaction property
  *  it encounters.
- * @param multi_split_val Boolean value with desired state (multi-split
+ * @param multi_split Boolean value with desired state (multi-split
  * vs two-split).
  */
 void GncTxImport::multi_split (bool multi_split)
@@ -172,7 +171,7 @@ bool GncTxImport::multi_split () { return m_settings.m_multi_split; }
  *  in the import data.
  *  In multi-split mode the user has to select an account column so in
  *  that mode the base_account can't be set.
- * @param base_acct Pointer to an account or NULL.
+ * @param base_account Pointer to an account or NULL.
  */
 void GncTxImport::base_account (Account* base_account)
 {
@@ -194,7 +193,7 @@ void GncTxImport::base_account (Account* base_account)
 
         /* Set default account for each line's split properties */
         for (auto line : m_parsed_lines)
-            std::get<3>(line)->set_account (m_settings.m_base_account);
+            std::get<PL_PRESPLIT>(line)->set_account (m_settings.m_base_account);
 
 
     }
@@ -276,12 +275,12 @@ void GncTxImport::update_skipped_lines(boost::optional<uint32_t> start, boost::o
 
     for (uint32_t i = 0; i < m_parsed_lines.size(); i++)
     {
-        std::get<4>(m_parsed_lines[i]) =
+        std::get<PL_SKIP>(m_parsed_lines[i]) =
             ((i < skip_start_lines()) ||             // start rows to skip
              (i >= m_parsed_lines.size() - skip_end_lines()) ||          // end rows to skip
              (((i - skip_start_lines()) % 2 == 1) && // skip every second row...
                   skip_alt_lines()) ||                   // ...if requested
-             (m_skip_errors && !std::get<1>(m_parsed_lines[i]).empty())); // skip lines with errors
+             (m_skip_errors && !std::get<PL_ERROR>(m_parsed_lines[i]).empty())); // skip lines with errors
     }
 }
 
@@ -425,7 +424,7 @@ void GncTxImport::tokenize (bool guessColTypes)
     if (m_settings.m_base_account)
     {
         for (auto line : m_parsed_lines)
-            std::get<3>(line)->set_account (m_settings.m_base_account);
+            std::get<PL_PRESPLIT>(line)->set_account (m_settings.m_base_account);
     }
 
     if (guessColTypes)
@@ -539,7 +538,7 @@ std::string GncTxImport::verify ()
     auto have_line_errors = false;
     for (auto line : m_parsed_lines)
     {
-        if (!std::get<4>(line) && !std::get<1>(line).empty())
+        if (!std::get<PL_SKIP>(line) && !std::get<PL_ERROR>(line).empty())
         {
             have_line_errors = true;
             break;
@@ -720,7 +719,7 @@ void GncTxImport::create_transactions ()
             ++parsed_lines_it)
     {
         /* Skip current line if the user specified so */
-        if ((std::get<4>(*parsed_lines_it)))
+        if ((std::get<PL_SKIP>(*parsed_lines_it)))
             continue;
 
         /* Should not throw anymore, otherwise verify needs revision */
@@ -743,11 +742,11 @@ void GncTxImport::update_pre_trans_props (uint32_t row, uint32_t col, GncTransPr
     if ((prop_type == GncTransPropType::NONE) || (prop_type > GncTransPropType::TRANS_PROPS))
         return; /* Only deal with transaction related properties. */
 
-    auto trans_props = std::make_shared<GncPreTrans> (*(std::get<2>(m_parsed_lines[row])).get());
+    auto trans_props = std::make_shared<GncPreTrans> (*(std::get<PL_PRETRANS>(m_parsed_lines[row])).get());
     auto value = std::string();
 
-    if (col < std::get<0>(m_parsed_lines[row]).size())
-        value = std::get<0>(m_parsed_lines[row]).at(col);
+    if (col < std::get<PL_INPUT>(m_parsed_lines[row]).size())
+        value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col);
 
     if (value.empty())
         trans_props->reset (prop_type);
@@ -762,13 +761,13 @@ void GncTxImport::update_pre_trans_props (uint32_t row, uint32_t col, GncTransPr
             /* Do nothing, just prevent the exception from escalating up
              * However log the error if it happens on a row that's not skipped
              */
-            if (!std::get<4>(m_parsed_lines[row]))
+            if (!std::get<PL_SKIP>(m_parsed_lines[row]))
                 PINFO("User warning: %s", e.what());
         }
     }
 
     /* Store the result */
-    std::get<2>(m_parsed_lines[row]) = trans_props;
+    std::get<PL_PRETRANS>(m_parsed_lines[row]) = trans_props;
 
     /* For multi-split input data, we need to check whether this line is part of
      * a transaction that has already been started by a previous line. */
@@ -779,7 +778,7 @@ void GncTxImport::update_pre_trans_props (uint32_t row, uint32_t col, GncTransPr
             /* This line is part of an already started transaction
              * continue with that one instead to make sure the split from this line
              * gets added to the proper transaction */
-            std::get<2>(m_parsed_lines[row]) = m_parent;
+            std::get<PL_PRETRANS>(m_parsed_lines[row]) = m_parent;
         }
         else
         {
@@ -796,11 +795,11 @@ void GncTxImport::update_pre_split_props (uint32_t row, uint32_t col, GncTransPr
     if ((prop_type > GncTransPropType::SPLIT_PROPS) || (prop_type <= GncTransPropType::TRANS_PROPS))
         return; /* Only deal with split related properties. */
 
-    auto split_props = std::get<3>(m_parsed_lines[row]);
+    auto split_props = std::get<PL_PRESPLIT>(m_parsed_lines[row]);
     auto value = std::string();
 
-    if (col < std::get<0>(m_parsed_lines[row]).size())
-        value = std::get<0>(m_parsed_lines[row]).at(col);
+    if (col < std::get<PL_INPUT>(m_parsed_lines[row]).size())
+        value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col);
 
     if (value.empty())
         split_props->reset (prop_type);
@@ -815,7 +814,7 @@ void GncTxImport::update_pre_split_props (uint32_t row, uint32_t col, GncTransPr
             /* Do nothing, just prevent the exception from escalating up
              * However log the error if it happens on a row that's not skipped
              */
-            if (!std::get<4>(m_parsed_lines[row]))
+            if (!std::get<PL_SKIP>(m_parsed_lines[row]))
                 PINFO("User warning: %s", e.what());
         }
     }
@@ -851,9 +850,9 @@ GncTxImport::set_column_type (uint32_t position, GncTransPropType type, bool for
         /* Reset date and currency formats for each trans/split props object
          * to ensure column updates use the most recent one
          */
-        std::get<2>(*parsed_lines_it)->set_date_format (m_settings.m_date_format);
-        std::get<3>(*parsed_lines_it)->set_date_format (m_settings.m_date_format);
-        std::get<3>(*parsed_lines_it)->set_currency_format (m_settings.m_currency_format);
+        std::get<PL_PRETRANS>(*parsed_lines_it)->set_date_format (m_settings.m_date_format);
+        std::get<PL_PRESPLIT>(*parsed_lines_it)->set_date_format (m_settings.m_date_format);
+        std::get<PL_PRESPLIT>(*parsed_lines_it)->set_currency_format (m_settings.m_currency_format);
 
         uint32_t row = parsed_lines_it - m_parsed_lines.begin();
 
@@ -862,7 +861,7 @@ GncTxImport::set_column_type (uint32_t position, GncTransPropType type, bool for
          */
         if (old_type != type)
         {
-            auto old_col = std::get<0>(*parsed_lines_it).size(); // Deliberately out of bounds to trigger a reset!
+            auto old_col = std::get<PL_INPUT>(*parsed_lines_it).size(); // Deliberately out of bounds to trigger a reset!
             if ((old_type > GncTransPropType::NONE)
                     && (old_type <= GncTransPropType::TRANS_PROPS))
                 update_pre_trans_props (row, old_col, old_type);
@@ -880,9 +879,9 @@ GncTxImport::set_column_type (uint32_t position, GncTransPropType type, bool for
             update_pre_split_props (row, position, type);
 
         /* Report errors if there are any */
-        auto trans_errors = std::get<2>(*parsed_lines_it)->errors();
-        auto split_errors = std::get<3>(*parsed_lines_it)->errors(m_req_mapped_accts);
-        std::get<1>(*parsed_lines_it) =
+        auto trans_errors = std::get<PL_PRETRANS>(*parsed_lines_it)->errors();
+        auto split_errors = std::get<PL_PRESPLIT>(*parsed_lines_it)->errors(m_req_mapped_accts);
+        std::get<PL_ERROR>(*parsed_lines_it) =
                 trans_errors +
                 (trans_errors.empty() && split_errors.empty() ? std::string() : "\n") +
                 split_errors;
@@ -907,14 +906,13 @@ GncTxImport::accounts ()
     uint32_t tacct_col = tacct_col_it - m_settings.m_column_types.begin();
 
     /* Iterate over all parsed lines */
-    auto odd_line = false;
     for (auto parsed_line : m_parsed_lines)
     {
         /* Skip current line if the user specified so */
-        if ((std::get<4>(parsed_line)))
+        if ((std::get<PL_SKIP>(parsed_line)))
             continue;
 
-        auto col_strs = std::get<0>(parsed_line);
+        auto col_strs = std::get<PL_INPUT>(parsed_line);
         if ((acct_col_it != m_settings.m_column_types.end()) && !col_strs[acct_col].empty())
             accts.insert(col_strs[acct_col]);
         if ((tacct_col_it != m_settings.m_column_types.end()) && !col_strs[tacct_col].empty())

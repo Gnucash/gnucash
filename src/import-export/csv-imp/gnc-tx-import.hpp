@@ -73,6 +73,11 @@ extern const gchar* date_format_user[];
  *  - an optional error string
  *  - a struct to hold user selected properties for a transaction
  *  - a struct to hold user selected properties for one or two splits in the above transaction */
+#define PL_INPUT    0
+#define PL_ERROR    1
+#define PL_PRETRANS 2
+#define PL_PRESPLIT 3
+#define PL_SKIP     4
 using parse_line_t = std::tuple<StrVec,
                                 std::string,
                                 std::shared_ptr<GncPreTrans>,

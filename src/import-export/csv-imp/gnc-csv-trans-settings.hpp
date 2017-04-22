@@ -75,9 +75,6 @@ void remove (void);
  *  The internally generated presets are read-only. The others
  *  can be saved to the state file or deleted.
  *
- *  @param group The group name where the settings are stored in the
- *  key file.
- *
  *  @return true if there was a problem.
  */
 bool read_only (void);
@@ -89,8 +86,8 @@ std::string   m_encoding;                     // File encoding
 bool          m_multi_split;                  // Assume multiple lines per transaction
 int           m_date_format;                  // Date Active id
 int           m_currency_format;              // Currency Active id
-uint32_t          m_skip_start_lines;             // Number of header rows to skip
-uint32_t          m_skip_end_lines;               // Number of footer rows to skip
+uint32_t      m_skip_start_lines;             // Number of header rows to skip
+uint32_t      m_skip_end_lines;               // Number of footer rows to skip
 bool          m_skip_alt_lines;               // Skip alternate rows
 std::string   m_separators;                   // Separators for csv format
 

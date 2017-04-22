@@ -245,7 +245,7 @@ CsvTransSettings::load (void)
     if (key_char && *key_char != '\0')
         m_encoding = key_char;
     else
-        "UTF-8";
+        m_encoding = "UTF-8";
     m_load_error |= handle_load_error (&key_error, group);
     if (key_char)
         g_free (key_char);
