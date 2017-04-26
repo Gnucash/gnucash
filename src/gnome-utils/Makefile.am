@@ -12,6 +12,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src \
   -I${top_builddir}/src \
+  -I${top_builddir}/src/core-utils \
   -I${top_srcdir}/lib/libc \
   -I${top_srcdir}/src/libqof/qof \
   ${GLIB_CFLAGS} \

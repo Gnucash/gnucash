@@ -16,6 +16,7 @@ AM_CPPFLAGS = -I${top_builddir} ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GTK_CFLAGS} \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnome \
   -I${top_builddir}/src \
+  -I${top_builddir}/src/core-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/libqof/qof \
   -I${top_srcdir}/src/report/report-system \
