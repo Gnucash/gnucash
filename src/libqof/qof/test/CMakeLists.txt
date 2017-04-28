@@ -50,9 +50,18 @@ IF (NOT WIN32)
   GNC_ADD_TEST(test-qof "${test_qof_SOURCES}" TEST_QOF_INCLUDE_DIRS TEST_QOF_LIBS)
   TARGET_COMPILE_DEFINITIONS(test-qof PRIVATE TESTPROG=test_qof)
   SET(MODULEPATH ${CMAKE_SOURCE_DIR}/src/libqof/qof)
-  SET(gtest_qof_LIBS gnc-qof ${GLIB2_LDFLAGS} ${Boost_LIBRARIES} ${GTEST_LIB})
+  SET(gtest_old_qof_LIBS gnc-qof ${GLIB2_LDFLAGS} ${Boost_LIBRARIES} ${GTEST_LIB})
+  SET(gtest_qof_LIBS
+    ${GLIB2_LDFLAGS}
+    ${GOBJECT_LDFLAGS}
+    ${GMODULE_LDFLAGS}
+    ${GTHREAD_LDFLAGS}
+    ${Boost_LIBRARIES}
+    ${GTEST_LIB})
   SET(gtest_qof_INCLUDES
     ${MODULEPATH}
+    ${CMAKE_BINARY_DIR}/src # for config.h
+    ${CMAKE_SOURCE_DIR}/src # for platform.h
     ${GLIB2_INCLUDE_DIRS}
     ${GTEST_INCLUDE_DIR})
 
@@ -61,7 +70,7 @@ IF (NOT WIN32)
     test-gnc-guid.cpp
     ${GTEST_SRC})
   GNC_ADD_TEST(test-gnc-guid "${test_gnc_guid_SOURCES}"
-    gtest_qof_INCLUDES gtest_qof_LIBS)
+    gtest_qof_INCLUDES gtest_old_qof_LIBS)
 
   SET(test_kvp_value_SOURCES
     ${MODULEPATH}/kvp-value.cpp
@@ -69,14 +78,14 @@ IF (NOT WIN32)
     test-kvp-frame.cpp
     ${GTEST_SRC})
   GNC_ADD_TEST(test-kvp-value "${test_kvp_value_SOURCES}"
-    gtest_qof_INCLUDES gtest_qof_LIBS)
+    gtest_qof_INCLUDES gtest_old_qof_LIBS)
 
   SET(test_qofsession_SOURCES
     ${MODULEPATH}/qofsession.cpp
     test-qofsession.cpp
     ${GTEST_SRC})
   GNC_ADD_TEST(test-qofsession "${test_qofsession_SOURCES}"
-    gtest_qof_INCLUDES gtest_qof_LIBS)
+    gtest_qof_INCLUDES gtest_old_qof_LIBS)
 
   SET(test_gnc_int128_SOURCES
     ${MODULEPATH}/gnc-int128.cpp
@@ -87,13 +96,25 @@ IF (NOT WIN32)
 
   SET(test_gnc_rational_SOURCES
     ${MODULEPATH}/gnc-rational.cpp
+    ${MODULEPATH}/gnc-numeric.cpp
+    ${MODULEPATH}/gnc-int128.cpp
+    ${MODULEPATH}/gnc-datetime.cpp
+    ${MODULEPATH}/gnc-timezone.cpp
+    ${MODULEPATH}/gnc-date.cpp
+    ${MODULEPATH}/qoflog.cpp
     gtest-gnc-rational.cpp
     ${GTEST_SRC})
   GNC_ADD_TEST(test-gnc-rational "${test_gnc_rational_SOURCES}"
     gtest_qof_INCLUDES gtest_qof_LIBS)
 
   SET(test_gnc_numeric_SOURCES
+    ${MODULEPATH}/gnc-rational.cpp
+    ${MODULEPATH}/gnc-int128.cpp
     ${MODULEPATH}/gnc-numeric.cpp
+    ${MODULEPATH}/gnc-datetime.cpp
+    ${MODULEPATH}/gnc-timezone.cpp
+    ${MODULEPATH}/gnc-date.cpp
+    ${MODULEPATH}/qoflog.cpp
     gtest-gnc-numeric.cpp
     ${GTEST_SRC})
   GNC_ADD_TEST(test-gnc-numeric "${test_gnc_numeric_SOURCES}"
@@ -104,12 +125,12 @@ IF (NOT WIN32)
     gtest-gnc-timezone.cpp
     ${GTEST_SRC})
   GNC_ADD_TEST(test-gnc-timezone "${test_gnc_timezone_SOURCES}"
-    gtest_qof_INCLUDES gtest_qof_LIBS)
+    gtest_qof_INCLUDES gtest_old_qof_LIBS)
 
   SET(test_gnc_datetime_SOURCES
     ${MODULEPATH}/gnc-datetime.cpp
     gtest-gnc-datetime.cpp
     ${GTEST_SRC})
   GNC_ADD_TEST(test-gnc-datetime "${test_gnc_datetime_SOURCES}"
-    gtest_qof_INCLUDES gtest_qof_LIBS)
+    gtest_qof_INCLUDES gtest_old_qof_LIBS)
 ENDIF()
