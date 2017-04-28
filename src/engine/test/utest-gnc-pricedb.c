@@ -968,6 +968,11 @@ gnc_pricedb_lookup_day(GNCPriceDB *db,// C: 4 in 2 SCM: 2 in 1 Local: 1:0:0
 static void
 test_gnc_pricedb_lookup_day (PriceDBFixture *fixture, gconstpointer pData)
 {
+    gchar *msg1 = "[gnc_dmy2timespec_internal()] Date computation error from Y-M-D 12-11-18: Year is out of valid range: 1400..10000";
+    gint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
+    gchar *logdomain = "qof.engine";
+    TestErrorStruct check = {loglevel, logdomain, msg1, 0};
+    GLogFunc hdlr = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
     Timespec t = gnc_dmy2timespec(17, 11, 2012);
     GNCPrice *price = gnc_pricedb_lookup_day(fixture->pricedb,
                                              fixture->com->usd,
@@ -978,11 +983,13 @@ test_gnc_pricedb_lookup_day (PriceDBFixture *fixture, gconstpointer pData)
                                    fixture->com->usd,
                                    fixture->com->gbp, t);
     g_assert_cmpstr(GET_COM_NAME(price), ==, "GBP");
+    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
     t = gnc_dmy2timespec(18, 11, 12);
     price = gnc_pricedb_lookup_day(fixture->pricedb,
                                    fixture->com->usd,
                                    fixture->com->gbp, t);
     g_assert(price == NULL);
+    g_log_set_default_handler (hdlr, 0);
 }
 
 // Not Used

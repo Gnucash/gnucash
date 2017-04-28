@@ -99,8 +99,10 @@ check_conversion (const char * str, Timespec expected_ts)
             || (g_date_get_year(&d1) != year))
     {
         fprintf (stderr,
-                 "\nmis-converted \"%s\" to GDate\n",
-                 str);
+                 "\nmis-converted \"%s\" to GDate. "
+                 "Got d1(Y-M-D) = %i-%i-%i, d2(Y-M-D) = %i-%i-%i\n",
+                 str, year, month, day,
+                 g_date_get_year(&d2), g_date_get_month(&d2), g_date_get_day(&d2));
         failure ("misconverted timespec");
         return FALSE;
     }

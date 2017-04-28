@@ -114,10 +114,10 @@ setup_begin(FixtureB *f, gconstpointer pData)
     f->test[1] = (TimeMap){1918, 3, 31, INT64_C(-1633305600)};
     f->test[2] = (TimeMap){1918, 4, 1, INT64_C(-1633219200)};
     f->test[3] = (TimeMap){2057, 11, 20, INT64_C(2773440000)};
-    f->test[4] = (TimeMap){1257, 07, 02, INT64_C(21695385600)}; /*invalid year*/
-    f->test[5] = (TimeMap){2017, 02, 29, INT64_C(1488326400)}; /*invalid day*/
-    f->test[6] = (TimeMap){2017, 02, 33, INT64_C(1488672000)}; /*invalid day*/
-    f->test[7] = (TimeMap){2017, 13, 29, INT64_C(1517184000)}; /*invalid month*/
+    f->test[4] = (TimeMap){1257, 07, 02, INT64_MAX}; /*invalid year*/
+    f->test[5] = (TimeMap){2017, 02, 29, INT64_MAX}; /*invalid day*/
+    f->test[6] = (TimeMap){2017, 02, 33, INT64_MAX}; /*invalid day*/
+    f->test[7] = (TimeMap){2017, 13, 29, INT64_MAX}; /*invalid month*/
     f->test[8] = (TimeMap){2017, 03, 16, INT64_C(1489622400)};
 }
 
@@ -142,10 +142,10 @@ setup_end(FixtureB *f, gconstpointer pData)
     f->test[1] = (TimeMap){1918, 3, 31, INT64_C(-1633219201)};
     f->test[2] = (TimeMap){1918, 4, 1, INT64_C(-1633132801)};
     f->test[3] = (TimeMap){2057, 11, 20, INT64_C(2773526399)};
-    f->test[4] = (TimeMap){1257, 07, 02, INT64_C(21695471999)};
-    f->test[5] = (TimeMap){2017, 02, 29, INT64_C(1488412799)};
-    f->test[6] = (TimeMap){2017, 02, 33, INT64_C(1488758399)};
-    f->test[7] = (TimeMap){2017, 13, 29, INT64_C(1517270399)};
+    f->test[4] = (TimeMap){1257, 07, 02, INT64_MAX};
+    f->test[5] = (TimeMap){2017, 02, 29, INT64_MAX};
+    f->test[6] = (TimeMap){2017, 02, 33, INT64_MAX};
+    f->test[7] = (TimeMap){2017, 13, 29, INT64_MAX};
     f->test[8] = (TimeMap){2017, 03, 16, INT64_C(1489708799)};
 }
 
@@ -1807,7 +1807,12 @@ gnc_dmy2timespec (int day, int month, int year)// C: 8 in 5  Local: 1:0:0
 static void
 test_gnc_dmy2timespec (FixtureB *f, gconstpointer pData)
 {
-
+    gchar *msg1 = "[qof_dmy2timespec()] Date computation error from Y-M-D 1257-7-2: Time value is outside the supported year range.";
+    gint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
+    gchar *logdomain = "qof.engine";
+    TestErrorStruct check = {loglevel, logdomain, msg1, 0};
+    GLogFunc hdlr = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
+    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
     for (int i = 0; i < sizeof(f->test)/sizeof(TimeMap); ++i)
     {
 #ifdef HAVE_STRUCT_TM_GMTOFF
@@ -1820,8 +1825,14 @@ test_gnc_dmy2timespec (FixtureB *f, gconstpointer pData)
         Timespec r_t = gnc_dmy2timespec (f->test[i].day, f->test[i].mon,
                                          f->test[i].yr);
         int offset = gnc_mktime(&tm) - gnc_timegm(&tm);
-        g_assert_cmpint (r_t.tv_sec, ==, f->test[i].secs + offset);
+        if (f->test[i].secs == INT64_MAX)
+            /* We use INT64_MAX as invalid timespec.secs.
+             * As we can't *add* to the max, we can ignore the tz offset in this case. */
+            g_assert_cmpint (r_t.tv_sec, ==, INT64_MAX);
+        else
+            g_assert_cmpint (r_t.tv_sec, ==, f->test[i].secs + offset);
     }
+    g_log_set_default_handler (hdlr, 0);
 }
 /* gnc_dmy2timespec_end
 Timespec
@@ -1830,6 +1841,12 @@ gnc_dmy2timespec_end (int day, int month, int year)// C: 1  Local: 0:0:0
 static void
 test_gnc_dmy2timespec_end (FixtureB *f, gconstpointer pData)
 {
+    gchar *msg1 = "[qof_dmy2timespec_end()] Date computation error from Y-M-D 1257-7-2: Time value is outside the supported year range.";
+    gint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
+    gchar *logdomain = "qof.engine";
+    TestErrorStruct check = {loglevel, logdomain, msg1, 0};
+    GLogFunc hdlr = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
+    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
     for (int i = 0; i < sizeof(f->test)/sizeof(TimeMap); ++i)
     {
 #ifdef HAVE_STRUCT_TM_GMTOFF
@@ -1842,8 +1859,14 @@ test_gnc_dmy2timespec_end (FixtureB *f, gconstpointer pData)
         Timespec r_t = gnc_dmy2timespec_end (f->test[i].day, f->test[i].mon,
                                              f->test[i].yr);
         int offset = gnc_mktime(&tm) - gnc_timegm(&tm);
-        g_assert_cmpint (r_t.tv_sec, ==, f->test[i].secs + offset);
+        if (f->test[i].secs == INT64_MAX)
+            /* We use INT64_MAX as invalid timespec.secs.
+             * As we can't *add* to the max, we can ignore the tz offset in this case. */
+            g_assert_cmpint (r_t.tv_sec, ==, INT64_MAX);
+        else
+            g_assert_cmpint (r_t.tv_sec, ==, f->test[i].secs + offset);
     }
+    g_log_set_default_handler (hdlr, 0);
 }
 
 static GDateTime*

@@ -1255,65 +1255,12 @@ gnc_timespec2dmy (Timespec t, int *day, int *month, int *year)
 #define THIRTY_TWO_YEARS 0x3c30fc00LL
 
 static Timespec
-gnc_dmy2timespec_internal (int day, int month, int year, gboolean start_of_day)
+gnc_dmy2timespec_internal (int day, int month, int year, DayPart day_part)
 {
-    Timespec result;
-    struct tm date;
-    long long secs = 0;
-
-    date.tm_year = year - 1900;
-    date.tm_mon = month - 1;
-    date.tm_mday = day;
-
-    if (start_of_day)
-        gnc_tm_set_day_start(&date);
-    else
-        gnc_tm_set_day_end(&date);
-
-    /* compute number of seconds */
-    secs = gnc_mktime (&date);
-
-    result.tv_sec = secs;
-    result.tv_nsec = 0;
-
-    return result;
-}
-
-
-Timespec
-gnc_dmy2timespec (int day, int month, int year)
-{
-    return gnc_dmy2timespec_internal (day, month, year, TRUE);
-}
-
-Timespec
-gnc_dmy2timespec_end (int day, int month, int year)
-{
-    return gnc_dmy2timespec_internal (day, month, year, FALSE);
-}
-
-Timespec
-gnc_dmy2timespec_neutral (int day, int month, int year)
-{
-    struct tm date;
-    memset (&date, 0, sizeof(struct tm));
-    date.tm_year = year - 1900;
-    date.tm_mon = month - 1;
-    date.tm_mday = day;
-    date.tm_hour = 10;
-    date.tm_min = 59;
-    date.tm_sec = 0;
-
     try
     {
-        GncDateTime gncdt(date);
-        auto offset = gncdt.offset() / 3600;
-        if (offset < -11)
-            date.tm_hour = -offset;
-        if (offset > 13)
-            date.tm_hour = 23 - offset;
-
-        return {gnc_timegm(&date), 0};
+        auto date = GncDate(year, month, day);
+        return { static_cast<time64>(GncDateTime (date, day_part)), 0 };
     }
     catch(const std::logic_error& err)
     {
@@ -1327,6 +1274,25 @@ gnc_dmy2timespec_neutral (int day, int month, int year)
               year, month, day, err.what());
         return {INT64_MAX, 0};
     }
+}
+
+
+Timespec
+gnc_dmy2timespec (int day, int month, int year)
+{
+    return gnc_dmy2timespec_internal (day, month, year, DayPart::start);
+}
+
+Timespec
+gnc_dmy2timespec_end (int day, int month, int year)
+{
+    return gnc_dmy2timespec_internal (day, month, year, DayPart::end);
+}
+
+Timespec
+gnc_dmy2timespec_neutral (int day, int month, int year)
+{
+    return gnc_dmy2timespec_internal (day, month, year, DayPart::neutral);
 }
 /********************************************************************\
 \********************************************************************/
