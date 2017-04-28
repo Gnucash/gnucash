@@ -153,23 +153,61 @@ private:
     std::unique_ptr<GncDateTimeImpl> m_impl;
 };
 
+/** GnuCash DateFormat class
+ *
+ * A helper class to represent a date format understood
+ * by the GncDate string/format constructor. Consumers
+ * of this header file are not supposed to create
+ * objects of this class themselves. Instead they
+ * can get a list of the understood formats from the
+ * GncDate::c_formats class variable and work with those.
+ */
+
 class GncDateFormat
 {
 public:
+    /** Construct a GncDateFormat with a given format and corresponding
+     * regular expression. This should only be used internally by the
+     * GncDate implementation. Consumers should never construct a GncDateFormat
+     * themselves!
+     */
     GncDateFormat (const char* fmt, const char* re) :
     m_fmt(fmt), m_re(re) {}
+    /** A string representing the format. */
     const std::string m_fmt;
 private:
+    /** Regular expression associated with the format string. This is to and
+     * only be used internally by the gnc-datetime code.
+     */
     const std::string m_re;
 
     friend class GncDateImpl;
 };
 
+/** GnuCash Date class
+ *
+ * The represented date is limited to the period
+ * between 1400 and 9999 CE.
+ */
 
 class GncDate
 {
     public:
-        /** A vector with all the date formats supported by the string constructor
+        /** A vector with all the date formats supported by the string constructor.
+         * The currently supported formats are:
+         * "y-m-d" (including yyyymmdd)
+         * "d-m-y" (including ddmmyyyy)
+         * "m-d-y" (including mmddyyyy)
+         * "d-m"   (including ddmm)
+         * "m-d"   (including mmdd)
+         *
+         * Notes:
+         * - while the format names are using a "-" as separator, the
+         * regexes will accept any of "-/.' " and will also work for dates
+         * without separators.
+         * - the format strings are marked for translation so it is possible
+         * to use a localized version of a format string using gettext. Example:
+         * gettext(GncDate::c_formats[0])
          */
         static const std::vector<GncDateFormat> c_formats;
         /** Construct a GncDate representing the current day.

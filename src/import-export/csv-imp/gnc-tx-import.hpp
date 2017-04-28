@@ -68,16 +68,23 @@ extern const gchar* currency_format_user[];
 extern const int num_date_formats;
 extern const gchar* date_format_user[];
 
-/** Tuple to hold
+/** An enum describing the columns found in a parse_line_t. Currently these are:
  *  - a tokenized line of input
  *  - an optional error string
  *  - a struct to hold user selected properties for a transaction
- *  - a struct to hold user selected properties for one or two splits in the above transaction */
-#define PL_INPUT    0
-#define PL_ERROR    1
-#define PL_PRETRANS 2
-#define PL_PRESPLIT 3
-#define PL_SKIP     4
+ *  - a struct to hold user selected properties for one or two splits in the above transaction
+ *  - a boolean to mark the line as skipped by error and/or user or not */
+enum parse_line_cols {
+    PL_INPUT,
+    PL_ERROR,
+    PL_PRETRANS,
+    PL_PRESPLIT,
+    PL_SKIP
+};
+
+/** Tuple to hold all internal state for one parsed line. The contents of each
+ * colummn is described by the parse_line_cols enum. This enum should be used
+ * with std::get to access the columns. */
 using parse_line_t = std::tuple<StrVec,
                                 std::string,
                                 std::shared_ptr<GncPreTrans>,
