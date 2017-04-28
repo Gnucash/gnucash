@@ -212,6 +212,8 @@ check_PROGRAMS += test-gnc-timezone
 test_gnc_datetime_SOURCES = \
         $(top_srcdir)/$(MODULEPATH)/gnc-datetime.cpp \
         $(top_srcdir)/$(MODULEPATH)/gnc-timezone.cpp \
+        $(top_srcdir)/$(MODULEPATH)/gnc-date.cpp \
+        $(top_srcdir)/${MODULEPATH}/qoflog.cpp \
         gtest-gnc-datetime.cpp
 test_gnc_datetime_CPPFLAGS =\
         -I$(GTEST_HEADERS) \
@@ -221,10 +223,9 @@ test_gnc_datetime_CPPFLAGS =\
         $(BOOST_CPPFLAGS)
 
 test_gnc_datetime_LDADD = \
-        -lboost_date_time \
-        ${top_builddir}/${MODULEPATH}/libgnc-qof.la \
         $(GLIB_LIBS) \
-        $(GTEST_LIBS)
+        $(GTEST_LIBS) \
+        ${BOOST_LDFLAGS} -lboost_regex -lboost_date_time
 if !GOOGLE_TEST_LIBS
 nodist_test_gnc_datetime_SOURCES = \
         $(GTEST_SRC)/src/gtest_main.cc

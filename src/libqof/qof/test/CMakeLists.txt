@@ -129,8 +129,11 @@ IF (NOT WIN32)
 
   SET(test_gnc_datetime_SOURCES
     ${MODULEPATH}/gnc-datetime.cpp
+    ${MODULEPATH}/gnc-timezone.cpp
+    ${MODULEPATH}/gnc-date.cpp
+    ${MODULEPATH}/qoflog.cpp
     gtest-gnc-datetime.cpp
     ${GTEST_SRC})
   GNC_ADD_TEST(test-gnc-datetime "${test_gnc_datetime_SOURCES}"
-    gtest_qof_INCLUDES gtest_old_qof_LIBS)
+    gtest_qof_INCLUDES gtest_qof_LIBS)
 ENDIF()
