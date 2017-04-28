@@ -236,7 +236,7 @@ TEST(gnc_datetime_constructors, test_gncdate_end_constructor)
     const ymd aymd = { 2046, 11, 06 };
     GncDateTime atime(GncDate(aymd.year, aymd.month, aymd.day), DayPart::end);
     //Skipping timezone information as this can't be controlled.
-    EXPECT_EQ(atime.format("%d-%m-%Y %H:%M:%S"), "06-11-2046 23:59:00");
+    EXPECT_EQ(atime.format("%d-%m-%Y %H:%M:%S"), "06-11-2046 23:59:59");
 }
 
 TEST(gnc_datetime_constructors, test_gncdate_neutral_constructor)

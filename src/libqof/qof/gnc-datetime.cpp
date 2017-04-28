@@ -223,7 +223,7 @@ GncDateTimeImpl::GncDateTimeImpl(const GncDateImpl& date, DayPart part) :
     using TD = boost::posix_time::time_duration;
     static const TD start(0, 0, 0);
     static const TD neutral(10, 59, 0);
-    static const TD end(23,59, 0);
+    static const TD end(23,59, 59);
     TD time_of_day;
     switch (part)
     {
