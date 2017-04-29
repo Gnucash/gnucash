@@ -183,6 +183,38 @@ TEST(gnc_date_constructors, test_str_format_constructor)
     }
 }
 
+TEST(gnc_date_operators, test_equality)
+{
+    GncDate a(2017, 1, 6);
+    GncDate b(2017, 1, 6);
+    GncDate c(2015, 6, 13);
+    EXPECT_TRUE (a == b);
+    EXPECT_FALSE (a == c);
+    EXPECT_TRUE (a != c);
+    EXPECT_FALSE (a != b);
+}
+
+TEST(gnc_date_operators, test_more_less_than)
+{
+    GncDate a(2017, 1, 6);
+    GncDate b(2017, 1, 6);
+    GncDate c(2015, 6, 13);
+    EXPECT_TRUE (a >= b);
+    EXPECT_TRUE (a <= b);
+    EXPECT_FALSE (a > b);
+    EXPECT_FALSE (a < b);
+
+    EXPECT_TRUE (a > c);
+    EXPECT_TRUE (a >= c);
+    EXPECT_FALSE (a < c);
+    EXPECT_FALSE (a <= c);
+
+    EXPECT_TRUE (c < a);
+    EXPECT_TRUE (c <= a);
+    EXPECT_FALSE (c > a);
+    EXPECT_FALSE (c >= a);
+}
+
 TEST(gnc_datetime_constructors, test_default_constructor)
 {
     GncDateTime atime;

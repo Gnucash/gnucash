@@ -270,6 +270,23 @@ private:
     std::unique_ptr<GncDateImpl> m_impl;
 
     friend GncDateTime::GncDateTime(const GncDate&, DayPart);
+    friend bool operator<(const GncDate&, const GncDate&);
+    friend bool operator>(const GncDate&, const GncDate&);
+    friend bool operator==(const GncDate&, const GncDate&);
+    friend bool operator<=(const GncDate&, const GncDate&);
+    friend bool operator>=(const GncDate&, const GncDate&);
+    friend bool operator!=(const GncDate&, const GncDate&);
 };
+
+/**@{
+ *  Standard comparison operators working on GncDate objects.
+ */
+bool operator<(const GncDate& a, const GncDate& b);
+bool operator>(const GncDate& a, const GncDate& b);
+bool operator==(const GncDate& a, const GncDate& b);
+bool operator<=(const GncDate& a, const GncDate& b);
+bool operator>=(const GncDate& a, const GncDate& b);
+bool operator!=(const GncDate& a, const GncDate& b);
+/**@}*/
 
 #endif // __GNC_DATETIME_HPP__

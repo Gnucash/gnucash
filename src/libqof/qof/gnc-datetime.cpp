@@ -213,6 +213,12 @@ private:
     Date m_greg;
 
     friend GncDateTimeImpl::GncDateTimeImpl(const GncDateImpl&, DayPart);
+    friend bool operator<(const GncDateImpl&, const GncDateImpl&);
+    friend bool operator>(const GncDateImpl&, const GncDateImpl&);
+    friend bool operator==(const GncDateImpl&, const GncDateImpl&);
+    friend bool operator<=(const GncDateImpl&, const GncDateImpl&);
+    friend bool operator>=(const GncDateImpl&, const GncDateImpl&);
+    friend bool operator!=(const GncDateImpl&, const GncDateImpl&);
 };
 
 /* Member function definitions for GncDateTimeImpl.
@@ -427,6 +433,13 @@ GncDateImpl::format(const char* format) const
     return ss.str();
 }
 
+bool operator<(const GncDateImpl& a, const GncDateImpl& b) { return a.m_greg < b.m_greg; }
+bool operator>(const GncDateImpl& a, const GncDateImpl& b) { return a.m_greg > b.m_greg; }
+bool operator==(const GncDateImpl& a, const GncDateImpl& b) { return a.m_greg == b.m_greg; }
+bool operator<=(const GncDateImpl& a, const GncDateImpl& b) { return a.m_greg <= b.m_greg; }
+bool operator>=(const GncDateImpl& a, const GncDateImpl& b) { return a.m_greg >= b.m_greg; }
+bool operator!=(const GncDateImpl& a, const GncDateImpl& b) { return a.m_greg != b.m_greg; }
+
 /* =================== Presentation-class Implementations ====================*/
 /* GncDateTime */
 
@@ -519,3 +532,10 @@ GncDate::year_month_day() const
 {
     return m_impl->year_month_day();
 }
+
+bool operator<(const GncDate& a, const GncDate& b) { return *(a.m_impl) < *(b.m_impl); }
+bool operator>(const GncDate& a, const GncDate& b) { return *(a.m_impl) > *(b.m_impl); }
+bool operator==(const GncDate& a, const GncDate& b) { return *(a.m_impl) == *(b.m_impl); }
+bool operator<=(const GncDate& a, const GncDate& b) { return *(a.m_impl) <= *(b.m_impl); }
+bool operator>=(const GncDate& a, const GncDate& b) { return *(a.m_impl) >= *(b.m_impl); }
+bool operator!=(const GncDate& a, const GncDate& b) { return *(a.m_impl) != *(b.m_impl); }
