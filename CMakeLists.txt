@@ -142,16 +142,6 @@ IF (WIN32)
   SET(CMAKE_EXE_LINKER_FLAGS -mwindows)
 ENDIF(WIN32)
 
-IF (APPLE)
-  SET (CMAKE_OSX_ARCHITECTURES "i386")
-  ADD_DEFINITIONS(-arch i386)
-  #SET(CMAKE_OSX_ARCHITECTURES "x86_64")
-  # For PPC build, uncomment these lines (untested):
-  #SET (CMAKE_OSX_ARCHITECTURES "i386;ppc")
-  #ADD_DEFINITIONS(-arch i386 -arch ppc
-  #SET (AC_APPLE_UNIVERSAL_BUILD 1)
-ENDIF (APPLE)
-
 FIND_PACKAGE(PkgConfig REQUIRED)
 
 # The default FindPkgConfig.make code has a bug in how the setting of PKG_CONFIG_PATH is handled.
