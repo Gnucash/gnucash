@@ -93,115 +93,6 @@ GncTransPropType sanitize_trans_prop (GncTransPropType prop, bool multi_split)
         return GncTransPropType::NONE;
 }
 
-/* Regular expressions used to parse dates per date format */
-const char* date_regex[] = {
-                             "(?:"                                   // either y-m-d
-                                 "(?<YEAR>[0-9]+)[-/.' ]+"
-                                 "(?<MONTH>[0-9]+)[-/.' ]+"
-                                 "(?<DAY>[0-9]+)"
-                             "|"                                     // or CCYYMMDD
-                                 "(?<YEAR>[0-9]{4})"
-                                 "(?<MONTH>[0-9]{2})"
-                                 "(?<DAY>[0-9]{2})"
-                             ")",
-
-                             "(?:"                                   // either d-m-y
-                                 "(?<DAY>[0-9]+)[-/.' ]+"
-                                 "(?<MONTH>[0-9]+)[-/.' ]+"
-                                 "(?<YEAR>[0-9]+)"
-                             "|"                                     // or DDMMCCYY
-                                 "(?<DAY>[0-9]{2})"
-                                 "(?<MONTH>[0-9]{2})"
-                                 "(?<YEAR>[0-9]{4})"
-                             ")",
-
-                             "(?:"                                   // either m-d-y
-                                 "(?<MONTH>[0-9]+)[-/.' ]+"
-                                 "(?<DAY>[0-9]+)[-/.' ]+"
-                                 "(?<YEAR>[0-9]+)"
-                             "|"                                     // or MMDDCCYY
-                                 "(?<MONTH>[0-9]{2})"
-                                 "(?<DAY>[0-9]{2})"
-                                 "(?<YEAR>[0-9]{4})"
-                             ")",
-
-                             "(?:"                                   // either d-m(-y)
-                                 "(?<DAY>[0-9]+)[-/.' ]+"
-                                 "(?<MONTH>[0-9]+)(?:[-/.' ]+"
-                                 "(?<YEAR>[0-9]+))?"
-                             "|"                                     // or DDMM(CCYY)
-                                 "(?<DAY>[0-9]{2})"
-                                 "(?<MONTH>[0-9]{2})"
-                                 "(?<YEAR>[0-9]+)?"
-                             ")",
-
-                             "(?:"                                   // either m-d(-y)
-                                 "(?<MONTH>[0-9]+)[-/.' ]+"
-                                 "(?<DAY>[0-9]+)(?:[-/.' ]+"
-                                 "(?<YEAR>[0-9]+))?"
-                             "|"                                     // or MMDD(CCYY)
-                                 "(?<MONTH>[0-9]{2})"
-                                 "(?<DAY>[0-9]{2})"
-                                 "(?<YEAR>[0-9]+)?"
-                             ")",
-};
-
-/** Parses a string into a date, given a format. This function
- * requires only knowing the order in which the year, month and day
- * appear. For example, 01-02-2003 will be parsed the same way as
- * 01/02/2003.
- * @param date_str The string containing a date being parsed
- * @param format An index specifying a format in date_format_user
- * @exception std::invalid_argument if the string can't be parsed into a date.
- * @return The parsed value of date_str on success, throws on failure
- */
-
-time64 parse_date (const std::string &date_str, int format)
-{
-    boost::regex r(date_regex[format]);
-    boost::smatch what;
-    if(!boost::regex_search(date_str, what, r))
-        throw std::invalid_argument (_("Value can't be parsed into a date using the selected date format."));  // regex didn't find a match
-
-    // Attention: different behavior from 2.6.x series !
-    // If date format without year was selected, the match
-    // should NOT have found a year.
-    if ((format >= 3) && (what.length("YEAR") != 0))
-        throw std::invalid_argument (_("Value appears to contain a year while the selected format forbids this."));
-
-    auto day = std::stoi (what.str("DAY"));
-    auto month = std::stoi (what.str("MONTH"));
-
-    int year;
-    if (format < 3)
-    {
-        /* The input dates have a year, so use that one */
-        year = std::stoi (what.str("YEAR"));
-
-        /* Handle two-digit years. */
-        if (year < 100)
-        {
-            /* We allow two-digit years in the range 1969 - 2068. */
-            if (year < 69)
-                year += 2000;
-            else
-                year += 1900;
-        }
-    }
-    else
-    {
-        /* The input dates don't have a year, so work with today's year.
-         */
-        gnc_timespec2dmy(timespec_now(), nullptr, nullptr, &year);
-    }
-
-    auto ts = gnc_dmy2timespec_neutral(day, month, year);
-    if (ts.tv_sec == INT64_MAX)
-        throw std::invalid_argument (_("Value can't be parsed into a date using the selected date format."));
-
-    return ts.tv_sec;
-}
-
 
 /** Convert str into a GncRational using the user-specified (import) currency format.
  * @param str The string to be parsed
@@ -317,7 +208,7 @@ void GncPreTrans::set (GncTransPropType prop_type, const std::string& value)
 
             case GncTransPropType::DATE:
                 m_date = boost::none;
-                m_date = parse_date (value, m_date_format); // Throws if parsing fails
+                m_date = GncDate(value, GncDate::c_formats[m_date_format].m_fmt); // Throws if parsing fails
                 break;
 
             case GncTransPropType::NUM:
@@ -417,7 +308,8 @@ Transaction* GncPreTrans::create_trans (QofBook* book, gnc_commodity* currency)
     auto trans = xaccMallocTransaction (book);
     xaccTransBeginEdit (trans);
     xaccTransSetCurrency (trans, m_commodity ? *m_commodity : currency);
-    xaccTransSetDatePostedSecsNormalized (trans, *m_date);
+    xaccTransSetDatePostedSecsNormalized (trans,
+                        static_cast<time64>(GncDateTime(*m_date, DayPart::neutral)));
 
     if (m_num)
         xaccTransSetNum (trans, m_num->c_str());
@@ -558,13 +450,15 @@ void GncPreSplit::set (GncTransPropType prop_type, const std::string& value)
             case GncTransPropType::REC_DATE:
                 m_rec_date = boost::none;
                 if (!value.empty())
-                    m_rec_date = parse_date (value, m_date_format); // Throws if parsing fails
+                    m_rec_date = GncDate (value,
+                                          GncDate::c_formats[m_date_format].m_fmt); // Throws if parsing fails
                 break;
 
             case GncTransPropType::TREC_DATE:
                 m_trec_date = boost::none;
                 if (!value.empty())
-                    m_trec_date = parse_date (value, m_date_format); // Throws if parsing fails
+                    m_trec_date = GncDate (value,
+                                           GncDate::c_formats[m_date_format].m_fmt); // Throws if parsing fails
                 break;
 
             default:
@@ -641,7 +535,7 @@ static void trans_add_split (Transaction* trans, Account* account, GncNumeric am
                             const boost::optional<std::string>& action,
                             const boost::optional<std::string>& memo,
                             const boost::optional<char>& rec_state,
-                            const boost::optional<time64> rec_date,
+                            const boost::optional<GncDate>& rec_date,
                             const boost::optional<GncNumeric> price)
 {
     QofBook* book = xaccTransGetBook (trans);
@@ -691,7 +585,8 @@ static void trans_add_split (Transaction* trans, Account* account, GncNumeric am
     if (rec_state && *rec_state != 'n')
         xaccSplitSetReconcile (split, *rec_state);
     if (rec_state && *rec_state == YREC && rec_date)
-        xaccSplitSetDateReconciledSecs (split, *rec_date);
+        xaccSplitSetDateReconciledSecs (split,
+                static_cast<time64>(GncDateTime(*rec_date, DayPart::neutral)));
 
 }
 

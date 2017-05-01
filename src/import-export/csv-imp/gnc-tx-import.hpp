@@ -64,10 +64,6 @@ struct DraftTransaction
 extern const int num_currency_formats;
 extern const gchar* currency_format_user[];
 
-/* A set of date formats that the user sees. */
-extern const int num_date_formats;
-extern const gchar* date_format_user[];
-
 /** An enum describing the columns found in a parse_line_t. Currently these are:
  *  - a tokenized line of input
  *  - an optional error string

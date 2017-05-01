@@ -521,10 +521,8 @@ CsvImpTransAssist::CsvImpTransAssist ()
 
         /* Add in the date format combo box and hook it up to an event handler. */
         date_format_combo = GTK_COMBO_BOX_TEXT(gtk_combo_box_text_new());
-        for (int i = 0; i < num_date_formats; i++)
-        {
-            gtk_combo_box_text_append_text (date_format_combo, _(date_format_user[i]));
-        }
+        for (auto& date_fmt : GncDate::c_formats)
+            gtk_combo_box_text_append_text (date_format_combo, _(date_fmt.m_fmt.c_str()));
         gtk_combo_box_set_active (GTK_COMBO_BOX(date_format_combo), 0);
         g_signal_connect (G_OBJECT(date_format_combo), "changed",
                          G_CALLBACK(csv_tximp_preview_date_fmt_sel_cb), this);
@@ -1560,7 +1558,7 @@ CsvImpTransAssist::preview_refresh ()
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(fixed_button),
             (tx_imp->file_format() != GncImpFileFormat::CSV));
 
-    // This section deals with the combo's and character encoding
+    // Set Date & Currency Format and Character encoding
     gtk_combo_box_set_active (GTK_COMBO_BOX(date_format_combo),
             tx_imp->date_format());
     gtk_combo_box_set_active (GTK_COMBO_BOX(currency_format_combo),

@@ -41,6 +41,7 @@ extern "C" {
 #include <map>
 #include <memory>
 #include <boost/optional.hpp>
+#include <gnc-datetime.hpp>
 #include <gnc-numeric.hpp>
 
 /** Enumeration for column types. These are the different types of
@@ -103,7 +104,6 @@ private:
 GncTransPropType sanitize_trans_prop (GncTransPropType prop, bool multi_split);
 
 
-time64 parse_date (const std::string &date_str, int format);
 gnc_commodity* parse_commodity (const std::string& comm_str);
 GncNumeric parse_amount (const std::string &str, int currency_format);
 
@@ -139,7 +139,7 @@ public:
 private:
     int m_date_format;
     boost::optional<std::string> m_differ;
-    boost::optional<time64> m_date;
+    boost::optional<GncDate> m_date;
     boost::optional<std::string> m_num;
     boost::optional<std::string> m_desc;
     boost::optional<std::string> m_notes;
@@ -176,12 +176,12 @@ private:
     boost::optional<GncNumeric> m_price;
     boost::optional<std::string> m_memo;
     boost::optional<char> m_rec_state;
-    boost::optional<time64> m_rec_date;
+    boost::optional<GncDate> m_rec_date;
     boost::optional<std::string> m_taction;
     boost::optional<Account*> m_taccount;
     boost::optional<std::string> m_tmemo;
     boost::optional<char> m_trec_state;
-    boost::optional<time64> m_trec_date;
+    boost::optional<GncDate> m_trec_date;
     bool created = false;
 
     std::map<GncTransPropType, std::string> m_errors;

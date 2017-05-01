@@ -43,14 +43,6 @@ extern "C" {
 
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 
-const int num_date_formats = 5;
-const gchar* date_format_user[] = {N_("y-m-d"),
-                                   N_("d-m-y"),
-                                   N_("m-d-y"),
-                                   N_("d-m"),
-                                   N_("m-d")
-                                  };
-
 const int num_currency_formats = 3;
 const gchar* currency_format_user[] = {N_("Locale"),
                                        N_("Period: 123,456.78"),
@@ -742,6 +734,8 @@ void GncTxImport::update_pre_trans_props (uint32_t row, uint32_t col, GncTransPr
     if ((prop_type == GncTransPropType::NONE) || (prop_type > GncTransPropType::TRANS_PROPS))
         return; /* Only deal with transaction related properties. */
 
+    /* Deliberately make a copy of the GncPreTrans. It may be the original one was shared
+     * with a previous line and should no longer be after the transprop is changed. */
     auto trans_props = std::make_shared<GncPreTrans> (*(std::get<PL_PRETRANS>(m_parsed_lines[row])).get());
     auto value = std::string();
 
