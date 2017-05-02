@@ -37,6 +37,22 @@ TEST(gnc_date_constructors, test_ymd_constructor)
     EXPECT_FALSE(date.isnull());
 }
 
+TEST(gnc_date_constructors, test_copy_constructor)
+{
+    GncDate a(2045, 11, 13);
+    GncDate b(a);
+    EXPECT_FALSE(a.isnull());
+    EXPECT_TRUE (a == b);
+}
+
+TEST(gnc_date_constructors, test_move_constructor)
+{
+    GncDate a(2045, 11, 13);
+    GncDate b(std::move(a));
+    EXPECT_TRUE(a.isnull());
+    EXPECT_TRUE (b.format("%Y-%m-%d") == "2045-11-13");
+}
+
 typedef struct
 {
     const char* date_fmt;
@@ -46,9 +62,6 @@ typedef struct
     int         exp_day;
 } parse_date_data;
 
-/* parse_date
- * time64 parse_date (const char* date_str, int format)// C: 14 in 7 SCM: 9 in 2 Local: 1:0:0
- */
 TEST(gnc_date_constructors, test_str_format_constructor)
 {
     auto today = GncDate();
@@ -213,6 +226,23 @@ TEST(gnc_date_operators, test_more_less_than)
     EXPECT_TRUE (c <= a);
     EXPECT_FALSE (c > a);
     EXPECT_FALSE (c >= a);
+}
+
+TEST(gnc_date_operators, test_copy_assignment)
+{
+    GncDate a(2017, 1, 6);
+    GncDate b;
+    b = a;
+    EXPECT_TRUE (a == b);
+}
+
+TEST(gnc_date_operators, test_move_assignment)
+{
+    GncDate a(2045, 11, 13);
+    GncDate b;
+    b = std::move(a);
+    EXPECT_TRUE(a.isnull());
+    EXPECT_TRUE (b.format("%Y-%m-%d") == "2045-11-13");
 }
 
 TEST(gnc_datetime_constructors, test_default_constructor)

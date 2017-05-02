@@ -509,9 +509,17 @@ GncDate::GncDate(const std::string str, const std::string fmt) :
 m_impl(new GncDateImpl(str, fmt)) {}
 GncDate::GncDate(std::unique_ptr<GncDateImpl> impl) :
 m_impl(std::move(impl)) {}
+GncDate::GncDate(const GncDate& a) :
+m_impl(new GncDateImpl(*a.m_impl)) {}
 GncDate::GncDate(GncDate&&) = default;
 GncDate::~GncDate() = default;
 
+GncDate&
+GncDate::operator=(const GncDate& a)
+{
+    m_impl.reset(new GncDateImpl(*a.m_impl));
+    return *this;
+}
 GncDate&
 GncDate::operator=(GncDate&&) = default;
 

@@ -244,9 +244,23 @@ class GncDate
          * - fmt doesn't specify a year, yet a year was found in the string
          */
         GncDate(const std::string str, const std::string fmt);
+        /** Construct a GncDate from a GncDateImpl.
+         */
         GncDate(std::unique_ptr<GncDateImpl> impl);
+        /** Copy constructor.
+         */
+        GncDate(const GncDate&);
+        /** Move constructor.
+         */
         GncDate(GncDate&&);
+        /** Default destructor.
+         */
         ~GncDate();
+        /** Copy assignment operator.
+         */
+        GncDate& operator=(const GncDate&);
+        /** Move assignment operator.
+         */
         GncDate& operator=(GncDate&&);
         /** Set the date object to the computer clock's current day. */
         void today();
