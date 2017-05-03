@@ -701,7 +701,7 @@ gnc_ui_update_namespace_picker (GtkWidget *cbwe,
         if (g_utf8_collate(node->data, "template" ) != 0)
         {
             gtk_list_store_append(GTK_LIST_STORE(model), &iter);
-            gtk_list_store_set (GTK_LIST_STORE(model), &iter, 0, node->data, -1);
+            gtk_list_store_set (GTK_LIST_STORE(model), &iter, 0, _(node->data), -1);
         }
 
         if (init_string && (g_utf8_collate(node->data, init_string) == 0))
@@ -730,6 +730,11 @@ gnc_ui_namespace_picker_ns (GtkWidget *cbwe)
     if (g_strcmp0 (name_space, GNC_COMMODITY_NS_ISO) == 0)
     {
         /* In case the user types in ISO4217, map it to CURRENCY. */
+        return g_strdup(GNC_COMMODITY_NS_CURRENCY);
+    }
+    else if (g_strcmp0 (name_space, _(GNC_COMMODITY_NS_CURRENCY)) == 0)
+    {
+        /* In case the user entered a translation of CURRENCY, return it untranslated. */
         return g_strdup(GNC_COMMODITY_NS_CURRENCY);
     }
     else

@@ -225,12 +225,8 @@ gnc_ui_edit_commodity_modal(gnc_commodity *commodity,
  *  @param sel The namespace that should be initially selected when
  *  the combo box appears.
  *
- *  @param mode Determines which namespaces the user may select a
+ *  @param mode Determines in which namespaces the user may select a
  *  commodity
- *
- *  @return The currently selected namespace.
- *
- *  @note The returned string must be freed by the caller.
  */
 void gnc_ui_update_namespace_picker(GtkWidget *cbwe,
                                     const gchar *sel,
@@ -242,8 +238,7 @@ void gnc_ui_update_namespace_picker(GtkWidget *cbwe,
  *
  *  @return The currently selected namespace.
  *
- *  @note This string is owned by the engine and must not be freed by
- *  the caller.
+ *  @note This string must be freed by with g_free.
  */
 gchar *gnc_ui_namespace_picker_ns (GtkWidget *cbwe);
 

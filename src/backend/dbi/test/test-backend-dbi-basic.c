@@ -24,12 +24,12 @@
  *                                                                  *
 \********************************************************************/
 
-#define _(X) X
 #include "config.h"
 
 #include <sys/types.h>
 #include <unistd.h>
 #include <glib/gstdio.h>
+#include <glib/gi18n.h>
 
 #include <qof.h>
 #include <unittest-support.h>

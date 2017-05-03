@@ -2637,7 +2637,7 @@ gnc_ui_qif_import_commodity_new_prepare (GtkAssistant *assistant,
     g_return_if_fail (qpage != NULL);
 
     /* Get any entered namespace. */
-    ns = gtk_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(qpage->namespace_combo)))));
+    ns = gnc_ui_namespace_picker_ns (qpage->namespace_combo);
 
     /* Update the namespaces available to select. */
     if (!ns || !ns[0])

@@ -50,6 +50,7 @@ typedef struct _GncCommodityClass gnc_commodityClass;
 typedef struct _GncCommodityNamespaceClass gnc_commodity_namespaceClass;
 
 #include <glib.h>
+#include <glib/gi18n.h>
 #include "gnc-engine.h"
 
 /* --- type macros --- */
@@ -97,7 +98,7 @@ GType gnc_commodity_namespace_get_type(void);
 #define GNC_COMMODITY_NS_LEGACY "GNC_LEGACY_CURRENCIES"
 /* The ISO define is deprecated in favor of CURRENCY */
 #define GNC_COMMODITY_NS_ISO    "ISO4217"
-#define GNC_COMMODITY_NS_CURRENCY _("CURRENCY")
+#define GNC_COMMODITY_NS_CURRENCY N_("CURRENCY")
 #define GNC_COMMODITY_NS_NASDAQ "NASDAQ"
 #define GNC_COMMODITY_NS_NYSE   "NYSE"
 #define GNC_COMMODITY_NS_EUREX  "EUREX"
