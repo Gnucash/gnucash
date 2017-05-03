@@ -136,16 +136,16 @@ GncNumeric parse_amount (const std::string &str, int currency_format)
 
 static char parse_reconciled (const std::string& reconcile)
 {
-    if (g_strcmp0 (reconcile.c_str(), _("n")) == 0) // Not reconciled
+    if (g_strcmp0 (reconcile.c_str(), gnc_get_reconcile_str(NREC)) == 0) // Not reconciled
         return NREC;
-    else if (g_strcmp0 (reconcile.c_str(), _("c")) == 0) // Cleared
+    else if (g_strcmp0 (reconcile.c_str(), gnc_get_reconcile_str(CREC)) == 0) // Cleared
         return CREC;
-    else if (g_strcmp0 (reconcile.c_str(), _("y")) == 0) // Reconciled
+    else if (g_strcmp0 (reconcile.c_str(), gnc_get_reconcile_str(YREC)) == 0) // Reconciled
         return YREC;
-    else if (g_strcmp0 (reconcile.c_str(), _("f")) == 0) // Frozen
+    else if (g_strcmp0 (reconcile.c_str(), gnc_get_reconcile_str(FREC)) == 0) // Frozen
         return FREC;
-    else if (g_strcmp0 (reconcile.c_str(), _("v")) == 0) // Voided will be handled at the transaction level
-        return NREC;                                      // so return not reconciled here
+    else if (g_strcmp0 (reconcile.c_str(), gnc_get_reconcile_str(VREC)) == 0) // Voided will be handled at the transaction level
+        return NREC;                                                          // so return not reconciled here
     else
         throw std::invalid_argument (_("Value can't be parsed into a valid reconcile state."));
 }
