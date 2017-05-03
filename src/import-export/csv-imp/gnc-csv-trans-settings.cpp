@@ -27,6 +27,7 @@
 */
 
 #include "gnc-csv-trans-settings.hpp"
+#include <sstream>
 
 extern "C"
 {
@@ -337,6 +338,15 @@ CsvTransSettings::save (void)
 
     g_key_file_set_string (keyfile, group.c_str(), CSV_SEP, m_separators.c_str());
     g_key_file_set_integer (keyfile, group.c_str(), CSV_DATE, m_date_format);
+    std::ostringstream cmt_ss;
+    cmt_ss << "Supported date formats: ";
+    int fmt_num = 0;
+    std::for_each (GncDate::c_formats.cbegin(), GncDate::c_formats.cend(),
+                    [&cmt_ss, &fmt_num](const GncDateFormat& fmt)
+                        { cmt_ss << fmt_num++ << ": '" << fmt.m_fmt << "', "; });
+    auto cmt = cmt_ss.str().substr(0, static_cast<long>(cmt_ss.tellp()) - 2);
+    g_key_file_set_comment (keyfile, group.c_str(), CSV_DATE,
+                            cmt.c_str(), nullptr);
     g_key_file_set_integer (keyfile, group.c_str(), CSV_CURRENCY, m_currency_format);
     g_key_file_set_string (keyfile, group.c_str(), CSV_ENCODING, m_encoding.c_str());
 
