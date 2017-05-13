@@ -1163,7 +1163,7 @@
 	  )
 	 )))
     ;;below line as fix to Bug 776396 - make sure the commidity aligns the same as the rest of the currency (on the right)
-    (gnc:html-table-set-style! table "table" 'attribute(list "style" "width:100%; max-width:20em"))
+    (gnc:html-table-set-style! table "table" 'attribute(list "style" "width:100%; max-width:20em") 'attribute (list "cellpadding" "0"))
     ;;end fix
     table)
   )
