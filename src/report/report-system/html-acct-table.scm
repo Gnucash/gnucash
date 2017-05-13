@@ -1162,6 +1162,7 @@
 	   )
 	  )
 	 )))
+    (gnc:html-table-set-style! table "table" 'attribute(list "style" "width:100%; max-width:20em") 'attribute (list "cellpadding" "0"))
     table)
   )
 
