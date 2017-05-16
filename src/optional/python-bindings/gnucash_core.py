@@ -367,7 +367,8 @@ class GncCommodityTable(GnuCashCoreClass):
     which includes most of the world's currencies.
     """
 
-    pass
+    def _get_namespaces_py(self):
+        return [ns.get_name() for ns in self.get_namespaces_list()]
 
 class GncCommodityNamespace(GnuCashCoreClass):
     pass
@@ -547,12 +548,12 @@ commoditytable_dict =   {
 methods_return_instance(GncCommodityTable, commoditytable_dict)
 
 methods_return_instance_lists(
-    GncCommodityTable, { 'get_namespaces': GncCommodityNamespace,
-                         'get_namespaces_list': GncCommodityNamespace,
+    GncCommodityTable, { 'get_namespaces_list': GncCommodityNamespace,
                          'get_commodities': GncCommodity,
                          'get_quotable_commodities': GncCommodity,
                          
                        } )
+setattr(GncCommodityTable, 'get_namespaces', getattr(GncCommodityTable, '_get_namespaces_py'))
 
 # GncCommodityNamespace
 GncCommodityNamespace.add_methods_with_prefix('gnc_commodity_namespace_')
