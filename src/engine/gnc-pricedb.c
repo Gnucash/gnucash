@@ -1372,7 +1372,7 @@ static void
 gnc_pricedb_get_remove_dates (GHashTable* hash_dates, GDate period_begin, GDate period_end, PriceRemoveOptions leave)
 {
     Recurrence *r;
-    GDate recurrance_date_old, recurrance_date_next;
+    GDate recurrence_date_old, recurrence_date_next;
 
     GDateWeekday selected_day_of_week = G_DATE_FRIDAY;
     GDate day_of_week_date;
@@ -1395,20 +1395,20 @@ gnc_pricedb_get_remove_dates (GHashTable* hash_dates, GDate period_begin, GDate 
     else
         recurrenceSet (r, 1, PERIOD_WEEK, &day_of_week_date, WEEKEND_ADJ_NONE); // Week set to begin on Friday of week
 
-    recurrance_date_next = recurrance_date_old = day_of_week_date;
+    recurrence_date_next = recurrence_date_old = day_of_week_date;
 
-    while (g_date_compare (&period_end, &recurrance_date_next) > 0)
+    while (g_date_compare (&period_end, &recurrence_date_next) > 0)
     {
         gchar *date_str;
         
-        recurrenceNextInstance (r, &recurrance_date_old, &recurrance_date_next);
-        date_str = g_strdup_printf ("%d/%d/%d", g_date_get_day (&recurrance_date_old),
-                   g_date_get_month (&recurrance_date_old), g_date_get_year (&recurrance_date_old));
+        recurrenceNextInstance (r, &recurrence_date_old, &recurrence_date_next);
+        date_str = g_strdup_printf ("%d/%d/%d", g_date_get_day (&recurrence_date_old),
+                   g_date_get_month (&recurrence_date_old), g_date_get_year (&recurrence_date_old));
 
-        DEBUG("Recurrance date old string for hash table insert is %s", date_str);
+        DEBUG("Recurrence date old string for hash table insert is %s", date_str);
 
         g_hash_table_insert (hash_dates, date_str, "Keep"); // date_str freed by hashtable
-        recurrance_date_old = recurrance_date_next;
+        recurrence_date_old = recurrence_date_next;
     }
     g_free (r);
 }
