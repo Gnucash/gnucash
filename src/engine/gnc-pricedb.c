@@ -1363,12 +1363,6 @@ pricedb_remove_foreach_pricelist (gpointer key,
 }
 
 static void
-free_data (gpointer data)
-{
-    g_free (data);
-}
-
-static void
 gnc_pricedb_remove_get_keep_dates (GHashTable* hash_dates, GDate period_begin, GDate period_end, PriceRemoveKeepOptions keep)
 {
     Recurrence *r;
@@ -1400,15 +1394,16 @@ gnc_pricedb_remove_get_keep_dates (GHashTable* hash_dates, GDate period_begin, G
 
     while (g_date_compare (&period_end, &recurrence_date_next) > 0)
     {
-        gchar *date_str;
+        char date_buf[MAX_DATE_LENGTH+1];
+        gint date_julian;
         
         recurrenceNextInstance (r, &recurrence_date_old, &recurrence_date_next);
-        date_str = g_strdup_printf ("%d/%d/%d", g_date_get_day (&recurrence_date_old),
-                   g_date_get_month (&recurrence_date_old), g_date_get_year (&recurrence_date_old));
+        qof_print_gdate (date_buf, MAX_DATE_LENGTH, &recurrence_date_old);
 
-        DEBUG("Recurrence date old string for hash table insert is %s", date_str);
+        DEBUG("Recurrence date old string for hash table insert is %s", date_buf);
 
-        g_hash_table_insert (hash_dates, date_str, "Keep"); // date_str freed by hashtable
+        date_julian = g_date_get_julian (&recurrence_date_old);
+        g_hash_table_insert (hash_dates, GINT_TO_POINTER(date_julian), GINT_TO_POINTER(1));
         recurrence_date_old = recurrence_date_next;
     }
     g_free (r);
@@ -1458,7 +1453,7 @@ gnc_pricedb_remove_old_prices (GNCPriceDB *db, GList *comm_list,
     {
         GDate period_begin = timespec_to_gdate (first);
         GDate period_end = timespec_to_gdate (cutoff);
-        hash_dates = g_hash_table_new_full (g_str_hash, g_str_equal, free_data, NULL);
+        hash_dates = g_hash_table_new (g_direct_hash, g_direct_equal);
 
         if (keep == PRICE_REMOVE_KEEP_SCALED)
         {
@@ -1478,18 +1473,18 @@ gnc_pricedb_remove_old_prices (GNCPriceDB *db, GList *comm_list,
     /* Now run this external list deleting prices */
     for (item = data.list; item; item = g_slist_next(item))
     {
-        GDate price_date = timespec_to_gdate (gnc_price_get_time (item->data));
         gboolean found = FALSE;
-        gchar *date_str; 
 
         if ((hash_dates != NULL) && (g_hash_table_size (hash_dates) != 0))
         {
-            date_str = g_strdup_printf ("%d/%d/%d", g_date_get_day(&price_date), g_date_get_month(&price_date), g_date_get_year(&price_date));
-            found = g_hash_table_contains (hash_dates, date_str);
+            GDate price_date = timespec_to_gdate (gnc_price_get_time (item->data));
+            gint date_julian = g_date_get_julian (&price_date);
+            char date_buf[MAX_DATE_LENGTH+1];
 
-            DEBUG("Looking for date string %s in hash_dates, found is %d", date_str, found);
+            qof_print_gdate (date_buf, MAX_DATE_LENGTH, &price_date);
+            found = g_hash_table_contains (hash_dates, GINT_TO_POINTER(date_julian));
 
-            g_free (date_str);
+            DEBUG("Looking for date string %s in hash_dates, found is %d", date_buf, found);
         }
         if (!found)
             gnc_pricedb_remove_price (db, item->data);
