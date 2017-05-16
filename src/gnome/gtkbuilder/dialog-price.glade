@@ -875,7 +875,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Leaving:</property>
+                    <property name="label" translatable="yes">Keeping:</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -906,7 +906,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Leave a price on the Friday of each week if present before date.</property>
+                    <property name="tooltip_text" translatable="yes">Keep a price on the Friday of each week if present before date.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">radiobutton_none</property>
@@ -923,7 +923,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Leave a price on the last Friday of the month if present before date.</property>
+                    <property name="tooltip_text" translatable="yes">Keep a price on the last Friday of the month if present before date.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">radiobutton_none</property>
@@ -1032,7 +1032,7 @@
               <object class="GtkLabel" id="label5">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Caution: If you select to leave prices and there are none on a Friday you may end up with no prices before the selected date.</property>
+                <property name="label" translatable="yes">Caution: If you select to Keep prices and there are none on a Friday you may end up with no prices before the selected date.</property>
                 <property name="justify">fill</property>
                 <property name="wrap">True</property>
               </object>
