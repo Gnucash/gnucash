@@ -374,13 +374,18 @@ gboolean     gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p);
 
 typedef enum
 {
-    PRICE_REMOVE_DEFAULT, // default option value
-    PRICE_REMOVE_USER,    // only user prices
-    PRICE_REMOVE_ALL,     // all prices
-    PRICE_REMOVE_WEEKLY,  // leave one every week on a friday
-    PRICE_REMOVE_MONTHLY, // leave one every last friday of month
-    PRICE_REMOVE_SCALED,  // leave one every week then one a month
-} PriceRemoveOptions;
+    PRICE_REMOVE_SOURCE_DEFAULT, // default option value
+    PRICE_REMOVE_SOURCE_USER,    // only user prices
+    PRICE_REMOVE_SOURCE_ALL,     // all prices
+} PriceRemoveSourceOptions;
+
+typedef enum
+{
+    PRICE_REMOVE_KEEP_DEFAULT, // default option value
+    PRICE_REMOVE_KEEP_WEEKLY,  // leave one every week on a friday
+    PRICE_REMOVE_KEEP_MONTHLY, // leave one every last friday of month
+    PRICE_REMOVE_KEEP_SCALED,  // leave one every week then one a month
+} PriceRemoveKeepOptions;
 
 /** @brief Remove and unref prices older than a certain time.
  * @param db The pricedb
@@ -388,13 +393,13 @@ typedef enum
  * @param first The oldest price time in the pricedb 
  * @param cutoff The time before which prices should be deleted.
  * @param source Whether Finance::Quote, user or all prices should be deleted.
- * @param leave Whether scaled, monthly, weekly or no prices should be left.
+ * @param keep Whether scaled, monthly, weekly or no prices should be left.
  * @return True if there were prices to process, False if not.
  */
 gboolean     gnc_pricedb_remove_old_prices(GNCPriceDB *db, GList *comm_list,
                                            Timespec first, Timespec cutoff,
-                                           PriceRemoveOptions source,
-                                           PriceRemoveOptions leave);
+                                           PriceRemoveSourceOptions source,
+                                           PriceRemoveKeepOptions keep);
 
 /** @brief Find the most recent price between the two commodities.
  *

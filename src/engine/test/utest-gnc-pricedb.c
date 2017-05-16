@@ -759,8 +759,8 @@ static void test_gnc_pricedb_remove_old_prices (PriceDBFixture *fixture, gconstp
 
     g_assert (gnc_pricedb_remove_old_prices(fixture->pricedb, comm_list,
                                            t_old, t_cut,
-                                           PRICE_REMOVE_DEFAULT, // source is FQ
-                                           PRICE_REMOVE_DEFAULT)); // leave none
+                                           PRICE_REMOVE_SOURCE_DEFAULT, // source is FQ
+                                           PRICE_REMOVE_KEEP_DEFAULT)); // keep none
 
     g_assert_cmpint (gnc_pricedb_num_prices(fixture->pricedb, c->gbp), ==, 12);
     g_assert_cmpint (gnc_pricedb_num_prices(fixture->pricedb, c->usd), ==, 9);
@@ -769,23 +769,23 @@ static void test_gnc_pricedb_remove_old_prices (PriceDBFixture *fixture, gconstp
 
     g_assert (gnc_pricedb_remove_old_prices(fixture->pricedb, comm_list,
                                            t_old, t_cut,
-                                           PRICE_REMOVE_USER, // source is USER
-                                           PRICE_REMOVE_DEFAULT)); // leave none
+                                           PRICE_REMOVE_SOURCE_USER, // source is USER
+                                           PRICE_REMOVE_KEEP_DEFAULT)); // keep none
 
     g_assert_cmpint (gnc_pricedb_get_num_prices(fixture->pricedb), ==, 28);
 
     // there should be no prices before cutoff, returns false
     g_assert (!gnc_pricedb_remove_old_prices(fixture->pricedb, comm_list,
                                            t_old, t_cut,
-                                           PRICE_REMOVE_ALL, // source is ALL
-                                           PRICE_REMOVE_DEFAULT)); // leave none
+                                           PRICE_REMOVE_SOURCE_ALL, // source is ALL
+                                           PRICE_REMOVE_KEEP_DEFAULT)); // keep none
 
     g_assert_cmpint (gnc_pricedb_get_num_prices(fixture->pricedb), ==, 28);
 
     g_assert (gnc_pricedb_remove_old_prices(fixture->pricedb, comm_list,
                                            t_old, t_cut2,
-                                           PRICE_REMOVE_DEFAULT, // source is FQ
-                                           PRICE_REMOVE_SCALED)); // leave scaled
+                                           PRICE_REMOVE_SOURCE_DEFAULT, // source is FQ
+                                           PRICE_REMOVE_KEEP_SCALED)); // keep scaled
 
     g_assert_cmpint (gnc_pricedb_get_num_prices(fixture->pricedb), ==, 16);
 

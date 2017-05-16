@@ -1369,7 +1369,7 @@ free_data (gpointer data)
 }
 
 static void
-gnc_pricedb_remove_get_keep_dates (GHashTable* hash_dates, GDate period_begin, GDate period_end, PriceRemoveOptions leave)
+gnc_pricedb_remove_get_keep_dates (GHashTable* hash_dates, GDate period_begin, GDate period_end, PriceRemoveKeepOptions keep)
 {
     Recurrence *r;
     GDate recurrence_date_old, recurrence_date_next;
@@ -1386,11 +1386,12 @@ gnc_pricedb_remove_get_keep_dates (GHashTable* hash_dates, GDate period_begin, G
            g_date_get_month (&period_end), g_date_get_year (&period_end));
 
     g_date_set_day (&day_of_week_date, 1); // set date to 1st of month
+    g_date_subtract_days (&day_of_week_date, 1); // move to last day of previous month
 
     while (g_date_get_weekday (&day_of_week_date) != selected_day_of_week)
-        g_date_subtract_days (&day_of_week_date, 1); // go back till we find last Friday of month
+        g_date_subtract_days (&day_of_week_date, 1); // go back till we find last Friday of previous month
 
-    if (leave == PRICE_REMOVE_MONTHLY)
+    if (keep == PRICE_REMOVE_KEEP_MONTHLY)
         recurrenceSet (r, 1, PERIOD_LAST_WEEKDAY, &day_of_week_date, WEEKEND_ADJ_NONE); // Month set begin on last friday of month
     else
         recurrenceSet (r, 1, PERIOD_WEEK, &day_of_week_date, WEEKEND_ADJ_NONE); // Week set to begin on Friday of week
@@ -1416,8 +1417,8 @@ gnc_pricedb_remove_get_keep_dates (GHashTable* hash_dates, GDate period_begin, G
 gboolean
 gnc_pricedb_remove_old_prices (GNCPriceDB *db, GList *comm_list,
                               Timespec first, Timespec cutoff,
-                              PriceRemoveOptions source,
-                              PriceRemoveOptions leave)
+                              PriceRemoveSourceOptions source,
+                              PriceRemoveKeepOptions keep)
 {
     GHashTable *hash_dates = NULL;
     remove_info data;
@@ -1430,13 +1431,13 @@ gnc_pricedb_remove_old_prices (GNCPriceDB *db, GList *comm_list,
     data.delete_user = FALSE;
     data.delete_all = FALSE;
 
-    ENTER("Remove Prices for Source %d, leaving %d", source, leave);
+    ENTER("Remove Prices for Source %d, keeping %d", source, keep);
 
     // setup the options
-    if (source == PRICE_REMOVE_ALL)
+    if (source == PRICE_REMOVE_SOURCE_ALL)
         data.delete_all = TRUE;
 
-    if (source == PRICE_REMOVE_USER)
+    if (source == PRICE_REMOVE_SOURCE_USER)
         data.delete_user = TRUE;
 
     // Walk the list of commodities
@@ -1453,23 +1454,23 @@ gnc_pricedb_remove_old_prices (GNCPriceDB *db, GList *comm_list,
     }
     DEBUG("Number of Prices in list is %d", g_slist_length (data.list));
 
-    if (leave != PRICE_REMOVE_DEFAULT)
+    if (keep != PRICE_REMOVE_KEEP_DEFAULT)
     {
         GDate period_begin = timespec_to_gdate (first);
         GDate period_end = timespec_to_gdate (cutoff);
         hash_dates = g_hash_table_new_full (g_str_hash, g_str_equal, free_data, NULL);
 
-        if (leave == PRICE_REMOVE_SCALED)
+        if (keep == PRICE_REMOVE_KEEP_SCALED)
         {
             GDate temp_end_date = period_end;
             GDate temp_begin_date = period_end;
             g_date_subtract_months (&temp_end_date, 6);
             g_date_subtract_months (&temp_begin_date, 12);
-            gnc_pricedb_remove_get_keep_dates (hash_dates, temp_begin_date, temp_end_date, PRICE_REMOVE_WEEKLY);
-            gnc_pricedb_remove_get_keep_dates (hash_dates, period_begin, temp_begin_date, PRICE_REMOVE_MONTHLY);
+            gnc_pricedb_remove_get_keep_dates (hash_dates, temp_begin_date, temp_end_date, PRICE_REMOVE_KEEP_WEEKLY);
+            gnc_pricedb_remove_get_keep_dates (hash_dates, period_begin, temp_begin_date, PRICE_REMOVE_KEEP_MONTHLY);
         }
         else
-            gnc_pricedb_remove_get_keep_dates (hash_dates, period_begin, period_end, leave);
+            gnc_pricedb_remove_get_keep_dates (hash_dates, period_begin, period_end, keep);
 
         DEBUG("There are %d keys in hash_dates", g_hash_table_size (hash_dates));
     }
@@ -1493,7 +1494,7 @@ gnc_pricedb_remove_old_prices (GNCPriceDB *db, GList *comm_list,
         if (!found)
             gnc_pricedb_remove_price (db, item->data);
     }
-    if (leave != PRICE_REMOVE_DEFAULT)
+    if (keep != PRICE_REMOVE_KEEP_DEFAULT)
         g_hash_table_destroy (hash_dates);
 
     g_slist_free (data.list);

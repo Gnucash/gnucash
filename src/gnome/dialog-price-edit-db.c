@@ -372,8 +372,8 @@ gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
         if ((g_list_length (comm_list) != 0) && (gnc_verify_dialog (dialog, FALSE, fmt, NULL)))
         {
             Timespec last_ts;
-            PriceRemoveOptions source = PRICE_REMOVE_DEFAULT; 
-            PriceRemoveOptions leave = PRICE_REMOVE_DEFAULT;
+            PriceRemoveSourceOptions source = PRICE_REMOVE_SOURCE_DEFAULT; 
+            PriceRemoveKeepOptions keep = PRICE_REMOVE_KEEP_DEFAULT;
             gboolean user, all;
 
             DEBUG("deleting prices");
@@ -386,22 +386,22 @@ gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
             button = GTK_WIDGET(gtk_builder_get_object (builder, "checkbutton_user"));
             user = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
             if (user)
-                source = PRICE_REMOVE_USER;
+                source = PRICE_REMOVE_SOURCE_USER;
             if (all)
-                source = PRICE_REMOVE_ALL;
+                source = PRICE_REMOVE_SOURCE_ALL;
 
             button1 = GTK_WIDGET(gtk_builder_get_object (builder, "radiobutton_month"));
             button2 = GTK_WIDGET(gtk_builder_get_object (builder, "radiobutton_week"));
             button3 = GTK_WIDGET(gtk_builder_get_object (builder, "radiobutton_scaled"));
             if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button1)))
-                leave = PRICE_REMOVE_MONTHLY;
+                keep = PRICE_REMOVE_KEEP_MONTHLY;
             if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button2)))
-                leave = PRICE_REMOVE_WEEKLY;
+                keep = PRICE_REMOVE_KEEP_WEEKLY;
             if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button3)))
-                leave = PRICE_REMOVE_SCALED;
+                keep = PRICE_REMOVE_KEEP_SCALED;
 
             gnc_pricedb_remove_old_prices (pdb_dialog->price_db, comm_list,
-                                           first_ts, last_ts, source, leave);
+                                           first_ts, last_ts, source, keep);
         }
         g_list_free (comm_list);
     }
