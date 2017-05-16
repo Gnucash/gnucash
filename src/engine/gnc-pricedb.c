@@ -1369,7 +1369,7 @@ free_data (gpointer data)
 }
 
 static void
-gnc_pricedb_get_remove_dates (GHashTable* hash_dates, GDate period_begin, GDate period_end, PriceRemoveOptions leave)
+gnc_pricedb_remove_get_keep_dates (GHashTable* hash_dates, GDate period_begin, GDate period_end, PriceRemoveOptions leave)
 {
     Recurrence *r;
     GDate recurrence_date_old, recurrence_date_next;
@@ -1465,11 +1465,11 @@ gnc_pricedb_remove_old_prices (GNCPriceDB *db, GList *comm_list,
             GDate temp_begin_date = period_end;
             g_date_subtract_months (&temp_end_date, 6);
             g_date_subtract_months (&temp_begin_date, 12);
-            gnc_pricedb_get_remove_dates (hash_dates, temp_begin_date, temp_end_date, PRICE_REMOVE_WEEKLY);
-            gnc_pricedb_get_remove_dates (hash_dates, period_begin, temp_begin_date, PRICE_REMOVE_MONTHLY);
+            gnc_pricedb_remove_get_keep_dates (hash_dates, temp_begin_date, temp_end_date, PRICE_REMOVE_WEEKLY);
+            gnc_pricedb_remove_get_keep_dates (hash_dates, period_begin, temp_begin_date, PRICE_REMOVE_MONTHLY);
         }
         else
-            gnc_pricedb_get_remove_dates (hash_dates, period_begin, period_end, leave);
+            gnc_pricedb_remove_get_keep_dates (hash_dates, period_begin, period_end, leave);
 
         DEBUG("There are %d keys in hash_dates", g_hash_table_size (hash_dates));
     }
