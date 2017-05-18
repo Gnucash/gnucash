@@ -224,7 +224,7 @@ gnc_bi_import_read_file (const gchar * filename, const gchar * parser_regexp,
 
 //! \brief try to fix some common errors in the csv representation of invoices
 //! * corrects the date format
-//! * corrects ambiguous values in multi line invoices
+//! * corrects ambigous values in multi line invoices
 //! * ensures customer exists
 //! * if quantity is unset, set to 1
 //! * if price is unset, delete row
@@ -704,15 +704,15 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             g_date_free (date);
         }
         timespecFromTime64 (&today, gnc_time (NULL));	// set today to the current date
-        if (strlen (date_opened) != 0)	// If a date is specified in CSV
+        if (strlen (date) != 0)	// If a date is specified in CSV
         {
-            qof_scan_date (date_opened, &day, &month, &year); // FIXME: Must check for the return value of qof_scan_date!
+            qof_scan_date (date, &day, &month, &year); // FIXME: Must check for the return value of qof_scan_date!
             gncEntrySetDate(entry, gnc_dmy2timespec (day, month, year));
             gncEntrySetDateEntered(entry, gnc_dmy2timespec (day, month, year));
         }
         else
         {
-            gncEntrySetDate(entry, today);
+            gncEntrySetDate(entry, today); // TODO: DEPRECATED - use gncEntrySetDateGDate() instead!
             gncEntrySetDateEntered(entry, today);
         }
         // Remove escaped quotes
