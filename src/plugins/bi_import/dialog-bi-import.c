@@ -707,12 +707,12 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
         if (strlen (date) != 0)	// If a date is specified in CSV
         {
             qof_scan_date (date, &day, &month, &year); // FIXME: Must check for the return value of qof_scan_date!
-            gncEntrySetDate(entry, gnc_dmy2timespec (day, month, year));
+            gncEntrySetDateGDate(entry, gnc_dmy2timespec (day, month, year));
             gncEntrySetDateEntered(entry, gnc_dmy2timespec (day, month, year));
         }
         else
         {
-            gncEntrySetDate(entry, today); // TODO: DEPRECATED - use gncEntrySetDateGDate() instead!
+            gncEntrySetDateGDate (entry, today); 
             gncEntrySetDateEntered(entry, today);
         }
         // Remove escaped quotes
