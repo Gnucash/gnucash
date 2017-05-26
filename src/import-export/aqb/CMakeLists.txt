@@ -45,15 +45,21 @@ IF(WITH_AQBANKING)
     ${aqbanking_noinst_HEADERS}
   )
 
-
   SET(AQB_EXPORT_SYMBOLS "")
   IF (WIN32)
     SET(AQB_EXPORT_SYMBOLS "-Wl,--export-all-symbols")
   ENDIF()
+  SET(AQB_LIBSTDCXX "")
+  IF (MINGW)
+    SET(AQB_LIBSTDCXX "-lstdc++")
+  ENDIF()
 
- TARGET_LINK_LIBRARIES(gncmod-aqbanking gnc-gnome gncmod-gnome-utils gncmod-generic-import gncmod-register-core
-           gncmod-register-gnome gncmod-ledger-core gncmod-engine gnc-qof ${AQB_EXPORT_SYMBOLS} ${AQBANKING_LDFLAGS} ${GWENHYWFAR_LDFLAGS}
-          ${GWENGUI_GTK2_LDFLAGS} ${GNOME_LDFLAGS} ${KTOBLZCHECK_LDFLAGS})
+  TARGET_LINK_LIBRARIES(gncmod-aqbanking gnc-gnome gncmod-gnome-utils
+         gncmod-generic-import gncmod-register-core
+         gncmod-register-gnome gncmod-ledger-core gncmod-engine
+         gnc-qof ${AQB_EXPORT_SYMBOLS} ${AQBANKING_LDFLAGS}
+         ${GWENHYWFAR_LDFLAGS} ${GWENGUI_GTK2_LDFLAGS}
+         ${GNOME_LDFLAGS} ${KTOBLZCHECK_LDFLAGS} ${AQB_LIBSTDCXX})
 
   TARGET_COMPILE_DEFINITIONS(gncmod-aqbanking PRIVATE -DG_LOG_DOMAIN=\"gnc.import.aqbanking\")
 

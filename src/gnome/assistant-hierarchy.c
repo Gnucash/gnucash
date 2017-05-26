@@ -25,6 +25,7 @@
 #include "config.h"
 
 #include <platform.h>
+#include <libguile.h>
 #if PLATFORM(WINDOWS)
 #include <windows.h>
 #endif
@@ -230,7 +231,7 @@ gnc_get_ea_locale_dir(const char *top_dir)
     static gchar *default_locale = "C";
     gchar *ret;
     gchar *locale;
-    struct stat buf;
+    GStatBuf buf;
     int i;
 
 #ifdef PLATFORM_WIN32

@@ -22,8 +22,10 @@
 
 #include "config.h"
 
+#ifdef __MINGW32__
+#define __USE_MINGW_ANSI_STDIO 1
+#endif
 #include "gnc-ui-util.h"
-
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gio/gio.h>

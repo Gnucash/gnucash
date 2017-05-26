@@ -20,6 +20,7 @@
 
 #include "config.h"
 
+#include "swig-runtime.h"
 #include <platform.h>
 #if PLATFORM(WINDOWS)
 #include <windows.h>
@@ -28,7 +29,6 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <string.h>
-#include "swig-runtime.h"
 #include <libguile.h>
 #include <errno.h>
 #ifdef HAVE_UNISTD_H

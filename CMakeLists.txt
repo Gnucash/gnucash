@@ -135,12 +135,13 @@ IF (WIN32)
   # Setting CMAKE_FRAMEWORK_PATH, which is intended for OS X, is a terrible hack here. But I don't
   # want to mess with CMAKE_PREFIX_PATH.
   SET(CMAKE_FRAMEWORK_PATH "${CMAKE_FRAMEWORK_PATH_TMP}")
-  SET(PKG_CONFIG_EXECUTABLE ${CMAKE_PREFIX_PATH}/gnome/bin/pkg-config.exe)
-  SET(SWIG_EXECUTABLE ${CMAKE_PREFIX_PATH}/swig/swig.exe)
-  SET(REGEX_INCLUDE_PATH ${CMAKE_PREFIX_PATH}/regex/include)
-  SET(REGEX_LDFLAGS "-L${CMAKE_PREFIX_PATH}/regex/lib -lregex")
-  SET(LIBXSLT_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/libxslt/include)
-  SET(LIBXSLT_XSLTPROC_EXECUTABLE ${CMAKE_PREFIX_PATH}/libxslt/bin/xsltproc)
+  #SET(PKG_CONFIG_EXECUTABLE ${CMAKE_PREFIX_PATH}/gnome/bin/pkg-config.exe)
+  SET(SWIG_EXECUTABLE swig)
+  #SET(SWIG_EXECUTABLE ${CMAKE_PREFIX_PATH}/swig/swig.exe)
+  SET(REGEX_INCLUDE_PATH ${CMAKE_PREFIX_PATH}/mingw32/include)
+  SET(REGEX_LDFLAGS "-L${CMAKE_PREFIX_PATH}/mingw32/lib -lregex")
+  #SET(LIBXSLT_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/libxslt/include)
+  #SET(LIBXSLT_XSLTPROC_EXECUTABLE ${CMAKE_PREFIX_PATH}/libxslt/bin/xsltproc)
   # I have not yet debugged the intltool-merge file generation process on Windows.
   SET(NO_INTLTOOL TRUE)
 #Prevent creating a console window on startup.
@@ -226,6 +227,7 @@ FIND_PATH (REGEX_INCLUDE_PATH NAMES regex.h
 		  PATHS /usr/include /opt/gnome/include)
 FIND_LIBRARY (REGEX_LIBRARY NAMES regex)
 IF (WIN32)
+  message(STATUS "Looking for htmlhelp.h and htmlhelp.a in ${HTMLHELP_DIR}")
   FIND_PATH (HTMLHELP_INCLUDE_PATH NAMES htmlhelp.h HINTS ${HTMLHELP_DIR}/include)
   FIND_LIBRARY (HTMLHELP_LIBRARY htmlhelp HINTS ${HTMLHELP_DIR}/lib)
 ENDIF (WIN32)
@@ -708,7 +710,7 @@ INSTALL(CODE
 #For windows, copy in some DLLs from Mingw
 
 IF (WIN32)
-  SET(MINGW_DLLS ${CMAKE_PREFIX_PATH}/mingw/bin/libstdc++-6.dll ${CMAKE_PREFIX_PATH}/mingw/bin/libgcc_s_dw2-1.dll)
+  SET(MINGW_DLLS ${CMAKE_PREFIX_PATH}/mingw32/bin/libstdc++-6.dll ${CMAKE_PREFIX_PATH}/mingw32/bin/libgcc_s_dw2-1.dll)
   INSTALL(PROGRAMS ${MINGW_DLLS} DESTINATION bin)
   FILE(COPY ${MINGW_DLLS} DESTINATION ${BINDIR_BUILD}
     # Do permissions matter for windows?

@@ -52,7 +52,7 @@ static QofLogModule log_module = GNC_MOD_BACKEND;
 bool
 GncXmlBackend::check_path (const char* fullpath, bool create)
 {
-    struct stat statbuf;
+    GStatBuf statbuf;
     char* dirname = g_path_get_dirname (fullpath);
     /* Again check whether the directory can be accessed */
     auto rc = g_stat (dirname, &statbuf);
@@ -333,7 +333,7 @@ GncXmlBackend::save_may_clobber_data()
 {
     if (m_fullpath.empty())
         return false;
-    struct stat statbuf;
+    GStatBuf statbuf;
     auto rc = g_stat (m_fullpath.c_str(), &statbuf);
     return rc == 0;
 }
@@ -397,7 +397,7 @@ GncXmlBackend::write_to_file (bool make_backup)
                                        gnc_prefs_get_file_save_compressed ()))
     {
         /* Record the file's permissions before g_unlinking it */
-        struct stat statbuf;
+        GStatBuf statbuf;
         auto rc = g_stat (m_fullpath.c_str(), &statbuf);
         if (rc == 0)
         {
@@ -619,7 +619,7 @@ GncXmlBackend::link_or_make_backup (const std::string& orig,
 bool
 GncXmlBackend::get_file_lock ()
 {
-    struct stat statbuf;
+    GStatBuf statbuf;
 #ifndef G_OS_WIN32
     char* pathbuf = NULL, *tmpbuf = NULL;
     size_t pathbuf_size = 0;
@@ -739,7 +739,7 @@ GncXmlBackend::get_file_lock ()
 bool
 GncXmlBackend::backup_file()
 {
-    struct stat statbuf;
+    GStatBuf statbuf;
 
     auto datafile = m_fullpath.c_str();
 
@@ -773,7 +773,7 @@ GncXmlBackend::backup_file()
 void
 GncXmlBackend::remove_old_files ()
 {
-    struct stat lockstatbuf, statbuf;
+    GStatBuf lockstatbuf, statbuf;
 
     if (g_stat (m_lockfile.c_str(), &lockstatbuf) != 0)
         return;

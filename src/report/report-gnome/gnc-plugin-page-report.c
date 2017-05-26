@@ -1471,7 +1471,7 @@ static char *
 gnc_get_export_filename (SCM choice)
 {
     char * filepath;
-    struct stat statbuf;
+    GStatBuf statbuf;
     char * title;
     const gchar * html_type = _("HTML");
     char * type;

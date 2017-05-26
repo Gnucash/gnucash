@@ -757,7 +757,9 @@ sxftd_update_excal_adapt( GObject *o, gpointer ud )
 void
 gnc_sx_create_from_trans( Transaction *trans )
 {
+#ifndef __MINGW32__
     int errno;
+#endif
     SXFromTransInfo *sxfti = g_new0( SXFromTransInfo, 1);
     GtkBuilder *builder;
     GtkWidget *dialog;

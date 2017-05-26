@@ -26,6 +26,7 @@
 #include "config.h"
 
 #include <platform.h>
+#include <libguile.h>
 #if PLATFORM(WINDOWS)
 #include <windows.h>
 #endif
@@ -41,7 +42,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <regex.h>
-#include <libguile.h>
 
 #include <webkit2/webkit2.h>
 

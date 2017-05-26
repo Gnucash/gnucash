@@ -26,6 +26,7 @@
 #include "config.h"
 
 #include <platform.h>
+#include <libguile.h>
 #if PLATFORM(WINDOWS)
 #include <windows.h>
 #endif

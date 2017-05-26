@@ -231,7 +231,9 @@ gnc_saved_reports_write_internal (const gchar *file, const gchar *contents, gboo
 {
     gboolean success = TRUE;
     gint fd;
+#ifndef __MINGW32__
     extern int errno;
+#endif
     ssize_t written;
     gint length;
     gint flags = O_WRONLY | O_CREAT | (overwrite ? O_TRUNC : O_APPEND);
