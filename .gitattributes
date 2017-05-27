@@ -23,6 +23,7 @@
 *.sh    text eol=lf
 *.svg   text eol=lf
 *.xsl   text eol=lf
+*.cmake test eol=lf
 
 Makefile.TAGS    text eol=lf
 Makevars         text eol=lf
@@ -33,7 +34,8 @@ custom.sh.sample text eol=lf
 glade-fixup      text eol=lf
 gnc-glossary.txt text eol=lf
 gnc-scm-info     text eol=lf
-
+CMakeLists.txt   text eol=lf
+.gitattributes   text eol=lf
 
 # Files that should use CRLF at all times
 *.bat text eol=crlf
