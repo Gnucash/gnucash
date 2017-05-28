@@ -320,6 +320,10 @@ class GncNumeric(GnuCashCoreClass):
         else:
             raise TypeError('Required single int/float/str or two ints: ' + str(args))
 
+    def to_fraction(self):
+        from fractions import Fraction
+        return Fraction(self.num(), self.denom())
+
     def __unicode__(self):
         """Returns a human readable numeric value string as UTF8."""
         return gnc_numeric_to_string(self.instance)

@@ -79,6 +79,11 @@ class TestGncNumeric( TestCase ):
         for test_num in [0.0, 1.1, -1.1, 1/3.0]:
             self.assertEqual(GncNumeric(test_num).to_double(), test_num)
 
+    def test_to_fraction(self):
+        fraction = GncNumeric("1000/3").to_fraction()
+        self.assertEqual(fraction.numerator, 1000)
+        self.assertEqual(fraction.denominator, 3)
+
     def test_incorect_args(self):
         with self.assertRaises(TypeError):
             GncNumeric(1, 2, 3)
