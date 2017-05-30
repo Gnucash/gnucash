@@ -1299,8 +1299,9 @@ typedef struct
 {
     GNCPriceDB *db;
     Timespec cutoff;
-    gboolean delete_user; // False is FQ only
-    gboolean delete_all;
+    gboolean delete_fq;
+    gboolean delete_user;
+    gboolean delete_app;
     GSList *list;
 } remove_info;
 
@@ -1315,19 +1316,18 @@ check_one_price_date (GNCPrice *price, gpointer user_data)
           gnc_commodity_get_mnemonic(gnc_price_get_commodity(price)),
           user_data);
 
-    if (!data->delete_all)
-    {
-        source = gnc_price_get_source (price);
+    source = gnc_price_get_source (price);
         
-        if ((source == PRICE_SOURCE_FQ) && !data->delete_user)
-            PINFO ("Delete Quote Source");
-        else if ((source == PRICE_SOURCE_USER_PRICE) && data->delete_user)
-            PINFO ("Delete User Source");
-        else
-        {
-            LEAVE("Not a matching source");
-            return TRUE;
-        }
+    if ((source == PRICE_SOURCE_FQ) && data->delete_fq)
+        PINFO ("Delete Quote Source");
+    else if ((source == PRICE_SOURCE_USER_PRICE) && data->delete_user)
+        PINFO ("Delete User Source");
+    else if ((source != PRICE_SOURCE_FQ) && (source != PRICE_SOURCE_USER_PRICE) && data->delete_app)
+        PINFO ("Delete App Source");
+    else
+    {
+        LEAVE("Not a matching source");
+        return TRUE;
     }
 
     pt = gnc_price_get_time (price);
@@ -1367,7 +1367,6 @@ gnc_pricedb_remove_get_keep_dates (GHashTable* hash_dates, GDate period_begin, G
 {
     Recurrence *r;
     GDate recurrence_date_old, recurrence_date_next;
-
     GDateWeekday selected_day_of_week = G_DATE_FRIDAY;
     GDate day_of_week_date;
 
@@ -1409,45 +1408,13 @@ gnc_pricedb_remove_get_keep_dates (GHashTable* hash_dates, GDate period_begin, G
     g_free (r);
 }
 
-gboolean
-gnc_pricedb_remove_old_prices (GNCPriceDB *db, GList *comm_list,
-                              Timespec first, Timespec cutoff,
-                              PriceRemoveSourceOptions source,
-                              PriceRemoveKeepOptions keep)
+
+static void
+gnc_pricedb_remove_old_prices_keep_friday (GNCPriceDB *db, Timespec first, Timespec cutoff,
+                                           remove_info data, PriceRemoveKeepOptions keep)
 {
     GHashTable *hash_dates = NULL;
-    remove_info data;
     GSList *item;
-    GList  *node;
-
-    data.db = db;
-    data.cutoff = cutoff;
-    data.list = NULL;
-    data.delete_user = FALSE;
-    data.delete_all = FALSE;
-
-    ENTER("Remove Prices for Source %d, keeping %d", source, keep);
-
-    // setup the options
-    if (source == PRICE_REMOVE_SOURCE_ALL)
-        data.delete_all = TRUE;
-
-    if (source == PRICE_REMOVE_SOURCE_USER)
-        data.delete_user = TRUE;
-
-    // Walk the list of commodities
-    for (node = g_list_first (comm_list); node; node = g_list_next (node))
-    {
-        GHashTable *currencies_hash = g_hash_table_lookup (db->commodity_hash, node->data);
-        g_hash_table_foreach (currencies_hash, pricedb_remove_foreach_pricelist, &data);
-    }
-
-    if (data.list == NULL)
-    {
-        LEAVE("Empty price list");
-        return FALSE;
-    }
-    DEBUG("Number of Prices in list is %d", g_slist_length (data.list));
 
     if (keep != PRICE_REMOVE_KEEP_DEFAULT)
     {
@@ -1491,6 +1458,56 @@ gnc_pricedb_remove_old_prices (GNCPriceDB *db, GList *comm_list,
     }
     if (keep != PRICE_REMOVE_KEEP_DEFAULT)
         g_hash_table_destroy (hash_dates);
+}
+
+
+gboolean
+gnc_pricedb_remove_old_prices (GNCPriceDB *db, GList *comm_list,
+                              Timespec first, Timespec cutoff,
+                              PriceRemoveSourceFlags source,
+                              PriceRemoveKeepOptions keep)
+{
+    remove_info data;
+    GList *node;
+
+    data.db = db;
+    data.cutoff = cutoff;
+    data.list = NULL;
+    data.delete_fq = FALSE;
+    data.delete_user = FALSE;
+    data.delete_app = FALSE;
+
+    ENTER("Remove Prices for Source %d, keeping %d", source, keep);
+
+    // setup the source options
+    if (source & PRICE_REMOVE_SOURCE_APP)
+        data.delete_app = TRUE;
+
+    if (source & PRICE_REMOVE_SOURCE_FQ)
+        data.delete_fq = TRUE;
+
+    if (source & PRICE_REMOVE_SOURCE_USER)
+        data.delete_user = TRUE;
+
+    // Walk the list of commodities
+    for (node = g_list_first (comm_list); node; node = g_list_next (node))
+    {
+        GHashTable *currencies_hash = g_hash_table_lookup (db->commodity_hash, node->data);
+        g_hash_table_foreach (currencies_hash, pricedb_remove_foreach_pricelist, &data);
+    }
+
+    if (data.list == NULL)
+    {
+        LEAVE("Empty price list");
+        return FALSE;
+    }
+    DEBUG("Number of Prices in list is %d", g_slist_length (data.list));
+
+    // decide on what remove procedure to use
+    if (keep > PRICE_REMOVE_KEEP_LAST)
+        PINFO("keep last function");
+    else
+        gnc_pricedb_remove_old_prices_keep_friday (db, first, cutoff, data, keep);
 
     g_slist_free (data.list);
     LEAVE(" ");

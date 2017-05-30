@@ -374,17 +374,24 @@ gboolean     gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p);
 
 typedef enum
 {
-    PRICE_REMOVE_SOURCE_DEFAULT, // default option value
-    PRICE_REMOVE_SOURCE_USER,    // only user prices
-    PRICE_REMOVE_SOURCE_ALL,     // all prices
-} PriceRemoveSourceOptions;
+    PRICE_REMOVE_SOURCE_FQ = 1,   // this flag is set when added by F:Q checked
+    PRICE_REMOVE_SOURCE_USER = 2, // this flag is set when added by the user checked
+    PRICE_REMOVE_SOURCE_APP = 4,  // this flag is set when added by the app checked
+    PRICE_REMOVE_SOURCE_COMM = 8, // this flag is set when we have commodities selected
+} PriceRemoveSourceFlags;
 
 typedef enum
 {
-    PRICE_REMOVE_KEEP_DEFAULT, // default option value
+    PRICE_REMOVE_KEEP_DEFAULT, // default option value, keep none
     PRICE_REMOVE_KEEP_WEEKLY,  // leave one every week on a friday
     PRICE_REMOVE_KEEP_MONTHLY, // leave one every last friday of month
     PRICE_REMOVE_KEEP_SCALED,  // leave one every week then one a month
+    PRICE_REMOVE_KEEP_LAST = PRICE_REMOVE_KEEP_SCALED,
+
+    PRICE_REMOVE_KEEP_LAST_WEEKLY,    // leave last one of every week
+    PRICE_REMOVE_KEEP_LAST_MONTHLY,   // leave last one of every month
+    PRICE_REMOVE_KEEP_LAST_QUARTERLY, // leave last one of every quarter
+    PRICE_REMOVE_KEEP_LAST_PERIOD,    // leave last one of every annual period
 } PriceRemoveKeepOptions;
 
 /** @brief Remove and unref prices older than a certain time.
@@ -398,7 +405,7 @@ typedef enum
  */
 gboolean     gnc_pricedb_remove_old_prices(GNCPriceDB *db, GList *comm_list,
                                            Timespec first, Timespec cutoff,
-                                           PriceRemoveSourceOptions source,
+                                           PriceRemoveSourceFlags source,
                                            PriceRemoveKeepOptions keep);
 
 /** @brief Find the most recent price between the two commodities.
