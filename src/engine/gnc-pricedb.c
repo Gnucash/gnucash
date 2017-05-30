@@ -29,6 +29,7 @@
 #include "gnc-pricedb-p.h"
 #include <qofinstance-p.h>
 #include "Recurrence.h"
+#include "gnc-gdate-utils.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_PRICE;
@@ -1461,8 +1462,260 @@ gnc_pricedb_remove_old_prices_keep_friday (GNCPriceDB *db, Timespec first, Times
 }
 
 
+static gint
+compare_prices_by_commodity_date (gconstpointer a, gconstpointer b)
+{
+    Timespec time_a;
+    Timespec time_b;
+    gnc_commodity *comma;
+    gnc_commodity *commb;
+    gnc_commodity *curra;
+    gnc_commodity *currb;
+    gint result;
+
+    if (!a && !b) return 0;
+    /* nothing is always less than something */
+    if (!a) return -1;
+
+    comma = gnc_price_get_commodity ((GNCPrice *) a);
+    commb = gnc_price_get_commodity ((GNCPrice *) b);
+
+    if (!gnc_commodity_equal(comma, commb))
+        return gnc_commodity_compare(comma, commb);
+
+    curra = gnc_price_get_currency ((GNCPrice *) a);
+    currb = gnc_price_get_currency ((GNCPrice *) b);
+
+    if (!gnc_commodity_equal(curra, currb))
+        return gnc_commodity_compare(curra, currb);
+
+    time_a = gnc_price_get_time((GNCPrice *) a);
+    time_b = gnc_price_get_time((GNCPrice *) b);
+
+    result = -timespec_cmp(&time_a, &time_b);
+    if (result) return result;
+
+    /* For a stable sort */
+    return guid_compare (gnc_price_get_guid((GNCPrice *) a),
+                         gnc_price_get_guid((GNCPrice *) b));
+}
+
+static gboolean
+price_commodity_and_currency_equal (GNCPrice *a, GNCPrice *b)
+{
+    gboolean ret_comm = FALSE;
+    gboolean ret_curr = FALSE;
+
+    if (gnc_commodity_equal (gnc_price_get_commodity(a), gnc_price_get_commodity (b)))
+        ret_comm = TRUE;
+
+    if (gnc_commodity_equal (gnc_price_get_currency(a), gnc_price_get_currency (b)))
+        ret_curr = TRUE;
+
+    return (ret_comm && ret_curr);
+}
+
+static void
+gnc_pricedb_remove_old_prices_pinfo (GNCPrice *price, gboolean keep_message)
+{
+    GDate price_date = timespec_to_gdate (gnc_price_get_time (price));
+    char date_buf[MAX_DATE_LENGTH+1];
+
+    if (g_date_valid (&price_date))
+    {
+        qof_print_gdate (date_buf, MAX_DATE_LENGTH, &price_date);
+
+        if (keep_message)
+        {
+            PINFO("#### Keep price with date %s, commodity is %s, currency is %s", date_buf,
+                     gnc_commodity_get_printname(gnc_price_get_commodity(price)),
+                     gnc_commodity_get_printname(gnc_price_get_currency(price)));
+        }
+        else
+            PINFO("## Remove price with date %s", date_buf);
+    }
+    else
+        PINFO("Keep price date is invalid");
+}
+
+static GNCPrice*
+save_cloned_price (GNCPrice *price, GNCPrice *clone_price)
+{
+    QofBook *book = qof_instance_get_book (QOF_INSTANCE(clone_price));
+    GNCPrice *cloned_price;
+
+    if (price)
+        gnc_price_unref (price);
+
+    cloned_price = gnc_price_clone (clone_price, book);
+
+    gnc_pricedb_remove_old_prices_pinfo (clone_price, TRUE);
+
+    return cloned_price;
+}
+
+static gint
+roundUp (gint numToRound, gint multiple)
+{
+    gint remainder;
+
+    if (multiple == 0)
+        return numToRound;
+
+    remainder = numToRound % multiple;
+    if (remainder == 0)
+        return numToRound;
+
+    return numToRound + multiple - remainder;
+}
+
+static gint
+get_fiscal_quarter (GDate *date, GDateMonth fiscal_start)
+{
+    GDateMonth month = g_date_get_month (date);
+
+    gint q = ((roundUp (22 - fiscal_start + month, 3)/3) % 4) + 1;
+
+    PINFO("Return fiscal quarter is %d", q);
+    return q;
+}
+
+static void
+gnc_pricedb_remove_old_prices_keep_last (GNCPriceDB *db, GDate *fiscal_end_date,
+                                         remove_info data, PriceRemoveKeepOptions keep)
+{
+    GSList *item;
+    gboolean save_first_price = FALSE;
+    GNCPrice *saved_price = NULL;
+    GDateMonth fiscal_month_end = g_date_get_month (fiscal_end_date);
+    GDateMonth fiscal_month_start;
+    GDate *tmp_date = g_date_new_dmy (g_date_get_day (fiscal_end_date),
+                                      g_date_get_month (fiscal_end_date),
+                                      g_date_get_year (fiscal_end_date));
+
+    // get the fiscal start month
+    g_date_subtract_months (tmp_date, 12);
+    fiscal_month_start = g_date_get_month (tmp_date) + 1;
+    g_date_free (tmp_date);
+
+    // sort the list by commodity / currency / date
+    data.list = g_slist_sort (data.list, compare_prices_by_commodity_date);
+
+    /* Now run this external list deleting prices */
+    for (item = data.list; item; item = g_slist_next(item))
+    {
+        save_first_price = !price_commodity_and_currency_equal (item->data, saved_price); // Not Equal
+
+        if (save_first_price == TRUE)
+        {
+            saved_price = save_cloned_price (saved_price, item->data);
+            save_first_price = FALSE;
+            continue;
+        }
+
+        // Keep last price in fiscal year
+        if (keep == PRICE_REMOVE_KEEP_LAST_PERIOD && save_first_price == FALSE)
+        {
+            GDate saved_price_date = timespec_to_gdate (gnc_price_get_time (saved_price));
+            GDate *saved_fiscal_end = g_date_new_dmy (g_date_get_day (&saved_price_date),
+                                                      g_date_get_month (&saved_price_date),
+                                                      g_date_get_year (&saved_price_date));
+            GDateMonth saved_fiscal_year;
+
+            GDate next_price_date = timespec_to_gdate (gnc_price_get_time (item->data));
+            GDate *next_fiscal_end = g_date_new_dmy (g_date_get_day (&next_price_date),
+                                                     g_date_get_month (&next_price_date),
+                                                     g_date_get_year (&next_price_date));
+            GDateMonth next_fiscal_year;
+
+            gnc_gdate_set_fiscal_year_end (saved_fiscal_end, fiscal_end_date);
+            gnc_gdate_set_fiscal_year_end (next_fiscal_end, fiscal_end_date);
+
+            saved_fiscal_year = g_date_get_year (saved_fiscal_end);
+            next_fiscal_year = g_date_get_year (next_fiscal_end);
+
+            PINFO("Keep last price in fiscal year");
+
+            if (saved_fiscal_year == next_fiscal_year)
+            {
+                gnc_pricedb_remove_old_prices_pinfo (item->data, FALSE);
+                gnc_pricedb_remove_price (db, item->data);
+            }
+            else
+                saved_price = save_cloned_price (saved_price, item->data);
+
+            g_date_free (saved_fiscal_end);
+            g_date_free (next_fiscal_end);
+        }
+
+        // Keep last price in fiscal quarter
+        if (keep == PRICE_REMOVE_KEEP_LAST_QUARTERLY && save_first_price == FALSE)
+        {
+            GDate saved_price_date = timespec_to_gdate (gnc_price_get_time (saved_price));
+            gint  saved_price_q = get_fiscal_quarter (&saved_price_date, fiscal_month_start);
+
+            GDate next_price_date = timespec_to_gdate (gnc_price_get_time (item->data));
+            gint  next_price_q = get_fiscal_quarter (&next_price_date, fiscal_month_start);
+
+            PINFO("Keep last price in fiscal quarter");
+
+            if (saved_price_q == next_price_q)
+            {
+                gnc_pricedb_remove_old_prices_pinfo (item->data, FALSE);
+                gnc_pricedb_remove_price (db, item->data);
+            }
+            else
+                saved_price = save_cloned_price (saved_price, item->data);
+        }
+
+        // Keep last price of every month
+        if (keep == PRICE_REMOVE_KEEP_LAST_MONTHLY && save_first_price == FALSE)
+        {
+            GDate saved_price_date = timespec_to_gdate (gnc_price_get_time (saved_price));
+            GDateMonth saved_price_month = g_date_get_month (&saved_price_date);
+
+            GDate next_price_date = timespec_to_gdate (gnc_price_get_time (item->data));
+            GDateMonth next_price_month = g_date_get_month (&next_price_date);
+
+            PINFO("Keep last price of every month");
+
+            if (next_price_month == saved_price_month)
+            {
+                gnc_pricedb_remove_old_prices_pinfo (item->data, FALSE);
+                gnc_pricedb_remove_price (db, item->data);
+            }
+            else
+                saved_price = save_cloned_price (saved_price, item->data);
+        }
+
+        // Keep last price of every week
+        if (keep == PRICE_REMOVE_KEEP_LAST_WEEKLY && save_first_price == FALSE)
+        {
+            GDate saved_price_date = timespec_to_gdate (gnc_price_get_time (saved_price));
+            gint saved_week_of_year = g_date_get_iso8601_week_of_year (&saved_price_date);
+
+            GDate next_price_date = timespec_to_gdate (gnc_price_get_time (item->data));
+            gint next_price_week_of_year = g_date_get_iso8601_week_of_year (&next_price_date);
+
+            PINFO("Keep last price of every week");
+
+            if (next_price_week_of_year == saved_week_of_year)
+            {
+                gnc_pricedb_remove_old_prices_pinfo (item->data, FALSE);
+                gnc_pricedb_remove_price (db, item->data);
+            }
+            else
+                saved_price = save_cloned_price (saved_price, item->data);
+        }
+    }
+    if (saved_price)
+        gnc_price_unref (saved_price);
+}
+
+
 gboolean
 gnc_pricedb_remove_old_prices (GNCPriceDB *db, GList *comm_list,
+                              GDate *fiscal_end_date,
                               Timespec first, Timespec cutoff,
                               PriceRemoveSourceFlags source,
                               PriceRemoveKeepOptions keep)
@@ -1501,11 +1754,19 @@ gnc_pricedb_remove_old_prices (GNCPriceDB *db, GList *comm_list,
         LEAVE("Empty price list");
         return FALSE;
     }
-    DEBUG("Number of Prices in list is %d", g_slist_length (data.list));
+    DEBUG("Number of Prices in list is %d, Cutoff date is %s", g_slist_length (data.list), gnc_print_date (cutoff));
 
     // decide on what remove procedure to use
     if (keep > PRICE_REMOVE_KEEP_LAST)
-        PINFO("keep last function");
+    {
+        // Check for a valid fiscal end of year date
+        if (!g_date_valid (fiscal_end_date))
+        {
+            GDateYear year_now = g_date_get_year (gnc_g_date_new_today ());
+            g_date_set_dmy (fiscal_end_date, 31, 12, year_now);
+        }
+        gnc_pricedb_remove_old_prices_keep_last (db, fiscal_end_date, data, keep);
+    }
     else
         gnc_pricedb_remove_old_prices_keep_friday (db, first, cutoff, data, keep);
 

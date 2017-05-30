@@ -397,6 +397,7 @@ typedef enum
 /** @brief Remove and unref prices older than a certain time.
  * @param db The pricedb
  * @param comm_list A list of commodities
+ * @param fiscal_end_date the end date of the current accounting period
  * @param first The oldest price time in the pricedb 
  * @param cutoff The time before which prices should be deleted.
  * @param source Whether Finance::Quote, user or all prices should be deleted.
@@ -404,6 +405,7 @@ typedef enum
  * @return True if there were prices to process, False if not.
  */
 gboolean     gnc_pricedb_remove_old_prices(GNCPriceDB *db, GList *comm_list,
+                                           GDate *fiscal_end_date,
                                            Timespec first, Timespec cutoff,
                                            PriceRemoveSourceFlags source,
                                            PriceRemoveKeepOptions keep);

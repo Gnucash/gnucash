@@ -32,6 +32,7 @@
 #include <time.h>
 
 #include "dialog-utils.h"
+#include "gnc-accounting-period.h"
 #include "gnc-amount-edit.h"
 #include "gnc-commodity-edit.h"
 #include "gnc-general-select.h"
@@ -376,6 +377,20 @@ selection_changed_cb (GtkTreeSelection *selection, gpointer data)
         change_source_flag (PRICE_REMOVE_SOURCE_COMM, FALSE, pdb_dialog);
 }
 
+static GDate
+get_fiscal_end_date (void)
+{
+    Timespec ts_end;
+    GDate f_end;
+
+    timespecFromTime64 (&ts_end, gnc_accounting_period_fiscal_end());
+    f_end = timespec_to_gdate (ts_end);
+
+    PINFO("Fiscal end date is %s", qof_print_date (gnc_accounting_period_fiscal_end()));
+
+    return f_end;
+}
+
 void
 gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
 {
@@ -450,6 +465,7 @@ gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
         if ((g_list_length (comm_list) != 0) && (gnc_verify_dialog (pdb_dialog->remove_dialog, FALSE, fmt, NULL)))
         {
             Timespec last_ts;
+            GDate fiscal_end_date = get_fiscal_end_date ();
             PriceRemoveSourceFlags source = PRICE_REMOVE_SOURCE_FQ; 
             PriceRemoveKeepOptions keep = PRICE_REMOVE_KEEP_DEFAULT;
 
@@ -479,7 +495,7 @@ gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
             if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button)))
                 keep = PRICE_REMOVE_KEEP_LAST_PERIOD;
 
-            gnc_pricedb_remove_old_prices (pdb_dialog->price_db, comm_list,
+            gnc_pricedb_remove_old_prices (pdb_dialog->price_db, comm_list, &fiscal_end_date,
                                            first_ts, last_ts, pdb_dialog->remove_source, keep);
         }
         g_list_free (comm_list);
