@@ -733,7 +733,7 @@
           <object class="GtkTable" id="table2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="n_rows">11</property>
+            <property name="n_rows">9</property>
             <property name="n_columns">2</property>
             <property name="column_spacing">12</property>
             <property name="row_spacing">10</property>
@@ -765,6 +765,7 @@
                     <property name="use_underline">True</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
+                    <property name="group">radiobutton_last_week</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -773,15 +774,15 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="radiobutton_week">
-                    <property name="label" translatable="yes">One per _Week</property>
+                  <object class="GtkRadioButton" id="radiobutton_last_week">
+                    <property name="label" translatable="yes">Last of _Week</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Keep a price on the Friday of each week if present before date.</property>
+                    <property name="tooltip_text" translatable="yes">Keep the last price of each week if present before date.</property>
                     <property name="use_underline">True</property>
+                    <property name="active">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">radiobutton_none</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -790,20 +791,54 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="radiobutton_month">
-                    <property name="label" translatable="yes">One per _Month</property>
+                  <object class="GtkRadioButton" id="radiobutton_last_month">
+                    <property name="label" translatable="yes">Last of _Month</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Keep a price on the last Friday of the month if present before date.</property>
+                    <property name="tooltip_text" translatable="yes">Keep the last price of each month if present before date.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">radiobutton_none</property>
+                    <property name="group">radiobutton_last_week</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
                     <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="radiobutton_last_quarter">
+                    <property name="label" translatable="yes">Last of _Quarter</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="tooltip_text" translatable="yes">Keep the last price of each fiscal quarter if present before date. This fiscal quarters are derived from the accounting period end date.</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">radiobutton_last_week</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="radiobutton_last_period">
+                    <property name="label" translatable="yes">Last of _Period</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="tooltip_text" translatable="yes">Keep the last price of each fiscal period if present before date. The fiscal period is derived from the accounting period end date.</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">radiobutton_last_week</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">4</property>
                   </packing>
                 </child>
                 <child>
@@ -815,12 +850,12 @@
                     <property name="tooltip_text" translatable="yes">With the scaled option, prices are removed relative to the date selected. 'One a month' is used for dates older than a year and 'One a week' is used for dates older than six months to a year.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">radiobutton_none</property>
+                    <property name="group">radiobutton_last_week</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
-                    <property name="position">3</property>
+                    <property name="position">5</property>
                   </packing>
                 </child>
               </object>
@@ -902,27 +937,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label5">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">Caution: If you select to keep prices and there are none on a Friday you may end up with no prices before the selected date.</property>
-                <property name="justify">fill</property>
-                <property name="wrap">True</property>
-              </object>
-              <packing>
-                <property name="right_attach">2</property>
-                <property name="top_attach">10</property>
-                <property name="bottom_attach">11</property>
-                <property name="y_options">GTK_FILL</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Keeping a price on Friday (if available):</property>
+                <property name="label" translatable="yes">Keeping the last available price for option:</property>
               </object>
               <packing>
                 <property name="right_attach">2</property>
@@ -1073,98 +1092,21 @@ the Accounts page and reports are able to correctly report values so removing th
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkRadioButton" id="radiobutton_last_week">
-                    <property name="label" translatable="yes">Last of Wee_k</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Keep the last price of each week if present before date.</property>
-                    <property name="use_underline">True</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">radiobutton_none</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">0</property>
-                  </packing>
+                  <placeholder/>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="radiobutton_last_month">
-                    <property name="label" translatable="yes">Last of M_onth</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Keep the last price of each month if present before date.</property>
-                    <property name="use_underline">True</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">radiobutton_none</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">1</property>
-                  </packing>
+                  <placeholder/>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="radiobutton_last_quarter">
-                    <property name="label" translatable="yes">Last of _Quarter</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Keep the last price of each quarter if present before date.</property>
-                    <property name="use_underline">True</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">radiobutton_none</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">2</property>
-                  </packing>
+                  <placeholder/>
                 </child>
-                <child>
-                  <object class="GtkRadioButton" id="radiobutton_last_period">
-                    <property name="label" translatable="yes">Last of _Period</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Keep the last price of each period if present before date.</property>
-                    <property name="use_underline">True</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">radiobutton_none</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">3</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="right_attach">2</property>
-                <property name="top_attach">9</property>
-                <property name="bottom_attach">10</property>
-                <property name="y_options"/>
-                <property name="x_padding">10</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label4">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">or the last available price for the option:</property>
               </object>
               <packing>
                 <property name="right_attach">2</property>
                 <property name="top_attach">8</property>
                 <property name="bottom_attach">9</property>
                 <property name="y_options"/>
+                <property name="x_padding">10</property>
               </packing>
             </child>
           </object>

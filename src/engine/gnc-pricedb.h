@@ -382,31 +382,25 @@ typedef enum
 
 typedef enum
 {
-    PRICE_REMOVE_KEEP_DEFAULT, // default option value, keep none
-    PRICE_REMOVE_KEEP_WEEKLY,  // leave one every week on a friday
-    PRICE_REMOVE_KEEP_MONTHLY, // leave one every last friday of month
-    PRICE_REMOVE_KEEP_SCALED,  // leave one every week then one a month
-    PRICE_REMOVE_KEEP_LAST = PRICE_REMOVE_KEEP_SCALED,
-
+    PRICE_REMOVE_KEEP_NONE,           // keep none
     PRICE_REMOVE_KEEP_LAST_WEEKLY,    // leave last one of every week
     PRICE_REMOVE_KEEP_LAST_MONTHLY,   // leave last one of every month
     PRICE_REMOVE_KEEP_LAST_QUARTERLY, // leave last one of every quarter
     PRICE_REMOVE_KEEP_LAST_PERIOD,    // leave last one of every annual period
+    PRICE_REMOVE_KEEP_SCALED,         // leave one every week then one a month
 } PriceRemoveKeepOptions;
 
 /** @brief Remove and unref prices older than a certain time.
  * @param db The pricedb
  * @param comm_list A list of commodities
  * @param fiscal_end_date the end date of the current accounting period
- * @param first The oldest price time in the pricedb 
  * @param cutoff The time before which prices should be deleted.
  * @param source Whether Finance::Quote, user or all prices should be deleted.
  * @param keep Whether scaled, monthly, weekly or no prices should be left.
  * @return True if there were prices to process, False if not.
  */
 gboolean     gnc_pricedb_remove_old_prices(GNCPriceDB *db, GList *comm_list,
-                                           GDate *fiscal_end_date,
-                                           Timespec first, Timespec cutoff,
+                                           GDate *fiscal_end_date, Timespec cutoff,
                                            PriceRemoveSourceFlags source,
                                            PriceRemoveKeepOptions keep);
 

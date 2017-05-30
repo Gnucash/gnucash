@@ -28,7 +28,6 @@
 #include <string.h>
 #include "gnc-pricedb-p.h"
 #include <qofinstance-p.h>
-#include "Recurrence.h"
 #include "gnc-gdate-utils.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -1363,105 +1362,6 @@ pricedb_remove_foreach_pricelist (gpointer key,
     LEAVE(" ");
 }
 
-static void
-gnc_pricedb_remove_get_keep_dates (GHashTable* hash_dates, GDate period_begin, GDate period_end, PriceRemoveKeepOptions keep)
-{
-    Recurrence *r;
-    GDate recurrence_date_old, recurrence_date_next;
-    GDateWeekday selected_day_of_week = G_DATE_FRIDAY;
-    GDate day_of_week_date;
-
-    day_of_week_date = period_begin;
-
-    r = g_new (Recurrence, 1);
-
-    DEBUG("Period Begin date is %d/%d/%d and End date is %d/%d/%d", g_date_get_day (&period_begin),
-           g_date_get_month (&period_begin), g_date_get_year (&period_begin), g_date_get_day (&period_end),
-           g_date_get_month (&period_end), g_date_get_year (&period_end));
-
-    g_date_set_day (&day_of_week_date, 1); // set date to 1st of month
-    g_date_subtract_days (&day_of_week_date, 1); // move to last day of previous month
-
-    while (g_date_get_weekday (&day_of_week_date) != selected_day_of_week)
-        g_date_subtract_days (&day_of_week_date, 1); // go back till we find last Friday of previous month
-
-    if (keep == PRICE_REMOVE_KEEP_MONTHLY)
-        recurrenceSet (r, 1, PERIOD_LAST_WEEKDAY, &day_of_week_date, WEEKEND_ADJ_NONE); // Month set begin on last friday of month
-    else
-        recurrenceSet (r, 1, PERIOD_WEEK, &day_of_week_date, WEEKEND_ADJ_NONE); // Week set to begin on Friday of week
-
-    recurrence_date_next = recurrence_date_old = day_of_week_date;
-
-    while (g_date_compare (&period_end, &recurrence_date_next) > 0)
-    {
-        char date_buf[MAX_DATE_LENGTH+1];
-        gint date_julian;
-        
-        recurrenceNextInstance (r, &recurrence_date_old, &recurrence_date_next);
-        qof_print_gdate (date_buf, MAX_DATE_LENGTH, &recurrence_date_old);
-
-        DEBUG("Recurrence date old string for hash table insert is %s", date_buf);
-
-        date_julian = g_date_get_julian (&recurrence_date_old);
-        g_hash_table_insert (hash_dates, GINT_TO_POINTER(date_julian), GINT_TO_POINTER(1));
-        recurrence_date_old = recurrence_date_next;
-    }
-    g_free (r);
-}
-
-
-static void
-gnc_pricedb_remove_old_prices_keep_friday (GNCPriceDB *db, Timespec first, Timespec cutoff,
-                                           remove_info data, PriceRemoveKeepOptions keep)
-{
-    GHashTable *hash_dates = NULL;
-    GSList *item;
-
-    if (keep != PRICE_REMOVE_KEEP_DEFAULT)
-    {
-        GDate period_begin = timespec_to_gdate (first);
-        GDate period_end = timespec_to_gdate (cutoff);
-        hash_dates = g_hash_table_new (g_direct_hash, g_direct_equal);
-
-        if (keep == PRICE_REMOVE_KEEP_SCALED)
-        {
-            GDate temp_end_date = period_end;
-            GDate temp_begin_date = period_end;
-            g_date_subtract_months (&temp_end_date, 6);
-            g_date_subtract_months (&temp_begin_date, 12);
-            gnc_pricedb_remove_get_keep_dates (hash_dates, temp_begin_date, temp_end_date, PRICE_REMOVE_KEEP_WEEKLY);
-            gnc_pricedb_remove_get_keep_dates (hash_dates, period_begin, temp_begin_date, PRICE_REMOVE_KEEP_MONTHLY);
-        }
-        else
-            gnc_pricedb_remove_get_keep_dates (hash_dates, period_begin, period_end, keep);
-
-        DEBUG("There are %d keys in hash_dates", g_hash_table_size (hash_dates));
-    }
-
-    /* Now run this external list deleting prices */
-    for (item = data.list; item; item = g_slist_next(item))
-    {
-        gboolean found = FALSE;
-
-        if ((hash_dates != NULL) && (g_hash_table_size (hash_dates) != 0))
-        {
-            GDate price_date = timespec_to_gdate (gnc_price_get_time (item->data));
-            gint date_julian = g_date_get_julian (&price_date);
-            char date_buf[MAX_DATE_LENGTH+1];
-
-            qof_print_gdate (date_buf, MAX_DATE_LENGTH, &price_date);
-            found = g_hash_table_contains (hash_dates, GINT_TO_POINTER(date_julian));
-
-            DEBUG("Looking for date string %s in hash_dates, found is %d", date_buf, found);
-        }
-        if (!found)
-            gnc_pricedb_remove_price (db, item->data);
-    }
-    if (keep != PRICE_REMOVE_KEEP_DEFAULT)
-        g_hash_table_destroy (hash_dates);
-}
-
-
 static gint
 compare_prices_by_commodity_date (gconstpointer a, gconstpointer b)
 {
@@ -1715,8 +1615,7 @@ gnc_pricedb_remove_old_prices_keep_last (GNCPriceDB *db, GDate *fiscal_end_date,
 
 gboolean
 gnc_pricedb_remove_old_prices (GNCPriceDB *db, GList *comm_list,
-                              GDate *fiscal_end_date,
-                              Timespec first, Timespec cutoff,
+                              GDate *fiscal_end_date, Timespec cutoff,
                               PriceRemoveSourceFlags source,
                               PriceRemoveKeepOptions keep)
 {
@@ -1756,19 +1655,13 @@ gnc_pricedb_remove_old_prices (GNCPriceDB *db, GList *comm_list,
     }
     DEBUG("Number of Prices in list is %d, Cutoff date is %s", g_slist_length (data.list), gnc_print_date (cutoff));
 
-    // decide on what remove procedure to use
-    if (keep > PRICE_REMOVE_KEEP_LAST)
+    // Check for a valid fiscal end of year date
+    if (!g_date_valid (fiscal_end_date))
     {
-        // Check for a valid fiscal end of year date
-        if (!g_date_valid (fiscal_end_date))
-        {
-            GDateYear year_now = g_date_get_year (gnc_g_date_new_today ());
-            g_date_set_dmy (fiscal_end_date, 31, 12, year_now);
-        }
-        gnc_pricedb_remove_old_prices_keep_last (db, fiscal_end_date, data, keep);
+        GDateYear year_now = g_date_get_year (gnc_g_date_new_today ());
+        g_date_set_dmy (fiscal_end_date, 31, 12, year_now);
     }
-    else
-        gnc_pricedb_remove_old_prices_keep_friday (db, first, cutoff, data, keep);
+    gnc_pricedb_remove_old_prices_keep_last (db, fiscal_end_date, data, keep);
 
     g_slist_free (data.list);
     LEAVE(" ");
