@@ -522,7 +522,7 @@
             (get-assoc-account-balances-budget
               budget
               liability-accounts
-              get-budget-account-budget-balance))
+              get-budget-account-budget-balance-negated))
 
           (set! liability-get-balance-fn
             (lambda (account start-date end-date)
