@@ -48,6 +48,8 @@ EXTRA_DIST = \
   test_account.py \
   test_book.py \
   test_split.py \
+  test_commodity.py \
+  test_numeric.py \
   test_transaction.py \
   test_business.py \
   CMakeLists.txt

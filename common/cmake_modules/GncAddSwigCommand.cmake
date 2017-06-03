@@ -26,10 +26,9 @@ MACRO (GNC_ADD_SWIG_PYTHON_COMMAND _target _output _input)
   )
   set (DEFAULT_SWIG_PYTHON_C_INCLUDES
     ${GLIB2_INCLUDE_DIRS}
-    ${CMAKE_SOURCE_DIR}/src/libqof/qof
-    ${CMAKE_SOURCE_DIR}/src
-    ${CMAKE_SOURCE_DIR}/src/engine
-    ${CMAKE_SOURCE_DIR}/src/app-utils
+    ${CMAKE_SOURCE_DIR}/common
+    ${CMAKE_SOURCE_DIR}/libgnucash/engine
+    ${CMAKE_SOURCE_DIR}/libgnucash/app-utils
   )
 
 
