@@ -22,18 +22,16 @@
  *                                                                  *
 \********************************************************************/
 
+typedef void * gpointer; // Not sure why SWIG doesn't figure this out.
+%typemap(newfree) gchar * "g_free($1);"
 
-/* Not sure why SWIG doesn't figure this out. */
+#if defined(SWIGGUILE)
+
 typedef int gint;
 typedef gint64 time64;
 typedef unsigned int guint;
 typedef double gdouble;
 typedef float gfloat;
-typedef void * gpointer;
-
-%typemap(newfree) gchar * "g_free($1);"
-
-#if defined(SWIGGUILE)
 typedef char gchar;
 
 %typemap (out) char * {
@@ -169,6 +167,9 @@ typedef char gchar;
 }
 %enddef
 #elif defined(SWIGPYTHON) /* Typemaps for Python */
+
+%import "glib.h"
+
 %typemap(in) gint8, gint16, gint32, gint64, gshort, glong {
     $1 = ($1_type)PyInt_AsLong($input);
 }
@@ -183,6 +184,14 @@ typedef char gchar;
 
 %typemap(out) guint8, guint16, guint32, guint64, gushort, gulong {
     $result = PyLong_FromUnsignedLong($1);
+}
+
+%typemap(in) gdouble {
+    $1 = ($1_type)PyFloat_AsDouble($input);
+}
+
+%typemap(out) gdouble {
+    $result = PyFloat_FromDouble($1);
 }
 
 %typemap(in) gchar * {

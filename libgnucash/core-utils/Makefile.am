@@ -51,7 +51,7 @@ endif
 endif
 swig-core-utils-python.c: core-utils.i ${top_srcdir}/common/base-typemaps.i
 	$(SWIG) -python -Wall -Werror $(SWIG_ARGS) \
-	-I${top_srcdir}/common -o $@ $<
+	-I${GLIB_CFLAGS} -I${top_srcdir}/common -o $@ $<
 endif
 
 AM_CPPFLAGS = \
