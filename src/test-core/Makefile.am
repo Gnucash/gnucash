@@ -38,7 +38,7 @@ endif
 
 swig-unittest-support-python.c: unittest-support.i $(top_srcdir)/src/base-typemaps.i
 	$(SWIG) -python  -Wall -Werror $(SWIG_ARGS) \
-	-I${top_srcdir}/src \
+	-I${GLIB_CFLAGS} -I${top_srcdir}/src \
 	${AM_CPPFLAGS} -o $@ $<
 
 unittest-support.py: swig-unittest-support-python.c ${SWIG_FILES}

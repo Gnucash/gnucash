@@ -118,7 +118,7 @@ endif
 endif
 swig-app-utils-python.c: app-utils.i ${top_srcdir}/src/base-typemaps.i
 	$(SWIG) -python -Wall -Werror $(SWIG_ARGS) \
-	-I${top_srcdir}/src -o $@ $<
+	-I${GLIB_CFLAGS} -I${top_srcdir}/src -o $@ $<
 endif
 
 if WITH_PYTHON
