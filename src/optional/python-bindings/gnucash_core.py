@@ -294,7 +294,7 @@ class GncNumeric(GnuCashCoreClass):
             return gnc_numeric_zero()
         elif len(args) == 1:
             arg = args[0]
-            if type(arg) == int:
+            if type(arg) in (int, long):
                 return gnc_numeric_create(arg ,1)
             elif type(arg) == float:
                 return double_to_gnc_numeric(arg, GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED | GNC_HOW_RND_NEVER)

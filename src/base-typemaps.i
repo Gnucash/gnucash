@@ -169,38 +169,15 @@ typedef char gchar;
 #elif defined(SWIGPYTHON) /* Typemaps for Python */
 
 %import "glib.h"
+%include <stdint.i>
 
-%typemap(in) gint8, gint16, gint32, gint64, gshort, glong {
-    $1 = ($1_type)PyInt_AsLong($input);
-}
-
-%typemap(out) gint8, gint16, gint32, gint64, gshort, glong {
-    $result = PyInt_FromLong($1);
-}
-
-%typemap(in) guint8, guint16, guint32, guint64, gushort, gulong {
-    $1 = ($1_type)PyLong_AsUnsignedLong($input);
-}
-
-%typemap(out) guint8, guint16, guint32, guint64, gushort, gulong {
-    $result = PyLong_FromUnsignedLong($1);
-}
-
-%typemap(in) gdouble {
-    $1 = ($1_type)PyFloat_AsDouble($input);
-}
-
-%typemap(out) gdouble {
-    $result = PyFloat_FromDouble($1);
-}
-
-%typemap(in) gchar * {
-    $1 = ($1_ltype)PyString_AsString($input);
-}
-
-%typemap(out) gchar * {
-    $result = PyString_FromString($1);
-}
+%apply int { gint };
+%apply long { glong };
+%apply int64_t { gint64 };
+%apply unsigned long { gulong };
+%apply uint64_t { guint64 };
+%apply double { gdouble };
+%apply char* { gchar* };
 
 %typemap(in) gboolean {
     if ($input == Py_True)

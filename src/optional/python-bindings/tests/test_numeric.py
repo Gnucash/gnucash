@@ -22,11 +22,14 @@ class TestGncNumeric( TestCase ):
         self.assertEqual(num.num(), 3)
         self.assertEqual(num.denom(), 1)
 
-    # Safest outcome at current. This can be fixed but correct bounds checks
-    # are required to ensure gint64 is not overflowed.
     def test_from_long(self):
-        with self.assertRaises(TypeError):
-            GncNumeric(3L)
+        num = GncNumeric(3L)
+        self.assertEqual(str(num), "3/1")
+        self.assertEqual(num.num(), 3)
+        self.assertEqual(num.denom(), 1)
+
+        with self.assertRaises(OverflowError):
+            GncNumeric((2**64)+1)
 
     def test_from_float(self):
         num = GncNumeric(3.1, 20, GNC_HOW_DENOM_FIXED | GNC_HOW_RND_NEVER)
