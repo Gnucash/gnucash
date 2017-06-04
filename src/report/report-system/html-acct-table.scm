@@ -1156,6 +1156,7 @@
 	   ;; add the account balance in the respective commodity
 	   (gnc:make-html-table-cell/markup
 	    "number-cell" bal)
+	   "&nbsp;"
 	   ;; add the account balance in the report commodity
 	   (gnc:make-html-table-cell/markup
 	    "number-cell" (exchange-fn bal report-commodity))
