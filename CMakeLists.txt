@@ -138,8 +138,9 @@ IF (WIN32)
   #SET(PKG_CONFIG_EXECUTABLE ${CMAKE_PREFIX_PATH}/gnome/bin/pkg-config.exe)
   SET(SWIG_EXECUTABLE swig)
   #SET(SWIG_EXECUTABLE ${CMAKE_PREFIX_PATH}/swig/swig.exe)
-  SET(REGEX_INCLUDE_PATH ${CMAKE_PREFIX_PATH}/mingw32/include)
-  SET(REGEX_LDFLAGS "-L${CMAKE_PREFIX_PATH}/mingw32/lib -lregex")
+  FIND_PATH(REGEX_INCLUDE_PATH regex.h)
+  FIND_PATH(REGEX_LIB_PATH libregex.dll.a)
+  SET(REGEX_LDFLAGS "-L${REGEX_LIB_PATH} -lregex")
   #SET(LIBXSLT_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/libxslt/include)
   #SET(LIBXSLT_XSLTPROC_EXECUTABLE ${CMAKE_PREFIX_PATH}/libxslt/bin/xsltproc)
   # I have not yet debugged the intltool-merge file generation process on Windows.
@@ -710,7 +711,9 @@ INSTALL(CODE
 #For windows, copy in some DLLs from Mingw
 
 IF (WIN32)
-  SET(MINGW_DLLS ${CMAKE_PREFIX_PATH}/mingw32/bin/libstdc++-6.dll ${CMAKE_PREFIX_PATH}/mingw32/bin/libgcc_s_dw2-1.dll)
+  FIND_LIBRARY(LIBSTDC++ libstdc++-6.dll)
+  FIND_LIBRARY(LIBDW2 libgcc_s_dw2-1.dll)
+  SET(MINGW_DLLS ${LIBSTDC++} ${LIBDW2})
   INSTALL(PROGRAMS ${MINGW_DLLS} DESTINATION bin)
   FILE(COPY ${MINGW_DLLS} DESTINATION ${BINDIR_BUILD}
     # Do permissions matter for windows?
