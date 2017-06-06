@@ -106,7 +106,8 @@ FUNCTION(RUN_AUTOTOOLS_DIST_CHECK PACKAGE_PREFIX)
         EXECUTE_PROCESS_AND_CHECK_RESULT(
                 COMMAND ${MY_CMAKE_COMMAND}
                     LDFLAGS=-L${CMAKE_PREFIX_PATH}/lib
-                    CFLAGS=-m32
+                    CFLAGS=${CMAKE_C_FLAGS}
+                    CXXFLAGS=${CMAKE_CXX_FLAGS}
                     CPPFLAGS=-I${CMAKE_PREFIX_PATH}/include
                     PATH=${CMAKE_PREFIX_PATH}/bin:$ENV{PATH}
                     ./configure --prefix=${CMAKE_CURRENT_SOURCE_DIR}/${INSTALL_DIR} --enable-compile-warnings
@@ -147,31 +148,6 @@ FUNCTION(RUN_AUTOTOOLS_DIST_CHECK PACKAGE_PREFIX)
             ERROR_MSG "Autotools 'make uninstall' step failed."
     )
 
-    EXECUTE_PROCESS_AND_CHECK_RESULT(
-            COMMAND ${MY_CMAKE_COMMAND} make dist
-            WORKING_DIRECTORY ${BUILD_DIR}
-            ERROR_MSG "Autotools 'make dist' step failed."
-    )
-
-    IF (CMAKE_PREFIX_PATH)
-      EXECUTE_PROCESS_AND_CHECK_RESULT(
-            COMMAND ${MY_CMAKE_COMMAND}
-               LDFLAGS=-L${CMAKE_PREFIX_PATH}/lib
-               CFLAGS=-m32
-               CPPFLAGS=-I${CMAKE_PREFIX_PATH}/include
-               PATH=${CMAKE_PREFIX_PATH}/bin:$ENV{PATH}
-               DISTCHECK_CONFIGURE_FLAGS="--with-dbi-dbd-dir=${CMAKE_PREFIX_PATH}/lib/dbd" 
-                 make distcheck
-            WORKING_DIRECTORY ${BUILD_DIR}
-            ERROR_MSG "Autotools 'make distcheck' step failed."
-      )
-    ELSE()
-      EXECUTE_PROCESS_AND_CHECK_RESULT(
-              COMMAND ${MY_CMAKE_COMMAND} make distcheck
-              WORKING_DIRECTORY ${BUILD_DIR}
-              ERROR_MSG "Autotools 'make distcheck' step failed."
-      )
-    ENDIF()
     MESSAGE("Autotools distcheck complete.")
 
 ENDFUNCTION()
