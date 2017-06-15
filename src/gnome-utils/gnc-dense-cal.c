@@ -208,7 +208,7 @@ gnc_dense_cal_get_type()
             NULL
         };
 
-        dense_cal_type = g_type_register_static(GTK_TYPE_VBOX,
+        dense_cal_type = g_type_register_static(GTK_TYPE_BOX,
                                                 "GncDenseCal",
                                                 &dense_cal_info, 0);
     }
@@ -264,6 +264,7 @@ gnc_dense_cal_init(GncDenseCal *dcal)
     GtkStyleContext *context;
     gboolean colorAllocSuccess[MAX_COLORS];
 
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(dcal), GTK_ORIENTATION_VERTICAL);
 
     context = gtk_widget_get_style_context (GTK_WIDGET(dcal));
     gtk_style_context_add_class (context,"GncDenseCal");
@@ -283,11 +284,12 @@ gnc_dense_cal_init(GncDenseCal *dcal)
     }
 
     {
-        GtkHBox *hbox = GTK_HBOX(gtk_hbox_new(FALSE, 0));
+        GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
         GtkAlignment *label_align;
         GtkLabel *label;
         float right_align = 1.0, mid_align = 0.5, fill_x = 0.0, fill_y = 1.0;
 
+        gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
         label = GTK_LABEL(gtk_label_new(_("View:")));
         label_align = GTK_ALIGNMENT(gtk_alignment_new(right_align, mid_align, fill_x, fill_y));
         gtk_container_add(GTK_CONTAINER(label_align), GTK_WIDGET(label));
@@ -323,8 +325,10 @@ gnc_dense_cal_init(GncDenseCal *dcal)
         GtkListStore *tree_data;
         GtkTreeView *tree_view;
 
-        vbox = gtk_vbox_new(FALSE, 5);
-        hbox = gtk_hbox_new(FALSE, 5);
+        vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
+        gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
+        hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+        gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
 
         l = gtk_label_new(_("Date: "));
         gtk_container_add(GTK_CONTAINER(hbox), l);
@@ -333,7 +337,7 @@ gnc_dense_cal_init(GncDenseCal *dcal)
         gtk_container_add(GTK_CONTAINER(hbox), l);
         gtk_container_add(GTK_CONTAINER(vbox), hbox);
 
-        gtk_container_add(GTK_CONTAINER(vbox), gtk_hseparator_new());
+        gtk_container_add(GTK_CONTAINER(vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
 
         tree_data = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
         tree_view = GTK_TREE_VIEW(gtk_tree_view_new_with_model(GTK_TREE_MODEL(tree_data)));
@@ -1218,7 +1222,14 @@ gnc_dense_cal_motion_notify(GtkWidget *widget,
 
     /* As per http://www.gtk.org/tutorial/sec-eventhandling.html */
     if (event->is_hint)
-        gdk_window_get_pointer(event->window, &unused, &unused, &unused2);
+    {
+        GdkDeviceManager *device_manager;
+        GdkDevice *pointer;
+
+        device_manager = gdk_display_get_device_manager (gdk_window_get_display (event->window));
+        pointer = gdk_device_manager_get_client_pointer (device_manager);
+        gdk_window_get_device_position (event->window, pointer,  &unused,  &unused, &unused2);
+    }
 
     doc = wheres_this(dcal, event->x, event->y);
     if (doc >= 0)

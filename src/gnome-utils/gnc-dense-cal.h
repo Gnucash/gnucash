@@ -53,7 +53,7 @@ enum GDC_COLORS
 
 struct _GncDenseCal
 {
-    GtkVBox widget;
+    GtkBox widget;
 
     GtkComboBox *view_options;
     GtkDrawingArea *cal_drawing_area;
