@@ -35,6 +35,8 @@ SET(GETTEXT_PACKAGE "gnucash")
 
 # Extra cmake macros
 SET (CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/src/cmake_modules;${CMAKE_MODULE_PATH}")
+# CMake does a non-recursive build that puts the final build product directories in the build root. Some code needs to know this.
+
 INCLUDE (MacroAppendForeach)
 INCLUDE (MacroAddSourceFileCompileFlags)
 INCLUDE (GncAddSwigCommand)
@@ -465,7 +467,7 @@ IF (UNIX)
   SET( CMAKE_C_FLAGS_RELEASE "-O3 ${CMAKE_C_FLAGS} -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2")
 ENDIF (UNIX)
 IF (MINGW)
-  SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wdeclaration-after-statement -Wno-pointer-sign -Wall -Wunused -Wmissing-prototypes -Wmissing-declarations  -Wno-unused -std=gnu11")
+  SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wdeclaration-after-statement -Wno-pointer-sign -Wall -Wunused -Wmissing-prototypes -Wmissing-declarations  -Wno-unused -Wno-error=deprecated-declarations -std=gnu11")
   SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWINVER=0x0500 -D_EMULATE_GLIBC=0") # Workaround for bug in gtest on mingw, see https://github.com/google/googletest/issues/893 and https://github.com/google/googletest/issues/920
 ENDIF (MINGW)
 IF (APPLE)
