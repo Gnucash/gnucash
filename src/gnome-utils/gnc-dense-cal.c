@@ -261,9 +261,13 @@ _gdc_get_view_options(void)
 static void
 gnc_dense_cal_init(GncDenseCal *dcal)
 {
+    GtkStyleContext *context;
     gboolean colorAllocSuccess[MAX_COLORS];
 
     gtk_widget_push_composite_child();
+
+    context = gtk_widget_get_style_context (GTK_WIDGET(dcal));
+    gtk_style_context_add_class (context,"GncDenseCal");
 
     {
         GtkTreeModel *options;
@@ -880,7 +884,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
     GtkStyleContext *stylectxt;
     GtkStateFlags state_flags;
     GtkAllocation alloc;
-    GdkRGBA color;
+    GdkRGBA color, test_color;
     gint i;
     int maxWidth;
     PangoLayout *layout;
@@ -899,10 +903,17 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
     layout = gtk_widget_create_pango_layout(GTK_WIDGET(dcal), NULL);
     LOG_AND_RESET(timer, "create_pango_layout");
 
+    gdk_rgba_parse (&test_color, "rgba(0, 0, 0, 0)");
+
     gtk_widget_get_allocation (GTK_WIDGET(dcal->cal_drawing_area), &alloc);
     stylectxt = gtk_widget_get_style_context (widget);
     state_flags = gtk_style_context_get_state (stylectxt);
     gtk_style_context_get_background_color (stylectxt, state_flags, &color);
+
+    // test for no color set
+    if (gdk_rgba_equal (&color, &test_color))
+        gdk_rgba_parse (&color, "white");
+
     cairo_set_source_rgb (cr, color.red, color.green, color.blue);
     cairo_rectangle (cr, 0, 0,
                      cairo_image_surface_get_width (dcal->surface),
