@@ -86,8 +86,17 @@ gnc_engine_init_part2()
     }, *lib;
 
     if (uninstalled)
+#ifdef CMAKE_BUILD
+	pkglibdir = g_build_path (G_DIR_SEPARATOR_S, builddir, NULL);
+#ifdef WIN32
+#define LIBDIR "bin"
+#else
+#define LIBDIR "lib"
+#endif
+#else
         pkglibdir = g_build_path (G_DIR_SEPARATOR_S, builddir,
                                   "src", "backend", NULL);
+#endif
     else
         pkglibdir = gnc_path_get_pkglibdir ();
 
@@ -95,8 +104,12 @@ gnc_engine_init_part2()
     {
         gchar *libdir;
         if (uninstalled)
+#ifdef CMAKE_BUILD
+	    libdir = g_build_path (G_DIR_SEPARATOR_S, pkglibdir, LIBDIR, NULL);
+#else
             libdir = g_build_path (G_DIR_SEPARATOR_S, pkglibdir,
                                    lib->subdir, ".libs", NULL);
+#endif
         else
             libdir = pkglibdir;
         if (qof_load_backend_library(libdir, lib->lib))

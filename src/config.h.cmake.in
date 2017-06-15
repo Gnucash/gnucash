@@ -1,5 +1,7 @@
 /* Template file for processing by the cmake command CONFIGURE_FILE */
 
+/* If we're using this file it's a CMAKE build, so say so */
+#define CMAKE_BUILD 1
 
 /* Define if building universal (internal helper macro) */
 #cmakedefine AC_APPLE_UNIVERSAL_BUILD
