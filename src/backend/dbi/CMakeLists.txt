@@ -30,7 +30,11 @@ ADD_LIBRARY	(gncmod-backend-dbi
   ${backend_dbi_noinst_HEADERS}
 )
 
-TARGET_LINK_LIBRARIES(gncmod-backend-dbi gnc-backend-sql gncmod-engine gnc-qof ${Boost_REGEX_LIBRARY} ${LIBDBI_LIBRARY})
+SET(WINSOCK_LIB "")
+IF(MINGW64)
+  SET(WINSOCK_LIB "-lws2_32")
+ENDIF(MINGW64)
+TARGET_LINK_LIBRARIES(gncmod-backend-dbi gnc-backend-sql gncmod-engine gnc-qof ${GTK2_LDFLAGS} ${Boost_REGEX_LIBRARY} ${LIBDBI_LIBRARY} ${WINSOCK_LIB})
 
 TARGET_COMPILE_DEFINITIONS(gncmod-backend-dbi PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.dbi\")
 
