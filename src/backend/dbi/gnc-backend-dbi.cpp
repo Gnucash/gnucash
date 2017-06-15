@@ -41,6 +41,7 @@ extern "C"
 #undef _UWIN
 #endif
 #if PLATFORM(WINDOWS)
+#include <winsock2.h>
 #include <windows.h>
 #define __STDC_FORMAT_MACROS 1
 #endif
