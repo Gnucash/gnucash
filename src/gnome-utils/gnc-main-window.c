@@ -2917,7 +2917,8 @@ gnc_main_window_open_page (GncMainWindow *window,
     }
     gtk_widget_show (label);
 
-    tab_hbox = gtk_hbox_new (FALSE, 6);
+    tab_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+    gtk_box_set_homogeneous (GTK_BOX (tab_hbox), FALSE);
     gtk_widget_show (tab_hbox);
 
     if (icon != NULL)
@@ -2961,7 +2962,7 @@ gnc_main_window_open_page (GncMainWindow *window,
         gtk_button_set_relief(GTK_BUTTON(close_button), GTK_RELIEF_NONE);
         close_image = gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
         gtk_widget_show(close_image);
-        gtk_widget_size_request(close_image, &requisition);
+        gtk_widget_get_preferred_size (close_image, &requisition, NULL);
         gtk_widget_set_size_request(close_button, requisition.width + 4,
                                     requisition.height + 2);
         gtk_button_set_alignment(GTK_BUTTON(close_button), 0.5, 0.5);
@@ -3514,12 +3515,14 @@ gnc_main_window_setup_window (GncMainWindow *window)
                       G_CALLBACK (gnc_main_window_delete_event), window);
 
     /* Create widgets and add them to the window */
-    main_vbox = gtk_vbox_new (FALSE, 0);
+    main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (main_vbox), FALSE);
     gtk_widget_show (main_vbox);
     gtk_container_add (GTK_CONTAINER (window), main_vbox);
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-    priv->menu_dock = gtk_vbox_new (FALSE, 0);
+    priv->menu_dock = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (priv->menu_dock), FALSE);
     gtk_widget_show (priv->menu_dock);
     gtk_box_pack_start (GTK_BOX (main_vbox), priv->menu_dock,
                         FALSE, TRUE, 0);
