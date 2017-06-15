@@ -225,11 +225,11 @@ gnc_header_unrealize (GtkWidget *widget)
     header->surface = NULL;
 
     if (header->resize_cursor)
-        gdk_cursor_unref (header->resize_cursor);
+        g_object_unref (header->resize_cursor);
     header->resize_cursor = NULL;
 
     if (header->normal_cursor)
-        gdk_cursor_unref (header->normal_cursor);
+        g_object_unref (header->normal_cursor);
     header->normal_cursor = NULL;
 
     if (GTK_WIDGET_CLASS (parent_class)->unrealize)
@@ -556,7 +556,8 @@ gnc_header_set_property (GObject *object,
     {
     case PROP_SHEET:
         header->sheet = GNUCASH_SHEET (g_value_get_object (value));
-        gtk_layout_set_hadjustment (layout, header->sheet->hadj);
+        gtk_scrollable_set_hadjustment (GTK_SCROLLABLE(layout), header->sheet->hadj);
+
         needs_update = TRUE;
         break;
     case PROP_CURSOR_NAME:

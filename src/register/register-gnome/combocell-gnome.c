@@ -819,13 +819,6 @@ static void
 popup_post_show (GtkWidget *widget,
                  G_GNUC_UNUSED gpointer user_data)
 {
-    /* What the hell is this doing here? Well, under gtk+ 1.2.9,
-     * the scrollbars never appear without it. Why does it work?
-     * Why are you asking so many questions? There's nothing to
-     * see here. These aren't the droids you're looking for.
-     * Move along. */
-    gtk_widget_size_request (widget, NULL);
-
     gnc_item_list_autosize (GNC_ITEM_LIST (widget));
     gnc_item_list_show_selected (GNC_ITEM_LIST (widget));
 }

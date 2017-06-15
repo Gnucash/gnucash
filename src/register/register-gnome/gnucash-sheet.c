@@ -411,7 +411,7 @@ gnucash_sheet_compute_visible_range (GnucashSheet *sheet)
     gtk_widget_get_allocation (GTK_WIDGET(sheet), &alloc);
     height = alloc.height;
 
-    adj = gtk_layout_get_vadjustment(GTK_LAYOUT(sheet));
+    adj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE(sheet));
     cy = gtk_adjustment_get_value(adj);
 
     top_block = gnucash_sheet_y_pixel_to_block (sheet, cy);
@@ -461,9 +461,9 @@ gnucash_sheet_show_row (GnucashSheet *sheet, gint virt_row)
     vcell_loc.virt_row = MIN (vcell_loc.virt_row,
                               sheet->num_virt_rows - 1);
 
-    adj = gtk_layout_get_hadjustment(GTK_LAYOUT(sheet));
+    adj = gtk_scrollable_get_hadjustment (GTK_SCROLLABLE(sheet));
     cx = gtk_adjustment_get_value(adj);
-    adj = gtk_layout_get_vadjustment(GTK_LAYOUT(sheet));
+    adj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE(sheet));
     cy = gtk_adjustment_get_value(adj);
     x = cx;
 
@@ -540,9 +540,9 @@ gnucash_sheet_show_range (GnucashSheet *sheet,
     end_loc.virt_row = MIN (end_loc.virt_row,
                             sheet->num_virt_rows - 1);
 
-    adj = gtk_layout_get_hadjustment(GTK_LAYOUT(sheet));
+    adj = gtk_scrollable_get_hadjustment (GTK_SCROLLABLE(sheet));
     cx = gtk_adjustment_get_value(adj);
-    adj = gtk_layout_get_vadjustment(GTK_LAYOUT(sheet));
+    adj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE(sheet));
     cy = gtk_adjustment_get_value(adj);
     x = cx;
 
@@ -689,8 +689,8 @@ gnucash_sheet_create (Table *table)
     sheet = g_object_new (GNUCASH_TYPE_SHEET, NULL);
     sheet->table = table;
     sheet->entry = NULL;
-    sheet->vadj = gtk_layout_get_vadjustment (GTK_LAYOUT(sheet));
-    sheet->hadj = gtk_layout_get_hadjustment (GTK_LAYOUT(sheet));
+    sheet->vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE(sheet));
+    sheet->hadj = gtk_scrollable_get_hadjustment (GTK_SCROLLABLE(sheet));
 
     g_signal_connect (G_OBJECT (sheet->vadj), "value_changed",
                       G_CALLBACK (gnucash_sheet_vadjustment_value_changed), sheet);

@@ -68,7 +68,7 @@ struct _PopupToggle
 
 typedef struct
 {
-    GtkHBox hbox;
+    GtkBox hbox;
     GnucashSheet *sheet;
 
     /* The editor whose status we reflect on the sheet */
@@ -94,7 +94,7 @@ typedef struct
 
 typedef struct
 {
-    GtkHBoxClass parent_class;
+    GtkBoxClass parent_class;
 } GncItemEditClass;
 
 

@@ -150,6 +150,8 @@ gnc_item_edit_init (GncItemEdit *item_edit)
 {
     /* Set invalid values so that we know when we have been fully
     	   initialized */
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(item_edit), GTK_ORIENTATION_HORIZONTAL);
+
     item_edit->sheet = NULL;
     item_edit->editor = NULL;
 
@@ -480,7 +482,7 @@ gnc_item_edit_get_type (void)
         };
 
         gnc_item_edit_type =
-            g_type_register_static(GTK_TYPE_HBOX,
+            g_type_register_static(GTK_TYPE_BOX,
                                    "GncItemEdit",
                                    &gnc_item_edit_info, 0);
     }
@@ -589,7 +591,8 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
     view_height = alloc.height;
     view_width  = alloc.width;
 
-    vadj = gtk_layout_get_vadjustment(GTK_LAYOUT(sheet));
+    vadj = gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(sheet));
+
     y_offset = gtk_adjustment_get_value(vadj);
     gnc_item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
 

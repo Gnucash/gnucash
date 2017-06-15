@@ -643,7 +643,7 @@ get_popup_height (GtkWidget *widget,
     req.height = 0;
     req.width = 0;
 
-    gtk_widget_size_request (cal, &req);
+    gtk_widget_get_preferred_size (cal, &req, NULL);
 
     return req.height;
 }
