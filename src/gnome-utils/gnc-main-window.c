@@ -2853,7 +2853,7 @@ gnc_main_window_open_page (GncMainWindow *window,
     GncMainWindowPrivate *priv;
     GtkWidget *tab_hbox;
     GtkWidget *label, *entry;
-    const gchar *icon, *text, *color_string;
+    const gchar *icon, *text, *color_string, *lab_text;
     GtkWidget *image;
     GList *tmp;
     gint width;
@@ -2903,11 +2903,17 @@ gnc_main_window_open_page (GncMainWindow *window,
      */
     width = gnc_prefs_get_float(GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_WIDTH);
     icon = GNC_PLUGIN_PAGE_GET_CLASS(page)->tab_icon;
-    label = gtk_label_new (gnc_plugin_page_get_page_name(page));
+    lab_text = gnc_plugin_page_get_page_name(page);
+    label = gtk_label_new (lab_text);
+
     if (width != 0)
     {
+        if (g_utf8_strlen (lab_text, -1) < width)
+            gtk_label_set_width_chars (GTK_LABEL(label), strlen (lab_text));
+        else
+            gtk_label_set_width_chars (GTK_LABEL(label), width);
+
         gtk_label_set_ellipsize(GTK_LABEL(label), PANGO_ELLIPSIZE_MIDDLE);
-        gtk_label_set_max_width_chars(GTK_LABEL(label), width);
     }
     gtk_widget_show (label);
 
