@@ -264,7 +264,6 @@ gnc_dense_cal_init(GncDenseCal *dcal)
     GtkStyleContext *context;
     gboolean colorAllocSuccess[MAX_COLORS];
 
-    gtk_widget_push_composite_child();
 
     context = gtk_widget_get_style_context (GTK_WIDGET(dcal));
     gtk_style_context_add_class (context,"GncDenseCal");
@@ -465,8 +464,6 @@ gnc_dense_cal_init(GncDenseCal *dcal)
         }
         g_strfreev(parts);
     }
-
-    gtk_widget_pop_composite_child();
 
     gtk_widget_show_all(GTK_WIDGET(dcal));
 }
