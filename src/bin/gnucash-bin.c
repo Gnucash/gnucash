@@ -805,7 +805,6 @@ main(int argc, char ** argv)
     }
 
     /* We need to initialize gtk before looking up all modules */
-    gnc_gtk_add_rc_file ();
     if(!gtk_init_check (&argc, &argv))
     {
         g_printerr(_("%s\nRun '%s --help' to see a full list of available command line options.\n"),
