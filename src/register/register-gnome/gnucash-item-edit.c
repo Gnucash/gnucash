@@ -678,6 +678,9 @@ gnc_item_edit_hide_popup (GncItemEdit *item_edit)
     if (!item_edit->is_popup)
         return;
 
+    if (gtk_widget_get_parent (GTK_WIDGET(item_edit->popup_item)) != GTK_WIDGET (item_edit->sheet))
+        return;
+
     gtk_container_remove (GTK_CONTAINER(item_edit->sheet), item_edit->popup_item);
     gtk_arrow_set (item_edit->popup_toggle.arrow,
                    GTK_ARROW_DOWN, GTK_SHADOW_IN);
