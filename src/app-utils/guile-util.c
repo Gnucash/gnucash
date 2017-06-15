@@ -23,15 +23,22 @@
 #include "swig-runtime.h"
 #include <platform.h>
 #if PLATFORM(WINDOWS)
+#include <winsock.h>
 #include <windows.h>
 #endif
 
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <string.h>
+#ifdef __MINGW32__
+#define _GL_UNISTD_H //Deflect poisonous define of close in Guile's GnuLib
+#endif
 #include <libguile.h>
 #include <errno.h>
 #ifdef HAVE_UNISTD_H
+# ifdef close
+#  undef close
+# endif
 # include <unistd.h>
 #else
 # include <io.h>

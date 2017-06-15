@@ -76,6 +76,7 @@
 #include <gtkmacintegration/gtkosxapplication.h>
 #endif
 #ifdef HAVE_SYS_STAT_H
+# define __need_system_sys_stat_h //To block Guile-2.0's evil substitute
 # include <sys/types.h>
 # include <sys/stat.h> // for stat(2)
 #endif
