@@ -341,7 +341,8 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
         gtk_container_add(GTK_CONTAINER(frame), scroller);
 
         /* Create the button_box */
-        button_box = gtk_vbox_new (FALSE, 3);
+        button_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+        gtk_box_set_homogeneous (GTK_BOX (button_box), FALSE);
 
         /* ... and add all the buttons */
         if (sw->buttons)

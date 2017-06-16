@@ -143,7 +143,9 @@ gcrd_init (GncCellRendererDate *date)
 	gtk_container_add (GTK_CONTAINER (popup->popup_window), frame);
 	gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_OUT);
 
-	vbox = gtk_vbox_new (FALSE, 6);
+        vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
+        gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
+
 	gtk_container_add (GTK_CONTAINER (frame), vbox);
 	gtk_container_set_border_width (GTK_CONTAINER (vbox), 6);
 	

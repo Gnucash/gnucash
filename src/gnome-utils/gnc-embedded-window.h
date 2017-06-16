@@ -56,7 +56,7 @@ G_BEGIN_DECLS
 typedef struct
 {
     /** The parent object for an embedded window. */
-    GtkVBox vbox;
+    GtkBox vbox;
     /** A pointer to the UI Manager data structure for the whole
      *  window. */
     GtkUIManager *ui_merge;
@@ -67,7 +67,7 @@ typedef struct
 typedef struct
 {
     /** The parent class for an embedded window. */
-    GtkVBoxClass vbox;
+    GtkBoxClass vbox;
 } GncEmbeddedWindowClass;
 
 

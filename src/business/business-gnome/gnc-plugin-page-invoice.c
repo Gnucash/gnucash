@@ -460,7 +460,9 @@ gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page)
         return priv->widget;
     }
 
-    priv->widget = gtk_vbox_new (FALSE, 0);
+    priv->widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (priv->widget), FALSE);
+
     gtk_widget_show (priv->widget);
 
     widget = gnc_invoice_create_page(priv->iw, page);

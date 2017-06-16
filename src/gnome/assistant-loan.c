@@ -242,7 +242,7 @@ typedef struct LoanAssistantData_
     GtkComboBox   *prmIrateType;
 
     /* opt = options */
-    GtkVBox        *optVBox;
+    GtkBox         *optVBox;
     GtkCheckButton *optEscrowCb;
     GtkHBox        *optEscrowHBox;
     GNCAccountSel  *optEscrowGAS;
@@ -499,7 +499,7 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
     }
     /* Options Page */
     {
-        ldd->optVBox = GTK_VBOX(gtk_builder_get_object(builder, "loan_options_page"));
+        ldd->optVBox = GTK_BOX(gtk_builder_get_object(builder, "loan_options_page"));
         ldd->optEscrowCb = GTK_CHECK_BUTTON(gtk_builder_get_object(builder, "opt_escrow_cb"));
         ldd->optEscrowHBox = GTK_HBOX(gtk_builder_get_object(builder, "opt_escrow_hbox"));
     }
@@ -728,7 +728,7 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
              */
 
             RepayOptUIData *rouid;
-            GtkVBox *vb;
+            GtkWidget  *vb;
             GtkAlignment *optAlign, *subOptAlign;
             GString *str;
 
@@ -737,7 +737,8 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
             for ( i = 0; i < ldd->ld.repayOptCount; i++ )
             {
                 rouid = ldd->repayOptsUI[i];
-                vb = GTK_VBOX(gtk_vbox_new( FALSE, 2 ));
+                vb = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
+                gtk_box_set_homogeneous (GTK_BOX (vb), FALSE);
 
                 /* Add payment checkbox. */
 

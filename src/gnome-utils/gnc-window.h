@@ -34,7 +34,7 @@
     GnuCash has two types of "windows" that can show Plugin Pages.
     The first is called a "Main Window" and is implemented on top of a
     GtkWindow.  The second is called an "Embedded Window" and is
-    implemented on top of a GtkVBox.  The functions in this file will
+    implemented on top of a GtkBox.  The functions in this file will
     work with either type of window.
 */
 

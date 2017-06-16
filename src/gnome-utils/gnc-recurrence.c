@@ -37,7 +37,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 struct _GncRecurrence
 {
-    GtkVBox widget;
+    GtkBox widget;
 
     GtkWidget *gde_start;
     GtkComboBox *gcb_period;
@@ -50,7 +50,7 @@ struct _GncRecurrence
 
 typedef struct
 {
-    GtkVBoxClass parent_class;
+    GtkBoxClass parent_class;
     void (*changed) (GncRecurrence *gr);
 } GncRecurrenceClass;
 
@@ -180,7 +180,7 @@ something_changed( GtkWidget *wid, gpointer d )
 static void
 gnc_recurrence_init( GncRecurrence *gr )
 {
-    GtkVBox *vb;
+    GtkBox  *vb;
     GtkHBox *hb;
     GtkWidget *w;
     GtkBuilder *builder;
@@ -193,7 +193,7 @@ gnc_recurrence_init( GncRecurrence *gr )
     gnc_builder_add_from_file (builder, "gnc-recurrence.glade", "GSB_Mult_Adj");
     gnc_builder_add_from_file (builder, "gnc-recurrence.glade", "RecurrenceEntryVBox");
 
-    vb = GTK_VBOX(gtk_builder_get_object (builder, "RecurrenceEntryVBox"));
+    vb = GTK_BOX(gtk_builder_get_object (builder, "RecurrenceEntryVBox"));
     hb = GTK_HBOX(gtk_builder_get_object (builder, "Startdate_hbox"));
     w = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
     gr->gde_start = w;
@@ -378,7 +378,7 @@ gnc_recurrence_get_type()
             (GInstanceInitFunc)gnc_recurrence_init
         };
 
-        type = g_type_register_static (GTK_TYPE_VBOX, "GncRecurrence",
+        type = g_type_register_static (GTK_TYPE_BOX, "GncRecurrence",
                                        &typeinfo, 0);
     }
     return type;
@@ -404,7 +404,7 @@ struct _GncRecurrenceComp
 {
     GtkScrolledWindow widget;
 
-    GtkVBox *vbox;
+    GtkWidget  *vbox;
     GtkHBox *hbox;
     GtkHButtonBox *hbb;
     gint num_rec;
@@ -534,8 +534,11 @@ gnc_recurrence_comp_init(GncRecurrenceComp *grc)
 {
     GtkWidget *vb;
 
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(grc), GTK_ORIENTATION_VERTICAL);
+
     grc->hbb = GTK_HBUTTON_BOX(gtk_hbutton_box_new());
-    grc->vbox = GTK_VBOX(gtk_vbox_new(FALSE, 1));
+    grc->vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 1);
+    gtk_box_set_homogeneous (GTK_BOX (grc->vbox), FALSE);
     grc->rlist = NULL;
 
     grc->buttAdd = GTK_BUTTON(gtk_button_new_from_stock(GTK_STOCK_ADD));
@@ -550,7 +553,8 @@ gnc_recurrence_comp_init(GncRecurrenceComp *grc)
     gtk_box_pack_start(GTK_BOX(grc->hbb), GTK_WIDGET(grc->buttRemove),
                        FALSE, FALSE, 3);
 
-    vb = gtk_vbox_new(FALSE, 1);
+    vb = gtk_box_new (GTK_ORIENTATION_VERTICAL, 1);
+    gtk_box_set_homogeneous (GTK_BOX (vb), FALSE);
     gtk_box_pack_start(GTK_BOX(vb), GTK_WIDGET(grc->hbb),
                        FALSE, FALSE, 3);
     gtk_box_pack_start(GTK_BOX(vb), GTK_WIDGET(grc->vbox),

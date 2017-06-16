@@ -127,7 +127,7 @@ gnc_frequency_get_type()
             (GInstanceInitFunc)gnc_frequency_init
         };
 
-        gncfreq_type = g_type_register_static (GTK_TYPE_VBOX,
+        gncfreq_type = g_type_register_static (GTK_TYPE_BOX,
                                                "GncFrequency",
                                                &gncfreq_info, 0);
     }
@@ -167,7 +167,7 @@ void
 gnc_frequency_init(GncFrequency *gf)
 {
     int i;
-    GtkVBox* vb;
+    GtkBox* vb;
     GtkWidget* o;
     GtkAdjustment* adj;
     GtkBuilder *builder;
@@ -201,6 +201,8 @@ gnc_frequency_init(GncFrequency *gf)
         { NULL,               NULL }
     };
 
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(gf), GTK_ORIENTATION_VERTICAL);
+
     builder = gtk_builder_new();
     gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "adjustment1");
     gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "adjustment2");
@@ -229,7 +231,7 @@ gnc_frequency_init(GncFrequency *gf)
                          4, 5, 0, 1, dont_expand_or_fill, 0,
                          0, 0);
     }
-    vb = GTK_VBOX(gtk_builder_get_object (builder, "gncfreq_vbox"));
+    vb = GTK_BOX(gtk_builder_get_object (builder, "gncfreq_vbox"));
     gf->vb = vb;
     gtk_container_add(GTK_CONTAINER(&gf->widget), GTK_WIDGET(gf->vb));
 

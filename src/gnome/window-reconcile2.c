@@ -1103,7 +1103,8 @@ gnc_reconcile_window_create_view_box (Account *account,
     else
         recnData->credit_frame = frame;
 
-    vbox = gtk_vbox_new (FALSE, 5);
+    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
 
     view = gnc_reconcile_view_new(account, type, recnData->statement_date);
     *list_save = view;
@@ -1616,7 +1617,7 @@ recnWindow2 (GtkWidget *parent, Account *account)
 static void
 recnWindow2_add_widget (GtkUIManager *merge,
                        GtkWidget *widget,
-                       GtkVBox *dock)
+                       GtkBox *dock)
 {
     gtk_box_pack_start (GTK_BOX (dock), widget, FALSE, FALSE, 0);
     gtk_widget_show (widget);
@@ -1673,10 +1674,12 @@ recnWindow2WithBalance (GtkWidget *parent, Account *account,
 
     gnc_recn_set_window_name (recnData);
 
-    vbox = gtk_vbox_new (FALSE, 0);
+    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
     gtk_container_add (GTK_CONTAINER(recnData->window), vbox);
 
-    dock = gtk_vbox_new (FALSE, 0);
+    dock = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (dock), FALSE);
     gtk_widget_show (dock);
     gtk_box_pack_start (GTK_BOX (vbox), dock, FALSE, TRUE, 0);
 
@@ -1741,11 +1744,12 @@ recnWindow2WithBalance (GtkWidget *parent, Account *account,
     /* The main area */
     {
         GtkWidget *frame = gtk_frame_new (NULL);
-        GtkWidget *main_area = gtk_vbox_new (FALSE, 10);
+        GtkWidget *main_area = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
         GtkWidget *debcred_area = gtk_table_new (1, 2, TRUE);
         GtkWidget *debits_box;
         GtkWidget *credits_box;
 
+        gtk_box_set_homogeneous (GTK_BOX (main_area), FALSE);
         gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE, TRUE, 10);
 
         /* Force a reasonable starting size */
@@ -1789,11 +1793,13 @@ recnWindow2WithBalance (GtkWidget *parent, Account *account,
             gtk_container_set_border_width (GTK_CONTAINER (totals_hbox), 5);
 
             /* vbox to hold titles */
-            title_vbox = gtk_vbox_new (FALSE, 3);
+            title_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+            gtk_box_set_homogeneous (GTK_BOX (title_vbox), FALSE);
             gtk_box_pack_start (GTK_BOX (totals_hbox), title_vbox, FALSE, FALSE, 0);
 
             /* vbox to hold values */
-            value_vbox = gtk_vbox_new (FALSE, 3);
+            value_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+            gtk_box_set_homogeneous (GTK_BOX (value_vbox), FALSE);
             gtk_box_pack_start (GTK_BOX (totals_hbox), value_vbox, TRUE, TRUE, 0);
 
             /* statement date title/value */

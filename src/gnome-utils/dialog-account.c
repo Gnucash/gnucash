@@ -650,7 +650,8 @@ verify_children_compatible (AccountWindow *aw)
     gtk_window_set_skip_taskbar_hint (GTK_WINDOW (dialog), TRUE);
 
     hbox = gtk_hbox_new (FALSE, 12);
-    vbox = gtk_vbox_new (FALSE, 12);
+    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
+    gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
 
     gtk_box_pack_start (
         GTK_BOX (hbox),

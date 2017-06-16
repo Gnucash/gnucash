@@ -301,7 +301,8 @@ gnc_choose_radio_option_dialog(GtkWidget *parent,
     GList *node;
     int i;
 
-    main_vbox = gtk_vbox_new(FALSE, 3);
+    main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+    gtk_box_set_homogeneous (GTK_BOX (main_vbox), FALSE);
     gtk_container_set_border_width(GTK_CONTAINER(main_vbox), 6);
     gtk_widget_show(main_vbox);
 
@@ -315,7 +316,8 @@ gnc_choose_radio_option_dialog(GtkWidget *parent,
     gtk_box_pack_start(GTK_BOX(main_vbox), alignment, FALSE, FALSE, 0);
     gtk_widget_show(alignment);
 
-    vbox = gtk_vbox_new(TRUE, 3);
+    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+    gtk_box_set_homogeneous (GTK_BOX (vbox), TRUE);
     gtk_container_set_border_width(GTK_CONTAINER(vbox), 6);
     gtk_container_add(GTK_CONTAINER(alignment), vbox);
     gtk_widget_show(vbox);

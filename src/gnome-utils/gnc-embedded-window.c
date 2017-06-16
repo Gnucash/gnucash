@@ -119,7 +119,7 @@ gnc_embedded_window_get_type (void)
             NULL
         };
 
-        gnc_embedded_window_type = g_type_register_static (GTK_TYPE_VBOX,
+        gnc_embedded_window_type = g_type_register_static (GTK_TYPE_BOX,
                                    "GncEmbeddedWindow",
                                    &our_info, 0);
         g_type_add_interface_static (gnc_embedded_window_type,
@@ -237,6 +237,8 @@ gnc_embedded_window_init (GncEmbeddedWindow *window,
 {
     ENTER("window %p", window);
 
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(window), GTK_ORIENTATION_VERTICAL);
+
     gnc_embedded_window_setup_window (window);
 
     gnc_gobject_tracking_remember(G_OBJECT(window),
@@ -324,7 +326,8 @@ gnc_embedded_window_setup_window (GncEmbeddedWindow *window)
     /* Create widgets and add them to the window */
     gtk_widget_show (GTK_WIDGET(window));
 
-    priv->menu_dock = gtk_vbox_new (FALSE, 0);
+    priv->menu_dock = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (priv->menu_dock), FALSE);
     gtk_widget_show (priv->menu_dock);
     gtk_box_pack_start (GTK_BOX (window), priv->menu_dock, FALSE, TRUE, 0);
 

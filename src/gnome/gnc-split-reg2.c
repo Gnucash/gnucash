@@ -120,7 +120,7 @@ gnc_split_reg2_get_type (void)
             (GInstanceInitFunc)gnc_split_reg2_init,
         };
 
-        gnc_split_reg2_type = g_type_register_static (GTK_TYPE_VBOX,
+        gnc_split_reg2_type = g_type_register_static (GTK_TYPE_BOX,
                              "GNCSplitReg2",
                              &type_info, 0 );
     }
@@ -186,6 +186,8 @@ gnc_split_reg2_new (GNCLedgerDisplay2 *ld,
 static void
 gnc_split_reg2_init (GNCSplitReg2 *gsr)
 {
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(gsr), GTK_ORIENTATION_VERTICAL);
+
     gsr->numRows = 10;
     gsr->read_only = FALSE;
 

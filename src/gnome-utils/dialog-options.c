@@ -866,7 +866,9 @@ gnc_option_create_currency_accounting_widget (char *name, GNCOption *option)
     frame = gtk_frame_new (name);
 
     /* Create the verticle button box */
-    vbox1 = gtk_vbox_new (FALSE, 5);
+    vbox1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (vbox1), FALSE);
+
     gtk_container_add (GTK_CONTAINER (frame), vbox1);
 
     /* Iterate over the three options and create a radio button for each one */
@@ -890,7 +892,10 @@ gnc_option_create_currency_accounting_widget (char *name, GNCOption *option)
         /* Use hbox & vbox2 for all buttons so they are all at the same level;
            easier to get in set/get ui functions */
         hbox = gtk_hbox_new(FALSE, 5);
-        vbox2 = gtk_vbox_new(FALSE, 5);
+
+        vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
+        gtk_box_set_homogeneous (GTK_BOX (vbox2), FALSE);
+
         gtk_box_pack_start (GTK_BOX (vbox2), widget, FALSE, FALSE, 0);
         gtk_box_pack_start (GTK_BOX (hbox), vbox2, FALSE, FALSE, 0);
         if (i == 1) /* book-currency */
@@ -910,7 +915,9 @@ gnc_option_create_currency_accounting_widget (char *name, GNCOption *option)
                          "changed",
                          G_CALLBACK(gnc_option_changed_widget_cb),
                          option);
-            vbox2 = gtk_vbox_new(FALSE, 5);
+            vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
+            gtk_box_set_homogeneous (GTK_BOX (vbox2), FALSE);
+
             gtk_widget_set_tooltip_text(vbox2, tip && *tip ? _(tip) : "");
             gtk_box_pack_start (GTK_BOX (vbox2), widget_label, FALSE, FALSE, 0);
             gtk_box_pack_start (GTK_BOX (vbox2),
@@ -923,7 +930,10 @@ gnc_option_create_currency_accounting_widget (char *name, GNCOption *option)
             }
             tip = gnc_currency_accounting_option_policy_documentation(option);
             widget_label = gtk_label_new( _("Default Gains Policy") );
-            vbox2 = gtk_vbox_new(FALSE, 5);
+
+            vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
+            gtk_box_set_homogeneous (GTK_BOX (vbox2), FALSE);
+
             gtk_widget_set_tooltip_text(vbox2, tip && *tip ? _(tip) : "");
             gtk_box_pack_start (GTK_BOX (vbox2), widget_label, FALSE, FALSE, 0);
             gtk_box_pack_start (GTK_BOX (vbox2),
@@ -1019,7 +1029,9 @@ gnc_option_create_account_widget(GNCOption *option, char *name)
 
     frame = gtk_frame_new(name);
 
-    vbox = gtk_vbox_new(FALSE, 0);
+    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
+
     gtk_container_add(GTK_CONTAINER(frame), vbox);
 
     tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
@@ -1369,14 +1381,18 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
     gtk_widget_show(page_label);
 
     /* Build this options page */
-    page_content_box = gtk_vbox_new(FALSE, 2);
+    page_content_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
+    gtk_box_set_homogeneous (GTK_BOX (page_content_box), FALSE);
+
     gtk_container_set_border_width(GTK_CONTAINER(page_content_box), 12);
 
     options_scrolled_win = gtk_scrolled_window_new(NULL, NULL);
     gtk_box_pack_start(GTK_BOX(page_content_box), options_scrolled_win, TRUE, TRUE, 0);
 
     /* Build space for the content - the options box */
-    options_box = gtk_vbox_new(FALSE, 5);
+    options_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (options_box), FALSE);
+
     gtk_container_set_border_width(GTK_CONTAINER(options_box), 0);
     gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(options_scrolled_win), options_box);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(options_scrolled_win), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);

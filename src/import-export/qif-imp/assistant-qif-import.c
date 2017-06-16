@@ -847,7 +847,8 @@ new_security_page(SCM security_hash_key, gnc_commodity *comm, QIFImportWindow *w
           " enter a new one.");
 
     /* Make the page widget. */
-    page = gtk_vbox_new( FALSE, 0 );
+    page = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (page), FALSE);
     retval->page = page;
     g_object_set_data(G_OBJECT(retval->page), "page_struct", retval);
     page = retval->page;

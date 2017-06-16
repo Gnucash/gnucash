@@ -79,12 +79,12 @@ typedef struct GncBudgetViewPrivate GncBudgetViewPrivate;
 
 struct _GncBudgetView
 {
-    GtkVBox w;
+    GtkBox w;
 };
 
 struct _GncBudgetViewClass
 {
-    GtkVBoxClass w;
+    GtkBoxClass w;
 };
 
 enum
@@ -160,7 +160,7 @@ struct GncBudgetViewPrivate
 #define GNC_BUDGET_VIEW_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE((o), GNC_TYPE_BUDGET_VIEW, GncBudgetViewPrivate))
 
-G_DEFINE_TYPE(GncBudgetView, gnc_budget_view, GTK_TYPE_VBOX)
+G_DEFINE_TYPE(GncBudgetView, gnc_budget_view, GTK_TYPE_BOX)
 
 /** \brief Create new gnc budget view.
 
@@ -316,7 +316,7 @@ gbv_create_widget(GncBudgetView *view)
     GtkTreeView *tree_view;
     GtkWidget *scrolled_window;
     GtkWidget *inner_scrolled_window;
-    GtkVBox* vbox;
+    GtkBox* vbox;
     GtkWidget* inner_vbox;
     GtkListStore* totals_tree_model;
     GtkTreeView* totals_tree_view;
@@ -327,7 +327,7 @@ gbv_create_widget(GncBudgetView *view)
     gchar guidstr[GUID_ENCODING_LENGTH+1];
 
     priv = GNC_BUDGET_VIEW_GET_PRIVATE(view);
-    vbox = GTK_VBOX(view);
+    vbox = GTK_BOX(view);
 
     gtk_widget_show(GTK_WIDGET(vbox));
     gtk_box_set_homogeneous(GTK_BOX(vbox), FALSE);
@@ -339,7 +339,8 @@ gbv_create_widget(GncBudgetView *view)
     gtk_widget_show(scrolled_window);
     gtk_box_pack_start(GTK_BOX(vbox), scrolled_window, /*expand*/TRUE, /*fill*/TRUE, 0);
 
-    inner_vbox = gtk_vbox_new(FALSE, 0);
+    inner_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (inner_vbox), FALSE);
     gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolled_window), GTK_WIDGET(inner_vbox));
     gtk_widget_show(GTK_WIDGET(inner_vbox));
 

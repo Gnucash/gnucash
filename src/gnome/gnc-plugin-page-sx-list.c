@@ -372,7 +372,8 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     gtk_widget_show (priv->widget);
 
     /* Add vbox and label */
-    vbox = gtk_vbox_new(FALSE, 0);
+    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
     gtk_paned_pack1( GTK_PANED(widget), vbox, TRUE, FALSE);
 
     label = gtk_label_new(NULL);
@@ -434,7 +435,8 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     }
 
     /* Add vbox and label */
-    vbox = gtk_vbox_new(FALSE, 0);
+    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);;
     gtk_paned_pack2( GTK_PANED(widget), vbox, TRUE, FALSE);
 
     label = gtk_label_new(NULL);
