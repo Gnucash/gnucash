@@ -443,7 +443,10 @@ AccountPickerDialog* gnc_import_account_assist_setup(GtkWidget *parent)
 
     /* Add the New Account Button */
     picker->new_button = gtk_button_new_with_mnemonic ("_New Account");
-    h_box = gtk_hbox_new(TRUE, 0);
+
+    h_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (h_box), TRUE);
+
     gtk_box_pack_start(GTK_BOX(h_box), picker->new_button, FALSE, FALSE, 0);
     gtk_box_pack_start( GTK_BOX(box), h_box, FALSE, FALSE, 6);
     gtk_button_set_use_stock (GTK_BUTTON(picker->new_button), TRUE);

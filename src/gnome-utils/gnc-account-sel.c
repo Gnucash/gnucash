@@ -65,7 +65,7 @@ static void gas_populate_list (GNCAccountSel *gas);
 
 static void gas_new_account_click (GtkButton *b, gpointer ud);
 
-static GtkHBox *parent_class;
+static GtkBox *parent_class;
 
 GType
 gnc_account_sel_get_type (void)
@@ -87,7 +87,7 @@ gnc_account_sel_get_type (void)
             (GInstanceInitFunc) gnc_account_sel_init
         };
 
-        account_sel_type = g_type_register_static (GTK_TYPE_HBOX,
+        account_sel_type = g_type_register_static (GTK_TYPE_BOX,
                            "GNCAccountSel",
                            &account_sel_info, 0);
     }
@@ -145,6 +145,8 @@ static void
 gnc_account_sel_init (GNCAccountSel *gas)
 {
     GtkWidget *widget;
+
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(gas), GTK_ORIENTATION_HORIZONTAL);
 
     gas->initDone = FALSE;
     gas->acctTypeFilters = FALSE;

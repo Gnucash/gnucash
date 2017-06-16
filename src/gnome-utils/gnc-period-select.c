@@ -526,7 +526,7 @@ gnc_period_select_get_type (void)
             NULL
         };
 
-        period_select_type = g_type_register_static(GTK_TYPE_HBOX,
+        period_select_type = g_type_register_static(GTK_TYPE_BOX,
                              "GncPeriodSelect",
                              &period_select_info, 0);
     }
@@ -612,6 +612,8 @@ static void
 gnc_period_select_init (GncPeriodSelect *period)
 {
     GncPeriodSelectPrivate *priv;
+
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(period), GTK_ORIENTATION_HORIZONTAL);
 
     priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
     priv->start = TRUE;

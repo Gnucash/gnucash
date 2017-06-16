@@ -1986,7 +1986,8 @@ add_summary_label (GtkWidget *summarybar, const char *label_str)
     GtkWidget *hbox;
     GtkWidget *label;
 
-    hbox = gtk_hbox_new(FALSE, 2);
+    hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
+    gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
     gtk_box_pack_start( GTK_BOX(summarybar), hbox, FALSE, FALSE, 5 );
 
     label = gtk_label_new( label_str );
@@ -2019,7 +2020,8 @@ gsr_create_summary_bar( GNCSplitReg *gsr )
         return NULL;
     }
 
-    summarybar = gtk_hbox_new (FALSE, 4);
+    summarybar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
+    gtk_box_set_homogeneous (GTK_BOX (summarybar), FALSE);
 
     if (!xaccAccountIsPriced(gnc_ledger_display_leader(gsr->ledger)))
     {

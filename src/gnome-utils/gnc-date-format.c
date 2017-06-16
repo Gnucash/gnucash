@@ -87,7 +87,7 @@ static void gnc_date_format_compute_format(GNCDateFormat *gdf);
 
 void gnc_ui_date_format_changed_cb(GtkWidget *unused, gpointer user_data);
 
-static GtkHBoxClass *parent_class;
+static GtkBoxClass *parent_class;
 
 /**
  * gnc_date_format_get_type:
@@ -115,7 +115,7 @@ gnc_date_format_get_type (void)
             NULL,
         };
 
-        date_format_type = g_type_register_static(GTK_TYPE_HBOX,
+        date_format_type = g_type_register_static(GTK_TYPE_BOX,
                            "GNCDateFormat",
                            &date_format_info, 0);
     }
@@ -157,6 +157,8 @@ gnc_date_format_init (GNCDateFormat *gdf)
 
     g_return_if_fail(gdf);
     g_return_if_fail(GNC_IS_DATE_FORMAT(gdf));
+
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(gdf), GTK_ORIENTATION_HORIZONTAL);
 
     /* Open up the Glade and set the signals */
     builder = gtk_builder_new();

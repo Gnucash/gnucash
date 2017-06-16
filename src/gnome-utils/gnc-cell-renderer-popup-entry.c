@@ -97,7 +97,8 @@ gnc_popup_entry_init (GncPopupEntry *widget)
 {
     GtkWidget *arrow;
 
-    widget->hbox = gtk_hbox_new (FALSE, 0);
+    widget->hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (widget->hbox), FALSE);
     gtk_widget_show (widget->hbox);
 
     widget->entry = g_object_new (GTK_TYPE_ENTRY, "has_frame", FALSE, NULL);

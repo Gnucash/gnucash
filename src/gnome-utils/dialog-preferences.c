@@ -1144,7 +1144,7 @@ gnc_prefs_connect_one (const gchar *name,
         DEBUG("  %s - entry", name);
         gnc_prefs_connect_entry(GTK_ENTRY(widget));
     }
-    else if (GTK_IS_HBOX(widget))
+    else if (GTK_IS_BOX(widget))
     {
         /* Test custom widgets are all children of a hbox */
         GtkWidget *widget_child;

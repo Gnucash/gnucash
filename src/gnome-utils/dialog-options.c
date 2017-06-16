@@ -708,7 +708,8 @@ gnc_option_create_date_widget (GNCOption *option)
     }
     else if (g_strcmp0(type, "both") == 0)
     {
-        box = gtk_hbox_new(FALSE, 5);
+        box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+        gtk_box_set_homogeneous (GTK_BOX (box), FALSE);
 
         ab_button = gtk_radio_button_new(NULL);
         g_signal_connect(G_OBJECT(ab_button), "toggled",
@@ -820,7 +821,8 @@ gnc_option_create_radiobutton_widget(char *name, GNCOption *option)
     frame = gtk_frame_new (name);
 
     /* Create the button box */
-    box = gtk_hbox_new (FALSE, 5);
+    box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (box), FALSE);
     gtk_container_add (GTK_CONTAINER (frame), box);
 
     /* Iterate over the options and create a radio button for each one */
@@ -891,7 +893,8 @@ gnc_option_create_currency_accounting_widget (char *name, GNCOption *option)
         gtk_widget_set_tooltip_text(widget, tip && *tip ? _(tip) : "");
         /* Use hbox & vbox2 for all buttons so they are all at the same level;
            easier to get in set/get ui functions */
-        hbox = gtk_hbox_new(FALSE, 5);
+        hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+        gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
 
         vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
         gtk_box_set_homogeneous (GTK_BOX (vbox2), FALSE);
@@ -1195,7 +1198,8 @@ gnc_option_create_list_widget(GNCOption *option, char *name)
     gint i;
 
     frame = gtk_frame_new(name);
-    hbox = gtk_hbox_new(FALSE, 0);
+    hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
     gtk_container_add(GTK_CONTAINER(frame), hbox);
 
     store = gtk_list_store_new(1, G_TYPE_STRING);
@@ -1891,7 +1895,8 @@ gnc_option_set_ui_widget_boolean (GNCOption *option, GtkBox *page_box,
 {
     GtkWidget *value;
 
-    *enclosing = gtk_hbox_new(FALSE, 5);
+    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
     value = gtk_check_button_new_with_label(name);
 
     gnc_option_set_widget (option, value);
@@ -1921,7 +1926,8 @@ gnc_option_set_ui_widget_string (GNCOption *option, GtkBox *page_box,
     gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
     g_free(colon_name);
 
-    *enclosing = gtk_hbox_new(FALSE, 5);
+    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
     value = gtk_entry_new();
 
     gnc_option_set_widget (option, value);
@@ -1957,7 +1963,8 @@ gnc_option_set_ui_widget_text (GNCOption *option, GtkBox *page_box,
 
     gtk_container_add(GTK_CONTAINER(frame), scroll);
 
-    *enclosing = gtk_hbox_new(FALSE, 10);
+    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
     value = gtk_text_view_new();
     gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(value), GTK_WRAP_WORD);
     gtk_text_view_set_editable(GTK_TEXT_VIEW(value), TRUE);
@@ -1990,7 +1997,8 @@ gnc_option_set_ui_widget_currency (GNCOption *option, GtkBox *page_box,
     gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
     g_free(colon_name);
 
-    *enclosing = gtk_hbox_new(FALSE, 5);
+    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
     value = gnc_currency_edit_new();
 
     gnc_option_set_widget (option, value);
@@ -2020,7 +2028,8 @@ gnc_option_set_ui_widget_commodity (GNCOption *option, GtkBox *page_box,
     gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
     g_free(colon_name);
 
-    *enclosing = gtk_hbox_new(FALSE, 5);
+    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
     value = gnc_general_select_new(GNC_GENERAL_SELECT_TYPE_SELECT,
                                    gnc_commodity_edit_get_string,
                                    gnc_commodity_edit_new_select,
@@ -2057,7 +2066,8 @@ gnc_option_set_ui_widget_multichoice (GNCOption *option, GtkBox *page_box,
     gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
     g_free(colon_name);
 
-    *enclosing = gtk_hbox_new(FALSE, 5);
+    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
 
     value = gnc_option_create_multichoice_widget(option);
     gnc_option_set_widget (option, value);
@@ -2085,7 +2095,8 @@ gnc_option_set_ui_widget_date (GNCOption *option, GtkBox *page_box,
     gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
     g_free(colon_name);
 
-    *enclosing = gtk_hbox_new(FALSE, 5);
+    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
 
     value = gnc_option_create_date_widget(option);
 
@@ -2167,7 +2178,8 @@ gnc_option_set_ui_widget_account_sel (GNCOption *option, GtkBox *page_box,
        TRUE? */
     gnc_option_set_ui_value(option, TRUE);
 
-    *enclosing = gtk_hbox_new(FALSE, 5);
+    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
     gtk_box_pack_start(GTK_BOX(*enclosing), label, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(*enclosing), value, FALSE, FALSE, 0);
     gtk_widget_show_all(*enclosing);
@@ -2220,7 +2232,8 @@ gnc_option_set_ui_widget_number_range (GNCOption *option, GtkBox *page_box,
     gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
     g_free(colon_name);
 
-    *enclosing = gtk_hbox_new(FALSE, 5);
+    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
 
     gnc_option_get_range_info(option, &lower_bound, &upper_bound,
                               &num_decimals, &step_size);
@@ -2281,7 +2294,8 @@ gnc_option_set_ui_widget_color (GNCOption *option, GtkBox *page_box,
     gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
     g_free(colon_name);
 
-    *enclosing = gtk_hbox_new(FALSE, 5);
+    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
 
     use_alpha = gnc_option_use_alpha(option);
 
@@ -2316,7 +2330,8 @@ gnc_option_set_ui_widget_font (GNCOption *option, GtkBox *page_box,
     gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
     g_free(colon_name);
 
-    *enclosing = gtk_hbox_new(FALSE, 5);
+    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
     value = gtk_font_button_new();
     g_object_set(G_OBJECT(value),
                  "use-font", TRUE,
@@ -2354,7 +2369,8 @@ gnc_option_set_ui_widget_pixmap (GNCOption *option, GtkBox *page_box,
     gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
     g_free(colon_name);
 
-    *enclosing = gtk_hbox_new(FALSE, 5);
+    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
 
     button = gtk_button_new_with_label(_("Clear"));
     gtk_widget_set_tooltip_text(button, _("Clear any selected image file."));
@@ -2397,7 +2413,8 @@ gnc_option_set_ui_widget_radiobutton (GNCOption *option, GtkBox *page_box,
 {
     GtkWidget *value;
 
-    *enclosing = gtk_hbox_new(FALSE, 5);
+    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
 
     value = gnc_option_create_radiobutton_widget(name, option);
     gnc_option_set_widget (option, value);
@@ -2493,9 +2510,11 @@ gnc_option_set_ui_widget_plot_size (GNCOption *option, GtkBox *page_box,
     gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
     g_free(colon_name);
 
-    hbox = gtk_hbox_new(FALSE, 5);
+    hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
 
-    *enclosing = gtk_hbox_new(FALSE, 5);
+    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
 
     gtk_box_pack_start(GTK_BOX(*enclosing), label, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(*enclosing), hbox, FALSE, FALSE, 0);
@@ -2582,7 +2601,8 @@ gnc_option_set_ui_widget_budget (GNCOption *option, GtkBox *page_box,
     gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
     g_free(colon_name);
 
-    *enclosing = gtk_hbox_new(FALSE, 5);
+    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
 
     value = gnc_option_create_budget_widget(option);
 
@@ -2609,7 +2629,8 @@ gnc_option_set_ui_widget_currency_accounting (GNCOption *option,
 {
     GtkWidget *value;
 
-    *enclosing = gtk_hbox_new(FALSE, 5);
+    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
 
     value = gnc_option_create_currency_accounting_widget(name, option);
     gnc_option_set_widget (option, value);

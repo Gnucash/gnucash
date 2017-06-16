@@ -1138,7 +1138,8 @@ gnc_reconcile_window_create_view_box (Account *account,
     gtk_container_add (GTK_CONTAINER (scrollWin), view);
     gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE, TRUE, 0);
 
-    hbox = gtk_hbox_new (FALSE, 5);
+    hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
     gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 
     label = gtk_label_new (_("Total:"));
@@ -1780,7 +1781,8 @@ recnWindow2WithBalance (GtkWidget *parent, Account *account,
             GtkWidget *totals_hbox, *frame, *title, *value;
 
             /* lower horizontal bar below reconcile lists */
-            hbox = gtk_hbox_new (FALSE, 5);
+            hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+            gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
             gtk_box_pack_start (GTK_BOX (main_area), hbox, FALSE, FALSE, 0);
 
             /* frame to hold totals */
@@ -1788,7 +1790,8 @@ recnWindow2WithBalance (GtkWidget *parent, Account *account,
             gtk_box_pack_end (GTK_BOX (hbox), frame, FALSE, FALSE, 0);
 
             /* hbox to hold title/value vboxes */
-            totals_hbox = gtk_hbox_new (FALSE, 3);
+            totals_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
+            gtk_box_set_homogeneous (GTK_BOX (totals_hbox), FALSE);
             gtk_container_add (GTK_CONTAINER (frame), totals_hbox);
             gtk_container_set_border_width (GTK_CONTAINER (totals_hbox), 5);
 

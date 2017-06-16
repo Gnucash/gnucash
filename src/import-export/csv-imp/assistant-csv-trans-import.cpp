@@ -423,7 +423,9 @@ CsvImpTransAssist::CsvImpTransAssist ()
     auto button = gtk_button_new_from_stock (GTK_STOCK_OK);
     gtk_widget_set_size_request (button, 100, -1);
     gtk_widget_show (button);
-    auto h_box = gtk_hbox_new (TRUE, 0);
+    auto h_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (h_box), TRUE);
+
     gtk_box_pack_start (GTK_BOX(h_box), button, FALSE, FALSE, 0);
     gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER(file_chooser), h_box);
     g_signal_connect (G_OBJECT(button), "clicked",

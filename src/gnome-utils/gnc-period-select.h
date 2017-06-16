@@ -44,12 +44,12 @@ G_BEGIN_DECLS
 /* typedefs & structures */
 typedef struct
 {
-    GtkHBox hbox;
+    GtkBox hbox;
 } GncPeriodSelect;
 
 typedef struct
 {
-    GtkHBoxClass hbox;
+    GtkBoxClass hbox;
 
     /* Signals */
     void (*changed) (GncPeriodSelect *period);

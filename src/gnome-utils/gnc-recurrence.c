@@ -181,7 +181,7 @@ static void
 gnc_recurrence_init( GncRecurrence *gr )
 {
     GtkBox  *vb;
-    GtkHBox *hb;
+    GtkBox  *hb;
     GtkWidget *w;
     GtkBuilder *builder;
 
@@ -194,7 +194,7 @@ gnc_recurrence_init( GncRecurrence *gr )
     gnc_builder_add_from_file (builder, "gnc-recurrence.glade", "RecurrenceEntryVBox");
 
     vb = GTK_BOX(gtk_builder_get_object (builder, "RecurrenceEntryVBox"));
-    hb = GTK_HBOX(gtk_builder_get_object (builder, "Startdate_hbox"));
+    hb = GTK_BOX(gtk_builder_get_object (builder, "Startdate_hbox"));
     w = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
     gr->gde_start = w;
     gtk_box_pack_start (GTK_BOX (hb), w, TRUE, TRUE, 0);
@@ -405,7 +405,7 @@ struct _GncRecurrenceComp
     GtkScrolledWindow widget;
 
     GtkWidget  *vbox;
-    GtkHBox *hbox;
+    GtkWidget  *hbox;
     GtkHButtonBox *hbb;
     gint num_rec;
     GtkButton *buttRemove;

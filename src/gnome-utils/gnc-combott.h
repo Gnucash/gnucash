@@ -46,7 +46,7 @@ typedef struct _GncCombottClass GncCombottClass;
 
 struct _GncCombott
 {
-    GtkHBox hbox;
+    GtkBox hbox;
 };
 
 struct _GncCombottClass

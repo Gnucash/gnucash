@@ -77,7 +77,7 @@ struct _GNCGeneralSearchPrivate
 #define _PRIVATE(o) \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_GENERAL_SEARCH, GNCGeneralSearchPrivate))
 
-static GtkHBoxClass *parent_class;
+static GtkBoxClass *parent_class;
 static guint general_search_signals[LAST_SIGNAL];
 
 
@@ -106,7 +106,7 @@ gnc_general_search_get_type (void)
             (GInstanceInitFunc) gnc_general_search_init,
         };
 
-        general_search_type = g_type_register_static (GTK_TYPE_HBOX,
+        general_search_type = g_type_register_static (GTK_TYPE_BOX,
                               "GNCGeneralSearch",
                               &our_info, 0);
     }
@@ -140,6 +140,8 @@ gnc_general_search_class_init (GNCGeneralSearchClass *klass)
 static void
 gnc_general_search_init (GNCGeneralSearch *gsl)
 {
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(gsl), GTK_ORIENTATION_HORIZONTAL);
+
     gsl->selected_item = NULL;
 }
 

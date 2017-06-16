@@ -134,7 +134,7 @@ gnc_combott_get_type (void)
             (GInstanceInitFunc) gctt_init,
         };
 
-        combott_type = g_type_register_static (GTK_TYPE_HBOX,
+        combott_type = g_type_register_static (GTK_TYPE_BOX,
                                                "GncCombott",
                                                &combott_info, 0);
     }
@@ -211,11 +211,14 @@ gctt_init (GncCombott *combott)
 
     GncCombottPrivate *priv = GNC_COMBOTT_GET_PRIVATE (combott);
 
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(combott), GTK_ORIENTATION_HORIZONTAL);
+
     priv->active = 0;
     priv->text_col = 0;
     priv->tip_col = 1;
 
-    hbox = gtk_hbox_new(FALSE, 0);
+    hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX(hbox), FALSE);
 
     arrow = gtk_arrow_new(GTK_ARROW_DOWN, GTK_SHADOW_OUT);
     gtk_box_pack_end (GTK_BOX (hbox), arrow, FALSE, FALSE, 0);

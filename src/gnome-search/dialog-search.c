@@ -852,7 +852,9 @@ get_element_widget (GNCSearchWindow *sw, GNCSearchCoreType *element)
     data->element = element;
     data->dialog = GTK_DIALOG (sw->dialog);
 
-    hbox = gtk_hbox_new (FALSE, 0);
+    hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
+
     /* only set to automatically clean up the memory */
     g_object_set_data_full (G_OBJECT (hbox), "data", data, g_free);
 

@@ -80,7 +80,7 @@ static int date_accel_key_press(GtkWidget *widget,
                                 gpointer data);
 
 
-static GtkHBoxClass *parent_class;
+static GtkBoxClass *parent_class;
 
 /**
  * gnc_date_edit_get_type:
@@ -108,7 +108,7 @@ gnc_date_edit_get_type (void)
             NULL,
         };
 
-        date_edit_type = g_type_register_static (GTK_TYPE_HBOX,
+        date_edit_type = g_type_register_static (GTK_TYPE_BOX,
                          "GNCDateEdit",
                          &date_edit_info, 0);
     }
@@ -606,7 +606,7 @@ gnc_date_edit_class_init (GNCDateEditClass *klass)
     object_class->dispose = gnc_date_edit_dispose;
     object_class->finalize = gnc_date_edit_finalize;
 
-    parent_class = g_type_class_ref(GTK_TYPE_HBOX);
+    parent_class = g_type_class_ref(GTK_TYPE_BOX);
 
     date_edit_signals [TIME_CHANGED] =
         g_signal_new ("time_changed",
@@ -643,6 +643,8 @@ gnc_date_edit_class_init (GNCDateEditClass *klass)
 static void
 gnc_date_edit_init (GNCDateEdit *gde)
 {
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(gde), GTK_ORIENTATION_HORIZONTAL);
+
     gde->disposed = FALSE;
     gde->popup_in_progress = FALSE;
     gde->lower_hour = 7;
@@ -856,7 +858,8 @@ create_children (GNCDateEdit *gde)
                       G_CALLBACK (gnc_date_edit_button_toggled), gde);
     gtk_box_pack_start (GTK_BOX (gde), gde->date_button, FALSE, FALSE, 0);
 
-    hbox = gtk_hbox_new (FALSE, 3);
+    hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
+    gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
     gtk_container_add (GTK_CONTAINER (gde->date_button), hbox);
     gtk_widget_show (GTK_WIDGET(hbox));
 

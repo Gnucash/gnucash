@@ -87,7 +87,8 @@ gnc_show_splash_screen (void)
     frame = gtk_frame_new (NULL);
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
     gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
-    hbox = gtk_hbox_new (FALSE, 3);
+    hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
+    gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
 #ifdef GNUCASH_SCM
     /* Development version */
     /* Translators: 1st %s is the GnuCash version (eg 2.4.11);

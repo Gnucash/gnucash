@@ -274,14 +274,16 @@ gncs_get_widget (GNCSearchCoreType *fe)
     g_return_val_if_fail (IS_GNCSEARCH_OWNER (fi), NULL);
 
     priv = GNC_SEARCH_OWNER_GET_PRIVATE(fi);
-    box = gtk_hbox_new (FALSE, 3);
+    box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
+    gtk_box_set_homogeneous (GTK_BOX (box), FALSE);
 
     /* Build and connect the "how" option menu. */
     how_menu = make_how_menu (fe);
     gtk_box_pack_start (GTK_BOX (box), how_menu, FALSE, FALSE, 3);
 
     /* Create the owner box */
-    priv->owner_box = gtk_hbox_new (FALSE, 0);
+    priv->owner_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (priv->owner_box), FALSE);
 
     /* Build and connect the "type" option menu.
      * Note that this will build the owner_choice and

@@ -51,7 +51,7 @@ static void gnc_general_select_class_init   (GNCGeneralSelectClass *klass);
 static void gnc_general_select_dispose      (GObject               *object);
 static void gnc_general_select_finalize     (GObject               *object);
 
-static GtkHBoxClass *parent_class;
+static GtkBoxClass *parent_class;
 static guint general_select_signals[LAST_SIGNAL];
 
 
@@ -81,7 +81,7 @@ gnc_general_select_get_type (void)
             NULL,
         };
 
-        general_select_type = g_type_register_static(GTK_TYPE_HBOX,
+        general_select_type = g_type_register_static(GTK_TYPE_BOX,
                               "GNCGeneralSelect",
                               &general_select_info, 0);
     }
@@ -119,7 +119,7 @@ gnc_general_select_class_init (GNCGeneralSelectClass *klass)
 
     object_class = (GObjectClass*) klass;
 
-    parent_class = g_type_class_ref(GTK_TYPE_HBOX);
+    parent_class = g_type_class_ref(GTK_TYPE_BOX);
 
     general_select_signals[SELECTION_CHANGED] =
         g_signal_new("changed",
@@ -142,6 +142,8 @@ gnc_general_select_class_init (GNCGeneralSelectClass *klass)
 static void
 gnc_general_select_init (GNCGeneralSelect *gsl)
 {
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(gsl), GTK_ORIENTATION_HORIZONTAL);
+
     gsl->disposed = FALSE;
     gsl->selected_item = NULL;
 }

@@ -2125,7 +2125,7 @@ main_window_find_tab_items (GncMainWindow *window,
                                            page->notebook_page);
     if (GTK_IS_EVENT_BOX (tab_widget))
         tab_hbox = gtk_bin_get_child(GTK_BIN(tab_widget));
-    else if (GTK_IS_HBOX (tab_widget))
+    else if (GTK_IS_BOX (tab_widget))
         tab_hbox = tab_widget;
     else
     {

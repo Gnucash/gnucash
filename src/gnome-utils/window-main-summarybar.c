@@ -530,7 +530,9 @@ gnc_main_window_summary_new (void)
                                             G_TYPE_STRING,
                                             G_TYPE_STRING);
 
-    retval->hbox         = gtk_hbox_new (FALSE, 5);
+    retval->hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (retval->hbox), FALSE);
+
     retval->totals_combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (retval->datamodel));
     g_object_unref (retval->datamodel);
 

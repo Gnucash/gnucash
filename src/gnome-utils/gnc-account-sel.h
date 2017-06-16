@@ -40,7 +40,7 @@
 
 typedef struct
 {
-    GtkHBox hbox;
+    GtkBox hbox;
     gboolean initDone;
     gboolean isModal;
     GtkListStore *store;
@@ -59,7 +59,7 @@ typedef struct
 
 typedef struct
 {
-    GtkHBoxClass parent_class;
+    GtkBoxClass parent_class;
 
     /* Signals for notification/filtering of changes */
     void (*account_sel_changed) (GNCAccountSel *gas);
