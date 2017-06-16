@@ -2041,6 +2041,7 @@ gnc_main_window_update_tab_width_one_page (GncPluginPage *page,
 {
     gint *new_value = user_data;
     GtkWidget *label;
+    const gchar *lab_text;
 
     ENTER("page %p, visible %d", page, *new_value);
     label = g_object_get_data(G_OBJECT (page), PLUGIN_PAGE_TAB_LABEL);
@@ -2050,15 +2051,21 @@ gnc_main_window_update_tab_width_one_page (GncPluginPage *page,
         return;
     }
 
+    lab_text = gtk_label_get_text (GTK_LABEL(label));
+
     if (*new_value != 0)
     {
+        if (g_utf8_strlen (lab_text, -1) < *new_value)
+            gtk_label_set_width_chars (GTK_LABEL(label), strlen (lab_text));
+        else
+            gtk_label_set_width_chars (GTK_LABEL(label), *new_value);
+
         gtk_label_set_ellipsize(GTK_LABEL(label), PANGO_ELLIPSIZE_MIDDLE);
-        gtk_label_set_max_width_chars(GTK_LABEL(label), *new_value);
     }
     else
     {
+        gtk_label_set_width_chars (GTK_LABEL(label), 15);
         gtk_label_set_ellipsize(GTK_LABEL(label), PANGO_ELLIPSIZE_NONE);
-        gtk_label_set_max_width_chars(GTK_LABEL(label), 100);
     }
     LEAVE(" ");
 }
@@ -2178,6 +2185,7 @@ main_window_update_page_name (GncPluginPage *page,
     GncMainWindowPrivate *priv;
     GtkWidget *label, *entry;
     gchar *name, *old_page_name, *old_page_long_name;
+    gint lab_width;
 
     ENTER(" ");
 
@@ -2215,6 +2223,10 @@ main_window_update_page_name (GncPluginPage *page,
 
     if (main_window_find_tab_items(window, page, &label, &entry))
         gtk_label_set_text(GTK_LABEL(label), name);
+
+    /* Adjust the label width for new text */
+    lab_width = gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_WIDTH);
+    gnc_main_window_update_tab_width_one_page (page, &lab_width);
 
     /* Update Tooltip on notebook Tab */
     if (old_page_long_name && old_page_name
@@ -2905,6 +2917,7 @@ gnc_main_window_open_page (GncMainWindow *window,
     icon = GNC_PLUGIN_PAGE_GET_CLASS(page)->tab_icon;
     lab_text = gnc_plugin_page_get_page_name(page);
     label = gtk_label_new (lab_text);
+    g_object_set_data (G_OBJECT (page), PLUGIN_PAGE_TAB_LABEL, label);
 
     if (width != 0)
     {
