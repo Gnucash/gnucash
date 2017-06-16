@@ -98,14 +98,17 @@ GType gnc_commodity_namespace_get_type(void);
 #define GNC_COMMODITY_NS_LEGACY "GNC_LEGACY_CURRENCIES"
 /* The ISO define is deprecated in favor of CURRENCY */
 #define GNC_COMMODITY_NS_ISO    "ISO4217"
-#define GNC_COMMODITY_NS_CURRENCY N_("CURRENCY")
+#define GNC_COMMODITY_NS_CURRENCY "CURRENCY"
 #define GNC_COMMODITY_NS_NASDAQ "NASDAQ"
 #define GNC_COMMODITY_NS_NYSE   "NYSE"
 #define GNC_COMMODITY_NS_EUREX  "EUREX"
 #define GNC_COMMODITY_NS_MUTUAL "FUND"
 #define GNC_COMMODITY_NS_AMEX   "AMEX"
 #define GNC_COMMODITY_NS_ASX    "ASX"
-#define GNC_COMMODITY_NS_NONCURRENCY _("ALL NON-CURRENCY")
+#define GNC_COMMODITY_NS_NONCURRENCY _("All non-currency")
+/* Delay translation of this one, we use it in both translated and untranslated form
+   when presenting the currency related namespace to the user */
+#define GNC_COMMODITY_NS_ISO_GUI N_("Currencies")
 
 typedef GList CommodityList;
 
@@ -803,6 +806,19 @@ gboolean gnc_commodity_table_add_default_data(gnc_commodity_table *table, QofBoo
  *  @return A pointer to the name of the namespace.  This string is
  *  owned by the engine and should not be freed by the caller. */
 const char * gnc_commodity_namespace_get_name (const gnc_commodity_namespace *ns) ;
+
+/** Return the textual name of a namespace data strucure in a form suitable to
+ * present to the user.
+ *
+ *  @param ns A pointer to the namespace data strucure.
+ *
+ *  @return A pointer to the gui friendly name of the namespace.  This string is
+ *  owned by the engine and should not be freed by the caller.
+ *
+ *  @notes The returned string is marked for translation, but not translated yet.
+ *  If you want it translated pass the return value on to gettext.
+ */
+const char * gnc_commodity_namespace_get_gui_name (const gnc_commodity_namespace *ns) ;
 
 
 /** Return a list of all commodity data structures in the specified namespace.

@@ -605,27 +605,46 @@ gnc_ui_update_namespace_picker (GtkWidget *cbwe,
         namespaces = g_list_prepend (NULL, GNC_COMMODITY_NS_CURRENCY);
         break;
     }
-/* First insert "ALL" */
+
+    /* First insert "Currencies" entry if requested */
+    if (mode == DIAG_COMM_CURRENCY || mode == DIAG_COMM_ALL)
+    {
+        gtk_list_store_append(GTK_LIST_STORE(model), &iter);
+        gtk_list_store_set (GTK_LIST_STORE(model), &iter, 0,
+                            _(GNC_COMMODITY_NS_ISO_GUI), -1);
+
+        if (init_string &&
+            (g_utf8_collate(GNC_COMMODITY_NS_ISO_GUI, init_string) == 0))
+        {
+            matched = TRUE;
+            match = iter;
+        }
+    }
+
+    /* Next insert insert "All non-currency" entry if requested */
     if (mode == DIAG_COMM_NON_CURRENCY_SELECT || mode == DIAG_COMM_ALL)
     {
         gtk_list_store_append(GTK_LIST_STORE(model), &iter);
         gtk_list_store_set (GTK_LIST_STORE(model), &iter, 0,
                             GNC_COMMODITY_NS_NONCURRENCY, -1);
     }
-    /* add them to the combobox */
+
+    /* add all others to the combobox */
     namespaces = g_list_sort(namespaces, collate);
     for (node = namespaces; node; node = node->next)
     {
-        if (g_utf8_collate(node->data, GNC_COMMODITY_NS_LEGACY) == 0)
+        /* Skip template, legacy and currency namespaces.
+           The latter was added as first entry earlier */
+        if ((g_utf8_collate(node->data, GNC_COMMODITY_NS_LEGACY) == 0) ||
+            (g_utf8_collate(node->data, "template" ) == 0) ||
+            (g_utf8_collate(node->data, GNC_COMMODITY_NS_CURRENCY ) == 0))
             continue;
-        /* Hide the template entry */
-        if (g_utf8_collate(node->data, "template" ) != 0)
-        {
-            gtk_list_store_append(GTK_LIST_STORE(model), &iter);
-            gtk_list_store_set (GTK_LIST_STORE(model), &iter, 0, _(node->data), -1);
-        }
 
-        if (init_string && (g_utf8_collate(node->data, init_string) == 0))
+        gtk_list_store_append(GTK_LIST_STORE(model), &iter);
+        gtk_list_store_set (GTK_LIST_STORE(model), &iter, 0, node->data, -1);
+
+        if (init_string &&
+            (g_utf8_collate(node->data, init_string) == 0))
         {
             matched = TRUE;
             match = iter;
@@ -648,16 +667,11 @@ gnc_ui_namespace_picker_ns (GtkWidget *cbwe)
 
     name_space = gtk_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(cbwe)))));
 
-    if (g_strcmp0 (name_space, GNC_COMMODITY_NS_ISO) == 0)
-    {
-        /* In case the user types in ISO4217, map it to CURRENCY. */
+    /* Map several currency related names to one common namespace */
+    if ((g_strcmp0 (name_space, GNC_COMMODITY_NS_ISO) == 0) ||
+        (g_strcmp0 (name_space, GNC_COMMODITY_NS_ISO_GUI) == 0) ||
+        (g_strcmp0 (name_space, _(GNC_COMMODITY_NS_ISO_GUI)) == 0))
         return g_strdup(GNC_COMMODITY_NS_CURRENCY);
-    }
-    else if (g_strcmp0 (name_space, _(GNC_COMMODITY_NS_CURRENCY)) == 0)
-    {
-        /* In case the user entered a translation of CURRENCY, return it untranslated. */
-        return g_strdup(GNC_COMMODITY_NS_CURRENCY);
-    }
     else
         return g_strdup(name_space);
 }

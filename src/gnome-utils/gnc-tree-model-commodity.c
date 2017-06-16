@@ -596,7 +596,7 @@ gnc_tree_model_commodity_get_value (GtkTreeModel *tree_model,
         {
         case GNC_TREE_MODEL_COMMODITY_COL_NAMESPACE:
             g_value_init (value, G_TYPE_STRING);
-            g_value_set_string (value, gnc_commodity_namespace_get_name (name_space));
+            g_value_set_string (value, _(gnc_commodity_namespace_get_gui_name (name_space)));
             break;
         default:
             g_value_init (value, G_TYPE_STRING);

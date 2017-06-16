@@ -1660,6 +1660,16 @@ gnc_commodity_namespace_get_name (const gnc_commodity_namespace *ns)
     return ns->name;
 }
 
+const char *
+gnc_commodity_namespace_get_gui_name (const gnc_commodity_namespace *ns)
+{
+    if (ns == NULL)
+        return NULL;
+    if (g_strcmp0 (ns->name, GNC_COMMODITY_NS_CURRENCY) == 0)
+        return GNC_COMMODITY_NS_ISO_GUI;
+    return ns->name;
+}
+
 GList *
 gnc_commodity_namespace_get_commodity_list(const gnc_commodity_namespace *name_space)
 {

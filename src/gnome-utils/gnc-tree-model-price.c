@@ -708,7 +708,7 @@ gnc_tree_model_price_get_value (GtkTreeModel *tree_model,
         {
         case GNC_TREE_MODEL_PRICE_COL_COMMODITY:
             g_value_init (value, G_TYPE_STRING);
-            g_value_set_string (value, gnc_commodity_namespace_get_name (name_space));
+            g_value_set_string (value, gnc_commodity_namespace_get_gui_name (name_space));
             break;
         case GNC_TREE_MODEL_PRICE_COL_VISIBILITY:
             g_value_init (value, G_TYPE_BOOLEAN);
