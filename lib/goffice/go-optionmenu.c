@@ -121,7 +121,7 @@ static void go_option_menu_position(GtkMenu *menu, gint *x, gint *y,
 
     widget = GTK_WIDGET(option_menu);
 
-    gtk_widget_get_child_requisition(GTK_WIDGET(menu), &requisition);
+    gtk_widget_get_preferred_size(GTK_WIDGET(menu), &requisition, NULL);
     menu_width = requisition.width;
 
     gdk_window_get_origin(gtk_widget_get_window(widget), &menu_xpos,
@@ -139,14 +139,14 @@ static void go_option_menu_position(GtkMenu *menu, gint *x, gint *y,
         if (GTK_IS_CHECK_MENU_ITEM(child)
                 && gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(child)))
         {
-            gtk_widget_get_child_requisition(child, &requisition);
+            gtk_widget_get_preferred_size(child, &requisition, NULL);
             menu_ypos -= requisition.height / 2;
             break;
         }
 
         if (gtk_widget_get_visible(child))
         {
-            gtk_widget_get_child_requisition(child, &requisition);
+            gtk_widget_get_preferred_size(child, &requisition, NULL);
             menu_ypos -= requisition.height;
         }
 
@@ -402,20 +402,20 @@ static void go_option_menu_init(GOOptionMenu *option_menu)
     gtk_widget_set_can_default(GTK_WIDGET(option_menu), FALSE);
     gtk_widget_set_receives_default(GTK_WIDGET(option_menu), FALSE);
 
-    box = GTK_BOX(gtk_hbox_new(FALSE, FALSE));
+    box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (box), FALSE);
 
     option_menu->menu = NULL;
     option_menu->selected = NULL;
 
     option_menu->button_label = GTK_LABEL(gtk_label_new(""));
-    gtk_box_pack_start(box, GTK_WIDGET(option_menu->button_label), FALSE, TRUE,
-            0);
+    gtk_box_pack_start(box, GTK_WIDGET(option_menu->button_label), FALSE, TRUE, 0);
 
     arrow = gtk_arrow_new(GTK_ARROW_DOWN, GTK_SHADOW_NONE);
     g_object_set(arrow, "xalign", 0.75, NULL);
     gtk_box_pack_end(box, arrow, FALSE, FALSE, 0);
 
-    sep = gtk_vseparator_new();
+    sep = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
     gtk_box_pack_end(box, sep, FALSE, FALSE, 0);
 
     gtk_container_add(GTK_CONTAINER(option_menu), GTK_WIDGET(box));

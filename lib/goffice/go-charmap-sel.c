@@ -255,7 +255,7 @@ static GHashTable *encoding_hash;
 
 struct _GOCharmapSel
 {
-    GtkHBox box;
+    GtkBox box;
     GOOptionMenu *encodings;
     GtkMenu *encodings_menu;
     GOCharmapSelTestDirection test;
@@ -263,7 +263,7 @@ struct _GOCharmapSel
 
 typedef struct
 {
-    GtkHBoxClass parent_class;
+    GtkBoxClass parent_class;
 
     gboolean (*charmap_changed)(GOCharmapSel *cs, char const *new_charmap);
 } GOCharmapSelClass;
@@ -361,6 +361,8 @@ static void cs_emphasize_label(GtkLabel *label)
 
 static void cs_init(GOCharmapSel *cs)
 {
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(cs), GTK_ORIENTATION_HORIZONTAL);
+
     cs->test = GO_CHARMAP_SEL_TO_UTF8;
 
     cs->encodings = GO_OPTION_MENU(go_option_menu_new());
@@ -604,7 +606,7 @@ go_charmap_sel_get_type (void)
             (GInstanceInitFunc) cs_init
         };
 
-        go_charmap_sel_type = g_type_register_static (GTK_TYPE_HBOX,
+        go_charmap_sel_type = g_type_register_static (GTK_TYPE_BOX,
                            "GOCharmapSel",
                            &go_charmap_sel_info, 0);
     }
