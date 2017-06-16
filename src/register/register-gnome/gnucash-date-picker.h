@@ -40,7 +40,7 @@
 
 typedef struct
 {
-    GtkHBox hbox;
+    GtkBox hbox;
 
     GtkCalendar *calendar;
 } GNCDatePicker;
@@ -59,7 +59,7 @@ void gnc_date_picker_get_date (GNCDatePicker *date_picker,
 
 typedef struct
 {
-    GtkHBoxClass parent_class;
+    GtkBoxClass parent_class;
 
     void (*date_selected) (GNCDatePicker *date_picker);
 

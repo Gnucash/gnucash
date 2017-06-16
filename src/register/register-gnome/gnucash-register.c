@@ -522,7 +522,9 @@ gnucash_register_create_widget (Table *table)
      * hierarchy so they can be realized. Stick them in a box
      * underneath the register, but don't show the box to the
      * user. */
-    box = gtk_hbox_new(FALSE, 0);
+    box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (box), FALSE);
+
     gtk_widget_set_no_show_all(GTK_WIDGET(box), TRUE);
     gtk_box_pack_start(GTK_BOX(box),
                                 GNUCASH_SHEET(sheet)->header_color, TRUE, TRUE, 0);

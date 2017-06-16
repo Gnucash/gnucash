@@ -66,6 +66,7 @@ gnc_date_picker_get_date (GNCDatePicker *date_picker,
 static void
 gnc_date_picker_init (GNCDatePicker *date_picker)
 {
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(date_picker), GTK_ORIENTATION_HORIZONTAL);
     date_picker->calendar = NULL;
 }
 
@@ -167,7 +168,7 @@ gnc_date_picker_get_type (void)
         };
 
         gnc_date_picker_type =
-            g_type_register_static (GTK_TYPE_HBOX,
+            g_type_register_static (GTK_TYPE_BOX,
                                     "GNCDatePicker",
                                     &type_info, 0);
     }
