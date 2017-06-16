@@ -1991,11 +1991,8 @@ add_gvalue_timespec_to_slist( const GncSqlBackend* be, QofIdTypeConst obj_name,
     value = g_new0( GValue, 1 );
     g_assert( value != NULL );
     (void)g_value_init( value, G_TYPE_STRING );
-    if ( ts.tv_sec != 0 || ts.tv_nsec != 0 )
-    {
-        datebuf = gnc_sql_convert_timespec_to_string( be, ts );
-        g_value_take_string( value, datebuf );
-    }
+    datebuf = gnc_sql_convert_timespec_to_string( be, ts );
+    g_value_take_string( value, datebuf );
 
     (*pList) = g_slist_append( (*pList), value );
 }
