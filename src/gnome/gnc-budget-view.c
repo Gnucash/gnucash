@@ -412,7 +412,7 @@ gbv_create_widget(GncBudgetView *view)
 
     gtk_box_pack_end(GTK_BOX(inner_vbox), GTK_WIDGET(totals_tree_view), /*expand*/FALSE, /*fill*/TRUE, 0);
 
-    h_separator = gtk_hseparator_new();
+    h_separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
     gtk_widget_show(h_separator);
     gtk_box_pack_end(GTK_BOX(inner_vbox), h_separator, /*expand*/FALSE, /*fill*/TRUE, 0);
 

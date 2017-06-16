@@ -1088,7 +1088,7 @@ gnc_option_create_account_widget(GNCOption *option, char *name)
     gtk_container_set_border_width(GTK_CONTAINER(scroll_win), 5);
     gtk_container_add(GTK_CONTAINER(scroll_win), tree);
 
-    bbox = gtk_hbutton_box_new();
+    bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
     gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_SPREAD);
     gtk_box_pack_start(GTK_BOX(vbox), bbox, FALSE, FALSE, 10);
 
@@ -1127,7 +1127,7 @@ gnc_option_create_account_widget(GNCOption *option, char *name)
     {
         /* Put the "Show hidden" checkbox on a separate line since the 4 buttons make
            the dialog too wide. */
-        bbox = gtk_hbutton_box_new();
+        bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
         gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_START);
         gtk_box_pack_start(GTK_BOX(vbox), bbox, FALSE, FALSE, 0);
     }
@@ -1233,7 +1233,7 @@ gnc_option_create_list_widget(GNCOption *option, char *name)
     g_signal_connect(selection, "changed",
                      G_CALLBACK(gnc_option_list_changed_cb), option);
 
-    bbox = gtk_vbutton_box_new();
+    bbox = gtk_button_box_new (GTK_ORIENTATION_VERTICAL);
     gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_SPREAD);
     gtk_box_pack_start(GTK_BOX(hbox), bbox, FALSE, FALSE, 10);
 
@@ -1410,7 +1410,7 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
     }
 
     /* Add a button box at the bottom of the page */
-    buttonbox = gtk_hbutton_box_new();
+    buttonbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
     gtk_button_box_set_layout (GTK_BUTTON_BOX (buttonbox),
                                GTK_BUTTONBOX_EDGE);
     gtk_container_set_border_width(GTK_CONTAINER (buttonbox), 5);

@@ -153,7 +153,7 @@ gcrd_init (GncCellRendererDate *date)
 	popup->focus_window = date->calendar;
 	gtk_box_pack_start (GTK_BOX (vbox), date->calendar, TRUE, TRUE, 0);
 
-        date->button_box = gtk_hbutton_box_new ();
+        date->button_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
 	gtk_box_set_spacing (GTK_BOX (date->button_box), 6);
 	gtk_box_pack_start (GTK_BOX (vbox), date->button_box, FALSE, FALSE, 0);
 

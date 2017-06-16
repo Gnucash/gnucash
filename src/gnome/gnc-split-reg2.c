@@ -296,7 +296,7 @@ gsr2_create_table (GNCSplitReg2 *gsr)
 
     gsr->scroll_adj = GTK_ADJUSTMENT (gtk_adjustment_new (model->position_of_trans_in_full_tlist, 0.0, num_of_trans + 10, 1.0, 10.0, 10.0));
 
-    gsr->scroll_bar = gtk_vscrollbar_new (GTK_ADJUSTMENT (gsr->scroll_adj));
+    gsr->scroll_bar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, GTK_ADJUSTMENT (gsr->scroll_adj));
     gtk_widget_show (gsr->scroll_bar);
 
     gtk_box_pack_start (GTK_BOX (hbox), gsr->scroll_bar, FALSE, FALSE, 2);

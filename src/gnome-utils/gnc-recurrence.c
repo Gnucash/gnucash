@@ -406,7 +406,7 @@ struct _GncRecurrenceComp
 
     GtkWidget  *vbox;
     GtkWidget  *hbox;
-    GtkHButtonBox *hbb;
+    GtkWidget  *hbb;
     gint num_rec;
     GtkButton *buttRemove;
     GtkButton *buttAdd;
@@ -536,7 +536,7 @@ gnc_recurrence_comp_init(GncRecurrenceComp *grc)
 
     gtk_orientable_set_orientation (GTK_ORIENTABLE(grc), GTK_ORIENTATION_VERTICAL);
 
-    grc->hbb = GTK_HBUTTON_BOX(gtk_hbutton_box_new());
+    grc->hbb = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
     grc->vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 1);
     gtk_box_set_homogeneous (GTK_BOX (grc->vbox), FALSE);
     grc->rlist = NULL;

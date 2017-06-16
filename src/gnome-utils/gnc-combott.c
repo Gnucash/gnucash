@@ -223,7 +223,7 @@ gctt_init (GncCombott *combott)
     arrow = gtk_arrow_new(GTK_ARROW_DOWN, GTK_SHADOW_OUT);
     gtk_box_pack_end (GTK_BOX (hbox), arrow, FALSE, FALSE, 0);
 
-    sep = gtk_vseparator_new();
+    sep = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
     gtk_box_pack_end (GTK_BOX (hbox), sep, FALSE, FALSE, 0);
 
     label = gtk_label_new(NULL);

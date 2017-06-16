@@ -367,7 +367,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
         return priv->widget;
 
     /* Create Vpaned widget for top level */
-    widget = gtk_vpaned_new();
+    widget = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
     priv->widget = widget;
     gtk_widget_show (priv->widget);
 
