@@ -58,6 +58,17 @@ typedef struct
 static _GncDateTime gncdt;
 extern void _gnc_date_time_init (_GncDateTime *);
 
+/* t < MINTIME is probably from a bad conversion from t 0 to
+ * 0000-00-00, so restore it to the Unix Epoch. t anywhere near
+ * MAXTIME is obviously an error, but we don't want to crash with a
+ * bad date-time so just clamp it to MAXTIME.
+ */
+static inline time64
+clamp_time(time64 t)
+{
+    return  t < MINTIME ? 0 : t > MAXTIME ? MAXTIME : t;
+}
+
 /* gnc_localtime just creates a tm on the heap and calls
  * gnc_localtime_r with it, so this suffices to test both.
  */
@@ -70,18 +81,6 @@ test_gnc_localtime (void)
                       // difference between g_date_time and tm->tm_wday)
                      };
     guint ind;
-#if defined(__clang__) && __clang_major__ < 6
-#define _func "struct tm *gnc_localtime_r(const time64 *, struct tm *)"
-#else
-#define _func "gnc_localtime_r"
-#endif
-    gchar *msg = _func ": assertion " _Q "gdt != NULL' failed";
-#undef _func
-    gint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
-    gchar *logdomain = "qof";
-    TestErrorStruct check = {loglevel, logdomain, msg, 0};
-    GLogFunc hdlr = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
 
     for (ind = 0; ind < G_N_ELEMENTS (secs); ind++)
     {
@@ -112,8 +111,6 @@ test_gnc_localtime (void)
         g_date_time_unref (gdt);
         gnc_tm_free (time);
     }
-    g_assert_cmpint (check.hits, ==, 1);
-    g_log_set_default_handler (hdlr, NULL);
 }
 
 static void
@@ -129,35 +126,23 @@ test_gnc_gmtime (void)
         { 48, 51, 23, 18, 11, 69, 4, 352, 0, 0, NULL },
         { 41, 12, 0, 6, 0, 70, 2, 6, 0, 0, NULL },
         { 32, 30, 2, 3, 11, 92, 4, 338, 0, 0, NULL },
-        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL },
+        { 59, 59, 23, 31, 11, 8099, 5, 365, 0, 0, NULL },
         { 6, 47, 16, 7, 3, 107, 6, 97, 0, 0, NULL },
 #else
         { 6, 41, 2, 24, 9, -1301, 4, 297, 0 },
         { 48, 51, 23, 18, 11, 69, 4, 352, 0 },
         { 41, 12, 0, 6, 0, 70, 2, 6, 0 },
         { 32, 30, 2, 3, 11, 92, 4, 338, 0 },
-        { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        { 59, 50, 23, 31, 11, 8099, 5, 365, 0 },
         { 6, 47, 16, 7, 3, 107, 6, 97, 0 },
 #endif
     };
     guint ind;
-#if defined(__clang__) && __clang_major__ < 6
-#define _func "struct tm *gnc_gmtime(const time64 *)"
-#else
-#define _func "gnc_gmtime"
-#endif
-    gchar *msg = _func ": assertion " _Q "gdt != NULL' failed";
-#undef _func
-    gint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
-    gchar *logdomain = "qof";
-    TestErrorStruct check = {loglevel, logdomain, msg, 0};
-    GLogFunc hdlr = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
 
     for (ind = 0; ind < G_N_ELEMENTS (secs); ind++)
     {
         struct tm* time = gnc_gmtime (&secs[ind]);
-        GDateTime *gdt = g_date_time_new_from_unix_utc (secs[ind]);
+        GDateTime *gdt = g_date_time_new_from_unix_utc (clamp_time (secs[ind]));
         if (gdt == NULL)
         {
             g_assert (time == NULL);
@@ -178,8 +163,6 @@ test_gnc_gmtime (void)
         g_date_time_unref (gdt);
         gnc_tm_free (time);
     }
-    g_assert_cmpint (check.hits, ==, 1);
-    g_log_set_default_handler (hdlr, NULL);
 }
 
 static void
@@ -2037,14 +2020,23 @@ gnc_timezone (const struct tm *tm)// C: 5 in 2  Local: 2:0:0
 test_gnc_timezone (void)
 {
 }*/
-/* timespecFromtime64
+/* timespecFromTime64
 void
-timespecFromtime64( Timespec *ts, time64 t )// C: 22 in 11  Local: 0:0:0
+timespecFromTime64( Timespec *ts, time64 t )// C: 22 in 11  Local: 0:0:0
 */
-/* static void
-test_timespecFromtime64 (void)
+static void
+test_timespecFromTime64 (void)
 {
-}*/
+     Timespec ts = {-9999, 0};
+     timespecFromTime64 (&ts, MINTIME - 1);
+     g_assert_cmpint (0, ==, ts.tv_sec);
+     timespecFromTime64 (&ts, MINTIME + 1);
+     g_assert_cmpint (MINTIME + 1, ==, ts.tv_sec);
+     timespecFromTime64 (&ts, MAXTIME + 1);
+     g_assert_cmpint (MAXTIME, ==, ts.tv_sec);
+     timespecFromTime64 (&ts, MAXTIME - 1);
+     g_assert_cmpint (MAXTIME - 1, ==, ts.tv_sec);
+}
 /* timespec_now
 Timespec
 timespec_now()// C: 2 in 2  Local: 0:0:0
@@ -2474,7 +2466,7 @@ test_suite_gnc_date (void)
     GNC_TEST_ADD_FUNC (suitename, "gnc dmy2timespec end", test_gnc_dmy2timespec_end);
     GNC_TEST_ADD_FUNC (suitename, "gnc dmy2timespec Neutral", test_gnc_dmy2timespec_neutral);
 // GNC_TEST_ADD_FUNC (suitename, "gnc timezone", test_gnc_timezone);
-// GNC_TEST_ADD_FUNC (suitename, "timespecFromTime t", test_timespecFromtime64);
+    GNC_TEST_ADD_FUNC (suitename, "timespecFromTime64", test_timespecFromTime64);
 // GNC_TEST_ADD_FUNC (suitename, "timespec now", test_timespec_now);
 // GNC_TEST_ADD_FUNC (suitename, "timespecToTime t", test_timespecTotime64);
     GNC_TEST_ADD_FUNC (suitename, "timespec to gdate", test_timespec_to_gdate);

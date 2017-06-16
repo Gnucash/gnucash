@@ -73,6 +73,17 @@
 #  define GNC_T_FMT "%r"
 #endif
 
+/* t < MINTIME is probably from a bad conversion from t 0 to
+ * 0000-00-00, so restore it to the Unix Epoch. t anywhere near
+ * MAXTIME is obviously an error, but we don't want to crash with a
+ * bad date-time so just clamp it to MAXTIME.
+ */
+static inline time64
+clamp_time(time64 t)
+{
+    return  t < MINTIME ? 0 : t > MAXTIME ? MAXTIME : t;
+}
+
 const char *gnc_default_strftime_date_format =
 #ifdef G_OS_WIN32
     /* The default date format for use with strftime in Win32. */
@@ -141,7 +152,7 @@ GDateTime*
 gnc_g_date_time_new_from_unix_local (time64 time)
 {
     GTimeZone *tz = gnc_g_time_zone_new_local ();
-    GDateTime *gdt = g_date_time_new_from_unix_utc (time);
+    GDateTime *gdt = g_date_time_new_from_unix_utc (clamp_time (time));
     if (gdt)
 	gdt = gnc_g_date_time_adjust_for_dst (gdt, tz);
     return gdt;
@@ -249,7 +260,7 @@ struct tm*
 gnc_localtime_r (const time64 *secs, struct tm* time)
 {
      guint index = 0;
-     GDateTime *gdt = gnc_g_date_time_new_from_unix_local (*secs);
+     GDateTime *gdt = gnc_g_date_time_new_from_unix_local (clamp_time (*secs));
      g_return_val_if_fail (gdt != NULL, NULL);
 
      gnc_g_date_time_fill_struct_tm (gdt, time);
@@ -271,7 +282,7 @@ struct tm*
 gnc_gmtime (const time64 *secs)
 {
      struct tm *time;
-     GDateTime *gdt = g_date_time_new_from_unix_utc (*secs);
+     GDateTime *gdt = g_date_time_new_from_unix_utc (clamp_time (*secs));
      g_return_val_if_fail (gdt != NULL, NULL);
      time = g_slice_alloc0 (sizeof (struct tm));
      gnc_g_date_time_fill_struct_tm (gdt, time);
@@ -389,10 +400,10 @@ gnc_timegm (struct tm* time)
 gchar*
 gnc_ctime (const time64 *secs)
 {
-     GDateTime *gdt = gnc_g_date_time_new_from_unix_local (*secs);
-     gchar *string = g_date_time_format (gdt, "%a %b %e %H:%M:%S %Y");
-     g_date_time_unref (gdt);
-     return string;
+    GDateTime *gdt = gnc_g_date_time_new_from_unix_local (clamp_time (*secs));
+    gchar *string = g_date_time_format (gdt, "%a %b %e %H:%M:%S %Y");
+    g_date_time_unref (gdt);
+    return string;
 }
 
 time64
@@ -887,7 +898,7 @@ size_t
 qof_print_date_buff (char * buff, size_t len, time64 t)
 {
     struct tm theTime;
-    time64 bt = t;
+    time64 bt = clamp_time (t);
     size_t actual;
     if (!buff) return 0 ;
     if (!gnc_localtime_r(&bt, &theTime))
@@ -1635,7 +1646,7 @@ gnc_timezone (const struct tm *tm)
 void
 timespecFromTime64 ( Timespec *ts, time64 t )
 {
-    ts->tv_sec = t;
+    ts->tv_sec = clamp_time (t);
     ts->tv_nsec = 0;
 }
 
