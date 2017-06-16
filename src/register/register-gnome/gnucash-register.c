@@ -500,7 +500,7 @@ gnucash_register_create_widget (Table *table)
                       0, 0);
     gtk_widget_show(sheet);
 
-    scrollbar = gtk_vscrollbar_new(GNUCASH_SHEET(sheet)->vadj);
+    scrollbar = gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL, GNUCASH_SHEET(sheet)->vadj);
     gtk_table_attach (GTK_TABLE(widget), GTK_WIDGET(scrollbar),
                       1, 2, 0, 3,
                       GTK_FILL,
@@ -508,7 +508,7 @@ gnucash_register_create_widget (Table *table)
                       0, 0);
     gtk_widget_show(scrollbar);
 
-    scrollbar = gtk_hscrollbar_new(GNUCASH_SHEET(sheet)->hadj);
+    scrollbar = gtk_scrollbar_new(GTK_ORIENTATION_HORIZONTAL, GNUCASH_SHEET(sheet)->hadj);
     gtk_table_attach (GTK_TABLE(widget), GTK_WIDGET(scrollbar),
                       0, 1, 2, 3,
                       GTK_EXPAND | GTK_SHRINK | GTK_FILL,
