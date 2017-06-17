@@ -930,7 +930,7 @@ new_security_page(SCM security_hash_key, gnc_commodity *comm, QIFImportWindow *w
     label = gtk_label_new_with_mnemonic(
                 _("_Exchange or abbreviation type:"));
     gtk_label_set_mnemonic_widget(GTK_LABEL(label), retval->namespace_combo);
-    ggnc_label_set_alignment(label, 0, 0.5);
+    gnc_label_set_alignment(label, 0, 0.5);
 
     gtk_widget_set_tooltip_text(label, namespace_tooltip);
     gtk_widget_set_tooltip_text(retval->namespace_combo, namespace_tooltip);
