@@ -310,7 +310,6 @@ Account * gnc_import_select_account(GtkWidget *parent,
         picker->account_tree_sw = GTK_WIDGET(gtk_builder_get_object (builder, "account_tree_sw"));
         online_id_label = GTK_WIDGET(gtk_builder_get_object (builder, "online_id_label"));
         button = GTK_WIDGET(gtk_builder_get_object (builder, "newbutton"));
-        gtk_button_set_use_stock (GTK_BUTTON(button), TRUE);
 
         //printf("gnc_import_select_account(): Fin get widget\n");
 
@@ -449,7 +448,6 @@ AccountPickerDialog* gnc_import_account_assist_setup(GtkWidget *parent)
 
     gtk_box_pack_start(GTK_BOX(h_box), picker->new_button, FALSE, FALSE, 0);
     gtk_box_pack_start( GTK_BOX(box), h_box, FALSE, FALSE, 6);
-    gtk_button_set_use_stock (GTK_BUTTON(picker->new_button), TRUE);
     gtk_widget_show (picker->new_button);
     g_signal_connect(picker->new_button, "clicked",
                      G_CALLBACK(gnc_import_add_account), picker);

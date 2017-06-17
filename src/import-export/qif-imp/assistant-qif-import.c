@@ -1669,13 +1669,11 @@ gnc_ui_qif_import_load_progress_pause_cb(GtkButton * button,
     /* Swap the button label between pause and resume. */
     if (strcmp(gtk_button_get_label(button), _("_Resume")))
     {
-        gtk_button_set_use_stock(button, FALSE);
         gtk_button_set_use_underline(button, TRUE);
         gtk_button_set_label(button, _("_Resume"));
     }
     else
     {
-        gtk_button_set_use_stock(button, TRUE);
         gtk_button_set_use_underline(button, FALSE);
         gtk_button_set_label(button, "gtk-media-pause");
     }
@@ -2789,13 +2787,11 @@ gnc_ui_qif_import_convert_progress_pause_cb(GtkButton * button,
     /* Swap the button label between pause and resume. */
     if (strcmp(gtk_button_get_label(button), _("_Resume")))
     {
-        gtk_button_set_use_stock(button, FALSE);
         gtk_button_set_use_underline(button, TRUE);
         gtk_button_set_label(button, _("_Resume"));
     }
     else
     {
-        gtk_button_set_use_stock(button, TRUE);
         gtk_button_set_use_underline(button, FALSE);
         gtk_button_set_label(button, "gtk-media-pause");
     }

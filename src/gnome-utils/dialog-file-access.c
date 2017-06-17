@@ -319,10 +319,7 @@ gnc_ui_file_access( int type )
 
     op = GTK_BUTTON(gtk_builder_get_object (builder, "pb_op" ));
     if ( op != NULL )
-    {
         gtk_button_set_label( op, button_label );
-        gtk_button_set_use_stock( op, TRUE );
-    }
 
     file_chooser = GTK_WIDGET(gtk_builder_get_object (builder, "file_chooser" ));
     fileChooser = GTK_FILE_CHOOSER_WIDGET(gtk_file_chooser_widget_new( fileChooserAction ));
