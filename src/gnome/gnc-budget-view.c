@@ -341,7 +341,7 @@ gbv_create_widget(GncBudgetView *view)
 
     inner_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (inner_vbox), FALSE);
-    gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolled_window), GTK_WIDGET(inner_vbox));
+    gtk_container_add (GTK_CONTAINER(scrolled_window), GTK_WIDGET(inner_vbox));
     gtk_widget_show(GTK_WIDGET(inner_vbox));
 
     inner_scrolled_window = gtk_scrolled_window_new(NULL, NULL);

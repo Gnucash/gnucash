@@ -1398,7 +1398,7 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
     gtk_box_set_homogeneous (GTK_BOX (options_box), FALSE);
 
     gtk_container_set_border_width(GTK_CONTAINER(options_box), 0);
-    gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(options_scrolled_win), options_box);
+    gtk_container_add (GTK_CONTAINER(options_scrolled_win), GTK_WIDGET(options_box));
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(options_scrolled_win), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
     /* Create all the options */

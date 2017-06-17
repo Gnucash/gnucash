@@ -467,7 +467,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
         gnc_dense_cal_set_months_per_col(priv->gdcal, 4);
         gnc_dense_cal_set_num_months(priv->gdcal, 12);
 
-        gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(swin), GTK_WIDGET(priv->gdcal));
+        gtk_container_add (GTK_CONTAINER(swin), GTK_WIDGET(priv->gdcal));
     }
 
     priv->gnc_component_id = gnc_register_gui_component("plugin-page-sx-list",

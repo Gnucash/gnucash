@@ -562,8 +562,8 @@ gnc_recurrence_comp_init(GncRecurrenceComp *grc)
     gtk_box_pack_start(GTK_BOX(vb), GTK_WIDGET(grc->vbox),
                        FALSE, FALSE, 3);
 
-    gtk_scrolled_window_add_with_viewport(
-        GTK_SCROLLED_WINDOW(grc), GTK_WIDGET(vb));
+    gtk_container_add (GTK_CONTAINER(grc), GTK_WIDGET(vb));
+
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(grc),
                                    GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
