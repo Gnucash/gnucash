@@ -1180,7 +1180,7 @@ gnc_reconcile_window_create_view_box(Account *account,
     gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 
     label = gtk_label_new(_("Total:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
+    gnc_label_set_alignment(label, 1.0, 0.5);
     gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0);
 
     label = gtk_label_new("");
@@ -1847,52 +1847,52 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
 
             /* statement date title/value */
             title = gtk_label_new(_("Statement Date:"));
-            gtk_misc_set_alignment(GTK_MISC(title), 1.0, 0.5);
+            gnc_label_set_alignment(title, 1.0, 0.5);
             gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 0);
 
             value = gtk_label_new("");
             recnData->recn_date = value;
-            gtk_misc_set_alignment(GTK_MISC(value), 1.0, 0.5);
+            gnc_label_set_alignment(value, 1.0, 0.5);
             gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 0);
 
             /* starting balance title/value */
             title = gtk_label_new(_("Starting Balance:"));
-            gtk_misc_set_alignment(GTK_MISC(title), 1.0, 0.5);
+            gnc_label_set_alignment(title, 1.0, 0.5);
             gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 3);
 
             value = gtk_label_new("");
             recnData->starting = value;
-            gtk_misc_set_alignment(GTK_MISC(value), 1.0, 0.5);
+            gnc_label_set_alignment(value, 1.0, 0.5);
             gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 3);
 
             /* ending balance title/value */
             title = gtk_label_new(_("Ending Balance:"));
-            gtk_misc_set_alignment(GTK_MISC(title), 1.0, 0.5);
+            gnc_label_set_alignment(title, 1.0, 0.5);
             gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 0);
 
             value = gtk_label_new("");
             recnData->ending = value;
-            gtk_misc_set_alignment(GTK_MISC(value), 1.0, 0.5);
+            gnc_label_set_alignment(value, 1.0, 0.5);
             gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 0);
 
             /* reconciled balance title/value */
             title = gtk_label_new(_("Reconciled Balance:"));
-            gtk_misc_set_alignment(GTK_MISC(title), 1.0, 0.5);
+            gnc_label_set_alignment(title, 1.0, 0.5);
             gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 0);
 
             value = gtk_label_new("");
             recnData->reconciled = value;
-            gtk_misc_set_alignment(GTK_MISC(value), 1.0, 0.5);
+            gnc_label_set_alignment(value, 1.0, 0.5);
             gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 0);
 
             /* difference title/value */
             title = gtk_label_new(_("Difference:"));
-            gtk_misc_set_alignment(GTK_MISC(title), 1.0, 0.5);
+            gnc_label_set_alignment(title, 1.0, 0.5);
             gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 0);
 
             value = gtk_label_new("");
             recnData->difference = value;
-            gtk_misc_set_alignment(GTK_MISC(value), 1.0, 0.5);
+            gnc_label_set_alignment(value, 1.0, 0.5);
             gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 0);
         }
 

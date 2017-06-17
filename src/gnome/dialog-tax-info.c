@@ -1151,7 +1151,7 @@ identity_edit_clicked_cb (GtkButton *button,
     if (!(g_strcmp0 (ti_dialog->tax_name, NULL) == 0))
         gtk_entry_set_text (GTK_ENTRY (name_entry), ti_dialog->tax_name);
     label = gtk_label_new (_("Name"));
-    gtk_misc_set_alignment (GTK_MISC (label), 1.00, 0.50);
+    gnc_label_set_alignment (label, 1.00, 0.50);
     alignment = gtk_alignment_new(1.00, 0.50, 1.00, 0.00);
     gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 0, 0, 12, 0);
     gtk_container_add (GTK_CONTAINER (alignment), label);
@@ -1190,7 +1190,7 @@ identity_edit_clicked_cb (GtkButton *button,
         gtk_combo_box_set_active (GTK_COMBO_BOX (type_combo), -1);
     }
     label = gtk_label_new (_("Type"));
-    gtk_misc_set_alignment (GTK_MISC (label), 1.00, 0.50);
+    gnc_label_set_alignment (label, 1.00, 0.50);
     alignment = gtk_alignment_new(1.00, 0.50, 1.00, 0.00);
     gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 0, 0, 12, 0);
     gtk_container_add (GTK_CONTAINER (alignment), label);
@@ -1201,7 +1201,7 @@ identity_edit_clicked_cb (GtkButton *button,
     gtk_table_attach_defaults (GTK_TABLE (table), alignment, 1, 2, 1, 2);
     label = gtk_label_new (_("CAUTION: If you set TXF categories, and later change 'Type', you will need to manually reset those categories one at a time"));
     gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-    gtk_misc_set_alignment (GTK_MISC (label), 0.50, 0.50);
+    gnc_label_set_alignment (label, 0.50, 0.50);
     alignment = gtk_alignment_new(0.50, 0.50, 1.00, 0.00);
     gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 6, 6, 4, 4);
     gtk_container_add (GTK_CONTAINER (alignment), label);

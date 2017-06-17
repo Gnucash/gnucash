@@ -865,7 +865,7 @@ create_children (GNCDateEdit *gde)
 
     /* Calendar label, only shown if the date editor has a time field */
     gde->cal_label = gtk_label_new (_("Calendar"));
-    gtk_misc_set_alignment (GTK_MISC (gde->cal_label), 0.0, 0.5);
+    gnc_label_set_alignment (gde->cal_label, 0.0, 0.5);
     gtk_box_pack_start (GTK_BOX (hbox), gde->cal_label, TRUE, TRUE, 0);
     if (gde->flags & GNC_DATE_EDIT_SHOW_TIME)
         gtk_widget_show (GTK_WIDGET(gde->cal_label));

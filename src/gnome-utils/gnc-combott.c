@@ -27,10 +27,12 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
+#include "config.h"
 #include <gtk/gtk.h>
 #include "gnc-combott.h"
 #include <strings.h>
 #include <string.h>
+#include "dialog-utils.h"
 
 enum
 {
@@ -410,7 +412,7 @@ gctt_rebuild_menu (GncCombott *combott, GtkTreeModel *model)
         /* Add the tooltip to the child label */
         label = gtk_bin_get_child(GTK_BIN(menu_items));
         gtk_widget_set_tooltip_text (label, tip_data);
-        gtk_misc_set_alignment (GTK_MISC(label), 0, 0.5);
+        gnc_label_set_alignment (label, 0, 0.5);
 
         /* ...and add it to the menu. */
         gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), menu_items);
@@ -603,7 +605,7 @@ menuitem_response_cb (GtkMenuItem *item, gpointer *user_data )
 
     /* Set the button Label */
     gtk_label_set_text(GTK_LABEL(priv->label), label_text);
-    gtk_misc_set_alignment (GTK_MISC(priv->label), 0, 0.5);
+    gnc_label_set_alignment (priv->label, 0, 0.5);
 
     /* Get the corresponding entry in the list store */
     valid = gtk_tree_model_get_iter_first (priv->model, &iter);
@@ -712,7 +714,7 @@ gnc_combott_set_active (GncCombott *combott, gint index)
                         priv->active = index + 1;
                         priv->active_iter = iter;
                         gtk_label_set_text(GTK_LABEL(priv->label), str_data);
-                        gtk_misc_set_alignment (GTK_MISC(priv->label), 0, 0.5);
+                        gnc_label_set_alignment (priv->label, 0, 0.5);
                         g_signal_emit (combott, combott_signals[CHANGED], 0);
                     }
 

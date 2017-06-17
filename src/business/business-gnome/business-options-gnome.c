@@ -84,7 +84,7 @@ make_name_label (char *name)
 
     colon_name = g_strconcat (name, ":", (char *)NULL);
     label = gtk_label_new (colon_name);
-    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gnc_label_set_alignment (label, 1.0, 0.5);
     g_free (colon_name);
 
     return label;

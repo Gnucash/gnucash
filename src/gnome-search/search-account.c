@@ -32,6 +32,7 @@
 #include "qof.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-gui-query.h"
+#include "dialog-utils.h"
 
 #include "search-account.h"
 #include "search-core-utils.h"
@@ -306,7 +307,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
     /* Build and connect the account entry window */
     desc = describe_button (fi);
     label = gtk_label_new (desc);
-    gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
+    gnc_label_set_alignment (label, 0.5, 0.5);
 
     button = gtk_button_new ();
     gtk_container_add (GTK_CONTAINER (button), label);

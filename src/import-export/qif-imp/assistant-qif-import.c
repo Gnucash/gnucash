@@ -885,7 +885,7 @@ new_security_page(SCM security_hash_key, gnc_commodity *comm, QIFImportWindow *w
                        gnc_commodity_get_fullname(comm));
     label = gtk_label_new_with_mnemonic(_("_Name or description:"));
     gtk_label_set_mnemonic_widget(GTK_LABEL(label), retval->name_entry);
-    gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+    gnc_label_set_alignment(label, 0, 0.5);
 
     gtk_widget_set_tooltip_text(label, name_tooltip);
     gtk_widget_set_tooltip_text(retval->name_entry, name_tooltip);
@@ -905,7 +905,7 @@ new_security_page(SCM security_hash_key, gnc_commodity *comm, QIFImportWindow *w
     label = gtk_label_new_with_mnemonic(
                 _("_Ticker symbol or other abbreviation:"));
     gtk_label_set_mnemonic_widget(GTK_LABEL(label), retval->mnemonic_entry);
-    gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+    gnc_label_set_alignment(label, 0, 0.5);
 
     gtk_widget_set_tooltip_text(label, mnemonic_tooltip);
     gtk_widget_set_tooltip_text(retval->mnemonic_entry, mnemonic_tooltip);
@@ -930,7 +930,7 @@ new_security_page(SCM security_hash_key, gnc_commodity *comm, QIFImportWindow *w
     label = gtk_label_new_with_mnemonic(
                 _("_Exchange or abbreviation type:"));
     gtk_label_set_mnemonic_widget(GTK_LABEL(label), retval->namespace_combo);
-    gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+    ggnc_label_set_alignment(label, 0, 0.5);
 
     gtk_widget_set_tooltip_text(label, namespace_tooltip);
     gtk_widget_set_tooltip_text(retval->namespace_combo, namespace_tooltip);

@@ -545,7 +545,7 @@ gnc_preferences_build_page (gpointer data,
     if (add_in->full_page)
     {
         label = gtk_label_new(add_in->tabname);
-        gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+        gnc_label_set_alignment(label, 0.0, 0.5);
         gtk_notebook_append_page(notebook, new_content, label);
         g_object_unref(G_OBJECT(builder));
         LEAVE("appended page");
@@ -583,7 +583,7 @@ gnc_preferences_build_page (gpointer data,
         existing_content = gtk_table_new(0, 4, FALSE);
         gtk_container_set_border_width(GTK_CONTAINER(existing_content), 6);
         label = gtk_label_new(add_in->tabname);
-        gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+        gnc_label_set_alignment(label, 0.0, 0.5);
         gtk_notebook_append_page(notebook, existing_content, label);
         gtk_widget_show_all(existing_content);
         DEBUG("created new page %s, appended it", add_in->tabname);

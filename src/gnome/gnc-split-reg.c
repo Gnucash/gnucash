@@ -1004,7 +1004,7 @@ gsr_default_associate_handler_location (GNCSplitReg *gsr, Transaction *trans, gb
         label = gtk_label_new (_("Enter URL:"));
 
     // pack label and entry to content area
-    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gnc_label_set_alignment (label, 0.0, 0.5);
     gtk_container_add (GTK_CONTAINER (content_area), label);
     gtk_container_add (GTK_CONTAINER (content_area), entry);
 
@@ -1991,11 +1991,11 @@ add_summary_label (GtkWidget *summarybar, const char *label_str)
     gtk_box_pack_start( GTK_BOX(summarybar), hbox, FALSE, FALSE, 5 );
 
     label = gtk_label_new( label_str );
-    gtk_misc_set_alignment( GTK_MISC(label), 1.0, 0.5 );
+    gnc_label_set_alignment(label, 1.0, 0.5 );
     gtk_box_pack_start( GTK_BOX(hbox), label, FALSE, FALSE, 0 );
 
     label = gtk_label_new( "" );
-    gtk_misc_set_alignment( GTK_MISC(label), 1.0, 0.5 );
+    gnc_label_set_alignment(label, 1.0, 0.5 );
     gtk_box_pack_start( GTK_BOX(hbox), label, FALSE, FALSE, 0 );
 
     return label;

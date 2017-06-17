@@ -382,7 +382,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     gtk_label_set_markup (GTK_LABEL (label), markup);
     g_free (markup);
     g_free (text);
-    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0);
+    gnc_label_set_alignment (label, 0.0, 0);
     gtk_widget_show (label);
     gtk_box_pack_start ( GTK_BOX(vbox), label, FALSE, FALSE, 0);
     gtk_widget_show (vbox);
@@ -445,7 +445,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     gtk_label_set_markup (GTK_LABEL (label), markup);
     g_free (markup);
     g_free (text);
-    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0);
+    gnc_label_set_alignment (label, 0.0, 0);
     gtk_widget_show (label);
 
     gtk_box_pack_start ( GTK_BOX(vbox), label, FALSE, FALSE, 0);

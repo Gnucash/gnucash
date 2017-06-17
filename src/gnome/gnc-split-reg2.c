@@ -775,11 +775,11 @@ add_summary_label (GtkWidget *summarybar, const char *label_str)
     gtk_box_pack_start (GTK_BOX (summarybar), hbox, FALSE, FALSE, 5);
 
     label = gtk_label_new (label_str);
-    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gnc_label_set_alignment (label, 1.0, 0.5);
     gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
     label = gtk_label_new ("");
-    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gnc_label_set_alignment (label, 1.0, 0.5);
     gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
     return label;

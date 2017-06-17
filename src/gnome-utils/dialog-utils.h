@@ -61,6 +61,9 @@ void gnc_save_window_size (const char *section, GtkWindow *window);
 \********************************************************************/
 void gnc_window_adjust_for_screen (GtkWindow * window);
 
+
+void gnc_label_set_alignment (GtkWidget *widget, gfloat xalign, gfloat yalign);
+
 gboolean gnc_handle_date_accelerator (GdkEventKey *event,
                                       struct tm *tm,
                                       const char *date_str);
