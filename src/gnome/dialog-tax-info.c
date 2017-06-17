@@ -1139,9 +1139,9 @@ identity_edit_clicked_cb (GtkButton *button,
                                           (GtkWindow *)ti_dialog->dialog,
                                           GTK_DIALOG_MODAL |
                                           GTK_DIALOG_DESTROY_WITH_PARENT,
-                                          GTK_STOCK_CANCEL,
+                                          _("Cancel"),
                                           GTK_RESPONSE_CANCEL,
-                                          GTK_STOCK_APPLY,
+                                          _("Apply"),
                                           GTK_RESPONSE_APPLY,
                                           NULL);
 

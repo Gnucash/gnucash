@@ -1569,11 +1569,11 @@ gnc_plugin_page_register_finish_pending (GncPluginPage *page)
        "Would you like to save the changes to this transaction, "
        "discard the transaction, or cancel the operation?"));
     gnc_gtk_dialog_add_button(dialog, _("_Discard Transaction"),
-                              GTK_STOCK_DELETE, GTK_RESPONSE_REJECT);
+                              _("Delete"), GTK_RESPONSE_REJECT);
     gtk_dialog_add_button(GTK_DIALOG(dialog),
-                          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+                          _("Cancel"), GTK_RESPONSE_CANCEL);
     gnc_gtk_dialog_add_button(dialog, _("_Save Transaction"),
-                              GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT);
+                              _("Save"), GTK_RESPONSE_ACCEPT);
 
     response = gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy(dialog);

@@ -2451,7 +2451,7 @@ gtv_sr_transaction_changed_confirm (GncTreeViewSplitReg *view,
                                              "%s", message);
 
     gtk_dialog_add_buttons (GTK_DIALOG(dialog),_("_Discard Changes"), GTK_RESPONSE_REJECT,
-                            GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                            _("Cancel"), GTK_RESPONSE_CANCEL,
                             _("_Record Changes"), GTK_RESPONSE_ACCEPT, NULL);
 
     response = gnc_dialog_run (GTK_DIALOG (dialog), GNC_PREF_WARN_REG_TRANS_MOD);

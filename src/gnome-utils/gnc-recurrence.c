@@ -23,9 +23,11 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *******************************************************************/
+#include "config.h"
 
 #include <gtk/gtk.h>
-#include "config.h"
+#include <glib/gi18n.h>
+
 #include "dialog-utils.h"
 #include "gnc-recurrence.h"
 #include "gnc-date-edit.h"
@@ -541,10 +543,10 @@ gnc_recurrence_comp_init(GncRecurrenceComp *grc)
     gtk_box_set_homogeneous (GTK_BOX (grc->vbox), FALSE);
     grc->rlist = NULL;
 
-    grc->buttAdd = GTK_BUTTON(gtk_button_new_from_stock(GTK_STOCK_ADD));
+    grc->buttAdd = GTK_BUTTON(gtk_button_new_with_label(_("Add")));
     g_signal_connect(G_OBJECT(grc->buttAdd), "clicked",
                      G_CALLBACK(addClicked), grc);
-    grc->buttRemove = GTK_BUTTON(gtk_button_new_from_stock(GTK_STOCK_REMOVE));
+    grc->buttRemove = GTK_BUTTON(gtk_button_new_with_label(_("Remove")));
     g_signal_connect(G_OBJECT(grc->buttRemove), "clicked",
                      G_CALLBACK(removeClicked), grc);
 

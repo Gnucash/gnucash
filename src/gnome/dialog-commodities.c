@@ -187,8 +187,8 @@ remove_clicked (CommoditiesDialog *cd)
     gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
             "%s", message);
     gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                           GTK_STOCK_DELETE, GTK_RESPONSE_OK,
+                           _("Cancel"), GTK_RESPONSE_CANCEL,
+                           _("Delete"), GTK_RESPONSE_OK,
                            (gchar *)NULL);
     response = gnc_dialog_run(GTK_DIALOG(dialog), warning);
     gtk_widget_destroy(dialog);

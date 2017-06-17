@@ -258,8 +258,8 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
         GTK_DIALOG(gtk_dialog_new_with_buttons(_("Select the Accounts to Compare"),
                    NULL,
                    0,
-                   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                   GTK_STOCK_OK, GTK_RESPONSE_OK,
+                   _("Cancel"), GTK_RESPONSE_CANCEL,
+                   _("OK"), GTK_RESPONSE_OK,
                    NULL));
 
     /* Put the dialog together */

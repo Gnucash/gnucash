@@ -84,7 +84,7 @@ gnc_file_dialog (const char * title,
     GtkWidget *file_box;
     const char *internal_name;
     char *file_name = NULL;
-    gchar * okbutton = GTK_STOCK_OPEN;
+    gchar * okbutton = _("Open");
     const gchar *ok_icon = NULL;
     GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
     gint response;
@@ -95,7 +95,7 @@ gnc_file_dialog (const char * title,
     {
     case GNC_FILE_DIALOG_OPEN:
         action = GTK_FILE_CHOOSER_ACTION_OPEN;
-        okbutton = GTK_STOCK_OPEN;
+        okbutton = _("Open");
         if (title == NULL)
             title = _("Open");
         break;
@@ -107,7 +107,7 @@ gnc_file_dialog (const char * title,
         break;
     case GNC_FILE_DIALOG_SAVE:
         action = GTK_FILE_CHOOSER_ACTION_SAVE;
-        okbutton = GTK_STOCK_SAVE;
+        okbutton = _("Save");
         if (title == NULL)
             title = _("Save");
         break;
@@ -125,7 +125,7 @@ gnc_file_dialog (const char * title,
                    title,
                    NULL,
                    action,
-                   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                   _("Cancel"), GTK_RESPONSE_CANCEL,
                    NULL);
     if (ok_icon)
         gnc_gtk_dialog_add_button(file_box, okbutton, ok_icon, GTK_RESPONSE_ACCEPT);
@@ -270,7 +270,7 @@ show_session_error (QofBackendError io_error,
         {
         case GNC_FILE_DIALOG_OPEN:
         default:
-            label = GTK_STOCK_OPEN;
+            label = _("Open");
             fmt = _("GnuCash could not obtain the lock for %s. "
                     "That database may be in use by another user, "
                     "in which case you should not open the database. "
@@ -286,7 +286,7 @@ show_session_error (QofBackendError io_error,
             break;
 
         case GNC_FILE_DIALOG_SAVE:
-            label = GTK_STOCK_SAVE;
+            label = _("Save");
             fmt = _("GnuCash could not obtain the lock for %s. "
                     "That database may be in use by another user, "
                     "in which case you should not save the database. "
@@ -309,7 +309,7 @@ show_session_error (QofBackendError io_error,
                                         fmt,
                                         displayname);
         gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-                               GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                               _("Cancel"), GTK_RESPONSE_CANCEL,
                                label, GTK_RESPONSE_YES,
                                NULL);
         if (parent == NULL)
@@ -607,9 +607,9 @@ gnc_file_query_save (gboolean can_cancel)
 
         if (can_cancel)
             gtk_dialog_add_button(GTK_DIALOG(dialog),
-                                  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+                                  _("Cancel"), GTK_RESPONSE_CANCEL);
         gtk_dialog_add_button(GTK_DIALOG(dialog),
-                              GTK_STOCK_SAVE, GTK_RESPONSE_YES);
+                              _("Save"), GTK_RESPONSE_YES);
 
         gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_YES);
 
@@ -791,14 +791,14 @@ RESTART:
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
 
         gnc_gtk_dialog_add_button(dialog, _("_Open Read-Only"),
-                                  GTK_STOCK_REVERT_TO_SAVED, RESPONSE_READONLY);
+                                  _("Revert"), RESPONSE_READONLY);
         gnc_gtk_dialog_add_button(dialog, _("_Create New File"),
-                                  GTK_STOCK_NEW, RESPONSE_NEW);
+                                  _("New"), RESPONSE_NEW);
         gnc_gtk_dialog_add_button(dialog, _("Open _Anyway"),
-                                  GTK_STOCK_OPEN, RESPONSE_OPEN);
+                                  _("Open"), RESPONSE_OPEN);
         if (shutdown_cb)
             gtk_dialog_add_button(GTK_DIALOG(dialog),
-                                  GTK_STOCK_QUIT, RESPONSE_QUIT);
+                                  _("Quit"), RESPONSE_QUIT);
         rc = gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
         g_free (displayname);

@@ -918,7 +918,7 @@ csv_export_assistant_create (CsvExportInfo *info)
     /* File chooser Page */
     info->file_page = GTK_WIDGET(gtk_builder_get_object(builder, "file_page"));
     info->file_chooser = gtk_file_chooser_widget_new (GTK_FILE_CHOOSER_ACTION_SAVE);
-    button = gtk_button_new_from_stock (GTK_STOCK_OK);
+    button = gtk_button_new_with_label (_("OK"));
     gtk_widget_set_size_request (button, 100, -1);
     gtk_widget_show (button);
     h_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
