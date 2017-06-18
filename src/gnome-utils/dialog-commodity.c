@@ -992,10 +992,12 @@ gnc_ui_build_commodity_dialog(const char * selected_namespace,
     retval->table = GTK_WIDGET(gtk_builder_get_object (builder, "edit_table"));
     sec_label = GTK_WIDGET(gtk_builder_get_object (builder, "security_label"));
     gtk_container_child_get(GTK_CONTAINER(retval->table), sec_label,
-                            "bottom-attach", &retval->comm_section_top, NULL);
+                            "top-attach", &retval->comm_section_top, NULL);
+
     widget = GTK_WIDGET(gtk_builder_get_object (builder, "quote_label"));
     gtk_container_child_get(GTK_CONTAINER(retval->table), widget,
                             "top-attach", &retval->comm_section_bottom, NULL);
+
     gtk_container_child_get(GTK_CONTAINER(retval->table),
                             retval->user_symbol_entry, "top-attach",
                             &retval->comm_symbol_line, NULL);
@@ -1029,12 +1031,11 @@ gnc_ui_build_commodity_dialog(const char * selected_namespace,
     }
     else
     {
-        guint row;
+        gtk_grid_set_row_spacing(GTK_GRID(retval->table), 0);
 
         widget = GTK_WIDGET(gtk_builder_get_object (builder, "unknown_source_alignment"));
-        gtk_container_child_get(GTK_CONTAINER(retval->table), widget,
-                                "top-attach", &row, NULL);
         gtk_widget_destroy(widget);
+
         widget = GTK_WIDGET(gtk_builder_get_object (builder, "unknown_source_box"));
         gtk_widget_destroy(widget);
     }
@@ -1072,10 +1073,12 @@ gnc_ui_build_commodity_dialog(const char * selected_namespace,
         /* Determine the price quote of the dialog */
         widget = GTK_WIDGET(gtk_builder_get_object (builder, "fq_warning_alignment"));
         gtk_container_child_get(GTK_CONTAINER(retval->table), widget,
-                                "bottom-attach", &retval->fq_section_top, NULL);
-        widget = GTK_WIDGET(gtk_builder_get_object (builder, "quote_tz_alignment"));
+                                "top-attach", &retval->fq_section_top, NULL);
+
+        widget = GTK_WIDGET(gtk_builder_get_object (builder, "bottom_alignment"));
         gtk_container_child_get(GTK_CONTAINER(retval->table), widget,
-                                "bottom-attach", &retval->fq_section_bottom, NULL);
+                                "top-attach", &retval->fq_section_bottom, NULL);
+
         gnc_ui_update_fq_info (retval);
     }
 
