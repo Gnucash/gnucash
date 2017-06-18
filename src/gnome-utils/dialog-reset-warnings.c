@@ -378,8 +378,8 @@ gnc_reset_warnings_dialog (GtkWindow *parent)
 
     DEBUG("Opening dialog-reset-warnings.glade:");
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-reset-warnings.glade", "Reset Warnings");
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Reset Warnings"));
+    gnc_builder_add_from_file (builder, "dialog-reset-warnings.glade", "reset_warnings_dialog");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "reset_warnings_dialog"));
 
     gtk_window_set_transient_for(GTK_WINDOW (dialog), parent);
 
