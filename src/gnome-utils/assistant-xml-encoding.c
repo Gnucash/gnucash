@@ -1184,8 +1184,8 @@ gxi_edit_encodings_clicked_cb (GtkButton *button, GncXmlImportData *data)
     gint i, j;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "assistant-xml-encoding.glade", "Encodings Dialog");
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Encodings Dialog"));
+    gnc_builder_add_from_file (builder, "assistant-xml-encoding.glade", "encodings_dialog");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "encodings_dialog"));
     data->encodings_dialog = dialog;
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, data);
