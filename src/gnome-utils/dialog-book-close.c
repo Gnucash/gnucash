@@ -337,8 +337,8 @@ void gnc_ui_close_book (QofBook* book)
 
     /* Open the dialog */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-book-close.glade", "Close Book");
-    cbw->dialog = GTK_WIDGET(gtk_builder_get_object (builder,  "Close Book"));
+    gnc_builder_add_from_file (builder, "dialog-book-close.glade", "close_book_dialog");
+    cbw->dialog = GTK_WIDGET(gtk_builder_get_object (builder,  "close_book_dialog"));
 
     PINFO("Closed Book Window is %p, Dialog is %p", cbw, cbw->dialog);
 
