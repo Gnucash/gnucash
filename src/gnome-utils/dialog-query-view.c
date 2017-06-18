@@ -186,10 +186,10 @@ gnc_dialog_query_view_new (GList *param_list, Query *q)
 
     dqv = g_new0 (DialogQueryView, 1);
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-query-view.glade", "Query View Dialog");
+    gnc_builder_add_from_file (builder, "dialog-query-view.glade", "query_view_dialog");
 
     /* Grab the dialog, save the dialog info */
-    dqv->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Query View Dialog"));
+    dqv->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "query_view_dialog"));
     g_object_set_data (G_OBJECT (dqv->dialog), "dialog-info", dqv);
 
     /* grab the widgets */
