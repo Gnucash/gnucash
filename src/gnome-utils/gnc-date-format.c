@@ -163,7 +163,7 @@ gnc_date_format_init (GNCDateFormat *gdf)
     /* Open up the Glade and set the signals */
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "gnc-date-format.glade", "format-liststore");
-    gnc_builder_add_from_file (builder, "gnc-date-format.glade", "GNC Date Format");
+    gnc_builder_add_from_file (builder, "gnc-date-format.glade", "gnc_date_format_window");
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, gdf);
 
@@ -189,7 +189,7 @@ gnc_date_format_init (GNCDateFormat *gdf)
     gnc_date_format_set_format(gdf, QOF_DATE_FORMAT_UNSET);
 
     /* pull in the dialog and table widgets and play the reconnect game */
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "GNC Date Format"));
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "gnc_date_format_window"));
 
     table = GTK_WIDGET(gtk_builder_get_object (builder, "date_format_table"));
     g_object_ref(G_OBJECT(table));
