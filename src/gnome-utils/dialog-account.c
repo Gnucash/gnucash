@@ -667,12 +667,16 @@ verify_children_compatible (AccountWindow *aw)
     {
         gint size;
         PangoFontDescription *font_desc;
+        GtkStyleContext *style;
 
-        size = pango_font_description_get_size (gtk_widget_get_style (label)->font_desc);
+        style = gtk_widget_get_style_context(label);
+        gtk_style_context_get (style, GTK_STATE_FLAG_NORMAL, GTK_STYLE_PROPERTY_FONT, &font_desc, NULL);
+
+        size = pango_font_description_get_size (font_desc);
         font_desc = pango_font_description_new ();
         pango_font_description_set_weight (font_desc, PANGO_WEIGHT_BOLD);
         pango_font_description_set_size (font_desc, size * PANGO_SCALE_LARGE);
-        gtk_widget_modify_font (label, font_desc);
+        gtk_widget_override_font(label, font_desc);
         pango_font_description_free (font_desc);
     }
     gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
@@ -704,9 +708,6 @@ verify_children_compatible (AccountWindow *aw)
     gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
     gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
     gtk_box_set_spacing (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), 14);
-    gtk_container_set_border_width (
-        GTK_CONTAINER (gtk_dialog_get_action_area (GTK_DIALOG (dialog))), 5);
-    gtk_box_set_spacing (GTK_BOX (gtk_dialog_get_action_area (GTK_DIALOG (dialog))), 6);
 
     gtk_widget_show_all (hbox);
 
@@ -1314,9 +1315,9 @@ gnc_account_window_create(AccountWindow *aw)
     ENTER("aw %p, modal %d", aw, aw->modal);
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-account.glade", "fraction_liststore");
-    gnc_builder_add_from_file (builder, "dialog-account.glade", "Account Dialog");
+    gnc_builder_add_from_file (builder, "dialog-account.glade", "account_dialog");
 
-    aw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Account Dialog"));
+    aw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "account_dialog"));
     awo = G_OBJECT (aw->dialog);
 
     g_object_set_data (awo, "dialog_info", aw);
@@ -2012,12 +2013,9 @@ gnc_account_renumber_create_dialog (GtkWidget *window, Account *account)
     data->num_children = gnc_account_n_children(account);
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-account.glade",
-			       "interval_adjustment");
-    gnc_builder_add_from_file (builder, "dialog-account.glade",
-			       "Renumber Accounts");
-    data->dialog = GTK_WIDGET(gtk_builder_get_object (builder,
-						      "Renumber Accounts"));
+    gnc_builder_add_from_file (builder, "dialog-account.glade", "interval_adjustment");
+    gnc_builder_add_from_file (builder, "dialog-account.glade", "account_renumber_dialog");
+    data->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "account_renumber_dialog"));
     gtk_window_set_transient_for(GTK_WINDOW(data->dialog), GTK_WINDOW(window));
     g_object_set_data_full(G_OBJECT(data->dialog), "builder", builder,
 			   g_object_unref);

@@ -1297,9 +1297,9 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
         gchar *title = NULL;
 
         builder = gtk_builder_new();
-        gnc_builder_add_from_file (builder, "dialog-account.glade", "Delete Account");
+        gnc_builder_add_from_file (builder, "dialog-account.glade", "account_delete_dialog");
 
-        dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Delete Account"));
+        dialog = GTK_WIDGET(gtk_builder_get_object (builder, "account_delete_dialog"));
         gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(window));
 
         widget = GTK_WIDGET(gtk_builder_get_object (builder, "header"));
