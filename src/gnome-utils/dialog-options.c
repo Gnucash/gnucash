@@ -1724,8 +1724,8 @@ gnc_options_dialog_new_modal(gboolean modal, gchar *title)
 
     retval = g_new0(GNCOptionWin, 1);
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-options.glade", "GnuCash Options");
-    retval->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "GnuCash Options"));
+    gnc_builder_add_from_file (builder, "dialog-options.glade", "gnucash_options_dialog");
+    retval->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "gnucash_options_dialog"));
     retval->page_list = GTK_WIDGET(gtk_builder_get_object (builder, "page_list_scroll"));
 
     /* Page List */
@@ -1773,7 +1773,7 @@ gnc_options_dialog_new_modal(gboolean modal, gchar *title)
     }
 
     /* glade doesn't support a notebook with zero pages */
-    hbox = GTK_WIDGET(gtk_builder_get_object (builder, "notebook placeholder"));
+    hbox = GTK_WIDGET(gtk_builder_get_object (builder, "notebook_placeholder"));
     retval->notebook = gtk_notebook_new();
     gtk_widget_show(retval->notebook);
     gtk_box_pack_start(GTK_BOX(hbox), retval->notebook, TRUE, TRUE, 5);
@@ -2301,7 +2301,7 @@ gnc_option_set_ui_widget_color (GNCOption *option, GtkBox *page_box,
 
     value = gtk_color_button_new();
     gtk_color_button_set_title(GTK_COLOR_BUTTON(value), name);
-    gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(value), use_alpha);
+    gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(value), use_alpha);
 
     gnc_option_set_widget (option, value);
     gnc_option_set_ui_value(option, FALSE);
