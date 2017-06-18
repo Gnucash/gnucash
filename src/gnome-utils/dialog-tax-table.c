@@ -230,9 +230,9 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
     /* Open and read the Glade File */
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-tax-table.glade", "type_liststore");
-    gnc_builder_add_from_file (builder, "dialog-tax-table.glade", "New Tax Table Dialog");
+    gnc_builder_add_from_file (builder, "dialog-tax-table.glade", "new_tax_table_dialog");
 
-    ntt->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "New Tax Table Dialog"));
+    ntt->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "new_tax_table_dialog"));
     ntt->name_entry = GTK_WIDGET(gtk_builder_get_object (builder, "name_entry"));
     if (name)
         gtk_entry_set_text (GTK_ENTRY (ntt->name_entry), name);
@@ -291,9 +291,6 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
         gtk_widget_hide (ntt->name_entry);
         /* Tables are great for layout, but a pain when you hide widgets */
         widget = GTK_WIDGET(gtk_builder_get_object (builder, "ttd_table"));
-        gtk_table_set_row_spacing (GTK_TABLE(widget), 0, 0);
-        gtk_table_set_row_spacing (GTK_TABLE(widget), 1, 0);
-        gtk_table_set_row_spacing (GTK_TABLE(widget), 2, 0);
         gtk_widget_grab_focus (gnc_amount_edit_gtk_entry
                                (GNC_AMOUNT_EDIT (ntt->amount_entry)));
     }
@@ -710,8 +707,8 @@ gnc_ui_tax_table_window_new (QofBook *book)
 
     /* Open and read the Glade File */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-tax-table.glade", "Tax Table Window");
-    ttw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Tax Table Window"));
+    gnc_builder_add_from_file (builder, "dialog-tax-table.glade", "tax_table_window_dialog");
+    ttw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "tax_table_window_dialog"));
     ttw->names_view = GTK_WIDGET(gtk_builder_get_object (builder, "tax_tables_view"));
     ttw->entries_view = GTK_WIDGET(gtk_builder_get_object (builder, "tax_table_entries"));
 
