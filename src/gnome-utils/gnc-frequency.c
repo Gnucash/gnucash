@@ -227,9 +227,12 @@ gnc_frequency_init(GncFrequency *gf)
     {
         gint dont_expand_or_fill = 0;
         GtkWidget *table = GTK_WIDGET(gtk_builder_get_object (builder, "gncfreq_table"));
-        gtk_table_attach(GTK_TABLE(table), GTK_WIDGET(gf->startDate),
-                         4, 5, 0, 1, dont_expand_or_fill, 0,
-                         0, 0);
+        gtk_grid_attach(GTK_GRID(table), GTK_WIDGET(gf->startDate), 4, 0, 1, 1);
+        gtk_widget_set_vexpand (GTK_WIDGET(gf->startDate), FALSE);
+        gtk_widget_set_hexpand (GTK_WIDGET(gf->startDate), FALSE);
+        gtk_widget_set_valign (GTK_WIDGET(gf->startDate), GTK_ALIGN_CENTER);
+        gtk_widget_set_halign (GTK_WIDGET(gf->startDate), GTK_ALIGN_CENTER);
+        g_object_set (GTK_WIDGET(gf->startDate), "margin", 0, NULL);
     }
     vb = GTK_BOX(gtk_builder_get_object (builder, "gncfreq_vbox"));
     gf->vb = vb;
