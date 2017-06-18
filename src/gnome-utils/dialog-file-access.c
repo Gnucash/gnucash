@@ -273,10 +273,9 @@ gnc_ui_file_access( int type )
 
     /* Open the dialog */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-file-access.glade", "File Access" );
-    faw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "File Access" ));
-    g_object_set_data_full( G_OBJECT(faw->dialog), "FileAccessWindow", faw,
-                            g_free );
+    gnc_builder_add_from_file (builder, "dialog-file-access.glade", "file_access_dialog" );
+    faw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "file_access_dialog" ));
+    g_object_set_data_full( G_OBJECT(faw->dialog), "FileAccessWindow", faw, g_free );
 
     faw->frame_file = GTK_WIDGET(gtk_builder_get_object (builder, "frame_file" ));
     faw->frame_database = GTK_WIDGET(gtk_builder_get_object (builder, "frame_database" ));
@@ -293,14 +292,14 @@ gnc_ui_file_access( int type )
     {
     case FILE_ACCESS_OPEN:
         gtk_window_set_title(GTK_WINDOW(faw->dialog), _("Open..."));
-        button_label = "gtk-open";
+        button_label = _("_Open");
         fileChooserAction = GTK_FILE_CHOOSER_ACTION_OPEN;
         settings_section = GNC_PREFS_GROUP_OPEN_SAVE;
         break;
 
     case FILE_ACCESS_SAVE_AS:
         gtk_window_set_title(GTK_WINDOW(faw->dialog), _("Save As..."));
-        button_label = "gtk-save-as";
+        button_label = _("_Save As");
         fileChooserAction = GTK_FILE_CHOOSER_ACTION_SAVE;
         settings_section = GNC_PREFS_GROUP_OPEN_SAVE;
         gtk_widget_destroy(faw->readonly_checkbutton);
@@ -309,7 +308,7 @@ gnc_ui_file_access( int type )
 
     case FILE_ACCESS_EXPORT:
         gtk_window_set_title(GTK_WINDOW(faw->dialog), _("Export"));
-        button_label = "gtk-save-as";
+        button_label = _("_Save As");
         fileChooserAction = GTK_FILE_CHOOSER_ACTION_SAVE;
         settings_section = GNC_PREFS_GROUP_EXPORT;
         gtk_widget_destroy(faw->readonly_checkbutton);
