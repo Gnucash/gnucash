@@ -255,11 +255,11 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-commodity.glade", "liststore1");
     gnc_builder_add_from_file (builder, "dialog-commodity.glade", "liststore2");
-    gnc_builder_add_from_file (builder, "dialog-commodity.glade", "Security Selector Dialog");
+    gnc_builder_add_from_file (builder, "dialog-commodity.glade", "security_selector_dialog");
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, retval);
 
-    retval->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Security Selector Dialog"));
+    retval->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "security_selector_dialog"));
     retval->namespace_combo = GTK_WIDGET(gtk_builder_get_object (builder, "ss_namespace_cbwe"));
     retval->commodity_combo = GTK_WIDGET(gtk_builder_get_object (builder, "ss_commodity_cbwe"));
     retval->select_user_prompt = GTK_WIDGET(gtk_builder_get_object (builder, "select_user_prompt"));
@@ -961,11 +961,11 @@ gnc_ui_build_commodity_dialog(const char * selected_namespace,
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-commodity.glade", "liststore2");
     gnc_builder_add_from_file (builder, "dialog-commodity.glade", "adjustment1");
-    gnc_builder_add_from_file (builder, "dialog-commodity.glade", "Security Dialog");
+    gnc_builder_add_from_file (builder, "dialog-commodity.glade", "security_dialog");
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, retval);
 
-    retval->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Security Dialog"));
+    retval->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "security_dialog"));
     if (parent != NULL)
         gtk_window_set_transient_for (GTK_WINDOW (retval->dialog), GTK_WINDOW (parent));
     retval->edit_commodity = NULL;
@@ -1034,7 +1034,6 @@ gnc_ui_build_commodity_dialog(const char * selected_namespace,
         widget = GTK_WIDGET(gtk_builder_get_object (builder, "unknown_source_alignment"));
         gtk_container_child_get(GTK_CONTAINER(retval->table), widget,
                                 "top-attach", &row, NULL);
-        gtk_table_set_row_spacing(GTK_TABLE(retval->table), row, 0);
         gtk_widget_destroy(widget);
         widget = GTK_WIDGET(gtk_builder_get_object (builder, "unknown_source_box"));
         gtk_widget_destroy(widget);
