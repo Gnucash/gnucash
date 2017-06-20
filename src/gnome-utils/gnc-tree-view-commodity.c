@@ -223,8 +223,8 @@ sort_namespace (GtkTreeModel *f_model,
 
     ns_a = gnc_tree_model_commodity_get_namespace (model, &iter_a);
     ns_b = gnc_tree_model_commodity_get_namespace (model, &iter_b);
-    return safe_utf8_collate (gnc_commodity_namespace_get_name (ns_a),
-                              gnc_commodity_namespace_get_name (ns_b));
+    return safe_utf8_collate (gnc_commodity_namespace_get_gui_name (ns_a),
+                              gnc_commodity_namespace_get_gui_name (ns_b));
 }
 
 static gint

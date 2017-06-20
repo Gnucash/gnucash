@@ -813,7 +813,7 @@ tt_act_handler (xmlNodePtr node, gpointer data)
 
             table = gnc_commodity_table_get_table (txd->book);
             com = gnc_commodity_table_lookup (table,
-                                              "template", "template");
+                                              GNC_COMMODITY_NS_TEMPLATE, "template");
 #else
             /* FIXME: This should first look in the table of the
                book, maybe? The right thing happens [WRT file
@@ -823,7 +823,7 @@ tt_act_handler (xmlNodePtr node, gpointer data)
                applies for
                SchedXaction.c:xaccSchedXactionInit... */
             com = gnc_commodity_new (txd->book,
-                                     "template", "template",
+                                     "template", GNC_COMMODITY_NS_TEMPLATE,
                                      "template", "template",
                                      1);
 #endif

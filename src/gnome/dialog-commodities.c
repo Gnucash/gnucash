@@ -283,7 +283,7 @@ gnc_commodities_dialog_filter_ns_func (gnc_commodity_namespace *name_space,
 
     /* Never show the template list */
     name = gnc_commodity_namespace_get_name (name_space);
-    if (g_strcmp0 (name, "template") == 0)
+    if (g_strcmp0 (name, GNC_COMMODITY_NS_TEMPLATE) == 0)
         return FALSE;
 
     /* Check whether or not to show commodities */

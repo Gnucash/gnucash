@@ -850,7 +850,7 @@ gnc_commodity_new(QofBook *book, const char * fullname,
     if ( name_space != NULL )
     {
 	/* Prevent setting anything except template in namespace template. */
-	if (g_strcmp0 (name_space, "template") == 0 &&
+        if (g_strcmp0 (name_space, GNC_COMMODITY_NS_TEMPLATE) == 0 &&
 	    g_strcmp0 (mnemonic, "template") != 0)
 	{
 	    PWARN("Converting commodity %s from namespace template to "
@@ -1680,6 +1680,16 @@ gnc_commodity_namespace_get_name (const gnc_commodity_namespace *ns)
     return ns->name;
 }
 
+const char *
+gnc_commodity_namespace_get_gui_name (const gnc_commodity_namespace *ns)
+{
+    if (ns == NULL)
+        return NULL;
+    if (g_strcmp0 (ns->name, GNC_COMMODITY_NS_CURRENCY) == 0)
+        return GNC_COMMODITY_NS_ISO_GUI;
+    return ns->name;
+}
+
 GList *
 gnc_commodity_namespace_get_commodity_list(const gnc_commodity_namespace *name_space)
 {
@@ -1949,7 +1959,7 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
     }
 
     /* Prevent setting anything except template in namespace template. */
-    if (g_strcmp0 (ns_name, "template") == 0 &&
+    if (g_strcmp0 (ns_name, GNC_COMMODITY_NS_TEMPLATE) == 0 &&
 	g_strcmp0 (priv->mnemonic, "template") != 0)
     {
 	PWARN("Converting commodity %s from namespace template to "
@@ -2129,7 +2139,7 @@ commodity_table_get_all_noncurrency_commodities(const gnc_commodity_table* table
     {
         gnc_commodity_namespace *ns = NULL;
         if (g_strcmp0((char*)(node->data), GNC_COMMODITY_NS_CURRENCY) == 0
-            || g_strcmp0((char*)(node->data), "template") == 0)
+            || g_strcmp0((char*)(node->data), GNC_COMMODITY_NS_TEMPLATE) == 0)
             continue;
         ns = gnc_commodity_table_find_namespace(table, (char*)(node->data));
         if (!ns)
@@ -2451,8 +2461,8 @@ gnc_commodity_table_add_default_data(gnc_commodity_table *table, QofBook *book)
     gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_NASDAQ, book);
     gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_EUREX, book);
     gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_MUTUAL, book);
-    gnc_commodity_table_add_namespace(table, "template", book);
-    c = gnc_commodity_new(book, "template", "template", "template", "template", 1);
+    gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_TEMPLATE, book);
+    c = gnc_commodity_new(book, "template", GNC_COMMODITY_NS_TEMPLATE, "template", "template", 1);
     gnc_commodity_table_insert(table, c);
 
 #include "iso-4217-currencies.c"
