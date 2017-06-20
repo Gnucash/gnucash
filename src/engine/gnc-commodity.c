@@ -1020,22 +1020,6 @@ gnc_commodity_get_namespace(const gnc_commodity * cm)
     return gnc_commodity_namespace_get_name(GET_PRIVATE(cm)->name_space);
 }
 
-const char *
-gnc_commodity_get_namespace_compat(const gnc_commodity * cm)
-{
-    CommodityPrivate* priv;
-
-    if (!cm) return NULL;
-    priv = GET_PRIVATE(cm);
-    if (!priv->name_space) return NULL;
-    if (priv->name_space->iso4217)
-    {
-        /* Data files are still written with ISO4217. */
-        return GNC_COMMODITY_NS_ISO;
-    }
-    return gnc_commodity_namespace_get_name(priv->name_space);
-}
-
 gnc_commodity_namespace *
 gnc_commodity_get_namespace_ds(const gnc_commodity * cm)
 {

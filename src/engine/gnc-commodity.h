@@ -340,20 +340,6 @@ const char * gnc_commodity_get_mnemonic(const gnc_commodity * cm);
  */
 const char * gnc_commodity_get_namespace(const gnc_commodity * cm);
 
-/** Retrieve the namespace for the specified commodity.  This will be
- *  a pointer to a null terminated string of the form "AMEX",
- *  "NASDAQ", etc.  The only difference between function and
- *  gnc_commodity_get_namespace() is that this function returns
- *  ISO4217 instead of CURRENCY for backward compatibility with the
- *  1.8 data files.
- *
- *  @param cm A pointer to a commodity data structure.
- *
- *  @return A pointer to the namespace for this commodity.  This string
- *  is owned by the engine and should not be freed by the caller.
- */
-const char * gnc_commodity_get_namespace_compat(const gnc_commodity * cm);
-
 /** Retrieve the namespace data strucure for the specified commodity.
  *  This will be a pointer to another data structure.
  *

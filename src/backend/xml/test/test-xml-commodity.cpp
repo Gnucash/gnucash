@@ -70,7 +70,7 @@ node_and_commodity_equal (xmlNodePtr node, const gnc_commodity* com)
         else if (g_strcmp0 ((char*)mark->name, "cmdty:space") == 0)
         {
             if (!equals_node_val_vs_string (
-                    mark, gnc_commodity_get_namespace_compat (com)))
+                    mark, gnc_commodity_get_namespace (com)))
             {
                 return "namespaces differ";
             }

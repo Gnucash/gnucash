@@ -76,7 +76,7 @@ gnc_commodity_dom_tree_create (const gnc_commodity* com)
     xmlSetProp (ret, BAD_CAST "version", BAD_CAST commodity_version_string);
 
     xmlAddChild (ret, text_to_dom_tree (cmdty_namespace,
-                                        gnc_commodity_get_namespace_compat (com)));
+                                        gnc_commodity_get_namespace (com)));
     xmlAddChild (ret, text_to_dom_tree (cmdty_id,
                                         gnc_commodity_get_mnemonic (com)));
 

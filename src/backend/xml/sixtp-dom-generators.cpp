@@ -120,7 +120,7 @@ commodity_ref_to_dom_tree (const char* tag, const gnc_commodity* c)
     {
         return NULL;
     }
-    name_space = g_strdup (gnc_commodity_get_namespace_compat (c));
+    name_space = g_strdup (gnc_commodity_get_namespace (c));
     mnemonic = g_strdup (gnc_commodity_get_mnemonic (c));
     xmlNewTextChild (ret, NULL, BAD_CAST "cmdty:space",
                      checked_char_cast (name_space));
