@@ -265,9 +265,9 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
     ENTER(" ");
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-find-account.glade", "list-store");
-    gnc_builder_add_from_file (builder, "dialog-find-account.glade", "Find Account Dialog");
+    gnc_builder_add_from_file (builder, "dialog-find-account.glade", "find_account_dialog");
 
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Find Account Dialog"));
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "find_account_dialog"));
     facc_dialog->dialog = dialog;
 
     facc_dialog->session = gnc_get_current_session();
