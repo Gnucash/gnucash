@@ -316,9 +316,9 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
     GtkTreeSelection *selection;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-commodities.glade", "Securities Dialog");
+    gnc_builder_add_from_file (builder, "dialog-commodities.glade", "securities_dialog");
 
-    cd->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Securities Dialog"));
+    cd->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "securities_dialog"));
     cd->session = gnc_get_current_session();
     cd->book = qof_session_get_book(cd->session);
     cd->show_currencies = gnc_prefs_get_bool(GNC_PREFS_GROUP, GNC_PREF_INCL_ISO);
