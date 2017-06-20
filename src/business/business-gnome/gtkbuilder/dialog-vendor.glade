@@ -1,7 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.0 -->
 <interface>
-  <!-- interface-requires gtk+ 2.10 -->
-  <object class="GtkDialog" id="Vendor Dialog">
+  <requires lib="gtk+" version="3.10"/>
+  <object class="GtkListStore" id="tax_included_store">
+    <columns>
+      <!-- column-name tax_included_name -->
+      <column type="gchararray"/>
+      <!-- column-name tax_included_value -->
+      <column type="gpointer"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="taxtable_store">
+    <columns>
+      <!-- column-name taxtable_name -->
+      <column type="gchararray"/>
+      <!-- column-name taxtable_value -->
+      <column type="gpointer"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="terms_store">
+    <columns>
+      <!-- column-name terms_name -->
+      <column type="gchararray"/>
+      <!-- column-name terms_value -->
+      <column type="gpointer"/>
+    </columns>
+  </object>
+  <object class="GtkDialog" id="vendor_dialog">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">New Vendor</property>
@@ -20,14 +45,13 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="helpbutton">
-                <property name="label">gtk-help</property>
+                <property name="label" translatable="yes">_Help</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
-                <property name="use_stock">True</property>
+                <property name="use_underline">True</property>
                 <signal name="clicked" handler="gnc_vendor_window_help_cb" swapped="no"/>
               </object>
               <packing>
@@ -38,13 +62,12 @@
             </child>
             <child>
               <object class="GtkButton" id="cancelbutton">
-                <property name="label">gtk-cancel</property>
+                <property name="label" translatable="yes">_Cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
-                <property name="use_stock">True</property>
+                <property name="use_underline">True</property>
                 <signal name="clicked" handler="gnc_vendor_window_cancel_cb" swapped="no"/>
               </object>
               <packing>
@@ -55,14 +78,13 @@
             </child>
             <child>
               <object class="GtkButton" id="okbutton">
-                <property name="label">gtk-ok</property>
+                <property name="label" translatable="yes">_OK</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
-                <property name="use_stock">True</property>
+                <property name="use_underline">True</property>
                 <signal name="clicked" handler="gnc_vendor_window_ok_cb" swapped="no"/>
               </object>
               <packing>
@@ -84,9 +106,10 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <child>
-              <object class="GtkVBox" id="vbox2">
+              <object class="GtkBox" id="vbox2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkFrame" id="frame1">
                     <property name="visible">True</property>
@@ -94,20 +117,25 @@
                     <property name="border_width">3</property>
                     <property name="label_xalign">0</property>
                     <child>
-                      <object class="GtkHBox" id="hbox2">
+                      <object class="GtkBox" id="hbox2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="margin_left">5</property>
+                        <property name="margin_right">5</property>
+                        <property name="margin_top">5</property>
+                        <property name="margin_bottom">5</property>
                         <property name="border_width">2</property>
                         <child>
-                          <object class="GtkVBox" id="vbox11">
+                          <object class="GtkBox" id="vbox11">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
                             <property name="homogeneous">True</property>
                             <child>
                               <object class="GtkLabel" id="label1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">1</property>
+                                <property name="halign">end</property>
                                 <property name="label" translatable="yes">Vendor Number: </property>
                                 <property name="justify">right</property>
                               </object>
@@ -121,7 +149,7 @@
                               <object class="GtkLabel" id="label19">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">1</property>
+                                <property name="halign">end</property>
                                 <property name="label" translatable="yes">Company Name: </property>
                                 <property name="justify">right</property>
                               </object>
@@ -137,7 +165,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
+                                <property name="halign">start</property>
                                 <property name="use_underline">True</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
@@ -156,9 +184,10 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkVBox" id="vbox12">
+                          <object class="GtkBox" id="vbox12">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
                             <property name="homogeneous">True</property>
                             <child>
                               <object class="GtkEntry" id="id_entry">
@@ -230,20 +259,25 @@
                     <property name="border_width">3</property>
                     <property name="label_xalign">0</property>
                     <child>
-                      <object class="GtkHBox" id="hbox3">
+                      <object class="GtkBox" id="hbox3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="margin_left">5</property>
+                        <property name="margin_right">5</property>
+                        <property name="margin_top">5</property>
+                        <property name="margin_bottom">5</property>
                         <child>
-                          <object class="GtkVBox" id="vbox5">
+                          <object class="GtkBox" id="vbox5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="border_width">3</property>
+                            <property name="orientation">vertical</property>
                             <property name="homogeneous">True</property>
                             <child>
                               <object class="GtkLabel" id="label3">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">1</property>
+                                <property name="halign">end</property>
                                 <property name="label" translatable="yes">Name: </property>
                                 <property name="justify">right</property>
                               </object>
@@ -257,7 +291,7 @@
                               <object class="GtkLabel" id="label4">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">1</property>
+                                <property name="halign">end</property>
                                 <property name="label" translatable="yes">Address: </property>
                                 <property name="justify">right</property>
                               </object>
@@ -307,7 +341,7 @@
                               <object class="GtkLabel" id="label5">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">1</property>
+                                <property name="halign">end</property>
                                 <property name="label" translatable="yes">Phone: </property>
                                 <property name="justify">right</property>
                               </object>
@@ -321,7 +355,7 @@
                               <object class="GtkLabel" id="label6">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">1</property>
+                                <property name="halign">end</property>
                                 <property name="label" translatable="yes">Fax: </property>
                                 <property name="justify">right</property>
                               </object>
@@ -335,7 +369,7 @@
                               <object class="GtkLabel" id="label7">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">1</property>
+                                <property name="halign">end</property>
                                 <property name="label" translatable="yes">Email: </property>
                                 <property name="justify">right</property>
                               </object>
@@ -354,10 +388,11 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkVBox" id="vbox6">
+                          <object class="GtkBox" id="vbox6">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="border_width">3</property>
+                            <property name="orientation">vertical</property>
                             <property name="homogeneous">True</property>
                             <child>
                               <object class="GtkEntry" id="name_entry">
@@ -488,6 +523,12 @@
                       <object class="GtkScrolledWindow" id="scrolledwindow1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="margin_left">5</property>
+                        <property name="margin_right">5</property>
+                        <property name="margin_top">5</property>
+                        <property name="margin_bottom">5</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
                         <property name="border_width">3</property>
                         <property name="hscrollbar_policy">never</property>
                         <property name="shadow_type">in</property>
@@ -528,9 +569,10 @@
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="vbox13">
+              <object class="GtkBox" id="vbox13">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkFrame" id="frame3">
                     <property name="visible">True</property>
@@ -538,19 +580,24 @@
                     <property name="border_width">3</property>
                     <property name="label_xalign">0</property>
                     <child>
-                      <object class="GtkHBox" id="hbox6">
+                      <object class="GtkBox" id="hbox6">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="margin_left">5</property>
+                        <property name="margin_right">5</property>
+                        <property name="margin_top">5</property>
+                        <property name="margin_bottom">5</property>
                         <child>
-                          <object class="GtkVBox" id="vbox7">
+                          <object class="GtkBox" id="vbox7">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
                             <property name="homogeneous">True</property>
                             <child>
                               <object class="GtkLabel" id="label36">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">1</property>
+                                <property name="halign">end</property>
                                 <property name="label" translatable="yes">Currency: </property>
                                 <property name="justify">right</property>
                               </object>
@@ -564,7 +611,7 @@
                               <object class="GtkLabel" id="label8">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">1</property>
+                                <property name="halign">end</property>
                                 <property name="label" translatable="yes">Terms: </property>
                                 <property name="justify">right</property>
                               </object>
@@ -578,7 +625,7 @@
                               <object class="GtkLabel" id="label34">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">1</property>
+                                <property name="halign">end</property>
                                 <property name="label" translatable="yes">Tax Included:</property>
                                 <property name="justify">right</property>
                               </object>
@@ -592,7 +639,7 @@
                               <object class="GtkLabel" id="label35">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">1</property>
+                                <property name="halign">end</property>
                                 <property name="label" translatable="yes">Tax Table:</property>
                                 <property name="justify">right</property>
                               </object>
@@ -610,13 +657,14 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkVBox" id="vbox1">
+                          <object class="GtkBox" id="vbox1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="border_width">3</property>
+                            <property name="orientation">vertical</property>
                             <property name="homogeneous">True</property>
                             <child>
-                              <object class="GtkHBox" id="currency_box">
+                              <object class="GtkBox" id="currency_box">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <child>
@@ -668,7 +716,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkHBox" id="hbox7">
+                              <object class="GtkBox" id="hbox7">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <child>
@@ -677,7 +725,8 @@
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="tooltip_text" translatable="yes">Override the global Tax Table?</property>
-                                    <property name="use_action_appearance">False</property>
+                                    <property name="halign">start</property>
+                                    <property name="margin_right">5</property>
                                     <property name="use_underline">True</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="gnc_vendor_taxtable_check_cb" swapped="no"/>
@@ -771,29 +820,5 @@
       <action-widget response="-6">cancelbutton</action-widget>
       <action-widget response="-5">okbutton</action-widget>
     </action-widgets>
-  </object>
-  <object class="GtkListStore" id="tax_included_store">
-    <columns>
-      <!-- column-name tax_included_name -->
-      <column type="gchararray"/>
-      <!-- column-name tax_included_value -->
-      <column type="gpointer"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="taxtable_store">
-    <columns>
-      <!-- column-name taxtable_name -->
-      <column type="gchararray"/>
-      <!-- column-name taxtable_value -->
-      <column type="gpointer"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="terms_store">
-    <columns>
-      <!-- column-name terms_name -->
-      <column type="gchararray"/>
-      <!-- column-name terms_value -->
-      <column type="gpointer"/>
-    </columns>
   </object>
 </interface>
