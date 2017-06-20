@@ -191,9 +191,9 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-report.glade", "template_liststore");
-    gnc_builder_add_from_file (builder, "dialog-report.glade", "New Style Sheet Dialog");
+    gnc_builder_add_from_file (builder, "dialog-report.glade", "new_style_sheet_dialog");
 
-    dlg = GTK_WIDGET(gtk_builder_get_object (builder, "New Style Sheet Dialog"));
+    dlg = GTK_WIDGET(gtk_builder_get_object (builder, "new_style_sheet_dialog"));
     template_combo = GTK_WIDGET(gtk_builder_get_object (builder, "template_combobox"));
     name_entry     = GTK_WIDGET(gtk_builder_get_object (builder, "name_entry"));
 
@@ -406,9 +406,9 @@ gnc_style_sheet_select_dialog_create(void)
     GtkTreeSelection  * selection;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-report.glade", "Select Style Sheet Dialog");
+    gnc_builder_add_from_file (builder, "dialog-report.glade", "select_style_sheet_dialog");
 
-    ss->toplevel   = GTK_WIDGET(gtk_builder_get_object (builder, "Select Style Sheet Dialog"));
+    ss->toplevel   = GTK_WIDGET(gtk_builder_get_object (builder, "select_style_sheet_dialog"));
 
     ss->list_view  = GTK_TREE_VIEW(gtk_builder_get_object (builder, "style_sheet_list_view"));
     ss->list_store = gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_POINTER);
