@@ -1,501 +1,49 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.0 -->
 <interface>
-  <requires lib="gtk+" version="2.16"/>
-  <!-- interface-naming-policy project-wide -->
-  <object class="GtkDialog" id="Edit Term Dialog">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="modal">True</property>
-    <property name="type_hint">dialog</property>
-    <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox9">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="spacing">8</property>
-        <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area9">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="cancel_butt">
-                <property name="label">gtk-cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_markup">Cancel your changes</property>
-                <property name="tooltip_text" translatable="yes">Cancel your changes</property>
-                <property name="use_action_appearance">False</property>
-                <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="ok_butt">
-                <property name="label">gtk-ok</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_markup">Commit this Billing Term</property>
-                <property name="tooltip_text" translatable="yes">Commit this Billing Term</property>
-                <property name="use_action_appearance">False</property>
-                <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkTable" id="table3">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="n_rows">4</property>
-            <property name="n_columns">2</property>
-            <child>
-              <object class="GtkLabel" id="label3">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">&lt;b&gt;Term Definition&lt;/b&gt;</property>
-                <property name="use_markup">True</property>
-              </object>
-              <packing>
-                <property name="right_attach">2</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkAlignment" id="alignment7">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="left_padding">12</property>
-                <child>
-                  <object class="GtkLabel" id="label4">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">De_scription:</property>
-                    <property name="use_underline">True</property>
-                    <property name="justify">right</property>
-                    <property name="mnemonic_widget">entry_desc</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options">GTK_FILL</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="entry_desc">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_markup">The description of the Billing Term, printed on invoices</property>
-                <property name="tooltip_text" translatable="yes">The description of the Billing Term, printed on invoices</property>
-                <property name="invisible_char">&#x25CF;</property>
-                <property name="activates_default">True</property>
-                <property name="invisible_char_set">True</property>
-                <property name="primary_icon_activatable">False</property>
-                <property name="secondary_icon_activatable">False</property>
-                <property name="primary_icon_sensitive">True</property>
-                <property name="secondary_icon_sensitive">True</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-                <property name="y_options"></property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkAlignment" id="alignment8">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="left_padding">12</property>
-                <child>
-                  <object class="GtkLabel" id="label6">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Type:</property>
-                    <property name="use_underline">True</property>
-                    <property name="justify">right</property>
-                    <property name="mnemonic_widget">type_combo</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="top_attach">2</property>
-                <property name="bottom_attach">3</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options">GTK_FILL</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBox" id="type_combo">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="model">type_liststore</property>
-                <signal name="changed" handler="billterms_type_combobox_changed" swapped="no"/>
-                <child>
-                  <object class="GtkCellRendererText" id="cellrenderertext3"/>
-                  <attributes>
-                    <attribute name="text">0</attribute>
-                  </attributes>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="top_attach">2</property>
-                <property name="bottom_attach">3</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options">GTK_FILL</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkHBox" id="notebook_hbox">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="top_attach">3</property>
-                <property name="bottom_attach">4</property>
-                <property name="x_options">GTK_FILL</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-      </object>
-    </child>
-    <action-widgets>
-      <action-widget response="-6">cancel_butt</action-widget>
-      <action-widget response="-5">ok_butt</action-widget>
-    </action-widgets>
+  <requires lib="gtk+" version="3.10"/>
+  <object class="GtkAdjustment" id="discount_adj">
+    <property name="upper">100</property>
+    <property name="step_increment">0.01</property>
+    <property name="page_increment">0.10000000000000001</property>
   </object>
-  <object class="GtkDialog" id="New Term Dialog">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="modal">True</property>
-    <property name="type_hint">dialog</property>
-    <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox7">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="spacing">8</property>
-        <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area7">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="cancel_button">
-                <property name="label">gtk-cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_markup">Cancel your changes</property>
-                <property name="tooltip_text" translatable="yes">Cancel your changes</property>
-                <property name="use_action_appearance">False</property>
-                <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="ok_button">
-                <property name="label">gtk-ok</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_markup">Commit this Billing Term</property>
-                <property name="tooltip_text" translatable="yes">Commit this Billing Term</property>
-                <property name="use_action_appearance">False</property>
-                <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkTable" id="table2">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="n_rows">7</property>
-            <property name="n_columns">2</property>
-            <child>
-              <object class="GtkEntry" id="name_entry">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_markup">The internal name of the Billing Term.</property>
-                <property name="tooltip_text" translatable="yes">The internal name of the Billing Term.</property>
-                <property name="invisible_char">&#x25CF;</property>
-                <property name="activates_default">True</property>
-                <property name="invisible_char_set">True</property>
-                <property name="primary_icon_activatable">False</property>
-                <property name="secondary_icon_activatable">False</property>
-                <property name="primary_icon_sensitive">True</property>
-                <property name="secondary_icon_sensitive">True</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-                <property name="y_options"></property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="description_entry">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_markup">The description of the Billing Term, printed on invoices</property>
-                <property name="tooltip_text" translatable="yes">The description of the Billing Term, printed on invoices</property>
-                <property name="invisible_char">&#x25CF;</property>
-                <property name="activates_default">True</property>
-                <property name="invisible_char_set">True</property>
-                <property name="primary_icon_activatable">False</property>
-                <property name="secondary_icon_activatable">False</property>
-                <property name="primary_icon_sensitive">True</property>
-                <property name="secondary_icon_sensitive">True</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="top_attach">4</property>
-                <property name="bottom_attach">5</property>
-                <property name="y_options"></property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkHBox" id="note_book_hbox">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="top_attach">6</property>
-                <property name="bottom_attach">7</property>
-                <property name="x_options">GTK_FILL</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label17">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">&lt;b&gt;New Billing Term&lt;/b&gt;</property>
-                <property name="use_markup">True</property>
-              </object>
-              <packing>
-                <property name="right_attach">2</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label18">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">&lt;b&gt;Term Definition&lt;/b&gt;</property>
-                <property name="use_markup">True</property>
-              </object>
-              <packing>
-                <property name="right_attach">2</property>
-                <property name="top_attach">3</property>
-                <property name="bottom_attach">4</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label24">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="top_attach">2</property>
-                <property name="bottom_attach">3</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkAlignment" id="alignment4">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="left_padding">12</property>
-                <child>
-                  <object class="GtkLabel" id="label5">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Name:</property>
-                    <property name="use_underline">True</property>
-                    <property name="justify">right</property>
-                    <property name="mnemonic_widget">name_entry</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options">GTK_FILL</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkAlignment" id="alignment5">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="left_padding">12</property>
-                <child>
-                  <object class="GtkLabel" id="label22">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">De_scription:</property>
-                    <property name="use_underline">True</property>
-                    <property name="justify">right</property>
-                    <property name="mnemonic_widget">description_entry</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="top_attach">4</property>
-                <property name="bottom_attach">5</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options">GTK_FILL</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkAlignment" id="alignment6">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="left_padding">12</property>
-                <child>
-                  <object class="GtkLabel" id="label21">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Type:</property>
-                    <property name="use_underline">True</property>
-                    <property name="justify">right</property>
-                    <property name="mnemonic_widget">type_combobox</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="top_attach">5</property>
-                <property name="bottom_attach">6</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options">GTK_FILL</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBox" id="type_combobox">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="model">type_liststore</property>
-                <signal name="changed" handler="billterms_type_combobox_changed" swapped="no"/>
-                <child>
-                  <object class="GtkCellRendererText" id="cellrenderertext1"/>
-                  <attributes>
-                    <attribute name="text">0</attribute>
-                  </attributes>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="top_attach">5</property>
-                <property name="bottom_attach">6</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options">GTK_FILL</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-      </object>
-    </child>
-    <action-widgets>
-      <action-widget response="-6">cancel_button</action-widget>
-      <action-widget response="-5">ok_button</action-widget>
-    </action-widgets>
+  <object class="GtkAdjustment" id="discount_days_adj">
+    <property name="upper">365</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
-  <object class="GtkWindow" id="Term Notebook">
+  <object class="GtkAdjustment" id="due_days_adj">
+    <property name="upper">365</property>
+    <property name="value">30</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="pcutoff_day_adj">
+    <property name="lower">-27</property>
+    <property name="upper">27</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="pdiscount_adj">
+    <property name="upper">100</property>
+    <property name="step_increment">0.01</property>
+    <property name="page_increment">0.10000000000000001</property>
+  </object>
+  <object class="GtkAdjustment" id="pdiscount_day_adj">
+    <property name="lower">1</property>
+    <property name="upper">31</property>
+    <property name="value">1</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="pdue_day_adj">
+    <property name="lower">1</property>
+    <property name="upper">31</property>
+    <property name="value">1</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkWindow" id="terms_notebook_window">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">window1</property>
     <child>
@@ -505,23 +53,25 @@
         <property name="show_tabs">False</property>
         <property name="show_border">False</property>
         <child>
-          <object class="GtkVBox" id="vbox13">
+          <object class="GtkBox" id="vbox13">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
             <child>
-              <object class="GtkHBox" id="hbox9">
+              <object class="GtkBox" id="hbox9">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkVBox" id="vbox7">
+                  <object class="GtkBox" id="vbox7">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
                     <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkLabel" id="label13">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
+                        <property name="halign">end</property>
                         <property name="label" translatable="yes">Due Days: </property>
                         <property name="justify">right</property>
                       </object>
@@ -535,7 +85,7 @@
                       <object class="GtkLabel" id="label14">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
+                        <property name="halign">end</property>
                         <property name="label" translatable="yes">Discount Days: </property>
                         <property name="justify">right</property>
                       </object>
@@ -549,7 +99,7 @@
                       <object class="GtkLabel" id="label15">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
+                        <property name="halign">end</property>
                         <property name="label" translatable="yes">Discount %: </property>
                         <property name="justify">right</property>
                       </object>
@@ -567,9 +117,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkVBox" id="vbox8">
+                  <object class="GtkBox" id="vbox8">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
                     <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkSpinButton" id="days:due_days">
@@ -578,12 +129,9 @@
                         <property name="has_tooltip">True</property>
                         <property name="tooltip_markup">The number of days to pay the bill after the post date.</property>
                         <property name="tooltip_text" translatable="yes">The number of days to pay the bill after the post date.</property>
-                        <property name="invisible_char">&#x25CF;</property>
-                        <property name="invisible_char_set">True</property>
+                        <property name="invisible_char">●</property>
                         <property name="primary_icon_activatable">False</property>
                         <property name="secondary_icon_activatable">False</property>
-                        <property name="primary_icon_sensitive">True</property>
-                        <property name="secondary_icon_sensitive">True</property>
                         <property name="adjustment">due_days_adj</property>
                         <property name="climb_rate">1</property>
                         <property name="snap_to_ticks">True</property>
@@ -602,12 +150,9 @@
                         <property name="has_tooltip">True</property>
                         <property name="tooltip_markup">The number of days after the post date during which a discount will be applied for early payment.</property>
                         <property name="tooltip_text" translatable="yes">The number of days after the post date during which a discount will be applied for early payment.</property>
-                        <property name="invisible_char">&#x25CF;</property>
-                        <property name="invisible_char_set">True</property>
+                        <property name="invisible_char">●</property>
                         <property name="primary_icon_activatable">False</property>
                         <property name="secondary_icon_activatable">False</property>
-                        <property name="primary_icon_sensitive">True</property>
-                        <property name="secondary_icon_sensitive">True</property>
                         <property name="adjustment">discount_days_adj</property>
                         <property name="climb_rate">1</property>
                         <property name="snap_to_ticks">True</property>
@@ -626,12 +171,9 @@
                         <property name="has_tooltip">True</property>
                         <property name="tooltip_markup">The percentage discount applied for early payment.</property>
                         <property name="tooltip_text" translatable="yes">The percentage discount applied for early payment.</property>
-                        <property name="invisible_char">&#x25CF;</property>
-                        <property name="invisible_char_set">True</property>
+                        <property name="invisible_char">●</property>
                         <property name="primary_icon_activatable">False</property>
                         <property name="secondary_icon_activatable">False</property>
-                        <property name="primary_icon_sensitive">True</property>
-                        <property name="secondary_icon_sensitive">True</property>
                         <property name="adjustment">discount_adj</property>
                         <property name="climb_rate">1</property>
                         <property name="digits">2</property>
@@ -671,23 +213,24 @@
           </packing>
         </child>
         <child>
-          <object class="GtkVBox" id="vbox14">
+          <object class="GtkBox" id="vbox14">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
             <child>
-              <object class="GtkHBox" id="hbox14">
+              <object class="GtkBox" id="hbox14">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkVBox" id="vbox11">
+                  <object class="GtkBox" id="vbox11">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
                     <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkLabel" id="label7">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
                         <property name="label" translatable="yes">Due Day: </property>
                         <property name="justify">right</property>
                       </object>
@@ -701,7 +244,6 @@
                       <object class="GtkLabel" id="label8">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
                         <property name="label" translatable="yes">Discount Day: </property>
                         <property name="justify">right</property>
                       </object>
@@ -715,7 +257,6 @@
                       <object class="GtkLabel" id="label19">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
                         <property name="label" translatable="yes">Discount %: </property>
                         <property name="justify">right</property>
                       </object>
@@ -729,7 +270,6 @@
                       <object class="GtkLabel" id="label20">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
                         <property name="label" translatable="yes">Cutoff Day: </property>
                         <property name="justify">right</property>
                       </object>
@@ -747,9 +287,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkVBox" id="vbox12">
+                  <object class="GtkBox" id="vbox12">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
                     <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkSpinButton" id="prox:due_day">
@@ -758,12 +299,9 @@
                         <property name="has_tooltip">True</property>
                         <property name="tooltip_markup">The day of the month bills are due</property>
                         <property name="tooltip_text" translatable="yes">The day of the month bills are due</property>
-                        <property name="invisible_char">&#x25CF;</property>
-                        <property name="invisible_char_set">True</property>
+                        <property name="invisible_char">●</property>
                         <property name="primary_icon_activatable">False</property>
                         <property name="secondary_icon_activatable">False</property>
-                        <property name="primary_icon_sensitive">True</property>
-                        <property name="secondary_icon_sensitive">True</property>
                         <property name="adjustment">pdue_day_adj</property>
                         <property name="climb_rate">1</property>
                         <property name="snap_to_ticks">True</property>
@@ -783,12 +321,9 @@
                         <property name="has_tooltip">True</property>
                         <property name="tooltip_markup">The last day of the month for the early payment discount.</property>
                         <property name="tooltip_text" translatable="yes">The last day of the month for the early payment discount.</property>
-                        <property name="invisible_char">&#x25CF;</property>
-                        <property name="invisible_char_set">True</property>
+                        <property name="invisible_char">●</property>
                         <property name="primary_icon_activatable">False</property>
                         <property name="secondary_icon_activatable">False</property>
-                        <property name="primary_icon_sensitive">True</property>
-                        <property name="secondary_icon_sensitive">True</property>
                         <property name="adjustment">pdiscount_day_adj</property>
                         <property name="climb_rate">1</property>
                         <property name="snap_to_ticks">True</property>
@@ -808,12 +343,9 @@
                         <property name="has_tooltip">True</property>
                         <property name="tooltip_markup">The discount percentage applied if paid early.</property>
                         <property name="tooltip_text" translatable="yes">The discount percentage applied if paid early.</property>
-                        <property name="invisible_char">&#x25CF;</property>
-                        <property name="invisible_char_set">True</property>
+                        <property name="invisible_char">●</property>
                         <property name="primary_icon_activatable">False</property>
                         <property name="secondary_icon_activatable">False</property>
-                        <property name="primary_icon_sensitive">True</property>
-                        <property name="secondary_icon_sensitive">True</property>
                         <property name="adjustment">pdiscount_adj</property>
                         <property name="climb_rate">1</property>
                         <property name="digits">2</property>
@@ -833,12 +365,9 @@
                         <property name="has_tooltip">True</property>
                         <property name="tooltip_markup">The cutoff day for applying bills to the next month. After the cutoff, bills are applied to the following month. Negative values count backwards from the end of the month.</property>
                         <property name="tooltip_text" translatable="yes">The cutoff day for applying bills to the next month. After the cutoff, bills are applied to the following month. Negative values count backwards from the end of the month.</property>
-                        <property name="invisible_char">&#x25CF;</property>
-                        <property name="invisible_char_set">True</property>
+                        <property name="invisible_char">●</property>
                         <property name="primary_icon_activatable">False</property>
                         <property name="secondary_icon_activatable">False</property>
-                        <property name="primary_icon_sensitive">True</property>
-                        <property name="secondary_icon_sensitive">True</property>
                         <property name="adjustment">pcutoff_day_adj</property>
                         <property name="climb_rate">1</property>
                         <property name="snap_to_ticks">True</property>
@@ -883,10 +412,20 @@
           </packing>
         </child>
         <child>
-          <placeholder/>
+          <object class="GtkBox" id="box1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="position">2</property>
+          </packing>
         </child>
         <child type="tab">
-          <object class="GtkLabel" id="table_label">
+          <object class="GtkLabel" id="grid_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Table</property>
@@ -900,25 +439,26 @@
       </object>
     </child>
   </object>
-  <object class="GtkDialog" id="Terms Window">
+  <object class="GtkDialog" id="terms_dialog">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Terms</property>
     <property name="type_hint">dialog</property>
     <signal name="destroy" handler="billterms_window_destroy_cb" swapped="no"/>
     <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox5">
+      <object class="GtkBox" id="dialog-vbox5">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">8</property>
         <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area5">
+          <object class="GtkButtonBox" id="dialog-action_area5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="close_button">
-                <property name="label">gtk-close</property>
+                <property name="label" translatable="yes">_Close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -926,8 +466,7 @@
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_markup">Close this window</property>
                 <property name="tooltip_text" translatable="yes">Close this window</property>
-                <property name="use_action_appearance">False</property>
-                <property name="use_stock">True</property>
+                <property name="use_underline">True</property>
                 <signal name="clicked" handler="billterms_window_close" swapped="no"/>
               </object>
               <packing>
@@ -945,20 +484,20 @@
           </packing>
         </child>
         <child>
-          <object class="GtkHBox" id="hbox1">
+          <object class="GtkBox" id="hbox1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="spacing">6</property>
             <child>
-              <object class="GtkVBox" id="vbox18">
+              <object class="GtkBox" id="vbox18">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">&lt;b&gt;Terms&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
                   </object>
@@ -977,8 +516,6 @@
                       <object class="GtkScrolledWindow" id="scrolledwindow1">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="hscrollbar_policy">automatic</property>
-                        <property name="vscrollbar_policy">automatic</property>
                         <property name="shadow_type">in</property>
                         <child>
                           <object class="GtkTreeView" id="terms_view">
@@ -986,6 +523,9 @@
                             <property name="can_focus">True</property>
                             <property name="headers_visible">False</property>
                             <property name="rules_hint">True</property>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection" id="treeview-selection1"/>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -1003,22 +543,21 @@
                     <property name="can_focus">False</property>
                     <property name="left_padding">12</property>
                     <child>
-                      <object class="GtkHButtonBox" id="hbox2">
+                      <object class="GtkButtonBox" id="hbox2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="spacing">6</property>
                         <property name="layout_style">spread</property>
                         <child>
                           <object class="GtkButton" id="delete_term_button">
-                            <property name="label">gtk-delete</property>
+                            <property name="label" translatable="yes">_Delete</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="has_tooltip">True</property>
                             <property name="tooltip_markup">Delete the current Billing Term</property>
                             <property name="tooltip_text" translatable="yes">Delete the current Billing Term</property>
-                            <property name="use_action_appearance">False</property>
-                            <property name="use_stock">True</property>
+                            <property name="use_underline">True</property>
                             <signal name="clicked" handler="billterms_delete_term_cb" swapped="no"/>
                           </object>
                           <packing>
@@ -1029,15 +568,14 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="new_term_button">
-                            <property name="label">gtk-new</property>
+                            <property name="label" translatable="yes">_New</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="has_tooltip">True</property>
                             <property name="tooltip_markup">Create a new Billing Term</property>
                             <property name="tooltip_text" translatable="yes">Create a new Billing Term</property>
-                            <property name="use_action_appearance">False</property>
-                            <property name="use_stock">True</property>
+                            <property name="use_underline">True</property>
                             <signal name="clicked" handler="billterms_new_term_cb" swapped="no"/>
                           </object>
                           <packing>
@@ -1063,9 +601,10 @@
               </packing>
             </child>
             <child>
-              <object class="GtkVSeparator" id="vseparator1">
+              <object class="GtkSeparator" id="vseparator1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1074,14 +613,14 @@
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="vbox19">
+              <object class="GtkBox" id="vbox19">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">&lt;b&gt;Term Definition&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
                   </object>
@@ -1092,153 +631,130 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkAlignment" id="alignment3">
+                  <object class="GtkBox" id="term_vbox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="top_padding">6</property>
-                    <property name="left_padding">12</property>
+                    <property name="border_width">2</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">6</property>
                     <child>
-                      <object class="GtkVBox" id="term_vbox">
+                      <object class="GtkGrid" id="table1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="border_width">2</property>
-                        <property name="spacing">6</property>
+                        <property name="column_spacing">12</property>
                         <child>
-                          <object class="GtkTable" id="table1">
+                          <object class="GtkLabel" id="label16">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="n_rows">3</property>
-                            <property name="n_columns">2</property>
-                            <property name="column_spacing">12</property>
-                            <child>
-                              <object class="GtkLabel" id="label16">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">De_scription:</property>
-                                <property name="use_underline">True</property>
-                                <property name="justify">right</property>
-                                <property name="mnemonic_widget">desc_entry</property>
-                              </object>
-                              <packing>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="label9">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">_Type:</property>
-                                <property name="use_underline">True</property>
-                                <property name="justify">right</property>
-                              </object>
-                              <packing>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEntry" id="desc_entry">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="has_tooltip">True</property>
-                                <property name="tooltip_markup">The description of the Billing Term, printed on invoices</property>
-                                <property name="tooltip_text" translatable="yes">The description of the Billing Term, printed on invoices</property>
-                                <property name="editable">False</property>
-                                <property name="invisible_char">&#x25CF;</property>
-                                <property name="activates_default">True</property>
-                                <property name="invisible_char_set">True</property>
-                                <property name="primary_icon_activatable">False</property>
-                                <property name="secondary_icon_activatable">False</property>
-                                <property name="primary_icon_sensitive">True</property>
-                                <property name="secondary_icon_sensitive">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="y_options"></property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="type_label">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
-                                <property name="label">(type)</property>
-                                <property name="justify">center</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options"></property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkHBox" id="notebook_box">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
-                                <property name="x_options">GTK_FILL</property>
-                              </packing>
-                            </child>
+                            <property name="label" translatable="yes">De_scription:</property>
+                            <property name="use_underline">True</property>
+                            <property name="justify">right</property>
+                            <property name="mnemonic_widget">desc_entry</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label9">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">_Type:</property>
+                            <property name="use_underline">True</property>
+                            <property name="justify">right</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="desc_entry">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="has_tooltip">True</property>
+                            <property name="tooltip_markup">The description of the Billing Term, printed on invoices</property>
+                            <property name="tooltip_text" translatable="yes">The description of the Billing Term, printed on invoices</property>
+                            <property name="hexpand">True</property>
+                            <property name="editable">False</property>
+                            <property name="invisible_char">●</property>
+                            <property name="activates_default">True</property>
+                            <property name="primary_icon_activatable">False</property>
+                            <property name="secondary_icon_activatable">False</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="type_label">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="label">(type)</property>
+                            <property name="justify">center</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="notebook_box">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
                             <child>
                               <placeholder/>
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">2</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkHButtonBox" id="hbox30">
+                          <placeholder/>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButtonBox" id="hbox30">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="layout_style">spread</property>
+                        <child>
+                          <object class="GtkButton" id="edit_term_button">
+                            <property name="label" translatable="yes">_Edit</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="layout_style">spread</property>
-                            <child>
-                              <object class="GtkButton" id="edit_term_button">
-                                <property name="label">gtk-edit</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <property name="has_tooltip">True</property>
-                                <property name="tooltip_markup">Edit the current Billing Term</property>
-                                <property name="tooltip_text" translatable="yes">Edit the current Billing Term</property>
-                                <property name="use_action_appearance">False</property>
-                                <property name="use_stock">True</property>
-                                <signal name="clicked" handler="billterms_edit_term_cb" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="has_tooltip">True</property>
+                            <property name="tooltip_markup">Edit the current Billing Term</property>
+                            <property name="tooltip_text" translatable="yes">Edit the current Billing Term</property>
+                            <property name="use_underline">True</property>
+                            <signal name="clicked" handler="billterms_edit_term_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="pack_type">end</property>
-                            <property name="position">1</property>
+                            <property name="fill">False</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                       </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="pack_type">end</property>
+                        <property name="position">1</property>
+                      </packing>
                     </child>
                   </object>
                   <packing>
@@ -1267,47 +783,6 @@
       <action-widget response="-6">close_button</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkAdjustment" id="discount_adj">
-    <property name="upper">100</property>
-    <property name="step_increment">0.01</property>
-    <property name="page_increment">0.10000000000000001</property>
-  </object>
-  <object class="GtkAdjustment" id="discount_days_adj">
-    <property name="upper">365</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="due_days_adj">
-    <property name="upper">365</property>
-    <property name="value">30</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="pcutoff_day_adj">
-    <property name="lower">-27</property>
-    <property name="upper">27</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="pdiscount_adj">
-    <property name="upper">100</property>
-    <property name="step_increment">0.01</property>
-    <property name="page_increment">0.10000000000000001</property>
-  </object>
-  <object class="GtkAdjustment" id="pdiscount_day_adj">
-    <property name="lower">1</property>
-    <property name="upper">31</property>
-    <property name="value">1</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="pdue_day_adj">
-    <property name="lower">1</property>
-    <property name="upper">31</property>
-    <property name="value">1</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
   <object class="GtkListStore" id="type_liststore">
     <columns>
       <!-- column-name type -->
@@ -1321,5 +796,457 @@
         <col id="0" translatable="yes">Proximo</col>
       </row>
     </data>
+  </object>
+  <object class="GtkDialog" id="edit_term_dialog">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="modal">True</property>
+    <property name="type_hint">dialog</property>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="dialog-vbox9">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">8</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="dialog-action_area9">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="cancel_butt">
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="has_tooltip">True</property>
+                <property name="tooltip_markup">Cancel your changes</property>
+                <property name="tooltip_text" translatable="yes">Cancel your changes</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="ok_butt">
+                <property name="label" translatable="yes">_OK</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="has_tooltip">True</property>
+                <property name="tooltip_markup">Commit this Billing Term</property>
+                <property name="tooltip_text" translatable="yes">Commit this Billing Term</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkGrid" id="table3">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkLabel" id="label3">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">&lt;b&gt;Term Definition&lt;/b&gt;</property>
+                <property name="use_markup">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkAlignment" id="alignment7">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <object class="GtkLabel" id="label4">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">De_scription:</property>
+                    <property name="use_underline">True</property>
+                    <property name="justify">right</property>
+                    <property name="mnemonic_widget">entry_desc</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="entry_desc">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="has_tooltip">True</property>
+                <property name="tooltip_markup">The description of the Billing Term, printed on invoices</property>
+                <property name="tooltip_text" translatable="yes">The description of the Billing Term, printed on invoices</property>
+                <property name="hexpand">True</property>
+                <property name="invisible_char">●</property>
+                <property name="activates_default">True</property>
+                <property name="primary_icon_activatable">False</property>
+                <property name="secondary_icon_activatable">False</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkAlignment" id="alignment8">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <object class="GtkLabel" id="label6">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">_Type:</property>
+                    <property name="use_underline">True</property>
+                    <property name="justify">right</property>
+                    <property name="mnemonic_widget">type_combo</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="type_combo">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="model">type_liststore</property>
+                <signal name="changed" handler="billterms_type_combobox_changed" swapped="no"/>
+                <child>
+                  <object class="GtkCellRendererText" id="cellrenderertext3"/>
+                  <attributes>
+                    <attribute name="text">0</attribute>
+                  </attributes>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="notebook_hbox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-6">cancel_butt</action-widget>
+      <action-widget response="-5">ok_butt</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkDialog" id="new_term_dialog">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="modal">True</property>
+    <property name="type_hint">dialog</property>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="dialog-vbox7">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">8</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="dialog-action_area7">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="cancel_button">
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="has_tooltip">True</property>
+                <property name="tooltip_markup">Cancel your changes</property>
+                <property name="tooltip_text" translatable="yes">Cancel your changes</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="ok_button">
+                <property name="label" translatable="yes">_OK</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="has_tooltip">True</property>
+                <property name="tooltip_markup">Commit this Billing Term</property>
+                <property name="tooltip_text" translatable="yes">Commit this Billing Term</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkGrid" id="table2">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkEntry" id="name_entry">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="has_tooltip">True</property>
+                <property name="tooltip_markup">The internal name of the Billing Term.</property>
+                <property name="tooltip_text" translatable="yes">The internal name of the Billing Term.</property>
+                <property name="hexpand">True</property>
+                <property name="invisible_char">●</property>
+                <property name="activates_default">True</property>
+                <property name="primary_icon_activatable">False</property>
+                <property name="secondary_icon_activatable">False</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="description_entry">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="has_tooltip">True</property>
+                <property name="tooltip_markup">The description of the Billing Term, printed on invoices</property>
+                <property name="tooltip_text" translatable="yes">The description of the Billing Term, printed on invoices</property>
+                <property name="hexpand">True</property>
+                <property name="invisible_char">●</property>
+                <property name="activates_default">True</property>
+                <property name="primary_icon_activatable">False</property>
+                <property name="secondary_icon_activatable">False</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="note_book_hbox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">6</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label17">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">&lt;b&gt;New Billing Term&lt;/b&gt;</property>
+                <property name="use_markup">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label18">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">&lt;b&gt;Term Definition&lt;/b&gt;</property>
+                <property name="use_markup">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">3</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label24">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkAlignment" id="alignment4">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <object class="GtkLabel" id="label5">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">_Name:</property>
+                    <property name="use_underline">True</property>
+                    <property name="justify">right</property>
+                    <property name="mnemonic_widget">name_entry</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkAlignment" id="alignment5">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <object class="GtkLabel" id="label22">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">De_scription:</property>
+                    <property name="use_underline">True</property>
+                    <property name="justify">right</property>
+                    <property name="mnemonic_widget">description_entry</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkAlignment" id="alignment6">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <object class="GtkLabel" id="label21">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">_Type:</property>
+                    <property name="use_underline">True</property>
+                    <property name="justify">right</property>
+                    <property name="mnemonic_widget">type_combobox</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">5</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="type_combobox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="model">type_liststore</property>
+                <signal name="changed" handler="billterms_type_combobox_changed" swapped="no"/>
+                <child>
+                  <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                  <attributes>
+                    <attribute name="text">0</attribute>
+                  </attributes>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">5</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-6">cancel_button</action-widget>
+      <action-widget response="-5">ok_button</action-widget>
+    </action-widgets>
   </object>
 </interface>

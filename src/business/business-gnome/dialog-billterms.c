@@ -109,7 +109,6 @@ read_widget (GtkBuilder *builder, char *name, gboolean read_only)
         adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (widget));
         gtk_adjustment_set_step_increment (adj, 0.0);
         gtk_adjustment_set_page_increment (adj, 0.0);
-        gtk_adjustment_changed (adj);
     }
 
     return widget;
@@ -132,9 +131,9 @@ init_notebook_widgets (BillTermNB *notebook, gboolean read_only,
     gnc_builder_add_from_file (builder, "dialog-billterms.glade", "pdiscount_day_adj");
     gnc_builder_add_from_file (builder, "dialog-billterms.glade", "pdue_day_adj");
     gnc_builder_add_from_file (builder, "dialog-billterms.glade", "pcutoff_day_adj");
-    gnc_builder_add_from_file (builder, "dialog-billterms.glade", "Term Notebook");
+    gnc_builder_add_from_file (builder, "dialog-billterms.glade", "terms_notebook_window");
     notebook->notebook = GTK_WIDGET(gtk_builder_get_object (builder, "term_notebook"));
-    parent = GTK_WIDGET(gtk_builder_get_object (builder, "Term Notebook"));
+    parent = GTK_WIDGET(gtk_builder_get_object (builder, "terms_notebook_window"));
 
     /* load the "days" widgets */
     notebook->days_due_days = read_widget (builder, "days:due_days", read_only);
@@ -419,14 +418,14 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
     /* Open and read the Glade File */
     if (term == NULL)
     {
-        dialog_name = "New Term Dialog";
+        dialog_name = "new_term_dialog";
         dialog_desc = "description_entry";
         dialog_combo = "type_combobox";
         dialog_nb = "note_book_hbox";
     }
     else
     {
-        dialog_name = "Edit Term Dialog";
+        dialog_name = "edit_term_dialog";
         dialog_desc = "entry_desc";
         dialog_combo = "type_combo";
         dialog_nb = "notebook_hbox";
@@ -767,8 +766,8 @@ gnc_ui_billterms_window_new (QofBook *book)
 
     /* Open and read the Glade File */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-billterms.glade", "Terms Window");
-    btw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Terms Window"));
+    gnc_builder_add_from_file (builder, "dialog-billterms.glade", "terms_dialog");
+    btw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "terms_dialog"));
     btw->terms_view = GTK_WIDGET(gtk_builder_get_object (builder, "terms_view"));
     btw->desc_entry = GTK_WIDGET(gtk_builder_get_object (builder, "desc_entry"));
     btw->type_label = GTK_WIDGET(gtk_builder_get_object (builder, "type_label"));
