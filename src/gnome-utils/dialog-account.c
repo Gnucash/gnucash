@@ -1120,17 +1120,18 @@ gnc_account_type_changed_cb (GtkTreeSelection *selection, gpointer data)
 }
 
 static void
-gnc_account_type_view_create (AccountWindow *aw)
+gnc_account_type_view_create (AccountWindow *aw, guint32 compat_types)
 {
     GtkTreeModel *model;
     GtkTreeSelection *selection;
     GtkCellRenderer *renderer;
     GtkTreeView *view;
 
+    aw->valid_types &= compat_types;
     if (aw->valid_types == 0)
     {
         /* no type restrictions, choose aw->type */
-        aw->valid_types = xaccAccountTypesValid () | (1 << aw->type);
+        aw->valid_types = compat_types | (1 << aw->type);
         aw->preferred_account_type = aw->type;
     }
     else if ((aw->valid_types & (1 << aw->type)) != 0)
@@ -1309,6 +1310,7 @@ gnc_account_window_create(AccountWindow *aw)
     GtkBuilder  *builder;
     GtkTreeSelection *selection;
     const gchar *tt = _("This Account contains Transactions.\nChanging this option is not possible.");
+    guint32 compat_types = xaccAccountTypesValid ();
 
     ENTER("aw %p, modal %d", aw, aw->modal);
     builder = gtk_builder_new();
@@ -1413,23 +1415,23 @@ gnc_account_window_create(AccountWindow *aw)
 
     /* This goes at the end so the select callback has good data. */
     aw->type_view = GTK_WIDGET(gtk_builder_get_object (builder, "type_view"));
-    gnc_account_type_view_create (aw);
 
-    // If the account has transactions, prevent changes by displaying a label and tooltip
+    // If the account has transactions, reduce the available account types
+    // to change the current account type to based on the following
+    // restrictions:
+    // - the new account type should not force a change of commodity
+    // - the old/new type is not an immutable type. Types are marked as
+    //   immutable if gnucash depends on details that would be lost/missing
+    //   if changing from/to such a type. At the time of this writing the
+    //   immutable types are AR, AP and trading types.
     if (xaccAccountCountSplits (aw_get_account (aw), FALSE) > 0)
     {
         GNCAccountType atype = xaccAccountGetType (aw_get_account (aw));
-        GtkWidget *label = gtk_label_new (xaccAccountGetTypeStr (atype));
-        GtkWidget *vbox = GTK_WIDGET(gtk_builder_get_object (builder, "type_vbox"));
-        GtkWidget *parent_widget = gtk_widget_get_parent (GTK_WIDGET(aw->type_view));
-
-        g_object_ref (G_OBJECT(aw->type_view));
-        gtk_container_remove (GTK_CONTAINER(vbox), parent_widget);
-        gtk_widget_set_tooltip_text (label, tt);
-        gtk_box_pack_start (GTK_BOX(vbox), label, FALSE, FALSE, 0);
-        gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-        gtk_widget_show (label);
+        compat_types = xaccAccountTypesCompatibleWith (atype);
+        if (!compat_types)
+            compat_types = xaccAccountTypesValid ();
     }
+    gnc_account_type_view_create (aw, compat_types);
 
     gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(aw->dialog));
 

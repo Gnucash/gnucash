@@ -4030,6 +4030,46 @@ xaccAccountGetTypeStr(GNCAccountType type)
 \********************************************************************/
 
 guint32
+xaccAccountTypesCompatibleWith (GNCAccountType type)
+{
+    switch (type)
+    {
+        case ACCT_TYPE_BANK:
+        case ACCT_TYPE_CASH:
+        case ACCT_TYPE_ASSET:
+        case ACCT_TYPE_CREDIT:
+        case ACCT_TYPE_LIABILITY:
+        case ACCT_TYPE_INCOME:
+        case ACCT_TYPE_EXPENSE:
+        case ACCT_TYPE_EQUITY:
+            return
+            (1 << ACCT_TYPE_BANK)       |
+            (1 << ACCT_TYPE_CASH)       |
+            (1 << ACCT_TYPE_ASSET)      |
+            (1 << ACCT_TYPE_CREDIT)     |
+            (1 << ACCT_TYPE_LIABILITY)  |
+            (1 << ACCT_TYPE_INCOME)     |
+            (1 << ACCT_TYPE_EXPENSE)    |
+            (1 << ACCT_TYPE_EQUITY);
+        case ACCT_TYPE_STOCK:
+        case ACCT_TYPE_MUTUAL:
+        case ACCT_TYPE_CURRENCY:
+            return
+            (1 << ACCT_TYPE_STOCK)      |
+            (1 << ACCT_TYPE_MUTUAL)     |
+            (1 << ACCT_TYPE_CURRENCY);
+        case ACCT_TYPE_RECEIVABLE:
+            return (1 << ACCT_TYPE_RECEIVABLE);
+        case ACCT_TYPE_PAYABLE:
+            return (1 << ACCT_TYPE_PAYABLE);
+        case ACCT_TYPE_TRADING:
+            return (1 << ACCT_TYPE_TRADING);
+        default:
+            PERR("bad account type: %d", type);
+            return 0;
+    }
+}
+guint32
 xaccParentAccountTypesCompatibleWith (GNCAccountType type)
 {
     switch (type)

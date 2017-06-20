@@ -926,6 +926,11 @@ GNCAccountType xaccAccountStringToEnum (const char* str);
  *  to the local language. */
 const char * xaccAccountGetTypeStr (GNCAccountType type);
 
+/** Return the bitmask of account types compatible with a given type.
+ *  That is, you could switch to any of the account types in the compatible
+ *  list without unwanted side-effects. */
+guint32 xaccAccountTypesCompatibleWith (GNCAccountType type);
+
 /** Return the bitmask of parent account types compatible with a given type. */
 guint32 xaccParentAccountTypesCompatibleWith (GNCAccountType type);
 

@@ -2189,6 +2189,7 @@ test_xaccAccountType_Stuff (void)
 }
 /* xaccParentAccountTypesCompatibleWith
  * xaccAccountTypesCompatible
+ * xaccAccountTypesCompatibleWith
 guint32
 xaccParentAccountTypesCompatibleWith (GNCAccountType type)// C: 5 in 3 */
 static void
@@ -2210,6 +2211,20 @@ test_xaccAccountType_Compatibility (void)
                               (1 << ACCT_TYPE_ROOT));
     guint32 equity_compat = ((1 << ACCT_TYPE_EQUITY) | (1 << ACCT_TYPE_ROOT));
     guint32 trading_compat = ((1 << ACCT_TYPE_TRADING) | (1 << ACCT_TYPE_ROOT));
+    guint32 currency_compat = ((1 << ACCT_TYPE_BANK)       |
+                               (1 << ACCT_TYPE_CASH)       |
+                               (1 << ACCT_TYPE_ASSET)      |
+                               (1 << ACCT_TYPE_CREDIT)     |
+                               (1 << ACCT_TYPE_LIABILITY)  |
+                               (1 << ACCT_TYPE_INCOME)     |
+                               (1 << ACCT_TYPE_EXPENSE)    |
+                               (1 << ACCT_TYPE_EQUITY));
+    guint32 stock_compat = ((1 << ACCT_TYPE_STOCK)      |
+                            (1 << ACCT_TYPE_MUTUAL)     |
+                            (1 << ACCT_TYPE_CURRENCY));
+    guint32 immutable_ar_compat = (1 << ACCT_TYPE_RECEIVABLE);
+    guint32 immutable_ap_compat = (1 << ACCT_TYPE_PAYABLE);
+    guint32 immutable_trading_compat = (1 << ACCT_TYPE_TRADING);
     guint32 compat;
     GNCAccountType  type;
     gchar *msg1 = g_strdup_printf ("[xaccParentAccountTypesCompatibleWith()] bad account type: %d", ACCT_TYPE_ROOT);
@@ -2252,6 +2267,19 @@ test_xaccAccountType_Compatibility (void)
                 g_assert (xaccAccountTypesCompatible (type, child));
             else
                 g_assert (!xaccAccountTypesCompatible (type, child));
+
+        compat = xaccAccountTypesCompatibleWith (type);
+        if (type <= ACCT_TYPE_LIABILITY ||
+            (type >= ACCT_TYPE_INCOME && type <= ACCT_TYPE_EQUITY))
+            g_assert_cmpint (compat, == , currency_compat);
+        else if (type >= ACCT_TYPE_STOCK && type <= ACCT_TYPE_CURRENCY)
+            g_assert_cmpint (compat, == , stock_compat);
+        else if (type == ACCT_TYPE_RECEIVABLE)
+            g_assert_cmpint (compat, == , immutable_ar_compat);
+        else if (type == ACCT_TYPE_PAYABLE)
+            g_assert_cmpint (compat, == , immutable_ap_compat);
+        else if (type == ACCT_TYPE_TRADING)
+            g_assert_cmpint (compat, == , immutable_trading_compat);
     }
 
     loghandler = g_log_set_handler (logdomain, loglevel,
