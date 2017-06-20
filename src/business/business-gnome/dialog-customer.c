@@ -572,8 +572,8 @@ gnc_customer_new_window (QofBook *bookp, GncCustomer *cust)
     gnc_builder_add_from_file (builder, "dialog-customer.glade", "terms_store");
     gnc_builder_add_from_file (builder, "dialog-customer.glade", "tax_included_store");
     gnc_builder_add_from_file (builder, "dialog-customer.glade", "taxtable_store");
-    gnc_builder_add_from_file (builder, "dialog-customer.glade", "Customer Dialog");
-    cw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "Customer Dialog"));
+    gnc_builder_add_from_file (builder, "dialog-customer.glade", "customer_dialog");
+    cw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "customer_dialog"));
 
     g_object_set_data (G_OBJECT (cw->dialog), "dialog_info", cw);
 
