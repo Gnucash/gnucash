@@ -3021,4 +3021,19 @@
   smallest-fraction="1000000"
   local-symbol=""
 />
+<!-- "XSU" - "SUCRE"
+	Alianza Bolivariana para los Pueblos de Nuestra América - Tratado de Comercio de los Pueblos
+	http://www.currency-iso.org/dam/isocy/downloads/dl_currency_iso_amendment_148.pdf
+-->
+<currency
+  isocode="XSU"
+  fullname="Sistema Unitario de Compensación Regional"
+  unitname="SUCRE"
+  partname=""
+  namespace="ISO4217"
+  exchange-code="994"
+  parts-per-unit="1"
+  smallest-fraction="1"
+  local-symbol=""
+/>
 </currencylist>

@@ -85,6 +85,7 @@ gnc_new_tip_number (TotdDialog *totd_dialog, gint offset)
     gchar *tip;
 
     ENTER("TotdDialog %p, offset %d", totd_dialog, offset);
+    g_return_if_fail (tip_list != NULL);
     current_tip_number += offset;
     DEBUG("clamp %d to '0 <= x < %d'", current_tip_number, tip_count);
     if (current_tip_number < 0)
@@ -175,9 +176,10 @@ gnc_totd_dialog_startup_toggled_cb (GtkToggleButton *button,
 static gboolean
 gnc_totd_initialize (void)
 {
-    gchar *filename, *contents, *new_str;
+    gchar *filename = NULL, *contents = NULL, *new_str = NULL;
     gsize length;
-    GError *error;
+    GError *error = NULL;
+    int tip;
 
     /* Find the file */
     filename = gnc_filepath_locate_data_file("tip_of_the_day.list");
@@ -197,21 +199,25 @@ gnc_totd_initialize (void)
     /* Split into multiple strings. Due to the nature of the
      * tip list file, this can contain empty strings */
     if (contents)
+    {
 	tip_list = g_strsplit(contents, "\n", 0);
-    g_free(contents);
-    contents = NULL;
+        g_free(contents);
+        contents = NULL;
+    }
+
+    tip_count = g_strv_length (tip_list);
 
     /* Remove the empty strings */
-    for (tip_count = 0; tip_list[tip_count] != NULL; tip_count++)
+    for (tip = 0; tip < tip_count; ++tip)
     {
-        if (*tip_list[tip_count]!='\0')
+        if (*tip_list[tip] != '\0')
         {
-            g_strstrip(tip_list[tip_count]);
+            g_strstrip(tip_list[tip]);
             if (!contents)
-                contents = g_strdup (tip_list[tip_count]);
+                contents = g_strdup (tip_list[tip]);
             else
             {
-                new_str = g_strjoin ("\n", contents, tip_list[tip_count], NULL);
+                new_str = g_strjoin ("\n", contents, tip_list[tip], NULL);
                 g_free (contents);
                 contents = new_str;
             }
@@ -220,28 +226,22 @@ gnc_totd_initialize (void)
 
     /* Split cleaned up contents into multiple strings again */
     g_strfreev (tip_list);
+    tip_list = NULL;
     if (contents)
+    {
         tip_list = g_strsplit(contents, "\n", 0);
+        tip_count = g_strv_length (tip_list);
 
-    /* Convert any escaped characters while counting the strings */
-    for (tip_count = 0; tip_list[tip_count] != NULL; tip_count++)
-    {
-        new_str = g_strcompress(tip_list[tip_count]);
-        g_free(tip_list[tip_count]);
-        tip_list[tip_count] = new_str;
+        /* Convert any escaped characters while counting the strings */
+        for (tip = 0; tip < tip_count; ++tip)
+        {
+            new_str = g_strcompress(tip_list[tip]);
+            g_free(tip_list[tip]);
+            tip_list[tip] = new_str;
+        }
     }
-
-
-    /* Don't continue when no tips were found, to prevent
-     * gnc_new_tip_number doesn't handle that case (it would try to
-     * display the terminating NULL). There's nothing to show
-     * anyway...*/
-    if (tip_count == 0)
-    {
-        PWARN("No tips found - Tips of the day window won't be displayed.");
+    if (tip_count < 1)
         return FALSE;
-    }
-
     return TRUE;
 }
 
@@ -326,6 +326,15 @@ gnc_totd_dialog (GtkWindow *parent, gboolean startup)
         current_tip_number =  gnc_prefs_get_int(GNC_PREFS_GROUP, GNC_PREF_CURRENT_TIP);
     }
 
+     /* Don't continue when no tips were found, to prevent
+     * gnc_new_tip_number doesn't handle that case (it would try to
+     * display the terminating NULL). There's nothing to show
+     * anyway...*/
+    if (tip_count < 1)
+    {
+        PWARN("No tips found - Tips of the day window won't be displayed.");
+        return;
+    }
     if (gnc_forall_gui_components(DIALOG_TOTD_CM_CLASS, show_handler, NULL))
     {
         return;

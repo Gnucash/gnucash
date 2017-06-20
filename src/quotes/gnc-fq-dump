@@ -150,7 +150,8 @@ $q->timeout(60);
 
 if ($#ARGV < 1) {
   my @sources = $q->sources();
-  printf "\nUsage: $0 <quote-source> [-v] <stock> [<stock> ...]\n\n";
+  printf "\nUsage: $0 [-v] <quote-source> <stock> [<stock> ...]\n\n";
+  printf "-v: verbose\n";
   printf "Available sources are: \n     %s\n\n", join(' ', @sources);
   exit 0;
 }

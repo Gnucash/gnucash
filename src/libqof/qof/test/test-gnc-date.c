@@ -151,6 +151,9 @@ setup_end(FixtureB *f, gconstpointer pData)
 
 void test_suite_gnc_date ( void );
 static GTimeZone *tz;
+#define MAXTIME INT64_C(253402214400)
+#define MINTIME INT64_C(-17987443200)
+
 /* gnc_localtime just creates a tm on the heap and calls
  * gnc_localtime_r with it, so this suffices to test both.
  */
@@ -163,6 +166,7 @@ test_gnc_localtime (void)
     guint ind;
     if (sizeof(time_t) < sizeof(time64))
         secs[0] = -432761LL;
+
     for (ind = 0; ind < G_N_ELEMENTS (secs); ind++)
     {
         struct tm* time = gnc_localtime (&secs[ind]);
@@ -1913,14 +1917,23 @@ gnc_timezone (const struct tm *tm)// C: 5 in 2  Local: 2:0:0
 test_gnc_timezone (void)
 {
 }*/
-/* timespecFromtime64
+/* timespecFromTime64
 void
-timespecFromtime64( Timespec *ts, time64 t )// C: 22 in 11  Local: 0:0:0
+timespecFromTime64( Timespec *ts, time64 t )// C: 22 in 11  Local: 0:0:0
 */
-/* static void
-test_timespecFromtime64 (void)
+static void
+test_timespecFromTime64 (void)
 {
-}*/
+     Timespec ts = {-9999, 0};
+     timespecFromTime64 (&ts, MINTIME - 1);
+     g_assert_cmpint (0, ==, ts.tv_sec);
+     timespecFromTime64 (&ts, MINTIME + 1);
+     g_assert_cmpint (MINTIME + 1, ==, ts.tv_sec);
+     timespecFromTime64 (&ts, MAXTIME + 1);
+     g_assert_cmpint (MAXTIME, ==, ts.tv_sec);
+     timespecFromTime64 (&ts, MAXTIME - 1);
+     g_assert_cmpint (MAXTIME - 1, ==, ts.tv_sec);
+}
 /* timespec_now
 Timespec
 timespec_now()// C: 2 in 2  Local: 0:0:0
@@ -2249,7 +2262,7 @@ test_suite_gnc_date (void)
     GNC_TEST_ADD (suitename, "gnc dmy2timespec end", FixtureB, NULL, setup_end, test_gnc_dmy2timespec_end, NULL);
     GNC_TEST_ADD (suitename, "gnc dmy2timespec Neutral", FixtureB, NULL, setup_neutral, test_gnc_dmy2timespec_neutral, NULL);
 // GNC_TEST_ADD_FUNC (suitename, "gnc timezone", test_gnc_timezone);
-// GNC_TEST_ADD_FUNC (suitename, "timespecFromTime t", test_timespecFromtime64);
+    GNC_TEST_ADD_FUNC (suitename, "timespecFromTime64", test_timespecFromTime64);
 // GNC_TEST_ADD_FUNC (suitename, "timespec now", test_timespec_now);
 // GNC_TEST_ADD_FUNC (suitename, "timespecToTime t", test_timespecTotime64);
     GNC_TEST_ADD (suitename, "timespec to gdate", FixtureA, NULL, setup, test_timespec_to_gdate, NULL);

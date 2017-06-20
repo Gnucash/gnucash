@@ -71,6 +71,17 @@ extern "C"
 #  define GNC_T_FMT "%r"
 #endif
 
+/* t < MINTIME is probably from a bad conversion from t 0 to
+ * 0000-00-00, so restore it to the Unix Epoch. t anywhere near
+ * MAXTIME is obviously an error, but we don't want to crash with a
+ * bad date-time so just clamp it to MAXTIME.
+ */
+static inline time64
+clamp_time(time64 t)
+{
+    return  t < MINTIME ? 0 : t > MAXTIME ? MAXTIME : t;
+}
+
 const char *gnc_default_strftime_date_format =
 #ifdef G_OS_WIN32
     /* The default date format for use with strftime in Win32. */
@@ -232,7 +243,7 @@ gnc_timegm (struct tm* time)
 char*
 gnc_ctime (const time64 *secs)
 {
-    return gnc_print_time64(*secs, "%a %b %d %H:%M:%S %Y");
+    return gnc_print_time64(clamp_time(*secs), "%a %b %d %H:%M:%S %Y");
 }
 
 time64
@@ -645,7 +656,7 @@ qof_print_date_buff (char * buff, size_t len, time64 t)
 
     try
     {
-        GncDateTime gncdt(t);
+        GncDateTime gncdt(clamp_time(t));
         std::string str = gncdt.format(qof_date_format_get_string(dateFormat));
         strncpy(buff, str.c_str(), len);
         if (str.length() >= len)
@@ -1299,7 +1310,7 @@ gnc_dmy2timespec_neutral (int day, int month, int year)
 void
 timespecFromTime64 ( Timespec *ts, time64 t )
 {
-    ts->tv_sec = t;
+    ts->tv_sec = clamp_time (t);
     ts->tv_nsec = 0;
 }
 

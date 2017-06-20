@@ -699,15 +699,16 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             g_date_free (date);
         }
         timespecFromTime64 (&today, gnc_time (NULL));	// set today to the current date
-        if (strlen (date_opened) != 0)	// If a date is specified in CSV
+        if (strlen (date) != 0)	// If a date is specified in CSV
         {
-            qof_scan_date (date_opened, &day, &month, &year); // FIXME: Must check for the return value of qof_scan_date!
-            gncEntrySetDate(entry, gnc_dmy2timespec (day, month, year));
+            GDate *date = g_date_new_dmy(day, month, year);
+            gncEntrySetDateGDate(entry, date);
             gncEntrySetDateEntered(entry, gnc_dmy2timespec (day, month, year));
         }
         else
         {
-            gncEntrySetDate(entry, today);
+            GDate *date = gnc_g_date_new_today();
+            gncEntrySetDateGDate(entry, date); // TODO: DEPRECATED - use gncEntrySetDateGDate() instead!
             gncEntrySetDateEntered(entry, today);
         }
         // Remove escaped quotes

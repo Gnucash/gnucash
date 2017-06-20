@@ -74,7 +74,7 @@ extern "C"
  
 #include <glib-object.h>
 #include <time.h>
-
+#include <stdint.h>
 /**
  * Many systems, including Microsoft Windows and BSD-derived Unixes
  * like Darwin, are retaining the int-32 typedef for time_t. Since
@@ -104,7 +104,6 @@ extern const char *gnc_default_strftime_date_format;
 
 /** The maximum length of a string created by the date printers */
 #define MAX_DATE_LENGTH 34
-
 /** Constants *******************************************************/
 /** \brief UTC date format string.
 

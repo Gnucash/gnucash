@@ -34,6 +34,7 @@ extern "C"
 #include <sys/types.h>
 #include <unistd.h>
 #include <glib/gstdio.h>
+#include <glib/gi18n.h>
 
 #include <qof.h>
 /* For cleaning up the database */
