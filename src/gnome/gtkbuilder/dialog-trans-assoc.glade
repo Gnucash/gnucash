@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.0 -->
 <interface>
-  <requires lib="gtk+" version="2.16"/>
-  <!-- interface-naming-policy toplevel-contextual -->
+  <requires lib="gtk+" version="3.10"/>
   <object class="GtkListStore" id="list-store">
     <columns>
       <!-- column-name date -->
@@ -20,7 +20,7 @@
       <column type="gboolean"/>
     </columns>
   </object>
-  <object class="GtkDialog" id="Transaction Association Dialog">
+  <object class="GtkDialog" id="transaction_association_dialog">
     <property name="visible">True</property>
     <property name="can_focus">True</property>
     <property name="has_focus">True</property>
@@ -34,23 +34,11 @@
     <signal name="destroy" handler="gnc_assoc_dialog_window_destroy_cb" swapped="no"/>
     <signal name="response" handler="gnc_assoc_dialog_response_cb" swapped="no"/>
     <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox2">
+      <object class="GtkBox" id="dialog-vbox2">
         <property name="can_focus">False</property>
-        <child>
-          <object class="GtkLabel" id="label1">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">All Transaction Associations</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="padding">2</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
+        <property name="orientation">vertical</property>
         <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area1">
+          <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
@@ -106,6 +94,19 @@
           </packing>
         </child>
         <child>
+          <object class="GtkLabel" id="label1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">All Transaction Associations</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="padding">2</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkLabel" id="path-head">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -121,13 +122,14 @@
           <object class="GtkScrolledWindow" id="scrolledwindow2">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="hscrollbar_policy">automatic</property>
-            <property name="vscrollbar_policy">automatic</property>
             <child>
               <object class="GtkTreeView" id="treeview">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="model">list-store</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection" id="treeview-selection1"/>
+                </child>
                 <child>
                   <object class="GtkTreeViewColumn" id="trans-date">
                     <property name="resizable">True</property>
@@ -195,7 +197,6 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="ypad">5</property>
             <property name="label" translatable="yes">     To jump to the Transaction, double click on the entry in the
 Description column or Association column to open the Association</property>
           </object>

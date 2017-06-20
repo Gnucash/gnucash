@@ -387,9 +387,9 @@ gnc_assoc_dialog_create (AssocDialog *assoc_dialog)
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-trans-assoc.glade", "list-store");
 
-    gnc_builder_add_from_file (builder, "dialog-trans-assoc.glade", "Transaction Association Dialog");
+    gnc_builder_add_from_file (builder, "dialog-trans-assoc.glade", "transaction_association_dialog");
 
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Transaction Association Dialog"));
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_association_dialog"));
     assoc_dialog->dialog = dialog;
 
     assoc_dialog->view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview"));
