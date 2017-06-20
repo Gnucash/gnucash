@@ -2903,8 +2903,8 @@ gnc_plugin_page_register2_cmd_void_transaction (GtkAction *action,
     }
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file  (builder , "gnc-plugin-page-register2.glade", "Void Transaction");
-    dialog = GTK_WIDGET (gtk_builder_get_object (builder, "Void Transaction"));
+    gnc_builder_add_from_file  (builder , "gnc-plugin-page-register2.glade", "void_transaction_dialog");
+    dialog = GTK_WIDGET (gtk_builder_get_object (builder, "void_transaction_dialog"));
     entry = GTK_WIDGET (gtk_builder_get_object (builder, "reason"));
 
     result = gtk_dialog_run (GTK_DIALOG (dialog));
@@ -3028,8 +3028,8 @@ gnc_plugin_page_register2_cmd_view_filter_by (GtkAction *action,
 
     /* Create the dialog */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "gnc-plugin-page-register2.glade", "Filter By");
-    dialog = GTK_WIDGET (gtk_builder_get_object (builder, "Filter By"));
+    gnc_builder_add_from_file (builder, "gnc-plugin-page-register2.glade", "filter_by_dialog");
+    dialog = GTK_WIDGET (gtk_builder_get_object (builder, "filter_by_dialog"));
     priv->fd.dialog = dialog;
     gtk_window_set_transient_for (GTK_WINDOW (dialog),
                                  gnc_window_get_gtk_window (GNC_WINDOW (GNC_PLUGIN_PAGE (page)->window)));
