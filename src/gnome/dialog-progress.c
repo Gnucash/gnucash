@@ -201,10 +201,10 @@ gnc_progress_dialog_create(GtkWidget * parent, GNCProgressDialog *progress)
     g_return_if_fail(progress);
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-progress.glade", "Progress Dialog");
+    gnc_builder_add_from_file (builder, "dialog-progress.glade", "progress_dialog");
 
 
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Progress Dialog"));
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "progress_dialog"));
     progress->dialog = dialog;
 
     /* parent */

@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.0 -->
 <interface>
-  <requires lib="gtk+" version="2.16"/>
-  <!-- interface-naming-policy toplevel-contextual -->
-  <object class="GtkWindow" id="Progress Dialog">
+  <requires lib="gtk+" version="3.10"/>
+  <object class="GtkTextBuffer" id="textbuffer1">
+    <property name="text" translatable="yes">1234567890123456789012345678901234567890</property>
+  </object>
+  <object class="GtkWindow" id="progress_dialog">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -11,16 +14,16 @@
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
     <child>
-      <object class="GtkVBox" id="vbox85">
+      <object class="GtkBox" id="vbox85">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="border_width">5</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
           <object class="GtkLabel" id="primary_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">0</property>
             <property name="label">&lt;span weight="bold" size="larger"&gt;Primary text&lt;/span&gt;</property>
             <property name="use_markup">True</property>
             <property name="wrap">True</property>
@@ -35,7 +38,6 @@
           <object class="GtkLabel" id="secondary_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">0</property>
             <property name="label">Secondary text.</property>
             <property name="wrap">True</property>
           </object>
@@ -46,9 +48,10 @@
           </packing>
         </child>
         <child>
-          <object class="GtkVBox" id="progress_vbox1">
+          <object class="GtkBox" id="progress_vbox1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
             <child>
               <object class="GtkProgressBar" id="progress_bar">
                 <property name="visible">True</property>
@@ -65,7 +68,6 @@
               <object class="GtkLabel" id="sub_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label">&lt;span style="italic"&gt;Sub-operation text&lt;/span&gt;</property>
                 <property name="use_markup">True</property>
                 <property name="wrap">True</property>
@@ -88,8 +90,6 @@
           <object class="GtkScrolledWindow" id="progress_log_window">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="hscrollbar_policy">automatic</property>
-            <property name="vscrollbar_policy">automatic</property>
             <property name="shadow_type">in</property>
             <child>
               <object class="GtkTextView" id="progress_log">
@@ -110,19 +110,18 @@
           </packing>
         </child>
         <child>
-          <object class="GtkHButtonBox" id="hbuttonbox1">
+          <object class="GtkButtonBox" id="hbuttonbox1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="spacing">6</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="cancel_button">
-                <property name="label">gtk-cancel</property>
+                <property name="label" translatable="yes">_Cancel</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
-                <property name="use_stock">True</property>
+                <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -132,14 +131,13 @@
             </child>
             <child>
               <object class="GtkButton" id="ok_button">
-                <property name="label">gtk-ok</property>
+                <property name="label" translatable="yes">_OK</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
-                <property name="use_stock">True</property>
+                <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -157,8 +155,5 @@
         </child>
       </object>
     </child>
-  </object>
-  <object class="GtkTextBuffer" id="textbuffer1">
-    <property name="text" translatable="yes">1234567890123456789012345678901234567890</property>
   </object>
 </interface>
