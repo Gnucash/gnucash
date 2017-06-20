@@ -589,8 +589,8 @@ gnc_order_new_window (QofBook *bookp, OrderDialogType type,
 
     /* Find the dialog */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-order.glade", "Order Entry Dialog");
-    ow->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Order Entry Dialog"));
+    gnc_builder_add_from_file (builder, "dialog-order.glade", "order_entry_dialog");
+    ow->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "order_entry_dialog"));
 
     /* Grab the widgets */
     ow->id_entry = GTK_WIDGET(gtk_builder_get_object (builder, "id_entry"));
@@ -700,9 +700,9 @@ gnc_order_window_new_order (QofBook *bookp, GncOwner *owner)
 
     /* Find the dialog */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-order.glade", "New Order Dialog");
+    gnc_builder_add_from_file (builder, "dialog-order.glade", "new_order_dialog");
 
-    ow->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "New Order Dialog"));
+    ow->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "new_order_dialog"));
 
     g_object_set_data (G_OBJECT (ow->dialog), "dialog_info", ow);
 
