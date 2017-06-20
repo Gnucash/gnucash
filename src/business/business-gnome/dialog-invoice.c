@@ -248,8 +248,8 @@ iw_ask_unpost (InvoiceWindow *iw)
     gint response;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-invoice.glade", "Unpost Message Dialog");
-    dialog = GTK_WIDGET (gtk_builder_get_object (builder, "Unpost Message Dialog"));
+    gnc_builder_add_from_file (builder, "dialog-invoice.glade", "unpost_message_dialog");
+    dialog = GTK_WIDGET (gtk_builder_get_object (builder, "unpost_message_dialog"));
     toggle = GTK_TOGGLE_BUTTON(gtk_builder_get_object (builder, "yes_tt_reset"));
 
     gtk_window_set_transient_for (GTK_WINDOW(dialog),
@@ -2534,8 +2534,8 @@ gnc_invoice_window_new_invoice (InvoiceDialogType dialog_type, QofBook *bookp,
     /* Find the glade page layout */
     iw->builder = builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-invoice.glade", "terms_store");
-    gnc_builder_add_from_file (builder, "dialog-invoice.glade", "New Invoice Dialog");
-    iw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "New Invoice Dialog"));
+    gnc_builder_add_from_file (builder, "dialog-invoice.glade", "new_invoice_dialog");
+    iw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "new_invoice_dialog"));
 
     g_object_set_data (G_OBJECT (iw->dialog), "dialog_info", iw);
 
