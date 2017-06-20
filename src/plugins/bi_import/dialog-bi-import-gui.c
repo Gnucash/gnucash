@@ -103,8 +103,8 @@ gnc_plugin_bi_import_showGUI(void)
     gui->open_mode = "ALL";
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-bi-import-gui.glade", "bi-import Dialog");
-    gui->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "bi-import Dialog"));
+    gnc_builder_add_from_file (builder, "dialog-bi-import-gui.glade", "bi_import_dialog");
+    gui->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "bi_import_dialog"));
     gui->tree_view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview1"));
     gui->entryFilename = GTK_WIDGET(gtk_builder_get_object (builder, "entryFilename"));
 
