@@ -764,9 +764,9 @@ gnc_plugin_page_budget_cmd_view_options (GtkAction *action,
     {
         builder = gtk_builder_new();
         gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.glade", "NumPeriods_Adj");
-        gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.glade", "OptionsContainer");
+        gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.glade", "budget_options_container_dialog");
 
-        priv->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "OptionsContainer"));
+        priv->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "budget_options_container_dialog"));
 
         gtk_window_set_transient_for(
             GTK_WINDOW(priv->dialog),
@@ -918,9 +918,9 @@ gnc_plugin_page_budget_cmd_estimate_budget(GtkAction *action,
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.glade", "DigitsToRound_Adj");
-    gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.glade", "BudgetEstimate");
+    gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.glade", "budget_estimate_dialog");
 
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetEstimate"));
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "budget_estimate_dialog"));
 
     gtk_window_set_transient_for(
         GTK_WINDOW(dialog),
