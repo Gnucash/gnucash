@@ -967,9 +967,9 @@ gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances, GList *auto_cr
     dialog = g_new0(GncSxSinceLastRunDialog, 1);
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-sx.glade", "since-last-run-dialog");
+    gnc_builder_add_from_file (builder, "dialog-sx.glade", "since_last_run_dialog");
 
-    dialog->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "since-last-run-dialog"));
+    dialog->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "since_last_run_dialog"));
 
     dialog->editing_model = gnc_sx_slr_tree_model_adapter_new(sx_instances);
     dialog->review_created_txns_toggle = GTK_TOGGLE_BUTTON(gtk_builder_get_object (builder, "review_txn_toggle"));

@@ -393,15 +393,15 @@ sxftd_init( SXFromTransInfo *sxfti )
     /* Setup the start and end dates as GNCDateEdits */
     {
         GtkWidget *paramTable = GTK_WIDGET(gtk_builder_get_object(sxfti->builder, "param_table" ));
-        sxfti->startDateGDE =
-            GNC_DATE_EDIT( gnc_date_edit_new (gnc_time (NULL),
-                                              FALSE, FALSE));
-        gtk_table_attach( GTK_TABLE(paramTable),
-                          GTK_WIDGET( sxfti->startDateGDE ),
-                          1, 2, 2, 3,
-                          (GTK_EXPAND | GTK_FILL),
-                          GTK_FILL,
-                          0, 0 );
+        sxfti->startDateGDE =  GNC_DATE_EDIT( gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE));
+
+        gtk_grid_attach (GTK_GRID(paramTable), GTK_WIDGET(sxfti->startDateGDE), 1, 2, 1, 1);
+        gtk_widget_set_halign (GTK_WIDGET(sxfti->startDateGDE), GTK_ALIGN_FILL);
+        gtk_widget_set_valign (GTK_WIDGET(sxfti->startDateGDE), GTK_ALIGN_FILL);
+        gtk_widget_set_hexpand (GTK_WIDGET(sxfti->startDateGDE), TRUE);
+        gtk_widget_set_vexpand (GTK_WIDGET(sxfti->startDateGDE), FALSE);
+        g_object_set (GTK_WIDGET(sxfti->startDateGDE), "margin", 0, NULL);
+
         g_signal_connect( sxfti->startDateGDE, "date-changed",
                           G_CALLBACK( sxftd_update_excal_adapt ),
                           sxfti );
@@ -766,8 +766,8 @@ gnc_sx_create_from_trans( Transaction *trans )
 
     gnc_builder_add_from_file  (builder , "dialog-sx.glade", "freq_liststore");
 
-    gnc_builder_add_from_file  (builder , "dialog-sx.glade", "sx_from_real_trans");
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "sx_from_real_trans"));
+    gnc_builder_add_from_file  (builder , "dialog-sx.glade", "sx_from_real_trans_dialog");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "sx_from_real_trans_dialog"));
 
     sxfti->builder = builder;
     sxfti->dialog = dialog;
