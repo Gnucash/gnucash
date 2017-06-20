@@ -691,9 +691,9 @@ startRecnWindow (GtkWidget *parent, Account *account,
 
     /* Create the dialog box */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "window-reconcile.glade", "Reconcile Start Dialog");
+    gnc_builder_add_from_file (builder, "window-reconcile.glade", "reconcile_start_dialog");
 
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Reconcile Start Dialog"));
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "reconcile_start_dialog"));
 
     title = gnc_recn_make_window_name (account);
     gtk_window_set_title (GTK_WINDOW (dialog), title);
@@ -1746,7 +1746,7 @@ recnWindow2WithBalance (GtkWidget *parent, Account *account,
     {
         GtkWidget *frame = gtk_frame_new (NULL);
         GtkWidget *main_area = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
-        GtkWidget *debcred_area = gtk_table_new (1, 2, TRUE);
+        GtkWidget *debcred_area = gtk_grid_new ();
         GtkWidget *debits_box;
         GtkWidget *credits_box;
 
@@ -1772,9 +1772,20 @@ recnWindow2WithBalance (GtkWidget *parent, Account *account,
         GNC_RECONCILE_VIEW (recnData->credit)->sibling = GNC_RECONCILE_VIEW (recnData->debit);
 
         gtk_box_pack_start (GTK_BOX (main_area), debcred_area, TRUE, TRUE, 0);
-        gtk_table_set_col_spacings (GTK_TABLE (debcred_area), 15);
-        gtk_table_attach_defaults (GTK_TABLE (debcred_area), debits_box, 0, 1, 0, 1);
-        gtk_table_attach_defaults (GTK_TABLE (debcred_area), credits_box, 1, 2, 0, 1);
+
+        gtk_grid_set_column_homogeneous (GTK_GRID(debcred_area), TRUE);
+        gtk_grid_set_column_spacing (GTK_GRID(debcred_area), 15);
+        gtk_grid_attach (GTK_GRID(debcred_area), debits_box, 0, 0, 1, 1);
+        gtk_widget_set_hexpand (debits_box, TRUE);
+        gtk_widget_set_vexpand (debits_box, TRUE);
+        gtk_widget_set_halign (debits_box, GTK_ALIGN_FILL);
+        gtk_widget_set_valign (debits_box, GTK_ALIGN_FILL);
+
+        gtk_grid_attach (GTK_GRID(debcred_area), credits_box, 1, 0, 1, 1);
+        gtk_widget_set_hexpand (credits_box, TRUE);
+        gtk_widget_set_vexpand (credits_box, TRUE);
+        gtk_widget_set_halign (credits_box, GTK_ALIGN_FILL);
+        gtk_widget_set_valign (credits_box, GTK_ALIGN_FILL);
 
         {
             GtkWidget *hbox, *title_vbox, *value_vbox;
