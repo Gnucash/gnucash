@@ -636,7 +636,7 @@ gnc_ui_update_namespace_picker (GtkWidget *cbwe,
         /* Skip template, legacy and currency namespaces.
            The latter was added as first entry earlier */
         if ((g_utf8_collate(node->data, GNC_COMMODITY_NS_LEGACY) == 0) ||
-            (g_utf8_collate(node->data, "template" ) == 0) ||
+            (g_utf8_collate(node->data, GNC_COMMODITY_NS_TEMPLATE ) == 0) ||
             (g_utf8_collate(node->data, GNC_COMMODITY_NS_CURRENCY ) == 0))
             continue;
 
@@ -1280,11 +1280,11 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
     /* Don't allow user to create commodities in namespace
      * "template". That's reserved for scheduled transaction use.
      */
-    if (g_utf8_collate(name_space, "template") == 0)
+    if (g_utf8_collate(name_space, GNC_COMMODITY_NS_TEMPLATE) == 0)
     {
 	gnc_warning_dialog (w->dialog,
 			    _("%s is a reserved commodity type."
-			      " Please use something else."), "template");
+                            " Please use something else."), GNC_COMMODITY_NS_TEMPLATE);
 	return FALSE;
     }
 

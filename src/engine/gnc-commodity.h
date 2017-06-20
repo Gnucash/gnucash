@@ -96,6 +96,7 @@ GType gnc_commodity_namespace_get_type(void);
  *  window.
  */
 #define GNC_COMMODITY_NS_LEGACY "GNC_LEGACY_CURRENCIES"
+#define GNC_COMMODITY_NS_TEMPLATE "template"
 /* The ISO define is deprecated in favor of CURRENCY */
 #define GNC_COMMODITY_NS_ISO    "ISO4217"
 #define GNC_COMMODITY_NS_CURRENCY "CURRENCY"
