@@ -646,9 +646,9 @@ gnc_imap_dialog_create (GtkWidget *parent, ImapDialog *imap_dialog)
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-imap-editor.glade", "tree-store");
     gnc_builder_add_from_file (builder, "dialog-imap-editor.glade", "treemodelfilter");
-    gnc_builder_add_from_file (builder, "dialog-imap-editor.glade", "Import Map Dialog");
+    gnc_builder_add_from_file (builder, "dialog-imap-editor.glade", "import_map_dialog");
 
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Import Map Dialog"));
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "import_map_dialog"));
     imap_dialog->dialog = dialog;
 
     imap_dialog->session = gnc_get_current_session();
