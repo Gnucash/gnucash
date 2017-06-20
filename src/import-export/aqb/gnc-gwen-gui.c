@@ -520,9 +520,9 @@ setup_dialog(GncGWENGui *gui)
     ENTER("gui=%p", gui);
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-ab.glade", "Connection Dialog");
+    gnc_builder_add_from_file (builder, "dialog-ab.glade", "aqbanking_connection_dialog");
 
-    gui->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Connection Dialog"));
+    gui->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "aqbanking_connection_dialog"));
 
     gui->entries_table = GTK_WIDGET(gtk_builder_get_object (builder, "entries_table"));
     gui->top_entry = GTK_WIDGET(gtk_builder_get_object (builder, "top_entry"));
@@ -993,8 +993,8 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title, const gchar *text,
 
     /* Set up dialog */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-ab.glade", "Password Dialog");
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Password Dialog"));
+    gnc_builder_add_from_file (builder, "dialog-ab.glade", "aqbanking_password_dialog");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "aqbanking_password_dialog"));
 
     heading_label = GTK_WIDGET(gtk_builder_get_object (builder, "heading_pw_label"));
     input_entry = GTK_WIDGET(gtk_builder_get_object (builder, "input_entry"));

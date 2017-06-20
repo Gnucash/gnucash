@@ -303,8 +303,8 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
 #endif
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-ab.glade", "Transaction Dialog");
-    td->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Transaction Dialog"));
+    gnc_builder_add_from_file (builder, "dialog-ab.glade", "aqbanking_transaction_dialog");
+    td->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "aqbanking_transaction_dialog"));
 
     if (parent)
         gtk_window_set_transient_for(GTK_WINDOW(td->dialog), GTK_WINDOW(parent));
@@ -1154,8 +1154,8 @@ gnc_ab_trans_dialog_add_templ_cb(GtkButton *button, gpointer user_data)
 
     ENTER("td=%p", td);
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-ab.glade", "Template Name Dialog");
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Template Name Dialog"));
+    gnc_builder_add_from_file (builder, "dialog-ab.glade", "aqbanking_template_name_dialog");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "aqbanking_template_name_dialog"));
 
     entry = GTK_WIDGET(gtk_builder_get_object (builder, "template_name"));
 
