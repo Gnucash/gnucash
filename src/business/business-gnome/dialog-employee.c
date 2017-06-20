@@ -435,8 +435,8 @@ gnc_employee_new_window (QofBook *bookp,
 
     /* Find the dialog */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-employee.glade", "Employee Dialog");
-    ew->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Employee Dialog"));
+    gnc_builder_add_from_file (builder, "dialog-employee.glade", "employee_dialog");
+    ew->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "employee_dialog"));
 
     g_object_set_data (G_OBJECT (ew->dialog), "dialog_info", ew);
 
