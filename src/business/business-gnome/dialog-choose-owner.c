@@ -59,11 +59,11 @@ gcoi_create_dialog(Split* split)
 
     /* Open the Glade file */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-choose-owner.glade", "Choose Owner Dialog");
+    gnc_builder_add_from_file (builder, "dialog-choose-owner.glade", "choose_owner_dialog");
     g_assert(builder);
 
     /* Get the dialog handle */
-    dco->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Choose Owner Dialog"));
+    dco->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "choose_owner_dialog"));
     g_assert(dco->dialog);
 
     /* Get the title widget and set the title */
