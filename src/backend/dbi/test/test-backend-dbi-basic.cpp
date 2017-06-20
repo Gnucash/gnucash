@@ -28,7 +28,6 @@
 
 extern "C"
 {
-#define _(X) X
 #include "config.h"
 
 #include <sys/types.h>
