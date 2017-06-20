@@ -60,7 +60,7 @@ INSTALL(TARGETS gncmod-aqbanking
   RUNTIME DESTINATION bin)
 # No headers to install
 
-SET(aqbanking_GLADE assistant-ab-initial.glade dialog-ab.glade)
+SET(aqbanking_GLADE assistant-ab-initial.glade dialog-ab.glade dialog-ab-pref.glade)
 
 SET(aqbanking_UI gnc-plugin-aqbanking-ui.xml)
 
