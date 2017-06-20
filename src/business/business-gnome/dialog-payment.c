@@ -927,8 +927,8 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
     gnc_builder_add_from_file (builder, "dialog-payment.glade", "docs_list_vert_adj");
     gnc_builder_add_from_file (builder, "dialog-payment.glade", "docs_list_model");
     gnc_builder_add_from_file (builder, "dialog-payment.glade", "post_combo_model");
-    gnc_builder_add_from_file (builder, "dialog-payment.glade", "Payment Dialog");
-    pw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "Payment Dialog"));
+    gnc_builder_add_from_file (builder, "dialog-payment.glade", "payment_dialog");
+    pw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "payment_dialog"));
 
     /* Grab the widgets and build the dialog */
     pw->payment_warning = GTK_WIDGET (gtk_builder_get_object (builder, "payment_warning"));
