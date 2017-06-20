@@ -855,10 +855,10 @@ gnc_print_check_save_button_clicked(GtkButton *unused, PrintCheckDialog *pcd)
     gchar *title;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "Format Title Dialog");
+    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "format_title_dialog");
 
     /* Get a title for the new check format. */
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Format Title Dialog"));
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "format_title_dialog"));
     entry = GTK_WIDGET(gtk_builder_get_object (builder, "format_title"));
     button = GTK_WIDGET(gtk_builder_get_object (builder, "ok_button"));
     gnc_check_format_title_changed(GTK_EDITABLE(entry), button);
@@ -1642,12 +1642,12 @@ gnc_ui_print_check_dialog_create(GtkWidget *parent,
     gnc_builder_add_from_file (builder, "dialog-print-check.glade", "liststore1");
     gnc_builder_add_from_file (builder, "dialog-print-check.glade", "liststore2");
     gnc_builder_add_from_file (builder, "dialog-print-check.glade", "liststore3");
-    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "Print Check Dialog");
+    gnc_builder_add_from_file (builder, "dialog-print-check.glade", "print_check_dialog");
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, pcd);
 
     pcd->builder = builder;
-    pcd->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Print Check Dialog"));
+    pcd->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "print_check_dialog"));
 
     /* now pick out the relevant child widgets */
     pcd->format_combobox = GTK_WIDGET(gtk_builder_get_object (builder, "check_format_combobox"));
@@ -1686,7 +1686,7 @@ gnc_ui_print_check_dialog_create(GtkWidget *parent,
     /* Create and attach the date-format chooser */
     table = GTK_WIDGET(gtk_builder_get_object (builder, "options_table"));
     pcd->date_format = gnc_date_format_new_without_label();
-    gtk_table_attach_defaults(GTK_TABLE(table), pcd->date_format, 1, 3, 4, 7);
+    gtk_grid_attach (GTK_GRID(table), pcd->date_format, 1, 4, 1, 1);
 
     /* Default font (set in preferences) */
     font = gnc_prefs_get_string(GNC_PREFS_GROUP, GNC_PREF_DEFAULT_FONT);
