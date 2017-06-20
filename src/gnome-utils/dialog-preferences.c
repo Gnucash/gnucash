@@ -39,7 +39,7 @@
     the name of a glade file and the content to load from that
     file along with a widget in that file.  If a partial
     page is added, the widget name provided must be that of
-    a GtkTable containing four columns. If a full page is added,
+    a GtkGrid containing four columns. If a full page is added,
     the widget name provided to this code can be any kind of
     widget, but for consistency it should probably be the same.
 
@@ -100,7 +100,7 @@ typedef struct addition_t
     gchar *filename;
     /** The name of the widget within the glade data file that should be
      *  added to the preferences dialog.  This should point to a
-     *  GtkTable widget that has four columns. */
+     *  GtkGrid widget that has four columns. */
     gchar *widgetname;
     /** The name of the tab within the preferences dialog where these
      *  widgets should be placed. */
@@ -393,19 +393,18 @@ gnc_prefs_build_widget_table (GtkBuilder *builder,
 
 
 /** This data structure is used while building the preferences dialog
- *  to copy a table from a glade file to the dialog under construction.
+ *  to copy a grid from a glade file to the dialog under construction.
  *  It maintains state information between invocations of the function
- *  gnc_prefs_move_table_entry which is called via a foreach loop over
- *  each item in the table. */
+ *  gnc_prefs_move_grid_entry which is called via a foreach loop over
+ *  each item in the grid. */
 struct copy_data
 {
-    /** The table being copied from. */
-    GtkTable *table_from;
-    /** The table being copied to. */
-    GtkTable *table_to;
-    /** The number of lines offset from the old table to the new
-     *  table. */
-    gint row_offset;
+    /** The grid being copied from. */
+    GtkGrid *grid_from;
+    /** The grid being copied to. */
+    GtkGrid *grid_to;
+    /** The number of columns and rows in the grid. */
+    gint cols, rows;
 };
 
 
@@ -443,7 +442,39 @@ gnc_prefs_find_page (GtkNotebook *notebook, const gchar *name)
 }
 
 
-/** This function moves a GtkWidget from one GtkTable to another,
+/** This function finds the size of a GtkGrid and saves it to
+ *  the data structure.
+ *
+ *  @internal
+ *
+ *  @param widget A pointer to the widget to move.
+ *
+ *  @param data A pointer to a data structure passed in by the caller.
+ *  This data structure contains pointers to the old and new grids
+ *  plus the row offset into the new grid.
+ */
+static void
+gnc_prefs_get_grid_size (GtkWidget *child, gpointer data)
+{
+    struct copy_data *copydata = data;
+    gint top, left, height, width;
+
+    gtk_container_child_get(GTK_CONTAINER(copydata->grid_to), child,
+                            "left-attach", &left,
+                            "top-attach", &top,
+                            "height", &height,
+                            "width", &width,
+                            NULL);
+
+    if (left + width >= copydata->cols)
+        copydata->cols = left + width;
+
+    if (top + height >= copydata->rows)
+        copydata->rows = top + height;
+}
+
+
+/** This function moves a GtkWidget from one GtkGrid to another,
  *  preserving its attachment data, etc.  It is called when adding one
  *  partial preference page to another.
  *
@@ -452,34 +483,47 @@ gnc_prefs_find_page (GtkNotebook *notebook, const gchar *name)
  *  @param widget A pointer to the widget to move.
  *
  *  @param data A pointer to a data structure passed in by the caller.
- *  This data structure contains pointers to the old and new tables,
- *  plus the row offset into the new table.
+ *  This data structure contains pointers to the old and new grids
+ *  plus the row offset into the new grid.
  */
 static void
-gnc_prefs_move_table_entry (GtkWidget *child,
+gnc_prefs_move_grid_entry (GtkWidget *child,
                             gpointer data)
 {
     struct copy_data *copydata = data;
-    GtkAttachOptions x_opts, y_opts;
-    gint bottom, top, left, right, x_pad, y_pad;
+    gint top, left, height, width;
+    gboolean hexpand, vexpand;
+    GtkAlign halign, valign;
+    gint topm, bottomm, leftm, rightm;
 
     ENTER("child %p, copy data %p", child, data);
-    gtk_container_child_get(GTK_CONTAINER(copydata->table_from), child,
-                            "bottom-attach", &bottom,
+    gtk_container_child_get(GTK_CONTAINER(copydata->grid_from), child,
                             "left-attach", &left,
-                            "right-attach", &right,
                             "top-attach", &top,
-                            "x-options", &x_opts,
-                            "x-padding", &x_pad,
-                            "y-options", &y_opts,
-                            "y-padding", &y_pad,
+                            "height", &height,
+                            "width", &width,
                             NULL);
+    hexpand = gtk_widget_get_hexpand (child);
+    vexpand = gtk_widget_get_vexpand (child);
+    halign = gtk_widget_get_halign (child);
+    valign = gtk_widget_get_valign (child);
+
+    g_object_get (child, "margin-top", &topm, "margin-bottom", &bottomm, NULL);
+    g_object_get (child, "margin-left", &leftm, "margin-right", &rightm, NULL);
 
     g_object_ref(child);
-    gtk_container_remove(GTK_CONTAINER(copydata->table_from), child);
-    gtk_table_attach(copydata->table_to, child, left, right,
-                     top + copydata->row_offset, bottom + copydata->row_offset,
-                     x_opts, y_opts, x_pad, y_pad);
+    gtk_container_remove(GTK_CONTAINER(copydata->grid_from), child);
+
+    gtk_grid_attach(copydata->grid_to, child, left, copydata->rows + top , width, height);
+
+    gtk_widget_set_hexpand (child, hexpand);
+    gtk_widget_set_vexpand (child, vexpand);
+    gtk_widget_set_halign (child, halign);
+    gtk_widget_set_valign (child, valign);
+
+    g_object_set (child, "margin-left", leftm, "margin-right", rightm, NULL);
+    g_object_set (child, "margin-top", topm, "margin-bottom", bottomm, NULL);
+
     g_object_unref(child);
     LEAVE(" ");
 }
@@ -552,20 +596,10 @@ gnc_preferences_build_page (gpointer data,
         return;
     }
 
-    /* Copied tables must match the size of the main table */
-    if (!GTK_IS_TABLE(new_content))
+    /* Copied grids must be grids */
+    if (!GTK_IS_GRID(new_content))
     {
-        g_critical("The object name %s in file %s is not a GtkTable.  It cannot "
-                   "be added to the preferences dialog.",
-                   add_in->widgetname, add_in->filename);
-        g_object_unref(G_OBJECT(builder));
-        LEAVE("");
-        return;
-    }
-    g_object_get(G_OBJECT(new_content), "n-columns", &cols, NULL);
-    if (cols != 4)
-    {
-        g_critical("The table %s in file %s does not have four columns.  It cannot "
+        g_critical("The object name %s in file %s is not a GtkGrid. It cannot "
                    "be added to the preferences dialog.",
                    add_in->widgetname, add_in->filename);
         g_object_unref(G_OBJECT(builder));
@@ -580,7 +614,7 @@ gnc_preferences_build_page (gpointer data,
     {
         /* No existing content with this name.  Create a blank page */
         rows = 0;
-        existing_content = gtk_table_new(0, 4, FALSE);
+        existing_content = gtk_grid_new();
         gtk_container_set_border_width(GTK_CONTAINER(existing_content), 6);
         label = gtk_label_new(add_in->tabname);
         gnc_label_set_alignment(label, 0.0, 0.5);
@@ -590,27 +624,28 @@ gnc_preferences_build_page (gpointer data,
     }
     else
     {
-        g_object_get(G_OBJECT(existing_content), "n-rows", &rows, NULL);
-        DEBUG("found existing page %s", add_in->tabname);
+        /* Lets get the size of the existing grid */
+        copydata.grid_to = GTK_GRID(existing_content);
+        gtk_container_foreach(GTK_CONTAINER(existing_content), gnc_prefs_get_grid_size, &copydata);
+
+        DEBUG("found existing page %s, grid size is %d x %d", add_in->tabname, copydata.rows, copydata.cols);
     }
 
     /* Maybe add a spacer row */
-    DEBUG("rows is %d", rows);
-    if (rows > 0)
+    if (copydata.rows > 0)
     {
         label = gtk_label_new("");
         gtk_widget_show(label);
-        gtk_table_attach(GTK_TABLE(existing_content), label, 0, 1, rows, rows + 1,
-                         GTK_FILL, GTK_FILL, 0, 0);
-        rows++;
+        gtk_grid_attach (GTK_GRID(existing_content), label, 0, copydata.rows, 1, 1);
+        copydata.rows = copydata.rows + 1;
+
+        DEBUG("add spacer row");
     }
 
-    /* Now copy all the entries in the table */
-    copydata.table_from = GTK_TABLE(new_content);
-    copydata.table_to = GTK_TABLE(existing_content);
-    copydata.row_offset = rows;
-    gtk_container_foreach(GTK_CONTAINER(new_content), gnc_prefs_move_table_entry,
-                          &copydata);
+    /* Now copy all the entries in the grid */
+    copydata.grid_from = GTK_GRID(new_content);
+    copydata.grid_to = GTK_GRID(existing_content);
+    gtk_container_foreach(GTK_CONTAINER(new_content), gnc_prefs_move_grid_entry, &copydata);
 
     g_object_ref_sink(new_content);
     g_object_unref(G_OBJECT(builder));
@@ -1228,9 +1263,9 @@ gnc_preferences_dialog_create(void)
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "retain_days_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "tab_width_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "date_formats");
-    gnc_builder_add_from_file (builder, "dialog-preferences.glade", "GnuCash Preferences");
+    gnc_builder_add_from_file (builder, "dialog-preferences.glade", "gnucash_preferences_dialog");
 
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "GnuCash Preferences"));
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "gnucash_preferences_dialog"));
 
 #ifndef REGISTER2_ENABLED
     /* Hide preferences that are related to register2 */
