@@ -98,8 +98,8 @@ gnc_plugin_customer_import_showGUI(void)
     gui = g_new0 (CustomerImportGui, 1);
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-customer-import-gui.glade", "customer_import Dialog");
-    gui->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "customer_import Dialog"));
+    gnc_builder_add_from_file (builder, "dialog-customer-import-gui.glade", "customer_import_dialog");
+    gui->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "customer_import_dialog"));
     gui->tree_view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview1"));
     gui->entryFilename = GTK_WIDGET(gtk_builder_get_object (builder, "entryFilename"));
     gui->type = "CUSTOMER"; // Set a default type to import
