@@ -137,8 +137,8 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
     ddc->ts = ts;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-date-close.glade", "Date Close Dialog");
-    ddc->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Date Close Dialog"));
+    gnc_builder_add_from_file (builder, "dialog-date-close.glade", "date_close_dialog");
+    ddc->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "date_close_dialog"));
 
     date_box = GTK_WIDGET(gtk_builder_get_object (builder, "date_box"));
     ddc->date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
@@ -227,8 +227,8 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
     ddc->terms = terms;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-date-close.glade", "Date Account Dialog");
-    ddc->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Date Account Dialog"));
+    gnc_builder_add_from_file (builder, "dialog-date-close.glade", "date_account_dialog");
+    ddc->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "date_account_dialog"));
     ddc->memo_entry = GTK_WIDGET(gtk_builder_get_object (builder, "memo_entry"));
 
     acct_box = GTK_WIDGET(gtk_builder_get_object (builder, "acct_hbox"));
@@ -343,8 +343,8 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
     ddc->acct = *acct;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-date-close.glade", "Date Account Dialog");
-    ddc->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Date Account Dialog"));
+    gnc_builder_add_from_file (builder, "dialog-date-close.glade", "date_account_dialog");
+    ddc->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "date_account_dialog"));
 
     acct_box = GTK_WIDGET(gtk_builder_get_object (builder, "acct_hbox"));
     ddc->acct_combo = gnc_account_sel_new();
