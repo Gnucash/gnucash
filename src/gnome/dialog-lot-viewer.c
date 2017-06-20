@@ -987,9 +987,9 @@ lv_create (GNCLotViewer *lv)
     GtkWidget *widget;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-lot-viewer.glade", "Lot Viewer Window");
+    gnc_builder_add_from_file (builder, "dialog-lot-viewer.glade", "lot_viewer_dialog");
 
-    lv->window = GTK_WIDGET(gtk_builder_get_object (builder, "Lot Viewer Window"));
+    lv->window = GTK_WIDGET(gtk_builder_get_object (builder, "lot_viewer_dialog"));
 
     win_title = g_strdup_printf (_("Lots in Account %s"),
                                  xaccAccountGetName(lv->account));
@@ -997,34 +997,34 @@ lv_create (GNCLotViewer *lv)
     g_free (win_title);
 
 #ifdef LOTS_READY_FOR_SHOWTIME
-    lv->regview_button = GTK_BUTTON(glade_xml_get_widget (builder, "regview button"));
+    lv->regview_button = GTK_BUTTON(glade_xml_get_widget (builder, "regview_button"));
 #endif
-    lv->delete_button = GTK_BUTTON(gtk_builder_get_object (builder, "delete button"));
-    lv->scrub_lot_button = GTK_BUTTON(gtk_builder_get_object (builder, "scrub lot button"));
-    lv->new_lot_button = GTK_BUTTON(gtk_builder_get_object (builder, "new lot button"));
+    lv->delete_button = GTK_BUTTON(gtk_builder_get_object (builder, "delete_button"));
+    lv->scrub_lot_button = GTK_BUTTON(gtk_builder_get_object (builder, "scrub_lot_button"));
+    lv->new_lot_button = GTK_BUTTON(gtk_builder_get_object (builder, "new_lot_button"));
 
-    lv->lot_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "lot view"));
-    lv->only_show_open_lots_checkbutton = GTK_TOGGLE_BUTTON(gtk_builder_get_object (builder, "only show open lots checkbutton"));
+    lv->lot_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "lot_view"));
+    lv->only_show_open_lots_checkbutton = GTK_TOGGLE_BUTTON(gtk_builder_get_object (builder, "only_show_open_lots_checkbutton"));
     lv_init_lot_view(lv);
-    lv->lot_notes = GTK_TEXT_VIEW(gtk_builder_get_object (builder, "lot notes text"));
-    lv->title_entry = GTK_ENTRY (gtk_builder_get_object (builder, "lot title entry"));
+    lv->lot_notes = GTK_TEXT_VIEW(gtk_builder_get_object (builder, "lot_notes_text"));
+    lv->title_entry = GTK_ENTRY (gtk_builder_get_object (builder, "lot_title_entry"));
 
-    lv->split_in_lot_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "split in lot view"));
-    lv->split_free_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "split free view"));
+    lv->split_in_lot_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "split_in_lot_view"));
+    lv->split_free_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "split_free_view"));
     lv_init_split_views(lv);
 
-    lv->add_split_to_lot_button = GTK_BUTTON(gtk_builder_get_object (builder, "add split to lot button"));
-    lv->remove_split_from_lot_button = GTK_BUTTON(gtk_builder_get_object (builder, "remove split from lot button"));
+    lv->add_split_to_lot_button = GTK_BUTTON(gtk_builder_get_object (builder, "add_split_to_lot_button"));
+    lv->remove_split_from_lot_button = GTK_BUTTON(gtk_builder_get_object (builder, "remove_split_from_lot_button"));
     lv_init_split_buttons(lv);
 
 
     if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
     {
         GObject *object;
-        object = gtk_builder_get_object (builder, "lot vpaned");
+        object = gtk_builder_get_object (builder, "lot_vpaned");
         gnc_prefs_bind (GNC_PREFS_GROUP, GNC_PREF_VPOS, object, "position");
 
-        object = gtk_builder_get_object (builder, "lot hpaned");
+        object = gtk_builder_get_object (builder, "lot_hpaned");
         gnc_prefs_bind (GNC_PREFS_GROUP, GNC_PREF_HPOS, object, "position");
     }
 
