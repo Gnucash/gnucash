@@ -814,8 +814,8 @@ csv_export_assistant_create (CsvExportInfo *info)
     time64 start_time, end_time;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file  (builder , "assistant-csv-export.glade", "CSV Export Assistant");
-    window = GTK_WIDGET(gtk_builder_get_object (builder, "CSV Export Assistant"));
+    gnc_builder_add_from_file  (builder , "assistant-csv-export.glade", "csv_export_assistant");
+    window = GTK_WIDGET(gtk_builder_get_object (builder, "csv_export_assistant"));
     info->window = window;
 
     /* Load default settings */
@@ -837,7 +837,7 @@ csv_export_assistant_create (CsvExportInfo *info)
         // Don't provide simple export layout for search registers and General Journal
         if ((info->export_type == XML_EXPORT_TREE) || (info->account == NULL))
             gtk_widget_destroy (chkbox);
-        gtk_widget_destroy (info->account_page);
+        gtk_assistant_remove_page (GTK_ASSISTANT(window), 1); //remove accounts page
     }
     else
     {

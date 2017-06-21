@@ -205,7 +205,9 @@ void csv_tree_export (CsvExportInfo *info)
             g_free (part2);
             /* Color */
             currentSel = xaccAccountGetColor (acc) ? xaccAccountGetColor (acc) : "" ;
-            part2 = g_strconcat (part1, currentSel, mid_sep, NULL);
+            str_temp = csv_test_field_string (info, currentSel);
+            part2 = g_strconcat (part1, str_temp, mid_sep, NULL);
+            g_free (str_temp);
             g_free (part1);
             /* Notes */
             currentSel = xaccAccountGetNotes (acc) ? xaccAccountGetNotes (acc) : "" ;
