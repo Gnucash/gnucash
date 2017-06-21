@@ -69,8 +69,14 @@ node_and_commodity_equal (xmlNodePtr node, const gnc_commodity* com)
         }
         else if (g_strcmp0 ((char*)mark->name, "cmdty:space") == 0)
         {
+            /* Currency namespace is now stored as GNC_COMMODITY_NS_CURRENCY
+             * but used to be stored as GNC_COMMODITY_NS_ISO,
+             * so check both to cater for (very) old testfiles. */
             if (!equals_node_val_vs_string (
-                    mark, gnc_commodity_get_namespace (com)))
+                    mark, gnc_commodity_get_namespace (com)) &&
+                !((g_strcmp0 (gnc_commodity_get_namespace (com), GNC_COMMODITY_NS_CURRENCY) == 0) &&
+                    equals_node_val_vs_string (
+                        mark, GNC_COMMODITY_NS_ISO)))
             {
                 return "namespaces differ";
             }
