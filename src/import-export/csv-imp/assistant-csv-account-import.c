@@ -121,7 +121,7 @@ void create_regex (GString *regex_str, const gchar *sep)
             "(?<name>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
             "(?<code>\"(?:[^\"]|\"\")*\"|[^%s]*)%s?"
             "(?<description>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
-            "(?<color>[^%s]*)%s"
+            "(?<color>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
             "(?<notes>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
             "(?<commoditym>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
             "(?<commodityn>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
@@ -267,14 +267,12 @@ void csv_import_sep_cb (GtkWidget *radio, gpointer user_data)
 
     /* Generate preview */
     gtk_list_store_clear (info->store);
+    gtk_widget_set_sensitive (info->header_row_spin, TRUE);
 
     if (csv_import_read_file (info->file_name, info->regexp->str, info->store, 11) == MATCH_FOUND)
-        gtk_widget_set_sensitive (info->header_row_spin, TRUE);
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->header_row_spin), 1); // set header spin to 1
     else
-        gtk_widget_set_sensitive (info->header_row_spin, FALSE);
-
-    /* Reset Header spin to 0 */
-    gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->header_row_spin), 0);
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->header_row_spin), 0); //reset header spin to 0
 }
 
 
@@ -407,10 +405,12 @@ csv_import_assistant_account_page_prepare (GtkAssistant *assistant,
 
     gtk_list_store_clear (info->store);
 
+    gtk_widget_set_sensitive (info->header_row_spin, TRUE);
+
     if (csv_import_read_file (info->file_name, info->regexp->str, info->store, 11 ) == MATCH_FOUND)
-        gtk_widget_set_sensitive (info->header_row_spin, TRUE);
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->header_row_spin), 1); // set header spin to 1
     else
-        gtk_widget_set_sensitive (info->header_row_spin, FALSE);
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->header_row_spin), 0); //reset header spin to 0
 }
 
 
@@ -577,8 +577,8 @@ csv_import_assistant_create (CsvImportInfo *info)
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file  (builder, "assistant-csv-account-import.glade", "num_hrows_adj");
-    gnc_builder_add_from_file  (builder, "assistant-csv-account-import.glade", "CSV Account Import Assistant");
-    window = GTK_WIDGET(gtk_builder_get_object (builder, "CSV Account Import Assistant"));
+    gnc_builder_add_from_file  (builder, "assistant-csv-account-import.glade", "csv_account_import_assistant");
+    window = GTK_WIDGET(gtk_builder_get_object (builder, "csv_account_import_assistant"));
     info->window = window;
 
     /* Load default settings */

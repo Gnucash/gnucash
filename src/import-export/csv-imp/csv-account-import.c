@@ -128,7 +128,6 @@ csv_import_read_file (const gchar *filename, const gchar *parser_regexp,
     g_regex_match (regexpat, contents, 0, &match_info);
     while (g_match_info_matches (match_info))
     {
-        match_found = TRUE;
         // fill in the values
         gtk_list_store_append (store, &iter);
         fill_model_with_match (match_info, "type", store, &iter, TYPE);
@@ -144,6 +143,16 @@ csv_import_read_file (const gchar *filename, const gchar *parser_regexp,
         fill_model_with_match (match_info, "tax", store, &iter, TAX);
         fill_model_with_match (match_info, "place_holder", store, &iter, PLACE_HOLDER);
         gtk_list_store_set (store, &iter, ROW_COLOR, NULL, -1);
+
+        if (row == 0)
+        {
+            gchar *str_type;
+            gtk_tree_model_get (GTK_TREE_MODEL(store), &iter, TYPE, &str_type, -1);
+
+            if (g_strcmp0 (_("type"), str_type) == 0)
+                match_found = TRUE;
+            g_free (str_type);
+        }
 
         row++;
         if (row == max_rows)
