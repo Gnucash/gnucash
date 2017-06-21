@@ -534,8 +534,8 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
     GtkWidget *window;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file  (builder , "assistant-stock-split.glade", "Stock Split Assistant");
-    window = GTK_WIDGET(gtk_builder_get_object (builder, "Stock Split Assistant"));
+    gnc_builder_add_from_file  (builder , "assistant-stock-split.glade", "stock_split_assistant");
+    window = GTK_WIDGET(gtk_builder_get_object (builder, "stock_split_assistant"));
     info->window = window;
 
     /* Enable buttons on first, second, fourth and last page. */
@@ -605,7 +605,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
         info->description_entry = GTK_WIDGET(gtk_builder_get_object(builder, "description_entry"));
 
         date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
-        gtk_table_attach_defaults (GTK_TABLE (table), date, 1, 2, 0, 1);
+        gtk_grid_attach (GTK_GRID(table), date, 1, 0, 1, 1);
         gtk_widget_show (date);
         info->date_edit = date;
 
@@ -616,7 +616,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
         g_signal_connect (amount, "changed",
                           G_CALLBACK (gnc_stock_split_details_valid_cb), info);
         gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
-        gtk_table_attach_defaults (GTK_TABLE (table), amount, 1, 2, 1, 2);
+        gtk_grid_attach (GTK_GRID(table), amount, 1, 1, 1, 1);
         gtk_widget_show (amount);
         info->distribution_edit = amount;
 
@@ -629,7 +629,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
         g_signal_connect (amount, "changed",
                           G_CALLBACK (gnc_stock_split_details_valid_cb), info);
         gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
-        gtk_table_attach_defaults (GTK_TABLE (table), amount, 1, 2, 5, 6);
+        gtk_grid_attach (GTK_GRID(table), amount, 1, 5, 1, 1);
         gtk_widget_show (amount);
         info->price_edit = amount;
 
@@ -639,7 +639,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
         info->price_currency_edit = gnc_currency_edit_new();
         gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(info->price_currency_edit), gnc_default_currency());
         gtk_widget_show (info->price_currency_edit);
-        gtk_table_attach_defaults (GTK_TABLE (table), info->price_currency_edit, 1, 2, 6, 7);
+        gtk_grid_attach (GTK_GRID(table), info->price_currency_edit, 1, 6, 1, 1);
     }
 
     /* Cash page Widgets */
