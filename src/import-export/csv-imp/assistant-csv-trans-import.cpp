@@ -389,8 +389,8 @@ CsvImpTransAssist::CsvImpTransAssist ()
     gnc_builder_add_from_file  (builder , "assistant-csv-trans-import.glade", "start_row_adj");
     gnc_builder_add_from_file  (builder , "assistant-csv-trans-import.glade", "end_row_adj");
     gnc_builder_add_from_file  (builder , "assistant-csv-trans-import.glade", "account_match_store");
-    gnc_builder_add_from_file  (builder , "assistant-csv-trans-import.glade", "CSV Transaction Assistant");
-    csv_imp_asst = GTK_ASSISTANT(gtk_builder_get_object (builder, "CSV Transaction Assistant"));
+    gnc_builder_add_from_file  (builder , "assistant-csv-trans-import.glade", "csv_transaction_assistant");
+    csv_imp_asst = GTK_ASSISTANT(gtk_builder_get_object (builder, "csv_transaction_assistant"));
 
     /* Enable buttons on all page. */
     gtk_assistant_set_page_complete (csv_imp_asst,
@@ -420,12 +420,12 @@ CsvImpTransAssist::CsvImpTransAssist ()
     file_chooser = gtk_file_chooser_widget_new (GTK_FILE_CHOOSER_ACTION_OPEN);
     g_signal_connect (G_OBJECT(file_chooser), "file-activated",
                       G_CALLBACK(csv_tximp_file_confirm_cb), this);
-    auto button = gtk_button_new_from_stock (GTK_STOCK_OK);
+    auto button = gtk_button_new_with_label (_("OK"));
     gtk_widget_set_size_request (button, 100, -1);
     gtk_widget_show (button);
     auto h_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (h_box), TRUE);
-
+    gtk_widget_set_hexpand (GTK_WIDGET(h_box), TRUE);
     gtk_box_pack_start (GTK_BOX(h_box), button, FALSE, FALSE, 0);
     gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER(file_chooser), h_box);
     g_signal_connect (G_OBJECT(button), "clicked",
