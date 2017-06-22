@@ -875,9 +875,9 @@ new_security_page(SCM security_hash_key, gnc_commodity *comm, QIFImportWindow *w
     /*
      * Add all the widgets to the page.
      */
-    table = gtk_table_new(3, 2, FALSE);
-    gtk_table_set_row_spacings(GTK_TABLE(table), 6);
-    gtk_table_set_col_spacings(GTK_TABLE(table), 12);
+    table = gtk_grid_new();
+    gtk_grid_set_row_spacing (GTK_GRID(table), 6);
+    gtk_grid_set_column_spacing (GTK_GRID(table), 12);
 
     /* Name entry */
     retval->name_entry = gtk_entry_new();
@@ -890,10 +890,14 @@ new_security_page(SCM security_hash_key, gnc_commodity *comm, QIFImportWindow *w
     gtk_widget_set_tooltip_text(label, name_tooltip);
     gtk_widget_set_tooltip_text(retval->name_entry, name_tooltip);
 
-    gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
-                     GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-    gtk_table_attach_defaults(GTK_TABLE(table), retval->name_entry,
-                              1, 2, 0, 1);
+    gtk_grid_attach (GTK_GRID(table), label, 0, 0, 1, 1);
+    gtk_widget_set_halign (label, GTK_ALIGN_FILL);
+    gtk_widget_set_valign (label, GTK_ALIGN_FILL);
+    gtk_widget_set_hexpand (label, TRUE);
+    gtk_widget_set_vexpand (label, FALSE);
+    g_object_set (label, "margin", 0, NULL);
+
+    gtk_grid_attach (GTK_GRID(table), retval->name_entry, 1, 0, 1, 1);
 
     g_signal_connect (retval->name_entry, "changed",
                       G_CALLBACK (gnc_ui_qif_import_comm_changed_cb), wind);
@@ -910,10 +914,14 @@ new_security_page(SCM security_hash_key, gnc_commodity *comm, QIFImportWindow *w
     gtk_widget_set_tooltip_text(label, mnemonic_tooltip);
     gtk_widget_set_tooltip_text(retval->mnemonic_entry, mnemonic_tooltip);
 
-    gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
-                     GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-    gtk_table_attach_defaults(GTK_TABLE(table), retval->mnemonic_entry,
-                              1, 2, 1, 2);
+    gtk_grid_attach (GTK_GRID(table), label, 0, 1, 1, 1);
+    gtk_widget_set_halign (label, GTK_ALIGN_FILL);
+    gtk_widget_set_valign (label, GTK_ALIGN_FILL);
+    gtk_widget_set_hexpand (label, TRUE);
+    gtk_widget_set_vexpand (label, FALSE);
+    g_object_set (label, "margin", 0, NULL);
+
+    gtk_grid_attach (GTK_GRID(table), retval->mnemonic_entry, 1, 1, 1, 1);
 
     g_signal_connect (retval->mnemonic_entry, "changed",
                       G_CALLBACK (gnc_ui_qif_import_comm_changed_cb), wind);
@@ -935,10 +943,14 @@ new_security_page(SCM security_hash_key, gnc_commodity *comm, QIFImportWindow *w
     gtk_widget_set_tooltip_text(label, namespace_tooltip);
     gtk_widget_set_tooltip_text(retval->namespace_combo, namespace_tooltip);
 
-    gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3,
-                     GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-    gtk_table_attach_defaults(GTK_TABLE(table), retval->namespace_combo,
-                              1, 2, 2, 3);
+    gtk_grid_attach (GTK_GRID(table), label, 0, 2, 1, 1);
+    gtk_widget_set_halign (label, GTK_ALIGN_FILL);
+    gtk_widget_set_valign (label, GTK_ALIGN_FILL);
+    gtk_widget_set_hexpand (label, TRUE);
+    gtk_widget_set_vexpand (label, FALSE);
+    g_object_set (label, "margin", 0, NULL);
+
+    gtk_grid_attach (GTK_GRID(table), retval->namespace_combo, 1, 2, 1, 1);
 
     gtk_container_set_border_width(GTK_CONTAINER(page), 12);
 
@@ -3384,7 +3396,7 @@ get_assistant_widgets(QIFImportWindow *wind, GtkBuilder *builder)
     g_return_if_fail(wind);
     g_return_if_fail(builder);
 
-    wind->window             = GTK_WIDGET(gtk_builder_get_object (builder, "QIF Import Assistant"));
+    wind->window             = GTK_WIDGET(gtk_builder_get_object (builder, "qif_import_assistant"));
     wind->filename_entry     = GTK_WIDGET(gtk_builder_get_object (builder, "qif_filename_entry"));
     wind->load_pause         = GTK_WIDGET(gtk_builder_get_object (builder, "load_progress_pause"));
     wind->load_start         = GTK_WIDGET(gtk_builder_get_object (builder, "load_progress_start"));
@@ -3580,7 +3592,7 @@ gnc_ui_qif_import_assistant_make(QIFImportWindow *qif_win)
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "assistant-qif-import.glade", "currency_liststore");
     gnc_builder_add_from_file (builder, "assistant-qif-import.glade", "date_format_liststore");
-    gnc_builder_add_from_file (builder, "assistant-qif-import.glade", "QIF Import Assistant");
+    gnc_builder_add_from_file (builder, "assistant-qif-import.glade", "qif_import_assistant");
 
     qif_win->new_namespaces       = NULL;
     qif_win->selected_transaction = 0;
