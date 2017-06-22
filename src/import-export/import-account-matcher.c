@@ -290,14 +290,14 @@ Account * gnc_import_select_account(GtkWidget *parent,
     {
         /* load the interface */
         builder = gtk_builder_new();
-        gnc_builder_add_from_file (builder, "dialog-import.glade", "account_picker");
+        gnc_builder_add_from_file (builder, "dialog-import.glade", "account_picker_dialog");
         gnc_builder_add_from_file (builder, "dialog-import.glade", "account_picker_content");
         /* connect the signals in the interface */
         if (builder == NULL)
         {
             PERR("Error opening the glade builder interface");
         }
-        picker->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "account_picker"));
+        picker->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "account_picker_dialog"));
         if (parent)
             gtk_window_set_transient_for (GTK_WINDOW (picker->dialog),
                                           GTK_WINDOW (parent));

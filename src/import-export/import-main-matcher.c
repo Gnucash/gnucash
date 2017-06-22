@@ -212,7 +212,7 @@ on_matcher_help_clicked (GtkButton *button, gpointer user_data)
     gnc_builder_add_from_file (builder, "dialog-import.glade", "textbuffer3");
     gnc_builder_add_from_file (builder, "dialog-import.glade", "textbuffer4");
     gnc_builder_add_from_file (builder, "dialog-import.glade", "textbuffer5");
-    gnc_builder_add_from_file (builder, "dialog-import.glade", "matcher_help");
+    gnc_builder_add_from_file (builder, "dialog-import.glade", "matcher_help_dialog");
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "red"));
     gtk_widget_override_background_color(box, GTK_STATE_FLAG_NORMAL,
@@ -224,7 +224,7 @@ on_matcher_help_clicked (GtkButton *button, gpointer user_data)
     gtk_widget_override_background_color(box, GTK_STATE_FLAG_NORMAL,
                                          &info->color_back_green);
 
-    help_dialog = GTK_WIDGET(gtk_builder_get_object (builder, "matcher_help"));
+    help_dialog = GTK_WIDGET(gtk_builder_get_object (builder, "matcher_help_dialog"));
     gtk_window_set_transient_for(GTK_WINDOW(help_dialog),
                                  GTK_WINDOW(info->dialog));
 
@@ -525,9 +525,9 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
 
     /* Initialize the GtkDialog. */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-import.glade", "transaction_matcher");
+    gnc_builder_add_from_file (builder, "dialog-import.glade", "transaction_matcher_dialog");
     gnc_builder_add_from_file (builder, "dialog-import.glade", "transaction_matcher_content");
-    info->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_matcher"));
+    info->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_matcher_dialog"));
     g_assert (info->dialog != NULL);
 
     /* Pack the content into the dialog vbox */
