@@ -612,6 +612,7 @@ csv_import_assistant_create (CsvImportInfo *info)
     gtk_widget_show (button);
     h_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (h_box), TRUE);
+    gtk_widget_set_hexpand (GTK_WIDGET(h_box), TRUE);
     gtk_box_pack_start (GTK_BOX(h_box), button, FALSE, FALSE, 0);
     gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER(info->file_chooser), h_box);
     g_signal_connect (G_OBJECT(button), "clicked",
