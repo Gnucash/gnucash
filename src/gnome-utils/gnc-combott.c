@@ -475,6 +475,9 @@ gctt_combott_menu_position (GtkMenu  *menu,
     GtkWidget *child;
     GtkRequisition req;
     GtkAllocation alloc;
+    GtkBorder padding;
+    GtkStyleContext *sc = gtk_widget_get_style_context (GTK_WIDGET (priv->button));
+    GtkStateFlags state_flags = gtk_style_context_get_state (sc);
 
     child = gtk_bin_get_child (GTK_BIN (priv->button));
 
@@ -489,9 +492,11 @@ gctt_combott_menu_position (GtkMenu  *menu,
 
     gdk_window_get_root_coords (gtk_widget_get_window (child), sx, sy, &sx, &sy);
 
-    sx -= gtk_widget_get_style (GTK_WIDGET (priv->button))->xthickness;
+    gtk_style_context_get_padding (sc, state_flags, &padding);
 
-    gtk_widget_size_request (GTK_WIDGET (menu), &req);
+    sx -= padding.left;
+
+    gtk_widget_get_preferred_size (GTK_WIDGET (menu), &req, NULL);
 
     if (gtk_widget_get_direction (GTK_WIDGET (priv->button)) == GTK_TEXT_DIR_LTR)
         *x = sx;
