@@ -623,15 +623,11 @@ gnc_tree_view_split_reg_pref_changed (gpointer prefs, gchar *pref, gpointer user
 
 
 /* Set the grid lines to be solid */
-static const gchar *rc_string =
+static const gchar *css_string =
 {
-"style \"solidTreeLines\"\n"
-"{\n"
-" GtkTreeView::grid-line-pattern = \"\1\"\n"
-" GtkTreeView::grid-line-width = 1\n" 
+"treeview.view {\n"
+" border-color: black;\n"
 "}\n"
-"\n"
-"class \"GtkTreeView\" style \"solidTreeLines\"\n"
 };
 
 
@@ -1022,6 +1018,7 @@ gnc_tree_view_split_reg_new_with_model (GncTreeModelSplitReg *model)
     GtkTreeModel        *s_model;
     GncTreeViewSplitReg *view;
     GtkTreeSelection    *selection;
+    GtkCssProvider* provider = gtk_css_provider_new();
 
     view = g_object_new (gnc_tree_view_split_reg_get_type(), NULL);
     g_object_set (view, "name", "split_reg_tree", NULL);
@@ -1034,7 +1031,11 @@ gnc_tree_view_split_reg_new_with_model (GncTreeModelSplitReg *model)
     view->help_text = g_strdup ("Help Text");
 
     // This sets up solid lines for the grid line.
-    gtk_rc_parse_string (rc_string);
+    gtk_css_provider_load_from_data (provider, css_string, strlen(css_string), NULL);
+    gtk_style_context_add_provider (gtk_widget_get_style_context(GTK_WIDGET(view)),
+                                   GTK_STYLE_PROVIDER (provider),
+                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    g_object_unref (provider);
 
     /* TreeView Grid lines */
     if (view->priv->use_horizontal_lines)
