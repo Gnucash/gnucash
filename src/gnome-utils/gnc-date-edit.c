@@ -148,13 +148,20 @@ gnc_strtok_r (char *s, const char *delim, char **save_ptr)
 static void
 gnc_date_edit_popdown(GNCDateEdit *gde)
 {
+    GdkDeviceManager *manager;
+    GdkDevice *pointer;
+
     g_return_if_fail (GNC_IS_DATE_EDIT (gde));
 
     ENTER("gde %p", gde);
 
+    manager = gdk_display_get_device_manager (gdk_display_get_default());
+    pointer = gdk_device_manager_get_client_pointer (manager);
+
     gtk_grab_remove (gde->cal_popup);
     gtk_widget_hide (gde->cal_popup);
-    gdk_pointer_ungrab (GDK_CURRENT_TIME);
+    if (pointer)
+        gdk_device_ungrab (pointer, GDK_CURRENT_TIME);
 
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gde->date_button),
                                   FALSE);
@@ -217,7 +224,7 @@ position_popup (GNCDateEdit *gde)
     GtkRequisition req;
     GtkAllocation alloc;
 
-    gtk_widget_size_request (gde->cal_popup, &req);
+    gtk_widget_get_preferred_size (gde->cal_popup, &req, NULL);
 
     gdk_window_get_origin (gtk_widget_get_window (gde->date_button), &x, &y);
 
@@ -242,28 +249,33 @@ position_popup (GNCDateEdit *gde)
 /* Pulled from gtkcombobox.c */
 static gboolean
 popup_grab_on_window (GdkWindow *window,
-                      guint32    activate_time,
-                      gboolean   grab_keyboard)
+                      GdkDevice *keyboard,
+                      GdkDevice *pointer,
+                      guint32    activate_time)
 {
-    if ((gdk_pointer_grab (window, TRUE,
-                           GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-                           GDK_POINTER_MOTION_MASK,
-                           NULL, NULL, activate_time) == 0))
+  if (keyboard &&
+      gdk_device_grab (keyboard, window,
+                       GDK_OWNERSHIP_WINDOW, TRUE,
+                       GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK,
+                       NULL, activate_time) != GDK_GRAB_SUCCESS)
+    return FALSE;
+
+  if (pointer &&
+      gdk_device_grab (pointer, window,
+                       GDK_OWNERSHIP_WINDOW, TRUE,
+                       GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+                       GDK_POINTER_MOTION_MASK,
+                       NULL, activate_time) != GDK_GRAB_SUCCESS)
     {
-        if (!grab_keyboard ||
-                gdk_keyboard_grab (window, TRUE,
-                                   activate_time) == 0)
-            return TRUE;
-        else
-        {
-            gdk_display_pointer_ungrab (gdk_window_get_display (window),
-                                        activate_time);
-            return FALSE;
-        }
+      if (keyboard)
+        gdk_device_ungrab (keyboard, activate_time);
+
+      return FALSE;
     }
 
-    return FALSE;
+  return TRUE;
 }
+
 
 static void
 gnc_date_edit_popup (GNCDateEdit *gde)
@@ -271,10 +283,13 @@ gnc_date_edit_popup (GNCDateEdit *gde)
     GtkWidget *toplevel;
     struct tm mtm;
     gboolean date_was_valid;
+    GdkDevice *device, *keyboard, *pointer;
 
     g_return_if_fail (GNC_IS_DATE_EDIT (gde));
 
     ENTER("gde %p", gde);
+
+    device = gtk_get_current_event_device ();
 
     /* This code is pretty much just copied from gtk_date_edit_get_date */
     date_was_valid = qof_scan_date (gtk_entry_get_text (GTK_ENTRY (gde->date_entry)),
@@ -321,11 +336,22 @@ gnc_date_edit_popup (GNCDateEdit *gde)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gde->date_button),
                                   TRUE);
 
+    if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
+    {
+        keyboard = device;
+        pointer = gdk_device_get_associated_device (device);
+    }
+    else
+    {
+        pointer = device;
+        keyboard = gdk_device_get_associated_device (device);
+    }
+
     if (!gtk_widget_has_focus (gde->calendar))
         gtk_widget_grab_focus (gde->calendar);
 
     if (!popup_grab_on_window (gtk_widget_get_window ((GTK_WIDGET(gde->cal_popup))),
-                               GDK_CURRENT_TIME, TRUE))
+                               keyboard, pointer, GDK_CURRENT_TIME))
     {
         gtk_widget_hide (gde->cal_popup);
         LEAVE("Failed to grab window");
