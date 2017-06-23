@@ -202,18 +202,23 @@ gnc_report_name( SCM report )
 gchar*
 gnc_get_default_report_font_family(void)
 {
-    GList*          top_list;
-    GtkWidget*      top_widget;
-    GtkStyle*       top_widget_style;
-    const gchar*    default_font_family;
+    GList                *top_list;
+    GtkWidget            *top_widget;
+    PangoFontDescription *font_desc;
+    GtkStyleContext      *top_widget_style_c;
+    const gchar*          default_font_family;
 
     top_list = gtk_window_list_toplevels();
     g_return_val_if_fail (top_list != NULL, NULL);
     top_widget = GTK_WIDGET(top_list->data);
     g_list_free(top_list);
-    top_widget_style = gtk_rc_get_style(top_widget);
-    default_font_family =
-        pango_font_description_get_family(top_widget_style->font_desc);
+    top_widget_style_c = gtk_widget_get_style_context (top_widget);
+    gtk_style_context_get (top_widget_style_c, gtk_widget_get_state_flags (GTK_WIDGET(top_widget)),
+                           "font", &font_desc, NULL);
+
+    default_font_family = pango_font_description_get_family (font_desc);
+
+    pango_font_description_free (font_desc);
 
     if (default_font_family == NULL)
         return g_strdup("Arial");
