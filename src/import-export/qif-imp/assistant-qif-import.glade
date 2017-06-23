@@ -1323,9 +1323,6 @@ Click "Cancel" to abort the QIF import process.</property>
       <object class="GtkBox" id="assistant-action_area2">
         <property name="can_focus">False</property>
       </object>
-      <packing>
-        <property name="has_padding">False</property>
-      </packing>
     </child>
   </object>
 </interface>
