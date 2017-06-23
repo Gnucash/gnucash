@@ -112,7 +112,7 @@ gnumeric_create_popup_menu_list (GSList *elements,
         if (name != NULL && *name != '\0')
         {
             trans = _(name);
-            item = gtk_image_menu_item_new_with_mnemonic (trans);
+            item = gtk_menu_item_new_with_mnemonic (trans);
             if (element->sensitive_filter != 0 &&
                     (element->sensitive_filter & sensitive_filter))
                 gtk_widget_set_sensitive (GTK_WIDGET (item), FALSE);
