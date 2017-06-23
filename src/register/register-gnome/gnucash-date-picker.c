@@ -207,7 +207,7 @@ gnc_date_picker_new (void)
 
     gtk_box_pack_start (GTK_BOX(date_picker), calendar, TRUE, TRUE, 0);
 
-    gtk_widget_size_request (calendar, &requisition);
+    gtk_widget_get_preferred_size (calendar, &requisition, NULL);
     allocation.x = 0;
     allocation.y = 0;
     allocation.width = requisition.width;
