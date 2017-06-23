@@ -272,7 +272,7 @@ gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass)
     icon = gtk_image_new_from_stock(GTK_STOCK_GO_DOWN,
                                     GTK_ICON_SIZE_SMALL_TOOLBAR);
     gtk_widget_show(icon);
-    gtk_widget_size_request(icon, &requisition);
+    gtk_widget_get_preferred_size(icon, &requisition, NULL);
     column = gnc_tree_view_add_text_column (view, NULL, NULL, NULL, NULL,
                                             -1, -1, NULL);
     g_object_set(G_OBJECT(column),
