@@ -395,7 +395,7 @@ static void go_option_menu_class_init(GOOptionMenuClass *class)
 
 static void go_option_menu_init(GOOptionMenu *option_menu)
 {
-    GtkBox *box;
+    GtkWidget *box;
     GtkWidget *arrow, *sep;
 
     gtk_widget_set_can_focus(GTK_WIDGET(option_menu), TRUE);
@@ -409,14 +409,14 @@ static void go_option_menu_init(GOOptionMenu *option_menu)
     option_menu->selected = NULL;
 
     option_menu->button_label = GTK_LABEL(gtk_label_new(""));
-    gtk_box_pack_start(box, GTK_WIDGET(option_menu->button_label), FALSE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(option_menu->button_label), FALSE, TRUE, 0);
 
     arrow = gtk_arrow_new(GTK_ARROW_DOWN, GTK_SHADOW_NONE);
     g_object_set(arrow, "xalign", 0.75, NULL);
-    gtk_box_pack_end(box, arrow, FALSE, FALSE, 0);
+    gtk_box_pack_end(GTK_BOX(box), arrow, FALSE, FALSE, 0);
 
     sep = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
-    gtk_box_pack_end(box, sep, FALSE, FALSE, 0);
+    gtk_box_pack_end(GTK_BOX(box), sep, FALSE, FALSE, 0);
 
     gtk_container_add(GTK_CONTAINER(option_menu), GTK_WIDGET(box));
 }
