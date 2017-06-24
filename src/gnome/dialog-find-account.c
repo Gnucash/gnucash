@@ -297,7 +297,9 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
                      G_CALLBACK(row_double_clicked), (gpointer)facc_dialog);
 
     /* Enable alternative line colors */
+#if !GTK_CHECK_VERSION(3, 14, 0)
     gtk_tree_view_set_rules_hint (GTK_TREE_VIEW(facc_dialog->view), TRUE);
+#endif
 
     /* default to 'close' button */
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);

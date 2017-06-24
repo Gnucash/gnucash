@@ -435,8 +435,9 @@ gnc_assoc_dialog_create (AssocDialog *assoc_dialog)
                       G_CALLBACK(row_selected_cb), (gpointer)assoc_dialog);
 
     /* Enable alternative line colors */
+#if !GTK_CHECK_VERSION(3, 14, 0)
     gtk_tree_view_set_rules_hint (GTK_TREE_VIEW(assoc_dialog->view), TRUE);
-
+#endif
     /* default to 'close' button */
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);
 

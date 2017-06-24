@@ -688,8 +688,9 @@ gnc_imap_dialog_create (GtkWidget *parent, ImapDialog *imap_dialog)
     gtk_tree_model_filter_set_visible_column (GTK_TREE_MODEL_FILTER(filter), FILTER);
 
     /* Enable alternative line colors */
+#if !GTK_CHECK_VERSION(3, 14, 0)
     gtk_tree_view_set_rules_hint (GTK_TREE_VIEW(imap_dialog->view), TRUE);
-
+#endif
     /* default to 'close' button */
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);
 
