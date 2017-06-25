@@ -409,7 +409,6 @@ gnc_stock_split_assistant_finish (GtkAssistant *assistant,
         if (!gnc_pricedb_add_price (pdb, price))
             gnc_error_dialog (info->window, "%s", _("Error adding price."));
 
-        gnc_price_unref (price);
     }
 
     amount = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (info->cash_edit));
