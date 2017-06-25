@@ -1683,6 +1683,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
     Account *from_account;
     gnc_numeric amount, to_amount;
     Timespec ts;
+    GDate date;
 
     g_return_if_fail (xferData != NULL);
     ENTER(" ");
@@ -1723,8 +1724,9 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
         LEAVE("invalid from amount");
         return;
     }
-
-    ts = gnc_date_edit_get_date_ts(GNC_DATE_EDIT(xferData->date_entry));
+    g_date_clear (&date, 1);
+    gnc_date_edit_get_gdate (GNC_DATE_EDIT (xferData->date_entry), &date);
+    ts = gdate_to_timespec (date);
 
     if (!gnc_commodity_equiv(xferData->from_commodity, xferData->to_commodity))
     {

@@ -699,7 +699,8 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
     gnc_suspend_gui_refresh ();
     {
         const char *memo, *num;
-        Timespec date;
+        GDate date;
+        Timespec ts;
         gnc_numeric exch = gnc_numeric_create(1, 1); //default to "one to one" rate
         GList *selected_lots = NULL;
         GtkTreeSelection *selection;
@@ -708,7 +709,9 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
         /* Obtain all our ancillary information */
         memo = gtk_entry_get_text (GTK_ENTRY (pw->memo_entry));
         num = gtk_entry_get_text (GTK_ENTRY (pw->num_entry));
-        date = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (pw->date_edit));
+        g_date_clear (&date, 1);
+        gnc_date_edit_get_gdate (GNC_DATE_EDIT (pw->date_edit), &date);
+        ts = gdate_to_timespec (date);
 
         /* Obtain the list of selected lots (documents/payments) from the dialog */
         selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(pw->docs_list_tree_view));
@@ -751,7 +754,7 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
 
         gncOwnerApplyPayment (&pw->owner, &(pw->pre_existing_txn), selected_lots,
                               pw->post_acct, pw->xfer_acct, pw->amount_tot, exch,
-                              date, memo, num, auto_pay);
+                              ts, memo, num, auto_pay);
     }
     gnc_resume_gui_refresh ();
 
@@ -843,7 +846,7 @@ gnc_payment_leave_amount_cb (GtkWidget *widget, GdkEventFocus *event,
     gnc_payment_window_check_payment (pw);
 }
 
-/* Select the list of accounts to show in the tree */
+/* Select the list of accoutns to show in the tree */
 static void
 gnc_payment_set_account_types (GncTreeViewAccount *tree)
 {
