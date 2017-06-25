@@ -433,27 +433,6 @@ gcrd_day_selected (GtkWidget *popup_window, GncCellRendererDate *cell)
 
 }
 
-static gboolean
-gcrd_grab_on_window (GdkWindow *window,
-		     guint32    activate_time)
-{
-	if ((gdk_pointer_grab (window, TRUE,
-			       GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-			       GDK_POINTER_MOTION_MASK,
-			       NULL, NULL, activate_time) == 0)) {
-		if (gdk_keyboard_grab (window, TRUE,
-			       activate_time) == 0)
-			return TRUE;
-		else {
-			gdk_pointer_ungrab (activate_time);
-			return FALSE;
-		}
-	}
-
-	return FALSE;
-}
-
-
 /* This function converts a time64 value date to separate entities */
 gboolean
 gcrd_time2dmy (time64 raw_time, gint *day, gint *month, gint *year)
@@ -513,8 +492,4 @@ gcrd_string_dmy2time (const gchar *date_string)
 	return gnc_time (NULL);
     }
 }
-
-
-
-
 

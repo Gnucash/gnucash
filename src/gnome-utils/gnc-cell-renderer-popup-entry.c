@@ -305,7 +305,7 @@ gnc_popup_get_button_width (void)
     gtk_window_move (GTK_WINDOW (window), -500, -500);
     gtk_widget_show (window);
 
-    gtk_widget_size_request (window, &req);
+    gtk_widget_get_preferred_size (window, &req, NULL);
 
     width = req.width;
 
