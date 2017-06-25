@@ -102,6 +102,7 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
     GtkTreeModel* model;
     GtkTreeIter iter;
 
+    // If the Description is longer than can be display, show it in a tooltip
     if (gtk_tree_view_get_tooltip_context (GTK_TREE_VIEW (qview), &x, &y, keyboard_mode, &model, NULL, &iter))
     {
         GtkTreeViewColumn *col;
@@ -109,7 +110,7 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
         gint col_pos, col_width;
 	gchar* desc_text = NULL;
 
-        /* Are we in keyboard tooltip mode, CTRL+F1 */
+        /* Are we in keyboard tooltip mode, displays tooltip below/above treeview CTRL+F1 */
         if (keyboard_mode == FALSE)
         {
             if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (qview), x, y, NULL, &col, NULL, NULL) == FALSE)
@@ -149,13 +150,20 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
 
             if (keyboard_mode == FALSE)
             {
+                GdkDeviceManager *device_manager;
+                GdkDevice *pointer;
                 GdkScreen *screen;
                 GtkWindow *tip_win = NULL;
-                GdkWindow *parent_window, *temp_window;
+                GdkWindow *parent_window;
                 GList *win_list, *node;
 
                 parent_window = gtk_widget_get_parent_window (GTK_WIDGET (qview));
-                temp_window = gdk_window_get_pointer (parent_window, &cur_x, &cur_y, NULL);
+
+                device_manager = gdk_display_get_device_manager (gdk_window_get_display (parent_window));
+                pointer = gdk_device_manager_get_client_pointer (device_manager);
+
+                gdk_window_get_device_position (parent_window, pointer, &cur_x, &cur_y, NULL);
+
                 gdk_window_get_origin (parent_window, &root_x, &root_y);
 
                 screen = gtk_widget_get_screen (GTK_WIDGET (qview));
@@ -181,7 +189,7 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
                     gint monitor_num;
                     gint x, y;
 
-                    gtk_widget_size_request (GTK_WIDGET (tip_win), &requisition);
+                    gtk_widget_get_preferred_size (GTK_WIDGET (tip_win), &requisition, NULL);
 
                     x = root_x + cur_x + 10;
                     y = root_y + cur_y + 10;
