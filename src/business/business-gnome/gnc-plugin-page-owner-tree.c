@@ -199,12 +199,12 @@ static GtkActionEntry gnc_plugin_page_owner_tree_actions [] =
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_invoice)
     },
     {
-        "OTVendorListingReportAction", GTK_STOCK_PRINT_PREVIEW, N_("Vendor Listing"), NULL,
+        "OTVendorListingReportAction", "document-print-preview", N_("Vendor Listing"), NULL,
         N_("Show vendor aging overview for all vendors"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_owners_report)
     },
     {
-        "OTCustomerListingReportAction", GTK_STOCK_PRINT_PREVIEW, N_("Customer Listing"), NULL,
+        "OTCustomerListingReportAction", "document-print-preview", N_("Customer Listing"), NULL,
         N_("Show customer aging overview for all customers"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_owners_report)
     },
