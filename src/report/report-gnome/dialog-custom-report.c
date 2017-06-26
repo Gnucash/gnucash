@@ -212,21 +212,21 @@ set_reports_view_and_model(CustomReportDialog *crd)
     gtk_tree_view_column_set_expand (crd->namecol, TRUE);
 
     renderer = gtk_cell_renderer_pixbuf_new();
-    g_object_set (G_OBJECT (renderer), "stock-id", GTK_STOCK_EXECUTE, NULL);
+    g_object_set (G_OBJECT (renderer), "icon-name", "system-run", NULL);
     gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (crd->reportview), -1,
             "R", renderer,
             NULL);
     crd->runcol = gtk_tree_view_get_column (GTK_TREE_VIEW (crd->reportview), VIEW_COL_RUN);
 
     renderer = gtk_cell_renderer_pixbuf_new();
-    g_object_set (G_OBJECT (renderer), "stock-id", GTK_STOCK_EDIT, NULL);
+    g_object_set (G_OBJECT (renderer), "icon-name", "accessories-text-editor", NULL);
     gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (crd->reportview), -1,
             "E", renderer,
             NULL);
     crd->editcol = gtk_tree_view_get_column (GTK_TREE_VIEW (crd->reportview), VIEW_COL_EDIT);
 
     renderer = gtk_cell_renderer_pixbuf_new();
-    g_object_set (G_OBJECT (renderer), "stock-id", GTK_STOCK_DELETE, NULL);
+    g_object_set (G_OBJECT (renderer), "icon-name", "edit-delete", NULL);
     colnum = gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (crd->reportview), -1,
              "D", renderer,
              NULL);
