@@ -210,12 +210,12 @@ You will have the opportunity to load as many files as you wish, so don't worry 
                 </child>
                 <child>
                   <object class="GtkButton" id="load_progress_pause">
-                    <property name="label">gtk-media-pause</property>
+                    <property name="label">P_ause</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="can_default">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_stock">True</property>
+                    <property name="use_underline">True</property>
                     <signal name="clicked" handler="gnc_ui_qif_import_load_progress_pause_cb" swapped="no"/>
                   </object>
                   <packing>
@@ -1098,12 +1098,12 @@ If you don't see your exchange listed, or none of the available choices are appr
                 </child>
                 <child>
                   <object class="GtkButton" id="convert_progress_pause">
-                    <property name="label">gtk-media-pause</property>
+                    <property name="label">P_ause</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="can_default">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_stock">True</property>
+                    <property name="use_underline">True</property>
                     <signal name="clicked" handler="gnc_ui_qif_import_convert_progress_pause_cb" swapped="no"/>
                   </object>
                   <packing>

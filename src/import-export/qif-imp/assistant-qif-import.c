@@ -1687,7 +1687,7 @@ gnc_ui_qif_import_load_progress_pause_cb(GtkButton * button,
     else
     {
         gtk_button_set_use_underline(button, FALSE);
-        gtk_button_set_label(button, "gtk-media-pause");
+        gtk_button_set_label(button, _("P_ause"));
     }
 }
 
@@ -2805,7 +2805,7 @@ gnc_ui_qif_import_convert_progress_pause_cb(GtkButton * button,
     else
     {
         gtk_button_set_use_underline(button, FALSE);
-        gtk_button_set_label(button, "gtk-media-pause");
+        gtk_button_set_label(button, _("P_ause"));
     }
 }
 
