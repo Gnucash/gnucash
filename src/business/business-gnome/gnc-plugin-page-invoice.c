@@ -153,7 +153,7 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
         G_CALLBACK (gnc_plugin_page_invoice_cmd_enter)
     },
     {
-        "CancelEntryAction", GTK_STOCK_CANCEL, N_("_Cancel"), NULL,
+        "CancelEntryAction", "process-stop", N_("_Cancel"), NULL,
         N_("Cancel the current entry"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_cancel)
     },

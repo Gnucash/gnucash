@@ -2183,7 +2183,7 @@ static GtkActionEntry recnWindow2_actions [] =
         G_CALLBACK(recnPostponeCB)
     },
     {
-        "RecnCancelAction", GTK_STOCK_CANCEL, N_("_Cancel"), NULL,
+        "RecnCancelAction", "process-stop", N_("_Cancel"), NULL,
         N_("Cancel the reconciliation of this account"),
         G_CALLBACK(recnCancelCB)
     },
