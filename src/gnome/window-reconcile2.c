@@ -2173,7 +2173,7 @@ static GtkActionEntry recnWindow2_actions [] =
         G_CALLBACK (gnc_ui_reconcile_window_change_cb)
     },
     {
-        "RecnFinishAction", GTK_STOCK_YES, N_("_Finish"), "<primary>w",
+        "RecnFinishAction", "system-run", N_("_Finish"), "<primary>w",
         N_("Finish the reconciliation of this account"),
         G_CALLBACK(recnFinishCB)
     },
@@ -2230,7 +2230,7 @@ static GtkActionEntry recnWindow2_actions [] =
         G_CALLBACK(gnc_ui_reconcile_window_delete_cb)
     },
     {
-        "TransRecAction", GTK_STOCK_APPLY, N_("_Reconcile Selection"), "<primary>r",
+        "TransRecAction", "emblem-default", N_("_Reconcile Selection"), "<primary>r",
         N_("Reconcile the selected transactions"),
         G_CALLBACK(gnc_ui_reconcile_window_rec_cb)
     },

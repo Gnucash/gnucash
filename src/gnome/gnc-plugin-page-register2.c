@@ -340,12 +340,12 @@ static GtkActionEntry gnc_plugin_page_register2_actions [] =
         G_CALLBACK (gnc_plugin_page_register2_cmd_transfer)
     },
     {
-        "ActionsReconcileAction", GTK_STOCK_INDEX, N_("_Reconcile..."), NULL,
+        "ActionsReconcileAction", "edit-select-all", N_("_Reconcile..."), NULL,
         N_("Reconcile the selected account"),
         G_CALLBACK (gnc_plugin_page_register2_cmd_reconcile)
     },
     {
-        "ActionsAutoClearAction", GTK_STOCK_INDEX, N_("_Auto-clear..."), NULL,
+        "ActionsAutoClearAction", "edit-select-all", N_("_Auto-clear..."), NULL,
         N_("Automatically clear individual transactions, so as to reach a certain cleared amount"),
         G_CALLBACK (gnc_plugin_page_register2_cmd_autoclear)
     },
