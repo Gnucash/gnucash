@@ -133,7 +133,7 @@ static GtkActionEntry gnc_plugin_actions [] =
         G_CALLBACK (gnc_main_window_cmd_file_revert)
     },
     {
-        "FileExportAccountsAction", GTK_STOCK_CONVERT,
+        "FileExportAccountsAction", "go-next",
         N_("Export _Accounts"), NULL,
         N_("Export the account hierarchy to a new GnuCash datafile"),
         G_CALLBACK (gnc_main_window_cmd_file_export_accounts)

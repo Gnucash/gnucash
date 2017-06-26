@@ -1162,7 +1162,7 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
             report_saveas_str, G_CALLBACK(gnc_plugin_page_report_save_as_cb)
         },
         {
-            "ReportExportAction", GTK_STOCK_CONVERT, N_("Export _Report"), NULL,
+            "ReportExportAction", "go-next", N_("Export _Report"), NULL,
             N_("Export HTML-formatted report to file"),
             G_CALLBACK(gnc_plugin_page_report_export_cb)
         },

@@ -114,7 +114,7 @@ gnc_file_dialog (const char * title,
     case GNC_FILE_DIALOG_EXPORT:
         action = GTK_FILE_CHOOSER_ACTION_SAVE;
         okbutton = _("_Export");
-        ok_icon = GTK_STOCK_CONVERT;
+        ok_icon = "go-next";
         if (title == NULL)
             title = _("Export");
         break;

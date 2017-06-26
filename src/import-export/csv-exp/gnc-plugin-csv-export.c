@@ -51,17 +51,17 @@ static void gnc_plugin_csv_export_register_cmd (GtkAction *action, GncMainWindow
 static GtkActionEntry gnc_plugin_actions [] =
 {
     {
-        "CsvExportTreeAction", GTK_STOCK_CONVERT, N_("Export Account T_ree to CSV..."), NULL,
+        "CsvExportTreeAction", "go-next", N_("Export Account T_ree to CSV..."), NULL,
         N_("Export the Account Tree to a CSV file"),
         G_CALLBACK (gnc_plugin_csv_export_tree_cmd)
     },
     {
-        "CsvExportTransAction", GTK_STOCK_CONVERT, N_("Export _Transactions to CSV..."), NULL,
+        "CsvExportTransAction", "go-next", N_("Export _Transactions to CSV..."), NULL,
         N_("Export the Transactions to a CSV file"),
         G_CALLBACK (gnc_plugin_csv_export_trans_cmd)
     },
     {
-        "CsvExportRegisterAction", GTK_STOCK_CONVERT, N_("Export _Active Register to CSV..."), NULL,
+        "CsvExportRegisterAction", "go-next", N_("Export _Active Register to CSV..."), NULL,
         N_("Export the Active Register to a CSV file"),
         G_CALLBACK (gnc_plugin_csv_export_register_cmd)
     },
