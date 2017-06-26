@@ -187,10 +187,10 @@ fill_model (FindAccountDialog *facc_dialog, Account *account)
 
     gtk_list_store_set (GTK_LIST_STORE(model), &iter,
                         ACC_FULL_NAME, fullname, ACCOUNT, account,
-                        PLACE_HOLDER, (xaccAccountGetPlaceholder (account) == TRUE ? GTK_STOCK_YES : NULL),
-                        HIDDEN, (xaccAccountGetHidden (account) == TRUE ? GTK_STOCK_YES : NULL),
-                        NOT_USED, (splits == 0 ? GTK_STOCK_YES : NULL),
-                        BAL_ZERO, (gnc_numeric_zero_p (total) == TRUE ? GTK_STOCK_YES : NULL), -1);
+                        PLACE_HOLDER, (xaccAccountGetPlaceholder (account) == TRUE ? "emblem-default" : NULL),
+                        HIDDEN, (xaccAccountGetHidden (account) == TRUE ? "emblem-default" : NULL),
+                        NOT_USED, (splits == 0 ? "emblem-default" : NULL),
+                        BAL_ZERO, (gnc_numeric_zero_p (total) == TRUE ? "emblem-default" : NULL), -1);
     g_free (fullname);
 }
 
@@ -316,7 +316,7 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
     cr = gtk_cell_renderer_pixbuf_new();
     gtk_tree_view_column_pack_start (tree_column, cr, TRUE);
     // connect 'active' and set 'xalign' property of the cell renderer
-    gtk_tree_view_column_set_attributes (tree_column, cr, "stock-id", PLACE_HOLDER, NULL);
+    gtk_tree_view_column_set_attributes (tree_column, cr, "icon-name", PLACE_HOLDER, NULL);
     gtk_cell_renderer_set_alignment (cr, 0.5, 0.5);
 
     tree_column = gtk_tree_view_column_new();
@@ -327,7 +327,7 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
     cr = gtk_cell_renderer_pixbuf_new();
     gtk_tree_view_column_pack_start (tree_column, cr, TRUE);
     // connect 'active' and set 'xalign' property of the cell renderer
-    gtk_tree_view_column_set_attributes (tree_column, cr, "stock-id", HIDDEN, NULL);
+    gtk_tree_view_column_set_attributes (tree_column, cr, "icon-name", HIDDEN, NULL);
     gtk_cell_renderer_set_alignment (cr, 0.5, 0.5);
 
     tree_column = gtk_tree_view_column_new();
@@ -338,7 +338,7 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
     cr = gtk_cell_renderer_pixbuf_new();
     gtk_tree_view_column_pack_start (tree_column, cr, TRUE);
     // connect 'active' and set 'xalign' property of the cell renderer
-    gtk_tree_view_column_set_attributes (tree_column, cr, "stock-id", NOT_USED, NULL);
+    gtk_tree_view_column_set_attributes (tree_column, cr, "icon-name", NOT_USED, NULL);
     gtk_cell_renderer_set_alignment (cr, 0.5, 0.5);
 
     tree_column = gtk_tree_view_column_new();
@@ -349,7 +349,7 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
     cr = gtk_cell_renderer_pixbuf_new();
     gtk_tree_view_column_pack_start (tree_column, cr, TRUE);
     // connect 'active' and set 'xalign' property of the cell renderer
-    gtk_tree_view_column_set_attributes (tree_column, cr, "stock-id", BAL_ZERO, NULL);
+    gtk_tree_view_column_set_attributes (tree_column, cr, "icon-name", BAL_ZERO, NULL);
     gtk_cell_renderer_set_alignment (cr, 0.5, 0.5);
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, facc_dialog);

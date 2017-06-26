@@ -269,7 +269,7 @@ gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass)
     /* Create the last column which contains the column selection
      * widget.  gnc_tree_view_add_text_column will do most of the
      * work. */
-    icon = gtk_image_new_from_stock(GTK_STOCK_GO_DOWN,
+    icon = gtk_image_new_from_icon_name ("go-down",
                                     GTK_ICON_SIZE_SMALL_TOOLBAR);
     gtk_widget_show(icon);
     gtk_widget_get_preferred_size(icon, &requisition, NULL);

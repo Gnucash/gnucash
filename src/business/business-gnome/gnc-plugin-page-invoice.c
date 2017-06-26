@@ -104,24 +104,24 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
         G_CALLBACK (gnc_plugin_page_invoice_cmd_new_account)
     },
     {
-        "FilePrintAction", GTK_STOCK_PRINT, N_("Print Invoice"), "<primary>p",
+        "FilePrintAction", "document-print", N_("Print Invoice"), "<primary>p",
         N_("Make a printable invoice"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_print)
     },
 
     /* Edit menu */
     {
-        "EditCutAction", GTK_STOCK_CUT, N_("_Cut"), NULL,
+        "EditCutAction", "edit-cut", N_("_Cut"), NULL,
         NULL,
         G_CALLBACK (gnc_plugin_page_invoice_cmd_cut)
     },
     {
-        "EditCopyAction", GTK_STOCK_COPY, N_("Copy"), NULL,
+        "EditCopyAction", "edit-copy", N_("Copy"), NULL,
         NULL,
         G_CALLBACK (gnc_plugin_page_invoice_cmd_copy)
     },
     {
-        "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), NULL,
+        "EditPasteAction", "edit-paste", N_("_Paste"), NULL,
         NULL,
         G_CALLBACK (gnc_plugin_page_invoice_cmd_paste)
     },
@@ -148,7 +148,7 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
 
     /* Actions menu */
     {
-        "RecordEntryAction", GTK_STOCK_ADD, N_("_Enter"), NULL,
+        "RecordEntryAction", "list-add", N_("_Enter"), NULL,
         N_("Record the current entry"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_enter)
     },
@@ -158,27 +158,27 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
         G_CALLBACK (gnc_plugin_page_invoice_cmd_cancel)
     },
     {
-        "DeleteEntryAction", GTK_STOCK_DELETE, N_("_Delete"), NULL,
+        "DeleteEntryAction", "edit-delete", N_("_Delete"), NULL,
         N_("Delete the current entry"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_delete)
     },
     {
-        "BlankEntryAction", GTK_STOCK_GOTO_BOTTOM, N_("_Blank"), NULL,
+        "BlankEntryAction", "go-bottom", N_("_Blank"), NULL,
         N_("Move to the blank entry at the bottom of the Invoice"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_blank)
     },
     {
-        "DuplicateEntryAction", GTK_STOCK_COPY, N_("Dup_licate Entry"), NULL,
+        "DuplicateEntryAction", "edit-copy", N_("Dup_licate Entry"), NULL,
         N_("Make a copy of the current entry"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_duplicateEntry)
     },
     {
-        "EntryUpAction", GTK_STOCK_GO_UP, N_("Move Entry _Up"), NULL,
+        "EntryUpAction", "go-up", N_("Move Entry _Up"), NULL,
         N_("Move the current entry one row upwards"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_entryUp)
     },
     {
-        "EntryDownAction", GTK_STOCK_GO_DOWN, N_("Move Entry Do_wn"), NULL,
+        "EntryDownAction", "go-down", N_("Move Entry Do_wn"), NULL,
         N_("Move the current entry one row downwards"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_entryDown)
     },

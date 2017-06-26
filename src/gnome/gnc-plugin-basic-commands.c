@@ -108,27 +108,27 @@ static GtkActionEntry gnc_plugin_actions [] =
     /* File menu */
 
     {
-        "FileNewAction", GTK_STOCK_NEW, N_("New _File"), "<primary>n",
+        "FileNewAction", "document-new", N_("New _File"), "<primary>n",
         N_("Create a new file"),
         G_CALLBACK (gnc_main_window_cmd_file_new)
     },
     {
-        "FileOpenAction", GTK_STOCK_OPEN, N_("_Open..."), "<primary>o",
+        "FileOpenAction", "document-open", N_("_Open..."), "<primary>o",
         N_("Open an existing GnuCash file"),
         G_CALLBACK (gnc_main_window_cmd_file_open)
     },
     {
-        "FileSaveAction", GTK_STOCK_SAVE, N_("_Save"), "<primary>s",
+        "FileSaveAction", "document-save", N_("_Save"), "<primary>s",
         N_("Save the current file"),
         G_CALLBACK (gnc_main_window_cmd_file_save)
     },
     {
-        "FileSaveAsAction", GTK_STOCK_SAVE_AS, N_("Save _As..."), "<shift><primary>s",
+        "FileSaveAsAction", "document-save-as", N_("Save _As..."), "<shift><primary>s",
         N_("Save this file with a different name"),
         G_CALLBACK (gnc_main_window_cmd_file_save_as)
     },
     {
-        "FileRevertAction", GTK_STOCK_REVERT_TO_SAVED, N_("Re_vert"), NULL,
+        "FileRevertAction", "document-revert", N_("Re_vert"), NULL,
         N_("Reload the current database, reverting all unsaved changes"),
         G_CALLBACK (gnc_main_window_cmd_file_revert)
     },
@@ -142,7 +142,7 @@ static GtkActionEntry gnc_plugin_actions [] =
     /* Edit menu */
 
     {
-        "EditFindTransactionsAction", GTK_STOCK_FIND, N_("_Find..."), "<primary>f",
+        "EditFindTransactionsAction", "edit-find", N_("_Find..."), "<primary>f",
         N_("Find transactions with a search"),
         G_CALLBACK (gnc_main_window_cmd_tools_find_transactions)
     },

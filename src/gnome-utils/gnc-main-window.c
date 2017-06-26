@@ -273,29 +273,29 @@ static GtkActionEntry gnc_menu_actions [] =
     { "FileImportAction", NULL, N_("_Import"), NULL, NULL, NULL },
     { "FileExportAction", NULL, N_("_Export"), NULL, NULL, NULL },
     {
-        "FilePrintAction", GTK_STOCK_PRINT, N_("_Print..."), "<primary>p",
+        "FilePrintAction", "document-print", N_("_Print..."), "<primary>p",
         N_("Print the currently active page"), NULL
     },
 #ifndef GTK_STOCK_PAGE_SETUP
 #    define GTK_STOCK_PAGE_SETUP NULL
 #endif
     {
-        "FilePageSetupAction", GTK_STOCK_PAGE_SETUP, N_("Pa_ge Setup..."), "<primary><shift>p",
+        "FilePageSetupAction", "document-page-setup", N_("Pa_ge Setup..."), "<primary><shift>p",
         N_("Specify the page size and orientation for printing"),
         G_CALLBACK (gnc_main_window_cmd_page_setup)
     },
     {
-        "FilePropertiesAction", GTK_STOCK_PROPERTIES, N_("Proper_ties"), "<Alt>Return",
+        "FilePropertiesAction", "document-properties", N_("Proper_ties"), "<Alt>Return",
         N_("Edit the properties of the current file"),
         G_CALLBACK (gnc_main_window_cmd_file_properties)
     },
     {
-        "FileCloseAction", GTK_STOCK_CLOSE, N_("_Close"), NULL,
+        "FileCloseAction", "window-close", N_("_Close"), NULL,
         N_("Close the currently active page"),
         G_CALLBACK (gnc_main_window_cmd_file_close)
     },
     {
-        "FileQuitAction", GTK_STOCK_QUIT, N_("_Quit"), NULL,
+        "FileQuitAction", "application-exit", N_("_Quit"), NULL,
         N_("Quit this application"),
         G_CALLBACK (gnc_main_window_cmd_file_quit)
     },
@@ -303,22 +303,22 @@ static GtkActionEntry gnc_menu_actions [] =
     /* Edit menu */
 
     {
-        "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), NULL,
+        "EditCutAction", "edit-cut", N_("Cu_t"), NULL,
         N_("Cut the current selection and copy it to clipboard"),
         G_CALLBACK (gnc_main_window_cmd_edit_cut)
     },
     {
-        "EditCopyAction", GTK_STOCK_COPY, N_("_Copy"), NULL,
+        "EditCopyAction", "edit-copy", N_("_Copy"), NULL,
         N_("Copy the current selection to clipboard"),
         G_CALLBACK (gnc_main_window_cmd_edit_copy)
     },
     {
-        "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), NULL,
+        "EditPasteAction", "edit-paste", N_("_Paste"), NULL,
         N_("Paste the clipboard content at the cursor position"),
         G_CALLBACK (gnc_main_window_cmd_edit_paste)
     },
     {
-        "EditPreferencesAction", GTK_STOCK_PREFERENCES, N_("Pr_eferences"), NULL,
+        "EditPreferencesAction", "preferences-system", N_("Pr_eferences"), NULL,
         N_("Edit the global preferences of GnuCash"),
         G_CALLBACK (gnc_main_window_cmd_edit_preferences)
     },
@@ -334,7 +334,7 @@ static GtkActionEntry gnc_menu_actions [] =
         N_("Select the account types that should be displayed."), NULL
     },
     {
-        "ViewRefreshAction", GTK_STOCK_REFRESH, N_("_Refresh"), "<primary>r",
+        "ViewRefreshAction", "view-refresh", N_("_Refresh"), "<primary>r",
         N_("Refresh this window"),
         G_CALLBACK (gnc_main_window_cmd_view_refresh)
     },
@@ -369,17 +369,17 @@ static GtkActionEntry gnc_menu_actions [] =
     /* Help menu */
 
     {
-        "HelpTutorialAction", GTK_STOCK_HELP, N_("Tutorial and Concepts _Guide"), NULL,
+        "HelpTutorialAction", "help-browser", N_("Tutorial and Concepts _Guide"), NULL,
         N_("Open the GnuCash Tutorial"),
         G_CALLBACK (gnc_main_window_cmd_help_tutorial)
     },
     {
-        "HelpContentsAction", GTK_STOCK_HELP, N_("_Contents"), "F1",
+        "HelpContentsAction", "help-browser", N_("_Contents"), "F1",
         N_("Open the GnuCash Help"),
         G_CALLBACK (gnc_main_window_cmd_help_contents)
     },
     {
-        "HelpAboutAction", GTK_STOCK_ABOUT, N_("_About"), NULL,
+        "HelpAboutAction", "help-about", N_("_About"), NULL,
         N_("About GnuCash"),
         G_CALLBACK (gnc_main_window_cmd_help_about)
     },
@@ -2973,7 +2973,7 @@ gnc_main_window_open_page (GncMainWindow *window,
 
         close_button = gtk_button_new();
         gtk_button_set_relief(GTK_BUTTON(close_button), GTK_RELIEF_NONE);
-        close_image = gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
+        close_image = gtk_image_new_from_icon_name ("window-close", GTK_ICON_SIZE_MENU);
         gtk_widget_show(close_image);
         gtk_widget_get_preferred_size (close_image, &requisition, NULL);
         gtk_widget_set_size_request(close_button, requisition.width + 4,

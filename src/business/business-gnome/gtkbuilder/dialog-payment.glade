@@ -87,7 +87,7 @@
             <child>
               <object class="GtkImage" id="payment_warning">
                 <property name="can_focus">False</property>
-                <property name="stock">gtk-dialog-warning</property>
+                <property name="icon_name">dialog-warning</property>
               </object>
               <packing>
                 <property name="expand">False</property>

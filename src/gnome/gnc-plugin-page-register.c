@@ -225,24 +225,24 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
     /* File menu */
 
     {
-        "FilePrintAction", GTK_STOCK_PRINT, N_("_Print Checks..."), "<primary>p", NULL,
+        "FilePrintAction", "document-print", N_("_Print Checks..."), "<primary>p", NULL,
         G_CALLBACK (gnc_plugin_page_register_cmd_print_check)
     },
 
     /* Edit menu */
 
     {
-        "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), NULL,
+        "EditCutAction", "edit-cut", N_("Cu_t"), NULL,
         N_("Cut the current selection and copy it to clipboard"),
         G_CALLBACK (gnc_plugin_page_register_cmd_cut)
     },
     {
-        "EditCopyAction", GTK_STOCK_COPY, N_("_Copy"), NULL,
+        "EditCopyAction", "edit-copy", N_("_Copy"), NULL,
         N_("Copy the current selection to clipboard"),
         G_CALLBACK (gnc_plugin_page_register_cmd_copy)
     },
     {
-        "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), NULL,
+        "EditPasteAction", "edit-paste", N_("_Paste"), NULL,
         N_("Paste the clipboard content at the cursor position"),
         G_CALLBACK (gnc_plugin_page_register_cmd_paste)
     },
@@ -252,12 +252,12 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
         G_CALLBACK (gnc_plugin_page_register_cmd_edit_account)
     },
     {
-        "EditFindAccountAction", GTK_STOCK_FIND, N_("F_ind Account"), "<primary>i",
+        "EditFindAccountAction", "edit-find", N_("F_ind Account"), "<primary>i",
         N_("Find an account"),
         G_CALLBACK (gnc_plugin_page_register_cmd_find_account)
     },
     {
-        "EditFindTransactionsAction", GTK_STOCK_FIND, N_("_Find..."), "<primary>f",
+        "EditFindTransactionsAction", "edit-find", N_("_Find..."), "<primary>f",
         N_("Find transactions with a search"),
         G_CALLBACK (gnc_plugin_page_register_cmd_find_transactions)
     },
@@ -265,37 +265,37 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
     /* Transaction menu */
 
     {
-        "CutTransactionAction", GTK_STOCK_CUT, CUT_TRANSACTION_LABEL, "",
+        "CutTransactionAction", "edit-cut", CUT_TRANSACTION_LABEL, "",
         CUT_TRANSACTION_TIP,
         G_CALLBACK (gnc_plugin_page_register_cmd_cut_transaction)
     },
     {
-        "CopyTransactionAction", GTK_STOCK_COPY, COPY_TRANSACTION_LABEL, "",
+        "CopyTransactionAction", "edit-copy", COPY_TRANSACTION_LABEL, "",
         COPY_TRANSACTION_TIP,
         G_CALLBACK (gnc_plugin_page_register_cmd_copy_transaction)
     },
     {
-        "PasteTransactionAction", GTK_STOCK_PASTE, PASTE_TRANSACTION_LABEL, "",
+        "PasteTransactionAction", "edit-paste", PASTE_TRANSACTION_LABEL, "",
         PASTE_TRANSACTION_TIP,
         G_CALLBACK (gnc_plugin_page_register_cmd_paste_transaction)
     },
     {
-        "DuplicateTransactionAction", GTK_STOCK_COPY, DUPLICATE_TRANSACTION_LABEL, "",
+        "DuplicateTransactionAction", "edit-copy", DUPLICATE_TRANSACTION_LABEL, "",
         DUPLICATE_TRANSACTION_TIP,
         G_CALLBACK (gnc_plugin_page_register_cmd_duplicate_transaction)
     },
     {
-        "DeleteTransactionAction", GTK_STOCK_DELETE, DELETE_TRANSACTION_LABEL, NULL,
+        "DeleteTransactionAction", "edit-delete", DELETE_TRANSACTION_LABEL, NULL,
         DELETE_TRANSACTION_TIP,
         G_CALLBACK (gnc_plugin_page_register_cmd_delete_transaction)
     },
     {
-        "RemoveTransactionSplitsAction", GTK_STOCK_CLEAR, N_("Remo_ve Other Splits"), NULL,
+        "RemoveTransactionSplitsAction", "edit-clear", N_("Remo_ve Other Splits"), NULL,
         N_("Remove all splits in the current transaction"),
         G_CALLBACK (gnc_plugin_page_register_cmd_reinitialize_transaction)
     },
     {
-        "RecordTransactionAction", GTK_STOCK_ADD, N_("_Enter Transaction"), NULL,
+        "RecordTransactionAction", "list-add", N_("_Enter Transaction"), NULL,
         N_("Record the current transaction"),
         G_CALLBACK (gnc_plugin_page_register_cmd_enter_transaction)
     },
@@ -371,7 +371,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
         G_CALLBACK (gnc_plugin_page_register_cmd_lots)
     },
     {
-        "BlankTransactionAction", GTK_STOCK_GOTO_BOTTOM, N_("_Blank Transaction"), "<primary>Page_Down",
+        "BlankTransactionAction", "go-bottom", N_("_Blank Transaction"), "<primary>Page_Down",
         N_("Move to the blank transaction at the bottom of the register"),
         G_CALLBACK (gnc_plugin_page_register_cmd_blank_transaction)
     },

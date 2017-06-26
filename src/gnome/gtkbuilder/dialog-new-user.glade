@@ -72,7 +72,7 @@
               <object class="GtkImage" id="image">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="stock">gtk-home</property>
+                <property name="icon_name">go-home</property>
                 <property name="icon_size">6</property>
               </object>
               <packing>
@@ -201,7 +201,7 @@
               <object class="GtkImage" id="image1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="stock">gtk-home</property>
+                <property name="icon_name">go-home</property>
                 <property name="icon_size">6</property>
               </object>
               <packing>

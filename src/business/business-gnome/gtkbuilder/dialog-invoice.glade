@@ -1343,7 +1343,7 @@
                   <object class="GtkImage" id="q_pixmap">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="stock">gtk-dialog-question</property>
+                    <property name="icon_name">dialog-question</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>

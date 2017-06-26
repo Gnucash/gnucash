@@ -141,12 +141,12 @@ static GtkActionEntry gnc_plugin_page_budget_actions [] =
         G_CALLBACK (gnc_plugin_page_budget_cmd_delete_budget)
     },
     {
-        "OptionsBudgetAction", GTK_STOCK_PROPERTIES, N_("Budget Options"),
+        "OptionsBudgetAction", "document-properties", N_("Budget Options"),
         NULL, N_("Edit this budget's options"),
         G_CALLBACK (gnc_plugin_page_budget_cmd_view_options)
     },
     {
-        "EstimateBudgetAction", GTK_STOCK_EXECUTE, N_("Estimate Budget"),
+        "EstimateBudgetAction", "system-run", N_("Estimate Budget"),
         NULL,
         N_("Estimate a budget value for the selected accounts from past transactions"),
         G_CALLBACK (gnc_plugin_page_budget_cmd_estimate_budget)

@@ -225,12 +225,12 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_delete_account)
     },
     {
-        "EditFindAccountAction", GTK_STOCK_FIND, N_("F_ind Account"), "<primary>i",
+        "EditFindAccountAction", "edit-find", N_("F_ind Account"), "<primary>i",
         N_("Find an account"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_find_account)
     },
     {
-        "EditFindAccountPopupAction", GTK_STOCK_FIND, N_("F_ind Account"), "<primary>i",
+        "EditFindAccountPopupAction", "edit-find", N_("F_ind Account"), "<primary>i",
         N_("Find an account"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_find_account_popup)
     },

@@ -1145,11 +1145,11 @@ enum
 static GnumericPopupMenuElement const popup_elements[] =
 {
     {
-        N_("Merge with column on _left"), GTK_STOCK_REMOVE,
+        N_("Merge with column on _left"), "list-remove",
         0, 1 << CONTEXT_STF_IMPORT_MERGE_LEFT, CONTEXT_STF_IMPORT_MERGE_LEFT
     },
     {
-        N_("Merge with column on _right"), GTK_STOCK_REMOVE,
+        N_("Merge with column on _right"), "list-remove",
         0, 1 << CONTEXT_STF_IMPORT_MERGE_RIGHT, CONTEXT_STF_IMPORT_MERGE_RIGHT
     },
     { "", nullptr, 0, 0, 0 },
@@ -1159,11 +1159,11 @@ static GnumericPopupMenuElement const popup_elements[] =
     },
     { "", nullptr, 0, 0, 0 },
     {
-        N_("_Widen this column"), GTK_STOCK_GO_FORWARD,
+        N_("_Widen this column"), "go-next",
         0, 1 << CONTEXT_STF_IMPORT_WIDEN, CONTEXT_STF_IMPORT_WIDEN
     },
     {
-        N_("_Narrow this column"), GTK_STOCK_GO_BACK,
+        N_("_Narrow this column"), "go-previous",
         0, 1 << CONTEXT_STF_IMPORT_NARROW, CONTEXT_STF_IMPORT_NARROW
     },
     { nullptr, nullptr, 0, 0, 0 },
@@ -1333,7 +1333,7 @@ CsvImpTransAssist::preview_row_fill_state_cells (GtkListStore *store, GtkTreeIte
         fcolor = "black";
         bcolor = "pink";
         c_err_msg = err_msg.c_str();
-        icon_name = GTK_STOCK_DIALOG_ERROR;
+        icon_name = "dialog-error";
     }
     gtk_list_store_set (store, iter,
             PREV_COL_FCOLOR, fcolor,

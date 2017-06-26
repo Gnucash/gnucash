@@ -656,7 +656,7 @@ verify_children_compatible (AccountWindow *aw)
 
     gtk_box_pack_start (
         GTK_BOX (hbox),
-        gtk_image_new_from_stock (GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_DIALOG),
+        gtk_image_new_from_icon_name ("dialog-information", GTK_ICON_SIZE_DIALOG),
         FALSE, FALSE, 0);
 
     /* primary label */

@@ -2178,7 +2178,7 @@ static GtkActionEntry recnWindow2_actions [] =
         G_CALLBACK(recnFinishCB)
     },
     {
-        "RecnPostponeAction", GTK_STOCK_GO_BACK, N_("_Postpone"), "<primary>p",
+        "RecnPostponeAction", "go-previous", N_("_Postpone"), "<primary>p",
         N_("Postpone the reconciliation of this account"),
         G_CALLBACK(recnPostponeCB)
     },
@@ -2191,7 +2191,7 @@ static GtkActionEntry recnWindow2_actions [] =
     /* Account menu */
 
     {
-        "AccountOpenAccountAction", GTK_STOCK_JUMP_TO, N_("_Open Account"), NULL,
+        "AccountOpenAccountAction", "go-jump", N_("_Open Account"), NULL,
         N_("Open the account"),
         G_CALLBACK(gnc_recn_open_cb)
     },
@@ -2215,17 +2215,17 @@ static GtkActionEntry recnWindow2_actions [] =
     /* Transaction menu */
 
     {
-        "TransBalanceAction", GTK_STOCK_NEW, N_("_Balance"), "<primary>b",
+        "TransBalanceAction", "document-new", N_("_Balance"), "<primary>b",
         N_("Add a new balancing entry to the account"),
         G_CALLBACK(gnc_ui_reconcile_window_balance_cb)
     },
     {
-        "TransEditAction", GTK_STOCK_PROPERTIES, N_("_Edit"),  "<primary>e",
+        "TransEditAction", "document-properties", N_("_Edit"),  "<primary>e",
         N_("Edit the current transaction"),
         G_CALLBACK(gnc_ui_reconcile_window_edit_cb)
     },
     {
-        "TransDeleteAction", GTK_STOCK_DELETE, N_("_Delete"),  "<primary>d",
+        "TransDeleteAction", "edit-delete", N_("_Delete"),  "<primary>d",
         N_("Delete the selected transaction"),
         G_CALLBACK(gnc_ui_reconcile_window_delete_cb)
     },
@@ -2235,7 +2235,7 @@ static GtkActionEntry recnWindow2_actions [] =
         G_CALLBACK(gnc_ui_reconcile_window_rec_cb)
     },
     {
-        "TransUnRecAction", GTK_STOCK_CLEAR, N_("_Unreconcile Selection"), "<primary>u",
+        "TransUnRecAction", "edit-clear", N_("_Unreconcile Selection"), "<primary>u",
         N_("Unreconcile the selected transactions"),
         G_CALLBACK(gnc_ui_reconcile_window_unrec_cb)
     },
