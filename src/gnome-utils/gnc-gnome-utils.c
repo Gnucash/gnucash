@@ -747,7 +747,7 @@ gnc_gui_init(void)
     /* Load css configuration file */
     gnc_add_css_file ();
 
-    gnc_load_stock_icons();
+    gnc_load_app_icons();
     gnc_totd_dialog(GTK_WINDOW(main_window), TRUE);
 
     LEAVE ("");

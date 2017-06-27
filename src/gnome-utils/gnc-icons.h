@@ -1,5 +1,5 @@
 /*
- * gnc-icons.h -- Functions to create a GtkIconFactory for GnuCash
+ * gnc-icons.h -- Functions to add icons for GnuCash to use
  * Copyright (C) 2003 Jan Arne Petersen
  * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
  */
@@ -29,34 +29,34 @@
 
 G_BEGIN_DECLS
 
-#define GNC_STOCK_ACCOUNT "gnc-account"
-#define GNC_STOCK_ACCOUNT_REPORT "gnc-account-report"
-#define GNC_STOCK_DELETE_ACCOUNT "gnc-delete-account"
-#define GNC_STOCK_EDIT_ACCOUNT "gnc-edit-account"
-#define GNC_STOCK_NEW_ACCOUNT "gnc-new-account"
-#define GNC_STOCK_OPEN_ACCOUNT "gnc-open-account"
-#define GNC_STOCK_SPLIT_TRANS "gnc-split-transaction"
-#define GNC_STOCK_SCHEDULE "gnc-schedule-new"
-#define GNC_STOCK_TRANSFER "gnc-transfer"
-#define GNC_STOCK_JUMP_TO "gnc-jump-to"
-#define GNC_STOCK_INVOICE "gnc-invoice-post"
-#define GNC_STOCK_INVOICE_POST "gnc-invoice-post"
-#define GNC_STOCK_INVOICE_UNPOST "gnc-invoice-unpost"
-#define GNC_STOCK_INVOICE_PAY "gnc-invoice-pay"
-#define GNC_STOCK_INVOICE_NEW "gnc-invoice-new"
-#define GNC_STOCK_INVOICE_EDIT "gnc-invoice-edit"
-#define GNC_STOCK_INVOICE_DUPLICATE "gnc-invoice-duplicate"
-#define GNC_STOCK_PDF_EXPORT "gnc-pdf-export"
+#define GNC_ICON_ACCOUNT "gnc-account"
+#define GNC_ICON_ACCOUNT_REPORT "gnc-account-report"
+#define GNC_ICON_DELETE_ACCOUNT "gnc-account-delete"
+#define GNC_ICON_EDIT_ACCOUNT "gnc-account-edit"
+#define GNC_ICON_NEW_ACCOUNT "gnc-account-new"
+#define GNC_ICON_OPEN_ACCOUNT "gnc-account-open"
+#define GNC_ICON_SPLIT_TRANS "gnc-split-trans"
+#define GNC_ICON_SCHEDULE "gnc-sx-new"
+#define GNC_ICON_TRANSFER "gnc-transfer"
+#define GNC_ICON_JUMP_TO "gnc-jumpto"
+#define GNC_ICON_INVOICE "gnc-invoice"
+#define GNC_ICON_INVOICE_POST "gnc-invoice-post"
+#define GNC_ICON_INVOICE_UNPOST "gnc-invoice-unpost"
+#define GNC_ICON_INVOICE_PAY "gnc-invoice-pay"
+#define GNC_ICON_INVOICE_NEW "gnc-invoice-new"
+#define GNC_ICON_INVOICE_EDIT "gnc-invoice-edit"
+#define GNC_ICON_INVOICE_DUPLICATE "gnc-invoice-duplicate"
+#define GNC_ICON_PDF_EXPORT "gnc-gnome-pdf"
 
 //FIXME: use own budget icons?
-#define GNC_STOCK_BUDGET "gnc-budget"
-#define GNC_STOCK_NEW_BUDGET "gnc-account"
-#define GNC_STOCK_OPEN_BUDGET "gnc-open-account"
-//#define GNC_STOCK_CLOSE_BUDGET "gnc-close-account"
-//#define GNC_STOCK_EDIT_BUDGET "gnc-edit-account"
-#define GNC_STOCK_DELETE_BUDGET "gnc-delete-account"
+#define GNC_ICON_BUDGET "gnc-budget"
+#define GNC_ICON_NEW_BUDGET "gnc-account"
+#define GNC_ICON_OPEN_BUDGET "gnc-account-open"
+//#define GNC_ICON_CLOSE_BUDGET "gnc-close-account"
+//#define GNC_ICON_EDIT_BUDGET "gnc-edit-account"
+#define GNC_ICON_DELETE_BUDGET "gnc-account-delete"
 
-void gnc_load_stock_icons (void);
+void gnc_load_app_icons (void);
 
 G_END_DECLS
 
