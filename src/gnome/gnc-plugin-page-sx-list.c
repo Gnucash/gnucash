@@ -131,31 +131,31 @@ static GtkActionEntry gnc_plugin_page_sx_list_actions [] =
 {
     { "SxListAction", NULL, N_("_Scheduled"), NULL, NULL, NULL },
     {
-        "SxListNewAction", GNC_STOCK_NEW_ACCOUNT, N_("_New"), NULL,
+        "SxListNewAction", GNC_ICON_NEW_ACCOUNT, N_("_New"), NULL,
         N_("Create a new scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_new)
     },
 #ifdef REGISTER2_ENABLED
 /*################## Added for Reg2 #################*/
     {
-        "SxListNewAction2", GNC_STOCK_NEW_ACCOUNT, N_("_New 2"), NULL,
+        "SxListNewAction2", GNC_ICON_NEW_ACCOUNT, N_("_New 2"), NULL,
         N_("Create a new scheduled transaction 2"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_new2)
     },
 /*################## Added for Reg2 #################*/
 #endif
     {
-        "SxListEditAction", GNC_STOCK_EDIT_ACCOUNT, N_("_Edit"), NULL,
+        "SxListEditAction", GNC_ICON_EDIT_ACCOUNT, N_("_Edit"), NULL,
         N_("Edit the selected scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_edit)
     },
 #ifdef REGISTER2_ENABLED
 /*################## Added for Reg2 #################*/
     {
-        "SxListEditAction2", GNC_STOCK_EDIT_ACCOUNT, N_("_Edit 2"), NULL,
+        "SxListEditAction2", GNC_ICON_EDIT_ACCOUNT, N_("_Edit 2"), NULL,
         N_("Edit the selected scheduled transaction 2"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_edit2)
     },
 /*################## Added for Reg2 #################*/
 #endif
     {
-        "SxListDeleteAction", GNC_STOCK_DELETE_ACCOUNT, N_("_Delete"), NULL,
+        "SxListDeleteAction", GNC_ICON_DELETE_ACCOUNT, N_("_Delete"), NULL,
         N_("Delete the selected scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_delete)
     },
 };
@@ -218,7 +218,7 @@ gnc_plugin_page_sx_list_class_init (GncPluginPageSxListClass *klass)
     object_class->dispose = gnc_plugin_page_sx_list_dispose;
     object_class->finalize = gnc_plugin_page_sx_list_finalize;
 
-    gnc_plugin_class->tab_icon        = GNC_STOCK_ACCOUNT;
+    gnc_plugin_class->tab_icon        = GNC_ICON_ACCOUNT;
     gnc_plugin_class->plugin_name     = GNC_PLUGIN_PAGE_SX_LIST_NAME;
     gnc_plugin_class->create_widget   = gnc_plugin_page_sx_list_create_widget;
     gnc_plugin_class->destroy_widget  = gnc_plugin_page_sx_list_destroy_widget;

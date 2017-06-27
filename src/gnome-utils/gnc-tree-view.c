@@ -1771,7 +1771,7 @@ GtkTreeViewColumn *
 gnc_tree_view_add_text_column (GncTreeView *view,
                                const gchar *column_title,
                                const gchar *pref_name,
-                               const gchar *stock_icon_name,
+                               const gchar *icon_name,
                                const gchar *sizing_text,
                                gint model_data_column,
                                gint model_visibility_column,
@@ -1788,10 +1788,10 @@ gnc_tree_view_add_text_column (GncTreeView *view,
     gtk_tree_view_column_set_title (column, column_title);
 
     /* Set up an icon renderer if requested */
-    if (stock_icon_name)
+    if (icon_name)
     {
         renderer = gtk_cell_renderer_pixbuf_new ();
-        g_object_set (renderer, "stock-id", stock_icon_name, NULL);
+        g_object_set (renderer, "icon-name", icon_name, NULL);
         gtk_tree_view_column_pack_start (column, renderer, FALSE);
     }
 
@@ -1838,7 +1838,7 @@ GtkTreeViewColumn *
 gnc_tree_view_add_date_column (GncTreeView *view,
                                const gchar *column_title,
                                const gchar *pref_name,
-                               const gchar *stock_icon_name,
+                               const gchar *icon_name,
                                const gchar *sizing_text,
                                gint model_data_column,
                                gint model_visibility_column,
@@ -1855,10 +1855,10 @@ gnc_tree_view_add_date_column (GncTreeView *view,
     gtk_tree_view_column_set_title (column, column_title);
 
     /* Set up an icon renderer if requested */
-    if (stock_icon_name)
+    if (icon_name)
     {
         renderer = gtk_cell_renderer_pixbuf_new ();
-        g_object_set (renderer, "stock-id", stock_icon_name, NULL);
+        g_object_set (renderer, "icon-name", icon_name, NULL);
         gtk_tree_view_column_pack_start (column, renderer, FALSE);
     }
 

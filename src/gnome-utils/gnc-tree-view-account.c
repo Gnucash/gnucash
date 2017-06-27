@@ -718,7 +718,7 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
 
     priv->name_column
         = gnc_tree_view_add_text_column(view, _("Account Name"), "name",
-                                        GNC_STOCK_ACCOUNT, "Expenses:Entertainment",
+                                        GNC_ICON_ACCOUNT, "Expenses:Entertainment",
                                         GNC_TREE_MODEL_ACCOUNT_COL_NAME,
                                         GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                         sort_by_string);

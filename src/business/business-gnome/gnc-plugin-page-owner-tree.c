@@ -138,39 +138,39 @@ static GtkActionEntry gnc_plugin_page_owner_tree_actions [] =
 
     /* Edit menu */
     {
-        "OTEditVendorAction", GNC_STOCK_EDIT_ACCOUNT, N_("E_dit Vendor"), "<primary>e",
+        "OTEditVendorAction", GNC_ICON_EDIT_ACCOUNT, N_("E_dit Vendor"), "<primary>e",
         N_("Edit the selected vendor"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_edit_owner)
     },
     {
-        "OTEditCustomerAction", GNC_STOCK_EDIT_ACCOUNT, N_("E_dit Customer"), "<primary>e",
+        "OTEditCustomerAction", GNC_ICON_EDIT_ACCOUNT, N_("E_dit Customer"), "<primary>e",
         N_("Edit the selected customer"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_edit_owner)
     },
     {
-        "OTEditEmployeeAction", GNC_STOCK_EDIT_ACCOUNT, N_("E_dit Employee"), "<primary>e",
+        "OTEditEmployeeAction", GNC_ICON_EDIT_ACCOUNT, N_("E_dit Employee"), "<primary>e",
         N_("Edit the selected employee"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_edit_owner)
     },
     {
-        "OTNewVendorAction", GNC_STOCK_NEW_ACCOUNT, N_("_New Vendor..."), NULL,
+        "OTNewVendorAction", GNC_ICON_NEW_ACCOUNT, N_("_New Vendor..."), NULL,
         N_("Create a new vendor"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_owner)
     },
     {
-        "OTNewCustomerAction", GNC_STOCK_NEW_ACCOUNT, N_("_New Customer..."), NULL,
+        "OTNewCustomerAction", GNC_ICON_NEW_ACCOUNT, N_("_New Customer..."), NULL,
         N_("Create a new customer"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_owner)
     },
     {
-        "OTNewEmployeeAction", GNC_STOCK_NEW_ACCOUNT, N_("_New Employee..."), NULL,
+        "OTNewEmployeeAction", GNC_ICON_NEW_ACCOUNT, N_("_New Employee..."), NULL,
         N_("Create a new employee"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_owner)
     },
 
 #if 0 /* Disabled due to crash */
     {
-        "EditDeleteOwnerAction", GNC_STOCK_DELETE_ACCOUNT, N_("_Delete Owner..."), "Delete",
+        "EditDeleteOwnerAction", GNC_ICON_DELETE_ACCOUNT, N_("_Delete Owner..."), "Delete",
         N_("Delete selected owner"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_delete_owner)
     },
@@ -184,17 +184,17 @@ static GtkActionEntry gnc_plugin_page_owner_tree_actions [] =
 
     /* Business menu */
     {
-        "OTNewBillAction", GNC_STOCK_INVOICE_NEW, N_("New _Bill..."), NULL,
+        "OTNewBillAction", GNC_ICON_INVOICE_NEW, N_("New _Bill..."), NULL,
         N_("Create a new bill"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_invoice)
     },
     {
-        "OTNewInvoiceAction", GNC_STOCK_INVOICE_NEW, N_("New _Invoice..."), NULL,
+        "OTNewInvoiceAction", GNC_ICON_INVOICE_NEW, N_("New _Invoice..."), NULL,
         N_("Create a new invoice"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_invoice)
     },
     {
-        "OTNewVoucherAction", GNC_STOCK_INVOICE_NEW, N_("New _Voucher..."), NULL,
+        "OTNewVoucherAction", GNC_ICON_INVOICE_NEW, N_("New _Voucher..."), NULL,
         N_("Create a new voucher"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_invoice)
     },
@@ -397,7 +397,7 @@ gnc_plugin_page_owner_tree_class_init (GncPluginPageOwnerTreeClass *klass)
 
     object_class->finalize = gnc_plugin_page_owner_tree_finalize;
 
-    gnc_plugin_class->tab_icon        = GNC_STOCK_ACCOUNT;
+    gnc_plugin_class->tab_icon        = GNC_ICON_ACCOUNT;
     gnc_plugin_class->plugin_name     = GNC_PLUGIN_PAGE_OWNER_TREE_NAME;
     gnc_plugin_class->create_widget   = gnc_plugin_page_owner_tree_create_widget;
     gnc_plugin_class->destroy_widget  = gnc_plugin_page_owner_tree_destroy_widget;

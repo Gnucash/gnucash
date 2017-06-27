@@ -166,29 +166,29 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
 
     /* File menu */
     {
-        "FileNewAccountAction", GNC_STOCK_NEW_ACCOUNT, N_("New _Account..."), NULL,
+        "FileNewAccountAction", GNC_ICON_NEW_ACCOUNT, N_("New _Account..."), NULL,
         N_("Create a new Account"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_new_account)
     },
     {
-        "FileAddAccountHierarchyAssistantAction", GNC_STOCK_NEW_ACCOUNT, N_("New Account _Hierarchy..."), NULL,
+        "FileAddAccountHierarchyAssistantAction", GNC_ICON_NEW_ACCOUNT, N_("New Account _Hierarchy..."), NULL,
         N_("Extend the current book by merging with new account type categories"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_file_new_hierarchy)
     },
 #ifdef REGISTER2_ENABLED
     {
-        "FileOpenAccount2Action", GNC_STOCK_OPEN_ACCOUNT, N_("Open _Account"), NULL,
+        "FileOpenAccount2Action", GNC_ICON_OPEN_ACCOUNT, N_("Open _Account"), NULL,
         N_("Open the selected account"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_open2_account)
     },
     {
-        "FileOpenAccountAction", GNC_STOCK_OPEN_ACCOUNT, N_("Open _Old Style Register Account"), NULL,
+        "FileOpenAccountAction", GNC_ICON_OPEN_ACCOUNT, N_("Open _Old Style Register Account"), NULL,
         N_("Open the old style register selected account"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_open_account)
     },
 #else
     {
-        "FileOpenAccountAction", GNC_STOCK_OPEN_ACCOUNT, N_("Open _Account"), NULL,
+        "FileOpenAccountAction", GNC_ICON_OPEN_ACCOUNT, N_("Open _Account"), NULL,
         N_("Open the selected account"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_open_account)
     },
@@ -196,18 +196,18 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
 
 #ifdef REGISTER2_ENABLED
     {
-        "FileOpenSubaccounts2Action", GNC_STOCK_OPEN_ACCOUNT, N_("Open _SubAccounts"), NULL,
+        "FileOpenSubaccounts2Action", GNC_ICON_OPEN_ACCOUNT, N_("Open _SubAccounts"), NULL,
         N_("Open the selected account and all its subaccounts"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_open2_subaccounts)
     },
     {
-        "FileOpenSubaccountsAction", GNC_STOCK_OPEN_ACCOUNT, N_("Open Old St_yle Subaccounts"), NULL,
+        "FileOpenSubaccountsAction", GNC_ICON_OPEN_ACCOUNT, N_("Open Old St_yle Subaccounts"), NULL,
         N_("Open the old style register selected account and all its subaccounts"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_open_subaccounts)
     },
 #else
     {
-        "FileOpenSubaccountsAction", GNC_STOCK_OPEN_ACCOUNT, N_("Open _SubAccounts"), NULL,
+        "FileOpenSubaccountsAction", GNC_ICON_OPEN_ACCOUNT, N_("Open _SubAccounts"), NULL,
         N_("Open the selected account and all its subaccounts"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_open_subaccounts)
     },
@@ -215,12 +215,12 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
 
     /* Edit menu */
     {
-        "EditEditAccountAction", GNC_STOCK_EDIT_ACCOUNT, N_("Edit _Account"), "<primary>e",
+        "EditEditAccountAction", GNC_ICON_EDIT_ACCOUNT, N_("Edit _Account"), "<primary>e",
         N_("Edit the selected account"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_edit_account)
     },
     {
-        "EditDeleteAccountAction", GNC_STOCK_DELETE_ACCOUNT, N_("_Delete Account..."), "Delete",
+        "EditDeleteAccountAction", GNC_ICON_DELETE_ACCOUNT, N_("_Delete Account..."), "Delete",
         N_("Delete selected account"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_delete_account)
     },
@@ -291,12 +291,12 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
     /* Extensions Menu */
     { "Register2TestAction", NULL, N_("_Register2"), NULL, NULL, NULL },
     {
-        "Register2TestAccountAction", GNC_STOCK_OPEN_ACCOUNT, N_("Open _Account"), NULL,
+        "Register2TestAccountAction", GNC_ICON_OPEN_ACCOUNT, N_("Open _Account"), NULL,
         N_("Open the selected account"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_open2_account)
     },
     {
-        "Register2TestSubAccountAction", GNC_STOCK_OPEN_ACCOUNT, N_("Open _SubAccounts"), NULL,
+        "Register2TestSubAccountAction", GNC_ICON_OPEN_ACCOUNT, N_("Open _SubAccounts"), NULL,
         N_("Open the selected account and all its subaccounts"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_open2_subaccounts)
     },
@@ -412,7 +412,7 @@ gnc_plugin_page_account_tree_class_init (GncPluginPageAccountTreeClass *klass)
 
     object_class->finalize = gnc_plugin_page_account_tree_finalize;
 
-    gnc_plugin_class->tab_icon        = GNC_STOCK_ACCOUNT;
+    gnc_plugin_class->tab_icon        = GNC_ICON_ACCOUNT;
     gnc_plugin_class->plugin_name     = GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME;
     gnc_plugin_class->create_widget   = gnc_plugin_page_account_tree_create_widget;
     gnc_plugin_class->destroy_widget  = gnc_plugin_page_account_tree_destroy_widget;

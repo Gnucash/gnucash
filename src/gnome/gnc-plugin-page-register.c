@@ -247,7 +247,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
         G_CALLBACK (gnc_plugin_page_register_cmd_paste)
     },
     {
-        "EditEditAccountAction", GNC_STOCK_EDIT_ACCOUNT, N_("Edit _Account"), "<primary>e",
+        "EditEditAccountAction", GNC_ICON_EDIT_ACCOUNT, N_("Edit _Account"), "<primary>e",
         N_("Edit the selected account"),
         G_CALLBACK (gnc_plugin_page_register_cmd_edit_account)
     },
@@ -346,7 +346,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
     /* Actions menu */
 
     {
-        "ActionsTransferAction", GNC_STOCK_TRANSFER, N_("_Transfer..."), "<primary>t",
+        "ActionsTransferAction", GNC_ICON_TRANSFER, N_("_Transfer..."), "<primary>t",
         N_("Transfer funds from one account to another"),
         G_CALLBACK (gnc_plugin_page_register_cmd_transfer)
     },
@@ -381,12 +381,12 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
         G_CALLBACK (gnc_plugin_page_register_cmd_exchange_rate)
     },
     {
-        "JumpTransactionAction", GNC_STOCK_JUMP_TO, N_("_Jump"), NULL,
+        "JumpTransactionAction", GNC_ICON_JUMP_TO, N_("_Jump"), NULL,
         N_("Jump to the corresponding transaction in the other account"),
         G_CALLBACK (gnc_plugin_page_register_cmd_jump)
     },
     {
-        "ScheduleTransactionAction", GNC_STOCK_SCHEDULE, N_("Sche_dule..."), NULL,
+        "ScheduleTransactionAction", GNC_ICON_SCHEDULE, N_("Sche_dule..."), NULL,
         N_("Create a Scheduled Transaction with the current transaction as a template"),
         G_CALLBACK (gnc_plugin_page_register_cmd_schedule)
     },
@@ -424,7 +424,7 @@ static GtkToggleActionEntry toggle_entries[] =
     },
 
     {
-        "SplitTransactionAction", GNC_STOCK_SPLIT_TRANS, N_("S_plit Transaction"), NULL,
+        "SplitTransactionAction", GNC_ICON_SPLIT_TRANS, N_("S_plit Transaction"), NULL,
         N_("Show all splits in the current transaction"),
         G_CALLBACK (gnc_plugin_page_register_cmd_expand_transaction), FALSE
     },
@@ -736,7 +736,7 @@ gnc_plugin_page_register_class_init (GncPluginPageRegisterClass *klass)
 
     object_class->finalize = gnc_plugin_page_register_finalize;
 
-    gnc_plugin_class->tab_icon        = GNC_STOCK_ACCOUNT;
+    gnc_plugin_class->tab_icon        = GNC_ICON_ACCOUNT;
     gnc_plugin_class->plugin_name     = GNC_PLUGIN_PAGE_REGISTER_NAME;
     gnc_plugin_class->create_widget   = gnc_plugin_page_register_create_widget;
     gnc_plugin_class->destroy_widget  = gnc_plugin_page_register_destroy_widget;

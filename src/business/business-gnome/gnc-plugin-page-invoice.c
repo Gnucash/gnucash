@@ -99,7 +99,7 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
 
     /* File menu */
     {
-        "FileNewAccountAction", GNC_STOCK_NEW_ACCOUNT, N_("New _Account..."), NULL,
+        "FileNewAccountAction", GNC_ICON_NEW_ACCOUNT, N_("New _Account..."), NULL,
         N_("Create a new account"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_new_account)
     },
@@ -126,22 +126,22 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
         G_CALLBACK (gnc_plugin_page_invoice_cmd_paste)
     },
     {
-        "EditEditInvoiceAction", GNC_STOCK_INVOICE_EDIT, N_("_Edit Invoice"), NULL,
+        "EditEditInvoiceAction", GNC_ICON_INVOICE_EDIT, N_("_Edit Invoice"), NULL,
         N_("Edit this invoice"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_edit)
     },
     {
-        "EditDuplicateInvoiceAction", GNC_STOCK_INVOICE_DUPLICATE, N_("_Duplicate Invoice"),
+        "EditDuplicateInvoiceAction", GNC_ICON_INVOICE_DUPLICATE, N_("_Duplicate Invoice"),
         NULL, N_("Create a new invoice as a duplicate of the current one"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_duplicateInvoice)
     },
     {
-        "EditPostInvoiceAction", GNC_STOCK_INVOICE_POST, N_("_Post Invoice"), NULL,
+        "EditPostInvoiceAction", GNC_ICON_INVOICE_POST, N_("_Post Invoice"), NULL,
         N_("Post this Invoice to your Chart of Accounts"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_post)
     },
     {
-        "EditUnpostInvoiceAction", GNC_STOCK_INVOICE_UNPOST, N_("_Unpost Invoice"), NULL,
+        "EditUnpostInvoiceAction", GNC_ICON_INVOICE_UNPOST, N_("_Unpost Invoice"), NULL,
         N_("Unpost this Invoice and make it editable"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_unpost)
     },
@@ -185,12 +185,12 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
 
     /* Business menu */
     {
-        "BusinessNewInvoiceAction", GNC_STOCK_INVOICE_NEW, N_("New _Invoice"), "",
+        "BusinessNewInvoiceAction", GNC_ICON_INVOICE_NEW, N_("New _Invoice"), "",
         N_("Create a new invoice for the same owner as the current one"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_new_invoice)
     },
     {
-        "ToolsProcessPaymentAction", GNC_STOCK_INVOICE_PAY, N_("_Pay Invoice"), NULL,
+        "ToolsProcessPaymentAction", GNC_ICON_INVOICE_PAY, N_("_Pay Invoice"), NULL,
         N_("Enter a payment for the owner of this Invoice"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_pay_invoice)
     },

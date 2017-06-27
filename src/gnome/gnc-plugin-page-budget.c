@@ -123,12 +123,12 @@ static GtkActionEntry gnc_plugin_page_budget_actions [] =
 
     /* File menu */
     {
-        "OpenAccountAction", GNC_STOCK_OPEN_ACCOUNT, N_("Open _Account"), NULL,
+        "OpenAccountAction", GNC_ICON_OPEN_ACCOUNT, N_("Open _Account"), NULL,
         N_("Open the selected account"),
         G_CALLBACK (gnc_plugin_page_budget_cmd_open_account)
     },
     {
-        "OpenSubaccountsAction", GNC_STOCK_OPEN_ACCOUNT,
+        "OpenSubaccountsAction", GNC_ICON_OPEN_ACCOUNT,
         N_("Open _Subaccounts"), NULL,
         N_("Open the selected account and all its subaccounts"),
         G_CALLBACK (gnc_plugin_page_budget_cmd_open_subaccounts)
@@ -136,7 +136,7 @@ static GtkActionEntry gnc_plugin_page_budget_actions [] =
 
     /* Edit menu */
     {
-        "DeleteBudgetAction", GNC_STOCK_DELETE_BUDGET, N_("_Delete Budget"),
+        "DeleteBudgetAction", GNC_ICON_DELETE_BUDGET, N_("_Delete Budget"),
         NULL, N_("Delete this budget"),
         G_CALLBACK (gnc_plugin_page_budget_cmd_delete_budget)
     },
@@ -287,7 +287,7 @@ gnc_plugin_page_budget_class_init (GncPluginPageBudgetClass *klass)
 
     object_class->finalize = gnc_plugin_page_budget_finalize;
 
-    gnc_plugin_class->tab_icon        = GNC_STOCK_BUDGET;
+    gnc_plugin_class->tab_icon        = GNC_ICON_BUDGET;
     gnc_plugin_class->plugin_name     = GNC_PLUGIN_PAGE_BUDGET_NAME;
     gnc_plugin_class->create_widget   = gnc_plugin_page_budget_create_widget;
     gnc_plugin_class->destroy_widget  = gnc_plugin_page_budget_destroy_widget;

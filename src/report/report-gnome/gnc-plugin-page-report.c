@@ -271,7 +271,7 @@ gnc_plugin_page_report_class_init (GncPluginPageReportClass *klass)
     object_class->set_property = gnc_plugin_page_report_set_property;
     object_class->get_property = gnc_plugin_page_report_get_property;
 
-    gnc_plugin_page_class->tab_icon        = GNC_STOCK_ACCOUNT_REPORT;
+    gnc_plugin_page_class->tab_icon        = GNC_ICON_ACCOUNT_REPORT;
     gnc_plugin_page_class->plugin_name     = GNC_PLUGIN_PAGE_REPORT_NAME;
 
     gnc_plugin_page_class->create_widget   = gnc_plugin_page_report_create_widget;
@@ -1129,7 +1129,7 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
             G_CALLBACK(gnc_plugin_page_report_print_cb)
         },
         {
-            "FilePrintPDFAction", GNC_STOCK_PDF_EXPORT, N_("Export as P_DF..."), NULL,
+            "FilePrintPDFAction", GNC_ICON_PDF_EXPORT, N_("Export as P_DF..."), NULL,
             N_("Export the current report as a PDF document"),
             G_CALLBACK(gnc_plugin_page_report_exportpdf_cb)
         },
