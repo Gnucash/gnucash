@@ -87,13 +87,13 @@ void gnc_builder_connect_full_func (GtkBuilder *builder,
  *
  *  @param label The text of the button.
  *
- *  @param stock_id The name of the stock button to use.
+ *  @param icon_name The name of the icon button to use.
  *
  *  @param response The response id to return if this button is
  *  clicked.*/
 void gnc_gtk_dialog_add_button (GtkWidget *dialog,
                                 const gchar *label,
-                                const gchar *stock_id,
+                                const gchar *icon_name,
                                 guint response);
 
 /** Note: This dialog is modal!  (It calls gtk_dialog_run() which is modal.)

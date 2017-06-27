@@ -872,7 +872,7 @@ gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
     gtk_dialog_add_button(GTK_DIALOG(dialog),
                           _("Cancel"), GTK_RESPONSE_CANCEL);
     gnc_gtk_dialog_add_button(dialog, _("_Remove Splits"),
-                              _("Delete"), GTK_RESPONSE_ACCEPT);
+                              "edit-delete", GTK_RESPONSE_ACCEPT);
     response = gnc_dialog_run(GTK_DIALOG(dialog), warning);
     gtk_widget_destroy (dialog);
     if (response != GTK_RESPONSE_ACCEPT)
@@ -1253,7 +1253,7 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
         gtk_dialog_add_button(GTK_DIALOG(dialog),
                               _("Cancel"), GTK_RESPONSE_CANCEL);
         gnc_gtk_dialog_add_button(dialog, _("_Delete Split"),
-                                  _("Delete"), GTK_RESPONSE_ACCEPT);
+                                  "edit-delete", GTK_RESPONSE_ACCEPT);
         response = gnc_dialog_run(GTK_DIALOG(dialog), warning);
         gtk_widget_destroy (dialog);
         if (response != GTK_RESPONSE_ACCEPT)
@@ -1293,7 +1293,7 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
         gtk_dialog_add_button(GTK_DIALOG(dialog),
                               _("Cancel"), GTK_RESPONSE_CANCEL);
         gnc_gtk_dialog_add_button(dialog, _("_Delete Transaction"),
-                                  _("Delete"), GTK_RESPONSE_ACCEPT);
+                                  "edit-delete", GTK_RESPONSE_ACCEPT);
         response =  gnc_dialog_run(GTK_DIALOG(dialog), warning);
         gtk_widget_destroy (dialog);
         if (response != GTK_RESPONSE_ACCEPT)

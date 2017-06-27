@@ -2936,7 +2936,7 @@ gnc_main_window_open_page (GncMainWindow *window,
 
     if (icon != NULL)
     {
-        image = gtk_image_new_from_stock (icon, GTK_ICON_SIZE_MENU);
+        image = gtk_image_new_from_icon_name (icon, GTK_ICON_SIZE_MENU);
         gtk_widget_show (image);
         gtk_box_pack_start (GTK_BOX (tab_hbox), image, FALSE, FALSE, 0);
         gtk_box_pack_start (GTK_BOX (tab_hbox), label, TRUE, TRUE, 0);

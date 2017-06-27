@@ -791,11 +791,11 @@ RESTART:
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
 
         gnc_gtk_dialog_add_button(dialog, _("_Open Read-Only"),
-                                  _("Revert"), RESPONSE_READONLY);
+                                  "document-revert", RESPONSE_READONLY);
         gnc_gtk_dialog_add_button(dialog, _("_Create New File"),
-                                  _("New"), RESPONSE_NEW);
+                                  "document-new", RESPONSE_NEW);
         gnc_gtk_dialog_add_button(dialog, _("Open _Anyway"),
-                                  _("Open"), RESPONSE_OPEN);
+                                  "document-open", RESPONSE_OPEN);
         if (shutdown_cb)
             gtk_dialog_add_button(GTK_DIALOG(dialog),
                                   _("Quit"), RESPONSE_QUIT);

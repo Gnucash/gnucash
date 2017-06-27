@@ -484,17 +484,18 @@ gnc_builder_connect_full_func(GtkBuilder *builder,
 
 
 void
-gnc_gtk_dialog_add_button (GtkWidget *dialog, const gchar *label, const gchar *stock_id, guint response)
+gnc_gtk_dialog_add_button (GtkWidget *dialog, const gchar *label, const gchar *icon_name, guint response)
 {
     GtkWidget *button;
 
     button = gtk_button_new_with_mnemonic(label);
-    if (stock_id)
+    if (icon_name)
     {
         GtkWidget *image;
 
-        image = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_BUTTON);
-        gtk_button_set_image(GTK_BUTTON(button), image);
+        image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_BUTTON);
+        gtk_button_set_image (GTK_BUTTON(button), image);
+        g_object_set (button, "always-show-image", TRUE, NULL); // Maybe this should be a preference
     }
     g_object_set (button, "can-default", TRUE, NULL);
     gtk_widget_show_all(button);
