@@ -1934,10 +1934,16 @@ draw_picture(GtkPrintContext *context, check_item_t *data)
     }
     else
     {
+        GtkIconTheme *def_theme = gtk_icon_theme_get_default ();
+
         g_warning("Filename '%s' cannot be read or understood.",
                   data->filename);
-        pixbuf = gtk_widget_render_icon_pixbuf (GTK_WIDGET(image),
-                                        "image-missing", -1);
+
+        pixbuf = gtk_icon_theme_load_icon (def_theme,
+                          "image-missing",
+                          16,
+                          GTK_ICON_LOOKUP_USE_BUILTIN,
+                          NULL);
     }
     pix_w = gdk_pixbuf_get_width(pixbuf);
     pix_h = gdk_pixbuf_get_height(pixbuf);
