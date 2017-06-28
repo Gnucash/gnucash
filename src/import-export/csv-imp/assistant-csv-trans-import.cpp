@@ -731,7 +731,9 @@ CsvImpTransAssist::preview_settings_name (GtkEntry* entry)
     if (text)
         tx_imp->settings_name(text);
 
-    auto combo = gtk_widget_get_parent (GTK_WIDGET(entry));
+    auto box = gtk_widget_get_parent (GTK_WIDGET(entry));
+    auto combo = gtk_widget_get_parent (GTK_WIDGET(box));
+    
     preview_handle_save_del_sensitivity (GTK_COMBO_BOX(combo));
 }
 
