@@ -92,10 +92,8 @@ gnumeric_create_popup_menu_list (GSList *elements,
                                  int sensitive_filter,
                                  GdkEventButton *event)
 {
-    GtkWidget *menu, *item;
-    char const *trans;
-
-    menu = gtk_menu_new ();
+    GtkWidget *menu = gtk_menu_new ();
+    GtkWidget *item, *label;
 
     for (; elements != NULL ; elements = elements->next)
     {
@@ -103,35 +101,41 @@ gnumeric_create_popup_menu_list (GSList *elements,
         char const * const name = element->name;
         char const * const pix_name = element->pixmap;
 
-        item = NULL;
-
         if (element->display_filter != 0 &&
                 !(element->display_filter & display_filter))
             continue;
 
         if (name != NULL && *name != '\0')
         {
-            trans = _(name);
-            item = gtk_menu_item_new_with_mnemonic (trans);
-            if (element->sensitive_filter != 0 &&
-                    (element->sensitive_filter & sensitive_filter))
-                gtk_widget_set_sensitive (GTK_WIDGET (item), FALSE);
+            GtkWidget *label = gtk_label_new_with_mnemonic (name);
+            GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
+
+            item = gtk_menu_item_new();
+            gtk_box_set_homogeneous (GTK_BOX (box), FALSE);
+            gtk_widget_set_hexpand (GTK_WIDGET(box), FALSE);
+            gtk_widget_set_halign (GTK_WIDGET(box), GTK_ALIGN_START);
+
             if (pix_name != NULL)
             {
                 GtkWidget *image = gtk_image_new_from_icon_name (pix_name,
                                    GTK_ICON_SIZE_MENU);
+
+                gtk_container_add (GTK_CONTAINER (box), image);
                 gtk_widget_show (image);
-                gtk_image_menu_item_set_image (
-                    GTK_IMAGE_MENU_ITEM (item),
-                    image);
             }
+            gtk_box_pack_end (GTK_BOX (box), label, TRUE, TRUE, 0);
+            gtk_container_add (GTK_CONTAINER (item), box);
+
+            if (element->sensitive_filter != 0 &&
+                    (element->sensitive_filter & sensitive_filter))
+                gtk_widget_set_sensitive (GTK_WIDGET (item), FALSE);
         }
         else
         {
             /* separator */
-            item = gtk_menu_item_new ();
-            gtk_widget_set_sensitive (item, FALSE);
+            item = gtk_separator_menu_item_new ();
         }
+        gtk_widget_show_all (item);
 
         if (element->index != 0)
         {
