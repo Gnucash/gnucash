@@ -245,6 +245,7 @@ Select location and file name for the Import, then click 'OK'...
                               <object class="GtkSeparator" id="hseparator1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="hexpand">True</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -415,7 +416,10 @@ Select location and file name for the Import, then click 'OK'...
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="icon_name">dialog-info</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                                <property name="icon_name">dialog-information</property>
+                                <property name="icon_size">3</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -464,7 +468,7 @@ Select location and file name for the Import, then click 'OK'...
                                     <property name="wrap">True</property>
                                   </object>
                                   <packing>
-                                    <property name="left_attach">2</property>
+                                    <property name="left_attach">0</property>
                                     <property name="top_attach">1</property>
                                   </packing>
                                 </child>
@@ -481,12 +485,6 @@ Select location and file name for the Import, then click 'OK'...
                                     <property name="left_attach">1</property>
                                     <property name="top_attach">1</property>
                                   </packing>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
                                 </child>
                               </object>
                               <packing>
@@ -510,6 +508,7 @@ Select location and file name for the Import, then click 'OK'...
                               <object class="GtkSeparator" id="hseparator4">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="hexpand">True</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -917,7 +916,10 @@ For example
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="icon_name">dialog-info</property>
+                <property name="halign">start</property>
+                <property name="valign">start</property>
+                <property name="icon_name">dialog-information</property>
+                <property name="icon_size">3</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -931,6 +933,7 @@ For example
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="halign">start</property>
                 <property name="label" translatable="yes">Select the type of each column to import.</property>
               </object>
               <packing>
