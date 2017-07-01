@@ -1,5 +1,63 @@
 Version history:
 ------- -------
+2.6.17 - 2 July 2017
+
+The following bugs are fixed:
+      Bug 603379 - Prevent changing some Account Options if it has transactions
+                   Followup: Relax the account type change restrictions again.
+		   In the new implementation account types can'tz be changed
+		   for an account with splits:
+		   - if the change woud force a commodity change
+		     (to/from normal accounts from/to stock related accounts)
+		   - for immutable accounts
+		   At the time of this commit the following account types are
+		   considered immutable:
+		   - Accounts Receivable
+		   - Accounts Payable
+		   - Trading accounts
+      Bug 776396 - Foreign currency reports, amounts are not aligned correctly
+                   Improve the styling of the table element used for foreign
+		   currencies in the Balance sheet report so they end up
+		   aligned with the other currencies.
+      Bug 780845 - link in github repo README file needs correction/editing
+      Bug 780889 - Split-register transactions result in invalid price:type
+                   "transaction": Add 'transaction' to the schema and document
+		   it in gnc-pricedb.h.
+      Bug 781634 - Alert on missing account currency when opening account
+      	  	   Also separate translatable commodity namespace strings
+                   from those used in storage:
+		   There is now a separate GNC_COMMODITY_NS_ISO_GUI
+		   label to be used everywhere the user needs to read
+		   'Currency namespace'. It's currently set to
+		   'Currencies' and can be translated.
+
+      Bug 782274 - Transactions produced by Transfer Funds or Process Payment
+                   dialogs sort to beginning of day and do not honor NUM field
+		   for custom sorting.
+      Bug 782897 - Stock Split Assistant crashes GnuCash if you enter a New
+                   Price and that already exists in the Price DB
+      Bug 783095 - gnucash-2.6.16 segfaults on startup
+      Bug 784317 - typo in 'import customers or vendors from text file' dialog
+
+Other repairs not marked as bugs in git:
+      Properly define the template namespace rather than using a local string
+         everywhere
+      Correctly store time64 0 in the SQL backend: The SQL backend ignored
+         time64 0 when saving dates. time64 is a perfectly valid timestamp
+	 (1970-01-01 00:00:00) and should be stored.
+      Clamp time64 values passed to GDateTime functions to the valid range.
+         Fixes a bug reported on the mailing list wherein a date of 0000-00-00
+         in a MySql database would crash GnuCash. Such dates may come from a bad
+         conversion of 1970-01-01 or from a crash.
+      Add XSU to iso-4217-currencies
+      Some banks include additional purpose information for a transaction in
+         non-swift-section 17 (aka transaction text). If available, this
+	 transaction text is put in front of the other purpose texts to provide
+	 full transaction information. Adds a preference to control import
+	 behaivour of transaction text.
+
+Updated Translations: Arabic, Turkish
+
 2.6.16 - 26 March 2017
 
 The following bugs are fixed:
