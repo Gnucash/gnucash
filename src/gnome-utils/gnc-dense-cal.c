@@ -359,26 +359,41 @@ gnc_dense_cal_init(GncDenseCal *dcal)
 
     /* Deal with the various label sizes. */
     {
+        PangoLayout *layout = gtk_widget_create_pango_layout(GTK_WIDGET(dcal), NULL);
+        GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(dcal));
+        GtkStateFlags state_flags = gtk_style_context_get_state (stylectxt);
+        gint font_size_reduction_units = 1;
+        PangoFontDescription *font_desc;
+        GtkCssProvider *provider;
+        gint font_size, px_size;
         gint i;
         gint maxWidth, maxHeight;
-        PangoLayout *layout;
-        PangoFontDescription *font_desc;
-        gint font_size;
-        gint font_size_reduction_units = 1;
-        GtkStyleContext *stylectxt;
-        GtkStateFlags state_flags;
+        gchar *px_str, *widget_css;
+        gdouble dpi;
 
-        layout = gtk_widget_create_pango_layout(GTK_WIDGET(dcal), NULL);
-
-        stylectxt = gtk_widget_get_style_context (GTK_WIDGET(dcal));
-        state_flags = gtk_style_context_get_state (stylectxt);
         gtk_style_context_get (stylectxt, state_flags,
                                GTK_STYLE_PROPERTY_FONT, &font_desc, NULL);
         font_size = pango_font_description_get_size(font_desc);
+
+#if GTK_CHECK_VERSION(3,16,0)
+        provider = gtk_css_provider_new();
+        dpi = gdk_screen_get_resolution (gdk_screen_get_default ());
+        px_size = ((font_size / PANGO_SCALE) - font_size_reduction_units) * (dpi / 72.);
+        px_str = g_strdup_printf("%i", px_size);
+        widget_css = g_strconcat ("*{\n  font-size:", px_str, "px;\n}\n", NULL);
+
+        gtk_css_provider_load_from_data (provider, widget_css, -1, NULL);
+        gtk_style_context_add_provider (stylectxt, GTK_STYLE_PROVIDER (provider),
+                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        g_object_unref (provider);
+        g_free (px_str);
+        g_free (widget_css);
+#else
         font_size -= font_size_reduction_units * PANGO_SCALE;
         pango_font_description_set_size(font_desc, font_size);
         gtk_widget_override_font(GTK_WIDGET(dcal), font_desc);
-        pango_font_description_free(font_desc);
+#endif
+        pango_font_description_free (font_desc);
 
         maxWidth = maxHeight = 0;
         for (i = 0; i < 12; i++)
