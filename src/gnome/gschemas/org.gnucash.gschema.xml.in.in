@@ -125,6 +125,11 @@
       <summary>Width of notebook tabs</summary>
       <description>This key specifies the maximum width of notebook tabs. If the text in the tab is longer than this value (the test is approximate) then the tab label will have the middle cut and replaced with an ellipsis.</description>
     </key>
+    <key name="buttons-with-icons-and-labels" type="b">
+      <default>true</default>
+      <summary>Show Button Icons and Labels</summary>
+      <description>If active, buttons that have been configured to show icons and labels will show both. Otherwise only labels will be used.</description>
+    </key>
     <key name="currency-choice-locale" type="b">
       <default>true</default>
       <summary>Use the system locale currency for all newly created accounts.</summary>
@@ -164,6 +169,16 @@
       <default>11.0</default>
       <summary>Maximum number of months to go back.</summary>
       <description>Dates will be completed so that they are close to the current date. Enter the maximum number of months to go backwards in time when completing dates.</description>
+    </key>
+    <key name="grid-lines-horizontal" type="b">
+      <default>false</default>
+      <summary>Show Horizontal Grid Lines</summary>
+      <description>If active, horzontal grid lines will be shown on table displays. Otherwise no horizontal grid lines will be shown.</description>
+    </key>
+    <key name="grid-lines-vertical" type="b">
+      <default>false</default>
+      <summary>Show Vertical Grid Lines</summary>
+      <description>If active, vertical grid lines will be shown on table displays. Otherwise no vertical grid lines will be shown.</description>
     </key>
     <key name="show-splash-screen" type="b">
       <default>true</default>

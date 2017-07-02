@@ -224,6 +224,14 @@ gnc_window_adjust_for_screen(GtkWindow * window)
     gtk_widget_queue_resize(GTK_WIDGET(window));
 }
 
+/********************************************************************\
+ * Sets the alignament of a Label Widget, GTK3 version specific.    *
+ *                                                                  *
+ * Args: widget - the label widget to set alignment on              *
+ *       xalign - x alignment                                       *
+ *       yalign - y alignment                                       *
+ * Returns: nothing                                                 *
+\********************************************************************/
 void
 gnc_label_set_alignment (GtkWidget *widget, gfloat xalign, gfloat yalign)
 {
@@ -233,6 +241,33 @@ gnc_label_set_alignment (GtkWidget *widget, gfloat xalign, gfloat yalign)
 #else
     gtk_misc_set_alignment (GTK_MISC (widget), xalign, yalign);
 #endif
+}
+
+/********************************************************************\
+ * Get the preference for showing tree view grid lines              *
+ *                                                                  *
+ * Args: none                                                       *
+ * Returns:  GtkTreeViewGridLines setting                           *
+\********************************************************************/
+GtkTreeViewGridLines
+gnc_tree_view_get_grid_lines_pref (void)
+{
+    GtkTreeViewGridLines grid_lines;
+    gboolean h_lines = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, "grid-lines-horizontal");
+    gboolean v_lines = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, "grid-lines-vertical");
+
+    if (h_lines)
+    {
+        if (v_lines)
+            grid_lines = GTK_TREE_VIEW_GRID_LINES_BOTH;
+        else
+            grid_lines =  GTK_TREE_VIEW_GRID_LINES_HORIZONTAL;
+    }
+    else if (v_lines)
+        grid_lines = GTK_TREE_VIEW_GRID_LINES_VERTICAL;
+    else
+        grid_lines = GTK_TREE_VIEW_GRID_LINES_NONE;
+    return grid_lines;
 }
 
 gboolean

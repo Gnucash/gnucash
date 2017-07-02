@@ -61,8 +61,23 @@ void gnc_save_window_size (const char *section, GtkWindow *window);
 \********************************************************************/
 void gnc_window_adjust_for_screen (GtkWindow * window);
 
-
+/********************************************************************\
+ * Sets the alignament of a Label Widget, GTK3 version specific.    *
+ *                                                                  *
+ * Args: widget - the label widget to set alignment on              *
+ *       xalign - x alignment                                       *
+ *       yalign - y alignment                                       *
+ * Returns: nothing                                                 *
+\********************************************************************/
 void gnc_label_set_alignment (GtkWidget *widget, gfloat xalign, gfloat yalign);
+
+/********************************************************************\
+ * Get the preference for showing tree view grid lines              *
+ *                                                                  *
+ * Args: none                                                       *
+ * Returns:  GtkTreeViewGridLines setting                           *
+\********************************************************************/
+GtkTreeViewGridLines gnc_tree_view_get_grid_lines_pref (void);
 
 gboolean gnc_handle_date_accelerator (GdkEventKey *event,
                                       struct tm *tm,
