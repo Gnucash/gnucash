@@ -108,7 +108,11 @@ gnc_popup_entry_init (GncPopupEntry *widget)
     widget->button = gtk_button_new ();
     gtk_widget_show (widget->button);
 
+#if GTK_CHECK_VERSION(3,14,0)
+    arrow = gtk_image_new_from_icon_name ("go-down", GTK_ICON_SIZE_BUTTON);
+#else
     arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_OUT);
+#endif
     gtk_widget_show (arrow);
 
     gtk_container_add (GTK_CONTAINER (widget->button), arrow);
@@ -298,7 +302,11 @@ gnc_popup_get_button_width (void)
     gtk_widget_show (button);
     gtk_container_add (GTK_CONTAINER (window), button);
 
+#if GTK_CHECK_VERSION(3,14,0)
+    arrow = gtk_image_new_from_icon_name ("go-down", GTK_ICON_SIZE_BUTTON);
+#else
     arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_OUT);
+#endif
     gtk_widget_show (arrow);
     gtk_container_add (GTK_CONTAINER (button), arrow);
 

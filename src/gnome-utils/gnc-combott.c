@@ -225,7 +225,16 @@ gctt_init (GncCombott *combott)
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_set_homogeneous (GTK_BOX(hbox), FALSE);
 
-    arrow = gtk_arrow_new(GTK_ARROW_DOWN, GTK_SHADOW_OUT);
+#if GTK_CHECK_VERSION(3,14,0)
+    arrow = gtk_image_new_from_icon_name ("go-down", GTK_ICON_SIZE_BUTTON);
+#else
+    arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_OUT);
+#endif
+#if GTK_CHECK_VERSION(3,12,0)
+    gtk_widget_set_margin_start (GTK_WIDGET(arrow), 5);
+#else
+    gtk_widget_set_margin_left (GTK_WIDGET(arrow), 5);
+#endif
     gtk_box_pack_end (GTK_BOX (hbox), arrow, FALSE, FALSE, 0);
 
     sep = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
