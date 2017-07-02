@@ -197,6 +197,9 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
     template_combo = GTK_WIDGET(gtk_builder_get_object (builder, "template_combobox"));
     name_entry     = GTK_WIDGET(gtk_builder_get_object (builder, "name_entry"));
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dlg), "GncStyleSheetDialog");
+
     g_assert(ssd);
 
     /* Erase the initial dummy entry. */
@@ -409,6 +412,9 @@ gnc_style_sheet_select_dialog_create(void)
     gnc_builder_add_from_file (builder, "dialog-report.glade", "select_style_sheet_dialog");
 
     ss->toplevel   = GTK_WIDGET(gtk_builder_get_object (builder, "select_style_sheet_dialog"));
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(ss->toplevel), "GncStyleSheetDialog");
 
     ss->list_view  = GTK_TREE_VIEW(gtk_builder_get_object (builder, "style_sheet_list_view"));
     ss->list_store = gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_POINTER);

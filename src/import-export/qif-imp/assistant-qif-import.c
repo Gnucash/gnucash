@@ -3434,6 +3434,9 @@ get_assistant_widgets(QIFImportWindow *wind, GtkBuilder *builder)
                                    GTK_TEXT_VIEW(wind->convert_log));
     wind->summary_text       = GTK_WIDGET(gtk_builder_get_object (builder, "summary_page"));
 
+    // Set the style context for this assistant so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(wind->window), "GncAssistQifImport");
+
     wind->new_transaction_view =
         GTK_WIDGET(gtk_builder_get_object (builder, "new_transaction_view"));
     wind->old_transaction_view =

@@ -581,6 +581,9 @@ csv_import_assistant_create (CsvImportInfo *info)
     window = GTK_WIDGET(gtk_builder_get_object (builder, "csv_account_import_assistant"));
     info->window = window;
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(window), "GncAssistAccountImport");
+
     /* Load default settings */
     load_settings (info);
 

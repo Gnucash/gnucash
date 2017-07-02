@@ -575,6 +575,9 @@ gnc_customer_new_window (QofBook *bookp, GncCustomer *cust)
     gnc_builder_add_from_file (builder, "dialog-customer.glade", "customer_dialog");
     cw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "customer_dialog"));
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(cw->dialog), "GncCustomerDialog");
+
     g_object_set_data (G_OBJECT (cw->dialog), "dialog_info", cw);
 
     /* Get entry points */

@@ -818,6 +818,9 @@ csv_export_assistant_create (CsvExportInfo *info)
     window = GTK_WIDGET(gtk_builder_get_object (builder, "csv_export_assistant"));
     info->window = window;
 
+    // Set the style context for this assistant so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(window), "GncAssistExport");
+
     /* Load default settings */
     load_settings (info);
 

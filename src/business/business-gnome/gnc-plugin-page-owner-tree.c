@@ -560,6 +560,7 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
     GtkTreeViewColumn *col;
     const gchar *state_section = NULL;
     gchar* label = "";
+    const gchar *style_label = NULL;
 
     ENTER("page %p", plugin_page);
     page = GNC_PLUGIN_PAGE_OWNER_TREE (plugin_page);
@@ -573,6 +574,9 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
     priv->widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (priv->widget), FALSE);
     gtk_widget_show (priv->widget);
+
+    // Set the style context for this page so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(priv->widget), "GncBusinessPage");
 
     scrolled_window = gtk_scrolled_window_new (NULL, NULL);
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
@@ -598,32 +602,38 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
     g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
     gnc_tree_view_configure_columns(GNC_TREE_VIEW(tree_view));
 
-
-
     switch (priv->owner_type)
     {
     case GNC_OWNER_NONE :
     case GNC_OWNER_UNDEFINED :
         PWARN("missing owner_type");
         label = _("Unknown");
+        style_label = "GncUnknown";
         break;
     case GNC_OWNER_CUSTOMER :
         label = _("Customers");
         state_section = "Customers Overview";
+        style_label = "GncCustomers";
         break;
     case GNC_OWNER_JOB :
         label = _("Jobs");
         state_section = "Jobs Overview";
+        style_label = "GncJobs";
         break;
     case GNC_OWNER_VENDOR :
         label = _("Vendors");
         state_section = "Vendors Overview";
+        style_label = "GncVendors";
         break;
     case GNC_OWNER_EMPLOYEE :
         label = _("Employees");
         state_section = "Employees Overview";
+        style_label = "GncEmployees";
         break;
     }
+
+    // Set a secondary style context for this page so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(priv->widget), style_label);
 
     g_object_set(G_OBJECT(tree_view), "state-section", state_section,
                                       "show-column-menu", TRUE,

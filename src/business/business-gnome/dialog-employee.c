@@ -438,6 +438,9 @@ gnc_employee_new_window (QofBook *bookp,
     gnc_builder_add_from_file (builder, "dialog-employee.glade", "employee_dialog");
     ew->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "employee_dialog"));
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(ew->dialog), "GncEmployeeDialog");
+
     g_object_set_data (G_OBJECT (ew->dialog), "dialog_info", ew);
 
     /* Get entry points */

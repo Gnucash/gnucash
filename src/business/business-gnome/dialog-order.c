@@ -592,6 +592,9 @@ gnc_order_new_window (QofBook *bookp, OrderDialogType type,
     gnc_builder_add_from_file (builder, "dialog-order.glade", "order_entry_dialog");
     ow->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "order_entry_dialog"));
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(ow->dialog), "GncOrderDialog");
+
     /* Grab the widgets */
     ow->id_entry = GTK_WIDGET(gtk_builder_get_object (builder, "id_entry"));
     ow->ref_entry = GTK_WIDGET(gtk_builder_get_object (builder, "ref_entry"));
@@ -703,6 +706,9 @@ gnc_order_window_new_order (QofBook *bookp, GncOwner *owner)
     gnc_builder_add_from_file (builder, "dialog-order.glade", "new_order_dialog");
 
     ow->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "new_order_dialog"));
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(ow->dialog), "GncOrderDialog");
 
     g_object_set_data (G_OBJECT (ow->dialog), "dialog_info", ow);
 

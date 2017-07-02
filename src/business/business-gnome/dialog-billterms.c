@@ -135,6 +135,9 @@ init_notebook_widgets (BillTermNB *notebook, gboolean read_only,
     notebook->notebook = GTK_WIDGET(gtk_builder_get_object (builder, "term_notebook"));
     parent = GTK_WIDGET(gtk_builder_get_object (builder, "terms_notebook_window"));
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(notebook->notebook), "GncBillTermsDialog");
+
     /* load the "days" widgets */
     notebook->days_due_days = read_widget (builder, "days:due_days", read_only);
     notebook->days_disc_days = read_widget (builder, "days:discount_days", read_only);
@@ -436,6 +439,10 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
     nbt->dialog = GTK_WIDGET(gtk_builder_get_object (builder, dialog_name));
     nbt->name_entry = GTK_WIDGET(gtk_builder_get_object (builder, "name_entry"));
     nbt->desc_entry = GTK_WIDGET(gtk_builder_get_object (builder, dialog_desc));
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(nbt->dialog), "GncBillTermsDialog");
+
     if (name)
         gtk_entry_set_text (GTK_ENTRY (nbt->name_entry), name);
 
@@ -772,6 +779,9 @@ gnc_ui_billterms_window_new (QofBook *book)
     btw->desc_entry = GTK_WIDGET(gtk_builder_get_object (builder, "desc_entry"));
     btw->type_label = GTK_WIDGET(gtk_builder_get_object (builder, "type_label"));
     btw->term_vbox = GTK_WIDGET(gtk_builder_get_object (builder, "term_vbox"));
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(btw->dialog), "GncBillTermsDialog");
 
     /* Initialize the view */
     view = GTK_TREE_VIEW(btw->terms_view);

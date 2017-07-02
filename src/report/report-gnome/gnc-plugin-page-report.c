@@ -49,6 +49,7 @@
 #include <gnc-glib-utils.h>
 #include "gfec.h"
 #include "dialog-custom-report.h"
+#include "dialog-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
 #include "gnc-gnome-utils.h"
@@ -423,6 +424,9 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
 
     priv->container = GTK_CONTAINER(gtk_frame_new(NULL));
     gtk_frame_set_shadow_type(GTK_FRAME(priv->container), GTK_SHADOW_NONE);
+
+    // Set the style context for this page so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(priv->container), "GncReportPage");
 
     gtk_container_add(GTK_CONTAINER(priv->container),
                       gnc_html_get_widget(priv->html));

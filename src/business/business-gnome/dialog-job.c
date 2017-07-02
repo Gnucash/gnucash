@@ -340,6 +340,9 @@ gnc_job_new_window (QofBook *bookp, GncOwner *owner, GncJob *job)
     /* Find the dialog */
     jw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "job_dialog"));
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(jw->dialog), "GncJobDialog");
+
     /* Get entry points */
     jw->id_entry  = GTK_WIDGET(gtk_builder_get_object (builder, "id_entry"));
     jw->name_entry = GTK_WIDGET(gtk_builder_get_object (builder, "name_entry"));

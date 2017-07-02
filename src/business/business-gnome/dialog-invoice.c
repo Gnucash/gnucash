@@ -252,6 +252,9 @@ iw_ask_unpost (InvoiceWindow *iw)
     dialog = GTK_WIDGET (gtk_builder_get_object (builder, "unpost_message_dialog"));
     toggle = GTK_TOGGLE_BUTTON(gtk_builder_get_object (builder, "yes_tt_reset"));
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncInvoiceDialog");
+
     gtk_window_set_transient_for (GTK_WINDOW(dialog),
                                   GTK_WINDOW(iw_get_window(iw)));
 
@@ -2262,6 +2265,9 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     gnc_builder_add_from_file (builder, "dialog-invoice.glade", "invoice_entry_vbox");
     dialog = GTK_WIDGET (gtk_builder_get_object (builder, "invoice_entry_vbox"));
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncInvoiceDialog");
+
     /* Autoconnect all the signals */
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, iw);
 
@@ -2536,6 +2542,9 @@ gnc_invoice_window_new_invoice (InvoiceDialogType dialog_type, QofBook *bookp,
     gnc_builder_add_from_file (builder, "dialog-invoice.glade", "terms_store");
     gnc_builder_add_from_file (builder, "dialog-invoice.glade", "new_invoice_dialog");
     iw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "new_invoice_dialog"));
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(iw->dialog), "GncInvoiceDialog");
 
     g_object_set_data (G_OBJECT (iw->dialog), "dialog_info", iw);
 

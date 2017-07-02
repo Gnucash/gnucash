@@ -930,6 +930,9 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
     gnc_builder_add_from_file (builder, "dialog-payment.glade", "payment_dialog");
     pw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "payment_dialog"));
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(pw->dialog), "GncPaymentDialog");
+
     /* Grab the widgets and build the dialog */
     pw->payment_warning = GTK_WIDGET (gtk_builder_get_object (builder, "payment_warning"));
     pw->ok_button = GTK_WIDGET (gtk_builder_get_object (builder, "okbutton"));
