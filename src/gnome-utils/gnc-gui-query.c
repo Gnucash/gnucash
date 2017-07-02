@@ -313,7 +313,7 @@ gnc_choose_radio_option_dialog(GtkWidget *parent,
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
     gtk_box_set_homogeneous (GTK_BOX (vbox), TRUE);
     gtk_container_set_border_width(GTK_CONTAINER(vbox), 6);
-    gtk_container_add(GTK_BOX(main_vbox), vbox);
+    gtk_container_add(GTK_CONTAINER(main_vbox), vbox);
     gtk_widget_show(vbox);
 
     for (node = radio_list, i = 0; node; node = node->next, i++)
