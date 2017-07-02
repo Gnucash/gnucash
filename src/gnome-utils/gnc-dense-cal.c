@@ -892,6 +892,42 @@ gnc_dense_cal_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
 #define LOG_AND_RESET(timer, msg) do { g_debug("%s: %f", msg, g_timer_elapsed(timer, NULL) * 1000.); g_timer_reset(timer); } while (0);
 
 static void
+gnc_style_context_get_background_color (GtkStyleContext *context,
+                                        GtkStateFlags    state,
+                                        GdkRGBA         *color)
+{
+    GdkRGBA *c;
+
+    g_return_if_fail (color != NULL);
+    g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+    gtk_style_context_get (context,
+                           state,
+                           "background-color", &c,
+                           NULL);
+    *color = *c;
+    gdk_rgba_free (c);
+}
+
+static void
+gnc_style_context_get_border_color (GtkStyleContext *context,
+                                    GtkStateFlags    state,
+                                    GdkRGBA         *color)
+{
+    GdkRGBA *c;
+
+    g_return_if_fail (color != NULL);
+    g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+    gtk_style_context_get (context,
+                           state,
+                           "border-color", &c,
+                           NULL);
+    *color = *c;
+    gdk_rgba_free (c);
+}
+
+static void
 gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
 {
     GtkWidget *widget;
@@ -922,7 +958,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
     gtk_widget_get_allocation (GTK_WIDGET(dcal->cal_drawing_area), &alloc);
     stylectxt = gtk_widget_get_style_context (widget);
     state_flags = gtk_style_context_get_state (stylectxt);
-    gtk_style_context_get_background_color (stylectxt, state_flags, &color);
+    gnc_style_context_get_background_color (stylectxt, state_flags, &color);
 
     // test for no color set
     if (gdk_rgba_equal (&color, &test_color))
@@ -1012,7 +1048,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
         h = col_height(dcal);
 
         /* draw the outside border [inside the month labels] */
-        gtk_style_context_get_border_color (stylectxt, state_flags, &color);
+        gnc_style_context_get_border_color (stylectxt, state_flags, &color);
         cairo_set_source_rgb (cr, color.red, color.green, color.blue);
         cairo_set_line_width (cr, 1);
         cairo_rectangle (cr, x + 0.5, y + 0.5, w, h);
