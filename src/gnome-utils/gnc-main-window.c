@@ -3004,7 +3004,6 @@ gnc_main_window_open_page (GncMainWindow *window,
         gtk_widget_get_preferred_size (close_image, &requisition, NULL);
         gtk_widget_set_size_request(close_button, requisition.width + 4,
                                     requisition.height + 2);
-        gtk_button_set_alignment(GTK_BUTTON(close_button), 0.5, 0.5);
         gtk_container_add(GTK_CONTAINER(close_button), close_image);
         if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SHOW_CLOSE_BUTTON))
             gtk_widget_show (close_button);
