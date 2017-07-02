@@ -68,8 +68,8 @@ test_import_pending_matches_LDADD = \
   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ../libgncmod-generic-import.la \
-  ${top_builddir}/src/test-core/libtest-core.la \
   ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
+  ${top_builddir}/src/test-core/libtest-core.la \
   ${GLIB_LIBS}
 
 test_import_pending_matches_CFLAGS = $(AM_CPPFLAGS)
