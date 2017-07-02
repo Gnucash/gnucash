@@ -611,6 +611,7 @@ add_children_to_expander (GObject *object, GParamSpec *param_spec, gpointer data
         gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET (view));
 
         gtk_container_add (GTK_CONTAINER (expander), scrolled_window);
+        gtk_widget_set_vexpand (GTK_WIDGET(scrolled_window), TRUE);
         gtk_widget_show_all (scrolled_window);
     }
 }
@@ -665,6 +666,20 @@ verify_children_compatible (AccountWindow *aw)
     gtk_label_set_selectable (GTK_LABEL (label), TRUE);
     gnc_label_set_alignment (label, 0.0, 0.0);
     {
+#if GTK_CHECK_VERSION(3,16,0)
+        GtkCssProvider *provider = gtk_css_provider_new();
+        const gchar *label_css = {
+                                  "label {\n"
+                                  " font-size:large;\n"
+                                  " font-weight: bold;\n"
+                                  "}\n"
+                                 };
+        gtk_css_provider_load_from_data (provider, label_css, strlen(label_css), NULL);
+        gtk_style_context_add_provider (gtk_widget_get_style_context(GTK_WIDGET(label)),
+                                   GTK_STYLE_PROVIDER (provider),
+                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        g_object_unref (provider);
+#else
         gint size;
         PangoFontDescription *font_desc;
         GtkStyleContext *style;
@@ -678,6 +693,7 @@ verify_children_compatible (AccountWindow *aw)
         pango_font_description_set_size (font_desc, size * PANGO_SCALE_LARGE);
         gtk_widget_override_font(label, font_desc);
         pango_font_description_free (font_desc);
+#endif
     }
     gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
