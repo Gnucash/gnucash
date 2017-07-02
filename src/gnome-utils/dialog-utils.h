@@ -79,6 +79,15 @@ void gnc_label_set_alignment (GtkWidget *widget, gfloat xalign, gfloat yalign);
 \********************************************************************/
 GtkTreeViewGridLines gnc_tree_view_get_grid_lines_pref (void);
 
+/********************************************************************\
+ * Add a style context to a Widget so it can be altered with css    *
+ *                                                                  *
+ * Args:    widget - widget to add css style too                    *
+ *       gnc_class - character string for css class name            *
+ * Returns:  nothing                                                *
+\********************************************************************/
+void gnc_widget_set_style_context (GtkWidget *widget, const char *gnc_class);
+
 gboolean gnc_handle_date_accelerator (GdkEventKey *event,
                                       struct tm *tm,
                                       const char *date_str);

@@ -270,6 +270,20 @@ gnc_tree_view_get_grid_lines_pref (void)
     return grid_lines;
 }
 
+/********************************************************************\
+ * Add a style context to a Widget so it can be altered with css    *
+ *                                                                  *
+ * Args:    widget - widget to add css style too                    *
+ *       gnc_class - character string for css class name            *
+ * Returns:  nothing                                                *
+\********************************************************************/
+void
+gnc_widget_set_style_context (GtkWidget *widget, const char *gnc_class)
+{
+    GtkStyleContext *context = gtk_widget_get_style_context (widget);
+    gtk_style_context_add_class (context, gnc_class);
+}
+
 gboolean
 gnc_handle_date_accelerator (GdkEventKey *event,
                              struct tm *tm,
