@@ -17,7 +17,7 @@
       <!-- column-name uri -->
       <column type="gchararray"/>
       <!-- column-name uri_relative -->
-      <column type="gboolean"/>
+      <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkDialog" id="transaction_association_dialog">

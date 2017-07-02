@@ -360,8 +360,8 @@ get_trans_info (AssocDialog *assoc_dialog)
                                     DATE_TRANS, gnc_print_date (ts),
                                     DESC_TRANS, xaccTransGetDescription (trans),
                                     URI_U, uri_u, AVAILABLE, _("Unknown"),
-                                    URI_SPLIT, split, URI, uri, URI_RELATIVE, rel, -1);
-
+                                    URI_SPLIT, split, URI, uri,
+                                    URI_RELATIVE, (rel == TRUE ? "emblem-default" : NULL), -1);
                 g_free (uri_u);
             }
             trans_list = g_list_prepend (trans_list, trans); // add trans to trans_list
@@ -428,10 +428,10 @@ gnc_assoc_dialog_create (AssocDialog *assoc_dialog)
     gtk_tree_view_append_column (GTK_TREE_VIEW(assoc_dialog->view), tree_column);
     gtk_tree_view_column_set_alignment (tree_column, 0.5);
     gtk_tree_view_column_set_expand (tree_column, TRUE);
-    cr = gtk_cell_renderer_toggle_new();
+    cr = gtk_cell_renderer_pixbuf_new();
     gtk_tree_view_column_pack_start (tree_column, cr, TRUE);
     // connect 'active' and set 'xalign' property of the cell renderer
-    gtk_tree_view_column_set_attributes (tree_column, cr, "active", URI_RELATIVE, NULL);
+    gtk_tree_view_column_set_attributes (tree_column, cr, "icon-name", URI_RELATIVE, NULL);
     gtk_cell_renderer_set_alignment (cr, 0.5, 0.5);
 
     g_signal_connect (assoc_dialog->view, "row-activated",
