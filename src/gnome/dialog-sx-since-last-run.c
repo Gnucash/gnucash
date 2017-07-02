@@ -971,6 +971,9 @@ gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances, GList *auto_cr
 
     dialog->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "since_last_run_dialog"));
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog->dialog), "GncSxSinceLastRunDialog");
+
     dialog->editing_model = gnc_sx_slr_tree_model_adapter_new(sx_instances);
     dialog->review_created_txns_toggle = GTK_TOGGLE_BUTTON(gtk_builder_get_object (builder, "review_txn_toggle"));
 

@@ -991,6 +991,9 @@ lv_create (GNCLotViewer *lv)
 
     lv->window = GTK_WIDGET(gtk_builder_get_object (builder, "lot_viewer_dialog"));
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(lv->window), "GncLotViewerDialog");
+
     win_title = g_strdup_printf (_("Lots in Account %s"),
                                  xaccAccountGetName(lv->account));
     gtk_window_set_title (GTK_WINDOW (lv->window), win_title);

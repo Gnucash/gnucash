@@ -1085,6 +1085,9 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
     gtk_box_set_homogeneous (GTK_BOX (priv->widget), FALSE);
     gtk_widget_show (priv->widget);
 
+    // Set the style context for this page so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(priv->widget), "GncRegisterPage");
+
     numRows = priv->lines_default;
     numRows = MIN(numRows, DEFAULT_LINES_AMOUNT);
 

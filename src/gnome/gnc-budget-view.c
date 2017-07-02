@@ -332,6 +332,9 @@ gbv_create_widget(GncBudgetView *view)
     gtk_widget_show(GTK_WIDGET(vbox));
     gtk_box_set_homogeneous(GTK_BOX(vbox), FALSE);
 
+    // Set the style context for this page so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(vbox), "GncBudgetPage");
+
     scrolled_window = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window),
                                    GTK_POLICY_AUTOMATIC,

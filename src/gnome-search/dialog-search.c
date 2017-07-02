@@ -1157,6 +1157,9 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
     gtk_window_set_title(GTK_WINDOW(sw->dialog), title);
     g_object_set_data (G_OBJECT (sw->dialog), "dialog-info", sw);
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(sw->dialog), "GncSearchDialog");
+
     /* Grab the result hbox */
     sw->result_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "result_hbox"));
 

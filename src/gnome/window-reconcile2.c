@@ -695,6 +695,9 @@ startRecnWindow (GtkWidget *parent, Account *account,
 
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "reconcile_start_dialog"));
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncReconcileDialog");
+
     title = gnc_recn_make_window_name (account);
     gtk_window_set_title (GTK_WINDOW (dialog), title);
     g_free (title);

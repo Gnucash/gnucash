@@ -464,6 +464,9 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
     window = GTK_WIDGET(gtk_builder_get_object (builder, "loan_mortgage_assistant"));
     ldd->window = window;
 
+    // Set the style context for this assistant so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(window), "GncAssistLoan");
+
     /* Enable buttons on complete pages. */
     gtk_assistant_set_page_complete (GTK_ASSISTANT (window),
                                      GTK_WIDGET(gtk_builder_get_object(builder, "loan_intro_page")),

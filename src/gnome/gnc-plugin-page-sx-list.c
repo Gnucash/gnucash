@@ -371,6 +371,9 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     priv->widget = widget;
     gtk_widget_show (priv->widget);
 
+    // Set the style context for this page so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(priv->widget), "GncSxPage");
+
     /* Add vbox and label */
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);

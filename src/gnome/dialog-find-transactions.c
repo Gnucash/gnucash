@@ -35,6 +35,7 @@
 #include "gnc-main-window.h"
 #include "gnc-plugin-page-register.h"
 #include "search-param.h"
+#include "dialog-utils.h"
 
 #define GNC_PREFS_GROUP_SEARCH "dialogs.find"
 
@@ -224,6 +225,9 @@ gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg)
                                         params, NULL, start_q, show_q,
                                         NULL, do_find_cb, NULL,
                                         ftd, free_ftd_cb, GNC_PREFS_GROUP_SEARCH, NULL);
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(ftd->sw), "GncFindTransDialog");
 
     if (!ftd->sw)
     {

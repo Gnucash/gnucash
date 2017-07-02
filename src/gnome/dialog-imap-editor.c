@@ -651,6 +651,9 @@ gnc_imap_dialog_create (GtkWidget *parent, ImapDialog *imap_dialog)
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "import_map_dialog"));
     imap_dialog->dialog = dialog;
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncImapDialog");
+
     imap_dialog->session = gnc_get_current_session();
     imap_dialog->type = BAYES;
 

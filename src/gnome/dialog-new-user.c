@@ -86,6 +86,9 @@ gnc_ui_new_user_dialog (void)
 
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "new_user_dialog"));
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncNewUserDialog");
+
     new_accounts_button = GTK_WIDGET(gtk_builder_get_object (builder, "new_accounts_button"));
     import_qif_button = GTK_WIDGET(gtk_builder_get_object (builder, "import_qif_button"));
     tutorial_button = GTK_WIDGET(gtk_builder_get_object (builder, "tutorial_button"));

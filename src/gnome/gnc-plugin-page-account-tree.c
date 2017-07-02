@@ -636,6 +636,9 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
     gtk_box_set_homogeneous (GTK_BOX (priv->widget), FALSE);
     gtk_widget_show (priv->widget);
 
+    // Set the style context for this page so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(priv->widget), "GncAccountPage");
+
     scrolled_window = gtk_scrolled_window_new (NULL, NULL);
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
                                     GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);

@@ -430,6 +430,9 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "prices_dialog"));
     pdb_dialog->dialog = dialog;
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncPriceEditDialog");
+
     pdb_dialog->session = gnc_get_current_session();
     pdb_dialog->book = qof_session_get_book(pdb_dialog->session);
     pdb_dialog->price_db = gnc_pricedb_get_db(pdb_dialog->book);

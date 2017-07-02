@@ -323,6 +323,9 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
     cd->book = qof_session_get_book(cd->session);
     cd->show_currencies = gnc_prefs_get_bool(GNC_PREFS_GROUP, GNC_PREF_INCL_ISO);
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(cd->dialog), "GncCommoditiesDialog");
+
     gtk_builder_connect_signals(builder, cd);
 
     /* parent */

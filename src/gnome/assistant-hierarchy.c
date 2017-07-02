@@ -1201,6 +1201,9 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "hierarchy_assistant"));
     data->dialog = dialog;
 
+    // Set the style context for this assistant so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncAssistAccountHierarchy");
+
     /* If we have a callback, make this window stay on top */
     if (when_completed != NULL)
         gtk_window_set_keep_above (GTK_WINDOW(data->dialog), TRUE);

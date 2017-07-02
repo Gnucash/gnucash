@@ -769,6 +769,9 @@ gnc_sx_create_from_trans( Transaction *trans )
     gnc_builder_add_from_file  (builder , "dialog-sx.glade", "sx_from_real_trans_dialog");
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "sx_from_real_trans_dialog"));
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncSxFromTransDialog");
+
     sxfti->builder = builder;
     sxfti->dialog = dialog;
     sxfti->trans = trans;

@@ -392,6 +392,9 @@ gnc_assoc_dialog_create (AssocDialog *assoc_dialog)
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_association_dialog"));
     assoc_dialog->dialog = dialog;
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncTransAssocDialog");
+
     assoc_dialog->view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview"));
     path_head = GTK_WIDGET(gtk_builder_get_object (builder, "path-head"));
 

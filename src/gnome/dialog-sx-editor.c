@@ -1195,6 +1195,9 @@ gnc_ui_scheduled_xaction_editor_dialog_create (SchedXaction *sx,
     sxed->endCountSpin = GTK_ENTRY(gtk_builder_get_object (builder, "end_spin"));
     sxed->endRemainSpin = GTK_ENTRY(gtk_builder_get_object (builder, "remain_spin"));
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(sxed->dialog), "GncSxEditorDialog");
+
     /* Setup the end-date GNC widget */
     {
         GtkWidget *endDateBox = GTK_WIDGET(gtk_builder_get_object (builder, "editor_end_date_box"));

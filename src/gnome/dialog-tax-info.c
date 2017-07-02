@@ -1280,6 +1280,9 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "tax_information_dialog"));
     ti_dialog->dialog = dialog;
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncTaxInfoDialog");
+
     initialize_getters ();
 
     g_signal_connect (G_OBJECT (dialog), "response",
