@@ -1,6 +1,146 @@
+2017-06-30 John Ralls 
+
+	* Update translations from the translation project. (HEAD, maint)
+
+2017-06-29 Mike Evans 
+
+	* Bug 784317 - typo in 'import customers or vendors from text file' dialog (origin/maint)
+
+2017-06-25 John Ralls 
+
+	* Bug 782274 - Transactions produced by Transfer Funds or Process...
+
+2017-06-24 John Ralls 
+
+	* Bug 782897 - Stock Split Assistant crashes GnuCash if you enter a New...
+
+2017-06-20 Geert Janssens 
+
+	* Bug 603379 - Prevent changing some Account Options if it has transactions - followup
+
+2017-06-20 Geert Janssens 
+
+	* Properly define the template namespace rather than using a local string everywhere
+
+2017-06-16 Geert Janssens 
+
+	* Bug 781634 followup - separate translatable commodity namespace strings from those uses in storage
+
+2017-06-16 John Ralls 
+
+	* Correctly store time64 0 in the SQL backend.
+
+2017-06-16 John Ralls 
+
+	* Clamp time64 values passed to GDateTime functions to the valid range.
+
+2017-06-04 christopherlam 
+
+	* Bug 776396 Further Fix
+
+2017-05-26 John Ralls 
+
+	* Bug 783095 - gnucash-2.6.16 segfaults on startup
+
+2017-05-21 Mike Evans 
+
+	* Change from deprecated gncEntrySetDate to gncEntrySetDateGDate. Again.
+
+2017-05-21 Mike Evans 
+
+	* Revert "Change from deprecated gncEntrySetDate to gncEntrySetDateGDate." Oops, more work required.
+
+2017-05-21 Mike Evans 
+
+	* Change from deprecated gncEntrySetDate to gncEntrySetDateGDate.
+
+2017-05-19 Mike Evans 
+
+	* Correct a typo.
+
+2017-05-18 Mike Evans 
+
+	* Use correct column for entry date.
+
+2017-05-13 Bert 
+
+	* Bug 776396 - Foreign currency reports, amounts are not aligned correctly
+
+2016-08-10 fell 
+
+	* Add XSU to iso-4217-currencies
+
+2017-05-03 Geert Janssens 
+
+	* Drop ifdeffed out code block
+
+2017-05-03 Geert Janssens 
+
+	* Bug 781634 - Alert on missing account currency when opening account
+
+2017-04-29 John Ralls 
+
+	* CMakeLists.txt: Remove Apple architecture settings.
+
+2017-04-16 John Ralls 
+
+	* Updated ar.po from ashalash@msn.com
+
+2017-04-29 fell 
+
+	* Fix wrong displayed position of the verbose flag in gnc-fq-dump
+
+2017-04-16 John Ralls 
+
+	* Merge branch 'PR140' into maint
+
+2016-08-04 John Ralls 
+
+	* Adjust CMAKE_C_FLAGS for better release/debug behavior.
+
+2017-04-10 John Ralls 
+
+	* Use the Mac Locale to find the account templates only when building with quartz.
+
+2017-04-10 Mike Alexander 
+
+	* Fix a minor typo.
+
+2017-04-04 Mike Alexander 
+
+	* Fix the SWIG Guile wrapping of functions that have a "struct tm" parameter.
+
+2017-04-03 John Ralls 
+
+	* Save Changes Bug 780889 - Split-register transactions result in invalid...
+
+2017-04-02 John Ralls 
+
+	* Bug 780845 - link in github repo README file needs correction/editing
+
+2017-03-30 John Ralls 
+
+	* Merge Ueli Neiderer's swift-transactiontxt branch into maint.
+
+2017-03-30 Ueli Niederer 
+
+	* Obey GNUcash coding style
+
+2017-03-30 Ueli Niederer 
+
+	* Added a preference to control import behaivour of transaction text
+
+2017-03-28 Ueli Niederer 
+
+	* Including the transaction text into the purpose text
+
 2017-03-25 John Ralls 
 
-	* Reduce the gate on get_random_gnc_numeric. (HEAD, maint)
+	* Release 2.6.16 (tag: 2.6.16)
+
+2017-03-25 John Ralls 
+
+	* Reduce the gate on get_random_gnc_numeric.
 
 2017-03-25 John Ralls 
 
@@ -8,7 +148,7 @@
 
 2017-03-24 John Ralls 
 
-	* Bug 670731 - Future Value not working with Loan Scheduled transaction (origin/maint)
+	* Bug 670731 - Future Value not working with Loan Scheduled transaction (manjusri/maint)
 
 2017-03-24 fell 
 
@@ -172,7 +312,7 @@
 
 2017-02-18 sdementen 
 
-	* add gnc_get_current_session to swig interface (manjusri/maint)
+	* add gnc_get_current_session to swig interface
 
 2017-02-14 fell 
 
