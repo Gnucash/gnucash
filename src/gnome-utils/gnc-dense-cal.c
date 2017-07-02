@@ -285,15 +285,13 @@ gnc_dense_cal_init(GncDenseCal *dcal)
 
     {
         GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-        GtkAlignment *label_align;
-        GtkLabel *label;
-        float right_align = 1.0, mid_align = 0.5, fill_x = 0.0, fill_y = 1.0;
+        GtkWidget *label = gtk_label_new (_("View:"));
 
         gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
-        label = GTK_LABEL(gtk_label_new(_("View:")));
-        label_align = GTK_ALIGNMENT(gtk_alignment_new(right_align, mid_align, fill_x, fill_y));
-        gtk_container_add(GTK_CONTAINER(label_align), GTK_WIDGET(label));
-        gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(label_align), TRUE, TRUE, 0);
+        gtk_widget_set_halign (label, GTK_ALIGN_END);
+        gtk_widget_set_margin_end (label, 5);
+
+        gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0);
         gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(dcal->view_options), FALSE, FALSE, 0);
 
         gtk_box_pack_start(GTK_BOX(dcal), GTK_WIDGET(hbox), FALSE, FALSE, 0);

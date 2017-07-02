@@ -293,7 +293,6 @@ gnc_choose_radio_option_dialog(GtkWidget *parent,
     GtkWidget *vbox;
     GtkWidget *main_vbox;
     GtkWidget *label;
-    GtkWidget *alignment;
     GtkWidget *radio_button;
     GtkWidget *dialog;
     GtkWidget *dvbox;
@@ -311,21 +310,17 @@ gnc_choose_radio_option_dialog(GtkWidget *parent,
     gtk_box_pack_start(GTK_BOX(main_vbox), label, FALSE, FALSE, 0);
     gtk_widget_show(label);
 
-    alignment = gtk_alignment_new(0.0, 0.0, 1.0, 1.0);
-    gtk_alignment_set_padding (GTK_ALIGNMENT(alignment), 0, 0, 12, 0);
-    gtk_box_pack_start(GTK_BOX(main_vbox), alignment, FALSE, FALSE, 0);
-    gtk_widget_show(alignment);
-
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
     gtk_box_set_homogeneous (GTK_BOX (vbox), TRUE);
     gtk_container_set_border_width(GTK_CONTAINER(vbox), 6);
-    gtk_container_add(GTK_CONTAINER(alignment), vbox);
+    gtk_container_add(GTK_BOX(main_vbox), vbox);
     gtk_widget_show(vbox);
 
     for (node = radio_list, i = 0; node; node = node->next, i++)
     {
         radio_button = gtk_radio_button_new_with_mnemonic(group, node->data);
         group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(radio_button));
+        gtk_widget_set_halign (GTK_WIDGET(radio_button), GTK_ALIGN_START);
 
         if (i == default_value) /* default is first radio button */
         {

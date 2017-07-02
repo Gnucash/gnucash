@@ -1125,7 +1125,6 @@ identity_edit_clicked_cb (GtkButton *button,
     GtkWidget *content_area;
     GtkWidget *name_entry;
     GtkWidget *label;
-    GtkWidget *alignment;
     GtkWidget *table;
     GtkListStore *store;
     GList *types = NULL;
@@ -1152,16 +1151,10 @@ identity_edit_clicked_cb (GtkButton *button,
         gtk_entry_set_text (GTK_ENTRY (name_entry), ti_dialog->tax_name);
     label = gtk_label_new (_("Name"));
     gnc_label_set_alignment (label, 1.00, 0.50);
-    alignment = gtk_alignment_new(1.00, 0.50, 1.00, 0.00);
-    gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 0, 0, 12, 0);
-    gtk_container_add (GTK_CONTAINER (alignment), label);
     table = gtk_grid_new ();
-    gtk_grid_attach (GTK_GRID(table), alignment, 0, 0, 1, 1);
-
-    alignment = gtk_alignment_new(0.00, 0.50, 1.00, 0.00);
-    gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 0, 0, 12, 0);
-    gtk_container_add (GTK_CONTAINER (alignment), name_entry);
-    gtk_grid_attach (GTK_GRID(table), alignment, 1, 0, 1, 1);
+    gtk_grid_set_column_spacing (GTK_GRID(table), 12);
+    gtk_grid_attach (GTK_GRID(table), label, 0, 0, 1, 1);
+    gtk_grid_attach (GTK_GRID(table), name_entry, 1, 0, 1, 1);
 
     store = gtk_list_store_new (1, G_TYPE_STRING);
     gtk_list_store_clear(store);
@@ -1193,24 +1186,15 @@ identity_edit_clicked_cb (GtkButton *button,
     }
     label = gtk_label_new (_("Type"));
     gnc_label_set_alignment (label, 1.00, 0.50);
-    alignment = gtk_alignment_new(1.00, 0.50, 1.00, 0.00);
-    gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 0, 0, 12, 0);
-    gtk_container_add (GTK_CONTAINER (alignment), label);
-    gtk_grid_attach (GTK_GRID(table), alignment, 0, 1, 1, 1);
-
-    alignment = gtk_alignment_new(0.00, 0.50, 1.00, 0.00);
-    gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 0, 0, 12, 0);
-    gtk_container_add (GTK_CONTAINER (alignment), type_combo);
-    gtk_grid_attach (GTK_GRID(table), alignment, 1, 1, 1, 1);
+    gtk_grid_attach (GTK_GRID(table), label, 0, 1, 1, 1);
+    gtk_grid_attach (GTK_GRID(table), type_combo, 1, 1, 1, 1);
 
     label = gtk_label_new (_("CAUTION: If you set TXF categories, and later change 'Type', you will need to manually reset those categories one at a time"));
     gtk_label_set_max_width_chars (GTK_LABEL (label), 50);
     gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
     gnc_label_set_alignment (label, 0.50, 0.50);
-    alignment = gtk_alignment_new(0.50, 0.50, 1.00, 0.00);
-    gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 6, 6, 4, 4);
-    gtk_container_add (GTK_CONTAINER (alignment), label);
-    gtk_grid_attach (GTK_GRID(table), alignment, 0, 2, 2, 1);
+    gtk_widget_set_margin_top (GTK_WIDGET(label), 5);
+    gtk_grid_attach (GTK_GRID(table), label, 0, 2, 2, 1);
 
     gtk_container_add (GTK_CONTAINER (content_area), table);
     gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_APPLY);

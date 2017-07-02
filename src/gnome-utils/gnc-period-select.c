@@ -110,7 +110,6 @@ struct _GncPeriodSelectPrivate
 
     GDate     *date_base;
     GtkWidget *date_label;
-    GtkWidget *date_align;
 };
 
 #define GNC_PERIOD_SELECT_GET_PRIVATE(o)  \
@@ -331,12 +330,14 @@ gnc_period_select_set_date_common (GncPeriodSelect *period, const GDate *date)
                                          g_date_get_year(date));
         if (priv->date_label == NULL)
         {
-            priv->date_align = gtk_alignment_new(0.5, 0.5, 0, 0);
-            gtk_alignment_set_padding(GTK_ALIGNMENT(priv->date_align), 0, 0, 6, 0);
-            gtk_box_pack_start(GTK_BOX(period), priv->date_align, TRUE, TRUE, 0);
             priv->date_label = gtk_label_new("");
-            gtk_container_add(GTK_CONTAINER(priv->date_align), priv->date_label);
-            gtk_widget_show_all(priv->date_align);
+#if GTK_CHECK_VERSION(3,12,0)
+            gtk_widget_set_margin_start (GTK_WIDGET(priv->date_label), 6);
+#else
+            gtk_widget_set_margin_left (GTK_WIDGET(priv->date_label), 6);
+#endif
+            gtk_box_pack_start(GTK_BOX(period), priv->date_label, TRUE, TRUE, 0);
+            gtk_widget_show_all(priv->date_label);
         }
         gnc_period_sample_update_date_label(period);
         return;
@@ -346,8 +347,7 @@ gnc_period_select_set_date_common (GncPeriodSelect *period, const GDate *date)
     {
         g_date_free(priv->date_base);
         priv->date_base = NULL;
-        gtk_widget_destroy(priv->date_align);
-        priv->date_align = NULL;
+        gtk_widget_destroy(priv->date_label);
         priv->date_label = NULL;
     }
 }
