@@ -5798,7 +5798,23 @@ gtv_sr_editable_start_editing_cb (GtkCellRenderer *cr, GtkCellEditable *editable
         if (gdk_rgba_parse (&color, row_color))
         {
             if (entry != NULL)
+            {
+#if GTK_CHECK_VERSION(3,16,0)
+                GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET (entry));
+                GtkCssProvider *provider = gtk_css_provider_new();
+                gchar *col_str = gdk_rgba_to_string (&color);
+                gchar *widget_css = g_strconcat ("*{\n  background-color:", col_str, ";\n}\n", NULL);
+
+                gtk_css_provider_load_from_data (provider, widget_css, -1, NULL);
+                gtk_style_context_add_provider (stylectxt, GTK_STYLE_PROVIDER (provider),
+                                                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+                g_object_unref (provider);
+                g_free (col_str);
+                g_free (widget_css);
+#else
                 gtk_widget_override_background_color (GTK_WIDGET (entry), GTK_STATE_FLAG_NORMAL, &color);
+#endif
+            }
         }
     }
 

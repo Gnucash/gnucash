@@ -2296,6 +2296,11 @@ main_window_update_page_color (GncPluginPage *page,
 
     if (want_color && gdk_rgba_parse(&tab_color, color_string) && priv->show_color_tabs)
     {
+#if GTK_CHECK_VERSION(3,16,0)
+        GtkCssProvider *provider = gtk_css_provider_new();
+        GtkStyleContext *stylectxt;
+        gchar *col_str, *widget_css;
+#endif
         if (!GTK_IS_EVENT_BOX (tab_widget))
         {
             GtkWidget *event_box = gtk_event_box_new ();
@@ -2306,8 +2311,21 @@ main_window_update_page_color (GncPluginPage *page,
             g_object_unref (tab_widget);
             tab_widget = event_box;
         }
+#if GTK_CHECK_VERSION(3,16,0)
+        stylectxt = gtk_widget_get_style_context (GTK_WIDGET (tab_widget));
+        col_str = gdk_rgba_to_string (&tab_color);
+        widget_css = g_strconcat ("*{\n  background-color:", col_str, ";\n}\n", NULL);
+
+        gtk_css_provider_load_from_data (provider, widget_css, -1, NULL);
+        gtk_style_context_add_provider (stylectxt, GTK_STYLE_PROVIDER (provider),
+                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        g_object_unref (provider);
+        g_free (col_str);
+        g_free (widget_css);
+#else
         gtk_widget_override_background_color (tab_widget, GTK_STATE_NORMAL, &tab_color);
         gtk_widget_override_background_color (tab_widget, GTK_STATE_ACTIVE, &tab_color);
+#endif
     }
     else
     {
@@ -2942,8 +2960,11 @@ gnc_main_window_open_page (GncMainWindow *window,
         image = gtk_image_new_from_icon_name (icon, GTK_ICON_SIZE_MENU);
         gtk_widget_show (image);
         gtk_box_pack_start (GTK_BOX (tab_hbox), image, FALSE, FALSE, 0);
+#if GTK_CHECK_VERSION(3,12,0)
         gtk_widget_set_margin_start (GTK_WIDGET(image), 5);
-
+#else
+        gtk_widget_set_margin_left (GTK_WIDGET(image), 5);
+#endif
         gtk_box_pack_start (GTK_BOX (tab_hbox), label, TRUE, TRUE, 0);
     }
     else
