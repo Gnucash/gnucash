@@ -38,6 +38,7 @@
 #include "gnc-period-select.h"
 #include "gnc-prefs.h"
 #include <gnc-gdate-utils.h>
+#include "dialog-utils.h"
 
 enum
 {
@@ -614,6 +615,9 @@ gnc_period_select_init (GncPeriodSelect *period)
     GncPeriodSelectPrivate *priv;
 
     gtk_orientable_set_orientation (GTK_ORIENTABLE(period), GTK_ORIENTATION_HORIZONTAL);
+
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(period), "GncPeriodSelect");
 
     priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
     priv->start = TRUE;

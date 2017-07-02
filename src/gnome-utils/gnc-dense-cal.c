@@ -31,6 +31,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <gnc-gdate-utils.h>
+#include "dialog-utils.h"
 
 /**
  * Marking ...
@@ -261,13 +262,12 @@ _gdc_get_view_options(void)
 static void
 gnc_dense_cal_init(GncDenseCal *dcal)
 {
-    GtkStyleContext *context;
     gboolean colorAllocSuccess[MAX_COLORS];
 
     gtk_orientable_set_orientation (GTK_ORIENTABLE(dcal), GTK_ORIENTATION_VERTICAL);
 
-    context = gtk_widget_get_style_context (GTK_WIDGET(dcal));
-    gtk_style_context_add_class (context,"GncDenseCal");
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dcal), "GncDenseCal");
 
     {
         GtkTreeModel *options;

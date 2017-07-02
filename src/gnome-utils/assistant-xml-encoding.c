@@ -1188,6 +1188,10 @@ gxi_edit_encodings_clicked_cb (GtkButton *button, GncXmlImportData *data)
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "encodings_dialog"));
     data->encodings_dialog = dialog;
 
+
+    // Set the style context for this assistant so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncAssistXmlEncoding");
+
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, data);
 
     gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (data->assistant));

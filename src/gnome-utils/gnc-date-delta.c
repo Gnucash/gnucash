@@ -43,6 +43,7 @@
 
 #include "gnc-date.h"
 #include "gnc-date-delta.h"
+#include "dialog-utils.h"
 
 #define GDD_LABEL "gdd"
 
@@ -160,6 +161,9 @@ static void
 gnc_date_delta_init (GNCDateDelta *gdd)
 {
     gtk_orientable_set_orientation (GTK_ORIENTABLE(gdd), GTK_ORIENTATION_HORIZONTAL);
+
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(gdd), "GncDateDelta");
 
     gdd->value_spin = NULL;
     gdd->units_combo = NULL;

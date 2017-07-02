@@ -233,6 +233,10 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
     gnc_builder_add_from_file (builder, "dialog-tax-table.glade", "new_tax_table_dialog");
 
     ntt->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "new_tax_table_dialog"));
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(ntt->dialog), "GncTaxTableDialog");
+
     ntt->name_entry = GTK_WIDGET(gtk_builder_get_object (builder, "name_entry"));
     if (name)
         gtk_entry_set_text (GTK_ENTRY (ntt->name_entry), name);
@@ -711,6 +715,9 @@ gnc_ui_tax_table_window_new (QofBook *book)
     ttw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "tax_table_window_dialog"));
     ttw->names_view = GTK_WIDGET(gtk_builder_get_object (builder, "tax_tables_view"));
     ttw->entries_view = GTK_WIDGET(gtk_builder_get_object (builder, "tax_table_entries"));
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(ttw->dialog), "GncTaxTableDialog");
 
     /* Create the tax tables view */
     view = GTK_TREE_VIEW(ttw->names_view);

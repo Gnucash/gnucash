@@ -38,6 +38,7 @@
 #include "gnc-plugin-manager.h"
 #include "gnc-ui.h"
 #include "gnc-window.h"
+#include "dialog-utils.h"
 
 /* Static Globals *******************************************************/
 
@@ -238,6 +239,9 @@ gnc_embedded_window_init (GncEmbeddedWindow *window,
     ENTER("window %p", window);
 
     gtk_orientable_set_orientation (GTK_ORIENTABLE(window), GTK_ORIENTATION_VERTICAL);
+
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(window), "GncEmbededWindow");
 
     gnc_embedded_window_setup_window (window);
 

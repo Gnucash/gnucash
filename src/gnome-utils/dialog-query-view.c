@@ -192,6 +192,9 @@ gnc_dialog_query_view_new (GList *param_list, Query *q)
     dqv->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "query_view_dialog"));
     g_object_set_data (G_OBJECT (dqv->dialog), "dialog-info", dqv);
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dqv->dialog), "GncQueryViewDialog");
+
     /* grab the widgets */
     dqv->label = GTK_WIDGET(gtk_builder_get_object (builder, "dialog_label"));
     result_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "result_hbox"));

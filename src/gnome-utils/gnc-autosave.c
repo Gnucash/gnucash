@@ -34,6 +34,7 @@
 #include "gnc-prefs.h"
 #include "gnc-main-window.h"
 #include "gnc-gui-query.h"
+#include "dialog-utils.h"
 
 #define GNC_PREF_AUTOSAVE_SHOW_EXPLANATION "autosave-show-explanation"
 #define GNC_PREF_AUTOSAVE_INTERVAL         "autosave-interval-minutes"
@@ -96,6 +97,10 @@ static gboolean autosave_confirm(GtkWidget *toplevel)
                                GTK_BUTTONS_NONE,
                                "%s",
                                _("Save file automatically?"));
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncAutoSaveDialog");
+
     gtk_message_dialog_format_secondary_text
     (GTK_MESSAGE_DIALOG(dialog),
      ngettext("Your data file needs to be saved to your hard disk to save your changes. "

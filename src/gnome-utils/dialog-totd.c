@@ -336,6 +336,9 @@ gnc_totd_dialog (GtkWindow *parent, gboolean startup)
     dialog  = GTK_WIDGET(gtk_builder_get_object (builder, "totd_dialog"));
     gtk_window_set_transient_for(GTK_WINDOW (dialog), parent);
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncTotdDialog");
+
     totd_dialog->dialog = dialog;
 
     ENTER("totd_dialog %p, dialog %p", totd_dialog, dialog);

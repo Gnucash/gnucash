@@ -203,6 +203,9 @@ gnc_frequency_init(GncFrequency *gf)
 
     gtk_orientable_set_orientation (GTK_ORIENTABLE(gf), GTK_ORIENTATION_VERTICAL);
 
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(gf), "GncFrequency");
+
     builder = gtk_builder_new();
     gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "adjustment1");
     gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "adjustment2");

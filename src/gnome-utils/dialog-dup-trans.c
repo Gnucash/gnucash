@@ -108,6 +108,9 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "duplicate_transaction_dialog"));
     dt_dialog->dialog = dialog;
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncDupTransDialog");
+
     /* parent */
     if (parent != NULL)
         gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));

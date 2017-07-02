@@ -671,6 +671,9 @@ gnc_date_edit_init (GNCDateEdit *gde)
 {
     gtk_orientable_set_orientation (GTK_ORIENTABLE(gde), GTK_ORIENTATION_HORIZONTAL);
 
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(gde), "GncDateEdit");
+
     gde->disposed = FALSE;
     gde->popup_in_progress = FALSE;
     gde->lower_hour = 7;

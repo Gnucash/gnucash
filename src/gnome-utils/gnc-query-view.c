@@ -215,6 +215,9 @@ gnc_query_view_init (GNCQueryView *qview)
 {
     GNCQueryViewPriv *priv;
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(qview), "GncQueryView");
+
     qview->query = NULL;
 
     qview->num_columns = 0;

@@ -215,6 +215,9 @@ gctt_init (GncCombott *combott)
 
     gtk_orientable_set_orientation (GTK_ORIENTABLE(combott), GTK_ORIENTATION_HORIZONTAL);
 
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(combott), "GncCombott");
+
     priv->active = 0;
     priv->text_col = 0;
     priv->tip_col = 1;

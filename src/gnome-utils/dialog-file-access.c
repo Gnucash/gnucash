@@ -277,6 +277,9 @@ gnc_ui_file_access( int type )
     faw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "file_access_dialog" ));
     g_object_set_data_full( G_OBJECT(faw->dialog), "FileAccessWindow", faw, g_free );
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(faw->dialog), "GncFileAccessDialog");
+
     faw->frame_file = GTK_WIDGET(gtk_builder_get_object (builder, "frame_file" ));
     faw->frame_database = GTK_WIDGET(gtk_builder_get_object (builder, "frame_database" ));
     faw->readonly_checkbutton = GTK_WIDGET(gtk_builder_get_object (builder, "readonly_checkbutton"));

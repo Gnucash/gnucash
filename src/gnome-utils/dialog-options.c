@@ -1728,6 +1728,9 @@ gnc_options_dialog_new_modal(gboolean modal, gchar *title)
     retval->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "gnucash_options_dialog"));
     retval->page_list = GTK_WIDGET(gtk_builder_get_object (builder, "page_list_scroll"));
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(retval->dialog), "GncOptionsDialog");
+
     /* Page List */
     {
         GtkTreeView *view;

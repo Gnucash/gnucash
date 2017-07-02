@@ -37,6 +37,7 @@
 #include <stdio.h>
 
 #include "gnc-general-select.h"
+#include "dialog-utils.h"
 
 /* Signal codes */
 enum
@@ -143,6 +144,9 @@ static void
 gnc_general_select_init (GNCGeneralSelect *gsl)
 {
     gtk_orientable_set_orientation (GTK_ORIENTABLE(gsl), GTK_ORIENTATION_HORIZONTAL);
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(gsl), "GncGeneralSelect");
 
     gsl->disposed = FALSE;
     gsl->selected_item = NULL;

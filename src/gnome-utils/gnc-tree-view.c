@@ -250,6 +250,9 @@ gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass)
     /* Ask gtk to help the user keep track of rows. */
     g_object_set(view, "rules-hint", TRUE, NULL);
 
+    // Set the style context for this page so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(view), "GncTreeView");
+
     /* Handle column drag and drop */
     gtk_tree_view_set_column_drag_function(GTK_TREE_VIEW(view),
                                            gnc_tree_view_drop_ok_cb, NULL, NULL);

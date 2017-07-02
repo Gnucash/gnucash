@@ -1320,6 +1320,9 @@ gnc_account_window_create(AccountWindow *aw)
     aw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "account_dialog"));
     awo = G_OBJECT (aw->dialog);
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(aw->dialog), "GncAccountDialog");
+
     g_object_set_data (awo, "dialog_info", aw);
 
     if (!aw->modal)

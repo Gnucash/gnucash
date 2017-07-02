@@ -29,6 +29,7 @@
 #include "gnc-splash.h"
 #include "core-utils/gnc-version.h"
 #include "gnc-prefs.h"
+#include "dialog-utils.h"
 
 #define MARKUP_STRING "<span size='small'>%s</span>"
 #define GNC_PREF_SHOW_SPLASH "show-splash-screen"
@@ -67,6 +68,9 @@ gnc_show_splash_screen (void)
     splash = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_decorated(GTK_WINDOW (splash), FALSE);
     gtk_window_set_skip_taskbar_hint (GTK_WINDOW (splash), TRUE);
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(splash), "GncSplash");
 
     g_signal_connect (splash, "destroy",
                       G_CALLBACK (splash_destroy_cb), NULL);

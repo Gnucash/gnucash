@@ -35,6 +35,7 @@
 #include "gnc-ui-util.h"
 #include "qof.h"
 #include "gnc-session.h"
+#include "dialog-utils.h"
 
 #define ACCT_DATA_TAG "gnc-account-sel_acct"
 
@@ -153,6 +154,9 @@ gnc_account_sel_init (GNCAccountSel *gas)
     gas->newAccountButton = NULL;
 
     g_object_set(gas, "spacing", 2, (gchar*)NULL);
+
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(gas), "GncAccountSel");
 
     gas->store = gtk_list_store_new(NUM_ACCT_COLS, G_TYPE_STRING, G_TYPE_POINTER);
     widget = gtk_combo_box_new_with_model_and_entry(GTK_TREE_MODEL(gas->store));

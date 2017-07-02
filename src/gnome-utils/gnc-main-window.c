@@ -2545,6 +2545,9 @@ gnc_main_window_init (GncMainWindow *window,
     priv->merged_actions_table =
         g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(window), "GncMainWindow");
+
     priv->event_handler_id =
         qof_event_register_handler(gnc_main_window_event_handler, window);
 

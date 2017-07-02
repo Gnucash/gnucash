@@ -1267,6 +1267,9 @@ gnc_preferences_dialog_create(void)
 
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "gnucash_preferences_dialog"));
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncPreferenceDialog");
+
 #ifndef REGISTER2_ENABLED
     /* Hide preferences that are related to register2 */
     box = GTK_WIDGET (gtk_builder_get_object (builder, "label14"));

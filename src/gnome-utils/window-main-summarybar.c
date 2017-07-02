@@ -37,6 +37,7 @@
 #include "gnc-locale-utils.h"
 #include "gnc-ui-util.h"
 #include "window-main-summarybar.h"
+#include "dialog-utils.h"
 
 typedef struct
 {
@@ -532,6 +533,9 @@ gnc_main_window_summary_new (void)
 
     retval->hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (retval->hbox), FALSE);
+
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(retval->hbox), "GncSummaryBar");
 
     retval->totals_combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (retval->datamodel));
     g_object_unref (retval->datamodel);
