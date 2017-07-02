@@ -438,6 +438,10 @@ gnc_assoc_dialog_create (AssocDialog *assoc_dialog)
 #if !GTK_CHECK_VERSION(3, 14, 0)
     gtk_tree_view_set_rules_hint (GTK_TREE_VIEW(assoc_dialog->view), TRUE);
 #endif
+
+    // Set grid lines option to preference
+    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(assoc_dialog->view), gnc_tree_view_get_grid_lines_pref ());
+
     /* default to 'close' button */
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);
 

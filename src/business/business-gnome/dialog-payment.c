@@ -993,6 +993,9 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(pw->docs_list_tree_view));
     gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 
+    // Set grid lines option to preference
+    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(pw->docs_list_tree_view), gnc_tree_view_get_grid_lines_pref ());
+
     /* Configure date column */
     renderer = gtk_cell_renderer_text_new ();
     column = gtk_tree_view_get_column (GTK_TREE_VIEW (pw->docs_list_tree_view), 0);

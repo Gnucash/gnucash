@@ -1029,6 +1029,9 @@ gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances, GList *auto_cr
         gtk_tree_view_expand_all(dialog->instance_view);
     }
 
+    // Set grid lines option to preference
+    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(dialog->instance_view), gnc_tree_view_get_grid_lines_pref ());
+
     g_signal_connect(G_OBJECT(dialog->dialog), "response", G_CALLBACK(dialog_response_cb), dialog);
     g_signal_connect(G_OBJECT(dialog->dialog), "destroy", G_CALLBACK(dialog_destroy_cb), dialog);
 

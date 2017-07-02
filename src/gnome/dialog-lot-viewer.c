@@ -1017,6 +1017,15 @@ lv_create (GNCLotViewer *lv)
     lv->remove_split_from_lot_button = GTK_BUTTON(gtk_builder_get_object (builder, "remove_split_from_lot_button"));
     lv_init_split_buttons(lv);
 
+    // Set grid lines option to preference
+    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(lv->lot_view), gnc_tree_view_get_grid_lines_pref ());
+
+    // Set grid lines option to preference
+    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(lv->split_in_lot_view), gnc_tree_view_get_grid_lines_pref ());
+
+    // Set grid lines option to preference
+    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(lv->split_free_view), gnc_tree_view_get_grid_lines_pref ());
+
 
     if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
     {

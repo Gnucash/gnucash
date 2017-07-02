@@ -1774,6 +1774,9 @@ _sx_engine_event_handler(QofInstance *ent, QofEventId event_type, gpointer user_
 
         list = GTK_TREE_VIEW(gtk_builder_get_object (builder, "sx_list"));
 
+        // Set grid lines option to preference
+        gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(list), gnc_tree_view_get_grid_lines_pref ());
+
         data = (acct_deletion_handler_data*)g_new0(acct_deletion_handler_data, 1);
         data->dialog = dialog;
         data->affected_sxes = affected_sxes;

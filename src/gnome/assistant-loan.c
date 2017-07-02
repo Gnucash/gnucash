@@ -1822,6 +1822,9 @@ loan_rev_prep( GtkAssistant *assistant, gpointer user_data )
                        gtk_tree_view_new_with_model( GTK_TREE_MODEL(store) ));
     g_object_unref(store);
 
+    // Set grid lines option to preference
+    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(ldd->revView), gnc_tree_view_get_grid_lines_pref ());
+
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Date"), renderer,
              "text", LOAN_COL_DATE,

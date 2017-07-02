@@ -301,6 +301,9 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
     gtk_tree_view_set_rules_hint (GTK_TREE_VIEW(facc_dialog->view), TRUE);
 #endif
 
+    // Set grid lines option to preference
+    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(facc_dialog->view), gnc_tree_view_get_grid_lines_pref ());
+
     /* default to 'close' button */
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);
 

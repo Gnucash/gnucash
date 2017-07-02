@@ -399,6 +399,9 @@ gbv_create_widget(GncBudgetView *view)
     totals_tree_view = GTK_TREE_VIEW(gtk_tree_view_new());
     priv->totals_tree_view = totals_tree_view;
 
+    // Set grid lines option to preference
+    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(totals_tree_view), gnc_tree_view_get_grid_lines_pref ());
+
     gtk_widget_show(GTK_WIDGET(totals_tree_view));
     gtk_tree_selection_set_mode(gtk_tree_view_get_selection(totals_tree_view),
                                 GTK_SELECTION_NONE);

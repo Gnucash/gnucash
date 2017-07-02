@@ -322,6 +322,9 @@ gnc_query_view_init_view (GNCQueryView *qview)
     /* compute the number of columns and fill in the rest of the view */
     qview->num_columns = g_list_length (qview->column_params);
 
+    // Set grid lines option to preference
+    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(view), gnc_tree_view_get_grid_lines_pref ());
+
     for (i = 0, node = qview->column_params; node; node = node->next, i++)
     {
         const char *type;

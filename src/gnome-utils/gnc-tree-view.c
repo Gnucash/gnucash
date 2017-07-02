@@ -44,6 +44,7 @@
 #include "gnc-gobject-utils.h"
 #include "gnc-cell-renderer-date.h"
 #include "gnc-state.h"
+#include "dialog-utils.h"
 
 /* The actual state key for a particular column visibility.  This is
  * attached to the menu items that are in the column selection menu.
@@ -265,6 +266,9 @@ gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass)
     priv->spacer_column = column;
 
     gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_FIXED);
+
+    // Set grid lines option to preference
+    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(view), gnc_tree_view_get_grid_lines_pref ());
 
     /* Create the last column which contains the column selection
      * widget.  gnc_tree_view_add_text_column will do most of the
