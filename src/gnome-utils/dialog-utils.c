@@ -530,7 +530,8 @@ gnc_gtk_dialog_add_button (GtkWidget *dialog, const gchar *label, const gchar *i
 
         image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_BUTTON);
         gtk_button_set_image (GTK_BUTTON(button), image);
-        g_object_set (button, "always-show-image", TRUE, NULL); // Maybe this should be a preference
+        if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, "buttons-with-icons-and-labels"))
+            g_object_set (button, "always-show-image", TRUE, NULL);
     }
     g_object_set (button, "can-default", TRUE, NULL);
     gtk_widget_show_all(button);
