@@ -3014,8 +3014,11 @@ gnc_main_window_open_page (GncMainWindow *window,
                                   G_CALLBACK(gnc_main_window_close_page), page);
 
         gtk_box_pack_start (GTK_BOX (tab_hbox), close_button, FALSE, FALSE, 0);
+#if GTK_CHECK_VERSION(3,12,0)
         gtk_widget_set_margin_end (GTK_WIDGET(close_button), 5);
-
+#else
+        gtk_widget_set_margin_right (GTK_WIDGET(close_button), 5);
+#endif
         g_object_set_data (G_OBJECT (page), PLUGIN_PAGE_CLOSE_BUTTON, close_button);
     }
 

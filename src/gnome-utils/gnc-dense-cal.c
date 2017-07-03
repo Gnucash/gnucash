@@ -289,8 +289,11 @@ gnc_dense_cal_init(GncDenseCal *dcal)
 
         gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
         gtk_widget_set_halign (label, GTK_ALIGN_END);
+#if GTK_CHECK_VERSION(3,12,0)
         gtk_widget_set_margin_end (label, 5);
-
+#else
+        gtk_widget_set_margin_right (label, 5);
+#endif
         gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0);
         gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(dcal->view_options), FALSE, FALSE, 0);
 
