@@ -31,6 +31,8 @@ extern "C"
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <unistd.h>
 #include <dirent.h>
 #include <string.h>
@@ -62,7 +64,7 @@ remove_files_pattern (const char* begining, const char* ending)
 static void
 remove_locks (const char* filename)
 {
-    struct stat buf;
+    GStatBuf buf;
     char* to_remove;
 
     {
