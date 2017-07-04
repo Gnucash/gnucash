@@ -105,7 +105,7 @@
     (add-option
      (gnc:make-string-option
       (N_ "Hello, World!") (N_ "Eval Option")
-      "cc" (N_ "This is an eval option.") (N_ "(+ 2 3)")))
+      "cc" (N_ "This is an eval option.") "(+ 2 3)"))
    
     ;; This is a date/time option. The user can pick a date and,
     ;; possibly, a time. Times are stored as a pair
