@@ -66,14 +66,32 @@ static item_file item_files[] =
 void
 gnc_load_app_icons (void)
 {
+#if GTK_CHECK_VERSION(3,14,0)
+    GtkIconTheme *icon_theme = gtk_icon_theme_get_default ();
+#endif
     item_file *file;
     const gchar *default_path;
     gchar* pkgdatadir = gnc_path_get_pkgdatadir ();
     default_path = g_build_filename (pkgdatadir, "icons", NULL);
-    g_free(pkgdatadir);
+    g_free (pkgdatadir);
+
+#if GTK_CHECK_VERSION(3,14,0)
+    gtk_icon_theme_append_search_path (icon_theme, default_path);
+#endif
 
     for (file = item_files; file->icon_name; file++)
     {
+#if GTK_CHECK_VERSION(3,14,0)
+
+        gint *icon_sizes = gtk_icon_theme_get_icon_sizes (icon_theme, file->icon_name);
+
+        if ((icon_sizes[0] != 16) && (icon_sizes[1] != 24))
+            g_warning ("Required icon size for icon name '%s' not found", file->icon_name);
+        g_free (icon_sizes);
+
+        // check to see if we have at least one size for the named icons loaded
+        g_assert (gtk_icon_theme_has_icon (icon_theme, file->icon_name));
+#else
         GdkPixbuf *pixbuf_sm, *pixbuf_lg;
         char *fullname_sm, *fullname_lg;
         fullname_sm = g_strconcat (default_path, "/hicolor/16x16/actions/", file->filename, NULL);
@@ -93,5 +111,6 @@ gnc_load_app_icons (void)
 
         g_free (fullname_sm);
         g_free (fullname_lg);
+#endif
     }
 }
