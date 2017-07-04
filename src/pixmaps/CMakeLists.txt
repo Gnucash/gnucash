@@ -2,6 +2,10 @@
 INSTALL(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION share/gnucash
         PATTERN Makefile.* EXCLUDE
         PATTERN CMakeLists.txt EXCLUDE
+        PATTERN hicolor EXCLUDE
+)
+
+INSTALL(DIRECTORY ${DATADIR_BUILD}/gnucash/icons DESTINATION share/gnucash
 )
 
 IF (GNC_BUILD_AS_INSTALL)
@@ -9,6 +13,13 @@ IF (GNC_BUILD_AS_INSTALL)
      DESTINATION ${DATADIR_BUILD}/gnucash/pixmaps
      PATTERN Makefile.* EXCLUDE
      PATTERN CMakeLists.txt EXCLUDE
+     PATTERN hicolor EXCLUDE
+  )
+ENDIF()
+
+IF (GNC_BUILD_AS_INSTALL)
+  FILE(COPY hicolor
+     DESTINATION ${DATADIR_BUILD}/gnucash/icons
   )
 ENDIF()
 
