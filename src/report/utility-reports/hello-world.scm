@@ -96,7 +96,17 @@
      (gnc:make-string-option
       (N_ "Hello, World!") (N_ "String Option")
       "c" (N_ "This is a string option.") (N_ "Hello, World")))
-    
+
+    ;; This is an eval option. Users can type a scheme expression.
+    ;; The default value is "(+ 2 3)". The scheme expression is 
+    ;; evaluated left to right, and the last value returned is
+    ;; to be printed into the report. This will be useful to 
+    ;; learn hacking scheme in gnucash.
+    (add-option
+     (gnc:make-string-option
+      (N_ "Hello, World!") (N_ "Eval Option")
+      "cc" (N_ "This is an eval option.") "(+ 2 3)"))
+   
     ;; This is a date/time option. The user can pick a date and,
     ;; possibly, a time. Times are stored as a pair
     ;; (seconds . nanoseconds) measured from Jan 1, 1970, i.e.,
@@ -249,6 +259,7 @@ option like this.")
   (let ((bool-val     (op-value "Hello, World!" "Boolean Option"))
         (mult-val     (op-value "Hello, World!" "Multi Choice Option"))
         (string-val   (op-value "Hello, World!" "String Option"))
+	(eval-val     (op-value "Hello, World!" "Eval Option"))
         (date-val     (gnc:date-option-absolute-time
                        (op-value "Hello, World!" "Just a Date Option")))
         (date2-val    (gnc:date-option-absolute-time
@@ -354,9 +365,9 @@ or extending existing reports.")))
 new, totally cool report, consult the mailing list %s.")
           (gnc:html-markup-anchor 
            "mailto:gnucash-devel@gnucash.org"
-           (gnc:html-markup-tt "gnucash-devel@gnucash.org")))
-         (_ "For details on subscribing to that list, see &lt;http://www.gnucash.org/&gt;.")
-         (_ "You can learn more about writing scheme at &lt;http://www.scheme.com/tspl2d/&gt;."))
+           (gnc:html-markup-tt "gnucash-devel@gnucash.org"))
+          (_ "For details on subscribing to that list, see &lt;http://www.gnucash.org/&gt;. ")
+          (_ "You can learn more about writing scheme at &lt;http://www.scheme.com/tspl2d/&gt;.")))
 
         (gnc:html-markup-p
          (gnc:html-markup/format
@@ -377,6 +388,11 @@ new, totally cool report, consult the mailing list %s.")
          (gnc:html-markup/format
           (_ "The string option is %s.") 
           (gnc:html-markup-b string-val)))
+
+	(gnc:html-markup-p
+         (gnc:html-markup/format
+          (_ "The eval option is %s.") 
+          (gnc:html-markup-b (eval-string eval-val))))
 
         (gnc:html-markup-p
          (gnc:html-markup/format
