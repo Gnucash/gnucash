@@ -33,7 +33,7 @@
 #endif
 extern "C"
 {
-#include <qoflog.h>
+#include "qoflog.h"
 static const QofLogModule log_module = "gnc-timezone";
 }
 

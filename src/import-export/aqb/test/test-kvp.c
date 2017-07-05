@@ -29,6 +29,8 @@
 #include <qofinstance-p.h>
 #include "engine/gnc-hooks.h"
 
+void test_qofsession_aqb_kvp (void);
+
 static char* get_filepath(const char* filename)
 {
     char *result;

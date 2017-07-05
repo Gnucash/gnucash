@@ -39,9 +39,13 @@ SET(csv_export_UI gnc-plugin-csv-export-ui.xml)
 
 INSTALL(FILES ${csv_export_UI} DESTINATION share/gnucash/ui)
 
-IF (GNC_BUILD_AS_INSTALL)
-  FILE(COPY ${csv_export_UI}
-    DESTINATION ${DATADIR_BUILD}/gnucash/ui)
-  FILE(COPY ${csv_export_GLADE}
-    DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder)
-ENDIF()
+FILE(COPY ${csv_export_UI}
+  DESTINATION ${DATADIR_BUILD}/gnucash/ui)
+FILE(COPY ${csv_export_GLADE}
+  DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder)
+
+SET_LOCAL_DIST(csv_export_DIST_local CMakeLists.txt Makefile.am
+        ${csv_export_SOURCES} ${csv_export_noinst_HEADERS}
+        ${csv_export_GLADE} ${csv_export_UI})
+SET(csv_export_DIST ${csv_export_DIST_local} ${csv_exp_gschema_DIST} PARENT_SCOPE)
+

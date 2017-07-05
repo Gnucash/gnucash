@@ -26,3 +26,8 @@ GNC_ADD_TEST_WITH_GUILE(test-scm-query-string test-scm-query-string.cpp
 ADD_APP_UTILS_TEST(test-sx test-sx.cpp)
 
 GNC_ADD_SCHEME_TEST(scm-test-load-module test-load-module.in)
+
+CONFIGURE_FILE(test-load-module.in test-load-module @ONLY)
+
+SET_DIST_LIST(test_app_utils_DIST CMakeLists.txt Makefile.am test-exp-parser.c test-link-module.c test-load-module.in
+        test-print-parse-amount.cpp test-print-queries.cpp test-scm-query-string.cpp test-sx.cpp)

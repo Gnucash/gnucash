@@ -2,10 +2,6 @@
 
 ADD_SUBDIRECTORY(test)
 
-# Command to generate the swig-engine.c wrapper file
-SET (SWIG_GNC_MODULE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-gnc-module.c)
-GNC_ADD_SWIG_COMMAND (${SWIG_GNC_MODULE_C} ${CMAKE_CURRENT_SOURCE_DIR}/gnc-module.i)
-
 SET (backend_xml_utils_noinst_HEADERS
   gnc-backend-xml.h
   gnc-xml.h
@@ -73,6 +69,10 @@ SET (backend_xml_utils_SOURCES
   sixtp.cpp
 )
 
+SET_LOCAL_DIST(backend_xml_DIST_local ${backend_xml_utils_SOURCES}
+  ${backend_xml_utils_noinst_HEADERS} gnc-backend-xml.cpp CMakeLists.txt
+  Makefile.am)
+SET(backend_xml_DIST ${backend_xml_DIST_local} ${test_backend_xml_DIST} PARENT_SCOPE)
 
 # Add dependency on config.h
 SET_SOURCE_FILES_PROPERTIES (${backend_xml_utils_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})

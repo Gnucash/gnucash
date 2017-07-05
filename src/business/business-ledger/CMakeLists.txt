@@ -33,3 +33,5 @@ INSTALL(TARGETS gnc-business-ledger
   ARCHIVE DESTINATION lib
   RUNTIME DESTINATION bin)
 # No headers to install
+
+SET_DIST_LIST(business_ledger_DIST CMakeLists.txt Makefile.am ${gnc_business_ledger_SOURCES} ${gnc_business_ledger_noinst_HEADERS})

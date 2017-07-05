@@ -57,3 +57,7 @@ INSTALL(TARGETS gncmod-register-core
   RUNTIME DESTINATION bin)
 
 INSTALL(FILES ${register_core_HEADERS} DESTINATION include/gnucash)
+
+SET_LOCAL_DIST(register_core_DIST_local CMakeLists.txt Makefile.am README ${register_core_SOURCES} ${register_core_HEADERS})
+
+SET(register_core_DIST ${register_core_DIST_local} ${test_register_core_DIST} PARENT_SCOPE)

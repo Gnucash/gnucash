@@ -7,7 +7,7 @@ ADD_SUBDIRECTORY(test)
 
 IF (BUILDING_FROM_VCS)
   SET (SWIG_GNOME_UTILS_C ${CMAKE_CURRENT_BINARY_DIR}/swig-gnome-utils.c)
-  GNC_ADD_SWIG_COMMAND (${SWIG_GNOME_UTILS_C} ${CMAKE_CURRENT_SOURCE_DIR}/gnome-utils.i)
+  GNC_ADD_SWIG_COMMAND (swig-gnome-utils-c ${SWIG_GNOME_UTILS_C} ${CMAKE_CURRENT_SOURCE_DIR}/gnome-utils.i)
 ELSE()
   SET (SWIG_GNOME_UTILS_C swig-gnome-utils.c)
 ENDIF()
@@ -31,6 +31,8 @@ ADD_CUSTOM_COMMAND(
   COMMAND
     ${LIBXSLT_XSLTPROC_EXECUTABLE} -o ${GNC_WARNINGS_H} ${CMAKE_CURRENT_SOURCE_DIR}/make-gnc-warnings-h.xsl ${CMAKE_CURRENT_BINARY_DIR}/${WARNINGS_SCHEMA}
 )
+
+ADD_CUSTOM_TARGET(gnc-warnings-c DEPENDS ${GNC_WARNINGS_C})
 
 SET (gnome_utils_SOURCES
   account-quickfill.c
@@ -106,15 +108,12 @@ SET (gnome_utils_SOURCES
   gnc-tree-view-split-reg.c
   gnc-tree-view-sx-list.c
   gnc-tree-view.c
-  ${GNC_WARNINGS_C}
   gnc-window.c
   gncmod-gnome-utils.c
   misc-gnome-utils.c
   tree-view-utils.c
   search-param.c
   print-session.c
-  ${SWIG_GNOME_UTILS_C}
-  swig-gnome-utils.c
   window-main-summarybar.c
 )
 
@@ -124,7 +123,6 @@ SET(gnome_utils_noinst_HEADERS
   gnc-gobject-utils.h
   gnc-gtk-utils.h
   search-param.h
-  ${GNC_WARNINGS_H}
 )
 
 SET (gnome_utils_HEADERS
@@ -203,9 +201,13 @@ SET (gnome_utils_HEADERS
   window-main-summarybar.h
 )
 
+
+
 ADD_LIBRARY (gncmod-gnome-utils
   ${gnome_utils_SOURCES}
   ${gnome_utils_HEADERS}
+  ${GNC_WARNINGS_C} ${GNC_WARNINGS_H}
+  ${SWIG_GNOME_UTILS_C}
   ${gnome_utils_noinst_HEADERS}
 )
 
@@ -267,3 +269,9 @@ GNC_ADD_SCHEME_TARGETS(scm-gnome-utils-2
 )
 
 ADD_CUSTOM_TARGET(scm-gnome-utils ALL DEPENDS scm-gnome-utils-2 scm-gnome-utils-1)
+
+SET_LOCAL_DIST(gnome_utils_DIST_local CMakeLists.txt Makefile.am ${gnome_utils_SOURCES} ${gnome_utils_HEADERS}
+        ${gnome_utils_noinst_HEADERS} gnome-utils.scm gnome-utils.i gnc-menu-extensions.scm
+        make-gnc-warnings-c.xsl make-gnc-warnings-h.xsl)
+SET(gnome_utils_DIST ${gnome_utils_DIST_local} ${gnome_utils_gschema_DIST} ${test_gnome_utils_DIST}
+        ${gnome_utils_ui_DIST} ${gnome_utils_gtkbuilder_DIST} PARENT_SCOPE)

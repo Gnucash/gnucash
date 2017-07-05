@@ -16,7 +16,6 @@ SET(test_qof_SOURCES
   test-qofinstance.cpp
   test-qofobject.c
   test-qof-string-cache.c
-  ${CMAKE_SOURCE_DIR}/src/test-core/unittest-support.c
 )
 
 SET(TEST_ENGINE_INCLUDE_DIRS
@@ -47,7 +46,9 @@ GNC_ADD_TEST(test-numeric "${test_numeric_SOURCES}" TEST_ENGINE_INCLUDE_DIRS TES
 # pop up due to an assertion. This interferes with running the tests
 # unattended.
 IF (NOT WIN32)
-  GNC_ADD_TEST(test-qof "${test_qof_SOURCES}" TEST_QOF_INCLUDE_DIRS TEST_QOF_LIBS)
+  SET(SOURCES ${test_qof_SOURCES} ${CMAKE_SOURCE_DIR}/src/test-core/unittest-support.c)
+  GNC_ADD_TEST(test-qof "${SOURCES}"
+          TEST_QOF_INCLUDE_DIRS TEST_QOF_LIBS)
   TARGET_COMPILE_DEFINITIONS(test-qof PRIVATE TESTPROG=test_qof)
   SET(MODULEPATH ${CMAKE_SOURCE_DIR}/src/libqof/qof)
   SET(gtest_old_qof_LIBS gnc-qof ${GLIB2_LDFLAGS} ${Boost_LIBRARIES} ${GTEST_LIB})
@@ -137,3 +138,8 @@ IF (NOT WIN32)
   GNC_ADD_TEST(test-gnc-datetime "${test_gnc_datetime_SOURCES}"
     gtest_qof_INCLUDES gtest_qof_LIBS)
 ENDIF()
+
+SET_DIST_LIST(test_qof_DIST CMakeLists.txt Makefile.am ${test_qof_SOURCES}
+  test-numeric.cpp test-gnc-guid.cpp test-kvp-value.cpp test-kvp-frame.cpp
+  test-qofsession.cpp gtest-gnc-int128.cpp gtest-gnc-rational.cpp
+  gtest-gnc-numeric.cpp gtest-gnc-timezone.cpp gtest-gnc-datetime.cpp)

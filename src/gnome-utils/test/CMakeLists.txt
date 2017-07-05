@@ -30,3 +30,7 @@ SET(GNOME_UTILS_GUI_TEST_LIBS
 #
 
 GNC_ADD_SCHEME_TEST(test-load-module-gnome-utils test-load-module.in)
+
+CONFIGURE_FILE(test-load-module.in test-load-module @ONLY)
+
+SET_DIST_LIST(test_gnome_utils_DIST CMakeLists.txt Makefile.am test-gnc-recurrence.c test-link-module.c test-load-module.in)

@@ -17,3 +17,5 @@ GNC_ADD_SCHEME_TARGETS(scm-gnumeric
   "${GUILE_DEPENDS}"
   FALSE
 )
+
+SET_DIST_LIST(scm_gnumeric_DIST CMakeLists.txt Makefile.am ${gnumeric_SCHEME})

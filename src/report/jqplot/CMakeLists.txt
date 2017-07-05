@@ -31,3 +31,5 @@ SET(gncjqplot_DATA
 )
 
 INSTALL(FILES ${gncjqplot_DATA} DESTINATION share/gnucash/jqplot)
+
+SET_DIST_LIST(jqplot_DIST CMakeLists.txt Makefile.am jquery.js ${gncjqplot_DATA})

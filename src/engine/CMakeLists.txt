@@ -76,7 +76,7 @@ SET (engine_HEADERS
 IF (BUILDING_FROM_VCS)
   # Command to generate the swig-engine.c wrapper file
   SET (SWIG_ENGINE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-engine.c)
-  GNC_ADD_SWIG_COMMAND (${SWIG_ENGINE_C} ${CMAKE_CURRENT_SOURCE_DIR}/engine.i ${engine_HEADERS})
+  GNC_ADD_SWIG_COMMAND (swig-engine-c ${SWIG_ENGINE_C} ${CMAKE_CURRENT_SOURCE_DIR}/engine.i ${engine_HEADERS})
 ELSE()
   SET (SWIG_ENGINE_C swig-engine.c)
 ENDIF()
@@ -88,7 +88,8 @@ ADD_CUSTOM_COMMAND (
   DEPENDS iso-4217-currencies.xml iso-currencies-to-c.xsl
   COMMAND
     ${LIBXSLT_XSLTPROC_EXECUTABLE} -o ${ISO_4217_C} "${CMAKE_CURRENT_SOURCE_DIR}/iso-currencies-to-c.xsl" "${CMAKE_CURRENT_SOURCE_DIR}/iso-4217-currencies.xml"
-)
+    )
+ADD_CUSTOM_TARGET(iso-4217-c DEPENDS ${ISO_4217_C})
 # Add dependency on iso-4217-currencies.c
 SET_SOURCE_FILES_PROPERTIES (gnc-commodity.c PROPERTIES OBJECT_DEPENDS "${ISO_4217_C};${CONFIG_H}")
 
@@ -127,7 +128,6 @@ SET (engine_SOURCES
   engine-helpers.c
   glib-helpers.c
   policy.c
-  ${SWIG_ENGINE_C}
   gncAddress.c
   gncBillTerm.c
   gncBusGuile.c
@@ -148,6 +148,7 @@ SET (engine_SOURCES
 ADD_LIBRARY	(gncmod-engine
   ${engine_SOURCES}
   ${engine_HEADERS}
+  ${SWIG_ENGINE_C}
   ${engine_noinst_HEADERS}
 )
 
@@ -215,3 +216,20 @@ GNC_ADD_SCHEME_TARGETS(scm-engine-1
 )
 
 ADD_CUSTOM_TARGET(scm-engine ALL DEPENDS scm-engine-1 scm-engine-0)
+
+SET(engine_EXTRA_DIST
+        business-core.i
+        design.txt
+        engine.i
+        engine-common.i
+        extensions.txt
+        iso-4217-currencies.xml
+        iso-currencies-to-c.xsl
+        kvp_doc.txt
+        README
+        README.query-api
+        SX-book-p.h
+        )
+SET_LOCAL_DIST(engine_DIST_local CMakeLists.txt Makefile.am ${engine_SOURCES} ${engine_HEADERS}
+                     ${engine_noinst_HEADERS} ${engine_SCHEME_0} ${engine_SCHEME_1} ${engine_EXTRA_DIST})
+SET(engine_DIST ${engine_DIST_local} ${engine_test_core_DIST} ${test_engine_DIST} PARENT_SCOPE)

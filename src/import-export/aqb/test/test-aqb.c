@@ -31,7 +31,7 @@ Write and link other test files */
 #include "engine/gnc-engine.h"
 #include <engine/TransLog.h>
 
-void test_qofsession_aqb_kvp( void );
+extern void test_qofsession_aqb_kvp( void );
 
 int
 main (int   argc,

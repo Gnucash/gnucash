@@ -6,14 +6,13 @@ SET (report_system_HEADERS
 
 IF (BUILDING_FROM_VCS)
   SET (SWIG_REPORT_SYSTEM_C ${CMAKE_CURRENT_BINARY_DIR}/swig-report-system.c)
-  GNC_ADD_SWIG_COMMAND (${SWIG_REPORT_SYSTEM_C} ${CMAKE_CURRENT_SOURCE_DIR}/report-system.i ${report_system_HEADERS})
+  GNC_ADD_SWIG_COMMAND (swig-report-system-c ${SWIG_REPORT_SYSTEM_C} ${CMAKE_CURRENT_SOURCE_DIR}/report-system.i ${report_system_HEADERS})
 ELSE()
   SET (SWIG_REPORT_SYSTEM_C swig-report-system.c)
 ENDIF()
 
 
 SET (report_system_SOURCES
-  ${SWIG_REPORT_SYSTEM_C}
   gncmod-report-system.c
   gnc-report.c
 )  
@@ -21,6 +20,7 @@ SET (report_system_SOURCES
 ADD_LIBRARY (gncmod-report-system
   ${report_system_SOURCES}
   ${report_system_HEADERS}
+  ${SWIG_REPORT_SYSTEM_C}
 )
 
 TARGET_COMPILE_DEFINITIONS(gncmod-report-system PRIVATE -DG_LOG_DOMAIN=\"gnc.report.core\")
@@ -111,3 +111,8 @@ GNC_ADD_SCHEME_TARGETS(scm-report-system-3
   FALSE
 )
 
+SET_LOCAL_DIST(report_system_DIST_local CMakeLists.txt Makefile.am report-system.i
+        ${report_system_HEADERS} ${report_system_SOURCES} ${report_system_SCHEME} ${report_system_SCHEME_1}
+        ${report_system_SCHEME_2} ${report_system_SCHEME_3})
+
+SET(report_system_DIST ${report_system_DIST_local} ${test_report_system_DIST} PARENT_SCOPE)

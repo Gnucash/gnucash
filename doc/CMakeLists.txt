@@ -15,25 +15,34 @@ SET(doc_DATA
   projects.html
 )
 
+SET(doc_noinst_DATA
+        build-aix.txt build-solaris.txt CMakeLists.txt gnc-fq-dump.1 gnc-fq-helper.1 gnucash.1.in gtkrc-2.0.gnucash
+        Makefile.am misc-notes.txt README.build-system README.HBCI README.OFX README.translator.txt tip_of_the_day.list.in
+        TRANSLATION_HOWTO)
+
 INSTALL(FILES ${doc_DATA} DESTINATION share/doc/gnucash)
 
-IF (GNC_BUILD_AS_INSTALL)
-  FILE(COPY ${doc_DATA} DESTINATION ${DATADIR_BUILD}/doc/gnucash)
-ENDIF()
+SET_LOCAL_DIST(doc_DIST_local ${doc_DATA} ${doc_noinst_DATA})
+SET(doc_DIST ${doc_DIST_local} ${examples_DIST} PARENT_SCOPE)
+
+FILE(COPY ${doc_DATA} DESTINATION ${DATADIR_BUILD}/doc/gnucash)
 
 IF (${CMAKE_VERSION} VERSION_GREATER 3.1)
   EXECUTE_PROCESS(
     COMMAND ${CMAKE_COMMAND} -E  env date +"%B %Y"
-    OUTPUT_VARIABLE DATE
+    OUTPUT_VARIABLE DATE_IN
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
 ELSE()
   EXECUTE_PROCESS(
     COMMAND date +"%B %Y"
-    OUTPUT_VARIABLE DATE
+    OUTPUT_VARIABLE DATE_IN
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
 ENDIF()
+
+# Remove any quotes present in the DATE string
+STRING(REGEX REPLACE "\"" "" DATE "${DATE_IN}")
 
 # Generate the tip of the day file.
 
@@ -58,18 +67,13 @@ FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/tip_of_the_day.list "${FINAL_TOTD}")
 
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tip_of_the_day.list DESTINATION share/gnucash)
 
-IF (GNC_BUILD_AS_INSTALL)
-  FILE(COPY ${CMAKE_CURRENT_BINARY_DIR}/tip_of_the_day.list
-    DESTINATION ${DATADIR_BUILD}/gnucash)
-ENDIF()
+FILE(COPY ${CMAKE_CURRENT_BINARY_DIR}/tip_of_the_day.list
+  DESTINATION ${DATADIR_BUILD}/gnucash)
 
 # ---
 
 GNC_CONFIGURE(gnucash.1.in gnucash.1 )
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.1 DESTINATION share/man/man1)
 
-IF (GNC_BUILD_AS_INSTALL)
-  FILE(COPY ${CMAKE_CURRENT_BINARY_DIR}/gnucash.1
-    DESTINATION ${DATADIR_BUILD}/gnucash)
-ENDIF()
-
+FILE(COPY ${CMAKE_CURRENT_BINARY_DIR}/gnucash.1
+  DESTINATION ${DATADIR_BUILD}/gnucash)

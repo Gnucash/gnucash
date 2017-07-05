@@ -44,3 +44,5 @@ GNC_ADD_SCHEME_TARGETS(scm-business-reports
 )
 
 INSTALL(FILES ${business_reports_DATA} DESTINATION ${SCHEME_INSTALLED_SOURCE_DIR}/gnucash/report)
+
+SET_DIST_LIST(business_reports_DIST CMakeLists.txt Makefile.am ${business_reports_SCHEME} ${business_reports_DATA})

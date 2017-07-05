@@ -58,6 +58,9 @@ SET (backend_sql_noinst_HEADERS
   escape.h
 )
 
+SET_LOCAL_DIST(backend_sql_DIST_local ${backend_sql_SOURCES} ${backend_sql_noinst_HEADERS} CMakeLists.txt Makefile.am)
+SET(backend_sql_DIST ${backend_sql_DIST_local} ${test_backend_sql_DIST} PARENT_SCOPE)
+
 # Add dependency on config.h
 SET_SOURCE_FILES_PROPERTIES (${gnc_backend_sql_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 

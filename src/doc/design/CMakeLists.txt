@@ -28,11 +28,22 @@ SET(VERSION_TEXI_IN
 ")
 
 FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/version.texi ${VERSION_TEXI_IN})
+FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/stamp-vti ${VERSION_TEXI_IN})
 
 FILE(TO_NATIVE_PATH "${CMAKE_CURRENT_BINARY_DIR}" TEXI_BINARY_DIR)
 FILE(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/gnucash-design.texi" TEXI_SOURCE_FILE)
 
-ADD_CUSTOM_TARGET(gnucash-design.texi ALL
-  COMMAND makeinfo -I ${TEXI_BINARY_DIR} ${TEXI_SOURCE_FILE}
-  DEPENDS ${gnucash_design_TEXINFOS}
-)
+IF(${CMAKE_VERSION} VERSION_GREATER 3.1)
+  ADD_CUSTOM_TARGET(gnucash-design-info ALL
+    COMMAND makeinfo -I ${TEXI_BINARY_DIR} ${TEXI_SOURCE_FILE}
+    BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/gnucash-design.info
+    DEPENDS ${gnucash_design_TEXINFOS}
+  )
+ELSE()
+  ADD_CUSTOM_TARGET(gnucash-design-info ALL
+    COMMAND makeinfo -I ${TEXI_BINARY_DIR} ${TEXI_SOURCE_FILE}
+    DEPENDS ${gnucash_design_TEXINFOS}
+  )
+ENDIF()
+
+SET_DIST_LIST(doc_design_DIST CMakeLists.txt Makefile.am gnucash-design.texi ${gnucash_design_TEXINFOS})

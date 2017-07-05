@@ -1,7 +1,7 @@
 # CMakeLists.txt for src/import-export/aqbanking
 
 ADD_SUBDIRECTORY(gschemas)
-
+ADD_SUBDIRECTORY(test)
 
 SET (aqbanking_SOURCES
   dialog-ab-trans.c
@@ -35,42 +35,52 @@ SET (aqbanking_noinst_HEADERS
   gnc-plugin-aqbanking.h
 )
 
-ADD_LIBRARY (gncmod-aqbanking
-  ${aqbanking_SOURCES}
-  ${aqbanking_noinst_HEADERS}
-  )
-
-SET(AQB_EXPORT_SYMBOLS "")
-IF (WIN32)
-  SET(AQB_EXPORT_SYMBOLS "-Wl,--export-all-symbols")
-ENDIF()
-
-TARGET_LINK_LIBRARIES(gncmod-aqbanking gnc-gnome gncmod-gnome-utils gncmod-generic-import gncmod-register-core
-         gncmod-register-gnome gncmod-ledger-core gncmod-engine gnc-qof ${AQB_EXPORT_SYMBOLS} ${AQBANKING_LDFLAGS} ${GWENHYWFAR_LDFLAGS}
-         ${GWENGUI_GTK2_LDFLAGS} ${GNOME_LDFLAGS} ${KTOBLZCHECK_LDFLAGS})
-
-TARGET_COMPILE_DEFINITIONS(gncmod-aqbanking PRIVATE -DG_LOG_DOMAIN=\"gnc.import.aqbanking\")
-
-TARGET_INCLUDE_DIRECTORIES(gncmod-aqbanking PRIVATE ${AQBANKING_INCLUDE_DIRS}
-       ${GWENHYWFAR_INCLUDE_DIRS} ${KTOBLZCHECK_INCLUDE_DIRS})
-
-INSTALL(TARGETS gncmod-aqbanking
-  LIBRARY DESTINATION lib/gnucash
-  ARCHIVE DESTINATION lib/gnucash
-  RUNTIME DESTINATION bin)
-# No headers to install
-
 SET(aqbanking_GLADE assistant-ab-initial.glade dialog-ab.glade)
 
 SET(aqbanking_UI gnc-plugin-aqbanking-ui.xml)
 
-INSTALL(FILES ${aqbanking_GLADE} DESTINATION share/gnucash/gtkbuilder)
+IF(WITH_AQBANKING)
+  ADD_LIBRARY (gncmod-aqbanking
+    ${aqbanking_SOURCES}
+    ${aqbanking_noinst_HEADERS}
+  )
 
-INSTALL(FILES ${aqbanking_UI} DESTINATION share/gnucash/ui)
 
-IF (GNC_BUILD_AS_INSTALL)
+  SET(AQB_EXPORT_SYMBOLS "")
+  IF (WIN32)
+    SET(AQB_EXPORT_SYMBOLS "-Wl,--export-all-symbols")
+  ENDIF()
+
+ TARGET_LINK_LIBRARIES(gncmod-aqbanking gnc-gnome gncmod-gnome-utils gncmod-generic-import gncmod-register-core
+           gncmod-register-gnome gncmod-ledger-core gncmod-engine gnc-qof ${AQB_EXPORT_SYMBOLS} ${AQBANKING_LDFLAGS} ${GWENHYWFAR_LDFLAGS}
+          ${GWENGUI_GTK2_LDFLAGS} ${GNOME_LDFLAGS} ${KTOBLZCHECK_LDFLAGS})
+
+  TARGET_COMPILE_DEFINITIONS(gncmod-aqbanking PRIVATE -DG_LOG_DOMAIN=\"gnc.import.aqbanking\")
+
+  TARGET_INCLUDE_DIRECTORIES(gncmod-aqbanking PRIVATE ${AQBANKING_INCLUDE_DIRS}
+         ${GWENHYWFAR_INCLUDE_DIRS} ${KTOBLZCHECK_INCLUDE_DIRS})
+
+  INSTALL(TARGETS gncmod-aqbanking
+    LIBRARY DESTINATION lib/gnucash
+    ARCHIVE DESTINATION lib/gnucash
+    RUNTIME DESTINATION bin)
+
+# No headers to install
+
+
+
+  INSTALL(FILES ${aqbanking_GLADE} DESTINATION share/gnucash/gtkbuilder)
+
+  INSTALL(FILES ${aqbanking_UI} DESTINATION share/gnucash/ui)
+
   FILE(COPY ${aqbanking_UI}
     DESTINATION ${DATADIR_BUILD}/gnucash/ui)
   FILE(COPY ${aqbanking_GLADE}
     DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder)
-ENDIF()
+ENDIF(WITH_AQBANKING)
+
+SET_LOCAL_DIST(aqbanking_DIST_local CMakeLists.txt Makefile.am migratable-prefs-aqbanking.xml
+        ${aqbanking_SOURCES} ${aqbanking_noinst_HEADERS} ${aqbanking_EXTRA_DIST}
+        ${aqbanking_GLADE} ${aqbanking_UI})
+
+SET(aqbanking_DIST ${aqbanking_DIST_local} ${aqbanking_gschema_DIST} ${test_aqb_DIST} PARENT_SCOPE)

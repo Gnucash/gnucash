@@ -28,7 +28,7 @@
  * Copyright (c) 2007 David Hampton <hampton@employees.org>
  */
 
-#include <guid.hpp>
+#include "guid.hpp"
 extern "C"
 {
 #include "config.h"

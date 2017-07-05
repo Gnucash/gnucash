@@ -7,15 +7,15 @@ SET(GUILE ${GUILE_EXECUTABLE})
 SET(GNC_SRCDIR ${CMAKE_SOURCE_DIR})
 SET(GNC_BUILDDIR ${CMAKE_BINARY_DIR})
 
+CONFIGURE_FILE(gnucash-make-guids.in gnucash-make-guids)
 CONFIGURE_FILE(gnucash-make-guids.in ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/gnucash-make-guids)
 GNC_CONFIGURE(gnucash-env.in ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/gnucash-env)
 GNC_CONFIGURE(guile.in ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/guile) #not installed
 GNC_CONFIGURE(gnucash-build-env.in ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/gnucash-build-env)   # not installed
 
-SET(SCRIPT_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR})
-IF (GNC_BUILD_AS_INSTALL)
-  SET(SCRIPT_OUTPUT_DIR ${LIBDIR_BUILD}exec/gnucash/overrides)
-ENDIF()
+SET_DIST_LIST(overrides_DIST CMakeLists.txt gnucash-build-env.in gnucash-env.in gnucash-make-guids.in guile.in Makefile.am)
+
+SET(SCRIPT_OUTPUT_DIR ${LIBDIR_BUILD}exec/gnucash/overrides)
 
 FOREACH(file gnucash-make-guids gnucash-env guile gnucash-build-env)
   FILE(COPY ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${file}

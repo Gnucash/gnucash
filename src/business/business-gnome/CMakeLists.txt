@@ -80,3 +80,8 @@ GNC_ADD_SCHEME_TARGETS(scm-business-gnome
   "${GUILE_DEPENDS}"
   FALSE
 )
+SET_LOCAL_DIST(business_gnome_DIST_local CMakeLists.txt Makefile.am ${business_gnome_SOURCES} ${business_gnome_HEADERS}
+               ${business_gnome_noinst_HEADERS} ${gncmod_business_gnome_SCHEME})
+
+SET(business_gnome_DIST ${business_gnome_DIST_local} ${business_gnome_gschema_DIST}
+        ${business_gnome_gtkbuilder_DIST} ${business_gnome_ui_DIST} PARENT_SCOPE)

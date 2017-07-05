@@ -1,6 +1,12 @@
 ADD_SUBDIRECTORY(gschemas)
 ADD_SUBDIRECTORY(test)
 
+SET(csv_import_remote_SOURCES
+  ${CMAKE_SOURCE_DIR}/lib/goffice/go-charmap-sel.c
+  ${CMAKE_SOURCE_DIR}/lib/goffice/go-optionmenu.c
+  ${CMAKE_SOURCE_DIR}/lib/goffice/go-glib-extras.c
+)
+
 SET(csv_import_SOURCES
   gncmod-csv-import.c
   assistant-csv-account-import.c
@@ -16,13 +22,16 @@ SET(csv_import_SOURCES
   gnc-tokenizer.cpp
   gnc-trans-props.cpp
   gnc-tx-import.cpp
-  ${CMAKE_SOURCE_DIR}/lib/goffice/go-charmap-sel.c
-  ${CMAKE_SOURCE_DIR}/lib/goffice/go-optionmenu.c
-  ${CMAKE_SOURCE_DIR}/lib/goffice/go-glib-extras.c
 )
 
 # Add dependency on config.h
 SET_SOURCE_FILES_PROPERTIES (${csv_import_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
+
+SET(csv_import_remote_HEADERS
+  ${CMAKE_SOURCE_DIR}/lib/goffice/go-charmap-sel.h
+  ${CMAKE_SOURCE_DIR}/lib/goffice/go-optionmenu.h
+  ${CMAKE_SOURCE_DIR}/lib/goffice/go-glib-extras.h
+)
 
 SET(csv_import_noinst_HEADERS
   assistant-csv-account-import.h
@@ -38,12 +47,11 @@ SET(csv_import_noinst_HEADERS
   gnc-tokenizer.hpp
   gnc-trans-props.hpp
   gnc-tx-import.hpp
-  ${CMAKE_SOURCE_DIR}/lib/goffice/go-charmap-sel.h
-  ${CMAKE_SOURCE_DIR}/lib/goffice/go-optionmenu.h
-  ${CMAKE_SOURCE_DIR}/lib/goffice/go-glib-extras.h
 )
 
-ADD_LIBRARY(gncmod-csv-import ${csv_import_noinst_HEADERS} ${csv_import_SOURCES})
+ADD_LIBRARY(gncmod-csv-import ${csv_import_noinst_HEADERS}
+  ${csv_import_remote_HEADERS} ${csv_import_remote_SOURCES} ${csv_import_SOURCES}
+)
 
 TARGET_LINK_LIBRARIES(
   gncmod-csv-import
@@ -81,9 +89,12 @@ SET(csv_import_UI gnc-plugin-csv-import-ui.xml)
 
 INSTALL(FILES ${csv_import_UI} DESTINATION share/gnucash/ui)
 
-IF (GNC_BUILD_AS_INSTALL)
-  FILE(COPY ${csv_import_UI}
-    DESTINATION ${DATADIR_BUILD}/gnucash/ui)
-  FILE(COPY ${csv_import_GLADE}
-    DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder)
-ENDIF()
+FILE(COPY ${csv_import_UI}
+  DESTINATION ${DATADIR_BUILD}/gnucash/ui)
+FILE(COPY ${csv_import_GLADE}
+  DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder)
+
+SET_LOCAL_DIST(csv_import_DIST_local CMakeLists.txt Makefile.am
+        ${csv_import_SOURCES} ${csv_import_noinst_HEADERS}
+        ${csv_import_GLADE} ${csv_import_UI})
+SET(csv_import_DIST ${csv_import_DIST_local} ${test_csv_import_DIST} ${csv_import_gschema_DIST} PARENT_SCOPE)

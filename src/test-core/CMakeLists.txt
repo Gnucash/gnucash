@@ -18,6 +18,9 @@ INCLUDE_DIRECTORIES(
   ${GUILE_INCLUDE_DIRS}
 )
 
+SET_DIST_LIST(test_core_DIST ${test_core_SOURCES} ${test_core_noinst_HEADERS} CMakeLists.txt
+        Makefile.am unittest-support.i unittest-support.scm)
+
 ADD_LIBRARY(test-core STATIC ${test_core_SOURCES} ${test_core_noinst_HEADERS})
 TARGET_LINK_LIBRARIES(test-core gncmod-engine gnc-qof ${GLIB2_LDFLAGS})
 IF (UNIX)
@@ -26,7 +29,7 @@ ENDIF()
 
 IF (BUILDING_FROM_VCS)
   SET (SWIG_UNITTEST_SUPPORT_GUILE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-unittest-support-guile.c)
-  GNC_ADD_SWIG_COMMAND (${SWIG_UNITTEST_SUPPORT_GUILE_C}
+  GNC_ADD_SWIG_COMMAND (swig-unittest-support-guile-c ${SWIG_UNITTEST_SUPPORT_GUILE_C}
       ${CMAKE_CURRENT_SOURCE_DIR}/unittest-support.i ${test_core_HEADERS})
   SET (SWIG_UNITTEST_SUPPORT_PYTHON_C ${CMAKE_CURRENT_BINARY_DIR}/swig-unittest-support-python.c)
   GNC_ADD_SWIG_PYTHON_COMMAND (swig-unittest-support-python ${SWIG_UNITTEST_SUPPORT_PYTHON_C} ${CMAKE_CURRENT_SOURCE_DIR}/unittest-support.i)

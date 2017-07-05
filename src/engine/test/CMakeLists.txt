@@ -16,6 +16,8 @@ MACRO(ADD_ENGINE_TEST _TARGET _SOURCE_FILES)
   GNC_ADD_TEST(${_TARGET} "${_SOURCE_FILES}" ENGINE_TEST_INCLUDE_DIRS ENGINE_TEST_LIBS)
 ENDMACRO()
 
+CONFIGURE_FILE(test-scm-query-import.in test-scm-query-import @ONLY)
+CONFIGURE_FILE(test-create-account.in test-create-account @ONLY)
 # Not via macro because of unique link requirements
 
 ADD_EXECUTABLE(test-link EXCLUDE_FROM_ALL test-link.c)
@@ -94,3 +96,57 @@ GNC_ADD_SCHEME_TARGETS(scm-test-engine
   "${GUILE_DEPENDS}"
   FALSE
 )
+
+SET(test_engine_SOURCES_DIST
+        dummy.cpp
+        gtest-import-map.cpp
+        test-account-object.cpp
+        test-address.c
+        test-business.c
+        test-commodities.cpp
+        test-customer.c
+        test-date.cpp
+        test-employee.c
+	test-engine-kvp-properties.c
+        test-engine.c
+        test-group-vs-book.cpp
+        test-guid.cpp
+        test-job.c
+        test-link.c
+        test-load-engine.c
+        test-lots.cpp
+        test-object.c
+        test-query.cpp
+        test-querynew.c
+        test-recurrence.c
+        test-scm-query.cpp
+        test-split-vs-account.cpp
+        test-transaction-reversal.cpp
+        test-transaction-voiding.cpp
+        test-vendor.c
+        utest-Account.cpp
+        utest-Budget.c
+        utest-Entry.c
+        utest-Invoice.c
+        utest-Split.cpp
+        utest-Transaction.cpp
+	utest-gnc-pricedb.c
+)
+
+SET(test_engine_SCHEME_DIST
+        test-account.scm
+        test-create-account.scm
+        test-extras.scm
+        test-scm-query-import.scm
+        test-split.scm
+        test-test-extras.scm
+)
+
+SET(test_engine_EXTRA_DIST
+        README
+        test-create-account.in
+        test-scm-query-import.in
+)
+
+SET_DIST_LIST(test_engine_DIST CMakeLists.txt Makefile.am
+        ${test_engine_SOURCES_DIST} ${test_engine_SCHEME_DIST} ${test_engine_EXTRA_DIST})

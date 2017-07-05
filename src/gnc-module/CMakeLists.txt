@@ -4,15 +4,12 @@ ADD_SUBDIRECTORY(test)
 IF (BUILDING_FROM_VCS)
   # Command to generate the swig-engine.c wrapper file
   SET (SWIG_GNC_MODULE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-gnc-module.c)
-  GNC_ADD_SWIG_COMMAND (${SWIG_GNC_MODULE_C} ${CMAKE_CURRENT_SOURCE_DIR}/gnc-module.i)
+  GNC_ADD_SWIG_COMMAND (swig-gnc-module-c ${SWIG_GNC_MODULE_C} ${CMAKE_CURRENT_SOURCE_DIR}/gnc-module.i)
 ELSE()
   SET (SWIG_GNC_MODULE_C swig-gnc-module.c)
 ENDIF()
 
-SET (gnc_module_SOURCES
-  gnc-module.c
-  ${SWIG_GNC_MODULE_C}
-)
+SET (gnc_module_SOURCES gnc-module.c)
 
 # Add dependency on config.h
 SET_SOURCE_FILES_PROPERTIES (${gnc_module_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
@@ -25,6 +22,7 @@ SET (gnc_module_HEADERS
 ADD_LIBRARY	(gnc-module
   ${gnc_module_SOURCES}
   ${gnc_module_HEADERS}
+  ${SWIG_GNC_MODULE_C}
 )
 
 TARGET_LINK_LIBRARIES(gnc-module gnc-qof ${GUILE_LDFLAGS} ${GMODULE_LDFLAGS} ${GLIB2_LDFLAGS})
@@ -62,3 +60,7 @@ GNC_ADD_SCHEME_TARGETS(scm-gnc-module
   "${GUILE_DEPENDS}"
   FALSE
 )
+
+SET_LOCAL_DIST(gnc_module_DIST_local CMakeLists.txt Makefile.am ${gnc_module_SOURCES} ${gnc_module_HEADERS}
+        gnc-module.i gnc-module.scm README)
+SET(gnc_module_DIST ${gnc_module_DIST_local} ${test_gnc_module_DIST} PARENT_SCOPE)

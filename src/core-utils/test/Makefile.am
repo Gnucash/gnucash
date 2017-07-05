@@ -49,7 +49,7 @@ test_gnc_glib_utils_CFLAGS = \
         -I${top_srcdir}/${MODULEPATH} \
         ${GLIB_CFLAGS}
 
-EXTRA_DIST =
+EXTRA_DIST +=
 
 clean-local:
 	rm -f translog.*
