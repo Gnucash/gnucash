@@ -1,11 +1,8 @@
 GETTING HELP: If you need help with GnuCash, please do not contact any
-of the Authors directly. Instead, first look at
-http://wiki.gnucash.org/wiki/FAQ to see if your question is common and
-is answered there. If that doesn't help, there are mailing lists in
-English, Dutch, French, German, Italian, and Portuguese and an English
-IRC channel. More information can be found at
-http://wiki.gnucash.org/wiki/Mailing_Lists and
-http://wiki.gnucash.org/wiki/IRC.
+of the Authors directly. Instead, first look at the <a href="http://wiki.gnucash.org/wiki/FAQ">FAQ</a> to see if your question
+is common and is answered there. If that doesn't help, there are mailing
+lists in English, Dutch, French, German, Italian, Portuguese and an English
+IRC channel. More information can be found at for <a href="http://wiki.gnucash.org/wiki/Mailing_Lists">Mailing List</a> and <a href="http://wiki.gnucash.org/wiki/IRC">IRC</a>.
 
 Current Project Team:
 =====================
@@ -47,7 +44,7 @@ Linas Vepstas liked what he saw: the GUI was slick, the code was
    X-Accountant internals to add double-entry, an account hierarchy,
    split out a transaction mini-engine, add support for stocks, and
    spiffed up the help menus.  All for version 1.0 as of January 1998.
-   Since then, for version 1.1 & 1.2, the engine was expanded &
+   Since then, for version 1.1 &amp; 1.2, the engine was expanded &amp;
    refined, and the register window code completely redesigned and
    made mostly Motif-(and GUI-)independent.
 
@@ -87,7 +84,7 @@ Christian Stimming was a report-generating monster. He's been one of
    translation.
 
 Joshua Sled worked on scheduled transactions and general project
-   monkeying (IRC bot, logs, website maintenance, bug-triage, &c.).
+   monkeying (IRC bot, logs, website maintenance, bug-triage, &amp;c.).
 
 Derek Atkins wrote the business-accounting package for Gnucash. This
    includes the Customer/Vendor database, Job tracking, Order entry,
@@ -129,11 +126,11 @@ Other Contributors:
 (In alphabetical order)
 
 Mike Alexander Cap gains, lot and MacOS fixes.
-Andrew Arensburger for FreeBSD & other patches
+Andrew Arensburger for FreeBSD &amp; other patches
 Matt Armstrong for misc fixes
 Jon Arney  Windows porting patches, misc fixes
 A. Alper Atici Turkish translation
-J. Alex Aycinena  Heavily improved Tax Report & TXF export
+J. Alex Aycinena  Heavily improved Tax Report &amp; TXF export
 Roman Bertle Austrian German account templates
 Jan-Pascal van Best MT940 importer
 Dennis Björklund Swedish translation
@@ -153,10 +150,10 @@ Conrad Canterford  register bug fix
 Bill Carlson  performance improvements
 David Marín Carreño  Spanish translation of account setup.
 Tomas Cernaj  GType consistency changes, register fixes
-Carol Champagne  documentation & a patient GUI usability critic
+Carol Champagne  documentation &amp; a patient GUI usability critic
 Nikos Charonitakis  Greek translation
 Graham Chapman  for the xacc-rpts addon package
-George Chen  for MS-Money QIF's & fixes
+George Chen  for MS-Money QIF's &amp; fixes
 Albert Chin-A-Young  configure.in patch
 Kenneth Christiansen  Danish translation
 Matthew Condell  FreeBSD patch
@@ -164,7 +161,7 @@ Patrick Condron  for webserver and T1 connection (credits to rackspace.com)
 Raphael Dechenaux  register patch
 Ciaran Deignan  for AIX binary version
 Glen Ditchfield  updated documentation
-Tyson Dowd  for config/make patches & debian maint
+Tyson Dowd  for config/make patches &amp; debian maint
 Koen D'Hondt  for Solaris patches to XmHTML
 Bob Drzyzgula  for budgeting design notes
 Frank H. Ellenberger  small things, usually germany related
@@ -187,7 +184,8 @@ Christoph Franzen  German account template for Wohnungswirtschaft business
 Dave Freese  for leap-year fix
 Todd T. Fries  OpenBSD fix
 John Goerzen  file i/o fix for 64-bit architectures
-Jeff Green  Python bindings, with grant funding from Assiniboine Credit Union (http://assiniboine.mb.ca/)
+Jeff Green  Python bindings, with grant funding from
+  <a href="http://assiniboine.mb.ca/">Assiniboine Credit Union</a>
 Hans de Graaff  XML patches
 Daniel Hagerty  patch to balance sheet report
 Mitsuo Hamada  messages Japanese translations
@@ -207,7 +205,9 @@ Edward J. Huff  Date handling in reports, quarterly option
 Tomokazu Iwashita  Japanese translation of xea
 Geert Janssens  GUI fixes for Lots, autocompletion in gnc-general-search, several small fixes
 David Jafferian  Delete account query code.
-Mark Jenkins  Python bindings, with grant funding from Assiniboine Credit Union (http://assiniboine.mb.ca/) and Legal Aid Manitoba (http://www.legalaid.mb.ca/)
+Mark Jenkins  Python bindings, with grant funding from
+  <a href="http://assiniboine.mb.ca/">Assiniboine Credit Union</a> and
+  <a href="http://www.legalaid.mb.ca/">Legal Aid Manitoba</a>
 Rich Johnson  Mac OS X patch
 Miquel Jordana Vilamitjana  Spanish translation of manual
 Prakash Kailasa  for gnome build fixes
@@ -263,7 +263,7 @@ Martin Norbäck  Swedish translation
 Peter Norton  for a valiant attempt at a GTK port
 Bill Nottingham  guile configure patch
 Peter O'Gorman  file i/o patches, Mac OS X patches
-OmNiBuS  web site graphics & content
+OmNiBuS  web site graphics &amp; content
 Gordon Oliver  multiple currency status line patch
 Scott Oonk  register changes for utf-8 and pango.
 Alan Orndorff  Solaris packager
@@ -277,7 +277,7 @@ Gavin Porter  for euro style dates
 Tomas Pospisek  Debian patches
 Paul Poulain  French translations
 John Ralls  MacOSX integration
-Ron Record  for SCO Unixware & OpenServer binaries
+Ron Record  for SCO Unixware &amp; OpenServer binaries
 Keith Refson  Solaris fixes
 Jerry Quinn  Bugfixes
 Andreas Rottmann  fixes for g-wrap 1.9
@@ -293,20 +293,20 @@ Keld Simonsen  messages Danish translation
 Richard Skelton  for Solaris cleanup
 Thomas Vander Stichele  Macro for filtering system directories
 James Strandboge  "Easy" Invoice report
-Henning Spruth  for German text & euro date rework
+Henning Spruth  for German text &amp; euro date rework
 Ben Stanley  test infrastructure
-Robby Stephenson  register & file history patches
+Robby Stephenson  register &amp; file history patches
 Robert Stocks  additional register report options
 Michael T. Garrison Stuber  report patch
 Bartek Szady  engine and build system patches
-Herbert Thoma  gnome register & euro support patches
+Herbert Thoma  gnome register &amp; euro support patches
 Tor Harald Thorland  testing, Norwegian translation
 Nigel Titley  British English translation
 James A. Treacy  doc patch
 Arnold Troeger  Mandrake packager
 Diane Trout  scheme QIF import patch
 Nicolae Turcan  Romanian translation
-Richard -Gilligan- Uschold  tax report & txf export
+Richard -Gilligan- Uschold  tax report &amp; txf export
 Tom Van Braeckel  various patches and fixes
 Matthew Vanecek  lots of postgres backend work
 Didier Vidal  various G2 fixes.

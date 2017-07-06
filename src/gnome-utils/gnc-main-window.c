@@ -4481,6 +4481,10 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 			  G_CALLBACK (url_signal_cb), NULL);
 	g_signal_connect (priv->about_dialog, "response",
 			  G_CALLBACK (gtk_widget_hide), NULL);
+
+        /* Set dialog to resize. */
+        gtk_window_set_resizable(GTK_WINDOW(priv->about_dialog), TRUE);
+
 	gtk_window_set_transient_for (GTK_WINDOW (priv->about_dialog),
 				      GTK_WINDOW (window));
     }
