@@ -49,8 +49,8 @@ gcrp_start_editing                       (GtkCellRenderer          *cell,
 					  GdkEvent                 *event,
 					  GtkWidget                *widget,
 					  const gchar              *path,
-					  GdkRectangle             *background_area,
-					  GdkRectangle             *cell_area,
+					  const GdkRectangle       *background_area,
+					  const GdkRectangle       *cell_area,
 					  GtkCellRendererState      flags);
 static void      gcrp_show_popup         (GncCellRendererPopup      *cell,
 					  const gchar              *path,
@@ -61,7 +61,7 @@ static void      gcrp_show_popup         (GncCellRendererPopup      *cell,
 static void      gcrp_hide_popup         (GncCellRendererPopup      *cell);
 static void      gcrp_get_size           (GtkCellRenderer          *cell,
 					  GtkWidget                *widget,
-					  GdkRectangle             *cell_area,
+					  const GdkRectangle       *cell_area,
 					  gint                     *x_offset,
 					  gint                     *y_offset,
 					  gint                     *width,
@@ -215,21 +215,25 @@ static gboolean
 gcrp_grab_on_window (GdkWindow *window,
 		     guint32    activate_time)
 {
-	if ((gdk_pointer_grab (window, TRUE,
-			       GDK_BUTTON_PRESS_MASK |
-			       GDK_BUTTON_RELEASE_MASK |
-			       GDK_POINTER_MOTION_MASK,
-			       NULL, NULL, activate_time) == 0)) {
-		if (gdk_keyboard_grab (window, TRUE,
-			       activate_time) == 0)
-			return TRUE;
-		else {
-			gdk_pointer_ungrab (activate_time);
-			return FALSE;
-		}
-	}
+    GdkDisplay *display = gdk_display_get_default ();
+    GdkDeviceManager *dm = gdk_display_get_device_manager (display);
+    GdkDevice *device = gdk_device_manager_get_client_pointer (dm);
 
-	return FALSE;
+    if ((gdk_device_grab (device, window, GDK_OWNERSHIP_WINDOW, TRUE,
+                          GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+                          GDK_POINTER_MOTION_MASK,
+                          NULL, activate_time) == 0)) {
+
+        if (gdk_device_grab (device, window, GDK_OWNERSHIP_WINDOW, TRUE,
+                             GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK,
+			     NULL, activate_time) == 0)
+            return TRUE;
+        else {
+            gdk_device_ungrab (device, activate_time);
+            return FALSE;
+        }
+    }
+    return FALSE;
 }
 
 static void
@@ -336,7 +340,7 @@ gcrp_arrow_clicked (GtkCellEditable     *entry,
 		gnc_cell_renderer_popup_hide (cell);
 		return;
 	}
-	
+
 	path = g_object_get_data (G_OBJECT (entry),
 				  GNC_CELL_RENDERER_POPUP_PATH);
 
@@ -369,8 +373,8 @@ gcrp_start_editing (GtkCellRenderer      *cell,
 		    GdkEvent             *event,
 		    GtkWidget            *widget,
 		    const gchar          *path,
-		    GdkRectangle         *background_area,
-		    GdkRectangle         *cell_area,
+		    const GdkRectangle   *background_area,
+		    const GdkRectangle   *cell_area,
 		    GtkCellRendererState  flags)
 {
 	GncCellRendererPopup *popup;
@@ -434,13 +438,13 @@ gnc_cell_renderer_popup_hide (GncCellRendererPopup *cell)
 }
 
 static void
-gcrp_get_size (GtkCellRenderer *cell,
-	       GtkWidget       *widget,
-	       GdkRectangle    *cell_area,
-	       gint            *x_offset,
-	       gint            *y_offset,
-	       gint            *width,
-	       gint            *height)
+gcrp_get_size (GtkCellRenderer    *cell,
+	       GtkWidget          *widget,
+	       const GdkRectangle *cell_area,
+	       gint               *x_offset,
+	       gint               *y_offset,
+	       gint               *width,
+	       gint               *height)
 {
 	GncCellRendererPopup *popup;
 

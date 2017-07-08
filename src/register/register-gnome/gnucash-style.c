@@ -24,7 +24,6 @@
 
 #include "config.h"
 #include "gnucash-color.h"
-#include "gnucash-grid.h"
 #include "gnucash-item-edit.h"
 #include "gnucash-sheet.h"
 #include "gnucash-sheetP.h"
@@ -166,7 +165,6 @@ static void
 set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
                          BlockDimensions *dimensions)
 {
-    /* GdkFont *font = GNUCASH_GRID(sheet->grid)->normal_font; */
     CellDimensions *cd;
     int row, col;
     gint max_height = -1;
@@ -291,8 +289,6 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
         }
     else if (width > default_width && width == sheet->window_width)
     {
-        /*GdkFont *font = GNUCASH_GRID(sheet->grid)->normal_font;*/
-
         for (col = 0; col < num_cols; col++)
         {
             BasicCell *cell;

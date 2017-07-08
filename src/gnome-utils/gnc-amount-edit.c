@@ -42,6 +42,7 @@
 #include "gnc-locale-utils.h"
 #include "gnc-ui-util.h"
 #include "qof.h"
+#include "dialog-utils.h"
 
 #ifdef G_OS_WIN32
 # include <gdk/gdkwin32.h>
@@ -138,6 +139,9 @@ gnc_amount_edit_init (GNCAmountEdit *gae)
     gae->print_info = gnc_default_print_info (FALSE);
     gae->fraction = 0;
     gae->evaluate_on_enter = FALSE;
+
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(gae), "GncAmountEdit");
 
     g_signal_connect (G_OBJECT (gae), "changed",
                       G_CALLBACK (gnc_amount_edit_changed), NULL);

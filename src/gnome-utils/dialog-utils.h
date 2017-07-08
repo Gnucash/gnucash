@@ -29,7 +29,6 @@
 #include <gtk/gtk.h>
 #include "qof.h"
 
-void gnc_get_deficit_color (GdkColor *color);
 void gnc_set_label_color (GtkWidget *label, gnc_numeric value);
 
 /********************************************************************\
@@ -62,6 +61,33 @@ void gnc_save_window_size (const char *section, GtkWindow *window);
 \********************************************************************/
 void gnc_window_adjust_for_screen (GtkWindow * window);
 
+/********************************************************************\
+ * Sets the alignament of a Label Widget, GTK3 version specific.    *
+ *                                                                  *
+ * Args: widget - the label widget to set alignment on              *
+ *       xalign - x alignment                                       *
+ *       yalign - y alignment                                       *
+ * Returns: nothing                                                 *
+\********************************************************************/
+void gnc_label_set_alignment (GtkWidget *widget, gfloat xalign, gfloat yalign);
+
+/********************************************************************\
+ * Get the preference for showing tree view grid lines              *
+ *                                                                  *
+ * Args: none                                                       *
+ * Returns:  GtkTreeViewGridLines setting                           *
+\********************************************************************/
+GtkTreeViewGridLines gnc_tree_view_get_grid_lines_pref (void);
+
+/********************************************************************\
+ * Add a style context to a Widget so it can be altered with css    *
+ *                                                                  *
+ * Args:    widget - widget to add css style too                    *
+ *       gnc_class - character string for css class name            *
+ * Returns:  nothing                                                *
+\********************************************************************/
+void gnc_widget_set_style_context (GtkWidget *widget, const char *gnc_class);
+
 gboolean gnc_handle_date_accelerator (GdkEventKey *event,
                                       struct tm *tm,
                                       const char *date_str);
@@ -85,13 +111,13 @@ void gnc_builder_connect_full_func (GtkBuilder *builder,
  *
  *  @param label The text of the button.
  *
- *  @param stock_id The name of the stock button to use.
+ *  @param icon_name The name of the icon button to use.
  *
  *  @param response The response id to return if this button is
  *  clicked.*/
 void gnc_gtk_dialog_add_button (GtkWidget *dialog,
                                 const gchar *label,
-                                const gchar *stock_id,
+                                const gchar *icon_name,
                                 guint response);
 
 /** Note: This dialog is modal!  (It calls gtk_dialog_run() which is modal.)

@@ -691,9 +691,12 @@ startRecnWindow (GtkWidget *parent, Account *account,
 
     /* Create the dialog box */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "window-reconcile.glade", "Reconcile Start Dialog");
+    gnc_builder_add_from_file (builder, "window-reconcile.glade", "reconcile_start_dialog");
 
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Reconcile Start Dialog"));
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "reconcile_start_dialog"));
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncReconcileDialog");
 
     title = gnc_recn_make_window_name (account);
     gtk_window_set_title (GTK_WINDOW (dialog), title);
@@ -1103,7 +1106,8 @@ gnc_reconcile_window_create_view_box (Account *account,
     else
         recnData->credit_frame = frame;
 
-    vbox = gtk_vbox_new (FALSE, 5);
+    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
 
     view = gnc_reconcile_view_new(account, type, recnData->statement_date);
     *list_save = view;
@@ -1137,11 +1141,12 @@ gnc_reconcile_window_create_view_box (Account *account,
     gtk_container_add (GTK_CONTAINER (scrollWin), view);
     gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE, TRUE, 0);
 
-    hbox = gtk_hbox_new (FALSE, 5);
+    hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
     gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 
     label = gtk_label_new (_("Total:"));
-    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gnc_label_set_alignment (label, 1.0, 0.5);
     gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
 
     label = gtk_label_new("");
@@ -1616,7 +1621,7 @@ recnWindow2 (GtkWidget *parent, Account *account)
 static void
 recnWindow2_add_widget (GtkUIManager *merge,
                        GtkWidget *widget,
-                       GtkVBox *dock)
+                       GtkBox *dock)
 {
     gtk_box_pack_start (GTK_BOX (dock), widget, FALSE, FALSE, 0);
     gtk_widget_show (widget);
@@ -1673,10 +1678,12 @@ recnWindow2WithBalance (GtkWidget *parent, Account *account,
 
     gnc_recn_set_window_name (recnData);
 
-    vbox = gtk_vbox_new (FALSE, 0);
+    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
     gtk_container_add (GTK_CONTAINER(recnData->window), vbox);
 
-    dock = gtk_vbox_new (FALSE, 0);
+    dock = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (dock), FALSE);
     gtk_widget_show (dock);
     gtk_box_pack_start (GTK_BOX (vbox), dock, FALSE, TRUE, 0);
 
@@ -1729,7 +1736,6 @@ recnWindow2WithBalance (GtkWidget *parent, Account *account,
                      G_CALLBACK (gnc_reconcile_window_popup_menu_cb), recnData);
 
     statusbar = gtk_statusbar_new ();
-    gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (statusbar), TRUE);
     gtk_box_pack_end (GTK_BOX (vbox), statusbar, FALSE, FALSE, 0);
 
     g_signal_connect (recnData->window, "destroy",
@@ -1742,11 +1748,12 @@ recnWindow2WithBalance (GtkWidget *parent, Account *account,
     /* The main area */
     {
         GtkWidget *frame = gtk_frame_new (NULL);
-        GtkWidget *main_area = gtk_vbox_new (FALSE, 10);
-        GtkWidget *debcred_area = gtk_table_new (1, 2, TRUE);
+        GtkWidget *main_area = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
+        GtkWidget *debcred_area = gtk_grid_new ();
         GtkWidget *debits_box;
         GtkWidget *credits_box;
 
+        gtk_box_set_homogeneous (GTK_BOX (main_area), FALSE);
         gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE, TRUE, 10);
 
         /* Force a reasonable starting size */
@@ -1768,16 +1775,28 @@ recnWindow2WithBalance (GtkWidget *parent, Account *account,
         GNC_RECONCILE_VIEW (recnData->credit)->sibling = GNC_RECONCILE_VIEW (recnData->debit);
 
         gtk_box_pack_start (GTK_BOX (main_area), debcred_area, TRUE, TRUE, 0);
-        gtk_table_set_col_spacings (GTK_TABLE (debcred_area), 15);
-        gtk_table_attach_defaults (GTK_TABLE (debcred_area), debits_box, 0, 1, 0, 1);
-        gtk_table_attach_defaults (GTK_TABLE (debcred_area), credits_box, 1, 2, 0, 1);
+
+        gtk_grid_set_column_homogeneous (GTK_GRID(debcred_area), TRUE);
+        gtk_grid_set_column_spacing (GTK_GRID(debcred_area), 15);
+        gtk_grid_attach (GTK_GRID(debcred_area), debits_box, 0, 0, 1, 1);
+        gtk_widget_set_hexpand (debits_box, TRUE);
+        gtk_widget_set_vexpand (debits_box, TRUE);
+        gtk_widget_set_halign (debits_box, GTK_ALIGN_FILL);
+        gtk_widget_set_valign (debits_box, GTK_ALIGN_FILL);
+
+        gtk_grid_attach (GTK_GRID(debcred_area), credits_box, 1, 0, 1, 1);
+        gtk_widget_set_hexpand (credits_box, TRUE);
+        gtk_widget_set_vexpand (credits_box, TRUE);
+        gtk_widget_set_halign (credits_box, GTK_ALIGN_FILL);
+        gtk_widget_set_valign (credits_box, GTK_ALIGN_FILL);
 
         {
             GtkWidget *hbox, *title_vbox, *value_vbox;
             GtkWidget *totals_hbox, *frame, *title, *value;
 
             /* lower horizontal bar below reconcile lists */
-            hbox = gtk_hbox_new (FALSE, 5);
+            hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+            gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
             gtk_box_pack_start (GTK_BOX (main_area), hbox, FALSE, FALSE, 0);
 
             /* frame to hold totals */
@@ -1785,66 +1804,69 @@ recnWindow2WithBalance (GtkWidget *parent, Account *account,
             gtk_box_pack_end (GTK_BOX (hbox), frame, FALSE, FALSE, 0);
 
             /* hbox to hold title/value vboxes */
-            totals_hbox = gtk_hbox_new (FALSE, 3);
+            totals_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
+            gtk_box_set_homogeneous (GTK_BOX (totals_hbox), FALSE);
             gtk_container_add (GTK_CONTAINER (frame), totals_hbox);
             gtk_container_set_border_width (GTK_CONTAINER (totals_hbox), 5);
 
             /* vbox to hold titles */
-            title_vbox = gtk_vbox_new (FALSE, 3);
+            title_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+            gtk_box_set_homogeneous (GTK_BOX (title_vbox), FALSE);
             gtk_box_pack_start (GTK_BOX (totals_hbox), title_vbox, FALSE, FALSE, 0);
 
             /* vbox to hold values */
-            value_vbox = gtk_vbox_new (FALSE, 3);
+            value_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+            gtk_box_set_homogeneous (GTK_BOX (value_vbox), FALSE);
             gtk_box_pack_start (GTK_BOX (totals_hbox), value_vbox, TRUE, TRUE, 0);
 
             /* statement date title/value */
             title = gtk_label_new (_("Statement Date:"));
-            gtk_misc_set_alignment (GTK_MISC (title), 1.0, 0.5);
+            gnc_label_set_alignment (title, 1.0, 0.5);
             gtk_box_pack_start (GTK_BOX (title_vbox), title, FALSE, FALSE, 0);
 
             value = gtk_label_new ("");
             recnData->recn_date = value;
-            gtk_misc_set_alignment (GTK_MISC (value), 1.0, 0.5);
+            gnc_label_set_alignment (value, 1.0, 0.5);
             gtk_box_pack_start (GTK_BOX (value_vbox), value, FALSE, FALSE, 0);
 
             /* starting balance title/value */
             title = gtk_label_new(_("Starting Balance:"));
-            gtk_misc_set_alignment (GTK_MISC (title), 1.0, 0.5);
+            gnc_label_set_alignment (title, 1.0, 0.5);
             gtk_box_pack_start (GTK_BOX (title_vbox), title, FALSE, FALSE, 3);
 
             value = gtk_label_new ("");
             recnData->starting = value;
-            gtk_misc_set_alignment (GTK_MISC (value), 1.0, 0.5);
+            gnc_label_set_alignment (value, 1.0, 0.5);
             gtk_box_pack_start (GTK_BOX (value_vbox), value, FALSE, FALSE, 3);
 
             /* ending balance title/value */
             title = gtk_label_new (_("Ending Balance:"));
-            gtk_misc_set_alignment (GTK_MISC (title), 1.0, 0.5);
+            gnc_label_set_alignment (title, 1.0, 0.5);
             gtk_box_pack_start (GTK_BOX (title_vbox), title, FALSE, FALSE, 0);
 
             value = gtk_label_new ("");
             recnData->ending = value;
-            gtk_misc_set_alignment (GTK_MISC (value), 1.0, 0.5);
+            gnc_label_set_alignment (value, 1.0, 0.5);
             gtk_box_pack_start (GTK_BOX (value_vbox), value, FALSE, FALSE, 0);
 
             /* reconciled balance title/value */
             title = gtk_label_new (_("Reconciled Balance:"));
-            gtk_misc_set_alignment (GTK_MISC (title), 1.0, 0.5);
+            gnc_label_set_alignment (title, 1.0, 0.5);
             gtk_box_pack_start (GTK_BOX (title_vbox), title, FALSE, FALSE, 0);
 
             value = gtk_label_new ("");
             recnData->reconciled = value;
-            gtk_misc_set_alignment (GTK_MISC (value), 1.0, 0.5);
+            gnc_label_set_alignment (value, 1.0, 0.5);
             gtk_box_pack_start (GTK_BOX (value_vbox), value, FALSE, FALSE, 0);
 
             /* difference title/value */
             title = gtk_label_new (_("Difference:"));
-            gtk_misc_set_alignment(GTK_MISC (title), 1.0, 0.5);
+            gnc_label_set_alignment (title, 1.0, 0.5);
             gtk_box_pack_start (GTK_BOX (title_vbox), title, FALSE, FALSE, 0);
 
             value = gtk_label_new ("");
             recnData->difference = value;
-            gtk_misc_set_alignment (GTK_MISC (value), 1.0, 0.5);
+            gnc_label_set_alignment (value, 1.0, 0.5);
             gtk_box_pack_start (GTK_BOX (value_vbox), value, FALSE, FALSE, 0);
         }
 
@@ -2154,17 +2176,17 @@ static GtkActionEntry recnWindow2_actions [] =
         G_CALLBACK (gnc_ui_reconcile_window_change_cb)
     },
     {
-        "RecnFinishAction", GTK_STOCK_YES, N_("_Finish"), "<primary>w",
+        "RecnFinishAction", "system-run", N_("_Finish"), "<primary>w",
         N_("Finish the reconciliation of this account"),
         G_CALLBACK(recnFinishCB)
     },
     {
-        "RecnPostponeAction", GTK_STOCK_GO_BACK, N_("_Postpone"), "<primary>p",
+        "RecnPostponeAction", "go-previous", N_("_Postpone"), "<primary>p",
         N_("Postpone the reconciliation of this account"),
         G_CALLBACK(recnPostponeCB)
     },
     {
-        "RecnCancelAction", GTK_STOCK_CANCEL, N_("_Cancel"), NULL,
+        "RecnCancelAction", "process-stop", N_("_Cancel"), NULL,
         N_("Cancel the reconciliation of this account"),
         G_CALLBACK(recnCancelCB)
     },
@@ -2172,7 +2194,7 @@ static GtkActionEntry recnWindow2_actions [] =
     /* Account menu */
 
     {
-        "AccountOpenAccountAction", GTK_STOCK_JUMP_TO, N_("_Open Account"), NULL,
+        "AccountOpenAccountAction", "go-jump", N_("_Open Account"), NULL,
         N_("Open the account"),
         G_CALLBACK(gnc_recn_open_cb)
     },
@@ -2196,27 +2218,27 @@ static GtkActionEntry recnWindow2_actions [] =
     /* Transaction menu */
 
     {
-        "TransBalanceAction", GTK_STOCK_NEW, N_("_Balance"), "<primary>b",
+        "TransBalanceAction", "document-new", N_("_Balance"), "<primary>b",
         N_("Add a new balancing entry to the account"),
         G_CALLBACK(gnc_ui_reconcile_window_balance_cb)
     },
     {
-        "TransEditAction", GTK_STOCK_PROPERTIES, N_("_Edit"),  "<primary>e",
+        "TransEditAction", "document-properties", N_("_Edit"),  "<primary>e",
         N_("Edit the current transaction"),
         G_CALLBACK(gnc_ui_reconcile_window_edit_cb)
     },
     {
-        "TransDeleteAction", GTK_STOCK_DELETE, N_("_Delete"),  "<primary>d",
+        "TransDeleteAction", "edit-delete", N_("_Delete"),  "<primary>d",
         N_("Delete the selected transaction"),
         G_CALLBACK(gnc_ui_reconcile_window_delete_cb)
     },
     {
-        "TransRecAction", GTK_STOCK_APPLY, N_("_Reconcile Selection"), "<primary>r",
+        "TransRecAction", "emblem-default", N_("_Reconcile Selection"), "<primary>r",
         N_("Reconcile the selected transactions"),
         G_CALLBACK(gnc_ui_reconcile_window_rec_cb)
     },
     {
-        "TransUnRecAction", GTK_STOCK_CLEAR, N_("_Unreconcile Selection"), "<primary>u",
+        "TransUnRecAction", "edit-clear", N_("_Unreconcile Selection"), "<primary>u",
         N_("Unreconcile the selected transactions"),
         G_CALLBACK(gnc_ui_reconcile_window_unrec_cb)
     },

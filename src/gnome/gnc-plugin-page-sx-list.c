@@ -131,31 +131,31 @@ static GtkActionEntry gnc_plugin_page_sx_list_actions [] =
 {
     { "SxListAction", NULL, N_("_Scheduled"), NULL, NULL, NULL },
     {
-        "SxListNewAction", GNC_STOCK_NEW_ACCOUNT, N_("_New"), NULL,
+        "SxListNewAction", GNC_ICON_NEW_ACCOUNT, N_("_New"), NULL,
         N_("Create a new scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_new)
     },
 #ifdef REGISTER2_ENABLED
 /*################## Added for Reg2 #################*/
     {
-        "SxListNewAction2", GNC_STOCK_NEW_ACCOUNT, N_("_New 2"), NULL,
+        "SxListNewAction2", GNC_ICON_NEW_ACCOUNT, N_("_New 2"), NULL,
         N_("Create a new scheduled transaction 2"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_new2)
     },
 /*################## Added for Reg2 #################*/
 #endif
     {
-        "SxListEditAction", GNC_STOCK_EDIT_ACCOUNT, N_("_Edit"), NULL,
+        "SxListEditAction", GNC_ICON_EDIT_ACCOUNT, N_("_Edit"), NULL,
         N_("Edit the selected scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_edit)
     },
 #ifdef REGISTER2_ENABLED
 /*################## Added for Reg2 #################*/
     {
-        "SxListEditAction2", GNC_STOCK_EDIT_ACCOUNT, N_("_Edit 2"), NULL,
+        "SxListEditAction2", GNC_ICON_EDIT_ACCOUNT, N_("_Edit 2"), NULL,
         N_("Edit the selected scheduled transaction 2"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_edit2)
     },
 /*################## Added for Reg2 #################*/
 #endif
     {
-        "SxListDeleteAction", GNC_STOCK_DELETE_ACCOUNT, N_("_Delete"), NULL,
+        "SxListDeleteAction", GNC_ICON_DELETE_ACCOUNT, N_("_Delete"), NULL,
         N_("Delete the selected scheduled transaction"), G_CALLBACK(gnc_plugin_page_sx_list_cmd_delete)
     },
 };
@@ -218,7 +218,7 @@ gnc_plugin_page_sx_list_class_init (GncPluginPageSxListClass *klass)
     object_class->dispose = gnc_plugin_page_sx_list_dispose;
     object_class->finalize = gnc_plugin_page_sx_list_finalize;
 
-    gnc_plugin_class->tab_icon        = GNC_STOCK_ACCOUNT;
+    gnc_plugin_class->tab_icon        = GNC_ICON_ACCOUNT;
     gnc_plugin_class->plugin_name     = GNC_PLUGIN_PAGE_SX_LIST_NAME;
     gnc_plugin_class->create_widget   = gnc_plugin_page_sx_list_create_widget;
     gnc_plugin_class->destroy_widget  = gnc_plugin_page_sx_list_destroy_widget;
@@ -367,12 +367,16 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
         return priv->widget;
 
     /* Create Vpaned widget for top level */
-    widget = gtk_vpaned_new();
+    widget = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
     priv->widget = widget;
     gtk_widget_show (priv->widget);
 
+    // Set the style context for this page so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(priv->widget), "GncSxPage");
+
     /* Add vbox and label */
-    vbox = gtk_vbox_new(FALSE, 0);
+    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
     gtk_paned_pack1( GTK_PANED(widget), vbox, TRUE, FALSE);
 
     label = gtk_label_new(NULL);
@@ -381,7 +385,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     gtk_label_set_markup (GTK_LABEL (label), markup);
     g_free (markup);
     g_free (text);
-    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0);
+    gnc_label_set_alignment (label, 0.0, 0);
     gtk_widget_show (label);
     gtk_box_pack_start ( GTK_BOX(vbox), label, FALSE, FALSE, 0);
     gtk_widget_show (vbox);
@@ -434,7 +438,8 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     }
 
     /* Add vbox and label */
-    vbox = gtk_vbox_new(FALSE, 0);
+    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);;
     gtk_paned_pack2( GTK_PANED(widget), vbox, TRUE, FALSE);
 
     label = gtk_label_new(NULL);
@@ -443,7 +448,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     gtk_label_set_markup (GTK_LABEL (label), markup);
     g_free (markup);
     g_free (text);
-    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0);
+    gnc_label_set_alignment (label, 0.0, 0);
     gtk_widget_show (label);
 
     gtk_box_pack_start ( GTK_BOX(vbox), label, FALSE, FALSE, 0);
@@ -465,7 +470,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
         gnc_dense_cal_set_months_per_col(priv->gdcal, 4);
         gnc_dense_cal_set_num_months(priv->gdcal, 12);
 
-        gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(swin), GTK_WIDGET(priv->gdcal));
+        gtk_container_add (GTK_CONTAINER(swin), GTK_WIDGET(priv->gdcal));
     }
 
     priv->gnc_component_id = gnc_register_gui_component("plugin-page-sx-list",

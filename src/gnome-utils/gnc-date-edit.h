@@ -57,7 +57,7 @@ typedef enum
  **/
 typedef struct
 {
-    GtkHBox hbox;
+    GtkBox hbox;
 
     GtkWidget *date_entry;
     GtkWidget *date_button;
@@ -84,7 +84,7 @@ typedef struct
 
 typedef struct
 {
-    GtkHBoxClass parent_class;
+    GtkBoxClass parent_class;
     void (*date_changed) (GNCDateEdit *gde);
     void (*time_changed) (GNCDateEdit *gde);
 } GNCDateEditClass;

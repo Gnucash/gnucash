@@ -738,7 +738,9 @@ gxi_update_string_box (GncXmlImportData *data)
     if (data->string_box)
         gtk_widget_destroy (data->string_box);
 
-    data->string_box = gtk_vbox_new (FALSE, 6);
+    data->string_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
+    gtk_box_set_homogeneous (GTK_BOX (data->string_box), FALSE);
+
     vbox = GTK_BOX (data->string_box);
 
     data->n_unassigned = 0;
@@ -1182,9 +1184,13 @@ gxi_edit_encodings_clicked_cb (GtkButton *button, GncXmlImportData *data)
     gint i, j;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "assistant-xml-encoding.glade", "Encodings Dialog");
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Encodings Dialog"));
+    gnc_builder_add_from_file (builder, "assistant-xml-encoding.glade", "encodings_dialog");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "encodings_dialog"));
     data->encodings_dialog = dialog;
+
+
+    // Set the style context for this assistant so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncAssistXmlEncoding");
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, data);
 

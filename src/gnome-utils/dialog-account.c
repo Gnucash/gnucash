@@ -208,7 +208,7 @@ gnc_account_to_ui(AccountWindow *aw)
     Account *account;
     gnc_commodity * commodity;
     const char *string;
-    GdkColor color;
+    GdkRGBA color;
     gboolean flag, nonstd_scu;
     gint index;
 
@@ -230,9 +230,9 @@ gnc_account_to_ui(AccountWindow *aw)
 
     string = xaccAccountGetColor (account);
     if (string == NULL) string = "";
-    if (gdk_color_parse(string, &color))
+    if (gdk_rgba_parse(&color, string))
     {
-        gtk_color_button_set_color(GTK_COLOR_BUTTON(aw->color_entry_button), &color);
+        gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(aw->color_entry_button), &color);
     }
 
     commodity = xaccAccountGetCommodity (account);
@@ -337,7 +337,7 @@ gnc_ui_to_account(AccountWindow *aw)
     Account *parent_account;
     const char *old_string;
     const char *string;
-    GdkColor color;
+    GdkRGBA color;
     gboolean flag;
     gnc_numeric balance;
     gboolean use_equity, nonstd;
@@ -376,8 +376,8 @@ gnc_ui_to_account(AccountWindow *aw)
     if (g_strcmp0 (string, old_string) != 0)
         xaccAccountSetDescription (account, string);
 
-    gtk_color_button_get_color(GTK_COLOR_BUTTON(aw->color_entry_button), &color );
-    string = gdk_color_to_string(&color);
+    gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(aw->color_entry_button), &color );
+    string = gdk_rgba_to_string(&color);
     if (g_strcmp0 (string, DEFAULT_COLOR) == 0)
         string = "Not Set";
 
@@ -611,6 +611,7 @@ add_children_to_expander (GObject *object, GParamSpec *param_spec, gpointer data
         gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET (view));
 
         gtk_container_add (GTK_CONTAINER (expander), scrolled_window);
+        gtk_widget_set_vexpand (GTK_WIDGET(scrolled_window), TRUE);
         gtk_widget_show_all (scrolled_window);
     }
 }
@@ -643,35 +644,56 @@ verify_children_compatible (AccountWindow *aw)
                                           GTK_WINDOW(aw->dialog),
                                           GTK_DIALOG_DESTROY_WITH_PARENT |
                                           GTK_DIALOG_MODAL,
-                                          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                                          GTK_STOCK_OK, GTK_RESPONSE_OK,
+                                          _("Cancel"), GTK_RESPONSE_CANCEL,
+                                          _("OK"), GTK_RESPONSE_OK,
                                           NULL);
 
     gtk_window_set_skip_taskbar_hint (GTK_WINDOW (dialog), TRUE);
 
-    hbox = gtk_hbox_new (FALSE, 12);
-    vbox = gtk_vbox_new (FALSE, 12);
+    hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
+    gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
+    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
+    gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
 
     gtk_box_pack_start (
         GTK_BOX (hbox),
-        gtk_image_new_from_stock (GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_DIALOG),
+        gtk_image_new_from_icon_name ("dialog-information", GTK_ICON_SIZE_DIALOG),
         FALSE, FALSE, 0);
 
     /* primary label */
     label = gtk_label_new (_("Give the children the same type?"));
     gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
     gtk_label_set_selectable (GTK_LABEL (label), TRUE);
-    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
+    gnc_label_set_alignment (label, 0.0, 0.0);
     {
+#if GTK_CHECK_VERSION(3,16,0)
+        GtkCssProvider *provider = gtk_css_provider_new();
+        const gchar *label_css = {
+                                  "label {\n"
+                                  " font-size:large;\n"
+                                  " font-weight: bold;\n"
+                                  "}\n"
+                                 };
+        gtk_css_provider_load_from_data (provider, label_css, strlen(label_css), NULL);
+        gtk_style_context_add_provider (gtk_widget_get_style_context(GTK_WIDGET(label)),
+                                   GTK_STYLE_PROVIDER (provider),
+                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        g_object_unref (provider);
+#else
         gint size;
         PangoFontDescription *font_desc;
+        GtkStyleContext *style;
 
-        size = pango_font_description_get_size (gtk_widget_get_style (label)->font_desc);
+        style = gtk_widget_get_style_context(label);
+        gtk_style_context_get (style, GTK_STATE_FLAG_NORMAL, GTK_STYLE_PROPERTY_FONT, &font_desc, NULL);
+
+        size = pango_font_description_get_size (font_desc);
         font_desc = pango_font_description_new ();
         pango_font_description_set_weight (font_desc, PANGO_WEIGHT_BOLD);
         pango_font_description_set_size (font_desc, size * PANGO_SCALE_LARGE);
-        gtk_widget_modify_font (label, font_desc);
+        gtk_widget_override_font(label, font_desc);
         pango_font_description_free (font_desc);
+#endif
     }
     gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
@@ -683,7 +705,7 @@ verify_children_compatible (AccountWindow *aw)
     g_free (str);
     gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
     gtk_label_set_selectable (GTK_LABEL (label), TRUE);
-    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
+    gnc_label_set_alignment (label, 0.0, 0.0);
     gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
     /* children */
@@ -702,9 +724,6 @@ verify_children_compatible (AccountWindow *aw)
     gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
     gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
     gtk_box_set_spacing (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), 14);
-    gtk_container_set_border_width (
-        GTK_CONTAINER (gtk_dialog_get_action_area (GTK_DIALOG (dialog))), 5);
-    gtk_box_set_spacing (GTK_BOX (gtk_dialog_get_action_area (GTK_DIALOG (dialog))), 6);
 
     gtk_widget_show_all (hbox);
 
@@ -1220,11 +1239,11 @@ gnc_account_name_changed_cb(GtkWidget *widget, gpointer data)
 void
 gnc_account_color_default_cb(GtkWidget *widget, gpointer data)
 {
-    GdkColor color;
+    GdkRGBA color;
     AccountWindow *aw = data;
 
-    gdk_color_parse( DEFAULT_COLOR, &color);
-    gtk_color_button_set_color(GTK_COLOR_BUTTON(aw->color_entry_button), &color);
+    gdk_rgba_parse(&color, DEFAULT_COLOR);
+    gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(aw->color_entry_button), &color);
 
 }
 
@@ -1315,10 +1334,13 @@ gnc_account_window_create(AccountWindow *aw)
     ENTER("aw %p, modal %d", aw, aw->modal);
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-account.glade", "fraction_liststore");
-    gnc_builder_add_from_file (builder, "dialog-account.glade", "Account Dialog");
+    gnc_builder_add_from_file (builder, "dialog-account.glade", "account_dialog");
 
-    aw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Account Dialog"));
+    aw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "account_dialog"));
     awo = G_OBJECT (aw->dialog);
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(aw->dialog), "GncAccountDialog");
 
     g_object_set_data (awo, "dialog_info", aw);
 
@@ -2042,12 +2064,9 @@ gnc_account_renumber_create_dialog (GtkWidget *window, Account *account)
     data->num_children = gnc_account_n_children(account);
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-account.glade",
-			       "interval_adjustment");
-    gnc_builder_add_from_file (builder, "dialog-account.glade",
-			       "Renumber Accounts");
-    data->dialog = GTK_WIDGET(gtk_builder_get_object (builder,
-						      "Renumber Accounts"));
+    gnc_builder_add_from_file (builder, "dialog-account.glade", "interval_adjustment");
+    gnc_builder_add_from_file (builder, "dialog-account.glade", "account_renumber_dialog");
+    data->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "account_renumber_dialog"));
     gtk_window_set_transient_for(GTK_WINDOW(data->dialog), GTK_WINDOW(window));
     g_object_set_data_full(G_OBJECT(data->dialog), "builder", builder,
 			   g_object_unref);

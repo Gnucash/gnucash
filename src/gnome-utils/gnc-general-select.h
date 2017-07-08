@@ -48,7 +48,7 @@ typedef enum
 
 typedef struct
 {
-    GtkHBox hbox;
+    GtkBox hbox;
 
     GtkWidget *entry;  /* display of selection name */
     GtkWidget *button; /* button for popping up selection window */
@@ -64,7 +64,7 @@ typedef struct
 
 typedef struct
 {
-    GtkHBoxClass parent_class;
+    GtkBoxClass parent_class;
 
     void 		(*changed) (GNCGeneralSelect *edit);
 } GNCGeneralSelectClass;

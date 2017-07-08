@@ -97,17 +97,22 @@ gnc_popup_entry_init (GncPopupEntry *widget)
 {
     GtkWidget *arrow;
 
-    widget->hbox = gtk_hbox_new (FALSE, 0);
+    widget->hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (widget->hbox), FALSE);
     gtk_widget_show (widget->hbox);
 
     widget->entry = g_object_new (GTK_TYPE_ENTRY, "has_frame", FALSE, NULL);
-    GTK_ENTRY (widget->entry)->is_cell_renderer = TRUE;
+    gtk_entry_set_visibility (GTK_ENTRY (widget->entry), TRUE);
     gtk_widget_show (widget->entry);
 
     widget->button = gtk_button_new ();
     gtk_widget_show (widget->button);
 
+#if GTK_CHECK_VERSION(3,14,0)
+    arrow = gtk_image_new_from_icon_name ("go-down", GTK_ICON_SIZE_BUTTON);
+#else
     arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_OUT);
+#endif
     gtk_widget_show (arrow);
 
     gtk_container_add (GTK_CONTAINER (widget->button), arrow);
@@ -297,14 +302,18 @@ gnc_popup_get_button_width (void)
     gtk_widget_show (button);
     gtk_container_add (GTK_CONTAINER (window), button);
 
+#if GTK_CHECK_VERSION(3,14,0)
+    arrow = gtk_image_new_from_icon_name ("go-down", GTK_ICON_SIZE_BUTTON);
+#else
     arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_OUT);
+#endif
     gtk_widget_show (arrow);
     gtk_container_add (GTK_CONTAINER (button), arrow);
 
     gtk_window_move (GTK_WINDOW (window), -500, -500);
     gtk_widget_show (window);
 
-    gtk_widget_size_request (window, &req);
+    gtk_widget_get_preferred_size (window, &req, NULL);
 
     width = req.width;
 

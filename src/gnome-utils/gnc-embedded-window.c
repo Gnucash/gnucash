@@ -38,6 +38,7 @@
 #include "gnc-plugin-manager.h"
 #include "gnc-ui.h"
 #include "gnc-window.h"
+#include "dialog-utils.h"
 
 /* Static Globals *******************************************************/
 
@@ -119,7 +120,7 @@ gnc_embedded_window_get_type (void)
             NULL
         };
 
-        gnc_embedded_window_type = g_type_register_static (GTK_TYPE_VBOX,
+        gnc_embedded_window_type = g_type_register_static (GTK_TYPE_BOX,
                                    "GncEmbeddedWindow",
                                    &our_info, 0);
         g_type_add_interface_static (gnc_embedded_window_type,
@@ -237,6 +238,11 @@ gnc_embedded_window_init (GncEmbeddedWindow *window,
 {
     ENTER("window %p", window);
 
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(window), GTK_ORIENTATION_VERTICAL);
+
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(window), "GncEmbededWindow");
+
     gnc_embedded_window_setup_window (window);
 
     gnc_gobject_tracking_remember(G_OBJECT(window),
@@ -324,12 +330,12 @@ gnc_embedded_window_setup_window (GncEmbeddedWindow *window)
     /* Create widgets and add them to the window */
     gtk_widget_show (GTK_WIDGET(window));
 
-    priv->menu_dock = gtk_vbox_new (FALSE, 0);
+    priv->menu_dock = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (priv->menu_dock), FALSE);
     gtk_widget_show (priv->menu_dock);
     gtk_box_pack_start (GTK_BOX (window), priv->menu_dock, FALSE, TRUE, 0);
 
     priv->statusbar = gtk_statusbar_new ();
-    gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR(priv->statusbar), FALSE);
     gtk_widget_show (priv->statusbar);
     gtk_box_pack_end (GTK_BOX (window), priv->statusbar, FALSE, TRUE, 0);
 

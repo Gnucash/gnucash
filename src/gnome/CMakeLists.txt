@@ -99,7 +99,7 @@ ENDIF(WIN32)
 
 ADD_LIBRARY (gnc-gnome ${gnc_gnome_SOURCES} ${gnc_gnome_noinst_HEADERS} ${SWIG_GNOME_C})
 TARGET_LINK_LIBRARIES(gnc-gnome gncmod-gnome-search gncmod-ledger-core gncmod-report-gnome gncmod-report-system
-    gncmod-register-gnome gncmod-register-core gncmod-engine ${GTK2_LDFLAGS} ${GTK_MAC_LDFLAGS})
+    gncmod-register-gnome gncmod-register-core gncmod-engine ${GTK3_LDFLAGS} ${GTK_MAC_LDFLAGS})
 
 TARGET_COMPILE_DEFINITIONS (gnc-gnome PRIVATE -DG_LOG_DOMAIN=\"gnc.gui\" ${GTK_MAC_CFLAGS_OTHER})
 

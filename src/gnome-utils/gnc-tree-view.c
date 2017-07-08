@@ -44,6 +44,7 @@
 #include "gnc-gobject-utils.h"
 #include "gnc-cell-renderer-date.h"
 #include "gnc-state.h"
+#include "dialog-utils.h"
 
 /* The actual state key for a particular column visibility.  This is
  * attached to the menu items that are in the column selection menu.
@@ -77,7 +78,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static void gnc_tree_view_class_init (GncTreeViewClass *klass);
 static void gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass);
 static void gnc_tree_view_finalize (GObject *object);
-static void gnc_tree_view_destroy (GtkObject *object);
+static void gnc_tree_view_destroy (GtkWidget *widget);
 static void gnc_tree_view_set_property (GObject         *object,
                                         guint            prop_id,
                                         const GValue    *value,
@@ -183,12 +184,12 @@ static void
 gnc_tree_view_class_init (GncTreeViewClass *klass)
 {
     GObjectClass *gobject_class;
-    GtkObjectClass *gtkobject_class;
+    GtkWidgetClass *gtkwidget_class;
 
     parent_class = g_type_class_peek_parent (klass);
 
     gobject_class = G_OBJECT_CLASS (klass);
-    gtkobject_class = GTK_OBJECT_CLASS (klass);
+    gtkwidget_class = GTK_WIDGET_CLASS (klass);
 
     gobject_class->set_property = gnc_tree_view_set_property;
     gobject_class->get_property = gnc_tree_view_get_property;
@@ -213,8 +214,8 @@ gnc_tree_view_class_init (GncTreeViewClass *klass)
     /* GObject signals */
     gobject_class->finalize = gnc_tree_view_finalize;
 
-    /* GtkObject signals */
-    gtkobject_class->destroy = gnc_tree_view_destroy;
+    /* GtkWidget signals */
+    gtkwidget_class->destroy = gnc_tree_view_destroy;
 }
 
 /** Initialize a new instance of a base gnucash tree view.  This
@@ -249,6 +250,9 @@ gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass)
     /* Ask gtk to help the user keep track of rows. */
     g_object_set(view, "rules-hint", TRUE, NULL);
 
+    // Set the style context for this page so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(view), "GncTreeView");
+
     /* Handle column drag and drop */
     gtk_tree_view_set_column_drag_function(GTK_TREE_VIEW(view),
                                            gnc_tree_view_drop_ok_cb, NULL, NULL);
@@ -266,13 +270,16 @@ gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass)
 
     gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_FIXED);
 
+    // Set grid lines option to preference
+    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(view), gnc_tree_view_get_grid_lines_pref ());
+
     /* Create the last column which contains the column selection
      * widget.  gnc_tree_view_add_text_column will do most of the
      * work. */
-    icon = gtk_image_new_from_stock(GTK_STOCK_GO_DOWN,
+    icon = gtk_image_new_from_icon_name ("go-down",
                                     GTK_ICON_SIZE_SMALL_TOOLBAR);
     gtk_widget_show(icon);
-    gtk_widget_size_request(icon, &requisition);
+    gtk_widget_get_preferred_size(icon, &requisition, NULL);
     column = gnc_tree_view_add_text_column (view, NULL, NULL, NULL, NULL,
                                             -1, -1, NULL);
     g_object_set(G_OBJECT(column),
@@ -313,28 +320,28 @@ gnc_tree_view_finalize (GObject *object)
     LEAVE(" ");
 }
 
-/** Destroy the GncTreeView object.  This function is called (possibly
- *  multiple times) from the Gtk_Object level to destroy the object.
- *  It should release any memory owned by the object that isn't
+/** Destroy the GncTreeView widget.  This function is called (possibly
+ *  multiple times) from the Gtk_Object level to destroy the widget.
+ *  It should release any memory owned by the widget that isn't
  *  fundamental to the implementation.  In this function any active
  *  callbacks are disconnected, all memory other than the private data
  *  structure are freed.
  *
- *  @param object The object being destroyed.
+ *  @param widget The widget being destroyed.
  *
  *  @internal
  */
 static void
-gnc_tree_view_destroy (GtkObject *object)
+gnc_tree_view_destroy (GtkWidget *widget)
 {
     GncTreeView *view;
     GncTreeViewPrivate *priv;
 
-    ENTER("view %p", object);
-    g_return_if_fail (object != NULL);
-    g_return_if_fail (GNC_IS_TREE_VIEW (object));
+    ENTER("view %p", widget);
+    g_return_if_fail (widget != NULL);
+    g_return_if_fail (GNC_IS_TREE_VIEW (widget));
 
-    view = GNC_TREE_VIEW (object);
+    view = GNC_TREE_VIEW (widget);
 
     priv = GNC_TREE_VIEW_GET_PRIVATE(view);
 
@@ -352,8 +359,8 @@ gnc_tree_view_destroy (GtkObject *object)
         priv->column_menu = NULL;
     }
 
-    if (GTK_OBJECT_CLASS (parent_class)->destroy)
-        GTK_OBJECT_CLASS (parent_class)->destroy (object);
+    if (GTK_WIDGET_CLASS (parent_class)->destroy)
+        GTK_WIDGET_CLASS (parent_class)->destroy (widget);
     LEAVE(" ");
 }
 
@@ -1754,7 +1761,7 @@ gnc_tree_view_add_toggle_column (GncTreeView *view,
     gnc_tree_view_append_column (view, column);
 
     /* Also add the full title to the object as a tooltip */
-    gtk_widget_set_tooltip_text(column->button, column_title);
+    gtk_widget_set_tooltip_text (gtk_tree_view_column_get_button (column), column_title);
 
     return column;
 }
@@ -1771,7 +1778,7 @@ GtkTreeViewColumn *
 gnc_tree_view_add_text_column (GncTreeView *view,
                                const gchar *column_title,
                                const gchar *pref_name,
-                               const gchar *stock_icon_name,
+                               const gchar *icon_name,
                                const gchar *sizing_text,
                                gint model_data_column,
                                gint model_visibility_column,
@@ -1788,10 +1795,10 @@ gnc_tree_view_add_text_column (GncTreeView *view,
     gtk_tree_view_column_set_title (column, column_title);
 
     /* Set up an icon renderer if requested */
-    if (stock_icon_name)
+    if (icon_name)
     {
         renderer = gtk_cell_renderer_pixbuf_new ();
-        g_object_set (renderer, "stock-id", stock_icon_name, NULL);
+        g_object_set (renderer, "icon-name", icon_name, NULL);
         gtk_tree_view_column_pack_start (column, renderer, FALSE);
     }
 
@@ -1838,7 +1845,7 @@ GtkTreeViewColumn *
 gnc_tree_view_add_date_column (GncTreeView *view,
                                const gchar *column_title,
                                const gchar *pref_name,
-                               const gchar *stock_icon_name,
+                               const gchar *icon_name,
                                const gchar *sizing_text,
                                gint model_data_column,
                                gint model_visibility_column,
@@ -1855,10 +1862,10 @@ gnc_tree_view_add_date_column (GncTreeView *view,
     gtk_tree_view_column_set_title (column, column_title);
 
     /* Set up an icon renderer if requested */
-    if (stock_icon_name)
+    if (icon_name)
     {
         renderer = gtk_cell_renderer_pixbuf_new ();
-        g_object_set (renderer, "stock-id", stock_icon_name, NULL);
+        g_object_set (renderer, "icon-name", icon_name, NULL);
         gtk_tree_view_column_pack_start (column, renderer, FALSE);
     }
 

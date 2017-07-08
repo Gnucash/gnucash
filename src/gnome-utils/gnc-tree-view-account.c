@@ -600,7 +600,7 @@ acc_color_data_func (GtkTreeViewColumn *col,
     GncTreeViewAccountPrivate *priv;
     gchar                     *acc_color = NULL, *acc_cond_color = NULL;
     gchar                     *item;
-    GdkColor                   color;
+    GdkRGBA                    color;
     gchar                     *column_name;
     GList                     *renderers;
 
@@ -616,7 +616,7 @@ acc_color_data_func (GtkTreeViewColumn *col,
     g_free (item);
 
     /* Test if the color string represents a valid color */
-    if (acc_color && (!gdk_color_parse(acc_color, &color)))
+    if (acc_color && (!gdk_rgba_parse(&color, acc_color)))
     {
         g_free (acc_color);
         acc_color = NULL;
@@ -718,7 +718,7 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
 
     priv->name_column
         = gnc_tree_view_add_text_column(view, _("Account Name"), "name",
-                                        GNC_STOCK_ACCOUNT, "Expenses:Entertainment",
+                                        GNC_ICON_ACCOUNT, "Expenses:Entertainment",
                                         GNC_TREE_MODEL_ACCOUNT_COL_NAME,
                                         GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                         sort_by_string);
@@ -2180,8 +2180,8 @@ account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page)
 
     /* Create the dialog */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-account.glade", "Filter By");
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Filter By"));
+    gnc_builder_add_from_file (builder, "dialog-account.glade", "account_filter_by_dialog");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "account_filter_by_dialog"));
     fd->dialog = dialog;
     gtk_window_set_transient_for(GTK_WINDOW(dialog),
                                  GTK_WINDOW(GNC_PLUGIN_PAGE(page)->window));

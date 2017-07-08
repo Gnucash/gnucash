@@ -84,7 +84,7 @@ make_name_label (char *name)
 
     colon_name = g_strconcat (name, ":", (char *)NULL);
     label = gtk_label_new (colon_name);
-    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gnc_label_set_alignment (label, 1.0, 0.5);
     g_free (colon_name);
 
     return label;
@@ -114,7 +114,9 @@ owner_set_widget (GNCOption *option, GtkBox *page_box,
     GtkWidget *value;
     GtkWidget *label;
 
-    *enclosing = gtk_hbox_new (FALSE, 5);
+    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
+
     label = make_name_label (name);
     gtk_box_pack_start (GTK_BOX (*enclosing), label, FALSE, FALSE, 0);
 
@@ -183,7 +185,9 @@ customer_set_widget (GNCOption *option, GtkBox *page_box,
     GtkWidget *value;
     GtkWidget *label;
 
-    *enclosing = gtk_hbox_new (FALSE, 5);
+    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
+
     label = make_name_label (name);
     gtk_box_pack_start (GTK_BOX (*enclosing), label, FALSE, FALSE, 0);
 
@@ -241,7 +245,9 @@ vendor_set_widget (GNCOption *option, GtkBox *page_box,
     GtkWidget *value;
     GtkWidget *label;
 
-    *enclosing = gtk_hbox_new (FALSE, 5);
+    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
+
     label = make_name_label (name);
     gtk_box_pack_start (GTK_BOX (*enclosing), label, FALSE, FALSE, 0);
 
@@ -298,7 +304,9 @@ employee_set_widget (GNCOption *option, GtkBox *page_box,
     GtkWidget *value;
     GtkWidget *label;
 
-    *enclosing = gtk_hbox_new (FALSE, 5);
+    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
+
     label = make_name_label (name);
     gtk_box_pack_start (GTK_BOX (*enclosing), label, FALSE, FALSE, 0);
 
@@ -372,7 +380,9 @@ invoice_set_widget (GNCOption *option, GtkBox *page_box,
     GtkWidget *value;
     GtkWidget *label;
 
-    *enclosing = gtk_hbox_new (FALSE, 5);
+    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
+
     label = make_name_label (name);
     gtk_box_pack_start (GTK_BOX (*enclosing), label, FALSE, FALSE, 0);
 
@@ -450,7 +460,9 @@ taxtable_set_widget (GNCOption *option, GtkBox *page_box,
     GtkWidget *value;
     GtkWidget *label;
 
-    *enclosing = gtk_hbox_new (FALSE, 5);
+    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
+
     label = make_name_label (name);
     gtk_box_pack_start (GTK_BOX (*enclosing), label, FALSE, FALSE, 0);
 

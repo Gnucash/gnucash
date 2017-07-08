@@ -814,9 +814,12 @@ csv_export_assistant_create (CsvExportInfo *info)
     time64 start_time, end_time;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file  (builder , "assistant-csv-export.glade", "CSV Export Assistant");
-    window = GTK_WIDGET(gtk_builder_get_object (builder, "CSV Export Assistant"));
+    gnc_builder_add_from_file  (builder , "assistant-csv-export.glade", "csv_export_assistant");
+    window = GTK_WIDGET(gtk_builder_get_object (builder, "csv_export_assistant"));
     info->window = window;
+
+    // Set the style context for this assistant so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(window), "GncAssistExport");
 
     /* Load default settings */
     load_settings (info);
@@ -837,7 +840,7 @@ csv_export_assistant_create (CsvExportInfo *info)
         // Don't provide simple export layout for search registers and General Journal
         if ((info->export_type == XML_EXPORT_TREE) || (info->account == NULL))
             gtk_widget_destroy (chkbox);
-        gtk_widget_destroy (info->account_page);
+        gtk_assistant_remove_page (GTK_ASSISTANT(window), 1); //remove accounts page
     }
     else
     {
@@ -918,10 +921,11 @@ csv_export_assistant_create (CsvExportInfo *info)
     /* File chooser Page */
     info->file_page = GTK_WIDGET(gtk_builder_get_object(builder, "file_page"));
     info->file_chooser = gtk_file_chooser_widget_new (GTK_FILE_CHOOSER_ACTION_SAVE);
-    button = gtk_button_new_from_stock (GTK_STOCK_OK);
+    button = gtk_button_new_with_label (_("OK"));
     gtk_widget_set_size_request (button, 100, -1);
     gtk_widget_show (button);
-    h_box = gtk_hbox_new (TRUE, 0);
+    h_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (h_box), TRUE);
     gtk_box_pack_start(GTK_BOX(h_box), button, FALSE, FALSE, 0);
     gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER(info->file_chooser), h_box);
     g_signal_connect (G_OBJECT(button), "clicked",

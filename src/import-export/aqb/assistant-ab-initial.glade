@@ -1,14 +1,17 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy project-wide -->
-  <object class="GtkAssistant" id="AqBanking Init Assistant">
+  <object class="GtkAssistant" id="aqbanking_init_assistant">
     <property name="can_focus">False</property>
     <property name="border_width">12</property>
     <property name="title" translatable="yes">AqBanking Initial Assistant</property>
     <signal name="close" handler="aai_on_finish" swapped="no"/>
     <signal name="prepare" handler="aai_on_prepare" swapped="no"/>
     <signal name="cancel" handler="aai_on_cancel" swapped="no"/>
+    <child>
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkLabel" id="start_page">
         <property name="visible">True</property>
@@ -67,7 +70,6 @@ Press "Cancel" if you do not wish to setup any Online Banking connection now.
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
                 <signal name="clicked" handler="aai_wizard_button_clicked_cb" swapped="no"/>
               </object>

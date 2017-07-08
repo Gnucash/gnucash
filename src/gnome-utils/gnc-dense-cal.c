@@ -31,6 +31,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <gnc-gdate-utils.h>
+#include "dialog-utils.h"
 
 /**
  * Marking ...
@@ -83,7 +84,7 @@ static void gnc_dense_cal_dispose(GObject *object);
 static void gnc_dense_cal_realize(GtkWidget *widget, gpointer user_data);
 static void gnc_dense_cal_configure(GtkWidget *widget, GdkEventConfigure *event, gpointer user_data);
 static void gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal);
-static gboolean gnc_dense_cal_expose(GtkWidget *widget, GdkEventExpose *event, gpointer user_data);
+static gboolean gnc_dense_cal_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data);
 
 static void gdc_reconfig(GncDenseCal *dcal);
 
@@ -208,7 +209,7 @@ gnc_dense_cal_get_type()
             NULL
         };
 
-        dense_cal_type = g_type_register_static(GTK_TYPE_VBOX,
+        dense_cal_type = g_type_register_static(GTK_TYPE_BOX,
                                                 "GncDenseCal",
                                                 &dense_cal_info, 0);
     }
@@ -263,7 +264,10 @@ gnc_dense_cal_init(GncDenseCal *dcal)
 {
     gboolean colorAllocSuccess[MAX_COLORS];
 
-    gtk_widget_push_composite_child();
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(dcal), GTK_ORIENTATION_VERTICAL);
+
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dcal), "GncDenseCal");
 
     {
         GtkTreeModel *options;
@@ -280,15 +284,17 @@ gnc_dense_cal_init(GncDenseCal *dcal)
     }
 
     {
-        GtkHBox *hbox = GTK_HBOX(gtk_hbox_new(FALSE, 0));
-        GtkAlignment *label_align;
-        GtkLabel *label;
-        float right_align = 1.0, mid_align = 0.5, fill_x = 0.0, fill_y = 1.0;
+        GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+        GtkWidget *label = gtk_label_new (_("View:"));
 
-        label = GTK_LABEL(gtk_label_new(_("View:")));
-        label_align = GTK_ALIGNMENT(gtk_alignment_new(right_align, mid_align, fill_x, fill_y));
-        gtk_container_add(GTK_CONTAINER(label_align), GTK_WIDGET(label));
-        gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(label_align), TRUE, TRUE, 0);
+        gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
+        gtk_widget_set_halign (label, GTK_ALIGN_END);
+#if GTK_CHECK_VERSION(3,12,0)
+        gtk_widget_set_margin_end (label, 5);
+#else
+        gtk_widget_set_margin_right (label, 5);
+#endif
+        gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0);
         gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(dcal->view_options), FALSE, FALSE, 0);
 
         gtk_box_pack_start(GTK_BOX(dcal), GTK_WIDGET(hbox), FALSE, FALSE, 0);
@@ -300,7 +306,7 @@ gnc_dense_cal_init(GncDenseCal *dcal)
                           | GDK_POINTER_MOTION_MASK
                           | GDK_POINTER_MOTION_HINT_MASK));
     gtk_box_pack_start(GTK_BOX(dcal), GTK_WIDGET(dcal->cal_drawing_area), TRUE, TRUE, 0);
-    g_signal_connect(G_OBJECT(dcal->cal_drawing_area), "expose_event", G_CALLBACK(gnc_dense_cal_expose), (gpointer)dcal);
+    g_signal_connect(G_OBJECT(dcal->cal_drawing_area), "draw", G_CALLBACK(gnc_dense_cal_draw), (gpointer)dcal);
     g_signal_connect(G_OBJECT(dcal->cal_drawing_area), "realize", G_CALLBACK(gnc_dense_cal_realize), (gpointer)dcal);
     g_signal_connect(G_OBJECT(dcal->cal_drawing_area), "configure_event", G_CALLBACK(gnc_dense_cal_configure), (gpointer)dcal);
 
@@ -320,8 +326,10 @@ gnc_dense_cal_init(GncDenseCal *dcal)
         GtkListStore *tree_data;
         GtkTreeView *tree_view;
 
-        vbox = gtk_vbox_new(FALSE, 5);
-        hbox = gtk_hbox_new(FALSE, 5);
+        vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
+        gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
+        hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+        gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
 
         l = gtk_label_new(_("Date: "));
         gtk_container_add(GTK_CONTAINER(hbox), l);
@@ -330,7 +338,7 @@ gnc_dense_cal_init(GncDenseCal *dcal)
         gtk_container_add(GTK_CONTAINER(hbox), l);
         gtk_container_add(GTK_CONTAINER(vbox), hbox);
 
-        gtk_container_add(GTK_CONTAINER(vbox), gtk_hseparator_new());
+        gtk_container_add(GTK_CONTAINER(vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
 
         tree_data = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
         tree_view = GTK_TREE_VIEW(gtk_tree_view_new_with_model(GTK_TREE_MODEL(tree_data)));
@@ -346,40 +354,49 @@ gnc_dense_cal_init(GncDenseCal *dcal)
         gtk_widget_realize(GTK_WIDGET(dcal->transPopup));
     }
 
-    gdk_color_parse(MONTH_THIS_COLOR,  &dcal->weekColors[MONTH_THIS]);
-    gdk_color_parse(MONTH_THAT_COLOR,  &dcal->weekColors[MONTH_THAT]);
+    gdk_rgba_parse(&dcal->weekColors[MONTH_THIS], MONTH_THIS_COLOR);
+    gdk_rgba_parse(&dcal->weekColors[MONTH_THAT], MONTH_THAT_COLOR);
 
     /* success array must be as big as number of colors */
     g_assert(MAX_COLORS == (sizeof(colorAllocSuccess)/sizeof(gboolean)));
 
-    if (gdk_colormap_alloc_colors(gdk_colormap_get_system(),
-                                  dcal->weekColors,
-                                  MAX_COLORS, TRUE, TRUE,
-                                  colorAllocSuccess) > 0)
-    {
-        g_error("error allocating colors");
-    }
-
     /* Deal with the various label sizes. */
     {
+        PangoLayout *layout = gtk_widget_create_pango_layout(GTK_WIDGET(dcal), NULL);
+        GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(dcal));
+        GtkStateFlags state_flags = gtk_style_context_get_state (stylectxt);
+        gint font_size_reduction_units = 1;
+        PangoFontDescription *font_desc;
+        GtkCssProvider *provider;
+        gint font_size, px_size;
         gint i;
         gint maxWidth, maxHeight;
-        GtkStyle *style;
-        PangoLayout *layout;
-        PangoFontDescription *font_desc;
-        gint font_size;
-        gint font_size_reduction_units = 1;
+        gchar *px_str, *widget_css;
+        gdouble dpi;
 
-        layout = gtk_widget_create_pango_layout(GTK_WIDGET(dcal), NULL);
-
-        style = gtk_widget_get_style(GTK_WIDGET(dcal));
-
-        font_desc = pango_font_description_copy(style->font_desc);
+        gtk_style_context_get (stylectxt, state_flags,
+                               GTK_STYLE_PROPERTY_FONT, &font_desc, NULL);
         font_size = pango_font_description_get_size(font_desc);
+
+#if GTK_CHECK_VERSION(3,16,0)
+        provider = gtk_css_provider_new();
+        dpi = gdk_screen_get_resolution (gdk_screen_get_default ());
+        px_size = ((font_size / PANGO_SCALE) - font_size_reduction_units) * (dpi / 72.);
+        px_str = g_strdup_printf("%i", px_size);
+        widget_css = g_strconcat ("*{\n  font-size:", px_str, "px;\n}\n", NULL);
+
+        gtk_css_provider_load_from_data (provider, widget_css, -1, NULL);
+        gtk_style_context_add_provider (stylectxt, GTK_STYLE_PROVIDER (provider),
+                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        g_object_unref (provider);
+        g_free (px_str);
+        g_free (widget_css);
+#else
         font_size -= font_size_reduction_units * PANGO_SCALE;
         pango_font_description_set_size(font_desc, font_size);
-        gtk_widget_modify_font(GTK_WIDGET(dcal), font_desc);
-        pango_font_description_free(font_desc);
+        gtk_widget_override_font(GTK_WIDGET(dcal), font_desc);
+#endif
+        pango_font_description_free (font_desc);
 
         maxWidth = maxHeight = 0;
         for (i = 0; i < 12; i++)
@@ -467,8 +484,6 @@ gnc_dense_cal_init(GncDenseCal *dcal)
         }
         g_strfreev(parts);
     }
-
-    gtk_widget_pop_composite_child();
 
     gtk_widget_show_all(GTK_WIDGET(dcal));
 }
@@ -707,10 +722,6 @@ gnc_dense_cal_realize (GtkWidget *widget, gpointer user_data)
 
     recompute_x_y_scales(dcal);
     gdc_reconfig(dcal);
-
-    gtk_style_set_background(gtk_widget_get_style (widget),
-                             gtk_widget_get_window (widget),
-                             GTK_STATE_ACTIVE);
 }
 
 static void
@@ -865,25 +876,18 @@ free_rect(gpointer data, gpointer ud)
 }
 
 static gboolean
-gnc_dense_cal_expose(GtkWidget *widget,
-                     GdkEventExpose *event,
-                     gpointer user_data)
+gnc_dense_cal_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
 {
     GncDenseCal *dcal;
-    cairo_t *cr;
 
     g_return_val_if_fail(widget != NULL, FALSE);
     g_return_val_if_fail(GNC_IS_DENSE_CAL(user_data), FALSE);
-    g_return_val_if_fail(event != NULL, FALSE);
-
-    if (event->count > 0)
-        return FALSE;
 
     dcal = GNC_DENSE_CAL(user_data);
-    cr = gdk_cairo_create (gtk_widget_get_window (GTK_WIDGET(dcal->cal_drawing_area)));
+    cairo_save (cr);;
     cairo_set_source_surface (cr, dcal->surface, 0, 0);
     cairo_paint (cr);
-    cairo_destroy (cr);
+    cairo_restore (cr);
 
     return TRUE;
 }
@@ -891,11 +895,49 @@ gnc_dense_cal_expose(GtkWidget *widget,
 #define LOG_AND_RESET(timer, msg) do { g_debug("%s: %f", msg, g_timer_elapsed(timer, NULL) * 1000.); g_timer_reset(timer); } while (0);
 
 static void
+gnc_style_context_get_background_color (GtkStyleContext *context,
+                                        GtkStateFlags    state,
+                                        GdkRGBA         *color)
+{
+    GdkRGBA *c;
+
+    g_return_if_fail (color != NULL);
+    g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+    gtk_style_context_get (context,
+                           state,
+                           "background-color", &c,
+                           NULL);
+    *color = *c;
+    gdk_rgba_free (c);
+}
+
+static void
+gnc_style_context_get_border_color (GtkStyleContext *context,
+                                    GtkStateFlags    state,
+                                    GdkRGBA         *color)
+{
+    GdkRGBA *c;
+
+    g_return_if_fail (color != NULL);
+    g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+    gtk_style_context_get (context,
+                           state,
+                           "border-color", &c,
+                           NULL);
+    *color = *c;
+    gdk_rgba_free (c);
+}
+
+static void
 gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
 {
     GtkWidget *widget;
+    GtkStyleContext *stylectxt;
+    GtkStateFlags state_flags;
     GtkAllocation alloc;
-    GdkColor color;
+    GdkRGBA color, test_color;
     gint i;
     int maxWidth;
     PangoLayout *layout;
@@ -914,11 +956,18 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
     layout = gtk_widget_create_pango_layout(GTK_WIDGET(dcal), NULL);
     LOG_AND_RESET(timer, "create_pango_layout");
 
+    gdk_rgba_parse (&test_color, "rgba(0, 0, 0, 0)");
+
     gtk_widget_get_allocation (GTK_WIDGET(dcal->cal_drawing_area), &alloc);
-    color = gtk_widget_get_style (widget)->white;
-    cairo_set_source_rgb (cr, color.red   / 65535.0,
-                              color.green / 65535.0,
-                              color.blue  / 65535.0);
+    stylectxt = gtk_widget_get_style_context (widget);
+    state_flags = gtk_style_context_get_state (stylectxt);
+    gnc_style_context_get_background_color (stylectxt, state_flags, &color);
+
+    // test for no color set
+    if (gdk_rgba_equal (&color, &test_color))
+        gdk_rgba_parse (&color, "white");
+
+    cairo_set_source_rgb (cr, color.red, color.green, color.blue);
     cairo_rectangle (cr, 0, 0,
                      cairo_image_surface_get_width (dcal->surface),
                      cairo_image_surface_get_height (dcal->surface));
@@ -949,9 +998,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
             {
                 rect = (GdkRectangle*)mcListIter->data;
                 color = dcal->weekColors[ i % 2 ];
-                cairo_set_source_rgb (cr, color.red   / 65535.0,
-                              color.green / 65535.0,
-                              color.blue  / 65535.0);
+                cairo_set_source_rgb (cr, color.red, color.green, color.blue);
                 cairo_rectangle (cr, rect->x, rect->y,
                                      rect->width, rect->height);
                 cairo_fill (cr);
@@ -967,11 +1014,8 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
         int i;
         int x1, x2, y1, y2;
 
-        gdk_color_parse(MARK_COLOR, &color);
-        gdk_colormap_alloc_color(gdk_colormap_get_system(), &color, TRUE, TRUE);
-        cairo_set_source_rgb (cr, color.red   / 65535.0,
-                                  color.green / 65535.0,
-                                  color.blue  / 65535.0);
+        gdk_rgba_parse(&color, MARK_COLOR);
+        cairo_set_source_rgb (cr, color.red, color.green, color.blue);
 
         for (i = 0; i < dcal->numMarks; i++)
         {
@@ -1007,11 +1051,9 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
         h = col_height(dcal);
 
         /* draw the outside border [inside the month labels] */
-        color = gtk_widget_get_style (widget)->fg[gtk_widget_get_state (widget)];
+        gnc_style_context_get_border_color (stylectxt, state_flags, &color);
+        cairo_set_source_rgb (cr, color.red, color.green, color.blue);
         cairo_set_line_width (cr, 1);
-        cairo_set_source_rgb (cr, color.red   / 65535.0,
-                                  color.green / 65535.0,
-                                  color.blue  / 65535.0);
         cairo_rectangle (cr, x + 0.5, y + 0.5, w, h);
         cairo_stroke (cr);
 
@@ -1055,10 +1097,8 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
                                  - (day_label_width / 2);
                 label_y_offset = y - dcal->dayLabelHeight;
                 pango_layout_set_text(layout, day_label_str, -1);
-                color = gtk_widget_get_style (widget)->text[gtk_widget_get_state (widget)];
-                cairo_set_source_rgb (cr, color.red   / 65535.0,
-                                          color.green / 65535.0,
-                                          color.blue  / 65535.0);
+                gtk_style_context_get_color (stylectxt, state_flags, &color);
+                cairo_set_source_rgb (cr, color.red, color.green, color.blue);
                 cairo_move_to (cr, label_x_offset, label_y_offset);
                 pango_cairo_show_layout (cr, layout);
             }
@@ -1234,7 +1274,14 @@ gnc_dense_cal_motion_notify(GtkWidget *widget,
 
     /* As per http://www.gtk.org/tutorial/sec-eventhandling.html */
     if (event->is_hint)
-        gdk_window_get_pointer(event->window, &unused, &unused, &unused2);
+    {
+        GdkDeviceManager *device_manager;
+        GdkDevice *pointer;
+
+        device_manager = gdk_display_get_device_manager (gdk_window_get_display (event->window));
+        pointer = gdk_device_manager_get_client_pointer (device_manager);
+        gdk_window_get_device_position (event->window, pointer,  &unused,  &unused, &unused2);
+    }
 
     doc = wheres_this(dcal, event->x, event->y);
     if (doc >= 0)

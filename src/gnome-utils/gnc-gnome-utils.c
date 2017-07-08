@@ -170,18 +170,28 @@ gnc_configure_date_completion (void)
 }
 
 void
-gnc_gtk_add_rc_file (void)
+gnc_add_css_file (void)
 {
+    GtkCssProvider *provider;
+    GdkDisplay *display;
+    GdkScreen *screen;
     const gchar *var;
     gchar *str;
+    GError *error = 0;
+
+    provider = gtk_css_provider_new ();
+    display = gdk_display_get_default ();
+    screen = gdk_display_get_default_screen (display);
+    gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     var = g_get_home_dir ();
     if (var)
     {
-        str = g_build_filename (var, ".gtkrc-2.0.gnucash", (char *)NULL);
-        gtk_rc_add_default_file (str);
+        str = g_build_filename (var, ".gtk-3.0-gnucash.css", (char *)NULL);
+        gtk_css_provider_load_from_path (provider, str, &error);
         g_free (str);
     }
+    g_object_unref (provider);
 }
 
 #ifdef MAC_INTEGRATION
@@ -734,7 +744,10 @@ gnc_gui_init(void)
     gtk_accel_map_load(map);
     g_free(map);
 
-    gnc_load_stock_icons();
+    /* Load css configuration file */
+    gnc_add_css_file ();
+
+    gnc_load_app_icons();
     gnc_totd_dialog(GTK_WINDOW(main_window), TRUE);
 
     LEAVE ("");

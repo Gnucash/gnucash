@@ -1141,7 +1141,9 @@ book_options_dialog_close_cb(GNCOptionWin * optionwin,
 static void
 assistant_instert_book_options_page (hierarchy_data *data)
 {
-    GtkWidget *vbox = gtk_vbox_new (FALSE, 0);
+    GtkWidget *options, *parent;
+    GtkWidget *vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
 
     data->options = gnc_option_db_new_for_type (QOF_ID_BOOK);
     qof_book_load_options (gnc_get_current_book (),
@@ -1156,7 +1158,18 @@ assistant_instert_book_options_page (hierarchy_data *data)
                                      (gpointer)data->options);
     gnc_options_dialog_set_new_book_option_values (data->options);
 
-    gtk_widget_reparent (gnc_options_dialog_notebook (data->optionwin), vbox);
+    options = gnc_options_dialog_notebook (data->optionwin);
+    parent = gtk_widget_get_parent (options);
+
+#if GTK_CHECK_VERSION(3, 14, 0)
+    g_object_ref (options);
+    gtk_container_remove (GTK_CONTAINER(parent), options);
+    gtk_container_add (GTK_CONTAINER(vbox), options);
+    g_object_unref (options);
+#else
+    gtk_widget_reparent (options, vbox);
+#endif
+
     gtk_widget_show_all (vbox);
     gtk_assistant_insert_page (GTK_ASSISTANT(data->dialog), vbox, 2);
     gtk_assistant_set_page_title (GTK_ASSISTANT(data->dialog), vbox, _("New Book Options"));
@@ -1183,10 +1196,13 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
     data->new_book = gnc_is_new_book();
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "assistant-hierarchy.glade", "Hierarchy Assistant");
+    gnc_builder_add_from_file (builder, "assistant-hierarchy.glade", "hierarchy_assistant");
 
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Hierarchy Assistant"));
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "hierarchy_assistant"));
     data->dialog = dialog;
+
+    // Set the style context for this assistant so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncAssistAccountHierarchy");
 
     /* If we have a callback, make this window stay on top */
     if (when_completed != NULL)

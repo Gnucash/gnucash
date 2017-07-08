@@ -255,16 +255,19 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-commodity.glade", "liststore1");
     gnc_builder_add_from_file (builder, "dialog-commodity.glade", "liststore2");
-    gnc_builder_add_from_file (builder, "dialog-commodity.glade", "Security Selector Dialog");
+    gnc_builder_add_from_file (builder, "dialog-commodity.glade", "security_selector_dialog");
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, retval);
 
-    retval->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Security Selector Dialog"));
+    retval->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "security_selector_dialog"));
     retval->namespace_combo = GTK_WIDGET(gtk_builder_get_object (builder, "ss_namespace_cbwe"));
     retval->commodity_combo = GTK_WIDGET(gtk_builder_get_object (builder, "ss_commodity_cbwe"));
     retval->select_user_prompt = GTK_WIDGET(gtk_builder_get_object (builder, "select_user_prompt"));
     retval->ok_button = GTK_WIDGET(gtk_builder_get_object (builder, "ss_ok_button"));
     label = GTK_WIDGET(gtk_builder_get_object (builder, "item_label"));
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(retval->dialog), "GncSecurityDialog");
 
     gnc_cbwe_require_list_item(GTK_COMBO_BOX(retval->namespace_combo));
     gnc_cbwe_require_list_item(GTK_COMBO_BOX(retval->commodity_combo));
@@ -901,13 +904,18 @@ gnc_ui_build_commodity_dialog(const char * selected_namespace,
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-commodity.glade", "liststore2");
     gnc_builder_add_from_file (builder, "dialog-commodity.glade", "adjustment1");
-    gnc_builder_add_from_file (builder, "dialog-commodity.glade", "Security Dialog");
+    gnc_builder_add_from_file (builder, "dialog-commodity.glade", "security_dialog");
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, retval);
 
-    retval->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Security Dialog"));
+    retval->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "security_dialog"));
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(retval->dialog), "GncSecurityDialog");
+
     if (parent != NULL)
         gtk_window_set_transient_for (GTK_WINDOW (retval->dialog), GTK_WINDOW (parent));
+
     retval->edit_commodity = NULL;
 
     help_button = GTK_WIDGET(gtk_builder_get_object (builder, "help_button"));
@@ -932,10 +940,12 @@ gnc_ui_build_commodity_dialog(const char * selected_namespace,
     retval->table = GTK_WIDGET(gtk_builder_get_object (builder, "edit_table"));
     sec_label = GTK_WIDGET(gtk_builder_get_object (builder, "security_label"));
     gtk_container_child_get(GTK_CONTAINER(retval->table), sec_label,
-                            "bottom-attach", &retval->comm_section_top, NULL);
+                            "top-attach", &retval->comm_section_top, NULL);
+
     widget = GTK_WIDGET(gtk_builder_get_object (builder, "quote_label"));
     gtk_container_child_get(GTK_CONTAINER(retval->table), widget,
                             "top-attach", &retval->comm_section_bottom, NULL);
+
     gtk_container_child_get(GTK_CONTAINER(retval->table),
                             retval->user_symbol_entry, "top-attach",
                             &retval->comm_symbol_line, NULL);
@@ -969,13 +979,11 @@ gnc_ui_build_commodity_dialog(const char * selected_namespace,
     }
     else
     {
-        guint row;
+        gtk_grid_set_row_spacing(GTK_GRID(retval->table), 0);
 
         widget = GTK_WIDGET(gtk_builder_get_object (builder, "unknown_source_alignment"));
-        gtk_container_child_get(GTK_CONTAINER(retval->table), widget,
-                                "top-attach", &row, NULL);
-        gtk_table_set_row_spacing(GTK_TABLE(retval->table), row, 0);
         gtk_widget_destroy(widget);
+
         widget = GTK_WIDGET(gtk_builder_get_object (builder, "unknown_source_box"));
         gtk_widget_destroy(widget);
     }
@@ -1013,10 +1021,12 @@ gnc_ui_build_commodity_dialog(const char * selected_namespace,
         /* Determine the price quote of the dialog */
         widget = GTK_WIDGET(gtk_builder_get_object (builder, "fq_warning_alignment"));
         gtk_container_child_get(GTK_CONTAINER(retval->table), widget,
-                                "bottom-attach", &retval->fq_section_top, NULL);
-        widget = GTK_WIDGET(gtk_builder_get_object (builder, "quote_tz_alignment"));
+                                "top-attach", &retval->fq_section_top, NULL);
+
+        widget = GTK_WIDGET(gtk_builder_get_object (builder, "bottom_alignment"));
         gtk_container_child_get(GTK_CONTAINER(retval->table), widget,
-                                "bottom-attach", &retval->fq_section_bottom, NULL);
+                                "top-attach", &retval->fq_section_bottom, NULL);
+
         gnc_ui_update_fq_info (retval);
     }
 

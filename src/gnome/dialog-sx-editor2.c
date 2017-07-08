@@ -1143,12 +1143,12 @@ gnc_ui_scheduled_xaction_editor_dialog_create2 (SchedXaction *sx,
     gnc_builder_add_from_file (builder, "dialog-sx.glade", "remind_days_adj");
     gnc_builder_add_from_file (builder, "dialog-sx.glade", "end_spin_adj");
     gnc_builder_add_from_file (builder, "dialog-sx.glade", "remain_spin_adj");
-    gnc_builder_add_from_file (builder, "dialog-sx.glade", "Scheduled Transaction Editor");
+    gnc_builder_add_from_file (builder, "dialog-sx.glade", "scheduled_transaction_editor_dialog");
 
     sxed->builder = builder;
 
     /* Connect the Widgets */
-    sxed->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "Scheduled Transaction Editor"));
+    sxed->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "scheduled_transaction_editor_dialog"));
     sxed->notebook = GTK_NOTEBOOK (gtk_builder_get_object (builder, "editor_notebook"));
     sxed->nameEntry = GTK_EDITABLE (gtk_builder_get_object (builder, "sxe_name"));
     sxed->enabledOpt = GTK_TOGGLE_BUTTON (gtk_builder_get_object (builder, "enabled_opt"));
@@ -1165,9 +1165,12 @@ gnc_ui_scheduled_xaction_editor_dialog_create2 (SchedXaction *sx,
     sxed->endCountSpin = GTK_ENTRY (gtk_builder_get_object (builder, "end_spin"));
     sxed->endRemainSpin = GTK_ENTRY (gtk_builder_get_object (builder, "remain_spin"));
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(sxed->dialog), "GncSxEditorDialog");
+
     /* Setup the end-date GNC widget */
     {
-        GtkWidget *endDateBox = GTK_WIDGET (gtk_builder_get_object (builder, "end_date_hbox"));
+        GtkWidget *endDateBox = GTK_WIDGET(gtk_builder_get_object (builder, "editor_end_date_box"));
         sxed->endDateEntry = GNC_DATE_EDIT (gnc_date_edit_new (gnc_time (NULL),
 							      FALSE, FALSE));
         gtk_widget_show (GTK_WIDGET (sxed->endDateEntry));
@@ -1716,11 +1719,14 @@ _sx_engine_event_handler (QofInstance *ent, QofEventId event_type, gpointer user
         GtkCellRenderer *renderer;
 
         builder = gtk_builder_new();
-        gnc_builder_add_from_file (builder, "dialog-sx.glade", "Account Deletion");
+        gnc_builder_add_from_file (builder, "dialog-sx.glade", "account_deletion_dialog");
 
-        dialog = GTK_WIDGET (gtk_builder_get_object (builder, "Account Deletion"));
+        dialog = GTK_WIDGET (gtk_builder_get_object (builder, "account_deletion_dialog"));
 
         list = GTK_TREE_VIEW (gtk_builder_get_object (builder, "sx_list"));
+
+        // Set grid lines option to preference
+        gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(list), gnc_tree_view_get_grid_lines_pref ());
 
         data = (acct_deletion_handler_data*)g_new0 (acct_deletion_handler_data, 1);
         data->dialog = dialog;

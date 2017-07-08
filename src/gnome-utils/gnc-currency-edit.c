@@ -68,6 +68,7 @@
 #include "gnc-gtk-utils.h"
 #include "gnc-ui-util.h"
 #include "gnc-engine.h"
+#include "dialog-utils.h"
 
 /** The debugging module used by this file. */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -226,6 +227,9 @@ gnc_currency_edit_class_init (GNCCurrencyEditClass *klass)
 static void
 gnc_currency_edit_init (GNCCurrencyEdit *gce)
 {
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(gce), "GncCurrencyEdit");
+
     g_signal_connect (gce, "notify::mnemonic",
                       G_CALLBACK (gnc_currency_edit_mnemonic_changed), gce);
     g_signal_connect (gce, "changed",

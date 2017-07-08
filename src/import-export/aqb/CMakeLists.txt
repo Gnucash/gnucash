@@ -35,7 +35,7 @@ SET (aqbanking_noinst_HEADERS
   gnc-plugin-aqbanking.h
 )
 
-SET(aqbanking_GLADE assistant-ab-initial.glade dialog-ab.glade)
+SET(aqbanking_GLADE assistant-ab-initial.glade dialog-ab.glade dialog-ab-pref.glade)
 
 SET(aqbanking_UI gnc-plugin-aqbanking-ui.xml)
 
@@ -66,7 +66,6 @@ IF(WITH_AQBANKING)
     RUNTIME DESTINATION bin)
 
 # No headers to install
-
 
 
   INSTALL(FILES ${aqbanking_GLADE} DESTINATION share/gnucash/gtkbuilder)

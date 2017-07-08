@@ -186,11 +186,14 @@ gnc_dialog_query_view_new (GList *param_list, Query *q)
 
     dqv = g_new0 (DialogQueryView, 1);
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-query-view.glade", "Query View Dialog");
+    gnc_builder_add_from_file (builder, "dialog-query-view.glade", "query_view_dialog");
 
     /* Grab the dialog, save the dialog info */
-    dqv->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Query View Dialog"));
+    dqv->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "query_view_dialog"));
     g_object_set_data (G_OBJECT (dqv->dialog), "dialog-info", dqv);
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dqv->dialog), "GncQueryViewDialog");
 
     /* grab the widgets */
     dqv->label = GTK_WIDGET(gtk_builder_get_object (builder, "dialog_label"));
@@ -214,7 +217,9 @@ gnc_dialog_query_view_new (GList *param_list, Query *q)
     gtk_box_pack_start (GTK_BOX (result_hbox), frame, TRUE, TRUE, 3);
 
     /* Create the button_box */
-    dqv->button_box = gtk_vbox_new (FALSE, 2);
+    dqv->button_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
+    gtk_box_set_homogeneous (GTK_BOX (dqv->button_box), FALSE);
+
     gtk_box_pack_start (GTK_BOX (result_hbox), dqv->button_box, FALSE, FALSE, 3);
 
     /* connect the double-click signal of the qview */

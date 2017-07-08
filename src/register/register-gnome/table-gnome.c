@@ -42,6 +42,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <glib-2.0/glib.h>
 
 #include "gnucash-sheet.h"
 #include "gnucash-sheetP.h"
@@ -148,78 +149,16 @@ table_destroy_cb (Table *table)
 /* Um, this function checks that data is not null but never uses it.
    Weird.  Also, since this function only works with a GnucashRegister
    widget, maybe some of it should be moved to gnucash-sheet.c. */
-/* Adding to previous note:  Since data doesn't appear do anything and to 
-   align the function with save_state() I've removed the check for 
-   NULL and changed two calls in dialog_order.c and dialog_invoice.c 
+/* Adding to previous note:  Since data doesn't appear do anything and to
+   align the function with save_state() I've removed the check for
+   NULL and changed two calls in dialog_order.c and dialog_invoice.c
    to pass NULL as second parameter. */
-   
+
 void
-gnc_table_init_gui (GtkWidget *widget, gchar * state_section)
+gnc_table_init_gui (Table *table)
 {
-    GNCHeaderWidths widths;
-    GnucashSheet *sheet;
-    GnucashRegister *greg;
-    Table *table;
-    GList *node;
-    gchar *key;
-    guint value;
-    GKeyFile *state_file = gnc_state_get_current();
- 
-    // Stuff for per-register settings load.
-    g_return_if_fail (widget != NULL);
-    g_return_if_fail (GNUCASH_IS_REGISTER (widget));
-    
-    PINFO("state_section=%s",state_section);
-    
-    ENTER("widget=%p, data=%p", widget, "");
-    
-
-    greg = GNUCASH_REGISTER (widget);
-    sheet = GNUCASH_SHEET (greg->sheet);
-    table = sheet->table;
-
     table->gui_handlers.redraw_help = table_ui_redraw_cb;
     table->gui_handlers.destroy = table_destroy_cb;
-    table->ui_data = sheet;
-
-    g_object_ref (sheet);
-
-    /* config the cell-block styles */
-
-    widths = gnc_header_widths_new ();
-
-    if (state_section && gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
-    {
-        node = gnc_table_layout_get_cells (table->layout);
-        for (; node; node = node->next)
-        {
-            BasicCell *cell = node->data;
-
-            if (cell->expandable)
-                continue;
-
-            /* Remember whether the column is visible */
-            key = g_strdup_printf("%s_width", cell->cell_name);
-            value = g_key_file_get_integer (state_file, state_section, key, NULL);
-            if (value != 0)
-                gnc_header_widths_set_width (widths, cell->cell_name, value);
-            g_free(key);
-        }
-    }
-
-    gnucash_sheet_create_styles (sheet);
-
-    gnucash_sheet_set_header_widths (sheet, widths);
-
-    gnucash_sheet_compile_styles (sheet);
-
-    gnucash_sheet_table_load (sheet, TRUE);
-    gnucash_sheet_cursor_set_from_table (sheet, TRUE);
-    gnucash_sheet_redraw_all (sheet);
-
-    gnc_header_widths_destroy (widths);
-
-    LEAVE(" ");
 }
 
 void

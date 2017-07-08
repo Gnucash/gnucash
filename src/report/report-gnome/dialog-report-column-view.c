@@ -583,8 +583,8 @@ gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data)
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-report.glade", "col_adjustment");
     gnc_builder_add_from_file (builder, "dialog-report.glade", "row_adjustment");
-    gnc_builder_add_from_file (builder, "dialog-report.glade", "Edit Report Size");
-    dlg = GTK_WIDGET(gtk_builder_get_object (builder, "Edit Report Size"));
+    gnc_builder_add_from_file (builder, "dialog-report.glade", "edit_report_size");
+    dlg = GTK_WIDGET(gtk_builder_get_object (builder, "edit_report_size"));
 
     /* get the spinner widgets */
     rowspin = GTK_WIDGET(gtk_builder_get_object (builder, "row_spin"));

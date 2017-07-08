@@ -47,7 +47,7 @@
 #include "gnc-file.h"
 #include "guile-mappings.h"
 #include "gnc-session.h"
-#include "gnome-utils/gnc-icons.h" /* for GNC_STOCK_INVOICE_NEW */
+#include "gnome-utils/gnc-icons.h" /* for GNC_ICON_INVOICE_NEW */
 
 #include "gnc-prefs.h"
 #include "gnome-utils/gnc-main-window.h"
@@ -308,7 +308,7 @@ static GtkActionEntry gnc_plugin_actions [] =
 
     /* Toolbar */
     {
-        "ToolbarNewInvoiceAction", GNC_STOCK_INVOICE_NEW, N_("New _Invoice..."), NULL,
+        "ToolbarNewInvoiceAction", GNC_ICON_INVOICE_NEW, N_("New _Invoice..."), NULL,
         N_("Open the New Invoice dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_customer_new_invoice)
     },

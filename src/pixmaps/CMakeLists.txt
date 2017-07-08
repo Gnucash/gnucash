@@ -2,15 +2,24 @@
 INSTALL(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION share/gnucash
         PATTERN Makefile.* EXCLUDE
         PATTERN CMakeLists.txt EXCLUDE
+        PATTERN hicolor EXCLUDE
 )
 
+INSTALL(DIRECTORY ${DATADIR_BUILD}/gnucash/icons DESTINATION share/gnucash
+        PATTERN Makefile.* EXCLUDE
+        PATTERN CMakeLists.txt EXCLUDE
+)
 
 FILE(COPY .
    DESTINATION ${DATADIR_BUILD}/gnucash/pixmaps
    PATTERN Makefile.* EXCLUDE
    PATTERN CMakeLists.txt EXCLUDE
+   PATTERN hicolor EXCLUDE
 )
 
+FILE(COPY hicolor
+   DESTINATION ${DATADIR_BUILD}/gnucash/icons
+)
 
 FOREACH(dir 256x256 128x128 96x96 64x64 48x48)
   INSTALL(
@@ -195,4 +204,3 @@ SET(gncpixmap_DATA
 
 SET_LOCAL_DIST(pixmaps_DIST_local CMakeLists.txt Makefile.am ${gncpixmap_DATA})
 SET(pixmaps_DIST ${pixmaps_DIST_local} PARENT_SCOPE)
-

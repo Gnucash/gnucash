@@ -345,12 +345,12 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry)
         wind->selected_name = gnc_scm_to_utf8_string (orig_acct);
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-account-picker.glade", "QIF Import Account Picker");
+    gnc_builder_add_from_file (builder, "dialog-account-picker.glade", "qif_import_account_picker_dialog");
 
     /* Connect all the signals */
     gtk_builder_connect_signals (builder, wind);
 
-    wind->dialog     = GTK_WIDGET(gtk_builder_get_object (builder, "QIF Import Account Picker"));
+    wind->dialog     = GTK_WIDGET(gtk_builder_get_object (builder, "qif_import_account_picker_dialog"));
     wind->treeview   = GTK_TREE_VIEW(gtk_builder_get_object (builder, "account_tree"));
     wind->qif_wind   = qif_wind;
 
@@ -396,7 +396,6 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry)
                            wind);
 
     button =  GTK_WIDGET(gtk_builder_get_object (builder, "newbutton"));
-    gtk_button_set_use_stock(GTK_BUTTON(button), TRUE);
 
     /* this is to get the checkmarks set up right.. it will get called
      * again after the window is mapped. */

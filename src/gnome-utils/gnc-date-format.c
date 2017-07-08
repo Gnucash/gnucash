@@ -87,7 +87,7 @@ static void gnc_date_format_compute_format(GNCDateFormat *gdf);
 
 void gnc_ui_date_format_changed_cb(GtkWidget *unused, gpointer user_data);
 
-static GtkHBoxClass *parent_class;
+static GtkBoxClass *parent_class;
 
 /**
  * gnc_date_format_get_type:
@@ -115,7 +115,7 @@ gnc_date_format_get_type (void)
             NULL,
         };
 
-        date_format_type = g_type_register_static(GTK_TYPE_HBOX,
+        date_format_type = g_type_register_static(GTK_TYPE_BOX,
                            "GNCDateFormat",
                            &date_format_info, 0);
     }
@@ -158,10 +158,15 @@ gnc_date_format_init (GNCDateFormat *gdf)
     g_return_if_fail(gdf);
     g_return_if_fail(GNC_IS_DATE_FORMAT(gdf));
 
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(gdf), GTK_ORIENTATION_HORIZONTAL);
+
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(gdf), "GncDateFormat");
+
     /* Open up the Glade and set the signals */
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "gnc-date-format.glade", "format-liststore");
-    gnc_builder_add_from_file (builder, "gnc-date-format.glade", "GNC Date Format");
+    gnc_builder_add_from_file (builder, "gnc-date-format.glade", "gnc_date_format_window");
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, gdf);
 
@@ -187,7 +192,7 @@ gnc_date_format_init (GNCDateFormat *gdf)
     gnc_date_format_set_format(gdf, QOF_DATE_FORMAT_UNSET);
 
     /* pull in the dialog and table widgets and play the reconnect game */
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "GNC Date Format"));
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "gnc_date_format_window"));
 
     table = GTK_WIDGET(gtk_builder_get_object (builder, "date_format_table"));
     g_object_ref(G_OBJECT(table));

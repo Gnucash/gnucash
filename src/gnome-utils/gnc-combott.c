@@ -27,10 +27,12 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
+#include "config.h"
 #include <gtk/gtk.h>
 #include "gnc-combott.h"
 #include <strings.h>
 #include <string.h>
+#include "dialog-utils.h"
 
 enum
 {
@@ -134,7 +136,7 @@ gnc_combott_get_type (void)
             (GInstanceInitFunc) gctt_init,
         };
 
-        combott_type = g_type_register_static (GTK_TYPE_HBOX,
+        combott_type = g_type_register_static (GTK_TYPE_BOX,
                                                "GncCombott",
                                                &combott_info, 0);
     }
@@ -211,16 +213,31 @@ gctt_init (GncCombott *combott)
 
     GncCombottPrivate *priv = GNC_COMBOTT_GET_PRIVATE (combott);
 
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(combott), GTK_ORIENTATION_HORIZONTAL);
+
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(combott), "GncCombott");
+
     priv->active = 0;
     priv->text_col = 0;
     priv->tip_col = 1;
 
-    hbox = gtk_hbox_new(FALSE, 0);
+    hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX(hbox), FALSE);
 
-    arrow = gtk_arrow_new(GTK_ARROW_DOWN, GTK_SHADOW_OUT);
+#if GTK_CHECK_VERSION(3,14,0)
+    arrow = gtk_image_new_from_icon_name ("go-down", GTK_ICON_SIZE_BUTTON);
+#else
+    arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_OUT);
+#endif
+#if GTK_CHECK_VERSION(3,12,0)
+    gtk_widget_set_margin_start (GTK_WIDGET(arrow), 5);
+#else
+    gtk_widget_set_margin_left (GTK_WIDGET(arrow), 5);
+#endif
     gtk_box_pack_end (GTK_BOX (hbox), arrow, FALSE, FALSE, 0);
 
-    sep = gtk_vseparator_new();
+    sep = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
     gtk_box_pack_end (GTK_BOX (hbox), sep, FALSE, FALSE, 0);
 
     label = gtk_label_new(NULL);
@@ -407,7 +424,7 @@ gctt_rebuild_menu (GncCombott *combott, GtkTreeModel *model)
         /* Add the tooltip to the child label */
         label = gtk_bin_get_child(GTK_BIN(menu_items));
         gtk_widget_set_tooltip_text (label, tip_data);
-        gtk_misc_set_alignment (GTK_MISC(label), 0, 0.5);
+        gnc_label_set_alignment (label, 0, 0.5);
 
         /* ...and add it to the menu. */
         gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), menu_items);
@@ -470,6 +487,9 @@ gctt_combott_menu_position (GtkMenu  *menu,
     GtkWidget *child;
     GtkRequisition req;
     GtkAllocation alloc;
+    GtkBorder padding;
+    GtkStyleContext *sc = gtk_widget_get_style_context (GTK_WIDGET (priv->button));
+    GtkStateFlags state_flags = gtk_style_context_get_state (sc);
 
     child = gtk_bin_get_child (GTK_BIN (priv->button));
 
@@ -484,9 +504,11 @@ gctt_combott_menu_position (GtkMenu  *menu,
 
     gdk_window_get_root_coords (gtk_widget_get_window (child), sx, sy, &sx, &sy);
 
-    sx -= gtk_widget_get_style (GTK_WIDGET (priv->button))->xthickness;
+    gtk_style_context_get_padding (sc, state_flags, &padding);
 
-    gtk_widget_size_request (GTK_WIDGET (menu), &req);
+    sx -= padding.left;
+
+    gtk_widget_get_preferred_size (GTK_WIDGET (menu), &req, NULL);
 
     if (gtk_widget_get_direction (GTK_WIDGET (priv->button)) == GTK_TEXT_DIR_LTR)
         *x = sx;
@@ -600,7 +622,7 @@ menuitem_response_cb (GtkMenuItem *item, gpointer *user_data )
 
     /* Set the button Label */
     gtk_label_set_text(GTK_LABEL(priv->label), label_text);
-    gtk_misc_set_alignment (GTK_MISC(priv->label), 0, 0.5);
+    gnc_label_set_alignment (priv->label, 0, 0.5);
 
     /* Get the corresponding entry in the list store */
     valid = gtk_tree_model_get_iter_first (priv->model, &iter);
@@ -709,7 +731,7 @@ gnc_combott_set_active (GncCombott *combott, gint index)
                         priv->active = index + 1;
                         priv->active_iter = iter;
                         gtk_label_set_text(GTK_LABEL(priv->label), str_data);
-                        gtk_misc_set_alignment (GTK_MISC(priv->label), 0, 0.5);
+                        gnc_label_set_alignment (priv->label, 0, 0.5);
                         g_signal_emit (combott, combott_signals[CHANGED], 0);
                     }
 

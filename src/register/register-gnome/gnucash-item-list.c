@@ -31,7 +31,6 @@
 
 #include <glib/gi18n.h>
 #include <gdk/gdkkeysyms.h>
-#include <libgnomecanvas/libgnomecanvas.h>
 
 #include "gnc-engine.h"
 #include "gnucash-item-list.h"
@@ -43,11 +42,10 @@ enum
     SELECT_ITEM,
     CHANGE_ITEM,
     ACTIVATE_ITEM,
-    KEY_PRESS_EVENT,
     LAST_SIGNAL
 };
 
-static GnomeCanvasWidgetClass *gnc_item_list_parent_class;
+static GtkEventBoxClass *gnc_item_list_parent_class;
 static guint gnc_item_list_signals[LAST_SIGNAL];
 
 gboolean _gnc_item_find_selection(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data);
@@ -239,7 +237,6 @@ gnc_item_list_init (GncItemList *item_list)
 {
     item_list->tree_view = NULL;
     item_list->list_store = NULL;
-    item_list->frame = NULL;
 }
 
 
@@ -305,6 +302,7 @@ gnc_item_list_key_event (GtkWidget *widget, GdkEventKey *event, gpointer data)
     GtkTreeIter iter;
     GtkTreeModel *model;
     gchar *string;
+    gboolean retval;
 
     switch (event->keyval)
     {
@@ -333,10 +331,9 @@ gnc_item_list_key_event (GtkWidget *widget, GdkEventKey *event, gpointer data)
     /* These go to the sheet */
     g_signal_stop_emission_by_name (G_OBJECT (widget), "key_press_event");
 
-    g_signal_emit (G_OBJECT (item_list),
-                   gnc_item_list_signals[KEY_PRESS_EVENT], 0, event);
+    g_signal_emit_by_name (G_OBJECT (item_list), "key_press_event", event, &retval);
 
-    return TRUE;
+    return retval;
 }
 
 
@@ -378,20 +375,9 @@ gnc_item_list_class_init (GncItemListClass *item_list_class)
                       G_TYPE_NONE, 1,
                       G_TYPE_POINTER);
 
-    gnc_item_list_signals[KEY_PRESS_EVENT] =
-        g_signal_new ("key_press_event",
-                      G_OBJECT_CLASS_TYPE (object_class),
-                      G_SIGNAL_RUN_LAST,
-                      G_STRUCT_OFFSET(GncItemListClass, key_press_event),
-                      NULL, NULL,
-                      g_cclosure_marshal_VOID__BOXED,
-                      G_TYPE_NONE, 1,
-                      GDK_TYPE_EVENT);
-
     item_list_class->select_item = NULL;
     item_list_class->change_item = NULL;
     item_list_class->activate_item = NULL;
-    item_list_class->key_press_event = NULL;
 }
 
 
@@ -416,7 +402,7 @@ gnc_item_list_get_type (void)
         };
 
         gnc_item_list_type =
-            g_type_register_static (gnome_canvas_widget_get_type(), "GncItemList",
+            g_type_register_static (GTK_TYPE_EVENT_BOX, "GncItemList",
                                     &gnc_item_list_info, 0);
     }
 
@@ -446,21 +432,20 @@ tree_view_selection_changed (GtkTreeSelection *selection,
     g_free (string);
 }
 
-GnomeCanvasItem *
-gnc_item_list_new(GnomeCanvasGroup *parent, GtkListStore *list_store)
+GtkWidget *
+gnc_item_list_new(GtkListStore *list_store)
 {
-    GtkWidget *frame;
     GtkWidget *tree_view;
     GtkWidget *scrollwin;
     GtkCellRenderer *renderer;
     GtkTreeViewColumn *column;
-    GnomeCanvasItem *item;
-    GncItemList *item_list;
 
-    frame = gtk_frame_new (NULL);
+    GncItemList *item_list =
+        GNC_ITEM_LIST(g_object_new (GNC_TYPE_ITEM_LIST,
+                                    NULL));
 
     scrollwin = gnc_scrolled_window_new ();
-    gtk_container_add (GTK_CONTAINER (frame), scrollwin);
+    gtk_container_add (GTK_CONTAINER (item_list), scrollwin);
 
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrollwin),
                                     GTK_POLICY_AUTOMATIC,
@@ -489,20 +474,9 @@ gnc_item_list_new(GnomeCanvasGroup *parent, GtkListStore *list_store)
     gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
 
     gtk_container_add (GTK_CONTAINER (scrollwin), tree_view);
-    gtk_widget_show_all (frame);
-
-    item = gnome_canvas_item_new (parent, gnc_item_list_get_type(),
-                                  "widget", frame,
-                                  "size_pixels", TRUE,
-                                  "x", -10000.0,
-                                  "y", -10000.0,
-                                  NULL);
-
-    item_list = GNC_ITEM_LIST (item);
 
     item_list->tree_view = GTK_TREE_VIEW (tree_view);
     item_list->list_store = list_store;
-    item_list->frame = frame;
 
     g_signal_connect (G_OBJECT(tree_view), "button_press_event",
                       G_CALLBACK (gnc_item_list_button_event), item_list);
@@ -513,7 +487,7 @@ gnc_item_list_new(GnomeCanvasGroup *parent, GtkListStore *list_store)
     g_signal_connect (G_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view))), "changed",
                       G_CALLBACK (tree_view_selection_changed), item_list);
 
-    return item;
+    return GTK_WIDGET(item_list);
 }
 
 

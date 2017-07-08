@@ -41,7 +41,7 @@
 /** Load a gtk resource configuration file to customize gtk
  *  appearance and behviour.
  */
-void gnc_gtk_add_rc_file (void);
+void gnc_add_css_file (void);
 
 /** Launch the default gnome help browser and open to a given link
  *  within a given file.  This routine will display an error message

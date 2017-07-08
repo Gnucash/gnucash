@@ -103,10 +103,13 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "num_adjustment");
     gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "tnum_adjustment");
-    gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "Duplicate Transaction Dialog");
+    gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "duplicate_transaction_dialog");
 
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Duplicate Transaction Dialog"));
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "duplicate_transaction_dialog"));
     dt_dialog->dialog = dialog;
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncDupTransDialog");
 
     /* parent */
     if (parent != NULL)

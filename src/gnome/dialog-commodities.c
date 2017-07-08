@@ -187,8 +187,8 @@ remove_clicked (CommoditiesDialog *cd)
     gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
             "%s", message);
     gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                           GTK_STOCK_DELETE, GTK_RESPONSE_OK,
+                           _("Cancel"), GTK_RESPONSE_CANCEL,
+                           _("Delete"), GTK_RESPONSE_OK,
                            (gchar *)NULL);
     response = gnc_dialog_run(GTK_DIALOG(dialog), warning);
     gtk_widget_destroy(dialog);
@@ -316,12 +316,15 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
     GtkTreeSelection *selection;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-commodities.glade", "Securities Dialog");
+    gnc_builder_add_from_file (builder, "dialog-commodities.glade", "securities_dialog");
 
-    cd->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Securities Dialog"));
+    cd->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "securities_dialog"));
     cd->session = gnc_get_current_session();
     cd->book = qof_session_get_book(cd->session);
     cd->show_currencies = gnc_prefs_get_bool(GNC_PREFS_GROUP, GNC_PREF_INCL_ISO);
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(cd->dialog), "GncCommoditiesDialog");
 
     gtk_builder_connect_signals(builder, cd);
 

@@ -79,12 +79,12 @@ typedef struct GncBudgetViewPrivate GncBudgetViewPrivate;
 
 struct _GncBudgetView
 {
-    GtkVBox w;
+    GtkBox w;
 };
 
 struct _GncBudgetViewClass
 {
-    GtkVBoxClass w;
+    GtkBoxClass w;
 };
 
 enum
@@ -160,7 +160,7 @@ struct GncBudgetViewPrivate
 #define GNC_BUDGET_VIEW_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE((o), GNC_TYPE_BUDGET_VIEW, GncBudgetViewPrivate))
 
-G_DEFINE_TYPE(GncBudgetView, gnc_budget_view, GTK_TYPE_VBOX)
+G_DEFINE_TYPE(GncBudgetView, gnc_budget_view, GTK_TYPE_BOX)
 
 /** \brief Create new gnc budget view.
 
@@ -316,7 +316,7 @@ gbv_create_widget(GncBudgetView *view)
     GtkTreeView *tree_view;
     GtkWidget *scrolled_window;
     GtkWidget *inner_scrolled_window;
-    GtkVBox* vbox;
+    GtkBox* vbox;
     GtkWidget* inner_vbox;
     GtkListStore* totals_tree_model;
     GtkTreeView* totals_tree_view;
@@ -327,10 +327,13 @@ gbv_create_widget(GncBudgetView *view)
     gchar guidstr[GUID_ENCODING_LENGTH+1];
 
     priv = GNC_BUDGET_VIEW_GET_PRIVATE(view);
-    vbox = GTK_VBOX(view);
+    vbox = GTK_BOX(view);
 
     gtk_widget_show(GTK_WIDGET(vbox));
     gtk_box_set_homogeneous(GTK_BOX(vbox), FALSE);
+
+    // Set the style context for this page so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(vbox), "GncBudgetPage");
 
     scrolled_window = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window),
@@ -339,8 +342,9 @@ gbv_create_widget(GncBudgetView *view)
     gtk_widget_show(scrolled_window);
     gtk_box_pack_start(GTK_BOX(vbox), scrolled_window, /*expand*/TRUE, /*fill*/TRUE, 0);
 
-    inner_vbox = gtk_vbox_new(FALSE, 0);
-    gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolled_window), GTK_WIDGET(inner_vbox));
+    inner_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (inner_vbox), FALSE);
+    gtk_container_add (GTK_CONTAINER(scrolled_window), GTK_WIDGET(inner_vbox));
     gtk_widget_show(GTK_WIDGET(inner_vbox));
 
     inner_scrolled_window = gtk_scrolled_window_new(NULL, NULL);
@@ -398,6 +402,9 @@ gbv_create_widget(GncBudgetView *view)
     totals_tree_view = GTK_TREE_VIEW(gtk_tree_view_new());
     priv->totals_tree_view = totals_tree_view;
 
+    // Set grid lines option to preference
+    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(totals_tree_view), gnc_tree_view_get_grid_lines_pref ());
+
     gtk_widget_show(GTK_WIDGET(totals_tree_view));
     gtk_tree_selection_set_mode(gtk_tree_view_get_selection(totals_tree_view),
                                 GTK_SELECTION_NONE);
@@ -411,7 +418,7 @@ gbv_create_widget(GncBudgetView *view)
 
     gtk_box_pack_end(GTK_BOX(inner_vbox), GTK_WIDGET(totals_tree_view), /*expand*/FALSE, /*fill*/TRUE, 0);
 
-    h_separator = gtk_hseparator_new();
+    h_separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
     gtk_widget_show(h_separator);
     gtk_box_pack_end(GTK_BOX(inner_vbox), h_separator, /*expand*/FALSE, /*fill*/TRUE, 0);
 

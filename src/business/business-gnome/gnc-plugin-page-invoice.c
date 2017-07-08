@@ -37,10 +37,11 @@
 #include "gnc-gobject-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-icons.h"
-#include "gnucash-sheet.h"
+#include "gnucash-register.h"
 #include "gnc-prefs.h"
 #include "gnc-ui-util.h"
 #include "gnc-window.h"
+#include "dialog-utils.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -99,98 +100,98 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
 
     /* File menu */
     {
-        "FileNewAccountAction", GNC_STOCK_NEW_ACCOUNT, N_("New _Account..."), NULL,
+        "FileNewAccountAction", GNC_ICON_NEW_ACCOUNT, N_("New _Account..."), NULL,
         N_("Create a new account"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_new_account)
     },
     {
-        "FilePrintAction", GTK_STOCK_PRINT, N_("Print Invoice"), "<primary>p",
+        "FilePrintAction", "document-print", N_("Print Invoice"), "<primary>p",
         N_("Make a printable invoice"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_print)
     },
 
     /* Edit menu */
     {
-        "EditCutAction", GTK_STOCK_CUT, N_("_Cut"), NULL,
+        "EditCutAction", "edit-cut", N_("_Cut"), NULL,
         NULL,
         G_CALLBACK (gnc_plugin_page_invoice_cmd_cut)
     },
     {
-        "EditCopyAction", GTK_STOCK_COPY, N_("Copy"), NULL,
+        "EditCopyAction", "edit-copy", N_("Copy"), NULL,
         NULL,
         G_CALLBACK (gnc_plugin_page_invoice_cmd_copy)
     },
     {
-        "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), NULL,
+        "EditPasteAction", "edit-paste", N_("_Paste"), NULL,
         NULL,
         G_CALLBACK (gnc_plugin_page_invoice_cmd_paste)
     },
     {
-        "EditEditInvoiceAction", GNC_STOCK_INVOICE_EDIT, N_("_Edit Invoice"), NULL,
+        "EditEditInvoiceAction", GNC_ICON_INVOICE_EDIT, N_("_Edit Invoice"), NULL,
         N_("Edit this invoice"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_edit)
     },
     {
-        "EditDuplicateInvoiceAction", GNC_STOCK_INVOICE_DUPLICATE, N_("_Duplicate Invoice"),
+        "EditDuplicateInvoiceAction", GNC_ICON_INVOICE_DUPLICATE, N_("_Duplicate Invoice"),
         NULL, N_("Create a new invoice as a duplicate of the current one"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_duplicateInvoice)
     },
     {
-        "EditPostInvoiceAction", GNC_STOCK_INVOICE_POST, N_("_Post Invoice"), NULL,
+        "EditPostInvoiceAction", GNC_ICON_INVOICE_POST, N_("_Post Invoice"), NULL,
         N_("Post this Invoice to your Chart of Accounts"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_post)
     },
     {
-        "EditUnpostInvoiceAction", GNC_STOCK_INVOICE_UNPOST, N_("_Unpost Invoice"), NULL,
+        "EditUnpostInvoiceAction", GNC_ICON_INVOICE_UNPOST, N_("_Unpost Invoice"), NULL,
         N_("Unpost this Invoice and make it editable"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_unpost)
     },
 
     /* Actions menu */
     {
-        "RecordEntryAction", GTK_STOCK_ADD, N_("_Enter"), NULL,
+        "RecordEntryAction", "list-add", N_("_Enter"), NULL,
         N_("Record the current entry"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_enter)
     },
     {
-        "CancelEntryAction", GTK_STOCK_CANCEL, N_("_Cancel"), NULL,
+        "CancelEntryAction", "process-stop", N_("_Cancel"), NULL,
         N_("Cancel the current entry"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_cancel)
     },
     {
-        "DeleteEntryAction", GTK_STOCK_DELETE, N_("_Delete"), NULL,
+        "DeleteEntryAction", "edit-delete", N_("_Delete"), NULL,
         N_("Delete the current entry"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_delete)
     },
     {
-        "BlankEntryAction", GTK_STOCK_GOTO_BOTTOM, N_("_Blank"), NULL,
+        "BlankEntryAction", "go-bottom", N_("_Blank"), NULL,
         N_("Move to the blank entry at the bottom of the Invoice"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_blank)
     },
     {
-        "DuplicateEntryAction", GTK_STOCK_COPY, N_("Dup_licate Entry"), NULL,
+        "DuplicateEntryAction", "edit-copy", N_("Dup_licate Entry"), NULL,
         N_("Make a copy of the current entry"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_duplicateEntry)
     },
     {
-        "EntryUpAction", GTK_STOCK_GO_UP, N_("Move Entry _Up"), NULL,
+        "EntryUpAction", "go-up", N_("Move Entry _Up"), NULL,
         N_("Move the current entry one row upwards"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_entryUp)
     },
     {
-        "EntryDownAction", GTK_STOCK_GO_DOWN, N_("Move Entry Do_wn"), NULL,
+        "EntryDownAction", "go-down", N_("Move Entry Do_wn"), NULL,
         N_("Move the current entry one row downwards"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_entryDown)
     },
 
     /* Business menu */
     {
-        "BusinessNewInvoiceAction", GNC_STOCK_INVOICE_NEW, N_("New _Invoice"), "",
+        "BusinessNewInvoiceAction", GNC_ICON_INVOICE_NEW, N_("New _Invoice"), "",
         N_("Create a new invoice for the same owner as the current one"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_new_invoice)
     },
     {
-        "ToolsProcessPaymentAction", GNC_STOCK_INVOICE_PAY, N_("_Pay Invoice"), NULL,
+        "ToolsProcessPaymentAction", GNC_ICON_INVOICE_PAY, N_("_Pay Invoice"), NULL,
         N_("Enter a payment for the owner of this Invoice"),
         G_CALLBACK (gnc_plugin_page_invoice_cmd_pay_invoice)
     },
@@ -460,7 +461,12 @@ gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page)
         return priv->widget;
     }
 
-    priv->widget = gtk_vbox_new (FALSE, 0);
+    priv->widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (priv->widget), FALSE);
+
+    // Set the style context for this page so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(priv->widget), "GncInvoicePage");
+
     gtk_widget_show (priv->widget);
 
     widget = gnc_invoice_create_page(priv->iw, page);

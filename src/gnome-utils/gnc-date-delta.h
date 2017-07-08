@@ -54,7 +54,7 @@ typedef enum
 
 typedef struct
 {
-    GtkHBox hbox;
+    GtkBox hbox;
 
     GtkWidget *value_spin;
     GtkWidget *units_combo;
@@ -68,7 +68,7 @@ typedef struct
 
 typedef struct
 {
-    GtkHBoxClass parent_class;
+    GtkBoxClass parent_class;
     void (*value_changed) (GNCDateDelta *gdd);
     void (*units_changed) (GNCDateDelta *gdd);
     void (*polarity_changed) (GNCDateDelta *gdd);

@@ -930,8 +930,11 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
     gnc_builder_add_from_file (builder, "dialog-payment.glade", "docs_list_vert_adj");
     gnc_builder_add_from_file (builder, "dialog-payment.glade", "docs_list_model");
     gnc_builder_add_from_file (builder, "dialog-payment.glade", "post_combo_model");
-    gnc_builder_add_from_file (builder, "dialog-payment.glade", "Payment Dialog");
-    pw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "Payment Dialog"));
+    gnc_builder_add_from_file (builder, "dialog-payment.glade", "payment_dialog");
+    pw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "payment_dialog"));
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(pw->dialog), "GncPaymentDialog");
 
     /* Grab the widgets and build the dialog */
     pw->payment_warning = GTK_WIDGET (gtk_builder_get_object (builder, "payment_warning"));
@@ -995,6 +998,9 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
     pw->docs_list_tree_view = GTK_WIDGET (gtk_builder_get_object (builder, "docs_list_tree_view"));
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(pw->docs_list_tree_view));
     gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
+
+    // Set grid lines option to preference
+    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(pw->docs_list_tree_view), gnc_tree_view_get_grid_lines_pref ());
 
     /* Configure date column */
     renderer = gtk_cell_renderer_text_new ();

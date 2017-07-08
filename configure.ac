@@ -1340,13 +1340,9 @@ then
   AM_CFLAGS="$CFLAGS"
   CFLAGS="$__cflags"
 
-  PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.24.0)
+  PKG_CHECK_MODULES(GTK, gtk+-3.0)
   AC_SUBST(GTK_CFLAGS)
   AC_SUBST(GTK_LIBS)
-
-  PKG_CHECK_MODULES(GNOMECANVAS, libgnomecanvas-2.0)
-  AC_SUBST(GNOMECANVAS_CFLAGS)
-  AC_SUBST(GNOMECANVAS_LIBS)
 
   PKG_CHECK_MODULES(GDK_PIXBUF, gdk-pixbuf-2.0)
   AC_SUBST(GDK_PIXBUF_CFLAGS)
@@ -1355,7 +1351,7 @@ then
   ### --------------------------------------------------------------------------
   ### checks for webkit
 
-  PKG_CHECK_MODULES(WEBKIT, webkit-1.0 >= "1.2")
+  PKG_CHECK_MODULES(WEBKIT, webkit2gtk-4.0 >= "2.6.0")
   AC_SUBST(WEBKIT_CFLAGS)
   AC_SUBST(WEBKIT_LIBS)
 

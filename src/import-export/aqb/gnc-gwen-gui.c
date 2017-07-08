@@ -520,9 +520,9 @@ setup_dialog(GncGWENGui *gui)
     ENTER("gui=%p", gui);
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-ab.glade", "Connection Dialog");
+    gnc_builder_add_from_file (builder, "dialog-ab.glade", "aqbanking_connection_dialog");
 
-    gui->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Connection Dialog"));
+    gui->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "aqbanking_connection_dialog"));
 
     gui->entries_table = GTK_WIDGET(gtk_builder_get_object (builder, "entries_table"));
     gui->top_entry = GTK_WIDGET(gtk_builder_get_object (builder, "top_entry"));
@@ -788,7 +788,12 @@ show_progress(GncGWENGui *gui, Progress *progress)
 
             gtk_entry_set_text(GTK_ENTRY(entry), current->title);
             if (new_box)
-                gui->other_entries_box = box = gtk_vbox_new(TRUE, 6);
+            {
+                gui->other_entries_box = box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
+                gtk_box_set_homogeneous (GTK_BOX (gui->other_entries_box), TRUE);
+                gtk_box_set_homogeneous (GTK_BOX (box), TRUE);
+            }
+
             gtk_box_pack_start(GTK_BOX(box), entry, TRUE, TRUE, 0);
             gtk_widget_show(entry);
             if (new_box)
@@ -988,8 +993,8 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title, const gchar *text,
 
     /* Set up dialog */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-ab.glade", "Password Dialog");
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Password Dialog"));
+    gnc_builder_add_from_file (builder, "dialog-ab.glade", "aqbanking_password_dialog");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "aqbanking_password_dialog"));
 
     heading_label = GTK_WIDGET(gtk_builder_get_object (builder, "heading_pw_label"));
     input_entry = GTK_WIDGET(gtk_builder_get_object (builder, "input_entry"));
@@ -1121,7 +1126,8 @@ messagebox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
     label = gtk_label_new(raw_text);
     g_free(raw_text);
     gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_LEFT);
-    vbox = gtk_vbox_new(TRUE, 0);
+    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (vbox), TRUE);
     gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
     gtk_container_add(GTK_CONTAINER(vbox), label);
     gtk_container_set_border_width(GTK_CONTAINER(dialog), 5);

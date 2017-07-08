@@ -29,6 +29,7 @@
 #include "gnc-splash.h"
 #include "core-utils/gnc-version.h"
 #include "gnc-prefs.h"
+#include "dialog-utils.h"
 
 #define MARKUP_STRING "<span size='small'>%s</span>"
 #define GNC_PREF_SHOW_SPLASH "show-splash-screen"
@@ -68,6 +69,9 @@ gnc_show_splash_screen (void)
     gtk_window_set_decorated(GTK_WINDOW (splash), FALSE);
     gtk_window_set_skip_taskbar_hint (GTK_WINDOW (splash), TRUE);
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(splash), "GncSplash");
+
     g_signal_connect (splash, "destroy",
                       G_CALLBACK (splash_destroy_cb), NULL);
 
@@ -85,8 +89,10 @@ gnc_show_splash_screen (void)
     }
 
     frame = gtk_frame_new (NULL);
-    vbox = gtk_vbox_new (FALSE, 3);
-    hbox = gtk_hbox_new (FALSE, 3);
+    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+    gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
+    hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
+    gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
 #ifdef GNUCASH_SCM
     /* Development version */
     /* Translators: 1st %s is the GnuCash version (eg 2.4.11);
@@ -110,7 +116,7 @@ gnc_show_splash_screen (void)
     gtk_label_set_markup(GTK_LABEL(version), markup);
     g_free(markup);
     g_free(ver_string);
-    separator = gtk_hseparator_new();
+    separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
 
     progress = gtk_label_new(NULL);
     /* the set_max_width avoids "bumping" of the splash screen

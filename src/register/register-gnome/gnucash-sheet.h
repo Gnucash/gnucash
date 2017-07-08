@@ -21,10 +21,10 @@
 #ifndef GNUCASH_SHEET_H
 #define GNUCASH_SHEET_H
 
-
 #include <gtk/gtk.h>
 #include "split-register-model.h"
 #include "table-allgui.h"
+
 /** @ingroup Register
  * @addtogroup Gnome
  * @{
@@ -37,12 +37,6 @@
 #define CELL_HPADDING 5
 
 
-#define GNUCASH_TYPE_REGISTER     (gnucash_register_get_type ())
-#define GNUCASH_REGISTER(obj)     (G_TYPE_CHECK_INSTANCE_CAST((obj), GNUCASH_TYPE_REGISTER, GnucashRegister))
-#define GNUCASH_REGISTER_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), GNUCASH_TYPE_REGISTER))
-#define GNUCASH_IS_REGISTER(o)    (G_TYPE_CHECK_INSTANCE_TYPE((o), GNUCASH_TYPE_REGISTER))
-
-
 #define GNUCASH_TYPE_SHEET     (gnucash_sheet_get_type ())
 #define GNUCASH_SHEET(obj)     (G_TYPE_CHECK_INSTANCE_CAST((obj), GNUCASH_TYPE_SHEET, GnucashSheet))
 #define GNUCASH_SHEET_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), GNUCASH_TYPE_SHEET))
@@ -52,8 +46,6 @@
 typedef struct _SheetBlockStyle SheetBlockStyle;
 typedef struct _GnucashSheet GnucashSheet;
 typedef struct _GnucashSheetClass GnucashSheetClass;
-typedef struct _GnucashRegister GnucashRegister;
-typedef struct _GnucashRegisterClass GnucashRegisterClass;
 
 
 typedef struct
@@ -74,11 +66,6 @@ GtkWidget *gnucash_sheet_new (Table *table);
 void gnucash_sheet_table_load (GnucashSheet *sheet, gboolean do_scroll);
 
 void gnucash_sheet_recompute_block_offsets (GnucashSheet *sheet);
-
-GType gnucash_register_get_type (void);
-
-/** this already has scrollbars attached */
-GtkWidget *gnucash_register_new (Table *table);
 
 SheetBlock *gnucash_sheet_get_block (GnucashSheet *sheet,
                                      VirtualCellLocation vcell_loc);
@@ -118,34 +105,7 @@ void gnucash_sheet_update_adjustments (GnucashSheet *sheet);
 
 void gnucash_sheet_set_window (GnucashSheet *sheet, GtkWidget *window);
 
-void gnucash_register_goto_virt_cell (GnucashRegister *reg,
-                                      VirtualCellLocation vcell_loc);
+GdkRGBA *get_gtkrc_color (GnucashSheet *sheet, RegisterColor field_type);
 
-void gnucash_register_goto_virt_loc (GnucashRegister *reg,
-                                     VirtualLocation virt_loc);
-
-void gnucash_register_goto_next_virt_row (GnucashRegister *reg);
-
-typedef gboolean (*VirtualLocationMatchFunc) (VirtualLocation virt_loc,
-        gpointer user_data);
-
-void gnucash_register_goto_next_matching_row (GnucashRegister *reg,
-        VirtualLocationMatchFunc match,
-        gpointer user_data);
-
-void gnucash_register_attach_popup(GnucashRegister *reg, GtkWidget *popup,
-                                   gpointer data);
-
-gboolean gnucash_register_has_selection (GnucashRegister *reg);
-void gnucash_register_cut_clipboard (GnucashRegister *reg);
-void gnucash_register_copy_clipboard (GnucashRegister *reg);
-void gnucash_register_paste_clipboard (GnucashRegister *reg);
-void gnucash_register_refresh_from_prefs (GnucashRegister *reg);
-void gnucash_register_set_moved_cb (GnucashRegister *reg,
-                                    GFunc cb, gpointer cb_data);
-
-GnucashSheet *gnucash_register_get_sheet (GnucashRegister *reg);
-
-GdkColor *get_gtkrc_color (GnucashSheet *sheet, RegisterColor field_type);
 /** @} */
 #endif

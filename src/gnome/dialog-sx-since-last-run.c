@@ -967,9 +967,12 @@ gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances, GList *auto_cr
     dialog = g_new0(GncSxSinceLastRunDialog, 1);
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-sx.glade", "since-last-run-dialog");
+    gnc_builder_add_from_file (builder, "dialog-sx.glade", "since_last_run_dialog");
 
-    dialog->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "since-last-run-dialog"));
+    dialog->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "since_last_run_dialog"));
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog->dialog), "GncSxSinceLastRunDialog");
 
     dialog->editing_model = gnc_sx_slr_tree_model_adapter_new(sx_instances);
     dialog->review_created_txns_toggle = GTK_TOGGLE_BUTTON(gtk_builder_get_object (builder, "review_txn_toggle"));
@@ -1028,6 +1031,9 @@ gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances, GList *auto_cr
 
         gtk_tree_view_expand_all(dialog->instance_view);
     }
+
+    // Set grid lines option to preference
+    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(dialog->instance_view), gnc_tree_view_get_grid_lines_pref ());
 
     g_signal_connect(G_OBJECT(dialog->dialog), "response", G_CALLBACK(dialog_response_cb), dialog);
     g_signal_connect(G_OBJECT(dialog->dialog), "destroy", G_CALLBACK(dialog_destroy_cb), dialog);

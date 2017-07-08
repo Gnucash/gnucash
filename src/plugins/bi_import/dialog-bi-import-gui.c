@@ -103,10 +103,13 @@ gnc_plugin_bi_import_showGUI(void)
     gui->open_mode = "ALL";
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-bi-import-gui.glade", "bi-import Dialog");
-    gui->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "bi-import Dialog"));
+    gnc_builder_add_from_file (builder, "dialog-bi-import-gui.glade", "bi_import_dialog");
+    gui->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "bi_import_dialog"));
     gui->tree_view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview1"));
     gui->entryFilename = GTK_WIDGET(gtk_builder_get_object (builder, "entryFilename"));
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(gui->dialog), "GncBillImportDialog");
 
     gui->book = gnc_get_current_book();
 
@@ -401,8 +404,8 @@ gnc_input_dialog (GtkWidget *parent, const gchar *title, const gchar *msg, const
     /* Create the widgets */
     dialog = gtk_dialog_new_with_buttons (title, GTK_WINDOW (parent),
                                           GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                          GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
-                                          GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
+                                          _("OK"), GTK_RESPONSE_ACCEPT,
+                                          _("Cancel"), GTK_RESPONSE_REJECT,
                                           NULL);
     content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
@@ -459,7 +462,7 @@ gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar *msg)
     /* Create the widgets */
     dialog = gtk_dialog_new_with_buttons (title, GTK_WINDOW (parent),
                                           GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                          GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+                                          _("OK"), GTK_RESPONSE_ACCEPT,
                                           NULL);
     content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 

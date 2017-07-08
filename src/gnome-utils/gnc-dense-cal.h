@@ -53,7 +53,7 @@ enum GDC_COLORS
 
 struct _GncDenseCal
 {
-    GtkVBox widget;
+    GtkBox widget;
 
     GtkComboBox *view_options;
     GtkDrawingArea *cal_drawing_area;
@@ -84,7 +84,7 @@ struct _GncDenseCal
 
     gdc_month_coords monthPositions[12];
 
-    GdkColor weekColors[MAX_COLORS];
+    GdkRGBA weekColors[MAX_COLORS];
 
     guint label_width;
     guint label_height;

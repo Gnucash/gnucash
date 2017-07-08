@@ -71,7 +71,8 @@ ui_DATA = \
 gtkbuilderdir = $(GNC_GTKBUILDER_DIR)
 gtkbuilder_DATA = \
   assistant-ab-initial.glade \
-  dialog-ab.glade
+  dialog-ab.glade \
+  dialog-ab-pref.glade
 
 EXTRA_DIST = ${ui_DATA} ${gtkbuilder_DATA} migratable-prefs-aqbanking.xml
 

@@ -52,6 +52,7 @@
 #include "gnc-ui.h"
 #include "gnome-utils/gnc-warnings.h"
 #include "gnucash-sheet.h"
+#include "gnucash-register.h"
 #include "table-allgui.h"
 
 #include "dialog-utils.h"
@@ -190,7 +191,7 @@ gnc_split_reg_get_type( void )
             (GInstanceInitFunc)gnc_split_reg_init,
         };
 
-        gnc_split_reg_type = g_type_register_static( GTK_TYPE_VBOX,
+        gnc_split_reg_type = g_type_register_static( GTK_TYPE_BOX,
                              "GNCSplitReg",
                              &type_info, 0 );
     }
@@ -339,6 +340,8 @@ gnc_split_reg_new( GNCLedgerDisplay *ld,
 static void
 gnc_split_reg_init( GNCSplitReg *gsr )
 {
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(gsr), GTK_ORIENTATION_VERTICAL);
+
     gsr->sort_type = BY_STANDARD;
     gsr->width = -1;
     gsr->height = -1;
@@ -401,9 +404,8 @@ gsr_create_table( GNCSplitReg *gsr )
 
     /* FIXME: We'd really rather pass this down... */
     sr = gnc_ledger_display_get_split_register( gsr->ledger );
-    register_widget = gnucash_register_new( sr->table );
+    register_widget = gnucash_register_new( sr->table, state_section );
     gsr->reg = GNUCASH_REGISTER( register_widget );
-    gnc_table_init_gui( GTK_WIDGET(gsr->reg), state_section);
     g_free (state_section);
     gtk_box_pack_start (GTK_BOX (gsr), GTK_WIDGET(gsr->reg), TRUE, TRUE, 0);
     gnucash_sheet_set_window (gnucash_register_get_sheet (gsr->reg), gsr->window);
@@ -868,9 +870,9 @@ gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
     }
 
     gtk_dialog_add_button(GTK_DIALOG(dialog),
-                          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+                          _("Cancel"), GTK_RESPONSE_CANCEL);
     gnc_gtk_dialog_add_button(dialog, _("_Remove Splits"),
-                              GTK_STOCK_DELETE, GTK_RESPONSE_ACCEPT);
+                              "edit-delete", GTK_RESPONSE_ACCEPT);
     response = gnc_dialog_run(GTK_DIALOG(dialog), warning);
     gtk_widget_destroy (dialog);
     if (response != GTK_RESPONSE_ACCEPT)
@@ -909,9 +911,9 @@ gsr_default_associate_handler_file (GNCSplitReg *gsr, Transaction *trans, gboole
     dialog = gtk_file_chooser_dialog_new (_("Associate File with Transaction"),
                                      GTK_WINDOW(gsr->window),
                                      GTK_FILE_CHOOSER_ACTION_OPEN,
-                                     GTK_STOCK_REMOVE, GTK_RESPONSE_REJECT,
-                                     GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                                     GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+                                     _("Remove"), GTK_RESPONSE_REJECT,
+                                     _("Cancel"), GTK_RESPONSE_CANCEL,
+                                     _("OK"), GTK_RESPONSE_ACCEPT,
                                      NULL);
 
     gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER(dialog), FALSE);
@@ -980,9 +982,9 @@ gsr_default_associate_handler_location (GNCSplitReg *gsr, Transaction *trans, gb
     dialog = gtk_dialog_new_with_buttons (_("Associate Location with Transaction"),
                                      GTK_WINDOW(gsr->window),
                                      GTK_DIALOG_MODAL,
-                                     GTK_STOCK_REMOVE, GTK_RESPONSE_REJECT,
-                                     GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                                     GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+                                     _("Remove"), GTK_RESPONSE_REJECT,
+                                     _("Cancel"), GTK_RESPONSE_CANCEL,
+                                     _("OK"), GTK_RESPONSE_ACCEPT,
                                      NULL);
 
     content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
@@ -1002,7 +1004,7 @@ gsr_default_associate_handler_location (GNCSplitReg *gsr, Transaction *trans, gb
         label = gtk_label_new (_("Enter URL:"));
 
     // pack label and entry to content area
-    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gnc_label_set_alignment (label, 0.0, 0.5);
     gtk_container_add (GTK_CONTAINER (content_area), label);
     gtk_container_add (GTK_CONTAINER (content_area), entry);
 
@@ -1249,9 +1251,9 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
         }
 
         gtk_dialog_add_button(GTK_DIALOG(dialog),
-                              GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+                              _("Cancel"), GTK_RESPONSE_CANCEL);
         gnc_gtk_dialog_add_button(dialog, _("_Delete Split"),
-                                  GTK_STOCK_DELETE, GTK_RESPONSE_ACCEPT);
+                                  "edit-delete", GTK_RESPONSE_ACCEPT);
         response = gnc_dialog_run(GTK_DIALOG(dialog), warning);
         gtk_widget_destroy (dialog);
         if (response != GTK_RESPONSE_ACCEPT)
@@ -1289,9 +1291,9 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
             warning = GNC_PREF_WARN_REG_TRANS_DEL;
         }
         gtk_dialog_add_button(GTK_DIALOG(dialog),
-                              GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+                              _("Cancel"), GTK_RESPONSE_CANCEL);
         gnc_gtk_dialog_add_button(dialog, _("_Delete Transaction"),
-                                  GTK_STOCK_DELETE, GTK_RESPONSE_ACCEPT);
+                                  "edit-delete", GTK_RESPONSE_ACCEPT);
         response =  gnc_dialog_run(GTK_DIALOG(dialog), warning);
         gtk_widget_destroy (dialog);
         if (response != GTK_RESPONSE_ACCEPT)
@@ -1984,15 +1986,16 @@ add_summary_label (GtkWidget *summarybar, const char *label_str)
     GtkWidget *hbox;
     GtkWidget *label;
 
-    hbox = gtk_hbox_new(FALSE, 2);
+    hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
+    gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
     gtk_box_pack_start( GTK_BOX(summarybar), hbox, FALSE, FALSE, 5 );
 
     label = gtk_label_new( label_str );
-    gtk_misc_set_alignment( GTK_MISC(label), 1.0, 0.5 );
+    gnc_label_set_alignment(label, 1.0, 0.5 );
     gtk_box_pack_start( GTK_BOX(hbox), label, FALSE, FALSE, 0 );
 
     label = gtk_label_new( "" );
-    gtk_misc_set_alignment( GTK_MISC(label), 1.0, 0.5 );
+    gnc_label_set_alignment(label, 1.0, 0.5 );
     gtk_box_pack_start( GTK_BOX(hbox), label, FALSE, FALSE, 0 );
 
     return label;
@@ -2017,7 +2020,8 @@ gsr_create_summary_bar( GNCSplitReg *gsr )
         return NULL;
     }
 
-    summarybar = gtk_hbox_new (FALSE, 4);
+    summarybar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
+    gtk_box_set_homogeneous (GTK_BOX (summarybar), FALSE);
 
     if (!xaccAccountIsPriced(gnc_ledger_display_leader(gsr->ledger)))
     {

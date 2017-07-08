@@ -228,7 +228,7 @@ typedef struct LoanAssistantData_
 
     /* widgets */
     /* prm = params */
-    GtkTable      *prmTable;
+    GtkGrid       *prmTable;
     GNCAccountSel *prmAccountGAS;
     GNCAmountEdit *prmOrigPrincGAE;
     GtkSpinButton *prmIrateSpin;
@@ -242,14 +242,14 @@ typedef struct LoanAssistantData_
     GtkComboBox   *prmIrateType;
 
     /* opt = options */
-    GtkVBox        *optVBox;
+    GtkBox         *optVBox;
     GtkCheckButton *optEscrowCb;
-    GtkHBox        *optEscrowHBox;
+    GtkBox         *optEscrowHBox;
     GNCAccountSel  *optEscrowGAS;
 
     /* rep = repayment */
     GtkEntry      *repTxnName;
-    GtkTable      *repTable;
+    GtkGrid       *repTable;
     GtkEntry      *repAmtEntry;
     GNCAccountSel *repAssetsFromGAS;
     GNCAccountSel *repPrincToGAS;
@@ -264,7 +264,7 @@ typedef struct LoanAssistantData_
     GNCAccountSel    *payAcctEscToGAS;
     GNCAccountSel    *payAcctEscFromGAS;
     GNCAccountSel    *payAcctToGAS;
-    GtkTable         *payTable;
+    GtkGrid          *payTable;
     GtkCheckButton   *payUseEscrow;
     GtkCheckButton   *paySpecSrcAcct;
     GtkLabel         *payAcctFromLabel;
@@ -272,13 +272,13 @@ typedef struct LoanAssistantData_
     GtkLabel         *payEscFromLabel;
     GtkRadioButton   *payTxnFreqPartRb;
     GtkRadioButton   *payTxnFreqUniqRb;
-    GtkAlignment     *payFreqAlign;
+    GtkBox           *payFreqHBox;
     GncFrequency     *payGncFreq;
 
     /* rev = review */
     GtkComboBox       *revRangeOpt;
     GtkFrame          *revDateFrame;
-    GtkTable          *revTable;
+    GtkGrid           *revTable;
     GNCDateEdit       *revStartDate;
     GNCDateEdit       *revEndDate;
     GtkScrolledWindow *revScrollWin;
@@ -460,9 +460,12 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
     gnc_builder_add_from_file  (builder , "assistant-loan.glade", "type_liststore");
     gnc_builder_add_from_file  (builder , "assistant-loan.glade", "rate_liststore");
 
-    gnc_builder_add_from_file  (builder , "assistant-loan.glade", "Loan-Mortgage Assistant");
-    window = GTK_WIDGET(gtk_builder_get_object (builder, "Loan-Mortgage Assistant"));
+    gnc_builder_add_from_file  (builder , "assistant-loan.glade", "loan_mortgage_assistant");
+    window = GTK_WIDGET(gtk_builder_get_object (builder, "loan_mortgage_assistant"));
     ldd->window = window;
+
+    // Set the style context for this assistant so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(window), "GncAssistLoan");
 
     /* Enable buttons on complete pages. */
     gtk_assistant_set_page_complete (GTK_ASSISTANT (window),
@@ -477,35 +480,35 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
 
     /* Information Page */
     {
-        ldd->prmTable = GTK_TABLE(gtk_builder_get_object(builder, "param_table"));
+        ldd->prmTable = GTK_GRID(gtk_builder_get_object(builder, "param_table"));
         ldd->prmVarFrame = GTK_FRAME(gtk_builder_get_object(builder, "type_freq_frame"));
         ldd->prmIrateSpin = GTK_SPIN_BUTTON (gtk_builder_get_object(builder, "irate_spin"));
         ldd->prmType = GTK_COMBO_BOX (gtk_builder_get_object(builder, "type_combobox"));
-        gtk_combo_box_set_active( GTK_COMBO_BOX( ldd->prmType), 0 );
+        gtk_combo_box_set_active( GTK_COMBO_BOX( ldd->prmType), FALSE );
         ldd->prmLengthSpin = GTK_SPIN_BUTTON (gtk_builder_get_object(builder, "len_spin"));
         ldd->prmLengthType = GTK_COMBO_BOX (gtk_builder_get_object(builder, "len_opt"));
-        gtk_combo_box_set_active( GTK_COMBO_BOX( ldd->prmLengthType), 0 );
+        gtk_combo_box_set_active( GTK_COMBO_BOX( ldd->prmLengthType), FALSE );
         ldd->prmRemainSpin = GTK_SPIN_BUTTON (gtk_builder_get_object(builder, "rem_spin"));
         ldd->prmIrateType = GTK_COMBO_BOX (gtk_builder_get_object(builder, "irate_type_combobox"));
-        gtk_combo_box_set_active( GTK_COMBO_BOX( ldd->prmIrateType), 0 );
+        gtk_combo_box_set_active( GTK_COMBO_BOX( ldd->prmIrateType), FALSE );
         /* ldd->prmStartDateGDE */
     }
     /* Repayment Page */
     {
-        ldd->repTable = GTK_TABLE(gtk_builder_get_object(builder, "repay_table"));
+        ldd->repTable = GTK_GRID(gtk_builder_get_object(builder, "repay_table"));
         ldd->repTxnName = GTK_ENTRY(gtk_builder_get_object(builder, "txn_title"));
         ldd->repAmtEntry = GTK_ENTRY(gtk_builder_get_object(builder, "amount_ent"));
         ldd->repFreqFrame = GTK_FRAME(gtk_builder_get_object(builder, "freq_frame"));
     }
     /* Options Page */
     {
-        ldd->optVBox = GTK_VBOX(gtk_builder_get_object(builder, "loan_options_page"));
+        ldd->optVBox = GTK_BOX(gtk_builder_get_object(builder, "loan_options_page"));
         ldd->optEscrowCb = GTK_CHECK_BUTTON(gtk_builder_get_object(builder, "opt_escrow_cb"));
-        ldd->optEscrowHBox = GTK_HBOX(gtk_builder_get_object(builder, "opt_escrow_hbox"));
+        ldd->optEscrowHBox = GTK_BOX(gtk_builder_get_object(builder, "opt_escrow_hbox"));
     }
     /* Payment Page */
     {
-        ldd->payTable = GTK_TABLE(gtk_builder_get_object(builder, "pay_table"));
+        ldd->payTable = GTK_GRID(gtk_builder_get_object(builder, "pay_table"));
         ldd->payTxnName = GTK_ENTRY(gtk_builder_get_object(builder, "pay_txn_title"));
         ldd->payAmtEntry = GTK_ENTRY(gtk_builder_get_object(builder, "pay_amt_ent"));
         ldd->payUseEscrow = GTK_CHECK_BUTTON(gtk_builder_get_object(builder, "pay_use_escrow"));
@@ -515,11 +518,11 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
         ldd->payEscFromLabel = GTK_LABEL(gtk_builder_get_object(builder, "pay_escrow_from_label"));
         ldd->payTxnFreqPartRb = GTK_RADIO_BUTTON(gtk_builder_get_object(builder, "pay_txn_part_rb"));
         ldd->payTxnFreqUniqRb = GTK_RADIO_BUTTON(gtk_builder_get_object(builder, "pay_uniq_freq_rb"));
-        ldd->payFreqAlign = GTK_ALIGNMENT(gtk_builder_get_object(builder, "pay_freq_align"));
+        ldd->payFreqHBox = GTK_BOX(gtk_builder_get_object(builder, "pay_freq_hbox"));
     }
     /* Review Page */
     {
-        ldd->revTable = GTK_TABLE(gtk_builder_get_object(builder, "rev_date_range_table"));
+        ldd->revTable = GTK_GRID(gtk_builder_get_object(builder, "rev_date_range_table"));
         ldd->revRangeOpt = GTK_COMBO_BOX(gtk_builder_get_object(builder, "rev_range_opt"));
         ldd->revDateFrame = GTK_FRAME(gtk_builder_get_object(builder, "rev_date_frame"));
         ldd->revScrollWin = GTK_SCROLLED_WINDOW(gtk_builder_get_object(builder, "rev_scrollwin"));
@@ -571,44 +574,39 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
         /* All of the GncAccountSel[ectors]... */
         {
             int i;
-            GtkAlignment *a;
             /* "gas" == GncAccountSel */
             struct gas_in_tables_data
             {
                 GNCAccountSel **loc;
-                GtkTable *table;
+                GtkGrid *table;
                 gboolean newAcctAbility;
-                int left, right, top, bottom;
+                int left, top, width, height;
                 GList *allowableAccounts;
             } gas_data[] =
             {
-                /* These ints are the GtkTable boundaries */
-                { &ldd->prmAccountGAS,     ldd->prmTable, TRUE,  1, 4, 0, 1, liabilityAcct },
-                { &ldd->repAssetsFromGAS,  ldd->repTable, TRUE,  1, 4, 2, 3, paymentFromAccts },
-                { &ldd->repPrincToGAS,     ldd->repTable, TRUE,  1, 2, 3, 4, paymentToAccts  },
-                { &ldd->repIntToGAS,       ldd->repTable, TRUE,  3, 4, 3, 4, paymentToAccts },
-                { &ldd->payAcctFromGAS,    ldd->payTable, TRUE,  1, 2, 4, 5, paymentFromAccts },
-                { &ldd->payAcctEscToGAS,   ldd->payTable, FALSE, 3, 4, 4, 5, paymentToAccts },
-                { &ldd->payAcctEscFromGAS, ldd->payTable, FALSE, 1, 2, 5, 6, paymentFromAccts },
-                { &ldd->payAcctToGAS,      ldd->payTable, TRUE,  3, 4, 5, 6, paymentToAccts },
+                /* These ints are the GtkGrid boundries */
+                { &ldd->prmAccountGAS,     ldd->prmTable, TRUE,  1, 0, 1, 1, liabilityAcct },
+                { &ldd->repAssetsFromGAS,  ldd->repTable, TRUE,  1, 2, 1, 1, paymentFromAccts },
+                { &ldd->repPrincToGAS,     ldd->repTable, TRUE,  1, 3, 1, 1, paymentToAccts  },
+                { &ldd->repIntToGAS,       ldd->repTable, TRUE,  3, 3, 1, 1, paymentToAccts },
+                { &ldd->payAcctFromGAS,    ldd->payTable, TRUE,  1, 4, 1, 1, paymentFromAccts },
+                { &ldd->payAcctEscToGAS,   ldd->payTable, FALSE, 3, 4, 1, 1, paymentToAccts },
+                { &ldd->payAcctEscFromGAS, ldd->payTable, FALSE, 1, 5, 1, 1, paymentFromAccts },
+                { &ldd->payAcctToGAS,      ldd->payTable, TRUE,  3, 5, 1, 1, paymentToAccts },
                 { NULL }
             };
 
-            /* left-aligned, 25%-width */
-            a = GTK_ALIGNMENT(gtk_alignment_new( 0.0, 0.5, 0.25, 1.0 ));
             ldd->prmOrigPrincGAE = GNC_AMOUNT_EDIT(gnc_amount_edit_new());
-            gtk_container_add( GTK_CONTAINER(a), GTK_WIDGET(ldd->prmOrigPrincGAE) );
-            gtk_table_attach( ldd->prmTable, GTK_WIDGET(a),
-                              1, 4, 1, 2,
-                              GTK_EXPAND | GTK_FILL,
-                              GTK_EXPAND | GTK_FILL, 2, 2 );
+            gtk_grid_attach (GTK_GRID(ldd->prmTable), GTK_WIDGET(ldd->prmOrigPrincGAE), 1, 1, 1, 1);
+
+            gtk_widget_set_halign (GTK_WIDGET(ldd->prmOrigPrincGAE), GTK_ALIGN_FILL);
+            gtk_widget_set_hexpand (GTK_WIDGET(ldd->prmOrigPrincGAE), FALSE);
+            g_object_set (GTK_WIDGET(ldd->prmOrigPrincGAE), "margin", 2, NULL);
 
             for ( i = 0; gas_data[i].loc != NULL; i++ )
             {
-                GNCAccountSel *gas;
+                GNCAccountSel *gas = GNC_ACCOUNT_SEL(gnc_account_sel_new());
 
-                a = GTK_ALIGNMENT(gtk_alignment_new( 0.0, 0.5, 0.25, 1.0 ));
-                gas = GNC_ACCOUNT_SEL(gnc_account_sel_new());
                 gnc_account_sel_set_new_account_ability(
                     gas, gas_data[i].newAcctAbility );
                 if ( gas_data[i].allowableAccounts != NULL )
@@ -616,16 +614,17 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                     gnc_account_sel_set_acct_filters(
                         gas, gas_data[i].allowableAccounts, NULL );
                 }
-                gtk_container_add( GTK_CONTAINER(a),
-                                   GTK_WIDGET(gas) );
-                gtk_table_attach( gas_data[i].table,
-                                  GTK_WIDGET(a),
+
+                gtk_grid_attach (GTK_GRID(gas_data[i].table),
+                                  GTK_WIDGET(gas),
                                   gas_data[i].left,
-                                  gas_data[i].right,
                                   gas_data[i].top,
-                                  gas_data[i].bottom,
-                                  GTK_EXPAND | GTK_FILL,
-                                  GTK_EXPAND | GTK_FILL, 2, 2 );
+                                  gas_data[i].width,
+                                  gas_data[i].height);
+
+                gtk_widget_set_halign (GTK_WIDGET(gas), GTK_ALIGN_FILL);
+                gtk_widget_set_hexpand (GTK_WIDGET(gas), FALSE);
+                g_object_set (GTK_WIDGET(gas), "margin", 2, NULL);
                 *(gas_data[i].loc) = gas;
             }
         }
@@ -640,14 +639,14 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
             struct gde_in_tables_data
             {
                 GNCDateEdit **loc;
-                GtkTable *table;
-                int left, right, top, bottom;
+                GtkGrid    *table;
+                int left, top, width, height;
             } gde_data[] =
             {
-                /* These ints are the GtkTable boundaries */
-                { &ldd->prmStartDateGDE, ldd->prmTable, 1, 2, 4, 5 },
-                { &ldd->revStartDate,    ldd->revTable, 1, 2, 0, 1 },
-                { &ldd->revEndDate,      ldd->revTable, 1, 2, 1, 2 },
+                /* These ints are the GtkGrid boundries */
+                { &ldd->prmStartDateGDE, ldd->prmTable, 1, 4, 1, 1 },
+                { &ldd->revStartDate,    ldd->revTable, 1, 0, 1, 1 },
+                { &ldd->revEndDate,      ldd->revTable, 1, 1, 1, 1 },
                 { NULL }
             };
 
@@ -657,14 +656,17 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                     GNC_DATE_EDIT(
                         gnc_date_edit_new( gnc_time (NULL),
                                            FALSE, FALSE ) );
-                gtk_table_attach( gde_data[i].table,
+
+                gtk_grid_attach (GTK_GRID(gde_data[i].table),
                                   GTK_WIDGET( *gde_data[i].loc ),
                                   gde_data[i].left,
-                                  gde_data[i].right,
                                   gde_data[i].top,
-                                  gde_data[i].bottom,
-                                  (GTK_EXPAND | GTK_FILL),
-                                  GTK_FILL, 0, 0 );
+                                  gde_data[i].width,
+                                  gde_data[i].height);
+
+                gtk_widget_set_halign (GTK_WIDGET( *gde_data[i].loc ), GTK_ALIGN_START);
+                gtk_widget_set_hexpand (GTK_WIDGET( *gde_data[i].loc ), FALSE);
+                g_object_set (GTK_WIDGET( *gde_data[i].loc ), "margin", 0, NULL);
             }
 
         }
@@ -728,8 +730,7 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
              */
 
             RepayOptUIData *rouid;
-            GtkVBox *vb;
-            GtkAlignment *optAlign, *subOptAlign;
+            GtkWidget  *vb;
             GString *str;
 
             str = g_string_sized_new( 32 );
@@ -737,7 +738,14 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
             for ( i = 0; i < ldd->ld.repayOptCount; i++ )
             {
                 rouid = ldd->repayOptsUI[i];
-                vb = GTK_VBOX(gtk_vbox_new( FALSE, 2 ));
+                vb = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
+                gtk_box_set_homogeneous (GTK_BOX (vb), FALSE);
+
+#if GTK_CHECK_VERSION(3, 12, 0)
+                gtk_widget_set_margin_start (GTK_WIDGET(vb), 12);
+#else
+                gtk_widget_set_margin_left (GTK_WIDGET(vb), 12);
+#endif
 
                 /* Add payment checkbox. */
 
@@ -759,15 +767,14 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                 gtk_widget_set_sensitive(
                     GTK_WIDGET(rouid->escrowCb),
                     FALSE );
-                subOptAlign =
-                    GTK_ALIGNMENT(
-                        gtk_alignment_new(
-                            0.5, 0.5, 0.75, 1.0 ));
-                gtk_container_add( GTK_CONTAINER(subOptAlign),
-                                   GTK_WIDGET(rouid->escrowCb) );
-                gtk_box_pack_start( GTK_BOX(vb), GTK_WIDGET(subOptAlign),
-                                    FALSE, FALSE, 2 );
 
+                gtk_box_pack_start( GTK_BOX(vb), GTK_WIDGET(rouid->escrowCb), FALSE, FALSE, 2 );
+
+#if GTK_CHECK_VERSION(3, 12, 0)
+                gtk_widget_set_margin_start (GTK_WIDGET(rouid->escrowCb), 12);
+#else
+                gtk_widget_set_margin_left (GTK_WIDGET(rouid->escrowCb), 12);
+#endif
                 g_signal_connect( rouid->optCb, "toggled",
                                   G_CALLBACK(loan_opt_toggled_cb),
                                   rouid );
@@ -778,12 +785,8 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                                   G_CALLBACK(loan_opt_escrow_toggled_cb),
                                   rouid );
 
-                optAlign = GTK_ALIGNMENT(gtk_alignment_new( 0.5, 0.5, 0.75, 1.0 ));
-                gtk_container_add( GTK_CONTAINER(optAlign),
-                                   GTK_WIDGET(vb) );
-                gtk_box_pack_start( GTK_BOX(ldd->optVBox), GTK_WIDGET(optAlign),
-                                    FALSE, FALSE, 2 );
-                gtk_widget_show_all( GTK_WIDGET(optAlign) );
+                gtk_box_pack_start( GTK_BOX(ldd->optVBox), GTK_WIDGET(vb), FALSE, FALSE, 2 );
+                gtk_widget_show_all( GTK_WIDGET(ldd->optVBox) );
             }
             g_string_free( str, TRUE );
         }
@@ -796,16 +799,16 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                           G_CALLBACK(loan_pay_freq_toggle_cb), ldd );
 
         {
-            GtkHBox *hbox;
-            hbox = GTK_HBOX(gtk_builder_get_object(builder, "type_freq_hbox"));
+            GtkBox *hbox;
+            hbox = GTK_BOX(gtk_builder_get_object(builder, "type_freq_hbox"));
             ldd->prmVarGncFreq = GNC_FREQUENCY(gnc_frequency_new( NULL, NULL ));
             gtk_box_pack_start( GTK_BOX(hbox) , GTK_WIDGET(ldd->prmVarGncFreq), TRUE, FALSE, 0 );
             g_signal_connect (ldd->prmVarGncFreq, "changed",
                               G_CALLBACK (loan_info_page_valid_cb), ldd);
         }
         {
-            GtkHBox *hbox;
-            hbox = GTK_HBOX(gtk_builder_get_object(builder, "freq_frame_hbox"));
+            GtkBox *hbox;
+            hbox = GTK_BOX(gtk_builder_get_object(builder, "freq_frame_hbox"));
             ldd->repGncFreq = GNC_FREQUENCY(gnc_frequency_new( NULL, NULL ));
             gtk_box_pack_start( GTK_BOX(hbox) , GTK_WIDGET(ldd->repGncFreq), TRUE, FALSE, 0 );
             g_signal_connect (ldd->repGncFreq, "changed",
@@ -813,7 +816,8 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
         }
 
         ldd->payGncFreq = GNC_FREQUENCY(gnc_frequency_new( NULL, NULL ));
-        gtk_container_add( GTK_CONTAINER(ldd->payFreqAlign), GTK_WIDGET(ldd->payGncFreq) );
+        gtk_container_add( GTK_CONTAINER(ldd->payFreqHBox), GTK_WIDGET(ldd->payGncFreq) );
+
         g_signal_connect (ldd->payGncFreq, "changed",
                           G_CALLBACK (loan_pay_page_valid_cb), ldd);
 
@@ -1489,15 +1493,15 @@ loan_pay_prep( GtkAssistant *assistant, gpointer user_data )
         gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(ldd->payTxnFreqUniqRb), rod->FreqUniq );
         g_signal_handlers_unblock_by_func(ldd->payTxnFreqUniqRb, loan_pay_freq_toggle_cb, ldd );
 
-        gtk_widget_set_sensitive( GTK_WIDGET(ldd->payFreqAlign), rod->FreqUniq );
+        gtk_widget_set_sensitive( GTK_WIDGET(ldd->payFreqHBox), rod->FreqUniq );
 
         if ( rod->FreqUniq )
         {
             g_signal_handlers_disconnect_by_func( ldd->payGncFreq, loan_pay_page_valid_cb, ldd );
-            gtk_container_remove( GTK_CONTAINER(ldd->payFreqAlign), GTK_WIDGET(ldd->payGncFreq) );
+            gtk_container_remove( GTK_CONTAINER(ldd->payFreqHBox), GTK_WIDGET(ldd->payGncFreq) );
             ldd->payGncFreq = NULL;
             ldd->payGncFreq = GNC_FREQUENCY(gnc_frequency_new_from_recurrence( rod->schedule, rod->startDate ));
-            gtk_container_add( GTK_CONTAINER(ldd->payFreqAlign), GTK_WIDGET(ldd->payGncFreq) );
+            gtk_container_add( GTK_CONTAINER(ldd->payFreqHBox), GTK_WIDGET(ldd->payGncFreq) );
             g_signal_connect (ldd->payGncFreq, "changed",
                               G_CALLBACK (loan_pay_page_valid_cb), ldd);
         }
@@ -1598,7 +1602,7 @@ loan_pay_freq_toggle_cb( GtkToggleButton *tb, gpointer user_data )
     rod = ldd->ld.repayOpts[ldd->currentIdx];
 
     rod->FreqUniq = gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(ldd->payTxnFreqUniqRb) );
-    gtk_widget_set_sensitive( GTK_WIDGET(ldd->payFreqAlign), rod->FreqUniq );
+    gtk_widget_set_sensitive( GTK_WIDGET(ldd->payFreqHBox), rod->FreqUniq );
 
     if ( rod->FreqUniq )
     {
@@ -1820,6 +1824,9 @@ loan_rev_prep( GtkAssistant *assistant, gpointer user_data )
     ldd->revView = GTK_TREE_VIEW(
                        gtk_tree_view_new_with_model( GTK_TREE_MODEL(store) ));
     g_object_unref(store);
+
+    // Set grid lines option to preference
+    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(ldd->revView), gnc_tree_view_get_grid_lines_pref ());
 
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Date"), renderer,

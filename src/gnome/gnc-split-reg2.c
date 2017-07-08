@@ -120,7 +120,7 @@ gnc_split_reg2_get_type (void)
             (GInstanceInitFunc)gnc_split_reg2_init,
         };
 
-        gnc_split_reg2_type = g_type_register_static (GTK_TYPE_VBOX,
+        gnc_split_reg2_type = g_type_register_static (GTK_TYPE_BOX,
                              "GNCSplitReg2",
                              &type_info, 0 );
     }
@@ -186,6 +186,8 @@ gnc_split_reg2_new (GNCLedgerDisplay2 *ld,
 static void
 gnc_split_reg2_init (GNCSplitReg2 *gsr)
 {
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(gsr), GTK_ORIENTATION_VERTICAL);
+
     gsr->numRows = 10;
     gsr->read_only = FALSE;
 
@@ -277,7 +279,8 @@ gsr2_create_table (GNCSplitReg2 *gsr)
                  "show-column-menu", FALSE, NULL);
 
     // Create a hbox for treeview and scrollbar.
-    hbox = gtk_hbox_new (FALSE, 0);
+    hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
     gtk_widget_show (hbox);
 
     scrolled_window = gtk_scrolled_window_new (NULL, NULL);
@@ -293,7 +296,7 @@ gsr2_create_table (GNCSplitReg2 *gsr)
 
     gsr->scroll_adj = GTK_ADJUSTMENT (gtk_adjustment_new (model->position_of_trans_in_full_tlist, 0.0, num_of_trans + 10, 1.0, 10.0, 10.0));
 
-    gsr->scroll_bar = gtk_vscrollbar_new (GTK_ADJUSTMENT (gsr->scroll_adj));
+    gsr->scroll_bar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, GTK_ADJUSTMENT (gsr->scroll_adj));
     gtk_widget_show (gsr->scroll_bar);
 
     gtk_box_pack_start (GTK_BOX (hbox), gsr->scroll_bar, FALSE, FALSE, 2);
@@ -767,15 +770,16 @@ add_summary_label (GtkWidget *summarybar, const char *label_str)
     GtkWidget *hbox;
     GtkWidget *label;
 
-    hbox = gtk_hbox_new (FALSE, 2);
+    hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
+    gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
     gtk_box_pack_start (GTK_BOX (summarybar), hbox, FALSE, FALSE, 5);
 
     label = gtk_label_new (label_str);
-    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gnc_label_set_alignment (label, 1.0, 0.5);
     gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
     label = gtk_label_new ("");
-    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gnc_label_set_alignment (label, 1.0, 0.5);
     gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
     return label;
@@ -800,7 +804,8 @@ gnc_split_reg2_create_summary_bar (GNCSplitReg2 *gsr)
         return NULL;
     }
 
-    summarybar = gtk_hbox_new (FALSE, 4);
+    summarybar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
+    gtk_box_set_homogeneous (GTK_BOX (summarybar), FALSE);
 
     if (!xaccAccountIsPriced(gnc_ledger_display2_leader(gsr->ledger)))
     {

@@ -21,10 +21,10 @@
 #ifndef GNUCASH_SHEETP_H
 #define GNUCASH_SHEETP_H
 
-
+#include <gtk/gtk.h>
 #include "gnucash-sheet.h"
 #include "gnucash-item-edit.h"
-#include <libgnomecanvas/libgnomecanvas.h>
+#include "gnucash-cursor.h"
 
 /** @ingroup Register
  * @addtogroup Gnome
@@ -36,7 +36,7 @@
 
 struct _GnucashSheet
 {
-    GnomeCanvas canvas;
+    GtkLayout layout;
 
     GtkWidget *window;
 
@@ -50,9 +50,8 @@ struct _GnucashSheet
     gint num_virt_rows;
     gint num_virt_cols;
 
-    GnomeCanvasItem *header_item;
-    GnomeCanvasItem *cursor;
-    GnomeCanvasItem *grid;
+    GtkWidget *header_item;
+    GnucashCursor *cursor;
 
     GHashTable *cursor_styles;
 
@@ -61,7 +60,7 @@ struct _GnucashSheet
 
     GTable *blocks;
 
-    GnomeCanvasItem *item_editor;
+    GtkWidget *item_editor;
     GtkWidget *entry;
 
     gboolean   use_theme_colors;
@@ -74,11 +73,6 @@ struct _GnucashSheet
 
     gboolean input_cancelled;
 
-    gint top_block;  /* maybe not fully visible */
-    gint bottom_block;
-    gint left_block;
-    gint right_block;
-
     gint num_visible_blocks;
     gint num_visible_phys_rows;
 
@@ -87,8 +81,6 @@ struct _GnucashSheet
 
     gint window_height;
     gint window_width;
-
-    gint cell_borders;
 
     gint editing;
 
@@ -128,36 +120,24 @@ struct _GnucashSheet
 
 struct _GnucashSheetClass
 {
-    GnomeCanvasClass parent_class;
-};
-
-
-struct _GnucashRegister
-{
-    GtkTable table;
-
-    GtkWidget *vscrollbar;
-    GtkWidget *hscrollbar;
-    GtkWidget *sheet;
-    GtkWidget *header_canvas;
-    gboolean  hscrollbar_visible;
-};
-
-
-struct _GnucashRegisterClass
-{
-    GtkTableClass parent_class;
-
-    void (*activate_cursor) (GnucashRegister *reg);
-    void (*redraw_all)      (GnucashRegister *reg);
-    void (*redraw_help)     (GnucashRegister *reg);
+    GtkLayoutClass parent_class;
 };
 
 
 GncItemEdit *gnucash_sheet_get_item_edit (GnucashSheet *sheet);
+void gnucash_sheet_set_popup (GnucashSheet *sheet, GtkWidget *popup, gpointer data);
+void gnucash_sheet_goto_virt_loc (GnucashSheet *sheet, VirtualLocation virt_loc);
+void gnucash_sheet_refresh_from_prefs (GnucashSheet *sheet);
 //Table       *gnucash_sheet_get_table (GnucashSheet *sheet);
 //gint         gnucash_sheet_get_num_virt_rows (GnucashSheet *sheet);
 //gint         gnucash_sheet_get_num_virt_cols (GnucashSheet *sheet);
+
+gboolean   gnucash_sheet_find_loc_by_pixel (GnucashSheet *sheet, gint x, gint y,
+                                           VirtualLocation *vcell_loc);
+gboolean gnucash_sheet_draw_internal (GnucashSheet *sheet, cairo_t *cr,
+                                      GtkAllocation *alloc);
+void gnucash_sheet_draw_cursor (GnucashCursor *cursor, cairo_t *cr);
+
 
 /** @} */
 #endif

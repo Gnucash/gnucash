@@ -51,7 +51,7 @@ ADD_LIBRARY (gncmod-generic-import
   ${generic_import_noinst_HEADERS}
 )
 
-TARGET_LINK_LIBRARIES(gncmod-generic-import gncmod-gnome-utils gncmod-engine ${GTK2_LDFLAGS} ${GLIB2_LDFLAGS})
+TARGET_LINK_LIBRARIES(gncmod-generic-import gncmod-gnome-utils gncmod-engine ${GTK3_LDFLAGS} ${GLIB2_LDFLAGS})
 
 TARGET_COMPILE_DEFINITIONS (gncmod-generic-import PRIVATE -DG_LOG_DOMAIN=\"gnc.import\")
 

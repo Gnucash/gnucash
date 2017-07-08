@@ -30,7 +30,7 @@
 #define GNC_SPLIT_REG_H
 
 #include "gnc-ledger-display.h"
-#include "gnucash-sheet.h"
+#include "gnucash-register.h"
 
 #define GNC_SPLIT_REG(obj)         G_TYPE_CHECK_INSTANCE_CAST( obj, gnc_split_reg_get_type(), GNCSplitReg )
 #define GNC_SPLIT_REG_CLASS(klass) G_TYPE_CHECK_CLASS_CAST( klass, gnc_split_reg_get_type(), GNCSplitRegClass )
@@ -42,7 +42,7 @@ typedef struct _GNCSplitRegClass GNCSplitRegClass;
 struct _GNCSplitReg
 {
     /* The "parent" widget. */
-    GtkVBox vbox;
+    GtkBox vbox;
 
     /* The containing window. */
     GtkWidget *window;
@@ -77,7 +77,7 @@ struct _GNCSplitReg
 
     /** The current ledger display. **/
     GNCLedgerDisplay *ledger;
-    /** The actual sheet widget. **/
+    /** The actual gnucash register widget. **/
     GnucashRegister *reg;
 
     gint numRows;
@@ -89,7 +89,7 @@ struct _GNCSplitReg
 
 struct _GNCSplitRegClass
 {
-    GtkVBoxClass parent_class;
+    GtkBoxClass parent_class;
 
     /* Signal defaults */
     void (*enter_ent_cb)    ( GNCSplitReg *w, gpointer user_data );

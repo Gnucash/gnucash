@@ -49,6 +49,7 @@
 #include <gnc-glib-utils.h>
 #include "gfec.h"
 #include "dialog-custom-report.h"
+#include "dialog-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
 #include "gnc-gnome-utils.h"
@@ -271,7 +272,7 @@ gnc_plugin_page_report_class_init (GncPluginPageReportClass *klass)
     object_class->set_property = gnc_plugin_page_report_set_property;
     object_class->get_property = gnc_plugin_page_report_get_property;
 
-    gnc_plugin_page_class->tab_icon        = GNC_STOCK_ACCOUNT_REPORT;
+    gnc_plugin_page_class->tab_icon        = GNC_ICON_ACCOUNT_REPORT;
     gnc_plugin_page_class->plugin_name     = GNC_PLUGIN_PAGE_REPORT_NAME;
 
     gnc_plugin_page_class->create_widget   = gnc_plugin_page_report_create_widget;
@@ -423,6 +424,9 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
 
     priv->container = GTK_CONTAINER(gtk_frame_new(NULL));
     gtk_frame_set_shadow_type(GTK_FRAME(priv->container), GTK_SHADOW_NONE);
+
+    // Set the style context for this page so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(priv->container), "GncReportPage");
 
     gtk_container_add(GTK_CONTAINER(priv->container),
                       gnc_html_get_widget(priv->html));
@@ -1124,71 +1128,71 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
     GtkActionEntry report_actions[] =
     {
         {
-            "FilePrintAction", GTK_STOCK_PRINT, N_("_Print Report..."), "<primary>p",
+            "FilePrintAction", "document-print", N_("_Print Report..."), "<primary>p",
             N_("Print the current report"),
             G_CALLBACK(gnc_plugin_page_report_print_cb)
         },
         {
-            "FilePrintPDFAction", GNC_STOCK_PDF_EXPORT, N_("Export as P_DF..."), NULL,
+            "FilePrintPDFAction", GNC_ICON_PDF_EXPORT, N_("Export as P_DF..."), NULL,
             N_("Export the current report as a PDF document"),
             G_CALLBACK(gnc_plugin_page_report_exportpdf_cb)
         },
         {
-            "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), NULL,
+            "EditCutAction", "edit-cut", N_("Cu_t"), NULL,
             N_("Cut the current selection and copy it to clipboard"),
             NULL
         },
         {
-            "EditCopyAction", GTK_STOCK_COPY, N_("_Copy"), NULL,
+            "EditCopyAction", "edit-copy", N_("_Copy"), NULL,
             N_("Copy the current selection to clipboard"),
             G_CALLBACK(gnc_plugin_page_report_copy_cb)
         },
         {
-            "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), NULL,
+            "EditPasteAction", "edit-paste", N_("_Paste"), NULL,
             N_("Paste the clipboard content at the cursor position"),
             NULL
         },
         {
-            "ViewRefreshAction", GTK_STOCK_REFRESH, N_("_Refresh"), "<primary>r",
+            "ViewRefreshAction", "view-refresh", N_("_Refresh"), "<primary>r",
             N_("Refresh this window"),
             G_CALLBACK (gnc_plugin_page_report_reload_cb)
         },
         {
-            "ReportSaveAction", GTK_STOCK_SAVE, N_("Save _Report Configuration"), "<primary><alt>s",
+            "ReportSaveAction", "document-save", N_("Save _Report Configuration"), "<primary><alt>s",
             report_save_str, G_CALLBACK(gnc_plugin_page_report_save_cb)
         },
         {
-            "ReportSaveAsAction", GTK_STOCK_SAVE_AS, N_("Save Report Configuration As..."), "<primary><alt><shift>s",
+            "ReportSaveAsAction", "document-save-as", N_("Save Report Configuration As..."), "<primary><alt><shift>s",
             report_saveas_str, G_CALLBACK(gnc_plugin_page_report_save_as_cb)
         },
         {
-            "ReportExportAction", GTK_STOCK_CONVERT, N_("Export _Report"), NULL,
+            "ReportExportAction", "go-next", N_("Export _Report"), NULL,
             N_("Export HTML-formatted report to file"),
             G_CALLBACK(gnc_plugin_page_report_export_cb)
         },
         {
-            "ReportOptionsAction", GTK_STOCK_PROPERTIES, N_("_Report Options"), NULL,
+            "ReportOptionsAction", "document-properties", N_("_Report Options"), NULL,
             N_("Edit report options"),
             G_CALLBACK(gnc_plugin_page_report_options_cb)
         },
 
         {
-            "ReportBackAction", GTK_STOCK_GO_BACK, N_("Back"), NULL,
+            "ReportBackAction", "go-previous", N_("Back"), NULL,
             N_("Move back one step in the history"),
             G_CALLBACK(gnc_plugin_page_report_back_cb)
         },
         {
-            "ReportForwAction", GTK_STOCK_GO_FORWARD, N_("Forward"), NULL,
+            "ReportForwAction", "go-next", N_("Forward"), NULL,
             N_("Move forward one step in the history"),
             G_CALLBACK(gnc_plugin_page_report_forw_cb)
         },
         {
-            "ReportReloadAction", GTK_STOCK_REFRESH, N_("Reload"), NULL,
+            "ReportReloadAction", "view-refresh", N_("Reload"), NULL,
             N_("Reload the current page"),
             G_CALLBACK(gnc_plugin_page_report_reload_cb)
         },
         {
-            "ReportStopAction", GTK_STOCK_STOP, N_("Stop"), NULL,
+            "ReportStopAction", "process-stop", N_("Stop"), NULL,
             N_("Cancel outstanding HTML requests"),
             G_CALLBACK(gnc_plugin_page_report_stop_cb)
         },
@@ -1834,7 +1838,7 @@ gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report 
 
     //g_warning("Setting job name=%s", job_name);
 
-    gnc_html_print(priv->html, job_name, FALSE);
+    gnc_html_print (priv->html);
 
     g_free (job_name);
 }
@@ -1873,7 +1877,7 @@ gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *rep
 
     //g_warning("Setting job name=%s", job_name);
 
-    gnc_html_print(priv->html, job_name, TRUE);
+    gnc_html_print (priv->html);
 
     if (owner)
     {

@@ -31,7 +31,7 @@ SET_SOURCE_FILES_PROPERTIES (${ledger_core_SOURCES} PROPERTIES OBJECT_DEPENDS ${
 ADD_LIBRARY (gncmod-ledger-core ${ledger_core_SOURCES} ${ledger_core_HEADERS})
 
 TARGET_LINK_LIBRARIES(gncmod-ledger-core gncmod-register-gnome gncmod-register-core gncmod-gnome-utils
-        gncmod-engine ${GTK2_LDFLAGS})
+        gncmod-engine ${GTK3_LDFLAGS})
 
 TARGET_COMPILE_DEFINITIONS (gncmod-ledger-core PRIVATE -DG_LOG_DOMAIN=\"gnc.register.ledger\")
 

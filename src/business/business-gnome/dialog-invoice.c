@@ -42,6 +42,7 @@
 #include "gnc-date-edit.h"
 #include "gnc-amount-edit.h"
 #include "gnucash-sheet.h"
+#include "gnucash-register.h"
 #include "window-report.h"
 #include "dialog-search.h"
 #include "search-param.h"
@@ -247,9 +248,12 @@ iw_ask_unpost (InvoiceWindow *iw)
     gint response;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-invoice.glade", "Unpost Message Dialog");
-    dialog = GTK_WIDGET (gtk_builder_get_object (builder, "Unpost Message Dialog"));
+    gnc_builder_add_from_file (builder, "dialog-invoice.glade", "unpost_message_dialog");
+    dialog = GTK_WIDGET (gtk_builder_get_object (builder, "unpost_message_dialog"));
     toggle = GTK_TOGGLE_BUTTON(gtk_builder_get_object (builder, "yes_tt_reset"));
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncInvoiceDialog");
 
     gtk_window_set_transient_for (GTK_WINDOW(dialog),
                                   GTK_WINDOW(iw_get_window(iw)));
@@ -1203,15 +1207,16 @@ add_summary_label (GtkWidget *summarybar, const char *label_str)
     GtkWidget *hbox;
     GtkWidget *label;
 
-    hbox = gtk_hbox_new(FALSE, 2);
+    hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
+    gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
     gtk_box_pack_start (GTK_BOX(summarybar), hbox, FALSE, FALSE, 5);
 
     label = gtk_label_new (label_str);
-    gtk_misc_set_alignment (GTK_MISC(label), 1.0, 0.5);
+    gnc_label_set_alignment (label, 1.0, 0.5);
     gtk_box_pack_start (GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
     label = gtk_label_new ("");
-    gtk_misc_set_alignment (GTK_MISC(label), 1.0, 0.5);
+    gnc_label_set_alignment (label, 1.0, 0.5);
     gtk_box_pack_start (GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
     return label;
@@ -1228,7 +1233,8 @@ gnc_invoice_window_create_summary_bar (InvoiceWindow *iw)
     iw->total_subtotal_label  = NULL;
     iw->total_tax_label       = NULL;
 
-    summarybar = gtk_hbox_new (FALSE, 4);
+    summarybar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
+    gtk_box_set_homogeneous (GTK_BOX (summarybar), FALSE);
 
     iw->total_label           = add_summary_label (summarybar, _("Total:"));
 
@@ -2259,6 +2265,9 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     gnc_builder_add_from_file (builder, "dialog-invoice.glade", "invoice_entry_vbox");
     dialog = GTK_WIDGET (gtk_builder_get_object (builder, "invoice_entry_vbox"));
 
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncInvoiceDialog");
+
     /* Autoconnect all the signals */
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, iw);
 
@@ -2417,9 +2426,8 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
 
         /* Watch the order of operations, here... */
         regWidget = gnucash_register_new (gnc_entry_ledger_get_table
-                                          (entry_ledger));
+                                          (entry_ledger), NULL);
         gtk_widget_show(regWidget);
-        gnc_table_init_gui( regWidget, NULL);
 
         frame = GTK_WIDGET (gtk_builder_get_object (builder, "ledger_frame"));
         gtk_container_add (GTK_CONTAINER (frame), regWidget);
@@ -2532,8 +2540,11 @@ gnc_invoice_window_new_invoice (InvoiceDialogType dialog_type, QofBook *bookp,
     /* Find the glade page layout */
     iw->builder = builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-invoice.glade", "terms_store");
-    gnc_builder_add_from_file (builder, "dialog-invoice.glade", "New Invoice Dialog");
-    iw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "New Invoice Dialog"));
+    gnc_builder_add_from_file (builder, "dialog-invoice.glade", "new_invoice_dialog");
+    iw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "new_invoice_dialog"));
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(iw->dialog), "GncInvoiceDialog");
 
     g_object_set_data (G_OBJECT (iw->dialog), "dialog_info", iw);
 

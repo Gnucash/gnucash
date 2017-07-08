@@ -438,8 +438,11 @@ gnc_vendor_new_window (QofBook *bookp, GncVendor *vendor)
     gnc_builder_add_from_file (builder, "dialog-vendor.glade", "terms_store");
     gnc_builder_add_from_file (builder, "dialog-vendor.glade", "tax_included_store");
     gnc_builder_add_from_file (builder, "dialog-vendor.glade", "taxtable_store");
-    gnc_builder_add_from_file (builder, "dialog-vendor.glade", "Vendor Dialog");
-    vw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "Vendor Dialog"));
+    gnc_builder_add_from_file (builder, "dialog-vendor.glade", "vendor_dialog");
+    vw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "vendor_dialog"));
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(vw->dialog), "GncVendorDialog");
 
     /* Get entry points */
     vw->id_entry = GTK_WIDGET (gtk_builder_get_object (builder, "id_entry"));

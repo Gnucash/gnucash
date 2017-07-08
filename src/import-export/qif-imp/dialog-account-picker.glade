@@ -1,28 +1,26 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.0 -->
 <interface>
-  <requires lib="gtk+" version="2.16"/>
-  <!-- interface-naming-policy project-wide -->
-  <object class="GtkWindow" id="Preferences">
+  <requires lib="gtk+" version="3.10"/>
+  <object class="GtkWindow" id="preferences_window">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Preferences</property>
     <child>
-      <object class="GtkTable" id="prefs_table">
+      <object class="GtkGrid" id="prefs_table">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="n_rows">7</property>
-        <property name="n_columns">4</property>
         <child>
           <object class="GtkLabel" id="label847718">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">0</property>
+            <property name="halign">start</property>
             <property name="label" translatable="yes">&lt;b&gt;QIF Import&lt;/b&gt;</property>
             <property name="use_markup">True</property>
           </object>
           <packing>
-            <property name="x_options">GTK_FILL</property>
-            <property name="y_options"></property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
           </packing>
         </child>
         <child>
@@ -34,17 +32,15 @@
             <property name="has_tooltip">True</property>
             <property name="tooltip_markup">Show some documentation-only pages in QIF Import assistant.</property>
             <property name="tooltip_text" translatable="yes">Show some documentation-only pages in QIF Import assistant.</property>
-            <property name="use_action_appearance">False</property>
+            <property name="halign">start</property>
+            <property name="margin_left">12</property>
+            <property name="resize_mode">immediate</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
           </object>
           <packing>
-            <property name="right_attach">4</property>
+            <property name="left_attach">0</property>
             <property name="top_attach">1</property>
-            <property name="bottom_attach">2</property>
-            <property name="x_options">GTK_FILL</property>
-            <property name="y_options"></property>
-            <property name="x_padding">12</property>
           </packing>
         </child>
         <child>
@@ -56,17 +52,15 @@
             <property name="has_tooltip">True</property>
             <property name="tooltip_markup">When the status is not specified in a QIF file, the transactions are marked as reconciled.</property>
             <property name="tooltip_text" translatable="yes">When the status is not specified in a QIF file, the transactions are marked as reconciled.</property>
-            <property name="use_action_appearance">False</property>
+            <property name="halign">start</property>
+            <property name="margin_left">12</property>
             <property name="use_underline">True</property>
             <property name="active">True</property>
             <property name="draw_indicator">True</property>
           </object>
           <packing>
-            <property name="top_attach">6</property>
-            <property name="bottom_attach">7</property>
-            <property name="x_options">GTK_FILL</property>
-            <property name="y_options"></property>
-            <property name="x_padding">12</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">5</property>
           </packing>
         </child>
         <child>
@@ -78,17 +72,15 @@
             <property name="has_tooltip">True</property>
             <property name="tooltip_markup">When the status is not specified in a QIF file, the transactions are marked as cleared.</property>
             <property name="tooltip_text" translatable="yes">When the status is not specified in a QIF file, the transactions are marked as cleared.</property>
-            <property name="use_action_appearance">False</property>
+            <property name="halign">start</property>
+            <property name="margin_left">12</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
             <property name="group">pref/dialogs.import.qif/default-status-reconciled</property>
           </object>
           <packing>
-            <property name="top_attach">5</property>
-            <property name="bottom_attach">6</property>
-            <property name="x_options">GTK_FILL</property>
-            <property name="y_options"></property>
-            <property name="x_padding">12</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">4</property>
           </packing>
         </child>
         <child>
@@ -100,68 +92,30 @@
             <property name="has_tooltip">True</property>
             <property name="tooltip_markup">When the status is not specified in a QIF file, the transactions are marked as not cleared.</property>
             <property name="tooltip_text" translatable="yes">When the status is not specified in a QIF file, the transactions are marked as not cleared.</property>
-            <property name="use_action_appearance">False</property>
+            <property name="halign">start</property>
+            <property name="margin_left">12</property>
             <property name="use_underline">True</property>
             <property name="draw_indicator">True</property>
             <property name="group">pref/dialogs.import.qif/default-status-reconciled</property>
           </object>
           <packing>
-            <property name="top_attach">4</property>
-            <property name="bottom_attach">5</property>
-            <property name="x_options">GTK_FILL</property>
-            <property name="y_options"></property>
-            <property name="x_padding">12</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">3</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="qif_default_transation_status">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">0</property>
-            <property name="xpad">16</property>
-            <property name="ypad">5</property>
+            <property name="halign">start</property>
+            <property name="margin_left">12</property>
             <property name="label" translatable="yes">Default transaction status (overridden by the status given by the QIF file)</property>
           </object>
           <packing>
-            <property name="right_attach">4</property>
+            <property name="left_attach">0</property>
             <property name="top_attach">2</property>
-            <property name="bottom_attach">3</property>
-            <property name="x_options">GTK_FILL</property>
-            <property name="y_options"></property>
+            <property name="width">2</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
         </child>
         <child>
           <placeholder/>
@@ -181,7 +135,7 @@
       </object>
     </child>
   </object>
-  <object class="GtkDialog" id="QIF Import Account Picker">
+  <object class="GtkDialog" id="qif_import_account_picker_dialog">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Select Account</property>
@@ -189,12 +143,13 @@
     <property name="default_height">400</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox1">
+      <object class="GtkBox" id="dialog-vbox1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">8</property>
         <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area1">
+          <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
@@ -205,7 +160,6 @@
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
                 <signal name="clicked" handler="gnc_ui_qif_account_picker_new_cb" swapped="no"/>
               </object>
@@ -217,13 +171,12 @@
             </child>
             <child>
               <object class="GtkButton" id="cancelbutton">
-                <property name="label">gtk-cancel</property>
+                <property name="label" translatable="yes">_Cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
-                <property name="use_stock">True</property>
+                <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -233,13 +186,12 @@
             </child>
             <child>
               <object class="GtkButton" id="okbutton">
-                <property name="label">gtk-ok</property>
+                <property name="label" translatable="yes">_OK</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
-                <property name="use_stock">True</property>
+                <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -256,15 +208,14 @@
           </packing>
         </child>
         <child>
-          <object class="GtkVBox" id="vbox2">
+          <object class="GtkBox" id="vbox2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
             <child>
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
-                <property name="xpad">5</property>
                 <property name="label" translatable="yes">_Select or add a GnuCash account:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">account_tree</property>
@@ -280,14 +231,15 @@
               <object class="GtkScrolledWindow" id="scrolledwindow24">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="hscrollbar_policy">automatic</property>
-                <property name="vscrollbar_policy">automatic</property>
                 <property name="shadow_type">in</property>
                 <child>
                   <object class="GtkTreeView" id="account_tree">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="rules_hint">True</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="treeview-selection1"/>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -306,10 +258,5 @@
         </child>
       </object>
     </child>
-    <action-widgets>
-      <action-widget response="1">newbutton</action-widget>
-      <action-widget response="-6">cancelbutton</action-widget>
-      <action-widget response="-5">okbutton</action-widget>
-    </action-widgets>
   </object>
 </interface>

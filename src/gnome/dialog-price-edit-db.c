@@ -195,8 +195,8 @@ gnc_prices_dialog_remove_clicked (GtkWidget *widget, gpointer data)
                 "%s", message);
         g_free(message);
         gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-                               GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                               GTK_STOCK_DELETE, GTK_RESPONSE_YES,
+                               _("Cancel"), GTK_RESPONSE_CANCEL,
+                               _("Delete"), GTK_RESPONSE_YES,
                                (gchar *)NULL);
         gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_YES);
         response = gnc_dialog_run(GTK_DIALOG(dialog), GNC_PREF_WARN_PRICE_QUOTES_DEL);
@@ -227,9 +227,9 @@ gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
 
     ENTER(" ");
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-price.glade", "Deletion Date");
+    gnc_builder_add_from_file (builder, "dialog-price.glade", "deletion_date_dialog");
 
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Deletion Date"));
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "deletion_date_dialog"));
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "date_hbox"));
     date = gnc_date_edit_new (time (NULL), FALSE, FALSE);
@@ -425,10 +425,13 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
 
     ENTER(" ");
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-price.glade", "Prices Dialog");
+    gnc_builder_add_from_file (builder, "dialog-price.glade", "prices_dialog");
 
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Prices Dialog"));
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "prices_dialog"));
     pdb_dialog->dialog = dialog;
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncPriceEditDialog");
 
     pdb_dialog->session = gnc_get_current_session();
     pdb_dialog->book = qof_session_get_book(pdb_dialog->session);

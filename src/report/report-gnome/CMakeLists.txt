@@ -30,7 +30,7 @@ ADD_LIBRARY (gncmod-report-gnome
   ${SWIG_REPORT_GNOME_C}
 )
 TARGET_LINK_LIBRARIES(gncmod-report-gnome gncmod-report-system gncmod-html gncmod-gnome-utils
-      gnc-qof ${GUILE_LDFLAGS} ${GTK2_LDFLAGS})
+      gnc-qof ${GUILE_LDFLAGS} ${GTK3_LDFLAGS})
 
 TARGET_COMPILE_DEFINITIONS (gncmod-report-gnome PRIVATE -DG_LOG_DOMAIN=\"gnc.report.gui\")
 

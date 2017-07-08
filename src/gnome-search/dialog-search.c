@@ -341,7 +341,8 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
         gtk_container_add(GTK_CONTAINER(frame), scroller);
 
         /* Create the button_box */
-        button_box = gtk_vbox_new (FALSE, 3);
+        button_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+        gtk_box_set_homogeneous (GTK_BOX (button_box), FALSE);
 
         /* ... and add all the buttons */
         if (sw->buttons)
@@ -718,15 +719,20 @@ attach_element (GtkWidget *element, GNCSearchWindow *sw, int row)
 
     data = g_object_get_data (G_OBJECT (element), "data");
 
-    gtk_table_attach (GTK_TABLE (sw->criteria_table), element, 0, 1, row, row + 1,
-                      GTK_EXPAND | GTK_FILL, 0, 0, 0);
+    gtk_grid_attach (GTK_GRID (sw->criteria_table), element, 0, row, 1, 1);
+    gtk_widget_set_hexpand (element, TRUE);
+    gtk_widget_set_halign (element, GTK_ALIGN_FILL);
+    g_object_set (element, "margin", 0, NULL);
 
-
-    remove = gtk_button_new_from_stock (GTK_STOCK_REMOVE);
+    remove = gtk_button_new_with_label (_("Remove"));
     g_object_set_data (G_OBJECT (remove), "element", element);
     g_signal_connect (G_OBJECT (remove), "clicked", G_CALLBACK (remove_element), sw);
-    gtk_table_attach (GTK_TABLE (sw->criteria_table), remove, 1, 2, row, row + 1,
-                      0, 0, 0, 0);
+
+    gtk_grid_attach (GTK_GRID (sw->criteria_table), remove, 1, row, 1, 1);
+    gtk_widget_set_hexpand (remove, FALSE);
+    gtk_widget_set_halign (remove, GTK_ALIGN_CENTER);
+    g_object_set (remove, "margin", 0, NULL);
+
     gtk_widget_show (remove);
     data->button = remove;	/* Save the button for later */
 }
@@ -851,7 +857,9 @@ get_element_widget (GNCSearchWindow *sw, GNCSearchCoreType *element)
     data->element = element;
     data->dialog = GTK_DIALOG (sw->dialog);
 
-    hbox = gtk_hbox_new (FALSE, 0);
+    hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
+
     /* only set to automatically clean up the memory */
     g_object_set_data_full (G_OBJECT (hbox), "data", data, g_free);
 
@@ -940,10 +948,42 @@ gnc_search_dialog_book_option_changed (gpointer new_val, gpointer user_data)
     gtk_widget_grab_focus(focused_widget);
 }
 
+struct grid_size
+{
+    /** The grid being sized. */
+    GtkGrid *grid;
+    /** The number of columns and rows in the grid. */
+    gint cols, rows;
+};
+
+static void
+get_grid_size (GtkWidget *child, gpointer data)
+{
+    struct grid_size *gridsize = data;
+    gint top, left, height, width;
+
+    gtk_container_child_get(GTK_CONTAINER(gridsize->grid), child,
+                            "left-attach", &left,
+                            "top-attach", &top,
+                            "height", &height,
+                            "width", &width,
+                            NULL);
+
+    if (left + width >= gridsize->cols)
+        gridsize->cols = left + width;
+
+    if (top + height >= gridsize->rows)
+        gridsize->rows = top + height;
+}
+
 static void
 gnc_search_dialog_add_criterion (GNCSearchWindow *sw)
 {
     GNCSearchCoreType *new_sct;
+    struct grid_size gridsize;
+
+    gridsize.cols = 0;
+    gridsize.rows = 0;
 
     /* First, make sure that the last criterion is ok */
     if (sw->crit_list)
@@ -967,15 +1007,15 @@ gnc_search_dialog_add_criterion (GNCSearchWindow *sw)
     {
         struct _crit_data *data;
         GtkWidget *w;
-        int rows;
 
         w = get_element_widget (sw, new_sct);
         data = g_object_get_data (G_OBJECT (w), "data");
         sw->crit_list = g_list_append (sw->crit_list, data);
 
-        gtk_table_get_size (GTK_TABLE (sw->criteria_table), &rows, NULL);
-        gtk_table_resize (GTK_TABLE (sw->criteria_table), rows + 1, 2);
-        attach_element (w, sw, rows);
+        gridsize.grid = GTK_GRID (sw->criteria_table);
+        gtk_container_foreach(GTK_CONTAINER(sw->criteria_table), get_grid_size, &gridsize);
+
+        attach_element (w, sw, gridsize.rows);
 
         gnc_search_core_type_grab_focus (new_sct);
         gnc_search_core_type_editable_enters (new_sct);
@@ -1110,12 +1150,15 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
     gboolean           active;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-search.glade", "Search Dialog");
+    gnc_builder_add_from_file (builder, "dialog-search.glade", "search_dialog");
 
     /* Grab the dialog, save the dialog info */
-    sw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Search Dialog"));
+    sw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "search_dialog"));
     gtk_window_set_title(GTK_WINDOW(sw->dialog), title);
     g_object_set_data (G_OBJECT (sw->dialog), "dialog-info", sw);
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(sw->dialog), "GncSearchDialog");
 
     /* Grab the result hbox */
     sw->result_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "result_hbox"));
@@ -1132,7 +1175,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
     gtk_label_set_text (GTK_LABEL (label), type_label);
 
     /* Set the 'add criterion' button */
-    add = gtk_button_new_from_stock (GTK_STOCK_ADD);
+    add = gtk_button_new_with_label (_("Add"));
 
     g_signal_connect (G_OBJECT (add), "clicked", G_CALLBACK (add_criterion), sw);
     box = GTK_WIDGET(gtk_builder_get_object (builder, "add_button_box"));

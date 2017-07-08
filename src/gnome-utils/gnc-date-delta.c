@@ -43,6 +43,7 @@
 
 #include "gnc-date.h"
 #include "gnc-date-delta.h"
+#include "dialog-utils.h"
 
 #define GDD_LABEL "gdd"
 
@@ -65,7 +66,7 @@ static void gnc_date_delta_forall     (GtkContainer      *container,
                                        GtkCallback	  callback,
                                        gpointer	          callbabck_data);
 
-static GtkHBoxClass *parent_class;
+static GtkBoxClass *parent_class;
 
 /**
  * gnc_date_delta_get_type:
@@ -92,7 +93,7 @@ gnc_date_delta_get_type (void)
             (GInstanceInitFunc) gnc_date_delta_init
         };
 
-        date_delta_type = g_type_register_static (gtk_hbox_get_type (),
+        date_delta_type = g_type_register_static (gtk_box_get_type (),
                           "GNCDateDelta",
                           &date_delta_info,
                           0);
@@ -159,6 +160,11 @@ gnc_date_delta_class_init (GNCDateDeltaClass *klass)
 static void
 gnc_date_delta_init (GNCDateDelta *gdd)
 {
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(gdd), GTK_ORIENTATION_HORIZONTAL);
+
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(gdd), "GncDateDelta");
+
     gdd->value_spin = NULL;
     gdd->units_combo = NULL;
     gdd->polarity_combo = NULL;

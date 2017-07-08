@@ -77,8 +77,8 @@ GtkCellEditable *gcrd_start_editing          (GtkCellRenderer         *cell,
 					      GdkEvent                *event,
 					      GtkWidget               *widget,
 					      const gchar             *path,
-					      GdkRectangle            *background_area,
-					      GdkRectangle            *cell_area,
+					      const GdkRectangle      *background_area,
+					      const GdkRectangle      *cell_area,
 					      GtkCellRendererState     flags);
 
 static void     gcrd_show                    (GncCellRendererPopup     *cell,
@@ -143,7 +143,9 @@ gcrd_init (GncCellRendererDate *date)
 	gtk_container_add (GTK_CONTAINER (popup->popup_window), frame);
 	gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_OUT);
 
-	vbox = gtk_vbox_new (FALSE, 6);
+        vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
+        gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
+
 	gtk_container_add (GTK_CONTAINER (frame), vbox);
 	gtk_container_set_border_width (GTK_CONTAINER (vbox), 6);
 	
@@ -151,7 +153,7 @@ gcrd_init (GncCellRendererDate *date)
 	popup->focus_window = date->calendar;
 	gtk_box_pack_start (GTK_BOX (vbox), date->calendar, TRUE, TRUE, 0);
 
-        date->button_box = gtk_hbutton_box_new ();
+        date->button_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
 	gtk_box_set_spacing (GTK_BOX (date->button_box), 6);
 	gtk_box_pack_start (GTK_BOX (vbox), date->button_box, FALSE, FALSE, 0);
 
@@ -269,8 +271,8 @@ gcrd_start_editing (GtkCellRenderer      *cell,
 		    GdkEvent             *event,
 		    GtkWidget            *widget,
 		    const gchar          *path,
-		    GdkRectangle         *background_area,
-		    GdkRectangle         *cell_area,
+		    const GdkRectangle   *background_area,
+		    const GdkRectangle   *cell_area,
 		    GtkCellRendererState  flags)
 {
 	GNC_CELL_RENDERER_POPUP (cell)->editing_canceled = FALSE;
@@ -431,27 +433,6 @@ gcrd_day_selected (GtkWidget *popup_window, GncCellRendererDate *cell)
 
 }
 
-static gboolean
-gcrd_grab_on_window (GdkWindow *window,
-		     guint32    activate_time)
-{
-	if ((gdk_pointer_grab (window, TRUE,
-			       GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-			       GDK_POINTER_MOTION_MASK,
-			       NULL, NULL, activate_time) == 0)) {
-		if (gdk_keyboard_grab (window, TRUE,
-			       activate_time) == 0)
-			return TRUE;
-		else {
-			gdk_pointer_ungrab (activate_time);
-			return FALSE;
-		}
-	}
-
-	return FALSE;
-}
-
-
 /* This function converts a time64 value date to separate entities */
 gboolean
 gcrd_time2dmy (time64 raw_time, gint *day, gint *month, gint *year)
@@ -511,8 +492,4 @@ gcrd_string_dmy2time (const gchar *date_string)
 	return gnc_time (NULL);
     }
 }
-
-
-
-
 

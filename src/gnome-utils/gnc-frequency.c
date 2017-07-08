@@ -58,7 +58,7 @@ static guint gnc_frequency_signals[LAST_SIGNAL] = { 0 };
 /** Private Prototypes ********************/
 
 static void gnc_frequency_class_init( GncFrequencyClass *klass );
-static void gnc_frequency_class_destroy( GtkObject *object );
+static void gnc_frequency_class_destroy( GtkWidget *widget );
 
 static void freq_combo_changed( GtkComboBox *b, gpointer d );
 static void start_date_changed( GNCDateEdit *gde, gpointer d );
@@ -127,7 +127,7 @@ gnc_frequency_get_type()
             (GInstanceInitFunc)gnc_frequency_init
         };
 
-        gncfreq_type = g_type_register_static (GTK_TYPE_VBOX,
+        gncfreq_type = g_type_register_static (GTK_TYPE_BOX,
                                                "GncFrequency",
                                                &gncfreq_info, 0);
     }
@@ -140,12 +140,12 @@ static void
 gnc_frequency_class_init( GncFrequencyClass *klass )
 {
     GObjectClass *object_class;
-    GtkObjectClass *gtkobject_class;
+    GtkWidgetClass *gtkwidget_class;
 
     parent_class = g_type_class_peek_parent (klass);
 
     object_class = G_OBJECT_CLASS (klass);
-    gtkobject_class = GTK_OBJECT_CLASS (klass);
+    gtkwidget_class = GTK_WIDGET_CLASS (klass);
 
     gnc_frequency_signals[GNCFREQ_CHANGED] =
         g_signal_new ("changed",
@@ -158,8 +158,8 @@ gnc_frequency_class_init( GncFrequencyClass *klass )
                       G_TYPE_NONE,
                       0);
 
-    /* GtkObject signals */
-    gtkobject_class->destroy = gnc_frequency_class_destroy;
+    /* GtkWidget signals */
+    gtkwidget_class->destroy = gnc_frequency_class_destroy;
 }
 
 
@@ -167,7 +167,7 @@ void
 gnc_frequency_init(GncFrequency *gf)
 {
     int i;
-    GtkVBox* vb;
+    GtkBox* vb;
     GtkWidget* o;
     GtkAdjustment* adj;
     GtkBuilder *builder;
@@ -201,6 +201,11 @@ gnc_frequency_init(GncFrequency *gf)
         { NULL,               NULL }
     };
 
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(gf), GTK_ORIENTATION_VERTICAL);
+
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(gf), "GncFrequency");
+
     builder = gtk_builder_new();
     gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "adjustment1");
     gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "adjustment2");
@@ -225,11 +230,14 @@ gnc_frequency_init(GncFrequency *gf)
     {
         gint dont_expand_or_fill = 0;
         GtkWidget *table = GTK_WIDGET(gtk_builder_get_object (builder, "gncfreq_table"));
-        gtk_table_attach(GTK_TABLE(table), GTK_WIDGET(gf->startDate),
-                         4, 5, 0, 1, dont_expand_or_fill, 0,
-                         0, 0);
+        gtk_grid_attach(GTK_GRID(table), GTK_WIDGET(gf->startDate), 4, 0, 1, 1);
+        gtk_widget_set_vexpand (GTK_WIDGET(gf->startDate), FALSE);
+        gtk_widget_set_hexpand (GTK_WIDGET(gf->startDate), FALSE);
+        gtk_widget_set_valign (GTK_WIDGET(gf->startDate), GTK_ALIGN_CENTER);
+        gtk_widget_set_halign (GTK_WIDGET(gf->startDate), GTK_ALIGN_CENTER);
+        g_object_set (GTK_WIDGET(gf->startDate), "margin", 0, NULL);
     }
-    vb = GTK_VBOX(gtk_builder_get_object (builder, "gncfreq_vbox"));
+    vb = GTK_BOX(gtk_builder_get_object (builder, "gncfreq_vbox"));
     gf->vb = vb;
     gtk_container_add(GTK_CONTAINER(&gf->widget), GTK_WIDGET(gf->vb));
 
@@ -273,23 +281,23 @@ gnc_frequency_init(GncFrequency *gf)
 }
 
 
-/** Destroy the GncFrequency object.  This function is called (possibly
- *  multiple times) from the Gtk_Object level to destroy the object.
+/** Destroy the GncFrequency widget.  This function is called (possibly
+ *  multiple times) from the Gtk_Object level to destroy the widget.
  *
- *  @param object The object being destroyed.
+ *  @param widget The widget being destroyed.
  *
  *  @internal
  */
 static void
-gnc_frequency_class_destroy (GtkObject *object)
+gnc_frequency_class_destroy (GtkWidget *widget)
 {
     GncFrequency *gf;
 
-    ENTER("frequency %p", object);
-    g_return_if_fail (object != NULL);
-    g_return_if_fail (GNC_IS_FREQUENCY (object));
+    ENTER("frequency %p", widget);
+    g_return_if_fail (widget != NULL);
+    g_return_if_fail (GNC_IS_FREQUENCY (widget));
 
-    gf = GNC_FREQUENCY (object);
+    gf = GNC_FREQUENCY (widget);
 
     if (gf->builder)
     {
@@ -298,8 +306,8 @@ gnc_frequency_class_destroy (GtkObject *object)
         gf->builder = NULL;
     }
 
-    if (GTK_OBJECT_CLASS (parent_class)->destroy)
-        GTK_OBJECT_CLASS (parent_class)->destroy (object);
+    if (GTK_WIDGET_CLASS (parent_class)->destroy)
+        GTK_WIDGET_CLASS (parent_class)->destroy (widget);
     LEAVE(" ");
 }
 

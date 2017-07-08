@@ -82,9 +82,12 @@ gnc_ui_new_user_dialog (void)
 
     ENTER(" ");
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-new-user.glade", "New User Dialog");
+    gnc_builder_add_from_file (builder, "dialog-new-user.glade", "new_user_dialog");
 
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "New User Dialog"));
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "new_user_dialog"));
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncNewUserDialog");
 
     new_accounts_button = GTK_WIDGET(gtk_builder_get_object (builder, "new_accounts_button"));
     import_qif_button = GTK_WIDGET(gtk_builder_get_object (builder, "import_qif_button"));
@@ -139,9 +142,9 @@ gnc_ui_new_user_cancel_dialog (void)
     gboolean keepshowing;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-new-user.glade", "New User Cancel Dialog");
+    gnc_builder_add_from_file (builder, "dialog-new-user.glade", "new_user_cancel_dialog");
 
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "New User Cancel Dialog"));
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "new_user_cancel_dialog"));
 
     result = gtk_dialog_run (GTK_DIALOG (dialog));
     keepshowing = (result == GTK_RESPONSE_YES);

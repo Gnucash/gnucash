@@ -225,39 +225,39 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
     /* File menu */
 
     {
-        "FilePrintAction", GTK_STOCK_PRINT, N_("_Print Checks..."), "<primary>p", NULL,
+        "FilePrintAction", "document-print", N_("_Print Checks..."), "<primary>p", NULL,
         G_CALLBACK (gnc_plugin_page_register_cmd_print_check)
     },
 
     /* Edit menu */
 
     {
-        "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), NULL,
+        "EditCutAction", "edit-cut", N_("Cu_t"), NULL,
         N_("Cut the current selection and copy it to clipboard"),
         G_CALLBACK (gnc_plugin_page_register_cmd_cut)
     },
     {
-        "EditCopyAction", GTK_STOCK_COPY, N_("_Copy"), NULL,
+        "EditCopyAction", "edit-copy", N_("_Copy"), NULL,
         N_("Copy the current selection to clipboard"),
         G_CALLBACK (gnc_plugin_page_register_cmd_copy)
     },
     {
-        "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), NULL,
+        "EditPasteAction", "edit-paste", N_("_Paste"), NULL,
         N_("Paste the clipboard content at the cursor position"),
         G_CALLBACK (gnc_plugin_page_register_cmd_paste)
     },
     {
-        "EditEditAccountAction", GNC_STOCK_EDIT_ACCOUNT, N_("Edit _Account"), "<primary>e",
+        "EditEditAccountAction", GNC_ICON_EDIT_ACCOUNT, N_("Edit _Account"), "<primary>e",
         N_("Edit the selected account"),
         G_CALLBACK (gnc_plugin_page_register_cmd_edit_account)
     },
     {
-        "EditFindAccountAction", GTK_STOCK_FIND, N_("F_ind Account"), "<primary>i",
+        "EditFindAccountAction", "edit-find", N_("F_ind Account"), "<primary>i",
         N_("Find an account"),
         G_CALLBACK (gnc_plugin_page_register_cmd_find_account)
     },
     {
-        "EditFindTransactionsAction", GTK_STOCK_FIND, N_("_Find..."), "<primary>f",
+        "EditFindTransactionsAction", "edit-find", N_("_Find..."), "<primary>f",
         N_("Find transactions with a search"),
         G_CALLBACK (gnc_plugin_page_register_cmd_find_transactions)
     },
@@ -265,42 +265,42 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
     /* Transaction menu */
 
     {
-        "CutTransactionAction", GTK_STOCK_CUT, CUT_TRANSACTION_LABEL, "",
+        "CutTransactionAction", "edit-cut", CUT_TRANSACTION_LABEL, "",
         CUT_TRANSACTION_TIP,
         G_CALLBACK (gnc_plugin_page_register_cmd_cut_transaction)
     },
     {
-        "CopyTransactionAction", GTK_STOCK_COPY, COPY_TRANSACTION_LABEL, "",
+        "CopyTransactionAction", "edit-copy", COPY_TRANSACTION_LABEL, "",
         COPY_TRANSACTION_TIP,
         G_CALLBACK (gnc_plugin_page_register_cmd_copy_transaction)
     },
     {
-        "PasteTransactionAction", GTK_STOCK_PASTE, PASTE_TRANSACTION_LABEL, "",
+        "PasteTransactionAction", "edit-paste", PASTE_TRANSACTION_LABEL, "",
         PASTE_TRANSACTION_TIP,
         G_CALLBACK (gnc_plugin_page_register_cmd_paste_transaction)
     },
     {
-        "DuplicateTransactionAction", GTK_STOCK_COPY, DUPLICATE_TRANSACTION_LABEL, "",
+        "DuplicateTransactionAction", "edit-copy", DUPLICATE_TRANSACTION_LABEL, "",
         DUPLICATE_TRANSACTION_TIP,
         G_CALLBACK (gnc_plugin_page_register_cmd_duplicate_transaction)
     },
     {
-        "DeleteTransactionAction", GTK_STOCK_DELETE, DELETE_TRANSACTION_LABEL, NULL,
+        "DeleteTransactionAction", "edit-delete", DELETE_TRANSACTION_LABEL, NULL,
         DELETE_TRANSACTION_TIP,
         G_CALLBACK (gnc_plugin_page_register_cmd_delete_transaction)
     },
     {
-        "RemoveTransactionSplitsAction", GTK_STOCK_CLEAR, N_("Remo_ve Other Splits"), NULL,
+        "RemoveTransactionSplitsAction", "edit-clear", N_("Remo_ve Other Splits"), NULL,
         N_("Remove all splits in the current transaction"),
         G_CALLBACK (gnc_plugin_page_register_cmd_reinitialize_transaction)
     },
     {
-        "RecordTransactionAction", GTK_STOCK_ADD, N_("_Enter Transaction"), NULL,
+        "RecordTransactionAction", "list-add", N_("_Enter Transaction"), NULL,
         N_("Record the current transaction"),
         G_CALLBACK (gnc_plugin_page_register_cmd_enter_transaction)
     },
     {
-        "CancelTransactionAction", GTK_STOCK_CANCEL, N_("Ca_ncel Transaction"), NULL,
+        "CancelTransactionAction", "process-stop", N_("Ca_ncel Transaction"), NULL,
         N_("Cancel the current transaction"),
         G_CALLBACK (gnc_plugin_page_register_cmd_cancel_transaction)
     },
@@ -346,17 +346,17 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
     /* Actions menu */
 
     {
-        "ActionsTransferAction", GNC_STOCK_TRANSFER, N_("_Transfer..."), "<primary>t",
+        "ActionsTransferAction", GNC_ICON_TRANSFER, N_("_Transfer..."), "<primary>t",
         N_("Transfer funds from one account to another"),
         G_CALLBACK (gnc_plugin_page_register_cmd_transfer)
     },
     {
-        "ActionsReconcileAction", GTK_STOCK_INDEX, N_("_Reconcile..."), NULL,
+        "ActionsReconcileAction", "edit-select-all", N_("_Reconcile..."), NULL,
         N_("Reconcile the selected account"),
         G_CALLBACK (gnc_plugin_page_register_cmd_reconcile)
     },
     {
-        "ActionsAutoClearAction", GTK_STOCK_INDEX, N_("_Auto-clear..."), NULL,
+        "ActionsAutoClearAction", "edit-select-all", N_("_Auto-clear..."), NULL,
         N_("Automatically clear individual transactions, so as to reach a certain cleared amount"),
         G_CALLBACK (gnc_plugin_page_register_cmd_autoclear)
     },
@@ -371,7 +371,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
         G_CALLBACK (gnc_plugin_page_register_cmd_lots)
     },
     {
-        "BlankTransactionAction", GTK_STOCK_GOTO_BOTTOM, N_("_Blank Transaction"), "<primary>Page_Down",
+        "BlankTransactionAction", "go-bottom", N_("_Blank Transaction"), "<primary>Page_Down",
         N_("Move to the blank transaction at the bottom of the register"),
         G_CALLBACK (gnc_plugin_page_register_cmd_blank_transaction)
     },
@@ -381,12 +381,12 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
         G_CALLBACK (gnc_plugin_page_register_cmd_exchange_rate)
     },
     {
-        "JumpTransactionAction", GNC_STOCK_JUMP_TO, N_("_Jump"), NULL,
+        "JumpTransactionAction", GNC_ICON_JUMP_TO, N_("_Jump"), NULL,
         N_("Jump to the corresponding transaction in the other account"),
         G_CALLBACK (gnc_plugin_page_register_cmd_jump)
     },
     {
-        "ScheduleTransactionAction", GNC_STOCK_SCHEDULE, N_("Sche_dule..."), NULL,
+        "ScheduleTransactionAction", GNC_ICON_SCHEDULE, N_("Sche_dule..."), NULL,
         N_("Create a Scheduled Transaction with the current transaction as a template"),
         G_CALLBACK (gnc_plugin_page_register_cmd_schedule)
     },
@@ -424,7 +424,7 @@ static GtkToggleActionEntry toggle_entries[] =
     },
 
     {
-        "SplitTransactionAction", GNC_STOCK_SPLIT_TRANS, N_("S_plit Transaction"), NULL,
+        "SplitTransactionAction", GNC_ICON_SPLIT_TRANS, N_("S_plit Transaction"), NULL,
         N_("Show all splits in the current transaction"),
         G_CALLBACK (gnc_plugin_page_register_cmd_expand_transaction), FALSE
     },
@@ -736,7 +736,7 @@ gnc_plugin_page_register_class_init (GncPluginPageRegisterClass *klass)
 
     object_class->finalize = gnc_plugin_page_register_finalize;
 
-    gnc_plugin_class->tab_icon        = GNC_STOCK_ACCOUNT;
+    gnc_plugin_class->tab_icon        = GNC_ICON_ACCOUNT;
     gnc_plugin_class->plugin_name     = GNC_PLUGIN_PAGE_REGISTER_NAME;
     gnc_plugin_class->create_widget   = gnc_plugin_page_register_create_widget;
     gnc_plugin_class->destroy_widget  = gnc_plugin_page_register_destroy_widget;
@@ -1081,8 +1081,12 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
         return priv->widget;
     }
 
-    priv->widget = gtk_vbox_new (FALSE, 0);
+    priv->widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (priv->widget), FALSE);
     gtk_widget_show (priv->widget);
+
+    // Set the style context for this page so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(priv->widget), "GncRegisterPage");
 
     numRows = priv->lines_default;
     numRows = MIN(numRows, DEFAULT_LINES_AMOUNT);
@@ -1568,11 +1572,11 @@ gnc_plugin_page_register_finish_pending (GncPluginPage *page)
        "Would you like to save the changes to this transaction, "
        "discard the transaction, or cancel the operation?"));
     gnc_gtk_dialog_add_button(dialog, _("_Discard Transaction"),
-                              GTK_STOCK_DELETE, GTK_RESPONSE_REJECT);
+                              "edit-delete", GTK_RESPONSE_REJECT);
     gtk_dialog_add_button(GTK_DIALOG(dialog),
-                          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+                          _("Cancel"), GTK_RESPONSE_CANCEL);
     gnc_gtk_dialog_add_button(dialog, _("_Save Transaction"),
-                              GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT);
+                              "document-save", GTK_RESPONSE_ACCEPT);
 
     response = gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy(dialog);
@@ -3052,8 +3056,8 @@ gnc_plugin_page_register_cmd_void_transaction (GtkAction *action,
         return;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file  (builder , "gnc-plugin-page-register.glade", "Void Transaction");
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Void Transaction"));
+    gnc_builder_add_from_file  (builder , "gnc-plugin-page-register.glade", "void_transaction_dialog");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "void_transaction_dialog"));
     entry = GTK_WIDGET(gtk_builder_get_object (builder, "reason"));
 
     result = gtk_dialog_run(GTK_DIALOG(dialog));
@@ -3160,8 +3164,8 @@ gnc_plugin_page_register_cmd_view_sort_by (GtkAction *action,
     /* Create the dialog */
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file  (builder, "gnc-plugin-page-register.glade", "Sort By");
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Sort By"));
+    gnc_builder_add_from_file  (builder, "gnc-plugin-page-register.glade", "sort_by_dialog");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "sort_by_dialog"));
     priv->sd.dialog = dialog;
     gtk_window_set_transient_for(GTK_WINDOW(dialog),
                                  gnc_window_get_gtk_window(GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window)));
@@ -3237,8 +3241,8 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
 
     /* Create the dialog */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "Filter By");
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Filter By"));
+    gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "filter_by_dialog");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "filter_by_dialog"));
     priv->fd.dialog = dialog;
     gtk_window_set_transient_for(GTK_WINDOW(dialog),
                                  gnc_window_get_gtk_window(GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window)));

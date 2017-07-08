@@ -164,10 +164,10 @@ gnc_tree_view_add_toggle_column (GncTreeView *view,
  *  used in several functions to look up the column, and it is also
  *  used when saving/restoring the view's state.
  *
- *  @param stock_icon_name The name of the stock icon to display to
+ *  @param icon_name The name of the icon to display to
  *  the left of the text in this column.  Used for adding icons like
- *  the "account" icon to a view.  This must be a registered stock
- *  icon, not a filename.
+ *  the "account" icon to a view.  This must be a registered icon,
+ *  not a filename.
  *
  *  @param sizing_text A string used to compute the default width of
  *  the column.  This text is never displayed.
@@ -193,7 +193,7 @@ GtkTreeViewColumn *
 gnc_tree_view_add_text_column (GncTreeView *view,
                                const gchar *column_title,
                                const gchar *pref_name,
-                               const gchar *stock_icon_name,
+                               const gchar *icon_name,
                                const gchar *sizing_text,
                                gint model_data_column,
                                gint model_visibility_column,
@@ -226,7 +226,7 @@ GtkTreeViewColumn *
 gnc_tree_view_add_date_column (GncTreeView *view,
                                const gchar *column_title,
                                const gchar *pref_name,
-                               const gchar *stock_icon_name,
+                               const gchar *icon_name,
                                const gchar *sizing_text,
                                gint model_data_column,
                                gint model_visibility_column,

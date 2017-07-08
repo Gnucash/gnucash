@@ -308,11 +308,14 @@ autoClearWindow (GtkWidget *parent, Account *account)
 
     /* Create the dialog box */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "window-autoclear.glade", "Auto-clear Start Dialog");
-    data->window = GTK_WIDGET(gtk_builder_get_object (builder, "Auto-clear Start Dialog"));
+    gnc_builder_add_from_file (builder, "window-autoclear.glade", "auto_clear_start_dialog");
+    data->window = GTK_WIDGET(gtk_builder_get_object (builder, "auto_clear_start_dialog"));
     title = gnc_autoclear_make_window_name (account);
     gtk_window_set_title(GTK_WINDOW(data->window), title);
     g_free (title);
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(data->window), "GncAutoClearDialog");
 
     /* Add amount edit box */
     data->end_value = GNC_AMOUNT_EDIT(gnc_amount_edit_new());

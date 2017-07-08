@@ -32,6 +32,7 @@
 #include "qof.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-gui-query.h"
+#include "dialog-utils.h"
 
 #include "search-account.h"
 #include "search-core-utils.h"
@@ -258,8 +259,8 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
         GTK_DIALOG(gtk_dialog_new_with_buttons(_("Select the Accounts to Compare"),
                    NULL,
                    0,
-                   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                   GTK_STOCK_OK, GTK_RESPONSE_OK,
+                   _("Cancel"), GTK_RESPONSE_CANCEL,
+                   _("OK"), GTK_RESPONSE_OK,
                    NULL));
 
     /* Put the dialog together */
@@ -296,7 +297,8 @@ gncs_get_widget (GNCSearchCoreType *fe)
     g_return_val_if_fail (fi, NULL);
     g_return_val_if_fail (IS_GNCSEARCH_ACCOUNT (fi), NULL);
 
-    box = gtk_hbox_new (FALSE, 3);
+    box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
+    gtk_box_set_homogeneous (GTK_BOX (box), FALSE);
 
     /* Build and connect the option menu */
     menu = make_menu (fe);
@@ -305,7 +307,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
     /* Build and connect the account entry window */
     desc = describe_button (fi);
     label = gtk_label_new (desc);
-    gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
+    gnc_label_set_alignment (label, 0.5, 0.5);
 
     button = gtk_button_new ();
     gtk_container_add (GTK_CONTAINER (button), label);

@@ -360,8 +360,8 @@ get_trans_info (AssocDialog *assoc_dialog)
                                     DATE_TRANS, gnc_print_date (ts),
                                     DESC_TRANS, xaccTransGetDescription (trans),
                                     URI_U, uri_u, AVAILABLE, _("Unknown"),
-                                    URI_SPLIT, split, URI, uri, URI_RELATIVE, rel, -1);
-
+                                    URI_SPLIT, split, URI, uri,
+                                    URI_RELATIVE, (rel == TRUE ? "emblem-default" : NULL), -1);
                 g_free (uri_u);
             }
             trans_list = g_list_prepend (trans_list, trans); // add trans to trans_list
@@ -387,10 +387,13 @@ gnc_assoc_dialog_create (AssocDialog *assoc_dialog)
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-trans-assoc.glade", "list-store");
 
-    gnc_builder_add_from_file (builder, "dialog-trans-assoc.glade", "Transaction Association Dialog");
+    gnc_builder_add_from_file (builder, "dialog-trans-assoc.glade", "transaction_association_dialog");
 
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Transaction Association Dialog"));
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_association_dialog"));
     assoc_dialog->dialog = dialog;
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncTransAssocDialog");
 
     assoc_dialog->view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview"));
     path_head = GTK_WIDGET(gtk_builder_get_object (builder, "path-head"));
@@ -425,17 +428,22 @@ gnc_assoc_dialog_create (AssocDialog *assoc_dialog)
     gtk_tree_view_append_column (GTK_TREE_VIEW(assoc_dialog->view), tree_column);
     gtk_tree_view_column_set_alignment (tree_column, 0.5);
     gtk_tree_view_column_set_expand (tree_column, TRUE);
-    cr = gtk_cell_renderer_toggle_new();
+    cr = gtk_cell_renderer_pixbuf_new();
     gtk_tree_view_column_pack_start (tree_column, cr, TRUE);
     // connect 'active' and set 'xalign' property of the cell renderer
-    gtk_tree_view_column_set_attributes (tree_column, cr, "active", URI_RELATIVE, NULL);
+    gtk_tree_view_column_set_attributes (tree_column, cr, "icon-name", URI_RELATIVE, NULL);
     gtk_cell_renderer_set_alignment (cr, 0.5, 0.5);
 
     g_signal_connect (assoc_dialog->view, "row-activated",
                       G_CALLBACK(row_selected_cb), (gpointer)assoc_dialog);
 
     /* Enable alternative line colors */
+#if !GTK_CHECK_VERSION(3, 14, 0)
     gtk_tree_view_set_rules_hint (GTK_TREE_VIEW(assoc_dialog->view), TRUE);
+#endif
+
+    // Set grid lines option to preference
+    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(assoc_dialog->view), gnc_tree_view_get_grid_lines_pref ());
 
     /* default to 'close' button */
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);

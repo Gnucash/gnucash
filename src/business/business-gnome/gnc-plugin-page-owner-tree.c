@@ -138,39 +138,39 @@ static GtkActionEntry gnc_plugin_page_owner_tree_actions [] =
 
     /* Edit menu */
     {
-        "OTEditVendorAction", GNC_STOCK_EDIT_ACCOUNT, N_("E_dit Vendor"), "<primary>e",
+        "OTEditVendorAction", GNC_ICON_EDIT_ACCOUNT, N_("E_dit Vendor"), "<primary>e",
         N_("Edit the selected vendor"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_edit_owner)
     },
     {
-        "OTEditCustomerAction", GNC_STOCK_EDIT_ACCOUNT, N_("E_dit Customer"), "<primary>e",
+        "OTEditCustomerAction", GNC_ICON_EDIT_ACCOUNT, N_("E_dit Customer"), "<primary>e",
         N_("Edit the selected customer"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_edit_owner)
     },
     {
-        "OTEditEmployeeAction", GNC_STOCK_EDIT_ACCOUNT, N_("E_dit Employee"), "<primary>e",
+        "OTEditEmployeeAction", GNC_ICON_EDIT_ACCOUNT, N_("E_dit Employee"), "<primary>e",
         N_("Edit the selected employee"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_edit_owner)
     },
     {
-        "OTNewVendorAction", GNC_STOCK_NEW_ACCOUNT, N_("_New Vendor..."), NULL,
+        "OTNewVendorAction", GNC_ICON_NEW_ACCOUNT, N_("_New Vendor..."), NULL,
         N_("Create a new vendor"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_owner)
     },
     {
-        "OTNewCustomerAction", GNC_STOCK_NEW_ACCOUNT, N_("_New Customer..."), NULL,
+        "OTNewCustomerAction", GNC_ICON_NEW_ACCOUNT, N_("_New Customer..."), NULL,
         N_("Create a new customer"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_owner)
     },
     {
-        "OTNewEmployeeAction", GNC_STOCK_NEW_ACCOUNT, N_("_New Employee..."), NULL,
+        "OTNewEmployeeAction", GNC_ICON_NEW_ACCOUNT, N_("_New Employee..."), NULL,
         N_("Create a new employee"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_owner)
     },
 
 #if 0 /* Disabled due to crash */
     {
-        "EditDeleteOwnerAction", GNC_STOCK_DELETE_ACCOUNT, N_("_Delete Owner..."), "Delete",
+        "EditDeleteOwnerAction", GNC_ICON_DELETE_ACCOUNT, N_("_Delete Owner..."), "Delete",
         N_("Delete selected owner"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_delete_owner)
     },
@@ -184,27 +184,27 @@ static GtkActionEntry gnc_plugin_page_owner_tree_actions [] =
 
     /* Business menu */
     {
-        "OTNewBillAction", GNC_STOCK_INVOICE_NEW, N_("New _Bill..."), NULL,
+        "OTNewBillAction", GNC_ICON_INVOICE_NEW, N_("New _Bill..."), NULL,
         N_("Create a new bill"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_invoice)
     },
     {
-        "OTNewInvoiceAction", GNC_STOCK_INVOICE_NEW, N_("New _Invoice..."), NULL,
+        "OTNewInvoiceAction", GNC_ICON_INVOICE_NEW, N_("New _Invoice..."), NULL,
         N_("Create a new invoice"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_invoice)
     },
     {
-        "OTNewVoucherAction", GNC_STOCK_INVOICE_NEW, N_("New _Voucher..."), NULL,
+        "OTNewVoucherAction", GNC_ICON_INVOICE_NEW, N_("New _Voucher..."), NULL,
         N_("Create a new voucher"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_invoice)
     },
     {
-        "OTVendorListingReportAction", GTK_STOCK_PRINT_PREVIEW, N_("Vendor Listing"), NULL,
+        "OTVendorListingReportAction", "document-print-preview", N_("Vendor Listing"), NULL,
         N_("Show vendor aging overview for all vendors"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_owners_report)
     },
     {
-        "OTCustomerListingReportAction", GTK_STOCK_PRINT_PREVIEW, N_("Customer Listing"), NULL,
+        "OTCustomerListingReportAction", "document-print-preview", N_("Customer Listing"), NULL,
         N_("Show customer aging overview for all customers"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_owners_report)
     },
@@ -397,7 +397,7 @@ gnc_plugin_page_owner_tree_class_init (GncPluginPageOwnerTreeClass *klass)
 
     object_class->finalize = gnc_plugin_page_owner_tree_finalize;
 
-    gnc_plugin_class->tab_icon        = GNC_STOCK_ACCOUNT;
+    gnc_plugin_class->tab_icon        = GNC_ICON_ACCOUNT;
     gnc_plugin_class->plugin_name     = GNC_PLUGIN_PAGE_OWNER_TREE_NAME;
     gnc_plugin_class->create_widget   = gnc_plugin_page_owner_tree_create_widget;
     gnc_plugin_class->destroy_widget  = gnc_plugin_page_owner_tree_destroy_widget;
@@ -560,6 +560,7 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
     GtkTreeViewColumn *col;
     const gchar *state_section = NULL;
     gchar* label = "";
+    const gchar *style_label = NULL;
 
     ENTER("page %p", plugin_page);
     page = GNC_PLUGIN_PAGE_OWNER_TREE (plugin_page);
@@ -570,8 +571,12 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
         return priv->widget;
     }
 
-    priv->widget = gtk_vbox_new (FALSE, 0);
+    priv->widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (priv->widget), FALSE);
     gtk_widget_show (priv->widget);
+
+    // Set the style context for this page so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(priv->widget), "GncBusinessPage");
 
     scrolled_window = gtk_scrolled_window_new (NULL, NULL);
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
@@ -597,32 +602,38 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
     g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
     gnc_tree_view_configure_columns(GNC_TREE_VIEW(tree_view));
 
-
-
     switch (priv->owner_type)
     {
     case GNC_OWNER_NONE :
     case GNC_OWNER_UNDEFINED :
         PWARN("missing owner_type");
         label = _("Unknown");
+        style_label = "GncUnknown";
         break;
     case GNC_OWNER_CUSTOMER :
         label = _("Customers");
         state_section = "Customers Overview";
+        style_label = "GncCustomers";
         break;
     case GNC_OWNER_JOB :
         label = _("Jobs");
         state_section = "Jobs Overview";
+        style_label = "GncJobs";
         break;
     case GNC_OWNER_VENDOR :
         label = _("Vendors");
         state_section = "Vendors Overview";
+        style_label = "GncVendors";
         break;
     case GNC_OWNER_EMPLOYEE :
         label = _("Employees");
         state_section = "Employees Overview";
+        style_label = "GncEmployees";
         break;
     }
+
+    // Set a secondary style context for this page so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(priv->widget), style_label);
 
     g_object_set(G_OBJECT(tree_view), "state-section", state_section,
                                       "show-column-menu", TRUE,
@@ -1075,8 +1086,8 @@ gnc_plugin_page_owner_tree_cmd_delete_owner (GtkAction *action, GncPluginPageOwn
                                          "%s", message);
         g_free(message);
         gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-                               GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                               GTK_STOCK_DELETE, GTK_RESPONSE_ACCEPT,
+                               _("Cancel"), GTK_RESPONSE_CANCEL,
+                               _("Delete"), GTK_RESPONSE_ACCEPT,
                                (gchar *)NULL);
         gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
         response = gtk_dialog_run(GTK_DIALOG(dialog));

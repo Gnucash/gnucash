@@ -461,10 +461,10 @@ init_match_picker_gui(GNCImportMatchPicker * matcher)
 
     /* load the interface */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-import.glade", "match_picker");
+    gnc_builder_add_from_file (builder, "dialog-import.glade", "match_picker_dialog");
     g_return_if_fail (builder != NULL);
 
-    matcher->transaction_matcher = GTK_WIDGET(gtk_builder_get_object (builder, "match_picker"));
+    matcher->transaction_matcher = GTK_WIDGET(gtk_builder_get_object (builder, "match_picker_dialog"));
     matcher->downloaded_view = (GtkTreeView *)GTK_WIDGET(gtk_builder_get_object (builder, "download_view"));
     matcher->match_view = (GtkTreeView *)GTK_WIDGET(gtk_builder_get_object (builder, "matched_view"));
     matcher->reconciled_chk = (GtkCheckButton *)GTK_WIDGET(gtk_builder_get_object(builder, "hide_reconciled_check1"));

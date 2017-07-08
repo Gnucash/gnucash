@@ -50,22 +50,8 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 #define GNC_PREF_LAST_GEOMETRY "last-geometry"
 
-
-/********************************************************************\
- * gnc_get_deficit_color                                            *
- *   fill in the 3 color values for the color of deficit values     *
- *                                                                  *
- * Args: color - color structure                                    *
- * Returns: none                                                    *
- \*******************************************************************/
-void
-gnc_get_deficit_color(GdkColor *color)
-{
-    color->red   = 50000;
-    color->green = 0;
-    color->blue  = 0;
-}
-
+const gchar *css_default_color = "* { color: currentColor }";
+const gchar *css_red_color     = "* { color: rgb(75%, 0%, 0%) }";
 
 /********************************************************************\
  * gnc_set_label_color                                              *
@@ -79,31 +65,30 @@ void
 gnc_set_label_color(GtkWidget *label, gnc_numeric value)
 {
     gboolean deficit;
-    GdkColormap *cm;
-    GtkStyle *style;
+    GtkStyleContext *stylecontext;
+    GtkCssProvider *provider;
 
     if (!gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED))
         return;
 
-    cm = gtk_widget_get_colormap(GTK_WIDGET(label));
-    gtk_widget_ensure_style(GTK_WIDGET(label));
-    style = gtk_widget_get_style(GTK_WIDGET(label));
+    provider = GTK_CSS_PROVIDER(g_object_get_data (G_OBJECT (label), "custom-provider"));
 
-    style = gtk_style_copy(style);
+    if (!provider)
+    {
+        provider = gtk_css_provider_new();
+        gtk_css_provider_load_from_data (provider, css_default_color, -1, NULL);
+        stylecontext = gtk_widget_get_style_context (label);
+        gtk_style_context_add_provider (stylecontext, GTK_STYLE_PROVIDER (provider),
+                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        g_object_set_data (G_OBJECT (label), "custom-provider", provider);
+    }
 
     deficit = gnc_numeric_negative_p (value);
 
     if (deficit)
-    {
-        gnc_get_deficit_color(&style->fg[GTK_STATE_NORMAL]);
-        gdk_colormap_alloc_color(cm, &style->fg[GTK_STATE_NORMAL], FALSE, TRUE);
-    }
+        gtk_css_provider_load_from_data (provider, css_red_color, -1, NULL);
     else
-        style->fg[GTK_STATE_NORMAL] = style->black;
-
-    gtk_widget_set_style(label, style);
-
-    g_object_unref(style);
+        gtk_css_provider_load_from_data (provider, css_default_color, -1, NULL);
 }
 
 
@@ -237,6 +222,66 @@ gnc_window_adjust_for_screen(GtkWindow * window)
 
     gdk_window_resize(gtk_widget_get_window (GTK_WIDGET(window)), width, height);
     gtk_widget_queue_resize(GTK_WIDGET(window));
+}
+
+/********************************************************************\
+ * Sets the alignament of a Label Widget, GTK3 version specific.    *
+ *                                                                  *
+ * Args: widget - the label widget to set alignment on              *
+ *       xalign - x alignment                                       *
+ *       yalign - y alignment                                       *
+ * Returns: nothing                                                 *
+\********************************************************************/
+void
+gnc_label_set_alignment (GtkWidget *widget, gfloat xalign, gfloat yalign)
+{
+#if GTK_CHECK_VERSION(3,16,0)
+    gtk_label_set_xalign (GTK_LABEL (widget), xalign);
+    gtk_label_set_yalign (GTK_LABEL (widget), yalign);
+#else
+    gtk_misc_set_alignment (GTK_MISC (widget), xalign, yalign);
+#endif
+}
+
+/********************************************************************\
+ * Get the preference for showing tree view grid lines              *
+ *                                                                  *
+ * Args: none                                                       *
+ * Returns:  GtkTreeViewGridLines setting                           *
+\********************************************************************/
+GtkTreeViewGridLines
+gnc_tree_view_get_grid_lines_pref (void)
+{
+    GtkTreeViewGridLines grid_lines;
+    gboolean h_lines = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, "grid-lines-horizontal");
+    gboolean v_lines = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, "grid-lines-vertical");
+
+    if (h_lines)
+    {
+        if (v_lines)
+            grid_lines = GTK_TREE_VIEW_GRID_LINES_BOTH;
+        else
+            grid_lines =  GTK_TREE_VIEW_GRID_LINES_HORIZONTAL;
+    }
+    else if (v_lines)
+        grid_lines = GTK_TREE_VIEW_GRID_LINES_VERTICAL;
+    else
+        grid_lines = GTK_TREE_VIEW_GRID_LINES_NONE;
+    return grid_lines;
+}
+
+/********************************************************************\
+ * Add a style context to a Widget so it can be altered with css    *
+ *                                                                  *
+ * Args:    widget - widget to add css style too                    *
+ *       gnc_class - character string for css class name            *
+ * Returns:  nothing                                                *
+\********************************************************************/
+void
+gnc_widget_set_style_context (GtkWidget *widget, const char *gnc_class)
+{
+    GtkStyleContext *context = gtk_widget_get_style_context (widget);
+    gtk_style_context_add_class (context, gnc_class);
 }
 
 gboolean
@@ -488,17 +533,19 @@ gnc_builder_connect_full_func(GtkBuilder *builder,
 
 
 void
-gnc_gtk_dialog_add_button (GtkWidget *dialog, const gchar *label, const gchar *stock_id, guint response)
+gnc_gtk_dialog_add_button (GtkWidget *dialog, const gchar *label, const gchar *icon_name, guint response)
 {
     GtkWidget *button;
 
     button = gtk_button_new_with_mnemonic(label);
-    if (stock_id)
+    if (icon_name)
     {
         GtkWidget *image;
 
-        image = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_BUTTON);
-        gtk_button_set_image(GTK_BUTTON(button), image);
+        image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_BUTTON);
+        gtk_button_set_image (GTK_BUTTON(button), image);
+        if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, "buttons-with-icons-and-labels"))
+            g_object_set (button, "always-show-image", TRUE, NULL);
     }
     g_object_set (button, "can-default", TRUE, NULL);
     gtk_widget_show_all(button);

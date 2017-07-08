@@ -646,10 +646,13 @@ gnc_imap_dialog_create (GtkWidget *parent, ImapDialog *imap_dialog)
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-imap-editor.glade", "tree-store");
     gnc_builder_add_from_file (builder, "dialog-imap-editor.glade", "treemodelfilter");
-    gnc_builder_add_from_file (builder, "dialog-imap-editor.glade", "Import Map Dialog");
+    gnc_builder_add_from_file (builder, "dialog-imap-editor.glade", "import_map_dialog");
 
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Import Map Dialog"));
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "import_map_dialog"));
     imap_dialog->dialog = dialog;
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncImapDialog");
 
     imap_dialog->session = gnc_get_current_session();
     imap_dialog->type = BAYES;
@@ -688,7 +691,12 @@ gnc_imap_dialog_create (GtkWidget *parent, ImapDialog *imap_dialog)
     gtk_tree_model_filter_set_visible_column (GTK_TREE_MODEL_FILTER(filter), FILTER);
 
     /* Enable alternative line colors */
+#if !GTK_CHECK_VERSION(3, 14, 0)
     gtk_tree_view_set_rules_hint (GTK_TREE_VIEW(imap_dialog->view), TRUE);
+#endif
+
+    // Set grid lines option to preference
+    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(imap_dialog->view), gnc_tree_view_get_grid_lines_pref ());
 
     /* default to 'close' button */
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);

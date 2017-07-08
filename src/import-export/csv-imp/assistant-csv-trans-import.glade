@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.0 -->
 <interface>
-  <requires lib="gtk+" version="2.24"/>
-  <!-- interface-naming-policy project-wide -->
+  <requires lib="gtk+" version="3.10"/>
   <object class="GtkListStore" id="account_match_store">
     <columns>
       <!-- column-name import_string -->
@@ -22,21 +22,23 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkAssistant" id="CSV Transaction Assistant">
+  <object class="GtkAssistant" id="csv_transaction_assistant">
     <property name="can_focus">False</property>
     <property name="border_width">12</property>
     <property name="title" translatable="yes">CSV Transaction Import</property>
     <property name="default_width">400</property>
     <property name="default_height">500</property>
+    <signal name="apply" handler="csv_tximp_assist_finish_cb" swapped="no"/>
+    <signal name="cancel" handler="csv_tximp_assist_cancel_cb" swapped="no"/>
     <signal name="close" handler="csv_tximp_assist_close_cb" swapped="no"/>
     <signal name="destroy" handler="csv_tximp_assist_destroy_cb" swapped="no"/>
-    <signal name="apply" handler="csv_tximp_assist_finish_cb" swapped="no"/>
     <signal name="prepare" handler="csv_tximp_assist_prepare_cb" swapped="no"/>
-    <signal name="cancel" handler="csv_tximp_assist_cancel_cb" swapped="no"/>
     <child>
       <object class="GtkLabel" id="start_page">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="valign">start</property>
         <property name="label" translatable="yes">This assistant will help you import a delimited file containing a list of transactions. It supports both token separated files (such as comma separated or semi-colon separated) and fixed width data.
 
 For a successful import three columns have to be available in the import data:
@@ -56,13 +58,15 @@ Lastly, for repeated imports the preview page has buttons to Load and Save the s
       <packing>
         <property name="page_type">intro</property>
         <property name="complete">True</property>
+        <property name="has_padding">False</property>
       </packing>
     </child>
     <child>
-      <object class="GtkVBox" id="file_page">
+      <object class="GtkBox" id="file_page">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="border_width">12</property>
+        <property name="orientation">vertical</property>
         <child>
           <object class="GtkLabel" id="label7">
             <property name="visible">True</property>
@@ -81,29 +85,23 @@ Select location and file name for the Import, then click 'OK'...
       </object>
       <packing>
         <property name="title" translatable="yes">Select File for Import</property>
+        <property name="has_padding">False</property>
       </packing>
     </child>
     <child>
-      <object class="GtkVBox" id="preview_page">
+      <object class="GtkBox" id="preview_page">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
         <property name="border_width">12</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child>
-          <object class="GtkTable" id="table1">
+          <object class="GtkGrid" id="table1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="n_rows">2</property>
-            <property name="n_columns">3</property>
-            <property name="column_spacing">5</property>
             <property name="row_spacing">5</property>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
+            <property name="column_spacing">5</property>
             <child>
               <object class="GtkFrame" id="frame6">
                 <property name="visible">True</property>
@@ -118,7 +116,7 @@ Select location and file name for the Import, then click 'OK'...
                     <property name="left_padding">5</property>
                     <property name="right_padding">5</property>
                     <child>
-                      <object class="GtkHBox" id="combo_hbox">
+                      <object class="GtkBox" id="combo_hbox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -132,7 +130,7 @@ Select location and file name for the Import, then click 'OK'...
                               <object class="GtkImage" id="image2">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="stock">gtk-delete</property>
+                                <property name="icon_name">edit-delete</property>
                               </object>
                             </child>
                           </object>
@@ -157,7 +155,7 @@ Select location and file name for the Import, then click 'OK'...
                               <object class="GtkImage" id="image1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="stock">gtk-save</property>
+                                <property name="icon_name">document-save</property>
                               </object>
                             </child>
                           </object>
@@ -183,8 +181,8 @@ Select location and file name for the Import, then click 'OK'...
                 </child>
               </object>
               <packing>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options">GTK_FILL</property>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
               </packing>
             </child>
             <child>
@@ -202,15 +200,14 @@ Select location and file name for the Import, then click 'OK'...
                     <property name="left_padding">5</property>
                     <property name="right_padding">5</property>
                     <child>
-                      <object class="GtkVBox" id="vbox1">
+                      <object class="GtkBox" id="vbox1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
                         <child>
-                          <object class="GtkTable" id="table4">
+                          <object class="GtkGrid" id="table4">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="n_rows">2</property>
-                            <property name="n_columns">2</property>
                             <child>
                               <object class="GtkRadioButton" id="csv_button">
                                 <property name="label" translatable="yes">Separators</property>
@@ -218,10 +215,15 @@ Select location and file name for the Import, then click 'OK'...
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="halign">start</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="csv_tximp_preview_sep_fixed_sel_cb" swapped="no"/>
                               </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                              </packing>
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="fixed_button">
@@ -230,25 +232,29 @@ Select location and file name for the Import, then click 'OK'...
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="halign">start</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">csv_button</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
+                                <property name="top_attach">0</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkHSeparator" id="hseparator1">
+                              <object class="GtkSeparator" id="hseparator1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="hexpand">True</property>
                               </object>
                               <packing>
-                                <property name="right_attach">2</property>
+                                <property name="left_attach">0</property>
                                 <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="y_options">GTK_FILL</property>
+                                <property name="width">3</property>
                               </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
                             </child>
                           </object>
                           <packing>
@@ -258,12 +264,10 @@ Select location and file name for the Import, then click 'OK'...
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkTable" id="separator_table">
+                          <object class="GtkGrid" id="separator_table">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="n_rows">3</property>
-                            <property name="n_columns">3</property>
                             <property name="column_spacing">3</property>
                             <child>
                               <object class="GtkCheckButton" id="space_cbutton">
@@ -272,12 +276,13 @@ Select location and file name for the Import, then click 'OK'...
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="halign">start</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
                               </object>
                               <packing>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
                               </packing>
                             </child>
                             <child>
@@ -287,14 +292,13 @@ Select location and file name for the Import, then click 'OK'...
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="halign">start</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
+                                <property name="top_attach">0</property>
                               </packing>
                             </child>
                             <child>
@@ -304,15 +308,14 @@ Select location and file name for the Import, then click 'OK'...
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="halign">start</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="left_attach">2</property>
-                                <property name="right_attach">3</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
+                                <property name="top_attach">0</property>
                               </packing>
                             </child>
                             <child>
@@ -322,14 +325,13 @@ Select location and file name for the Import, then click 'OK'...
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="halign">start</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
                               </object>
                               <packing>
+                                <property name="left_attach">0</property>
                                 <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
                               </packing>
                             </child>
                             <child>
@@ -339,16 +341,13 @@ Select location and file name for the Import, then click 'OK'...
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="halign">start</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
                                 <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
                               </packing>
                             </child>
                             <child>
@@ -358,16 +357,13 @@ Select location and file name for the Import, then click 'OK'...
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="halign">start</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="left_attach">2</property>
-                                <property name="right_attach">3</property>
                                 <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
                               </packing>
                             </child>
                             <child>
@@ -377,14 +373,13 @@ Select location and file name for the Import, then click 'OK'...
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="halign">start</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
                               </object>
                               <packing>
+                                <property name="left_attach">0</property>
                                 <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
                               </packing>
                             </child>
                             <child>
@@ -393,21 +388,17 @@ Select location and file name for the Import, then click 'OK'...
                                 <property name="can_focus">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="invisible_char">●</property>
-                                <property name="invisible_char_set">True</property>
                                 <property name="primary_icon_activatable">False</property>
                                 <property name="secondary_icon_activatable">False</property>
-                                <property name="primary_icon_sensitive">True</property>
-                                <property name="secondary_icon_sensitive">True</property>
                                 <signal name="changed" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
-                                <property name="right_attach">3</property>
                                 <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
                               </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
                             </child>
                           </object>
                           <packing>
@@ -417,7 +408,7 @@ Select location and file name for the Import, then click 'OK'...
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkHBox" id="fw_instructions_hbox">
+                          <object class="GtkBox" id="fw_instructions_hbox">
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
                             <child>
@@ -425,8 +416,10 @@ Select location and file name for the Import, then click 'OK'...
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="yalign">0</property>
-                                <property name="stock">gtk-dialog-info</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                                <property name="icon_name">dialog-information</property>
+                                <property name="icon_size">3</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -436,67 +429,61 @@ Select location and file name for the Import, then click 'OK'...
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkTable" id="table2">
+                              <object class="GtkGrid" id="table2">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="n_rows">2</property>
-                                <property name="n_columns">2</property>
                                 <child>
                                   <object class="GtkLabel" id="label2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="yalign">0</property>
-                                    <property name="xpad">5</property>
                                     <property name="label" translatable="yes">•</property>
                                     <property name="use_markup">True</property>
                                     <property name="wrap">True</property>
                                   </object>
+                                  <packing>
+                                    <property name="left_attach">0</property>
+                                    <property name="top_attach">0</property>
+                                  </packing>
                                 </child>
                                 <child>
                                   <object class="GtkLabel" id="label3">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">0</property>
+                                    <property name="halign">start</property>
                                     <property name="label" translatable="yes">Double-click anywhere on the table below to insert a column break</property>
                                     <property name="use_markup">True</property>
                                     <property name="wrap">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
-                                    <property name="right_attach">2</property>
-                                    <property name="y_options"/>
+                                    <property name="top_attach">0</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkLabel" id="label4">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="yalign">0</property>
-                                    <property name="xpad">5</property>
                                     <property name="label" translatable="yes">•</property>
                                     <property name="use_markup">True</property>
                                     <property name="wrap">True</property>
                                   </object>
                                   <packing>
+                                    <property name="left_attach">0</property>
                                     <property name="top_attach">1</property>
-                                    <property name="bottom_attach">2</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkLabel" id="label5">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">0</property>
+                                    <property name="halign">start</property>
                                     <property name="label" translatable="yes">Right-click anywhere in a column to modify it (widen, narrow, merge)</property>
                                     <property name="use_markup">True</property>
                                     <property name="wrap">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
-                                    <property name="right_attach">2</property>
                                     <property name="top_attach">1</property>
-                                    <property name="bottom_attach">2</property>
-                                    <property name="y_options"/>
                                   </packing>
                                 </child>
                               </object>
@@ -514,17 +501,19 @@ Select location and file name for the Import, then click 'OK'...
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkTable" id="table5">
+                          <object class="GtkGrid" id="table5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="n_rows">2</property>
                             <child>
-                              <object class="GtkHSeparator" id="hseparator4">
+                              <object class="GtkSeparator" id="hseparator4">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="hexpand">True</property>
                               </object>
                               <packing>
-                                <property name="y_options">GTK_FILL</property>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                                <property name="width">2</property>
                               </packing>
                             </child>
                             <child>
@@ -537,13 +526,17 @@ Select location and file name for the Import, then click 'OK'...
 
 When Multi-split is enabled the importer will assume multiple consecutive lines together hold the information for one transaction. Each line provides information for exactly one split. The first line should also provide the information for the transaction.
 To know which lines belong to the same transaction, the importer will compare the provided transaction information in each line. If that information is empty or the same as the first transaction line the importer will consider this line part of the same transaction.</property>
+                                <property name="halign">start</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="csv_tximp_preview_multisplit_cb" swapped="no"/>
                               </object>
                               <packing>
+                                <property name="left_attach">0</property>
                                 <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
                               </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
                             </child>
                           </object>
                           <packing>
@@ -570,10 +563,8 @@ To know which lines belong to the same transaction, the importer will compare th
                 </child>
               </object>
               <packing>
+                <property name="left_attach">0</property>
                 <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options">GTK_FILL</property>
               </packing>
             </child>
             <child>
@@ -589,18 +580,17 @@ To know which lines belong to the same transaction, the importer will compare th
                     <property name="left_padding">5</property>
                     <property name="right_padding">5</property>
                     <child>
-                      <object class="GtkVBox" id="vbox6">
+                      <object class="GtkBox" id="vbox6">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="orientation">vertical</property>
                         <child>
-                          <object class="GtkTable" id="table3">
+                          <object class="GtkGrid" id="table3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="n_rows">6</property>
-                            <property name="n_columns">2</property>
-                            <property name="column_spacing">5</property>
                             <property name="row_spacing">5</property>
+                            <property name="column_spacing">5</property>
                             <child>
                               <object class="GtkAlignment" id="date_format_container">
                                 <property name="visible">True</property>
@@ -610,23 +600,19 @@ To know which lines belong to the same transaction, the importer will compare th
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
                                 <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkLabel" id="label20">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
+                                <property name="halign">start</property>
                                 <property name="label" translatable="yes">Date Format</property>
                               </object>
                               <packing>
+                                <property name="left_attach">0</property>
                                 <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options">GTK_SHRINK | GTK_FILL</property>
                               </packing>
                             </child>
                             <child>
@@ -637,34 +623,31 @@ To know which lines belong to the same transaction, the importer will compare th
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
                                 <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
-                                <property name="x_options">GTK_FILL</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkLabel" id="label21">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
+                                <property name="halign">start</property>
                                 <property name="label" translatable="yes">Currency Format</property>
                               </object>
                               <packing>
+                                <property name="left_attach">0</property>
                                 <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
-                                <property name="x_options">GTK_SHRINK | GTK_FILL</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkLabel" id="label16">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
+                                <property name="halign">start</property>
                                 <property name="label" translatable="yes">Encoding</property>
                               </object>
                               <packing>
-                                <property name="x_options">GTK_SHRINK | GTK_FILL</property>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
                               </packing>
                             </child>
                             <child>
@@ -675,38 +658,35 @@ To know which lines belong to the same transaction, the importer will compare th
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="x_options">GTK_FILL</property>
+                                <property name="top_attach">0</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkLabel" id="label17">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
+                                <property name="halign">start</property>
                                 <property name="label" translatable="yes">Leading Lines to Skip</property>
                               </object>
                               <packing>
+                                <property name="left_attach">0</property>
                                 <property name="top_attach">4</property>
-                                <property name="bottom_attach">5</property>
-                                <property name="x_options">GTK_FILL</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkLabel" id="label18">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
+                                <property name="halign">start</property>
                                 <property name="label" translatable="yes">Trailing Lines to Skip</property>
                               </object>
                               <packing>
+                                <property name="left_attach">0</property>
                                 <property name="top_attach">5</property>
-                                <property name="bottom_attach">6</property>
-                                <property name="x_options">GTK_FILL</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkHBox" id="hbox2">
+                              <object class="GtkBox" id="hbox2">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <child>
@@ -714,11 +694,8 @@ To know which lines belong to the same transaction, the importer will compare th
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="invisible_char">●</property>
-                                    <property name="invisible_char_set">True</property>
                                     <property name="primary_icon_activatable">False</property>
                                     <property name="secondary_icon_activatable">False</property>
-                                    <property name="primary_icon_sensitive">True</property>
-                                    <property name="secondary_icon_sensitive">True</property>
                                     <property name="adjustment">start_row_adj</property>
                                     <property name="numeric">True</property>
                                     <signal name="value-changed" handler="csv_tximp_preview_srow_cb" swapped="no"/>
@@ -735,13 +712,11 @@ To know which lines belong to the same transaction, the importer will compare th
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
                                 <property name="top_attach">4</property>
-                                <property name="bottom_attach">5</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkHBox" id="hbox3">
+                              <object class="GtkBox" id="hbox3">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <child>
@@ -749,11 +724,8 @@ To know which lines belong to the same transaction, the importer will compare th
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="invisible_char">●</property>
-                                    <property name="invisible_char_set">True</property>
                                     <property name="primary_icon_activatable">False</property>
                                     <property name="secondary_icon_activatable">False</property>
-                                    <property name="primary_icon_sensitive">True</property>
-                                    <property name="secondary_icon_sensitive">True</property>
                                     <property name="adjustment">end_row_adj</property>
                                     <property name="numeric">True</property>
                                     <signal name="value-changed" handler="csv_tximp_preview_erow_cb" swapped="no"/>
@@ -770,20 +742,18 @@ To know which lines belong to the same transaction, the importer will compare th
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
                                 <property name="top_attach">5</property>
-                                <property name="bottom_attach">6</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkHSeparator" id="hseparator2">
+                              <object class="GtkSeparator" id="hseparator2">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                               </object>
                               <packing>
-                                <property name="right_attach">2</property>
+                                <property name="left_attach">0</property>
                                 <property name="top_attach">3</property>
-                                <property name="bottom_attach">4</property>
+                                <property name="width">2</property>
                               </packing>
                             </child>
                           </object>
@@ -803,6 +773,7 @@ To know which lines belong to the same transaction, the importer will compare th
 For example
 * if 'Leading Lines to Skip' is set to 3, the first line to import will be line 4. Lines 5, 7, 9,... will be skipped.
 * if 'Leading Lines to Skip' is set to 4, the first line to import will be line 5. Lines 6, 8, 10,... will be skipped.</property>
+                            <property name="halign">start</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="csv_tximp_preview_skiprows_cb" swapped="no"/>
                           </object>
@@ -830,11 +801,7 @@ For example
               </object>
               <packing>
                 <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
                 <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options">GTK_FILL</property>
               </packing>
             </child>
             <child>
@@ -851,7 +818,7 @@ For example
                     <property name="left_padding">5</property>
                     <property name="right_padding">5</property>
                     <child>
-                      <object class="GtkHBox" id="account_hbox">
+                      <object class="GtkBox" id="account_hbox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -872,9 +839,7 @@ For example
               </object>
               <packing>
                 <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options">GTK_FILL</property>
+                <property name="top_attach">0</property>
               </packing>
             </child>
           </object>
@@ -888,16 +853,15 @@ For example
           <object class="GtkScrolledWindow" id="scrolledwindow2">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="hscrollbar_policy">automatic</property>
-            <property name="vscrollbar_policy">automatic</property>
             <child>
               <object class="GtkViewport" id="viewport2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkVBox" id="vbox8">
+                  <object class="GtkBox" id="vbox8">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkTreeView" id="ctreeview">
                         <property name="visible">True</property>
@@ -905,6 +869,9 @@ For example
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="headers_visible">False</property>
                         <property name="enable_grid_lines">both</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection"/>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -918,6 +885,9 @@ For example
                         <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="enable_grid_lines">both</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection"/>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -937,7 +907,7 @@ For example
           </packing>
         </child>
         <child>
-          <object class="GtkHBox" id="hbox13">
+          <object class="GtkBox" id="hbox13">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -946,8 +916,10 @@ For example
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="yalign">0</property>
-                <property name="stock">gtk-dialog-info</property>
+                <property name="halign">start</property>
+                <property name="valign">start</property>
+                <property name="icon_name">dialog-information</property>
+                <property name="icon_size">3</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -961,7 +933,7 @@ For example
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="xalign">0</property>
+                <property name="halign">start</property>
                 <property name="label" translatable="yes">Select the type of each column to import.</property>
               </object>
               <packing>
@@ -979,7 +951,7 @@ For example
           </packing>
         </child>
         <child>
-          <object class="GtkHBox" id="hbox14">
+          <object class="GtkBox" id="hbox14">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
@@ -987,7 +959,6 @@ For example
                 <property name="label" translatable="yes">Skip Errors</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="xalign">1</property>
                 <property name="image_position">right</property>
                 <property name="draw_indicator">True</property>
                 <signal name="toggled" handler="csv_tximp_preview_skiperrors_cb" swapped="no"/>
@@ -1013,19 +984,19 @@ For example
       <packing>
         <property name="page_type">intro</property>
         <property name="complete">True</property>
+        <property name="has_padding">False</property>
       </packing>
     </child>
     <child>
-      <object class="GtkVBox" id="account_match_page">
+      <object class="GtkBox" id="account_match_page">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="border_width">12</property>
+        <property name="orientation">vertical</property>
         <child>
           <object class="GtkLabel" id="label7609">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">0</property>
-            <property name="xpad">5</property>
             <property name="label" translatable="yes">Select a row to change the mappings:</property>
           </object>
           <packing>
@@ -1039,8 +1010,6 @@ For example
           <object class="GtkScrolledWindow" id="account_match_swindow">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="hscrollbar_policy">automatic</property>
-            <property name="vscrollbar_policy">automatic</property>
             <property name="shadow_type">in</property>
             <child>
               <object class="GtkTreeView" id="account_match_view">
@@ -1051,6 +1020,9 @@ For example
                 <property name="enable_search">False</property>
                 <property name="enable_tree_lines">True</property>
                 <signal name="button-press-event" handler="csv_tximp_acct_match_view_clicked_cb" swapped="no"/>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection"/>
+                </child>
                 <child>
                   <object class="GtkTreeViewColumn" id="treeviewcolumn1">
                     <property name="resizable">True</property>
@@ -1086,14 +1058,13 @@ For example
           </packing>
         </child>
         <child>
-          <object class="GtkHBox" id="hbox7609">
+          <object class="GtkBox" id="hbox7609">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
               <object class="GtkLabel" id="account_match_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes">Error text.</property>
               </object>
               <packing>
@@ -1128,12 +1099,14 @@ For example
       </object>
       <packing>
         <property name="title" translatable="yes">Match Import accounts with GnuCash accounts</property>
+        <property name="has_padding">False</property>
       </packing>
     </child>
     <child>
-      <object class="GtkVBox" id="doc_page">
+      <object class="GtkBox" id="doc_page">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
         <child>
           <object class="GtkLabel" id="label8">
             <property name="visible">True</property>
@@ -1162,13 +1135,15 @@ More information can be displayed by using the help button.</property>
         <property name="page_type">progress</property>
         <property name="title" translatable="yes">Transaction Information</property>
         <property name="complete">True</property>
+        <property name="has_padding">False</property>
       </packing>
     </child>
     <child>
-      <object class="GtkVBox" id="match_page">
+      <object class="GtkBox" id="match_page">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="border_width">12</property>
+        <property name="orientation">vertical</property>
         <child>
           <object class="GtkLabel" id="match_label">
             <property name="visible">True</property>
@@ -1186,13 +1161,15 @@ More information can be displayed by using the help button.</property>
       <packing>
         <property name="page_type">confirm</property>
         <property name="title" translatable="yes">Match Transactions</property>
+        <property name="has_padding">False</property>
       </packing>
     </child>
     <child>
-      <object class="GtkVBox" id="summary_page">
+      <object class="GtkBox" id="summary_page">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="border_width">12</property>
+        <property name="orientation">vertical</property>
         <child>
           <object class="GtkLabel" id="summary_label">
             <property name="visible">True</property>
@@ -1212,7 +1189,13 @@ More information can be displayed by using the help button.</property>
         <property name="page_type">summary</property>
         <property name="title" translatable="yes">Import Summary</property>
         <property name="complete">True</property>
+        <property name="has_padding">False</property>
       </packing>
+    </child>
+    <child internal-child="action_area">
+      <object class="GtkBox" id="assistant-action_area2">
+        <property name="can_focus">False</property>
+      </object>
     </child>
   </object>
 </interface>

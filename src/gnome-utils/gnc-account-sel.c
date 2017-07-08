@@ -35,6 +35,7 @@
 #include "gnc-ui-util.h"
 #include "qof.h"
 #include "gnc-session.h"
+#include "dialog-utils.h"
 
 #define ACCT_DATA_TAG "gnc-account-sel_acct"
 
@@ -65,7 +66,7 @@ static void gas_populate_list (GNCAccountSel *gas);
 
 static void gas_new_account_click (GtkButton *b, gpointer ud);
 
-static GtkHBox *parent_class;
+static GtkBox *parent_class;
 
 GType
 gnc_account_sel_get_type (void)
@@ -87,7 +88,7 @@ gnc_account_sel_get_type (void)
             (GInstanceInitFunc) gnc_account_sel_init
         };
 
-        account_sel_type = g_type_register_static (GTK_TYPE_HBOX,
+        account_sel_type = g_type_register_static (GTK_TYPE_BOX,
                            "GNCAccountSel",
                            &account_sel_info, 0);
     }
@@ -146,11 +147,16 @@ gnc_account_sel_init (GNCAccountSel *gas)
 {
     GtkWidget *widget;
 
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(gas), GTK_ORIENTATION_HORIZONTAL);
+
     gas->initDone = FALSE;
     gas->acctTypeFilters = FALSE;
     gas->newAccountButton = NULL;
 
     g_object_set(gas, "spacing", 2, (gchar*)NULL);
+
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(gas), "GncAccountSel");
 
     gas->store = gtk_list_store_new(NUM_ACCT_COLS, G_TYPE_STRING, G_TYPE_POINTER);
     widget = gtk_combo_box_new_with_model_and_entry(GTK_TREE_MODEL(gas->store));

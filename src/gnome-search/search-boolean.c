@@ -171,7 +171,8 @@ gncs_get_widget (GNCSearchCoreType *fe)
     g_return_val_if_fail (fi, NULL);
     g_return_val_if_fail (IS_GNCSEARCH_BOOLEAN (fi), NULL);
 
-    box = gtk_hbox_new (FALSE, 3);
+    box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
+    gtk_box_set_homogeneous (GTK_BOX (box), FALSE);
 
     /* Build and connect the toggle */
     toggle = gtk_check_button_new ();

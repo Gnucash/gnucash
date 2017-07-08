@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk+" version="2.16"/>
-  <object class="GtkDialog" id="Connection Dialog">
+  <object class="GtkDialog" id="aqbanking_connection_dialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Online Banking Connection Window</property>
@@ -292,7 +292,7 @@
       <action-widget response="0">close_button</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkDialog" id="Date Range Dialog">
+  <object class="GtkDialog" id="aqbanking_date_range_dialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Get Transactions Online</property>
@@ -610,7 +610,7 @@
       <action-widget response="-5">ok_button</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkDialog" id="Password Dialog">
+  <object class="GtkDialog" id="aqbanking_password_dialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Enter Password</property>
@@ -790,7 +790,7 @@
       <action-widget response="-5">okbutton2</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkWindow" id="Preferences">
+  <object class="GtkWindow" id="aqbanking_preferences">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">window1</property>
@@ -893,7 +893,7 @@
       </object>
     </child>
   </object>
-  <object class="GtkDialog" id="Template Name Dialog">
+  <object class="GtkDialog" id="aqbanking_template_name_dialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Name for new template</property>
@@ -997,7 +997,7 @@
       <action-widget response="-5">okbutton1</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkDialog" id="Transaction Dialog">
+  <object class="GtkDialog" id="aqbanking_transaction_dialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Online Transaction</property>
@@ -1888,3 +1888,4 @@
     </action-widgets>
   </object>
 </interface>
+

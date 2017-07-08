@@ -389,8 +389,11 @@ CsvImpTransAssist::CsvImpTransAssist ()
     gnc_builder_add_from_file  (builder , "assistant-csv-trans-import.glade", "start_row_adj");
     gnc_builder_add_from_file  (builder , "assistant-csv-trans-import.glade", "end_row_adj");
     gnc_builder_add_from_file  (builder , "assistant-csv-trans-import.glade", "account_match_store");
-    gnc_builder_add_from_file  (builder , "assistant-csv-trans-import.glade", "CSV Transaction Assistant");
-    csv_imp_asst = GTK_ASSISTANT(gtk_builder_get_object (builder, "CSV Transaction Assistant"));
+    gnc_builder_add_from_file  (builder , "assistant-csv-trans-import.glade", "csv_transaction_assistant");
+    csv_imp_asst = GTK_ASSISTANT(gtk_builder_get_object (builder, "csv_transaction_assistant"));
+
+    // Set the style context for this assistant so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(csv_imp_asst), "GncAssistTransImport");
 
     /* Enable buttons on all page. */
     gtk_assistant_set_page_complete (csv_imp_asst,
@@ -420,10 +423,12 @@ CsvImpTransAssist::CsvImpTransAssist ()
     file_chooser = gtk_file_chooser_widget_new (GTK_FILE_CHOOSER_ACTION_OPEN);
     g_signal_connect (G_OBJECT(file_chooser), "file-activated",
                       G_CALLBACK(csv_tximp_file_confirm_cb), this);
-    auto button = gtk_button_new_from_stock (GTK_STOCK_OK);
+    auto button = gtk_button_new_with_label (_("OK"));
     gtk_widget_set_size_request (button, 100, -1);
     gtk_widget_show (button);
-    auto h_box = gtk_hbox_new (TRUE, 0);
+    auto h_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (h_box), TRUE);
+    gtk_widget_set_hexpand (GTK_WIDGET(h_box), TRUE);
     gtk_box_pack_start (GTK_BOX(h_box), button, FALSE, FALSE, 0);
     gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER(file_chooser), h_box);
     g_signal_connect (G_OBJECT(button), "clicked",
@@ -727,7 +732,9 @@ CsvImpTransAssist::preview_settings_name (GtkEntry* entry)
     if (text)
         tx_imp->settings_name(text);
 
-    auto combo = gtk_widget_get_parent (GTK_WIDGET(entry));
+    auto box = gtk_widget_get_parent (GTK_WIDGET(entry));
+    auto combo = gtk_widget_get_parent (GTK_WIDGET(box));
+    
     preview_handle_save_del_sensitivity (GTK_COMBO_BOX(combo));
 }
 
@@ -1133,11 +1140,11 @@ enum
 static GnumericPopupMenuElement const popup_elements[] =
 {
     {
-        N_("Merge with column on _left"), GTK_STOCK_REMOVE,
+        N_("Merge with column on _left"), "list-remove",
         0, 1 << CONTEXT_STF_IMPORT_MERGE_LEFT, CONTEXT_STF_IMPORT_MERGE_LEFT
     },
     {
-        N_("Merge with column on _right"), GTK_STOCK_REMOVE,
+        N_("Merge with column on _right"), "list-remove",
         0, 1 << CONTEXT_STF_IMPORT_MERGE_RIGHT, CONTEXT_STF_IMPORT_MERGE_RIGHT
     },
     { "", nullptr, 0, 0, 0 },
@@ -1147,11 +1154,11 @@ static GnumericPopupMenuElement const popup_elements[] =
     },
     { "", nullptr, 0, 0, 0 },
     {
-        N_("_Widen this column"), GTK_STOCK_GO_FORWARD,
+        N_("_Widen this column"), "go-next",
         0, 1 << CONTEXT_STF_IMPORT_WIDEN, CONTEXT_STF_IMPORT_WIDEN
     },
     {
-        N_("_Narrow this column"), GTK_STOCK_GO_BACK,
+        N_("_Narrow this column"), "go-previous",
         0, 1 << CONTEXT_STF_IMPORT_NARROW, CONTEXT_STF_IMPORT_NARROW
     },
     { nullptr, nullptr, 0, 0, 0 },
@@ -1321,7 +1328,7 @@ CsvImpTransAssist::preview_row_fill_state_cells (GtkListStore *store, GtkTreeIte
         fcolor = "black";
         bcolor = "pink";
         c_err_msg = err_msg.c_str();
-        icon_name = GTK_STOCK_DIALOG_ERROR;
+        icon_name = "dialog-error";
     }
     gtk_list_store_set (store, iter,
             PREV_COL_FCOLOR, fcolor,

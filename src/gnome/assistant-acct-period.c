@@ -26,7 +26,7 @@
  * This is still a work in progress so may damage your data, to enable   *
  * for testing do the following :-                                       *
  * Add a define entry to gnc-plugin-basic-commands.c as below            *
- *     #define CLOSE_BOOKS_ACTUALLY_WORKS                                *
+ *     #define CLOSE_BOOKS_ACTUALLY_WORKS 1                              *
  *                                                                       *
  * Add the following to gnc-plugin-basic-commands-ui.xml on line 43      *
  * <menuitem name="ActionsCloseBooks" action="ActionsCloseBooksAction"/> *
@@ -541,9 +541,12 @@ ap_assistant_create (AcctPeriodInfo *info)
     GtkWidget *box;
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file  (builder , "assistant-acct-period.glade", "Account Period Assistant");
-    window = GTK_WIDGET(gtk_builder_get_object (builder, "Account Period Assistant"));
+    gnc_builder_add_from_file  (builder , "assistant-acct-period.glade", "account_period_assistant");
+    window = GTK_WIDGET(gtk_builder_get_object (builder, "account_period_assistant"));
     info->window = window;
+
+    // Set the style context for this assistant so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(window), "GncAssistAccountPeriod");
 
     /* Enable all pages except menu page. */
     gtk_assistant_set_page_complete (GTK_ASSISTANT (window),

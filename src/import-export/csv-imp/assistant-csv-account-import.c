@@ -121,7 +121,7 @@ void create_regex (GString *regex_str, const gchar *sep)
             "(?<name>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
             "(?<code>\"(?:[^\"]|\"\")*\"|[^%s]*)%s?"
             "(?<description>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
-            "(?<color>[^%s]*)%s"
+            "(?<color>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
             "(?<notes>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
             "(?<commoditym>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
             "(?<commodityn>\"(?:[^\"]|\"\")*\"|[^%s]*)%s"
@@ -267,14 +267,12 @@ void csv_import_sep_cb (GtkWidget *radio, gpointer user_data)
 
     /* Generate preview */
     gtk_list_store_clear (info->store);
+    gtk_widget_set_sensitive (info->header_row_spin, TRUE);
 
     if (csv_import_read_file (info->file_name, info->regexp->str, info->store, 11) == MATCH_FOUND)
-        gtk_widget_set_sensitive (info->header_row_spin, TRUE);
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->header_row_spin), 1); // set header spin to 1
     else
-        gtk_widget_set_sensitive (info->header_row_spin, FALSE);
-
-    /* Reset Header spin to 0 */
-    gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->header_row_spin), 0);
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->header_row_spin), 0); //reset header spin to 0
 }
 
 
@@ -327,8 +325,8 @@ gnc_input_dialog (GtkWidget *parent, const gchar *title, const gchar *msg, const
     /* Create the widgets */
     dialog = gtk_dialog_new_with_buttons (title, GTK_WINDOW(parent),
                                           GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                          GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
-                                          GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
+                                          _("OK"), GTK_RESPONSE_ACCEPT,
+                                          _("Cancel"), GTK_RESPONSE_REJECT,
                                           NULL);
 
     content_area = gtk_dialog_get_content_area (GTK_DIALOG(dialog));
@@ -407,10 +405,12 @@ csv_import_assistant_account_page_prepare (GtkAssistant *assistant,
 
     gtk_list_store_clear (info->store);
 
+    gtk_widget_set_sensitive (info->header_row_spin, TRUE);
+
     if (csv_import_read_file (info->file_name, info->regexp->str, info->store, 11 ) == MATCH_FOUND)
-        gtk_widget_set_sensitive (info->header_row_spin, TRUE);
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->header_row_spin), 1); // set header spin to 1
     else
-        gtk_widget_set_sensitive (info->header_row_spin, FALSE);
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->header_row_spin), 0); //reset header spin to 0
 }
 
 
@@ -577,9 +577,12 @@ csv_import_assistant_create (CsvImportInfo *info)
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file  (builder, "assistant-csv-account-import.glade", "num_hrows_adj");
-    gnc_builder_add_from_file  (builder, "assistant-csv-account-import.glade", "CSV Account Import Assistant");
-    window = GTK_WIDGET(gtk_builder_get_object (builder, "CSV Account Import Assistant"));
+    gnc_builder_add_from_file  (builder, "assistant-csv-account-import.glade", "csv_account_import_assistant");
+    window = GTK_WIDGET(gtk_builder_get_object (builder, "csv_account_import_assistant"));
     info->window = window;
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(window), "GncAssistAccountImport");
 
     /* Load default settings */
     load_settings (info);
@@ -607,10 +610,12 @@ csv_import_assistant_create (CsvImportInfo *info)
     info->file_chooser = gtk_file_chooser_widget_new (GTK_FILE_CHOOSER_ACTION_OPEN);
     g_signal_connect (G_OBJECT(info->file_chooser), "file-activated",
                       G_CALLBACK(csv_import_file_chooser_confirm_cb), info);
-    button = gtk_button_new_from_stock (GTK_STOCK_OK);
+    button = gtk_button_new_with_label (_("OK"));
     gtk_widget_set_size_request (button, 100, -1);
     gtk_widget_show (button);
-    h_box = gtk_hbox_new (TRUE, 0);
+    h_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (h_box), TRUE);
+    gtk_widget_set_hexpand (GTK_WIDGET(h_box), TRUE);
     gtk_box_pack_start (GTK_BOX(h_box), button, FALSE, FALSE, 0);
     gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER(info->file_chooser), h_box);
     g_signal_connect (G_OBJECT(button), "clicked",

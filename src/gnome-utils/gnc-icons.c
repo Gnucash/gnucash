@@ -1,5 +1,5 @@
 /*
- * gnc-icons.c -- Functions to create a GtkIconFactory for GnuCash
+ * gnc-icons.c -- Functions to add icons for GnuCash to use
  * Copyright (C) 2003 Jan Arne Petersen
  * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
  */
@@ -32,113 +32,85 @@
 #include "gnc-icons.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-gnome-utils.h"
-
-static GtkStockItem items[] =
-{
-    { GNC_STOCK_ACCOUNT,        N_("Account"),         0, 0, NULL },
-    { GNC_STOCK_DELETE_ACCOUNT, N_("_Delete Account"), 0, 0, NULL },
-    { GNC_STOCK_EDIT_ACCOUNT,   N_("_Edit Account"),   0, 0, NULL },
-    { GNC_STOCK_NEW_ACCOUNT,    N_("_New Account"),    0, 0, NULL },
-    { GNC_STOCK_OPEN_ACCOUNT,   N_("_Open Account"),   0, 0, NULL },
-    { GNC_STOCK_TRANSFER,       N_("_Transfer..."),    0, 0, NULL },
-    { GNC_STOCK_SPLIT_TRANS,    N_("S_plit Transaction"), 0, 0, NULL },
-    { GNC_STOCK_JUMP_TO,        N_("_Jump"),              0, 0, NULL },
-};
+#include "gnc-path.h"
 
 typedef struct _item_file
 {
-    const gchar *stock_name;
-    const gchar *filename_lg;
-    const gchar *filename_sm;
+    const gchar *icon_name;
+    const gchar *filename;
 } item_file;
 
 static item_file item_files[] =
 {
-    { GNC_STOCK_ACCOUNT,        "gnc-account.png",        "gnc-account-16.png"},
-    { GNC_STOCK_ACCOUNT_REPORT, "gnc-account-report.png", "gnc-account-report-16.png"},
-    { GNC_STOCK_DELETE_ACCOUNT, "gnc-account-delete.png", "gnc-account-delete-16.png"},
-    { GNC_STOCK_EDIT_ACCOUNT,   "gnc-account-edit.png",   "gnc-account-edit-16.png"},
-    { GNC_STOCK_NEW_ACCOUNT,    "gnc-account-new.png",    "gnc-account-new-16.png"},
-    { GNC_STOCK_OPEN_ACCOUNT,   "gnc-account-open.png",   "gnc-account-open-16.png"},
-    { GNC_STOCK_TRANSFER,       "gnc-transfer.png",       "gnc-transfer-16.png"},
-    { GNC_STOCK_SCHEDULE,       "gnc-sx-new.png",         "gnc-sx-new-16.png"},
-    { GNC_STOCK_SPLIT_TRANS,    "gnc-split-trans.png",    "gnc-split-trans-16.png"},
-    { GNC_STOCK_JUMP_TO,        "gnc-jumpto.png",         "gnc-jumpto-16.png"},
-    { GNC_STOCK_INVOICE,        "gnc-invoice.png",        "gnc-invoice-16.png"},
-    { GNC_STOCK_INVOICE_PAY,    "gnc-invoice-pay.png",    "gnc-invoice-pay-16.png"},
-    { GNC_STOCK_INVOICE_POST,   "gnc-invoice-post.png",   "gnc-invoice-post-16.png"},
-    { GNC_STOCK_INVOICE_UNPOST, "gnc-invoice-unpost.png", "gnc-invoice-unpost-16.png"},
-    { GNC_STOCK_INVOICE_NEW,    "gnc-invoice-new.png",   "gnc-invoice-new-16.png"},
-    { GNC_STOCK_INVOICE_EDIT,   "gnc-invoice-edit.png",   "gnc-invoice-edit-16.png"},
-    { GNC_STOCK_INVOICE_DUPLICATE, "gnc-invoice-duplicate.png", "gnc-invoice-duplicate-16.png"},
-    { GNC_STOCK_PDF_EXPORT,     "gnc-gnome-pdf-24.png",   "gnc-gnome-pdf-16.png"},
+    { GNC_ICON_ACCOUNT,           "gnc-account.png"},
+    { GNC_ICON_ACCOUNT_REPORT,    "gnc-account-report.png"},
+    { GNC_ICON_DELETE_ACCOUNT,    "gnc-account-delete.png"},
+    { GNC_ICON_EDIT_ACCOUNT,      "gnc-account-edit.png"},
+    { GNC_ICON_NEW_ACCOUNT,       "gnc-account-new.png"},
+    { GNC_ICON_OPEN_ACCOUNT,      "gnc-account-open.png"},
+    { GNC_ICON_TRANSFER,          "gnc-transfer.png"},
+    { GNC_ICON_SCHEDULE,          "gnc-sx-new.png"},
+    { GNC_ICON_SPLIT_TRANS,       "gnc-split-trans.png"},
+    { GNC_ICON_JUMP_TO,           "gnc-jumpto.png"},
+    { GNC_ICON_INVOICE,           "gnc-invoice.png"},
+    { GNC_ICON_INVOICE_PAY,       "gnc-invoice-pay.png"},
+    { GNC_ICON_INVOICE_POST,      "gnc-invoice-post.png"},
+    { GNC_ICON_INVOICE_UNPOST,    "gnc-invoice-unpost.png"},
+    { GNC_ICON_INVOICE_NEW,       "gnc-invoice-new.png"},
+    { GNC_ICON_INVOICE_EDIT,      "gnc-invoice-edit.png"},
+    { GNC_ICON_INVOICE_DUPLICATE, "gnc-invoice-duplicate.png"},
+    { GNC_ICON_PDF_EXPORT,        "gnc-gnome-pdf.png"},
     { 0 },
 };
 
-static void
-gnc_add_stock_icon_pair (GtkIconFactory *factory,
-                         const char *stock,
-                         const char *filename1,
-                         const char *filename2)
-{
-    GtkIconSet *set;
-    GtkIconSource *source;
-    GdkPixbuf *pixbuf1, *pixbuf2;
-    char *fullname1, *fullname2;
-
-    /* Find the complete path names for these files */
-    fullname1 = gnc_filepath_locate_pixmap (filename1);
-    fullname2 = gnc_filepath_locate_pixmap (filename2);
-    g_assert (fullname1 && fullname2);
-
-    /* Load the pixbufs */
-    pixbuf1 = gnc_gnome_get_gdkpixbuf (filename1);
-    pixbuf2 = gnc_gnome_get_gdkpixbuf (filename2);
-    g_assert (pixbuf1 && pixbuf2);
-
-    /* Create the icon set */
-    set = gtk_icon_set_new ();
-    source = gtk_icon_source_new ();
-    gtk_icon_source_set_filename (source, fullname1);
-    gtk_icon_source_set_pixbuf (source, pixbuf1);
-    gtk_icon_set_add_source (set, source);
-    gtk_icon_source_free(source);
-
-    source = gtk_icon_source_new ();
-    gtk_icon_source_set_filename (source, fullname2);
-    gtk_icon_source_set_pixbuf (source, pixbuf2);
-    gtk_icon_source_set_size (source, GTK_ICON_SIZE_MENU);
-    gtk_icon_source_set_size_wildcarded (source, FALSE);
-    gtk_icon_set_add_source (set, source);
-    gtk_icon_source_free(source);
-
-    /* Add it to the factory */
-    gtk_icon_factory_add (factory, stock, set);
-
-    /* Cleanup */
-    g_object_unref (pixbuf2);
-    g_object_unref (pixbuf1);
-    g_free(fullname2);
-    g_free(fullname1);
-    gtk_icon_set_unref (set);
-}
-
 void
-gnc_load_stock_icons (void)
+gnc_load_app_icons (void)
 {
-    GtkIconFactory *factory;
+#if GTK_CHECK_VERSION(3,14,0)
+    GtkIconTheme *icon_theme = gtk_icon_theme_get_default ();
+#endif
     item_file *file;
+    const gchar *default_path;
+    gchar* pkgdatadir = gnc_path_get_pkgdatadir ();
+    default_path = g_build_filename (pkgdatadir, "icons", NULL);
+    g_free (pkgdatadir);
 
-    /* Register our stock items */
-    gtk_stock_add (items, G_N_ELEMENTS (items));
+#if GTK_CHECK_VERSION(3,14,0)
+    gtk_icon_theme_append_search_path (icon_theme, default_path);
+#endif
 
-    /* Add our custom icon factory to the list of defaults */
-    factory = gtk_icon_factory_new ();
-    for (file = item_files; file->stock_name; file++)
+    for (file = item_files; file->icon_name; file++)
     {
-        gnc_add_stock_icon_pair (factory, file->stock_name,
-                                 file->filename_lg, file->filename_sm);
-    }
+#if GTK_CHECK_VERSION(3,14,0)
 
-    gtk_icon_factory_add_default (factory);
+        gint *icon_sizes = gtk_icon_theme_get_icon_sizes (icon_theme, file->icon_name);
+
+        if ((icon_sizes[0] != 16) && (icon_sizes[1] != 24))
+            g_warning ("Required icon size for icon name '%s' not found", file->icon_name);
+        g_free (icon_sizes);
+
+        // check to see if we have at least one size for the named icons loaded
+        g_assert (gtk_icon_theme_has_icon (icon_theme, file->icon_name));
+#else
+        GdkPixbuf *pixbuf_sm, *pixbuf_lg;
+        char *fullname_sm, *fullname_lg;
+        fullname_sm = g_strconcat (default_path, "/hicolor/16x16/actions/", file->filename, NULL);
+        fullname_lg = g_strconcat (default_path, "/hicolor/24x24/actions/", file->filename, NULL);
+
+        g_assert (fullname_sm && fullname_lg);
+
+        pixbuf_sm = gnc_gnome_get_gdkpixbuf (fullname_sm);
+        pixbuf_lg = gnc_gnome_get_gdkpixbuf (fullname_lg);
+        g_assert (pixbuf_sm && pixbuf_lg);
+
+        gtk_icon_theme_add_builtin_icon (file->icon_name, 16, pixbuf_sm);
+        gtk_icon_theme_add_builtin_icon (file->icon_name, 24, pixbuf_lg);
+
+        g_object_unref(pixbuf_sm);
+        g_object_unref(pixbuf_lg);
+
+        g_free (fullname_sm);
+        g_free (fullname_lg);
+#endif
+    }
 }

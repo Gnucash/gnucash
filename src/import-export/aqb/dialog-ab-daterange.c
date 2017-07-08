@@ -69,9 +69,9 @@ gnc_ab_enter_daterange(GtkWidget *parent,
     ENTER("");
 
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-ab.glade", "Date Range Dialog");
+    gnc_builder_add_from_file (builder, "dialog-ab.glade", "aqbanking_date_range_dialog");
 
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Date Range Dialog"));
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "aqbanking_date_range_dialog"));
 
     /* Connect the signals */
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, &info );

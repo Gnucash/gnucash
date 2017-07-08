@@ -40,12 +40,12 @@
  **/
 typedef struct
 {
-    GtkHBox hbox;
+    GtkBox hbox;
 } GNCDateFormat;
 
 typedef struct
 {
-    GtkHBoxClass hbox_class;
+    GtkBoxClass hbox_class;
     void (*format_changed) (GNCDateFormat *gdf);
 } GNCDateFormatClass;
 

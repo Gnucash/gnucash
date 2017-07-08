@@ -856,9 +856,9 @@ gnc_ab_initial_assistant(void)
 
     info = g_new0(ABInitialInfo, 1);
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "assistant-ab-initial.glade", "AqBanking Init Assistant");
+    gnc_builder_add_from_file (builder, "assistant-ab-initial.glade", "aqbanking_init_assistant");
 
-    info->window = GTK_WIDGET(gtk_builder_get_object (builder, "AqBanking Init Assistant"));
+    info->window = GTK_WIDGET(gtk_builder_get_object (builder, "aqbanking_init_assistant"));
 
     info->api = gnc_AB_BANKING_new();
     info->deferred_info = NULL;

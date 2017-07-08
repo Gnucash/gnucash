@@ -51,8 +51,11 @@ gnc_ui_object_references_show( const gchar* explanation_text, GList* objlist )
 
     /* Open the dialog */
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-object-references.glade", "Object references" );
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "Object references" ));
+    gnc_builder_add_from_file (builder, "dialog-object-references.glade", "object_references_dialog" );
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "object_references_dialog" ));
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncObjectRefDialog");
 
     explanation = GTK_LABEL(gtk_builder_get_object (builder, "lbl_explanation" ));
     gtk_label_set_text( explanation, explanation_text );

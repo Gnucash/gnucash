@@ -212,7 +212,7 @@ ADD_LIBRARY (gncmod-gnome-utils
 )
 
 TARGET_LINK_LIBRARIES(gncmod-gnome-utils gncmod-app-utils gncmod-engine gnc-backend-xml-utils
-     ${GTK2_LDFLAGS} ${GTK_MAC_LDFLAGS})
+     ${GTK3_LDFLAGS} ${GTK_MAC_LDFLAGS})
 
 TARGET_COMPILE_DEFINITIONS(gncmod-gnome-utils PUBLIC ${GTK_MAC_CFLAGS_OTHER}
     PRIVATE -DG_LOG_DOMAIN=\"gnc.gui\")
@@ -224,7 +224,7 @@ ENDIF(MAC_INTEGRATION)
 
 TARGET_INCLUDE_DIRECTORIES(gncmod-gnome-utils
     PUBLIC
-      ${GTK2_INCLUDE_DIRS}
+      ${GTK3_INCLUDE_DIRS}
       ${CMAKE_CURRENT_SOURCE_DIR}
     PRIVATE
       ${GTK_MAC_INCLUDE_DIRS}

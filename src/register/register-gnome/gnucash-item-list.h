@@ -23,7 +23,8 @@
 #ifndef GNUCASH_ITEM_LIST_H
 #define GNUCASH_ITEM_LIST_H
 
-#include <libgnomecanvas/libgnomecanvas.h>
+#include <gtk/gtk.h>
+
 /** @ingroup Register
  * @addtogroup Gnome
  * @{
@@ -38,16 +39,15 @@
 
 typedef struct
 {
-    GnomeCanvasWidget canvas_widget;
+    GtkEventBox ebox;
 
     GtkTreeView *tree_view;
     GtkListStore *list_store; /* Contains the list items */
-    GtkWidget *frame;         /* frame around everything */
 } GncItemList;
 
 typedef struct
 {
-    GnomeCanvasWidgetClass parent_class;
+    GtkEventBoxClass parent_class;
 
     void (*select_item) (GncItemList *item_list,
                          char        *item_string);
@@ -58,15 +58,12 @@ typedef struct
     void (*activate_item) (GncItemList *item_list,
                            char        *item_string);
 
-    void (*key_press_event) (GncItemList *item_list,
-                             GdkEventKey *event);
-
 } GncItemListClass;
 
 
 GType gnc_item_list_get_type (void);
 
-GnomeCanvasItem *gnc_item_list_new (GnomeCanvasGroup *parent, GtkListStore *shared_store);
+GtkWidget *gnc_item_list_new (GtkListStore *shared_store);
 
 gint gnc_item_list_num_entries (GncItemList *item_list);
 

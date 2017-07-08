@@ -123,12 +123,12 @@ static GtkActionEntry gnc_plugin_page_budget_actions [] =
 
     /* File menu */
     {
-        "OpenAccountAction", GNC_STOCK_OPEN_ACCOUNT, N_("Open _Account"), NULL,
+        "OpenAccountAction", GNC_ICON_OPEN_ACCOUNT, N_("Open _Account"), NULL,
         N_("Open the selected account"),
         G_CALLBACK (gnc_plugin_page_budget_cmd_open_account)
     },
     {
-        "OpenSubaccountsAction", GNC_STOCK_OPEN_ACCOUNT,
+        "OpenSubaccountsAction", GNC_ICON_OPEN_ACCOUNT,
         N_("Open _Subaccounts"), NULL,
         N_("Open the selected account and all its subaccounts"),
         G_CALLBACK (gnc_plugin_page_budget_cmd_open_subaccounts)
@@ -136,17 +136,17 @@ static GtkActionEntry gnc_plugin_page_budget_actions [] =
 
     /* Edit menu */
     {
-        "DeleteBudgetAction", GNC_STOCK_DELETE_BUDGET, N_("_Delete Budget"),
+        "DeleteBudgetAction", GNC_ICON_DELETE_BUDGET, N_("_Delete Budget"),
         NULL, N_("Delete this budget"),
         G_CALLBACK (gnc_plugin_page_budget_cmd_delete_budget)
     },
     {
-        "OptionsBudgetAction", GTK_STOCK_PROPERTIES, N_("Budget Options"),
+        "OptionsBudgetAction", "document-properties", N_("Budget Options"),
         NULL, N_("Edit this budget's options"),
         G_CALLBACK (gnc_plugin_page_budget_cmd_view_options)
     },
     {
-        "EstimateBudgetAction", GTK_STOCK_EXECUTE, N_("Estimate Budget"),
+        "EstimateBudgetAction", "system-run", N_("Estimate Budget"),
         NULL,
         N_("Estimate a budget value for the selected accounts from past transactions"),
         G_CALLBACK (gnc_plugin_page_budget_cmd_estimate_budget)
@@ -287,7 +287,7 @@ gnc_plugin_page_budget_class_init (GncPluginPageBudgetClass *klass)
 
     object_class->finalize = gnc_plugin_page_budget_finalize;
 
-    gnc_plugin_class->tab_icon        = GNC_STOCK_BUDGET;
+    gnc_plugin_class->tab_icon        = GNC_ICON_BUDGET;
     gnc_plugin_class->plugin_name     = GNC_PLUGIN_PAGE_BUDGET_NAME;
     gnc_plugin_class->create_widget   = gnc_plugin_page_budget_create_widget;
     gnc_plugin_class->destroy_widget  = gnc_plugin_page_budget_destroy_widget;
@@ -764,9 +764,9 @@ gnc_plugin_page_budget_cmd_view_options (GtkAction *action,
     {
         builder = gtk_builder_new();
         gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.glade", "NumPeriods_Adj");
-        gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.glade", "OptionsContainer");
+        gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.glade", "budget_options_container_dialog");
 
-        priv->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "OptionsContainer"));
+        priv->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "budget_options_container_dialog"));
 
         gtk_window_set_transient_for(
             GTK_WINDOW(priv->dialog),
@@ -918,9 +918,9 @@ gnc_plugin_page_budget_cmd_estimate_budget(GtkAction *action,
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.glade", "DigitsToRound_Adj");
-    gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.glade", "BudgetEstimate");
+    gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.glade", "budget_estimate_dialog");
 
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetEstimate"));
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "budget_estimate_dialog"));
 
     gtk_window_set_transient_for(
         GTK_WINDOW(dialog),

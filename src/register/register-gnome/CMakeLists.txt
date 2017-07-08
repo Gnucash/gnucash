@@ -8,11 +8,12 @@ SET (register_gnome_SOURCES
   gnucash-color.c
   gnucash-cursor.c
   gnucash-date-picker.c
-  gnucash-grid.c
   gnucash-header.c
   gnucash-item-edit.c
   gnucash-item-list.c
+  gnucash-register.c
   gnucash-scrolled-window.c
+  gnucash-sheet-private.c
   gnucash-sheet.c
   gnucash-style.c
   pricecell-gnome.c
@@ -25,10 +26,10 @@ SET (register_gnome_noinst_HEADERS
   gnucash-color.h
   gnucash-cursor.h
   gnucash-date-picker.h
-  gnucash-grid.h
   gnucash-header.h
   gnucash-item-edit.h
   gnucash-item-list.h
+  gnucash-register.h
   gnucash-scrolled-window.h
   gnucash-sheet.h
   gnucash-sheetP.h
@@ -43,13 +44,13 @@ SET_SOURCE_FILES_PROPERTIES (${register_gnome_SOURCES} PROPERTIES OBJECT_DEPENDS
 
 ADD_LIBRARY (gncmod-register-gnome ${register_gnome_SOURCES} ${register_gnome_noinst_HEADERS})
 
-TARGET_LINK_LIBRARIES(gncmod-register-gnome gncmod-register-core gnc-qof ${GNOMECANVAS_LDFLAGS} ${GTK2_LDFLAGS})
+TARGET_LINK_LIBRARIES(gncmod-register-gnome gncmod-register-core gnc-qof ${GTK3_LDFLAGS})
 
 TARGET_COMPILE_DEFINITIONS(gncmod-register-gnome PRIVATE -DG_LOG_DOMAIN=\"gnc.register.gnome\")
 
 TARGET_INCLUDE_DIRECTORIES(gncmod-register-gnome
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
-    PRIVATE ${CMAKE_SOURCE_DIR}/src/register/ledger-core ${GNOMECANVAS_INCLUDE_DIRS}
+    PRIVATE ${CMAKE_SOURCE_DIR}/src/register/ledger-core ${GTK3_INCLUDE_DIRS}
 )
 
 INSTALL(TARGETS gncmod-register-gnome

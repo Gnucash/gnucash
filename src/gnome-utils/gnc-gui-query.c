@@ -293,7 +293,6 @@ gnc_choose_radio_option_dialog(GtkWidget *parent,
     GtkWidget *vbox;
     GtkWidget *main_vbox;
     GtkWidget *label;
-    GtkWidget *alignment;
     GtkWidget *radio_button;
     GtkWidget *dialog;
     GtkWidget *dvbox;
@@ -301,7 +300,8 @@ gnc_choose_radio_option_dialog(GtkWidget *parent,
     GList *node;
     int i;
 
-    main_vbox = gtk_vbox_new(FALSE, 3);
+    main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+    gtk_box_set_homogeneous (GTK_BOX (main_vbox), FALSE);
     gtk_container_set_border_width(GTK_CONTAINER(main_vbox), 6);
     gtk_widget_show(main_vbox);
 
@@ -310,20 +310,17 @@ gnc_choose_radio_option_dialog(GtkWidget *parent,
     gtk_box_pack_start(GTK_BOX(main_vbox), label, FALSE, FALSE, 0);
     gtk_widget_show(label);
 
-    alignment = gtk_alignment_new(0.0, 0.0, 1.0, 1.0);
-    gtk_alignment_set_padding (GTK_ALIGNMENT(alignment), 0, 0, 12, 0);
-    gtk_box_pack_start(GTK_BOX(main_vbox), alignment, FALSE, FALSE, 0);
-    gtk_widget_show(alignment);
-
-    vbox = gtk_vbox_new(TRUE, 3);
+    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+    gtk_box_set_homogeneous (GTK_BOX (vbox), TRUE);
     gtk_container_set_border_width(GTK_CONTAINER(vbox), 6);
-    gtk_container_add(GTK_CONTAINER(alignment), vbox);
+    gtk_container_add(GTK_CONTAINER(main_vbox), vbox);
     gtk_widget_show(vbox);
 
     for (node = radio_list, i = 0; node; node = node->next, i++)
     {
         radio_button = gtk_radio_button_new_with_mnemonic(group, node->data);
         group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(radio_button));
+        gtk_widget_set_halign (GTK_WIDGET(radio_button), GTK_ALIGN_START);
 
         if (i == default_value) /* default is first radio button */
         {
@@ -340,10 +337,10 @@ gnc_choose_radio_option_dialog(GtkWidget *parent,
     }
 
     if (!button_name)
-        button_name = GTK_STOCK_OK;
+        button_name = _("OK");
     dialog = gtk_dialog_new_with_buttons (title, GTK_WINDOW(parent),
                                           GTK_DIALOG_DESTROY_WITH_PARENT,
-                                          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                          _("Cancel"), GTK_RESPONSE_CANCEL,
                                           button_name, GTK_RESPONSE_OK,
                                           NULL);
 

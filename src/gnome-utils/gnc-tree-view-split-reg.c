@@ -623,15 +623,11 @@ gnc_tree_view_split_reg_pref_changed (gpointer prefs, gchar *pref, gpointer user
 
 
 /* Set the grid lines to be solid */
-static const gchar *rc_string =
+static const gchar *css_string =
 {
-"style \"solidTreeLines\"\n"
-"{\n"
-" GtkTreeView::grid-line-pattern = \"\1\"\n"
-" GtkTreeView::grid-line-width = 1\n" 
+"treeview.view {\n"
+" border-color: black;\n"
 "}\n"
-"\n"
-"class \"GtkTreeView\" style \"solidTreeLines\"\n"
 };
 
 
@@ -1022,6 +1018,7 @@ gnc_tree_view_split_reg_new_with_model (GncTreeModelSplitReg *model)
     GtkTreeModel        *s_model;
     GncTreeViewSplitReg *view;
     GtkTreeSelection    *selection;
+    GtkCssProvider* provider = gtk_css_provider_new();
 
     view = g_object_new (gnc_tree_view_split_reg_get_type(), NULL);
     g_object_set (view, "name", "split_reg_tree", NULL);
@@ -1034,7 +1031,11 @@ gnc_tree_view_split_reg_new_with_model (GncTreeModelSplitReg *model)
     view->help_text = g_strdup ("Help Text");
 
     // This sets up solid lines for the grid line.
-    gtk_rc_parse_string (rc_string);
+    gtk_css_provider_load_from_data (provider, css_string, strlen(css_string), NULL);
+    gtk_style_context_add_provider (gtk_widget_get_style_context(GTK_WIDGET(view)),
+                                   GTK_STYLE_PROVIDER (provider),
+                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    g_object_unref (provider);
 
     /* TreeView Grid lines */
     if (view->priv->use_horizontal_lines)
@@ -2451,7 +2452,7 @@ gtv_sr_transaction_changed_confirm (GncTreeViewSplitReg *view,
                                              "%s", message);
 
     gtk_dialog_add_buttons (GTK_DIALOG(dialog),_("_Discard Changes"), GTK_RESPONSE_REJECT,
-                            GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                            _("Cancel"), GTK_RESPONSE_CANCEL,
                             _("_Record Changes"), GTK_RESPONSE_ACCEPT, NULL);
 
     response = gnc_dialog_run (GTK_DIALOG (dialog), GNC_PREF_WARN_REG_TRANS_MOD);
@@ -5779,7 +5780,7 @@ gtv_sr_editable_start_editing_cb (GtkCellRenderer *cr, GtkCellEditable *editable
 
     /* Lets change the background of the entry widgets */
     {
-        GdkColor     color;
+        GdkRGBA      color;
         const gchar *row_color;
         gboolean     is_trow1 = FALSE;
         gboolean     is_trow2 = FALSE;
@@ -5794,10 +5795,26 @@ gtv_sr_editable_start_editing_cb (GtkCellRenderer *cr, GtkCellEditable *editable
 
         row_color = gnc_tree_model_split_reg_get_row_color (model, is_trow1, is_trow2, is_split, indices[0]);
 
-        if (gdk_color_parse (row_color, &color))
+        if (gdk_rgba_parse (&color, row_color))
         {
             if (entry != NULL)
-                gtk_widget_modify_base (GTK_WIDGET (entry), GTK_STATE_NORMAL, &color);
+            {
+#if GTK_CHECK_VERSION(3,16,0)
+                GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET (entry));
+                GtkCssProvider *provider = gtk_css_provider_new();
+                gchar *col_str = gdk_rgba_to_string (&color);
+                gchar *widget_css = g_strconcat ("*{\n  background-color:", col_str, ";\n}\n", NULL);
+
+                gtk_css_provider_load_from_data (provider, widget_css, -1, NULL);
+                gtk_style_context_add_provider (stylectxt, GTK_STYLE_PROVIDER (provider),
+                                                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+                g_object_unref (provider);
+                g_free (col_str);
+                g_free (widget_css);
+#else
+                gtk_widget_override_background_color (GTK_WIDGET (entry), GTK_STATE_FLAG_NORMAL, &color);
+#endif
+            }
         }
     }
 

@@ -2,7 +2,7 @@
 <interface>
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy project-wide -->
-  <object class="GtkDialog" id="account_picker">
+  <object class="GtkDialog" id="account_picker_dialog">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Select Account</property>
@@ -162,7 +162,7 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkDialog" id="format_picker">
+  <object class="GtkDialog" id="format_picker_dialog">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Choose a format</property>
@@ -616,7 +616,7 @@
       </object>
     </child>
   </object>
-  <object class="GtkDialog" id="match_picker">
+  <object class="GtkDialog" id="match_picker_dialog">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Select matching existing transaction</property>
     <property name="default_width">600</property>
@@ -787,7 +787,7 @@
   <object class="GtkTextBuffer" id="textbuffer5">
     <property name="text" translatable="yes">Double click on the transaction to change the matching transaction to reconcile, or the destination account of the auto-balance split (if required).</property>
   </object>
-  <object class="GtkDialog" id="matcher_help">
+  <object class="GtkDialog" id="matcher_help_dialog">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">12</property>
@@ -1218,7 +1218,7 @@
       <action-widget response="-7">matcher_help_close</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkDialog" id="transaction_matcher">
+  <object class="GtkDialog" id="transaction_matcher_dialog">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Generic import transaction matcher</property>
     <property name="default_width">600</property>

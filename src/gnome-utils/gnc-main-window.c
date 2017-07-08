@@ -35,6 +35,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <gdk/gdk.h>
 #include <gdk/gdkkeysyms.h>
 
 #include "gnc-plugin.h"
@@ -126,7 +127,7 @@ static guint secs_to_save = 0;
 static void gnc_main_window_class_init (GncMainWindowClass *klass);
 static void gnc_main_window_init (GncMainWindow *window, GncMainWindowClass *klass);
 static void gnc_main_window_finalize (GObject *object);
-static void gnc_main_window_destroy (GtkObject *object);
+static void gnc_main_window_destroy (GtkWidget *widget);
 
 static void gnc_main_window_setup_window (GncMainWindow *window);
 static void gnc_window_main_window_init (GncWindowIface *iface);
@@ -272,29 +273,29 @@ static GtkActionEntry gnc_menu_actions [] =
     { "FileImportAction", NULL, N_("_Import"), NULL, NULL, NULL },
     { "FileExportAction", NULL, N_("_Export"), NULL, NULL, NULL },
     {
-        "FilePrintAction", GTK_STOCK_PRINT, N_("_Print..."), "<primary>p",
+        "FilePrintAction", "document-print", N_("_Print..."), "<primary>p",
         N_("Print the currently active page"), NULL
     },
 #ifndef GTK_STOCK_PAGE_SETUP
 #    define GTK_STOCK_PAGE_SETUP NULL
 #endif
     {
-        "FilePageSetupAction", GTK_STOCK_PAGE_SETUP, N_("Pa_ge Setup..."), "<primary><shift>p",
+        "FilePageSetupAction", "document-page-setup", N_("Pa_ge Setup..."), "<primary><shift>p",
         N_("Specify the page size and orientation for printing"),
         G_CALLBACK (gnc_main_window_cmd_page_setup)
     },
     {
-        "FilePropertiesAction", GTK_STOCK_PROPERTIES, N_("Proper_ties"), "<Alt>Return",
+        "FilePropertiesAction", "document-properties", N_("Proper_ties"), "<Alt>Return",
         N_("Edit the properties of the current file"),
         G_CALLBACK (gnc_main_window_cmd_file_properties)
     },
     {
-        "FileCloseAction", GTK_STOCK_CLOSE, N_("_Close"), NULL,
+        "FileCloseAction", "window-close", N_("_Close"), NULL,
         N_("Close the currently active page"),
         G_CALLBACK (gnc_main_window_cmd_file_close)
     },
     {
-        "FileQuitAction", GTK_STOCK_QUIT, N_("_Quit"), NULL,
+        "FileQuitAction", "application-exit", N_("_Quit"), NULL,
         N_("Quit this application"),
         G_CALLBACK (gnc_main_window_cmd_file_quit)
     },
@@ -302,22 +303,22 @@ static GtkActionEntry gnc_menu_actions [] =
     /* Edit menu */
 
     {
-        "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), NULL,
+        "EditCutAction", "edit-cut", N_("Cu_t"), NULL,
         N_("Cut the current selection and copy it to clipboard"),
         G_CALLBACK (gnc_main_window_cmd_edit_cut)
     },
     {
-        "EditCopyAction", GTK_STOCK_COPY, N_("_Copy"), NULL,
+        "EditCopyAction", "edit-copy", N_("_Copy"), NULL,
         N_("Copy the current selection to clipboard"),
         G_CALLBACK (gnc_main_window_cmd_edit_copy)
     },
     {
-        "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), NULL,
+        "EditPasteAction", "edit-paste", N_("_Paste"), NULL,
         N_("Paste the clipboard content at the cursor position"),
         G_CALLBACK (gnc_main_window_cmd_edit_paste)
     },
     {
-        "EditPreferencesAction", GTK_STOCK_PREFERENCES, N_("Pr_eferences"), NULL,
+        "EditPreferencesAction", "preferences-system", N_("Pr_eferences"), NULL,
         N_("Edit the global preferences of GnuCash"),
         G_CALLBACK (gnc_main_window_cmd_edit_preferences)
     },
@@ -333,7 +334,7 @@ static GtkActionEntry gnc_menu_actions [] =
         N_("Select the account types that should be displayed."), NULL
     },
     {
-        "ViewRefreshAction", GTK_STOCK_REFRESH, N_("_Refresh"), "<primary>r",
+        "ViewRefreshAction", "view-refresh", N_("_Refresh"), "<primary>r",
         N_("Refresh this window"),
         G_CALLBACK (gnc_main_window_cmd_view_refresh)
     },
@@ -368,17 +369,17 @@ static GtkActionEntry gnc_menu_actions [] =
     /* Help menu */
 
     {
-        "HelpTutorialAction", GTK_STOCK_HELP, N_("Tutorial and Concepts _Guide"), NULL,
+        "HelpTutorialAction", "help-browser", N_("Tutorial and Concepts _Guide"), NULL,
         N_("Open the GnuCash Tutorial"),
         G_CALLBACK (gnc_main_window_cmd_help_tutorial)
     },
     {
-        "HelpContentsAction", GTK_STOCK_HELP, N_("_Contents"), "F1",
+        "HelpContentsAction", "help-browser", N_("_Contents"), "F1",
         N_("Open the GnuCash Help"),
         G_CALLBACK (gnc_main_window_cmd_help_contents)
     },
     {
-        "HelpAboutAction", GTK_STOCK_ABOUT, N_("_About"), NULL,
+        "HelpAboutAction", "help-about", N_("_About"), NULL,
         N_("About GnuCash"),
         G_CALLBACK (gnc_main_window_cmd_help_about)
     },
@@ -1255,8 +1256,8 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
     }
     gtk_dialog_add_buttons(GTK_DIALOG(dialog),
                            _("Close _Without Saving"), GTK_RESPONSE_CLOSE,
-                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                           GTK_STOCK_SAVE, GTK_RESPONSE_APPLY,
+                           _("Cancel"), GTK_RESPONSE_CANCEL,
+                           _("Save"), GTK_RESPONSE_APPLY,
                            NULL);
     gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_APPLY);
 
@@ -2040,6 +2041,7 @@ gnc_main_window_update_tab_width_one_page (GncPluginPage *page,
 {
     gint *new_value = user_data;
     GtkWidget *label;
+    const gchar *lab_text;
 
     ENTER("page %p, visible %d", page, *new_value);
     label = g_object_get_data(G_OBJECT (page), PLUGIN_PAGE_TAB_LABEL);
@@ -2049,15 +2051,21 @@ gnc_main_window_update_tab_width_one_page (GncPluginPage *page,
         return;
     }
 
+    lab_text = gtk_label_get_text (GTK_LABEL(label));
+
     if (*new_value != 0)
     {
+        if (g_utf8_strlen (lab_text, -1) < *new_value)
+            gtk_label_set_width_chars (GTK_LABEL(label), strlen (lab_text));
+        else
+            gtk_label_set_width_chars (GTK_LABEL(label), *new_value);
+
         gtk_label_set_ellipsize(GTK_LABEL(label), PANGO_ELLIPSIZE_MIDDLE);
-        gtk_label_set_max_width_chars(GTK_LABEL(label), *new_value);
     }
     else
     {
+        gtk_label_set_width_chars (GTK_LABEL(label), 15);
         gtk_label_set_ellipsize(GTK_LABEL(label), PANGO_ELLIPSIZE_NONE);
-        gtk_label_set_max_width_chars(GTK_LABEL(label), 100);
     }
     LEAVE(" ");
 }
@@ -2117,7 +2125,7 @@ main_window_find_tab_items (GncMainWindow *window,
                                            page->notebook_page);
     if (GTK_IS_EVENT_BOX (tab_widget))
         tab_hbox = gtk_bin_get_child(GTK_BIN(tab_widget));
-    else if (GTK_IS_HBOX (tab_widget))
+    else if (GTK_IS_BOX (tab_widget))
         tab_hbox = tab_widget;
     else
     {
@@ -2177,6 +2185,7 @@ main_window_update_page_name (GncPluginPage *page,
     GncMainWindowPrivate *priv;
     GtkWidget *label, *entry;
     gchar *name, *old_page_name, *old_page_long_name;
+    gint lab_width;
 
     ENTER(" ");
 
@@ -2214,6 +2223,10 @@ main_window_update_page_name (GncPluginPage *page,
 
     if (main_window_find_tab_items(window, page, &label, &entry))
         gtk_label_set_text(GTK_LABEL(label), name);
+
+    /* Adjust the label width for new text */
+    lab_width = gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_WIDTH);
+    gnc_main_window_update_tab_width_one_page (page, &lab_width);
 
     /* Update Tooltip on notebook Tab */
     if (old_page_long_name && old_page_name
@@ -2259,7 +2272,7 @@ main_window_update_page_color (GncPluginPage *page,
     GncMainWindow *window;
     GncMainWindowPrivate *priv;
     GtkWidget *tab_widget;
-    GdkColor tab_color;
+    GdkRGBA tab_color;
     gchar *color_string = NULL;
     gboolean want_color = FALSE;
 
@@ -2281,8 +2294,13 @@ main_window_update_page_color (GncPluginPage *page,
     main_window_find_tab_widget (window, page, &tab_widget);
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
-    if (want_color && gdk_color_parse(color_string, &tab_color) && priv->show_color_tabs)
+    if (want_color && gdk_rgba_parse(&tab_color, color_string) && priv->show_color_tabs)
     {
+#if GTK_CHECK_VERSION(3,16,0)
+        GtkCssProvider *provider = gtk_css_provider_new();
+        GtkStyleContext *stylectxt;
+        gchar *col_str, *widget_css;
+#endif
         if (!GTK_IS_EVENT_BOX (tab_widget))
         {
             GtkWidget *event_box = gtk_event_box_new ();
@@ -2293,8 +2311,21 @@ main_window_update_page_color (GncPluginPage *page,
             g_object_unref (tab_widget);
             tab_widget = event_box;
         }
-        gtk_widget_modify_bg(tab_widget, GTK_STATE_NORMAL, &tab_color);
-        gtk_widget_modify_bg(tab_widget, GTK_STATE_ACTIVE, &tab_color);
+#if GTK_CHECK_VERSION(3,16,0)
+        stylectxt = gtk_widget_get_style_context (GTK_WIDGET (tab_widget));
+        col_str = gdk_rgba_to_string (&tab_color);
+        widget_css = g_strconcat ("*{\n  background-color:", col_str, ";\n}\n", NULL);
+
+        gtk_css_provider_load_from_data (provider, widget_css, -1, NULL);
+        gtk_style_context_add_provider (stylectxt, GTK_STYLE_PROVIDER (provider),
+                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        g_object_unref (provider);
+        g_free (col_str);
+        g_free (widget_css);
+#else
+        gtk_widget_override_background_color (tab_widget, GTK_STATE_NORMAL, &tab_color);
+        gtk_widget_override_background_color (tab_widget, GTK_STATE_ACTIVE, &tab_color);
+#endif
     }
     else
     {
@@ -2443,7 +2474,7 @@ static void
 gnc_main_window_class_init (GncMainWindowClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
-    GtkObjectClass *gtkobject_class = GTK_OBJECT_CLASS(klass);
+    GtkWidgetClass *gtkwidget_class = GTK_WIDGET_CLASS(klass);
 
     parent_class = g_type_class_peek_parent (klass);
 
@@ -2451,8 +2482,8 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
 
     object_class->finalize = gnc_main_window_finalize;
 
-    /* GtkObject signals */
-    gtkobject_class->destroy = gnc_main_window_destroy;
+    /* GtkWidget signals */
+    gtkwidget_class->destroy = gnc_main_window_destroy;
 
     g_type_class_add_private(klass, sizeof(GncMainWindowPrivate));
 
@@ -2532,6 +2563,9 @@ gnc_main_window_init (GncMainWindow *window,
     priv->merged_actions_table =
         g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(window), "GncMainWindow");
+
     priv->event_handler_id =
         qof_event_register_handler(gnc_main_window_event_handler, window);
 
@@ -2578,17 +2612,17 @@ gnc_main_window_finalize (GObject *object)
 
 
 static void
-gnc_main_window_destroy (GtkObject *object)
+gnc_main_window_destroy (GtkWidget *widget)
 {
     GncMainWindow *window;
     GncMainWindowPrivate *priv;
     GncPluginManager *manager;
     GList *plugins;
 
-    g_return_if_fail (object != NULL);
-    g_return_if_fail (GNC_IS_MAIN_WINDOW (object));
+    g_return_if_fail (widget != NULL);
+    g_return_if_fail (GNC_IS_MAIN_WINDOW (widget));
 
-    window = GNC_MAIN_WINDOW (object);
+    window = GNC_MAIN_WINDOW (widget);
 
     active_windows = g_list_remove (active_windows, window);
 
@@ -2626,7 +2660,7 @@ gnc_main_window_destroy (GtkObject *object)
     }
     if (priv->about_dialog)
 	g_object_unref (priv->about_dialog);
-    GTK_OBJECT_CLASS (parent_class)->destroy (object);
+    GTK_WIDGET_CLASS (parent_class)->destroy (widget);
 }
 
 
@@ -2852,11 +2886,10 @@ gnc_main_window_open_page (GncMainWindow *window,
     GncMainWindowPrivate *priv;
     GtkWidget *tab_hbox;
     GtkWidget *label, *entry;
-    const gchar *icon, *text, *color_string;
+    const gchar *icon, *text, *color_string, *lab_text;
     GtkWidget *image;
     GList *tmp;
     gint width;
-    GdkColor tab_color;
 
     ENTER("window %p, page %p", window, page);
     if (window)
@@ -2903,22 +2936,35 @@ gnc_main_window_open_page (GncMainWindow *window,
      */
     width = gnc_prefs_get_float(GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_WIDTH);
     icon = GNC_PLUGIN_PAGE_GET_CLASS(page)->tab_icon;
-    label = gtk_label_new (gnc_plugin_page_get_page_name(page));
+    lab_text = gnc_plugin_page_get_page_name(page);
+    label = gtk_label_new (lab_text);
+    g_object_set_data (G_OBJECT (page), PLUGIN_PAGE_TAB_LABEL, label);
+
     if (width != 0)
     {
+        if (g_utf8_strlen (lab_text, -1) < width)
+            gtk_label_set_width_chars (GTK_LABEL(label), strlen (lab_text));
+        else
+            gtk_label_set_width_chars (GTK_LABEL(label), width);
+
         gtk_label_set_ellipsize(GTK_LABEL(label), PANGO_ELLIPSIZE_MIDDLE);
-        gtk_label_set_max_width_chars(GTK_LABEL(label), width);
     }
     gtk_widget_show (label);
 
-    tab_hbox = gtk_hbox_new (FALSE, 6);
+    tab_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+    gtk_box_set_homogeneous (GTK_BOX (tab_hbox), FALSE);
     gtk_widget_show (tab_hbox);
 
     if (icon != NULL)
     {
-        image = gtk_image_new_from_stock (icon, GTK_ICON_SIZE_MENU);
+        image = gtk_image_new_from_icon_name (icon, GTK_ICON_SIZE_MENU);
         gtk_widget_show (image);
         gtk_box_pack_start (GTK_BOX (tab_hbox), image, FALSE, FALSE, 0);
+#if GTK_CHECK_VERSION(3,12,0)
+        gtk_widget_set_margin_start (GTK_WIDGET(image), 5);
+#else
+        gtk_widget_set_margin_left (GTK_WIDGET(image), 5);
+#endif
         gtk_box_pack_start (GTK_BOX (tab_hbox), label, TRUE, TRUE, 0);
     }
     else
@@ -2953,12 +2999,11 @@ gnc_main_window_open_page (GncMainWindow *window,
 
         close_button = gtk_button_new();
         gtk_button_set_relief(GTK_BUTTON(close_button), GTK_RELIEF_NONE);
-        close_image = gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
+        close_image = gtk_image_new_from_icon_name ("window-close", GTK_ICON_SIZE_MENU);
         gtk_widget_show(close_image);
-        gtk_widget_size_request(close_image, &requisition);
+        gtk_widget_get_preferred_size (close_image, &requisition, NULL);
         gtk_widget_set_size_request(close_button, requisition.width + 4,
                                     requisition.height + 2);
-        gtk_button_set_alignment(GTK_BUTTON(close_button), 0.5, 0.5);
         gtk_container_add(GTK_CONTAINER(close_button), close_image);
         if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SHOW_CLOSE_BUTTON))
             gtk_widget_show (close_button);
@@ -2969,7 +3014,11 @@ gnc_main_window_open_page (GncMainWindow *window,
                                   G_CALLBACK(gnc_main_window_close_page), page);
 
         gtk_box_pack_start (GTK_BOX (tab_hbox), close_button, FALSE, FALSE, 0);
-
+#if GTK_CHECK_VERSION(3,12,0)
+        gtk_widget_set_margin_end (GTK_WIDGET(close_button), 5);
+#else
+        gtk_widget_set_margin_right (GTK_WIDGET(close_button), 5);
+#endif
         g_object_set_data (G_OBJECT (page), PLUGIN_PAGE_CLOSE_BUTTON, close_button);
     }
 
@@ -3508,12 +3557,14 @@ gnc_main_window_setup_window (GncMainWindow *window)
                       G_CALLBACK (gnc_main_window_delete_event), window);
 
     /* Create widgets and add them to the window */
-    main_vbox = gtk_vbox_new (FALSE, 0);
+    main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (main_vbox), FALSE);
     gtk_widget_show (main_vbox);
     gtk_container_add (GTK_CONTAINER (window), main_vbox);
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-    priv->menu_dock = gtk_vbox_new (FALSE, 0);
+    priv->menu_dock = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (priv->menu_dock), FALSE);
     gtk_widget_show (priv->menu_dock);
     gtk_box_pack_start (GTK_BOX (main_vbox), priv->menu_dock,
                         FALSE, TRUE, 0);
@@ -3535,7 +3586,6 @@ gnc_main_window_setup_window (GncMainWindow *window)
     gtk_widget_show (priv->statusbar);
     gtk_box_pack_start (GTK_BOX (main_vbox), priv->statusbar,
                         FALSE, TRUE, 0);
-    gtk_statusbar_set_has_resize_grip( GTK_STATUSBAR(priv->statusbar), TRUE );
 
     priv->progressbar = gtk_progress_bar_new ();
     gtk_progress_bar_set_text(GTK_PROGRESS_BAR(priv->progressbar), " ");
@@ -4431,6 +4481,10 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 			  G_CALLBACK (url_signal_cb), NULL);
 	g_signal_connect (priv->about_dialog, "response",
 			  G_CALLBACK (gtk_widget_hide), NULL);
+
+        /* Set dialog to resize. */
+        gtk_window_set_resizable(GTK_WINDOW(priv->about_dialog), TRUE);
+
 	gtk_window_set_transient_for (GTK_WINDOW (priv->about_dialog),
 				      GTK_WINDOW (window));
     }

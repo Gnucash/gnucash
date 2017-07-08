@@ -23,9 +23,11 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *******************************************************************/
+#include "config.h"
 
 #include <gtk/gtk.h>
-#include "config.h"
+#include <glib/gi18n.h>
+
 #include "dialog-utils.h"
 #include "gnc-recurrence.h"
 #include "gnc-date-edit.h"
@@ -37,7 +39,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 struct _GncRecurrence
 {
-    GtkVBox widget;
+    GtkBox widget;
 
     GtkWidget *gde_start;
     GtkComboBox *gcb_period;
@@ -50,7 +52,7 @@ struct _GncRecurrence
 
 typedef struct
 {
-    GtkVBoxClass parent_class;
+    GtkBoxClass parent_class;
     void (*changed) (GncRecurrence *gr);
 } GncRecurrenceClass;
 
@@ -180,12 +182,15 @@ something_changed( GtkWidget *wid, gpointer d )
 static void
 gnc_recurrence_init( GncRecurrence *gr )
 {
-    GtkVBox *vb;
-    GtkHBox *hb;
+    GtkBox  *vb;
+    GtkBox  *hb;
     GtkWidget *w;
     GtkBuilder *builder;
 
     recurrenceSet(&gr->recurrence, 1, PERIOD_MONTH, NULL, WEEKEND_ADJ_NONE);
+
+    // Set the style context for this widget so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(gr), "GncRecurrence");
 
     /* Open up the builder file */
     builder = gtk_builder_new();
@@ -193,8 +198,8 @@ gnc_recurrence_init( GncRecurrence *gr )
     gnc_builder_add_from_file (builder, "gnc-recurrence.glade", "GSB_Mult_Adj");
     gnc_builder_add_from_file (builder, "gnc-recurrence.glade", "RecurrenceEntryVBox");
 
-    vb = GTK_VBOX(gtk_builder_get_object (builder, "RecurrenceEntryVBox"));
-    hb = GTK_HBOX(gtk_builder_get_object (builder, "Startdate_hbox"));
+    vb = GTK_BOX(gtk_builder_get_object (builder, "RecurrenceEntryVBox"));
+    hb = GTK_BOX(gtk_builder_get_object (builder, "Startdate_hbox"));
     w = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
     gr->gde_start = w;
     gtk_box_pack_start (GTK_BOX (hb), w, TRUE, TRUE, 0);
@@ -378,7 +383,7 @@ gnc_recurrence_get_type()
             (GInstanceInitFunc)gnc_recurrence_init
         };
 
-        type = g_type_register_static (GTK_TYPE_VBOX, "GncRecurrence",
+        type = g_type_register_static (GTK_TYPE_BOX, "GncRecurrence",
                                        &typeinfo, 0);
     }
     return type;
@@ -404,9 +409,9 @@ struct _GncRecurrenceComp
 {
     GtkScrolledWindow widget;
 
-    GtkVBox *vbox;
-    GtkHBox *hbox;
-    GtkHButtonBox *hbb;
+    GtkWidget  *vbox;
+    GtkWidget  *hbox;
+    GtkWidget  *hbb;
     gint num_rec;
     GtkButton *buttRemove;
     GtkButton *buttAdd;
@@ -534,14 +539,17 @@ gnc_recurrence_comp_init(GncRecurrenceComp *grc)
 {
     GtkWidget *vb;
 
-    grc->hbb = GTK_HBUTTON_BOX(gtk_hbutton_box_new());
-    grc->vbox = GTK_VBOX(gtk_vbox_new(FALSE, 1));
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(grc), GTK_ORIENTATION_VERTICAL);
+
+    grc->hbb = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
+    grc->vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 1);
+    gtk_box_set_homogeneous (GTK_BOX (grc->vbox), FALSE);
     grc->rlist = NULL;
 
-    grc->buttAdd = GTK_BUTTON(gtk_button_new_from_stock(GTK_STOCK_ADD));
+    grc->buttAdd = GTK_BUTTON(gtk_button_new_with_label(_("Add")));
     g_signal_connect(G_OBJECT(grc->buttAdd), "clicked",
                      G_CALLBACK(addClicked), grc);
-    grc->buttRemove = GTK_BUTTON(gtk_button_new_from_stock(GTK_STOCK_REMOVE));
+    grc->buttRemove = GTK_BUTTON(gtk_button_new_with_label(_("Remove")));
     g_signal_connect(G_OBJECT(grc->buttRemove), "clicked",
                      G_CALLBACK(removeClicked), grc);
 
@@ -550,14 +558,15 @@ gnc_recurrence_comp_init(GncRecurrenceComp *grc)
     gtk_box_pack_start(GTK_BOX(grc->hbb), GTK_WIDGET(grc->buttRemove),
                        FALSE, FALSE, 3);
 
-    vb = gtk_vbox_new(FALSE, 1);
+    vb = gtk_box_new (GTK_ORIENTATION_VERTICAL, 1);
+    gtk_box_set_homogeneous (GTK_BOX (vb), FALSE);
     gtk_box_pack_start(GTK_BOX(vb), GTK_WIDGET(grc->hbb),
                        FALSE, FALSE, 3);
     gtk_box_pack_start(GTK_BOX(vb), GTK_WIDGET(grc->vbox),
                        FALSE, FALSE, 3);
 
-    gtk_scrolled_window_add_with_viewport(
-        GTK_SCROLLED_WINDOW(grc), GTK_WIDGET(vb));
+    gtk_container_add (GTK_CONTAINER(grc), GTK_WIDGET(vb));
+
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(grc),
                                    GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
