@@ -484,11 +484,11 @@ init_match_picker_gui(GNCImportMatchPicker * matcher)
     
     /* now that we've bound the checkbox appropriately we can hook up the
      * change callback */
-    gtk_signal_connect ((GtkObject *)matcher->reconciled_chk, "toggled",
+    g_signal_connect ((GObject *)matcher->reconciled_chk, "toggled",
                        G_CALLBACK(match_show_reconciled_changed_cb), matcher);
 
     /* now that we've bound the checkbox appropriately we can hook up the change callback */
-    gtk_signal_connect((GtkObject *)matcher->reconciled_chk, "toggled", G_CALLBACK(match_show_reconciled_changed_cb), matcher);
+    g_signal_connect((GObject *)matcher->reconciled_chk, "toggled", G_CALLBACK(match_show_reconciled_changed_cb), matcher);
     
     gnc_restore_window_size(GNC_PREFS_GROUP,
                             GTK_WINDOW (matcher->transaction_matcher));

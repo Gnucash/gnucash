@@ -417,6 +417,7 @@ src/import-export/aqb/assistant-ab-initial.c
 src/import-export/aqb/assistant-ab-initial.glade
 src/import-export/aqb/dialog-ab-daterange.c
 src/import-export/aqb/dialog-ab.glade
+src/import-export/aqb/dialog-ab-pref.glade
 src/import-export/aqb/dialog-ab-trans.c
 src/import-export/aqb/gnc-ab-getbalance.c
 src/import-export/aqb/gnc-ab-gettrans.c

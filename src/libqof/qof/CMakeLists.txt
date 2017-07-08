@@ -120,7 +120,7 @@ SET(qof_test_HEADERS
     qofbook.h
     qofinstance.h
     qofobject.h
-    /qofsession.h
+    qofsession.h
 )
 
 INSTALL(FILES ${qof_test_HEADERS} DESTINATION libexec/gnucash/src/libqof/qof/test)
