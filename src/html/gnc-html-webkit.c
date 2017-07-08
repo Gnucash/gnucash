@@ -577,7 +577,7 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
      }
      while ( FALSE );
 }
-
+#ifdef WEBKIT2_4
 static gboolean
 perform_navigation_policy (WebKitWebView *web_view,
 			   WebKitNavigationPolicyDecision *decision,
@@ -603,7 +603,7 @@ perform_navigation_policy (WebKitWebView *web_view,
      webkit_policy_decision_ignore ((WebKitPolicyDecision*)decision);
      return TRUE;
 }
-
+#endif
 /********************************************************************
  * webkit_navigation_requested_cb - called when a URL needs to be
  * loaded within the loading of a page (embedded image).
@@ -616,6 +616,7 @@ webkit_decide_policy_cb (WebKitWebView *web_view,
 			 gpointer user_data)
 {
 /* This turns out to be the signal to intercept for handling a link-click. */
+#ifdef WEBKIT2_4
      if (decision_type != WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION)
      {
 	  webkit_policy_decision_use (decision);
@@ -624,6 +625,10 @@ webkit_decide_policy_cb (WebKitWebView *web_view,
      return perform_navigation_policy (
 	  web_view, (WebKitNavigationPolicyDecision*) decision,
 	  GNC_HTML (user_data));
+#else
+     webkit_policy_decision_use (decision);
+     return TRUE;
+#endif
 }
 
 static void

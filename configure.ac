@@ -1351,9 +1351,19 @@ then
   ### --------------------------------------------------------------------------
   ### checks for webkit
 
-  PKG_CHECK_MODULES(WEBKIT, webkit2gtk-4.0 >= "2.6.0")
-  AC_SUBST(WEBKIT_CFLAGS)
-  AC_SUBST(WEBKIT_LIBS)
+  PKG_CHECK_MODULES(WEBKIT, webkit2gtk-4.0,
+  [AC_DEFINE([WEBKIT2_4], [1], [Webkit2Gtk API Version 4.0])],
+  [PKG_CHECK_MODULES(WEBKIT, webkit2gtk-3.0,
+  [
+    case $host_os in
+       win32* | mingw*)
+          AC_DEFINE([WEBKIT1], [1], [Webkit1Gtk API])
+          ;;
+       *)
+          AC_DEFINE([WEBKIT2_3], [1], [Webkit2Gtk API Version 3.0])
+          ;;
+     esac
+   ],)])
 
     ###-----------------------------------------------------------------------
   ## Find a suitable password store
