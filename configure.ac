@@ -1544,7 +1544,7 @@ then
   warnXXFLAGS=
   #We have a lot of unused variables. Don't warn until someone gets
   #around to cleaning them up.
-  AM_CFLAGS="${AM_CFLAGS} -Wno-unused"
+  AM_CFLAGS="${AM_CFLAGS} -Wno-unused -Wno-deprecated-declarations"
   # other flags...
   # These next two are included in the COMPILE_WARNINGS
   #warnFLAGS="${warnFLAGS} -Wmissing-prototypes"
