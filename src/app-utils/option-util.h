@@ -258,9 +258,11 @@ char * gnc_currency_accounting_option_currency_documentation(GNCOption *option);
 SCM gnc_currency_accounting_option_get_default_currency(GNCOption *option);
 char * gnc_currency_accounting_option_policy_documentation(GNCOption *option);
 SCM gnc_currency_accounting_option_get_default_policy(GNCOption *option);
+char * gnc_currency_accounting_option_gain_loss_account_documentation(GNCOption *option);
 SCM gnc_currency_accounting_option_value_get_method (SCM option_value);
 SCM gnc_currency_accounting_option_value_get_book_currency (SCM option_value);
 SCM gnc_currency_accounting_option_value_get_default_policy (SCM option_value);
+SCM gnc_currency_accounting_option_value_get_default_account (SCM option_value);
 
 void gnc_option_db_set_option_selectable_by_name(SCM guile_options,
         const char *section,

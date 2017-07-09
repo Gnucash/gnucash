@@ -1401,6 +1401,7 @@
          default-book-currency-value
          default-cap-gains-policy-documentation-string
          default-cap-gains-policy-value
+         default-gains-loss-account-documentation-string
         )
   (define (legal-val val p-vals)
     (cond ((null? p-vals) #f)
@@ -1433,6 +1434,38 @@
   (define (scm->currency currency)
     (currency-lookup currency))
 
+  (define (valid-gains-loss-account? book-currency gains-loss-account-guid)
+  ;; xaccAccountLookup returns Account if guid valid otherwise NULL; also must
+  ;; be in book-currency, income or expense, and not placeholder nor hidden
+    (let* ((account (xaccAccountLookup gains-loss-account-guid
+                                                    (gnc-get-current-book)))
+           (hidden? (if account
+                        (xaccAccountIsHidden account)
+                        #t))
+           (placeholder? (if account
+                             (xaccAccountGetPlaceholder account)
+                             #t))
+           (account-type (if account
+                             (xaccAccountGetType account)
+                             #f))
+           (income-or-expense? (if (and account account-type)
+                                   (or (= ACCT-TYPE-INCOME account-type)
+                                       (= ACCT-TYPE-EXPENSE account-type))
+                                   #f))
+           (commodity-eq-book-curr? (if account
+                                        (gnc-commodity-equal
+                                          (currency-lookup book-currency)
+                                          (xaccAccountGetCommodity account))
+                                        #f))
+          )
+          (if (and account
+                   (not hidden?)
+                   (not placeholder?)
+                   income-or-expense?
+                   commodity-eq-book-curr?)
+              #t
+              #f)))
+
   (let* ((value (if (eq? 'book-currency default-radiobutton-value)
                     (cons default-radiobutton-value
                           (cons default-book-currency-value
@@ -1446,22 +1479,25 @@
          (book-currency-path (list gnc:*option-section-accounts*
                                    gnc:*option-name-book-currency*))
          (gains-policy-path (list gnc:*option-section-accounts*
-                                  gnc:*option-name-default-gains-policy*)))
+                                  gnc:*option-name-default-gains-policy*))
+         (gains-loss-account-path (list gnc:*option-section-accounts*
+                                  gnc:*option-name-default-gain-loss-account*)))
     (gnc:make-option
      section name sort-tag 'currency-accounting
      radiobutton-documentation-string
-     (lambda () value)
+     (lambda () value) ;; getter
      (lambda (x)
        (if (legal-val (car x) ok-radiobutton-values)
            (set! value x)
-           (gnc:error "Illegal Radiobutton option set")))
+           (gnc:error "Illegal Radiobutton option set"))) ;;setter
      (lambda () (if (eq? 'book-currency default-radiobutton-value)
                     (cons default-radiobutton-value
                           (cons default-book-currency-value
-                                (cons default-cap-gains-policy-value '())))
-                    (cons default-radiobutton-value '())))
+                                (cons default-cap-gains-policy-value
+                                      (cons '() '()))))
+                    (cons default-radiobutton-value '()))) ;; default-getter
      (gnc:restore-form-generator value->string)
-     (lambda (b p)
+     (lambda (b p) ;; scm->kvp
        (if (eq? 'book-currency (car value))
            (begin
              ;; Currency = selected currency
@@ -1473,11 +1509,17 @@
              (qof-book-set-option
                 b
                 (symbol->string (caddr value))
-                gains-policy-path))
+                gains-policy-path)
+             ;; Default Gains Account = if selected, selected account
+             (if (car (cdddr value))
+                 (qof-book-set-option
+                    b
+                    (car (cdddr value))
+                    gains-loss-account-path)))
            (if (eq? 'trading (car value))
                ;; Use Trading Accounts = "t"
                (qof-book-set-option b "t" trading-accounts-path))))
-     (lambda (b p)
+     (lambda (b p) ;; kvp->scm
        (let* ((trading-option-path-kvp?
                        (qof-book-get-option
                         b trading-accounts-path))
@@ -1487,6 +1529,7 @@
                             #f))
               (book-currency #f)
               (cap-gains-policy #f)
+              (gains-loss-account-guid #f)
               (v (if trading?
                      'trading
                      (let* ((book-currency-option-path-kvp?
@@ -1495,6 +1538,9 @@
                             (gains-policy-option-path-kvp?
                                  (qof-book-get-option
                                      b gains-policy-path))
+                            (gains-loss-account-option-path-kvp?
+                                 (qof-book-get-option
+                                     b gains-loss-account-path))
                             (book-currency?
                                (if (and book-currency-option-path-kvp?
                                         gains-policy-option-path-kvp?
@@ -1513,24 +1559,37 @@
                                                book-currency-option-path-kvp?)
                                      (set! cap-gains-policy
                                                gains-policy-option-path-kvp?)
+                                     (if gains-loss-account-option-path-kvp?
+                                         (if (valid-gains-loss-account?
+                                               book-currency
+                                               gains-loss-account-option-path-kvp?)
+                                             (set! gains-loss-account-guid
+                                               gains-loss-account-option-path-kvp?)))
                                      #t)
-                                   #f)))
+                                    #f)))
                            (if book-currency?
                                'book-currency
                                'neither)))))
-         (if (and v (symbol? v) (legal-val v ok-radiobutton-values))
-             (set! value (cons v (if (eq? 'book-currency v)
-                                     (list (scm->currency book-currency)
-                                           (string->symbol cap-gains-policy))
-                                     '())))
-             (set! value (cons 'neither '())))))
-     (lambda (x)
+             (if (and v (symbol? v) (legal-val v ok-radiobutton-values))
+                 (set! value (cons v (if (eq? 'book-currency v)
+                                         (list (scm->currency book-currency)
+                                               (string->symbol cap-gains-policy)
+                                               gains-loss-account-guid)
+                                         '())))
+                 (set! value (cons 'neither '())))))
+     (lambda (x) ;; value validator
        (if (list? x)
            (if (legal-val (car x) ok-radiobutton-values)
                (if (eq? 'book-currency (car x))
                    (if (currency? (currency->scm (cadr x)))
                        (if (gnc-valid-policy-name (symbol->string (caddr x)))
-                           (list #t x)
+                           (if (car(cdddr x))
+                               (if (valid-gains-loss-account?
+                                     (currency->scm (cadr x))
+                                     (car(cdddr x)))
+                                   (list #t x)
+                                   (list #f "gains-loss-account-option: illegal value"))
+                               (list #t x)) ;; must be valid if specified, otherwise OK
                            (list #f "cap-gains-policy-option: illegal value"))
                        (list #f "currency-option: illegal value"))
                    (list #t x))
@@ -1539,7 +1598,8 @@
      (vector book-currency-documentation-string
              default-book-currency-value
              default-cap-gains-policy-documentation-string
-             default-cap-gains-policy-value)
+             default-cap-gains-policy-value
+             default-gains-loss-account-documentation-string)
      (vector (lambda () (length ok-radiobutton-values))
              (lambda (x) (vector-ref (list-ref ok-radiobutton-values x) 0))
              (lambda (x) (vector-ref (list-ref ok-radiobutton-values x) 1))
@@ -1560,6 +1620,9 @@
 
 (define (gnc:get-currency-accounting-option-data-policy-default option-data)
   (vector-ref option-data 3))
+
+(define (gnc:get-currency-accounting-option-data-gain-loss-account-doc-string option-data)
+  (vector-ref option-data 4))
 
 (define (gnc:currency-accounting-option-get-curr-doc-string option)
   (if (eq? (gnc:option-type option) 'currency-accounting)
@@ -1585,6 +1648,12 @@
         (gnc:option-data option))
       (gnc:error "Not a currency accounting option")))
 
+(define (gnc:currency-accounting-option-get-gain-loss-account-doc-string option)
+  (if (eq? (gnc:option-type option) 'currency-accounting)
+      (gnc:get-currency-accounting-option-data-gain-loss-account-doc-string
+        (gnc:option-data option))
+      (gnc:error "Not a currency accounting option")))
+
 (define (gnc:currency-accounting-option-selected-method option-value)
   (car option-value))
 
@@ -1596,6 +1665,11 @@
 (define (gnc:currency-accounting-option-selected-policy option-value)
   (if (eq? (car option-value) 'book-currency)
       (caddr option-value)
+      #f))
+
+(define (gnc:currency-accounting-option-selected-gain-loss-account option-value)
+  (if (eq? (car option-value) 'book-currency)
+      (car (cdddr option-value))
       #f))
 
 ;; Create a new options database
@@ -1731,11 +1805,11 @@
              (default-value (gnc:option-default-value option))
              (section (gnc:option-section option))
              (name (gnc:option-name option)))
-         (gnc:debug "value: " value "; default: " default-value
-                    "; section: " section "; name: " name)
+;;         (gnc:debug "value: " value "; default: " default-value
+;;                   "; section: " section "; name: " name)
          (if (not (equal? value default-value))
              (let ((save-fcn (gnc:option-scm->kvp option)))
-               (gnc:debug "save-fcn: " save-fcn)
+;;               (gnc:debug "save-fcn: " save-fcn)
                (if save-fcn
                    (save-fcn book (list section name)))))))))
 

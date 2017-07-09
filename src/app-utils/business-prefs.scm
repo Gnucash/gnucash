@@ -151,19 +151,21 @@
     (N_ "Select the currency accounting method to use for transactions involving more than one currency or commodity.")
     'neither
     (list
+      (vector 'neither
+              (N_ "Use neither Trading Accounts nor a Book Currency")
+              (N_ "Check to use neither trading accounts nor a book-currency for transactions involving more than one currency or commodity."))
       (vector 'trading
               (N_ "Use Trading Accounts")
               (N_ "Check to have trading accounts used for transactions involving more than one currency or commodity."))
       (vector 'book-currency
-              (N_ "Use a Book-Currency")
-              (N_ "Check to use a book-currency for transactions involving more than one currency or commodity."))
-      (vector 'neither
-              (N_ "Use neither Trading Accounts nor a Book-Currency")
-              (N_ "Check to use neither trading accounts nor a book-currency for transactions involving more than one currency or commodity.")))
+              (N_ "Use a Book Currency")
+              (N_ "Check to use a book-currency for transactions involving more than one currency or commodity.")))
     (N_ "Select the book-currency which is to be used to track costs of transactions involving currencies or commodities other than the book-currency.")
     (gnc-default-currency)
     (N_ "Select the default gains policy; this policy will be used unless over-ridden at the account level.")
-    'fifo))
+    'fifo
+    (N_ "Select the default gains/loss account (income or expense account, in book-currency, neither placeholder nor hidden); this account will be used unless over-ridden at the account level. If one is not selected, an account will be created as needed."))
+ )
 
   ;; Budgeting Tab
 

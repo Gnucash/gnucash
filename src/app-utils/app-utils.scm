@@ -123,9 +123,11 @@
 (export gnc:currency-accounting-option-get-default-curr)
 (export gnc:currency-accounting-option-get-policy-doc-string)
 (export gnc:currency-accounting-option-get-default-policy)
+(export gnc:currency-accounting-option-get-gain-loss-account-doc-string)
 (export gnc:currency-accounting-option-selected-method)
 (export gnc:currency-accounting-option-selected-currency)
 (export gnc:currency-accounting-option-selected-policy)
+(export gnc:currency-accounting-option-selected-gain-loss-account)
 
 (export gnc:color->html)
 (export gnc:color-option->html)
@@ -350,12 +352,14 @@
 (define gnc:*option-name-currency-accounting* OPTION-NAME-CURRENCY-ACCOUNTING)
 (define gnc:*option-name-book-currency* OPTION-NAME-BOOK-CURRENCY)
 (define gnc:*option-name-default-gains-policy* OPTION-NAME-DEFAULT-GAINS-POLICY)
+(define gnc:*option-name-default-gain-loss-account* OPTION-NAME-DEFAULT-GAINS-LOSS-ACCT-GUID)
 (define gnc:*option-name-auto-readonly-days* OPTION-NAME-AUTO-READONLY-DAYS)
 (define gnc:*option-name-num-field-source* OPTION-NAME-NUM-FIELD-SOURCE)
 
 (export gnc:*option-section-accounts* gnc:*option-name-trading-accounts*
-        gnc:*option-name-currency-accounting*
-        gnc:*option-name-book-currency* gnc:*option-name-default-gains-policy*
+        gnc:*option-name-currency-accounting* gnc:*option-name-book-currency*
+        gnc:*option-name-default-gains-policy*
+        gnc:*option-name-default-gain-loss-account*
         gnc:*option-name-auto-readonly-days* gnc:*option-name-num-field-source*)
 
 (define gnc:*option-section-budgeting* OPTION-SECTION-BUDGETING)

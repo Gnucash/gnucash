@@ -29,6 +29,7 @@ extern "C"
 #include <glib.h>
 #include <unittest-support.h>
 #include <qofbookslots.h>
+#include "test-engine-stuff.h"
 #include "../option-util.h"
 }
 
@@ -136,9 +137,18 @@ test_option_load_book_currency (Fixture *fixture, gconstpointer pData)
     SCM symbol_value;
     const gchar *curr = NULL;
     SCM curr_scm;
+    SCM acct_guid_scm = NULL;
     gnc_commodity *commodity;
     QofBook *book = fixture->book;
     GNCOptionDB *odb = gnc_option_db_new_for_type (QOF_ID_BOOK);
+    Account *acct, *acc;
+
+    qof_book_begin_edit (book);
+    acc = get_random_account( book );
+    qof_instance_set (QOF_INSTANCE (book),
+                     "default-gain-loss-account-guid", qof_entity_get_guid(QOF_INSTANCE(acc)),
+                     NULL);
+    qof_book_commit_edit (book);
 
     qof_book_load_options (book, gnc_option_db_load, odb);
     symbol_value = gnc_currency_accounting_option_value_get_method (
@@ -155,6 +165,24 @@ test_option_load_book_currency (Fixture *fixture, gconstpointer pData)
         }
     }
     g_assert_cmpstr (str, ==, "book-currency");
+    if (str)
+        g_free (str);
+    acct_guid_scm = gnc_currency_accounting_option_value_get_default_account (
+                        gnc_option_db_lookup_option (odb,
+                            OPTION_SECTION_ACCOUNTS,
+                            OPTION_NAME_CURRENCY_ACCOUNTING,
+                            SCM_BOOL_F));
+    if (acct_guid_scm && (scm_is_string(acct_guid_scm)))
+    {
+
+        GncGUID *guid = g_new (GncGUID, 1);
+
+        str = scm_to_utf8_string (acct_guid_scm);
+            if (string_to_guid (str, guid))
+                acct = xaccAccountLookup( guid, book );
+        g_free (guid);
+    }
+    g_assert ( xaccAccountEqual(acct, acc, TRUE) );
     if (str)
         g_free (str);
     symbol_value = gnc_currency_accounting_option_value_get_default_policy (
@@ -221,15 +249,31 @@ test_option_save_book_currency (Fixture *fixture, gconstpointer pData)
     QofBook *book = fixture->book;
     GNCOptionDB *odb = gnc_option_db_new_for_type (QOF_ID_BOOK);
     KvpFrame *slots = qof_instance_get_slots (QOF_INSTANCE (book));
+    Account *acct, *acc;
+    gchar *gain_loss_account_guid_str, *gain_loss_account_guid_str2;
+    GncGUID *gain_loss_account_guid;
+    SCM val;
 
+    acc = get_random_account( book );
+    gain_loss_account_guid_str = guid_to_string (xaccAccountGetGUID (acc));
+    val = scm_from_utf8_string (gain_loss_account_guid_str);
     g_assert (gnc_option_db_set_option (odb, OPTION_SECTION_ACCOUNTS,
 						OPTION_NAME_CURRENCY_ACCOUNTING,
 						scm_cons (scm_from_locale_symbol("book-currency"),
                         scm_cons (scm_from_utf8_string("GTQ"),
-                        scm_cons (scm_from_locale_symbol("fifo"), SCM_EOL)))));
+                        scm_cons (scm_from_locale_symbol("fifo"),
+                        scm_cons (val, SCM_EOL))))));
     qof_book_save_options (book, gnc_option_db_save, odb, TRUE);
     g_assert_cmpstr (slots->get_slot("options/Accounts/Book Currency")->get<const char*>(), == , "GTQ");
     g_assert_cmpstr (slots->get_slot("options/Accounts/Default Gains Policy")->get<const char*>(), == , "fifo");
+    gain_loss_account_guid =
+        slots->get_slot("options/Accounts/Default Gain or Loss Account")->get<GncGUID*>();
+    gain_loss_account_guid_str2 = guid_to_string (gain_loss_account_guid);
+    g_assert_cmpstr (gain_loss_account_guid_str2, == , gain_loss_account_guid_str);
+    if (gain_loss_account_guid_str)
+        g_free (gain_loss_account_guid_str);
+    if (gain_loss_account_guid_str2)
+        g_free (gain_loss_account_guid_str2);
 
     gnc_option_db_destroy (odb);
 }

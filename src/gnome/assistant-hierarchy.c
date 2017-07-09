@@ -68,6 +68,7 @@ static QofLogModule log_module = GNC_MOD_IMPORT;
 
 #define GNC_PREFS_GROUP           "dialogs.new-hierarchy"
 #define GNC_PREF_SHOW_ON_NEW_FILE "show-on-new-file"
+#define DIALOG_BOOK_OPTIONS_CM_CLASS "dialog-book-options"
 
 typedef enum
 {
@@ -87,6 +88,7 @@ typedef struct
     gboolean next_ok;
 
     GtkWidget *currency_selector;
+    GtkWidget *currency_selector_label;
 
     GtkTreeView *categories_tree;
     GtkTreeRowReference *initial_category;
@@ -124,6 +126,7 @@ void select_all_clicked (GtkButton       *button,
 void clear_all_clicked (GtkButton       *button,
                         hierarchy_data  *data);
 void on_final_account_prepare (hierarchy_data  *data);
+void on_select_currency_prepare (hierarchy_data  *data);
 void on_cancel (GtkAssistant      *gtkassistant, hierarchy_data *data);
 void on_finish (GtkAssistant  *gtkassistant, hierarchy_data *data);
 
@@ -487,12 +490,16 @@ account_categories_tree_view_prepare (hierarchy_data  *data)
 void on_prepare (GtkAssistant  *assistant, GtkWidget *page,
                  hierarchy_data  *data)
 {
+    const int currency_page = data->new_book ? 2 : 1;
     const int selection_page = data->new_book ? 3 : 2;
     const int final_page = data->new_book ? 4 : 3;
     const int current_page = gtk_assistant_get_current_page (assistant);
 
+    if (current_page == currency_page)
+        on_select_currency_prepare (data);
+
     if (current_page == selection_page)
-        on_choose_account_categories_prepare(data);
+        on_choose_account_categories_prepare (data);
 
     if (current_page == final_page)
         on_final_account_prepare (data);
@@ -1074,13 +1081,7 @@ on_finish (GtkAssistant  *gtkassistant,
         gnc_account_foreach_descendant (data->our_account_tree,
                                         (AccountCb)starting_balance_helper,
                                         data);
-
-
     }
-
-    /* Set book options based on the user's choices */
-    if (data->new_book)
-        gnc_book_options_dialog_apply_helper(data->options);
 
     // delete before we suspend GUI events, and then muck with the model,
     // because the model doesn't seem to handle this correctly.
@@ -1112,6 +1113,39 @@ on_finish (GtkAssistant  *gtkassistant,
     LEAVE (" ");
 }
 
+/* If a book currency is selected in prior page, set the currency_selector to
+ * the book currency, make insensitive and modify text. Otherwise, restore the
+ * selector to original condition
+  */
+void
+on_select_currency_prepare (hierarchy_data  *data)
+{
+    /* Set book options based on the user's choices */
+    if (data->new_book)
+    {
+        gnc_book_options_dialog_apply_helper(data->options);
+
+        if (gnc_book_use_book_currency (gnc_get_current_book ()))
+        {
+            gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(data->currency_selector),
+                gnc_book_get_book_currency (gnc_get_current_book ()));
+            gtk_label_set_text (GTK_LABEL(data->currency_selector_label),
+                ( _("You selected a book currency and it will be used for\n" \
+                    "new accounts. Accounts in other currencies must be\n" \
+                    "added manually.") ));
+            gtk_widget_set_sensitive(data->currency_selector, FALSE);
+        }
+        else
+        {
+            gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(data->currency_selector),
+                gnc_default_currency());
+            gtk_label_set_text (GTK_LABEL(data->currency_selector_label),
+                ( _("Please choose the currency to use for new accounts.") ));
+            gtk_widget_set_sensitive(data->currency_selector, TRUE);
+        }
+    }
+}
+
 /********************************************************
  * For a new book the assistant will also allow the user
  * to set default book options, because this impacts how
@@ -1139,7 +1173,7 @@ book_options_dialog_close_cb(GNCOptionWin * optionwin,
 }
 
 static void
-assistant_instert_book_options_page (hierarchy_data *data)
+assistant_insert_book_options_page (hierarchy_data *data)
 {
     GtkWidget *options, *parent;
     GtkWidget *vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
@@ -1150,7 +1184,8 @@ assistant_instert_book_options_page (hierarchy_data *data)
 			   gnc_option_db_load, data->options);
     gnc_option_db_clean (data->options);
 
-    data->optionwin = gnc_options_dialog_new_modal (TRUE, _("New Book Options"));
+    data->optionwin = gnc_options_dialog_new_modal (TRUE, _("New Book Options"),
+                                                DIALOG_BOOK_OPTIONS_CM_CLASS);
     gnc_options_dialog_build_contents_full (data->optionwin, data->options, FALSE);
 
     gnc_options_dialog_set_close_cb (data->optionwin,
@@ -1171,7 +1206,7 @@ assistant_instert_book_options_page (hierarchy_data *data)
 #endif
 
     gtk_widget_show_all (vbox);
-    gtk_assistant_insert_page (GTK_ASSISTANT(data->dialog), vbox, 2);
+    gtk_assistant_insert_page (GTK_ASSISTANT(data->dialog), vbox, 1);
     gtk_assistant_set_page_title (GTK_ASSISTANT(data->dialog), vbox, _("New Book Options"));
     gtk_assistant_set_page_complete (GTK_ASSISTANT(data->dialog), vbox, TRUE);
 
@@ -1224,9 +1259,12 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
 
     /* Currency Page */
     data->currency_selector = gnc_currency_edit_new();
-    gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(data->currency_selector), gnc_default_currency());
+    gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(data->currency_selector),
+            gnc_default_currency());
     gtk_widget_show (data->currency_selector);
     box = GTK_WIDGET(gtk_builder_get_object (builder, "currency_chooser_hbox"));
+    data->currency_selector_label = GTK_WIDGET(gtk_builder_get_object (builder,
+                                           "choose_currency_label"));
     gtk_box_pack_start(GTK_BOX(box), data->currency_selector, TRUE, TRUE, 0);
 
     /* Categories Page */
@@ -1243,7 +1281,7 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
 
     /* Book options page - only on new books */
     if (data->new_book)
-        assistant_instert_book_options_page (data);
+        assistant_insert_book_options_page (data);
 
     /* Final Accounts Page */
     data->final_account_tree_container = GTK_WIDGET(gtk_builder_get_object (builder, "final_account_tree_box"));

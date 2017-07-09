@@ -106,6 +106,7 @@ enum
 
 #define GNC_MAIN_WINDOW_NAME "GncMainWindow"
 
+#define DIALOG_BOOK_OPTIONS_CM_CLASS "dialog-book-options"
 
 /* Static Globals *******************************************************/
 
@@ -4030,6 +4031,17 @@ gnc_book_options_dialog_close_cb(GNCOptionWin * optionwin,
     gnc_option_db_destroy(options);
 }
 
+static gboolean
+show_handler (const char *class_name, gint component_id,
+              gpointer user_data, gpointer iter_data)
+{
+    GtkWidget *dialog;
+
+    dialog = GTK_WIDGET(user_data);
+    gtk_window_present(GTK_WINDOW(dialog));
+    return(TRUE);
+}
+
 GtkWidget *
 gnc_book_options_dialog_cb (gboolean modal, gchar *title)
 {
@@ -4041,8 +4053,16 @@ gnc_book_options_dialog_cb (gboolean modal, gchar *title)
     qof_book_load_options (book, gnc_option_db_load, options);
     gnc_option_db_clean (options);
 
+    /* Only allow one Book Options dialog if called from file->properties
+       menu */
+    if (gnc_forall_gui_components(DIALOG_BOOK_OPTIONS_CM_CLASS,
+                                  show_handler, NULL))
+    {
+        return NULL;
+    }
     optionwin = gnc_options_dialog_new_modal (modal,
-                (title ? title : _( "Book Options")));
+                (title ? title : _( "Book Options")),
+                DIALOG_BOOK_OPTIONS_CM_CLASS);
     gnc_options_dialog_build_contents (optionwin, options);
 
     gnc_options_dialog_set_book_options_help_cb (optionwin);

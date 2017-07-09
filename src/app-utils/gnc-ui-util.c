@@ -368,7 +368,8 @@ gnc_book_get_default_gains_policy (QofBook *book)
 /** Returns pointer to default gain/loss account for book or NULL; determines
   * that both book-currency and default gain/loss policy KVPs exist and that
   * both are valid, a requirement for the 'book-currency' currency accounting
-  * method to apply. */
+  * method to apply. Also, account must not be hidden or a placeholder, and
+  * must be of same currency as book-currency and income or expense type */
 Account *
 gnc_book_get_default_gain_loss_acct (QofBook *book)
 {
@@ -380,7 +381,20 @@ gnc_book_get_default_gain_loss_acct (QofBook *book)
         gains_account = xaccAccountLookup
                         (qof_book_get_default_gain_loss_acct_guid (book), book);
 
-    return gains_account;
+    if (gains_account &&
+        !xaccAccountGetPlaceholder(gains_account) &&
+        !xaccAccountGetHidden(gains_account) &&
+        (gnc_commodity_equal(xaccAccountGetCommodity(gains_account),
+                                    gnc_book_get_book_currency(book))) &&
+        ((xaccAccountGetType(gains_account) == ACCT_TYPE_INCOME) ||
+            (xaccAccountGetType(gains_account) == ACCT_TYPE_EXPENSE)))
+    {
+        return gains_account;
+    }
+    else
+    {
+        return NULL;
+    }
 }
 
 Account *

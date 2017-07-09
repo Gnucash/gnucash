@@ -6,7 +6,7 @@
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">GnuCash Options</property>
     <property name="default_width">400</property>
-    <property name="default_height">400</property>
+    <property name="default_height">625</property>
     <property name="type_hint">dialog</property>
     <signal name="response" handler="gnc_options_dialog_response_cb" swapped="no"/>
     <child internal-child="vbox">
@@ -41,6 +41,7 @@
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
+                <property name="tooltip_text" translatable="yes">Close dialog and make no changes.</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -56,6 +57,7 @@
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
+                <property name="tooltip_text" translatable="yes">Apply changes but do not close dialog.</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -71,6 +73,7 @@
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
+                <property name="tooltip_text" translatable="yes">Apply changes and close dialog.</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
