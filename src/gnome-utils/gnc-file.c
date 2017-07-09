@@ -85,7 +85,7 @@ gnc_file_dialog (const char * title,
     GtkWidget *file_box;
     const char *internal_name;
     char *file_name = NULL;
-    gchar * okbutton = _("Open");
+    gchar * okbutton = _("_Open");
     const gchar *ok_icon = NULL;
     GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
     gint response;
@@ -96,7 +96,7 @@ gnc_file_dialog (const char * title,
     {
     case GNC_FILE_DIALOG_OPEN:
         action = GTK_FILE_CHOOSER_ACTION_OPEN;
-        okbutton = _("Open");
+        okbutton = _("_Open");
         if (title == NULL)
             title = _("Open");
         break;
@@ -108,7 +108,7 @@ gnc_file_dialog (const char * title,
         break;
     case GNC_FILE_DIALOG_SAVE:
         action = GTK_FILE_CHOOSER_ACTION_SAVE;
-        okbutton = _("Save");
+        okbutton = _("_Save");
         if (title == NULL)
             title = _("Save");
         break;
@@ -126,7 +126,7 @@ gnc_file_dialog (const char * title,
                    title,
                    NULL,
                    action,
-                   _("Cancel"), GTK_RESPONSE_CANCEL,
+                   _("_Cancel"), GTK_RESPONSE_CANCEL,
                    NULL);
     if (ok_icon)
         gnc_gtk_dialog_add_button(file_box, okbutton, ok_icon, GTK_RESPONSE_ACCEPT);
@@ -313,7 +313,7 @@ show_session_error (QofBackendError io_error,
                                         fmt,
                                         displayname);
         gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-                               _("Cancel"), GTK_RESPONSE_CANCEL,
+                               _("_Cancel"), GTK_RESPONSE_CANCEL,
                                label, GTK_RESPONSE_YES,
                                NULL);
         if (parent == NULL)
@@ -611,9 +611,9 @@ gnc_file_query_save (gboolean can_cancel)
 
         if (can_cancel)
             gtk_dialog_add_button(GTK_DIALOG(dialog),
-                                  _("Cancel"), GTK_RESPONSE_CANCEL);
+                                  _("_Cancel"), GTK_RESPONSE_CANCEL);
         gtk_dialog_add_button(GTK_DIALOG(dialog),
-                              _("Save"), GTK_RESPONSE_YES);
+                              _("_Save"), GTK_RESPONSE_YES);
 
         gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_YES);
 
@@ -802,7 +802,7 @@ RESTART:
                                   "document-open", RESPONSE_OPEN);
         if (shutdown_cb)
             gtk_dialog_add_button(GTK_DIALOG(dialog),
-                                  _("Quit"), RESPONSE_QUIT);
+                                  _("_Quit"), RESPONSE_QUIT);
         rc = gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
         g_free (displayname);

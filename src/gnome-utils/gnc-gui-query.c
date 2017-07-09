@@ -337,10 +337,10 @@ gnc_choose_radio_option_dialog(GtkWidget *parent,
     }
 
     if (!button_name)
-        button_name = _("OK");
+        button_name = _("_OK");
     dialog = gtk_dialog_new_with_buttons (title, GTK_WINDOW(parent),
                                           GTK_DIALOG_DESTROY_WITH_PARENT,
-                                          _("Cancel"), GTK_RESPONSE_CANCEL,
+                                          _("_Cancel"), GTK_RESPONSE_CANCEL,
                                           button_name, GTK_RESPONSE_OK,
                                           NULL);
 
