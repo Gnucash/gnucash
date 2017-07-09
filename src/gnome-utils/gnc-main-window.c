@@ -758,14 +758,15 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
         g_warning("invalid number of values for group %s key %s",
                   window_group, WINDOW_POSITION);
     }
-    else if ((pos[0] + (geom ? geom[0] : 0) < 0) ||
-             (pos[0] > gdk_screen_width()) ||
-             (pos[1] + (geom ? geom[1] : 0) < 0) ||
-             (pos[1] > gdk_screen_height()))
-    {
+// This does not do any thing ?
+//    else if ((pos[0] + (geom ? geom[0] : 0) < 0) ||
+//             (pos[0] > gdk_screen_width()) ||
+//             (pos[1] + (geom ? geom[1] : 0) < 0) ||
+//             (pos[1] > gdk_screen_height()))
+//    {
 //    g_debug("position %dx%d, size%dx%d is offscreen; will not move",
 //	    pos[0], pos[1], geom[0], geom[1]);
-    }
+//    }
     else
     {
         gtk_window_move(GTK_WINDOW(window), pos[0], pos[1]);
@@ -1256,8 +1257,8 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
     }
     gtk_dialog_add_buttons(GTK_DIALOG(dialog),
                            _("Close _Without Saving"), GTK_RESPONSE_CLOSE,
-                           _("Cancel"), GTK_RESPONSE_CANCEL,
-                           _("Save"), GTK_RESPONSE_APPLY,
+                           _("_Cancel"), GTK_RESPONSE_CANCEL,
+                           _("_Save"), GTK_RESPONSE_APPLY,
                            NULL);
     gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_APPLY);
 
@@ -4686,8 +4687,11 @@ do_popup_menu(GncPluginPage *page, GdkEventButton *event)
         button = 0;
         event_time = gtk_get_current_event_time ();
     }
-
+#if GTK_CHECK_VERSION(3,22,0)
+    gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent *) event);
+#else
     gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, button, event_time);
+#endif
     LEAVE(" ");
 }
 

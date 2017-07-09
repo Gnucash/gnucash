@@ -915,7 +915,7 @@ gnc_entry_ledger_duplicate_current_entry (GncEntryLedger *ledger)
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                 "%s", message);
         gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-                               _("Cancel"), GTK_RESPONSE_CANCEL,
+                               _("_Cancel"), GTK_RESPONSE_CANCEL,
                                _("_Record"), GTK_RESPONSE_ACCEPT,
                                NULL);
         response = gnc_dialog_run(GTK_DIALOG(dialog), GNC_PREF_WARN_INV_ENTRY_DUP);

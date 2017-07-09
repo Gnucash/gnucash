@@ -125,11 +125,6 @@
       <summary>Width of notebook tabs</summary>
       <description>This key specifies the maximum width of notebook tabs. If the text in the tab is longer than this value (the test is approximate) then the tab label will have the middle cut and replaced with an ellipsis.</description>
     </key>
-    <key name="buttons-with-icons-and-labels" type="b">
-      <default>true</default>
-      <summary>Show Button Icons and Labels</summary>
-      <description>If active, buttons that have been configured to show icons and labels will show both. Otherwise only labels will be used.</description>
-    </key>
     <key name="currency-choice-locale" type="b">
       <default>true</default>
       <summary>Use the system locale currency for all newly created accounts.</summary>

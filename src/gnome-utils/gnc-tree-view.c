@@ -1372,8 +1372,12 @@ gnc_tree_view_select_column_cb (GtkTreeViewColumn *column,
     gtk_widget_show_all(menu);
 
     /* Pop the menu up at the button */
+#if GTK_CHECK_VERSION(3,22,0)
+    gtk_menu_popup_at_pointer (GTK_MENU(priv->column_menu), NULL);
+#else
     gtk_menu_popup(GTK_MENU(priv->column_menu), NULL, GTK_WIDGET(menu),
                    NULL, NULL, 0, gtk_get_current_event_time());
+#endif
 }
 
 

@@ -1,42 +1,49 @@
 gncpixmapdir = ${GNC_PIXMAP_DIR}
+gncicon16dir = ${GNC_ICON_DIR}/hicolor/16x16/actions/
+gncicon24dir = ${GNC_ICON_DIR}/hicolor/24x24/actions/
+
+gncicon16_DATA = \
+  hicolor/16x16/actions/gnc-account.png \
+  hicolor/16x16/actions/gnc-account-delete.png \
+  hicolor/16x16/actions/gnc-account-edit.png \
+  hicolor/16x16/actions/gnc-account-new.png \
+  hicolor/16x16/actions/gnc-account-open.png \
+  hicolor/16x16/actions/gnc-account-report.png \
+  hicolor/16x16/actions/gnc-gnome-pdf.png \
+  hicolor/16x16/actions/gnc-invoice.png \
+  hicolor/16x16/actions/gnc-invoice-duplicate.png \
+  hicolor/16x16/actions/gnc-invoice-edit.png \
+  hicolor/16x16/actions/gnc-invoice-new.png \
+  hicolor/16x16/actions/gnc-invoice-pay.png \
+  hicolor/16x16/actions/gnc-invoice-post.png \
+  hicolor/16x16/actions/gnc-invoice-unpost.png \
+  hicolor/16x16/actions/gnc-jumpto.png \
+  hicolor/16x16/actions/gnc-split-trans.png \
+  hicolor/16x16/actions/gnc-sx-new.png \
+  hicolor/16x16/actions/gnc-transfer.png
+
+
+gncicon24_DATA = \
+  hicolor/24x24/actions/gnc-account.png \
+  hicolor/24x24/actions/gnc-account-delete.png \
+  hicolor/24x24/actions/gnc-account-edit.png \
+  hicolor/24x24/actions/gnc-account-new.png \
+  hicolor/24x24/actions/gnc-account-open.png \
+  hicolor/24x24/actions/gnc-account-report.png \
+  hicolor/24x24/actions/gnc-gnome-pdf.png \
+  hicolor/24x24/actions/gnc-invoice.png \
+  hicolor/24x24/actions/gnc-invoice-duplicate.png \
+  hicolor/24x24/actions/gnc-invoice-edit.png \
+  hicolor/24x24/actions/gnc-invoice-new.png \
+  hicolor/24x24/actions/gnc-invoice-pay.png \
+  hicolor/24x24/actions/gnc-invoice-post.png \
+  hicolor/24x24/actions/gnc-invoice-unpost.png \
+  hicolor/24x24/actions/gnc-jumpto.png \
+  hicolor/24x24/actions/gnc-split-trans.png \
+  hicolor/24x24/actions/gnc-sx-new.png \
+  hicolor/24x24/actions/gnc-transfer.png
 
 gncpixmap_DATA = \
-  hicolor/16x16/actions/gnc-account.png \
-  hicolor/24x24/actions/gnc-account.png \
-  hicolor/16x16/actions/gnc-account-delete.png \
-  hicolor/24x24/actions/gnc-account-delete.png \
-  hicolor/16x16/actions/gnc-account-edit.png \
-  hicolor/24x24/actions/gnc-account-edit.png \
-  hicolor/16x16/actions/gnc-account-new.png \
-  hicolor/24x24/actions/gnc-account-new.png \
-  hicolor/16x16/actions/gnc-account-open.png \
-  hicolor/24x24/actions/gnc-account-open.png \
-  hicolor/16x16/actions/gnc-account-report.png \
-  hicolor/24x24/actions/gnc-account-report.png \
-  hicolor/16x16/actions/gnc-gnome-pdf.png \
-  hicolor/24x24/actions/gnc-gnome-pdf.png \
-  hicolor/16x16/actions/gnc-invoice.png \
-  hicolor/24x24/actions/gnc-invoice.png \
-  hicolor/16x16/actions/gnc-invoice-duplicate.png \
-  hicolor/24x24/actions/gnc-invoice-duplicate.png \
-  hicolor/16x16/actions/gnc-invoice-edit.png \
-  hicolor/24x24/actions/gnc-invoice-edit.png \
-  hicolor/16x16/actions/gnc-invoice-new.png \
-  hicolor/24x24/actions/gnc-invoice-new.png \
-  hicolor/16x16/actions/gnc-invoice-pay.png \
-  hicolor/24x24/actions/gnc-invoice-pay.png \
-  hicolor/16x16/actions/gnc-invoice-post.png \
-  hicolor/24x24/actions/gnc-invoice-post.png \
-  hicolor/16x16/actions/gnc-invoice-unpost.png \
-  hicolor/24x24/actions/gnc-invoice-unpost.png \
-  hicolor/16x16/actions/gnc-jumpto.png \
-  hicolor/24x24/actions/gnc-jumpto.png \
-  hicolor/16x16/actions/gnc-split-trans.png \
-  hicolor/24x24/actions/gnc-split-trans.png \
-  hicolor/16x16/actions/gnc-sx-new.png \
-  hicolor/24x24/actions/gnc-sx-new.png \
-  hicolor/16x16/actions/gnc-transfer.png \
-  hicolor/24x24/actions/gnc-transfer.png \
   gnucash-icon.ico \
   gnucash-icon-16x16.png \
   gnucash-icon-32x32.png \
@@ -158,6 +165,8 @@ ico_files_lr = \
 
 EXTRA_DIST = \
   ${gncpixmap_DATA} \
+  ${gncicon16_DATA} \
+  ${gncicon24_DATA} \
   ${ico_files_hr} \
   ${ico_files_lr} \
   ${gncscalableicon_DATA}

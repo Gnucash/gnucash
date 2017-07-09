@@ -404,8 +404,8 @@ gnc_input_dialog (GtkWidget *parent, const gchar *title, const gchar *msg, const
     /* Create the widgets */
     dialog = gtk_dialog_new_with_buttons (title, GTK_WINDOW (parent),
                                           GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                          _("OK"), GTK_RESPONSE_ACCEPT,
-                                          _("Cancel"), GTK_RESPONSE_REJECT,
+                                          _("_OK"), GTK_RESPONSE_ACCEPT,
+                                          _("_Cancel"), GTK_RESPONSE_REJECT,
                                           NULL);
     content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
@@ -462,7 +462,7 @@ gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar *msg)
     /* Create the widgets */
     dialog = gtk_dialog_new_with_buttons (title, GTK_WINDOW (parent),
                                           GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                          _("OK"), GTK_RESPONSE_ACCEPT,
+                                          _("_OK"), GTK_RESPONSE_ACCEPT,
                                           NULL);
     content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 

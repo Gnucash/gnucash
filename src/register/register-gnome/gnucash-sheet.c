@@ -598,7 +598,9 @@ gnucash_sheet_update_adjustments (GnucashSheet *sheet)
     else
         gtk_adjustment_set_step_increment (vadj, 0);
 
+#if !GTK_CHECK_VERSION(3,18,0)
     gtk_adjustment_changed(vadj);
+#endif
 }
 
 
@@ -1279,13 +1281,22 @@ gnucash_sheet_check_grab (GnucashSheet *sheet)
 {
     GdkModifierType mods;
     GdkDevice *device;
+#if GTK_CHECK_VERSION(3,20,0)
+    GdkSeat *seat;
+#else
     GdkDeviceManager *device_manager;
+#endif
 
     if (!sheet->grabbed)
         return;
 
-    device_manager = gdk_display_get_device_manager(gdk_display_get_default());
+#if GTK_CHECK_VERSION(3,20,0)
+    seat = gdk_display_get_default_seat (gdk_display_get_default());
+    device = gdk_seat_get_pointer (seat);
+#else
+    device_manager = gdk_display_get_device_manager (gdk_display_get_default());
     device = gdk_device_manager_get_client_pointer (device_manager);
+#endif
 
     gdk_device_get_state (device, gtk_widget_get_window (GTK_WIDGET(sheet)),
                           0, &mods);
@@ -1371,8 +1382,12 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
     if (virt_loc_equal (new_virt_loc, cur_virt_loc) &&
         sheet->editing && do_popup)
     {
+#if GTK_CHECK_VERSION(3,22,0)
+        gtk_menu_popup_at_pointer (GTK_MENU(sheet->popup), (GdkEvent *) event);
+#else
         gtk_menu_popup(GTK_MENU(sheet->popup), NULL, NULL, NULL,
                        sheet->popup_data, event->button, event->time);
+#endif
 
         return TRUE;
     }
@@ -1395,8 +1410,12 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
         gnucash_sheet_check_grab (sheet);
 
     if (do_popup)
+#if GTK_CHECK_VERSION(3,22,0)
+        gtk_menu_popup_at_pointer (GTK_MENU(sheet->popup), (GdkEvent *) event);
+#else
         gtk_menu_popup(GTK_MENU(sheet->popup), NULL, NULL, NULL,
                        sheet->popup_data, event->button, event->time);
+#endif
     return button_1 || do_popup;
 }
 
@@ -2316,6 +2335,25 @@ gnucash_sheet_realize_entry (GnucashSheet *sheet, GtkWidget *entry)
  * the register is rewritten.
  */
 
+static void
+gnc_style_context_get_background_color (GtkStyleContext *context,
+                                        GtkStateFlags    state,
+                                        GdkRGBA         *color)
+{
+    GdkRGBA *c;
+
+    g_return_if_fail (color != NULL);
+    g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+    gtk_style_context_get (context,
+                           state,
+                           GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &c,
+                           NULL);
+    *color = *c;
+    gdk_rgba_free (c);
+}
+
+
 /** Map a cell type to a gtkrc specified color. */
 GdkRGBA *
 get_gtkrc_color (GnucashSheet *sheet,
@@ -2379,13 +2417,13 @@ get_gtkrc_color (GnucashSheet *sheet,
     case COLOR_PRIMARY_BG:
     case COLOR_SECONDARY_BG:
     case COLOR_SPLIT_BG:
-        gtk_style_context_get_background_color(stylectxt, GTK_STATE_FLAG_NORMAL, &color);
+        gnc_style_context_get_background_color(stylectxt, GTK_STATE_FLAG_NORMAL, &color);
         break;
 
     case COLOR_PRIMARY_BG_ACTIVE:
     case COLOR_SECONDARY_BG_ACTIVE:
     case COLOR_SPLIT_BG_ACTIVE:
-        gtk_style_context_get_background_color(stylectxt, GTK_STATE_FLAG_SELECTED, &color);
+        gnc_style_context_get_background_color(stylectxt, GTK_STATE_FLAG_SELECTED, &color);
         break;
 
     case COLOR_HEADER_FG:

@@ -585,7 +585,11 @@ gnc_header_init (GncHeader *header)
     header->cursor_name = NULL;
     header->in_resize = FALSE;
     header->resize_col = -1;
+#if GTK_CHECK_VERSION(3,16,0)
+    header->resize_cursor = gdk_cursor_new_for_display (gdk_display_get_default (), GDK_SB_H_DOUBLE_ARROW);
+#else
     header->resize_cursor = gdk_cursor_new (GDK_SB_H_DOUBLE_ARROW);
+#endif
     header->normal_cursor = NULL;
     header->height = 20;
     header->width = 400;

@@ -1086,8 +1086,8 @@ gnc_plugin_page_owner_tree_cmd_delete_owner (GtkAction *action, GncPluginPageOwn
                                          "%s", message);
         g_free(message);
         gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-                               _("Cancel"), GTK_RESPONSE_CANCEL,
-                               _("Delete"), GTK_RESPONSE_ACCEPT,
+                               _("_Cancel"), GTK_RESPONSE_CANCEL,
+                               _("_Delete"), GTK_RESPONSE_ACCEPT,
                                (gchar *)NULL);
         gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
         response = gtk_dialog_run(GTK_DIALOG(dialog));

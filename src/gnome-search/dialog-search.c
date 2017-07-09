@@ -724,7 +724,7 @@ attach_element (GtkWidget *element, GNCSearchWindow *sw, int row)
     gtk_widget_set_halign (element, GTK_ALIGN_FILL);
     g_object_set (element, "margin", 0, NULL);
 
-    remove = gtk_button_new_with_label (_("Remove"));
+    remove = gtk_button_new_with_mnemonic (_("_Remove"));
     g_object_set_data (G_OBJECT (remove), "element", element);
     g_signal_connect (G_OBJECT (remove), "clicked", G_CALLBACK (remove_element), sw);
 
@@ -1175,7 +1175,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
     gtk_label_set_text (GTK_LABEL (label), type_label);
 
     /* Set the 'add criterion' button */
-    add = gtk_button_new_with_label (_("Add"));
+    add = gtk_button_new_with_mnemonic (_("_Add"));
 
     g_signal_connect (G_OBJECT (add), "clicked", G_CALLBACK (add_criterion), sw);
     box = GTK_WIDGET(gtk_builder_get_object (builder, "add_button_box"));
@@ -1311,7 +1311,8 @@ gnc_search_dialog_create (QofIdTypeConst obj_type, const gchar *title,
                           GNCSearchNewItemCB new_item_cb,
                           gpointer user_data, GNCSearchFree free_cb,
                           const gchar *prefs_group,
-                          const gchar *type_label)
+                          const gchar *type_label,
+                          const gchar *style_class)
 {
     GNCSearchWindow *sw = g_new0 (GNCSearchWindow, 1);
 
@@ -1347,6 +1348,12 @@ gnc_search_dialog_create (QofIdTypeConst obj_type, const gchar *title,
     if (sw->prefs_group)
         gnc_restore_window_size(sw->prefs_group, GTK_WINDOW(sw->dialog));
     gtk_widget_show(sw->dialog);
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    if (style_class == NULL)
+        gnc_widget_set_style_context (GTK_WIDGET(sw->dialog), "GncSearchDialog");
+    else
+        gnc_widget_set_style_context (GTK_WIDGET(sw->dialog), style_class);
 
     /* Maybe display the original query results? */
     if (callbacks && show_start_query)
@@ -1492,6 +1499,6 @@ gnc_search_dialog_test (void)
     gnc_search_dialog_create (GNC_ID_SPLIT, _("Find Transaction"),
 			      params, display,
 			      NULL, NULL, buttons, NULL, NULL, NULL, NULL,
-			      NULL, NULL);
+			      NULL, NULL, NULL);
 }
 

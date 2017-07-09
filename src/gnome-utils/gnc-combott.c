@@ -92,11 +92,13 @@ static void gctt_get_property (GObject *object,
 
 static void gctt_finalize (GObject *object);
 
+#if !GTK_CHECK_VERSION(3,22,0)
 static void gctt_combott_menu_position (GtkMenu *menu,
                                         gint *x,
                                         gint *y,
                                         gint *push_in,
                                         gpointer user_data);
+#endif
 
 static void gctt_changed (GncCombott *combott);
 static void gctt_set_model (GncCombott *combott, GtkTreeModel *model);
@@ -474,6 +476,7 @@ gctt_changed(GncCombott *combott)
 }
 
 
+#if !GTK_CHECK_VERSION(3,22,0)
 static void
 gctt_combott_menu_position (GtkMenu  *menu,
                             gint     *x,
@@ -525,6 +528,7 @@ gctt_combott_menu_position (GtkMenu  *menu,
 
     *push_in = FALSE;
 }
+#endif
 
 
 static void
@@ -591,10 +595,18 @@ button_press_cb (GtkWidget *widget, GdkEvent *event, gpointer *user_data )
         {
             GdkEventButton *bevent = (GdkEventButton *) event;
 
+#if GTK_CHECK_VERSION(3,22,0)
+            gtk_menu_popup_at_widget (GTK_MENU(priv->menu),
+                                      widget,
+                                      GDK_GRAVITY_SOUTH_WEST,
+                                      GDK_GRAVITY_NORTH_WEST,
+                                      event);
+#else
             gtk_menu_popup (GTK_MENU (priv->menu),
                             NULL, NULL,
                             gctt_combott_menu_position, combott,
                             bevent->button, bevent->time);
+#endif
 
             /* Tell calling code that we have handled this event; the buck
              * stops here. */

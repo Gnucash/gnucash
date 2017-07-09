@@ -1574,7 +1574,7 @@ gnc_plugin_page_register_finish_pending (GncPluginPage *page)
     gnc_gtk_dialog_add_button(dialog, _("_Discard Transaction"),
                               "edit-delete", GTK_RESPONSE_REJECT);
     gtk_dialog_add_button(GTK_DIALOG(dialog),
-                          _("Cancel"), GTK_RESPONSE_CANCEL);
+                          _("_Cancel"), GTK_RESPONSE_CANCEL);
     gnc_gtk_dialog_add_button(dialog, _("_Save Transaction"),
                               "document-save", GTK_RESPONSE_ACCEPT);
 

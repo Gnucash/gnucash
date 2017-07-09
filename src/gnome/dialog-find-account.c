@@ -299,11 +299,6 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
     g_signal_connect (facc_dialog->view, "row-activated",
                      G_CALLBACK(row_double_clicked), (gpointer)facc_dialog);
 
-    /* Enable alternative line colors */
-#if !GTK_CHECK_VERSION(3, 14, 0)
-    gtk_tree_view_set_rules_hint (GTK_TREE_VIEW(facc_dialog->view), TRUE);
-#endif
-
     // Set grid lines option to preference
     gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(facc_dialog->view), gnc_tree_view_get_grid_lines_pref ());
 
