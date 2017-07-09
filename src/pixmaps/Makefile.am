@@ -1,6 +1,7 @@
 gncpixmapdir = ${GNC_PIXMAP_DIR}
+gncicondir = ${GNC_ICON_DIR}
 
-gncpixmap_DATA = \
+gncicon_DATA = \
   hicolor/16x16/actions/gnc-account.png \
   hicolor/24x24/actions/gnc-account.png \
   hicolor/16x16/actions/gnc-account-delete.png \
@@ -37,6 +38,8 @@ gncpixmap_DATA = \
   hicolor/24x24/actions/gnc-sx-new.png \
   hicolor/16x16/actions/gnc-transfer.png \
   hicolor/24x24/actions/gnc-transfer.png \
+
+gncpixmap_DATA = \
   gnucash-icon.ico \
   gnucash-icon-16x16.png \
   gnucash-icon-32x32.png \
@@ -158,6 +161,7 @@ ico_files_lr = \
 
 EXTRA_DIST = \
   ${gncpixmap_DATA} \
+  ${gncicon_DATA} \
   ${ico_files_hr} \
   ${ico_files_lr} \
   ${gncscalableicon_DATA}
