@@ -3011,7 +3011,7 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
     GncOwnerType owner_type = GNC_OWNER_CUSTOMER;
     static GList *inv_params = NULL, *bill_params = NULL, *emp_params = NULL, *params;
     static GList *columns = NULL;
-    const gchar *title, *label;
+    const gchar *title, *label, *style_class;
     static GNCSearchCallbackButton *buttons;
     static GNCSearchCallbackButton inv_buttons[] =
     {
@@ -3251,18 +3251,21 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
     case GNC_OWNER_VENDOR:
         title = _("Find Bill");
         label = _("Bill");
+        style_class = "GncFindBillDialog";
         params = bill_params;
         buttons = bill_buttons;
         break;
     case GNC_OWNER_EMPLOYEE:
         title = _("Find Expense Voucher");
         label = _("Expense Voucher");
+        style_class = "GncFindExpenseVoucherDialog";
         params = emp_params;
         buttons = emp_buttons;
         break;
     default:
         title = _("Find Invoice");
         label = _("Invoice");
+        style_class = "GncFindInvoiceDialog";
         params = inv_params;
         buttons = inv_buttons;
         break;
@@ -3270,7 +3273,7 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
     return gnc_search_dialog_create (type, title, params, columns, q, q2,
                                      buttons, NULL, new_invoice_cb,
                                      sw, free_invoice_cb, GNC_PREFS_GROUP_SEARCH,
-                                     label);
+                                     label, style_class);
 }
 
 DialogQueryView *

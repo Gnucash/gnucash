@@ -224,11 +224,8 @@ gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg)
     ftd->sw = gnc_search_dialog_create (type, _("Find Transaction"),
                                         params, NULL, start_q, show_q,
                                         NULL, do_find_cb, NULL,
-                                        ftd, free_ftd_cb, GNC_PREFS_GROUP_SEARCH, NULL);
-
-    // Set the style context for this dialog so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(ftd->sw), "GncFindTransDialog");
-
+                                        ftd, free_ftd_cb, GNC_PREFS_GROUP_SEARCH, NULL,
+                                        "GncFindTransDialog");
     if (!ftd->sw)
     {
         free_ftd_cb (ftd);

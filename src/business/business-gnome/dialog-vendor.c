@@ -762,7 +762,8 @@ gnc_vendor_search (GncVendor *start, QofBook *book)
     return gnc_search_dialog_create (type, _("Find Vendor"),
                                      params, columns, q, q2, buttons, NULL,
                                      new_vendor_cb, sw, free_vendor_cb,
-                                     GNC_PREFS_GROUP_SEARCH, NULL);
+                                     GNC_PREFS_GROUP_SEARCH, NULL,
+                                     "GncFindVendorDialog");
 }
 
 GNCSearchWindow *

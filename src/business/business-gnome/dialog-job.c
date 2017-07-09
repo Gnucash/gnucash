@@ -650,7 +650,8 @@ gnc_job_search (GncJob *start, GncOwner *owner, QofBook *book)
     return gnc_search_dialog_create (type, _("Find Job"),
                                      params, columns, q, q2, buttons, NULL,
                                      new_job_cb, sw, free_userdata_cb,
-                                     GNC_PREFS_GROUP_SEARCH, NULL);
+                                     GNC_PREFS_GROUP_SEARCH, NULL,
+                                     "GncFindJobDialog");
 }
 
 /* Functions for widgets for job selection */

@@ -762,7 +762,8 @@ gnc_employee_search (GncEmployee *start, QofBook *book)
                                      params, columns, q, q2,
                                      buttons, NULL, new_employee_cb,
                                      sw, free_employee_cb,
-                                     GNC_PREFS_GROUP_SEARCH, NULL);
+                                     GNC_PREFS_GROUP_SEARCH, NULL,
+                                     "GncFindEmployeeDialog");
 }
 
 GNCSearchWindow *

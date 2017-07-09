@@ -954,7 +954,7 @@ gnc_order_search (GncOrder *start, GncOwner *owner, QofBook *book)
                                      params, columns, q, q2,
                                      buttons, NULL, new_order_cb,
                                      sw, free_order_cb, GNC_PREFS_GROUP_SEARCH,
-                                     NULL);
+                                     NULL, "GncFindOrderDialog");
 }
 
 GNCSearchWindow *
