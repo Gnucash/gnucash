@@ -546,10 +546,10 @@ gnc_recurrence_comp_init(GncRecurrenceComp *grc)
     gtk_box_set_homogeneous (GTK_BOX (grc->vbox), FALSE);
     grc->rlist = NULL;
 
-    grc->buttAdd = GTK_BUTTON(gtk_button_new_with_label(_("Add")));
+    grc->buttAdd = GTK_BUTTON(gtk_button_new_with_mnemonic(_("_Add")));
     g_signal_connect(G_OBJECT(grc->buttAdd), "clicked",
                      G_CALLBACK(addClicked), grc);
-    grc->buttRemove = GTK_BUTTON(gtk_button_new_with_label(_("Remove")));
+    grc->buttRemove = GTK_BUTTON(gtk_button_new_with_mnemonic(_("_Remove")));
     g_signal_connect(G_OBJECT(grc->buttRemove), "clicked",
                      G_CALLBACK(removeClicked), grc);
 

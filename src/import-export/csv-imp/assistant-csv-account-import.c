@@ -325,8 +325,8 @@ gnc_input_dialog (GtkWidget *parent, const gchar *title, const gchar *msg, const
     /* Create the widgets */
     dialog = gtk_dialog_new_with_buttons (title, GTK_WINDOW(parent),
                                           GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                          _("OK"), GTK_RESPONSE_ACCEPT,
-                                          _("Cancel"), GTK_RESPONSE_REJECT,
+                                          _("_OK"), GTK_RESPONSE_ACCEPT,
+                                          _("_Cancel"), GTK_RESPONSE_REJECT,
                                           NULL);
 
     content_area = gtk_dialog_get_content_area (GTK_DIALOG(dialog));
@@ -610,7 +610,7 @@ csv_import_assistant_create (CsvImportInfo *info)
     info->file_chooser = gtk_file_chooser_widget_new (GTK_FILE_CHOOSER_ACTION_OPEN);
     g_signal_connect (G_OBJECT(info->file_chooser), "file-activated",
                       G_CALLBACK(csv_import_file_chooser_confirm_cb), info);
-    button = gtk_button_new_with_label (_("OK"));
+    button = gtk_button_new_with_mnemonic (_("_OK"));
     gtk_widget_set_size_request (button, 100, -1);
     gtk_widget_show (button);
     h_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);

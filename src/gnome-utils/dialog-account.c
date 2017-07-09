@@ -644,8 +644,8 @@ verify_children_compatible (AccountWindow *aw)
                                           GTK_WINDOW(aw->dialog),
                                           GTK_DIALOG_DESTROY_WITH_PARENT |
                                           GTK_DIALOG_MODAL,
-                                          _("Cancel"), GTK_RESPONSE_CANCEL,
-                                          _("OK"), GTK_RESPONSE_OK,
+                                          _("_Cancel"), GTK_RESPONSE_CANCEL,
+                                          _("_OK"), GTK_RESPONSE_OK,
                                           NULL);
 
     gtk_window_set_skip_taskbar_hint (GTK_WINDOW (dialog), TRUE);

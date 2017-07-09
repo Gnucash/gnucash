@@ -724,7 +724,7 @@ attach_element (GtkWidget *element, GNCSearchWindow *sw, int row)
     gtk_widget_set_halign (element, GTK_ALIGN_FILL);
     g_object_set (element, "margin", 0, NULL);
 
-    remove = gtk_button_new_with_label (_("Remove"));
+    remove = gtk_button_new_with_mnemonic (_("_Remove"));
     g_object_set_data (G_OBJECT (remove), "element", element);
     g_signal_connect (G_OBJECT (remove), "clicked", G_CALLBACK (remove_element), sw);
 
@@ -1175,7 +1175,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
     gtk_label_set_text (GTK_LABEL (label), type_label);
 
     /* Set the 'add criterion' button */
-    add = gtk_button_new_with_label (_("Add"));
+    add = gtk_button_new_with_mnemonic (_("_Add"));
 
     g_signal_connect (G_OBJECT (add), "clicked", G_CALLBACK (add_criterion), sw);
     box = GTK_WIDGET(gtk_builder_get_object (builder, "add_button_box"));

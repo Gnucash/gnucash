@@ -884,7 +884,7 @@ gnc_tree_control_split_reg_reinit (GncTreeViewSplitReg *view, gpointer data)
     }
 
     gtk_dialog_add_button (GTK_DIALOG (dialog),
-                          _("Cancel"), GTK_RESPONSE_CANCEL);
+                          _("_Cancel"), GTK_RESPONSE_CANCEL);
     gnc_gtk_dialog_add_button(dialog, _("_Remove Splits"),
                               "edit-delete", GTK_RESPONSE_ACCEPT);
     response = gnc_dialog_run (GTK_DIALOG(dialog), warning);
@@ -1021,7 +1021,7 @@ gnc_tree_control_split_reg_delete (GncTreeViewSplitReg *view, gpointer data)
         }
 
         gtk_dialog_add_button (GTK_DIALOG (dialog),
-                              _("Cancel"), GTK_RESPONSE_CANCEL);
+                              _("_Cancel"), GTK_RESPONSE_CANCEL);
         gnc_gtk_dialog_add_button (dialog, _("_Delete Split"),
                                   "edit-delete", GTK_RESPONSE_ACCEPT);
         response = gnc_dialog_run (GTK_DIALOG (dialog), warning);
@@ -1061,7 +1061,7 @@ gnc_tree_control_split_reg_delete (GncTreeViewSplitReg *view, gpointer data)
             warning = GNC_PREF_WARN_REG_TRANS_DEL;
         }
         gtk_dialog_add_button (GTK_DIALOG (dialog),
-                              _("Cancel"), GTK_RESPONSE_CANCEL);
+                              _("_Cancel"), GTK_RESPONSE_CANCEL);
         gnc_gtk_dialog_add_button (dialog, _("_Delete Transaction"),
                                   "edit-delete", GTK_RESPONSE_ACCEPT);
         response =  gnc_dialog_run (GTK_DIALOG (dialog), warning);
