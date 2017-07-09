@@ -120,9 +120,21 @@ gnc_restore_window_size(const char *group, GtkWindow *window)
     geometry = gnc_prefs_get_value (group, GNC_PREF_LAST_GEOMETRY);
     if (g_variant_is_of_type (geometry, (const GVariantType *) "(iiii)") )
     {
-        gint screen_width = gdk_screen_width();
-        gint screen_height = gdk_screen_height();
+        gint screen_width;
+        gint screen_height;
+#if GTK_CHECK_VERSION(3,22,0)
+        GdkWindow *win = gdk_screen_get_root_window (gtk_window_get_screen (window));
+        GdkMonitor *mon = gdk_display_get_monitor_at_window (gtk_widget_get_display (GTK_WIDGET(window)), win);
+        GdkRectangle monitor_size;
 
+        gdk_monitor_get_geometry (mon, &monitor_size);
+
+        screen_width = monitor_size.width;
+        screen_height = monitor_size.height;
+#else
+        screen_width = gdk_screen_width(); //default screen
+        screen_height = gdk_screen_height(); //default screen
+#endif
         g_variant_get (geometry, "(iiii)",
                        &wpos[0],  &wpos[1],
                        &wsize[0], &wsize[1]);
@@ -194,6 +206,11 @@ gnc_save_window_size(const char *group, GtkWindow *window)
 void
 gnc_window_adjust_for_screen(GtkWindow * window)
 {
+#if GTK_CHECK_VERSION(3,22,0)
+    GdkWindow *win;
+    GdkMonitor *mon;
+    GdkRectangle monitor_size;
+#endif
     gint screen_width;
     gint screen_height;
     gint width;
@@ -206,8 +223,17 @@ gnc_window_adjust_for_screen(GtkWindow * window)
     if (gtk_widget_get_window (GTK_WIDGET(window)) == NULL)
         return;
 
+#if GTK_CHECK_VERSION(3,22,0)
+    win = gdk_screen_get_root_window (gtk_window_get_screen (window));
+    mon = gdk_display_get_monitor_at_window (gtk_widget_get_display (GTK_WIDGET(window)), win);
+    gdk_monitor_get_geometry (mon, &monitor_size);
+
+    screen_width = monitor_size.width;
+    screen_height = monitor_size.height;
+#else
     screen_width = gdk_screen_width();
     screen_height = gdk_screen_height();
+#endif
     width = gdk_window_get_width (gtk_widget_get_window (GTK_WIDGET(window)));
     height = gdk_window_get_height (gtk_widget_get_window (GTK_WIDGET(window)));
 
