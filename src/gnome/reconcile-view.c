@@ -193,9 +193,13 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
 
                 if (GTK_IS_WINDOW (tip_win))
                 {
+#if GTK_CHECK_VERSION(3,22,0)
+                    GdkMonitor *mon;
+#else
+                    gint monitor_num;
+#endif
                     GdkRectangle monitor;
                     GtkRequisition requisition;
-                    gint monitor_num;
                     gint x, y;
 
                     gtk_widget_get_preferred_size (GTK_WIDGET (tip_win), &requisition, NULL);
@@ -203,8 +207,13 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
                     x = root_x + cur_x + 10;
                     y = root_y + cur_y + 10;
 
+#if GTK_CHECK_VERSION(3,22,0)
+                    mon = gdk_display_get_monitor_at_point (gdk_display_get_default(), x, y);
+                    gdk_monitor_get_geometry (mon, &monitor);
+#else
                     monitor_num = gdk_screen_get_monitor_at_point (screen, x, y);
                     gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+#endif
 
                     if (x + requisition.width > monitor.x + monitor.width)
                         x -= x - (monitor.x + monitor.width) + requisition.width;
