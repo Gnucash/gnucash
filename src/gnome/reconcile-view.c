@@ -150,7 +150,11 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
 
             if (keyboard_mode == FALSE)
             {
+#if GTK_CHECK_VERSION(3,20,0)
+                GdkSeat *seat;
+#else
                 GdkDeviceManager *device_manager;
+#endif
                 GdkDevice *pointer;
                 GdkScreen *screen;
                 GtkWindow *tip_win = NULL;
@@ -159,8 +163,13 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
 
                 parent_window = gtk_widget_get_parent_window (GTK_WIDGET (qview));
 
+#if GTK_CHECK_VERSION(3,20,0)
+                seat = gdk_display_get_default_seat (gdk_window_get_display (parent_window));
+                pointer = gdk_seat_get_pointer (seat);
+#else
                 device_manager = gdk_display_get_device_manager (gdk_window_get_display (parent_window));
                 pointer = gdk_device_manager_get_client_pointer (device_manager);
+#endif
 
                 gdk_window_get_device_position (parent_window, pointer, &cur_x, &cur_y, NULL);
 
