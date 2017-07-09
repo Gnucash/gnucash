@@ -690,11 +690,6 @@ gnc_imap_dialog_create (GtkWidget *parent, ImapDialog *imap_dialog)
     filter = gtk_tree_view_get_model (GTK_TREE_VIEW(imap_dialog->view));
     gtk_tree_model_filter_set_visible_column (GTK_TREE_MODEL_FILTER(filter), FILTER);
 
-    /* Enable alternative line colors */
-#if !GTK_CHECK_VERSION(3, 14, 0)
-    gtk_tree_view_set_rules_hint (GTK_TREE_VIEW(imap_dialog->view), TRUE);
-#endif
-
     // Set grid lines option to preference
     gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(imap_dialog->view), gnc_tree_view_get_grid_lines_pref ());
 

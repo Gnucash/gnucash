@@ -437,11 +437,6 @@ gnc_assoc_dialog_create (AssocDialog *assoc_dialog)
     g_signal_connect (assoc_dialog->view, "row-activated",
                       G_CALLBACK(row_selected_cb), (gpointer)assoc_dialog);
 
-    /* Enable alternative line colors */
-#if !GTK_CHECK_VERSION(3, 14, 0)
-    gtk_tree_view_set_rules_hint (GTK_TREE_VIEW(assoc_dialog->view), TRUE);
-#endif
-
     // Set grid lines option to preference
     gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(assoc_dialog->view), gnc_tree_view_get_grid_lines_pref ());
 
