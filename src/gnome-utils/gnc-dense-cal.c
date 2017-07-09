@@ -906,7 +906,7 @@ gnc_style_context_get_background_color (GtkStyleContext *context,
 
     gtk_style_context_get (context,
                            state,
-                           "background-color", &c,
+                           GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &c,
                            NULL);
     *color = *c;
     gdk_rgba_free (c);
@@ -924,7 +924,7 @@ gnc_style_context_get_border_color (GtkStyleContext *context,
 
     gtk_style_context_get (context,
                            state,
-                           "border-color", &c,
+                           GTK_STYLE_PROPERTY_BORDER_COLOR, &c,
                            NULL);
     *color = *c;
     gdk_rgba_free (c);
