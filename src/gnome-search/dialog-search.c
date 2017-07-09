@@ -1311,7 +1311,8 @@ gnc_search_dialog_create (QofIdTypeConst obj_type, const gchar *title,
                           GNCSearchNewItemCB new_item_cb,
                           gpointer user_data, GNCSearchFree free_cb,
                           const gchar *prefs_group,
-                          const gchar *type_label)
+                          const gchar *type_label,
+                          const gchar *style_class)
 {
     GNCSearchWindow *sw = g_new0 (GNCSearchWindow, 1);
 
@@ -1347,6 +1348,12 @@ gnc_search_dialog_create (QofIdTypeConst obj_type, const gchar *title,
     if (sw->prefs_group)
         gnc_restore_window_size(sw->prefs_group, GTK_WINDOW(sw->dialog));
     gtk_widget_show(sw->dialog);
+
+    // Set the style context for this dialog so it can be easily manipulated with css
+    if (style_class == NULL)
+        gnc_widget_set_style_context (GTK_WIDGET(sw->dialog), "GncSearchDialog");
+    else
+        gnc_widget_set_style_context (GTK_WIDGET(sw->dialog), style_class);
 
     /* Maybe display the original query results? */
     if (callbacks && show_start_query)
@@ -1492,6 +1499,6 @@ gnc_search_dialog_test (void)
     gnc_search_dialog_create (GNC_ID_SPLIT, _("Find Transaction"),
 			      params, display,
 			      NULL, NULL, buttons, NULL, NULL, NULL, NULL,
-			      NULL, NULL);
+			      NULL, NULL, NULL);
 }
 

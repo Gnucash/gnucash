@@ -112,7 +112,8 @@ gnc_search_dialog_create (QofIdTypeConst obj_type, const gchar *title,
                           GNCSearchNewItemCB new_item_cb,
                           gpointer user_data, GNCSearchFree free_user_data,
                           const gchar *prefs_group,
-                          const gchar *type_label);
+                          const gchar *type_label,
+                          const gchar *style_class);
 
 void gnc_search_dialog_destroy (GNCSearchWindow *sw);
 void gnc_search_dialog_raise (GNCSearchWindow *sw);
