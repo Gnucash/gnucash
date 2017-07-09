@@ -43,6 +43,12 @@ gchar *gnc_path_get_bindir(void);
  * @returns A newly allocated string. */
 gchar *gnc_path_get_libdir(void);
 
+/** Returns the datadir path, usually
+ * "$prefix/share".
+ *
+ * @returns A newly allocated string. */
+gchar *gnc_path_get_datadir(void);
+
 /** Returns the pkgdatadir path, usually
  * "$prefix/share/gnucash". Needed for gnc_gnome_locate_*().
  *

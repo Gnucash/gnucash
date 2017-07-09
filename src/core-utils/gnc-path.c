@@ -51,6 +51,16 @@ gchar *gnc_path_get_libdir()
     return gnc_gbr_find_lib_dir (LIBDIR);
 }
 
+/** Returns the libdir path, usually
+ * "$prefix/lib".
+ *
+ * @returns A newly allocated string. */
+gchar *gnc_path_get_datadir()
+{
+    //printf("Returning libdir %s\n", gnc_gbr_find_lib_dir (LIBDIR));
+    return gnc_gbr_find_data_dir (DATADIR);
+}
+
 /** Returns the datadir path, usually
  * "$prefix/share/gnucash". Needed for gnc_gnome_locate_*().
  *

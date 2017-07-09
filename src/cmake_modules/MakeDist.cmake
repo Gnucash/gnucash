@@ -1,4 +1,4 @@
-# This file implements the process of making source distributio tarballs. It expects to find list in
+# This file implements the process of making source distribution tarballs. It expects to find list in
 # 'dist_manifest.txt' of all of the files to be included in the distribution, EXCEPT those
 # files that are generated. The list of generated files is specified in MakeDistFiles.cmake in the
 # COPY_FROM_BUILD and COPY_FROM_BUILD_2 variables.

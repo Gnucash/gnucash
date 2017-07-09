@@ -648,13 +648,9 @@ gnc_gui_init(void)
     gchar *data_dir;
 #endif
     int idx;
-    char *icon_filenames[] = {"gnucash-icon-16x16.png",
-                              "gnucash-icon-32x32.png",
-                              "gnucash-icon-48x48.png",
-                              NULL
-                             };
+    int icon_sizes[] = { 16, 32, 48, 0 };
     GList *icons = NULL;
-    char *fullname;
+    GtkIconTheme *icon_theme = gtk_icon_theme_get_default ();
 
     ENTER ("");
 
@@ -662,26 +658,18 @@ gnc_gui_init(void)
         return main_window;
 
     /* use custom icon */
-    for (idx = 0; icon_filenames[idx] != NULL; idx++)
+    gnc_load_app_icons();
+    for (idx = 0; icon_sizes[idx] != 0; idx++)
     {
-        GdkPixbuf *buf = NULL;
-
-        fullname = gnc_filepath_locate_pixmap(icon_filenames[idx]);
-        if (fullname == NULL)
-        {
-            g_warning("couldn't find icon file [%s]", icon_filenames[idx]);
-            continue;
-        }
-
-        buf = gnc_gnome_get_gdkpixbuf(fullname);
-        if (buf == NULL)
-        {
-            g_warning("error loading image from [%s]", fullname);
-            g_free(fullname);
-            continue;
-        }
-        g_free(fullname);
-        icons = g_list_append(icons, buf);
+        GdkPixbuf *pixbuf = gtk_icon_theme_load_icon (icon_theme,
+                                           GNC_ICON_APP,
+                                           icon_sizes[idx],
+                                           GTK_ICON_LOOKUP_USE_BUILTIN,
+                                           NULL);
+        if (!pixbuf)
+            g_warning("error loading application icon of size [%i]", icon_sizes[idx]);
+        else
+            icons = g_list_append(icons, pixbuf);
     }
 
     gtk_window_set_default_icon_list(icons);
@@ -747,7 +735,6 @@ gnc_gui_init(void)
     /* Load css configuration file */
     gnc_add_css_file ();
 
-    gnc_load_app_icons();
     gnc_totd_dialog(GTK_WINDOW(main_window), TRUE);
 
     LEAVE ("");

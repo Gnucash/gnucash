@@ -35,6 +35,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <gtk/gtk.h>
 #include <gdk/gdk.h>
 #include <gdk/gdkkeysyms.h>
 
@@ -57,6 +58,7 @@
 #include "gnc-gobject-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-hooks.h"
+#include "gnc-icons.h"
 #include "gnc-session.h"
 #include "gnc-state.h"
 #include "gnc-ui.h"
@@ -4455,7 +4457,13 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 	gchar **documenters = get_file_strsplit("DOCUMENTERS");
 	gchar *license = get_file("LICENSE");
 	gchar *message;
-	GdkPixbuf *logo = gnc_gnome_get_gdkpixbuf ("gnucash-icon-48x48.png");
+        GtkIconTheme *icon_theme = gtk_icon_theme_get_default ();
+	GdkPixbuf *logo = gtk_icon_theme_load_icon (icon_theme,
+                                                    GNC_ICON_APP,
+                                                    48,
+                                                    GTK_ICON_LOOKUP_USE_BUILTIN,
+                                                    NULL);
+
 
 #ifdef GNUCASH_SCM
     /* Development version */

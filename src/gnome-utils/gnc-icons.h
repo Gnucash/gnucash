@@ -55,6 +55,7 @@ G_BEGIN_DECLS
 //#define GNC_ICON_CLOSE_BUDGET "gnc-close-account"
 //#define GNC_ICON_EDIT_BUDGET "gnc-edit-account"
 #define GNC_ICON_DELETE_BUDGET "gnc-account-delete"
+#define GNC_ICON_APP "gnucash-icon"
 
 void gnc_load_app_icons (void);
 

@@ -106,18 +106,6 @@ SET(COPY_FROM_BUILD_2
         po/gnucash.pot
         src/doc/design/stamp-vti
         src/doc/design/version.texi
-        src/pixmaps/128x128/gnucash-icon.png
-        src/pixmaps/16x16/gnucash-icon.png
-        src/pixmaps/22x22/gnucash-icon.png
-        src/pixmaps/24x24/gnucash-icon.png
-        src/pixmaps/256x256/gnucash-icon.png
-        src/pixmaps/32x32/gnucash-icon.png
-        src/pixmaps/48x48/gnucash-icon.png
-        src/pixmaps/64x64/gnucash-icon.png
-        src/pixmaps/96x96/gnucash-icon.png
-        src/pixmaps/gnucash-icon-16x16.png
-        src/pixmaps/gnucash-icon-32x32.png
-        src/pixmaps/scalable/gnucash-icon.svg
         src/optional/python-bindings/gnucash_core_c.py
         src/test-core/unittest_support.py
 
