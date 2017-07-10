@@ -65,8 +65,8 @@ test_book_use_book_currency( Fixture *fixture, gconstpointer pData )
     const gchar *cur;
     const gchar *pol;
     Account *acct, *acc;
-    gnc_commodity *com = gnc_commodity_new(fixture-> book, NULL, NULL, "USD",
-                                NULL, NULL);
+    gnc_commodity *com = gnc_commodity_new(fixture-> book, "US Dollar",
+                                                "CURRENCY", "USD", "0", 100);
 
     g_test_message( "Testing with no currency accounting method selected" );
     cur = gnc_book_get_book_currency_name( fixture-> book );
