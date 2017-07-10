@@ -25,7 +25,8 @@ EXTRA_DIST = \
   qif.txt \
   tax.txt \
   user-prefs-howto.txt \
-  python-bindings-doxygen.py
+  python-bindings-doxygen.py \
+  CMakeLists.txt
 
 
 all:

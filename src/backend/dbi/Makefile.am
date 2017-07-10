@@ -35,3 +35,5 @@ libgncmod_backend_dbi_la_LIBADD = \
    ${LIBDBI_LIBS}
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.backend.dbi\"
+
+EXTRA_DIST = CMakeLists.txt

@@ -16,3 +16,5 @@ gsettings_SCHEMAS = $(gschema_in_files:.gschema.xml.in=.gschema.xml)
 @GSETTINGS_RULES@
 
 CLEANFILES = $(gsettings_SCHEMAS)
+
+EXTRA_DIST = CMakeLists.txt

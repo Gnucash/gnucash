@@ -40,7 +40,8 @@ endif
 
 EXTRA_DIST = \
   baz.i \
-  gnucash/baz.scm
+  gnucash/baz.scm \
+  CMakeLists.txt
 
 BUILT_SOURCES = swig-baz.c
 MAINTAINERCLEANFILES = swig-baz.c

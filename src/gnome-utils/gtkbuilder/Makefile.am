@@ -19,4 +19,4 @@ gtkbuilder_DATA = \
   gnc-recurrence.glade \
   gnc-tree-view-owner.glade 
 
-EXTRA_DIST = $(gtkbuilder_DATA)
+EXTRA_DIST = $(gtkbuilder_DATA) CMakeLists.txt

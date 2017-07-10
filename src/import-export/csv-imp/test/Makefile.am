@@ -92,7 +92,8 @@ TESTS_ENVIRONMENT = \
   $(shell ${abs_top_srcdir}/src/gnc-test-env.pl --noexports ${GNC_TEST_DEPS})
 
 EXTRA_DIST += \
-  sample1.csv
+  sample1.csv \
+  CMakeLists.txt
 
 
 AM_CPPFLAGS = -DG_LOG_DOMAIN=\"gnc.import.csv\"

@@ -45,3 +45,5 @@ test_qof_CFLAGS = \
 	-DTESTPROG=test_qof \
 	-I$(top_srcdir)/lib/libc \
 	${GLIB_CFLAGS}
+
+EXTRA_DIST = CMakeLists.txt

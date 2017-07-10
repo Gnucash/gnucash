@@ -160,7 +160,8 @@ EXTRA_DIST = \
   ${gncpixmap_DATA} \
   ${ico_files_hr} \
   ${ico_files_lr} \
-  ${gncscalableicon_DATA}
+  ${gncscalableicon_DATA} \
+  CMakeLists.txt
 
 # Only clean up if we're building from svn/svk/git/bzr
 if BUILDING_FROM_VCS

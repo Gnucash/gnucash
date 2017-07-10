@@ -19,4 +19,4 @@ gtkbuilder_DATA = \
 	window-autoclear.glade \
 	window-reconcile.glade
 
-EXTRA_DIST = $(gtkbuilder_DATA)
+EXTRA_DIST = $(gtkbuilder_DATA) CMakeLists.txt

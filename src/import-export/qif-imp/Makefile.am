@@ -72,7 +72,8 @@ EXTRA_DIST = \
   ${gncscm_DATA} \
   ${gtkbuilder_DATA} \
   file-format.txt \
-  $(ui_DATA)
+  $(ui_DATA) \
+  CMakeLists.txt
 
 CLEANFILES =
 

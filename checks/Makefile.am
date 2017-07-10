@@ -10,4 +10,4 @@ checks_DATA = \
 	quicken_check_21.chk \
 	quicken_3part.chk
 
-EXTRA_DIST = ${checks_DATA}
+EXTRA_DIST = ${checks_DATA} CMakeLists.txt

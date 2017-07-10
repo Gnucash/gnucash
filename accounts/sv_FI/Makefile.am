@@ -7,4 +7,5 @@ account_DATA = \
     acctchrt_rf.gnucash-xea
 
 EXTRA_DIST = \
-  ${account_DATA}
+  ${account_DATA} \
+  CMakeLists.txt

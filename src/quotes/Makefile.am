@@ -6,7 +6,8 @@ EXTRA_DIST = \
   gnc-fq-dump \
   gnc-fq-helper.in \
   gnc-fq-update.in \
-  gnc-value-portfolio
+  gnc-value-portfolio \
+  CMakeLists.txt
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf

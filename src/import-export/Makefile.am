@@ -68,6 +68,7 @@ AM_CPPFLAGS = \
 
 EXTRA_DIST = \
   $(gtkbuilder_DATA) \
-  generic-import-design.txt
+  generic-import-design.txt \
+  CMakeLists.txt
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.i-e\"

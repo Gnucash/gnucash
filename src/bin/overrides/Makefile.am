@@ -8,7 +8,8 @@ EXTRA_DIST = \
   gnucash-env.in \
   gnucash-build-env.in \
   gnucash-make-guids \
-  guile.in 
+  guile.in \
+  CMakeLists.txt
 
 noinst_DATA = gnucash-build-env guile
 

@@ -70,7 +70,8 @@ SCM_FILES = ${gncscm_DATA} ${gncscmmod_DATA}
 EXTRA_DIST = \
   build-config.scm.in \
   config \
-  ${SCM_FILES}
+  ${SCM_FILES} \
+  CMakeLists.txt
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf

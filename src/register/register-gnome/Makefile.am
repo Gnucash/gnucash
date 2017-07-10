@@ -66,3 +66,5 @@ AM_CPPFLAGS = \
   ${GNOMECANVAS_CFLAGS}
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.register.gnome\"
+
+EXTRA_DIST = CMakeLists.txt

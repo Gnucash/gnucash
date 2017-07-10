@@ -10,3 +10,5 @@ dist_account_DATA = \
  acctchrt_houseown.gnucash-xea \
  acctchrt_investment.gnucash-xea \
  acctchrt_kids.gnucash-xea
+
+EXTRA_DIST = CMakeLists.txt

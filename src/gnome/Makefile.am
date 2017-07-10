@@ -126,7 +126,8 @@ endif
 EXTRA_DIST = \
   gnome.i \
   $(gnomeapp_in_files) \
-  $(appdata_in_files)
+  $(appdata_in_files) \
+  CMakeLists.txt
 
 AM_CPPFLAGS = \
   -I${top_srcdir}/src \

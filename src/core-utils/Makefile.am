@@ -130,7 +130,13 @@ endif
 
 noinst_DATA = .scm-links
 BUILT_SOURCES = gncla-dir.h gnc-version.h
-EXTRA_DIST = $(gncscmmod_DATA) core-utils.i gncla-dir.h.in gnc-vcs-info.h
+EXTRA_DIST = \
+  $(gncscmmod_DATA) \
+  core-utils.i \
+  gncla-dir.h.in \
+  gnc-vcs-info.h \
+  CMakeLists.txt
+
 clean-local:
 	rm -rf gnucash
 

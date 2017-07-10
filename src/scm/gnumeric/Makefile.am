@@ -31,7 +31,8 @@ endif
 noinst_DATA = .scm-links
 
 EXTRA_DIST = \
-  ${gncscm_DATA}
+  ${gncscm_DATA} \
+  CMakeLists.txt
 
 CLEANFILES = .scm-links ${gncscmcache_DATA}
 

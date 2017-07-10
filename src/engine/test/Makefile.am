@@ -131,7 +131,8 @@ EXTRA_DIST += \
   test-scm-query-import \
   test-scm-query-import.scm \
   $(SCM_TEST_HELPERS) \
-  $(SCM_TEST_SRCS)
+  $(SCM_TEST_SRCS) \
+  CMakeLists.txt
 
 TEST_PROGS += test-engine
 

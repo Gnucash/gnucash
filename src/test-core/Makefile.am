@@ -124,7 +124,8 @@ EXTRA_DIST = \
   swig-unittest-support-python.c \
   swig-unittest-support-guile.c \
   unittest_support.py \
-  unittest-support.i
+  unittest-support.i \
+  CMakeLists.txt
 
 MAINTAINERCLEANFILES = \
 	swig-unittest-support-guile.c \

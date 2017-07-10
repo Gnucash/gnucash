@@ -67,7 +67,8 @@ EXTRA_DIST = \
   test-scm-dynload \
   test-scm-init \
   test-scm-module \
-  test-scm-multi
+  test-scm-multi \
+  CMakeLists.txt
 
 foo:
 	${TESTS_ENVIRONMENT} strace -f -o xxx ./test-load-c

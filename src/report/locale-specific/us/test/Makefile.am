@@ -26,3 +26,5 @@ testit:
 test_link_module_SOURCES = test-link-module.c
 test_link_module_LDADD= \
   ${top_builddir}/src/report/locale-specific/us/libgncmod-locale-reports-us.la
+
+EXTRA_DIST = CMakeLists.txt

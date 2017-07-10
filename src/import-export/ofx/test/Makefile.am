@@ -9,3 +9,5 @@ test_link_LDADD=\
         $(top_builddir)/src/app-utils/libgncmod-app-utils.la \
 	${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
     ../libgncmod-ofx.la 
+
+EXTRA_DIST = CMakeLists.txt

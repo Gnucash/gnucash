@@ -164,7 +164,8 @@ EXTRA_DIST = \
   engine-common.i \
   business-core.i \
   ${gncscmmod_DATA} \
-  ${gncscm_DATA}
+  ${gncscm_DATA} \
+  CMakeLists.txt
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases

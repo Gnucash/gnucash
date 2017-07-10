@@ -1,6 +1,7 @@
 EXTRA_DIST = \
   gnucash.spec.in \
-  gnucash.spec
+  gnucash.spec \
+  CMakeLists.txt
 
 all-local: gnucash.spec
 

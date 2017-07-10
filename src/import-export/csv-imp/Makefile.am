@@ -59,6 +59,6 @@ gtkbuilder_DATA = \
 	assistant-csv-account-import.glade \
 	assistant-csv-trans-import.glade
 
-EXTRA_DIST = $(ui_DATA) $(gtkbuilder_DATA)
+EXTRA_DIST = $(ui_DATA) $(gtkbuilder_DATA) CMakeLists.txt
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.import.csv\"

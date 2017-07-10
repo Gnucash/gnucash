@@ -102,3 +102,5 @@ libgncmod_backend_xml_la_LIBADD = \
    ${top_builddir}/src/libqof/qof/libgnc-qof.la
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.backend.xml\"
+
+EXTRA_DIST = CMakeLists.txt

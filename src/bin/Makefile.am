@@ -137,8 +137,9 @@ CLEANFILES += ${gnc_common_scripts}
 endif
 
 EXTRA_DIST = \
-    generate-gnc-script \
+	generate-gnc-script \
 	gnucash-valgrind.in \
-	environment.in
+	environment.in \
+	CMakeLists.txt
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.bin\"

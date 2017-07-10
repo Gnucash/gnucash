@@ -15,3 +15,5 @@ TESTS_ENVIRONMENT = \
 check_PROGRAMS=test-link-module
 test_link_module_SOURCES=test-link-module.c
 test_link_module_LDADD=../libgncmod-tax-us.la ${GUILE_LIBS} ${GLIB_LIBS}
+
+EXTRA_DIST = CMakeLists.txt

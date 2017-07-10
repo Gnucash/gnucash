@@ -26,3 +26,5 @@ libgncmod_agedver_la_LIBADD = \
   $(GLIB_LIBS)
 
 CLEANFILES = *.so* *.a
+
+EXTRA_DIST = CMakeLists.txt

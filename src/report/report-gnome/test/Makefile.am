@@ -60,4 +60,4 @@ TESTS_ENVIRONMENT = \
 
 check_PROGRAMS = test-link-module
 
-EXTRA_DIST = test-load-module
+EXTRA_DIST = test-load-module CMakeLists.txt

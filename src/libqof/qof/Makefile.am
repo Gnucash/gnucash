@@ -89,7 +89,8 @@ libmd5_la_CFLAGS=-fno-strict-aliasing
 libgnc_qof_la_LIBADD += libmd5.la
 
 EXTRA_DIST += \
-  qofmath128.c
+  qofmath128.c \
+  CMakeLists.txt
 
 if OS_WIN32
 libgnc_qof_la_SOURCES += qof-win32.c

@@ -36,7 +36,8 @@ endif
 
 EXTRA_DIST = \
   bar.i \
-  gnucash/bar.scm
+  gnucash/bar.scm \
+  CMakeLists.txt
 
 BUILT_SOURCES = swig-bar.c
 MAINTAINERCLEANFILES = swig-bar.c

@@ -108,7 +108,7 @@ uidir = $(GNC_UI_DIR)
 dist_ui_DATA = \
 	gnc-plugin-stylesheets-ui.xml
 
-EXTRA_DIST = ${gncscmmod_DATA}
+EXTRA_DIST = ${gncscmmod_DATA} CMakeLists.txt
 
 CLEANFILES = .scm-links ${gncscmmodcache_DATA}
 DISTCLEANFILES = ${SCM_FILE_LINKS}

@@ -57,3 +57,5 @@ AM_CPPFLAGS = \
 
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.register.ledger\"
+
+EXTRA_DIST = CMakeLists.txt

@@ -272,6 +272,7 @@ EXTRA_DIST = \
   grab-types.pl \
   test-dom-parser1.c \
   test-real-data.sh \
-  test-xml2-is-file.c
+  test-xml2-is-file.c \
+  CMakeLists.txt
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.backend.xml\"

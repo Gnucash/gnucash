@@ -5,4 +5,4 @@ ui_DATA = \
 	gnc-windows-menu-ui-quartz.xml \
 	osx_accel_map
 
-EXTRA_DIST = $(ui_DATA)
+EXTRA_DIST = $(ui_DATA) CMakeLists.txt
