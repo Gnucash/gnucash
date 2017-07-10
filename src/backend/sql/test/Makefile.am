@@ -79,4 +79,4 @@ test_sqlbe_CFLAGS = \
 	-I$(top_srcdir)/src/test-core/ \
 	$(GLIB_CFLAGS)
 
-EXTRA_DIST = CMakeLists.txt
+EXTRA_DIST += CMakeLists.txt

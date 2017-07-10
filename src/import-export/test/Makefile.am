@@ -79,4 +79,4 @@ clean-local:
 
 distclean-local: clean-local
 
-EXTRA_DIST = CMakeLists.txt
+EXTRA_DIST += CMakeLists.txt

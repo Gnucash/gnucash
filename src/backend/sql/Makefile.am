@@ -77,4 +77,4 @@ libgnc_backend_sql_la_LIBADD = \
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.backend.sql\"
 
-EXTRA_DIST = CMakeLists.txt
+EXTRA_DIST += CMakeLists.txt

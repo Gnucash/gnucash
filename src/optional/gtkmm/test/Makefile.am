@@ -47,4 +47,4 @@ AM_CPPFLAGS = \
   ${GTKMM_CFLAGS} \
   ${GLIB_CFLAGS}
 
-EXTRA_DIST = CMakeLists.txt
+EXTRA_DIST += CMakeLists.txt
