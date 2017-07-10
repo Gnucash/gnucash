@@ -34,72 +34,65 @@
 #include "gnc-gnome-utils.h"
 #include "gnc-path.h"
 
-typedef enum  {
-    APP_ICON,
-    ACTION_ICON
-} IconFileType;
+static QofLogModule log_module = GNC_MOD_GUI;
 
-typedef struct _icon_file
+static gchar *icon_files[] =
 {
-    const gchar *icon_name;
-    const gchar *filename;
-    const IconFileType icon_type;
-} icon_file;
-
-static icon_file icon_files[] =
-{
-    { GNC_ICON_APP,               "gnucash-icon.png",          APP_ICON},
-    { GNC_ICON_ACCOUNT,           "gnc-account.png",           ACTION_ICON},
-    { GNC_ICON_ACCOUNT_REPORT,    "gnc-account-report.png",    ACTION_ICON},
-    { GNC_ICON_DELETE_ACCOUNT,    "gnc-account-delete.png",    ACTION_ICON},
-    { GNC_ICON_EDIT_ACCOUNT,      "gnc-account-edit.png",      ACTION_ICON},
-    { GNC_ICON_NEW_ACCOUNT,       "gnc-account-new.png",       ACTION_ICON},
-    { GNC_ICON_OPEN_ACCOUNT,      "gnc-account-open.png",      ACTION_ICON},
-    { GNC_ICON_TRANSFER,          "gnc-transfer.png",          ACTION_ICON},
-    { GNC_ICON_SCHEDULE,          "gnc-sx-new.png",            ACTION_ICON},
-    { GNC_ICON_SPLIT_TRANS,       "gnc-split-trans.png",       ACTION_ICON},
-    { GNC_ICON_JUMP_TO,           "gnc-jumpto.png",            ACTION_ICON},
-    { GNC_ICON_INVOICE,           "gnc-invoice.png",           ACTION_ICON},
-    { GNC_ICON_INVOICE_PAY,       "gnc-invoice-pay.png",       ACTION_ICON},
-    { GNC_ICON_INVOICE_POST,      "gnc-invoice-post.png",      ACTION_ICON},
-    { GNC_ICON_INVOICE_UNPOST,    "gnc-invoice-unpost.png",    ACTION_ICON},
-    { GNC_ICON_INVOICE_NEW,       "gnc-invoice-new.png",       ACTION_ICON},
-    { GNC_ICON_INVOICE_EDIT,      "gnc-invoice-edit.png",      ACTION_ICON},
-    { GNC_ICON_INVOICE_DUPLICATE, "gnc-invoice-duplicate.png", ACTION_ICON},
-    { GNC_ICON_PDF_EXPORT,        "gnc-gnome-pdf.png",         ACTION_ICON},
-    { GNC_ICON_PDF_EXPORT,        "gnc-gnome-pdf.png",         ACTION_ICON},
-    { 0 },
+    GNC_ICON_APP,
+    GNC_ICON_ACCOUNT,
+    GNC_ICON_ACCOUNT_REPORT,
+    GNC_ICON_DELETE_ACCOUNT,
+    GNC_ICON_EDIT_ACCOUNT,
+    GNC_ICON_NEW_ACCOUNT,
+    GNC_ICON_OPEN_ACCOUNT,
+    GNC_ICON_TRANSFER,
+    GNC_ICON_SCHEDULE,
+    GNC_ICON_SPLIT_TRANS,
+    GNC_ICON_JUMP_TO,
+    GNC_ICON_INVOICE,
+    GNC_ICON_INVOICE_PAY,
+    GNC_ICON_INVOICE_POST,
+    GNC_ICON_INVOICE_UNPOST,
+    GNC_ICON_INVOICE_NEW,
+    GNC_ICON_INVOICE_EDIT,
+    GNC_ICON_INVOICE_DUPLICATE,
+    GNC_ICON_PDF_EXPORT,
+    NULL
 };
 
 void
 gnc_load_app_icons (void)
 {
     GtkIconTheme *icon_theme = gtk_icon_theme_get_default ();
-    icon_file *file;
+    gchar *file;
     const gchar *default_path;
     gchar* pkgdatadir = gnc_path_get_pkgdatadir ();
     gchar* datadir = gnc_path_get_datadir ();
+    gchar **path;
+    gint n_elements, i;
 
     default_path = g_build_filename (pkgdatadir, "icons", NULL);
-    g_free (pkgdatadir);
     gtk_icon_theme_append_search_path (icon_theme, default_path);
     default_path = g_build_filename (datadir, "icons", NULL);
-    g_free (datadir);
     gtk_icon_theme_append_search_path (icon_theme, default_path);
+    g_free (pkgdatadir);
+    g_free (datadir);
 
-    for (file = icon_files; file->icon_name; file++)
+    gtk_icon_theme_get_search_path (icon_theme,
+                                    &path,
+                                    &n_elements);
+    PINFO ("The icon theme search path has %i elements.", n_elements);
+    if (n_elements > 0)
     {
+        for (i = 0; i < n_elements; i++)
+            PINFO ("Path %i: %s", i, path[i]);
+    }
 
-        gint *icon_sizes = gtk_icon_theme_get_icon_sizes (icon_theme, file->icon_name);
-
-        if ((file->icon_type == ACTION_ICON) &&
-            (icon_sizes[0] != 16) && (icon_sizes[1] != 24))
-            g_warning ("Required icon size for icon name '%s' not found", file->icon_name);
-        else if ((icon_sizes[0] != 16) && (icon_sizes[3] != 32) && (icon_sizes[4] != 48))
-            g_warning ("Required icon size for icon name '%s' not found", file->icon_name);
-        g_free (icon_sizes);
-
-        // check to see if we have at least one size for the named icons loaded
-        g_assert (gtk_icon_theme_has_icon (icon_theme, file->icon_name));
+    for (i = 0; icon_files[i]; i++)
+    {
+        gchar *file = icon_files[i];
+        // check if we have at least one size for the named icons loaded
+        if (!gtk_icon_theme_has_icon (icon_theme, file))
+            PWARN ("No icon named '%s' found. Some gui elements may be missing their icons", file);
     }
 }

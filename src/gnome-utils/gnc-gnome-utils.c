@@ -655,10 +655,6 @@ gnc_gui_init(void)
 #ifdef MAC_INTEGRATION
     gchar *data_dir;
 #endif
-    int idx;
-    int icon_sizes[] = { 16, 32, 48, 0 };
-    GList *icons = NULL;
-    GtkIconTheme *icon_theme = gtk_icon_theme_get_default ();
 
     ENTER ("");
 
@@ -667,22 +663,7 @@ gnc_gui_init(void)
 
     /* use custom icon */
     gnc_load_app_icons();
-    for (idx = 0; icon_sizes[idx] != 0; idx++)
-    {
-        GdkPixbuf *pixbuf = gtk_icon_theme_load_icon (icon_theme,
-                                           GNC_ICON_APP,
-                                           icon_sizes[idx],
-                                           GTK_ICON_LOOKUP_USE_BUILTIN,
-                                           NULL);
-        if (!pixbuf)
-            g_warning("error loading application icon of size [%i]", icon_sizes[idx]);
-        else
-            icons = g_list_append(icons, pixbuf);
-    }
-
-    gtk_window_set_default_icon_list(icons);
-    g_list_foreach(icons, (GFunc)g_object_unref, NULL);
-    g_list_free(icons);
+    gtk_window_set_default_icon_name(GNC_ICON_APP);
 
     g_set_application_name(PACKAGE_NAME);
 
