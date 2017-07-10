@@ -50,6 +50,7 @@ LDADD = \
 
 EXTRA_DIST += \
   test-load-module \
+  test-print-queries.cpp \
   CMakeLists.txt
 
 AM_CPPFLAGS = \

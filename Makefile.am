@@ -67,6 +67,7 @@ EXTRA_DIST = \
   macros/legacy_macros.m4 \
   macros/CMakeLists.txt \
   po/CMakeLists.txt \
+  po/check-po.cmake \
   po/glossary/CMakeLists.txt \
   po/gnucash.pot \
   po/POTFILES.in \

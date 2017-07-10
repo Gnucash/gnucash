@@ -16,4 +16,4 @@ libgnc_goffice_la_LIBADD = $(GTK_LIBS) \
 AM_CPPFLAGS = $(GTK_CFLAGS) \
               ${LIBXML2_CFLAGS}
 
-EXTRA_DIST = $(REALSRCS) $(REALHDRS)
+EXTRA_DIST = $(REALSRCS) $(REALHDRS) CMakeLists.txt

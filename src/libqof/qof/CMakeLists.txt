@@ -125,5 +125,5 @@ SET(qof_test_HEADERS
 
 INSTALL(FILES ${qof_test_HEADERS} DESTINATION libexec/gnucash/src/libqof/qof/test)
 SET_LOCAL_DIST(qof_DIST_local CMakeLists.txt Makefile.am ${gnc_qof_EXTRA_DIST}
-  ${gnc_qof_HEADERS} ${gnc_qof_noinst_HEADERS} ${gnc_qof_SOURCES})
+  ${gnc_qof_HEADERS} ${gnc_qof_noinst_HEADERS} ${gnc_qof_SOURCES} qof-win32.cpp)
 SET(qof_DIST ${qof_DIST_local} ${test_qof_DIST} PARENT_SCOPE) 

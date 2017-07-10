@@ -66,3 +66,8 @@ test_aqb_CFLAGS = \
 TESTS_ENVIRONMENT = \
   SRCDIR=${srcdir} \
   G_DEBUG=
+
+EXTRA_DIST += \
+  file-book-hbcislot.gnucash \
+  file-book.gnucash \
+  CMakeLists.txt

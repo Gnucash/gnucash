@@ -11,4 +11,5 @@ set(goffice_SOURCES go-optionmenu.c go-charmap-sel.c go-glib-extras.c)
 #  ARCHIVE DESTINATION lib
 #  RUNTIME DESTINATION bin)
 
-SET_DIST_LIST(goffice_DIST CMakeLists.txt Makefile.am ${goffice_noinst_HEADERS} ${goffice_SOURCES})
+SET_DIST_LIST(goffice_DIST CMakeLists.txt Makefile.am
+  README ${goffice_noinst_HEADERS} ${goffice_SOURCES})
