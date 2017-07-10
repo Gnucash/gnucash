@@ -6,12 +6,12 @@ INSTALL(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION share/gnucash
 )
 INSTALL(
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/hicolor DESTINATION share/gnucash/icons
-    REGEX ".*/actions.*" EXCLUDE
+    REGEX ".*/apps.*" EXCLUDE
 )
 
 INSTALL(
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/hicolor DESTINATION share/icons
-    REGEX ".*/apps.*" EXCLUDE
+    REGEX ".*/actions.*" EXCLUDE
 )
 
 SET(gncpixmap_DATA
