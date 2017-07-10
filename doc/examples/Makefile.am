@@ -20,4 +20,5 @@ doc_DATA = \
   web.qif
 
 EXTRA_DIST = \
-  ${doc_DATA}
+  ${doc_DATA} \
+  CMakeLists.txt

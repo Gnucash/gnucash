@@ -61,6 +61,7 @@ gtkbuilder_DATA = \
   dialog-search.glade
 
 EXTRA_DIST = \
-  ${gtkbuilder_DATA}
+  ${gtkbuilder_DATA} \
+  CMakeLists.txt
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.gui.search\"

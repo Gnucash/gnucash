@@ -20,4 +20,4 @@ ui_DATA = \
 	gnc-sxed-window-ui.xml \
 	gnc-sxed-window-ui-full.xml
 
-EXTRA_DIST = $(ui_DATA)
+EXTRA_DIST = $(ui_DATA) CMakeLists.txt

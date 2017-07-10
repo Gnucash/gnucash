@@ -9,4 +9,5 @@ EXTRA_DIST = \
   preferences-v1.dtd \
   prices-v1.dtd \
   transactions-v2.dtd \
-  types.dtd
+  types.dtd \
+  CMakeLists.txt

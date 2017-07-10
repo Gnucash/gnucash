@@ -67,3 +67,5 @@ AM_CPPFLAGS = \
   ${GTK_XIM_FLAGS}
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.register.gnome\"
+
+EXTRA_DIST = CMakeLists.txt

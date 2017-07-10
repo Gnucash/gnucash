@@ -4,5 +4,5 @@ else
 SUBDIRS = libc
 endif
 
-EXTRA_DIST = README
+EXTRA_DIST = README CMakeLists.txt
 

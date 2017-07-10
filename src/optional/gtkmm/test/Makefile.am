@@ -46,3 +46,5 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/optional/gtkmm \
   ${GTKMM_CFLAGS} \
   ${GLIB_CFLAGS}
+
+EXTRA_DIST += CMakeLists.txt

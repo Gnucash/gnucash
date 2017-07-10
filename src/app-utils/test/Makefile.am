@@ -49,7 +49,9 @@ LDADD = \
    ${GUILE_LIBS}
 
 EXTRA_DIST += \
-  test-load-module
+  test-load-module \
+  test-print-queries.cpp \
+  CMakeLists.txt
 
 AM_CPPFLAGS = \
   -I${top_srcdir}/src \

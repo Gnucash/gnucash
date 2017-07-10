@@ -149,7 +149,12 @@ endif
 
 noinst_DATA = .scm-links
 
-EXTRA_DIST = report-system.i ${gncscmmod_DATA} ${gncscm_DATA} ${gncmodscm_DATA}
+EXTRA_DIST = \
+	report-system.i \
+	${gncscmmod_DATA} \
+	${gncscm_DATA} \
+	${gncmodscm_DATA} \
+	CMakeLists.txt
 
 clean-local:
 	rm -rf gnucash

@@ -14,7 +14,9 @@ SET(gnome_GLADE
         assistant-loan.glade
         assistant-stock-split.glade
         dialog-commodities.glade
+        dialog-imap-editor.glade
         dialog-fincalc.glade
+        dialog-find-account.glade
         dialog-lot-viewer.glade
         dialog-new-user.glade
         dialog-price.glade
@@ -22,6 +24,7 @@ SET(gnome_GLADE
         dialog-progress.glade
         dialog-sx.glade
         dialog-tax-info.glade
+        dialog-trans-assoc.glade
         gnc-plugin-page-budget.glade
         gnc-plugin-page-register2.glade
         gnc-plugin-page-register.glade

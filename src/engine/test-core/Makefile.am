@@ -25,3 +25,5 @@ AM_CPPFLAGS = \
   ${GLIB_CFLAGS} \
   ${GUILE_CFLAGS} \
   ${BOOST_CPPFLAGS}
+
+EXTRA_DIST = CMakeLists.txt

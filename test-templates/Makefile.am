@@ -50,3 +50,5 @@ test_foo_CFLAGS = \
 	${DEFAULT_INCLUDES} \
 	-I$(top_srcdir)/${MODULEPATH}/ \
 	${GLIB_CFLAGS}
+
+EXTRA_DIST = CMakeLists.txt

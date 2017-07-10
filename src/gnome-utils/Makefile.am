@@ -249,7 +249,8 @@ EXTRA_DIST = \
   make-gnc-warnings-c.xsl \
   make-gnc-warnings-h.xsl \
   ${gncscmmod_DATA} \
-  ${gncscm_DATA}
+  ${gncscm_DATA} \
+  CMakeLists.txt
 
 
 if GNUCASH_SEPARATE_BUILDDIR

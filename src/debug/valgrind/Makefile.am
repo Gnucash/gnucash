@@ -6,4 +6,5 @@ EXTRA_DIST = \
   valgrind-libfontconfig.supp \
   valgrind-libgda.supp \
   valgrind-libguile.supp \
-  valgrind-x11.supp
+  valgrind-x11.supp \
+  CMakeLists.txt

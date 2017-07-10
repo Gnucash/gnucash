@@ -66,7 +66,8 @@ SCM_TEST_HELPERS = \
 EXTRA_DIST = \
 	test-load-module \
 	$(SCM_TEST_HELPERS) \
-	$(SCM_TEST_SRCS)
+	$(SCM_TEST_SRCS) \
+	CMakeLists.txt
 
 .scm-links:
 	$(RM) -rf gnucash

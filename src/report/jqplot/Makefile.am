@@ -32,5 +32,7 @@ gncjqplot_DATA = \
   plugins/jqplot.trendline.js
 
 # Also ship jquery.js since it is the source for jquery.min.js
-EXTRA_DIST = ${gncjqplot_DATA} \
-	jquery.js
+EXTRA_DIST = \
+	${gncjqplot_DATA} \
+	jquery.js \
+	CMakeLists.txt

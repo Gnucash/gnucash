@@ -15,6 +15,7 @@ SET (backend_dbi_noinst_HEADERS
   gnc-dbisqlresult.hpp
   gnc-dbisqlconnection.hpp
   gnc-dbiprovider.hpp
+  gnc-dbiproviderimpl.hpp
 )
 
 SET_LOCAL_DIST(backend_dbi_DIST_local

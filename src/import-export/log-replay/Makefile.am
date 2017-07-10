@@ -42,3 +42,5 @@ dist_ui_DATA = \
 	gnc-plugin-log-replay-ui.xml
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.import.log-replay\"
+
+EXTRA_DIST = CMakeLists.txt

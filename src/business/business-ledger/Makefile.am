@@ -42,3 +42,5 @@ AM_CPPFLAGS = \
   ${GLIB_CFLAGS}
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.business.ledger\"
+
+EXTRA_DIST = CMakeLists.txt

@@ -44,7 +44,8 @@ endif
 
 EXTRA_DIST = \
   ${gncscmmod_DATA} \
-  gnc-module.i
+  gnc-module.i \
+  CMakeLists.txt
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases

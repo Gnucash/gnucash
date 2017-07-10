@@ -46,7 +46,8 @@ TESTS_ENVIRONMENT = \
 EXTRA_DIST += \
     test-dbi-stuff.h \
     test-dbi-business-stuff.h \
-    test-dbi.xml
+    test-dbi.xml \
+    CMakeLists.txt
 
 check_PROGRAMS = test-backend-dbi
 

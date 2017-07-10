@@ -34,7 +34,8 @@ EXTRA_DIST = \
   gnucash.1.in \
   gtkrc-2.0.gnucash \
   misc-notes.txt \
-  tip_of_the_day.list.in
+  tip_of_the_day.list.in \
+  CMakeLists.txt
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf

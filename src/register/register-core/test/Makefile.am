@@ -19,6 +19,7 @@ test_link_module_LDADD=\
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ../libgncmod-register-core.la
 
-#EXTRA_DIST = test-load-module
+EXTRA_DIST = CMakeLists.txt
+#            test-load-module
 
 AM_CPPFLAGS = ${GLIB_CFLAGS} -I${top_srcdir}/src/test-core -I..

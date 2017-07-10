@@ -14,4 +14,5 @@ gtkbuilder_DATA = \
   dialog-vendor.glade
 
 EXTRA_DIST = \
-  ${gtkbuilder_DATA}
+  ${gtkbuilder_DATA} \
+  CMakeLists.txt

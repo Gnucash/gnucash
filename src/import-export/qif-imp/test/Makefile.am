@@ -15,3 +15,4 @@ test_link_LDADD=../libgncmod-qif-import.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${LIBXML2_LIBS}
 
+EXTRA_DIST = CMakeLists.txt

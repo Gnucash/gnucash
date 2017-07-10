@@ -50,4 +50,5 @@ EXTRA_DIST = \
   test_book.py \
   test_split.py \
   test_transaction.py \
-  test_business.py
+  test_business.py \
+  CMakeLists.txt

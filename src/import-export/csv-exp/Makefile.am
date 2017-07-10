@@ -57,6 +57,6 @@ gtkbuilderdir = ${GNC_GTKBUILDER_DIR}
 gtkbuilder_DATA = \
 	assistant-csv-export.glade
 
-EXTRA_DIST = $(ui_DATA) $(gtkbuilder_DATA)
+EXTRA_DIST = $(ui_DATA) $(gtkbuilder_DATA) CMakeLists.txt
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.export.csv\"

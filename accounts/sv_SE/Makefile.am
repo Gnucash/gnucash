@@ -6,4 +6,5 @@ account_DATA = \
 	acctchrt_common.gnucash-xea 
 EXTRA_DIST = \
   README.bas_2012 \
-  ${account_DATA}
+  ${account_DATA} \
+  CMakeLists.txt

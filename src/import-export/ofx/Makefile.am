@@ -44,6 +44,6 @@ uidir = $(GNC_UI_DIR)
 ui_DATA = \
 	gnc-plugin-ofx-ui.xml
 
-EXTRA_DIST = $(ui_DATA) migratable-prefs-ofx.xml
+EXTRA_DIST = $(ui_DATA) migratable-prefs-ofx.xml CMakeLists.txt
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.import.ofx\"

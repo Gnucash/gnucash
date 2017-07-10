@@ -78,3 +78,5 @@ clean-local:
 	rm -f translog.*
 
 distclean-local: clean-local
+
+EXTRA_DIST += CMakeLists.txt

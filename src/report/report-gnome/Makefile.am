@@ -81,7 +81,8 @@ EXTRA_DIST = \
   report-gnome.i \
   ${gtkbuilder_DATA} \
   ${gncscmmod_DATA} \
-  ${ui_DATA}
+  ${ui_DATA} \
+  CMakeLists.txt
 
 if GNUCASH_SEPARATE_BUILDDIR
 #Only needed when srcdir and builddir are different

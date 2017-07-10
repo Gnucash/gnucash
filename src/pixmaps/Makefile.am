@@ -110,7 +110,8 @@ EXTRA_DIST = \
   ${gncicon24_DATA} \
   ${ico_files_hr} \
   ${ico_files_lr} \
-  ${gncscalableicon_DATA}
+  ${gncscalableicon_DATA} \
+  CMakeLists.txt
 
 # Create gnucash-icon.ico
 .PHONY: ico

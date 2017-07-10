@@ -35,3 +35,4 @@ SUBDIRS = \
 	zh_HK \
 	zh_TW
 
+EXTRA_DIST = CMakeLists.txt

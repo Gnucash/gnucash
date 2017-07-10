@@ -69,7 +69,8 @@ endif
 endif
 
 EXTRA_DIST = \
-  gnc-html.i
+  gnc-html.i \
+  CMakeLists.txt
 
 CLEANFILES = $(BUILT_SOURCES) gnucash
 MAINTAINERCLEANFILES = swig-gnc-html.c

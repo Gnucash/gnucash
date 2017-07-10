@@ -95,6 +95,9 @@ noinst_HEADERS = \
    qofquery-p.h  \
    qofquerycore-p.h
 
+EXTRA_DIST += \
+  CMakeLists.txt
+
 if OS_WIN32
 libgnc_qof_la_SOURCES += qof-win32.cpp
 else

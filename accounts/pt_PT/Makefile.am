@@ -18,4 +18,5 @@ account_DATA = \
   acctchrt_spouseretire.gnucash-xea
 
 EXTRA_DIST = \
-  ${account_DATA}
+  ${account_DATA} \
+  CMakeLists.txt
