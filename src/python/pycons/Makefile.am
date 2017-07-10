@@ -10,5 +10,5 @@ pycons_DATA = \
    shell.py \
    simple_plot.py
 
-EXTRA_DIST = ${pycons_DATA}
+   EXTRA_DIST = ${pycons_DATA} CMakeLists.txt
 

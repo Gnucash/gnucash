@@ -20,4 +20,5 @@ account_DATA = \
 
 EXTRA_DIST = \
   ${account_DATA} \
-  acctchrt_full.gnucash-xea 
+  acctchrt_full.gnucash-xea  \
+  CMakeLists.txt

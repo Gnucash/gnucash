@@ -248,3 +248,5 @@ test_qof_CPPFLAGS = \
         -DTESTPROG=test_qof \
         -I$(top_srcdir)/lib/libc \
         ${GLIB_CFLAGS}
+
+EXTRA_DIST = CMakeLists.txt

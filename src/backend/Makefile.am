@@ -3,3 +3,4 @@ if WITH_DBI
 endif
 SUBDIRS = xml sql ${DBI_DIR}
 
+EXTRA_DIST = CMakeLists.txt

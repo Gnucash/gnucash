@@ -87,7 +87,8 @@ gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash
 gncscmmod_DATA = business-gnome.scm
 
 EXTRA_DIST = \
-  ${gncscmmod_DATA}
+  ${gncscmmod_DATA} \
+  CMakeLists.txt
 
 if GNUCASH_SEPARATE_BUILDDIR
 #Only needed when srcdir and builddir are different

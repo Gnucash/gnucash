@@ -17,3 +17,5 @@ gnucash_design_TEXINFOS = \
 # have a version skew between automake and texinfo.
 DISTCLEANFILES = gnucash-design.cps gnucash-design.fns gnucash-design.tps
 MAINTAINERCLEANFILES = gnucash-design.info gnucash-design.info-[0-9]*
+
+EXTRA_DIST = CMakeLists.txt

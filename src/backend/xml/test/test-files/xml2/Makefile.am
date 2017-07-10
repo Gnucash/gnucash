@@ -14,7 +14,9 @@ ACCT_TST_FILES = \
 	ms-money.gml2 \
 	pricedb1.gml2 
 
-EXTRA_DIST = $(ACCT_TST_FILES)
+EXTRA_DIST = \
+	$(ACCT_TST_FILES) \
+	CMakeLists.txt
 
 check:
 	for file in $(ACCT_TST_FILES); do			\

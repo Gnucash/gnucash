@@ -122,7 +122,8 @@ noinst_DATA = .scm-links
 
 EXTRA_DIST = \
 	${gncscmmod_DATA} \
-	${gncscmrpt_DATA}
+	${gncscmrpt_DATA} \
+	CMakeLists.txt
 
 CLEANFILES = \
 	.scm-links \

@@ -25,7 +25,8 @@ libgncmodfoo_la_LIBADD = \
 
 EXTRA_DIST = \
   foo.i \
-  gnucash/foo.scm
+  gnucash/foo.scm \
+  CMakeLists.txt
 
 if BUILDING_FROM_VCS
 swig-foo.c: foo.i

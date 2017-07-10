@@ -54,6 +54,10 @@ dist_doc_DATA = \
 
 EXTRA_DIST = \
   $(SWIG_DIST_FAIL) \
+  CMakeLists.txt \
+  cmake/cmake_uninstall.cmake.in \
+  cmake/README_CMAKE.txt \
+  cmake/CMakeLists.txt \
   make-gnucash-potfiles.in \
   macros/binreloc.m4 \
   macros/compiler-flags.m4 \
@@ -61,6 +65,9 @@ EXTRA_DIST = \
   macros/ax_python_devel.m4 \
   macros/ax_swig_python.m4 \
   macros/legacy_macros.m4 \
+  macros/CMakeLists.txt \
+  po/CMakeLists.txt \
+  po/glossary/CMakeLists.txt \
   po/gnucash.pot \
   po/POTFILES.in \
   po/POTFILES.skip \
@@ -94,7 +101,10 @@ EXTRA_DIST = \
   intltool-extract.in \
   intltool-merge.in \
   intltool-update.in \
-  util/gnc-vcs-info
+  test-templates/CMakeLists.txt \
+  test-templates/Makefile.am \
+  util/gnc-vcs-info \
+  util/CMakeLists.txt
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf

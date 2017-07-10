@@ -54,7 +54,7 @@ clean-local:
 
 noinst_DATA = .py-links
 
-EXTRA_DIST = ${gncpymod_DATA}
+EXTRA_DIST = ${gncpymod_DATA} CMakeLists.txt
 
 CLEANFILES = .py-links
 DISTCLEANFILES = ${PY_FILE_LINKS}

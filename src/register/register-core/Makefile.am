@@ -68,3 +68,5 @@ AM_CPPFLAGS = \
 CLEANFILES = $(BUILT_SOURCES)
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.register.core\"
+
+EXTRA_DIST = CMakeLists.txt

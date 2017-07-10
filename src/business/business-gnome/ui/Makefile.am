@@ -4,4 +4,4 @@ ui_DATA = \
 	gnc-plugin-page-invoice-ui.xml \
 	gnc-plugin-page-owner-tree-ui.xml
 
-EXTRA_DIST = $(ui_DATA)
+EXTRA_DIST = $(ui_DATA) CMakeLists.txt

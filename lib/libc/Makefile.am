@@ -13,7 +13,8 @@ libc_missing_la_SOURCES = libc-missing-noop.c
 EXTRA_libc_missing_la_SOURCES = \
   setenv.c \
   strfmon.c \
-  strptime.c
+  strptime.c \
+  CMakeLists.txt
 
 # This will automatically be filled in with the necessary object file
 # names.  Configure does this based upon the AC_REPLACE_FUNCS macros.

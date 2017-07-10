@@ -48,4 +48,4 @@ check_PROGRAMS = \
   test-qif
 
 EXTRA_DIST = \
-  test-files/test-1-bank-txn.qif
+  test-files/test-1-bank-txn.qif CMakeLists.txt

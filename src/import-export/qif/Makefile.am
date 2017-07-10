@@ -37,3 +37,5 @@ AM_CPPFLAGS = \
   ${GUILE_CFLAGS}
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.import.qif\"
+
+EXTRA_DIST = CMakeLists.txt

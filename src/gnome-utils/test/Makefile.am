@@ -70,7 +70,8 @@ test_link_module_LDADD = \
   ${top_builddir}/src/gnc-module/libgnc-module.la
 
 EXTRA_DIST = \
-  test-load-module
+  test-load-module \
+  CMakeLists.txt
 
 testit:
 	libtool --mode execute gdb test-link-module

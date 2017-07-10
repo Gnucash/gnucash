@@ -59,6 +59,6 @@ ui_DATA = gnc-plugin-gtkmm-ui.xml
 gtkbuilderdir = $(GNC_GTKBUILDER_DIR)
 gtkbuilder_DATA =
 
-EXTRA_DIST = ${ui_DATA} ${gtkbuilder_DATA}
+EXTRA_DIST = ${ui_DATA} ${gtkbuilder_DATA} CMakeLists.txt
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.gui.gtkmm\"

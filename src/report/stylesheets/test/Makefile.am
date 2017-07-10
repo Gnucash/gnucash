@@ -36,4 +36,4 @@ TESTS_ENVIRONMENT = \
   GNC_BUILDDIR="${abs_top_builddir}" \
   $(shell ${abs_top_srcdir}/src/gnc-test-env.pl --noexports ${GNC_TEST_DEPS})
 
-EXTRA_DIST = test-load-module
+EXTRA_DIST = test-load-module CMakeLists.txt

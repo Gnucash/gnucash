@@ -89,7 +89,7 @@ clean-local:
 
 noinst_DATA = .scm-links
 
-EXTRA_DIST = ${gncscmmod_DATA}
+EXTRA_DIST = ${gncscmmod_DATA} CMakeLists.txt
 
 CLEANFILES = .scm-links ${gncscmmodcache_DATA}
 DISTCLEANFILES = ${SCM_FILE_LINKS}

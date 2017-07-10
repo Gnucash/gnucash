@@ -172,7 +172,8 @@ EXTRA_DIST = \
   app-utils.i \
   ${gncscmmod_DATA} \
   ${gncscm_DATA} \
-  ${prefsmigration_DATA}
+  ${prefsmigration_DATA} \
+  CMakeLists.txt
 
 if OS_WIN32
 libgncmod_app_utils_la_SOURCES += gnc-help-utils.c

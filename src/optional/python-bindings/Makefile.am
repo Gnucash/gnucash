@@ -97,7 +97,9 @@ EXTRA_DIST = \
   example_scripts/test_imbalance_transaction.py \
   example_scripts/rest-api/gnucash_rest.py \
   example_scripts/rest-api/gnucash_simple.py \
-  example_scripts/rest-api/README
+  example_scripts/rest-api/README \
+  example_scripts/CMakeLists.txt \
+  CMakeLists.txt
 
 MAINTAINERCLEANFILES = gnucash_core.c
 

@@ -77,7 +77,8 @@ SCM_TEST_HELPERS = test-extras.scm
 EXTRA_DIST = \
 	test-load-module \
 	$(SCM_TEST_HELPERS) \
-	$(SCM_TEST_SRCS)
+	$(SCM_TEST_SRCS) \
+	CMakeLists.txt
 
 testit:
 	$(TESTS_ENVIRONMENT) libtool --mode execute gdb test-link-module

@@ -16,3 +16,4 @@ else
 SUBDIRS = $(NONGUI_SUBDIRS)
 endif
 
+EXTRA_DIST = CMakeLists.txt

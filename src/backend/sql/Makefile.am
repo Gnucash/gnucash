@@ -82,3 +82,5 @@ libgnc_backend_sql_la_LIBADD = \
    ${top_builddir}/src/libqof/qof/libgnc-qof.la
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.backend.sql\"
+
+EXTRA_DIST = CMakeLists.txt
