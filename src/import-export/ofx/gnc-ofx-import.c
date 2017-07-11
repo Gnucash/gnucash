@@ -337,7 +337,11 @@ fix_ofx_bug_39 (time64 t)
 #if HAVE_OFX_BUG_39
     struct tm stm;
     gnc_localtime_r(&t, &stm);
+#ifdef __FreeBSD__
+    if (tzname[1][0] != ' ' && !stm.tm_isdst)
+#else
     if (daylight && !stm.tm_isdst)
+#endif
       t += 3600;
 #endif
     return t;
