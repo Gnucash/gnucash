@@ -65,8 +65,6 @@ test_book_use_book_currency( Fixture *fixture, gconstpointer pData )
     const gchar *cur;
     const gchar *pol;
     Account *acct, *acc;
-    gnc_commodity *com = gnc_commodity_new(fixture-> book, "US Dollar",
-                                                "CURRENCY", "USD", "0", 100);
 
     g_test_message( "Testing with no currency accounting method selected" );
     cur = gnc_book_get_book_currency_name( fixture-> book );
@@ -235,7 +233,7 @@ test_book_use_book_currency( Fixture *fixture, gconstpointer pData )
     qof_book_destroy( fixture->book );
     fixture->book = qof_book_new();
 
-     g_test_message( "Testing with book-currency and default-gains-policy set to valid values but default-gain-loss-account-guid set to valid but placeholder account and no trading accounts flag" );
+     g_test_message( "Testing with book-currency, default-gains-policy and default-gain-loss-account-guid set to valid values and no trading accounts flag" );
     qof_book_begin_edit (fixture->book);
     qof_instance_set (QOF_INSTANCE (fixture->book),
 		      "book-currency", "USD",
@@ -243,133 +241,6 @@ test_book_use_book_currency( Fixture *fixture, gconstpointer pData )
     qof_instance_set (QOF_INSTANCE (fixture->book),
 		      "default-gains-policy", "fifo",
 		      NULL);
-    acc = get_random_account( fixture-> book );
-    xaccAccountBeginEdit (acc);
-    xaccAccountSetType (acc, ACCT_TYPE_INCOME);
-    xaccAccountSetCommodity (acc, com);
-    xaccAccountSetPlaceholder (acc, TRUE);
-    xaccAccountSetHidden (acc, FALSE);
-    xaccAccountCommitEdit (acc);
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "default-gain-loss-account-guid", qof_entity_get_guid(QOF_INSTANCE(acc)),
-		      NULL);
-    cur = gnc_book_get_book_currency_name( fixture-> book );
-    g_assert_cmpstr( cur, == , "USD" );
-    pol = gnc_book_get_default_gains_policy( fixture-> book );
-    g_assert_cmpstr( pol, == , "fifo" );
-    acct = gnc_book_get_default_gain_loss_acct ( fixture-> book );
-    g_assert (acct == NULL );
-    g_assert( gnc_book_use_book_currency ( fixture-> book ));
-    qof_book_commit_edit (fixture->book);
-
-    qof_book_destroy( fixture->book );
-    fixture->book = qof_book_new();
-
-     g_test_message( "Testing with book-currency and default-gains-policy set to valid values but default-gain-loss-account-guid set to valid but hidden account and no trading accounts flag" );
-    qof_book_begin_edit (fixture->book);
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "book-currency", "USD",
-		      NULL);
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "default-gains-policy", "fifo",
-		      NULL);
-    acc = get_random_account( fixture-> book );
-    xaccAccountBeginEdit (acc);
-    xaccAccountSetType (acc, ACCT_TYPE_INCOME);
-    xaccAccountSetCommodity (acc, com);
-    xaccAccountSetPlaceholder (acc, FALSE);
-    xaccAccountSetHidden (acc, TRUE);
-    xaccAccountCommitEdit (acc);
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "default-gain-loss-account-guid", qof_entity_get_guid(QOF_INSTANCE(acc)),
-		      NULL);
-    cur = gnc_book_get_book_currency_name( fixture-> book );
-    g_assert_cmpstr( cur, == , "USD" );
-    pol = gnc_book_get_default_gains_policy( fixture-> book );
-    g_assert_cmpstr( pol, == , "fifo" );
-    acct = gnc_book_get_default_gain_loss_acct ( fixture-> book );
-    g_assert (acct == NULL );
-    g_assert( gnc_book_use_book_currency ( fixture-> book ));
-    qof_book_commit_edit (fixture->book);
-
-    qof_book_destroy( fixture->book );
-    fixture->book = qof_book_new();
-
-     g_test_message( "Testing with book-currency and default-gains-policy set to valid values but default-gain-loss-account-guid set to valid but asset account and no trading accounts flag" );
-    qof_book_begin_edit (fixture->book);
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "book-currency", "USD",
-		      NULL);
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "default-gains-policy", "fifo",
-		      NULL);
-    acc = get_random_account( fixture-> book );
-    xaccAccountBeginEdit (acc);
-    xaccAccountSetType (acc, ACCT_TYPE_ASSET);
-    xaccAccountSetCommodity (acc, com);
-    xaccAccountSetPlaceholder (acc, FALSE);
-    xaccAccountSetHidden (acc, FALSE);
-    xaccAccountCommitEdit (acc);
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "default-gain-loss-account-guid", qof_entity_get_guid(QOF_INSTANCE(acc)),
-		      NULL);
-    cur = gnc_book_get_book_currency_name( fixture-> book );
-    g_assert_cmpstr( cur, == , "USD" );
-    pol = gnc_book_get_default_gains_policy( fixture-> book );
-    g_assert_cmpstr( pol, == , "fifo" );
-    acct = gnc_book_get_default_gain_loss_acct ( fixture-> book );
-    g_assert (acct == NULL );
-    g_assert( gnc_book_use_book_currency ( fixture-> book ));
-    qof_book_commit_edit (fixture->book);
-
-    qof_book_destroy( fixture->book );
-    fixture->book = qof_book_new();
-
-     g_test_message( "Testing with book-currency and default-gains-policy set to valid values but default-gain-loss-account-guid set to valid but not book-currency account and no trading accounts flag" );
-    qof_book_begin_edit (fixture->book);
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "book-currency", "GBP",
-		      NULL);
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "default-gains-policy", "fifo",
-		      NULL);
-    acc = get_random_account( fixture-> book );
-    xaccAccountBeginEdit (acc);
-    xaccAccountSetType (acc, ACCT_TYPE_ASSET);
-    xaccAccountSetCommodity (acc, com);
-    xaccAccountSetPlaceholder (acc, FALSE);
-    xaccAccountSetHidden (acc, FALSE);
-    xaccAccountCommitEdit (acc);
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "default-gain-loss-account-guid", qof_entity_get_guid(QOF_INSTANCE(acc)),
-		      NULL);
-    cur = gnc_book_get_book_currency_name( fixture-> book );
-    g_assert_cmpstr( cur, == , "GBP" );
-    pol = gnc_book_get_default_gains_policy( fixture-> book );
-    g_assert_cmpstr( pol, == , "fifo" );
-    acct = gnc_book_get_default_gain_loss_acct ( fixture-> book );
-    g_assert (acct == NULL );
-    g_assert( gnc_book_use_book_currency ( fixture-> book ));
-    qof_book_commit_edit (fixture->book);
-
-    qof_book_destroy( fixture->book );
-    fixture->book = qof_book_new();
-
-   g_test_message( "Testing with book-currency, default-gains-policy and default-gain-loss-account-guid set to valid values and no trading accounts flag" );
-    qof_book_begin_edit (fixture->book);
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "book-currency", "USD",
-		      NULL);
-    qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "default-gains-policy", "fifo",
-		      NULL);
-    acc = get_random_account( fixture-> book );
-    xaccAccountBeginEdit (acc);
-    xaccAccountSetType (acc, ACCT_TYPE_INCOME);
-    xaccAccountSetCommodity (acc, com);
-    xaccAccountSetPlaceholder (acc, FALSE);
-    xaccAccountSetHidden (acc, FALSE);
-    xaccAccountCommitEdit (acc);
     qof_instance_set (QOF_INSTANCE (fixture->book),
 		      "default-gain-loss-account-guid", qof_entity_get_guid(QOF_INSTANCE(acc)),
 		      NULL);
