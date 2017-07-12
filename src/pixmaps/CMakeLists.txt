@@ -4,13 +4,29 @@ INSTALL(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION share/gnucash
         PATTERN CMakeLists.txt EXCLUDE
         PATTERN hicolor EXCLUDE
 )
+FILE(COPY ${CMAKE_CURRENT_SOURCE_DIR}
+    DESTINATION ${DATADIR_BUILD}/gnucash
+    PATTERN Makefile.* EXCLUDE
+    PATTERN CMakeLists.txt EXCLUDE
+    PATTERN hicolor EXCLUDE
+)
 INSTALL(
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/hicolor DESTINATION share/gnucash/icons
+    REGEX ".*/apps.*" EXCLUDE
+)
+FILE(
+    COPY ${CMAKE_CURRENT_SOURCE_DIR}/hicolor
+    DESTINATION ${DATADIR_BUILD}/gnucash/icons
     REGEX ".*/apps.*" EXCLUDE
 )
 
 INSTALL(
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/hicolor DESTINATION share/icons
+    REGEX ".*/actions.*" EXCLUDE
+)
+FILE(
+    COPY ${CMAKE_CURRENT_SOURCE_DIR}/hicolor
+    DESTINATION ${DATADIR_BUILD}/icons
     REGEX ".*/actions.*" EXCLUDE
 )
 
