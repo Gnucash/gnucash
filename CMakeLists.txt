@@ -52,7 +52,7 @@ INCLUDE (MakeDistFiles)
 # SQL, put -D WITH_SQL=OFF on the command line.
 
 OPTION (WITH_SQL "Build this project with SQL (libdbi) support" ON)
-OPTION (WITH_AQBANKING "Build this project with aqbanking (online banking) support" OFF )
+OPTION (WITH_AQBANKING "Build this project with aqbanking (online banking) support" ON)
 OPTION (WITH_GNUCASH "Build all of GnuCash, not just cutecash" ON)
 OPTION (WITH_CUTECASH "Also build cutecash" OFF)
 OPTION (WITH_OFX "compile with ofx support (needs LibOFX)" ON)
