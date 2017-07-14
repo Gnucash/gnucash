@@ -24,7 +24,7 @@ libgncmod_html_la_SOURCES = \
   gnc-html.c \
   gnc-html-history.c \
   gnc-html-factory.c \
-  gnc-html-webkit.c \
+  gnc-html-webkit2.c \
   swig-gnc-html.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
@@ -33,7 +33,7 @@ gncinclude_HEADERS = \
   gnc-html.h \
   gnc-html-p.h \
   gnc-html-factory.h \
-  gnc-html-webkit.h \
+  gnc-html-webkit2.h \
   gnc-html-extras.h \
   gnc-html-webkit-p.h
 
@@ -70,7 +70,10 @@ endif
 
 EXTRA_DIST = \
   gnc-html.i \
-  CMakeLists.txt
+  CMakeLists.txt \
+  gnc-html-webkit.h \
+  gnc-html-webkit1.h \
+  gnc-html-webkit1.c
 
 CLEANFILES = $(BUILT_SOURCES) gnucash
 MAINTAINERCLEANFILES = swig-gnc-html.c

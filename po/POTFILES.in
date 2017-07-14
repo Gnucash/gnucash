@@ -402,7 +402,8 @@ src/gnome-utils/window-main-summarybar.c
 src/html/gnc-html.c
 src/html/gnc-html-factory.c
 src/html/gnc-html-history.c
-src/html/gnc-html-webkit.c
+src/html/gnc-html-webkit1.c
+src/html/gnc-html-webkit2.c
 src/html/gncmod-html.c
 src/import-export/aqb/assistant-ab-initial.c
 src/import-export/aqb/assistant-ab-initial.glade
