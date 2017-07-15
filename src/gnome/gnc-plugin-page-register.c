@@ -232,17 +232,17 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
     /* Edit menu */
 
     {
-        "EditCutAction", "edit-cut", N_("Cu_t"), NULL,
+        "EditCutAction", "edit-cut", N_("Cu_t"), "<primary>X",
         N_("Cut the current selection and copy it to clipboard"),
         G_CALLBACK (gnc_plugin_page_register_cmd_cut)
     },
     {
-        "EditCopyAction", "edit-copy", N_("_Copy"), NULL,
+        "EditCopyAction", "edit-copy", N_("_Copy"), "<primary>C",
         N_("Copy the current selection to clipboard"),
         G_CALLBACK (gnc_plugin_page_register_cmd_copy)
     },
     {
-        "EditPasteAction", "edit-paste", N_("_Paste"), NULL,
+        "EditPasteAction", "edit-paste", N_("_Paste"), "<primary>V",
         N_("Paste the clipboard content at the cursor position"),
         G_CALLBACK (gnc_plugin_page_register_cmd_paste)
     },

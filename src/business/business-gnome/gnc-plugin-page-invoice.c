@@ -112,17 +112,17 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
 
     /* Edit menu */
     {
-        "EditCutAction", "edit-cut", N_("_Cut"), NULL,
+        "EditCutAction", "edit-cut", N_("_Cut"), "<primary>X",
         NULL,
         G_CALLBACK (gnc_plugin_page_invoice_cmd_cut)
     },
     {
-        "EditCopyAction", "edit-copy", N_("Copy"), NULL,
+        "EditCopyAction", "edit-copy", N_("Copy"), "<primary>C",
         NULL,
         G_CALLBACK (gnc_plugin_page_invoice_cmd_copy)
     },
     {
-        "EditPasteAction", "edit-paste", N_("_Paste"), NULL,
+        "EditPasteAction", "edit-paste", N_("_Paste"), "<primary>V",
         NULL,
         G_CALLBACK (gnc_plugin_page_invoice_cmd_paste)
     },
