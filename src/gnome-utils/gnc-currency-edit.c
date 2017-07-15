@@ -467,6 +467,42 @@ gnc_currency_edit_get_currency (GNCCurrencyEdit *gce)
     return commodity;
 }
 
+/** Clear the displayed currency of the widget.
+ *
+ *  This will clear the currency being displayed just like when first created
+ *  but it still returns the default currency as usual
+ *
+ *  @param gce The currency editor widget whose values should be retrieved.
+ */
+void
+gnc_currency_edit_clear_display (GNCCurrencyEdit *gce)
+{
+    GtkTreeModel *model;
+    GtkWidget *entry;
+
+    g_return_if_fail(gce != NULL);
+    g_return_if_fail(GNC_IS_CURRENCY_EDIT(gce));
+
+    model = gtk_combo_box_get_model (GTK_COMBO_BOX(gce));
+
+    entry = gtk_bin_get_child (GTK_BIN(gce));
+
+    g_object_ref (model);
+
+    g_signal_handlers_block_by_func (G_OBJECT(gce),
+                                    G_CALLBACK(gnc_currency_edit_active_changed), gce);
+
+    gtk_combo_box_set_model (GTK_COMBO_BOX(gce), NULL);
+    gtk_entry_set_text (GTK_ENTRY(entry),"");
+    gtk_combo_box_set_active (GTK_COMBO_BOX(gce), -1);
+    gtk_combo_box_set_model (GTK_COMBO_BOX(gce), model);
+
+    g_signal_handlers_block_by_func (G_OBJECT(gce),
+                                    G_CALLBACK(gnc_currency_edit_active_changed), gce);
+
+    g_object_unref (model);
+}
+
 /** @} */
 /** @} */
 /** @} */
