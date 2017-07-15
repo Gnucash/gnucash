@@ -668,7 +668,6 @@ verify_children_compatible (AccountWindow *aw)
     gtk_label_set_selectable (GTK_LABEL (label), TRUE);
     gnc_label_set_alignment (label, 0.0, 0.0);
     {
-#if GTK_CHECK_VERSION(3,16,0)
         GtkCssProvider *provider = gtk_css_provider_new();
         const gchar *label_css = {
                                   "label {\n"
@@ -681,21 +680,6 @@ verify_children_compatible (AccountWindow *aw)
                                    GTK_STYLE_PROVIDER (provider),
                                    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
         g_object_unref (provider);
-#else
-        gint size;
-        PangoFontDescription *font_desc;
-        GtkStyleContext *style;
-
-        style = gtk_widget_get_style_context(label);
-        gtk_style_context_get (style, GTK_STATE_FLAG_NORMAL, GTK_STYLE_PROPERTY_FONT, &font_desc, NULL);
-
-        size = pango_font_description_get_size (font_desc);
-        font_desc = pango_font_description_new ();
-        pango_font_description_set_weight (font_desc, PANGO_WEIGHT_BOLD);
-        pango_font_description_set_size (font_desc, size * PANGO_SCALE_LARGE);
-        gtk_widget_override_font(label, font_desc);
-        pango_font_description_free (font_desc);
-#endif
     }
     gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 

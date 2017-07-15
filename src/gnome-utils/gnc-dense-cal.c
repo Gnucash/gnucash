@@ -378,7 +378,6 @@ gnc_dense_cal_init(GncDenseCal *dcal)
                                GTK_STYLE_PROPERTY_FONT, &font_desc, NULL);
         font_size = pango_font_description_get_size(font_desc);
 
-#if GTK_CHECK_VERSION(3,16,0)
         provider = gtk_css_provider_new();
         dpi = gdk_screen_get_resolution (gdk_screen_get_default ());
         px_size = ((font_size / PANGO_SCALE) - font_size_reduction_units) * (dpi / 72.);
@@ -391,11 +390,7 @@ gnc_dense_cal_init(GncDenseCal *dcal)
         g_object_unref (provider);
         g_free (px_str);
         g_free (widget_css);
-#else
-        font_size -= font_size_reduction_units * PANGO_SCALE;
-        pango_font_description_set_size(font_desc, font_size);
-        gtk_widget_override_font(GTK_WIDGET(dcal), font_desc);
-#endif
+
         pango_font_description_free (font_desc);
 
         maxWidth = maxHeight = 0;

@@ -928,11 +928,8 @@ create_children (GNCDateEdit *gde)
         gtk_widget_show (GTK_WIDGET(gde->cal_label));
 
     /* Graphic for the popup button. */
-#if GTK_CHECK_VERSION(3,14,0)
     arrow = gtk_image_new_from_icon_name ("go-down", GTK_ICON_SIZE_BUTTON);
-#else
-    arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_NONE);
-#endif
+
     gtk_box_pack_start (GTK_BOX (hbox), arrow, TRUE, FALSE, 0);
     gtk_widget_show (GTK_WIDGET(arrow));
 
