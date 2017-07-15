@@ -2301,11 +2301,10 @@ main_window_update_page_color (GncPluginPage *page,
 
     if (want_color && gdk_rgba_parse(&tab_color, color_string) && priv->show_color_tabs)
     {
-#if GTK_CHECK_VERSION(3,16,0)
         GtkCssProvider *provider = gtk_css_provider_new();
         GtkStyleContext *stylectxt;
         gchar *col_str, *widget_css;
-#endif
+
         if (!GTK_IS_EVENT_BOX (tab_widget))
         {
             GtkWidget *event_box = gtk_event_box_new ();
@@ -2316,7 +2315,7 @@ main_window_update_page_color (GncPluginPage *page,
             g_object_unref (tab_widget);
             tab_widget = event_box;
         }
-#if GTK_CHECK_VERSION(3,16,0)
+
         stylectxt = gtk_widget_get_style_context (GTK_WIDGET (tab_widget));
         col_str = gdk_rgba_to_string (&tab_color);
         widget_css = g_strconcat ("*{\n  background-color:", col_str, ";\n}\n", NULL);
@@ -2327,10 +2326,6 @@ main_window_update_page_color (GncPluginPage *page,
         g_object_unref (provider);
         g_free (col_str);
         g_free (widget_css);
-#else
-        gtk_widget_override_background_color (tab_widget, GTK_STATE_NORMAL, &tab_color);
-        gtk_widget_override_background_color (tab_widget, GTK_STATE_ACTIVE, &tab_color);
-#endif
     }
     else
     {
