@@ -680,6 +680,10 @@ gnc_set_default_gain_loss_account_widget(gnc_commodity *commodity)
                 g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE,
                     GINT_TO_POINTER(1));
 
+                // add the color background data function to the column
+                gnc_tree_view_account_column_add_color (GNC_TREE_VIEW_ACCOUNT(
+                         book_currency_data->default_gain_loss_account_widget), col);
+
                 col =
                     gnc_tree_view_add_toggle_column(GNC_TREE_VIEW(
                         book_currency_data->default_gain_loss_account_widget),
@@ -695,6 +699,10 @@ gnc_set_default_gain_loss_account_widget(gnc_commodity *commodity)
                         NULL);
                 g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE,
                     GINT_TO_POINTER(1));
+
+                // add the color background data function to the column
+                gnc_tree_view_account_column_add_color (GNC_TREE_VIEW_ACCOUNT(
+                         book_currency_data->default_gain_loss_account_widget), col);
 
                 gnc_tree_view_configure_columns (GNC_TREE_VIEW(
                         book_currency_data->default_gain_loss_account_widget));
