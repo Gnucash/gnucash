@@ -54,7 +54,7 @@
 #define DIALOG_NEW_ACCOUNT_CM_CLASS "dialog-new-account"
 #define DIALOG_EDIT_ACCOUNT_CM_CLASS "dialog-edit-account"
 #define GNC_PREFS_GROUP "dialogs.account"
-#define DEFAULT_COLOR "#ededececebeb"
+#define DEFAULT_COLOR "rgb(237,236,235)"
 
 enum account_cols
 {
@@ -229,7 +229,9 @@ gnc_account_to_ui(AccountWindow *aw)
     gtk_entry_set_text(GTK_ENTRY(aw->description_entry), string);
 
     string = xaccAccountGetColor (account);
-    if (string == NULL) string = "";
+
+    if ((string == NULL) || (g_strcmp0 ("Not Set", string) == 0))
+        string = DEFAULT_COLOR;
     if (gdk_rgba_parse(&color, string))
     {
         gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(aw->color_entry_button), &color);
