@@ -114,6 +114,16 @@ void gnc_currency_edit_set_currency (GNCCurrencyEdit *gce,
  */
 gnc_commodity *gnc_currency_edit_get_currency (GNCCurrencyEdit *gce);
 
+
+/** Clear the displayed currency of the widget.
+ *
+ *  This will clear the currency being displayed just like when first created
+ *  but it still returns the default currency as usual
+ *
+ *  @param gce The currency editor widget whose values should be retrieved.
+ */
+void gnc_currency_edit_clear_display (GNCCurrencyEdit *gce);
+
 /** @} */
 
 #endif

@@ -597,10 +597,6 @@ gnucash_sheet_update_adjustments (GnucashSheet *sheet)
             gtk_adjustment_get_page_size (vadj) / sheet->num_visible_blocks);
     else
         gtk_adjustment_set_step_increment (vadj, 0);
-
-#if !GTK_CHECK_VERSION(3,18,0)
-    gtk_adjustment_changed(vadj);
-#endif
 }
 
 

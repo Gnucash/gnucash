@@ -294,12 +294,12 @@ static GtkActionEntry gnc_menu_actions [] =
         G_CALLBACK (gnc_main_window_cmd_file_properties)
     },
     {
-        "FileCloseAction", "window-close", N_("_Close"), NULL,
+        "FileCloseAction", "window-close", N_("_Close"), "<primary>W",
         N_("Close the currently active page"),
         G_CALLBACK (gnc_main_window_cmd_file_close)
     },
     {
-        "FileQuitAction", "application-exit", N_("_Quit"), NULL,
+        "FileQuitAction", "application-exit", N_("_Quit"), "<primary>Q",
         N_("Quit this application"),
         G_CALLBACK (gnc_main_window_cmd_file_quit)
     },
@@ -307,17 +307,17 @@ static GtkActionEntry gnc_menu_actions [] =
     /* Edit menu */
 
     {
-        "EditCutAction", "edit-cut", N_("Cu_t"), NULL,
+        "EditCutAction", "edit-cut", N_("Cu_t"), "<primary>X",
         N_("Cut the current selection and copy it to clipboard"),
         G_CALLBACK (gnc_main_window_cmd_edit_cut)
     },
     {
-        "EditCopyAction", "edit-copy", N_("_Copy"), NULL,
+        "EditCopyAction", "edit-copy", N_("_Copy"), "<primary>C",
         N_("Copy the current selection to clipboard"),
         G_CALLBACK (gnc_main_window_cmd_edit_copy)
     },
     {
-        "EditPasteAction", "edit-paste", N_("_Paste"), NULL,
+        "EditPasteAction", "edit-paste", N_("_Paste"), "<primary>V",
         N_("Paste the clipboard content at the cursor position"),
         G_CALLBACK (gnc_main_window_cmd_edit_paste)
     },
@@ -373,7 +373,7 @@ static GtkActionEntry gnc_menu_actions [] =
     /* Help menu */
 
     {
-        "HelpTutorialAction", "help-browser", N_("Tutorial and Concepts _Guide"), NULL,
+        "HelpTutorialAction", "help-browser", N_("Tutorial and Concepts _Guide"), "<primary>H",
         N_("Open the GnuCash Tutorial"),
         G_CALLBACK (gnc_main_window_cmd_help_tutorial)
     },
@@ -2301,11 +2301,10 @@ main_window_update_page_color (GncPluginPage *page,
 
     if (want_color && gdk_rgba_parse(&tab_color, color_string) && priv->show_color_tabs)
     {
-#if GTK_CHECK_VERSION(3,16,0)
         GtkCssProvider *provider = gtk_css_provider_new();
         GtkStyleContext *stylectxt;
         gchar *col_str, *widget_css;
-#endif
+
         if (!GTK_IS_EVENT_BOX (tab_widget))
         {
             GtkWidget *event_box = gtk_event_box_new ();
@@ -2316,7 +2315,7 @@ main_window_update_page_color (GncPluginPage *page,
             g_object_unref (tab_widget);
             tab_widget = event_box;
         }
-#if GTK_CHECK_VERSION(3,16,0)
+
         stylectxt = gtk_widget_get_style_context (GTK_WIDGET (tab_widget));
         col_str = gdk_rgba_to_string (&tab_color);
         widget_css = g_strconcat ("*{\n  background-color:", col_str, ";\n}\n", NULL);
@@ -2327,10 +2326,6 @@ main_window_update_page_color (GncPluginPage *page,
         g_object_unref (provider);
         g_free (col_str);
         g_free (widget_css);
-#else
-        gtk_widget_override_background_color (tab_widget, GTK_STATE_NORMAL, &tab_color);
-        gtk_widget_override_background_color (tab_widget, GTK_STATE_ACTIVE, &tab_color);
-#endif
     }
     else
     {

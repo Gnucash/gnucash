@@ -870,7 +870,7 @@ For example
                         <property name="headers_visible">False</property>
                         <property name="enable_grid_lines">both</property>
                         <child internal-child="selection">
-                          <object class="GtkTreeSelection"/>
+                          <object class="GtkTreeSelection" id="treeview-selection1"/>
                         </child>
                       </object>
                       <packing>
@@ -886,7 +886,7 @@ For example
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="enable_grid_lines">both</property>
                         <child internal-child="selection">
-                          <object class="GtkTreeSelection"/>
+                          <object class="GtkTreeSelection" id="treeview-selection2"/>
                         </child>
                       </object>
                       <packing>
@@ -1021,7 +1021,7 @@ For example
                 <property name="enable_tree_lines">True</property>
                 <signal name="button-press-event" handler="csv_tximp_acct_match_view_clicked_cb" swapped="no"/>
                 <child internal-child="selection">
-                  <object class="GtkTreeSelection"/>
+                  <object class="GtkTreeSelection" id="treeview-selection3"/>
                 </child>
                 <child>
                   <object class="GtkTreeViewColumn" id="treeviewcolumn1">
