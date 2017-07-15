@@ -659,6 +659,18 @@ gnc_tree_view_account_color_update (gpointer gsettings, gchar *key, gpointer use
         priv->show_account_color = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, key);
 }
 
+/** Add the account color background data function to the GncTreeViewAccount column to 
+ *  show or not the column background in the account color.
+ */
+void
+gnc_tree_view_account_column_add_color (GncTreeViewAccount *view, GtkTreeViewColumn *col)
+{
+    GtkCellRenderer *renderer = gnc_tree_view_column_get_renderer(col);
+
+    gtk_tree_view_column_set_cell_data_func (col, renderer, acc_color_data_func,
+                                             GTK_TREE_VIEW(view), NULL);
+}
+
 /************************************************************/
 /*                    New View Creation                     */
 /************************************************************/
@@ -1743,6 +1755,7 @@ account_cell_property_data_func (GtkTreeViewColumn *tree_column,
 				 GtkTreeIter *s_iter,
 				 gpointer key)
 {
+    GncTreeViewAccount *view;
     Account *account;
     gchar *string = NULL;
 
@@ -1755,6 +1768,11 @@ account_cell_property_data_func (GtkTreeViewColumn *tree_column,
 	string = "";
 
     g_object_set (G_OBJECT (cell), "text", string, "xalign", 0.0, NULL);
+
+    view = g_object_get_data(G_OBJECT(tree_column), "tree-view");
+
+    if (GNC_IS_TREE_VIEW_ACCOUNT (view))
+        acc_color_data_func (tree_column, cell, s_model, s_iter, view);
 }
 
 
@@ -1777,6 +1795,9 @@ gnc_tree_view_account_add_property_column (GncTreeViewAccount *view,
      * far.  Find that renderer. */
     renderer = gnc_tree_view_column_get_renderer(column);
     g_object_set (G_OBJECT (renderer), "xalign", 1.0, NULL);
+
+    // add a pointer to the view to make it easier to access in data_func
+    g_object_set_data(G_OBJECT(column), "tree-view", (gpointer)view);
 
     gtk_tree_view_column_set_cell_data_func (column, renderer,
             account_cell_property_data_func,

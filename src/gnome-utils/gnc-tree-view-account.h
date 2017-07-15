@@ -471,6 +471,11 @@ void gnc_tree_view_account_select_subaccounts (GncTreeViewAccount *view,
  */
 void gnc_tree_view_account_expand_to_account (GncTreeViewAccount *view, Account *account);
 
+/** Add the account color background data function to the GncTreeViewAccount column to 
+ *  show or not the column background in the account color.
+ */
+void gnc_tree_view_account_column_add_color (GncTreeViewAccount *view, GtkTreeViewColumn *col);
+
 /** @} */
 
 /** @} */
