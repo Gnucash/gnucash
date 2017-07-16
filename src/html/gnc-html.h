@@ -135,7 +135,11 @@ struct _GncHtmlClass
     void (*reload)( GncHtml* html, gboolean force_rebuild );
     void (*copy_to_clipboard)( GncHtml* html );
     gboolean (*export_to_file)( GncHtml* html, const gchar* file );
+#ifdef WEBKIT1
+  void (*print) (GncHtml* html, const gchar* jobname, gboolean export_pdf);
+#else
     void (*print) (GncHtml* html);
+#endif
     void (*cancel)( GncHtml* html );
     URLType (*parse_url)( GncHtml* html, const gchar* url,
                           gchar** url_location, gchar** url_label );
@@ -196,13 +200,25 @@ void gnc_html_copy_to_clipboard( GncHtml* html );
  */
 gboolean gnc_html_export_to_file( GncHtml* html, const gchar* filename );
 
+#ifdef WEBKIT1
+/**
+ * Prints the report.
+ *
+ * @param html GncHtml object
+ * @param jobname A jobname fo identifying the print job or to provide
+ *                an output filename.
+ * @param export_pdf If TRUE write a PDF file using the jobname for a
+ *                   filename; otherwise put up a print dialog.
+ */
+void gnc_html_print (GncHtml* html, const char* jobname, gboolean export_pdf);
+#else
 /**
  * Prints the report.
  *
  * @param html GncHtml object
  */
 void gnc_html_print (GncHtml* html);
-
+#endif
 /**
  * Cancels the current operation
  *

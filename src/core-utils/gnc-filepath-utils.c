@@ -307,7 +307,7 @@ gnc_path_find_localized_html_file (const gchar *file_name)
 static gboolean
 gnc_validate_directory (const gchar *dirname, gboolean create, gchar **msg)
 {
-    struct stat statbuf;
+    GStatBuf statbuf;
     gint rc;
 
     *msg = NULL;

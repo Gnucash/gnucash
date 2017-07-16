@@ -1138,17 +1138,17 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
             G_CALLBACK(gnc_plugin_page_report_exportpdf_cb)
         },
         {
-            "EditCutAction", "edit-cut", N_("Cu_t"), NULL,
+            "EditCutAction", "edit-cut", N_("Cu_t"), "<primary>X",
             N_("Cut the current selection and copy it to clipboard"),
             NULL
         },
         {
-            "EditCopyAction", "edit-copy", N_("_Copy"), NULL,
+            "EditCopyAction", "edit-copy", N_("_Copy"), "<primary>C",
             N_("Copy the current selection to clipboard"),
             G_CALLBACK(gnc_plugin_page_report_copy_cb)
         },
         {
-            "EditPasteAction", "edit-paste", N_("_Paste"), NULL,
+            "EditPasteAction", "edit-paste", N_("_Paste"), "<primary>V",
             N_("Paste the clipboard content at the cursor position"),
             NULL
         },
@@ -1471,7 +1471,7 @@ static char *
 gnc_get_export_filename (SCM choice)
 {
     char * filepath;
-    struct stat statbuf;
+    GStatBuf statbuf;
     char * title;
     const gchar * html_type = _("HTML");
     char * type;
@@ -1838,7 +1838,11 @@ gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report 
 
     //g_warning("Setting job name=%s", job_name);
 
+#ifdef WEBKIT1
+    gnc_html_print (priv->html, job_name, TRUE);
+#else
     gnc_html_print (priv->html);
+#endif
 
     g_free (job_name);
 }
@@ -1877,7 +1881,11 @@ gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *rep
 
     //g_warning("Setting job name=%s", job_name);
 
+#ifdef WEBKIT1
+    gnc_html_print (priv->html, job_name, TRUE);
+#else
     gnc_html_print (priv->html);
+#endif
 
     if (owner)
     {

@@ -1384,7 +1384,7 @@ CsvImpTransAssist::preview_style_column (uint32_t col_num, GtkTreeModel* model)
     if (col_num == 0)
     {
         gtk_tree_view_column_set_attributes (col, renderer,
-                "stock-id", PREV_COL_ERR_ICON,
+                "icon-name", PREV_COL_ERR_ICON,
                 "cell-background", PREV_COL_BCOLOR, nullptr);
         g_object_set (G_OBJECT(renderer), "stock-size", GTK_ICON_SIZE_MENU, nullptr);
         g_object_set (G_OBJECT(col), "sizing", GTK_TREE_VIEW_COLUMN_FIXED,

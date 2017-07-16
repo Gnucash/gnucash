@@ -321,6 +321,10 @@ GncNumeric::to_decimal(unsigned int max_places) const
 {
     if (max_places > max_leg_digits)
         max_places = max_leg_digits;
+
+    if (m_num == 0)
+	return GncNumeric();
+
     if (is_decimal())
     {
         if (m_num == 0 || m_den < powten(max_places))
@@ -350,7 +354,7 @@ GncNumeric::to_decimal(unsigned int max_places) const
         rr_num *= factor;
         rr_den *= factor;
     }
-    while (rr_num % 10 == 0)
+    while (!rr_num.isZero() && rr_num % 10 == 0)
     {
         rr_num /= 10;
         rr_den /= 10;

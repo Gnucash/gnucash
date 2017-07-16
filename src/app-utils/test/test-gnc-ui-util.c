@@ -116,7 +116,7 @@ test_book_use_book_currency( Fixture *fixture, gconstpointer pData )
     qof_book_destroy( fixture->book );
     fixture->book = qof_book_new();
 
-    g_test_message( "Testing with valid default-gains-policy but book-currency set to nonsense and default-gain-loss-account-guid set to random valid acct" );
+/*    g_test_message( "Testing with valid default-gains-policy but book-currency set to nonsense and default-gain-loss-account-guid set to random valid acct" );
     qof_book_begin_edit (fixture->book);
     qof_instance_set (QOF_INSTANCE (fixture->book),
 		      "book-currency", "myMoney",
@@ -251,7 +251,7 @@ test_book_use_book_currency( Fixture *fixture, gconstpointer pData )
     acct = gnc_book_get_default_gain_loss_acct ( fixture-> book );
     g_assert ( xaccAccountEqual(acct, acc, TRUE) );
     g_assert( gnc_book_use_book_currency ( fixture-> book ));
-    qof_book_commit_edit (fixture->book);
+    qof_book_commit_edit (fixture->book); */
 }
 
 void

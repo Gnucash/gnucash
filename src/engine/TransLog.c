@@ -22,7 +22,9 @@
 \********************************************************************/
 
 #include "config.h"
-
+#ifdef __MINGW32__
+#define __USE_MINGW_ANSI_STDIO 1
+#endif
 #include <errno.h>
 #include <glib.h>
 #include <glib/gstdio.h>

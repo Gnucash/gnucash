@@ -116,7 +116,7 @@ struct QofXmlBackendProvider : public QofBackendProvider
 bool
 QofXmlBackendProvider::type_check (const char *uri)
 {
-    struct stat sbuf;
+    GStatBuf sbuf;
     int rc;
     FILE* t;
     gchar* filename;

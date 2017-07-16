@@ -530,16 +530,24 @@ gnc_html_export_to_file( GncHtml* self, const gchar* filepath )
         return FALSE;
     }
 }
-
+#ifdef WEBKIT1
+void
+gnc_html_print (GncHtml* self, const char *jobname, gboolean export_pdf)
+#else
 void
 gnc_html_print (GncHtml* self)
+#endif
 {
     g_return_if_fail( self != NULL );
     g_return_if_fail( GNC_IS_HTML(self) );
 
     if ( GNC_HTML_GET_CLASS(self)->print != NULL )
     {
+#ifdef WEBKIT1
+      GNC_HTML_GET_CLASS(self)->print (self, jobname, export_pdf);
+#else
         GNC_HTML_GET_CLASS(self)->print (self);
+#endif
     }
     else
     {

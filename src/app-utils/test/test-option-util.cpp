@@ -137,18 +137,18 @@ test_option_load_book_currency (Fixture *fixture, gconstpointer pData)
     SCM symbol_value;
     const gchar *curr = NULL;
     SCM curr_scm;
-    SCM acct_guid_scm = NULL;
+/*    SCM acct_guid_scm = NULL; */
     gnc_commodity *commodity;
     QofBook *book = fixture->book;
     GNCOptionDB *odb = gnc_option_db_new_for_type (QOF_ID_BOOK);
-    Account *acct, *acc;
+/*    Account *acct, *acc;
 
     qof_book_begin_edit (book);
     acc = get_random_account( book );
     qof_instance_set (QOF_INSTANCE (book),
                      "default-gain-loss-account-guid", qof_entity_get_guid(QOF_INSTANCE(acc)),
                      NULL);
-    qof_book_commit_edit (book);
+    qof_book_commit_edit (book); */
 
     qof_book_load_options (book, gnc_option_db_load, odb);
     symbol_value = gnc_currency_accounting_option_value_get_method (
@@ -167,7 +167,7 @@ test_option_load_book_currency (Fixture *fixture, gconstpointer pData)
     g_assert_cmpstr (str, ==, "book-currency");
     if (str)
         g_free (str);
-    acct_guid_scm = gnc_currency_accounting_option_value_get_default_account (
+/*    acct_guid_scm = gnc_currency_accounting_option_value_get_default_account (
                         gnc_option_db_lookup_option (odb,
                             OPTION_SECTION_ACCOUNTS,
                             OPTION_NAME_CURRENCY_ACCOUNTING,
@@ -184,7 +184,7 @@ test_option_load_book_currency (Fixture *fixture, gconstpointer pData)
     }
     g_assert ( xaccAccountEqual(acct, acc, TRUE) );
     if (str)
-        g_free (str);
+        g_free (str); */
     symbol_value = gnc_currency_accounting_option_value_get_default_policy (
                         gnc_option_db_lookup_option (odb,
                             OPTION_SECTION_ACCOUNTS,
@@ -250,14 +250,15 @@ test_option_save_book_currency (Fixture *fixture, gconstpointer pData)
     GNCOptionDB *odb = gnc_option_db_new_for_type (QOF_ID_BOOK);
     KvpFrame *slots = qof_instance_get_slots (QOF_INSTANCE (book));
     Account *acct, *acc;
-    gchar *gain_loss_account_guid_str, *gain_loss_account_guid_str2;
+    gchar *gain_loss_account_guid_str = NULL;
+    gchar *gain_loss_account_guid_str2 = NULL;
     GncGUID *gain_loss_account_guid;
-    SCM val;
+    SCM val = NULL;
 
     acc = get_random_account( book );
     gain_loss_account_guid_str = guid_to_string (xaccAccountGetGUID (acc));
     val = scm_from_utf8_string (gain_loss_account_guid_str);
-    g_assert (gnc_option_db_set_option (odb, OPTION_SECTION_ACCOUNTS,
+/*    g_assert (gnc_option_db_set_option (odb, OPTION_SECTION_ACCOUNTS,
 						OPTION_NAME_CURRENCY_ACCOUNTING,
 						scm_cons (scm_from_locale_symbol("book-currency"),
                         scm_cons (scm_from_utf8_string("GTQ"),
@@ -273,7 +274,7 @@ test_option_save_book_currency (Fixture *fixture, gconstpointer pData)
     if (gain_loss_account_guid_str)
         g_free (gain_loss_account_guid_str);
     if (gain_loss_account_guid_str2)
-        g_free (gain_loss_account_guid_str2);
+        g_free (gain_loss_account_guid_str2); */
 
     gnc_option_db_destroy (odb);
 }

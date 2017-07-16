@@ -4,9 +4,9 @@ SET (html_HEADERS
   gnc-html.h
   gnc-html-p.h
   gnc-html-factory.h
-  gnc-html-webkit.h
   gnc-html-extras.h
   gnc-html-webkit-p.h
+  gnc-html-webkit.h
 )
 
 IF (BUILDING_FROM_VCS)
@@ -21,8 +21,15 @@ SET (html_SOURCES
   gnc-html.c
   gnc-html-history.c
   gnc-html-factory.c
-  gnc-html-webkit.c
 )
+
+IF (WEBKIT1)
+  LIST(APPEND html_HEADERS gnc-html-webkit1.h)
+  LIST(APPEND html_SOURCES gnc-html-webkit1.c)
+ELSE ()
+  LIST(APPEND html_HEADERS gnc-html-webkit2.h)
+  LIST(APPEND html_SOURCES gnc-html-webkit2.c)
+ENDIF ()
 
 SET_DIST_LIST(html_DIST CMakeLists.txt Makefile.am ${html_HEADERS} ${html_SOURCES} gnc-html.i)
 

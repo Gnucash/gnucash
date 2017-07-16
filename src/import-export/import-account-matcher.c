@@ -118,6 +118,9 @@ build_acct_tree(AccountPickerDialog *picker)
             _("Account ID"), "online-id");
     g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
 
+    // the color background data function is part of the add_property_column
+    // function which will color the background based on preference setting
+
     gtk_container_add(GTK_CONTAINER(picker->account_tree_sw),
                       GTK_WIDGET(picker->account_tree));
 

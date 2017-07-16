@@ -108,7 +108,6 @@ gnc_key_file_save_to_file (const gchar *filename,
 {
     gchar *contents;
     gint fd;
-    extern int errno;
     gint length;
     ssize_t written;
     gboolean success = TRUE;

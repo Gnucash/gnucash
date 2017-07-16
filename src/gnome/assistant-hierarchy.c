@@ -25,6 +25,7 @@
 #include "config.h"
 
 #include <platform.h>
+#include <libguile.h>
 #if PLATFORM(WINDOWS)
 #include <windows.h>
 #endif
@@ -230,7 +231,7 @@ gnc_get_ea_locale_dir(const char *top_dir)
     static gchar *default_locale = "C";
     gchar *ret;
     gchar *locale;
-    struct stat buf;
+    GStatBuf buf;
     int i;
 
 #ifdef PLATFORM_WIN32
@@ -1196,14 +1197,10 @@ assistant_insert_book_options_page (hierarchy_data *data)
     options = gnc_options_dialog_notebook (data->optionwin);
     parent = gtk_widget_get_parent (options);
 
-#if GTK_CHECK_VERSION(3, 14, 0)
     g_object_ref (options);
     gtk_container_remove (GTK_CONTAINER(parent), options);
     gtk_container_add (GTK_CONTAINER(vbox), options);
     g_object_unref (options);
-#else
-    gtk_widget_reparent (options, vbox);
-#endif
 
     gtk_widget_show_all (vbox);
     gtk_assistant_insert_page (GTK_ASSISTANT(data->dialog), vbox, 1);

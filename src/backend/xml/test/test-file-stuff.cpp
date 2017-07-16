@@ -383,7 +383,7 @@ test_files_in_dir (int argc, char** argv, gxpf_callback cb,
 
     for (count = 1; count < argc; count++)
     {
-        struct stat file_info;
+        GStatBuf file_info;
         const char* to_open = argv[count];
         if (g_stat (to_open, &file_info) != 0)
         {

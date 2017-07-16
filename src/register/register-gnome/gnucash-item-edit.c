@@ -527,11 +527,7 @@ gnc_item_edit_new (GnucashSheet *sheet)
     /* Create the popup button
        It will only be displayed when the cell being edited provides
        a popup item (like a calendar or account list) */
-#if GTK_CHECK_VERSION(3,14,0)
     item_edit->popup_toggle.arrow = gtk_image_new_from_icon_name ("go-down", GTK_ICON_SIZE_BUTTON);
-#else
-    item_edit->popup_toggle.arrow = GTK_WIDGET(gtk_arrow_new(GTK_ARROW_DOWN, GTK_SHADOW_IN));
-#endif
 
     item_edit->popup_toggle.tbutton = gtk_toggle_button_new();
     gtk_toggle_button_set_mode (
@@ -645,11 +641,7 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
         unblock_toggle_signals (item_edit);
     }
 
-#if GTK_CHECK_VERSION(3,14,0)
     item_edit->popup_toggle.arrow = gtk_image_new_from_icon_name ("go-up", GTK_ICON_SIZE_BUTTON);
-#else
-    gtk_arrow_set (GTK_ARROW(item_edit->popup_toggle.arrow), GTK_ARROW_UP, GTK_SHADOW_OUT);
-#endif
 
     if (item_edit->popup_set_focus)
         item_edit->popup_set_focus (item_edit->popup_item,
@@ -691,11 +683,8 @@ gnc_item_edit_hide_popup (GncItemEdit *item_edit)
         return;
 
     gtk_container_remove (GTK_CONTAINER(item_edit->sheet), item_edit->popup_item);
-#if GTK_CHECK_VERSION(3,14,0)
+
     item_edit->popup_toggle.arrow = gtk_image_new_from_icon_name ("go-down", GTK_ICON_SIZE_BUTTON);
-#else
-    gtk_arrow_set (GTK_ARROW(item_edit->popup_toggle.arrow), GTK_ARROW_DOWN, GTK_SHADOW_IN);
-#endif
 
     gtk_toggle_button_set_active
     (GTK_TOGGLE_BUTTON(item_edit->popup_toggle.tbutton), FALSE);

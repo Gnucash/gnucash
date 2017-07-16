@@ -137,30 +137,30 @@ static GtkActionEntry gnc_plugin_actions [] =
 
     /* File -> Import menu item */
     {
-        "Mt940ImportAction", GTK_STOCK_CONVERT, N_("Import _MT940"), NULL,
+        "Mt940ImportAction", "go-previous", N_("Import _MT940"), NULL,
         N_("Import a MT940 file into GnuCash"),
         G_CALLBACK(gnc_plugin_ab_cmd_mt940_import)
     },
     {
-        "Mt942ImportAction", GTK_STOCK_CONVERT, N_("Import MT94_2"), NULL,
+        "Mt942ImportAction", "go-previous", N_("Import MT94_2"), NULL,
         N_("Import a MT942 file into GnuCash"),
         G_CALLBACK(gnc_plugin_ab_cmd_mt942_import)
     },
     {
-        "DtausImportAction", GTK_STOCK_CONVERT, N_("Import _DTAUS"), NULL,
+        "DtausImportAction", "go-previous", N_("Import _DTAUS"), NULL,
         N_("Import a DTAUS file into GnuCash"),
         G_CALLBACK(gnc_plugin_ab_cmd_dtaus_import)
     },
     /* #ifdef CSV_IMPORT_FUNCTIONAL */
-    /*     { "CsvImportAction", GTK_STOCK_CONVERT, N_("Import _CSV"), NULL, */
+    /*     { "CsvImportAction", "go-previous", N_("Import _CSV"), NULL, */
     /*       N_("Import a CSV file into GnuCash"), */
     /*       G_CALLBACK(gnc_plugin_ab_cmd_csv_import) }, */
-    /*     { "CsvImportSendAction", GTK_STOCK_CONVERT, N_("Import CSV and s_end..."), NULL, */
+    /*     { "CsvImportSendAction", "go-previous", N_("Import CSV and s_end..."), NULL, */
     /*       N_("Import a CSV file into GnuCash and send the transfers online through Online Banking"), */
     /*       G_CALLBACK(gnc_plugin_ab_cmd_csv_importsend) }, */
     /* #endif */
     {
-        "DtausImportSendAction", GTK_STOCK_CONVERT, N_("Import DTAUS and _send..."), NULL,
+        "DtausImportSendAction", "go-previous", N_("Import DTAUS and _send..."), NULL,
         N_("Import a DTAUS file into GnuCash and send the transfers online through Online Banking"),
         G_CALLBACK(gnc_plugin_ab_cmd_dtaus_importsend)
     },

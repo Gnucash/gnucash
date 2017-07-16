@@ -35,6 +35,8 @@ SET(GETTEXT_PACKAGE "gnucash")
 
 # Extra cmake macros
 SET (CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/src/cmake_modules;${CMAKE_MODULE_PATH}")
+# CMake does a non-recursive build that puts the final build product directories in the build root. Some code needs to know this.
+
 INCLUDE (MacroAppendForeach)
 INCLUDE (MacroAddSourceFileCompileFlags)
 INCLUDE (GncAddSwigCommand)
@@ -50,7 +52,7 @@ INCLUDE (MakeDistFiles)
 # SQL, put -D WITH_SQL=OFF on the command line.
 
 OPTION (WITH_SQL "Build this project with SQL (libdbi) support" ON)
-OPTION (WITH_AQBANKING "Build this project with aqbanking (online banking) support" OFF )
+OPTION (WITH_AQBANKING "Build this project with aqbanking (online banking) support" ON)
 OPTION (WITH_GNUCASH "Build all of GnuCash, not just cutecash" ON)
 OPTION (WITH_CUTECASH "Also build cutecash" OFF)
 OPTION (WITH_OFX "compile with ofx support (needs LibOFX)" ON)
@@ -135,12 +137,14 @@ IF (WIN32)
   # Setting CMAKE_FRAMEWORK_PATH, which is intended for OS X, is a terrible hack here. But I don't
   # want to mess with CMAKE_PREFIX_PATH.
   SET(CMAKE_FRAMEWORK_PATH "${CMAKE_FRAMEWORK_PATH_TMP}")
-  SET(PKG_CONFIG_EXECUTABLE ${CMAKE_PREFIX_PATH}/gnome/bin/pkg-config.exe)
-  SET(SWIG_EXECUTABLE ${CMAKE_PREFIX_PATH}/swig/swig.exe)
-  SET(REGEX_INCLUDE_PATH ${CMAKE_PREFIX_PATH}/regex/include)
-  SET(REGEX_LDFLAGS "-L${CMAKE_PREFIX_PATH}/regex/lib -lregex")
-  SET(LIBXSLT_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/libxslt/include)
-  SET(LIBXSLT_XSLTPROC_EXECUTABLE ${CMAKE_PREFIX_PATH}/libxslt/bin/xsltproc)
+  #SET(PKG_CONFIG_EXECUTABLE ${CMAKE_PREFIX_PATH}/gnome/bin/pkg-config.exe)
+  SET(SWIG_EXECUTABLE swig)
+  #SET(SWIG_EXECUTABLE ${CMAKE_PREFIX_PATH}/swig/swig.exe)
+  FIND_PATH(REGEX_INCLUDE_PATH regex.h)
+  FIND_PATH(REGEX_LIB_PATH libregex.dll.a)
+  SET(REGEX_LDFLAGS "-L${REGEX_LIB_PATH} -lregex")
+  #SET(LIBXSLT_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/libxslt/include)
+  #SET(LIBXSLT_XSLTPROC_EXECUTABLE ${CMAKE_PREFIX_PATH}/libxslt/bin/xsltproc)
   # I have not yet debugged the intltool-merge file generation process on Windows.
   SET(NO_INTLTOOL TRUE)
 #Prevent creating a console window on startup.
@@ -166,17 +170,18 @@ GNC_PKG_CHECK_MODULES (GTHREAD REQUIRED gthread-2.0>=2.20)
 
 GNC_PKG_CHECK_MODULES (LIBXML2 REQUIRED libxml-2.0>=2.7.0)
 GNC_PKG_CHECK_MODULES (LIBXSLT REQUIRED libxslt)
-GNC_PKG_CHECK_MODULES (WEBKIT webkit2gtk-4.0)
-IF (NOT WEBKIT_FOUND)
-  GNC_PKG_CHECK_MODULES (WEBKIT REQUIRED webkit2gtk-3.0)
-  IF (WIN32)
+IF (WIN32)
+    GNC_PKG_CHECK_MODULES (WEBKIT REQUIRED webkitgtk-3.0)
     SET(WEBKIT1 1)
-  ELSE (WIN32)
+ELSE (WIN32)
+  GNC_PKG_CHECK_MODULES (WEBKIT webkit2gtk-4.0)
+  IF (NOT WEBKIT_FOUND)
+    GNC_PKG_CHECK_MODULES (WEBKIT REQUIRED webkit2gtk-3.0)
     SET(WEBKIT2_3 1)
-  ENDIF (WIN32)
-ELSE (NOT WEBKIT_FOUND)
+  ELSE (NOT WEBKIT_FOUND)
     SET(WEBKIT2_4 1)
-ENDIF (NOT WEBKIT_FOUND)
+  ENDIF (NOT WEBKIT_FOUND)
+ENDIF (WIN32)
 
 IF (WITH_GNUCASH)
   GNC_PKG_CHECK_MODULES (GTK3 REQUIRED gtk+-3.0>=3.14.0)
@@ -226,6 +231,7 @@ FIND_PATH (REGEX_INCLUDE_PATH NAMES regex.h
 		  PATHS /usr/include /opt/gnome/include)
 FIND_LIBRARY (REGEX_LIBRARY NAMES regex)
 IF (WIN32)
+  message(STATUS "Looking for htmlhelp.h and htmlhelp.a in ${HTMLHELP_DIR}")
   FIND_PATH (HTMLHELP_INCLUDE_PATH NAMES htmlhelp.h HINTS ${HTMLHELP_DIR}/include)
   FIND_LIBRARY (HTMLHELP_LIBRARY htmlhelp HINTS ${HTMLHELP_DIR}/lib)
 ENDIF (WIN32)
@@ -462,7 +468,7 @@ IF (UNIX)
   SET( CMAKE_C_FLAGS_RELEASE "-O3 ${CMAKE_C_FLAGS} -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2")
 ENDIF (UNIX)
 IF (MINGW)
-  SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wdeclaration-after-statement -Wno-pointer-sign -Wall -Wunused -Wmissing-prototypes -Wmissing-declarations  -Wno-unused -std=gnu11")
+  SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wdeclaration-after-statement -Wno-pointer-sign -Wall -Wunused -Wmissing-prototypes -Wmissing-declarations  -Wno-unused -Wno-error=deprecated-declarations -std=gnu11")
   SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWINVER=0x0500 -D_EMULATE_GLIBC=0") # Workaround for bug in gtest on mingw, see https://github.com/google/googletest/issues/893 and https://github.com/google/googletest/issues/920
 ENDIF (MINGW)
 IF (APPLE)
@@ -708,7 +714,9 @@ INSTALL(CODE
 #For windows, copy in some DLLs from Mingw
 
 IF (WIN32)
-  SET(MINGW_DLLS ${CMAKE_PREFIX_PATH}/mingw/bin/libstdc++-6.dll ${CMAKE_PREFIX_PATH}/mingw/bin/libgcc_s_dw2-1.dll)
+  FIND_LIBRARY(LIBSTDC++ libstdc++-6.dll)
+  FIND_LIBRARY(LIBDW2 libgcc_s_dw2-1.dll)
+  SET(MINGW_DLLS ${LIBSTDC++} ${LIBDW2})
   INSTALL(PROGRAMS ${MINGW_DLLS} DESTINATION bin)
   FILE(COPY ${MINGW_DLLS} DESTINATION ${BINDIR_BUILD}
     # Do permissions matter for windows?

@@ -26,6 +26,10 @@
 #include "config.h"
 
 #include <platform.h>
+#ifdef __MINGW32__
+#define _GL_UNISTD_H //Deflect poisonous define of close in Guile's GnuLib
+#endif
+#include <libguile.h>
 #if PLATFORM(WINDOWS)
 #include <windows.h>
 #endif
@@ -41,7 +45,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <regex.h>
-#include <libguile.h>
 
 #include <webkit2/webkit2.h>
 

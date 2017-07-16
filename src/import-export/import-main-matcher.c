@@ -203,7 +203,6 @@ on_matcher_help_close_clicked (GtkButton *button, gpointer user_data)
     gtk_widget_destroy(help_dialog);
 }
 
-#if GTK_CHECK_VERSION(3,16,0)
 static void
 gnc_override_background_color (GtkWidget *widget,
                                GdkRGBA   *rgba)
@@ -220,8 +219,6 @@ gnc_override_background_color (GtkWidget *widget,
     g_free (col_str);
     g_free (widget_css);
 }
-#endif
-
 
 void
 on_matcher_help_clicked (GtkButton *button, gpointer user_data)
@@ -238,28 +235,13 @@ on_matcher_help_clicked (GtkButton *button, gpointer user_data)
     gnc_builder_add_from_file (builder, "dialog-import.glade", "matcher_help_dialog");
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "red"));
-#if GTK_CHECK_VERSION(3,16,0)
     gnc_override_background_color (box, &info->color_back_red);
-#else
-    gtk_widget_override_background_color(box, GTK_STATE_FLAG_NORMAL,
-                                         &info->color_back_red);
-#endif
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "yellow"));
-#if GTK_CHECK_VERSION(3,16,0)
     gnc_override_background_color (box, &info->color_back_yellow);
-#else
-    gtk_widget_override_background_color(box, GTK_STATE_FLAG_NORMAL,
-                                         &info->color_back_yellow);
-#endif
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "green"));
-#if GTK_CHECK_VERSION(3,16,0)
     gnc_override_background_color (box, &info->color_back_green);
-#else
-    gtk_widget_override_background_color(box, GTK_STATE_FLAG_NORMAL,
-                                         &info->color_back_green);
-#endif
 
     help_dialog = GTK_WIDGET(gtk_builder_get_object (builder, "matcher_help_dialog"));
     gtk_window_set_transient_for(GTK_WINDOW(help_dialog),
