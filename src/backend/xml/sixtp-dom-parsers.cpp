@@ -517,23 +517,15 @@ gnc_numeric*
 dom_tree_to_gnc_numeric (xmlNodePtr node)
 {
     gchar* content = dom_tree_to_text (node);
-    gnc_numeric* ret;
     if (!content)
         return NULL;
 
-    ret = g_new (gnc_numeric, 1);
+    gnc_numeric *ret = g_new (gnc_numeric, 1);
 
-    if (string_to_gnc_numeric (content, ret))
-    {
-        g_free (content);
-        return ret;
-    }
-    else
-    {
-        g_free (content);
-        g_free (ret);
-        return NULL;
-    }
+    if (!string_to_gnc_numeric (content, ret))
+	*ret = gnc_numeric_zero ();
+    g_free (content);
+    return ret;
 }
 
 static inline Timespec
