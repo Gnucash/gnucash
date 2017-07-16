@@ -143,8 +143,12 @@ gnc_html_webkit_webview_new (void)
      webkit_settings = webkit_web_view_get_settings (WEBKIT_WEB_VIEW (view));
      g_object_set (G_OBJECT(webkit_settings),
                    "default-charset", "utf-8",
+#if WEBKIT_MINOR_VERSION >= 10
                    "allow-file-access-from-file-urls", TRUE,
+#endif
+#if WEBKIT_MINOR_VERSION >= 14
                    "allow-universal-access-from-file-urls", TRUE,
+#endif
                    "enable-java", FALSE,
                    "enable-page-cache", FALSE,
                    "enable-plugins", FALSE,
