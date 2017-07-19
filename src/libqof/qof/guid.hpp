@@ -49,7 +49,7 @@ struct GUID
     operator GncGUID () const noexcept;
     static GUID create_random () noexcept;
     static GUID const & null_guid () noexcept;
-    static GUID from_string (std::string const &) throw (guid_syntax_exception);
+    static GUID from_string (std::string const &);
     std::string to_string () const noexcept;
     auto begin () const noexcept -> decltype (implementation.begin ());
     auto end () const noexcept -> decltype (implementation.end ());
