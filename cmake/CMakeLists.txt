@@ -19,7 +19,7 @@ SET(schema-targets business-gnome-gschema csv-exp-gschema csv-imp-gschema
     generic-import-gschema gnome-gschema gnome-utils-gschema ofx-gschema qif-imp-gschema)
 
 IF (WITH_AQBANKING)
-  LIST(APPEND schema_targets aqb-gschema)
+  LIST(APPEND schema-targets aqb-gschema)
 ENDIF (WITH_AQBANKING)
     
 SET(SCHEMA_DIRECTORY ${DATADIR_BUILD}/glib-2.0/schemas)
