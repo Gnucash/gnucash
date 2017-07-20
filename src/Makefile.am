@@ -32,8 +32,8 @@ GUI_SUBDIRS = \
   report \
   register \
   gnome \
+  gnome-business \
   import-export \
-  business \
   optional \
   plugins \
   bin

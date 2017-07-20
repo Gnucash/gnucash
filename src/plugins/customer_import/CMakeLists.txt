@@ -23,6 +23,11 @@ ADD_LIBRARY(gncmod-customer_import ${customer_import_SOURCES} ${customer_input_n
 TARGET_LINK_LIBRARIES(gncmod-customer_import gncmod-business-gnome gncmod-gnome-utils gncmod-app-utils
      gncmod-engine gnc-core-utils gnc-module gnc-qof ${GLIB2_LDFLAGS})
 
+TARGET_INCLUDE_DIRECTORIES(gncmod-bi_import
+  PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
+  PRIVATE ${CMAKE_SOURCE_DIR}/src/gnome-business
+)
+
 TARGET_COMPILE_DEFINITIONS(gncmod-customer_import PRIVATE -DG_LOG_DOMAIN=\"gnc.plugin.customer_import\")
 
 INSTALL(TARGETS gncmod-customer_import
