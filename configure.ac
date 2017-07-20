@@ -1781,11 +1781,10 @@ AC_CONFIG_FILES(
   src/tax/us/Makefile
   src/tax/us/test/Makefile
   src/test-core/Makefile
-  src/business/Makefile
-  src/business/business-gnome/Makefile
-  src/business/business-gnome/gtkbuilder/Makefile
-  src/business/business-gnome/gschemas/Makefile
-  src/business/business-gnome/ui/Makefile
+  src/gnome-business/Makefile
+  src/gnome-business/gtkbuilder/Makefile
+  src/gnome-business/gschemas/Makefile
+  src/gnome-business/ui/Makefile
   dnl # Stuff for bill/invoice import plugin
   src/plugins/Makefile
   src/plugins/bi_import/Makefile
@@ -1800,7 +1799,7 @@ AC_CONFIG_FILES(
   src/app-utils/migratable-prefs.xml
   src/gnome/gnucash.desktop.in
   dnl # GSettings schema files
-  src/business/business-gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in
+  src/gnome-business/gschemas/org.gnucash.dialogs.business.gschema.xml.in
   src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in
   src/gnome/gschemas/org.gnucash.dialogs.commodities.gschema.xml.in
   src/gnome/gschemas/org.gnucash.dialogs.gschema.xml.in

@@ -59,9 +59,9 @@
 #include <gnc-gdate-utils.h>
 
 // To open the invoices for editing
-#include "business/business-gnome/gnc-plugin-page-invoice.h"
-#include "business/business-gnome/dialog-invoice.h"
-#include "business/business-gnome/business-gnome-utils.h"
+#include "gnc-plugin-page-invoice.h"
+#include "dialog-invoice.h"
+#include "business-gnome-utils.h"
 
 // this helper macro takes a regexp match and fills the model
 #define FILL_IN_HELPER(match_name,column) \

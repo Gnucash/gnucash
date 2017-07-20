@@ -36,7 +36,7 @@ typedef struct gnc_report_window_s gnc_report_window;
 GtkWidget * gnc_report_window_default_params_editor(SCM options, SCM report);
 
 // called from multiple places
-// [business-gnome/dialog-invoice.c;gnome/window-register.c]; and
+// [gnome-business/dialog-invoice.c;gnome/window-register.c]; and
 // scm-exposed; 3-liner which calls gnc_main_window_open_report after handling busy-cursor.
 void       reportWindow(int id);
 gboolean   gnc_report_edit_options(SCM report);

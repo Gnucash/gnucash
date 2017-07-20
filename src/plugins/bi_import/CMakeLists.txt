@@ -33,6 +33,11 @@ TARGET_LINK_LIBRARIES(gncmod-bi_import
   gnc-qof
 )
 
+TARGET_INCLUDE_DIRECTORIES(gncmod-bi_import
+  PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
+  PRIVATE ${CMAKE_SOURCE_DIR}/src/gnome-business
+)
+
 TARGET_COMPILE_DEFINITIONS(gncmod-bi_import PRIVATE -DG_LOG_DOMAIN=\"gnc.plugin.bi-import\")
 
 INSTALL(TARGETS gncmod-bi_import
