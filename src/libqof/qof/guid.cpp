@@ -343,7 +343,7 @@ GUID::to_string () const noexcept
 }
 
 GUID
-GUID::from_string (std::string const & str) throw (guid_syntax_exception)
+GUID::from_string (std::string const & str)
 {
     try
     {
