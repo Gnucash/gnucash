@@ -53,10 +53,6 @@ eval `${top_srcdir}/src/gnc-test-env.pl \
   --gnc-module-dir ${top_builddir}/src/import-export/ofx \
   --gnc-module-dir ${top_builddir}/src/import-export/hbci \
   --gnc-module-dir ${top_builddir}/src/import-export/log-replay \
-  --gnc-module-dir ${top_builddir}/src/business/business-core \
-  --gnc-module-dir ${top_builddir}/src/business/business-core/file \
-  --gnc-module-dir ${top_builddir}/src/business/business-utils \
-  --gnc-module-dir ${top_builddir}/src/business/dialog-tax-table \
   --gnc-module-dir ${top_builddir}/src/business/business-gnome \
   --guile-load-dir ${top_builddir}/src/core-utils \
   --guile-load-dir ${top_builddir}/src/gnc-module \
@@ -67,13 +63,13 @@ eval `${top_srcdir}/src/gnc-test-env.pl \
   --guile-load-dir ${top_builddir}/src/gnome-utils \
   --guile-load-dir ${top_builddir}/src/report/report-system \
   --guile-load-dir ${top_builddir}/src/report/standard-reports \
+  --guile-load-dir ${top_builddir}/src/report/business-reports \
   --guile-load-dir ${top_builddir}/src/report/utility-reports \
   --guile-load-dir ${top_builddir}/src/report/locale-specific/us \
   --guile-load-dir ${top_builddir}/src/report/report-gnome \
   --guile-load-dir ${top_builddir}/src/report/stylesheets \
   --guile-load-dir ${top_builddir}/src/import-export/qif-import \
   --guile-load-dir ${top_builddir}/src/business/business-gnome \
-  --guile-load-dir ${top_builddir}/src/business/business-reports \
   --library-dir    ${top_builddir}/src/test-core \
   --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
