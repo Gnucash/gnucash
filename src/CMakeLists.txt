@@ -155,7 +155,6 @@ IF (WITH_GNUCASH)
   ADD_SUBDIRECTORY (debug)
   ADD_SUBDIRECTORY (doc)
   ADD_SUBDIRECTORY (gnome)
-  ADD_SUBDIRECTORY (gnome-business)
   ADD_SUBDIRECTORY (gnome-utils)
   ADD_SUBDIRECTORY (gnome-search)
   ADD_SUBDIRECTORY (html)
@@ -186,7 +185,7 @@ SET(src_EXTRA_DIST
 
 SET_LOCAL_DIST(src_DIST_local CMakeLists.txt Makefile.am ${src_EXTRA_DIST})
 
-SET(src_DIST ${src_DIST_local} ${app_utils_DIST} ${backend_DIST} ${bin_DIST} ${business_DIST} ${cmake_modules_DIST}
+SET(src_DIST ${src_DIST_local} ${app_utils_DIST} ${backend_DIST} ${bin_DIST} ${cmake_modules_DIST}
              ${core_utils_DIST} ${debug_DIST} ${doc_DIST} ${engine_DIST} ${gnc_module_DIST} ${gnome_DIST} ${gnome_search_DIST}
              ${gnome_utils_DIST} ${html_DIST} ${import_export_DIST} ${libqof_DIST} ${optional_DIST} ${plugins_DIST} ${pixmaps_DIST} ${python_DIST}
              ${quotes_DIST} ${register_DIST} ${report_DIST} ${scm_DIST} ${tax_DIST} ${test_core_DIST} PARENT_SCOPE)

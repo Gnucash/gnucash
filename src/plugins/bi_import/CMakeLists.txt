@@ -23,7 +23,6 @@ SET(bi_import_noinst_HEADERS
 ADD_LIBRARY(gncmod-bi_import ${bi_import_noinst_HEADERS} ${bi_import_SOURCES})
 
 TARGET_LINK_LIBRARIES(gncmod-bi_import
-  gncmod-business-gnome
   gncmod-gnome-utils
   gncmod-gnome-search
   gncmod-app-utils
@@ -31,11 +30,12 @@ TARGET_LINK_LIBRARIES(gncmod-bi_import
   gnc-core-utils
   gnc-module
   gnc-qof
+  gnc-gnome
 )
 
 TARGET_INCLUDE_DIRECTORIES(gncmod-bi_import
   PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
-  PRIVATE ${CMAKE_SOURCE_DIR}/src/gnome-business
+  PRIVATE ${CMAKE_SOURCE_DIR}/src/gnome
 )
 
 TARGET_COMPILE_DEFINITIONS(gncmod-bi_import PRIVATE -DG_LOG_DOMAIN=\"gnc.plugin.bi-import\")

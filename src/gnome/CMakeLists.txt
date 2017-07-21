@@ -8,13 +8,25 @@ SET (gnc_gnome_noinst_HEADERS
   assistant-hierarchy.h
   assistant-loan.h
   assistant-stock-split.h
+  business-options-gnome.h
+  business-urls.h
+  business-gnome-utils.h
+  dialog-billterms.h
+  dialog-choose-owner.h
+  dialog-customer.h
+  dialog-date-close.h
+  dialog-employee.h
   dialog-fincalc.h
   dialog-find-account.h
   dialog-find-transactions.h
   dialog-find-transactions2.h
   dialog-imap-editor.h
+  dialog-invoice.h
+  dialog-job.h
   dialog-lot-viewer.h
   dialog-new-user.h
+  dialog-order.h
+  dialog-payment.h
   dialog-print-check.h
   dialog-progress.h
   dialog-sx-editor.h
@@ -22,20 +34,25 @@ SET (gnc_gnome_noinst_HEADERS
   dialog-sx-from-trans.h
   dialog-sx-since-last-run.h
   dialog-trans-assoc.h
+  dialog-vendor.h
   gnc-budget-view.h
   gnc-plugin-account-tree.h
   gnc-plugin-basic-commands.h
   gnc-plugin-budget.h
+  gnc-plugin-business.h
   gnc-plugin-register.h
   gnc-plugin-register2.h
   gnc-plugin-page-account-tree.h
   gnc-plugin-page-budget.h
+  gnc-plugin-page-invoice.h
+  gnc-plugin-page-owner-tree.h
   gnc-plugin-page-sx-list.h
   gnc-plugin-page-register.h
   gnc-plugin-page-register2.h
   gnc-split-reg.h
   gnc-split-reg2.h
   reconcile-view.h
+  search-owner.h
   top-level.h
   window-reconcile.h
   window-reconcile2.h
@@ -55,14 +72,26 @@ SET (gnc_gnome_SOURCES
   assistant-hierarchy.c
   assistant-loan.c
   assistant-stock-split.c
+  business-options-gnome.c
+  business-urls.c
+  business-gnome-utils.c
+  dialog-billterms.c
+  dialog-choose-owner.c
   dialog-commodities.c
+  dialog-customer.c
+  dialog-date-close.c
+  dialog-employee.c
   dialog-fincalc.c
   dialog-find-account.c
   dialog-find-transactions.c
   dialog-find-transactions2.c
   dialog-imap-editor.c
+  dialog-invoice.c
+  dialog-job.c
   dialog-lot-viewer.c
   dialog-new-user.c
+  dialog-order.c
+  dialog-payment.c
   dialog-price-editor.c
   dialog-price-edit-db.c
   dialog-print-check.c
@@ -73,25 +102,33 @@ SET (gnc_gnome_SOURCES
   dialog-sx-since-last-run.c
   dialog-tax-info.c
   dialog-trans-assoc.c
+  dialog-vendor.c
   gnc-budget-view.c
   gnc-plugin-account-tree.c
   gnc-plugin-basic-commands.c
   gnc-plugin-budget.c
+  gnc-plugin-business.c
   gnc-plugin-register.c
   gnc-plugin-register2.c
   gnc-plugin-page-account-tree.c
   gnc-plugin-page-budget.c
+  gnc-plugin-page-invoice.c
+  gnc-plugin-page-owner-tree.c
   gnc-plugin-page-sx-list.c
   gnc-plugin-page-register.c
   gnc-plugin-page-register2.c
   gnc-split-reg.c
   gnc-split-reg2.c
   reconcile-view.c
+  search-owner.c
   top-level.c
   window-reconcile.c
   window-reconcile2.c
   window-autoclear.c
 )  
+
+SET_SOURCE_FILES_PROPERTIES (${gnc_gnome_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
+SET_SOURCE_FILES_PROPERTIES (business-options-gnome.c PROPERTIES OBJECT_DEPENDS ${SWIG_RUNTIME_H})
 
 IF (WIN32)
   SET (gnc_gnome_SOURCES ${gnc_gnome_SOURCES} ${CMAKE_SOURCE_DIR}/lib/libc/strfmon.c)
@@ -99,7 +136,7 @@ ENDIF(WIN32)
 
 ADD_LIBRARY (gnc-gnome ${gnc_gnome_SOURCES} ${gnc_gnome_noinst_HEADERS} ${SWIG_GNOME_C})
 TARGET_LINK_LIBRARIES(gnc-gnome gncmod-gnome-search gncmod-ledger-core gncmod-report-gnome gncmod-report-system
-    gncmod-register-gnome gncmod-register-core gncmod-engine ${GTK3_LDFLAGS} ${GTK_MAC_LDFLAGS})
+    gncmod-register-gnome gncmod-register-core gncmod-gnome-utils gncmod-engine ${GTK3_LDFLAGS} ${GTK_MAC_LDFLAGS})
 
 TARGET_COMPILE_DEFINITIONS (gnc-gnome PRIVATE -DG_LOG_DOMAIN=\"gnc.gui\" ${GTK_MAC_CFLAGS_OTHER})
 

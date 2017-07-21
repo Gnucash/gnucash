@@ -70,6 +70,11 @@ libgncmod_standard_reports_gnc_module_init(int refcount)
     {
         return FALSE;
     }
+    if (scm_c_eval_string("(use-modules (gnucash report business-reports))") ==
+            SCM_BOOL_F)
+    {
+        return FALSE;
+    }
     return TRUE;
 }
 

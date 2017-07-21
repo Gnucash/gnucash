@@ -18,7 +18,7 @@ noinst_HEADERS = \
 libgncmod_bi_import_la_LDFLAGS = -avoid-version
 
 libgncmod_bi_import_la_LIBADD = \
-  ${top_builddir}/src/gnome-business/libgncmod-business-gnome.la \
+  ${top_builddir}/src/gnome/libgnc-gnome.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
@@ -33,7 +33,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_builddir}/src \
   -I${top_srcdir}/src/gnome \
-  -I${top_srcdir}/src/gnome-business \
   -I${top_srcdir}/src/report/report-gnome \
   -I${top_srcdir}/src/gnome-search/ \
   -I${top_srcdir}/src/register/ledger-core \

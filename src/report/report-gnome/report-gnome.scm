@@ -111,6 +111,8 @@
     (gnc:make-menu gnc:menuname-utility (list gnc:menuname-reports)))
   (define tax-menu 
     (gnc:make-menu gnc:menuname-taxes (list gnc:menuname-reports)))
+  (define business-menu 
+    (gnc:make-menu gnc:menuname-business-reports (list gnc:menuname-reports)))
 
   (gnc-add-scm-extension 
    (gnc:make-menu-item
@@ -126,6 +128,7 @@
   (gnc-add-scm-extension asset-liability-menu)
   (gnc-add-scm-extension budget-menu)
   (gnc-add-scm-extension utility-menu)
+  (gnc-add-scm-extension business-menu)
 
   ;; run report-hook danglers
   (gnc:hook-run-danglers HOOK-REPORT)
