@@ -1,7 +1,3 @@
-ADD_SUBDIRECTORY(gschemas)
-ADD_SUBDIRECTORY(gtkbuilder)
-ADD_SUBDIRECTORY(ui)
-
 SET(business_gnome_SOURCES
   business-options-gnome.c
   business-urls.c
