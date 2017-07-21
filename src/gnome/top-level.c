@@ -29,9 +29,13 @@
 #include <stdlib.h>
 
 #include "TransLog.h"
+#include "business-options-gnome.h"
+#include "business-urls.h"
 #include "combocell.h"
 #include "dialog-account.h"
 #include "dialog-commodity.h"
+#include "dialog-invoice.h"
+#include "dialog-preferences.h"
 #include "dialog-options.h"
 #include "dialog-sx-editor.h"
 #include "dialog-transfer.h"
@@ -52,6 +56,7 @@
 #include "gnc-plugin-register.h" /* FIXME Remove this line*/
 #include "gnc-plugin-register2.h" /* FIXME Remove this line*/
 #include "gnc-plugin-budget.h"
+#include "gnc-plugin-business.h"
 #include "gnc-plugin-page-register.h"
 #include "gnc-plugin-page-register2.h"
 #include "gnc-plugin-manager.h" /* FIXME Remove this line*/
@@ -66,6 +71,8 @@
 #include "gnucash-sheet.h"
 #include "gnucash-style.h"
 #include "guile-util.h"
+#include "search-core-type.h"
+#include "search-owner.h"
 #include "top-level.h"
 #include "window-report.h"
 #include "gnc-window.h"
@@ -372,6 +379,12 @@ gnc_main_gui_init (void)
 
     gnc_ui_sx_initialize();
 
+    /* Register the Owner search type */
+    gnc_search_core_register_type (GNC_OWNER_MODULE_NAME,
+                                    (GNCSearchCoreNew) gnc_search_owner_new);
+    gnc_business_urls_initialize ();
+    gnc_business_options_gnome_initialize ();
+
     /* FIXME Remove this test code */
     gnc_plugin_manager_add_plugin (
         gnc_plugin_manager_get (), gnc_plugin_account_tree_new ());
@@ -385,6 +398,8 @@ gnc_main_gui_init (void)
         gnc_plugin_manager_get (), gnc_plugin_register_new ());
     gnc_plugin_manager_add_plugin (
         gnc_plugin_manager_get (), gnc_plugin_register2_new ());
+    gnc_plugin_manager_add_plugin (
+        gnc_plugin_manager_get (), gnc_plugin_business_new ());
     /* I'm not sure why the FIXME note says to remove this.  Maybe
        each module should be adding its own plugin to the manager?
        Anyway... Oh, maybe... nah */
@@ -401,7 +416,15 @@ gnc_main_gui_init (void)
                          gnc_save_all_state, NULL);
     gnc_hook_add_dangler(HOOK_BOOK_CLOSED,
                          (GFunc)gnc_reports_flush_global, NULL);
+    gnc_hook_add_dangler(HOOK_BOOK_OPENED,
+                         (GFunc)gnc_invoice_remind_bills_due_cb, NULL);
+    gnc_hook_add_dangler(HOOK_BOOK_OPENED,
+                         (GFunc)gnc_invoice_remind_invoices_due_cb, NULL);
 
+    /* Add to preferences under Business */
+    /* The parameters are; glade file, items to add from glade file - last being the dialog, preference tab name */
+    gnc_preferences_add_page("business-prefs.glade", "liststore_printinvoice,days_in_adj,cust_days_in_adj,business_prefs",
+                            _("Business"));
 
     LEAVE(" ");
     return;

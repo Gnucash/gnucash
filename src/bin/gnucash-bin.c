@@ -509,7 +509,6 @@ load_gnucash_modules()
         { "gnucash/report/utility-reports", 0, FALSE },
         { "gnucash/report/locale-specific/us", 0, FALSE },
         { "gnucash/report/report-gnome", 0, FALSE },
-        { "gnucash/business-gnome", 0, TRUE },
         { "gnucash/gtkmm", 0, TRUE },
         { "gnucash/python", 0, TRUE },
         { "gnucash/plugins/bi_import", 0, TRUE},

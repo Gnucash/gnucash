@@ -1781,7 +1781,6 @@ AC_CONFIG_FILES(
   src/tax/us/Makefile
   src/tax/us/test/Makefile
   src/test-core/Makefile
-  src/gnome-business/Makefile
   dnl # Stuff for bill/invoice import plugin
   src/plugins/Makefile
   src/plugins/bi_import/Makefile
