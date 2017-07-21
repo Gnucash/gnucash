@@ -15,7 +15,7 @@ IF (${CMAKE_VERSION} VERSION_GREATER 3.1)
   SET(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
 ENDIF()
 
-SET(schema-targets business-gnome-gschema csv-exp-gschema csv-imp-gschema
+SET(schema-targets csv-exp-gschema csv-imp-gschema
     generic-import-gschema gnome-gschema gnome-utils-gschema ofx-gschema qif-imp-gschema)
 
 IF (WITH_AQBANKING)

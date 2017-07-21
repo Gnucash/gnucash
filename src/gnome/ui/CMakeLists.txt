@@ -12,10 +12,13 @@ SET(gnome_UI
       gnc-plugin-account-tree-ui.xml
       gnc-plugin-basic-commands-ui.xml
       gnc-plugin-budget-ui.xml
+      gnc-plugin-business-ui.xml
       gnc-plugin-file-history-ui.xml
       gnc-plugin-page-account-tree2-ui.xml
       gnc-plugin-page-account-tree-ui.xml
       gnc-plugin-page-budget-ui.xml
+      gnc-plugin-page-invoice-ui.xml
+      gnc-plugin-page-owner-tree-ui.xml
       gnc-plugin-page-register2-ui.xml
       gnc-plugin-page-register-ui.xml
       gnc-plugin-page-sx-list2-ui.xml

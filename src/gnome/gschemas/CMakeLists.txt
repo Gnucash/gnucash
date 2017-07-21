@@ -1,6 +1,7 @@
 
 SET(gnome_GSCHEMA
   org.gnucash.dialogs.gschema.xml
+  org.gnucash.dialogs.business.gschema.xml
   org.gnucash.dialogs.commodities.gschema.xml
   org.gnucash.dialogs.checkprinting.gschema.xml
   org.gnucash.dialogs.reconcile.gschema.xml

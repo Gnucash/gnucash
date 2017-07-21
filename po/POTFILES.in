@@ -210,6 +210,7 @@ src/gnome/gnc-plugin-register2.c
 src/gnome/gnc-plugin-register.c
 src/gnome/gnc-split-reg2.c
 src/gnome/gnc-split-reg.c
+[type: gettext/gsettings]src/gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in
 [type: gettext/gsettings]src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in
 [type: gettext/gsettings]src/gnome/gschemas/org.gnucash.dialogs.commodities.gschema.xml.in.in
 [type: gettext/gsettings]src/gnome/gschemas/org.gnucash.dialogs.gschema.xml.in.in
@@ -223,18 +224,30 @@ src/gnome/gtkbuilder/assistant-acct-period.glade
 src/gnome/gtkbuilder/assistant-hierarchy.glade
 src/gnome/gtkbuilder/assistant-loan.glade
 src/gnome/gtkbuilder/assistant-stock-split.glade
+src/gnome/gtkbuilder/business-options-gnome.glade
+src/gnome/gtkbuilder/business-prefs.glade
+src/gnome/gtkbuilder/dialog-billterms.glade
+src/gnome/gtkbuilder/dialog-choose-owner.glade
 src/gnome/gtkbuilder/dialog-commodities.glade
+src/gnome/gtkbuilder/dialog-customer.glade
+src/gnome/gtkbuilder/dialog-date-close.glade
+src/gnome/gtkbuilder/dialog-employee.glade
 src/gnome/gtkbuilder/dialog-fincalc.glade
 src/gnome/gtkbuilder/dialog-find-account.glade
 src/gnome/gtkbuilder/dialog-imap-editor.glade
+src/gnome/gtkbuilder/dialog-invoice.glade
+src/gnome/gtkbuilder/dialog-job.glade
 src/gnome/gtkbuilder/dialog-lot-viewer.glade
 src/gnome/gtkbuilder/dialog-new-user.glade
+src/gnome/gtkbuilder/dialog-order.glade
+src/gnome/gtkbuilder/dialog-payment.glade
 src/gnome/gtkbuilder/dialog-price.glade
 src/gnome/gtkbuilder/dialog-print-check.glade
 src/gnome/gtkbuilder/dialog-progress.glade
 src/gnome/gtkbuilder/dialog-sx.glade
 src/gnome/gtkbuilder/dialog-tax-info.glade
 src/gnome/gtkbuilder/dialog-trans-assoc.glade
+src/gnome/gtkbuilder/dialog-vendor.glade
 src/gnome/gtkbuilder/gnc-plugin-page-budget.glade
 src/gnome/gtkbuilder/gnc-plugin-page-register2.glade
 src/gnome/gtkbuilder/gnc-plugin-page-register.glade
@@ -263,19 +276,6 @@ src/gnome-business/gncmod-business-gnome.c
 src/gnome-business/gnc-plugin-business.c
 src/gnome-business/gnc-plugin-page-invoice.c
 src/gnome-business/gnc-plugin-page-owner-tree.c
-[type: gettext/gsettings]src/gnome-business/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in
-src/gnome-business/gtkbuilder/business-options-gnome.glade
-src/gnome-business/gtkbuilder/business-prefs.glade
-src/gnome-business/gtkbuilder/dialog-billterms.glade
-src/gnome-business/gtkbuilder/dialog-choose-owner.glade
-src/gnome-business/gtkbuilder/dialog-customer.glade
-src/gnome-business/gtkbuilder/dialog-date-close.glade
-src/gnome-business/gtkbuilder/dialog-employee.glade
-src/gnome-business/gtkbuilder/dialog-invoice.glade
-src/gnome-business/gtkbuilder/dialog-job.glade
-src/gnome-business/gtkbuilder/dialog-order.glade
-src/gnome-business/gtkbuilder/dialog-payment.glade
-src/gnome-business/gtkbuilder/dialog-vendor.glade
 src/gnome-business/search-owner.c
 src/gnome-search/dialog-search.c
 src/gnome-search/dialog-search.glade

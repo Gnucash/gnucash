@@ -1,6 +1,7 @@
 uidir = $(GNC_UI_DIR)
 ui_DATA = \
 	gnc-plugin-budget-ui.xml \
+	gnc-plugin-business-ui.xml \
 	gnc-plugin-page-budget-ui.xml \
 	gnc-plugin-account-tree-ui.xml \
 	gnc-plugin-basic-commands-ui.xml \
@@ -10,6 +11,8 @@ ui_DATA = \
 	gnc-plugin-register-ui.xml \
 	gnc-plugin-register2-ui.xml \
 	gnc-plugin-register22-ui.xml \
+	gnc-plugin-page-invoice-ui.xml \
+	gnc-plugin-page-owner-tree-ui.xml \
 	gnc-plugin-page-register-ui.xml \
 	gnc-plugin-page-register2-ui.xml \
         gnc-plugin-page-sx-list-ui.xml \
