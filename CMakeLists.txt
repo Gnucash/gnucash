@@ -95,7 +95,15 @@ SET(BINDIR_BUILD     ${CMAKE_BINARY_DIR}/bin)
 
 SET(SHELL_FROM_ENV $ENV{SHELL})
 SET(SHELL /bin/bash)
-IF (WIN32)
+#We need to distinguish between MinGW.org and MinGW-w64:
+
+IF (MINGW)
+  STRING(FIND ${CMAKE_C_COMPILER} "msys2" IS_MSYS2)
+  IF(${IS_MSYS2} GREATER_EQUAL 0)
+    SET(MINGW64 ON)
+  ENDIF()
+ENDIF(MINGW)
+IF (MINGW AND NOT MINGW64) # /bin/bash will work fine on MinGW
   SET(SHELL ${CMAKE_PREFIX_PATH}/mingw/msys/1.0/bin/bash.exe)
 ENDIF()
 IF (SHELL_FROM_ENV) # Replacing this with IF ($ENV{SHELL}) doesn't work.
