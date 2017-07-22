@@ -2100,7 +2100,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
     /* The default_gain_loss_account_widget needs to be refreshed if any
        changes have been made via account maintenance, if it exists and
        if the book currency widget has a selection */
-    if (book_currency_data->default_gain_loss_account_widget &&
+/*    if (book_currency_data->default_gain_loss_account_widget &&
         gtk_combo_box_get_active_iter(
             GTK_COMBO_BOX(book_currency_data->book_currency_widget), &iter))
     {
@@ -2109,7 +2109,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
                                     book_currency_data->book_currency_widget));
         gnc_set_default_gain_loss_account_widget(commodity);
         gtk_widget_show_all(book_currency_data->book_currency_vbox);
-    }
+    } */
 }
 
 /* gnc_options_dialog_new:

@@ -6,7 +6,7 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">12</property>
-    <property name="default_height">800</property>
+    <property name="default_height">550</property>
     <signal name="cancel" handler="on_cancel" swapped="no"/>
     <signal name="close" handler="on_finish" swapped="no"/>
     <signal name="prepare" handler="on_prepare" swapped="no"/>
