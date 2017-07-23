@@ -234,7 +234,6 @@ gnc_plugin_page_sx_list_init (GncPluginPageSxList *plugin_page)
 {
     GtkActionGroup *action_group;
     GncPluginPage *parent;
-    GncPluginPageSxListClass *klass = GNC_PLUGIN_PAGE_SX_LIST_GET_CLASS (plugin_page);
 
     /* Init parent declared variables */
     parent = GNC_PLUGIN_PAGE(plugin_page);

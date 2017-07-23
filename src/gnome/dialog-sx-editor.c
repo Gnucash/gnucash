@@ -722,11 +722,8 @@ check_transaction_splits (Transaction *txn, gpointer data)
     for ( ; splitList; splitList = splitList->next )
     {
         gnc_commodity *base_cmdty = NULL;
-        txnCreditDebitSums *tcds;
         Split *s = (Split*)splitList->data;
 
-        tcds = (txnCreditDebitSums*)g_hash_table_lookup (sd->txns,
-                                                         (gpointer)txn);
         if (sd->tcds == NULL)
         {
             sd->tcds = tcds_new ();

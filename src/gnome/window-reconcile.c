@@ -984,11 +984,8 @@ gnc_reconcile_window_button_press_cb (GtkWidget *widget,
                                       RecnWindow *recnData)
 {
     GNCQueryView      *qview = GNC_QUERY_VIEW(widget);
-    GtkTreeModel      *model;
     GtkTreeSelection  *selection;
     GtkTreePath       *path;
-
-    model = gtk_tree_view_get_model(GTK_TREE_VIEW(qview));
 
     if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
     {

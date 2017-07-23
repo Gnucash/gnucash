@@ -238,10 +238,7 @@ get_account_info (FindAccountDialog *facc_dialog)
 static void
 filter_button_cb (GtkButton *button, FindAccountDialog *facc_dialog)
 {
-    GtkTreeModel *model;
-    const gchar  *filter_text = gtk_entry_get_text (GTK_ENTRY(facc_dialog->filter_text_entry));
-
-    model = gtk_tree_view_get_model (GTK_TREE_VIEW(facc_dialog->view));
+    GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW(facc_dialog->view));
 
     // Clear the list store
     gtk_list_store_clear (GTK_LIST_STORE(model));

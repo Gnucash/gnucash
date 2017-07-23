@@ -198,7 +198,6 @@ set_reports_view_and_model(CustomReportDialog *crd)
 {
     GtkCellRenderer *renderer;
     GtkTreeModel *model;
-    gint colnum;
 
     crd->namerenderer = gtk_cell_renderer_text_new();
     g_signal_connect (G_OBJECT (crd->namerenderer), "edited",
@@ -226,7 +225,7 @@ set_reports_view_and_model(CustomReportDialog *crd)
 
     renderer = gtk_cell_renderer_pixbuf_new();
     g_object_set (G_OBJECT (renderer), "icon-name", "edit-delete", NULL);
-    colnum = gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (crd->reportview), -1,
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (crd->reportview), -1,
              "D", renderer,
              NULL);
     crd->delcol = gtk_tree_view_get_column (GTK_TREE_VIEW (crd->reportview), VIEW_COL_DELETE);
