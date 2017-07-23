@@ -800,6 +800,8 @@ gnc_split_register_get_associate_entry (VirtualLocation virt_loc,
     return s;
 }
 
+#if 0
+// this code is not used yet
 static char
 gnc_split_register_get_associate_value (SplitRegister *reg,
                                    VirtualLocation virt_loc)
@@ -812,6 +814,7 @@ gnc_split_register_get_associate_value (SplitRegister *reg,
 
     return gnc_recn_cell_get_flag (cell);
 }
+#endif
 
 static const char *
 gnc_split_register_get_type_entry (VirtualLocation virt_loc,

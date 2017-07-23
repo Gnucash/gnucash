@@ -163,12 +163,14 @@ static GtkActionEntry gnc_plugin_page_budget_actions [] =
 static guint gnc_plugin_page_budget_n_actions =
     G_N_ELEMENTS (gnc_plugin_page_budget_actions);
 
+#if 0 
 static const gchar *actions_requiring_account[] =
 {
     "OpenAccountAction",
     "OpenSubaccountsAction",
     NULL
 };
+#endif
 
 /** Short labels for use on the toolbar buttons. */
 static action_toolbar_labels toolbar_labels[] =
