@@ -639,7 +639,8 @@ gbv_treeview_resized_cb(GtkWidget* widget, GtkAllocation* allocation, GncBudgetV
         {
             col_width = gtk_tree_view_column_get_width(tree_view_col);
             totals_view_col = gtk_tree_view_get_column(priv->totals_tree_view, j);
-            gtk_tree_view_column_set_fixed_width(totals_view_col, col_width);
+            if(GTK_IS_TREE_VIEW_COLUMN(totals_view_col))
+                gtk_tree_view_column_set_fixed_width(totals_view_col, col_width);
             j++;
         }
     }
