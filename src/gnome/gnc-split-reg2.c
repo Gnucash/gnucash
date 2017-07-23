@@ -216,11 +216,12 @@ static
 void
 gsr2_setup_table (GNCSplitReg2 *gsr)
 {
-    GncTreeModelSplitReg *model;
+//    GncTreeModelSplitReg *model;
 
     ENTER("gsr=%p", gsr);
 
-    model = gnc_ledger_display2_get_split_model_register (gsr->ledger);
+// This dose not do any thing
+//    model = gnc_ledger_display2_get_split_model_register (gsr->ledger);
 
     LEAVE(" ");
 }
@@ -229,7 +230,6 @@ static
 void
 gsr2_create_table (GNCSplitReg2 *gsr)
 {
-    GtkWidget *register_widget;
     GncTreeViewSplitReg *view;
     GncTreeModelSplitReg *model;
     GtkTreeModel *s_model;
@@ -243,7 +243,6 @@ gsr2_create_table (GNCSplitReg2 *gsr)
     GKeyFile *state_file = gnc_state_get_current();
     const GncGUID * guid;
     Account * account;
-    const gchar *sort_string;
 
     account = gnc_ledger_display2_leader (gsr->ledger);
     guid = xaccAccountGetGUID (account);
@@ -565,9 +564,6 @@ gsr2_redraw_all_cb (GncTreeViewSplitReg *view, gpointer user_data)
         GNCPriceDB *pricedb = gnc_pricedb_get_db (book);
         gnc_commodity *commodity = xaccAccountGetCommodity (leader);
         gnc_commodity *currency = gnc_default_currency ();
-        gnc_numeric currency_value =
-            gnc_pricedb_convert_balance_latest_price(pricedb, amount,
-                                                     commodity, currency);
         print_info = gnc_commodity_print_info (currency, TRUE);
         xaccSPrintAmount (string, amount, print_info);
         gnc_set_label_color (gsr->value_label, amount);
@@ -663,7 +659,6 @@ gsr2_create_balancing_transaction (QofBook *book, Account *account,
 static void
 gnc_split_reg2_sort_changed_cb (GtkTreeSortable *sortable, gpointer user_data)
 {
-    Query *query;
     GNCSplitReg2 *gsr = user_data;
     GncTreeViewSplitReg *view;
     GncTreeModelSplitReg *model;
@@ -678,8 +673,6 @@ gnc_split_reg2_sort_changed_cb (GtkTreeSortable *sortable, gpointer user_data)
 
     view = gnc_ledger_display2_get_split_view_register (gsr->ledger);
     model = gnc_ledger_display2_get_split_model_register (gsr->ledger);
-
-    query = gnc_ledger_display2_get_query (gsr->ledger);
 
     sort_depth = gnc_tree_view_reg_get_selected_row_depth (view);
     if (sort_depth != 0)
@@ -966,7 +959,6 @@ void
 gnc_split_reg2_determine_read_only (GNCSplitReg2 *gsr) //this works
 {
     dialog_args *args = g_malloc (sizeof (dialog_args));
-    GncTreeViewSplitReg *view;
 
     if (qof_book_is_readonly (gnc_get_current_book()))
     {

@@ -425,7 +425,6 @@ gchar *
 gnc_tree_util_split_reg_get_date_help (GDate *date)
 {
     char string[1024];
-    struct tm tm;
 
     if (g_date_valid (date))
     {
@@ -824,20 +823,19 @@ gnc_tree_util_split_reg_get_debcred_entry (GncTreeViewSplitReg *view,
 void
 gnc_tree_util_split_reg_set_value_for (GncTreeViewSplitReg *view, Transaction *trans, Split *split, gnc_numeric input, gboolean force)
 {
-    GncTreeModelSplitReg *model;
+//    GncTreeModelSplitReg *model;
     GtkWidget *window;
-    Account *anchor;
-    Account *acct = xaccSplitGetAccount (split);
-    gnc_commodity *currency;
-    gnc_numeric value, amount, rate;
+//    Account *anchor;
+//    Account *acct = xaccSplitGetAccount (split);
+//    gnc_commodity *currency;
 
     ENTER("set_value_for trans %p and split %p input %s force %d", trans, split, gnc_numeric_to_string (input), force);
 
-    currency = xaccTransGetCurrency (trans);
+//    currency = xaccTransGetCurrency (trans);
 
-    model = gnc_tree_view_split_reg_get_model_from_view (view);
+//    model = gnc_tree_view_split_reg_get_model_from_view (view);
 
-    anchor = gnc_tree_model_split_reg_get_anchor (model);
+//    anchor = gnc_tree_model_split_reg_get_anchor (model);
 
     if (gnc_numeric_zero_p (input))
     {

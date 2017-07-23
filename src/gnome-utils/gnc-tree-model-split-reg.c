@@ -366,8 +366,6 @@ gnc_tree_model_split_reg_prefs_changed (gpointer prefs, gchar *pref, gpointer us
 static void
 gnc_tree_model_split_reg_init (GncTreeModelSplitReg *model)
 {
-    GncTreeModelSplitRegPrivate *priv;
-
     ENTER("model %p", model);
     while (model->stamp == 0)
     {
@@ -391,13 +389,9 @@ gnc_tree_model_split_reg_init (GncTreeModelSplitReg *model)
 static void
 gnc_tree_model_split_reg_finalize (GObject *object)
 {
-    GncTreeModelSplitReg *model;
-
     ENTER("model split reg %p", object);
     g_return_if_fail (object != NULL);
     g_return_if_fail (GNC_IS_TREE_MODEL_SPLIT_REG (object));
-
-    model = GNC_TREE_MODEL_SPLIT_REG (object);
 
     if (G_OBJECT_CLASS (parent_class)->finalize)
         G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -616,8 +610,6 @@ void
 gnc_tree_model_split_reg_load (GncTreeModelSplitReg *model, GList *slist, Account *default_account)
 {
     GncTreeModelSplitRegPrivate *priv;
-    GList *node;
-    gint rows = 0;
 
     ENTER("#### Load ModelSplitReg = %p and slist length is %d ####", model, g_list_length (slist));
 
@@ -1521,7 +1513,6 @@ gnc_tree_model_split_reg_get_value (GtkTreeModel *tree_model,
     GncTreeModelSplitReg *model = GNC_TREE_MODEL_SPLIT_REG (tree_model);
     const GncGUID *guid;
     GList *tnode;
-    gint depth, *indices;
 
     g_return_if_fail (GNC_IS_TREE_MODEL_SPLIT_REG (model));
 
@@ -2116,7 +2107,6 @@ GtkTreePath *
 gnc_tree_model_split_reg_get_path_to_split_and_trans (GncTreeModelSplitReg *model, Split *split, Transaction *trans)
 {
     GtkTreePath *path;
-    GList *slist;
     gint tpos, spos, number;
 
     ENTER("transaction is %p, split is %p", trans, split);
@@ -2160,7 +2150,6 @@ gnc_tree_model_split_reg_get_path_to_split_and_trans (GncTreeModelSplitReg *mode
 
     if (split != NULL)
     {
-        slist = xaccTransGetSplitList (trans);
         /* Level 3 */
         spos = xaccTransGetSplitIndex (trans, split);
         if (spos == -1)
@@ -3022,7 +3011,6 @@ gnc_tree_model_split_reg_update_account_list (GncTreeModelSplitReg *model)
     Account *acc;
     GtkTreeIter iter;
     GList *accts, *accts_cpy, *ptr;
-    gboolean valid;
     const gchar *name;
     gchar *fname;
     gint i;
