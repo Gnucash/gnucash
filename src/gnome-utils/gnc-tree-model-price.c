@@ -508,7 +508,7 @@ gnc_tree_model_price_get_iter (GtkTreeModel *tree_model,
     gnc_commodity_namespace *name_space;
     gnc_commodity *commodity = NULL;
     GNCPrice *price;
-    GList *ns_list, *cm_list, *price_list;
+    GList *ns_list, *cm_list;
     guint i, depth;
 
     g_return_val_if_fail (GNC_IS_TREE_MODEL_PRICE (tree_model), FALSE);
