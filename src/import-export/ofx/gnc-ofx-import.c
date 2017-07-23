@@ -328,7 +328,7 @@ static Account *gnc_ofx_new_account(const char* name,
 /* LibOFX has a daylight time handling bug,
  * https://sourceforge.net/p/libofx/bugs/39/, which causes it to adjust the
  * timestamp for daylight time even when daylight time is not in
- * effect. HAvE_OFX_BUG_39 reflects the result of checking for this bug during
+ * effect. HAVE_OFX_BUG_39 reflects the result of checking for this bug during
  * configuration, and fix_ofx_bug_39() corrects for it.
  */
 static time64
@@ -338,7 +338,7 @@ fix_ofx_bug_39 (time64 t)
     struct tm stm;
     gnc_localtime_r(&t, &stm);
     if (daylight && !stm.tm_isdst)
-      t += 3600;
+        t += 3600;
 #endif
     return t;
 }
