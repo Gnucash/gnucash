@@ -563,9 +563,6 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
         QofBook *book = gnc_account_get_book (leader);
         GNCPriceDB *pricedb = gnc_pricedb_get_db (book);
         gnc_commodity *currency = gnc_default_currency ();
-        gnc_numeric currency_value =
-            gnc_pricedb_convert_balance_latest_price(pricedb, amount,
-                                                     commodity, currency);
         print_info = gnc_commodity_print_info (currency, TRUE);
         xaccSPrintAmount (string, amount, print_info);
         gnc_set_label_color (gsr->value_label, amount);

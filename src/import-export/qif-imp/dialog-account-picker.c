@@ -332,7 +332,6 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry)
     SCM orig_acct    = scm_call_1(gnc_name, map_entry);
     int response;
     GtkBuilder *builder;
-    GtkWidget *button;
 
     wind = g_new0(QIFAccountPickerDialog, 1);
 
@@ -394,8 +393,6 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry)
     g_signal_connect_after(wind->dialog, "map",
                            G_CALLBACK(gnc_ui_qif_account_picker_map_cb),
                            wind);
-
-    button =  GTK_WIDGET(gtk_builder_get_object (builder, "newbutton"));
 
     /* this is to get the checkmarks set up right.. it will get called
      * again after the window is mapped. */

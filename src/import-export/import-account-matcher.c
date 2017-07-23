@@ -239,7 +239,7 @@ Account * gnc_import_select_account(GtkWidget *parent,
     Account * retval = NULL;
     const gchar *retval_name = NULL;
     GtkBuilder *builder;
-    GtkWidget * online_id_label, *button, *box, *pbox;
+    GtkWidget * online_id_label, *box, *pbox;
     gchar account_description_text[ACCOUNT_DESCRIPTION_MAX_SIZE] = "";
     gboolean ok_pressed_retval = FALSE;
 
@@ -312,7 +312,6 @@ Account * gnc_import_select_account(GtkWidget *parent,
 
         picker->account_tree_sw = GTK_WIDGET(gtk_builder_get_object (builder, "account_tree_sw"));
         online_id_label = GTK_WIDGET(gtk_builder_get_object (builder, "online_id_label"));
-        button = GTK_WIDGET(gtk_builder_get_object (builder, "newbutton"));
 
         //printf("gnc_import_select_account(): Fin get widget\n");
 

@@ -723,14 +723,12 @@ static void
 gdc_reconfig(GncDenseCal *dcal)
 {
     GtkWidget *widget;
-    GdkWindow *window;
     GtkAllocation alloc;
 
     if (dcal->surface)
         cairo_surface_destroy (dcal->surface);
 
     widget = GTK_WIDGET(dcal->cal_drawing_area);
-    window = gtk_widget_get_window (widget);
     gtk_widget_get_allocation (widget, &alloc);
     dcal->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                                 alloc.width,

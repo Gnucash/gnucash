@@ -2886,15 +2886,15 @@ static void
 gnc_plot_size_option_set_select_method(GNCOption *option, gboolean set_buttons)
 {
     GList* widget_list;
-    GtkWidget *px_button, *p_button, *px_widget, *p_widget;
+    GtkWidget *px_widget, *p_widget;
     GtkWidget *widget;
 
     widget = gnc_option_get_gtk_widget (option);
 
     widget_list = gtk_container_get_children(GTK_CONTAINER(widget));
-    px_button = g_list_nth_data(widget_list, 0);
+    // px_button item 0
     px_widget = g_list_nth_data(widget_list, 1);
-    p_button = g_list_nth_data(widget_list, 2);
+    // p_button item 2
     p_widget = g_list_nth_data(widget_list, 3);
     g_list_free(widget_list);
 
@@ -3995,14 +3995,14 @@ static SCM
 gnc_option_get_ui_value_plot_size (GNCOption *option, GtkWidget *widget)
 {
     GList* widget_list;
-    GtkWidget *px_button, *p_button, *px_widget, *p_widget;
+    GtkWidget *px_button, *px_widget, *p_widget;
     gdouble d_value;
     SCM type, val;
 
     widget_list = gtk_container_get_children(GTK_CONTAINER(widget));
     px_button = g_list_nth_data(widget_list, 0);
     px_widget = g_list_nth_data(widget_list, 1);
-    p_button = g_list_nth_data(widget_list, 2);
+    // p_button item 2
     p_widget = g_list_nth_data(widget_list, 3);
     g_list_free(widget_list);
 
