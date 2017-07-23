@@ -120,10 +120,12 @@ static void gppsl_row_activated_cb(GtkTreeView *tree_view, GtkTreePath *path, Gt
 
 static void gnc_plugin_page_sx_list_cmd_new(GtkAction *action, GncPluginPageSxList *page);
 static void gnc_plugin_page_sx_list_cmd_edit(GtkAction *action, GncPluginPageSxList *page);
+#ifdef REGISTER2_ENABLED
 /*################## Added for Reg2 #################*/
 static void gnc_plugin_page_sx_list_cmd_new2(GtkAction *action, GncPluginPageSxList *page);
 static void gnc_plugin_page_sx_list_cmd_edit2(GtkAction *action, GncPluginPageSxList *page);
 /*################## Added for Reg2 #################*/
+#endif
 static void gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page);
 
 /* Command callbacks */
@@ -607,6 +609,7 @@ gnc_plugin_page_sx_list_cmd_new(GtkAction *action, GncPluginPageSxList *page)
     gnc_ui_scheduled_xaction_editor_dialog_create(new_sx, new_sx_flag);
 }
 
+#ifdef REGISTER2_ENABLED
 /*################## Added for Reg2 #################*/
 static void
 gnc_plugin_page_sx_list_cmd_new2 (GtkAction *action, GncPluginPageSxList *page)
@@ -630,6 +633,7 @@ gnc_plugin_page_sx_list_cmd_new2 (GtkAction *action, GncPluginPageSxList *page)
     gnc_ui_scheduled_xaction_editor_dialog_create2 (new_sx, new_sx_flag);
 }
 /*################## Added for Reg2 #################*/
+#endif
 
 static void
 _edit_sx(gpointer data, gpointer user_data)
@@ -637,6 +641,7 @@ _edit_sx(gpointer data, gpointer user_data)
     gnc_ui_scheduled_xaction_editor_dialog_create((SchedXaction*)data, FALSE);
 }
 
+#ifdef REGISTER2_ENABLED
 /*################## Added for Reg2 #################*/
 static void
 _edit_sx2 (gpointer data, gpointer user_data)
@@ -644,6 +649,7 @@ _edit_sx2 (gpointer data, gpointer user_data)
     gnc_ui_scheduled_xaction_editor_dialog_create2 ((SchedXaction*)data, FALSE);
 }
 /*################## Added for Reg2 #################*/
+#endif
 
 static SchedXaction*
 _argument_reorder_fn(GtkTreePath* list_path_data, GncTreeViewSxList* user_tree_view)
@@ -677,6 +683,7 @@ gnc_plugin_page_sx_list_cmd_edit(GtkAction *action, GncPluginPageSxList *page)
     g_list_free(selected_paths);
 }
 
+#ifdef REGISTER2_ENABLED
 /*################## Added for Reg2 #################*/
 static void
 gnc_plugin_page_sx_list_cmd_edit2 (GtkAction *action, GncPluginPageSxList *page)
@@ -703,7 +710,7 @@ gnc_plugin_page_sx_list_cmd_edit2 (GtkAction *action, GncPluginPageSxList *page)
     g_list_free (selected_paths);
 }
 /*################## Added for Reg2 #################*/
-
+#endif
 
 static void
 gppsl_row_activated_cb(GtkTreeView *tree_view,
