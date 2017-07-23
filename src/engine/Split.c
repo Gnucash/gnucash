@@ -1568,9 +1568,6 @@ xaccSplitOrderDateOnly (const Split *sa, const Split *sb)
 static gboolean
 get_corr_account_split(const Split *sa, const Split **retval)
 {
-
-    const Split *current_split;
-
     *retval = NULL;
     g_return_val_if_fail(sa, FALSE);
 

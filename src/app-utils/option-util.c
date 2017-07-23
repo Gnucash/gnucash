@@ -1726,7 +1726,6 @@ gnc_commit_option(GNCOption *option)
         char *section, *name;
         const gchar *message;
         const gchar *format = _("There is a problem with option %s:%s.\n%s");
-        char * str;
 
         /* Second element is error message */
         oops = SCM_CADR(result);
@@ -2619,8 +2618,6 @@ gnc_option_db_set_string_option(GNCOptionDB *odb,
 char *
 gnc_option_date_option_get_subtype(GNCOption *option)
 {
-    SCM value;
-
     initialize_getters();
 
     return gnc_scm_call_1_symbol_to_string(getters.date_option_subtype, option->guile_option);
@@ -2636,8 +2633,6 @@ gnc_option_date_option_get_subtype(GNCOption *option)
 char *
 gnc_date_option_value_get_type (SCM option_value)
 {
-    SCM value;
-
     initialize_getters();
 
     return gnc_scm_call_1_symbol_to_string (getters.date_option_value_type, option_value);
@@ -2687,8 +2682,6 @@ gnc_date_option_value_get_relative (SCM option_value)
 char *
 gnc_plot_size_option_value_get_type (SCM option_value)
 {
-    SCM value;
-
     initialize_getters();
 
     return gnc_scm_call_1_symbol_to_string (getters.plot_size_option_value_type, option_value);

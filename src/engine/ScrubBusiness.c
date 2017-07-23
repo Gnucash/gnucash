@@ -51,7 +51,6 @@ static void
 gncScrubInvoiceState (GNCLot *lot)
 {
     SplitList *ls_iter = NULL;
-    Transaction *txn = NULL; // ll_txn = "Lot Link Transaction"
     GncInvoice *invoice = NULL;
     GncInvoice *lot_invoice = gncInvoiceGetInvoiceFromLot (lot);
 

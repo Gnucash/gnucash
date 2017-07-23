@@ -1339,7 +1339,6 @@ void
 xaccAccountScrubKvp (Account *account)
 {
     GValue v = G_VALUE_INIT;
-    const gchar *str;
     gchar *str2;
 
     if (!account) return;

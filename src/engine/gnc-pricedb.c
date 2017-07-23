@@ -1539,7 +1539,6 @@ gnc_pricedb_lookup_latest(GNCPriceDB *db,
 {
     GList *price_list;
     GNCPrice *result;
-    GHashTable *currency_hash;
 
     if (!db || !commodity || !currency) return NULL;
     ENTER ("db=%p commodity=%p currency=%p", db, commodity, currency);
@@ -2029,7 +2028,6 @@ gnc_pricedb_lookup_at_time(GNCPriceDB *db,
 {
     GList *price_list;
     GList *item = NULL;
-    GHashTable *currency_hash;
 
     if (!db || !c || !currency) return NULL;
     ENTER ("db=%p commodity=%p currency=%p", db, c, currency);
@@ -2064,7 +2062,6 @@ lookup_nearest_in_time(GNCPriceDB *db,
     GNCPrice *next_price = NULL;
     GNCPrice *result = NULL;
     GList *item = NULL;
-    GHashTable *currency_hash;
 
     if (!db || !c || !currency) return NULL;
     ENTER ("db=%p commodity=%p currency=%p", db, c, currency);
@@ -2185,7 +2182,6 @@ gnc_pricedb_lookup_latest_before (GNCPriceDB *db,
     /*  GNCPrice *next_price = NULL;
         GNCPrice *result = NULL;*/
     GList *item = NULL;
-    GHashTable *currency_hash;
     Timespec price_time;
 
     if (!db || !c || !currency) return NULL;
