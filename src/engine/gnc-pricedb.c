@@ -1555,20 +1555,6 @@ gnc_pricedb_lookup_latest(GNCPriceDB *db,
     return result;
 }
 
-
-static void
-lookup_latest(gpointer key, gpointer val, gpointer user_data)
-{
-    //gnc_commodity *currency = (gnc_commodity *)key;
-    GList *price_list = (GList *)val;
-    GList **return_list = (GList **)user_data;
-
-    if (!price_list) return;
-
-    /* the latest price is the first in list */
-    gnc_price_list_insert(return_list, price_list->data, FALSE);
-}
-
 typedef struct
 {
     GList **list;

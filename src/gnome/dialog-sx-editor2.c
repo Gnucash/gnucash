@@ -155,7 +155,6 @@ static void gnc_sxed_freq_changed (GncFrequency *gf, gpointer ud);
 static void sxed_excal_update_adapt_cb (GtkWidget *o, gpointer ud);
 static void gnc_sxed_update_cal (GncSxEditorDialog2 *sxed);
 static void on_sx_check_toggled_cb (GtkWidget *togglebutton, gpointer user_data);
-//void on_sx_check_toggled_cb (GtkWidget *togglebutton, gpointer user_data);
 static void gnc_sxed_reg_check_close (GncSxEditorDialog2 *sxed);
 static gboolean sxed_delete_event (GtkWidget *widget, GdkEvent *event, gpointer ud);
 static gboolean sxed_confirmed_cancel (GncSxEditorDialog2 *sxed);

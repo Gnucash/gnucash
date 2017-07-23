@@ -101,11 +101,6 @@ typedef struct LotPrivate
 
 /* ============================================================= */
 
-static void gnc_lot_set_invoice (GNCLot* lot, GncGUID *guid);
-static GncGUID *gnc_lot_get_invoice (GNCLot* lot);
-
-/* ============================================================= */
-
 /* GObject Initialization */
 G_DEFINE_TYPE(GNCLot, gnc_lot, QOF_TYPE_INSTANCE)
 

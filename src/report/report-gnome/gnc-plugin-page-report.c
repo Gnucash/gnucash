@@ -1591,6 +1591,7 @@ gnc_plugin_page_report_save_cb( GtkAction *action, GncPluginPageReport *report )
          */
         save_func = scm_c_eval_string("gnc:report-to-template-update");
         rpt_id = scm_call_1(save_func, priv->cur_report);
+        (void)rpt_id;
     }
     else
     {
@@ -1656,12 +1657,6 @@ gnc_plugin_page_report_export_cb( GtkAction *action, GncPluginPageReport *report
 
     g_free(filepath);
     return;
-}
-
-static void
-error_handler(const char *str)
-{
-    PWARN("Report Error: %s", str);
 }
 
 static void

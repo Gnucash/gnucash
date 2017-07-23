@@ -878,10 +878,6 @@ gnc_prefs_connect_radio_button (GtkRadioButton *button)
 
     gnc_prefs_split_widget_name (gtk_buildable_get_name(GTK_BUILDABLE(button)), &group, &pref);
 
-//    active = gnc_prefs_get_bool (group, pref);
-//    DEBUG(" Checkbox %s/%s initially %sactive", group, pref, active ? "" : "in");
-//    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), active);
-
     gnc_prefs_bind (group, pref, G_OBJECT (button), "active");
 
     g_free (group);
@@ -905,10 +901,6 @@ gnc_prefs_connect_check_button (GtkCheckButton *button)
     g_return_if_fail(GTK_IS_CHECK_BUTTON(button));
 
     gnc_prefs_split_widget_name (gtk_buildable_get_name(GTK_BUILDABLE(button)), &group, &pref);
-
-//    active = gnc_prefs_get_bool (group, pref);
-//    DEBUG(" Checkbox %s/%s initially %sactive", group, pref, active ? "" : "in");
-//    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), active);
 
     gnc_prefs_bind (group, pref, G_OBJECT (button), "active");
 
@@ -934,10 +926,6 @@ gnc_prefs_connect_spin_button (GtkSpinButton *spin)
 
     gnc_prefs_split_widget_name (gtk_buildable_get_name(GTK_BUILDABLE(spin)), &group, &pref);
 
-//    value = gnc_prefs_get_float (group, pref);
-//    gtk_spin_button_set_value(spin, value);
-//    DEBUG(" Spin button %s/%s has initial value %f", group, pref, value);
-
     gnc_prefs_bind (group, pref, G_OBJECT (spin), "value");
 
     g_free (group);
@@ -960,10 +948,6 @@ gnc_prefs_connect_combo_box (GtkComboBox *box)
     g_return_if_fail(GTK_IS_COMBO_BOX(box));
 
     gnc_prefs_split_widget_name (gtk_buildable_get_name(GTK_BUILDABLE(box)), &group, &pref);
-
-//    active = gnc_prefs_get_int(group, pref);
-//    gtk_combo_box_set_active(GTK_COMBO_BOX(box), active);
-//    DEBUG(" Combo box %s/%s set to item %d", group, pref, active);
 
     gnc_prefs_bind (group, pref, G_OBJECT (box), "active");
 
@@ -1012,11 +996,6 @@ gnc_prefs_connect_entry (GtkEntry *entry)
     g_return_if_fail(GTK_IS_ENTRY(entry));
 
     gnc_prefs_split_widget_name (gtk_buildable_get_name(GTK_BUILDABLE(entry)), &group, &pref);
-
-//    text = gnc_prefs_get_string(group, pref);
-//    gtk_entry_set_text(GTK_ENTRY(entry), text ? text : "");
-//    DEBUG(" Entry %s/%s set to '%s'", group, pref, text ? text : "(null)");
-//    g_free(text);
 
     gnc_prefs_bind (group, pref, G_OBJECT (entry), "text");
 
