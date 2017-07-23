@@ -420,7 +420,7 @@ update to latest  darwin])
       AC_DEFINE(GNC_PLATFORM_COCOA, 1, [Cocoa/Nexstep/GnuStep framework])
       AC_MSG_RESULT(yes)
       AC_DEFINE(GDK_QUARTZ,,[Using GDK Quartz (not X11)])
-      PKG_CHECK_MODULES([GTK_MAC], gtk-mac-integration-gtk2,
+      PKG_CHECK_MODULES([GTK_MAC], gtk-mac-integration-gtk3,
                         [_gtk_mac=yes], [_gtk_mac=no])
       if test "x$_gtk_mac" = xyes; then
         GTK_MAC_LIBS="${GTK_MAC_LIBS} -lobjc -framework Cocoa"
