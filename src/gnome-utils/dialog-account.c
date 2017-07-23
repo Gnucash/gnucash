@@ -667,20 +667,10 @@ verify_children_compatible (AccountWindow *aw)
     gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
     gtk_label_set_selectable (GTK_LABEL (label), TRUE);
     gnc_label_set_alignment (label, 0.0, 0.0);
-    {
-        GtkCssProvider *provider = gtk_css_provider_new();
-        const gchar *label_css = {
-                                  "label {\n"
-                                  " font-size:large;\n"
-                                  " font-weight: bold;\n"
-                                  "}\n"
-                                 };
-        gtk_css_provider_load_from_data (provider, label_css, strlen(label_css), NULL);
-        gtk_style_context_add_provider (gtk_widget_get_style_context(GTK_WIDGET(label)),
-                                   GTK_STYLE_PROVIDER (provider),
-                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-        g_object_unref (provider);
-    }
+
+    /* make label large */
+    gnc_widget_set_style_context (GTK_WIDGET(label), "primary_label_size");
+
     gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
     /* secondary label */

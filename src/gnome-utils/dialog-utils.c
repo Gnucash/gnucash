@@ -50,9 +50,6 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 #define GNC_PREF_LAST_GEOMETRY "last-geometry"
 
-const gchar *css_default_color = "* { color: currentColor }";
-const gchar *css_red_color     = "* { color: rgb(75%, 0%, 0%) }";
-
 /********************************************************************\
  * gnc_set_label_color                                              *
  *   sets the color of the label given the value                    *
@@ -65,30 +62,16 @@ void
 gnc_set_label_color(GtkWidget *label, gnc_numeric value)
 {
     gboolean deficit;
-    GtkStyleContext *stylecontext;
-    GtkCssProvider *provider;
 
     if (!gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED))
         return;
 
-    provider = GTK_CSS_PROVIDER(g_object_get_data (G_OBJECT (label), "custom-provider"));
-
-    if (!provider)
-    {
-        provider = gtk_css_provider_new();
-        gtk_css_provider_load_from_data (provider, css_default_color, -1, NULL);
-        stylecontext = gtk_widget_get_style_context (label);
-        gtk_style_context_add_provider (stylecontext, GTK_STYLE_PROVIDER (provider),
-                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-        g_object_set_data (G_OBJECT (label), "custom-provider", provider);
-    }
-
     deficit = gnc_numeric_negative_p (value);
 
     if (deficit)
-        gtk_css_provider_load_from_data (provider, css_red_color, -1, NULL);
+        gnc_widget_set_style_context (GTK_WIDGET(label), "css_red_color");
     else
-        gtk_css_provider_load_from_data (provider, css_default_color, -1, NULL);
+        gnc_widget_set_style_context (GTK_WIDGET(label), "css_default_color");
 }
 
 
