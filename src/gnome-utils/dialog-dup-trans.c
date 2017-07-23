@@ -121,7 +121,6 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
     {
         GtkWidget *date_edit;
         GtkWidget *hbox;
-        GtkWidget *label;
 
         date_edit = gnc_date_edit_new (date, FALSE, FALSE);
         gnc_date_activates_default(GNC_DATE_EDIT(date_edit), TRUE);

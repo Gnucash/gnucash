@@ -3844,7 +3844,7 @@ gnc_main_window_switch_page (GtkNotebook *notebook,
     GncMainWindowPrivate *priv;
     GtkWidget *child;
     GncPluginPage *page;
-    gboolean immutable, visible;
+    gboolean visible;
 
     ENTER("Notebook %p, page, %p, index %d, window %p",
           notebook, notebook_page, pos, window);

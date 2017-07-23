@@ -453,12 +453,8 @@ gctt_rebuild_menu (GncCombott *combott, GtkTreeModel *model)
 static void
 gctt_refresh_menu (GncCombott *combott, GtkTreeModel *model)
 {
-    GncCombottPrivate *priv;
-
     g_return_if_fail (GNC_IS_COMBOTT (combott));
     g_return_if_fail (model == NULL || GTK_IS_TREE_MODEL (model));
-
-    priv = GNC_COMBOTT_GET_PRIVATE (combott);
 
     gctt_rebuild_menu(combott, model);
 }
@@ -565,7 +561,6 @@ which_tooltip_cb (GtkWidget  *widget, gint x, gint y, gboolean keyboard_mode, Gt
         gtk_tree_model_get( priv->model, &priv->active_iter, priv->tip_col, &text, -1 );
         if(g_strcmp0(text, "") && (text != NULL))
         {
-            gchar *label = "";
             gtk_tooltip_set_text (tooltip, text);
             g_free(text);
             return TRUE;
@@ -699,7 +694,6 @@ gnc_combott_set_active (GncCombott *combott, gint index)
     GtkTreeIter iter;
     gboolean valid = TRUE;
     gint active = 1;
-    gint num = 1;
 
     g_return_if_fail (GNC_IS_COMBOTT (combott));
     g_return_if_fail (index >= -1);

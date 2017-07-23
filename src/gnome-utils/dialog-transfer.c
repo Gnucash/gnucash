@@ -1065,7 +1065,6 @@ gnc_xfer_to_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
 {
     XferDialog *xferData = data;
     gnc_numeric price_value;
-    Account *account;
 
     gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->to_amount_edit));
     price_value = gnc_xfer_dialog_compute_price_value(xferData);
@@ -1799,7 +1798,6 @@ gnc_xfer_dialog_close_cb(GtkDialog *dialog, gpointer data)
 void
 gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData)
 {
-    GNCPrice *prc;
     PriceReq pr;
     SCM quotes_func;
     SCM book_scm;

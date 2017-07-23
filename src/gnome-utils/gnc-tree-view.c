@@ -678,7 +678,6 @@ gnc_tree_view_update_visibility (GtkTreeViewColumn *column,
                                  GncTreeView *view)
 {
     GncTreeViewPrivate *priv;
-    gchar *name, *key;
     gboolean visible;
 
     g_return_if_fail(GTK_IS_TREE_VIEW_COLUMN(column));
@@ -741,7 +740,7 @@ gnc_tree_view_get_sort_column (GncTreeView *view)
     GtkTreeModel *s_model;
     GtkTreeViewColumn *column;
     GtkSortType order;
-    gint model_column, current;
+    gint current;
     const gchar *name;
 
     s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
@@ -1627,7 +1626,6 @@ gnc_tree_view_column_properties (GncTreeView *view,
     GtkTreeModel *s_model;
     gboolean visible;
     int width = 0;
-    gchar *key;
 
     /* Set data used by other functions */
     if (pref_name)
