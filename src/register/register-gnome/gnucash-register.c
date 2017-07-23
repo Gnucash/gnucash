@@ -556,11 +556,11 @@ GtkWidget *
 gnucash_register_new (Table *table, gchar *state_section)
 {
     GnucashRegister *reg;
-    GtkWidget *header;
+//    GtkWidget *header;
     GtkWidget *widget;
-    GtkWidget *sheet;
-    GtkWidget *scrollbar;
-    GtkWidget *box;
+//    GtkWidget *sheet;
+//    GtkWidget *scrollbar;
+//    GtkWidget *box;
 
     widget = gnucash_register_create_widget(table);
     reg = GNUCASH_REGISTER(widget);
