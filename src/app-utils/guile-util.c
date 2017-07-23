@@ -57,9 +57,10 @@
 #include "guile-util.h"
 #include "guile-mappings.h"
 
-/* This static indicates the debugging module this .o belongs to.  */
-static QofLogModule log_module = GNC_MOD_GUILE;
+#define UNUSED_VAR     __attribute__ ((unused))
 
+/* This static indicates the debugging module this .o belongs to.  */
+static QofLogModule UNUSED_VAR log_module = GNC_MOD_GUILE;
 
 struct _setters
 {

@@ -39,8 +39,10 @@
 #define IMPORT_FULL_PATH     "FullPath"
 #define IMPORT_ACCOUNT       "Account"
 
+#define UNUSED_VAR     __attribute__ ((unused))
+
 /* This static indicates the debugging module that this .o belongs to.  */
-static QofLogModule log_module = G_LOG_DOMAIN;
+static QofLogModule UNUSED_VAR log_module = G_LOG_DOMAIN;
 
 /**************************************************
  * account_imap_destroy

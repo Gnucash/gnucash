@@ -126,7 +126,9 @@ struct _invoice_select_window
     GncOwner	owner_def;
 };
 
-static QofLogModule log_module = G_LOG_DOMAIN; //G_LOG_BUSINESS;
+#define UNUSED_VAR     __attribute__ ((unused))
+
+static QofLogModule UNUSED_VAR log_module = G_LOG_DOMAIN; //G_LOG_BUSINESS;
 
 /** This data structure does double duty.  It is used to maintain
  *  information for the "New Invoice" dialog, and it is also used to
