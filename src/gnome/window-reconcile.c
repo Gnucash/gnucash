@@ -694,7 +694,6 @@ startRecnWindow(GtkWidget *parent, Account *account,
     gboolean auto_interest_xfer_option;
     GNCPrintAmountInfo print_info;
     gnc_numeric ending;
-    gboolean has_uniform_currency;
     char *title;
     int result;
 
@@ -1445,7 +1444,6 @@ gnc_get_reconcile_info (Account *account,
     gboolean always_today;
     GDate date;
     time64 today;
-    struct tm tm;
 
     g_date_clear(&date, 1);
 

@@ -643,7 +643,6 @@ gnc_reconcile_view_set_list ( GNCReconcileView  *view, gboolean reconcile)
     GNCQueryView      *qview = GNC_QUERY_VIEW(view);
     GtkTreeSelection  *selection;
     GtkTreeModel      *model;
-    GtkTreeIter        iter;
     gpointer           entry;
     gboolean           toggled;
     GList             *node;
@@ -691,7 +690,6 @@ gnc_reconcile_view_set_toggle (GNCReconcileView  *view)
     GNCQueryView      *qview = GNC_QUERY_VIEW(view);
     GtkTreeSelection  *selection;
     GtkTreeModel      *model;
-    GtkTreeIter        iter;
     gboolean           toggled;
     GList             *node;
     GList             *list_of_rows;
@@ -732,11 +730,7 @@ gnc_reconcile_view_key_press_cb (GtkWidget *widget, GdkEventKey *event,
                             gpointer user_data)
 {
     GNCReconcileView  *view = GNC_RECONCILE_VIEW(user_data);
-    GNCQueryView      *qview = GNC_QUERY_VIEW(widget);
-    GtkTreeModel      *model;
-    GtkTreeIter        iter;
-    gpointer           entry, pointer;
-    gboolean           valid, toggle;
+    gboolean           toggle;
 
     switch (event->keyval)
     {

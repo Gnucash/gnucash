@@ -171,8 +171,6 @@ gnc_budget_view_new(GncBudget *budget, AccountFilterDialog* fd)
 {
     GncBudgetView *budget_view;
     GncBudgetViewPrivate *priv;
-    gchar* label;
-    const GList *item;
 
     g_return_val_if_fail(GNC_IS_BUDGET(budget), NULL);
     ENTER(" ");
@@ -254,7 +252,6 @@ static void
 gnc_budget_view_finalize(GObject *object)
 {
     GncBudgetView *view;
-    GncBudgetViewPrivate *priv;
 
     ENTER("object %p", object);
     view = GNC_BUDGET_VIEW(object);
@@ -443,7 +440,6 @@ void
 gnc_budget_view_save(GncBudgetView *view, GKeyFile *key_file, const gchar *group_name)
 {
     GncBudgetViewPrivate *priv;
-    char guid_str[GUID_ENCODING_LENGTH+1];
 
     g_return_if_fail(view != NULL);
     g_return_if_fail(key_file != NULL);
@@ -653,8 +649,6 @@ static void
 gbv_row_activated_cb(GtkTreeView *treeview, GtkTreePath *path,
                      GtkTreeViewColumn *col, GncBudgetView *view)
 {
-    GtkWidget *window;
-    GncPluginPage *new_page;
     Account *account;
 
     g_return_if_fail(GNC_IS_BUDGET_VIEW(view));
@@ -910,9 +904,6 @@ totals_col_source(GtkTreeViewColumn *col, GtkCellRenderer *cell,
     gint period_num;
     gnc_numeric value; // used to assist in adding and subtracting
     gchar amtbuff[100]; //FIXME: overkill, where's the #define?
-    
-    gint width; // FIXME: VARIABLE NOT NEEDED?
-
     gint i;
     gint num_top_accounts;
 
@@ -1099,7 +1090,6 @@ gbv_col_edited_cb(GtkCellRendererText* cell, gchar* path_string, gchar* new_text
 {
     GncBudgetView *view;
     GncBudgetViewPrivate *priv;
-    const EventInfo* ei;
 
     view = GNC_BUDGET_VIEW(user_data);
     priv = GNC_BUDGET_VIEW_GET_PRIVATE(view);

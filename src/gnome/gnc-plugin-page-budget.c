@@ -347,7 +347,6 @@ static void
 gnc_plugin_page_budget_finalize (GObject *object)
 {
     GncPluginPageBudget *page;
-    GncPluginPageBudgetPrivate *priv;
 
     ENTER("object %p", object);
     page = GNC_PLUGIN_PAGE_BUDGET (object);
@@ -410,10 +409,6 @@ gnc_plugin_page_budget_create_widget (GncPluginPage *plugin_page)
 {
     GncPluginPageBudget *page;
     GncPluginPageBudgetPrivate *priv;
-    GtkTreeSelection *selection;
-    GtkTreeView *tree_view;
-    GtkWidget *scrolled_window;
-    const gchar *budget_guid_str;
 
     ENTER("page %p", plugin_page);
     page = GNC_PLUGIN_PAGE_BUDGET (plugin_page);

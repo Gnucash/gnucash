@@ -1090,7 +1090,6 @@ gsr_default_execassociated_handler (GNCSplitReg *gsr, gpointer data)
     SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
     Transaction *trans;
     Split *split = gnc_split_register_get_current_split (reg);
-    GtkWidget *dialog;
     const char *uri;
     const char *run_uri;
     gchar *uri_scheme;
