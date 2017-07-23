@@ -549,7 +549,6 @@ gnc_preferences_build_page (gpointer data,
     GtkNotebook *notebook;
     addition *add_in;
     struct copy_data copydata;
-    gint rows, cols;
     gchar **widgetname;
     gint i;
 
@@ -613,7 +612,6 @@ gnc_preferences_build_page (gpointer data,
     if (!existing_content)
     {
         /* No existing content with this name.  Create a blank page */
-        rows = 0;
         existing_content = gtk_grid_new();
         gtk_container_set_border_width(GTK_CONTAINER(existing_content), 6);
         label = gtk_label_new(add_in->tabname);
@@ -713,7 +711,6 @@ static void
 gnc_prefs_connect_font_button (GtkFontButton *fb)
 {
     gchar *group, *pref;
-    gchar *font;
 
     g_return_if_fail(GTK_IS_FONT_BUTTON(fb));
 
@@ -876,7 +873,6 @@ static void
 gnc_prefs_connect_radio_button (GtkRadioButton *button)
 {
     gchar *group, *pref;
-    gboolean active;
 
     g_return_if_fail(GTK_IS_RADIO_BUTTON(button));
 
@@ -905,7 +901,6 @@ static void
 gnc_prefs_connect_check_button (GtkCheckButton *button)
 {
     gchar *group, *pref;
-    gboolean active;
 
     g_return_if_fail(GTK_IS_CHECK_BUTTON(button));
 
@@ -934,7 +929,6 @@ static void
 gnc_prefs_connect_spin_button (GtkSpinButton *spin)
 {
     gchar *group, *pref;
-    gdouble value;
 
     g_return_if_fail(GTK_IS_SPIN_BUTTON(spin));
 
@@ -962,7 +956,6 @@ static void
 gnc_prefs_connect_combo_box (GtkComboBox *box)
 {
     gchar *group, *pref;
-    gint active;
 
     g_return_if_fail(GTK_IS_COMBO_BOX(box));
 
@@ -989,9 +982,7 @@ gnc_prefs_connect_combo_box (GtkComboBox *box)
 static void
 gnc_prefs_connect_currency_edit (GNCCurrencyEdit *gce, const gchar *boxname )
 {
-    gnc_commodity *currency;
     gchar *group, *pref;
-    gchar *mnemonic;
 
     g_return_if_fail(GNC_IS_CURRENCY_EDIT(gce));
 
@@ -1017,7 +1008,6 @@ static void
 gnc_prefs_connect_entry (GtkEntry *entry)
 {
     gchar *group, *pref;
-    gchar *text;
 
     g_return_if_fail(GTK_IS_ENTRY(entry));
 
@@ -1046,7 +1036,6 @@ static void
 gnc_prefs_connect_period_select (GncPeriodSelect *period, const gchar *boxname )
 {
     gchar *group, *pref;
-    gchar *mnemonic;
 
     g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
 
@@ -1070,7 +1059,6 @@ static void
 gnc_prefs_connect_date_edit (GNCDateEdit *gde , const gchar *boxname )
 {
     gchar *group, *pref;
-    gchar *mnemonic;
 
     g_return_if_fail(GNC_IS_DATE_EDIT(gde));
 
@@ -1244,7 +1232,6 @@ gnc_preferences_dialog_create(void)
     gnc_commodity *locale_currency;
     const gchar *currency_name;
     QofBook *book;
-    gint64 month, day;
     GDate fy_end;
     gboolean date_is_valid = FALSE;
 

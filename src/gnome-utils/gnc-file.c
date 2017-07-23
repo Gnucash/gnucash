@@ -950,7 +950,6 @@ RESTART:
             QofBook *book = qof_session_get_book (new_session);
             gchar *msg = gnc_features_test_unknown (book);
             Account *template_root = gnc_book_get_template_root (book);
-            GList *child = NULL;
 
             if (msg)
             {

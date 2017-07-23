@@ -181,7 +181,7 @@ gnc_dialog_query_view_new (GList *param_list, Query *q)
 {
     GtkBuilder  *builder;
     DialogQueryView *dqv;
-    GtkWidget *result_hbox, *close, *scrollWin, *frame, *but_hbox;
+    GtkWidget *result_hbox, *close, *scrollWin, *frame;
     GList *node;
 
     dqv = g_new0 (DialogQueryView, 1);

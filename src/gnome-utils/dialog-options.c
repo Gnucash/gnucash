@@ -2093,7 +2093,6 @@ component_close_handler (gpointer data)
 static void
 refresh_handler (GHashTable *changes, gpointer user_data)
 {
-    GNCOptionWin *retval = user_data;
     gnc_commodity *commodity = NULL;
     GtkTreeIter iter;
 
@@ -3604,7 +3603,6 @@ gnc_option_set_ui_value_currency_accounting (GNCOption *option,
             else
             {
                 GtkWidget *button = NULL;
-                int i;
                 gpointer val;
 
                 switch (index)

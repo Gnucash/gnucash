@@ -893,7 +893,6 @@ create_children (GNCDateEdit *gde)
     GtkWidget *frame;
     GtkWidget *hbox;
     GtkWidget *arrow;
-    GtkComboBox  *combo;
     GtkTreeStore *store;
     GtkCellRenderer *cell;
 
@@ -1170,7 +1169,6 @@ time64
 gnc_date_edit_get_date (GNCDateEdit *gde)
 {
     struct tm tm;
-    time64 retval;
 
     g_return_val_if_fail (gde != NULL, 0);
     g_return_val_if_fail (GNC_IS_DATE_EDIT (gde), 0);

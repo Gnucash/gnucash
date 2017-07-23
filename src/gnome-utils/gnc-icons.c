@@ -64,7 +64,6 @@ void
 gnc_load_app_icons (void)
 {
     GtkIconTheme *icon_theme = gtk_icon_theme_get_default ();
-    gchar *file;
     const gchar *default_path;
     gchar* pkgdatadir = gnc_path_get_pkgdatadir ();
     gchar* datadir = gnc_path_get_datadir ();

@@ -418,11 +418,7 @@ gnc_query_view_init_view (GNCQueryView *qview)
 static void
 gnc_query_view_class_init (GNCQueryViewClass *klass)
 {
-    GtkWidgetClass       *widget_class;
-    GtkTreeViewClass     *view_class;
-
-    widget_class = (GtkWidgetClass*) klass;
-    view_class =   (GtkTreeViewClass*) klass;
+    GtkWidgetClass *widget_class = (GtkWidgetClass*) klass;
 
     parent_class = g_type_class_peek (GTK_TYPE_TREE_VIEW);
 
@@ -474,7 +470,6 @@ gnc_query_view_select_row_cb (GtkTreeSelection *selection, gpointer user_data)
 {
     GNCQueryView   *qview = GNC_QUERY_VIEW (gtk_tree_selection_get_tree_view (selection));
     GtkTreeModel   *model;
-    GtkTreeIter     iter;
     gint            number_of_rows;
     gpointer        entry = NULL;
     GList          *node;
@@ -687,8 +682,6 @@ void
 gnc_query_view_refresh (GNCQueryView *qview)
 {
     GtkTreeModel     *model;
-    GtkTreeIter       iter;
-    GtkTreeSelection *selection;
     GList            *old_entry;
 
     g_return_if_fail (qview != NULL);

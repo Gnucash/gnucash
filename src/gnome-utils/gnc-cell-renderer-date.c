@@ -134,7 +134,6 @@ gcrd_init (GncCellRendererDate *date)
 	GncCellRendererPopup *popup;
 	GtkWidget                *frame;
 	GtkWidget                *vbox;
-	GtkWidget                *bbox;
 	GtkWidget                *button;
 
 	popup = GNC_CELL_RENDERER_POPUP (date);
@@ -312,7 +311,6 @@ gcrd_show (GncCellRendererPopup *cell,
 	gint                     year;
 	gint                     month;
 	gint                     day;
-	gint                     index;
 	const gchar             *text;
 
 	if (parent_class->show_popup) {
@@ -342,7 +340,6 @@ gcrd_show (GncCellRendererPopup *cell,
 
 	gtk_calendar_select_day (GTK_CALENDAR (date->calendar), day);
 	gtk_calendar_mark_day (GTK_CALENDAR (date->calendar), day);
-	
 }
 
 GtkCellRenderer *

@@ -147,8 +147,6 @@ gnc_search_callback_button_execute (GNCSearchCallbackButton *cb,
 {
     GNCQueryView     *qview = GNC_QUERY_VIEW(sw->result_view);
     GtkTreeSelection *selection;
-    GtkTreeModel     *model;
-    GtkTreeIter       iter;
 
     // Sanity check
     g_assert(qview);
@@ -188,7 +186,6 @@ gnc_search_dialog_result_clicked (GtkButton *button, GNCSearchWindow *sw)
 static void
 gnc_search_dialog_select_buttons_enable (GNCSearchWindow *sw, gint selected)
 {
-    gint i;
     gboolean enable, read_only;
     GList  *blist;
 
