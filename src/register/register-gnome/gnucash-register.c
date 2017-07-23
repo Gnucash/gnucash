@@ -407,7 +407,6 @@ static void
 gnucash_register_configure (GnucashSheet *sheet, gchar * state_section)
 {
     GNCHeaderWidths widths;
-    GnucashRegister *greg;
     Table *table;
     GList *node;
     gchar *key;

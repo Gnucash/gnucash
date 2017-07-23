@@ -658,7 +658,6 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
     SCM dirty_report = scm_c_eval_string("gnc:report-set-dirty?!");
     const gchar *old_name;
     gchar *new_name;
-    gchar *new_name_escaped;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REPORT(data));
     report = GNC_PLUGIN_PAGE_REPORT(data);

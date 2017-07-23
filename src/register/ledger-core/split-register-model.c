@@ -603,7 +603,6 @@ gnc_split_register_get_fg_color_internal (VirtualLocation virt_loc,
     const guint32 red_color = color_table[COLOR_NEGATIVE];
     guint32 fg_color;
     const char * cell_name;
-    gboolean is_current;
     gnc_numeric value;
     Split *split;
 

@@ -31,7 +31,6 @@ static const char *KEY_ASSOC_INCOME_ACCOUNT = "ofx/associated-income-account";
 
 Account *gnc_ofx_kvp_get_assoc_account(const Account* investment_account)
 {
-    Account *result = NULL;
     GncGUID *income_guid= NULL;
     g_assert(investment_account);
     qof_instance_get (QOF_INSTANCE (investment_account),

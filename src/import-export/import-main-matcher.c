@@ -875,7 +875,6 @@ void gnc_gen_trans_list_add_trans_with_ref_id(GNCImportMainMatcher *gui, Transac
     GtkTreeModel *model;
     GtkTreeIter iter;
     GNCImportMatchInfo *selected_match;
-    GncGUID *pending_match_guid;
     gboolean match_selected_manually;
     g_assert (gui);
     g_assert (trans);
