@@ -600,9 +600,6 @@ gnc_plugin_page_register2_new_common (GNCLedgerDisplay2 *ledger)
     GncPluginPageRegister2Private *priv;
     GncPluginPage *plugin_page;
 
-    GncTreeModelSplitReg *model; 
-    GtkTreeView *tv; 
-
     GNCSplitReg2 *gsr;
 
     const GList *item;
@@ -610,7 +607,6 @@ gnc_plugin_page_register2_new_common (GNCLedgerDisplay2 *ledger)
     gchar *label;
     gchar *label_color;
     QofQuery *q;
-    Account *account;
 
     /* Is there an existing page? */
     gsr = gnc_ledger_display2_get_user_data (ledger);
@@ -789,13 +785,11 @@ static void
 gnc_plugin_page_register2_finalize (GObject *object)
 {
     GncPluginPageRegister2 *page;
-    GncPluginPageRegister2Private *priv;
-
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER2 (object));
 
     ENTER("object %p", object);
     page = GNC_PLUGIN_PAGE_REGISTER2 (object);
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (page);
+
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER2 (page));
 
     G_OBJECT_CLASS (parent_class)->finalize (object);
     LEAVE(" ");
@@ -1079,7 +1073,6 @@ gnc_plugin_page_register2_create_widget (GncPluginPage *plugin_page)
     GncTreeModelSplitReg *model;
     Account *acct;
     gchar **filter;
-    gchar *order;
     int filter_changed = 0;
 
     ENTER("page %p", plugin_page);
@@ -1434,7 +1427,6 @@ gnc_plugin_page_register2_restore_edit_menu (GncPluginPage *page,
         GKeyFile *key_file,
         const gchar *group_name)
 {
-    GncPluginPageRegister2Private *priv;
     GtkAction *action;
     GError *error = NULL;
     gchar *style_name;
@@ -1443,7 +1435,6 @@ gnc_plugin_page_register2_restore_edit_menu (GncPluginPage *page,
     gboolean show_extra_dates;
 
     ENTER(" ");
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (page);
 
     /* Convert the style name to an index */
     style_name = g_key_file_get_string (key_file, group_name,
@@ -1749,14 +1740,12 @@ void
 gnc_plugin_page_register2_set_filter (GncPluginPage *plugin_page, const gchar *filter )
 {
     GncPluginPageRegister2Private *priv;
-    GNCLedgerDisplay2Type ledger_type;
     GNCLedgerDisplay2 *ld;
     Account *leader;
     gchar *default_filter;
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
     ld = priv->ledger;
-    ledger_type = gnc_ledger_display2_type (ld);
     leader = gnc_ledger_display2_leader (ld);
 
     if (leader != NULL)
@@ -1968,10 +1957,9 @@ gnc_plugin_page_register2_filter_time2dmy (time64 raw_time)
 {
     struct tm * timeinfo;
     gchar date_string[11];
-    gint i;
 
     timeinfo = gnc_localtime (&raw_time);
-    i = strftime (date_string, 11, "%d-%m-%Y", timeinfo);
+    strftime (date_string, 11, "%d-%m-%Y", timeinfo);
     PINFO("Date string is %s", date_string);
 
     gnc_tm_free (timeinfo);
@@ -2093,7 +2081,6 @@ static void
 get_filter_times (GncPluginPageRegister2 *page)
 {
     GncPluginPageRegister2Private *priv;
-    GtkWidget *button, *today, *gde;
     time64 time_val;
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (page);
@@ -2642,7 +2629,7 @@ gnc_plugin_page_register2_cmd_print_check (GtkAction *action,
     }
     else if (ledger_type == LD2_GL && model->type == SEARCH_LEDGER2)
     {
-        Account *common_acct = NULL, *account;
+        Account *common_acct = NULL;
         splits = qof_query_run (gnc_ledger_display2_get_query (priv->ledger));
         /* Make sure each split is from the same account */
         for (item = splits; item; item = g_list_next (item))
@@ -2700,15 +2687,11 @@ static void
 gnc_plugin_page_register2_cmd_cut (GtkAction *action,
                                   GncPluginPageRegister2 *page) //this works
 {
-    GncPluginPageRegister2Private *priv;
-    GncTreeViewSplitReg *view;
     GtkWidget *window, *widget;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2 (page));
 
     ENTER("(action %p, page %p)", action, page);
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (page);
-    view = gnc_ledger_display2_get_split_view_register (priv->ledger);
 
     window = gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page));
     widget = gtk_window_get_focus (GTK_WINDOW (window));
@@ -2725,15 +2708,11 @@ static void
 gnc_plugin_page_register2_cmd_copy (GtkAction *action,
                                    GncPluginPageRegister2 *page) //this works
 {
-    GncPluginPageRegister2Private *priv;
-    GncTreeViewSplitReg *view;
     GtkWidget *window, *widget;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2 (page));
 
     ENTER("(action %p, page %p)", action, page);
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (page);
-    view = gnc_ledger_display2_get_split_view_register (priv->ledger);
 
     window = gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page));
     widget = gtk_window_get_focus (GTK_WINDOW (window));
@@ -2750,15 +2729,11 @@ static void
 gnc_plugin_page_register2_cmd_paste (GtkAction *action,
                                     GncPluginPageRegister2 *page) //this works
 {
-    GncPluginPageRegister2Private *priv;
-    GncTreeViewSplitReg *view;
     GtkWidget *window, *widget;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2 (page));
 
     ENTER("(action %p, page %p)", action, page);
-    priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (page);
-    view = gnc_ledger_display2_get_split_view_register (priv->ledger);
 
     window = gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page));
     widget = gtk_window_get_focus (GTK_WINDOW (window));
@@ -3009,12 +2984,11 @@ gnc_plugin_page_register2_cmd_view_filter_by (GtkAction *action,
 {
     GncPluginPageRegister2Private *priv;
     GNCLedgerDisplay2Type ledger_type;
-    GtkWidget *dialog, *toggle, *button, *start_date, *end_date, *table, *hbox;
+    GtkWidget *dialog, *toggle, *button, *table, *hbox;
     time64 start_time, end_time, time_val;
     GtkBuilder *builder;
     gboolean sensitive, value;
     Query *query;
-    GList *split_list;
     gchar *title;
     int i;
 
@@ -3257,7 +3231,6 @@ gnc_plugin_page_register2_cmd_style_extra_dates (GtkToggleAction *action,
         GncPluginPageRegister2 *plugin_page) // this works
 {
     GncPluginPageRegister2Private *priv;
-    GncTreeModelSplitReg *model;
     GncTreeViewSplitReg *view;
     gboolean show_extra_dates;
 
@@ -3267,7 +3240,6 @@ gnc_plugin_page_register2_cmd_style_extra_dates (GtkToggleAction *action,
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER2 (plugin_page));
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE (plugin_page);
-    model = gnc_ledger_display2_get_split_model_register (priv->ledger);
 
     view = gnc_ledger_display2_get_split_view_register (priv->ledger);
 
@@ -3532,7 +3504,6 @@ gnc_plugin_page_register2_cmd_jump (GtkAction *action,
 {
     GncPluginPageRegister2Private *priv;
     GncPluginPage *new_page;
-    GncPluginPageRegister2 *new_reg_page;
     GtkWidget *window;
     GNCLedgerDisplay2 *ld;
     GncTreeViewSplitReg *view, *new_view;

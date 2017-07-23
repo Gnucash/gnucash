@@ -658,7 +658,6 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
     SCM dirty_report = scm_c_eval_string("gnc:report-set-dirty?!");
     const gchar *old_name;
     gchar *new_name;
-    gchar *new_name_escaped;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REPORT(data));
     report = GNC_PLUGIN_PAGE_REPORT(data);
@@ -1592,6 +1591,7 @@ gnc_plugin_page_report_save_cb( GtkAction *action, GncPluginPageReport *report )
          */
         save_func = scm_c_eval_string("gnc:report-to-template-update");
         rpt_id = scm_call_1(save_func, priv->cur_report);
+        (void)rpt_id;
     }
     else
     {
@@ -1657,12 +1657,6 @@ gnc_plugin_page_report_export_cb( GtkAction *action, GncPluginPageReport *report
 
     g_free(filepath);
     return;
-}
-
-static void
-error_handler(const char *str)
-{
-    PWARN("Report Error: %s", str);
 }
 
 static void

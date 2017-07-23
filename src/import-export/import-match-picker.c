@@ -452,7 +452,6 @@ static void
 init_match_picker_gui(GNCImportMatchPicker * matcher)
 {
     GtkBuilder *builder;
-    gboolean show_reconciled;
 
     /* DEBUG("Begin..."); */
 

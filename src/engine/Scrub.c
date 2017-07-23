@@ -683,7 +683,6 @@ gnc_transaction_balance_trading (Transaction *trans, Account *root)
         gnc_commodity *commodity;
         gnc_numeric old_amount, new_amount;
         gnc_numeric old_value, new_value, val_imbalance;
-        Account *account = NULL;
         const gnc_commodity *txn_curr = xaccTransGetCurrency (trans);
 
         commodity = gnc_monetary_commodity (*imbal_mon);
@@ -696,8 +695,6 @@ gnc_transaction_balance_trading (Transaction *trans, Account *root)
             LEAVE("");
             return;
         }
-
-        account = xaccSplitGetAccount(balance_split);
 
         if (! gnc_commodity_equal (txn_curr, commodity))
         {
@@ -757,7 +754,6 @@ gnc_transaction_balance_trading_more_splits (Transaction *trans, Account *root)
             gnc_commodity *commodity;
             gnc_numeric old_value, new_value;
             Split *balance_split;
-            Account *account = NULL;
 
             commodity = xaccAccountGetCommodity(xaccSplitGetAccount(split));
             if (!commodity)
@@ -772,8 +768,6 @@ gnc_transaction_balance_trading_more_splits (Transaction *trans, Account *root)
                 LEAVE("");
                 return;
             }
-            account = xaccSplitGetAccount(balance_split);
-
             xaccTransBeginEdit (trans);
 
             old_value = xaccSplitGetValue (balance_split);
@@ -1339,7 +1333,6 @@ void
 xaccAccountScrubKvp (Account *account)
 {
     GValue v = G_VALUE_INIT;
-    const gchar *str;
     gchar *str2;
 
     if (!account) return;

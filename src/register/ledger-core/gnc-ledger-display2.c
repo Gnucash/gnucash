@@ -519,6 +519,8 @@ gnc_ledger_display2_parent (void *user_data)
     return gnc_ledger_display2_get_parent( ld );
 }
 
+#ifdef skip
+//FIXME Not used ?
 static void
 gnc_ledger_display2_set_watches (GNCLedgerDisplay2 *ld, GList *splits)
 {
@@ -541,6 +543,7 @@ gnc_ledger_display2_set_watches (GNCLedgerDisplay2 *ld, GList *splits)
                                         QOF_EVENT_MODIFY);
     }
 }
+#endif
 
 static void
 refresh_handler (GHashTable *changes, gpointer user_data)
@@ -702,7 +705,7 @@ gnc_ledger_display2_internal (Account *lead_account, Query *q,
     GNCLedgerDisplay2 *ld;
     gint limit;
     const char *klass;
-    GList *splits;
+//    GList *splits;
     gboolean display_subaccounts = FALSE;
     gboolean is_gl = FALSE;
 

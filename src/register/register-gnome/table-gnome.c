@@ -59,8 +59,10 @@
 
 /** Static Globals *****************************************************/
 
+#define UNUSED_VAR     __attribute__ ((unused))
+
 /* This static indicates the debugging module that this .o belongs to. */
-static QofLogModule log_module = GNC_MOD_REGISTER;
+static QofLogModule UNUSED_VAR log_module = GNC_MOD_REGISTER;
 
 
 /** Implementation *****************************************************/

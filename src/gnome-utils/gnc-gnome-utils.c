@@ -172,26 +172,38 @@ gnc_configure_date_completion (void)
 void
 gnc_add_css_file (void)
 {
-    GtkCssProvider *provider;
+    GtkCssProvider *provider_user, *provider_app;
     GdkDisplay *display;
     GdkScreen *screen;
     const gchar *var;
+    gchar* pkgdatadir = gnc_path_get_pkgdatadir ();
     gchar *str;
     GError *error = 0;
 
-    provider = gtk_css_provider_new ();
+    provider_user = gtk_css_provider_new ();
+    provider_app = gtk_css_provider_new ();
     display = gdk_display_get_default ();
     screen = gdk_display_get_default_screen (display);
-    gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
+    gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider_app), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider_user), GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+    if (pkgdatadir)
+    {
+        str = g_build_filename (pkgdatadir, "ui", "gnucash.css", (char *)NULL);
+        gtk_css_provider_load_from_path (provider_app, str, &error);
+        g_free (str);
+    }
+    g_free (pkgdatadir);
 
     var = g_get_home_dir ();
     if (var)
     {
         str = g_build_filename (var, ".gtk-3.0-gnucash.css", (char *)NULL);
-        gtk_css_provider_load_from_path (provider, str, &error);
+        gtk_css_provider_load_from_path (provider_user, str, &error);
         g_free (str);
     }
-    g_object_unref (provider);
+    g_object_unref (provider_user);
+    g_object_unref (provider_app);
 }
 
 #ifdef MAC_INTEGRATION

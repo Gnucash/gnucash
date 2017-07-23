@@ -314,7 +314,6 @@ gnc_transaction_get_property(GObject* object,
 {
     Transaction* tx;
     gchar *key;
-    GValue *temp;
 
     g_return_if_fail(GNC_IS_TRANSACTION(object));
 
@@ -2676,7 +2675,7 @@ xaccTransGetVoidTime(const Transaction *tr)
 {
     GValue v = G_VALUE_INIT;
     const char *s = NULL;
-    Timespec void_time = {0, 0}, *ts;
+    Timespec void_time = {0, 0};
 
     g_return_val_if_fail(tr, void_time);
     qof_instance_get_kvp (QOF_INSTANCE (tr), void_time_str, &v);

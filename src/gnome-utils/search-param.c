@@ -561,7 +561,6 @@ gnc_search_param_prepend_compound (GList *list, char const *title,
                                    GtkJustification justify,
                                    GNCSearchParamKind kind)
 {
-    GList *result;
     GList *p;
     QofIdTypeConst type = NULL;
     GNCSearchParamCompound *param;

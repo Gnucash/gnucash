@@ -305,7 +305,6 @@ gnc_account_get_property (GObject         *object,
     Account *account;
     AccountPrivate *priv;
     const gchar *key;
-    GValue *temp;
 
     g_return_if_fail(GNC_IS_ACCOUNT(object));
 
@@ -5540,7 +5539,6 @@ gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
     for (current_token = g_list_first(tokens); current_token;
             current_token = current_token->next)
     {
-         GValue value = G_VALUE_INIT;
         /* Jump to next iteration if the pointer is not valid or if the
                  string is empty. In HBCI import we almost always get an empty
                  string, which doesn't work in the kvp loopkup later. So we

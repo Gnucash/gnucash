@@ -591,7 +591,6 @@ get_account_info (ImapDialog *imap_dialog)
     Account      *root;
     GList        *accts;
     GtkTreeModel *model, *filter;
-    GtkTreeIter   iter;
 
     /* Get list of Accounts */
     root = gnc_book_get_root_account (gnc_get_current_book());

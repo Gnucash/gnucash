@@ -923,7 +923,6 @@ gnc_entry_ledger_get_color_internal (VirtualLocation virt_loc,
                                      const guint32 *color_table,
                                      gboolean foreground)
 {
-    const char *cursor_name;
     VirtualCell *vcell;
     gboolean is_current;
     guint32 colorbase = 0; /* By default return background colors */

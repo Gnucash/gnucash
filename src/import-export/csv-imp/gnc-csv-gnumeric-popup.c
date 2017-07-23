@@ -93,7 +93,7 @@ gnumeric_create_popup_menu_list (GSList *elements,
                                  GdkEventButton *event)
 {
     GtkWidget *menu = gtk_menu_new ();
-    GtkWidget *item, *label;
+    GtkWidget *item;
 
     for (; elements != NULL ; elements = elements->next)
     {

@@ -613,7 +613,6 @@ inner_main (void *closure, int argc, char **argv)
 {
     SCM main_mod;
     char* fn;
-    GError *error = NULL;
 
     scm_c_eval_string("(debug-set! stack 200000)");
 

@@ -189,12 +189,9 @@ static void
 gnc_plugin_register2_finalize (GObject *object)
 {
     GncPluginRegister2 *plugin;
-    GncPluginRegister2Private *priv;
-
-    g_return_if_fail (GNC_IS_PLUGIN_REGISTER2 (object));
 
     plugin = GNC_PLUGIN_REGISTER2 (object);
-    priv = GNC_PLUGIN_REGISTER2_GET_PRIVATE(plugin);
+    g_return_if_fail (GNC_IS_PLUGIN_REGISTER2 (plugin));
 
     G_OBJECT_CLASS (parent_class)->finalize (object);
 }

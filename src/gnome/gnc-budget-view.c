@@ -109,11 +109,14 @@ static void gnc_budget_view_init(GncBudgetView *budget_view);
 static void gnc_budget_view_finalize(GObject *object);
 
 static void gbv_create_widget(GncBudgetView *view);
-
+#if 0
 static gboolean gbv_button_press_cb(
     GtkWidget *widget, GdkEventButton *event, GncBudgetView *view);
+#endif
+#if 0
 static gboolean gbv_key_press_cb(
     GtkWidget *treeview, GdkEventKey *event, gpointer userdata);
+#endif
 static void gbv_row_activated_cb(
     GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *col,
     GncBudgetView *view);
@@ -171,8 +174,6 @@ gnc_budget_view_new(GncBudget *budget, AccountFilterDialog* fd)
 {
     GncBudgetView *budget_view;
     GncBudgetViewPrivate *priv;
-    gchar* label;
-    const GList *item;
 
     g_return_val_if_fail(GNC_IS_BUDGET(budget), NULL);
     ENTER(" ");
@@ -254,7 +255,6 @@ static void
 gnc_budget_view_finalize(GObject *object)
 {
     GncBudgetView *view;
-    GncBudgetViewPrivate *priv;
 
     ENTER("object %p", object);
     view = GNC_BUDGET_VIEW(object);
@@ -443,7 +443,6 @@ void
 gnc_budget_view_save(GncBudgetView *view, GKeyFile *key_file, const gchar *group_name)
 {
     GncBudgetViewPrivate *priv;
-    char guid_str[GUID_ENCODING_LENGTH+1];
 
     g_return_if_fail(view != NULL);
     g_return_if_fail(key_file != NULL);
@@ -573,7 +572,7 @@ gbv_button_press_cb(GtkWidget *widget, GdkEventButton *event,
 }
 #endif
 
-
+#if 0
 /** \brief Key press action for gnc budget view.
 */
 static gboolean
@@ -605,7 +604,7 @@ gbv_key_press_cb(GtkWidget *treeview, GdkEventKey *event, gpointer userdata)
         gtk_tree_view_set_cursor(tv, path, col, TRUE);
     return TRUE;
 }
-
+#endif
 
 /** \brief gnc budget view actions for resize of treeview.
 */
@@ -639,7 +638,8 @@ gbv_treeview_resized_cb(GtkWidget* widget, GtkAllocation* allocation, GncBudgetV
         {
             col_width = gtk_tree_view_column_get_width(tree_view_col);
             totals_view_col = gtk_tree_view_get_column(priv->totals_tree_view, j);
-            gtk_tree_view_column_set_fixed_width(totals_view_col, col_width);
+            if(GTK_IS_TREE_VIEW_COLUMN(totals_view_col))
+                gtk_tree_view_column_set_fixed_width(totals_view_col, col_width);
             j++;
         }
     }
@@ -652,8 +652,6 @@ static void
 gbv_row_activated_cb(GtkTreeView *treeview, GtkTreePath *path,
                      GtkTreeViewColumn *col, GncBudgetView *view)
 {
-    GtkWidget *window;
-    GncPluginPage *new_page;
     Account *account;
 
     g_return_if_fail(GNC_IS_BUDGET_VIEW(view));
@@ -909,9 +907,6 @@ totals_col_source(GtkTreeViewColumn *col, GtkCellRenderer *cell,
     gint period_num;
     gnc_numeric value; // used to assist in adding and subtracting
     gchar amtbuff[100]; //FIXME: overkill, where's the #define?
-    
-    gint width; // FIXME: VARIABLE NOT NEEDED?
-
     gint i;
     gint num_top_accounts;
 
@@ -1098,7 +1093,6 @@ gbv_col_edited_cb(GtkCellRendererText* cell, gchar* path_string, gchar* new_text
 {
     GncBudgetView *view;
     GncBudgetViewPrivate *priv;
-    const EventInfo* ei;
 
     view = GNC_BUDGET_VIEW(user_data);
     priv = GNC_BUDGET_VIEW_GET_PRIVATE(view);

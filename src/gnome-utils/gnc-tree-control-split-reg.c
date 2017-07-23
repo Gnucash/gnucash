@@ -833,7 +833,6 @@ void
 gnc_tree_control_split_reg_reinit (GncTreeViewSplitReg *view, gpointer data)
 {
     Transaction *trans;
-    Split *split;
     GtkWidget *dialog, *window;
     gint response;
     const gchar *warning;
@@ -1082,7 +1081,6 @@ gnc_tree_control_split_reg_reverse_current (GncTreeViewSplitReg *view)
     GtkWidget *window;
     Transaction *trans = NULL, *new_trans = NULL;
     GList *snode = NULL;
-    gboolean changed = FALSE;
 
     ENTER(" ");
 
@@ -1174,7 +1172,6 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
     Transaction *trans;
     Split *blank_split;
     Split *split, *trans_split;
-    gboolean changed = FALSE;
     gboolean use_split_action_for_num_field = FALSE;
 
     ENTER("");
@@ -1313,7 +1310,6 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
     {
         Transaction *new_trans;
         int trans_split_index;
-        int split_index;
         const char *in_num = NULL;
         const char *in_tnum = NULL;
         char *out_num;
@@ -1649,16 +1645,11 @@ gboolean gnc_tree_control_split_reg_is_current_movable_updown (GncTreeViewSplitR
 gboolean
 gnc_tree_control_split_reg_save (GncTreeViewSplitReg *view, gboolean reg_closing)
 {
-    GncTreeModelSplitReg *model;
-    RowDepth depth;
     Transaction *dirty_trans;
     Transaction *blank_trans;
     Transaction *trans;
-    Account *account;
-    Split *blank_split;
-    const char *memo;
-    const char *desc;
-    Split *split, *current_trans_split;
+//    Split *split;
+//    Split *current_trans_split;
 
     ENTER("view=%p, reg_closing=%s", view, reg_closing ? "TRUE" : "FALSE");
 
@@ -1674,17 +1665,14 @@ gnc_tree_control_split_reg_save (GncTreeViewSplitReg *view, gboolean reg_closing
     if (reg_closing)
         view->reg_closing = TRUE;
 
-    model = gnc_tree_view_split_reg_get_model_from_view (view);
-
-    blank_split = gnc_tree_control_split_reg_get_blank_split (view);
     dirty_trans = gnc_tree_view_split_reg_get_dirty_trans (view);
     blank_trans = gnc_tree_control_split_reg_get_blank_trans (view);
 
     /* get the handle to the current split and transaction */
-    split = gnc_tree_view_split_reg_get_current_split (view);
+//    split = gnc_tree_view_split_reg_get_current_split (view);
     trans = gnc_tree_view_split_reg_get_current_trans (view);
 
-    current_trans_split = gnc_tree_control_split_reg_get_current_trans_split (view);
+//    current_trans_split = gnc_tree_control_split_reg_get_current_trans_split (view);
 
     if (trans == NULL)
     {
@@ -1961,7 +1949,6 @@ gnc_tree_control_split_reg_get_account_by_name (GncTreeViewSplitReg *view, const
     const char *placeholder = _("The account %s does not allow transactions.");
     const char *missing = _("The account %s does not exist. "
                             "Would you like to create it?");
-    char *account_name;
     Account *account;
 
     if (!name || (strlen(name) == 0))
@@ -2069,7 +2056,7 @@ gnc_tree_control_split_reg_copy_trans (GncTreeViewSplitReg *view)
 {
     GncTreeModelSplitReg *model;
     Transaction *from_trans;
-    Account *from_acc, *anchor;
+    Account *anchor;
 
     g_return_if_fail (GNC_IS_TREE_VIEW_SPLIT_REG (view));
 
@@ -2146,7 +2133,7 @@ void
 gnc_tree_control_auto_complete (GncTreeViewSplitReg *view, Transaction *trans,  const gchar *new_text)
 {
     GncTreeModelSplitReg *model;
-    Transaction          *btrans, *dirty_trans;
+    Transaction          *btrans;
     GtkListStore         *desc_list;
     GtkTreeIter           iter;
     gboolean              valid;

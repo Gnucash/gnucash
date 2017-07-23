@@ -694,7 +694,6 @@ startRecnWindow(GtkWidget *parent, Account *account,
     gboolean auto_interest_xfer_option;
     GNCPrintAmountInfo print_info;
     gnc_numeric ending;
-    gboolean has_uniform_currency;
     char *title;
     int result;
 
@@ -985,11 +984,8 @@ gnc_reconcile_window_button_press_cb (GtkWidget *widget,
                                       RecnWindow *recnData)
 {
     GNCQueryView      *qview = GNC_QUERY_VIEW(widget);
-    GtkTreeModel      *model;
     GtkTreeSelection  *selection;
     GtkTreePath       *path;
-
-    model = gtk_tree_view_get_model(GTK_TREE_VIEW(qview));
 
     if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
     {
@@ -1445,7 +1441,6 @@ gnc_get_reconcile_info (Account *account,
     gboolean always_today;
     GDate date;
     time64 today;
-    struct tm tm;
 
     g_date_clear(&date, 1);
 

@@ -70,7 +70,7 @@ static void
 gnc_state_set_base (const QofSession *session)
 {
     gchar *basename, *original = NULL, *filename, *file_guid;
-    gchar *sf_extension = NULL, *newstyle_filename = NULL;
+    gchar *sf_extension = NULL;
     const gchar *uri;
     gchar guid_string[GUID_ENCODING_LENGTH+1];
     QofBook *book;
@@ -200,10 +200,6 @@ gnc_state_set_base (const QofSession *session)
 
 GKeyFile *gnc_state_load (const QofSession *session)
 {
-
-    GKeyFile *keyfile = NULL;
-    GError *error = NULL;
-
     /* Drop possible previous state_file first */
     if (state_file)
     {
@@ -221,7 +217,6 @@ GKeyFile *gnc_state_load (const QofSession *session)
                      TRUE, TRUE, NULL);
 
     return gnc_state_get_current ();
-
 }
 
 void gnc_state_save (const QofSession *session)

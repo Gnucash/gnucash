@@ -509,12 +509,6 @@ gnc_main_window_cmd_file_save_as (GtkAction *action, GncMainWindowActionData *da
 static void
 gnc_main_window_cmd_file_revert (GtkAction *action, GncMainWindowActionData *data)
 {
-    GtkWidget *dialog;
-    QofSession *session;
-    QofBook *book;
-    const gchar *filename, *tmp;
-    const gchar *title = _("Reverting will discard all unsaved changes to %s. Are you sure you want to proceed ?");
-
     g_return_if_fail (data != NULL);
 
     if (!gnc_main_window_all_finish_pending())

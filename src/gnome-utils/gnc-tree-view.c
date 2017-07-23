@@ -677,15 +677,12 @@ static void
 gnc_tree_view_update_visibility (GtkTreeViewColumn *column,
                                  GncTreeView *view)
 {
-    GncTreeViewPrivate *priv;
-    gchar *name, *key;
     gboolean visible;
 
     g_return_if_fail(GTK_IS_TREE_VIEW_COLUMN(column));
     g_return_if_fail(GNC_IS_TREE_VIEW(view));
 
     ENTER(" ");
-    priv = GNC_TREE_VIEW_GET_PRIVATE(view);
     visible = gnc_tree_view_column_visible(view, column, NULL);
     gtk_tree_view_column_set_visible(column, visible);
     LEAVE("made %s", visible ? "visible" : "invisible");
@@ -704,13 +701,11 @@ gnc_tree_view_update_visibility (GtkTreeViewColumn *column,
 static gchar *
 gnc_tree_view_get_sort_order (GncTreeView *view)
 {
-    GncTreeViewPrivate *priv;
     GtkTreeModel *s_model;
     GtkSortType order;
     gint current;
     gchar *order_str = NULL;
 
-    priv = GNC_TREE_VIEW_GET_PRIVATE(view);
     s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
     if (!s_model)
         return NULL; /* no model, so sort order doesn't make sense */
@@ -741,7 +736,7 @@ gnc_tree_view_get_sort_column (GncTreeView *view)
     GtkTreeModel *s_model;
     GtkTreeViewColumn *column;
     GtkSortType order;
-    gint model_column, current;
+    gint current;
     const gchar *name;
 
     s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
@@ -827,12 +822,10 @@ static void
 gnc_tree_view_set_sort_order (GncTreeView *view,
                               const gchar *name)
 {
-    GncTreeViewPrivate *priv;
     GtkTreeModel *s_model;
     GtkSortType order = GTK_SORT_ASCENDING;
     gint current;
 
-    priv = GNC_TREE_VIEW_GET_PRIVATE(view);
     s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
     if (!s_model)
         return;
@@ -907,7 +900,6 @@ gnc_tree_view_set_column_order (GncTreeView *view,
                                 gchar **column_names,
                                 gsize length)
 {
-    GncTreeViewPrivate *priv;
     GtkTreeViewColumn *column, *prev;
     const GSList *tmp;
     GSList *columns;
@@ -915,7 +907,6 @@ gnc_tree_view_set_column_order (GncTreeView *view,
 
     /* First, convert from names to pointers */
     ENTER(" ");
-    priv = GNC_TREE_VIEW_GET_PRIVATE(view);
     columns = NULL;
     for (idx = 0; idx < length; idx++)
     {
@@ -1312,15 +1303,11 @@ static void
 gnc_tree_view_update_column_menu_item (GtkCheckMenuItem *checkmenuitem,
                                        GncTreeView *view)
 {
-    GncTreeViewPrivate *priv;
-    gchar *key;
     gboolean visible;
 
     g_return_if_fail(GTK_IS_CHECK_MENU_ITEM(checkmenuitem));
     g_return_if_fail(GNC_IS_TREE_VIEW(view));
 
-    priv = GNC_TREE_VIEW_GET_PRIVATE(view);
-    key = g_object_get_data(G_OBJECT(checkmenuitem), STATE_KEY);
     if (g_object_get_data(G_OBJECT(checkmenuitem), ALWAYS_VISIBLE))
     {
         visible = TRUE;
@@ -1627,7 +1614,6 @@ gnc_tree_view_column_properties (GncTreeView *view,
     GtkTreeModel *s_model;
     gboolean visible;
     int width = 0;
-    gchar *key;
 
     /* Set data used by other functions */
     if (pref_name)

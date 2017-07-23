@@ -163,12 +163,14 @@ static GtkActionEntry gnc_plugin_page_budget_actions [] =
 static guint gnc_plugin_page_budget_n_actions =
     G_N_ELEMENTS (gnc_plugin_page_budget_actions);
 
+#if 0 
 static const gchar *actions_requiring_account[] =
 {
     "OpenAccountAction",
     "OpenSubaccountsAction",
     NULL
 };
+#endif
 
 /** Short labels for use on the toolbar buttons. */
 static action_toolbar_labels toolbar_labels[] =
@@ -333,6 +335,7 @@ gnc_plugin_page_budget_init (GncPluginPageBudget *plugin_page)
     priv->fd.visible_types = -1; /* Start with all types */
     priv->fd.show_hidden = FALSE;
     priv->fd.show_zero_total = TRUE;
+    priv->fd.filter_override = g_hash_table_new (g_direct_hash, g_direct_equal);
 
     priv->sigFigs = 1;
     recurrenceSet(&priv->r, 1, PERIOD_MONTH, NULL, WEEKEND_ADJ_NONE);
@@ -346,7 +349,6 @@ static void
 gnc_plugin_page_budget_finalize (GObject *object)
 {
     GncPluginPageBudget *page;
-    GncPluginPageBudgetPrivate *priv;
 
     ENTER("object %p", object);
     page = GNC_PLUGIN_PAGE_BUDGET (object);
@@ -409,10 +411,6 @@ gnc_plugin_page_budget_create_widget (GncPluginPage *plugin_page)
 {
     GncPluginPageBudget *page;
     GncPluginPageBudgetPrivate *priv;
-    GtkTreeSelection *selection;
-    GtkTreeView *tree_view;
-    GtkWidget *scrolled_window;
-    const gchar *budget_guid_str;
 
     ENTER("page %p", plugin_page);
     page = GNC_PLUGIN_PAGE_BUDGET (plugin_page);
@@ -470,6 +468,9 @@ gnc_plugin_page_budget_destroy_widget (GncPluginPage *plugin_page)
         g_object_unref(G_OBJECT(priv->budget_view));
         priv->budget_view = NULL;
     }
+
+    // Destroy the filter override hash table
+    g_hash_table_destroy(priv->fd.filter_override);
 
     gnc_gui_component_clear_watches (priv->component_id);
 

@@ -75,7 +75,10 @@ void gnc_import_gui_type_cb (GtkWidget *widget, gpointer data);
 // utils
 static gchar *gnc_input_dialog (GtkWidget *parent, const gchar *title, const gchar *msg, const gchar *default_input);
 static void gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar *msg);
-static QofLogModule log_module = G_LOG_DOMAIN; //G_LOG_BUSINESS;
+
+#define UNUSED_VAR     __attribute__ ((unused))
+
+static QofLogModule UNUSED_VAR log_module = G_LOG_DOMAIN; //G_LOG_BUSINESS;
 
 BillImportGui *
 gnc_plugin_bi_import_showGUI(void)

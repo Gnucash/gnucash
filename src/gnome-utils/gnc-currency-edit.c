@@ -302,7 +302,6 @@ static void gnc_currency_edit_active_changed (GtkComboBox *gobject,
         gpointer     user_data)
 {
     GNCCurrencyEdit *self = GNC_CURRENCY_EDIT (gobject);
-    GNCCurrencyEditPrivate *priv = GET_PRIVATE (self);
 
     gnc_commodity *currency = gnc_currency_edit_get_currency (self);
     const gchar *mnemonic = gnc_commodity_get_mnemonic (currency);

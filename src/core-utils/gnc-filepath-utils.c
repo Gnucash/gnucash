@@ -269,7 +269,6 @@ gnc_path_find_localized_html_file (const gchar *file_name)
     gchar *loc_file_name = NULL;
     gchar *full_path = NULL;
     const gchar * const *lang;
-    int i;
 
     if (!file_name || *file_name == '\0')
         return NULL;

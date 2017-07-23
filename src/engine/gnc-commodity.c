@@ -1080,7 +1080,6 @@ gnc_commodity_get_fraction(const gnc_commodity * cm)
 static gboolean
 gnc_commodity_get_auto_quote_control_flag(const gnc_commodity *cm)
 {
-    const char *str;
     GValue v = G_VALUE_INIT;
 
     if (!cm) return FALSE;
@@ -1144,7 +1143,6 @@ gnc_commodity_get_quote_tz(const gnc_commodity *cm)
 const char*
 gnc_commodity_get_user_symbol(const gnc_commodity *cm)
 {
-    const char *str;
     GValue v = G_VALUE_INIT;
     if (!cm) return NULL;
     qof_instance_get_kvp (QOF_INSTANCE(cm), "user_symbol", &v);
@@ -1159,7 +1157,6 @@ gnc_commodity_get_user_symbol(const gnc_commodity *cm)
 const char*
 gnc_commodity_get_default_symbol(const gnc_commodity *cm)
 {
-    const char *str;
     if (!cm) return NULL;
     return GET_PRIVATE(cm)->default_symbol;
 }

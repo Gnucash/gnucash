@@ -722,11 +722,8 @@ check_transaction_splits (Transaction *txn, gpointer data)
     for ( ; splitList; splitList = splitList->next )
     {
         gnc_commodity *base_cmdty = NULL;
-        txnCreditDebitSums *tcds;
         Split *s = (Split*)splitList->data;
 
-        tcds = (txnCreditDebitSums*)g_hash_table_lookup (sd->txns,
-                                                         (gpointer)txn);
         if (sd->tcds == NULL)
         {
             sd->tcds = tcds_new ();
@@ -808,7 +805,6 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
      *   right... ]
      */
 
-    gboolean multi_commodity = FALSE;
     gint ttVarCount = 0, splitCount = 0;
     static const int NUM_ITERS_WITH_VARS = 5;
     static const int NUM_ITERS_NO_VARS = 1;
@@ -1364,7 +1360,6 @@ schedXact_editor_populate( GncSxEditorDialog *sxed )
     char *name;
     time64 tmpDate;
     SplitRegister *splitReg;
-    struct tm *tmpTm;
     const GDate *gd;
     gint daysInAdvance;
     gboolean enabledState, autoCreateState, notifyState;

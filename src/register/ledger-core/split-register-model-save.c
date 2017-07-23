@@ -148,7 +148,6 @@ gnc_split_register_save_tnum_cell (BasicCell * cell,
                                   gpointer user_data)
 {
     SRSaveData *sd = save_data;
-    SplitRegister *reg = user_data;
     const char *value;
 
     g_return_if_fail (gnc_basic_cell_has_name (cell, TNUM_CELL));
@@ -727,11 +726,6 @@ gnc_template_register_save_debcred_cell (BasicCell * cell,
 {
     SRSaveData *sd = save_data;
     SplitRegister *reg = user_data;
-    const char *formula;
-    char *error_loc;
-    gnc_numeric amount;
-    gboolean parse_result;
-    GHashTable *parser_vars = g_hash_table_new(g_str_hash, g_str_equal);
 
     g_return_if_fail (gnc_basic_cell_has_name (cell, FDEBT_CELL) ||
                       gnc_basic_cell_has_name (cell, FCRED_CELL));

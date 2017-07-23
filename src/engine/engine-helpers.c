@@ -658,7 +658,6 @@ gnc_query_scm2path (SCM path_scm)
     while (!scm_is_null (path_scm))
     {
         SCM key_scm = SCM_CAR (path_scm);
-        char *str;
         char *key;
 
         if (!scm_is_string (key_scm))

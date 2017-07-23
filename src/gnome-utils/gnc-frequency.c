@@ -228,7 +228,6 @@ gnc_frequency_init(GncFrequency *gf)
     gf->startDate = GNC_DATE_EDIT(gnc_date_edit_new(time(NULL), FALSE, FALSE));
     /* Add the new widget to the table. */
     {
-        gint dont_expand_or_fill = 0;
         GtkWidget *table = GTK_WIDGET(gtk_builder_get_object (builder, "gncfreq_table"));
         gtk_grid_attach(GTK_GRID(table), GTK_WIDGET(gf->startDate), 4, 0, 1, 1);
         gtk_widget_set_vexpand (GTK_WIDGET(gf->startDate), FALSE);
