@@ -223,7 +223,9 @@ gcrp_grab_on_window (GdkWindow *window,
 #endif
     GdkDevice *device;
 
-GdkEvent *event = gtk_get_current_event ();
+#if GTK_CHECK_VERSION(3,22,0)
+    GdkEvent *event = gtk_get_current_event ();
+#endif
 
 #if GTK_CHECK_VERSION(3,20,0)
     seat = gdk_display_get_default_seat (display);
