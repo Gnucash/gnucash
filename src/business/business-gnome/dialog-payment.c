@@ -192,10 +192,8 @@ static gboolean
 gnc_payment_window_check_payment (PaymentWindow *pw)
 {
     const char *conflict_msg = NULL;
-    Account *post, *acc;
     gnc_numeric amount_deb, amount_cred;
     gboolean enable_xfer_acct = TRUE;
-    GtkTreeSelection *selection;
 
     if (!pw)
         return FALSE;

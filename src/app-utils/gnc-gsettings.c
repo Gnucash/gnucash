@@ -620,7 +620,6 @@ xsltprocExternalEntityLoader(const char *URL, const char *ID,
     xmlChar *newURL;
     gchar *tmpdir = g_build_filename (g_get_home_dir (), ".gnc-migration-tmp", NULL);
 
-    int i;
     const char *lastsegment = URL;
     const char *iter = URL;
 
@@ -700,7 +699,7 @@ void gnc_gsettings_migrate_from_gconf (void)
     gchar *pkgdatadir, *stylesheet, *input, *output, *command;
     gchar *gconf_root, *gconf_apps, *gconf_gnucash;
     gchar *base_dir, *iter;
-    SCM migr_script, result;
+    SCM migr_script;
     xsltStylesheetPtr stylesheetptr = NULL;
     xmlDocPtr inputxml, transformedxml;
     FILE *outfile;

@@ -842,7 +842,6 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
         GNCPrice *convprice;
         gnc_commodity *account_currency = (gnc_commodity*)key;
         gnc_numeric *amount = (gnc_numeric*)value;
-        Timespec pricedate;
         XferDialog *xfer;
         gnc_numeric exch_rate;
 
@@ -2246,7 +2245,6 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
 {
     GncInvoice *invoice;
     GtkBuilder *builder;
-    GtkWidget *id_label;
     GtkWidget *dialog, *hbox;
     GncEntryLedger *entry_ledger = NULL;
     GncOwnerType owner_type;
@@ -2595,7 +2593,6 @@ gnc_invoice_window_new_invoice (InvoiceDialogType dialog_type, QofBook *bookp,
 
     if (dialog_type == DUP_INVOICE)
     {
-        GtkWidget *invoice_radio = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_invoice_type"));
         GtkWidget *cn_radio = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_creditnote_type"));
 
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(cn_radio), gncInvoiceGetIsCreditNote (invoice));
@@ -3288,7 +3285,6 @@ gnc_invoice_show_bills_due (QofBook *book, double days_in_advance, GncWhichDueTy
     DialogQueryView *dialog;
     gint len;
     Timespec ts;
-    QofQueryCompare comparetype;
     static GList *param_list = NULL;
     static GNCDisplayViewButton vendorbuttons[] =
     {

@@ -60,10 +60,8 @@ static time64 gnc_accounting_period_end_time64 (GncAccountingPeriod which,
 static time64
 lookup_start_date_option(GDate *fy_end)
 {
-    gchar *choice;
     time64 time;
     int which;
-
 
     if (gnc_prefs_get_bool (GNC_PREFS_GROUP_ACCT_SUMMARY, GNC_PREF_START_CHOICE_ABS))
         time = gnc_prefs_get_int64 (GNC_PREFS_GROUP_ACCT_SUMMARY, GNC_PREF_START_DATE);

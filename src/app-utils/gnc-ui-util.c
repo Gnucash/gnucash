@@ -1584,7 +1584,6 @@ xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
     char sign_posn;
 
     gboolean print_sign = TRUE;
-    gboolean is_shares = FALSE;
     gboolean print_absolute = FALSE;
 
     if (!bufp)

@@ -154,7 +154,6 @@ gfec_eval_string(const char *str, gfec_error_handler error_handler)
 SCM
 gfec_eval_file(const char *file, gfec_error_handler error_handler)
 {
-    char *err_msg = NULL;
     gchar *contents = NULL;
     GError *save_error = NULL;
     SCM result;
