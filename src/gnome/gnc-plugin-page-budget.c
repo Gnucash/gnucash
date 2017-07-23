@@ -333,6 +333,7 @@ gnc_plugin_page_budget_init (GncPluginPageBudget *plugin_page)
     priv->fd.visible_types = -1; /* Start with all types */
     priv->fd.show_hidden = FALSE;
     priv->fd.show_zero_total = TRUE;
+    priv->fd.filter_override = g_hash_table_new (g_direct_hash, g_direct_equal);
 
     priv->sigFigs = 1;
     recurrenceSet(&priv->r, 1, PERIOD_MONTH, NULL, WEEKEND_ADJ_NONE);
@@ -470,6 +471,9 @@ gnc_plugin_page_budget_destroy_widget (GncPluginPage *plugin_page)
         g_object_unref(G_OBJECT(priv->budget_view));
         priv->budget_view = NULL;
     }
+
+    // Destroy the filter override hash table
+    g_hash_table_destroy(priv->fd.filter_override);
 
     gnc_gui_component_clear_watches (priv->component_id);
 
