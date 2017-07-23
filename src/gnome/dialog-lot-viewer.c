@@ -982,9 +982,7 @@ static void
 lv_create (GNCLotViewer *lv)
 {
     gchar *win_title;
-    gint position;
     GtkBuilder *builder;
-    GtkWidget *widget;
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-lot-viewer.glade", "lot_viewer_dialog");

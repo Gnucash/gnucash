@@ -311,7 +311,6 @@ gnc_save_all_state (gpointer session, gpointer unused)
     QofBook *book;
     gchar guid_string[GUID_ENCODING_LENGTH+1];
     const GncGUID *guid;
-    GError *error = NULL;
     GKeyFile *keyfile = NULL;
 
     keyfile = gnc_state_get_current ();
@@ -322,7 +321,6 @@ gnc_save_all_state (gpointer session, gpointer unused)
          */
         gsize num_groups, curr;
         gchar **groups = g_key_file_get_groups (keyfile, &num_groups);
-        gchar *group = NULL;
         for (curr=0; curr < num_groups; curr++)
         {
             if (g_str_has_prefix (groups[curr], "Window ") ||

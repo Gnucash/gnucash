@@ -1325,7 +1325,6 @@ schedXact_editor_populate (GncSxEditorDialog2 *sxed)
     char *name;
     time64 tmpDate;
     GncTreeModelSplitReg *model;
-    struct tm *tmpTm;
     const GDate *gd;
     gint daysInAdvance;
     gboolean enabledState, autoCreateState, notifyState;

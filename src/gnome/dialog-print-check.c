@@ -1606,7 +1606,6 @@ gnc_ui_print_check_dialog_create(GtkWidget *parent,
     PrintCheckDialog *pcd;
     GtkBuilder *builder;
     GtkWidget *table;
-    GtkWindow *window;
     gchar *font;
     Transaction *trans = NULL;
 

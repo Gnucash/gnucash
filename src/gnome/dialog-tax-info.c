@@ -472,7 +472,6 @@ load_tax_entity_type_list (TaxInfoDialog *ti_dialog)
     {
         TaxTypeInfo *tax_type_info;
         SCM type_scm;
-        gchar *str = NULL;
         SCM scm;
 
         type_scm  = SCM_CAR (tax_types);

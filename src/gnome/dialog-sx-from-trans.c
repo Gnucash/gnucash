@@ -340,7 +340,6 @@ sxftd_init( SXFromTransInfo *sxfti )
     gint pos;
     GList *schedule = NULL;
     time64 start_tt;
-    struct tm *tmpTm;
     GDate date, nextDate;
 
     if ( ! sxfti->sx )
@@ -579,7 +578,6 @@ sxftd_freq_combo_changed( GtkWidget *w, gpointer user_data )
     SXFromTransInfo *sxfti = (SXFromTransInfo*)user_data;
     GDate date, nextDate;
     time64 tmp_tt;
-    struct tm *tmpTm;
     GList *schedule = NULL;
 
     tmp_tt = xaccTransGetDate( sxfti->trans );
@@ -676,7 +674,6 @@ gnc_sx_trans_window_response_cb (GtkDialog *dialog,
 static void
 sxftd_update_example_cal( SXFromTransInfo *sxfti )
 {
-    struct tm *tmpTm;
     time64 tmp_tt;
     GDate date, startDate, nextDate;
     GList *schedule = NULL;

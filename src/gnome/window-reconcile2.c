@@ -1408,7 +1408,6 @@ gnc_get_reconcile_info (Account *account,
     gboolean always_today;
     GDate date;
     time64 today;
-    struct tm tm;
 
     g_date_clear(&date, 1);
 

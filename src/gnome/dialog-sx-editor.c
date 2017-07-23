@@ -808,7 +808,6 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
      *   right... ]
      */
 
-    gboolean multi_commodity = FALSE;
     gint ttVarCount = 0, splitCount = 0;
     static const int NUM_ITERS_WITH_VARS = 5;
     static const int NUM_ITERS_NO_VARS = 1;
@@ -1364,7 +1363,6 @@ schedXact_editor_populate( GncSxEditorDialog *sxed )
     char *name;
     time64 tmpDate;
     SplitRegister *splitReg;
-    struct tm *tmpTm;
     const GDate *gd;
     gint daysInAdvance;
     gboolean enabledState, autoCreateState, notifyState;
