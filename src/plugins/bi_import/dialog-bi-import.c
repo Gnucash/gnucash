@@ -528,7 +528,6 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
     gchar *new_id = NULL;
     gint64 denom = 0;
     gnc_commodity *currency;
-    Transaction * txn;
 
     // these arguments are needed
     g_return_if_fail (store && book);

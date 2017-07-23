@@ -153,7 +153,6 @@ error_handler(const char *str)
 gboolean
 gnc_run_report (gint report_id, char ** data)
 {
-    gchar *free_data;
     SCM scm_text;
     gchar *str;
 

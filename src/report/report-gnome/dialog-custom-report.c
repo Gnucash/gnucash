@@ -198,7 +198,6 @@ set_reports_view_and_model(CustomReportDialog *crd)
 {
     GtkCellRenderer *renderer;
     GtkTreeModel *model;
-    GtkTreeViewColumn * col;
     gint colnum;
 
     crd->namerenderer = gtk_cell_renderer_text_new();

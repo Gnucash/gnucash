@@ -173,7 +173,6 @@ gnc_plugin_csv_export_register_cmd (GtkAction *action,
                                  GncMainWindowActionData *data)
 {
     Query   *query;
-    GList   *splits;
     Account *acc;
 
     GncPluginPage *page = gnc_main_window_get_current_page (data->window);
