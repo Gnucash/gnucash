@@ -109,11 +109,14 @@ static void gnc_budget_view_init(GncBudgetView *budget_view);
 static void gnc_budget_view_finalize(GObject *object);
 
 static void gbv_create_widget(GncBudgetView *view);
-
+#if 0
 static gboolean gbv_button_press_cb(
     GtkWidget *widget, GdkEventButton *event, GncBudgetView *view);
+#endif
+#if 0
 static gboolean gbv_key_press_cb(
     GtkWidget *treeview, GdkEventKey *event, gpointer userdata);
+#endif
 static void gbv_row_activated_cb(
     GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *col,
     GncBudgetView *view);
@@ -569,7 +572,7 @@ gbv_button_press_cb(GtkWidget *widget, GdkEventButton *event,
 }
 #endif
 
-
+#if 0
 /** \brief Key press action for gnc budget view.
 */
 static gboolean
@@ -601,7 +604,7 @@ gbv_key_press_cb(GtkWidget *treeview, GdkEventKey *event, gpointer userdata)
         gtk_tree_view_set_cursor(tv, path, col, TRUE);
     return TRUE;
 }
-
+#endif
 
 /** \brief gnc budget view actions for resize of treeview.
 */
