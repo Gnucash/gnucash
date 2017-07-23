@@ -403,7 +403,7 @@ gnucash_sheet_compute_visible_range (GnucashSheet *sheet)
     gint height;
     gint cy;
     gint top_block;
-    gint old_visible_blocks, old_visible_rows;
+//    gint old_visible_blocks, old_visible_rows;
 
     g_return_if_fail (sheet != NULL);
     g_return_if_fail (GNUCASH_IS_SHEET (sheet));
@@ -416,8 +416,8 @@ gnucash_sheet_compute_visible_range (GnucashSheet *sheet)
 
     top_block = gnucash_sheet_y_pixel_to_block (sheet, cy);
 
-    old_visible_blocks = sheet->num_visible_blocks;
-    old_visible_rows = sheet->num_visible_phys_rows;
+//    old_visible_blocks = sheet->num_visible_blocks;
+//    old_visible_rows = sheet->num_visible_phys_rows;
     sheet->num_visible_blocks = 0;
     sheet->num_visible_phys_rows = 0;
 
@@ -1054,10 +1054,11 @@ gnucash_sheet_draw_cb (GtkWidget *widget, cairo_t *cr, G_GNUC_UNUSED gpointer da
     GnucashSheet *sheet = GNUCASH_SHEET (widget);
     GtkStyleContext *context = gtk_widget_get_style_context (widget);
     GtkAllocation alloc;
-    gboolean result;
+    gboolean result; //FIXME
 
     gtk_widget_get_allocation(widget, &alloc);
     gtk_render_background (context, cr, alloc.x, alloc.y, alloc.width, alloc.height);
+//FIXME what should be done with result being TRUE or FALSE
     result = gnucash_sheet_draw_internal (sheet, cr, &alloc);
     gnucash_sheet_draw_cursor (sheet->cursor, cr);
 
@@ -1309,7 +1310,7 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
 {
     GnucashSheet *sheet;
     VirtualCell *vcell;
-    gboolean changed_cells;
+    gboolean changed_cells; //FIXME
 
     VirtualLocation cur_virt_loc;
     VirtualLocation new_virt_loc;
@@ -1399,7 +1400,7 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
 
     if (abort_move)
         return TRUE;
-
+//FIXME does something need to be done if changed_cells is true or false ?
     changed_cells = gnucash_sheet_cursor_move (sheet, new_virt_loc);
 
     if (button_1)
@@ -1434,10 +1435,8 @@ gnucash_sheet_clipboard_event (GnucashSheet *sheet, GdkEventKey *event)
 {
     GncItemEdit *item_edit;
     gboolean handled = FALSE;
-    guint32 time;
 
     item_edit = GNC_ITEM_EDIT(sheet->item_editor);
-    time = event->time;
 
     switch (event->keyval)
     {
@@ -1488,7 +1487,7 @@ gnucash_sheet_direct_event(GnucashSheet *sheet, GdkEvent *event)
     GtkEditable *editable;
     Table *table = sheet->table;
     VirtualLocation virt_loc;
-    gboolean changed;
+//    gboolean changed;
     gboolean result;
 
     char *new_text = NULL;
@@ -1519,7 +1518,7 @@ gnucash_sheet_direct_event(GnucashSheet *sheet, GdkEvent *event)
                                       &new_start, &new_end,
                                       event);
 
-    changed = FALSE;
+//    changed = FALSE;
 
     if (new_text != NULL)
     {
@@ -1535,19 +1534,19 @@ gnucash_sheet_direct_event(GnucashSheet *sheet, GdkEvent *event)
         g_signal_handler_unblock (G_OBJECT (sheet->entry),
                                   sheet->insert_signal);
 
-        changed = TRUE;
+//        changed = TRUE;
     }
 
     if (new_position != cursor_position)
     {
         gtk_editable_set_position (editable, new_position);
-        changed = TRUE;
+//        changed = TRUE;
     }
 
     if ((new_start != start_sel) || (new_end != end_sel))
     {
         gtk_editable_select_region(editable, new_start, new_end);
-        changed = TRUE;
+//        changed = TRUE;
     }
 
     return result;
@@ -2147,14 +2146,14 @@ void
 gnucash_sheet_set_scroll_region (GnucashSheet *sheet)
 {
     guint new_h, new_w;
-    GtkWidget *widget;
+//    GtkWidget *widget;
     GtkAllocation alloc;
     guint old_h, old_w;
 
     if (!sheet)
         return;
 
-    widget = GTK_WIDGET(sheet);
+//    widget = GTK_WIDGET(sheet);
 
     if (!sheet->header_item || !GNC_HEADER(sheet->header_item)->style)
         return;
