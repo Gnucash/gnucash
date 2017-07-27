@@ -989,7 +989,7 @@ AC_SUBST([GTEST_HEADERS], [$ac_cv_gtest_headers])
 AC_SUBST([GMOCK_SRC_PATH], [$ac_cv_gmock_src_path])
 AC_SUBST([GMOCK_SRC], [$ac_cv_gmock_root])
 AC_SUBST([GMOCK_HEADERS], [$ac_cv_gmock_headers])
-AM_CONDITIONAL([GOOGLE_TEST_LIBS], [test "x$ac_cv_have_gtest_libs" == "xyes"])
+AM_CONDITIONAL([GOOGLE_TEST_LIBS], [test "x$ac_cv_have_gtest_libs" = "xyes"])
 ### --------------------------------------------------------------------------
 ### Register2
 AC_ARG_ENABLE( register2,
