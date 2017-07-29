@@ -21,7 +21,7 @@
 #ifndef GNUCASH_CURSOR_H
 #define GNUCASH_CURSOR_H
 
-#include <glib-2.0/glib.h>
+#include <glib.h>
 #include "gnucash-sheet.h"
 
 /** @ingroup Register
