@@ -414,7 +414,7 @@ update to latest  darwin])
     AC_MSG_RESULT($platform)
     AC_MSG_CHECKING(For GDK-Quartz)
     platform=osx
-    _gdk_tgt=`$PKG_CONFIG --variable=target gdk-2.0`
+    _gdk_tgt=`$PKG_CONFIG --variable=targets gdk-3.0`
     if test "x$_gdk_tgt" = xquartz; then
       platform=darwin/quartz
       AC_DEFINE(GNC_PLATFORM_COCOA, 1, [Cocoa/Nexstep/GnuStep framework])
