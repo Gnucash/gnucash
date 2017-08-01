@@ -346,6 +346,9 @@ gnucash_register_init (GnucashRegister *g_reg)
     gtk_widget_set_can_focus (GTK_WIDGET(table), FALSE);
     gtk_widget_set_can_default (GTK_WIDGET(table), FALSE);
 
+    // Set the style context for this widget so it can be easily manipulated with css
+    gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET(g_reg)), "GncRegister");
+
     gtk_grid_set_row_homogeneous (GTK_GRID(table), FALSE);
     gtk_grid_set_column_homogeneous (GTK_GRID(table), FALSE);
 }

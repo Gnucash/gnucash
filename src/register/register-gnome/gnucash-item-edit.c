@@ -505,6 +505,9 @@ gnc_item_edit_new (GnucashSheet *sheet)
                            NULL);
     gtk_layout_put (GTK_LAYOUT(sheet), GTK_WIDGET(item_edit), 0, 0);
 
+    // Set the style context for this widget so it can be easily manipulated with css
+    gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET(item_edit)), "GncRegisterItemEdit");
+
     /* Create the text entry */
     item_edit->editor = gtk_entry_new();
     sheet->entry = item_edit->editor;

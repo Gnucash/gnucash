@@ -606,6 +606,9 @@ gnc_header_init (GncHeader *header)
     header->width = 400;
     header->style = NULL;
 
+    // Set the style context for this widget so it can be easily manipulated with css
+    gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET(header)), "GncRegisterHeader");
+
     gtk_widget_add_events(GTK_WIDGET(header), (GDK_EXPOSURE_MASK
                           | GDK_BUTTON_PRESS_MASK
                           | GDK_BUTTON_RELEASE_MASK
