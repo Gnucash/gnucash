@@ -582,11 +582,11 @@ void
 gnc_item_edit_show_popup (GncItemEdit *item_edit)
 {
     GtkToggleButton *toggle;
-    GtkAdjustment *vadj;
+    GtkAdjustment *vadj, *hadj;
     GtkAllocation alloc;
     GnucashSheet *sheet;
     gint x, y, w, h;
-    gint y_offset;
+    gint y_offset, x_offset;
     gint popup_x, popup_y;
     gint popup_w;
     gint popup_h;
@@ -609,8 +609,10 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
     view_width  = alloc.width;
 
     vadj = gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(sheet));
+    hadj = gtk_scrollable_get_hadjustment(GTK_SCROLLABLE(sheet));
 
     y_offset = gtk_adjustment_get_value(vadj);
+    x_offset = gtk_adjustment_get_value(hadj);
     gnc_item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
 
     popup_x = x;
@@ -620,7 +622,7 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
 
     if (up_height > down_height)
     {
-        popup_y = y_offset;
+        popup_y = y + y_offset;
         popup_h = up_height;
     }
     else
@@ -629,7 +631,7 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
         popup_h = down_height;
     }
 
-    popup_max_width = view_width - popup_x;
+    popup_max_width = view_width - popup_x + x_offset;
 
     if (item_edit->get_popup_height)
         popup_h = item_edit->get_popup_height
@@ -644,11 +646,13 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
     else
         popup_w = -1;
 
+    if (up_height > down_height)
+        popup_y = y - popup_h;
+
     if (!gtk_widget_get_parent (item_edit->popup_item))
         gtk_layout_put (GTK_LAYOUT(sheet), item_edit->popup_item,
                         popup_x, popup_y);
     gtk_widget_set_size_request(item_edit->popup_item, popup_w, popup_h);
-    // FIXME what about the GtkAnchorType that the GNOME_CANVAS_ITEM used ?
 
     toggle = GTK_TOGGLE_BUTTON(item_edit->popup_toggle.tbutton);
 
@@ -684,9 +688,11 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
         {
             popup_x -= popup_width - popup_max_width;
             popup_x = MAX (0, popup_x);
-            gtk_layout_move (GTK_LAYOUT(sheet), item_edit->popup_item,
-                             popup_x, popup_y);
         }
+        else
+            popup_x = x;
+
+        gtk_layout_move (GTK_LAYOUT(sheet), item_edit->popup_item, popup_x, popup_y);
     }
 }
 
