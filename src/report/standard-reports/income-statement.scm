@@ -647,14 +647,16 @@
 		  (if standard-order?
 		      (list
 		       (gnc:make-html-table-cell inc-table)
-		       (if (not (null? trading-accounts))
+		       (if (null? trading-accounts)
+			   (gnc:html-make-empty-cell)
 		           (gnc:make-html-table-cell tra-table))
 		       (gnc:make-html-table-cell exp-table)
 		       )
 		      (list
 		       (gnc:make-html-table-cell exp-table)
 		       (gnc:make-html-table-cell inc-table)
-		       (if (not (null? trading-accounts))
+		       (if (null? trading-accounts)
+			   (gnc:html-make-empty-cell)
 		           (gnc:make-html-table-cell tra-table))
 		       )
 		      )
