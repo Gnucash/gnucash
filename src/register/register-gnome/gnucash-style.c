@@ -592,9 +592,6 @@ gnucash_sheet_get_borders (GnucashSheet *sheet, VirtualLocation virt_loc,
     borders->left  = line_style;
     borders->right = line_style;
 
-    if (virt_loc.phys_col_offset == 0)
-        borders->left = CELL_BORDER_LINE_NORMAL;
-
     style = gnucash_sheet_get_style_from_cursor (sheet, CURSOR_HEADER);
     if (style)
         if (virt_loc.phys_col_offset == (style->ncols - 1))
