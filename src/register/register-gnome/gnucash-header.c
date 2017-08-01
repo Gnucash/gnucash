@@ -106,13 +106,18 @@ gnc_header_draw_offscreen (GncHeader *header)
                                                 header->height);
 
     cr = cairo_create (header->surface);
+    // Fill background color of header
     cairo_rectangle (cr, 0.5, 0.5, header->width - 1.0, header->height - 1.0);
     cairo_set_source_rgb (cr, bg_color->red, bg_color->green, bg_color->blue);
     cairo_fill_preserve (cr);
+
+    // Draw bottom horizontal line, makes bottom line thicker
     cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
+    cairo_move_to (cr, 0.5, header->height - 1.5);
+    cairo_line_to (cr, header->width - 1.0, header->height - 1.5);
+    cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
     cairo_set_line_width (cr, 1.0);
     cairo_stroke (cr);
-//    cairo_set_line_width (cr, 1.0);
 
     /*font = gnucash_register_font;*/
 
@@ -157,7 +162,8 @@ gnc_header_draw_offscreen (GncHeader *header)
                 continue;
             }
 
-            cairo_rectangle (cr, col_offset + 0.5, row_offset + 0.5, w, h);
+            cairo_rectangle (cr, col_offset - 0.5, row_offset + 0.5, w, h);
+            cairo_set_line_width (cr, 1.0);
             cairo_stroke (cr);
 
             virt_loc.vcell_loc =
@@ -189,6 +195,7 @@ gnc_header_draw_offscreen (GncHeader *header)
             text_h = h - 2;
             cairo_save (cr);
             cairo_rectangle (cr, text_x, text_y, text_w, text_h);
+            cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
             cairo_clip (cr);
             cairo_move_to (cr, text_x, text_y);
             pango_cairo_show_layout (cr, layout);
@@ -374,10 +381,12 @@ gnc_header_resize_column (GncHeader *header, gint col, gint width)
     gnucash_cursor_configure (GNUCASH_CURSOR(sheet->cursor));
     gnc_item_edit_configure (gnucash_sheet_get_item_edit (sheet));
 
+    gnc_header_reconfigure (header);
+
     gnucash_sheet_set_scroll_region (sheet);
     gnucash_sheet_update_adjustments (sheet);
 
-    gnc_header_reconfigure (header);
+//FIXME Not required?    gnc_header_request_redraw (header);
     gnucash_sheet_redraw_all (sheet);
 }
 
@@ -474,6 +483,7 @@ gnc_header_event (GtkWidget *widget, GdkEvent *event)
                  header->resize_col_width);
             header->in_resize = FALSE;
             header->resize_col = -1;
+            gnc_header_request_redraw (header);
         }
 
         break;
