@@ -502,7 +502,7 @@ gnucash_register_create_widget (Table *table)
     gtk_widget_show (sheet);
 
     scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, GNUCASH_SHEET(sheet)->vadj);
-    gtk_grid_attach (GTK_GRID(widget), GTK_WIDGET(scrollbar), 1, 0, 1, 4);
+    gtk_grid_attach (GTK_GRID(widget), GTK_WIDGET(scrollbar), 1, 0, 1, 2);
     gtk_widget_set_hexpand (GTK_WIDGET(scrollbar), FALSE);
     gtk_widget_set_halign (GTK_WIDGET(scrollbar), GTK_ALIGN_FILL);
     gtk_widget_set_vexpand (GTK_WIDGET(scrollbar), TRUE);
@@ -511,7 +511,7 @@ gnucash_register_create_widget (Table *table)
     gtk_widget_show (scrollbar);
 
     scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_HORIZONTAL, GNUCASH_SHEET(sheet)->hadj);
-    gtk_grid_attach (GTK_GRID(widget), GTK_WIDGET(scrollbar), 0, 3, 1, 1);
+    gtk_grid_attach (GTK_GRID(widget), GTK_WIDGET(scrollbar), 0, 2, 1, 1);
     gtk_widget_set_hexpand (GTK_WIDGET(scrollbar), TRUE);
     gtk_widget_set_halign (GTK_WIDGET(scrollbar), GTK_ALIGN_FILL);
     gtk_widget_set_vexpand (GTK_WIDGET(scrollbar), FALSE);
@@ -538,7 +538,7 @@ gnucash_register_create_widget (Table *table)
     gtk_box_pack_start(GTK_BOX(box),
                                 GNUCASH_SHEET(sheet)->split_color, TRUE, TRUE, 0);
 
-    gtk_grid_attach (GTK_GRID(widget), GTK_WIDGET(box), 0, 4, 1, 1);
+    gtk_grid_attach (GTK_GRID(widget), GTK_WIDGET(box), 0, 3, 1, 1);
     gtk_widget_set_hexpand (GTK_WIDGET(box), TRUE);
     gtk_widget_set_halign (GTK_WIDGET(box), GTK_ALIGN_FILL);
     gtk_widget_set_vexpand (GTK_WIDGET(box), TRUE);
