@@ -2503,6 +2503,9 @@ gnucash_sheet_init (GnucashSheet *sheet)
     gtk_widget_set_can_focus (GTK_WIDGET(sheet), TRUE);
     gtk_widget_set_can_default (GTK_WIDGET(sheet), TRUE);
 
+    // Set the style context for this widget so it can be easily manipulated with css
+    gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET(sheet)), "GncRegisterSheet");
+
     sheet->num_visible_blocks = 1;
     sheet->num_visible_phys_rows = 1;
 
