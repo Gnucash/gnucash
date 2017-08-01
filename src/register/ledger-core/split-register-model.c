@@ -742,25 +742,12 @@ gnc_split_register_get_border (VirtualLocation virt_loc,
     cursor_class =
         gnc_split_register_cursor_name_to_class (vcell->cellblock->cursor_name);
 
-    if (cursor_class == CURSOR_CLASS_TRANS &&
-            virt_loc.phys_col_offset == vcell->cellblock->start_col)
-        borders->left   = CELL_BORDER_LINE_NONE;
-
-    if (cursor_class == CURSOR_CLASS_TRANS &&
-            virt_loc.phys_col_offset == vcell->cellblock->stop_col)
-        borders->right  = CELL_BORDER_LINE_NONE;
-
     if (cursor_class == CURSOR_CLASS_SPLIT)
     {
         borders->top    = CELL_BORDER_LINE_LIGHT;
         borders->bottom = CELL_BORDER_LINE_LIGHT;
-        borders->left   = MIN (borders->left,   CELL_BORDER_LINE_LIGHT);
-        borders->right  = MIN (borders->right,  CELL_BORDER_LINE_LIGHT);
-
-        if (virt_loc.phys_col_offset == vcell->cellblock->start_col)
-            borders->left = CELL_BORDER_LINE_LIGHT;
-        if (virt_loc.phys_col_offset == vcell->cellblock->stop_col)
-            borders->right = CELL_BORDER_LINE_LIGHT;
+        borders->left   = MIN (borders->left,   CELL_BORDER_LINE_NORMAL);
+        borders->right  = MIN (borders->right,  CELL_BORDER_LINE_NORMAL);
     }
 }
 
