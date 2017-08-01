@@ -699,19 +699,28 @@ gnucash_sheet_draw_cursor (GnucashCursor *cursor, cairo_t *cr)
 
     fg_color = &gn_black;
 
-    /* draw the rectangle around the entire active
-     *    virtual *row */
-    cairo_rectangle (cr, cursor->x - x + 0.5, cursor->y - y + 0.5,
-                     cursor->w - 1.0, cursor->h - 1.0);
-    cairo_move_to (cr, cursor->x - x, cursor->y - y + cursor->h - 1.5);
-    cairo_rel_line_to (cr, cursor->w, 0);
     cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
+    /* draw the rectangle around the entire active virtual row - transaction rows only - double line  */
+
+    if (cursor->y == 0)
+        cairo_rectangle (cr, cursor->x - x + 0.5, cursor->y - y + 0.5, cursor->w - 1.0, cursor->h - 3.0);
+    else
+    {
+        if (cursor->x == 0)
+            cairo_rectangle (cr, cursor->x - x + 0.5, cursor->y - y - 0.5, cursor->w - 1.0, cursor->h - 2.0);
+        else
+            cairo_rectangle (cr, cursor->x - x - 0.5, cursor->y - y - 0.5, cursor->w, cursor->h - 2.0);
+    }
     cairo_set_line_width (cr, 1.0);
     cairo_stroke (cr);
 
-    cairo_rectangle (cr, cc->x - x + 0.5, cursor->y + cc->y - y + 0.5,
-                     cc->w - 1.0, cc->h - 1.0);
     cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
+    /* draw rectangle around the active cell */
+    if (cc->x != 0)
+        cairo_rectangle (cr, cc->x - x - 0.5, cursor->y + cc->y - y - 0.5, cc->w, cc->h);
+    else
+        cairo_rectangle (cr, cc->x - x + 0.5, cursor->y + cc->y - y - 0.5, cc->w - 1.0, cc->h);
+
     cairo_set_line_width (cr, 1.0);
     cairo_stroke (cr);
 }
