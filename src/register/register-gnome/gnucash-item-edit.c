@@ -659,7 +659,10 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
         unblock_toggle_signals (item_edit);
     }
 
+    gtk_container_remove (GTK_CONTAINER(item_edit->popup_toggle.tbutton), GTK_WIDGET(item_edit->popup_toggle.arrow));
     item_edit->popup_toggle.arrow = gtk_image_new_from_icon_name ("go-up", GTK_ICON_SIZE_BUTTON);
+    gtk_container_add (GTK_CONTAINER(item_edit->popup_toggle.tbutton), GTK_WIDGET(item_edit->popup_toggle.arrow));
+    gtk_widget_show (item_edit->popup_toggle.arrow);
 
     if (item_edit->popup_set_focus)
         item_edit->popup_set_focus (item_edit->popup_item,
@@ -702,7 +705,10 @@ gnc_item_edit_hide_popup (GncItemEdit *item_edit)
 
     gtk_container_remove (GTK_CONTAINER(item_edit->sheet), item_edit->popup_item);
 
+    gtk_container_remove (GTK_CONTAINER(item_edit->popup_toggle.tbutton), GTK_WIDGET(item_edit->popup_toggle.arrow));
     item_edit->popup_toggle.arrow = gtk_image_new_from_icon_name ("go-down", GTK_ICON_SIZE_BUTTON);
+    gtk_container_add (GTK_CONTAINER(item_edit->popup_toggle.tbutton), GTK_WIDGET(item_edit->popup_toggle.arrow));
+    gtk_widget_show (item_edit->popup_toggle.arrow);
 
     gtk_toggle_button_set_active
     (GTK_TOGGLE_BUTTON(item_edit->popup_toggle.tbutton), FALSE);
