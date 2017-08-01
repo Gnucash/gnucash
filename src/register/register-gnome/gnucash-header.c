@@ -464,7 +464,6 @@ gnc_header_event (GtkWidget *widget, GdkEvent *event)
             header->resize_col_width = cd->pixel_width;
             header->resize_x = x;
         }
-
         break;
     }
     case GDK_BUTTON_RELEASE:
@@ -485,7 +484,6 @@ gnc_header_event (GtkWidget *widget, GdkEvent *event)
             header->resize_col = -1;
             gnc_header_request_redraw (header);
         }
-
         break;
     }
 
@@ -516,14 +514,12 @@ gnc_header_event (GtkWidget *widget, GdkEvent *event)
             header->resize_col = -1;
             gnc_header_auto_resize_column (header, resize_col);
         }
-
     }
     break;
 
     default:
         break;
     }
-
     return FALSE;
 }
 
@@ -572,7 +568,6 @@ gnc_header_set_property (GObject *object,
     case PROP_SHEET:
         header->sheet = GNUCASH_SHEET (g_value_get_object (value));
         gtk_scrollable_set_hadjustment (GTK_SCROLLABLE(layout), header->sheet->hadj);
-
         needs_update = TRUE;
         break;
     case PROP_CURSOR_NAME:
