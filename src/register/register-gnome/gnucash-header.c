@@ -51,10 +51,15 @@ enum
 static gboolean
 gnc_header_draw (GtkWidget *header, cairo_t *cr)
 {
-    cairo_save (cr);
-    cairo_set_source_surface (cr, GNC_HEADER(header)->surface, 0, 0);
+    GnucashSheet *sheet = GNC_HEADER(header)->sheet;
+    GdkWindow *sheet_layout_win = gtk_layout_get_bin_window (GTK_LAYOUT(sheet));
+    gint x, y;
+
+    // use this to get the scroll x value to align the header
+    gdk_window_get_position (sheet_layout_win, &x, &y);
+
+    cairo_set_source_surface (cr, GNC_HEADER(header)->surface, x, 0);
     cairo_paint (cr);
-    cairo_restore (cr);
 
     return TRUE;
 }
