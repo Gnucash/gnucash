@@ -84,6 +84,20 @@ gnc_item_edit_get_pixel_coords (GncItemEdit *item_edit,
      item_edit->virt_loc.phys_col_offset,
      x, y, w, h);
 
+    // alter cell size of first column
+    if (item_edit->virt_loc.phys_col_offset == 0)
+    {
+        *x = *x + 1;
+        *w = *w - 1;
+    }
+
+    // alter cell size of first row
+    if (yd == 0)
+    {
+        *y = *y + 1;
+        *h = *h - 1;
+    }
+
     *x += xd;
     *y += yd;
 }
@@ -101,6 +115,7 @@ gnc_item_edit_update (GncItemEdit *item_edit)
 {
     gint x, y, w, h;
 
+//FIXME this does not appear to be realiable, widget does not always move to correct place
     gnc_item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
     gtk_layout_move (GTK_LAYOUT(item_edit->sheet),
                      GTK_WIDGET(item_edit), x, y);
@@ -415,7 +430,7 @@ gnc_item_edit_get_preferred_width (GtkWidget *widget,
 {
     gint x, y, w, h;
     gnc_item_edit_get_pixel_coords (GNC_ITEM_EDIT (widget), &x, &y, &w, &h);
-    *minimal_width = *natural_width = w + 1;
+    *minimal_width = *natural_width = w - 1;
 }
 
 
@@ -426,7 +441,7 @@ gnc_item_edit_get_preferred_height (GtkWidget *widget,
 {
     gint x, y, w, h;
     gnc_item_edit_get_pixel_coords (GNC_ITEM_EDIT (widget), &x, &y, &w, &h);
-    *minimal_width = *natural_width = h + 1;
+    *minimal_width = *natural_width = h - 1;
 }
 
 /*
