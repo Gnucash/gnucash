@@ -367,8 +367,8 @@ draw_divider_line (cairo_t *cr, VirtualLocation virt_loc,
 
     cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
 
-    cairo_set_line_width (cr, 2.0);
-    cairo_move_to (cr, x, y + 0.5 + offset);
+    cairo_set_line_width (cr, 3.0);
+    cairo_move_to (cr, x, y - 0.5 + offset);
     cairo_rel_line_to (cr, width, 0);
     cairo_stroke (cr);
 }
