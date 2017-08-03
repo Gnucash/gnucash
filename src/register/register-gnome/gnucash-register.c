@@ -300,6 +300,10 @@ gnucash_register_class_init (GnucashRegisterClass *klass)
 
     gobject_class = G_OBJECT_CLASS (klass);
 
+#if GTK_CHECK_VERSION(3,20,0)
+    gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(klass), "register");
+#endif
+
     register_parent_class = g_type_class_peek_parent (klass);
 
     register_signals[ACTIVATE_CURSOR] =
@@ -346,8 +350,8 @@ gnucash_register_init (GnucashRegister *g_reg)
     gtk_widget_set_can_focus (GTK_WIDGET(table), FALSE);
     gtk_widget_set_can_default (GTK_WIDGET(table), FALSE);
 
-    // Set the style context for this widget so it can be easily manipulated with css
-    gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET(g_reg)), "GncRegister");
+    // This sets a style class for when Gtk+ version is less than 3.20
+    gnc_widget_set_css_name (GTK_WIDGET(g_reg), "register");
 
     gtk_grid_set_row_homogeneous (GTK_GRID(table), FALSE);
     gtk_grid_set_column_homogeneous (GTK_GRID(table), FALSE);
