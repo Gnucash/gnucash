@@ -702,7 +702,7 @@
        #f)
      #f (gnc:html-table-col-styles table))
     
-	(push (gnc:html-document-markup-start doc "tbody" #t))
+    (push (gnc:html-document-markup-start doc "tbody" #t))
     ;; now iterate over the rows 
     (let ((rownum 0) (colnum 0))
       (for-each 
@@ -752,7 +752,7 @@
            (set! colnum 0)
            (set! rownum (+ 1 rownum))))
        (reverse (gnc:html-table-data table))))
-	(push (gnc:html-document-markup-end doc "tbody"))
+    (push (gnc:html-document-markup-end doc "tbody"))
     
     ;; write the table end tag and pop the table style
     (push (gnc:html-document-markup-end doc "table"))
