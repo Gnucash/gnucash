@@ -90,14 +90,6 @@ gnc_item_edit_get_pixel_coords (GncItemEdit *item_edit,
         *x = *x + 1;
         *w = *w - 1;
     }
-
-    // alter cell size of first row
-    if (yd == 0)
-    {
-        *y = *y + 1;
-        *h = *h - 1;
-    }
-
     *x += xd;
     *y += yd;
 }
