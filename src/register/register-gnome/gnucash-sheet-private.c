@@ -421,10 +421,10 @@ draw_cell (GnucashSheet *sheet,
     /* top */
     draw_cell_line (cr, bg_color,
                     (borders.top >= borders.left ? x : x + 1.0),
-                    (y == 0 ? y + 0.5 : y - 0.5),
+                    y - 0.5,
                     (borders.top >= borders.right ?
                      x + width : x + width - 1),
-                    (y == 0 ? y + 0.5 : y - 0.5),
+                    y - 0.5,
                     borders.top);
 
     /* bottom */
