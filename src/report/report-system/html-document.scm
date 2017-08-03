@@ -168,7 +168,7 @@
                 (let ((title (gnc:html-document-title doc)))
                   (if title 
                       (push (list "</title>" title "<title>\n"))))
-                (push "</head>\n")
+                (push "</head>")
                 
                 ;; this lovely little number just makes sure that <body>
                 ;; attributes like bgcolor get included 
@@ -286,7 +286,7 @@
                       (attr (gnc:warn "non-string attribute" attr)))))
              (build-first-tag
               (lambda (tag)
-                (push "\n<") (push tag)
+                (push "<") (push tag)
                 (if attr (hash-fold add-attribute #f attr))
                 (if extra-attrib (for-each addextraatt extra-attrib))
                 (if (not end-tag?)
@@ -395,7 +395,7 @@
                (lambda (obj doc)
                  (gnc:html-document-render-data doc obj))
                ;; if the object is #f, make it a placeholder
-               (if obj obj "&nbsp;&nbsp;&nbsp;")))        
+               (if obj obj " ")))        
         (cond 
          ((gnc:html-text? obj)
           (set! o (gnc:make-html-object-internal 
