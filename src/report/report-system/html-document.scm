@@ -286,7 +286,7 @@
                       (attr (gnc:warn "non-string attribute" attr)))))
              (build-first-tag
               (lambda (tag)
-                (push "\n<") (push tag)
+                (push "<") (push tag)
                 (if attr (hash-fold add-attribute #f attr))
                 (if extra-attrib (for-each addextraatt extra-attrib))
                 (if (not end-tag?)
@@ -336,7 +336,7 @@
             (let ((addtag (lambda (t)
                             (push "</")
                             (push tag)
-                            (push ">"))))
+                            (push ">\n"))))
               (cond
                ((string? tag)
                 (addtag tag))
