@@ -454,6 +454,10 @@ gnc_item_edit_class_init (GncItemEditClass *gnc_item_edit_class)
     GObjectClass  *object_class;
     GtkWidgetClass *widget_class;
 
+#if GTK_CHECK_VERSION(3,20,0)
+    gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(gnc_item_edit_class), "cursor");
+#endif
+
     gnc_item_edit_parent_class = g_type_class_peek_parent (gnc_item_edit_class);
 
     object_class = G_OBJECT_CLASS (gnc_item_edit_class);
@@ -522,8 +526,8 @@ gnc_item_edit_new (GnucashSheet *sheet)
                            NULL);
     gtk_layout_put (GTK_LAYOUT(sheet), GTK_WIDGET(item_edit), 0, 0);
 
-    // Set the style context for this widget so it can be easily manipulated with css
-    gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET(item_edit)), "GncRegisterItemEdit");
+    // This sets a style class for when Gtk+ version is less than 3.20
+    gnc_widget_set_css_name (GTK_WIDGET(item_edit), "cursor");
 
     /* Create the text entry */
     item_edit->editor = gtk_entry_new();

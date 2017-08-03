@@ -138,6 +138,7 @@ gboolean gnucash_sheet_draw_internal (GnucashSheet *sheet, cairo_t *cr,
                                       GtkAllocation *alloc);
 void gnucash_sheet_draw_cursor (GnucashCursor *cursor, cairo_t *cr);
 
+void gnc_widget_set_css_name (GtkWidget *widget, const char *name);
 
 /** @} */
 #endif

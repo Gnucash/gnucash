@@ -601,8 +601,8 @@ gnc_header_init (GncHeader *header)
     header->width = 400;
     header->style = NULL;
 
-    // Set the style context for this widget so it can be easily manipulated with css
-    gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET(header)), "GncRegisterHeader");
+    // This sets a style class for when Gtk+ version is less than 3.20
+    gnc_widget_set_css_name (GTK_WIDGET(header), "header");
 
     gtk_widget_add_events(GTK_WIDGET(header), (GDK_EXPOSURE_MASK
                           | GDK_BUTTON_PRESS_MASK
@@ -621,6 +621,10 @@ gnc_header_class_init (GncHeaderClass *header_class)
 {
     GObjectClass  *object_class = G_OBJECT_CLASS (header_class);
     GtkWidgetClass *item_class = GTK_WIDGET_CLASS (header_class);
+
+#if GTK_CHECK_VERSION(3,20,0)
+    gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(header_class), "header");
+#endif
 
     parent_class = g_type_class_peek_parent (header_class);
 
