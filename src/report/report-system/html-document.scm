@@ -168,7 +168,7 @@
                 (let ((title (gnc:html-document-title doc)))
                   (if title 
                       (push (list "</title>" title "<title>\n"))))
-                (push "</head>\n")
+                (push "</head>")
                 
                 ;; this lovely little number just makes sure that <body>
                 ;; attributes like bgcolor get included 
@@ -336,7 +336,7 @@
             (let ((addtag (lambda (t)
                             (push "</")
                             (push tag)
-                            (push ">\n"))))
+                            (push ">"))))
               (cond
                ((string? tag)
                 (addtag tag))
