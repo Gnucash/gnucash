@@ -338,11 +338,9 @@ draw_hatching (cairo_t *cr,
     cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
 
     cairo_rectangle (cr, h_x, h_y, h_size, h_size);
-
     cairo_move_to (cr, h_x, h_y);
     cairo_rel_line_to (cr, h_size, h_size);
-
-    cairo_move_to (cr, h_x , h_y + h_size);
+    cairo_rel_move_to (cr, -h_size, 0);
     cairo_rel_line_to (cr, h_size, -h_size);
     cairo_stroke (cr);
 }
