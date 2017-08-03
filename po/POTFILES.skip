@@ -2,6 +2,7 @@
 # not distributed.
 src/backend/dbi/gncmod-backend-dbi.c
 src/backend/xml/gncmod-backend-xml.c
+src/backend/xml/gncmod-backend-xml.cpp
 src/gnome-utils/gnc-tree-model-selection.c
 
 # These we don't want to translate because they're experimental:

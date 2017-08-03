@@ -33,23 +33,15 @@ close IN;
 # * case-insensitive
 # * ignoring punctuation (-,_,.)
 #
-sub sort_func
-{
-    my $stripped_a = $a;
-    my $stripped_b = $b;
-    $stripped_a =~ s/[-_.]//g;
-    $stripped_b =~ s/[-_.]//g;
+# This sort function has been extracted into a separate file (util/elegant-sort.pl)
+# in order to use the same algorithm in both cmake and autools based builds
 
-    lc ($stripped_a) cmp lc ($stripped_b)
-      ||
-    lc ($a) cmp lc ($b)
-}
-
-my @possible_files = sort sort_func
-                      `cd @-SRCDIR-@ && find src lib -name '*.c' \\
+my @possible_files = `cd @-SRCDIR-@ && \\
+                      find src lib -name '*.c' \\
                       -o -name '*.cpp' -o -name '*.glade' \\
                       -o -name '*.desktop.in' -o -name '*.keys.in' \\
-                      -o -name '*.gschema.xml.in.in' -o -name '*.scm'`;
+                      -o -name '*.gschema.xml.in.in' -o -name '*.scm' \\
+                      | util/elegant-sort.pl`;
 ## For perl files add the following:
 # -o -name '*.pl'
 
@@ -71,7 +63,7 @@ foreach my $file (@possible_files) {
         }
     }
     next if $ignores{$path . $name};
-    
+
     # Ignore unreadable files, e.g. dangling symlinks
     next unless (-r "@-SRCDIR-@/" . $path . $name);
 
@@ -80,7 +72,7 @@ foreach my $file (@possible_files) {
     if ($file =~ m/.gschema.xml.in.in/ ){
         $type = "[type: gettext/gsettings]";
     }
-    
+
     print $type . $path . $name . "\n";
 }
 
