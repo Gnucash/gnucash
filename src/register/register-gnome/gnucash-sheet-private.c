@@ -558,7 +558,7 @@ draw_cell (GnucashSheet *sheet,
 
 
 
-    cairo_move_to (cr, rect.x + x_offset, rect.y - 1); //FIXME Not sure about this change from + 1
+    cairo_move_to (cr, rect.x + x_offset, rect.y + 1);
     pango_cairo_show_layout (cr, layout);
 
     cairo_restore (cr);
