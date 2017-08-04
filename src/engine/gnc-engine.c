@@ -91,7 +91,7 @@ gnc_engine_init_part2()
 #ifdef WIN32
 #define LIBDIR "bin"
 #else
-#define LIBDIR "lib"
+#define LIBDIR "lib/gnucash"
 #endif
 #else
         pkglibdir = g_build_path (G_DIR_SEPARATOR_S, builddir,

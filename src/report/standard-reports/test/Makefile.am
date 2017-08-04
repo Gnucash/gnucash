@@ -1,6 +1,4 @@
-MODULE_TESTS=test-load-module
-
-TESTS = $(SCM_TESTS) $(MODULE_TESTS)
+TESTS = $(SCM_TESTS)
 
 SCM_TESTS = \
 	test-cash-flow \
@@ -19,8 +17,6 @@ GNC_TEST_DEPS = \
   --gnc-module-dir ${top_builddir}/src/report/app-utils \
   --gnc-module-dir ${top_builddir}/src/report/report-system \
   --gnc-module-dir ${top_builddir}/src/report/report-system/test \
-  --gnc-module-dir ${top_builddir}/src/report/standard-reports \
-  --gnc-module-dir ${top_builddir}/src/report/standard-reports/test \
 \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/scm \
@@ -35,7 +31,6 @@ GNC_TEST_DEPS = \
   --guile-load-dir ${top_builddir}/src/report/standard-reports/test \
 \
   --library-dir    ${top_builddir}/src/report/report-system \
-  --library-dir    ${top_builddir}/src/report/standard-reports \
   --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/app-utils \
@@ -64,7 +59,6 @@ SCM_TEST_HELPERS = \
 	test-generic-net-linechart.scm
 
 EXTRA_DIST = \
-	test-load-module \
 	$(SCM_TEST_HELPERS) \
 	$(SCM_TEST_SRCS) \
 	CMakeLists.txt

@@ -1,23 +1,5 @@
 SUBDIRS = . test
 
-pkglib_LTLIBRARIES = libgncmod-standard-reports.la
-
-libgncmod_standard_reports_la_SOURCES = \
-  gncmod-standard-reports.c
-
-libgncmod_standard_reports_la_LDFLAGS = -avoid-version
-
-libgncmod_standard_reports_la_LIBADD = \
-  ${top_builddir}/src/gnc-module/libgnc-module.la \
-  ${GUILE_LIBS} \
-  ${GLIB_LIBS}
-
-AM_CPPFLAGS = \
-  -I${top_srcdir}/src \
-  -I${top_srcdir}/src/gnc-module \
-  ${GUILE_CFLAGS} \
-  ${GLIB_CFLAGS}
-
 gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash/report/
 gncscmmod_DATA = \
    standard-reports.scm
@@ -81,7 +63,6 @@ GUILE_COMPILE_ENV = \
   --gnc-module-dir ${top_builddir}/src/gnome-utils \
   --gnc-module-dir ${top_builddir}/src/html \
   --gnc-module-dir ${top_builddir}/src/report/report-system \
-  --gnc-module-dir ${top_builddir}/src/report/standard-reports \
   --guile-load-dir ${top_builddir}/src/app-utils \
   --guile-load-dir ${top_builddir}/src/core-utils \
   --guile-load-dir ${top_builddir}/src/engine \
@@ -99,8 +80,7 @@ GUILE_COMPILE_ENV = \
   --library-dir    ${top_builddir}/src/backend/xml \
   --library-dir    ${top_builddir}/src/backend/sql \
   --library-dir    ${top_builddir}/src/html \
-  --library-dir    ${top_builddir}/src/report/report-system \
-  --library-dir    ${top_builddir}/src/report/standard-reports
+  --library-dir    ${top_builddir}/src/report/report-system
 
 %.go : %.scm .scm-links $(pkglib_LTLIBRARIES)
 	GNC_UNINSTALLED=yes \
@@ -127,10 +107,9 @@ EXTRA_DIST = \
 
 CLEANFILES = \
 	.scm-links \
-	${SCM_FILE_LINK} \
 	${gncscmmodcache_DATA} \
 	${gncscmrptcache_DATA}
 
-DISTCLEANFILES =
+DISTCLEANFILES = ${SCM_FILE_LINKS}
 
-AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.report.standard\"
+AM_CPPFLAGS = -DG_LOG_DOMAIN=\"gnc.report.standard\"

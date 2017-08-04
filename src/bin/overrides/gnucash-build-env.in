@@ -39,9 +39,6 @@ eval `${top_srcdir}/src/gnc-test-env.pl \
   --gnc-module-dir ${top_builddir}/src/app-utils \
   --gnc-module-dir ${top_builddir}/src/gnome-utils \
   --gnc-module-dir ${top_builddir}/src/gnome-search \
-  --gnc-module-dir ${top_builddir}/src/report/report-system \
-  --gnc-module-dir ${top_builddir}/src/report/standard-reports \
-  --gnc-module-dir ${top_builddir}/src/report/utility-reports \
   --gnc-module-dir ${top_builddir}/src/report/locale-specific/us \
   --gnc-module-dir ${top_builddir}/src/report/report-gnome \
   --gnc-module-dir ${top_builddir}/src/report/stylesheets \

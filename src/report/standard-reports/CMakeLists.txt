@@ -1,26 +1,6 @@
 
 ADD_SUBDIRECTORY(test)
 
-SET(standard_reports_SOURCES gncmod-standard-reports.c)
-
-ADD_LIBRARY (gncmod-standard-reports ${standard_reports_SOURCES})
-
-TARGET_LINK_LIBRARIES(gncmod-standard-reports gnc-module ${GTK3_LDFLAGS})
-
-TARGET_COMPILE_DEFINITIONS(gncmod-standard-reports PRIVATE -DG_LOG_DOMAIN=\"gnc.report.standard\")
-
-TARGET_INCLUDE_DIRECTORIES(gncmod-standard-reports PRIVATE ${GUILE_INCLUDE_DIRS})
-
-INSTALL(TARGETS gncmod-standard-reports
-  LIBRARY DESTINATION lib/gnucash
-  ARCHIVE DESTINATION lib/gnucash
-  RUNTIME DESTINATION bin)
-
-# No headers to install
-
-
-# Scheme
-
 SET (standard_reports_SCHEME standard-reports.scm)
 
 SET (standard_reports_SCHEME_2
@@ -56,7 +36,7 @@ SET(GUILE_LOAD_DIRS    src/app-utils src/engine src/core-utils src/gnc-module sr
 SET(GUILE_LIBRARY_DIRS src/app-utils src/engine src/core-utils src/gnc-module src/gnome-utils src/report/report-system)
 SET(GUILE_DEPENDS      gncmod-html scm-app-utils scm-gnome-utils scm-report-system scm-report-system-3)
 
-GNC_ADD_SCHEME_TARGETS(scm-standard-reports
+GNC_ADD_SCHEME_TARGETS(scm-standard-reports-1
   "${standard_reports_SCHEME}"
   "gnucash/report"
   "${GUILE_MODULES}"
@@ -76,6 +56,8 @@ GNC_ADD_SCHEME_TARGETS(scm-standard-reports-2
   TRUE
 )
 
+ADD_CUSTOM_TARGET(scm-standard-reports ALL DEPENDS scm-standard-reports-2 scm-standard-reports)
+
 # FIXME: This is a hack since core-utils assumes an autotools build environment.
 
 SET(STD_RPT_DIR ${CMAKE_CURRENT_BINARY_DIR}/gnucash/report)
@@ -85,5 +67,5 @@ FILE(COPY standard-reports.scm DESTINATION ${STD_RPT_DIR})
 FILE(MAKE_DIRECTORY ${STD_RPT_DIR}/standard-reports)
 FILE(COPY ${standard_reports_SCHEME_2} DESTINATION ${STD_RPT_DIR}/standard-reports)
 
-SET_LOCAL_DIST(standard_reports_DIST_local CMakeLists.txt Makefile.am ${standard_reports_SOURCES} ${standard_reports_SCHEME} ${standard_reports_SCHEME_2})
+SET_LOCAL_DIST(standard_reports_DIST_local CMakeLists.txt Makefile.am ${standard_reports_SCHEME} ${standard_reports_SCHEME_2})
 SET(standard_reports_DIST ${standard_reports_DIST_local} ${test_standard_reports_DIST} PARENT_SCOPE)

@@ -78,9 +78,7 @@ SET(COPY_FROM_BUILD
   src/report/report-gnome/test/test-load-module
   src/report/report-system/swig-report-system.c
   src/report/report-system/test/test-load-module
-  src/report/standard-reports/test/test-load-module
   src/report/stylesheets/test/test-load-module
-  src/report/utility-reports/test/test-load-module
   src/scm/build-config.scm
   src/swig-runtime.h
   src/test-core/swig-unittest-support-guile.c

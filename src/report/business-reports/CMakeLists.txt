@@ -31,7 +31,7 @@ SET(GUILE_LOAD_DIRS    src/app-utils src/core-utils src/engine src/gnc-module sr
                          src/report/business_reports src/report/report-system src/report/standard-reports)
 SET(GUILE_LIBRARY_DIRS src/app-utils src/core-utils src/engine src/gnc-module src/gnome-utils src/report/report-system
                          src/report/standard-reports)
-SET(GUILE_DEPENDS      scm-business-reports-links gncmod-standard-reports scm-standard-reports)
+SET(GUILE_DEPENDS      scm-business-reports-links scm-standard-reports)
 
 GNC_ADD_SCHEME_TARGETS(scm-business-reports
   "${business_reports_SCHEME}"
