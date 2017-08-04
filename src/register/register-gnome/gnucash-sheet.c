@@ -2477,6 +2477,10 @@ gnucash_sheet_class_init (GnucashSheetClass *klass)
     gobject_class = G_OBJECT_CLASS (klass);
     widget_class = GTK_WIDGET_CLASS (klass);
 
+#if GTK_CHECK_VERSION(3,20,0)
+    gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(klass), "sheet");
+#endif
+
     sheet_parent_class = g_type_class_peek_parent (klass);
 
     /* Method override */
@@ -2502,6 +2506,9 @@ gnucash_sheet_init (GnucashSheet *sheet)
 {
     gtk_widget_set_can_focus (GTK_WIDGET(sheet), TRUE);
     gtk_widget_set_can_default (GTK_WIDGET(sheet), TRUE);
+
+    // This sets a style class for when Gtk+ version is less than 3.20
+    gnc_widget_set_css_name (GTK_WIDGET(sheet), "sheet");
 
     sheet->num_visible_blocks = 1;
     sheet->num_visible_phys_rows = 1;

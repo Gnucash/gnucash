@@ -51,10 +51,15 @@ enum
 static gboolean
 gnc_header_draw (GtkWidget *header, cairo_t *cr)
 {
-    cairo_save (cr);
-    cairo_set_source_surface (cr, GNC_HEADER(header)->surface, 0, 0);
+    GnucashSheet *sheet = GNC_HEADER(header)->sheet;
+    GdkWindow *sheet_layout_win = gtk_layout_get_bin_window (GTK_LAYOUT(sheet));
+    gint x, y;
+
+    // use this to get the scroll x value to align the header
+    gdk_window_get_position (sheet_layout_win, &x, &y);
+
+    cairo_set_source_surface (cr, GNC_HEADER(header)->surface, x, 0);
     cairo_paint (cr);
-    cairo_restore (cr);
 
     return TRUE;
 }
@@ -101,13 +106,18 @@ gnc_header_draw_offscreen (GncHeader *header)
                                                 header->height);
 
     cr = cairo_create (header->surface);
+    // Fill background color of header
     cairo_rectangle (cr, 0.5, 0.5, header->width - 1.0, header->height - 1.0);
     cairo_set_source_rgb (cr, bg_color->red, bg_color->green, bg_color->blue);
     cairo_fill_preserve (cr);
+
+    // Draw bottom horizontal line, makes bottom line thicker
     cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
+    cairo_move_to (cr, 0.5, header->height - 1.5);
+    cairo_line_to (cr, header->width - 1.0, header->height - 1.5);
+    cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
     cairo_set_line_width (cr, 1.0);
     cairo_stroke (cr);
-//    cairo_set_line_width (cr, 1.0);
 
     /*font = gnucash_register_font;*/
 
@@ -152,7 +162,8 @@ gnc_header_draw_offscreen (GncHeader *header)
                 continue;
             }
 
-            cairo_rectangle (cr, col_offset + 0.5, row_offset + 0.5, w, h);
+            cairo_rectangle (cr, col_offset - 0.5, row_offset + 0.5, w, h);
+            cairo_set_line_width (cr, 1.0);
             cairo_stroke (cr);
 
             virt_loc.vcell_loc =
@@ -184,6 +195,7 @@ gnc_header_draw_offscreen (GncHeader *header)
             text_h = h - 2;
             cairo_save (cr);
             cairo_rectangle (cr, text_x, text_y, text_w, text_h);
+            cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
             cairo_clip (cr);
             cairo_move_to (cr, text_x, text_y);
             pango_cairo_show_layout (cr, layout);
@@ -369,10 +381,12 @@ gnc_header_resize_column (GncHeader *header, gint col, gint width)
     gnucash_cursor_configure (GNUCASH_CURSOR(sheet->cursor));
     gnc_item_edit_configure (gnucash_sheet_get_item_edit (sheet));
 
+    gnc_header_reconfigure (header);
+
     gnucash_sheet_set_scroll_region (sheet);
     gnucash_sheet_update_adjustments (sheet);
 
-    gnc_header_reconfigure (header);
+//FIXME Not required?    gnc_header_request_redraw (header);
     gnucash_sheet_redraw_all (sheet);
 }
 
@@ -450,7 +464,6 @@ gnc_header_event (GtkWidget *widget, GdkEvent *event)
             header->resize_col_width = cd->pixel_width;
             header->resize_x = x;
         }
-
         break;
     }
     case GDK_BUTTON_RELEASE:
@@ -469,8 +482,8 @@ gnc_header_event (GtkWidget *widget, GdkEvent *event)
                  header->resize_col_width);
             header->in_resize = FALSE;
             header->resize_col = -1;
+            gnc_header_request_redraw (header);
         }
-
         break;
     }
 
@@ -501,14 +514,12 @@ gnc_header_event (GtkWidget *widget, GdkEvent *event)
             header->resize_col = -1;
             gnc_header_auto_resize_column (header, resize_col);
         }
-
     }
     break;
 
     default:
         break;
     }
-
     return FALSE;
 }
 
@@ -557,7 +568,6 @@ gnc_header_set_property (GObject *object,
     case PROP_SHEET:
         header->sheet = GNUCASH_SHEET (g_value_get_object (value));
         gtk_scrollable_set_hadjustment (GTK_SCROLLABLE(layout), header->sheet->hadj);
-
         needs_update = TRUE;
         break;
     case PROP_CURSOR_NAME:
@@ -591,6 +601,9 @@ gnc_header_init (GncHeader *header)
     header->width = 400;
     header->style = NULL;
 
+    // This sets a style class for when Gtk+ version is less than 3.20
+    gnc_widget_set_css_name (GTK_WIDGET(header), "header");
+
     gtk_widget_add_events(GTK_WIDGET(header), (GDK_EXPOSURE_MASK
                           | GDK_BUTTON_PRESS_MASK
                           | GDK_BUTTON_RELEASE_MASK
@@ -608,6 +621,10 @@ gnc_header_class_init (GncHeaderClass *header_class)
 {
     GObjectClass  *object_class = G_OBJECT_CLASS (header_class);
     GtkWidgetClass *item_class = GTK_WIDGET_CLASS (header_class);
+
+#if GTK_CHECK_VERSION(3,20,0)
+    gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(header_class), "header");
+#endif
 
     parent_class = g_type_class_peek_parent (header_class);
 

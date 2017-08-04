@@ -300,6 +300,10 @@ gnucash_register_class_init (GnucashRegisterClass *klass)
 
     gobject_class = G_OBJECT_CLASS (klass);
 
+#if GTK_CHECK_VERSION(3,20,0)
+    gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(klass), "register");
+#endif
+
     register_parent_class = g_type_class_peek_parent (klass);
 
     register_signals[ACTIVATE_CURSOR] =
@@ -345,6 +349,9 @@ gnucash_register_init (GnucashRegister *g_reg)
 
     gtk_widget_set_can_focus (GTK_WIDGET(table), FALSE);
     gtk_widget_set_can_default (GTK_WIDGET(table), FALSE);
+
+    // This sets a style class for when Gtk+ version is less than 3.20
+    gnc_widget_set_css_name (GTK_WIDGET(g_reg), "register");
 
     gtk_grid_set_row_homogeneous (GTK_GRID(table), FALSE);
     gtk_grid_set_column_homogeneous (GTK_GRID(table), FALSE);
@@ -502,7 +509,7 @@ gnucash_register_create_widget (Table *table)
     gtk_widget_show (sheet);
 
     scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, GNUCASH_SHEET(sheet)->vadj);
-    gtk_grid_attach (GTK_GRID(widget), GTK_WIDGET(scrollbar), 1, 0, 1, 4);
+    gtk_grid_attach (GTK_GRID(widget), GTK_WIDGET(scrollbar), 1, 0, 1, 2);
     gtk_widget_set_hexpand (GTK_WIDGET(scrollbar), FALSE);
     gtk_widget_set_halign (GTK_WIDGET(scrollbar), GTK_ALIGN_FILL);
     gtk_widget_set_vexpand (GTK_WIDGET(scrollbar), TRUE);
@@ -511,7 +518,7 @@ gnucash_register_create_widget (Table *table)
     gtk_widget_show (scrollbar);
 
     scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_HORIZONTAL, GNUCASH_SHEET(sheet)->hadj);
-    gtk_grid_attach (GTK_GRID(widget), GTK_WIDGET(scrollbar), 0, 3, 1, 1);
+    gtk_grid_attach (GTK_GRID(widget), GTK_WIDGET(scrollbar), 0, 2, 1, 1);
     gtk_widget_set_hexpand (GTK_WIDGET(scrollbar), TRUE);
     gtk_widget_set_halign (GTK_WIDGET(scrollbar), GTK_ALIGN_FILL);
     gtk_widget_set_vexpand (GTK_WIDGET(scrollbar), FALSE);
@@ -538,7 +545,7 @@ gnucash_register_create_widget (Table *table)
     gtk_box_pack_start(GTK_BOX(box),
                                 GNUCASH_SHEET(sheet)->split_color, TRUE, TRUE, 0);
 
-    gtk_grid_attach (GTK_GRID(widget), GTK_WIDGET(box), 0, 4, 1, 1);
+    gtk_grid_attach (GTK_GRID(widget), GTK_WIDGET(box), 0, 3, 1, 1);
     gtk_widget_set_hexpand (GTK_WIDGET(box), TRUE);
     gtk_widget_set_halign (GTK_WIDGET(box), GTK_ALIGN_FILL);
     gtk_widget_set_vexpand (GTK_WIDGET(box), TRUE);

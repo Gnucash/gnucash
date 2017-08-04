@@ -84,6 +84,12 @@ gnc_item_edit_get_pixel_coords (GncItemEdit *item_edit,
      item_edit->virt_loc.phys_col_offset,
      x, y, w, h);
 
+    // alter cell size of first column
+    if (item_edit->virt_loc.phys_col_offset == 0)
+    {
+        *x = *x + 1;
+        *w = *w - 1;
+    }
     *x += xd;
     *y += yd;
 }
@@ -101,6 +107,7 @@ gnc_item_edit_update (GncItemEdit *item_edit)
 {
     gint x, y, w, h;
 
+//FIXME this does not appear to be realiable, widget does not always move to correct place
     gnc_item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
     gtk_layout_move (GTK_LAYOUT(item_edit->sheet),
                      GTK_WIDGET(item_edit), x, y);
@@ -160,7 +167,8 @@ gnc_item_edit_init (GncItemEdit *item_edit)
 
     item_edit->popup_toggle.ebox = NULL;
     item_edit->popup_toggle.tbutton = NULL;
-    item_edit->popup_toggle.arrow = NULL;
+    item_edit->popup_toggle.arrow_up = NULL;
+    item_edit->popup_toggle.arrow_down = NULL;
     item_edit->popup_toggle.signals_connected = FALSE;
 
     item_edit->popup_item = NULL;
@@ -415,7 +423,7 @@ gnc_item_edit_get_preferred_width (GtkWidget *widget,
 {
     gint x, y, w, h;
     gnc_item_edit_get_pixel_coords (GNC_ITEM_EDIT (widget), &x, &y, &w, &h);
-    *minimal_width = *natural_width = w + 1;
+    *minimal_width = *natural_width = w - 1;
 }
 
 
@@ -426,7 +434,7 @@ gnc_item_edit_get_preferred_height (GtkWidget *widget,
 {
     gint x, y, w, h;
     gnc_item_edit_get_pixel_coords (GNC_ITEM_EDIT (widget), &x, &y, &w, &h);
-    *minimal_width = *natural_width = h + 1;
+    *minimal_width = *natural_width = h - 1;
 }
 
 /*
@@ -437,6 +445,10 @@ gnc_item_edit_class_init (GncItemEditClass *gnc_item_edit_class)
 {
     GObjectClass  *object_class;
     GtkWidgetClass *widget_class;
+
+#if GTK_CHECK_VERSION(3,20,0)
+    gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(gnc_item_edit_class), "cursor");
+#endif
 
     gnc_item_edit_parent_class = g_type_class_peek_parent (gnc_item_edit_class);
 
@@ -495,6 +507,7 @@ GtkWidget *
 gnc_item_edit_new (GnucashSheet *sheet)
 {
     char *hpad_str, *vpad_str, *entry_css;
+    GtkWidget *box;
     GtkStyleContext *stylecontext;
     GtkCssProvider *provider;
     GncItemEdit *item_edit =
@@ -504,6 +517,9 @@ gnc_item_edit_new (GnucashSheet *sheet)
                           "homogeneous", FALSE,
                            NULL);
     gtk_layout_put (GTK_LAYOUT(sheet), GTK_WIDGET(item_edit), 0, 0);
+
+    // This sets a style class for when Gtk+ version is less than 3.20
+    gnc_widget_set_css_name (GTK_WIDGET(item_edit), "cursor");
 
     /* Create the text entry */
     item_edit->editor = gtk_entry_new();
@@ -527,13 +543,17 @@ gnc_item_edit_new (GnucashSheet *sheet)
     /* Create the popup button
        It will only be displayed when the cell being edited provides
        a popup item (like a calendar or account list) */
-    item_edit->popup_toggle.arrow = gtk_image_new_from_icon_name ("go-down", GTK_ICON_SIZE_BUTTON);
+    item_edit->popup_toggle.arrow_down = gtk_image_new_from_icon_name ("go-down", GTK_ICON_SIZE_BUTTON);
+    item_edit->popup_toggle.arrow_up = gtk_image_new_from_icon_name ("go-up", GTK_ICON_SIZE_BUTTON);
+
+    box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_pack_start (GTK_BOX(box), GTK_WIDGET(item_edit->popup_toggle.arrow_down), FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX(box), GTK_WIDGET(item_edit->popup_toggle.arrow_up),FALSE, FALSE, 0);
 
     item_edit->popup_toggle.tbutton = gtk_toggle_button_new();
     gtk_toggle_button_set_mode (
         GTK_TOGGLE_BUTTON (item_edit->popup_toggle.tbutton), FALSE);
-    gtk_container_add(GTK_CONTAINER(item_edit->popup_toggle.tbutton),
-                      GTK_WIDGET(item_edit->popup_toggle.arrow));
+    gtk_container_add(GTK_CONTAINER(item_edit->popup_toggle.tbutton), GTK_WIDGET(box));
 
     /* Force padding on the button to
        1. keep it small
@@ -556,6 +576,8 @@ gnc_item_edit_new (GnucashSheet *sheet)
                         FALSE, TRUE, 0);
     gtk_widget_show_all(GTK_WIDGET(item_edit));
 
+    gtk_widget_hide (GTK_WIDGET(item_edit->popup_toggle.arrow_up));
+
     return GTK_WIDGET(item_edit);
 }
 
@@ -564,11 +586,11 @@ void
 gnc_item_edit_show_popup (GncItemEdit *item_edit)
 {
     GtkToggleButton *toggle;
-    GtkAdjustment *vadj;
+    GtkAdjustment *vadj, *hadj;
     GtkAllocation alloc;
     GnucashSheet *sheet;
     gint x, y, w, h;
-    gint y_offset;
+    gint y_offset, x_offset;
     gint popup_x, popup_y;
     gint popup_w;
     gint popup_h;
@@ -591,8 +613,10 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
     view_width  = alloc.width;
 
     vadj = gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(sheet));
+    hadj = gtk_scrollable_get_hadjustment(GTK_SCROLLABLE(sheet));
 
     y_offset = gtk_adjustment_get_value(vadj);
+    x_offset = gtk_adjustment_get_value(hadj);
     gnc_item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
 
     popup_x = x;
@@ -602,7 +626,7 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
 
     if (up_height > down_height)
     {
-        popup_y = y_offset;
+        popup_y = y + y_offset;
         popup_h = up_height;
     }
     else
@@ -611,7 +635,7 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
         popup_h = down_height;
     }
 
-    popup_max_width = view_width - popup_x;
+    popup_max_width = view_width - popup_x + x_offset;
 
     if (item_edit->get_popup_height)
         popup_h = item_edit->get_popup_height
@@ -626,11 +650,13 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
     else
         popup_w = -1;
 
+    if (up_height > down_height)
+        popup_y = y - popup_h;
+
     if (!gtk_widget_get_parent (item_edit->popup_item))
         gtk_layout_put (GTK_LAYOUT(sheet), item_edit->popup_item,
                         popup_x, popup_y);
     gtk_widget_set_size_request(item_edit->popup_item, popup_w, popup_h);
-    // FIXME what about the GtkAnchorType that the GNOME_CANVAS_ITEM used ?
 
     toggle = GTK_TOGGLE_BUTTON(item_edit->popup_toggle.tbutton);
 
@@ -641,7 +667,8 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
         unblock_toggle_signals (item_edit);
     }
 
-    item_edit->popup_toggle.arrow = gtk_image_new_from_icon_name ("go-up", GTK_ICON_SIZE_BUTTON);
+    gtk_widget_hide (item_edit->popup_toggle.arrow_down);
+    gtk_widget_show (item_edit->popup_toggle.arrow_up);
 
     if (item_edit->popup_set_focus)
         item_edit->popup_set_focus (item_edit->popup_item,
@@ -663,9 +690,11 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
         {
             popup_x -= popup_width - popup_max_width;
             popup_x = MAX (0, popup_x);
-            gtk_layout_move (GTK_LAYOUT(sheet), item_edit->popup_item,
-                             popup_x, popup_y);
         }
+        else
+            popup_x = x;
+
+        gtk_layout_move (GTK_LAYOUT(sheet), item_edit->popup_item, popup_x, popup_y);
     }
 }
 
@@ -684,7 +713,8 @@ gnc_item_edit_hide_popup (GncItemEdit *item_edit)
 
     gtk_container_remove (GTK_CONTAINER(item_edit->sheet), item_edit->popup_item);
 
-    item_edit->popup_toggle.arrow = gtk_image_new_from_icon_name ("go-down", GTK_ICON_SIZE_BUTTON);
+    gtk_widget_hide (item_edit->popup_toggle.arrow_up);
+    gtk_widget_show (item_edit->popup_toggle.arrow_down);
 
     gtk_toggle_button_set_active
     (GTK_TOGGLE_BUTTON(item_edit->popup_toggle.tbutton), FALSE);

@@ -338,11 +338,9 @@ draw_hatching (cairo_t *cr,
     cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
 
     cairo_rectangle (cr, h_x, h_y, h_size, h_size);
-
     cairo_move_to (cr, h_x, h_y);
     cairo_rel_line_to (cr, h_size, h_size);
-
-    cairo_rel_move_to (cr, -h_x, 0);
+    cairo_rel_move_to (cr, -h_size, 0);
     cairo_rel_line_to (cr, h_size, -h_size);
     cairo_stroke (cr);
 }
@@ -370,7 +368,7 @@ draw_divider_line (cairo_t *cr, VirtualLocation virt_loc,
     cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
 
     cairo_set_line_width (cr, 3.0);
-    cairo_move_to (cr, x, y + 0.5 + offset);
+    cairo_move_to (cr, x, y - 0.5 + offset);
     cairo_rel_line_to (cr, width, 0);
     cairo_stroke (cr);
 }
@@ -423,42 +421,41 @@ draw_cell (GnucashSheet *sheet,
     /* top */
     draw_cell_line (cr, bg_color,
                     (borders.top >= borders.left ? x : x + 1.0),
-                    y + 0.5,
+                    y - 0.5,
                     (borders.top >= borders.right ?
                      x + width : x + width - 1),
-                    y + 0.5,
+                    y - 0.5,
                     borders.top);
 
     /* bottom */
     draw_cell_line (cr, bg_color,
-                    (borders.bottom >= borders.left ? x : x + 1),
-                    y + height + 0.5,
+                    (borders.bottom >= borders.left ? x : x + 1.0),
+                    y + height - 0.5,
                     (borders.bottom >= borders.right ?
                      x + width : x + width - 1),
-                    y + height + 0.5,
+                    y + height - 0.5,
                     borders.bottom);
 
     /* left */
     draw_cell_line (cr, bg_color,
-                    x + 0.5,
-                    (borders.left > borders.top ? y : y + 1),
-                    x + 0.5,
+                    (x == 0 ? x + 0.5 : x - 0.5),
+                    (borders.left > borders.top ? y : y),
+                    (x == 0 ? x + 0.5 : x - 0.5),
                     (borders.left > borders.bottom ?
-                     y + height : y + height - 1),
+                     y + height : y + height),
                     borders.left);
 
     /* right */
     draw_cell_line (cr, bg_color,
-                    x + width + 0.5,
-                    (borders.right > borders.top ? y : y + 1),
-                    x + width + 0.5,
+                    x + width - 0.5,
+                    (borders.right > borders.top ? y : y),
+                    x + width - 0.5,
                     (borders.right > borders.bottom ?
-                     y + height : y + height - 1),
+                     y + height : y + height),
                     borders.right);
 
     if (hatching)
-        draw_hatching (cr,
-                               x, y, width, height);
+        draw_hatching (cr, x, y, width, height);
 
     /* dividing line upper (red) */
     fg_color = &gn_red;
@@ -700,19 +697,37 @@ gnucash_sheet_draw_cursor (GnucashCursor *cursor, cairo_t *cr)
 
     fg_color = &gn_black;
 
-    /* draw the rectangle around the entire active
-     *    virtual *row */
-    cairo_rectangle (cr, cursor->x - x + 0.5, cursor->y - y + 0.5,
-                     cursor->w - 1.0, cursor->h - 1.0);
-    cairo_move_to (cr, cursor->x - x, cursor->y - y + cursor->h - 1.5);
-    cairo_rel_line_to (cr, cursor->w, 0);
+   /* draw the rectangle around the entire active virtual row - transaction rows only - double line  */
     cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
+    if (cursor->x == 0)
+        cairo_rectangle (cr, cursor->x - x + 0.5, cursor->y - y - 0.5, cursor->w - 1.0, cursor->h - 2.0);
+    else
+        cairo_rectangle (cr, cursor->x - x - 0.5, cursor->y - y - 0.5, cursor->w, cursor->h - 2.0);
+
     cairo_set_line_width (cr, 1.0);
     cairo_stroke (cr);
 
-    cairo_rectangle (cr, cc->x - x + 0.5, cursor->y + cc->y - y + 0.5,
-                     cc->w - 1.0, cc->h - 1.0);
+    // make the bottom line thicker
+    cairo_move_to (cr, cursor->x - x + 0.5, cursor->y - y + cursor->h - 1.5);
+    cairo_rel_line_to (cr, cursor->w, 0);
+    cairo_stroke (cr);
+
+    /* draw rectangle around the active cell */
     cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
+    if (cc->x != 0)
+        cairo_rectangle (cr, cc->x - x - 0.5, cursor->y + cc->y - y - 0.5, cc->w, cc->h);
+    else
+        cairo_rectangle (cr, cc->x - x + 0.5, cursor->y + cc->y - y - 0.5, cc->w - 1.0, cc->h);
+
     cairo_set_line_width (cr, 1.0);
     cairo_stroke (cr);
+}
+
+void
+gnc_widget_set_css_name (GtkWidget *widget, const char *name)
+{
+#if !GTK_CHECK_VERSION(3,20,0)
+    GtkStyleContext *context = gtk_widget_get_style_context (widget);
+    gtk_style_context_add_class (context, name);
+#endif
 }
