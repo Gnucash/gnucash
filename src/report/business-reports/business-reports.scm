@@ -27,7 +27,7 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report report-system))
-(gnc:module-load "gnucash/report/standard-reports" 0)
+(use-modules (gnucash report standard-reports))
 
 ;; to define gnc-build-url
 (gnc:module-load "gnucash/html" 0)

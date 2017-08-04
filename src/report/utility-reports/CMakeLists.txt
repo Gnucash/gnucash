@@ -1,30 +1,3 @@
-ADD_SUBDIRECTORY(test)
-
-SET(utility_reports_SOURCES
-  gncmod-utility-reports.c
-)
-
-ADD_LIBRARY(gncmod-utility-reports MODULE ${utility_reports_SOURCES})
-
-TARGET_LINK_LIBRARIES(gncmod-utility-reports gnc-module ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS})
-
-TARGET_COMPILE_DEFINITIONS(gncmod-utility-reports PRIVATE -DG_LOG_DOMAIN=\"gnc.report.util\")
-
-TARGET_INCLUDE_DIRECTORIES(gncmod-utility-reports
-    PRIVATE ${GUILE_INCLUDE_DIRS}
-)
-
-SET(LIB_DIR lib/gnucash)
-IF (WIN32)
-  SET(LIB_DIR bin)
-ENDIF(WIN32)
-
-
-INSTALL(TARGETS gncmod-utility-reports
-  LIBRARY DESTINATION ${LIB_DIR}
-  ARCHIVE DESTINATION ${LIB_DIR}
-  RUNTIME DESTINATION bin)
-
 # Scheme
 
 SET(utility_reports_SCHEME
@@ -53,5 +26,5 @@ GNC_ADD_SCHEME_TARGETS(scm-utility-reports
 )
 
 SET_LOCAL_DIST(utility_reports_DIST_local CMakeLists.txt Makefile.am
-        ${utility_reports_SOURCES} ${utility_reports_SCHEME})
+        ${utility_reports_SCHEME})
 SET(utility_reports_DIST ${utility_reports_DIST_local} ${test_utility_reports_DIST} PARENT_SCOPE)

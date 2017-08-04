@@ -275,8 +275,6 @@ src/gnome/top-level.c
 src/gnome/window-autoclear.c
 src/gnome/window-reconcile2.c
 src/gnome/window-reconcile.c
-src/gnome-business/business-gnome.scm
-src/gnome-business/gncmod-business-gnome.c
 src/gnome-search/dialog-search.c
 src/gnome-search/dialog-search.glade
 src/gnome-search/gnc-general-search.c
@@ -640,7 +638,6 @@ src/report/standard-reports/daily-reports.scm
 src/report/standard-reports/equity-statement.scm
 src/report/standard-reports/general-journal.scm
 src/report/standard-reports/general-ledger.scm
-src/report/standard-reports/gncmod-standard-reports.c
 src/report/standard-reports/income-statement.scm
 src/report/standard-reports/net-barchart.scm
 src/report/standard-reports/net-linechart.scm
@@ -659,7 +656,6 @@ src/report/stylesheets/stylesheet-footer.scm
 src/report/stylesheets/stylesheet-head-or-tail.scm
 src/report/stylesheets/stylesheet-plain.scm
 src/report/stylesheets/stylesheets.scm
-src/report/utility-reports/gncmod-utility-reports.c
 src/report/utility-reports/hello-world.scm
 src/report/utility-reports/utility-reports.scm
 src/report/utility-reports/view-column.scm

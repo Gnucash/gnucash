@@ -1,24 +1,21 @@
 -*-text-*-
 
 'Modules' in Gnucash are relatively self-contained segments of code that
-can be dynamically loaded at runtime.  Eventually we want the whole gnucash
-source tree to be a set of modules and the app itself to be a short Scheme
-program that loads them all. 
+can be dynamically loaded at runtime.  While this may have been a great
+design when gnucash was pure guile, it turns out this needlessly complicates
+the current mix of C, C++ and guile. So expect this gnc-module based 
+modularization to be greatly reduced in the future. All the core parts should
+be loadable straight away as dynamic libraries. This is currently not feasible
+so the gnc-module functionality will still be around for some time and perhaps
+forever as a way to extend gnucash with external code.
 
 We're not there yet :) 
 
-core-utils                  The lowest level.  Very basic code.
-                            Should not depend on any other modules.
-                            This module is not a gnc-module (and
-                            perhaps shouldn't be).
-
-Here are the bits that have been converted to use the module system so
-far.
+Here are the bits that are still using the module system so far (this list is probably
+outdated already, but can serve as a starting point to figure out which modules
+can already be de-modularized):.
 
 gnc-module                  The module system (actually not a module itself)
-
-calculation                 Low-level expression parsing & financial
-                            equation solving.
 
 engine                      The engine module, without any backends
 
@@ -34,14 +31,10 @@ register/register-core      Toolkit independent register code, formerly in
 register/register-gnome     Gnome-specific register code, formerly in 
                             src/register/gnome
 
-import-export/binary-import utils for importing old GnuCash binary files
-
 import-export/qif-import    the old qif importer with Gnome druid 
 import-export/qif-io-core   new qif import/export module.  unfinished.
 
 report/report-system        the report infrastructure and HTML handling 
-report/standard-reports     most of the reports that are in gnucash
-report/utility-reports      the multicolumn view, the iframe report, etc. 
 report/locale-specific-reports  reports that should only be loaded in 
                                 certain locales. subdir per locale. 
 report/stylesheets          predefined style sheet templates 
@@ -50,14 +43,8 @@ report/report-gnome         Gnome gui for displaying reports.
 app-utils                   utils for the gnucash app framework (component 
                             mgr, cmd line processing, gettext stuff, etc)
 
-app-file                    application-level file handling
-
 gnome-utils                 Extensions and utilities for using Gnome/Gtk
                             with GnuCash, including new widgets.
 
-network-utils               Utils for network communication.
-
 tax/us                      US tax information
-
-(RPC was removed in v.1.9.0, subversion release: 12018)
 

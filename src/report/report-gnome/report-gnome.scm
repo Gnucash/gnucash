@@ -29,6 +29,7 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gnome-utils))
 (use-modules (gnucash gettext))
+(use-modules (gnucash report utility-reports))
 
 (use-modules (gnucash printf))
 
@@ -43,7 +44,6 @@
 
 (gnc:module-load "gnucash/gnome-utils" 0)
 (gnc:module-load "gnucash/report/report-system" 0)
-(gnc:module-load "gnucash/report/utility-reports" 0)
 
 (export gnc:report-menu-setup)
 (export gnc:add-report-template-menu-items)

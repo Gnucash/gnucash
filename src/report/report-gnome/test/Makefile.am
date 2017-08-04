@@ -25,7 +25,6 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/gnome-utils \
   --gnc-module-dir ${top_builddir}/src/html \
   --gnc-module-dir ${top_builddir}/src/report/report-system \
-  --gnc-module-dir ${top_builddir}/src/report/utility-reports \
   --gnc-module-dir ${top_builddir}/src/report/report-gnome \
 \
   --guile-load-dir ${top_builddir}/src/gnc-module \
@@ -35,6 +34,8 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/app-utils \
   --guile-load-dir ${top_builddir}/src/gnome-utils \
   --guile-load-dir ${top_builddir}/src/report/report-system \
+  --guile-load-dir ${top_builddir}/src/report/standard-reports \
+  --guile-load-dir ${top_builddir}/src/report/business-reports \
   --guile-load-dir ${top_builddir}/src/report/utility-reports \
   --guile-load-dir ${top_builddir}/src/report/report-gnome \
 \

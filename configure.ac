@@ -1773,7 +1773,6 @@ AC_CONFIG_FILES(
   src/report/stylesheets/Makefile
   src/report/stylesheets/test/Makefile
   src/report/utility-reports/Makefile
-  src/report/utility-reports/test/Makefile
   src/report/jqplot/Makefile
   src/scm/Makefile
   src/scm/gnumeric/Makefile
@@ -1850,12 +1849,8 @@ AC_CONFIG_FILES([src/report/report-gnome/test/test-load-module],
                 [chmod +x src/report/report-gnome/test/test-load-module])
 AC_CONFIG_FILES([src/report/report-system/test/test-load-module],
                 [chmod +x src/report/report-system/test/test-load-module])
-AC_CONFIG_FILES([src/report/standard-reports/test/test-load-module],
-                [chmod +x src/report/standard-reports/test/test-load-module])
 AC_CONFIG_FILES([src/report/stylesheets/test/test-load-module],
                 [chmod +x src/report/stylesheets/test/test-load-module])
-AC_CONFIG_FILES([src/report/utility-reports/test/test-load-module],
-                [chmod +x src/report/utility-reports/test/test-load-module])
 AC_CONFIG_FILES([src/tax/us/test/test-load-module],
                 [chmod +x src/tax/us/test/test-load-module])
 
