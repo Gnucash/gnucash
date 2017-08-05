@@ -34,10 +34,12 @@ libgncmod_engine_la_SOURCES = \
   gnc-commodity.c \
   gnc-engine.c \
   gnc-event.c \
+  gnc-features.c \
   gnc-hooks.c \
   gnc-lot.c \
   gnc-pricedb.c \
   gnc-session.c \
+  gnc-uri-utils.c \
   gncmod-engine.c \
   swig-engine.c \
   kvp-scm.cpp \
@@ -86,9 +88,11 @@ gncinclude_HEADERS = \
   gnc-commodity.h \
   gnc-engine.h \
   gnc-event.h \
+  gnc-features.h \
   gnc-hooks.h \
   gnc-pricedb.h \
   gnc-session.h \
+  gnc-uri-utils.h \
   kvp-scm.h \
   policy.h \
   gncAddress.h \

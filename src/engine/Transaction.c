@@ -62,7 +62,7 @@ struct timeval
 #include "gnc-engine.h"
 #include "gnc-lot.h"
 #include "gnc-event.h"
-#include <gnc-gdate-utils.h>
+#include <gnc-date.h>
 #include "SchedXaction.h"
 #include "gncBusiness.h"
 #include <qofinstance-p.h>

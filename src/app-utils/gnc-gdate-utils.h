@@ -40,21 +40,6 @@
 
 #include <gnc-date.h>
 
-/** @name GDate time64 setters
-    @{ */
-/** Set a GDate to the current day
- * @param theGDate: The date to act on
- */
-void gnc_gdate_set_today (GDate* gd);
-
-/** Set a GDate to a time64
- * @param theGDate: the date to act on
- * @param time: the time to set it to.
- */
-void gnc_gdate_set_time64 (GDate* gd, time64 time);
-
-/** @} */
-
 /** @name GDate hash table support
     @{ */
 

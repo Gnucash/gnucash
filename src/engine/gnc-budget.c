@@ -29,7 +29,6 @@
 #include <time.h>
 #include <qof.h>
 #include <qofbookslots.h>
-#include <gnc-gdate-utils.h>
 #include <qofinstance-p.h>
 
 #include "Account.h"
@@ -89,16 +88,17 @@ static void
 gnc_budget_init(GncBudget* budget)
 {
     BudgetPrivate* priv;
-    GDate date;
+    GDate *date;
 
     priv = GET_PRIVATE(budget);
     priv->name = CACHE_INSERT(_("Unnamed Budget"));
     priv->description = CACHE_INSERT("");
 
     priv->num_periods = 12;
-    gnc_gdate_set_today (&date);
-    g_date_subtract_days(&date, g_date_get_day(&date) - 1);
-    recurrenceSet(&priv->recurrence, 1, PERIOD_MONTH, &date, WEEKEND_ADJ_NONE);
+    date = gnc_g_date_new_today ();
+    g_date_subtract_days(date, g_date_get_day(date) - 1);
+    recurrenceSet(&priv->recurrence, 1, PERIOD_MONTH, date, WEEKEND_ADJ_NONE);
+    g_date_free (date);
 }
 
 static void

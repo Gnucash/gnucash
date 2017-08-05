@@ -6,16 +6,13 @@ libgnc_core_utils_la_SOURCES = \
   binreloc.c \
   gnc-prefs.c \
   gnc-environment.c \
-  gnc-features.c \
   gnc-filepath-utils.c \
-  gnc-gdate-utils.c \
   gnc-gkeyfile-utils.c \
   gnc-glib-utils.c \
   gnc-guile-utils.c \
   gnc-jalali.c \
   gnc-locale-utils.c \
   gnc-path.c \
-  gnc-uri-utils.c \
   swig-core-utils-guile.c
 
 libgnc_core_utils_la_LIBADD = \
@@ -31,16 +28,13 @@ noinst_HEADERS = \
   gnc-prefs.h \
   gnc-prefs-p.h \
   gnc-environment.h \
-  gnc-features.h \
   gnc-filepath-utils.h \
-  gnc-gdate-utils.h \
   gnc-gkeyfile-utils.h \
   gnc-glib-utils.h \
   gnc-guile-utils.h \
   gnc-jalali.h \
   gnc-locale-utils.h \
-  gnc-path.h \
-  gnc-uri-utils.h
+  gnc-path.h
 
 if BUILDING_FROM_VCS
 swig-core-utils-guile.c: core-utils.i ${top_srcdir}/src/base-typemaps.i

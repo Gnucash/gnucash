@@ -35,6 +35,7 @@ ADD_ENGINE_TEST(test-commodities test-commodities.cpp)
 
 SET(test_engine_SOURCES
   test-engine.c
+  test-gnc-uri-utils.c
   utest-Account.cpp
   utest-Budget.c
   utest-Entry.c
@@ -109,6 +110,7 @@ SET(test_engine_SOURCES_DIST
         test-employee.c
 	test-engine-kvp-properties.c
         test-engine.c
+        test-gnc-uri-utils.c
         test-group-vs-book.cpp
         test-guid.cpp
         test-job.c

@@ -1354,7 +1354,27 @@ GDate* gnc_g_date_new_today ()
     auto result = g_date_new_dmy (ymd.day, month, ymd.year);
     g_assert(g_date_valid (result));
     return result;
+}void
+
+gnc_gdate_set_today (GDate* gd)
+{
+    GDate *today = gnc_g_date_new_today ();
+    g_date_set_julian (gd, g_date_get_julian (today));
+    g_date_free (today);
 }
+
+void
+gnc_gdate_set_time64 (GDate* gd, time64 time)
+{
+    struct tm tm;
+    gnc_localtime_r(&time, &tm);
+    g_date_set_dmy (gd, tm.tm_mday,
+                    static_cast<GDateMonth>(tm.tm_mon + 1),
+                    tm.tm_year + 1900);
+
+}
+
+
 
 Timespec gdate_to_timespec (GDate d)
 {

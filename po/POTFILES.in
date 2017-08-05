@@ -27,6 +27,7 @@ src/app-utils/gnc-component-manager.c
 src/app-utils/gnc-entry-quickfill.c
 src/app-utils/gnc-euro.c
 src/app-utils/gnc-exp-parser.c
+src/app-utils/gnc-gdate-utils.c
 src/app-utils/gnc-gettext-util.c
 src/app-utils/gnc-gsettings.c
 src/app-utils/gnc-helpers.c
@@ -113,9 +114,7 @@ src/bin/gnucash-bin.c
 src/core-utils/binreloc.c
 src/core-utils/core-utils.scm
 src/core-utils/gnc-environment.c
-src/core-utils/gnc-features.c
 src/core-utils/gnc-filepath-utils.c
-src/core-utils/gnc-gdate-utils.c
 src/core-utils/gnc-gkeyfile-utils.c
 src/core-utils/gnc-glib-utils.c
 src/core-utils/gnc-guile-utils.c
@@ -123,7 +122,6 @@ src/core-utils/gnc-jalali.c
 src/core-utils/gnc-locale-utils.c
 src/core-utils/gnc-path.c
 src/core-utils/gnc-prefs.c
-src/core-utils/gnc-uri-utils.c
 src/doc/doxygen_main_page.c
 src/engine/Account.c
 src/engine/business-core.scm
@@ -146,6 +144,7 @@ src/engine/gncEmployee.c
 src/engine/gnc-engine.c
 src/engine/gncEntry.c
 src/engine/gnc-event.c
+src/engine/gnc-features.c
 src/engine/gnc-hooks.c
 src/engine/gncIDSearch.c
 src/engine/gncInvoice.c
@@ -158,6 +157,7 @@ src/engine/gncOwner.c
 src/engine/gnc-pricedb.c
 src/engine/gnc-session.c
 src/engine/gncTaxTable.c
+src/engine/gnc-uri-utils.c
 src/engine/gncVendor.c
 src/engine/kvp-scm.cpp
 src/engine/policy.c
