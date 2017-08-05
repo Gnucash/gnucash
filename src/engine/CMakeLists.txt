@@ -90,14 +90,6 @@ ADD_CUSTOM_COMMAND (
     ${LIBXSLT_XSLTPROC_EXECUTABLE} -o ${ISO_4217_C} "${CMAKE_CURRENT_SOURCE_DIR}/iso-currencies-to-c.xsl" "${CMAKE_CURRENT_SOURCE_DIR}/iso-4217-currencies.xml"
     )
 ADD_CUSTOM_TARGET(iso-4217-c DEPENDS ${ISO_4217_C})
-# Add dependency on iso-4217-currencies.c
-SET_SOURCE_FILES_PROPERTIES (gnc-commodity.c PROPERTIES OBJECT_DEPENDS "${ISO_4217_C};${CONFIG_H}")
-
-# Add dependency on config.h
-SET_SOURCE_FILES_PROPERTIES (${libgncmod_engine_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
-
-# Add dependency on swig-runtime.h
-SET_SOURCE_FILES_PROPERTIES (gnc-hooks.c engine-helpers.c kvp-scm.cpp glib-helpers.c PROPERTIES OBJECT_DEPENDS "${CONFIG_H};${SWIG_RUNTIME_H}")
 
 SET (engine_SOURCES
   Account.c
@@ -144,8 +136,18 @@ SET (engine_SOURCES
   gncVendor.c
 )
 
+# Add dependency on config.h
+SET_SOURCE_FILES_PROPERTIES (${engine_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
-ADD_LIBRARY	(gncmod-engine
+# Add dependency on iso-4217-currencies.c
+SET_SOURCE_FILES_PROPERTIES (gnc-commodity.c PROPERTIES OBJECT_DEPENDS "${ISO_4217_C};${CONFIG_H}")
+
+# Add dependency on swig-runtime.h
+SET_SOURCE_FILES_PROPERTIES (gnc-hooks.c engine-helpers.c kvp-scm.cpp glib-helpers.c PROPERTIES OBJECT_DEPENDS "${CONFIG_H};${SWIG_RUNTIME_H}")
+
+
+
+ADD_LIBRARY (gncmod-engine
   ${engine_SOURCES}
   ${engine_HEADERS}
   ${SWIG_ENGINE_C}
