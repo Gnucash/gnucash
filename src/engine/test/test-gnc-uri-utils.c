@@ -27,8 +27,11 @@
 
 #include <glib.h>
 #include "qof.h"
-#include "test-stuff.h"
+#include <unittest-support.h>
 #include "gnc-uri-utils.h"
+
+static const gchar *suitename = "engine/uri-utils";
+void test_suite_gnc_uri_utils(void);
 
 struct test_strings_struct
 {
@@ -194,14 +197,11 @@ test_strings strs[] =
     { NULL, FALSE, NULL, NULL, NULL, NULL, NULL, 0, NULL, FALSE },
 };
 
-int
-main(int argc, char **argv)
+/* TEST: gnc_uri_get_components */
+static void
+test_gnc_uri_get_components()
 {
     int i;
-
-    qof_init();
-
-    /* TEST: gnc_uri_get_components */
     for (i = 0; strs[i].uri != NULL; i++)
     {
         gchar *tprotocol = NULL;
@@ -210,141 +210,124 @@ main(int argc, char **argv)
         gchar *tpassword = NULL;
         gchar *tpath     = NULL;
         gint32 tport     = 0;
-        gboolean testresult;
 
         gnc_uri_get_components( strs[i].uri, &tprotocol, &thostname,
                                 &tport, &tusername, &tpassword, &tpath );
-        testresult = ( g_strcmp0 ( tprotocol, strs[i].protocol ) == 0 ) &
-                     ( g_strcmp0 ( thostname, strs[i].hostname ) == 0 ) &
-                     ( g_strcmp0 ( tusername, strs[i].username ) == 0 ) &
-                     ( g_strcmp0 ( tpassword, strs[i].password ) == 0 ) &
-                     ( g_strcmp0 ( tpath, strs[i].path ) == 0 ) &
-                     ( tport == strs[i].port );
-        do_test_args(testresult,
-                     "gnc_uri_get_components",
-                     __FILE__, __LINE__,
-                     "\n  %s:\n"
-                     "    Expected: %s, %s, %s, %s, %s, %d\n"
-                     "    Got     : %s, %s, %s, %s, %s, %d\n",
-                     strs[i].uri, strs[i].protocol, strs[i].hostname,
-                     strs[i].username, strs[i].password, strs[i].path, strs[i].port,
-                     tprotocol, thostname, tusername, tpassword, tpath, tport);
+        g_assert_cmpstr ( tprotocol, ==, strs[i].protocol );
+        g_assert_cmpstr ( thostname, ==, strs[i].hostname );
+        g_assert_cmpstr ( tusername, ==, strs[i].username );
+        g_assert_cmpstr ( tpassword, ==, strs[i].password );
+        g_assert_cmpstr ( tpath, ==, strs[i].path );
+        g_assert_cmpint ( tport, ==, strs[i].port );
+
         g_free(tprotocol);
         g_free(thostname);
         g_free(tusername);
         g_free(tpassword);
         g_free(tpath);
     }
+}
 
-    /* TEST: gnc_uri_get_protocol */
+/* TEST: gnc_uri_get_protocol */
+static void
+test_gnc_uri_get_protocol()
+{
+    int i;
     for (i = 0; strs[i].uri != NULL; i++)
     {
         gchar *tprotocol = NULL;
-        gboolean testresult;
 
         tprotocol = gnc_uri_get_protocol( strs[i].uri );
-        testresult = ( g_strcmp0 ( tprotocol, strs[i].protocol ) == 0 );
-        do_test_args(testresult,
-                     "gnc_uri_get_protocol",
-                     __FILE__, __LINE__,
-                     "\n  %s:\n"
-                     "    Expected: %s\n"
-                     "    Got     : %s\n",
-                     strs[i].uri, strs[i].protocol, tprotocol );
+        g_assert_cmpstr ( tprotocol, ==, strs[i].protocol );
         g_free(tprotocol);
     }
+}
 
-    /* TEST: gnc_uri_get_path */
+/* TEST: gnc_uri_get_path */
+static void
+test_gnc_uri_get_path()
+{
+    int i;
     for (i = 0; strs[i].uri != NULL; i++)
     {
         gchar *tpath = NULL;
-        gboolean testresult;
 
         tpath = gnc_uri_get_path( strs[i].uri );
-        testresult = ( g_strcmp0 ( tpath, strs[i].path ) == 0 );
-        do_test_args(testresult,
-                     "gnc_uri_get_path",
-                     __FILE__, __LINE__,
-                     "\n  %s:\n"
-                     "    Expected: %s\n"
-                     "    Got     : %s\n",
-                     strs[i].uri, strs[i].path, tpath );
+        g_assert_cmpstr ( tpath, ==, strs[i].path );
         g_free(tpath);
     }
+}
 
-    /* TEST: gnc_uri_create_uri */
+/* TEST: gnc_uri_create_uri */
+static void
+test_gnc_uri_create_uri()
+{
+    int i;
     for (i = 0; strs[i].uri != NULL; i++)
     {
         gchar *turi = NULL;
-        gboolean testresult;
 
         turi = gnc_uri_create_uri( strs[i].protocol, strs[i].hostname, strs[i].port,
                                    strs[i].username, strs[i].password, strs[i].path );
-        testresult = ( g_strcmp0 ( turi, strs[i].created_uri ) == 0 );
-        do_test_args(testresult,
-                     "gnc_uri_create_uri",
-                     __FILE__, __LINE__,
-                     "\n  %s, %s, %s, %s, %s, %d:\n"
-                     "    Expected: %s\n"
-                     "    Got     : %s\n",
-                     strs[i].protocol, strs[i].hostname,
-                     strs[i].username, strs[i].password, strs[i].path, strs[i].port,
-                     strs[i].created_uri, turi);
+        g_assert_cmpstr ( turi, ==, strs[i].created_uri );
         g_free(turi);
     }
+}
+
+/* TEST: gnc_uri_normalize_uri */
+static void
+test_gnc_uri_normalize_uri()
+{
+    int i;
 
     /* TEST: gnc_uri_normalize_uri */
     for (i = 0; strs[i].uri != NULL; i++)
     {
         gchar *turi = NULL;
-        gboolean testresult;
 
         turi = gnc_uri_normalize_uri( strs[i].uri, strs[i].want_password );
-        testresult = ( g_strcmp0 ( turi, strs[i].normalized_uri ) == 0 );
-        do_test_args(testresult,
-                     "gnc_uri_normalize_uri",
-                     __FILE__, __LINE__,
-                     "\n  %s:\n"
-                     "    Expected: %s\n"
-                     "    Got     : %s\n",
-                     strs[i].uri, strs[i].normalized_uri, turi );
+        g_assert_cmpstr ( turi, ==, strs[i].normalized_uri );
         g_free(turi);
     }
+}
 
-    /* TEST: gnc_uri_is_file_protocol */
+/* TEST: gnc_uri_is_file_protocol */
+static void
+test_gnc_uri_is_file_protocol()
+{
+    int i;
     for (i = 0; strs[i].uri != NULL; i++)
     {
         gboolean tis_file_protocol;
-        gboolean testresult;
 
         tis_file_protocol = gnc_uri_is_file_protocol( strs[i].protocol );
-        testresult = ( tis_file_protocol == strs[i].is_file_protocol );
-        do_test_args(testresult,
-                     "gnc_uri_is_file_protocol",
-                     __FILE__, __LINE__,
-                     "\n  %s:\n"
-                     "    Expected: %s\n"
-                     "    Got     : %s\n",
-                     strs[i].uri, strs[i].is_file_protocol, tis_file_protocol );
+        g_assert_true ( tis_file_protocol == strs[i].is_file_protocol );;
     }
+}
 
-    /* TEST: gnc_uri_is_file_uri */
+/* TEST: gnc_uri_is_file_uri */
+static void
+test_gnc_uri_is_file_uri()
+{
+    int i;
     for (i = 0; strs[i].uri != NULL; i++)
     {
         gboolean tis_file_uri;
-        gboolean testresult;
 
         tis_file_uri = gnc_uri_is_file_uri( strs[i].uri );
-        testresult = ( tis_file_uri == strs[i].is_file_protocol );
-        do_test_args(testresult,
-                     "gnc_uri_is_file_uri",
-                     __FILE__, __LINE__,
-                     "\n  %s:\n"
-                     "    Expected: %s\n"
-                     "    Got     : %s\n",
-                     strs[i].uri, strs[i].is_file_protocol, tis_file_uri );
+        g_assert_true ( tis_file_uri == strs[i].is_file_protocol );
     }
+}
 
-    print_test_results();
-    return get_rv();
+void
+test_suite_gnc_uri_utils(void)
+{
+    GNC_TEST_ADD_FUNC(suitename, "gnc_uri_get_components()", test_gnc_uri_get_components);
+    GNC_TEST_ADD_FUNC(suitename, "gnc_uri_get_protocol()", test_gnc_uri_get_protocol);
+    GNC_TEST_ADD_FUNC(suitename, "gnc_uri_get_path()", test_gnc_uri_get_path);
+    GNC_TEST_ADD_FUNC(suitename, "gnc_uri_create_uri()", test_gnc_uri_create_uri);
+    GNC_TEST_ADD_FUNC(suitename, "gnc_uri_normalize_uri()", test_gnc_uri_normalize_uri);
+    GNC_TEST_ADD_FUNC(suitename, "gnc_uri_is_file_protocol()", test_gnc_uri_is_file_protocol);
+    GNC_TEST_ADD_FUNC(suitename, "gnc_uri_is_file_uri()", test_gnc_uri_is_file_uri);
+
 }

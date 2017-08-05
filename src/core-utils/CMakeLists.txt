@@ -17,15 +17,12 @@ SET (core_utils_SOURCES
   gnc-prefs.c
   gnc-environment.c
   gnc-filepath-utils.c
-  gnc-features.c
-  gnc-gdate-utils.c
   gnc-gkeyfile-utils.c
   gnc-glib-utils.c
   gnc-guile-utils.c
   gnc-jalali.c
   gnc-locale-utils.c
   gnc-path.c
-  gnc-uri-utils.c
 )
 
 # Add dependency on config.h
@@ -110,16 +107,13 @@ SET(core_utils_noinst_HEADERS
   gnc-prefs.h
   gnc-prefs-p.h
   gnc-environment.h
-  gnc-features.h
   gnc-filepath-utils.h
-  gnc-gdate-utils.h
   gnc-gkeyfile-utils.h
   gnc-glib-utils.h
   gnc-guile-utils.h
   gnc-jalali.h
   gnc-locale-utils.h
   gnc-path.h
-  gnc-uri-utils.h
 )
 
 SET(core_utils_ALL_SOURCES ${core_utils_SOURCES} ${core_utils_noinst_HEADERS})

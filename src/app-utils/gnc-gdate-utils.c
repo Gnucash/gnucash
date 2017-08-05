@@ -26,23 +26,6 @@
 
 #include "gnc-gdate-utils.h"
 
-void
-gnc_gdate_set_today (GDate* gd)
-{
-    GDate *today = gnc_g_date_new_today ();
-    g_date_set_julian (gd, g_date_get_julian (today));
-    g_date_free (today);
-}
-
-void
-gnc_gdate_set_time64 (GDate* gd, time64 time)
-{
-    struct tm tm;
-    gnc_localtime_r(&time, &tm);
-    g_date_set_dmy (gd, tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
-
-}
-
 gboolean
 gnc_gdate_equal(gconstpointer gda, gconstpointer gdb)
 {

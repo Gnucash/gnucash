@@ -148,6 +148,7 @@ noinst_DATA: .scm-links
 
 test_engine_SOURCES = \
 	test-engine.c \
+	test-gnc-uri-utils.c \
 	utest-Account.cpp \
 	utest-Budget.c \
 	utest-Entry.c \

@@ -21,7 +21,6 @@ LDADD = \
 #
 
 TESTS = \
-  test-gnc-uri-utils \
   test-resolve-file-path \
   test-gnc-glib-utils
 

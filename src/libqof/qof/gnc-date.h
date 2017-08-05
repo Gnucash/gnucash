@@ -259,18 +259,32 @@ gboolean gnc_date_string_to_monthformat(const gchar *format_string,
                                         GNCDateMonthFormat *format);
 
 /** \brief print a time64 as a date string per format
- * \param time
+ * \param time The time64 to print
  * \param format A date format conforming to the strftime format rules.
  * \return a raw heap-allocated char* which must be freed.
  */
 char* gnc_print_time64(time64 time, const char* format);
 
+// @}
+
+/** @name GDate time64 setters
+ *    @{ */
 /** Returns a newly allocated date of the current clock time, taken from
  * time(2). The caller must g_date_free() the object afterwards. */
 GDate* gnc_g_date_new_today (void);
 
+/** Set a GDate to the current day
+ * @param gd The date to act on
+ */
+void gnc_gdate_set_today (GDate* gd);
 
-// @}
+/** Set a GDate to a time64
+ * @param gd the date to act on
+ * @param time the time to set it to.
+ */
+void gnc_gdate_set_time64 (GDate* gd, time64 time);
+
+/** @} */
 
 /* Datatypes *******************************************************/
 

@@ -27,7 +27,7 @@
 #include "gnc-date.h"
 #include "qof.h"
 #include "gnc-engine.h"
-#include "gnc-gdate-utils.h"
+#include "gnc-date.h"
 #include "Account.h"
 
 #define LOG_MOD "gnc.engine.recurrence"
@@ -381,16 +381,23 @@ time64
 recurrenceGetPeriodTime(const Recurrence *r, guint period_num, gboolean end)
 {
     GDate date;
+    Timespec ts;
     recurrenceNthInstance(r, period_num + (end ? 1 : 0), &date);
     if (end)
     {
         g_date_subtract_days(&date, 1);
-        return gnc_time64_get_day_end_gdate(&date);
+        ts = gnc_dmy2timespec_end (g_date_get_day(&date),
+                                   g_date_get_month(&date),
+                                   g_date_get_year (&date));
+
     }
     else
     {
-        return gnc_time64_get_day_start_gdate(&date);
+        ts = gnc_dmy2timespec (g_date_get_day(&date),
+                               g_date_get_month(&date),
+                               g_date_get_year (&date));
     }
+    return timespecToTime64(ts);
 }
 
 gnc_numeric
