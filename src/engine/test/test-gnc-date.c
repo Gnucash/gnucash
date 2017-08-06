@@ -27,7 +27,7 @@ extern "C"
 #endif
 
 #include <config.h>
-#include "../../../platform.h"
+#include "../../platform.h"
 #include <string.h>
 #include <sys/time.h>
 #include <glib.h>

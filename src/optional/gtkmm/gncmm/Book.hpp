@@ -24,7 +24,7 @@
 #define GNC_BOOK_HPP
 
 // gnucash includes
-#include "libqof/qof/guid.hpp"
+#include "engine/guid.hpp"
 extern "C"
 {
 #include "qof.h"

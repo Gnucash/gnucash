@@ -33,7 +33,7 @@ extern "C"
 #include "qofinstance-p.h"
 }
 
-#include "kvp_frame.hpp"
+#include "kvp-frame.hpp"
 #include "gnc-rational.hpp"
 
 namespace {

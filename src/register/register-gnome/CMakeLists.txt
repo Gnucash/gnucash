@@ -44,7 +44,7 @@ SET_SOURCE_FILES_PROPERTIES (${register_gnome_SOURCES} PROPERTIES OBJECT_DEPENDS
 
 ADD_LIBRARY (gncmod-register-gnome ${register_gnome_SOURCES} ${register_gnome_noinst_HEADERS})
 
-TARGET_LINK_LIBRARIES(gncmod-register-gnome gncmod-register-core gnc-qof ${GTK3_LDFLAGS})
+TARGET_LINK_LIBRARIES(gncmod-register-gnome gncmod-register-core ${GTK3_LDFLAGS})
 
 TARGET_COMPILE_DEFINITIONS(gncmod-register-gnome PRIVATE -DG_LOG_DOMAIN=\"gnc.register.gnome\")
 

@@ -42,7 +42,7 @@ static const gchar *suitename = "/engine/Account";
 void test_suite_account (void);
 }
 
-#include <kvp_frame.hpp>
+#include <kvp-frame.hpp>
 
 typedef struct
 {

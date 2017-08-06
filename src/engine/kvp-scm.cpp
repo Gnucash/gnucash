@@ -1,5 +1,5 @@
 #include <guid.hpp>
-#include <kvp_frame.hpp>
+#include <kvp-frame.hpp>
 #include <libguile.h>
 
 extern "C"

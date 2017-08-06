@@ -6,7 +6,6 @@ SET(XML_TEST_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/src/backend/xml/test
   ${CMAKE_SOURCE_DIR}/src/engine
   ${CMAKE_SOURCE_DIR}/src/engine/test-core
-  ${CMAKE_SOURCE_DIR}/src/libqof/qof # for qof.h
   ${CMAKE_BINARY_DIR}/src # for config.h
   ${CMAKE_SOURCE_DIR}/src/test-core  # for unittest-support.h
   ${GLIB2_INCLUDE_DIRS}
@@ -15,7 +14,7 @@ SET(XML_TEST_INCLUDE_DIRS
 )
 
 
-SET(XML_TEST_LIBS gncmod-engine gnc-qof gncmod-test-engine test-core ${LIBXML2_LDFLAGS} -lz)
+SET(XML_TEST_LIBS gncmod-engine gncmod-test-engine test-core ${LIBXML2_LDFLAGS} -lz)
 
 FUNCTION(ADD_XML_TEST _TARGET _SOURCE_FILES)
   GNC_ADD_TEST(${_TARGET} "${_SOURCE_FILES}" XML_TEST_INCLUDE_DIRS XML_TEST_LIBS ${ARGN})

@@ -1,4 +1,6 @@
-SUBDIRS = . test
+# No SUBDIR variable here...
+# The 'test' subdir is added via src/Makefile to handle
+# it's dependency on src/engine
 
 lib_LTLIBRARIES = libgnc-core-utils.la
 
@@ -19,8 +21,7 @@ libgnc_core_utils_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${BINRELOC_LIBS} \
-  ${GTK_MAC_LIBS} \
-  ${QOF_LIBS}
+  ${GTK_MAC_LIBS}
 
 
 noinst_HEADERS = \
@@ -56,8 +57,6 @@ AM_CPPFLAGS = \
   ${GUILE_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GTK_MAC_CFLAGS} \
-  ${QOF_CFLAGS} \
-  -I${top_srcdir}/src/libqof/qof \
   -I${top_builddir}/src \
   -I${top_srcdir}/src
 
@@ -84,9 +83,7 @@ libgnc_core_utils_python_la_LIBADD = \
 libgnc_core_utils_python_la_CPPFLAGS = \
   ${GLIB_CFLAGS} \
   ${GTK_MAC_CFLAGS} \
-  ${QOF_CFLAGS} \
   ${PYTHON_CPPFLAGS} \
-  -I${top_srcdir}/src/libqof/qof \
   -I${top_builddir}/src \
   -I${top_srcdir}/src
 
@@ -108,8 +105,7 @@ endif
 
 if GNC_HAVE_GUILE_2
 GUILE_COMPILE_ENV = \
-  --library-dir    ${top_builddir}/src/core-utils \
-  --library-dir    ${top_builddir}/src/libqof/qof
+  --library-dir    ${top_builddir}/src/core-utils
 
 %.go : %.scm .scm-links $(lib_LTLIBRARIES)
 	GNC_UNINSTALLED=yes \

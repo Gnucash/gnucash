@@ -657,17 +657,6 @@ AC_CHECK_LIB(z, gzopen, [:], [
 ])
 LIBS="$oLIBS"
 
-### --------------------------------------------------------------------------
-### Internal code part which is called "qof"
-
-LIBQOF_LIBRARY_VERSION=1:4:0
-AC_SUBST(LIBQOF_LIBRARY_VERSION)
-
-QOF_CFLAGS='-I${top_builddir}/src/libqof/qof -I${top_srcdir}/src/libqof/qof'
-QOF_LIBS='${top_builddir}/src/libqof/qof/libgnc-qof.la'
-AC_SUBST(QOF_CFLAGS)
-AC_SUBST(QOF_LIBS)
-
 ### ----------------------
 ### LIBDBI
 
@@ -1740,9 +1729,6 @@ AC_CONFIG_FILES(
   src/import-export/aqb/Makefile
   src/import-export/aqb/gschemas/Makefile
   src/import-export/aqb/test/Makefile
-  src/libqof/Makefile
-  src/libqof/qof/Makefile
-  src/libqof/qof/test/Makefile
   src/optional/Makefile
   src/optional/gtkmm/Makefile
   src/optional/gtkmm/test/Makefile

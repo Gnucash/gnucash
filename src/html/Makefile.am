@@ -12,7 +12,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_builddir}/src \
   -I${top_srcdir}/lib/libc \
-  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GUILE_CFLAGS} \
   ${GTK_CFLAGS} \
@@ -50,7 +49,6 @@ libgncmod_html_la_LIBADD = \
   ${GTK_LIBS} \
   ${GLIB_LIBS} \
   ${DB_LIBS} \
-  ${QOF_LIBS} \
   ${GUILE_LIBS} \
   ${REGEX_LIBS}
 

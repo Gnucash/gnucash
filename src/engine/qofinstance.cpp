@@ -39,7 +39,7 @@ extern "C"
 #include "qof.h"
 #include "qofbook-p.h"
 #include "qofid-p.h"
-#include "kvp_frame.hpp"
+#include "kvp-frame.hpp"
 #include "qofinstance-p.h"
 #include "qof-backend.hpp"
 

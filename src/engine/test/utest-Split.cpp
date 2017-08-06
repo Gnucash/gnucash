@@ -45,7 +45,7 @@ static const gchar *suitename = "/engine/Split";
 void test_suite_split ( void );
 }
 
-#include <kvp_frame.hpp>
+#include <kvp-frame.hpp>
 
 typedef struct
 {

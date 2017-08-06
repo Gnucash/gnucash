@@ -57,7 +57,7 @@ extern "C"
 #include "qofid-p.h"
 #include "qofobject-p.h"
 #include "qofbookslots.h"
-#include "kvp_frame.hpp"
+#include "kvp-frame.hpp"
 
 static QofLogModule log_module = QOF_MOD_ENGINE;
 #define AB_KEY "hbci"

@@ -28,7 +28,7 @@ extern "C"
 #include <qofinstance-p.h>
 }
 
-#include <kvp_frame.hpp>
+#include <kvp-frame.hpp>
 #include <gtest/gtest.h>
 
 class ImapTest : public testing::Test

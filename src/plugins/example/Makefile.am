@@ -15,7 +15,6 @@ libgncmod_example_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${GNOME_LIBS} \
   ${GLADE_LIBS} \
-  ${QOF_LIBS} \
   ${GLIB_LIBS} \
   ${AQBANKING_LIBS}
 
@@ -32,7 +31,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   ${GNOME_CFLAGS} \
   ${GLADE_CFLAGS} \
-  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${AQBANKING_CFLAGS}
 

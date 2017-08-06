@@ -40,7 +40,6 @@ test_aqb_LDADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GLIB_LIBS}
 
 test_aqb_CFLAGS = \
@@ -58,7 +57,6 @@ test_aqb_CFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/gnc-module \
-  -I${top_srcdir}/src/libqof/qof \
   ${GTK_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${AQBANKING_CFLAGS}

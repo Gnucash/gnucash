@@ -48,7 +48,6 @@ IMP_TEST_CPPFLAGS =  \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/gnc-module \
-  -I${top_srcdir}/src/libqof/qof \
   -I${top_srcdir}/lib/libc \
   -I${top_srcdir}/lib \
   ${GTK_CFLAGS} \
@@ -77,7 +76,6 @@ IMP_TEST_LDFLAGS = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GLIB_LIBS} \
   $(BOOST_LDFLAGS)
 
@@ -105,8 +103,7 @@ GNC_TEST_DEPS = \
 --library-dir    ${top_builddir}/src/backend/xml \
 --library-dir    ${top_builddir}/src/engine \
 --library-dir    ${top_builddir}/src/core-utils \
---library-dir    ${top_builddir}/src/gnc-module \
---library-dir    ${top_builddir}/src/libqof/qof
+--library-dir    ${top_builddir}/src/gnc-module
 
 TESTS_ENVIRONMENT = \
   SRCDIR=${srcdir} \

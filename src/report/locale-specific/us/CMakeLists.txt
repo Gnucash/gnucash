@@ -29,7 +29,7 @@ SET(gncmod_local_reports_us_SCHEME_2 us.scm de_DE.scm)
 SET(GUILE_MODULES src/app-utils src/engine src/gnome-utils src/html src/report/report-system src/tax/us)
 SET(GUILE_LOAD_DIRS  src/app-utils src/core-utils src/engine src/gnc-module src/gnome-utils src/report/report-system
                      src/scm src/tax/us)
-SET(GUILE_LIBRARY_DIRS src/engine src/libqof/qof src/app-utils src/core-utils src/gnc-module src/gnome-utils
+SET(GUILE_LIBRARY_DIRS src/engine src/app-utils src/core-utils src/gnc-module src/gnome-utils
                        src/html src/report/report-system)
 SET(GUILE_DEPENDS   gncmod-html scm-tax-us-1 scm-tax-us-2 scm-report-system-3)
 

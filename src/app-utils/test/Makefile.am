@@ -23,7 +23,6 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/scm \
   --guile-load-dir ${top_builddir}/src/app-utils \
-  --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/engine \
@@ -39,7 +38,6 @@ TESTS_ENVIRONMENT = \
   $(shell ${abs_top_srcdir}/src/gnc-test-env.pl --noexports ${GNC_TEST_DEPS})
 
 LDADD = \
-   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
    ${top_builddir}/src/core-utils/libgnc-core-utils.la \
    ${top_builddir}/src/engine/libgncmod-engine.la \
    ${top_builddir}/src/gnc-module/libgnc-module.la \
@@ -61,7 +59,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/core-utils \
-  -I${top_srcdir}/src/libqof/qof \
   ${GUILE_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${BOOST_CPPFLAGS}

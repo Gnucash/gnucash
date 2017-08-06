@@ -10,7 +10,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \
-  -I${top_srcdir}/src/libqof/qof \
   -I${top_srcdir}/src/backend/sql \
   -DTEST_MYSQL_URL=\"${TEST_MYSQL_URL}\" \
   -DTEST_PGSQL_URL=\"${TEST_PGSQL_URL}\" \
@@ -23,7 +22,6 @@ LDADD = ${top_builddir}/src/test-core/libtest-core.la \
         ${top_builddir}/src/engine/libgncmod-engine.la \
         ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
         ${top_builddir}/src/core-utils/libgnc-core-utils.la \
-        ${top_builddir}/src/libqof/qof/libgnc-qof.la \
         ${top_builddir}/src/backend/sql/libgnc-backend-sql.la \
         ${top_builddir}/src/backend/xml/libgnc-backend-xml-utils.la \
         ${top_builddir}/lib/libc/libc-missing.la
@@ -31,7 +29,6 @@ LDADD = ${top_builddir}/src/test-core/libtest-core.la \
 GNC_TEST_DEPS = \
   --gnc-module-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/engine \
-  --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/engine \

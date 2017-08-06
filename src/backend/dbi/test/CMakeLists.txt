@@ -4,14 +4,13 @@ SET(BACKEND_DBI_TEST_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/src/core-utils
   ${CMAKE_SOURCE_DIR}/src/backend/dbi/test
   ${CMAKE_SOURCE_DIR}/src/backend/sql
-  ${CMAKE_SOURCE_DIR}/src/libqof/qof # for qof.h
   ${CMAKE_SOURCE_DIR}/src/engine
   ${CMAKE_SOURCE_DIR}/src/engine/test-core
   ${CMAKE_SOURCE_DIR}/src/test-core
   ${LIBDBI_INCLUDE_PATH}
   ${GLIB2_INCLUDE_DIRS}
 )
-SET(BACKEND_DBI_TEST_LIBS gnc-backend-sql gncmod-engine gncmod-test-engine gnc-qof test-core ${Boost_REGEX_LIBRARY} ${LIBDBI_LIBRARY})
+SET(BACKEND_DBI_TEST_LIBS gnc-backend-sql gncmod-engine gncmod-test-engine test-core ${Boost_REGEX_LIBRARY} ${LIBDBI_LIBRARY})
 
 SET(test_dbi_backend_SOURCES
   test-backend-dbi.cpp

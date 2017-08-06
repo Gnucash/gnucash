@@ -83,7 +83,7 @@ SET_SOURCE_FILES_PROPERTIES (${app_utils_SOURCES} PROPERTIES OBJECT_DEPENDS ${CO
 SET(app_utils_ALL_SOURCES ${app_utils_SOURCES} ${app_utils_HEADERS} ${app_utils_noinst_HEADERS})
 SET(app_utils_ALL_LIBRARIES gncmod-engine gnc-module ${GTK3_LDFLAGS} ${LIBXML2_LDFLAGS} ${LIBXSLT_LDFLAGS})
 SET(app_utils_ALL_INCLUDES  ${CMAKE_CURRENT_SOURCE_DIR}/calculation  ${LIBXML2_INCLUDE_DIRS}
-                               ${LIBXSLT_INCLUDE_DIRS} ${GTK3_INCLUDE_DIRS})
+                            ${LIBXSLT_INCLUDE_DIRS} ${GTK3_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/engine)
 
 IF (WIN32)
   LIST(APPEND app_utils_ALL_SOURCES gnc-help-utils.c)
@@ -171,7 +171,7 @@ SET(app_utils_SCHEME_3
 
 SET(GUILE_MODULES      src/engine)
 SET(GUILE_LOAD_DIRS    src/app-utils src/core-utils src/engine src/gnc-module src/scm)
-SET(GUILE_LIBRARY_DIRS src/app-utils src/core-utils src/engine src/gnc-module src/libqof/qof)
+SET(GUILE_LIBRARY_DIRS src/app-utils src/core-utils src/engine src/gnc-module)
 SET(GUILE_DEPENDS      gncmod-app-utils scm-core-utils scm-engine scm-scm)
 
 GNC_ADD_SCHEME_TARGETS(scm-gettext

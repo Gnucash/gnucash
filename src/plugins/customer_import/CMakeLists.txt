@@ -21,7 +21,7 @@ SET(customer_import_noinst_HEADERS
 ADD_LIBRARY(gncmod-customer_import ${customer_import_SOURCES} ${customer_input_noinst_HEADERS})
 
 TARGET_LINK_LIBRARIES(gncmod-customer_import gnc-gnome gncmod-gnome-utils gncmod-app-utils
-     gncmod-engine gnc-core-utils gnc-module gnc-qof ${GLIB2_LDFLAGS})
+     gncmod-engine gnc-core-utils gnc-module ${GLIB2_LDFLAGS})
 
 TARGET_INCLUDE_DIRECTORIES(gncmod-bi_import
   PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}

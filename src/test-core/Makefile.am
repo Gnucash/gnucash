@@ -8,7 +8,7 @@ libtest_core_la_SOURCES = \
 	unittest-support.c
 
 libtest_core_la_LIBADD = \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
   ${GLIB_LIBS}
 
 noinst_HEADERS = \
@@ -17,7 +17,7 @@ noinst_HEADERS = \
 
 libtest_core_la_CPPFLAGS = \
   -I${top_srcdir}/src \
-  -I${top_srcdir}/src/libqof/qof \
+  -I${top_srcdir}/src/engine \
   ${GLIB_CFLAGS}
 
 libtest_core_la_LDFLAGS = \
@@ -113,7 +113,7 @@ endif
 if GNC_HAVE_GUILE_2
 GUILE_COMPILE_ENV = \
   --library-dir    ${top_builddir}/src/test-core \
-  --library-dir    ${top_builddir}/src/libqof/qof
+  --library-dir    ${top_builddir}/src/engine
 
 %.go : %.scm .scm-links $(noinst_LTLIBRARIES)
 	GNC_UNINSTALLED=yes \

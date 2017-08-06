@@ -28,7 +28,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/app-utils/calculation \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
-  -I${top_srcdir}/src/libqof/qof \
   -I${top_srcdir}/src/backend/xml \
   ${GUILE_CFLAGS} \
   ${PYTHON_CPPFLAGS} \
@@ -100,7 +99,6 @@ libgncmod_app_utils_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GTK_LIBS} \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
@@ -213,7 +211,6 @@ GUILE_COMPILE_ENV = \
   --guile-load-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/scm \
-  --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/engine \

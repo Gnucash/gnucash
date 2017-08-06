@@ -10,7 +10,6 @@ libgncmod_register_core_la_LIBADD = \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GUILE_LIBS} \
   ${GLIB_LIBS}
 
@@ -60,7 +59,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/gnome-utils \
-  -I${top_srcdir}/src/libqof/qof \
   ${GUILE_CFLAGS} \
   ${GTK_CFLAGS} \
   ${GLIB_CFLAGS}

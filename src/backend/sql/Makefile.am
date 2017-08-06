@@ -14,7 +14,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/core-utils\
   -I${top_srcdir}/lib/libc\
-  -I${top_srcdir}/src/libqof/qof \
   ${GLIB_CFLAGS} \
   ${GUILE_CFLAGS} \
   ${WARN_CFLAGS} \
@@ -78,8 +77,7 @@ noinst_HEADERS = \
 libgnc_backend_sql_la_LIBADD = \
    ${GLIB_LIBS} \
    ${GUILE_LIBS} \
-   ${top_builddir}/src/engine/libgncmod-engine.la \
-   ${top_builddir}/src/libqof/qof/libgnc-qof.la
+   ${top_builddir}/src/engine/libgncmod-engine.la
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.backend.sql\"
 

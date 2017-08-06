@@ -23,7 +23,7 @@ IF (WITH_OFX)
   ADD_LIBRARY(gncmod-ofx ${ofx_SOURCES} ${ofx_noinst_HEADERS})
 
   TARGET_LINK_LIBRARIES(gncmod-ofx gncmod-generic-import gncmod-engine gncmod-app-utils gnc-core-utils
-                    gncmod-gnome-utils gnc-qof ${LIBOFX_LDFLAGS})
+                    gncmod-gnome-utils ${LIBOFX_LDFLAGS})
 
   TARGET_COMPILE_DEFINITIONS(gncmod-ofx PRIVATE -DG_LOG_DOMAIN=\"gnc.import.ofx\")
 

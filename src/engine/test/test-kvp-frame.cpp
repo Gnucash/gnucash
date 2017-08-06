@@ -24,7 +24,7 @@
 
 #include <guid.hpp>
 #include "../kvp-value.hpp"
-#include "../kvp_frame.hpp"
+#include "../kvp-frame.hpp"
 #include <gtest/gtest.h>
 #include <algorithm>
 

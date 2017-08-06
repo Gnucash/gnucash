@@ -79,7 +79,7 @@ This is known to not work very well.  Instead, `--prefix` your build into /opt/g
 
 Getting Trace Messages From GnuCash
 -----------------------------------
-See the doxygen comments in lib/libqof/qof/qoflog.h (and .c)
+See the doxygen comments in src/engine/qoflog.h (and .c)
 
 Starting GnuCash in GDB
 -----------------------

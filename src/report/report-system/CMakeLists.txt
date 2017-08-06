@@ -25,7 +25,7 @@ ADD_LIBRARY (gncmod-report-system
 
 TARGET_COMPILE_DEFINITIONS(gncmod-report-system PRIVATE -DG_LOG_DOMAIN=\"gnc.report.core\")
 
-TARGET_LINK_LIBRARIES(gncmod-report-system gnc-module gncmod-app-utils gnc-qof ${GTK3_LDFLAGS} ${GUILE_LDFLAGS})
+TARGET_LINK_LIBRARIES(gncmod-report-system gnc-module gncmod-app-utils ${GTK3_LDFLAGS} ${GUILE_LDFLAGS})
 
 TARGET_INCLUDE_DIRECTORIES (gncmod-report-system
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} PRIVATE ${GTK3_INCLUDE_DIRS}

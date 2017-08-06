@@ -1,15 +1,15 @@
 
 SET(APP_UTILS_TEST_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/src/app-utils
-  ${CMAKE_SOURCE_DIR}/src/libqof/qof # for qof.h
   ${CMAKE_SOURCE_DIR}/src/test-core
+  ${CMAKE_SOURCE_DIR}/src/engine # for qof.h
   ${CMAKE_SOURCE_DIR}/src/engine/test-core
   ${CMAKE_BINARY_DIR}/src # for config.h
   ${GLIB2_INCLUDE_DIRS}
   ${GUILE_INCLUDE_DIRS}
 )
 
-SET(APP_UTILS_TEST_LIBS gncmod-app-utils gncmod-test-engine gnc-qof test-core ${GUILE_LDFLAGS})
+SET(APP_UTILS_TEST_LIBS gncmod-app-utils gncmod-test-engine test-core ${GUILE_LDFLAGS})
 
 SET(test_app_utils_SOURCES test-app-utils.c test-option-util.cpp test-gnc-ui-util.c)
 

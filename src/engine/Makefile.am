@@ -1,4 +1,7 @@
-SUBDIRS = . test-core test
+# Note the test subdirectory is added in src/Makefile.am rather
+# than here. This is because we need it to build after src/test-core
+# but that directory requires src/engine to be built already...
+SUBDIRS = . test-core
 
 pkglib_LTLIBRARIES = libgncmod-engine.la
 
@@ -8,7 +11,6 @@ AM_CPPFLAGS = \
 	-I${top_srcdir}/src \
 	-I${top_builddir}/src \
 	-I${top_srcdir}/src/gnc-module \
-	-I${top_srcdir}/src/libqof/qof \
 	${GLIB_CFLAGS} \
 	${GUILE_CFLAGS} \
 	$(BOOST_CPPFLAGS)
@@ -30,19 +32,29 @@ libgncmod_engine_la_SOURCES = \
   Transaction.c \
   cap-gains.c \
   cashobjects.c \
+  gnc-aqbanking-templates.cpp \
   gnc-budget.c \
   gnc-commodity.c \
+  gnc-date.cpp \
+  gnc-datetime.cpp \
   gnc-engine.c \
   gnc-event.c \
   gnc-features.c \
   gnc-hooks.c \
+  gnc-int128.cpp \
   gnc-lot.c \
+  gnc-numeric.cpp \
   gnc-pricedb.c \
+  gnc-rational.cpp \
   gnc-session.c \
+  gnc-timezone.cpp \
   gnc-uri-utils.c \
   gncmod-engine.c \
+  guid.cpp \
   swig-engine.c \
+  kvp-frame.cpp \
   kvp-scm.cpp \
+  kvp-value.cpp \
   engine-helpers.c \
   glib-helpers.c  \
   policy.c \
@@ -59,7 +71,27 @@ libgncmod_engine_la_SOURCES = \
   gncOwner.c \
   gncTaxTable.c \
   gncIDSearch.c \
-  gncVendor.c
+  gncVendor.c \
+  qof-backend.cpp \
+  qofbook.cpp \
+  qofchoice.cpp \
+  qofclass.cpp \
+  qofevent.cpp \
+  qofid.cpp \
+  qofinstance.cpp \
+  qoflog.cpp \
+  qofobject.cpp \
+  qofquery.cpp \
+  qofquerycore.cpp \
+  qofsession.cpp \
+  qof-string-cache.cpp \
+  qofutil.cpp
+
+if OS_WIN32
+libgncmod_engine_la_SOURCES += qof-win32.cpp
+else
+WIN32_EXTRA_DIST = qof-win32.cpp
+endif
 
 EXTRA_libgncmod_engine_la_SOURCES = iso-4217-currencies.c
 
@@ -84,16 +116,28 @@ gncinclude_HEADERS = \
   engine-helpers.h \
   engine-helpers-guile.h \
   glib-helpers.h \
+  gnc-aqbanking-templates.h \
   gnc-budget.h \
   gnc-commodity.h \
+  gnc-date-p.h \
+  gnc-date.h \
+  gnc-datetime.hpp \
   gnc-engine.h \
   gnc-event.h \
   gnc-features.h \
   gnc-hooks.h \
+  gnc-numeric.h \
+  gnc-numeric.hpp \
   gnc-pricedb.h \
+  gnc-rational.hpp \
+  gnc-rational-rounding.hpp \
   gnc-session.h \
+  gnc-timezone.hpp \
   gnc-uri-utils.h \
+  guid.h \
+  kvp-frame.hpp \
   kvp-scm.h \
+  kvp-value.hpp \
   policy.h \
   gncAddress.h \
   gncAddressP.h \
@@ -119,7 +163,28 @@ gncinclude_HEADERS = \
   gncTaxTableP.h \
   gncIDSearch.h \
   gncVendor.h \
-  gncVendorP.h
+  gncVendorP.h \
+  qof.h \
+  qof-backend.hpp \
+  qofbackend.h \
+  qofbook.h \
+  qofbookslots.h \
+  qofchoice.h \
+  qofclass.h \
+  qofevent.h \
+  qofid-p.h \
+  qofid.h \
+  qofinstance-p.h \
+  qofinstance.h \
+  qoflog.h \
+  qofobject.h \
+  qofquery.h \
+  qofquerycore.h \
+  qofsession.h \
+  qofsession.hpp \
+  qof-string-cache.h \
+  qofutil.h \
+  qof-gobject.h
 
 noinst_HEADERS = \
   AccountP.h \
@@ -128,11 +193,18 @@ noinst_HEADERS = \
   SX-book.h \
   SX-ttinfo.h \
   TransactionP.h \
+  gnc-backend-prov.hpp \
   gnc-hooks-scm.h \
   gnc-lot.h \
   gnc-lot-p.h \
   gnc-pricedb-p.h \
-  policy-p.h
+  policy-p.h  \
+  qofclass-p.h \
+  qofevent-p.h \
+  gnc-int128.hpp \
+  qofobject-p.h \
+  qofquery-p.h \
+  qofquerycore-p.h
 
 libgncmod_engine_la_LDFLAGS = -avoid-version
 if PLATFORM_WIN32
@@ -146,10 +218,10 @@ endif
 libgncmod_engine_la_LIBADD = \
   ../gnc-module/libgnc-module.la \
   ../core-utils/libgnc-core-utils.la \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GUILE_LIBS} \
   ${REGEX_LIBS} \
   ${GLIB_LIBS} \
+  ${BOOST_LDFLAGS} -lboost_regex \
   ${top_builddir}/lib/libc/libc-missing.la
 
 gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash
@@ -176,7 +248,8 @@ EXTRA_DIST = \
   business-core.i \
   ${gncscmmod_DATA} \
   ${gncscm_DATA} \
-  CMakeLists.txt
+  CMakeLists.txt \
+  ${WIN32_EXTRA_DIST}
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases
@@ -204,8 +277,7 @@ GUILE_COMPILE_ENV = \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/src/gnc-module \
-  --library-dir    ${top_builddir}/src/core-utils \
-  --library-dir    ${top_builddir}/src/libqof/qof
+  --library-dir    ${top_builddir}/src/core-utils
 
 %.go : %.scm .scm-links $(pkglib_LTLIBRARIES)
 	GNC_UNINSTALLED=yes \
@@ -224,18 +296,10 @@ noinst_DATA = .scm-links
 
 if BUILDING_FROM_VCS
 
-# The generated file depends on various libqof headers. Out of
-# laziness I only include a few here - more might be needed
-# subsequently.
-QOFHEADERS = \
-  $(top_srcdir)/src/libqof/qof/qofbook.h \
-  $(top_srcdir)/src/libqof/qof/qofbookslots.h
-
 swig-engine.c: engine.i $(top_srcdir)/src/base-typemaps.i \
-               $(QOFHEADERS) \
                $(gncinclude_HEADERS) $(noinst_HEADERS)
 	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
-	-I${top_srcdir}/src/libqof/qof -I${top_srcdir}/src -o $@ $<
+	-I${top_srcdir}/src -o $@ $<
 if ! OS_WIN32
 if ! SWIG_DIST_FAIL
 	if ! `grep "define scm_from_utf8_string" $@ > /dev/null 2>&1`; then \

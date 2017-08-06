@@ -29,7 +29,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include "libqof/qof/qof.h"
+#include "qof.h"
 #include "gnc-features.h"
 
 typedef struct

@@ -45,7 +45,7 @@ void test_suite_transaction ( void );
 }
 
 #include <qof-backend.hpp>
-#include <kvp_frame.hpp>
+#include <kvp-frame.hpp>
 
 /* Copied from Transaction.c. Changing these values will break
  * existing databases, which is a good reason to fail a test.
@@ -81,10 +81,10 @@ typedef struct
     Account *gains_acc;
 } GainsFixture;
 
-class MockBackend : public QofBackend
+class TransMockBackend : public QofBackend
 {
 public:
-    MockBackend() : QofBackend(), m_last_call{"Constructor"},
+    TransMockBackend() : QofBackend(), m_last_call{"Constructor"},
                     m_result_err{ERR_BACKEND_NO_ERR} {}
     void session_begin(QofSession*, const char*, bool, bool, bool) override {
         m_last_call = "session_begin";
@@ -117,7 +117,7 @@ static void
 setup (Fixture *fixture, gconstpointer pData)
 {
     QofBook *book = qof_book_new ();
-    MockBackend *mbe = new MockBackend;
+    TransMockBackend *mbe = new TransMockBackend;
     Transaction *txn;
     Timespec entered = gnc_dmy2timespec (20, 4, 2012);
     Timespec posted = gnc_dmy2timespec (21, 4, 2012);
@@ -208,7 +208,7 @@ static void
 teardown (Fixture *fixture, gconstpointer pData)
 {
     QofBook *book = qof_instance_get_book (QOF_INSTANCE (fixture->txn));
-    auto mbe = static_cast<MockBackend*>(qof_book_get_backend (book));
+    auto mbe = static_cast<TransMockBackend*>(qof_book_get_backend (book));
 
     test_destroy (fixture->txn);
     test_destroy (fixture->acc1);
@@ -1692,7 +1692,7 @@ test_xaccTransRollbackEdit (Fixture *fixture, gconstpointer pData)
     KvpFrame *base_frame = NULL;
     auto sig_account = test_signal_new (QOF_INSTANCE (fixture->acc1),
                               GNC_EVENT_ITEM_CHANGED, NULL);
-    auto mbe = static_cast<MockBackend*>(qof_book_get_backend (book));
+    auto mbe = static_cast<TransMockBackend*>(qof_book_get_backend (book));
     auto split_00 = static_cast<Split*>(txn->splits->data);
     auto split_01 = static_cast<Split*>(txn->splits->next->data);
     auto split_02 = xaccMallocSplit (book);
@@ -1754,7 +1754,7 @@ test_xaccTransRollbackEdit (Fixture *fixture, gconstpointer pData)
 static void
 test_xaccTransRollbackEdit_BackendErrors (Fixture *fixture, gconstpointer pData)
 {
-    auto mbe = static_cast<MockBackend*>(qof_book_get_backend (qof_instance_get_book (fixture->txn)));
+    auto mbe = static_cast<TransMockBackend*>(qof_book_get_backend (qof_instance_get_book (fixture->txn)));
     auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     auto msg = "[xaccTransRollbackEdit()] Rollback Failed.  Ouch!";
     auto check = test_error_struct_new ("gnc.engine", loglevel, msg);

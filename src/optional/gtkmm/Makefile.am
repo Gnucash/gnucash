@@ -40,13 +40,11 @@ libgncmod_gtkmm_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GTKMM_LIBS} \
   ${GLIB_LIBS}
 
 AM_CPPFLAGS = \
   -I${top_srcdir}/src \
-  -I${top_srcdir}/src/libqof/qof \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \

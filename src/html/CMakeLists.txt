@@ -39,7 +39,7 @@ ADD_LIBRARY (gncmod-html
   ${html_HEADERS}
 )
 
-TARGET_LINK_LIBRARIES(gncmod-html gnc-qof gnc-module gncmod-gnome-utils ${WEBKIT_LDFLAGS} ${GUILE_LDFLAGS})
+TARGET_LINK_LIBRARIES(gncmod-html gncmod-engine gnc-module gncmod-gnome-utils ${WEBKIT_LDFLAGS} ${GUILE_LDFLAGS})
 
 TARGET_COMPILE_DEFINITIONS(gncmod-html PRIVATE -DG_LOG_DOMAIN=\"gnc.html\")
 

@@ -13,7 +13,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/html \
   -I${top_srcdir}/src/report/report-system \
-  -I${top_srcdir}/src/libqof/qof \
   ${GUILE_CFLAGS} \
   ${GTK_CFLAGS} \
   ${GLIB_CFLAGS}
@@ -45,7 +44,6 @@ libgncmod_report_gnome_la_LIBADD = \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/html/libgncmod-html.la \
   ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GUILE_LIBS} \
   ${GLIB_LIBS}
 
@@ -120,7 +118,6 @@ GUILE_COMPILE_ENV = \
   --guile-load-dir ${top_builddir}/src/report/utility-reports \
   --guile-load-dir ${top_builddir}/src/scm \
   --library-dir    ${top_builddir}/src/engine \
-  --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/app-utils \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/gnc-module \

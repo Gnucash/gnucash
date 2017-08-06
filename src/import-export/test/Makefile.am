@@ -7,14 +7,12 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/import-export \
-  -I${top_srcdir}/src/libqof/qof \
   -I${top_srcdir}/src/engine/test-core \
   ${GTK_CFLAGS} \
   ${GUILE_CFLAGS} \
   ${GLIB_CFLAGS}
 
 LDADD = \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/test-core/libtest-core.la \
@@ -40,7 +38,6 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/app-utils \
   --guile-load-dir ${top_builddir}/src/gnome-utils \
 \
-  --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/app-utils \
   --library-dir    ${top_builddir}/src/gnome-utils \
@@ -65,7 +62,6 @@ noinst_PROGRAMS = $(TEST_PROGS) $(check_PROGRAMS)
 test_import_pending_matches_SOURCES = test-import-pending-matches.c
 
 test_import_pending_matches_LDADD = \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ../libgncmod-generic-import.la \
   ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \

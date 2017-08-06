@@ -1,10 +1,11 @@
-SUBDIRS = . test
+# No SUBDIR variable here...
+# The 'test' subdir is added via src/Makefile to handle
+# it's dependency on src/engine
 
 AM_CPPFLAGS = \
    -I${top_srcdir}/lib/libc \
    -I${top_srcdir}/src \
    -I${top_srcdir}/src/core-utils \
-  -I${top_srcdir}/src/libqof/qof \
    ${GLIB_CFLAGS} \
    ${GUILE_CFLAGS}
 
@@ -15,7 +16,6 @@ libgnc_module_la_SOURCES = gnc-module.c swig-gnc-module.c
 libgnc_module_la_LIBADD = \
   ../core-utils/libgnc-core-utils.la \
   ${top_builddir}/lib/libc/libc-missing.la \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GLIB_LIBS} \
   ${GUILE_LIBS}
 
@@ -69,8 +69,7 @@ endif
 if GNC_HAVE_GUILE_2
 GUILE_COMPILE_ENV = \
   --library-dir    ${top_builddir}/src/gnc-module \
-  --library-dir    ${top_builddir}/src/core-utils \
-  --library-dir    ${top_builddir}/src/libqof/qof
+  --library-dir    ${top_builddir}/src/core-utils
 
 %.go : %.scm .scm-links $(lib_LTLIBRARIES)
 	GNC_UNINSTALLED=yes \

@@ -1,17 +1,18 @@
 include $(top_srcdir)/test-templates/Makefile.decl
 MODULEPATH = src/core-utils
 
+# We add src/engine here, just to load qof.h, which
+# is pulled in via test-core
 AM_CPPFLAGS = \
   -I${top_srcdir} \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/test-core \
-  -I${top_srcdir}/src/libqof/qof \
   -I${top_srcdir}/src/core-utils \
+  -I${top_srcdir}/src/engine \
   ${GUILE_CFLAGS} \
   ${GLIB_CFLAGS}
 
 LDADD = \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ../libgnc-core-utils.la \
   ${top_builddir}/src/test-core/libtest-core.la \
   ${GLIB_LIBS}
@@ -25,7 +26,6 @@ TESTS = \
   test-gnc-glib-utils
 
 GNC_TEST_DEPS = \
-  --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils
 
 TESTS_ENVIRONMENT = \
@@ -39,7 +39,6 @@ test_gnc_glib_utils_SOURCES = \
   test-gnc-glib-utils.c
 
 test_gnc_glib_utils_LDADD = \
-        ${top_builddir}/src/libqof/qof/libgnc-qof.la \
         ${top_builddir}/src/test-core/libtest-core.la \
         $(GLIB_LIBS)
 

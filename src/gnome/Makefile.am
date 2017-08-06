@@ -15,12 +15,10 @@ libgnc_gnome_la_LIBADD = \
   ${top_builddir}/src/html/libgncmod-html.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${LIBXML2_LIBS} \
   ${GUILE_LIBS} \
   ${GTK_LIBS} \
-  ${GLIB_LIBS} \
-  ${QOF_LIBS}
+  ${GLIB_LIBS}
 
 libgnc_gnome_la_SOURCES = \
   swig-gnome.c \
@@ -186,7 +184,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/report/report-system \
   -I${top_srcdir}/src/report/report-gnome \
   -I${top_srcdir}/lib/libc \
-  -I${top_srcdir}/src/libqof/qof \
   ${LIBXML2_CFLAGS} \
   ${GUILE_CFLAGS} \
   ${GTK_CFLAGS} \

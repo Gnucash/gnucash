@@ -14,7 +14,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/lib/libc \
-  -I${top_srcdir}/src/libqof/qof \
   -I${top_srcdir}/src \
   ${GLIB_CFLAGS} \
   ${BOOST_CPPFLAGS} \
@@ -39,7 +38,6 @@ libgncmod_backend_dbi_la_LIBADD = \
    ${top_builddir}/src/backend/sql/libgnc-backend-sql.la \
    ${top_builddir}/src/engine/libgncmod-engine.la \
    ${top_builddir}/src/core-utils/libgnc-core-utils.la \
-   ${top_builddir}/src/libqof/qof/libgnc-qof.la \
    ${BOOST_LDFLAGS} -lboost_regex \
    ${LIBDBI_LIBS}
 
