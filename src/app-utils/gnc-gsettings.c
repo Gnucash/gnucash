@@ -30,7 +30,7 @@
 #include "gnc-path.h"
 #include "guile-mappings.h"
 #include <libguile.h>
-#include "libqof/qof/qof.h"
+#include "qof.h"
 #include "gnc-prefs-p.h"
 
 #include <libxml/xmlmemory.h>

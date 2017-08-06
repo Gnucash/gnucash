@@ -22,11 +22,11 @@
  */
 
 #include <stdlib.h>
+#include <glib.h>
 #include "config.h"
 #include "gnc-prefs.h"
 #include "gnc-prefs-p.h"
 #include "gnc-version.h"
-#include "libqof/qof/qof.h"
 
 static gchar *namespace_regexp    = NULL;
 static gboolean is_debugging      = FALSE;
@@ -36,9 +36,6 @@ static gint file_retention_policy = 1;    // 1 = "days", the default in the pref
 static gint file_retention_days   = 30;   // This is also the default in the prefs backend
 
 PrefsBackend *prefsbackend = NULL;
-
-/* This static indicates the debugging module that this .o belongs to.  */
-static QofLogModule log_module = G_LOG_DOMAIN;
 
 const gchar *
 gnc_prefs_get_namespace_regexp(void)
@@ -130,18 +127,11 @@ gulong gnc_prefs_register_cb (const char *group,
                               gpointer func,
                               gpointer user_data)
 {
-    ENTER("group %s; pref_name %s, prefsbackend->register_cb %p", group, pref_name,
-            prefsbackend ? prefsbackend->register_cb : NULL);
     if (prefsbackend && prefsbackend->register_cb)
-    {
-        LEAVE("");
         return (prefsbackend->register_cb) (group, pref_name, func, user_data);
-    }
     else
-    {
-        LEAVE("no backend loaded, or the backend doesn't define register_cb, returning 0");
+        g_warning ("no backend loaded, or the backend doesn't define register_cb, returning 0");
         return 0;
-    }
 }
 
 

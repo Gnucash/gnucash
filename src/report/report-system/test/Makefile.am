@@ -2,13 +2,13 @@ AM_CPPFLAGS = \
   -I${top_srcdir} \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/test-core \
-  -I${top_srcdir}/src/libqof/qof \
+  -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
   ${GUILE_CFLAGS} \
   ${GLIB_CFLAGS}
 
 LDADD = \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${GLIB_LIBS} \
   ${GUILE_LIBS}
@@ -47,7 +47,6 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/report/report-system/test \
 \
   --library-dir    ${top_builddir}/src/report/report-system \
-  --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/app-utils \
   --library-dir    ${top_builddir}/src/gnome-utils \

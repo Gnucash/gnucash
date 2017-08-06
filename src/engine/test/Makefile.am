@@ -9,14 +9,12 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \
-  -I${top_srcdir}/src/libqof/qof \
   -I${top_srcdir}/src/core-utils \
   ${GUILE_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${BOOST_CPPFLAGS}
 
 LDADD = \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/test-core/libtest-core.la \
   ../libgncmod-engine.la \
@@ -36,6 +34,7 @@ TEST_GROUP_1 = \
   test-date \
   test-object \
   test-commodities \
+  test-qof \
   test-engine
 
 TEST_GROUP_2 = \
@@ -73,7 +72,6 @@ GNC_TEST_DEPS = \
   --guile-load-dir ${top_builddir}/src/core-utils \
   --guile-load-dir ${top_builddir}/src/scm \
   --guile-load-dir ${top_builddir}/src/engine/test \
-  --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/engine \
@@ -113,7 +111,6 @@ TESTS = ${TEST_GROUP_1} test-create-account ${TEST_GROUP_2} ${SCM_TESTS}
 
 test_link_SOURCES = test-link.c
 test_link_LDADD = ../libgncmod-engine.la \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la
 
 if WITH_GOOGLE_PROFILER
@@ -146,6 +143,23 @@ noinst_PROGRAMS = ${TEST_PROGS} ${CHECK_PROGS}
 
 noinst_DATA: .scm-links
 
+test_qof_SOURCES = \
+	test-gnc-date.c \
+	test-qof.c \
+	test-qofbook.c \
+	test-qofinstance.cpp \
+	test-qofobject.c \
+	test-qof-string-cache.c
+
+test_qof_LDADD = \
+	$(LDADD)
+test_qof_CFLAGS = \
+	${DEFAULT_INCLUDES} \
+	-I${top_srcdir}/${MODULEPATH}/ \
+	-DTESTPROG=test_qof \
+	${GLIB_CFLAGS} \
+	${AM_CFLAGS}
+
 test_engine_SOURCES = \
 	test-engine.c \
 	test-gnc-uri-utils.c \
@@ -155,11 +169,12 @@ test_engine_SOURCES = \
 	utest-Invoice.c \
 	test-engine-kvp-properties.c \
 	utest-gnc-pricedb.c \
-	dummy.cpp
+	utest-Transaction.cpp \
+	dummy.cpp \
+	utest-Split.cpp \
+	${top_srcdir}/${MODULEPATH}/gnc-numeric.cpp
 
 test_engine_LDADD = \
-	libutest-Split.la \
-	libutest-Trans.la \
 	$(LDADD)
 test_engine_CFLAGS = \
 	${DEFAULT_INCLUDES} \
@@ -167,27 +182,11 @@ test_engine_CFLAGS = \
 	-DTESTPROG=test_engine \
 	${GLIB_CFLAGS} \
 	${AM_CFLAGS}
-
-noinst_LTLIBRARIES = \
-	libutest-Split.la \
-	libutest-Trans.la
-
-libutest_Split_la_SOURCES = \
-	utest-Split.cpp \
-	${top_srcdir}/src/libqof/qof/gnc-numeric.cpp
-libutest_Split_la_CXXFLAGS = -Wno-write-strings $(AM_CXXFLAGS)
-
-libutest_Split_la_LIBADD = $(LDADD)
-
-libutest_Trans_la_SOURCES = \
-	utest-Transaction.cpp
-
-libutest_Trans_la_LIBADD = $(LDADD)
+test_engine_CXXFLAGS = -Wno-write-strings $(AM_CXXFLAGS)
 
 test_import_map_SOURCES = \
         gtest-import-map.cpp
 test_import_map_LDADD = \
-        ${top_builddir}/src/libqof/qof/libgnc-qof.la \
         ${top_builddir}/src/engine/libgncmod-engine.la \
         ${GLIB_LIBS} \
         ${GTEST_LIBS}
@@ -200,7 +199,6 @@ endif
 test_import_map_CPPFLAGS = \
         -I${GTEST_HEADERS} \
         -I${top_srcdir}/${MODULEPATH} \
-        -I${top_srcdir}/src/libqof/qof \
         -I${top_srcdir}/src/core-utils \
         ${GLIB_CFLAGS}
 

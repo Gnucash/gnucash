@@ -25,7 +25,7 @@
 #include <guid.hpp>
 #include "../kvp-value.hpp"
 #include "../guid.h"
-#include "../kvp_frame.hpp"
+#include "../kvp-frame.hpp"
 #include "../gnc-date.h"
 #include <memory>
 #include <gtest/gtest.h>

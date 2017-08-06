@@ -132,7 +132,7 @@ FUNCTION(MAKE_GNUCASH_POTFILES)
   # These are also added, even though they are outside of src/
   FILE(APPEND ${POTFILES_IN_PATH} "src/gnome/gnucash.appdata.xml.in
 src/gnome/gnucash.desktop.in.in
-src/libqof/qof/qofbookslots.h
+src/engine/qofbookslots.h
 doc/tip_of_the_day.list.in
 ")
 

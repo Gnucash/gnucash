@@ -15,7 +15,6 @@ TESTS = ${check_PROGRAMS}
 GNC_TEST_DEPS = \
   --gnc-module-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/engine \
-  --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/engine \
@@ -32,7 +31,6 @@ LDADD = ${top_builddir}/src/test-core/libtest-core.la \
         ${top_builddir}/src/engine/libgncmod-engine.la \
         ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
         ${top_builddir}/src/core-utils/libgnc-core-utils.la \
-        ${top_builddir}/src/libqof/qof/libgnc-qof.la \
         ${top_builddir}/lib/libc/libc-missing.la
 
 AM_CPPFLAGS = \
@@ -44,7 +42,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \
   -I${top_srcdir}/src/backend/sql \
-  -I${top_srcdir}/src/libqof/qof \
   ${GLIB_CFLAGS} \
   ${GUILE_CFLAGS}
 
@@ -58,7 +55,7 @@ test_sqlbe_SOURCES = \
 
 test_sqlbe_LDADD = \
 	$(top_builddir)/$(MODULEPATH)/libgnc-backend-sql.la \
-	$(top_builddir)/src/libqof/qof/libgnc-qof.la \
+	$(top_builddir)/src/engine/libgncmod-engine.la \
 	$(top_builddir)/src/test-core/libtest-core.la \
 	$(top_builddir)/src/core-utils/libgnc-core-utils.la \
 	$(GLIB_LIBS)
@@ -68,7 +65,7 @@ test_sqlbe_CFLAGS = \
 	$(DEFAULT_INCLUDES) \
 	-I$(top_srcdir)/$(MODULEPATH)/ \
 	-I$(top_srcdir)/src/backend/dbi/ \
-	-I$(top_srcdir)/src/libqof/qof/ \
+	-I$(top_srcdir)/src/engine/ \
 	-I$(top_srcdir)/src/test-core/ \
 	$(GLIB_CFLAGS)
 

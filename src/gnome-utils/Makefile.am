@@ -14,13 +14,11 @@ AM_CPPFLAGS = \
   -I${top_builddir}/src \
   -I${top_builddir}/src/core-utils \
   -I${top_srcdir}/lib/libc \
-  -I${top_srcdir}/src/libqof/qof \
   ${GLIB_CFLAGS} \
   ${GTK_CFLAGS} \
   ${GNOME_KEYRING_CFLAGS} \
   ${LIBSECRET_CFLAGS} \
   ${GUILE_CFLAGS} \
-  ${QOF_CFLAGS} \
   ${LIBGDA_CFLAGS} \
   ${LIBXML2_CFLAGS} \
   ${GTK_MAC_CFLAGS}
@@ -201,7 +199,6 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${top_builddir}/src/backend/xml/libgnc-backend-xml-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   $(top_builddir)/lib/libc/libc-missing.la \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${GTK_LIBS} \
   ${GNOME_KEYRING_LIBS} \
   ${LIBSECRET_LIBS} \
@@ -280,7 +277,6 @@ GUILE_COMPILE_ENV = \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/scm \
   --library-dir    ${top_builddir}/src/engine \
-  --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/app-utils \

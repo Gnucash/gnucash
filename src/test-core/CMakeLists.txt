@@ -11,7 +11,7 @@ SET(test_core_noinst_HEADERS
 INCLUDE_DIRECTORIES(
   ${CMAKE_BINARY_DIR}/src
   ${CMAKE_SOURCE_DIR}/src
-  ${CMAKE_SOURCE_DIR}/src/libqof/qof
+  ${CMAKE_SOURCE_DIR}/src/engine
   ${CMAKE_SOURCE_DIR}/src/test-core
 
   ${GLIB2_INCLUDE_DIRS}
@@ -22,7 +22,7 @@ SET_DIST_LIST(test_core_DIST ${test_core_SOURCES} ${test_core_noinst_HEADERS} CM
         Makefile.am unittest-support.i unittest-support.scm)
 
 ADD_LIBRARY(test-core STATIC ${test_core_SOURCES} ${test_core_noinst_HEADERS})
-TARGET_LINK_LIBRARIES(test-core gncmod-engine gnc-qof ${GLIB2_LDFLAGS})
+TARGET_LINK_LIBRARIES(test-core gncmod-engine ${GLIB2_LDFLAGS})
 IF (UNIX)
   TARGET_COMPILE_OPTIONS(test-core PRIVATE -fPIC)
 ENDIF()
@@ -54,7 +54,7 @@ SET(test_core_SCHEME unittest-support.scm)
 SET(GUILE_OUTPUT_DIR   gnucash)
 SET(GUILE_MODULES      "")
 SET(GUILE_LOAD_DIRS    "")
-SET(GUILE_LIBRARY_DIRS src/test-core src/libqof)
+SET(GUILE_LIBRARY_DIRS src/test-core src/engine)
 SET(GUILE_DEPENDS      test-core-guile)
 
 
@@ -78,4 +78,4 @@ ADD_LIBRARY(gmock STATIC  ${lib_gmock_SOURCES})
 TARGET_INCLUDE_DIRECTORIES(gmock PUBLIC
   ${GTEST_INCLUDE_DIR} ${GTEST_SRC_DIR}
   ${GMOCK_INCLUDE_DIR} ${GMOCK_SRC_DIR})
-INSTALL(FILES unittest-support.h DESTINATION libexec/gnucash/src/libqof/qof/test)
+INSTALL(FILES unittest-support.h DESTINATION libexec/gnucash/src/engine/test)

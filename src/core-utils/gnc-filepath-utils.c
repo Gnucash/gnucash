@@ -50,16 +50,11 @@
 
 #include "gnc-path.h"
 #include "gnc-filepath-utils.h"
-#include "libqof/qof/qof.h"
 
 #ifdef _MSC_VER
 #include <glib/gwin32.h>
 #define PATH_MAX MAXPATHLEN
 #endif
-
-/* This static indicates the debugging module that this .o belongs to.  */
-static QofLogModule log_module = G_LOG_DOMAIN;
-
 
 /**
  * Scrubs a filename by changing "strange" chars (e.g. those that are not
@@ -220,7 +215,7 @@ gnc_path_find_localized_html_file_internal (const gchar * file_name)
     for (i = 0; dirs[i]; i++)
     {
         full_path = g_build_filename (dirs[i], file_name, (gchar *)NULL);
-        DEBUG ("Checking for existence of %s", full_path);
+        g_debug ("Checking for existence of %s", full_path);
         full_path = check_path_return_if_valid (full_path);
         if (full_path != NULL)
             return full_path;

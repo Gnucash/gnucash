@@ -2,14 +2,13 @@ SUBDIRS = mod-foo mod-bar mod-baz misc-mods
 
 LDADD = \
   ${top_builddir}/src/test-core/libtest-core.la \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ../libgnc-module.la ${GLIB_LIBS} ${GUILE_LIBS}
 
 AM_CPPFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
-  -I${top_srcdir}/src/libqof/qof \
   -I${top_srcdir}/src/test-core \
+  -I${top_srcdir}/src/engine \
   ${GUILE_CFLAGS} \
   ${GLIB_CFLAGS}
 
@@ -38,7 +37,6 @@ GNC_TEST_DEPS = \
   --guile-load-dir ${top_srcdir}/src/gnc-module/test/mod-foo \
   --guile-load-dir ${top_srcdir}/src/gnc-module/test/mod-baz \
   --guile-load-dir ${top_srcdir}/src/gnc-module/test/mod-bar \
-  --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/test-core \
   --library-dir    ${top_builddir}/src/gnc-module \

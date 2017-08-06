@@ -16,7 +16,6 @@ SET(GNOME_UTILS_GUI_TEST_INCLUDE_DIRS
   ${CMAKE_BINARY_DIR}/src
   ${CMAKE_SOURCE_DIR}/src/gnome-utils
   ${CMAKE_SOURCE_DIR}/src/engine
-  ${CMAKE_SOURCE_DIR}/src/libqof/qof # for qof.h
   ${GTK3_INCLUDE_DIRS}
 )
 SET(GNOME_UTILS_GUI_TEST_LIBS

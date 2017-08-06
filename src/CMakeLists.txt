@@ -141,7 +141,6 @@ SET(SCHEME_INSTALLED_SOURCE_DIR ${CMAKE_INSTALL_PREFIX}/share/gnucash/scm)
 SET(SCHEME_INSTALLED_CACHE_DIR ${CMAKE_INSTALL_PREFIX}/lib/gnucash/scm/ccache/${GUILE_EFFECTIVE_VERSION})
 
 # The subdirectories
-ADD_SUBDIRECTORY (libqof)
 ADD_SUBDIRECTORY (core-utils)
 ADD_SUBDIRECTORY (gnc-module)
 ADD_SUBDIRECTORY (engine)
@@ -187,5 +186,5 @@ SET_LOCAL_DIST(src_DIST_local CMakeLists.txt Makefile.am ${src_EXTRA_DIST})
 
 SET(src_DIST ${src_DIST_local} ${app_utils_DIST} ${backend_DIST} ${bin_DIST} ${cmake_modules_DIST}
              ${core_utils_DIST} ${debug_DIST} ${doc_DIST} ${engine_DIST} ${gnc_module_DIST} ${gnome_DIST} ${gnome_search_DIST}
-             ${gnome_utils_DIST} ${html_DIST} ${import_export_DIST} ${libqof_DIST} ${optional_DIST} ${plugins_DIST} ${pixmaps_DIST} ${python_DIST}
+             ${gnome_utils_DIST} ${html_DIST} ${import_export_DIST} ${optional_DIST} ${plugins_DIST} ${pixmaps_DIST} ${python_DIST}
              ${quotes_DIST} ${register_DIST} ${report_DIST} ${scm_DIST} ${tax_DIST} ${test_core_DIST} PARENT_SCOPE)

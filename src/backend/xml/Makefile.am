@@ -13,7 +13,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/lib/libc\
-  -I${top_srcdir}/src/libqof/qof \
   -I$(top_srcdir)/src \
   ${LIBXML2_CFLAGS} \
   ${GLIB_CFLAGS} \
@@ -92,8 +91,7 @@ libgnc_backend_xml_utils_la_LIBADD = \
    ${LIBXML2_LIBS} \
    ${ZLIB_LIBS} \
    ${top_builddir}/src/engine/libgncmod-engine.la \
-   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
-   ${top_builddir}/src/libqof/qof/libgnc-qof.la
+   ${top_builddir}/src/core-utils/libgnc-core-utils.la
 
 libgncmod_backend_xml_la_LDFLAGS = -module -avoid-version
 libgncmod_backend_xml_la_LIBADD = \
@@ -102,8 +100,7 @@ libgncmod_backend_xml_la_LIBADD = \
    ${ZLIB_LIBS} \
    ${top_builddir}/src/engine/libgncmod-engine.la \
    ${top_builddir}/src/core-utils/libgnc-core-utils.la \
-   libgnc-backend-xml-utils.la \
-   ${top_builddir}/src/libqof/qof/libgnc-qof.la
+   libgnc-backend-xml-utils.la
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.backend.xml\"
 

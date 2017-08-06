@@ -36,7 +36,7 @@
 #ifndef GNC_FEATURES_H
 #define GNC_FEATURES_H
 
-#include "libqof/qof/qof.h"
+#include "qof.h"
 
 /** @name Defined features
 @{

@@ -30,7 +30,7 @@ test_gtkmm_HEADERS = \
 #The tests might require more libraries, but try to keep them
 #as independent as possible.
 test_gtkmm_LDADD = ${top_builddir}/${MODULEPATH}/libgncmod-gtkmm.la \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
   ${GTKMM_LIBS} \
   ${GLIB_LIBS}
 

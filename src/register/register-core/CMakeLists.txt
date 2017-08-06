@@ -45,7 +45,7 @@ SET_SOURCE_FILES_PROPERTIES (${register_core_SOURCES} PROPERTIES OBJECT_DEPENDS 
 
 ADD_LIBRARY (gncmod-register-core ${register_core_SOURCES} ${register_core_HEADERS})
 
-TARGET_LINK_LIBRARIES(gncmod-register-core gncmod-gnome-utils  gnc-qof gncmod-app-utils ${GMODULE_LDFLAGS})
+TARGET_LINK_LIBRARIES(gncmod-register-core gncmod-gnome-utils gncmod-app-utils ${GMODULE_LDFLAGS})
 
 TARGET_COMPILE_DEFINITIONS (gncmod-register-core PRIVATE -DG_LOG_DOMAIN=\"gnc.register.core\")
 

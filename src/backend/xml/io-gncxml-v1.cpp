@@ -53,7 +53,7 @@ extern "C"
 #include "sixtp-parsers.h"
 #include "sixtp-utils.h"
 
-#include <kvp_frame.hpp>
+#include <kvp-frame.hpp>
 
 /* from Transaction-xml-parser-v1.c */
 static sixtp* gnc_transaction_parser_new (void);

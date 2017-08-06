@@ -16,7 +16,7 @@ SET(log_replay_noinst_HEADERS
 ADD_LIBRARY(gncmod-log-replay ${log_replay_SOURCES} ${log_replay_noinst_HEADERS})
 
 TARGET_LINK_LIBRARIES(gncmod-log-replay gncmod-gnome-utils gncmod-app-utils gncmod-engine
-     gnc-core-utils gnc-module gnc-qof ${GTK3_LDFLAGS})
+     gnc-core-utils gnc-module ${GTK3_LDFLAGS})
 
 TARGET_COMPILE_DEFINITIONS(gncmod-log-replay PRIVATE -DG_LOG_DOMAIN=\"gnc.import.log-replay\")
 

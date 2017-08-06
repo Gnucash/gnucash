@@ -23,12 +23,8 @@
 #include "swig-runtime.h"
 #include <libguile.h>
 
-#include "qof.h"
 #include "gnc-guile-utils.h"
 #include "guile-mappings.h"
-
-/* This static indicates the debugging module this .o belongs to.  */
-static QofLogModule log_module = G_LOG_DOMAIN;
 
 
 /********************************************************************\
@@ -54,7 +50,7 @@ gchar *gnc_scm_to_utf8_string(SCM scm_string)
     }
 
     /* Unable to extract string from the symbol...*/
-    PERR("bad value\n");
+    g_error ("bad value\n");
     return NULL;
 }
 
@@ -86,7 +82,7 @@ gchar *gnc_scm_to_locale_string(SCM scm_string)
     }
 
     /* Unable to extract string from the symbol...*/
-    PERR("bad value\n");
+    g_error ("bad value\n");
     return NULL;
 }
 
@@ -117,7 +113,7 @@ gnc_scm_symbol_to_locale_string(SCM symbol_value)
     }
 
     /* Unable to extract string from the symbol...*/
-    PERR("bad value\n");
+    g_error ("bad value\n");
     return NULL;
 }
 
@@ -146,12 +142,12 @@ gnc_scm_call_1_to_string(SCM func, SCM arg)
         }
         else
         {
-            PERR("bad value\n");
+            g_error ("bad value\n");
         }
     }
     else
     {
-        PERR("not a procedure\n");
+        g_error ("not a procedure\n");
     }
 
     return NULL;
@@ -180,7 +176,7 @@ gnc_scm_call_1_symbol_to_string(SCM func, SCM arg)
     }
     else
     {
-        PERR("not a procedure\n");
+        g_error ("not a procedure\n");
     }
 
     return NULL;
@@ -209,12 +205,12 @@ gnc_scm_call_1_to_procedure(SCM func, SCM arg)
             return value;
         else
         {
-            PERR("bad value\n");
+            g_error ("bad value\n");
         }
     }
     else
     {
-        PERR("not a procedure\n");
+        g_error ("not a procedure\n");
     }
 
     return SCM_UNDEFINED;
@@ -243,12 +239,12 @@ gnc_scm_call_1_to_list(SCM func, SCM arg)
             return value;
         else
         {
-            PERR("bad value\n");
+            g_error ("bad value\n");
         }
     }
     else
     {
-        PERR("not a procedure\n");
+        g_error ("not a procedure\n");
     }
 
     return SCM_UNDEFINED;
@@ -277,12 +273,12 @@ gnc_scm_call_1_to_vector(SCM func, SCM arg)
             return value;
         else
         {
-            PERR("bad value\n");
+            g_error ("bad value\n");
         }
     }
     else
     {
-        PERR("not a procedure\n");
+        g_error ("not a procedure\n");
     }
 
     return SCM_UNDEFINED;

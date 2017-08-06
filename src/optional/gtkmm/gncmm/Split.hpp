@@ -25,7 +25,7 @@
 
 // gnucash includes
 #include "config.h"
-#include "libqof/qof/guid.hpp"
+#include "engine/guid.hpp"
 extern "C"
 {
 #include "qof.h"

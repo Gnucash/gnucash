@@ -29,7 +29,6 @@ TARGET_LINK_LIBRARIES(gncmod-bi_import
   gncmod-engine
   gnc-core-utils
   gnc-module
-  gnc-qof
   gnc-gnome
 )
 

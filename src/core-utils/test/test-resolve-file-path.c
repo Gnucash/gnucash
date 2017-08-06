@@ -26,7 +26,6 @@
 #include <string.h>
 
 #include <glib.h>
-#include "qof.h"
 #include "test-stuff.h"
 #include "gnc-filepath-utils.h"
 
@@ -58,8 +57,6 @@ int
 main(int argc, char **argv)
 {
     int i;
-
-    qof_init();
 
     for (i = 0; strs[i].input != NULL; i++)
     {

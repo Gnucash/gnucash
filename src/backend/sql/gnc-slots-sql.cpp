@@ -49,7 +49,7 @@ extern "C"
 #include "gnc-sql-column-table-entry.hpp"
 #include "gnc-slots-sql.h"
 
-#include <kvp_frame.hpp>
+#include <kvp-frame.hpp>
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 

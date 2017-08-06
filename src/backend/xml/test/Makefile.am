@@ -211,7 +211,6 @@ GNC_TEST_DEPS = \
   --gnc-module-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/engine \
-  --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/gnc-module \
   --library-dir    ${top_builddir}/src/engine \
@@ -250,7 +249,6 @@ check_PROGRAMS = \
 noinst_HEADERS = test-file-stuff.h
 
 LDADD = \
-        ${top_builddir}/src/libqof/qof/libgnc-qof.la \
         ${top_builddir}/src/test-core/libtest-core.la \
         ${top_builddir}/src/gnc-module/libgnc-module.la \
         ${top_builddir}/src/engine/libgncmod-engine.la \
@@ -270,7 +268,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \
   -I${top_srcdir}/src/backend/xml \
-  -I${top_srcdir}/src/libqof/qof \
   -DU_SHOW_CPLUSPLUS_API=0 \
   ${LIBXML2_CFLAGS} \
   ${GLIB_CFLAGS} \

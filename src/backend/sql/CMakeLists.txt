@@ -69,7 +69,7 @@ ADD_LIBRARY	(gnc-backend-sql
   ${backend_sql_noinst_HEADERS}
 )
 
-TARGET_LINK_LIBRARIES(gnc-backend-sql gncmod-engine gnc-qof)
+TARGET_LINK_LIBRARIES(gnc-backend-sql gncmod-engine)
 
 TARGET_COMPILE_DEFINITIONS (gnc-backend-sql PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.sql\")
 

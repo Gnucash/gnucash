@@ -4,11 +4,10 @@ SET(CSV_IMP_TEST_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/src
   ${CMAKE_SOURCE_DIR}/src/engine
   ${CMAKE_SOURCE_DIR}/src/test-core
-  ${CMAKE_SOURCE_DIR}/src/libqof/qof
   ${CMAKE_SOURCE_DIR}/lib
   ${GLIB2_INCLUDE_DIRS}
 )
-SET(CSV_IMP_TEST_LIBS gncmod-csv-import gncmod-engine gnc-qof test-core)
+SET(CSV_IMP_TEST_LIBS gncmod-csv-import gncmod-engine test-core)
 
 # This test does not run in Win32
 IF (NOT WIN32)

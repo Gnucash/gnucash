@@ -1,13 +1,18 @@
 # These directories do not contain any gtk dependencies
+# Note the unusual ordering of some test directories. This is
+# because test-core depends on engine and the test directories
+# in turn depend on test-core.
 NONGUI_SUBDIRS = \
-  libqof \
-  test-core \
   debug \
   doc \
   pixmaps \
   core-utils \
   gnc-module \
   engine \
+  test-core \
+  core-utils/test \
+  gnc-module/test \
+  engine/test \
   backend \
   scm \
   quotes

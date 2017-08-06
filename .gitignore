@@ -51,8 +51,6 @@ intltool-merge.in
 intltool-update
 intltool-update.in
 lib/guile-www/www
-lib/libqof/backend/file/qsf-dir.h
-lib/libqof/qof/qofla-dir.h
 libtool
 ltmain.sh
 macros/intltool.m4
@@ -194,10 +192,7 @@ src/import-export/qif-import/qif-import
 src/import-export/qif-import/test/test-link
 src/import-export/test/test-import-parse
 src/import-export/test/test-link
-src/libqof/backend/file/qsf-dir.h
-src/libqof/qof/qofla-dir.h
-src/libqof/qof/test-qofmath
-src/libqof/qof/test/test-qof
+src/engine/test/test-qof
 src/optional/gtkmm/test/test-gtkmm
 src/optional/python-bindings/.py-links
 src/optional/python-bindings/gnucash/

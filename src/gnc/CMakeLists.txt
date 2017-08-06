@@ -83,7 +83,6 @@ INCLUDE_DIRECTORIES (${LIBINTL_INCLUDE_PATH})
 INCLUDE_DIRECTORIES (${REGEX_INCLUDE_PATH})
 INCLUDE_DIRECTORIES (${CMAKE_BINARY_DIR}/src ) # for config.h
 INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src ) # for gnc-ui.h
-INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/libqof/qof) # for qof.h
 INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/gnc-module) # for gnc-glib-utils.h
 INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/core-utils) # for gnc-glib-utils.h
 INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR}/src/engine) # for gnc-glib-utils.h
@@ -115,7 +114,7 @@ IF (WITH_AQBANKING)
 #  TARGET_LINK_LIBRARIES (cutecash ${AQBANKING_LIBRARIES} ${GWENHYWFAR_LIBRARIES})
 ENDIF (WITH_AQBANKING)
 TARGET_LINK_LIBRARIES (cutecash libgncmod-gtkmm)
-TARGET_LINK_LIBRARIES (cutecash gncmod-engine gnc-module gnc-core-utils gnc-qof)
+TARGET_LINK_LIBRARIES (cutecash gncmod-engine gnc-module gnc-core-utils)
 
 TARGET_LINK_LIBRARIES (cutecash ${GUILE_LIBRARY} ${GUILE_LIBRARIES})
 TARGET_LINK_LIBRARIES (cutecash ${GLIBMM_LIBRARIES})

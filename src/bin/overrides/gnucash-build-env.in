@@ -66,7 +66,6 @@ eval `${top_srcdir}/src/gnc-test-env.pl \
   --guile-load-dir ${top_builddir}/src/report/stylesheets \
   --guile-load-dir ${top_builddir}/src/import-export/qif-import \
   --library-dir    ${top_builddir}/src/test-core \
-  --library-dir    ${top_builddir}/src/libqof/qof \
   --library-dir    ${top_builddir}/src/core-utils \
   --library-dir    ${top_builddir}/src/calculation \
   --library-dir    ${top_builddir}/src/app-utils \

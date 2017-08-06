@@ -2,7 +2,7 @@
 ADD_SUBDIRECTORY(test)
 
 IF (BUILDING_FROM_VCS)
-  # Command to generate the swig-engine.c wrapper file
+  # Command to generate the swig-gnc-module.c wrapper file
   SET (SWIG_GNC_MODULE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-gnc-module.c)
   GNC_ADD_SWIG_COMMAND (swig-gnc-module-c ${SWIG_GNC_MODULE_C} ${CMAKE_CURRENT_SOURCE_DIR}/gnc-module.i)
 ELSE()
@@ -25,13 +25,16 @@ ADD_LIBRARY	(gnc-module
   ${SWIG_GNC_MODULE_C}
 )
 
-TARGET_LINK_LIBRARIES(gnc-module gnc-qof ${GUILE_LDFLAGS} ${GMODULE_LDFLAGS} ${GLIB2_LDFLAGS})
+TARGET_LINK_LIBRARIES(gnc-module ${GUILE_LDFLAGS} ${GMODULE_LDFLAGS} ${GLIB2_LDFLAGS})
 
 TARGET_COMPILE_DEFINITIONS (gnc-module PRIVATE -DG_LOG_DOMAIN=\"gnc.module\")
 
 TARGET_INCLUDE_DIRECTORIES (gnc-module
     PRIVATE ${GUILE_INCLUDE_DIRS}
     PUBLIC  ${CMAKE_CURRENT_SOURCE_DIR}
+            ${CMAKE_SOURCE_DIR}/src
+            ${CMAKE_BINARY_DIR}/src # for config.h
+            ${GLIB2_INCLUDE_DIRS}
 )
 
 INSTALL(TARGETS gnc-module

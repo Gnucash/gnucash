@@ -90,7 +90,6 @@ WARN_LOGFILE           =
 # configuration options related to the input files
 #---------------------------------------------------------------------------
 INPUT                  = . \
-    ../libqof/qof \
 	../core-utils \
 	../gnc-module \
 	../engine \

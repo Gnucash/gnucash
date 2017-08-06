@@ -10,7 +10,6 @@ TARGET_INCLUDE_DIRECTORIES(gncmod-test-engine PRIVATE
   ${CMAKE_PREFIX_PATH}/include
   ${GMODULE_INCLUDE_DIRS}
   ${CMAKE_SOURCE_DIR}/src/gnc-module
-  ${CMAKE_SOURCE_DIR}/src/libqof/qof
   ${CMAKE_BINARY_DIR}/src # for config.h
   ${CMAKE_SOURCE_DIR}/src
   ${CMAKE_SOURCE_DIR}/src/engine

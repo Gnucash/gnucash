@@ -4,14 +4,14 @@ SET(GENERIC_IMPORT_TEST_INCLUDE_DIRS
   ${CMAKE_BINARY_DIR}/src # for config.h
   ${CMAKE_SOURCE_DIR}/src/gnc-module
   ${CMAKE_SOURCE_DIR}/src/import-export
-  ${CMAKE_SOURCE_DIR}/src/libqof/qof
   ${CMAKE_SOURCE_DIR}/src/test-core
+  ${CMAKE_SOURCE_DIR}/src/engine
   ${CMAKE_SOURCE_DIR}/src/engine/test-core
   ${GLIB2_INCLUDE_DIRS}
   ${GUILE_INCLUDE_DIRS}
 )
 
-SET(GENERIC_IMPORT_TEST_LIBS gncmod-generic-import gncmod-test-engine gnc-qof test-core)
+SET(GENERIC_IMPORT_TEST_LIBS gncmod-generic-import gncmod-test-engine test-core)
 
 GNC_ADD_TEST_WITH_GUILE(test-import-parse test-import-parse.c
   GENERIC_IMPORT_TEST_INCLUDE_DIRS GENERIC_IMPORT_TEST_LIBS

@@ -22,9 +22,7 @@ libgncmod_customer_import_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${top_builddir}/lib/libc/libc-missing.la \
-  ${QOF_LIBS} \
   ${GLIB_LIBS}
 
 AM_CPPFLAGS = \
@@ -44,7 +42,6 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/lib/libc \
   ${GTK_CFLAGS} \
-  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS}
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.plugin.customer_import\"

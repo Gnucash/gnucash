@@ -17,7 +17,6 @@ _gnucash_core_c_la_SOURCES = \
 _gnucash_core_c_la_CPPFLAGS = \
   $(PYTHON_CPPFLAGS) \
   $(GLIB_CFLAGS) \
-  -I${top_srcdir}/src/libqof/qof \
   -I$(top_srcdir)/src  \
   -I$(top_srcdir)/src/engine \
   -I${top_srcdir}/src/gnome-utils \
@@ -34,20 +33,19 @@ _gnucash_core_c_la_LDFLAGS = -avoid-version -module
 
 _gnucash_core_c_la_LIBADD = \
   ${GLIB_LIBS} \
-  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la
 if BUILDING_FROM_VCS
 _gnucash_core_c_includes= \
 	${top_builddir}/config.h \
-	${top_srcdir}/src/libqof/qof/qofsession.h \
-	${top_srcdir}/src/libqof/qof/qofbook.h \
-	${top_srcdir}/src/libqof/qof/qofbackend.h \
-	${top_srcdir}/src/libqof/qof/qoflog.h \
-	${top_srcdir}/src/libqof/qof/qofutil.h \
-	${top_srcdir}/src/libqof/qof/qofid.h \
-	${top_srcdir}/src/libqof/qof/guid.h \
+	${top_srcdir}/src/engine/qofsession.h \
+	${top_srcdir}/src/engine/qofbook.h \
+	${top_srcdir}/src/engine/qofbackend.h \
+	${top_srcdir}/src/engine/qoflog.h \
+	${top_srcdir}/src/engine/qofutil.h \
+	${top_srcdir}/src/engine/qofid.h \
+	${top_srcdir}/src/engine/guid.h \
 	${top_srcdir}/src/gnc-module/gnc-module.h \
 	${top_srcdir}/src/engine/gnc-engine.h \
 	${top_srcdir}/src/engine/Transaction.h \
@@ -55,7 +53,7 @@ _gnucash_core_c_includes= \
 	${top_srcdir}/src/engine/Account.h \
 	${top_srcdir}/src/engine/gnc-commodity.h \
 	${top_srcdir}/src/engine/gnc-lot.h \
-	${top_srcdir}/src/libqof/qof/gnc-numeric.h \
+	${top_srcdir}/src/engine/gnc-numeric.h \
 	${top_srcdir}/src/engine/gncCustomer.h \
 	${top_srcdir}/src/engine/gncEmployee.h \
 	${top_srcdir}/src/engine/gncVendor.h \
@@ -74,8 +72,7 @@ _gnucash_core_c_includes= \
 gnucash_core.c: $(SWIG_FILES) ${top_srcdir}/src/base-typemaps.i ${top_srcdir}/src/engine/engine-common.i $(_gnucash_core_c_includes)
 	$(SWIG) -python -Wall -Werror \
 	-I$(top_srcdir)/src -I$(top_srcdir)/src/engine \
-	-I$(top_srcdir)/src/app-utils -I${top_srcdir}/src/libqof/qof \
-	-o $@ $<
+	-I$(top_srcdir)/src/app-utils -o $@ $<
 
 gnucash_core_c.py: gnucash_core.c $(SWIG_FILES)
 endif

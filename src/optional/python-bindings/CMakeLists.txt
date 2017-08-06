@@ -5,21 +5,21 @@ IF (BUILDING_FROM_VCS)
   SET(SWIG_FILES ${CMAKE_CURRENT_SOURCE_DIR}/gnucash_core.i ${CMAKE_CURRENT_SOURCE_DIR}/timespec.i)
   SET(GNUCASH_CORE_C_INCLUDES
     ${CMAKE_BINARY_DIR}/src/config.h
-    ${CMAKE_SOURCE_DIR}/src/libqof/qof/qofsession.h
-    ${CMAKE_SOURCE_DIR}/src/libqof/qof/qofbook.h
-    ${CMAKE_SOURCE_DIR}/src/libqof/qof/qofbackend.h
-    ${CMAKE_SOURCE_DIR}/src/libqof/qof/qoflog.h
-    ${CMAKE_SOURCE_DIR}/src/libqof/qof/qofutil.h
-    ${CMAKE_SOURCE_DIR}/src/libqof/qof/qofid.h
-    ${CMAKE_SOURCE_DIR}/src/libqof/qof/guid.h
+    ${CMAKE_SOURCE_DIR}/src/engine/qofsession.h
+    ${CMAKE_SOURCE_DIR}/src/engine/qofbook.h
+    ${CMAKE_SOURCE_DIR}/src/engine/qofbackend.h
+    ${CMAKE_SOURCE_DIR}/src/engine/qoflog.h
+    ${CMAKE_SOURCE_DIR}/src/engine/qofutil.h
+    ${CMAKE_SOURCE_DIR}/src/engine/qofid.h
+    ${CMAKE_SOURCE_DIR}/src/engine/guid.h
     ${CMAKE_SOURCE_DIR}/src/gnc-module/gnc-module.h
     ${CMAKE_SOURCE_DIR}/src/engine/gnc-engine.h
-		${CMAKE_SOURCE_DIR}/src/engine/Transaction.h
+    ${CMAKE_SOURCE_DIR}/src/engine/Transaction.h
     ${CMAKE_SOURCE_DIR}/src/engine/Split.h
     ${CMAKE_SOURCE_DIR}/src/engine/Account.h
     ${CMAKE_SOURCE_DIR}/src/engine/gnc-commodity.h
     ${CMAKE_SOURCE_DIR}/src/engine/gnc-lot.h
-    ${CMAKE_SOURCE_DIR}/src/libqof/qof/gnc-numeric.h
+    ${CMAKE_SOURCE_DIR}/src/engine/gnc-numeric.h
     ${CMAKE_SOURCE_DIR}/src/engine/gncCustomer.h
     ${CMAKE_SOURCE_DIR}/src/engine/gncEmployee.h
     ${CMAKE_SOURCE_DIR}/src/engine/gncVendor.h
@@ -50,7 +50,6 @@ ENDIF()
 IF(WITH_PYTHON)
 
   SET(gnucash_core_c_INCLUDE_DIRS
-    ${CMAKE_SOURCE_DIR}/src/libqof/qof
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/src/engine
     ${CMAKE_SOURCE_DIR}/src/gnome-utils
@@ -66,12 +65,12 @@ IF(WITH_PYTHON)
   ADD_LIBRARY(gnucash_core_c MODULE ${SWIG_GNUCASH_CORE_C})
   TARGET_INCLUDE_DIRECTORIES(gnucash_core_c PRIVATE ${gnucash_core_c_INCLUDE_DIRS})
 
-  TARGET_LINK_LIBRARIES(gnucash_core_c gnc-qof gnc-module gncmod-engine gncmod-app-utils ${GLIB_LIBS} ${PYTHON_LIBRARIES})
+  TARGET_LINK_LIBRARIES(gnucash_core_c gncmod-app-utils gncmod-engine gnc-module ${GLIB_LIBS} ${PYTHON_LIBRARIES})
   SET_TARGET_PROPERTIES(gnucash_core_c PROPERTIES PREFIX "_")
   TARGET_COMPILE_OPTIONS(gnucash_core_c PRIVATE -Wno-implicit -Wno-missing-prototypes -Wno-declaration-after-statement -Wno-missing-declarations)
 
   ADD_EXECUTABLE(sqlite3test EXCLUDE_FROM_ALL sqlite3test.c ${SWIG_GNUCASH_CORE_C})
-  TARGET_LINK_LIBRARIES(sqlite3test gnc-qof gnc-module gncmod-engine gncmod-app-utils ${GLIB_LIBS} ${PYTHON_LIBRARIES})
+  TARGET_LINK_LIBRARIES(sqlite3test gncmod-app-utils gncmod-engine gnc-module ${GLIB_LIBS} ${PYTHON_LIBRARIES})
   TARGET_INCLUDE_DIRECTORIES(sqlite3test PRIVATE ${gnucash_core_c_INCLUDE_DIRS})
   TARGET_COMPILE_OPTIONS(sqlite3test PRIVATE -Wno-implicit -Wno-missing-prototypes -Wno-declaration-after-statement -Wno-missing-declarations)
 

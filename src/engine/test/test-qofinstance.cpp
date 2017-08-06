@@ -29,7 +29,7 @@ extern "C"
 #include "../qof.h"
 }
 #include "../qof-backend.hpp"
-#include "../kvp_frame.hpp"
+#include "../kvp-frame.hpp"
 static const gchar *suitename = "/qof/qofinstance";
 extern "C" void test_suite_qofinstance ( void );
 static gchar* error_message;
@@ -49,10 +49,10 @@ static struct
 } commit_test;
 
 
-class MockBackend : public QofBackend
+class QofInstMockBackend : public QofBackend
 {
 public:
-    MockBackend() : m_qof_error{ERR_BACKEND_NO_ERR} {
+    QofInstMockBackend() : m_qof_error{ERR_BACKEND_NO_ERR} {
         commit_test.m_be = this;
     }
     void session_begin(QofSession* sess, const char* book_name,
@@ -503,7 +503,7 @@ test_instance_begin_edit( Fixture *fixture, gconstpointer pData )
     gboolean result;
 
     /* setup */
-    auto be = new MockBackend;
+    auto be = new QofInstMockBackend;
     g_assert( be );
     book = qof_book_new();
     g_assert( book );
@@ -598,7 +598,7 @@ test_instance_commit_edit_part2( Fixture *fixture, gconstpointer pData )
     gboolean result;
 
     /* setup */
-    auto be = new MockBackend;
+    auto be = new QofInstMockBackend;
     g_assert( be );
     book = qof_book_new();
     g_assert( book );

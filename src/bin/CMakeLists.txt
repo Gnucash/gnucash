@@ -24,7 +24,7 @@ TARGET_COMPILE_DEFINITIONS(gnucash PRIVATE -DG_LOG_DOMAIN=\"gnc.bin\")
 
 TARGET_LINK_LIBRARIES (gnucash
    gncmod-ledger-core gncmod-report-gnome gnc-gnome gncmod-gnome-utils gncmod-app-utils
-   gncmod-engine gnc-module gnc-core-utils gnc-qof gncmod-report-system
+   gncmod-engine gnc-module gnc-core-utils gncmod-report-system
    ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS} ${GTK3_LDFLAGS} ${GTK_MAC_LDFLAGS}
 )
 

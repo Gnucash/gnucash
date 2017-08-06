@@ -25,7 +25,7 @@ SET(qif_noinst_HEADERS
 
 ADD_LIBRARY(gncmod-qif ${qif_noinst_HEADERS} ${qif_SOURCES})
 
-TARGET_LINK_LIBRARIES(gncmod-qif gncmod-generic-import gncmod-engine gnc-qof ${GLIB2_LDFLAGS})
+TARGET_LINK_LIBRARIES(gncmod-qif gncmod-generic-import gncmod-engine ${GLIB2_LDFLAGS})
 
 TARGET_COMPILE_DEFINITIONS(gncmod-qif PRIVATE -DG_LOG_DOMAIN=\"gnc.import.qif\")
 

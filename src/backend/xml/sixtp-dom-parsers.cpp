@@ -33,7 +33,7 @@ extern "C"
 
 #include "sixtp-utils.h"
 #include "sixtp-dom-parsers.h"
-#include <kvp_frame.hpp>
+#include <kvp-frame.hpp>
 
 static QofLogModule log_module = GNC_MOD_IO;
 
