@@ -42,7 +42,9 @@ from gnucash_core_c import gncInvoiceLookup, gncInvoiceGetInvoiceFromTxn, \
     gncTaxTableLookup, gncTaxTableLookupByName, gnc_search_invoice_on_id, \
     gnc_search_customer_on_id, gnc_search_bill_on_id , \
     gnc_search_vendor_on_id, gncInvoiceNextID, gncCustomerNextID, \
-    gncVendorNextID, gncTaxTableGetTables
+    gncVendorNextID, gncTaxTableGetTables, gnc_numeric_zero, \
+    gnc_numeric_create, double_to_gnc_numeric, string_to_gnc_numeric, \
+    gnc_numeric_to_string
 
 class GnuCashCoreClass(ClassFromFunctions):
     _module = gnucash_core_c
@@ -271,26 +273,60 @@ class GncNumeric(GnuCashCoreClass):
     Look at gnc-numeric.h to see how to use these
     """
 
-    def __init__(self, num=0, denom=1, **kargs):
-        """Constructor that allows you to set the numerator and denominator or
-        leave them blank with a default value of 0 (not a good idea since there
-        is currently no way to alter the value after instantiation)
+    def __init__(self, *args, **kargs):
+        """Constructor that supports the following formats:
+        * No arguments defaulting to zero: eg. GncNumeric() == 0/1
+        * A integer: e.g. GncNumeric(1) == 1/1
+        * Numerator and denominator intager pair: eg. GncNumeric(1, 2) == 1/2
+        * A floating point number: e.g. GncNumeric(0.5) == 1/2
+        * A floating point number with defined conversion: e.g.
+          GncNumeric(0.5, GNC_DENOM_AUTO,
+                    GNC_HOW_DENOM_FIXED | GNC_HOW_RND_NEVER) == 1/2
+        * A string: e.g. GncNumeric("1/2") == 1/2
         """
-        GnuCashCoreClass.__init__(self, num, denom, **kargs)
-        #if INSTANCE_ARG in kargs:
-        #    GnuCashCoreClass.__init__(**kargs)
-        #else:
-        #    self.set_denom(denom) # currently undefined
-        #    self.set_num(num)     # currently undefined
+        if 'instance' not in kargs:
+            kargs['instance'] = GncNumeric.__args_to_instance(args)
+        GnuCashCoreClass.__init__(self, [], **kargs)
+
+    @staticmethod
+    def __args_to_instance(args):
+        if len(args) == 0:
+            return gnc_numeric_zero()
+        elif len(args) == 1:
+            arg = args[0]
+            if type(arg) in (int, long):
+                return gnc_numeric_create(arg ,1)
+            elif type(arg) == float:
+                return double_to_gnc_numeric(arg, GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED | GNC_HOW_RND_NEVER)
+            elif type(arg) == str:
+                instance = gnc_numeric_zero()
+                if not string_to_gnc_numeric(arg, instance):
+                    raise TypeError('Failed to convert to GncNumeric: ' + str(args))
+                return instance
+            else:
+                raise TypeError('Only single int/float/str allowed: ' + str(args))
+        elif len(args) == 2:
+            if type(args[0]) == int and type(args[1]) == int:
+                return gnc_numeric_create(*args)
+            else:
+                raise TypeError('Only two ints allowed: ' + str(args))
+        elif len(args) == 3:
+            if type(args[0]) == float \
+                and type(args[1]) == type(GNC_DENOM_AUTO) \
+                and type(args[2]) == type(GNC_HOW_DENOM_FIXED):
+                return double_to_gnc_numeric(*args)
+            else:
+                raise TypeError('Only (float, GNC_HOW_RND_*, GNC_HOW_RND_*, GNC_HOW_RND_*) allowed: ' + str(args))
+        else:
+            raise TypeError('Required single int/float/str or two ints: ' + str(args))
+
+    def to_fraction(self):
+        from fractions import Fraction
+        return Fraction(self.num(), self.denom())
 
     def __unicode__(self):
         """Returns a human readable numeric value string as UTF8."""
-        if self.denom() == 0:
-            return "Division by zero"
-        else:
-            value_float = self.to_double() 
-            value_str   = u"{0:.{1}f}".format(value_float,2) ## The second argument is the precision. It would be nice to be able to make it configurable.
-            return value_str
+        return gnc_numeric_to_string(self.instance)
 
     def __str__(self):
         """returns a human readable numeric value string as bytes."""

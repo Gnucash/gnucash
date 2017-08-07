@@ -73,8 +73,9 @@ _gnucash_core_c_includes= \
 
 gnucash_core.c: $(SWIG_FILES) ${top_srcdir}/src/base-typemaps.i ${top_srcdir}/src/engine/engine-common.i $(_gnucash_core_c_includes)
 	$(SWIG) -python -Wall -Werror \
-	-I$(top_srcdir)/src -I$(top_srcdir)/src/engine \
-	-I$(top_srcdir)/src/app-utils -I${top_srcdir}/src/libqof/qof \
+	-I${GLIB_CFLAGS} -I$(top_srcdir)/src \
+	-I$(top_srcdir)/src/engine -I$(top_srcdir)/src/app-utils \
+	-I${top_srcdir}/src/libqof/qof \
 	-o $@ $<
 
 gnucash_core_c.py: gnucash_core.c $(SWIG_FILES)
