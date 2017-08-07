@@ -61,7 +61,8 @@ test_aqb_CFLAGS = \
   ${GLIB_CFLAGS} \
   ${AQBANKING_CFLAGS}
 
-TESTS_ENVIRONMENT = \
+  TESTS_ENVIRONMENT = \
+  GNC_BUILDDIR=${abs_top_builddir} \
   SRCDIR=${srcdir} \
   G_DEBUG=
 

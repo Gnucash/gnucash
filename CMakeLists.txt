@@ -527,12 +527,8 @@ ADD_CUSTOM_TARGET(check
      scm-test-core scm-test-report-system scm-standard-reports-2
      scm-test-standard-reports foo gncmodfoo baz gncmodbaz
      bar gncmodbar gncmod_agedver gncmod_incompatdep
-     gncmod_futuremodsys check-po test-core-guile
+     gncmod_futuremodsys check-po test-core-guile gncmod-backend-xml
 )
-IF (NOT WIN32)
-  ADD_DEPENDENCIES(check gncmod-backend-xml-link)
-ENDIF()
-
 
 SET(gnucash_DOCS
     AUTHORS

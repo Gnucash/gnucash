@@ -127,22 +127,3 @@ ADD_LIBRARY(gncmod-backend-xml-utils ${libgncmod_backend_xml_SOURCES})
 TARGET_LINK_LIBRARIES(gncmod-backend-xml-utils gnc-backend-xml-utils gncmod-engine
                         gnc-core-utils ${LIBXML2_LDFLAGS} ${GLIB2_LDFLAGS} ${ZLIB_LIBRARY})
 TARGET_COMPILE_DEFINITIONS (gncmod-backend-xml-utils PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.xml\" -DU_SHOW_CPLUSPLUS_API=0)
-
-# ----
-
-# FIXME: Below is a hack to create .libs/libgncmod-backend-xml to silence some complaints
-# from guile when compiling. Eventually, fix the guile module loader to not expect items
-# to be in .libs. At this time, WIN32 does not use guile-2, so no need for this.
-
-IF (NOT WIN32)
-  SET(_LINK_TARGET ${CMAKE_CURRENT_BINARY_DIR}/.libs/libgncmod-backend-xml${CMAKE_SHARED_MODULE_SUFFIX})
-  FILE(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/.libs)
-
-  ADD_CUSTOM_COMMAND(
-      OUTPUT ${_LINK_TARGET}
-      COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE:gncmod-backend-xml> ${_LINK_TARGET}
-      DEPENDS gnc-backend-xml-utils
-  )
-
-  ADD_CUSTOM_TARGET(gncmod-backend-xml-link ALL DEPENDS gncmod-backend-xml ${_LINK_TARGET})
-ENDIF()

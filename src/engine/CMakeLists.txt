@@ -269,23 +269,18 @@ SET (engine_SCHEME_1
     engine-utilities.scm
     gnc-numeric.scm
 )
-IF (NOT WIN32)
-  SET(BACKEND_DEPENDS gncmod-backend-xml-link)
-
-  IF(WITH_SQL)
-    LIST(APPEND BACKEND_DEPENDS gncmod-backend-dbi-link)
-  ENDIF(WITH_SQL)
-ELSE (NOT WIN32)
+IF (WIN32)
   ADD_DEFINITIONS (-DOS_WIN32)
   SET (engine_SOURCES ${engine_SOURCES}
   qof-win32.cpp
   ../../lib/libc/strptime.c
   )
-   SET(BACKEND_DEPENDS gncmod-backend-xml)
-   IF (WITH_SQL)
-      LIST(APPEND BACKEND_DEPENDS gncmod-backend-dbi)
-   ENDIF(WITH_SQL)
-ENDIF (NOT WIN32)
+ENDIF (WIN32)
+
+SET(BACKEND_DEPENDS gncmod-backend-xml)
+IF (WITH_SQL)
+    LIST(APPEND BACKEND_DEPENDS gncmod-backend-dbi)
+ENDIF(WITH_SQL)
 
 SET(GUILE_MODULES      "")
 SET(GUILE_LOAD_DIRS    src/gnc-module)

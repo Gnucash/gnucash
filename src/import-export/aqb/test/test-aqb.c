@@ -37,6 +37,7 @@ int
 main (int   argc,
       char *argv[])
 {
+    g_setenv ("GNC_UNINSTALLED", "1", TRUE);
     qof_init(); 			/* Initialize the GObject system */
     qof_log_init_filename_special("stderr"); /* Init the log system */
     g_test_init ( &argc, &argv, NULL ); 	/* initialize test program */
@@ -46,9 +47,7 @@ main (int   argc,
     xaccLogDisable();
 
     gnc_module_system_init();
-    gnc_engine_init_static(argc, argv);
-    qof_load_backend_library ("../../../backend/xml/.libs/",
-			      "gncmod-backend-xml");
+    gnc_engine_init(argc, argv);
 
     /* Add test functions and suites. See
      * http://library.gnome.org/devel/glib/stable/glib-Testing.html for
