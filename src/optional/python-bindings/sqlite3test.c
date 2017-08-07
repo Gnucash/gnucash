@@ -30,7 +30,7 @@ int main()
     gnc_engine_init(0, no_args);
 
     QofSession * s = qof_session_new();
-    qof_session_begin(s, "sqlite3:///tmp/blah.gnucash", 0, 1, 0);
+    qof_session_begin(s, "sqlite3:///tmp/blah.gnucash", 0, 1, 1);
     qof_session_load(s, NULL);
     qof_session_save(s, NULL);
     qof_session_end(s);
