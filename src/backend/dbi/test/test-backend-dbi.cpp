@@ -29,20 +29,23 @@ extern "C"
 }
 extern void test_suite_gnc_backend_dbi ();
 
-#define GNC_LIB_NAME "gncmod-backend-dbi"
+#define GNC_LIB_NAME_1 "gncmod-backend-dbi"
+#define GNC_LIB_REL_PATH_1 "dbi"
+#define GNC_LIB_NAME_2 "gncmod-backend-xml"
+#define GNC_LIB_REL_PATH_2 "xml"
 
 int
 main (int   argc,
       char* argv[])
 {
+    g_setenv ("GNC_UNINSTALLED", "1", TRUE);
     qof_init (); /* equally initializes gobject system */
     qof_log_init_filename_special ("stderr"); /* Init the log system */
     g_test_init (&argc, &argv, NULL);       /* initialize test program */
     g_test_bug_base ("https://bugzilla.gnome.org/show_bug.cgi?id="); /* init the bugzilla URL */
     cashobjects_register ();
-    g_assert (qof_load_backend_library ("../.libs/", GNC_LIB_NAME));
-    g_assert (qof_load_backend_library ("../../xml/.libs",
-                                        "gncmod-backend-xml"));
+    g_assert (qof_load_backend_library (GNC_LIB_REL_PATH_1, GNC_LIB_NAME_1));
+    g_assert (qof_load_backend_library (GNC_LIB_REL_PATH_2, GNC_LIB_NAME_2));
 
     test_suite_gnc_backend_dbi ();
 

@@ -55,6 +55,7 @@ extern "C"
 #include "test-file-stuff.h"
 
 #define GNC_LIB_NAME "gncmod-backend-xml"
+#define GNC_LIB_REL_PATH "xml"
 
 static void
 remove_files_pattern (const char* begining, const char* ending)
@@ -120,13 +121,14 @@ test_load_file (const char* filename)
 int
 main (int argc, char** argv)
 {
+    g_setenv ("GNC_UNINSTALLED", "1", TRUE);
     const char* location = g_getenv ("GNC_TEST_FILES");
     int files_tested = 0;
     GDir* xml2_dir;
 
     qof_init ();
     cashobjects_register ();
-    do_test (qof_load_backend_library ("../.libs/", GNC_LIB_NAME),
+    do_test (qof_load_backend_library (GNC_LIB_REL_PATH, GNC_LIB_NAME),
              " loading gnc-backend-xml GModule failed");
 
     if (!location)

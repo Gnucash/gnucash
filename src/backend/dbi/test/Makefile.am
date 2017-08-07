@@ -35,6 +35,7 @@ GNC_TEST_DEPS = \
   --library-dir    ${top_builddir}/src/backend/xml
 
 TESTS_ENVIRONMENT = \
+  GNC_BUILDDIR=${abs_top_builddir} \
   GNC_ACCOUNT_PATH=${top_srcdir}/accounts/C \
   SRCDIR=${srcdir} \
   ${gnc_dbd_dir_override} \

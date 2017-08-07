@@ -220,19 +220,15 @@ typedef void (* gnc_engine_init_hook_t)(int, char **);
 /** PROTOTYPES ******************************************************/
 
 /** gnc_engine_init should be called before gnc engine
- * functions can be used - see also ::qof_init for a
- * method that does not require Guile. */
+ * functions can be used. */
 void gnc_engine_init(int argc, char ** argv);
 
 /** This is the statically linked-in version of gnc_engine_init. It is
- * identically to that function except that it doesn't load the
- * loadable shared module, which means this function will not load the
- * "(gnucash engine)" scheme module.
+ * identical to that function except that it doesn't load any backend library.
  */
 void gnc_engine_init_static(int argc, char ** argv);
 
-/** Called to shutdown the engine, see also ::qof_close
- * for use without Guile. */
+/** Called to shutdown the engine. */
 void gnc_engine_shutdown (void);
 
 /** check the engine is fully initialized */

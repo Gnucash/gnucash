@@ -33,13 +33,15 @@ extern "C"
 }
 
 #define GNC_LIB_NAME "gncmod-backend-xml"
+#define GNC_LIB_REL_PATH "xml"
 
 int main (int argc, char** argv)
 {
+    g_setenv ("GNC_UNINSTALLED", "1", TRUE);
     qof_init ();
     cashobjects_register ();
     do_test (
-        qof_load_backend_library ("../.libs/", GNC_LIB_NAME),
+        qof_load_backend_library (GNC_LIB_REL_PATH, GNC_LIB_NAME),
         " loading gnc-backend-xml GModule failed");
     print_test_results ();
     qof_close ();

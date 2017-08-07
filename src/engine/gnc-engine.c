@@ -66,11 +66,6 @@ gnc_engine_init_part1()
 static void
 gnc_engine_init_part2()
 {
-    gchar *pkglibdir;
-    const gchar *builddir = g_getenv ("GNC_BUILDDIR");
-    gboolean uninstalled = (g_getenv ("GNC_UNINSTALLED") != NULL
-                            && builddir != NULL);
-
     static struct
     {
         const gchar* subdir;
@@ -85,50 +80,22 @@ gnc_engine_init_part2()
         { NULL, FALSE }
     }, *lib;
 
-    if (uninstalled)
-#ifdef CMAKE_BUILD
-	pkglibdir = g_build_path (G_DIR_SEPARATOR_S, builddir, NULL);
-#ifdef WIN32
-#define LIBDIR "bin"
-#else
-#define LIBDIR "lib/gnucash"
-#endif
-#else
-        pkglibdir = g_build_path (G_DIR_SEPARATOR_S, builddir,
-                                  "src", "backend", NULL);
-#endif
-    else
-        pkglibdir = gnc_path_get_pkglibdir ();
-
     for (lib = libs; lib->lib ; lib++)
     {
-        gchar *libdir;
-        if (uninstalled)
-#ifdef CMAKE_BUILD
-	    libdir = g_build_path (G_DIR_SEPARATOR_S, pkglibdir, LIBDIR, NULL);
-#else
-            libdir = g_build_path (G_DIR_SEPARATOR_S, pkglibdir,
-                                   lib->subdir, ".libs", NULL);
-#endif
-        else
-            libdir = pkglibdir;
-        if (qof_load_backend_library(libdir, lib->lib))
+        if (qof_load_backend_library(lib->subdir, lib->lib))
         {
             engine_is_initialized = 1;
         }
         else
         {
-            g_warning("failed to load %s from %s\n", lib->lib, libdir);
+            g_warning("failed to load %s from relative path %s\n", lib->lib, lib->subdir);
             /* If this is a required library, stop now! */
             if (lib->required)
             {
                 g_critical("required library %s not found.\n", lib->lib);
             }
         }
-        if (uninstalled)
-            g_free (libdir);
     }
-    g_free (pkglibdir);
 }
 
 static void
