@@ -247,9 +247,6 @@ gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass)
     priv->sort_column_changed_cb_id = 0;
     priv->size_allocate_cb_id = 0;
 
-    /* Ask gtk to help the user keep track of rows. */
-    g_object_set(view, "rules-hint", TRUE, NULL);
-
     // Set the style context for this page so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(view), "GncTreeView");
 
