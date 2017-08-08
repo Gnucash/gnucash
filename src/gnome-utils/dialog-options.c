@@ -4265,7 +4265,22 @@ scm_apply_cb (GNCOptionWin *win, gpointer data)
 
     if (gnc_option_db_get_changed (win->option_db))
     {
-        gnc_option_db_commit (win->option_db);
+        GList *results = NULL, *iter;
+        results = gnc_option_db_commit (win->option_db);
+        for (iter = results; iter; iter = iter->next)
+        {
+            GtkWidget *dialog = gtk_message_dialog_new(NULL,
+                                                       0,
+                                                       GTK_MESSAGE_ERROR,
+                                                       GTK_BUTTONS_OK,
+                                                       "%s",
+                                                       (char*)iter->data);
+            gtk_dialog_run(GTK_DIALOG(dialog));
+            gtk_widget_destroy(dialog);
+            g_free (iter->data);
+        }
+        g_list_free (results);
+
         if (cbdata->apply_cb != SCM_BOOL_F)
         {
             scm_call_0 (cbdata->apply_cb);

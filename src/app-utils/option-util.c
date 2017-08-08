@@ -22,9 +22,6 @@
 
 #include "config.h"
 
-#ifdef GNOME
-# include <gtk/gtk.h>
-#endif
 #include <glib/gi18n.h>
 #include <time.h>
 #include <string.h>
@@ -1682,16 +1679,17 @@ gnc_option_valid_value(GNCOption *option, SCM value)
 }
 
 
-static void
+static char*
 gnc_commit_option(GNCOption *option)
 {
     SCM validator, setter, value;
     SCM result, ok;
+    char* retval = NULL;
 
     /* Validate the ui's value */
     value = gnc_option_get_ui_value(option);
     if (value == SCM_UNDEFINED)
-        return;
+        return NULL;
 
     validator = gnc_option_value_validator(option);
 
@@ -1699,7 +1697,7 @@ gnc_commit_option(GNCOption *option)
     if (!scm_is_list(result) || scm_is_null(result))
     {
         PERR("bad validation result\n");
-        return;
+        return NULL;
     }
 
     /* First element determines validity */
@@ -1707,7 +1705,7 @@ gnc_commit_option(GNCOption *option)
     if (!scm_is_bool(ok))
     {
         PERR("bad validation result\n");
-        return;
+        return NULL;
     }
 
     if (scm_is_true(ok))
@@ -1724,40 +1722,29 @@ gnc_commit_option(GNCOption *option)
     {
         SCM oops;
         char *section, *name;
-        const gchar *message;
-        const gchar *format = _("There is a problem with option %s:%s.\n%s");
+        const char *message;
+        const char *format = _("There is a problem with option %s:%s.\n%s");
+        const char *bad_value = _("Invalid option value");
+
+        name = gnc_option_name(option);
+        section = gnc_option_section(option);
 
         /* Second element is error message */
         oops = SCM_CADR(result);
         if (!scm_is_string(oops))
         {
             PERR("bad validation result\n");
-            return;
+            retval = g_strdup_printf(format,
+                                     section ? section : "(null)",
+                                     name ? name : "(null)",
+                                     bad_value);
         }
 
         message = gnc_scm_to_utf8_string (oops);
-        name = gnc_option_name(option);
-        section = gnc_option_section(option);
-
-#ifdef GNOME
-        {
-            GtkWidget *dialog = gtk_message_dialog_new(NULL,
-                                0,
-                                GTK_MESSAGE_ERROR,
-                                GTK_BUTTONS_OK,
-                                format,
-                                section ? section : "(null)",
-                                name ? name : "(null)",
-                                message ? message : "(null)");
-            gtk_dialog_run(GTK_DIALOG(dialog));
-            gtk_widget_destroy(dialog);
-        }
-#else
-        printf(format,
-               section ? section : "(null)",
-               name ? name : "(null)",
-               message ? message : "(null)");
-#endif
+        retval = g_strdup_printf(format,
+                                 section ? section : "(null)",
+                                 name ? name : "(null)",
+                                 message ? message : "(null)");
 
         if (name != NULL)
             free(name);
@@ -1765,6 +1752,8 @@ gnc_commit_option(GNCOption *option)
             free(section);
         g_free ((gpointer *) message);
     }
+
+    return retval;
 }
 
 
@@ -1814,7 +1803,7 @@ gnc_option_db_get_changed(GNCOptionDB *odb)
  * Args: odb - option database to commit                            *
  * Return: nothing                                                  *
 \********************************************************************/
-void
+GList*
 gnc_option_db_commit(GNCOptionDB *odb)
 {
     GSList *section_node;
@@ -1822,8 +1811,9 @@ gnc_option_db_commit(GNCOptionDB *odb)
     GNCOptionSection *section;
     GNCOption *option;
     gboolean changed_something = FALSE;
+    GList *commit_errors = NULL;
 
-    g_return_if_fail (odb);
+    g_return_val_if_fail (odb, NULL);
 
     section_node = odb->option_sections;
     while (section_node != NULL)
@@ -1837,7 +1827,10 @@ gnc_option_db_commit(GNCOptionDB *odb)
 
             if (option->changed)
             {
-                gnc_commit_option(option_node->data);
+                char *result = NULL;
+                result = gnc_commit_option(option_node->data);
+                if (result)
+                    commit_errors = g_list_append (commit_errors, result);
                 changed_something = TRUE;
                 option->changed = FALSE;
             }
@@ -1850,6 +1843,8 @@ gnc_option_db_commit(GNCOptionDB *odb)
 
     if (changed_something)
         gnc_call_option_change_callbacks(odb);
+
+    return commit_errors;
 }
 
 

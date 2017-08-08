@@ -95,13 +95,28 @@ gnc_style_sheet_options_apply_cb(GNCOptionWin * propertybox,
 {
     ss_info * ssi = (ss_info *)user_data;
     GHashTable *reports = NULL;
+    GList *results = NULL, *iter;
 
     /* FIXME: shouldn't be global */
     reports = gnc_reports_get_global();
     if (reports)
         g_hash_table_foreach(reports, dirty_same_stylesheet, ssi->stylesheet);
 
-    gnc_option_db_commit(ssi->odb);
+    results = gnc_option_db_commit (ssi->odb);
+    for (iter = results; iter; iter = iter->next)
+    {
+        GtkWidget *dialog = gtk_message_dialog_new(NULL,
+                                                   0,
+                                                   GTK_MESSAGE_ERROR,
+                                                   GTK_BUTTONS_OK,
+                                                   "%s",
+                                                   (char*)iter->data);
+        gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
+        g_free (iter->data);
+    }
+    g_list_free (results);
+
 }
 
 

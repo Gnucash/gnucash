@@ -3984,10 +3984,24 @@ gnc_book_options_dialog_apply_helper(GNCOptionDB * options)
     gboolean use_split_action_for_num_after;
     gboolean use_book_currency_after;
     gboolean return_val = FALSE;
+    GList *results = NULL, *iter;
 
     if (!options) return return_val;
 
-    gnc_option_db_commit (options);
+    results = gnc_option_db_commit (options);
+    for (iter = results; iter; iter = iter->next)
+    {
+        GtkWidget *dialog = gtk_message_dialog_new(NULL,
+                                                   0,
+                                                   GTK_MESSAGE_ERROR,
+                                                   GTK_BUTTONS_OK,
+                                                   "%s",
+                                                   (char*)iter->data);
+        gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
+        g_free (iter->data);
+    }
+    g_list_free (results);
     qof_book_begin_edit (book);
     qof_book_save_options (book, gnc_option_db_save, options, TRUE);
     use_split_action_for_num_after =

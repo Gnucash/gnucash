@@ -32,7 +32,6 @@ AM_CPPFLAGS = \
   ${GUILE_CFLAGS} \
   ${PYTHON_CPPFLAGS} \
   ${GLIB_CFLAGS} \
-  ${GTK_CFLAGS} \
   ${LIBXML2_CFLAGS} \
   ${LIBXSLT_CFLAGS}
 
@@ -99,7 +98,6 @@ libgncmod_app_utils_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgnc-module.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/core-utils/libgnc-core-utils.la \
-  ${GTK_LIBS} \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${LIBXML2_LIBS} \

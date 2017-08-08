@@ -82,9 +82,24 @@ gnc_options_dialog_apply_cb(GNCOptionWin * propertybox,
 {
     SCM  dirty_report = scm_c_eval_string("gnc:report-set-dirty?!");
     struct report_default_params_data * win = user_data;
+    GList *results = NULL, *iter;
 
     if (!win) return;
-    gnc_option_db_commit(win->db);
+    results = gnc_option_db_commit (win->db);
+    for (iter = results; iter; iter = iter->next)
+    {
+        GtkWidget *dialog = gtk_message_dialog_new(NULL,
+                                                   0,
+                                                   GTK_MESSAGE_ERROR,
+                                                   GTK_BUTTONS_OK,
+                                                   "%s",
+                                                   (char*)iter->data);
+        gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
+        g_free (iter->data);
+    }
+    g_list_free (results);
+
     scm_call_2(dirty_report, win->cur_report, SCM_BOOL_T);
 }
 
