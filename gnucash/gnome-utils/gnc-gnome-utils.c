@@ -172,7 +172,7 @@ gnc_configure_date_completion (void)
 void
 gnc_add_css_file (void)
 {
-    GtkCssProvider *provider_user, *provider_app;
+    GtkCssProvider *provider_user, *provider_app, *provider_fallback;
     GdkDisplay *display;
     GdkScreen *screen;
     const gchar *var;
@@ -182,13 +182,20 @@ gnc_add_css_file (void)
 
     provider_user = gtk_css_provider_new ();
     provider_app = gtk_css_provider_new ();
+    provider_fallback = gtk_css_provider_new ();
     display = gdk_display_get_default ();
     screen = gdk_display_get_default_screen (display);
+
+    gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider_fallback), GTK_STYLE_PROVIDER_PRIORITY_THEME - 50);
     gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider_app), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider_user), GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     if (pkgdatadir)
     {
+        str = g_build_filename (pkgdatadir, "ui", "gnucash-fallback.css", (char *)NULL);
+        gtk_css_provider_load_from_path (provider_fallback, str, &error);
+        g_free (str);
+ 
         str = g_build_filename (pkgdatadir, "ui", "gnucash.css", (char *)NULL);
         gtk_css_provider_load_from_path (provider_app, str, &error);
         g_free (str);
@@ -204,6 +211,7 @@ gnc_add_css_file (void)
     }
     g_object_unref (provider_user);
     g_object_unref (provider_app);
+    g_object_unref (provider_fallback);
 }
 
 #ifdef MAC_INTEGRATION
