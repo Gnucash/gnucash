@@ -2,3 +2,16 @@
    directly by name as these are not brought in when loaded, only
    the widget type can be configured unless they are named in code */
 
+
+/* These are the defaults used in the dense-cal */
+*.primary {
+  background-color: lavender;
+}
+
+*.secondary {
+  background-color: SlateGray1;
+}
+
+*.markers {
+  background-color: yellow;
+}
