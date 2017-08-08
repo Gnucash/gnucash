@@ -15,18 +15,18 @@ NONGUI_SUBDIRS = \
   engine/test \
   backend \
   scm \
-  quotes
+  quotes \
+  app-utils \
+  tax
 
 if WITH_PYTHON
    PYTHON_DIR = python
 endif
 
 # These directories should also not contain any gtk dependencies, but
-# currently there is only single very little dependency in
-# app-utils. It should go away in the long run, though.
+# currently there is a gtk based console in the python bindings
+# that should probably live elsewhere.
 ALMOST_NONGUI_SUBDIRS = \
-  app-utils \
-  tax \
   ${PYTHON_DIR}
 
 # These directories contain the code with gtk dependency
