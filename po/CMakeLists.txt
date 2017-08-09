@@ -66,7 +66,7 @@ ENDFUNCTION()
 
 FUNCTION(MAKE_GNUCASH_POTFILES)
 
-  SET(IGNORE_PATTERNS "gw-" "test" "experimental" "python-bindings" "swig-.*\\.c" "^src/gnc/" "^src/optional/gtkmm")
+  SET(IGNORE_PATTERNS "gw-" "test" "experimental" "python-bindings" "swig-.*\\.c")
 
   # Create a list of candidate translation files
   FILE(GLOB_RECURSE FILES_IN RELATIVE ${CMAKE_SOURCE_DIR}

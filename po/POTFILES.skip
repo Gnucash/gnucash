@@ -5,10 +5,6 @@ src/backend/xml/gncmod-backend-xml.c
 src/backend/xml/gncmod-backend-xml.cpp
 src/gnome-utils/gnc-tree-model-selection.c
 
-# These we don't want to translate because they're experimental:
-src/gnc/.*
-src/optional/gtkmm/.*
-
 # Skip softlinks to scm files. These softlinks are created in builddir
 # for testing purposes, intltool-extract isn't smart enough to ignore
 # them when bulddir and srcdir are the same, and both intltool-extract
