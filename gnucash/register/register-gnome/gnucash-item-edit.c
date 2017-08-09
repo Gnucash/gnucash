@@ -167,8 +167,7 @@ gnc_item_edit_init (GncItemEdit *item_edit)
 
     item_edit->popup_toggle.ebox = NULL;
     item_edit->popup_toggle.tbutton = NULL;
-    item_edit->popup_toggle.arrow_up = NULL;
-    item_edit->popup_toggle.arrow_down = NULL;
+    item_edit->popup_toggle.direction = TRUE;
     item_edit->popup_toggle.signals_connected = FALSE;
 
     item_edit->popup_item = NULL;
@@ -333,6 +332,32 @@ unblock_toggle_signals(GncItemEdit *item_edit)
 }
 
 
+static gboolean
+draw_arrow_cb (GtkWidget *widget, cairo_t *cr, gpointer data)
+{
+    GncItemEdit *item_edit = GNC_ITEM_EDIT (data);
+    GtkStyleContext *context = gtk_widget_get_style_context (widget);
+    gint width = gtk_widget_get_allocated_width (widget);
+    gint height = gtk_widget_get_allocated_height (widget);
+    gint size;
+
+    gtk_render_background (context, cr, 0, 0, width, height);
+
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_ARROW);
+
+    size = MIN(width / 2, height / 2);
+
+    if (item_edit->popup_toggle.direction == 0)
+        gtk_render_arrow (context, cr, 0,
+                         (width - size)/2, (height - size)/2, size);
+    else
+        gtk_render_arrow (context, cr, G_PI,
+                         (width - size)/2, (height - size)/2, size);
+
+    return FALSE;
+}
+
+
 static void
 connect_popup_toggle_signals (GncItemEdit *item_edit)
 {
@@ -352,6 +377,10 @@ connect_popup_toggle_signals (GncItemEdit *item_edit)
     g_signal_connect (object, "key_press_event",
                       G_CALLBACK(key_press_popup_cb),
                       item_edit);
+
+    g_signal_connect_after (object, "draw",
+                            G_CALLBACK (draw_arrow_cb),
+                            item_edit);
 
     item_edit->popup_toggle.signals_connected = TRUE;
 }
@@ -507,7 +536,6 @@ GtkWidget *
 gnc_item_edit_new (GnucashSheet *sheet)
 {
     char *hpad_str, *vpad_str, *entry_css;
-    GtkWidget *box;
     GtkStyleContext *stylecontext;
     GtkCssProvider *provider;
     GncItemEdit *item_edit =
@@ -543,17 +571,8 @@ gnc_item_edit_new (GnucashSheet *sheet)
     /* Create the popup button
        It will only be displayed when the cell being edited provides
        a popup item (like a calendar or account list) */
-    item_edit->popup_toggle.arrow_down = gtk_image_new_from_icon_name ("go-down", GTK_ICON_SIZE_BUTTON);
-    item_edit->popup_toggle.arrow_up = gtk_image_new_from_icon_name ("go-up", GTK_ICON_SIZE_BUTTON);
-
-    box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_box_pack_start (GTK_BOX(box), GTK_WIDGET(item_edit->popup_toggle.arrow_down), FALSE, FALSE, 0);
-    gtk_box_pack_start (GTK_BOX(box), GTK_WIDGET(item_edit->popup_toggle.arrow_up),FALSE, FALSE, 0);
-
     item_edit->popup_toggle.tbutton = gtk_toggle_button_new();
-    gtk_toggle_button_set_mode (
-        GTK_TOGGLE_BUTTON (item_edit->popup_toggle.tbutton), FALSE);
-    gtk_container_add(GTK_CONTAINER(item_edit->popup_toggle.tbutton), GTK_WIDGET(box));
+    gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (item_edit->popup_toggle.tbutton), FALSE);
 
     /* Force padding on the button to
        1. keep it small
@@ -575,8 +594,6 @@ gnc_item_edit_new (GnucashSheet *sheet)
                         item_edit->popup_toggle.ebox,
                         FALSE, TRUE, 0);
     gtk_widget_show_all(GTK_WIDGET(item_edit));
-
-    gtk_widget_hide (GTK_WIDGET(item_edit->popup_toggle.arrow_up));
 
     return GTK_WIDGET(item_edit);
 }
@@ -667,8 +684,8 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
         unblock_toggle_signals (item_edit);
     }
 
-    gtk_widget_hide (item_edit->popup_toggle.arrow_down);
-    gtk_widget_show (item_edit->popup_toggle.arrow_up);
+    // set the popup arrow direction up
+    item_edit->popup_toggle.direction = FALSE;
 
     if (item_edit->popup_set_focus)
         item_edit->popup_set_focus (item_edit->popup_item,
@@ -713,8 +730,8 @@ gnc_item_edit_hide_popup (GncItemEdit *item_edit)
 
     gtk_container_remove (GTK_CONTAINER(item_edit->sheet), item_edit->popup_item);
 
-    gtk_widget_hide (item_edit->popup_toggle.arrow_up);
-    gtk_widget_show (item_edit->popup_toggle.arrow_down);
+    // set the popup arrow direction down
+    item_edit->popup_toggle.direction = TRUE;
 
     gtk_toggle_button_set_active
     (GTK_TOGGLE_BUTTON(item_edit->popup_toggle.tbutton), FALSE);
