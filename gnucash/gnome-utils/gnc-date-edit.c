@@ -929,6 +929,9 @@ create_children (GNCDateEdit *gde)
     /* Graphic for the popup button. */
     arrow = gtk_image_new_from_icon_name ("go-down", GTK_ICON_SIZE_BUTTON);
 
+    g_signal_connect (G_OBJECT (arrow), "draw",
+                      G_CALLBACK (gnc_draw_arrow_cb), GINT_TO_POINTER(1));
+
     gtk_box_pack_start (GTK_BOX (hbox), arrow, TRUE, FALSE, 0);
     gtk_widget_show (GTK_WIDGET(arrow));
 
