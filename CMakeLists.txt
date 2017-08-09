@@ -53,8 +53,7 @@ INCLUDE (MakeDistFiles)
 
 OPTION (WITH_SQL "Build this project with SQL (libdbi) support" ON)
 OPTION (WITH_AQBANKING "Build this project with aqbanking (online banking) support" ON)
-OPTION (WITH_GNUCASH "Build all of GnuCash, not just cutecash" ON)
-OPTION (WITH_CUTECASH "Also build cutecash" OFF)
+OPTION (WITH_GNUCASH "Build all of GnuCash, not just the library" ON)
 OPTION (WITH_OFX "compile with ofx support (needs LibOFX)" ON)
 OPTION (WITH_PYTHON "enable python plugin and bindings" OFF)
 OPTION (ENABLE_BINRELOC "compile with binary relocation support" ON)
@@ -197,9 +196,6 @@ IF (WITH_GNUCASH)
 ENDIF (WITH_GNUCASH)
 
 GNC_PKG_CHECK_MODULES (ZLIB REQUIRED zlib)
-IF (WITH_CUTECASH)
-  GNC_PKG_CHECK_MODULES (GLIBMM REQUIRED glibmm-2.4>=2.24)
-ENDIF(WITH_CUTECASH)
 
 IF (MSVC)
   MESSAGE (STATUS "Hint: To create the import libraries for the gnome DLLs (e.g. gconf-2.lib), use the dlltool as follows: pexports bin/libgconf-2-4.dll > lib/libgconf-2.def ; dlltool -d lib/libgconf-2.def -D bin/libgconf-2-4.dll -l lib/gconf-2.lib")
@@ -288,12 +284,6 @@ FIND_PROGRAM (GUILE_EXECUTABLE guile)
 IF (NOT GUILE_EXECUTABLE)
   MESSAGE (SEND_ERROR "The guile executable was not found, but is required. Please set GUILE_EXECUTABLE.")
 ENDIF (NOT GUILE_EXECUTABLE)
-
-# Qt
-IF (WITH_CUTECASH)
-  SET (QT_MIN_VERSION "4.5.0")
-  FIND_PACKAGE (Qt4 REQUIRED) # find and setup Qt4 for this project
-ENDIF (WITH_CUTECASH)
 
 # ############################################################
 IF (WITH_AQBANKING)
@@ -731,22 +721,6 @@ ENDIF()
 # ############################################################
 # Package creation rules
 
-IF (WITH_CUTECASH)
-SET (CUTECASH_VERSION_MAJOR "0")
-SET (CUTECASH_VERSION_MINOR "1")
-SET (CUTECASH_VERSION_PATCH "0")
-SET (CUTECASH_VERSION_NANO "0")
-
-SET (CPACK_PACKAGE_NAME "Cutecash")
-SET (CPACK_PACKAGE_DESCRIPTION_SUMMARY "Cutecash Free Finance Software")
-SET (CPACK_PACKAGE_VERSION_MAJOR ${CUTECASH_VERSION_MAJOR})
-SET (CPACK_PACKAGE_VERSION_MINOR ${CUTECASH_VERSION_MINOR})
-SET (CPACK_PACKAGE_VERSION_PATCH ${CUTECASH_VERSION_PATCH})
-SET (CPACK_PACKAGE_VENDOR "Christian Stimming")
-SET (CPACK_SOURCE_IGNORE_FILES "/\\\\.svn/;/\\\\.git/;.*~;build.*;html;Debug;Release")
-SET (CPACK_STRIP_FILES "bin/cutecash")
-#SET (CPACK_PACKAGE_EXECUTABLES "bin/carclient")
-ENDIF (WITH_CUTECASH)
 IF(UNIX)
   SET(CPACK_GENERATOR "TGZ")
 ENDIF(UNIX)

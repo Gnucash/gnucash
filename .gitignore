@@ -193,7 +193,6 @@ src/import-export/qif-import/test/test-link
 src/import-export/test/test-import-parse
 src/import-export/test/test-link
 src/engine/test/test-qof
-src/optional/gtkmm/test/test-gtkmm
 src/optional/python-bindings/.py-links
 src/optional/python-bindings/gnucash/
 src/optional/python-bindings/gnucash_core.c

@@ -153,30 +153,7 @@ AX_BOOST_BASE([1.53.0], [ac_cv_BOOST=yes], [ac_cv_BOOST=no])
 if test x$ac_cv_BOOST != xyes; then
     AC_MSG_ERROR([Boost 1.53.0 or later was not found and is required to build GnuCash])
 fi
-###--------------------------------------------------------
-### Optionally enable gtkmm plugin (requires c++ compiler)
-###--------------------------------------------------------
-enable_GTKMM=false
 
-AC_ARG_ENABLE(gtkmm,
-  [AS_HELP_STRING([--enable-gtkmm],[enable gtkmm gui])],
-  [case "${enableval}" in
-     yes) enable_GTKMM=true ;;
-     no) enable_GTKMM=false ;;
-     *) enable_GTKMM=false ;;
-   esac]
-  )
-
-AS_IF([test x${enable_GTKMM} = "xtrue"],
-  [
-    # We require gtkmm, of course
-    PKG_CHECK_MODULES(GTKMM, gtkmm-2.4 >= 2.24)
-    # and also the c++ compiler
-    AC_PROG_CXXCPP
-    AC_PROG_CXX
-    _COMPONENTS="$_COMPONENTS gtkmm"
-  ])
-AM_CONDITIONAL([WITH_GTKMM], [test x${enable_GTKMM} = "xtrue"])
 # This section must come before AC_PROG_LIBTOOL because libtool
 # must know about the c++ compiler.
 ###--------------------------------------------------------
@@ -1730,8 +1707,6 @@ AC_CONFIG_FILES(
   src/import-export/aqb/gschemas/Makefile
   src/import-export/aqb/test/Makefile
   src/optional/Makefile
-  src/optional/gtkmm/Makefile
-  src/optional/gtkmm/test/Makefile
   src/optional/python-bindings/Makefile
   src/optional/python-bindings/tests/Makefile
   src/pixmaps/Makefile
