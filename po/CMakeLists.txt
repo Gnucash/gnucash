@@ -73,10 +73,10 @@ FUNCTION(MAKE_GNUCASH_POTFILES)
     ${CMAKE_SOURCE_DIR}/*.c ${CMAKE_SOURCE_DIR}/*.cpp ${CMAKE_SOURCE_DIR}/*.glade ${CMAKE_SOURCE_DIR}/*.desktop.in
     ${CMAKE_SOURCE_DIR}/*.keys.in  ${CMAKE_SOURCE_DIR}/*.gschema.xml.in.in ${CMAKE_SOURCE_DIR}/*.scm)
 
-  # Only consider files in the src/ directory. Also check against list of ignore patterns
+  # Only consider files in the common, libgnucash, and gnucash/ directories. Also check against list of ignore patterns
   SET(FILES "")
   FOREACH(path ${FILES_IN})
-    STRING(REGEX MATCH "^(src/|lib)" IS_SRC ${path})
+    STRING(REGEX MATCH "^(common/|lib|gnucash|bindings)" IS_SRC ${path})
     IF (IS_SRC)
       SET(IS_IGNORED FALSE)
       FOREACH(pattern ${IGNORE_PATTERNS})
@@ -129,10 +129,10 @@ FUNCTION(MAKE_GNUCASH_POTFILES)
     FILE(APPEND ${POTFILES_IN_PATH} "${path}\n")
   ENDFOREACH()
 
-  # These are also added, even though they are outside of src/
-  FILE(APPEND ${POTFILES_IN_PATH} "src/gnome/gnucash.appdata.xml.in
-src/gnome/gnucash.desktop.in.in
-src/engine/qofbookslots.h
+  # These are manually added, because they're not picked up by the generation script
+  FILE(APPEND ${POTFILES_IN_PATH} "gnucash/gnome/gnucash.appdata.xml.in
+gnucash/gnome/gnucash.desktop.in.in
+libgnucash/engine/qofbookslots.h
 doc/tip_of_the_day.list.in
 ")
 

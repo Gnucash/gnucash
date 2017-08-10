@@ -37,7 +37,7 @@ close IN;
 # in order to use the same algorithm in both cmake and autools based builds
 
 my @possible_files = `cd @-SRCDIR-@ && \\
-                      find src lib -name '*.c' \\
+                      find bindings common libgnucash gnucash lib -name '*.c' \\
                       -o -name '*.cpp' -o -name '*.glade' \\
                       -o -name '*.desktop.in' -o -name '*.keys.in' \\
                       -o -name '*.gschema.xml.in.in' -o -name '*.scm' \\
@@ -76,8 +76,8 @@ foreach my $file (@possible_files) {
     print $type . $path . $name . "\n";
 }
 
-# These are also added, even though they are outside of src/
-print "src/gnome/gnucash.appdata.xml.in\n";
-print "src/gnome/gnucash.desktop.in.in\n";
-print "src/engine/qofbookslots.h\n";
+# These are manually added, because they're not picked up by the generation script
+print "gnucash/gnome/gnucash.appdata.xml.in\n";
+print "gnucash/gnome/gnucash.desktop.in.in\n";
+print "libgnucash/engine/qofbookslots.h\n";
 print "doc/tip_of_the_day.list.in\n";

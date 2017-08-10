@@ -22,7 +22,7 @@ dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.60)
 AC_INIT([GnuCash], [2.6.99], [gnucash-devel@gnucash.org])
 AC_CONFIG_HEADERS(config.h)
-AC_CONFIG_SRCDIR(src/engine/Transaction.h)
+AC_CONFIG_SRCDIR(libgnucash/engine/Transaction.h)
 AC_CONFIG_MACRO_DIR([macros])
 
 #Change this in development versions when changing anything that
@@ -31,7 +31,7 @@ GNUCASH_NANO_VERSION=0
 #This should be the earliest version in the form XXMMUUNN (XX=MAJOR,
 #MM=MINOR, UU=MICRO, NN=NANO) or SVN revision if before 2.4.1 which is
 #storage-compatible with the current version. See the comments in
-#src/backend/dbi/gnc-backend-dbi.c:gnc_dbi_load.
+#libgnucash/backend/dbi/gnc-backend-dbi.c:gnc_dbi_load.
 GNUCASH_RESAVE_VERSION=19920
 # Initialize automake -- make sure we have at least version 1.9 Note:
 # Automake 1.14 & 1.15 issue a ton of warnings about subdir-objects, which
@@ -42,7 +42,7 @@ GNUCASH_RESAVE_VERSION=19920
 # http://lists.gnu.org/archive/html/automake/2014-04/msg00002.html and
 # http://debbugs.gnu.org/cgi/bugreport.cgi?bug=13928 for details.
 # In the meantime the best option is to use Automake 1.13 or earlier.
-AM_INIT_AUTOMAKE([1.9 dist-bzip2])
+AM_INIT_AUTOMAKE([1.9 tar-ustar dist-bzip2])
 
 # Parse out the version number
 GNUCASH_VERSION_STRING=AC_PACKAGE_VERSION
@@ -276,7 +276,7 @@ else
   VCS_TYPE=
 
   # Make sure we've got swig-runtime.h and gnc-vcs-info.h
-  AC_CHECK_FILE(${srcdir}/src/swig-runtime.h, [],
+  AC_CHECK_FILE(${srcdir}/common/swig-runtime.h, [],
     [AC_MSG_ERROR([
 
 It looks like you are NOT building from Subversion, svk, git or bzr
@@ -286,7 +286,7 @@ Either that or contact gnucash-devel@gnucash.org because
 the tarball you downloaded is broken.
 
     ])])
-  AC_CHECK_FILE(${srcdir}/src/core-utils/gnc-vcs-info.h, [],
+  AC_CHECK_FILE(${srcdir}/libgnucash/core-utils/gnc-vcs-info.h, [],
     [AC_MSG_ERROR([
 
 It looks like you are NOT building from Subversion, svk, git or bzr
@@ -941,7 +941,7 @@ if test "x$ac_cv_have_gtest_libs" = xyes; then
 else
 dnl Google test requires pthreads and this seems the easiest way to check.
     AX_PTHREAD([
-    ac_cv_gtest_libs="\$(top_builddir)/src/test-core/libgtest.a $PTHREAD_CFLAGS"
+    ac_cv_gtest_libs="\$(top_builddir)/common/test-core/libgtest.a $PTHREAD_CFLAGS"
     ],[
     AC_MSG_ERROR(
       [GTest requires pthreads, but this wasn't found.])
@@ -1000,7 +1000,7 @@ fi
 MIGRATABLE_PREFS_OFX="/dev/null"
 if test x${have_ofx} = xyes ; then
   _COMPONENTS="$_COMPONENTS ofx"
-  MIGRATABLE_PREFS_OFX="$srcdir/src/import-export/ofx/migratable-prefs-ofx.xml"
+  MIGRATABLE_PREFS_OFX="$srcdir/gnucash/import-export/ofx/migratable-prefs-ofx.xml"
 fi
 
 ofx_has_bug_39=no
@@ -1087,7 +1087,7 @@ then
   AC_SUBST(AQBANKING_LIBS)
   AC_SUBST(AQBANKING_CFLAGS)
   _COMPONENTS="$_COMPONENTS aqbanking"
-  MIGRATABLE_PREFS_AQBANKING="$srcdir/src/import-export/aqb/migratable-prefs-aqbanking.xml"
+  MIGRATABLE_PREFS_AQBANKING="$srcdir/gnucash/import-export/aqb/migratable-prefs-aqbanking.xml"
 fi
 AM_CONDITIONAL([WITH_AQBANKING], [test x${want_aqbanking} = xyes])
 AC_SUBST_FILE([MIGRATABLE_PREFS_AQBANKING])
@@ -1587,7 +1587,7 @@ AC_MSG_RESULT($warnFLAGS)
 ### makefiles, so that we don't have an opportunity to adjust them
 ### there.
 
-chmod u+x ${srcdir}/src/bin/generate-gnc-script
+chmod u+x ${srcdir}/gnucash/bin/generate-gnc-script
 
 ### --------------------------------------------------------------------------
 ### Makefile creation
@@ -1637,188 +1637,188 @@ AC_CONFIG_FILES(
   accounts/zh_CN/Makefile
   accounts/zh_HK/Makefile
   accounts/zh_TW/Makefile
+  bindings/Makefile
+  bindings/python/Makefile
+  bindings/python/tests/Makefile
   checks/Makefile
+  common/Makefile
+  common/debug/Makefile
+  common/debug/valgrind/Makefile
+  common/test-core/Makefile
   doc/Makefile
   doc/examples/Makefile
+  gnucash/Makefile
+  gnucash/bin/Makefile
+  gnucash/bin/overrides/Makefile
+  gnucash/bin/test/Makefile
+  gnucash/gnome/Makefile
+  gnucash/gnome/gtkbuilder/Makefile
+  gnucash/gnome/gschemas/Makefile
+  gnucash/gnome/ui/Makefile
+  gnucash/gnome-utils/Makefile
+  gnucash/gnome-utils/gtkbuilder/Makefile
+  gnucash/gnome-utils/gschemas/Makefile
+  gnucash/gnome-utils/test/Makefile
+  gnucash/gnome-utils/ui/Makefile
+  gnucash/gnome-search/Makefile
+  gnucash/html/Makefile
+  gnucash/import-export/Makefile
+  gnucash/import-export/test/Makefile
+  gnucash/import-export/ofx/gschemas/Makefile
+  gnucash/import-export/qif-imp/Makefile
+  gnucash/import-export/qif/Makefile
+  gnucash/import-export/qif/test/Makefile
+  gnucash/import-export/qif-imp/gschemas/Makefile
+  gnucash/import-export/qif-imp/test/Makefile
+  gnucash/import-export/gschemas/Makefile
+  gnucash/import-export/ofx/Makefile
+  gnucash/import-export/ofx/test/Makefile
+  gnucash/import-export/csv-imp/Makefile
+  gnucash/import-export/csv-imp/gschemas/Makefile
+  gnucash/import-export/csv-imp/test/Makefile
+  gnucash/import-export/csv-exp/Makefile
+  gnucash/import-export/csv-exp/gschemas/Makefile
+  gnucash/import-export/log-replay/Makefile
+  gnucash/import-export/aqb/Makefile
+  gnucash/import-export/aqb/gschemas/Makefile
+  gnucash/import-export/aqb/test/Makefile
+  gnucash/plugins/Makefile
+  gnucash/plugins/bi_import/Makefile
+  gnucash/plugins/bi_import/gtkbuilder/Makefile
+  gnucash/plugins/bi_import/ui/Makefile
+  gnucash/plugins/customer_import/Makefile
+  gnucash/plugins/customer_import/gtkbuilder/Makefile
+  gnucash/plugins/customer_import/ui/Makefile
+  gnucash/python/Makefile
+  gnucash/python/pycons/Makefile
+  gnucash/register/Makefile
+  gnucash/register/ledger-core/Makefile
+  gnucash/register/ledger-core/test/Makefile
+  gnucash/register/register-core/Makefile
+  gnucash/register/register-core/test/Makefile
+  gnucash/register/register-gnome/Makefile
+  gnucash/register/register-gnome/test/Makefile
+  gnucash/report/Makefile
+  gnucash/report/report-gnome/Makefile
+  gnucash/report/report-gnome/test/Makefile
+  gnucash/report/report-system/Makefile
+  gnucash/report/report-system/test/Makefile
+  gnucash/report/standard-reports/Makefile
+  gnucash/report/standard-reports/test/Makefile
+  gnucash/report/business-reports/Makefile
+  gnucash/report/locale-specific/Makefile
+  gnucash/report/locale-specific/us/Makefile
+  gnucash/report/locale-specific/us/test/Makefile
+  gnucash/report/stylesheets/Makefile
+  gnucash/report/stylesheets/test/Makefile
+  gnucash/report/utility-reports/Makefile
+  gnucash/report/jqplot/Makefile
   lib/Makefile
   lib/goffice/Makefile
   lib/libc/Makefile
+  libgnucash/Makefile
+  libgnucash/app-utils/Makefile
+  libgnucash/app-utils/test/Makefile
+  libgnucash/backend/Makefile
+  libgnucash/backend/dbi/Makefile
+  libgnucash/backend/dbi/test/Makefile
+  libgnucash/backend/xml/Makefile
+  libgnucash/backend/xml/test/Makefile
+  libgnucash/backend/xml/test/test-files/Makefile
+  libgnucash/backend/xml/test/test-files/xml2/Makefile
+  libgnucash/backend/sql/Makefile
+  libgnucash/backend/sql/test/Makefile
+  libgnucash/core-utils/Makefile
+  libgnucash/core-utils/test/Makefile
+  libgnucash/doc/Makefile
+  libgnucash/doc/design/Makefile
+  libgnucash/doc/xml/Makefile
+  libgnucash/engine/Makefile
+  libgnucash/engine/test/Makefile
+  libgnucash/engine/test-core/Makefile
+  libgnucash/gnc-module/Makefile
+  libgnucash/gnc-module/test/Makefile
+  libgnucash/gnc-module/test/mod-foo/Makefile
+  libgnucash/gnc-module/test/mod-bar/Makefile
+  libgnucash/gnc-module/test/mod-baz/Makefile
+  libgnucash/gnc-module/test/misc-mods/Makefile
+  libgnucash/pixmaps/Makefile
+  libgnucash/quotes/Makefile
+  libgnucash/scm/Makefile
+  libgnucash/scm/gnumeric/Makefile
+  libgnucash/tax/Makefile
+  libgnucash/tax/us/Makefile
+  libgnucash/tax/us/test/Makefile
   packaging/Makefile
-  src/Makefile
-  src/app-utils/Makefile
-  src/app-utils/test/Makefile
-  src/backend/Makefile
-  src/backend/dbi/Makefile
-  src/backend/dbi/test/Makefile
-  src/backend/xml/Makefile
-  src/backend/xml/test/Makefile
-  src/backend/xml/test/test-files/Makefile
-  src/backend/xml/test/test-files/xml2/Makefile
-  src/backend/sql/Makefile
-  src/backend/sql/test/Makefile
-  src/bin/Makefile
-  src/bin/overrides/Makefile
-  src/bin/test/Makefile
-  src/core-utils/Makefile
-  src/core-utils/test/Makefile
-  src/debug/Makefile
-  src/debug/valgrind/Makefile
-  src/doc/Makefile
-  src/doc/design/Makefile
-  src/doc/xml/Makefile
-  src/engine/Makefile
-  src/engine/test/Makefile
-  src/engine/test-core/Makefile
-  src/gnc-module/Makefile
-  src/gnc-module/test/Makefile
-  src/gnc-module/test/mod-foo/Makefile
-  src/gnc-module/test/mod-bar/Makefile
-  src/gnc-module/test/mod-baz/Makefile
-  src/gnc-module/test/misc-mods/Makefile
-  src/gnome/Makefile
-  src/gnome/gtkbuilder/Makefile
-  src/gnome/gschemas/Makefile
-  src/gnome/ui/Makefile
-  src/gnome-utils/Makefile
-  src/gnome-utils/gtkbuilder/Makefile
-  src/gnome-utils/gschemas/Makefile
-  src/gnome-utils/test/Makefile
-  src/gnome-utils/ui/Makefile
-  src/gnome-search/Makefile
-  src/html/Makefile
-  src/import-export/Makefile
-  src/import-export/test/Makefile
-  src/import-export/ofx/gschemas/Makefile
-  src/import-export/qif-imp/Makefile
-  src/import-export/qif/Makefile
-  src/import-export/qif/test/Makefile
-  src/import-export/qif-imp/gschemas/Makefile
-  src/import-export/qif-imp/test/Makefile
-  src/import-export/gschemas/Makefile
-  src/import-export/ofx/Makefile
-  src/import-export/ofx/test/Makefile
-  src/import-export/csv-imp/Makefile
-  src/import-export/csv-imp/gschemas/Makefile
-  src/import-export/csv-imp/test/Makefile
-  src/import-export/csv-exp/Makefile
-  src/import-export/csv-exp/gschemas/Makefile
-  src/import-export/log-replay/Makefile
-  src/import-export/aqb/Makefile
-  src/import-export/aqb/gschemas/Makefile
-  src/import-export/aqb/test/Makefile
-  src/optional/Makefile
-  src/optional/python-bindings/Makefile
-  src/optional/python-bindings/tests/Makefile
-  src/pixmaps/Makefile
-  src/python/Makefile
-  src/python/pycons/Makefile
-  src/quotes/Makefile
-  src/register/Makefile
-  src/register/ledger-core/Makefile
-  src/register/ledger-core/test/Makefile
-  src/register/register-core/Makefile
-  src/register/register-core/test/Makefile
-  src/register/register-gnome/Makefile
-  src/register/register-gnome/test/Makefile
-  src/report/Makefile
-  src/report/report-gnome/Makefile
-  src/report/report-gnome/test/Makefile
-  src/report/report-system/Makefile
-  src/report/report-system/test/Makefile
-  src/report/standard-reports/Makefile
-  src/report/standard-reports/test/Makefile
-  src/report/business-reports/Makefile
-  src/report/locale-specific/Makefile
-  src/report/locale-specific/us/Makefile
-  src/report/locale-specific/us/test/Makefile
-  src/report/stylesheets/Makefile
-  src/report/stylesheets/test/Makefile
-  src/report/utility-reports/Makefile
-  src/report/jqplot/Makefile
-  src/scm/Makefile
-  src/scm/gnumeric/Makefile
-  src/tax/Makefile
-  src/tax/us/Makefile
-  src/tax/us/test/Makefile
-  src/test-core/Makefile
-  dnl # Stuff for bill/invoice import plugin
-  src/plugins/Makefile
-  src/plugins/bi_import/Makefile
-  src/plugins/bi_import/gtkbuilder/Makefile
-  src/plugins/bi_import/ui/Makefile
-  dnl # Stuff for customer import.
-  src/plugins/customer_import/Makefile
-  src/plugins/customer_import/gtkbuilder/Makefile
-  src/plugins/customer_import/ui/Makefile
   dnl # non-makefiles
-  src/bin/gnucash.rc
-  src/app-utils/migratable-prefs.xml
-  src/gnome/gnucash.desktop.in
+  gnucash/bin/gnucash.rc
+  libgnucash/app-utils/migratable-prefs.xml
+  gnucash/gnome/gnucash.desktop.in
   dnl # GSettings schema files
-  src/gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in
-  src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in
-  src/gnome/gschemas/org.gnucash.dialogs.commodities.gschema.xml.in
-  src/gnome/gschemas/org.gnucash.dialogs.gschema.xml.in
-  src/gnome/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in
-  src/gnome/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in
-  src/gnome/gschemas/org.gnucash.dialogs.totd.gschema.xml.in
-  src/gnome/gschemas/org.gnucash.gschema.xml.in
-  src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in
-  src/gnome/gschemas/org.gnucash.window.pages.gschema.xml.in
-  src/gnome-utils/gschemas/org.gnucash.history.gschema.xml.in
-  src/gnome-utils/gschemas/org.gnucash.warnings.gschema.xml.in
-  src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in
-  src/import-export/csv-exp/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in
-  src/import-export/csv-imp/gschemas/org.gnucash.dialogs.import.csv.gschema.xml.in
-  src/import-export/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in
-  src/import-export/ofx/gschemas/org.gnucash.dialogs.import.ofx.gschema.xml.in
-  src/import-export/qif-imp/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in
+  gnucash/gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in
+  gnucash/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in
+  gnucash/gnome/gschemas/org.gnucash.dialogs.commodities.gschema.xml.in
+  gnucash/gnome/gschemas/org.gnucash.dialogs.gschema.xml.in
+  gnucash/gnome/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in
+  gnucash/gnome/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in
+  gnucash/gnome/gschemas/org.gnucash.dialogs.totd.gschema.xml.in
+  gnucash/gnome/gschemas/org.gnucash.gschema.xml.in
+  gnucash/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in
+  gnucash/gnome/gschemas/org.gnucash.window.pages.gschema.xml.in
+  gnucash/gnome-utils/gschemas/org.gnucash.history.gschema.xml.in
+  gnucash/gnome-utils/gschemas/org.gnucash.warnings.gschema.xml.in
+  gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in
+  gnucash/import-export/csv-exp/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in
+  gnucash/import-export/csv-imp/gschemas/org.gnucash.dialogs.import.csv.gschema.xml.in
+  gnucash/import-export/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in
+  gnucash/import-export/ofx/gschemas/org.gnucash.dialogs.import.ofx.gschema.xml.in
+  gnucash/import-export/qif-imp/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in
   dnl # Please read doc/build-system before adding *anything* here
   ,
   dnl # init-commands go here
 )
 dnl # Shell scripts, to have their shells set
-AC_CONFIG_FILES([src/app-utils/test/test-load-module],
-                [chmod +x src/app-utils/test/test-load-module])
-AC_CONFIG_FILES([src/backend/xml/test/test-real-data.sh],
-                [chmod +x src/backend/xml/test/test-real-data.sh])
-AC_CONFIG_FILES([src/bin/test/test-version],
-                [chmod +x src/bin/test/test-version])
-AC_CONFIG_FILES([src/engine/test/test-create-account],
-                [chmod +x src/engine/test/test-create-account])
-AC_CONFIG_FILES([src/engine/test/test-scm-query-import],
-                [chmod +x src/engine/test/test-scm-query-import])
-AC_CONFIG_FILES([src/gnc-module/test/test-gwrapped-c],
-                [chmod +x src/gnc-module/test/test-gwrapped-c])
-AC_CONFIG_FILES([src/gnc-module/test/test-load-deps],
-                [chmod +x src/gnc-module/test/test-load-deps])
-AC_CONFIG_FILES([src/gnc-module/test/test-load-scm],
-                [chmod +x src/gnc-module/test/test-load-scm])
-AC_CONFIG_FILES([src/gnc-module/test/test-scm-dynload],
-                [chmod +x src/gnc-module/test/test-scm-dynload])
-AC_CONFIG_FILES([src/gnc-module/test/test-scm-init],
-                [chmod +x src/gnc-module/test/test-scm-init])
-AC_CONFIG_FILES([src/gnc-module/test/test-scm-module],
-                [chmod +x src/gnc-module/test/test-scm-module])
-AC_CONFIG_FILES([src/gnc-module/test/test-scm-multi],
-                [chmod +x src/gnc-module/test/test-scm-multi])
-AC_CONFIG_FILES([src/gnome-utils/test/test-load-module],
-                [chmod +x src/gnome-utils/test/test-load-module])
-AC_CONFIG_FILES([src/report/locale-specific/us/test/test-load-module],
-                [chmod +x src/report/locale-specific/us/test/test-load-module])
-AC_CONFIG_FILES([src/report/report-gnome/test/test-load-module],
-                [chmod +x src/report/report-gnome/test/test-load-module])
-AC_CONFIG_FILES([src/report/report-system/test/test-load-module],
-                [chmod +x src/report/report-system/test/test-load-module])
-AC_CONFIG_FILES([src/report/stylesheets/test/test-load-module],
-                [chmod +x src/report/stylesheets/test/test-load-module])
-AC_CONFIG_FILES([src/tax/us/test/test-load-module],
-                [chmod +x src/tax/us/test/test-load-module])
+AC_CONFIG_FILES([libgnucash/app-utils/test/test-load-module],
+                [chmod +x libgnucash/app-utils/test/test-load-module])
+AC_CONFIG_FILES([libgnucash/backend/xml/test/test-real-data.sh],
+                [chmod +x libgnucash/backend/xml/test/test-real-data.sh])
+AC_CONFIG_FILES([gnucash/bin/test/test-version],
+                [chmod +x gnucash/bin/test/test-version])
+AC_CONFIG_FILES([libgnucash/engine/test/test-create-account],
+                [chmod +x libgnucash/engine/test/test-create-account])
+AC_CONFIG_FILES([libgnucash/engine/test/test-scm-query-import],
+                [chmod +x libgnucash/engine/test/test-scm-query-import])
+AC_CONFIG_FILES([libgnucash/gnc-module/test/test-gwrapped-c],
+                [chmod +x libgnucash/gnc-module/test/test-gwrapped-c])
+AC_CONFIG_FILES([libgnucash/gnc-module/test/test-load-deps],
+                [chmod +x libgnucash/gnc-module/test/test-load-deps])
+AC_CONFIG_FILES([libgnucash/gnc-module/test/test-load-scm],
+                [chmod +x libgnucash/gnc-module/test/test-load-scm])
+AC_CONFIG_FILES([libgnucash/gnc-module/test/test-scm-dynload],
+                [chmod +x libgnucash/gnc-module/test/test-scm-dynload])
+AC_CONFIG_FILES([libgnucash/gnc-module/test/test-scm-init],
+                [chmod +x libgnucash/gnc-module/test/test-scm-init])
+AC_CONFIG_FILES([libgnucash/gnc-module/test/test-scm-module],
+                [chmod +x libgnucash/gnc-module/test/test-scm-module])
+AC_CONFIG_FILES([libgnucash/gnc-module/test/test-scm-multi],
+                [chmod +x libgnucash/gnc-module/test/test-scm-multi])
+AC_CONFIG_FILES([gnucash/gnome-utils/test/test-load-module],
+                [chmod +x gnucash/gnome-utils/test/test-load-module])
+AC_CONFIG_FILES([gnucash/report/locale-specific/us/test/test-load-module],
+                [chmod +x gnucash/report/locale-specific/us/test/test-load-module])
+AC_CONFIG_FILES([gnucash/report/report-gnome/test/test-load-module],
+                [chmod +x gnucash/report/report-gnome/test/test-load-module])
+AC_CONFIG_FILES([gnucash/report/report-system/test/test-load-module],
+                [chmod +x gnucash/report/report-system/test/test-load-module])
+AC_CONFIG_FILES([gnucash/report/stylesheets/test/test-load-module],
+                [chmod +x gnucash/report/stylesheets/test/test-load-module])
+AC_CONFIG_FILES([libgnucash/tax/us/test/test-load-module],
+                [chmod +x libgnucash/tax/us/test/test-load-module])
 
 # A few files need extra actions at creation time
-AC_CONFIG_FILES([src/bin/overrides/gnucash-make-guids], [chmod u+x src/bin/overrides/gnucash-make-guids])
+AC_CONFIG_FILES([gnucash/bin/overrides/gnucash-make-guids], [chmod u+x gnucash/bin/overrides/gnucash-make-guids])
 #Link (copy on Windows) test data files:
-AC_CONFIG_LINKS([src/import-export/csv-imp/test/sample1.csv:src/import-export/csv-imp/test/sample1.csv])
+AC_CONFIG_LINKS([gnucash/import-export/csv-imp/test/sample1.csv:gnucash/import-export/csv-imp/test/sample1.csv])
 LDFLAGS="${LDFLAGS} ${NOUNDEF}"
 AC_OUTPUT
 

@@ -1,6 +1,0 @@
-if WITH_PYTHON
-    PYTHON_BINDINGS_DIR = python-bindings
-endif
-SUBDIRS = ${PYTHON_BINDINGS_DIR}
-
-EXTRA_DIST = CMakeLists.txt
