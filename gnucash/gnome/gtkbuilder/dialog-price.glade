@@ -304,7 +304,7 @@
                 <property name="entry_text_column">0</property>
                 <signal name="changed" handler="pedit_commodity_ns_changed_cb" swapped="no"/>
                 <child internal-child="entry">
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="combobox-entry3">
                     <property name="can_focus">False</property>
                   </object>
                 </child>
@@ -323,7 +323,7 @@
                 <property name="entry_text_column">0</property>
                 <signal name="changed" handler="pedit_commodity_changed_cb" swapped="no"/>
                 <child internal-child="entry">
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="combobox-entry2">
                     <property name="can_focus">False</property>
                   </object>
                 </child>
@@ -565,7 +565,7 @@
                         <property name="can_focus">True</property>
                         <property name="model">liststore4</property>
                         <child internal-child="selection">
-                          <object class="GtkTreeSelection"/>
+                          <object class="GtkTreeSelection" id="selection1"/>
                         </child>
                         <child>
                           <object class="GtkTreeViewColumn" id="name_column">
