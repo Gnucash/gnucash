@@ -1,0 +1,88 @@
+#!/bin/sh
+
+# Usage: gnucash-build-env
+
+# Usage: gnucash-build-env any-cmd [ args ... ]
+# runs any-cmd in gnucash's build environment.
+
+# As with all the other gnucash overrides scripts, expects PATH to be
+# set appropriately.
+
+top_srcdir="@-GNC_SRCDIR-@"
+top_builddir="@-GNC_BUILDDIR-@"
+
+if test "${GNC_CONFIG_PATH}"x = x
+then
+  GNC_CONFIG_PATH="(\"${top_srcdir}/libgnucash/scm\")"
+  export GNC_CONFIG_PATH
+fi
+
+if test "${GNC_SHARE_PATH}"x = x
+then
+  GNC_SHARE_PATH="(\"${top_srcdir}/libgnucash/scm\" \"${top_srcdir}/libgnucash/quotes\")"
+  export GNC_SHARE_PATH
+fi
+
+if test "${GNC_DOC_PATH}"x = x
+then
+  GNC_DOC_PATH="(\"${top_srcdir}/libgnucash/scm\")"
+  export GNC_DOC_PATH
+fi
+
+set +x
+eval `${top_srcdir}/common/gnc-test-env.pl \
+  --gnc-module-dir ${top_builddir}/libgnucash/engine \
+  --gnc-module-dir ${top_builddir}/libgnucash/tax/us \
+  --gnc-module-dir ${top_builddir}/libgnucash/app-utils \
+  --gnc-module-dir ${top_builddir}/gnucash/gnome-utils \
+  --gnc-module-dir ${top_builddir}/gnucash/gnome-search \
+  --gnc-module-dir ${top_builddir}/gnucash/import-export \
+  --gnc-module-dir ${top_builddir}/gnucash/import-export/hbci \
+  --gnc-module-dir ${top_builddir}/gnucash/import-export/log-replay \
+  --gnc-module-dir ${top_builddir}/gnucash/import-export/ofx \
+  --gnc-module-dir ${top_builddir}/gnucash/import-export/qif-import \
+  --gnc-module-dir ${top_builddir}/gnucash/report/locale-specific/us \
+  --gnc-module-dir ${top_builddir}/gnucash/report/report-gnome \
+  --gnc-module-dir ${top_builddir}/gnucash/report/stylesheets \
+  --gnc-module-dir ${top_builddir}/gnucash/register/register-core \
+  --gnc-module-dir ${top_builddir}/gnucash/register/register-gnome \
+  --gnc-module-dir ${top_builddir}/gnucash/register/ledger-core \
+\
+  --guile-load-dir ${top_builddir}/libgnucash/app-utils \
+  --guile-load-dir ${top_builddir}/libgnucash/core-utils \
+  --guile-load-dir ${top_builddir}/libgnucash/gnc-module \
+  --guile-load-dir ${top_builddir}/libgnucash/engine \
+  --guile-load-dir ${top_builddir}/libgnucash/scm \
+  --guile-load-dir ${top_builddir}/libgnucash/tax/us \
+  --guile-load-dir ${top_builddir}/gnucash/gnome-utils \
+  --guile-load-dir ${top_builddir}/gnucash/import-export/qif-import \
+  --guile-load-dir ${top_builddir}/gnucash/report/report-system \
+  --guile-load-dir ${top_builddir}/gnucash/report/standard-reports \
+  --guile-load-dir ${top_builddir}/gnucash/report/business-reports \
+  --guile-load-dir ${top_builddir}/gnucash/report/utility-reports \
+  --guile-load-dir ${top_builddir}/gnucash/report/locale-specific/us \
+  --guile-load-dir ${top_builddir}/gnucash/report/report-gnome \
+  --guile-load-dir ${top_builddir}/gnucash/report/stylesheets \
+\
+  --library-dir    ${top_builddir}/common/test-core \
+  --library-dir    ${top_builddir}/libgnucash/core-utils \
+  --library-dir    ${top_builddir}/libgnucash/app-utils \
+  --library-dir    ${top_builddir}/libgnucash/app-utils/calculation \
+  --library-dir    ${top_builddir}/libgnucash/engine \
+  --library-dir    ${top_builddir}/libgnucash/backend/xml \
+  --library-dir    ${top_builddir}/libgnucash/backend/sql  \
+  --library-dir    ${top_builddir}/libgnucash/gnc-module \
+  --library-dir    ${top_builddir}/gnucash/gnome \
+  --library-dir    ${top_builddir}/gnucash/gnome-search \
+  --library-dir    ${top_builddir}/gnucash/gnome-utils \
+  --library-dir    ${top_builddir}/gnucash/html \
+  --library-dir    ${top_builddir}/gnucash/import-export \
+  --library-dir    ${top_builddir}/gnucash/register/register-gnome \
+  --library-dir    ${top_builddir}/gnucash/register/ledger-core \
+  --library-dir    ${top_builddir}/gnucash/register/register-core \
+  --library-dir    ${top_builddir}/gnucash/report/report-gnome \
+  --library-dir    ${top_builddir}/gnucash/report/report-system
+  `
+LD_LIBRARY_PATH="${DYLD_LIBRARY_PATH}"
+
+exec "$@"

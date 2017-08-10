@@ -34,7 +34,7 @@ SET (GNUCASH_RESAVE_VERSION "19920")
 SET(GETTEXT_PACKAGE "gnucash")
 
 # Extra cmake macros
-SET (CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/src/cmake_modules;${CMAKE_MODULE_PATH}")
+SET (CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/common/cmake_modules;${CMAKE_MODULE_PATH}")
 # CMake does a non-recursive build that puts the final build product directories in the build root. Some code needs to know this.
 
 INCLUDE (MacroAppendForeach)
@@ -161,7 +161,7 @@ ENDIF(WIN32)
 FIND_PACKAGE(PkgConfig REQUIRED)
 
 # The default FindPkgConfig.make code has a bug in how the setting of PKG_CONFIG_PATH is handled.
-# The src/cmake_modules/GncFindPkgConfig.cmake file overrides a couple of macros in FindPkgConfig to fix.
+# The common/cmake_modules/GncFindPkgConfig.cmake file overrides a couple of macros in FindPkgConfig to fix.
 
 INCLUDE (GncFindPkgConfig)
 
@@ -556,16 +556,16 @@ INSTALL(FILES ${gnucash_DOCS} DESTINATION share/doc/gnucash)
 SET (GETTEXT_PACKAGE "gnucash")
 
 IF (WIN32)
-  IF (MINGW)
-    SET (HAVE_SCANF_LLD 1)
-  ELSE ()
-    SET (HAVE_SCANF_I64D 1)
-  ENDIF ()
-  SET (HAVE_HTMLHELPW 1)
+IF (MINGW)
+SET (HAVE_SCANF_LLD 1)
+ELSE ()
+SET (HAVE_SCANF_I64D 1)
+ENDIF ()
+SET (HAVE_HTMLHELPW 1)
 ENDIF (WIN32)
 
 IF (NOT WIN32)
-  CHECK_INCLUDE_FILES (X11/Xlib.h HAVE_X11_XLIB_H)
+CHECK_INCLUDE_FILES (X11/Xlib.h HAVE_X11_XLIB_H)
 ENDIF (NOT WIN32)
 
 CHECK_INCLUDE_FILES (dirent.h HAVE_DIRENT_H)
@@ -589,99 +589,92 @@ CHECK_INCLUDE_FILES (utmp.h HAVE_UTMP_H)
 CHECK_INCLUDE_FILES (wctype.h HAVE_WCTYPE_H)
 
 IF (NOT DISABLE_NLS)
-  SET(ENABLE_NLS 1)
+SET(ENABLE_NLS 1)
 ENDIF(NOT DISABLE_NLS)
 
 IF (ENABLE_BINRELOC)
-  IF (UNIX OR MINGW)
-    SET(BR_PTHREAD 1)
-  ENDIF(UNIX OR MINGW)
+IF (UNIX OR MINGW)
+SET(BR_PTHREAD 1)
+ENDIF(UNIX OR MINGW)
 ENDIF(ENABLE_BINRELOC)
 
 IF (UNIX OR MINGW)
-  SET (HAVE_BIND_TEXTDOMAIN_CODESET 1)
-  SET (HAVE_DCGETTEXT 1)
-  SET (HAVE_GETTEXT 1)
-  SET (HAVE_GETTIMEOFDAY 1)
-  SET (HAVE_GUILE 1)
-  SET (HAVE_LIBM 1)
-  SET (HAVE_MEMCPY 1)
-  SET (STDC_HEADERS 1)
-  SET (_ALL_SOURCE 1)
-  SET (_GNU_SOURCE 1)
-  SET (_POSIX_PTHREAD_SEMANTICS 1)
-  SET (_TANDEM_SOURCE 1)
-  SET (__EXTENSIONS__ 1)
+SET (HAVE_BIND_TEXTDOMAIN_CODESET 1)
+SET (HAVE_DCGETTEXT 1)
+SET (HAVE_GETTEXT 1)
+SET (HAVE_GETTIMEOFDAY 1)
+SET (HAVE_GUILE 1)
+SET (HAVE_LIBM 1)
+SET (HAVE_MEMCPY 1)
+SET (STDC_HEADERS 1)
+SET (_ALL_SOURCE 1)
+SET (_GNU_SOURCE 1)
+SET (_POSIX_PTHREAD_SEMANTICS 1)
+SET (_TANDEM_SOURCE 1)
+SET (__EXTENSIONS__ 1)
 ENDIF (UNIX OR MINGW)
 
 IF (UNIX)
-  SET (HAVE_CHOWN 1)
-  SET (HAVE_DLERROR 1)
-  SET (HAVE_DLSYM 1)
-  SET (HAVE_GETHOSTID 1)
-  SET (HAVE_GETHOSTNAME 1)
-  SET (HAVE_GETPPID 1)
-  SET (HAVE_GETUID 1)
-  SET (HAVE_GMTIME_R 1)
-  SET (HAVE_LANGINFO_D_FMT 1)
-  SET (HAVE_LC_MESSAGES 1)
-  SET (HAVE_LIBPTHREAD 1)
-  SET (HAVE_LINK 1)
-  SET (HAVE_LOCALTIME_R 1)
-  SET (HAVE_PTHREAD_MUTEX_INIT 1)
-  SET (HAVE_PTHREAD_PRIO_INHERIT 1)
-  SET (HAVE_SCANF_LLD 1)
-  SET (HAVE_SETENV 1)
-  SET (HAVE_STPCPY 1)
-  SET (HAVE_STRFMON 1)
-  SET (HAVE_STRPTIME 1)
-  SET (HAVE_STRUCT_TM_GMTOFF 1)
-  SET (HAVE_TIMEGM 1)
-  SET (HAVE_TOWUPPER 1)
-  SET (GNC_PLATFORM_POSIX 1)
+SET (HAVE_CHOWN 1)
+SET (HAVE_DLERROR 1)
+SET (HAVE_DLSYM 1)
+SET (HAVE_GETHOSTID 1)
+SET (HAVE_GETHOSTNAME 1)
+SET (HAVE_GETPPID 1)
+SET (HAVE_GETUID 1)
+SET (HAVE_GMTIME_R 1)
+SET (HAVE_LANGINFO_D_FMT 1)
+SET (HAVE_LC_MESSAGES 1)
+SET (HAVE_LIBPTHREAD 1)
+SET (HAVE_LINK 1)
+SET (HAVE_LOCALTIME_R 1)
+SET (HAVE_PTHREAD_MUTEX_INIT 1)
+SET (HAVE_PTHREAD_PRIO_INHERIT 1)
+SET (HAVE_SCANF_LLD 1)
+SET (HAVE_SETENV 1)
+SET (HAVE_STPCPY 1)
+SET (HAVE_STRFMON 1)
+SET (HAVE_STRPTIME 1)
+SET (HAVE_STRUCT_TM_GMTOFF 1)
+SET (HAVE_TIMEGM 1)
+SET (HAVE_TOWUPPER 1)
+SET (GNC_PLATFORM_POSIX 1)
 ENDIF (UNIX)
 
 IF (WIN32)
-  SET (GNC_PLATFORM_WINDOWS 1)
+SET (GNC_PLATFORM_WINDOWS 1)
 ENDIF (WIN32)
 
 IF (APPLE)
 # FIXME: HANDLE gtk-mac-integration-gtk2
-  SET(GNC_PLATFORM_DARWIN 1)
-  SET(GNC_PLATFORM_OSX 1)
-  SET(PLATFORM_OSX 1)
-  SET(HAVE_OSX_KEYCHAIN 1)
+SET(GNC_PLATFORM_DARWIN 1)
+SET(GNC_PLATFORM_OSX 1)
+SET(PLATFORM_OSX 1)
+SET(HAVE_OSX_KEYCHAIN 1)
 ENDIF(APPLE)
 
 IF(GLIB2_VERSION VERSION_GREATER 2.46.0 OR GLIB2_VERSION VERSION_EQUAL 2.46.0)
-  SET(HAVE_GLIB_2_46 1)
+SET(HAVE_GLIB_2_46 1)
 ENDIF()
 
 IF(DISABLE_DEPRECATED_GNOME)
-  SET(GNOME_DISABLE_DEPRECATED 1)
+SET(GNOME_DISABLE_DEPRECATED 1)
 ENDIF(DISABLE_DEPRECATED_GNOME)
 
 IF(DISABLE_DEPRECATED_GTK)
-  SET(GTK_DISABLE_DEPRECATED 1)
-  SET(GDK_DISABLE_DEPRECATED 1)
-  SET(GDK_PIXMAP_DISABLE_DEPRECATED 1)
+SET(GTK_DISABLE_DEPRECATED 1)
+SET(GDK_DISABLE_DEPRECATED 1)
+SET(GDK_PIXMAP_DISABLE_DEPRECATED 1)
 ENDIF(DISABLE_DEPRECATED_GTK)
 
 IF(DISABLE_DEPRECATED_GLIB)
-  SET(G_DISABLE_DEPRECATED 1)
+SET(G_DISABLE_DEPRECATED 1)
 ENDIF(DISABLE_DEPRECATED_GLIB)
 
 ADD_DEFINITIONS (-DHAVE_CONFIG_H)
 
-SET (CONFIG_H ${CMAKE_CURRENT_BINARY_DIR}/src/config.h)
-CONFIGURE_FILE (${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.cmake.in ${CONFIG_H})
-
-IF (BUILDING_FROM_VCS)
-  SET (SWIG_RUNTIME_H ${CMAKE_CURRENT_BINARY_DIR}/src/swig-runtime.h)
-ELSE()
-  SET (SWIG_RUNTIME_H ${CMAKE_CURRENT_SOURCE_DIR}/src/swig-runtime.h)
-ENDIF()
-
+SET (CONFIG_H ${CMAKE_CURRENT_BINARY_DIR}/common/config.h)
+CONFIGURE_FILE (${CMAKE_CURRENT_SOURCE_DIR}/common/config.h.cmake.in ${CONFIG_H})
 
 SET(SCHEME_INSTALLED_SOURCE_DIR ${CMAKE_INSTALL_PREFIX}/share/gnucash/scm)
 SET(SCHEME_INSTALLED_CACHE_DIR ${CMAKE_INSTALL_PREFIX}/lib/gnucash/scm/ccache/${GUILE_EFFECTIVE_VERSION})
@@ -694,7 +687,12 @@ ADD_SUBDIRECTORY (lib)
 ADD_SUBDIRECTORY (macros)
 ADD_SUBDIRECTORY (packaging)
 ADD_SUBDIRECTORY (po)
-ADD_SUBDIRECTORY (src)
+ADD_SUBDIRECTORY (common)
+ADD_SUBDIRECTORY (libgnucash)
+IF (WITH_GNUCASH)
+  ADD_SUBDIRECTORY (gnucash)
+ENDIF (WITH_GNUCASH)
+ADD_SUBDIRECTORY (bindings)
 ADD_SUBDIRECTORY (test-templates)
 ADD_SUBDIRECTORY (util)
 
@@ -709,26 +707,27 @@ ADD_SUBDIRECTORY(cmake)
 SET(PACKAGE_PREFIX "${PACKAGE}-${PACKAGE_VERSION}")
 SET(DIST_FILE "${PACKAGE_PREFIX}.tar")
 
-SET(gnucash_DIST_local ${gnucash_DOCS} ChangeLog.2015 ChangeLog.2016
+SET(toplvl_DIST_local ${gnucash_DOCS} ChangeLog.2015 ChangeLog.2016
   CMakeLists.txt configure.ac Makefile.am make-gnucash-potfiles.in README)
 
 IF(BUILDING_FROM_VCS AND AUTOTOOLS_IN_DIST)
-  SET(gnucash_DIST_local ${gnucash_DIST_local} autogen.sh)
+  SET(toplvl_DIST_local ${toplvl_DIST_local} autogen.sh)
 ENDIF()
 
-SET_LOCAL_DIST(gnucash_DIST ${gnucash_DIST_local})
+SET_LOCAL_DIST(toplvl_DIST ${toplvl_DIST_local})
 
 # Each subdirectory is responsible for reporting its list of distribution files to its parent, up to here.
 #
 # Leaf directories use the SET_DIST_LIST() function to report their distribution files. See
-# the bottom of src/app-utils/test/CMakeLists.txt for an example.
+# the bottom of libgnucash/app-utils/test/CMakeLists.txt for an example.
 #
 # A non leaf directories uses the SET_LOCAL_DIST() function to specify its distribution files local that dir,
 # then uses a (SET ${foo_DIST} ${locals....} PARENT_SCOPE) command to report up. See the bottom of
-# src/app-utils/CMakeLists.txt for an example of this.
+# libgnucash/app-utils/CMakeLists.txt for an example of this.
 
-SET(ALL_DIST ${accounts_DIST} ${checks_DIST} ${cmake_DIST} ${doc_DIST} ${lib_DIST} ${macros_DIST} ${packaging_DIST}
-        ${po_DIST} ${src_DIST} ${gnucash_DIST} ${test_templates_DIST} ${util_DIST})
+SET(ALL_DIST ${accounts_DIST} ${bindings_DIST} ${checks_DIST} ${cmake_DIST} ${common_DIST}
+    ${doc_DIST} ${gnucash_DIST} ${lib_DIST} ${libgnucash_DIST} ${macros_DIST} ${packaging_DIST}
+    ${po_DIST} ${test_templates_DIST} ${toplvl_DIST} ${util_DIST})
 
 
 IF (BUILDING_FROM_VCS)
@@ -738,7 +737,7 @@ ELSE()
   IF(AUTOTOOLS_IN_DIST)
     # Include autotools generated file in the dist
     LIST(APPEND ALL_DIST compile config.guess config.sub configure depcomp install-sh missing
-            src/doc/design/mdate-sh src/doc/design/texinfo.tex)
+            libgnucash/doc/design/mdate-sh libgnucash/doc/design/texinfo.tex)
     IF (EXISTS ${CMAKE_SOURCE_DIR}/test-driver)  # test-driver only created for automake 1.12+.
       LIST(APPEND ALL_DIST test-driver)
     ENDIF()
@@ -757,14 +756,14 @@ ENDFOREACH()
 
 ADD_CUSTOM_COMMAND(OUTPUT ${DIST_FILE}.gz ${DIST_FILE}.bz2
         COMMAND ${CMAKE_COMMAND}
-           -D CMAKE_MODULE_PATH=${CMAKE_SOURCE_DIR}/src/cmake_modules
+           -D CMAKE_MODULE_PATH=${CMAKE_SOURCE_DIR}/common/cmake_modules
            -D PACKAGE_PREFIX=${PACKAGE_PREFIX}
            -D GNUCASH_SOURCE_DIR=${CMAKE_SOURCE_DIR}
            -D BUILD_SOURCE_DIR=${BUILD_SOURCE_DIR}
            -D BUILDING_FROM_VCS=${BUILDING_FROM_VCS}
            -D SHELL=${SHELL}
            -D AUTOTOOLS_IN_DIST=${AUTOTOOLS_IN_DIST}
-           -P ${CMAKE_SOURCE_DIR}/src/cmake_modules/MakeDist.cmake
+           -P ${CMAKE_SOURCE_DIR}/common/cmake_modules/MakeDist.cmake
 
         DEPENDS
           ${ALL_DIST} ${DIST_GENERATED_FILES2} gnc-vcs-info iso-4217-c gnc-warnings-c build-config-scm gnucash-design-info ChangeLog
@@ -774,13 +773,13 @@ ADD_CUSTOM_TARGET(dist DEPENDS ${DIST_FILE}.gz ${DIST_FILE}.bz2)
 
 ADD_CUSTOM_TARGET(distcheck DEPENDS dist
         COMMAND ${CMAKE_COMMAND}
-            -D CMAKE_MODULE_PATH=${CMAKE_SOURCE_DIR}/src/cmake_modules
+            -D CMAKE_MODULE_PATH=${CMAKE_SOURCE_DIR}/common/cmake_modules
             -D CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
             -D PACKAGE_PREFIX=${PACKAGE_PREFIX}
             -D CMAKE_C_FLAGS=${CMAKE_C_FLAGS}
             -D CMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
             -D AUTOTOOLS_IN_DIST=${AUTOTOOLS_IN_DIST}
-            -P ${CMAKE_SOURCE_DIR}/src/cmake_modules/MakeDistCheck.cmake
+            -P ${CMAKE_SOURCE_DIR}/common/cmake_modules/MakeDistCheck.cmake
         )
 
 
