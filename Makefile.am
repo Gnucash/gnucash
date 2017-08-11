@@ -3,7 +3,7 @@ if GNUCASH_ENABLE_GUI
 else
   GNUCASH_SUBDIR =
 endif
-SUBDIRS = . doc lib common libgnucash bindings ${GNUCASH_SUBDIR} packaging po accounts checks
+SUBDIRS = . doc lib common libgnucash bindings ${GNUCASH_SUBDIR} packaging po data
 
 GNC_CTAGS_FILE = @GNC_CTAGS_FILE@
 GNC_ETAGS_FILE = @GNC_ETAGS_FILE@
