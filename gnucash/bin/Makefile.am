@@ -34,7 +34,7 @@ GNUCASH_RESOURCE_FILE = gnucash.rc
 dist_noinst_DATA = gnucash.rc
 
 .rc.o:
-	$(AM_V_GEN)$(RC) -I${top_srcdir}/libgnucash/pixmaps -i '$<' --input-format=rc -o '$@' -O coff
+	$(AM_V_GEN)$(RC) -I${top_srcdir}/data/pixmaps -i '$<' --input-format=rc -o '$@' -O coff
 
 else !PLATFORM_WIN32
 # All other platforms use these settings:

@@ -219,7 +219,7 @@ GNC_TEST_DEPS = \
 
 TESTS_ENVIRONMENT = \
   GUILE_WARN_DEPRECATED=no \
-  GNC_ACCOUNT_PATH=${top_srcdir}/accounts/C \
+  GNC_ACCOUNT_PATH=${top_srcdir}/data/accounts/C \
   GNC_TEST_FILES=test-files/xml2 \
   SRCDIR=${srcdir} \
   GNC_BUILDDIR="${abs_top_builddir}" \

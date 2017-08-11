@@ -1,0 +1,4 @@
+SUBDIRS = \
+  accounts \
+  checks \
+  pixmaps

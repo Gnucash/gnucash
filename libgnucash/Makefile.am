@@ -6,7 +6,6 @@
 # As we intend to move to cmake it's not worth fixing this any more.
 SUBDIRS = \
   doc \
-  pixmaps \
   core-utils \
   gnc-module \
   engine \

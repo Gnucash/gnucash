@@ -7,7 +7,6 @@ ADD_SUBDIRECTORY (core-utils)
 ADD_SUBDIRECTORY (doc)
 ADD_SUBDIRECTORY (engine)
 ADD_SUBDIRECTORY (gnc-module)
-ADD_SUBDIRECTORY (pixmaps)
 ADD_SUBDIRECTORY (quotes)
 ADD_SUBDIRECTORY (scm)
 ADD_SUBDIRECTORY (tax)
@@ -18,4 +17,4 @@ SET_LOCAL_DIST(libgnucash_DIST_local CMakeLists.txt Makefile.am ${libgnucash_EXT
 
 SET(libgnucash_DIST ${libgnucash_DIST_local} ${app_utils_DIST} ${backend_DIST}
              ${core_utils_DIST} ${doc_DIST} ${engine_DIST} ${gnc_module_DIST}
-             ${pixmaps_DIST} ${quotes_DIST} ${scm_DIST} ${tax_DIST} PARENT_SCOPE)
+             ${quotes_DIST} ${scm_DIST} ${tax_DIST} PARENT_SCOPE)

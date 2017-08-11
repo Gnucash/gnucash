@@ -1602,45 +1602,47 @@ AC_CONFIG_FILES(
   po/Makefile.in
   dnl # Makefiles
   Makefile
-  accounts/Makefile
-  accounts/C/Makefile
-  accounts/cs/Makefile
-  accounts/da/Makefile
-  accounts/de_AT/Makefile
-  accounts/de_CH/Makefile
-  accounts/de_DE/Makefile
-  accounts/el_GR/Makefile
-  accounts/en_GB/Makefile
-  accounts/es_ES/Makefile
-  accounts/es_MX/Makefile
-  accounts/fi_FI/Makefile
-  accounts/fr_CA/Makefile
-  accounts/fr_CH/Makefile
-  accounts/fr_FR/Makefile
-  accounts/hu_HU/Makefile
-  accounts/it/Makefile
-  accounts/ja/Makefile
-  accounts/ko/Makefile
-  accounts/lt/Makefile
-  accounts/lv/Makefile
-  accounts/nb/Makefile
-  accounts/nl/Makefile
-  accounts/pl/Makefile
-  accounts/pt_BR/Makefile
-  accounts/pt_PT/Makefile
-  accounts/ru/Makefile
-  accounts/sk/Makefile
-  accounts/sv_AX/Makefile
-  accounts/sv_FI/Makefile
-  accounts/sv_SE/Makefile
-  accounts/tr_TR/Makefile
-  accounts/zh_CN/Makefile
-  accounts/zh_HK/Makefile
-  accounts/zh_TW/Makefile
+  data/Makefile
+  data/accounts/Makefile
+  data/accounts/C/Makefile
+  data/accounts/cs/Makefile
+  data/accounts/da/Makefile
+  data/accounts/de_AT/Makefile
+  data/accounts/de_CH/Makefile
+  data/accounts/de_DE/Makefile
+  data/accounts/el_GR/Makefile
+  data/accounts/en_GB/Makefile
+  data/accounts/es_ES/Makefile
+  data/accounts/es_MX/Makefile
+  data/accounts/fi_FI/Makefile
+  data/accounts/fr_CA/Makefile
+  data/accounts/fr_CH/Makefile
+  data/accounts/fr_FR/Makefile
+  data/accounts/hu_HU/Makefile
+  data/accounts/it/Makefile
+  data/accounts/ja/Makefile
+  data/accounts/ko/Makefile
+  data/accounts/lt/Makefile
+  data/accounts/lv/Makefile
+  data/accounts/nb/Makefile
+  data/accounts/nl/Makefile
+  data/accounts/pl/Makefile
+  data/accounts/pt_BR/Makefile
+  data/accounts/pt_PT/Makefile
+  data/accounts/ru/Makefile
+  data/accounts/sk/Makefile
+  data/accounts/sv_AX/Makefile
+  data/accounts/sv_FI/Makefile
+  data/accounts/sv_SE/Makefile
+  data/accounts/tr_TR/Makefile
+  data/accounts/zh_CN/Makefile
+  data/accounts/zh_HK/Makefile
+  data/accounts/zh_TW/Makefile
+  data/checks/Makefile
+  data/pixmaps/Makefile
   bindings/Makefile
   bindings/python/Makefile
   bindings/python/tests/Makefile
-  checks/Makefile
   common/Makefile
   common/debug/Makefile
   common/debug/valgrind/Makefile
@@ -1742,7 +1744,6 @@ AC_CONFIG_FILES(
   libgnucash/gnc-module/test/mod-bar/Makefile
   libgnucash/gnc-module/test/mod-baz/Makefile
   libgnucash/gnc-module/test/misc-mods/Makefile
-  libgnucash/pixmaps/Makefile
   libgnucash/quotes/Makefile
   libgnucash/scm/Makefile
   libgnucash/scm/gnumeric/Makefile

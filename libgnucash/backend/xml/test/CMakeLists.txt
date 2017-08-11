@@ -85,7 +85,7 @@ ADD_XML_TEST(test-load-xml2 test-load-xml2.cpp
 GNC_ADD_TEST_WITH_GUILE(test-load-example-account
   "${test_backend_xml_module_SOURCES};test-load-example-account.cpp"
   XML_TEST_INCLUDE_DIRS XML_TEST_LIBS
-  GNC_ACCOUNT_PATH=${CMAKE_SOURCE_DIR}/accounts/C
+  GNC_ACCOUNT_PATH=${CMAKE_SOURCE_DIR}/data/accounts/C
 )
 TARGET_COMPILE_OPTIONS(test-load-example-account PRIVATE -DU_SHOW_CPLUSPLUS_API=0)
 ADD_XML_TEST(test-string-converters "${test_backend_xml_base_SOURCES};test-string-converters.cpp")
