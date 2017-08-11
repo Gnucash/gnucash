@@ -63,9 +63,6 @@ macros/lt~obsolete.m4
 make-gnucash-potfiles
 missing
 mkinstalldirs
-packaging/gnucash.spec
-packaging/win32/custom.sh
-packaging/win32/gnucash.iss
 po/.intltool-merge-cache
 po/Makefile.in.in
 po/POTFILES

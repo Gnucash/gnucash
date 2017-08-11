@@ -1750,7 +1750,6 @@ AC_CONFIG_FILES(
   libgnucash/tax/Makefile
   libgnucash/tax/us/Makefile
   libgnucash/tax/us/test/Makefile
-  packaging/Makefile
   dnl # non-makefiles
   gnucash/bin/gnucash.rc
   libgnucash/app-utils/migratable-prefs.xml
