@@ -5,7 +5,7 @@ exec ${GUILE} -s $0 "$@"
 (define log-domain "gnc.module")
 (define check (new-TestErrorStruct))
 (define log-level (G-LOG-LEVEL-WARNING))
-(define msg "Module '../../../src/gnc-module/test/misc-mods/.libs/libgncmod_futuremodsys.so' requires newer module system\n")
+(define msg "Module '../../../libgnucash/gnc-module/test/misc-mods/.libs/libgncmod_futuremodsys.so' requires newer module system\n")
 (TestErrorStruct-log-domain-set check log-domain)
 (TestErrorStruct-log-level-set check log-level)
 (TestErrorStruct-msg-set check msg)

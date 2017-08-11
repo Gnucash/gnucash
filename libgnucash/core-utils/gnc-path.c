@@ -168,7 +168,7 @@ gchar *gnc_path_get_reportdir()
     const gchar *builddir = g_getenv ("GNC_BUILDDIR");
     if (g_getenv ("GNC_UNINSTALLED") && builddir)
     {
-        result = g_build_filename (builddir, "src", "report", NULL);
+        result = g_build_filename (builddir, "gnucash", "report", NULL);
     }
     else
     {
