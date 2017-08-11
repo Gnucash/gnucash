@@ -324,6 +324,10 @@ SET(engine_EXTRA_DIST
         README.query-api
         SX-book-p.h
         )
+
+IF (NOT WIN32)
+  LIST(APPEND engine_EXTRA_DIST qof-win32.cpp)
+ENDIF (NOT WIN32)
 SET_LOCAL_DIST(engine_DIST_local CMakeLists.txt Makefile.am ${engine_SOURCES} ${engine_HEADERS}
                      ${engine_noinst_HEADERS} ${engine_SCHEME_0} ${engine_SCHEME_1} ${engine_EXTRA_DIST})
 SET(engine_DIST ${engine_DIST_local} ${engine_test_core_DIST} ${test_engine_DIST} PARENT_SCOPE)
