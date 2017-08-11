@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-11 10:05+0300\n"
+"POT-Creation-Date: 2017-08-11 18:15+0200\n"
 "PO-Revision-Date: 2017-08-11 11:36+0300\n"
 "Last-Translator: Valdis Vītoliņš <valdis.vitolins@odo.lv>\n"
 "Language-Team: Latvian <translation-team-lv@lists.sourceforge.net>\n"
@@ -13185,7 +13185,7 @@ msgstr "_Piezīmes:"
 msgid "Ta_x related"
 msgstr "_Attiecas uz nodokļiem"
 
-#. Translators: use the same words here as in
+#. Translators: use the same words here as in 'Ta_x Report Options'.
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:21
 msgid ""
 "Use Edit->Tax Report Options to set the tax-related flag and assign a tax "
@@ -14550,6 +14550,30 @@ msgstr "Nav ieplānots"
 msgid "Select occurrence date above."
 msgstr "Augstāk izvēlieties parādīšanās datumu."
 
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:7
+#, fuzzy
+msgctxt "Daily"
+msgid "Every"
+msgstr "Katru"
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:8
+#, fuzzy
+msgctxt "Daily"
+msgid "days."
+msgstr "dienas."
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:10
+#, fuzzy
+msgctxt "Weekly"
+msgid "Every"
+msgstr "Katru"
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:11
+#, fuzzy
+msgctxt "Weekly"
+msgid "weeks."
+msgstr "nedēļas."
+
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:12
 #: ../src/report/standard-reports/daily-reports.scm:355
 msgid "Saturday"
@@ -14591,6 +14615,18 @@ msgstr "Pirmdiena"
 msgid "Tuesday"
 msgstr "Otrdiena"
 
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:21
+#, fuzzy
+msgctxt "Semimonthly"
+msgid "Every"
+msgstr "Katru"
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:22
+#, fuzzy
+msgctxt "Semimonthly"
+msgid "months."
+msgstr "mēnesi"
+
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:23
 msgid "First on the:"
 msgstr "Pirmoreiz:"
@@ -14606,6 +14642,18 @@ msgstr "tad:"
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:26
 msgid "Semi-Monthly"
 msgstr "Divreiz mēnesī"
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:27
+#, fuzzy
+msgctxt "Monthly"
+msgid "Every"
+msgstr "Katru"
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:28
+#, fuzzy
+msgctxt "Monthly"
+msgid "months."
+msgstr "mēnesi"
 
 # liek pirms datuma.
 # nevar ierakstīt, netulkojas
@@ -25750,46 +25798,6 @@ msgid ""
 msgstr ""
 "Lai vizuāli salīdzinātu ekrāna saturu divās cilnēs, vienā izvēlieties Logs -"
 "> Jauns logs un tajā atveriet iepriekšējās cilnes lapu arī šajā logā."
-
-#, fuzzy
-#~ msgctxt "Daily"
-#~ msgid "Every"
-#~ msgstr "Katru"
-
-#, fuzzy
-#~ msgctxt "Daily"
-#~ msgid "days."
-#~ msgstr "dienas."
-
-#, fuzzy
-#~ msgctxt "Weekly"
-#~ msgid "Every"
-#~ msgstr "Katru"
-
-#, fuzzy
-#~ msgctxt "Weekly"
-#~ msgid "weeks."
-#~ msgstr "nedēļas."
-
-#, fuzzy
-#~ msgctxt "Semimonthly"
-#~ msgid "Every"
-#~ msgstr "Katru"
-
-#, fuzzy
-#~ msgctxt "Semimonthly"
-#~ msgid "months."
-#~ msgstr "mēnesi"
-
-#, fuzzy
-#~ msgctxt "Monthly"
-#~ msgid "Every"
-#~ msgstr "Katru"
-
-#, fuzzy
-#~ msgctxt "Monthly"
-#~ msgid "months."
-#~ msgstr "mēnesi"
 
 #~ msgid "Arabic"
 #~ msgstr "Arābu"
