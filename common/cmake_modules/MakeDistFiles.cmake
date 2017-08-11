@@ -100,7 +100,6 @@ SET(COPY_FROM_BUILD
 
 SET(COPY_FROM_BUILD_2
         doc/gnucash.1  # Uses GNC_CONFIGURE
-        packaging/gnucash.spec # Uses GNC_CONFIGURE
         po/gnucash.pot
         libgnucash/doc/design/stamp-vti
         libgnucash/doc/design/version.texi
