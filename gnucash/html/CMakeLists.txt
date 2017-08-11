@@ -26,12 +26,14 @@ SET (html_SOURCES
 IF (WEBKIT1)
   LIST(APPEND html_HEADERS gnc-html-webkit1.h)
   LIST(APPEND html_SOURCES gnc-html-webkit1.c)
+  SET(html_EXTRA_DIST gnc-html-webkit2.h gnc-html-webkit2.c)
 ELSE ()
   LIST(APPEND html_HEADERS gnc-html-webkit2.h)
   LIST(APPEND html_SOURCES gnc-html-webkit2.c)
+  SET(html_EXTRA_DIST gnc-html-webkit1.h gnc-html-webkit1.c)
 ENDIF ()
 
-SET_DIST_LIST(html_DIST CMakeLists.txt Makefile.am ${html_HEADERS} ${html_SOURCES} gnc-html.i)
+SET_DIST_LIST(html_DIST CMakeLists.txt Makefile.am ${html_HEADERS} ${html_SOURCES} gnc-html.i ${html_EXTRA_DIST})
 
 ADD_LIBRARY (gncmod-html
   ${html_SOURCES}
