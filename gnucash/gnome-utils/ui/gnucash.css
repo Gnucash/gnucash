@@ -15,15 +15,6 @@
   background-color: DarkSeaGreen1;
 }
 
-/* label colors # dialog-utils.c */
-.css_default_color {
-  color: currentColor;
-}
-
-.css_red_color {
-  color: rgb(75%, 0%, 0%);
-}
-
 /* Set the grid lines to be solid # gnc-tree-view-split-reg.c */
 .treeview_grid_lines {
   border-color: black;
