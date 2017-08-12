@@ -106,6 +106,17 @@ typedef struct GncTreeModelAccountPrivate
 /************************************************************/
 /*           Account Tree Model - Misc Functions            */
 /************************************************************/
+static gchar*
+get_negative_color (void)
+{
+    GdkRGBA color;
+    GtkWidget *label = gtk_label_new ("Color");
+    GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET(label));
+    gtk_style_context_add_class (context, "negative-color");
+    gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+
+    return gdk_rgba_to_string (&color);;
+}
 
 /** Tell the GncTreeModelAccount code to update the color that it will
  *  use for negative numbers.  This function will iterate over all
@@ -124,7 +135,7 @@ gnc_tree_model_account_update_color (gpointer gsettings, gchar *key, gpointer us
     model = user_data;
     priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
     use_red = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
-    priv->negative_color = use_red ? "red" : NULL;
+    priv->negative_color = use_red ? get_negative_color () : NULL;
 }
 /************************************************************/
 /*               g_object required functions                */
@@ -205,7 +216,7 @@ gnc_tree_model_account_init (GncTreeModelAccount *model)
     priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
     priv->book = NULL;
     priv->root = NULL;
-    priv->negative_color = red ? "red" : NULL;
+    priv->negative_color = red ? get_negative_color () : NULL;
 
     gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED,
                           gnc_tree_model_account_update_color,
