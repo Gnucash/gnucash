@@ -1587,7 +1587,7 @@ AC_MSG_RESULT($warnFLAGS)
 ### makefiles, so that we don't have an opportunity to adjust them
 ### there.
 
-chmod u+x ${srcdir}/gnucash/bin/generate-gnc-script
+chmod u+x ${srcdir}/gnucash/generate-gnc-script
 
 ### --------------------------------------------------------------------------
 ### Makefile creation
@@ -1650,9 +1650,8 @@ AC_CONFIG_FILES(
   doc/Makefile
   doc/examples/Makefile
   gnucash/Makefile
-  gnucash/bin/Makefile
-  gnucash/bin/overrides/Makefile
-  gnucash/bin/test/Makefile
+  gnucash/overrides/Makefile
+  gnucash/test/Makefile
   gnucash/gnome/Makefile
   gnucash/gnome/gtkbuilder/Makefile
   gnucash/gnome/gschemas/Makefile
@@ -1751,7 +1750,7 @@ AC_CONFIG_FILES(
   libgnucash/tax/us/Makefile
   libgnucash/tax/us/test/Makefile
   dnl # non-makefiles
-  gnucash/bin/gnucash.rc
+  gnucash/gnucash.rc
   libgnucash/app-utils/migratable-prefs.xml
   gnucash/gnome/gnucash.desktop.in
   dnl # GSettings schema files
@@ -1782,8 +1781,8 @@ AC_CONFIG_FILES([libgnucash/app-utils/test/test-load-module],
                 [chmod +x libgnucash/app-utils/test/test-load-module])
 AC_CONFIG_FILES([libgnucash/backend/xml/test/test-real-data.sh],
                 [chmod +x libgnucash/backend/xml/test/test-real-data.sh])
-AC_CONFIG_FILES([gnucash/bin/test/test-version],
-                [chmod +x gnucash/bin/test/test-version])
+AC_CONFIG_FILES([gnucash/test/test-version],
+                [chmod +x gnucash/test/test-version])
 AC_CONFIG_FILES([libgnucash/engine/test/test-create-account],
                 [chmod +x libgnucash/engine/test/test-create-account])
 AC_CONFIG_FILES([libgnucash/engine/test/test-scm-query-import],
@@ -1816,7 +1815,7 @@ AC_CONFIG_FILES([libgnucash/tax/us/test/test-load-module],
                 [chmod +x libgnucash/tax/us/test/test-load-module])
 
 # A few files need extra actions at creation time
-AC_CONFIG_FILES([gnucash/bin/overrides/gnucash-make-guids], [chmod u+x gnucash/bin/overrides/gnucash-make-guids])
+AC_CONFIG_FILES([gnucash/overrides/gnucash-make-guids], [chmod u+x gnucash/overrides/gnucash-make-guids])
 #Link (copy on Windows) test data files:
 AC_CONFIG_LINKS([gnucash/import-export/csv-imp/test/sample1.csv:gnucash/import-export/csv-imp/test/sample1.csv])
 LDFLAGS="${LDFLAGS} ${NOUNDEF}"
