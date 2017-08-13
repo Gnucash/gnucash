@@ -1017,7 +1017,7 @@ gnc_tree_view_split_reg_new_with_model (GncTreeModelSplitReg *model)
     view->help_text = g_strdup ("Help Text");
 
     /* Set the grid lines to be solid */
-    gnc_widget_set_style_context (GTK_WIDGET(view), "treeview_grid_lines");
+    gnc_widget_set_style_context (GTK_WIDGET(view), "register2_grid_lines");
 
     /* TreeView Grid lines */
     if (view->priv->use_horizontal_lines)

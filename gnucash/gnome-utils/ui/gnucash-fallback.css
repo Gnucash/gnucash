@@ -25,7 +25,11 @@
   color: rgb(75%, 0%, 0%);
 }
 
-/* These are the defaults used in # gnc-dense-cal.c */
+/* Register2 grid lines color */
+.register2_grid_lines {
+  border-color: black;
+}
+
 *.primary {
   background-color: lavender;
 }

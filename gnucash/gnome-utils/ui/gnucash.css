@@ -2,11 +2,6 @@
    directly by name as these are not brought in when loaded, only
    the widget type can be configured unless they are named in code */
 
-/* Set the grid lines to be solid # gnc-tree-view-split-reg.c */
-.treeview_grid_lines {
-  border-color: black;
-}
-
 /* Increase label size # dialog-account.c */
 .primary_label_size {
   font-size: large;
