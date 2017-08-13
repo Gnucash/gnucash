@@ -2,7 +2,21 @@
    directly by name as these are not brought in when loaded, only
    the widget type can be configured unless they are named in code */
 
-/* negative value label colors # dialog-utils.c */
+
+/* Import Matcher, amount of intervention required */
+.intervention-required {
+  background-color: brown1;
+}
+
+.intervention-probably-required {
+  background-color: gold;
+}
+
+.intervention-not-required {
+  background-color: DarkSeaGreen1;
+}
+
+/* Negative value label colors */
 .default-color {
   color: currentColor;
 }

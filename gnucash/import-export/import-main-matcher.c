@@ -82,9 +82,9 @@ enum downloaded_cols
     NUM_DOWNLOADED_COLS
 };
 
-#define COLOR_RED    "brown1"
-#define COLOR_YELLOW "gold"
-#define COLOR_GREEN  "DarkSeaGreen1"
+#define COLOR_RED_CLASS    "intervention-required"
+#define COLOR_YELLOW_CLASS "intervention-probably-required"
+#define COLOR_GREEN_CLASS  "intervention-not-required"
 
 static QofLogModule log_module = GNC_MOD_IMPORT;
 
@@ -215,13 +215,13 @@ on_matcher_help_clicked (GtkButton *button, gpointer user_data)
     gnc_builder_add_from_file (builder, "dialog-import.glade", "matcher_help_dialog");
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "red"));
-    gnc_widget_set_style_context (GTK_WIDGET(box), "color_back_red");
+    gnc_widget_set_style_context (GTK_WIDGET(box), "intervention-required");
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "yellow"));
-    gnc_widget_set_style_context (GTK_WIDGET(box), "color_back_yellow");
+    gnc_widget_set_style_context (GTK_WIDGET(box), "intervention-probably-required");
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "green"));
-    gnc_widget_set_style_context (GTK_WIDGET(box), "color_back_green");
+    gnc_widget_set_style_context (GTK_WIDGET(box), "intervention-not-required");
 
     help_dialog = GTK_WIDGET(gtk_builder_get_object (builder, "matcher_help_dialog"));
     gtk_window_set_transient_for(GTK_WINDOW(help_dialog),
@@ -651,6 +651,35 @@ gboolean gnc_gen_trans_list_run (GNCImportMainMatcher *info)
 }
 
 static void
+gnc_style_context_get_background_color (GtkStyleContext *context,
+                                        GtkStateFlags    state,
+                                        GdkRGBA         *color)
+{
+    GdkRGBA *c;
+
+    g_return_if_fail (color != NULL);
+    g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+    gtk_style_context_get (context,
+                           state,
+                           GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &c,
+                           NULL);
+    *color = *c;
+    gdk_rgba_free (c);
+}
+
+static gchar*
+get_required_color (const gchar *class_name)
+{
+    GdkRGBA color;
+    GtkWidget *label = gtk_label_new ("Color");
+    GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET(label));
+    gtk_style_context_add_class (context, class_name);
+    gnc_style_context_get_background_color (context, GTK_STATE_FLAG_NORMAL, &color);
+    return gdk_rgba_to_string (&color);
+}
+
+static void
 refresh_model_row (GNCImportMainMatcher *gui,
                    GtkTreeModel *model,
                    GtkTreeIter *iter,
@@ -705,7 +734,7 @@ refresh_model_row (GNCImportMainMatcher *gui,
         if (gnc_import_TransInfo_is_balanced(info) == TRUE)
         {
             ro_text = _("New, already balanced");
-            color = COLOR_GREEN;
+            color = get_required_color (COLOR_GREEN_CLASS);
         }
         else
         {
@@ -721,7 +750,7 @@ refresh_model_row (GNCImportMainMatcher *gui,
                    TRUE) ));
             if (gnc_import_TransInfo_get_destacc (info) != NULL)
             {
-                color = COLOR_GREEN;
+                color = get_required_color (COLOR_GREEN_CLASS);
                 tmp = gnc_account_get_full_name
                       (gnc_import_TransInfo_get_destacc (info));
                 if (gnc_import_TransInfo_get_destacc_selected_manually(info)
@@ -746,7 +775,7 @@ refresh_model_row (GNCImportMainMatcher *gui,
             }
             else
             {
-                color = COLOR_YELLOW;
+                color = get_required_color (COLOR_YELLOW_CLASS);
                 text =
                     /* Translators: %s is the amount to be transferred. */
                     g_strdup_printf(_("New, UNBALANCED (need acct to transfer %s)!"),
@@ -758,7 +787,7 @@ refresh_model_row (GNCImportMainMatcher *gui,
     case GNCImport_CLEAR:
         if (gnc_import_TransInfo_get_selected_match(info))
         {
-            color = COLOR_GREEN;
+            color = get_required_color (COLOR_GREEN_CLASS);
             if (gnc_import_TransInfo_get_match_selected_manually(info) == TRUE)
             {
                 ro_text = _("Reconcile (manual) match");
@@ -770,14 +799,14 @@ refresh_model_row (GNCImportMainMatcher *gui,
         }
         else
         {
-            color = COLOR_RED;
+            color = get_required_color (COLOR_RED_CLASS);
             ro_text = _("Match missing!");
         }
         break;
     case GNCImport_UPDATE:
         if (gnc_import_TransInfo_get_selected_match(info))
         {
-            color = COLOR_GREEN;
+            color = get_required_color (COLOR_GREEN_CLASS);
             if (gnc_import_TransInfo_get_match_selected_manually(info) == TRUE)
             {
                 ro_text = _("Update and reconcile (manual) match");
@@ -789,12 +818,12 @@ refresh_model_row (GNCImportMainMatcher *gui,
         }
         else
         {
-            color = COLOR_RED;
+            color = get_required_color (COLOR_RED_CLASS);
             ro_text = _("Match missing!");
         }
         break;
     case GNCImport_SKIP:
-        color = COLOR_RED;
+        color = get_required_color (COLOR_RED_CLASS);
         ro_text = _("Do not import (no action selected)");
         break;
     default:
