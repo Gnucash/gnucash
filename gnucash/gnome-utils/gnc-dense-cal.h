@@ -44,13 +44,6 @@ typedef struct _gdc_month_coords
     gint x, y;
 } gdc_month_coords;
 
-enum GDC_COLORS
-{
-    MONTH_THIS = 0,
-    MONTH_THAT,
-    MAX_COLORS
-};
-
 struct _GncDenseCal
 {
     GtkBox widget;
@@ -83,8 +76,6 @@ struct _GncDenseCal
     gint topPadding;
 
     gdc_month_coords monthPositions[12];
-
-    GdkRGBA weekColors[MAX_COLORS];
 
     guint label_width;
     guint label_height;

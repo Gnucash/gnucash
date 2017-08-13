@@ -262,7 +262,6 @@ static void
 gnc_dense_cal_init(GncDenseCal *dcal)
 {
     GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET(dcal));
-    gboolean colorAllocSuccess[MAX_COLORS];
 
     gtk_orientable_set_orientation (GTK_ORIENTABLE(dcal), GTK_ORIENTATION_VERTICAL);
 
