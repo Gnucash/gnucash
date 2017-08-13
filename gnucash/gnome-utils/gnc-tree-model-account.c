@@ -115,7 +115,7 @@ get_negative_color (void)
     gtk_style_context_add_class (context, "negative-numbers");
     gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
 
-    return gdk_rgba_to_string (&color);;
+    return gdk_rgba_to_string (&color);
 }
 
 /** Tell the GncTreeModelAccount code to update the color that it will
