@@ -69,7 +69,7 @@ gnc_set_label_color(GtkWidget *label, gnc_numeric value)
     deficit = gnc_numeric_negative_p (value);
 
     if (deficit)
-        gnc_widget_set_style_context (GTK_WIDGET(label), "negative-color");
+        gnc_widget_set_style_context (GTK_WIDGET(label), "negative-numbers");
     else
         gnc_widget_set_style_context (GTK_WIDGET(label), "default-color");
 }

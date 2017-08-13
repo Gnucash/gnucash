@@ -112,7 +112,7 @@ get_negative_color (void)
     GdkRGBA color;
     GtkWidget *label = gtk_label_new ("Color");
     GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET(label));
-    gtk_style_context_add_class (context, "negative-color");
+    gtk_style_context_add_class (context, "negative-numbers");
     gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
 
     return gdk_rgba_to_string (&color);;
