@@ -30,6 +30,13 @@
   border-color: black;
 }
 
+/* Make Label bold and larger */
+.emphasize-label {
+  font-size: large;
+  font-weight: bold;
+}
+
+/* The Dense Calendar defaults */
 *.primary {
   background-color: lavender;
 }
