@@ -45,9 +45,9 @@ SET(COPY_FROM_BUILD
   libgnucash/app-utils/swig-app-utils-python.c
   libgnucash/app-utils/test/test-load-module
   libgnucash/backend/xml/test/test-real-data.sh
-  gnucash/bin/gnucash.rc
-  gnucash/bin/overrides/gnucash-make-guids
-  gnucash/bin/test/test-version
+  gnucash/gnucash.rc
+  gnucash/overrides/gnucash-make-guids
+  gnucash/test/test-version
   libgnucash/core-utils/gnc-vcs-info.h
   libgnucash/core-utils/swig-core-utils-guile.c
   libgnucash/core-utils/swig-core-utils-python.c
