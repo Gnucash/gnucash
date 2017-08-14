@@ -1,5 +1,5 @@
 /*
- * gnc-plugin-customer_import.c --
+ * gnc-plugin-customer-import.c --
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -21,7 +21,7 @@
 
 /**
  * @internal
- * @file gnc-plugin-customer_import.c
+ * @file gnc-plugin-customer-import.c
  * @brief Plugin registration of the customer_import plugin
  * @author Copyright (C) 2009 Sebastian Held <sebastian.held@gmx.de>
  */
@@ -34,7 +34,7 @@
 
 #include "dialog-utils.h"
 
-#include "gnc-plugin-customer_import.h"
+#include "gnc-plugin-customer-import.h"
 #include "dialog-customer-import-gui.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -47,8 +47,8 @@ static void gnc_plugin_customer_import_finalize           (GObject *object);
 /* Command callbacks */
 static void gnc_plugin_customer_import_cmd_test (GtkAction *action, GncMainWindowActionData *data);
 
-#define PLUGIN_ACTIONS_NAME "gnc-plugin-customer_import-actions"
-#define PLUGIN_UI_FILENAME  "gnc-plugin-customer_import-ui.xml"
+#define PLUGIN_ACTIONS_NAME "gnc-plugin-customer-import-actions"
+#define PLUGIN_UI_FILENAME  "gnc-plugin-customer-import-ui.xml"
 
 static GtkActionEntry gnc_plugin_actions [] =
 {

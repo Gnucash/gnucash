@@ -1,5 +1,5 @@
 /*
- * gnc-plugin-customer_import.h --
+ * gnc-plugin-customer-import.h --
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -22,7 +22,7 @@
 /**
  * @addtogroup Tools
  * @{
- * @file gnc-plugin-customer_import.h
+ * @file gnc-plugin-customer-import.h
  * @brief Plugin registration of the customer_import module
  * @author Copyright (C) 2009 Sebastian Held <sebastian.held@gmx.de>
  */
@@ -44,7 +44,7 @@ G_BEGIN_DECLS
 #define GNC_IS_PLUGIN_customer_import_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass),  GNC_TYPE_PLUGIN_customer_import))
 #define GNC_PLUGIN_customer_import_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj),  GNC_TYPE_PLUGIN_customer_import, GncPlugincustomer_importClass))
 
-#define GNC_PLUGIN_customer_import_NAME "gnc-plugin-customer_import"
+#define GNC_PLUGIN_customer_import_NAME "gnc-plugin-customer-import"
 
 /* typedefs & structures */
 typedef struct

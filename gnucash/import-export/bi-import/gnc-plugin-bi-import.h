@@ -44,7 +44,7 @@ G_BEGIN_DECLS
 #define GNC_IS_PLUGIN_BI_IMPORT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass),  GNC_TYPE_PLUGIN_BI_IMPORT))
 #define GNC_PLUGIN_BI_IMPORT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj),  GNC_TYPE_PLUGIN_BI_IMPORT, GncPluginbi_importClass))
 
-#define GNC_PLUGIN_BI_IMPORT_NAME "gnc-plugin-bi_import"
+#define GNC_PLUGIN_BI_IMPORT_NAME "gnc-plugin-bi-import"
 
 /* typedefs & structures */
 typedef struct

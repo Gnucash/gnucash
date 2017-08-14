@@ -1683,13 +1683,12 @@ AC_CONFIG_FILES(
   gnucash/import-export/aqb/Makefile
   gnucash/import-export/aqb/gschemas/Makefile
   gnucash/import-export/aqb/test/Makefile
-  gnucash/plugins/Makefile
-  gnucash/plugins/bi_import/Makefile
-  gnucash/plugins/bi_import/gtkbuilder/Makefile
-  gnucash/plugins/bi_import/ui/Makefile
-  gnucash/plugins/customer_import/Makefile
-  gnucash/plugins/customer_import/gtkbuilder/Makefile
-  gnucash/plugins/customer_import/ui/Makefile
+  gnucash/import-export/bi-import/Makefile
+  gnucash/import-export/bi-import/gtkbuilder/Makefile
+  gnucash/import-export/bi-import/ui/Makefile
+  gnucash/import-export/customer-import/Makefile
+  gnucash/import-export/customer-import/gtkbuilder/Makefile
+  gnucash/import-export/customer-import/ui/Makefile
   gnucash/python/Makefile
   gnucash/python/pycons/Makefile
   gnucash/register/Makefile

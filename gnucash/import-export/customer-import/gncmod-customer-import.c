@@ -1,5 +1,5 @@
 /*********************************************************************
- * gncmod-customer_import.c
+ * gncmod-customer-import.c
  * module definition/initialization for the customer_import GNOME UI module
  *
  * Copyright (c) 2009 Sebastian Held <sebastian.held@gmx.de>
@@ -37,7 +37,7 @@
 #include "gnc-module-api.h"
 
 #include "gnc-plugin-manager.h"
-#include "gnc-plugin-customer_import.h"
+#include "gnc-plugin-customer-import.h"
 
 GNC_MODULE_API_DECL(libgncmod_customer_import);
 
@@ -53,7 +53,7 @@ int libgncmod_customer_import_gnc_module_age      = 0;
 char *
 libgncmod_customer_import_gnc_module_path (void)
 {
-    return g_strdup("gnucash/plugins/customer_import");
+    return g_strdup("gnucash/import-export/customer-import");
 }
 
 char *

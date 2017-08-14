@@ -53,13 +53,13 @@ int libgncmod_bi_import_gnc_module_age      = 0;
 char *
 libgncmod_bi_import_gnc_module_path (void)
 {
-    return g_strdup("gnucash/plugins/bi_import");
+    return g_strdup("gnucash/import-export/bi-import");
 }
 
 char *
 libgncmod_bi_import_gnc_module_description (void)
 {
-    return g_strdup("The GnuCash bi_import plugin");
+    return g_strdup("The GnuCash bi-import plugin");
 }
 
 int
