@@ -17,7 +17,7 @@ AM_CPPFLAGS = \
 
 
 libgncmod_engine_la_SOURCES = \
-  Account.c \
+  Account.cpp \
   Recurrence.c \
   Query.c \
   SchedXaction.c \

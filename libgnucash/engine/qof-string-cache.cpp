@@ -132,4 +132,11 @@ qof_string_cache_insert(gconstpointer key)
     return NULL;
 }
 
+void
+qof_string_cache_replace(gconstpointer * dst, gconstpointer src)
+{
+    gpointer tmp {qof_string_cache_insert(src)};
+    qof_string_cache_remove(&dst);
+    *dst = tmp;
+}
 /* ************************ END OF FILE ***************************** */
