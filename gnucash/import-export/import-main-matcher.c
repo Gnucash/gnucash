@@ -215,13 +215,13 @@ on_matcher_help_clicked (GtkButton *button, gpointer user_data)
     gnc_builder_add_from_file (builder, "dialog-import.glade", "matcher_help_dialog");
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "red"));
-    gnc_widget_set_style_context (GTK_WIDGET(box), "intervention-required");
+    gnc_widget_set_style_context (GTK_WIDGET(box), COLOR_RED_CLASS);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "yellow"));
-    gnc_widget_set_style_context (GTK_WIDGET(box), "intervention-probably-required");
+    gnc_widget_set_style_context (GTK_WIDGET(box), COLOR_YELLOW_CLASS);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "green"));
-    gnc_widget_set_style_context (GTK_WIDGET(box), "intervention-not-required");
+    gnc_widget_set_style_context (GTK_WIDGET(box), COLOR_GREEN_CLASS);
 
     help_dialog = GTK_WIDGET(gtk_builder_get_object (builder, "matcher_help_dialog"));
     gtk_window_set_transient_for(GTK_WINDOW(help_dialog),
