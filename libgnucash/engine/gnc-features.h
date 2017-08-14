@@ -38,6 +38,10 @@
 
 #include "qof.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** @name Defined features
 @{
  */
@@ -63,6 +67,10 @@ gchar *gnc_features_test_unknown (QofBook *book);
  * this book.
  */
 void gnc_features_set_used (QofBook *book, const gchar *feature);
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
 
 #endif /* GNC_FEATURES_H */
 /** @} */
