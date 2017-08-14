@@ -1,5 +1,9 @@
-
-SUBDIRS = . doc lib src packaging po accounts checks
+if GNUCASH_ENABLE_GUI
+  GNUCASH_SUBDIR = gnucash
+else
+  GNUCASH_SUBDIR =
+endif
+SUBDIRS = . doc lib common libgnucash bindings ${GNUCASH_SUBDIR} po data
 
 GNC_CTAGS_FILE = @GNC_CTAGS_FILE@
 GNC_ETAGS_FILE = @GNC_ETAGS_FILE@
@@ -125,9 +129,9 @@ DISTCLEANFILES = \
   make-gnucash-potfiles po/.intltool-merge-cache
 
 cscope.files:
-	find src lib -name '*.[ch]' > cscope.files
+	find bindings common libgnucash gnucash lib -name '*.[ch]' > cscope.files
 if GNUCASH_SEPARATE_BUILDDIR
-	find ${srcdir}/src ${srcdir}/lib -name '*.[ch]' >> cscope.files
+	find ${srcdir}/bindings ${srcdir}/common ${srcdir}/libgnucash ${srcdir}/gnucash ${srcdir}/lib -name '*.[ch]' >> cscope.files
 endif
 
 ${srcdir}/cscope.out: cscope.files
@@ -243,10 +247,10 @@ endif
 ASTYLE = /usr/bin/astyle
 .PHONY: indent
 indent:
-	$(ASTYLE) --indent=spaces=4 --brackets=break --suffix=none `find ${srcdir}/src -name '*.[hc]'`
+	$(ASTYLE) --indent=spaces=4 --brackets=break --suffix=none `find ${srcdir}/{bindings,common,libgnucash,gnucash} -name '*.[hc]'`
 # Use the following line if you've got astyle-1.24, but don't use
 # --pad=oper with astyle 1.22 as it will reformat e.g. "return +1;" in
 # a very ugly way.
-#	$(ASTYLE) --indent=spaces=4 --brackets=break --pad-oper -pad-header --suffix=none `find ${srcdir}/src -name '*.[hc]'`
+#	$(ASTYLE) --indent=spaces=4 --brackets=break --pad-oper -pad-header --suffix=none `find ${srcdir}/{bindings,common,libgnucash,gnucash} -name '*.[hc]'`
 	@echo "### GnuCash development hint: The above command might have re-indented much more files than what you intended. Please commit only those which you really want to have changed, and revert the changes in the others so that other devevelopers do not have unnecessary merge conflicts. Thanks! ###"
 

@@ -1,0 +1,40 @@
+ADD_SUBDIRECTORY(gtkbuilder)
+ADD_SUBDIRECTORY(ui)
+
+SET(customer_import_SOURCES
+  gnc-plugin-customer-import.c
+  gncmod-customer-import.c
+  dialog-customer-import-gui.c
+  dialog-customer-import.c
+)
+
+# Add dependency on config.h
+SET_SOURCE_FILES_PROPERTIES (${customer_import_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
+
+
+SET(customer_import_noinst_HEADERS
+  gnc-plugin-customer-import.h
+  dialog-customer-import-gui.h
+  dialog-customer-import.h
+)
+
+ADD_LIBRARY(gncmod-customer-import ${customer_import_SOURCES} ${customer_input_noinst_HEADERS})
+
+TARGET_LINK_LIBRARIES(gncmod-customer-import gnc-gnome gncmod-gnome-utils gncmod-app-utils
+     gncmod-engine gnc-core-utils gnc-module ${GLIB2_LDFLAGS})
+
+TARGET_INCLUDE_DIRECTORIES(gncmod-customer-import
+  PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
+  PRIVATE ${CMAKE_SOURCE_DIR}/gnucash/gnome
+)
+
+TARGET_COMPILE_DEFINITIONS(gncmod-customer-import PRIVATE -DG_LOG_DOMAIN=\"gnc.plugin.customer-import\")
+
+INSTALL(TARGETS gncmod-customer-import
+  LIBRARY DESTINATION lib/gnucash
+  ARCHIVE DESTINATION lib/gnucash
+  RUNTIME DESTINATION bin)
+# No headers to install.
+
+SET_LOCAL_DIST(customer_import_DIST_local CMakeLists.txt Makefile.am ${customer_import_SOURCES} ${customer_import_noinst_HEADERS})
+SET(customer_import_DIST ${customer_import_DIST_local} ${customer_import_glade_DIST} ${customer_import_ui_DIST} PARENT_SCOPE)

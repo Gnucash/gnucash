@@ -1,0 +1,11 @@
+<ui>
+  <menubar>
+    <menu name="File" action="FileAction">
+      <menu name="FileImport" action="FileImportAction">
+          <placeholder name="FileImportPlaceholder">
+           <menuitem name="customer_import" action="customer_importAction"/>
+          </placeholder>
+      </menu>
+    </menu>
+  </menubar>
+</ui>
