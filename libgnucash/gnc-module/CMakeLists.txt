@@ -1,5 +1,6 @@
 # CMakeLists.txt for libgnucash/gnc-module
 ADD_SUBDIRECTORY(test)
+ADD_SUBDIRECTORY(example)
 
 IF (BUILDING_FROM_VCS)
   # Command to generate the swig-gnc-module.c wrapper file
@@ -66,4 +67,4 @@ GNC_ADD_SCHEME_TARGETS(scm-gnc-module
 
 SET_LOCAL_DIST(gnc_module_DIST_local CMakeLists.txt Makefile.am ${gnc_module_SOURCES} ${gnc_module_HEADERS}
         gnc-module.i gnc-module.scm README)
-SET(gnc_module_DIST ${gnc_module_DIST_local} ${test_gnc_module_DIST} PARENT_SCOPE)
+SET(gnc_module_DIST ${gnc_module_DIST_local} ${test_gnc_module_DIST} ${example_DIST} PARENT_SCOPE)

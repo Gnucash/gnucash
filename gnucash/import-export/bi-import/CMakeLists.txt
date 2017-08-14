@@ -20,9 +20,9 @@ SET(bi_import_noinst_HEADERS
   dialog-bi-import.h
 )
 
-ADD_LIBRARY(gncmod-bi_import ${bi_import_noinst_HEADERS} ${bi_import_SOURCES})
+ADD_LIBRARY(gncmod-bi-import ${bi_import_noinst_HEADERS} ${bi_import_SOURCES})
 
-TARGET_LINK_LIBRARIES(gncmod-bi_import
+TARGET_LINK_LIBRARIES(gncmod-bi-import
   gncmod-gnome-utils
   gncmod-gnome-search
   gncmod-app-utils
@@ -32,14 +32,14 @@ TARGET_LINK_LIBRARIES(gncmod-bi_import
   gnc-gnome
 )
 
-TARGET_INCLUDE_DIRECTORIES(gncmod-bi_import
+TARGET_INCLUDE_DIRECTORIES(gncmod-bi-import
   PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
   PRIVATE ${CMAKE_SOURCE_DIR}/gnucash/gnome
 )
 
-TARGET_COMPILE_DEFINITIONS(gncmod-bi_import PRIVATE -DG_LOG_DOMAIN=\"gnc.plugin.bi-import\")
+TARGET_COMPILE_DEFINITIONS(gncmod-bi-import PRIVATE -DG_LOG_DOMAIN=\"gnc.plugin.bi-import\")
 
-INSTALL(TARGETS gncmod-bi_import
+INSTALL(TARGETS gncmod-bi-import
   LIBRARY DESTINATION lib/gnucash
   ARCHIVE DESTINATION lib/gnucash
   RUNTIME DESTINATION bin)

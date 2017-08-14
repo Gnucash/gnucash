@@ -4,8 +4,10 @@ ADD_SUBDIRECTORY(test)
 
 # ############################################################
 ADD_SUBDIRECTORY(aqb)
+ADD_SUBDIRECTORY(bi-import)
 ADD_SUBDIRECTORY(csv-exp)
 ADD_SUBDIRECTORY(csv-imp)
+ADD_SUBDIRECTORY(customer-import)
 ADD_SUBDIRECTORY(gschemas)
 ADD_SUBDIRECTORY(log-replay)
 ADD_SUBDIRECTORY(ofx)
@@ -79,8 +81,8 @@ SET_LOCAL_DIST(import_export_DIST_local CMakeLists.txt Makefile.am ${generic_imp
         ${generic_import_HEADERS} ${generic_import_GLADE} ${generic_import_noinst_HEADERS}
         ${generic_import_EXTRA_DIST})
 
-SET(import_export_DIST ${import_export_DIST_local} ${aqbanking_DIST}
-        ${csv_export_DIST} ${csv_import_DIST}
+SET(import_export_DIST ${import_export_DIST_local} ${aqbanking_DIST} ${bi_import_DIST}
+        ${csv_export_DIST} ${csv_import_DIST} ${customer_import_DIST}
         ${generic_import_gschema_DIST} ${log_report_DIST} ${ofx_DIST} ${qif_DIST} ${qif_import_DIST}
         ${test_generic_import_DIST}
         PARENT_SCOPE)

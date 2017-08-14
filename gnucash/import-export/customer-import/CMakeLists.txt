@@ -2,8 +2,8 @@ ADD_SUBDIRECTORY(gtkbuilder)
 ADD_SUBDIRECTORY(ui)
 
 SET(customer_import_SOURCES
-  gnc-plugin-customer_import.c
-  libgncmod-customer_import.c
+  gnc-plugin-customer-import.c
+  gncmod-customer-import.c
   dialog-customer-import-gui.c
   dialog-customer-import.c
 )
@@ -13,24 +13,24 @@ SET_SOURCE_FILES_PROPERTIES (${customer_import_SOURCES} PROPERTIES OBJECT_DEPEND
 
 
 SET(customer_import_noinst_HEADERS
-  gnc-plugin-customer_import.h
+  gnc-plugin-customer-import.h
   dialog-customer-import-gui.h
   dialog-customer-import.h
 )
 
-ADD_LIBRARY(gncmod-customer_import ${customer_import_SOURCES} ${customer_input_noinst_HEADERS})
+ADD_LIBRARY(gncmod-customer-import ${customer_import_SOURCES} ${customer_input_noinst_HEADERS})
 
-TARGET_LINK_LIBRARIES(gncmod-customer_import gnc-gnome gncmod-gnome-utils gncmod-app-utils
+TARGET_LINK_LIBRARIES(gncmod-customer-import gnc-gnome gncmod-gnome-utils gncmod-app-utils
      gncmod-engine gnc-core-utils gnc-module ${GLIB2_LDFLAGS})
 
-TARGET_INCLUDE_DIRECTORIES(gncmod-bi_import
+TARGET_INCLUDE_DIRECTORIES(gncmod-customer-import
   PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
   PRIVATE ${CMAKE_SOURCE_DIR}/gnucash/gnome
 )
 
-TARGET_COMPILE_DEFINITIONS(gncmod-customer_import PRIVATE -DG_LOG_DOMAIN=\"gnc.plugin.customer_import\")
+TARGET_COMPILE_DEFINITIONS(gncmod-customer-import PRIVATE -DG_LOG_DOMAIN=\"gnc.plugin.customer-import\")
 
-INSTALL(TARGETS gncmod-customer_import
+INSTALL(TARGETS gncmod-customer-import
   LIBRARY DESTINATION lib/gnucash
   ARCHIVE DESTINATION lib/gnucash
   RUNTIME DESTINATION bin)

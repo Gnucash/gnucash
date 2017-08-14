@@ -239,6 +239,12 @@ gnucash/import-export/aqb/gnc-gwen-gui.c
 gnucash/import-export/aqb/gncmod-aqbanking.c
 gnucash/import-export/aqb/gnc-plugin-aqbanking.c
 [type: gettext/gsettings]gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in
+gnucash/import-export/bi-import/dialog-bi-import.c
+gnucash/import-export/bi-import/dialog-bi-import-gui.c
+gnucash/import-export/bi-import/dialog-bi-import-helper.c
+gnucash/import-export/bi-import/gncmod-bi-import.c
+gnucash/import-export/bi-import/gnc-plugin-bi-import.c
+gnucash/import-export/bi-import/gtkbuilder/dialog-bi-import-gui.glade
 gnucash/import-export/csv-exp/assistant-csv-export.c
 gnucash/import-export/csv-exp/assistant-csv-export.glade
 gnucash/import-export/csv-exp/csv-transactions-export.c
@@ -263,6 +269,11 @@ gnucash/import-export/csv-imp/gnc-tokenizer.cpp
 gnucash/import-export/csv-imp/gnc-trans-props.cpp
 gnucash/import-export/csv-imp/gnc-tx-import.cpp
 [type: gettext/gsettings]gnucash/import-export/csv-imp/gschemas/org.gnucash.dialogs.import.csv.gschema.xml.in.in
+gnucash/import-export/customer-import/dialog-customer-import.c
+gnucash/import-export/customer-import/dialog-customer-import-gui.c
+gnucash/import-export/customer-import/gncmod-customer-import.c
+gnucash/import-export/customer-import/gnc-plugin-customer-import.c
+gnucash/import-export/customer-import/gtkbuilder/dialog-customer-import-gui.glade
 gnucash/import-export/dialog-import.glade
 gnucash/import-export/gncmod-generic-import.c
 [type: gettext/gsettings]gnucash/import-export/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in.in
@@ -303,19 +314,6 @@ gnucash/import-export/qif-imp/qif-objects.scm
 gnucash/import-export/qif-imp/qif-parse.scm
 gnucash/import-export/qif-imp/qif-to-gnc.scm
 gnucash/import-export/qif-imp/qif-utils.scm
-gnucash/plugins/bi_import/dialog-bi-import.c
-gnucash/plugins/bi_import/dialog-bi-import-gui.c
-gnucash/plugins/bi_import/dialog-bi-import-helper.c
-gnucash/plugins/bi_import/gncmod-bi-import.c
-gnucash/plugins/bi_import/gnc-plugin-bi-import.c
-gnucash/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade
-gnucash/plugins/customer_import/dialog-customer-import.c
-gnucash/plugins/customer_import/dialog-customer-import-gui.c
-gnucash/plugins/customer_import/gnc-plugin-customer_import.c
-gnucash/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade
-gnucash/plugins/customer_import/libgncmod-customer_import.c
-gnucash/plugins/example/gncmod-example.c
-gnucash/plugins/example/gnc-plugin.example.c
 gnucash/python/gncmod-python.c
 gnucash/register/ledger-core/gncEntryLedger.c
 gnucash/register/ledger-core/gncEntryLedgerControl.c
@@ -658,6 +656,8 @@ libgnucash/engine/SX-book.c
 libgnucash/engine/SX-ttinfo.c
 libgnucash/engine/Transaction.c
 libgnucash/engine/TransLog.c
+libgnucash/gnc-module/example/gncmod-example.c
+libgnucash/gnc-module/example/gnc-plugin.example.c
 libgnucash/gnc-module/gnc-module.c
 libgnucash/gnc-module/gnc-module.scm
 libgnucash/scm/fin.scm

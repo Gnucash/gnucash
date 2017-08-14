@@ -4,8 +4,18 @@ endif
 if WITH_AQBANKING
     AQBANKING_DIR=aqb
 endif
-SUBDIRS = . gschemas qif qif-imp \
-	${OFX_DIR} ${AQBANKING_DIR} log-replay test csv-imp csv-exp
+SUBDIRS = . \
+  gschemas \
+  ${AQBANKING_DIR} \
+  bi-import \
+  csv-exp \
+  csv-imp \
+  customer-import \
+  log-replay \
+  ${OFX_DIR} \
+  qif \
+  qif-imp \
+  test
 
 pkglib_LTLIBRARIES=libgncmod-generic-import.la
 

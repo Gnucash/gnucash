@@ -1,15 +1,15 @@
 SUBDIRS = ui gtkbuilder .
 
-pkglib_LTLIBRARIES = libgncmod-customer_import.la
+pkglib_LTLIBRARIES = libgncmod-customer-import.la
 
 libgncmod_customer_import_la_SOURCES = \
-  gnc-plugin-customer_import.c \
-  libgncmod-customer_import.c \
+  gnc-plugin-customer-import.c \
+  gncmod-customer-import.c \
   dialog-customer-import-gui.c \
   dialog-customer-import.c
 
 noinst_HEADERS = \
-  gnc-plugin-customer_import.h \
+  gnc-plugin-customer-import.h \
   dialog-customer-import-gui.h \
   dialog-customer-import.h
 
@@ -43,6 +43,6 @@ AM_CPPFLAGS = \
   ${GTK_CFLAGS} \
   ${GLIB_CFLAGS}
 
-AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.plugin.customer_import\"
+AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.plugin.customer-import\"
 
 EXTRA_DIST = CMakeLists.txt

@@ -84,7 +84,7 @@ gnc_plugin_customer_import_showGUI(void)
     GtkTreeViewColumn *column;
 
     // if window exists already, activate it
-    glist = gnc_find_gui_components ("dialog-customer_import_gui", NULL, NULL);
+    glist = gnc_find_gui_components ("dialog-customer-import-gui", NULL, NULL);
     if (glist)
     {
         // window found
@@ -142,7 +142,7 @@ gnc_plugin_customer_import_showGUI(void)
     CREATE_COLUMN ("shipfax", CI_SHIPFAX);
     CREATE_COLUMN ("shipemail", CI_SHIPEMAIL);
 
-    gui->component_id = gnc_register_gui_component ("dialog-customer_import_gui",
+    gui->component_id = gnc_register_gui_component ("dialog-customer-import-gui",
                         NULL,
                         gnc_customer_import_gui_close_handler,
                         gui);

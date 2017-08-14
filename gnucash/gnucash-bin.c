@@ -503,13 +503,13 @@ load_gnucash_modules()
         { "gnucash/import-export/csv-export", 0, TRUE },
         { "gnucash/import-export/log-replay", 0, TRUE },
         { "gnucash/import-export/aqbanking", 0, TRUE },
+        { "gnucash/import-export/bi-import", 0, TRUE},
+        { "gnucash/import-export/customer-import", 0, TRUE},
         { "gnucash/report/report-system", 0, FALSE },
         { "gnucash/report/stylesheets", 0, FALSE },
         { "gnucash/report/locale-specific/us", 0, FALSE },
         { "gnucash/report/report-gnome", 0, FALSE },
         { "gnucash/python", 0, TRUE },
-        { "gnucash/plugins/bi_import", 0, TRUE},
-        { "gnucash/plugins/customer_import", 0, TRUE},
     };
 
     /* module initializations go here */

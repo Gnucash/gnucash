@@ -1,6 +1,6 @@
 SUBDIRS = ui gtkbuilder .
 
-pkglib_LTLIBRARIES = libgncmod-bi_import.la
+pkglib_LTLIBRARIES = libgncmod-bi-import.la
 
 libgncmod_bi_import_la_SOURCES = \
   gnc-plugin-bi-import.c \

@@ -14,7 +14,6 @@ SUBDIRS = \
   register \
   gnome \
   import-export \
-  plugins \
   . \
   ${OVERRIDES_DIR} \
   test
