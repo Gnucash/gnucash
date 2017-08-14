@@ -549,6 +549,7 @@ GncSqlColumnTableEntryImpl<CT_NUMERIC>::load (const GncSqlBackend* sql_be,
         buf = g_strdup_printf ("%s_denom", m_col_name);
         auto denom = row.get_int_at_col (buf);
         n = gnc_numeric_create (num, denom);
+        g_free (buf);
     }
     catch (std::invalid_argument)
     {
@@ -569,6 +570,7 @@ GncSqlColumnTableEntryImpl<CT_NUMERIC>::add_to_table(ColVec& vec) const noexcept
                                      subtable_row->m_col_name);
         GncSqlColumnInfo info(buf, BCT_INT64, 0, false, false,
                               m_flags & COL_PKEY, m_flags & COL_NNUL);
+        g_free (buf);
         vec.emplace_back(std::move(info));
     }
 }

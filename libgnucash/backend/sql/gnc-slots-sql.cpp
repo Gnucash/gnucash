@@ -361,9 +361,9 @@ set_string_val (gpointer pObject,  gpointer pValue)
 
     if (pInfo->value_type != KvpValue::Type::STRING || pValue == NULL)
         return;
-    auto string = g_strdup (static_cast<const char*> (pValue));
-    auto value = new KvpValue {string};
+    auto value = new KvpValue {static_cast<const char*> (pValue)};
     set_slot_from_value (pInfo, value);
+    delete value;
 }
 
 static  gpointer
@@ -796,6 +796,7 @@ slots_load_info (slot_info_t* pInfo)
         auto result = pInfo->be->execute_select_statement (stmt);
         for (auto row : *result)
             load_slot (pInfo, row);
+        delete result;
     }
 }
 
@@ -934,6 +935,7 @@ void gnc_sql_slots_load_for_sql_subquery (GncSqlBackend* sql_be,
     auto result = sql_be->execute_select_statement(stmt);
     for (auto row : *result)
         load_slot_for_book_object (sql_be, row, lookup_fn);
+    delete result;
 }
 
 /* ================================================================= */
