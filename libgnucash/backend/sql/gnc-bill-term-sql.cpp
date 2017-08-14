@@ -244,6 +244,7 @@ GncSqlBillTermBackend::load_all (GncSqlBackend* sql_be)
         if (pBillTerm != nullptr)
             instances.push_back(QOF_INSTANCE(pBillTerm));
     }
+    delete result;
 
     if (!instances.empty())
         gnc_sql_slots_load_for_instancevec (sql_be, instances);
