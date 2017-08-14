@@ -86,6 +86,10 @@ void qof_string_cache_remove(gconstpointer key);
 */
 gpointer qof_string_cache_insert(gconstpointer key);
 
+/** Same as CACHE_REPLACE below, but safe to call from C++.
+ */
+void qof_string_cache_replace(gconstpointer * dst, gconstpointer src);
+
 #define CACHE_INSERT(str) qof_string_cache_insert((gconstpointer)(str))
 #define CACHE_REMOVE(str) qof_string_cache_remove((str))
 

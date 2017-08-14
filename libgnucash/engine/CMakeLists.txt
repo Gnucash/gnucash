@@ -136,7 +136,7 @@ ADD_CUSTOM_COMMAND (
 ADD_CUSTOM_TARGET(iso-4217-c DEPENDS ${ISO_4217_C})
 
 SET (engine_SOURCES
-  Account.c
+  Account.cpp
   Recurrence.c
   Query.c
   SchedXaction.c
