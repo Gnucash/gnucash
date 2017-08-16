@@ -21,4 +21,9 @@ TARGET_INCLUDE_DIRECTORIES(gncmodbar PRIVATE
   ${GUILE_INCLUDE_DIRS}
 )
 
+SET_TARGET_PROPERTIES(bar gncmodbar PROPERTIES
+LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/gnucash/test
+ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/gnucash/test
+RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
 SET_DIST_LIST(mod_bar_DIST CMakeLists.txt Makefile.am bar.c gnucash/bar.scm bar.h bar.i gnc-mod-bar.c)
