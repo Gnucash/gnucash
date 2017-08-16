@@ -654,9 +654,9 @@
   (gnc:register-trep-option
    (gnc:make-string-option
     gnc:pagename-accounts (N_ "Account Substring")
-    "a5" (N_ "Match only above accounts whose fullname contains substring e.g. ':Travel:' will \
+    "a5" (N_ "Match only above accounts whose fullname contains substring e.g. ':Travel' will \
 match Expenses:Travel:Holiday and Expenses:Business:Travel. Can be left blank, which will \
-disable the substring filter.")
+disable the substring filter. This filter is case-sensitive.")
     ""))
 
   (gnc:register-trep-option
