@@ -184,6 +184,12 @@ SET(test_gnc_datetime_SOURCES
 GNC_ADD_TEST(test-gnc-datetime "${test_gnc_datetime_SOURCES}"
   gtest_engine_INCLUDES gtest_qof_LIBS)
 
+SET(test_import_map_SOURCES
+  gtest-import-map.cpp
+  ${GTEST_SRC})
+GNC_ADD_TEST(test-import-map "${test_import_map_SOURCES}"
+  gtest_engine_INCLUDES gtest_old_engine_LIBS)
+
 ############################
 # This is a C test that needs GUILE environment variables set.
 # It does not pass on Win32.
