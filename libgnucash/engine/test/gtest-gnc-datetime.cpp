@@ -259,6 +259,19 @@ TEST(gnc_datetime_constructors, test_time64_constructor)
     EXPECT_EQ(static_cast<time64>(atime), time);
 }
 
+TEST(gnc_datetime_constructors, test_string_constructor)
+{
+    std::string timestr("2015-12-05 00:01:00");
+    GncDateTime time(timestr);
+    auto tm = time.utc_tm();
+    EXPECT_EQ(tm.tm_year, 115);
+    EXPECT_EQ(tm.tm_mon, 11);
+    EXPECT_EQ(tm.tm_mday, 5);
+    EXPECT_EQ(tm.tm_hour, 0);
+    EXPECT_EQ(tm.tm_min, 1);
+    EXPECT_EQ(tm.tm_sec, 0);
+}
+
 TEST(gnc_datetime_constructors, test_struct_tm_constructor)
 {
 #ifdef HAVE_STRUCT_TM_GMTOFF

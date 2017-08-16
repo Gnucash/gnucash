@@ -393,7 +393,13 @@ GncSqlColumnTableEntryImpl<CT_TIMESPEC>::load (const GncSqlBackend* sql_be,
     {
         try
         {
+            constexpr size_t datelen = 14;
             auto val = row.get_string_at_col(m_col_name);
+            if (val.length() == datelen)
+                val = std::string(val.substr(0, 4) + "-" + val.substr(4, 2) +
+                                  "-" + val.substr(6, 2) + " " +
+                                  val.substr(8, 2) + ":" + val.substr(10, 2) +
+                                  ":" + val.substr(12, 2));
             GncDateTime time(val);
             ts.tv_sec = static_cast<time64>(time);
         }
