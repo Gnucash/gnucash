@@ -74,9 +74,9 @@ gnc_engine_init_part2()
     } libs[] =
     {
 #if defined( HAVE_DBI_DBI_H )
-        { "dbi", "gncmod-backend-dbi", TRUE },
+        { "gnucash", "gncmod-backend-dbi", TRUE },
 #endif
-        { "xml", "gncmod-backend-xml", TRUE },
+        { "gnucash", "gncmod-backend-xml", TRUE },
         { NULL, FALSE }
     }, *lib;
 
