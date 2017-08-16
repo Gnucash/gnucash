@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.3.14\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-08-11 18:15+0200\n"
-"PO-Revision-Date: 2017-08-11 11:36+0300\n"
+"PO-Revision-Date: 2017-08-16 12:19+0300\n"
 "Last-Translator: Valdis Vītoliņš <valdis.vitolins@odo.lv>\n"
 "Language-Team: Latvian <translation-team-lv@lists.sourceforge.net>\n"
 "Language: lv\n"
@@ -5552,7 +5552,7 @@ msgstr "Saglabāt failu ar citu nosaukumu"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:127
 msgid "Re_vert"
-msgstr "_Atgriezt"
+msgstr "Atg_riezt"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:128
 msgid "Reload the current database, reverting all unsaved changes"
@@ -6599,7 +6599,7 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-register2.c:2644
 #: ../src/gnome/gnc-plugin-page-register.c:2819
 msgid "_Print checks"
-msgstr "Drukāt čekus"
+msgstr "_Drukāt čekus"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:2663
 #: ../src/gnome/gnc-plugin-page-register.c:2838
@@ -8197,10 +8197,9 @@ msgstr ""
 "Šajā iestatījumā norāda eksportējamā PDF faila nosaukumu. Tā ir sprintf(3) "
 "simbolu virkne ar trijiem argumentiem: \"%1$s\" ir pārskata nosaumums, "
 "piemēram \"Rēķins\". \"%2$s\" ir pārskata numurs, kas rēķina gadījumā ir "
-"rēķina numurs. \"%3$s\" ir pārskata datums, noformēts saskaņā ar "
-"filename_date_format iestatījumiem. (Piezīme: Visas faila nosaukumā "
-"neatļautās rakstzīmes, piemēram '/', tiks aizstātas ar pasvītrojuma zīmi "
-"'_'.)"
+"rēķina numurs. \"%3$s\" ir pārskata datums, noformēts saskaņā ar filename-"
+"date-format iestatījumiem. (Piezīme: Visas faila nosaukumā neatļautās "
+"rakstzīmes, piemēram '/', tiks aizstātas ar pasvītrojuma zīmi '_'.)"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:116
 msgid "PDF export file name date format choice"
@@ -9146,7 +9145,7 @@ msgstr "<b>_Nosaukums</b>"
 
 #: ../src/gnome/gtkbuilder/dialog-lot-viewer.glade.h:6
 msgid "<b>_Lots in This Account</b>"
-msgstr "<b>Partijas šajā kontā</b>"
+msgstr "<b>_Partijas šajā kontā</b>"
 
 #: ../src/gnome/gtkbuilder/dialog-lot-viewer.glade.h:7
 msgid "Show only open lots"
@@ -9733,7 +9732,7 @@ msgstr "Klikšķiniet, lai nomainītu nodokļa nosaukumu un/vai veidu."
 #: ../src/gnome/gtkbuilder/dialog-tax-info.glade.h:6
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:14
 msgid "<b>_Accounts</b>"
-msgstr "<b>Konti</b>"
+msgstr "<b>_Konti</b>"
 
 #: ../src/gnome/gtkbuilder/dialog-tax-info.glade.h:7
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:15
@@ -10065,7 +10064,7 @@ msgstr "Kārtot pēc piezīmju lauka."
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:47
 msgid "Sa_ve Sort Order"
-msgstr "Saglabāt kārtošanas secību"
+msgstr "Sa_glabāt kārtošanas secību"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:48
 msgid "Save the sort order for this register."
@@ -11041,7 +11040,7 @@ msgstr "Uz summu:"
 
 #: ../src/gnome-utils/dialog-utils.c:547
 msgid "Remember and don't _ask me again."
-msgstr "Atcerēties un nekad vairs nejautāt."
+msgstr "_Atcerēties un nekad vairs nejautāt."
 
 #: ../src/gnome-utils/dialog-utils.c:548
 msgid "Don't _tell me again."
@@ -11926,7 +11925,7 @@ msgstr "© 1997-2017 atbalstītāji"
 #. * contributors.
 #: ../src/gnome-utils/gnc-main-window.c:4409
 msgid "translator_credits"
-msgstr "V. Vītoliņš, S. Zihmane, A. Vucāne, u.c."
+msgstr "tulkotāju _saraksts"
 
 #: ../src/gnome-utils/gnc-period-select.c:73
 msgid "Start of this quarter"
@@ -13870,7 +13869,7 @@ msgstr "Datums/laiks"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:70
 msgid "Perform account list _setup on new file"
-msgstr "Palaist kontu vedni, veidojot jaunu failu"
+msgstr "Palaist kontu vedni, _veidojot jaunu failu"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:71
 msgid "Present the new account list dialog when you choose File -> New File."
@@ -14294,7 +14293,7 @@ msgstr "<b>Cilnes</b>"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:201
 msgid "Show close button on _notebook tabs"
-msgstr "Rādīt aizvēršanas pogu uz piezīmju grāmatas cilnēm"
+msgstr "Rādīt aizvēršanas pogu uz piezīmju grāmatas _cilnēm"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:202
 msgid ""
@@ -14551,25 +14550,21 @@ msgid "Select occurrence date above."
 msgstr "Augstāk izvēlieties parādīšanās datumu."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:7
-#, fuzzy
 msgctxt "Daily"
 msgid "Every"
 msgstr "Katru"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:8
-#, fuzzy
 msgctxt "Daily"
 msgid "days."
 msgstr "dienas."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:10
-#, fuzzy
 msgctxt "Weekly"
 msgid "Every"
 msgstr "Katru"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:11
-#, fuzzy
 msgctxt "Weekly"
 msgid "weeks."
 msgstr "nedēļas."
@@ -14616,16 +14611,14 @@ msgid "Tuesday"
 msgstr "Otrdiena"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:21
-#, fuzzy
 msgctxt "Semimonthly"
 msgid "Every"
 msgstr "Katru"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:22
-#, fuzzy
 msgctxt "Semimonthly"
 msgid "months."
-msgstr "mēnesi"
+msgstr "mēnesi."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:23
 msgid "First on the:"
@@ -14644,16 +14637,14 @@ msgid "Semi-Monthly"
 msgstr "Divreiz mēnesī"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:27
-#, fuzzy
 msgctxt "Monthly"
 msgid "Every"
 msgstr "Katru"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:28
-#, fuzzy
 msgctxt "Monthly"
 msgid "months."
-msgstr "mēnesi"
+msgstr "mēnešus."
 
 # liek pirms datuma.
 # nevar ierakstīt, netulkojas
@@ -14983,7 +14974,7 @@ msgstr "Rādīt tikai _aktīvos īpašniekus"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-tree-view-owner.glade.h:3
 msgid "Show _zero balance owners"
-msgstr "Rādīt nulles bilances īpašniekus"
+msgstr "Rādīt _nulles bilances īpašniekus"
 
 #: ../src/gnome-utils/window-main-summarybar.c:298
 #, c-format
@@ -15496,7 +15487,7 @@ msgstr "<b>Banka tiešsaistē</b>"
 
 #: ../src/import-export/aqb/dialog-ab.glade.h:23
 msgid "_Close log window when finished"
-msgstr "Aizvērt žurnālu, kad pabeigts"
+msgstr "_Aizvērt žurnālu, kad pabeigts"
 
 #: ../src/import-export/aqb/dialog-ab.glade.h:24
 msgid "Use Non-SWIFT _transaction text"
@@ -16502,7 +16493,7 @@ msgstr "veids"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:155
 msgid "full_name"
-msgstr "pilns vārds"
+msgstr "_pilns vārds"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:155
 msgid "name"
@@ -16542,7 +16533,7 @@ msgstr "nodoklis"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:158
 msgid "place_holder"
-msgstr "vietturis"
+msgstr "_vietturis"
 
 #: ../src/import-export/csv-exp/gnc-plugin-csv-export.c:47
 msgid "Export Account T_ree to CSV..."
@@ -17156,7 +17147,7 @@ msgstr "Sākumpunkta _nokārtošana automātiski"
 # treshold - arī minimālā noteiktā summa
 #: ../src/import-export/dialog-import.glade.h:18
 msgid "Auto-_add threshold"
-msgstr "Sākumpunkta pievienošana automātiski"
+msgstr "Sākumpunkta pievienošana _automātiski"
 
 #: ../src/import-export/dialog-import.glade.h:19
 msgid "Match _display threshold"
@@ -18749,7 +18740,7 @@ msgstr "Importēt klientus un piegādātājus"
 
 #: ../src/plugins/customer_import/gnc-plugin-customer_import.c:57
 msgid "customer_import tooltip"
-msgstr "Klientu importa paskaidre"
+msgstr "Klientu _importa paskaidre"
 
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:1
 msgid "Import customers or vendors from text file"
