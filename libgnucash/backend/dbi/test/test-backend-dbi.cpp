@@ -30,9 +30,9 @@ extern "C"
 extern void test_suite_gnc_backend_dbi ();
 
 #define GNC_LIB_NAME_1 "gncmod-backend-dbi"
-#define GNC_LIB_REL_PATH_1 "dbi"
+#define GNC_LIB_REL_PATH_1 "gnucash"
 #define GNC_LIB_NAME_2 "gncmod-backend-xml"
-#define GNC_LIB_REL_PATH_2 "xml"
+#define GNC_LIB_REL_PATH_2 "gnucash"
 
 int
 main (int   argc,
