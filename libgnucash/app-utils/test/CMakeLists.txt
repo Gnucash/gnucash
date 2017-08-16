@@ -18,7 +18,7 @@ MACRO(ADD_APP_UTILS_TEST _TARGET _SOURCE_FILES)
 ENDMACRO()
 
 ADD_APP_UTILS_TEST(test-exp-parser test-exp-parser.c)
-GNC_ADD_TEST_WITH_GUILE(test-link-module test-link-module APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS)
+GNC_ADD_TEST_WITH_GUILE(test-link-module-app-utils test-link-module APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS)
 ADD_APP_UTILS_TEST(test-print-parse-amount test-print-parse-amount.cpp)
 # This test not run in autotools build.
 #GNC_ADD_TEST_WITH_GUILE(test-print-queries test-print-queries.cpp APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS)
@@ -27,9 +27,9 @@ GNC_ADD_TEST_WITH_GUILE(test-scm-query-string test-scm-query-string.cpp
 )
 ADD_APP_UTILS_TEST(test-sx test-sx.cpp)
 
-GNC_ADD_SCHEME_TEST(scm-test-load-module test-load-module.in)
+GNC_ADD_SCHEME_TEST(scm-test-load-module-app-utils test-load-module.in)
 # Doesn't work yet:
-#ADD_APP_UTILS_TEST(test-app-utils "${test_app_utils_SOURCES}")
+GNC_ADD_TEST_WITH_GUILE(test-app-utils "${test_app_utils_SOURCES}" APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS)
 
 CONFIGURE_FILE(test-load-module.in test-load-module @ONLY)
 

@@ -25,7 +25,8 @@ LDADD = \
 
 TESTS = \
   test-link \
-  test-import-parse
+  test-import-parse \
+  test-import-pending-matches
 
 GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/libgnucash/engine \
   --gnc-module-dir ${top_builddir}/libgnucash/app-utils \
@@ -53,9 +54,8 @@ TESTS_ENVIRONMENT = \
 
 check_PROGRAMS = \
   test-link \
-  test-import-parse
-
-TEST_PROGS += test-import-pending-matches
+  test-import-parse \
+  test-import-pending-matches
 
 noinst_PROGRAMS = $(TEST_PROGS) $(check_PROGRAMS)
 
