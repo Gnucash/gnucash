@@ -76,7 +76,7 @@ FUNCTION(MAKE_GNUCASH_POTFILES)
   # Only consider files in the common, libgnucash, and gnucash/ directories. Also check against list of ignore patterns
   SET(FILES "")
   FOREACH(path ${FILES_IN})
-    STRING(REGEX MATCH "^(common/|lib|gnucash|bindings)" IS_SRC ${path})
+    STRING(REGEX MATCH "^(bindings/|common/|borrowed/|libgnucash/|gnucash/)" IS_SRC ${path})
     IF (IS_SRC)
       SET(IS_IGNORED FALSE)
       FOREACH(pattern ${IGNORE_PATTERNS})

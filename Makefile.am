@@ -3,7 +3,7 @@ if GNUCASH_ENABLE_GUI
 else
   GNUCASH_SUBDIR =
 endif
-SUBDIRS = . doc lib common libgnucash bindings ${GNUCASH_SUBDIR} po data
+SUBDIRS = . doc borrowed common libgnucash bindings ${GNUCASH_SUBDIR} po data
 
 GNC_CTAGS_FILE = @GNC_CTAGS_FILE@
 GNC_ETAGS_FILE = @GNC_ETAGS_FILE@

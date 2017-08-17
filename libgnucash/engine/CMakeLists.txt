@@ -237,7 +237,7 @@ TARGET_INCLUDE_DIRECTORIES (gncmod-engine
         ${GLIB2_INCLUDE_DIRS}
         ${LIBINTL_INCLUDE_PATH}
         ${REGEX_INCLUDE_PATH}
-        ${CMAKE_SOURCE_DIR}/lib/libc # for strptime.h
+        ${CMAKE_SOURCE_DIR}/borrowed/libc # for strptime.h
 )
 
 INSTALL(TARGETS gncmod-engine
@@ -274,7 +274,7 @@ IF (WIN32)
   ADD_DEFINITIONS (-DOS_WIN32)
   SET (engine_SOURCES ${engine_SOURCES}
   qof-win32.cpp
-  ../../lib/libc/strptime.c
+  ../../borrowed/libc/strptime.c
   )
 ENDIF (WIN32)
 

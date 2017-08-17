@@ -11,7 +11,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/libgnucash/app-utils \
   -I${top_srcdir}/common \
   -I${top_builddir}/common \
-  -I${top_srcdir}/lib/libc \
+  -I${top_srcdir}/borrowed/libc \
   ${GLIB_CFLAGS} \
   ${GUILE_CFLAGS} \
   ${GTK_CFLAGS} \
@@ -44,7 +44,7 @@ libgncmod_html_la_LIBADD = \
   ${top_builddir}/libgnucash/engine/libgncmod-engine.la \
   ${top_builddir}/gnucash/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/libgnucash/app-utils/libgncmod-app-utils.la \
-  $(top_builddir)/lib/libc/libc-missing.la \
+  $(top_builddir)/borrowed/libc/libc-missing.la \
   ${WEBKIT_LIBS} \
   ${GTK_LIBS} \
   ${GLIB_LIBS} \

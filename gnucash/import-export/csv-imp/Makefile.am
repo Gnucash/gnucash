@@ -42,8 +42,8 @@ libgncmod_csv_import_la_LIBADD = \
   ${top_builddir}/libgnucash/engine/libgncmod-engine.la \
   ${top_builddir}/libgnucash/core-utils/libgnc-core-utils.la \
   ${top_builddir}/libgnucash/gnc-module/libgnc-module.la \
-  ${top_builddir}/lib/goffice/libgnc-goffice.la \
-  ${top_builddir}/lib/libc/libc-missing.la \
+  ${top_builddir}/borrowed/goffice/libgnc-goffice.la \
+  ${top_builddir}/borrowed/libc/libc-missing.la \
   ${GLIB_LIBS} \
   ${GTK_LIBS} \
   ${ICU4C_I18N_LIBS} \
@@ -60,9 +60,8 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/gnucash/gnome \
   -I${top_srcdir}/gnucash/gnome-utils \
   -I${top_srcdir}/gnucash/import-export \
-  -I${top_srcdir}/lib/libc \
-  -I${top_srcdir}/lib/goffice \
-  -I${top_srcdir}/lib \
+  -I${top_srcdir}/borrowed/libc \
+  -I${top_srcdir}/borrowed/goffice \
   ${GUILE_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GTK_CFLAGS} \

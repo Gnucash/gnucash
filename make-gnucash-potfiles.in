@@ -37,7 +37,7 @@ close IN;
 # in order to use the same algorithm in both cmake and autools based builds
 
 my @possible_files = `cd @-SRCDIR-@ && \\
-                      find bindings common libgnucash gnucash lib -name '*.c' \\
+                      find bindings borrowed common libgnucash gnucash -name '*.c' \\
                       -o -name '*.cpp' -o -name '*.glade' \\
                       -o -name '*.desktop.in' -o -name '*.keys.in' \\
                       -o -name '*.gschema.xml.in.in' -o -name '*.scm' \\

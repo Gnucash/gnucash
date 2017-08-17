@@ -22,7 +22,7 @@ libgncmod_customer_import_la_LIBADD = \
   ${top_builddir}/libgnucash/engine/libgncmod-engine.la \
   ${top_builddir}/libgnucash/core-utils/libgnc-core-utils.la \
   ${top_builddir}/libgnucash/gnc-module/libgnc-module.la \
-  ${top_builddir}/lib/libc/libc-missing.la \
+  ${top_builddir}/borrowed/libc/libc-missing.la \
   ${GLIB_LIBS}
 
 AM_CPPFLAGS = \
@@ -39,7 +39,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/libgnucash/engine \
   -I${top_srcdir}/libgnucash/core-utils \
   -I${top_srcdir}/libgnucash/gnc-module \
-  -I${top_srcdir}/lib/libc \
+  -I${top_srcdir}/borrowed/libc \
   ${GTK_CFLAGS} \
   ${GLIB_CFLAGS}
 

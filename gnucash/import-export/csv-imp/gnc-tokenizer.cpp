@@ -14,7 +14,7 @@
 #include <boost/locale.hpp>
 
 extern "C" {
-#include <goffice/go-glib-extras.h>
+#include <go-glib-extras.h>
 }
 
 std::unique_ptr<GncTokenizer> gnc_tokenizer_factory(GncImpFileFormat fmt)

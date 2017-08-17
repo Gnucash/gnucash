@@ -13,7 +13,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/common/debug \
   -I${top_srcdir}/libgnucash/engine \
   -I${top_srcdir}/libgnucash/core-utils\
-  -I${top_srcdir}/lib/libc\
+  -I${top_srcdir}/borrowed/libc\
   ${GLIB_CFLAGS} \
   ${GUILE_CFLAGS} \
   ${WARN_CFLAGS} \

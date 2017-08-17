@@ -6,7 +6,7 @@ SUBDIRS = . test-core
 pkglib_LTLIBRARIES = libgncmod-engine.la
 
 AM_CPPFLAGS = \
-	-I${top_srcdir}/lib/libc \
+	-I${top_srcdir}/borrowed/libc \
 	-I${top_srcdir}/libgnucash/core-utils \
 	-I${top_srcdir}/common \
 	-I${top_builddir}/common \
@@ -224,7 +224,7 @@ libgncmod_engine_la_LIBADD = \
   ${REGEX_LIBS} \
   ${GLIB_LIBS} \
   ${BOOST_LDFLAGS} -lboost_regex \
-  ${top_builddir}/lib/libc/libc-missing.la
+  ${top_builddir}/borrowed/libc/libc-missing.la
 
 gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash
 gncscmmod_DATA = engine.scm \

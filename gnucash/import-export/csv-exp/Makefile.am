@@ -25,7 +25,7 @@ libgncmod_csv_export_la_LIBADD = \
   ${top_builddir}/libgnucash/engine/libgncmod-engine.la \
   ${top_builddir}/libgnucash/core-utils/libgnc-core-utils.la \
   ${top_builddir}/libgnucash/gnc-module/libgnc-module.la \
-  ${top_builddir}/lib/libc/libc-missing.la \
+  ${top_builddir}/borrowed/libc/libc-missing.la \
   ${GTK_LIBS} \
   ${GLIB_LIBS}
 
@@ -41,7 +41,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/gnucash/register/register-core \
   -I${top_srcdir}/gnucash/register/register-gnome \
   -I${top_srcdir}/gnucash/import-export \
-  -I${top_srcdir}/lib/libc \
+  -I${top_srcdir}/borrowed/libc \
   -I${top_srcdir}/lib \
   ${GUILE_CFLAGS} \
   ${GLIB_CFLAGS} \

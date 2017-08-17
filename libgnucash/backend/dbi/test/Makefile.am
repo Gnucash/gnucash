@@ -3,7 +3,7 @@
 include $(top_srcdir)/test-templates/Makefile.decl
 
 AM_CPPFLAGS = \
-  -I${top_srcdir}/lib/libc \
+-I${top_srcdir}/borrowed/libc \
   -I${top_srcdir}/common \
   -I${top_srcdir}/libgnucash/core-utils \
   -I${top_srcdir}/libgnucash/gnc-module \
@@ -24,7 +24,7 @@ LDADD = ${top_builddir}/common/test-core/libtest-core.la \
         ${top_builddir}/libgnucash/core-utils/libgnc-core-utils.la \
         ${top_builddir}/libgnucash/backend/sql/libgnc-backend-sql.la \
         ${top_builddir}/libgnucash/backend/xml/libgnc-backend-xml-utils.la \
-        ${top_builddir}/lib/libc/libc-missing.la
+        ${top_builddir}/borrowed/libc/libc-missing.la
 
 GNC_TEST_DEPS = \
   --gnc-module-dir ${top_builddir}/libgnucash/engine \

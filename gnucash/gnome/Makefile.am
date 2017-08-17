@@ -184,7 +184,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/gnucash/register/register-gnome \
   -I${top_srcdir}/gnucash/report/report-system \
   -I${top_srcdir}/gnucash/report/report-gnome \
-  -I${top_srcdir}/lib/libc \
+  -I${top_srcdir}/borrowed/libc \
   ${LIBXML2_CFLAGS} \
   ${GUILE_CFLAGS} \
   ${GTK_CFLAGS} \
