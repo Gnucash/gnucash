@@ -257,10 +257,10 @@ LDADD = \
         ./libgnc-test-file-stuff.la \
         ${LIBXML2_LIBS} \
         ${ZLIB_LIBS} \
-        ${top_builddir}/lib/libc/libc-missing.la
+        ${top_builddir}/borrowed/libc/libc-missing.la
 
 AM_CPPFLAGS = \
-  -I${top_srcdir}/lib/libc \
+  -I${top_srcdir}/borrowed/libc \
   -I${top_srcdir}/common \
   -I${top_srcdir}/libgnucash/core-utils \
   -I${top_srcdir}/libgnucash/gnc-module \

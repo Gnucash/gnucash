@@ -21,7 +21,7 @@ pkglib_LTLIBRARIES = libgncmod-app-utils.la
 
 AM_CPPFLAGS = \
   -Wno-error=deprecated-declarations \
-  -I$(top_srcdir)/lib/libc \
+  -I$(top_srcdir)/borrowed/libc \
   -I${top_srcdir}/common \
   -I${top_builddir}/common \
   -I${top_srcdir}/libgnucash/gnc-module \

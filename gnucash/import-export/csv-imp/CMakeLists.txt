@@ -2,9 +2,9 @@ ADD_SUBDIRECTORY(gschemas)
 ADD_SUBDIRECTORY(test)
 
 SET(csv_import_remote_SOURCES
-  ${CMAKE_SOURCE_DIR}/lib/goffice/go-charmap-sel.c
-  ${CMAKE_SOURCE_DIR}/lib/goffice/go-optionmenu.c
-  ${CMAKE_SOURCE_DIR}/lib/goffice/go-glib-extras.c
+  ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-charmap-sel.c
+  ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-optionmenu.c
+  ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-glib-extras.c
 )
 
 SET(csv_import_SOURCES
@@ -28,9 +28,9 @@ SET(csv_import_SOURCES
 SET_SOURCE_FILES_PROPERTIES (${csv_import_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
 SET(csv_import_remote_HEADERS
-  ${CMAKE_SOURCE_DIR}/lib/goffice/go-charmap-sel.h
-  ${CMAKE_SOURCE_DIR}/lib/goffice/go-optionmenu.h
-  ${CMAKE_SOURCE_DIR}/lib/goffice/go-glib-extras.h
+  ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-charmap-sel.h
+  ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-optionmenu.h
+  ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-glib-extras.h
 )
 
 SET(csv_import_noinst_HEADERS
@@ -69,8 +69,7 @@ TARGET_COMPILE_DEFINITIONS(gncmod-csv-import PRIVATE -DG_LOG_DOMAIN=\"gnc.import
 
 TARGET_INCLUDE_DIRECTORIES(gncmod-csv-import PRIVATE
      ${ICU4C_I18N_INCLUDE_DIRS}
-     ${CMAKE_SOURCE_DIR}/lib
-     ${CMAKE_SOURCE_DIR}/lib/goffice
+     ${CMAKE_SOURCE_DIR}/borrowed/goffice
 )
 
 INSTALL(TARGETS gncmod-csv-import

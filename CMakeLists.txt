@@ -680,9 +680,9 @@ SET(SCHEME_INSTALLED_SOURCE_DIR ${CMAKE_INSTALL_PREFIX}/share/gnucash/scm)
 SET(SCHEME_INSTALLED_CACHE_DIR ${CMAKE_INSTALL_PREFIX}/lib/gnucash/scm/ccache/${GUILE_EFFECTIVE_VERSION})
 
 # The subdirectories
+ADD_SUBDIRECTORY (borrowed)
 ADD_SUBDIRECTORY (data)
 ADD_SUBDIRECTORY (doc)
-ADD_SUBDIRECTORY (lib)
 ADD_SUBDIRECTORY (macros)
 ADD_SUBDIRECTORY (po)
 ADD_SUBDIRECTORY (common)
@@ -723,8 +723,8 @@ SET_LOCAL_DIST(toplvl_DIST ${toplvl_DIST_local})
 # then uses a (SET ${foo_DIST} ${locals....} PARENT_SCOPE) command to report up. See the bottom of
 # libgnucash/app-utils/CMakeLists.txt for an example of this.
 
-SET(ALL_DIST ${bindings_DIST} ${cmake_DIST} ${common_DIST} ${data_DIST}
-    ${doc_DIST} ${gnucash_DIST} ${lib_DIST} ${libgnucash_DIST} ${macros_DIST} ${packaging_DIST}
+SET(ALL_DIST ${bindings_DIST} ${borrowed_DIST} ${cmake_DIST} ${common_DIST} ${data_DIST}
+    ${doc_DIST} ${gnucash_DIST} ${libgnucash_DIST} ${macros_DIST} ${packaging_DIST}
     ${po_DIST} ${test_templates_DIST} ${toplvl_DIST} ${util_DIST})
 
 

@@ -3,7 +3,7 @@
 # it's dependency on src/engine
 
 AM_CPPFLAGS = \
-   -I${top_srcdir}/lib/libc \
+   -I${top_srcdir}/borrowed/libc \
    -I${top_srcdir}/common \
    -I${top_srcdir}/libgnucash/core-utils \
    ${GLIB_CFLAGS} \
@@ -15,7 +15,7 @@ libgnc_module_la_SOURCES = gnc-module.c swig-gnc-module.c
 
 libgnc_module_la_LIBADD = \
   ../core-utils/libgnc-core-utils.la \
-  ${top_builddir}/lib/libc/libc-missing.la \
+  ${top_builddir}/borrowed/libc/libc-missing.la \
   ${GLIB_LIBS} \
   ${GUILE_LIBS}
 

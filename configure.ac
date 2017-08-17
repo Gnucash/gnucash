@@ -1643,6 +1643,9 @@ AC_CONFIG_FILES(
   bindings/Makefile
   bindings/python/Makefile
   bindings/python/tests/Makefile
+  borrowed/Makefile
+  borrowed/goffice/Makefile
+  borrowed/libc/Makefile
   common/Makefile
   common/debug/Makefile
   common/debug/valgrind/Makefile
@@ -1713,9 +1716,6 @@ AC_CONFIG_FILES(
   gnucash/report/stylesheets/test/Makefile
   gnucash/report/utility-reports/Makefile
   gnucash/report/jqplot/Makefile
-  lib/Makefile
-  lib/goffice/Makefile
-  lib/libc/Makefile
   libgnucash/Makefile
   libgnucash/app-utils/Makefile
   libgnucash/app-utils/test/Makefile

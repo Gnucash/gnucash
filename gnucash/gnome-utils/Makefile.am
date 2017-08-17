@@ -13,7 +13,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/common \
   -I${top_builddir}/common \
   -I${top_builddir}/libgnucash/core-utils \
-  -I${top_srcdir}/lib/libc \
+  -I${top_srcdir}/borrowed/libc \
   ${GLIB_CFLAGS} \
   ${GTK_CFLAGS} \
   ${GNOME_KEYRING_CFLAGS} \
@@ -198,7 +198,7 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${top_builddir}/libgnucash/engine/libgncmod-engine.la \
   ${top_builddir}/libgnucash/backend/xml/libgnc-backend-xml-utils.la \
   ${top_builddir}/libgnucash/app-utils/libgncmod-app-utils.la \
-  $(top_builddir)/lib/libc/libc-missing.la \
+  $(top_builddir)/borrowed/libc/libc-missing.la \
   ${GTK_LIBS} \
   ${GNOME_KEYRING_LIBS} \
   ${LIBSECRET_LIBS} \

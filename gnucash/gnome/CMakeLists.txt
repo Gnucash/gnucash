@@ -131,7 +131,7 @@ SET_SOURCE_FILES_PROPERTIES (${gnc_gnome_SOURCES} PROPERTIES OBJECT_DEPENDS ${CO
 SET_SOURCE_FILES_PROPERTIES (business-options-gnome.c PROPERTIES OBJECT_DEPENDS ${SWIG_RUNTIME_H})
 
 IF (WIN32)
-  SET (gnc_gnome_SOURCES ${gnc_gnome_SOURCES} ${CMAKE_SOURCE_DIR}/lib/libc/strfmon.c)
+  SET (gnc_gnome_SOURCES ${gnc_gnome_SOURCES} ${CMAKE_SOURCE_DIR}/borrowed/libc/strfmon.c)
 ENDIF(WIN32)
 
 ADD_LIBRARY (gnc-gnome ${gnc_gnome_SOURCES} ${gnc_gnome_noinst_HEADERS} ${SWIG_GNOME_C})

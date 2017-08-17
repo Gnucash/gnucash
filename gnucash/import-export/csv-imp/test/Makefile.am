@@ -48,8 +48,7 @@ IMP_TEST_CPPFLAGS =  \
   -I${top_srcdir}/libgnucash/engine \
   -I${top_srcdir}/libgnucash/core-utils \
   -I${top_srcdir}/libgnucash/gnc-module \
-  -I${top_srcdir}/lib/libc \
-  -I${top_srcdir}/lib \
+  -I${top_srcdir}/borrowed/libc \
   ${GTK_CFLAGS} \
   ${GLIB_CFLAGS} \
   $(BOOST_CPPFLAGS)
