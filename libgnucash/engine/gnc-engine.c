@@ -77,7 +77,7 @@ gnc_engine_init_part2()
         { "dbi", "gncmod-backend-dbi", TRUE },
 #endif
         { "xml", "gncmod-backend-xml", TRUE },
-        { NULL, FALSE }
+        { NULL, NULL, FALSE }
     }, *lib;
 
     for (lib = libs; lib->lib ; lib++)
