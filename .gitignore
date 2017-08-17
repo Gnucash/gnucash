@@ -51,7 +51,6 @@ intltool-merge
 intltool-merge.in
 intltool-update
 intltool-update.in
-lib/guile-www/www
 libtool
 ltmain.sh
 macros/intltool.m4
@@ -138,6 +137,7 @@ libgnucash/doc/html/
 libgnucash/engine/gncla-dir.h
 libgnucash/engine/gnucash
 libgnucash/engine/iso-4217-currencies.c
+libgnucash/engine/test/gnucash
 libgnucash/engine/test/test-account-object
 libgnucash/engine/test/test-address
 libgnucash/engine/test/test-book-merge
