@@ -148,7 +148,7 @@ INSTALL(FILES ${ENVIRONMENT_FILE_DIR}/environment DESTINATION etc/gnucash)
 IF (WIN32)
   # Write out a command script for windows
   SET(lib_directories boost enchant libsoup mysql pgsql libxslt)
-  SET(bin_directories mingw gnutls goffice libgsf pcre gnome guile webkit regex aqbanking gwenhywfar libofx opensp
+  SET(bin_directories mingw gnutls libgsf pcre gnome guile webkit regex aqbanking gwenhywfar libofx opensp
     libdbi sqlite3 mysql pgsql enchant libsoup libxslt)
 
   SET(CMD_LINES "")
