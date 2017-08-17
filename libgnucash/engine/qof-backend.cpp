@@ -82,16 +82,17 @@ QofBackend::get_message ()
     return std::move(m_error_msg);
 }
 
-/* Helper function that return a directory from which the requested module
+/* Helper function that returns a directory from which the requested module
  * can be loaded. This is needed because the location of the modules
  * depends on
  * - whether we're running in an installed environment or the build environment
- * - the operation system
+ * - the operating system
  * - (in the build environment) which build system is used
  *
  * Note parameter rel_path is only used when invoked in the build environment
- * because each backend module is likely to reside in its own directory. At
- * install time it is assumed all backend modules reside in one single directory.
+ * and even then only for autotools builds because each backend module is likely
+ * to reside in its own directory in that configuration. At install time or in a
+ * cmake build it is assumed all backend modules reside in one single directory.
  */
 static char* get_default_module_dir(const char* rel_path)
 {
