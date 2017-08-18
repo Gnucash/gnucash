@@ -149,16 +149,8 @@ struct to_string_visitor : boost::static_visitor<void>
         /*Since val is passed by value, we can modify it*/
         for (;val; val = val->next)
         {
-            gchar *tmp3;
             auto realvalue = static_cast<const KvpValue *>(val->data);
-            tmp3 = realvalue->to_string();
-            output << ' ';
-            if (tmp3)
-            {
-                output << tmp3;
-                g_free(tmp3);
-            }
-            output << ',';
+            output << ' ' << realvalue->to_string() << ',';
         }
 
         output << " ]";
@@ -207,7 +199,7 @@ struct to_string_visitor : boost::static_visitor<void>
     }
 };
 
-char *
+std::string
 KvpValueImpl::to_string() const noexcept
 {
     std::ostringstream ret;
@@ -215,7 +207,7 @@ KvpValueImpl::to_string() const noexcept
     boost::apply_visitor(visitor, datastore);
 
     /*We still use g_strdup since the return value will be freed by g_free*/
-    return g_strdup(ret.str().c_str());
+    return ret.str();
 }
 
 static int
