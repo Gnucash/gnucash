@@ -361,9 +361,8 @@ set_string_val (gpointer pObject,  gpointer pValue)
 
     if (pInfo->value_type != KvpValue::Type::STRING || pValue == NULL)
         return;
-    auto value = new KvpValue {static_cast<const char*> (pValue)};
+    auto value = new KvpValue {g_strdup(static_cast<const char*> (pValue))};
     set_slot_from_value (pInfo, value);
-    delete value;
 }
 
 static  gpointer
