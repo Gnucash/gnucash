@@ -21,7 +21,7 @@ libtest_core_la_CPPFLAGS = \
   ${GLIB_CFLAGS}
 
 libtest_core_la_LDFLAGS = \
-  -rpath ${exec-prefix}/lib
+  -rpath ${exec_prefix}/lib
 
 if BUILDING_FROM_VCS
 swig-unittest-support-guile.c: unittest-support.i $(top_srcdir)/common/base-typemaps.i
