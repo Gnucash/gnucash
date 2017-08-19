@@ -5928,7 +5928,7 @@ convert_imap_account (Account *acc)
     if (g_list_length (imap_list) > 0) // we have mappings
     {
         PINFO("List length is %d", g_list_length (imap_list));
-
+        xaccAccountBeginEdit(acc);
         for (node = imap_list;  node; node = g_list_next (node))
         {
             Account *map_account = NULL;
@@ -5939,7 +5939,6 @@ convert_imap_account (Account *acc)
 
             if (map_account != NULL) // we have an account, try and update it
                 convert_imap_entry (imapInfo, map_account);
-
             // Free the members and structure
             g_free (imapInfo->category_head);
             g_free (imapInfo->full_category);
@@ -5947,6 +5946,7 @@ convert_imap_account (Account *acc)
             g_free (imapInfo->count);
             g_free (imapInfo);
         }
+        xaccAccountCommitEdit(acc);
     }
     g_free (acc_name);
     g_list_free (imap_list); // Free the List
