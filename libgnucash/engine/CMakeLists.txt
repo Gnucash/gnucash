@@ -54,6 +54,7 @@ SET (engine_HEADERS
   gnc-engine.h
   gnc-event.h
   gnc-features.h
+  gnc-gdate-utils.h
   gnc-hooks.h
   gnc-numeric.h
   gnc-numeric.hpp
@@ -159,6 +160,7 @@ SET (engine_SOURCES
   gnc-engine.c
   gnc-event.c
   gnc-features.c
+  gnc-gdate-utils.c
   gnc-hooks.c
   gnc-int128.cpp
   gnc-lot.c
