@@ -116,8 +116,8 @@ gnc_localtime (const time64 *secs)
     auto time = static_cast<struct tm*>(calloc(1, sizeof(struct tm)));
     if (gnc_localtime_r (secs, time) == NULL)
     {
-	gnc_tm_free (time);
-	return NULL;
+        gnc_tm_free (time);
+        return NULL;
     }
     return time;
 }
@@ -127,12 +127,12 @@ gnc_localtime_r (const time64 *secs, struct tm* time)
 {
     try
     {
-	*time = static_cast<struct tm>(GncDateTime(*secs));
-	return time;
+        *time = static_cast<struct tm>(GncDateTime(*secs));
+        return time;
     }
     catch(std::invalid_argument)
     {
-	return NULL;
+        return NULL;
     }
 }
 
@@ -199,14 +199,14 @@ gnc_gmtime (const time64 *secs)
 {
     try
     {
-	auto time = static_cast<struct tm*>(calloc(1, sizeof(struct tm)));
-	GncDateTime gncdt(*secs);
-	*time = gncdt.utc_tm();
-	return time;
+        auto time = static_cast<struct tm*>(calloc(1, sizeof(struct tm)));
+        GncDateTime gncdt(*secs);
+        *time = gncdt.utc_tm();
+        return time;
     }
     catch(std::invalid_argument)
     {
-	return NULL;
+        return NULL;
     }
 
 }
@@ -216,13 +216,13 @@ gnc_mktime (struct tm* time)
 {
     try
     {
-	normalize_struct_tm (time);
-	GncDateTime gncdt(*time);
-	return static_cast<time64>(gncdt) - gncdt.offset();
+        normalize_struct_tm (time);
+        GncDateTime gncdt(*time);
+        return static_cast<time64>(gncdt) - gncdt.offset();
     }
     catch(std::invalid_argument)
     {
-	return 0;
+        return 0;
     }
 }
 
@@ -231,12 +231,12 @@ gnc_timegm (struct tm* time)
 {
     try
     {
-	normalize_struct_tm(time);
-	return static_cast<time64>(GncDateTime(*time));
+        normalize_struct_tm(time);
+        return static_cast<time64>(GncDateTime(*time));
     }
     catch(std::invalid_argument)
     {
-	return 0;
+        return 0;
     }
 }
 
@@ -259,11 +259,10 @@ gnc_time (time64 *tbuf)
 gdouble
 gnc_difftime (const time64 secs1, const time64 secs2)
 {
-     return (double)secs1 - (double)secs2;
+    return (double)secs1 - (double)secs2;
 }
 
 /****************************************************************************/
-
 
 const char*
 gnc_date_dateformat_to_string(QofDateFormat format)
@@ -318,7 +317,6 @@ gnc_date_string_to_dateformat(const char* fmt_str, QofDateFormat *format)
 
     return FALSE;
 }
-
 
 const char*
 gnc_date_monthformat_to_string(GNCDateMonthFormat format)
@@ -410,7 +408,6 @@ timespec_normalize(Timespec *t)
     }
     return;
 }
-
 
 gboolean
 timespec_equal (const Timespec *ta, const Timespec *tb)
@@ -738,14 +735,14 @@ floordiv(int a, int b)
 
     Fully formatted UTC timestamp strings are converted separately.
 
-param   buff - pointer to date string
-param     day -  will store day of the month as 1 ... 31
-param     month - will store month of the year as 1 ... 12
-param     year - will store the year (4-digit)
+    param   buff - pointer to date string
+    param     day -  will store day of the month as 1 ... 31
+    param     month - will store month of the year as 1 ... 12
+    param     year - will store the year (4-digit)
 
-return TRUE if date appeared to be valid.
+    return TRUE if date appeared to be valid.
 
- Globals: global dateFormat value
+    Globals: global dateFormat value
 */
 static gboolean
 qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
@@ -1045,7 +1042,6 @@ char dateSeparator (void)
         }
         break;
     }
-
     return '\0';
 }
 
@@ -1179,7 +1175,6 @@ qof_strftime(gchar *buf, gsize max, const gchar *format, const struct tm *tm)
     return retval;
 }
 
-
 /********************************************************************\
 \********************************************************************/
 
@@ -1248,7 +1243,6 @@ gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
         PWARN("Error processing time64 %" PRId64 ": %s", ts.tv_sec, err.what());
         return buff;
     }
-
 }
 
 void
@@ -1286,7 +1280,6 @@ gnc_dmy2timespec_internal (int day, int month, int year, DayPart day_part)
         return {INT64_MAX, 0};
     }
 }
-
 
 Timespec
 gnc_dmy2timespec (int day, int month, int year)
@@ -1371,10 +1364,7 @@ gnc_gdate_set_time64 (GDate* gd, time64 time)
     g_date_set_dmy (gd, tm.tm_mday,
                     static_cast<GDateMonth>(tm.tm_mon + 1),
                     tm.tm_year + 1900);
-
 }
-
-
 
 Timespec gdate_to_timespec (GDate d)
 {
@@ -1422,7 +1412,6 @@ gnc_time64_get_day_end (time64 time_val)
     new_time = gnc_mktime(&tm);
     return new_time;
 }
-
 
 /* ======================================================== */
 
@@ -1500,7 +1489,6 @@ timespec_get_type( void )
                                              timespec_boxed_copy_func,
                                              timespec_boxed_free_func );
     }
-
     return type;
 }
 
