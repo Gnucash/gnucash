@@ -1439,20 +1439,22 @@ gnc_pricedb_remove_old_prices_pinfo (GNCPrice *price, gboolean keep_message)
         PINFO("Keep price date is invalid");
 }
 
-static GNCPrice*
-save_cloned_price (GNCPrice *price, GNCPrice *clone_price)
+static void
+clone_price (GNCPrice **price, GNCPrice *source_price)
 {
-    QofBook *book = qof_instance_get_book (QOF_INSTANCE(clone_price));
-    GNCPrice *cloned_price;
+    QofBook *book;
 
-    if (price)
-        gnc_price_unref (price);
+    if (!source_price) return;
+    if (price == NULL) return;
 
-    cloned_price = gnc_price_clone (clone_price, book);
+    book = qof_instance_get_book (QOF_INSTANCE(source_price));
 
-    gnc_pricedb_remove_old_prices_pinfo (clone_price, TRUE);
+    if (*price)
+        gnc_price_unref (*price);
 
-    return cloned_price;
+    *price = gnc_price_clone (source_price, book);
+
+    gnc_pricedb_remove_old_prices_pinfo (source_price, TRUE);
 }
 
 static gint
@@ -1488,7 +1490,7 @@ gnc_pricedb_remove_old_prices_keep_last (GNCPriceDB *db, GDate *fiscal_end_date,
     GSList *item;
     gboolean save_first_price = FALSE;
     gint saved_test_value = 0, next_test_value = 0;
-    GNCPrice *saved_price = NULL;
+    GNCPrice *cloned_price = NULL;
     GDateMonth fiscal_month_end = g_date_get_month (fiscal_end_date);
     GDateMonth fiscal_month_start;
     GDate *tmp_date = g_date_new_dmy (g_date_get_day (fiscal_end_date),
@@ -1517,16 +1519,16 @@ gnc_pricedb_remove_old_prices_keep_last (GNCPriceDB *db, GDate *fiscal_end_date,
             continue;
         }
 
-        save_first_price = !price_commodity_and_currency_equal (item->data, saved_price); // Not Equal
+        save_first_price = !price_commodity_and_currency_equal (item->data, cloned_price); // Not Equal
         if (save_first_price == TRUE)
         {
-            saved_price = save_cloned_price (saved_price, item->data);
+            clone_price (&cloned_price, item->data);
             save_first_price = FALSE;
             continue;
         }
 
         // get the price dates
-        saved_price_date = timespec_to_gdate (gnc_price_get_time (saved_price));
+        saved_price_date = timespec_to_gdate (gnc_price_get_time (cloned_price));
         next_price_date = timespec_to_gdate (gnc_price_get_time (item->data));
 
         // Keep last price in fiscal year
@@ -1586,10 +1588,10 @@ gnc_pricedb_remove_old_prices_keep_last (GNCPriceDB *db, GDate *fiscal_end_date,
             gnc_pricedb_remove_price (db, item->data);
         }
         else
-            saved_price = save_cloned_price (saved_price, item->data);
+            clone_price (&cloned_price, item->data);
     }
-    if (saved_price)
-        gnc_price_unref (saved_price);
+    if (cloned_price)
+        gnc_price_unref (cloned_price);
 }
 
 gboolean
