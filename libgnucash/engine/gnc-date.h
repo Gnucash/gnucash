@@ -1,11 +1,12 @@
-/***************************************************************************
+/********************************************************************
  *            gnc-date.h (to be renamed qofdate.h)
  *
  *  Copyright (C) 1997 Robin D. Clark <rclark@cs.hmc.edu>
  *  Copyright (C) 1998-2000, 2003 Linas Vepstas <linas@linas.org>
  *  Copyright  2005  Neil Williams <linux@codehelp.co.uk>
+ *  Copyright (C) 2005 David Hampton <hampton@employees.org>
  *  Copyright 2012 John Ralls <jralls@ceridwen.us>
- ****************************************************************************/
+ ********************************************************************/
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -54,7 +55,7 @@
     If a file-io backend needs date handling, it should do it itself,
     instead of depending on the routines here.
 
-	(to be renamed qofdate.h in libqof2.)
+    (to be renamed qofdate.h in libqof2.)
 
     @author Copyright (C) 1997 Robin D. Clark <rclark@cs.hmc.edu>
     @author Copyright (C) 1998-2001,2003 Linas Vepstas <linas@linas.org>
@@ -153,6 +154,7 @@ typedef enum
     GNCDATE_MONTH_ABBREV,
     GNCDATE_MONTH_NAME
 } GNCDateMonthFormat;
+
 /* Replacements for POSIX functions which use time_t. Time_t is still
  * 32 bits in Microsoft Windows, Apple OSX, and some BSD versions even
  * when the rest of the system is 64-bits, as well as all 32-bit
@@ -348,7 +350,6 @@ GDate timespec_to_gdate (Timespec ts);
 /** Turns a GDate into a Timespec, returning the first second of the day  */
 Timespec gdate_to_timespec (GDate d);
 
-
 /** Convert a day, month, and year to a Timespec, returning the first second of the day */
 Timespec gnc_dmy2timespec (gint day, gint month, gint year);
 
@@ -410,7 +411,8 @@ void gnc_timespec2dmy (Timespec ts, gint *day, gint *month, gint *year);
 
 // @}
 
-/* ------------------------------------------------------------------------ */
+/* ======================================================== */
+
 /** \name QofDateFormat functions */
 // @{
 /** The qof_date_format_get routine returns the date format that
@@ -448,6 +450,8 @@ const gchar *qof_date_format_get_string(QofDateFormat df);
 const gchar *qof_date_text_format_get_string(QofDateFormat df);
 // @}
 
+/* ======================================================== */
+
 /**
  * The qof_date_completion_set() routing sets the date completion method to
  *    one of QOF_DATE_COMPLETION_THISYEAR (for completing the year to
@@ -466,6 +470,8 @@ void qof_date_completion_set(QofDateCompletion dc, int backmonths);
  * Globals: global dateFormat value
  */
 gchar dateSeparator(void);
+
+/* ======================================================== */
 
 /** \name Date Printing/Scanning functions
  */
@@ -568,6 +574,9 @@ size_t qof_print_date_time_buff (char * buff, size_t len, time64 secs);
 gboolean qof_scan_date (const char *buff, int *day, int *month, int *year);
 
 // @}
+
+/* ======================================================== */
+
 /** \name Date Start/End Adjustment routines
  * Given a time value, adjust it to be the beginning or end of that day.
  */
@@ -665,6 +674,196 @@ char * gnc_date_timestamp (void);
 void gnc_dow_abbrev(gchar *buf, int buf_len, int dow);
 
 //@}
+
+/* ======================================================== */
+
+/** \name GDate hash table support */
+// @{
+
+/** Compares two GDate*'s for equality; useful for using GDate*'s as
+ *  GHashTable keys. */
+gint gnc_gdate_equal(gconstpointer gda, gconstpointer gdb);
+
+
+/** Provides a "hash" of a GDate* value; useful for using GDate*'s as
+ *  GHashTable keys. */
+guint gnc_gdate_hash( gconstpointer gd );
+
+//@}
+
+/* ======================================================== */
+
+/** \name GDate to time64 conversions */
+// @{
+
+/** The gnc_time64_get_day_start() routine will take the given time in
+ *  GLib GDate format and adjust it to the first second of that day.
+ */
+time64 gnc_time64_get_day_start_gdate (const GDate *date);
+
+/** The gnc_time64_get_day_end() routine will take the given time in
+ *  GLib GDate format and adjust it to the last second of that day.
+ */
+time64 gnc_time64_get_day_end_gdate (const GDate *date);
+
+//@}
+
+/* ======================================================== */
+
+/** \name Date Manipulation */
+// @{
+
+/** This function modifies a GDate to set it to the first day of the
+ *  month in which it falls.  For example, if this function is called
+ *  with a date of 2003-09-24 the date will be modified to 2003-09-01.
+ *
+ *  @param date The GDate to modify. */
+void gnc_gdate_set_month_start (GDate *date);
+
+
+/** This function modifies a GDate to set it to the last day of the
+ *  month in which it falls.  For example, if this function is called
+ *  with a date of 2003-09-24 the date will be modified to 2003-09-30.
+ *
+ *  @param date The GDate to modify. */
+void gnc_gdate_set_month_end (GDate *date);
+
+
+/** This function modifies a GDate to set it to the first day of the
+ *  month prior to the one in which it falls.  For example, if this
+ *  function is called with a date of 2003-09-24 the date will be
+ *  modified to 2003-08-01.
+ *
+ *  @param date The GDate to modify. */
+void gnc_gdate_set_prev_month_start (GDate *date);
+
+
+/** This function modifies a GDate to set it to the last day of the
+ *  month prior to the one in which it falls.  For example, if this
+ *  function is called with a date of 2003-09-24 the date will be
+ *  modified to 2003-08-31.
+ *
+ *  @param date The GDate to modify. */
+void gnc_gdate_set_prev_month_end (GDate *date);
+
+
+/** This function modifies a GDate to set it to the first day of the
+ *  quarter in which it falls.  For example, if this function is called
+ *  with a date of 2003-09-24 the date will be modified to 2003-09-01.
+ *
+ *  @param date The GDate to modify. */
+void gnc_gdate_set_quarter_start (GDate *date);
+
+
+/** This function modifies a GDate to set it to the last day of the
+ *  quarter in which it falls.  For example, if this function is called
+ *  with a date of 2003-09-24 the date will be modified to 2003-12-31.
+ *
+ *  @param date The GDate to modify. */
+void gnc_gdate_set_quarter_end (GDate *date);
+
+
+/** This function modifies a GDate to set it to the first day of the
+ *  quarter prior to the one in which it falls.  For example, if this
+ *  function is called with a date of 2003-09-24 the date will be
+ *  modified to 2003-06-01.
+ *
+ *  @param date The GDate to modify. */
+void gnc_gdate_set_prev_quarter_start (GDate *date);
+
+
+/** This function modifies a GDate to set it to the last day of the
+ *  quarter prior to the one in which it falls.  For example, if this
+ *  function is called with a date of 2003-09-24 the date will be
+ *  modified to 2003-07-31.
+ *
+ *  @param date The GDate to modify. */
+void gnc_gdate_set_prev_quarter_end (GDate *date);
+
+
+/** This function modifies a GDate to set it to the first day of the
+ *  year in which it falls.  For example, if this function is called
+ *  with a date of 2003-09-24 the date will be modified to 2003-01-01.
+ *
+ *  @param date The GDate to modify. */
+void gnc_gdate_set_year_start (GDate *date);
+
+
+/** This function modifies a GDate to set it to the last day of the
+ *  year in which it falls.  For example, if this function is called
+ *  with a date of 2003-09-24 the date will be modified to 2003-12-31.
+ *
+ *  @param date The GDate to modify. */
+void gnc_gdate_set_year_end (GDate *date);
+
+
+/** This function modifies a GDate to set it to the first day of the
+ *  year prior to the one in which it falls.  For example, if this
+ *  function is called with a date of 2003-09-24 the date will be
+ *  modified to 2002-01-01.
+ *
+ *  @param date The GDate to modify. */
+void gnc_gdate_set_prev_year_start (GDate *date);
+
+
+/** This function modifies a GDate to set it to the last day of the
+ *  year prior to the one in which it falls.  For example, if this
+ *  function is called with a date of 2003-09-24 the date will be
+ *  modified to 2002-12-31.
+ *
+ *  @param date The GDate to modify. */
+void gnc_gdate_set_prev_year_end (GDate *date);
+
+
+/** This function modifies a GDate to set it to the first day of the
+ *  fiscal year in which it falls.  For example, if this function is
+ *  called with a date of 2003-09-24 and a fiscal year ending July
+ *  31st, the date will be modified to 2003-08-01.
+ *
+ *  @param date The GDate to modify.
+ *
+ *  @param year_end A GDate containing the last month and day of the
+ *  fiscal year.  The year field of this argument is ignored. */
+void gnc_gdate_set_fiscal_year_start (GDate *date, const GDate *year_end);
+
+
+/** This function modifies a GDate to set it to the last day of the
+ *  fiscal year in which it falls.  For example, if this function is
+ *  called with a date of 2003-09-24 and a fiscal year ending July
+ *  31st, the date will be modified to 2004-07-31.
+ *
+ *  @param date The GDate to modify.
+ *
+ *  @param year_end A GDate containing the last month and day of the
+ *  fiscal year.  The year field of this argument is ignored. */
+void gnc_gdate_set_fiscal_year_end (GDate *date, const GDate *year_end);
+
+
+/** This function modifies a GDate to set it to the first day of the
+ *  fiscal year prior to the one in which it falls.  For example, if
+ *  this function is called with a date of 2003-09-24 and a fiscal
+ *  year ending July 31st, the date will be modified to 2002-08-01.
+ *
+ *  @param date The GDate to modify.
+ *
+ *  @param year_end A GDate containing the last month and day of the
+ *  fiscal year.  The year field of this argument is ignored. */
+void gnc_gdate_set_prev_fiscal_year_start (GDate *date, const GDate *year_end);
+
+
+/** This function modifies a GDate to set it to the last day of the
+ *  fiscal year prior to the one in which it falls.  For example, if
+ *  this function is called with a date of 2003-09-24 and a fiscal
+ *  year ending July 31st, the date will be modified to 2003-07-31.
+ *
+ *  @param date The GDate to modify.
+ *
+ *  @param year_end A GDate containing the last month and day of the
+ *  fiscal year.  The year field of this argument is ignored. */
+void gnc_gdate_set_prev_fiscal_year_end (GDate *date, const GDate *year_end);
+
+//@}
+
 //@}
 #ifdef __cplusplus
 }

@@ -26,9 +26,9 @@
 
 #include <glib.h>
 #include <string.h>
+#include "gnc-date.h"
 #include "gnc-pricedb-p.h"
 #include <qofinstance-p.h>
-#include "gnc-gdate-utils.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_PRICE;

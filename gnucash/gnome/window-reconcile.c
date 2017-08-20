@@ -44,10 +44,10 @@
 #include "dialog-utils.h"
 #include "gnc-amount-edit.h"
 #include "gnc-component-manager.h"
+#include "gnc-date.h"
 #include "gnc-date-edit.h"
 #include "gnc-event.h"
 #include "gnc-filepath-utils.h"
-#include <gnc-gdate-utils.h>
 #include "gnc-gnome-utils.h"
 #include "gnc-main-window.h"
 #include "gnc-plugin-page-register.h"

@@ -24,7 +24,7 @@
 
 #include <glib.h>
 
-#include <gnc-gdate-utils.h>
+#include "gnc-date.h"
 #include "pricecell.h"
 #include "split-register-p.h"
 

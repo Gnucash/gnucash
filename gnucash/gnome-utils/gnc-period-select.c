@@ -37,7 +37,6 @@
 #include "gnc-date.h"
 #include "gnc-period-select.h"
 #include "gnc-prefs.h"
-#include <gnc-gdate-utils.h>
 #include "dialog-utils.h"
 
 enum

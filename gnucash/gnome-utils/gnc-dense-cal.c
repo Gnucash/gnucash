@@ -30,7 +30,7 @@
 #include <gtk/gtk.h>
 #include <math.h>
 #include <stdlib.h>
-#include <gnc-gdate-utils.h>
+#include "gnc-date.h"
 #include "dialog-utils.h"
 
 /**
