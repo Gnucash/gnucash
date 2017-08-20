@@ -310,12 +310,13 @@ gnc_prices_dialog_get_commodities (GtkTreeView *view)
 
     return comm_list;
 }
- 
+
 static void
 change_source_flag (PriceRemoveSourceFlags source, gboolean set, gpointer data)
 {
     PricesDialog *pdb_dialog = data;
     GtkWidget *w = gtk_dialog_get_widget_for_response (GTK_DIALOG(pdb_dialog->remove_dialog), GTK_RESPONSE_OK);
+    gboolean enable_button;
 
     if (set)
         pdb_dialog->remove_source = pdb_dialog->remove_source | source;
@@ -323,10 +324,8 @@ change_source_flag (PriceRemoveSourceFlags source, gboolean set, gpointer data)
         pdb_dialog->remove_source = pdb_dialog->remove_source & (~source);
 
     // Check if we have the required options to enable OK button
-    if (pdb_dialog->remove_source > 8) // commodities flag is 8
-        gtk_widget_set_sensitive (w, TRUE);
-    else
-        gtk_widget_set_sensitive (w, FALSE);
+    enable_button = (pdb_dialog->remove_source > 8 ? TRUE : FALSE); // commodities flag is 8
+    gtk_widget_set_sensitive (w, enable_button);
 
     DEBUG("Source is: %d, remove_source is %d", source, pdb_dialog->remove_source);
 }
@@ -335,33 +334,27 @@ static void
 check_event_fq_cb (GtkWidget *widget, gpointer data)
 {
     PricesDialog *pdb_dialog = data;
+    gboolean active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(widget));
 
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(widget)))
-        change_source_flag (PRICE_REMOVE_SOURCE_FQ, TRUE, pdb_dialog);
-    else
-        change_source_flag (PRICE_REMOVE_SOURCE_FQ, FALSE, pdb_dialog);
+    change_source_flag (PRICE_REMOVE_SOURCE_FQ, active, pdb_dialog);
 }
 
 static void
 check_event_user_cb (GtkWidget *widget, gpointer data)
 {
     PricesDialog *pdb_dialog = data;
+    gboolean active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(widget));
 
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(widget)))
-        change_source_flag (PRICE_REMOVE_SOURCE_USER, TRUE, pdb_dialog);
-    else
-        change_source_flag (PRICE_REMOVE_SOURCE_USER, FALSE, pdb_dialog);
+    change_source_flag (PRICE_REMOVE_SOURCE_USER, active, pdb_dialog);
 }
 
 static void
 check_event_app_cb (GtkWidget *widget, gpointer data)
 {
     PricesDialog *pdb_dialog = data;
+    gboolean active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(widget));
 
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(widget)))
-        change_source_flag (PRICE_REMOVE_SOURCE_APP, TRUE, pdb_dialog);
-    else
-        change_source_flag (PRICE_REMOVE_SOURCE_APP, FALSE, pdb_dialog);
+    change_source_flag (PRICE_REMOVE_SOURCE_APP, active, pdb_dialog);
 }
 
 static void
@@ -370,11 +363,9 @@ selection_changed_cb (GtkTreeSelection *selection, gpointer data)
     PricesDialog *pdb_dialog = data;
     GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW(pdb_dialog->remove_view));
     GList *rows = gtk_tree_selection_get_selected_rows (selection, &model);
+    gboolean have_rows = (g_list_length (rows) > 0 ? TRUE : FALSE);
 
-    if (g_list_length (rows) > 0)
-        change_source_flag (PRICE_REMOVE_SOURCE_COMM, TRUE, pdb_dialog);
-    else
-        change_source_flag (PRICE_REMOVE_SOURCE_COMM, FALSE, pdb_dialog);
+    change_source_flag (PRICE_REMOVE_SOURCE_COMM, have_rows, pdb_dialog);
 }
 
 static GDate
@@ -465,7 +456,7 @@ gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
         {
             Timespec last_ts;
             GDate fiscal_end_date = get_fiscal_end_date ();
-            PriceRemoveSourceFlags source = PRICE_REMOVE_SOURCE_FQ; 
+            PriceRemoveSourceFlags source = PRICE_REMOVE_SOURCE_FQ;
             PriceRemoveKeepOptions keep = PRICE_REMOVE_KEEP_NONE;
 
             DEBUG("deleting prices");
@@ -497,7 +488,7 @@ gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
                 GDate tmp_date = timespec_to_gdate (last_ts);
                 g_date_subtract_months (&tmp_date, 6);
                 tmp_ts = gdate_to_timespec (tmp_date);
- 
+
                 gnc_pricedb_remove_old_prices (pdb_dialog->price_db, comm_list, &fiscal_end_date, tmp_ts,
                                                pdb_dialog->remove_source, PRICE_REMOVE_KEEP_LAST_WEEKLY);
 
