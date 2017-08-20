@@ -38,7 +38,6 @@
 #include <glib/gi18n.h>
 #include <locale.h>
 
-#include <gnc-gdate-utils.h>
 #include "qof.h"
 #include "Account.h"
 #include "SchedXaction.h"

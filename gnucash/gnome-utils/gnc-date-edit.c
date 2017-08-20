@@ -43,7 +43,6 @@
 #include <ctype.h> /* isdigit */
 #include <stdio.h>
 
-#include <gnc-gdate-utils.h>
 #include "gnc-date.h"
 #include "gnc-engine.h"
 #include "dialog-utils.h"

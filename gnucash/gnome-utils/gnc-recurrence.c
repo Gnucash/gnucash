@@ -29,11 +29,11 @@
 #include <glib/gi18n.h>
 
 #include "dialog-utils.h"
+#include "gnc-date.h"
 #include "gnc-recurrence.h"
 #include "gnc-date-edit.h"
 #include "Recurrence.h"
 #include "gnc-engine.h"
-#include "gnc-gdate-utils.h"
 
 static QofLogModule log_module = GNC_MOD_GUI;
 

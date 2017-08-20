@@ -24,9 +24,9 @@ extern "C"
 #include <stdlib.h>
 #include <glib.h>
 #include "SX-book.h"
+#include "gnc-date.h"
 #include "gnc-sx-instance-model.h"
 #include "gnc-ui-util.h"
-#include <gnc-gdate-utils.h>
 
 #include "test-stuff.h"
 #include "test-engine-stuff.h"

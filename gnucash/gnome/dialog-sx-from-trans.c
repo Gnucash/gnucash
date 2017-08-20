@@ -26,11 +26,11 @@
 
 #include "config.h"
 
-#include <gnc-gdate-utils.h>
 #include "dialog-sx-editor.h"
 #include "dialog-sx-from-trans.h"
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
+#include "gnc-date.h"
 #include "gnc-date-edit.h"
 #include "gnc-dense-cal-store.h"
 #include "gnc-dense-cal.h"
