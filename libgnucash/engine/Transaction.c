@@ -1933,14 +1933,16 @@ xaccTransSetDateInternal(Transaction *trans, Timespec *dadate, Timespec val)
 {
     xaccTransBeginEdit(trans);
 
-    {
+#if 0 /* gnc_ctime is expensive so change to 1 only if you need to debug setting
+       * dates. */
+   {
         time64 secs = (time64) val.tv_sec;
         gchar *tstr = gnc_ctime (&secs);
         PINFO ("addr=%p set date to %" G_GUINT64_FORMAT ".%09ld %s\n",
                trans, val.tv_sec, val.tv_nsec, tstr ? tstr : "(null)");
         g_free(tstr);
     }
-
+#endif
     *dadate = val;
     qof_instance_set_dirty(QOF_INSTANCE(trans));
     mark_trans(trans);
