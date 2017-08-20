@@ -1376,6 +1376,7 @@ compare_prices_by_commodity_date (gconstpointer a, gconstpointer b)
     if (!a && !b) return 0;
     /* nothing is always less than something */
     if (!a) return -1;
+    if (!b) return 1;
 
     comma = gnc_price_get_commodity ((GNCPrice *) a);
     commb = gnc_price_get_commodity ((GNCPrice *) b);
