@@ -286,7 +286,7 @@ gnc_prices_dialog_load_view (GtkTreeView *view, GNCPriceDB *pdb)
 }
 
 static GList *
-gnc_prices_dialog_get_commodity (GtkTreeView *view)
+gnc_prices_dialog_get_commodities (GtkTreeView *view)
 {
     GtkTreeModel     *model = gtk_tree_view_get_model (GTK_TREE_VIEW(view));
     GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(view));
@@ -458,7 +458,7 @@ gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
     if (result == GTK_RESPONSE_OK)
     {
         const char *fmt = _("Are you sure you want to delete these prices ?");
-        GList *comm_list = gnc_prices_dialog_get_commodity (pdb_dialog->remove_view);
+        GList *comm_list = gnc_prices_dialog_get_commodities (pdb_dialog->remove_view);
 
         // Are you sure you want to delete the entries and we have commodities
         if ((g_list_length (comm_list) != 0) && (gnc_verify_dialog (pdb_dialog->remove_dialog, FALSE, fmt, NULL)))
