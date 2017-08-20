@@ -1317,7 +1317,7 @@ check_one_price_date (GNCPrice *price, gpointer user_data)
           user_data);
 
     source = gnc_price_get_source (price);
-        
+
     if ((source == PRICE_SOURCE_FQ) && data->delete_fq)
         PINFO ("Delete Quote Source");
     else if ((source == PRICE_SOURCE_USER_PRICE) && data->delete_user)
@@ -1484,8 +1484,8 @@ get_fiscal_quarter (GDate *date, GDateMonth fiscal_start)
 }
 
 static void
-gnc_pricedb_remove_old_prices_keep_last (GNCPriceDB *db, GDate *fiscal_end_date,
-                                         remove_info data, PriceRemoveKeepOptions keep)
+gnc_pricedb_process_removal_list (GNCPriceDB *db, GDate *fiscal_end_date,
+                                  remove_info data, PriceRemoveKeepOptions keep)
 {
     GSList *item;
     gboolean save_first_price = FALSE;
@@ -1637,7 +1637,7 @@ gnc_pricedb_remove_old_prices (GNCPriceDB *db, GList *comm_list,
     DEBUG("Number of Prices in list is %d, Cutoff date is %s", g_slist_length (data.list), gnc_print_date (cutoff));
 
     // Check for a valid fiscal end of year date
-    if (fiscal_end_date == NULL )
+    if (fiscal_end_date == NULL)
     {
         GDateYear year_now = g_date_get_year (gnc_g_date_new_today ());
         fiscal_end_date = g_date_new ();
@@ -1649,7 +1649,7 @@ gnc_pricedb_remove_old_prices (GNCPriceDB *db, GList *comm_list,
         g_date_clear (fiscal_end_date, 1);
         g_date_set_dmy (fiscal_end_date, 31, 12, year_now);
     }
-    gnc_pricedb_remove_old_prices_keep_last (db, fiscal_end_date, data, keep);
+    gnc_pricedb_process_removal_list (db, fiscal_end_date, data, keep);
 
     g_slist_free (data.list);
     LEAVE(" ");
