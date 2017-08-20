@@ -1330,11 +1330,12 @@ timespecToTime64 (Timespec ts)
 GDate timespec_to_gdate (Timespec ts)
 {
     GDate result;
-    gint day, month, year;
 
     g_date_clear (&result, 1);
-    gnc_timespec2dmy (ts, &day, &month, &year);
-    g_date_set_dmy (&result, day, static_cast<GDateMonth>(month), year);
+    GncDateTime time(ts.tv_sec);
+    auto date = time.date().year_month_day();
+    g_date_set_dmy (&result, date.day, static_cast<GDateMonth>(date.month),
+                    date.year);
     g_assert(g_date_valid (&result));
 
     return result;
