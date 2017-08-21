@@ -492,8 +492,10 @@ load_gnucash_modules()
         gboolean optional;
     } modules[] =
     {
-        { "gnucash/app-utils", 0, FALSE },
         { "gnucash/engine", 0, FALSE },
+        { "gnucash/app-utils", 0, FALSE },
+        { "gnucash/gnome-utils", 0, FALSE },
+        { "gnucash/gnome-search", 0, FALSE },
         { "gnucash/register/ledger-core", 0, FALSE },
         { "gnucash/register/register-core", 0, FALSE },
         { "gnucash/register/register-gnome", 0, FALSE },
