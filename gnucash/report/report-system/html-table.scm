@@ -668,6 +668,7 @@
              #f (gnc:html-table-col-styles table))
             
             ;; render the headers 
+            (push (gnc:html-document-markup-start doc "thead" #t))
             (push (gnc:html-document-markup-start doc "tr" #t))
             (for-each 
              (lambda (hdr) 
@@ -685,6 +686,7 @@
                                    colnum))))
              ch)
             (push (gnc:html-document-markup-end doc "tr"))
+            (push (gnc:html-document-markup-end doc "thead"))
 
             ;; pop the col header style 
             (gnc:html-document-pop-style doc))))
@@ -700,6 +702,7 @@
        #f)
      #f (gnc:html-table-col-styles table))
     
+    (push (gnc:html-document-markup-start doc "tbody" #t))
     ;; now iterate over the rows 
     (let ((rownum 0) (colnum 0))
       (for-each 
@@ -749,6 +752,7 @@
            (set! colnum 0)
            (set! rownum (+ 1 rownum))))
        (reverse (gnc:html-table-data table))))
+    (push (gnc:html-document-markup-end doc "tbody"))
     
     ;; write the table end tag and pop the table style
     (push (gnc:html-document-markup-end doc "table"))

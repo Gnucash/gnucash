@@ -24,7 +24,7 @@ http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
 
 Interessante functies: 
 
-    * Dubbele boekhouding
+    * Dubbel boekhouden
     * Aandelen-/belegginsrekeningen
     * QIF/OFX/HBCI import met dubbele transactie herkenning
     * Rapporten, grafieken
