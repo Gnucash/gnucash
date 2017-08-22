@@ -186,7 +186,7 @@ gnc_add_css_file (void)
     display = gdk_display_get_default ();
     screen = gdk_display_get_default_screen (display);
 
-    gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider_fallback), GTK_STYLE_PROVIDER_PRIORITY_THEME - 50);
+    gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider_fallback), GTK_STYLE_PROVIDER_PRIORITY_FALLBACK);
     gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider_app), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider_user), GTK_STYLE_PROVIDER_PRIORITY_USER);
 
@@ -195,7 +195,7 @@ gnc_add_css_file (void)
         str = g_build_filename (pkgdatadir, "ui", "gnucash-fallback.css", (char *)NULL);
         gtk_css_provider_load_from_path (provider_fallback, str, &error);
         g_free (str);
- 
+
         str = g_build_filename (pkgdatadir, "ui", "gnucash.css", (char *)NULL);
         gtk_css_provider_load_from_path (provider_app, str, &error);
         g_free (str);
