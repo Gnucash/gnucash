@@ -228,7 +228,7 @@ error_handler(const char *msg)
 }
 
 gboolean
-gfec_try_load(gchar *fn)
+gfec_try_load(const gchar *fn)
 {
     g_debug("looking for %s", fn);
     if (g_file_test(fn, G_FILE_TEST_EXISTS))

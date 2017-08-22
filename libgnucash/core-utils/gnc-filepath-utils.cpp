@@ -26,6 +26,7 @@
  * @author Copyright (c) 2000 Dave Peticolas
  */
 
+extern "C" {
 #include "config.h"
 
 #include <platform.h>
@@ -55,6 +56,12 @@
 #include <glib/gwin32.h>
 #define PATH_MAX MAXPATHLEN
 #endif
+}
+
+#include <boost/filesystem.hpp>
+
+namespace bfs = boost::filesystem;
+namespace bst = boost::system;
 
 /**
  * Scrubs a filename by changing "strange" chars (e.g. those that are not
@@ -104,7 +111,7 @@ check_path_return_if_valid(gchar *path)
  *
  *  Otherwise, assume that filefrag is a well-formed relative path and
  *  try to find a file with its path relative to
- *  \li  the current working directory,
+ *  \li the current working directory,
  *  \li the installed system-wide data directory (e.g., /usr/local/share/gnucash),
  *  \li the installed system configuration directory (e.g., /usr/local/etc/gnucash),
  *  \li or in the user's configuration directory (e.g., $HOME/.gnucash/data)
@@ -164,7 +171,7 @@ gnc_resolve_file_path (const gchar * filefrag)
         return fullpath;
 
     /* Look in the users config dir (e.g. $HOME/.gnucash/data) */
-    fullpath = gnc_build_data_path(filefrag);
+    fullpath = g_strdup(gnc_build_data_path(filefrag));
     if (g_file_test(fullpath, G_FILE_TEST_IS_REGULAR))
         return fullpath;
 
@@ -196,7 +203,7 @@ gnc_path_find_localized_html_file_internal (const gchar * file_name)
     const gchar *env_doc_path = g_getenv("GNC_DOC_PATH");
     const gchar *default_dirs[] =
         {
-            gnc_build_dotgnucash_path ("html"),
+            gnc_build_userdata_path ("html"),
             gnc_path_get_pkgdocdir (),
             gnc_path_get_pkgdatadir (),
             NULL
@@ -292,190 +299,156 @@ gnc_path_find_localized_html_file (const gchar *file_name)
 }
 
 /* ====================================================================== */
-
 /** @brief Check that the supplied directory path exists, is a directory, and
  * that the user has adequate permissions to use it.
  *
  * @param dirname The path to check
  */
-static gboolean
-gnc_validate_directory (const gchar *dirname, gboolean create, gchar **msg)
+static bool
+gnc_validate_directory (const bfs::path &dirname, bool create)
 {
-    GStatBuf statbuf;
-    gint rc;
+    if (dirname.empty())
+        return false;
 
-    *msg = NULL;
-    rc = g_stat (dirname, &statbuf);
-    if (rc)
+    if (!bfs::exists(dirname) && (!create))
+        return false;
+
+    /* Optionally create directories if they don't exist yet
+     * Note this will do nothing if the directory and its
+     * parents already exist, but will fail if the path
+     * points to a file or a softlink. So it serves as a test
+     * for that as well.
+     */
+    bfs::create_directories(dirname);
+
+    auto d = bfs::directory_entry (dirname);
+    auto perms = d.status().permissions();
+
+    /* On Windows only write permission will be checked.
+     * So strictly speaking we'd need two error messages here depending
+     * on the platform. For simplicity this detail is glossed over though. */
+    if ((perms & bfs::owner_all) != bfs::owner_all)
+        throw (bfs::filesystem_error(
+            std::string(_("Insufficient permissions, at least write and access permissions required: "))
+            + dirname.c_str(), dirname,
+            bst::error_code(bst::errc::permission_denied, bst::generic_category())));
+
+    return true;
+}
+
+static auto usr_conf_dir = bfs::path();
+
+static void
+gnc_filepath_init()
+{
+    auto try_home_dir = true;
+    auto env_var = g_getenv("GNC_DOT_DIR");
+    if (env_var)
+        usr_conf_dir = env_var;
+
+    if (!usr_conf_dir.empty())
     {
-        switch (errno)
+        try
         {
-        case ENOENT:
-            if (create)
-            {
-                rc = g_mkdir (dirname,
-#ifdef G_OS_WIN32
-                              0          /* The mode argument is ignored on windows */
-#else
-                              S_IRWXU    /* perms = S_IRWXU = 0700 */
-#endif
-                              );
-                if (rc)
-                {
-                    *msg = g_strdup_printf(
-                            _("An error occurred while creating the directory:\n"
-                              "  %s\n"
-                              "Please correct the problem and restart GnuCash.\n"
-                              "The reported error was '%s' (errno %d).\n"),
-                              dirname, g_strerror(errno) ? g_strerror(errno) : "", errno);
-                    return FALSE;
-                }
-            }
-            else
-            {
-                *msg = g_strdup_printf(
-                        _("Note: the directory\n"
-                          "  %s\n"
-                          "doesn't exist. This is however not fatal.\n"),
-                          dirname);
-                return FALSE;
-            }
-            g_stat (dirname, &statbuf);
-            break;
-
-        case EACCES:
-            *msg = g_strdup_printf(
-                      _("The directory\n"
-                        "  %s\n"
-                        "exists but cannot be accessed. This program \n"
-                        "must have full access (read/write/execute) to \n"
-                        "the directory in order to function properly.\n"),
-                      dirname);
-            return FALSE;
-
-        case ENOTDIR:
-            *msg = g_strdup_printf(
-                      _("The path\n"
-                        "  %s\n"
-                        "exists but it is not a directory. Please delete\n"
-                        "the file and start GnuCash again.\n"),
-                      dirname);
-            return FALSE;
-
-        default:
-            *msg = g_strdup_printf(
-                      _("An unknown error occurred when validating that the\n"
-                        "  %s\n"
-                        "directory exists and is usable. Please correct the\n"
-                        "problem and restart GnuCash. The reported error \n"
-                        "was '%s' (errno %d)."),
-                      dirname, g_strerror(errno) ? g_strerror(errno) : "", errno);
-            return FALSE;
+            gnc_validate_directory(usr_conf_dir, true);
+            try_home_dir = false;
+        }
+        catch (const bfs::filesystem_error& ex)
+        {
+            g_warning("%s is not a suitable base directory for the user configuration."
+                      "Trying home directory instead.\nThe failure is\n%s",
+                      usr_conf_dir.c_str(), ex.what());
         }
     }
 
-    if ((statbuf.st_mode & S_IFDIR) != S_IFDIR)
+    if (try_home_dir)
     {
-        *msg = g_strdup_printf(
-                  _("The path\n"
-                    "  %s\n"
-                    "exists but it is not a directory. Please delete\n"
-                    "the file and start GnuCash again.\n"),
-                  dirname);
-        return FALSE;
+        usr_conf_dir = g_get_home_dir();
+        try
+        {
+            if (!gnc_validate_directory(usr_conf_dir, false))
+                usr_conf_dir = g_get_tmp_dir();
+        }
+        catch (const bfs::filesystem_error& ex)
+        {
+            g_warning("Cannot find suitable home directory. Using tmp directory instead.\n"
+                    "The failure is\n%s", ex.what());
+            usr_conf_dir = g_get_tmp_dir();
+        }
     }
-#ifndef G_OS_WIN32
-    /* The mode argument is ignored on windows anyway */
-    if ((statbuf.st_mode & S_IRWXU) != S_IRWXU)
-    {
-        *msg = g_strdup_printf(
-                  _("The permissions are wrong on the directory\n"
-                    "  %s\n"
-                    "They must be at least 'rwx' for the user.\n"),
-                  dirname);
-        return FALSE;
-    }
-#endif
+    g_assert(!usr_conf_dir.empty());
 
-    return TRUE;
+    usr_conf_dir /= ".gnucash";
+
+    if (!gnc_validate_directory(usr_conf_dir, true))
+    {
+        g_warning("Cannot find suitable .gnucash directory in home directory. Using tmp directory instead.");
+
+        usr_conf_dir = g_get_tmp_dir();
+        g_assert(!usr_conf_dir.empty());
+        usr_conf_dir /= ".gnucash";
+        /* This may throw and end the program! */
+        gnc_validate_directory(usr_conf_dir, true);
+    }
+
+    /* Since we're in code that is only executed once....
+     * Note these calls may throw and end the program! */
+    gnc_validate_directory(usr_conf_dir / "books", true);
+    gnc_validate_directory(usr_conf_dir / "checks", true);
+    gnc_validate_directory(usr_conf_dir / "translog", true);
 }
 
-/** @fn const gchar * gnc_dotgnucash_dir ()
+/** @fn const gchar * gnc_userdata_dir ()
  *  @brief Ensure that the user's configuration directory exists and is minimally populated.
  *
  *  Note that the default path is $HOME/.gnucash; This can be changed
  *  by the environment variable $GNC_DOT_DIR.
  *
- *  @return An absolute path to the configuration directory
+ *  @return An absolute path to the configuration directory. This string is
+ *  by the gnc_filepath_utils code and should not be freed by the user.
  */
 const gchar *
-gnc_dotgnucash_dir (void)
+gnc_userdata_dir (void)
 {
-    static gchar *dotgnucash = NULL;
-    gchar *tmp_dir;
-    gchar *errmsg = NULL;
+    if (usr_conf_dir.empty())
+        gnc_filepath_init();
 
-    if (dotgnucash)
-        return dotgnucash;
-
-    dotgnucash = g_strdup(g_getenv("GNC_DOT_DIR"));
-
-    if (!dotgnucash)
-    {
-        const gchar *home = g_get_home_dir();
-        if (!home || !gnc_validate_directory(home, FALSE, &errmsg))
-        {
-            g_free(errmsg);
-            g_warning("Cannot find suitable home directory. Using tmp directory instead.");
-            home = g_get_tmp_dir();
-        }
-        g_assert(home);
-
-        dotgnucash = g_build_filename(home, ".gnucash", (gchar *)NULL);
-    }
-    if (!gnc_validate_directory(dotgnucash, TRUE, &errmsg))
-    {
-        const gchar *tmp = g_get_tmp_dir();
-        g_free(errmsg);
-        g_free(dotgnucash);
-        g_warning("Cannot find suitable .gnucash directory in home directory. Using tmp directory instead.");
-        g_assert(tmp);
-
-        dotgnucash = g_build_filename(tmp, ".gnucash", (gchar *)NULL);
-        
-        if (!gnc_validate_directory(dotgnucash, TRUE, &errmsg))
-            exit(1);
-    }
-
-    /* Since we're in code that is only executed once.... */
-    tmp_dir = g_build_filename(dotgnucash, "books", (gchar *)NULL);
-    if (!gnc_validate_directory(tmp_dir, TRUE, &errmsg))
-        exit(1);
-    g_free(tmp_dir);
-    tmp_dir = g_build_filename(dotgnucash, "checks", (gchar *)NULL);
-    if (!gnc_validate_directory(tmp_dir, TRUE, &errmsg))
-        exit(1);
-    g_free(tmp_dir);
-    tmp_dir = g_build_filename(dotgnucash, "translog", (gchar *)NULL);
-    if (!gnc_validate_directory(tmp_dir, TRUE, &errmsg))
-        exit(1);
-    g_free(tmp_dir);
-
-    return dotgnucash;
+    return usr_conf_dir.c_str();
 }
 
-/** @fn gchar * gnc_build_dotgnucash_path (const gchar *filename)
+static const bfs::path&
+gnc_userdata_dir_as_path (void)
+{
+    if (usr_conf_dir.empty())
+        gnc_filepath_init();
+
+    return usr_conf_dir;
+}
+
+/** @fn gchar * gnc_build_userdata_path (const gchar *filename)
  *  @brief Make a path to filename in the user's configuration directory.
  *
  * @param filename The name of the file
  *
- *  @return An absolute path.
+ *  @return An absolute path. The returned string should be freed by the user
+ *  using g_free().
  */
 
 gchar *
-gnc_build_dotgnucash_path (const gchar *filename)
+gnc_build_userdata_path (const gchar *filename)
 {
-    return g_build_filename(gnc_dotgnucash_dir(), filename, (gchar *)NULL);
+    return g_strdup((gnc_userdata_dir_as_path() / filename).c_str());
+}
+
+static bfs::path
+gnc_build_userdata_subdir_path (const gchar *subdir, const gchar *filename)
+{
+    gchar* filename_dup = g_strdup(filename);
+
+    scrub_filename(filename_dup);
+    auto result = (gnc_userdata_dir_as_path() / subdir) / filename_dup;
+    g_free(filename_dup);
+    return result;
 }
 
 /** @fn gchar * gnc_build_book_path (const gchar *filename)
@@ -483,20 +456,14 @@ gnc_build_dotgnucash_path (const gchar *filename)
  *
  * @param filename The name of the file
  *
- *  @return An absolute path.
+ *  @return An absolute path. The returned string should be freed by the user
+ *  using g_free().
  */
 
 gchar *
 gnc_build_book_path (const gchar *filename)
 {
-    gchar* filename_dup = g_strdup(filename);
-    gchar* result = NULL;
-
-    scrub_filename(filename_dup);
-    result = g_build_filename(gnc_dotgnucash_dir(), "books",
-                              filename_dup, (gchar *)NULL);
-    g_free(filename_dup);
-    return result;
+    return g_strdup(gnc_build_userdata_subdir_path("books", filename).c_str());
 }
 
 /** @fn gchar * gnc_build_translog_path (const gchar *filename)
@@ -504,20 +471,14 @@ gnc_build_book_path (const gchar *filename)
  *
  * @param filename The name of the file
  *
- *  @return An absolute path.
+ *  @return An absolute path. The returned string should be freed by the user
+ *  using g_free().
  */
 
 gchar *
 gnc_build_translog_path (const gchar *filename)
 {
-    gchar* filename_dup = g_strdup(filename);
-    gchar* result = NULL;
-
-    scrub_filename(filename_dup);
-    result = g_build_filename(gnc_dotgnucash_dir(), "translog",
-                              filename_dup, (gchar *)NULL);
-    g_free(filename_dup);
-    return result;
+    return g_strdup(gnc_build_userdata_subdir_path("translog", filename).c_str());
 }
 
 /** @fn gchar * gnc_build_data_path (const gchar *filename)
@@ -525,19 +486,14 @@ gnc_build_translog_path (const gchar *filename)
  *
  * @param filename The name of the file
  *
- *  @return An absolute path.
+ *  @return An absolute path. The returned string should be freed by the user
+ *  using g_free().
  */
 
 gchar *
 gnc_build_data_path (const gchar *filename)
 {
-    gchar* filename_dup = g_strdup(filename);
-    gchar* result;
-
-    scrub_filename(filename_dup);
-    result = g_build_filename(gnc_dotgnucash_dir(), "data", filename_dup, (gchar *)NULL);
-    g_free(filename_dup);
-    return result;
+    return g_strdup(gnc_build_userdata_subdir_path("data", filename).c_str());
 }
 
 /** @fn gchar * gnc_build_report_path (const gchar *filename)
@@ -545,7 +501,8 @@ gnc_build_data_path (const gchar *filename)
  *
  * @param filename The name of the file
  *
- *  @return An absolute path.
+ *  @return An absolute path. The returned string should be freed by the user
+ *  using g_free().
  */
 
 gchar *
@@ -560,7 +517,8 @@ gnc_build_report_path (const gchar *filename)
  *
  * @param filename The name of the file
  *
- *  @return An absolute path.
+ *  @return An absolute path. The returned string should be freed by the user
+ *  using g_free().
  */
 
 gchar *

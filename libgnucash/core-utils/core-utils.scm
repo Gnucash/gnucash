@@ -41,7 +41,7 @@
 (re-export gnc-path-get-bindir)
 (re-export gnc-path-get-stdreportsdir)
 (re-export gnc-path-find-localized-html-file)
-(re-export gnc-build-dotgnucash-path)
+(re-export gnc-build-userdata-path)
 (re-export gnc-build-report-path)
 (re-export gnc-build-stdreports-path)
 (re-export gnc-utf8?)

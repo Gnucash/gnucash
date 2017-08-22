@@ -8,7 +8,7 @@ libgnc_core_utils_la_SOURCES = \
   binreloc.c \
   gnc-prefs.c \
   gnc-environment.c \
-  gnc-filepath-utils.c \
+  gnc-filepath-utils.cpp \
   gnc-gkeyfile-utils.c \
   gnc-glib-utils.c \
   gnc-guile-utils.c \
@@ -21,7 +21,8 @@ libgnc_core_utils_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${BINRELOC_LIBS} \
-  ${GTK_MAC_LIBS}
+  ${GTK_MAC_LIBS} \
+  ${BOOST_LDFLAGS} -lboost_filesystem
 
 
 noinst_HEADERS = \
@@ -58,7 +59,8 @@ AM_CPPFLAGS = \
   ${GLIB_CFLAGS} \
   ${GTK_MAC_CFLAGS} \
   -I${top_builddir}/common \
-  -I${top_srcdir}/common
+  -I${top_srcdir}/common \
+  $(BOOST_CPPFLAGS)
 
 gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash
 gncscmmod_DATA = core-utils.scm

@@ -61,7 +61,7 @@ static gboolean      parser_inited     = FALSE;
 static gchar *
 gnc_exp_parser_filname (void)
 {
-    return gnc_build_dotgnucash_path("expressions-2.0");
+    return gnc_build_userdata_path("expressions-2.0");
 }
 
 void
