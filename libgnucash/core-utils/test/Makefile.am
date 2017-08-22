@@ -10,20 +10,24 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/libgnucash/core-utils \
   -I${top_srcdir}/libgnucash/engine \
   ${GUILE_CFLAGS} \
-  ${GLIB_CFLAGS}
+  ${GLIB_CFLAGS} \
+  $(BOOST_CPPFLAGS)
 
 LDADD = \
   ../libgnc-core-utils.la \
   ${top_builddir}/common/test-core/libtest-core.la \
-  ${GLIB_LIBS}
+  ${GLIB_LIBS} \
+  ${BOOST_LDFLAGS}
 
 # these tests are ordered kind more or less in the order
 # that they should be executed, with more basic tests coming first.
 #
 
 TESTS = \
+  test-gnc-glib-utils \
   test-resolve-file-path \
-  test-gnc-glib-utils
+  test-usr-conf-dir \
+  test-usr-conf-dir-invalid-home
 
 GNC_TEST_DEPS = \
   --library-dir    ${top_builddir}/libgnucash/core-utils

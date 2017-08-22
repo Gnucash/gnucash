@@ -799,7 +799,7 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
                               pcd->splits_account_x, pcd->splits_account_y);
 
     filename = g_strconcat(title, CHECK_NAME_EXTENSION, NULL);
-    pathname = g_build_filename(gnc_dotgnucash_dir(), CHECK_FMT_DIR,
+    pathname = g_build_filename(gnc_userdata_dir(), CHECK_FMT_DIR,
                                 filename, NULL);
 
     if (gnc_key_file_save_to_file(pathname, key_file, &error))
@@ -1558,7 +1558,7 @@ read_formats(PrintCheckDialog *pcd, GtkListStore *store)
     g_free(dirname);
     g_free(pkgdatadir);
 
-    dirname = gnc_build_dotgnucash_path(CHECK_FMT_DIR);
+    dirname = gnc_build_userdata_path(CHECK_FMT_DIR);
     /* Translators: This is a directory name. It may be presented to
      * the user to indicate that some data file was defined by a
      * user herself. */
@@ -1901,7 +1901,7 @@ read_image (const gchar *filename)
     if (!g_file_test(tmp_name, G_FILE_TEST_EXISTS))
     {
         g_free(tmp_name);
-        dirname = gnc_build_dotgnucash_path(CHECK_FMT_DIR);
+        dirname = gnc_build_userdata_path(CHECK_FMT_DIR);
         tmp_name = g_build_filename(dirname, filename, (char *)NULL);
         g_free(dirname);
     }

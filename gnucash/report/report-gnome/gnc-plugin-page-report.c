@@ -1116,7 +1116,7 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
     GncPluginPage *parent;
     gboolean use_new;
     gchar *name;
-    gchar *saved_reports_path = gnc_build_dotgnucash_path (SAVED_REPORTS_FILE);
+    gchar *saved_reports_path = gnc_build_userdata_path (SAVED_REPORTS_FILE);
     gchar *report_save_str = g_strdup_printf (
         _("Update the current report's saved configuration. "
         "The report will be saved in the file %s. "), saved_reports_path);

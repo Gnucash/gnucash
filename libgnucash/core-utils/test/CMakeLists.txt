@@ -14,5 +14,8 @@ ENDMACRO()
 
 ADD_CORE_UTILS_TEST(test-gnc-glib-utils test-gnc-glib-utils.c)
 ADD_CORE_UTILS_TEST(test-resolve-file-path test-resolve-file-path.c)
+ADD_CORE_UTILS_TEST(test-usr-conf-dir test-usr-conf-dir.c)
+ADD_CORE_UTILS_TEST(test-usr-conf-dir-invalid-home test-usr-conf-dir-invalid-home.c)
 
-SET_DIST_LIST(test_core_utils_DIST CMakeLists.txt Makefile.am test-gnc-glib-utils.c test-resolve-file-path.c)
+SET_DIST_LIST(test_core_utils_DIST CMakeLists.txt Makefile.am test-gnc-glib-utils.c
+    test-resolve-file-path.c test-usr-conf-dir.c test-usr-conf-dir-invalid-home.c)

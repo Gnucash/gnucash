@@ -344,7 +344,7 @@ try_load_config_array(const gchar *fns[])
 
     for (i = 0; fns[i]; i++)
     {
-        filename = gnc_build_dotgnucash_path(fns[i]);
+        filename = gnc_build_userdata_path(fns[i]);
         if (gfec_try_load(filename))
         {
             g_free(filename);
@@ -703,7 +703,7 @@ gnc_log_init()
 
     {
         gchar *log_config_filename;
-        log_config_filename = gnc_build_dotgnucash_path("log.conf");
+        log_config_filename = gnc_build_userdata_path("log.conf");
         if (g_file_test(log_config_filename, G_FILE_TEST_EXISTS))
             qof_log_parse_log_config(log_config_filename);
         g_free(log_config_filename);

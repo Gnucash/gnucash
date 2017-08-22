@@ -430,7 +430,7 @@ show_session_error (QofBackendError io_error,
         fmt = _("You attempted to save in\n%s\nor a subdirectory thereof. "
                 "This is not allowed as %s reserves that directory for internal use.\n\n"
                 "Please try again in a different directory.");
-        gnc_error_dialog (parent, fmt, gnc_dotgnucash_dir(), PACKAGE_NAME);
+        gnc_error_dialog (parent, fmt, gnc_userdata_dir(), PACKAGE_NAME);
         break;
 
     case ERR_SQL_DB_TOO_OLD:
@@ -1139,7 +1139,7 @@ check_file_path (const char *path)
 {
     /* Remember the directory as the default. */
      gchar *dir = g_path_get_dirname(path);
-     const gchar *dotgnucash = gnc_dotgnucash_dir();
+     const gchar *dotgnucash = gnc_userdata_dir();
      char *dirpath = dir;
 
      /* Prevent user from storing file in GnuCash' private configuration

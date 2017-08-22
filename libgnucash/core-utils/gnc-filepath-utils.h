@@ -75,8 +75,8 @@ gchar *gnc_resolve_file_path (const gchar *filefrag);
  */
 gchar *gnc_path_find_localized_html_file (const gchar *file_name);
 
-const gchar *gnc_dotgnucash_dir (void);
-gchar *gnc_build_dotgnucash_path (const gchar *filename);
+const gchar *gnc_userdata_dir (void);
+gchar *gnc_build_userdata_path (const gchar *filename);
 gchar *gnc_build_book_path (const gchar *filename);
 gchar *gnc_build_translog_path (const gchar *filename);
 gchar *gnc_build_data_path (const gchar *filename);

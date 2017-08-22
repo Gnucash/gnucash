@@ -29,28 +29,34 @@
 #include "test-stuff.h"
 #include "gnc-filepath-utils.h"
 
-struct relpath_strings_struct
+struct usr_confpath_strings_struct
 {
-    char *input;
+    int func_num;
+    char *funcname;
     char *output;
-    int prefix_home;
 };
 
-typedef struct relpath_strings_struct relpath_strings;
+typedef struct usr_confpath_strings_struct usr_confpath_strings;
 
-relpath_strings strs[] =
+usr_confpath_strings strs2[] =
 {
     {
-        G_DIR_SEPARATOR_S ".gnucash" G_DIR_SEPARATOR_S "test-account-name",
-        G_DIR_SEPARATOR_S ".gnucash" G_DIR_SEPARATOR_S "test-account-name", 1
+        0, "gnc_build_userdata_path",
+        ".gnucash"
     },
     {
-        G_DIR_SEPARATOR_S "tmp" G_DIR_SEPARATOR_S "test-account-name2",
-        G_DIR_SEPARATOR_S "tmp" G_DIR_SEPARATOR_S "test-account-name2", 0
+        1, "gnc_build_book_path",
+        ".gnucash" G_DIR_SEPARATOR_S "books"
     },
-    /* TODO Figure out how to write tests that actually verify the relative
-     * pathname resolution. The above tests only test absolute pathnames */
-    { NULL, NULL, 0 },
+    {
+        2, "gnc_build_translog_path",
+        ".gnucash" G_DIR_SEPARATOR_S "translog"
+    },
+    {
+        3, "gnc_build_data_path",
+        ".gnucash" G_DIR_SEPARATOR_S "data"
+    },
+    { 0, NULL, NULL },
 };
 
 int
@@ -70,37 +76,42 @@ main(int argc, char **argv)
         /* Set up a fake home directory to play with */
         home_dir = g_dir_make_tmp("gnucashXXXXXX", NULL);
 
-    for (i = 0; strs[i].input != NULL; i++)
+    /* Run usr conf dir tests with a valid and writable homedir */
+    g_setenv("HOME", home_dir, TRUE);
+    for (i = 0; strs2[i].funcname != NULL; i++)
     {
         char *daout;
-        char *dain;
         char *wantout;
 
-        if (strs[i].prefix_home == 1)
+        if (strs2[i].func_num == 0)
         {
-            dain = g_build_filename(home_dir, strs[i].input,
-                                    (gchar *)NULL);
-            wantout = g_build_filename(home_dir, strs[i].output,
+            wantout = g_build_filename(home_dir, strs2[i].output, "foo",
                                        (gchar *)NULL);
+            daout = gnc_build_userdata_path("foo");
         }
-        else if (strs[i].prefix_home == 2)
+        else if (strs2[i].func_num == 1)
         {
-            dain = g_strdup(strs[i].input);
-            wantout = g_build_filename(home_dir, strs[i].output,
+            wantout = g_build_filename(home_dir, strs2[i].output, "foo",
                                        (gchar *)NULL);
+            daout = gnc_build_book_path("foo");
         }
-        else
+        else if (strs2[i].func_num == 2)
         {
-            dain = g_strdup(strs[i].input);
-            wantout = g_strdup(strs[i].output);
+            wantout = g_build_filename(home_dir, strs2[i].output, "foo",
+                                       (gchar *)NULL);
+            daout = gnc_build_translog_path("foo");
+        }
+        else // if (strs2[i].prefix_home == 3)
+        {
+            wantout = g_build_filename(home_dir, strs2[i].output, "foo",
+                                       (gchar *)NULL);
+            daout = gnc_build_data_path("foo");
         }
 
-        daout = gnc_resolve_file_path(dain);
         do_test_args(g_strcmp0(daout, wantout) == 0,
-                     "gnc_resolve_file_path",
+                     "gnc_build_x_path",
                      __FILE__, __LINE__,
-                     "%s (%s) vs %s", daout, dain, wantout);
-        g_free(dain);
+                     "%s (%s) vs %s", daout, strs2[i].funcname, wantout);
         g_free(wantout);
         g_free(daout);
     }

@@ -91,7 +91,7 @@
     (false-if-exception
      (read)))
 
-  (let* ((pref-filename (gnc-build-dotgnucash-path "qif-accounts-map"))
+  (let* ((pref-filename (gnc-build-userdata-path "qif-accounts-map"))
          (results '()))
 
     ;; Get the user's saved mappings.
@@ -293,7 +293,7 @@
 
   ;; This procedure does all the work. We'll define it, then call it safely.
   (define (private-save)
-    (with-output-to-file (gnc-build-dotgnucash-path "qif-accounts-map")
+    (with-output-to-file (gnc-build-userdata-path "qif-accounts-map")
       (lambda ()
         (display ";;; qif-accounts-map")
         (newline)

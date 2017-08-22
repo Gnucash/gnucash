@@ -16,7 +16,7 @@ SET (core_utils_SOURCES
   binreloc.c
   gnc-prefs.c
   gnc-environment.c
-  gnc-filepath-utils.c
+  gnc-filepath-utils.cpp
   gnc-gkeyfile-utils.c
   gnc-glib-utils.c
   gnc-guile-utils.c
@@ -117,7 +117,7 @@ SET(core_utils_noinst_HEADERS
 )
 
 SET(core_utils_ALL_SOURCES ${core_utils_SOURCES} ${core_utils_noinst_HEADERS})
-SET(core_utils_ALL_LIBRARIES ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS} ${GOBJECT_LDFLAGS} ${GTK_MAC_LDFLAGS})
+SET(core_utils_ALL_LIBRARIES ${Boost_LIBRARIES} -lboost_filesystem ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS} ${GOBJECT_LDFLAGS} ${GTK_MAC_LDFLAGS})
 SET(core_utils_ALL_INCLUDES
   ${CMAKE_SOURCE_DIR}/common
   ${CMAKE_BINARY_DIR}/common

@@ -82,7 +82,7 @@
   ;; Then look in Gnucash's standard report directory.
   ;; If no file is found, returns just 'fname' for use in error messages.
   ;; Note: this has been tested on Linux and Windows Vista so far...
-  (let* ((userpath (gnc-build-dotgnucash-path fname))
+  (let* ((userpath (gnc-build-userdata-path fname))
          (syspath  (gnc-build-report-path fname)))
     ; make sure there's a trailing delimiter
       (if (access? userpath R_OK)
