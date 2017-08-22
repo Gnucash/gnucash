@@ -89,14 +89,22 @@ GncNumeric::GncNumeric(double d) : m_num(0), m_den(1)
         msg << "Unable to construct a GncNumeric from " << d << ".\n";
         throw std::invalid_argument(msg.str());
     }
-    constexpr auto max_denom = INT64_MAX / 10;
+    constexpr auto max_num = static_cast<double>(INT64_MAX);
     auto logval = log10(fabs(d));
     int64_t den;
+    uint8_t den_digits;
     if (logval > 0.0)
-        den = powten((max_leg_digits + 1) - static_cast<int>(floor(logval) + 1.0));
+        den_digits = (max_leg_digits + 1) - static_cast<int>(floor(logval) + 1.0);
     else
-        den = powten(max_leg_digits);
-    auto num = static_cast<int64_t>(floor(static_cast<double>(den) * d));
+        den_digits = max_leg_digits;
+    den = powten(den_digits);
+    auto num_d = static_cast<double>(den) * d;
+    while (fabs(num_d) > max_num && den_digits > 1)
+    {
+        den = powten(--den_digits);
+        num_d = static_cast<double>(den) * d;
+    }
+    auto num = static_cast<int64_t>(floor(num_d));
 
     if (num == 0)
         return;
