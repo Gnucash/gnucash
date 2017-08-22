@@ -113,7 +113,9 @@ endif
 if GNC_HAVE_GUILE_2
 GUILE_COMPILE_ENV = \
   --library-dir    ${top_builddir}/common/test-core \
-  --library-dir    ${top_builddir}/libgnucash/engine
+  --library-dir    ${top_builddir}/libgnucash/engine \
+  --library-dir    ${top_builddir}/libgnucash/gnc-module \
+  --library-dir    ${top_builddir}/libgnucash/core-utils
 
 %.go : %.scm .scm-links $(noinst_LTLIBRARIES)
 	GNC_UNINSTALLED=yes \
