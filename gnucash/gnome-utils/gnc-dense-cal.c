@@ -1030,7 +1030,15 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
                 center_y = (y1 + y2 ) / 2;
                 radius = MIN((x2 - x1), (y2 - y1)) * .75;
 
-                gtk_render_background (stylectxt, cr, center_x - radius - 2, center_y - radius, (radius * 2) + 4, radius * 2);
+                // try to compensate for row height being odd or even
+                if (((y2 -y1) % 2) == 0)
+                    gtk_render_background (stylectxt, cr,
+                                           center_x - radius - 2, center_y - radius - 1,
+                                            (radius * 2) + 4, radius * 2);
+                else
+                    gtk_render_background (stylectxt, cr,
+                                           center_x - radius - 2, center_y - radius,
+                                            (radius * 2) + 4, (radius * 2) + 1);
             }
         }
         gtk_style_context_restore (stylectxt);
