@@ -42,19 +42,19 @@ usr_confpath_strings strs2[] =
 {
     {
         0, "gnc_build_userdata_path",
-        ".gnucash"
+        PACKAGE_NAME
     },
     {
         1, "gnc_build_book_path",
-        ".gnucash" G_DIR_SEPARATOR_S "books"
+        PACKAGE_NAME G_DIR_SEPARATOR_S "books"
     },
     {
         2, "gnc_build_translog_path",
-        ".gnucash" G_DIR_SEPARATOR_S "translog"
+        PACKAGE_NAME G_DIR_SEPARATOR_S "translog"
     },
     {
         3, "gnc_build_data_path",
-        ".gnucash" G_DIR_SEPARATOR_S "data"
+        PACKAGE_NAME G_DIR_SEPARATOR_S "data"
     },
     { 0, NULL, NULL },
 };
@@ -64,6 +64,8 @@ main(int argc, char **argv)
 {
     int i;
     char *home_dir = NULL;
+    const char *userdata_dir = NULL;
+    const char *tmp_dir = g_get_tmp_dir();
 
     if (argc > 1)
         /* One can pass a homedir on the command line. This
@@ -78,6 +80,8 @@ main(int argc, char **argv)
 
     /* Run usr conf dir tests with a valid and writable homedir */
     g_setenv("HOME", home_dir, TRUE);
+
+    /* First run, before calling gnc_filepath_init */
     for (i = 0; strs2[i].funcname != NULL; i++)
     {
         char *daout;
@@ -85,25 +89,66 @@ main(int argc, char **argv)
 
         if (strs2[i].func_num == 0)
         {
-            wantout = g_build_filename(home_dir, strs2[i].output, "foo",
+            wantout = g_build_filename(tmp_dir, strs2[i].output, "foo",
                                        (gchar *)NULL);
             daout = gnc_build_userdata_path("foo");
         }
         else if (strs2[i].func_num == 1)
         {
-            wantout = g_build_filename(home_dir, strs2[i].output, "foo",
+            wantout = g_build_filename(tmp_dir, strs2[i].output, "foo",
                                        (gchar *)NULL);
             daout = gnc_build_book_path("foo");
         }
         else if (strs2[i].func_num == 2)
         {
-            wantout = g_build_filename(home_dir, strs2[i].output, "foo",
+            wantout = g_build_filename(tmp_dir, strs2[i].output, "foo",
                                        (gchar *)NULL);
             daout = gnc_build_translog_path("foo");
         }
         else // if (strs2[i].prefix_home == 3)
         {
-            wantout = g_build_filename(home_dir, strs2[i].output, "foo",
+            wantout = g_build_filename(tmp_dir, strs2[i].output, "foo",
+                                       (gchar *)NULL);
+            daout = gnc_build_data_path("foo");
+        }
+
+        do_test_args(g_strcmp0(daout, wantout) == 0,
+                     "gnc_build_x_path",
+                     __FILE__, __LINE__,
+                     "%s (%s) vs %s", daout, strs2[i].funcname, wantout);
+        g_free(wantout);
+        g_free(daout);
+    }
+
+    /* Second run, after properly having called gnc_filepath_init */
+    gnc_filepath_init(TRUE);
+    userdata_dir = g_get_user_data_dir();
+    for (i = 0; strs2[i].funcname != NULL; i++)
+    {
+        char *daout;
+        char *wantout;
+
+        if (strs2[i].func_num == 0)
+        {
+            wantout = g_build_filename(userdata_dir, strs2[i].output, "foo",
+                                       (gchar *)NULL);
+            daout = gnc_build_userdata_path("foo");
+        }
+        else if (strs2[i].func_num == 1)
+        {
+            wantout = g_build_filename(userdata_dir, strs2[i].output, "foo",
+                                       (gchar *)NULL);
+            daout = gnc_build_book_path("foo");
+        }
+        else if (strs2[i].func_num == 2)
+        {
+            wantout = g_build_filename(userdata_dir, strs2[i].output, "foo",
+                                       (gchar *)NULL);
+            daout = gnc_build_translog_path("foo");
+        }
+        else // if (strs2[i].prefix_home == 3)
+        {
+            wantout = g_build_filename(userdata_dir, strs2[i].output, "foo",
                                        (gchar *)NULL);
             daout = gnc_build_data_path("foo");
         }

@@ -26,8 +26,8 @@ LDADD = \
 TESTS = \
   test-gnc-glib-utils \
   test-resolve-file-path \
-  test-usr-conf-dir \
-  test-usr-conf-dir-invalid-home
+  test-userdata-dir \
+  test-userdata-dir-invalid-home
 
 GNC_TEST_DEPS = \
   --library-dir    ${top_builddir}/libgnucash/core-utils
