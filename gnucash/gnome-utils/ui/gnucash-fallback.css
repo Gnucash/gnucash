@@ -1,5 +1,5 @@
 /* Note: Widgets obtained from Glade files will not be addressable
-   directly by name as these are not brought in when loaded, only
+   unless they have been named or have style classes added. Only 
    the widget type can be configured unless they are named in code */
 
 
