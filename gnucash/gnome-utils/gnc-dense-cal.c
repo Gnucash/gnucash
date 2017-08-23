@@ -419,8 +419,8 @@ gnc_dense_cal_init(GncDenseCal *dcal)
     dcal->topPadding = 2;
 
     {
-	GDate now;
-	g_date_clear (&now, 1);
+    GDate now;
+    g_date_clear (&now, 1);
         gnc_gdate_set_today (&now);
         _gnc_dense_cal_set_month(dcal, g_date_get_month(&now), FALSE);
         _gnc_dense_cal_set_year(dcal, g_date_get_year(&now), FALSE);
@@ -1341,7 +1341,7 @@ gnc_dense_cal_motion_notify(GtkWidget *widget,
         GdkWindow *win = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
         GdkMonitor *mon = gdk_display_get_monitor_at_window (gtk_widget_get_display (widget), win);
         GdkRectangle monitor_size;
-                
+
         gdk_monitor_get_geometry (mon, &monitor_size);
 
         screen_width = monitor_size.width;
@@ -1355,7 +1355,7 @@ gnc_dense_cal_motion_notify(GtkWidget *widget,
 
         gtk_widget_get_allocation(GTK_WIDGET(dcal->transPopup), &alloc);
 
-        gtk_widget_show_all(GTK_WIDGET(dcal->transPopup));      
+        gtk_widget_show_all(GTK_WIDGET(dcal->transPopup));
 
         if (event->x_root + 5 + alloc.width > screen_width)
             win_xpos = event->x_root - 2 - alloc.width;
