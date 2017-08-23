@@ -52,7 +52,7 @@ extern "C" {
 #include "gnc-path.h"
 #include "gnc-filepath-utils.h"
 
-#ifdef _MSC_VER
+#if defined (_MSC_VER) || defined (G_OS_WIN32)
 #include <glib/gwin32.h>
 #define PATH_MAX MAXPATHLEN
 #endif
@@ -336,93 +336,259 @@ gnc_validate_directory (const bfs::path &dirname, bool create)
     return true;
 }
 
-static auto usr_conf_dir = bfs::path();
+static bool userdata_is_home = false;
+static bool userdata_is_tmp = false;
+static auto userdata_home = bfs::path();
+static auto gnc_userdata_home = bfs::path();
 
-static void
-gnc_filepath_init()
+/* Will attempt to copy all files and directories from src to dest
+ * Returns true if successful or false if not */
+static bool
+copy_recursive(const bfs::path& src, const bfs::path& dest)
+{
+    if (!bfs::exists(src))
+        return false;
+
+    auto old_str = src.string();
+    auto old_len = old_str.size();
+    try
+    {
+        /* Note: the for(auto elem : iterator) construct fails
+         * on travis (g++ 4.8.x, boost 1.54) so I'm using
+         * a traditional for loop here */
+        for(auto direntry = bfs::recursive_directory_iterator(src);
+            direntry != bfs::recursive_directory_iterator(); ++direntry)
+        {
+            auto cur_str = direntry->path().string();
+            auto cur_len = cur_str.size();
+            auto rel_str = std::string(cur_str, old_len, cur_len - old_len);
+            auto relpath = bfs::path(rel_str).relative_path();
+            auto newpath = bfs::absolute (relpath, dest);
+            bfs::copy(direntry->path(), newpath);
+        }
+    }
+    catch(const bfs::filesystem_error& ex)
+    {
+        g_warning("An error occured while trying to migrate the user configation from\n%s to\n%s"
+                  "The reported failure is\n%s",
+                  src.c_str(), gnc_userdata_home.c_str(), ex.what());
+        return false;
+    }
+
+    return true;
+}
+
+#ifdef G_OS_WIN32
+/* g_get_user_data_dir defaults to CSIDL_LOCAL_APPDATA, but
+ * the roaming profile makes more sense.
+ * So this function is a copy of glib's internal get_special_folder
+ * and minimally adjusted to fetch CSIDL_APPDATA
+ */
+static gchar *
+win32_get_userdata_home (void)
+{
+    wchar_t path[MAX_PATH+1];
+    HRESULT hr;
+    LPITEMIDLIST pidl = NULL;
+    BOOL b;
+    gchar *retval = NULL;
+
+    hr = SHGetSpecialFolderLocation (NULL, CSIDL_APPDATA, &pidl);
+    if (hr == S_OK)
+    {
+        b = SHGetPathFromIDListW (pidl, path);
+        if (b)
+            retval = g_utf16_to_utf8 (path, -1, NULL, NULL, NULL);
+        CoTaskMemFree (pidl);
+    }
+    return retval;
+}
+#elif defined MAC_INTEGRATION
+static gchar*
+quarz_get_userdata_home(void)
+{
+    gchar *retval = NULL;
+    NSFileManager*fm = [NSFileManager defaultManager];
+    NSArray* appSupportDir = [fm URLsForDirectory:NSApplicationSupportDirectory
+    inDomains:NSUserDomainMask];
+    if ([appSupportDir count] > 0)
+    {
+        NSURL* dirUrl = [appSupportDir objectAtIndex:0];
+        NSString* dirPath = [dirUrl path];
+        retval = g_strdup([dirPath UTF8String]);
+    }
+    return retval;
+}
+#endif
+
+static bfs::path
+get_userdata_home(bool create)
 {
     auto try_home_dir = true;
-    auto env_var = g_getenv("GNC_DOT_DIR");
-    if (env_var)
-        usr_conf_dir = env_var;
+    gchar *data_dir = NULL;
 
-    if (!usr_conf_dir.empty())
+#ifdef G_OS_WIN32
+    data_dir = win32_get_userdata_home ();
+#elif defined MAC_INTEGRATION
+    data_dir = quarz_get_userdata_home ();
+#endif
+
+    if (data_dir)
+    {
+        userdata_home = data_dir;
+        g_free(data_dir);
+    }
+    else
+        userdata_home = g_get_user_data_dir();
+
+    if (!userdata_home.empty())
     {
         try
         {
-            gnc_validate_directory(usr_conf_dir, true);
+            if (!gnc_validate_directory(userdata_home, create))
+                throw (bfs::filesystem_error(
+                    std::string(_("Directory doesn't exist: "))
+                    + userdata_home.c_str(), userdata_home,
+                    bst::error_code(bst::errc::permission_denied, bst::generic_category())));
             try_home_dir = false;
         }
         catch (const bfs::filesystem_error& ex)
         {
-            g_warning("%s is not a suitable base directory for the user configuration."
-                      "Trying home directory instead.\nThe failure is\n%s",
-                      usr_conf_dir.c_str(), ex.what());
+            g_warning("%s is not a suitable base directory for the user data."
+            "Trying home directory instead.\nThe failure is\n%s",
+            userdata_home.c_str(), ex.what());
         }
     }
 
     if (try_home_dir)
     {
-        usr_conf_dir = g_get_home_dir();
+        userdata_home = g_get_home_dir();
         try
         {
-            if (!gnc_validate_directory(usr_conf_dir, false))
-                usr_conf_dir = g_get_tmp_dir();
+            /* Never attempt to create a home directory, hence the false below */
+            if (!gnc_validate_directory(userdata_home, false))
+                throw (bfs::filesystem_error(
+                    std::string(_("Directory doesn't exist: "))
+                    + userdata_home.c_str(), userdata_home,
+                    bst::error_code(bst::errc::permission_denied, bst::generic_category())));
+            userdata_is_home = true;
         }
         catch (const bfs::filesystem_error& ex)
         {
             g_warning("Cannot find suitable home directory. Using tmp directory instead.\n"
-                    "The failure is\n%s", ex.what());
-            usr_conf_dir = g_get_tmp_dir();
+            "The failure is\n%s", ex.what());
+            userdata_home = g_get_tmp_dir();
+            userdata_is_tmp = true;
         }
     }
-    g_assert(!usr_conf_dir.empty());
+    g_assert(!userdata_home.empty());
 
-    usr_conf_dir /= ".gnucash";
+    return userdata_home;
+}
 
-    if (!gnc_validate_directory(usr_conf_dir, true))
+gboolean
+gnc_filepath_init(gboolean create)
+{
+    auto userdata_home = get_userdata_home(create);
+
+    if (userdata_is_home)
     {
-        g_warning("Cannot find suitable .gnucash directory in home directory. Using tmp directory instead.");
-
-        usr_conf_dir = g_get_tmp_dir();
-        g_assert(!usr_conf_dir.empty());
-        usr_conf_dir /= ".gnucash";
-        /* This may throw and end the program! */
-        gnc_validate_directory(usr_conf_dir, true);
+        /* If we get here that means the platform
+         * dependent gnc_userdata_home is not available for
+         * some reason. If legacy .gnucash directory still exists,
+         * use it as first fallback, but never create it (we want
+         * it to go away eventually).
+         * If missing, fall back to tmp_dir instead */
+        gnc_userdata_home = userdata_home / ".gnucash";
+        if (!bfs::exists(gnc_userdata_home))
+        {
+            userdata_home = g_get_tmp_dir();
+            userdata_is_home = false;
+        }
     }
+
+    if (!userdata_is_home)
+        gnc_userdata_home = userdata_home / PACKAGE_NAME;
+
+    auto try_migrate = false;
+    if (!userdata_is_home && !bfs::exists(gnc_userdata_home) && create)
+        try_migrate = true;
+    /* This may throw and end the program! */
+    gnc_validate_directory(gnc_userdata_home, create);
+    auto migrated = FALSE;
+    if (try_migrate)
+        migrated = copy_recursive(bfs::path (g_get_home_dir()) / ".gnucash",
+                                  gnc_userdata_home);
 
     /* Since we're in code that is only executed once....
      * Note these calls may throw and end the program! */
-    gnc_validate_directory(usr_conf_dir / "books", true);
-    gnc_validate_directory(usr_conf_dir / "checks", true);
-    gnc_validate_directory(usr_conf_dir / "translog", true);
+    gnc_validate_directory(gnc_userdata_home / "books", (create || userdata_is_tmp));
+    gnc_validate_directory(gnc_userdata_home / "checks", (create || userdata_is_tmp));
+    gnc_validate_directory(gnc_userdata_home / "translog", (create || userdata_is_tmp));
+
+    return migrated;
 }
 
 /** @fn const gchar * gnc_userdata_dir ()
  *  @brief Ensure that the user's configuration directory exists and is minimally populated.
  *
- *  Note that the default path is $HOME/.gnucash; This can be changed
- *  by the environment variable $GNC_DOT_DIR.
+ *  Note that the default path depends on the platform.
+ *  - Windows: CSIDL_APPDATA/Gnucash
+ *  - OS X: $HOME/Application Support/Gnucash
+ *  - Linux: $XDG_DATA_HOME/Gnucash (or the default $HOME/.local/share/Gnucash)
+ *
+ *  If any of these paths doesn't exist and can't be created the function will
+ *  fall back to
+ *  - $HOME/.gnucash
+ *  - <TMP_DIR>/Gnucash
+ *  (in that order)
  *
  *  @return An absolute path to the configuration directory. This string is
- *  by the gnc_filepath_utils code and should not be freed by the user.
+ *  owned by the gnc_filepath_utils code and should not be freed by the user.
+ */
+
+
+/* Note Don't create missing directories automatically
+ * here and in the next function except if the
+ * target directory is the temporary directory. This
+ * should be done properly at a higher level (in the gui
+ * code most likely) very early in application startup.
+ * This call is just a fallback to prevent the code from
+ * crashing because no directories were configured. This
+ * weird construct is set up because compiling our guile
+ * scripts also triggers this code and that's not the
+ * right moment to start creating the necessary directories.
+ * FIXME A better approach would be to have the gnc_userdata_home
+ * verification/creation be part of the application code instead
+ * of libgnucash. If libgnucash needs access to this directory
+ * libgnucash will need some kind of initialization routine
+ * that the application can call to set (among others) the proper
+ * gnc_uderdata_home for libgnucash. The only other aspect to
+ * consider here is how to handle this in the bindings (if they
+ * need it).
  */
 const gchar *
 gnc_userdata_dir (void)
 {
-    if (usr_conf_dir.empty())
-        gnc_filepath_init();
+    if (gnc_userdata_home.empty())
+        gnc_filepath_init(false);
 
-    return usr_conf_dir.c_str();
+    return gnc_userdata_home.c_str();
 }
 
 static const bfs::path&
 gnc_userdata_dir_as_path (void)
 {
-    if (usr_conf_dir.empty())
-        gnc_filepath_init();
+    if (gnc_userdata_home.empty())
+        /* Don't create missing directories automatically except
+         * if the target directory is the temporary directory. This
+         * should be done properly at a higher level (in the gui
+         * code most likely) very early in application startup.
+         * This call is just a fallback to prevent the code from
+         * crashing because no directories were configured. */
+        gnc_filepath_init(false);
 
-    return usr_conf_dir;
+    return gnc_userdata_home;
 }
 
 /** @fn gchar * gnc_build_userdata_path (const gchar *filename)

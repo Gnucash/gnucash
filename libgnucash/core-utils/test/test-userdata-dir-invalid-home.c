@@ -42,19 +42,19 @@ usr_confpath_strings strs2[] =
 {
     {
         0, "gnc_build_userdata_path",
-        ".gnucash"
+        PACKAGE_NAME
     },
     {
         1, "gnc_build_book_path",
-        ".gnucash" G_DIR_SEPARATOR_S "books"
+        PACKAGE_NAME G_DIR_SEPARATOR_S "books"
     },
     {
         2, "gnc_build_translog_path",
-        ".gnucash" G_DIR_SEPARATOR_S "translog"
+        PACKAGE_NAME G_DIR_SEPARATOR_S "translog"
     },
     {
         3, "gnc_build_data_path",
-        ".gnucash" G_DIR_SEPARATOR_S "data"
+        PACKAGE_NAME G_DIR_SEPARATOR_S "data"
     },
     { 0, NULL, NULL },
 };

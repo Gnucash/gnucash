@@ -148,6 +148,9 @@ static GOptionEntry options[] =
     { NULL }
 };
 
+static gboolean userdata_migrated = FALSE;
+static gchar *userdata_migration_msg = NULL;
+
 static void
 gnc_print_unstable_message(void)
 {
@@ -658,6 +661,18 @@ inner_main (void *closure, int argc, char **argv)
         gnc_destroy_splash_screen();
         gnc_ui_new_user_dialog();
     }
+
+    if (userdata_migrated)
+    {
+        GtkWidget *dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL,
+                                                   GTK_MESSAGE_INFO,
+                                                   GTK_BUTTONS_OK,
+                                                   "%s",
+                                                   userdata_migration_msg);
+        gnc_destroy_splash_screen();
+        gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy (dialog);
+    }
     /* Ensure temporary preferences are temporary */
     gnc_prefs_reset_group (GNC_PREFS_GROUP_WARNINGS_TEMP);
 
@@ -777,9 +792,21 @@ main(int argc, char ** argv)
         g_free(localedir);
     }
 #endif
-    
+
     gnc_parse_command_line(&argc, &argv);
     gnc_print_unstable_message();
+
+    /* Make sure gnucash' user data directory is properly set up */
+    userdata_migrated = gnc_filepath_init(TRUE);
+    /* Translators: the message below will be completed with two directory names. */
+    userdata_migration_msg = g_strdup_printf (
+        _("Notice\n\nYour gnucash metadata has been migrated.\n\n"
+          "Old location: %s%s\n"
+          "New location: %s\n\n"
+          "If you no longer intend to run " PACKAGE_NAME " 2.6.x or older on this system you can safely remove the old directory."),
+        g_get_home_dir(), G_DIR_SEPARATOR_S ".gnucash", gnc_userdata_dir());
+    if (userdata_migrated)
+        g_print("\n\n%s\n", userdata_migration_msg);
 
     gnc_log_init();
 
