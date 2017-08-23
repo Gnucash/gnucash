@@ -19,8 +19,8 @@ GNC_ADD_TEST_WITH_GUILE(test-import-parse test-import-parse.c
 GNC_ADD_TEST(test-link-generic-import test-link.c
   GENERIC_IMPORT_TEST_INCLUDE_DIRS GENERIC_IMPORT_TEST_LIBS
 )
-GNC_ADD_TEST(test-import-pending-matches test-import-pending-matches.c
+GNC_ADD_TEST(test-import-pending-matches test-import-pending-matches.cpp
   GENERIC_IMPORT_TEST_INCLUDE_DIRS GENERIC_IMPORT_TEST_LIBS
 )
 SET_DIST_LIST(test_generic_import_DIST CMakeLists.txt Makefile.am
-        test-link.c test-import-parse.c test-import-pending-matches.c)
+        test-link.c test-import-parse.c test-import-pending-matches.cpp)
