@@ -37,14 +37,31 @@
 }
 
 /* The Dense Calendar defaults */
+@define-color primary_bg_color lavender;
+@define-color secondary_bg_color SlateGray1;
+@define-color marker_bg_color yellow;
+
 *.primary {
-  background-color: lavender;
+   background-color: @primary_bg_color;
+}
+
+*.primary-dark {
+  background-color: shade (@primary_bg_color, 0.7);
 }
 
 *.secondary {
-  background-color: SlateGray1;
+  background-color: @secondary_bg_color;
+}
+
+*.secondary-dark {
+  background-color: shade (@secondary_bg_color, 0.7);
 }
 
 *.markers {
-  background-color: yellow;
+  background-color: @marker_bg_color;
 }
+
+*.markers-dark {
+  background-color: shade (@marker_bg_color, 0.8);
+}
+

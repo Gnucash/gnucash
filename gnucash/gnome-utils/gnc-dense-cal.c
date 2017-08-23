@@ -923,6 +923,20 @@ gnc_style_context_get_border_color (GtkStyleContext *context,
     gdk_rgba_free (c);
 }
 
+static gboolean
+is_color_dark (GdkRGBA *color)
+{
+    gboolean is_dark = FALSE;
+
+    // Counting the perceptive luminance - human eye favors green color...
+    double a = (0.299 * color->red + 0.587 * color->green + 0.114 * color->blue);
+
+    if (a > 0.5)
+        is_dark = TRUE;
+
+    return is_dark;
+}
+
 static void
 gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
 {
@@ -935,6 +949,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
     PangoLayout *layout;
     GTimer *timer;
     cairo_t *cr;
+    const gchar *primary_color_class, *secondary_color_class, *marker_color_class;
 
     timer = g_timer_new();
     g_debug("drawing");
@@ -957,6 +972,22 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
     gtk_render_background (stylectxt, cr, 0, 0,
                            cairo_image_surface_get_width (dcal->surface),
                            cairo_image_surface_get_height (dcal->surface));
+
+    /* get the colors */
+    {
+         GdkRGBA color;
+         gchar *color_extension = NULL;
+
+         gtk_style_context_get_color (stylectxt, GTK_STATE_FLAG_NORMAL, &color);
+
+          if (is_color_dark (&color))
+              color_extension = "-dark";
+
+          primary_color_class = g_strconcat ("primary", color_extension, NULL);
+          secondary_color_class = g_strconcat ("secondary", color_extension, NULL);
+          marker_color_class = g_strconcat ("markers", color_extension, NULL);
+    }
+
 
     /* Fill in alternating month colors. */
     {
@@ -984,20 +1015,15 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
             for (mcListIter = mcList; mcListIter != NULL; mcListIter = mcListIter->next)
             {
                 rect = (GdkRectangle*)mcListIter->data;
+                gtk_style_context_save (stylectxt);
 
                 if (i % 2 == 0)
-                {
-                    gtk_style_context_add_class (stylectxt, "primary");
-                    if (gtk_style_context_has_class (stylectxt, "secondary"))
-                        gtk_style_context_remove_class (stylectxt, "secondary");
-                }
+                    gtk_style_context_add_class (stylectxt, primary_color_class);
                 else
-                {
-                    if (gtk_style_context_has_class (stylectxt, "primary"))
-                        gtk_style_context_remove_class (stylectxt, "primary");
-                    gtk_style_context_add_class (stylectxt, "secondary");
-                }
+                    gtk_style_context_add_class (stylectxt, secondary_color_class);
+
                 gtk_render_background (stylectxt, cr, rect->x, rect->y, rect->width, rect->height);
+                gtk_style_context_restore (stylectxt);
             }
             g_list_foreach(mcList, free_rect, NULL);
             g_list_free(mcList);
@@ -1013,7 +1039,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
         int x1, x2, y1, y2;
 
         gtk_style_context_save (stylectxt);
-        gtk_style_context_add_class (stylectxt, "markers");
+        gtk_style_context_add_class (stylectxt, marker_color_class);
 #if GTK_CHECK_VERSION(3,22,0)
         gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_VIEW);
         gtk_style_context_set_state (stylectxt, GTK_STATE_FLAG_SELECTED);
@@ -1064,12 +1090,16 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
         w = col_width(dcal) - COL_BORDER_SIZE - dcal->label_width;
         h = col_height(dcal);
 
+        gtk_style_context_save (stylectxt);
+
         /* draw the outside border [inside the month labels] */
+        gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_FRAME);
+
+        gtk_render_frame (stylectxt, cr, x, y, w + 1, h + 1);
+
         gnc_style_context_get_border_color (stylectxt, state_flags, &color);
         cairo_set_source_rgb (cr, color.red, color.green, color.blue);
         cairo_set_line_width (cr, 1);
-        cairo_rectangle (cr, x + 0.5, y + 0.5, w, h);
-        cairo_stroke (cr);
 
         /* draw the week separations */
         for (j = 0; j < num_weeks_per_col(dcal); j++)
@@ -1089,6 +1119,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
             cairo_stroke (cr);
         }
         cairo_restore (cr);
+        gtk_style_context_restore (stylectxt);
 
 
         /* draw the day of the week labels */
