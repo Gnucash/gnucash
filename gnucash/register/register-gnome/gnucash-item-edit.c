@@ -167,7 +167,7 @@ gnc_item_edit_init (GncItemEdit *item_edit)
 
     item_edit->popup_toggle.ebox = NULL;
     item_edit->popup_toggle.tbutton = NULL;
-    item_edit->popup_toggle.direction = TRUE;
+    item_edit->popup_toggle.arrow_down = TRUE;
     item_edit->popup_toggle.signals_connected = FALSE;
 
     item_edit->popup_item = NULL;
@@ -347,7 +347,7 @@ draw_arrow_cb (GtkWidget *widget, cairo_t *cr, gpointer data)
 
     size = MIN(width / 2, height / 2);
 
-    if (item_edit->popup_toggle.direction == 0)
+    if (item_edit->popup_toggle.arrow_down == 0)
         gtk_render_arrow (context, cr, 0,
                          (width - size)/2, (height - size)/2, size);
     else
@@ -685,7 +685,7 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
     }
 
     // set the popup arrow direction up
-    item_edit->popup_toggle.direction = FALSE;
+    item_edit->popup_toggle.arrow_down = FALSE;
 
     if (item_edit->popup_set_focus)
         item_edit->popup_set_focus (item_edit->popup_item,
@@ -731,7 +731,7 @@ gnc_item_edit_hide_popup (GncItemEdit *item_edit)
     gtk_container_remove (GTK_CONTAINER(item_edit->sheet), item_edit->popup_item);
 
     // set the popup arrow direction down
-    item_edit->popup_toggle.direction = TRUE;
+    item_edit->popup_toggle.arrow_down = TRUE;
 
     gtk_toggle_button_set_active
     (GTK_TOGGLE_BUTTON(item_edit->popup_toggle.tbutton), FALSE);
