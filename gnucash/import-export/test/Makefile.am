@@ -59,9 +59,10 @@ check_PROGRAMS = \
 
 noinst_PROGRAMS = $(TEST_PROGS) $(check_PROGRAMS)
 
-test_import_pending_matches_SOURCES = test-import-pending-matches.c
+test_import_pending_matches_SOURCES = test-import-pending-matches.cpp
 
 test_import_pending_matches_LDADD = \
+  ${top_builddir}/libgnucash/core-utils/libgnc-core-utils.la \
   ${top_builddir}/libgnucash/engine/libgncmod-engine.la \
   ../libgncmod-generic-import.la \
   ${top_builddir}/libgnucash/engine/test-core/libgncmod-test-engine.la \
