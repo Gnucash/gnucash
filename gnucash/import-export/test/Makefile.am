@@ -61,6 +61,14 @@ noinst_PROGRAMS = $(TEST_PROGS) $(check_PROGRAMS)
 
 test_import_pending_matches_SOURCES = test-import-pending-matches.cpp
 
+#
+# Force automake to treat test-import-pending-matches as a C++ program.
+#
+# dummy.cpp, intentionally, does not actually exist.  See:
+#     https://www.gnu.org/software/automake/manual/html_node/Libtool-Convenience-Libraries.html
+#
+nodist_EXTRA_test_import_pending_matches_SOURCES = dummy.cpp
+
 test_import_pending_matches_LDADD = \
   ${top_builddir}/libgnucash/core-utils/libgnc-core-utils.la \
   ${top_builddir}/libgnucash/engine/libgncmod-engine.la \
