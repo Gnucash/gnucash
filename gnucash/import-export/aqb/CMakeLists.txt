@@ -58,7 +58,7 @@ IF(WITH_AQBANKING)
          gncmod-generic-import gncmod-register-core
          gncmod-register-gnome gncmod-ledger-core gncmod-engine
          ${AQB_EXPORT_SYMBOLS} ${AQBANKING_LDFLAGS}
-         ${GWENHYWFAR_LDFLAGS} ${GWENGUI_GTK2_LDFLAGS}
+         ${GWENHYWFAR_LDFLAGS} ${GWENGUI_GTK3_LDFLAGS}
          ${GNOME_LDFLAGS} ${KTOBLZCHECK_LDFLAGS} ${AQB_LIBSTDCXX})
 
   TARGET_COMPILE_DEFINITIONS(gncmod-aqbanking PRIVATE -DG_LOG_DOMAIN=\"gnc.import.aqbanking\")
