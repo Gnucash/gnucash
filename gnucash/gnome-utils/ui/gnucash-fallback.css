@@ -30,7 +30,7 @@
   border-color: black;
 }
 
-/* Make Label bold and larger */
+/* Make label more important */
 .emphasize-label {
   font-size: large;
   font-weight: bold;
