@@ -34,6 +34,7 @@
 #include <glib/gi18n.h>
 #include <gwenhywfar/gui_be.h>
 #include <gwenhywfar/inherit.h>
+#include <gwenhywfar/version.h>
 
 #include "dialog-utils.h"
 #include "gnc-ab-utils.h"
@@ -195,9 +196,23 @@ static gint progress_advance_cb(GWEN_GUI *gwen_gui, uint32_t id,
 static gint progress_log_cb(GWEN_GUI *gwen_gui, guint32 id,
                             GWEN_LOGGER_LEVEL level, const gchar *text);
 static gint progress_end_cb(GWEN_GUI *gwen_gui, guint32 id);
-static gint GNC_GWENHYWFAR_CB getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *token,
-        const gchar *title, const gchar *text, gchar *buffer,
-        gint min_len, gint max_len, guint32 guiid);
+#if GWENHYWFAR_VERSION_INT <= 41700
+static gint GNC_GWENHYWFAR_CB getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags,
+                                             const gchar *token,
+                                             const gchar *title,
+                                             const gchar *text, gchar *buffer,
+                                             gint min_len, gint max_len,
+                                             guint32 guiid);
+#else
+static gint GNC_GWENHYWFAR_CB getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags,
+                                             const gchar *token,
+                                             const gchar *title,
+                                             const gchar *text, gchar *buffer,
+                                             gint min_len, gint max_len,
+                                             GWEN_GUI_PASSWORD_METHOD methodId,
+                                             GWEN_DB_NODE *methodParams,
+                                             guint32 guiid);
+#endif
 static gint GNC_GWENHYWFAR_CB setpasswordstatus_cb(GWEN_GUI *gwen_gui, const gchar *token,
         const gchar *pin,
         GWEN_GUI_PASSWORD_STATUS status, guint32 guiid);
@@ -1395,9 +1410,16 @@ progress_end_cb(GWEN_GUI *gwen_gui, guint32 id)
 }
 
 static gint GNC_GWENHYWFAR_CB
+#if GWENHYWFAR_VERSION_INT <= 41700
 getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *token,
                const gchar *title, const gchar *text, gchar *buffer,
                gint min_len, gint max_len, guint32 guiid)
+#else
+getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *token,
+               const gchar *title, const gchar *text, gchar *buffer,
+               gint min_len, gint max_len, GWEN_GUI_PASSWORD_METHOD methodId,
+               GWEN_DB_NODE *methodParams, guint32 guiid)
+#endif
 {
     GncGWENGui *gui = GETDATA_GUI(gwen_gui);
     gchar *password = NULL;
