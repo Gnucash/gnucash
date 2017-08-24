@@ -46,9 +46,9 @@
 #include "qof.h"
 
 #if GWENHYWFAR_VERSION_INT >= 39921
-/* For sufficiently new gwenhywfar (>=3.99.21) the gtk2 gui object is
+/* For sufficiently new gwenhywfar (>=3.99.21) the gtk3 gui object is
  * working fine and it is enabled here here. */
-# define USING_GWENHYWFAR_GTK2_GUI
+# define USING_GWENHYWFAR_GTK3_GUI
 # define GNC_GWENHYWFAR_CB GWENHYWFAR_CB
 #else
 # define GNC_GWENHYWFAR_CB
@@ -59,25 +59,25 @@
 #define GNC_PREF_CLOSE_ON_FINISH   "close-on-finish"
 #define GNC_PREF_REMEMBER_PIN      "remember-pin"
 
-#ifdef USING_GWENHYWFAR_GTK2_GUI
-# include <gwen-gui-gtk2/gtk2_gui.h>
+#ifdef USING_GWENHYWFAR_GTK3_GUI
+# include <gwen-gui-gtk3/gtk3_gui.h>
 #endif
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
 
-/* The following block can be enabled, but the gwen-gtk2 widgets might
+/* The following block can be enabled, but the gwen-gtk3 widgets might
  * still need some work. */
-#if 0 /*#ifdef USING_GWENHYWFAR_GTK2_GUI*/
+#if 0 /*#ifdef USING_GWENHYWFAR_GTK3_GUI*/
 
-/* A GWEN_GUI implementation using gtk2 widgets  */
+/* A GWEN_GUI implementation using gtk3 widgets  */
 static GWEN_GUI *gwen_gui = NULL;
 
 void gnc_GWEN_Gui_log_init(void)
 {
     if (!gwen_gui)
     {
-        gwen_gui = Gtk2_Gui_new();
+        gwen_gui = Gtk3_Gui_new();
         GWEN_Gui_SetGui(gwen_gui);
     }
 }
@@ -291,8 +291,8 @@ gnc_GWEN_Gui_log_init(void)
     if (!log_gwen_gui)
     {
         log_gwen_gui =
-#ifdef USING_GWENHYWFAR_GTK2_GUI
-            Gtk2_Gui_new()
+#ifdef USING_GWENHYWFAR_GTK3_GUI
+            Gtk3_Gui_new()
 #else
             GWEN_Gui_new()
 #endif
@@ -461,8 +461,8 @@ register_callbacks(GncGWENGui *gui)
     ENTER("gui=%p", gui);
 
     gwen_gui =
-#ifdef USING_GWENHYWFAR_GTK2_GUI
-        Gtk2_Gui_new()
+#ifdef USING_GWENHYWFAR_GTK3_GUI
+        Gtk3_Gui_new()
 #else
         GWEN_Gui_new()
 #endif
