@@ -43,7 +43,7 @@ libgncmod_aqbanking_la_LIBADD = \
   ${top_builddir}/libgnucash/gnc-module/libgnc-module.la \
   ${GTK_LIBS} \
   ${GLIB_LIBS} \
-  ${GWENGUI_GTK2_LIBS} \
+  ${GWENGUI_GTK3_LIBS} \
   ${AQBANKING_LIBS}
 
 AM_CPPFLAGS = \
