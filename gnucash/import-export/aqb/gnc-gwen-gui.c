@@ -61,7 +61,7 @@
 #define GNC_PREF_REMEMBER_PIN      "remember-pin"
 
 #ifdef USING_GWENHYWFAR_GTK3_GUI
-# include <gwen-gui-gtk3/gtk3_gui.h>
+# include <gtk3_gui.h>
 #endif
 
 /* This static indicates the debugging module that this .o belongs to.  */

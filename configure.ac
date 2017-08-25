@@ -1076,7 +1076,7 @@ then
     AC_MSG_ERROR([Could not find aqbanking >= 4.0.0. If you use --enable-aqbanking, you MUST have aqbanking installed!])
   ])
   # For libgwenhywfar > 3.99.20, look for its library gwengui-gtk2.
-  PKG_CHECK_MODULES([GWENGUI_GTK3], [gwengui-gtk3 gwenhywfar], [has_gwengui_gtk3=1], [has_gwengui_gtk2=0])
+  PKG_CHECK_MODULES([GWEN], [gwenhywfar], [has_gwen=1], [has_gwen=0])
 
   # also check for ktoblzcheck
   AC_CHECK_HEADERS(ktoblzcheck.h)
@@ -1646,6 +1646,7 @@ AC_CONFIG_FILES(
   borrowed/Makefile
   borrowed/goffice/Makefile
   borrowed/libc/Makefile
+  borrowed/gwengui-gtk3/Makefile
   common/Makefile
   common/debug/Makefile
   common/debug/valgrind/Makefile
