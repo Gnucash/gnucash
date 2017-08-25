@@ -41,13 +41,14 @@ libgncmod_aqbanking_la_LIBADD = \
   ${top_builddir}/libgnucash/engine/libgncmod-engine.la \
   ${top_builddir}/libgnucash/core-utils/libgnc-core-utils.la \
   ${top_builddir}/libgnucash/gnc-module/libgnc-module.la \
+  ${top_builddir}/borrowed/gwengui-gtk3/libgwengui-gtk3.la \
   ${GTK_LIBS} \
   ${GLIB_LIBS} \
-  ${GWENGUI_GTK3_LIBS} \
   ${AQBANKING_LIBS}
 
 AM_CPPFLAGS = \
   -I${top_srcdir}/common \
+  -I${top_srcdir}/borrowed/gwengui-gtk3 \
   -I${top_srcdir}/gnucash/import-export \
   -I${top_srcdir}/gnucash/gnome \
   -I${top_srcdir}/gnucash/register/ledger-core \

@@ -56,15 +56,18 @@ IF(WITH_AQBANKING)
 
   TARGET_LINK_LIBRARIES(gncmod-aqbanking gnc-gnome gncmod-gnome-utils
          gncmod-generic-import gncmod-register-core
-         gncmod-register-gnome gncmod-ledger-core gncmod-engine
+         gncmod-register-gnome gncmod-ledger-core gncmod-engine gwengui-gtk3
          ${AQB_EXPORT_SYMBOLS} ${AQBANKING_LDFLAGS}
-         ${GWENHYWFAR_LDFLAGS} ${GWENGUI_GTK3_LDFLAGS}
+         ${GWENHYWFAR_LDFLAGS} 
          ${GNOME_LDFLAGS} ${KTOBLZCHECK_LDFLAGS} ${AQB_LIBSTDCXX})
 
   TARGET_COMPILE_DEFINITIONS(gncmod-aqbanking PRIVATE -DG_LOG_DOMAIN=\"gnc.import.aqbanking\")
 
-  TARGET_INCLUDE_DIRECTORIES(gncmod-aqbanking PRIVATE ${AQBANKING_INCLUDE_DIRS}
-         ${GWENHYWFAR_INCLUDE_DIRS} ${KTOBLZCHECK_INCLUDE_DIRS})
+  TARGET_INCLUDE_DIRECTORIES(gncmod-aqbanking PRIVATE
+    ${CMAKE_SOURCE_DIR}/borrowed/gwengui-gtk3
+    ${AQBANKING_INCLUDE_DIRS}
+    ${GWENHYWFAR_INCLUDE_DIRS}
+    ${KTOBLZCHECK_INCLUDE_DIRS})
 
   INSTALL(TARGETS gncmod-aqbanking
     LIBRARY DESTINATION lib/gnucash
