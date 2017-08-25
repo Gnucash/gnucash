@@ -660,6 +660,14 @@
       '())
     #f #t))
 
+  ;(gnc:register-trep-option - hidden option for compatibility
+   (gnc:make-string-option
+    gnc:pagename-accounts (N_ "Account Substring")
+    "a5" (N_ "Match only above accounts whose fullname contains substring e.g. ':Travel' will \
+match Expenses:Travel:Holiday and Expenses:Business:Travel. Can be left blank, which will \
+disable the substring filter. This filter is case-sensitive. Gnucash 2.8 or later.")
+    "");)
+
   (gnc:register-trep-option
    (gnc:make-account-list-option
     gnc:pagename-accounts (N_ "Filter By...")
