@@ -33,7 +33,6 @@
 
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (srfi srfi-1))
-(use-modules (srfi srfi-13))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
@@ -666,7 +665,7 @@
     gnc:pagename-accounts (N_ "Account Substring")
     "a5" (N_ "Match only above accounts whose fullname contains substring e.g. ':Travel' will \
 match Expenses:Travel:Holiday and Expenses:Business:Travel. Can be left blank, which will \
-disable the substring filter. This filter is case-sensitive.")
+disable the substring filter. This filter is case-sensitive. Gnucash 2.8 or later.")
     ""))
 
   (gnc:register-trep-option
@@ -1431,7 +1430,6 @@ Credit Card, and Income accounts.")))))
   (gnc:report-starting reportname)
   (let ((document (gnc:make-html-document))
 	(c_account_1 (opt-val gnc:pagename-accounts "Accounts"))
-	(c_account_substring (opt-val gnc:pagename-accounts "Account Substring"))
 	(c_account_2 (opt-val gnc:pagename-accounts "Filter By..."))
 	(filter-mode (opt-val gnc:pagename-accounts "Filter Type"))
         (begindate (gnc:timepair-start-day-time
@@ -1454,11 +1452,6 @@ Credit Card, and Income accounts.")))))
     ;;(gnc:warn "accts in trep-renderer:" c_account_1)
     ;;(gnc:warn "Report Account names:" (get-other-account-names c_account_1))
 
-    (set! c_account_1
-          (filter (lambda (acc)
-                    (string-contains (gnc-account-get-full-name acc) c_account_substring))
-                  c_account_1))
-    
     (if (not (or (null? c_account_1) (and-map not c_account_1)))
         (begin
           (qof-query-set-book query (gnc-get-current-book))
