@@ -96,60 +96,17 @@ static gchar  *environment_expand(gchar *param)
     return expanded;
 }
 
-void
-gnc_environment_setup (void)
+static void
+gnc_environment_parse_one (const gchar *env_path)
 {
-    gchar *config_path;
-    gchar *env_file;
     GKeyFile    *keyfile = g_key_file_new();
     GError      *error = NULL;
     gchar **env_vars;
     gsize param_count;
     gint i;
     gboolean got_keyfile;
-    gchar *env_parm;
 
-    /* Export default parameters to the environment */
-    env_parm = gnc_path_get_prefix();
-    if (!g_setenv("GNC_HOME", env_parm, FALSE))
-        g_warning ("Couldn't set/override environment variable GNC_HOME.");
-    g_free (env_parm);
-    env_parm = gnc_path_get_bindir();
-    if (!g_setenv("GNC_BIN", env_parm, FALSE))
-        g_warning ("Couldn't set/override environment variable GNC_BIN.");
-    g_free (env_parm);
-    env_parm = gnc_path_get_pkglibdir();
-    if (!g_setenv("GNC_LIB", env_parm, FALSE))
-        g_warning ("Couldn't set/override environment variable GNC_LIB.");
-    g_free (env_parm);
-    env_parm = gnc_path_get_pkgdatadir();
-    if (!g_setenv("GNC_DATA", env_parm, FALSE))
-        g_warning ("Couldn't set/override environment variable GNC_DATA.");
-    g_free (env_parm);
-    env_parm = gnc_path_get_pkgsysconfdir();
-    if (!g_setenv("GNC_CONF", env_parm, FALSE))
-        g_warning ("Couldn't set/override environment variable GNC_CONF.");
-    g_free (env_parm);
-    env_parm = gnc_path_get_libdir();
-    if (!g_setenv("SYS_LIB", env_parm, FALSE))
-        g_warning ("Couldn't set/override environment variable SYS_LIB.");
-    g_free (env_parm);
-
-    config_path = gnc_path_get_pkgsysconfdir();
-#ifdef G_OS_WIN32
-    {
-        /* unhide files without extension */
-        gchar *pathext = g_build_path(";", ".", g_getenv("PATHEXT"),
-                                      (gchar*) NULL);
-        g_setenv("PATHEXT", pathext, TRUE);
-        g_free(pathext);
-    }
-#endif
-
-    env_file = g_build_filename (config_path, "environment", NULL);
-    got_keyfile = g_key_file_load_from_file (keyfile, env_file, G_KEY_FILE_NONE, &error);
-    g_free (config_path);
-    g_free (env_file);
+    got_keyfile = g_key_file_load_from_file (keyfile, env_path, G_KEY_FILE_NONE, &error);
     if ( !got_keyfile )
     {
         g_key_file_free(keyfile);
@@ -195,11 +152,67 @@ gnc_environment_setup (void)
 
             if (!g_setenv (env_vars[i], new_val, TRUE))
                 g_warning ("Couldn't properly override environment variable \"%s\". "
-                           "This may lead to unexpected results", env_vars[i]);
+                "This may lead to unexpected results", env_vars[i]);
             g_free(new_val);
         }
     }
 
     g_strfreev(env_vars);
     g_key_file_free(keyfile);
+}
+
+void
+gnc_environment_setup (void)
+{
+    gchar *config_path;
+    gchar *env_path;
+    gchar *env_parm;
+
+    /* Export default parameters to the environment */
+    env_parm = gnc_path_get_prefix();
+    if (!g_setenv("GNC_HOME", env_parm, FALSE))
+        g_warning ("Couldn't set/override environment variable GNC_HOME.");
+    g_free (env_parm);
+    env_parm = gnc_path_get_bindir();
+    if (!g_setenv("GNC_BIN", env_parm, FALSE))
+        g_warning ("Couldn't set/override environment variable GNC_BIN.");
+    g_free (env_parm);
+    env_parm = gnc_path_get_pkglibdir();
+    if (!g_setenv("GNC_LIB", env_parm, FALSE))
+        g_warning ("Couldn't set/override environment variable GNC_LIB.");
+    g_free (env_parm);
+    env_parm = gnc_path_get_pkgdatadir();
+    if (!g_setenv("GNC_DATA", env_parm, FALSE))
+        g_warning ("Couldn't set/override environment variable GNC_DATA.");
+    g_free (env_parm);
+    env_parm = gnc_path_get_pkgsysconfdir();
+    if (!g_setenv("GNC_CONF", env_parm, FALSE))
+        g_warning ("Couldn't set/override environment variable GNC_CONF.");
+    g_free (env_parm);
+    env_parm = gnc_path_get_libdir();
+    if (!g_setenv("SYS_LIB", env_parm, FALSE))
+        g_warning ("Couldn't set/override environment variable SYS_LIB.");
+    g_free (env_parm);
+
+    config_path = gnc_path_get_pkgsysconfdir();
+#ifdef G_OS_WIN32
+    {
+        /* unhide files without extension */
+        gchar *pathext = g_build_path(";", ".", g_getenv("PATHEXT"),
+                                      (gchar*) NULL);
+        g_setenv("PATHEXT", pathext, TRUE);
+        g_free(pathext);
+    }
+#endif
+
+    /* Parse the environment file that got installed with gnucash */
+    env_path = g_build_filename (config_path, "environment", NULL);
+    gnc_environment_parse_one(env_path);
+    g_free (env_path);
+
+    /* Parse local overrides for this file */
+    env_path = g_build_filename (config_path, "environment.local", NULL);
+    gnc_environment_parse_one(env_path);
+    g_free (env_path);
+    g_free (config_path);
 }
