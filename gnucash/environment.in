@@ -65,3 +65,16 @@ DYLD_LIBRARY_PATH={GNC_LIBRARY_PATH};{DYLD_LIBRARY_PATH}
 # below and set LANG to your preferred locale
 # LANG=nl_BE
 # LANGUAGE={LANG}
+
+# Set the location of the gnucash user specific application data
+# The default depends on the operating system
+# Linux - follows the freedesktop xdg data home specification
+# Windows - uses the user's AppData(Roaming)\GnuCash
+# OS X/Quarz - uses the value of NSApplicationSupportDirectory/GnuCash
+# If these are not what you want, you can override it here
+# GNC_DATA_HOME=
+
+# Similarly you can override the default location for AqBanking's settings.
+# This will only be used if gnucash is built with AqBanking support enabled.
+# Default: $HOME/.aqbanking
+# AQBANKING_HOME=
