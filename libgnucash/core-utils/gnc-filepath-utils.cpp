@@ -489,34 +489,58 @@ get_userdata_home(bool create)
 gboolean
 gnc_filepath_init(gboolean create)
 {
-    auto userdata_home = get_userdata_home(create);
-
-    if (userdata_is_home)
+    auto gnc_userdata_home_exists = false;
+    auto gnc_userdata_home_from_env = false;
+    auto gnc_userdata_home_env = g_getenv("GNC_DATA_HOME");
+    if (gnc_userdata_home_env)
     {
-        /* If we get here that means the platform
-         * dependent gnc_userdata_home is not available for
-         * some reason. If legacy .gnucash directory still exists,
-         * use it as first fallback, but never create it (we want
-         * it to go away eventually).
-         * If missing, fall back to tmp_dir instead */
-        gnc_userdata_home = userdata_home / ".gnucash";
-        if (!bfs::exists(gnc_userdata_home))
+        gnc_userdata_home = bfs::path(gnc_userdata_home_env);
+        try
         {
-            userdata_home = g_get_tmp_dir();
-            userdata_is_home = false;
+            gnc_userdata_home_exists = bfs::exists(gnc_userdata_home);
+            if (!gnc_validate_directory(gnc_userdata_home, create))
+                throw (bfs::filesystem_error(
+                    std::string(_("Directory doesn't exist: "))
+                    + userdata_home.c_str(), userdata_home,
+                    bst::error_code(bst::errc::permission_denied, bst::generic_category())));
+            gnc_userdata_home_from_env = true;
+        }
+        catch (const bfs::filesystem_error& ex)
+        {
+            g_warning("%s (from environment variable 'GNC_DATA_HOME') is not a suitable directory for the user data."
+            "Trying the default instead.\nThe failure is\n%s",
+            gnc_userdata_home.c_str(), ex.what());
         }
     }
 
-    if (!userdata_is_home)
-        gnc_userdata_home = userdata_home / PACKAGE_NAME;
+    if (!gnc_userdata_home_from_env)
+    {
+        auto userdata_home = get_userdata_home(create);
+        if (userdata_is_home)
+        {
+            /* If we get here that means the platform
+            * dependent gnc_userdata_home is not available for
+            * some reason. If legacy .gnucash directory still exists,
+            * use it as first fallback, but never create it (we want
+            * it to go away eventually).
+            * If missing, fall back to tmp_dir instead */
+            gnc_userdata_home = userdata_home / ".gnucash";
+            if (!bfs::exists(gnc_userdata_home))
+            {
+                userdata_home = g_get_tmp_dir();
+                userdata_is_home = false;
+            }
+        }
 
-    auto try_migrate = false;
-    if (!userdata_is_home && !bfs::exists(gnc_userdata_home) && create)
-        try_migrate = true;
-    /* This may throw and end the program! */
-    gnc_validate_directory(gnc_userdata_home, create);
+        if (!userdata_is_home)
+            gnc_userdata_home = userdata_home / PACKAGE_NAME;
+        gnc_userdata_home_exists = bfs::exists(gnc_userdata_home);
+        /* This may throw and end the program! */
+        gnc_validate_directory(gnc_userdata_home, create);
+    }
+
     auto migrated = FALSE;
-    if (try_migrate)
+    if (!userdata_is_home && !gnc_userdata_home_exists && create)
         migrated = copy_recursive(bfs::path (g_get_home_dir()) / ".gnucash",
                                   gnc_userdata_home);
 
