@@ -1,5 +1,8 @@
 if GNUCASH_ENABLE_GUI
-SUBDIRS = libc goffice gwengui-gtk3
+SUBDIRS = libc goffice
+if WITH_AQBANKING
+SUBDIRS += gwengui-gtk3
+endif
 else
 SUBDIRS = libc
 endif
