@@ -5,10 +5,20 @@
 @-NOTE - gnucash-on-windows.git:gnucash.iss don't conflict. -@
 # environment
 #
-# This configuration file can be used to change/add environment variables
+# This configuration file defines a number of environment variables to set/alter
 # during GnuCash startup.
 #
-# It uses a very simple syntax for this:
+# The contents of this file is overwritten with each gnucash update.
+# If you want to add your own variables to the environment or wish
+# to override what gets set in this file please create a new file
+# named "environment.local" next to this one with the same structure:
+#
+# [Variables]
+# VAR_X=value_x
+# ....
+#
+#
+# Both files use a very simple syntax:
 # <variable_name>=<variable_value>
 #
 # You can refer to existing environment variables in the new value by
@@ -61,8 +71,8 @@ LD_LIBRARY_PATH={GNC_LIBRARY_PATH};{LD_LIBRARY_PATH}
 # The same, but for GnuCash on OS X
 DYLD_LIBRARY_PATH={GNC_LIBRARY_PATH};{DYLD_LIBRARY_PATH}
 
-# If you wish GnuCash to use a different language, uncomment the two parameters
-# below and set LANG to your preferred locale
+# If you wish GnuCash to use a different language, copy the two parameters
+# below to environment.local, remove '# ' in front and set LANG to your preferred locale
 # LANG=nl_BE
 # LANGUAGE={LANG}
 
@@ -71,7 +81,7 @@ DYLD_LIBRARY_PATH={GNC_LIBRARY_PATH};{DYLD_LIBRARY_PATH}
 # Linux - follows the freedesktop xdg data home specification
 # Windows - uses the user's AppData(Roaming)\GnuCash
 # OS X/Quarz - uses the value of NSApplicationSupportDirectory/GnuCash
-# If these are not what you want, you can override it here
+# If these are not what you want, you can override it in enviromnent.local
 # GNC_DATA_HOME=
 
 # Similarly you can override the default location for AqBanking's settings.
