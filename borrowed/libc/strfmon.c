@@ -414,7 +414,7 @@ __setup_vars(int flags, char *cs_precedes, char *sep_by_space,
                 *cs_precedes = lc->n_cs_precedes;
                 *sep_by_space = lc->n_sep_by_space;
                 *sign_posn = (flags & PARENTH_POSN) ? 0 : lc->n_sign_posn;
-                *signstr = (lc->negative_sign == '\0') ? "-"
+                *signstr = (lc->negative_sign == NULL) ? "-"
                     : lc->negative_sign;
         } else {
                 *cs_precedes = lc->p_cs_precedes;
