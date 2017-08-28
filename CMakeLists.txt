@@ -85,7 +85,6 @@ SET(GNC_DBD_DIR ${CMAKE_PREFIX_PATH}/lib/dbd CACHE PATH "specify location of lib
 SET(PKGLIBDIR ${CMAKE_INSTALL_PREFIX}/lib/gnucash)
 SET(TEST_MYSQL_URL "" CACHE STRING "MySQL database URL for testing")
 SET(TEST_PGSQL_URL "" CACHE STRING "PgSQL database URL for testing")
-SET(HTMLHELP_DIR ${CMAKE_PREFIX_PATH}/hh CACHE PATH "Specify location of Win32 HTMLHELP library")
 
 SET(DATADIR_BUILD    ${CMAKE_BINARY_DIR}/${DATADIRNAME})
 SET(LIBDIR_BUILD     ${CMAKE_BINARY_DIR}/lib)
@@ -236,9 +235,9 @@ FIND_PATH (REGEX_INCLUDE_PATH NAMES regex.h
 		  PATHS /usr/include /opt/gnome/include)
 FIND_LIBRARY (REGEX_LIBRARY NAMES regex)
 IF (WIN32)
-  message(STATUS "Looking for htmlhelp.h and htmlhelp.a in ${HTMLHELP_DIR}")
-  FIND_PATH (HTMLHELP_INCLUDE_PATH NAMES htmlhelp.h HINTS ${HTMLHELP_DIR}/include)
-  FIND_LIBRARY (HTMLHELP_LIBRARY htmlhelp HINTS ${HTMLHELP_DIR}/lib)
+  message(STATUS "Looking for htmlhelp.h and htmlhelp.a")
+  FIND_PATH (HTMLHELP_INCLUDE_PATH NAMES htmlhelp.h)
+  FIND_LIBRARY (HTMLHELP_LIBRARY htmlhelp)
 ENDIF (WIN32)
 
 # ############################################################
