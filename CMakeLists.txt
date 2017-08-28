@@ -270,7 +270,7 @@ ELSE()
   # look for guile 1.8
   GNC_PKG_CHECK_MODULES (GUILE1 guile-1.8>=1.8.8 QUIET)
   IF (NOT GUILE1_FOUND)
-    MESSAGE (SEND_ERROR "Neither guile 1.8 nor guile 2.0 where find. Please set PKG_CONFIG_PATH one of these is found.")
+    MESSAGE (FATAL_ERROR "Neither guile 1.8 nor guile 2.0 were found GnuCash can't run without one of them. Ensure that one is installed and can be found with pgk-config.")
   ENDIF(NOT GUILE1_FOUND)
 
   SET(HAVE_GUILE1 TRUE)
