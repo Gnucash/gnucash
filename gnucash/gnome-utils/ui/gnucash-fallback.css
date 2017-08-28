@@ -4,16 +4,32 @@
 
 
 /* Import Matcher, amount of intervention required */
+@define-color intervention-required_bg_color brown1;
+@define-color intervention-probably-required_bg_color gold;
+@define-color intervention-not-required_bg_color DarkSeaGreen1;
+
 .intervention-required {
-  background-color: brown1;
+  background-color: @intervention-required_bg_color;
 }
 
 .intervention-probably-required {
-  background-color: gold;
+  background-color: @intervention-probably-required_bg_color;
 }
 
 .intervention-not-required {
-  background-color: DarkSeaGreen1;
+  background-color: @intervention-not-required_bg_color;
+}
+
+.intervention-required-dark {
+  background-color: shade (@intervention-required_bg_color, 0.7);
+}
+
+.intervention-probably-required-dark {
+  background-color: shade (@intervention-probably-required_bg_color, 0.8);
+}
+
+.intervention-not-required-dark {
+  background-color: shade (@intervention-not-required_bg_color, 0.3);
 }
 
 /* Negative value label colors */
