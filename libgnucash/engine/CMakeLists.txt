@@ -206,6 +206,14 @@ SET (engine_SOURCES
   qof-string-cache.cpp
 )
 
+IF (WIN32)
+  ADD_DEFINITIONS (-DOS_WIN32)
+  SET (engine_SOURCES ${engine_SOURCES}
+  qof-win32.cpp
+  ../../borrowed/libc/strptime.c
+  )
+ENDIF (WIN32)
+
 # Add dependency on config.h
 SET_SOURCE_FILES_PROPERTIES (${engine_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
@@ -270,13 +278,6 @@ SET (engine_SCHEME_1
     engine-utilities.scm
     gnc-numeric.scm
 )
-IF (WIN32)
-  ADD_DEFINITIONS (-DOS_WIN32)
-  SET (engine_SOURCES ${engine_SOURCES}
-  qof-win32.cpp
-  ../../borrowed/libc/strptime.c
-  )
-ENDIF (WIN32)
 
 SET(BACKEND_DEPENDS gncmod-backend-xml)
 IF (WITH_SQL)
