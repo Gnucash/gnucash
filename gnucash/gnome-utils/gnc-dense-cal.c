@@ -924,17 +924,17 @@ gnc_style_context_get_border_color (GtkStyleContext *context,
 }
 
 static gboolean
-is_color_dark (GdkRGBA *color)
+is_color_light (GdkRGBA *color)
 {
-    gboolean is_dark = FALSE;
+    gboolean is_light = FALSE;
 
     // Counting the perceptive luminance - human eye favors green color...
     double a = (0.299 * color->red + 0.587 * color->green + 0.114 * color->blue);
 
     if (a > 0.5)
-        is_dark = TRUE;
+        is_light = TRUE;
 
-    return is_dark;
+    return is_light;
 }
 
 static void
@@ -949,7 +949,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
     PangoLayout *layout;
     GTimer *timer;
     cairo_t *cr;
-    const gchar *primary_color_class, *secondary_color_class, *marker_color_class;
+    gchar *primary_color_class, *secondary_color_class, *marker_color_class;
 
     timer = g_timer_new();
     g_debug("drawing");
@@ -976,16 +976,16 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
     /* get the colors */
     {
          GdkRGBA color;
-         gchar *color_extension = NULL;
+         gchar *class_extension = NULL;
 
          gtk_style_context_get_color (stylectxt, GTK_STATE_FLAG_NORMAL, &color);
 
-          if (is_color_dark (&color))
-              color_extension = "-dark";
+          if (is_color_light (&color))
+              class_extension = "-dark";
 
-          primary_color_class = g_strconcat ("primary", color_extension, NULL);
-          secondary_color_class = g_strconcat ("secondary", color_extension, NULL);
-          marker_color_class = g_strconcat ("markers", color_extension, NULL);
+          primary_color_class = g_strconcat ("primary", class_extension, NULL);
+          secondary_color_class = g_strconcat ("secondary", class_extension, NULL);
+          marker_color_class = g_strconcat ("markers", class_extension, NULL);
     }
 
 
@@ -1231,6 +1231,10 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
                                alloc.height);
 
     LOG_AND_RESET(timer, "queue draw");
+
+    g_free (primary_color_class);
+    g_free (secondary_color_class);
+    g_free (marker_color_class);
 
     g_object_unref(layout);
     cairo_destroy (cr);
