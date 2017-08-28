@@ -808,7 +808,7 @@ SET_TARGET_PROPERTIES(gnc-core-utils gnc-module gnc-backend-sql gnc-backend-xml-
 )
 
 IF (WIN32)
-  SET_TARGET_PROPERTIES(gncmod-backend-xml gncmod-stylesheets gncmod-utility-reports PROPERTIES
+  SET_TARGET_PROPERTIES(gncmod-backend-xml gncmod-stylesheets PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
   )
 ENDIF()
