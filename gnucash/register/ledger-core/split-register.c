@@ -28,12 +28,12 @@
 #include <glib/gi18n.h>
 #include <libguile.h>
 
-#include <gnc-gdate-utils.h>
 #include "combocell.h"
 #include "datecell.h"
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
 #include "split-register-p.h"
+#include "gnc-date.h"
 #include "gnc-ledger-display.h"
 #include "gnc-prefs.h"
 #include "gnc-ui.h"

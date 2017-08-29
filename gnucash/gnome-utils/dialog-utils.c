@@ -35,6 +35,7 @@
 
 #include "dialog-utils.h"
 #include "gnc-commodity.h"
+#include "gnc-date.h"
 #include "gnc-path.h"
 #include "gnc-engine.h"
 #include "gnc-euro.h"
@@ -43,7 +44,6 @@
 #include "gnc-combott.h"
 #include "guile-util.h"
 #include "gnc-main-window.h"
-#include <gnc-gdate-utils.h>
 
 /* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule log_module = GNC_MOD_GUI;

@@ -39,6 +39,7 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 
+#include "gnc-date.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-gui-query.h"
@@ -56,7 +57,6 @@
 #include "gncIDSearch.h"
 #include "dialog-bi-import.h"
 #include "dialog-bi-import-helper.h"
-#include <gnc-gdate-utils.h>
 
 // To open the invoices for editing
 #include "gnc-plugin-page-invoice.h"

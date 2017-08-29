@@ -372,17 +372,37 @@ gboolean     gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p);
  */
 gboolean     gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p);
 
+typedef enum
+{
+    PRICE_REMOVE_SOURCE_FQ = 1,   // this flag is set when added by F:Q checked
+    PRICE_REMOVE_SOURCE_USER = 2, // this flag is set when added by the user checked
+    PRICE_REMOVE_SOURCE_APP = 4,  // this flag is set when added by the app checked
+    PRICE_REMOVE_SOURCE_COMM = 8, // this flag is set when we have commodities selected
+} PriceRemoveSourceFlags;
+
+typedef enum
+{
+    PRICE_REMOVE_KEEP_NONE,           // keep none
+    PRICE_REMOVE_KEEP_LAST_WEEKLY,    // leave last one of every week
+    PRICE_REMOVE_KEEP_LAST_MONTHLY,   // leave last one of every month
+    PRICE_REMOVE_KEEP_LAST_QUARTERLY, // leave last one of every quarter
+    PRICE_REMOVE_KEEP_LAST_PERIOD,    // leave last one of every annual period
+    PRICE_REMOVE_KEEP_SCALED,         // leave one every week then one a month
+} PriceRemoveKeepOptions;
+
 /** @brief Remove and unref prices older than a certain time.
  * @param db The pricedb
+ * @param comm_list A list of commodities
+ * @param fiscal_end_date the end date of the current accounting period
  * @param cutoff The time before which prices should be deleted.
- * @param delete_user Whether user-created (i.e. not Finance::Quote) prices
- * should be deleted.
- * @param delete_last Whether a price should be deleted if it's the only
- * remaining price for its commodity.
+ * @param source Whether Finance::Quote, user or all prices should be deleted.
+ * @param keep Whether scaled, monthly, weekly or no prices should be left.
+ * @return True if there were prices to process, False if not.
  */
-gboolean     gnc_pricedb_remove_old_prices(GNCPriceDB *db, Timespec cutoff,
-                                           const gboolean delete_user,
-                                           gboolean delete_last);
+gboolean     gnc_pricedb_remove_old_prices(GNCPriceDB *db, GList *comm_list,
+                                           GDate *fiscal_end_date, Timespec cutoff,
+                                           PriceRemoveSourceFlags source,
+                                           PriceRemoveKeepOptions keep);
 
 /** @brief Find the most recent price between the two commodities.
  *

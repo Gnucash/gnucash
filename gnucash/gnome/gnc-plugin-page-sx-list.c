@@ -47,7 +47,6 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 
-#include <gnc-gdate-utils.h>
 #include <gnc-gobject-utils.h>
 #include "SX-book.h"
 #include "Split.h"
@@ -59,6 +58,7 @@
 #include "dialog-utils.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
+#include "gnc-date.h"
 #include "gnc-dense-cal.h"
 #include "gnc-engine.h"
 #include "gnc-event.h"

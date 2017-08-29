@@ -33,11 +33,11 @@
 #include "config.h"
 #include <glib.h>
 #include <glib-object.h>
+#include "gnc-date.h"
 #include "gnc-dense-cal.h"
 #include "gnc-dense-cal-model.h"
 #include "gnc-dense-cal-store.h"
 #include "Recurrence.h"
-#include <gnc-gdate-utils.h>
 
 struct _GncDenseCalStore
 {

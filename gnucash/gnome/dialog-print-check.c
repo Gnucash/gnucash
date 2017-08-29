@@ -36,7 +36,6 @@
 #include <locale.h>
 #include <math.h>
 
-#include <gnc-gdate-utils.h>
 #include "qof.h"
 #include "gnc-date.h"
 #include "gnc-prefs.h"

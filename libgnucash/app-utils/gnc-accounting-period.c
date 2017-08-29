@@ -44,7 +44,6 @@
 #include "config.h"
 #include <string.h>
 #include "gnc-accounting-period.h"
-#include "gnc-gdate-utils.h"
 #include "gnc-date.h"
 #include "gnc-prefs.h"
 #include "qof.h"

@@ -42,13 +42,13 @@
 #include "Split.h"
 #include "Transaction.h"
 #include "gnc-commodity.h"
+#include "gnc-date.h"
 #include "gnc-event.h"
 #include "gnc-exp-parser.h"
 #include "gnc-glib-utils.h"
 #include "gnc-sx-instance-model.h"
 #include "gnc-ui-util.h"
 #include "qof.h"
-#include <gnc-gdate-utils.h>
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.app-utils.sx"

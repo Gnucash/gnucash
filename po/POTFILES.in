@@ -512,7 +512,6 @@ libgnucash/app-utils/gnc-component-manager.c
 libgnucash/app-utils/gnc-entry-quickfill.c
 libgnucash/app-utils/gnc-euro.c
 libgnucash/app-utils/gnc-exp-parser.c
-libgnucash/app-utils/gnc-gdate-utils.c
 libgnucash/app-utils/gnc-gettext-util.c
 libgnucash/app-utils/gnc-gsettings.c
 libgnucash/app-utils/gnc-helpers.c

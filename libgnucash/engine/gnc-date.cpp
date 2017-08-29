@@ -3,6 +3,7 @@
  *                                                                  *
  * Copyright 1997 Robin D. Clark <rclark@cs.hmc.edu>                *
  * Copyright 1998-2000, 2003 Linas Vepstas <linas@linas.org>        *
+ * Copyright (C) 2005 David Hampton <hampton@employees.org>         *
  * Copyright 2011-2015 John Ralls <jralls@ceridwen.us               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -116,8 +117,8 @@ gnc_localtime (const time64 *secs)
     auto time = static_cast<struct tm*>(calloc(1, sizeof(struct tm)));
     if (gnc_localtime_r (secs, time) == NULL)
     {
-	gnc_tm_free (time);
-	return NULL;
+        gnc_tm_free (time);
+        return NULL;
     }
     return time;
 }
@@ -127,12 +128,12 @@ gnc_localtime_r (const time64 *secs, struct tm* time)
 {
     try
     {
-	*time = static_cast<struct tm>(GncDateTime(*secs));
-	return time;
+        *time = static_cast<struct tm>(GncDateTime(*secs));
+        return time;
     }
     catch(std::invalid_argument)
     {
-	return NULL;
+        return NULL;
     }
 }
 
@@ -199,14 +200,14 @@ gnc_gmtime (const time64 *secs)
 {
     try
     {
-	auto time = static_cast<struct tm*>(calloc(1, sizeof(struct tm)));
-	GncDateTime gncdt(*secs);
-	*time = gncdt.utc_tm();
-	return time;
+        auto time = static_cast<struct tm*>(calloc(1, sizeof(struct tm)));
+        GncDateTime gncdt(*secs);
+        *time = gncdt.utc_tm();
+        return time;
     }
     catch(std::invalid_argument)
     {
-	return NULL;
+        return NULL;
     }
 
 }
@@ -216,13 +217,13 @@ gnc_mktime (struct tm* time)
 {
     try
     {
-	normalize_struct_tm (time);
-	GncDateTime gncdt(*time);
-	return static_cast<time64>(gncdt) - gncdt.offset();
+        normalize_struct_tm (time);
+        GncDateTime gncdt(*time);
+        return static_cast<time64>(gncdt) - gncdt.offset();
     }
     catch(std::invalid_argument)
     {
-	return 0;
+        return 0;
     }
 }
 
@@ -231,12 +232,12 @@ gnc_timegm (struct tm* time)
 {
     try
     {
-	normalize_struct_tm(time);
-	return static_cast<time64>(GncDateTime(*time));
+        normalize_struct_tm(time);
+        return static_cast<time64>(GncDateTime(*time));
     }
     catch(std::invalid_argument)
     {
-	return 0;
+        return 0;
     }
 }
 
@@ -259,11 +260,10 @@ gnc_time (time64 *tbuf)
 gdouble
 gnc_difftime (const time64 secs1, const time64 secs2)
 {
-     return (double)secs1 - (double)secs2;
+    return (double)secs1 - (double)secs2;
 }
 
 /****************************************************************************/
-
 
 const char*
 gnc_date_dateformat_to_string(QofDateFormat format)
@@ -318,7 +318,6 @@ gnc_date_string_to_dateformat(const char* fmt_str, QofDateFormat *format)
 
     return FALSE;
 }
-
 
 const char*
 gnc_date_monthformat_to_string(GNCDateMonthFormat format)
@@ -410,7 +409,6 @@ timespec_normalize(Timespec *t)
     }
     return;
 }
-
 
 gboolean
 timespec_equal (const Timespec *ta, const Timespec *tb)
@@ -738,14 +736,14 @@ floordiv(int a, int b)
 
     Fully formatted UTC timestamp strings are converted separately.
 
-param   buff - pointer to date string
-param     day -  will store day of the month as 1 ... 31
-param     month - will store month of the year as 1 ... 12
-param     year - will store the year (4-digit)
+    param   buff - pointer to date string
+    param     day -  will store day of the month as 1 ... 31
+    param     month - will store month of the year as 1 ... 12
+    param     year - will store the year (4-digit)
 
-return TRUE if date appeared to be valid.
+    return TRUE if date appeared to be valid.
 
- Globals: global dateFormat value
+    Globals: global dateFormat value
 */
 static gboolean
 qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
@@ -1045,7 +1043,6 @@ char dateSeparator (void)
         }
         break;
     }
-
     return '\0';
 }
 
@@ -1179,7 +1176,6 @@ qof_strftime(gchar *buf, gsize max, const gchar *format, const struct tm *tm)
     return retval;
 }
 
-
 /********************************************************************\
 \********************************************************************/
 
@@ -1248,7 +1244,6 @@ gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
         PWARN("Error processing time64 %" PRId64 ": %s", ts.tv_sec, err.what());
         return buff;
     }
-
 }
 
 void
@@ -1286,7 +1281,6 @@ gnc_dmy2timespec_internal (int day, int month, int year, DayPart day_part)
         return {INT64_MAX, 0};
     }
 }
-
 
 Timespec
 gnc_dmy2timespec (int day, int month, int year)
@@ -1372,10 +1366,7 @@ gnc_gdate_set_time64 (GDate* gd, time64 time)
     g_date_set_dmy (gd, tm.tm_mday,
                     static_cast<GDateMonth>(tm.tm_mon + 1),
                     tm.tm_year + 1900);
-
 }
-
-
 
 Timespec gdate_to_timespec (GDate d)
 {
@@ -1423,7 +1414,6 @@ gnc_time64_get_day_end (time64 time_val)
     new_time = gnc_mktime(&tm);
     return new_time;
 }
-
 
 /* ======================================================== */
 
@@ -1501,7 +1491,6 @@ timespec_get_type( void )
                                              timespec_boxed_copy_func,
                                              timespec_boxed_free_func );
     }
-
     return type;
 }
 
@@ -1511,4 +1500,258 @@ gnc_date_load_funcs (void)
     Testfuncs *tf = g_slice_new (Testfuncs);
     tf->timespec_normalize = timespec_normalize;
     return tf;
+}
+
+/* ================================================= */
+
+gboolean
+gnc_gdate_equal(gconstpointer gda, gconstpointer gdb)
+{
+    return (g_date_compare( (GDate*)gda, (GDate*)gdb ) == 0 ? TRUE : FALSE);
+}
+
+guint
+gnc_gdate_hash( gconstpointer gd )
+{
+    gint val = (g_date_get_year( (GDate*)gd ) * 10000)
+               + (g_date_get_month( (GDate*)gd ) * 100)
+               + g_date_get_day( (GDate*)gd );
+    return g_int_hash( &val );
+}
+
+/* ================================================= */
+
+time64
+gnc_time64_get_day_start_gdate (const GDate *date)
+{
+    struct tm stm;
+    time64 secs;
+
+    /* First convert to a 'struct tm' */
+    g_date_to_struct_tm (date, &stm);
+
+    /* Then convert to number of seconds */
+    secs = gnc_mktime (&stm);
+    return secs;
+}
+
+time64
+gnc_time64_get_day_end_gdate (const GDate *date)
+{
+    struct tm stm;
+    time64 secs;
+
+    /* First convert to a 'struct tm' */
+    g_date_to_struct_tm(date, &stm);
+
+    /* Force to th last second of the day */
+    stm.tm_hour = 23;
+    stm.tm_min = 59;
+    stm.tm_sec = 59;
+    stm.tm_isdst = -1;
+
+    /* Then convert to number of seconds */
+    secs = gnc_mktime (&stm);
+    return secs;
+}
+
+/* ================================================= */
+
+void
+gnc_gdate_set_month_start (GDate *date)
+{
+    g_date_set_day(date, 1);
+}
+
+/** Convert a GDate to the last day of the month.  This routine has no
+ *  knowledge of how many days are in a month, whether its a leap
+ *  year, etc.  All that information is contained in the glib date
+ *  functions.
+ *
+ *  @param date The GDate to modify.
+ */
+void
+gnc_gdate_set_month_end (GDate *date)
+{
+    /* First set the start of next month. */
+    g_date_set_day(date, 1);
+    g_date_add_months(date, 1);
+
+    /* Then back up one day */
+    g_date_subtract_days(date, 1);
+}
+
+/** Convert a GDate to the first day of the prebvious month.  This
+ *  routine has no knowledge of how many days are in a month, whether
+ *  its a leap year, etc.  All that information is contained in the
+ *  glib date functions.
+ *
+ *  @param date The GDate to modify.
+ */
+void
+gnc_gdate_set_prev_month_start (GDate *date)
+{
+    g_date_set_day(date, 1);
+    g_date_subtract_months(date, 1);
+}
+
+/** Convert a GDate to the last day of the prebvious month.  This
+ *  routine has no knowledge of how many days are in a month, whether
+ *  its a leap year, etc.  All that information is contained in the
+ *  glib date functions.
+ *
+ *  @param date The GDate to modify.
+ */
+void
+gnc_gdate_set_prev_month_end (GDate *date)
+{
+    /* This will correctly handle the varying month lengths */
+    g_date_set_day(date, 1);
+    g_date_subtract_days(date, 1);
+}
+
+/* ================================================= */
+
+void
+gnc_gdate_set_quarter_start (GDate *date)
+{
+    gint months;
+
+    /* Set the date to the first day of the specified month. */
+    g_date_set_day(date, 1);
+
+    /* Back up 0-2 months */
+    months = (g_date_get_month(date) - G_DATE_JANUARY) % 3;
+    g_date_subtract_months(date, months);
+}
+
+void
+gnc_gdate_set_quarter_end (GDate *date)
+{
+    gint months;
+
+    /* Set the date to the first day of the specified month. */
+    g_date_set_day(date, 1);
+
+    /* Add 1-3 months to get the first day of the next quarter.*/
+    months = (g_date_get_month(date) - G_DATE_JANUARY) % 3;
+    g_date_add_months(date, 3 - months);
+
+    /* Now back up one day */
+    g_date_subtract_days(date, 1);
+}
+
+void
+gnc_gdate_set_prev_quarter_start (GDate *date)
+{
+    gnc_gdate_set_quarter_start(date);
+    g_date_subtract_months(date, 3);
+}
+
+void
+gnc_gdate_set_prev_quarter_end (GDate *date)
+{
+    gnc_gdate_set_quarter_end(date);
+    g_date_subtract_months(date, 3);
+}
+
+/* ================================================= */
+
+void
+gnc_gdate_set_year_start (GDate *date)
+{
+    g_date_set_month(date, G_DATE_JANUARY);
+    g_date_set_day(date, 1);
+}
+
+void
+gnc_gdate_set_year_end (GDate *date)
+{
+    g_date_set_month(date, G_DATE_DECEMBER);
+    g_date_set_day(date, 31);
+}
+
+void
+gnc_gdate_set_prev_year_start (GDate *date)
+{
+    gnc_gdate_set_year_start(date);
+    g_date_subtract_years(date, 1);
+}
+
+void
+gnc_gdate_set_prev_year_end (GDate *date)
+{
+    gnc_gdate_set_year_end(date);
+    g_date_subtract_years(date, 1);
+}
+
+/* ================================================= */
+
+void
+gnc_gdate_set_fiscal_year_start (GDate *date,
+                                 const GDate *fy_end)
+{
+    GDate temp;
+    gboolean new_fy;
+
+    g_return_if_fail(date);
+    g_return_if_fail(fy_end);
+
+    /* Compute the FY end that occurred this CY */
+    temp = *fy_end;
+    g_date_set_year(&temp, g_date_get_year(date));
+
+    /* Has it already passed? */
+    new_fy = (g_date_compare(date, &temp) > 0);
+
+    /* Set start date */
+    *date = temp;
+    g_date_add_days(date, 1);
+    if (!new_fy)
+        g_date_subtract_years(date, 1);
+}
+
+void
+gnc_gdate_set_fiscal_year_end (GDate *date,
+                               const GDate *fy_end)
+{
+    GDate temp;
+    gboolean new_fy;
+
+    g_return_if_fail(date);
+    g_return_if_fail(fy_end);
+
+    /* Compute the FY end that occurred this CY */
+    temp = *fy_end;
+    g_date_set_year(&temp, g_date_get_year(date));
+
+    /* Has it already passed? */
+    new_fy = (g_date_compare(date, &temp) > 0);
+
+    /* Set end date */
+    *date = temp;
+    if (new_fy)
+        g_date_add_years(date, 1);
+}
+
+void
+gnc_gdate_set_prev_fiscal_year_start (GDate *date,
+                                      const GDate *fy_end)
+{
+    g_return_if_fail(date);
+    g_return_if_fail(fy_end);
+
+    gnc_gdate_set_fiscal_year_start(date, fy_end);
+    g_date_subtract_years(date, 1);
+}
+
+void
+gnc_gdate_set_prev_fiscal_year_end (GDate *date,
+                                    const GDate *fy_end)
+{
+    g_return_if_fail(date);
+    g_return_if_fail(fy_end);
+
+    gnc_gdate_set_fiscal_year_end(date, fy_end);
+    g_date_subtract_years(date, 1);
 }
