@@ -223,3 +223,22 @@ gnc_cbwe_require_list_item (GtkComboBox *cbwe)
 
     g_object_set_data(G_OBJECT(cbwe), CHANGED_ID, GINT_TO_POINTER(id));
 }
+
+/** Test to see if fg_color is a light one which should be a foreground
+ *  one and hence would be on a dark background
+ *
+ *  @param fg_color The foreground color to test.
+ */
+gboolean
+gnc_is_dark_theme (GdkRGBA *fg_color)
+{
+    gboolean is_dark = FALSE;
+
+    // Counting the perceptive luminance - human eye favors green color...
+    double lightness = (0.299 * fg_color->red + 0.587 * fg_color->green + 0.114 * fg_color->blue);
+
+    if (lightness > 0.5)
+        is_dark = TRUE;
+
+    return is_dark;
+}

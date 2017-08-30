@@ -43,6 +43,7 @@
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-engine.h"
+#include "gnc-gtk-utils.h"
 #include "import-settings.h"
 #include "import-match-picker.h"
 #include "import-backend.h"
@@ -511,19 +512,7 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
                      G_CALLBACK(gnc_gen_trans_row_changed_cb), info);
 }
 
-static gboolean
-is_color_light (GdkRGBA *color)
-{
-    gboolean is_light = FALSE;
 
-    // Counting the perceptive luminance - human eye favors green color...
-    double a = (0.299 * color->red + 0.587 * color->green + 0.114 * color->blue);
-
-    if (a > 0.5)
-        is_light = TRUE;
-
-    return is_light;
-}
 
 GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
         const gchar* heading,
@@ -547,7 +536,7 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
 
     stylectxt = gtk_widget_get_style_context (GTK_WIDGET(parent));
     gtk_style_context_get_color (stylectxt, GTK_STATE_FLAG_NORMAL, &color);
-    info->dark_theme = is_color_light (&color);
+    info->dark_theme = gnc_is_dark_theme (&color);
 
     /* Initialize the GtkDialog. */
     builder = gtk_builder_new();
@@ -616,7 +605,7 @@ GNCImportMainMatcher * gnc_gen_trans_assist_new (GtkWidget *parent,
 
     stylectxt = gtk_widget_get_style_context (GTK_WIDGET(parent));
     gtk_style_context_get_color (stylectxt, GTK_STATE_FLAG_NORMAL, &color);
-    info->dark_theme = is_color_light (&color);
+    info->dark_theme = gnc_is_dark_theme (&color);
 
     /* load the interface */
     builder = gtk_builder_new();

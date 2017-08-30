@@ -45,6 +45,7 @@ void gnc_cbwe_set_by_string(GtkComboBox *cbwe, const gchar *text);
 void gnc_cbwe_add_completion (GtkComboBox *cbwe);
 void gnc_cbwe_require_list_item (GtkComboBox *cbwe);
 
+gboolean gnc_is_dark_theme (GdkRGBA *fg_color);
 /** @} */
 
 #endif /* GNC_GTK_UTILS_H */

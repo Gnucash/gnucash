@@ -25,6 +25,7 @@
 #include "gnc-dense-cal.h"
 #include "gnc-dense-cal-model.h"
 #include "gnc-engine.h"
+#include "gnc-gtk-utils.h"
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
@@ -923,21 +924,6 @@ gnc_style_context_get_border_color (GtkStyleContext *context,
     gdk_rgba_free (c);
 }
 
-static gboolean
-is_color_light (GdkRGBA *color)
-{
-    gboolean is_light = FALSE;
-
-    // Counting the perceptive luminance - human eye favors green color...
-    double a = (0.299 * color->red + 0.587 * color->green + 0.114 * color->blue);
-
-    if (a > 0.5)
-        is_light = TRUE;
-
-    return is_light;
-}
-
-static void
 gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
 {
     GtkWidget *widget;
@@ -980,7 +966,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
 
          gtk_style_context_get_color (stylectxt, GTK_STATE_FLAG_NORMAL, &color);
 
-          if (is_color_light (&color))
+          if (gnc_is_dark_theme (&color))
               class_extension = "-dark";
 
           primary_color_class = g_strconcat ("primary", class_extension, NULL);
