@@ -671,24 +671,6 @@ gboolean gnc_gen_trans_list_run (GNCImportMainMatcher *info)
     return result;
 }
 
-static void
-gnc_style_context_get_background_color (GtkStyleContext *context,
-                                        GtkStateFlags    state,
-                                        GdkRGBA         *color)
-{
-    GdkRGBA *c;
-
-    g_return_if_fail (color != NULL);
-    g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-
-    gtk_style_context_get (context,
-                           state,
-                           GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &c,
-                           NULL);
-    *color = *c;
-    gdk_rgba_free (c);
-}
-
 static gchar*
 get_required_color (const gchar *class_name)
 {

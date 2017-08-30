@@ -37,6 +37,7 @@
 #include "gnucash-sheetP.h"
 
 #include "dialog-utils.h"
+#include "gnc-gtk-utils.h"
 #include "gnc-prefs.h"
 #include "gnucash-color.h"
 #include "gnucash-cursor.h"
@@ -2329,25 +2330,6 @@ gnucash_sheet_realize_entry (GnucashSheet *sheet, GtkWidget *entry)
  * cells drawn on the canvas.  This code should all go away whenever
  * the register is rewritten.
  */
-
-static void
-gnc_style_context_get_background_color (GtkStyleContext *context,
-                                        GtkStateFlags    state,
-                                        GdkRGBA         *color)
-{
-    GdkRGBA *c;
-
-    g_return_if_fail (color != NULL);
-    g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-
-    gtk_style_context_get (context,
-                           state,
-                           GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &c,
-                           NULL);
-    *color = *c;
-    gdk_rgba_free (c);
-}
-
 
 /** Map a cell type to a gtkrc specified color. */
 GdkRGBA *

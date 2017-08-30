@@ -889,41 +889,6 @@ gnc_dense_cal_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
 #define LOG_AND_RESET(timer, msg) do { g_debug("%s: %f", msg, g_timer_elapsed(timer, NULL) * 1000.); g_timer_reset(timer); } while (0);
 
 static void
-gnc_style_context_get_background_color (GtkStyleContext *context,
-                                        GtkStateFlags    state,
-                                        GdkRGBA         *color)
-{
-    GdkRGBA *c;
-
-    g_return_if_fail (color != NULL);
-    g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-
-    gtk_style_context_get (context,
-                           state,
-                           GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &c,
-                           NULL);
-    *color = *c;
-    gdk_rgba_free (c);
-}
-
-static void
-gnc_style_context_get_border_color (GtkStyleContext *context,
-                                    GtkStateFlags    state,
-                                    GdkRGBA         *color)
-{
-    GdkRGBA *c;
-
-    g_return_if_fail (color != NULL);
-    g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-
-    gtk_style_context_get (context,
-                           state,
-                           GTK_STYLE_PROPERTY_BORDER_COLOR, &c,
-                           NULL);
-    *color = *c;
-    gdk_rgba_free (c);
-}
-
 gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
 {
     GtkWidget *widget;

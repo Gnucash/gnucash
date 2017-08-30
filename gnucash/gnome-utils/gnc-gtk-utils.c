@@ -242,3 +242,55 @@ gnc_is_dark_theme (GdkRGBA *fg_color)
 
     return is_dark;
 }
+
+/** Wrapper to get the background color of a widget for a given state
+ *
+ *  @param context Style context of widget.
+ *
+ *  @param state The stateflag of the widget.
+ *
+ *  @param color The returned background color of the widget.
+ */
+void
+gnc_style_context_get_background_color (GtkStyleContext *context,
+                                        GtkStateFlags    state,
+                                        GdkRGBA         *color)
+{
+    GdkRGBA *c;
+
+    g_return_if_fail (color != NULL);
+    g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+    gtk_style_context_get (context,
+                           state,
+                           GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &c,
+                           NULL);
+    *color = *c;
+    gdk_rgba_free (c);
+}
+
+/** Wrapper to get the border color of a widget for a given state
+ *
+ *  @param context Style context of widget.
+ *
+ *  @param state The stateflag of the widget.
+ *
+ *  @param color The returned border color of the widget.
+ */
+void
+gnc_style_context_get_border_color (GtkStyleContext *context,
+                                    GtkStateFlags    state,
+                                    GdkRGBA         *color)
+{
+    GdkRGBA *c;
+
+    g_return_if_fail (color != NULL);
+    g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+    gtk_style_context_get (context,
+                           state,
+                           GTK_STYLE_PROPERTY_BORDER_COLOR, &c,
+                           NULL);
+    *color = *c;
+    gdk_rgba_free (c);
+}

@@ -46,6 +46,13 @@ void gnc_cbwe_add_completion (GtkComboBox *cbwe);
 void gnc_cbwe_require_list_item (GtkComboBox *cbwe);
 
 gboolean gnc_is_dark_theme (GdkRGBA *fg_color);
+void gnc_style_context_get_background_color (GtkStyleContext *context,
+                                             GtkStateFlags    state,
+                                             GdkRGBA         *color);
+void gnc_style_context_get_border_color (GtkStyleContext *context,
+                                         GtkStateFlags    state,
+                                         GdkRGBA         *color);
+
 /** @} */
 
 #endif /* GNC_GTK_UTILS_H */
