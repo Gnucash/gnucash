@@ -156,8 +156,9 @@ static void
 gnc_item_edit_init (GncItemEdit *item_edit)
 {
     /* Set invalid values so that we know when we have been fully
-    	   initialized */
-    gtk_orientable_set_orientation (GTK_ORIENTABLE(item_edit), GTK_ORIENTATION_HORIZONTAL);
+           initialized */
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(item_edit),
+                                    GTK_ORIENTATION_HORIZONTAL);
 
     item_edit->sheet = NULL;
     item_edit->editor = NULL;
@@ -593,13 +594,11 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
     gint x, y, w, h;
     gint y_offset, x_offset;
     gint popup_x, popup_y;
-    gint popup_w;
-    gint popup_h;
-    gint popup_max_width;
-    gint view_height;
-    gint view_width;
-    gint up_height;
-    gint down_height;
+    gint popup_w = -1, popup_h = -1;
+    gint popup_max_width, popup_max_height;
+    gint view_width, view_height;
+    gint down_height, up_height;
+    gint sheet_width;
 
     g_return_if_fail (item_edit != NULL);
     g_return_if_fail (GNC_IS_ITEM_EDIT(item_edit));
@@ -608,6 +607,8 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
         return;
 
     sheet = item_edit->sheet;
+
+    sheet_width = sheet->width;
 
     gtk_widget_get_allocation (GTK_WIDGET (sheet), &alloc);
     view_height = alloc.height;
@@ -625,22 +626,12 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
     up_height = y - y_offset;
     down_height = view_height - (up_height + h);
 
-    if (up_height > down_height)
-    {
-        popup_y = y + y_offset;
-        popup_h = up_height;
-    }
-    else
-    {
-        popup_y = y + h;
-        popup_h = down_height;
-    }
-
-    popup_max_width = view_width - popup_x + x_offset;
+    popup_max_height = MAX (up_height, down_height);
+    popup_max_width = sheet_width - popup_x + x_offset; // always pops to the right
 
     if (item_edit->popup_get_height)
         popup_h = item_edit->popup_get_height
-                       (item_edit->popup_item, popup_h, h,
+                       (item_edit->popup_item, popup_max_height, h,
                         item_edit->popup_user_data);
 
     if (item_edit->popup_autosize)
@@ -649,15 +640,18 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
                                        popup_max_width,
                                        item_edit->popup_user_data);
     else
-        popup_w = -1;
+        popup_w = 0;
 
+    // Adjust the popup_y point based on poping above or below 
     if (up_height > down_height)
         popup_y = y - popup_h;
+    else
+        popup_y = y + h;
 
     if (!gtk_widget_get_parent (item_edit->popup_item))
-        gtk_layout_put (GTK_LAYOUT(sheet), item_edit->popup_item,
-                        popup_x, popup_y);
-    gtk_widget_set_size_request(item_edit->popup_item, popup_w, popup_h);
+        gtk_layout_put (GTK_LAYOUT(sheet), item_edit->popup_item, popup_x, popup_y);
+
+    gtk_widget_set_size_request (item_edit->popup_item, popup_w - 1, popup_h);
 
     toggle = GTK_TOGGLE_BUTTON(item_edit->popup_toggle.tbutton);
 
@@ -686,6 +680,9 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
         popup_width = item_edit->popup_get_width
                       (item_edit->popup_item,
                        item_edit->popup_user_data);
+
+        if (popup_width > popup_w)
+            popup_width = popup_w;
 
         if (popup_width > popup_max_width)
         {
