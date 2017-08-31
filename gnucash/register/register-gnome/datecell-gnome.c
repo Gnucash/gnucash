@@ -97,28 +97,28 @@ check_readonly_threshold (const gchar *datestr, GDate *d)
     if (g_date_compare(d, readonly_threshold) < 0)
     {
 #if 0
-	gchar *dialog_msg = _("The entered date of the new transaction is "
-			      "older than the \"Read-Only Threshold\" set for "
-			      "this book. This setting can be changed in "
-			      "File -> Properties -> Accounts.");
-	gchar *dialog_title = _("Cannot store a transaction at this date");
-	GtkWidget *dialog = gtk_message_dialog_new(NULL,
-						   0,
-						   GTK_MESSAGE_ERROR,
-						   GTK_BUTTONS_OK,
-						   "%s", dialog_title);
-	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-						 "%s", dialog_msg);
-	gtk_dialog_run(GTK_DIALOG(dialog));
-	gtk_widget_destroy(dialog);
+    gchar *dialog_msg = _("The entered date of the new transaction is "
+                  "older than the \"Read-Only Threshold\" set for "
+                  "this book. This setting can be changed in "
+                  "File -> Properties -> Accounts.");
+    gchar *dialog_title = _("Cannot store a transaction at this date");
+    GtkWidget *dialog = gtk_message_dialog_new(NULL,
+                           0,
+                           GTK_MESSAGE_ERROR,
+                           GTK_BUTTONS_OK,
+                           "%s", dialog_title);
+    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+                         "%s", dialog_msg);
+    gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
 #endif
-	g_warning("Entered date %s is before the \"auto-read-only threshold\";"
-		  " resetting to the threshold.", datestr);
+    g_warning("Entered date %s is before the \"auto-read-only threshold\";"
+          " resetting to the threshold.", datestr);
 
-	// Reset the date to the threshold date
-	g_date_set_julian (d, g_date_get_julian (readonly_threshold));
-	g_date_free (readonly_threshold);
-	return TRUE;
+    // Reset the date to the threshold date
+    g_date_set_julian (d, g_date_get_julian (readonly_threshold));
+    g_date_free (readonly_threshold);
+    return TRUE;
     }
     g_date_free (readonly_threshold);
     return FALSE;
@@ -138,7 +138,7 @@ gnc_parse_date (struct tm *parsed, const char * datestr)
         // Couldn't parse date, use today
         struct tm tm_today;
 
-	memset (&tm_today, 0, sizeof (struct tm));
+    memset (&tm_today, 0, sizeof (struct tm));
         gnc_tm_get_today_start (&tm_today);
         day = tm_today.tm_mday;
         month = tm_today.tm_mon + 1;
@@ -150,13 +150,13 @@ gnc_parse_date (struct tm *parsed, const char * datestr)
     if (use_autoreadonly)
     {
         GDate *d = g_date_new_dmy(day, month, year);
-	if (check_readonly_threshold (datestr, d))
-	{
-	    day = g_date_get_day (d);
-	    month = g_date_get_month (d);
-	    year = g_date_get_year (d);
-	}
-	g_date_free (d);
+    if (check_readonly_threshold (datestr, d))
+    {
+        day = g_date_get_day (d);
+        month = g_date_get_month (d);
+        year = g_date_get_year (d);
+    }
+    g_date_free (d);
     }
 
     parsed->tm_mday = day;
