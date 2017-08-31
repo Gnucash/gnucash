@@ -555,18 +555,8 @@ gnc_item_edit_new (GnucashSheet *sheet)
     gtk_entry_set_width_chars (GTK_ENTRY(item_edit->editor), 1);
     gtk_box_pack_start (GTK_BOX(item_edit), item_edit->editor,  TRUE, TRUE, 0);
 
-    /* Force padding on the entry to align with the rest of the register */
-    hpad_str = g_strdup_printf("%i", CELL_HPADDING);
-    vpad_str = g_strdup_printf("%i", CELL_VPADDING);
-    entry_css = g_strconcat ("* { padding: ", vpad_str, "px ", hpad_str, "px ", vpad_str, "px ", hpad_str, "px }", NULL);
-    provider = gtk_css_provider_new();
-    gtk_css_provider_load_from_data (provider, entry_css, -1, NULL);
-    stylecontext = gtk_widget_get_style_context (item_edit->editor);
-    gtk_style_context_add_provider (stylecontext, GTK_STYLE_PROVIDER (provider),
-                                    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    g_free (hpad_str);
-    g_free (vpad_str);
-    g_free (entry_css);
+    /* Force padding on the entry to align with the rest of the register this
+       is done in the gnucash.css file which should be in line with sheet.h */
 
     /* Create the popup button
        It will only be displayed when the cell being edited provides
@@ -574,14 +564,8 @@ gnc_item_edit_new (GnucashSheet *sheet)
     item_edit->popup_toggle.tbutton = gtk_toggle_button_new();
     gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (item_edit->popup_toggle.tbutton), FALSE);
 
-    /* Force padding on the button to
-       1. keep it small
-       2. display as much as possible of the arrow */
-    provider = gtk_css_provider_new();
-    gtk_css_provider_load_from_data (provider, "* { padding: 1px }", -1, NULL);
-    stylecontext = gtk_widget_get_style_context (item_edit->popup_toggle.tbutton);
-    gtk_style_context_add_provider (stylecontext, GTK_STYLE_PROVIDER (provider),
-                                    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    /* Force padding on the button to keep it small and display as much as 
+       possible of the arrow which is done in the gnucash.css file */
 
     /* Wrap the popup button in an event box to give it its own gdkwindow.
      * Without one the button would disappear behind the grid object. */
