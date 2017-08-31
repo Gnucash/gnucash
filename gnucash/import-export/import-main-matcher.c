@@ -43,6 +43,7 @@
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-engine.h"
+#include "gnc-gtk-utils.h"
 #include "import-settings.h"
 #include "import-match-picker.h"
 #include "import-backend.h"
@@ -60,6 +61,7 @@ struct _main_matcher_info
     GtkTreeView *view;
     GNCImportSettings *user_settings;
     int selected_row;
+    gboolean dark_theme;
     GNCTransactionProcessedCB transaction_processed_cb;
     gpointer user_data;
     GNCImportPendingMatches *pending_matches;
@@ -82,9 +84,9 @@ enum downloaded_cols
     NUM_DOWNLOADED_COLS
 };
 
-#define COLOR_RED    "brown1"
-#define COLOR_YELLOW "gold"
-#define COLOR_GREEN  "DarkSeaGreen1"
+#define CSS_INT_REQUIRED_CLASS      "intervention-required"
+#define CSS_INT_PROB_REQUIRED_CLASS "intervention-probably-required"
+#define CSS_INT_NOT_REQUIRED_CLASS  "intervention-not-required"
 
 static QofLogModule log_module = GNC_MOD_IMPORT;
 
@@ -206,6 +208,8 @@ on_matcher_help_clicked (GtkButton *button, gpointer user_data)
     GNCImportMainMatcher *info = user_data;
     GtkBuilder *builder;
     GtkWidget *help_dialog, *box;
+    gchar *int_required_class, *int_prob_required_class, *int_not_required_class;
+    gchar *class_extension = NULL;
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-import.glade", "textbuffer2");
@@ -214,14 +218,21 @@ on_matcher_help_clicked (GtkButton *button, gpointer user_data)
     gnc_builder_add_from_file (builder, "dialog-import.glade", "textbuffer5");
     gnc_builder_add_from_file (builder, "dialog-import.glade", "matcher_help_dialog");
 
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "red"));
-    gnc_widget_set_style_context (GTK_WIDGET(box), "color_back_red");
+    if (info->dark_theme == TRUE)
+        class_extension = "-dark";
 
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "yellow"));
-    gnc_widget_set_style_context (GTK_WIDGET(box), "color_back_yellow");
+    int_required_class = g_strconcat (CSS_INT_REQUIRED_CLASS, class_extension, NULL);
+    int_prob_required_class = g_strconcat (CSS_INT_PROB_REQUIRED_CLASS, class_extension, NULL);
+    int_not_required_class = g_strconcat (CSS_INT_NOT_REQUIRED_CLASS, class_extension, NULL);
 
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "green"));
-    gnc_widget_set_style_context (GTK_WIDGET(box), "color_back_green");
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "intervention_required_box"));
+    gnc_widget_set_style_context (GTK_WIDGET(box), int_required_class);
+
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "intervention_probably_required_box"));
+    gnc_widget_set_style_context (GTK_WIDGET(box), int_prob_required_class);
+
+    box = GTK_WIDGET(gtk_builder_get_object (builder, "intervention_not_required_box"));
+    gnc_widget_set_style_context (GTK_WIDGET(box), int_not_required_class);
 
     help_dialog = GTK_WIDGET(gtk_builder_get_object (builder, "matcher_help_dialog"));
     gtk_window_set_transient_for(GTK_WINDOW(help_dialog),
@@ -231,6 +242,10 @@ on_matcher_help_clicked (GtkButton *button, gpointer user_data)
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, help_dialog);
 
     g_object_unref(G_OBJECT(builder));
+
+    g_free (int_required_class);
+    g_free (int_prob_required_class);
+    g_free (int_not_required_class);
 
     gtk_widget_show(help_dialog);
 }
@@ -398,10 +413,6 @@ add_text_column(GtkTreeView *view, const gchar *title, int col_num)
     GtkTreeViewColumn *column;
 
     renderer = gtk_cell_renderer_text_new();
-    g_object_set(G_OBJECT(renderer),
-                 "foreground", "black",
-                 "foreground-set", TRUE,
-                 NULL);
     column = gtk_tree_view_column_new_with_attributes
              (title, renderer,
               "text", col_num,
@@ -481,10 +492,6 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
              "cell-background", DOWNLOADED_COL_COLOR,
              NULL);
     renderer = gtk_cell_renderer_text_new();
-    g_object_set(G_OBJECT(renderer),
-                 "foreground", "black",
-                 "foreground-set", TRUE,
-                 NULL);
     gtk_tree_view_column_pack_start(column, renderer, TRUE);
     gtk_tree_view_column_set_attributes(column, renderer,
                                         "text", DOWNLOADED_COL_ACTION_INFO,
@@ -505,6 +512,8 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
                      G_CALLBACK(gnc_gen_trans_row_changed_cb), info);
 }
 
+
+
 GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
         const gchar* heading,
         gboolean all_from_same_account,
@@ -515,6 +524,8 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     GtkWidget *heading_label;
     GtkWidget *box, *pbox;
     gboolean show_update;
+    GtkStyleContext *stylectxt;
+    GdkRGBA color;
 
     info = g_new0 (GNCImportMainMatcher, 1);
     info->pending_matches = gnc_import_PendingMatches_new();
@@ -522,6 +533,10 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     /* Initialize user Settings. */
     info->user_settings = gnc_import_Settings_new ();
     gnc_import_Settings_set_match_date_hardlimit (info->user_settings, match_date_hardlimit);
+
+    stylectxt = gtk_widget_get_style_context (GTK_WIDGET(parent));
+    gtk_style_context_get_color (stylectxt, GTK_STATE_FLAG_NORMAL, &color);
+    info->dark_theme = gnc_is_dark_theme (&color);
 
     /* Initialize the GtkDialog. */
     builder = gtk_builder_new();
@@ -546,7 +561,7 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
 
     /* if (parent)
       gtk_window_set_transient_for (GTK_WINDOW (info->dialog),
-    			  GTK_WINDOW (parent));*/
+                  GTK_WINDOW (parent));*/
 
     if (heading)
         gtk_label_set_text (GTK_LABEL (heading_label), heading);
@@ -578,6 +593,8 @@ GNCImportMainMatcher * gnc_gen_trans_assist_new (GtkWidget *parent,
     GtkWidget *heading_label;
     GtkWidget *box;
     gboolean show_update;
+    GtkStyleContext *stylectxt;
+    GdkRGBA color;
 
     info = g_new0 (GNCImportMainMatcher, 1);
     info->pending_matches = gnc_import_PendingMatches_new();
@@ -585,6 +602,10 @@ GNCImportMainMatcher * gnc_gen_trans_assist_new (GtkWidget *parent,
     /* Initialize user Settings. */
     info->user_settings = gnc_import_Settings_new ();
     gnc_import_Settings_set_match_date_hardlimit (info->user_settings, match_date_hardlimit);
+
+    stylectxt = gtk_widget_get_style_context (GTK_WIDGET(parent));
+    gtk_style_context_get_color (stylectxt, GTK_STATE_FLAG_NORMAL, &color);
+    info->dark_theme = gnc_is_dark_theme (&color);
 
     /* load the interface */
     builder = gtk_builder_new();
@@ -650,6 +671,17 @@ gboolean gnc_gen_trans_list_run (GNCImportMainMatcher *info)
     return result;
 }
 
+static gchar*
+get_required_color (const gchar *class_name)
+{
+    GdkRGBA color;
+    GtkWidget *label = gtk_label_new ("Color");
+    GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET(label));
+    gtk_style_context_add_class (context, class_name);
+    gnc_style_context_get_background_color (context, GTK_STATE_FLAG_NORMAL, &color);
+    return gdk_rgba_to_string (&color);
+}
+
 static void
 refresh_model_row (GNCImportMainMatcher *gui,
                    GtkTreeModel *model,
@@ -660,6 +692,8 @@ refresh_model_row (GNCImportMainMatcher *gui,
     GtkTreeSelection *selection;
     gchar *tmp, *imbalance, *text, *color;
     const gchar *ro_text;
+    gchar *int_required_class, *int_prob_required_class, *int_not_required_class;
+    gchar *class_extension = NULL;
     Split *split;
     g_assert (gui);
     g_assert (model);
@@ -668,6 +702,13 @@ refresh_model_row (GNCImportMainMatcher *gui,
 
     store = GTK_LIST_STORE(model);
     gtk_list_store_set(store, iter, DOWNLOADED_COL_DATA, info, -1);
+
+    if (gui->dark_theme == TRUE)
+        class_extension = "-dark";
+
+    int_required_class = g_strconcat (CSS_INT_REQUIRED_CLASS, class_extension, NULL);
+    int_prob_required_class = g_strconcat (CSS_INT_PROB_REQUIRED_CLASS, class_extension, NULL);
+    int_not_required_class = g_strconcat (CSS_INT_NOT_REQUIRED_CLASS, class_extension, NULL);
 
     /*Account:*/
     split = gnc_import_TransInfo_get_fsplit (info);
@@ -705,7 +746,7 @@ refresh_model_row (GNCImportMainMatcher *gui,
         if (gnc_import_TransInfo_is_balanced(info) == TRUE)
         {
             ro_text = _("New, already balanced");
-            color = COLOR_GREEN;
+            color = get_required_color (int_not_required_class);
         }
         else
         {
@@ -721,7 +762,7 @@ refresh_model_row (GNCImportMainMatcher *gui,
                    TRUE) ));
             if (gnc_import_TransInfo_get_destacc (info) != NULL)
             {
-                color = COLOR_GREEN;
+                color = get_required_color (int_not_required_class);
                 tmp = gnc_account_get_full_name
                       (gnc_import_TransInfo_get_destacc (info));
                 if (gnc_import_TransInfo_get_destacc_selected_manually(info)
@@ -746,7 +787,7 @@ refresh_model_row (GNCImportMainMatcher *gui,
             }
             else
             {
-                color = COLOR_YELLOW;
+                color = get_required_color (int_prob_required_class);
                 text =
                     /* Translators: %s is the amount to be transferred. */
                     g_strdup_printf(_("New, UNBALANCED (need acct to transfer %s)!"),
@@ -758,7 +799,7 @@ refresh_model_row (GNCImportMainMatcher *gui,
     case GNCImport_CLEAR:
         if (gnc_import_TransInfo_get_selected_match(info))
         {
-            color = COLOR_GREEN;
+            color = get_required_color (int_not_required_class);
             if (gnc_import_TransInfo_get_match_selected_manually(info) == TRUE)
             {
                 ro_text = _("Reconcile (manual) match");
@@ -770,14 +811,14 @@ refresh_model_row (GNCImportMainMatcher *gui,
         }
         else
         {
-            color = COLOR_RED;
+            color = get_required_color (int_required_class);
             ro_text = _("Match missing!");
         }
         break;
     case GNCImport_UPDATE:
         if (gnc_import_TransInfo_get_selected_match(info))
         {
-            color = COLOR_GREEN;
+            color = get_required_color (int_not_required_class);
             if (gnc_import_TransInfo_get_match_selected_manually(info) == TRUE)
             {
                 ro_text = _("Update and reconcile (manual) match");
@@ -789,12 +830,12 @@ refresh_model_row (GNCImportMainMatcher *gui,
         }
         else
         {
-            color = COLOR_RED;
+            color = get_required_color (int_required_class);
             ro_text = _("Match missing!");
         }
         break;
     case GNCImport_SKIP:
-        color = COLOR_RED;
+        color = get_required_color (int_required_class);
         ro_text = _("Do not import (no action selected)");
         break;
     default:
@@ -809,6 +850,10 @@ refresh_model_row (GNCImportMainMatcher *gui,
                        -1);
     if (text)
         g_free(text);
+
+    g_free (int_required_class);
+    g_free (int_prob_required_class);
+    g_free (int_not_required_class);
 
     /* Set the pixmaps */
     gtk_list_store_set(store, iter,

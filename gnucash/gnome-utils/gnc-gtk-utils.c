@@ -223,3 +223,74 @@ gnc_cbwe_require_list_item (GtkComboBox *cbwe)
 
     g_object_set_data(G_OBJECT(cbwe), CHANGED_ID, GINT_TO_POINTER(id));
 }
+
+/** Test to see if fg_color is a light one which should be a foreground
+ *  one and hence would be on a dark background
+ *
+ *  @param fg_color The foreground color to test.
+ */
+gboolean
+gnc_is_dark_theme (GdkRGBA *fg_color)
+{
+    gboolean is_dark = FALSE;
+
+    // Counting the perceptive luminance - human eye favors green color...
+    double lightness = (0.299 * fg_color->red + 0.587 * fg_color->green + 0.114 * fg_color->blue);
+
+    if (lightness > 0.5)
+        is_dark = TRUE;
+
+    return is_dark;
+}
+
+/** Wrapper to get the background color of a widget for a given state
+ *
+ *  @param context Style context of widget.
+ *
+ *  @param state The stateflag of the widget.
+ *
+ *  @param color The returned background color of the widget.
+ */
+void
+gnc_style_context_get_background_color (GtkStyleContext *context,
+                                        GtkStateFlags    state,
+                                        GdkRGBA         *color)
+{
+    GdkRGBA *c;
+
+    g_return_if_fail (color != NULL);
+    g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+    gtk_style_context_get (context,
+                           state,
+                           GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &c,
+                           NULL);
+    *color = *c;
+    gdk_rgba_free (c);
+}
+
+/** Wrapper to get the border color of a widget for a given state
+ *
+ *  @param context Style context of widget.
+ *
+ *  @param state The stateflag of the widget.
+ *
+ *  @param color The returned border color of the widget.
+ */
+void
+gnc_style_context_get_border_color (GtkStyleContext *context,
+                                    GtkStateFlags    state,
+                                    GdkRGBA         *color)
+{
+    GdkRGBA *c;
+
+    g_return_if_fail (color != NULL);
+    g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+    gtk_style_context_get (context,
+                           state,
+                           GTK_STYLE_PROPERTY_BORDER_COLOR, &c,
+                           NULL);
+    *color = *c;
+    gdk_rgba_free (c);
+}

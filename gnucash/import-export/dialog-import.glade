@@ -1004,7 +1004,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEventBox" id="red">
+              <object class="GtkEventBox" id="intervention_required_box">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -1021,7 +1021,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEventBox" id="yellow">
+              <object class="GtkEventBox" id="intervention_probably_required_box">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -1038,7 +1038,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEventBox" id="green">
+              <object class="GtkEventBox" id="intervention_not_required_box">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>

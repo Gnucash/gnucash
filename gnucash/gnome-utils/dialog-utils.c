@@ -69,9 +69,9 @@ gnc_set_label_color(GtkWidget *label, gnc_numeric value)
     deficit = gnc_numeric_negative_p (value);
 
     if (deficit)
-        gnc_widget_set_style_context (GTK_WIDGET(label), "css_red_color");
+        gnc_widget_set_style_context (GTK_WIDGET(label), "negative-numbers");
     else
-        gnc_widget_set_style_context (GTK_WIDGET(label), "css_default_color");
+        gnc_widget_set_style_context (GTK_WIDGET(label), "default-color");
 }
 
 
@@ -292,6 +292,38 @@ gnc_widget_set_style_context (GtkWidget *widget, const char *gnc_class)
     GtkStyleContext *context = gtk_widget_get_style_context (widget);
     gtk_style_context_add_class (context, gnc_class);
 }
+
+/********************************************************************\
+ * Draw an arrow on a Widget so it can be altered with css          *
+ *                                                                  *
+ * Args:     widget - widget to add arrow to in the draw callback   *
+ *               cr - cairo context for the draw callback           *
+ *        direction - 0 for up, 1 for down                          *
+ * Returns:  TRUE, stop other handlers being invoked for the event  *
+\********************************************************************/
+gboolean
+gnc_draw_arrow_cb (GtkWidget *widget, cairo_t *cr, gpointer direction)
+{
+    GtkStyleContext *context = gtk_widget_get_style_context (widget);
+    gint width = gtk_widget_get_allocated_width (widget);
+    gint height = gtk_widget_get_allocated_height (widget);
+    gint size;
+
+    gtk_render_background (context, cr, 0, 0, width, height);
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_ARROW);
+
+    size = MIN(width / 2, height / 2);
+
+    if (GPOINTER_TO_INT(direction) == 0)
+        gtk_render_arrow (context, cr, 0,
+                         (width - size)/2, (height - size)/2, size);
+    else
+        gtk_render_arrow (context, cr, G_PI,
+                         (width - size)/2, (height - size)/2, size);
+
+    return TRUE;
+}
+
 
 gboolean
 gnc_handle_date_accelerator (GdkEventKey *event,

@@ -4,6 +4,7 @@ ui_DATA = \
 	gnc-windows-menu-ui.xml \
 	gnc-windows-menu-ui-quartz.xml \
 	osx_accel_map \
-	gnucash.css
+	gnucash.css \
+	gnucash-fallback.css
 
 EXTRA_DIST = $(ui_DATA) CMakeLists.txt

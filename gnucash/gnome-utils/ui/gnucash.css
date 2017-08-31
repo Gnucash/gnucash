@@ -1,37 +1,4 @@
 /* Note: Widgets obtained from Glade files will not be addressable
-   directly by name as these are not brought in when loaded, only
+   unless they have been named or have style classes added. Only 
    the widget type can be configured unless they are named in code */
-
-/* Import Matcher # import-main-matcher.*/
-.color_back_red {
-  background-color: brown1;
-}
-
-.color_back_yellow {
-  background-color: gold;
-}
-
-.color_back_green {
-  background-color: DarkSeaGreen1;
-}
-
-/* label colors # dialog-utils.c */
-.css_default_color {
-  color: currentColor;
-}
-
-.css_red_color {
-  color: rgb(75%, 0%, 0%);
-}
-
-/* Set the grid lines to be solid # gnc-tree-view-split-reg.c */
-.treeview_grid_lines {
-  border-color: black;
-}
-
-/* Increase label size # dialog-account.c */
-.primary_label_size {
-  font-size: large;
-  font-weight: bold;
-}
 

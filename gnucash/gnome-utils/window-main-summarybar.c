@@ -47,6 +47,8 @@ typedef struct
     int           component_id;
     int           cnxn_id;
     gboolean      combo_popped;
+    gboolean      show_negative_color;
+    gchar        *negative_color;
 } GNCMainSummary;
 
 #define WINDOW_SUMMARYBAR_CM_CLASS "summary-bar"
@@ -327,6 +329,8 @@ enum
     COLUMN_ASSETS_VALUE,
     COLUMN_PROFITS,
     COLUMN_PROFITS_VALUE,
+    COLUMN_ASSETS_NEG,
+    COLUMN_PROFITS_NEG,
     N_COLUMNS
 };
 
@@ -417,8 +421,10 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
                                COLUMN_MNEMONIC_TYPE, total_mode_label,
                                COLUMN_ASSETS,        _("Net Assets:"),
                                COLUMN_ASSETS_VALUE,  asset_amount_string,
+                               COLUMN_ASSETS_NEG,    gnc_numeric_negative_p(currency_accum->assets),
                                COLUMN_PROFITS,       _("Profits:"),
                                COLUMN_PROFITS_VALUE, profit_amount_string,
+                               COLUMN_PROFITS_NEG,   gnc_numeric_negative_p(currency_accum->profits),
                                -1);
             g_free(total_mode_label);
         }
@@ -439,12 +445,48 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
     g_list_free(currency_list);
 }
 
+static gchar*
+get_negative_color (void)
+{
+    GdkRGBA color;
+    GdkRGBA *rgba;
+    gchar *color_str;
+    GtkWidget *label = gtk_label_new ("Color");
+    GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET(label));
+    gtk_style_context_add_class (context, "negative-numbers");
+    gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+    rgba = gdk_rgba_copy (&color);
+
+    color_str = g_strdup_printf ("#%02X%02X%02X",
+                              (int)(0.5 + CLAMP (rgba->red, 0., 1.) * 255.),
+                              (int)(0.5 + CLAMP (rgba->green, 0., 1.) * 255.),
+                              (int)(0.5 + CLAMP (rgba->blue, 0., 1.) * 255.));
+    gdk_rgba_free (rgba);
+    return color_str;
+}
+
+static void
+summarybar_update_color (gpointer gsettings, gchar *key, gpointer user_data)
+{
+    GNCMainSummary *summary = user_data;
+
+    summary->negative_color = get_negative_color();
+    summary->show_negative_color = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
+
+    gnc_main_window_summary_refresh (summary);
+}
+
 static void
 gnc_main_window_summary_destroy_cb(GNCMainSummary *summary, gpointer data)
 {
     gnc_prefs_remove_cb_by_id (GNC_PREFS_GROUP, summary->cnxn_id);
     gnc_unregister_gui_component(summary->component_id);
-    g_free(summary);
+
+    gnc_prefs_remove_cb_by_func(GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED,
+                                summarybar_update_color, summary);
+
+    g_free (summary->negative_color);
+    g_free (summary);
 }
 
 static void
@@ -461,12 +503,57 @@ prefs_changed_cb (gpointer prefs, gchar *pref, gpointer user_data)
     gnc_main_window_summary_refresh(summary);
 }
 
+static gchar*
+check_string_for_markup (gchar *string)
+{
+    gchar **strings;
+    gchar *ret_string = g_strdup (string);
+
+    if (g_strrstr (ret_string, "&") != NULL)
+    {
+        strings = g_strsplit (ret_string, "&", -1);
+        g_free (ret_string);
+        ret_string = g_strjoinv ("&amp;", strings);
+        g_strfreev (strings);
+    }
+    if (g_strrstr (ret_string, "<") != NULL)
+    {
+        strings = g_strsplit (ret_string, "<", -1);
+        g_free (ret_string);
+        ret_string = g_strjoinv ("&lt;", strings);
+        g_strfreev (strings);
+    }
+    if (g_strrstr (ret_string, ">") != NULL)
+    {
+        strings = g_strsplit (ret_string, ">", -1);
+        g_free (ret_string);
+        ret_string = g_strjoinv ("&gt;", strings);
+        g_strfreev (strings);
+    }
+    if (g_strrstr (ret_string, "\"") != NULL)
+    {
+        strings = g_strsplit (ret_string, "\"", -1);
+        g_free (ret_string);
+        ret_string = g_strjoinv ("&quot;", strings);
+        g_strfreev (strings);
+    }
+    if (g_strrstr (ret_string, "'") != NULL)
+    {
+        strings = g_strsplit (ret_string, "'", -1);
+        g_free (ret_string);
+        ret_string = g_strjoinv ("&apos;", strings);
+        g_strfreev (strings);
+    }
+    return ret_string;
+}
+
 static void
 cdf (GtkCellLayout *cell_layout, GtkCellRenderer *cell, GtkTreeModel *tree_model, GtkTreeIter *iter,
                           gpointer user_data)
 {
     GNCMainSummary * summary = user_data;
     gchar *type, *assets, *assets_val, *profits, *profits_val;
+    gboolean assets_neg, profits_neg;
     gint viewcol;
 
     viewcol = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "view_column"));
@@ -481,23 +568,37 @@ cdf (GtkCellLayout *cell_layout, GtkCellRenderer *cell, GtkTreeModel *tree_model
                             COLUMN_ASSETS, &assets,
                             COLUMN_ASSETS_VALUE, &assets_val,
                             COLUMN_PROFITS, &profits,
-                            COLUMN_PROFITS_VALUE, &profits_val, -1);
+                            COLUMN_PROFITS_VALUE, &profits_val,
+                            COLUMN_ASSETS_NEG, &assets_neg,
+                            COLUMN_PROFITS_NEG, &profits_neg, -1);
 
     if (viewcol == 0)
         g_object_set (cell, "text", type, NULL);
 
     if (viewcol == 2)
     {
-        gchar *a_string = g_strconcat (assets, " ", assets_val, NULL);
-        g_object_set (cell, "text", a_string, NULL);
+        gchar *a_string, *checked_string = check_string_for_markup (assets_val);
+        if ((summary->show_negative_color == TRUE) && (assets_neg == TRUE))
+            a_string = g_strconcat (assets, " <span foreground='", summary->negative_color, "'>", checked_string, "</span>", NULL);
+        else
+            a_string = g_strconcat (assets, " ", checked_string, NULL);
+
+        g_object_set (cell, "markup", a_string, NULL);
         g_free (a_string);
+        g_free (checked_string);
     }
 
     if (viewcol == 4)
     {
-        gchar *p_string = g_strconcat (profits, " ", profits_val, NULL);
-        g_object_set (cell, "text", p_string, NULL);
+        gchar *p_string, *checked_string = check_string_for_markup (profits_val);
+        if ((summary->show_negative_color == TRUE) && (profits_neg == TRUE))
+            p_string = g_strconcat (profits, " <span foreground='", summary->negative_color, "'>", checked_string, "</span>", NULL);
+        else
+            p_string = g_strconcat (profits, " ", checked_string, NULL);
+
+        g_object_set (cell, "markup", p_string, NULL);
         g_free (p_string);
+        g_free (checked_string);
     }
 
     g_free (type);
@@ -529,16 +630,23 @@ gnc_main_window_summary_new (void)
                                             G_TYPE_STRING,
                                             G_TYPE_STRING,
                                             G_TYPE_STRING,
-                                            G_TYPE_STRING);
+                                            G_TYPE_STRING,
+                                            G_TYPE_BOOLEAN,
+                                            G_TYPE_BOOLEAN);
 
     retval->hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (retval->hbox), FALSE);
 
     // Set the style context for this widget so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(retval->hbox), "GncSummaryBar");
+    gnc_widget_set_style_context (GTK_WIDGET(retval->hbox), "summary-bar");
 
     retval->totals_combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (retval->datamodel));
     g_object_unref (retval->datamodel);
+
+    retval->negative_color = get_negative_color();
+    retval->show_negative_color = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED,
+                          summarybar_update_color, retval);
 
     retval->component_id = gnc_register_gui_component (WINDOW_SUMMARYBAR_CM_CLASS,
                            summarybar_refresh_handler,
@@ -553,7 +661,7 @@ gnc_main_window_summary_new (void)
 
     retval->combo_popped = FALSE;
 
-    for (i = 0; i <= N_COLUMNS; i += 2)
+    for (i = 0; i <= N_COLUMNS - 2; i += 2)
     {
         textRenderer = GTK_CELL_RENDERER(gtk_cell_renderer_text_new());
 

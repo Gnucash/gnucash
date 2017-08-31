@@ -229,6 +229,9 @@ gctt_init (GncCombott *combott)
 
     arrow = gtk_image_new_from_icon_name ("go-down", GTK_ICON_SIZE_BUTTON);
 
+    g_signal_connect (G_OBJECT (arrow), "draw",
+                      G_CALLBACK (gnc_draw_arrow_cb), GINT_TO_POINTER(1));
+
 #if GTK_CHECK_VERSION(3,12,0)
     gtk_widget_set_margin_start (GTK_WIDGET(arrow), 5);
 #else

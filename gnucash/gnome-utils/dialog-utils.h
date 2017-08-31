@@ -88,6 +88,16 @@ GtkTreeViewGridLines gnc_tree_view_get_grid_lines_pref (void);
 \********************************************************************/
 void gnc_widget_set_style_context (GtkWidget *widget, const char *gnc_class);
 
+/********************************************************************\
+ * Draw an arrow on a Widget so it can be altered with css          *
+ *                                                                  *
+ * Args:     widget - widget to add arrow to in the draw callback   *
+ *               cr - cairo context for the draw callback           *
+ *        direction - 0 for up, 1 for down                          *
+ * Returns:  TRUE, stop other handlers being invoked for the event  *
+\********************************************************************/
+gboolean gnc_draw_arrow_cb (GtkWidget *widget, cairo_t *cr, gpointer direction);
+
 gboolean gnc_handle_date_accelerator (GdkEventKey *event,
                                       struct tm *tm,
                                       const char *date_str);

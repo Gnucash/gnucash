@@ -61,8 +61,7 @@ struct _PopupToggle
 {
     GtkWidget *ebox;
     GtkWidget *tbutton;
-    GtkWidget *arrow_up;
-    GtkWidget *arrow_down;
+    gboolean   arrow_down;
     gboolean signals_connected;
 };
 
