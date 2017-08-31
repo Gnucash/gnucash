@@ -116,8 +116,13 @@ SET(core_utils_noinst_HEADERS
   gnc-path.h
 )
 
+if (MINGW64)
+  SET(BOOST_FILESYSTEM -lboost_filesystem-mt)
+else()
+  SET(BOOST_FILESYSTEM -lboost_filesystem)
+endif()
 SET(core_utils_ALL_SOURCES ${core_utils_SOURCES} ${core_utils_noinst_HEADERS})
-SET(core_utils_ALL_LIBRARIES ${Boost_LIBRARIES} -lboost_filesystem ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS} ${GOBJECT_LDFLAGS} ${GTK_MAC_LDFLAGS})
+SET(core_utils_ALL_LIBRARIES ${Boost_LIBRARIES} ${BOOST_FILESYSTEM} ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS} ${GOBJECT_LDFLAGS} ${GTK_MAC_LDFLAGS})
 SET(core_utils_ALL_INCLUDES
   ${CMAKE_SOURCE_DIR}/common
   ${CMAKE_BINARY_DIR}/common

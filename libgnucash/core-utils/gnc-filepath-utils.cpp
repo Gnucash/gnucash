@@ -32,6 +32,7 @@ extern "C" {
 #include <platform.h>
 #if PLATFORM(WINDOWS)
 #include <windows.h>
+#include <Shlobj.h>
 #endif
 
 #include <glib.h>
@@ -54,14 +55,36 @@ extern "C" {
 
 #if defined (_MSC_VER) || defined (G_OS_WIN32)
 #include <glib/gwin32.h>
+#ifndef PATH_MAX
 #define PATH_MAX MAXPATHLEN
+#endif
 #endif
 }
 
+#include <codecvt>
+#include <string>
 #include <boost/filesystem.hpp>
 
 namespace bfs = boost::filesystem;
 namespace bst = boost::system;
+
+/*
+ * Converts UTF16 to UTF8. Pinched from Nicolai M. Josuttis, "The C++
+ * Standard Library, Second Edition", 2012, Addison-Wesley.
+ */
+static std::string utf8(const std::wstring& str)
+{
+    std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
+    return myconv.to_bytes(str);
+}
+
+/*
+ * Does nothing, it's just here so to save a bunch of ifdefs later.
+ */
+static std::string utf8(const std::string& str)
+{
+    return str;
+}
 
 /**
  * Scrubs a filename by changing "strange" chars (e.g. those that are not
@@ -330,7 +353,7 @@ gnc_validate_directory (const bfs::path &dirname, bool create)
     if ((perms & bfs::owner_all) != bfs::owner_all)
         throw (bfs::filesystem_error(
             std::string(_("Insufficient permissions, at least write and access permissions required: "))
-            + dirname.c_str(), dirname,
+            + dirname.string(), dirname,
             bst::error_code(bst::errc::permission_denied, bst::generic_category())));
 
     return true;
@@ -371,7 +394,8 @@ copy_recursive(const bfs::path& src, const bfs::path& dest)
     {
         g_warning("An error occured while trying to migrate the user configation from\n%s to\n%s"
                   "The reported failure is\n%s",
-                  src.c_str(), gnc_userdata_home.c_str(), ex.what());
+                  src.c_str(), gnc_userdata_home.string(),
+                  ex.what());
         return false;
     }
 
@@ -398,7 +422,7 @@ win32_get_userdata_home (void)
     {
         b = SHGetPathFromIDListW (pidl, path);
         if (b)
-            retval = g_utf16_to_utf8 (path, -1, NULL, NULL, NULL);
+            retval = g_strdup(utf8(path).c_str());
         CoTaskMemFree (pidl);
     }
     return retval;
@@ -599,7 +623,7 @@ gnc_userdata_dir (void)
     if (gnc_userdata_home.empty())
         gnc_filepath_init(false);
 
-    return gnc_userdata_home.c_str();
+    return gnc_userdata_home.string().c_str();
 }
 
 static const bfs::path&
@@ -629,7 +653,7 @@ gnc_userdata_dir_as_path (void)
 gchar *
 gnc_build_userdata_path (const gchar *filename)
 {
-    return g_strdup((gnc_userdata_dir_as_path() / filename).c_str());
+    return g_strdup((gnc_userdata_dir_as_path() / filename).string().c_str());
 }
 
 static bfs::path
@@ -655,7 +679,8 @@ gnc_build_userdata_subdir_path (const gchar *subdir, const gchar *filename)
 gchar *
 gnc_build_book_path (const gchar *filename)
 {
-    return g_strdup(gnc_build_userdata_subdir_path("books", filename).c_str());
+    auto path = gnc_build_userdata_subdir_path("books", filename).string();
+    return g_strdup(path.c_str());
 }
 
 /** @fn gchar * gnc_build_translog_path (const gchar *filename)
@@ -670,7 +695,8 @@ gnc_build_book_path (const gchar *filename)
 gchar *
 gnc_build_translog_path (const gchar *filename)
 {
-    return g_strdup(gnc_build_userdata_subdir_path("translog", filename).c_str());
+    auto path = gnc_build_userdata_subdir_path("translog", filename).string();
+    return g_strdup(path.c_str());
 }
 
 /** @fn gchar * gnc_build_data_path (const gchar *filename)
@@ -685,7 +711,8 @@ gnc_build_translog_path (const gchar *filename)
 gchar *
 gnc_build_data_path (const gchar *filename)
 {
-    return g_strdup(gnc_build_userdata_subdir_path("data", filename).c_str());
+    auto path = gnc_build_userdata_subdir_path("data", filename).string();
+    return g_strdup(path.c_str());
 }
 
 /** @fn gchar * gnc_build_report_path (const gchar *filename)
