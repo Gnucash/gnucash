@@ -457,8 +457,6 @@ gnc_item_list_new(GtkListStore *list_store)
         g_object_ref(list_store);
     tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (list_store));
     g_object_unref(list_store);
-    /* Removed code to enable sorting. Enable it after the list is
-     * fully populated by calling gnc_item_list_finished_loading(). */
 
     gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (tree_view), FALSE);
     gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)),
