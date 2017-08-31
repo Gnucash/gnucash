@@ -448,15 +448,16 @@ get_userdata_home(bool create)
             if (!gnc_validate_directory(userdata_home, create))
                 throw (bfs::filesystem_error(
                     std::string(_("Directory doesn't exist: "))
-                    + userdata_home.c_str(), userdata_home,
+                    + userdata_home.string(), userdata_home,
                     bst::error_code(bst::errc::permission_denied, bst::generic_category())));
             try_home_dir = false;
         }
         catch (const bfs::filesystem_error& ex)
         {
+            auto path_string = userdata_home.string();
             g_warning("%s is not a suitable base directory for the user data."
             "Trying home directory instead.\nThe failure is\n%s",
-            userdata_home.c_str(), ex.what());
+            path_string.c_str(), ex.what());
         }
     }
 
@@ -469,7 +470,7 @@ get_userdata_home(bool create)
             if (!gnc_validate_directory(userdata_home, false))
                 throw (bfs::filesystem_error(
                     std::string(_("Directory doesn't exist: "))
-                    + userdata_home.c_str(), userdata_home,
+                    + userdata_home.string(), userdata_home,
                     bst::error_code(bst::errc::permission_denied, bst::generic_category())));
             userdata_is_home = true;
         }
@@ -501,15 +502,16 @@ gnc_filepath_init(gboolean create)
             if (!gnc_validate_directory(gnc_userdata_home, create))
                 throw (bfs::filesystem_error(
                     std::string(_("Directory doesn't exist: "))
-                    + userdata_home.c_str(), userdata_home,
+                    + userdata_home.string(), userdata_home,
                     bst::error_code(bst::errc::permission_denied, bst::generic_category())));
             gnc_userdata_home_from_env = true;
         }
         catch (const bfs::filesystem_error& ex)
         {
+            auto path_string = userdata_home.string();
             g_warning("%s (from environment variable 'GNC_DATA_HOME') is not a suitable directory for the user data."
             "Trying the default instead.\nThe failure is\n%s",
-            gnc_userdata_home.c_str(), ex.what());
+            path_string.c_str(), ex.what());
         }
     }
 
