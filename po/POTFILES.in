@@ -464,6 +464,7 @@ gnucash/report/standard-reports/budget-barchart.scm
 gnucash/report/standard-reports/budget-flow.scm
 gnucash/report/standard-reports/budget-income-statement.scm
 gnucash/report/standard-reports/budget.scm
+gnucash/report/standard-reports/business-tax-report.scm
 gnucash/report/standard-reports/cash-flow.scm
 gnucash/report/standard-reports/category-barchart.scm
 gnucash/report/standard-reports/daily-reports.scm
