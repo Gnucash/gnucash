@@ -224,10 +224,14 @@ gnc_cbwe_require_list_item (GtkComboBox *cbwe)
     g_object_set_data(G_OBJECT(cbwe), CHANGED_ID, GINT_TO_POINTER(id));
 }
 
-/** Test to see if fg_color is a light one which should be a foreground
- *  one and hence would be on a dark background
+/** Return whether the current gtk theme is a dark one. A theme is considered "dark" if
+ *  it has a dark background color with a light foreground color (used for text and so on).
+ *  We only test on the foregrond color assuming a sane theme chooses enough contrast between
+ *  foreground and background colors.
  *
  *  @param fg_color The foreground color to test.
+ *
+ *  @returns TRUE if the theme is considered dark, FALSE otherwise.
  */
 gboolean
 gnc_is_dark_theme (GdkRGBA *fg_color)
