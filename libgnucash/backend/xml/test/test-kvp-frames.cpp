@@ -35,7 +35,7 @@ test_kvp_get_slot (int run,
     {
         gchar* tmp;
         failure_args (msg, __FILE__, __LINE__, "run=%d", run);
-        printf ("    Value is %s\n", test_val2->to_string ());
+        printf ("    Value is %s\n", test_val2->to_string ().c_str ());
     }
 }
 
