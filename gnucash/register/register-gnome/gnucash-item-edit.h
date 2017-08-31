@@ -38,7 +38,7 @@
 #define GNC_IS_ITEM_EDIT(o)       (G_TYPE_CHECK_INSTANCE_TYPE((o), GNC_TYPE_ITEM_EDIT))
 
 
-typedef int (*GetPopupHeight) (GtkWidget *item,
+typedef int (*PopupGetHeight) (GtkWidget *item,
                                int space_available,
                                int row_height,
                                gpointer user_data);
@@ -79,7 +79,7 @@ typedef struct
 
     PopupToggle popup_toggle;
     GtkWidget *popup_item;
-    GetPopupHeight   get_popup_height;
+    PopupGetHeight   popup_get_height;
     PopupAutosize    popup_autosize;
     PopupSetFocus    popup_set_focus;
     PopupPostShow    popup_post_show;
@@ -110,7 +110,7 @@ GtkWidget *gnc_item_edit_new (GnucashSheet *sheet);
 
 void gnc_item_edit_set_popup (GncItemEdit    *item_edit,
                               GtkWidget      *popup_item,
-                              GetPopupHeight  get_popup_height,
+                              PopupGetHeight  popup_get_height,
                               PopupAutosize   popup_autosize,
                               PopupSetFocus   popup_set_focus,
                               PopupPostShow   popup_post_show,

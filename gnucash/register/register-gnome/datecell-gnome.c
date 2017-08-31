@@ -632,7 +632,7 @@ gnc_date_cell_move (BasicCell *bcell)
 }
 
 static int
-get_popup_height (GtkWidget *widget,
+popup_get_height (GtkWidget *widget,
                   G_GNUC_UNUSED int space_available,
                   G_GNUC_UNUSED int row_height,
                   G_GNUC_UNUSED gpointer user_data)
@@ -665,7 +665,7 @@ gnc_date_cell_enter (BasicCell *bcell,
     PopBox *box = bcell->gui_private;
 
     gnc_item_edit_set_popup (box->item_edit, GTK_WIDGET (box->date_picker),
-                             get_popup_height, NULL, popup_set_focus,
+                             popup_get_height, NULL, popup_set_focus,
                              NULL, NULL, NULL);
 
     block_picker_signals (cell);

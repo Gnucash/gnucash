@@ -783,7 +783,7 @@ gnc_combo_cell_gui_move (BasicCell *bcell)
 }
 
 static int
-get_popup_height (G_GNUC_UNUSED GtkWidget *widget,
+popup_get_height (G_GNUC_UNUSED GtkWidget *widget,
                   int space_available,
                   int row_height,
                   gpointer user_data)
@@ -851,7 +851,7 @@ gnc_combo_cell_enter (BasicCell *bcell,
 
     gnc_item_edit_set_popup (box->item_edit,
                              GTK_WIDGET(box->item_list),
-                             get_popup_height, popup_autosize,
+                             popup_get_height, popup_autosize,
                              popup_set_focus, popup_post_show,
                              popup_get_width, box);
 

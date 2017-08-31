@@ -171,7 +171,7 @@ gnc_item_edit_init (GncItemEdit *item_edit)
     item_edit->popup_toggle.signals_connected = FALSE;
 
     item_edit->popup_item = NULL;
-    item_edit->get_popup_height = NULL;
+    item_edit->popup_get_height = NULL;
     item_edit->popup_autosize = NULL;
     item_edit->popup_set_focus = NULL;
     item_edit->popup_post_show = NULL;
@@ -654,8 +654,8 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
 
     popup_max_width = view_width - popup_x + x_offset;
 
-    if (item_edit->get_popup_height)
-        popup_h = item_edit->get_popup_height
+    if (item_edit->popup_get_height)
+        popup_h = item_edit->popup_get_height
                        (item_edit->popup_item, popup_h, h,
                         item_edit->popup_user_data);
 
@@ -742,7 +742,7 @@ gnc_item_edit_hide_popup (GncItemEdit *item_edit)
 void
 gnc_item_edit_set_popup (GncItemEdit    *item_edit,
                          GtkWidget      *popup_item,
-                         GetPopupHeight  get_popup_height,
+                         PopupGetHeight  popup_get_height,
                          PopupAutosize   popup_autosize,
                          PopupSetFocus   popup_set_focus,
                          PopupPostShow   popup_post_show,
@@ -757,7 +757,7 @@ gnc_item_edit_set_popup (GncItemEdit    *item_edit,
     item_edit->is_popup = popup_item != NULL;
 
     item_edit->popup_item       = popup_item;
-    item_edit->get_popup_height = get_popup_height;
+    item_edit->popup_get_height = popup_get_height;
     item_edit->popup_autosize   = popup_autosize;
     item_edit->popup_set_focus  = popup_set_focus;
     item_edit->popup_post_show  = popup_post_show;
