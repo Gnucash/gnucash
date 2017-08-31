@@ -595,7 +595,7 @@ gnc_account_class_init (AccountClass *klass)
                           "repeated. but no two accounts that share "
                           "a parent may have the same name.",
                           NULL,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -606,7 +606,7 @@ gnc_account_class_init (AccountClass *klass)
                           "all its parent account names to indicate "
                           "a unique account.",
                           NULL,
-                          G_PARAM_READABLE));
+                          static_cast<GParamFlags>(G_PARAM_READABLE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -618,7 +618,7 @@ gnc_account_class_init (AccountClass *klass)
                           "be reporting code that is a synonym for "
                           "the accountName.",
                           NULL,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -630,7 +630,7 @@ gnc_account_class_init (AccountClass *klass)
                           "to be a longer, 1-5 sentence description of "
                           "what this account is all about.",
                           NULL,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -641,7 +641,7 @@ gnc_account_class_init (AccountClass *klass)
                           "by the user. It is intended to highlight the "
                           "account based on the users wishes.",
                           NULL,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -652,7 +652,7 @@ gnc_account_class_init (AccountClass *klass)
                           "for the user to attach any other text that "
                           "they would like to associate with the account.",
                           NULL,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -665,7 +665,7 @@ gnc_account_class_init (AccountClass *klass)
                        ACCT_TYPE_NONE,
                        NUM_ACCOUNT_TYPES - 1,
                        ACCT_TYPE_BANK,
-                       G_PARAM_READWRITE));
+                       static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -676,7 +676,7 @@ gnc_account_class_init (AccountClass *klass)
                           "'stuff' stored  in this account, whether "
                           "it is USD, gold, stock, etc.",
                           GNC_TYPE_COMMODITY,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -691,7 +691,7 @@ gnc_account_class_init (AccountClass *klass)
                        0,
                        G_MAXINT32,
                        1000000,
-                       G_PARAM_READWRITE));
+                       static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -704,7 +704,7 @@ gnc_account_class_init (AccountClass *klass)
                            "mismatched values in older versions of "
                            "GnuCash.",
                            FALSE,
-                           G_PARAM_READWRITE));
+                           static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -719,7 +719,7 @@ gnc_account_class_init (AccountClass *klass)
                           "affect the sort order of the account. Note: "
                           "This value can only be set to TRUE.",
                           FALSE,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -733,7 +733,7 @@ gnc_account_class_init (AccountClass *klass)
                           "the engine to say a split has been modified. "
                           "Note: This value can only be set to TRUE.",
                           FALSE,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -749,7 +749,7 @@ gnc_account_class_init (AccountClass *klass)
                         "the 'starting balance' will represent the "
                         "summation of the splits up to that date.",
                         GNC_TYPE_NUMERIC,
-                        G_PARAM_READWRITE));
+                        static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -766,7 +766,7 @@ gnc_account_class_init (AccountClass *klass)
                         "balance' will represent the summation of the "
                         "splits up to that date.",
                         GNC_TYPE_NUMERIC,
-                        G_PARAM_READWRITE));
+                        static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -783,7 +783,7 @@ gnc_account_class_init (AccountClass *klass)
                         "balance' will represent the summation of the "
                         "splits up to that date.",
                         GNC_TYPE_NUMERIC,
-                        G_PARAM_READWRITE));
+                        static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -818,7 +818,7 @@ gnc_account_class_init (AccountClass *klass)
                         "the starting balance and all reconciled splits "
                         "in the account.",
                         GNC_TYPE_NUMERIC,
-                        G_PARAM_READABLE));
+                        static_cast<GParamFlags>(G_PARAM_READABLE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -826,7 +826,7 @@ gnc_account_class_init (AccountClass *klass)
      g_param_spec_pointer ("policy",
                            "Policy",
                            "The account lots policy.",
-                           G_PARAM_READWRITE));
+                           static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -837,7 +837,7 @@ gnc_account_class_init (AccountClass *klass)
                        0,
                        G_MAXINT16,
                        0,
-                       G_PARAM_READWRITE));
+                       static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -847,7 +847,7 @@ gnc_account_class_init (AccountClass *klass)
                            "Whether the account maps to an entry on an "
                            "income tax document.",
                            FALSE,
-                           G_PARAM_READWRITE));
+                           static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -859,7 +859,7 @@ gnc_account_class_init (AccountClass *klass)
                           "United States it is used to transfer totals "
                           "into tax preparation software.",
                           NULL,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -868,7 +868,7 @@ gnc_account_class_init (AccountClass *klass)
                           "Tax Source",
                           "This specifies where exported name comes from.",
                           NULL,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -880,7 +880,7 @@ gnc_account_class_init (AccountClass *klass)
                          (gint64)1,
                          G_MAXINT64,
                          (gint64)1,
-                         G_PARAM_READWRITE));
+                         static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -890,7 +890,7 @@ gnc_account_class_init (AccountClass *klass)
                            "Whether the account should be hidden in the  "
                            "account tree.",
                            FALSE,
-                           G_PARAM_READWRITE));
+                           static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -900,7 +900,7 @@ gnc_account_class_init (AccountClass *klass)
                            "Whether the account is a placeholder account which does not "
                            "allow transactions to be created, edited or deleted.",
                            FALSE,
-                           G_PARAM_READWRITE));
+                           static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -910,7 +910,7 @@ gnc_account_class_init (AccountClass *klass)
                           "The account filter is a value saved to allow "
                           "filters to be recalled.",
                           NULL,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -920,7 +920,7 @@ gnc_account_class_init (AccountClass *klass)
                           "The account sort order is a value saved to allow "
                           "the sort order to be recalled.",
                           NULL,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -929,7 +929,7 @@ gnc_account_class_init (AccountClass *klass)
                           "Account Sort Reversed",
                           "Parameter to store whether the sort order is reversed or not.",
                           FALSE,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -940,7 +940,7 @@ gnc_account_class_init (AccountClass *klass)
                          (gint64)1,
                          G_MAXINT64,
                          (gint64)1,
-                         G_PARAM_READWRITE));
+                         static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -950,7 +950,7 @@ gnc_account_class_init (AccountClass *klass)
                           "The online account which corresponds to this "
                           "account for OFX import",
                           NULL,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
      g_object_class_install_property(
        gobject_class,
@@ -959,7 +959,7 @@ gnc_account_class_init (AccountClass *klass)
                            "Associated income account",
                            "Used by the OFX importer.",
                            GNC_TYPE_GUID,
-                           G_PARAM_READWRITE));
+                           static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -969,7 +969,7 @@ gnc_account_class_init (AccountClass *klass)
                           "The AqBanking account which corresponds to this "
                           "account for AQBanking import",
                           NULL,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
     g_object_class_install_property
     (gobject_class,
      PROP_AB_BANK_CODE,
@@ -978,7 +978,7 @@ gnc_account_class_init (AccountClass *klass)
                           "The online account which corresponds to this "
                           "account for AQBanking import",
                           NULL,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -989,7 +989,7 @@ gnc_account_class_init (AccountClass *klass)
                          (gint64)1,
                          G_MAXINT64,
                          (gint64)1,
-                         G_PARAM_READWRITE));
+                         static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -999,7 +999,7 @@ gnc_account_class_init (AccountClass *klass)
                         "The time of the last transaction retrieval for this "
                         "account.",
                         GNC_TYPE_TIMESPEC,
-                        G_PARAM_READWRITE));
+                        static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
 }
 
