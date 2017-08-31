@@ -102,12 +102,11 @@ gnc_item_edit_get_toggle_offset (int row_height)
     return row_height - (2 * (CELL_VPADDING + 1)) + 3;
 }
 
-static void
+static gboolean
 gnc_item_edit_update (GncItemEdit *item_edit)
 {
     gint x, y, w, h;
 
-//FIXME this does not appear to be realiable, widget does not always move to correct place
     gnc_item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
     gtk_layout_move (GTK_LAYOUT(item_edit->sheet),
                      GTK_WIDGET(item_edit), x, y);
@@ -119,6 +118,7 @@ gnc_item_edit_update (GncItemEdit *item_edit)
         if (item_edit->show_popup)
             gnc_item_edit_show_popup (item_edit);
     }
+    return FALSE;
 }
 
 void
@@ -222,7 +222,7 @@ gnc_item_edit_configure (GncItemEdit *item_edit)
         gnc_item_edit_set_popup (item_edit, NULL, NULL, NULL,
                                  NULL, NULL, NULL, NULL);
 
-    gnc_item_edit_update (item_edit);
+    g_idle_add ((GSourceFunc) gnc_item_edit_update, item_edit);
 }
 
 
