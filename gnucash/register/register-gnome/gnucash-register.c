@@ -368,13 +368,13 @@ gnucash_register_get_type (void)
         static const GTypeInfo gnucash_register_info =
         {
             sizeof (GnucashRegisterClass),
-            NULL,		/* base_init */
-            NULL,		/* base_finalize */
+            NULL,       /* base_init */
+            NULL,       /* base_finalize */
             (GClassInitFunc) gnucash_register_class_init,
-            NULL,		/* class_finalize */
-            NULL,		/* class_data */
+            NULL,       /* class_finalize */
+            NULL,       /* class_data */
             sizeof (GnucashRegister),
-            0,		/* n_preallocs */
+            0,      /* n_preallocs */
             (GInstanceInitFunc) gnucash_register_init,
         };
 
@@ -563,11 +563,7 @@ GtkWidget *
 gnucash_register_new (Table *table, gchar *state_section)
 {
     GnucashRegister *reg;
-//    GtkWidget *header;
     GtkWidget *widget;
-//    GtkWidget *sheet;
-//    GtkWidget *scrollbar;
-//    GtkWidget *box;
 
     widget = gnucash_register_create_widget(table);
     reg = GNUCASH_REGISTER(widget);
