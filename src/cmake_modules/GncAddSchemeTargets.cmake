@@ -87,6 +87,15 @@ MACRO(GNC_ADD_SCHEME_TARGETS _TARGET _SOURCE_FILES _OUTPUT_DIR_IN _GUILE_MODULES
     ENDIF(__DEBUG)
     SET(_TARGET_FILES "")
 
+    # These 'gncmod' modules need to build before any scheme code is compiled to prevent (harmless) complaints
+    # from gnc-module.
+    SET(GNCMODULE_TARGETS gncmod-app-utils gncmod-backend-dbi gncmod-backend-xml gncmod-bi_import gncmod-business-gnome
+            gncmod-csv-export gncmod-csv-import gncmod-customer_import gncmod-engine gncmod-generic-import
+            gncmod-gnome-search gncmod-gnome-utils gncmod-html gncmod-ledger-core gncmod-locale-reports-us
+            gncmod-log-replay gncmod-ofx gncmod-qif-import gncmod-qif gncmod-register-core gncmod-register-gnome
+            gncmod-report-gnome gncmod-report-system gncmod-standard-reports gncmod-stylesheets gncmod-tax-us
+            gncmod-utility-reports)
+
     FOREACH(source_file ${_SOURCE_FILES})
       SET(guile_depends ${_GUILE_DEPENDS_IN})
       GET_FILENAME_COMPONENT(basename ${source_file} NAME_WE)
@@ -123,7 +132,7 @@ MACRO(GNC_ADD_SCHEME_TARGETS _TARGET _SOURCE_FILES _OUTPUT_DIR_IN _GUILE_MODULES
            #GNC_MODULE_PATH=${_GNC_MODULE_PATH}
            GNC_MODULE_PATH="${LIBDIR_BUILD}:${LIBDIR_BUILD}/gnucash:${GNC_MODULE_PATH}"
            ${GUILE_EXECUTABLE} -e '\(@@ \(guild\) main\)' -s ${GUILD_EXECUTABLE} compile -o ${output_file} ${source_file_abs_path}
-        DEPENDS ${guile_depends}
+        DEPENDS ${guile_depends} ${GNCMODULE_TARGETS}
         MAIN_DEPENDENCY ${source_file_abs_path}
       )
     ENDFOREACH(source_file)
