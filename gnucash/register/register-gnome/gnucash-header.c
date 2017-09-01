@@ -386,7 +386,7 @@ gnc_header_resize_column (GncHeader *header, gint col, gint width)
     gnucash_sheet_set_scroll_region (sheet);
     gnucash_sheet_update_adjustments (sheet);
 
-//FIXME Not required?    gnc_header_request_redraw (header);
+    gnc_header_request_redraw (header);
     gnucash_sheet_redraw_all (sheet);
 }
 
