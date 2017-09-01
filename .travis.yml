@@ -6,6 +6,29 @@ compiler:
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get build-dep -qq gnucash
-  - sudo apt-get install -qq swig xsltproc libdbd-sqlite3
+  - sudo apt-get install -qq swig xsltproc libdbd-sqlite3 cmake3 texinfo ninja-build
   - sudo apt-get --reinstall install -qq language-pack-en language-pack-fr
-script: ./autogen.sh && ./configure && make && make check
+script: |
+  # The -e here says that if any line below fails, the whole script fails
+  set -ev
+
+  # First, do the cmake build using the default Makefile generator
+  mkdir /tmp/gnucash-build-cmake-make
+  cd /tmp/gnucash-build-cmake-make
+  cmake $TRAVIS_BUILD_DIR
+  make -j 4
+  make check
+
+  # Next, do cmake again, using the Ninja generator this time
+  mkdir /tmp/gnucash-build-cmake-ninja
+  cd /tmp/gnucash-build-cmake-ninja
+  cmake -G Ninja $TRAVIS_BUILD_DIR
+  ninja
+  ninja check
+
+  # Finally, do the autotools build
+  cd $TRAVIS_BUILD_DIR
+  ./autogen.sh
+  ./configure
+  make
+  make check
