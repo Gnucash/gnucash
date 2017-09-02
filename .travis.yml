@@ -3,6 +3,10 @@ language: c
 compiler:
   - gcc
 #  - clang
+env:
+  - BUILDTYPE=cmake-make
+  - BUILDTYPE=cmake-ninja
+  - BUILDTYPE=autotools
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get build-dep -qq gnucash
@@ -13,22 +17,26 @@ script: |
   set -ev
 
   # First, do the cmake build using the default Makefile generator
-  mkdir /tmp/gnucash-build-cmake-make
-  cd /tmp/gnucash-build-cmake-make
-  cmake $TRAVIS_BUILD_DIR
-  make -j 4
-  make check
+  if [[ "$BUILDTYPE" == "cmake-make" ]]; then
+    mkdir /tmp/gnucash-build-cmake-make
+    cd /tmp/gnucash-build-cmake-make
+    cmake $TRAVIS_BUILD_DIR
+    make -j 4
+    make check
 
   # Next, do cmake again, using the Ninja generator this time
-  mkdir /tmp/gnucash-build-cmake-ninja
-  cd /tmp/gnucash-build-cmake-ninja
-  cmake -G Ninja $TRAVIS_BUILD_DIR
-  ninja
-  ninja check
+  elif [[ "$BUILDTYPE" == "cmake-ninja" ]]; then
+    mkdir /tmp/gnucash-build-cmake-ninja
+    cd /tmp/gnucash-build-cmake-ninja
+    cmake -G Ninja $TRAVIS_BUILD_DIR
+    ninja
+    ninja check
 
   # Finally, do the autotools build
-  cd $TRAVIS_BUILD_DIR
-  ./autogen.sh
-  ./configure
-  make
-  make check
+  elif [[ "$BUILDTYPE" == "autotools" ]]; then
+    cd $TRAVIS_BUILD_DIR
+    ./autogen.sh
+    ./configure
+    make
+    make check
+  fi
