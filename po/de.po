@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.6.15\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-22 02:17+0100\n"
-"PO-Revision-Date: 2017-03-22 14:22+0100\n"
+"PO-Revision-Date: 2017-09-04 00:52+0200\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: de\n"
@@ -8316,13 +8316,15 @@ msgid "Zoom factor to use by default for reports."
 msgstr "Vorgabe der Vergrößerung in Berichten."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:112
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:179
 msgid ""
-"On high-resolution displays the reports will be unreadable by default. "
-"Setting a zoom factor to a number bigger than 1.0 can help improve this "
-"situation."
-msgstr "Auf hochauflösenden Monitoren können Berichte in der "
-"Standardeinstellung schwer lesbar sein. Das Setzen eines "
-"Vergrößerungsfaktors größer 1 kann dann eine ABhilfe sein."
+"On high resolution screens reports tend to be hard to read. This option "
+"allows you to scale reports up by the set factor. For example setting this "
+"to 2.0 will display reports at twice their typical size."
+msgstr ""
+"Auf hochauflösenden Bildschirmen können Berichte schwer zu lesen sein.\n"
+"Diese Option erlaubt das Skalieren der berichte um den gewählten Faktor.\n"
+"Z.B. wird das Setzen auf 2 die Berichte mit der Doppelten ihrer ursprünglichen Größe darstellen."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:113
 msgid "PDF export file name format"
@@ -12140,8 +12142,8 @@ msgstr ""
 "GnuCash: Ihr privater Finanzmanager. Die freie Lösung zur Finanzverwaltung."
 
 #: ../src/gnome-utils/gnc-main-window.c:4372
-msgid "© 1997-2016 Contributors"
-msgstr "© 1997-2016 Mitwirkende"
+msgid "© 1997-2017 Contributors"
+msgstr "© 1997-2017 Mitwirkende"
 
 #. Translators: the following string will be shown in Help->About->Credits
 #. * Enter your name or that of your team and an email contact for feedback.
@@ -22873,7 +22875,7 @@ msgstr ""
 #: ../src/report/standard-reports/advanced-portfolio.scm:97
 msgid "Use last-in first-out method for basis."
 msgstr ""
-"Verwende die First-In First-Out-Zuordnung (zuerst erworbene werden zuerst "
+"Verwende die Last-In First-Out-Zuordnung (zuletzt erworbene werden zuerst "
 "verkauft) zur Ermittlung der Basis."
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:103
