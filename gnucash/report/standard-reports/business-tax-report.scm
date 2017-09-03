@@ -664,7 +664,7 @@
   ;; account to do report on
 
   (gnc:register-trep-option
-   (gnc:make-account-list-option
+   (gnc:make-account-list-limited-option
     gnc:pagename-accounts (N_ "Accounts")
     "b1" (N_ "Report on these accounts.")
     ;; select, by default, no accounts! Selecting all accounts will
@@ -674,7 +674,9 @@
     ;; continue.
     (lambda ()
       '())
-    #f #t))
+    #f #t
+    (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE)
+    ))
 
   (gnc:register-trep-option
    (gnc:make-string-option
