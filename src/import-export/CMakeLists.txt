@@ -3,7 +3,9 @@
 ADD_SUBDIRECTORY(test)
 
 # ############################################################
-ADD_SUBDIRECTORY(aqb)
+if (WITH_AQBANKING)
+  ADD_SUBDIRECTORY(aqb)
+endif()
 ADD_SUBDIRECTORY(csv-exp)
 ADD_SUBDIRECTORY(csv-imp)
 ADD_SUBDIRECTORY(gschemas)
