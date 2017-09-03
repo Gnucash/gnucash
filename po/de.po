@@ -7,15 +7,16 @@
 # Christian Meyer <chrisime@gnome.org>, 2000, 2001.
 # Herbert Thoma <tma@iis.fhg.de>, 2001.
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2007, 2009-2017.
-# Rolf Leggewie, 2008
-# Mechtilde Stehmann <ooo@mechtilde.de>, 2014-2017
+# Rolf Leggewie, 2008.
+# Mechtilde Stehmann <ooo@mechtilde.de>, 2014-2017.
+# quazgar <quazgar@posteo.de> 2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.6.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-22 02:17+0100\n"
-"PO-Revision-Date: 2017-03-22 14:22+0100\n"
+"POT-Creation-Date: 2017-09-04 00:02+0200\n"
+"PO-Revision-Date: 2017-09-03 23:50+0200\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: de\n"
@@ -1775,7 +1776,7 @@ msgstr "Lieferantenrechnungs-Informationen"
 #: ../src/business/business-gnome/dialog-invoice.c:2548
 #: ../src/business/business-gnome/dialog-invoice.c:3094
 msgid "Bill ID"
-msgstr "Rechnungsnummer des Lieferanten"
+msgstr "Abrechnungs-ID"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2375
 #: ../src/business/business-gnome/dialog-invoice.c:2552
@@ -1864,7 +1865,7 @@ msgstr "Bemerkungen Rechnung"
 #: ../src/report/business-reports/fancy-invoice.scm:324
 #: ../src/report/business-reports/invoice.scm:309
 msgid "Billing ID"
-msgstr "Abrechnungs-ID"
+msgstr "Rechnungsnummer des Lieferanten"
 
 #: ../src/business/business-gnome/dialog-invoice.c:3041
 #: ../src/business/business-gnome/dialog-invoice.c:3075
