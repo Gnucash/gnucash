@@ -156,6 +156,7 @@ gnucash_register_refresh_from_prefs (GnucashRegister *reg)
 
     sheet = GNUCASH_SHEET(reg->sheet);
     gnucash_sheet_refresh_from_prefs(sheet);
+    gnc_header_request_redraw (GNC_HEADER(sheet->header_item));
 }
 
 
