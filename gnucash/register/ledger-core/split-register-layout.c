@@ -737,8 +737,8 @@ gnc_split_register_layout_add_cells (SplitRegister *reg,
                            QUICKFILL_CELL_TYPE_NAME,
                            N_("sample:Memo field sample text string") + 7,
                            CELL_ALIGN_LEFT,
-                           FALSE,
-                           TRUE);
+                           TRUE,
+                           FALSE);
 
     gnc_register_add_cell (layout,
                            DEBT_CELL,
