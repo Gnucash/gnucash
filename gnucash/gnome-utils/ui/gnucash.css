@@ -2,6 +2,16 @@
    unless they have been named or have style classes added. Only 
    the widget type can be configured unless they are named in code */
 
+
+/* Negative value label colors */
+.default-color {
+  color: @default-color;
+}
+
+.negative-numbers {
+  color: @negative-numbers;
+}
+
 /* Register Cursor padding settings, make sure entry matches sheet.h */
 cursor entry {
   padding: 2px 5px 2px 5px;
