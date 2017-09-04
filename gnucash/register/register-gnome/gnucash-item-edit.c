@@ -565,7 +565,7 @@ gnc_item_edit_new (GnucashSheet *sheet)
     item_edit->popup_toggle.tbutton = gtk_toggle_button_new();
     gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (item_edit->popup_toggle.tbutton), FALSE);
 
-    /* Force padding on the button to keep it small and display as much as 
+    /* Force padding on the button to keep it small and display as much as
        possible of the arrow which is done in the gnucash.css file */
 
     /* Wrap the popup button in an event box to give it its own gdkwindow.
@@ -642,7 +642,7 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
     else
         popup_w = 0;
 
-    // Adjust the popup_y point based on poping above or below 
+    // Adjust the popup_y point based on poping above or below
     if (up_height > down_height)
         popup_y = y - popup_h;
     else
