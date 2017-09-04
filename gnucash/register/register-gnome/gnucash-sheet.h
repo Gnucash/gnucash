@@ -105,7 +105,8 @@ void gnucash_sheet_update_adjustments (GnucashSheet *sheet);
 
 void gnucash_sheet_set_window (GnucashSheet *sheet, GtkWidget *window);
 
-GdkRGBA *get_gtkrc_color (GnucashSheet *sheet, RegisterColor field_type);
+void gnucash_get_style_classes (GnucashSheet *sheet, GtkStyleContext *stylectxt,
+                                RegisterColor field_type);
 
 /** @} */
 #endif

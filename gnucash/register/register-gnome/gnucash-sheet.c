@@ -1055,10 +1055,17 @@ gnucash_sheet_draw_cb (GtkWidget *widget, cairo_t *cr, G_GNUC_UNUSED gpointer da
     GnucashSheet *sheet = GNUCASH_SHEET (widget);
     GtkStyleContext *context = gtk_widget_get_style_context (widget);
     GtkAllocation alloc;
+    GdkRGBA color;
     gboolean result; //FIXME
 
     gtk_widget_get_allocation(widget, &alloc);
-    gtk_render_background (context, cr, alloc.x, alloc.y, alloc.width, alloc.height);
+
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
+    gtk_render_background (context, cr, 0, 0, alloc.width, alloc.height);
+    gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+    sheet->dark_theme = gnc_is_dark_theme (&color);
+    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BACKGROUND);
+
 //FIXME what should be done with result being TRUE or FALSE
     result = gnucash_sheet_draw_internal (sheet, cr, &alloc);
     gnucash_sheet_draw_cursor (sheet->cursor, cr);
@@ -2321,104 +2328,69 @@ gnucash_sheet_realize_entry (GnucashSheet *sheet, GtkWidget *entry)
 
 /*************************************************************/
 
-/* This code is one big hack to use gtkrc to set cell colors in a
- * register.  Because the cells are just boxes drawn on a gnome
- * canvas, there's no way to specify the individual cells in a gtkrc
- * file.  This code creates four hidden GtkEntry widgets and names
- * them so that they *can* be specified in gtkrc.  It then looks up
- * the colors specified on these hidden widgets and uses it for the
- * cells drawn on the canvas.  This code should all go away whenever
- * the register is rewritten.
- */
-
-/** Map a cell type to a gtkrc specified color. */
-GdkRGBA *
-get_gtkrc_color (GnucashSheet *sheet,
-                 RegisterColor field_type)
+/** Map a cell type to a css style class. */
+void
+gnucash_get_style_classes (GnucashSheet *sheet, GtkStyleContext *stylectxt,
+                           RegisterColor field_type)
 {
-    GtkWidget *widget = NULL;
-    GtkStyleContext *stylectxt;
-    GdkRGBA color;
+    gchar *full_class, *style_class = NULL;
 
     switch (field_type)
     {
     default:
-        return gdk_rgba_copy (&gn_white);
-
     case COLOR_UNKNOWN_BG:
-        return gdk_rgba_copy (&gn_white);
-
     case COLOR_UNKNOWN_FG:
-        return gdk_rgba_copy (&gn_black);
+        gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_BACKGROUND);
+        return;
 
     case COLOR_NEGATIVE:
-        return gdk_rgba_copy (&gn_red);  // FIXME shouldn't be hardcoded...
+        gtk_style_context_add_class (stylectxt, "negative-numbers");
+        return;
 
     case COLOR_HEADER_BG:
     case COLOR_HEADER_FG:
-        widget = sheet->header_color;
+        style_class = "header";
         break;
 
     case COLOR_PRIMARY_BG:
-    case COLOR_PRIMARY_BG_ACTIVE:
     case COLOR_PRIMARY_FG:
+        style_class = "primary";
+        break;
+
+    case COLOR_PRIMARY_BG_ACTIVE:
     case COLOR_PRIMARY_FG_ACTIVE:
-        widget = sheet->primary_color;
+    case COLOR_SECONDARY_BG_ACTIVE:
+    case COLOR_SECONDARY_FG_ACTIVE:
+    case COLOR_SPLIT_BG_ACTIVE:
+    case COLOR_SPLIT_FG_ACTIVE:
+        gtk_style_context_set_state (stylectxt, GTK_STATE_FLAG_SELECTED);
+        style_class = "cursor";
         break;
 
     case COLOR_SECONDARY_BG:
-    case COLOR_SECONDARY_BG_ACTIVE:
     case COLOR_SECONDARY_FG:
-    case COLOR_SECONDARY_FG_ACTIVE:
-        widget = sheet->secondary_color;
+        style_class = "secondary";
         break;
 
     case COLOR_SPLIT_BG:
-    case COLOR_SPLIT_BG_ACTIVE:
     case COLOR_SPLIT_FG:
-    case COLOR_SPLIT_FG_ACTIVE:
-        widget = sheet->split_color;
+        style_class = "split";
         break;
     }
 
-    stylectxt = gtk_widget_get_style_context (widget);
-    if (!stylectxt)
-        return gdk_rgba_copy (&gn_white);
-
-    switch (field_type)
+    if (sheet->use_theme_colors)
     {
-    default:
-        return gdk_rgba_copy (&gn_white);
-
-    case COLOR_HEADER_BG:
-    case COLOR_PRIMARY_BG:
-    case COLOR_SECONDARY_BG:
-    case COLOR_SPLIT_BG:
-        gnc_style_context_get_background_color(stylectxt, GTK_STATE_FLAG_NORMAL, &color);
-        break;
-
-    case COLOR_PRIMARY_BG_ACTIVE:
-    case COLOR_SECONDARY_BG_ACTIVE:
-    case COLOR_SPLIT_BG_ACTIVE:
-        gnc_style_context_get_background_color(stylectxt, GTK_STATE_FLAG_SELECTED, &color);
-        break;
-
-    case COLOR_HEADER_FG:
-    case COLOR_PRIMARY_FG:
-    case COLOR_SECONDARY_FG:
-    case COLOR_SPLIT_FG:
-        gtk_style_context_get_color(stylectxt, GTK_STATE_FLAG_NORMAL, &color);
-        break;
-
-    case COLOR_PRIMARY_FG_ACTIVE:
-    case COLOR_SECONDARY_FG_ACTIVE:
-    case COLOR_SPLIT_FG_ACTIVE:
-        gtk_style_context_get_color(stylectxt, GTK_STATE_FLAG_SELECTED, &color);
-        break;
+        gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_VIEW);
+        full_class = g_strconcat (style_class, "-color", NULL);
     }
-
-    return gdk_rgba_copy (&color);
-}
+    else
+    {
+        if (sheet->dark_theme)
+            full_class = g_strconcat ("app-", style_class, "-dark", NULL);
+        else
+            full_class = g_strconcat ("app-", style_class, NULL);
+    }
+    gtk_style_context_add_class (stylectxt, full_class);
 
 /** Create the entries used for nameing register colors in gtkrc. */
 static void
@@ -2446,6 +2418,7 @@ gnucash_sheet_create_color_hack(GnucashSheet *sheet)
     g_signal_connect_after(sheet, "realize",
                            G_CALLBACK(gnucash_sheet_realize_entry),
                            sheet->split_color);
+    g_free (full_class);
 }
 
 /*************************************************************/
@@ -2591,7 +2564,6 @@ gnucash_sheet_new (Table *table)
                                    g_free, NULL);
 
     gnucash_sheet_refresh_from_prefs(sheet);
-    gnucash_sheet_create_color_hack(sheet);
 
     return GTK_WIDGET(sheet);
 }

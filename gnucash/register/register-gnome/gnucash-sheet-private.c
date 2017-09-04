@@ -41,6 +41,7 @@
 #include "gnucash-sheetP.h"
 #include "gnucash-color.h"
 #include "gnucash-style.h"
+#include "gnc-gtk-utils.h"
 
 /*
  * Sets virt_row, virt_col to the block coordinates for the
@@ -390,31 +391,34 @@ draw_cell (GnucashSheet *sheet,
     GdkRGBA *bg_color, *fg_color;
     GdkRectangle rect;
     gboolean hatching;
-    guint32 argb, color_type;
+    guint32 color_type;
     int x_offset;
+    GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(sheet));
+    GdkRGBA color;
 
-    if (sheet->use_theme_colors)
-    {
-        color_type = gnc_table_get_gtkrc_bg_color (table, virt_loc,
-                     &hatching);
-        bg_color = get_gtkrc_color(sheet, color_type);
-    }
-    else
-    {
-        argb = gnc_table_get_bg_color (table, virt_loc, &hatching);
-        // Are we in a read-only row? Then make the background color somewhat more gray.
-        if ((virt_loc.phys_row_offset == (block->style->nrows - 1))
+    gtk_style_context_save (stylectxt);
+
+    // Get the background and foreground color types and apply the css class
+    color_type = gnc_table_get_gtkrc_bg_color (table, virt_loc, &hatching);
+    gnucash_get_style_classes (sheet, stylectxt, color_type);
+
+    color_type = gnc_table_get_gtkrc_fg_color (table, virt_loc);
+    gnucash_get_style_classes (sheet, stylectxt, color_type);
+
+    // Are we in a read-only row? Then make the background color somewhat more grey.
+    if ((virt_loc.phys_row_offset < block->style->nrows)
                 && (table->model->dividing_row_upper >= 0)
                 && (virt_loc.vcell_loc.virt_row < table->model->dividing_row_upper))
-        {
-            argb = dec_intensity_10percent(argb);
-        }
-        bg_color = gnucash_color_argb_to_gdk (argb);
+    {
+        if (!gtk_style_context_has_class (stylectxt, GTK_STYLE_CLASS_BACKGROUND))
+            gtk_style_context_set_state (stylectxt, GTK_STATE_FLAG_INSENSITIVE);
     }
 
-    cairo_set_source_rgb (cr, bg_color->red, bg_color->green, bg_color->blue);
-    cairo_rectangle (cr, x, y, width, height);
-    cairo_fill (cr);
+    gtk_render_background (stylectxt, cr, x, y, width, height);
+
+    gdk_rgba_parse (&color, "black");
+    gnc_style_context_get_background_color (stylectxt, GTK_STATE_FLAG_NORMAL, &color);
+    bg_color = gdk_rgba_copy (&color);
 
     get_cell_borders (sheet, virt_loc, &borders);
 
@@ -477,30 +481,28 @@ draw_cell (GnucashSheet *sheet,
     text = gnc_table_get_entry (table, virt_loc);
 
     layout = gtk_widget_create_pango_layout (GTK_WIDGET (sheet), text);
+
+    if (gtk_style_context_has_class (stylectxt, GTK_STYLE_CLASS_VIEW))
+        gtk_style_context_remove_class (stylectxt, GTK_STYLE_CLASS_VIEW);
+
     // We don't need word wrap or line wrap
     pango_layout_set_width (layout, -1);
     context = pango_layout_get_context (layout);
     font = pango_font_description_copy (pango_context_get_font_description (context));
 
-    if (sheet->use_theme_colors)
-    {
-        color_type = gnc_table_get_gtkrc_fg_color (table, virt_loc);
-        fg_color = get_gtkrc_color(sheet, color_type);
-    }
-    else
-    {
-        argb = gnc_table_get_fg_color (table, virt_loc);
 #ifdef READONLY_LINES_WITH_CHANGED_FG_COLOR
-        // Are we in a read-only row? Then make the foreground color somewhat less black
-        if ((virt_loc.phys_row_offset == (block->style->nrows - 1))
-                && (table->model->dividing_row_upper >= 0)
-                && (virt_loc.vcell_loc.virt_row < table->model->dividing_row_upper))
-        {
-            argb = inc_intensity_10percent(argb);
-        }
-#endif
-        fg_color = gnucash_color_argb_to_gdk (argb);
+    // Are we in a read-only row? Then make the foreground color somewhat less black
+    if ((virt_loc.phys_row_offset < block->style->nrows)
+            && (table->model->dividing_row_upper >= 0)
+            && (virt_loc.vcell_loc.virt_row < table->model->dividing_row_upper))
+    {
+        // Make text color greyed
+        if (sheet->dark_theme)
+            gtk_style_context_add_class (stylectxt, "darker-grey-mix");
+        else
+            gtk_style_context_add_class (stylectxt, "lighter-grey-mix");
     }
+#endif
 
     /* If this is the currently open transaction and
        there is no text in this cell */
@@ -511,12 +513,17 @@ draw_cell (GnucashSheet *sheet,
         text = gnc_table_get_label (table, virt_loc);
         if ((text == NULL) || (*text == '\0'))
             goto exit;
-        fg_color = &gn_light_gray;
+
+        // Make text color greyed
+        if (sheet->dark_theme)
+            gtk_style_context_add_class (stylectxt, "darker-grey-mix");
+        else
+            gtk_style_context_add_class (stylectxt, "lighter-grey-mix");
+
         pango_layout_set_text (layout, text, strlen (text));
         pango_font_description_set_style (font, PANGO_STYLE_ITALIC);
         pango_context_set_font_description (context, font);
     }
-    cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
 
     if ((text == NULL) || (*text == '\0'))
     {
@@ -555,11 +562,7 @@ draw_cell (GnucashSheet *sheet,
                         logical_rect.width) / 2;
         break;
     }
-
-
-
-    cairo_move_to (cr, rect.x + x_offset, rect.y + 1);
-    pango_cairo_show_layout (cr, layout);
+    gtk_render_layout (stylectxt, cr, rect.x + x_offset, rect.y + 1, layout);
 
     cairo_restore (cr);
 
@@ -569,11 +572,7 @@ exit:
     pango_font_description_free (font);
     g_object_unref (layout);
 
-    if (sheet->use_theme_colors)
-    {
-        gdk_rgba_free(bg_color);
-        gdk_rgba_free(fg_color);
-    }
+    gtk_style_context_restore (stylectxt);
 }
 
 static void

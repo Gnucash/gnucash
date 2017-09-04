@@ -70,6 +70,7 @@ struct _GnucashSheet
     GtkWidget *primary_color;
     GtkWidget *secondary_color;
     GtkWidget *split_color;
+    gboolean   dark_theme;
 
     gboolean input_cancelled;
 

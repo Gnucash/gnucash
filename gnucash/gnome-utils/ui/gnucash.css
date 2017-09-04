@@ -10,3 +10,87 @@ cursor entry {
 cursor button {
   padding: 1px 1px 1px 1px;
 }
+
+/* Register defaults */
+@define-color register_header_bg_color #96B183;
+@define-color register_primary_bg_color #BFDEB9;
+@define-color register_secondary_bg_color #F6FFDA;
+@define-color register_split_bg_color #EDE7D3;
+@define-color register_cursor_bg_color #FFEF98;
+
+.app-header {
+  background-color: @register_header_bg_color;
+}
+
+.app-header-dark {
+  background-color: shade (@register_header_bg_color, 0.7);
+}
+
+
+*.app-primary {
+  background-color: @register_primary_bg_color;
+}
+
+*.app-primary:insensitive {
+  background-color: mix (@register_primary_bg_color, grey, 0.2);
+}
+
+*.app-primary-dark {
+  background-color: shade (@register_primary_bg_color, 0.7);
+}
+
+*.app-primary-dark:insensitive {
+  background-color: mix (shade (@register_primary_bg_color, 0.7), grey, 0.3);
+}
+
+
+*.app-secondary {
+  background-color: @register_secondary_bg_color;
+}
+
+*.app-secondary:insensitive {
+  background-color: mix (@register_secondary_bg_color, grey, 0.2);
+}
+
+*.app-secondary-dark {
+  background-color: shade (@register_secondary_bg_color, 0.5);
+}
+
+*.app-secondary-dark:insensitive {
+  background-color: mix (shade (@register_secondary_bg_color, 0.5), grey, 0.3);
+}
+
+
+*.app-split {
+  background-color: @register_split_bg_color;
+}
+
+*.app-split:insensitive {
+  background-color: mix (@register_split_bg_color, grey, 0.2);
+}
+
+*.app-split-dark {
+  background-color: shade (@register_split_bg_color, 0.5);
+}
+
+*.app-split-dark:insensitive {
+  background-color: mix (shade (@register_split_bg_color, 0.5), grey, 0.3);
+}
+
+
+*.app-cursor {
+  background-color: @register_cursor_bg_color;
+}
+
+*.app-cursor:insensitive {
+  background-color: mix (@register_cursor_bg_color, grey, 0.2);
+}
+
+*.app-cursor-dark {
+  background-color: shade (@register_cursor_bg_color, 0.6);
+}
+
+*.app-cursor-dark:insensitive {
+  background-color: mix (shade (@register_cursor_bg_color, 0.6), grey, 0.3);
+}
+

@@ -36,6 +36,7 @@
 #include "gnucash-style.h"
 #include "gnucash-cursor.h"
 #include "gnucash-item-edit.h"
+#include "gnc-gtk-utils.h"
 
 #include "gnucash-header.h"
 
@@ -71,7 +72,9 @@ gnc_header_draw_offscreen (GncHeader *header)
     Table *table = header->sheet->table;
     VirtualLocation virt_loc;
     VirtualCell *vcell;
-    GdkRGBA *fg_color, *bg_color;
+    guint32 color_type;
+    GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(header));
+    GdkRGBA color;
     int row_offset;
     CellBlock *cb;
     int i;
@@ -82,22 +85,11 @@ gnc_header_draw_offscreen (GncHeader *header)
     virt_loc.phys_row_offset = 0;
     virt_loc.phys_col_offset = 0;
 
-    if (header->sheet->use_theme_colors)
-    {
-        guint32 color_type;
-        color_type = gnc_table_get_gtkrc_bg_color (table, virt_loc, NULL);
-        bg_color = get_gtkrc_color(header->sheet, color_type);
-        color_type = gnc_table_get_gtkrc_fg_color (table, virt_loc);
-        fg_color = get_gtkrc_color(header->sheet, color_type);
-    }
-    else
-    {
-        guint32 argb;
-        argb = gnc_table_get_bg_color (table, virt_loc, NULL);
-        bg_color = gnucash_color_argb_to_gdk (argb);
-        argb = gnc_table_get_fg_color (table, virt_loc);
-        fg_color = gnucash_color_argb_to_gdk (argb);
-    }
+    gtk_style_context_save (stylectxt);
+
+    // Get the background color type and apply the css class
+    color_type = gnc_table_get_gtkrc_bg_color (table, virt_loc, NULL);
+    gnucash_get_style_classes (header->sheet, stylectxt, color_type);
 
     if (header->surface)
         cairo_surface_destroy (header->surface);
@@ -106,13 +98,17 @@ gnc_header_draw_offscreen (GncHeader *header)
                                                 header->height);
 
     cr = cairo_create (header->surface);
+
     // Fill background color of header
+    gtk_render_background (stylectxt, cr, 0, 0, header->width, header->height);
+
+    gdk_rgba_parse (&color, "black");
+    cairo_set_source_rgb (cr, color.red, color.green, color.blue);
     cairo_rectangle (cr, 0.5, 0.5, header->width - 1.0, header->height - 1.0);
-    cairo_set_source_rgb (cr, bg_color->red, bg_color->green, bg_color->blue);
-    cairo_fill_preserve (cr);
+    cairo_set_line_width (cr, 1.0);
+    cairo_stroke (cr);
 
     // Draw bottom horizontal line, makes bottom line thicker
-    cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
     cairo_move_to (cr, 0.5, header->height - 1.5);
     cairo_line_to (cr, header->width - 1.0, header->height - 1.5);
     cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
@@ -195,24 +191,19 @@ gnc_header_draw_offscreen (GncHeader *header)
             text_h = h - 2;
             cairo_save (cr);
             cairo_rectangle (cr, text_x, text_y, text_w, text_h);
-            cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
             cairo_clip (cr);
-            cairo_move_to (cr, text_x, text_y);
-            pango_cairo_show_layout (cr, layout);
+
+            gtk_render_layout (stylectxt, cr, text_x, text_y, layout);
+
             cairo_restore (cr);
             g_object_unref (layout);
 
             col_offset += w;
         }
-
         row_offset += h;
     }
+    gtk_style_context_restore (stylectxt);
 
-    if (header->sheet->use_theme_colors)
-    {
-        gdk_rgba_free(bg_color);
-        gdk_rgba_free(fg_color);
-    }
     cairo_destroy (cr);
 }
 
