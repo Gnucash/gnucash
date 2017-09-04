@@ -918,11 +918,14 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
     stylectxt = gtk_widget_get_style_context (GTK_WIDGET(dcal->cal_drawing_area));
     state_flags = gtk_style_context_get_state (stylectxt);
 
+    gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_BACKGROUND);
     gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_CALENDAR);
 
     gtk_render_background (stylectxt, cr, 0, 0,
                            cairo_image_surface_get_width (dcal->surface),
                            cairo_image_surface_get_height (dcal->surface));
+
+    gtk_style_context_remove_class (stylectxt, GTK_STYLE_CLASS_BACKGROUND);
 
     /* get the colors */
     {
