@@ -167,7 +167,7 @@ gnc_split_register_get_split_commodity (SplitRegister *reg,
 
     if (!account)
         return NULL;
-        
+
     return xaccAccountGetCommodity(account);
 }
 
@@ -972,7 +972,7 @@ gnc_split_register_get_num_entry (VirtualLocation virt_loc,
     split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
     trans = xaccSplitGetParent (split);
 
-    return gnc_get_num_action (trans, split); 
+    return gnc_get_num_action (trans, split);
 }
 
 static const char *
@@ -1164,7 +1164,7 @@ gnc_split_register_get_rate_entry (VirtualLocation virt_loc,
 
     if (info->rate_reset == RATE_RESET_REQD && info->auto_complete)
         return "0";
-        
+
     split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
     if (!split)
         return NULL;
@@ -2132,8 +2132,8 @@ gnc_template_register_get_xfrm_entry (VirtualLocation virt_loc,
      */
     g_free (name);
     qof_instance_get (QOF_INSTANCE (split),
-		      "sx-account", &guid,
-		      NULL);
+              "sx-account", &guid,
+              NULL);
     account = xaccAccountLookup (guid, gnc_get_current_book ());
     name = account ? gnc_get_account_name_for_register (account) : NULL;
 
@@ -2224,7 +2224,7 @@ gnc_split_register_get_default_help (VirtualLocation virt_loc,
  *
  * Now it retrieves the sx-debit-numeric or sx-credit-numeric properties from
  * the split. I'm not sure that it's what was originally intended, but at least
- * it can do something now.	<jralls, 8 June 2015>
+ * it can do something now. <jralls, 8 June 2015>
  */
 static const char *
 gnc_template_register_get_debcred_entry (VirtualLocation virt_loc,
