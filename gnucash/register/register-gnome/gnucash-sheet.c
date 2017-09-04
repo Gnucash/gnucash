@@ -45,7 +45,7 @@
 #include "gnucash-header.h"
 #include "gnucash-item-edit.h"
 #include "split-register.h"
-#include "gnc-engine.h"		// For debugging, e.g. ENTER(), LEAVE()
+#include "gnc-engine.h"     // For debugging, e.g. ENTER(), LEAVE()
 
 #ifdef G_OS_WIN32
 # include <gdk/gdkwin32.h>
@@ -2551,13 +2551,13 @@ gnucash_sheet_get_type (void)
         static const GTypeInfo gnucash_sheet_info =
         {
             sizeof (GnucashSheetClass),
-            NULL,		/* base_init */
-            NULL,		/* base_finalize */
+            NULL,       /* base_init */
+            NULL,       /* base_finalize */
             (GClassInitFunc) gnucash_sheet_class_init,
-            NULL,		/* class_finalize */
-            NULL,		/* class_data */
+            NULL,       /* class_finalize */
+            NULL,       /* class_data */
             sizeof (GnucashSheet),
-            0,		/* n_preallocs */
+            0,      /* n_preallocs */
             (GInstanceInitFunc) gnucash_sheet_init
         };
 
@@ -2581,8 +2581,6 @@ gnucash_sheet_new (Table *table)
 
     /* The cursor */
     sheet->cursor = gnucash_cursor_new (sheet);
-
-    /*gtk_layout_put (GTK_LAYOUT (sheet), sheet->entry, 0, 0);*/
 
     /* set up the editor */
     sheet->item_editor = gnc_item_edit_new(sheet);
