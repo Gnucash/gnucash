@@ -2,14 +2,6 @@
 <!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
-  <object class="GtkListStore" id="terms_store">
-    <columns>
-      <!-- column-name label -->
-      <column type="gchararray"/>
-      <!-- column-name rowdata -->
-      <column type="gpointer"/>
-    </columns>
-  </object>
   <object class="GtkWindow" id="invoice_entry_window">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -169,6 +161,8 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="editable">False</property>
+                            <property name="primary_icon_activatable">False</property>
+                            <property name="secondary_icon_activatable">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -209,6 +203,8 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="editable">False</property>
+                            <property name="primary_icon_activatable">False</property>
+                            <property name="secondary_icon_activatable">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -400,6 +396,8 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="editable">False</property>
+                            <property name="primary_icon_activatable">False</property>
+                            <property name="secondary_icon_activatable">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -408,21 +406,17 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkComboBox" id="page_terms_menu">
+                          <object class="GtkEntry" id="page_terms_menu">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="model">terms_store</property>
-                            <signal name="changed" handler="gnc_invoice_terms_changed_cb" swapped="no"/>
-                            <child>
-                              <object class="GtkCellRendererText" id="page_cell_renderer_text"/>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
-                            </child>
+                            <property name="editable">False</property>
+                            <property name="invisible_char">●</property>
+                            <property name="primary_icon_activatable">False</property>
+                            <property name="secondary_icon_activatable">False</property>
                           </object>
                           <packing>
                             <property name="expand">True</property>
-                            <property name="fill">False</property>
+                            <property name="fill">True</property>
                             <property name="position">3</property>
                           </packing>
                         </child>
@@ -674,6 +668,14 @@
       </object>
     </child>
   </object>
+  <object class="GtkListStore" id="terms_store">
+    <columns>
+      <!-- column-name label -->
+      <column type="gchararray"/>
+      <!-- column-name rowdata -->
+      <column type="gpointer"/>
+    </columns>
+  </object>
   <object class="GtkDialog" id="new_invoice_dialog">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -899,6 +901,8 @@
                             <property name="has_focus">True</property>
                             <property name="tooltip_text" translatable="yes">The invoice ID number. If left blank a reasonable number will be chosen for you.</property>
                             <property name="activates_default">True</property>
+                            <property name="primary_icon_activatable">False</property>
+                            <property name="secondary_icon_activatable">False</property>
                             <signal name="changed" handler="gnc_invoice_id_changed_cb" swapped="no"/>
                           </object>
                           <packing>
@@ -1063,6 +1067,8 @@
                           <object class="GtkEntry" id="dialog_billing_id_entry">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="primary_icon_activatable">False</property>
+                            <property name="secondary_icon_activatable">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
