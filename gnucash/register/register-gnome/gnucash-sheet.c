@@ -1118,7 +1118,7 @@ gnucash_sheet_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
             gnucash_sheet_show_row (sheet,
                                     virt_loc.vcell_loc.virt_row);
     }
-
+    gnc_header_request_redraw (GNC_HEADER(sheet->header_item));
     LEAVE(" ");
 }
 
