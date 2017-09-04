@@ -28,7 +28,7 @@
 #include "gnucash-sheet.h"
 #include "gnucash-sheetP.h"
 #include "gnucash-style.h"
-#include "gnc-engine.h"		// For debugging, e.g. ENTER(), LEAVE()
+#include "gnc-engine.h"     // For debugging, e.g. ENTER(), LEAVE()
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
