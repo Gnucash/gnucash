@@ -110,7 +110,17 @@ SET(gtest_engine_INCLUDES
   ${CMAKE_BINARY_DIR}/common # for config.h
   ${CMAKE_SOURCE_DIR}/common # for platform.h
   ${GLIB2_INCLUDE_DIRS}
-  ${GTEST_INCLUDE_DIR})
+  ${GTEST_INCLUDE_DIR}
+  ../../../borrowed/libc
+)
+
+IF (WIN32)
+  ADD_DEFINITIONS (-DOS_WIN32)
+  SET (gtest_engine_win32_SOURCES
+    ${MODULEPATH}/qof-win32.cpp
+    ../../../borrowed/libc/strptime.c
+  )
+ENDIF (WIN32)
 
 SET(test_gnc_guid_SOURCES
   ${MODULEPATH}/guid.cpp
@@ -149,8 +159,10 @@ SET(test_gnc_rational_SOURCES
   ${MODULEPATH}/gnc-timezone.cpp
   ${MODULEPATH}/gnc-date.cpp
   ${MODULEPATH}/qoflog.cpp
+  ${gtest_engine_win32_SOURCES}
   gtest-gnc-rational.cpp
   ${GTEST_SRC})
+
 GNC_ADD_TEST(test-gnc-rational "${test_gnc_rational_SOURCES}"
   gtest_engine_INCLUDES gtest_qof_LIBS)
 
@@ -162,6 +174,7 @@ SET(test_gnc_numeric_SOURCES
   ${MODULEPATH}/gnc-timezone.cpp
   ${MODULEPATH}/gnc-date.cpp
   ${MODULEPATH}/qoflog.cpp
+  ${gtest_engine_win32_SOURCES}
   gtest-gnc-numeric.cpp
   ${GTEST_SRC})
 GNC_ADD_TEST(test-gnc-numeric "${test_gnc_numeric_SOURCES}"
@@ -179,6 +192,7 @@ SET(test_gnc_datetime_SOURCES
   ${MODULEPATH}/gnc-timezone.cpp
   ${MODULEPATH}/gnc-date.cpp
   ${MODULEPATH}/qoflog.cpp
+  ${gtest_engine_win32_SOURCES}
   gtest-gnc-datetime.cpp
   ${GTEST_SRC})
 GNC_ADD_TEST(test-gnc-datetime "${test_gnc_datetime_SOURCES}"
