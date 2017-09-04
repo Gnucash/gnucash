@@ -354,6 +354,13 @@ gnc_split_register_get_type_label (VirtualLocation virt_loc,
 }
 
 static const char *
+gnc_split_register_get_rate_label (VirtualLocation virt_loc,
+                                   gpointer user_data)
+{
+    return _("Rate");
+}
+
+static const char *
 gnc_split_register_get_debit_label (VirtualLocation virt_loc,
                                     gpointer user_data)
 {
@@ -2453,6 +2460,10 @@ gnc_split_register_model_new (void)
     gnc_table_model_set_label_handler (model,
                                        gnc_split_register_get_price_label,
                                        PRIC_CELL);
+
+    gnc_table_model_set_label_handler (model,
+                                       gnc_split_register_get_rate_label,
+                                       RATE_CELL);
 
     gnc_table_model_set_label_handler (model,
                                        gnc_split_register_get_shares_label,
