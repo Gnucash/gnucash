@@ -61,30 +61,15 @@ extern "C" {
 #endif
 }
 
-#include <codecvt>
-#include <string>
 #include <boost/filesystem.hpp>
+
+#if PLATFORM(WINDOWS)
+#include <codecvt>
+#include <locale>
+#endif
 
 namespace bfs = boost::filesystem;
 namespace bst = boost::system;
-
-/*
- * Converts UTF16 to UTF8. Pinched from Nicolai M. Josuttis, "The C++
- * Standard Library, Second Edition", 2012, Addison-Wesley.
- */
-static std::string utf8(const std::wstring& str)
-{
-    std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
-    return myconv.to_bytes(str);
-}
-
-/*
- * Does nothing, it's just here so to save a bunch of ifdefs later.
- */
-static std::string utf8(const std::string& str)
-{
-    return str;
-}
 
 /**
  * Scrubs a filename by changing "strange" chars (e.g. those that are not
@@ -394,7 +379,7 @@ copy_recursive(const bfs::path& src, const bfs::path& dest)
     {
         g_warning("An error occured while trying to migrate the user configation from\n%s to\n%s"
                   "The reported failure is\n%s",
-                  src.c_str(), gnc_userdata_home.string(),
+                  src.string().c_str(), gnc_userdata_home.string().c_str(),
                   ex.what());
         return false;
     }
@@ -408,30 +393,33 @@ copy_recursive(const bfs::path& src, const bfs::path& dest)
  * So this function is a copy of glib's internal get_special_folder
  * and minimally adjusted to fetch CSIDL_APPDATA
  */
-static gchar *
+static char *
 win32_get_userdata_home (void)
 {
     wchar_t path[MAX_PATH+1];
     HRESULT hr;
     LPITEMIDLIST pidl = NULL;
     BOOL b;
-    gchar *retval = NULL;
+    char *retval = NULL;
 
     hr = SHGetSpecialFolderLocation (NULL, CSIDL_APPDATA, &pidl);
     if (hr == S_OK)
     {
         b = SHGetPathFromIDListW (pidl, path);
         if (b)
-            retval = g_strdup(utf8(path).c_str());
+        {
+            std::wstring_convert<std::codecvt_utf8<wchar_t>> utf8_conv;
+            retval = g_strdup(utf8_conv.to_bytes(path).c_str());
+        }
         CoTaskMemFree (pidl);
     }
     return retval;
 }
 #elif defined MAC_INTEGRATION
-static gchar*
+static char*
 quarz_get_userdata_home(void)
 {
-    gchar *retval = NULL;
+    char *retval = NULL;
     NSFileManager*fm = [NSFileManager defaultManager];
     NSArray* appSupportDir = [fm URLsForDirectory:NSApplicationSupportDirectory
     inDomains:NSUserDomainMask];
