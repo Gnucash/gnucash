@@ -335,7 +335,12 @@ gnc_validate_directory (const bfs::path &dirname, bool create)
     /* On Windows only write permission will be checked.
      * So strictly speaking we'd need two error messages here depending
      * on the platform. For simplicity this detail is glossed over though. */
-    if ((perms & bfs::owner_all) != bfs::owner_all)
+#if PLATFORM(WINDOWS)
+    auto check_perms = bfs::owner_read | bfs::owner_write;
+#else
+    auto check_perms = bfs::owner_all;
+#endif
+    if ((perms & check_perms) != check_perms)
         throw (bfs::filesystem_error(
             std::string(_("Insufficient permissions, at least write and access permissions required: "))
             + dirname.string(), dirname,
