@@ -66,10 +66,6 @@ struct _GnucashSheet
     gboolean   use_theme_colors;
     gboolean   use_horizontal_lines;
     gboolean   use_vertical_lines;
-    GtkWidget *header_color;
-    GtkWidget *primary_color;
-    GtkWidget *secondary_color;
-    GtkWidget *split_color;
     gboolean   dark_theme;
 
     gboolean input_cancelled;

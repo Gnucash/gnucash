@@ -2315,17 +2315,6 @@ gnucash_sheet_table_load (GnucashSheet *sheet, gboolean do_scroll)
     gnucash_sheet_activate_cursor_cell (sheet, TRUE);
 }
 
-static void
-gnucash_sheet_realize_entry (GnucashSheet *sheet, GtkWidget *entry)
-{
-    GValue gval = {0,};
-    g_value_init (&gval, G_TYPE_BOOLEAN);
-    g_value_set_boolean (&gval, FALSE);
-    g_object_set_property (G_OBJECT (entry), "editable", &gval);
-
-    gtk_widget_realize (entry);
-}
-
 /*************************************************************/
 
 /** Map a cell type to a css style class. */
@@ -2392,32 +2381,6 @@ gnucash_get_style_classes (GnucashSheet *sheet, GtkStyleContext *stylectxt,
     }
     gtk_style_context_add_class (stylectxt, full_class);
 
-/** Create the entries used for nameing register colors in gtkrc. */
-static void
-gnucash_sheet_create_color_hack(GnucashSheet *sheet)
-{
-    sheet->header_color    = gtk_entry_new();
-    sheet->primary_color   = gtk_entry_new();
-    sheet->secondary_color = gtk_entry_new();
-    sheet->split_color     = gtk_entry_new();
-
-    gtk_widget_set_name(sheet->header_color,    "header_color");
-    gtk_widget_set_name(sheet->primary_color,   "primary_color");
-    gtk_widget_set_name(sheet->secondary_color, "secondary_color");
-    gtk_widget_set_name(sheet->split_color,     "split_color");
-
-    g_signal_connect_after(sheet, "realize",
-                           G_CALLBACK(gnucash_sheet_realize_entry),
-                           sheet->header_color);
-    g_signal_connect_after(sheet, "realize",
-                           G_CALLBACK(gnucash_sheet_realize_entry),
-                           sheet->primary_color);
-    g_signal_connect_after(sheet, "realize",
-                           G_CALLBACK(gnucash_sheet_realize_entry),
-                           sheet->secondary_color);
-    g_signal_connect_after(sheet, "realize",
-                           G_CALLBACK(gnucash_sheet_realize_entry),
-                           sheet->split_color);
     g_free (full_class);
 }
 

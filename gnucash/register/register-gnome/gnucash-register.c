@@ -528,30 +528,6 @@ gnucash_register_create_widget (Table *table)
     gtk_widget_show (reg->hscrollbar);
     reg->hscrollbar_visible = TRUE;
 
-    /* The gtkrc color helper widgets need to be part of a window
-     * hierarchy so they can be realized. Stick them in a box
-     * underneath the register, but don't show the box to the
-     * user. */
-    box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_box_set_homogeneous (GTK_BOX (box), FALSE);
-
-    gtk_widget_set_no_show_all(GTK_WIDGET(box), TRUE);
-    gtk_box_pack_start(GTK_BOX(box),
-                                GNUCASH_SHEET(sheet)->header_color, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(box),
-                                GNUCASH_SHEET(sheet)->primary_color, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(box),
-                                GNUCASH_SHEET(sheet)->secondary_color, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(box),
-                                GNUCASH_SHEET(sheet)->split_color, TRUE, TRUE, 0);
-
-    gtk_grid_attach (GTK_GRID(widget), GTK_WIDGET(box), 0, 3, 1, 1);
-    gtk_widget_set_hexpand (GTK_WIDGET(box), TRUE);
-    gtk_widget_set_halign (GTK_WIDGET(box), GTK_ALIGN_FILL);
-    gtk_widget_set_vexpand (GTK_WIDGET(box), TRUE);
-    gtk_widget_set_valign (GTK_WIDGET(box), GTK_ALIGN_FILL);
-    g_object_set (GTK_WIDGET(box), "margin", 0, NULL);
-
     g_signal_connect (GNUCASH_SHEET(sheet)->hadj, "changed",
                       G_CALLBACK (gnucash_register_update_hadjustment), reg);
 
