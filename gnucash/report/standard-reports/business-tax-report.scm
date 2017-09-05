@@ -57,13 +57,10 @@
 (define optname-void-transactions (N_ "Void Transactions"))
 ;(define optname-table-export (N_ "Table for Exporting"))
 (define optname-common-currency (N_ "Common Currency"))
-(define TAX-SETUP-DESC (string-append 
-                        " From Business > Sales Tax Tables, create a Tax Table named 'Output' for tax collected on sales"
-                        " (payable to authorities) and 'Input' for tax paid on purchases (receivable from authorities)."
-                        " These will be used to tabulate data. Please note the tax table percentages or values are unused"
-                        " in this report. No warranty is implied. Please independently verify the figures. "
-                        " The Input/Output account names are used to label the columns if Edit > Report Options > Display > "
-                        " Individual tax columns is ticked."))
+(define TAX-SETUP-DESC "From the Report Options, you will need to select the accounts which will \
+hold the GST/VAT taxes collected or paid. These accounts must contain splits which document the \
+monies which are wholly sent or claimed from tax authorities during periodic GST/VAT returns. These \
+accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
 (define optname-currency (N_ "Report's currency"))
 (define def:grand-total-style "grand-total")
 (define def:normal-row-style "normal-row")
@@ -685,6 +682,20 @@
 match Expenses:Travel:Holiday and Expenses:Business:Travel. Can be left blank, which will \
 disable the substring filter. This filter is case-sensitive.")
     ""))
+
+  (gnc:register-trep-option
+   (gnc:make-account-list-limited-option
+    gnc:pagename-accounts (N_ "Tax Accounts")
+    "b17" (N_ "Please find and select the accounts which will hold the tax collected or paid. \
+These accounts must contain splits which document the monies which are wholly sent or claimed \
+from tax authorities during periodic GST/VAT returns. These accounts must be of type ASSET \
+for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
+    (lambda ()
+      '())
+    #f #t
+    (list ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY)
+    ))
+
   
   (gnc:register-trep-option
    (gnc:make-account-list-option
@@ -1534,12 +1545,9 @@ disable the substring filter. This filter is case-sensitive.")
                          (string-contains (gnc-account-get-full-name acc) c_account_substring))
                        c_account_0))
          (c_account_2 (opt-val gnc:pagename-accounts "Filter By..."))
-         (accounts-tax-collected (map (lambda (ttentry)
-                                        (gncTaxTableEntryGetAccount ttentry))
-                                      (gncTaxTableGetEntries (gncTaxTableLookupByName (gnc-get-current-book) "Output"))))
-         (accounts-tax-paid (map (lambda (ttentry)
-                                   (gncTaxTableEntryGetAccount ttentry))
-                                 (gncTaxTableGetEntries (gncTaxTableLookupByName (gnc-get-current-book) "Input"))))
+         (tax-accounts (opt-val gnc:pagename-accounts "Tax Accounts"))
+         (accounts-tax-collected (filter (lambda (acc) (eq? (xaccAccountGetType acc) ACCT-TYPE-LIABILITY)) tax-accounts))
+         (accounts-tax-paid (filter (lambda (acc) (eq? (xaccAccountGetType acc) ACCT-TYPE-ASSET)) tax-accounts))
          (accounts-sales (filter (lambda (acc) (eq? (xaccAccountGetType acc) ACCT-TYPE-INCOME)) c_account_1))
          (accounts-purchases (filter (lambda (acc) (eq? (xaccAccountGetType acc) ACCT-TYPE-EXPENSE)) c_account_1))
          (filter-mode (opt-val gnc:pagename-accounts "Filter Type"))
@@ -1718,7 +1726,7 @@ disable the substring filter. This filter is case-sensitive.")
 
 ;; Define the report.
 (gnc:define-report
- 'version 20170827
+ 'version 20170905
  'menu-path (list gnc:menuname-business-reports)
  'name reportname
  'report-guid "2fe3bba544212fae95a59620f"
