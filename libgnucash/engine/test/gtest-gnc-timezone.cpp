@@ -39,7 +39,7 @@ TEST(gnc_timezone_constructors, test_default_constructor)
 TEST(gnc_timezone_constructors, test_pacific_time_constructor)
 {
 #if PLATFORM(WINDOWS)
-    std::string timzone("Pacific Standard Time");
+    std::string timezone("Pacific Standard Time");
 #else
     std::string timezone("America/Los_Angeles");
 #endif
