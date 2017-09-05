@@ -1609,7 +1609,7 @@ disable the substring filter. This filter is case-sensitive.")
 
           ; We have to remove duplicates because the report will *sum* amounts in a transaction
 	  ; otherwise it will double count where transaction contains 2 splits in same account
-          (set! splits (splits-filter-unique-transactions splits)))
+          (set! splits (splits-filter-unique-transactions splits))
           
           (if (not (null? splits))
               (let ((table 
