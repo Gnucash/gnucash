@@ -974,7 +974,6 @@ disable the substring filter. This filter is case-sensitive.")
     ;(list (N_ "Price")                        "l"  (N_ "Display the shares price?") #f)
     ;; note the "Amount" multichoice option in between here
     (list (N_ "Totals")                       "o"  (N_ "Display the totals?") #t)
-    (list (N_ "Remove duplicates")            "o2" (N_ "Eliminate duplicates eg transactions which contain splits in both income/expense accounts?") #f)
     (list (N_ "Individual tax columns")       "p"  (N_ "Display individual tax columns rather than their sum") #f)
     (list (N_ "Remittance amount")            "q"  (N_ "Display the remittance amount (total sales - total purchases)") #f)
     (list (N_ "Tax payable")                  "r"  (N_ "Display the tax payable (tax on sales - tax on purchases)") #f)
@@ -1608,9 +1607,9 @@ disable the substring filter. This filter is case-sensitive.")
                                        (not (is-filter-member split c_account_2)))
                                      splits))))
 
-          ;Do we remove duplicates?
-          (if (gnc:option-value (gnc:lookup-option options gnc:pagename-display (N_ "Remove duplicates")))
-              (set! splits (splits-filter-unique-transactions splits)))
+          ; We have to remove duplicates because the report will *sum* amounts in a transaction
+	  ; otherwise it will double count where transaction contains 2 splits in same account
+          (set! splits (splits-filter-unique-transactions splits)))
           
           (if (not (null? splits))
               (let ((table 
