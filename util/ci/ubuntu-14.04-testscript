@@ -1,0 +1,28 @@
+#!/bin/bash -e
+
+git clone --depth 1 https://github.com/Gnucash/gnucash.git;
+mkdir build;
+cd build;
+export TZ="America/Los_Angeles";
+ls -al /;
+ls -al /gtest;
+mkdir -p /root/.local/share
+export GTEST_ROOT=/gtest/googletest GMOCK_ROOT=/gtest/googlemock;
+if [[ "$BUILDTYPE" == "cmake-make" ]]; then
+    cmake ../gnucash;
+    make -j 4;
+    make check;
+elif [[ "$BUILDTYPE" == "cmake-ninja" ]]; then
+    cmake ../gnucash -G Ninja;
+    ninja;
+    ninja check;
+elif [[ "$BUILDTYPE" == "autotools" ]]; then
+    ../gnucash/autogen.sh;
+    ../gnucash/configure --enable-python;
+    make;
+    make check;
+else
+    echo "Unknown buildtype: \"$BUILDTYPE\". Not building.";
+    exit 11;
+fi
+
