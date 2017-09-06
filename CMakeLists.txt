@@ -538,6 +538,8 @@ SET(gnucash_DOCS
     ChangeLog.2012
     ChangeLog.2013
     ChangeLog.2014
+    ChangeLog.2015
+    ChangeLog.2016
     DOCUMENTERS
     HACKING
     LICENSE
@@ -820,8 +822,10 @@ IF (BUILDING_FROM_VCS)
     COMMAND ${GIT_EXECUTABLE} log --format=\"%ad %aN %n%n%x09* %s%d%n\" --date=short --since=2016-01-01 > ${CMAKE_BINARY_DIR}/ChangeLog
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
   )
+  INSTALL(FILES ${CMAKE_BINARY_DIR}/ChangeLog DESTINATION share/doc/gnucash)
 ELSE()
   FILE(COPY ChangeLog DESTINATION ChangeLog)
+  INSTALL(FILES ChangeLog DESTINATION share/doc/gnucash)
 ENDIF()
 
 #Link LICENSE to COPYING so that people expecting to find it,
