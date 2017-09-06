@@ -105,7 +105,7 @@ FUNCTION(MAKE_GNUCASH_POTFILES)
   # here so it is easier for me to compare to the autotools
   # generated POTFILES.in
   STRING(REPLACE ";" "\n" SORT_IN "${FILES}")
-  STRING(APPEND SORT_IN "\n")
+  SET(SORT_IN "${SORT_IN}\n")
   FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/POTFILES.in.in "${SORT_IN}")
 
   EXECUTE_PROCESS(COMMAND "${PERL_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/util/elegant-sort.pl"
