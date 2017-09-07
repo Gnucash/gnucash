@@ -1137,7 +1137,9 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                                                                 splitVal))))
                                           (if typefilter
                                               (if (eq? typefilter splitAccType)
-                                                  (set! sum (myadd sum splitVal))))
+                                                  (set! sum (if sum 
+                                                                (myadd sum splitVal)
+                                                                splitVal))))
                                           ))
                                       splits-in-transaction)
                             sum)))                                 
