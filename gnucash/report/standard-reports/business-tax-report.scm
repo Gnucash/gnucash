@@ -216,36 +216,55 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
 
 (define (add-subtotal-row table width subtotal-string subtotal-collectors 
                           subtotal-style export?)
-  (let ((row-contents '())
-        (columns (map (lambda (coll) (coll 'format gnc:make-gnc-monetary #f)) subtotal-collectors))
-        (row 0)
-        (amount-or-blank (lambda (monetary)
-                           (if (zero? (gnc:gnc-numeric-num (gnc:gnc-monetary-amount monetary)))
-                               (gnc:html-make-empty-cell)
-                               monetary))))
+  (let* ((row-contents '())
+         (columns (map (lambda (coll) (coll 'format gnc:make-gnc-monetary #f)) subtotal-collectors)) ;returns a list of list of <gnc-monetary>
+         (list-of-commodities (delete-duplicates (map gnc:gnc-monetary-commodity (apply append columns))))
+         (equal-commodity? (lambda (monetary commodity) (eq? (gnc:gnc-monetary-commodity monetary) commodity)))
+         (retrieve-commodity (lambda (list-of-monetary commodity)
+           (filter (lambda (monetary) (eq? (gnc:gnc-monetary-commodity monetary) commodity))
+                   list-of-monetary)))
+         (row 0)
+         (amount-or-blank (lambda (monetary)
+                             (if monetary
+                                 monetary
+                                 "no"))))
+;XXX   
+; then i need to cycle through the list of currencies:
+; - first currency with the subtotal title
+; - subsequent currencies without subtotal title
+    ;(gnc:warn "3rd column = " (cadr columns))
     
-    ;(gnc:warn "Columns = " columns)
-    (addto! row-contents (gnc:make-html-table-cell/size/markup 1 width "total-label-cell" subtotal-string))
-    (for-each (lambda (coll)
-                (addto! row-contents
-                        (gnc:make-html-table-cell/markup
-                         "total-number-cell"
-                         (amount-or-blank (car coll)))))
-              columns)
+    (addto! row-contents (gnc:make-html-table-cell/size/markup  1 width "total-label-cell" subtotal-string))
+    
+    (for-each (lambda (column) ; each column is a list of monetary objects
+        (let ((first-monetary (retrieve-commodity column (car list-of-commodities))))
+            (gnc:warn "first monetary = " first-monetary)
+            (addto! row-contents
+                (gnc:make-html-table-cell/markup
+                    "total-number-cell"
+                    (if (pair? column)
+                        first-monetary
+                        ;(car column)  
+                        (gnc:html-make-empty-cell)
+                        )))))
+        columns)
+        
     (gnc:html-table-append-row/markup! table subtotal-style (reverse row-contents))
 
-    (for-each (lambda (currency)
-                (set! row-contents '())
-                (set! row (+ row 1))
-                (addto! row-contents (gnc:make-html-table-cell/size/markup 1 width "total-label-cell" ""))
-                (for-each (lambda (coll)
-                            (addto! row-contents
-                                    (gnc:make-html-table-cell/markup
-                                     "total-number-cell"
-                                     (amount-or-blank (list-ref coll row)))))
-                          columns)
-                (gnc:html-table-append-row/markup! table subtotal-style (reverse row-contents)))
-              (cdr (car columns)))))
+;
+;    (for-each (lambda (currency)
+;                (set! row-contents '())
+;                (set! row (+ row 1))
+;                (addto! row-contents (gnc:make-html-table-cell/size/markup 1 width "total-label-cell" ""))
+;                (for-each (lambda (coll)
+;                            (addto! row-contents
+;                                    (gnc:make-html-table-cell/markup
+;                                     "total-number-cell"
+;                                     (amount-or-blank (list-ref coll row)))))
+;                          columns)
+;                (gnc:html-table-append-row/markup! table subtotal-style (reverse row-contents)))
+;              (cdr (car columns)))))
+))
 
 (define (total-string str) (string-append (_ "Total For ") str))
 
@@ -595,14 +614,16 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
     ;        (addto! row-contents " ")))
 
     (for-each (lambda (cell)
-                (if (zero? (gnc:gnc-numeric-num (gnc:gnc-monetary-amount cell)))
-                    (addto! row-contents (gnc:html-make-empty-cell))
+                (if cell
+                    
                     (addto! row-contents
                             (gnc:make-html-table-cell/markup
                              "number-cell"
                              (gnc:html-transaction-anchor
                               parent
-                              (gnc:make-gnc-monetary report-currency cell))))))
+                              (gnc:make-gnc-monetary report-currency cell))))
+                    (addto! row-contents (gnc:html-make-empty-cell))          
+                              ))
               cells)
     
     (gnc:html-table-append-row/markup! table row-style
@@ -1097,10 +1118,12 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
 
     (define calculated-cells
       (letrec
-          ((split-adder (lambda (split accountlist typefilter)
+          ((myadd (lambda (X Y) (if X (if Y (gnc-numeric-add X Y GNC-DENOM-AUTO GNC-RND-ROUND) X) Y)))
+           (myneg (lambda (X) (if X (gnc-numeric-neg X) #f)))
+           (split-adder (lambda (split accountlist typefilter)
                           (let* ((transaction (xaccSplitGetParent split))
                                  (splits-in-transaction (xaccTransGetSplitList transaction))
-                                 (sum (gnc:make-gnc-numeric 0 1)))
+                                 (sum #f))
                             (for-each (lambda (s)
                                         (let* ((splitAcc (xaccSplitGetAccount s))
                                                (splitVal (xaccSplitGetValue s))
@@ -1109,10 +1132,12 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                                                (splitAccName (xaccAccountGetName splitAcc)))
                                           (if accountlist
                                               (if (member splitAcc accountlist)
-                                                  (set! sum (gnc-numeric-add sum splitVal GNC-DENOM-AUTO GNC-RND-ROUND))))
+                                                  (set! sum (if sum 
+                                                                (myadd sum splitVal)
+                                                                splitVal))))
                                           (if typefilter
                                               (if (eq? typefilter splitAccType)
-                                                  (set! sum (gnc-numeric-add sum splitVal GNC-DENOM-AUTO GNC-RND-ROUND))))
+                                                  (set! sum (myadd sum splitVal))))
                                           ))
                                       splits-in-transaction)
                             sum)))                                 
@@ -1123,11 +1148,11 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
            (sales-without-tax (lambda (s) (split-adder s accounts-sales #f)))
            (purchases-without-tax (lambda (s) (split-adder s accounts-purchases #f)))
            (account-adder (lambda (acc) (lambda (s) (split-adder s (list acc) #f))))
-           (total-sales (lambda (s) (gnc-numeric-add (tax-on-sales s) (sales-without-tax s) GNC-DENOM-AUTO GNC-RND-ROUND)))
-           (total-purchases (lambda (s) (gnc-numeric-add (tax-on-purchases s) (purchases-without-tax s) GNC-DENOM-AUTO GNC-RND-ROUND)))
-           (bank-remittance (lambda (s) (gnc-numeric-neg (gnc-numeric-add (total-sales s) (total-purchases s) GNC-DENOM-AUTO GNC-RND-ROUND))))
-           (net-income (lambda (s) (gnc-numeric-neg (gnc-numeric-add (sales-without-tax s) (purchases-without-tax s) GNC-DENOM-AUTO GNC-RND-ROUND))))
-           (tax-payable (lambda (s) (gnc-numeric-neg (gnc-numeric-add (tax-on-purchases s) (tax-on-sales s) GNC-DENOM-AUTO GNC-RND-ROUND))))
+           (total-sales (lambda (s) (myadd (tax-on-sales s) (sales-without-tax s))))
+           (total-purchases (lambda (s) (myadd (tax-on-purchases s) (purchases-without-tax s))))
+           (bank-remittance (lambda (s) (myneg (myadd (total-sales s) (total-purchases s)))))
+           (net-income (lambda (s) (myneg (myadd (sales-without-tax s) (purchases-without-tax s)))))
+           (tax-payable (lambda (s) (myneg (myadd (tax-on-purchases s) (tax-on-sales s)))))
            )
         (append
          (list (cons "Total Sales" total-sales))
@@ -1248,19 +1273,23 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                  account-types-to-reverse))
 
             ;(gnc:warn "sv = " split-values)
+            ;(gnc:warn "(car TC) = " ((cadddr total-collectors) 'format gnc:make-gnc-monetary #f))
             
             (map (lambda (collector value)
-                   (collector 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value)))
+                   (if value
+                       (collector 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))))
                  primary-subtotal-collectors
                  split-values)
 
             (map (lambda (collector value)
-                   (collector 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value)))
+                   (if value
+                       (collector 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))))
                  secondary-subtotal-collectors
                  split-values)
 
             (map (lambda (collector value)
-                   (collector 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value)))
+                   (if value
+                       (collector 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))))
                  total-collectors
                  split-values)
             
