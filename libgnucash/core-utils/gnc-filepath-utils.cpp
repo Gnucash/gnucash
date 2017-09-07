@@ -59,6 +59,9 @@ extern "C" {
 #define PATH_MAX MAXPATHLEN
 #endif
 #endif
+#ifdef MAC_INTEGRATION
+#include <Foundation/Foundation.h>
+#endif
 }
 
 #include <boost/filesystem.hpp>
