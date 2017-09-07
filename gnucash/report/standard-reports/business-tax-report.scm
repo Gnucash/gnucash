@@ -219,24 +219,23 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
   (let* ((row-contents '())
          (columns (map (lambda (coll) (coll 'format gnc:make-gnc-monetary #f)) subtotal-collectors))
          (list-of-commodities (delete-duplicates (map gnc:gnc-monetary-commodity (apply append columns)))))
-
+    
     (define (retrieve-commodity list-of-monetary commodity)
       (if (null? list-of-monetary)
           #f
           (if (eq? (gnc:gnc-monetary-commodity (car list-of-monetary)) commodity)
               (car list-of-monetary)
               (retrieve-commodity (cdr list-of-monetary) commodity))))
-    
+
     ;first row
     (addto! row-contents (gnc:make-html-table-cell/size/markup  1 width "total-label-cell" subtotal-string))
     (for-each (lambda (column)
-                (let ((first-monetary #f))
-                  (addto! row-contents
-                          (gnc:make-html-table-cell/markup
-                           "total-number-cell"
-                           (if (pair? column)
-                               (retrieve-commodity column (car list-of-commodities))
-                               (gnc:html-make-empty-cell))))))
+                (addto! row-contents
+                        (gnc:make-html-table-cell/markup
+                         "total-number-cell"
+                         (if (pair? column)
+                             (retrieve-commodity column (car list-of-commodities))
+                             (gnc:html-make-empty-cell)))))
               columns)
     (gnc:html-table-append-row/markup! table subtotal-style (reverse row-contents))
 
@@ -1263,7 +1262,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                  current table used-columns def:alternate-row-style
                  account-types-to-reverse))
 
-            ;(gnc:warn "sv = " split-values)
+
             ;(gnc:warn "(car TC) = " ((cadddr total-collectors) 'format gnc:make-gnc-monetary #f))
             
             (map (lambda (collector value)
@@ -1283,7 +1282,13 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                        (collector 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))))
                  total-collectors
                  split-values)
-            
+
+            (gnc:warn "")
+            (gnc:warn "sv = " split-values)
+            (gnc:warn "primary-subtotal-pred = " primary-subtotal-pred)
+            (gnc:warn "next = " next)
+            (gnc:warn "runner = " (if next (primary-subtotal-pred current next) #f))
+
             (if (and primary-subtotal-pred
                      (or (not next)
                          (and next
