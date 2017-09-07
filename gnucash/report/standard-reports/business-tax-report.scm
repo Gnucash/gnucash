@@ -226,31 +226,25 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
           (if (eq? (gnc:gnc-monetary-commodity (car list-of-monetary)) commodity)
               (car list-of-monetary)
               (retrieve-commodity (cdr list-of-monetary) commodity))))
-
+    
+    (define (add-columns commodity)
+      (for-each (lambda (column)
+                  (addto! row-contents
+                          (gnc:make-html-table-cell/markup
+                           "total-number-cell"
+                           (retrieve-commodity column commodity))))
+                columns))
+      
     ;first row
     (addto! row-contents (gnc:make-html-table-cell/size/markup  1 width "total-label-cell" subtotal-string))
-    (for-each (lambda (column)
-                (addto! row-contents
-                        (gnc:make-html-table-cell/markup
-                         "total-number-cell"
-                         (if (pair? column)
-                             (retrieve-commodity column (car list-of-commodities))
-                             (gnc:html-make-empty-cell)))))
-              columns)
+    (add-columns (car list-of-commodities))
     (gnc:html-table-append-row/markup! table subtotal-style (reverse row-contents))
 
     ;subsequent rows
     (for-each (lambda (commodity)
                 (set! row-contents '())
                 (addto! row-contents (gnc:make-html-table-cell/size/markup 1 width "total-label-cell" ""))
-                (for-each (lambda (column)
-                            (addto! row-contents
-                                    (gnc:make-html-table-cell/markup
-                                     "total-number-cell"
-                                     (if (pair? column)
-                                         (retrieve-commodity column commodity)
-                                         (gnc:html-make-empty-cell)))))
-                          columns)
+                (add-columns commodity)
                 (gnc:html-table-append-row/markup! table subtotal-style (reverse row-contents)))
               (cdr list-of-commodities))))
 
@@ -1120,15 +1114,10 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                                                (splitAccName (xaccAccountGetName splitAcc)))
                                           (if accountlist
                                               (if (member splitAcc accountlist)
-                                                  (set! sum (if sum 
-                                                                (myadd sum splitVal)
-                                                                splitVal))))
+                                                  (set! sum (myadd sum splitVal))))
                                           (if typefilter
                                               (if (eq? typefilter splitAccType)
-                                                  (set! sum (if sum 
-                                                                (myadd sum splitVal)
-                                                                splitVal))))
-                                          ))
+                                                  (set! sum (myadd sum splitVal))))))
                                       splits-in-transaction)
                             sum)))                                 
            ;(sales-without-tax (lambda (s) (split-adder s #f ACCT-TYPE-INCOME)))
