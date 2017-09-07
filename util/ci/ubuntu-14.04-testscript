@@ -11,16 +11,16 @@ export GTEST_ROOT=/gtest/googletest GMOCK_ROOT=/gtest/googlemock;
 if [[ "$BUILDTYPE" == "cmake-make" ]]; then
     cmake ../gnucash;
     make -j 4;
-    make check;
+    make check || ./afterfailure;
 elif [[ "$BUILDTYPE" == "cmake-ninja" ]]; then
     cmake ../gnucash -G Ninja;
     ninja;
-    ninja check;
+    ninja check || ./afterfailure;
 elif [[ "$BUILDTYPE" == "autotools" ]]; then
     ../gnucash/autogen.sh;
     ../gnucash/configure --enable-python;
     make;
-    make check;
+    make check || ./afterfailure;
 else
     echo "Unknown buildtype: \"$BUILDTYPE\". Not building.";
     exit 11;

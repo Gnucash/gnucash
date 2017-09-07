@@ -18,4 +18,5 @@ install:
 script:
     - echo BUILDTYPE="$BUILDTYPE"
     - pwd
-    - sudo docker run -v Gnucash/gnucash:/gnucash:ro --env="BUILDTYPE=$BUILDTYPE" --rm ${BUILDENV}-gnucashbuild
+    - ls
+    - sudo docker run -v "$(pwd)"/Gnucash/gnucash:/gnucash:ro --env="BUILDTYPE=$BUILDTYPE" --rm ${BUILDENV}-gnucashbuild
