@@ -19,4 +19,4 @@ script:
     - echo BUILDTYPE="$BUILDTYPE"
     - pwd
     - ls
-    - sudo docker run -v "$(pwd)":/gnucash:ro --env="BUILDTYPE=$BUILDTYPE" --rm ${BUILDENV}-gnucashbuild
+    - sudo docker run -v "$(pwd)":/gnucash:rw --env="BUILDTYPE=$BUILDTYPE" --rm ${BUILDENV}-gnucashbuild
