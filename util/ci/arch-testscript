@@ -1,0 +1,40 @@
+#!/bin/bash -le
+
+#-l above (login shell) so that /etc/profile runs so that perl is
+# on the path.
+
+#-e so that if any command has an exit code != 0, this script will
+#  exit immediately.
+
+# Python is python 3, but gnucash doesn't work with python 3. There
+# doesn't seem to be a way to tell automake to use /usr/bin/python2,
+# so we'll mock this up
+mkdir autotools_bin;
+ln -s /usr/bin/python2 autotools_bin/python;
+export PATH=/autotools_bin:"$PATH";
+echo path is "$PATH";
+echo python version is "$(python --version)";
+
+mkdir -p /root/.local/share;
+
+mkdir build;
+cd build;
+export TZ="America/Los_Angeles";
+
+if [[ "$BUILDTYPE" == "cmake-make" ]]; then
+    cmake ../gnucash
+    make -j 4;
+    make check || ./afterfailure;
+elif [[ "$BUILDTYPE" == "cmake-ninja" ]]; then
+    cmake ../gnucash -DCMAKE_BUILD_TYPE=debug -DENABLE_DEBUG=on -G Ninja
+    ninja
+    ninja check || ./afterfailure;
+elif [[ "$BUILDTYPE" == "autotools" ]]; then
+    ../gnucash/autogen.sh;
+    ../gnucash/configure --enable-python;
+    make;
+    make check || ./afterfailure;
+else
+    echo "Unknown buildtype: \"$BUILDTYPE\". Not building.";
+fi
+

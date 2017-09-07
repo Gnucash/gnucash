@@ -1,26 +1,22 @@
 # Test
 sudo: required
-dist: trusty
-branches:
-  except:
-    - trunk
 language: c++
-compiler:
-  - gcc
-#  - clang
+compiler: gcc
 env:
-  - BUILDTYPE=cmake-make
-  - BUILDTYPE=cmake-ninja
-  - BUILDTYPE=autotools
-before_install:
-#  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-  - sudo apt-get update -qq
+    - BUILDENV=arch BUILDTYPE=cmake-make
+    - BUILDENV=arch BUILDTYPE=cmake-ninja
+    - BUILDENV=arch BUILDTYPE=autotools
+    - BUILDENV=ubuntu-14.04 BUILDTYPE=cmake-make
+    - BUILDENV=ubuntu-14.04 BUILDTYPE=cmake-ninja
+    - BUILDENV=ubuntu-14.04 BUILDTYPE=autotools
+services:
+    - docker
 install:
-#  - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.9; export CXX="g++-4.9" CC="gcc-4.9"; fi
-  - sudo apt-get build-dep -qq gnucash
-  - sudo apt-get install -qq swig xsltproc libdbd-sqlite3 cmake3 texinfo ninja-build
-  - sudo apt-get install -qq libboost-all-dev libgtk-3-dev libwebkit2gtk-3.0-dev
-  - sudo apt-get --reinstall install -qq language-pack-en language-pack-fr
-  - git clone https://github.com/google/googletest -b release-1.8.0 ~/gtest
-script: ./util/travis-script.sh
-after_failure:  ./util/travis-after-failure.sh
+    - sudo docker --version
+    - echo BUILDENV="$BUILDENV"
+    - sudo docker build -f util/ci/${BUILDENV}-docker -t ${BUILDENV}-gnucashbuild util/ci
+script:
+    - echo BUILDTYPE="$BUILDTYPE"
+    - pwd
+    - ls
+    - sudo docker run -v "$(pwd)":/gnucash:rw --env="BUILDTYPE=$BUILDTYPE" --rm ${BUILDENV}-gnucashbuild
