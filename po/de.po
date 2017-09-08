@@ -1773,11 +1773,12 @@ msgstr "Auslagenerstattung anzeigen"
 msgid "Bill Information"
 msgstr "Lieferantenrechnungs-Informationen"
 
+#  Daß es eine Lieferantenrechnung ist, sollte aus anderen Dialogelementen hervorgehen. Fell, 2017-09-08
 #: ../src/business/business-gnome/dialog-invoice.c:2372
 #: ../src/business/business-gnome/dialog-invoice.c:2548
 #: ../src/business/business-gnome/dialog-invoice.c:3094
 msgid "Bill ID"
-msgstr "Abrechnungs-ID"
+msgstr "Rechnungsnummer"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2375
 #: ../src/business/business-gnome/dialog-invoice.c:2552
@@ -1866,7 +1867,7 @@ msgstr "Bemerkungen Rechnung"
 #: ../src/report/business-reports/fancy-invoice.scm:324
 #: ../src/report/business-reports/invoice.scm:309
 msgid "Billing ID"
-msgstr "Rechnungsnummer des Lieferanten"
+msgstr "Abrechnungs-ID"
 
 #: ../src/business/business-gnome/dialog-invoice.c:3041
 #: ../src/business/business-gnome/dialog-invoice.c:3075
