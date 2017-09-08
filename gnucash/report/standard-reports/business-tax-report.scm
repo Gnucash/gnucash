@@ -223,7 +223,7 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
     (define (retrieve-commodity list-of-monetary commodity)
       (if (null? list-of-monetary)
           #f
-          (if (eq? (gnc:gnc-monetary-commodity (car list-of-monetary)) commodity)
+          (if (gnc-commodity-equiv (gnc:gnc-monetary-commodity (car list-of-monetary)) commodity)
               (car list-of-monetary)
               (retrieve-commodity (cdr list-of-monetary) commodity))))
     
@@ -1251,9 +1251,6 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                  current table used-columns def:alternate-row-style
                  account-types-to-reverse))
 
-
-            ;(gnc:warn "(car TC) = " ((cadddr total-collectors) 'format gnc:make-gnc-monetary #f))
-            
             (map (lambda (collector value)
                    (if value
                        (collector 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))))
@@ -1272,27 +1269,19 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                  total-collectors
                  split-values)
 
-            (gnc:warn "")
-            (gnc:warn "sv = " split-values)
-            (gnc:warn "primary-subtotal-pred = " primary-subtotal-pred)
-            (gnc:warn "next = " next)
-            (gnc:warn "runner = " (if next (primary-subtotal-pred current next) #f))
-
             (if (and primary-subtotal-pred
                      (or (not next)
                          (and next
                               (not (primary-subtotal-pred current next)))))
                 (begin 
                   (if secondary-subtotal-pred
-
-                      (begin
-                        (secondary-subtotal-renderer
-                         table width current
-                         secondary-subtotal-collectors
-                         def:secondary-subtotal-style used-columns export?)
-                        (for-each (lambda (coll) (coll 'reset #f #f))
-                                  secondary-subtotal-collectors)
-                        ))
+                      
+                      (secondary-subtotal-renderer
+                       table width current
+                       secondary-subtotal-collectors
+                       def:secondary-subtotal-style used-columns export?)
+                      (for-each (lambda (coll) (coll 'reset #f #f))
+                                secondary-subtotal-collectors))
 
                   (primary-subtotal-renderer table width current
                                              primary-subtotal-collectors
@@ -1306,12 +1295,12 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                       (begin 
                         (primary-subheading-renderer
                          next table width def:primary-subtotal-style used-columns)
-
                         (if secondary-subtotal-pred
-                            (secondary-subheading-renderer
-                             next 
-                             table 
-                             width def:secondary-subtotal-style used-columns)))))
+                            (begin
+                              (secondary-subheading-renderer
+                               next 
+                               table 
+                               width def:secondary-subtotal-style used-columns))))))
 
                 (if (and secondary-subtotal-pred
                          (or (not next)
