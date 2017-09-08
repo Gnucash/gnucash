@@ -223,7 +223,7 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
     (define (retrieve-commodity list-of-monetary commodity)
       (if (null? list-of-monetary)
           #f
-          (if (gnc-commodity-equiv (gnc:gnc-monetary-commodity (car list-of-monetary)) commodity)
+          (if (gnc-commodity-equal (gnc:gnc-monetary-commodity (car list-of-monetary)) commodity)
               (car list-of-monetary)
               (retrieve-commodity (cdr list-of-monetary) commodity))))
     
