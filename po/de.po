@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.6.15\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-04 00:02+0200\n"
-"PO-Revision-Date: 2017-09-03 23:50+0200\n"
+"PO-Revision-Date: 2017-09-04 17:10+0200\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: de\n"
@@ -1277,12 +1277,13 @@ msgstr "Auslagenerstattung"
 #: ../src/engine/Recurrence.c:478 ../src/engine/Recurrence.c:666
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:4
 #: ../src/import-export/csv-imp/gnc-csv-model.c:70
-#: ../src/report/standard-reports/transaction.scm:685
-#: ../src/report/standard-reports/transaction.scm:722
-#: ../src/report/standard-reports/transaction.scm:777
-#: ../src/report/standard-reports/transaction.scm:839
-#: ../src/report/standard-reports/transaction.scm:987
-#: ../src/report/standard-reports/transaction.scm:997
+#: ../src/import-export/import-pending-matches.c:192
+#: ../src/report/standard-reports/transaction.scm:690
+#: ../src/report/standard-reports/transaction.scm:727
+#: ../src/report/standard-reports/transaction.scm:782
+#: ../src/report/standard-reports/transaction.scm:844
+#: ../src/report/standard-reports/transaction.scm:992
+#: ../src/report/standard-reports/transaction.scm:1002
 msgid "None"
 msgstr "Keine"
 
@@ -1437,7 +1438,7 @@ msgstr "Haben muss ein positiver Betrag sein oder Sie müssen es frei lassen."
 #: ../src/business/business-gnome/dialog-employee.c:313
 #: ../src/business/business-gnome/dialog-job.c:238
 #: ../src/business/business-gnome/dialog-vendor.c:299
-#: ../src/gnome-utils/dialog-account.c:1454
+#: ../src/gnome-utils/dialog-account.c:1456
 msgid "<No name>"
 msgstr "<Kein Name>"
 
@@ -1692,7 +1693,7 @@ msgstr "Gesamt Belastung:"
 
 #. Set the type label
 #: ../src/business/business-gnome/dialog-invoice.c:1706
-#: ../src/business/business-gnome/dialog-payment.c:1024
+#: ../src/business/business-gnome/dialog-payment.c:1027
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:22
 #: ../src/engine/gncInvoice.c:977
 #: ../src/report/business-reports/easy-invoice.scm:717
@@ -1978,7 +1979,7 @@ msgstr "Geöffnet"
 #: ../src/report/standard-reports/transaction.scm:384
 #: ../src/report/standard-reports/transaction.scm:385
 #: ../src/report/standard-reports/transaction.scm:442
-#: ../src/report/standard-reports/transaction.scm:946
+#: ../src/report/standard-reports/transaction.scm:951
 msgid "Num"
 msgstr "Nr"
 
@@ -2013,10 +2014,10 @@ msgstr "Gutschrift?"
 #: ../src/gnome/dialog-lot-viewer.c:931 ../src/gnome/reconcile-view.c:373
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2992
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3004
-#: ../src/import-export/aqb/dialog-ab.glade.h:34
-#: ../src/import-export/import-main-matcher.c:464
-#: ../src/import-export/import-match-picker.c:345
-#: ../src/import-export/import-match-picker.c:385
+#: ../src/import-export/aqb/dialog-ab.glade.h:35
+#: ../src/import-export/import-main-matcher.c:467
+#: ../src/import-export/import-match-picker.c:394
+#: ../src/import-export/import-match-picker.c:434
 #: ../src/import-export/qif-imp/assistant-qif-import.c:3508
 #: ../src/import-export/qif-imp/assistant-qif-import.c:3545
 #: ../src/report/business-reports/customer-summary.scm:71
@@ -2030,9 +2031,9 @@ msgstr "Gutschrift?"
 #: ../src/report/standard-reports/register.scm:851
 #: ../src/report/standard-reports/transaction.scm:398
 #: ../src/report/standard-reports/transaction.scm:458
-#: ../src/report/standard-reports/transaction.scm:758
-#: ../src/report/standard-reports/transaction.scm:813
-#: ../src/report/standard-reports/transaction.scm:983
+#: ../src/report/standard-reports/transaction.scm:763
+#: ../src/report/standard-reports/transaction.scm:818
+#: ../src/report/standard-reports/transaction.scm:988
 msgid "Amount"
 msgstr "Betrag"
 
@@ -2179,7 +2180,7 @@ msgstr "Sie müssen ein Herkunftskonto aus der Kontenhierarchie wählen."
 msgid "Pre-Payment"
 msgstr "Vorauszahlung"
 
-#: ../src/business/business-gnome/dialog-payment.c:728
+#: ../src/business/business-gnome/dialog-payment.c:731
 msgid ""
 "The transfer and post accounts are associated with different currencies. "
 "Please specify the conversion rate."
@@ -2187,7 +2188,7 @@ msgstr ""
 "Das Herkunfts- oder Buchungskonto hat eine andere Währung. Bitte geben Sie "
 "den Umrechnungskurs an."
 
-#: ../src/business/business-gnome/dialog-payment.c:1122
+#: ../src/business/business-gnome/dialog-payment.c:1125
 #, c-format
 msgid ""
 "You have no valid \"Post To\" accounts. Please create an account of type \"%s"
@@ -3108,7 +3109,7 @@ msgstr "Elegante Rechnung"
 
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:5
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:3
-#: ../src/import-export/dialog-import.glade.h:1
+#: ../src/import-export/dialog-import.glade.h:6
 #: ../src/import-export/qif-imp/dialog-account-picker.glade.h:1
 msgid "Preferences"
 msgstr "Einstellungen"
@@ -3368,9 +3369,9 @@ msgstr "Auswahl des Besitzers"
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2912
 #: ../src/import-export/csv-exp/csv-transactions-export.c:419
 #: ../src/import-export/csv-imp/gnc-csv-model.c:73
-#: ../src/import-export/import-main-matcher.c:465
-#: ../src/import-export/import-match-picker.c:346
-#: ../src/import-export/import-match-picker.c:386
+#: ../src/import-export/import-main-matcher.c:468
+#: ../src/import-export/import-match-picker.c:395
+#: ../src/import-export/import-match-picker.c:435
 #: ../src/import-export/qif-imp/assistant-qif-import.c:3499
 #: ../src/import-export/qif-imp/assistant-qif-import.c:3536
 #: ../src/register/ledger-core/split-register-model.c:286
@@ -3393,9 +3394,9 @@ msgstr "Auswahl des Besitzers"
 #: ../src/report/standard-reports/sx-summary.scm:447
 #: ../src/report/standard-reports/transaction.scm:388
 #: ../src/report/standard-reports/transaction.scm:444
-#: ../src/report/standard-reports/transaction.scm:762
-#: ../src/report/standard-reports/transaction.scm:817
-#: ../src/report/standard-reports/transaction.scm:947
+#: ../src/report/standard-reports/transaction.scm:767
+#: ../src/report/standard-reports/transaction.scm:822
+#: ../src/report/standard-reports/transaction.scm:952
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -3486,8 +3487,8 @@ msgstr "Rechnungsadresse"
 #: ../src/report/standard-reports/sx-summary.scm:488
 #: ../src/report/standard-reports/transaction.scm:420
 #: ../src/report/standard-reports/transaction.scm:447
-#: ../src/report/standard-reports/transaction.scm:948
-#: ../src/report/standard-reports/transaction.scm:978
+#: ../src/report/standard-reports/transaction.scm:953
+#: ../src/report/standard-reports/transaction.scm:983
 msgid "Notes"
 msgstr "Bemerkung"
 
@@ -3540,6 +3541,7 @@ msgid "Override the global Tax Table?"
 msgstr "Globale Steuertabelle ignorieren?"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-customer.glade.h:22
+#: ../src/business/business-gnome/gtkbuilder/dialog-employee.glade.h:19
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:13
 #: ../src/business/business-gnome/gtkbuilder/dialog-order.glade.h:8
 msgid "Billing Information"
@@ -3595,14 +3597,9 @@ msgid "Default Rate: "
 msgstr "Voreinstellung Stundenlohn: "
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-employee.glade.h:18
-#: ../src/gnome-utils/dialog-transfer.c:1960
+#: ../src/gnome-utils/dialog-transfer.c:1962
 msgid "Credit Account"
 msgstr "Habenkonto"
-
-#: ../src/business/business-gnome/gtkbuilder/dialog-employee.glade.h:19
-#: ../src/report/business-reports/receivables.scm:71
-msgid "Billing"
-msgstr "Rechnung"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-employee.glade.h:20
 #: ../src/business/business-gnome/search-owner.c:240
@@ -3780,9 +3777,9 @@ msgstr "Buchen nach (Soll)"
 #: ../src/gnome-utils/gnc-tree-view-price.c:436
 #: ../src/import-export/csv-exp/csv-transactions-export.c:417
 #: ../src/import-export/csv-imp/gnc-csv-model.c:71
-#: ../src/import-export/import-main-matcher.c:461
-#: ../src/import-export/import-match-picker.c:344
-#: ../src/import-export/import-match-picker.c:384
+#: ../src/import-export/import-main-matcher.c:464
+#: ../src/import-export/import-match-picker.c:393
+#: ../src/import-export/import-match-picker.c:433
 #: ../src/import-export/qif-imp/assistant-qif-import.c:3491
 #: ../src/import-export/qif-imp/assistant-qif-import.c:3528
 #: ../src/register/ledger-core/split-register-model.c:224
@@ -3812,9 +3809,9 @@ msgstr "Buchen nach (Soll)"
 #: ../src/report/standard-reports/register.scm:812
 #: ../src/report/standard-reports/transaction.scm:380
 #: ../src/report/standard-reports/transaction.scm:427
-#: ../src/report/standard-reports/transaction.scm:734
-#: ../src/report/standard-reports/transaction.scm:789
-#: ../src/report/standard-reports/transaction.scm:942
+#: ../src/report/standard-reports/transaction.scm:739
+#: ../src/report/standard-reports/transaction.scm:794
+#: ../src/report/standard-reports/transaction.scm:947
 msgid "Date"
 msgstr "Datum"
 
@@ -3831,7 +3828,7 @@ msgstr "Datum"
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2865
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:6
 #: ../src/import-export/csv-exp/csv-transactions-export.c:418
-#: ../src/report/standard-reports/transaction.scm:821
+#: ../src/report/standard-reports/transaction.scm:826
 msgid "Number"
 msgstr "Nummer"
 
@@ -3878,9 +3875,9 @@ msgstr "Erstattung"
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2898
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2916
 #: ../src/import-export/csv-exp/csv-transactions-export.c:420
-#: ../src/import-export/import-main-matcher.c:466
-#: ../src/import-export/import-match-picker.c:347
-#: ../src/import-export/import-match-picker.c:387
+#: ../src/import-export/import-main-matcher.c:469
+#: ../src/import-export/import-match-picker.c:396
+#: ../src/import-export/import-match-picker.c:436
 #: ../src/register/ledger-core/split-register-model.c:346
 #: ../src/report/standard-reports/general-ledger.scm:81
 #: ../src/report/standard-reports/general-ledger.scm:101
@@ -3889,9 +3886,9 @@ msgstr "Erstattung"
 #: ../src/report/standard-reports/transaction.scm:408
 #: ../src/report/standard-reports/transaction.scm:447
 #: ../src/report/standard-reports/transaction.scm:448
-#: ../src/report/standard-reports/transaction.scm:774
-#: ../src/report/standard-reports/transaction.scm:825
-#: ../src/report/standard-reports/transaction.scm:972
+#: ../src/report/standard-reports/transaction.scm:779
+#: ../src/report/standard-reports/transaction.scm:830
+#: ../src/report/standard-reports/transaction.scm:977
 msgid "Memo"
 msgstr "Buchungstext"
 
@@ -3962,14 +3959,14 @@ msgstr "ist nicht"
 
 #: ../src/business/business-ledger/gncEntryLedger.c:85
 #: ../src/gnome-utils/dialog-transfer.c:1455
-#: ../src/gnome-utils/gnc-tree-control-split-reg.c:1959
+#: ../src/gnome-utils/gnc-tree-control-split-reg.c:1961
 #: ../src/register/ledger-core/split-register.c:1830
 #, c-format
 msgid "The account %s does not allow transactions."
 msgstr "Das Konto %s kann keine Buchungen enthalten."
 
 #: ../src/business/business-ledger/gncEntryLedger.c:86
-#: ../src/gnome-utils/gnc-tree-control-split-reg.c:1960
+#: ../src/gnome-utils/gnc-tree-control-split-reg.c:1962
 #: ../src/register/ledger-core/split-register.c:1831
 #, c-format
 msgid "The account %s does not exist. Would you like to create it?"
@@ -4480,7 +4477,7 @@ msgstr ""
 "Folgende Kontennamen sind betroffen:\n"
 "%s"
 
-#: ../src/engine/Account.c:3999 ../src/import-export/aqb/gnc-ab-utils.c:460
+#: ../src/engine/Account.c:3999 ../src/import-export/aqb/gnc-ab-utils.c:471
 #: ../src/report/report-system/report-utilities.scm:109
 msgid "Bank"
 msgstr "Bank"
@@ -4505,7 +4502,7 @@ msgstr "Aktienkonto"
 msgid "Mutual Fund"
 msgstr "Investmentfonds"
 
-#: ../src/engine/Account.c:4006 ../src/gnome-utils/dialog-commodity.c:829
+#: ../src/engine/Account.c:4006 ../src/gnome-utils/dialog-commodity.c:769
 #: ../src/gnome-utils/gnc-tree-view-owner.c:440
 #: ../src/gnome-utils/gnc-tree-view-price.c:430
 msgid "Currency"
@@ -4546,12 +4543,7 @@ msgstr ""
 "Realisierter Gewinn/Verlust von Aktienkonten, die nicht woanders gespeichert "
 "worden sind."
 
-#. Translators: Namespaces of commodities
-#: ../src/engine/commodity-table.scm:29
-msgid "CURRENCY"
-msgstr "WÄHRUNG"
-
-#: ../src/engine/commodity-table.scm:38
+#: ../src/engine/commodity-table.scm:36
 msgid "ALL NON-CURRENCY"
 msgstr "ALLE NICHT-WÄHRUNGEN"
 
@@ -4597,12 +4589,12 @@ msgid " + "
 msgstr " + "
 
 #: ../src/engine/Recurrence.c:598
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:33
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:32
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:41
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:20
 #: ../src/report/standard-reports/account-piecharts.scm:125
 #: ../src/report/standard-reports/category-barchart.scm:132
-#: ../src/report/standard-reports/transaction.scm:840
+#: ../src/report/standard-reports/transaction.scm:845
 msgid "Weekly"
 msgstr "Wöchentlich"
 
@@ -4651,7 +4643,7 @@ msgid "%s %s"
 msgstr "%s %s"
 
 #: ../src/engine/Recurrence.c:687
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:31
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:30
 msgid "Semi-monthly"
 msgstr "Halbmonatlich"
 
@@ -4675,18 +4667,18 @@ msgstr "Täglich"
 #. g_warning("nth weekday not handled");
 #. g_string_printf(buf, "@fixme: nth weekday not handled");
 #: ../src/engine/Recurrence.c:736 ../src/engine/Recurrence.c:750
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:30
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:29
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:43
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:30
 #: ../src/report/standard-reports/account-piecharts.scm:122
 #: ../src/report/standard-reports/category-barchart.scm:129
-#: ../src/report/standard-reports/transaction.scm:841
+#: ../src/report/standard-reports/transaction.scm:846
 msgid "Monthly"
 msgstr "Monatlich"
 
 #: ../src/engine/Recurrence.c:762 ../src/gnome/gtkbuilder/dialog-sx.glade.h:45
 #: ../src/report/standard-reports/account-piecharts.scm:119
-#: ../src/report/standard-reports/transaction.scm:843
+#: ../src/report/standard-reports/transaction.scm:848
 msgid "Yearly"
 msgstr "Jährlich"
 
@@ -4973,14 +4965,14 @@ msgstr "Fehler beim Hinzufügen des Preises."
 
 #. define all option's names so that they are properly defined
 #. in *one* place.
-#: ../src/gnome/assistant-stock-split.c:570
+#: ../src/gnome/assistant-stock-split.c:569
 #: ../src/gnome/dialog-find-transactions2.c:108
 #: ../src/gnome/dialog-find-transactions.c:107
 #: ../src/gnome-utils/gnc-icons.c:38
-#: ../src/import-export/aqb/gnc-ab-utils.c:458
+#: ../src/import-export/aqb/gnc-ab-utils.c:469
 #: ../src/import-export/csv-imp/gnc-csv-model.c:75
-#: ../src/import-export/import-main-matcher.c:462
-#: ../src/import-export/import-match-picker.c:343
+#: ../src/import-export/import-main-matcher.c:465
+#: ../src/import-export/import-match-picker.c:392
 #: ../src/import-export/qif-imp/dialog-account-picker.c:369
 #: ../src/register/ledger-core/split-register-model.c:332
 #: ../src/report/business-reports/job-report.scm:39
@@ -4997,14 +4989,14 @@ msgstr "Fehler beim Hinzufügen des Preises."
 msgid "Account"
 msgstr "Konto"
 
-#: ../src/gnome/assistant-stock-split.c:576
+#: ../src/gnome/assistant-stock-split.c:575
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:390
 #: ../src/report/standard-reports/advanced-portfolio.scm:1054
 #: ../src/report/standard-reports/portfolio.scm:244
 msgid "Symbol"
 msgstr "Symbol"
 
-#: ../src/gnome/assistant-stock-split.c:582
+#: ../src/gnome/assistant-stock-split.c:581
 #: ../src/gnome/dialog-find-transactions2.c:121
 #: ../src/gnome/dialog-find-transactions.c:120
 #: ../src/register/ledger-core/split-register-model.c:403
@@ -5016,11 +5008,11 @@ msgstr "Symbol"
 #: ../src/report/standard-reports/register.scm:440
 #: ../src/report/standard-reports/transaction.scm:394
 #: ../src/report/standard-reports/transaction.scm:454
-#: ../src/report/standard-reports/transaction.scm:956
+#: ../src/report/standard-reports/transaction.scm:961
 msgid "Shares"
 msgstr "Anteile"
 
-#: ../src/gnome/assistant-stock-split.c:773
+#: ../src/gnome/assistant-stock-split.c:772
 msgid "You don't have any stock accounts with balances!"
 msgstr "Sie haben keine Aktienkonten mit mehr als Null Aktien."
 
@@ -5084,7 +5076,7 @@ msgstr "Alle Konten"
 
 #: ../src/gnome/dialog-find-transactions2.c:111
 #: ../src/gnome/dialog-find-transactions.c:110
-#: ../src/import-export/import-match-picker.c:348
+#: ../src/import-export/import-match-picker.c:397
 msgid "Balanced"
 msgstr "Ausgeglichene Buchungen"
 
@@ -5135,7 +5127,7 @@ msgstr "Wert"
 #: ../src/gnome-search/dialog-search.c:893
 #: ../src/gnome-search/dialog-search.c:899
 #: ../src/import-export/csv-exp/csv-transactions-export.c:422
-#: ../src/report/standard-reports/transaction.scm:766
+#: ../src/report/standard-reports/transaction.scm:771
 msgid "Number/Action"
 msgstr "Nummer/Aktion"
 
@@ -5150,7 +5142,7 @@ msgstr "Nummer/Aktion"
 #: ../src/gnome-search/dialog-search.c:895
 #: ../src/gnome-search/dialog-search.c:901
 #: ../src/import-export/csv-exp/csv-transactions-export.c:418
-#: ../src/report/standard-reports/transaction.scm:770
+#: ../src/report/standard-reports/transaction.scm:775
 msgid "Transaction Number"
 msgstr "Buchungsnummer"
 
@@ -5168,8 +5160,8 @@ msgstr "Buchungen suchen"
 
 #: ../src/gnome/dialog-lot-viewer.c:797
 #: ../src/gnome/gnc-plugin-page-account-tree.c:340
-#: ../src/gnome/gnc-plugin-page-budget.c:176 ../src/gnome-utils/gnc-file.c:100
-#: ../src/gnome-utils/gnc-file.c:1042 ../src/gnome/window-reconcile2.c:1701
+#: ../src/gnome/gnc-plugin-page-budget.c:176 ../src/gnome-utils/gnc-file.c:101
+#: ../src/gnome-utils/gnc-file.c:1060 ../src/gnome/window-reconcile2.c:1701
 #: ../src/gnome/window-reconcile.c:1741
 msgid "Open"
 msgstr "Öffnen"
@@ -5237,7 +5229,7 @@ msgid "You must select a Currency."
 msgstr "Sie müssen eine Währung auswählen."
 
 #: ../src/gnome/dialog-price-editor.c:229
-#: ../src/gnome-utils/dialog-transfer.c:1712
+#: ../src/gnome-utils/dialog-transfer.c:1713
 msgid "You must enter a valid amount."
 msgstr "Sie müssen einen gültigen Betrag eingeben."
 
@@ -5289,7 +5281,7 @@ msgstr "Benutzerdefiniert"
 
 #: ../src/gnome/dialog-print-check.c:2587
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:37
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:198
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:196
 msgid "Top"
 msgstr "Oben"
 
@@ -5442,8 +5434,7 @@ msgstr ""
 #: ../src/gnome/dialog-sx-editor.c:674
 #, c-format
 msgid "Couldn't parse %s for split \"%s\"."
-msgstr ""
-"%s konnte nicht verarbeitet werden im Buchungsteil »%s«. "
+msgstr "%s konnte nicht verarbeitet werden im Buchungsteil »%s«. "
 
 #: ../src/gnome/dialog-sx-editor.c:740
 #, c-format
@@ -5457,7 +5448,9 @@ msgstr "Ungültiges Konto in Buchungsteil"
 #: ../src/gnome/dialog-sx-editor.c:755
 #, c-format
 msgid "Split with memo %s has an unparseable Credit Formula."
-msgstr "Der Buchungsteil mit Buchungstext %s hat eine für das Programm unverständliche Haben-Formel"
+msgstr ""
+"Der Buchungsteil mit Buchungstext %s hat eine für das Programm "
+"unverständliche Haben-Formel"
 
 #: ../src/gnome/dialog-sx-editor.c:758 ../src/gnome/dialog-sx-editor.c:774
 msgid "Unparsable Formula in Split"
@@ -5466,7 +5459,9 @@ msgstr "Unverständliche Formel in Buchungsteil"
 #: ../src/gnome/dialog-sx-editor.c:771
 #, c-format
 msgid "Split with memo %s has an unparseable Debit Formula."
-msgstr "Der Buchungsteil mit Buchungstext %s hat eine für das Programm unverständliche Soll-Formel"
+msgstr ""
+"Der Buchungsteil mit Buchungstext %s hat eine für das Programm "
+"unverständliche Soll-Formel"
 
 #: ../src/gnome/dialog-sx-from-trans.c:558
 msgid ""
@@ -5792,7 +5787,7 @@ msgid "View the Tips of the Day"
 msgstr "»Tipp des Tages« anzeigen"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:505
-#: ../src/gnome-utils/gnc-file.c:1579
+#: ../src/gnome-utils/gnc-file.c:1597
 #, c-format
 msgid ""
 "Reverting will discard all unsaved changes to %s. Are you sure you want to "
@@ -6589,7 +6584,7 @@ msgstr "Vollständig"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:482
 #: ../src/gnome/gnc-plugin-page-register.c:487
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:24
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:23
 msgid "Schedule"
 msgstr "Terminiert"
 
@@ -6917,8 +6912,8 @@ msgstr "_Journal (klassisch)"
 #: ../src/gnome/gnc-plugin-register.c:55
 msgid "Open an old style general ledger window"
 msgstr ""
-"Klassisches Journal-Fenster öffnen (Alle Buchungssätze aller Konten in einem einzigen "
-"Journal)"
+"Klassisches Journal-Fenster öffnen (Alle Buchungssätze aller Konten in einem "
+"einzigen Journal)"
 
 #: ../src/gnome/gnc-plugin-register.c:59
 msgid "Open general ledger window"
@@ -7108,8 +7103,8 @@ msgid ""
 "This value specifies the predefined check format to use. The number is the "
 "guid of a known check format."
 msgstr ""
-"Dieser Wert bestimmt das zu verwendende vordefinierte Scheckformat. Die Zahl ist der "
-"global eindeutige Schlüssel (GUID) eines bekannten Scheckformats."
+"Dieser Wert bestimmt das zu verwendende vordefinierte Scheckformat. Die Zahl "
+"ist der global eindeutige Schlüssel (GUID) eines bekannten Scheckformats."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:3
 msgid "Which check position to print"
@@ -7148,10 +7143,10 @@ msgid ""
 "any valid strftime string; for more information about this format, read the "
 "manual page of strftime by \"man 3 strftime\"."
 msgstr ""
-"Wenn das Datumsformat auf Benutzerdefiniert gesetzt ist, kann in dieser Ausdruck"
-"als Argument an das strftime-Format übergegeben werden. Es kann eine beliebige "
-"gültige strftime Zeichenkette sein. Für mehr Informationen "
-"lesen Sie die Ausgabe von »man 3 strftime«."
+"Wenn das Datumsformat auf Benutzerdefiniert gesetzt ist, kann in dieser "
+"Ausdruckals Argument an das strftime-Format übergegeben werden. Es kann eine "
+"beliebige gültige strftime Zeichenkette sein. Für mehr Informationen lesen "
+"Sie die Ausgabe von »man 3 strftime«."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:10
 msgid "Units in which the custom coordinates are expressed"
@@ -7282,8 +7277,9 @@ msgid ""
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
 msgstr ""
-"Dieser Wert enthält die X/Y-Koordinaten für den Zeilenanfang des Betrags in Worten "
-"auf dem Scheck. Die Koordinaten werden von der linken unteren Ecke aus gemessen."
+"Dieser Wert enthält die X/Y-Koordinaten für den Zeilenanfang des Betrags in "
+"Worten auf dem Scheck. Die Koordinaten werden von der linken unteren Ecke "
+"aus gemessen."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:32
 msgid "Position of split's memo line"
@@ -7295,8 +7291,9 @@ msgid ""
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
 msgstr ""
-"Dieser Wert enthält die X/Y-Koordinaten für den Verwendungszweck-Zeilenanfang "
-"auf dem Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
+"Dieser Wert enthält die X/Y-Koordinaten für den Verwendungszweck-"
+"Zeilenanfang auf dem Scheck. Koordinaten werden von der linken unteren Ecke "
+"aus gemessen."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:34
 msgid "Position of split's account line"
@@ -7308,8 +7305,9 @@ msgid ""
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
 msgstr ""
-"Dieser Wert enthält die X/Y-Koordinaten für den Zeileanfang der Kontobezeichnung "
-"auf dem Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
+"Dieser Wert enthält die X/Y-Koordinaten für den Zeileanfang der "
+"Kontobezeichnung auf dem Scheck. Koordinaten werden von der linken unteren "
+"Ecke aus gemessen."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:36
 msgid "Print the date format below the date."
@@ -7356,7 +7354,7 @@ msgstr ""
 "Andernfalls werden nur die »aktiven« Einträge durchsucht."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.gschema.xml.in.in.h:6
-#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:17
+#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:19
 #: ../src/import-export/csv-exp/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in.in.h:3
 #: ../src/import-export/csv-imp/gschemas/org.gnucash.dialogs.import.csv.gschema.xml.in.in.h:3
 #: ../src/import-export/ofx/gschemas/org.gnucash.dialogs.import.ofx.gschema.xml.in.in.h:1
@@ -7365,7 +7363,7 @@ msgid "Last pathname used"
 msgstr "Zuletzt verwendeter Pfadname"
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.gschema.xml.in.in.h:7
-#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:18
+#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:20
 #: ../src/import-export/csv-exp/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in.in.h:4
 #: ../src/import-export/csv-imp/gschemas/org.gnucash.dialogs.import.csv.gschema.xml.in.in.h:4
 #: ../src/import-export/ofx/gschemas/org.gnucash.dialogs.import.ofx.gschema.xml.in.in.h:2
@@ -7468,8 +7466,7 @@ msgstr ""
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in.in.h:3
 msgid "Run \"since last run\" dialog when a file is opened."
-msgstr ""
-"»Seit letztem Aufruf« starten, wenn eine Datei geöffnet wird."
+msgstr "»Seit letztem Aufruf« starten, wenn eine Datei geöffnet wird."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in.in.h:4
 msgid ""
@@ -7479,8 +7476,8 @@ msgid ""
 "active, run the \"since last run\" process, otherwise it is not run."
 msgstr ""
 "Diese Einstellung bestimmt, ob die Aktion »Terminierte Buchungen -> Seit "
-"letztem Aufruf...« beim Öffnen einer Datei automatisch ausgeführt wird. "
-"Nur wenn die Einstellung aktiviert ist, wird der Prozeß gestartet."
+"letztem Aufruf...« beim Öffnen einer Datei automatisch ausgeführt wird. Nur "
+"wenn die Einstellung aktiviert ist, wird der Prozeß gestartet."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in.in.h:5
 msgid "Show \"since last run\" notification dialog when a file is opened."
@@ -7496,9 +7493,9 @@ msgid ""
 "show the dialog, otherwise it is not shown."
 msgstr ""
 "Diese Einstellung bestimmt, ob nur der Benachrichtigungsdialog »Seit letztem "
-"Aufruf...« der terminierten Buchungen beim Öffnen einer Datei angezeigt wird, "
-"wenn die »Seit letztem Aufruf«-Verarbeitung aktiviert ist. "
-"Nur wenn diese Einstellung aktiviert ist,  wird der Dialog angezeigt."
+"Aufruf...« der terminierten Buchungen beim Öffnen einer Datei angezeigt "
+"wird, wenn die »Seit letztem Aufruf«-Verarbeitung aktiviert ist. Nur wenn "
+"diese Einstellung aktiviert ist,  wird der Dialog angezeigt."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in.in.h:7
 msgid "Set the \"auto create\" flag by default"
@@ -7956,7 +7953,7 @@ msgstr ""
 "Andernfalls wird er nicht angezeigt."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:58
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:190
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:188
 msgid "Display the notebook tabs at the top of the window."
 msgstr "Die Karteireiter der Tabs am oberen Rand des Fensters anzeigen."
 
@@ -7971,22 +7968,22 @@ msgstr ""
 "»right«. Voreingestellt ist »top«."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:60
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:192
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:190
 msgid "Display the notebook tabs at the bottom of the window."
 msgstr "Die Karteireiter der Tabs am unteren Rand des Fensters anzeigen."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:61
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:194
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:192
 msgid "Display the notebook tabs at the left of the window."
 msgstr "Die Karteireiter der Tabs am linken Rand des Fensters anzeigen."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:62
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:196
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:194
 msgid "Display the notebook tabs at the right of the window."
 msgstr "Die Karteireiter der Tabs am rechten Rand des Fensters anzeigen."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:63
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:199
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:197
 msgid "Display the summary bar at the top of the page."
 msgstr "Die Zusammenfassungsleiste am oberen Rand der Seite anzeigen."
 
@@ -8001,12 +7998,12 @@ msgstr ""
 "»bottom« (unten). Voreingestellt ist »bottom«."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:65
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:201
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:199
 msgid "Display the summary bar at the bottom of the page."
 msgstr "Die Zusammenfassungsleiste am unteren Rand der Seite anzeigen."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:66
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:187
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:185
 msgid "Closing a tab moves to the most recently visited tab."
 msgstr "Tab schließen wechselt zum zuletzt benutzten Tab."
 
@@ -8184,8 +8181,8 @@ msgid ""
 msgstr ""
 "Zwei Zeilen für jede Buchung im Kontofenster anzeigen. Dies ist die "
 "Voreinstellung, wenn ein Kontofenster das erste Mal geöffnet wird. Für jedes "
-"Kontofenster kann diese Einstellung jederzeit über das Menü »Anzeige-&gt;Zwei "
-"Zeilen« geändert werden."
+"Kontofenster kann diese Einstellung jederzeit über das Menü »Anzeige-&gt;"
+"Zwei Zeilen« geändert werden."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:91
 msgid "Only display leaf account names."
@@ -8223,8 +8220,7 @@ msgstr "Zeigt eingegebenen und abgeglichenen Daten in der Selektion"
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:96
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:170
 msgid "Show the entered date and reconciled date on transaction selection."
-msgstr ""
-"Zeigt eingegebenen und abgeglichenen Daten in der Buchungsauswahl."
+msgstr "Zeigt eingegebenen und abgeglichenen Daten in der Buchungsauswahl."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:97
 msgid "Show the calendar buttons"
@@ -8315,15 +8311,6 @@ msgstr "Standardwährung, die bei neuen Berichten verwendet wird"
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:111
 msgid "Zoom factor to use by default for reports."
 msgstr "Vorgabe der Vergrößerung in Berichten."
-
-#: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:112
-msgid ""
-"On high-resolution displays the reports will be unreadable by default. "
-"Setting a zoom factor to a number bigger than 1.0 can help improve this "
-"situation."
-msgstr "Auf hochauflösenden Monitoren können Berichte in der "
-"Standardeinstellung schwer lesbar sein. Das Setzen eines "
-"Vergrößerungsfaktors größer 1 kann dann eine ABhilfe sein."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:113
 msgid "PDF export file name format"
@@ -8770,7 +8757,7 @@ msgid ""
 msgstr ""
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:16
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:17
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:16
 #: ../src/gnome/gtkbuilder/dialog-tax-info.glade.h:4
 msgid "Type:"
 msgstr "Typ:"
@@ -9168,106 +9155,102 @@ msgid "Interest rate"
 msgstr "Zinssatz"
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:6
-msgid "Clear the entry"
-msgstr "Löschen des Eintrages"
-
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:7
 msgid "Present value"
 msgstr "Aktueller Wert"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:8
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:7
 msgid "Periodic payment"
 msgstr "Periodische Zahlung"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:9
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:8
 msgid "Future value"
 msgstr "Zukünftiger Wert"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:10
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:9
 msgid "Recalculate the (single) blank entry in the above fields."
 msgstr "Den einen leeren Eintrag in den Feldern ausrechnen."
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:11
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:10
 msgid "Calculate"
 msgstr "Berechnen"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:12
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:11
 msgid "<b>Payment Options</b>"
 msgstr "<b>Zahlungsraten Optionen</b>"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:13
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:12
 msgid "Payment Total:"
 msgstr "Zahlungsbetrag:"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:14
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:13
 msgid "total"
 msgstr "Betrag"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:15
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:14
 msgid "Discrete"
 msgstr "Schrittweise"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:16
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:15
 msgid "Continuous"
 msgstr "Kontinuierlich"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:18
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:17
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:51
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:1
 msgid "Frequency:"
 msgstr "Häufigkeit:"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:19
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:18
 msgid "When paid:"
 msgstr "Zahlungszeitpunkt:"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:20
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:19
 msgid "Beginning"
 msgstr "Anfang"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:21
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:20
 msgid "End"
 msgstr "Ende"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:22
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:21
 msgid "<b>Compounding:</b>"
 msgstr "<b>Zinsen:</b>"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:23
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:22
 msgid "<b>Period:</b>"
 msgstr "<b>Zeitintervall:</b>"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:25
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:24
 msgid "Annual"
 msgstr "Jährlich"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:26
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:25
 msgid "Semi-annual"
 msgstr "Halbjährlich"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:27
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:26
 msgid "Tri-annual"
 msgstr "Alle 4 Monate"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:28
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:27
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:44
-#: ../src/report/standard-reports/transaction.scm:842
+#: ../src/report/standard-reports/transaction.scm:847
 msgid "Quarterly"
 msgstr "Vierteljährlich"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:29
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:28
 msgid "Bi-monthly"
 msgstr "Alle 2 Monate"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:32
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:31
 msgid "Bi-weekly"
 msgstr "Alle 2 Wochen"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:34
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:33
 msgid "Daily (360)"
 msgstr "Täglich (360)"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:35
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:34
 msgid "Daily (365)"
 msgstr "Täglich (365)"
 
@@ -9639,7 +9622,7 @@ msgid "Middle"
 msgstr "Mitte"
 
 #: ../src/gnome/gtkbuilder/dialog-print-check.glade.h:39
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:200
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:198
 msgid "Bottom"
 msgstr "Unten"
 
@@ -10151,8 +10134,8 @@ msgid "Keep normal account order."
 msgstr "Beibehalten der normalen Kontenreihenfolge"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:30
-#: ../src/report/standard-reports/transaction.scm:735
-#: ../src/report/standard-reports/transaction.scm:790
+#: ../src/report/standard-reports/transaction.scm:740
+#: ../src/report/standard-reports/transaction.scm:795
 msgid "Sort by date."
 msgstr "Nach Datum sortieren"
 
@@ -10184,8 +10167,8 @@ msgid "Amo_unt"
 msgstr "_Betrag"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:38
-#: ../src/report/standard-reports/transaction.scm:759
-#: ../src/report/standard-reports/transaction.scm:814
+#: ../src/report/standard-reports/transaction.scm:764
+#: ../src/report/standard-reports/transaction.scm:819
 msgid "Sort by amount."
 msgstr "Sortieren nach Summe"
 
@@ -10194,14 +10177,14 @@ msgid "_Memo"
 msgstr "Buchungstext"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:40
-#: ../src/report/standard-reports/transaction.scm:775
-#: ../src/report/standard-reports/transaction.scm:826
+#: ../src/report/standard-reports/transaction.scm:780
+#: ../src/report/standard-reports/transaction.scm:831
 msgid "Sort by memo."
 msgstr "Sortiere nach Buchungstext"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:42
-#: ../src/report/standard-reports/transaction.scm:763
-#: ../src/report/standard-reports/transaction.scm:818
+#: ../src/report/standard-reports/transaction.scm:768
+#: ../src/report/standard-reports/transaction.scm:823
 msgid "Sort by description."
 msgstr "Sortieren nach Beschreibung"
 
@@ -10513,6 +10496,7 @@ msgstr "Bestätigt"
 
 #: ../src/gnome-search/search-reconciled.c:232
 #: ../src/gnome-utils/gnc-tree-view-account.c:803
+#: ../src/import-export/import-match-picker.c:437
 msgid "Reconciled"
 msgstr "Abgeglichen"
 
@@ -10767,7 +10751,7 @@ msgid "There was an error parsing the file."
 msgstr "Beim Verarbeiten der Datei ist ein Fehler aufgetreten."
 
 #: ../src/gnome-utils/assistant-xml-encoding.c:1128
-#: ../src/gnome-utils/gnc-file.c:1301 ../src/gnome-utils/gnc-file.c:1535
+#: ../src/gnome-utils/gnc-file.c:1319 ../src/gnome-utils/gnc-file.c:1553
 msgid "Writing file..."
 msgstr "Datei wird geschrieben..."
 
@@ -10845,7 +10829,7 @@ msgstr ""
 "Sie müssen ein Herkunftskonto wählen oder das Ausgleichskonto für den "
 "Anfangsbestand benutzen."
 
-#: ../src/gnome-utils/dialog-account.c:1311
+#: ../src/gnome-utils/dialog-account.c:1312
 msgid ""
 "This Account contains Transactions.\n"
 "Changing this option is not possible."
@@ -10853,21 +10837,21 @@ msgstr ""
 "Dieses Konto enthält Buchungen. Daher kann diese Option nicht geändert "
 "werden."
 
-#: ../src/gnome-utils/dialog-account.c:1488
+#: ../src/gnome-utils/dialog-account.c:1490
 msgid "Edit Account"
 msgstr "Konto bearbeiten"
 
-#: ../src/gnome-utils/dialog-account.c:1491
+#: ../src/gnome-utils/dialog-account.c:1493
 #, c-format
 msgid "(%d) New Accounts"
 msgstr "(%d) Neue Konten"
 
-#: ../src/gnome-utils/dialog-account.c:1501
+#: ../src/gnome-utils/dialog-account.c:1503
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:9
 msgid "New Account"
 msgstr "Neues Konto"
 
-#: ../src/gnome-utils/dialog-account.c:2054
+#: ../src/gnome-utils/dialog-account.c:2056
 #, c-format
 msgid ""
 "Renumber the immediate sub-accounts of %s? This will replace the account "
@@ -10941,50 +10925,44 @@ msgstr "Bitte wählen Sie das Wertpapier"
 msgid "Select currency"
 msgstr "Bitte wählen Sie die Währung"
 
-#: ../src/gnome-utils/dialog-commodity.c:547
-msgid "You must select a commodity. To create a new one, click \"New\""
-msgstr ""
-"Sie müssen eine Devise/Wertpapier auswählen. Wenn Sie eine neue anlegen "
-"möchten, klicken Sie auf »Neu«."
-
-#: ../src/gnome-utils/dialog-commodity.c:924
+#: ../src/gnome-utils/dialog-commodity.c:864
 msgid "Use local time"
 msgstr "Lokale Zeit benutzen"
 
-#: ../src/gnome-utils/dialog-commodity.c:1053
+#: ../src/gnome-utils/dialog-commodity.c:993
 msgid "Edit currency"
 msgstr "Währung bearbeiten"
 
-#: ../src/gnome-utils/dialog-commodity.c:1054
+#: ../src/gnome-utils/dialog-commodity.c:994
 msgid "Currency Information"
 msgstr "Währungsinformationen"
 
-#: ../src/gnome-utils/dialog-commodity.c:1059
+#: ../src/gnome-utils/dialog-commodity.c:999
 msgid "Edit security"
 msgstr "Wertpapier bearbeiten"
 
-#: ../src/gnome-utils/dialog-commodity.c:1059
+#: ../src/gnome-utils/dialog-commodity.c:999
 msgid "New security"
 msgstr "Neues Wertpapier"
 
-#: ../src/gnome-utils/dialog-commodity.c:1060
+#: ../src/gnome-utils/dialog-commodity.c:1000
 msgid "Security Information"
 msgstr "Wertpapierinformationen"
 
-#: ../src/gnome-utils/dialog-commodity.c:1336
+#: ../src/gnome-utils/dialog-commodity.c:1276
 msgid "You may not create a new national currency."
 msgstr "Sie können keine neue nationale Währung erstellen."
 
-#: ../src/gnome-utils/dialog-commodity.c:1346
+#: ../src/gnome-utils/dialog-commodity.c:1286
 #, c-format
 msgid "%s is a reserved commodity type. Please use something else."
 msgstr ""
 
-#: ../src/gnome-utils/dialog-commodity.c:1361
+#: ../src/gnome-utils/dialog-commodity.c:1301
 msgid "That commodity already exists."
 msgstr "Diese Devise/Wertpapier existiert bereits."
 
-#: ../src/gnome-utils/dialog-commodity.c:1410
+#: ../src/gnome-utils/dialog-commodity.c:1350
 msgid ""
 "You must enter a non-empty \"Full name\", \"Symbol/abbreviation\", and \"Type"
 "\" for the commodity."
@@ -11007,7 +10985,7 @@ msgid "Save As..."
 msgstr "Speichern unter..."
 
 #: ../src/gnome-utils/dialog-file-access.c:311
-#: ../src/gnome-utils/gnc-file.c:119 ../src/gnome-utils/gnc-file.c:297
+#: ../src/gnome-utils/gnc-file.c:120 ../src/gnome-utils/gnc-file.c:298
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1165
 msgid "Export"
 msgstr "Exportieren"
@@ -11158,8 +11136,9 @@ msgstr "Fehler"
 msgid ""
 "Retrieve the current online quote. This will fail if there is a manually-"
 "created price for today."
-msgstr "Den Online-Kurs abrufen. Das klappt nicht, wenn für heute schon "
-"ein Kurs manuell erstellt wurde."
+msgstr ""
+"Den Online-Kurs abrufen. Das klappt nicht, wenn für heute schon ein Kurs "
+"manuell erstellt wurde."
 
 #: ../src/gnome-utils/dialog-transfer.c:1332
 msgid "Finance::Quote must be installed to enable this button."
@@ -11196,27 +11175,27 @@ msgstr "Sie müssen einen gültigen Preis angeben."
 msgid "You must enter a valid `to' amount."
 msgstr "Sie müssen einen gültigen Betrag eingeben."
 
-#: ../src/gnome-utils/dialog-transfer.c:1721
+#: ../src/gnome-utils/dialog-transfer.c:1722
 msgid "You must enter an amount to transfer."
 msgstr "Sie müssen einen Betrag angeben."
 
-#: ../src/gnome-utils/dialog-transfer.c:1964
+#: ../src/gnome-utils/dialog-transfer.c:1966
 msgid "Debit Account"
 msgstr "Sollkonto"
 
-#: ../src/gnome-utils/dialog-transfer.c:1982
+#: ../src/gnome-utils/dialog-transfer.c:1984
 msgid "Transfer From"
 msgstr "Herkunftskonto"
 
-#: ../src/gnome-utils/dialog-transfer.c:1986
+#: ../src/gnome-utils/dialog-transfer.c:1988
 msgid "Transfer To"
 msgstr "Buchen nach"
 
-#: ../src/gnome-utils/dialog-transfer.c:2043
+#: ../src/gnome-utils/dialog-transfer.c:2045
 msgid "Debit Amount:"
 msgstr "Soll Betrag:"
 
-#: ../src/gnome-utils/dialog-transfer.c:2048
+#: ../src/gnome-utils/dialog-transfer.c:2050
 #: ../src/gnome-utils/gtkbuilder/dialog-transfer.glade.h:14
 msgid "To Amount:"
 msgstr "Zum Betrag:"
@@ -11362,62 +11341,62 @@ msgstr "(unbenannt)"
 
 #. File menu
 #. Menu Items
-#: ../src/gnome-utils/gnc-file.c:104 ../src/gnome-utils/gnc-main-window.c:272
+#: ../src/gnome-utils/gnc-file.c:105 ../src/gnome-utils/gnc-main-window.c:272
 #: ../src/plugins/bi_import/gnc-plugin-bi-import.c:56
 msgid "_Import"
 msgstr "_Importieren"
 
-#: ../src/gnome-utils/gnc-file.c:106 ../src/gnome-utils/gnc-file.c:281
+#: ../src/gnome-utils/gnc-file.c:107 ../src/gnome-utils/gnc-file.c:282
 msgid "Import"
 msgstr "Import"
 
-#: ../src/gnome-utils/gnc-file.c:112 ../src/gnome-utils/gnc-file.c:1091
-#: ../src/gnome-utils/gnc-file.c:1351
+#: ../src/gnome-utils/gnc-file.c:113 ../src/gnome-utils/gnc-file.c:1109
+#: ../src/gnome-utils/gnc-file.c:1369
 msgid "Save"
 msgstr "Speichern"
 
-#: ../src/gnome-utils/gnc-file.c:116 ../src/gnome-utils/gnc-main-window.c:273
+#: ../src/gnome-utils/gnc-file.c:117 ../src/gnome-utils/gnc-main-window.c:273
 msgid "_Export"
 msgstr "E_xportieren"
 
-#: ../src/gnome-utils/gnc-file.c:158
+#: ../src/gnome-utils/gnc-file.c:159
 msgid "All files"
 msgstr "Alle Dateien"
 
-#: ../src/gnome-utils/gnc-file.c:207
+#: ../src/gnome-utils/gnc-file.c:208
 msgid "(null)"
 msgstr "(keine)"
 
-#: ../src/gnome-utils/gnc-file.c:226
+#: ../src/gnome-utils/gnc-file.c:227
 #, c-format
 msgid "No suitable backend was found for %s."
 msgstr "Kein passendes Dateimodul wurde gefunden für %s."
 
-#: ../src/gnome-utils/gnc-file.c:231
+#: ../src/gnome-utils/gnc-file.c:232
 #, c-format
 msgid "The URL %s is not supported by this version of GnuCash."
 msgstr "Die URL »%s« kann von dieser GnuCash Version nicht verarbeitet werden."
 
-#: ../src/gnome-utils/gnc-file.c:236
+#: ../src/gnome-utils/gnc-file.c:237
 #, c-format
 msgid "Can't parse the URL %s."
 msgstr "Folgende URL konnte nicht verarbeitet werden: %s"
 
-#: ../src/gnome-utils/gnc-file.c:241
+#: ../src/gnome-utils/gnc-file.c:242
 #, c-format
 msgid "Can't connect to %s. The host, username or password were incorrect."
 msgstr ""
 "Verbindung konnte nicht aufgebaut werden zu Rechner »%s«. Der Rechnername, "
 "Benutzername oder Passwort waren falsch."
 
-#: ../src/gnome-utils/gnc-file.c:247
+#: ../src/gnome-utils/gnc-file.c:248
 #, c-format
 msgid "Can't connect to %s. Connection was lost, unable to send data."
 msgstr ""
 "Verbindung konnte nicht aufgebaut werden zu Rechner »%s«. Verbindung "
 "verloren. Daten konnten nicht gesendet werden."
 
-#: ../src/gnome-utils/gnc-file.c:253
+#: ../src/gnome-utils/gnc-file.c:254
 msgid ""
 "This file/URL appears to be from a newer version of GnuCash. You must "
 "upgrade your version of GnuCash to work with this data."
@@ -11425,13 +11404,13 @@ msgstr ""
 "Diese Datei scheint von einer neueren Version von GnuCash zu sein. Sie "
 "brauchen eine neuere GnuCash Version, um die Datei lesen zu können."
 
-#: ../src/gnome-utils/gnc-file.c:260
+#: ../src/gnome-utils/gnc-file.c:261
 #, c-format
 msgid "The database %s doesn't seem to exist. Do you want to create it?"
 msgstr ""
 "Die Datenbank oder Datei »%s« existiert nicht. Möchten Sie sie erstellen?"
 
-#: ../src/gnome-utils/gnc-file.c:274
+#: ../src/gnome-utils/gnc-file.c:275
 #, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
@@ -11444,7 +11423,7 @@ msgstr ""
 "\n"
 "Möchten Sie trotzdem mit dem Öffnen der Datenbank fortfahren?"
 
-#: ../src/gnome-utils/gnc-file.c:282
+#: ../src/gnome-utils/gnc-file.c:283
 #, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
@@ -11457,7 +11436,7 @@ msgstr ""
 "\n"
 "Möchten Sie trotzdem mit dem Importieren der Datenbank fortfahren?"
 
-#: ../src/gnome-utils/gnc-file.c:290
+#: ../src/gnome-utils/gnc-file.c:291
 #, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
@@ -11470,7 +11449,7 @@ msgstr ""
 "\n"
 "Möchten Sie trotzdem mit dem Speichern der Datenbank fortfahren?"
 
-#: ../src/gnome-utils/gnc-file.c:298
+#: ../src/gnome-utils/gnc-file.c:299
 #, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
@@ -11483,7 +11462,7 @@ msgstr ""
 "\n"
 "Möchten Sie trotzdem mit dem Öffnen der Datei fortfahren?"
 
-#: ../src/gnome-utils/gnc-file.c:323
+#: ../src/gnome-utils/gnc-file.c:324
 #, c-format
 msgid ""
 "GnuCash could not write to %s. That database may be on a read-only file "
@@ -11493,14 +11472,14 @@ msgstr ""
 "einem schreibgeschützten Dateisystem befinden oder Sie haben keine "
 "Schreibberechtigung in das Verzeichnis. "
 
-#: ../src/gnome-utils/gnc-file.c:330
+#: ../src/gnome-utils/gnc-file.c:331
 #, c-format
 msgid "The file/URL %s does not contain GnuCash data or the data is corrupt."
 msgstr ""
 "Die Datei/URL »%s« verweist nicht auf GnuCash-Daten oder diese Daten sind "
 "fehlerhaft."
 
-#: ../src/gnome-utils/gnc-file.c:336
+#: ../src/gnome-utils/gnc-file.c:337
 #, c-format
 msgid ""
 "The server at URL %s experienced an error or encountered bad or corrupt data."
@@ -11508,54 +11487,54 @@ msgstr ""
 "Der Server unter der URL »%s« stiess auf einen Fehler oder benutzte falsche "
 "oder fehlerhafte Daten."
 
-#: ../src/gnome-utils/gnc-file.c:342
+#: ../src/gnome-utils/gnc-file.c:343
 #, c-format
 msgid "You do not have permission to access %s."
 msgstr "Sie haben keine Zugriffsberechtigung für die Datei »%s«."
 
-#: ../src/gnome-utils/gnc-file.c:347
+#: ../src/gnome-utils/gnc-file.c:348
 #: ../src/register/register-core/formulacell.c:118
 #: ../src/register/register-core/pricecell.c:181
 #, c-format
 msgid "An error occurred while processing %s."
 msgstr "Fehler aufgetreten beim Verarbeiten von »%s«."
 
-#: ../src/gnome-utils/gnc-file.c:352
+#: ../src/gnome-utils/gnc-file.c:353
 msgid "There was an error reading the file. Do you want to continue?"
 msgstr "Es gab einen Fehler beim Öffnen der Datei. Möchten Sie fortfahren?"
 
-#: ../src/gnome-utils/gnc-file.c:361
+#: ../src/gnome-utils/gnc-file.c:362
 #, c-format
 msgid "There was an error parsing the file %s."
 msgstr "Beim Lesen der Datei »%s« ist ein Fehler aufgetreten."
 
-#: ../src/gnome-utils/gnc-file.c:366
+#: ../src/gnome-utils/gnc-file.c:367
 #, c-format
 msgid "The file %s is empty."
 msgstr "Die Datei »%s« ist leer."
 
-#: ../src/gnome-utils/gnc-file.c:377
+#: ../src/gnome-utils/gnc-file.c:378
 #, c-format
 msgid "The file/URI %s could not be found."
 msgstr "Die Datei/URI »%s« konnte nicht gefunden werden."
 
-#: ../src/gnome-utils/gnc-file.c:383
+#: ../src/gnome-utils/gnc-file.c:384
 msgid "This file is from an older version of GnuCash. Do you want to continue?"
 msgstr ""
 "Diese Datei ist von einer älteren Version von GnuCash. Möchten Sie "
 "fortfahren?"
 
-#: ../src/gnome-utils/gnc-file.c:392
+#: ../src/gnome-utils/gnc-file.c:393
 #, c-format
 msgid "The file type of file %s is unknown."
 msgstr "Der Dateityp der Datei »%s« ist unbekannt."
 
-#: ../src/gnome-utils/gnc-file.c:397
+#: ../src/gnome-utils/gnc-file.c:398
 #, c-format
 msgid "Could not make a backup of the file %s"
 msgstr "Von der Datei »%s« konnte kein Backup erstellt werden."
 
-#: ../src/gnome-utils/gnc-file.c:402
+#: ../src/gnome-utils/gnc-file.c:403
 #, c-format
 msgid ""
 "Could not write to file %s. Check that you have permission to write to this "
@@ -11565,7 +11544,7 @@ msgstr ""
 "dass Sie Schreibberechtigung für das Verzeichnis und diese Datei haben und "
 "dass genug Platz auf dem Datenträger frei ist."
 
-#: ../src/gnome-utils/gnc-file.c:409
+#: ../src/gnome-utils/gnc-file.c:410
 #, c-format
 msgid "No read permission to read from file %s."
 msgstr "Sie haben keine Leseberechtigung für die Datei »%s«."
@@ -11573,7 +11552,7 @@ msgstr "Sie haben keine Leseberechtigung für die Datei »%s«."
 #. Translators: the first %s is a path in the filesystem,
 #. * the second %s is PACKAGE_NAME, which by default is "GnuCash"
 #.
-#: ../src/gnome-utils/gnc-file.c:417
+#: ../src/gnome-utils/gnc-file.c:418
 #, c-format
 msgid ""
 "You attempted to save in\n"
@@ -11590,7 +11569,7 @@ msgstr ""
 "\n"
 "Bitte wählen Sie einen Dateinamen in einem anderen Ordner."
 
-#: ../src/gnome-utils/gnc-file.c:424
+#: ../src/gnome-utils/gnc-file.c:425
 msgid ""
 "This database is from an older version of GnuCash. Select OK to upgrade it "
 "to the current version, Cancel to mark it read-only."
@@ -11599,7 +11578,7 @@ msgstr ""
 "die Datei zur aktuellen GnuCash-Version aktualisieren oder »Abbrechen«, um "
 "sie schreibgeschützt zu öffnen."
 
-#: ../src/gnome-utils/gnc-file.c:433
+#: ../src/gnome-utils/gnc-file.c:434
 msgid ""
 "This database is from a newer version of GnuCash. This version can read it, "
 "but cannot safely save to it. It will be marked read-only until you do "
@@ -11612,7 +11591,7 @@ msgstr ""
 "Wenn Sie die Datei in dieser älteren Version speichern, könnten allerdings "
 "Daten aus der neueren GnuCash-Version verloren gehen."
 
-#: ../src/gnome-utils/gnc-file.c:442
+#: ../src/gnome-utils/gnc-file.c:443
 msgid ""
 "The SQL database is in use by other users, and the upgrade cannot be "
 "performed until they logoff. If there are currently no other users, consult "
@@ -11625,7 +11604,7 @@ msgstr ""
 "Wenn keine anderen Anwender mehr im System sind, konsultieren Sie bitte das "
 "Handbuch, um Anweisungen zum Löschen von 'dangling login sessions' zu finden."
 
-#: ../src/gnome-utils/gnc-file.c:452
+#: ../src/gnome-utils/gnc-file.c:453
 msgid ""
 "The library \"libdbi\" installed on your system doesn't correctly store "
 "large numbers. This means GnuCash cannot use SQL databases correctly. "
@@ -11639,7 +11618,7 @@ msgstr ""
 "eine andere Version von »libdbi« installiert ist. Siehe auch https://"
 "bugzilla.gnome.org/show_bug.cgi?id=611936 "
 
-#: ../src/gnome-utils/gnc-file.c:464
+#: ../src/gnome-utils/gnc-file.c:465
 msgid ""
 "GnuCash could not complete a critical test for the presence of a bug in the "
 "\"libdbi\" library. This may be caused by a permissions misconfiguration of "
@@ -11652,7 +11631,7 @@ msgstr ""
 "bugzilla.gnome.org/show_bug.cgi?id=645216 und prüfen, ob Sie dort die "
 "passende Korrektur nachlesen können."
 
-#: ../src/gnome-utils/gnc-file.c:474
+#: ../src/gnome-utils/gnc-file.c:475
 msgid ""
 "This file is from an older version of GnuCash and will be upgraded when "
 "saved by this version. You will not be able to read the saved file from the "
@@ -11666,16 +11645,16 @@ msgstr ""
 "das alte Dateiformat behalten möchten, beenden Sie das aktuelle GnuCash, "
 "ohne zu speichern."
 
-#: ../src/gnome-utils/gnc-file.c:485
+#: ../src/gnome-utils/gnc-file.c:486
 #, c-format
 msgid "An unknown I/O error (%d) occurred."
 msgstr "Ein unbekannter Eingabe/Ausgabefehler (%d) ist aufgetreten."
 
-#: ../src/gnome-utils/gnc-file.c:581
+#: ../src/gnome-utils/gnc-file.c:582
 msgid "Save changes to the file?"
 msgstr "Änderungen in Datei speichern?"
 
-#: ../src/gnome-utils/gnc-file.c:594 ../src/gnome-utils/gnc-main-window.c:1252
+#: ../src/gnome-utils/gnc-file.c:595 ../src/gnome-utils/gnc-main-window.c:1252
 #, c-format
 msgid "If you don't save, changes from the past %d minute will be discarded."
 msgid_plural ""
@@ -11687,16 +11666,16 @@ msgstr[1] ""
 "Wenn Sie nicht speichern, gehen die Änderungen der letzten %d Minuten "
 "verloren."
 
-#: ../src/gnome-utils/gnc-file.c:598
+#: ../src/gnome-utils/gnc-file.c:599
 msgid "Continue _Without Saving"
 msgstr "Schließen _ohne zu speichern"
 
-#: ../src/gnome-utils/gnc-file.c:755
+#: ../src/gnome-utils/gnc-file.c:756
 #, c-format
 msgid "GnuCash could not obtain the lock for %s."
 msgstr "GnuCash konnte keine exklusive Schreibberechtigung für %s erreichen."
 
-#: ../src/gnome-utils/gnc-file.c:757
+#: ../src/gnome-utils/gnc-file.c:758
 msgid ""
 "That database may be in use by another user, in which case you should not "
 "open the database. What would you like to do?"
@@ -11710,7 +11689,7 @@ msgstr ""
 "\n"
 "Was möchten Sie tun?"
 
-#: ../src/gnome-utils/gnc-file.c:760
+#: ../src/gnome-utils/gnc-file.c:761
 msgid ""
 "That database may be on a read-only file system, or you may not have write "
 "permission for the directory. If you proceed you may not be able to save any "
@@ -11725,28 +11704,28 @@ msgstr ""
 "\n"
 "Was möchten Sie tun?"
 
-#: ../src/gnome-utils/gnc-file.c:786
+#: ../src/gnome-utils/gnc-file.c:787
 msgid "_Open Read-Only"
 msgstr "_Schreibgeschützt öffnen"
 
-#: ../src/gnome-utils/gnc-file.c:788
+#: ../src/gnome-utils/gnc-file.c:789
 msgid "_Create New File"
 msgstr "_Neue Datei anlegen"
 
-#: ../src/gnome-utils/gnc-file.c:790
+#: ../src/gnome-utils/gnc-file.c:791
 msgid "Open _Anyway"
 msgstr "Tr_otzdem öffnen"
 
 #. try to load once again
-#: ../src/gnome-utils/gnc-file.c:874 ../src/gnome-utils/gnc-file.c:894
+#: ../src/gnome-utils/gnc-file.c:875 ../src/gnome-utils/gnc-file.c:895
 msgid "Loading user data..."
 msgstr "Daten laden..."
 
-#: ../src/gnome-utils/gnc-file.c:910
+#: ../src/gnome-utils/gnc-file.c:911
 msgid "Re-saving user data..."
 msgstr "Daten erneut speichern..."
 
-#: ../src/gnome-utils/gnc-file.c:1215 ../src/gnome-utils/gnc-file.c:1450
+#: ../src/gnome-utils/gnc-file.c:1233 ../src/gnome-utils/gnc-file.c:1468
 #: ../src/import-export/csv-exp/assistant-csv-export.c:123
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1542
 #, c-format
@@ -11755,12 +11734,12 @@ msgstr ""
 "Die Datei »%s« existiert bereits. Sind Sie sicher, dass sie überschrieben "
 "werden soll?"
 
-#: ../src/gnome-utils/gnc-file.c:1244
+#: ../src/gnome-utils/gnc-file.c:1262
 msgid "Exporting file..."
 msgstr "Datei exportieren..."
 
 #. %s is the strerror(3) error string of the error that occurred.
-#: ../src/gnome-utils/gnc-file.c:1257
+#: ../src/gnome-utils/gnc-file.c:1275
 #, c-format
 msgid ""
 "There was an error saving the file.\n"
@@ -11771,7 +11750,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/gnome-utils/gnc-file.c:1289
+#: ../src/gnome-utils/gnc-file.c:1307
 msgid ""
 "The database was opened read-only. Do you want to save it to a different "
 "place?"
@@ -11779,7 +11758,7 @@ msgstr ""
 "Diese Datenbank wurde schreibgeschützt geöffnet. Wollen Sie die Daten an "
 "eine andere Stelle speichern?"
 
-#: ../src/gnome-utils/gnc-file.c:1587 ../src/gnome-utils/gnc-main-window.c:1220
+#: ../src/gnome-utils/gnc-file.c:1605 ../src/gnome-utils/gnc-main-window.c:1220
 msgid "<unknown>"
 msgstr "<unbekannt>"
 
@@ -12312,32 +12291,36 @@ msgid ""
 "The entered date of the duplicated transaction is older than the \"Read-Only "
 "Threshold\" set for this book. This setting can be changed in File -> "
 "Properties -> Accounts."
-msgstr "Das eingegebene Datum der duplizierten Buchung ist älter als die "
-"\"Nur-Lese Schwelle\" dieser Datei. Diese Einstellung kann in Datei -> "
-"Eigenschaften -> Konten geändert werden."
+msgstr ""
+"Das eingegebene Datum der duplizierten Buchung ist älter als die \"Nur-Lese "
+"Schwelle\" dieser Datei. Diese Einstellung kann in Datei -> Eigenschaften -> "
+"Konten geändert werden."
 
-#: ../src/gnome-utils/gnc-tree-control-split-reg.c:1725
+#. Translators: This message will be presented when a user *
+#. * attempts to record a transaction without splits
+#: ../src/gnome-utils/gnc-tree-control-split-reg.c:1727
 msgid "Not enough information for Blank Transaction?"
 msgstr "Nicht genug Informationen für eine neue Buchung?"
 
-#: ../src/gnome-utils/gnc-tree-control-split-reg.c:1727
+#: ../src/gnome-utils/gnc-tree-control-split-reg.c:1729
 msgid ""
 "The blank transaction does not have enough information to save it. Would you "
 "like to return to the transaction to update, or cancel the save?"
 msgstr ""
-"Die neue Buchung hat nicht genügend Informationen, gespeichert werden zu können. Möchten Sie zur "
-"Bearbeitung der Buchung zurückkehren oder das Speichern abbrechen?"
+"Die neue Buchung hat nicht genügend Informationen, gespeichert werden zu "
+"können. Möchten Sie zur Bearbeitung der Buchung zurückkehren oder das "
+"Speichern abbrechen?"
 
-#: ../src/gnome-utils/gnc-tree-control-split-reg.c:1738
+#: ../src/gnome-utils/gnc-tree-control-split-reg.c:1740
 msgid "_Return"
 msgstr "Kapitalertrag"
 
-#: ../src/gnome-utils/gnc-tree-control-split-reg.c:1781
+#: ../src/gnome-utils/gnc-tree-control-split-reg.c:1783
 #: ../src/register/ledger-core/split-register-control.c:1835
 msgid "Mark split as unreconciled?"
 msgstr "Buchungsteil als nicht abgeglichen markieren?"
 
-#: ../src/gnome-utils/gnc-tree-control-split-reg.c:1783
+#: ../src/gnome-utils/gnc-tree-control-split-reg.c:1785
 #: ../src/register/ledger-core/split-register-control.c:1837
 msgid ""
 "You are about to mark a reconciled split as unreconciled. Doing so might "
@@ -12346,17 +12329,17 @@ msgstr ""
 "Wollen Sie diesen Buchungssatz wirklich als nicht abgeglichen markieren? "
 "Dies kann das nächste Abgleichen erschweren. Trotzdem fortsetzen?"
 
-#: ../src/gnome-utils/gnc-tree-control-split-reg.c:1827
+#: ../src/gnome-utils/gnc-tree-control-split-reg.c:1829
 #: ../src/register/ledger-core/split-register-control.c:1854
 msgid "_Unreconcile"
 msgstr "_Nicht abgeglichen"
 
-#: ../src/gnome-utils/gnc-tree-control-split-reg.c:1912
+#: ../src/gnome-utils/gnc-tree-control-split-reg.c:1914
 #: ../src/register/ledger-core/split-register-model.c:2064
 msgid "Change reconciled split?"
 msgstr "Abgeglichenen Buchungsteil ändern?"
 
-#: ../src/gnome-utils/gnc-tree-control-split-reg.c:1914
+#: ../src/gnome-utils/gnc-tree-control-split-reg.c:1916
 #: ../src/register/ledger-core/split-register-model.c:2066
 msgid ""
 "You are about to change a reconciled split. Doing so might make future "
@@ -12365,12 +12348,12 @@ msgstr ""
 "Sie wollen einen abgeglichenen Buchungsteil verändern. Dies kann das nächste "
 "Abgleichen erschweren. Trotzdem fortsetzen?"
 
-#: ../src/gnome-utils/gnc-tree-control-split-reg.c:1919
+#: ../src/gnome-utils/gnc-tree-control-split-reg.c:1921
 #: ../src/register/ledger-core/split-register-model.c:2071
 msgid "Change split linked to a reconciled split?"
 msgstr "Abgeglichenen Buchungsteil ändern?"
 
-#: ../src/gnome-utils/gnc-tree-control-split-reg.c:1921
+#: ../src/gnome-utils/gnc-tree-control-split-reg.c:1923
 #: ../src/register/ledger-core/split-register-model.c:2073
 msgid ""
 "You are about to change a split that is linked to a reconciled split. Doing "
@@ -12379,12 +12362,12 @@ msgstr ""
 "Sie wollen einen abgeglichenen Buchungsteil verändern. Dies kann das nächste "
 "Abgleichen erschweren. Wollen Sie trotzdem fortsetzen?"
 
-#: ../src/gnome-utils/gnc-tree-control-split-reg.c:1935
+#: ../src/gnome-utils/gnc-tree-control-split-reg.c:1937
 #: ../src/register/ledger-core/split-register-model.c:2087
 msgid "Chan_ge Split"
 msgstr "Buchungs_teil ändern"
 
-#: ../src/gnome-utils/gnc-tree-control-split-reg.c:2123
+#: ../src/gnome-utils/gnc-tree-control-split-reg.c:2125
 msgid "You can not paste from the general ledger to a register."
 msgstr "Sie können vom Journal nicht in ein Kontofenster einfügen."
 
@@ -12507,7 +12490,7 @@ msgstr "Gehalt"
 #: ../src/report/standard-reports/register.scm:450
 #: ../src/report/standard-reports/transaction.scm:396
 #: ../src/report/standard-reports/transaction.scm:456
-#: ../src/report/standard-reports/transaction.scm:957
+#: ../src/report/standard-reports/transaction.scm:962
 msgid "Price"
 msgstr "Preis"
 
@@ -12606,9 +12589,9 @@ msgstr "_Berechnen"
 #: ../src/report/standard-reports/general-ledger.scm:82
 #: ../src/report/standard-reports/general-ledger.scm:102
 #: ../src/report/standard-reports/transaction.scm:390
-#: ../src/report/standard-reports/transaction.scm:726
-#: ../src/report/standard-reports/transaction.scm:781
-#: ../src/report/standard-reports/transaction.scm:949
+#: ../src/report/standard-reports/transaction.scm:731
+#: ../src/report/standard-reports/transaction.scm:786
+#: ../src/report/standard-reports/transaction.scm:954
 #: ../src/report/standard-reports/trial-balance.scm:664
 msgid "Account Name"
 msgstr "Kontobezeichnung"
@@ -12625,9 +12608,9 @@ msgstr "Devise/Wertpapier"
 #: ../src/report/standard-reports/general-ledger.scm:104
 #: ../src/report/standard-reports/sx-summary.scm:85
 #: ../src/report/standard-reports/transaction.scm:410
-#: ../src/report/standard-reports/transaction.scm:730
-#: ../src/report/standard-reports/transaction.scm:785
-#: ../src/report/standard-reports/transaction.scm:951
+#: ../src/report/standard-reports/transaction.scm:735
+#: ../src/report/standard-reports/transaction.scm:790
+#: ../src/report/standard-reports/transaction.scm:956
 msgid "Account Code"
 msgstr "Kontonummer"
 
@@ -12918,7 +12901,7 @@ msgid "Accounts / Void Reason"
 msgstr "Konten / Stornierungsbegründung"
 
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2962
-#: ../src/import-export/import-main-matcher.c:472
+#: ../src/import-export/import-main-matcher.c:475
 msgid "R"
 msgstr "Abgl"
 
@@ -13422,14 +13405,14 @@ msgstr "Be_merkung:"
 msgid "Ta_x related"
 msgstr "Steuer_relevant"
 
-#. Translators: use the same words here as in 'Ta_x Report Options'.
+#. Translators: use the same words here as in
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:21
 msgid ""
 "Use Edit->Tax Report Options to set the tax-related flag and assign a tax "
 "code to this account."
 msgstr ""
-"Benutzen Sie den Menüpunkt »Bearbeiten -> Optionen Steuerbericht«, um "
-"dieses Konto als »steuerrelevant« zu markieren und diesem Konto einen "
+"Benutzen Sie den Menüpunkt »Bearbeiten -> Optionen Steuerbericht«, um dieses "
+"Konto als »steuerrelevant« zu markieren und diesem Konto einen "
 "Steuerschlüssel zuzuweisen."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:22
@@ -13611,7 +13594,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:50
 #: ../src/gnome-utils/gtkbuilder/gnc-tree-view-owner.glade.h:1
-#: ../src/report/standard-reports/transaction.scm:665
+#: ../src/report/standard-reports/transaction.scm:670
 msgid "Filter By..."
 msgstr "Filtern nach..."
 
@@ -14279,7 +14262,7 @@ msgid "Printing"
 msgstr "Drucken"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:119
-#: ../src/import-export/dialog-import.glade.h:29
+#: ../src/import-export/dialog-import.glade.h:34
 msgid "<b>Actions</b>"
 msgstr "<b>Aktionen</b>"
 
@@ -14507,70 +14490,59 @@ msgstr ""
 msgid "<b>Default zoom level</b>"
 msgstr "<b>Vorgabe Vergrößerung</b>"
 
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:179
-msgid ""
-"On high resolution screens reports tend to be hard to read.\n"
-"This option allows you to scale reports up by the set factor.\n"
-"For example setting this to 2.0 will display reports at twice their typical "
-"size."
-msgstr "Auf hochauflösenden Bildschirmen können Berichte schwer zu lesen sein.\n"
-"Diese Option erlaubt ihr Skalieren um den gewählten Faktor.\n"
-"Z.B. wird das Setzen auf 2 die Berichte mit der Doppelten "
-"ihrer ursprünglichen Größe darstellen."
-
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:182
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:180
 msgid "Reports"
 msgstr "Berichte"
 
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:183
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:181
 msgid "<b>Window Geometry</b>"
 msgstr "<b>Fenster-Einstellungen</b>"
 
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:184
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:182
 msgid "_Save window size and position"
 msgstr "_Fenstergrößen und -positionen speichern"
 
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:185
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:183
 msgid "Save window size and location when it is closed."
 msgstr "Fenstergröße und -positionen speichern"
 
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:186
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:184
 msgid "Bring the most _recent tab to the front"
 msgstr "Die _zuletzt benutzte Karteikarte nach vorne bringen"
 
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:188
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:186
 msgid "<b>Tab Position</b>"
 msgstr "<b>Position Reiter der Karteikarten</b>"
 
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:189
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:187
 msgid "To_p"
 msgstr "_Oben"
 
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:191
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:189
 msgid "B_ottom"
 msgstr "_Unten"
 
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:193
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:191
 msgid "_Left"
 msgstr "_Links"
 
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:195
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:193
 msgid "_Right"
 msgstr "_Rechts"
 
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:197
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:195
 msgid "<b>Summary Bar Position</b>"
 msgstr "<b>Position Zusammenfassungsleiste</b>"
 
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:202
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:200
 msgid "<b>Tabs</b>"
 msgstr "<b>Karteikarten-Ansicht</b>"
 
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:203
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:201
 msgid "Show close button on _notebook tabs"
 msgstr "Den Knopf »Schließen« bei _Karteikarten-Ansicht anzeigen"
 
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:204
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:202
 msgid ""
 "Show a close button on each notebook tab. These function identically to the "
 "'Close' menu item."
@@ -14578,11 +14550,11 @@ msgstr ""
 "Einen Knopf »Schließen« auf jeder Karteikarte anzeigen. Die Schließen-"
 "Funktion kann auch im gleichnamigen Menüpunkt erreicht werden."
 
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:205
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:203
 msgid "_Width:"
 msgstr "_Breite:"
 
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:206
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:204
 msgid ""
 "If the text in the tab is longer than this value (the test is approximate) "
 "then the tab label will have the middle cut and replaced with an ellipsis."
@@ -14591,11 +14563,11 @@ msgstr ""
 "an. Wenn Text in einem Reiter länger als dieser Wert ist, wird der Text "
 "abgeschnitten und mit Punkten beendet."
 
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:207
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:205
 msgid "characters"
 msgstr "Zeichen"
 
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:208
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:206
 msgid "Windows"
 msgstr "Fenster"
 
@@ -14785,7 +14757,7 @@ msgid "Years:"
 msgstr "Jahre:"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:11
-#: ../src/import-export/dialog-import.glade.h:23
+#: ../src/import-export/dialog-import.glade.h:5
 msgid "Format:"
 msgstr "Format:"
 
@@ -14824,26 +14796,6 @@ msgstr "Nicht vorgemerkt"
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:5
 msgid "Select occurrence date above."
 msgstr "Wählen Sie oben ein Datum des Auftretens."
-
-#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:7
-msgctxt "Daily"
-msgid "Every"
-msgstr "Alle"
-
-#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:8
-msgctxt "Daily"
-msgid "days."
-msgstr "Tage."
-
-#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:10
-msgctxt "Weekly"
-msgid "Every"
-msgstr "Alle"
-
-#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:11
-msgctxt "Weekly"
-msgid "weeks."
-msgstr "Wochen."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:12
 #: ../src/report/standard-reports/daily-reports.scm:355
@@ -14886,16 +14838,6 @@ msgstr "Montag"
 msgid "Tuesday"
 msgstr "Dienstag"
 
-#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:21
-msgctxt "Semimonthly"
-msgid "Every"
-msgstr "Alle"
-
-#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:22
-msgctxt "Semimonthly"
-msgid "months."
-msgstr "Monate."
-
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:23
 msgid "First on the:"
 msgstr "Zuerst am:"
@@ -14911,16 +14853,6 @@ msgstr "dann am:"
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:26
 msgid "Semi-Monthly"
 msgstr "Halbmonatlich"
-
-#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:27
-msgctxt "Monthly"
-msgid "Every"
-msgstr "Alle"
-
-#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:28
-msgctxt "Monthly"
-msgid "months."
-msgstr "Monate."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:29
 msgid "On the"
@@ -15788,110 +15720,115 @@ msgid "_Close log window when finished"
 msgstr "Fenster nach Verbindungsende _schließen"
 
 #: ../src/import-export/aqb/dialog-ab.glade.h:24
+#, fuzzy
+msgid "Use Non-SWIFT _transaction text"
+msgstr "Verwende das dem Buchungsdatum nächste Datum."
+
+#: ../src/import-export/aqb/dialog-ab.glade.h:25
 msgid "_Verbose debug messages"
 msgstr "Ausführliche _Fehlermeldungen"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:25
+#: ../src/import-export/aqb/dialog-ab.glade.h:26
 msgid "Name for new template"
 msgstr "Namen für neue Überweisungsvorlage"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:26
+#: ../src/import-export/aqb/dialog-ab.glade.h:27
 msgid "Enter name for new template:"
 msgstr "Bitte geben Sie einen Namen für die neue Überweisungsvorlage ein:"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:27
+#: ../src/import-export/aqb/dialog-ab.glade.h:28
 msgid "Online Transaction"
 msgstr "Online-Auftrag Einzelüberweisung"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:28
+#: ../src/import-export/aqb/dialog-ab.glade.h:29
 msgid "Enter an Online Transaction"
 msgstr "Online-Überweisung eingeben"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:29
+#: ../src/import-export/aqb/dialog-ab.glade.h:30
 msgid "Recipient Account Number"
 msgstr "Konto-Nr. des Empfängers"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:30
+#: ../src/import-export/aqb/dialog-ab.glade.h:31
 msgid "Recipient Bank Code"
 msgstr "Bankleitzahl"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:31
+#: ../src/import-export/aqb/dialog-ab.glade.h:32
 msgid "Recipient Name"
 msgstr "Empfänger: Name, Vorname / Firma"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:32
+#: ../src/import-export/aqb/dialog-ab.glade.h:33
 msgid "at Bank"
 msgstr "der Bank"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:33
+#: ../src/import-export/aqb/dialog-ab.glade.h:34
 msgid "(filled in automatically)"
 msgstr "(wird automatisch ausgefüllt)"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:35
+#: ../src/import-export/aqb/dialog-ab.glade.h:36
 msgid "Payment Purpose (only for recipient)"
 msgstr "Verwendungszweck - z.B. Kunden-Referenznummer - (nur für Empfänger)"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:36
+#: ../src/import-export/aqb/dialog-ab.glade.h:37
 msgid "Payment Purpose continued"
 msgstr "noch Verwendungszweck (ggf. noch Anschrift des Auftraggebers)"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:37
+#: ../src/import-export/aqb/dialog-ab.glade.h:38
 msgid "Originator Name"
 msgstr "Auftraggeber: Name, Vorname"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:38
+#: ../src/import-export/aqb/dialog-ab.glade.h:39
 msgid "something"
 msgstr "irgendwas"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:39
+#: ../src/import-export/aqb/dialog-ab.glade.h:40
 msgid "Originator Account Number"
 msgstr "Konto-Nr. des Auftraggebers"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:40
+#: ../src/import-export/aqb/dialog-ab.glade.h:41
 msgid "Bank Code"
 msgstr "Bankleitzahl"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:41
+#: ../src/import-export/aqb/dialog-ab.glade.h:42
 msgid "Add the current online transaction as a new transaction template"
 msgstr "Aktuelle Online-Buchung als neue Überweisungsvorlage hinzufügen"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:42
+#: ../src/import-export/aqb/dialog-ab.glade.h:43
 msgid "Add current"
 msgstr "Aktuelle hinzufügen"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:43
+#: ../src/import-export/aqb/dialog-ab.glade.h:44
 msgid "Move the selected transaction template one row up"
 msgstr "Gewählte Überweisungsvorlage eine Zeile nach oben umsortieren"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:44
+#: ../src/import-export/aqb/dialog-ab.glade.h:45
 msgid "Move the selected transaction template one row down"
 msgstr "Gewählte Überweisungsvorlage eine Zeile nach unten umsortieren"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:45
+#: ../src/import-export/aqb/dialog-ab.glade.h:46
 msgid "Sort the list of transaction templates alphabetically"
 msgstr "Die Liste der Überweisungsvorlagen alphabetisch sortieren"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:46
+#: ../src/import-export/aqb/dialog-ab.glade.h:47
 msgid "Sort"
 msgstr "Sortieren"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:47
+#: ../src/import-export/aqb/dialog-ab.glade.h:48
 msgid "Delete the currently selected transaction template"
 msgstr "Ausgewählte Überweisungsvorlage löschen"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:48
+#: ../src/import-export/aqb/dialog-ab.glade.h:49
 msgid "Templates"
 msgstr "Vorlagen"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:49
+#: ../src/import-export/aqb/dialog-ab.glade.h:50
 msgid "Execute later (unimpl.)"
 msgstr "Später ausführen (unfertig)"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:50
+#: ../src/import-export/aqb/dialog-ab.glade.h:51
 msgid "Execute this online transaction now"
 msgstr "Diesen Auftrag jetzt online abschicken"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:51
+#: ../src/import-export/aqb/dialog-ab.glade.h:52
 msgid "Execute Now"
 msgstr "Jetzt ausführen"
 
@@ -16182,12 +16119,12 @@ msgstr ""
 "\n"
 "Wollen Sie den Auftrag erneut abschicken?"
 
-#: ../src/import-export/aqb/gnc-ab-utils.c:409
+#: ../src/import-export/aqb/gnc-ab-utils.c:420
 #: ../src/import-export/qif-imp/qif-dialog-utils.scm:89
 msgid "Unspecified"
 msgstr "Nicht spezifiziert"
 
-#: ../src/import-export/aqb/gnc-ab-utils.c:662
+#: ../src/import-export/aqb/gnc-ab-utils.c:673
 msgid ""
 "The backend found an error during the preparation of the job. It is not "
 "possible to execute this job. \n"
@@ -16207,7 +16144,7 @@ msgstr ""
 "\n"
 "Wollen Sie den Auftrag erneut eingeben?"
 
-#: ../src/import-export/aqb/gnc-ab-utils.c:754
+#: ../src/import-export/aqb/gnc-ab-utils.c:765
 msgid ""
 "The bank has sent transaction information in its response.\n"
 "Do you want to import it?"
@@ -16215,7 +16152,7 @@ msgstr ""
 "Der Bank-Server hat Kontoumsätze (Buchungen) in der Antwort mitgeschickt. \n"
 "Wollen Sie diese jetzt importieren?"
 
-#: ../src/import-export/aqb/gnc-ab-utils.c:781
+#: ../src/import-export/aqb/gnc-ab-utils.c:792
 msgid ""
 "No Online Banking account found for this gnucash account. These transactions "
 "will not be executed by Online Banking."
@@ -16224,7 +16161,7 @@ msgstr ""
 "zugeordnet ist. Die Buchungen werden nicht als Online-Banking Aufträge "
 "abgeschickt."
 
-#: ../src/import-export/aqb/gnc-ab-utils.c:858
+#: ../src/import-export/aqb/gnc-ab-utils.c:869
 msgid ""
 "The bank has sent balance information in its response.\n"
 "Do you want to import it?"
@@ -16239,7 +16176,7 @@ msgstr ""
 #. * (Switzerland). If none of these techniques are available
 #. * in your country, you may safely ignore strings from the
 #. * import-export/hbci subdirectory.
-#: ../src/import-export/aqb/gnc-ab-utils.c:946
+#: ../src/import-export/aqb/gnc-ab-utils.c:957
 msgid ""
 "The downloaded Online Banking Balance was zero.\n"
 "\n"
@@ -16256,7 +16193,7 @@ msgstr ""
 "können Sie im Onlinebanking-Einrichtungs-Assistent eine höhere HBCI-Version "
 "auswählen. Versuchen Sie anschließend erneut, den Saldo abzufragen."
 
-#: ../src/import-export/aqb/gnc-ab-utils.c:963
+#: ../src/import-export/aqb/gnc-ab-utils.c:974
 #, c-format
 msgid ""
 "Result of Online Banking job: \n"
@@ -16265,14 +16202,14 @@ msgstr ""
 "Ergebnis der Saldenabfrage: \n"
 "Gebuchter Saldo des Kontos ist %s"
 
-#: ../src/import-export/aqb/gnc-ab-utils.c:969
+#: ../src/import-export/aqb/gnc-ab-utils.c:980
 #, c-format
 msgid "For your information: This account also has a noted balance of %s\n"
 msgstr ""
 "Zu Ihrer Information: Dieses Konto hat außerdem folgenden Saldo an zur "
 "Ausführung vorgemerkten Aufträgen: %s\n"
 
-#: ../src/import-export/aqb/gnc-ab-utils.c:976
+#: ../src/import-export/aqb/gnc-ab-utils.c:987
 msgid ""
 "The booked balance is identical to the current reconciled balance of the "
 "account."
@@ -16280,16 +16217,15 @@ msgstr ""
 "Dieser gebuchte Saldo stimmt mit dem aktuellen abgeglichenen Saldo Ihres "
 "Kontos überein."
 
-#: ../src/import-export/aqb/gnc-ab-utils.c:991
+#: ../src/import-export/aqb/gnc-ab-utils.c:1002
 msgid "Reconcile account now?"
 msgstr "Konto jetzt abgleichen?"
 
-#: ../src/import-export/aqb/gnc-ab-utils.c:1057
+#: ../src/import-export/aqb/gnc-ab-utils.c:1068
 msgid "The bank has sent a message in its response."
-msgstr ""
-"Die Bank hat eine Nachricht in ihrer Antwort mitgeschickt"
+msgstr "Die Bank hat eine Nachricht in ihrer Antwort mitgeschickt"
 
-#: ../src/import-export/aqb/gnc-ab-utils.c:1058
+#: ../src/import-export/aqb/gnc-ab-utils.c:1069
 msgid "Subject:"
 msgstr "Betreff:"
 
@@ -16514,18 +16450,33 @@ msgstr ""
 "AqBanking eingegeben werden und wird nicht im Speicher gehalten."
 
 #: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:7
+#, fuzzy
+msgid "Put the transaction text in front of the purpose of a transaction."
+msgstr ""
+"Alle Buchungssätze außer dem aktuellen einzeilig anzeigen. Den aktuellen "
+"Buchungssatz vollständig anzeigen."
+
+#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:8
+msgid ""
+"Some banks place part of transaction description as \"transaction text\" in "
+"the MT940 file. Normally GNUcash ignores this text. However by activating "
+"this option, the transaction text is used for the transaction description "
+"too."
+msgstr ""
+
+#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:9
 msgid "Verbose HBCI debug messages"
 msgstr "Ausführliche HBCI-Fehlermeldungen"
 
-#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:8
+#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:10
 msgid "Enables verbose debug messages for HBCI/AqBanking Online Banking."
 msgstr "Ausführliche Fehlermeldungen für HBCI Online Banking aktivieren."
 
-#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:9
+#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:11
 msgid "DTAUS import data format"
 msgstr "DTAUS-Import Dateiformat"
 
-#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:10
+#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:12
 msgid ""
 "This setting specifies the data format when importing DTAUS files. The "
 "AqBanking library offers various import formats (called \"profiles\") of "
@@ -16536,11 +16487,11 @@ msgstr ""
 "als »Profiles« (Profile) bezeichnet werden. Geben Sie hier den Namen des "
 "AqBanking-Profils an."
 
-#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:11
+#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:13
 msgid "CSV import data format"
 msgstr "CSV-Import Dateiformat"
 
-#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:12
+#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:14
 msgid ""
 "This setting specifies the data format when importing CSV files. The "
 "AqBanking library offers various import formats (called \"profiles\") of "
@@ -16551,11 +16502,11 @@ msgstr ""
 "»Profiles« (Profile) bezeichnet werden. Geben Sie hier den Namen des "
 "AqBanking-Profils an."
 
-#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:13
+#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:15
 msgid "SWIFT MT940 import data format"
 msgstr "SWIFT MT940-Import Dateiformat"
 
-#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:14
+#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:16
 msgid ""
 "This setting specifies the data format when importing SWIFT MT940 files. The "
 "AqBanking library offers various import formats (called \"profiles\") of "
@@ -16566,11 +16517,11 @@ msgstr ""
 "die dort als »Profiles« (Profile) bezeichnet werden. Geben Sie hier den "
 "Namen des AqBanking-Profils an."
 
-#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:15
+#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:17
 msgid "SWIFT MT942 import data format"
 msgstr "SWIFT MT942-Import Dateiformat"
 
-#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:16
+#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:18
 msgid ""
 "This setting specifies the data format when importing SWIFT MT942 files. The "
 "AqBanking library offers various import formats (called \"profiles\") of "
@@ -16896,7 +16847,8 @@ msgid ""
 "The number of Accounts added was %u and updated was %u.\n"
 "\n"
 "See below for errors..."
-msgstr "Import mit Fehlern abgeschlossen!\n"
+msgstr ""
+"Import mit Fehlern abgeschlossen!\n"
 "\n"
 "%u Konten wurden hinzugefügt und %u aktualisiert.\n"
 "\n"
@@ -16908,7 +16860,8 @@ msgid ""
 "Import completed successfully!\n"
 "\n"
 "The number of Accounts added was %u and updated was %u.\n"
-msgstr "Import fehlerfrei abgeschlossen!\n"
+msgstr ""
+"Import fehlerfrei abgeschlossen!\n"
 "\n"
 "%u Konten wurden hinzugefügt und %u aktualisiert.\n"
 
@@ -17035,8 +16988,8 @@ msgid ""
 "The rows displayed below had errors which are in the last column. You can "
 "attempt to correct them by changing the configuration."
 msgstr ""
-"Die unten angezeigten Zeilen zeigen Fehler in der letzten Spalte. "
-"Sie können versuchen, die Fehler durch veränderte Einstellungen zu beheben."
+"Die unten angezeigten Zeilen zeigen Fehler in der letzten Spalte. Sie können "
+"versuchen, die Fehler durch veränderte Einstellungen zu beheben."
 
 #. Set check button label
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.c:1390
@@ -17048,7 +17001,8 @@ msgstr "Fehler überspringen"
 msgid ""
 "There are problems with the import settings!\n"
 "The date format could be wrong or there are not enough columns set..."
-msgstr "Es gibt Probleme mit den Importeinstellungen!\n"
+msgstr ""
+"Es gibt Probleme mit den Importeinstellungen!\n"
 "Das Datumformat könnte falsch sein oder die Spaltenzahl ist zu klein..."
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.c:1437
@@ -17056,8 +17010,8 @@ msgstr "Es gibt Probleme mit den Importeinstellungen!\n"
 msgid ""
 "To Change the account, double click on the required account, click Forward "
 "to proceed."
-msgstr "Um das KOnto zu wechseln, doppleklicken Sie auf das gewünschte Konto, "
-"dann "
+msgstr ""
+"Um das KOnto zu wechseln, doppleklicken Sie auf das gewünschte Konto, dann "
 
 #. A list of the transactions we create
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.c:1520
@@ -17293,11 +17247,28 @@ msgstr "_Buchungen importieren aus CSV..."
 msgid "Import Transactions from a CSV file"
 msgstr "Buchungen aus Datei mit durch Komma o.ä. getrennten Werten importieren"
 
+#: ../src/import-export/dialog-import.glade.h:1
+#: ../src/import-export/qif-imp/dialog-account-picker.glade.h:12
+msgid "Select Account"
+msgstr "Konto auswählen"
+
 #: ../src/import-export/dialog-import.glade.h:2
+msgid "Please select or create an appropriate GnuCash account for:"
+msgstr "Auswählen oder Hinzufügen des passenden GnuCash Kontos:"
+
+#: ../src/import-export/dialog-import.glade.h:3
+msgid "Online account ID here..."
+msgstr "Online Kontonummer hier..."
+
+#: ../src/import-export/dialog-import.glade.h:4
+msgid "Choose a format"
+msgstr "Wählen Sie das Export-Format"
+
+#: ../src/import-export/dialog-import.glade.h:7
 msgid "Enable skip transaction action"
 msgstr "»Überspringen«-Aktion aktivieren "
 
-#: ../src/import-export/dialog-import.glade.h:3
+#: ../src/import-export/dialog-import.glade.h:8
 #: ../src/import-export/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in.in.h:2
 msgid ""
 "Enable the SKIP action in the transaction matcher. If enabled, a transaction "
@@ -17309,11 +17280,11 @@ msgstr ""
 "liegt (größer als die Auto-Hinzufügen-Schwelle, aber kleiner als die Auto-"
 "Abgleichen-Schwelle), hat als Voreinstellung »Überspringen«."
 
-#: ../src/import-export/dialog-import.glade.h:4
+#: ../src/import-export/dialog-import.glade.h:9
 msgid "Enable update match action"
 msgstr "»Abgleichen und Datenübernahme«-Aktion aktivieren"
 
-#: ../src/import-export/dialog-import.glade.h:5
+#: ../src/import-export/dialog-import.glade.h:10
 #: ../src/import-export/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in.in.h:4
 msgid ""
 "Enable the UPDATE AND RECONCILE action in the transaction matcher. If "
@@ -17328,11 +17299,11 @@ msgstr ""
 "Zusätzlich werden die Datenfelder Buchungsdatum, -text und -betrag von der "
 "importierten Buchung übernommen."
 
-#: ../src/import-export/dialog-import.glade.h:6
+#: ../src/import-export/dialog-import.glade.h:11
 msgid "<b>Generic Importer</b>"
 msgstr "<b>Buchungen importieren</b>"
 
-#: ../src/import-export/dialog-import.glade.h:7
+#: ../src/import-export/dialog-import.glade.h:12
 msgid ""
 "In some places commercial ATMs (not belonging to a financial institution) "
 "are installed in places like convenience stores. These ATMs add their fee "
@@ -17348,7 +17319,7 @@ msgstr ""
 "existierende Buchung richtig zuzuordnen, können Sie hier die Höhe für solche "
 "zusätzlichen Auszahlungsgebühren in Ihrer lokalen Währung angeben."
 
-#: ../src/import-export/dialog-import.glade.h:8
+#: ../src/import-export/dialog-import.glade.h:13
 msgid ""
 "A transaction whose best match's score is in the green zone (above or equal "
 "to the Auto-CLEAR threshold) will be CLEARed by default."
@@ -17357,7 +17328,7 @@ msgstr ""
 "grünen Bereich liegt (größer oder gleich der Auto-Abgleich-Schwelle) hat als "
 "Voreinstellung 'Abgleichen'."
 
-#: ../src/import-export/dialog-import.glade.h:9
+#: ../src/import-export/dialog-import.glade.h:14
 msgid ""
 "A transaction whose best match's score is in the red zone (above the display "
 "threshold but below or equal to the Auto-ADD threshold) will be ADDed by "
@@ -17367,7 +17338,7 @@ msgstr ""
 "roten Bereich liegt (größer als Anzeige-Schwelle, aber kleiner oder gleich "
 "der Auto-Hinzufügen-Schwelle), hat als Voreinstellung 'Hinzufügen'."
 
-#: ../src/import-export/dialog-import.glade.h:10
+#: ../src/import-export/dialog-import.glade.h:15
 msgid ""
 "The minimum score a potential match must have to be displayed in the match "
 "list."
@@ -17376,39 +17347,39 @@ msgstr ""
 "existierenden Buchung im Buchungs-Import überhaupt berücksichtigt und "
 "angezeigt wird."
 
-#: ../src/import-export/dialog-import.glade.h:11
+#: ../src/import-export/dialog-import.glade.h:16
 msgid "Commercial ATM _fees threshold"
 msgstr "Auszahlungsgebühren"
 
-#: ../src/import-export/dialog-import.glade.h:12
+#: ../src/import-export/dialog-import.glade.h:17
 msgid "Auto-c_lear threshold"
 msgstr "Entscheidungsschwelle für automatisches Abgleichen"
 
-#: ../src/import-export/dialog-import.glade.h:13
+#: ../src/import-export/dialog-import.glade.h:18
 msgid "Auto-_add threshold"
 msgstr "Entscheidungsschwelle für automatisches Hinzufügen"
 
-#: ../src/import-export/dialog-import.glade.h:14
+#: ../src/import-export/dialog-import.glade.h:19
 msgid "Match _display threshold"
 msgstr "Entscheidungsschwelle für Anzeige in Zuordnung"
 
-#: ../src/import-export/dialog-import.glade.h:15
+#: ../src/import-export/dialog-import.glade.h:20
 msgid "Use _bayesian matching"
 msgstr "_Bayes-Algorithmus verwenden"
 
-#: ../src/import-export/dialog-import.glade.h:16
+#: ../src/import-export/dialog-import.glade.h:21
 msgid ""
 "Use bayesian algorithms to match new transactions with existing accounts."
 msgstr ""
 "Bayes-Algorithmus verwenden, um importierte Buchungen mit existierenden "
 "abzugleichen."
 
-#: ../src/import-export/dialog-import.glade.h:17
+#: ../src/import-export/dialog-import.glade.h:22
 #: ../src/import-export/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in.in.h:15
 msgid "Automatically create new commodities"
 msgstr "Automatisch neue Wertpapiere/Währungen erstellen"
 
-#: ../src/import-export/dialog-import.glade.h:18
+#: ../src/import-export/dialog-import.glade.h:23
 #: ../src/import-export/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in.in.h:16
 msgid ""
 "Enables the automatic creation of new commodities if any unknown commodity "
@@ -17420,90 +17391,24 @@ msgstr ""
 "Andernfalls wird eine Rückfrage für jedes unbekannte Wertpapier/Währung "
 "angezeigt."
 
-#: ../src/import-export/dialog-import.glade.h:19
-#: ../src/import-export/qif-imp/dialog-account-picker.glade.h:12
-msgid "Select Account"
-msgstr "Konto auswählen"
-
-#: ../src/import-export/dialog-import.glade.h:20
-msgid "Please select or create an appropriate GnuCash account for:"
-msgstr "Auswählen oder Hinzufügen des passenden GnuCash Kontos:"
-
-#: ../src/import-export/dialog-import.glade.h:21
-msgid "Online account ID here..."
-msgstr "Online Kontonummer hier..."
-
-#: ../src/import-export/dialog-import.glade.h:22
-msgid "Choose a format"
-msgstr "Wählen Sie das Export-Format"
-
 #: ../src/import-export/dialog-import.glade.h:24
 msgid "Select matching existing transaction"
 msgstr "Wählen Sie die zugeordnete, schon existierende Buchung"
 
 #: ../src/import-export/dialog-import.glade.h:25
+#, fuzzy
+msgid "Show Reconciled"
+msgstr "Abgeglichen"
+
+#: ../src/import-export/dialog-import.glade.h:26
 msgid "Imported transaction's first split:"
 msgstr "Erster Teil der importierten Buchung"
 
-#: ../src/import-export/dialog-import.glade.h:26
+#: ../src/import-export/dialog-import.glade.h:27
 msgid "Potential splits matching the selected transaction: "
 msgstr "Mögliche Buchungen, die zum aktuellen Buchungssatz passen: "
 
-#: ../src/import-export/dialog-import.glade.h:27
-msgid "Transaction List Help"
-msgstr "Buchungsimport Hilfe"
-
 #: ../src/import-export/dialog-import.glade.h:28
-msgid "<b>Colors</b>"
-msgstr "<b>Farben</b>"
-
-#: ../src/import-export/dialog-import.glade.h:30
-msgid "\"A\""
-msgstr "»Neu«"
-
-#: ../src/import-export/dialog-import.glade.h:31
-msgid "\"U+R\""
-msgstr "»Abgl+Ü«"
-
-#: ../src/import-export/dialog-import.glade.h:32
-msgid "\"R\""
-msgstr "»Abgl«"
-
-#: ../src/import-export/dialog-import.glade.h:33
-msgid "Select \"A\" to add the transaction as new."
-msgstr "Wählen Sie »Neu«, um die Buchung als neue Buchung zu importieren."
-
-#: ../src/import-export/dialog-import.glade.h:34
-msgid "Select \"U+R\" to update and reconcile a matching transaction."
-msgstr ""
-"Wählen Sie »Abgl+Ü«, um eine existierende Buchung abzugleichen und die Daten "
-"zu übernehmen."
-
-#: ../src/import-export/dialog-import.glade.h:35
-msgid "Select \"R\" to reconcile a matching transaction."
-msgstr "Wählen Sie »Abgl«, um eine existierende Buchung abzugleichen"
-
-#: ../src/import-export/dialog-import.glade.h:36
-msgid "Select neither to skip the transaction (it won't be imported at all)."
-msgstr "Ist keines der beiden gewählt, wird die Buchung nicht importiert."
-
-#: ../src/import-export/dialog-import.glade.h:37
-msgid "(none)"
-msgstr "(keine)"
-
-#: ../src/import-export/dialog-import.glade.h:38
-msgid "Red"
-msgstr "Rot"
-
-#: ../src/import-export/dialog-import.glade.h:39
-msgid "Yellow"
-msgstr "Gelb"
-
-#: ../src/import-export/dialog-import.glade.h:40
-msgid "Green"
-msgstr "Grün"
-
-#: ../src/import-export/dialog-import.glade.h:41
 msgid ""
 "This transaction probably requires your intervention or it will be imported "
 "unbalanced."
@@ -17511,17 +17416,17 @@ msgstr ""
 "Diese Buchung benötigt Ihre Zuordnung, ansonsten würde sie unausgeglichen "
 "importiert."
 
-#: ../src/import-export/dialog-import.glade.h:42
+#: ../src/import-export/dialog-import.glade.h:29
 msgid ""
 "This transaction will be imported balanced (you may still want to double "
 "check the match or destination account)."
 msgstr "Diese Buchung wird ausgeglichen importiert."
 
-#: ../src/import-export/dialog-import.glade.h:43
+#: ../src/import-export/dialog-import.glade.h:30
 msgid "This transaction requires your intervention or it will NOT be imported."
 msgstr "Diese Buchung benötigt Ihre Auswahl oder sie würde nicht importiert."
 
-#: ../src/import-export/dialog-import.glade.h:44
+#: ../src/import-export/dialog-import.glade.h:31
 msgid ""
 "Double click on the transaction to change the matching transaction to "
 "reconcile, or the destination account of the auto-balance split (if "
@@ -17531,11 +17436,65 @@ msgstr ""
 "Buchung auswählen, oder ein gewünschtes Gegenkonto für die neue Buchung "
 "auswählen."
 
+#: ../src/import-export/dialog-import.glade.h:32
+msgid "Transaction List Help"
+msgstr "Buchungsimport Hilfe"
+
+#: ../src/import-export/dialog-import.glade.h:33
+msgid "<b>Colors</b>"
+msgstr "<b>Farben</b>"
+
+#: ../src/import-export/dialog-import.glade.h:35
+msgid "\"A\""
+msgstr "»Neu«"
+
+#: ../src/import-export/dialog-import.glade.h:36
+msgid "\"U+R\""
+msgstr "»Abgl+Ü«"
+
+#: ../src/import-export/dialog-import.glade.h:37
+msgid "\"R\""
+msgstr "»Abgl«"
+
+#: ../src/import-export/dialog-import.glade.h:38
+msgid "Select \"A\" to add the transaction as new."
+msgstr "Wählen Sie »Neu«, um die Buchung als neue Buchung zu importieren."
+
+#: ../src/import-export/dialog-import.glade.h:39
+msgid "Select \"U+R\" to update and reconcile a matching transaction."
+msgstr ""
+"Wählen Sie »Abgl+Ü«, um eine existierende Buchung abzugleichen und die Daten "
+"zu übernehmen."
+
+#: ../src/import-export/dialog-import.glade.h:40
+msgid "Select \"R\" to reconcile a matching transaction."
+msgstr "Wählen Sie »Abgl«, um eine existierende Buchung abzugleichen"
+
+#: ../src/import-export/dialog-import.glade.h:41
+msgid "Select neither to skip the transaction (it won't be imported at all)."
+msgstr "Ist keines der beiden gewählt, wird die Buchung nicht importiert."
+
+#: ../src/import-export/dialog-import.glade.h:42
+msgid "(none)"
+msgstr "(keine)"
+
+#: ../src/import-export/dialog-import.glade.h:43
+msgid "Red"
+msgstr "Rot"
+
+#: ../src/import-export/dialog-import.glade.h:44
+msgid "Yellow"
+msgstr "Gelb"
+
 #: ../src/import-export/dialog-import.glade.h:45
+msgid "Green"
+msgstr "Grün"
+
+#: ../src/import-export/dialog-import.glade.h:46
 msgid "Generic import transaction matcher"
 msgstr "Buchungszuordnung für Allgemeinen Import"
 
-#: ../src/import-export/dialog-import.glade.h:46
+#: ../src/import-export/dialog-import.glade.h:47
 msgid "List of downloaded transactions (source split shown):"
 msgstr ""
 "Liste der importierten Buchungen (angezeigt wird die Herkunftsbuchung):"
@@ -17628,6 +17587,17 @@ msgstr ""
 "existierende Buchung richtig zuzuordnen, können Sie hier die Höhe für solche "
 "zusätzlichen Auszahlungsgebühren in Ihrer lokalen Währung angeben."
 
+#: ../src/import-export/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in.in.h:19
+#, fuzzy
+msgid "Display or hide reconciled matches"
+msgstr "Anzeigen des Abgleich-Datums?"
+
+#: ../src/import-export/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in.in.h:20
+msgid ""
+"Shows or hides transactions from the match picker which are already of some "
+"reconciled state."
+msgstr ""
+
 #: ../src/import-export/import-account-matcher.c:118
 msgid "Account ID"
 msgstr "Kontonummer"
@@ -17673,74 +17643,89 @@ msgstr "Jahr/Monat/Tag"
 msgid "y/d/m"
 msgstr "Jahr/Tag/Monat"
 
-#: ../src/import-export/import-main-matcher.c:250
+#: ../src/import-export/import-main-matcher.c:253
 msgid "Destination account for the auto-balance split."
 msgstr "Gegenkonto für Ausgleichsbuchung."
 
-#: ../src/import-export/import-main-matcher.c:467
+#: ../src/import-export/import-main-matcher.c:470
 msgid "A"
 msgstr "Neu"
 
-#: ../src/import-export/import-main-matcher.c:469
+#: ../src/import-export/import-main-matcher.c:472
 msgid "U+R"
 msgstr "Abgl+Ü"
 
-#: ../src/import-export/import-main-matcher.c:478
+#: ../src/import-export/import-main-matcher.c:481
 msgid "Info"
 msgstr "Information"
 
-#: ../src/import-export/import-main-matcher.c:714
+#: ../src/import-export/import-main-matcher.c:719
 msgid "New, already balanced"
 msgstr "Neu (und ausgeglichen)"
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
-#: ../src/import-export/import-main-matcher.c:740
+#: ../src/import-export/import-main-matcher.c:745
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
 msgstr "Neu (Buchung von %s nach »%s«, manuell gewählt)"
 
 #. Translators: %1$s is the amount to be
 #. transferred. %2$s is the destination account.
-#: ../src/import-export/import-main-matcher.c:748
+#: ../src/import-export/import-main-matcher.c:753
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
 msgstr "Neu (Buchung von %s nach »%s«, automatisch gewählt)"
 
 #. Translators: %s is the amount to be transferred.
-#: ../src/import-export/import-main-matcher.c:759
+#: ../src/import-export/import-main-matcher.c:764
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "Neu (Nicht ausgeglichen, benötige Konto für verbleibende %s)"
 
-#: ../src/import-export/import-main-matcher.c:771
+#: ../src/import-export/import-main-matcher.c:776
 msgid "Reconcile (manual) match"
 msgstr "Abgleichen (mit manuell gewählter Zuordnung)"
 
-#: ../src/import-export/import-main-matcher.c:775
+#: ../src/import-export/import-main-matcher.c:780
 msgid "Reconcile (auto) match"
 msgstr "Abgleichen (mit automatisch gewählter Zuordnung)"
 
-#: ../src/import-export/import-main-matcher.c:781
-#: ../src/import-export/import-main-matcher.c:800
+#: ../src/import-export/import-main-matcher.c:786
+#: ../src/import-export/import-main-matcher.c:805
 msgid "Match missing!"
 msgstr "Zuordnung fehlt!"
 
-#: ../src/import-export/import-main-matcher.c:790
+#: ../src/import-export/import-main-matcher.c:795
 msgid "Update and reconcile (manual) match"
 msgstr "Abgleichen und Datenübernahme (mit manuell gewählter Zuordnung)"
 
-#: ../src/import-export/import-main-matcher.c:794
+#: ../src/import-export/import-main-matcher.c:799
 msgid "Update and reconcile (auto) match"
 msgstr "Abgleichen und Datenübernahme (mit automatisch gewählter Zuordnung)"
 
-#: ../src/import-export/import-main-matcher.c:805
+#: ../src/import-export/import-main-matcher.c:810
 msgid "Do not import (no action selected)"
 msgstr "Nicht importieren (keine Import-Aktion gewählt)"
 
-#: ../src/import-export/import-match-picker.c:374
+#: ../src/import-export/import-match-picker.c:423
 msgid "Confidence"
 msgstr "Genauigkeit"
+
+#: ../src/import-export/import-match-picker.c:438
+#, fuzzy
+msgid "Pending Action"
+msgstr "_Online Aktionen"
+
+#: ../src/import-export/import-pending-matches.c:194
+#, fuzzy
+msgid "Manual"
+msgstr "Jährlich"
+
+#: ../src/import-export/import-pending-matches.c:196
+#: ../src/report/business-reports/balsheet-eg.scm:332
+msgid "Auto"
+msgstr "automatisch"
 
 #: ../src/import-export/log-replay/gnc-log-replay.c:570
 msgid "Select a .log file to replay"
@@ -18776,13 +18761,13 @@ msgid "Missing transaction date."
 msgstr "Buchungsdatum fehlt."
 
 #. The default date format for use with strftime in Win32.
-#: ../src/libqof/qof/gnc-date.c:79
+#: ../src/libqof/qof/gnc-date.c:90
 msgid "%B %#d, %Y"
 msgstr "%#d. %B %Y"
 
 #. The default date format for use with strftime in other OS.
 #. Translators: call "man strftime" for possible values.
-#: ../src/libqof/qof/gnc-date.c:83
+#: ../src/libqof/qof/gnc-date.c:94
 msgid "%B %e, %Y"
 msgstr "%e. %B %Y"
 
@@ -18824,25 +18809,29 @@ msgstr "Diese Zeilen wurden gelöscht:"
 msgid "Are you sure you have bills/invoices to update?"
 msgstr "Sind Sie sicher, dass Rechnungen aktualisiert werden sollen?"
 
-#: ../src/plugins/bi_import/dialog-bi-import.c:817
+#: ../src/plugins/bi_import/dialog-bi-import.c:818
 #, c-format
 msgid "Invoice %s posted.\n"
 msgstr "Rechnung %s wurde eingebucht.\n"
 
-#: ../src/plugins/bi_import/dialog-bi-import.c:822
+#: ../src/plugins/bi_import/dialog-bi-import.c:823
 #, c-format
 msgid "Invoice %s NOT posted because currencies don't match.\n"
-msgstr "Rechnung %s wurde nicht eingebucht, da die Währungen nicht übereinstimmen.\n"
+msgstr ""
+"Rechnung %s wurde nicht eingebucht, da die Währungen nicht übereinstimmen.\n"
 
-#: ../src/plugins/bi_import/dialog-bi-import.c:828
+#: ../src/plugins/bi_import/dialog-bi-import.c:829
 #, c-format
 msgid "Cannot post invoice %s because account name \"%s\" is invalid!\n"
-msgstr "Rechnung %s kann nicht eingebucht werden, da die Kontenbezeichnung \"%s\" ungültig ist!\n"
+msgstr ""
+"Rechnung %s kann nicht eingebucht werden, da die Kontenbezeichnung \"%s\" "
+"ungültig ist!\n"
 
-#: ../src/plugins/bi_import/dialog-bi-import.c:834
+#: ../src/plugins/bi_import/dialog-bi-import.c:835
 #, c-format
 msgid "Invoice %s NOT posted because it requires currency conversion.\n"
-msgstr "Rechnung %s wurde nicht eingebucht, da sie eine Währungkonversion benötigt.\n"
+msgstr ""
+"Rechnung %s wurde nicht eingebucht, da sie eine Währungkonversion benötigt.\n"
 
 #: ../src/plugins/bi_import/dialog-bi-import-gui.c:182
 msgid "Import Bills or Invoices from csv"
@@ -19023,7 +19012,8 @@ msgid "<b>3. Select import options</b>"
 msgstr "<b>3. Bestimmen Sie die Importoptionen</b>"
 
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:14
-msgid "<b>3. Preview</b>"
+#, fuzzy
+msgid "<b>4. Preview</b>"
 msgstr "<b>4. Vorschau</b>"
 
 #. Menu Items
@@ -19476,9 +19466,10 @@ msgstr "Das Buchungsdatum wird als Stichtag verwendet."
 msgid ""
 "Display Address Name. This, and other fields, may be useful if copying this "
 "report to a spreadsheet for use in a mail merge."
-msgstr "Adressbezeichnung anzeigen. Dieses Feld mag neben anderen nützlich "
-"sein, wenn man den Bericht zur Weiterverarbeitung in die "
-"Tabellenkalkulation kopiert."
+msgstr ""
+"Adressbezeichnung anzeigen. Dieses Feld mag neben anderen nützlich sein, "
+"wenn man den Bericht zur Weiterverarbeitung in die Tabellenkalkulation "
+"kopiert."
 
 #: ../src/report/business-reports/aging.scm:428
 msgid "Display Address 1."
@@ -19828,10 +19819,6 @@ msgstr "Fremdwährungen in Konten anzeigen."
 msgid "Commodities"
 msgstr "Währungen/Wertpapiere"
 
-#: ../src/report/business-reports/balsheet-eg.scm:332
-msgid "Auto"
-msgstr "automatisch"
-
 #: ../src/report/business-reports/balsheet-eg.scm:333
 msgid "Adjust the layout to fit the width of the screen or page."
 msgstr "Paßt das Layout an die Breite des Fensters oder der Seite an."
@@ -20074,7 +20061,7 @@ msgid "Sort by expense amount."
 msgstr "Sortieren nach Kosten."
 
 #: ../src/report/business-reports/customer-summary.scm:472
-#: ../src/report/standard-reports/transaction.scm:831
+#: ../src/report/standard-reports/transaction.scm:836
 msgid "Ascending"
 msgstr "Aufsteigend"
 
@@ -20083,7 +20070,7 @@ msgid "A to Z, smallest to largest."
 msgstr "Von A bis Z, von klein nach groß."
 
 #: ../src/report/business-reports/customer-summary.scm:475
-#: ../src/report/standard-reports/transaction.scm:834
+#: ../src/report/standard-reports/transaction.scm:839
 msgid "Descending"
 msgstr "Absteigend"
 
@@ -20176,7 +20163,7 @@ msgstr ""
 #: ../src/report/business-reports/invoice.scm:245
 #: ../src/report/business-reports/taxinvoice.scm:169
 #: ../src/report/standard-reports/register.scm:411
-#: ../src/report/standard-reports/transaction.scm:942
+#: ../src/report/standard-reports/transaction.scm:947
 msgid "Display the date?"
 msgstr "Anzeigen des Datums?"
 
@@ -20184,7 +20171,7 @@ msgstr "Anzeigen des Datums?"
 #: ../src/report/business-reports/fancy-invoice.scm:265
 #: ../src/report/business-reports/invoice.scm:250
 #: ../src/report/standard-reports/register.scm:426
-#: ../src/report/standard-reports/transaction.scm:947
+#: ../src/report/standard-reports/transaction.scm:952
 msgid "Display the description?"
 msgstr "Anzeigen der Beschreibung?"
 
@@ -20297,7 +20284,7 @@ msgstr "Anzeigen des Betrags des Postens?"
 #: ../src/report/standard-reports/transaction.scm:412
 #: ../src/report/standard-reports/transaction.scm:414
 #: ../src/report/standard-reports/transaction.scm:420
-#: ../src/report/standard-reports/transaction.scm:1063
+#: ../src/report/standard-reports/transaction.scm:1068
 msgid "Display"
 msgstr "Anzeige"
 
@@ -20340,7 +20327,7 @@ msgstr "Alle einzelnen Steueranteile anzeigen?"
 #: ../src/report/standard-reports/general-ledger.scm:93
 #: ../src/report/standard-reports/general-ledger.scm:113
 #: ../src/report/standard-reports/register.scm:474
-#: ../src/report/standard-reports/transaction.scm:960
+#: ../src/report/standard-reports/transaction.scm:965
 msgid "Totals"
 msgstr "Gesamtsumme"
 
@@ -20348,7 +20335,7 @@ msgstr "Gesamtsumme"
 #: ../src/report/business-reports/fancy-invoice.scm:310
 #: ../src/report/business-reports/invoice.scm:295
 #: ../src/report/standard-reports/register.scm:475
-#: ../src/report/standard-reports/transaction.scm:960
+#: ../src/report/standard-reports/transaction.scm:965
 msgid "Display the totals?"
 msgstr "Anzeigen der Gesamtsumme"
 
@@ -20741,6 +20728,10 @@ msgstr "Das Konto der Forderungen, welche Sie untersuchen wollen."
 #: ../src/report/business-reports/receivables.scm:68
 msgid "Address source."
 msgstr "Art der Anschrift."
+
+#: ../src/report/business-reports/receivables.scm:71
+msgid "Billing"
+msgstr "Rechnung"
 
 #: ../src/report/business-reports/receivables.scm:71
 msgid "Address fields from billing address."
@@ -22364,11 +22355,11 @@ msgstr "Verbindlichkeiten Konten"
 msgid "Credit Lines"
 msgstr "Kreditrahmen"
 
-#: ../src/report/report-system/report-utilities.scm:687
+#: ../src/report/report-system/report-utilities.scm:690
 msgid "Building '%s' report ..."
 msgstr "Bericht '%s' berechnen..."
 
-#: ../src/report/report-system/report-utilities.scm:693
+#: ../src/report/report-system/report-utilities.scm:696
 msgid "Rendering '%s' report ..."
 msgstr "Bericht '%s' darstellen..."
 
@@ -23775,7 +23766,7 @@ msgstr "Salden %s bis %s"
 
 #: ../src/report/standard-reports/category-barchart.scm:602
 #: ../src/report/standard-reports/transaction.scm:301
-#: ../src/report/standard-reports/transaction.scm:1031
+#: ../src/report/standard-reports/transaction.scm:1036
 msgid "Grand Total"
 msgstr "Gesamtbetrag"
 
@@ -23895,7 +23886,7 @@ msgstr "Hauptbuch Journal"
 #: ../src/report/standard-reports/register.scm:145
 #: ../src/report/standard-reports/register.scm:416
 #: ../src/report/standard-reports/transaction.scm:386
-#: ../src/report/standard-reports/transaction.scm:945
+#: ../src/report/standard-reports/transaction.scm:950
 msgid "Num/Action"
 msgstr "Nummer/Aktion"
 
@@ -23905,7 +23896,7 @@ msgstr "Nummer/Aktion"
 #: ../src/report/standard-reports/general-ledger.scm:112
 #: ../src/report/standard-reports/register.scm:469
 #: ../src/report/standard-reports/transaction.scm:404
-#: ../src/report/standard-reports/transaction.scm:959
+#: ../src/report/standard-reports/transaction.scm:964
 msgid "Running Balance"
 msgstr "Laufender Saldo"
 
@@ -23917,7 +23908,7 @@ msgid "Sorting"
 msgstr "Sortieren"
 
 #: ../src/report/standard-reports/general-ledger.scm:65
-#: ../src/report/standard-reports/transaction.scm:681
+#: ../src/report/standard-reports/transaction.scm:686
 msgid "Filter Type"
 msgstr "Filtertyp"
 
@@ -23930,9 +23921,9 @@ msgstr "Stornierte Buchungssätze"
 #: ../src/report/standard-reports/general-ledger.scm:98
 #: ../src/report/standard-reports/transaction.scm:382
 #: ../src/report/standard-reports/transaction.scm:429
-#: ../src/report/standard-reports/transaction.scm:742
-#: ../src/report/standard-reports/transaction.scm:797
-#: ../src/report/standard-reports/transaction.scm:943
+#: ../src/report/standard-reports/transaction.scm:747
+#: ../src/report/standard-reports/transaction.scm:802
+#: ../src/report/standard-reports/transaction.scm:948
 msgid "Reconciled Date"
 msgstr "Datum des Abgleichs"
 
@@ -23941,52 +23932,52 @@ msgstr "Datum des Abgleichs"
 #: ../src/report/standard-reports/transaction.scm:439
 #: ../src/report/standard-reports/transaction.scm:523
 #: ../src/report/standard-reports/transaction.scm:525
-#: ../src/report/standard-reports/transaction.scm:965
+#: ../src/report/standard-reports/transaction.scm:970
 msgid "Trans Number"
 msgstr "Buchungsnummer"
 
 #: ../src/report/standard-reports/general-ledger.scm:83
 #: ../src/report/standard-reports/general-ledger.scm:103
 #: ../src/report/standard-reports/transaction.scm:406
-#: ../src/report/standard-reports/transaction.scm:950
+#: ../src/report/standard-reports/transaction.scm:955
 msgid "Use Full Account Name"
 msgstr "Volle Kontobezeichnung benutzen"
 
 #: ../src/report/standard-reports/general-ledger.scm:85
 #: ../src/report/standard-reports/general-ledger.scm:105
 #: ../src/report/standard-reports/transaction.scm:392
-#: ../src/report/standard-reports/transaction.scm:750
-#: ../src/report/standard-reports/transaction.scm:805
-#: ../src/report/standard-reports/transaction.scm:952
+#: ../src/report/standard-reports/transaction.scm:755
+#: ../src/report/standard-reports/transaction.scm:810
+#: ../src/report/standard-reports/transaction.scm:957
 msgid "Other Account Name"
 msgstr "Name des Gegenkontos"
 
 #: ../src/report/standard-reports/general-ledger.scm:86
 #: ../src/report/standard-reports/general-ledger.scm:106
 #: ../src/report/standard-reports/transaction.scm:414
-#: ../src/report/standard-reports/transaction.scm:954
+#: ../src/report/standard-reports/transaction.scm:959
 msgid "Use Full Other Account Name"
 msgstr "Volle Kontobezeichnung des Gegenkontos benutzen"
 
 #: ../src/report/standard-reports/general-ledger.scm:87
 #: ../src/report/standard-reports/general-ledger.scm:107
 #: ../src/report/standard-reports/transaction.scm:412
-#: ../src/report/standard-reports/transaction.scm:754
-#: ../src/report/standard-reports/transaction.scm:809
-#: ../src/report/standard-reports/transaction.scm:955
+#: ../src/report/standard-reports/transaction.scm:759
+#: ../src/report/standard-reports/transaction.scm:814
+#: ../src/report/standard-reports/transaction.scm:960
 msgid "Other Account Code"
 msgstr "Nummer des Gegenkontos"
 
 #: ../src/report/standard-reports/general-ledger.scm:94
 #: ../src/report/standard-reports/general-ledger.scm:114
-#: ../src/report/standard-reports/transaction.scm:993
-#: ../src/report/standard-reports/transaction.scm:1064
+#: ../src/report/standard-reports/transaction.scm:998
+#: ../src/report/standard-reports/transaction.scm:1069
 msgid "Sign Reverses"
 msgstr "Vorzeichenumkehr"
 
 #: ../src/report/standard-reports/general-ledger.scm:121
 #: ../src/report/standard-reports/transaction.scm:617
-#: ../src/report/standard-reports/transaction.scm:1070
+#: ../src/report/standard-reports/transaction.scm:1075
 msgid "Style"
 msgstr "Stil"
 
@@ -23997,13 +23988,13 @@ msgstr "Primärschlüssel"
 
 #: ../src/report/standard-reports/general-ledger.scm:133
 #: ../src/report/standard-reports/transaction.scm:418
-#: ../src/report/standard-reports/transaction.scm:862
+#: ../src/report/standard-reports/transaction.scm:867
 msgid "Show Full Account Name"
 msgstr "Lange Kontobezeichnung anzeigen"
 
 #: ../src/report/standard-reports/general-ledger.scm:134
 #: ../src/report/standard-reports/transaction.scm:416
-#: ../src/report/standard-reports/transaction.scm:869
+#: ../src/report/standard-reports/transaction.scm:874
 msgid "Show Account Code"
 msgstr "Kontonummer anzeigen"
 
@@ -24018,7 +24009,7 @@ msgid "Primary Subtotal for Date Key"
 msgstr "Primäre Zwischensumme für Datumsschlüssel"
 
 #: ../src/report/standard-reports/general-ledger.scm:137
-#: ../src/report/standard-reports/transaction.scm:890
+#: ../src/report/standard-reports/transaction.scm:895
 msgid "Primary Sort Order"
 msgstr "Hauptsortier-Reihenfolge"
 
@@ -24038,7 +24029,7 @@ msgid "Secondary Subtotal for Date Key"
 msgstr "Sekundäre Zwischensumme für Datumsschlüssel"
 
 #: ../src/report/standard-reports/general-ledger.scm:141
-#: ../src/report/standard-reports/transaction.scm:927
+#: ../src/report/standard-reports/transaction.scm:932
 msgid "Secondary Sort Order"
 msgstr "Sekundäre Sortierreihenfolge"
 
@@ -24063,12 +24054,12 @@ msgstr "Summenzeile für die Devisenhandel-Konten anzeigen."
 msgid "Total Trading"
 msgstr "Gesamt Devisenhandel"
 
-#: ../src/report/standard-reports/income-statement.scm:718
+#: ../src/report/standard-reports/income-statement.scm:720
 #: ../src/report/standard-reports/trial-balance.scm:617
 msgid "Income Statement"
 msgstr "Ergebnisrechnung"
 
-#: ../src/report/standard-reports/income-statement.scm:719
+#: ../src/report/standard-reports/income-statement.scm:721
 msgid "Profit & Loss"
 msgstr "Gewinn- und Verlustrechnung"
 
@@ -24326,13 +24317,13 @@ msgid "Display the check number/action?"
 msgstr "Anzeigen der Schecknummer/Aktion?"
 
 #: ../src/report/standard-reports/register.scm:421
-#: ../src/report/standard-reports/transaction.scm:945
-#: ../src/report/standard-reports/transaction.scm:946
+#: ../src/report/standard-reports/transaction.scm:950
+#: ../src/report/standard-reports/transaction.scm:951
 msgid "Display the check number?"
 msgstr "Anzeigen der Schecknummer?"
 
 #: ../src/report/standard-reports/register.scm:431
-#: ../src/report/standard-reports/transaction.scm:973
+#: ../src/report/standard-reports/transaction.scm:978
 msgid "Display the memo?"
 msgstr "Anzeigen des Buchungstexts?"
 
@@ -24341,7 +24332,7 @@ msgid "Display the account?"
 msgstr "Konto anzeigen?"
 
 #: ../src/report/standard-reports/register.scm:441
-#: ../src/report/standard-reports/transaction.scm:956
+#: ../src/report/standard-reports/transaction.scm:961
 msgid "Display the number of shares?"
 msgstr "Anzahl von Anteilen anzeigen?"
 
@@ -24350,33 +24341,33 @@ msgid "Display the name of lot the shares are in?"
 msgstr "Bezeichnung des Loses anzeigen, in dem sich die Anteile befinden?"
 
 #: ../src/report/standard-reports/register.scm:451
-#: ../src/report/standard-reports/transaction.scm:957
+#: ../src/report/standard-reports/transaction.scm:962
 msgid "Display the shares price?"
 msgstr "Den Anteilspreis anzeigen?"
 
 #: ../src/report/standard-reports/register.scm:456
-#: ../src/report/standard-reports/transaction.scm:984
+#: ../src/report/standard-reports/transaction.scm:989
 msgid "Display the amount?"
 msgstr "Betrag anzeigen?"
 
 #: ../src/report/standard-reports/register.scm:459
 #: ../src/report/standard-reports/transaction.scm:624
-#: ../src/report/standard-reports/transaction.scm:988
+#: ../src/report/standard-reports/transaction.scm:993
 msgid "Single"
 msgstr "Einzel"
 
 #: ../src/report/standard-reports/register.scm:459
-#: ../src/report/standard-reports/transaction.scm:988
+#: ../src/report/standard-reports/transaction.scm:993
 msgid "Single Column Display."
 msgstr "Einspaltige Anzeige."
 
 #: ../src/report/standard-reports/register.scm:460
-#: ../src/report/standard-reports/transaction.scm:989
+#: ../src/report/standard-reports/transaction.scm:994
 msgid "Double"
 msgstr "Doppel"
 
 #: ../src/report/standard-reports/register.scm:460
-#: ../src/report/standard-reports/transaction.scm:989
+#: ../src/report/standard-reports/transaction.scm:994
 msgid "Two Column Display."
 msgstr "Zweispaltige Anzeige."
 
@@ -24385,7 +24376,7 @@ msgid "Display the value in transaction currency?"
 msgstr "Werte in Buchungswährung anzeigen?"
 
 #: ../src/report/standard-reports/register.scm:470
-#: ../src/report/standard-reports/transaction.scm:959
+#: ../src/report/standard-reports/transaction.scm:964
 msgid "Display a running balance?"
 msgstr "Einen laufenden Saldo anzeigen."
 
@@ -24471,213 +24462,218 @@ msgstr ""
 "Formatiert die Tabelle passend zum Kopieren/Einfügen mit zusätzlichen "
 "Tabellenzellen."
 
-#: ../src/report/standard-reports/transaction.scm:666
+#: ../src/report/standard-reports/transaction.scm:665
+#, fuzzy
+msgid "Account Substring"
+msgstr "Kontenauswahl"
+
+#: ../src/report/standard-reports/transaction.scm:671
 msgid "Filter on these accounts."
 msgstr "Auf jenen Konten filtern."
 
-#: ../src/report/standard-reports/transaction.scm:682
+#: ../src/report/standard-reports/transaction.scm:687
 msgid "Filter account."
 msgstr "Konto filtern."
 
-#: ../src/report/standard-reports/transaction.scm:686
+#: ../src/report/standard-reports/transaction.scm:691
 msgid "Do not do any filtering."
 msgstr "Nichts filtern."
 
-#: ../src/report/standard-reports/transaction.scm:688
+#: ../src/report/standard-reports/transaction.scm:693
 msgid "Include Transactions to/from Filter Accounts"
 msgstr "Buchungen von/nach Filter-Konten einschließen"
 
-#: ../src/report/standard-reports/transaction.scm:689
+#: ../src/report/standard-reports/transaction.scm:694
 msgid "Include transactions to/from filter accounts only."
 msgstr "Nur Buchungen von/nach Filter-Konten einschließen."
 
-#: ../src/report/standard-reports/transaction.scm:691
+#: ../src/report/standard-reports/transaction.scm:696
 msgid "Exclude Transactions to/from Filter Accounts"
 msgstr "Buchungen von/nach Filter-Konten ausschließen"
 
-#: ../src/report/standard-reports/transaction.scm:692
+#: ../src/report/standard-reports/transaction.scm:697
 msgid "Exclude transactions to/from all filter accounts."
 msgstr "Buchungen von/nach allen Filter-Konten ausschließen."
 
-#: ../src/report/standard-reports/transaction.scm:700
+#: ../src/report/standard-reports/transaction.scm:705
 msgid "How to handle void transactions."
 msgstr "Behandlung von stornierten Buchungssätzen."
 
-#: ../src/report/standard-reports/transaction.scm:704
+#: ../src/report/standard-reports/transaction.scm:709
 msgid "Non-void only"
 msgstr "Nur nicht-stornierte"
 
-#: ../src/report/standard-reports/transaction.scm:705
+#: ../src/report/standard-reports/transaction.scm:710
 msgid "Show only non-voided transactions."
 msgstr "Nur nicht-stornierte Buchungssätze anzeigen."
 
-#: ../src/report/standard-reports/transaction.scm:708
+#: ../src/report/standard-reports/transaction.scm:713
 msgid "Void only"
 msgstr "Nur stornierte"
 
-#: ../src/report/standard-reports/transaction.scm:709
+#: ../src/report/standard-reports/transaction.scm:714
 msgid "Show only voided transactions."
 msgstr "Nur stornierte Buchungssätze anzeigen."
 
-#: ../src/report/standard-reports/transaction.scm:712
+#: ../src/report/standard-reports/transaction.scm:717
 msgid "Both"
 msgstr "Beides"
 
-#: ../src/report/standard-reports/transaction.scm:713
+#: ../src/report/standard-reports/transaction.scm:718
 msgid "Show both (and include void transactions in totals)."
 msgstr ""
 "Beides anzeigen (und stornierte Buchungssätze im Saldo miteinbeziehen)."
 
-#: ../src/report/standard-reports/transaction.scm:723
-#: ../src/report/standard-reports/transaction.scm:778
+#: ../src/report/standard-reports/transaction.scm:728
+#: ../src/report/standard-reports/transaction.scm:783
 msgid "Do not sort."
 msgstr "Nicht sortieren."
 
-#: ../src/report/standard-reports/transaction.scm:727
-#: ../src/report/standard-reports/transaction.scm:782
+#: ../src/report/standard-reports/transaction.scm:732
+#: ../src/report/standard-reports/transaction.scm:787
 msgid "Sort & subtotal by account name."
 msgstr "Sortiere nach Kontonamen und berechne die Zwischensumme"
 
-#: ../src/report/standard-reports/transaction.scm:731
-#: ../src/report/standard-reports/transaction.scm:786
+#: ../src/report/standard-reports/transaction.scm:736
+#: ../src/report/standard-reports/transaction.scm:791
 msgid "Sort & subtotal by account code."
 msgstr "Sortiere nach Kontonummer und berechne die Zwischensumme."
 
-#: ../src/report/standard-reports/transaction.scm:738
-#: ../src/report/standard-reports/transaction.scm:793
+#: ../src/report/standard-reports/transaction.scm:743
+#: ../src/report/standard-reports/transaction.scm:798
 msgid "Exact Time"
 msgstr "Genaue Zeit"
 
-#: ../src/report/standard-reports/transaction.scm:739
-#: ../src/report/standard-reports/transaction.scm:794
+#: ../src/report/standard-reports/transaction.scm:744
+#: ../src/report/standard-reports/transaction.scm:799
 msgid "Sort by exact time."
 msgstr "Nach genauem Zeitpunkt sortieren."
 
-#: ../src/report/standard-reports/transaction.scm:743
-#: ../src/report/standard-reports/transaction.scm:798
+#: ../src/report/standard-reports/transaction.scm:748
+#: ../src/report/standard-reports/transaction.scm:803
 msgid "Sort by the Reconciled Date."
 msgstr "Sortiere nach Abgleich-Datum."
 
-#: ../src/report/standard-reports/transaction.scm:746
-#: ../src/report/standard-reports/transaction.scm:801
+#: ../src/report/standard-reports/transaction.scm:751
+#: ../src/report/standard-reports/transaction.scm:806
 msgid "Register Order"
 msgstr "Wie Kontobuch"
 
-#: ../src/report/standard-reports/transaction.scm:747
-#: ../src/report/standard-reports/transaction.scm:802
+#: ../src/report/standard-reports/transaction.scm:752
+#: ../src/report/standard-reports/transaction.scm:807
 msgid "Sort as with the register."
 msgstr "Die Sortierung, die im Kontobuch benutzt wird."
 
-#: ../src/report/standard-reports/transaction.scm:751
-#: ../src/report/standard-reports/transaction.scm:806
+#: ../src/report/standard-reports/transaction.scm:756
+#: ../src/report/standard-reports/transaction.scm:811
 msgid "Sort by account transferred from/to's name."
 msgstr "Sortiere nach Namen des Gegenkontos."
 
-#: ../src/report/standard-reports/transaction.scm:755
-#: ../src/report/standard-reports/transaction.scm:810
+#: ../src/report/standard-reports/transaction.scm:760
+#: ../src/report/standard-reports/transaction.scm:815
 msgid "Sort by account transferred from/to's code."
 msgstr "Sortiere nach Nummer des Gegenkontos."
 
-#: ../src/report/standard-reports/transaction.scm:767
+#: ../src/report/standard-reports/transaction.scm:772
 msgid "Sort by check number/action."
 msgstr "Sortiere nach Schecknummer/Aktion."
 
-#: ../src/report/standard-reports/transaction.scm:771
+#: ../src/report/standard-reports/transaction.scm:776
 msgid "Sort by transaction number."
 msgstr "Sortieren nach Buchungsnummer."
 
-#: ../src/report/standard-reports/transaction.scm:822
+#: ../src/report/standard-reports/transaction.scm:827
 msgid "Sort by check/transaction number."
 msgstr "Sortieren nach Scheck-/Buchungsnr."
 
-#: ../src/report/standard-reports/transaction.scm:832
+#: ../src/report/standard-reports/transaction.scm:837
 msgid "Smallest to largest, earliest to latest."
 msgstr "Kleinster zum Grösstem, Ältester zum jüngsten."
 
-#: ../src/report/standard-reports/transaction.scm:835
+#: ../src/report/standard-reports/transaction.scm:840
 msgid "Largest to smallest, latest to earliest."
 msgstr "Grösster zum Kleinstem, Jüngster zum Ältesten."
 
-#: ../src/report/standard-reports/transaction.scm:839
+#: ../src/report/standard-reports/transaction.scm:844
 msgid "None."
 msgstr "Keine."
 
-#: ../src/report/standard-reports/transaction.scm:840
+#: ../src/report/standard-reports/transaction.scm:845
 msgid "Weekly."
 msgstr "Wöchentlich."
 
-#: ../src/report/standard-reports/transaction.scm:841
+#: ../src/report/standard-reports/transaction.scm:846
 msgid "Monthly."
 msgstr "Monatlich."
 
-#: ../src/report/standard-reports/transaction.scm:842
+#: ../src/report/standard-reports/transaction.scm:847
 msgid "Quarterly."
 msgstr "Vierteljährlich."
 
-#: ../src/report/standard-reports/transaction.scm:843
+#: ../src/report/standard-reports/transaction.scm:848
 msgid "Yearly."
 msgstr "Jährlich."
 
-#: ../src/report/standard-reports/transaction.scm:849
+#: ../src/report/standard-reports/transaction.scm:854
 msgid "Sort by this criterion first."
 msgstr "Sortiere zuerst nach diesem Kriterium."
 
-#: ../src/report/standard-reports/transaction.scm:864
+#: ../src/report/standard-reports/transaction.scm:869
 msgid "Show the full account name for subtotals and subtitles?"
 msgstr ""
 "Lange Kontenbezeichung in den Zwischensummen und -überschriften anzeigen?"
 
-#: ../src/report/standard-reports/transaction.scm:871
+#: ../src/report/standard-reports/transaction.scm:876
 msgid "Show the account code for subtotals and subtitles?"
 msgstr "Kontonummer für Zwischensummen und -überschriften anzeigen?"
 
-#: ../src/report/standard-reports/transaction.scm:878
+#: ../src/report/standard-reports/transaction.scm:883
 msgid "Subtotal according to the primary key?"
 msgstr "Zwischensummen für Primärschlüssel?"
 
-#: ../src/report/standard-reports/transaction.scm:884
-#: ../src/report/standard-reports/transaction.scm:921
+#: ../src/report/standard-reports/transaction.scm:889
+#: ../src/report/standard-reports/transaction.scm:926
 msgid "Do a date subtotal."
 msgstr "Zwischensumme nach Datum."
 
-#: ../src/report/standard-reports/transaction.scm:891
+#: ../src/report/standard-reports/transaction.scm:896
 msgid "Order of primary sorting."
 msgstr "Reihenfolge des primären Sortierens."
 
-#: ../src/report/standard-reports/transaction.scm:900
+#: ../src/report/standard-reports/transaction.scm:905
 msgid "Sort by this criterion second."
 msgstr "Sortiere als zweites nach diesem Kriterium."
 
-#: ../src/report/standard-reports/transaction.scm:915
+#: ../src/report/standard-reports/transaction.scm:920
 msgid "Subtotal according to the secondary key?"
 msgstr "Zwischensummen für Sekundärschlüssel?"
 
-#: ../src/report/standard-reports/transaction.scm:928
+#: ../src/report/standard-reports/transaction.scm:933
 msgid "Order of Secondary sorting."
 msgstr "Reihenfolge der zweiten Sortierung."
 
-#: ../src/report/standard-reports/transaction.scm:943
+#: ../src/report/standard-reports/transaction.scm:948
 msgid "Display the reconciled date?"
 msgstr "Anzeigen des Abgleich-Datums?"
 
-#: ../src/report/standard-reports/transaction.scm:948
+#: ../src/report/standard-reports/transaction.scm:953
 msgid "Display the notes if the memo is unavailable?"
 msgstr "Anzeigen der Bemerkung, falls kein Buchungstext verfügbar?"
 
-#: ../src/report/standard-reports/transaction.scm:949
+#: ../src/report/standard-reports/transaction.scm:954
 msgid "Display the account name?"
 msgstr "Kontenbezeichnung anzeigen?"
 
-#: ../src/report/standard-reports/transaction.scm:950
-#: ../src/report/standard-reports/transaction.scm:954
+#: ../src/report/standard-reports/transaction.scm:955
+#: ../src/report/standard-reports/transaction.scm:959
 msgid "Display the full account name?"
 msgstr "Volle Kontenbezeichnung anzeigen?"
 
-#: ../src/report/standard-reports/transaction.scm:951
+#: ../src/report/standard-reports/transaction.scm:956
 msgid "Display the account code?"
 msgstr "Kontonummer anzeigen?"
 
-#: ../src/report/standard-reports/transaction.scm:952
+#: ../src/report/standard-reports/transaction.scm:957
 msgid ""
 "Display the other account name? (if this is a split transaction, this "
 "parameter is guessed)."
@@ -24685,39 +24681,39 @@ msgstr ""
 "Kontobezeichnung des Gegenkontos anzeigen? (Wenn dies eine mehrteiliger "
 "Buchungssatz ist, wird dieser Parameter empfohlen.)"
 
-#: ../src/report/standard-reports/transaction.scm:955
+#: ../src/report/standard-reports/transaction.scm:960
 msgid "Display the other account code?"
 msgstr "Kontonummer des Gegenkontos anzeigen?"
 
-#: ../src/report/standard-reports/transaction.scm:966
+#: ../src/report/standard-reports/transaction.scm:971
 msgid "Display the trans number?"
 msgstr "Anzeigen der Buchungsnummer?"
 
-#: ../src/report/standard-reports/transaction.scm:987
+#: ../src/report/standard-reports/transaction.scm:992
 msgid "No amount display."
 msgstr "Keine Summenanzeige."
 
-#: ../src/report/standard-reports/transaction.scm:994
+#: ../src/report/standard-reports/transaction.scm:999
 msgid "Reverse amount display for certain account types."
 msgstr "Vorzeichen für bestimmte Kontenarten umkehren."
 
-#: ../src/report/standard-reports/transaction.scm:997
+#: ../src/report/standard-reports/transaction.scm:1002
 msgid "Don't change any displayed amounts."
 msgstr "Keine Vorzeichenumkehr anwenden."
 
-#: ../src/report/standard-reports/transaction.scm:998
+#: ../src/report/standard-reports/transaction.scm:1003
 msgid "Income and Expense"
 msgstr "Erträge und Aufwendungen"
 
-#: ../src/report/standard-reports/transaction.scm:999
+#: ../src/report/standard-reports/transaction.scm:1004
 msgid "Reverse amount display for Income and Expense Accounts."
 msgstr "Vorzeichen umkehren für Ertrags- und Aufwandskonten."
 
-#: ../src/report/standard-reports/transaction.scm:1000
+#: ../src/report/standard-reports/transaction.scm:1005
 msgid "Credit Accounts"
 msgstr "Habenkonten"
 
-#: ../src/report/standard-reports/transaction.scm:1001
+#: ../src/report/standard-reports/transaction.scm:1006
 msgid ""
 "Reverse amount display for Liability, Payable, Equity, Credit Card, and "
 "Income accounts."
@@ -24725,15 +24721,15 @@ msgstr ""
 "Passiv- (Kreditkarten, Eigen- & Fremdkapital) und Ertragskonten mit "
 "umgekehrten Vorzeichen darstellen."
 
-#: ../src/report/standard-reports/transaction.scm:1014
+#: ../src/report/standard-reports/transaction.scm:1019
 msgid "From %s To %s"
 msgstr "Von %s bis %s"
 
-#: ../src/report/standard-reports/transaction.scm:1018
-#: ../src/report/standard-reports/transaction.scm:1024
-#: ../src/report/standard-reports/transaction.scm:1030
-#: ../src/report/standard-reports/transaction.scm:1036
-#: ../src/report/standard-reports/transaction.scm:1042
+#: ../src/report/standard-reports/transaction.scm:1023
+#: ../src/report/standard-reports/transaction.scm:1029
+#: ../src/report/standard-reports/transaction.scm:1035
+#: ../src/report/standard-reports/transaction.scm:1041
+#: ../src/report/standard-reports/transaction.scm:1047
 #: ../src/report/stylesheets/stylesheet-easy.scm:102
 #: ../src/report/stylesheets/stylesheet-easy.scm:109
 #: ../src/report/stylesheets/stylesheet-easy.scm:116
@@ -24786,27 +24782,27 @@ msgstr "Von %s bis %s"
 msgid "Colors"
 msgstr "Farben"
 
-#: ../src/report/standard-reports/transaction.scm:1019
+#: ../src/report/standard-reports/transaction.scm:1024
 msgid "Primary Subtotals/headings"
 msgstr "Primäre Zwischenüberschriften/-summen"
 
-#: ../src/report/standard-reports/transaction.scm:1025
+#: ../src/report/standard-reports/transaction.scm:1030
 msgid "Secondary Subtotals/headings"
 msgstr "Sekundäre Zwischenüberschriften/-summen"
 
-#: ../src/report/standard-reports/transaction.scm:1037
+#: ../src/report/standard-reports/transaction.scm:1042
 msgid "Split Odd"
 msgstr "Ungerade Teilung"
 
-#: ../src/report/standard-reports/transaction.scm:1043
+#: ../src/report/standard-reports/transaction.scm:1048
 msgid "Split Even"
 msgstr "Gerade Teilung"
 
-#: ../src/report/standard-reports/transaction.scm:1539
+#: ../src/report/standard-reports/transaction.scm:1544
 msgid "No matching transactions found"
 msgstr "Keine passenden Buchungssätze gefunden"
 
-#: ../src/report/standard-reports/transaction.scm:1541
+#: ../src/report/standard-reports/transaction.scm:1546
 msgid ""
 "No transactions were found that match the time interval and account "
 "selection specified in the Options panel."
@@ -25727,18 +25723,18 @@ msgstr "Willkommen bei GnuCash ~a"
 msgid "GnuCash ~a has lots of nice features. Here are a few."
 msgstr "GnuCash ~a hat viele neue Funktionen. Hier sind einige Beispiele."
 
-#: ../src/scm/price-quotes.scm:486 ../src/scm/price-quotes.scm:487
+#: ../src/scm/price-quotes.scm:490 ../src/scm/price-quotes.scm:491
 msgid "No commodities marked for quote retrieval."
 msgstr "Keine Devisen/Wertpapiere zum Börsenkurs-Abruf markiert."
 
-#: ../src/scm/price-quotes.scm:491 ../src/scm/price-quotes.scm:492
-#: ../src/scm/price-quotes.scm:515 ../src/scm/price-quotes.scm:518
+#: ../src/scm/price-quotes.scm:495 ../src/scm/price-quotes.scm:496
+#: ../src/scm/price-quotes.scm:519 ../src/scm/price-quotes.scm:522
 msgid "Unable to get quotes or diagnose the problem."
 msgstr ""
 "Abrufen der Börsenkurse fehlgeschlagen. Genauere Diagnose ebenfalls "
 "fehlgeschlagen."
 
-#: ../src/scm/price-quotes.scm:497 ../src/scm/price-quotes.scm:499
+#: ../src/scm/price-quotes.scm:501 ../src/scm/price-quotes.scm:503
 msgid ""
 "You are missing some needed Perl libraries.\n"
 "Run 'gnc-fq-update' as root to install them."
@@ -25746,37 +25742,37 @@ msgstr ""
 "Ihnen fehlen einige benötigte Perl Bibliotheken.\n"
 "Führen Sie 'gnc-fq-update' als root aus, um diese zu installieren."
 
-#: ../src/scm/price-quotes.scm:505 ../src/scm/price-quotes.scm:506
+#: ../src/scm/price-quotes.scm:509 ../src/scm/price-quotes.scm:510
 msgid "There was a system error while retrieving the price quotes."
 msgstr "Beim Herunterladen der Börsenkurse ist ein Systemfehler aufgetreten."
 
-#: ../src/scm/price-quotes.scm:511 ../src/scm/price-quotes.scm:512
+#: ../src/scm/price-quotes.scm:515 ../src/scm/price-quotes.scm:516
 msgid "There was an unknown error while retrieving the price quotes."
 msgstr ""
 "Beim Herunterladen der Börsenkurse ist ein unbekannter Fehler aufgetreten."
 
-#: ../src/scm/price-quotes.scm:528 ../src/scm/price-quotes.scm:539
-#: ../src/scm/price-quotes.scm:547
+#: ../src/scm/price-quotes.scm:532 ../src/scm/price-quotes.scm:543
+#: ../src/scm/price-quotes.scm:551
 msgid "Unable to retrieve quotes for these items:"
 msgstr "Abrufen von Börsenkursen für diese Werte fehlgeschlagen:"
 
-#: ../src/scm/price-quotes.scm:533
+#: ../src/scm/price-quotes.scm:537
 msgid "Continue using only the good quotes?"
 msgstr "Mit den benutzbaren Kursen fortsetzen?"
 
-#: ../src/scm/price-quotes.scm:552
+#: ../src/scm/price-quotes.scm:556
 msgid "Continuing with good quotes."
 msgstr "Es wird mit den benutzbaren Kursen fortgesetzt."
 
-#: ../src/scm/price-quotes.scm:567 ../src/scm/price-quotes.scm:576
+#: ../src/scm/price-quotes.scm:571 ../src/scm/price-quotes.scm:580
 msgid "Unable to create prices for these items:"
 msgstr "Preis-Eintrag für folgende Werte fehlgeschlagen:"
 
-#: ../src/scm/price-quotes.scm:572
+#: ../src/scm/price-quotes.scm:576
 msgid "Add remaining good quotes?"
 msgstr "Übrige benutzbare Kurse eintragen?"
 
-#: ../src/scm/price-quotes.scm:581
+#: ../src/scm/price-quotes.scm:585
 msgid "Adding remaining good quotes."
 msgstr "Benutzbare Kurse werden eingetragen."
 
@@ -26151,6 +26147,58 @@ msgstr ""
 "Um den Inhalt zweiter Reiter in einem der Reiter optisch zu vergleichen,"
 "wählen Sie im Menü 'Fenster -> Neues Fenster mit Seite', um diesen Reiter in "
 "einem neuen Fenster anzuzeigen "
+
+#~ msgid "CURRENCY"
+#~ msgstr "WÄHRUNG"
+
+#~ msgid ""
+#~ "On high-resolution displays the reports will be unreadable by default. "
+#~ "Setting a zoom factor to a number bigger than 1.0 can help improve this "
+#~ "situation."
+#~ msgstr ""
+#~ "Auf hochauflösenden Monitoren können Berichte in der Standardeinstellung "
+#~ "schwer lesbar sein. Das Setzen eines Vergrößerungsfaktors größer 1 kann "
+#~ "dann eine ABhilfe sein."
+
+#~ msgid "Clear the entry"
+#~ msgstr "Löschen des Eintrages"
+
+#~ msgid "You must select a commodity. To create a new one, click \"New\""
+#~ msgstr ""
+#~ "Sie müssen eine Devise/Wertpapier auswählen. Wenn Sie eine neue anlegen "
+#~ "möchten, klicken Sie auf »Neu«."
+
+#~ msgctxt "Daily"
+#~ msgid "Every"
+#~ msgstr "Alle"
+
+#~ msgctxt "Daily"
+#~ msgid "days."
+#~ msgstr "Tage."
+
+#~ msgctxt "Weekly"
+#~ msgid "Every"
+#~ msgstr "Alle"
+
+#~ msgctxt "Weekly"
+#~ msgid "weeks."
+#~ msgstr "Wochen."
+
+#~ msgctxt "Semimonthly"
+#~ msgid "Every"
+#~ msgstr "Alle"
+
+#~ msgctxt "Semimonthly"
+#~ msgid "months."
+#~ msgstr "Monate."
+
+#~ msgctxt "Monthly"
+#~ msgid "Every"
+#~ msgstr "Alle"
+
+#~ msgctxt "Monthly"
+#~ msgid "months."
+#~ msgstr "Monate."
 
 #~ msgid "set true"
 #~ msgstr "auf wahr setzen"
