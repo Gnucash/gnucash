@@ -604,14 +604,12 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
                              (gnc:html-transaction-anchor
                               parent
                               (gnc:make-gnc-monetary report-currency cell))))
-                    (addto! row-contents (gnc:html-make-empty-cell))          
-                              ))
+                    (addto! row-contents (gnc:html-make-empty-cell))))
               cells)
     
     (gnc:html-table-append-row/markup! table row-style
                                        (reverse row-contents))
-    cells
-    ))
+    cells))
 
 (define date-sorting-types (list 'date 'register-order))
 
@@ -648,8 +646,7 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
                  gnc:*transaction-report-options*
                  gnc:pagename-general
                  optname-currency
-                 x))
-    ))
+                 x))))
 
   (gnc:options-add-currency!
    gnc:*transaction-report-options* gnc:pagename-general optname-currency "f")
@@ -675,8 +672,7 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
     (lambda ()
       '())
     #f #t
-    (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE)
-    ))
+    (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE)))
 
   (gnc:register-trep-option
    (gnc:make-string-option
@@ -696,8 +692,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
     (lambda ()
       '())
     #f #t
-    (list ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY)
-    ))
+    (list ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY)))
 
   
   (gnc:register-trep-option
@@ -1131,8 +1126,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
            (total-purchases (lambda (s) (myadd (tax-on-purchases s) (purchases-without-tax s))))
            (bank-remittance (lambda (s) (myneg (myadd (total-sales s) (total-purchases s)))))
            (net-income (lambda (s) (myneg (myadd (sales-without-tax s) (purchases-without-tax s)))))
-           (tax-payable (lambda (s) (myneg (myadd (tax-on-purchases s) (tax-on-sales s)))))
-           )
+           (tax-payable (lambda (s) (myneg (myadd (tax-on-purchases s) (tax-on-sales s))))))
         (append
          (list (cons "Total Sales" total-sales))
          (if (gnc:option-value (gnc:lookup-option options gnc:pagename-display (N_ "Individual income columns")))
@@ -1244,8 +1238,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                                 options
                                 current-row-style
                                 account-types-to-reverse
-                                #t))
-                 )
+                                #t)))
             (if multi-rows?
                 (add-other-split-rows
                  current table used-columns def:alternate-row-style
@@ -1574,8 +1567,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
          (secondary-order (opt-val pagename-sorting "Secondary Sort Order"))
          (void-status (opt-val gnc:pagename-accounts optname-void-transactions))
          (splits '())
-         (query (qof-query-create-for-splits)) 
-         )
+         (query (qof-query-create-for-splits)))
 
     ;(gnc:warn "c1 is " c_account_1)
     ;(gnc:warn "c2 is " c_account_2)
@@ -1630,7 +1622,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                                      splits))))
 
           ; We have to remove duplicates because the report will *sum* amounts in a transaction
-	  ; otherwise it will double count where transaction contains 2 splits in same account
+          ; otherwise it will double count where transaction contains 2 splits in same account
           (set! splits (splits-filter-unique-transactions splits))
           
           (if (not (null? splits))
@@ -1690,8 +1682,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                       (gnc:html-markup-p 
                        "There are no input/output tax accounts set up. This is probably not what"
                        " you want. "
-                       TAX-SETUP-DESC
-                       ))))
+                       TAX-SETUP-DESC))))
                 
                 (gnc:html-document-add-object!
                  document 
