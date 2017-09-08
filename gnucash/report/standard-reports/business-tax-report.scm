@@ -1267,8 +1267,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                          (and next
                               (not (primary-subtotal-pred current next)))))
                 (begin 
-                  (if secondary-subtotal-pred
-                      
+                  (if secondary-subtotal-pred                      
                       (secondary-subtotal-renderer
                        table width current
                        secondary-subtotal-collectors
