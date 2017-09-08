@@ -63,6 +63,8 @@ IF(WITH_PYTHON)
     ${PYTHON_INCLUDE_DIRS}
   )
 
+  SET(PYEXEC_FILES  __init__.py function_class.py gnucash_business.py gnucash_core.py)
+
   ADD_LIBRARY(gnucash_core_c MODULE ${SWIG_GNUCASH_CORE_C})
   TARGET_INCLUDE_DIRECTORIES(gnucash_core_c PRIVATE ${gnucash_core_c_INCLUDE_DIRS})
 
@@ -101,19 +103,19 @@ IF(WITH_PYTHON)
     DESTINATION ${PYTHON_SYSCONFIG_OUTPUT}/gnucash
   )
 
+  FILE(COPY ${PYEXEC_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/gnucash)
+
+  ADD_CUSTOM_TARGET(gnucash-core-c-py ALL
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/gnucash_core_c.py ${CMAKE_CURRENT_BINARY_DIR}/gnucash
+    DEPENDS ${SWIG_GNUCASH_CORE_C})
+
 ENDIF()
 
-SET(python_bindings_DATA
-        __init__.py
-        function_class.py
-        gnucash_business.py
+SET(python_bindings_DATA ${PYEXEC_FILES}
         gnucash_core.i
-        gnucash_core.py
         sqlite3test.c
         timespec.i)
 
 SET_LOCAL_DIST(python_bindings_DIST_local CMakeLists.txt Makefile.am ${python_bindings_DATA})
 
 SET(python_bindings_DIST ${python_bindings_DIST_local} ${test_python_bindings_DIST} ${example_scripts_DIST} PARENT_SCOPE)
-
-
