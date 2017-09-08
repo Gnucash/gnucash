@@ -672,7 +672,7 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
     (lambda ()
       '())
     #f #t
-    (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE)))
+    (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)))
 
   (gnc:register-trep-option
    (gnc:make-string-option
