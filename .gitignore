@@ -12,6 +12,7 @@
 *.pyo
 *.schemas
 *~
+.*.sw?
 .autotools
 .cproject
 .deps
@@ -24,6 +25,7 @@ INSTALL
 Makefile
 Makefile.in
 TAGS
+tags
 aclocal.m4
 autom4te.cache
 build*/
