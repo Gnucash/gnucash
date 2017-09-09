@@ -676,7 +676,7 @@ GncTaxTable *gncTaxTableLookupByName (QofBook *book, const char *name)
     return NULL;
 }
 
-GList * gncTaxTableGetTables (QofBook *book)
+GncTaxTableList * gncTaxTableGetTables (QofBook *book)
 {
     struct _book_info *bi;
     if (!book) return NULL;
