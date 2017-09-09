@@ -1270,11 +1270,17 @@ gnucash_scroll_event (GtkWidget *widget, GdkEventScroll *event)
     case GDK_SCROLL_DOWN:
         v_value += gtk_adjustment_get_step_increment (vadj);
         break;
+    case GDK_SCROLL_SMOOTH:
+        if (event->delta_y < 0)
+            v_value -= gtk_adjustment_get_step_increment (vadj);
+        if (event->delta_y > 0)
+            v_value += gtk_adjustment_get_step_increment (vadj);
+        break;
     default:
         return FALSE;
     }
-
-    v_value = CLAMP(v_value, gtk_adjustment_get_lower (vadj), gtk_adjustment_get_upper (vadj) - gtk_adjustment_get_page_size (vadj));
+    v_value = CLAMP(v_value, gtk_adjustment_get_lower (vadj),
+              gtk_adjustment_get_upper (vadj) - gtk_adjustment_get_page_size (vadj));
 
     gtk_adjustment_set_value(vadj, v_value);
 
