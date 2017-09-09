@@ -1266,14 +1266,15 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                      (or (not next)
                          (and next
                               (not (primary-subtotal-pred current next)))))
-                (begin 
-                  (if secondary-subtotal-pred                      
-                      (secondary-subtotal-renderer
-                       table width current
-                       secondary-subtotal-collectors
-                       def:secondary-subtotal-style used-columns export?)
-                      (for-each (lambda (coll) (coll 'reset #f #f))
-                                secondary-subtotal-collectors))
+                (begin
+                  (if secondary-subtotal-pred
+                      (begin
+                        (secondary-subtotal-renderer
+                         table width current
+                         secondary-subtotal-collectors
+                         def:secondary-subtotal-style used-columns export?)
+                        (for-each (lambda (coll) (coll 'reset #f #f))
+                                  secondary-subtotal-collectors)))
 
                   (primary-subtotal-renderer table width current
                                              primary-subtotal-collectors
