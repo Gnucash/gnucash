@@ -1223,7 +1223,7 @@ gnucash_sheet_start_editing_at_cursor (GnucashSheet *sheet)
 }
 
 static gboolean
-gnucash_button_release_event (GtkWidget *widget, GdkEventButton *event)
+gnucash_sheet_button_release_event (GtkWidget *widget, GdkEventButton *event)
 {
     GnucashSheet *sheet;
 
@@ -1314,7 +1314,7 @@ gnucash_sheet_check_grab (GnucashSheet *sheet)
 }
 
 static gboolean
-gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
+gnucash_sheet_button_press_event (GtkWidget *widget, GdkEventButton *event)
 {
     GnucashSheet *sheet;
     VirtualCell *vcell;
@@ -1408,6 +1408,7 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
 
     if (abort_move)
         return TRUE;
+
 //FIXME does something need to be done if changed_cells is true or false ?
     changed_cells = gnucash_sheet_cursor_move (sheet, new_virt_loc);
 
@@ -2413,8 +2414,8 @@ gnucash_sheet_class_init (GnucashSheetClass *klass)
 
     widget_class->key_press_event = gnucash_sheet_key_press_event;
     widget_class->key_release_event = gnucash_sheet_key_release_event;
-    widget_class->button_press_event = gnucash_button_press_event;
-    widget_class->button_release_event = gnucash_button_release_event;
+    widget_class->button_press_event = gnucash_sheet_button_press_event;
+    widget_class->button_release_event = gnucash_sheet_button_release_event;
     widget_class->scroll_event = gnucash_scroll_event;
 }
 
