@@ -334,6 +334,57 @@ unblock_toggle_signals(GncItemEdit *item_edit)
 
 
 static gboolean
+draw_text_cursor_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
+{
+    GtkEditable *editable = GTK_EDITABLE(widget);
+    GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(widget));
+    gint height = gtk_widget_get_allocated_height (widget);
+    const gchar *text;
+    GdkRGBA *fg_color;
+    GdkRGBA color;
+    gint x_offset;
+    gint cursor_x = 0;
+
+    // Get the layout x offset
+    gtk_entry_get_layout_offsets (GTK_ENTRY(widget), &x_offset, NULL);
+
+    // Get the foreground color
+    gdk_rgba_parse (&color, "black");
+    gtk_style_context_get_color (stylectxt, GTK_STATE_FLAG_NORMAL, &color);
+    fg_color = &color;
+    
+    text = gtk_entry_get_text (GTK_ENTRY (widget));
+    
+    if ((text != NULL) && (*text != '\0'))
+    {
+        PangoLayout *layout;
+        PangoRectangle strong_pos;
+        gint start_pos, end_pos, cursor_pos, cursor_byte_pos;
+
+        cursor_pos = gtk_editable_get_position (editable);
+        cursor_byte_pos = g_utf8_offset_to_pointer (text, cursor_pos) - text;
+    
+        gtk_editable_get_selection_bounds (editable, &start_pos, &end_pos);
+
+        layout = gtk_entry_get_layout (GTK_ENTRY(widget));
+        pango_layout_get_cursor_pos (layout, cursor_byte_pos, &strong_pos, NULL);
+        cursor_x = x_offset + PANGO_PIXELS (strong_pos.x);
+    }
+    else
+        cursor_x = x_offset;
+    
+    // Now draw a vertical line
+    cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
+    cairo_set_line_width (cr, 1.0);
+    cairo_move_to (cr, cursor_x + 0.5, 2);
+    cairo_rel_line_to (cr, 0, height - 4);
+    cairo_stroke (cr);
+
+    return FALSE;
+}
+
+
+static gboolean
 draw_arrow_cb (GtkWidget *widget, cairo_t *cr, gpointer data)
 {
     GncItemEdit *item_edit = GNC_ITEM_EDIT (data);
@@ -555,6 +606,14 @@ gnc_item_edit_new (GnucashSheet *sheet)
     sheet->entry = item_edit->editor;
     gtk_entry_set_width_chars (GTK_ENTRY(item_edit->editor), 1);
     gtk_box_pack_start (GTK_BOX(item_edit), item_edit->editor,  TRUE, TRUE, 0);
+
+    // Make sure the Entry can not have focus and no frame
+    gtk_widget_set_can_focus (GTK_WIDGET(item_edit->editor), FALSE);
+    gtk_entry_set_has_frame (GTK_ENTRY(item_edit->editor), FALSE);
+    
+    // Connect to the draw signal so we can draw a cursor
+    g_signal_connect_after (item_edit->editor, "draw",
+                            G_CALLBACK (draw_text_cursor_cb), NULL);
 
     /* Force padding on the entry to align with the rest of the register this
        is done in the gnucash.css file which should be in line with sheet.h */
