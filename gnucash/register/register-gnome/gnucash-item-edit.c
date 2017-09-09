@@ -334,6 +334,31 @@ unblock_toggle_signals(GncItemEdit *item_edit)
 
 
 static gboolean
+draw_background_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
+{
+    GtkStyleContext *stylectxt = gtk_widget_get_style_context (widget);
+    GncItemEdit *item_edit = GNC_ITEM_EDIT (user_data);
+    gint width = gtk_widget_get_allocated_width (widget);
+    gint height = gtk_widget_get_allocated_height (widget);
+    guint32 color_type;
+
+    gtk_style_context_save (stylectxt);
+
+    // Get the background and foreground color types and apply the css class
+    color_type = gnc_table_get_gtkrc_bg_color (item_edit->sheet->table, item_edit->virt_loc, NULL);
+    gnucash_get_style_classes (item_edit->sheet, stylectxt, color_type);
+
+    color_type = gnc_table_get_gtkrc_fg_color (item_edit->sheet->table, item_edit->virt_loc);
+    gnucash_get_style_classes (item_edit->sheet, stylectxt, color_type);
+
+    gtk_render_background (stylectxt, cr, 0, 0, width, height);
+
+    gtk_style_context_restore (stylectxt);
+    return FALSE;
+}
+
+
+static gboolean
 draw_text_cursor_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
 {
     GtkEditable *editable = GTK_EDITABLE(widget);
@@ -614,6 +639,10 @@ gnc_item_edit_new (GnucashSheet *sheet)
     // Connect to the draw signal so we can draw a cursor
     g_signal_connect_after (item_edit->editor, "draw",
                             G_CALLBACK (draw_text_cursor_cb), NULL);
+
+    // Fill in the background so the underlying sheet cell can not be seen
+    g_signal_connect (item_edit, "draw",
+                            G_CALLBACK (draw_background_cb), item_edit);
 
     /* Force padding on the entry to align with the rest of the register this
        is done in the gnucash.css file which should be in line with sheet.h */
