@@ -110,7 +110,6 @@ gnc_item_edit_update (GncItemEdit *item_edit)
     gnc_item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
     gtk_layout_move (GTK_LAYOUT(item_edit->sheet),
                      GTK_WIDGET(item_edit), x, y);
-    gtk_widget_queue_resize (GTK_WIDGET (item_edit));
 
     if (item_edit->is_popup)
     {
@@ -223,7 +222,8 @@ gnc_item_edit_configure (GncItemEdit *item_edit)
         gnc_item_edit_set_popup (item_edit, NULL, NULL, NULL,
                                  NULL, NULL, NULL, NULL);
 
-    g_idle_add ((GSourceFunc) gnc_item_edit_update, item_edit);
+    g_idle_add_full (G_PRIORITY_HIGH_IDLE,
+                    (GSourceFunc) gnc_item_edit_update, item_edit, NULL);
 }
 
 
