@@ -981,10 +981,10 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
         (list (N_ "Num")                      "b"  (N_ "Display the check number?") #t))
     (list (N_ "Description")                  "c"  (N_ "Display the description?") #t)
     (list (N_ "Notes")                        "d2" (N_ "Display the notes if the memo is unavailable?") #t)
-    (list (N_ "Account Name")                 "e"  (N_ "Display the account name?") #f)
+    ;(list (N_ "Account Name")                 "e"  (N_ "Display the account name?") #f)
     (list (N_ "Use Full Account Name")        "f"  (N_ "Display the full account name?") #t)
     (list (N_ "Account Code")                 "g"  (N_ "Display the account code?") #f)
-    (list (N_ "Other Account Name")           "h"  (N_ "Display the other account name? (if this is a split transaction, this parameter is guessed).") #f)
+    ;(list (N_ "Other Account Name")           "h"  (N_ "Display the other account name? (if this is a split transaction, this parameter is guessed).") #f)
     (list (N_ "Use Full Other Account Name")  "i"  (N_ "Display the full account name?") #t)
     (list (N_ "Other Account Code")           "j"  (N_ "Display the other account code?") #f)
     ;(list (N_ "Shares")                       "k"  (N_ "Display the number of shares?") #f)
@@ -1016,6 +1016,30 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                  gnc:*transaction-report-options*
                  gnc:pagename-display
                  (N_ "Notes")
+                 x))))
+
+  ;; Ditto for Account Name #t -> Use Full Account Name is selectable
+  (gnc:register-trep-option
+   (gnc:make-complex-boolean-option
+    gnc:pagename-display (N_ "Account Name")
+    "e"  (N_ "Display the account name?") #t
+    #f
+    (lambda (x) (gnc-option-db-set-option-selectable-by-name
+                 gnc:*transaction-report-options*
+                 gnc:pagename-display
+                 (N_ "Use Full Account Name")
+                 x))))
+
+  ;; Ditto for Other Account Name #t -> Use Full Other Account Name is selectable
+  (gnc:register-trep-option
+   (gnc:make-complex-boolean-option
+    gnc:pagename-display (N_ "Other Account Name")
+    "h"  (N_ "Display the other account name? (if this is a split transaction, this parameter is guessed).") #f
+    #f
+    (lambda (x) (gnc-option-db-set-option-selectable-by-name
+                 gnc:*transaction-report-options*
+                 gnc:pagename-display
+                 (N_ "Use Full Other Account Name")
                  x))))
 
   ;(gnc:register-trep-option
