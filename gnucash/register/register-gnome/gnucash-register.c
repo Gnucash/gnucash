@@ -264,6 +264,15 @@ gnucash_register_goto_next_matching_row (GnucashRegister *reg,
     gnucash_sheet_goto_virt_loc (sheet, virt_loc);
 }
 
+static gboolean
+gnucash_register_sheet_resize (GnucashRegister *reg)
+{
+    // Sometimes the space left by the horzontal scrollbar does
+    // not get filled on load, this makes sure it does
+    if (!reg->hscrollbar_visible)
+        gtk_widget_queue_resize (GTK_WIDGET (reg->sheet));
+    return FALSE;
+}
 
 static void
 gnucash_register_update_hadjustment (GtkAdjustment *adj,
@@ -287,6 +296,10 @@ gnucash_register_update_hadjustment (GtkAdjustment *adj,
         {
             gtk_widget_hide(reg->hscrollbar);
             reg->hscrollbar_visible = FALSE;
+            // When sheet first loaded and the scrollbar is hidden, the space left
+            // is not always automaticly taken up by the sheet so queue a resize
+            // when all is idle
+            g_idle_add ((GSourceFunc) gnucash_register_sheet_resize, reg);
         }
     }
 }
