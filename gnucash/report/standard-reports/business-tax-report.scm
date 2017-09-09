@@ -55,7 +55,7 @@
 (define optname-sec-subtotal (N_ "Secondary Subtotal"))
 (define optname-sec-date-subtotal (N_ "Secondary Subtotal for Date Key"))
 (define optname-void-transactions (N_ "Void Transactions"))
-;(define optname-table-export (N_ "Table for Exporting"))
+(define optname-table-export (N_ "Table for Exporting"))
 (define optname-common-currency (N_ "Common Currency"))
 (define TAX-SETUP-DESC "From the Report Options, you will need to select the accounts which will \
 hold the GST/VAT taxes collected or paid. These accounts must contain splits which document the \
@@ -227,6 +227,14 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
               (car list-of-monetary)
               (retrieve-commodity (cdr list-of-monetary) commodity))))
     
+    (define (add-first-column string)
+      (if export?
+          (begin
+            (addto! row-contents (gnc:make-html-table-cell/markup "total-label-cell" string))
+            (for-each (lambda (cell) (addto! row-contents cell))
+                      (gnc:html-make-empty-cells (- width 1))))
+          (addto! row-contents (gnc:make-html-table-cell/size/markup 1 width "total-label-cell" string))))
+    
     (define (add-columns commodity)
       (for-each (lambda (column)
                   (addto! row-contents
@@ -234,16 +242,16 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
                            "total-number-cell"
                            (retrieve-commodity column commodity))))
                 columns))
-      
+
     ;first row
-    (addto! row-contents (gnc:make-html-table-cell/size/markup  1 width "total-label-cell" subtotal-string))
+    (add-first-column subtotal-string)
     (add-columns (car list-of-commodities))
     (gnc:html-table-append-row/markup! table subtotal-style (reverse row-contents))
 
     ;subsequent rows
     (for-each (lambda (commodity)
                 (set! row-contents '())
-                (addto! row-contents (gnc:make-html-table-cell/size/markup 1 width "total-label-cell" ""))
+                (add-first-column "")
                 (add-columns commodity)
                 (gnc:html-table-append-row/markup! table subtotal-style (reverse row-contents)))
               (cdr list-of-commodities))))
@@ -651,10 +659,10 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
   (gnc:options-add-currency!
    gnc:*transaction-report-options* gnc:pagename-general optname-currency "f")
 
-  ;(gnc:register-trep-option
-  ; (gnc:make-simple-boolean-option
-  ;  gnc:pagename-general optname-table-export
-  ;  "g" (N_ "Formats the table suitable for cut & paste exporting with extra cells.") #f))  
+  (gnc:register-trep-option
+   (gnc:make-simple-boolean-option
+    gnc:pagename-general optname-table-export
+    "g" (N_ "Formats the table suitable for cut & paste exporting with extra cells.") #f))
   
   ;; Accounts options
   
@@ -1331,7 +1339,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
     (let* ((table (gnc:make-html-table))
            (width (num-columns-required used-columns))
            (multi-rows? #f) ;disable. (transaction-report-multi-rows-p options))
-           (export? #f)  ;disable. Removed functionality from add-subtotal-row. (transaction-report-export-p options))
+           (export?  (transaction-report-export-p options))
            (account-types-to-reverse '())) ;disabled.            (get-account-types-to-reverse '()))options)))
 
       (gnc:html-table-set-col-headers!
