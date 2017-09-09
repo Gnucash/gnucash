@@ -1289,11 +1289,10 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                         (primary-subheading-renderer
                          next table width def:primary-subtotal-style used-columns)
                         (if secondary-subtotal-pred
-                            (begin
-                              (secondary-subheading-renderer
-                               next 
-                               table 
-                               width def:secondary-subtotal-style used-columns))))))
+                            (secondary-subheading-renderer
+                             next 
+                             table 
+                             width def:secondary-subtotal-style used-columns)))))
 
                 (if (and secondary-subtotal-pred
                          (or (not next)
