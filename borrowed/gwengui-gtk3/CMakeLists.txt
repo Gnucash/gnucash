@@ -15,6 +15,7 @@ SET (gwengui_gtk3_EXTRA_DIST
   w_dialog.c
   w_gridlayout.c
   w_groupbox.c
+  w_image.c
   w_hlayout.c
   w_hline.c
   w_hspacer.c
