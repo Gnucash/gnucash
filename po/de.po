@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.6.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-04 00:02+0200\n"
+"POT-Creation-Date: 2017-09-10 20:53+0200\n"
 "PO-Revision-Date: 2017-09-09 21:33+0200\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
@@ -7145,7 +7145,7 @@ msgid ""
 "manual page of strftime by \"man 3 strftime\"."
 msgstr ""
 "Wenn das Datumsformat auf Benutzerdefiniert gesetzt ist, kann in dieser "
-"Ausdruckals Argument an das strftime-Format übergegeben werden. Es kann eine "
+"Ausdruck als Argument an das strftime-Format übergegeben werden. Es kann eine "
 "beliebige gültige strftime Zeichenkette sein. Für mehr Informationen lesen "
 "Sie die Ausgabe von »man 3 strftime«."
 
@@ -8322,7 +8322,8 @@ msgid ""
 msgstr ""
 "Auf hochauflösenden Bildschirmen können Berichte schwer zu lesen sein.\n"
 "Diese Option erlaubt das Skalieren der Berichte um den gewählten Faktor.\n"
-"Z.B. wird ein Wert von 2 die Berichte mit dem Doppelten ihrer ursprünglichen Größe darstellen."
+"Z.B. wird ein Wert von 2 die Berichte mit dem Doppelten ihrer ursprünglichen "
+"Größe darstellen."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:113
 msgid "PDF export file name format"
@@ -13417,7 +13418,7 @@ msgstr "Be_merkung:"
 msgid "Ta_x related"
 msgstr "Steuer_relevant"
 
-#. Translators: use the same words here as in
+#. Translators: use the same words here as in 'Ta_x Report Options'.
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:21
 msgid ""
 "Use Edit->Tax Report Options to set the tax-related flag and assign a tax "
@@ -14809,6 +14810,26 @@ msgstr "Nicht vorgemerkt"
 msgid "Select occurrence date above."
 msgstr "Wählen Sie oben ein Datum des Auftretens."
 
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:7
+msgctxt "Daily"
+msgid "Every"
+msgstr "Alle"
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:8
+msgctxt "Daily"
+msgid "days."
+msgstr "Tage."
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:10
+msgctxt "Weekly"
+msgid "Every"
+msgstr "Alle"
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:11
+msgctxt "Weekly"
+msgid "weeks."
+msgstr "Wochen."
+
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:12
 #: ../src/report/standard-reports/daily-reports.scm:355
 msgid "Saturday"
@@ -14850,6 +14871,16 @@ msgstr "Montag"
 msgid "Tuesday"
 msgstr "Dienstag"
 
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:21
+msgctxt "Semimonthly"
+msgid "Every"
+msgstr "Alle"
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:22
+msgctxt "Semimonthly"
+msgid "months."
+msgstr "Monate."
+
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:23
 msgid "First on the:"
 msgstr "Zuerst am:"
@@ -14865,6 +14896,16 @@ msgstr "dann am:"
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:26
 msgid "Semi-Monthly"
 msgstr "Halbmonatlich"
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:27
+msgctxt "Monthly"
+msgid "Every"
+msgstr "Alle"
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:28
+msgctxt "Monthly"
+msgid "months."
+msgstr "Monate."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:29
 msgid "On the"
@@ -26179,38 +26220,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Sie müssen eine Devise/Wertpapier auswählen. Wenn Sie eine neue anlegen "
 #~ "möchten, klicken Sie auf »Neu«."
-
-#~ msgctxt "Daily"
-#~ msgid "Every"
-#~ msgstr "Alle"
-
-#~ msgctxt "Daily"
-#~ msgid "days."
-#~ msgstr "Tage."
-
-#~ msgctxt "Weekly"
-#~ msgid "Every"
-#~ msgstr "Alle"
-
-#~ msgctxt "Weekly"
-#~ msgid "weeks."
-#~ msgstr "Wochen."
-
-#~ msgctxt "Semimonthly"
-#~ msgid "Every"
-#~ msgstr "Alle"
-
-#~ msgctxt "Semimonthly"
-#~ msgid "months."
-#~ msgstr "Monate."
-
-#~ msgctxt "Monthly"
-#~ msgid "Every"
-#~ msgstr "Alle"
-
-#~ msgctxt "Monthly"
-#~ msgid "months."
-#~ msgstr "Monate."
 
 #~ msgid "set true"
 #~ msgstr "auf wahr setzen"
