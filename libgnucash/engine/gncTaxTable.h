@@ -152,7 +152,8 @@ static inline GncTaxTable *gncTaxTableLookup (const QofBook* book, const GncGUID
 
 GncTaxTable *gncTaxTableLookupByName (QofBook *book, const char *name);
 
-GList * gncTaxTableGetTables (QofBook *book);
+typedef GList GncTaxTableList;
+GncTaxTableList  * gncTaxTableGetTables (QofBook *book);
 
 const char *gncTaxTableGetName (const GncTaxTable *table);
 GncTaxTable *gncTaxTableGetParent (const GncTaxTable *table);

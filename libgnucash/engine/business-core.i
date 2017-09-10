@@ -74,6 +74,7 @@ static GncEmployee * gncEmployeeLookupFlip(GncGUID g, QofBook *b)
 
 GLIST_HELPER_INOUT(GncInvoiceList, SWIGTYPE_p__gncInvoice);
 GLIST_HELPER_INOUT(EntryList, SWIGTYPE_p__gncEntry);
+GLIST_HELPER_INOUT(GncTaxTableGetTables, SWIGTYPE_p__gncTaxTable);
 GLIST_HELPER_INOUT(GncTaxTableEntryList, SWIGTYPE_p__gncTaxTableEntry);
 GLIST_HELPER_INOUT(OwnerList, SWIGTYPE_p__gncOwner);
 
