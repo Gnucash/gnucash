@@ -1,0 +1,8 @@
+#!/bin/bash -e
+
+# -e above so that if any command has an exit code != 0, this script will
+#  exit immediately.
+
+export GTEST_ROOT=/gtest/googletest GMOCK_ROOT=/gtest/googlemock;
+
+../commonbuild
