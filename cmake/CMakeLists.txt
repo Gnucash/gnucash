@@ -16,11 +16,15 @@ IF (${CMAKE_VERSION} VERSION_GREATER 3.1)
 ENDIF()
 
 SET(schema-targets csv-exp-gschema csv-imp-gschema
-    generic-import-gschema gnome-gschema gnome-utils-gschema ofx-gschema qif-imp-gschema)
+    generic-import-gschema gnome-gschema gnome-utils-gschema qif-imp-gschema)
 
 IF (WITH_AQBANKING)
   LIST(APPEND schema-targets aqb-gschema)
 ENDIF (WITH_AQBANKING)
+    
+IF (WITH_OFX)
+  LIST(APPEND schema-targets ofx-gschema)
+ENDIF (WITH_OFX)
     
 SET(SCHEMA_DIRECTORY ${DATADIR_BUILD}/glib-2.0/schemas)
 ADD_CUSTOM_COMMAND(
