@@ -18,9 +18,9 @@ class TestCommodity( CommoditySession ):
 
 class TestCommodityNamespace( CommoditySession ):
     def test_namespaces(self):
-        print(self.table.__class__)
+        #print(self.table.__class__)
         namespace_names = self.table.get_namespaces()
-        print(namespace_names)
+        #print(namespace_names)
         self.assertEqual(namespace_names, ['AMEX', 'NYSE', 'NASDAQ', 'EUREX', 'FUND', 'template', 'CURRENCY'])
 
     def test_namespaces_list(self):
