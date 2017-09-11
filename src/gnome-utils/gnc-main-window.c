@@ -4369,7 +4369,8 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
     {
 	const gchar *fixed_message = _("The GnuCash personal finance manager. "
                                    "The GNU way to manage your money!");
-	const gchar *copyright = _("© 1997-2017 Contributors");
+	gchar *copyright = g_strdup_printf(_("© 1997-%s Contributors"),
+			                             GNUCASH_BUILD_YEAR);
 	gchar **authors = get_file_strsplit("AUTHORS");
 	gchar **documenters = get_file_strsplit("DOCUMENTERS");
 	gchar *license = get_file("LICENSE");
@@ -4412,6 +4413,7 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 		      NULL);
 
 	g_free(message);
+	g_free(copyright);
 	if (license)     g_free(license);
 	if (documenters) g_strfreev(documenters);
 	if (authors)     g_strfreev(authors);
