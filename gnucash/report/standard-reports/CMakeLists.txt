@@ -56,7 +56,7 @@ GNC_ADD_SCHEME_TARGETS(scm-standard-reports-2
   TRUE
 )
 
-ADD_CUSTOM_TARGET(scm-standard-reports ALL DEPENDS scm-standard-reports-2 scm-standard-reports)
+ADD_CUSTOM_TARGET(scm-standard-reports ALL DEPENDS scm-standard-reports-2 scm-standard-reports-1)
 
 # FIXME: This is a hack since core-utils assumes an autotools build environment.
 
