@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.6.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-10 20:53+0200\n"
-"PO-Revision-Date: 2017-09-09 21:33+0200\n"
+"POT-Creation-Date: 2017-09-11 02:57+0200\n"
+"PO-Revision-Date: 2017-09-11 04:33+0200\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: de\n"
@@ -1205,7 +1205,7 @@ msgstr "GnuCash Entwicklungsversion %s"
 #. 2nd %s is the scm type (svn/svk/git/bzr);
 #. 3rd %s is the scm revision number;
 #. 4th %s is the build date
-#: ../src/bin/gnucash-bin.c:452 ../src/gnome-utils/gnc-main-window.c:4385
+#: ../src/bin/gnucash-bin.c:452 ../src/gnome-utils/gnc-main-window.c:4386
 #, c-format
 msgid ""
 "%s\n"
@@ -1222,7 +1222,7 @@ msgstr "GnuCash %s"
 #. Translators: 1st %s is a fixed message, which is translated independently;
 #. 2nd %s is the scm (svn/svk/git/bzr) revision number;
 #. 3rd %s is the build date
-#: ../src/bin/gnucash-bin.c:463 ../src/gnome-utils/gnc-main-window.c:4392
+#: ../src/bin/gnucash-bin.c:463 ../src/gnome-utils/gnc-main-window.c:4393
 #, c-format
 msgid ""
 "%s\n"
@@ -7145,9 +7145,9 @@ msgid ""
 "manual page of strftime by \"man 3 strftime\"."
 msgstr ""
 "Wenn das Datumsformat auf Benutzerdefiniert gesetzt ist, kann in dieser "
-"Ausdruck als Argument an das strftime-Format übergegeben werden. Es kann eine "
-"beliebige gültige strftime Zeichenkette sein. Für mehr Informationen lesen "
-"Sie die Ausgabe von »man 3 strftime«."
+"Ausdruck als Argument an das strftime-Format übergegeben werden. Es kann "
+"eine beliebige gültige strftime Zeichenkette sein. Für mehr Informationen "
+"lesen Sie die Ausgabe von »man 3 strftime«."
 
 #: ../src/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in.h:10
 msgid "Units in which the custom coordinates are expressed"
@@ -12133,14 +12133,15 @@ msgstr ""
 "GnuCash: Ihr privater Finanzmanager. Die freie Lösung zur Finanzverwaltung."
 
 #: ../src/gnome-utils/gnc-main-window.c:4372
-msgid "© 1997-2017 Contributors"
-msgstr "© 1997-2017 Mitwirkende"
+#, c-format
+msgid "© 1997-%s Contributors"
+msgstr "© 1997-%s Mitwirkende"
 
 #. Translators: the following string will be shown in Help->About->Credits
 #. * Enter your name or that of your team and an email contact for feedback.
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
-#: ../src/gnome-utils/gnc-main-window.c:4409
+#: ../src/gnome-utils/gnc-main-window.c:4410
 msgid "translator_credits"
 msgstr "Christian Stimming <christian@cstimming.de> et. al."
 
