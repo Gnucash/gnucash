@@ -50,9 +50,13 @@
 (define pagename-sorting (N_ "Sorting"))
 (define optname-prime-sortkey (N_ "Primary Key"))
 (define optname-prime-subtotal (N_ "Primary Subtotal"))
+(define optname-prime-sortorder (N_ "Primary Sort Order"))
 (define optname-prime-date-subtotal (N_ "Primary Subtotal for Date Key"))
+(define optname-full-account-name (N_ "Show Full Account Name"))
+(define optname-show-account-code (N_ "Show Account Code"))
 (define optname-sec-sortkey (N_ "Secondary Key"))
 (define optname-sec-subtotal (N_ "Secondary Subtotal"))
+(define optname-sec-sortorder  (N_ "Secondary Sort Order"))
 (define optname-sec-date-subtotal (N_ "Secondary Subtotal for Date Key"))
 (define optname-void-transactions (N_ "Void Transactions"))
 (define optname-table-export (N_ "Table for Exporting"))
@@ -878,54 +882,101 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
           (vector 'weekly (N_ "Weekly") (N_ "Weekly."))
           (vector 'monthly (N_ "Monthly") (N_ "Monthly."))
           (vector 'quarterly (N_ "Quarterly") (N_ "Quarterly."))
-          (vector 'yearly (N_ "Yearly") (N_ "Yearly.")))))
+          (vector 'yearly (N_ "Yearly") (N_ "Yearly."))))
+
+        (prime-sortkey 'account-name)
+        (prime-sortkey-subtotal-true #t)
+        (sec-sortkey 'register-order)
+        (sec-sortkey-subtotal-true #f))
+    
+    (define (apply-selectable-by-name-options)
+      (let* ((prime-sortkey-enabled (not (eq? prime-sortkey 'none)))
+             (prime-sortkey-subtotal-enabled (member prime-sortkey subtotal-enabled))
+             (prime-date-sortingtype-enabled (member prime-sortkey date-sorting-types))
+             (sec-sortkey-enabled (not (eq? sec-sortkey 'none)))
+             (sec-sortkey-subtotal-enabled (member sec-sortkey subtotal-enabled))
+             (sec-date-sortingtype-enabled (member sec-sortkey date-sorting-types)))
+        
+        (gnc-option-db-set-option-selectable-by-name
+         options pagename-sorting optname-prime-subtotal
+         prime-sortkey-subtotal-enabled)
+        
+        (gnc-option-db-set-option-selectable-by-name
+         options pagename-sorting optname-prime-sortorder
+         prime-sortkey-enabled)
+        
+        (gnc-option-db-set-option-selectable-by-name
+         options pagename-sorting optname-sec-subtotal
+         sec-sortkey-subtotal-enabled)
+
+        (gnc-option-db-set-option-selectable-by-name
+         options pagename-sorting optname-sec-sortorder
+         sec-sortkey-enabled)
+
+        (gnc-option-db-set-option-selectable-by-name
+         options pagename-sorting optname-full-account-name
+         (or (and prime-sortkey-subtotal-enabled prime-sortkey-subtotal-true)
+             (and sec-sortkey-subtotal-enabled sec-sortkey-subtotal-true)))
+        
+        (gnc-option-db-set-option-selectable-by-name
+         options pagename-sorting optname-show-account-code
+         (or (and prime-sortkey-subtotal-enabled prime-sortkey-subtotal-true)
+             (and sec-sortkey-subtotal-enabled sec-sortkey-subtotal-true)))
+        
+        (gnc-option-db-set-option-selectable-by-name
+         options pagename-sorting optname-prime-date-subtotal
+         prime-date-sortingtype-enabled)
+        
+        (gnc-option-db-set-option-selectable-by-name
+         options pagename-sorting optname-sec-date-subtotal
+         sec-date-sortingtype-enabled)
+        ))
     
     ;; primary sorting criterion
     (gnc:register-trep-option
      (gnc:make-multichoice-callback-option
       pagename-sorting optname-prime-sortkey
       "a" (N_ "Sort by this criterion first.")
-      'account-name
+      prime-sortkey
       key-choice-list #f
       (lambda (x)
-        (gnc-option-db-set-option-selectable-by-name
-         options pagename-sorting optname-prime-subtotal
-         (and (member x subtotal-enabled) #t))
-        (gnc-option-db-set-option-selectable-by-name
-         options pagename-sorting optname-prime-date-subtotal
-         (if (member x date-sorting-types) #t #f)))))
+        (set! prime-sortkey x)
+        (apply-selectable-by-name-options))))
     
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      pagename-sorting (N_ "Show Full Account Name")
-      "a1" 
+      pagename-sorting optname-full-account-name
+      "j1" 
       (N_ "Show the full account name for subtotals and subtitles?")
       #f))
     
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
-      pagename-sorting (N_ "Show Account Code")
-      "a2" 
+      pagename-sorting optname-show-account-code
+      "j2" 
       (N_ "Show the account code for subtotals and subtitles?")
       #f))
     
     (gnc:register-trep-option
-     (gnc:make-simple-boolean-option
+     (gnc:make-complex-boolean-option
       pagename-sorting optname-prime-subtotal
-      "c" 
+      "e5"
       (N_ "Subtotal according to the primary key?")
-      #t))
+      prime-sortkey-subtotal-true #f
+      (lambda (x)
+        (set! prime-sortkey-subtotal-true x)
+        (apply-selectable-by-name-options))))
     
     (gnc:register-trep-option
      (gnc:make-multichoice-option
       pagename-sorting optname-prime-date-subtotal
-      "d" (N_ "Do a date subtotal.")
+      "e2" (N_ "Do a date subtotal.")
       'quarterly
       subtotal-choice-list))
     
     (gnc:register-trep-option
      (gnc:make-multichoice-option
-      pagename-sorting (N_ "Primary Sort Order")
+      pagename-sorting optname-prime-sortorder
       "e" (N_ "Order of primary sorting.")
       'ascend
       ascending-choice-list))
@@ -936,36 +987,38 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
       pagename-sorting optname-sec-sortkey
       "f"
       (N_ "Sort by this criterion second.")
-      'date
+      sec-sortkey
       key-choice-list #f
       (lambda (x)
-        (gnc-option-db-set-option-selectable-by-name
-         options pagename-sorting optname-sec-subtotal
-         (and (member x subtotal-enabled) #t))
-        (gnc-option-db-set-option-selectable-by-name
-         options pagename-sorting optname-sec-date-subtotal
-         (if (member x date-sorting-types) #t #f)))))
+        (set! sec-sortkey x)
+        (apply-selectable-by-name-options))))
     
     (gnc:register-trep-option
-     (gnc:make-simple-boolean-option
+     (gnc:make-complex-boolean-option
       pagename-sorting optname-sec-subtotal
-      "g" 
+      "i5"
       (N_ "Subtotal according to the secondary key?")
-      #t))
+      sec-sortkey-subtotal-true #f
+      (lambda (x)
+        (set! sec-sortkey-subtotal-true x)
+        (apply-selectable-by-name-options))))
     
     (gnc:register-trep-option
      (gnc:make-multichoice-option
       pagename-sorting optname-sec-date-subtotal
-      "h" (N_ "Do a date subtotal.")
+      "i2" (N_ "Do a date subtotal.")
       'none
       subtotal-choice-list))
     
     (gnc:register-trep-option
      (gnc:make-multichoice-option
-      pagename-sorting (N_ "Secondary Sort Order")
+      pagename-sorting optname-sec-sortorder
       "i" (N_ "Order of Secondary sorting.")
       'ascend
-      ascending-choice-list)))
+      ascending-choice-list))
+
+    (apply-selectable-by-name-options) ; apply default selectable values
+    )
   
   ;; Display options
   
