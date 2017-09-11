@@ -46,7 +46,7 @@
 
 ;; Define the strings here to avoid typos and make changes easier.
 
-(define reportname (N_ "Business Tax Report"))
+(define reportname (N_ "Transaction Report for Income, Expense & VAT/GST"))
 (define pagename-sorting (N_ "Sorting"))
 (define optname-prime-sortkey (N_ "Primary Key"))
 (define optname-prime-subtotal (N_ "Primary Subtotal"))
@@ -680,7 +680,7 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
     (lambda ()
       '())
     #f #t
-    (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)))
+    (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE ACCT-TYPE-PAYABLE ACCT-TYPE-RECEIVABLE)))
 
   (gnc:register-trep-option
    (gnc:make-string-option
@@ -1757,7 +1757,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
 ;; Define the report.
 (gnc:define-report
  'version 20170905
- 'menu-path (list gnc:menuname-business-reports)
+ 'menu-path (list gnc:menuname-income-expense)
  'name reportname
  'report-guid "2fe3bba544212fae95a59620f"
  'options-generator trep-options-generator
