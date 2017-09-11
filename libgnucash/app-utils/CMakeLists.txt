@@ -106,9 +106,9 @@ INSTALL(TARGETS gncmod-app-utils
 )
 
 IF (WITH_PYTHON)
-  ADD_LIBRARY (gncmod-app-utils-python ${app_utils_ALL_SOURCES} ${SWIG_APP_UTILS_PYTHON_C})
+  ADD_LIBRARY (gncmod-app-utils-python ${SWIG_APP_UTILS_PYTHON_C})
 
-  TARGET_LINK_LIBRARIES(gncmod-app-utils-python ${app_utils_ALL_LIBRARIES} ${PYTHON_LIBRARIES})
+  TARGET_LINK_LIBRARIES(gncmod-app-utils-python gncmod-app-utils ${app_utils_ALL_LIBRARIES} ${PYTHON_LIBRARIES})
 
   TARGET_INCLUDE_DIRECTORIES (gncmod-app-utils-python
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
