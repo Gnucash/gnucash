@@ -166,7 +166,10 @@ _gnc-version.h: gnc-vcs-info.h Makefile
 	if [ $$? = 0 ] ; then \
 		echo "#define GNUCASH_SCM \"$$scm_info\"" >> _gnc-version.h ; \
 	fi
-	@echo "#define GNUCASH_BUILD_DATE \"`date +%Y-%m-%d`\"" >> _gnc-version.h
+	DATE_FMT="%Y-%m-%d" ;\
+	SOURCE_DATE_EPOCH="$${SOURCE_DATE_EPOCH:-$$(date +%s)}" ;\
+	BUILD_DATE=$$(date -u -d "@$$SOURCE_DATE_EPOCH" "+$$DATE_FMT" 2>/dev/null || date -u -r "$$SOURCE_DATE_EPOCH" "+$$DATE_FMT" 2>/dev/null || date -u "+$$DATE_FMT") ;\
+	echo "#define GNUCASH_BUILD_DATE \"$$BUILD_DATE\"" >> _gnc-version.h
 	@echo "#include \"gnc-vcs-info.h\""          >> _gnc-version.h
 	@echo "#endif"                               >> _gnc-version.h
 

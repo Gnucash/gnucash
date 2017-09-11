@@ -45,7 +45,7 @@ gnucash.1: gnucash.1.in Makefile
 	rm -f $@.tmp
 	${SED} < $< > $@.tmp \
             -e 's:@-VERSION-@:${VERSION}:g' \
-            -e 's:@-DATE-@:$(shell date +'%B %Y'):g'
+            -e 's:@-DATE-@:$(shell date -u -r ../ChangeLog +'%B %Y'):g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
