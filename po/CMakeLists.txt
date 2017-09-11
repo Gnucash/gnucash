@@ -146,7 +146,7 @@ ENDIF ()
 
 IF(BUILDING_FROM_VCS)
 
-  MAKE_GNUCASH_POTFILES()
+#  MAKE_GNUCASH_POTFILES()
 
   find_program(INTLTOOL_EXTRACT NAMES intltool-extract)
   find_program(XGETTEXT xgettext)
