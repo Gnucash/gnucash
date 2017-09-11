@@ -3,7 +3,7 @@ IF (WITH_PYTHON)
   ADD_TEST(python-bindings ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/runTests.py.in)
   SET_PROPERTY(TEST python-bindings PROPERTY ENVIRONMENT
     GNC_BUILDDIR=${CMAKE_BINARY_DIR}
-    PYTHONPATH=${CMAKE_BINARY_DIR}/src/optional/python-bindings:${CMAKE_BINARY_DIR}/lib/gnucash:${CMAKE_BINARY_DIR}/src/test-core
+    PYTHONPATH=${PYTHON_SYSCONFIG_BUILD}:${CMAKE_BINARY_DIR}/lib/gnucash:${CMAKE_BINARY_DIR}/src/test-core
   )
 ENDIF()
 
