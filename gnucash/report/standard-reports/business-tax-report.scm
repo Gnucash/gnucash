@@ -245,16 +245,19 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
 
     ;first row
     (add-first-column subtotal-string)
-    (add-columns (car list-of-commodities))
+    (add-columns (if (pair? list-of-commodities)
+                     (car list-of-commodities)
+                     #f)) ;to account for empty-row subtotals
     (gnc:html-table-append-row/markup! table subtotal-style (reverse row-contents))
 
     ;subsequent rows
-    (for-each (lambda (commodity)
-                (set! row-contents '())
-                (add-first-column "")
-                (add-columns commodity)
-                (gnc:html-table-append-row/markup! table subtotal-style (reverse row-contents)))
-              (cdr list-of-commodities))))
+    (if (pair? list-of-commodities)
+        (for-each (lambda (commodity)
+                    (set! row-contents '())
+                    (add-first-column "")
+                    (add-columns commodity)
+                    (gnc:html-table-append-row/markup! table subtotal-style (reverse row-contents)))
+                  (cdr list-of-commodities)))))
 
 (define (total-string str) (string-append (_ "Total For ") str))
 
