@@ -790,7 +790,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
 
                    (vector 'register-order
                            (N_ "Register Order")
-                           (N_ "Sort as with the register."))
+                           (N_ "Sort as in the register."))
 
                    (vector 'corresponding-acc-name 
                            (N_ "Other Account Name")
@@ -841,7 +841,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
 
                    (vector 'register-order
                            (N_ "Register Order")
-                           (N_ "Sort as with the register."))
+                           (N_ "Sort as in the register."))
 
                    (vector 'corresponding-acc-name 
                            (N_ "Other Account Name")
@@ -929,8 +929,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
         
         (gnc-option-db-set-option-selectable-by-name
          options pagename-sorting optname-sec-date-subtotal
-         sec-date-sortingtype-enabled)
-        ))
+         sec-date-sortingtype-enabled)))
     
     ;; primary sorting criterion
     (gnc:register-trep-option
@@ -971,7 +970,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
      (gnc:make-multichoice-option
       pagename-sorting optname-prime-date-subtotal
       "e2" (N_ "Do a date subtotal.")
-      'quarterly
+      'monthly
       subtotal-choice-list))
     
     (gnc:register-trep-option
@@ -1015,10 +1014,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
       pagename-sorting optname-sec-sortorder
       "i" (N_ "Order of Secondary sorting.")
       'ascend
-      ascending-choice-list))
-
-    (apply-selectable-by-name-options) ; apply default selectable values
-    )
+      ascending-choice-list)))
   
   ;; Display options
   
@@ -1037,11 +1033,11 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
         (list (N_ "Num")                      "b"  (N_ "Display the check number?") #t))
     (list (N_ "Description")                  "c"  (N_ "Display the description?") #t)
     (list (N_ "Notes")                        "d2" (N_ "Display the notes if the memo is unavailable?") #t)
-    ;(list (N_ "Account Name")                 "e"  (N_ "Display the account name?") #f)
+    ;; account name option appears here
     (list (N_ "Use Full Account Name")        "f"  (N_ "Display the full account name?") #t)
     (list (N_ "Account Code")                 "g"  (N_ "Display the account code?") #f)
-    ;(list (N_ "Other Account Name")           "h"  (N_ "Display the other account name? (if this is a split transaction, this parameter is guessed).") #f)
-    (list (N_ "Use Full Other Account Name")  "i"  (N_ "Display the full account name?") #t)
+    ;; other account name option appears here
+    (list (N_ "Use Full Other Account Name")  "i"  (N_ "Display the full account name?") #f)
     (list (N_ "Other Account Code")           "j"  (N_ "Display the other account code?") #f)
     ;(list (N_ "Shares")                       "k"  (N_ "Display the number of shares?") #f)
     ;(list (N_ "Price")                        "l"  (N_ "Display the shares price?") #f)
@@ -1090,7 +1086,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
   (gnc:register-trep-option
    (gnc:make-complex-boolean-option
     gnc:pagename-display (N_ "Other Account Name")
-    "h"  (N_ "Display the other account name? (if this is a split transaction, this parameter is guessed).") #f
+    "h5"  (N_ "Display the other account name? (if this is a split transaction, this parameter is guessed).") #f
     #f
     (lambda (x) (gnc-option-db-set-option-selectable-by-name
                  gnc:*transaction-report-options*
