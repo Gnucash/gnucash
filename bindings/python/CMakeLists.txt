@@ -79,35 +79,24 @@ IF(WITH_PYTHON)
   ADD_TEST(NAME sqlite3test COMMAND sqlite3test)
   ADD_DEPENDENCIES(check sqlite3test)
 
-
-  # Determine where to install the python libraries.
-  EXECUTE_PROCESS(
-    COMMAND ${PYTHON_EXECUTABLE} -c "import sysconfig; print sysconfig.get_path('platlib', vars = { 'platbase' : '${CMAKE_INSTALL_PREFIX}' }  )"
-    RESULT_VARIABLE PYTHON_SYSCONFIG_RESULT
-    OUTPUT_VARIABLE PYTHON_SYSCONFIG_OUTPUT
-    ERROR_VARIABLE PYTHON_SYSCONFIG_ERROR
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-    ERROR_STRIP_TRAILING_WHITESPACE
-  )
-  IF (PYTHON_SYSCONFIG_RESULT)
-    MESSAGE(SEND_ERROR "Could not determine Python site-package directory:\n${PYTHON_SYSCONFIG_ERROR}")
-  ENDIF()
-
   INSTALL(TARGETS gnucash_core_c
     LIBRARY DESTINATION ${PYTHON_SYSCONFIG_OUTPUT}/gnucash
     ARCHIVE DESTINATION ${PYTHON_SYSCONFIG_OUTPUT}/gnucash
   )
-  INSTALL(FILES __init__.py function_class.py gnucash_business.py gnucash_core.py
-    ${CMAKE_CURRENT_BINARY_DIR}/gnucash_core_c.py
+  INSTALL(FILES ${PYEXEC_FILES} ${CMAKE_CURRENT_BINARY_DIR}/gnucash_core_c.py
     DESTINATION ${PYTHON_SYSCONFIG_OUTPUT}/gnucash
   )
 
-  FILE(COPY ${PYEXEC_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/gnucash)
+  FILE(COPY ${PYEXEC_FILES} DESTINATION ${PYTHON_SYSCONFIG_BUILD}/gnucash)
 
   ADD_CUSTOM_TARGET(gnucash-core-c-py ALL
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/gnucash_core_c.py ${CMAKE_CURRENT_BINARY_DIR}/gnucash
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/gnucash_core_c.py ${PYTHON_SYSCONFIG_BUILD}/gnucash
     DEPENDS ${SWIG_GNUCASH_CORE_C})
 
+  ADD_CUSTOM_TARGET(gnucash-core-c-build ALL
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/lib/gnucash/_gnucash_core_c${CMAKE_SHARED_LIBRARY_SUFFIX} ${PYTHON_SYSCONFIG_BUILD}/gnucash
+    DEPENDS gnucash_core_c)
+    
 ENDIF()
 
 SET(python_bindings_DATA ${PYEXEC_FILES}

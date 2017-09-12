@@ -167,6 +167,7 @@ _gnc-version.h: gnc-vcs-info.h Makefile
 		echo "#define GNUCASH_SCM \"$$scm_info\"" >> _gnc-version.h ; \
 	fi
 	@echo "#define GNUCASH_BUILD_DATE \"`date +%Y-%m-%d`\"" >> _gnc-version.h
+	@echo "#define GNUCASH_BUILD_YEAR \"`date +%Y`\"" >> _gnc-version.h
 	@echo "#include \"gnc-vcs-info.h\""          >> _gnc-version.h
 	@echo "#endif"                               >> _gnc-version.h
 
