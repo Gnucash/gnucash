@@ -262,6 +262,68 @@ gnucash_sheet_deactivate_cursor_cell (GnucashSheet *sheet)
 }
 
 
+static gint
+gnucash_sheet_get_text_cursor_position (GnucashSheet *sheet, const VirtualLocation virt_loc)
+{
+    GncItemEdit *item_edit = GNC_ITEM_EDIT(sheet->item_editor);
+    Table *table = sheet->table;
+    const char *text = gnc_table_get_entry (table, virt_loc);
+    PangoLayout *layout;
+    PangoRectangle logical_rect;
+    GdkRectangle rect;
+    gint x, y, w, h;
+    gint index, trailing;
+    gboolean result;
+    gint x_offset = 0;
+
+    if ((text == NULL) || (*text == '\0'))
+        return 0;
+
+    // Get the item_edit position
+    gnc_item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
+
+    layout = gtk_widget_create_pango_layout (GTK_WIDGET (sheet), text);
+
+    // We don't need word wrap or line wrap
+    pango_layout_set_width (layout, -1);
+
+    pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+
+    rect.x      = x + CELL_HPADDING;
+    rect.y      = y + CELL_VPADDING;
+    rect.width  = MAX (0, w - (2 * CELL_HPADDING));
+    rect.height = h - 2;
+
+    // Get the alignment of the cell
+    switch (gnc_table_get_align (table, virt_loc))
+    {
+    default:
+    case CELL_ALIGN_LEFT:
+        x_offset = 0;
+        break;
+
+    case CELL_ALIGN_RIGHT:
+        x_offset = w - 2 * CELL_HPADDING - logical_rect.width - 3;
+        break;
+
+    case CELL_ALIGN_CENTER:
+        if (logical_rect.width > w - 2 * CELL_HPADDING)
+            x_offset = 0;
+        else
+            x_offset = (w - 2 * CELL_HPADDING -
+                        logical_rect.width) / 2;
+        break;
+    }
+
+    result = pango_layout_xy_to_index (layout,
+                 PANGO_SCALE * (sheet->button_x - rect.x - x_offset),
+                 PANGO_SCALE * (h/2), &index, &trailing);
+
+    g_object_unref (layout);
+
+    return index + trailing;
+}
+
 static void
 gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
                                     gboolean changed_cells)
@@ -310,8 +372,18 @@ gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
     {
         gnucash_sheet_im_context_reset(sheet);
         gnucash_sheet_start_editing_at_cursor (sheet);
-        gtk_editable_set_position (editable, cursor_pos);
-        gtk_editable_select_region (editable, start_sel, end_sel);
+
+        // Came here by keyboard, select text, otherwise text cursor to
+        // mouse position
+        if (sheet->button != 1)
+        {
+            gtk_editable_set_position (editable, cursor_pos);
+            gtk_editable_select_region (editable, start_sel, end_sel);
+        }
+        else
+            gtk_editable_set_position (editable,
+                gnucash_sheet_get_text_cursor_position (sheet, virt_loc));
+
         sheet->direct_update_cell =
             gnucash_sheet_check_direct_update_cell (sheet, virt_loc);
     }
@@ -1373,9 +1445,15 @@ gnucash_sheet_button_press_event (GtkWidget *widget, GdkEventButton *event)
 
     gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &cur_virt_loc);
 
+    sheet->button_x = -1;
+    sheet->button_y = -1;
+
     if (!gnucash_sheet_find_loc_by_pixel(sheet,
                                         event->x, event->y, &new_virt_loc))
         return TRUE;
+
+    sheet->button_x = event->x;
+    sheet->button_y = event->y;
 
     vcell = gnc_table_get_virtual_cell (table, new_virt_loc.vcell_loc);
     if (vcell == NULL)

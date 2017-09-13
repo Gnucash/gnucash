@@ -83,6 +83,7 @@ struct _GnucashSheet
 
     guint button; /* mouse button being held down */
     gboolean grabbed; /* has the grab */
+    gdouble button_x, button_y;
 
     guint insert_signal;
     guint delete_signal;
