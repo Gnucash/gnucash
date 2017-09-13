@@ -182,88 +182,31 @@ struct table
 typedef enum
 {
     /* Colors used for background drawing */
-    COLOR_UNKNOWN_BG,
-    COLOR_HEADER_BG,
-    COLOR_PRIMARY_BG,
-    COLOR_PRIMARY_BG_ACTIVE,
-    COLOR_SECONDARY_BG,
-    COLOR_SECONDARY_BG_ACTIVE,
-    COLOR_SPLIT_BG,
-    COLOR_SPLIT_BG_ACTIVE,
+    COLOR_UNKNOWN_BG,          // 0
+    COLOR_HEADER_BG,           // 1
+    COLOR_PRIMARY_BG,          // 2
+    COLOR_PRIMARY_BG_ACTIVE,   // 3
+    COLOR_SECONDARY_BG,        // 4
+    COLOR_SECONDARY_BG_ACTIVE, // 5
+    COLOR_SPLIT_BG,            // 6
+    COLOR_SPLIT_BG_ACTIVE,     // 7
 
     /* Colors used for foreground drawing (text etc)
      * ATTENTION: the background and foreground lists should have
      *            the same types (the same amount of entries) !
      *            The code relies on this ! */
-    COLOR_UNKNOWN_FG,
-    COLOR_HEADER_FG,
-    COLOR_PRIMARY_FG,
-    COLOR_PRIMARY_FG_ACTIVE,
-    COLOR_SECONDARY_FG,
-    COLOR_SECONDARY_FG_ACTIVE,
-    COLOR_SPLIT_FG,
-    COLOR_SPLIT_FG_ACTIVE,
+    COLOR_UNKNOWN_FG,          // 8
+    COLOR_HEADER_FG,           // 9
+    COLOR_PRIMARY_FG,          // 10
+    COLOR_PRIMARY_FG_ACTIVE,   // 11
+    COLOR_SECONDARY_FG,        // 12
+    COLOR_SECONDARY_FG_ACTIVE, // 13
+    COLOR_SPLIT_FG,            // 14
+    COLOR_SPLIT_FG_ACTIVE,     // 15
 
     /* Other colors */
-    COLOR_NEGATIVE, /* Color to use for negative numbers */
+    COLOR_NEGATIVE,            // 16 Color to use for negative numbers
 } RegisterColor;
-
-
-
-
-/** Alternative color tables to use for the register.
- * The colors in this array are ordered according to the RegisterColor Enum
- * Be careful to respect this order !
- */
-static const guint32 reg_colors_default [] =
-{
-    0xFFFFFF,     // COLOR_UNKNOWN_BG
-    0x96B183,     // COLOR_HEADER_BG
-    0xBFDEB9,     // COLOR_PRIMARY_BG
-    0xFFEF98,     // COLOR_PRIMARY_BG_ACTIVE
-    0xF6FFDA,     // COLOR_SECONDARY_BG
-    0xFFEF98,     // COLOR_SECONDARY_BG_ACTIVE
-    0xEDE7D3,     // COLOR_SPLIT_BG
-    0xFFEF98,     // COLOR_SPLIT_BG_ACTIVE
-
-    0x000000,     // COLOR_UNKNOWN_FG
-    0x000000,     // COLOR_HEADER_FG
-    0x000000,     // COLOR_PRIMARY_FG
-    0x000000,     // COLOR_PRIMARY_FG_ACTIVE
-    0x000000,     // COLOR_SECONDARY_FG
-    0x000000,     // COLOR_SECONDARY_FG_ACTIVE
-    0x000000,     // COLOR_SPLIT_FG
-    0x000000,     // COLOR_SPLIT_FG_ACTIVE
-
-    0xFF0000,     // COLOR_NEGATIVE
-};
-
-/* The colors in this array are ordered according to the RegisterColor Enum
- * Be careful to respect this order !
- */
-static const guint32 reg_colors_gtkrc [] =
-{
-    COLOR_UNKNOWN_BG,          // COLOR_UNKNOWN_BG
-    COLOR_HEADER_BG,           // COLOR_HEADER_BG
-    COLOR_PRIMARY_BG,          // COLOR_PRIMARY_BG
-    COLOR_PRIMARY_BG_ACTIVE,   // COLOR_PRIMARY_BG_ACTIVE
-    COLOR_SECONDARY_BG,        // COLOR_SECONDARY_BG
-    COLOR_SECONDARY_BG_ACTIVE, // COLOR_SECONDARY_BG_ACTIVE
-    COLOR_SPLIT_BG,            // COLOR_SPLIT_BG
-    COLOR_SPLIT_BG_ACTIVE,     // COLOR_SPLIT_BG_ACTIVE
-
-    COLOR_UNKNOWN_FG,          // COLOR_UNKNOWN_FG
-    COLOR_HEADER_FG,           // COLOR_HEADER_FG
-    COLOR_PRIMARY_FG,          // COLOR_PRIMARY_FG
-    COLOR_PRIMARY_FG_ACTIVE,   // COLOR_PRIMARY_FG_ACTIVE
-    COLOR_SECONDARY_FG,        // COLOR_SECONDARY_FG
-    COLOR_SECONDARY_FG_ACTIVE, // COLOR_SECONDARY_FG_ACTIVE
-    COLOR_SPLIT_FG,            // COLOR_SPLIT_FG
-    COLOR_SPLIT_FG_ACTIVE,     // COLOR_SPLIT_FG_ACTIVE
-
-    COLOR_NEGATIVE,            // COLOR_NEGATIVE
-};
-
 
 /** Set the default gui handlers used by new tables. */
 void gnc_table_set_default_gui_handlers (TableGUIHandlers *gui_handlers);
@@ -317,12 +260,8 @@ CellIOFlags    gnc_table_get_io_flags (Table *table, VirtualLocation virt_loc);
 
 guint32        gnc_table_get_fg_color (Table *table, VirtualLocation virt_loc);
 
-guint32        gnc_table_get_gtkrc_fg_color (Table *table, VirtualLocation virt_loc);
-
 guint32        gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc,
                                        gboolean *hatching);
-guint32        gnc_table_get_gtkrc_bg_color (Table *table, VirtualLocation virt_loc,
-        gboolean *hatching);
 
 void           gnc_table_get_borders (Table *table, VirtualLocation virt_loc,
                                       PhysicalCellBorders *borders);

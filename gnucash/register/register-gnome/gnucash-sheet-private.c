@@ -399,10 +399,10 @@ draw_cell (GnucashSheet *sheet,
     gtk_style_context_save (stylectxt);
 
     // Get the background and foreground color types and apply the css class
-    color_type = gnc_table_get_gtkrc_bg_color (table, virt_loc, &hatching);
+    color_type = gnc_table_get_bg_color (table, virt_loc, &hatching);
     gnucash_get_style_classes (sheet, stylectxt, color_type);
 
-    color_type = gnc_table_get_gtkrc_fg_color (table, virt_loc);
+    color_type = gnc_table_get_fg_color (table, virt_loc);
     gnucash_get_style_classes (sheet, stylectxt, color_type);
 
     // Are we in a read-only row? Then make the background color somewhat more grey.
