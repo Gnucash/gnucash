@@ -377,9 +377,9 @@ draw_text_cursor_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
     gdk_rgba_parse (&color, "black");
     gtk_style_context_get_color (stylectxt, GTK_STATE_FLAG_NORMAL, &color);
     fg_color = &color;
-    
+
     text = gtk_entry_get_text (GTK_ENTRY (widget));
-    
+
     if ((text != NULL) && (*text != '\0'))
     {
         PangoLayout *layout;
@@ -388,7 +388,7 @@ draw_text_cursor_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
 
         cursor_pos = gtk_editable_get_position (editable);
         cursor_byte_pos = g_utf8_offset_to_pointer (text, cursor_pos) - text;
-    
+
         gtk_editable_get_selection_bounds (editable, &start_pos, &end_pos);
 
         layout = gtk_entry_get_layout (GTK_ENTRY(widget));
@@ -397,7 +397,7 @@ draw_text_cursor_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
     }
     else
         cursor_x = x_offset;
-    
+
     // Now draw a vertical line
     cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
     cairo_set_line_width (cr, 1.0);
@@ -635,7 +635,7 @@ gnc_item_edit_new (GnucashSheet *sheet)
     // Make sure the Entry can not have focus and no frame
     gtk_widget_set_can_focus (GTK_WIDGET(item_edit->editor), FALSE);
     gtk_entry_set_has_frame (GTK_ENTRY(item_edit->editor), FALSE);
-    
+
     // Connect to the draw signal so we can draw a cursor
     g_signal_connect_after (item_edit->editor, "draw",
                             G_CALLBACK (draw_text_cursor_cb), NULL);
