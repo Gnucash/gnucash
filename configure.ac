@@ -74,8 +74,8 @@ AX_CXX_COMPILE_STDCXX_11(ext)
 # Ensure the C compiler supports C11
 AX_CHECK_COMPILE_FLAG([-std=gnu11],
                       [AX_APPEND_FLAG([-std=gnu11])],
-                      [AC_MSG_ERROR([The compiler doesn't support the C11 (gnu11) standard.])
-                      ])
+                      AC_MSG_ERROR([No C++11 Support.])
+                      )
 
 AC_SUBST(GNUCASH_MAJOR_VERSION)
 AC_SUBST(GNUCASH_MINOR_VERSION)
@@ -144,6 +144,7 @@ AM_CONDITIONAL([CLANG], [test "x$ac_cv_CLANG" = "xyes"])
 ###--------------------------------------------------------
 ### Begin C++ dependencies
 ###--------------------------------------------------------
+AC_PROG_CXX
 PKG_CHECK_MODULES(ICU4C, icu-uc, [ac_cv_ICU4C=yes], [ac_cv_ICU4C=no])
 PKG_CHECK_MODULES(ICU4C_I18N, icu-i18n, [ac_cv_ICU4C=yes], [ac_cv_ICU4C=no])
 if test x$ac_cv_ICU4C != xyes; then
@@ -939,14 +940,12 @@ fi
 if test "x$ac_cv_have_gtest_libs" = xyes; then
    ac_cv_gtest_libs="-lgtest -lgtest_main"
 else
-dnl Google test requires pthreads and this seems the easiest way to check.
     AX_PTHREAD([
     ac_cv_gtest_libs="\$(top_builddir)/common/test-core/libgtest.a $PTHREAD_CFLAGS"
-    ],[
+    ],
     AC_MSG_ERROR(
       [GTest requires pthreads, but this wasn't found.])
-      dnl Google test requires pthreads and this seems the easiest way to check.
-    ])
+    )
 fi
 
 AC_SUBST([GTEST_LIBS], [$ac_cv_gtest_libs])
