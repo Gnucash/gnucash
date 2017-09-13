@@ -551,7 +551,7 @@ draw_cell (GnucashSheet *sheet,
         break;
 
     case CELL_ALIGN_RIGHT:
-        x_offset = width - 2 * CELL_HPADDING - logical_rect.width;
+        x_offset = width - 2 * CELL_HPADDING - logical_rect.width - 3;
         break;
 
     case CELL_ALIGN_CENTER:
@@ -562,7 +562,7 @@ draw_cell (GnucashSheet *sheet,
                         logical_rect.width) / 2;
         break;
     }
-    gtk_render_layout (stylectxt, cr, rect.x + x_offset, rect.y + 1, layout);
+    gtk_render_layout (stylectxt, cr, rect.x + x_offset + 1, rect.y, layout);
 
     cairo_restore (cr);
 
