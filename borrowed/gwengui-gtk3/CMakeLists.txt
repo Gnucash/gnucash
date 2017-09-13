@@ -1,4 +1,5 @@
 SET (gwengui_gtk3_noinst_HEADERS
+  gtk3_gui.h
   gtk3_gui_p.h
   gtk3_gui_dialog_l.h
   gtk3_gui_dialog_p.h
