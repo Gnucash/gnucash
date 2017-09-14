@@ -906,7 +906,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
         (sec-sortkey 'register-order)
         (sec-sortkey-subtotal-true #f))
     
-    (define (apply-selectable-by-name-options)
+    (define (apply-selectable-by-name-sorting-options)
       (let* ((prime-sortkey-enabled (not (eq? prime-sortkey 'none)))
              (prime-sortkey-subtotal-enabled (member prime-sortkey subtotal-enabled))
              (prime-date-sortingtype-enabled (member prime-sortkey date-sorting-types))
@@ -957,7 +957,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
       key-choice-list #f
       (lambda (x)
         (set! prime-sortkey x)
-        (apply-selectable-by-name-options))))
+        (apply-selectable-by-name-sorting-options))))
     
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
@@ -981,7 +981,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
       prime-sortkey-subtotal-true #f
       (lambda (x)
         (set! prime-sortkey-subtotal-true x)
-        (apply-selectable-by-name-options))))
+        (apply-selectable-by-name-sorting-options))))
     
     (gnc:register-trep-option
      (gnc:make-multichoice-option
@@ -1007,7 +1007,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
       key-choice-list #f
       (lambda (x)
         (set! sec-sortkey x)
-        (apply-selectable-by-name-options))))
+        (apply-selectable-by-name-sorting-options))))
     
     (gnc:register-trep-option
      (gnc:make-complex-boolean-option
@@ -1017,7 +1017,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
       sec-sortkey-subtotal-true #f
       (lambda (x)
         (set! sec-sortkey-subtotal-true x)
-        (apply-selectable-by-name-options))))
+        (apply-selectable-by-name-sorting-options))))
     
     (gnc:register-trep-option
      (gnc:make-multichoice-option
