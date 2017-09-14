@@ -644,6 +644,11 @@
     gnc:pagename-general optname-table-export
     "g" (N_ "Formats the table suitable for cut & paste exporting with extra cells.") #f))  
   
+  (gnc:register-trep-option
+   (gnc:make-internal-option
+    gnc:pagename-general (N_ "Transaction Type Filter")
+    #f))
+  
   ;; Accounts options
   
   ;; account to do report on
