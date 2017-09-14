@@ -646,7 +646,7 @@
   
   (gnc:register-trep-option
    (gnc:make-internal-option
-    gnc:pagename-general (N_ "Transaction Type Filter")
+    gnc:pagename-accounts  (N_ "Transaction Type Filter")
     #f))
   
   ;; Accounts options
