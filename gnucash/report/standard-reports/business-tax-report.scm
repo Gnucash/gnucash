@@ -671,31 +671,6 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
     gnc:pagename-general optname-table-export
     "g" (N_ "Formats the table suitable for cut & paste exporting with extra cells.") #f))
   
-  (gnc:register-trep-option
-   (gnc:make-multichoice-option
-    gnc:pagename-general (N_ "Transaction Type Filter")
-    "h" (N_ "Select type of filtering to apply to transactions. ")
-    #f
-    (list (vector #f
-                  (N_ "Select all transactions.")
-                  (N_ "Select all transactions. Will contain regular transactions, \
-invoices/bills, payments and link transactions between invoices & payments."))
-          (vector (list TXN-TYPE-NONE TXN-TYPE-INVOICE)
-                  (N_ "Select regular transactions and invoices/bills only.")
-                  (N_ "Select regular transactions and invoices/bills only."))
-          (vector (list TXN-TYPE-NONE)
-                  (N_ "Select regular transactions only.")
-                  (N_ "Select regular transactions only."))
-          (vector (list TXN-TYPE-INVOICE)
-                  (N_ "Select invoices/bills only.")
-                  (N_ "Select invoices/bills only."))
-          (vector (list TXN-TYPE-PAYMENT)
-                  (N_ "Select payments only.")
-                  (N_ "Select payments only."))
-          (vector (list TXN-TYPE-LINK)
-                  (N_ "Select link transactions only.")
-                  (N_ "Select link transactions only.")))))
-
   ;; Accounts options
   
   ;; account to do report on
@@ -734,6 +709,23 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
     #f #t
     (list ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY)))
 
+  (gnc:register-trep-option
+   (gnc:make-list-option
+    gnc:pagename-accounts (N_ "Transaction Type Filter")
+    "b19" (N_ "Select type of transactions to include. ")
+    (list TXN-TYPE-NONE TXN-TYPE-INVOICE)
+    (list (vector TXN-TYPE-NONE
+                  (N_ "Regular transactions.")
+                  (N_ "Regular transactions."))
+          (vector TXN-TYPE-INVOICE
+                  (N_ "Invoices/bills.")
+                  (N_ "Invoices/bills."))
+          (vector TXN-TYPE-PAYMENT
+                  (N_ "Payments.")
+                  (N_ "Payments."))
+          (vector TXN-TYPE-LINK
+                  (N_ "Link transactions.")
+                  (N_ "Link transactions.")))))
   
   (gnc:register-trep-option
    (gnc:make-account-list-option
@@ -1660,7 +1652,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
          (accounts-sales (filter (lambda (acc) (eq? (xaccAccountGetType acc) ACCT-TYPE-INCOME)) c_account_1))
          (accounts-purchases (filter (lambda (acc) (eq? (xaccAccountGetType acc) ACCT-TYPE-EXPENSE)) c_account_1))
          (filter-mode (opt-val gnc:pagename-accounts "Filter Type"))
-         (transaction-type-filter (opt-val gnc:pagename-general "Transaction Type Filter"))
+         (transaction-type-filter (opt-val gnc:pagename-accounts "Transaction Type Filter"))
          (begindate (gnc:timepair-start-day-time
                      (gnc:date-option-absolute-time
                       (opt-val gnc:pagename-general "Start Date"))))
@@ -1736,13 +1728,12 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
 
           ; For each split, we will optionally only keep those which contain useful data
           ; e.g. show invoice & regular transactions or show all
-          (if transaction-type-filter
-              (set! splits (filter
-                            (lambda (split)
-                              (let* ((trans (xaccSplitGetParent split))
-                                     (txn-type (xaccTransGetTxnType trans)))
-                                (member txn-type transaction-type-filter)))
-                            splits)))
+          (set! splits (filter
+                        (lambda (split)
+                          (let* ((trans (xaccSplitGetParent split))
+                                 (txn-type (xaccTransGetTxnType trans)))
+                            (member txn-type transaction-type-filter)))
+                        splits))
           
           (if (not (null? splits))
               (let ((table 
