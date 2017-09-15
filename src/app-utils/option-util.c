@@ -233,35 +233,6 @@ gnc_option_db_new(SCM guile_options)
     return odb;
 }
 
-typedef struct
-{
-    GNCOptionDB *odb;
-    SCM guile_options;
-} ODBFindInfo;
-
-static void
-option_db_finder (gpointer key, gpointer value, gpointer data)
-{
-    ODBFindInfo *find_info = data;
-    GNCOptionDB *odb = value;
-
-    if (odb && (odb->guile_options == find_info->guile_options))
-        find_info->odb = odb;
-}
-
-static GNCOptionDB *
-gnc_option_db_find (SCM guile_options)
-{
-    ODBFindInfo find_info;
-
-    find_info.odb = NULL;
-    find_info.guile_options = guile_options;
-
-    g_hash_table_foreach (option_dbs, option_db_finder, &find_info);
-
-    return find_info.odb;
-}
-
 /* Create an option DB for a particular data type */
 GNCOptionDB *
 gnc_option_db_new_for_type(QofIdType id_type)
@@ -2634,6 +2605,27 @@ gnc_date_option_value_get_relative (SCM option_value)
     return scm_call_1 (getters.date_option_value_relative, option_value);
 }
 
+static int
+find_option_db_with_selectable_pred (gpointer key, gpointer value, gpointer data)
+{
+    SCM guile_options = data;
+    GNCOptionDB *odb = value;
+
+    if (odb && (odb->guile_options == guile_options)
+        && odb->set_selectable    )
+        return TRUE;
+
+    return FALSE;
+
+}
+
+static GNCOptionDB *
+find_option_db_with_selectable (SCM guile_options)
+{
+    return g_hash_table_find (option_dbs, find_option_db_with_selectable_pred,
+                              guile_options);
+}
+
 /*******************************************************************\
  * gnc_option_db_set_option_selectable_by_name                     *
  *   set the sensitivity of the option widget                      *
@@ -2645,7 +2637,7 @@ gnc_date_option_value_get_relative (SCM option_value)
  * Return: SCM value                                               *
 \*******************************************************************/
 void
-gnc_option_db_set_option_selectable_by_name(SCM guile_option,
+gnc_option_db_set_option_selectable_by_name(SCM guile_options,
         const char *section,
         const char *name,
         gboolean selectable)
@@ -2653,7 +2645,7 @@ gnc_option_db_set_option_selectable_by_name(SCM guile_option,
     GNCOptionDB *odb;
     GNCOption *option;
 
-    odb = gnc_option_db_find (guile_option);
+    odb = find_option_db_with_selectable (guile_options);
     if (!odb)
         return;
 
