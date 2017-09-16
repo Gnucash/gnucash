@@ -322,7 +322,9 @@ gnc_validate_directory (const bfs::path &dirname, bool create)
         return false;
 
     if (!bfs::exists(dirname) && (!create))
-        return false;
+        throw (bfs::filesystem_error("", dirname,
+                bst::error_code(bst::errc::no_such_file_or_directory,
+                                bst::generic_category())));
 
     /* Optionally create directories if they don't exist yet
      * Note this will do nothing if the directory and its
@@ -386,7 +388,7 @@ copy_recursive(const bfs::path& src, const bfs::path& dest)
     catch(const bfs::filesystem_error& ex)
     {
         g_warning("An error occured while trying to migrate the user configation from\n%s to\n%s"
-                  "The reported failure is\n%s",
+                  "(Error: %s)",
                   src.string().c_str(), gnc_userdata_home.string().c_str(),
                   ex.what());
         return false;
@@ -465,18 +467,14 @@ get_userdata_home(bool create)
     {
         try
         {
-            if (!gnc_validate_directory(userdata_home, create))
-                throw (bfs::filesystem_error(
-                    std::string(_("Directory doesn't exist: "))
-                    + userdata_home.string(), userdata_home,
-                    bst::error_code(bst::errc::permission_denied, bst::generic_category())));
+            gnc_validate_directory(userdata_home, create);  // May throw
             try_home_dir = false;
         }
         catch (const bfs::filesystem_error& ex)
         {
             auto path_string = userdata_home.string();
-            g_warning("%s is not a suitable base directory for the user data."
-            "Trying home directory instead.\nThe failure is\n%s",
+            g_warning("%s is not a suitable base directory for the user data. "
+            "Trying home directory instead.\n(Error: %s)",
             path_string.c_str(), ex.what());
         }
     }
@@ -487,17 +485,13 @@ get_userdata_home(bool create)
         try
         {
             /* Never attempt to create a home directory, hence the false below */
-            if (!gnc_validate_directory(userdata_home, false))
-                throw (bfs::filesystem_error(
-                    std::string(_("Directory doesn't exist: "))
-                    + userdata_home.string(), userdata_home,
-                    bst::error_code(bst::errc::permission_denied, bst::generic_category())));
+            gnc_validate_directory(userdata_home, false);  // May throw
             userdata_is_home = true;
         }
         catch (const bfs::filesystem_error& ex)
         {
             g_warning("Cannot find suitable home directory. Using tmp directory instead.\n"
-            "The failure is\n%s", ex.what());
+            "(Error: %s)", ex.what());
             userdata_home = g_get_tmp_dir();
             userdata_is_tmp = true;
         }
@@ -519,18 +513,14 @@ gnc_filepath_init(gboolean create)
         try
         {
             gnc_userdata_home_exists = bfs::exists(gnc_userdata_home);
-            if (!gnc_validate_directory(gnc_userdata_home, create))
-                throw (bfs::filesystem_error(
-                    std::string(_("Directory doesn't exist: "))
-                    + userdata_home.string(), userdata_home,
-                    bst::error_code(bst::errc::permission_denied, bst::generic_category())));
+            gnc_validate_directory(gnc_userdata_home, create); // May throw
             gnc_userdata_home_from_env = true;
         }
         catch (const bfs::filesystem_error& ex)
         {
             auto path_string = userdata_home.string();
-            g_warning("%s (from environment variable 'GNC_DATA_HOME') is not a suitable directory for the user data."
-            "Trying the default instead.\nThe failure is\n%s",
+            g_warning("%s (from environment variable 'GNC_DATA_HOME') is not a suitable directory for the user data. "
+            "Trying the default instead.\n(Error: %s)",
             path_string.c_str(), ex.what());
         }
     }
@@ -551,6 +541,7 @@ gnc_filepath_init(gboolean create)
             {
                 userdata_home = g_get_tmp_dir();
                 userdata_is_home = false;
+                userdata_is_tmp = true;
             }
         }
 
@@ -563,8 +554,12 @@ gnc_filepath_init(gboolean create)
         if (!userdata_is_home)
             gnc_userdata_home = userdata_home / PACKAGE_NAME;
         gnc_userdata_home_exists = bfs::exists(gnc_userdata_home);
-        /* This may throw and end the program! */
-        gnc_validate_directory(gnc_userdata_home, create);
+        /* This may throw and end the program!
+         * Note we always allow to create in the tmp_dir. This will
+         * skip migrating to that location in the next step but that's
+         * a good thing.
+         */
+        gnc_validate_directory(gnc_userdata_home, (create || userdata_is_tmp));
     }
 
     auto migrated = FALSE;
