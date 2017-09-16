@@ -1,5 +1,5 @@
 /***************************************************************************
- *            test-resolve-file-path.c
+ *            test-userdata-dir-invalid-home.c
  *
  *  Thu Sep 29 22:48:57 2005
  *  Copyright  2005  GnuCash team
@@ -65,7 +65,9 @@ main(G_GNUC_UNUSED int argc, G_GNUC_UNUSED char **argv)
     int i;
     const char *tmp_dir = g_get_tmp_dir();
 
-    /* Run usr conf dir tests with a valid and writable homedir */
+    /* Run usr conf dir tests with an invalid homedir
+     * The code should fall back to using the temporary
+     * directory in that case. */
     g_setenv("HOME", "/notexist", TRUE);
     for (i = 0; strs2[i].funcname != NULL; i++)
     {

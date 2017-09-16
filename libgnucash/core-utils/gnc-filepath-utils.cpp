@@ -554,6 +554,12 @@ gnc_filepath_init(gboolean create)
             }
         }
 
+        /* The fall back to the tmp dir is to accomodate for very restricted
+         * distribution build environments. In some such cases
+         * there is no home directory available, which would cause the build
+         * to fail (as this code is actually run while compiling guile scripts).
+         * This is worked around by continuing with a userdata directory
+         * in the temporary directory which always exists. */
         if (!userdata_is_home)
             gnc_userdata_home = userdata_home / PACKAGE_NAME;
         gnc_userdata_home_exists = bfs::exists(gnc_userdata_home);

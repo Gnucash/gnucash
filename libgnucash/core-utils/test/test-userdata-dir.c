@@ -1,5 +1,5 @@
 /***************************************************************************
- *            test-resolve-file-path.c
+ *            test-userdata-dir.c
  *
  *  Thu Sep 29 22:48:57 2005
  *  Copyright  2005  GnuCash team
