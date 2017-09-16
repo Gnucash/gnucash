@@ -31,9 +31,9 @@ import sys
 import re
 import tempfile
 import readline
-import gobject
-import gtk
-import pango
+from gi.repository import GObject
+from gi.repository import Gtk
+from gi.repository import Pango
 from StringIO import StringIO
 import shell
 try:    import ishell
@@ -105,8 +105,8 @@ class ConsoleIn:
         iter = buffer.get_iter_at_mark(buffer.get_insert())
         buffer.move_mark (buffer.get_mark('linestart'), iter)
         while self.console.input_mode:
-            #while gtk.events_pending():
-            gtk.main_iteration()
+            #while Gtk.events_pending():
+            Gtk.main_iteration()
         s = self.console.input
         self.console.input = ''
         return s+'\n'
@@ -119,7 +119,7 @@ class ConsoleIn:
 
 
 # ---------------------------------------------------------------- class Console
-class Console (gtk.ScrolledWindow):
+class Console (Gtk.ScrolledWindow):
     """ GTK python console """
 
     def __init__(self, argv=[], shelltype='python', banner=[],
@@ -129,12 +129,12 @@ class Console (gtk.ScrolledWindow):
 
         # GTK interface
         self.do_quit = False
-        gtk.ScrolledWindow.__init__(self)
-        self.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
-        self.set_shadow_type (gtk.SHADOW_NONE)
+        GObject.GObject.__init__(self)
+        self.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        self.set_shadow_type (Gtk.ShadowType.NONE)
         self.set_border_width(0)
-        self.view = gtk.TextView()
-        self.view.modify_font (pango.FontDescription("Mono 10"))
+        self.view = Gtk.TextView()
+        self.view.modify_font (Pango.FontDescription("Mono 10"))
         self.view.set_editable (True)
         self.view.set_wrap_mode(True)
         self.view.set_left_margin(0)
@@ -142,7 +142,7 @@ class Console (gtk.ScrolledWindow):
         self.buffer = self.view.get_buffer()
         self.buffer.create_tag ('title',
                                 indent = 2,
-                                weight=pango.WEIGHT_BOLD,
+                                weight=Pango.Weight.BOLD,
                                 foreground='blue',
                                 font='Mono 12')
         self.buffer.create_tag ('subtitle',
@@ -154,11 +154,11 @@ class Console (gtk.ScrolledWindow):
                                 font='Mono 10')
         self.buffer.create_tag ('error',
                                 foreground='red',
-                                style=pango.STYLE_OBLIQUE,
+                                style=Pango.Style.OBLIQUE,
                                 font='Mono 10')
         self.buffer.create_tag ('prompt',
                                 foreground='blue',
-                                weight=pango.WEIGHT_BOLD,
+                                weight=Pango.Weight.BOLD,
                                 font='Mono 10')
         self.buffer.create_tag('0')
         self.color_pat = re.compile('\x01?\x1b\[(.*?)m\x02?')
@@ -170,7 +170,7 @@ class Console (gtk.ScrolledWindow):
             self.write (text, style)
         iter = self.buffer.get_iter_at_mark(self.buffer.get_insert())
         self.buffer.create_mark ('linestart', iter, True)
-        self.view.add_events(gtk.gdk.KEY_PRESS_MASK)
+        self.view.add_events(Gdk.EventMask.KEY_PRESS_MASK)
         self.view.connect ('key-press-event', self.key_press_event)
         self.add(self.view)
         self.show_all()
@@ -294,13 +294,13 @@ class Console (gtk.ScrolledWindow):
         self.buffer.move_mark (self.buffer.get_mark('linestart'), iter)
         self.history_reset()
         self.view.scroll_mark_onscreen(self.buffer.get_insert())
-        while gtk.events_pending():
-            gtk.main_iteration()
+        while Gtk.events_pending():
+            Gtk.main_iteration()
 
     def key_press_event (self, widget, event):
         """ Handle key press event """
 
-        keyname = gtk.gdk.keyval_name (event.keyval)
+        keyname = Gdk.keyval_name (event.keyval)
 
         # New command
         if keyname in ['Return', 'KP_Enter']:
@@ -358,7 +358,7 @@ class Console (gtk.ScrolledWindow):
             return True
 
         # Controls
-        elif event.state & gtk.gdk.CONTROL_MASK:
+        elif event.get_state() & Gdk.ModifierType.CONTROL_MASK:
             if keyname in ['a','A']:
                 mark = self.buffer.get_mark('linestart')
                 linestart = self.buffer.get_iter_at_mark(mark)
@@ -413,8 +413,8 @@ class Console (gtk.ScrolledWindow):
 
         self.shell.eval(self)
         self.view.scroll_mark_onscreen(self.buffer.get_insert())
-        while gtk.events_pending():
-            gtk.main_iteration()
+        while Gtk.events_pending():
+            Gtk.main_iteration()
 
         # Get system output and remove system redirection
         os.dup2 (sys_stdout, 1)
@@ -431,7 +431,7 @@ class Console (gtk.ScrolledWindow):
     def quit(self):
         """ Quit console """
 
-        gtk.main_quit()
+        Gtk.main_quit()
         self.history_save()
         try:
             os.close (self.piperead)

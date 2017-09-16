@@ -2,7 +2,7 @@ import sys
 import _sw_app_utils
 from gnucash import *
 from _sw_core_utils import gnc_prefs_is_extra_enabled
-import gtk
+from gi.repository import Gtk
 import os
 sys.path.append(os.path.dirname(__file__))
 noisy = gnc_prefs_is_extra_enabled()
@@ -44,7 +44,7 @@ class Console (cons.Console):
                  filename=None, size=100):
         cons.Console.__init__(self, argv, shelltype, banner, filename, size)
         self.buffer.create_tag('center',
-                               justification=gtk.JUSTIFY_CENTER,
+                               justification=Gtk.Justification.CENTER,
                                font='Mono 4')
         self.figures = []
         self.callbacks = []
@@ -86,14 +86,14 @@ class Console (cons.Console):
 if False:
     console = Console(argv = [], shelltype = 'python', banner = [['woop', 'title']], size = 100)
 
-    window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-    window.set_position(gtk.WIN_POS_CENTER)
+    window = Gtk.Window(Gtk.WindowType.TOPLEVEL)
+    window.set_position(Gtk.WindowPosition.CENTER)
     window.set_default_size(800,600)
     window.set_border_width(0)
-    # Hm. gtk.main_quit will kill gnucash without closing the file
+    # Hm. Gtk.main_quit will kill gnucash without closing the file
     # properly. That's kinda bad.
-    window.connect('destroy-event', gtk.main_quit)
-    window.connect('delete-event', gtk.main_quit)
+    window.connect('destroy-event', Gtk.main_quit)
+    window.connect('delete-event', Gtk.main_quit)
     window.add (console)
     window.show_all()
     console.grab_focus()
