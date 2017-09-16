@@ -57,10 +57,12 @@ endif
 AM_CPPFLAGS = \
   ${GUILE_CFLAGS} \
   ${GLIB_CFLAGS} \
-  ${GTK_MAC_CFLAGS} \
   -I${top_builddir}/common \
   -I${top_srcdir}/common \
   $(BOOST_CPPFLAGS)
+
+AM_CFLAGS = ${GTK_MAC_CFLAGS}
+AM_CXXFLAGS = ${GTK_MAC_CXXFLAGS}
 
 gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash
 gncscmmod_DATA = core-utils.scm

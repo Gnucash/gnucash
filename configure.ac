@@ -402,6 +402,7 @@ update to latest  darwin])
       if test "x$_gtk_mac" = xyes; then
         GTK_MAC_LIBS="${GTK_MAC_LIBS} -lobjc -framework Cocoa"
         GTK_MAC_CFLAGS="${GTK_MAC_CFLAGS} -xobjective-c"
+        GTK_MAC_CXXFLAGS="${GTK_MAC_CFLAGS} -xobjective-c++"
  	if test "`echo ${GCC_VERSION} | cut -d. -f1`" -eq 4; then
 	   if test "`echo ${GCC_VERSION} | cut -d. -f2`" -ge 8; then
       	   # This is gcc >= 4.8.x
@@ -412,6 +413,7 @@ update to latest  darwin])
       AC_MSG_RESULT(${_gtk_mac})
       AC_SUBST(GTK_MAC_LIBS)
       AC_SUBST(GTK_MAC_CFLAGS)
+      AC_SUBST(GTK_MAC_CXXFLAGS)
     else
       AC_MSG_RESULT(no)
     fi
