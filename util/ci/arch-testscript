@@ -9,10 +9,10 @@
 # Python is python 3, but gnucash doesn't work with python 3. There
 # doesn't seem to be a way to tell automake to use /usr/bin/python2,
 # so we'll mock this up
-mkdir autotools_bin;
-ln -s /usr/bin/python2 autotools_bin/python;
-export PATH=/autotools_bin:"$PATH";
-echo path is "$PATH";
-echo python version is "$(python --version)";
+mkdir autotools_bin
+ln -s /usr/bin/python2 autotools_bin/python
+export PATH=/autotools_bin:"$PATH"
+echo path is "$PATH"
+echo python version is "$(python --version)"
 
 ../commonbuild

@@ -1,25 +1,23 @@
 #!/bin/bash -e
 
-mkdir build;
-cd build;
-export TZ="America/Los_Angeles";
-
-#mkdir -p /root/.local/share;
+mkdir build
+cd build
+export TZ="America/Los_Angeles"
 
 if [[ "$BUILDTYPE" == "cmake-make" ]]; then
     cmake ../gnucash
-    make -j 4;
-    make check || ../afterfailure;
+    make -j 4
+    make check || ../afterfailure
 elif [[ "$BUILDTYPE" == "cmake-ninja" ]]; then
     cmake ../gnucash -DWITH_PYTHON=ON -DCMAKE_BUILD_TYPE=debug -DENABLE_DEBUG=on -G Ninja
     ninja
     ninja check || ../afterfailure;
 elif [[ "$BUILDTYPE" == "autotools" ]]; then
     ../gnucash/autogen.sh;
-    ../gnucash/configure --enable-python;
+    ../gnucash/configure --enable-python
     make;
-    make check || ../afterfailure;
+    make check || ../afterfailure
 else
-    echo "Unknown buildtype: \"$BUILDTYPE\". Not building.";
+    echo "Unknown buildtype: \"$BUILDTYPE\". Not building."
 fi
 
