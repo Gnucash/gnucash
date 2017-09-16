@@ -4,7 +4,7 @@ mkdir build;
 cd build;
 export TZ="America/Los_Angeles";
 
-mkdir -p /root/.local/share;
+#mkdir -p /root/.local/share;
 
 if [[ "$BUILDTYPE" == "cmake-make" ]]; then
     cmake ../gnucash
