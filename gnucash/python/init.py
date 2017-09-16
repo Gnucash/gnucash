@@ -2,6 +2,8 @@ import sys
 import _sw_app_utils
 from gnucash import *
 from _sw_core_utils import gnc_prefs_is_extra_enabled
+from gi import require_version
+require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import os
 sys.path.append(os.path.dirname(__file__))

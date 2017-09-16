@@ -73,8 +73,9 @@ libgncmod_python_gnc_module_init(int refcount)
     */
     FILE *fp;
     gchar *pkgdatadir, *init_filename;
-
+    char* argv = "";
     Py_Initialize();
+    PySys_SetArgv(0, &argv);
 #if PY_VERSION_HEX >= 0x03000000
     PyInit__sw_app_utils();
     PyInit__sw_core_utils();
