@@ -1710,13 +1710,14 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
           ; otherwise it will double count where transaction contains 2 splits in same account
           (set! splits (splits-filter-unique-transactions splits))
 
-          ; For each split, we will optionally only keep those which contain useful data
-          ; e.g. show invoices & regular transactions
+          ; For each split, we will only keep those which contain useful data
+          ; e.g. show invoices & regular transactions. We will also disallow closing txns.
           (set! splits (filter
                         (lambda (split)
                           (let* ((trans (xaccSplitGetParent split))
                                  (txn-type (xaccTransGetTxnType trans)))
-                            (member txn-type (list TXN-TYPE-NONE TXN-TYPE-INVOICE))))
+                            (and (member txn-type (list TXN-TYPE-NONE TXN-TYPE-INVOICE))
+                                 (not (xaccTransGetIsClosingTxn trans)))))
                         splits))
           
           (if (not (null? splits))
