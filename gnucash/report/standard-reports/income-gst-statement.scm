@@ -483,11 +483,11 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
     (if (used-amount-double-negative column-vector)
         (addto! heading-list (_ "Credit")))
 
-    (for-each (lambda (arg)
+    (for-each (lambda (cell)
                 (addto! heading-list
                         (gnc:make-html-table-cell/markup
                          "column-heading-right"
-                         (car arg))))
+                         (vector-ref cell 0))))
               calculated-cells)
 
     (reverse heading-list)))
@@ -511,6 +511,7 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
          (report-currency (if (opt-val gnc:pagename-general optname-common-currency)
                               (opt-val gnc:pagename-general optname-currency)
                               currency))
+         (sign-reverses? (opt-val gnc:pagename-display (N_ "Sign Reverses")))
          (trans-date (gnc-transaction-get-date-posted parent))
          (converted (lambda (num)
                       (gnc:exchange-by-pricedb-nearest
@@ -520,7 +521,12 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
 
     (define cells
       (map (lambda (cell)
-             (converted ((cdr cell) split)))
+             (let* ((calculator (vector-ref cell 1))
+                    (reverse-column? (vector-ref cell 2))
+                    (calculated (calculator split)))
+               (if (and sign-reverses? reverse-column? calculated)
+                   (converted (gnc-numeric-neg calculated))
+                   (converted calculated))))
            cell-calculators))
 
     (if (used-date column-vector)
@@ -1038,13 +1044,14 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
     ;(list (N_ "Shares")                       "k"  (N_ "Display the number of shares?") #f)
     ;(list (N_ "Price")                        "l"  (N_ "Display the shares price?") #f)
     ;; note the "Amount" multichoice option in between here
-    (list (N_ "Totals")                       "o"  (N_ "Display the totals?") #t)
+    (list (N_ "Totals")                       "o" (N_ "Display the totals?") #t)
     (list (N_ "Individual income columns")    "p" (N_ "Display individual income columns rather than their sum") #f)
     (list (N_ "Individual expense columns")   "q" (N_ "Display individual expense columns rather than their sum") #f)
-    (list (N_ "Individual tax columns")       "r"  (N_ "Display individual tax columns rather than their sum") #f)
-    (list (N_ "Remittance amount")            "s"  (N_ "Display the remittance amount (total sales - total purchases)") #f)
-    (list (N_ "Net Income")                   "t"  (N_ "Display the net income (sales without tax - purchases without tax)") #f)
-    (list (N_ "Tax payable")                  "t"  (N_ "Display the tax payable (tax on sales - tax on purchases)") #f)
+    (list (N_ "Individual tax columns")       "r" (N_ "Display individual tax columns rather than their sum") #f)
+    (list (N_ "Remittance amount")            "s" (N_ "Display the remittance amount (total sales - total purchases)") #f)
+    (list (N_ "Net Income")                   "t" (N_ "Display the net income (sales without tax - purchases without tax)") #f)
+    (list (N_ "Tax payable")                  "u" (N_ "Display the tax payable (tax on sales - tax on purchases)") #f)
+    (list (N_ "Sign Reverses")                "z" (N_ "Reverse amount display for income-related columns.") #t)
     ))
 
   (if (qof-book-use-split-action-for-num-field (gnc-get-current-book))
@@ -1100,18 +1107,6 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
   ;   (vector 'single (N_ "Single") (N_ "Single Column Display."))
   ;   (vector 'double (N_ "Double") (N_ "Two Column Display."))
   ;   )))
-
-  ;(gnc:register-trep-option
-  ; (gnc:make-multichoice-option
-  ;  gnc:pagename-display (N_ "Sign Reverses")
-  ;  "p" (N_ "Reverse amount display for certain account types.")
-  ;  'none
-  ;  (list
-  ;   (vector 'none (N_ "None") (N_ "Don't change any displayed amounts."))
-  ;   (vector 'income-expense (N_ "Income and Expense")
-  ;           (N_ "Reverse amount display for Income and Expense Accounts."))
-  ;   (vector 'credit-accounts (N_ "Credit Accounts")
-  ;           (N_ "Reverse amount display for Liability, Payable, Equity, Credit Card, and Income accounts.")))))
 
   (gnc:options-set-default-section gnc:*transaction-report-options*
                                    gnc:pagename-general)
@@ -1210,47 +1205,35 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
            (net-income (lambda (s) (myneg (myadd (sales-without-tax s) (purchases-without-tax s)))))
            (tax-payable (lambda (s) (myneg (myadd (tax-on-purchases s) (tax-on-sales s))))))
         (append
-         (list (cons "Total Sales" total-sales))
+         ; each column will be a vector
+         ; (vector heading calculator-function reverse-column?)
+         (list (vector "Total Sales" total-sales #t))
          (if (gnc:option-value (gnc:lookup-option options gnc:pagename-display (N_ "Individual income columns")))
-             (map (lambda (acc) (cons (xaccAccountGetName acc) (account-adder acc)))
+             (map (lambda (acc) (vector (xaccAccountGetName acc) (account-adder acc) #t))
                   accounts-sales)
-             (list (cons "Net Sales" sales-without-tax)))
+             (list (vector "Net Sales" sales-without-tax #t)))
          (if (gnc:option-value (gnc:lookup-option options gnc:pagename-display (N_ "Individual tax columns")))
-             (map (lambda (acc) (cons (xaccAccountGetName acc) (account-adder acc)))
+             (map (lambda (acc) (vector (xaccAccountGetName acc) (account-adder acc) #t))
                   accounts-tax-collected)
-             (list (cons "Tax on Sales" tax-on-sales)))
-         (list (cons "Total Purchases" total-purchases))
+             (list (vector "Tax on Sales" tax-on-sales #t)))
+         (list (vector "Total Purchases" total-purchases #f))
          (if (gnc:option-value (gnc:lookup-option options gnc:pagename-display (N_ "Individual expense columns")))
-             (map (lambda (acc) (cons (xaccAccountGetName acc) (account-adder acc)))
+             (map (lambda (acc) (vector (xaccAccountGetName acc) (account-adder acc) #f))
                   accounts-purchases)
-             (list (cons "Net Purchases" purchases-without-tax)))
+             (list (vector "Net Purchases" purchases-without-tax #f)))
          (if (gnc:option-value (gnc:lookup-option options gnc:pagename-display (N_ "Individual tax columns")))
-             (map (lambda (acc) (cons (xaccAccountGetName acc) (account-adder acc)))
+             (map (lambda (acc) (vector (xaccAccountGetName acc) (account-adder acc) #f))
                   accounts-tax-paid)
-             (list (cons "Tax on Purchases" tax-on-purchases)))
+             (list (vector "Tax on Purchases" tax-on-purchases #f)))
          (if (gnc:option-value (gnc:lookup-option options gnc:pagename-display (N_ "Remittance amount")))
-             (list (cons "Remittance" bank-remittance))
+             (list (vector "Remittance" bank-remittance #f))
              '())
          (if (gnc:option-value (gnc:lookup-option options gnc:pagename-display (N_ "Net Income")))
-             (list (cons "Net Income" net-income))
+             (list (vector "Net Income" net-income #f))
              '())
          (if (gnc:option-value (gnc:lookup-option options gnc:pagename-display (N_ "Tax payable")))
-             (list (cons "Tax Payable" tax-payable))
-             '())
-         )))
-
-
-    ;(define (get-account-types-to-reverse options)
-    ;  (cdr (assq (gnc:option-value
-    ;              (gnc:lookup-option options
-    ;                                 gnc:pagename-display
-    ;                                 (N_ "Sign Reverses")))
-    ;             account-types-to-reverse-assoc-list)))
-
-    ;(define (transaction-report-multi-rows-p options)
-    ;  (eq? (gnc:option-value
-    ;        (gnc:lookup-option options gnc:pagename-general (N_ "Style")))
-    ;       'multi-line))
+             (list (vector "Tax Payable" tax-payable #f))
+             '()))))
 
     (define (transaction-report-export-p options)
       (gnc:option-value
@@ -1413,7 +1396,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
            (width (num-columns-required used-columns))
            (multi-rows? #f) ;disable. (transaction-report-multi-rows-p options))
            (export?  (transaction-report-export-p options))
-           (account-types-to-reverse '())) ;disabled.            (get-account-types-to-reverse '()))options)))
+           (account-types-to-reverse '()))
 
       (gnc:html-table-set-col-headers!
        table
@@ -1440,11 +1423,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                                     secondary-subtotal-renderer
                                     (map (lambda (x) (gnc:make-commodity-collector)) calculated-cells)
                                     (map (lambda (x) (gnc:make-commodity-collector)) calculated-cells)
-                                    (map (lambda (x) (gnc:make-commodity-collector)) calculated-cells)
-                                    ;(gnc:make-commodity-collector)
-                                    ;(gnc:make-commodity-collector)
-                                    ;(gnc:make-commodity-collector)
-                                    )))
+                                    (map (lambda (x) (gnc:make-commodity-collector)) calculated-cells))))
       table)))
 
 ;; ;;;;;;;;;;;;;;;;;;;;
