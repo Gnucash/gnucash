@@ -62,11 +62,9 @@ Libraries/Deps
 --------------
   required		Version
   --------		_______
-glib2			2.28.0
-gtk+2			2.24.0
+glib2			2.40.0
+gtk+3			3.14.0
 guile			1.8.5 or 2.0.0
-libgnomecanvas		2.0
-[lib]goffice		0.7.0
 libxml2			2.5.10
 libxslt
 ICU                                             International Compnents for
@@ -75,7 +73,8 @@ boost			1.50.0                  locale and regex libs must be
                                                 built with ICU support.
 swig			2.0.10			Only required to build from git
 						or SVN.
-webkit			1.0
+webkit			webkitgtk-3.0 (Windows)
+                        webkit2gtk-3.0 (Everything Else)
 
   optional
   --------
