@@ -374,9 +374,16 @@
 
 (define (gnc:restore-report-by-guid id template-id template-name options)
   (if options
-      (let ((r ((record-constructor <report>)
-		 template-id id options #t #t #f #f "")))
-	 (gnc-report-add r))
+      (let* (
+              (r ((record-constructor <report>)
+		    template-id id options #t #t #f #f ""))
+              (report-id (gnc-report-add r))
+            )
+	(if (number? report-id)
+          (gnc:report-set-id! r report-id)
+        )
+        report-id
+      )
       (begin
 	(gnc-error-dialog '() (string-append "Report Failed! One of your previously opened reports has failed to open. The template on which it was based: " template-name ", was not found."))
 	#f))
@@ -384,9 +391,16 @@
 
 (define (gnc:restore-report-by-guid-with-custom-template id template-id template-name custom-template-id options)
   (if options
-      (let ((r ((record-constructor <report>)
-                 template-id id options #t #t #f #f custom-template-id)))
-         (gnc-report-add r))
+      (let* (
+              (r ((record-constructor <report>)
+                 template-id id options #t #t #f #f custom-template-id))
+              (report-id (gnc-report-add r))
+            )
+	(if (number? report-id)
+          (gnc:report-set-id! r report-id)
+        )
+        report-id
+      )
       (begin
         (gnc-error-dialog '() (string-append "Report Failed! One of your previously opened reports has failed to open. The template on which it was based: " template-name ", was not found."))
         #f))
@@ -558,17 +572,67 @@
 (define (gnc:report-serialize-embedded embedded-reports)
   (let* ((result-string ""))
     (if embedded-reports
+      (begin
         (for-each
-         (lambda (subreport-id)
-           (let*
-               ((subreport (gnc-report-find subreport-id))
-                (subreport-options-text (gnc:report-serialize subreport)))
-             (set! result-string (string-append
-                                  result-string
-                                  ";;;; Options for embedded report\n"
-                                  subreport-options-text))))
-         embedded-reports))
-    result-string))
+          (lambda (subreport-id)
+            (let* (
+                    (subreport (gnc-report-find subreport-id))
+                    (subreport-type (gnc:report-type subreport))
+                    (subreport-template (hash-ref *gnc:_report-templates_* subreport-type))
+                    (subreport-template-name (gnc:report-template-name subreport-template))
+                    (thunk (gnc:report-template-options-cleanup-cb subreport-template))
+                  )
+              ;; clean up the options if necessary.  this is only needed
+              ;; in special cases.
+              (if thunk
+                (thunk subreport))
+              ;; save them
+              (set! result-string
+                (string-append
+                  result-string
+                  "\n      ;;;; Options for embedded report\n"
+                  "      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
+                  (format #f "      ;; options for report ~S\n" (gnc:report-name subreport))
+                  (format #f "      (let ((options (gnc:report-template-new-options/report-guid ~S ~S)))"
+                    subreport-type
+                    subreport-template-name)
+                  (gnc:generate-restore-forms (gnc:report-options subreport) "options")
+                  (format #f "\n        (set! new-embedded-report-ids\n          (append\n            new-embedded-report-ids\n              (list (gnc:restore-report-by-guid-with-custom-template #f ~S ~S ~S options))\n          )\n        )\n"
+                    subreport-type
+                    subreport-template-name
+                    (gnc:report-custom-template subreport))
+                  "      )\n"
+                )
+              )
+            )
+          )
+          embedded-reports)
+        ;;(set! result-string (string-append result-string (gnc:update-section-general)))
+        (set! result-string
+          (string-append
+            result-string
+            "\n"
+            "      ;;;; Update Section: __general\n"
+            "      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
+            "      (let*\n"
+            "        (\n"
+            "          (option (gnc:lookup-option options \"__general\" \"report-list\"))\n"
+            "          (saved-report-list (gnc:option-value option))\n"
+            "        )\n"
+            "        (\n"
+            "          (lambda (option)\n"
+            "            (if option ((gnc:option-setter option) (map (lambda (x y) (cons x (cdr y))) new-embedded-report-ids saved-report-list)))\n"
+            "          )\n"
+            "          option\n"
+            "        )\n"
+            "      )\n"
+          )
+        )
+      )
+    )
+    result-string
+  )
+)
 
 (define (gnc:report-template-serialize-internal name type templ-name options guid)
   (let* ((embedded-serialized (gnc:report-serialize-embedded (gnc:report-embedded-list options)))
@@ -577,15 +641,15 @@
    (format #f ";; Options for saved report ~S, based on template ~S\n"
            name type)
    (format
-    #f "(let ()\n (define (options-gen)\n  (let ((options (gnc:report-template-new-options/report-guid ~S ~S)))\n"
+    #f "(let ()\n  (define (options-gen)\n    (let\n         (\n           (options (gnc:report-template-new-options/report-guid ~S ~S))\n           (new-embedded-report-ids '()) ;; only used with Multicolumn View Reports\n         )"
     type templ-name)
    (gnc:generate-restore-forms options "options")
    (if embedded-serialized
        embedded-serialized
        "")
-   "  options))\n"
+   "\n      options\n    )\n  )\n"
    (format 
-    #f " (gnc:define-report \n  'version 1\n  'name ~S\n  'report-guid ~S\n  'parent-type ~S\n  'options-generator options-gen\n  'menu-path (list gnc:menuname-custom)\n  'renderer (gnc:report-template-renderer/report-guid ~S ~S)))\n\n"
+    #f "  (gnc:define-report \n    'version 1\n    'name ~S\n    'report-guid ~S\n    'parent-type ~S\n    'options-generator options-gen\n    'menu-path (list gnc:menuname-custom)\n    'renderer (gnc:report-template-renderer/report-guid ~S ~S)\n  )\n)\n\n"
     name
     (if guid
         guid
