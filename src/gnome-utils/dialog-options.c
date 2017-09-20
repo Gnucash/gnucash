@@ -1010,6 +1010,11 @@ gnc_option_set_ui_widget(GNCOption *option,
         LEAVE("bad type");
         return;
     }
+    else if (g_strcmp0 (type, "internal") == 0)
+    {
+        LEAVE("internal type");
+        return;
+    }
 
     raw_name = gnc_option_name(option);
     if (raw_name && *raw_name)
