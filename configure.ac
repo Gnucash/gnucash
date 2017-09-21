@@ -1607,6 +1607,7 @@ AC_CONFIG_FILES(
   data/Makefile
   data/accounts/Makefile
   data/accounts/C/Makefile
+  data/accounts/ca/Makefile
   data/accounts/cs/Makefile
   data/accounts/da/Makefile
   data/accounts/de_AT/Makefile

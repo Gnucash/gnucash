@@ -1,6 +1,7 @@
 
 SUBDIRS = \
 	C \
+	ca \
 	cs \
 	da \
 	de_AT \
