@@ -20,6 +20,7 @@ SET (standard_reports_SCHEME_2
     equity-statement.scm
     general-journal.scm
     general-ledger.scm
+    income-gst-statement.scm
     income-statement.scm
     net-barchart.scm
     net-linechart.scm
