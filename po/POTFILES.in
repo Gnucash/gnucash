@@ -470,6 +470,7 @@ gnucash/report/standard-reports/daily-reports.scm
 gnucash/report/standard-reports/equity-statement.scm
 gnucash/report/standard-reports/general-journal.scm
 gnucash/report/standard-reports/general-ledger.scm
+gnucash/report/standard-reports/income-gst-statement.scm
 gnucash/report/standard-reports/income-statement.scm
 gnucash/report/standard-reports/net-barchart.scm
 gnucash/report/standard-reports/net-linechart.scm
