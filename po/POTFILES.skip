@@ -87,6 +87,7 @@ src/report/standard-reports/gnucash/report/standard-reports/equity-statement.scm
 src/report/standard-reports/gnucash/report/standard-reports/general-journal.scm
 src/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
 src/report/standard-reports/gnucash/report/standard-reports/income-statement.scm
+src/report/standard-reports/gnucash/report/standard-reports/income-statement-gst.scm
 src/report/standard-reports/gnucash/report/standard-reports/net-barchart.scm
 src/report/standard-reports/gnucash/report/standard-reports/net-linechart.scm
 src/report/standard-reports/gnucash/report/standard-reports/portfolio.scm
