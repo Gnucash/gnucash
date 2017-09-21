@@ -1414,6 +1414,7 @@ AC_CONFIG_FILES(
   Makefile
   accounts/Makefile
   accounts/C/Makefile
+  accounts/ca/Makefile
   accounts/cs/Makefile
   accounts/da/Makefile
   accounts/de_AT/Makefile
