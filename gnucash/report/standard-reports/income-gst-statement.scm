@@ -524,9 +524,10 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
              (let* ((calculator (vector-ref cell 1))
                     (reverse-column? (vector-ref cell 2))
                     (calculated (calculator split)))
-               (if (and sign-reverses? reverse-column? calculated)
-                   (converted (gnc-numeric-neg calculated))
-                   (converted calculated))))
+               (cond
+                 ((and sign-reverses? reverse-column? calculated) (converted (gnc-numeric-neg calculated)))
+                 (calculated  (converted calculated))
+                 (else #f))))
            cell-calculators))
 
     (if (used-date column-vector)
@@ -622,7 +623,7 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
                              "number-cell"
                              (gnc:html-transaction-anchor
                               parent
-                              (gnc:make-gnc-monetary report-currency cell))))
+                              cell)))
                     (addto! row-contents (gnc:html-make-empty-cell))))
               cells)
 
