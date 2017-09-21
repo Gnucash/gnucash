@@ -1,5 +1,6 @@
 SET(accounts_SUBDIRS
   C
+  ca
   cs
   da
   de_AT
@@ -41,6 +42,7 @@ SET(ACCOUNTS_BUILD_DIR ${DATADIR_BUILD}/gnucash/accounts)
 
 
 ADD_SUBDIRECTORY(C)
+ADD_SUBDIRECTORY(ca)
 ADD_SUBDIRECTORY(cs)
 ADD_SUBDIRECTORY(da)
 ADD_SUBDIRECTORY(de_AT)
@@ -77,7 +79,7 @@ ADD_SUBDIRECTORY(zh_TW)
 
 SET_LOCAL_DIST(dist_list CMakeLists.txt Makefile.am)
 
-SET(accounts_DIST ${C_DIST} ${CS_DIST} ${DA_DIST} ${DE_AT_DIST} ${DE_CH_DIST} ${DE_DE_DIST} ${EL_GR_DIST}
+SET(accounts_DIST ${C_DIST} ${CA_DIST} ${CS_DIST} ${DA_DIST} ${DE_AT_DIST} ${DE_CH_DIST} ${DE_DE_DIST} ${EL_GR_DIST}
                   ${EN_GB_DIST} ${ES_ES_DIST} ${ES_MX_DIST} ${FI_FI_DIST} ${FR_CA_DIST} ${FR_CH_DIST}
                   ${FR_FR_DIST} ${HU_HU_DIST} ${IT_DIST} ${JA_DIST} ${KO_DIST} ${LT_DIST} ${LV_DIST}
                   ${NB_DIST} ${NL_DIST} ${PL_DIST} ${PT_BR_DIST} ${PT_PT_DIST} ${RU_DIST} ${SK_DIST}
