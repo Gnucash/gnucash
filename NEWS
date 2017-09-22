@@ -1,5 +1,24 @@
 Version history:
 ------- -------
+2.6.18 - 24 September 2017
+
+The following bugs are fixed:
+     Bug 644898 - Calendar of upcoming SXes has various display issues
+     Bug 647805 - Interdependent report options fail to change state after
+                  using apply for a limited number of times.
+     Bug 771246 - Set Invoice/Bill items date correctly from imported CSV.
+     Bug 784284 - unifying "Clear the entry." tooltip on Loan Repayment
+                  Calculator
+     Bug 787479 - Persian currency symbol is doubled.
+
+Other repairs not marked as bugs in git:
+      Added Catalan Accounts for the New Account Assistant
+      Fixed errors from loading init.py.
+      Run the python bindings tests in a CMake build.
+      Implement dist, distcheck, and uninstall targets for CMake build.
+
+Updated Translations: Farsi, German, Japanese, Latvian, Serbian, Spanish
+
 2.6.17 - 2 July 2017
 
 The following bugs are fixed:
