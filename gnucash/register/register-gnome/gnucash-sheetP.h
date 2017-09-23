@@ -90,6 +90,7 @@ struct _GnucashSheet
     guint changed_signal;
 
     GtkAdjustment *hadj, *vadj;
+    GtkWidget *hscrollbar, *vscrollbar;
 
     GFunc moved_cb;
     gpointer moved_cb_data;

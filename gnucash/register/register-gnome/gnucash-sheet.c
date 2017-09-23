@@ -1356,6 +1356,13 @@ gnucash_scroll_event (GtkWidget *widget, GdkEventScroll *event)
 
     gtk_adjustment_set_value(vadj, v_value);
 
+    if (event->delta_y == 0)
+    {
+        // There are problems with the slider not tracking the value so
+        // when delta_y is 0 hide and showing the scrollbar seems to fix it
+        gtk_widget_hide (GTK_WIDGET(sheet->vscrollbar));
+        gtk_widget_show (GTK_WIDGET(sheet->vscrollbar));
+    }
     return TRUE;
 }
 
