@@ -271,6 +271,11 @@ gnucash_register_sheet_resize (GnucashRegister *reg)
     // not get filled on load, this makes sure it does
     if (!reg->hscrollbar_visible)
         gtk_widget_queue_resize (GTK_WIDGET (reg->sheet));
+
+    // Make sure the sheet is the focus
+    if (!gtk_widget_has_focus(GTK_WIDGET (reg->sheet)))
+        gtk_widget_grab_focus (GTK_WIDGET (reg->sheet));
+
     return FALSE;
 }
 
