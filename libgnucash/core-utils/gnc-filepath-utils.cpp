@@ -504,6 +504,7 @@ get_userdata_home(bool create)
 gboolean
 gnc_filepath_init(gboolean create)
 {
+    userdata_is_home = userdata_is_tmp = false;
     auto gnc_userdata_home_exists = false;
     auto gnc_userdata_home_from_env = false;
     auto gnc_userdata_home_env = g_getenv("GNC_DATA_HOME");
@@ -559,7 +560,15 @@ gnc_filepath_init(gboolean create)
          * skip migrating to that location in the next step but that's
          * a good thing.
          */
-        gnc_validate_directory(gnc_userdata_home, (create || userdata_is_tmp));
+        try
+        {
+            gnc_validate_directory(gnc_userdata_home, (create || userdata_is_tmp));
+        }
+        catch (const bfs::filesystem_error& ex)
+        {
+            g_warning("User data directory doesn't exist, yet the calling code requested not to create it. Proceed with caution.\n"
+            "(Error: %s)", ex.what());
+        }
     }
 
     auto migrated = FALSE;
@@ -567,11 +576,18 @@ gnc_filepath_init(gboolean create)
         migrated = copy_recursive(bfs::path (g_get_home_dir()) / ".gnucash",
                                   gnc_userdata_home);
 
-    /* Since we're in code that is only executed once....
-     * Note these calls may throw and end the program! */
-    gnc_validate_directory(gnc_userdata_home / "books", (create || userdata_is_tmp));
-    gnc_validate_directory(gnc_userdata_home / "checks", (create || userdata_is_tmp));
-    gnc_validate_directory(gnc_userdata_home / "translog", (create || userdata_is_tmp));
+    /* Try to create the standard subdirectories for gnucash' user data */
+    try
+    {
+        gnc_validate_directory(gnc_userdata_home / "books", (create || userdata_is_tmp));
+        gnc_validate_directory(gnc_userdata_home / "checks", (create || userdata_is_tmp));
+        gnc_validate_directory(gnc_userdata_home / "translog", (create || userdata_is_tmp));
+    }
+    catch (const bfs::filesystem_error& ex)
+    {
+        g_warning("Default user data subdirectories don't exist, yet the calling code requested not to create them. Proceed with caution.\n"
+        "(Error: %s)", ex.what());
+    }
 
     return migrated;
 }
