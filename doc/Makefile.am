@@ -3,6 +3,7 @@ SUBDIRS = examples
 doc_DATA = \
   README.francais \
   README.german \
+  README-ca.win32-bin.txt \
   README-de.win32-bin.txt \
   README-fr.win32-bin.txt \
   README-it.win32-bin.txt \
