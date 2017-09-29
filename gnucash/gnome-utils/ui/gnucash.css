@@ -28,39 +28,39 @@ cursor button {
 @define-color register_split_bg_color #EDE7D3;
 @define-color register_cursor_bg_color #FFEF98;
 
-.app-header {
+.register-header {
   background-color: @register_header_bg_color;
 }
 
-*.app-primary {
+*.register-primary {
   background-color: @register_primary_bg_color;
 }
 
-*.app-primary:insensitive {
+*.register-primary:insensitive {
   background-color: mix (@register_primary_bg_color, grey, 0.2);
 }
 
-*.app-secondary {
+*.register-secondary {
   background-color: @register_secondary_bg_color;
 }
 
-*.app-secondary:insensitive {
+*.register-secondary:insensitive {
   background-color: mix (@register_secondary_bg_color, grey, 0.2);
 }
 
-*.app-split {
+*.register-split {
   background-color: @register_split_bg_color;
 }
 
-*.app-split:insensitive {
+*.register-split:insensitive {
   background-color: mix (@register_split_bg_color, grey, 0.2);
 }
 
-*.app-cursor {
+*.register-cursor {
   background-color: @register_cursor_bg_color;
 }
 
-*.app-cursor:insensitive {
+*.register-cursor:insensitive {
   background-color: mix (@register_cursor_bg_color, grey, 0.2);
 }
 

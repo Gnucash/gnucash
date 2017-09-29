@@ -2462,7 +2462,7 @@ gnucash_get_style_classes (GnucashSheet *sheet, GtkStyleContext *stylectxt,
         full_class = g_strconcat (style_class, "-color", NULL);
     }
     else
-        full_class = g_strconcat ("app-", style_class, NULL);
+        full_class = g_strconcat ("register-", style_class, NULL);
 
     gtk_style_context_add_class (stylectxt, full_class);
 
