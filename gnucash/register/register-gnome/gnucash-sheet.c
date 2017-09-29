@@ -1131,9 +1131,10 @@ gnucash_sheet_draw_cb (GtkWidget *widget, cairo_t *cr, G_GNUC_UNUSED gpointer da
 
     gtk_widget_get_allocation(widget, &alloc);
 
+    gtk_style_context_save (context);
     gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
     gtk_render_background (context, cr, 0, 0, alloc.width, alloc.height);
-    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BACKGROUND);
+    gtk_style_context_restore (context);
 
 //FIXME what should be done with result being TRUE or FALSE
     result = gnucash_sheet_draw_internal (sheet, cr, &alloc);
