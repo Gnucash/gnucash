@@ -701,7 +701,7 @@ gnucash_sheet_draw_cursor (GnucashCursor *cursor, cairo_t *cr)
     cairo_stroke (cr);
 
     // make the bottom line thicker
-    cairo_move_to (cr, cursor->x - x + 0.5, cursor->y - y + cursor->h - 3.5);
+    cairo_move_to (cr, cursor->x - x + 0.5, cursor->y - y + cursor->h - 1.5);
     cairo_rel_line_to (cr, cursor->w, 0);
     cairo_set_line_width (cr, 1.0);
     cairo_stroke (cr);
