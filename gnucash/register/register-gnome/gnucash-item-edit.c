@@ -351,7 +351,7 @@ draw_background_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
     color_type = gnc_table_get_fg_color (item_edit->sheet->table, item_edit->virt_loc);
     gnucash_get_style_classes (item_edit->sheet, stylectxt, color_type);
 
-    gtk_render_background (stylectxt, cr, 0, 0, width, height);
+    gtk_render_background (stylectxt, cr, 0, 1, width, height - 2);
 
     gtk_style_context_restore (stylectxt);
     return FALSE;
