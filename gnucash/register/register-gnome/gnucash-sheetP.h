@@ -66,7 +66,6 @@ struct _GnucashSheet
     gboolean   use_theme_colors;
     gboolean   use_horizontal_lines;
     gboolean   use_vertical_lines;
-    gboolean   dark_theme;
 
     gboolean input_cancelled;
 

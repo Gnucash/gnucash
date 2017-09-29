@@ -497,10 +497,7 @@ draw_cell (GnucashSheet *sheet,
             && (virt_loc.vcell_loc.virt_row < table->model->dividing_row_upper))
     {
         // Make text color greyed
-        if (sheet->dark_theme)
-            gtk_style_context_add_class (stylectxt, "darker-grey-mix");
-        else
-            gtk_style_context_add_class (stylectxt, "lighter-grey-mix");
+        gtk_style_context_add_class (stylectxt, "lighter-grey-mix");
     }
 #endif
 
@@ -515,10 +512,7 @@ draw_cell (GnucashSheet *sheet,
             goto exit;
 
         // Make text color greyed
-        if (sheet->dark_theme)
-            gtk_style_context_add_class (stylectxt, "darker-grey-mix");
-        else
-            gtk_style_context_add_class (stylectxt, "lighter-grey-mix");
+        gtk_style_context_add_class (stylectxt, "lighter-grey-mix");
 
         pango_layout_set_text (layout, text, strlen (text));
         pango_font_description_set_style (font, PANGO_STYLE_ITALIC);

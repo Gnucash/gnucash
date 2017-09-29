@@ -1127,15 +1127,12 @@ gnucash_sheet_draw_cb (GtkWidget *widget, cairo_t *cr, G_GNUC_UNUSED gpointer da
     GnucashSheet *sheet = GNUCASH_SHEET (widget);
     GtkStyleContext *context = gtk_widget_get_style_context (widget);
     GtkAllocation alloc;
-    GdkRGBA color;
     gboolean result; //FIXME
 
     gtk_widget_get_allocation(widget, &alloc);
 
     gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
     gtk_render_background (context, cr, 0, 0, alloc.width, alloc.height);
-    gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
-    sheet->dark_theme = gnc_is_dark_theme (&color);
     gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BACKGROUND);
 
 //FIXME what should be done with result being TRUE or FALSE
@@ -2465,12 +2462,8 @@ gnucash_get_style_classes (GnucashSheet *sheet, GtkStyleContext *stylectxt,
         full_class = g_strconcat (style_class, "-color", NULL);
     }
     else
-    {
-        if (sheet->dark_theme)
-            full_class = g_strconcat ("app-", style_class, "-dark", NULL);
-        else
-            full_class = g_strconcat ("app-", style_class, NULL);
-    }
+        full_class = g_strconcat ("app-", style_class, NULL);
+
     gtk_style_context_add_class (stylectxt, full_class);
 
     g_free (full_class);
