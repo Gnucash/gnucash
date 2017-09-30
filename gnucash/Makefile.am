@@ -55,9 +55,16 @@ PLATFORM_FILES = gnucash-valgrind
 
 endif !PLATFORM_WIN32
 
+# gresource for css
+PKGCONFIG = $(shell which pkg-config)
+GLIB_COMPILE_RESOURCES = $(shell $(PKGCONFIG) --variable=glib_compile_resources gio-2.0)
+gresource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir) --generate-dependencies $(srcdir)/gnucash-gresources.xml)
+gnucash-gresources.c: gnucash-gresources.xml $(gresource_files)
+	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(srcdir) --generate-source $<
+
 BIN_NAME = gnucash
 bin_PROGRAMS = ${BIN_NAME}
-gnucash_SOURCES = gnucash-bin.c ${GNUCASH_RESOURCE_FILE}
+gnucash_SOURCES = gnucash-bin.c gnucash-gresources.c ${GNUCASH_RESOURCE_FILE}
 gnucash_LDADD = \
   ${top_builddir}/gnucash/register/ledger-core/libgncmod-ledger-core.la \
   ${top_builddir}/gnucash/report/report-gnome/libgncmod-report-gnome.la \
@@ -156,6 +163,10 @@ EXTRA_DIST = \
 	generate-gnc-script \
 	gnucash-valgrind.in \
 	environment.in \
+	gnucash-310.css \
+	gnucash-320.css \
+	gnucash-fallback-310.css \
+	gnucash-gresources.xml \
 	CMakeLists.txt
 
 AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.bin\"

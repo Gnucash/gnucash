@@ -12,6 +12,15 @@
   color: @negative-numbers;
 }
 
+/* Change font color by mixing with grey */
+.lighter-grey-mix {
+  color: mix (currentColor, grey, 0.8);
+}
+
+.darker-grey-mix {
+  color: mix (currentColor, grey, 0.2);
+}
+
 /* Register Cursor padding settings, make sure entry matches sheet.h */
 cursor entry {
   padding: 2px 5px 2px 5px;
