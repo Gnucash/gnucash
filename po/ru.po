@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.6.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-22 15:13-0700\n"
+"POT-Creation-Date: 2017-10-02 06:36+0200\n"
 "PO-Revision-Date: 2017-10-01 04:09+0500\n"
 "Last-Translator: ashed <craysy@gmail.com>\n"
 "Language-Team: russian <ru@li.org>\n"
@@ -27,12 +27,12 @@ msgstr ""
 "X-Source-Language: C\n"
 
 #. Business options
-#: ../src/app-utils/app-utils.scm:304
+#: ../src/app-utils/app-utils.scm:305
 #: ../src/business/business-gnome/gncmod-business-gnome.c:117
 msgid "Business"
 msgstr "Деятельность"
 
-#: ../src/app-utils/app-utils.scm:305
+#: ../src/app-utils/app-utils.scm:306
 #: ../src/business/business-gnome/dialog-customer.c:923
 #: ../src/business/business-gnome/dialog-vendor.c:726
 #: ../src/gnome-utils/gnc-tree-view-owner.c:380
@@ -41,31 +41,31 @@ msgstr "Деятельность"
 msgid "Company Name"
 msgstr "Название фирмы"
 
-#: ../src/app-utils/app-utils.scm:306
+#: ../src/app-utils/app-utils.scm:307
 msgid "Company Address"
 msgstr "Адрес фирмы"
 
-#: ../src/app-utils/app-utils.scm:307
+#: ../src/app-utils/app-utils.scm:308
 msgid "Company ID"
 msgstr "ID фирмы"
 
-#: ../src/app-utils/app-utils.scm:308
+#: ../src/app-utils/app-utils.scm:309
 msgid "Company Phone Number"
 msgstr "Номер телефона фирмы"
 
-#: ../src/app-utils/app-utils.scm:309
+#: ../src/app-utils/app-utils.scm:310
 msgid "Company Fax Number"
 msgstr "Номер факса фирмы"
 
-#: ../src/app-utils/app-utils.scm:310
+#: ../src/app-utils/app-utils.scm:311
 msgid "Company Website URL"
 msgstr "Адрес сайта фирмы"
 
-#: ../src/app-utils/app-utils.scm:311
+#: ../src/app-utils/app-utils.scm:312
 msgid "Company Email Address"
 msgstr "Адрес электронной почты фирмы"
 
-#: ../src/app-utils/app-utils.scm:312
+#: ../src/app-utils/app-utils.scm:313
 msgid "Company Contact Person"
 msgstr "Контактное лицо фирмы"
 
@@ -6814,8 +6814,7 @@ msgstr "Предстоящие проводки"
 msgid "Do you really want to delete this scheduled transaction?"
 msgstr "Вы действительно хотите удалить эту запланированную проводку?"
 
-#: ../src/gnome/gnc-plugin-register2.c:57
-#: ../src/gnome/gnc-plugin-register.c:58
+#: ../src/gnome/gnc-plugin-register2.c:57 ../src/gnome/gnc-plugin-register.c:58
 msgid "_General Ledger"
 msgstr "_Главная Книга"
 
@@ -11672,8 +11671,7 @@ msgstr ""
 "База данных была открыта только для чтения. Вы хотите сохранить её в другое "
 "место?"
 
-#: ../src/gnome-utils/gnc-file.c:1605
-#: ../src/gnome-utils/gnc-main-window.c:1220
+#: ../src/gnome-utils/gnc-file.c:1605 ../src/gnome-utils/gnc-main-window.c:1220
 msgid "<unknown>"
 msgstr "<неизвестно>"
 
@@ -13316,7 +13314,7 @@ msgstr "З_аметки:"
 msgid "Ta_x related"
 msgstr "Относящиеся к _налогам"
 
-#. Translators: use the same words here as in
+#. Translators: use the same words here as in 'Ta_x Report Options'.
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:21
 msgid ""
 "Use Edit->Tax Report Options to set the tax-related flag and assign a tax "
@@ -14695,6 +14693,30 @@ msgstr "Не запланировано"
 msgid "Select occurrence date above."
 msgstr "Выберите дату события выше."
 
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:7
+#, fuzzy
+msgctxt "Daily"
+msgid "Every"
+msgstr "Каждый"
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:8
+#, fuzzy
+msgctxt "Daily"
+msgid "days."
+msgstr "дней."
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:10
+#, fuzzy
+msgctxt "Weekly"
+msgid "Every"
+msgstr "Каждый"
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:11
+#, fuzzy
+msgctxt "Weekly"
+msgid "weeks."
+msgstr "недель."
+
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:12
 #: ../src/report/standard-reports/daily-reports.scm:355
 msgid "Saturday"
@@ -14736,6 +14758,18 @@ msgstr "Понедельник"
 msgid "Tuesday"
 msgstr "Вторник"
 
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:21
+#, fuzzy
+msgctxt "Semimonthly"
+msgid "Every"
+msgstr "Каждый"
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:22
+#, fuzzy
+msgctxt "Semimonthly"
+msgid "months."
+msgstr "месяцев."
+
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:23
 msgid "First on the:"
 msgstr "Первый раз:"
@@ -14751,6 +14785,18 @@ msgstr "затем на:"
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:26
 msgid "Semi-Monthly"
 msgstr "Дважды в месяц"
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:27
+#, fuzzy
+msgctxt "Monthly"
+msgid "Every"
+msgstr "Каждый"
+
+#: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:28
+#, fuzzy
+msgctxt "Monthly"
+msgid "months."
+msgstr "месяцев."
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:29
 msgid "On the"
@@ -25983,46 +26029,6 @@ msgstr ""
 
 #~ msgid "Retrieve the current online quote"
 #~ msgstr "Получить текущую цену по сети"
-
-#, fuzzy
-#~ msgctxt "Daily"
-#~ msgid "Every"
-#~ msgstr "Каждый"
-
-#, fuzzy
-#~ msgctxt "Daily"
-#~ msgid "days."
-#~ msgstr "дней."
-
-#, fuzzy
-#~ msgctxt "Weekly"
-#~ msgid "Every"
-#~ msgstr "Каждый"
-
-#, fuzzy
-#~ msgctxt "Weekly"
-#~ msgid "weeks."
-#~ msgstr "недель."
-
-#, fuzzy
-#~ msgctxt "Semimonthly"
-#~ msgid "Every"
-#~ msgstr "Каждый"
-
-#, fuzzy
-#~ msgctxt "Semimonthly"
-#~ msgid "months."
-#~ msgstr "месяцев."
-
-#, fuzzy
-#~ msgctxt "Monthly"
-#~ msgid "Every"
-#~ msgstr "Каждый"
-
-#, fuzzy
-#~ msgctxt "Monthly"
-#~ msgid "months."
-#~ msgstr "месяцев."
 
 #~ msgid "New item"
 #~ msgstr "Новый пункт"
