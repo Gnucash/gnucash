@@ -1,6 +1,7 @@
-# translation of gnucash.pot to russian
+# Russian translations for GnuCash package.
 # Translation of gnucash messages to Russian.
 # Copyright (C) 2000, 2001, 2002, 2003, 2004, 2008, 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the GnuCash package.
 #
 # Valek Filippov <frob@df.ru>, 2000.
 # Vitaly Lipatov <lav@altlinux.ru>, 2002, 2003, 2004.
@@ -10,7 +11,7 @@
 # ashed <craysy@gmail.com>, 2017
 msgid ""
 msgstr ""
-"Project-Id-Version: ru\n"
+"Project-Id-Version: GnuCash 2.6.18\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-22 15:13-0700\n"
 "PO-Revision-Date: 2017-10-01 04:09+0500\n"
@@ -20,9 +21,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.4\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 1.5.4\n"
 "X-Source-Language: C\n"
 
 #. Business options
