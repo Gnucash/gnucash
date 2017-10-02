@@ -1,5 +1,5 @@
 /* Note: Widgets obtained from Glade files will not be addressable
-   unless they have been named or have style classes added. Only 
+   unless they have been named or have style classes added. Only
    the widget type can be configured unless they are named in code */
 
 
@@ -36,7 +36,7 @@ cursor button {
   background-color: @register_primary_bg_color;
 }
 
-*.register-primary:insensitive {
+*.register-primary:disabled {
   background-color: mix (@register_primary_bg_color, grey, 0.2);
 }
 
@@ -44,7 +44,7 @@ cursor button {
   background-color: @register_secondary_bg_color;
 }
 
-*.register-secondary:insensitive {
+*.register-secondary:disabled {
   background-color: mix (@register_secondary_bg_color, grey, 0.2);
 }
 
@@ -52,7 +52,7 @@ cursor button {
   background-color: @register_split_bg_color;
 }
 
-*.register-split:insensitive {
+*.register-split:disabled {
   background-color: mix (@register_split_bg_color, grey, 0.2);
 }
 
@@ -60,7 +60,13 @@ cursor button {
   background-color: @register_cursor_bg_color;
 }
 
-*.register-cursor:insensitive {
+*.register-cursor:disabled {
   background-color: mix (@register_cursor_bg_color, grey, 0.2);
+}
+
+/* Some tweaks for the about dialog */
+dialog#GnuCash > box > box > label
+{
+  font-size: 24px;
 }
 

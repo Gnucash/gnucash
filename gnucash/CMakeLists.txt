@@ -27,6 +27,7 @@ ENDIF (WIN32)
 
 SET (gnucash_SOURCES
   gnucash-bin.c
+  gnucash-gresources.c
   ${GNUCASH_RESOURCE_FILE}
 )
 
@@ -42,6 +43,40 @@ TARGET_LINK_LIBRARIES (gnucash
    ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS} ${GTK3_LDFLAGS} ${GTK_MAC_LDFLAGS}
 )
 
+# Get glib executable for generating the gresource file
+EXECUTE_PROCESS(
+   COMMAND
+       ${PKG_CONFIG_EXECUTABLE} gio-2.0 --variable glib_compile_resources
+   OUTPUT_VARIABLE
+       GLIB_COMPILE_RESOURCES_EXECUTABLE
+   OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+# Get the dependencies of the gresource
+EXECUTE_PROCESS(
+  OUTPUT_VARIABLE
+      gr_files
+  COMMAND ${GLIB_COMPILE_RESOURCES_EXECUTABLE}
+     --sourcedir=${CMAKE_CURRENT_SOURCE_DIR}
+     --generate-dependencies
+     ${CMAKE_CURRENT_SOURCE_DIR}/gnucash-gresources.xml
+)
+
+STRING (REPLACE "\n" ";" gresource_files ${gr_files})
+
+ADD_CUSTOM_COMMAND(
+   OUTPUT gnucash-gresources.c
+   COMMAND
+    ${GLIB_COMPILE_RESOURCES_EXECUTABLE}
+    --target=gnucash-gresources.c
+    --sourcedir=${CMAKE_CURRENT_SOURCE_DIR}
+    --generate-source
+    ${CMAKE_CURRENT_SOURCE_DIR}/gnucash-gresources.xml
+   DEPENDS
+    ${CMAKE_CURRENT_SOURCE_DIR}/gnucash-gresources.xml ${gresource_files}
+   WORKING_DIRECTORY
+    ${CMAKE_CURRENT_BINARY_DIR}
+)
 
 IF (MAC_INTEGRATION)
   TARGET_COMPILE_OPTIONS(gnucash PRIVATE ${OSX_EXTRA_COMPILE_FLAGS})
@@ -202,7 +237,7 @@ ENDIF(WIN32)
 
 
 SET_LOCAL_DIST(gnucash_DIST_local CMakeLists.txt environment.in generate-gnc-script
-               gnucash-bin.c gnucash.rc.in gnucash-valgrind.in
+               gnucash-bin.c gnucash.rc.in gnucash-valgrind.in gnucash-gresourses.xml ${gresource_files}
                Makefile.am ${gnucash_EXTRA_DIST})
 
 SET(gnucash_DIST ${gnucash_DIST_local} ${gnome_DIST} ${gnome_search_DIST}
