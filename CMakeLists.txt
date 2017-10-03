@@ -114,7 +114,7 @@ IF (GNC_VCS_INFO_RESULT EQUAL 0)
   # IF building from VCS, we need git
   find_package(Git)
   IF (NOT GIT_FOUND)
-    MESSAGE(SEND_ERROR "Looks like we're building from vesion control, but can't find git executable. Please set GIT_EXECUTABLE.")
+    MESSAGE(SEND_ERROR "Looks like we're building from version control, but can't find git executable. Please set GIT_EXECUTABLE.")
   ENDIF()
 ENDIF()
 
