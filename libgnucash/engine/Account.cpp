@@ -41,6 +41,7 @@
 #include "gnc-pricedb.h"
 #include "qofinstance-p.h"
 #include "gnc-features.h"
+#include "guid.hpp"
 
 static QofLogModule log_module = GNC_MOD_ACCOUNT;
 
@@ -5178,48 +5179,6 @@ gnc_account_imap_delete_account (GncImportMatchMap *imap,
 --------------------------------------------------------------------------*/
 
 
-struct account_token_count
-{
-    char* account_guid;
-    gint64 token_count; /**< occurrences of a given token for this account_guid */
-};
-
-/** total_count and the token_count for a given account let us calculate the
- * probability of a given account with any single token
- */
-struct token_accounts_info
-{
-    GList *accounts; /**< array of struct account_token_count */
-    gint64 total_count;
-};
-
-/** gpointer is a pointer to a struct token_accounts_info
- * \note Can always assume that keys are unique, reduces code in this function
- */
-static void
-buildTokenInfo(const char *key, const GValue *value, gpointer data)
-{
-    struct token_accounts_info *tokenInfo = (struct token_accounts_info*)data;
-    struct account_token_count* this_account;
-
-    //  PINFO("buildTokenInfo: account '%s', token_count: '%" G_GINT64_FORMAT "'", (char*)key,
-    //                  g_value_get_int64(value));
-
-    /* add the count to the total_count */
-    tokenInfo->total_count += g_value_get_int64(value);
-
-    /* allocate a new structure for this account and it's token count */
-    this_account = (struct account_token_count*)
-                   g_new0(struct account_token_count, 1);
-
-    /* fill in the account guid and number of tokens found for this account guid */
-    this_account->account_guid = (char*)key;
-    this_account->token_count = g_value_get_int64(value);
-
-    /* append onto the glist a pointer to the new account_token_count structure */
-    tokenInfo->accounts = g_list_prepend(tokenInfo->accounts, this_account);
-}
-
 /** intermediate values used to calculate the bayes probability of a given account
   where p(AB) = (a*b)/[a*b + (1-a)(1-b)], product is (a*b),
   product_difference is (1-a) * (1-b)
@@ -5230,29 +5189,51 @@ struct account_probability
     double product_difference; /* product of (1-probabilities) */
 };
 
-/** convert a hash table of account names and (struct account_probability*)
-  into a hash table of 100000x the percentage match value, ie. 10% would be
-  0.10 * 100000 = 10000
- */
-#define PROBABILITY_FACTOR 100000
-static void
-buildProbabilities(gpointer key, gpointer value, gpointer data)
+struct account_token_count
 {
-    GHashTable *final_probabilities = (GHashTable*)data;
-    struct account_probability *account_p = (struct account_probability*)value;
+    std::string account_guid;
+    int64_t token_count; /**< occurrences of a given token for this account_guid */
+};
 
-    /* P(AB) = A*B / [A*B + (1-A)*(1-B)]
-     * NOTE: so we only keep track of a running product(A*B*C...)
-     * and product difference ((1-A)(1-B)...)
-     */
-    gint32 probability =
-        (account_p->product /
-         (account_p->product + account_p->product_difference))
-        * PROBABILITY_FACTOR;
+/** total_count and the token_count for a given account let us calculate the
+ * probability of a given account with any single token
+ */
+struct token_accounts_info
+{
+    std::vector<account_token_count> accounts;
+    int64_t total_count;
+};
 
-    PINFO("P('%s') = '%d'", (char*)key, probability);
+static void
+build_token_info(char const * key, KvpValue * value, token_accounts_info & tokenInfo)
+{
+    tokenInfo.total_count += value->get<int64_t>();
+    account_token_count this_account;
+    this_account.account_guid = key;
+    this_account.token_count = value->get<int64_t>();
+    tokenInfo.accounts.push_back(this_account);
+}
 
-    g_hash_table_insert(final_probabilities, key, GINT_TO_POINTER(probability));
+/** We scale the probability values by PROBABILITY_FACTOR.
+  ie. with PROBABILITY_FACTOR of 100000, 10% would be
+  0.10 * 100000 = 10000 */
+#define PROBABILITY_FACTOR 100000
+static std::map<std::string, int32_t>
+build_probabilities(std::map<std::string, account_probability> const & first_pass)
+{
+    std::map<std::string, int32_t> ret;
+    for (auto const & first_pass_prob : first_pass)
+    {
+        auto const & account_probability { first_pass_prob.second };
+        /* P(AB) = A*B / [A*B + (1-A)*(1-B)]
+         * NOTE: so we only keep track of a running product(A*B*C...)
+         * and product difference ((1-A)(1-B)...)
+         */
+        int32_t probability = (account_probability.product /
+                (account_probability.product + account_probability.product_difference)) * PROBABILITY_FACTOR;
+        ret[first_pass_prob.first] = probability;
+    }
+    return ret;
 }
 
 /** Frees an array of the same time that buildProperties built */
@@ -5270,30 +5251,54 @@ freeProbabilities(gpointer key, gpointer value, gpointer data)
  */
 struct account_info
 {
-    char* account_guid;
-    gint32 probability;
+    std::string account_guid;
+    int32_t probability;
 };
 
-/** Find the highest probability and the corresponding account guid
-    store in data, a (struct account_info*)
-    NOTE: this is a g_hash_table_foreach() function for a hash table of entries
-    key is a  pointer to the account guid, value is a gint32, 100000x
-    the probability for this account
-*/
-static void
-highestProbability(gpointer key, gpointer value, gpointer data)
+static account_info
+highest_probability(std::map<std::string, int32_t> const & probabilities)
 {
-    struct account_info *account_i = (struct account_info*)data;
-
-    /* if the current probability is greater than the stored, store the current */
-    if (GPOINTER_TO_INT(value) > account_i->probability)
-    {
-        /* Save the new highest probability and the assoaciated account guid */
-        account_i->probability = GPOINTER_TO_INT(value);
-        account_i->account_guid = static_cast <char*> (key);
-    }
+    account_info ret {"", std::numeric_limits<int32_t>::min()};
+    for (auto const & prob : probabilities)
+        if (prob.second > ret.probability)
+            ret = account_info{prob.first, prob.second};
+    return ret;
 }
 
+static std::map<std::string, account_probability>
+get_first_pass_probabilities(GncImportMatchMap * imap, GList * tokens)
+{
+    std::map<std::string, account_probability> ret;
+    /* find the probability for each account that contains any of the tokens
+     * in the input tokens list. */
+    for (auto current_token = tokens; current_token; current_token = current_token->next)
+    {
+        token_accounts_info tokenInfo{};
+        auto path {std::string{IMAP_FRAME_BAYES "/"} + static_cast<char const *>(current_token->data)};
+        qof_instance_foreach_slot_temp (QOF_INSTANCE (imap->acc), path, &build_token_info, tokenInfo);
+        for (auto const & current_account_token : tokenInfo.accounts)
+        {
+            auto item {ret.find(current_account_token.account_guid)};
+            if (item != ret.end())
+            {/* This account is already in the map */
+                item->second.product = ((double)current_account_token.token_count /
+                                      (double)tokenInfo.total_count) * item->second.product;
+                item->second.product_difference = ((double)1 - ((double)current_account_token.token_count /
+                                              (double)tokenInfo.total_count)) * item->second.product_difference;
+            }
+            else
+            {
+                /* add a new entry */
+                account_probability new_probability;
+                new_probability.product = ((double)current_account_token.token_count /
+                                      (double)tokenInfo.total_count);
+                new_probability.product_difference = 1 - (new_probability.product);
+                ret[current_account_token.account_guid] = std::move(new_probability);
+            }
+        } /* for all accounts in tokenInfo */
+    }
+    return ret;
+}
 
 #define threshold (.90 * PROBABILITY_FACTOR) /* 90% */
 
@@ -5301,173 +5306,50 @@ highestProbability(gpointer key, gpointer value, gpointer data)
 Account*
 gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
 {
-    struct token_accounts_info tokenInfo; /**< holds the accounts and total
-                                           * token count for a single token */
-    GList *current_token;                 /**< pointer to the current
-                                           * token from the input GList
-                                           * tokens */
-    GList *current_account_token;         /**< pointer to the struct
-                                           * account_token_count */
-    struct account_token_count *account_c; /**< an account name and the number
-                                            * of times a token has appeared
-                                            * for the account */
-    struct account_probability *account_p; /**< intermediate storage of values
-                                            * to compute the bayes probability
-                                            * of an account */
-    GHashTable *running_probabilities = g_hash_table_new(g_str_hash,
-                                                         g_str_equal);
-    GHashTable *final_probabilities = g_hash_table_new(g_str_hash,
-                                                       g_str_equal);
-    struct account_info account_i;
-
     ENTER(" ");
-
-    /* check to see if the imap is NULL */
     if (!imap)
     {
         PINFO("imap is null, returning null");
         LEAVE(" ");
-        return NULL;
+        return nullptr;
     }
-
-    /* find the probability for each account that contains any of the tokens
-     * in the input tokens list
-     */
-    for (current_token = tokens; current_token;
-         current_token = current_token->next)
+    auto first_pass {get_first_pass_probabilities(imap, tokens)};
+    if (!first_pass.size())
     {
-        char* path = g_strdup_printf (IMAP_FRAME_BAYES "/%s",
-                                            (char*)current_token->data);
-        /* zero out the token_accounts_info structure */
-        memset(&tokenInfo, 0, sizeof(struct token_accounts_info));
-
-        PINFO("token: '%s'", (char*)current_token->data);
-
-        /* process the accounts for this token, adding the account if it
-         * doesn't already exist or adding to the existing accounts token
-         * count if it does
-         */
-        qof_instance_foreach_slot(QOF_INSTANCE (imap->acc), path,
-                                  buildTokenInfo, &tokenInfo);
-        g_free (path);
-        /* for each account we have just found, see if the account
-         * already exists in the list of account probabilities, if not
-         * add it
-         */
-        for (current_account_token = tokenInfo.accounts; current_account_token;
-                current_account_token = current_account_token->next)
-        {
-            /* get the account name and corresponding token count */
-            account_c = (struct account_token_count*)current_account_token->data;
-
-            PINFO("account_c->account_guid('%s'), "
-                  "account_c->token_count('%" G_GINT64_FORMAT
-                  "')/total_count('%" G_GINT64_FORMAT "')",
-                  account_c->account_guid, account_c->token_count,
-                  tokenInfo.total_count);
-
-            account_p = static_cast <account_probability*> (
-                    g_hash_table_lookup(running_probabilities, account_c->account_guid));
-
-            /* if the account exists in the list then continue
-             * the running probablities
-             */
-            if (account_p)
-            {
-                account_p->product = (((double)account_c->token_count /
-                                      (double)tokenInfo.total_count)
-                                      * account_p->product);
-                account_p->product_difference =
-                    ((double)1 - ((double)account_c->token_count /
-                                  (double)tokenInfo.total_count))
-                    * account_p->product_difference;
-                PINFO("product == %f, product_difference == %f",
-                      account_p->product, account_p->product_difference);
-            }
-            else
-            {
-                /* add a new entry */
-                PINFO("adding a new entry for this account");
-                account_p = (struct account_probability*)
-                            g_new0(struct account_probability, 1);
-
-                /* set the product and product difference values */
-                account_p->product = ((double)account_c->token_count /
-                                      (double)tokenInfo.total_count);
-                account_p->product_difference =
-                    (double)1 - ((double)account_c->token_count /
-                                 (double)tokenInfo.total_count);
-
-                PINFO("product == %f, product_difference == %f",
-                      account_p->product, account_p->product_difference);
-
-                /* add the account guid and (struct account_probability*)
-                 * to the hash table */
-                g_hash_table_insert(running_probabilities,
-                                    account_c->account_guid, account_p);
-            }
-        } /* for all accounts in tokenInfo */
-
-        /* free the data in tokenInfo */
-        for (current_account_token = tokenInfo.accounts; current_account_token;
-                current_account_token = current_account_token->next)
-        {
-            /* free up each struct account_token_count we allocated */
-            g_free((struct account_token_count*)current_account_token->data);
-        }
-
-        g_list_free(tokenInfo.accounts); /* free the accounts GList */
+        LEAVE("return null");
+        return nullptr;
     }
-
-    /* build a hash table of account names and their final probabilities
-     * from each entry in the running_probabilties hash table
-     */
-    g_hash_table_foreach(running_probabilities, buildProbabilities,
-                         final_probabilities);
-
-    /* find the highest probabilty and the corresponding account */
-    memset(&account_i, 0, sizeof(struct account_info));
-    g_hash_table_foreach(final_probabilities, highestProbability, &account_i);
-
-    /* free each element of the running_probabilities hash */
-    g_hash_table_foreach(running_probabilities, freeProbabilities, NULL);
-
-    /* free the hash tables */
-    g_hash_table_destroy(running_probabilities);
-    g_hash_table_destroy(final_probabilities);
-
-    PINFO("highest P('%s') = '%d'",
-          account_i.account_guid ? account_i.account_guid : "(null)",
-          account_i.probability);
-
-    /* has this probability met our threshold? */
-    if (account_i.probability >= threshold)
+    auto final_probabilities {build_probabilities(first_pass)};
+    if (!final_probabilities.size())
     {
-        GncGUID *guid;
-        Account *account = NULL;
-
-        PINFO("Probability has met threshold");
-
-        guid = g_new (GncGUID, 1);
-
-        if (string_to_guid (account_i.account_guid, guid))
-            account = xaccAccountLookup (guid, imap->book);
-
-        g_free (guid);
-
-        if (account != NULL)
-            LEAVE("Return account is '%s'", xaccAccountGetName (account));
-        else
-            LEAVE("Return NULL, account for Guid '%s' can not be found", account_i.account_guid);
-
-        return account;
+        LEAVE("return null");
+        return nullptr;
     }
-    PINFO("Probability has not met threshold");
-    LEAVE("Return NULL");
-
-    return NULL; /* we didn't meet our threshold, return NULL for an account */
+    auto best {highest_probability(final_probabilities)};
+    if (best.account_guid == "")
+    {
+        LEAVE("return null");
+        return nullptr;
+    }
+    if (best.probability < threshold)
+    {
+        LEAVE("return null");
+        return nullptr;
+    }
+    gnc::GUID guid;
+    try {
+        guid = gnc::GUID::from_string(best.account_guid);
+    } catch (gnc::guid_syntax_exception) {
+        LEAVE("Invalid account guid.");
+        return nullptr;
+    }
+    auto account {xaccAccountLookup (reinterpret_cast<GncGUID*>(&guid), imap->book)};
+    if (account != NULL)
+        LEAVE("Return account is '%s'", xaccAccountGetName (account));
+    else
+        LEAVE("Return NULL, account for Guid '%s' can not be found", best.account_guid);
+    return account;
 }
-
 
 static void
 change_imap_entry (GncImportMatchMap *imap, gchar *kvp_path, int64_t token_count)
