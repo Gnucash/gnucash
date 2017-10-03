@@ -407,24 +407,18 @@ test_gnc_transaction_set_get_property (Fixture *fixture, gconstpointer pData)
 {
     QofBook *book = qof_book_new ();
     Transaction *txn = g_object_new (GNC_TYPE_TRANSACTION, "book", book, NULL);
-    gchar *num = "42", *desc = "The Answer", *t_num = NULL, *t_desc = NULL, *phony = NULL;
+    gchar *num = "42", *desc = "The Answer", *t_num = NULL, *t_desc = NULL;
     gnc_commodity *curr = gnc_commodity_new (book, "Gnu Rand", "CURRENCY",
                           "GNR", "", 240), *t_curr = NULL;
     Timespec now = timespec_now (), *t_entered = NULL, *t_posted = NULL;
     time_t secs = (time_t)now.tv_sec;
-    gchar *msg1 = "g_object_set_valist: object class " _Q "Transaction' has no property named " _Q "bogus'";
-    gchar *msg2 = g_strdup_printf ("[xaccTransSetDateInternal] addr=%p set date to %" G_GUINT64_FORMAT ".%09ld %s",
+    gchar *msg = g_strdup_printf ("[xaccTransSetDateInternal] addr=%p set date to %" G_GUINT64_FORMAT ".%09ld %s",
                                    txn, now.tv_sec, now.tv_nsec, ctime (&secs));
-    GLogLevelFlags loglevel1 = G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL;
-    GLogLevelFlags loglevel2 = G_LOG_LEVEL_INFO;
-    TestErrorStruct *check1 = test_error_struct_new ("GLib-GObject",
-                              loglevel1, msg1);
-    TestErrorStruct *check2 = test_error_struct_new ("gnc.engine",
-                              loglevel2, msg2);
-    g_free (msg2);
-    fixture->hdlrs = test_log_set_fatal_handler (fixture->hdlrs, check1,
-                     (GLogFunc)test_checked_handler);
-    fixture->hdlrs = test_log_set_handler (fixture->hdlrs, check2,
+    GLogLevelFlags loglevel = G_LOG_LEVEL_INFO;
+    TestErrorStruct *check = test_error_struct_new ("gnc.engine",
+                              loglevel, msg);
+    g_free (msg);
+    fixture->hdlrs = test_log_set_handler (fixture->hdlrs, check,
                                            (GLogFunc)test_checked_handler);
     g_assert_cmpstr (txn->num, ==, "");
     g_assert_cmpstr (txn->description, ==, "");
@@ -441,7 +435,6 @@ test_gnc_transaction_set_get_property (Fixture *fixture, gconstpointer pData)
                   "currency", curr,
                   "post-date", &now,
                   "enter-date", &now,
-                  "bogus", phony,
                   NULL);
 
     g_assert_cmpstr (txn->num, ==, num);
@@ -449,18 +442,14 @@ test_gnc_transaction_set_get_property (Fixture *fixture, gconstpointer pData)
     g_assert (txn->common_currency == curr);
     g_assert (timespec_equal (&(txn->date_entered), &now));
     g_assert (timespec_equal (&(txn->date_posted), &now));
-    g_assert_cmpint (check1->hits, ==, 1);
-    g_assert_cmpint (check2->hits, ==, 2);
+    g_assert_cmpint (check->hits, ==, 2);
 
-    g_free (check1->msg);
-    check1->msg = g_strdup ("g_object_get_valist: object class " _Q "Transaction' has no property named " _Q "bogus'");
     g_object_get (G_OBJECT (txn),
                   "num", &t_num,
                   "description", &t_desc,
                   "currency", &t_curr,
                   "post-date", &t_posted,
                   "enter-date", &t_entered,
-                  "bogus", &phony,
                   NULL);
 
     g_assert_cmpstr (t_num, ==, num);
@@ -468,8 +457,7 @@ test_gnc_transaction_set_get_property (Fixture *fixture, gconstpointer pData)
     g_assert (t_curr == curr);
     g_assert (timespec_equal (t_entered, &now));
     g_assert (timespec_equal (t_posted, &now));
-    g_assert_cmpint (check1->hits, ==, 2);
-    g_assert_cmpint (check2->hits, ==, 2);
+    g_assert_cmpint (check->hits, ==, 2);
     xaccTransRollbackEdit (txn);
     test_destroy (txn);
     test_destroy (curr);
