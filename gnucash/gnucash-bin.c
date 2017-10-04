@@ -452,9 +452,9 @@ gnc_parse_command_line(int *argc, char ***argv)
                             2nd %s is the scm type (svn/svk/git/bzr);
                             3rd %s is the scm revision number;
                             4th %s is the build date */
-            g_print ( _("%s\nThis copy was built from %s rev %s on %s."),
+            g_print ( _("%s\nThis copy was built from %s rev %s (commit date %s)."),
                       fixed_message, GNUCASH_SCM, GNUCASH_SCM_REV,
-                      GNUCASH_BUILD_DATE );
+                      GNUCASH_SCM_REV_DATE );
         }
         else
         {
@@ -463,8 +463,8 @@ gnc_parse_command_line(int *argc, char ***argv)
             /* Translators: 1st %s is a fixed message, which is translated independently;
                             2nd %s is the scm (svn/svk/git/bzr) revision number;
                             3rd %s is the build date */
-            g_print ( _("%s\nThis copy was built from rev %s on %s."),
-                      fixed_message, GNUCASH_SCM_REV, GNUCASH_BUILD_DATE );
+            g_print ( _("%s\nThis copy was built from rev %s (commit date %s)."),
+                      fixed_message, GNUCASH_SCM_REV, GNUCASH_SCM_REV_DATE );
         }
         g_print("\n");
         g_free (fixed_message);

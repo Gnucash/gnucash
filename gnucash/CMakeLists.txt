@@ -34,6 +34,8 @@ ADD_EXECUTABLE (gnucash
   ${gnucash_SOURCES}
 )
 
+ADD_DEPENDENCIES (gnucash gnucash-manpage)
+
 TARGET_COMPILE_DEFINITIONS(gnucash PRIVATE -DG_LOG_DOMAIN=\"gnc.bin\")
 
 TARGET_LINK_LIBRARIES (gnucash

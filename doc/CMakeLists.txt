@@ -28,23 +28,6 @@ SET(doc_DIST ${doc_DIST_local} ${examples_DIST} PARENT_SCOPE)
 
 FILE(COPY ${doc_DATA} DESTINATION ${DATADIR_BUILD}/doc/gnucash)
 
-IF (${CMAKE_VERSION} VERSION_GREATER 3.1)
-  EXECUTE_PROCESS(
-    COMMAND ${CMAKE_COMMAND} -E  env date +"%B %Y"
-    OUTPUT_VARIABLE DATE_IN
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-  )
-ELSE()
-  EXECUTE_PROCESS(
-    COMMAND date +"%B %Y"
-    OUTPUT_VARIABLE DATE_IN
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-  )
-ENDIF()
-
-# Remove any quotes present in the DATE string
-STRING(REGEX REPLACE "\"" "" DATE "${DATE_IN}")
-
 # Generate the tip of the day file.
 
 EXECUTE_PROCESS(
@@ -72,9 +55,34 @@ FILE(COPY ${CMAKE_CURRENT_BINARY_DIR}/tip_of_the_day.list
   DESTINATION ${DATADIR_BUILD}/gnucash)
 
 # ---
+IF (BUILDING_FROM_VCS)
+  SET(VCS_INFO_BASE_DIR ${CMAKE_BINARY_DIR})
+ELSE()
+  SET(VCS_INFO_BASE_DIR ${CMAKE_SOURCE_DIR})
+ENDIF()
+SET(VCS_INFO_FILE ${VCS_INFO_BASE_DIR}/libgnucash/core-utils/gnc-vcs-info.h)
 
-GNC_CONFIGURE(gnucash.1.in gnucash.1 )
+# The copious use of backslashes below is to escape escape sequences that
+# have to end up in the file being written...
+# eg \\\" will become \", \\\\1 will become \\1 (which cmake will then interpret as \1)
+FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/manpage.cmake
+"FILE(STRINGS \${VCS_INFO_FILE} ym_line REGEX \"GNUCASH_SCM_REV_Y_M\")
+STRING(REGEX REPLACE \"^.* \\\"(.*)\\\"\" \"\\\\1\" DATE \${ym_line})
+CONFIGURE_FILE(\${SRC} \${DST} )
+FILE(COPY gnucash.1
+  DESTINATION \${DATADIR_BUILD}/gnucash)
+")
+
+
+ADD_CUSTOM_COMMAND(OUTPUT gnucash.1
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.1.in gnc-vcs-info
+  COMMAND ${CMAKE_COMMAND} -D SRC=${CMAKE_CURRENT_SOURCE_DIR}/gnucash.1.in
+                           -D DST=gnucash.1
+                           -D VERSION=${VERSION}
+                           -D VCS_INFO_FILE=${VCS_INFO_FILE}
+                           -D DATADIR_BUILD=${DATADIR_BUILD}
+                           -P ${CMAKE_CURRENT_BINARY_DIR}/manpage.cmake
+  )
+ADD_CUSTOM_TARGET(gnucash-manpage DEPENDS gnucash.1)
+
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.1 DESTINATION share/man/man1)
-
-FILE(COPY ${CMAKE_CURRENT_BINARY_DIR}/gnucash.1
-  DESTINATION ${DATADIR_BUILD}/gnucash)

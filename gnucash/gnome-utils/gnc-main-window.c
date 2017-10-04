@@ -4464,7 +4464,7 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 	const gchar *fixed_message = _("The GnuCash personal finance manager. "
                                    "The GNU way to manage your money!");
 	gchar *copyright = g_strdup_printf(_("© 1997-%s Contributors"),
-			                             GNUCASH_BUILD_YEAR);
+                                           GNUCASH_SCM_REV_YEAR);
 	gchar **authors = get_file_strsplit("AUTHORS");
 	gchar **documenters = get_file_strsplit("DOCUMENTERS");
 	gchar *license = get_file("LICENSE");
@@ -4483,16 +4483,16 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
                     2nd %s is the scm type (svn/svk/git/bzr);
                     3rd %s is the scm revision number;
                     4th %s is the build date */
-	message = g_strdup_printf(_("%s\nThis copy was built from %s rev %s on %s."),
-				  fixed_message, GNUCASH_SCM, GNUCASH_SCM_REV,
-				  GNUCASH_BUILD_DATE);
+	message = g_strdup_printf(_("%s\nThis copy was built from %s rev %s (commit date %s)."),
+                                  fixed_message, GNUCASH_SCM, GNUCASH_SCM_REV,
+                                  GNUCASH_SCM_REV_DATE);
 #else
     /* Translators: 1st %s is a fixed message, which is translated independently;
                     2nd %s is the scm (svn/svk/git/bzr) revision number;
                     3rd %s is the build date */
-	message = g_strdup_printf(_("%s\nThis copy was built from rev %s on %s."),
-				  fixed_message, GNUCASH_SCM_REV,
-				  GNUCASH_BUILD_DATE);
+	message = g_strdup_printf(_("%s\nThis copy was built from rev %s (commit date %s)."),
+                                  fixed_message, GNUCASH_SCM_REV,
+                                  GNUCASH_SCM_REV_DATE);
 #endif
 	priv->about_dialog = gtk_about_dialog_new ();
 	g_object_set (priv->about_dialog,
