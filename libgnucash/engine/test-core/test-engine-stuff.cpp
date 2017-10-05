@@ -55,7 +55,6 @@ extern "C"
 #include <string.h>
 #include <sys/stat.h>
 #include <qof.h>
-#include <qofinstance-p.h>
 
 #include "Account.h"
 #include "AccountP.h"
@@ -71,6 +70,7 @@ extern "C"
 #include "test-stuff.h"
 #include "test-engine-strings.h"
 }
+#include <qofinstance-p.h>
 
 static gboolean glist_strings_only = FALSE;
 

@@ -30,9 +30,9 @@
 extern "C"
 {
 #include "gnc-aqbanking-templates.h"
-#include "qofinstance-p.h"
 }
 
+#include "qofinstance-p.h"
 #include "kvp-frame.hpp"
 #include "gnc-rational.hpp"
 

@@ -204,11 +204,11 @@ struct KvpFrameImpl
      * @return The value at the key or nullptr.
      */
     KvpValue* get_slot(Path keys) const noexcept;
-    /** Convenience wrapper for std::for_each, which should be preferred.
+    /** The function should be of the form:
+     * <anything> func (char const *, KvpValue *, data_type &);
      */
-    void for_each_slot(void (*proc)(const char *key, KvpValue *value,
-                                    void * data),
-                       void *data) const noexcept;
+    template <typename func_type, typename data_type>
+    void for_each_slot(func_type const &, data_type &) const noexcept;
 
     /** Test for emptiness
      * @return true if the frame contains nothing.
@@ -219,6 +219,19 @@ struct KvpFrameImpl
     private:
     map_type m_valuemap;
 };
+
+template <typename func_type, typename data_type>
+void KvpFrame::for_each_slot(func_type const & func, data_type & data) const noexcept
+{
+    if (!func) return;
+    std::for_each (m_valuemap.begin(), m_valuemap.end(),
+        [&func,&data](const KvpFrameImpl::map_type::value_type & a)
+        {
+            func (a.first, a.second, data);
+        }
+    );
+}
+
 
 int compare (const KvpFrameImpl &, const KvpFrameImpl &) noexcept;
 int compare (const KvpFrameImpl *, const KvpFrameImpl *) noexcept;
