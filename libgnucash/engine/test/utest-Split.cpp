@@ -35,7 +35,6 @@ extern "C"
 #include <TransactionP.h>
 #include <gnc-lot.h>
 #include <gnc-event.h>
-#include <qofinstance-p.h>
 
 #if defined(__clang__) && (__clang_major__ == 5 || (__clang_major__ == 3 && __clang_minor__ < 5))
 #define USE_CLANG_FUNC_SIG 1
@@ -45,6 +44,7 @@ static const gchar *suitename = "/engine/Split";
 void test_suite_split ( void );
 }
 
+#include <qofinstance-p.h>
 #include <kvp-frame.hpp>
 
 typedef struct

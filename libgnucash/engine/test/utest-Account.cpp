@@ -27,7 +27,6 @@ extern "C"
 #include <unittest-support.h>
 #include <gnc-event.h>
 #include <gnc-date.h>
-#include <qofinstance-p.h>
 /* Add specific headers for this class */
 #include "../Account.h"
 #include "../AccountP.h"
@@ -42,6 +41,7 @@ static const gchar *suitename = "/engine/Account";
 void test_suite_account (void);
 }
 
+#include <qofinstance-p.h>
 #include <kvp-frame.hpp>
 
 typedef struct

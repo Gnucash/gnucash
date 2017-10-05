@@ -25,9 +25,9 @@ extern "C"
 #include <config.h>
 #include "../Account.h"
 #include <qof.h>
-#include <qofinstance-p.h>
 }
 
+#include <qofinstance-p.h>
 #include <kvp-frame.hpp>
 #include <gtest/gtest.h>
 
