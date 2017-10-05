@@ -214,20 +214,6 @@ KvpFrameImpl::get_keys() const noexcept
     return ret;
 }
 
-void
-KvpFrameImpl::for_each_slot(void (*proc)(const char *key, KvpValue *value,
-                                         void * data),
-                            void *data) const noexcept
-{
-    if (!proc) return;
-    std::for_each (m_valuemap.begin(), m_valuemap.end(),
-        [proc,data](const KvpFrameImpl::map_type::value_type & a)
-        {
-            proc (a.first, a.second, data);
-        }
-    );
-}
-
 KvpValueImpl *
 KvpFrameImpl::get_slot(const char * key) const noexcept
 {

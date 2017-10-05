@@ -30,7 +30,6 @@ extern "C"
 
 #include <glib.h>
 
-#include "test-stuff.h"
 #include "test-engine-stuff.h"
 #include "cashobjects.h"
 #include "gnc-engine.h"
@@ -44,6 +43,7 @@ extern "C"
 #include "sixtp-utils.h"
 #include "sixtp-dom-parsers.h"
 #include "sixtp-dom-generators.h"
+#include "test-stuff.h"
 
 #define GNC_V2_STRING "gnc-v2"
 const gchar* gnc_v2_xml_version_string = GNC_V2_STRING;

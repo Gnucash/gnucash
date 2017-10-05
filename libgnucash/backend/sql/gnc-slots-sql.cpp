@@ -581,81 +581,78 @@ slot_info_copy (slot_info_t* pInfo, GncGUID* guid)
 }
 
 static void
-save_slot (const char* key, KvpValue* value, gpointer data)
+save_slot (const char* key, KvpValue* value, slot_info_t & slot_info)
 {
-    slot_info_t* pSlot_info = (slot_info_t*)data;
-
     g_return_if_fail (value != NULL);
-    g_return_if_fail (data != NULL);
 
     // Ignore if we've already run into a failure
-    if (!pSlot_info->is_ok)
+    if (!slot_info.is_ok)
     {
         return;
     }
-    auto curlen = pSlot_info->path.length();
-    pSlot_info->pKvpValue = value;
+    auto curlen = slot_info.path.length();
+    slot_info.pKvpValue = value;
     if (curlen != 0)
-        pSlot_info->path += "/";
+        slot_info.path += "/";
 
-    pSlot_info->path += key;
-    pSlot_info->value_type = value->get_type ();
+    slot_info.path += key;
+    slot_info.value_type = value->get_type ();
 
-    switch (pSlot_info->value_type)
+    switch (slot_info.value_type)
     {
     case KvpValue::Type::FRAME:
     {
         auto pKvpFrame = value->get<KvpFrame*> ();
         auto guid = guid_new ();
-        slot_info_t* pNewInfo = slot_info_copy (pSlot_info, guid);
-        KvpValue* oldValue = pSlot_info->pKvpValue;
-        pSlot_info->pKvpValue = new KvpValue {guid};
-        pSlot_info->is_ok = pSlot_info->be->do_db_operation(OP_DB_INSERT,
+        slot_info_t* pNewInfo = slot_info_copy (&slot_info, guid);
+        KvpValue* oldValue = slot_info.pKvpValue;
+        slot_info.pKvpValue = new KvpValue {guid};
+        slot_info.is_ok = slot_info.be->do_db_operation(OP_DB_INSERT,
                                                             TABLE_NAME,
                                                             TABLE_NAME,
-                                                            pSlot_info,
+                                                            &slot_info,
                                                             col_table);
-        g_return_if_fail (pSlot_info->is_ok);
-        pKvpFrame->for_each_slot (save_slot, pNewInfo);
-        delete pSlot_info->pKvpValue;
-        pSlot_info->pKvpValue = oldValue;
+        g_return_if_fail (slot_info.is_ok);
+        pKvpFrame->for_each_slot_temp (save_slot, *pNewInfo);
+        delete slot_info.pKvpValue;
+        slot_info.pKvpValue = oldValue;
         delete pNewInfo;
     }
     break;
     case KvpValue::Type::GLIST:
     {
         GncGUID* guid = guid_new ();
-        slot_info_t* pNewInfo = slot_info_copy (pSlot_info, guid);
-        KvpValue* oldValue = pSlot_info->pKvpValue;
-        pSlot_info->pKvpValue = new KvpValue {guid};  // Transfer ownership!
-        pSlot_info->is_ok = pSlot_info->be->do_db_operation(OP_DB_INSERT,
+        slot_info_t* pNewInfo = slot_info_copy (&slot_info, guid);
+        KvpValue* oldValue = slot_info.pKvpValue;
+        slot_info.pKvpValue = new KvpValue {guid};  // Transfer ownership!
+        slot_info.is_ok = slot_info.be->do_db_operation(OP_DB_INSERT,
                                                             TABLE_NAME,
                                                             TABLE_NAME,
-                                                            pSlot_info,
+                                                            &slot_info,
                                                             col_table);
-        g_return_if_fail (pSlot_info->is_ok);
+        g_return_if_fail (slot_info.is_ok);
         for (auto cursor = value->get<GList*> (); cursor; cursor = cursor->next)
         {
             auto val = static_cast<KvpValue*> (cursor->data);
-            save_slot ("", val, pNewInfo);
+            save_slot ("", val, *pNewInfo);
         }
-        delete pSlot_info->pKvpValue;
-        pSlot_info->pKvpValue = oldValue;
+        delete slot_info.pKvpValue;
+        slot_info.pKvpValue = oldValue;
         delete pNewInfo;
     }
     break;
     default:
     {
-        pSlot_info->is_ok = pSlot_info->be->do_db_operation (OP_DB_INSERT,
+        slot_info.is_ok = slot_info.be->do_db_operation (OP_DB_INSERT,
                                                              TABLE_NAME,
                                                              TABLE_NAME,
-                                                             pSlot_info,
+                                                             &slot_info,
                                                              col_table);
     }
     break;
     }
 
-    pSlot_info->path.erase(curlen);
+    slot_info.path.erase(curlen);
 }
 
 gboolean
@@ -678,7 +675,7 @@ gnc_sql_slots_save (GncSqlBackend* sql_be, const GncGUID* guid, gboolean is_infa
 
     slot_info.be = sql_be;
     slot_info.guid = guid;
-    pFrame->for_each_slot (save_slot, &slot_info);
+    pFrame->for_each_slot_temp (save_slot, slot_info);
 
     return slot_info.is_ok;
 }

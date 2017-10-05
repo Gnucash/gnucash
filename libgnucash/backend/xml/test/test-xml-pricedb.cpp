@@ -34,7 +34,6 @@ extern "C"
 #include "gnc-engine.h"
 #include "gnc-pricedb.h"
 
-#include "test-stuff.h"
 #include "test-engine-stuff.h"
 }
 
@@ -45,6 +44,7 @@ extern "C"
 #include "sixtp-dom-parsers.h"
 #include "io-gncxml-v2.h"
 #include "test-file-stuff.h"
+#include "test-stuff.h"
 
 static QofSession* session;
 static int iter;

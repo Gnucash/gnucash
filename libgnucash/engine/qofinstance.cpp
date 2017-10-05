@@ -1278,10 +1278,9 @@ struct wrap_param
 };
 }
 static void
-wrap_gvalue_function (const char* key, KvpValue *val, gpointer data)
+wrap_gvalue_function (const char* key, KvpValue *val, wrap_param & param)
 {
     GValue *gv;
-    auto param = static_cast<wrap_param*>(data);
     if (val->get_type() != KvpValue::Type::FRAME)
         gv = gvalue_from_kvp_value(val);
     else
@@ -1290,7 +1289,7 @@ wrap_gvalue_function (const char* key, KvpValue *val, gpointer data)
         g_value_init (gv, G_TYPE_STRING);
         g_value_set_string (gv, nullptr);
     }
-    param->proc(key, gv, param->user_data);
+    param.proc(key, gv, param.user_data);
     g_slice_free (GValue, gv);
 }
 
@@ -1304,7 +1303,7 @@ qof_instance_foreach_slot (const QofInstance *inst, const char* path,
         return;
     auto frame = slot->get<KvpFrame*>();
     wrap_param new_data {proc, data};
-    frame->for_each_slot(wrap_gvalue_function, &new_data);
+    frame->for_each_slot_temp(&wrap_gvalue_function, new_data);
 }
 
 /* ========================== END OF FILE ======================= */

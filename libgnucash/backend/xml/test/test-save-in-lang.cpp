@@ -30,7 +30,6 @@ extern "C"
 #include <stdlib.h>
 #include <string.h>
 
-#include "test-stuff.h"
 #include "test-engine-stuff.h"
 
 #include "gnc-engine.h"
@@ -39,6 +38,7 @@ extern "C"
 
 #include "test-file-stuff.h"
 #include "io-gncxml-v2.h"
+#include "test-stuff.h"
 
 const char* possible_envs[] =
 {
