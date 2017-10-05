@@ -57,7 +57,9 @@ Otherwise, only failures are printed out.
 #include <glib.h>
 #include <stdlib.h>
 
-
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /* Privately used to indicate a test result. You may use these if you
  * wish, but it's easier to use the do_test macro above.
@@ -150,5 +152,8 @@ gint64 get_random_gint64(void);
 double get_random_double(void);
 const char* get_random_string_in_array(const char* str_list[]);
 
+#ifdef __cplusplus
+} /*extern "C"*/
+#endif
 
 #endif /* TEST_STUFF_H */

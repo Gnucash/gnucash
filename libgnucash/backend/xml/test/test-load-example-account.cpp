@@ -34,7 +34,6 @@ extern "C"
 
 #include "gnc-module.h"
 #include "gnc-engine.h"
-#include "test-stuff.h"
 #include "test-engine-stuff.h"
 }
 
@@ -43,6 +42,7 @@ extern "C"
 #include "io-gncxml-v2.h"
 
 #include "io-example-account.h"
+#include "test-stuff.h"
 
 static const gchar* da_ending = ".gnucash-xea";
 
