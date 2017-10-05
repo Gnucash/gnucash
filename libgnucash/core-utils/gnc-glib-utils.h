@@ -39,6 +39,10 @@
 
 #include <glib.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** @name Character Sets
  @{
 */
@@ -185,6 +189,10 @@ void gnc_scm_log_debug(const gchar *msg);
 void gnc_gpid_kill(GPid pid);
 
 /** @} */
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
 
 #endif /* GNC_GLIB_UTILS_H */
 /** @} */

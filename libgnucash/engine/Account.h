@@ -48,6 +48,9 @@
 #include "gnc-engine.h"
 #include "policy.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 typedef gnc_numeric (*xaccGetBalanceFn)( const Account *account );
 
 typedef gnc_numeric (*xaccGetBalanceInCurrencyFn) (
@@ -1516,6 +1519,10 @@ const char * dxaccAccountGetQuoteTZ (const Account *account);
 /** This is the type-override when you want to match all accounts.  Used
  * in the gnome-search parameter list.  Be careful when you use this. */
 #define ACCOUNT_MATCH_ALL_TYPE	"account-match-all"
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
 
 #endif /* XACC_ACCOUNT_H */
 /** @} */

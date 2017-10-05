@@ -181,23 +181,30 @@ KvpFrameImpl::set_path(Path path, KvpValue* value) noexcept
 std::string
 KvpFrameImpl::to_string() const noexcept
 {
-    std::ostringstream ret;
-    ret << "{\n";
+    return to_string("/");
+}
 
+std::string
+KvpFrameImpl::to_string(std::string const & prefix) const noexcept
+{
+    if (!m_valuemap.size())
+        return prefix;
+    std::ostringstream ret;
     std::for_each(m_valuemap.begin(), m_valuemap.end(),
-        [this,&ret](const map_type::value_type &a)
+        [this,&ret,&prefix](const map_type::value_type &a)
         {
-            ret << "    ";
+            std::string new_prefix {prefix};
             if (a.first)
-                ret << a.first;
-            ret << " => ";
+            {
+                new_prefix += a.first;
+                new_prefix += "/";
+            }
             if (a.second)
-                ret << a.second->to_string();
-            ret << ",\n";
+                ret << a.second->to_string(new_prefix) << "\n";
+            else
+                ret << new_prefix << "(null)\n";
         }
     );
-
-    ret << "}\n";
     return ret.str();
 }
 
@@ -212,20 +219,6 @@ KvpFrameImpl::get_keys() const noexcept
         }
     );
     return ret;
-}
-
-void
-KvpFrameImpl::for_each_slot(void (*proc)(const char *key, KvpValue *value,
-                                         void * data),
-                            void *data) const noexcept
-{
-    if (!proc) return;
-    std::for_each (m_valuemap.begin(), m_valuemap.end(),
-        [proc,data](const KvpFrameImpl::map_type::value_type & a)
-        {
-            proc (a.first, a.second, data);
-        }
-    );
 }
 
 KvpValueImpl *

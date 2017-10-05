@@ -41,6 +41,10 @@ typedef struct _SplitClass SplitClass;
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* --- type macros --- */
 #define GNC_TYPE_SPLIT            (gnc_split_get_type ())
 #define GNC_SPLIT(o)              \
@@ -549,6 +553,10 @@ gnc_numeric xaccSplitVoidFormerValue(const Split *split);
 #define xaccSplitGetGUID(X)      qof_entity_get_guid(QOF_INSTANCE(X))
 /** \deprecated */
 #define xaccSplitReturnGUID(X) (X ? *(qof_entity_get_guid(QOF_INSTANCE(X))) : *(guid_null()))
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
 
 #endif /* XACC_SPLIT_H */
 /** @} */

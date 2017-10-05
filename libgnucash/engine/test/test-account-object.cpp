@@ -32,10 +32,10 @@ extern "C"
 #include "qof.h"
 #include "Account.h"
 #include "cashobjects.h"
-#include "test-stuff.h"
 #include "test-engine-stuff.h"
-#include <qofinstance-p.h>
 }
+#include <qofinstance-p.h>
+#include "test-stuff.h"
 
 static void
 run_test (void)
