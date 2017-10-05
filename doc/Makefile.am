@@ -41,17 +41,17 @@ EXTRA_DIST = \
 gnucash.1: gnucash.1.in Makefile
 	rm -f $@.tmp
 if BUILDING_FROM_VCS
-	GNUCASH_SCM_REV_Y_M=`perl -ne 'print if $$_=~s/.*GNUCASH_SCM_REV_Y_M "(.*)"/$$1/' ${top_builddir}/libgnucash/core-utils/gnc-vcs-info.h` ; \
+	GNC_VCS_REV_Y_M=`perl -ne 'print if $$_=~s/.*GNC_VCS_REV_Y_M "(.*)"/$$1/' ${top_builddir}/libgnucash/core-utils/gnc-vcs-info.h` ; \
 	${SED} < $< > $@.tmp \
             -e 's:$${VERSION}:${VERSION}:g' \
-            -e 's:$${DATE}:'$${GNUCASH_SCM_REV_Y_M}':g'
+            -e 's:$${DATE}:'$${GNC_VCS_REV_Y_M}':g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
 else
-	GNUCASH_SCM_REV_Y_M=`perl -ne 'print if $$_=~s/.*GNUCASH_SCM_REV_Y_M "(.*)"/$$1/' ${top_srcdir}/libgnucash/core-utils/gnc-vcs-info.h` ; \
+	GNC_VCS_REV_Y_M=`perl -ne 'print if $$_=~s/.*GNC_VCS_REV_Y_M "(.*)"/$$1/' ${top_srcdir}/libgnucash/core-utils/gnc-vcs-info.h` ; \
 	${SED} < $< > $@.tmp \
 	-e 's:$${VERSION}:${VERSION}:g' \
-	-e 's:$${DATE}:'$${GNUCASH_SCM_REV_Y_M}':g'
+	-e 's:$${DATE}:'$${GNC_VCS_REV_Y_M}':g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
 endif

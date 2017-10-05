@@ -93,22 +93,22 @@ gnc_show_splash_screen (void)
     gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
-#ifdef GNUCASH_SCM
+#ifdef GNC_VCS
     /* Development version */
     /* Translators: 1st %s is the GnuCash version (eg 2.4.11);
                     2nd %s is the scm type (svn/svk/git/bzr);
                     3rd %s is the scm revision number;
                     4th %s is the build date */
     ver_string = g_strdup_printf(_("Version: GnuCash-%s %s (rev %s, commit date %s)"),
-                                 VERSION, GNUCASH_SCM, GNUCASH_SCM_REV,
-                                 GNUCASH_SCM_REV_DATE);
+                                 VERSION, GNC_VCS, GNC_VCS_REV,
+                                 GNC_VCS_REV_DATE);
 #else
     /* Dist Tarball */
     /* Translators: 1st %s is the GnuCash version (eg 2.4.11);
                     2nd %s is the scm (svn/svk/git/bzr) revision number;
                     3rd %s is the build date */
     ver_string = g_strdup_printf(_("Version: GnuCash-%s (rev %s, commit date %s)"),
-                                 VERSION, GNUCASH_SCM_REV, GNUCASH_SCM_REV_DATE);
+                                 VERSION, GNC_VCS_REV, GNC_VCS_REV_DATE);
 #endif
 
     version = gtk_label_new(NULL);

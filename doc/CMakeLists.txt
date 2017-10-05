@@ -66,7 +66,7 @@ SET(VCS_INFO_FILE ${VCS_INFO_BASE_DIR}/libgnucash/core-utils/gnc-vcs-info.h)
 # have to end up in the file being written...
 # eg \\\" will become \", \\\\1 will become \\1 (which cmake will then interpret as \1)
 FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/manpage.cmake
-"FILE(STRINGS \${VCS_INFO_FILE} ym_line REGEX \"GNUCASH_SCM_REV_Y_M\")
+"FILE(STRINGS \${VCS_INFO_FILE} ym_line REGEX \"GNC_VCS_REV_Y_M\")
 STRING(REGEX REPLACE \"^.* \\\"(.*)\\\"\" \"\\\\1\" DATE \${ym_line})
 CONFIGURE_FILE(\${SRC} \${DST} )
 FILE(COPY gnucash.1

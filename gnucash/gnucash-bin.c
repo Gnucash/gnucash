@@ -68,12 +68,12 @@ static QofLogModule log_module = GNC_MOD_GUI;
 #  include <Foundation/Foundation.h>
 #endif
 
-/* GNUCASH_SCM is defined whenever we're building from an svn/svk/git/bzr tree */
-#ifdef GNUCASH_SCM
+/* GNC_VCS is defined whenever we're building from an svn/svk/git/bzr tree */
+#ifdef GNC_VCS
 static int is_development_version = TRUE;
 #else
 static int is_development_version = FALSE;
-#define GNUCASH_SCM ""
+#define GNC_VCS ""
 #endif
 
 /* Command-line option variables */
@@ -453,8 +453,8 @@ gnc_parse_command_line(int *argc, char ***argv)
                             3rd %s is the scm revision number;
                             4th %s is the build date */
             g_print ( _("%s\nThis copy was built from %s rev %s (commit date %s)."),
-                      fixed_message, GNUCASH_SCM, GNUCASH_SCM_REV,
-                      GNUCASH_SCM_REV_DATE );
+                      fixed_message, GNC_VCS, GNC_VCS_REV,
+                      GNC_VCS_REV_DATE );
         }
         else
         {
@@ -464,7 +464,7 @@ gnc_parse_command_line(int *argc, char ***argv)
                             2nd %s is the scm (svn/svk/git/bzr) revision number;
                             3rd %s is the build date */
             g_print ( _("%s\nThis copy was built from rev %s (commit date %s)."),
-                      fixed_message, GNUCASH_SCM_REV, GNUCASH_SCM_REV_DATE );
+                      fixed_message, GNC_VCS_REV, GNC_VCS_REV_DATE );
         }
         g_print("\n");
         g_free (fixed_message);
