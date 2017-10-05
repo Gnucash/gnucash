@@ -122,7 +122,7 @@ then
   [ -n "$GIT_CMD" ] || GIT_CMD=git
   if [ "$request" = "date" ]
   then
-    exec "$GIT_CMD" --git-dir "${real_gitdir}" log -1 --format=%cd --date=format:"%Y-%m-%d"
+    exec "$GIT_CMD" --git-dir "${real_gitdir}" log -1 --format=%cd --date=short
     exit 0
   fi
 
