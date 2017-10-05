@@ -409,21 +409,10 @@ test_gnc_transaction_set_get_property (Fixture *fixture, gconstpointer pData)
     QofBook *book = qof_book_new ();
     auto txn = static_cast<Transaction*>(g_object_new (GNC_TYPE_TRANSACTION, "book", book, NULL));
     auto num = "42", desc = "The Answer";
-    gchar *t_num = NULL, *t_desc = NULL, *phony = NULL;
+    gchar *t_num = NULL, *t_desc = NULL;
     gnc_commodity *curr = gnc_commodity_new (book, "Gnu Rand", "CURRENCY",
                           "GNR", "", 240), *t_curr = NULL;
     Timespec now = timespec_now (), *t_entered = NULL, *t_posted = NULL;
-    time_t secs = (time_t)now.tv_sec;
-
-    char buff[80];
-    strftime (buff, 80, "%a %b %d %H:%M:%S %Y", localtime(&secs));
-
-    auto msg1 = "g_object_set_valist: object class 'Transaction' has no property named 'bogus'";
-
-    auto loglevel1 = static_cast<GLogLevelFlags>(G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL);
-    auto check1 = test_error_struct_new ("GLib-GObject", loglevel1, msg1);
-    fixture->hdlrs = test_log_set_fatal_handler (fixture->hdlrs, check1,
-                     (GLogFunc)test_checked_handler);
     g_assert_cmpstr (txn->num, ==, "");
     g_assert_cmpstr (txn->description, ==, "");
     g_assert (txn->common_currency == NULL);
@@ -439,7 +428,6 @@ test_gnc_transaction_set_get_property (Fixture *fixture, gconstpointer pData)
                   "currency", curr,
                   "post-date", &now,
                   "enter-date", &now,
-                  "bogus", phony,
                   NULL);
 
     g_assert_cmpstr (txn->num, ==, num);
@@ -447,17 +435,13 @@ test_gnc_transaction_set_get_property (Fixture *fixture, gconstpointer pData)
     g_assert (txn->common_currency == curr);
     g_assert (timespec_equal (&(txn->date_entered), &now));
     g_assert (timespec_equal (&(txn->date_posted), &now));
-    g_assert_cmpint (check1->hits, ==, 1);
 
-    g_free (check1->msg);
-    check1->msg = g_strdup ("g_object_get_valist: object class 'Transaction' has no property named 'bogus'");
     g_object_get (G_OBJECT (txn),
                   "num", &t_num,
                   "description", &t_desc,
                   "currency", &t_curr,
                   "post-date", &t_posted,
                   "enter-date", &t_entered,
-                  "bogus", &phony,
                   NULL);
 
     g_assert_cmpstr (t_num, ==, num);
@@ -465,7 +449,6 @@ test_gnc_transaction_set_get_property (Fixture *fixture, gconstpointer pData)
     g_assert (t_curr == curr);
     g_assert (timespec_equal (t_entered, &now));
     g_assert (timespec_equal (t_posted, &now));
-    g_assert_cmpint (check1->hits, ==, 2);
     xaccTransRollbackEdit (txn);
     test_destroy (txn);
     test_destroy (curr);

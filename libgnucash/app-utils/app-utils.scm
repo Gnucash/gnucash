@@ -195,6 +195,7 @@
 (export gnc:date-get-month-day)
 (export gnc:date-get-month)
 (export gnc:date-get-week-day)
+(export gnc:date-get-week)
 (export gnc:date-get-year-day)
 (export gnc:timepair-get-year)
 (export gnc:timepair-get-quarter)
