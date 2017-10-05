@@ -125,34 +125,32 @@ struct to_string_visitor : boost::static_visitor<void>
 
     void operator()(int64_t val)
     {
-        output << "KVP_VALUE_GINT64(" << val << ")";
+        output << val << " (64-bit int)";
     }
 
-    void operator()(KvpFrame * val)
+    void operator()(KvpFrame* val)
     {
-        output << "KVP_VALUE_FRAME(" << val->to_string() << ")";
+        output << val->to_string();
     }
 
     void operator()(GDate val)
     {
-        output << "KVP_VALUE_GDATE(";
         output << std::setw(4) << g_date_get_year(&val) << '-';
         output << std::setw(2) << g_date_get_month(&val) << '-';
-        output << std::setw(2) << g_date_get_day(&val) << ')';
+        output << std::setw(2) << g_date_get_day(&val);
+        output << " (gdate)";
     }
 
     void operator()(GList * val)
     {
         output << "KVP_VALUE_GLIST(";
         output << "[ ";
-
         /*Since val is passed by value, we can modify it*/
         for (;val; val = val->next)
         {
             auto realvalue = static_cast<const KvpValue *>(val->data);
             output << ' ' << realvalue->to_string() << ',';
         }
-
         output << " ]";
         output << ")";
     }
@@ -161,53 +159,66 @@ struct to_string_visitor : boost::static_visitor<void>
     {
         char tmp1[40] {};
         gnc_timespec_to_iso8601_buff (val, tmp1);
-        output << "KVP_VALUE_TIMESPEC(" << tmp1 << ")";
+        output << tmp1 << " (timespec)";
     }
 
     void operator()(gnc_numeric val)
     {
         auto tmp1 = gnc_numeric_to_string(val);
-        output << "KVP_VALUE_NUMERIC(";
         if (tmp1)
         {
             output << tmp1;
             g_free(tmp1);
         }
-        output << ")";
+        else
+        {
+            output << "(null)";
+        }
+        output << " (timespec)";
     }
 
     void operator()(GncGUID * val)
     {
         char guidstr[GUID_ENCODING_LENGTH+1];
-        output << "KVP_VALUE_GUID(";
         if (val)
         {
             guid_to_string_buff(val,guidstr);
             output << guidstr;
         }
-        output << ")";
+        else
+        {
+            output << "(null)";
+        }
+        output << " (guid)";
     }
 
     void operator()(const char * val)
     {
-        output << "KVP_VALUE_STRING(" << val << ")";
+        output << val << " (char *)";
     }
 
     void operator()(double val)
     {
-        output << "KVP_VALUE_DOUBLE(" << val << ")";
+        output << val << " (double)";
     }
 };
 
 std::string
-KvpValueImpl::to_string() const noexcept
+KvpValueImpl::to_string(std::string const & prefix) const noexcept
 {
+    if (this->datastore.type() == typeid(KvpFrame*))
+        return this->get<KvpFrame*>()->to_string(prefix);
     std::ostringstream ret;
     to_string_visitor visitor {ret};
     boost::apply_visitor(visitor, datastore);
-
     /*We still use g_strdup since the return value will be freed by g_free*/
-    return ret.str();
+    return prefix + ret.str();
+}
+
+std::string
+KvpValueImpl::to_string() const noexcept
+{
+    return to_string("");
 }
 
 static int
