@@ -200,6 +200,10 @@
            (gnc:html-piechart-button-3-legend-urls piechart)))
          (data 
           (ensure-positive-numbers (gnc:html-piechart-data piechart)))
+         ;; convert color list to string with valid js array of strings, example: "\"blue\", \"red\""
+         (colors-str (string-join (map (lambda (color)
+                                         (string-append "\"" color "\""))
+                                       (gnc:html-piechart-colors piechart)) ", "))
          ; Use a unique chart-id for each chart. This prevents chart
          ; clashed on multi-column reports
          (chart-id (string-append "chart-" (number->string (random 999999)))))
@@ -247,6 +251,7 @@
                          show: false },
                     cursor: {
                          showTooltip: false },
+                    seriesColors: false,
                    };\n")
 
             (if title
@@ -259,6 +264,13 @@
                 (push "  options.title += \" (")
                 (push (jqplot-escape-string subtitle))
                 (push ")\";\n")))
+            (if (not (equal? colors-str ""))
+                (begin            ; example: options.seriesColors= ["blue", "red"];
+                  (push "options.seriesColors = [")
+                  (push colors-str)
+                  (push "];\n")
+                  )
+                )
 
             (push "$.jqplot.config.enablePlugins = true;\n")
             (push "$(document).ready(function() {
