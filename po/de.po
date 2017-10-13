@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.6.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-11 02:57+0200\n"
+"POT-Creation-Date: 2017-10-13 10:24+0200\n"
 "PO-Revision-Date: 2017-09-11 04:33+0200\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
@@ -27,12 +27,12 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 
 #. Business options
-#: ../src/app-utils/app-utils.scm:304
+#: ../src/app-utils/app-utils.scm:305
 #: ../src/business/business-gnome/gncmod-business-gnome.c:117
 msgid "Business"
 msgstr "Geschäft"
 
-#: ../src/app-utils/app-utils.scm:305
+#: ../src/app-utils/app-utils.scm:306
 #: ../src/business/business-gnome/dialog-customer.c:923
 #: ../src/business/business-gnome/dialog-vendor.c:726
 #: ../src/gnome-utils/gnc-tree-view-owner.c:380
@@ -41,31 +41,31 @@ msgstr "Geschäft"
 msgid "Company Name"
 msgstr "Firmenname"
 
-#: ../src/app-utils/app-utils.scm:306
+#: ../src/app-utils/app-utils.scm:307
 msgid "Company Address"
 msgstr "Firmenadresse"
 
-#: ../src/app-utils/app-utils.scm:307
+#: ../src/app-utils/app-utils.scm:308
 msgid "Company ID"
 msgstr "Firmennummer"
 
-#: ../src/app-utils/app-utils.scm:308
+#: ../src/app-utils/app-utils.scm:309
 msgid "Company Phone Number"
 msgstr "Firmentelefonnummer"
 
-#: ../src/app-utils/app-utils.scm:309
+#: ../src/app-utils/app-utils.scm:310
 msgid "Company Fax Number"
 msgstr "Firmenfaxnummer"
 
-#: ../src/app-utils/app-utils.scm:310
+#: ../src/app-utils/app-utils.scm:311
 msgid "Company Website URL"
 msgstr "Firmenwebseite URL"
 
-#: ../src/app-utils/app-utils.scm:311
+#: ../src/app-utils/app-utils.scm:312
 msgid "Company Email Address"
 msgstr "Firmen-E-Mail-Adresse"
 
-#: ../src/app-utils/app-utils.scm:312
+#: ../src/app-utils/app-utils.scm:313
 msgid "Company Contact Person"
 msgstr "Firmen Ansprechpartner"
 
@@ -842,7 +842,7 @@ msgstr "Soll"
 msgid "Credit"
 msgstr "Haben"
 
-#: ../src/app-utils/option-util.c:1685
+#: ../src/app-utils/option-util.c:1656
 #, c-format
 msgid ""
 "There is a problem with option %s:%s.\n"
@@ -2015,7 +2015,7 @@ msgstr "Gutschrift?"
 #: ../src/gnome/dialog-lot-viewer.c:931 ../src/gnome/reconcile-view.c:373
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2992
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3004
-#: ../src/import-export/aqb/dialog-ab.glade.h:35
+#: ../src/import-export/aqb/dialog-ab.glade.h:39
 #: ../src/import-export/import-main-matcher.c:467
 #: ../src/import-export/import-match-picker.c:394
 #: ../src/import-export/import-match-picker.c:434
@@ -11059,31 +11059,31 @@ msgid "Select the default selection."
 msgstr "Die voreingestellte Auswahl auswählen."
 
 #. The reset button on each option page
-#: ../src/gnome-utils/dialog-options.c:1131
+#: ../src/gnome-utils/dialog-options.c:1136
 msgid "Reset defaults"
 msgstr "Voreinstellungen"
 
-#: ../src/gnome-utils/dialog-options.c:1133
+#: ../src/gnome-utils/dialog-options.c:1138
 msgid "Reset all values to their defaults."
 msgstr "Alle Werte auf ihre Voreinstellung zurücksetzen."
 
-#: ../src/gnome-utils/dialog-options.c:1459
+#: ../src/gnome-utils/dialog-options.c:1464
 msgid "Page"
 msgstr "Seite"
 
-#: ../src/gnome-utils/dialog-options.c:2139
+#: ../src/gnome-utils/dialog-options.c:2144
 msgid "Clear"
 msgstr "Zurücksetzen"
 
-#: ../src/gnome-utils/dialog-options.c:2140
+#: ../src/gnome-utils/dialog-options.c:2145
 msgid "Clear any selected image file."
 msgstr "Auswahl der Bilddatei wieder löschen."
 
-#: ../src/gnome-utils/dialog-options.c:2142
+#: ../src/gnome-utils/dialog-options.c:2147
 msgid "Select image"
 msgstr "Bild auswählen"
 
-#: ../src/gnome-utils/dialog-options.c:2144
+#: ../src/gnome-utils/dialog-options.c:2149
 msgid "Select an image file."
 msgstr "Bilddatei auswählen."
 
@@ -15762,127 +15762,163 @@ msgid "Confirm Password:"
 msgstr "Passwort bestätigen:"
 
 #: ../src/import-export/aqb/dialog-ab.glade.h:21
-msgid "Remember _PIN"
-msgstr "_PIN merken"
+#, fuzzy
+msgid "Remember the _PIN in memory"
+msgstr "HBCI PIN im Speicher merken"
 
 #: ../src/import-export/aqb/dialog-ab.glade.h:22
+#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:6
+msgid ""
+"If active, the PIN for HBCI/AqBanking actions will be remembered in memory "
+"during a session. Otherwise it will have to be entered again each time "
+"during a session when it is needed."
+msgstr ""
+"Wenn aktiviert, wird die PIN (Persönliche Identifikationsnummer) für HBCI/"
+"AqBanking während einer Programmbenutzung im Speicher zwischengespeichert. "
+"Wenn nicht aktiviert, muss die PIN bei jeder einzelnen Aktion von HBCI/"
+"AqBanking eingegeben werden und wird nicht im Speicher gehalten."
+
+#: ../src/import-export/aqb/dialog-ab.glade.h:23
 msgid "<b>Online Banking</b>"
 msgstr "<b>Onlinebanking</b>"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:23
+#: ../src/import-export/aqb/dialog-ab.glade.h:24
 msgid "_Close log window when finished"
 msgstr "Fenster nach Verbindungsende _schließen"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:24
+#: ../src/import-export/aqb/dialog-ab.glade.h:25
+#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:4
+msgid ""
+"If active, the window will be closed automatically when you finish the HBCI/"
+"AqBanking import process. Otherwise it will stay open."
+msgstr ""
+"Wenn aktiviert, wird das Fenster automatisch geschlossen, wenn der HBCI/"
+"AqBanking-Import beendet ist. Andernfalls bleibt das Fenster geöffnet."
+
+#: ../src/import-export/aqb/dialog-ab.glade.h:26
 #, fuzzy
 msgid "Use Non-SWIFT _transaction text"
 msgstr "Verwende das dem Buchungsdatum nächste Datum."
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:25
+#: ../src/import-export/aqb/dialog-ab.glade.h:27
+#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:8
+msgid ""
+"Some banks place part of transaction description as \"transaction text\" in "
+"the MT940 file. Normally GNUcash ignores this text. However by activating "
+"this option, the transaction text is used for the transaction description "
+"too."
+msgstr ""
+
+#: ../src/import-export/aqb/dialog-ab.glade.h:28
 msgid "_Verbose debug messages"
 msgstr "Ausführliche _Fehlermeldungen"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:26
+#: ../src/import-export/aqb/dialog-ab.glade.h:29
+#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:10
+msgid "Enables verbose debug messages for HBCI/AqBanking Online Banking."
+msgstr "Ausführliche Fehlermeldungen für HBCI Online Banking aktivieren."
+
+#: ../src/import-export/aqb/dialog-ab.glade.h:30
 msgid "Name for new template"
 msgstr "Namen für neue Überweisungsvorlage"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:27
+#: ../src/import-export/aqb/dialog-ab.glade.h:31
 msgid "Enter name for new template:"
 msgstr "Bitte geben Sie einen Namen für die neue Überweisungsvorlage ein:"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:28
+#: ../src/import-export/aqb/dialog-ab.glade.h:32
 msgid "Online Transaction"
 msgstr "Online-Auftrag Einzelüberweisung"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:29
+#: ../src/import-export/aqb/dialog-ab.glade.h:33
 msgid "Enter an Online Transaction"
 msgstr "Online-Überweisung eingeben"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:30
+#: ../src/import-export/aqb/dialog-ab.glade.h:34
 msgid "Recipient Account Number"
 msgstr "Konto-Nr. des Empfängers"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:31
+#: ../src/import-export/aqb/dialog-ab.glade.h:35
 msgid "Recipient Bank Code"
 msgstr "Bankleitzahl"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:32
+#: ../src/import-export/aqb/dialog-ab.glade.h:36
 msgid "Recipient Name"
 msgstr "Empfänger: Name, Vorname / Firma"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:33
+#: ../src/import-export/aqb/dialog-ab.glade.h:37
 msgid "at Bank"
 msgstr "der Bank"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:34
+#: ../src/import-export/aqb/dialog-ab.glade.h:38
 msgid "(filled in automatically)"
 msgstr "(wird automatisch ausgefüllt)"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:36
+#: ../src/import-export/aqb/dialog-ab.glade.h:40
 msgid "Payment Purpose (only for recipient)"
 msgstr "Verwendungszweck - z.B. Kunden-Referenznummer - (nur für Empfänger)"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:37
+#: ../src/import-export/aqb/dialog-ab.glade.h:41
 msgid "Payment Purpose continued"
 msgstr "noch Verwendungszweck (ggf. noch Anschrift des Auftraggebers)"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:38
+#: ../src/import-export/aqb/dialog-ab.glade.h:42
 msgid "Originator Name"
 msgstr "Auftraggeber: Name, Vorname"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:39
+#: ../src/import-export/aqb/dialog-ab.glade.h:43
 msgid "something"
 msgstr "irgendwas"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:40
+#: ../src/import-export/aqb/dialog-ab.glade.h:44
 msgid "Originator Account Number"
 msgstr "Konto-Nr. des Auftraggebers"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:41
+#: ../src/import-export/aqb/dialog-ab.glade.h:45
 msgid "Bank Code"
 msgstr "Bankleitzahl"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:42
+#: ../src/import-export/aqb/dialog-ab.glade.h:46
 msgid "Add the current online transaction as a new transaction template"
 msgstr "Aktuelle Online-Buchung als neue Überweisungsvorlage hinzufügen"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:43
+#: ../src/import-export/aqb/dialog-ab.glade.h:47
 msgid "Add current"
 msgstr "Aktuelle hinzufügen"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:44
+#: ../src/import-export/aqb/dialog-ab.glade.h:48
 msgid "Move the selected transaction template one row up"
 msgstr "Gewählte Überweisungsvorlage eine Zeile nach oben umsortieren"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:45
+#: ../src/import-export/aqb/dialog-ab.glade.h:49
 msgid "Move the selected transaction template one row down"
 msgstr "Gewählte Überweisungsvorlage eine Zeile nach unten umsortieren"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:46
+#: ../src/import-export/aqb/dialog-ab.glade.h:50
 msgid "Sort the list of transaction templates alphabetically"
 msgstr "Die Liste der Überweisungsvorlagen alphabetisch sortieren"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:47
+#: ../src/import-export/aqb/dialog-ab.glade.h:51
 msgid "Sort"
 msgstr "Sortieren"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:48
+#: ../src/import-export/aqb/dialog-ab.glade.h:52
 msgid "Delete the currently selected transaction template"
 msgstr "Ausgewählte Überweisungsvorlage löschen"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:49
+#: ../src/import-export/aqb/dialog-ab.glade.h:53
 msgid "Templates"
 msgstr "Vorlagen"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:50
+#: ../src/import-export/aqb/dialog-ab.glade.h:54
 msgid "Execute later (unimpl.)"
 msgstr "Später ausführen (unfertig)"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:51
+#: ../src/import-export/aqb/dialog-ab.glade.h:55
 msgid "Execute this online transaction now"
 msgstr "Diesen Auftrag jetzt online abschicken"
 
-#: ../src/import-export/aqb/dialog-ab.glade.h:52
+#: ../src/import-export/aqb/dialog-ab.glade.h:56
 msgid "Execute Now"
 msgstr "Jetzt ausführen"
 
@@ -16480,28 +16516,9 @@ msgstr "Online-Banking Verlaufsfenster anzeigen"
 msgid "Close window when finished"
 msgstr "Fenster nach Verbindungsende schließen"
 
-#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:4
-msgid ""
-"If active, the window will be closed automatically when you finish the HBCI/"
-"AqBanking import process. Otherwise it will stay open."
-msgstr ""
-"Wenn aktiviert, wird das Fenster automatisch geschlossen, wenn der HBCI/"
-"AqBanking-Import beendet ist. Andernfalls bleibt das Fenster geöffnet."
-
 #: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:5
 msgid "Remember the PIN in memory"
 msgstr "HBCI PIN im Speicher merken"
-
-#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:6
-msgid ""
-"If active, the PIN for HBCI/AqBanking actions will be remembered in memory "
-"during a session. Otherwise it will have to be entered again each time "
-"during a session when it is needed."
-msgstr ""
-"Wenn aktiviert, wird die PIN (Persönliche Identifikationsnummer) für HBCI/"
-"AqBanking während einer Programmbenutzung im Speicher zwischengespeichert. "
-"Wenn nicht aktiviert, muss die PIN bei jeder einzelnen Aktion von HBCI/"
-"AqBanking eingegeben werden und wird nicht im Speicher gehalten."
 
 #: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:7
 #, fuzzy
@@ -16510,21 +16527,9 @@ msgstr ""
 "Alle Buchungssätze außer dem aktuellen einzeilig anzeigen. Den aktuellen "
 "Buchungssatz vollständig anzeigen."
 
-#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:8
-msgid ""
-"Some banks place part of transaction description as \"transaction text\" in "
-"the MT940 file. Normally GNUcash ignores this text. However by activating "
-"this option, the transaction text is used for the transaction description "
-"too."
-msgstr ""
-
 #: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:9
 msgid "Verbose HBCI debug messages"
 msgstr "Ausführliche HBCI-Fehlermeldungen"
-
-#: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:10
-msgid "Enables verbose debug messages for HBCI/AqBanking Online Banking."
-msgstr "Ausführliche Fehlermeldungen für HBCI Online Banking aktivieren."
 
 #: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:11
 msgid "DTAUS import data format"
@@ -26201,6 +26206,9 @@ msgstr ""
 "Um den Inhalt zweiter Reiter in einem der Reiter optisch zu vergleichen,"
 "wählen Sie im Menü 'Fenster -> Neues Fenster mit Seite', um diesen Reiter in "
 "einem neuen Fenster anzuzeigen "
+
+#~ msgid "Remember _PIN"
+#~ msgstr "_PIN merken"
 
 #~ msgid "CURRENCY"
 #~ msgstr "WÄHRUNG"
