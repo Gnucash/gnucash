@@ -88,6 +88,13 @@ static WebKitNavigationResponse webkit_navigation_requested_cb(
     WebKitWebFrame* frame,
     WebKitNetworkRequest* request,
     gpointer user_data );
+static gboolean webkit_on_load_error (WebKitWebView *web_view,
+                                      WebKitWebFrame *web_frame, gchar *uri,
+                                      GError *error, gpointer data);
+static void webkit_resource_load_error (WebKitWebView *web_view,
+                                        WebKitWebFrame *web_frame,
+                                        WebKitWebResource *resource,
+                                        GError *error, gpointer data);
 static void webkit_on_url_cb( WebKitWebView* web_view, gchar* title, gchar* url,
                               gpointer data );
 static gchar* handle_embedded_object( GncHtmlWebkit* self, gchar* html_str );
@@ -189,6 +196,13 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
                       G_CALLBACK(gnc_html_submit_cb),
                       self);
 #endif
+    g_signal_connect (priv->web_view, "load-error",
+                      G_CALLBACK (webkit_on_load_error),
+                      self);
+
+    g_signal_connect (priv->web_view, "resource-load-failed",
+                      G_CALLBACK (webkit_resource_load_error),
+                      self);
 
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL_REPORT,
             GNC_PREF_RPT_DFLT_ZOOM,
@@ -619,6 +633,25 @@ webkit_navigation_requested_cb( WebKitWebView* web_view, WebKitWebFrame* frame,
 
     LEAVE("");
     return WEBKIT_NAVIGATION_RESPONSE_IGNORE;
+}
+
+static gboolean
+webkit_on_load_error (WebKitWebView *web_view, WebKitWebFrame *web_frame,
+                      gchar *uri, GError *error, gpointer data)
+{
+     PERR ("WebKit load of %s failed due to %s\n", uri, error->message);
+     return FALSE;
+}
+
+static void
+webkit_resource_load_error (WebKitWebView *web_view, WebKitWebFrame *web_frame,
+                            WebKitWebResource *resource, GError *error,
+                            gpointer data)
+{
+     const gchar *uri = webkit_web_resource_get_uri (resource);
+     const gchar *type = webkit_web_resource_get_mime_type (resource);
+     PERR ("WebKit load of resource %s, type %s, failed due to %s\n",
+              uri, type, error->message);
 }
 
 #if 0

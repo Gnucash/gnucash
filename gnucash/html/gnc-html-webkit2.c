@@ -107,6 +107,10 @@ static gboolean webkit_load_failed_cb (WebKitWebView *web_view,
 				       WebKitLoadEvent event,
 				       gchar *uri, GError *error,
 				       gpointer user_data);
+static void webkit_resource_load_started_cb (WebKitWebView *web_view,
+                                             WebKitWebResource *resource,
+                                             WebKitURIRequest *request,
+                                             gpointer data);
 static gchar* handle_embedded_object( GncHtmlWebkit* self, gchar* html_str );
 static void impl_webkit_show_url( GncHtml* self, URLType type,
                                   const gchar* location, const gchar* label,
@@ -207,9 +211,11 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
 #endif
 
      g_signal_connect (priv->web_view, "load-failed",
-		       G_CALLBACK (webkit_load_failed_cb),
-		       self);
-
+                       G_CALLBACK (webkit_load_failed_cb),
+                       self);
+     g_signal_connect (priv->web_view, "resource-load-started",
+                       G_CALLBACK (webkit_resource_load_started_cb),
+                       self);
      gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL_REPORT,
                             GNC_PREF_RPT_DFLT_ZOOM,
                             impl_webkit_default_zoom_changed,
@@ -691,13 +697,43 @@ webkit_notification_cb (WebKitWebView* web_view, WebKitNotification *note,
 
 static gboolean
 webkit_load_failed_cb (WebKitWebView *web_view, WebKitLoadEvent event,
-		       gchar *uri, GError *error, gpointer user_data)
+                       gchar *uri, GError *error, gpointer user_data)
 {
-     char *msg = g_strdup_printf ("Failed to load %s: %s", uri, error->message);
-     webkit_web_view_load_plain_text(web_view, msg);
-     g_free (msg);
+     PERR ("WebKit load of %s failed due to %s\n", uri, error->message);
      return FALSE;
 }
+static void
+webkit_resource_load_failed_cb (WebKitWebResource *resource,
+                                GError *error,
+                                gpointer data)
+{
+     WebKitURIResponse *response = webkit_web_resource_get_response (resource);
+     const gchar * uri = webkit_web_resource_get_uri (resource);
+     PERR ("Load of resource at %s failed with error %s and status code %d.\n",
+           uri, error->message, webkit_uri_response_get_status_code (response));
+}
+
+static void
+webkit_resource_load_finished_cb (WebKitWebResource *resource, gpointer data)
+{
+     DEBUG ("Load of resource %s completed.\n", webkit_web_resource_get_uri(resource));
+}
+
+static void
+webkit_resource_load_started_cb (WebKitWebView *web_view,
+                                 WebKitWebResource *resource,
+                                 WebKitURIRequest *request,
+                                 gpointer data)
+{
+     DEBUG ("Load of resource %s begun.\n", webkit_web_resource_get_uri(resource));
+     g_signal_connect (resource, "failed",
+                       G_CALLBACK (webkit_resource_load_failed_cb),
+                       data);
+     g_signal_connect (resource, "finished",
+                       G_CALLBACK (webkit_resource_load_finished_cb),
+                       data);
+}
+
 /********************************************************************
  * gnc_html_open_scm
  * insert some scheme-generated HTML
