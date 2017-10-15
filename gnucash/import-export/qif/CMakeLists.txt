@@ -29,6 +29,10 @@ TARGET_LINK_LIBRARIES(gncmod-qif gncmod-generic-import gncmod-engine ${GLIB2_LDF
 
 TARGET_COMPILE_DEFINITIONS(gncmod-qif PRIVATE -DG_LOG_DOMAIN=\"gnc.import.qif\")
 
+IF (APPLE)
+  SET_TARGET_PROPERTIES (gncmod-qif PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib/gnucash")
+ENDIF()
+
 INSTALL(TARGETS gncmod-qif
   LIBRARY DESTINATION lib/gnucash
   ARCHIVE DESTINATION lib/gnucash

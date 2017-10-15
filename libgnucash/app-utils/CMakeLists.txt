@@ -99,6 +99,10 @@ TARGET_INCLUDE_DIRECTORIES (gncmod-app-utils
 )
 TARGET_COMPILE_DEFINITIONS (gncmod-app-utils PRIVATE -DG_LOG_DOMAIN=\"gnc.app-utils\")
 
+IF (APPLE)
+  SET_TARGET_PROPERTIES (gncmod-app-utils PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib/gnucash")
+ENDIF()
+
 INSTALL(TARGETS gncmod-app-utils
   LIBRARY DESTINATION lib/gnucash
   ARCHIVE DESTINATION lib/gnucash
@@ -115,6 +119,10 @@ IF (WITH_PYTHON)
     PRIVATE ${app_utils_ALL_INCLUDES} ${PYTHON_INCLUDE_DIRS}
   )
   TARGET_COMPILE_DEFINITIONS (gncmod-app-utils-python PRIVATE -DG_LOG_DOMAIN=\"gnc.app-utils\")
+
+  IF (APPLE)
+    SET_TARGET_PROPERTIES (gncmod-app-utils-python PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib/gnucash")
+  ENDIF()
 
   INSTALL(TARGETS gncmod-app-utils-python
     LIBRARY DESTINATION lib/gnucash

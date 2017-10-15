@@ -32,6 +32,10 @@ TARGET_INCLUDE_DIRECTORIES (gncmod-report-system
 )
 
 
+IF (APPLE)
+  SET_TARGET_PROPERTIES (gncmod-report-system PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib/gnucash")
+ENDIF()
+
 INSTALL(TARGETS gncmod-report-system
   LIBRARY DESTINATION lib/gnucash
   ARCHIVE DESTINATION lib/gnucash

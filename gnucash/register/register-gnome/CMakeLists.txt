@@ -53,6 +53,10 @@ TARGET_INCLUDE_DIRECTORIES(gncmod-register-gnome
     PRIVATE ${CMAKE_SOURCE_DIR}/gnucash/register/ledger-core ${GTK3_INCLUDE_DIRS}
 )
 
+IF (APPLE)
+  SET_TARGET_PROPERTIES (gncmod-register-gnome PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib/gnucash")
+ENDIF()
+
 INSTALL(TARGETS gncmod-register-gnome
   LIBRARY DESTINATION lib/gnucash
   ARCHIVE DESTINATION lib/gnucash

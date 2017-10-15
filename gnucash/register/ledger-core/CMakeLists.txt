@@ -53,6 +53,10 @@ TARGET_INCLUDE_DIRECTORIES(gncmod-ledger-core
         ${CMAKE_BINARY_DIR}/gnucash/gnome-utils # for gnc-warnings.h
 )
 
+IF (APPLE)
+  SET_TARGET_PROPERTIES (gncmod-ledger-core PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib/gnucash")
+ENDIF()
+
 INSTALL(TARGETS gncmod-ledger-core
   LIBRARY DESTINATION lib/gnucash
   ARCHIVE DESTINATION lib/gnucash

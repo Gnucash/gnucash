@@ -248,6 +248,10 @@ TARGET_INCLUDE_DIRECTORIES (gncmod-engine
         ${CMAKE_SOURCE_DIR}/borrowed/libc # for strptime.h
 )
 
+IF (APPLE)
+  SET_TARGET_PROPERTIES (gncmod-engine PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib/gnucash")
+ENDIF()
+
 INSTALL(TARGETS gncmod-engine
   LIBRARY DESTINATION lib/gnucash
   ARCHIVE DESTINATION lib/gnucash

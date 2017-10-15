@@ -12,6 +12,10 @@ TARGET_LINK_LIBRARIES(gncmod-locale-reports-us gnc-module gncmod-app-utils gncmo
 TARGET_COMPILE_DEFINITIONS(gncmod-locale-reports-us PRIVATE -DG_LOG_DOMAIN=\"gnc.report.locale.us\")
 
 
+IF (APPLE)
+  SET_TARGET_PROPERTIES (gncmod-locale-reports-us PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib/gnucash")
+ENDIF()
+
 INSTALL(TARGETS gncmod-locale-reports-us
   LIBRARY DESTINATION lib/gnucash
   ARCHIVE DESTINATION lib/gnucash

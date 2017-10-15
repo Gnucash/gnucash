@@ -39,6 +39,10 @@ TARGET_INCLUDE_DIRECTORIES(gncmod-bi-import
 
 TARGET_COMPILE_DEFINITIONS(gncmod-bi-import PRIVATE -DG_LOG_DOMAIN=\"gnc.plugin.bi-import\")
 
+IF (APPLE)
+  SET_TARGET_PROPERTIES (gncmod-bi-import PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib/gnucash")
+ENDIF()
+
 INSTALL(TARGETS gncmod-bi-import
   LIBRARY DESTINATION lib/gnucash
   ARCHIVE DESTINATION lib/gnucash
