@@ -238,7 +238,8 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
         gnc_xfer_dialog_set_amount_sensitive(xfer_dialog, FALSE);
         gnc_xfer_dialog_set_date_sensitive(xfer_dialog, FALSE);
 
-        description = gnc_ab_description_to_gnc(ab_trans);
+        /* OFX doesn't do transfers. */
+        description = gnc_ab_description_to_gnc(ab_trans, FALSE);
         gnc_xfer_dialog_set_description(xfer_dialog, description);
         g_free(description);
 
