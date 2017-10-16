@@ -17,6 +17,7 @@ gncscmrpt_DATA = \
    budget-flow.scm \
    budget-income-statement.scm \
    cash-flow.scm \
+   cashflow-barchart.scm \
    category-barchart.scm \
    daily-reports.scm \
    equity-statement.scm \
