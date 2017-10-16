@@ -26375,7 +26375,7 @@ msgstr ""
 #~ msgid "Account Full Name"
 #~ msgstr "Konta pilnais nosaukums"
 
-#~ msgid "Case insensative searching is available on 'Account Full Name'."
+#~ msgid "Case insensitive searching is available on 'Account Full Name'."
 #~ msgstr ""
 #~ "'Konta pilnajā nosaukumā' meklēšana tiek veikta, nešķirojot lielos un "
 #~ "mazos burtus."
