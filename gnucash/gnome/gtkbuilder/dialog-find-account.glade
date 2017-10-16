@@ -184,7 +184,7 @@
           <object class="GtkLabel" id="filter-label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Case insensative searching is available on 'Account Full Name'.</property>
+            <property name="label" translatable="yes">Case insensitive searching is available on 'Account Full Name'.</property>
             <property name="justify">center</property>
           </object>
           <packing>
