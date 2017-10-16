@@ -797,7 +797,11 @@ impl_webkit_show_data( GncHtml* self, const gchar* data, int datalen )
     fd = g_mkstemp( filename );
     impl_webkit_export_to_file( self, filename );
     close( fd );
+#ifdef G_OS_WIN32
+    uri = g_strdup_printf( "file:///%s", filename );
+#else
     uri = g_strdup_printf( "file://%s", filename );
+#endif
     g_free(filename);
     DEBUG("Loading uri '%s'", uri);
     webkit_web_view_load_uri( priv->web_view, uri );
