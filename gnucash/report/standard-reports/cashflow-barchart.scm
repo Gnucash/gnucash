@@ -27,14 +27,13 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report cashflow-barchart))
+(define-module (gnucash report standard-reports cashflow-barchart))
 
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 (use-modules (gnucash engine))
 (use-modules (gnucash printf))
-(use-modules (gnucash report stylesheets))
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
