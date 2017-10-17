@@ -10518,9 +10518,13 @@ msgstr "mhaiti koxant samballunk zaina. Pustok fokt vachunk zata oxem khunnailam
 msgid "Book Options"
 msgstr "pustok poriai"
 
-#: ../src/gnome-utils/gnc-main-window.c:4378
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "GnuCash veoktigot orthik karbhari. Tujea dudvsancho GNU chea riti pormonnem karbhar"
+#: ../src/gnome-utils/gnc-main-window.c:4370
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+"GnuCash veoktigot orthik karbhari.\n"
+"Tujea dudvsancho GNU chea riti pormonnem karbhar"
 
 #: ../src/gnome-utils/gnc-main-window.c:4380
 #, fuzzy

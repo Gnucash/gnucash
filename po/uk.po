@@ -10578,11 +10578,13 @@ msgstr "Не вдалося зберегти до бази даних."
 msgid "Unable to save to database: Book is marked read-only."
 msgstr "Не вдалося зберегти до бази даних: книга доступна лише для читання."
 
-#: ../src/gnome-utils/gnc-main-window.c:4021
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
+#: ../src/gnome-utils/gnc-main-window.c:4370
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
 msgstr ""
-"Особистий фінансовий менеджер GnuCash. GNU-спосіб розпорядження вашими грошами!\n"
-"http://www.gnucash.org/"
+"Особистий фінансовий менеджер GnuCash.\n"
+"GNU-спосіб розпорядження вашими грошами!"
 
 #. Development version
 #: ../src/gnome-utils/gnc-main-window.c:4034

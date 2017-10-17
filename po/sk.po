@@ -11064,9 +11064,13 @@ msgstr "Cesta k ukladanému obrázku:"
 msgid "Unable to save to database: Book is marked read-only."
 msgstr ""
 
-#: ../src/gnome-utils/gnc-main-window.c:4004
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "GnuCash - správca osobných financií. GNU spôsob spravovania svojich peňazí!"
+#: ../src/gnome-utils/gnc-main-window.c:4370
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+"GnuCash - správca osobných financií.\n"
+"GNU spôsob spravovania svojich peňazí!"
 
 #. Development version
 #: ../src/gnome-utils/gnc-main-window.c:4017

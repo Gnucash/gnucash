@@ -10550,9 +10550,13 @@ msgstr "Veritabanına kaydedilemiyor: Defter salt-okunur olarak işaretli."
 msgid "Book Options"
 msgstr "Dosya Seçenekleri"
 
-#: src/gnome-utils/gnc-main-window.c:4370
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "GnuCash kişisel mali yönetim yazılımı. Paranızın idaresi için GNU tarzı!"
+#: ../src/gnome-utils/gnc-main-window.c:4370
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+"GnuCash kişisel mali yönetim yazılımı.\n"
+"Paranızın idaresi için GNU tarzı!"
 
 #: src/gnome-utils/gnc-main-window.c:4372
 msgid "© 1997-2017 Contributors"

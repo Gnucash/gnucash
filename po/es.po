@@ -10620,9 +10620,13 @@ msgstr "Incapaz de guardar en la base de datos: el libro está marcado como sól
 msgid "Book Options"
 msgstr "Opciones del Libro"
 
-#: src/gnome-utils/gnc-main-window.c:4370
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "El gestor de finanzas personales GnuCash. ¡La manera GNU de gestionar su dinero!"
+#: ../src/gnome-utils/gnc-main-window.c:4370
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+"El gestor de finanzas personales GnuCash.\n"
+"¡La manera GNU de gestionar su dinero!"
 
 #: src/gnome-utils/gnc-main-window.c:4372
 msgid "© 1997-2017 Contributors"

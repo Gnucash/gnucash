@@ -10851,9 +10851,13 @@ msgstr "Impossibile salvare nel database: il libro è marcato come accessibile i
 msgid "Book Options"
 msgstr "Opzioni libro"
 
-#: ../src/gnome-utils/gnc-main-window.c:4378
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "Il gestore di finanze GnuCash. Il GNUovo modo di gestire il proprio denaro!"
+#: ../src/gnome-utils/gnc-main-window.c:4370
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+"Il gestore di finanze GnuCash.\n"
+"Il GNUovo modo di gestire il proprio denaro!"
 
 #: ../src/gnome-utils/gnc-main-window.c:4380
 #, fuzzy

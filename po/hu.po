@@ -10679,9 +10679,13 @@ msgstr ""
 msgid "Book Options"
 msgstr "Könyv beállításai"
 
-#: ../src/gnome-utils/gnc-main-window.c:4378
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "GnuCash a személyes pénzügyek kezelője. Pénzügyek GNU-módra!"
+#: ../src/gnome-utils/gnc-main-window.c:4370
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+"GnuCash a személyes pénzügyek kezelője.\n"
+"Pénzügyek GNU-módra!"
 
 #: ../src/gnome-utils/gnc-main-window.c:4380
 msgid "© 1997-2015 Contributors"

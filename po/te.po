@@ -10520,9 +10520,12 @@ msgstr "డేటాబేస్ భద్రపరచడానికి సా�
 msgid "Book Options"
 msgstr "పుస్తక ఐచ్ఛికాలు"
 
-#: ../src/gnome-utils/gnc-main-window.c:4378
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "GnuCash వ్యక్తిగత ఆర్ధిక నిర్వాహకి మీ సొమ్మును నిర్వహించడానికి GNU మార్గం!"
+#: ../src/gnome-utils/gnc-main-window.c:4370
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+"GnuCash వ్యక్తిగత ఆర్ధిక నిర్వాహకి మీ సొమ్మును నిర్వహించడానికి GNU మార్గం!"
 
 #: ../src/gnome-utils/gnc-main-window.c:4380
 #, fuzzy

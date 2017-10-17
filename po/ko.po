@@ -10749,9 +10749,13 @@ msgstr ""
 msgid "Book Options"
 msgstr "장부 설정"
 
-#: ../src/gnome-utils/gnc-main-window.c:4378
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "GnuCash는 개인 재정 관리자입니다. 당신의 돈을 관리할 수 있는 GNU 방식!"
+#: ../src/gnome-utils/gnc-main-window.c:4370
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+"GnuCash는 개인 재정 관리자입니다.\n"
+"당신의 돈을 관리할 수 있는 GNU 방식!"
 
 #: ../src/gnome-utils/gnc-main-window.c:4380
 msgid "© 1997-2015 Contributors"

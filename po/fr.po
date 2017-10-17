@@ -11775,9 +11775,13 @@ msgid "Book Options"
 msgstr "Options du Grand Livre"
 
 # messages-i18n.c:11
-#: ../src/gnome-utils/gnc-main-window.c:4378
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "Le gestionnaire de finances personnelles GnuCash. La façon GNU de gérer votre argent !"
+#: ../src/gnome-utils/gnc-main-window.c:4370
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+"Le gestionnaire de finances personnelles GnuCash.\n"
+"La façon GNU de gérer votre argent !"
 
 #: ../src/gnome-utils/gnc-main-window.c:4380
 #, fuzzy

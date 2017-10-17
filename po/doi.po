@@ -10784,9 +10784,13 @@ msgstr "डैटाबेस च बचाइयै रक्खने च अ�
 msgid "Book Options"
 msgstr "कताब आप्शन "
 
-#: ../src/gnome-utils/gnc-main-window.c:4378
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "GnuCash पर्सनल फाइनांस मैनेजर.  थुआढ़े धन दे प्रबंधन  दा GNU तरीका! "
+#: ../src/gnome-utils/gnc-main-window.c:4370
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+"GnuCash पर्सनल फाइनांस मैनेजर.\n"
+"थुआढ़े धन दे प्रबंधन  दा GNU तरीका! "
 
 #: ../src/gnome-utils/gnc-main-window.c:4380
 msgid "© 1997-2015 Contributors"

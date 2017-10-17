@@ -11217,9 +11217,10 @@ msgstr ""
 msgid "<no file>"
 msgstr "<ez dago fitxategirik>"
 
-#: ../src/gnome-utils/gnc-main-window.c:3473
-#, fuzzy
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
+#: ../src/gnome-utils/gnc-main-window.c:4370
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
 msgstr ""
 "GnuCash-en finantza pertsonalen kudeatzailea.\n"
 "Zure dirua kontrolatzeko GNUk ematen duen bidea!\n"

@@ -11983,9 +11983,12 @@ msgid "Book Options"
 msgstr "Opções do livro"
 
 #: ../src/gnome-utils/gnc-main-window.c:4370
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
 msgstr ""
-"O gestor de finanças pessoais GnuCash. O modo GNU de gerir o seu dinheiro!"
+"O gestor de finanças pessoais GnuCash.\n"
+"O modo GNU de gerir o seu dinheiro!"
 
 #: ../src/gnome-utils/gnc-main-window.c:4372
 msgid "© 1997-2016 Contributors"

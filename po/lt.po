@@ -10549,9 +10549,13 @@ msgstr "Nepavyko išsaugoti į duomenų bazę: knyga pažymėta tik skaitymui."
 msgid "Book Options"
 msgstr "Knygos parinktys"
 
-#: ../src/gnome-utils/gnc-main-window.c:4378
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "Asmeninių finansų apskaitos programa GnuCash. „GNU“ būdas valdyti savo pinigus!"
+#: ../src/gnome-utils/gnc-main-window.c:4370
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+"Asmeninių finansų apskaitos programa GnuCash.\n"
+"„GNU“ būdas valdyti savo pinigus!"
 
 #: ../src/gnome-utils/gnc-main-window.c:4380
 #, fuzzy

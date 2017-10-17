@@ -11761,10 +11761,13 @@ msgstr ""
 msgid "<no file>"
 msgstr "<Oya IDOSIYE"
 
-#: ../src/gnome-utils/gnc-main-window.c:3473
+#: ../src/gnome-utils/gnc-main-window.c:4370
 #, fuzzy
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "Bwite Muyobozi Kuri kuyobora HTTP www org"
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+"Bwite Muyobozi Kuri kuyobora HTTP www org"
 
 #. Development version
 #: ../src/gnome-utils/gnc-main-window.c:3486

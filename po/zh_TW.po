@@ -10708,9 +10708,12 @@ msgstr "無法存到資料庫：帳本已標為唯讀。"
 msgid "Book Options"
 msgstr "帳本選項"
 
-#: ../src/gnome-utils/gnc-main-window.c:4378
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "GnuCash 個人財務管理員。管理您金錢的 GNU 解決方案！"
+#: ../src/gnome-utils/gnc-main-window.c:4370
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+"GnuCash 個人財務管理員。管理您金錢的 GNU 解決方案！"
 
 #: ../src/gnome-utils/gnc-main-window.c:4380
 msgid "© 1997-2015 Contributors"

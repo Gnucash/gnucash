@@ -6480,10 +6480,12 @@ msgid "Book Options"
 msgstr ""
 
 #: ../src/gnome-utils/gnc-main-window.c:4370
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
 msgstr ""
-"GnuCash henkilökohtainen kirjanpito-ohjelma. GNU:mpi tapa taloutesi "
-"hallintaan!"
+"GnuCash henkilökohtainen kirjanpito-ohjelma.\n"
+"GNU:mpi tapa taloutesi hallintaan!"
 
 #: ../src/gnome-utils/gnc-main-window.c:4372
 msgid "© 1997-2016 Contributors"

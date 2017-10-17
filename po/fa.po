@@ -10642,8 +10642,10 @@ msgstr "توانایی ذخیره در پایگاه داده را ندارد:ک�
 msgid "Book Options"
 msgstr "گزینه‌های کتابچه"
 
-#: src/gnome-utils/gnc-main-window.c:4370
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
+#: ../src/gnome-utils/gnc-main-window.c:4370
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
 msgstr ""
 
 #: src/gnome-utils/gnc-main-window.c:4372

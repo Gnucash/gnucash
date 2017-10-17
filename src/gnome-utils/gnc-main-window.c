@@ -4367,7 +4367,7 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 
     if (priv->about_dialog == NULL)
     {
-	const gchar *fixed_message = _("The GnuCash personal finance manager. "
+	const gchar *fixed_message = _("The GnuCash personal finance manager.\n"
                                    "The GNU way to manage your money!");
 	gchar *copyright = g_strdup_printf(_("© 1997-%s Contributors"),
 			                             GNUCASH_BUILD_YEAR);
