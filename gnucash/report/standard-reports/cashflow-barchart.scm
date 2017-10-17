@@ -507,10 +507,14 @@
      (cons 'money-in-collector money-in-collector)
      (cons 'money-out-collector money-out-collector))))
 
+;; export to make uuid available to unit test: test-cashflow-barchart
+(export cashflow-barchart-uuid)
+(define cashflow-barchart-uuid "5426e4d987f6444387fe70880e5b28a0")
+
 (gnc:define-report
  'version 1
  'name reportname
- 'report-guid "5426e4d987f6444387fe70880e5b28a0"
+ 'report-guid cashflow-barchart-uuid
  'menu-tip (N_ "Shows a barchart with cash flow over time")
  'menu-path (list gnc:menuname-income-expense)
  'options-generator cashflow-barchart-options-generator
