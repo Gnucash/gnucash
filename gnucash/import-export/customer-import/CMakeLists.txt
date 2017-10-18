@@ -30,6 +30,10 @@ TARGET_INCLUDE_DIRECTORIES(gncmod-customer-import
 
 TARGET_COMPILE_DEFINITIONS(gncmod-customer-import PRIVATE -DG_LOG_DOMAIN=\"gnc.plugin.customer-import\")
 
+IF (APPLE)
+  SET_TARGET_PROPERTIES (gncmod-customer-import PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib/gnucash")
+ENDIF()
+
 INSTALL(TARGETS gncmod-customer-import
   LIBRARY DESTINATION lib/gnucash
   ARCHIVE DESTINATION lib/gnucash

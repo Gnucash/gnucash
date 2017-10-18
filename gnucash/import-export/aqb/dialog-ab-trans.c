@@ -688,8 +688,8 @@ gnc_ab_trans_dialog_verify_values(GncABTransDialog *td)
         gnc_ab_trans_dialog_entry_set (amount_entry, "", NULL);
     }
 
-    /* Check transaction purpose */
-    purpose = gnc_ab_get_purpose(td->ab_trans);
+    /* Check transaction purpose. OFX doesn't do transfers. */
+    purpose = gnc_ab_get_purpose(td->ab_trans, FALSE);
     if (!purpose || !strlen(purpose))
     {
         gnc_ab_trans_dialog_entry_set (td->purpose_entry,

@@ -72,6 +72,10 @@ TARGET_INCLUDE_DIRECTORIES(gncmod-csv-import PRIVATE
      ${CMAKE_SOURCE_DIR}/borrowed/goffice
 )
 
+IF (APPLE)
+  SET_TARGET_PROPERTIES (gncmod-csv-import PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib/gnucash")
+ENDIF()
+
 INSTALL(TARGETS gncmod-csv-import
   LIBRARY DESTINATION lib/gnucash
   ARCHIVE DESTINATION lib/gnucash

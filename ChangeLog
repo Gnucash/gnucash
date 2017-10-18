@@ -1,10 +1,374 @@
+2017-10-15 John Ralls 
+
+	* Re-release 2.7.0 (HEAD -> unstable)
+
+2017-10-15 John Ralls 
+
+	* Disable inclusion of transaction text for OFX transactions in the description.
+
+2017-10-16 John Ralls 
+
+	* Use file:/// when constructing a tempdir uri on Windows. (origin/unstable)
+
+2017-10-16 John Ralls 
+
+	* Merge branch 'unstable-fix-spelling' of https://github.com/christopherlam/gnucash into unstable
+
+2017-10-16 John Ralls 
+
+	* Install libgwengui-gtk3.dll on Windows.
+
+2017-10-16 Christopher Lam 
+
+	* Fix spelling insensative->insensitive
+
+2017-10-15 John Ralls 
+
+	* [MacOS] Change CMake installed names to absolute paths from @rpath/...
+
+2017-10-14 John Ralls 
+
+	* Build Macs with WebKit1.
+
+2017-10-14 John Ralls 
+
+	* HTML: Connect to load-failed and resource-load signals.
+
+2017-10-13 John Ralls 
+
+	* Fix html temp-file URI.
+
+2017-10-11 fell 
+
+	* reapply commit 3cdac65 on the new dialog-ab-pref and remove obsolete section from dialog-ab.gade
+
+2017-10-06 fell 
+
+	* Merge branch 'maint' into unstable
+
+2017-10-06 fell 
+
+	* Use descriptions from gschema as tooltips in Preferences Aqbanking
+
+2017-10-05 Geert Janssens 
+
+	* Replace ambiguous 'scm' with 'vcs' in macro name (origin/master, origin/HEAD)
+
+2017-10-05 Geert Janssens 
+
+	* Use different format specifier to make older git versions happy
+
+2017-10-05 Geert Janssens 
+
+	* Merge branch maint into unstable
+
+2017-10-04 Geert Janssens 
+
+	* Additional changes to use commit date rather than build date
+
+2017-10-03 Geert Janssens 
+
+	* Fix gnucash.pot generation from cmake build.
+
+2017-10-03 Geert Janssens 
+
+	* Stop testing GObject's handling of invalid parameters
+
+2017-10-03 fell 
+
+	* Fix a typo in gir error message
+
+2017-10-02 fell 
+
+	* Readd the missing glade msgctx strings to ru.po (maint)
+
+2017-10-02 fell 
+
+	* ru.po: Minor improvements of the header after PR #209
+
+2017-10-01 ashed 
+
+	* Update Russian Translation with the 2.6.18 gnucash.pot.
+
+2017-09-07 Bernhard M. Wiedemann 
+
+	* Allow to export the last commit's date
+
+2017-09-29 Ashed 
+
+	* Updated and polished Russian Translation.
+
+2017-09-29 Robert Fewell 
+
+	* Change the item_edit blanking rectangle position and size
+
+2017-09-29 Robert Fewell 
+
+	* Change the position of the double row on the cursor
+
+2017-09-29 Robert Fewell 
+
+	* Instead of removing a css class, wrap the change in save/restore
+
+2017-09-29 Robert Fewell 
+
+	* Rename internal CSS class prefix for the register to 'register-'
+
+2017-09-29 Robert Fewell 
+
+	* Remove the CSS for a dark theme Register
+
+2017-09-29 Robert Fewell 
+
+	* Fix typo in comment
+
+2017-09-23 Robert Fewell 
+
+	* Make sure the sheet has focus at start
+
+2017-09-23 Robert Fewell 
+
+	* Fix problem with scrollbar sliders not tracking value
+
+2017-09-13 Robert Fewell 
+
+	* Fix missing hatchings when transaction unbalanced
+
+2017-09-13 Robert Fewell 
+
+	* When tabbing to the field, text should be highlighted only
+
+2017-09-13 Robert Fewell 
+
+	* Remove spaces from blank lines
+
+2017-09-13 Robert Fewell 
+
+	* Adjust text position to be the same as the item_edit entry
+
+2017-09-09 Robert Fewell 
+
+	* Make sure the cursor background is filled to start to hide whats below it
+
+2017-09-09 Robert Fewell 
+
+	* Add ability to draw a text cursor for the entry
+
+2017-09-09 Robert Fewell 
+
+	* Do not copy the colour and so prevent form having to free it
+
+2017-09-09 Robert Fewell 
+
+	* Allow the sheet to be scrolled with the mouse wheel
+
+2017-09-09 Robert Fewell 
+
+	* Rename a couple of functions to align with the format of the rest
+
+2017-09-09 Robert Fewell 
+
+	* Use a higher priority for the idle add when item edit updating
+
+2017-09-09 Robert Fewell 
+
+	* Fix problem when sheet first loaded in the register
+
+2017-09-09 Robert Fewell 
+
+	* Change the line position to make double thickness line on cursor
+
+2017-09-04 Robert Fewell 
+
+	* Use the background class for the dense-calendar
+
+2017-09-04 Robert Fewell 
+
+	* Change the way negative-numbers class was defined in CSS
+
+2017-09-04 Robert Fewell 
+
+	* Remove white space and tabs from split-register-model
+
+2017-09-04 Robert Fewell 
+
+	* Add a heading for the Rate column.
+
+2017-09-04 Robert Fewell 
+
+	* Register in journal mode with rate column, split columns loose alignment
+
+2017-09-04 Robert Fewell 
+
+	* Redraw the header after size allocation of the sheet.
+
+2017-09-04 Robert Fewell 
+
+	* Add redraw of the header when preference changes
+
+2017-09-04 Robert Fewell 
+
+	* Remove the no longer widgets for setting register colours
+
+2017-09-04 Robert Fewell 
+
+	* Change the register to be based on CSS
+
+2017-09-04 Robert Fewell 
+
+	* Change tabs to spaces in gnucash-style.c
+
+2017-09-04 Robert Fewell 
+
+	* Remove trailing white space from gnucash-sheet.c
+
+2017-09-04 Robert Fewell 
+
+	* Remove trailing white space from gnucash-item-edit.c
+
+2017-09-04 Robert Fewell 
+
+	* This dialog-invoice.glade file had missing changes, corrected.
+
+2017-09-01 Robert Fewell 
+
+	* This change is needed after all, used when header is resized
+
+2017-08-31 Robert Fewell 
+
+	* Remove white space and change tabs to spaces in gnucash-register.c
+
+2017-08-31 Robert Fewell 
+
+	* Rework the item-edit pop up to use sheet width and not move about
+
+2017-08-31 Robert Fewell 
+
+	* Change gnc_item_edit_update to be used in an idle add function
+
+2017-08-31 Robert Fewell 
+
+	* Move inline css for padding to gnucash.css
+
+2017-08-31 Robert Fewell 
+
+	* Remove an obsolete source comment in gnucash-item-list.c
+
+2017-08-31 Robert Fewell 
+
+	* Remove white space and change tabs to spaces in datecell-gnome.c
+
+2017-08-31 Robert Fewell 
+
+	* Rename various forms of Get Popup Height to Popup Get Height
+
+2017-09-21 christopherlam 
+
+	* Add missing export (gnc:date-get-week)
+
+2017-09-27 Geert Janssens 
+
+	* Merge branch 'maint' into unstable
+
+2017-09-27 Geert Janssens 
+
+	* Use the same bugzilla url in AC_INIT as on maint
+
+2017-09-27 Geert Janssens 
+
+	* Add Catalan README file to autotools based build
+
+2017-09-26 Geert Janssens 
+
+	* Fix build failures if userdata_home exists but gnc_userdata_home  doesn't (master)
+
+2017-09-26 Josep-Maria Prat 
+
+	* Readme translated into catalan
+
+2017-09-22 John Ralls 
+
+	* Release 2.6.18 (tag: 2.6.18)
+
+2017-09-22 John Ralls 
+
+	* Remove automake version check for make dist.
+
+2017-09-22 John Ralls 
+
+	* Fix typo in CA_DIST name.
+
+2017-09-21 John Ralls 
+
+	* Import latest Farsi and Srpska translations from the translation project.
+
+2017-09-21 Geert Janssens 
+
+	* Ignore softlink for new report
+
+2017-09-21 Geert Janssens 
+
+	* Revert "Ignore softlink for new report"
+
+2017-09-21 Geert Janssens 
+
+	* Ignore softlink for new report
+
+2017-09-21 Geert Janssens 
+
+	* Merge 'maint' into unstable
+
+2017-09-21 Geert Janssens 
+
+	* Add income-gst-statement.scm to POTFILES.in
+
+2017-09-21 christopherlam 
+
+	* Fix some (gnc:make-gnc-monetary) errors
+
+2017-09-17 christopherlam 
+
+	* Restore "sign reverses" option This was removed during development.
+
+2017-09-17 christopherlam 
+
+	* Initial commit income-gst-statement.scm
+
+2017-09-17 christopherlam 
+
+	* Reindent from transaction.scm
+
+2017-09-17 christopherlam 
+
+	* cp transaction.scm income-gst-statement.scm
+
+2017-09-21 Geert Janssens 
+
+	* Fixup for Catalan account charts
+
+2017-09-21 Geert Janssens 
+
+	* Add boilerplate to get Catalan account charts installed and added to the distribution
+
+2017-09-21 Josep-Maria Prat 
+
+	* Catalan accounts missing
+
+2017-09-20 Geert Janssens 
+
+	* Properly ignore internal report options that are not on invisible option pages when opening the report options dialog
+
 2017-09-16 John Ralls 
 
-	* Merge branch 'maint' (HEAD -> unstable, master)
+	* Release 2.7.0 (tag: 2.7.0)
 
 2017-09-16 John Ralls 
 
-	* Fix test-userdata-dir on Mac. (origin/master, origin/HEAD)
+	* Fix the fix from mac for test-userdata-dir.c
+
+2017-09-16 John Ralls 
+
+	* Fix test-userdata-dir on Mac.
 
 2017-09-16 Geert Janssens 
 
@@ -32,7 +396,7 @@
 
 2017-09-06 John Ralls 
 
-	* Install the current, 2015, and 2016 ChangeLogs. (origin/maint, maint)
+	* Install the current, 2015, and 2016 ChangeLogs.
 
 2017-09-16 Geert Janssens 
 
@@ -6085,4 +6449,8 @@
 2016-01-02 fell 
 
 	* Add a missing gettext in plugin page owner tree
+
+2016-01-01 fell 
+
+	* Bug 760052 - missing flag translatable in Custom Report
 

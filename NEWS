@@ -1,10 +1,17 @@
 Version history:
 ------- -------
-2.7.0  - 19 September 2017
+2.7.0  - 17 October 2017
        The Gnucash Development Team is pleased to release Gnucash 2.7.0,
        the first release of an unstable series leading to Gnucash 2.8.0.
 
        This release is UNSTABLE and SHOULD NOT BE USED in production.
+       See the KNOWN PROBLEMS list at the bottom of the announcement.
+
+       Note: Version information in the splash screen and About dialog
+       will now reflect the date of the last commit used to build
+       GnuCash rather than the date it was compiled. This is to assist
+       quality assurance and debugging efforts by Linux distribution
+       maintainers.
 
        The headline item for this release is that GnuCash now uses the
        Gtk+-3.0 Toolkit and the WebKit2Gtk API. This change was forced
@@ -13,66 +20,80 @@ Version history:
        support Microsoft Windows so that platform will continue to use
        the WebKit1 API, though with Gtk3. We've selected Gtk+-3.14.0
        as the minimum version because it fully supports CSS
-       theming. Geert Janssens did the original conversion and Bob
-       Fewell has contributed much UI polishing.
+       theming. (Geert Janssens and Robert Fewell)
 
-       Geert Janssens has overhauled the CSV importer, rewriting the
-       bulk of it in C++, adding new features including the ability to
-       re-import CSV files exported from GnuCash.
+       There's a new CSV importer largely rewritten in C++, adding new
+       features including the ability to re-import CSV files exported
+       from GnuCash. (Geert Janssens)
 
-       Geert has also adjusted the data file directory so that it's
-       located appropriately to the operating system's conventions by
-       default. It's still possible to overried with the environment
-       variable GNC_DOC_PATH, which replaces GNC_DOT_DIR in earlier
-       versions of GnuCash.
+       Data file directories are now located appropriately to the
+       operating system's conventions by default. It's still possible
+       to overried with the environment variable GNC_DOC_PATH, which
+       replaces GNC_DOT_DIR in earlier versions of GnuCash. (Geert
+       Janssens)
 
-       Bob Fewell has converted the account representation in the
-       Bayes import map to GUID from strings so that the matcher won't
-       have to be retrained if you rename an account. THIS WILL MAKE
-       YOUR MAP UNREADABLE BY PREVIOUS VERSIONS OF GNUCASH.  Bob has
-       also implemented an editor to remove outdated or incorrect
-       match data from the import maps, added user interfacs for
-       managing files associated with transactions, improved the
-       facility for removing old prices from the price database, and
-       provided for removing deleted files from the history list in
-       the file menu.
+       Accounts in the Bayes import map are now linked by GUID instead
+       of names so that the matcher won't have to be retrained if you
+       rename an account. THIS WILL MAKE YOUR FILE UNREADABLE BY
+       PREVIOUS VERSIONS OF GNUCASH. There's a new editor to remove
+       outdated or incorrect match data from the import maps, a new
+       user interfacs for managing files associated with transactions,
+       an improved facility for removing old prices from the price
+       database, and a way to remove deleted files from the history
+       list in the file menu. (All from Robert Fewell!)
 
-       John Ralls has rewritten the numerics to allow for more
-       significant digits. The old 6-digit-maximum fraction will be a
-       9-digit maximum by 2.8. there is still some cleanup required
-       before the limit can actually change.
+       Numerics are rewritten to allow for more significant
+       digits. The old 6-digit-maximum fraction will be a 9-digit
+       maximum by 2.8. there is still some cleanup required before the
+       limit can actually change. (John Ralls)
 
-       Christopher Lam has contributed a new Income GST Report and
-       made some improvements to the Transaction report.
+       New Income GST Report and some improvements to the Transaction
+       report. (Christopher Lam)
 
-       Carsten Rinke has improved the appearance of the chart reports.
+       Chart Reports appearance is improved (Carsten Rinke)
 
-       John Ralls and Aaron Laws have rewritten several parts of the
-       engine and SQL backend in C++, an effort that will continue in
-       the next development cycle. KVP is now private to
-       libgncmod-engine and accessible outside via qof_instance_set
-       and qof_instance_get. Aaron has reimplemented KVP itself in C++
-       using boost::variant and GUID based on boost::UUID.
+       Several parts of the engine and the SQL backend are rewritten
+       in C++, an effort that will continue in the next development
+       cycle. KVP is now private to libgncmod-engine and accessible
+       outside via qof_instance_set and qof_instance_get. (John Ralls
+       and Aaron Laws)
 
-       John rewrote the date implementation to boost::date-time,
+       KVP and GUID are reimplemnted in C++ using boost::variant and
+       boost::UUID respectively (Aaron Laws).
+
+       The date implementation is migrated to boost::date-time,
        replacing a Glib GDateTime implementation. This makes the
        earliest date recordable 1 January 1400CE instead of 1 January
-       1CE. We doubt any users will be affected.
+       1CE. We doubt any users will be affected. (John Ralls)
+
+       Distribution tarballs can now be built with CMake as well as
+       Autotools. (Rob Gowin)
 
        The CuteCash front end has been removed. The code we need from
        GOffice has been brought into the GnuCash code base so GOffice
        is no longer a dependency.
 
-       Rob Gowin, in addition to creating the CMake-based build system
-       partway through the 2.6 release cycle, has added to it a dist
-       function that allows us to distribute tarballs that will build
-       with either CMake or Autotools... but look for Autotools to be
-       dropped soon.
-
        Of interest mostly to developers, we've reorganized the code
        into a core library directory, libgnucash, and
        applications-specific directory, gnucash.
 
+       A new Russian translation of the Guide has been started by
+       Dmitriy Mandel. Downloads in the usual formats are available at
+       https://code.gnucash.org/docs/ru/; the HTML is at
+       https://code.gnucash.org/docs/ru/gnucash-guide/.
+
+       There will be no unstable documentation release at this
+       time. There have been very few relatively minor changes to the
+       master documentation branch; those documents may be viewed in
+       the nightly builds at https://www.gnucash.org/docs.phtml.
+
+       KNOWN PROBLEMS:
+
+       On Microsoft Windows starting the AQBanking Setup Wizard crashes GnuCash.
+
+       test-import-bayes built with autotools intermittently fails at
+       line 381, where the returned value is 1 instead of the expected
+       6.
 
 2.6.18 - 24 September 2017
 

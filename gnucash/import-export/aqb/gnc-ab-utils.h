@@ -179,7 +179,7 @@ gchar *gnc_ab_get_remote_name(const AB_TRANSACTION *ab_trans);
  * @param ab_trans AqBanking transaction
  * @return A newly allocated string, may be ""
  */
-gchar *gnc_ab_get_purpose(const AB_TRANSACTION *ab_trans);
+gchar *gnc_ab_get_purpose(const AB_TRANSACTION *ab_trans, gboolean is_ofx);
 
 /**
  * Create the appropriate description field for a GnuCash Transaction by the
@@ -189,7 +189,7 @@ gchar *gnc_ab_get_purpose(const AB_TRANSACTION *ab_trans);
  * @param ab_trans AqBanking transaction
  * @return A newly allocated string, may be ""
  */
-gchar *gnc_ab_description_to_gnc(const AB_TRANSACTION *ab_trans);
+gchar *gnc_ab_description_to_gnc(const AB_TRANSACTION *ab_trans, gboolean is_ofx);
 
 /**
  * Create the appropriate memo field for a GnuCash Split by the information
