@@ -32,6 +32,7 @@
 (use-modules (gnucash app-utils))
 (use-modules (gnucash engine))
 (use-modules (sw_engine))
+(use-modules (gnucash report stylesheets))
 
 (use-modules (gnucash report report-system collectors))
 (use-modules (gnucash engine test test-extras))
@@ -114,8 +115,8 @@
 	  (let* ((result (gnc:html-document-render doc #f))
 		 (tbl (stream->list
 		       (pattern-streamer "<tr>"
-					 (list (list "<string> ([0-9][0-9])/([0-9][0-9])/([0-9][0-9])</td>" 1 2 3)
-					       (list "<number> ([^<]*)</td>" 1))
+					 (list (list "<td>([0-9][0-9])/([0-9][0-9])/([0-9][0-9])</td>" 1 2 3)
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1))
 					 result))))
 	    (every (lambda (date value-list)
 		     (let ((day (second date))
@@ -172,12 +173,12 @@
 		 (columns (columns-from-report-document html-document))
 		 (tbl (stream->list
 		       (pattern-streamer "<tr>"
-					 (list (list "<string> ([0-9][0-9])/([0-9][0-9])/([0-9][0-9])</td>" 1 2 3)
-					       (list "<number> ([^<]*)</td>" 1)
-					       (list "<number> ([^<]*)</td>" 1)
-					       (list "<number> ([^<]*)</td>" 1)
-					       (list "<number> ([^<]*)</td>" 1)
-					       (list "<number> ([^<]*)</td>" 1))
+					 (list (list "<td>([0-9][0-9])/([0-9][0-9])/([0-9][0-9])</td>" 1 2 3)
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1))
 					 html-document))))
 	    ;(format #t "~a" html-document)
 	    (and (= 6 (length columns))
@@ -188,7 +189,7 @@
 
 (define (columns-from-report-document doc)
   (let ((columns (stream->list (pattern-streamer "<th>"
-						 (list (list "<string> ([^<]*)</" 1))
+						 (list (list "<th>([^<]*)</" 1))
 						 doc))))
     (map caar columns)))
 
@@ -231,8 +232,8 @@
 		 (columns (columns-from-report-document html-document))
 		 (tbl (stream->list
 		       (pattern-streamer "<tr>"
-					 (list (list "<string> ([0-9][0-9])/([0-9][0-9])/([0-9][0-9])</td>" 1 2 3)
-					       (list "<number> ([^<]*)</td>" 1))
+					 (list (list "<td>([0-9][0-9])/([0-9][0-9])/([0-9][0-9])</td>" 1 2 3)
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1))
 					 html-document)))
 		 (row-count (tbl-row-count tbl)))
 	    (and (member "account-1" columns)
