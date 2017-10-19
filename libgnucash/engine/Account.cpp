@@ -41,6 +41,7 @@
 #include "gnc-pricedb.h"
 #include "qofinstance-p.h"
 #include "gnc-features.h"
+#include "guid.hpp"
 
 static QofLogModule log_module = GNC_MOD_ACCOUNT;
 
@@ -5181,48 +5182,6 @@ gnc_account_imap_delete_account (GncImportMatchMap *imap,
 --------------------------------------------------------------------------*/
 
 
-struct account_token_count
-{
-    char* account_guid;
-    gint64 token_count; /**< occurrences of a given token for this account_guid */
-};
-
-/** total_count and the token_count for a given account let us calculate the
- * probability of a given account with any single token
- */
-struct token_accounts_info
-{
-    GList *accounts; /**< array of struct account_token_count */
-    gint64 total_count;
-};
-
-/** gpointer is a pointer to a struct token_accounts_info
- * \note Can always assume that keys are unique, reduces code in this function
- */
-static void
-buildTokenInfo(const char *key, const GValue *value, gpointer data)
-{
-    struct token_accounts_info *tokenInfo = (struct token_accounts_info*)data;
-    struct account_token_count* this_account;
-
-    //  PINFO("buildTokenInfo: account '%s', token_count: '%" G_GINT64_FORMAT "'", (char*)key,
-    //                  g_value_get_int64(value));
-
-    /* add the count to the total_count */
-    tokenInfo->total_count += g_value_get_int64(value);
-
-    /* allocate a new structure for this account and it's token count */
-    this_account = (struct account_token_count*)
-                   g_new0(struct account_token_count, 1);
-
-    /* fill in the account guid and number of tokens found for this account guid */
-    this_account->account_guid = (char*)key;
-    this_account->token_count = g_value_get_int64(value);
-
-    /* append onto the glist a pointer to the new account_token_count structure */
-    tokenInfo->accounts = g_list_prepend(tokenInfo->accounts, this_account);
-}
-
 /** intermediate values used to calculate the bayes probability of a given account
   where p(AB) = (a*b)/[a*b + (1-a)(1-b)], product is (a*b),
   product_difference is (1-a) * (1-b)
@@ -5233,70 +5192,114 @@ struct account_probability
     double product_difference; /* product of (1-probabilities) */
 };
 
-/** convert a hash table of account names and (struct account_probability*)
-  into a hash table of 100000x the percentage match value, ie. 10% would be
-  0.10 * 100000 = 10000
+struct account_token_count
+{
+    std::string account_guid;
+    int64_t token_count; /** occurrences of a given token for this account_guid */
+};
+
+/** total_count and the token_count for a given account let us calculate the
+ * probability of a given account with any single token
  */
-#define PROBABILITY_FACTOR 100000
-static void
-buildProbabilities(gpointer key, gpointer value, gpointer data)
+struct token_accounts_info
 {
-    GHashTable *final_probabilities = (GHashTable*)data;
-    struct account_probability *account_p = (struct account_probability*)value;
-
-    /* P(AB) = A*B / [A*B + (1-A)*(1-B)]
-     * NOTE: so we only keep track of a running product(A*B*C...)
-     * and product difference ((1-A)(1-B)...)
-     */
-    gint32 probability =
-        (account_p->product /
-         (account_p->product + account_p->product_difference))
-        * PROBABILITY_FACTOR;
-
-    PINFO("P('%s') = '%d'", (char*)key, probability);
-
-    g_hash_table_insert(final_probabilities, key, GINT_TO_POINTER(probability));
-}
-
-/** Frees an array of the same time that buildProperties built */
-static void
-freeProbabilities(gpointer key, gpointer value, gpointer data)
-{
-    /* free up the struct account_probability that was allocated
-     * in gnc_account_find_account_bayes()
-     */
-    g_free(value);
-}
+    std::vector<account_token_count> accounts;
+    int64_t total_count;
+};
 
 /** holds an account guid and its corresponding integer probability
   the integer probability is some factor of 10
  */
 struct account_info
 {
-    char* account_guid;
-    gint32 probability;
+    std::string account_guid;
+    int32_t probability;
 };
 
-/** Find the highest probability and the corresponding account guid
-    store in data, a (struct account_info*)
-    NOTE: this is a g_hash_table_foreach() function for a hash table of entries
-    key is a  pointer to the account guid, value is a gint32, 100000x
-    the probability for this account
-*/
 static void
-highestProbability(gpointer key, gpointer value, gpointer data)
+build_token_info(char const * key, KvpValue * value, token_accounts_info & tokenInfo)
 {
-    struct account_info *account_i = (struct account_info*)data;
-
-    /* if the current probability is greater than the stored, store the current */
-    if (GPOINTER_TO_INT(value) > account_i->probability)
-    {
-        /* Save the new highest probability and the assoaciated account guid */
-        account_i->probability = GPOINTER_TO_INT(value);
-        account_i->account_guid = static_cast <char*> (key);
-    }
+    tokenInfo.total_count += value->get<int64_t>();
+    account_token_count this_account;
+    std::string account_guid {key};
+    /*By convention, the key ends with the account GUID.*/
+    this_account.account_guid = account_guid.substr(account_guid.size() - GUID_ENCODING_LENGTH);
+    this_account.token_count = value->get<int64_t>();
+    tokenInfo.accounts.push_back(this_account);
 }
 
+/** We scale the probability values by PROBABILITY_FACTOR.
+  ie. with PROBABILITY_FACTOR of 100000, 10% would be
+  0.10 * 100000 = 10000 */
+#define PROBABILITY_FACTOR 100000
+
+static std::vector<std::pair<std::string, int32_t>>
+build_probabilities(std::vector<std::pair<std::string, account_probability>> const & first_pass)
+{
+    std::vector<std::pair<std::string, int32_t>> ret;
+    for (auto const & first_pass_prob : first_pass)
+    {
+        auto const & account_probability = first_pass_prob.second;
+        /* P(AB) = A*B / [A*B + (1-A)*(1-B)]
+         * NOTE: so we only keep track of a running product(A*B*C...)
+         * and product difference ((1-A)(1-B)...)
+         */
+        int32_t probability = (account_probability.product /
+                (account_probability.product + account_probability.product_difference)) * PROBABILITY_FACTOR;
+        ret.push_back({first_pass_prob.first, probability});
+    }
+    return ret;
+}
+
+static account_info
+highest_probability(std::vector<std::pair<std::string, int32_t>> const & probabilities)
+{
+    account_info ret {"", std::numeric_limits<int32_t>::min()};
+    for (auto const & prob : probabilities)
+        if (prob.second > ret.probability)
+            ret = account_info{prob.first, prob.second};
+    return ret;
+}
+
+static std::vector<std::pair<std::string, account_probability>>
+get_first_pass_probabilities(GncImportMatchMap * imap, GList * tokens)
+{
+    std::vector<std::pair<std::string, account_probability>> ret;
+    /* find the probability for each account that contains any of the tokens
+     * in the input tokens list. */
+    for (auto current_token = tokens; current_token; current_token = current_token->next)
+    {
+        auto translated_token = std::string{static_cast<char const *>(current_token->data)};
+        std::replace(translated_token.begin(), translated_token.end(), '/', '-');
+        token_accounts_info tokenInfo{};
+        auto path = std::string{IMAP_FRAME_BAYES "-"} + translated_token;
+        qof_instance_foreach_slot_prefix (QOF_INSTANCE (imap->acc), path, &build_token_info, tokenInfo);
+        for (auto const & current_account_token : tokenInfo.accounts)
+        {
+            auto item = std::find_if(ret.begin(), ret.end(), [&current_account_token]
+                (std::pair<std::string, account_probability> const & a) {
+                    return current_account_token.account_guid == a.first;
+                });
+            if (item != ret.end())
+            {/* This account is already in the map */
+                item->second.product = ((double)current_account_token.token_count /
+                                      (double)tokenInfo.total_count) * item->second.product;
+                item->second.product_difference = ((double)1 - ((double)current_account_token.token_count /
+                                              (double)tokenInfo.total_count)) * item->second.product_difference;
+            }
+            else
+            {
+                /* add a new entry */
+                account_probability new_probability;
+                new_probability.product = ((double)current_account_token.token_count /
+                                      (double)tokenInfo.total_count);
+                new_probability.product_difference = 1 - (new_probability.product);
+                ret.push_back({current_account_token.account_guid, std::move(new_probability)});
+            }
+        } /* for all accounts in tokenInfo */
+    }
+    return ret;
+}
 
 #define threshold (.90 * PROBABILITY_FACTOR) /* 90% */
 
@@ -5304,173 +5307,28 @@ highestProbability(gpointer key, gpointer value, gpointer data)
 Account*
 gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
 {
-    struct token_accounts_info tokenInfo; /**< holds the accounts and total
-                                           * token count for a single token */
-    GList *current_token;                 /**< pointer to the current
-                                           * token from the input GList
-                                           * tokens */
-    GList *current_account_token;         /**< pointer to the struct
-                                           * account_token_count */
-    struct account_token_count *account_c; /**< an account name and the number
-                                            * of times a token has appeared
-                                            * for the account */
-    struct account_probability *account_p; /**< intermediate storage of values
-                                            * to compute the bayes probability
-                                            * of an account */
-    GHashTable *running_probabilities = g_hash_table_new(g_str_hash,
-                                                         g_str_equal);
-    GHashTable *final_probabilities = g_hash_table_new(g_str_hash,
-                                                       g_str_equal);
-    struct account_info account_i;
-
-    ENTER(" ");
-
-    /* check to see if the imap is NULL */
     if (!imap)
-    {
-        PINFO("imap is null, returning null");
-        LEAVE(" ");
-        return NULL;
+        return nullptr;
+    auto first_pass = get_first_pass_probabilities(imap, tokens);
+    if (!first_pass.size())
+        return nullptr;
+    auto final_probabilities = build_probabilities(first_pass);
+    if (!final_probabilities.size())
+        return nullptr;
+    auto best = highest_probability(final_probabilities);
+    if (best.account_guid == "")
+        return nullptr;
+    if (best.probability < threshold)
+        return nullptr;
+    gnc::GUID guid;
+    try {
+        guid = gnc::GUID::from_string(best.account_guid);
+    } catch (gnc::guid_syntax_exception) {
+        return nullptr;
     }
-
-    /* find the probability for each account that contains any of the tokens
-     * in the input tokens list
-     */
-    for (current_token = tokens; current_token;
-         current_token = current_token->next)
-    {
-        char* path = g_strdup_printf (IMAP_FRAME_BAYES "/%s",
-                                            (char*)current_token->data);
-        /* zero out the token_accounts_info structure */
-        memset(&tokenInfo, 0, sizeof(struct token_accounts_info));
-
-        PINFO("token: '%s'", (char*)current_token->data);
-
-        /* process the accounts for this token, adding the account if it
-         * doesn't already exist or adding to the existing accounts token
-         * count if it does
-         */
-        qof_instance_foreach_slot(QOF_INSTANCE (imap->acc), path,
-                                  buildTokenInfo, &tokenInfo);
-        g_free (path);
-        /* for each account we have just found, see if the account
-         * already exists in the list of account probabilities, if not
-         * add it
-         */
-        for (current_account_token = tokenInfo.accounts; current_account_token;
-                current_account_token = current_account_token->next)
-        {
-            /* get the account name and corresponding token count */
-            account_c = (struct account_token_count*)current_account_token->data;
-
-            PINFO("account_c->account_guid('%s'), "
-                  "account_c->token_count('%" G_GINT64_FORMAT
-                  "')/total_count('%" G_GINT64_FORMAT "')",
-                  account_c->account_guid, account_c->token_count,
-                  tokenInfo.total_count);
-
-            account_p = static_cast <account_probability*> (
-                    g_hash_table_lookup(running_probabilities, account_c->account_guid));
-
-            /* if the account exists in the list then continue
-             * the running probablities
-             */
-            if (account_p)
-            {
-                account_p->product = (((double)account_c->token_count /
-                                      (double)tokenInfo.total_count)
-                                      * account_p->product);
-                account_p->product_difference =
-                    ((double)1 - ((double)account_c->token_count /
-                                  (double)tokenInfo.total_count))
-                    * account_p->product_difference;
-                PINFO("product == %f, product_difference == %f",
-                      account_p->product, account_p->product_difference);
-            }
-            else
-            {
-                /* add a new entry */
-                PINFO("adding a new entry for this account");
-                account_p = (struct account_probability*)
-                            g_new0(struct account_probability, 1);
-
-                /* set the product and product difference values */
-                account_p->product = ((double)account_c->token_count /
-                                      (double)tokenInfo.total_count);
-                account_p->product_difference =
-                    (double)1 - ((double)account_c->token_count /
-                                 (double)tokenInfo.total_count);
-
-                PINFO("product == %f, product_difference == %f",
-                      account_p->product, account_p->product_difference);
-
-                /* add the account guid and (struct account_probability*)
-                 * to the hash table */
-                g_hash_table_insert(running_probabilities,
-                                    account_c->account_guid, account_p);
-            }
-        } /* for all accounts in tokenInfo */
-
-        /* free the data in tokenInfo */
-        for (current_account_token = tokenInfo.accounts; current_account_token;
-                current_account_token = current_account_token->next)
-        {
-            /* free up each struct account_token_count we allocated */
-            g_free((struct account_token_count*)current_account_token->data);
-        }
-
-        g_list_free(tokenInfo.accounts); /* free the accounts GList */
-    }
-
-    /* build a hash table of account names and their final probabilities
-     * from each entry in the running_probabilties hash table
-     */
-    g_hash_table_foreach(running_probabilities, buildProbabilities,
-                         final_probabilities);
-
-    /* find the highest probabilty and the corresponding account */
-    memset(&account_i, 0, sizeof(struct account_info));
-    g_hash_table_foreach(final_probabilities, highestProbability, &account_i);
-
-    /* free each element of the running_probabilities hash */
-    g_hash_table_foreach(running_probabilities, freeProbabilities, NULL);
-
-    /* free the hash tables */
-    g_hash_table_destroy(running_probabilities);
-    g_hash_table_destroy(final_probabilities);
-
-    PINFO("highest P('%s') = '%d'",
-          account_i.account_guid ? account_i.account_guid : "(null)",
-          account_i.probability);
-
-    /* has this probability met our threshold? */
-    if (account_i.probability >= threshold)
-    {
-        GncGUID *guid;
-        Account *account = NULL;
-
-        PINFO("Probability has met threshold");
-
-        guid = g_new (GncGUID, 1);
-
-        if (string_to_guid (account_i.account_guid, guid))
-            account = xaccAccountLookup (guid, imap->book);
-
-        g_free (guid);
-
-        if (account != NULL)
-            LEAVE("Return account is '%s'", xaccAccountGetName (account));
-        else
-            LEAVE("Return NULL, account for Guid '%s' can not be found", account_i.account_guid);
-
-        return account;
-    }
-    PINFO("Probability has not met threshold");
-    LEAVE("Return NULL");
-
-    return NULL; /* we didn't meet our threshold, return NULL for an account */
+    auto account = xaccAccountLookup (reinterpret_cast<GncGUID*>(&guid), imap->book);
+    return account;
 }
-
 
 static void
 change_imap_entry (GncImportMatchMap *imap, gchar *kvp_path, int64_t token_count)
@@ -5553,13 +5411,13 @@ gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
 
         PINFO("adding token '%s'", (char*)current_token->data);
 
-        kvp_path = g_strdup_printf (IMAP_FRAME_BAYES "/%s/%s",
-                                    (char*)current_token->data,
+        std::string translated_token {static_cast<char*>(current_token->data)};
+        std::replace(translated_token.begin(), translated_token.end(), '/', '-');
+        kvp_path = g_strdup_printf (IMAP_FRAME_BAYES "-%s-%s",
+                                    translated_token.c_str(),
                                     guid_string);
-
         /* change the imap entry for the account */
         change_imap_entry (imap, kvp_path, token_count);
-
         g_free (kvp_path);
     }
 
@@ -5575,13 +5433,15 @@ gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
 /*******************************************************************************/
 
 static void
-build_bayes_layer_two (const char *key, const GValue *value, gpointer user_data)
+build_non_bayes (const char *key, const GValue *value, gpointer user_data)
 {
+    if (!G_VALUE_HOLDS_BOXED (value))
+        return;
+
     QofBook     *book;
-    Account     *map_account = NULL;
-    GncGUID     *guid;
+    GncGUID     *guid = NULL;
     gchar       *kvp_path;
-    gchar       *count;
+    gchar       *guid_string = NULL;
 
     struct imap_info *imapInfo_node;
 
@@ -5590,134 +5450,94 @@ build_bayes_layer_two (const char *key, const GValue *value, gpointer user_data)
     // Get the book
     book = qof_instance_get_book (imapInfo->source_account);
 
-    if (G_VALUE_HOLDS_INT64 (value))
-    {
-        PINFO("build_bayes_layer_two: account '%s', token_count: '%" G_GINT64_FORMAT "'",
-                                  (char*)key, g_value_get_int64(value));
+    guid = (GncGUID*)g_value_get_boxed (value);
+    guid_string = guid_to_string (guid);
 
-        count = g_strdup_printf ("%" G_GINT64_FORMAT, g_value_get_int64 (value));
-    }
-    else
-        count = g_strdup ("0");
+    PINFO("build_non_bayes: account '%s', match account guid: '%s'",
+                            (char*)key, guid_string);
 
     kvp_path = g_strconcat (imapInfo->category_head, "/", key, NULL);
 
-    PINFO("build_bayes_layer_two: kvp_path is '%s'", kvp_path);
-
-    guid = g_new (GncGUID, 1);
-
-    if (string_to_guid (key, guid))
-        map_account = xaccAccountLookup (guid, book);
-
-    g_free (guid);
+    PINFO("build_non_bayes: kvp_path is '%s'", kvp_path);
 
     imapInfo_node = static_cast <imap_info*> (g_malloc(sizeof(*imapInfo_node)));
 
     imapInfo_node->source_account = imapInfo->source_account;
-    imapInfo_node->map_account    = map_account;
+    imapInfo_node->map_account    = xaccAccountLookup (guid, book);
     imapInfo_node->full_category  = g_strdup (kvp_path);
-    imapInfo_node->match_string   = g_strdup (imapInfo->match_string);
+    imapInfo_node->match_string   = g_strdup (key);
     imapInfo_node->category_head  = g_strdup (imapInfo->category_head);
-    imapInfo_node->count          = g_strdup (count);
+    imapInfo_node->count          = g_strdup (" ");
 
     imapInfo->list = g_list_append (imapInfo->list, imapInfo_node);
 
+    g_free (kvp_path);
+    g_free (guid_string);
+}
+
+static void
+build_bayes_layer_two (const char *key, KvpValue * val, imap_info imapInfo)
+{
+    QofBook     *book;
+    Account     *map_account = NULL;
+    GncGUID     *guid;
+    gchar       *kvp_path;
+    gchar       *count;
+    struct imap_info *imapInfo_node;
+    // Get the book
+    book = qof_instance_get_book (imapInfo.source_account);
+    if (val->get_type() == KvpValue::Type::INT64)
+    {
+        PINFO("build_bayes_layer_two: account '%s', token_count: '%" G_GINT64_FORMAT "'",
+                                  key, val->get<int64_t>());
+        count = g_strdup_printf ("%" G_GINT64_FORMAT, val->get<int64_t>());
+    }
+    else
+        count = g_strdup ("0");
+    kvp_path = g_strconcat (imapInfo.category_head, "/", key, NULL);
+    PINFO("build_bayes_layer_two: kvp_path is '%s'", kvp_path);
+    guid = g_new (GncGUID, 1);
+    if (string_to_guid (key, guid))
+        map_account = xaccAccountLookup (guid, book);
+    g_free (guid);
+    imapInfo_node = static_cast <imap_info*> (g_malloc(sizeof(*imapInfo_node)));
+    imapInfo_node->source_account = imapInfo.source_account;
+    imapInfo_node->map_account    = map_account;
+    imapInfo_node->full_category  = g_strdup (kvp_path);
+    imapInfo_node->match_string   = g_strdup (imapInfo.match_string);
+    imapInfo_node->category_head  = g_strdup (imapInfo.category_head);
+    imapInfo_node->count          = g_strdup (count);
+    imapInfo.list = g_list_append (imapInfo.list, imapInfo_node);
     g_free (kvp_path);
     g_free (count);
 }
 
 static void
-build_bayes (const char *key, const GValue *value, gpointer user_data)
+build_bayes (const char *key, KvpValue * value, imap_info & imapInfo)
 {
-    gchar *kvp_path;
-    struct imap_info *imapInfo = (struct imap_info*)user_data;
-    struct imap_info  imapInfol2;
-
+    struct imap_info imapInfol2;
     PINFO("build_bayes: match string '%s'", (char*)key);
 
-    if (G_VALUE_HOLDS (value, G_TYPE_STRING) && g_value_get_string (value) == NULL)
-    {
-        kvp_path = g_strdup_printf (IMAP_FRAME_BAYES "/%s", key);
-
-        if (qof_instance_has_slot (QOF_INSTANCE(imapInfo->source_account), kvp_path))
-        {
-            PINFO("build_bayes: kvp_path is '%s', key '%s'", kvp_path, key);
-
-            imapInfol2.source_account = imapInfo->source_account;
-            imapInfol2.match_string   = g_strdup (key);
-            imapInfol2.category_head  = g_strdup (kvp_path);
-            imapInfol2.list           = imapInfo->list;
-
-            qof_instance_foreach_slot (QOF_INSTANCE(imapInfo->source_account), kvp_path,
-                                       build_bayes_layer_two, &imapInfol2);
-
-            imapInfo->list = imapInfol2.list;
-            g_free (imapInfol2.match_string);
-            g_free (imapInfol2.category_head);
-        }
-        g_free (kvp_path);
-    }
+    std::string prefix {g_strdup_printf (IMAP_FRAME_BAYES "-%s", key)};
+    PINFO("build_bayes: prefix is '%s', key '%s'", prefix.c_str(), key);
+    imapInfol2.source_account = imapInfo.source_account;
+    imapInfol2.match_string   = g_strdup (key);
+    imapInfol2.category_head  = g_strdup (prefix.c_str());
+    imapInfol2.list           = imapInfo.list;
+    qof_instance_foreach_slot_prefix (QOF_INSTANCE(imapInfo.source_account), prefix,
+                               build_bayes_layer_two, imapInfol2);
+    imapInfo.list = imapInfol2.list;
+    g_free (imapInfol2.match_string);
+    g_free (imapInfol2.category_head);
 }
-
-
-static void
-build_non_bayes (const char *key, const GValue *value, gpointer user_data)
-{
-    if (G_VALUE_HOLDS_BOXED (value))
-    {
-        QofBook     *book;
-        GncGUID     *guid = NULL;
-        gchar       *kvp_path;
-        gchar       *guid_string = NULL;
-
-        struct imap_info *imapInfo_node;
-
-        struct imap_info *imapInfo = (struct imap_info*)user_data;
-
-        // Get the book
-        book = qof_instance_get_book (imapInfo->source_account);
-
-        guid = (GncGUID*)g_value_get_boxed (value);
-        guid_string = guid_to_string (guid);
-
-        PINFO("build_non_bayes: account '%s', match account guid: '%s'",
-                                (char*)key, guid_string);
-
-        kvp_path = g_strconcat (imapInfo->category_head, "/", key, NULL);
-
-        PINFO("build_non_bayes: kvp_path is '%s'", kvp_path);
-
-        imapInfo_node = static_cast <imap_info*> (g_malloc(sizeof(*imapInfo_node)));
-
-        imapInfo_node->source_account = imapInfo->source_account;
-        imapInfo_node->map_account    = xaccAccountLookup (guid, book);
-        imapInfo_node->full_category  = g_strdup (kvp_path);
-        imapInfo_node->match_string   = g_strdup (key);
-        imapInfo_node->category_head  = g_strdup (imapInfo->category_head);
-        imapInfo_node->count          = g_strdup (" ");
-
-        imapInfo->list = g_list_append (imapInfo->list, imapInfo_node);
-
-        g_free (kvp_path);
-        g_free (guid_string);
-    }
-}
-
 
 GList *
 gnc_account_imap_get_info_bayes (Account *acc)
 {
-    GList *list = NULL;
-
-    GncImapInfo imapInfo;
-
-    imapInfo.source_account = acc;
-    imapInfo.list = list;
-
-    if (qof_instance_has_slot (QOF_INSTANCE(acc), IMAP_FRAME_BAYES))
-        qof_instance_foreach_slot (QOF_INSTANCE(acc), IMAP_FRAME_BAYES,
-                                   build_bayes, &imapInfo);
-
+    /* A dummy object which is used to hold the specified account, and the list
+     * of data about which we care. */
+    GncImapInfo imapInfo {acc, nullptr};
+    qof_instance_foreach_slot_prefix (QOF_INSTANCE (acc), IMAP_FRAME_BAYES, &build_bayes, imapInfo);
     return imapInfo.list;
 }
 
@@ -5774,18 +5594,14 @@ void
 gnc_account_delete_map_entry (Account *acc, char *full_category, gboolean empty)
 {
     gchar *kvp_path = g_strdup (full_category);
-
     if ((acc != NULL) && qof_instance_has_slot (QOF_INSTANCE(acc), kvp_path))
     {
         xaccAccountBeginEdit (acc);
-
         if (empty)
             qof_instance_slot_delete_if_empty (QOF_INSTANCE(acc), kvp_path);
         else
             qof_instance_slot_delete (QOF_INSTANCE(acc), kvp_path);
-
         PINFO("Account is '%s', path is '%s'", xaccAccountGetName (acc), kvp_path);
-
         qof_instance_set_dirty (QOF_INSTANCE(acc));
         xaccAccountCommitEdit (acc);
     }
@@ -5796,11 +5612,12 @@ gnc_account_delete_map_entry (Account *acc, char *full_category, gboolean empty)
 /*******************************************************************************/
 
 static gchar *
-look_for_old_separator_descendants (Account *root, gchar *full_name, const gchar *separator)
+look_for_old_separator_descendants (Account *root, gchar const *full_name, const gchar *separator)
 {
     GList *top_accounts, *ptr;
     gint   found_len = 0;
     gchar  found_sep;
+    gchar * new_name = nullptr;
 
     top_accounts = gnc_account_get_descendants (root);
 
@@ -5828,59 +5645,15 @@ look_for_old_separator_descendants (Account *root, gchar *full_name, const gchar
         }
     }
     g_list_free (top_accounts); // Free the List
+    new_name = g_strdup (full_name);
 
     if (found_len > 1)
-        full_name = g_strdelimit (full_name, &found_sep, *separator);
+        g_strdelimit (new_name, &found_sep, *separator);
 
-    PINFO("Return full_name is '%s'", full_name);
+    PINFO("Return full_name is '%s'", new_name);
 
-    return full_name;
+    return new_name;
 }
-
-
-static void
-convert_imap_entry (GncImapInfo *imapInfo, Account *map_account)
-{
-    GncImportMatchMap *imap;
-    gchar   *guid_string;
-    gchar   *kvp_path;
-    int64_t  token_count = 1;
-
-    GValue value = G_VALUE_INIT;
-
-    // Create an ImportMatchMap object
-    imap = gnc_account_imap_create_imap (imapInfo->source_account);
-
-    xaccAccountBeginEdit (imapInfo->source_account);
-
-    guid_string = guid_to_string (xaccAccountGetGUID (map_account));
-
-    PINFO("Map Account is '%s', GUID is '%s', Count is %s", xaccAccountGetName (map_account),
-               guid_string, imapInfo->count);
-
-    // save converting string, get the count value
-    qof_instance_get_kvp (QOF_INSTANCE (imapInfo->source_account), imapInfo->full_category, &value);
-
-    if (G_VALUE_HOLDS_INT64 (&value))
-        token_count = g_value_get_int64 (&value);
-
-    // Delete the old entry based on full account name
-    kvp_path = g_strdup (imapInfo->full_category);
-    gnc_account_delete_map_entry (imapInfo->source_account, kvp_path, FALSE);
-
-    // create path based on guid
-    kvp_path = g_strdup_printf ("/%s/%s", imapInfo->category_head, guid_string);
-
-    // change the imap entry of source_account
-    change_imap_entry (imap, kvp_path, token_count);
-
-    qof_instance_set_dirty (QOF_INSTANCE (imapInfo->source_account));
-    xaccAccountCommitEdit (imapInfo->source_account);
-
-    g_free (kvp_path);
-    g_free (guid_string);
-}
-
 
 static Account *
 look_for_old_mapping (GncImapInfo *imapInfo)
@@ -5905,7 +5678,9 @@ look_for_old_mapping (GncImapInfo *imapInfo)
     // do we have a valid account, if not, look for old separator
     if (map_account == NULL)
     {
-        full_name = look_for_old_separator_descendants (root, full_name, sep);
+        gchar * temp_name = look_for_old_separator_descendants (root, full_name, sep);
+        g_free(full_name);
+        full_name = temp_name;
         map_account = gnc_account_lookup_by_full_name (root, full_name); // lets try again
     }
 
@@ -5916,84 +5691,150 @@ look_for_old_mapping (GncImapInfo *imapInfo)
     return map_account;
 }
 
-static void
-convert_imap_account (Account *acc)
+static std::vector<std::pair<std::string, KvpValue*>>
+get_new_guid_imap (Account * acc)
 {
-    GList *imap_list, *node;
-    gchar *acc_name = NULL;
+    auto frame = qof_instance_get_slots (QOF_INSTANCE (acc));
+    auto slot = frame->get_slot(IMAP_FRAME_BAYES);
+    if (!slot)
+        return {};
+    std::string const imap_frame_str {IMAP_FRAME_BAYES};
+    std::vector<std::pair<std::string, KvpValue*>> ret;
+    auto root = gnc_account_get_root (acc);
+    auto imap_frame = slot->get<KvpFrame*>();
+    imap_frame->for_each_slot_temp ([&ret, root, &imap_frame_str] (char const * token, KvpValue* val) {
+        auto token_frame = val->get<KvpFrame*>();
+        token_frame->for_each_slot_temp ([&ret, root, &imap_frame_str, token] (char const * account_name, KvpValue* val) {
+            auto map_account = gnc_account_lookup_by_full_name (root, account_name);
+            if (!map_account)
+            {
+                auto temp_account_name = look_for_old_separator_descendants (root, account_name, gnc_get_account_separator_string());
+                map_account = gnc_account_lookup_by_full_name (root, temp_account_name);
+                g_free (temp_account_name);
+            }
+            auto temp_guid = gnc::GUID{*xaccAccountGetGUID (map_account)};
+            auto guid_str = temp_guid.to_string();
+            ret.push_back({imap_frame_str + "-" + token + "-" + guid_str, val});
+        });
+    });
+    return ret;
+}
 
-    acc_name = gnc_account_get_full_name (acc);
-    PINFO("Source Acc '%s'", acc_name);
+static void
+convert_imap_account_bayes_to_guid (Account *acc)
+{
+    auto frame = qof_instance_get_slots (QOF_INSTANCE (acc));
+    if (!frame->get_keys().size())
+        return;
+    auto new_imap = get_new_guid_imap(acc);
+    xaccAccountBeginEdit(acc);
+    frame->set(IMAP_FRAME_BAYES, nullptr);
+    std::for_each(new_imap.begin(), new_imap.end(), [&frame] (std::pair<std::string, KvpValue*> const & entry) {
+        frame->set(entry.first.c_str(), entry.second);
+    });
+    qof_instance_set_dirty (QOF_INSTANCE (acc));
+    xaccAccountCommitEdit(acc);
+}
 
-    imap_list = gnc_account_imap_get_info_bayes (acc);
+char const * run_once_key_to_guid {"changed-bayesian-to-guid"};
+char const * run_once_key_to_flat {"changed-bayesian-to-flat"};
 
-    if (g_list_length (imap_list) > 0) // we have mappings
+static void
+imap_convert_bayes_to_guid (QofBook * book)
+{
+    auto root = gnc_book_get_root_account (book);
+    auto accts = gnc_account_get_descendants_sorted (root);
+    for (auto ptr = accts; ptr; ptr = g_list_next (ptr))
     {
-        PINFO("List length is %d", g_list_length (imap_list));
-        xaccAccountBeginEdit(acc);
-        for (node = imap_list;  node; node = g_list_next (node))
-        {
-            Account *map_account = NULL;
-            GncImapInfo *imapInfo = static_cast <GncImapInfo *> (node->data);
-
-            // Lets start doing stuff
-            map_account = look_for_old_mapping (imapInfo);
-
-            if (map_account != NULL) // we have an account, try and update it
-                convert_imap_entry (imapInfo, map_account);
-            // Free the members and structure
-            g_free (imapInfo->category_head);
-            g_free (imapInfo->full_category);
-            g_free (imapInfo->match_string);
-            g_free (imapInfo->count);
-            g_free (imapInfo);
-        }
-        xaccAccountCommitEdit(acc);
+        Account *acc = static_cast <Account*> (ptr->data);
+        convert_imap_account_bayes_to_guid (acc);
     }
-    g_free (acc_name);
-    g_list_free (imap_list); // Free the List
+    g_list_free (accts);
+}
+
+static std::vector<std::pair<std::string, KvpValue*>>
+get_new_flat_imap (Account * acc)
+{
+    auto frame = qof_instance_get_slots (QOF_INSTANCE (acc));
+    auto slot = frame->get_slot(IMAP_FRAME_BAYES);
+    if (!slot)
+        return {};
+    std::string const imap_frame_str {IMAP_FRAME_BAYES};
+    std::vector<std::pair<std::string, KvpValue*>> ret;
+    auto root = gnc_account_get_root (acc);
+    auto imap_frame = slot->get<KvpFrame*>();
+    imap_frame->for_each_slot_temp ([&ret, &imap_frame_str] (char const * token, KvpValue* val) {
+        auto token_frame = val->get<KvpFrame*>();
+        token_frame->for_each_slot_temp ([&ret, &imap_frame_str, token] (char const * account_guid, KvpValue* val) {
+            ret.push_back({imap_frame_str + "-" + token + "-" + account_guid, val});
+        });
+    });
+    return ret;
+}
+
+static void
+convert_imap_account_bayes_to_flat (Account * acc)
+{
+    auto flat_imap = get_new_flat_imap (acc);
+    if (!flat_imap.size())
+        return;
+    auto frame = qof_instance_get_slots (QOF_INSTANCE (acc));
+    xaccAccountBeginEdit(acc);
+    frame->set(IMAP_FRAME_BAYES, nullptr);
+    std::for_each(flat_imap.begin(), flat_imap.end(), [&frame] (std::pair<std::string, KvpValue*> const & entry) {
+        frame->set(entry.first.c_str(), entry.second);
+    });
+    qof_instance_set_dirty (QOF_INSTANCE (acc));
+    xaccAccountCommitEdit(acc);
+}
+
+static void
+imap_convert_bayes_to_flat (QofBook * book)
+{
+    auto root = gnc_book_get_root_account (book);
+    auto accts = gnc_account_get_descendants_sorted (root);
+    for (auto ptr = accts; ptr; ptr = g_list_next (ptr))
+    {
+        Account *acc = static_cast <Account*> (ptr->data);
+        convert_imap_account_bayes_to_flat (acc);
+    }
+    g_list_free (accts);
+}
+
+static bool
+run_once_key_set (char const * key, QofBook * book)
+{
+    GValue value G_VALUE_INIT;
+    qof_instance_get_kvp (QOF_INSTANCE(book), key, &value);
+    return G_VALUE_HOLDS_STRING(&value) && strcmp(g_value_get_string(&value), "true");
+}
+
+static void
+set_run_once_key (char const * key, QofBook * book)
+{
+    GValue value G_VALUE_INIT;
+    g_value_init(&value, G_TYPE_BOOLEAN);
+    g_value_set_boolean(&value, TRUE);
+    qof_instance_set_kvp(QOF_INSTANCE (book), key, &value);
+}
+
+void
+gnc_account_imap_convert_flat (QofBook *book)
+{
+    if (run_once_key_set(run_once_key_to_flat, book))
+        return;
+    imap_convert_bayes_to_flat (book);
+    set_run_once_key(run_once_key_to_flat, book);
 }
 
 void
 gnc_account_imap_convert_bayes (QofBook *book)
 {
-    Account      *root;
-    GList        *accts, *ptr;
-    gboolean      run_once = FALSE;
-    GValue        value_s = G_VALUE_INIT;
-
-    // get the run-once value
-    qof_instance_get_kvp (QOF_INSTANCE (book), "changed-bayesian-to-guid", &value_s);
-
-    if (G_VALUE_HOLDS_STRING (&value_s) && (strcmp(g_value_get_string (&value_s), "true") == 0))
-        run_once = TRUE;
-
-    if (run_once == FALSE)
-    {
-        GValue value_b = G_VALUE_INIT;
-
-        /* Get list of Accounts */
-        root = gnc_book_get_root_account (book);
-        accts = gnc_account_get_descendants_sorted (root);
-
-        /* Go through list of accounts */
-        for (ptr = accts; ptr; ptr = g_list_next (ptr))
-        {
-            Account *acc = static_cast <Account*> (ptr->data);
-
-            convert_imap_account (acc);
-        }
-        g_list_free (accts);
-
-        g_value_init (&value_b, G_TYPE_BOOLEAN);
-
-        g_value_set_boolean (&value_b, TRUE);
-
-        // set the run-once value
-        qof_instance_set_kvp (QOF_INSTANCE (book), "changed-bayesian-to-guid", &value_b);
-    }
+    if (run_once_key_set(run_once_key_to_guid, book))
+        return;
+    imap_convert_bayes_to_guid(book);
+    set_run_once_key(run_once_key_to_guid, book);
 }
-
 
 /* ================================================================ */
 /* QofObject function implementation and registration */

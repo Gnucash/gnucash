@@ -472,4 +472,30 @@ gnc_value_list_get_type (void)
     return type;
 }
 
-/* ========================== END OF FILE ======================= */
+void
+KvpFrame::flatten_kvp_impl(std::vector<std::string> path, std::vector<std::pair<std::string, KvpValue*>> & entries) const
+{
+    for (auto const & entry : m_valuemap)
+    {
+        if (entry.second->get_type() == KvpValue::Type::FRAME)
+        {
+            std::vector<std::string> send_path {path};
+            send_path.push_back("/");
+            send_path.push_back(entry.first);
+            entry.second->get<KvpFrame*>()->flatten_kvp_impl(send_path, entries);
+        }
+        else
+        {
+            std::string flat_path {std::accumulate(path.begin(), path.end(), std::string{})};
+            entries.emplace_back(flat_path + "/" + entry.first, entry.second);
+        }
+    }
+}
+
+std::vector<std::pair<std::string, KvpValue*>>
+KvpFrame::flatten_kvp(void) const
+{
+    std::vector<std::pair<std::string, KvpValue*>> ret;
+    flatten_kvp_impl({}, ret);
+    return ret;
+}

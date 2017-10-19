@@ -160,6 +160,10 @@ void qof_instance_foreach_slot (const QofInstance *inst, const char *path,
 #ifdef __cplusplus
 } /* extern "C" */
 
+/** Returns all keys that match the given prefix and their corresponding values.*/
+std::map<std::string, KvpValue*>
+qof_instance_get_slots_prefix (QofInstance const *, std::string const & prefix);
+
 /* Don't pass nullptr as the function */
 template<typename func_type, typename data_type>
 void qof_instance_foreach_slot_temp (QofInstance const * inst, std::string const & path,
@@ -171,6 +175,18 @@ void qof_instance_foreach_slot_temp (QofInstance const * inst, std::string const
     auto frame = slot->get<KvpFrame*>();
     frame->for_each_slot(func, data);
 }
+
+/**
+ * Similar to qof_instance_foreach_slot, but we don't traverse the depth of the key value frame,
+ * we only check the root level for keys that match the specified prefix.
+ */
+template<typename func_type, typename data_type>
+void qof_instance_foreach_slot_prefix(QofInstance const * inst, std::string const & path_prefix,
+        func_type const & func, data_type & data)
+{
+    inst->kvp_data->for_each_slot_prefix(path_prefix, func, data);
+}
+
 #endif
 
 #endif /* QOF_INSTANCE_P_H */
