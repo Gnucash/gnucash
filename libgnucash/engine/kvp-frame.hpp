@@ -188,6 +188,12 @@ struct KvpFrameImpl
      */
     std::string to_string() const noexcept;
     /**
+     * Make a string representation of the frame with the specified string
+     * prefixed to every item in the frame.
+     * @return A std::string representing all the children of the frame.
+     */
+    std::string to_string(std::string const & prefix) const noexcept;
+    /**
      * Report the keys in the immediate frame. Be sensible about using this, it
      * isn't a very efficient way to iterate.
      * @return std::vector of keys as std::strings.

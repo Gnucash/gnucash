@@ -885,7 +885,7 @@ test_xaccTransEqual (Fixture *fixture, gconstpointer pData)
     xaccTransCommitEdit (clone);
     g_free (cleanup->msg);
     g_free (check->msg);
-    check->msg = g_strdup ("[xaccTransEqual] kvp frames differ:\n{\n    notes => KVP_VALUE_STRING(Salt pork sausage),\n    qux => KVP_VALUE_FRAME({\n    quux => KVP_VALUE_FRAME({\n    corge => KVP_VALUE_DOUBLE(654.321),\n}\n),\n}\n),\n}\n\n\nvs\n\n{\n    notes => KVP_VALUE_STRING(Salt pork sausage),\n    qux => KVP_VALUE_FRAME({\n    quux => KVP_VALUE_FRAME({\n    corge => KVP_VALUE_DOUBLE(123.456),\n}\n),\n}\n),\n}\n");
+    check->msg = g_strdup ("[xaccTransEqual] kvp frames differ:\nnotes/Salt pork sausage (char *)\nqux/quux/corge/654.321 (double)\n\n\n\n\nvs\n\nnotes/Salt pork sausage (char *)\nqux/quux/corge/123.456 (double)\n\n\n");
 
     g_assert (!xaccTransEqual (clone, txn0, TRUE, FALSE, TRUE, TRUE));
 
