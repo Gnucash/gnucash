@@ -4444,14 +4444,15 @@ xaccAccountGetReconcilePostponeBalance (const Account *acc,
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
     qof_instance_get_kvp (QOF_INSTANCE(acc),
                           "reconcile-info/postpone/balance", &v);
-    if (G_VALUE_HOLDS_INT64 (&v))
+    if (G_VALUE_HOLDS_INT64 (&v)) {
         bal = *(gnc_numeric*)g_value_get_boxed (&v);
 
-    if (bal.denom)
-    {
-        if (balance)
-            *balance = bal;
-        return TRUE;
+        if (bal.denom)
+        {
+            if (balance)
+                *balance = bal;
+            return TRUE;
+        }
     }
     return FALSE;
 }
