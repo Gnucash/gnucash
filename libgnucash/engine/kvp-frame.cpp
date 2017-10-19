@@ -472,4 +472,39 @@ gnc_value_list_get_type (void)
     return type;
 }
 
-/* ========================== END OF FILE ======================= */
+std::map<std::string, KvpValue*>
+KvpFrame::get_values_with_prefix(std::string const & prefix)
+{
+    std::map<std::string, KvpValue*> ret;
+    auto all_values = get_all_values();
+    std::for_each (all_values.begin(), all_values.end(), [&ret, &prefix] (std::map<std::string, KvpValue*>::value_type const & entry) {
+        if (std::mismatch(prefix.begin(), prefix.end(), entry.first.begin()).first == prefix.end())
+            ret[entry.first] = entry.second;
+    });;
+    return ret;
+}
+
+void
+KvpFrame::add_all_values (std::map<std::string, KvpValue*> & m, std::string const & prefix)
+{
+    std::for_each (m_valuemap.begin(), m_valuemap.end(), [&m, &prefix] (map_type::value_type const & entry) {
+        std::string new_key;
+        if (prefix.size())
+            new_key = prefix + delim + entry.first;
+        else
+            new_key = entry.first;
+        if (entry.second->get_type() == KvpValue::Type::FRAME)
+            entry.second->get<KvpFrame*>()->add_all_values(m, new_key);
+        else
+            m[new_key] = entry.second;
+    });
+}
+
+std::map<std::string, KvpValue*>
+KvpFrame::get_all_values (void)
+{
+    std::map<std::string, KvpValue*> ret;
+    add_all_values(ret, "");
+    return ret;
+}
+
