@@ -1120,7 +1120,8 @@ msgstr "Zuletzt geöffnete Datei nicht öffnen"
 msgid ""
 "Set the prefix for gsettings schemas for gsettings queries. This can be "
 "useful to have a different settings tree while debugging."
-msgstr ""
+msgstr "Setzt den Präfix für »gsettings schemas«. Das kann nützlich sein, um "
+"andere Einstellungen beim Entwanzen zu verwenden."
 
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
@@ -1169,7 +1170,7 @@ msgstr ""
 #: ../src/bin/gnucash-bin.c:159
 msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org"
 msgstr ""
-"Fehlerberichte können auf http://bugzilla.gnome.org eingeschickt werden."
+"Fehlerberichte können auf http://bugzilla.gnome.org eingesehen und erstellt werden."
 
 #: ../src/bin/gnucash-bin.c:160
 msgid "To find the last stable version, please refer to http://www.gnucash.org"
@@ -1250,8 +1251,11 @@ msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
 "       Perhaps you need to set the $DISPLAY environment variable ?"
-msgstr ""
-
+msgstr "Fehler: Die graphische Benutzerschnittstelle konnte nicht "
+"initialisiert werden, obwohl die Option »add-price-quotes« nicht gesetzt "
+"war.\n"
+"       Möglicherweise müssen Sie die Umgebungsvariable $DISPLAY setzen?"
+# Fixme: Source Accelerator missing in dialog-invoice?
 #: ../src/business/business-gnome/business-gnome-utils.c:73
 #: ../src/business/business-gnome/business-gnome-utils.c:260
 #: ../src/business/business-gnome/dialog-invoice.c:1315
@@ -1345,7 +1349,7 @@ msgstr "Ungültige Konto Entität: %s"
 
 #: ../src/business/business-gnome/dialog-billterms.c:265
 msgid "Discount days cannot be more than due days."
-msgstr ""
+msgstr "»Tage für Skonto« kann nicht größer als »Fälligkeitstage« sein."
 
 #: ../src/business/business-gnome/dialog-billterms.c:324
 msgid "You must provide a name for this Billing Term."
@@ -1465,6 +1469,7 @@ msgstr "Aufträge des Kunden"
 msgid "Customer's Invoices"
 msgstr "Rechnungen des Kunden"
 
+# Fixme: Source Accelerator(s) missing in dialog-invoice?
 #: ../src/business/business-gnome/dialog-customer.c:907
 #: ../src/business/business-gnome/dialog-employee.c:712
 #: ../src/business/business-gnome/dialog-invoice.c:2999
@@ -1474,7 +1479,7 @@ msgstr "Rechnungen des Kunden"
 #: ../src/business/business-gnome/dialog-job.c:549
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:1
 msgid "Process Payment"
-msgstr "Zahlung verarbeiten"
+msgstr "_Zahlung verarbeiten"
 
 #: ../src/business/business-gnome/dialog-customer.c:917
 msgid "Shipping Contact"
@@ -1799,15 +1804,17 @@ msgstr "Datum der kopierten Einträge"
 msgid ""
 "One or more selected invoices have already been posted.\n"
 "Re-check your selection."
-msgstr ""
+msgstr "Eine oder mehrere ausgewählte Rechnungen wurden bereits gebucht.\n"
+"Überprüfen Sie Ihre Auswahl."
 
 #: ../src/business/business-gnome/dialog-invoice.c:2932
 msgid "Do you really want to post these invoices?"
 msgstr "Wollen Sie diese Rechnungen wirklich buchen?"
 
+# Fixme: Source Accelerator missing
 #: ../src/business/business-gnome/dialog-invoice.c:2998
 msgid "View/Edit Invoice"
-msgstr "Rechnung anzeigen/bearbeiten"
+msgstr "_Rechnung anzeigen/bearbeiten"
 
 #: ../src/business/business-gnome/dialog-invoice.c:3000
 #: ../src/business/business-gnome/dialog-invoice.c:3009
@@ -2339,9 +2346,10 @@ msgstr "_Zahlung verarbeiten..."
 msgid "Open the Process Payment dialog"
 msgstr "Den Dialog für das Eingeben von Zahlungen öffnen"
 
+# Fixme: Source Accelerator missing
 #: ../src/business/business-gnome/gnc-plugin-business.c:197
 msgid "Vendors Overview"
-msgstr "Lieferantenübersicht"
+msgstr "Lieferantenüber_sicht"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:198
 msgid "Open a Vendor overview page"
@@ -2371,7 +2379,7 @@ msgstr "Den Dialog für die Suche nach Lieferanten öffnen"
 #: ../src/business/business-gnome/gnc-plugin-business.c:213
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:187
 msgid "New _Bill..."
-msgstr "Neue Lieferantenrechnung..."
+msgstr "N_eue Lieferantenrechnung..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:214
 msgid "Open the New Bill dialog"
@@ -2387,9 +2395,10 @@ msgstr "Lieferanten_rechnung suchen..."
 msgid "Open the Find Bill dialog"
 msgstr "Den Dialog für die Suche nach Rechnungen öffnen"
 
+# Fixme: Source Accelerator missing
 #: ../src/business/business-gnome/gnc-plugin-business.c:240
 msgid "Employees Overview"
-msgstr "Mitarbeiterübersicht"
+msgstr "Mitarbeiterüber_sicht"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:241
 msgid "Open a Employee overview page"
@@ -2402,7 +2411,7 @@ msgstr "_Mitarbeiter"
 #: ../src/business/business-gnome/gnc-plugin-business.c:246
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:166
 msgid "_New Employee..."
-msgstr "Neuer Mitarbeiter..."
+msgstr "_Neuer Mitarbeiter..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:247
 msgid "Open the New Employee dialog"
@@ -2435,7 +2444,7 @@ msgstr "Den Dialog für die Suche nach Auslagenerstattungen öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:273
 msgid "Sales _Tax Table"
-msgstr "Steuertabelle..."
+msgstr "MwSt.-_Steuertabelle..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:274
 msgid "View and edit the list of Sales Tax Tables (GST/VAT)"
@@ -2443,7 +2452,7 @@ msgstr "Liste der Steuertabellen (MwSt./USt.) anzeigen und bearbeiten"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:278
 msgid "_Billing Terms Editor"
-msgstr "Zahlungsbedingungen"
+msgstr "Tabelle für _Zahlungsbedingungen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:279
 msgid "View and edit the list of Billing Terms"
@@ -2451,7 +2460,7 @@ msgstr "Liste der Zahlungsbedingungen anzeigen und bearbeiten"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:283
 msgid "Bills _Due Reminder"
-msgstr "Erinnerung an fällige Rechnungen"
+msgstr "Erinnerung an _fällige Rechnungen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:284
 msgid "Open the Bills Due Reminder dialog"
@@ -2471,9 +2480,10 @@ msgstr "Den Such-Dialog testen"
 msgid "Initialize Test Data"
 msgstr "Testdaten zurücksetzen"
 
+# Fixme: Source Accelerator missing
 #: ../src/business/business-gnome/gnc-plugin-business.c:311
 msgid "Assign as payment..."
-msgstr "Als Zahlung zuweisen..."
+msgstr "Als _Zahlung zuweisen..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:312
 msgid "Assign the selected transaction as payment"
@@ -2518,7 +2528,7 @@ msgstr "E_infügen"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:129
 msgid "_Edit Invoice"
-msgstr "Rechnung bearbeiten"
+msgstr "Rechnung be_arbeiten"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:130
 msgid "Edit this invoice"
@@ -2552,7 +2562,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:151
 msgid "_Enter"
-msgstr "Übernehmen"
+msgstr "_Übernehmen"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:152
 msgid "Record the current entry"
@@ -2788,19 +2798,19 @@ msgstr "_Filtern nach..."
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:188
 msgid "Create a new bill"
-msgstr "Eine neue Rechnung anlegen"
+msgstr "Eine neue Lieferantenrechnung erfassen"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:193
 msgid "Create a new invoice"
-msgstr "Eine neue Rechnung anlegen"
+msgstr "Eine neue Kundenrechnung erstellen"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:197
 msgid "New _Voucher..."
-msgstr "Neue Gutschrift..."
+msgstr "Neuer _Auslagenbeleg..."
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:198
 msgid "Create a new voucher"
-msgstr "Neue Gutschrift erstellen"
+msgstr "Neuen Auslagenbeleg erfassen"
 
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:202
 #: ../src/business/business-gnome/gnc-plugin-page-owner-tree.c:277
@@ -3049,6 +3059,12 @@ msgid ""
 "opposite sign. For example for a bill, vendor credit notes and negative "
 "bills are considered counter documents."
 msgstr ""
+"Während des Buchungsvorgangs wird versucht Lieferantendokumente mit bereits "
+"geleisteten Vorauszahlungen und Gegendokumenten zu verrechnen. Die "
+"Vorauszahlungen und Gegendokumente müssen natürlich denselben Lieferanten "
+"betreffen. Gegendokumente sind Dokumente mit umgekehrtem Vorzeichen. Zu "
+"einer Rechnung wären beispielsweise Gutschriften und negative Rechnungen als "
+"Gegendokumente zu betrachten."
 
 #: ../src/business/business-gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in.h:18
 msgid "Show bills due reminder at startup"
@@ -3210,12 +3226,12 @@ msgstr "Bericht zum _Drucken:"
 #. See the tooltip "At post time..." for details.
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:26
 msgid "_Process payments on posting"
-msgstr "Automatisch durchbuchen"
+msgstr "Automatisch _verrechnen"
 
 #. See the tooltip "At post time..." for details.
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:29
 msgid "Pro_cess payments on posting"
-msgstr "Automatisch durchbuchen"
+msgstr "Automatisch ver_rechnen"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-billterms.glade.h:1
 msgid "Cancel your changes"
@@ -3493,6 +3509,8 @@ msgstr "Rechnungsadresse"
 msgid "Notes"
 msgstr "Bemerkung"
 
+# Fixme: Source 1. Accelerator missing "assign payment"
+#   2. Comment misplaced
 #. Translators: "Markup" is profit amount divided by sales amount
 #: ../src/business/business-gnome/gtkbuilder/dialog-customer.glade.h:14
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:24
@@ -3632,7 +3650,7 @@ msgstr "Rechnungs-Informationen"
 #: ../src/business/business-gnome/gtkbuilder/dialog-order.glade.h:6
 #: ../src/business/business-gnome/gtkbuilder/dialog-payment.glade.h:3
 msgid "(owner)"
-msgstr "(Mandant)"
+msgstr "(Geschäftspartner)"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:10
 #: ../src/business/business-gnome/search-owner.c:241
@@ -4087,7 +4105,7 @@ msgstr "sample(DH):+%"
 #: ../src/register/ledger-core/split-register-layout.c:722
 #: ../src/register/ledger-core/split-register-layout.c:730
 msgid "sample:Expenses:Automobile:Gasoline"
-msgstr "sample:Ausgaben:Automobil:Treibstoff"
+msgstr "sample:Aufwendungen 2/4:Reparatur/Instandhaltung:4805 Reparatur u. Instandh. von Anlagen/Maschinen u. Betriebs- u. Geschäftsausst."
 
 #: ../src/business/business-ledger/gncEntryLedgerLayout.c:125
 msgid "sample:T?"
@@ -4383,11 +4401,11 @@ msgid ""
 "Please correct the problem and restart GnuCash.\n"
 "The reported error was '%s' (errno %d).\n"
 msgstr ""
-"Ein unbekannter Fehler ist aufgetreten, als nach dem Verzeichnis\n"
+"Ein Fehler ist aufgetreten, als das Verzeichnis\n"
 "  %s\n"
-"gesucht wurde. Bitte berichten Sie den Fehler an die Programmierer und\n"
-"starten Sie GnuCash neu. \n"
-"Nennen Sie bitte diesen Fehlertext: »%s« (errno %d)\n"
+"erstellt werden sollte. Bitte beheben Sie das Problem und\n"
+"starten Sie GnuCash neu.\n"
+"Folgender Fehler wurde gemeldet: »%s« (errno %d)\n"
 
 #: ../src/core-utils/gnc-filepath-utils.c:338
 #, c-format
@@ -4415,6 +4433,7 @@ msgstr ""
 "Programm muss alle Zugriffrechte (Lesen/Schreiben/Ausführen) zu diesem\n"
 "Verzeichnis besitzen, um korrekt zu funktionieren.\n"
 
+# Fixme: Check source
 #: ../src/core-utils/gnc-filepath-utils.c:359
 #: ../src/core-utils/gnc-filepath-utils.c:381
 #, c-format
@@ -4429,6 +4448,7 @@ msgstr ""
 "existiert, ist aber kein Verzeichnis. Bitte löschen Sie diese Datei\n"
 "oder wählen einen anderen Pfad. Starten Sie dann GnuCash neu.\n"
 
+# Fixme: Source
 #: ../src/core-utils/gnc-filepath-utils.c:368
 #, c-format
 msgid ""
@@ -4438,12 +4458,11 @@ msgid ""
 "problem and restart GnuCash. The reported error \n"
 "was '%s' (errno %d)."
 msgstr ""
-"Ein unbekannter Fehler ist aufgetreten, als nach dem Verzeichnis\n"
+"Ein unbekannter Fehler ist aufgetreten, als das Verzeichnis\n"
 "  %s\n"
-"\n"
-"gesucht wurde. Bitte berichten Sie den Fehler an die Programmierer und\n"
-"starten Sie GnuCash neu. \n"
-"Nennen Sie bitte diesen Fehlertext: »%s« (errno %d)"
+"auf seine Existenz und Verwendbarkeit überprüft wurde.\n"
+"Bitte beheben Sie das Problem und starten Sie GnuCash neu.\n"
+"Der gemeldete Fehler war: »%s« (errno %d)."
 
 #: ../src/core-utils/gnc-filepath-utils.c:393
 #, c-format
@@ -4552,6 +4571,7 @@ msgstr "ALLE NICHT-WÄHRUNGEN"
 msgid "Unnamed Budget"
 msgstr "Unbenanntes Budget"
 
+# Fixme: Source
 #. Set memo.
 #: ../src/engine/gncInvoice.c:1574
 msgid "Extra to Charge Card"
@@ -4685,19 +4705,21 @@ msgstr "Jährlich"
 
 #: ../src/engine/ScrubBusiness.c:522
 msgid ""
-"Please delete this transaction. Explanation at http://wiki.gnucash.org/wiki/"
-"Business_Features_Issues#Double_Posting"
-msgstr ""
+"Please delete this transaction. Explanation at https://wiki.gnucash.org/wiki/"
+"Business_Features_Issues#Double_posting"
+msgstr "Bitte löschen sie diese Buchung. Die (englische) Erklärung befindet "
+"sich in https://wiki.gnucash.org/wiki/Business_Features_Issues#Double_posting"
 
+# Fixme: Bessere Lösung für die nächsten 2?
 #: ../src/engine/ScrubBusiness.c:592
 #, c-format
 msgid "Checking business lots in account %s: %u of %u"
-msgstr ""
+msgstr "Überprüfe geschäftliche Posten in Konto %s: %u von %u"
 
 #: ../src/engine/ScrubBusiness.c:642
 #, c-format
 msgid "Checking business splits in account %s: %u of %u"
-msgstr ""
+msgstr "Überprüfe geschäftliche Buchungsteile in Konto %s: %u von %u"
 
 #. Reason 2: zero Orphan a/c
 #: ../src/engine/Scrub.c:89 ../src/report/business-reports/balsheet-eg.scm:511
@@ -4707,12 +4729,12 @@ msgstr "Ausbuchungskonto"
 #: ../src/engine/Scrub.c:106
 #, c-format
 msgid "Looking for orphans in account %s: %u of %u"
-msgstr ""
+msgstr "Suche nach verwaisten Buchungen in Konto %s: %u von %u"
 
 #: ../src/engine/Scrub.c:302
 #, c-format
 msgid "Looking for imbalances in account %s: %u of %u"
-msgstr ""
+msgstr "Suche nach unausgeglichenen Buchungen in Konto %s: %u von %u"
 
 #. (> (accrec-depth accrec) 1))
 #. Reason 1: zero Imbalance a/c
@@ -4875,7 +4897,7 @@ msgstr "Steuern"
 
 #: ../src/gnome/assistant-loan.c:115
 msgid "Tax Payment"
-msgstr "Steuern"
+msgstr "Steuerzahlungen"
 
 #: ../src/gnome/assistant-loan.c:116
 msgid "Insurance"
@@ -4883,7 +4905,7 @@ msgstr "Versicherung"
 
 #: ../src/gnome/assistant-loan.c:116
 msgid "Insurance Payment"
-msgstr "Versicherung"
+msgstr "Zahlungen für Versicherungen"
 
 #. Translators: PMI stands for Private Mortgage Insurance.
 #: ../src/gnome/assistant-loan.c:118
@@ -4892,15 +4914,15 @@ msgstr "Hypothekenversicherung"
 
 #: ../src/gnome/assistant-loan.c:118
 msgid "PMI Payment"
-msgstr "Hypothekenversicherung"
+msgstr "Zahlungen für Hypothekenversicherungen"
 
 #: ../src/gnome/assistant-loan.c:119
 msgid "Other Expense"
-msgstr "Anderes"
+msgstr "Sonstiges"
 
 #: ../src/gnome/assistant-loan.c:119
 msgid "Miscellaneous Payment"
-msgstr "Anderes"
+msgstr "Sonstige Zahlungen"
 
 #. Add payment checkbox.
 #. Translators: %s is "Taxes",
@@ -4928,7 +4950,7 @@ msgstr "Darlehensrechner-Option: \"%s\""
 
 #: ../src/gnome/assistant-loan.c:1837 ../src/gnome/assistant-loan.c:2834
 msgid "Principal"
-msgstr "Endbetrag Kapital"
+msgstr "Tilgung"
 
 #: ../src/gnome/assistant-loan.c:1843 ../src/gnome/assistant-loan.c:2854
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2882
@@ -5064,11 +5086,11 @@ msgstr "Der Zinssatz kann nicht Null sein."
 
 #: ../src/gnome/dialog-fincalc.c:372
 msgid "The number of payments cannot be zero."
-msgstr "Die Anzahl der Zahlungen kann nicht Null sein"
+msgstr "Die Anzahl der Zahlungen kann nicht Null sein."
 
 #: ../src/gnome/dialog-fincalc.c:377
 msgid "The number of payments cannot be negative."
-msgstr "Die Anzahl der Zahlungen kann nicht negativ sein"
+msgstr "Die Anzahl der Zahlungen kann nicht negativ sein."
 
 #: ../src/gnome/dialog-find-transactions2.c:104
 #: ../src/gnome/dialog-find-transactions.c:103
@@ -5620,7 +5642,7 @@ msgstr "Summe"
 
 #: ../src/gnome/gnc-plugin-account-tree.c:59
 msgid "New Accounts _Page"
-msgstr "Neue _Kontenhierarchie"
+msgstr "Neue _Kontenübersicht"
 
 #: ../src/gnome/gnc-plugin-account-tree.c:60
 msgid "Open a new Account Tree page"
@@ -5628,7 +5650,7 @@ msgstr "Neue Ansicht der Kontenhierarchie öffnen"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:107
 msgid "New _File"
-msgstr "Neue _Datei"
+msgstr "_Neue Datei"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:108
 msgid "Create a new file"
@@ -5660,7 +5682,7 @@ msgstr "AKtuelle Datei mit einem neuen Namen speichern"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:127
 msgid "Re_vert"
-msgstr "Änderungen verwerfen"
+msgstr "Änderungen ver_werfen"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:128
 msgid "Reload the current database, reverting all unsaved changes"
@@ -5691,7 +5713,7 @@ msgstr "Finde Buchungssätze"
 #. * translation in dialog-account.glade
 #: ../src/gnome/gnc-plugin-basic-commands.c:149
 msgid "Ta_x Report Options"
-msgstr "Optionen _Steuerbericht"
+msgstr "_Optionen Steuerbericht"
 
 #. Translators: currently implemented are *
 #. * US: income tax and                     *
@@ -5706,9 +5728,10 @@ msgstr "Konten für Steuerbericht (MwSt.) einrichten"
 msgid "_Scheduled Transactions"
 msgstr "Term_inierte Buchungen"
 
+# Fixme: Source should have HEllip?
 #: ../src/gnome/gnc-plugin-basic-commands.c:162
 msgid "_Scheduled Transaction Editor"
-msgstr "Terminierte Buchungen Editor"
+msgstr "Terminierte Buchungen _Editor"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:163
 msgid "The list of Scheduled Transactions"
@@ -5800,7 +5823,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:554
 msgid "There are no Scheduled Transactions to be entered at this time."
-msgstr "Es gibt keine terminierten Buchungen, die gebucht werden sollten."
+msgstr "Es gibt derzeit keine terminierten Buchungen, die gebucht werden sollten."
 
 #. Translators: %d is the number of transactions. This is a
 #. ngettext(3) message.
@@ -5853,7 +5876,7 @@ msgstr "Ein neues Konto eröffnen"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:171
 msgid "New Account _Hierarchy..."
-msgstr "Konten_hierarchie _hinzufügen"
+msgstr "Konten_hierarchie hinzufügen"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:172
 msgid "Extend the current book by merging with new account type categories"
@@ -5874,14 +5897,12 @@ msgid "Open the selected account"
 msgstr "Gewähltes Konto öffnen"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:182
-#, fuzzy
 msgid "Open _Old Style Register Account"
-msgstr "Gewähltes Konto öffnen"
+msgstr "Gewähltes Konto im _alten Registerstil öffnen"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:183
-#, fuzzy
 msgid "Open the old style register selected account"
-msgstr "Gewähltes Konto öffnen"
+msgstr "Gewähltes Konto im alten Registerstil öffnen"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:196
 #: ../src/gnome/gnc-plugin-page-account-tree.c:207
@@ -5897,14 +5918,12 @@ msgid "Open the selected account and all its subaccounts"
 msgstr "Öffne das gewählte Konto und alle Unterkonten"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:201
-#, fuzzy
 msgid "Open Old St_yle Subaccounts"
-msgstr "_Unterkonten öffnen"
+msgstr "_Unterkonten im alten Stil öffnen"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:202
-#, fuzzy
 msgid "Open the old style register selected account and all its subaccounts"
-msgstr "Öffne das gewählte Konto und alle Unterkonten"
+msgstr "Öffne das gewählte Konto und alle Unterkonten in der alten Kontoansicht"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:215
 #: ../src/gnome/gnc-plugin-page-register2.c:241
@@ -5920,7 +5939,7 @@ msgstr "Ausgewähltes Konto bearbeiten"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:220
 msgid "_Delete Account..."
-msgstr "_Konto löschen..."
+msgstr "Konto _löschen..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:221
 msgid "Delete selected account"
@@ -5928,7 +5947,7 @@ msgstr "Ausgewähltes Konto löschen"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:225
 msgid "_Renumber Subaccounts..."
-msgstr "_Unterkonten neu nummerieren..."
+msgstr "Unterkonten neu _nummerieren..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:226
 msgid "Renumber the children of the selected account"
@@ -6039,9 +6058,8 @@ msgid "_Register2"
 msgstr "_Kontobuch Vers. 2"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:342
-#, fuzzy
 msgid "Open2"
-msgstr "Öffnen"
+msgstr "Öffnen (Vers. 2)"
 
 #. FIXME this needs an indent option
 #. FIXME this could use an indent option
@@ -6205,7 +6223,7 @@ msgstr "Buchung _kopieren"
 #: ../src/gnome/gnc-plugin-page-register2.c:192
 #: ../src/gnome/gnc-plugin-page-register.c:196
 msgid "_Paste Transaction"
-msgstr "Buchung _einfügen"
+msgstr "Buchung ein_fügen"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:193
 #: ../src/gnome/gnc-plugin-page-register.c:197
@@ -6217,7 +6235,7 @@ msgstr "Buchung dupli_zieren"
 #: ../src/gnome/gnc-split-reg.c:1335
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1065
 msgid "_Delete Transaction"
-msgstr "_Buchung löschen"
+msgstr "Buchung _löschen"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:195
 #: ../src/gnome/gnc-plugin-page-register.c:202
@@ -6292,10 +6310,11 @@ msgstr "Den Buchungsteil von der Zwischenablage einfügen"
 msgid "Make a copy of the current split"
 msgstr "Kopie des aktuellen Buchungsteils erstellen"
 
+# tritt alternativ zu "Buchung _löschen" auf
 #: ../src/gnome/gnc-plugin-page-register2.c:209
 #: ../src/gnome/gnc-plugin-page-register.c:219
 msgid "Delete the current split"
-msgstr "Aktuellen Buchungsteil löschen"
+msgstr "Aktuellen Buchungsteil _löschen"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:219
 #: ../src/gnome/gnc-plugin-page-register.c:226
@@ -6349,7 +6368,7 @@ msgstr "Alle Buchungsteile im aktuellen Buchungssatz entfernen"
 #: ../src/gnome/gnc-plugin-page-register2.c:284
 #: ../src/gnome/gnc-plugin-page-register.c:291
 msgid "_Enter Transaction"
-msgstr "Buchung eingeben"
+msgstr "Buchung ein_geben"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:285
 #: ../src/gnome/gnc-plugin-page-register.c:292
@@ -6374,7 +6393,7 @@ msgstr "Buchung _ungültig machen"
 #: ../src/gnome/gnc-plugin-page-register2.c:298
 #: ../src/gnome/gnc-plugin-page-register.c:305
 msgid "_Unvoid Transaction"
-msgstr "Ungültige Buchung wieder_herstellen"
+msgstr "Ungültige Buchung _wiederherstellen"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:302
 #: ../src/gnome/gnc-plugin-page-register.c:309
@@ -6453,7 +6472,7 @@ msgstr "Den Wechselkurs für die gewählte Buchung bearbeiten"
 #: ../src/gnome/gnc-plugin-page-register.c:377
 #: ../src/gnome-utils/gnc-icons.c:45
 msgid "_Jump"
-msgstr "Ge_genbuchung"
+msgstr "_Gegenbuchung"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:367
 #: ../src/gnome/gnc-plugin-page-register.c:378
@@ -6474,13 +6493,14 @@ msgstr "Terminierte Buchung erstellen mit aktuellem Buchungssatz als Vorlage"
 #: ../src/gnome/gnc-plugin-page-register2.c:376
 #: ../src/gnome/gnc-plugin-page-register.c:387
 msgid "_All transactions"
-msgstr "Alle Buchungssätze"
+msgstr "_Alle Buchungssätze"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:380
 #: ../src/gnome/gnc-plugin-page-register.c:391
 msgid "_This transaction"
 msgstr "_Dieser Buchungssatz"
 
+# Fixme: Source Accelerator missing
 #: ../src/gnome/gnc-plugin-page-register2.c:387
 #: ../src/gnome/gnc-plugin-page-register.c:398
 msgid "Account Report"
@@ -6491,10 +6511,11 @@ msgstr "Kontenbericht"
 msgid "Open a register report for this Account"
 msgstr "Kontobuch als Bericht für dieses Konto öffnen"
 
+# Fixme: Source Accelerator missing
 #: ../src/gnome/gnc-plugin-page-register2.c:392
 #: ../src/gnome/gnc-plugin-page-register.c:403
 msgid "Account Report - Single Transaction"
-msgstr "Kontenbuch - Einzelüberweisung"
+msgstr "Kontenbuch - Einzelbuchung"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:393
 #: ../src/gnome/gnc-plugin-page-register.c:404
@@ -6553,8 +6574,8 @@ msgstr "_Aktive vollständig"
 msgid ""
 "Show transactions on one or two lines and expand the current transaction"
 msgstr ""
-"Alle Buchungssätze außer dem aktuellen einzeilig anzeigen. Den aktuellen "
-"Buchungssatz vollständig anzeigen."
+"Alle Buchungssätze außer dem aktuellen ein- bis zweizeilig anzeigen. "
+"Den aktuellen Buchungssatz vollständig anzeigen."
 
 #: ../src/gnome/gnc-plugin-page-register2.c:437
 #: ../src/gnome/gnc-plugin-page-register.c:442
@@ -6722,7 +6743,7 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-register2.c:2644
 #: ../src/gnome/gnc-plugin-page-register.c:2819
 msgid "_Print checks"
-msgstr "Scheck_s drucken"
+msgstr "Schec_ks drucken"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:2663
 #: ../src/gnome/gnc-plugin-page-register.c:2838
@@ -6776,12 +6797,12 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-register.c:286
 msgid "Remo_ve Other Splits"
-msgstr "Andere Buchungsteile löschen"
+msgstr "Andere Buchungs_teile löschen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:331
 #: ../src/gnome-utils/gnc-main-window.c:328
 msgid "_Sort By..."
-msgstr "_Sortieren nach..."
+msgstr "Sortieren _nach..."
 
 #: ../src/gnome/gnc-plugin-page-register.c:491
 msgid "Associate File"
@@ -6834,7 +6855,7 @@ msgstr "%s sortieren nach..."
 #: ../src/gnome/gnc-plugin-page-register.c:3798
 #, c-format
 msgid "Checking splits in current register: %u of %u"
-msgstr ""
+msgstr "Überprüfe Buchungsteile im aktuellen Konto: %u von %u"
 
 #: ../src/gnome/gnc-plugin-page-sx-list.c:132
 msgid "_Scheduled"
@@ -7030,7 +7051,7 @@ msgstr ""
 #: ../src/gnome/gnc-split-reg.c:985
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:888
 msgid "_Remove Splits"
-msgstr "Buchungsteile entfernen"
+msgstr "Buchungsteile _entfernen"
 
 #: ../src/gnome/gnc-split-reg.c:1178
 msgid "This transaction is not associated with a URI."
@@ -7621,11 +7642,12 @@ msgstr ""
 "Die Anzahl Minuten, bis die Datei automatisch gespeichert wird (»Auto-"
 "Speichern«). Wenn Null gesetzt ist, wird nichts automatisch gespeichert."
 
+# Fixme: Source Accelerators missing
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:11
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:105
 msgid "Enable timeout on \"Save changes on closing\" question"
 msgstr ""
-"Aktiviere Wartezeit bei \"Geänderte Datei speichern\"-Frage beim Schließen"
+"Aktiviere Wartezeit bei »Geänderte Datei speichern«-Frage beim Schließen"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:12
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:106
@@ -7635,7 +7657,7 @@ msgid ""
 "that time, the changes will be saved automatically and the question window "
 "closed."
 msgstr ""
-"Wenn aktiviert, wird die \"Geänderte Datei speichern?\"-Frage nur einige "
+"Wenn aktiviert, wird die »Geänderte Datei speichern?«-Frage nur einige "
 "Sekunden auf eine Antwort warten. Wenn der Benutzer in dieser Zeit nicht "
 "reagiert, werden die Änderungen automatisch gespeichert und die Frage "
 "verschwindet."
@@ -7707,6 +7729,7 @@ msgstr ""
 msgid "Do not create log/backup files."
 msgstr "Keine Backup- und Log-Dateien erstellen."
 
+# Fixme: Source format can be improved by linebreaks
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:23
 msgid ""
 "This setting specifies what to do with old log/backups files. \"forever\" "
@@ -7714,7 +7737,13 @@ msgid ""
 "Each time you save, older versions of the file are removed. \"days\" means "
 "keep old files for a number of days. How many days is defined in key 'retain-"
 "days'"
-msgstr ""
+msgstr "Diese Einstellung bestimmt, was mit alten Protokoll- und "
+"Backup-Dateien geschieht:\n"
+"»Immer« bedeutet, daß alle alten Dateien behalten werden.\n"
+"»Nie« bedeutet, es werden keine log/Backup-Dateien behalten. "
+"Bei jeder Speicherung werden ältere Versionen gelöscht.\n"
+"»Tage« bedeutet, daß alte Dateien eine bestimmte Anzahl Tage aufbewahrt werden.\n"
+"Diese Zahl wird im Schlüssel »retain-days« gespeichert."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:24
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:102
@@ -8021,7 +8050,7 @@ msgstr ""
 msgid ""
 "Set book option on new files to use split \"action\" field for \"Num\" field "
 "on registers/reports"
-msgstr "Setzt die Buchungsoption "
+msgstr ""
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:69
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:73
@@ -8233,9 +8262,8 @@ msgid "Show the calendar buttons Cancel, Today and Select."
 msgstr "Zeigt die Kalenderschaltflächen Abbrechen, Heute und Auswählen an"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:99
-#, fuzzy
 msgid "Move the selection to the blank split on expand"
-msgstr "Gewählte Überweisungsvorlage eine Zeile nach oben umsortieren"
+msgstr "Bewege die Auswahl beim Erweitern in den leeren Buchungsteil"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:100
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:168
@@ -8243,6 +8271,8 @@ msgid ""
 "This will move the selection to the blank split when the transaction is "
 "expanded."
 msgstr ""
+"Hierdurch wird die Auswahl in den leeren Buchungsteil bewegt, wenn die "
+"Buchung erweitert wird."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:101
 msgid "Number of transactions to show in a register."
@@ -8287,18 +8317,19 @@ msgstr ""
 msgid "Use the system locale currency for all newly created reports."
 msgstr "Die systemweit voreingestellte Währung für neue Berichte benutzen."
 
+#Fixme: Source insert line breaks
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:108
-#, fuzzy
 msgid ""
 "This setting controls the default currency used for reports. If set to "
 "\"locale\" then GnuCash will retrieve the default currency from the user's "
 "locale setting. If set to \"other\", GnuCash will use the setting specified "
 "by the currency-other key."
 msgstr ""
-"Diese Einstellung gibt die Herkunft der voreingestellten Währung für neue "
-"Berichte an. Wenn auf »locale« gesetzt, verwendet GnuCash die "
-"voreingestellte Währung der Systemeinstellungen (locale). Wenn auf »other« "
-"gesetzt, wird die Einstellung von »currency_other« verwendet."
+"Diese Einstellung bestimmt die voreingestellten Währung für Berichte an.\n"
+"Ist »choice-locale« gewählt, verwendet GnuCash die voreingestellte Währung "
+"aus den Systemeinstellungen des Benutzers (locale). \n"
+"Ist aber »choice-other« gewählt, wird die Einstellung aus »currency_other« "
+"verwendet."
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:109
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:172
@@ -8339,7 +8370,14 @@ msgid ""
 "the filename-date-format setting. (Note: Any characters that are not allowed "
 "in filenames, such as '/', will be replaced with underscores '_' in the "
 "resulting file name.)"
-msgstr ""
+msgstr "Diese Einstellung bestimmt den Dateinamen für den PDF-Export. Dies "
+"ist eine »sprintf(3)« Zeichenkette mit drei Argumenten: »%1$s« ist der "
+"Berichtsname wie etwa »Rechnung«. »%2$s« ist die Nummer des Berichts, welche "
+"bei einer Rechnung die Rechnungsnummer ist. »%3$s« ist das Datum des "
+"Berichts, formatiert entsprechend der »filename-date-format«-Einstellung. "
+"(Anmerkung: Sämtliche Zeichen, die in Dateinamen nicht erlaubt sind, wie "
+"z.B. '/', werden durch Unterstriche »_«  im resultierenden Dateinamen "
+"ersetzt.)"
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:116
 msgid "PDF export file name date format choice"
@@ -8483,7 +8521,6 @@ msgid "Ending time period identifier"
 msgstr "Index für relativen Endzeitpunkt"
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in.h:17
-#, fuzzy
 msgid ""
 "This setting controls the ending date set in profit/loss calculations if the "
 "end-choice setting is set to anything other than \"absolute\". This field "
@@ -8491,7 +8528,7 @@ msgid ""
 msgstr ""
 "Diese Einstellung setzt das Enddatum in den Einname-/Ausgabenrechnungen, "
 "wenn die Einstellung »end_choice« auf etwas anderes als »absolute« gesetzt "
-"ist. Dann wählt diese Einstellung eines der relativen Datumsvorgaben mit dem "
+"ist. Dann wählt diese Einstellung eine der relativen Datumsvorgaben mit dem "
 "jeweiligen Index von 0 bis 8."
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.gschema.xml.in.in.h:1
@@ -8502,7 +8539,8 @@ msgstr "Diese Spalte anzeigen?"
 msgid ""
 "This setting controls whether the given column will be visible in the view. "
 "TRUE means visible, FALSE means hidden."
-msgstr ""
+msgstr "Diese Einstellung bestimmt, ob die gegebene Spalte in der Ansicht "
+"sichtbar sein wird. »TRUE« bedeutet sichtbar und »FALSE« unsichtbar."
 
 #: ../src/gnome/gschemas/org.gnucash.window.pages.gschema.xml.in.in.h:3
 msgid "Width of this column"
@@ -8532,7 +8570,6 @@ msgid "Setup Account Period"
 msgstr "Buchführungsperioden einrichten"
 
 #: ../src/gnome/gtkbuilder/assistant-acct-period.glade.h:5
-#, fuzzy
 msgid ""
 "\n"
 "Select an accounting period and the closing date which must not be in the "
@@ -8541,9 +8578,12 @@ msgid ""
 "Books will be closed at midnight on the selected date."
 msgstr ""
 "\n"
-"Wählen Sie einen Buchungszeitraum und ein Abschlussdatum für diesen "
-"Zeitraum. Der Buchabschluss wird für Mitternacht jenes Datums gespeichert."
+"Wählen Sie einen Buchungszeitraum und das Abschlußdatum, welches größer als "
+"das des vorherigen Buches sein muß und nicht in der Zukunft liegen darf.\n"
+"\n"
+"Das Buch wird um Mitternacht des gewählten Datums geschlossen."
 
+# Fixme: I don't know, how to call the "Account Period Assistant"
 #: ../src/gnome/gtkbuilder/assistant-acct-period.glade.h:9
 msgid "xxx"
 msgstr "xxx"
@@ -8704,7 +8744,6 @@ msgid "Finish Account Setup"
 msgstr "Konteneinrichten fertigstellen"
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:1
-#, fuzzy
 msgid ""
 "This is a step-by-step method for creating a loan repayment within GnuCash. "
 "In this assistant, you can input the details of your loan and its repayment "
@@ -8716,11 +8755,11 @@ msgid ""
 msgstr ""
 "Dieser Assistent ist eine Schritt-für-Schritt Anleitung, um die Rückzahlung "
 "eines Darlehens in GnuCash einzurichten. Sie können die Parameter Ihres "
-"Darlehens und der Rückzahlungsraten angeben. Mit diesen Informationen werden "
-"die entsprechenden Terminierten Buchungen erstellt.\n"
+"Darlehens und der Tilgungsraten angeben. Mit diesen Informationen werden "
+"die entsprechenden terminierten Buchungen erstellt.\n"
 "\n"
-"Wenn Sie einen Irrtum machen oder später Änderungen machen möchten, können "
-"Sie die erstellte Terminierte Buchung direkt ändern."
+"Wenn Ihnen ein Fehler unterläuft oder Sie später Änderungen vornehmen möchten, können "
+"Sie die erstellte terminierte Buchung direkt ändern."
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:4
 msgid "Loan / Mortgage Repayment Setup"
@@ -8733,6 +8772,7 @@ msgstr ""
 "Geben Sie die Dahrlehensangaben ein. Es werden mindestens das Darlehenskonto "
 "und der Betrag benötigt.\n"
 
+# Fixme: Source without accelerator
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:7
 msgid "Interest Rate:"
 msgstr "Zinssatz:"
@@ -8761,13 +8801,16 @@ msgstr "Darlehenskonto:"
 msgid ""
 "Enter the number of months still to be paid off. This determines both the "
 "remaining principle and the duration of the scheduled transaction."
-msgstr ""
+msgstr "Geben sie die Anzahl der Monate an, die noch getilgt werden müssen. "
+"Daraus resultiert sowohl der noch zu tilgende Betrag als auch die Dauer der "
+"terminierten Buchung."
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:13
 msgid ""
 "Enter the annual interest rate in percent. Accepts values from 0.001 - 100. "
 "The Mortgage Assistant does not support zero-interest loans."
-msgstr ""
+msgstr "Geben SIe den jährlichen Zinssatz in Prozent ein. Akzeptiert werden "
+"Werte von 0,001 - 100. Dieser Assistent unterstützt keine Null-Zins Kredite."
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:16
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:16
@@ -10058,7 +10101,7 @@ msgstr "Datum _wählen:"
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:12
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:28
 msgid "Toda_y"
-msgstr "_Heute"
+msgstr "H_eute"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register2.glade.h:12
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:13
@@ -10076,7 +10119,7 @@ msgstr "Ende:"
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:15
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:31
 msgid "C_hoose Date:"
-msgstr "Datum _wählen:"
+msgstr "Datum w_ählen:"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register2.glade.h:15
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:16
@@ -10113,12 +10156,12 @@ msgstr "_Fixiert"
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register2.glade.h:22
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:23
 msgid "Select _All"
-msgstr "Alle auswählen"
+msgstr "A_lle auswählen"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register2.glade.h:24
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:25
 msgid "Sa_ve Filter"
-msgstr "Filter speichern"
+msgstr "Filter _speichern"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register2.glade.h:25
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:51
@@ -10158,7 +10201,7 @@ msgstr "Sortiere nach Datum der Einträge"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:33
 msgid "S_tatement Date"
-msgstr "_Datum des Kontoauszugs:"
+msgstr "Datum des Kontoaus_zugs:"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:34
 msgid ""
@@ -10187,7 +10230,7 @@ msgstr "Sortieren nach Summe"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:39
 msgid "_Memo"
-msgstr "Buchungstext"
+msgstr "Buchungs_text"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:40
 #: ../src/report/standard-reports/transaction.scm:780
@@ -10211,7 +10254,7 @@ msgstr "Sortiere nach Aktionsfeld"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:45
 msgid "_Notes"
-msgstr "_Bemerkung"
+msgstr "Be_merkung"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:46
 msgid "Sort by notes field."
@@ -10219,15 +10262,16 @@ msgstr "Sortiere nach Bemerkungsfeld"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:47
 msgid "Sa_ve Sort Order"
-msgstr "Sortierreihenfolge speichern"
+msgstr "Sortierreihenfolge s_peichern"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:48
 msgid "Save the sort order for this register."
 msgstr "Sortierreihenfolge für diese Liste speichern"
 
+# Fixme: Source Accelerator missing
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:49
 msgid "Reverse Order"
-msgstr "Umgekehrte Reihenfolge"
+msgstr "_Umgekehrte Reihenfolge"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:50
 msgid "Sort in descending order."
@@ -10264,7 +10308,8 @@ msgstr "_Unterkonten einbeziehen"
 msgid ""
 "Include all descendant accounts in the reconcile. All of them must use the "
 "same commodity as this one."
-msgstr ""
+msgstr "Schließe alle Unterkonten in den Abgleich ein. Sie müssen alle in "
+"derselben Währung geführt werden wie dieses Konto."
 
 #: ../src/gnome/gtkbuilder/window-reconcile.glade.h:7
 #: ../src/gnome/window-reconcile2.c:763 ../src/gnome/window-reconcile.c:800
@@ -10275,7 +10320,7 @@ msgstr "Zahlung Haben_zins eingeben..."
 #: ../src/register/ledger-core/split-register-layout.c:690
 #: ../src/register/ledger-core/split-register-model.c:303
 msgid "Reconciled:R"
-msgstr "Reconciled:J"
+msgstr "Reconciled:A"
 
 #: ../src/gnome-search/dialog-search.c:239
 msgid "You must select an item from the list"
@@ -10302,7 +10347,8 @@ msgstr "Neuer Buchungsteil"
 msgid ""
 "Item represents an unknown object type (in the sense of bill, customer, "
 "invoice, transaction, split,...)|New item"
-msgstr ""
+msgstr "Item represents an unknown object type (in the sense of bill, customer, "
+"invoice, transaction, split,...)|Neues Element"
 
 #: ../src/gnome-search/dialog-search.c:1145
 msgid "all criteria are met"
@@ -10969,7 +11015,8 @@ msgstr "Sie können keine neue nationale Währung erstellen."
 #: ../src/gnome-utils/dialog-commodity.c:1286
 #, c-format
 msgid "%s is a reserved commodity type. Please use something else."
-msgstr ""
+msgstr "%s ist als Typ für Währungen oder Wertpapiere reserviert. "
+"Bitte verwenden Sie eine andere Bezeichnung."
 
 #: ../src/gnome-utils/dialog-commodity.c:1301
 msgid "That commodity already exists."
@@ -10983,11 +11030,11 @@ msgstr ""
 "Sie müssen in den Feldern »Voller Name«, »Symbol/Abkürzung« und »Typ« für "
 "die Devise/Wertpapier etwas angeben."
 
+# Fixme: Wo taucht das auf?
 #. The "date" and the "tnum" fields aren't being asked for, this is a split copy
 #: ../src/gnome-utils/dialog-dup-trans.c:235
-#, fuzzy
 msgid "Action/Number:"
-msgstr "_Nummer:"
+msgstr "Aktion/_Nummer:"
 
 #: ../src/gnome-utils/dialog-file-access.c:295
 msgid "Open..."
@@ -11887,7 +11934,7 @@ msgstr "Aktuelle Seite drucken"
 
 #: ../src/gnome-utils/gnc-main-window.c:282
 msgid "Pa_ge Setup..."
-msgstr "Seite _einrichten"
+msgstr "Seite ein_richten"
 
 #: ../src/gnome-utils/gnc-main-window.c:283
 msgid "Specify the page size and orientation for printing"
@@ -12321,13 +12368,13 @@ msgid ""
 "The blank transaction does not have enough information to save it. Would you "
 "like to return to the transaction to update, or cancel the save?"
 msgstr ""
-"Die neue Buchung hat nicht genügend Informationen, gespeichert werden zu "
+"Die neue Buchung hat nicht genügend Informationen, um gespeichert werden zu "
 "können. Möchten Sie zur Bearbeitung der Buchung zurückkehren oder das "
 "Speichern abbrechen?"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1740
 msgid "_Return"
-msgstr "Kapitalertrag"
+msgstr "_Zurück"
 
 #: ../src/gnome-utils/gnc-tree-control-split-reg.c:1783
 #: ../src/register/ledger-core/split-register-control.c:1835
@@ -13809,13 +13856,14 @@ msgstr ""
 msgid "_Display symbol"
 msgstr "_Anzeigesymbol"
 
+# Fixme: Source
 #: ../src/gnome-utils/gtkbuilder/dialog-file-access.glade.h:1
 msgid "<b>Data Format:</b>"
 msgstr "<b>Dateiformat:</b>"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-file-access.glade.h:2
 msgid "Open _Read-Only"
-msgstr "Schreib_geschützt öffnen"
+msgstr "_Schreibgeschützt öffnen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-file-access.glade.h:3
 msgid "<b>File</b>"
@@ -14118,9 +14166,11 @@ msgstr "Das Datumsformat aus den Systemeinstellungen übernehmen."
 msgid "Date/Time"
 msgstr "Datum und Zeit"
 
+# Fixme: Der Assistent ist derzeit unter Aktion->Kontenhierarchie hinzufügen
+# erreichbar. Können wir das vereinheitlichen?
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:70
 msgid "Perform account list _setup on new file"
-msgstr "Konteneinrichtung bei neuer Datei"
+msgstr "Konten_einrichtung bei neuer Datei"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:71
 msgid "Present the new account list dialog when you choose File -> New File."
@@ -14130,7 +14180,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:74
 msgid "Display \"_tip of the day\" dialog"
-msgstr "»Tipp des Tages« anzeigen"
+msgstr "»_Tipp des Tages« anzeigen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:75
 msgid "Display hints for using GnuCash at startup."
@@ -14179,7 +14229,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:86
 msgid "Display ne_gative amounts in red"
-msgstr "Negative Beträge in rot anzeigen"
+msgstr "Negative Beträge in _rot anzeigen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:87
 msgid "Display negative amounts in red."
@@ -14195,7 +14245,7 @@ msgstr "<b>Such-Dialog</b>"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:90
 msgid "New search _limit:"
-msgstr "Ergebnisanzahl für Neue Suche:"
+msgstr "Ergebnisan_zahl für Neue Suche:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:91
 msgid "Default to 'new search' if fewer than this number of items is returned."
@@ -14221,7 +14271,7 @@ msgstr "Minuten"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:97
 msgid "Show auto-save confirmation _question"
-msgstr "Erklärung für automatisch Speichern anzeigen"
+msgstr "Erklärung für automatisch Speichern an_zeigen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:98
 msgid ""
@@ -14234,7 +14284,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:107
 msgid "Time to wait for answer:"
-msgstr "Wartezeit für Antwort:"
+msgstr "_Wartezeit für Antwort:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:109
 msgid "seconds"
@@ -14259,9 +14309,8 @@ msgid "Default _font:"
 msgstr "Voreingestellte _Schrift:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:115
-#, fuzzy
 msgid "The default check printing font."
-msgstr "Voreingestellte Schriftart zum Scheck drucken"
+msgstr "Die voreingestellte Schriftart zum Scheck drucken."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:116
 msgid "Print _blocking chars"
@@ -14282,7 +14331,7 @@ msgstr "<b>Aktionen</b>"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:120
 msgid "'_Enter' moves to blank transaction"
-msgstr "Mit 'Eingabe' gehen Sie zur leeren Buchung"
+msgstr "Mit »_Eingabe« gehen Sie zur leeren Buchung"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:121
 msgid ""
@@ -14290,12 +14339,12 @@ msgid ""
 "the bottom of the register. If clear, pressing the 'Enter' key will move "
 "down one row."
 msgstr ""
-"Wenn aktiviert, nach Drücken von 'Eingabe' zum leeren Buchungssatz gehen. "
-"Ansonsten nur eine Zeile nach unten gehen."
+"Wenn aktiviert, nach Drücken von »Eingabe« zum leeren Buchungssatz, "
+"ansonsten nur eine Zeile nach unten gehen."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:122
 msgid "_Auto-raise lists"
-msgstr "Listen automatisch aufklappen"
+msgstr "_Listen automatisch aufklappen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:123
 msgid "Automatically raise the list of accounts or actions during input."
@@ -14308,7 +14357,7 @@ msgstr "<b>Kontenabgleich</b>"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:125
 msgid "Check cleared _transactions"
-msgstr "Bestätigte Buchungen automatisch abgleichen"
+msgstr "_Bestätigte Buchungen automatisch abgleichen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:126
 msgid "Pre-check cleared transactions when creating a reconcile dialog."
@@ -14332,7 +14381,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:131
 msgid "Always reconcile to t_oday"
-msgstr "Immer zum heutigen Datum abgleichen"
+msgstr "Immer zum heutigen _Datum abgleichen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:132
 msgid ""
@@ -14350,9 +14399,10 @@ msgstr "_Vertikale Linien zwischen Spalten zeichnen"
 msgid "Show vertical borders on the cells."
 msgstr "Vertikale Begrenzungen anzeigen."
 
+# H und C sind in diesem Dialog durch Hilfe und Schließen belegt
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:135
 msgid "Draw hori_zontal lines between rows"
-msgstr "_Horizontale Linien zwischen Zeilen zeichnen"
+msgstr "H_orizontale Linien zwischen Zeilen zeichnen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:136
 msgid "Show horizontal borders on the cells."
@@ -14360,7 +14410,7 @@ msgstr "Horizontale Begrenzungen anzeigen."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:137
 msgid "Double _mode colors alternate with transactions"
-msgstr "Zweizeilenstil: Farben abwechselnd pro Buchungssatz"
+msgstr "_Zweizeilenstil: Farben abwechselnd pro Buchungssatz"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:138
 msgid ""
@@ -14372,13 +14422,14 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:139
 msgid "Don't _use GnuCash built-in colors"
-msgstr "Benutzt nicht die GnuCash-eigenen Farben"
+msgstr "Benutzt nicht die GnuCash-eigenen _Farben"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:140
 msgid ""
 "GnuCash uses a yellow/green theme by default for register windows. Check "
 "this if you want to use the system color theme instead."
-msgstr ""
+msgstr "Gnucash verwendet in der Kontenansicht normalerweise ein gelb/grünes "
+"Farbthema. Wenn aktiviert, wird stattdessen das systemeigene Thema verwendet."
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:141
 msgid "<b>Graphics</b>"
@@ -14386,7 +14437,7 @@ msgstr "<b>Grafik</b>"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:142
 msgid "Tab order in_cludes Transfer on Memorised Transactions"
-msgstr "Bei Auto-Vervollständigen zum Gegenkonto-Feld weitergehen"
+msgstr "Bei Auto-Vervollständigen zum _Gegenkonto-Feld weitergehen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:143
 msgid "Move to Transfer field when memorised transaction auto filled."
@@ -14410,7 +14461,7 @@ msgstr "_Aktive vollständig"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:153
 msgid "Number of _transactions:"
-msgstr "Anzahl Buchungen:"
+msgstr "An_zahl Buchungen:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:155
 msgid "_Double line mode"
@@ -14426,7 +14477,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:157
 msgid "Register opens in a new _window"
-msgstr "Kontobuch in neuem Fenster öffnen"
+msgstr "Kontobuch in neuem _Fenster öffnen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:158
 msgid ""
@@ -14455,26 +14506,26 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:161
 msgid "Number of _characters for auto complete:"
-msgstr "Anzahl Buchstaben für Auto-Vervollständigen:"
+msgstr "Anzahl Buchstaben für Auto-Vervo_llständigen:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:163
 msgid "Show the _entered and reconcile dates"
-msgstr "Datum der _Eingabe und Abgleichen anzeigen"
+msgstr "Datum von _Eingabe und Abgleich anzeigen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:165
 msgid "Show the calendar b_uttons"
-msgstr "Kalender-Knöpfe anzeigen"
+msgstr "_Kalender-Knöpfe anzeigen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:167
 msgid "_Move the selection to the blank split on expand"
 msgstr ""
-"Mit dem Cursor zum neuen Buchungsteil springen, wenn eine Buchung "
+"Mit dem Cursor zum _neuen Buchungsteil springen, wenn eine Buchung "
 "ausgeklappt wird"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:169
 msgid "_Show entered and reconciled dates on selection"
 msgstr ""
-"Datum der Eingabe und des Abgleichens bei ausgewählter Buchung anzeigen"
+"_Datum der Eingabe und des Abgleichens bei der Ausgewahl anzeigen"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:171
 msgid "Register Defaults"
@@ -14797,7 +14848,7 @@ msgstr "ISO (2001-12-31)"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:19
 msgid "UTC - Coordinated Universal Time"
-msgstr ""
+msgstr "UTC - Koordinierte Weltzeit"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:21
 msgid "No Fancy Date Format"
@@ -15231,11 +15282,11 @@ msgstr ""
 
 #: ../src/gnome-utils/gtkbuilder/gnc-tree-view-owner.glade.h:2
 msgid "Only show _active owners"
-msgstr "Nur _aktive Mandanten zeigen"
+msgstr "Nur _aktive Partner zeigen"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-tree-view-owner.glade.h:3
 msgid "Show _zero balance owners"
-msgstr "Nullsalden anzeigen"
+msgstr "Partner mit _Nullsalden anzeigen"
 
 #: ../src/gnome-utils/window-main-summarybar.c:298
 #, c-format
@@ -15762,9 +15813,8 @@ msgid "Confirm Password:"
 msgstr "Passwort bestätigen:"
 
 #: ../src/import-export/aqb/dialog-ab.glade.h:21
-#, fuzzy
 msgid "Remember the _PIN in memory"
-msgstr "HBCI PIN im Speicher merken"
+msgstr "HBCI _PIN im Speicher merken"
 
 #: ../src/import-export/aqb/dialog-ab.glade.h:22
 #: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:6
@@ -15796,9 +15846,8 @@ msgstr ""
 "AqBanking-Import beendet ist. Andernfalls bleibt das Fenster geöffnet."
 
 #: ../src/import-export/aqb/dialog-ab.glade.h:26
-#, fuzzy
 msgid "Use Non-SWIFT _transaction text"
-msgstr "Verwende das dem Buchungsdatum nächste Datum."
+msgstr "Verwende _Nicht-SWIFT Buchungstext"
 
 #: ../src/import-export/aqb/dialog-ab.glade.h:27
 #: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:8
@@ -15807,7 +15856,10 @@ msgid ""
 "the MT940 file. Normally GNUcash ignores this text. However by activating "
 "this option, the transaction text is used for the transaction description "
 "too."
-msgstr ""
+msgstr "Einige Banken fügen Teile des Buchungsbeschreibung als »transaction "
+"text« in MT940 Dateien ein. Normalerweise ignoriert GnuCash diesen Text. "
+"Durch Aktivierung dieser Option wird der »transaction text« zur "
+"Buchungsbeschreibung hinzugefügt."
 
 #: ../src/import-export/aqb/dialog-ab.glade.h:28
 msgid "_Verbose debug messages"
@@ -15991,25 +16043,24 @@ msgid "Credited Account Bank Code"
 msgstr "BLZ des Auftraggebers"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:404
-#, fuzzy
 msgid "Enter a SEPA Online Direct Debit Note"
-msgstr "Online-Lastschrift eingeben"
+msgstr "SEPA Online-Lastschrift eingeben"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:409
 msgid "Debited IBAN (International Account Number)"
-msgstr "IBAN des Zahlungspflichtigen"
+msgstr "IBAN (International Account Number) des Zahlungspflichtigen"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:411
 msgid "Debited BIC (Bank Code)"
-msgstr "BIC des Zahlungspflichtigen"
+msgstr "BIC (SWIFT Bankkennzahl) des Zahlungspflichtigen"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:416
 msgid "Credited IBAN (International Account Number)"
-msgstr "IBAN des Zahlungsempfängers"
+msgstr "IBAN (International Account Number) des Zahlungsempfängers"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:418
 msgid "Credited BIC (Bank Code)"
-msgstr "BIC des Zahlungsempfängers"
+msgstr "BIC (SWIFT Bankkennzahl) des Zahlungsempfängers"
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:497
 #, c-format
@@ -16091,6 +16142,7 @@ msgstr ""
 "Sie haben keinen Verwendungszweck eingegeben. Für einen Überweisungsauftrag "
 "ist die Eingabe eines Verwendungszwecks erforderlich.\n"
 
+# Fixme: aktuellen Stand prüfen.
 #: ../src/import-export/aqb/dialog-ab-trans.c:718
 msgid ""
 "The text you entered contained at least one character that is invalid for a "
@@ -16100,7 +16152,13 @@ msgid ""
 "\n"
 "In particular, neither Umlauts nor an ampersand (&) is allowed, neither in "
 "the recipient or sender name nor in any purpose line."
-msgstr ""
+msgstr "Ihr eingegebener Text enthält mindestens ein Zeichen, das in einer "
+"SEPA-Überweisung ungültig sein kann. In der Basisversion unterstützt SEPA "
+"leider nur: a...z, A...Z, 0...9, und die folgenden Satzzeichen: "
+"' : ? , - ( + . ) / \n"
+"\n"
+"Insbesondere sind weder Umlaute, noch Et-Zeichen »&« erlaubt, weder im "
+"Sender- noch im Empfängernamen, geschweige denn im Verwendungszweck."
 
 #: ../src/import-export/aqb/dialog-ab-trans.c:1183
 msgid ""
@@ -16521,11 +16579,9 @@ msgid "Remember the PIN in memory"
 msgstr "HBCI PIN im Speicher merken"
 
 #: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:7
-#, fuzzy
 msgid "Put the transaction text in front of the purpose of a transaction."
 msgstr ""
-"Alle Buchungssätze außer dem aktuellen einzeilig anzeigen. Den aktuellen "
-"Buchungssatz vollständig anzeigen."
+"Den »transaction text« vor dem Verwendungszweck einfügen."
 
 #: ../src/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in.h:9
 msgid "Verbose HBCI debug messages"
@@ -16709,7 +16765,8 @@ msgstr "Export-Einstellungen"
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:13
 msgid "Select the accounts to be exported and date range if required."
-msgstr ""
+msgstr "Wählen Sie die Konten für den Export, sowie den Zeitraum, sofern "
+"gewünscht."
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:22
 msgid "<b>_Dates</b>"
@@ -16737,7 +16794,8 @@ msgstr "Wählen Sie einen Dateinamen für den Export"
 msgid ""
 "Press Apply to create export file.\n"
 "Cancel to abort."
-msgstr ""
+msgstr "Drücken Sie »Anwenden«, um die Export-Datei zu erstellen,\n"
+"oder »Abbrechen«, um den Vorgang abzubrechen."
 
 #: ../src/import-export/csv-exp/assistant-csv-export.glade.h:40
 msgid "Export Now..."
@@ -16757,33 +16815,32 @@ msgstr "Kategorie"
 
 #: ../src/import-export/csv-exp/csv-transactions-export.c:424
 msgid "To With Sym"
-msgstr ""
+msgstr "Nach m. Währung"
 
 #: ../src/import-export/csv-exp/csv-transactions-export.c:424
 msgid "From With Sym"
-msgstr ""
+msgstr "Von m. Währung"
 
 #: ../src/import-export/csv-exp/csv-transactions-export.c:425
 msgid "To Num."
-msgstr "Bis Nr."
+msgstr "Nach numerisch"
 
 #: ../src/import-export/csv-exp/csv-transactions-export.c:425
 msgid "From Num."
-msgstr "Von Nr."
+msgstr "Von numerisch"
 
-# strange, had fuzzy translation Saldo (Periodenbezogen)
 #: ../src/import-export/csv-exp/csv-transactions-export.c:426
 msgid "To Rate/Price"
-msgstr "Zu Kurs/Preis"
+msgstr "Nach Kurs"
 
 #: ../src/import-export/csv-exp/csv-transactions-export.c:426
 msgid "From Rate/Price"
-msgstr "Von Kurs/Preis"
+msgstr "Von Kurs"
 
 #. Header string, 'eol = end of line marker'
 #: ../src/import-export/csv-exp/csv-tree-export.c:155
 msgid "type"
-msgstr ""
+msgstr "Typ"
 
 #: ../src/import-export/csv-exp/csv-tree-export.c:155
 msgid "full_name"
@@ -16825,13 +16882,14 @@ msgstr "Versteckt"
 msgid "tax"
 msgstr "Steuerrelevant"
 
+# Fixme: Source should be changed
 #: ../src/import-export/csv-exp/csv-tree-export.c:158
 msgid "place_holder"
 msgstr "Platzhalter"
 
 #: ../src/import-export/csv-exp/gnc-plugin-csv-export.c:47
 msgid "Export Account T_ree to CSV..."
-msgstr "_Kontenhierarchie nach CSV exportieren ..."
+msgstr "Konten_hierarchie nach CSV exportieren ..."
 
 #: ../src/import-export/csv-exp/gnc-plugin-csv-export.c:48
 msgid "Export the Account Tree to a CSV file"
@@ -16860,7 +16918,12 @@ msgid ""
 "\n"
 "You can also go back and verify your selections by clicking on 'Back' or "
 "'Cancel' to Abort Import.\n"
-msgstr ""
+msgstr "Wenn Sie auf »Anwenden« drücken, werden die Konten aus der Datei »%s« "
+"importiert.\n"
+"\n"
+"Sie können aber auch zurückgehen und ihre Angaben überprüfen, wenn sie auf "
+"»Zurück« drücken oder den Vorgang ganz abbrechen, indem Sie auf »Abbrechen« "
+"drücken.\n" 
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.c:75
 #, c-format
@@ -16874,7 +16937,18 @@ msgid ""
 "for setting book options, since these can affect how imported data are "
 "converted to GnuCash transactions. If this is an existing file, the dialog "
 "will not be shown.\n"
-msgstr ""
+msgstr "Wenn Sie auf »Anwenden« drücken, werden die Konten aus der Datei »%s« "
+"importiert.\n"
+"\n"
+"Sie können aber auch zurückgehen und ihre Angaben überprüfen, wenn sie auf "
+"»Zurück« drücken oder den Vorgang ganz abbrechen, indem Sie auf »Abbrechen« "
+"drücken.\n" 
+"\n"
+"Wenn dies Ihr erster Import in eine neue Datei ist, werden Sie zunächst "
+"einen Dialog zum Setzen der Buch-Eigenschaften sehen, da diese die Art und "
+"Weise beeinflussen können, wie Ihre importierten Daten in GnuCash Buchungen "
+"konvertiert werden. Falls diese Datei bereits existierte, wird der Dialog "
+"nicht mehr angezeigt.\n"
 
 #: ../src/import-export/csv-imp/assistant-csv-account-import.c:172
 #: ../src/plugins/bi_import/dialog-bi-import-gui.c:218
@@ -17070,24 +17144,24 @@ msgid ""
 "To Change the account, double click on the required account, click Forward "
 "to proceed."
 msgstr ""
-"Um das KOnto zu wechseln, doppleklicken Sie auf das gewünschte Konto, dann "
+"Um ein Konto zu auszutauschen, doppelklicken Sie auf das gewünschte Konto, dann "
+"»Vorwärts«, um fortzufahren."
 
 #. A list of the transactions we create
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.c:1520
 msgid "Double click on rows to change, then click on Apply to Import"
-msgstr ""
+msgstr "Doppelklicken Sie auf Zeilen für Änderungen, danach klicken Sie »Anwenden« zum Import."
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.c:1568
-#, fuzzy, c-format
+#, c-format
 msgid "The transactions were imported from the file '%s'."
-msgstr "Beim Lesen der Datei »%s« ist ein Fehler aufgetreten."
+msgstr "Die Buchungen wurden aus der Datei »%s« importiert."
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:1
 msgid "CSV Transaction Import"
 msgstr "CSV-Buchungen-Import"
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:2
-#, fuzzy
 msgid ""
 "This assistant will help you import a delimited file containing a list of "
 "transactions.\n"
@@ -17105,8 +17179,8 @@ msgid ""
 "have some header text, a points collected status row or multiple accounts in "
 "the same file."
 msgstr ""
-"Dieser Assistent möchte Ihnen helfen, Textdateien mit Buchungen zu "
-"importieren.\n"
+"Dieser Assistent möchte Ihnen helfen, Buchungen aus einer Textdateie mit "
+"Trennzeichen zu importieren.\n"
 "\n"
 "Alle importierten Buchungen eines Imports werden mit einem bestimmten Konto "
 "pro Import assoziiert. Wenn Sie eine Kontospalte wählen wird das Konto aus "
@@ -17117,8 +17191,9 @@ msgstr ""
 "auf den Balken über den dargestellten Zeilen, um die Breite festzulegen.\n"
 "\n"
 "Schließlich gibt es eine Option zur Bestimmung der ersten und letzten Zeile, "
-"welche benutzt werden kann, wenn sie einige Kopfzeilen oder mehrere Konten "
-"in einer Datei haben."
+"sowie eine Option Zeilen abwechselnd zu überspringen. Diese Optionen können "
+"benutzt werden, wenn sie einige Kopfzeilen oder mehrere Konten in einer "
+"Datei haben."
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:9
 msgid "Transaction Import Assistant"
@@ -17146,7 +17221,7 @@ msgstr " und stoppe auf Zeile "
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:16
 msgid "Skip alternate rows from the start row"
-msgstr ""
+msgstr "Überspringe abwechseld Zeilen ab der Startzeile"
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:17
 msgid "Data type: "
@@ -17196,6 +17271,7 @@ msgstr "Vorschau-Einstellungen"
 msgid "Error text."
 msgstr "Fehlertext"
 
+# Fixme: Source should be more precise "in this file"
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:36
 msgid ""
 "On the following page you will be able to associate each transaction to a "
@@ -17213,7 +17289,23 @@ msgid ""
 "The confidence of a correct association is displayed as a colored bar.\n"
 "\n"
 "More information can be displayed by using the help button."
-msgstr ""
+msgstr "Auf der folgenden Seite haben Sie die Möglicjkeit, jeder Buchung eine "
+"Kategorie zuzuordnen.\n"
+"\n"
+"Wenn dies ihr erster Import in diese Datei ist, müssen Sie leider alle "
+"Zeilen manuell zuordnen. Bei späteren Importen wird das Import-Modul "
+"versuchen, die Zuordnung basierend auf den früheren Importen vorzunehmen.\n" 
+"\n"
+"Wenn dies Ihr erster Import in eine neue Datei ist, werden Sie zunächst "
+"einen Dialog zum Setzen der Buch-Eigenschaften sehen, da diese die Art und "
+"Weise beeinflussen können, wie Ihre importierten Daten in GnuCash Buchungen "
+"konvertiert werden. Falls diese Datei bereits existierte, wird der Dialog "
+"nicht mehr angezeigt.\n"
+"\n"
+"Die Zuverlässigkeit der korrekten Zuordnung wird durch einen farbigen Balken "
+"angezeigt.\n" 
+"\n"
+"Weitere Informationen sind über den »Hilfe«-Knopf abrufbar."
 
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.glade.h:45
 msgid "Transaction Information"
@@ -17408,23 +17500,23 @@ msgstr ""
 
 #: ../src/import-export/dialog-import.glade.h:16
 msgid "Commercial ATM _fees threshold"
-msgstr "Auszahlungsgebühren"
+msgstr "Aus_zahlungsgebühren"
 
 #: ../src/import-export/dialog-import.glade.h:17
 msgid "Auto-c_lear threshold"
-msgstr "Entscheidungsschwelle für automatisches Abgleichen"
+msgstr "Entscheidungsschwelle für automatisches Abg_leichen"
 
 #: ../src/import-export/dialog-import.glade.h:18
 msgid "Auto-_add threshold"
-msgstr "Entscheidungsschwelle für automatisches Hinzufügen"
+msgstr "Entscheidungsschwelle für automatisches Hinzu_fügen"
 
 #: ../src/import-export/dialog-import.glade.h:19
 msgid "Match _display threshold"
-msgstr "Entscheidungsschwelle für Anzeige in Zuordnung"
+msgstr "Entscheidungsschwelle für Anzeige in Zu_ordnung"
 
 #: ../src/import-export/dialog-import.glade.h:20
 msgid "Use _bayesian matching"
-msgstr "_Bayes-Algorithmus verwenden"
+msgstr "Ba_yes-Algorithmus verwenden"
 
 #: ../src/import-export/dialog-import.glade.h:21
 msgid ""
@@ -17454,14 +17546,14 @@ msgstr ""
 msgid "Select matching existing transaction"
 msgstr "Wählen Sie die zugeordnete, schon existierende Buchung"
 
+#Fixme: Source accelerator missing
 #: ../src/import-export/dialog-import.glade.h:25
-#, fuzzy
 msgid "Show Reconciled"
-msgstr "Abgeglichen"
+msgstr "Abgeglichene anzeigen"
 
 #: ../src/import-export/dialog-import.glade.h:26
 msgid "Imported transaction's first split:"
-msgstr "Erster Teil der importierten Buchung"
+msgstr "Erster Teil der importierten Buchung:"
 
 #: ../src/import-export/dialog-import.glade.h:27
 msgid "Potential splits matching the selected transaction: "
@@ -17479,7 +17571,8 @@ msgstr ""
 msgid ""
 "This transaction will be imported balanced (you may still want to double "
 "check the match or destination account)."
-msgstr "Diese Buchung wird ausgeglichen importiert."
+msgstr "Diese Buchung wird ausgeglichen importiert. Überprüfen Sie trotzdem "
+"die Zuordnung und das Gegenkonto."
 
 #: ../src/import-export/dialog-import.glade.h:30
 msgid "This transaction requires your intervention or it will NOT be imported."
@@ -17647,15 +17740,15 @@ msgstr ""
 "zusätzlichen Auszahlungsgebühren in Ihrer lokalen Währung angeben."
 
 #: ../src/import-export/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in.in.h:19
-#, fuzzy
 msgid "Display or hide reconciled matches"
-msgstr "Anzeigen des Abgleich-Datums?"
+msgstr "Anzeigen oder verbergen abgeglichener Treffer"
 
 #: ../src/import-export/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in.in.h:20
 msgid ""
 "Shows or hides transactions from the match picker which are already of some "
 "reconciled state."
-msgstr ""
+msgstr "Zeigt oder verbirgt Buchungen, welche vom Programm bereits als "
+"einander entsprechend betrachtet werden."
 
 #: ../src/import-export/import-account-matcher.c:118
 msgid "Account ID"
@@ -17772,19 +17865,17 @@ msgid "Confidence"
 msgstr "Genauigkeit"
 
 #: ../src/import-export/import-match-picker.c:438
-#, fuzzy
 msgid "Pending Action"
-msgstr "_Online Aktionen"
+msgstr "Ausstehende Aktion"
 
 #: ../src/import-export/import-pending-matches.c:194
-#, fuzzy
 msgid "Manual"
-msgstr "Jährlich"
+msgstr "Manuell"
 
 #: ../src/import-export/import-pending-matches.c:196
 #: ../src/report/business-reports/balsheet-eg.scm:332
 msgid "Auto"
-msgstr "automatisch"
+msgstr "Automatisch"
 
 #: ../src/import-export/log-replay/gnc-log-replay.c:570
 msgid "Select a .log file to replay"
@@ -17818,12 +17909,12 @@ msgstr ""
 
 #: ../src/import-export/log-replay/gnc-plugin-log-replay.c:48
 msgid "_Replay GnuCash .log file..."
-msgstr "Einträge aus Logdatei abspielen..."
+msgstr "Einträge aus _Logdatei einspielen..."
 
 #: ../src/import-export/log-replay/gnc-plugin-log-replay.c:49
 msgid "Replay a GnuCash log file after a crash. This cannot be undone."
 msgstr ""
-"Einträge aus Logdatei nach einem Programmabsturz abspielen. Dies kann nicht "
+"Einträge aus Logdatei nach einem Programmabsturz einspielen. Dies kann nicht "
 "rückgängig gemacht werden."
 
 #. As we now have the commodity, select the account with that commodity.
@@ -18020,7 +18111,7 @@ msgid ""
 "are no errors or warnings, you will automatically proceed to the next step. "
 "Otherwise, the details will be shown below for your review."
 msgstr ""
-"Sobald Sie den »Vor«-Knopf drücken, wird GnuCash Ihre QIF-Datei laden. Wenn "
+"Sobald Sie den »Start«-Knopf drücken, wird GnuCash Ihre QIF-Datei laden. Wenn "
 "dabei keine Fehler oder Warnungen auftreten, kommt der nächste Schritt. "
 "Andernfalls werden die Meldungen unten angezeigt."
 
@@ -18146,9 +18237,10 @@ msgstr ""
 "Sie können so viele Dateien laden, wie Sie möchten. Es ist also kein "
 "Problem, falls sich Ihre Daten in mehreren Dateien befinden.\n"
 
+# A ist bereits durch _Abbrechen in den Dialogen belegt
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:12
 msgid "_Select..."
-msgstr "_Auswählen..."
+msgstr "Aus_wählen..."
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:13
 msgid "Select a QIF file to load"
@@ -18477,7 +18569,7 @@ msgstr "_Importierte Buchungen, die durchgesehen werden müssen:"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:77
 msgid "_Possible matches for the selected transaction:"
-msgstr "Mögliche Duplikate für ausgewählte neue Buchungen"
+msgstr "Mögliche _Duplikate für ausgewählte neue Buchung:"
 
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:78
 msgid "Select possible duplicates"
@@ -18585,7 +18677,7 @@ msgstr ""
 
 #: ../src/import-export/qif-imp/dialog-account-picker.glade.h:13
 msgid "_Select or add a GnuCash account:"
-msgstr "Auswählen oder Hinzufügen eines GnuCash Kontos"
+msgstr "Aus_wählen oder Hinzufügen eines GnuCash Kontos"
 
 #: ../src/import-export/qif-imp/gnc-plugin-qif-import.c:47
 msgid "Import _QIF..."
@@ -18924,7 +19016,7 @@ msgstr "Diese Zeilen wurden beim Importieren ignoriert"
 
 #: ../src/plugins/bi_import/gnc-plugin-bi-import.c:57
 msgid "Import Bills & Invoices..."
-msgstr "Rechnungen importieren..."
+msgstr "_Rechnungen importieren..."
 
 #: ../src/plugins/bi_import/gnc-plugin-bi-import.c:57
 msgid "Import bills and invoices from a CSV text file"
@@ -19033,15 +19125,18 @@ msgstr ""
 "   %u %s neu angelegt\n"
 "   %u %s aktualisiert (gemäß ID)"
 
+# Fixme: Source
 #. Menu Items
 #: ../src/plugins/customer_import/gnc-plugin-customer_import.c:56
 msgid "I_mport"
 msgstr "I_mport"
 
+# Fixme: Source
 #: ../src/plugins/customer_import/gnc-plugin-customer_import.c:57
 msgid "Import Customers and Vendors"
-msgstr "Importiert Kunden und Lieferanten"
+msgstr "Importiert K_unden und Lieferanten"
 
+# Fixme: Source
 #: ../src/plugins/customer_import/gnc-plugin-customer_import.c:57
 msgid "customer_import tooltip"
 msgstr ""
@@ -19071,7 +19166,6 @@ msgid "<b>3. Select import options</b>"
 msgstr "<b>3. Bestimmen Sie die Importoptionen</b>"
 
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:14
-#, fuzzy
 msgid "<b>4. Preview</b>"
 msgstr "<b>4. Vorschau</b>"
 
@@ -19162,9 +19256,8 @@ msgstr "sample:Beschreibungsbeispiel einer Buchung"
 
 #: ../src/register/ledger-core/split-register-layout.c:698
 #: ../src/register/ledger-core/split-register-model.c:325
-#, fuzzy
 msgid "Associate:A"
-msgstr "Datei zuordnen"
+msgstr "Associate:Z"
 
 #: ../src/register/ledger-core/split-register-layout.c:706
 #: ../src/register/ledger-core/split-register-layout.c:746
@@ -20164,9 +20257,10 @@ msgstr ""
 "Keine gültige %s gewählt. Klicken Sie auf »Optionen«, um eine Firma zu "
 "wählen."
 
+# Fixme: Source Accelerator missing
 #: ../src/report/business-reports/customer-summary.scm:1031
 msgid "Customer Summary"
-msgstr "Kundenübersicht"
+msgstr "Kundenüber_sicht"
 
 #: ../src/report/business-reports/easy-invoice.scm:114
 #: ../src/report/business-reports/easy-invoice.scm:259
@@ -21513,15 +21607,15 @@ msgstr "Spalten"
 
 #: ../src/report/report-gnome/dialog-report.glade.h:1
 msgid "<b>A_vailable reports</b>"
-msgstr "<b>Verfügbare Berichte</b>"
+msgstr "<b>_Verfügbare Berichte</b>"
 
 #: ../src/report/report-gnome/dialog-report.glade.h:2
 msgid "<b>_Selected Reports</b>"
-msgstr "<b>Gewählte Berichte</b>"
+msgstr "<b>_Gewählte Berichte</b>"
 
 #: ../src/report/report-gnome/dialog-report.glade.h:3
 msgid "A_dd  >>"
-msgstr "Hinzufügen >>"
+msgstr "Hin_zufügen >>"
 
 #: ../src/report/report-gnome/dialog-report.glade.h:4
 msgid "<< _Remove"
@@ -22276,13 +22370,17 @@ msgstr ""
 "Zeige Zwischensummen für übergeordnete Konten gemäß Rechnungswesen-Stil "
 "eingerückt an. (experimentell)."
 
+# Hier ausnahmsweise "Aktiva & Passiva", die Seiten der Bilanz, 
+# da sich auch die Reinvermögen-Berichte darin befinden
 #: ../src/report/report-system/report.scm:65
 msgid "_Assets & Liabilities"
-msgstr "_Aktiva & Verbindlichkeiten"
+msgstr "_Aktiva & Passiva"
 
+# Fell: im Deutschen ist "Aufwand & Ertrag"
+# neben "Gewinn & Verust (GuV)" gebräuchlicher
 #: ../src/report/report-system/report.scm:66
 msgid "_Income & Expense"
-msgstr "_Ertrag & Aufwand"
+msgstr "Aufwand & _Ertrag"
 
 #: ../src/report/report-system/report.scm:68
 msgid "_Taxes"
@@ -22919,7 +23017,7 @@ msgstr ""
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:96
 msgid "LIFO"
-msgstr ""
+msgstr "LiFo"
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:97
 msgid "Use last-in first-out method for basis."
@@ -22935,24 +23033,26 @@ msgstr ""
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:109
 msgid "How to report commissions and other brokerage fees."
-msgstr ""
+msgstr "Wie sollen Kommissionen und andere Vermittlungsgebühren berücksichtigt "
+"werden?"
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:111
 msgid "Include in basis"
-msgstr "Schließt Bemessungsgrundlage ein"
+msgstr "In Bemessungsgrundlage einschließen"
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:112
 msgid "Include brokerage fees in the basis for the asset."
-msgstr "Schließt die Maklergebühr in die Basis für den Gewinn ein."
+msgstr "Schließt die Vermittlungsgebühren als Beschaffungskosten in die Basis "
+"der Anlage ein."
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:114
 msgid "Include in gain"
-msgstr "Schließt Gewinn ein"
+msgstr "Im Ertrag berücksichtigen"
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:115
 msgid "Include brokerage fees in the gain and loss but not in the basis."
 msgstr ""
-"Schließt Maklergebührt in Gewinn und Verlust ein, aber nicht in der "
+"Schließe Vermittlungsgebühren in Gewinn und Verlust ein, aber nicht in der "
 "Bemessungsgrundlage."
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:117
@@ -23058,7 +23158,8 @@ msgstr ""
 
 #: ../src/report/standard-reports/advanced-portfolio.scm:1183
 msgid "** this commodity has no price and a price of 1 has been used."
-msgstr ""
+msgstr "** dieses Wertpapier hat keinen Kurs hinterlegt, daher wird dafür 1 "
+"verwendet."
 
 #: ../src/report/standard-reports/average-balance.scm:36
 msgid "Average Balance"
@@ -23708,9 +23809,8 @@ msgid "Cash Flow"
 msgstr "Kapitalfluss"
 
 #: ../src/report/standard-reports/cash-flow.scm:57
-#, fuzzy
 msgid "Include Trading Accounts in report"
-msgstr "Summe Devisenhandel anzeigen"
+msgstr "Handelskonten in den Bericht einschließen"
 
 #: ../src/report/standard-reports/cash-flow.scm:106
 msgid "Include transfers to and from Trading Accounts in the report."
@@ -24521,10 +24621,10 @@ msgstr ""
 "Formatiert die Tabelle passend zum Kopieren/Einfügen mit zusätzlichen "
 "Tabellenzellen."
 
+# Fixme: da gibt es bestimmt was Schöneres...
 #: ../src/report/standard-reports/transaction.scm:665
-#, fuzzy
 msgid "Account Substring"
-msgstr "Kontenauswahl"
+msgstr "Teilzeichenkette Konto"
 
 #: ../src/report/standard-reports/transaction.scm:671
 msgid "Filter on these accounts."
@@ -25850,7 +25950,8 @@ msgstr "Keine Hilfe verfügbar."
 #: ../src/gnome/gnucash.appdata.xml.in.h:1
 msgid ""
 "GnuCash is a program for personal and small-business financial-accounting."
-msgstr ""
+msgstr "GnuCash ist ein Buchhaltungsprogramm Privatpersonen und kleine "
+"Unternehmen."
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:2
 msgid ""
@@ -25859,40 +25960,46 @@ msgid ""
 "use as a checkbook register, it is based on professional accounting "
 "principles like double-entry accounting to ensure balanced books and "
 "accurate reports."
-msgstr ""
+msgstr "Enworfen, um einfach im Gebrauch zu sein, aber mächtig und flexibel, "
+"erlaubt GnuCash Ihnen den Überblick über Ihre Bankkonten wie Wertpapiere, "
+"Einkünte wie Aufwendungen zu behalten. So intuitiv und schnell zu benutzen "
+" wie ein Scheckbuchregister basiert es auf professionellen Prinzipien wie "
+"der doppelten Buchführung um ausgeglichene Bücher und präzise Berichte zu "
+"gewährleisten."
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:3
 msgid "With GnuCash you can (but are not limited to):"
-msgstr ""
+msgstr "Mit GnuCash können Sie neben Anderem:"
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:4
 msgid "Keep track of your day to day personal income and expenses"
-msgstr ""
+msgstr "Die Übersicht über Ihre täglichen persönlichen Einnahmen und Ausgaben bewahren"
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:5
 msgid "Manage your stock, bond and mutual fund accounts with ease"
-msgstr ""
+msgstr "Mit Leichtigkeit ihre Renten, Aktien und Fonds verwalten"
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:6
 msgid "Keep your small business' accounting up to date"
-msgstr "Behalten Sie Ihre Buchhaltung aktuell"
+msgstr "Ihre kleine Geschäftsbuchhaltung auf dem Laufenden halten"
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:7
 msgid "Create accurate reports and graphs from your financial data"
-msgstr ""
+msgstr "Präzise Berichte ind Grafiken ihrer Finanzdaten erzeugen"
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:8
 msgid "Set up scheduled transactions to avoid repeated data entry"
 msgstr ""
 "Terminierte Buchungen einrichten, um wiederholte Dateneingabe zu vermeiden"
 
+# Fixme: expand Source
 #: ../src/gnome/gnucash.appdata.xml.in.h:9
 msgid "QIF/OFX/HBCI Import, Transaction Matching"
-msgstr ""
+msgstr "Datenaustausch via FinTS(HBCI)/SWIFT-MT9xx/QIF/OFX und Abgleich"
 
 #: ../src/gnome/gnucash.appdata.xml.in.h:10
 msgid "Perform financial calculations, such as a loan repayment"
-msgstr ""
+msgstr "Finanzkalkulationen ausführen wie Kredit-Rückzahlung"
 
 #: ../src/gnome/gnucash.desktop.in.in.h:1
 msgid "GnuCash"
@@ -25906,6 +26013,7 @@ msgstr "Finanzmanagement"
 msgid "Manage your finances, accounts, and investments"
 msgstr "Verwaltung der Finanzen von Privatanwendern und Kleinbetrieben."
 
+# Fixme: Source qofbookslots: All accelerators missing
 #: ../src/libqof/qof/qofbookslots.h:66
 msgid "Use Trading Accounts"
 msgstr "Devisenhandel-Konten benutzen"
@@ -26263,9 +26371,8 @@ msgstr ""
 #~ msgid "(USD)"
 #~ msgstr "(USD)"
 
-#, fuzzy
 #~ msgid "Retrieve the current online quote"
-#~ msgstr "Aktuellen Buchungsteil löschen"
+#~ msgstr "Aktuellen Kurs online abrufen"
 
 #~ msgid "Auto pay on post_ing"
 #~ msgstr "Automatisch durchbuchen"
