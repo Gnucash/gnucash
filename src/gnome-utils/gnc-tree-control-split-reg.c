@@ -1737,6 +1737,7 @@ gnc_tree_control_split_reg_save (GncTreeViewSplitReg *view, gboolean reg_closing
                 gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                         "%s", message);
                 gtk_dialog_add_button (GTK_DIALOG (dialog),
+                              /* Translators: Return to the transaction to update */
                               _("_Return"), GTK_RESPONSE_ACCEPT);
 
                 gtk_widget_grab_focus (gtk_dialog_get_widget_for_response (GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT));

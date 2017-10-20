@@ -982,7 +982,9 @@ gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
 
     gtk_dialog_add_button(GTK_DIALOG(dialog),
                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-    gnc_gtk_dialog_add_button(dialog, _("_Remove Splits"),
+    gnc_gtk_dialog_add_button(dialog,
+                              /* Translators: This is the confirmation button in a warning dialog */
+                               _("_Remove Splits"),
                               GTK_STOCK_DELETE, GTK_RESPONSE_ACCEPT);
     response = gnc_dialog_run(GTK_DIALOG(dialog), warning);
     gtk_widget_destroy (dialog);
