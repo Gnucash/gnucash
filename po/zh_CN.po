@@ -10928,9 +10928,12 @@ msgstr "关闭而不保存(_W)"
 msgid "Unsaved Book"
 msgstr "未保存的账本"
 
-#: ../src/gnome-utils/gnc-main-window.c:3956
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "GnuCash 个人理财助理。GNU 的理财解决方案！"
+#: ../src/gnome-utils/gnc-main-window.c:4370
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+"GnuCash 个人理财助理。GNU 的理财解决方案！"
 
 #. Development version
 #: ../src/gnome-utils/gnc-main-window.c:3969

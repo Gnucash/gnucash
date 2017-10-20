@@ -10552,9 +10552,13 @@ msgstr ""
 msgid "Book Options"
 msgstr "Bokinställningar"
 
-#: ../../po/../src/gnome-utils/gnc-main-window.c:4367
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "GnuCash tar hand om dina personliga finanser. GNU-sättet att hantera dina pengar!"
+#: ../src/gnome-utils/gnc-main-window.c:4370
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+"GnuCash tar hand om dina personliga finanser.\n"
+"GNU-sättet att hantera dina pengar!"
 
 #: ../../po/../src/gnome-utils/gnc-main-window.c:4369
 msgid "© 1997-2016 Contributors"

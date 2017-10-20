@@ -12175,9 +12175,12 @@ msgid "Book Options"
 msgstr "Buch-Optionen"
 
 #: ../src/gnome-utils/gnc-main-window.c:4370
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
 msgstr ""
-"GnuCash: Ihr privater Finanzmanager. Die freie Lösung zur Finanzverwaltung."
+"Ihr privater Finanzmanager GnuCash.\n"
+"Die freie Lösung zur Finanzverwaltung."
 
 #: ../src/gnome-utils/gnc-main-window.c:4372
 #, c-format
@@ -14091,7 +14094,7 @@ msgstr "Beispiel:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:48
 msgid "<b>Account Color</b>"
-msgstr "<b>_Kontofarbe</b>"
+msgstr "<b>Kontofarbe</b>"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:49
 msgid "Show the Account Color as background"

@@ -10520,9 +10520,13 @@ msgstr "डेटाबेसींत जतनाय करपाक शकन
 msgid "Book Options"
 msgstr "पुस्तक पर्याय"
 
-#: ../src/gnome-utils/gnc-main-window.c:4378
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "GnuCash वैयक्तिक अर्थिक व्यवस्थापक. तुमचे पैसे व्यवस्थापन करपाचो GNU मार्ग"
+#: ../src/gnome-utils/gnc-main-window.c:4370
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+"GnuCash वैयक्तिक अर्थिक व्यवस्थापक.\n"
+"तुमचे पैसे व्यवस्थापन करपाचो GNU मार्ग"
 
 #: ../src/gnome-utils/gnc-main-window.c:4380
 #, fuzzy

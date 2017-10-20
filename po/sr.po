@@ -10600,8 +10600,12 @@ msgid "Book Options"
 msgstr "Опције књиге"
 
 #: ../src/gnome-utils/gnc-main-window.c:4370
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "Гнуов новчић лични управник финансијама. Гнуов начин за управљање вашим новцем!"
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+"Гнуов новчић лични управник финансијама.\n"
+"Гнуов начин за управљање вашим новцем!"
 
 #: ../src/gnome-utils/gnc-main-window.c:4372
 msgid "© 1997-2017 Contributors"

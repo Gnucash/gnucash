@@ -10517,9 +10517,13 @@ msgstr "हयुक नॊ डाटा बिसस मंज़ मोहफ�
 msgid "Book Options"
 msgstr "बुक ऊपशन"
 
-#: ../src/gnome-utils/gnc-main-window.c:4378
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "GNUCASH ज़ॊती फायनानोस मनिजर. GNUतरिक पूंसुक ईनतोज़ाम करनुक."
+#: ../src/gnome-utils/gnc-main-window.c:4370
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+"GNUCASH ज़ॊती फायनानोस मनिजर.\n"
+"GNUतरिक पूंसुक ईनतोज़ाम करनुक."
 
 #: ../src/gnome-utils/gnc-main-window.c:4380
 #, fuzzy

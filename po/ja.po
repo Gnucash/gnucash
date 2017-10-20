@@ -10876,9 +10876,12 @@ msgstr ""
 msgid "Book Options"
 msgstr "帳簿オプション"
 
-#: src/gnome-utils/gnc-main-window.c:4370
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "GnuCash個人用財務管理。GNUでお金を管理しよう!"
+#: ../src/gnome-utils/gnc-main-window.c:4370
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+"GnuCash個人用財務管理。GNUでお金を管理しよう!"
 
 #: src/gnome-utils/gnc-main-window.c:4372
 msgid "© 1997-2017 Contributors"

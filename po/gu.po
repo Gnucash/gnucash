@@ -10780,9 +10780,13 @@ msgstr "ડેટાબેઝને સેવ કરવામાં અસક્
 msgid "Book Options"
 msgstr "પુસ્તકના વિકલ્પ"
 
-#: ../src/gnome-utils/gnc-main-window.c:4378
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "GnuCash પર્સનલ ફાયનાન્સ મેનેજર. તમારા નાણાંનાં સંચાલન માટે GNU પ્રકાર! "
+#: ../src/gnome-utils/gnc-main-window.c:4370
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+"GnuCash પર્સનલ ફાયનાન્સ મેનેજર.\n"
+"તમારા નાણાંનાં સંચાલન માટે GNU પ્રકાર! "
 
 #: ../src/gnome-utils/gnc-main-window.c:4380
 msgid "© 1997-2015 Contributors"

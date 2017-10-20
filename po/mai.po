@@ -10514,9 +10514,13 @@ msgstr "डाटाबेस मे सहेजए मे असमर्थ: 
 msgid "Book Options"
 msgstr "पोथी केर विकल्प"
 
-#: ../src/gnome-utils/gnc-main-window.c:4378
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "GnuCash निज वित्तीय प्रबंधक. अहाँक पैसा केर प्रबंधन क' GNU तरीका! "
+#: ../src/gnome-utils/gnc-main-window.c:4370
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+"GnuCash निज वित्तीय प्रबंधक.\n"
+"अहाँक पैसा केर प्रबंधन क' GNU तरीका! "
 
 #: ../src/gnome-utils/gnc-main-window.c:4380
 #, fuzzy

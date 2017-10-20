@@ -10516,9 +10516,13 @@ msgstr "ডাটাবেছ ছেভ কৰিবলৈ অসমৰ্থ: �
 msgid "Book Options"
 msgstr "কিতাপৰ বিকল্পবিলাক"
 
-#: ../src/gnome-utils/gnc-main-window.c:4378
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "GnuCash টো ব্যক্তিগত বিত্ত পৰিচালক. আপোনাৰ ধন পৰিচলনা কৰিবলৈ GNU য়ে পথ নিৰ্দেশন কৰে!"
+#: ../src/gnome-utils/gnc-main-window.c:4370
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+"GnuCash টো ব্যক্তিগত বিত্ত পৰিচালক.\n"
+"আপোনাৰ ধন পৰিচলনা কৰিবলৈ GNU য়ে পথ নিৰ্দেশন কৰে!"
 
 #: ../src/gnome-utils/gnc-main-window.c:4380
 #, fuzzy

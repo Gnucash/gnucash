@@ -10578,8 +10578,12 @@ msgid "Book Options"
 msgstr "Grootboek-opties"
 
 #: ../src/gnome-utils/gnc-main-window.c:4370
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "GnuCash financieel beheer voor uw huishoudboekje. De vrije manier om uw geldzaken te managen!"
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+"GnuCash financieel beheer voor uw huishoudboekje.\n"
+"De vrije manier om uw geldzaken te managen!"
 
 #: ../src/gnome-utils/gnc-main-window.c:4372
 msgid "© 1997-2016 Contributors"

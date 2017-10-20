@@ -10565,9 +10565,13 @@ msgstr "দাতাবেজ সেভ তৌবা ঙমদে: বুক অ
 msgid "Book Options"
 msgstr "বুক ওপসন"
 
-#: ../src/gnome-utils/gnc-main-window.c:4378
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "GnuCash পর্সনেল ফাইনান্স মেনেজর. অদোমগী শেল শিল-লাংনবগী GNU গী লম্বী!"
+#: ../src/gnome-utils/gnc-main-window.c:4370
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+"GnuCash পর্সনেল ফাইনান্স মেনেজর.\n"
+"অদোমগী শেল শিল-লাংনবগী GNU গী লম্বী!"
 
 #: ../src/gnome-utils/gnc-main-window.c:4380
 #, fuzzy

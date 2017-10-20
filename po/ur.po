@@ -10515,9 +10515,12 @@ msgstr "ڈاٹا بیس میں محفوظ كرنے میں ناقابل : كتا�
 msgid "Book Options"
 msgstr "بیاض كا آپشنس"
 
-#: ../src/gnome-utils/gnc-main-window.c:4378
-msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "GnuCash پرسنل فائنانس مینجر ۔  آپ كے پیسوں كے انتظام كا GNU طریقہ!"
+#: ../src/gnome-utils/gnc-main-window.c:4370
+msgid ""
+"The GnuCash personal finance manager.\n"
+"The GNU way to manage your money!"
+msgstr ""
+"GnuCash پرسنل فائنانس مینجر ۔  آپ كے پیسوں كے انتظام كا GNU طریقہ!"
 
 #: ../src/gnome-utils/gnc-main-window.c:4380
 #, fuzzy
