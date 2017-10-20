@@ -1120,15 +1120,6 @@ fi
 dnl check for nl_langinfo(D_FMT) which is missing on FreeBSD
 LANGINFO_D_FMT_CHECK
 
-dnl Enable locale-specific tax-related information in the accounts
-AC_ARG_ENABLE( locale-specific-tax,
-  [AS_HELP_STRING([--enable-locale-specific-tax],[enable localized tax categories (experimental, but used by the german SKR04 account chart)])],
-  [
-  if test x$enableval = xyes; then
-    AC_DEFINE(LOCALE_SPECIFIC_TAX,1,Enable the experimental locale-specific tax categories)
-  fi
-  ])
-
 dnl Make sure we have a proper gettext installed
 AC_MSG_CHECKING(for a valid gettext/gmsgfmt installation)
 if test "$gt_cv_have_gettext" != "yes" || test "x$GMSGFMT" = "x"; then

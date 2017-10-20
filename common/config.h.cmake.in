@@ -280,9 +280,6 @@
 /* Define to 1 if you have the file `/usr/src/gtest/src/gtest-all.cc'. */
 #cmakedefine HAVE__USR_SRC_GTEST_SRC_GTEST_ALL_CC 1
 
-/* Enable the experimental locale-specific tax categories */
-#cmakedefine LOCALE_SPECIFIC_TAX 1
-
 /* Define to the sub-directory where libtool stores uninstalled libraries. */
 #define LT_OBJDIR ".libs/"
 
