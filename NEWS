@@ -13,87 +13,162 @@ Version history:
        quality assurance and debugging efforts by Linux distribution
        maintainers.
 
-       The headline item for this release is that GnuCash now uses the
-       Gtk+-3.0 Toolkit and the WebKit2Gtk API. This change was forced
-       on us by some major Linux distributions dropping support for
-       the WebKit1 API. Unfortunately the Webkit project doesn't
-       support Microsoft Windows so that platform will continue to use
-       the WebKit1 API, though with Gtk3. We've selected Gtk+-3.14.0
-       as the minimum version because it fully supports CSS
-       theming. (Geert Janssens and Robert Fewell)
+New Features For Users:
 
-       There's a new CSV importer largely rewritten in C++, adding new
-       features including the ability to re-import CSV files exported
-       from GnuCash. (Geert Janssens)
+    The headline item for this release is that GnuCash now uses the
+    Gtk+-3.0 Toolkit and the WebKit2Gtk API. This change was forced
+    on us by some major Linux distributions dropping support for
+    the WebKit1 API. Unfortunately the Webkit project doesn't
+    support Microsoft Windows so that platform will continue to use
+    the WebKit1 API, though with Gtk3. We've selected Gtk+-3.14.0
+    as the minimum version because it fully supports CSS
+    theming. (Geert Janssens and Robert Fewell)
 
-       Data file directories are now located appropriately to the
-       operating system's conventions by default. It's still possible
-       to overried with the environment variable GNC_DOC_PATH, which
-       replaces GNC_DOT_DIR in earlier versions of GnuCash. (Geert
-       Janssens)
+    There's a new CSV importer largely rewritten in C++, adding new
+    features including the ability to re-import CSV files exported
+    from GnuCash. (Geert Janssens)
 
-       Accounts in the Bayes import map are now linked by GUID instead
-       of names so that the matcher won't have to be retrained if you
-       rename an account. THIS WILL MAKE YOUR FILE UNREADABLE BY
-       PREVIOUS VERSIONS OF GNUCASH. There's a new editor to remove
-       outdated or incorrect match data from the import maps, a new
-       user interfacs for managing files associated with transactions,
-       an improved facility for removing old prices from the price
-       database, and a way to remove deleted files from the history
-       list in the file menu. (All from Robert Fewell!)
+    Data file directories are now located appropriately to the
+    operating system's conventions by default. It's still possible
+    to overried with the environment variable GNC_DOC_PATH, which
+    replaces GNC_DOT_DIR in earlier versions of GnuCash. (Geert
+    Janssens)
 
-       Numerics are rewritten to allow for more significant
-       digits. The old 6-digit-maximum fraction will be a 9-digit
-       maximum by 2.8. there is still some cleanup required before the
-       limit can actually change. (John Ralls)
+    Accounts in the Bayes import map are now linked by GUID instead
+    of names so that the matcher won't have to be retrained if you
+    rename an account. THIS WILL MAKE YOUR FILE UNREADABLE BY
+    PREVIOUS VERSIONS OF GNUCASH. There's a new editor to remove
+    outdated or incorrect match data from the import maps, a new
+    user interfacs for managing files associated with transactions,
+    an improved facility for removing old prices from the price
+    database, and a way to remove deleted files from the history
+    list in the file menu. (All from Robert Fewell!)
 
-       New Income GST Report and some improvements to the Transaction
-       report. (Christopher Lam)
+    Numerics are rewritten to allow for more significant
+    digits. The old 6-digit-maximum fraction will be a 9-digit
+    maximum by 2.8. there is still some cleanup required before the
+    limit can actually change. (John Ralls)
 
-       Chart Reports appearance is improved (Carsten Rinke)
+    New Income GST Report and some improvements to the Transaction
+    report. (Christopher Lam)
 
-       Several parts of the engine and the SQL backend are rewritten
-       in C++, an effort that will continue in the next development
-       cycle. KVP is now private to libgncmod-engine and accessible
-       outside via qof_instance_set and qof_instance_get. (John Ralls
-       and Aaron Laws)
+    Chart Reports appearance is improved (Carsten Rinke)
 
-       KVP and GUID are reimplemnted in C++ using boost::variant and
-       boost::UUID respectively (Aaron Laws).
+New Features For Developers
 
-       The date implementation is migrated to boost::date-time,
-       replacing a Glib GDateTime implementation. This makes the
-       earliest date recordable 1 January 1400CE instead of 1 January
-       1CE. We doubt any users will be affected. (John Ralls)
+    Several parts of the engine and the SQL backend are rewritten
+    in C++, an effort that will continue in the next development
+    cycle. KVP is now private to libgncmod-engine and accessible
+    outside via qof_instance_set and qof_instance_get. (John Ralls
+    and Aaron Laws)
 
-       Distribution tarballs can now be built with CMake as well as
-       Autotools. (Rob Gowin)
+    KVP and GUID are reimplemnted in C++ using boost::variant and
+    boost::UUID respectively (Aaron Laws).
 
-       The CuteCash front end has been removed. The code we need from
-       GOffice has been brought into the GnuCash code base so GOffice
-       is no longer a dependency.
+    The date implementation is migrated to boost::date-time,
+    replacing a Glib GDateTime implementation. This makes the
+    earliest date recordable 1 January 1400CE instead of 1 January
+    1CE. We doubt any users will be affected. (John Ralls)
 
-       Of interest mostly to developers, we've reorganized the code
-       into a core library directory, libgnucash, and
-       applications-specific directory, gnucash.
+    Distribution tarballs can now be built with CMake as well as
+    Autotools. (Rob Gowin)
 
-       A new Russian translation of the Guide has been started by
-       Dmitriy Mandel. Downloads in the usual formats are available at
-       https://code.gnucash.org/docs/ru/; the HTML is at
-       https://code.gnucash.org/docs/ru/gnucash-guide/.
+    The CuteCash front end has been removed. The code we need from
+    GOffice has been brought into the GnuCash code base so GOffice
+    is no longer a dependency.
 
-       There will be no unstable documentation release at this
-       time. There have been very few relatively minor changes to the
-       master documentation branch; those documents may be viewed in
-       the nightly builds at https://www.gnucash.org/docs.phtml.
+    Of interest mostly to developers, we've reorganized the code
+    into a core library directory, libgnucash, and
+    applications-specific directory, gnucash.
 
-       KNOWN PROBLEMS:
+    A new Russian translation of the Guide has been started by
+    Dmitriy Mandel. Downloads in the usual formats are available at
+    https://code.gnucash.org/docs/ru/; the HTML is at
+    https://code.gnucash.org/docs/ru/gnucash-guide/.
 
-       On Microsoft Windows starting the AQBanking Setup Wizard crashes GnuCash.
+    There will be no unstable documentation release at this
+    time. There have been very few relatively minor changes to the
+    master documentation branch; those documents may be viewed in
+    the nightly builds at https://www.gnucash.org/docs.phtml.
 
-       test-import-bayes built with autotools intermittently fails at
-       line 381, where the returned value is 1 instead of the expected
-       6.
+The following bugs are fixed only in unstable/master:
+    Bug  87652 - KVP modification does not change 'dirty' flag.
+    Bug 120250 - KVP XML loader ignores '0' timestamps?
+    Bug 122895 - general ledger should be named journal
+    Bug 343227 - Summary bar alignment patch.
+    Bug 388500 - Add option to remove deleted files from the history list.
+                 Allows removing files from the MRU list if they no longer exist.
+    Bug 541541 - RFE: auto-hide unused accounts
+    Bug 608098 - Option is hard to find: Change Transaction Report to show account names in multirow txn
+                 On the Transaction report the General->Style option
+                 has been replaced with a similar Display->Detail Level
+                 option. This was done in order to make the display of
+                 some columns dependent on the value of this option.
+
+                 When upgrading from 2.6.x or earlier to 2.8.x and you
+                 had saved or open reports that had set General->Style
+                 to 'Multi-line' you will have to update these reports
+                 to set 'Multi-line' on the Display->Detail Level
+                 option instead and optionally resave your report.
+    Bug 639401 - Invoices Due Reminder
+    Bug 645786 - Fancy invoice report still doesn't use fancy date format preference
+    Bug 647230 - Display the blank split after the "now" line instead of at the end
+    Bug 679791 - Import Template for importing CSV files - part2
+    Bug 684719 - Man pages for gnc-fq-* perl scripts
+    Bug 689489 - Be able to show file location
+                 The file location is now visible in the status bar
+                 while hovering over the recent file list of the File
+                 menu. The currently open file is the top-most file in
+                 this list so its location can be seen by hovering over
+                 it with the mouse.
+    Bug 695610 - GnuCash Tax Invoice for Australia
+    Bug 706021 - Test match text for valid account path
+    Bug 726535 - Budget BarChart Report - add option to change to a line chart
+    Bug 728136 - Rate in Job
+    Bug 729001 - Fix a minor typo affecting the profile option in the previous commit
+    Bug 731589 - Add account level selection on accounts option tab
+    Bug 733186 - [PATCH] Extend account tree view search function
+    Bug 734168 - Tax invoice can be a bill too.
+    Bug 737171 - After account creation wizard and saving, empty account window is shown
+    Bug 738462 - Fixes Report Scheme error.
+    Bug 738477 - WebKit is broken on Win32.
+    Bug 741810 - Compilation fails because of creating .gnucash
+    Bug 747377 - Fix overly restrictive input validation for IBAN of SEPA transfer.
+    Bug 752686 - Initialize temp GValues in xaccAccountGetReconcileLastInterval.
+    Bug 754530 - Add CSV Export Simple Layout
+    Bug 754533 - Change finish page text for Search and General Journal register exports
+    Bug 756373 - Typos in Transaction Rpt options mouse-over text
+    Bug 757532 - [PATCH] Make start and end rows editable by keyboard
+    Bug 759674 - GNUCash crashes when importing invoices or bills with delimited import
+    Bug 760107 - Change default date completion to sliding window
+                 The default date completion when entering partial
+                 dates has been changed from "always complete in
+                 current calendar year" to "complete to a sliding
+                 window starting 11 months before current month". For
+                 example if you enter "1/23" (January 23rd) while today
+                 is December 10th 2015, the date will be expanded to
+                 January 23rd 2016 rather than 2015. If you prefer to
+                 keep the old behaviour, you can restore to it via
+                 Edit->Preferences->Date/Time->Date Completion. In
+                 addition if you were already using the sliding window
+                 before, but didn't change the previous 6 months before
+                 default, you will now also get the new default 11
+                 months before. Again if you prefer the old behaviour
+                 it can be restored via the same Preference.
+    Bug 764268 - MT940 import select account based on transaction info
+    Bug 766200
+    Bug 769115 - db name isn't escaped well
+    Bug 769576 - Seg Fault on Editing Scheduled Transaction's Amount
+    Bug 778042 - These are the script changes for jqplot reports.
+                 Adds resize function to graphical reports.
+    Bug 780845 - link in github repo README file needs correction/editing
+
+KNOWN PROBLEMS:
+
+    On Microsoft Windows starting the AQBanking Setup Wizard crashes GnuCash.
+
+    test-import-bayes built with autotools intermittently fails at
+    line 381, where the returned value is 1 instead of the expected 6.
 
 2.6.18 - 24 September 2017
 
