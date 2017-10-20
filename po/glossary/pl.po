@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.2.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-13 00:33+0200\n"
+"POT-Creation-Date: 2017-10-20 19:04+0200\n"
 "PO-Revision-Date: 2010-09-06 12:20+0200\n"
 "Last-Translator: Radzisław Galler <rgaller@gazeta.pl>\n"
 "Language-Team: Polish <translators@gnomepl.org>\n"
@@ -45,6 +45,11 @@ msgstr "typ konta: Aktywa"
 msgid "account type: Asset"
 msgstr "typ konta: Aktywa"
 
+#. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
+#, fuzzy
+msgid "account type: Assets & Liabilities"
+msgstr "typ konta: Zobowiązania"
+
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
 msgstr "typ konta: A'vista"
@@ -80,6 +85,11 @@ msgstr "typ konta: Fundusz wzajemny"
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugzilla.gnome.org/show_bug.cgi?id=421766"
 #, fuzzy
 msgid "account type: Passive"
+msgstr "typ konta: Aktywa"
+
+#. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
+#, fuzzy
+msgid "account type: Profit & Loss"
 msgstr "typ konta: Aktywa"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
@@ -155,7 +165,7 @@ msgstr "akcja: pożyczka"
 msgid "action: payment"
 msgstr "akcja: płatność"
 
-#. "-"
+#. "Point of sale"
 msgid "action: POS"
 msgstr "akcja: punkt sprzedaży"
 
@@ -399,7 +409,7 @@ msgstr "kalkulator finansowy: płatności"
 msgid "gain"
 msgstr "zysk"
 
-#. "Name of an automaticly created account to get imbalanced transactions back in balance"
+#. "Name of an automatically created account to get imbalanced transactions back in balance"
 msgid "imbalance"
 msgstr "niezrównoważenie"
 
@@ -417,11 +427,6 @@ msgstr "odsetki"
 
 #. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out (to a customer), whereas a 'bill' is one that we received (from a vendor)."
 msgid "invoice"
-msgstr "faktura"
-
-#. "The customer (or vendor) to which this invoice is sent to."
-#, fuzzy
-msgid "invoice owner"
 msgstr "faktura"
 
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
@@ -524,6 +529,10 @@ msgstr "polecenie"
 #. "Name of an automatically created account that holds splits that have no account."
 msgid "orphan"
 msgstr "osierocone"
+
+#. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
+msgid "owner (of bill, invoice or expense voucher)"
+msgstr ""
 
 #. "A secret phrase that one needs to know in order to get access to a user account "
 msgid "passphrase"
@@ -699,7 +708,7 @@ msgstr "arkusz stylów"
 msgid "subtotal"
 msgstr "podsuma"
 
-#. "On the goverment's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
+#. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
 #, fuzzy
 msgid "tax code"
 msgstr "informacja o podatku"
@@ -787,6 +796,10 @@ msgstr "kwit"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "obciążenie"
+
+#, fuzzy
+#~ msgid "invoice owner"
+#~ msgstr "faktura"
 
 #~ msgid "Term"
 #~ msgstr "Termin"
