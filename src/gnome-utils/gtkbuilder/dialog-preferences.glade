@@ -1462,7 +1462,7 @@ many months before the current month:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">&lt;b&gt;General&lt;/b&gt;</property>
+                    <property name="label" translatable="yes" comments="Preferences Dialog, General Tab">&lt;b&gt;General&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
                   </object>
                   <packing>
@@ -2025,7 +2025,7 @@ many months before the current month:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Time to wait for answer:</property>
+                    <property name="label" translatable="yes">Time to _wait for answer:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">pref/general/autosave-interval-minutes</property>
                   </object>
@@ -2910,7 +2910,7 @@ many months before the current month:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Number of _characters for auto complete:</property>
+                    <property name="label" translatable="yes" comments="Register2 feature">Number of _characters for auto complete:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">pref/general.register/key-length</property>
                   </object>
@@ -2928,7 +2928,7 @@ many months before the current month:</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">This sets the number of characters before auto complete starts for description, notes and memo fields.</property>
-                    <property name="tooltip_text" translatable="yes">This sets the number of characters before auto complete starts for description, notes and memo fields.</property>
+                    <property name="tooltip_text" translatable="yes" comments="Register2 feature">This sets the number of characters before auto complete starts for description, notes and memo fields.</property>
                     <property name="invisible_char">●</property>
                     <property name="invisible_char_set">True</property>
                     <property name="primary_icon_activatable">False</property>
@@ -2952,12 +2952,12 @@ many months before the current month:</property>
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="pref/general.register/show-extra-dates">
-                    <property name="label" translatable="yes">Show the _entered and reconcile dates</property>
+                    <property name="label" translatable="yes" comments="Register2 feature">Show the _entered and reconcile dates</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="tooltip_markup">Show the date when the transaction was entered below the posted date and reconciled date on split row.</property>
-                    <property name="tooltip_text" translatable="yes">Show the date when the transaction was entered below the posted date and reconciled date on split row.</property>
+                    <property name="tooltip_text" translatable="yes" comments="Register2 feature">Show the date when the transaction was entered below the posted date and reconciled date on split row.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -2972,12 +2972,12 @@ many months before the current month:</property>
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="pref/general.register/show-calendar-buttons">
-                    <property name="label" translatable="yes">Show the calendar b_uttons</property>
+                    <property name="label" translatable="yes" comments="Register2 feature">Show the calendar b_uttons</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="tooltip_markup">Show the calendar buttons Cancel, Today and Select.</property>
-                    <property name="tooltip_text" translatable="yes">Show the calendar buttons Cancel, Today and Select.</property>
+                    <property name="tooltip_text" translatable="yes" comments="Register2 feature">Show the calendar buttons Cancel, Today and Select.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -2992,12 +2992,12 @@ many months before the current month:</property>
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="pref/general.register/selection-to-blank-on-expand">
-                    <property name="label" translatable="yes">_Move the selection to the blank split on expand</property>
+                    <property name="label" translatable="yes" comments="Register2 feature">_Move the selection to the blank split on expand</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="tooltip_markup">This will move the selection to the blank split when the transaction is expanded.</property>
-                    <property name="tooltip_text" translatable="yes">This will move the selection to the blank split when the transaction is expanded.</property>
+                    <property name="tooltip_text" translatable="yes" comments="Register2 feature">This will move the selection to the blank split when the transaction is expanded.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -3012,12 +3012,12 @@ many months before the current month:</property>
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="pref/general.register/show-extra-dates-on-selection">
-                    <property name="label" translatable="yes">_Show entered and reconciled dates on selection</property>
+                    <property name="label" translatable="yes" comments="Register2 feature">_Show entered and reconciled dates on selection</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="tooltip_markup">Show the entered date and reconciled date on transaction selection.</property>
-                    <property name="tooltip_text" translatable="yes">Show the entered date and reconciled date on transaction selection.</property>
+                    <property name="tooltip_text" translatable="yes" comments="Register2 feature">Show the entered date and reconciled date on transaction selection.</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
