@@ -1,4 +1,6 @@
-ADD_SUBDIRECTORY(design)
+if (!WIN32)
+  ADD_SUBDIRECTORY(design)
+endif()
 ADD_SUBDIRECTORY(xml)
 
 SET(doc_FILES
