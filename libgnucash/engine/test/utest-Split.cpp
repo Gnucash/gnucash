@@ -249,6 +249,8 @@ test_gnc_split_set_get_property ()
      * few leaks to save trouble; it will all work fine once the
      * refactoring is taken care of.
      */
+    g_free (r_value);
+    g_free (r_amount);
     g_object_unref (txn);
     g_object_unref (acc);
     g_object_unref (lot);

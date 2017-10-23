@@ -2209,7 +2209,7 @@ gnc_template_register_get_debcred_entry (VirtualLocation virt_loc,
 {
     SplitRegister *reg = user_data;
     Split *split;
-    gnc_numeric *amount;
+    gnc_numeric *amount, amount2;
     const char * cell_name;
 
     split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
@@ -2228,11 +2228,18 @@ gnc_template_register_get_debcred_entry (VirtualLocation virt_loc,
         qof_instance_get (QOF_INSTANCE (split),
                           "sx-credit-numeric", &amount,
                           NULL);
-    if (gnc_numeric_zero_p (*amount))
+    if (!amount)
         return "";
 
-    *amount = gnc_numeric_abs (*amount);
-    return xaccPrintAmount (*amount, gnc_default_print_info (FALSE));
+    if (gnc_numeric_zero_p (*amount))
+    {
+        g_free (amount);
+        return "";
+    }
+
+    amount2 = gnc_numeric_abs (*amount);
+    g_free (amount);
+    return xaccPrintAmount (amount2, gnc_default_print_info (FALSE));
 }
 
 static void

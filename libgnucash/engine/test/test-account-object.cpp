@@ -60,6 +60,8 @@ run_test (void)
     do_test (gnc_numeric_zero_p(*end), "end balance is zero");
     do_test (gnc_numeric_zero_p(delta), "delta is zero");
     do_test (gnc_numeric_zero_p(end2), "end2 balance is zero");
+    g_free (start);
+    g_free (end);
 
     /*****/
 
@@ -75,6 +77,8 @@ run_test (void)
     do_test (gnc_numeric_zero_p(delta), "end balance matches");
     delta = gnc_numeric_sub(end2, five, GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED);
     do_test (gnc_numeric_zero_p(delta), "end2 balance matches");
+    g_free (start);
+    g_free (end);
 
     /*****/
 

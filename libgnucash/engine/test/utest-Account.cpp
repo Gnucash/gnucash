@@ -625,6 +625,12 @@ test_gnc_account_create_and_destroy (void)
     g_free (notes);
     g_free (tax_code);
     g_free (tax_src);
+    g_free (start_bal);
+    g_free (start_clr_bal);
+    g_free (start_rec_bal);
+    g_free (end_bal);
+    g_free (end_clr_bal);
+    g_free (end_rec_bal);
 
     g_object_unref (acc);
     /* There's no good way to test that the object has been properly

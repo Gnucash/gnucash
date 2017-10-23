@@ -78,11 +78,12 @@ scrub_sx_split_numeric (Split* split, const char *debcred)
     const char *numeric = is_credit ?
         "sx-credit-numeric" : "sx-debit-numeric";
     char *formval;
-    gnc_numeric *numval;
+    gnc_numeric *numval = NULL;
     GHashTable *parser_vars = g_hash_table_new (g_str_hash, g_str_equal);
     char *error_loc;
     gnc_numeric amount = gnc_numeric_zero ();
     gboolean parse_result = FALSE;
+    gboolean num_val_changed = FALSE;
     qof_instance_get (QOF_INSTANCE (split),
 		  formula, &formval,
 		  numeric, &numval,
@@ -93,12 +94,15 @@ scrub_sx_split_numeric (Split* split, const char *debcred)
     if (!parse_result || g_hash_table_size (parser_vars) != 0)
         amount = gnc_numeric_zero ();
     g_hash_table_unref (parser_vars);
-    if (gnc_numeric_eq (amount, *numval))
-        return FALSE;
-    qof_instance_set (QOF_INSTANCE (split),
-		  numeric, &amount,
-		  NULL);
-    return TRUE;
+    if (!numval || !gnc_numeric_eq (amount, *numval))
+    {
+        qof_instance_set (QOF_INSTANCE (split),
+                          numeric, &amount,
+                          NULL);
+        num_val_changed = TRUE;
+    }
+    g_free (numval);
+    return num_val_changed;
 }
 
 /* Fixes error in pre-2.6.16 where the numeric slot wouldn't get changed if the

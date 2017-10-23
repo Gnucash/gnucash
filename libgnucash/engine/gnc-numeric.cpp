@@ -1222,12 +1222,15 @@ string_to_gnc_numeric(const gchar* str, gnc_numeric *n)
  *  GValue handling
  ********************************************************************/
 static gpointer
-gnc_numeric_boxed_copy_func( gpointer in_gnc_numeric )
+gnc_numeric_boxed_copy_func( gpointer in_ptr )
 {
-    gnc_numeric* newvalue;
+    auto in_gnc_numeric = static_cast<gnc_numeric*>(in_ptr);
+    if (!in_gnc_numeric)
+        return nullptr;
 
-    newvalue = static_cast<gnc_numeric*>(g_malloc (sizeof (gnc_numeric)));
-    memcpy( newvalue, in_gnc_numeric, sizeof( gnc_numeric ) );
+    /* newvalue will be passed to g_free so we must allocate with g_malloc. */
+    auto newvalue = static_cast<gnc_numeric*>(g_malloc (sizeof (gnc_numeric)));
+    *newvalue = *in_gnc_numeric;
 
     return newvalue;
 }
