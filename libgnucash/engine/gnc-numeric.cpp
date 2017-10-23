@@ -85,9 +85,13 @@ GncNumeric::GncNumeric(double d) : m_num(0), m_den(1)
     static uint64_t max_leg_value{INT64_C(1000000000000000000)};
     if (std::isnan(d) || fabs(d) > max_leg_value)
     {
-        std::ostringstream msg;
+#ifdef __MINGW32__
+	throw std::invalid_argument("Bad double");
+#else
+	std::ostringstream msg;
         msg << "Unable to construct a GncNumeric from " << d << ".\n";
         throw std::invalid_argument(msg.str());
+#endif
     }
     constexpr auto max_num = static_cast<double>(INT64_MAX);
     auto logval = log10(fabs(d));
@@ -117,6 +121,83 @@ GncNumeric::GncNumeric(double d) : m_num(0), m_den(1)
 using boost::regex;
 using boost::smatch;
 using boost::regex_search;
+
+static bool
+string_regex (const std::string& str, const regex& expr,
+	      std::string& first, std::string& second)
+{
+    smatch m;
+    if (regex_search(str, m, expr))
+    {
+	first = m[1].str();
+	second = m[2].str();
+	return true;
+    }
+    return false;
+}
+
+static bool
+string_regex (const std::string& str, const regex& expr, std::string& string)
+{
+    smatch m;
+    if (regex_search(str, m, expr))
+    {
+	string = m[1].str();
+	return true;
+    }
+    return false;
+}
+
+
+static bool
+numeric_regex (const std::string& str, const regex& expr,
+	       int64_t& num, int64_t& denom, int base1, int base2)
+{
+    std::string first, second;
+    if (string_regex(str, expr, first, second))
+    {
+	num = stoll(first, nullptr, base1);
+	denom = stoll(second, nullptr, base2);
+	return true;
+    }
+    return false;
+}
+
+numeric_regex (const std::string& str, const regex& expr, int64_t& num,
+	       int base)
+{
+    std::string result;
+    if (string_regex(str, expr, result))
+    {
+	num = stoll(result, nullptr, base);
+	return true;
+    }
+    return false;
+}
+
+static bool
+numeric_regex (const std::string& str, const regex& expr,
+	       GncInt128& num, int64_t& den)
+{
+    std::string first, second;
+    if (string_regex(str, expr, first, second))
+    {
+	GncInt128 high(stoll(first));
+	GncInt128 low(stoll(second));
+	den = powten(second.length());
+	num = high * den + (high > 0 ? low : -low);
+	return true;
+    }
+    return false;
+}
+
+static void
+check_for_zero_denom (int64_t denom)
+{
+    if (denom == 0)
+	throw std::invalid_argument("GncNumeric denominator can't be 0.");
+}
+
 GncNumeric::GncNumeric(const std::string& str, bool autoround)
 {
     static const std::string numer_frag("(-?[0-9]+)");
@@ -134,91 +215,70 @@ GncNumeric::GncNumeric(const std::string& str, bool autoround)
     static const regex hex_over_num(hex_frag + slash + denom_frag);
     static const regex num_over_hex(numer_frag + slash + hex_frag);
     static const regex decimal(numer_frag + "[.,]" + denom_frag);
-    smatch m;
 /* The order of testing the regexes is from the more restrictve to the less
  * restrictive, as less-restrictive ones will match patterns that would also
  * match the more-restrictive and so invoke the wrong construction.
  */
     if (str.empty())
         throw std::invalid_argument("Can't construct a GncNumeric from an empty string.");
-    if (regex_search(str, m, hex_rational))
+    if (numeric_regex(str, hex_rational, m_num, m_den, 16, 16) ||
+	numeric_regex(str, hex_over_num, m_num, m_den, 16, 10) ||
+	numeric_regex(str, num_over_hex, m_num, m_den, 10, 16) ||
+	numeric_regex(str, numeral_rational, m_num, m_den, 10, 10))
     {
-        GncNumeric n(stoll(m[1].str(), nullptr, 16),
-                     stoll(m[2].str(), nullptr, 16));
-        m_num = n.num();
-        m_den = n.denom();
-        return;
+	check_for_zero_denom(m_den);
+	return;
     }
-    if (regex_search(str, m, hex_over_num))
+    GncInt128 n;
+    int64_t d;
+    if (numeric_regex(str, decimal, n, d))
     {
-        GncNumeric n(stoll(m[1].str(), nullptr, 16),
-                     stoll(m[2].str()));
-        m_num = n.num();
-        m_den = n.denom();
-        return;
-    }
-    if (regex_search(str, m, num_over_hex))
-    {
-        GncNumeric n(stoll(m[1].str()),
-                     stoll(m[2].str(), nullptr, 16));
-        m_num = n.num();
-        m_den = n.denom();
-        return;
-    }
-    if (regex_search(str, m, numeral_rational))
-    {
-        GncNumeric n(stoll(m[1].str()), stoll(m[2].str()));
-        m_num = n.num();
-        m_den = n.denom();
-        return;
-    }
-    if (regex_search(str, m, decimal))
-    {
-        GncInt128 high(stoll(m[1].str()));
-        GncInt128 low(stoll(m[2].str()));
-        int64_t d = powten(m[2].str().length());
-        GncInt128 n = high * d + (high > 0 ? low : -low);
         if (!autoround && n.isBig())
         {
-            std::ostringstream errmsg;
-            errmsg << "Decimal string " << m[1].str() << "." << m[2].str()
-                   << "can't be represented in a GncNumeric without rounding.";
+#ifdef __MINGW32__
+	    throw std::overflow_error("String overflowed, rounding.");
+#else
+	    std::ostringstream errmsg;
+            errmsg << "Decimal string " << str
+                   << " can't be represented in a GncNumeric without rounding.";
             throw std::overflow_error(errmsg.str());
+#endif
+
         }
         while (n.isBig() && d > 0)
         {
             n >>= 1;
             d >>= 1;
         }
-        if (n.isBig()) //Shouldn't happen, of course
+        if (d == 0 || n.isBig()) //Shouldn't happen, of course
         {
+	    d = d ? d : 1;
+#ifdef __MINGW32__
+	    throw std::overflow_error("String overflowed, reducing.");
+#else
             std::ostringstream errmsg;
-            errmsg << "Decimal string " << m[1].str() << "." << m[2].str()
+            errmsg << "Decimal string " << str
             << " can't be represented in a GncNumeric, even after reducing denom to " << d;
             throw std::overflow_error(errmsg.str());
+#endif
         }
-        GncNumeric gncn(static_cast<int64_t>(n), d);
-        m_num = gncn.num();
-        m_den = gncn.denom();
-        return;
+        m_num = static_cast<int64_t>(n);
+	m_den = d;
+	return;
     }
-    if (regex_search(str, m, hex))
+    if (numeric_regex(str, hex, m_num, 16) ||
+	numeric_regex(str, numeral, m_num, 10))
     {
-        GncNumeric n(stoll(m[1].str(), nullptr, 16),INT64_C(1));
-        m_num = n.num();
-        m_den = n.denom();
+        m_den = 1;
         return;
     }
-    if (regex_search(str, m, numeral))
-    {
-        GncNumeric n(stoll(m[1].str()), INT64_C(1));
-        m_num = n.num();
-        m_den = n.denom();
-        return;
-    }
+#ifdef __MINGW32__
+    throw std::invalid_argument("No numeric.");
+#else
     std::ostringstream errmsg;
     errmsg << "String " << str << " contains no recognizable numeric value.";
     throw std::invalid_argument(errmsg.str());
+#endif
 }
 
 GncNumeric::operator gnc_numeric() const noexcept
@@ -343,11 +403,15 @@ GncNumeric::to_decimal(unsigned int max_places) const
         auto excess = m_den / powten(max_places);
         if (m_num % excess)
         {
+#ifdef __MINGW32__
+	    throw std::range_error("Number couldn't be reprensented without rounding");
+#else
             std::ostringstream msg;
             msg << "GncNumeric " << *this
                 << " could not be represented in " << max_places
                 << " decimal places without rounding.\n";
             throw std::range_error(msg.str());
+#endif
         }
         return GncNumeric(m_num / excess, powten(max_places));
     }
@@ -378,17 +442,25 @@ GncNumeric::to_decimal(unsigned int max_places) const
     }
     catch (const std::invalid_argument& err)
     {
+#ifdef __MINGW32__
+	throw std::range_error("Number couldn't be represented without rounding");
+#else
         std::ostringstream msg;
         msg << "GncNumeric " << *this
             << " could not be represented as a decimal without rounding.\n";
         throw std::range_error(msg.str());
+#endif
     }
     catch (const std::overflow_error& err)
     {
+#ifdef __MINGW32__
+	throw std::range_error("Number overflows as a decimal.");
+#else
         std::ostringstream msg;
         msg << "GncNumeric " << *this
             << " overflows when attempting to convert it to decimal.\n";
         throw std::range_error(msg.str());
+#endif
     }
 }
 
