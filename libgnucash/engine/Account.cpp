@@ -31,7 +31,7 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "AccountP.h"
+#include "Account.hpp"
 #include "Split.h"
 #include "Transaction.h"
 #include "TransactionP.h"

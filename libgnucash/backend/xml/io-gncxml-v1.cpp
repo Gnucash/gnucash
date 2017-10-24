@@ -36,7 +36,6 @@ extern "C"
 
 #include <gnc-xml-helper.h>
 #include <Account.h>
-#include <AccountP.h>
 #include <Query.h>
 #include <Scrub.h>
 #include <Transaction.h>
@@ -46,6 +45,7 @@ extern "C"
 #include <gnc-pricedb-p.h>
 }
 
+#include "Account.hpp"
 #include "io-gncxml.h"
 #include "sixtp.h"
 #include "sixtp-dom-parsers.h"

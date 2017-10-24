@@ -187,7 +187,7 @@ gncinclude_HEADERS = \
   qof-string-cache.h
 
 noinst_HEADERS = \
-  AccountP.h \
+  Account.hpp \
   ScrubP.h \
   SplitP.h \
   SX-book.h \

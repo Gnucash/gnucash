@@ -29,7 +29,7 @@
 #include "config.h"
 #include "cashobjects.h"
 #include "gnc-engine.h"
-#include "AccountP.h"
+#include "Account.h"
 #include "TransactionP.h"
 #include "SchedXaction.h"
 #include "SX-book-p.h"

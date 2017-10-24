@@ -1494,6 +1494,17 @@ void dxaccAccountSetQuoteTZ (Account *account, const char *tz);
 const char * dxaccAccountGetQuoteTZ (const Account *account);
 /** @} */
 
+/**
+ * Register Accounts with the engine
+ *
+ * NOTE: This function originates from AccountP.h.
+ * A header file private to libgnucash/engine. This has been
+ * moved to Account.h to aid the transition to c++.
+ *
+ * The intention is likely to move this to a private method on Account.
+ * Therefore this method should not be used outside of libgnucash/engine.
+ */
+gboolean xaccAccountRegister (void);
 
 /** @name Account parameter names
  @{

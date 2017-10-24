@@ -136,8 +136,6 @@ struct account_s
  * call this on an existing account! */
 void xaccAccountSetGUID (Account *account, const GncGUID *guid);
 
-/* Register Accounts with the engine */
-gboolean xaccAccountRegister (void);
 
 /* Structure for accessing static functions for testing */
 typedef struct

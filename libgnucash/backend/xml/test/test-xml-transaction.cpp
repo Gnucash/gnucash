@@ -41,11 +41,11 @@ extern "C"
 #include <test-engine-stuff.h>
 #include <unittest-support.h>
 
-#include <AccountP.h>
 #include <Transaction.h>
 #include <TransactionP.h>
 }
 
+#include "Account.hpp"
 #include "../gnc-xml-helper.h"
 #include "../gnc-xml.h"
 #include "../sixtp-parsers.h"

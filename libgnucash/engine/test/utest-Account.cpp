@@ -29,7 +29,6 @@ extern "C"
 #include <gnc-date.h>
 /* Add specific headers for this class */
 #include "../Account.h"
-#include "../AccountP.h"
 #include "../Split.h"
 #include "../Transaction.h"
 #include "../gnc-lot.h"
@@ -41,6 +40,7 @@ static const gchar *suitename = "/engine/Account";
 void test_suite_account (void);
 }
 
+#include "../Account.hpp"
 #include <qofinstance-p.h>
 #include <kvp-frame.hpp>
 
