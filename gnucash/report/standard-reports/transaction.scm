@@ -34,6 +34,7 @@
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-13))
+(use-modules (ice-9 regex))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
@@ -657,10 +658,11 @@
 
   (gnc:register-trep-option
    (gnc:make-string-option
-    gnc:pagename-accounts (N_ "Account Substring")
-    "a5" (N_ "Match only above accounts whose fullname contains substring e.g. ':Travel' will \
-match Expenses:Travel:Holiday and Expenses:Business:Travel. Can be left blank, which will \
-disable the substring filter. This filter is case-sensitive.")
+    gnc:pagename-accounts (N_ "Account Matcher")
+    "a5" (N_ "Match only above accounts whose fullname is matched by regex \
+e.g. ':Travel' will match Expenses:Travel:Holiday and Expenses:Business:Travel. \
+'Car|Flights' will match both Expenses:Car and Expenses:Business:Flights. It \
+can be left blank, which will disable the matcher")
     ""))
 
   (gnc:register-trep-option
@@ -1530,7 +1532,7 @@ Credit Card, and Income accounts."))))))
   (gnc:report-starting reportname)
   (let ((document (gnc:make-html-document))
 	(c_account_1 (opt-val gnc:pagename-accounts "Accounts"))
-	(c_account_substring (opt-val gnc:pagename-accounts "Account Substring"))
+	(c_account_matcher (opt-val gnc:pagename-accounts "Account Matcher"))
 	(c_account_2 (opt-val gnc:pagename-accounts "Filter By..."))
 	(filter-mode (opt-val gnc:pagename-accounts "Filter Type"))
         (begindate (gnc:timepair-start-day-time
@@ -1555,7 +1557,7 @@ Credit Card, and Income accounts."))))))
 
     (set! c_account_1
           (filter (lambda (acc)
-                    (string-contains (gnc-account-get-full-name acc) c_account_substring))
+                    (string-match c_account_matcher (gnc-account-get-full-name acc)))
                   c_account_1))
     
     (if (not (or (null? c_account_1) (and-map not c_account_1)))
