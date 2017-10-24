@@ -1197,7 +1197,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
         (append
          ; each column will be a vector
          ; (vector heading calculator-function reverse-column?)
-         (list (vector "Total Sales" total-sales #t))
+         (list (vector "TOTAL SALES" total-sales #t))
          (if (gnc:option-value (gnc:lookup-option options gnc:pagename-display (N_ "Individual income columns")))
              (map (lambda (acc) (vector (xaccAccountGetName acc) (account-adder acc) #t))
                   accounts-sales)
@@ -1206,7 +1206,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
              (map (lambda (acc) (vector (xaccAccountGetName acc) (account-adder acc) #t))
                   accounts-tax-collected)
              (list (vector "Tax on Sales" tax-on-sales #t)))
-         (list (vector "Total Purchases" total-purchases #f))
+         (list (vector "TOTAL PURCHASES" total-purchases #f))
          (if (gnc:option-value (gnc:lookup-option options gnc:pagename-display (N_ "Individual expense columns")))
              (map (lambda (acc) (vector (xaccAccountGetName acc) (account-adder acc) #f))
                   accounts-purchases)
@@ -1723,14 +1723,18 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                  (gnc:make-html-text
                   (gnc:html-markup-p
                    "Input Tax accounts: "
-                   (string-join (map gnc-account-get-full-name accounts-tax-paid) ", "))))
+                   (if (null? accounts-tax-paid)
+                       (N_ "None")
+                       (string-join (map gnc-account-get-full-name accounts-tax-paid) ", ")))))
 
                 (gnc:html-document-add-object!
                  document
                  (gnc:make-html-text
                   (gnc:html-markup-p
                    "Output Tax accounts: "
-                   (string-join (map gnc-account-get-full-name accounts-tax-collected) ", "))))
+                   (if (null? accounts-tax-collected)
+                       (N_ "None")
+                       (string-join (map gnc-account-get-full-name accounts-tax-collected) ", ")))))
 
                 (if (null? (append accounts-tax-collected accounts-tax-paid))
                     (gnc:html-document-add-object!
