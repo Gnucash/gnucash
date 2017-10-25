@@ -1,4 +1,4 @@
-if (!WIN32)
+if (NOT WIN32)
   ADD_SUBDIRECTORY(design)
 endif()
 ADD_SUBDIRECTORY(xml)
