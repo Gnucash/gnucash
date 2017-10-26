@@ -23,7 +23,7 @@
 @brief module definition/initialization for the csv exporter
 @author Copyright (c) 2012 Robert Fewell
 */
-#include "config.h"
+#include <config.h>
 
 #include <gmodule.h>
 

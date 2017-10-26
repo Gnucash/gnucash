@@ -44,7 +44,7 @@
 #ifndef __GNC_PLUGIN_PAGE_SX_LIST_H
 #define __GNC_PLUGIN_PAGE_SX_LIST_H
 
-#include "config.h"
+#include <config.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include "SchedXaction.h"

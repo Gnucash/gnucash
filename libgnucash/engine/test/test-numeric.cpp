@@ -24,7 +24,7 @@
 
 extern "C"
 {
-#include "config.h"
+#include <config.h>
 #include <ctype.h>
 #include <glib.h>
 #include "cashobjects.h"

@@ -27,7 +27,7 @@
  */
 extern "C"
 {
-#include "config.h"
+#include <config.h>
 
 #include <platform.h>
 #ifdef __STRICT_ANSI__

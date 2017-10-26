@@ -33,7 +33,7 @@
  * Copyright (c) 2000 Dave Peticolas <dave@krondo.com>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <stdlib.h>
 #include <string.h>

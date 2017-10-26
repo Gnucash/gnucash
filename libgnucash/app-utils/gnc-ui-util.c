@@ -20,7 +20,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#include "config.h"
+#include <config.h>
 
 #ifdef __MINGW32__
 #define __USE_MINGW_ANSI_STDIO 1

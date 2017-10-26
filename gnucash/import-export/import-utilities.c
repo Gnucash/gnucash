@@ -23,7 +23,7 @@
     @brief Utility functions for writing import modules.
     @author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>
 */
-#include "config.h"
+#include <config.h>
 
 
 #include <glib.h>

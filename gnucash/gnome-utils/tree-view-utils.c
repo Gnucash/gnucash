@@ -33,7 +33,7 @@
     @author Geert Janssens <geert@kobaltwit.be>
 */
 
-#include "config.h"
+#include <config.h>
 
 #include <gtk/gtk.h>
 #include <string.h>

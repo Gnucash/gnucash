@@ -28,7 +28,7 @@
  * @author Copyright (C) 2006,2007 David Hampton <hampton@employees.org>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>

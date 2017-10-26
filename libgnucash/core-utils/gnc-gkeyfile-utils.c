@@ -34,7 +34,7 @@
  *  @author Copyright (C) 2005 David Hampton <hampton@employees.org>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <platform.h>
 #if PLATFORM(WINDOWS)

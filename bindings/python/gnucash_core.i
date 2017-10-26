@@ -45,7 +45,7 @@
 %module(package="gnucash") gnucash_core_c
 
 %{
-#include "config.h"
+#include <config.h>
 #include <datetime.h>
 #include "qofsession.h"
 #include "qofbook.h"

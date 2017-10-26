@@ -29,7 +29,7 @@
  * transactions in stock and commodity accounts.
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <glib.h>
 

@@ -21,7 +21,7 @@
 %module sw_engine
 %{
 /* Includes the header in the wrapper code */
-#include "config.h"
+#include <config.h>
 #include <glib.h>
 #include "qof.h"
 #include "Query.h"

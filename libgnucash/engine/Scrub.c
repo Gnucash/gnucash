@@ -36,7 +36,7 @@
  * Copyright (c) 2006 David Hampton
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <glib.h>
 #include <glib/gi18n.h>

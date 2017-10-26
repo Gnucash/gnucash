@@ -21,7 +21,7 @@
  *                                                                  *
 \********************************************************************/
 
-#include "config.h"
+#include <config.h>
 
 #include <libguile.h>
 #include "guile-mappings.h"

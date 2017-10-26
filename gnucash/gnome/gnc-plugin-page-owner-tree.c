@@ -31,7 +31,7 @@
     @author Copyright (C) 2011 Geert Janssens <geert@kobaltwit.be>
 */
 
-#include "config.h"
+#include <config.h>
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>

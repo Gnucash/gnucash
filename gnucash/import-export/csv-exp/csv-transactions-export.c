@@ -24,7 +24,7 @@
     @brief CSV Export Transactions
     @author Copyright (c) 2012 Robert Fewell
 */
-#include "config.h"
+#include <config.h>
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>

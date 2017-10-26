@@ -26,7 +26,7 @@
  * decimal point, the function PriceDirect handle this case.
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <locale.h>
 #include <gdk/gdkkeysyms.h>

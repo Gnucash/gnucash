@@ -24,7 +24,7 @@ extern "C"
 {
 #define __EXTENSIONS__
 
-#include "config.h"
+#include <config.h>
 #include <glib.h>
 
 #include <gnc-date.h>

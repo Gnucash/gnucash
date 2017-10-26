@@ -32,7 +32,7 @@
 
 #ifndef __BINRELOC_C__
 #define __BINRELOC_C__
-#include "config.h"
+#include <config.h>
 
 #include <platform.h>
 #if PLATFORM(WINDOWS)

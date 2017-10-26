@@ -26,7 +26,7 @@
 
 extern "C"
 {
-#include "config.h"
+#include <config.h>
 #include "qof.h"
 }
 #include <boost/version.hpp>

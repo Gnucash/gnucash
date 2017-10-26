@@ -27,7 +27,7 @@
  * @author Copyright (C) 2008 Andreas Koehler <andi5.py@gmx.net>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include "dialog-ab-daterange.h"
 #include "dialog-utils.h"

@@ -29,7 +29,7 @@
   @NOTATION@
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <gtk/gtk.h>
 #include <string.h>

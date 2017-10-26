@@ -33,7 +33,7 @@
  * Copyright (c) 2000-2001 Dave Peticolas <dave@krondo.com>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include "cellblock.h"
 

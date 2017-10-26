@@ -22,7 +22,7 @@
  *                                                                  *
 \********************************************************************/
 
-#include "config.h"
+#include <config.h>
 
 #include "swig-runtime.h"
 #include <libguile.h>

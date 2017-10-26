@@ -29,7 +29,7 @@
 #define GNC_CSV_TRANS_SETTINGS_H
 
 extern "C" {
-#include "config.h"
+#include <config.h>
 #include "Account.h"
 }
 

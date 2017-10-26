@@ -22,7 +22,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
-#include "config.h"
+#include <config.h>
 #ifdef __MINGW32__
 #define _GL_UNISTD_H //Deflect poisonous define in Guile's GnuLib
 #endif

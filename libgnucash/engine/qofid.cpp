@@ -24,7 +24,7 @@
 
 extern "C"
 {
-#include "config.h"
+#include <config.h>
 #include <string.h>
 #include <glib.h>
 }

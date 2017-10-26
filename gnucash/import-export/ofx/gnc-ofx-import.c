@@ -23,7 +23,7 @@
      @brief Ofx import module code
      @author Copyright (c) 2002 Benoit Grégoire <bock@step.polymtl.ca>
  */
-#include "config.h"
+#include <config.h>
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>

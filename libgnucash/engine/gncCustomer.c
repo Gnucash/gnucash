@@ -26,7 +26,7 @@
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <glib.h>
 #include <string.h>

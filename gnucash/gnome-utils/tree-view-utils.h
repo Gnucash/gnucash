@@ -36,7 +36,7 @@
 #ifndef TREE_VIEW_UTILS_H_
 #define TREE_VIEW_UTILS_H_
 
-#include "config.h"
+#include <config.h>
 
 #include <gtk/gtk.h>
 #include <string.h>

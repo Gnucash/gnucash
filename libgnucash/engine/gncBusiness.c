@@ -21,7 +21,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
-#include "config.h"
+#include <config.h>
 
 #include "gncBusiness.h"
 #include "gncOwner.h"

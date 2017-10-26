@@ -21,7 +21,7 @@
 #ifndef GNC_PLATFORM_H
 #define GNC_PLATFORM_H
 
-#include "config.h"
+#include <config.h>
 
 /* PLATFORM handles OS, operating environment, graphics API, and CPU */
 #define PLATFORM(GNC_FEATURE) (defined( GNC_PLATFORM_##GNC_FEATURE ) && GNC_PLATFORM_##GNC_FEATURE)

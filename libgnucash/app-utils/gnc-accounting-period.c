@@ -41,7 +41,7 @@
     problem for CashUtils, the app-file directory was chosen.
 */
 
-#include "config.h"
+#include <config.h>
 #include <string.h>
 #include "gnc-accounting-period.h"
 #include "gnc-date.h"

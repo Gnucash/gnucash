@@ -32,7 +32,7 @@
  *
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <gtk/gtk.h>
 #ifdef __G_IR_SCANNER__

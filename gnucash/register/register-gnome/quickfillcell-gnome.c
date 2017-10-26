@@ -27,7 +27,7 @@
  * Copyright (C) 2000 Dave Peticolas <dave@krondo.com>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <string.h>
 #include <gdk/gdkkeysyms.h>

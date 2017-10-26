@@ -23,7 +23,7 @@
 \********************************************************************/
 extern "C"
 {
-#include "config.h"
+#include <config.h>
 }
 
 #include "io-gncxml-gen.h"

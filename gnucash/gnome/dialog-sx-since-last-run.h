@@ -24,7 +24,7 @@
 #ifndef DIALOG_SX_SINCE_LAST_RUN_H
 #define DIALOG_SX_SINCE_LAST_RUN_H
 
-#include "config.h"
+#include <config.h>
 
 #include <gtk/gtk.h>
 

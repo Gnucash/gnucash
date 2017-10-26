@@ -29,7 +29,7 @@
  * @author Copyright (C) 2008 Andreas Koehler <andi5.py@gmx.net>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>

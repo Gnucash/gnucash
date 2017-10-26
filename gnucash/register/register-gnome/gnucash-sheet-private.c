@@ -33,7 +33,7 @@
  * separate to not oversize that file.
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <string.h>
 

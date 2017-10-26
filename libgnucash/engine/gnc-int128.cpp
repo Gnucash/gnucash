@@ -23,7 +23,7 @@
  *******************************************************************/
 extern "C"
 {
-#include "config.h"
+#include <config.h>
 }
 
 #include "gnc-int128.hpp"

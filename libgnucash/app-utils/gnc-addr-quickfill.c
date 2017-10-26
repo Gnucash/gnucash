@@ -21,7 +21,7 @@
  *                                                                  *
 \********************************************************************/
 
-#include "config.h"
+#include <config.h>
 #include "gnc-addr-quickfill.h"
 #include "gnc-event.h"
 #include "gnc-engine.h"

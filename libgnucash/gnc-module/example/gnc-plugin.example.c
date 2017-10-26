@@ -26,7 +26,7 @@
  * @author Copyright (C) 2009 ?enter your name here? <your-email@example.com>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <glib/gi18n.h>
 

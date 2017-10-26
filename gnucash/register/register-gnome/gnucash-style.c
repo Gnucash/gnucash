@@ -22,7 +22,7 @@
  *  configure the cursor styles
  */
 
-#include "config.h"
+#include <config.h>
 #include "gnucash-color.h"
 #include "gnucash-item-edit.h"
 #include "gnucash-sheet.h"

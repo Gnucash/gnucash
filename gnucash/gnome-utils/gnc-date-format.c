@@ -31,7 +31,7 @@
  * Authors: Derek Atkins <derek@ihtfp.com>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <gtk/gtk.h>
 #include <string.h>

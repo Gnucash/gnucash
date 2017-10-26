@@ -23,7 +23,7 @@
 
 #include <stdlib.h>
 #include <glib.h>
-#include "config.h"
+#include <config.h>
 #include "gnc-prefs.h"
 #include "gnc-prefs-p.h"
 #include "gnc-version.h"

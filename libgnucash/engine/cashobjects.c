@@ -26,7 +26,7 @@
  *  02110-1301, USA.
  */
 
-#include "config.h"
+#include <config.h>
 #include "cashobjects.h"
 #include "gnc-engine.h"
 #include "AccountP.h"

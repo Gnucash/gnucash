@@ -31,7 +31,7 @@
  * Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <limits.h>
 #include <stdlib.h>

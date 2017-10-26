@@ -20,7 +20,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#include "config.h"
+#include <config.h>
 
 #include "gnc-dense-cal.h"
 #include "gnc-dense-cal-model.h"

@@ -24,7 +24,7 @@
 /* This is a template test program. Copy it to the test sudirectory and rename it test_modulename.c. (Use the same modulename that you gave Makefile.am in the same directory.
 Write and link other test files */
 #include <glib.h>
-#include "config.h"
+#include <config.h>
 #include <qof.h>
 #include "gnc-backend-xml.h"
 #include "gnc-module.h"

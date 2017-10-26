@@ -28,7 +28,7 @@
  * Escapes the ' and \ characters in a string
  */
 
-#include "config.h"
+#include <config.h>
 #include <glib.h>
 #include <string.h>
 

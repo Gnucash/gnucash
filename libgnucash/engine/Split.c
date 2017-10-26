@@ -24,7 +24,7 @@
  *                                                                  *
 \********************************************************************/
 
-#include "config.h"
+#include <config.h>
 
 #include <platform.h>
 #if PLATFORM(WINDOWS)

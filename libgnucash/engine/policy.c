@@ -29,7 +29,7 @@
  *  how splits are assigned to lots.
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <glib.h>
 

@@ -23,7 +23,7 @@
 #ifndef _GNC_SX_INSTANCE_DENSE_CAL_ADAPTER_H
 #define _GNC_SX_INSTANCE_DENSE_CAL_ADAPTER_H
 
-#include "config.h"
+#include <config.h>
 #include <glib.h>
 #include "gnc-sx-instance-model.h"
 

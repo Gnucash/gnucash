@@ -26,7 +26,7 @@
  * @author Copyright (C) 2009 Sebastian Held <sebastian.held@gmx.de>
  */
 
-#include "config.h"
+#include <config.h>
 
 //#include <glade/glade.h>
 //#include <glade/glade-xml.h>

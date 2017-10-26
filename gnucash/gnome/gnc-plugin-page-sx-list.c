@@ -41,7 +41,7 @@
     @author Josh Sled <jsled@asynchronous.org>
 */
 
-#include "config.h"
+#include <config.h>
 
 #include <gtk/gtk.h>
 #include <glib.h>

@@ -22,7 +22,7 @@
  * author Copyright (c) 1998-2000 Linas Vepstas <linas@linas.org>
  * author Copyright (c) 2000-2001 Dave Peticolas <dave@krondo.com>
  */
-#include "config.h"
+#include <config.h>
 
 #include <glib.h>
 #include <glib/gi18n.h>

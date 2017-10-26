@@ -23,7 +23,7 @@
   @brief  A Generic commodity matcher/picker
   @author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>
  */
-#include "config.h"
+#include <config.h>
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>

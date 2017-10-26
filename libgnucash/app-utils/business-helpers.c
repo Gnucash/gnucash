@@ -22,7 +22,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
-#include "config.h"
+#include <config.h>
 
 #include "business-options.h"
 #include "business-helpers.h"

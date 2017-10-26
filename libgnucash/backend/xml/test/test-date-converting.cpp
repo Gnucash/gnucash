@@ -19,7 +19,7 @@
 \********************************************************************/
 extern "C"
 {
-#include "config.h"
+#include <config.h>
 
 #include "test-stuff.h"
 #include "test-engine-stuff.h"

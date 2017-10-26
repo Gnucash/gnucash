@@ -19,7 +19,7 @@
 \********************************************************************/
 extern "C"
 {
-#include "config.h"
+#include <config.h>
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <unistd.h>

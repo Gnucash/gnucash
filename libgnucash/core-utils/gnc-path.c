@@ -19,7 +19,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#include "config.h"
+#include <config.h>
 #include "gnc-path.h"
 #include "gncla-dir.h"
 #include <stdio.h>

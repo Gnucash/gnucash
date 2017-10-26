@@ -26,7 +26,7 @@
  */
 extern "C"
 {
-#include "config.h"
+#include <config.h>
 #include <unistd.h>
 #include <glib.h>
 #include "qof.h"

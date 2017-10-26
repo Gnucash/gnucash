@@ -38,7 +38,7 @@
 #define GNC_FW_TOKENIZER_HPP
 
 extern "C" {
-#include "config.h"
+#include <config.h>
 }
 
 #include <iostream>

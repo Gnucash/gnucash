@@ -18,7 +18,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
-#include "config.h"
+#include <config.h>
 #include <time.h>
 #include <glib.h>
 #include <glib/gi18n.h>

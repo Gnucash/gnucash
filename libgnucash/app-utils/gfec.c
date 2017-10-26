@@ -9,7 +9,7 @@
 #include <assert.h>
 #include <string.h>
 
-#include "config.h"
+#include <config.h>
 #include "gfec.h"
 #include "gnc-guile-utils.h"
 #include "platform.h"

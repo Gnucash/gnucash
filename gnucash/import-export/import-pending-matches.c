@@ -24,7 +24,7 @@
     @author Copyright (C) 2016 Jesse Olmer
 */
 
-#include "config.h"
+#include <config.h>
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h> /* for references in import-backend.h */

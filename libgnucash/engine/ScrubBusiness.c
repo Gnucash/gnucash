@@ -27,7 +27,7 @@
  * Provides the high-level API for checking and repairing ('scrubbing
  * clean') the various data objects used by the business functions.*/
 
-#include "config.h"
+#include <config.h>
 
 #include <glib.h>
 #include <glib/gi18n.h>

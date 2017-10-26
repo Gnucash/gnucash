@@ -35,7 +35,7 @@
  *   iter->user_data3  The index of the item within its parent list
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>

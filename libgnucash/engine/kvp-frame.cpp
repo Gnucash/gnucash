@@ -24,7 +24,7 @@
 
 extern "C"
 {
-#include "config.h"
+#include <config.h>
 #include "qof.h"
 #include <glib.h>
 #include <stdarg.h>

@@ -26,7 +26,7 @@
  *     Dave Peticolas <dave@krondo.com>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <string.h>
 

@@ -30,7 +30,7 @@
  * @author Copyright (C) 2008 Andreas Koehler <andi5.py@gmx.net>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <platform.h>
 #if PLATFORM(WINDOWS)

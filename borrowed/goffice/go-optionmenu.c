@@ -31,7 +31,7 @@
  * USA.
  */
 
-#include "config.h"
+#include <config.h>
 #include "go-optionmenu.h"
 
 #include <gdk/gdkkeysyms.h>

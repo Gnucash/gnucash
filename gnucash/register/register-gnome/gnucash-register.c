@@ -28,7 +28,7 @@
  *     Dave Peticolas <dave@krondo.com>
  */
 
-#include "config.h"
+#include <config.h>
 #include <glib.h>
 #include <glib/gprintf.h>
 #include <gdk/gdkkeysyms.h>

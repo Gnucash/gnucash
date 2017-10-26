@@ -8,7 +8,7 @@
  *    Zbigniew Chyla (cyba@gnome.pl)
  *    Morten Welinder (terra@gnome.org)
  */
-#include "config.h"
+#include <config.h>
 #include "go-glib-extras.h"
 
 #include <glib/gi18n-lib.h>

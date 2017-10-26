@@ -31,7 +31,7 @@
  * Copyright (c) 2003 Linas Vepstas <linas@linas.org>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <stdlib.h>
 #include <string.h>

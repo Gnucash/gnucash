@@ -23,7 +23,7 @@
 #ifndef _GNC_SX_LIST_TREE_MODEL_ADAPTER_H
 #define _GNC_SX_LIST_TREE_MODEL_ADAPTER_H
 
-#include "config.h"
+#include <config.h>
 #include <glib.h>
 #include <glib-object.h>
 #include <gtk/gtk.h>

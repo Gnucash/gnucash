@@ -37,7 +37,7 @@
 #define GNC_DUMMY_TOKENIZER_HPP
 
 extern "C" {
-#include "config.h"
+#include <config.h>
 }
 
 #include <iostream>

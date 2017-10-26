@@ -25,7 +25,7 @@
  *   Author: Linas Vepstas (linas@linas.org)                        *
 \********************************************************************/
 
-#include "config.h"
+#include <config.h>
 
 #include <ctype.h>
 #include <glib.h>

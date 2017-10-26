@@ -26,7 +26,7 @@
 #ifndef _GNC_SX_INSTANCE_MODEL_H
 #define _GNC_SX_INSTANCE_MODEL_H
 
-#include "config.h"
+#include <config.h>
 #include <glib.h>
 #include <glib-object.h>
 #include "gnc-numeric.h"

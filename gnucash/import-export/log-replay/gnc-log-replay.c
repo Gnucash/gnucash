@@ -23,7 +23,7 @@
     @brief .log file replay code
     @author Copyright (c) 2003 Benoit Grégoire <bock@step.polymtl.ca>
 */
-#include "config.h"
+#include <config.h>
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>

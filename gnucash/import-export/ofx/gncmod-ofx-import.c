@@ -23,7 +23,7 @@
 @brief module definition/initialization for the ofx importer
 @author Copyright (c) 2002 Benoit Grégoire bock@step.polymtl.ca
 */
-#include "config.h"
+#include <config.h>
 
 #include <gmodule.h>
 

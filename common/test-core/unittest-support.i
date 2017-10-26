@@ -20,7 +20,7 @@
 
 %module unittest_support
 %{
-#include "config.h"
+#include <config.h>
 #include "unittest-support.h"
 %}
 

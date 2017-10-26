@@ -28,7 +28,7 @@
 #include <guid.hpp>
 extern "C"
 {
-#include "config.h"
+#include <config.h>
 
 #include <glib/gi18n.h>
 

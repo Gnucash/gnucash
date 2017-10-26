@@ -24,7 +24,7 @@
     @brief Save and Load Mappings
     @author Copyright (c) 2015 Robert Fewell
 */
-#include "config.h"
+#include <config.h>
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>

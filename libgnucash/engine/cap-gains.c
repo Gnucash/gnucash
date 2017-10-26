@@ -53,7 +53,7 @@ ToDo:
    with XXX below for things that might go wrong.
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <glib.h>
 #include <glib/gi18n.h>

@@ -23,7 +23,7 @@
  *      Author: cs
  */
 
-#include "config.h"
+#include <config.h>
 #include "gnc-ofx-kvp.h"
 
 static const char *KEY_ASSOC_INCOME_ACCOUNT = "ofx/associated-income-account";

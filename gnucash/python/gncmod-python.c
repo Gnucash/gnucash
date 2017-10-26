@@ -26,7 +26,7 @@
 
 
 #include <Python.h>
-#include "config.h"
+#include <config.h>
 #include <gmodule.h>
 #include <stdio.h>
 

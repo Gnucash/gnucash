@@ -18,7 +18,7 @@
  *                                                                  *
 \********************************************************************/
 
-#include "config.h"
+#include <config.h>
 #include "qofsession.h"
 
 int main()

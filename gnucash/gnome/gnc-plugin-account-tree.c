@@ -31,7 +31,7 @@
     @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
 */
 
-#include "config.h"
+#include <config.h>
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>

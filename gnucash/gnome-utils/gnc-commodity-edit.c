@@ -33,7 +33,7 @@
  * 	    Derek Atkins <warlord@MIT.EDU>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <gtk/gtk.h>
 

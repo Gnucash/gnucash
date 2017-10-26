@@ -21,7 +21,7 @@
  *                                                                  *
 \********************************************************************/
 
-#include "config.h"
+#include <config.h>
 #include "gnc-entry-quickfill.h"
 #include "gnc-event.h"
 #include "gncEntry.h"

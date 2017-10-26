@@ -18,7 +18,7 @@
  *                                                                  *
 \********************************************************************/
 
-#include "config.h"
+#include <config.h>
 #include "gnc-event.h"
 
 const char* qofeventid_to_string(QofEventId id)

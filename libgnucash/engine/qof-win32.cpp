@@ -26,7 +26,7 @@ extern "C"
 {
 #endif
 
-#include "config.h"
+#include <config.h>
 
 #include <glib.h>
 #include "gnc-date-p.h"

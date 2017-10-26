@@ -21,7 +21,7 @@
  *                                                                  *
 \********************************************************************/
 
-#include "config.h"
+#include <config.h>
 
 #include <glib/gi18n.h>
 #ifdef HAVE_X11_XLIB_H

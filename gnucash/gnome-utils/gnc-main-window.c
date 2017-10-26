@@ -32,7 +32,7 @@
     @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
     @author Copyright (C) 2003,2005,2006 David Hampton <hampton@employees.org>
 */
-#include "config.h"
+#include <config.h>
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>

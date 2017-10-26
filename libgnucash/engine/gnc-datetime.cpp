@@ -24,7 +24,7 @@
 
 extern "C"
 {
-#include "config.h"
+#include <config.h>
 #include "platform.h"
 }
 #include <boost/date_time/gregorian/gregorian.hpp>

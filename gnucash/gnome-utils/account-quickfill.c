@@ -21,7 +21,7 @@
  *                                                                  *
 \********************************************************************/
 
-#include "config.h"
+#include <config.h>
 #include "account-quickfill.h"
 #include "gnc-engine.h"
 #include "gnc-prefs.h"

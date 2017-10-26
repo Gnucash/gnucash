@@ -23,7 +23,7 @@
 #ifndef _GNC_DENSE_CAL_H
 #define _GNC_DENSE_CAL_H
 
-#include "config.h"
+#include <config.h>
 
 #include <glib.h>
 #include "gnc-dense-cal-model.h"

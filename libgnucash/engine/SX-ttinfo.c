@@ -23,7 +23,7 @@
 \********************************************************************/
 
 
-#include "config.h"
+#include <config.h>
 
 #include "SX-ttinfo.h"
 

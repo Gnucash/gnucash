@@ -380,7 +380,7 @@
  * stack will probably never be needed.
  */
 
-#include "config.h"
+#include <config.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>

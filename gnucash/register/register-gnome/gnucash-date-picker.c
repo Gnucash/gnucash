@@ -24,7 +24,7 @@
  *  A popup date picker for the canvas using gtk_calendar.
  */
 
-#include "config.h"
+#include <config.h>
 #include <gdk/gdkkeysyms.h>
 #include "gnucash-date-picker.h"
 

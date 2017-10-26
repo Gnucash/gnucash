@@ -20,7 +20,7 @@
 
 extern "C"
 {
-#include "config.h"
+#include <config.h>
 #include <stdlib.h>
 #include <glib.h>
 #include "SX-book.h"

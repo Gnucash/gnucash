@@ -30,7 +30,7 @@
  * the accounts specific accounting policy (probably FIFO).
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <glib.h>
 
