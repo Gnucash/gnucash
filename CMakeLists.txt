@@ -134,7 +134,7 @@ IF (WIN32)
   # should be provided as CMAKE_PREFIX_PATH on the CMake command line:
   #      cmake -D CMAKE_PREFIX_PATH=c/gcdev -G "MSYS Makefiles" path/to/gnucash/sources
   #
-
+  SET(CMAKE_C_IMPLICIT_LINK_LIBRARIES "")
   SET(CMAKE_FRAMEWORK_PATH_TMP ${CMAKE_PREFIX_PATH})
   SET(DEV_SUBDIRS aqbanking gnome guile gwenhywfar libgsf libofx libsoup libxslt webkit)
   FOREACH(subdir ${DEV_SUBDIRS})
