@@ -37,6 +37,10 @@
 #ifndef XACC_POLICY_H
 #define XACC_POLICY_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct gncpolicy_s GNCPolicy;
 
 /** Valid Policy List
@@ -82,6 +86,10 @@ GNCPolicy *xaccGetFIFOPolicy (void);
  *     selected, this will always be book currency).
  */
 GNCPolicy *xaccGetLIFOPolicy (void);
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
 
 #endif /* XACC_POLICY_H */
 /** @} */

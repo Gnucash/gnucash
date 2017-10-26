@@ -1040,6 +1040,7 @@ RESTART:
     // Convert imap mappings from account full name to guid strings
     qof_event_suspend();
     gnc_account_imap_convert_bayes (gnc_get_current_book());
+    gnc_account_imap_convert_flat (gnc_get_current_book());
     qof_event_resume();
 
     return TRUE;

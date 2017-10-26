@@ -93,6 +93,8 @@
 #include <string>
 #include <vector>
 #include <cstring>
+#include <algorithm>
+#include <iostream>
 using Path = std::vector<std::string>;
 
 /** Implements KvpFrame.
@@ -188,6 +190,12 @@ struct KvpFrameImpl
      */
     std::string to_string() const noexcept;
     /**
+     * Make a string representation of the frame with the specified string
+     * prefixed to every item in the frame.
+     * @return A std::string representing all the children of the frame.
+     */
+    std::string to_string(std::string const &) const noexcept;
+    /**
      * Report the keys in the immediate frame. Be sensible about using this, it
      * isn't a very efficient way to iterate.
      * @return std::vector of keys as std::strings.
@@ -204,11 +212,34 @@ struct KvpFrameImpl
      * @return The value at the key or nullptr.
      */
     KvpValue* get_slot(Path keys) const noexcept;
-    /** Convenience wrapper for std::for_each, which should be preferred.
+
+    void for_each_slot(void (*proc)(const char *key, KvpValue *, void *data), void* data) const noexcept;
+
+    /** The function should be of the form:
+     * <anything> func (char const *, KvpValue *, data_type &);
+     * Do not pass nullptr as the function.
      */
-    void for_each_slot(void (*proc)(const char *key, KvpValue *value,
-                                    void * data),
-                       void *data) const noexcept;
+    template <typename func_type, typename data_type>
+    void for_each_slot_temp(func_type const &, data_type &) const noexcept;
+
+    template <typename func_type>
+    void for_each_slot_temp(func_type const &) const noexcept;
+
+    /**
+     * Like for_each_slot, but doesn't traverse nested values. This will only loop
+     * over root-level values whose keys match the specified prefix.
+     */
+    template <typename func_type, typename data_type>
+    void for_each_slot_prefix(std::string const & prefix, func_type const &, data_type &) const noexcept;
+
+    template <typename func_type>
+    void for_each_slot_prefix(std::string const & prefix, func_type const &) const noexcept;
+
+    std::map<std::string, KvpValue*>
+    get_all_values(void);
+
+    std::map<std::string, KvpValue*>
+    get_values_with_prefix(std::string const &);
 
     /** Test for emptiness
      * @return true if the frame contains nothing.
@@ -218,7 +249,65 @@ struct KvpFrameImpl
 
     private:
     map_type m_valuemap;
+
+    void add_all_values (std::map<std::string, KvpValue*> &, std::string const &);
 };
+
+template<typename func_type>
+void KvpFrame::for_each_slot_prefix(std::string const & prefix,
+        func_type const & func) const noexcept
+{
+    std::for_each (m_valuemap.begin(), m_valuemap.end(),
+        [&prefix,&func](const KvpFrameImpl::map_type::value_type & a)
+        {
+            std::string temp_key {a.first};
+            if (temp_key.size() < prefix.size())
+                return;
+            /* Testing for prefix matching */
+            if (std::mismatch(prefix.begin(), prefix.end(), temp_key.begin()).first == prefix.end())
+                func (a.first, a.second);
+        }
+    );
+}
+
+template<typename func_type, typename data_type>
+void KvpFrame::for_each_slot_prefix(std::string const & prefix,
+        func_type const & func, data_type & data) const noexcept
+{
+    std::for_each (m_valuemap.begin(), m_valuemap.end(),
+        [&prefix,&func,&data](const KvpFrameImpl::map_type::value_type & a)
+        {
+            std::string temp_key {a.first};
+            if (temp_key.size() < prefix.size())
+                return;
+            /* Testing for prefix matching */
+            if (std::mismatch(prefix.begin(), prefix.end(), temp_key.begin()).first == prefix.end())
+                func (a.first, a.second, data);
+        }
+    );
+}
+
+template <typename func_type>
+void KvpFrame::for_each_slot_temp(func_type const & func) const noexcept
+{
+    std::for_each (m_valuemap.begin(), m_valuemap.end(),
+        [&func](const KvpFrameImpl::map_type::value_type & a)
+        {
+            func (a.first, a.second);
+        }
+    );
+}
+
+template <typename func_type, typename data_type>
+void KvpFrame::for_each_slot_temp(func_type const & func, data_type & data) const noexcept
+{
+    std::for_each (m_valuemap.begin(), m_valuemap.end(),
+        [&func,&data](const KvpFrameImpl::map_type::value_type & a)
+        {
+            func (a.first, a.second, data);
+        }
+    );
+}
 
 int compare (const KvpFrameImpl &, const KvpFrameImpl &) noexcept;
 int compare (const KvpFrameImpl *, const KvpFrameImpl *) noexcept;

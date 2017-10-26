@@ -50,6 +50,7 @@ struct GUID
     static GUID create_random () noexcept;
     static GUID const & null_guid () noexcept;
     static GUID from_string (std::string const &);
+    static bool is_valid_guid (std::string const &);
     std::string to_string () const noexcept;
     auto begin () const noexcept -> decltype (implementation.begin ());
     auto end () const noexcept -> decltype (implementation.end ());

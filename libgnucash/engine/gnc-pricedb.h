@@ -31,6 +31,10 @@ typedef struct _GncPriceDBClass GNCPriceDBClass;
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* --- type macros --- */
 #define GNC_TYPE_PRICE            (gnc_price_get_type ())
 #define GNC_PRICE(o)              \
@@ -661,6 +665,10 @@ void gnc_pricedb_print_contents(GNCPriceDB *db, FILE *f);
 /**@}*/
 
 /** @} */
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
 
 #endif /* GNC_PRICEDB_H */
 /** @} */

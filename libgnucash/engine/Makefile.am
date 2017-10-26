@@ -17,7 +17,7 @@ AM_CPPFLAGS = \
 
 
 libgncmod_engine_la_SOURCES = \
-  Account.c \
+  Account.cpp \
   Recurrence.c \
   Query.c \
   SchedXaction.c \
@@ -187,7 +187,7 @@ gncinclude_HEADERS = \
   qof-string-cache.h
 
 noinst_HEADERS = \
-  AccountP.h \
+  Account.hpp \
   ScrubP.h \
   SplitP.h \
   SX-book.h \

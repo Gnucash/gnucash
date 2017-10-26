@@ -34,7 +34,6 @@ extern "C"
 
 #include "qof.h"
 #include "Account.h"
-#include "AccountP.h"
 #include "gnc-commodity.h"
 
 #if defined( S_SPLINT_S )
@@ -46,6 +45,7 @@ extern "C"
 #include <vector>
 #include <algorithm>
 
+#include "Account.hpp"
 #include "gnc-sql-connection.hpp"
 #include "gnc-sql-backend.hpp"
 #include "gnc-sql-object-backend.hpp"

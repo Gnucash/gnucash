@@ -356,6 +356,21 @@ GUID::from_string (std::string const & str)
     }
 }
 
+bool
+GUID::is_valid_guid (std::string const & str)
+{
+    try
+    {
+        static boost::uuids::string_generator strgen;
+        auto a = strgen (str);
+        return true;
+    }
+    catch (...)
+    {
+        return false;
+    }
+}
+
 guid_syntax_exception::guid_syntax_exception () noexcept
     : invalid_argument {"Invalid syntax for guid."}
 {

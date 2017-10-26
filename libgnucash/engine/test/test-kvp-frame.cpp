@@ -202,3 +202,41 @@ TEST_F (KvpFrameTest, Empty)
     EXPECT_TRUE(f1.empty());
     EXPECT_FALSE(f2.empty());
 }
+
+TEST (KvpFrameTestForEachPrefix, for_each_prefix_1)
+{
+    KvpFrame fr;
+    fr.set("one", new KvpValue{new KvpFrame});
+    fr.set("one/two", new KvpValue{new KvpFrame});
+    fr.set("top/two/three", new KvpValue {15.0});
+    fr.set("onetwo", new KvpValue{new KvpFrame});
+    fr.set("onetwo/three", new KvpValue {15.0});
+    fr.set("onetwothree", new KvpValue {(int64_t)52});
+    unsigned count {};
+    auto counter = [] (char const *, KvpValue*, unsigned & count) { ++count; };
+    fr.for_each_slot_prefix("one", counter, count);
+    EXPECT_EQ(count, 3);
+    count = 0;
+    fr.for_each_slot_prefix("onetwo", counter, count);
+    EXPECT_EQ(count, 2);
+    count = 0;
+    fr.for_each_slot_prefix("onetwothree", counter, count);
+    EXPECT_EQ(count, 1);
+    count = 0;
+    fr.for_each_slot_prefix("two", counter, count);
+    EXPECT_EQ(count, 0);
+}
+
+TEST (KvpFrameTestForEachPrefix, for_each_prefix_2)
+{
+    KvpFrame fr;
+    fr.set("onetwo/three", new KvpValue {15.0});
+    fr.set("onethree", new KvpValue {(int64_t)52});
+    unsigned count;
+    fr.for_each_slot_prefix("onetwo", [](char const *, KvpValue * value, unsigned) {
+            EXPECT_EQ(value->get_type(), KvpValue::Type::FRAME);
+        }, count);
+    fr.for_each_slot_prefix("onetwo", [](char const *, KvpValue * value, unsigned) {
+            EXPECT_EQ(value->get_type(), KvpValue::Type::INT64);
+        }, count);
+}

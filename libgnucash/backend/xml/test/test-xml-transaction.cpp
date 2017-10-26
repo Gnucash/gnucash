@@ -38,22 +38,21 @@ extern "C"
 #include <cashobjects.h>
 #include <TransLog.h>
 
-#include <test-stuff.h>
 #include <test-engine-stuff.h>
 #include <unittest-support.h>
 
-#include <AccountP.h>
 #include <Transaction.h>
 #include <TransactionP.h>
 }
 
+#include "Account.hpp"
 #include "../gnc-xml-helper.h"
 #include "../gnc-xml.h"
 #include "../sixtp-parsers.h"
 #include "../sixtp-dom-parsers.h"
 #include "../io-gncxml-gen.h"
 #include "test-file-stuff.h"
-
+#include <test-stuff.h>
 static QofBook* book;
 
 extern gboolean gnc_transaction_xml_v2_testing;

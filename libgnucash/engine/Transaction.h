@@ -94,6 +94,10 @@ typedef struct _TransactionClass TransactionClass;
 #include "gnc-engine.h"
 #include "Split.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* --- type macros --- */
 #define GNC_TYPE_TRANSACTION            (gnc_transaction_get_type ())
 #define GNC_TRANSACTION(o)              \
@@ -770,6 +774,10 @@ void xaccTransDump (const Transaction *trans, const char *tag);
 #define xaccTransGetGUID(X)      qof_entity_get_guid(QOF_INSTANCE(X))
 /** \deprecated */
 #define xaccTransReturnGUID(X) (X ? *(qof_entity_get_guid(QOF_INSTANCE(X))) : *(guid_null()))
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
 
 #endif /* XACC_TRANSACTION_H */
 /** @} */

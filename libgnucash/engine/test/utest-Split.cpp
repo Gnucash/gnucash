@@ -35,7 +35,6 @@ extern "C"
 #include <TransactionP.h>
 #include <gnc-lot.h>
 #include <gnc-event.h>
-#include <qofinstance-p.h>
 
 #if defined(__clang__) && (__clang_major__ == 5 || (__clang_major__ == 3 && __clang_minor__ < 5))
 #define USE_CLANG_FUNC_SIG 1
@@ -45,6 +44,7 @@ static const gchar *suitename = "/engine/Split";
 void test_suite_split ( void );
 }
 
+#include <qofinstance-p.h>
 #include <kvp-frame.hpp>
 
 typedef struct
@@ -738,7 +738,7 @@ test_xaccSplitDetermineGainStatus (Fixture *fixture, gconstpointer pData)
     g_assert (fixture->split->gains_split == NULL);
     g_assert_cmpint (fixture->split->gains, ==, GAINS_STATUS_A_VDIRTY | GAINS_STATUS_DATE_DIRTY);
 
-    fixture->split->inst.kvp_data->set("gains-source", new KvpValue(const_cast<GncGUID*>(guid_copy(g_guid))));
+    fixture->split->inst.kvp_data->set("gains-source", new KvpValue(guid_copy(g_guid)));
     g_assert (fixture->split->gains_split == NULL);
     fixture->split->gains = GAINS_STATUS_UNKNOWN;
     xaccSplitDetermineGainStatus (fixture->split);

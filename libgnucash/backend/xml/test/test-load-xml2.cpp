@@ -45,7 +45,6 @@ extern "C"
 #include <gnc-engine.h>
 #include <gnc-prefs.h>
 
-#include <test-stuff.h>
 #include <unittest-support.h>
 #include <test-engine-stuff.h>
 }
@@ -53,6 +52,7 @@ extern "C"
 #include "../gnc-backend-xml.h"
 #include "../io-gncxml-v2.h"
 #include "test-file-stuff.h"
+#include <test-stuff.h>
 
 #define GNC_LIB_NAME "gncmod-backend-xml"
 #define GNC_LIB_REL_PATH "xml"

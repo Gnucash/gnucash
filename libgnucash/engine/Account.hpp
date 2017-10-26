@@ -41,6 +41,10 @@
 
 #include "Account.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define GNC_ID_ROOT_ACCOUNT        "RootAccount"
 
 /** STRUCTS *********************************************************/
@@ -132,8 +136,6 @@ struct account_s
  * call this on an existing account! */
 void xaccAccountSetGUID (Account *account, const GncGUID *guid);
 
-/* Register Accounts with the engine */
-gboolean xaccAccountRegister (void);
 
 /* Structure for accessing static functions for testing */
 typedef struct
@@ -149,5 +151,8 @@ typedef struct
 
 AccountTestFunctions* _utest_account_fill_functions(void);
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
 
 #endif /* XACC_ACCOUNT_P_H */
