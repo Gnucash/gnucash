@@ -46,7 +46,6 @@
 #include <qofinstance-p.h>
 
 #include "Account.h"
-#include "AccountP.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
 #include "cap-gains.h"

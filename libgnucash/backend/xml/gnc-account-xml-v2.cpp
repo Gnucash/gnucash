@@ -29,10 +29,10 @@ extern "C"
 #include <glib.h>
 #include <stdlib.h>
 #include <string.h>
-#include <AccountP.h>
 #include <Account.h>
 }
 
+#include "Account.hpp"
 #include "gnc-xml-helper.h"
 #include "sixtp.h"
 #include "sixtp-utils.h"

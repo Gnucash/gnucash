@@ -138,6 +138,7 @@ struct KvpValueImpl
     KvpValueImpl::Type get_type() const noexcept;
 
     std::string to_string() const noexcept;
+    std::string to_string(std::string const & prefix) const noexcept;
 
     template <typename T>
     T get() const noexcept;

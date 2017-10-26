@@ -27,13 +27,14 @@ extern "C"
 #include <glib.h>
 #include "qof.h"
 #include "cashobjects.h"
-#include "AccountP.h"
 #include "TransLog.h"
 #include "gnc-engine.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 #include "Transaction.h"
 }
+
+#include "Account.hpp"
 
 static void
 run_test (void)

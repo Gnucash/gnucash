@@ -25,11 +25,12 @@ extern "C"
 #include <config.h>
 #include "../Account.h"
 #include <qof.h>
-#include <qofinstance-p.h>
 }
 
+#include <qofinstance-p.h>
 #include <kvp-frame.hpp>
 #include <gtest/gtest.h>
+#include <string>
 
 class ImapTest : public testing::Test
 {
@@ -67,7 +68,11 @@ protected:
         gnc_account_append_child(t_expense_account, t_expense_account2);
     }
     void TearDown() {
-        qof_book_destroy (gnc_account_get_book (t_bank_account));
+        auto root = gnc_account_get_root (t_bank_account);
+        auto book = gnc_account_get_book (root);
+        xaccAccountBeginEdit (root);
+        xaccAccountDestroy (root);
+        qof_book_destroy (book);
     }
     Account *t_bank_account {};
     Account *t_sav_account {};
@@ -110,18 +115,16 @@ protected:
 TEST_F(ImapPlainTest, FindAccount)
 {
     auto root = qof_instance_get_slots(QOF_INSTANCE(t_bank_account));
-    auto acc1_val = new KvpValue(const_cast<GncGUID*>(xaccAccountGetGUID(t_expense_account1)));
-    auto acc2_val = new KvpValue(const_cast<GncGUID*>(xaccAccountGetGUID(t_expense_account2)));
+    auto acc1_val = new KvpValue(guid_copy(xaccAccountGetGUID(t_expense_account1)));
+    auto acc2_val = new KvpValue(guid_copy(xaccAccountGetGUID(t_expense_account2)));
     root->set_path({IMAP_FRAME, "foo", "bar"}, acc1_val);
     root->set_path({IMAP_FRAME, "baz", "waldo"}, acc2_val);
-    root->set_path({IMAP_FRAME, "pepper"}, acc1_val);
-    root->set_path({IMAP_FRAME, "salt"}, acc2_val);
+    root->set_path({IMAP_FRAME, "pepper"}, new KvpValue{*acc1_val});
+    root->set_path({IMAP_FRAME, "salt"}, new KvpValue{*acc2_val});
 
     EXPECT_EQ(t_expense_account1, gnc_account_imap_find_account(t_imap, "foo", "bar"));
-    EXPECT_EQ(t_expense_account2,
-              gnc_account_imap_find_account(t_imap, "baz", "waldo"));
-    EXPECT_EQ(t_expense_account1,
-              gnc_account_imap_find_account(t_imap, NULL, "pepper"));
+    EXPECT_EQ(t_expense_account2, gnc_account_imap_find_account(t_imap, "baz", "waldo"));
+    EXPECT_EQ(t_expense_account1, gnc_account_imap_find_account(t_imap, NULL, "pepper"));
     EXPECT_EQ(t_expense_account2, gnc_account_imap_find_account(t_imap, NULL, "salt"));
     EXPECT_EQ(nullptr, gnc_account_imap_find_account(t_imap, "salt", NULL));
 }
@@ -251,12 +254,12 @@ TEST_F(ImapBayesTest, FindAccountBayes)
     auto acct2_guid = guid_to_string (xaccAccountGetGUID(t_expense_account2));
     auto value = new KvpValue(INT64_C(42));
 
-    root->set_path({IMAP_FRAME_BAYES, foo, acct1_guid}, value);
-    root->set_path({IMAP_FRAME_BAYES, bar, acct1_guid}, value);
-    root->set_path({IMAP_FRAME_BAYES, baz, acct2_guid}, value);
-    root->set_path({IMAP_FRAME_BAYES, waldo, acct2_guid}, value);
-    root->set_path({IMAP_FRAME_BAYES, pepper, acct1_guid}, value);
-    root->set_path({IMAP_FRAME_BAYES, salt, acct2_guid}, value);
+    root->set_path((std::string{IMAP_FRAME_BAYES} + "-" + foo + "-" + acct1_guid).c_str(), value);
+    root->set_path((std::string{IMAP_FRAME_BAYES} + "-" + bar + "-" + acct1_guid).c_str(), new KvpValue{*value});
+    root->set_path((std::string{IMAP_FRAME_BAYES} + "-" + baz + "-" + acct2_guid).c_str(), new KvpValue{*value});
+    root->set_path((std::string{IMAP_FRAME_BAYES} + "-" + waldo + "-" + acct2_guid).c_str(), new KvpValue{*value});
+    root->set_path((std::string{IMAP_FRAME_BAYES} + "-" + pepper + "-" + acct1_guid).c_str(), new KvpValue{*value});
+    root->set_path((std::string{IMAP_FRAME_BAYES} + "-" + salt + "-" + acct2_guid).c_str(), new KvpValue{*value});
 
     auto account = gnc_account_imap_find_account_bayes(t_imap, t_list1);
     EXPECT_EQ(t_expense_account1, account);
@@ -289,29 +292,29 @@ TEST_F(ImapBayesTest, AddAccountBayes)
     auto root = qof_instance_get_slots(QOF_INSTANCE(t_bank_account));
     auto acct1_guid = guid_to_string (xaccAccountGetGUID(t_expense_account1));
     auto acct2_guid = guid_to_string (xaccAccountGetGUID(t_expense_account2));
-    auto value = root->get_slot({IMAP_FRAME_BAYES, "foo", "bar"});
+    auto value = root->get_slot((std::string{IMAP_FRAME_BAYES} + "-foo-bar").c_str());
     auto check_account = [this](KvpValue* v) {
         return (v->get<const char*>(), this->t_imap->book); };
-    value = root->get_slot({IMAP_FRAME_BAYES, foo, acct1_guid});
+    value = root->get_slot((std::string{IMAP_FRAME_BAYES} + "-" + foo + "-" + acct1_guid).c_str());
     EXPECT_EQ(1, value->get<int64_t>());
-    value = root->get_slot({IMAP_FRAME_BAYES, bar, acct1_guid});
+    value = root->get_slot((std::string{IMAP_FRAME_BAYES} + "-" + bar + "-" + acct1_guid).c_str());
     EXPECT_EQ(1, value->get<int64_t>());
-    value = root->get_slot({IMAP_FRAME_BAYES, baz, acct2_guid});
+    value = root->get_slot((std::string{IMAP_FRAME_BAYES} + "-" + baz + "-" + acct2_guid).c_str());
     EXPECT_EQ(1, value->get<int64_t>());
-    value = root->get_slot({IMAP_FRAME_BAYES, waldo, acct2_guid});
+    value = root->get_slot((std::string{IMAP_FRAME_BAYES} + "-" + waldo + "-" + acct2_guid).c_str());
     EXPECT_EQ(1, value->get<int64_t>());
-    value = root->get_slot({IMAP_FRAME_BAYES, pepper, acct1_guid});
+    value = root->get_slot((std::string{IMAP_FRAME_BAYES} + "-" + pepper + "-" + acct1_guid).c_str());
     EXPECT_EQ(1, value->get<int64_t>());
-    value = root->get_slot({IMAP_FRAME_BAYES, salt, acct2_guid});
+    value = root->get_slot((std::string{IMAP_FRAME_BAYES} + "-" + salt + "-" + acct2_guid).c_str());
     EXPECT_EQ(1, value->get<int64_t>());
-    value = root->get_slot({IMAP_FRAME_BAYES, baz, acct1_guid});
+    value = root->get_slot((std::string{IMAP_FRAME_BAYES} + "-" + baz + "-" + acct1_guid).c_str());
     EXPECT_EQ(nullptr, value);
 
     qof_instance_increase_editlevel(QOF_INSTANCE(t_bank_account));
     gnc_account_imap_add_account_bayes(t_imap, t_list2, t_expense_account2);
     qof_instance_mark_clean(QOF_INSTANCE(t_bank_account));
     qof_instance_reset_editlevel(QOF_INSTANCE(t_bank_account));
-    value = root->get_slot({IMAP_FRAME_BAYES, baz, acct2_guid});
+    value = root->get_slot((std::string{IMAP_FRAME_BAYES} + "-" + baz + "-" + acct2_guid).c_str());
     EXPECT_EQ(2, value->get<int64_t>());
 }
 
@@ -336,22 +339,22 @@ TEST_F(ImapBayesTest, ConvertAccountBayes)
     auto val3 = new KvpValue(static_cast<int64_t>(2));
 
     // Test for existing entries, all will be 1
-    auto value = root->get_slot({IMAP_FRAME_BAYES, foo, acct1_guid});
+    auto value = root->get_slot((std::string{IMAP_FRAME_BAYES} + "-" + foo + "-" + acct1_guid).c_str());
     EXPECT_EQ(1, value->get<int64_t>());
-    value = root->get_slot({IMAP_FRAME_BAYES, bar, acct1_guid});
+    value = root->get_slot((std::string{IMAP_FRAME_BAYES} + "-" + bar + "-" + acct1_guid).c_str());
     EXPECT_EQ(1, value->get<int64_t>());
-    value = root->get_slot({IMAP_FRAME_BAYES, baz, acct2_guid});
+    value = root->get_slot((std::string{IMAP_FRAME_BAYES} + "-" + baz + "-" + acct2_guid).c_str());
     EXPECT_EQ(1, value->get<int64_t>());
-    value = root->get_slot({IMAP_FRAME_BAYES, waldo, acct2_guid});
+    value = root->get_slot((std::string{IMAP_FRAME_BAYES} + "-" + waldo + "-" + acct2_guid).c_str());
     EXPECT_EQ(1, value->get<int64_t>());
 
     // Set up some old entries
-    root->set_path({IMAP_FRAME_BAYES, pepper, "Asset-Bank"}, val1);
-    root->set_path({IMAP_FRAME_BAYES, salt, "Asset-Bank#Bank"}, val1);
-    root->set_path({IMAP_FRAME_BAYES, salt, "Asset>Bank#Bank"}, val2);
-    root->set_path({IMAP_FRAME_BAYES, pork, "Expense#Food"}, val2);
-    root->set_path({IMAP_FRAME_BAYES, sausage, "Expense#Drink"}, val3);
-    root->set_path({IMAP_FRAME_BAYES, foo, "Expense#Food"}, val2);
+    root->set_path((std::string{IMAP_FRAME_BAYES} + "/" + pepper + "/" + "Asset-Bank").c_str(), val1);
+    root->set_path((std::string{IMAP_FRAME_BAYES} + "/" + salt + "/" + "Asset-Bank#Bank").c_str(), new KvpValue{*val1});
+    root->set_path((std::string{IMAP_FRAME_BAYES} + "/" + salt + "/" + "Asset>Bank#Bank").c_str(), val2);
+    root->set_path((std::string{IMAP_FRAME_BAYES} + "/" + pork + "/" + "Expense#Food").c_str(), new KvpValue{*val2});
+    root->set_path((std::string{IMAP_FRAME_BAYES} + "/" + sausage + "/" + "Expense#Drink").c_str(), val3);
+    root->set_path((std::string{IMAP_FRAME_BAYES} + "/" + foo + "/" + "Expense#Food").c_str(), new KvpValue{*val2});
 
     EXPECT_EQ(1, qof_instance_get_editlevel(QOF_INSTANCE(t_bank_account)));
     EXPECT_TRUE(qof_instance_get_dirty_flag(QOF_INSTANCE(t_bank_account)));
@@ -361,24 +364,24 @@ TEST_F(ImapBayesTest, ConvertAccountBayes)
     gnc_account_imap_convert_bayes (t_imap->book);
 
     // convert from 'Asset-Bank' to 'Asset-Bank' guid
-    value = root->get_slot({IMAP_FRAME_BAYES, pepper, acct3_guid});
+    value = root->get_slot((std::string{IMAP_FRAME_BAYES} + "-" + pepper + "-" + acct3_guid).c_str());
     EXPECT_EQ(10, value->get<int64_t>());
 
     // convert from 'Asset-Bank#Bank' to 'Sav Bank' guid
-    value = root->get_slot({IMAP_FRAME_BAYES, salt, acct4_guid});
+    value = root->get_slot((std::string{IMAP_FRAME_BAYES} + "-" + salt + "-" + acct4_guid).c_str());
     EXPECT_EQ(10, value->get<int64_t>());
 
     // convert from 'Expense#Food' to 'Food' guid
-    value = root->get_slot({IMAP_FRAME_BAYES, pork, acct1_guid});
+    value = root->get_slot((std::string{IMAP_FRAME_BAYES} + "-" + pork + "-" + acct1_guid).c_str());
     EXPECT_EQ(5, value->get<int64_t>());
 
     // convert from 'Expense#Drink' to 'Drink' guid
-    value = root->get_slot({IMAP_FRAME_BAYES, sausage, acct2_guid});
+    value = root->get_slot((std::string{IMAP_FRAME_BAYES} + "-" + sausage + "-" + acct2_guid).c_str());
     EXPECT_EQ(2, value->get<int64_t>());
 
     // convert from 'Expense#Food' to 'Food' guid but add to original value
-    value = root->get_slot({IMAP_FRAME_BAYES, foo, acct1_guid});
-    EXPECT_EQ(6, value->get<int64_t>());
+    value = root->get_slot((std::string{IMAP_FRAME_BAYES} + "-" + foo + "-" + acct1_guid).c_str());
+    EXPECT_EQ(5, value->get<int64_t>());
 
     // Check for run once flag
     auto vals = book->get_slot("changed-bayesian-to-guid");
@@ -388,4 +391,53 @@ TEST_F(ImapBayesTest, ConvertAccountBayes)
     EXPECT_TRUE(qof_instance_get_dirty_flag(QOF_INSTANCE(t_bank_account)));
 }
 
+TEST_F (ImapBayesTest, convert_map_flat)
+{
+    // prevent the embedded beginedit/committedit from doing anything
+    qof_instance_increase_editlevel(QOF_INSTANCE(t_bank_account));
+    qof_instance_mark_clean(QOF_INSTANCE(t_bank_account));
+    //gnc_account_imap_add_account_bayes(t_imap, t_list1, t_expense_account1); //Food
+    //gnc_account_imap_add_account_bayes(t_imap, t_list2, t_expense_account2); //Drink
+    auto root = qof_instance_get_slots(QOF_INSTANCE(t_bank_account));
+    auto acct1_guid = guid_to_string (xaccAccountGetGUID(t_expense_account1)); //Food
+    auto acct2_guid = guid_to_string (xaccAccountGetGUID(t_expense_account2)); //Drink
+    auto acct3_guid = guid_to_string (xaccAccountGetGUID(t_asset_account2)); //Asset-Bank
+    auto acct4_guid = guid_to_string (xaccAccountGetGUID(t_sav_account)); //Sav Bank
+    auto val1 = new KvpValue(static_cast<int64_t>(10));
+    auto val2 = new KvpValue(static_cast<int64_t>(5));
+    auto val3 = new KvpValue(static_cast<int64_t>(2));
+    // Set up some old entries
+    root->set_path((std::string{IMAP_FRAME_BAYES} + "/" + pepper + "/" + acct1_guid).c_str(), val1);
+    root->set_path((std::string{IMAP_FRAME_BAYES} + "/" + salt + "/" + acct2_guid).c_str(), new KvpValue{*val1});
+    root->set_path((std::string{IMAP_FRAME_BAYES} + "/" + foo + "/" + acct3_guid).c_str(), val2);
+    root->set_path((std::string{IMAP_FRAME_BAYES} + "/" + pork + "/" + acct4_guid).c_str(), val3);
+    EXPECT_EQ(1, qof_instance_get_editlevel(QOF_INSTANCE(t_bank_account)));
+    qof_instance_mark_clean(QOF_INSTANCE(t_bank_account));
+    gnc_account_imap_convert_flat (t_imap->book);
+    auto value = root->get_slot((std::string{IMAP_FRAME_BAYES} + "-" + pepper + "-" + acct1_guid).c_str());
+    EXPECT_EQ(10, value->get<int64_t>());
+    value = root->get_slot((std::string{IMAP_FRAME_BAYES} + "-" + salt + "-" + acct2_guid).c_str());
+    EXPECT_EQ(10, value->get<int64_t>());
+    value = root->get_slot((std::string{IMAP_FRAME_BAYES} + "-" + foo + "-" + acct3_guid).c_str());
+    EXPECT_EQ(5, value->get<int64_t>());
+    value = root->get_slot((std::string{IMAP_FRAME_BAYES} + "-" + pork + "-" + acct4_guid).c_str());
+    EXPECT_EQ(2, value->get<int64_t>());
+    auto book = qof_instance_get_slots(QOF_INSTANCE(t_imap->book));
+    auto vals = book->get_slot("changed-bayesian-to-flat");
+    EXPECT_STREQ("true", vals->get<const char*>());
+    EXPECT_EQ(1, qof_instance_get_editlevel(QOF_INSTANCE(t_bank_account)));
+    EXPECT_TRUE(qof_instance_get_dirty_flag(QOF_INSTANCE(t_bank_account)));
+}
 
+/* Tests the import map's handling of KVP delimiters */
+TEST_F (ImapBayesTest, import_map_with_delimiters)
+{
+    GList * tokens {nullptr};
+    tokens = g_list_prepend(tokens, const_cast<char*>("one/two/three"));
+    gnc_account_imap_add_account_bayes(t_imap, tokens, t_expense_account1);
+    gnc_account_imap_add_account_bayes(t_imap, tokens, t_expense_account1);
+    gnc_account_imap_add_account_bayes(t_imap, tokens, t_expense_account1);
+
+    auto account = gnc_account_imap_find_account_bayes (t_imap, tokens);
+    EXPECT_EQ (account, t_expense_account1);
+}

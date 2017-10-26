@@ -27,12 +27,13 @@ extern "C"
 
 #include <glib.h>
 #include <string.h>
-#include "AccountP.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
 }
+
+#include "Account.hpp"
 #include "gnc-xml-helper.h"
 
 #include "sixtp.h"

@@ -39,6 +39,10 @@
 #include <glib.h>
 #include "qof.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** \name QofLogModule identifiers */
 // @{
 #define GNC_MOD_ROOT      "gnc"
@@ -126,7 +130,7 @@
 
 /** @brief Account in Gnucash.
  * This is the typename for an account. The actual structure is
- * defined in the private header AccountP.h, but no one outside the
+ * defined in the header Account.hpp, but no one outside the
  * engine should include that file. Instead, access that data only
  * through the functions in Account.h .*/
 typedef struct account_s             Account;
@@ -257,6 +261,9 @@ void gnc_engine_signal_commit_error( QofBackendError errcode );
 #define GNC_OWNER_GUID    "owner-guid"
 #define GNC_SX_ID         "sched-xaction"
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
 
 #endif
 /** @} */

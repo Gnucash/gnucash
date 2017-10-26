@@ -51,7 +51,7 @@ struct timeval
 # include <unistd.h>
 #endif
 
-#include "AccountP.h"
+#include "Account.h"
 #include "Scrub.h"
 #include "Scrub3.h"
 #include "TransactionP.h"
@@ -253,7 +253,7 @@ void gen_event_trans (Transaction *trans)
         Account *account = s->acc;
         GNCLot *lot = s->lot;
         if (account)
-            qof_event_gen (&account->inst, GNC_EVENT_ITEM_CHANGED, s);
+            qof_event_gen (QOF_INSTANCE(account), GNC_EVENT_ITEM_CHANGED, s);
 
         if (lot)
         {

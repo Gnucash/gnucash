@@ -27,10 +27,8 @@ extern "C"
 #include <unittest-support.h>
 #include <gnc-event.h>
 #include <gnc-date.h>
-#include <qofinstance-p.h>
 /* Add specific headers for this class */
 #include "../Account.h"
-#include "../AccountP.h"
 #include "../Split.h"
 #include "../Transaction.h"
 #include "../gnc-lot.h"
@@ -42,6 +40,8 @@ static const gchar *suitename = "/engine/Account";
 void test_suite_account (void);
 }
 
+#include "../Account.hpp"
+#include <qofinstance-p.h>
 #include <kvp-frame.hpp>
 
 typedef struct
@@ -467,13 +467,7 @@ test_gnc_account_list_name_violations (Fixture *fixture, gconstpointer pData)
 {
     auto log_level = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     auto log_domain = "gnc.engine";
-#ifdef USE_CLANG_FUNC_SIG
-#define _func "GList *gnc_account_list_name_violations(QofBook *, const gchar *)"
-#else
-#define _func "gnc_account_list_name_violations"
-#endif
-    auto msg = _func ": assertion 'separator != NULL' failed";
-#undef _func
+    auto msg = ": assertion 'separator != NULL' failed";
     auto check = test_error_struct_new(log_domain, log_level, msg);
     GList *results, *res_iter;
     auto sep = ":";
@@ -482,7 +476,7 @@ test_gnc_account_list_name_violations (Fixture *fixture, gconstpointer pData)
      * affect the test_log_fatal_handler
      */
     GLogFunc oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler, check);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, check);
+    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_substring_handler, check);
     g_assert (gnc_account_list_name_violations (NULL, NULL) == NULL);
     g_assert_cmpint (check->hits, ==, 1);
     g_assert (gnc_account_list_name_violations (book, NULL) == NULL);
@@ -753,19 +747,13 @@ test_xaccCloneAccount (Fixture *fixture, gconstpointer pData)
     Account *clone;
     QofBook *book = gnc_account_get_book (fixture->acct);
     auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
-#ifdef USE_CLANG_FUNC_SIG
-#define _func "Account *xaccCloneAccount(const Account *, QofBook *)"
-#else
-#define _func "xaccCloneAccount"
-#endif
-    auto msg1 = _func ": assertion 'GNC_IS_ACCOUNT(from)' failed";
-    auto msg2 = _func ": assertion 'QOF_IS_BOOK(book)' failed";
-#undef _func
+    auto msg1 = ": assertion 'GNC_IS_ACCOUNT(from)' failed";
+    auto msg2 = ": assertion 'QOF_IS_BOOK(book)' failed";
     auto check = test_error_struct_new("gnc.engine", loglevel, msg1);
     AccountPrivate *acct_p, *clone_p;
     auto oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler,
                                                 check);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, check);
+    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_substring_handler, check);
     clone = xaccCloneAccount (NULL, book);
     g_assert (clone == NULL);
     g_assert_cmpint (check->hits, ==, 1);
@@ -1089,14 +1077,8 @@ test_gnc_account_insert_remove_split (Fixture *fixture, gconstpointer pData)
     Split *split3 = xaccMallocSplit (book);
     TestSignal sig1, sig2, sig3;
     AccountPrivate *priv = fixture->func->get_private (fixture->acct);
-#ifdef USE_CLANG_FUNC_SIG
-#define _func "gboolean gnc_account_insert_split(Account *, Split *)"
-#else
-#define _func "gnc_account_insert_split"
-#endif
-    auto msg1 = _func ": assertion 'GNC_IS_ACCOUNT(acc)' failed";
-    auto msg2 = _func ": assertion 'GNC_IS_SPLIT(s)' failed";
-#undef _func
+    auto msg1 = ": assertion 'GNC_IS_ACCOUNT(acc)' failed";
+    auto msg2 = ": assertion 'GNC_IS_SPLIT(s)' failed";
     auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
 //    auto log_domain = "gnc.engine";
     auto check1 = test_error_struct_new("gnc.engine", loglevel, msg1);
@@ -1110,7 +1092,7 @@ test_gnc_account_insert_remove_split (Fixture *fixture, gconstpointer pData)
     test_add_error (check2);
     logger = g_log_set_handler ("gnc.engine", loglevel,
                                 (GLogFunc)test_null_handler, check3);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_list_handler, NULL);
+    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_list_substring_handler, NULL);
 
     /* Check that the call fails with invalid account and split (throws) */
     g_assert (!gnc_account_insert_split (NULL, split1));

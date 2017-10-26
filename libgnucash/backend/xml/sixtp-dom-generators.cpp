@@ -334,7 +334,7 @@ add_kvp_value_node (xmlNodePtr node, const gchar* tag, KvpValue* val)
         auto frame = val->get<KvpFrame*> ();
         if (!frame)
             break;
-        frame->for_each_slot (add_kvp_slot, static_cast<void*> (val_node));
+        frame->for_each_slot_temp (&add_kvp_slot, val_node);
         break;
     }
     default:
@@ -366,6 +366,6 @@ qof_instance_slots_to_dom_tree (const char* tag, const QofInstance* inst)
         return nullptr;
 
     ret = xmlNewNode (nullptr, BAD_CAST tag);
-    frame->for_each_slot (add_kvp_slot, static_cast<void*> (ret));
+    frame->for_each_slot_temp (&add_kvp_slot, ret);
     return ret;
 }

@@ -48,6 +48,9 @@
 #include "gnc-engine.h"
 #include "policy.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 typedef gnc_numeric (*xaccGetBalanceFn)( const Account *account );
 
 typedef gnc_numeric (*xaccGetBalanceInCurrencyFn) (
@@ -1451,6 +1454,10 @@ void gnc_account_delete_map_entry (Account *acc, char *full_category, gboolean e
  */
 void gnc_account_imap_convert_bayes (QofBook *book);
 
+/** Change the bayes imap entries from a nested representation to a flat representation.
+ */
+void gnc_account_imap_convert_flat (QofBook *);
+
 /** @} */
 
 
@@ -1487,6 +1494,17 @@ void dxaccAccountSetQuoteTZ (Account *account, const char *tz);
 const char * dxaccAccountGetQuoteTZ (const Account *account);
 /** @} */
 
+/**
+ * Register Accounts with the engine
+ *
+ * NOTE: This function originates from AccountP.h.
+ * A header file private to libgnucash/engine. This has been
+ * moved to Account.h to aid the transition to c++.
+ *
+ * The intention is likely to move this to a private method on Account.
+ * Therefore this method should not be used outside of libgnucash/engine.
+ */
+gboolean xaccAccountRegister (void);
 
 /** @name Account parameter names
  @{
@@ -1516,6 +1534,10 @@ const char * dxaccAccountGetQuoteTZ (const Account *account);
 /** This is the type-override when you want to match all accounts.  Used
  * in the gnome-search parameter list.  Be careful when you use this. */
 #define ACCOUNT_MATCH_ALL_TYPE	"account-match-all"
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
 
 #endif /* XACC_ACCOUNT_H */
 /** @} */
