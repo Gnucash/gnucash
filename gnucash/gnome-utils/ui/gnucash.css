@@ -64,3 +64,8 @@ cursor button {
   background-color: mix (@register_cursor_bg_color, grey, 0.2);
 }
 
+/* Some tweaks for the about dialog */
+dialog#GnuCash > box > box > label
+{
+    font-size: 24px;
+}

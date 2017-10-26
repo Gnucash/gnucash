@@ -60,7 +60,7 @@ gnc_show_splash_screen (void)
     GtkWidget *hbox;
     GtkWidget *version;
     GtkWidget *separator;
-    gchar *ver_string, *markup;
+    gchar *ver_string, *markup, *vcs;
 
     if (splash) return;
     if (!gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SHOW_SPLASH)) return;
@@ -94,22 +94,13 @@ gnc_show_splash_screen (void)
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
 #ifdef GNC_VCS
-    /* Development version */
-    /* Translators: 1st %s is the GnuCash version (eg 2.4.11);
-                    2nd %s is the scm type (svn/svk/git/bzr);
-                    3rd %s is the scm revision number;
-                    4th %s is the build date */
-    ver_string = g_strdup_printf(_("Version: GnuCash-%s %s (rev %s, commit date %s)"),
-                                 VERSION, GNC_VCS, GNC_VCS_REV,
-                                 GNC_VCS_REV_DATE);
+    vcs = GNC_VCS " ";
 #else
-    /* Dist Tarball */
-    /* Translators: 1st %s is the GnuCash version (eg 2.4.11);
-                    2nd %s is the scm (svn/svk/git/bzr) revision number;
-                    3rd %s is the build date */
-    ver_string = g_strdup_printf(_("Version: GnuCash-%s (rev %s, commit date %s)"),
-                                 VERSION, GNC_VCS_REV, GNC_VCS_REV_DATE);
+    vcs = "";
 #endif
+    ver_string = g_strdup_printf("%s: %s, %s: %s%s (%s)", _("Version"),
+                                 VERSION, _("Build ID"), vcs, GNC_VCS_REV,
+                                 GNC_VCS_REV_DATE);
 
     version = gtk_label_new(NULL);
     markup = g_markup_printf_escaped(MARKUP_STRING, ver_string);

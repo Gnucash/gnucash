@@ -4461,44 +4461,34 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 
     if (priv->about_dialog == NULL)
     {
-	const gchar *fixed_message = _("The GnuCash personal finance manager. "
-                                   "The GNU way to manage your money!");
-	gchar *copyright = g_strdup_printf(_("© 1997-%s Contributors"),
+        /* Translators: %s will be replaced with the current year */
+	gchar *copyright = g_strdup_printf(_("Copyright © 1997-%s The GnuCash contributors."),
                                            GNC_VCS_REV_YEAR);
 	gchar **authors = get_file_strsplit("AUTHORS");
 	gchar **documenters = get_file_strsplit("DOCUMENTERS");
 	gchar *license = get_file("LICENSE");
-	gchar *message;
+        gchar *version = NULL;
+        gchar *vcs = NULL;
         GtkIconTheme *icon_theme = gtk_icon_theme_get_default ();
 	GdkPixbuf *logo = gtk_icon_theme_load_icon (icon_theme,
                                                     GNC_ICON_APP,
-                                                    48,
+                                                    128,
                                                     GTK_ICON_LOOKUP_USE_BUILTIN,
                                                     NULL);
 
 
 #ifdef GNC_VCS
-    /* Development version */
-    /* Translators: 1st %s is a fixed message, which is translated independently;
-                    2nd %s is the scm type (svn/svk/git/bzr);
-                    3rd %s is the scm revision number;
-                    4th %s is the build date */
-	message = g_strdup_printf(_("%s\nThis copy was built from %s rev %s (commit date %s)."),
-                                  fixed_message, GNC_VCS, GNC_VCS_REV,
-                                  GNC_VCS_REV_DATE);
+        vcs = GNC_VCS " ";
 #else
-    /* Translators: 1st %s is a fixed message, which is translated independently;
-                    2nd %s is the scm (svn/svk/git/bzr) revision number;
-                    3rd %s is the build date */
-	message = g_strdup_printf(_("%s\nThis copy was built from rev %s (commit date %s)."),
-                                  fixed_message, GNC_VCS_REV,
-                                  GNC_VCS_REV_DATE);
+        vcs = "";
 #endif
+        version = g_strdup_printf ("%s: %s\n%s: %s%s (%s)", _("Version"), VERSION,
+                                   _("Build ID"), vcs, GNC_VCS_REV, GNC_VCS_REV_DATE);
 	priv->about_dialog = gtk_about_dialog_new ();
 	g_object_set (priv->about_dialog,
 		      "authors", authors,
 		      "documenters", documenters,
-		      "comments", message,
+		      "comments", _("Accounting for personal and small business finance."),
 		      "copyright", copyright,
 		      "license", license,
 		      "logo", logo,
@@ -4508,11 +4498,12 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
       * The string can have multiple rows, so you can also add a list of
       * contributors. */
 		      "translator-credits", _("translator_credits"),
-		      "version", VERSION,
+		      "version", version,
 		      "website", "http://www.gnucash.org",
+		      "website_label", _("Visit the GnuCash website."),
 		      NULL);
 
-	g_free(message);
+        g_free(version);
 	g_free(copyright);
 	if (license)     g_free(license);
 	if (documenters) g_strfreev(documenters);

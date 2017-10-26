@@ -104,7 +104,6 @@ then
 fi
 
 # If we get here then this is NOT an svn checkout.
-
 # Maybe it's git?
 real_gitdir="${real_srcdir}"/.git
 if test -d "${real_gitdir}"
@@ -126,7 +125,7 @@ then
     exit 0
   fi
 
-  githead=`"$GIT_CMD" --git-dir "${real_gitdir}" log -1 --pretty=format:"%h" HEAD 2>/dev/null`  # short hash only
+  githead=$("$GIT_CMD" --git-dir "${real_gitdir}" describe)
   if test $? = 0 ; then
     /bin/echo -n $githead
     # Add a "+" to the hash if there deleted or modified files (not excluded by .gitignore and friends)

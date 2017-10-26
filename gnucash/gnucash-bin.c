@@ -425,9 +425,8 @@ load_user_config(void)
 static void
 gnc_parse_command_line(int *argc, char ***argv)
 {
-
     GError *error = NULL;
-    GOptionContext *context = g_option_context_new (_("- GnuCash personal and small business finance management"));
+    GOptionContext *context = g_option_context_new (_("- GnuCash, accounting for personal and small business finance"));
 
     g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
     g_option_context_add_group (context, gtk_get_option_group(FALSE));
@@ -439,35 +438,22 @@ gnc_parse_command_line(int *argc, char ***argv)
         exit (1);
     }
     g_option_context_free (context);
-
     if (gnucash_show_version)
     {
-        gchar *fixed_message;
+        gchar *vcs;
 
         if (is_development_version)
-        {
-            fixed_message = g_strdup_printf(_("GnuCash %s development version"), VERSION);
-
-            /* Translators: 1st %s is a fixed message, which is translated independently;
-                            2nd %s is the scm type (svn/svk/git/bzr);
-                            3rd %s is the scm revision number;
-                            4th %s is the build date */
-            g_print ( _("%s\nThis copy was built from %s rev %s (commit date %s)."),
-                      fixed_message, GNC_VCS, GNC_VCS_REV,
-                      GNC_VCS_REV_DATE );
-        }
+            g_print (_("GnuCash %s development version"), VERSION);
         else
-        {
-            fixed_message = g_strdup_printf(_("GnuCash %s"), VERSION);
+            g_print (_("GnuCash %s"), VERSION);
 
-            /* Translators: 1st %s is a fixed message, which is translated independently;
-                            2nd %s is the scm (svn/svk/git/bzr) revision number;
-                            3rd %s is the build date */
-            g_print ( _("%s\nThis copy was built from rev %s (commit date %s)."),
-                      fixed_message, GNC_VCS_REV, GNC_VCS_REV_DATE );
-        }
-        g_print("\n");
-        g_free (fixed_message);
+#ifdef GNC_VCS
+        vcs = GNC_VCS " ";
+#else
+        vcs = "";
+#endif
+        g_print ("\n%s: %s%s (%s)\n",
+                 _("Build ID"), vcs, GNC_VCS_REV, GNC_VCS_REV_DATE);
         exit(0);
     }
 
