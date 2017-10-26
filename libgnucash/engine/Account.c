@@ -3826,6 +3826,8 @@ boolean_from_key (const Account *acc, const char *key)
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
     qof_instance_get_kvp (QOF_INSTANCE(acc), key, &v);
+    if (G_VALUE_HOLDS_INT64 (&v))
+        return g_value_get_int64 (&v) != 0;
     if (G_VALUE_HOLDS_BOOLEAN (&v))
          return g_value_get_boolean (&v);
     if (G_VALUE_HOLDS_STRING (&v))
