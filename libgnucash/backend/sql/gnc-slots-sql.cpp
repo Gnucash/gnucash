@@ -889,7 +889,7 @@ load_slot_for_book_object (GncSqlBackend* sql_be, GncSqlRow& row,
     guid = load_obj_guid (sql_be, row);
     g_return_if_fail (guid != NULL);
     inst = lookup_fn (guid, sql_be->book());
-    g_return_if_fail (inst != NULL);
+    if (inst == NULL) return; /* Silently bail if the guid isn't loaded yet. */
 
     slot_info.be = sql_be;
     slot_info.pKvpFrame = qof_instance_get_slots (inst);

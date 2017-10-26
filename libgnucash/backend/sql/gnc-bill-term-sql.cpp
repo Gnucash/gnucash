@@ -98,7 +98,7 @@ static EntryVec col_table
 
 static EntryVec billterm_parent_col_table
 {
-    gnc_sql_make_table_entry<CT_INT64>("parent", 0, 0, nullptr,
+    gnc_sql_make_table_entry<CT_GUID>("parent", 0, 0, nullptr,
                                        bt_set_parent_guid),
 };
 
@@ -212,7 +212,7 @@ load_single_billterm (GncSqlBackend* sql_be, GncSqlRow& row,
 
         s.billterm = pBillTerm;
         s.have_guid = false;
-        gnc_sql_load_object (sql_be, row, GNC_ID_TAXTABLE, &s,
+        gnc_sql_load_object (sql_be, row, GNC_ID_BILLTERM, &s,
                              billterm_parent_col_table);
         if (s.have_guid)
             l_billterms_needing_parents.push_back(new BillTermParentGuid(s));
