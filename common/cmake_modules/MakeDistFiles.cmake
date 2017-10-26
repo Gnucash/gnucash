@@ -40,6 +40,7 @@ ENDFUNCTION()
 
 SET(COPY_FROM_BUILD
   ChangeLog
+  doc/gnucash.1
   libgnucash/app-utils/migratable-prefs.xml
   libgnucash/app-utils/swig-app-utils-guile.c
   libgnucash/app-utils/swig-app-utils-python.c
@@ -89,17 +90,11 @@ SET(COPY_FROM_BUILD
 # above, except that we don't create an explicit
 # dependency on this for the 'dist' target. I need
 # to fix the creation of these files so that we
-# can add the as dependencies for 'dist'. These
+# can add them as dependencies for 'dist'. These
 # file are not generated using CONFIGURE_FILE(),
 # so CMake does not realize these are generated files.
 
-# Items marked with GNC_CONFIGURE can be
-# properly generated when we drop autotools, because
-# then the source file can use the @XXX@ convention
-# instead of @-XXX-@
-
 SET(COPY_FROM_BUILD_2
-        doc/gnucash.1  # Uses GNC_CONFIGURE
         po/gnucash.pot
         libgnucash/doc/design/stamp-vti
         libgnucash/doc/design/version.texi
