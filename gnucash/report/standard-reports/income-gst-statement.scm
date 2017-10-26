@@ -1566,16 +1566,11 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
   ;;  ( map (lambda (acct)  (gnc-account-get-full-name acct)) account-list))
 
   (define (splits-filter-unique-transactions splits)
-    (let ((have-trans-hash (make-hash-table)))
-      (define (only-one-copy? split)
-        (let* ((parent (xaccSplitGetParent split))
-               (trans-guid (gncTransGetGUID parent)))
-          (if (hash-ref have-trans-hash trans-guid #f)
-              #f  ; already have a copy of this transaction
-              (begin
-                (hash-set! have-trans-hash trans-guid #t)
-                #t))))
-      (filter only-one-copy? splits)))
+    (define (same-txn? s1 s2)
+      (define txn1 (xaccSplitGetParent s1))
+      (define txn2 (xaccSplitGetParent s2))
+      (xaccTransEqual txn1 txn2 #t #t #t #f))
+    (delete-duplicates! splits same-txn?))
 
   (define (is-filter-member split account-list)
     (let* ((txn (xaccSplitGetParent split))
@@ -1690,26 +1685,11 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
 
           ;;(gnc:warn "Splits in trep-renderer:" splits)
 
-          ;;(gnc:warn "Filter account names:" (get-other-account-names c_account_2))
-
-          ;;This should probably a cond or a case to allow for different filter types.
-          ;;(gnc:warn "Filter Mode: " filter-mode)
-          (if (eq? filter-mode 'include)
-              (begin
-                ;;(gnc:warn "Including Filter Accounts")
-                (set! splits (filter (lambda (split)
-                                       (is-filter-member split c_account_2))
-                                     splits))))
-
-          (if (eq? filter-mode 'exclude)
-              (begin
-                ;;(gnc:warn "Excluding Filter Accounts")
-                (set! splits (filter (lambda (split)
-                                       (not (is-filter-member split c_account_2)))
-                                     splits))))
-
-          ; Combines: Transaction Description/Notes/Memo matcher, include only
-          ; invoices & regular transactions, and disallow closing txns.
+          ; Combined Filter:
+          ; - include/exclude splits to/from selected accounts
+          ; - include only Invoices & Regular Transactions (i.e. remove Link & Payments)
+          ; - disallow Closing Transactions, and
+          ; - substring/regex matcher for Description/Notes/Memo 
           (set! splits (filter
                         (lambda (split)
                           (let* ((trans (xaccSplitGetParent split))
@@ -1718,7 +1698,9 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                                            (if transaction-matcher-regexp
                                                (regexp-exec transaction-matcher-regexp str)
                                                (string-contains str transaction-matcher)))))
-                            (and (member txn-type (list TXN-TYPE-NONE TXN-TYPE-INVOICE))
+                            (and (if (eq? filter-mode 'include) (is-filter-member split c_account_2) #t)
+                                 (if (eq? filter-mode 'exclude) (not (is-filter-member split c_account_2)) #t)
+                                 (member txn-type (list TXN-TYPE-NONE TXN-TYPE-INVOICE))
                                  (not (xaccTransGetIsClosingTxn trans))
                                  (or (match? (xaccTransGetDescription trans))
                                      (match? (xaccTransGetNotes trans))
