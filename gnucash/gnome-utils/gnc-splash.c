@@ -93,14 +93,22 @@ gnc_show_splash_screen (void)
     gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
+
 #ifdef GNC_VCS
     vcs = GNC_VCS " ";
 #else
     vcs = "";
 #endif
-    ver_string = g_strdup_printf("%s: %s, %s: %s%s (%s)", _("Version"),
-                                 VERSION, _("Build ID"), vcs, GNC_VCS_REV,
-                                 GNC_VCS_REV_DATE);
+
+    /* Allow builder to override the build id (eg distributions may want to
+     * print an package source version number (rpm, dpkg,...) instead of our git ref */
+    if (g_strcmp0("", GNUCASH_BUILD_ID) != 0)
+        ver_string = g_strdup_printf("%s: %s, %s: %s", _("Version"),
+                                     VERSION, _("Build ID"), GNUCASH_BUILD_ID);
+    else
+        ver_string = g_strdup_printf("%s: %s, %s: %s%s (%s)", _("Version"),
+                                     VERSION, _("Build ID"), vcs, GNC_VCS_REV,
+                                     GNC_VCS_REV_DATE);
 
     version = gtk_label_new(NULL);
     markup = g_markup_printf_escaped(MARKUP_STRING, ver_string);

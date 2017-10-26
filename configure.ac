@@ -96,6 +96,14 @@ AC_DEFINE_UNQUOTED(GNUCASH_RESAVE_VERSION, $GNUCASH_RESAVE_VERSION,
 AC_DEFINE_UNQUOTED(GNUCASH_LATEST_STABLE_SERIES, "$GNUCASH_LATEST_STABLE_SERIES",
     [Most recent stable GnuCash series])
 
+AC_ARG_VAR([GNUCASH_BUILD_ID],[Overrides the GnuCash build identification (Build ID) which defaults
+to a description of the vcs commit from which gnucash is built. Distributions may want to insert a package
+management based version number instead])
+AC_DEFINE_UNQUOTED(GNUCASH_BUILD_ID, "$GNUCASH_BUILD_ID",
+                   [GnuCash build identification, which defaults
+                   to a description of the vcs commit from which gnucash is built. Distributions may want
+                   to insert a package management based version string instead.])
+
 dnl Set of available languages:
 dnl managed at the Translation Project:
 TP_LINGUAS="az ca cs da eu fa ja nl rw sk sr sv tr uk zh_CN"

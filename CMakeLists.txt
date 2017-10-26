@@ -72,6 +72,7 @@ OPTION (AUTOTOOLS_IN_DIST "Add autotools support to distribution tarballs." ON)
 
 # These are also settable from the command line in a similar way.
 
+SET(GNUCASH_BUILD_ID "" CACHE STRING "Overrides the GnuCash build identification (Build ID) which defaults to a description of the vcs commit from which gnucash is built. Distributions may want to insert a package management based version number instead")
 SET(BINDIR ${CMAKE_INSTALL_PREFIX}/bin CACHE STRING "user executables")
 SET(SYSCONFDIR ${CMAKE_INSTALL_PREFIX}/etc CACHE STRING "read-only single-machine data")
 SET(DATAROOTDIR ${CMAKE_INSTALL_PREFIX}/share CACHE STRING "read-only arch.-independent data root")

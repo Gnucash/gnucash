@@ -452,8 +452,15 @@ gnc_parse_command_line(int *argc, char ***argv)
 #else
         vcs = "";
 #endif
-        g_print ("\n%s: %s%s (%s)\n",
-                 _("Build ID"), vcs, GNC_VCS_REV, GNC_VCS_REV_DATE);
+
+        /* Allow builder to override the build id (eg distributions may want to
+         * print an package source version number (rpm, dpkg,...) instead of our git ref */
+        if (g_strcmp0("", GNUCASH_BUILD_ID) != 0)
+            g_print ("\n%s: %s\n",
+                     _("Build ID"), GNUCASH_BUILD_ID);
+        else
+            g_print ("\n%s: %s%s (%s)\n",
+                     _("Build ID"), vcs, GNC_VCS_REV, GNC_VCS_REV_DATE);
         exit(0);
     }
 

@@ -4476,14 +4476,20 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
                                                     GTK_ICON_LOOKUP_USE_BUILTIN,
                                                     NULL);
 
-
 #ifdef GNC_VCS
         vcs = GNC_VCS " ";
 #else
         vcs = "";
 #endif
-        version = g_strdup_printf ("%s: %s\n%s: %s%s (%s)", _("Version"), VERSION,
-                                   _("Build ID"), vcs, GNC_VCS_REV, GNC_VCS_REV_DATE);
+
+        /* Allow builder to override the build id (eg distributions may want to
+         * print an package source version number (rpm, dpkg,...) instead of our git ref */
+        if (g_strcmp0("", GNUCASH_BUILD_ID) != 0)
+            version = g_strdup_printf ("%s: %s\n%s: %s", _("Version"), VERSION,
+                                       _("Build ID"), GNUCASH_BUILD_ID);
+        else
+            version = g_strdup_printf ("%s: %s\n%s: %s%s (%s)", _("Version"), VERSION,
+                                       _("Build ID"), vcs, GNC_VCS_REV, GNC_VCS_REV_DATE);
 	priv->about_dialog = gtk_about_dialog_new ();
 	g_object_set (priv->about_dialog,
 		      "authors", authors,
