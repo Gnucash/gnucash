@@ -37,6 +37,7 @@
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-13))
+(use-modules (ice-9 regex))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 (use-modules (gnucash printf))
@@ -62,11 +63,15 @@
 (define optname-void-transactions (N_ "Void Transactions"))
 (define optname-table-export (N_ "Table for Exporting"))
 (define optname-common-currency (N_ "Common Currency"))
-(define TAX-SETUP-DESC "From the Report Options, you will need to select the accounts which will \
+(define TAX-SETUP-DESC (N_ "From the Report Options, you will need to select the accounts which will \
 hold the GST/VAT taxes collected or paid. These accounts must contain splits which document the \
 monies which are wholly sent or claimed from tax authorities during periodic GST/VAT returns. These \
-accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
+accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY for taxes collected on sales."))
 (define optname-currency (N_ "Report's currency"))
+(define optname-account-matcher (N_ "Account Matcher"))
+(define optname-account-matcher-regex (N_ "Account Matcher uses regular expressions for extended matching"))
+(define optname-transaction-matcher (N_ "Transaction Matcher"))
+(define optname-transaction-matcher-regex (N_ "Transaction Matcher uses regular expressions for extended matching"))
 (define def:grand-total-style "grand-total")
 (define def:normal-row-style "normal-row")
 (define def:alternate-row-style "alternate-row")
@@ -223,7 +228,8 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
                           subtotal-style export?)
   (let* ((row-contents '())
          (columns (map (lambda (coll) (coll 'format gnc:make-gnc-monetary #f)) subtotal-collectors))
-         (list-of-commodities (delete-duplicates (map gnc:gnc-monetary-commodity (apply append columns)))))
+         (list-of-commodities (delete-duplicates (map gnc:gnc-monetary-commodity (apply append columns))
+                                                 gnc-commodity-equal)))
 
     (define (retrieve-commodity list-of-monetary commodity)
       (if (null? list-of-monetary)
@@ -675,6 +681,23 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
     gnc:pagename-general optname-table-export
     "g" (N_ "Formats the table suitable for cut & paste exporting with extra cells.") #f))
 
+  (gnc:register-trep-option
+   (gnc:make-string-option
+    gnc:pagename-general optname-transaction-matcher
+    "i1" (N_ "Match only transactions whose substring is matched e.g. '#gift' \
+will find all transactions with #gift in memo, description or notes. It can be left \
+blank, which will disable the matcher.")
+    ""))
+
+  (gnc:register-trep-option
+   (gnc:make-simple-boolean-option
+    gnc:pagename-general optname-transaction-matcher-regex
+    "i2"
+    (N_ "By default the transaction matcher will search substring only. Set this to true to \
+enable full POSIX regular expressions capabilities. '#work|#family' will match both \
+tags within description, notes or memo. ")
+    #f))
+
   ;; Accounts options
 
   ;; account to do report on
@@ -695,11 +718,20 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
 
   (gnc:register-trep-option
    (gnc:make-string-option
-    gnc:pagename-accounts (N_ "Account Substring")
-    "b15" (N_ "Match only above accounts whose fullname contains substring e.g. ':Travel' will \
-match Expenses:Travel:Holiday and Expenses:Business:Travel. Can be left blank, which will \
-disable the substring filter. This filter is case-sensitive.")
+    gnc:pagename-accounts optname-account-matcher
+    "b15" (N_ "Match only above accounts whose fullname is matched e.g. ':Travel' will match \
+Expenses:Travel:Holiday and Expenses:Business:Travel. It can be left blank, which will disable \
+the matcher.")
     ""))
+
+  (gnc:register-trep-option
+   (gnc:make-simple-boolean-option
+    gnc:pagename-accounts optname-account-matcher-regex
+    "b16"
+    (N_ "By default the account matcher will search substring only. Set this to true to enable full \
+POSIX regular expressions capabilities. 'Car|Flights' will match both Expenses:Car and Expenses:Flights. \
+Use a period (.) to match a single character e.g. '20../.' will match 'Travel 2017/1 London'. ")
+    #f))
 
   (gnc:register-trep-option
    (gnc:make-account-list-limited-option
@@ -1173,33 +1205,22 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
       (letrec
           ((myadd (lambda (X Y) (if X (if Y (gnc-numeric-add X Y GNC-DENOM-AUTO GNC-RND-ROUND) X) Y)))
            (myneg (lambda (X) (if X (gnc-numeric-neg X) #f)))
-           (split-adder (lambda (split accountlist typefilter)
+           (split-adder (lambda (split accountlist)
                           (let* ((transaction (xaccSplitGetParent split))
                                  (splits-in-transaction (xaccTransGetSplitList transaction))
-                                 (sum #f))
-                            (for-each (lambda (s)
-                                        (let* ((splitAcc (xaccSplitGetAccount s))
-                                               (splitVal (if (xaccTransGetVoidStatus transaction)
-                                                             (xaccSplitVoidFormerValue s)
-                                                             (xaccSplitGetValue s)))
-                                               (splitCommodity (xaccAccountGetCommodity splitAcc))
-                                               (splitAccType (xaccAccountGetType splitAcc))
-                                               (splitAccName (xaccAccountGetName splitAcc)))
-                                          (if accountlist
-                                              (if (member splitAcc accountlist)
-                                                  (set! sum (myadd sum splitVal))))
-                                          (if typefilter
-                                              (if (eq? typefilter splitAccType)
-                                                  (set! sum (myadd sum splitVal))))))
-                                      splits-in-transaction)
-                            sum)))
-           ;(sales-without-tax (lambda (s) (split-adder s #f ACCT-TYPE-INCOME)))
-           ;(purchases-without-tax (lambda (s) (split-adder s #f ACCT-TYPE-EXPENSE)))
-           (tax-on-sales (lambda (s) (split-adder s accounts-tax-collected #f)))
-           (tax-on-purchases (lambda (s) (split-adder s accounts-tax-paid #f)))
-           (sales-without-tax (lambda (s) (split-adder s accounts-sales #f)))
-           (purchases-without-tax (lambda (s) (split-adder s accounts-purchases #f)))
-           (account-adder (lambda (acc) (lambda (s) (split-adder s (list acc) #f))))
+                                 (split-get-value (lambda (s)
+                                                    (if (xaccTransGetVoidStatus transaction)
+                                                        (xaccSplitVoidFormerValue s)
+                                                        (xaccSplitGetValue s))))
+                                 (include-split? (lambda (s) (member (xaccSplitGetAccount s) accountlist)))
+                                 (filtered-splits (filter include-split? splits-in-transaction))
+                                 (list-of-values (map split-get-value filtered-splits)))
+                            (fold myadd #f list-of-values))))
+           (tax-on-sales (lambda (s) (split-adder s accounts-tax-collected)))
+           (tax-on-purchases (lambda (s) (split-adder s accounts-tax-paid)))
+           (sales-without-tax (lambda (s) (split-adder s accounts-sales)))
+           (purchases-without-tax (lambda (s) (split-adder s accounts-purchases)))
+           (account-adder (lambda (acc) (lambda (s) (split-adder s (list acc)))))
            (total-sales (lambda (s) (myadd (tax-on-sales s) (sales-without-tax s))))
            (total-purchases (lambda (s) (myadd (tax-on-purchases s) (purchases-without-tax s))))
            (bank-remittance (lambda (s) (myneg (myadd (total-sales s) (total-purchases s)))))
@@ -1208,7 +1229,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
         (append
          ; each column will be a vector
          ; (vector heading calculator-function reverse-column?)
-         (list (vector "Total Sales" total-sales #t))
+         (list (vector "TOTAL SALES" total-sales #t))
          (if (gnc:option-value (gnc:lookup-option options gnc:pagename-display (N_ "Individual income columns")))
              (map (lambda (acc) (vector (xaccAccountGetName acc) (account-adder acc) #t))
                   accounts-sales)
@@ -1217,7 +1238,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
              (map (lambda (acc) (vector (xaccAccountGetName acc) (account-adder acc) #t))
                   accounts-tax-collected)
              (list (vector "Tax on Sales" tax-on-sales #t)))
-         (list (vector "Total Purchases" total-purchases #f))
+         (list (vector "TOTAL PURCHASES" total-purchases #f))
          (if (gnc:option-value (gnc:lookup-option options gnc:pagename-display (N_ "Individual expense columns")))
              (map (lambda (acc) (vector (xaccAccountGetName acc) (account-adder acc) #f))
                   accounts-purchases)
@@ -1546,50 +1567,30 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
   ;;  ( map (lambda (acct)  (gnc-account-get-full-name acct)) account-list))
 
   (define (splits-filter-unique-transactions splits)
-    (let ((have-trans-hash (make-hash-table)))
-      (define (only-one-copy? split)
-        (let* ((parent (xaccSplitGetParent split))
-               (trans-guid (gncTransGetGUID parent)))
-          (if (hash-ref have-trans-hash trans-guid #f)
-              #f  ; already have a copy of this transaction
-              (begin
-                (hash-set! have-trans-hash trans-guid #t)
-                #t))))
-      (filter only-one-copy? splits)))
+    (define (same-txn? s1 s2)
+      (define txn1 (xaccSplitGetParent s1))
+      (define txn2 (xaccSplitGetParent s2))
+      (xaccTransEqual txn1 txn2 #t #t #t #f))
+    (delete-duplicates! splits same-txn?))
 
   (define (is-filter-member split account-list)
     (let* ((txn (xaccSplitGetParent split))
-           (splitcount (xaccTransCountSplits txn)))
-
+           (splitcount (xaccTransCountSplits txn))
+           (other-account (xaccSplitGetAccount (xaccSplitGetOtherSplit split)))
+           (splits-equal? (lambda (s1 s2) (xaccSplitEqual s1 s2 #t #f #f)))
+           (other-splits (delete split (xaccTransGetSplitList txn) splits-equal?))
+           (other-accounts (map xaccSplitGetAccount other-splits))
+           (is-in-account-list? (lambda (acc) (member acc account-list))))
       (cond
         ;; A 2-split transaction - test separately so it can be optimized
         ;; to significantly reduce the number of splits to traverse
         ;; in guile code
         ((= splitcount 2)
-         (let* ((other      (xaccSplitGetOtherSplit split))
-                (other-acct (xaccSplitGetAccount other)))
-           (member other-acct account-list)))
+         (is-in-account-list? other-account))
 
         ;; A multi-split transaction - run over all splits
         ((> splitcount 2)
-         (let ((splits (xaccTransGetSplitList txn)))
-
-           ;; Walk through the list of splits.
-           ;; if we reach the end, return #f
-           ;; if the 'this' != 'split' and the split->account is a member
-           ;; of the account-list, then return #t, else recurse
-           (define (is-member splits)
-             (if (null? splits)
-                 #f
-                 (let* ((this (car splits))
-                        (rest (cdr splits))
-                        (acct (xaccSplitGetAccount this)))
-                   (if (and (not (eq? this split))
-                            (member acct account-list))
-                       #t
-                       (is-member rest)))))
-
-           (is-member splits)))
+         (or-map is-in-account-list? other-accounts))
 
         ;; Single transaction splits
         (else #f))))
@@ -1598,10 +1599,15 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
 
   (let* ((document (gnc:make-html-document))
          (c_account_0 (opt-val gnc:pagename-accounts "Accounts"))
-         (c_account_substring (opt-val gnc:pagename-accounts "Account Substring"))
+         (account-matcher (opt-val gnc:pagename-accounts optname-account-matcher))
+         (account-matcher-regexp (if (opt-val gnc:pagename-accounts optname-account-matcher-regex)
+                                     (make-regexp account-matcher)
+                                     #f))
          (c_account_1 (filter
                        (lambda (acc)
-                         (string-contains (gnc-account-get-full-name acc) c_account_substring))
+                         (if account-matcher-regexp
+                             (regexp-exec account-matcher-regexp (gnc-account-get-full-name acc))
+                             (string-contains (gnc-account-get-full-name acc) account-matcher)))
                        c_account_0))
          (c_account_2 (opt-val gnc:pagename-accounts "Filter By..."))
          (tax-accounts (opt-val gnc:pagename-accounts "Tax Accounts"))
@@ -1616,6 +1622,10 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
          (enddate (gnc:timepair-end-day-time
                    (gnc:date-option-absolute-time
                     (opt-val gnc:pagename-general "End Date"))))
+         (transaction-matcher (opt-val gnc:pagename-general optname-transaction-matcher))
+         (transaction-matcher-regexp (if (opt-val gnc:pagename-general optname-transaction-matcher-regex)
+                                         (make-regexp transaction-matcher)
+                                         #f))
          (report-title (opt-val
                         gnc:pagename-general
                         gnc:optname-reportname))
@@ -1661,37 +1671,31 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
 
           ;;(gnc:warn "Splits in trep-renderer:" splits)
 
-          ;;(gnc:warn "Filter account names:" (get-other-account-names c_account_2))
-
-          ;;This should probably a cond or a case to allow for different filter types.
-          ;;(gnc:warn "Filter Mode: " filter-mode)
-          (if (eq? filter-mode 'include)
-              (begin
-                ;;(gnc:warn "Including Filter Accounts")
-                (set! splits (filter (lambda (split)
-                                       (is-filter-member split c_account_2))
-                                     splits))))
-
-          (if (eq? filter-mode 'exclude)
-              (begin
-                ;;(gnc:warn "Excluding Filter Accounts")
-                (set! splits (filter (lambda (split)
-                                       (not (is-filter-member split c_account_2)))
-                                     splits))))
+          ; Combined Filter:
+          ; - include/exclude splits to/from selected accounts
+          ; - include only Invoices & Regular Transactions (i.e. remove Link & Payments)
+          ; - disallow Closing Transactions, and
+          ; - substring/regex matcher for Description/Notes/Memo 
+          (set! splits (filter
+                        (lambda (split)
+                          (let* ((trans (xaccSplitGetParent split))
+                                 (txn-type (xaccTransGetTxnType trans))
+                                 (match? (lambda (str)
+                                           (if transaction-matcher-regexp
+                                               (regexp-exec transaction-matcher-regexp str)
+                                               (string-contains str transaction-matcher)))))
+                            (and (if (eq? filter-mode 'include) (is-filter-member split c_account_2) #t)
+                                 (if (eq? filter-mode 'exclude) (not (is-filter-member split c_account_2)) #t)
+                                 (member txn-type (list TXN-TYPE-NONE TXN-TYPE-INVOICE))
+                                 (not (xaccTransGetIsClosingTxn trans))
+                                 (or (match? (xaccTransGetDescription trans))
+                                     (match? (xaccTransGetNotes trans))
+                                     (match? (xaccSplitGetMemo split))))))
+                        splits))
 
           ; We have to remove duplicates because the report will *sum* amounts in a transaction
           ; otherwise it will double count where transaction contains 2 splits in same account
           (set! splits (splits-filter-unique-transactions splits))
-
-          ; For each split, we will only keep those which contain useful data
-          ; e.g. show invoices & regular transactions. We will also disallow closing txns.
-          (set! splits (filter
-                        (lambda (split)
-                          (let* ((trans (xaccSplitGetParent split))
-                                 (txn-type (xaccTransGetTxnType trans)))
-                            (and (member txn-type (list TXN-TYPE-NONE TXN-TYPE-INVOICE))
-                                 (not (xaccTransGetIsClosingTxn trans)))))
-                        splits))
 
           (if (not (null? splits))
               (let ((table
@@ -1734,14 +1738,18 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                  (gnc:make-html-text
                   (gnc:html-markup-p
                    "Input Tax accounts: "
-                   (string-join (map gnc-account-get-full-name accounts-tax-paid) ", "))))
+                   (if (null? accounts-tax-paid)
+                       (N_ "None")
+                       (string-join (map gnc-account-get-full-name accounts-tax-paid) ", ")))))
 
                 (gnc:html-document-add-object!
                  document
                  (gnc:make-html-text
                   (gnc:html-markup-p
                    "Output Tax accounts: "
-                   (string-join (map gnc-account-get-full-name accounts-tax-collected) ", "))))
+                   (if (null? accounts-tax-collected)
+                       (N_ "None")
+                       (string-join (map gnc-account-get-full-name accounts-tax-collected) ", ")))))
 
                 (if (null? (append accounts-tax-collected accounts-tax-paid))
                     (gnc:html-document-add-object!
@@ -1768,28 +1776,38 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
 
         ;; error condition: no accounts specified
 
-        (begin
-          (gnc:html-document-add-object!
-           document
-           (gnc:html-make-no-account-warning
-            report-title (gnc:report-id report-obj)))
-
-          (gnc:html-document-add-object!
-           document
-           (gnc:make-html-text
-            (gnc:html-markup-p
-             "This report is useful to calculate periodic business tax payable/receivable from"
-             " authorities. From <i>Edit report options</i> above, choose your Business Income and Business Expense accounts."
-             " Each transaction may contain, in addition to the accounts payable/receivable or bank accounts,"
-             " a split to a tax account, e.g. Income:Sales -$1000, Liability:GST on Sales -$100, Asset:Bank $1100.")
-            (gnc:html-markup-p
-             " These tax accounts can either be populated using the standard register, or from Business Invoices and Bills "
-             " which will require Business > Sales Tax Tables to be set up correctly. Please see the documentation.")))
-
-          (gnc:html-document-add-object!
-           document
-           (gnc:make-html-text
-            (gnc:html-markup-p TAX-SETUP-DESC)))))
+          (if (null? c_account_0)
+              (begin
+                (gnc:html-document-add-object!
+                 document
+                 (gnc:html-make-no-account-warning
+                  report-title (gnc:report-id report-obj)))
+                
+                (gnc:html-document-add-object!
+                 document
+                 (gnc:make-html-text
+                  (gnc:html-markup-p
+                   "This report is useful to calculate periodic business tax payable/receivable from"
+                   " authorities. From <i>Edit report options</i> above, choose your Business Income and Business Expense accounts."
+                   " Each transaction may contain, in addition to the accounts payable/receivable or bank accounts,"
+                   " a split to a tax account, e.g. Income:Sales -$1000, Liability:GST on Sales -$100, Asset:Bank $1100.")
+                  (gnc:html-markup-p
+                   " These tax accounts can either be populated using the standard register, or from Business Invoices and Bills "
+                   " which will require Business > Sales Tax Tables to be set up correctly. Please see the documentation.")))
+                
+                (gnc:html-document-add-object!
+                 document
+                 (gnc:make-html-text
+                  (gnc:html-markup-p TAX-SETUP-DESC))))
+            
+              (begin
+                (gnc:html-document-add-object!
+                 document
+                 (gnc:make-html-text
+                  (gnc:html-markup-h2
+                   (N_ "No accounts were matched"))
+                  (gnc:html-markup-p
+                   (N_ "The account matcher specified in the report options did not match any accounts.")))))))
 
     (gnc:report-finished)
     document))
