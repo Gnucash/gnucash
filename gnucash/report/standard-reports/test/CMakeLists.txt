@@ -1,4 +1,5 @@
 GNC_ADD_SCHEME_TEST(test-cash-flow test-cash-flow.scm)
+GNC_ADD_SCHEME_TEST(test-cashflow-barchart test-cashflow-barchart.scm)
 GNC_ADD_SCHEME_TEST(test-standard-category-report test-standard-category-report.scm)
 GNC_ADD_SCHEME_TEST(test-standard-net-barchart test-standard-net-barchart.scm)
 GNC_ADD_SCHEME_TEST(test-standard-net-linechart test-standard-net-linechart.scm)
@@ -20,5 +21,5 @@ GNC_ADD_SCHEME_TARGETS(scm-test-standard-reports
 )
 
 SET_DIST_LIST(test_standard_reports_DIST CMakeLists.txt Makefile.am ${scm_test_standard_reports_SOURCES}
-        test-cash-flow.scm test-standard-category-report.scm test-standard-net-barchart.scm
+        test-cash-flow.scm test-cashflow-barchart.scm test-standard-category-report.scm test-standard-net-barchart.scm
         test-standard-net-linechart.scm)

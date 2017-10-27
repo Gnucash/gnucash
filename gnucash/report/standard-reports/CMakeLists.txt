@@ -15,6 +15,7 @@ SET (standard_reports_SCHEME_2
     budget-income-statement.scm
     budget.scm
     cash-flow.scm
+    cashflow-barchart.scm
     category-barchart.scm
     daily-reports.scm
     equity-statement.scm
