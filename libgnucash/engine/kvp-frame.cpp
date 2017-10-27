@@ -38,6 +38,7 @@ extern "C"
 #include <sstream>
 #include <algorithm>
 #include <vector>
+#include <numeric>
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = "qof.kvp";
@@ -473,7 +474,7 @@ gnc_value_list_get_type (void)
 }
 
 void
-KvpFrame::flatten_kvp_impl(std::vector<std::string> path, std::vector<std::pair<std::string, KvpValue*>> & entries) const
+KvpFrame::flatten_kvp_impl(std::vector <std::string> path, std::vector <std::pair <std::vector <std::string>, KvpValue*>> & entries) const
 {
     for (auto const & entry : m_valuemap)
     {
@@ -486,16 +487,17 @@ KvpFrame::flatten_kvp_impl(std::vector<std::string> path, std::vector<std::pair<
         }
         else
         {
-            std::string flat_path {std::accumulate(path.begin(), path.end(), std::string{})};
-            entries.emplace_back(flat_path + "/" + entry.first, entry.second);
+            std::vector <std::string> new_path {path};
+            new_path.emplace_back (entry.first);
+            entries.emplace_back (new_path, entry.second);
         }
     }
 }
 
-std::vector<std::pair<std::string, KvpValue*>>
+std::vector <std::pair <std::vector <std::string>, KvpValue*>>
 KvpFrame::flatten_kvp(void) const
 {
-    std::vector<std::pair<std::string, KvpValue*>> ret;
+    std::vector <std::pair <std::vector <std::string>, KvpValue*>> ret;
     flatten_kvp_impl({}, ret);
     return ret;
 }

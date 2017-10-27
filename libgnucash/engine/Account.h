@@ -1454,10 +1454,6 @@ void gnc_account_delete_map_entry (Account *acc, char *full_category, gboolean e
  */
 void gnc_account_imap_convert_bayes (QofBook *book);
 
-/** Change the bayes imap entries from a nested representation to a flat representation.
- */
-void gnc_account_imap_convert_flat (QofBook *);
-
 /** @} */
 
 

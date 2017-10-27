@@ -213,6 +213,10 @@ struct KvpFrameImpl
      */
     KvpValue* get_slot(Path keys) const noexcept;
 
+    /**
+     * proc is called with each of the immediate contents of this frame, passing it the key,
+     * value, and specified data.
+     */
     void for_each_slot(void (*proc)(const char *key, KvpValue *, void *data), void* data) const noexcept;
 
     /** The function should be of the form:
@@ -239,7 +243,7 @@ struct KvpFrameImpl
      * Returns all keys and values of this frame recursively, flattening
      * the frame-containing values.
      */
-    std::vector<std::pair<std::string, KvpValue*>>
+    std::vector <std::pair <std::vector <std::string>, KvpValue*>>
     flatten_kvp(void) const;
 
     /** Test for emptiness
@@ -251,7 +255,7 @@ struct KvpFrameImpl
     private:
     map_type m_valuemap;
 
-    void flatten_kvp_impl(std::vector<std::string>, std::vector<std::pair<std::string, KvpValue*>> &) const;
+    void flatten_kvp_impl(std::vector <std::string>, std::vector <std::pair <std::vector <std::string>, KvpValue*>> &) const;
 };
 
 template<typename func_type>

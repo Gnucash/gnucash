@@ -43,6 +43,8 @@
 #include "gnc-features.h"
 #include "guid.hpp"
 
+#include <numeric>
+
 static QofLogModule log_module = GNC_MOD_ACCOUNT;
 
 /* The Canonical Account Separator.  Pre-Initialized. */
@@ -5269,8 +5271,8 @@ get_first_pass_probabilities(GncImportMatchMap * imap, GList * tokens)
      * in the input tokens list. */
     for (auto current_token = tokens; current_token; current_token = current_token->next)
     {
-        auto translated_token = std::string{static_cast<char const *>(current_token->data)};
-        std::replace(translated_token.begin(), translated_token.end(), '/', '-');
+        auto translated_token = std::string {static_cast <char const *> (current_token->data)};
+        std::replace (translated_token.begin (), translated_token.end (), '/', '-');
         token_accounts_info tokenInfo{};
         auto path = std::string{IMAP_FRAME_BAYES "-"} + translated_token;
         qof_instance_foreach_slot_prefix (QOF_INSTANCE (imap->acc), path, &build_token_info, tokenInfo);
@@ -5331,7 +5333,7 @@ gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
 }
 
 static void
-change_imap_entry (GncImportMatchMap *imap, gchar *kvp_path, int64_t token_count)
+change_imap_entry (GncImportMatchMap *imap, gchar const * kvp_path, int64_t token_count)
 {
     GValue value = G_VALUE_INIT;
 
@@ -5377,7 +5379,7 @@ gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
 {
     GList *current_token;
     gint64 token_count;
-    char *account_fullname, *kvp_path;
+    char *account_fullname;
     char *guid_string;
 
     ENTER(" ");
@@ -5405,28 +5407,20 @@ gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
                  skip this case here. */
         if (!current_token->data || (*((char*)current_token->data) == '\0'))
             continue;
-
         /* start off with one token for this account */
         token_count = 1;
-
         PINFO("adding token '%s'", (char*)current_token->data);
-
-        std::string translated_token {static_cast<char*>(current_token->data)};
-        std::replace(translated_token.begin(), translated_token.end(), '/', '-');
-        kvp_path = g_strdup_printf (IMAP_FRAME_BAYES "-%s-%s",
-                                    translated_token.c_str(),
-                                    guid_string);
+        std::string translated_token {static_cast <char*> (current_token->data)};
+        std::replace (translated_token.begin (), translated_token.end (), '/', '-');
+        auto path = std::string {IMAP_FRAME_BAYES} + '-' + translated_token + '-' + guid_string;
         /* change the imap entry for the account */
-        change_imap_entry (imap, kvp_path, token_count);
-        g_free (kvp_path);
+        change_imap_entry (imap, path.c_str (), token_count);
     }
-
     /* free up the account fullname and guid string */
     qof_instance_set_dirty (QOF_INSTANCE (imap->acc));
     xaccAccountCommitEdit (imap->acc);
     g_free (account_fullname);
     g_free (guid_string);
-
     LEAVE(" ");
 }
 
@@ -5655,68 +5649,48 @@ look_for_old_separator_descendants (Account *root, gchar const *full_name, const
     return new_name;
 }
 
-static Account *
-look_for_old_mapping (GncImapInfo *imapInfo)
+static std::string
+get_guid_from_account_name (Account * root, std::string const & name)
 {
-    Account       *root, *map_account = NULL;
-    const gchar   *sep = gnc_get_account_separator_string ();
-    gchar         *full_name;
-
-    PINFO("Category Head is '%s', Full Category is '%s'", imapInfo->category_head, imapInfo->full_category);
-
-    // do we have a map_account all ready, implying a guid string
-    if (imapInfo->map_account != NULL)
-        return NULL;
-
-    root = gnc_account_get_root (imapInfo->source_account);
-
-    full_name = g_strdup (imapInfo->full_category + strlen (imapInfo->category_head) + 1);
-
-    // may be top level or match with existing separator
-    map_account = gnc_account_lookup_by_full_name (root, full_name);
-
-    // do we have a valid account, if not, look for old separator
-    if (map_account == NULL)
+    auto map_account = gnc_account_lookup_by_full_name (root, name.c_str ());
+    if (!map_account)
     {
-        gchar * temp_name = look_for_old_separator_descendants (root, full_name, sep);
-        g_free(full_name);
-        full_name = temp_name;
-        map_account = gnc_account_lookup_by_full_name (root, full_name); // lets try again
+        auto temp_account_name = look_for_old_separator_descendants (root, name.c_str (),
+             gnc_get_account_separator_string ());
+        map_account = gnc_account_lookup_by_full_name (root, temp_account_name);
+        g_free (temp_account_name);
     }
+    auto temp_guid = gnc::GUID {*xaccAccountGetGUID (map_account)};
+    return temp_guid.to_string ();
+}
 
-    PINFO("Full account name is '%s'", full_name);
-
-    g_free (full_name);
-
-    return map_account;
+static std::pair <std::string, KvpValue*>
+convert_entry (std::pair <std::vector <std::string>, KvpValue*> entry, Account* root)
+{
+    auto const & account_name = entry.first.back();
+    entry.first.pop_back();
+    auto guid_str = get_guid_from_account_name (root, account_name);
+    entry.first.emplace_back ("/");
+    entry.first.emplace_back (guid_str);
+    std::string new_key {std::accumulate (entry.first.begin(), entry.first.end(), std::string {})};
+    new_key = IMAP_FRAME_BAYES + new_key;
+    std::replace (new_key.begin(), new_key.end(), '/', '-');
+    return {new_key, entry.second};
 }
 
 static std::vector<std::pair<std::string, KvpValue*>>
 get_new_guid_imap (Account * acc)
 {
     auto frame = qof_instance_get_slots (QOF_INSTANCE (acc));
-    auto slot = frame->get_slot(IMAP_FRAME_BAYES);
+    auto slot = frame->get_slot (IMAP_FRAME_BAYES);
     if (!slot)
         return {};
-    std::string const imap_frame_str {IMAP_FRAME_BAYES};
-    std::vector<std::pair<std::string, KvpValue*>> ret;
+    auto imap_frame = slot->get<KvpFrame*> ();
+    auto flat_kvp = imap_frame->flatten_kvp ();
     auto root = gnc_account_get_root (acc);
-    auto imap_frame = slot->get<KvpFrame*>();
-    imap_frame->for_each_slot_temp ([&ret, root, &imap_frame_str] (char const * token, KvpValue* val) {
-        auto token_frame = val->get<KvpFrame*>();
-        token_frame->for_each_slot_temp ([&ret, root, &imap_frame_str, token] (char const * account_name, KvpValue* val) {
-            auto map_account = gnc_account_lookup_by_full_name (root, account_name);
-            if (!map_account)
-            {
-                auto temp_account_name = look_for_old_separator_descendants (root, account_name, gnc_get_account_separator_string());
-                map_account = gnc_account_lookup_by_full_name (root, temp_account_name);
-                g_free (temp_account_name);
-            }
-            auto temp_guid = gnc::GUID{*xaccAccountGetGUID (map_account)};
-            auto guid_str = temp_guid.to_string();
-            ret.push_back({imap_frame_str + "-" + token + "-" + guid_str, val});
-        });
-    });
+    std::vector <std::pair <std::string, KvpValue*>> ret;
+    for (auto const & flat_entry : flat_kvp)
+        ret.emplace_back (convert_entry (flat_entry, root));
     return ret;
 }
 
@@ -5737,7 +5711,6 @@ convert_imap_account_bayes_to_guid (Account *acc)
 }
 
 char const * run_once_key_to_guid {"changed-bayesian-to-guid"};
-char const * run_once_key_to_flat {"changed-bayesian-to-flat"};
 
 static void
 imap_convert_bayes_to_guid (QofBook * book)
@@ -5748,55 +5721,6 @@ imap_convert_bayes_to_guid (QofBook * book)
     {
         Account *acc = static_cast <Account*> (ptr->data);
         convert_imap_account_bayes_to_guid (acc);
-    }
-    g_list_free (accts);
-}
-
-static std::vector<std::pair<std::string, KvpValue*>>
-get_new_flat_imap (Account * acc)
-{
-    auto frame = qof_instance_get_slots (QOF_INSTANCE (acc));
-    auto slot = frame->get_slot(IMAP_FRAME_BAYES);
-    if (!slot)
-        return {};
-    std::string const imap_frame_str {IMAP_FRAME_BAYES};
-    std::vector<std::pair<std::string, KvpValue*>> ret;
-    auto root = gnc_account_get_root (acc);
-    auto imap_frame = slot->get<KvpFrame*>();
-    imap_frame->for_each_slot_temp ([&ret, &imap_frame_str] (char const * token, KvpValue* val) {
-        auto token_frame = val->get<KvpFrame*>();
-        token_frame->for_each_slot_temp ([&ret, &imap_frame_str, token] (char const * account_guid, KvpValue* val) {
-            ret.push_back({imap_frame_str + "-" + token + "-" + account_guid, val});
-        });
-    });
-    return ret;
-}
-
-static void
-convert_imap_account_bayes_to_flat (Account * acc)
-{
-    auto flat_imap = get_new_flat_imap (acc);
-    if (!flat_imap.size())
-        return;
-    auto frame = qof_instance_get_slots (QOF_INSTANCE (acc));
-    xaccAccountBeginEdit(acc);
-    frame->set(IMAP_FRAME_BAYES, nullptr);
-    std::for_each(flat_imap.begin(), flat_imap.end(), [&frame] (std::pair<std::string, KvpValue*> const & entry) {
-        frame->set(entry.first.c_str(), entry.second);
-    });
-    qof_instance_set_dirty (QOF_INSTANCE (acc));
-    xaccAccountCommitEdit(acc);
-}
-
-static void
-imap_convert_bayes_to_flat (QofBook * book)
-{
-    auto root = gnc_book_get_root_account (book);
-    auto accts = gnc_account_get_descendants_sorted (root);
-    for (auto ptr = accts; ptr; ptr = g_list_next (ptr))
-    {
-        Account *acc = static_cast <Account*> (ptr->data);
-        convert_imap_account_bayes_to_flat (acc);
     }
     g_list_free (accts);
 }
@@ -5819,21 +5743,12 @@ set_run_once_key (char const * key, QofBook * book)
 }
 
 void
-gnc_account_imap_convert_flat (QofBook *book)
-{
-    if (run_once_key_set(run_once_key_to_flat, book))
-        return;
-    imap_convert_bayes_to_flat (book);
-    set_run_once_key(run_once_key_to_flat, book);
-}
-
-void
 gnc_account_imap_convert_bayes (QofBook *book)
 {
-    if (run_once_key_set(run_once_key_to_guid, book))
+    if (run_once_key_set (run_once_key_to_guid, book))
         return;
-    imap_convert_bayes_to_guid(book);
-    set_run_once_key(run_once_key_to_guid, book);
+    imap_convert_bayes_to_guid (book);
+    set_run_once_key (run_once_key_to_guid, book);
 }
 
 /* ================================================================ */
@@ -5843,7 +5758,6 @@ static void
 gnc_account_book_end(QofBook* book)
 {
     Account *root_account = gnc_book_get_root_account(book);
-
     xaccAccountBeginEdit(root_account);
     xaccAccountDestroy(root_account);
 }
