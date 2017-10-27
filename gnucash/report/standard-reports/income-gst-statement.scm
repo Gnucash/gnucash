@@ -228,7 +228,8 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
                           subtotal-style export?)
   (let* ((row-contents '())
          (columns (map (lambda (coll) (coll 'format gnc:make-gnc-monetary #f)) subtotal-collectors))
-         (list-of-commodities (delete-duplicates (map gnc:gnc-monetary-commodity (apply append columns)))))
+         (list-of-commodities (delete-duplicates (map gnc:gnc-monetary-commodity (apply append columns))
+                                                 gnc-commodity-equal)))
 
     (define (retrieve-commodity list-of-monetary commodity)
       (if (null? list-of-monetary)
@@ -1574,37 +1575,22 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
 
   (define (is-filter-member split account-list)
     (let* ((txn (xaccSplitGetParent split))
-           (splitcount (xaccTransCountSplits txn)))
-
+           (splitcount (xaccTransCountSplits txn))
+           (other-account (xaccSplitGetAccount (xaccSplitGetOtherSplit split)))
+           (splits-equal? (lambda (s1 s2) (xaccSplitEqual s1 s2 #t #f #f)))
+           (other-splits (delete split (xaccTransGetSplitList txn) splits-equal?))
+           (other-accounts (map xaccSplitGetAccount other-splits))
+           (is-in-account-list? (lambda (acc) (member acc account-list))))
       (cond
         ;; A 2-split transaction - test separately so it can be optimized
         ;; to significantly reduce the number of splits to traverse
         ;; in guile code
         ((= splitcount 2)
-         (let* ((other      (xaccSplitGetOtherSplit split))
-                (other-acct (xaccSplitGetAccount other)))
-           (member other-acct account-list)))
-
+         (is-in-account-list? other-account))
+        
         ;; A multi-split transaction - run over all splits
         ((> splitcount 2)
-         (let ((splits (xaccTransGetSplitList txn)))
-
-           ;; Walk through the list of splits.
-           ;; if we reach the end, return #f
-           ;; if the 'this' != 'split' and the split->account is a member
-           ;; of the account-list, then return #t, else recurse
-           (define (is-member splits)
-             (if (null? splits)
-                 #f
-                 (let* ((this (car splits))
-                        (rest (cdr splits))
-                        (acct (xaccSplitGetAccount this)))
-                   (if (and (not (eq? this split))
-                            (member acct account-list))
-                       #t
-                       (is-member rest)))))
-
-           (is-member splits)))
+         (or-map is-in-account-list? other-accounts))
 
         ;; Single transaction splits
         (else #f))))
