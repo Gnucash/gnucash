@@ -1587,7 +1587,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
         ;; in guile code
         ((= splitcount 2)
          (is-in-account-list? other-account))
-        
+
         ;; A multi-split transaction - run over all splits
         ((> splitcount 2)
          (or-map is-in-account-list? other-accounts))

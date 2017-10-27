@@ -64,6 +64,10 @@
 (define optname-table-export (N_ "Table for Exporting"))
 (define optname-common-currency (N_ "Common Currency"))
 (define optname-currency (N_ "Report's currency"))
+(define optname-account-matcher (N_ "Account Matcher"))
+(define optname-account-matcher-regex (N_ "Account Matcher uses regular expressions for extended matching"))
+(define optname-transaction-matcher (N_ "Transaction Matcher"))
+(define optname-transaction-matcher-regex (N_ "Transaction Matcher uses regular expressions for extended matching"))
 (define def:grand-total-style "grand-total")
 (define def:normal-row-style "normal-row")
 (define def:alternate-row-style "alternate-row")
@@ -639,7 +643,24 @@
    (gnc:make-simple-boolean-option
     gnc:pagename-general optname-table-export
     "g" (N_ "Formats the table suitable for cut & paste exporting with extra cells.") #f))  
-  
+
+  (gnc:register-trep-option
+   (gnc:make-string-option
+    gnc:pagename-general optname-transaction-matcher
+    "i1" (N_ "Match only transactions whose substring is matched e.g. '#gift' \
+will find all transactions with #gift in description, notes or memo. It can be left \
+blank, which will disable the matcher.")
+    ""))
+
+  (gnc:register-trep-option
+   (gnc:make-simple-boolean-option
+    gnc:pagename-general optname-transaction-matcher-regex
+    "i2"
+    (N_ "By default the transaction matcher will search substring only. Set this to true to \
+enable full POSIX regular expressions capabilities. '#work|#family' will match both \
+tags within description, notes or memo. ")
+    #f))
+
   ;; Accounts options
   
   ;; account to do report on
@@ -658,12 +679,20 @@
 
   (gnc:register-trep-option
    (gnc:make-string-option
-    gnc:pagename-accounts (N_ "Account Matcher")
-    "a5" (N_ "Match only above accounts whose fullname is matched by regex \
-e.g. ':Travel' will match Expenses:Travel:Holiday and Expenses:Business:Travel. \
-'Car|Flights' will match both Expenses:Car and Expenses:Business:Flights. It \
-can be left blank, which will disable the matcher")
+    gnc:pagename-accounts optname-account-matcher
+    "a5" (N_ "Match only above accounts whose fullname is matched e.g. ':Travel' will match \
+Expenses:Travel:Holiday and Expenses:Business:Travel. It can be left blank, which will disable \
+the matcher.")
     ""))
+
+  (gnc:register-trep-option
+   (gnc:make-simple-boolean-option
+    gnc:pagename-accounts optname-account-matcher-regex
+    "a6"
+    (N_ "By default the account matcher will search substring only. Set this to true to enable full \
+POSIX regular expressions capabilities. 'Car|Flights' will match both Expenses:Car and Expenses:Flights. \
+Use a period (.) to match a single character e.g. '20../.' will match 'Travel 2017/1 London'. ")
+    #f))
 
   (gnc:register-trep-option
    (gnc:make-account-list-option
@@ -1530,10 +1559,19 @@ Credit Card, and Income accounts."))))))
 
 
   (gnc:report-starting reportname)
-  (let ((document (gnc:make-html-document))
-	(c_account_1 (opt-val gnc:pagename-accounts "Accounts"))
-	(c_account_matcher (opt-val gnc:pagename-accounts "Account Matcher"))
-	(c_account_2 (opt-val gnc:pagename-accounts "Filter By..."))
+  (let* ((document (gnc:make-html-document))
+        (c_account_0 (opt-val gnc:pagename-accounts "Accounts"))
+        (account-matcher (opt-val gnc:pagename-accounts optname-account-matcher))
+        (account-matcher-regexp (if (opt-val gnc:pagename-accounts optname-account-matcher-regex)
+                                    (make-regexp account-matcher)
+                                    #f))
+        (c_account_1 (filter
+                      (lambda (acc)
+                        (if account-matcher-regexp
+                            (regexp-exec account-matcher-regexp (gnc-account-get-full-name acc))
+                            (string-contains (gnc-account-get-full-name acc) account-matcher)))
+                     c_account_0))
+        (c_account_2 (opt-val gnc:pagename-accounts "Filter By..."))
 	(filter-mode (opt-val gnc:pagename-accounts "Filter Type"))
         (begindate (gnc:timepair-start-day-time
                     (gnc:date-option-absolute-time
@@ -1541,6 +1579,10 @@ Credit Card, and Income accounts."))))))
         (enddate (gnc:timepair-end-day-time
                   (gnc:date-option-absolute-time
                    (opt-val gnc:pagename-general "End Date"))))
+        (transaction-matcher (opt-val gnc:pagename-general optname-transaction-matcher))
+        (transaction-matcher-regexp (if (opt-val gnc:pagename-general optname-transaction-matcher-regex)
+                                        (make-regexp transaction-matcher)
+                                        #f))
         (report-title (opt-val 
                        gnc:pagename-general
                        gnc:optname-reportname))
@@ -1548,18 +1590,13 @@ Credit Card, and Income accounts."))))))
         (primary-order (opt-val pagename-sorting "Primary Sort Order"))
         (secondary-key (opt-val pagename-sorting optname-sec-sortkey))
         (secondary-order (opt-val pagename-sorting "Secondary Sort Order"))
-	(void-status (opt-val gnc:pagename-accounts optname-void-transactions))
+        (void-status (opt-val gnc:pagename-accounts optname-void-transactions))
         (splits '())
         (query (qof-query-create-for-splits)))
 
     ;;(gnc:warn "accts in trep-renderer:" c_account_1)
     ;;(gnc:warn "Report Account names:" (get-other-account-names c_account_1))
 
-    (set! c_account_1
-          (filter (lambda (acc)
-                    (string-match c_account_matcher (gnc-account-get-full-name acc)))
-                  c_account_1))
-    
     (if (not (or (null? c_account_1) (and-map not c_account_1)))
         (begin
           (qof-query-set-book query (gnc-get-current-book))
@@ -1590,28 +1627,23 @@ Credit Card, and Income accounts."))))))
 
           ;;(gnc:warn "Splits in trep-renderer:" splits)
 
-	  ;;(gnc:warn "Filter account names:" (get-other-account-names c_account_2))
+          ; Combined Filter:
+          ; - include/exclude splits to/from selected accounts
+          ; - substring/regex matcher for Transaction Description/Notes/Memo
+          (set! splits (filter
+                        (lambda (split)
+                          (let* ((trans (xaccSplitGetParent split))
+                                 (match? (lambda (str)
+                                           (if transaction-matcher-regexp
+                                               (regexp-exec transaction-matcher-regexp str)
+                                               (string-contains str transaction-matcher)))))
+                            (and (if (eq? filter-mode 'include) (is-filter-member split c_account_2) #t)
+                                 (if (eq? filter-mode 'exclude) (not (is-filter-member split c_account_2)) #t)
+                                 (or (match? (xaccTransGetDescription trans))
+                                     (match? (xaccTransGetNotes trans))
+                                     (match? (xaccSplitGetMemo split))))))
+                        splits))
 
-	  ;;This should probably a cond or a case to allow for different filter types.
-	  ;;(gnc:warn "Filter Mode: " filter-mode)
-	  (if (eq? filter-mode 'include)
-	      (begin
-		;;(gnc:warn "Including Filter Accounts")
-		(set! splits (filter (lambda (split) 
-				       (is-filter-member split c_account_2))
-				     splits))
-		)
-	      )
-
-	  (if (eq? filter-mode 'exclude)
-	      (begin
-		;;(gnc:warn "Excluding Filter Accounts")
-		(set! splits (filter (lambda (split) 
-				       (not (is-filter-member split c_account_2)))
-				     splits))
-		)
-	      )
-	
           (if (not (null? splits))
               (let ((table 
                      (make-split-table 
@@ -1659,12 +1691,22 @@ match the time interval and account selection specified \
 in the Options panel.")))
                 (gnc:html-document-add-object! document p))))
 
-        ;; error condition: no accounts specified
-        
-        (gnc:html-document-add-object!
-         document 
-	 (gnc:html-make-no-account-warning 
-	  report-title (gnc:report-id report-obj))))
+        (if (null? c_account_0)
+            
+            ;; error condition: no accounts specified
+            (gnc:html-document-add-object!
+             document 
+             (gnc:html-make-no-account-warning 
+              report-title (gnc:report-id report-obj)))
+
+            ;; error condition: accounts were specified but none matcher string/regex
+            (gnc:html-document-add-object!
+             document
+             (gnc:make-html-text
+              (gnc:html-markup-h2
+               (N_ "No accounts were matched"))
+              (gnc:html-markup-p
+               (N_ "The account matcher specified in the report options did not match any accounts."))))))
 
     (gnc:report-finished)
     document))
