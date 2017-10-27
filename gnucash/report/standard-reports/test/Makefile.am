@@ -2,6 +2,7 @@ TESTS = $(SCM_TESTS)
 
 SCM_TESTS = \
 	test-cash-flow \
+	test-cashflow-barchart \
 	test-standard-category-report \
 	test-standard-net-barchart \
 	test-standard-net-linechart
