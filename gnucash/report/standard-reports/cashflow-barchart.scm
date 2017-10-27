@@ -220,9 +220,6 @@
                (total-in #f)
                (total-out #f)
                (total-net #f)
-               (in-value-list #f)
-               (out-value-list #f)
-               (net-value-list #f)
                )
 
           ;; Helper function to convert currencies
@@ -289,15 +286,12 @@
 
           (set! total-in (apply monetary+ in-list))
           (set! total-out (apply monetary+ out-list))
-          (set! in-value-list (map monetary->double in-list))
-          (set! out-value-list (map monetary->double out-list))
 
           (if show-net?
               (begin
                 (set! net-list (reverse net-list))
                 (set! total-net (apply monetary+ net-list))
-                (set! net-value-list (map monetary->double net-list)))
-              )
+                ))
           (gnc:report-percent-done 90)
 
           (gnc:html-barchart-set-title! chart report-title)
@@ -314,11 +308,11 @@
 
           (if show-inout?
               (begin
-                (add-column! in-value-list)
-                (add-column! out-value-list)
+                (add-column! (map monetary->double in-list))
+                (add-column! (map monetary->double out-list))
                 ))
           (if show-net?
-              (add-column! net-value-list))
+              (add-column! (map monetary->double net-list)))
 
           ;; Legend labels, colors
           (gnc:html-barchart-set-col-labels!
@@ -346,12 +340,6 @@
 
           (if (and non-zeros show-table?)
               (let* ((table (gnc:make-html-table)))
-                (set! date-string-list (append date-string-list (list "Total")))
-                (set! in-list (append in-list (list total-in)))
-                (set! out-list (append out-list (list total-out)))
-                (if show-net?
-                    (set! net-list (append net-list (list total-net))))
-
                 (gnc:html-table-set-col-headers!
                  table (append (list (_ "Date"))
                                (if show-inout?
@@ -362,15 +350,15 @@
 
                 (gnc:html-document-add-object!
                  doc (gnc:make-html-text (gnc:html-markup-h3 (_ "Overview:"))))
-                (gnc:html-table-append-column! table date-string-list)
+                (gnc:html-table-append-column! table (append date-string-list (list "Total")))
 
                 (if show-inout?
                     (begin
-                      (gnc:html-table-append-column! table in-list)
-                      (gnc:html-table-append-column! table out-list)
+                      (gnc:html-table-append-column! table (append in-list (list total-in)))
+                      (gnc:html-table-append-column! table (append out-list (list total-out)))
                       ))
                 (if show-net?
-                    (gnc:html-table-append-column! table net-list))
+                    (gnc:html-table-append-column! table (append net-list (list total-net))))
 
                 ;; set numeric columns to align right
                 (for-each
