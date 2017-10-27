@@ -1,5 +1,7 @@
 #!/bin/bash -e
 
+mkdir -p "$HOME"/.local/share
+
 mkdir build
 cd build
 export TZ="America/Los_Angeles"
