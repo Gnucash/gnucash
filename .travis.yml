@@ -3,11 +3,9 @@ sudo: required
 language: c++
 compiler: gcc
 env:
-    - BUILDENV=arch BUILDTYPE=cmake-make
     - BUILDENV=arch BUILDTYPE=cmake-ninja
     - BUILDENV=arch BUILDTYPE=autotools
     - BUILDENV=ubuntu-14.04 BUILDTYPE=cmake-make
-    - BUILDENV=ubuntu-14.04 BUILDTYPE=cmake-ninja
     - BUILDENV=ubuntu-14.04 BUILDTYPE=autotools
 services:
     - docker
