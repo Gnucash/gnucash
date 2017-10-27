@@ -338,8 +338,8 @@ GncSqlColumnTableEntryImpl<CT_GUID>::load (const GncSqlBackend* sql_be,
     {
         return;
     }
-    (void)string_to_guid (str.c_str(), &guid);
-    set_parameter(pObject, &guid, get_setter(obj_name), m_gobj_param_name);
+    if (string_to_guid (str.c_str(), &guid))
+        set_parameter(pObject, &guid, get_setter(obj_name), m_gobj_param_name);
 }
 
 template<> void

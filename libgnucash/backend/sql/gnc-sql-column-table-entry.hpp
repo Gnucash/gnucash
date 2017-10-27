@@ -168,11 +168,13 @@ public:
             {
                 GncGUID guid;
                 auto val = row.get_string_at_col (m_col_name);
-                (void)string_to_guid (val.c_str(), &guid);
-                auto target = get_ref(&guid);
-                if (target != nullptr)
-                    set_parameter (pObject, target, get_setter(obj_name),
-                                   m_gobj_param_name);
+                if (string_to_guid (val.c_str(), &guid))
+                {
+                    auto target = get_ref(&guid);
+                    if (target != nullptr)
+                        set_parameter (pObject, target, get_setter(obj_name),
+                                       m_gobj_param_name);
+                }
             }
             catch (std::invalid_argument) {}
         }

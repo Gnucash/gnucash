@@ -1308,8 +1308,9 @@ GncSqlColumnTableEntryImpl<CT_TXREF>::load (const GncSqlBackend* sql_be,
     {
         auto val = row.get_string_at_col (m_col_name);
         GncGUID guid;
-        (void)string_to_guid (val.c_str(), &guid);
-        auto tx = xaccTransLookup (&guid, sql_be->book());
+        Transaction *tx = nullptr;
+        if (string_to_guid (val.c_str(), &guid))
+            tx = xaccTransLookup (&guid, sql_be->book());
 
         // If the transaction is not found, try loading it
         if (tx == nullptr)

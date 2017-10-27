@@ -711,8 +711,8 @@ gnc_sql_slots_delete (GncSqlBackend* sql_be, const GncGUID* guid)
                     col_table[guid_val_col];
                 GncGUID child_guid;
                 auto val = row.get_string_at_col (table_row->name());
-                (void)string_to_guid (val.c_str(), &child_guid);
-                gnc_sql_slots_delete (sql_be, &child_guid);
+                if (string_to_guid (val.c_str(), &child_guid))
+                    gnc_sql_slots_delete (sql_be, &child_guid);
             }
             catch (std::invalid_argument)
             {
