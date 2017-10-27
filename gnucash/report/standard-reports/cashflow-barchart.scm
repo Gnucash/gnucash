@@ -217,12 +217,12 @@
                (in-list '())
                (out-list '())
                (net-list '())
+               (total-in #f)
+               (total-out #f)
+               (total-net #f)
                (in-value-list #f)
                (out-value-list #f)
                (net-value-list #f)
-               (in-total-collector (gnc:make-commodity-collector))
-               (out-total-collector (gnc:make-commodity-collector))
-               (net-total-collector (gnc:make-commodity-collector))
                )
 
           ;; Helper function to convert currencies
@@ -236,6 +236,22 @@
             (gnc:sum-collector-commodity
              collector report-currency exchange-fn)
             )
+
+          ;; Add two or more gnc-monetary objects
+          (define (monetary+ a . blist)
+            (if (null? blist)
+                a
+                (let ((b (apply monetary+ blist)))
+                  (if (and (gnc:gnc-monetary? a) (gnc:gnc-monetary? b))
+                      (let ((same-currency? (gnc-commodity-equal (gnc:gnc-monetary-commodity a) (gnc:gnc-monetary-commodity b)))
+                            (amount (gnc-numeric-add (gnc:gnc-monetary-amount a) (gnc:gnc-monetary-amount b) GNC-DENOM-AUTO GNC-RND-ROUND)))
+                        (if same-currency?
+                            (gnc:make-gnc-monetary (gnc:gnc-monetary-commodity a) amount)
+                            (warn "incompatible currencies in monetary+: " a b)))
+                      (warn "wrong arguments for monetary+: " a b)))
+                )
+            )
+
           ;; Convert gnc:monetary to number (used to generate data for the chart)
           (define (monetary->double monetary)
             (gnc-numeric-to-double (gnc:gnc-monetary-amount monetary))
@@ -257,35 +273,29 @@
                     (result (cashflow-barchart-calc-money-in-out settings))
                     (money-in-collector (cdr (assq 'money-in-collector result)))
                     (money-out-collector (cdr (assq 'money-out-collector result)))
-                    (money-net-collector (gnc:make-commodity-collector))
-                    (money-in-monetary (sum-collector money-in-collector))
-                    (money-out-monetary (sum-collector money-out-collector))
-                    (money-net-monetary #f)
+                    (money-in (sum-collector money-in-collector))
+                    (money-out (sum-collector money-out-collector))
+                    (money-net (monetary+ money-in (gnc:monetary-neg money-out)))
                     )
-               (money-net-collector 'merge money-in-collector #f)
-               (money-net-collector 'minusmerge money-out-collector #f)
-               (set! money-net-monetary (sum-collector money-net-collector))
-               (set! in-list (cons money-in-monetary in-list))
-               (set! out-list (cons money-out-monetary out-list))
-               (set! net-list (cons money-net-monetary net-list))
-               (in-total-collector 'merge money-in-collector #f)
-               (out-total-collector 'merge money-out-collector #f)
+               (set! in-list (cons money-in in-list))
+               (set! out-list (cons money-out out-list))
+               (set! net-list (cons money-net net-list))
                ))
            dates-list)
-
-          (net-total-collector 'merge in-total-collector #f)
-          (net-total-collector 'minusmerge out-total-collector #f)
 
           ;; flip result lists (they were built by appending to the front)
           (set! in-list (reverse in-list))
           (set! out-list (reverse out-list))
 
+          (set! total-in (apply monetary+ in-list))
+          (set! total-out (apply monetary+ out-list))
           (set! in-value-list (map monetary->double in-list))
           (set! out-value-list (map monetary->double out-list))
 
           (if show-net?
               (begin
                 (set! net-list (reverse net-list))
+                (set! total-net (apply monetary+ net-list))
                 (set! net-value-list (map monetary->double net-list)))
               )
           (gnc:report-percent-done 90)
@@ -337,10 +347,10 @@
           (if (and non-zeros show-table?)
               (let* ((table (gnc:make-html-table)))
                 (set! date-string-list (append date-string-list (list "Total")))
-                (set! in-list (append in-list (list (sum-collector in-total-collector))))
-                (set! out-list (append out-list (list (sum-collector out-total-collector))))
+                (set! in-list (append in-list (list total-in)))
+                (set! out-list (append out-list (list total-out)))
                 (if show-net?
-                    (set! net-list (append net-list (list (sum-collector net-total-collector)))))
+                    (set! net-list (append net-list (list total-net))))
 
                 (gnc:html-table-set-col-headers!
                  table (append (list (_ "Date"))
