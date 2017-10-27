@@ -36,8 +36,9 @@ typedef struct gnc_option_win GNCOptionWin;
 typedef void (* GNCOptionWinCallback)(GNCOptionWin *, gpointer data);
 
 GNCOptionWin * gnc_options_dialog_new_modal(gboolean modal, gchar *title,
-                                                const char *component_class);
-GNCOptionWin * gnc_options_dialog_new(gchar *title);
+                                            const char *component_class,
+                                            GtkWindow *parent);
+GNCOptionWin * gnc_options_dialog_new(gchar *title, GtkWindow *parent);
 GNCOptionWin * gnc_options_dialog_new_w_dialog(gchar *title, GtkWidget *dialog);
 void gnc_options_dialog_destroy(GNCOptionWin * win);
 void gnc_options_register_stocks (void);

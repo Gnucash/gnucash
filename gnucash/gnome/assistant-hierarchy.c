@@ -1174,9 +1174,9 @@ book_options_dialog_close_cb(GNCOptionWin * optionwin,
 }
 
 static void
-assistant_insert_book_options_page (hierarchy_data *data)
+assistant_insert_book_options_page (hierarchy_data *data, GtkWindow* parent)
 {
-    GtkWidget *options, *parent;
+    GtkWidget *options;
     GtkWidget *vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
 
@@ -1186,7 +1186,8 @@ assistant_insert_book_options_page (hierarchy_data *data)
     gnc_option_db_clean (data->options);
 
     data->optionwin = gnc_options_dialog_new_modal (TRUE, _("New Book Options"),
-                                                DIALOG_BOOK_OPTIONS_CM_CLASS);
+                                                    DIALOG_BOOK_OPTIONS_CM_CLASS,
+                                                    parent);
     gnc_options_dialog_build_contents_full (data->optionwin, data->options, FALSE);
 
     gnc_options_dialog_set_close_cb (data->optionwin,
@@ -1195,7 +1196,6 @@ assistant_insert_book_options_page (hierarchy_data *data)
     gnc_options_dialog_set_new_book_option_values (data->options);
 
     options = gnc_options_dialog_notebook (data->optionwin);
-    parent = gtk_widget_get_parent (options);
 
     g_object_ref (options);
     gtk_container_remove (GTK_CONTAINER(parent), options);
@@ -1278,7 +1278,7 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
 
     /* Book options page - only on new books */
     if (data->new_book)
-        assistant_insert_book_options_page (data);
+        assistant_insert_book_options_page (data, GTK_WINDOW (tree_view));
 
     /* Final Accounts Page */
     data->final_account_tree_container = GTK_WIDGET(gtk_builder_get_object (builder, "final_account_tree_box"));

@@ -1663,12 +1663,12 @@ static void
 gnc_plugin_page_report_options_cb( GtkAction *action, GncPluginPageReport *report )
 {
     GncPluginPageReportPrivate *priv;
-
+    GtkWindow *parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (report)));
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
     if (priv->cur_report == SCM_BOOL_F)
         return;
 
-    if (gnc_report_edit_options (priv->cur_report))
+    if (gnc_report_edit_options (priv->cur_report, parent))
         gnc_plugin_page_report_add_edited_report(priv, priv->cur_report);
 }
 

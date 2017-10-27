@@ -417,10 +417,14 @@ void gnc_main_window_show_all_windows(void);
  *
  *  @param title Title of the dialog; "Book Options" if NULL.
  *
+ *  @param parent The toplevel GdkWindow with which the dialog will
+ *  be transient for.
+ *
  *  @return A pointer to the GtkWidget for the dialog that can be used
  *  when started in modal mode.
  **/
-GtkWidget *gnc_book_options_dialog_cb (gboolean modal, gchar *title);
+GtkWidget *gnc_book_options_dialog_cb (gboolean modal, gchar *title,
+                                       GtkWindow *parent);
 
 /**
  * Processes selected options in the Book Options dialog: checks book_currency

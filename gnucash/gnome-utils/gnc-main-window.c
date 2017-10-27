@@ -4056,7 +4056,7 @@ show_handler (const char *class_name, gint component_id,
 }
 
 GtkWidget *
-gnc_book_options_dialog_cb (gboolean modal, gchar *title)
+gnc_book_options_dialog_cb (gboolean modal, gchar *title, GtkWindow* parent)
 {
     QofBook *book = gnc_get_current_book ();
     GNCOptionDB *options;
@@ -4073,9 +4073,10 @@ gnc_book_options_dialog_cb (gboolean modal, gchar *title)
     {
         return NULL;
     }
-    optionwin = gnc_options_dialog_new_modal (modal,
-                (title ? title : _( "Book Options")),
-                DIALOG_BOOK_OPTIONS_CM_CLASS);
+    optionwin = gnc_options_dialog_new_modal (
+        modal,
+        (title ? title : _( "Book Options")),
+        DIALOG_BOOK_OPTIONS_CM_CLASS, parent);
     gnc_options_dialog_build_contents (optionwin, options);
 
     gnc_options_dialog_set_book_options_help_cb (optionwin);
@@ -4094,7 +4095,7 @@ gnc_book_options_dialog_cb (gboolean modal, gchar *title)
 static void
 gnc_main_window_cmd_file_properties (GtkAction *action, GncMainWindow *window)
 {
-    gnc_book_options_dialog_cb (FALSE, NULL);
+    gnc_book_options_dialog_cb (FALSE, NULL, GTK_WINDOW (window));
 }
 
 static void

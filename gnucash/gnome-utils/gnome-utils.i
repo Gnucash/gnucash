@@ -49,7 +49,7 @@ SCM scm_init_sw_gnome_utils_module (void);
 
 %import "base-typemaps.i"
 
-GNCOptionWin * gnc_options_dialog_new(gchar *title);
+GNCOptionWin * gnc_options_dialog_new(gchar *title, GtkWindow* parent);
 void gnc_options_dialog_destroy(GNCOptionWin * win);
 void gnc_options_dialog_build_contents(GNCOptionWin *propertybox,
                                        GNCOptionDB  *odb);

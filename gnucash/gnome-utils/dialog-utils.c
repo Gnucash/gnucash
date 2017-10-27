@@ -676,10 +676,8 @@ gnc_new_book_option_display (GtkWidget *parent)
     GtkWidget *window;
     gint result = GTK_RESPONSE_HELP;
 
-    window = gnc_book_options_dialog_cb (TRUE, _( "New Book Options"));
-    if (parent)
-        gtk_window_set_transient_for (GTK_WINDOW(window), GTK_WINDOW(parent));
-
+    window = gnc_book_options_dialog_cb (TRUE, _( "New Book Options"),
+                                         GTK_WINDOW (parent));
     if (window)
     {
         /* close dialog and proceed unless help button selected */

@@ -309,7 +309,7 @@ gnc_column_view_edit_options(SCM options, SCM view)
         gnc_column_view_edit * r = g_new0(gnc_column_view_edit, 1);
         GtkBuilder *builder;
 
-        r->optwin = gnc_options_dialog_new(NULL);
+        r->optwin = gnc_options_dialog_new(NULL, NULL);
 
         /* Hide the generic dialog page list. */
         gtk_widget_hide(gnc_options_page_list(r->optwin));

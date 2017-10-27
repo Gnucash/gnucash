@@ -2125,9 +2125,9 @@ refresh_handler (GHashTable *changes, gpointer user_data)
  *
  */
 GNCOptionWin *
-gnc_options_dialog_new(gchar *title)
+gnc_options_dialog_new(gchar *title, GtkWindow *parent)
 {
-    return gnc_options_dialog_new_modal(FALSE, title, NULL);
+    return gnc_options_dialog_new_modal(FALSE, title, NULL, parent);
 }
 
 /* gnc_options_dialog_new_modal:
@@ -2145,7 +2145,8 @@ gnc_options_dialog_new(gchar *title)
  */
 GNCOptionWin *
 gnc_options_dialog_new_modal(gboolean modal, gchar *title,
-                                                    const char *component_class)
+                             const char *component_class,
+                             GtkWindow *parent)
 {
     GNCOptionWin *retval;
     GtkBuilder   *builder;
@@ -2160,7 +2161,7 @@ gnc_options_dialog_new_modal(gboolean modal, gchar *title,
 
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(retval->dialog), "GncOptionsDialog");
-
+    gtk_window_set_transient_for (GTK_WINDOW (retval->dialog), parent);
     /* Page List */
     {
         GtkTreeView *view;
