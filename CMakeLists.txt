@@ -840,8 +840,7 @@ IF (BUILDING_FROM_VCS)
   )
   INSTALL(FILES ${CMAKE_BINARY_DIR}/ChangeLog DESTINATION share/doc/gnucash)
 ELSE()
-  FILE(COPY ChangeLog DESTINATION ChangeLog)
-  INSTALL(FILES ChangeLog DESTINATION share/doc/gnucash)
+  INSTALL(FILES ${CMAKE_SOURCE_DIR}/ChangeLog DESTINATION share/doc/gnucash)
 ENDIF()
 
 #Link LICENSE to COPYING so that people expecting to find it,
