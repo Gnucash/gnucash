@@ -1,17 +1,70 @@
 Version history:
 ------- -------
-2.7.0  - 17 October 2017
-       The Gnucash Development Team is pleased to release Gnucash 2.7.0,
-       the first release of an unstable series leading to Gnucash 2.8.0.
+2.7.1 - 29 October 2017
 
-       This release is UNSTABLE and SHOULD NOT BE USED in production.
-       See the KNOWN PROBLEMS list at the bottom of the announcement.
+    The Gnucash Development Team is pleased to release Gnucash 2.7.1,
+    the second release of an unstable series leading to Gnucash 2.8.0.
 
-       Note: Version information in the splash screen and About dialog
-       will now reflect the date of the last commit used to build
-       GnuCash rather than the date it was compiled. This is to assist
-       quality assurance and debugging efforts by Linux distribution
-       maintainers.
+    This release is UNSTABLE and SHOULD NOT BE USED in production.
+    See the KNOWN PROBLEMS list at the bottom of the announcement.
+
+New Features For Users:
+
+A new Cashflow Barchart report from Jose Marino
+
+    Transaction Report improvements, including regular expression filtering,
+    from Chrostopher Lam.
+
+    The About dialog box layout is improved.
+
+    GnuCash will always build the locale-specific tax modules. This
+    was optional when building with autotools and never enabled when
+    building with cmake. Note that the only supported tax locales are
+    en_US and de_DE.
+
+The following bugs are fixed only in unstable/master:
+
+    Bug 789298 - Prompt for file history update leads to crash during startup.
+
+Other repairs not marked as bugs in git:
+
+    GnuCash no longer crashes on startup on Windows.
+
+    GnuCash no longer crashes when loading price data.
+
+    The Options Dialogs will appear over the application window
+    instead of wherever Gdk decides is coordinates 0, 0 on the
+    display.
+
+    Owners were not correctly linked to invoices in the SQL backend.
+
+    Building from a tarball with python enabled now works.
+
+    Fix Reconcile dialog always showing a 0 ending balance.
+
+    Fix the book being always marked dirty at startup if it contained
+    any scheduled transactions.
+
+KNOWN PROBLEMS:
+
+    On Microsoft Windows starting the AQBanking Setup Wizard crashes GnuCash.
+
+    test-import-bayes built with autotools intermittently fails at
+    line 381, where the returned value is 1 instead of the expected 6.
+
+2.7.0 - 17 October 2017
+
+    The Gnucash Development Team is pleased to release Gnucash 2.7.0,
+    the first release of an unstable series leading to Gnucash 2.8.0.
+
+    This release is UNSTABLE and SHOULD NOT BE USED in production.
+    See the KNOWN PROBLEMS list at the bottom of the announcement.
+
+    Note: Version information in the splash screen and About dialog
+    will now reflect the date of the last commit used to build
+    GnuCash rather than the date it was compiled. This is to assist
+    quality assurance and debugging efforts by Linux distribution
+    maintainers.
 
 New Features For Users:
 

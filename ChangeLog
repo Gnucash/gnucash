@@ -1,6 +1,166 @@
+2017-10-28 John Ralls 
+
+	* Don't copy ChangeLog on a tarball build. (HEAD -> unstable, origin/unstable)
+
+2017-10-28 John Ralls 
+
+	* Pass a NULL parent to gnc_options_dialog_new_modal in assistant-hierarchy.
+
+2017-10-27 John Ralls 
+
+	* Set a parent window for the options dialogs.
+
+2017-10-27 John Ralls 
+
+	* Merge branch Christopher Lam's Transaction Report Improvements into unstable.
+
+2017-10-27 John Ralls 
+
+	* Merge branch J. Marino's cashflow-barchart report into unstable.
+
+2017-10-27 John Ralls 
+
+	* Merge Aaron Law's branch 'buildfix' to unstable. (origin/master, origin/HEAD)
+
+2017-10-27 John Ralls 
+
+	* [SQL] Check return of string_to_guid, bail if false.
+
+2017-10-26 John Ralls 
+
+	* Bug 789298 - Prompt for file history update leads to crash during startup.
+
+2017-10-27 lmat 
+
+	* Updating home directory to fix CI error messages
+
+2017-10-27 Christopher Lam 
+
+	* transaction.scm upgrade complete
+
+2017-10-27 christopherlam 
+
+	* refactor old is-filter-member to use srfi-1
+
+2017-10-26 christopherlam 
+
+	* improve split-remove-duplicates, combine filters
+
+2017-10-25 christopherlam 
+
+	* Regex is optional, and add transaction matcher
+
+2017-10-24 Christopher Lam 
+
+	* Enhance transaction.scm account filter to regex
+
+2017-10-24 christopherlam 
+
+	* Enhance account filter to a regex
+
+2017-10-24 christopherlam 
+
+	* Amend some strings for improved visibility
+
+2017-10-24 christopherlam 
+
+	* Change critical code to pure FP
+
+2017-10-26 John Ralls 
+
+	* Bug 789297 - Account Tax Related Information - 2.7.0 is not backwards compatible
+
+2017-10-26 John Ralls 
+
+	* Fix NEWS errors reported by Chris Lam
+
+2017-10-26 Geert Janssens 
+
+	* Add GNUCASH_BUILD_ID cmake/configure variable which allows packagers to define their own
+
+2017-10-26 Geert Janssens 
+
+	* Use alternative revision retrieval if git describe is failing
+
+2017-10-26 Geert Janssens 
+
+	* Improve about dialog layout and contents
+
+2017-10-26 John Ralls 
+
+	* Revert "Partial fix to exception crashes on Windows."
+
+2017-10-26 John Ralls 
+
+	* Fix Windows crash-on-throw.
+
+2017-10-22 John Ralls 
+
+	* Partial fix to exception crashes on Windows.
+
+2017-10-25 Geert Janssens 
+
+	* Fix building from dist tarball with python bindings enabled
+
+2017-10-25 Geert Janssens 
+
+	* Fix disabling src docs build on Windows
+
+2017-10-26 Geert Janssens 
+
+	* Prevent gcc from searching config.h in the current directory
+
+2017-10-26 Geert Janssens 
+
+	* Add gnucash.1 man page as proper dependency for dist
+
+2017-10-22 Carwyn Nelson 
+
+	* Little refactor of account.c
+
+2017-10-23 Geert Janssens 
+
+	* Improve gnc_numeric_boxed_copy_func based on discussion in PR#145
+
+2017-04-23 Bob-IT 
+
+	* Save button active on every load
+
+2017-10-22 John Ralls 
+
+	* Don't build design docs on Windows.
+
+2017-10-20 John Ralls 
+
+	* Add fixed bugs for 2.7.0 to NEWS.
+
+2017-10-20 Geert Janssens 
+
+	* Remove configure option --enable-locale-specific-tax and make gnucash always behave as if it was set
+
+2017-10-19 Jose Marino 
+
+	* fix reconcile dialog always showing ending balance of zero
+
+2017-10-17 Jose Marino 
+
+	* add unit test for cashflow-barchart report
+
+2017-10-17 John Ralls 
+
+	* Merge branch 'unstable'
+
 2017-10-15 John Ralls 
 
-	* Re-release 2.7.0 (HEAD -> unstable)
+	* Re-release 2.7.0 (tag: 2.7.0a)
+
+2017-10-16 Jose Marino 
+
+	* add new report 'cashflow-barchart.scm' to build system
+
+2017-10-16 Jose Marino 
+
+	* fix module location of new cashflow-barchart report
 
 2017-10-15 John Ralls 
 
@@ -8,7 +168,7 @@
 
 2017-10-16 John Ralls 
 
-	* Use file:/// when constructing a tempdir uri on Windows. (origin/unstable)
+	* Use file:/// when constructing a tempdir uri on Windows.
 
 2017-10-16 John Ralls 
 
@@ -42,6 +202,10 @@
 
 	* reapply commit 3cdac65 on the new dialog-ab-pref and remove obsolete section from dialog-ab.gade
 
+2017-10-11 Jose Marino 
+
+	* add new report: cashflow-barchart.scm
+
 2017-10-06 fell 
 
 	* Merge branch 'maint' into unstable
@@ -52,7 +216,7 @@
 
 2017-10-05 Geert Janssens 
 
-	* Replace ambiguous 'scm' with 'vcs' in macro name (origin/master, origin/HEAD)
+	* Replace ambiguous 'scm' with 'vcs' in macro name
 
 2017-10-05 Geert Janssens 
 
@@ -6449,8 +6613,4 @@
 2016-01-02 fell 
 
 	* Add a missing gettext in plugin page owner tree
-
-2016-01-01 fell 
-
-	* Bug 760052 - missing flag translatable in Custom Report
 
