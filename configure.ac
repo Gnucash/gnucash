@@ -486,15 +486,10 @@ AM_CONDITIONAL(PLATFORM_OSX_QUARTZ, test "x$platform" = "xdarwin/quartz")
 AM_CONDITIONAL(PLATFORM_WIN32, test "x$platform" = "xwin32")
 AM_CONDITIONAL(OS_WIN32, test "x$native_win32" = "xyes")
 
-# These are unavailable on windows/mingw32 and X11 isn't desired or
+# These are unavailable on windows/mingw32
 # required for MacOSX Quartz
-if test "x$_gdk_tgt" = xquartz;
-then
-    AC_CHECK_HEADERS(glob.h)
-else
-    AC_CHECK_HEADERS(X11/Xlib.h glob.h)
-fi
-AM_CONDITIONAL(HAVE_X11_XLIB_H, test "x$ac_cv_header_X11_Xlib_h" = "xyes")
+AC_CHECK_HEADERS(glob.h)
+
 AC_CHECK_FUNCS(chown gethostname getppid getuid gettimeofday gmtime_r)
 AC_CHECK_FUNCS(gethostid link)
 ##################################################

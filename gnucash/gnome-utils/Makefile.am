@@ -217,10 +217,6 @@ gnc-warnings.c: gschemas/org.gnucash.warnings.gschema.xml.in make-gnc-warnings-c
 gnc-warnings.h: gschemas/org.gnucash.warnings.gschema.xml.in make-gnc-warnings-h.xsl
 	$(XSLTPROC) -o $@ $(srcdir)/make-gnc-warnings-h.xsl $<
 
-if HAVE_X11_XLIB_H
-  libgncmod_gnome_utils_la_LIBADD += -lX11
-endif
-
 if BUILDING_FROM_VCS
 swig-gnome-utils.c: gnome-utils.i \
                     ${top_srcdir}/common/base-typemaps.i

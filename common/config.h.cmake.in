@@ -264,9 +264,6 @@
 /* Define to 1 if you have the <wctype.h> header file. */
 #cmakedefine HAVE_WCTYPE_H 1
 
-/* Define to 1 if you have the <X11/Xlib.h> header file. */
-#cmakedefine HAVE_X11_XLIB_H 1
-
 /* Define to 1 if you have the file `/usr/include/gmock/gmock.h'. */
 #cmakedefine HAVE__USR_INCLUDE_GMOCK_GMOCK_H
 
