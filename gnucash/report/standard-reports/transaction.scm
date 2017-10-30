@@ -9,6 +9,7 @@
 ;; Michael T. Garrison Stuber
 ;; Modified account names display by Tomas Pospisek
 ;; <tpo_deb@sourcepole.ch> with a lot of help from "warlord"
+;; Account and Transaction Filtering by Christopher Lam
 ;;
 ;; This program is free software; you can redistribute it and/or    
 ;; modify it under the terms of the GNU General Public License as   
@@ -66,8 +67,11 @@
 (define optname-currency (N_ "Report's currency"))
 (define optname-account-matcher (N_ "Account Matcher"))
 (define optname-account-matcher-regex (N_ "Account Matcher uses regular expressions for extended matching"))
+
+(define pagename-filtering (N_ "Filtering"))
 (define optname-transaction-matcher (N_ "Transaction Matcher"))
 (define optname-transaction-matcher-regex (N_ "Transaction Matcher uses regular expressions for extended matching"))
+
 (define def:grand-total-style "grand-total")
 (define def:normal-row-style "normal-row")
 (define def:alternate-row-style "alternate-row")
@@ -610,7 +614,7 @@
     split-value))
 
 
-(define date-sorting-types (list 'date 'exact-time 'register-order))
+(define date-sorting-types (list 'date 'reconciled-date 'register-order))
 
 (define (trep-options-generator)
   (define gnc:*transaction-report-options* (gnc:new-options))
@@ -646,7 +650,7 @@
 
   (gnc:register-trep-option
    (gnc:make-string-option
-    gnc:pagename-general optname-transaction-matcher
+    pagename-filtering optname-transaction-matcher
     "i1" (N_ "Match only transactions whose substring is matched e.g. '#gift' \
 will find all transactions with #gift in description, notes or memo. It can be left \
 blank, which will disable the matcher.")
@@ -654,7 +658,7 @@ blank, which will disable the matcher.")
 
   (gnc:register-trep-option
    (gnc:make-simple-boolean-option
-    gnc:pagename-general optname-transaction-matcher-regex
+    pagename-filtering optname-transaction-matcher-regex
     "i2"
     (N_ "By default the transaction matcher will search substring only. Set this to true to \
 enable full POSIX regular expressions capabilities. '#work|#family' will match both \
@@ -768,10 +772,6 @@ Use a period (.) to match a single character e.g. '20../.' will match 'Travel 20
                            (N_ "Date")
                            (N_ "Sort by date."))
 
-                   (vector 'exact-time
-                           (N_ "Exact Time")
-                           (N_ "Sort by exact time."))
-
                    (vector 'reconciled-date
                            (N_ "Reconciled Date")
                            (N_ "Sort by the Reconciled Date."))
@@ -822,10 +822,6 @@ Use a period (.) to match a single character e.g. '20../.' will match 'Travel 20
                    (vector 'date
                            (N_ "Date")
                            (N_ "Sort by date."))
-
-                   (vector 'exact-time
-                           (N_ "Exact Time")
-                           (N_ "Sort by exact time."))
 
                    (vector 'reconciled-date
                            (N_ "Reconciled Date")
@@ -1423,9 +1419,6 @@ Credit Card, and Income accounts."))))))
                                   split-account-code-same-p
                                   render-account-subheading
                                   render-account-subtotal))
-            (cons 'exact-time    (vector
-                                  (list SPLIT-TRANS TRANS-DATE-POSTED)
-                                  #f #f #f))
             (cons 'date          (vector
                                   (list SPLIT-TRANS TRANS-DATE-POSTED)
                                   #f #f #f))
@@ -1579,8 +1572,8 @@ Credit Card, and Income accounts."))))))
         (enddate (gnc:timepair-end-day-time
                   (gnc:date-option-absolute-time
                    (opt-val gnc:pagename-general "End Date"))))
-        (transaction-matcher (opt-val gnc:pagename-general optname-transaction-matcher))
-        (transaction-matcher-regexp (if (opt-val gnc:pagename-general optname-transaction-matcher-regex)
+        (transaction-matcher (opt-val pagename-filtering optname-transaction-matcher))
+        (transaction-matcher-regexp (if (opt-val pagename-filtering optname-transaction-matcher-regex)
                                         (make-regexp transaction-matcher)
                                         #f))
         (report-title (opt-val 
