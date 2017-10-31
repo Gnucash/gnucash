@@ -49,7 +49,8 @@
 (define optname-accounts (N_ "Accounts"))
 (define optname-include-trading-accounts (N_ "Include Trading Accounts in report"))
 ;; Display
-(define optname-show-inout (N_ "Show Money In/Out"))
+(define optname-show-in (N_ "Show Money In"))
+(define optname-show-out (N_ "Show Money Out"))
 (define optname-show-net (N_ "Show Net Flow"))
 (define optname-show-table (N_ "Show Table"))
 (define optname-plot-width (N_ "Plot Width"))
@@ -106,25 +107,31 @@
     (gnc:register-option
      options
      (gnc:make-simple-boolean-option
-      gnc:pagename-display optname-show-inout
-      "a" (N_ "Show money in/out?") #t))
+      gnc:pagename-display optname-show-in
+      "a" (N_ "Show money in?") #t))
+
+    (gnc:register-option
+     options
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display optname-show-out
+      "b" (N_ "Show money out?") #t))
 
     (gnc:register-option
      options
      (gnc:make-simple-boolean-option
       gnc:pagename-display optname-show-net
-      "b" (N_ "Show net money flow?") #t))
+      "c" (N_ "Show net money flow?") #t))
 
     (gnc:register-option
      options
      (gnc:make-simple-boolean-option
       gnc:pagename-display optname-show-table
-      "c" (N_ "Display a table of the selected data.") #f))
+      "d" (N_ "Display a table of the selected data.") #f))
 
     ;; Plot size options
     (gnc:options-add-plot-size!
      options gnc:pagename-display
-     optname-plot-width optname-plot-height "d" (cons 'percent 100.0) (cons 'percent 100.0))
+     optname-plot-width optname-plot-height "e" (cons 'percent 100.0) (cons 'percent 100.0))
 
     ;; Set the general page as default option tab
     (gnc:options-set-default-section options gnc:pagename-general)
@@ -170,7 +177,8 @@
                        price-source report-currency to-date-tp))
 
          (interval (get-option gnc:pagename-general optname-stepsize))
-         (show-inout? (get-option gnc:pagename-display optname-show-inout))
+         (show-in? (get-option gnc:pagename-display optname-show-in))
+         (show-out? (get-option gnc:pagename-display optname-show-out))
          (show-net? (get-option gnc:pagename-display optname-show-net))
          (show-table? (get-option gnc:pagename-display optname-show-table))
          (height (get-option gnc:pagename-display optname-plot-height))
@@ -217,12 +225,9 @@
                (in-list '())
                (out-list '())
                (net-list '())
-               (in-value-list #f)
-               (out-value-list #f)
-               (net-value-list #f)
-               (in-total-collector (gnc:make-commodity-collector))
-               (out-total-collector (gnc:make-commodity-collector))
-               (net-total-collector (gnc:make-commodity-collector))
+               (total-in #f)
+               (total-out #f)
+               (total-net #f)
                )
 
           ;; Helper function to convert currencies
@@ -236,6 +241,22 @@
             (gnc:sum-collector-commodity
              collector report-currency exchange-fn)
             )
+
+          ;; Add two or more gnc-monetary objects
+          (define (monetary+ a . blist)
+            (if (null? blist)
+                a
+                (let ((b (apply monetary+ blist)))
+                  (if (and (gnc:gnc-monetary? a) (gnc:gnc-monetary? b))
+                      (let ((same-currency? (gnc-commodity-equal (gnc:gnc-monetary-commodity a) (gnc:gnc-monetary-commodity b)))
+                            (amount (gnc-numeric-add (gnc:gnc-monetary-amount a) (gnc:gnc-monetary-amount b) GNC-DENOM-AUTO GNC-RND-ROUND)))
+                        (if same-currency?
+                            (gnc:make-gnc-monetary (gnc:gnc-monetary-commodity a) amount)
+                            (warn "incompatible currencies in monetary+: " a b)))
+                      (warn "wrong arguments for monetary+: " a b)))
+                )
+            )
+
           ;; Convert gnc:monetary to number (used to generate data for the chart)
           (define (monetary->double monetary)
             (gnc-numeric-to-double (gnc:gnc-monetary-amount monetary))
@@ -257,37 +278,33 @@
                     (result (cashflow-barchart-calc-money-in-out settings))
                     (money-in-collector (cdr (assq 'money-in-collector result)))
                     (money-out-collector (cdr (assq 'money-out-collector result)))
-                    (money-net-collector (gnc:make-commodity-collector))
-                    (money-in-monetary (sum-collector money-in-collector))
-                    (money-out-monetary (sum-collector money-out-collector))
-                    (money-net-monetary #f)
+                    (money-in (sum-collector money-in-collector))
+                    (money-out (sum-collector money-out-collector))
+                    (money-net (monetary+ money-in (gnc:monetary-neg money-out)))
                     )
-               (money-net-collector 'merge money-in-collector #f)
-               (money-net-collector 'minusmerge money-out-collector #f)
-               (set! money-net-monetary (sum-collector money-net-collector))
-               (set! in-list (cons money-in-monetary in-list))
-               (set! out-list (cons money-out-monetary out-list))
-               (set! net-list (cons money-net-monetary net-list))
-               (in-total-collector 'merge money-in-collector #f)
-               (out-total-collector 'merge money-out-collector #f)
+               (set! in-list (cons money-in in-list))
+               (set! out-list (cons money-out out-list))
+               (set! net-list (cons money-net net-list))
                ))
            dates-list)
 
-          (net-total-collector 'merge in-total-collector #f)
-          (net-total-collector 'minusmerge out-total-collector #f)
-
           ;; flip result lists (they were built by appending to the front)
-          (set! in-list (reverse in-list))
-          (set! out-list (reverse out-list))
-
-          (set! in-value-list (map monetary->double in-list))
-          (set! out-value-list (map monetary->double out-list))
+          (if show-in?
+              (begin
+                (set! in-list (reverse in-list))
+                (set! total-in (apply monetary+ in-list))
+                ))
+          (if show-out?
+              (begin
+                (set! out-list (reverse out-list))
+                (set! total-out (apply monetary+ out-list))
+		))
 
           (if show-net?
               (begin
                 (set! net-list (reverse net-list))
-                (set! net-value-list (map monetary->double net-list)))
-              )
+                (set! total-net (apply monetary+ net-list))
+                ))
           (gnc:report-percent-done 90)
 
           (gnc:html-barchart-set-title! chart report-title)
@@ -302,27 +319,26 @@
           (gnc:html-barchart-set-y-axis-label!
            chart (gnc-commodity-get-mnemonic report-currency))
 
-          (if show-inout?
-              (begin
-                (add-column! in-value-list)
-                (add-column! out-value-list)
-                ))
+          (if show-in?
+              (add-column! (map monetary->double in-list)))
+          (if show-out?
+              (add-column! (map monetary->double out-list)))
           (if show-net?
-              (add-column! net-value-list))
+              (add-column! (map monetary->double net-list)))
 
           ;; Legend labels, colors
           (gnc:html-barchart-set-col-labels!
            chart (append
-                  (if show-inout?
-                      (list (_ "Money In") (_ "Money Out")) '())
-                  (if show-net?
-                      (list (_ "Net Flow")) '())))
+                  (if show-in? (list (_ "Money In")) '())
+                  (if show-out? (list (_ "Money Out")) '())
+                  (if show-net? (list (_ "Net Flow")) '())
+                  ))
           (gnc:html-barchart-set-col-colors!
            chart (append
-                  (if show-inout?
-                      '("blue" "red") '())
-                  (if show-net?
-                      '("green") '())))
+                  (if show-in? '("blue") '())
+                  (if show-out? '("red") '())
+                  (if show-net? '("green") '())
+                  ))
           (gnc:report-percent-done 95)
 
           ;; If we have no data in the plot, display warning message
@@ -336,31 +352,23 @@
 
           (if (and non-zeros show-table?)
               (let* ((table (gnc:make-html-table)))
-                (set! date-string-list (append date-string-list (list "Total")))
-                (set! in-list (append in-list (list (sum-collector in-total-collector))))
-                (set! out-list (append out-list (list (sum-collector out-total-collector))))
-                (if show-net?
-                    (set! net-list (append net-list (list (sum-collector net-total-collector)))))
-
                 (gnc:html-table-set-col-headers!
                  table (append (list (_ "Date"))
-                               (if show-inout?
-                                   (list (_ "Money In") (_ "Money Out")) '())
-                               (if show-net?
-                                   (list (_ "Net Flow")) '())
+                               (if show-in? (list (_ "Money In")) '())
+                               (if show-out? (list (_ "Money Out")) '())
+                               (if show-net? (list (_ "Net Flow")) '())
                                ))
 
                 (gnc:html-document-add-object!
                  doc (gnc:make-html-text (gnc:html-markup-h3 (_ "Overview:"))))
-                (gnc:html-table-append-column! table date-string-list)
+                (gnc:html-table-append-column! table (append date-string-list (list "Total")))
 
-                (if show-inout?
-                    (begin
-                      (gnc:html-table-append-column! table in-list)
-                      (gnc:html-table-append-column! table out-list)
-                      ))
+                (if show-in?
+                    (gnc:html-table-append-column! table (append in-list (list total-in))))
+                (if show-out?
+                    (gnc:html-table-append-column! table (append out-list (list total-out))))
                 (if show-net?
-                    (gnc:html-table-append-column! table net-list))
+                    (gnc:html-table-append-column! table (append net-list (list total-net))))
 
                 ;; set numeric columns to align right
                 (for-each

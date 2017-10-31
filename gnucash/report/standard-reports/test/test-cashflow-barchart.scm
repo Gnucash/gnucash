@@ -29,8 +29,6 @@
 (use-modules (gnucash report report-system))
 (use-modules (gnucash report report-system test test-extras))
 (use-modules (gnucash report standard-reports cashflow-barchart))
-
-(add-to-load-path "../../stylesheets/")
 (use-modules (gnucash report stylesheets))
 
 (use-modules (ice-9 format))
