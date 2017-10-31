@@ -30,6 +30,7 @@ GNC_TEST_DEPS = \
   --guile-load-dir ${top_builddir}/gnucash/report/report-system/test \
   --guile-load-dir ${top_builddir}/gnucash/report/standard-reports \
   --guile-load-dir ${top_builddir}/gnucash/report/standard-reports/test \
+  --guile-load-dir ${top_builddir}/gnucash/report/stylesheets \
 \
   --library-dir    ${top_builddir}/gnucash/report/report-system \
   --library-dir    ${top_builddir}/libgnucash/core-utils \
