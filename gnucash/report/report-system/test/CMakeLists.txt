@@ -9,15 +9,18 @@ GNC_ADD_TEST_WITH_GUILE(test-link-module-report-system test-link-module.c
   REPORT_SYSTEM_TEST_INCLUDE_DIRS REPORT_SYSTEM_TEST_LIBS
 )
 
+SET(scm_test_report_system_SOURCES
+  test-collectors.scm
+  test-list-extras.scm
+  test-report-utilities.scm
+# test-test-extras.scm ;;Not run in autotools
+  )
+
+GNC_ADD_SCHEME_TESTS(${scm_test_report_system_SOURCES})
 GNC_ADD_SCHEME_TEST(test-load-module-report-system test-load-module.in)
-GNC_ADD_SCHEME_TEST(test-collectors test-collectors.scm)
-GNC_ADD_SCHEME_TEST(test-list-extras test-list-extras.scm)
-GNC_ADD_SCHEME_TEST(test-report-utilities test-report-utilities.scm)
-# This test is not run in the autotools build.
-#GNC_ADD_SCHEME_TEST(test-test-extras test-test-extras.scm)
 
 GNC_ADD_SCHEME_TARGETS(scm-test-report-system
-  test-extras.scm
+  "${scm_test_report_system_SOURCES};test-extras.scm"
   gnucash/report/report-system/test
   ""
   ""
