@@ -1,5 +1,5 @@
 /* Note: Widgets obtained from Glade files will not be addressable
-   unless they have been named or have style classes added. Only 
+   unless they have been named or have style classes added. Only
    the widget type can be configured unless they are named in code */
 
 
@@ -62,7 +62,7 @@
 @define-color marker_bg_color yellow;
 
 *.primary {
-   background-color: @primary_bg_color;
+  background-color: @primary_bg_color;
 }
 
 *.primary-dark {

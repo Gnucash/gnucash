@@ -15,8 +15,6 @@ SET(gnome_utils_ui_DIST_local
         gnc-windows-menu-ui.xml
         Makefile.am
         osx_accel_map
-        gnucash.css
-        gnucash-fallback.css
         )
 
 SET_DIST_LIST(gnome_utils_ui_DIST ${gnome_utils_ui_DIST_local})
