@@ -20,12 +20,22 @@ GNC_ADD_SCHEME_TESTS(${scm_test_report_system_SOURCES})
 GNC_ADD_SCHEME_TEST(test-load-module-report-system test-load-module.in)
 
 GNC_ADD_SCHEME_TARGETS(scm-test-report-system
-  "${scm_test_report_system_SOURCES};test-extras.scm"
+  "test-extras.scm"
   gnucash/report/report-system/test
   ""
   ""
   ""
   "scm-gnc-module;scm-test-engine;scm-report-system-3"
+  FALSE
+  )
+
+GNC_ADD_SCHEME_TARGETS(scm-test-report-system-2
+  "${scm_test_report_system_SOURCES}"
+  gnucash/report/report-system/test
+  ""
+  ""
+  ""
+  "scm-test-report-system"
   FALSE
 )
 
