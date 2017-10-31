@@ -27,9 +27,22 @@ SET(GNOME_UTILS_GUI_TEST_LIBS
 #  GNOME_UTILS_GUI_TEST_INCLUDE_DIRS
 #  GNOME_UTILS_GUI_TEST_LIBS
 #
+SET(GUILE_DEPENDS
+  test-core
+  gncmod-test-engine
+  gncmod-app-utils
+  gnc-core-utils
+  gncmod-engine
+)
 
-GNC_ADD_SCHEME_TEST(test-load-module-gnome-utils test-load-module.in)
+GNC_ADD_SCHEME_TARGETS(scm-test-load-gnome-utils-module
+  "test-load-gnome-utils-module.scm"
+  "gnucash/reports"
+  "${GUILE_DEPENDS}"
+  FALSE
+)
 
-CONFIGURE_FILE(test-load-module.in test-load-module @ONLY)
+GNC_ADD_SCHEME_TESTS(test-load-gnome-utils-module.scm)
 
-SET_DIST_LIST(test_gnome_utils_DIST CMakeLists.txt Makefile.am test-gnc-recurrence.c test-link-module.c test-load-module.in)
+
+SET_DIST_LIST(test_gnome_utils_DIST CMakeLists.txt Makefile.am test-gnc-recurrence.c test-link-module.c test-load-report-gnome-module.scm)

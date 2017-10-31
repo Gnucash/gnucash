@@ -54,7 +54,7 @@ SET(GUILE_DEPENDS      gnc-module)
 
 GNC_ADD_SCHEME_TARGETS(scm-gnc-module
   "${gnc_module_SCHEME}"
-  ${GUILE_OUTPUT_DIR} 
+  ${GUILE_OUTPUT_DIR}
   "${GUILE_DEPENDS}"
   FALSE
 )

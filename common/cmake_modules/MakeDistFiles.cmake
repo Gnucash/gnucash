@@ -44,7 +44,6 @@ SET(COPY_FROM_BUILD
   libgnucash/app-utils/migratable-prefs.xml
   libgnucash/app-utils/swig-app-utils-guile.c
   libgnucash/app-utils/swig-app-utils-python.c
-  libgnucash/app-utils/test/test-load-module
   libgnucash/backend/xml/test/test-real-data.sh
   gnucash/gnucash.rc
   gnucash/overrides/gnucash-make-guids
@@ -55,31 +54,18 @@ SET(COPY_FROM_BUILD
   libgnucash/doc/design/gnucash-design.info
   libgnucash/engine/iso-4217-currencies.c
   libgnucash/engine/swig-engine.c
-  libgnucash/engine/test/test-create-account
-  libgnucash/engine/test/test-scm-query-import
   libgnucash/gnc-module/swig-gnc-module.c
   libgnucash/gnc-module/test/mod-bar/swig-bar.c
   libgnucash/gnc-module/test/mod-baz/swig-baz.c
   libgnucash/gnc-module/test/mod-foo/swig-foo.c
-  libgnucash/gnc-module/test/test-gwrapped-c
-  libgnucash/gnc-module/test/test-load-deps
-  libgnucash/gnc-module/test/test-load-scm
-  libgnucash/gnc-module/test/test-scm-dynload
-  libgnucash/gnc-module/test/test-scm-init
-  libgnucash/gnc-module/test/test-scm-module
-  libgnucash/gnc-module/test/test-scm-multi
   gnucash/gnome/gnucash.desktop.in
   gnucash/gnome/swig-gnome.c
   gnucash/gnome-utils/gnc-warnings.c
   gnucash/gnome-utils/swig-gnome-utils.c
-  gnucash/gnome-utils/test/test-load-module
   gnucash/html/swig-gnc-html.c
   bindings/python/gnucash_core.c
   gnucash/report/report-gnome/swig-report-gnome.c
-  gnucash/report/report-gnome/test/test-load-module
   gnucash/report/report-system/swig-report-system.c
-  gnucash/report/report-system/test/test-load-module
-  gnucash/report/stylesheets/test/test-load-module
   libgnucash/scm/build-config.scm
   common/swig-runtime.h
   common/test-core/swig-unittest-support-guile.c

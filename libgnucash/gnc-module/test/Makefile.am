@@ -14,17 +14,22 @@ AM_CPPFLAGS = \
 
 TESTS = \
   test-load-c \
-  test-load-scm \
-  test-gwrapped-c \
-  test-scm-module \
-  test-scm-multi \
-  test-load-deps \
   test-modsysver \
   test-incompatdep \
   test-agedver \
   test-dynload \
-  test-scm-dynload \
-  test-scm-init
+  ${SCM_TESTS}
+
+SCM_TESTS = \
+  test-gnc-module-load-scm \
+  test-gnc-module-swigged-c \
+  test-gnc-module-scm-module \
+  test-gnc-module-scm-multi \
+  test-gnc-module-load-deps \
+  test-gnc-module-scm-dynload \
+  test-gnc-module-scm-init
+
+SCM_TEST_SRCS = $(SCM_TESTS:%=%.scm)
 
 GNC_TEST_DEPS = \
   --gnc-module-dir ${top_builddir}/libgnucash/gnc-module \
@@ -58,14 +63,14 @@ check_PROGRAMS = \
 
 test_dynload_LDFLAGS = ${GUILE_LIBS}
 
+$(SCM_TESTS): %: $(srcdir)/%.scm Makefile
+	echo 'export GNC_BUILDDIR="${abs_top_builddir}";' > $@
+	echo 'export GNC_UNINSTALLED=yes;' >> $@
+	echo '${GUILE} --debug -l $(srcdir)/$*.scm -c "(exit (run-test))"' >> $@
+	chmod a+x $@
+
 EXTRA_DIST = \
-  test-gwrapped-c \
-  test-load-deps \
-  test-load-scm \
-  test-scm-dynload \
-  test-scm-init \
-  test-scm-module \
-  test-scm-multi \
+  ${SCM_TEST_SRCS} \
   CMakeLists.txt
 
 foo:

@@ -1,8 +1,3 @@
-#! @SHELL@
-echo "  test-scm-init: testing Scheme-only module system init. ";
-exec ${GUILE} -s $0 "$@"
-!#
-
 (use-modules (gnucash unittest-support))
 (define log-domain "gnc.module")
 (define check (new-TestErrorStruct))
@@ -15,9 +10,14 @@ exec ${GUILE} -s $0 "$@"
 
 (use-modules (gnucash gnc-module))
 (gnc:module-system-init)
+(gnc:module-load "gnucash/foo" 0)
+(foo-hello)
+(foo:scheme-hello)
+(gnc:module-load "gnucash/bar" 0)
+(foo-hello)
+(foo:scheme-hello)
+(bar-hello)
+(bar:scheme-hello)
 
 (g-log-remove-handler log-domain handler)
-
-;; LocalVariables:
-;; mode: scheme
-;; End:
+(exit 0)

@@ -1,7 +1,3 @@
-#! @SHELL@ 
-exec ${GUILE} -s "$0"
-!#
-
 (debug-enable 'debug)
 (debug-enable 'backtrace)
 
@@ -23,7 +19,3 @@ exec ${GUILE} -s "$0"
     (begin 
       (display "failed\n")
       (exit -1)))
-
-
- 
-

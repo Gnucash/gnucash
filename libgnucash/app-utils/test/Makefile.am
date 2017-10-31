@@ -9,8 +9,8 @@ check_PROGRAMS = \
   test-app-utils
 
 TESTS =  \
-  test-load-module \
-  ${check_PROGRAMS}
+  ${check_PROGRAMS} \
+  ${SCM_TESTS}
 
 test_scm_query_string_SOURCES = test-scm-query-string.cpp
 test_sx_SOURCES = test-sx.cpp
@@ -47,8 +47,8 @@ LDADD = \
    ${GUILE_LIBS}
 
 EXTRA_DIST += \
-  test-load-module \
   test-print-queries.cpp \
+  ${SCM_TEST_SRCS} \
   CMakeLists.txt
 
 AM_CPPFLAGS = \
@@ -73,3 +73,12 @@ test_app_utils_CXXFLAGS = \
 	-I${top_srcdir}/${MODULEPATH}/ \
 	-DTESTPROG=test_app_utils \
 	${GLIB_CFLAGS}
+
+SCM_TESTS =   test-load-app-utils-module
+SCM_TEST_SRCS = $(SCM_TESTS:%=%.scm)
+
+$(SCM_TESTS): %: $(srcdir)/%.scm Makefile
+	echo 'export GNC_BUILDDIR="${abs_top_builddir}";' > $@
+	echo 'export GNC_UNINSTALLED=yes;' >> $@
+	echo '${GUILE} --debug -l $(srcdir)/$*.scm -c "(exit (run-test))"' >> $@
+	chmod a+x $@

@@ -7,6 +7,10 @@ SCM_TESTS = \
 	test-standard-net-barchart \
 	test-standard-net-linechart
 
+# test-generic-category-report.scm,test-generic-net-barchart, and
+# test-generic-net-linechart are support files used by the respective
+# test-standard-*
+
 SCM_TEST_SRCS = $(SCM_TESTS:%=%.scm)
 
 GNC_TEST_DEPS = \

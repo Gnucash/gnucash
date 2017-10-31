@@ -27,11 +27,34 @@ GNC_ADD_TEST_WITH_GUILE(test-scm-query-string test-scm-query-string.cpp
 )
 ADD_APP_UTILS_TEST(test-sx test-sx.cpp)
 
-GNC_ADD_SCHEME_TEST(scm-test-load-module-app-utils test-load-module.in)
+SET(GUILE_DEPENDS
+  scm-app-utils
+  gnc-core-utils
+  gnc-module
+  gncmod-engine
+  gncmod-backend-xml
+  gncmod-backend-xml
+)
+
+GNC_ADD_SCHEME_TARGETS(scm-test-load-app-utils-module
+  "test-load-app-utils-module.scm"
+  "gnucash/reports"
+  "${GUILE_DEPENDS}"
+  FALSE
+)
+
+GNC_ADD_SCHEME_TESTS("test-load-app-utils-module.scm")
 # Doesn't work yet:
 GNC_ADD_TEST_WITH_GUILE(test-app-utils "${test_app_utils_SOURCES}" APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS)
 
-CONFIGURE_FILE(test-load-module.in test-load-module @ONLY)
-
-SET_DIST_LIST(test_app_utils_DIST CMakeLists.txt Makefile.am test-exp-parser.c test-link-module.c test-load-module.in
-        test-print-parse-amount.cpp test-print-queries.cpp test-scm-query-string.cpp test-sx.cpp ${test_app_utils_SOURCES})
+SET_DIST_LIST(test_app_utils_DIST
+  CMakeLists.txt
+  Makefile.am
+  test-exp-parser.c
+  test-link-module.c
+  test-print-parse-amount.cpp
+  test-print-queries.cpp
+  test-scm-query-string.cpp
+  test-sx.cpp
+  ${test_app_utils_SOURCES}
+)

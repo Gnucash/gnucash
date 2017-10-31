@@ -13,6 +13,7 @@ gnucash/gnome-utils/gnc-tree-model-selection.c
 
 libgnucash/app-utils/gnucash/app-utils.scm
 libgnucash/app-utils/gnucash/gettext.scm
+libgnucash/app-utils/test/test-load-app-utils-module.scm
 libgnucash/core-utils/gnucash/core-utils.scm
 libgnucash/engine/gnucash/business-core.scm
 libgnucash/engine/gnucash/engine.scm

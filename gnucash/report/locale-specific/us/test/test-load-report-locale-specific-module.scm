@@ -1,7 +1,3 @@
-#! @SHELL@ 
-exec ${GUILE} -s $0
-!#
-
 (use-modules (gnucash gnc-module))
 (gnc:module-system-init)
 
@@ -16,4 +12,3 @@ exec ${GUILE} -s $0
     (begin 
       (display "failed\n")
       (exit -1)))
-

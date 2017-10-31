@@ -162,7 +162,7 @@ FUNCTION(GNC_ADD_SCHEME_TARGETS _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
            ${GUILE_EXECUTABLE} -e '\(@@ \(guild\) main\)' -s ${GUILD_EXECUTABLE} compile -o ${output_file} ${source_file_abs_path}
         DEPENDS ${guile_depends}
         MAIN_DEPENDENCY ${source_file_abs_path}
-      )
+        )
     ENDFOREACH(source_file)
     IF (__DEBUG)
       MESSAGE("TARGET_FILES are ${_TARGET_FILES}")

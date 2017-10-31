@@ -34,16 +34,6 @@ ENDFUNCTION()
 
 GNC_ADD_TEST_WITH_GUILE(test-load-c test-load-c.c GNC_MODULE_TEST_INCLUDE_DIRS GNC_MODULE_TEST_LIBS "GNC_MODULE_PATH=${CMAKE_BINARY_DIR}/lib/gnucash/test")
 
-RUN_TEST_WITH_GUILE(test-load-scm ${CMAKE_CURRENT_SOURCE_DIR}/test-load-scm.in)
-
-RUN_TEST_WITH_GUILE(test-load-deps ${CMAKE_CURRENT_SOURCE_DIR}/test-load-deps.in)
-
-RUN_TEST_WITH_GUILE(test-scm-init ${CMAKE_CURRENT_SOURCE_DIR}/test-scm-init.in)
-
-RUN_TEST_WITH_GUILE(test-scm-multi ${CMAKE_CURRENT_SOURCE_DIR}/test-scm-multi.in)
-
-RUN_TEST_WITH_GUILE(test-scm-dynload ${CMAKE_CURRENT_SOURCE_DIR}/test-scm-dynload.in)
-
 GNC_ADD_TEST_WITH_GUILE(test-modsysver test-modsysver.c
   GNC_MODULE_TEST_INCLUDE_DIRS GNC_MODULE_TEST_LIBS
 )
@@ -64,31 +54,36 @@ GNC_ADD_TEST(test-dynload test-dynload.c
   LIBDIR=${_LIBDIR}
 )
 
-SET(GUILE ${GUILE_EXECUTABLE})
-CONFIGURE_FILE(test-gwrapped-c.in test-gwrapped-c @ONLY)
-CONFIGURE_FILE(test-scm-module.in test-scm-module @ONLY)
-CONFIGURE_FILE(test-load-deps.in test-load-deps @ONLY)
-CONFIGURE_FILE(test-load-scm.in test-load-scm @ONLY)
-CONFIGURE_FILE(test-scm-dynload.in test-scm-dynload @ONLY)
-CONFIGURE_FILE(test-scm-init.in test-scm-init @ONLY)
-CONFIGURE_FILE(test-scm-multi.in test-scm-multi @ONLY)
-
-FUNCTION(RUN_GUILE_SHELL_TEST _TARGET _SOURCE_FILE)
-  GET_GUILE_ENV()
-  SET(CMAKE_COMMAND_TMP "")
-  IF (${CMAKE_VERSION} VERSION_GREATER 3.1)
-  SET(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env "${GUILE_ENV};GNC_MODULE_PATH=${CMAKE_BINARY_DIR}/lib/gnucash/test")
-  ENDIF()
-  ADD_TEST(NAME ${_TARGET}
-    COMMAND ${CMAKE_COMMAND_TMP}
-      ${SHELL} ${_SOURCE_FILE}
+SET(test_gnc_module_SCHEME
+  test-gnc-module-scm-init.scm
+  test-gnc-module-load-scm.scm
+  test-gnc-module-swigged-c.scm
+  test-gnc-module-load-deps.scm
+  test-gnc-module-scm-dynload.scm
+  test-gnc-module-scm-module.scm
+  test-gnc-module-scm-multi.scm
   )
-  SET_TESTS_PROPERTIES(${_TARGET} PROPERTIES ENVIRONMENT "${GUILE_ENV};GNC_MODULE_PATH=${CMAKE_BINARY_DIR}/lib/gnucash/test")
-ENDFUNCTION()
 
-RUN_GUILE_SHELL_TEST(test-gwrapped-c ${CMAKE_CURRENT_BINARY_DIR}/test-gwrapped-c)
+SET(GUILE_DEPENDS gnc-module scm-test-core scm-mod-foo scm-mod-baz)
 
-RUN_GUILE_SHELL_TEST(test-scm-module ${CMAKE_CURRENT_BINARY_DIR}/test-scm-module)
+GNC_ADD_SCHEME_TARGETS(test-gnc-modules-scm
+  "${test_gnc_module_SCHEME}"
+  "gnucash/gnc-modules/test"
+  "${GUILE_DEPENDS}"
+  TRUE
+  )
+
+GNC_ADD_SCHEME_TESTS("${test_gnc_module_SCHEME}")
+IF(NOT WIN32)
+  # This little dance is needed because gnc_module_init will assert if
+  # it finds libgncmod_futuremod.so outside of a test that expects it.
+  GET_GUILE_ENV()
+  SET(_GNC_MODULE_PATH "${CMAKE_BINARY_DIR}/lib:${CMAKE_BINARY_DIR}/lib/gnucash:${CMAKE_BINARY_DIR}/lib/gnucash/test")
+  FOREACH(test_file ${test_gnc_module_SCHEME})
+    GET_FILENAME_COMPONENT(basename ${test_file} NAME_WE)
+    SET_TESTS_PROPERTIES(${basename} PROPERTIES ENVIRONMENT "${GUILE_ENV};GNC_MODULE_PATH=${_GNC_MODULE_PATH}")
+  ENDFOREACH()
+ENDIF()
 
 SET(test_gnc_module_SOURCE_DIST
   test-agedver.c
@@ -100,13 +95,7 @@ SET(test_gnc_module_SOURCE_DIST
 
 SET(test_gnc_module_EXTRA_DIST
   README
-  test-gwrapped-c.in
-  test-load-deps.in
-  test-load-scm.in
-  test-scm-dynload.in
-  test-scm-init.in
-  test-scm-module.in
-  test-scm-multi.in
+  ${test_gnc_module_SCHEME}
 )
 
 SET_LOCAL_DIST(test_gnc_module_DIST_local CMakeLists.txt Makefile.am README ${test_gnc_module_SOURCE_DIST} ${test_gnc_module_EXTRA_DIST})

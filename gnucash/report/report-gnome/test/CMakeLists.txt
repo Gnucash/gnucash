@@ -9,11 +9,21 @@ GNC_ADD_TEST_WITH_GUILE(test-link-module-report-gnome test-link-module.c
   REPORT_GNOME_TEST_INCLUDE_DIRS REPORT_GNOME_TEST_LIBS
 )
 
-GNC_ADD_SCHEME_TEST(test-load-module-report-gnome
-  test-load-module.in
+SET(GUILE_DEPENDS
+  scm-app-utils
+  gncmod-gnome-utils
+  gnc-module
+  gncmod-engine
+  gncmod-report-gnome
 )
 
-CONFIGURE_FILE(test-load-module.in test-load-module @ONLY)
+GNC_ADD_SCHEME_TARGETS(scm-test-load-report-gnome-module
+  "test-load-report-gnome-module.scm"
+  "gnucash/reports"
+  "${GUILE_DEPENDS}"
+  FALSE
+)
+GNC_ADD_SCHEME_TESTS(test-load-report-gnome-module.scm)
 
-SET_DIST_LIST(test_report_gnome_DIST CMakeLists.txt Makefile.am test-link-module.c test-load-module.in)
+SET_DIST_LIST(test_report_gnome_DIST CMakeLists.txt Makefile.am test-link-module.c test-load-report-gnome-module.scm)
 

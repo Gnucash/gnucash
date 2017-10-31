@@ -10,6 +10,7 @@ GNC_ADD_TEST_WITH_GUILE(test-link-module-report-system test-link-module.c
 )
 
 SET(scm_test_report_system_SOURCES
+  test-load-report-system-module.scm
   test-collectors.scm
   test-list-extras.scm
   test-report-utilities.scm
@@ -17,7 +18,6 @@ SET(scm_test_report_system_SOURCES
   )
 
 GNC_ADD_SCHEME_TESTS(${scm_test_report_system_SOURCES})
-GNC_ADD_SCHEME_TEST(test-load-module-report-system test-load-module.in)
 
 GNC_ADD_SCHEME_TARGETS(scm-test-report-system
   "test-extras.scm"
@@ -33,7 +33,13 @@ GNC_ADD_SCHEME_TARGETS(scm-test-report-system-2
   FALSE
 )
 
-CONFIGURE_FILE(test-load-module.in test-load-module @ONLY)
 
-SET_DIST_LIST(test_report_system_DIST CMakeLists.txt Makefile.am test-collectors.scm test-extras.scm test-link-module.c
-        test-load-module.in test-report-utilities.scm test-list-extras.scm)
+SET_DIST_LIST(test_report_system_DIST
+  CMakeLists.txt
+  Makefile.am
+  test-collectors.scm
+  test-extras.scm
+  test-link-module.c
+  test-report-utilities.scm
+  test-list-extras.scm
+)

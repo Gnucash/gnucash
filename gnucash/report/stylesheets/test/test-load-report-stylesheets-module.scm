@@ -1,7 +1,3 @@
-#! @SHELL@ 
-exec ${GUILE} -s "$0"
-!#
-
 (setenv "GNC_UNINSTALLED" "1")
 (display "  testing stylesheet module load ... ")
 (use-modules (gnucash unittest-support))
@@ -17,15 +13,11 @@ exec ${GUILE} -s "$0"
 (gnc:module-system-init)
 
 (if (gnc:module-load "gnucash/report/stylesheets" 0)
-    (begin 
+    (begin
       (g-log-remove-handler log-domain handler)
       (display "ok\n")
       (exit 0))
-    (begin 
+    (begin
       (g-log-remove-handler log-domain handler)
       (display "failed\n")
       (exit -1)))
-
-
- 
-

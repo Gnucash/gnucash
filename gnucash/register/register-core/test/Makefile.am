@@ -1,6 +1,5 @@
 TESTS =  \
   test-link-module
-#  test-load-module
 
 #GNC_TEST_DEPS := \
 #
@@ -19,6 +18,5 @@ test_link_module_LDADD=\
   ../libgncmod-register-core.la
 
 EXTRA_DIST = CMakeLists.txt
-#            test-load-module
 
 AM_CPPFLAGS = ${GLIB_CFLAGS} -I${top_srcdir}/common/test-core -I..

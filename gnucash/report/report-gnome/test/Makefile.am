@@ -18,7 +18,7 @@ LDADD = \
 
 TESTS = \
   test-link-module \
-  test-load-module
+  ${SCM_TESTS}
 
 GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/libgnucash/engine \
   --gnc-module-dir ${top_builddir}/libgnucash/app-utils \
@@ -60,6 +60,15 @@ TESTS_ENVIRONMENT = \
   $(shell ${abs_top_srcdir}/common/gnc-test-env.pl --noexports ${GNC_TEST_DEPS})
 
 
+SCM_TESTS =   test-load-report-gnome-module
+SCM_TEST_SRCS = $(SCM_TESTS:%=%.scm)
+
+$(SCM_TESTS): %: $(srcdir)/%.scm Makefile
+	echo 'export GNC_BUILDDIR="${abs_top_builddir}";' > $@
+	echo 'export GNC_UNINSTALLED=yes;' >> $@
+	echo '${GUILE} --debug -l $(srcdir)/$*.scm -c "(exit (run-test))"' >> $@
+	chmod a+x $@
+
 check_PROGRAMS = test-link-module
 
-EXTRA_DIST = test-load-module CMakeLists.txt
+EXTRA_DIST = ${SCM_TEST_SRCS} CMakeLists.txt

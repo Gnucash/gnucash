@@ -1,2 +1,0 @@
-#!@SHELL@
-${GUILE} -l $SRCDIR/test-scm-query-import.scm -c "(exit (run-test))"

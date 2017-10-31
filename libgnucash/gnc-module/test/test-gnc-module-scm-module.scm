@@ -1,6 +1,3 @@
-#! @SHELL@
-exec ${GUILE} -s $0 "$@"
-!#
 (use-modules (gnucash unittest-support))
 (define log-domain "gnc.module")
 (define check (new-TestErrorStruct))
@@ -10,20 +7,8 @@ exec ${GUILE} -s $0 "$@"
 (TestErrorStruct-log-level-set check log-level)
 (TestErrorStruct-msg-set check msg)
 (define handler (test-set-checked-handler log-domain log-level check))
-
 (use-modules (gnucash gnc-module))
-(gnc:module-system-init) 
-(gnc:module-load "gnucash/foo" 0)
-(foo-hello)
-(foo:scheme-hello)
-(gnc:module-load "gnucash/bar" 0)
-(foo-hello)
-(foo:scheme-hello)
-(bar-hello)
-(bar:scheme-hello)
-
+(gnc:module-system-init)
+(if (not (gnc:module-load "gnucash/foo" 0)) (exit -1))
+(exit (foo:scheme-hello))
 (g-log-remove-handler log-domain handler)
-
-;; Local Variables:
-;; mode: scheme
-;; End:

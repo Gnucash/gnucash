@@ -27,6 +27,13 @@ TARGET_INCLUDE_DIRECTORIES(gncmodbaz PRIVATE
   ${GUILE_INCLUDE_DIRS}
 )
 
+GNC_ADD_SCHEME_TARGETS(scm-mod-baz
+  gnucash/baz.scm
+  "gnucash"
+  gncmodbaz
+  TRUE
+  )
+
 SET_TARGET_PROPERTIES(baz gncmodbaz PROPERTIES
 LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/gnucash/test
 ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/gnucash/test

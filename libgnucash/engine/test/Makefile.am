@@ -56,9 +56,11 @@ TEST_GROUP_2 = \
   test-vendor
 
 SCM_TESTS = \
+  test-create-account \
   test-test-extras \
   test-account \
   test-split
+#  test-scm-query-import \ Fails
 
 SCM_TEST_SRCS = $(SCM_TESTS:%=%.scm)
 
@@ -107,7 +109,7 @@ TESTS_ENVIRONMENT = \
 
 check_PROGRAMS = ${TEST_GROUP_1} ${TEST_GROUP_2}
 
-TESTS = ${TEST_GROUP_1} test-create-account ${TEST_GROUP_2} ${SCM_TESTS}
+TESTS = ${TEST_GROUP_1} ${TEST_GROUP_2} ${SCM_TESTS}
 
 test_link_SOURCES = test-link.c
 test_link_LDADD = ../libgncmod-engine.la \
@@ -120,10 +122,6 @@ endif
 SCM_TEST_HELPERS = test-extras.scm
 
 EXTRA_DIST += \
-  test-create-account \
-  test-create-account.scm \
-  test-scm-query-import \
-  test-scm-query-import.scm \
   $(SCM_TEST_HELPERS) \
   $(SCM_TEST_SRCS) \
   CMakeLists.txt

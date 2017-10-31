@@ -1,7 +1,3 @@
-#! @SHELL@ 
-exec ${GUILE} -s $0
-!#
-
 (setenv "GNC_UNINSTALLED" "1")
 (use-modules (gnucash gnc-module))
 (gnc:module-system-init)

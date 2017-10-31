@@ -1777,42 +1777,10 @@ AC_CONFIG_FILES(
   dnl # init-commands go here
 )
 dnl # Shell scripts, to have their shells set
-AC_CONFIG_FILES([libgnucash/app-utils/test/test-load-module],
-                [chmod +x libgnucash/app-utils/test/test-load-module])
 AC_CONFIG_FILES([libgnucash/backend/xml/test/test-real-data.sh],
                 [chmod +x libgnucash/backend/xml/test/test-real-data.sh])
 AC_CONFIG_FILES([gnucash/test/test-version],
                 [chmod +x gnucash/test/test-version])
-AC_CONFIG_FILES([libgnucash/engine/test/test-create-account],
-                [chmod +x libgnucash/engine/test/test-create-account])
-AC_CONFIG_FILES([libgnucash/engine/test/test-scm-query-import],
-                [chmod +x libgnucash/engine/test/test-scm-query-import])
-AC_CONFIG_FILES([libgnucash/gnc-module/test/test-gwrapped-c],
-                [chmod +x libgnucash/gnc-module/test/test-gwrapped-c])
-AC_CONFIG_FILES([libgnucash/gnc-module/test/test-load-deps],
-                [chmod +x libgnucash/gnc-module/test/test-load-deps])
-AC_CONFIG_FILES([libgnucash/gnc-module/test/test-load-scm],
-                [chmod +x libgnucash/gnc-module/test/test-load-scm])
-AC_CONFIG_FILES([libgnucash/gnc-module/test/test-scm-dynload],
-                [chmod +x libgnucash/gnc-module/test/test-scm-dynload])
-AC_CONFIG_FILES([libgnucash/gnc-module/test/test-scm-init],
-                [chmod +x libgnucash/gnc-module/test/test-scm-init])
-AC_CONFIG_FILES([libgnucash/gnc-module/test/test-scm-module],
-                [chmod +x libgnucash/gnc-module/test/test-scm-module])
-AC_CONFIG_FILES([libgnucash/gnc-module/test/test-scm-multi],
-                [chmod +x libgnucash/gnc-module/test/test-scm-multi])
-AC_CONFIG_FILES([gnucash/gnome-utils/test/test-load-module],
-                [chmod +x gnucash/gnome-utils/test/test-load-module])
-AC_CONFIG_FILES([gnucash/report/locale-specific/us/test/test-load-module],
-                [chmod +x gnucash/report/locale-specific/us/test/test-load-module])
-AC_CONFIG_FILES([gnucash/report/report-gnome/test/test-load-module],
-                [chmod +x gnucash/report/report-gnome/test/test-load-module])
-AC_CONFIG_FILES([gnucash/report/report-system/test/test-load-module],
-                [chmod +x gnucash/report/report-system/test/test-load-module])
-AC_CONFIG_FILES([gnucash/report/stylesheets/test/test-load-module],
-                [chmod +x gnucash/report/stylesheets/test/test-load-module])
-AC_CONFIG_FILES([libgnucash/tax/us/test/test-load-module],
-                [chmod +x libgnucash/tax/us/test/test-load-module])
 
 # A few files need extra actions at creation time
 AC_CONFIG_FILES([gnucash/overrides/gnucash-make-guids], [chmod u+x gnucash/overrides/gnucash-make-guids])

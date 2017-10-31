@@ -15,10 +15,10 @@ LDADD = \
 
 TESTS = \
   test-link-module \
-  test-load-module \
   $(SCM_TESTS)
 
 SCM_TESTS = \
+        test-load-report-system-module \
 	test-collectors \
 	test-list-extras \
 	test-report-utilities
@@ -74,7 +74,6 @@ check_PROGRAMS = test-link-module
 SCM_TEST_HELPERS = test-extras.scm
 
 EXTRA_DIST = \
-	test-load-module \
 	$(SCM_TEST_HELPERS) \
 	$(SCM_TEST_SRCS) \
 	CMakeLists.txt

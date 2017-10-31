@@ -1,5 +1,5 @@
 TESTS =  \
-  test-link-module test-load-module
+  test-link-module ${SCM_TESTS}
 
 # The following tests are nice, but have absolutely no place in an
 # automated testing system.
@@ -67,8 +67,17 @@ test_link_module_LDADD = \
   ${GLIB_LIBS} \
   ${top_builddir}/libgnucash/gnc-module/libgnc-module.la
 
+SCM_TESTS =   test-load-gnome-utils-module
+SCM_TEST_SRCS = $(SCM_TESTS:%=%.scm)
+
+$(SCM_TESTS): %: $(srcdir)/%.scm Makefile
+	echo 'export GNC_BUILDDIR="${abs_top_builddir}";' > $@
+	echo 'export GNC_UNINSTALLED=yes;' >> $@
+	echo '${GUILE} --debug -l $(srcdir)/$*.scm -c "(exit (run-test))"' >> $@
+	chmod a+x $@
+
 EXTRA_DIST = \
-  test-load-module \
+  ${SCM_TEST_SRCS} \
   CMakeLists.txt
 
 testit:

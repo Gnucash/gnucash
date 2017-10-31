@@ -15,8 +15,6 @@ MACRO(ADD_ENGINE_TEST _TARGET _SOURCE_FILES)
   GNC_ADD_TEST(${_TARGET} "${_SOURCE_FILES}" ENGINE_TEST_INCLUDE_DIRS ENGINE_TEST_LIBS)
 ENDMACRO()
 
-CONFIGURE_FILE(test-scm-query-import.in test-scm-query-import @ONLY)
-CONFIGURE_FILE(test-create-account.in test-create-account @ONLY)
 # Not via macro because of unique link requirements
 
 ADD_EXECUTABLE(test-link EXCLUDE_FROM_ALL test-link.c)
@@ -210,23 +208,34 @@ GNC_ADD_TEST(test-import-map "${test_import_map_SOURCES}"
 GNC_ADD_TEST_WITH_GUILE(test-scm-query test-scm-query.cpp ENGINE_TEST_INCLUDE_DIRS ENGINE_TEST_LIBS)
 ############################
 
-GNC_ADD_SCHEME_TEST(scm-test-account test-account.scm)
-GNC_ADD_SCHEME_TEST(scm-test-create-account test-create-account.scm)
-GNC_ADD_SCHEME_TEST(scm-test-test-extra test-test-extras.scm)
-GNC_ADD_SCHEME_TEST(scm-test-split test-split.scm)
-# This check not run in autotools. Doesn't pass.
-#GNC_ADD_SCHEME_TEST(scm-test-scm-query-import test-scm-query-import.scm)
 
-SET(engine_test_SCHEME test-extras.scm)
+SET(engine_test_SCHEME
+  test-account.scm
+  test-create-account.scm
+  test-test-extras.scm
+  test-split.scm
+  test-test-extras.scm
+  )
+
+#LIST(APPEND engine_test_SCHEME  test-scm-query-import.scm) Fails
 
 SET(GUILE_DEPENDS      scm-app-utils scm-scm)
 
-GNC_ADD_SCHEME_TARGETS(scm-test-engine
-  "${engine_test_SCHEME}"
-  gnucash/engine/test
+GNC_ADD_SCHEME_TARGETS(scm-test-engine-extras
+  "test-extras.scm"
+  "gnucash/engine/test/"
   "${GUILE_DEPENDS}"
   FALSE
-)
+  )
+
+GNC_ADD_SCHEME_TARGETS(scm-test-engine
+  "${engine_test_SCHEME}"
+  ""
+  "${GUILE_DEPENDS};scm-test-engine-extras"
+  FALSE
+  )
+
+GNC_ADD_SCHEME_TESTS("${engine_test_SCHEME}")
 
 SET(test_engine_SOURCES_DIST
         dummy.cpp
@@ -292,8 +301,6 @@ SET(test_engine_SCHEME_DIST
 
 SET(test_engine_EXTRA_DIST
         README
-        test-create-account.in
-        test-scm-query-import.in
 )
 
 SET_DIST_LIST(test_engine_DIST CMakeLists.txt Makefile.am
