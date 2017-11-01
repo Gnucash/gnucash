@@ -138,7 +138,8 @@ gnc_item_edit_tb_class_init (GncItemEditTbClass *gnc_item_edit_tb_class)
     GtkWidgetClass *widget_class;
 
 #if GTK_CHECK_VERSION(3,20,0)
-    gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(gnc_item_edit_tb_class), "button");
+//    gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(gnc_item_edit_tb_class), "button");
+    gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(gnc_item_edit_tb_class), "toggle-button");
 #endif
 
     gnc_item_edit_tb_parent_class = g_type_class_peek_parent (gnc_item_edit_tb_class);
@@ -200,7 +201,8 @@ gnc_item_edit_tb_new (GnucashSheet *sheet)
                            NULL);
 
     // This sets a style class for when Gtk+ version is less than 3.20
-    gnc_widget_set_css_name (GTK_WIDGET(item_edit_tb), "button");
+//    gnc_widget_set_css_name (GTK_WIDGET(item_edit_tb), "button");
+    gnc_widget_set_css_name (GTK_WIDGET(item_edit_tb), "toggle-button");
 
     context = gtk_widget_get_style_context (GTK_WIDGET(item_edit_tb));
     gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
@@ -568,6 +570,9 @@ draw_arrow_cb (GtkWidget *widget, cairo_t *cr, gpointer data)
     gint size;
 
     gtk_render_background (context, cr, 0, 0, width, height);
+
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_FRAME);
+    gtk_render_frame (context, cr, 1, 1, width - 2, height - 2);
 
     gtk_style_context_add_class (context, GTK_STYLE_CLASS_ARROW);
 

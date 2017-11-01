@@ -27,7 +27,7 @@
   padding: 2px 2px 2px 2px; /* all work with different values, around the text blue area */
 }
 
-.cursor .button {
+.cursor .toggle-button {
   margin: 1px 1px 1px 1px; /* does not work, not used, here for completeness */
 }
 
