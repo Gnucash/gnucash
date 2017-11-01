@@ -388,8 +388,10 @@
                       (gnc:html-linechart-row-labels linechart)))
          (col-labels (catenate-escaped-strings
                       (gnc:html-linechart-col-labels linechart)))
-         (col-colors (catenate-escaped-strings
-                      (gnc:html-linechart-col-colors linechart)))
+         ;; convert color list to string with valid js array of strings, example: "\"blue\", \"red\""
+         (colors-str (string-join (map (lambda (color)
+                                         (string-append "\"" color "\""))
+                                       (gnc:html-linechart-col-colors linechart)) ", "))
          (line-width (gnc:html-linechart-line-width linechart))
          (series-data-start (lambda (series-index)
                          (push "var d")
@@ -501,7 +503,8 @@
                    cursor: {
                        show: true,
                        zoom: true
-                   }
+                   },
+                   seriesColors: false,
                 };\n")
 
             (push "  options.stackSeries = ")
@@ -546,6 +549,13 @@
                 (push "  options.axes.yaxis.label = \"")
                 (push y-label)
                 (push "\";\n")))
+	    (if (not (equal? colors-str ""))
+                (begin            ; example: options.seriesColors= ["blue", "red"];
+                  (push "options.seriesColors = [")
+                  (push colors-str)
+                  (push "];\n")
+                  )
+                )
 
             ;; adjust the date string format to the one given by the preferences
             (push "  options.axes.xaxis.tickOptions.formatString = '")

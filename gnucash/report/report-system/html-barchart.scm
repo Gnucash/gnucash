@@ -353,8 +353,10 @@
                       (gnc:html-barchart-row-labels barchart)))
          (col-labels (catenate-escaped-strings 
                       (gnc:html-barchart-col-labels barchart)))
-         (col-colors (catenate-escaped-strings 
-                      (gnc:html-barchart-col-colors barchart)))
+         ;; convert color list to string with valid js array of strings, example: "\"blue\", \"red\""
+         (colors-str (string-join (map (lambda (color)
+					 (string-append "\"" color "\""))
+				       (gnc:html-barchart-col-colors barchart)) ", "))
          (series-data-start (lambda (series-index)
                          (push "var d")
                          (push series-index)
@@ -476,6 +478,7 @@
                        showTooltip: false,
                        zoom: true,
                    },
+                   seriesColors: false,
                 };\n")
 
             (push "  options.stackSeries = ")
@@ -506,6 +509,13 @@
                 (push y-label)
                 (push "\";\n")))
             (push "  options.axes.xaxis.ticks = all_ticks;\n")
+            (if (not (equal? colors-str ""))
+                (begin            ; example: options.seriesColors= ["blue", "red"];
+                  (push "options.seriesColors = [")
+                  (push colors-str)
+                  (push "];\n")
+                  )
+                )
 
 
             (push "$.jqplot.config.enablePlugins = true;\n")
