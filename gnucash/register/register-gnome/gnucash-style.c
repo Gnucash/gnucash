@@ -215,9 +215,10 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
             if (cd->pixel_width > 0)
                 continue;
 
+            // This is used on new account popup cells to get the default
+            // width of text plus toggle button.
             if (cell && cell->is_popup)
-                width += gnc_item_edit_get_toggle_offset
-                         (cd->pixel_height);
+                width += cd->pixel_height; // toggle button is square, use cell height
 
             cd->pixel_width = MAX (cd->pixel_width, width);
         }
