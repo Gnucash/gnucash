@@ -134,8 +134,7 @@ gnc_table_model_new (void)
     model->label_handlers = gnc_table_model_handler_hash_new ();
     model->help_handlers = gnc_table_model_handler_hash_new ();
     model->io_flags_handlers = gnc_table_model_handler_hash_new ();
-    model->fg_color_handlers = gnc_table_model_handler_hash_new ();
-    model->bg_color_handlers = gnc_table_model_handler_hash_new ();
+    model->cell_color_handlers = gnc_table_model_handler_hash_new ();
     model->cell_border_handlers = gnc_table_model_handler_hash_new ();
     model->confirm_handlers = gnc_table_model_handler_hash_new ();
     model->save_handlers = gnc_table_model_handler_hash_new ();
@@ -165,11 +164,8 @@ gnc_table_model_destroy (TableModel *model)
     gnc_table_model_handler_hash_destroy (model->io_flags_handlers);
     model->io_flags_handlers = NULL;
 
-    gnc_table_model_handler_hash_destroy (model->fg_color_handlers);
-    model->fg_color_handlers = NULL;
-
-    gnc_table_model_handler_hash_destroy (model->bg_color_handlers);
-    model->bg_color_handlers = NULL;
+    gnc_table_model_handler_hash_destroy (model->cell_color_handlers);
+    model->cell_color_handlers = NULL;
 
     gnc_table_model_handler_hash_destroy (model->cell_border_handlers);
     model->cell_border_handlers = NULL;
@@ -334,75 +330,39 @@ gnc_table_model_get_io_flags_handler (TableModel *model,
 }
 
 void
-gnc_table_model_set_fg_color_handler
+gnc_table_model_set_cell_color_handler
 (TableModel *model,
- TableGetFGColorHandler fg_color_handler,
+ TableGetCellColorHandler color_handler,
  const char * cell_name)
 {
     g_return_if_fail (model != NULL);
     g_return_if_fail (cell_name != NULL);
 
-    gnc_table_model_handler_hash_insert (model->fg_color_handlers,
+    gnc_table_model_handler_hash_insert (model->cell_color_handlers,
                                          cell_name,
-                                         fg_color_handler);
+                                         color_handler);
 }
 
 void
-gnc_table_model_set_default_fg_color_handler
+gnc_table_model_set_default_cell_color_handler
 (TableModel *model,
- TableGetFGColorHandler fg_color_handler)
+ TableGetCellColorHandler color_handler)
 {
     g_return_if_fail (model != NULL);
 
-    gnc_table_model_handler_hash_insert (model->fg_color_handlers,
+    gnc_table_model_handler_hash_insert (model->cell_color_handlers,
                                          DEFAULT_HANDLER,
-                                         fg_color_handler);
+                                         color_handler);
 }
 
-TableGetFGColorHandler
-gnc_table_model_get_fg_color_handler (TableModel *model,
-                                      const char * cell_name)
+TableGetCellColorHandler
+gnc_table_model_get_cell_color_handler (TableModel *model,
+                                   const char * cell_name)
 {
     g_return_val_if_fail (model != NULL, NULL);
 
-    return gnc_table_model_handler_hash_lookup (model->fg_color_handlers,
-            cell_name);
-}
-
-void
-gnc_table_model_set_bg_color_handler
-(TableModel *model,
- TableGetBGColorHandler bg_color_handler,
- const char * cell_name)
-{
-    g_return_if_fail (model != NULL);
-    g_return_if_fail (cell_name != NULL);
-
-    gnc_table_model_handler_hash_insert (model->bg_color_handlers,
-                                         cell_name,
-                                         bg_color_handler);
-}
-
-void
-gnc_table_model_set_default_bg_color_handler
-(TableModel *model,
- TableGetBGColorHandler bg_color_handler)
-{
-    g_return_if_fail (model != NULL);
-
-    gnc_table_model_handler_hash_insert (model->bg_color_handlers,
-                                         DEFAULT_HANDLER,
-                                         bg_color_handler);
-}
-
-TableGetBGColorHandler
-gnc_table_model_get_bg_color_handler (TableModel *model,
-                                      const char * cell_name)
-{
-    g_return_val_if_fail (model != NULL, NULL);
-
-    return gnc_table_model_handler_hash_lookup (model->bg_color_handlers,
-            cell_name);
+    return gnc_table_model_handler_hash_lookup (model->cell_color_handlers,
+                                                cell_name);
 }
 
 void
