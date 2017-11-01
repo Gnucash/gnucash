@@ -86,6 +86,10 @@ typedef struct
     PopupGetWidth    popup_get_width;
     gpointer         popup_user_data;
 
+    GtkBorder        padding;
+    GtkBorder        margin;
+    GtkBorder        border;
+
     /* Where are we */
     VirtualLocation virt_loc;
 
@@ -97,6 +101,15 @@ typedef struct
     GtkBoxClass parent_class;
 } GncItemEditClass;
 
+typedef enum
+{
+    left,
+    right,
+    top,
+    bottom,
+    left_right,
+    top_bottom,
+} Sides;
 
 GType gnc_item_edit_get_type (void);
 
@@ -129,6 +142,9 @@ void gnc_item_edit_paste_clipboard (GncItemEdit *item_edit);
 gboolean gnc_item_edit_get_has_selection (GncItemEdit *item_edit);
 void gnc_item_edit_focus_in (GncItemEdit *item_edit);
 void gnc_item_edit_focus_out (GncItemEdit *item_edit);
+
+gint gnc_item_edit_get_margin (GncItemEdit *item_edit, Sides side);
+gint gnc_item_edit_get_padding_border (GncItemEdit *item_edit, Sides side);
 
 /** @} */
 #endif /* GNUCASH_ITEM_EDIT_H */

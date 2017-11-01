@@ -361,6 +361,7 @@ draw_background_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
 static gboolean
 draw_text_cursor_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
 {
+    GncItemEdit *item_edit = GNC_ITEM_EDIT(user_data);
     GtkEditable *editable = GTK_EDITABLE(widget);
     GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(widget));
     gint height = gtk_widget_get_allocated_height (widget);
@@ -401,8 +402,15 @@ draw_text_cursor_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
     // Now draw a vertical line
     cairo_set_source_rgb (cr, fg_color->red, fg_color->green, fg_color->blue);
     cairo_set_line_width (cr, 1.0);
-    cairo_move_to (cr, cursor_x + 0.5, 2);
-    cairo_rel_line_to (cr, 0, height - 4);
+#if GTK_CHECK_VERSION(3,20,0)
+    cairo_move_to (cr, cursor_x + 0.5, gnc_item_edit_get_margin (item_edit, top) +
+                                       gnc_item_edit_get_padding_border (item_edit, top));
+    cairo_rel_line_to (cr, 0, height - gnc_item_edit_get_margin (item_edit, top_bottom) -
+                                       gnc_item_edit_get_padding_border (item_edit, top_bottom));
+#else
+    cairo_move_to (cr, cursor_x + 0.5, gnc_item_edit_get_padding_border (item_edit, top));
+    cairo_rel_line_to (cr, 0, height - gnc_item_edit_get_padding_border (item_edit, top_bottom));
+#endif
     cairo_stroke (cr);
 
     return FALSE;
@@ -608,13 +616,60 @@ gnc_item_edit_get_type (void)
     return gnc_item_edit_type;
 }
 
+gint
+gnc_item_edit_get_margin (GncItemEdit *item_edit, Sides side)
+{
+    switch (side)
+    {
+    case left:
+        return item_edit->margin.left;
+    case right:
+        return item_edit->margin.right;
+    case top:
+        return item_edit->margin.top;
+    case bottom:
+        return item_edit->margin.bottom;
+    case left_right:
+        return item_edit->margin.left + item_edit->margin.right;
+    case top_bottom:
+        return item_edit->margin.top + item_edit->margin.bottom;
+    default:
+        return 2;
+    }
+}
+
+gint
+gnc_item_edit_get_padding_border (GncItemEdit *item_edit, Sides side)
+{
+    switch (side)
+    {
+    case left:
+        return item_edit->padding.left + item_edit->border.left;
+    case right:
+        return item_edit->padding.right + item_edit->border.right;
+    case top:
+        return item_edit->padding.top + item_edit->border.top;
+    case bottom:
+        return item_edit->padding.bottom + item_edit->border.bottom;
+    case left_right:
+        return item_edit->padding.left + item_edit->border.left +
+               item_edit->padding.right + item_edit->border.right;
+    case top_bottom:
+        return item_edit->padding.top + item_edit->border.top +
+               item_edit->padding.bottom + item_edit->border.bottom;
+    default:
+        return 2;
+    }
+}
 
 GtkWidget *
 gnc_item_edit_new (GnucashSheet *sheet)
 {
-    char *hpad_str, *vpad_str, *entry_css;
-    GtkStyleContext *stylecontext;
-    GtkCssProvider *provider;
+    GtkStyleContext *stylectxt;
+    GtkBorder padding;
+    GtkBorder margin;
+    GtkBorder border;
+    GtkWidget *vb = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     GncItemEdit *item_edit =
             g_object_new (GNC_TYPE_ITEM_EDIT,
                           "sheet", sheet,
@@ -630,31 +685,53 @@ gnc_item_edit_new (GnucashSheet *sheet)
     item_edit->editor = gtk_entry_new();
     sheet->entry = item_edit->editor;
     gtk_entry_set_width_chars (GTK_ENTRY(item_edit->editor), 1);
-    gtk_box_pack_start (GTK_BOX(item_edit), item_edit->editor,  TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX(item_edit), item_edit->editor, TRUE, TRUE, 0);
+
+    // Get the CSS space settings for the entry
+    stylectxt = gtk_widget_get_style_context (GTK_WIDGET(item_edit->editor));
+    gtk_style_context_get_padding (stylectxt, GTK_STATE_FLAG_NORMAL, &padding);
+    gtk_style_context_get_margin (stylectxt, GTK_STATE_FLAG_NORMAL, &margin);
+    gtk_style_context_get_border (stylectxt, GTK_STATE_FLAG_NORMAL, &border);
+
+    item_edit->padding = padding;
+    item_edit->margin = margin;
+    item_edit->border = border;
 
     // Make sure the Entry can not have focus and no frame
     gtk_widget_set_can_focus (GTK_WIDGET(item_edit->editor), FALSE);
     gtk_entry_set_has_frame (GTK_ENTRY(item_edit->editor), FALSE);
 
+#if !GTK_CHECK_VERSION(3,20,0)
+#if GTK_CHECK_VERSION(3,12,0)
+    gtk_widget_set_margin_start (GTK_WIDGET(item_edit->editor),
+                                 gnc_item_edit_get_margin (item_edit, left));
+    gtk_widget_set_margin_end (GTK_WIDGET(item_edit->editor),
+                               gnc_item_edit_get_margin (item_edit, right));
+#else
+    gtk_widget_set_margin_left (GTK_WIDGET(item_edit->editor),
+                                gnc_item_edit_get_margin (item_edit, left));
+    gtk_widget_set_margin_right (GTK_WIDGET(item_edit->editor),
+                                 gnc_item_edit_get_margin (item_edit, right));
+#endif
+    gtk_widget_set_margin_top (GTK_WIDGET(item_edit->editor),
+                               gnc_item_edit_get_margin (item_edit, top));
+    gtk_widget_set_margin_bottom (GTK_WIDGET(item_edit->editor),
+                                  gnc_item_edit_get_margin (item_edit, bottom));
+#endif
+
     // Connect to the draw signal so we can draw a cursor
     g_signal_connect_after (item_edit->editor, "draw",
-                            G_CALLBACK (draw_text_cursor_cb), NULL);
+                            G_CALLBACK (draw_text_cursor_cb), item_edit);
 
     // Fill in the background so the underlying sheet cell can not be seen
     g_signal_connect (item_edit, "draw",
                             G_CALLBACK (draw_background_cb), item_edit);
-
-    /* Force padding on the entry to align with the rest of the register this
-       is done in the gnucash.css file which should be in line with sheet.h */
 
     /* Create the popup button
        It will only be displayed when the cell being edited provides
        a popup item (like a calendar or account list) */
     item_edit->popup_toggle.tbutton = gtk_toggle_button_new();
     gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (item_edit->popup_toggle.tbutton), FALSE);
-
-    /* Force padding on the button to keep it small and display as much as
-       possible of the arrow which is done in the gnucash.css file */
 
     /* Wrap the popup button in an event box to give it its own gdkwindow.
      * Without one the button would disappear behind the grid object. */
@@ -663,11 +740,13 @@ gnc_item_edit_new (GnucashSheet *sheet)
     gtk_container_add(GTK_CONTAINER(item_edit->popup_toggle.ebox),
                       item_edit->popup_toggle.tbutton);
 
-    gtk_box_pack_start (GTK_BOX(item_edit),
-                        item_edit->popup_toggle.ebox,
-                        FALSE, TRUE, 0);
-    gtk_widget_show_all(GTK_WIDGET(item_edit));
+    /* The button needs to be packed into a vertical box so that the height and position
+     * can be controlled in ealier than Gtk3.20 versions */
+    gtk_box_pack_start (GTK_BOX(vb), item_edit->popup_toggle.ebox,
+                        FALSE, FALSE, 0);
 
+    gtk_box_pack_start (GTK_BOX(item_edit), vb, FALSE, FALSE, 0);
+    gtk_widget_show_all(GTK_WIDGET(item_edit));
     return GTK_WIDGET(item_edit);
 }
 
