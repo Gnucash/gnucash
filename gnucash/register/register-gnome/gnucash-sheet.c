@@ -312,7 +312,7 @@ gnucash_sheet_get_text_cursor_position (GnucashSheet *sheet, const VirtualLocati
     PangoLayout *layout;
     PangoRectangle logical_rect;
     GdkRectangle rect;
-    gint x, y, w, h;
+    gint x, y, width, height;
     gint index, trailing;
     gboolean result;
     gint x_offset = 0;
@@ -321,7 +321,7 @@ gnucash_sheet_get_text_cursor_position (GnucashSheet *sheet, const VirtualLocati
         return 0;
 
     // Get the item_edit position
-    gnc_item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
+    gnc_item_edit_get_pixel_coords (item_edit, &x, &y, &width, &height);
 
     layout = gtk_widget_create_pango_layout (GTK_WIDGET (sheet), text);
 
@@ -330,35 +330,14 @@ gnucash_sheet_get_text_cursor_position (GnucashSheet *sheet, const VirtualLocati
 
     pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 
-    rect.x      = x + CELL_HPADDING;
-    rect.y      = y + CELL_VPADDING;
-    rect.width  = MAX (0, w - (2 * CELL_HPADDING));
-    rect.height = h - 2;
+    gnucash_sheet_set_text_bounds (sheet, &rect, x, y, width, height);
 
-    // Get the alignment of the cell
-    switch (gnc_table_get_align (table, virt_loc))
-    {
-    default:
-    case CELL_ALIGN_LEFT:
-        x_offset = 0;
-        break;
-
-    case CELL_ALIGN_RIGHT:
-        x_offset = w - 2 * CELL_HPADDING - logical_rect.width - 3;
-        break;
-
-    case CELL_ALIGN_CENTER:
-        if (logical_rect.width > w - 2 * CELL_HPADDING)
-            x_offset = 0;
-        else
-            x_offset = (w - 2 * CELL_HPADDING -
-                        logical_rect.width) / 2;
-        break;
-    }
+    x_offset = gnucash_sheet_get_text_offset (sheet, virt_loc,
+                                              rect.width, logical_rect.width);
 
     result = pango_layout_xy_to_index (layout,
                  PANGO_SCALE * (sheet->button_x - rect.x - x_offset),
-                 PANGO_SCALE * (h/2), &index, &trailing);
+                 PANGO_SCALE * (height/2), &index, &trailing);
 
     g_object_unref (layout);
 
@@ -2231,6 +2210,7 @@ gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col)
     SheetBlock *block;
     SheetBlockStyle *style;
     PangoLayout *layout = gtk_widget_create_pango_layout (GTK_WIDGET (sheet), "");
+    GncItemEdit *item_edit = GNC_ITEM_EDIT(sheet->item_editor);
 
     g_return_val_if_fail (virt_col >= 0, 0);
     g_return_val_if_fail (virt_col < sheet->num_virt_cols, 0);
