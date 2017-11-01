@@ -417,7 +417,8 @@ draw_cell (GnucashSheet *sheet,
     gtk_render_background (stylectxt, cr, x, y, width, height);
 
     gdk_rgba_parse (&color, "black");
-    gnc_style_context_get_background_color (stylectxt, GTK_STATE_FLAG_NORMAL, &color);
+    gnc_style_context_get_background_color (stylectxt, gtk_style_context_get_state (stylectxt),
+                                            &color);
     bg_color = &color;
 
     get_cell_borders (sheet, virt_loc, &borders);
