@@ -88,8 +88,8 @@ gnc_header_draw_offscreen (GncHeader *header)
 
     gtk_style_context_save (stylectxt);
 
-    // Get the background color type and apply the css class
-    color_type = gnc_table_get_bg_color (table, virt_loc, NULL);
+    // Get the color type and apply the css class
+    color_type = gnc_table_get_color (table, virt_loc, NULL);
     gnucash_get_style_classes (header->sheet, stylectxt, color_type);
 
     if (header->surface)

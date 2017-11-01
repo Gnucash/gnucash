@@ -2428,52 +2428,46 @@ gnucash_sheet_table_load (GnucashSheet *sheet, gboolean do_scroll)
 
 /*************************************************************/
 
-/** Map a cell type to a css style class. */
+/** Map a cell color type to a css style class. */
 void
 gnucash_get_style_classes (GnucashSheet *sheet, GtkStyleContext *stylectxt,
                            RegisterColor field_type)
 {
     gchar *full_class, *style_class = NULL;
 
+    if (field_type >= COLOR_NEGATIVE) // Require a Negative fg color
+    {
+        gtk_style_context_add_class (stylectxt, "negative-numbers");
+        field_type -= COLOR_NEGATIVE;
+    }
+
     switch (field_type)
     {
     default:
-    case COLOR_UNKNOWN_BG:
-    case COLOR_UNKNOWN_FG:
+    case COLOR_UNDEFINED:
         gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_BACKGROUND);
         return;
 
-    case COLOR_NEGATIVE:
-        gtk_style_context_add_class (stylectxt, "negative-numbers");
-        return;
-
-    case COLOR_HEADER_BG:
-    case COLOR_HEADER_FG:
+    case COLOR_HEADER:
         style_class = "header";
         break;
 
-    case COLOR_PRIMARY_BG:
-    case COLOR_PRIMARY_FG:
+    case COLOR_PRIMARY:
         style_class = "primary";
         break;
 
-    case COLOR_PRIMARY_BG_ACTIVE:
-    case COLOR_PRIMARY_FG_ACTIVE:
-    case COLOR_SECONDARY_BG_ACTIVE:
-    case COLOR_SECONDARY_FG_ACTIVE:
-    case COLOR_SPLIT_BG_ACTIVE:
-    case COLOR_SPLIT_FG_ACTIVE:
+    case COLOR_PRIMARY_ACTIVE:
+    case COLOR_SECONDARY_ACTIVE:
+    case COLOR_SPLIT_ACTIVE:
         gtk_style_context_set_state (stylectxt, GTK_STATE_FLAG_SELECTED);
         style_class = "cursor";
         break;
 
-    case COLOR_SECONDARY_BG:
-    case COLOR_SECONDARY_FG:
+    case COLOR_SECONDARY:
         style_class = "secondary";
         break;
 
-    case COLOR_SPLIT_BG:
-    case COLOR_SPLIT_FG:
+    case COLOR_SPLIT:
         style_class = "split";
         break;
     }
