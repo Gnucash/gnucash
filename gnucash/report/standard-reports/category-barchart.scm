@@ -302,19 +302,24 @@ developing over time"))
                (averaging-multiplier
                  (if averaging-fraction-func
                      ;; Calculate the divisor of the amounts so that an
-                     ;; average is shown
+                     ;; average is shown. Multiplier factor is a gnc-numeric
                      (let* ((start-frac-avg (averaging-fraction-func (gnc:timepair->secs from-date-tp)))
                              (end-frac-avg (averaging-fraction-func (+ 1 (gnc:timepair->secs to-date-tp))))
                              (diff-avg (- end-frac-avg start-frac-avg))
+                             (diff-avg-numeric (gnc:make-gnc-numeric
+                                                (inexact->exact (round (* diff-avg 1000000))) ; 6 decimals precision
+                                                1000000))
                              (start-frac-int (interval-fraction-func (gnc:timepair->secs from-date-tp)))
                              (end-frac-int (interval-fraction-func (+ 1 (gnc:timepair->secs to-date-tp))))
                              (diff-int (- end-frac-int start-frac-int))
+                             (diff-int-numeric (gnc:make-gnc-numeric
+                                                (inexact->exact diff-int) 1))
                             )
                      ;; Extra sanity check to ensure a number smaller than 1
                      (if (> diff-avg diff-int)
-                         (/ diff-int diff-avg)
-                         1))
-                     1))
+                         (gnc-numeric-div diff-int-numeric diff-avg-numeric GNC-DENOM-AUTO GNC-RND-ROUND)
+                         (gnc:make-gnc-numeric 1 1)))
+                     (gnc:make-gnc-numeric 1 1)))
                ;; If there is averaging, the report-title is extended
                ;; accordingly.
                (report-title
@@ -323,6 +328,7 @@ developing over time"))
                    ((WeekDelta) (string-append report-title " " (_ "Weekly Average")))
                    ((DayDelta) (string-append report-title " " (_ "Daily Average")))
                    (else report-title)))
+               (currency-frac (gnc-commodity-get-fraction report-currency))
                ;; This is the list of date intervals to calculate.
                (dates-list (if do-intervals?
                                (gnc:make-date-interval-list
@@ -349,24 +355,52 @@ developing over time"))
                               date-list-item)))
                  dates-list))
 
-          ;; Converts a commodity-collector into one single double
-          ;; number, depending on the report's currency and the
-          ;; exchange-fn calculated above. Returns a double, multiplied
-          ;; by the averaging-multiplies (smaller than one; multiplication
+          ;; Converts a commodity-collector into gnc-monetary in the report's
+          ;; currency using the exchange-fn calculated above. Returns a gnc-monetary
+          ;; multiplied by the averaging-multiplier (smaller than one; multiplication
           ;; instead of division to avoid division-by-zero issues) in case
           ;; the user wants to see the amounts averaged over some value.
-          (define (collector->double c date)
-            ;; Future improvement: Let the user choose which kind of
-            ;; currency combining she want to be done.
-	    (if (not (gnc:timepair? date))
-		(throw 'wrong))
-            (*
-              (gnc-numeric-to-double
+          (define (collector->monetary c date)
+            (if (not (gnc:timepair? date))
+                (throw 'wrong))
+            (gnc:make-gnc-monetary
+             report-currency
+             (gnc-numeric-mul
               (gnc:gnc-monetary-amount
                 (gnc:sum-collector-commodity
                 c report-currency
-                (lambda (a b) (exchange-fn a b date)))))
-             averaging-multiplier))
+                (lambda (a b) (exchange-fn a b date))))
+              averaging-multiplier currency-frac GNC-RND-ROUND)
+              ))
+
+          ;; Add two or more gnc-monetary objects
+          (define (monetary+ a . blist)
+            (if (null? blist)
+                a
+                (let ((b (apply monetary+ blist)))
+                  (if (and (gnc:gnc-monetary? a) (gnc:gnc-monetary? b))
+                      (let ((same-currency? (gnc-commodity-equal (gnc:gnc-monetary-commodity a) (gnc:gnc-monetary-commodity b)))
+                            (amount (gnc-numeric-add (gnc:gnc-monetary-amount a) (gnc:gnc-monetary-amount b) GNC-DENOM-AUTO GNC-RND-ROUND)))
+                        (if same-currency?
+                            (gnc:make-gnc-monetary (gnc:gnc-monetary-commodity a) amount)
+                            (warn "incompatible currencies in monetary+: " a b)))
+                      (warn "wrong arguments for monetary+: " a b)))
+                )
+            )
+
+          ;; Extract value of gnc-monetary and return it as double
+          (define (monetary->double monetary)
+            (gnc-numeric-to-double (gnc:gnc-monetary-amount monetary)))
+
+          ;; copy of gnc:not-all-zeros using gnc-monetary
+          (define (not-all-zeros data)
+            (define (myor list)
+              (begin
+                (if (null? list) #f
+                    (or (car list) (myor (cdr list))))))
+            (cond ((gnc:gnc-monetary? data) (not (gnc-numeric-zero-p (gnc:gnc-monetary-amount data))))
+                  ((list? data) (myor (map not-all-zeros data)))
+                  (else #f)))
 
 	  (define (count-accounts current-depth accts)
 	    (if (< current-depth tree-depth)
@@ -394,7 +428,7 @@ developing over time"))
           ;; would forget an account that is selected but not its
           ;; parent.
 	  (define (apply-sign account x)
-	    (if (reverse-balance? account) (- x) x))
+            (if (reverse-balance? account) (gnc:monetary-neg x) x))
           (define (calculate-report accounts progress-range)
 	    (let* ((the-acount-destination-alist (account-destination-alist accounts
 									    account-types
@@ -404,7 +438,7 @@ developing over time"))
 			(lambda (account result)
 			  (map (lambda (collector datepair)
 				 (let ((date (second datepair)))
-				   (apply-sign account (collector->double collector date))))
+                                   (apply-sign account (collector->monetary collector date))))
 			       result dates-list))
 			(lambda (account result)
 			  (let ((commodity-collector (gnc:make-commodity-collector)))
@@ -412,8 +446,8 @@ developing over time"))
 						   (commodity-collector 'merge next #f)
 						   (collector-add list-collector
 								  (apply-sign account
-									      (collector->double commodity-collector
-												 date))))
+                                                                              (collector->monetary commodity-collector
+                                                                                                   date))))
 						 (collector-into-list)
 						 result dates-list))))))
 
@@ -446,7 +480,8 @@ developing over time"))
           ;; Sort the account list according to the account code field.
           (set! all-data (sort
                           (filter (lambda (l)
-                                    (not (= 0.0 (apply + (cadr l)))))
+                                    (not (gnc-numeric-equal (gnc-numeric-zero)
+                                                            (gnc:gnc-monetary-amount (apply monetary+ (cadr l))))))
                                   (calculate-report accounts (cons 0 90)))
 			  (cond
 			   ((eq? sort-method 'acct-code)
@@ -463,8 +498,10 @@ developing over time"))
 					     xaccAccountGetName) (car b)))))
 			   (else
 			    (lambda (a b)
-			      (> (apply + (cadr a))
-				 (apply + (cadr b))))))))
+                              (> (gnc-numeric-compare (gnc:gnc-monetary-amount (apply monetary+ (cadr a)))
+                                                      (gnc:gnc-monetary-amount (apply monetary+ (cadr b))))
+                                 0)))
+                            )))
           ;; Or rather sort by total amount?
           ;;(< (apply + (cadr a)) 
           ;;   (apply + (cadr b))))))
@@ -478,7 +515,7 @@ developing over time"))
           ;; Proceed if the data is non-zeros
           (if 
            (and (not (null? all-data))
-                (gnc:not-all-zeros (map cadr all-data)))
+                (not-all-zeros  (map cadr all-data)))
            (begin 
              (set! date-string-list (datelist->stringlist dates-list))
              (qof-date-format-set QOF-DATE-FORMAT-ISO)
@@ -547,7 +584,7 @@ developing over time"))
                  (let* ((start (take all-data (- max-slices 1)))
                         (finish (drop all-data (- max-slices 1)))
                         (other-sum (map 
-                                    (lambda (l) (apply + l))
+                                    (lambda (l) (apply monetary+ l))
                                     (apply zip (map cadr finish)))))
                    (set! all-data
                          (append start
@@ -576,7 +613,9 @@ developing over time"))
                  (if (not (null? all-data))
                      (gnc:html-barchart-set-data!
                       chart
-                      (apply zip (map cadr all-data))))
+                      (apply zip (map (lambda (mlist)
+                                        (map monetary->double mlist))
+                                      (map cadr all-data)))))
              
                  ;; Labels and colors
 	         (gnc:report-percent-done 94)
@@ -596,7 +635,9 @@ developing over time"))
                  (if (not (null? all-data))
                      (gnc:html-linechart-set-data!
                       chart
-                      (apply zip (map cadr all-data))))
+                      (apply zip (map (lambda (mlist)
+                                        (map monetary->double mlist))
+                                      (map cadr all-data)))))
 
                  ;; Labels and colors
 	         (gnc:report-percent-done 94)
@@ -716,8 +757,8 @@ developing over time"))
                             (sumrow
                              (lambda (row)
                                (if (not (null? row))
-                                   (+ (car row) (sumrow (cdr row)))
-                                   0
+                                   (monetary+ (car row) (sumrow (cdr row)))
+                                   (gnc:make-gnc-monetary report-currency (gnc-numeric-zero))
                                    )
                                )
                              ))

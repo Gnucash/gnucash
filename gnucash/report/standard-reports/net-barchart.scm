@@ -205,26 +205,36 @@
         #f))
 
     ;; This exchanges the commodity-collector 'c' to one single
-    ;; 'report-currency' according to the exchange-fn. Returns a
-    ;; double.
-    (define (collector->double c date)
+    ;; 'report-currency' according to the exchange-fn. Returns a gnc:monetary
+    (define (collector->monetary c date)
       (if (not (gnc:timepair? date))
 	  (throw 'wrong))
-      (gnc-numeric-to-double
-       (gnc:gnc-monetary-amount
-        (gnc:sum-collector-commodity
-         c report-currency
-         (lambda (a b) (exchange-fn a b date))))))
+      (gnc:sum-collector-commodity
+       c report-currency
+       (lambda (a b) (exchange-fn a b date))))
+
+    ;; Add two gnc-monetary objects in the same currency.
+    (define (monetary+ a b)
+      (if (and (gnc:gnc-monetary? a) (gnc:gnc-monetary? b))
+	  (let ((same-currency? (gnc-commodity-equal (gnc:gnc-monetary-commodity a) (gnc:gnc-monetary-commodity b)))
+		(amount (gnc-numeric-add (gnc:gnc-monetary-amount a) (gnc:gnc-monetary-amount b) GNC-DENOM-AUTO GNC-RND-ROUND)))
+	    (if same-currency?
+		(gnc:make-gnc-monetary (gnc:gnc-monetary-commodity a) amount)
+		(warn "incompatible currencies in monetary+: " a b)))
+	  (warn "wrong arguments for monetary+: " a b)))
+
+    (define (monetary->double monetary)
+      (gnc-numeric-to-double (gnc:gnc-monetary-amount monetary)))
 
     ;; This calculates the balances for all the 'accounts' for each
     ;; element of the list 'dates'. If income?==#t, the signs get
     ;; reversed according to income-sign-reverse general option
-    ;; settings. Uses the collector->double conversion function
-    ;; above. Returns a list of doubles.
+    ;; settings. Uses the collector->monetary conversion function
+    ;; above. Returns a list of gnc-monetary.
     (define (process-datelist accounts dates income?)
       (map
        (lambda (date)
-         (collector->double
+         (collector->monetary
           ((if inc-exp?
                (if income?
                    gnc:accounts-get-comm-total-income
@@ -281,14 +291,14 @@
 	      (account-reformat (if inc-exp?
 				    (lambda (account result)
 				      (map (lambda (collector date-interval)
-					     (- (collector->double collector (second date-interval))))
+					     (gnc:monetary-neg (collector->monetary collector (second date-interval))))
 					   result dates-list))
 				    (lambda (account result)
 				      (let ((commodity-collector (gnc:make-commodity-collector)))
 					(collector-end (fold (lambda (next date list-collector)
 							       (commodity-collector 'merge next #f)
 							       (collector-add list-collector
-									      (collector->double
+									      (collector->monetary
 									       commodity-collector date)))
 							     (collector-into-list)
 							     result
@@ -303,14 +313,18 @@
 	      (assets (assoc-ref rpt 'asset))
 	      (liabilities (assoc-ref rpt 'liability)))
 	 (set! assets-list (if assets (car assets)
-			       (map (lambda (d) 0) dates-list)))
+			       (map (lambda (d)
+				      (gnc:make-gnc-monetary report-currency (gnc:make-gnc-numeric 0 1)))
+				    dates-list)))
 	 (set! liability-list (if liabilities (car liabilities)
-				  (map (lambda (d) 0) dates-list)))
+				  (map (lambda (d)
+				      (gnc:make-gnc-monetary report-currency (gnc:make-gnc-numeric 0 1)))
+				    dates-list)))
 	 )
 
        (gnc:report-percent-done 80)
        (set! net-list
-             (map + assets-list liability-list))
+             (map monetary+ assets-list liability-list))
        (gnc:report-percent-done 90)
 
        (gnc:html-barchart-set-title!
@@ -335,13 +349,13 @@
        ;; Add the data
        (if show-sep?
            (begin
-             (add-column! assets-list)
+             (add-column! (map monetary->double assets-list))
              (add-column!		      ;;(if inc-exp?
-              (map - liability-list)
+              (map - (map monetary->double liability-list))
               ;;liability-list)
               )))
        (if show-net?
-           (add-column! net-list))
+           (add-column! (map monetary->double net-list)))
 
        ;; Legend labels, colors
        (gnc:html-barchart-set-col-labels!

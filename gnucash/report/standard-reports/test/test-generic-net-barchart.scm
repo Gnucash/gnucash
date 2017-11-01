@@ -25,6 +25,7 @@
 
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/report/report-system" 0)
+(use-modules (gnucash report stylesheets))
 
 (use-modules (gnucash engine test test-extras))
 (use-modules (gnucash report report-system test test-extras))
@@ -99,11 +100,11 @@
 	  (let* ((result (gnc:html-document-render doc #f))
 		 (tbl (stream->list
 		       (pattern-streamer "<tr>"
-					 (list (list "<string> ([0-9][0-9])/([0-9][0-9])/([0-9][0-9])</td>"
+					 (list (list "<td>([0-9][0-9])/([0-9][0-9])/([0-9][0-9])</td>"
 						     1 2 3)
-					       (list "<number> ([^<]*)</td>" 1)
-					       (list "<number> ([^<]*)</td>" 1)
-					       (list "<number> ([^<]*)</td>" 1))
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1))
 					 result))))
 	    (and (= 1 (tbl-ref->number tbl 0 1))
 			 (= 0 (tbl-ref->number tbl 0 2))
@@ -153,11 +154,11 @@
 	  (let* ((result (gnc:html-document-render doc #f))
 		 (tbl (stream->list
 		       (pattern-streamer "<tr>"
-					 (list (list "<string> ([0-9][0-9])/([0-9][0-9])/([0-9][0-9])</td>"
+					 (list (list "<td>([0-9][0-9])/([0-9][0-9])/([0-9][0-9])</td>"
 						     1 2 3)
-					       (list "<number> ([^<]*)</td>" 1)
-					       (list "<number> ([^<]*)</td>" 1)
-					       (list "<number> ([^<]*)</td>" 1))
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1))
 					 result))))
 	    (and (every (lambda (row)
 				  (and (equal? (second row) (fourth row))
@@ -207,11 +208,11 @@
 	  (let* ((result (gnc:html-document-render doc #f))
 		 (tbl (stream->list
 		       (pattern-streamer "<tr>"
-					 (list (list "<string> ([0-9][0-9])/([0-9][0-9])/([0-9][0-9])</td>"
+					 (list (list "<td>([0-9][0-9])/([0-9][0-9])/([0-9][0-9])</td>"
 						     1 2 3)
-					       (list "<number> ([^<]*)</td>" 1)
-					       (list "<number> ([^<]*)</td>" 1)
-					       (list "<number> ([^<]*)</td>" 1))
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1))
 					 result))))
 	    (and (every (lambda (row)
 				  (and (= (string->number (car (fourth row)))
@@ -263,11 +264,11 @@
 	  (let* ((result (gnc:html-document-render doc #f))
 		 (tbl (stream->list
 		       (pattern-streamer "<tr>"
-					 (list (list "<string> ([0-9][0-9])/([0-9][0-9])/([0-9][0-9])</td>"
+					 (list (list "<td>([0-9][0-9])/([0-9][0-9])/([0-9][0-9])</td>"
 						     1 2 3)
-					       (list "<number> ([^<]*)</td>" 1)
-					       (list "<number> ([^<]*)</td>" 1)
-					       (list "<number> ([^<]*)</td>" 1))
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1))
 					 result))))
 	    (and (every (lambda (row)
 				  (and (= (string->number (car (fourth row)))
@@ -328,11 +329,11 @@
 	  (let* ((result (gnc:html-document-render doc #f))
 		 (tbl (stream->list
 		       (pattern-streamer "<tr>"
-					 (list (list "<string> ([0-9][0-9])/([0-9][0-9])/([0-9][0-9])</td>"
+					 (list (list "<td>([0-9][0-9])/([0-9][0-9])/([0-9][0-9])</td>"
 						     1 2 3)
-					       (list "<number> ([^<]*)</td>" 1)
-					       (list "<number> ([^<]*)</td>" 1)
-					       (list "<number> ([^<]*)</td>" 1))
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1))
 					 result))))
 	    (and (every (lambda (row)
 				  (and (= (string->number (car (fourth row)))
