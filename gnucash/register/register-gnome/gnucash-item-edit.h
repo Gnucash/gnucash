@@ -85,6 +85,7 @@ typedef struct
     PopupPostShow    popup_post_show;
     PopupGetWidth    popup_get_width;
     gpointer         popup_user_data;
+    gint             popup_returned_height;
 
     GtkBorder        padding;
     GtkBorder        margin;
