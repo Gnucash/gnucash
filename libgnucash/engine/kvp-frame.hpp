@@ -44,12 +44,8 @@
  * KVP modifications are written to the database. Two generic abstractions are
  * provided:
  *
- * * @ref qof_instance_set_kvp and @ref qof_instance_get_kvp provide single-item
-     access via GValues to support object properties.
-
  * * @ref qof_book_set_option and @ref qof_book_get_option provide similar
-     access for book options.
-
+ *   access for book options.
  *
  * @ref kvpvalues provides a catolog of KVP entries including what objects
  * they're part of and how they're used.

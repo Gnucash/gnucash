@@ -1228,10 +1228,10 @@ xaccAccountDeleteOldData (Account *account)
 {
     if (!account) return;
     xaccAccountBeginEdit (account);
-    qof_instance_set_kvp (QOF_INSTANCE (account), "old-currency", NULL);
-    qof_instance_set_kvp (QOF_INSTANCE (account), "old-security", NULL);
-    qof_instance_set_kvp (QOF_INSTANCE (account), "old-currency-scu", NULL);
-    qof_instance_set_kvp (QOF_INSTANCE (account), "old-security-scu", NULL);
+    qof_instance_set_var_kvp (QOF_INSTANCE (account), NULL, 1, "old-currency");
+    qof_instance_set_var_kvp (QOF_INSTANCE (account), NULL, 1, "old-security");
+    qof_instance_set_var_kvp (QOF_INSTANCE (account), NULL, 1, "old-currency-scu");
+    qof_instance_set_var_kvp (QOF_INSTANCE (account), NULL, 1, "old-security-scu");
     qof_instance_set_dirty (QOF_INSTANCE (account));
     xaccAccountCommitEdit (account);
 }
@@ -1337,22 +1337,22 @@ xaccAccountScrubKvp (Account *account)
 
     if (!account) return;
 
-    qof_instance_get_kvp (QOF_INSTANCE (account), "notes", &v);
+    qof_instance_get_var_kvp (QOF_INSTANCE (account), &v, 1, "notes");
     if (G_VALUE_HOLDS_STRING (&v))
     {
         str2 = g_strstrip(g_value_dup_string(&v));
         if (strlen(str2) == 0)
-            qof_instance_slot_delete (QOF_INSTANCE (account), "notes");
+            qof_instance_slot_var_delete (QOF_INSTANCE (account), 1, "notes");
         g_free(str2);
     }
 
-    qof_instance_get_kvp (QOF_INSTANCE (account), "placeholder", &v);
+    qof_instance_get_var_kvp (QOF_INSTANCE (account), &v, 1, "placeholder");
     if ((G_VALUE_HOLDS_STRING (&v) &&
         strcmp(g_value_get_string (&v), "false") == 0) ||
         (G_VALUE_HOLDS_BOOLEAN (&v) && ! g_value_get_boolean (&v)))
-        qof_instance_slot_delete (QOF_INSTANCE (account), "placeholder");
+        qof_instance_slot_var_delete (QOF_INSTANCE (account), 1, "placeholder");
 
-    qof_instance_slot_delete_if_empty (QOF_INSTANCE (account), "hbci");
+    qof_instance_slot_var_delete_if_empty (QOF_INSTANCE (account), 1, "hbci");
 }
 
 /* ================================================================ */

@@ -148,16 +148,13 @@ gnc_lot_get_property(GObject* object, guint prop_id, GValue* value, GParamSpec* 
         g_value_set_int(value, priv->marker);
         break;
     case PROP_INVOICE:
-        key = GNC_INVOICE_ID "/" GNC_INVOICE_GUID;
-        qof_instance_get_kvp (QOF_INSTANCE (lot), key, value);
+        qof_instance_get_var_kvp (QOF_INSTANCE (lot), value, 2, GNC_INVOICE_ID, GNC_INVOICE_GUID);
         break;
     case PROP_OWNER_TYPE:
-        key = GNC_OWNER_ID"/" GNC_OWNER_TYPE;
-        qof_instance_get_kvp (QOF_INSTANCE (lot), key, value);
+        qof_instance_get_var_kvp (QOF_INSTANCE (lot), value, 2, GNC_OWNER_ID, GNC_OWNER_TYPE);
         break;
     case PROP_OWNER_GUID:
-        key = GNC_OWNER_ID "/" GNC_OWNER_GUID;
-        qof_instance_get_kvp (QOF_INSTANCE (lot), key, value);
+        qof_instance_get_var_kvp (QOF_INSTANCE (lot), value, 2, GNC_OWNER_ID, GNC_OWNER_GUID);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -191,16 +188,13 @@ gnc_lot_set_property (GObject* object,
         priv->marker = g_value_get_int(value);
         break;
     case PROP_INVOICE:
-        key = GNC_INVOICE_ID"/" GNC_INVOICE_GUID;
-        qof_instance_set_kvp (QOF_INSTANCE (lot), key, value);
+        qof_instance_set_var_kvp (QOF_INSTANCE (lot), value, 2, GNC_INVOICE_ID, GNC_INVOICE_GUID);
         break;
     case PROP_OWNER_TYPE:
-        key = GNC_OWNER_ID "/" GNC_OWNER_TYPE;
-        qof_instance_set_kvp (QOF_INSTANCE (lot), key, value);
+        qof_instance_set_var_kvp (QOF_INSTANCE (lot), value, 2, GNC_OWNER_ID, GNC_OWNER_TYPE);
         break;
     case PROP_OWNER_GUID:
-        key = GNC_OWNER_ID "/" GNC_OWNER_GUID;
-        qof_instance_set_kvp (QOF_INSTANCE (lot), key, value);
+        qof_instance_set_var_kvp (QOF_INSTANCE (lot), value, 2, GNC_OWNER_ID, GNC_OWNER_GUID);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -433,7 +427,7 @@ gnc_lot_get_title (const GNCLot *lot)
 {
     GValue v = G_VALUE_INIT;
     if (!lot) return NULL;
-    qof_instance_get_kvp (QOF_INSTANCE (lot), "/title", &v);
+    qof_instance_get_var_kvp (QOF_INSTANCE (lot), &v, 1, "title");
     if (G_VALUE_HOLDS_STRING (&v))
         return g_value_get_string (&v);
     return NULL;
@@ -444,7 +438,7 @@ gnc_lot_get_notes (const GNCLot *lot)
 {
     GValue v = G_VALUE_INIT;
     if (!lot) return NULL;
-    qof_instance_get_kvp (QOF_INSTANCE (lot), "/notes", &v);
+    qof_instance_get_var_kvp (QOF_INSTANCE (lot), &v, 1, "notes");
     if (G_VALUE_HOLDS_STRING (&v))
         return g_value_get_string (&v);
     return NULL;
@@ -458,7 +452,7 @@ gnc_lot_set_title (GNCLot *lot, const char *str)
     qof_begin_edit(QOF_INSTANCE(lot));
     g_value_init (&v, G_TYPE_STRING);
     g_value_set_string (&v, str);
-    qof_instance_set_kvp (QOF_INSTANCE (lot), "/title", &v);
+    qof_instance_set_var_kvp (QOF_INSTANCE (lot), &v, 1, "title");
     qof_instance_set_dirty(QOF_INSTANCE(lot));
     gnc_lot_commit_edit(lot);
 }
@@ -471,7 +465,7 @@ gnc_lot_set_notes (GNCLot *lot, const char *str)
     qof_begin_edit(QOF_INSTANCE(lot));
     g_value_init (&v, G_TYPE_STRING);
     g_value_set_string (&v, str);
-    qof_instance_set_kvp (QOF_INSTANCE (lot), "/notes", &v);
+    qof_instance_set_var_kvp (QOF_INSTANCE (lot), &v, 1, "notes");
     qof_instance_set_dirty(QOF_INSTANCE(lot));
     gnc_lot_commit_edit(lot);
 }

@@ -84,6 +84,11 @@ make_vector(std::string key)
     return path;
 }
 
+/*
+ * If the key is delimited, calls set(path) with the parsed result
+ * otherwise, inserts the key and value locally and returns the
+ * old value if there was one.
+ */
 KvpValue*
 KvpFrameImpl::set(const char* key, KvpValue* value) noexcept
 {
@@ -123,6 +128,10 @@ walk_path_or_nullptr(const KvpFrameImpl* frame, Path& path)
     return cur_frame;
 }
 
+/*
+ * If the last path parameter has a delimiter, the path before that point is ignored,
+ * and set is called with only the last parameter with the delimiter as the key.
+ */
 KvpValue*
 KvpFrameImpl::set(Path path, KvpValue* value) noexcept
 {

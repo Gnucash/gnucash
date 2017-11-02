@@ -184,40 +184,31 @@ gnc_split_get_property(GObject         *object,
             g_value_take_object(value, split->lot);
             break;
         case PROP_SX_CREDIT_FORMULA:
-            key = GNC_SX_ID "/" GNC_SX_CREDIT_FORMULA;
-            qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
+            qof_instance_get_var_kvp (QOF_INSTANCE (split), value, 2, GNC_SX_ID, GNC_SX_CREDIT_FORMULA);
             break;
         case PROP_SX_CREDIT_NUMERIC:
-            key = GNC_SX_ID "/" GNC_SX_CREDIT_NUMERIC;
-            qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
+            qof_instance_get_var_kvp (QOF_INSTANCE (split), value, 2, GNC_SX_ID, GNC_SX_CREDIT_NUMERIC);
             break;
         case PROP_SX_DEBIT_FORMULA:
-            key = GNC_SX_ID "/" GNC_SX_DEBIT_FORMULA;
-            qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
+            qof_instance_get_var_kvp (QOF_INSTANCE (split), value, 2, GNC_SX_ID, GNC_SX_DEBIT_FORMULA);
             break;
         case PROP_SX_DEBIT_NUMERIC:
-            key = GNC_SX_ID "/" GNC_SX_DEBIT_NUMERIC;
-            qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
+            qof_instance_get_var_kvp (QOF_INSTANCE (split), value, 2, GNC_SX_ID, GNC_SX_DEBIT_NUMERIC);
             break;
         case PROP_SX_ACCOUNT:
-            key = GNC_SX_ID "/" GNC_SX_ACCOUNT;
-            qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
+            qof_instance_get_var_kvp (QOF_INSTANCE (split), value, 2, GNC_SX_ID, GNC_SX_ACCOUNT);
             break;
         case PROP_SX_SHARES:
-            key = GNC_SX_ID "/" GNC_SX_SHARES;
-            qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
+            qof_instance_get_var_kvp (QOF_INSTANCE (split), value, 2, GNC_SX_ID, GNC_SX_SHARES);
             break;
         case PROP_ONLINE_ACCOUNT:
-            key = "online_id";
-            qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
+            qof_instance_get_var_kvp (QOF_INSTANCE (split), value, 1, "online_id");
             break;
         case PROP_GAINS_SPLIT:
-            key = "gains-split";
-            qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
+            qof_instance_get_var_kvp (QOF_INSTANCE (split), value, 1, "gains-split");
             break;
         case PROP_GAINS_SOURCE:
-            key = "gains-source";
-            qof_instance_get_kvp (QOF_INSTANCE (split), key, value);
+            qof_instance_get_var_kvp (QOF_INSTANCE (split), value, 1, "gains-source");
             break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -270,40 +261,31 @@ gnc_split_set_property(GObject         *object,
             xaccSplitSetLot(split, g_value_get_object(value));
             break;
         case PROP_SX_CREDIT_FORMULA:
-            key = GNC_SX_ID "/" GNC_SX_CREDIT_FORMULA;
-            qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
+            qof_instance_set_var_kvp (QOF_INSTANCE (split), value, 2, GNC_SX_ID, GNC_SX_CREDIT_FORMULA);
             break;
         case PROP_SX_CREDIT_NUMERIC:
-            key = GNC_SX_ID "/" GNC_SX_CREDIT_NUMERIC;
-            qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
+            qof_instance_set_var_kvp (QOF_INSTANCE (split), value, 2, GNC_SX_ID, GNC_SX_CREDIT_NUMERIC);
             break;
         case PROP_SX_DEBIT_FORMULA:
-            key = GNC_SX_ID "/" GNC_SX_DEBIT_FORMULA;
-            qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
+            qof_instance_set_var_kvp (QOF_INSTANCE (split), value, 2, GNC_SX_ID, GNC_SX_DEBIT_FORMULA);
             break;
         case PROP_SX_DEBIT_NUMERIC:
-            key = GNC_SX_ID "/" GNC_SX_DEBIT_NUMERIC;
-            qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
+            qof_instance_set_var_kvp (QOF_INSTANCE (split), value, 2, GNC_SX_ID, GNC_SX_DEBIT_NUMERIC);
             break;
         case PROP_SX_ACCOUNT:
-            key = GNC_SX_ID "/" GNC_SX_ACCOUNT;
-            qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
+            qof_instance_set_var_kvp (QOF_INSTANCE (split), value, 2, GNC_SX_ID, GNC_SX_ACCOUNT);
             break;
         case PROP_SX_SHARES:
-            key = GNC_SX_ID "/" GNC_SX_SHARES;
-            qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
+            qof_instance_set_var_kvp (QOF_INSTANCE (split), value, 2, GNC_SX_ID, GNC_SX_SHARES);
             break;
         case PROP_ONLINE_ACCOUNT:
-            key = "online_id";
-            qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
+            qof_instance_set_var_kvp (QOF_INSTANCE (split), value, 1, "online_id");
             break;
         case PROP_GAINS_SPLIT:
-            key = "gains-split";
-            qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
+            qof_instance_set_var_kvp (QOF_INSTANCE (split), value, 1, "gains-split");
             break;
         case PROP_GAINS_SOURCE:
-            key = "gains-source";
-            qof_instance_set_kvp (QOF_INSTANCE (split), key, value);
+            qof_instance_set_var_kvp (QOF_INSTANCE (split), value, 1, "gains-source");
             break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -1097,7 +1079,7 @@ xaccSplitDetermineGainStatus (Split *split)
         return;
     }
 
-    qof_instance_get_kvp (QOF_INSTANCE (split), "gains-source", &v);
+    qof_instance_get_var_kvp (QOF_INSTANCE (split), &v, 1, "gains-source");
     if (G_VALUE_HOLDS_BOXED (&v))
         guid = (GncGUID*)g_value_get_boxed (&v);
     if (!guid)
@@ -1990,7 +1972,7 @@ xaccSplitGetType(const Split *s)
     const char *split_type = NULL;
 
     if (!s) return NULL;
-    qof_instance_get_kvp (QOF_INSTANCE (s), "split-type", &v);
+    qof_instance_get_var_kvp (QOF_INSTANCE (s), &v, 1, "split-type");
     if (G_VALUE_HOLDS_STRING (&v))
         split_type = g_value_get_string (&v);
     return split_type ? split_type : "normal";
@@ -2007,7 +1989,7 @@ xaccSplitMakeStockSplit(Split *s)
     s->value = gnc_numeric_zero();
     g_value_init (&v, G_TYPE_STRING);
     g_value_set_string (&v, "stock-split");
-    qof_instance_set_kvp (QOF_INSTANCE (s), "split-type", &v);
+    qof_instance_set_var_kvp (QOF_INSTANCE (s), &v, 1, "split-type");
     SET_GAINS_VDIRTY(s);
     mark_split(s);
     qof_instance_set_dirty(QOF_INSTANCE(s));
@@ -2144,7 +2126,7 @@ xaccSplitVoidFormerAmount(const Split *split)
     GValue v = G_VALUE_INIT;
     gnc_numeric *num = NULL;
     g_return_val_if_fail(split, gnc_numeric_zero());
-    qof_instance_get_kvp (QOF_INSTANCE (split), void_former_amt_str, &v);
+    qof_instance_get_var_kvp (QOF_INSTANCE (split), &v, 1, void_former_amt_str);
     if (G_VALUE_HOLDS_BOXED (&v))
         num = (gnc_numeric*)g_value_get_boxed (&v);
     return num ? *num : gnc_numeric_zero();
@@ -2156,7 +2138,7 @@ xaccSplitVoidFormerValue(const Split *split)
     GValue v = G_VALUE_INIT;
     gnc_numeric *num = NULL;
     g_return_val_if_fail(split, gnc_numeric_zero());
-    qof_instance_get_kvp (QOF_INSTANCE (split), void_former_val_str, &v);
+    qof_instance_get_var_kvp (QOF_INSTANCE (split), &v, 1, void_former_val_str);
     if (G_VALUE_HOLDS_BOXED (&v))
         num = (gnc_numeric*)g_value_get_boxed (&v);
     return num ? *num : gnc_numeric_zero();
@@ -2171,10 +2153,10 @@ xaccSplitVoid(Split *split)
     g_value_init (&v, GNC_TYPE_NUMERIC);
     num =  xaccSplitGetAmount(split);
     g_value_set_boxed (&v, &num);
-    qof_instance_set_kvp (QOF_INSTANCE (split), void_former_amt_str, &v);
+    qof_instance_set_var_kvp (QOF_INSTANCE (split), &v, 1, void_former_amt_str);
     num =  xaccSplitGetValue(split);
     g_value_set_boxed (&v, &num);
-    qof_instance_set_kvp (QOF_INSTANCE (split), void_former_val_str, &v);
+    qof_instance_set_var_kvp (QOF_INSTANCE (split), &v, 1, void_former_val_str);
 
     /* Marking dirty handled by SetAmount etc. */
     xaccSplitSetAmount (split, zero);
@@ -2188,8 +2170,8 @@ xaccSplitUnvoid(Split *split)
     xaccSplitSetAmount (split, xaccSplitVoidFormerAmount(split));
     xaccSplitSetValue (split, xaccSplitVoidFormerValue(split));
     xaccSplitSetReconcile(split, NREC);
-    qof_instance_set_kvp (QOF_INSTANCE (split), void_former_amt_str, NULL);
-    qof_instance_set_kvp (QOF_INSTANCE (split), void_former_val_str, NULL);
+    qof_instance_set_var_kvp (QOF_INSTANCE (split), NULL, 1, void_former_amt_str);
+    qof_instance_set_var_kvp (QOF_INSTANCE (split), NULL, 1, void_former_val_str);
     qof_instance_set_dirty (QOF_INSTANCE (split));
 }
 
