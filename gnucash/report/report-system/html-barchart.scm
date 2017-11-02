@@ -514,6 +514,9 @@
                   (push "options.seriesColors = [")
                   (push colors-str)
                   (push "];\n")
+                  (push "options.negativeSeriesColors = [")
+                  (push colors-str)
+                  (push "];\n")
                   )
                 )
 
