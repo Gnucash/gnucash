@@ -35,6 +35,7 @@
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-13))
+(use-modules (ice-9 hash-table))
 (use-modules (ice-9 regex))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
@@ -100,51 +101,14 @@ in the Options panel."))
 (define NO-MATCHING-ACCT-TEXT (N_ "No account were found that match the \
 options specified in the Options panels."))
 
+
+(define date-sorting-types (list 'date 'reconciled-date))
+
 ;; The option-values of the sorting key multichoice option, for
 ;; which a subtotal should be enabled.
-(define subtotal-enabled '(account-name
-                           account-code 
-                           corresponding-acc-name
-                           corresponding-acc-code))
+(define subtotal-enabled '(account-name corresponding-acc-name
+                           account-code corresponding-acc-code))
 
-(define (timepair-same-year tp-a tp-b)
-  (= (gnc:timepair-get-year tp-a)
-     (gnc:timepair-get-year tp-b)))
-
-(define (timepair-same-quarter tp-a tp-b)
-  (and (timepair-same-year tp-a tp-b) 
-       (= (gnc:timepair-get-quarter tp-a)
-          (gnc:timepair-get-quarter tp-b))))
-
-(define (timepair-same-month tp-a tp-b)
-  (and (timepair-same-year tp-a tp-b) 
-       (= (gnc:timepair-get-month tp-a)
-          (gnc:timepair-get-month tp-b))))
-
-(define (timepair-same-week tp-a tp-b)
-  (and (timepair-same-year tp-a tp-b)
-       (= (gnc:timepair-get-week tp-a)
-          (gnc:timepair-get-week tp-b))))
-
-(define (split-same-week? a b)
-  (let ((tp-a (gnc-transaction-get-date-posted (xaccSplitGetParent a)))
-        (tp-b (gnc-transaction-get-date-posted (xaccSplitGetParent b))))
-    (timepair-same-week tp-a tp-b)))
-
-(define (split-same-month? a b)
-  (let ((tp-a (gnc-transaction-get-date-posted (xaccSplitGetParent a)))
-        (tp-b (gnc-transaction-get-date-posted (xaccSplitGetParent b))))
-    (timepair-same-month tp-a tp-b)))
-
-(define (split-same-quarter? a b)
-  (let ((tp-a (gnc-transaction-get-date-posted (xaccSplitGetParent a)))
-        (tp-b (gnc-transaction-get-date-posted (xaccSplitGetParent b))))
-    (timepair-same-quarter tp-a tp-b)))
-
-(define (split-same-year? a b)
-  (let ((tp-a (gnc-transaction-get-date-posted (xaccSplitGetParent a)))
-        (tp-b (gnc-transaction-get-date-posted (xaccSplitGetParent b))))
-    (timepair-same-year tp-a tp-b)))
 
 (define (add-subheading-row data table width subheading-style)
   (let ((heading-cell (gnc:make-html-table-cell data)))
@@ -153,6 +117,25 @@ options specified in the Options panels."))
      table subheading-style
      (list heading-cell))))
 
+(define (column-uses? param columns-used) (hash-ref columns-used param))
+
+;             
+;                                                                          
+;                               ;;                                         
+;                               ;;                                         
+;                               ;;                                         
+;   ;; ;;;   ;;;;   ; ;;;    ;;;;;   ;;;;   ;; ;;;   ;;;;   ;; ;;;   ;;;;  
+;    ;;  ;  ;;  ;   ;;  ;   ;;  ;;  ;;  ;    ;;  ;  ;;  ;    ;;  ;  ;;  ;  
+;    ;;     ;    ;  ;   ;;  ;   ;;  ;    ;   ;;     ;    ;   ;;     ;;     
+;    ;;     ;;;;;;  ;   ;;  ;   ;;  ;;;;;;   ;;     ;;;;;;   ;;       ;;;  
+;    ;;     ;       ;   ;;  ;   ;;  ;        ;;     ;        ;;         ;  
+;    ;;     ;;      ;   ;;  ;;  ;;  ;;       ;;     ;;       ;;     ;   ;; 
+;   ;;;;     ;;;;;  ;   ;;   ;;;;;   ;;;;;  ;;;;     ;;;;;  ;;;;     ;;;;  
+;                                                                          
+;                                                                          
+;                                                                          
+;                                                                          
+            
 ;; display an account name depending on the options the user has set
 (define (account-namestring account show-account-code? show-account-name? show-account-full-name?)
   ;;# on multi-line splits we can get an empty ('()) account
@@ -171,6 +154,8 @@ options specified in the Options panels."))
                (xaccAccountGetName account))
            ""))))
 
+                                                   
+
 ;; render an account subheading - column-vector determines what is displayed
 (define (render-account-subheading
          split table width subheading-style column-vector)
@@ -179,9 +164,9 @@ options specified in the Options panels."))
                          (gnc:html-markup-anchor
                           (gnc:account-anchor-text account)
                           (account-namestring account
-                                              (used-sort-account-code      column-vector)
+                                              (column-uses? 'sort-account-code      column-vector)
                                               #t
-                                              (used-sort-account-full-name column-vector))))
+                                              (column-uses? 'sort-account-full-name column-vector))))
                         table width subheading-style)))
 
 (define (render-corresponding-account-subheading 
@@ -193,9 +178,9 @@ options specified in the Options panels."))
                               ""
                               (gnc:account-anchor-text account))
                           (account-namestring account
-                                              (used-sort-account-code      column-vector)
+                                              (column-uses? 'sort-account-code      column-vector)
                                               #t
-                                              (used-sort-account-full-name column-vector))))
+                                              (column-uses? 'sort-account-full-name column-vector))))
                         table width subheading-style)))
 
 (define (render-week-subheading split table width subheading-style column-vector)
@@ -261,9 +246,9 @@ options specified in the Options panels."))
          table width split total-collector subtotal-style column-vector export?)
   (add-subtotal-row table width 
                     (total-string (account-namestring (xaccSplitGetAccount split)
-                                                      (used-sort-account-code      column-vector)
+                                                      (column-uses? 'sort-account-code      column-vector)
                                                       #t
-                                                      (used-sort-account-full-name column-vector)))
+                                                      (column-uses? 'sort-account-full-name column-vector)))
                     total-collector subtotal-style export?))
 
 (define (render-corresponding-account-subtotal
@@ -271,9 +256,9 @@ options specified in the Options panels."))
   (add-subtotal-row table width
                     (total-string (account-namestring (xaccSplitGetAccount
                                                        (xaccSplitGetOtherSplit split))
-                                                      (used-sort-account-code      column-vector)
+                                                      (column-uses? 'sort-account-code      column-vector)
                                                       #t
-                                                      (used-sort-account-full-name column-vector)))
+                                                      (column-uses? 'sort-account-full-name column-vector)))
                     total-collector subtotal-style export?))
 
 (define (render-week-subtotal
@@ -314,7 +299,6 @@ options specified in the Options panels."))
   (add-subtotal-row table width
                     (_ "Grand Total")
                     total-collector def:grand-total-style export?))
-
 
 
 
@@ -368,95 +352,99 @@ options specified in the Options panels."))
                        ;; likely match a price on the previous day
                        (timespecCanonicalDayTime trans-date))))
     
-    (if (used-date column-vector)
+    (if (column-uses? 'date column-vector)
         (addto! row-contents
                 (if transaction-row?
-                    (gnc:make-html-table-cell/markup "date-cell"
-                                                     (gnc-print-date (gnc-transaction-get-date-posted parent)))
-                    " ")))
+                    (gnc:make-html-table-cell/markup
+                     "date-cell"
+                     (gnc-print-date trans-date))
+                    "")))
     
-    (if (used-reconciled-date column-vector)
+    (if (column-uses? 'reconciled-date column-vector)
         (addto! row-contents
-                (gnc:make-html-table-cell/markup "date-cell"
-                                                 (let ((date (gnc-split-get-date-reconciled split)))
-                                                   (if (equal? date (cons 0 0))
-                                                       " "
-                                                       (gnc-print-date date))))))
-    (if (used-num column-vector)
+                (gnc:make-html-table-cell/markup
+                 "date-cell"
+                 (let ((date (gnc-split-get-date-reconciled split)))
+                   (if (equal? date (cons 0 0))
+                       ""
+                       (gnc-print-date date))))))
+
+    (if (column-uses? 'num column-vector)
         (addto! row-contents
                 (if transaction-row?
-                    (if (qof-book-use-split-action-for-num-field
-                         (gnc-get-current-book))
+                    (if (qof-book-use-split-action-for-num-field (gnc-get-current-book))
                         (let* ((num (gnc-get-num-action parent split))
                                (t-num (if (if (gnc:lookup-option options gnc:pagename-display
                                                                  (N_ "Trans Number"))
                                               (opt-val gnc:pagename-display (N_ "Trans Number"))
-                                              #f)
+                                              "")
                                           (gnc-get-num-action parent #f)
                                           ""))
                                (num-string (if (string-null? t-num)
                                                num
                                                (string-append num "/" t-num))))
-                          (gnc:make-html-table-cell/markup "text-cell"
-                                                           num-string))
+                          (gnc:make-html-table-cell/markup "text-cell" num-string))
                         (gnc:make-html-table-cell/markup "text-cell"
                                                          (gnc-get-num-action parent split)))
-                    " ")))
+                    "")))
 
-    (if (used-description column-vector)
+    (if (column-uses? 'description column-vector)
         (addto! row-contents
                 (if transaction-row?
-                    (gnc:make-html-table-cell/markup "text-cell"
-                                                     (xaccTransGetDescription parent))
-                    " ")))
+                    (gnc:make-html-table-cell/markup
+                     "text-cell"
+                     (xaccTransGetDescription parent))
+                    "")))
     
-    (if (used-memo column-vector)
+    (if (column-uses? 'memo column-vector)
         (let ((memo (xaccSplitGetMemo split)))
-          (if (and (equal? memo "") (used-notes column-vector))
+          (if (and (string-null? memo) (column-uses? 'notes column-vector))
               (addto! row-contents (xaccTransGetNotes parent))
               (addto! row-contents memo))))
     
-    (if (or (used-account-name column-vector) (used-account-code column-vector))
+    (if (or (column-uses? 'account-name column-vector) (column-uses? 'account-code column-vector))
         (addto! row-contents (account-namestring account
-                                                 (used-account-code      column-vector)
-                                                 (used-account-name      column-vector)
-                                                 (used-account-full-name column-vector))))
+                                                 (column-uses? 'account-code      column-vector)
+                                                 (column-uses? 'account-name      column-vector)
+                                                 (column-uses? 'account-full-name column-vector))))
     
-    (if (or (used-other-account-name column-vector) (used-other-account-code column-vector))
-        (addto! row-contents (account-namestring (xaccSplitGetAccount
-                                                  (xaccSplitGetOtherSplit split))
-                                                 (used-other-account-code      column-vector)
-                                                 (used-other-account-name      column-vector)
-                                                 (used-other-account-full-name column-vector))))
+    (if (or (column-uses? 'other-account-name column-vector) (column-uses? 'other-account-code column-vector))
+        (addto! row-contents (account-namestring (xaccSplitGetAccount (xaccSplitGetOtherSplit split))
+                                                 (column-uses? 'other-account-code      column-vector)
+                                                 (column-uses? 'other-account-name      column-vector)
+                                                 (column-uses? 'other-account-full-name column-vector))))
     
-    (if (used-shares column-vector)
+    (if (column-uses? 'shares column-vector)
         (addto! row-contents (xaccSplitGetAmount split)))
     
-    (if (used-price column-vector)
-        (addto! row-contents 
-                (gnc:make-gnc-monetary (xaccTransGetCurrency parent)
-                                (xaccSplitGetSharePrice split))))
+    (if (column-uses? 'price column-vector)
+        (addto! row-contents  (gnc:make-gnc-monetary (xaccTransGetCurrency parent)
+                                                     (xaccSplitGetSharePrice split))))
     
-    (if (used-amount-single column-vector)
+    (if (column-uses? 'amount-single column-vector)
         (addto! row-contents
-                (gnc:make-html-table-cell/markup "number-cell"
-                                                 (gnc:html-transaction-anchor parent split-value))))
+                (gnc:make-html-table-cell/markup
+                 "number-cell" (gnc:html-transaction-anchor parent split-value))))
     
-    (if (used-amount-double-positive column-vector)
+    (if (column-uses? 'amount-double column-vector)        
+
         (if (gnc-numeric-positive-p (gnc:gnc-monetary-amount split-value))
-            (addto! row-contents
-                    (gnc:make-html-table-cell/markup "number-cell"
-                                                     (gnc:html-transaction-anchor parent split-value)))
-            (addto! row-contents " ")))
+
+            (begin
+              (addto! row-contents
+                      (gnc:make-html-table-cell/markup
+                       "number-cell" (gnc:html-transaction-anchor
+                                      parent split-value)))
+              (addto! row-contents ""))
+        
+            (begin
+              (addto! row-contents "")
+              (addto! row-contents
+                      (gnc:make-html-table-cell/markup
+                       "number-cell" (gnc:html-transaction-anchor
+                                      parent (gnc:monetary-neg split-value)))))))
     
-    (if (used-amount-double-negative column-vector)
-        (if (gnc-numeric-negative-p (gnc:gnc-monetary-amount split-value))
-            (addto! row-contents
-                    (gnc:make-html-table-cell/markup
-                     "number-cell" (gnc:html-transaction-anchor parent (gnc:monetary-neg split-value))))
-            (addto! row-contents " ")))
-    
-    (if (used-running-balance column-vector)
+    (if (column-uses? 'running-balance column-vector)
         (begin
           ;(gnc:debug "split is " split)
           ;(gnc:debug "split get balance:" (xaccSplitGetBalance split))
@@ -471,7 +459,6 @@ options specified in the Options panels."))
     split-value))
 
 
-(define date-sorting-types (list 'date 'reconciled-date))
 
 
 ;                                                                                                  
@@ -501,23 +488,23 @@ options specified in the Options panels."))
   
   ;; General options
   
-;                                                          
-;                                                          
-;                                                          
-;                                                   ;;;    
-;                                                     ;    
-;        ;                                            ;    
-;    ;;;;;   ;;;;   ; ;;;    ;;;;   ;; ;;;  ;;;;      ;    
-;   ;   ;   ;;  ;   ;;  ;   ;;  ;    ;;  ;      ;     ;    
-;   ;   ;   ;    ;  ;   ;;  ;    ;   ;;         ;     ;    
-;   ;   ;   ;;;;;;  ;   ;;  ;;;;;;   ;;      ;;;;     ;    
-;    ;;;    ;       ;   ;;  ;        ;;     ;   ;     ;    
-;   ;       ;;      ;   ;;  ;;       ;;     ;   ;     ;    
-;    ;;;;    ;;;;;  ;   ;;   ;;;;;  ;;;;     ;;;;;    ;;;; 
-;        ;                                                 
-;   ;    ;                                                 
-;    ;;;;                                                  
-;                                                          
+  ;                                                          
+  ;                                                          
+  ;                                                          
+  ;                                                   ;;;    
+  ;                                                     ;    
+  ;        ;                                            ;    
+  ;    ;;;;;   ;;;;   ; ;;;    ;;;;   ;; ;;;  ;;;;      ;    
+  ;   ;   ;   ;;  ;   ;;  ;   ;;  ;    ;;  ;      ;     ;    
+  ;   ;   ;   ;    ;  ;   ;;  ;    ;   ;;         ;     ;    
+  ;   ;   ;   ;;;;;;  ;   ;;  ;;;;;;   ;;      ;;;;     ;    
+  ;    ;;;    ;       ;   ;;  ;        ;;     ;   ;     ;    
+  ;   ;       ;;      ;   ;;  ;;       ;;     ;   ;     ;    
+  ;    ;;;;    ;;;;;  ;   ;;   ;;;;;  ;;;;     ;;;;;    ;;;; 
+  ;        ;                                                 
+  ;   ;    ;                                                 
+  ;    ;;;;                                                  
+  ;                                                          
 
   (gnc:options-add-date-interval!
    options gnc:pagename-general optname-startdate optname-enddate "a")
@@ -541,23 +528,23 @@ options specified in the Options panels."))
 
   ;; Filtering Options
   
-;                                                                          
-;                                                                          
-;                                                                          
-;      ;;;    ;;    ;;;                               ;;                   
-;     ;       ;;      ;       ;                       ;;                   
-;     ;               ;       ;                                          ; 
-;     ;      ;;;      ;     ;;;;;    ;;;;   ;; ;;;   ;;;    ; ;;;    ;;;;; 
-;   ;;;;;      ;      ;       ;     ;;  ;    ;;  ;     ;    ;;  ;   ;   ;  
-;     ;        ;      ;       ;     ;    ;   ;;        ;    ;   ;;  ;   ;  
-;     ;        ;      ;       ;     ;;;;;;   ;;        ;    ;   ;;  ;   ;  
-;     ;        ;      ;       ;     ;        ;;        ;    ;   ;;   ;;;   
-;     ;        ;      ;       ;     ;;       ;;        ;    ;   ;;  ;      
-;     ;      ;;;;;    ;;;;    ;;;;   ;;;;;  ;;;;     ;;;;;  ;   ;;   ;;;;  
-;                                                                        ; 
-;                                                                   ;    ; 
-;                                                                    ;;;;  
-;                                                                          
+  ;                                                                          
+  ;                                                                          
+  ;                                                                          
+  ;      ;;;    ;;    ;;;                               ;;                   
+  ;     ;       ;;      ;       ;                       ;;                   
+  ;     ;               ;       ;                                          ; 
+  ;     ;      ;;;      ;     ;;;;;    ;;;;   ;; ;;;   ;;;    ; ;;;    ;;;;; 
+  ;   ;;;;;      ;      ;       ;     ;;  ;    ;;  ;     ;    ;;  ;   ;   ;  
+  ;     ;        ;      ;       ;     ;    ;   ;;        ;    ;   ;;  ;   ;  
+  ;     ;        ;      ;       ;     ;;;;;;   ;;        ;    ;   ;;  ;   ;  
+  ;     ;        ;      ;       ;     ;        ;;        ;    ;   ;;   ;;;   
+  ;     ;        ;      ;       ;     ;;       ;;        ;    ;   ;;  ;      
+  ;     ;      ;;;;;    ;;;;    ;;;;   ;;;;;  ;;;;     ;;;;;  ;   ;;   ;;;;  
+  ;                                                                        ; 
+  ;                                                                   ;    ; 
+  ;                                                                    ;;;;  
+  ;                                                                          
 
   (gnc:register-trep-option
    (gnc:make-string-option
@@ -606,23 +593,23 @@ tags within description, notes or memo. ")
 
   ;; Accounts options
   
-;                                                                  
-;                                                                  
-;                                                                  
-;                                                                  
-;                                                     ;            
-;                                                     ;            
-;   ;;;;      ;;;     ;;;    ;;;;   ;   ;;  ; ;;;   ;;;;;    ;;;;  
-;       ;    ;   ;   ;   ;  ;;  ;   ;   ;;  ;;  ;     ;     ;;  ;  
-;       ;   ;       ;       ;    ;  ;   ;;  ;   ;;    ;     ;;     
-;    ;;;;   ;       ;       ;    ;  ;   ;;  ;   ;;    ;       ;;;  
-;   ;   ;   ;       ;       ;    ;  ;   ;;  ;   ;;    ;         ;  
-;   ;   ;    ;       ;      ;;  ;   ;   ;;  ;   ;;    ;     ;   ;; 
-;    ;;;;;    ;;;;    ;;;;   ;;;;    ;;; ;  ;   ;;    ;;;;   ;;;;  
-;                                                                  
-;                                                                  
-;                                                                  
-;                                                                  
+  ;                                                                  
+  ;                                                                  
+  ;                                                                  
+  ;                                                                  
+  ;                                                     ;            
+  ;                                                     ;            
+  ;   ;;;;      ;;;     ;;;    ;;;;   ;   ;;  ; ;;;   ;;;;;    ;;;;  
+  ;       ;    ;   ;   ;   ;  ;;  ;   ;   ;;  ;;  ;     ;     ;;  ;  
+  ;       ;   ;       ;       ;    ;  ;   ;;  ;   ;;    ;     ;;     
+  ;    ;;;;   ;       ;       ;    ;  ;   ;;  ;   ;;    ;       ;;;  
+  ;   ;   ;   ;       ;       ;    ;  ;   ;;  ;   ;;    ;         ;  
+  ;   ;   ;    ;       ;      ;;  ;   ;   ;;  ;   ;;    ;     ;   ;; 
+  ;    ;;;;;    ;;;;    ;;;;   ;;;;    ;;; ;  ;   ;;    ;;;;   ;;;;  
+  ;                                                                  
+  ;                                                                  
+  ;                                                                  
+  ;                                                                  
 
   ;; account to do report on
   (gnc:register-trep-option
@@ -681,23 +668,23 @@ tags within description, notes or memo. ")
 
   ;; Sorting options
   
-;                                                          
-;                                                          
-;                                                          
-;                                     ;;                   
-;                             ;       ;;                   
-;                             ;                          ; 
-;    ;;;;    ;;;;   ;; ;;;  ;;;;;    ;;;    ; ;;;    ;;;;; 
-;   ;;  ;   ;;  ;    ;;  ;    ;        ;    ;;  ;   ;   ;  
-;   ;;      ;    ;   ;;       ;        ;    ;   ;;  ;   ;  
-;     ;;;   ;    ;   ;;       ;        ;    ;   ;;  ;   ;  
-;       ;   ;    ;   ;;       ;        ;    ;   ;;   ;;;   
-;   ;   ;;  ;;  ;    ;;       ;        ;    ;   ;;  ;      
-;    ;;;;    ;;;;   ;;;;      ;;;;   ;;;;;  ;   ;;   ;;;;  
-;                                                        ; 
-;                                                   ;    ; 
-;                                                    ;;;;  
-;                                                          
+  ;                                                          
+  ;                                                          
+  ;                                                          
+  ;                                     ;;                   
+  ;                             ;       ;;                   
+  ;                             ;                          ; 
+  ;    ;;;;    ;;;;   ;; ;;;  ;;;;;    ;;;    ; ;;;    ;;;;; 
+  ;   ;;  ;   ;;  ;    ;;  ;    ;        ;    ;;  ;   ;   ;  
+  ;   ;;      ;    ;   ;;       ;        ;    ;   ;;  ;   ;  
+  ;     ;;;   ;    ;   ;;       ;        ;    ;   ;;  ;   ;  
+  ;       ;   ;    ;   ;;       ;        ;    ;   ;;   ;;;   
+  ;   ;   ;;  ;;  ;    ;;       ;        ;    ;   ;;  ;      
+  ;    ;;;;    ;;;;   ;;;;      ;;;;   ;;;;;  ;   ;;   ;;;;  
+  ;                                                        ; 
+  ;                                                   ;    ; 
+  ;                                                    ;;;;  
+  ;                                                          
 
   (let ((key-choice-list 
          (append
@@ -906,23 +893,23 @@ tags within description, notes or memo. ")
   
   ;; Display options
   
-;                                                          
-;                                                          
-;                                                          
-;       ;;    ;;                    ;;;                    
-;       ;;    ;;                      ;                    
-;       ;;                            ;                    
-;    ;;;;;   ;;;     ;;;;   ; ;;;     ;     ;;;;    ;    ; 
-;   ;;  ;;     ;    ;;  ;   ;;  ;;    ;         ;   ;   ;  
-;   ;   ;;     ;    ;;      ;    ;    ;         ;    ;  ;  
-;   ;   ;;     ;      ;;;   ;    ;    ;      ;;;;    ;  ;  
-;   ;   ;;     ;        ;   ;    ;    ;     ;   ;    ; ;   
-;   ;;  ;;     ;    ;   ;;  ;;  ;     ;     ;   ;     ;;   
-;    ;;;;;   ;;;;;   ;;;;   ; ;;;     ;;;;   ;;;;;    ;;   
-;                           ;                         ;    
-;                           ;                         ;    
-;                           ;                       ;;     
-;                                                          
+  ;                                                          
+  ;                                                          
+  ;                                                          
+  ;       ;;    ;;                    ;;;                    
+  ;       ;;    ;;                      ;                    
+  ;       ;;                            ;                    
+  ;    ;;;;;   ;;;     ;;;;   ; ;;;     ;     ;;;;    ;    ; 
+  ;   ;;  ;;     ;    ;;  ;   ;;  ;;    ;         ;   ;   ;  
+  ;   ;   ;;     ;    ;;      ;    ;    ;         ;    ;  ;  
+  ;   ;   ;;     ;      ;;;   ;    ;    ;      ;;;;    ;  ;  
+  ;   ;   ;;     ;        ;   ;    ;    ;     ;   ;    ; ;   
+  ;   ;;  ;;     ;    ;   ;;  ;;  ;     ;     ;   ;     ;;   
+  ;    ;;;;;   ;;;;;   ;;;;   ; ;;;     ;;;;   ;;;;;    ;;   
+  ;                           ;                         ;    
+  ;                           ;                         ;    
+  ;                           ;                       ;;     
+  ;                                                          
 
   (let ((disp-memo? #t)
         (disp-accname? #t)
@@ -1089,92 +1076,92 @@ Credit Card, and Income accounts."))))))
 
   (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
 
-  (define (used-date columns-used) (vector-ref columns-used 0))
-  (define (used-reconciled-date columns-used) (vector-ref columns-used 1))
-  (define (used-num columns-used) (vector-ref columns-used 2))
-  (define (used-description columns-used) (vector-ref columns-used 3))
-  (define (used-account-name columns-used) (vector-ref columns-used 4))
-  (define (used-other-account-name columns-used) (vector-ref columns-used 5))	
-  (define (used-shares columns-used) (vector-ref columns-used 6))	
-  (define (used-price columns-used) (vector-ref columns-used 7))	
-  (define (used-amount-single columns-used) (vector-ref columns-used 8))	
-  (define (used-amount-double-positive columns-used) (vector-ref columns-used 9))	
-  (define (used-amount-double-negative columns-used) (vector-ref columns-used 10))	
-  (define (used-running-balance columns-used) (vector-ref columns-used 11))
-  (define (used-account-full-name columns-used) (vector-ref columns-used 12))
-  (define (used-memo columns-used) (vector-ref columns-used 13))
-  (define (used-account-code columns-used) (vector-ref columns-used 14))
-  (define (used-other-account-code columns-used) (vector-ref columns-used 15))
-  (define (used-other-account-full-name columns-used) (vector-ref columns-used 16))
-  (define (used-sort-account-code columns-used) (vector-ref columns-used 17))
-  (define (used-sort-account-full-name columns-used) (vector-ref columns-used 18))
-  (define (used-notes columns-used) (vector-ref columns-used 19))
+;                                                                                  
+;                                                                                  
+;                                                                                  
+;   ;                 ;;    ;;;         ;;                          ;;;            
+;   ;                 ;;      ;         ;;                            ;            
+;   ;                         ;         ;;                            ;            
+;   ; ;;;   ;   ;;   ;;;      ;      ;;;;;            ;;;    ;;;;     ;      ;;;;  
+;   ;;  ;;  ;   ;;     ;      ;     ;;  ;;           ;   ;  ;;  ;     ;     ;;  ;  
+;   ;    ;  ;   ;;     ;      ;     ;   ;;  ;;;;;;  ;       ;    ;    ;     ;;     
+;   ;    ;  ;   ;;     ;      ;     ;   ;;          ;       ;    ;    ;       ;;;  
+;   ;    ;  ;   ;;     ;      ;     ;   ;;          ;       ;    ;    ;         ;  
+;   ;;  ;;  ;   ;;     ;      ;     ;;  ;;           ;      ;;  ;     ;     ;   ;; 
+;   ; ;;;    ;;; ;   ;;;;;    ;;;;   ;;;;;            ;;;;   ;;;;     ;;;;   ;;;;  
+;                                                                                  
+;                                                                                  
+;                                                                                  
+;                                                                                  
 
   (define (build-columns-used)
     (define is-single? (eq? (opt-val gnc:pagename-display optname-detail-level) 'single))
     (define amount-setting (opt-val gnc:pagename-display (N_ "Amount")))
-    (vector
-     (opt-val gnc:pagename-display (N_ "Date"))
-     (opt-val gnc:pagename-display (N_ "Reconciled Date"))
-     (if (gnc:lookup-option options gnc:pagename-display (N_ "Num"))
-         (opt-val gnc:pagename-display (N_ "Num"))
-         (opt-val gnc:pagename-display (N_ "Num/Action")))
-     (opt-val gnc:pagename-display (N_ "Description"))
-     (opt-val gnc:pagename-display (N_ "Account Name"))
-     (and is-single? (opt-val gnc:pagename-display (N_ "Other Account Name")))
-     (opt-val gnc:pagename-display (N_ "Shares"))
-     (opt-val gnc:pagename-display (N_ "Price"))
-     (eq? amount-setting 'single)
-     (eq? amount-setting 'double)
-     (eq? amount-setting 'double)
-     (opt-val gnc:pagename-display (N_ "Running Balance"))
-     (opt-val gnc:pagename-display (N_ "Use Full Account Name"))
-     (opt-val gnc:pagename-display (N_ "Memo"))
-     (opt-val gnc:pagename-display (N_ "Account Code"))
-     (and is-single? (opt-val gnc:pagename-display (N_ "Other Account Code")))
-     (and is-single? (opt-val gnc:pagename-display (N_ "Use Full Other Account Name")))
-     (opt-val pagename-sorting (N_ "Show Account Code"))
-     (opt-val pagename-sorting (N_ "Show Full Account Name"))
-     (opt-val gnc:pagename-display (N_ "Notes"))))
+    (alist->hash-table
+     (list (cons 'date (opt-val gnc:pagename-display (N_ "Date")))
+           (cons 'reconciled-date (opt-val gnc:pagename-display (N_ "Reconciled Date")))
+           (cons 'num (if (gnc:lookup-option options gnc:pagename-display (N_ "Num"))
+                          (opt-val gnc:pagename-display (N_ "Num"))
+                          (opt-val gnc:pagename-display (N_ "Num/Action"))))
+           (cons 'description (opt-val gnc:pagename-display (N_ "Description")))
+           (cons 'account-name (opt-val gnc:pagename-display (N_ "Account Name")))
+           (cons 'other-account-name (and is-single?
+                                          (opt-val gnc:pagename-display (N_ "Other Account Name"))))
+           (cons 'shares (opt-val gnc:pagename-display (N_ "Shares")))
+           (cons 'price (opt-val gnc:pagename-display (N_ "Price")))
+           (cons 'amount-single (eq? amount-setting 'single))
+           (cons 'amount-double (eq? amount-setting 'double))
+           (cons 'running-balance (opt-val gnc:pagename-display (N_ "Running Balance")))
+           (cons 'account-full-name (opt-val gnc:pagename-display (N_ "Use Full Account Name")))
+           (cons 'memo (opt-val gnc:pagename-display (N_ "Memo")))
+           (cons 'account-code (opt-val gnc:pagename-display (N_ "Account Code")))
+           (cons 'other-account-code (and is-single?
+                                          (opt-val gnc:pagename-display (N_ "Other Account Code"))))
+           (cons 'other-account-full-name (and is-single?
+                                               (opt-val gnc:pagename-display (N_ "Use Full Other Account Name"))))
+           (cons 'sort-account-code (opt-val pagename-sorting (N_ "Show Account Code")))
+           (cons 'sort-account-full-name (opt-val pagename-sorting (N_ "Show Full Account Name")))
+           (cons 'notes (opt-val gnc:pagename-display (N_ "Notes"))))))
 
   (define (make-heading-list columns-used)
     (define (add-if pred? item) (if pred? (list item) '()))
     (append
-     (add-if (used-date columns-used)
+     (add-if (column-uses? 'date columns-used)
              (_ "Date"))
-     (add-if (used-reconciled-date columns-used)
+     (add-if (column-uses? 'reconciled-date columns-used)
              (_ "Reconciled Date"))
-     (add-if (used-num columns-used)
+     (add-if (column-uses? 'num columns-used)
              (if (and (qof-book-use-split-action-for-num-field (gnc-get-current-book))
                       (if (gnc:lookup-option options gnc:pagename-display (N_ "Trans Number"))
                           (opt-val gnc:pagename-display (N_ "Trans Number"))
                           #f))
                  (_ "Num/T-Num")
                  (_ "Num")))
-     (add-if (used-description columns-used)
+     (add-if (column-uses? 'description columns-used)
              (_ "Description"))
-     (add-if (used-memo columns-used)
-             (if (used-notes columns-used)
+     (add-if (column-uses? 'memo columns-used)
+             (if (column-uses? 'notes columns-used)
                  (string-append (_ "Memo") "/" (_ "Notes"))
                  (_ "Memo")))
-     (add-if (or (used-account-name columns-used)
-                 (used-account-code columns-used))
+     (add-if (or (column-uses? 'account-name columns-used)
+                 (column-uses? 'account-code columns-used))
              (_ "Account"))
-     (add-if (or (used-other-account-name columns-used)
-                 (used-other-account-code columns-used))
+     (add-if (or (column-uses? 'other-account-name columns-used)
+                 (column-uses? 'other-account-code columns-used))
              (_ "Transfer from/to"))
-     (add-if (used-shares columns-used)
+     (add-if (column-uses? 'shares columns-used)
              (_ "Shares"))
-     (add-if (used-price columns-used)
+     (add-if (column-uses? 'price columns-used)
              (_ "Price"))
-     (add-if (used-amount-single columns-used)
+     (add-if (column-uses? 'amount-single columns-used)
              (_ "Amount"))
      ;; FIXME: Proper labels: what?
-     (add-if (used-amount-double-positive columns-used)
-             (_ "Debit"))
-     (add-if (used-amount-double-negative columns-used)
-             (_ "Credit"))
-     (add-if (used-running-balance columns-used)
+     (if (column-uses? 'amount-double columns-used)
+         (list
+          (_ "Debit")
+          (_ "Credit"))
+         '())
+     (add-if (column-uses? 'running-balance columns-used)
              (_ "Balance"))))
 
   (let ((work-to-do (length splits))
@@ -1418,18 +1405,16 @@ Credit Card, and Income accounts."))))))
           (cons 'register-order (vector
                                  (list QUERY-DEFAULT-SORT)
                                  #f #f #f))
-          (cons 'corresponding-acc-name
-                (vector
-                 (list SPLIT-CORR-ACCT-NAME)
-                 (lambda (a b) (zero? (xaccSplitCompareOtherAccountFullNames a b))) 
-                 render-corresponding-account-subheading
-                 render-corresponding-account-subtotal))
-          (cons 'corresponding-acc-code
-                (vector
-                 (list SPLIT-CORR-ACCT-CODE)
-                 (lambda (a b) (zero? (xaccSplitCompareOtherAccountCodes a b))) 
-                 render-corresponding-account-subheading
-                 render-corresponding-account-subtotal))
+          (cons 'corresponding-acc-name (vector
+                                         (list SPLIT-CORR-ACCT-NAME)
+                                         (lambda (a b) (zero? (xaccSplitCompareOtherAccountFullNames a b))) 
+                                         render-corresponding-account-subheading
+                                         render-corresponding-account-subtotal))
+          (cons 'corresponding-acc-code (vector
+                                         (list SPLIT-CORR-ACCT-CODE)
+                                         (lambda (a b) (zero? (xaccSplitCompareOtherAccountCodes a b))) 
+                                         render-corresponding-account-subheading
+                                         render-corresponding-account-subtotal))
           (cons 'amount        (vector (list SPLIT-VALUE) #f #f #f))
           (cons 'description   (vector (list SPLIT-TRANS TRANS-DESCRIPTION) #f #f #f))
           (if (qof-book-use-split-action-for-num-field (gnc-get-current-book))
@@ -1439,19 +1424,38 @@ Credit Card, and Income accounts."))))))
           (cons 'memo          (vector (list SPLIT-MEMO) #f #f #f))
           (cons 'none          (vector '() #f #f #f))))
 
-  (define date-comp-funcs-assoc-list
-    ;; Extra list for date option. Each entry: (cons
-    ;; 'date-subtotal-option-value (vector subtotal-function
-    ;; subtotal-renderer))
-    (list
-     (cons 'none (vector #f #f #f))
-     (cons 'weekly (vector split-same-week? render-week-subheading render-week-subtotal))
-     (cons 'monthly (vector split-same-month? render-month-subheading render-month-subtotal))
-     (cons 'quarterly (vector split-same-quarter? render-quarter-subheading render-quarter-subtotal))
-     (cons 'yearly (vector split-same-year? render-year-subheading render-year-subtotal))))
-
   (define (get-subtotalstuff-helper name-sortkey name-subtotal name-date-subtotal
-           comp-index date-index)
+                                    comp-index date-index)
+   
+    (define (timepair-year tp)    (gnc:timepair-get-year tp))
+    (define (timepair-quarter tp) (+ (* 10 (timepair-year tp))  (gnc:timepair-get-quarter tp)))
+    (define (timepair-month tp)   (+ (* 100 (timepair-year tp)) (gnc:timepair-get-month tp)))
+    (define (timepair-week tp)    (+ (* 100 (timepair-year tp)) (gnc:timepair-get-week tp)))
+
+    (define (split-same-week? a b)
+      (let ((tp-a (gnc-transaction-get-date-posted (xaccSplitGetParent a)))
+            (tp-b (gnc-transaction-get-date-posted (xaccSplitGetParent b))))
+        (= (timepair-week tp-a)
+           (timepair-week tp-b))))
+
+    (define (split-same-month? a b)
+      (let ((tp-a (gnc-transaction-get-date-posted (xaccSplitGetParent a)))
+            (tp-b (gnc-transaction-get-date-posted (xaccSplitGetParent b))))
+        (= (timepair-month tp-a)
+           (timepair-month tp-b))))
+
+    (define (split-same-quarter? a b)
+      (let ((tp-a (gnc-transaction-get-date-posted (xaccSplitGetParent a)))
+            (tp-b (gnc-transaction-get-date-posted (xaccSplitGetParent b))))
+        (= (timepair-quarter tp-a)
+           (timepair-quarter tp-b))))
+
+    (define (split-same-year? a b)
+      (let ((tp-a (gnc-transaction-get-date-posted (xaccSplitGetParent a)))
+            (tp-b (gnc-transaction-get-date-posted (xaccSplitGetParent b))))
+        (= (timepair-year tp-a)
+           (timepair-year tp-b))))
+    
     ;; The value of the sorting-key multichoice option.
     (let ((sortkey (opt-val pagename-sorting name-sortkey)))
       (if (member sortkey date-sorting-types)
@@ -1460,7 +1464,15 @@ Credit Card, and Income accounts."))))))
           ;; corresponding funcs in the assoc-list.
           (vector-ref
            (cdr (assq (opt-val pagename-sorting name-date-subtotal)
-                      date-comp-funcs-assoc-list)) 
+                      ;; Extra list for date option. Each entry: (cons
+                      ;; 'date-subtotal-option-value (vector subtotal-function
+                      ;; subtotal-renderer))
+                      (list
+                       (cons 'none (vector #f #f #f))
+                       (cons 'weekly (vector split-same-week? render-week-subheading render-week-subtotal))
+                       (cons 'monthly (vector split-same-month? render-month-subheading render-month-subtotal))
+                       (cons 'quarterly (vector split-same-quarter? render-quarter-subheading render-quarter-subtotal))
+                       (cons 'yearly (vector split-same-year? render-year-subheading render-year-subtotal))))) 
            date-index)
           ;; For everything else: 1. check whether sortkey has
           ;; subtotalling enabled at all, 2. check whether the
@@ -1471,7 +1483,7 @@ Credit Card, and Income accounts."))))))
                     (vector-ref (cdr (assq sortkey comp-funcs-assoc-list)) comp-index))))))
   
   (define (get-query-sortkey sort-option-value)
-    (vector-ref  (cdr (assq sort-option-value comp-funcs-assoc-list)) 0))
+    (vector-ref (cdr (assq sort-option-value comp-funcs-assoc-list)) 0))
 
   (define (get-subtotal-pred name-sortkey name-subtotal name-date-subtotal)
     (get-subtotalstuff-helper name-sortkey name-subtotal name-date-subtotal 1 0))
@@ -1546,8 +1558,7 @@ Credit Card, and Income accounts."))))))
             ;; error condition: no accounts specified
             (gnc:html-document-add-object!
              document 
-             (gnc:html-make-no-account-warning 
-              report-title (gnc:report-id report-obj)))
+             (gnc:html-make-no-account-warning report-title (gnc:report-id report-obj)))
 
             ;; error condition: accounts were specified but none matcher string/regex
             (gnc:html-document-add-object!
@@ -1638,9 +1649,9 @@ Credit Card, and Income accounts."))))))
                  (gnc:make-html-text
                   (gnc:html-markup-h3 
                    (sprintf #f
-                           (_ "From %s to %s")
-                           (gnc-print-date begindate)
-                           (gnc-print-date enddate)))))
+                            (_ "From %s to %s")
+                            (gnc-print-date begindate)
+                            (gnc-print-date enddate)))))
 
                 (gnc:html-document-add-object! document table)))))
 
