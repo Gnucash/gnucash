@@ -52,18 +52,12 @@ ENDIF()
 SET(test_core_SCHEME unittest-support.scm)
 
 SET(GUILE_OUTPUT_DIR   gnucash)
-SET(GUILE_MODULES      "")
-SET(GUILE_LOAD_DIRS    "")
-SET(GUILE_LIBRARY_DIRS common/test-core libgnucash/engine)
 SET(GUILE_DEPENDS      test-core-guile)
 
 
 GNC_ADD_SCHEME_TARGETS(scm-test-core
   ${test_core_SCHEME}
   ${GUILE_OUTPUT_DIR}
-  "${GUILE_MODULES}"
-  "${GUILE_LOAD_DIRS}"
-  "${GUILE_LIBRARY_DIRS}"
   "${GUILE_DEPENDS}"
   FALSE
   )

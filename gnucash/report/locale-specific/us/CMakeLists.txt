@@ -30,19 +30,11 @@ SET(gncmod_local_reports_us_SCHEME_1 taxtxf.scm taxtxf-de_DE.scm)
 SET(gncmod_local_reports_us_SCHEME_2 us.scm de_DE.scm)
 
 
-SET(GUILE_MODULES libgnucash/app-utils libgnucash/engine gnucash/gnome-utils gnucash/html gnucash/report/report-system gnucash/tax/us)
-SET(GUILE_LOAD_DIRS  libgnucash/app-utils libgnucash/core-utils libgnucash/engine libgnucash/gnc-module gnucash/gnome-utils gnucash/report/report-system
-                     libgnucash/scm libgnucash/tax/us)
-SET(GUILE_LIBRARY_DIRS libgnucash/engine libgnucash/app-utils libgnucash/core-utils libgnucash/gnc-module gnucash/gnome-utils
-                       gnucash/html gnucash/report/report-system)
 SET(GUILE_DEPENDS   gncmod-html scm-tax-us-1 scm-tax-us-2 scm-report-system-3)
 
 GNC_ADD_SCHEME_TARGETS(scm-report-locale-specific-1
   "${gncmod_local_reports_us_SCHEME_1}"
   gnucash/report
-  "${GUILE_MODULES}"
-  "${GUILE_LOAD_DIRS}"
-  "${GUILE_LIBRARY_DIRS}"
   "${GUILE_DEPENDS}"
   FALSE
 )
@@ -50,9 +42,6 @@ GNC_ADD_SCHEME_TARGETS(scm-report-locale-specific-1
 GNC_ADD_SCHEME_TARGETS(scm-report-locale-specific-2
   "${gncmod_local_reports_us_SCHEME_2}"
   gnucash/report/locale-specific
-  "${GUILE_MODULES}"
-  "${GUILE_LOAD_DIRS}"
-  "${GUILE_LIBRARY_DIRS}"
   "scm-report-locale-specific-1;${GUILE_DEPENDS}"
   FALSE
 )

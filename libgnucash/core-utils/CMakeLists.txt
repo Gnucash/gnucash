@@ -198,17 +198,11 @@ ENDIF()
 SET (core_utils_SCHEME core-utils.scm)
 
 SET(GUILE_OUTPUT_DIR   gnucash)
-SET(GUILE_MODULES      "")
-SET(GUILE_LOAD_DIRS    libgnucash/core-utils)
-SET(GUILE_LIBRARY_DIRS libgnucash/core-utils)
 SET(GUILE_DEPENDS      gnc-core-utils)
 
 GNC_ADD_SCHEME_TARGETS(scm-core-utils
     "${core_utils_SCHEME}"
     ${GUILE_OUTPUT_DIR}
-    "${GUILE_MODULES}"
-    "${GUILE_LOAD_DIRS}"
-    "${GUILE_LIBRARY_DIRS}"
     "${GUILE_DEPENDS}"
     FALSE
 )

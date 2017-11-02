@@ -219,17 +219,11 @@ GNC_ADD_SCHEME_TEST(scm-test-split test-split.scm)
 
 SET(engine_test_SCHEME test-extras.scm)
 
-SET(GUILE_MODULES      "")
-SET(GUILE_LOAD_DIRS    libgnucash/app-utils libgnucash/scm)
-SET(GUILE_LIBRARY_DIRS "")
 SET(GUILE_DEPENDS      scm-app-utils scm-scm)
 
 GNC_ADD_SCHEME_TARGETS(scm-test-engine
   "${engine_test_SCHEME}"
   gnucash/engine/test
-  "${GUILE_MODULES}"
-  "${GUILE_LOAD_DIRS}"
-  "${GUILE_LIBRARY_DIRS}"
   "${GUILE_DEPENDS}"
   FALSE
 )

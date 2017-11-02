@@ -11,9 +11,6 @@ GNC_ADD_SCHEME_TESTS(${scm_test_standard_reports_SOURCES})
 GNC_ADD_SCHEME_TARGETS(scm-test-standard-reports
   "${scm_test_standard_reports_SOURCES}"
   gnucash/report/standard-reports/test
-  ""
-  ""
-  ""
   "scm-gnc-module;scm-test-report-system;scm-standard-reports;scm-report-stylesheets-2"
   FALSE
 )

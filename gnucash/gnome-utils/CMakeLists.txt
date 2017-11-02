@@ -246,17 +246,11 @@ INSTALL(FILES ${gnome_utils_HEADERS} DESTINATION include/gnucash)
 
 # Scheme
 
-SET(GUILE_MODULES      "")
-SET(GUILE_LOAD_DIRS    libgnucash/core-utils libgnucash/gnc-module libgnucash/scm)
-SET(GUILE_LIBRARY_DIRS libgnucash/core-utils libgnucash/gnc-module)
 SET(GUILE_DEPENDS      gncmod-gnome-utils scm-core-utils scm-gnc-module scm-scm)
 
 GNC_ADD_SCHEME_TARGETS(scm-gnome-utils-1
   gnome-utils.scm
   gnucash
-  "${GUILE_MODULES}"
-  "${GUILE_LOAD_DIRS}"
-  "${GUILE_LIBRARY_DIRS}"
   "${GUILE_DEPENDS}"
   FALSE
 )
@@ -265,9 +259,6 @@ GNC_ADD_SCHEME_TARGETS(scm-gnome-utils-1
 GNC_ADD_SCHEME_TARGETS(scm-gnome-utils-2
   gnc-menu-extensions.scm
   ""
-  "${GUILE_MODULES}"
-  "${GUILE_LOAD_DIRS}"
-  "${GUILE_LIBRARY_DIRS}"
   "${GUILE_DEPENDS}"
   FALSE
 )

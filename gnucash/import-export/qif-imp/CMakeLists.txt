@@ -54,17 +54,11 @@ SET(qif_import_SCHEME_2
   qif-import.scm
 )
 
-SET(GUILE_MODULES      "")
-SET(GUILE_LOAD_DIRS    libgnucash/core-utils libgnucash/gnc-module libgnucash/scm)
-SET(GUILE_LIBRARY_DIRS libgnucash/core-utils libgnucash/gnc-module gnucash/gnome)
 SET(GUILE_DEPENDS      gncmod-qif-import scm-core-utils scm-gnc-module scm-scm)
 
 GNC_ADD_SCHEME_TARGETS(scm-qif-import-2
   "${qif_import_SCHEME_2}"
   "gnucash/import-export"
-  "${GUILE_MODULES}"
-  "${GUILE_LOAD_DIRS}"
-  "${GUILE_LIBRARY_DIRS}"
   "${GUILE_DEPENDS}"
   FALSE
 )
@@ -72,9 +66,6 @@ GNC_ADD_SCHEME_TARGETS(scm-qif-import-2
 GNC_ADD_SCHEME_TARGETS(scm-qif-import
   "${qif_import_SCHEME}"
   "qif-import"
-  "${GUILE_MODULES}"
-  "${GUILE_LOAD_DIRS}"
-  "${GUILE_LIBRARY_DIRS}"
   "${GUILE_DEPENDS}"
   FALSE
 )

@@ -26,26 +26,17 @@ INSTALL(TARGETS gncmod-tax-us
 SET(gncmod_tax_us_SCHEME_1 txf.scm txf-help.scm txf-de_DE.scm txf-help-de_DE.scm)
 SET(gncmod_tax_us_SCHEME_2 de_DE.scm us.scm)
 
-SET(GUILE_MODULES      libgnucash/app-utils libgnucash/engine)
-SET(GUILE_LOAD_DIRS    libgnucash/app-utils libgnucash/core-utils libgnucash/engine libgnucash/gnc-module libgnucash/scm)
-SET(GUILE_LIBRARY_DIRS libgnucash/app-utils libgnucash/engine libgnucash/gnc-module)
 SET(GUILE_DEPENDS      scm-app-utils)
 
 GNC_ADD_SCHEME_TARGETS(scm-tax-us-1
   "${gncmod_tax_us_SCHEME_1}"
   ""
-  "${GUILE_MODULES}"
-  "${GUILE_LOAD_DIRS}"
-  "${GUILE_LIBRARY_DIRS}"
   "${GUILE_DEPENDS}"
   FALSE
   )
 GNC_ADD_SCHEME_TARGETS(scm-tax-us-2
   "${gncmod_tax_us_SCHEME_2}"
   gnucash/tax
-  "${GUILE_MODULES}"
-  "${GUILE_LOAD_DIRS}"
-  "${GUILE_LIBRARY_DIRS}"
   "${GUILE_DEPENDS}"
   FALSE
   )

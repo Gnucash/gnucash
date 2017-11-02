@@ -8,19 +8,11 @@ SET(utility_reports_SCHEME
 )
 
 SET(GUILE_OUTPUT_DIR     gnucash/report)
-SET(GUILE_MODULES        libgnucash/app-utils libgnucash/engine gnucash/gnome-utils gnucash/html gnucash/report/report-system)
-SET(GUILE_LOAD_DIRS      libgnucash/app-utils libgnucash/core-utils libgnucash/engine libgnucash/gnc-module
-                            gnucash/gnome-utils gnucash/report/report-system libgnucash/scm)
-SET(GUILE_LIBRARY_DIRS   libgnucash/engine libgnucash/app-utils libgnucash/core-utils libgnucash/gnc-module gnucash/gnome-utils gnucash/html
-                              gnucash/report/report-system)
 SET(GUILE_DEPENDS        scm-utility-reports-links scm-app-utils scm-report-system-3)
 
 GNC_ADD_SCHEME_TARGETS(scm-utility-reports
   "${utility_reports_SCHEME}"
   ${GUILE_OUTPUT_DIR}
-  "${GUILE_MODULES}"
-  "${GUILE_LOAD_DIRS}"
-  "${GUILE_LIBRARY_DIRS}"
   "${GUILE_DEPENDS}"
   TRUE
 )

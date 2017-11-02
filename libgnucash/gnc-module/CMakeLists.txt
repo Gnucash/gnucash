@@ -50,17 +50,11 @@ INSTALL(FILES ${gnc_module_HEADERS} DESTINATION include/gnucash)
 SET (gnc_module_SCHEME gnc-module.scm)
 
 SET(GUILE_OUTPUT_DIR   gnucash)
-SET(GUILE_MODULES      "")
-SET(GUILE_LOAD_DIRS    "")
-SET(GUILE_LIBRARY_DIRS "")
 SET(GUILE_DEPENDS      gnc-module)
 
 GNC_ADD_SCHEME_TARGETS(scm-gnc-module
   "${gnc_module_SCHEME}"
   ${GUILE_OUTPUT_DIR} 
-  "${GUILE_MODULES}"
-  "${GUILE_LOAD_DIRS}"
-  "${GUILE_LIBRARY_DIRS}"
   "${GUILE_DEPENDS}"
   FALSE
 )

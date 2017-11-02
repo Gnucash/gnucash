@@ -22,9 +22,6 @@ ENDIF()
 
 # CONFIGURE_FILE(build-config.scm.in ${BUILD_CONFIG_SCM})
 
-SET(GUILE_MODULES      "")
-SET(GUILE_LOAD_DIRS    libgnucash/core-utils libgnucash/gnc-module)
-SET(GUILE_LIBRARY_DIRS libgnucash/core-utils libgnucash/gnc-module)
 SET(GUILE_DEPENDS      scm-core-utils scm-gnc-module)
 
 SET(scm_SCHEME_0
@@ -35,16 +32,13 @@ SET(scm_SCHEME_0
   xml-generator.scm
 )
 
-GNC_ADD_SCHEME_TARGETS(scm-scm-0 "${scm_SCHEME_0}" "" "" "" "" "" FALSE)
+GNC_ADD_SCHEME_TARGETS(scm-scm-0 "${scm_SCHEME_0}" "" "" FALSE)
 
-GNC_ADD_SCHEME_TARGETS(scm-scm-1 "printf.scm" gnucash "" "" "" "" FALSE)
+GNC_ADD_SCHEME_TARGETS(scm-scm-1 "printf.scm" gnucash "" FALSE)
 
 GNC_ADD_SCHEME_TARGETS(scm-scm-2
   main.scm
   gnucash
-  "${GUILE_MODULES}"
-  "${GUILE_LOAD_DIRS}"
-  "${GUILE_LIBRARY_DIRS}"
   "scm-scm-1;${GUILE_DEPENDS}"  # requires printf.scm from scm-scm-1 and modules from GUILE_DEPENDS
   FALSE
 )
@@ -53,9 +47,6 @@ GNC_ADD_SCHEME_TARGETS(scm-scm-2
 GNC_ADD_SCHEME_TARGETS(scm-scm-3
   price-quotes.scm
   gnucash
-  "${GUILE_MODULES}"
-  "${GUILE_LOAD_DIRS}"
-  "${GUILE_LIBRARY_DIRS}"
   "scm-scm-2;scm-scm-0"  # depends on build_config.scm
   FALSE)
 

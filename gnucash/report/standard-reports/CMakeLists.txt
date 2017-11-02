@@ -33,17 +33,11 @@ SET (standard_reports_SCHEME_2
     trial-balance.scm
     )
 
-SET(GUILE_MODULES      libgnucash/app-utils libgnucash/engine gnucash/gnome-utils gnucash/html gnucash/report/report-system)
-SET(GUILE_LOAD_DIRS    libgnucash/app-utils libgnucash/engine libgnucash/core-utils libgnucash/gnc-module gnucash/gnome-utils gnucash/report/report-system libgnucash/scm)
-SET(GUILE_LIBRARY_DIRS libgnucash/app-utils libgnucash/engine libgnucash/core-utils libgnucash/gnc-module gnucash/gnome-utils gnucash/report/report-system)
 SET(GUILE_DEPENDS      gncmod-html scm-app-utils scm-gnome-utils scm-report-system scm-report-system-3)
 
 GNC_ADD_SCHEME_TARGETS(scm-standard-reports-1
   "${standard_reports_SCHEME}"
   "gnucash/report"
-  "${GUILE_MODULES}"
-  "${GUILE_LOAD_DIRS}"
-  "${GUILE_LIBRARY_DIRS}"
   "scm-standard-reports-2;${GUILE_DEPENDS}"
   TRUE
 )
@@ -51,9 +45,6 @@ GNC_ADD_SCHEME_TARGETS(scm-standard-reports-1
 GNC_ADD_SCHEME_TARGETS(scm-standard-reports-2
   "${standard_reports_SCHEME_2}"
   "gnucash/report/standard-reports"
-  "${GUILE_MODULES}"
-  "${GUILE_LOAD_DIRS}"
-  "${GUILE_LIBRARY_DIRS}"
   "scm-standard-reports-2-links;${GUILE_DEPENDS}"
   TRUE
 )

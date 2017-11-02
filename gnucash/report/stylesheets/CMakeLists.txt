@@ -48,17 +48,11 @@ SET(stylesheets_SCHEME_2
 )
 
 SET(GUILE_OUTPUT_DIR gnucash/report)
-SET(GUILE_MODULES libgnucash/app-utils libgnucash/engine gnucash/html gnucash/gnome-utils gnucash/report/report-system)
-SET(GUILE_LOAD_DIRS libgnucash/app-utils libgnucash/core-utils libgnucash/engine libgnucash/gnc-module gnucash/gnome-utils gnucash/report/report-system libgnucash/scm)
-SET(GUILE_LIBRARY_DIRS libgnucash/engine libgnucash/app-utils libgnucash/core-utils libgnucash/gnc-module gnucash/gnome-utils gnucash/html gnucash/report/report-system)
 SET(GUILE_DEPENDS gncmod-html scm-app-utils scm-report-system-3)
 
 GNC_ADD_SCHEME_TARGETS(scm-report-stylesheets-1
   "${stylesheets_SCHEME_1}"
   ${GUILE_OUTPUT_DIR}
-  "${GUILE_MODULES}"
-  "${GUILE_LOAD_DIRS}"
-  "${GUILE_LIBRARY_DIRS}"
   "${GUILE_DEPENDS}"
   TRUE
 )
@@ -66,9 +60,6 @@ GNC_ADD_SCHEME_TARGETS(scm-report-stylesheets-1
 GNC_ADD_SCHEME_TARGETS(scm-report-stylesheets-2
   "${stylesheets_SCHEME_2}"
   ${GUILE_OUTPUT_DIR}
-  "${GUILE_MODULES}"
-  "${GUILE_LOAD_DIRS}"
-  "${GUILE_LIBRARY_DIRS}"
   "scm-report-stylesheets-1;${GUILE_DEPENDS}"
   TRUE
 )

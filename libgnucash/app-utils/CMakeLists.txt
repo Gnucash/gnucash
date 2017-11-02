@@ -175,17 +175,11 @@ SET(app_utils_SCHEME_3
     business-prefs.scm
 )
 
-SET(GUILE_MODULES      libgnucash/engine)
-SET(GUILE_LOAD_DIRS    libgnucash/app-utils libgnucash/core-utils libgnucash/engine libgnucash/gnc-module libgnucash/scm)
-SET(GUILE_LIBRARY_DIRS libgnucash/app-utils libgnucash/core-utils libgnucash/engine libgnucash/gnc-module)
 SET(GUILE_DEPENDS      gncmod-app-utils scm-core-utils scm-engine scm-scm)
 
 GNC_ADD_SCHEME_TARGETS(scm-gettext
   gettext.scm
   gnucash
-  libgnucash/app-utils
-  ""
-  ""
   gncmod-app-utils
   FALSE
 )
@@ -193,9 +187,6 @@ GNC_ADD_SCHEME_TARGETS(scm-gettext
 GNC_ADD_SCHEME_TARGETS(scm-app-utils-1
   "${app_utils_SCHEME_1}"
   ""
-  "${GUILE_MODULES}"
-  "${GUILE_LOAD_DIRS}"
-  "${GUILE_LIBRARY_DIRS}"
   "scm-gettext;${GUILE_DEPENDS}"
   FALSE
 )
@@ -203,9 +194,6 @@ GNC_ADD_SCHEME_TARGETS(scm-app-utils-1
 GNC_ADD_SCHEME_TARGETS(scm-app-utils-2
   "${app_utils_SCHEME_2}"
   "gnucash"
-  "${GUILE_MODULES}"
-  "${GUILE_LOAD_DIRS}"
-  "${GUILE_LIBRARY_DIRS}"
   scm-app-utils-1
   FALSE
 )
@@ -213,9 +201,6 @@ GNC_ADD_SCHEME_TARGETS(scm-app-utils-2
 GNC_ADD_SCHEME_TARGETS(scm-app-utils-3
   "${app_utils_SCHEME_3}"
   ""
-  "${GUILE_MODULES}"
-  "${GUILE_LOAD_DIRS}"
-  "${GUILE_LIBRARY_DIRS}"
   scm-app-utils-2
   FALSE
 )

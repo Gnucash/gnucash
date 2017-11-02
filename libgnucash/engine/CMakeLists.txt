@@ -288,27 +288,18 @@ IF (WITH_SQL)
     LIST(APPEND BACKEND_DEPENDS gncmod-backend-dbi)
 ENDIF(WITH_SQL)
 
-SET(GUILE_MODULES      "")
-SET(GUILE_LOAD_DIRS    libgnucash/gnc-module)
-SET(GUILE_LIBRARY_DIRS libgnucash/gnc-module)
 SET(GUILE_DEPENDS      ${BACKEND_DEPENDS} gnc-module gncmod-engine scm-gnc-module)
 
 
 GNC_ADD_SCHEME_TARGETS(scm-engine-0
   "${engine_SCHEME_0}"
   gnucash
-  "${GUILE_MODULES}"
-  "${GUILE_LOAD_DIRS}"
-  "${GUILE_LIBRARY_DIRS}"
   "${GUILE_DEPENDS}"
   FALSE
 )
 
 GNC_ADD_SCHEME_TARGETS(scm-engine-1
   "${engine_SCHEME_1}"
-  ""
-  ""
-  ""
   ""
   "scm-engine-0;${GUILE_DEPENDS}"
   FALSE
