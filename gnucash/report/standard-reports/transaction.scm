@@ -100,7 +100,7 @@ in the Options panel."))
 (define NO-MATCHING-ACCT-TEXT (N_ "No account were found that match the \
 options specified in the Options panels."))
 
-
+;; bugfix - this was formerly 'date 'register-order
 (define DATE-SORTING-TYPES (list 'date 'reconciled-date))
 
 ;; The option-values of the sorting key multichoice option, for
@@ -110,12 +110,6 @@ options specified in the Options panels."))
 
 (define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
 
-(define (add-subheading-row data table width subheading-style)
-  (let ((heading-cell (gnc:make-html-table-cell data)))
-    (gnc:html-table-cell-set-colspan! heading-cell width)
-    (gnc:html-table-append-row/markup!
-     table subheading-style
-     (list heading-cell))))
 
 (define (column-uses? param columns-used)
   (cdr (assq param columns-used)))
@@ -155,151 +149,90 @@ options specified in the Options panels."))
                (xaccAccountGetName account))
            ""))))
 
-                                                   
-
 ;; render an account subheading - column-vector determines what is displayed
-(define (render-account-subheading
-         split table width subheading-style column-vector)
+(define (render-account-subheading split column-vector)
   (let ((account (xaccSplitGetAccount split)))
-    (add-subheading-row (gnc:make-html-text
-                         (gnc:html-markup-anchor
-                          (gnc:account-anchor-text account)
-                          (account-namestring account
-                                              (column-uses? 'sort-account-code      column-vector)
-                                              #t
-                                              (column-uses? 'sort-account-full-name column-vector))))
-                        table width subheading-style)))
+    (gnc:make-html-text
+     (gnc:html-markup-anchor
+      (gnc:account-anchor-text account)
+      (account-namestring account
+                          (column-uses? 'sort-account-code      column-vector)
+                          #t
+                          (column-uses? 'sort-account-full-name column-vector))))))                        
 
-(define (render-corresponding-account-subheading 
-         split table width subheading-style column-vector)
+(define (render-corresponding-account-subheading split column-vector)
   (let ((account (xaccSplitGetAccount (xaccSplitGetOtherSplit split))))
-    (add-subheading-row (gnc:make-html-text
-                         (gnc:html-markup-anchor
-                          (if (null? account)
-                              ""
-                              (gnc:account-anchor-text account))
-                          (account-namestring account
-                                              (column-uses? 'sort-account-code      column-vector)
-                                              #t
-                                              (column-uses? 'sort-account-full-name column-vector))))
-                        table width subheading-style)))
+    (gnc:make-html-text
+     (gnc:html-markup-anchor
+      (if (null? account)
+          ""
+          (gnc:account-anchor-text account))
+      (account-namestring account
+                          (column-uses? 'sort-account-code      column-vector)
+                          #t
+                          (column-uses? 'sort-account-full-name column-vector))))))
 
-(define (render-week-subheading split table width subheading-style column-vector)
-  (add-subheading-row (gnc:date-get-week-year-string
-                       (gnc:timepair->date
-                        (gnc-transaction-get-date-posted
-                         (xaccSplitGetParent split))))
-                      table width subheading-style))
+(define (render-week-subheading split column-vector)
+  (gnc:date-get-week-year-string
+   (gnc:timepair->date
+    (gnc-transaction-get-date-posted
+     (xaccSplitGetParent split)))))
+  
+(define (render-month-subheading split column-vector)
+  (gnc:date-get-month-year-string
+   (gnc:timepair->date 
+    (gnc-transaction-get-date-posted
+     (xaccSplitGetParent split)))))
+  
+(define (render-quarter-subheading split column-vector)
+  (gnc:date-get-quarter-year-string 
+   (gnc:timepair->date 
+    (gnc-transaction-get-date-posted
+     (xaccSplitGetParent split)))))
 
-(define (render-month-subheading split table width subheading-style column-vector)
-  (add-subheading-row (gnc:date-get-month-year-string
-                       (gnc:timepair->date 
-                        (gnc-transaction-get-date-posted
-                         (xaccSplitGetParent split))))
-                      table width subheading-style))
 
-(define (render-quarter-subheading split table width subheading-style column-vector)
-  (add-subheading-row (gnc:date-get-quarter-year-string 
-                       (gnc:timepair->date 
-                        (gnc-transaction-get-date-posted
-                         (xaccSplitGetParent split))))
-                      table width subheading-style))
-
-(define (render-year-subheading split table width subheading-style column-vector)
-  (add-subheading-row (gnc:date-get-year-string 
-                       (gnc:timepair->date 
-                        (gnc-transaction-get-date-posted
-                         (xaccSplitGetParent split))))
-                      table width subheading-style))
-
-(define (add-subtotal-row table width subtotal-string subtotal-collector 
-                          subtotal-style export?)
-  (let ((currency-totals (subtotal-collector 'format gnc:make-gnc-monetary #f)))
-    (gnc:html-table-append-row/markup!
-     table
-     subtotal-style 
-     (if export?
-         (append! (cons (gnc:make-html-table-cell/markup "total-label-cell" subtotal-string)
-                        (gnc:html-make-empty-cells (- width 2)))
-                  (list (gnc:make-html-table-cell/markup 
-                         "total-number-cell"
-                         (car currency-totals))))
-         (list (gnc:make-html-table-cell/size/markup 1 (- width 1) "total-label-cell"
-                                                     subtotal-string)
-               (gnc:make-html-table-cell/markup 
-                "total-number-cell"
-                (car currency-totals)))))
-    (for-each (lambda (currency)
-                (gnc:html-table-append-row/markup! 
-                 table
-                 subtotal-style
-                 (append!
-                  (if export?
-                      (gnc:html-make-empty-cells (- width 1))
-                      (list (gnc:make-html-table-cell/size 1 (- width 1) #f)))
-                  (list (gnc:make-html-table-cell/markup
-                         "total-number-cell" currency)))))
-              (cdr currency-totals))))
+(define (render-year-subheading split column-vector)
+  (gnc:date-get-year-string 
+   (gnc:timepair->date 
+    (gnc-transaction-get-date-posted
+     (xaccSplitGetParent split)))))
 
 (define (total-string str) (string-append (_ "Total For ") str))
 
-(define (render-account-subtotal 
-         table width split total-collector subtotal-style column-vector export?)
-  (add-subtotal-row table width 
-                    (total-string (account-namestring (xaccSplitGetAccount split)
-                                                      (column-uses? 'sort-account-code      column-vector)
-                                                      #t
-                                                      (column-uses? 'sort-account-full-name column-vector)))
-                    total-collector subtotal-style export?))
+(define (render-account-subtotal split column-vector)
+  (total-string (account-namestring (xaccSplitGetAccount split)
+                                    (column-uses? 'sort-account-code      column-vector)
+                                    #t
+                                    (column-uses? 'sort-account-full-name column-vector))))
 
-(define (render-corresponding-account-subtotal
-         table width split total-collector subtotal-style column-vector export?)
-  (add-subtotal-row table width
-                    (total-string (account-namestring (xaccSplitGetAccount
-                                                       (xaccSplitGetOtherSplit split))
-                                                      (column-uses? 'sort-account-code      column-vector)
-                                                      #t
-                                                      (column-uses? 'sort-account-full-name column-vector)))
-                    total-collector subtotal-style export?))
+(define (render-corresponding-account-subtotal split column-vector)
+  (total-string (account-namestring (xaccSplitGetAccount (xaccSplitGetOtherSplit split))
+                                    (column-uses? 'sort-account-code      column-vector)
+                                    #t
+                                    (column-uses? 'sort-account-full-name column-vector))))
 
-(define (render-week-subtotal
-         table width split total-collector subtotal-style column-vector export?)
+(define (render-week-subtotal split column-vector)
   (let ((tm (gnc:timepair->date (gnc-transaction-get-date-posted
                                  (xaccSplitGetParent split)))))
-    (add-subtotal-row table width
-                      (total-string (gnc:date-get-week-year-string tm))
-                      total-collector subtotal-style export?)))
+    (total-string (gnc:date-get-week-year-string tm))))
 
-(define (render-month-subtotal
-         table width split total-collector subtotal-style column-vector export?)
+(define (render-month-subtotal split column-vector)
   (let ((tm (gnc:timepair->date (gnc-transaction-get-date-posted
                                  (xaccSplitGetParent split)))))
-    (add-subtotal-row table width 
-                      (total-string (gnc:date-get-month-year-string tm))
-                      total-collector subtotal-style export?)))
+    (total-string (gnc:date-get-month-year-string tm))))
 
-
-(define (render-quarter-subtotal
-         table width split total-collector subtotal-style column-vector export?)
+(define (render-quarter-subtotal split column-vector)
   (let ((tm (gnc:timepair->date (gnc-transaction-get-date-posted
                                  (xaccSplitGetParent split)))))
-    (add-subtotal-row table width 
-                      (total-string (gnc:date-get-quarter-year-string tm))
-                      total-collector subtotal-style export?)))
+    (total-string (gnc:date-get-quarter-year-string tm))))
 
-(define (render-year-subtotal
-         table width split total-collector subtotal-style column-vector export?)
+(define (render-year-subtotal split column-vector)
   (let ((tm (gnc:timepair->date (gnc-transaction-get-date-posted
                                  (xaccSplitGetParent split)))))
-    (add-subtotal-row table width 
-                      (total-string (strftime "%Y" tm))
-                      total-collector subtotal-style export?)))
+    (total-string (strftime "%Y" tm))))
 
-(define (render-grand-total
-         table width total-collector export?)
-  (add-subtotal-row table width
-                    (_ "Grand Total")
-                    total-collector def:grand-total-style export?))
+(define (render-grand-total)
+  (_ "Grand Total")) ; def:grand-total-style
 
 
 
@@ -320,10 +253,14 @@ options specified in the Options panels."))
 ;                                                          
 
 (define sortkey-list
-  ;; Defines the different sorting keys, together with the
-  ;; subtotal functions. Each entry: (cons
-  ;; 'sorting-key-option-value (vector 'query-sorting-key
-  ;; subtotal-function subtotal-renderer))
+  ;; Defines the different sorting keys, as an association-list 
+  ;; together with the subtotal functions. Each entry: 
+  ;;  'sortkey             - sort parameter sent via qof-query
+  ;;  'split-sortvalue     - function which retrieves number/string used for comparing splits
+  ;;  'text                - text displayed in Display tab
+  ;;  'tip                 - tooltip displayed in Display tab
+  ;;  'subheading-renderer - function which renders the subheading
+  ;;  'subtotal-renderer   - function which renders the subtotal
   (list (cons 'account-name  (list (cons 'sortkey (list SPLIT-ACCT-FULLNAME))
                                    (cons 'split-sortvalue (lambda (a) (gnc-account-get-full-name (xaccSplitGetAccount a))))
                                    (cons 'text (N_ "Account Name"))
@@ -510,7 +447,7 @@ options specified in the Options panels."))
 (define (add-split-row table split column-vector options
                        row-style account-types-to-reverse transaction-row?)
 
-  (define (opt-val section name) (gnc:option-value  (gnc:lookup-option options section name)))
+  (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
 
   (let* ((row-contents '())
          (parent (xaccSplitGetParent split))
@@ -1225,7 +1162,7 @@ Credit Card, and Income accounts."))))))
           (cons 'notes (opt-val gnc:pagename-display (N_ "Notes")))))
 
   (define (make-heading-list columns-used)
-    (define (add-if pred? item) (if pred? (list item) '()))
+    (define (add-if pred? . items) (if pred? items '()))
     (append
      (add-if (column-uses? 'date columns-used)
              (_ "Date"))
@@ -1257,16 +1194,61 @@ Credit Card, and Income accounts."))))))
      (add-if (column-uses? 'amount-single columns-used)
              (_ "Amount"))
      ;; FIXME: Proper labels: what?
-     (if (column-uses? 'amount-double columns-used)
-         (list
-          (_ "Positive")
-          (_ "Negative"))
-         '())
+     ;; formerly Debit/Credit, but not always true; change to Positive/Negative for now
+     (add-if (column-uses? 'amount-double columns-used)
+             (_ "Positive")
+             (_ "Negative"))
      (add-if (column-uses? 'running-balance columns-used)
              (_ "Balance"))))
 
-  (let ((work-to-do (length splits))
-        (work-done 0))
+  (let* ((work-to-do (length splits))
+         (work-done 0)
+         (table (gnc:make-html-table))
+         (used-columns (build-columns-used))
+         (headings (make-heading-list used-columns))
+         (width (length headings))
+         (account-types-to-reverse
+          (cdr (assq (opt-val gnc:pagename-display (N_ "Sign Reverses"))
+                     (list (cons 'none '())
+                           (cons 'income-expense (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE))
+                           (cons 'credit-accounts  (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE
+                                                         ACCT-TYPE-EQUITY ACCT-TYPE-CREDIT
+                                                         ACCT-TYPE-INCOME))))))
+         (is-multiline? (eq? (opt-val gnc:pagename-display optname-detail-level) 'multi-line))
+         (export? (opt-val gnc:pagename-general optname-table-export)))
+
+    (define (add-subheading data subheading-style)
+      (let ((heading-cell (gnc:make-html-table-cell data)))
+        (gnc:html-table-cell-set-colspan! heading-cell width)
+        (gnc:html-table-append-row/markup!
+         table subheading-style
+         (list heading-cell))))
+
+    (define (add-subtotal-row string collector style)
+      (let ((currency-totals (collector 'format gnc:make-gnc-monetary #f)))
+        (gnc:html-table-append-row/markup!
+         table style 
+         (if export?
+             (append! (cons (gnc:make-html-table-cell/markup "total-label-cell" string)
+                            (gnc:html-make-empty-cells (- width 2)))
+                      (list (gnc:make-html-table-cell/markup 
+                             "total-number-cell"
+                             (car currency-totals))))
+             (list (gnc:make-html-table-cell/size/markup 1 (- width 1) "total-label-cell"
+                                                         string)
+                   (gnc:make-html-table-cell/markup 
+                    "total-number-cell"
+                    (car currency-totals)))))
+        (for-each (lambda (currency)
+                    (gnc:html-table-append-row/markup! 
+                     table style
+                     (append!
+                      (if export?
+                          (gnc:html-make-empty-cells (- width 1))
+                          (list (gnc:make-html-table-cell/size 1 (- width 1) #f)))
+                      (list (gnc:make-html-table-cell/markup
+                             "total-number-cell" currency)))))
+                  (cdr currency-totals))))
 
     (define (do-rows-with-subtotals splits 
                                     table 
@@ -1289,11 +1271,11 @@ Credit Card, and Income accounts."))))))
       (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
 
       (set! work-done (+ 1 work-done))
-
+      
       (if (null? splits)
-
+          
           (begin
-
+            
             (gnc:html-table-append-row/markup!
              table def:grand-total-style
              (list
@@ -1301,12 +1283,11 @@ Credit Card, and Income accounts."))))))
                1 width (gnc:make-html-text (gnc:html-markup-hr)))))
             
             (if (opt-val gnc:pagename-display "Totals")
-                (render-grand-total table width total-collector export?)))
-	
+                (add-subtotal-row (render-grand-total) total-collector def:grand-total-style)))
+          
           (let* ((current (car splits))
                  (rest (cdr splits))
-                 (next (if (null? rest) #f
-                           (car rest))))
+                 (next (if (null? rest) #f (car rest))))
             
             (define split-value (add-split-row 
                                  table 
@@ -1319,7 +1300,7 @@ Credit Card, and Income accounts."))))))
                                          def:alternate-row-style))
                                  account-types-to-reverse
                                  #t))
-
+            
             (if multi-rows?
                 
                 (for-each (lambda (othersplits)
@@ -1332,7 +1313,7 @@ Credit Card, and Income accounts."))))))
                                            #f))
                           (delete current (xaccTransGetSplitList
                                            (xaccSplitGetParent current)))))
-                
+            
             (primary-subtotal-collector 'add 
                                         (gnc:gnc-monetary-commodity split-value) 
                                         (gnc:gnc-monetary-amount split-value))
@@ -1340,68 +1321,62 @@ Credit Card, and Income accounts."))))))
             (secondary-subtotal-collector 'add
                                           (gnc:gnc-monetary-commodity split-value)
                                           (gnc:gnc-monetary-amount split-value))
-
+            
             (total-collector 'add
                              (gnc:gnc-monetary-commodity split-value)
                              (gnc:gnc-monetary-amount split-value))
-
+            
             (if (and primary-subtotal-pred
                      (or (not next)
                          (and next
                               (not (equal? (primary-subtotal-pred current)
                                            (primary-subtotal-pred next))))))
-
+                
                 (begin 
-
+                  
                   (if secondary-subtotal-pred
-
+                      
                       (begin
-
-                        (secondary-subtotal-renderer
-                         table width current
-                         secondary-subtotal-collector
-                         def:secondary-subtotal-style used-columns export?)
-
+                        
+                        (add-subtotal-row (secondary-subtotal-renderer current used-columns)
+                                          secondary-subtotal-collector
+                                          def:secondary-subtotal-style)
+                        
                         (secondary-subtotal-collector 'reset #f #f)))
-
-                  (primary-subtotal-renderer table width current
-                                             primary-subtotal-collector
-                                             def:primary-subtotal-style used-columns
-                                             export?)
-
+                  
+                  (add-subtotal-row (primary-subtotal-renderer current used-columns)
+                                    primary-subtotal-collector
+                                    def:primary-subtotal-style)
+                  
                   (primary-subtotal-collector 'reset #f #f)
-
+                  
                   (if next
-
+                      
                       (begin 
-
-                        (primary-subheading-renderer
-                         next table width def:primary-subtotal-style used-columns)
-
+                        
+                        (add-subheading (primary-subheading-renderer next used-columns)
+                                        def:primary-subtotal-style)
+                        
                         (if secondary-subtotal-pred
-                            (secondary-subheading-renderer
-                             next 
-                             table 
-                             width def:secondary-subtotal-style used-columns)))))
-
+                            (add-subheading (secondary-subheading-renderer next used-columns)
+                                            def:secondary-subtotal-style)))))
+                
                 (if (and secondary-subtotal-pred
                          (or (not next)
                              (and next
                                   (not (equal? (secondary-subtotal-pred current)
                                                (secondary-subtotal-pred next))))))
-
-                    (begin (secondary-subtotal-renderer
-                            table width current
-                            secondary-subtotal-collector
-                            def:secondary-subtotal-style used-columns export?)
-
+                    
+                    (begin (add-subtotal-row (secondary-subtotal-renderer current used-columns)
+                                             secondary-subtotal-collector
+                                             def:secondary-subtotal-style)
+                           
                            (secondary-subtotal-collector 'reset #f #f)
-
+                           
                            (if next
-                               (secondary-subheading-renderer
-                                next table width
-                                def:secondary-subtotal-style used-columns)))))
-
+                               (add-subheading (secondary-subheading-renderer next used-columns)
+                                               def:secondary-subtotal-style)))))
+            
             (do-rows-with-subtotals rest 
                                     table 
                                     used-columns
@@ -1419,46 +1394,32 @@ Credit Card, and Income accounts."))))))
                                     primary-subtotal-collector 
                                     secondary-subtotal-collector 
                                     total-collector))))
-
-    (let* ((table (gnc:make-html-table))
-           (used-columns (build-columns-used))
-           (headings (make-heading-list used-columns))
-           (width (length headings))
-           (account-types-to-reverse
-            (cdr (assq (opt-val gnc:pagename-display (N_ "Sign Reverses"))
-                       (list (cons 'none '())
-                             (cons 'income-expense (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE))
-                             (cons 'credit-accounts  (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE
-                                                           ACCT-TYPE-EQUITY ACCT-TYPE-CREDIT
-                                                           ACCT-TYPE-INCOME))))))
-           (is-multiline? (eq? (opt-val gnc:pagename-display optname-detail-level) 'multi-line))
-           (export? (opt-val gnc:pagename-general optname-table-export)))
-      
-      (gnc:html-table-set-col-headers! table headings)
-      
-      (if primary-subheading-renderer 
-          (primary-subheading-renderer
-           (car splits) table width def:primary-subtotal-style used-columns))
-      
-      (if secondary-subheading-renderer
-          (secondary-subheading-renderer
-           (car splits) table width def:secondary-subtotal-style used-columns))
-      
-      (do-rows-with-subtotals splits table used-columns width
-                              is-multiline? #t
-                              export?
-                              account-types-to-reverse
-                              primary-subtotal-pred
-                              secondary-subtotal-pred
-                              primary-subheading-renderer
-                              secondary-subheading-renderer
-                              primary-subtotal-renderer
-                              secondary-subtotal-renderer
-                              (gnc:make-commodity-collector)
-                              (gnc:make-commodity-collector)
-                              (gnc:make-commodity-collector))
-      
-      table)))
+    
+    (gnc:html-table-set-col-headers! table headings)
+    
+    (if primary-subheading-renderer 
+        (add-subheading (primary-subheading-renderer (car splits) used-columns)
+                        def:primary-subtotal-style))
+    
+    (if secondary-subheading-renderer
+        (add-subheading (secondary-subheading-renderer (car splits) used-columns)
+                        def:secondary-subtotal-style))
+    
+    (do-rows-with-subtotals splits table used-columns width
+                            is-multiline? #t
+                            export?
+                            account-types-to-reverse
+                            primary-subtotal-pred
+                            secondary-subtotal-pred
+                            primary-subheading-renderer
+                            secondary-subheading-renderer
+                            primary-subtotal-renderer
+                            secondary-subtotal-renderer
+                            (gnc:make-commodity-collector)
+                            (gnc:make-commodity-collector)
+                            (gnc:make-commodity-collector))
+    
+    table))
 
 ;; ;;;;;;;;;;;;;;;;;;;;
 ;; Here comes the renderer function for this report.
