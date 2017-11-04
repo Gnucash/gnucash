@@ -173,8 +173,9 @@ bool qof_instance_has_path_slot (QofInstance const *, std::vector<std::string> c
 void qof_instance_slot_path_delete (QofInstance const *, std::vector<std::string> const &);
 
 void qof_instance_slot_path_delete_if_empty (QofInstance const *, std::vector<std::string> const &);
+
 /** Returns all keys that match the given prefix and their corresponding values.*/
-std::map<std::string, KvpValue*>
+std::vector <std::pair <std::string, KvpValue*>>
 qof_instance_get_slots_prefix (QofInstance const *, std::string const & prefix);
 
 /* Don't pass nullptr as the function */

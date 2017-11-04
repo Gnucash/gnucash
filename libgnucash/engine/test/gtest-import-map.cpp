@@ -381,11 +381,30 @@ TEST_F(ImapBayesTest, ConvertAccountBayes)
 TEST_F (ImapBayesTest, import_map_with_delimiters)
 {
     GList * tokens {nullptr};
-    tokens = g_list_prepend(tokens, const_cast<char*>("one/two/three"));
-    gnc_account_imap_add_account_bayes(t_imap, tokens, t_expense_account1);
-    gnc_account_imap_add_account_bayes(t_imap, tokens, t_expense_account1);
-    gnc_account_imap_add_account_bayes(t_imap, tokens, t_expense_account1);
-
+    tokens = g_list_prepend (tokens, const_cast<char*> ("one/two/three"));
+    gnc_account_imap_add_account_bayes (t_imap, tokens, t_expense_account1);
+    gnc_account_imap_add_account_bayes (t_imap, tokens, t_expense_account1);
+    gnc_account_imap_add_account_bayes (t_imap, tokens, t_expense_account1);
     auto account = gnc_account_imap_find_account_bayes (t_imap, tokens);
     EXPECT_EQ (account, t_expense_account1);
 }
+
+TEST_F (ImapBayesTest, get_bayes_info)
+{
+    GList * tokens {nullptr};
+    tokens = g_list_prepend (tokens, const_cast <char*> ("one/two/three"));
+    gnc_account_imap_add_account_bayes(t_imap, tokens, t_expense_account1);
+    auto account = gnc_account_imap_find_account_bayes (t_imap, tokens);
+    EXPECT_EQ (account, t_expense_account1);
+    auto infos = gnc_account_imap_get_info_bayes (t_bank_account);
+    EXPECT_EQ (g_list_first (infos), g_list_last (infos));
+    auto info = static_cast <imap_info*> (g_list_first (infos)->data);
+    EXPECT_EQ (info->source_account, t_bank_account);
+    EXPECT_EQ (info->map_account, t_expense_account1);
+    auto acct1_guid = guid_to_string (xaccAccountGetGUID(t_expense_account1)); //Food
+    EXPECT_STREQ (info->full_category, (std::string {IMAP_FRAME_BAYES} + "-one-two-three-" + acct1_guid).c_str ());
+    EXPECT_STREQ (info->match_string, "one-two-three");
+    EXPECT_STREQ (info->category_head, (std::string {IMAP_FRAME_BAYES} + "-one-two-three").c_str ());
+    EXPECT_STREQ (info->count, "1");
+}
+

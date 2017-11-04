@@ -5432,60 +5432,39 @@ build_non_bayes (const char *key, const GValue *value, gpointer user_data)
     g_free (guid_string);
 }
 
-static void
-build_bayes_layer_two (const char *key, KvpValue * val, imap_info imapInfo)
+static std::tuple<std::string, std::string, std::string>
+parse_bayes_imap_info (std::string const & imap_bayes_entry)
 {
-    QofBook     *book;
-    Account     *map_account = NULL;
-    GncGUID     *guid;
-    gchar       *kvp_path;
-    gchar       *count;
-    struct imap_info *imapInfo_node;
-    // Get the book
-    book = qof_instance_get_book (imapInfo.source_account);
-    if (val->get_type() == KvpValue::Type::INT64)
-    {
-        PINFO("build_bayes_layer_two: account '%s', token_count: '%" G_GINT64_FORMAT "'",
-                                  key, val->get<int64_t>());
-        count = g_strdup_printf ("%" G_GINT64_FORMAT, val->get<int64_t>());
-    }
-    else
-        count = g_strdup ("0");
-    kvp_path = g_strconcat (imapInfo.category_head, "/", key, NULL);
-    PINFO("build_bayes_layer_two: kvp_path is '%s'", kvp_path);
-    guid = g_new (GncGUID, 1);
-    if (string_to_guid (key, guid))
-        map_account = xaccAccountLookup (guid, book);
-    g_free (guid);
-    imapInfo_node = static_cast <imap_info*> (g_malloc(sizeof(*imapInfo_node)));
-    imapInfo_node->source_account = imapInfo.source_account;
-    imapInfo_node->map_account    = map_account;
-    imapInfo_node->full_category  = g_strdup (kvp_path);
-    imapInfo_node->match_string   = g_strdup (imapInfo.match_string);
-    imapInfo_node->category_head  = g_strdup (imapInfo.category_head);
-    imapInfo_node->count          = g_strdup (count);
-    imapInfo.list = g_list_append (imapInfo.list, imapInfo_node);
-    g_free (kvp_path);
-    g_free (count);
+    auto header_length = strlen (IMAP_FRAME_BAYES);
+    std::string header {imap_bayes_entry.substr (0, header_length)};
+    auto guid_start = imap_bayes_entry.size() - GUID_ENCODING_LENGTH;
+    std::string keyword {imap_bayes_entry.substr (header_length + 1, guid_start - header_length - 2)};
+    std::string account_guid {imap_bayes_entry.substr (guid_start)};
+    return {header, keyword, account_guid};
 }
 
 static void
 build_bayes (const char *key, KvpValue * value, imap_info & imapInfo)
 {
-    struct imap_info imapInfol2;
-    PINFO("build_bayes: match string '%s'", (char*)key);
-
-    std::string prefix {g_strdup_printf (IMAP_FRAME_BAYES "-%s", key)};
-    PINFO("build_bayes: prefix is '%s', key '%s'", prefix.c_str(), key);
-    imapInfol2.source_account = imapInfo.source_account;
-    imapInfol2.match_string   = g_strdup (key);
-    imapInfol2.category_head  = g_strdup (prefix.c_str());
-    imapInfol2.list           = imapInfo.list;
-    qof_instance_foreach_slot_prefix (QOF_INSTANCE(imapInfo.source_account), prefix,
-                               build_bayes_layer_two, imapInfol2);
-    imapInfo.list = imapInfol2.list;
-    g_free (imapInfol2.match_string);
-    g_free (imapInfol2.category_head);
+    auto slots = qof_instance_get_slots_prefix (QOF_INSTANCE (imapInfo.source_account), IMAP_FRAME_BAYES);
+    if (!slots.size()) return;
+    for (auto const & entry : slots)
+    {
+        auto parsed_key = parse_bayes_imap_info (entry.first);
+        auto temp_guid = gnc::GUID::from_string (std::get <2> (parsed_key));
+        GncGUID guid = temp_guid;
+        auto map_account = xaccAccountLookup (&guid, gnc_account_get_book (imapInfo.source_account));
+        std::string category_head {std::get <0> (parsed_key) + "-" + std::get <1> (parsed_key)};
+        auto imap_node = static_cast <imap_info*> (g_malloc (sizeof (imap_info)));
+        auto count = entry.second->get <int64_t> ();
+        imap_node->source_account = imapInfo.source_account;
+        imap_node->map_account = map_account;
+        imap_node->full_category = g_strdup (key);
+        imap_node->match_string = g_strdup (std::get <1> (parsed_key).c_str ());
+        imap_node->category_head = g_strdup (category_head.c_str ());
+        imap_node->count = g_strdup_printf ("%" G_GINT64_FORMAT, count);
+        imapInfo.list = g_list_append (imapInfo.list, imap_node);
+    };
 }
 
 GList *
@@ -5497,7 +5476,6 @@ gnc_account_imap_get_info_bayes (Account *acc)
     qof_instance_foreach_slot_prefix (QOF_INSTANCE (acc), IMAP_FRAME_BAYES, &build_bayes, imapInfo);
     return imapInfo.list;
 }
-
 
 GList *
 gnc_account_imap_get_info (Account *acc, const char *category)

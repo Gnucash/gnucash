@@ -1353,6 +1353,17 @@ qof_instance_slot_delete_if_empty (const QofInstance *inst, const char *path)
     }
 }
 
+std::vector <std::pair <std::string, KvpValue*>>
+qof_instance_get_slots_prefix (QofInstance const * inst, std::string const & prefix)
+{
+    std::vector <std::pair <std::string, KvpValue*>> ret;
+    inst->kvp_data->for_each_slot_temp ([&prefix, &ret] (std::string const & key, KvpValue * val) {
+        if (key.find (prefix) == 0)
+            ret.emplace_back (key, val);
+    });
+    return ret;
+}
+
 namespace {
 struct wrap_param
 {
@@ -1360,6 +1371,7 @@ struct wrap_param
     void *user_data;
 };
 }
+
 static void
 wrap_gvalue_function (const char* key, KvpValue *val, wrap_param & param)
 {
