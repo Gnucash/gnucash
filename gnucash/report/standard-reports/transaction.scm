@@ -978,21 +978,19 @@ Credit Card, and Income accounts."))))))
     ;
 
     ;; display an account name depending on the options the user has set
-    (define (account-namestring account code? name? full-name?)
+    (define (account-namestring account show-account-code? show-account-name? show-account-full-name?)
       ;;# on multi-line splits we can get an empty ('()) account
       (if (null? account)
           (_ "Split Transaction")
-          (string-join
-           (append
-            (if code?
-                (list (xaccAccountGetCode account))
-                '())
-            (if name?
-                (if full-name?
-                    (list (gnc-account-get-full-name account))
-                    (list (xaccAccountGetName account)))
-                '()))
-           " ")))
+          (string-append
+           (if show-account-code?
+               (string-append (xaccAccountGetCode account) " ")
+               "")
+           (if show-account-name?
+               (if show-account-full-name?
+                   (gnc-account-get-full-name account)
+                   (xaccAccountGetName account))
+               ""))))
 
     (define (render-date renderer-key split)
       ((case renderer-key
@@ -1017,8 +1015,9 @@ Credit Card, and Income accounts."))))))
                               "")))
         (if (and anchor? (not (null? account))) ;html anchor for 2-split transactions only
             (gnc:make-html-text
-             (gnc:html-markup-anchor (gnc:account-anchor-text account) name))
-            (string-append name description))))
+             (gnc:html-markup-anchor (gnc:account-anchor-text account) name)
+             description)
+            name)))
 
     (define (render-summary split renderer-key anchor?)
       (case renderer-key
