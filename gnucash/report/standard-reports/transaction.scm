@@ -135,92 +135,92 @@ options specified in the Options panels."))
   ;;  'split-sortvalue     - function which retrieves number/string used for comparing splits
   ;;  'text                - text displayed in Display tab
   ;;  'tip                 - tooltip displayed in Display tab
-  ;;  'renderer            - helper symbol to select subtotal/subheading renderer
+  ;;  'renderer-key        - helper symbol to select subtotal/subheading renderer
   ;;
   (list (cons 'account-name  (list (cons 'sortkey (list SPLIT-ACCT-FULLNAME))
                                    (cons 'split-sortvalue (lambda (a) (gnc-account-get-full-name (xaccSplitGetAccount a))))
                                    (cons 'text (N_ "Account Name"))
                                    (cons 'tip (N_ "Sort & subtotal by account name."))
-                                   (cons 'renderer 'account)))
+                                   (cons 'renderer-key 'account)))
         
         (cons 'account-code (list (cons 'sortkey (list SPLIT-ACCOUNT ACCOUNT-CODE-))
                                   (cons 'split-sortvalue (lambda (a) (xaccAccountGetCode (xaccSplitGetAccount a))))
                                   (cons 'text (N_ "Account Code"))
                                   (cons 'tip (N_ "Sort & subtotal by account code."))
-                                  (cons 'renderer 'account)))
+                                  (cons 'renderer-key 'account)))
 
         (cons 'date         (list (cons 'sortkey (list SPLIT-TRANS TRANS-DATE-POSTED))
                                   (cons 'split-sortvalue #f)
                                   (cons 'text (N_ "Date"))
                                   (cons 'tip (N_ "Sort by date."))
-                                  (cons 'renderer #f)))
+                                  (cons 'renderer-key #f)))
 
         (cons 'reconciled-date (list (cons 'sortkey (list SPLIT-DATE-RECONCILED))
                                      (cons 'split-sortvalue #f)
                                      (cons 'text (N_ "Reconciled Date"))
                                      (cons 'tip (N_ "Sort by the Reconciled Date."))
-                                     (cons 'renderer #f)))
+                                     (cons 'renderer-key #f)))
 
         (cons 'register-order (list (cons 'sortkey (list QUERY-DEFAULT-SORT))
                                     (cons 'split-sortvalue #f)
                                     (cons 'text (N_ "Register Order"))
                                     (cons 'tip (N_ "Sort as in the register."))
-                                    (cons 'renderer #f)))                                 
+                                    (cons 'renderer-key #f)))                                 
 
         (cons 'corresponding-acc-name (list (cons 'sortkey (list SPLIT-CORR-ACCT-NAME))
                                             (cons 'split-sortvalue (lambda (a) (xaccSplitGetCorrAccountFullName a)))
                                             (cons 'text (N_ "Other Account Name"))
                                             (cons 'tip (N_ "Sort by account transferred from/to's name."))
-                                            (cons 'renderer 'other-acc)))
+                                            (cons 'renderer-key 'other-acc)))
 
         (cons 'corresponding-acc-code (list (cons 'sortkey (list SPLIT-CORR-ACCT-CODE))
                                             (cons 'split-sortvalue (lambda (a) (xaccSplitGetCorrAccountCode a)))
                                             (cons 'text (N_ "Other Account Code"))
                                             (cons 'tip (N_ "Sort by account transferred from/to's code."))
-                                            (cons 'renderer 'other-acct)))
+                                            (cons 'renderer-key 'other-acct)))
 
         (cons 'amount        (list (cons 'sortkey (list SPLIT-VALUE))
                                    (cons 'split-sortvalue #f)
                                    (cons 'text (N_ "Amount."))
                                    (cons 'tip (N_ "Sort by amount."))
-                                   (cons 'renderer #f)))
+                                   (cons 'renderer-key #f)))
 
         (cons 'description   (list (cons 'sortkey (list SPLIT-TRANS TRANS-DESCRIPTION))
                                    (cons 'split-sortvalue #f)
                                    (cons 'text (N_ "Description"))
                                    (cons 'tip (N_ "Sort by description."))
-                                   (cons 'renderer #f)))
+                                   (cons 'renderer-key #f)))
 
         (if BOOK-SPLIT-ACTION
             (cons 'number    (list (cons 'sortkey (list SPLIT-ACTION))
                                    (cons 'split-sortvalue #f)
                                    (cons 'text (N_ "Number/Action"))
                                    (cons 'tip (N_ "Sort by check number/action."))
-                                   (cons 'renderer #f)))
+                                   (cons 'renderer-key #f)))
 
             (cons 'number    (list (cons 'sortkey (list SPLIT-TRANS TRANS-NUM))
                                    (cons 'split-sortvalue #f)
                                    (cons 'text (N_ "Number"))
                                    (cons 'tip (N_ "Sort by check/transaction number."))
-                                   (cons 'renderer #f))))
+                                   (cons 'renderer-key #f))))
 
         (cons 't-number      (list (cons 'sortkey (list SPLIT-TRANS TRANS-NUM))
                                    (cons 'split-sortvalue #f)
                                    (cons 'text (N_ "Transaction Number"))
                                    (cons 'tip (N_ "Sort by transaction number."))
-                                   (cons 'renderer #f)))
+                                   (cons 'renderer-key #f)))
 
         (cons 'memo          (list (cons 'sortkey (list SPLIT-MEMO))
                                    (cons 'split-sortvalue #f)
                                    (cons 'text (N_ "Memo"))
                                    (cons 'tip (N_ "Sort by memo."))
-                                   (cons 'renderer #f)))
+                                   (cons 'renderer-key #f)))
 
         (cons 'none          (list (cons 'sortkey '())
                                    (cons 'split-sortvalue #f)
                                    (cons 'text (N_ "None"))
                                    (cons 'tip (N_ "Do not sort."))
-                                   (cons 'renderer #f)))))
+                                   (cons 'renderer-key #f)))))
 
 
 (define (sortkey-get-info sortkey info)
@@ -236,39 +236,42 @@ options specified in the Options panels."))
 (define (split-year a) (timepair-year (gnc-transaction-get-date-posted (xaccSplitGetParent a))))
 
 (define date-subtotal-list
-  ;; Extra list for date option. Each entry: (cons
-  ;; 'date-subtotal-option-value (vector subtotal-function
-  ;; subtotal-renderer))
+  ;; List for date option. 
+  ;; Defines the different date sorting keys, as an association-list. Each entry: 
+  ;;  'split-sortvalue     - function which retrieves number/string used for comparing splits
+  ;;  'text                - text displayed in Display tab
+  ;;  'tip                 - tooltip displayed in Display tab
+  ;;  'renderer-key        - helper symbol to select subtotal/subheading renderer
   (list
    (cons 'none (list
                 (cons 'split-sortvalue #f)
                 (cons 'text (N_ "None"))
                 (cons 'tip (N_ "None."))
-                (cons 'renderer #f)))
+                (cons 'renderer-key #f)))
 
    (cons 'weekly (list
                   (cons 'split-sortvalue split-week)
                   (cons 'text (N_ "Weekly"))
                   (cons 'tip (N_ "Weekly."))
-                  (cons 'renderer 'week)))
+                  (cons 'renderer-key 'week)))
 
    (cons 'monthly (list
                    (cons 'split-sortvalue split-month)
                    (cons 'text (N_ "Monthly"))
                    (cons 'tip (N_ "Monthly."))
-                   (cons 'renderer 'month)))
+                   (cons 'renderer-key 'month)))
 
    (cons 'quarterly (list
                      (cons 'split-sortvalue split-quarter)
                      (cons 'text (N_ "Quarterly"))
                      (cons 'tip (N_ "Quarterly."))
-                     (cons 'renderer 'quarter)))
+                     (cons 'renderer-key 'quarter)))
 
    (cons 'yearly (list
                   (cons 'split-sortvalue split-year)
                   (cons 'text (N_ "Yearly"))
                   (cons 'tip (N_ "Yearly."))
-                  (cons 'renderer 'year)))))
+                  (cons 'renderer-key 'year)))))
 
 (define (date-subtotal-get-info sortkey info)
   (cdr (assq info (cdr (assq sortkey date-subtotal-list)))))
@@ -816,10 +819,10 @@ Credit Card, and Income accounts."))))))
 ;                                                                                                                                  
 
 (define (make-split-table splits options
-                          primary-subtotal-pred
-                          secondary-subtotal-pred
-                          primary-sortkey
-                          secondary-sortkey)
+                          primary-subtotal-comparator
+                          secondary-subtotal-comparator
+                          primary-renderer-key
+                          secondary-renderer-key)
 
   (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
 
@@ -889,8 +892,8 @@ Credit Card, and Income accounts."))))))
      ;; FIXME: Proper labels: what?
      ;; formerly Debit/Credit, but not always true; change to Positive/Negative for now
      (add-if (column-uses? 'amount-double columns-used)
-             (_ "Positive")
-             (_ "Negative"))
+             (_ "Debit")
+             (_ "Credit"))
      (add-if (column-uses? 'running-balance columns-used)
              (_ "Balance"))))
 
@@ -966,116 +969,46 @@ Credit Card, and Income accounts."))))))
       (if (null? account)
           (_ "Split Transaction")
           (string-append 
-           ;; display account code?
            (if show-account-code?
                (string-append (xaccAccountGetCode account) " ")
                "")
-           ;; display account name?
            (if show-account-name?
-               ;; display full account name?
                (if show-account-full-name?
                    (gnc-account-get-full-name account)
                    (xaccAccountGetName account))
                ""))))
 
-    ;; render an account subheading - used-columns determines what is displayed
-    (define (render-account-subheading split)
-      (let ((account (xaccSplitGetAccount split)))
-        (gnc:make-html-text
-         (gnc:html-markup-anchor
-          (gnc:account-anchor-text account)
-          (account-namestring account
-                              (column-uses? 'sort-account-code      used-columns)
-                              #t
-                              (column-uses? 'sort-account-full-name used-columns))))))                        
-
-    (define (render-corresponding-account-subheading split)
-      (let ((account (xaccSplitGetAccount (xaccSplitGetOtherSplit split))))
-        (gnc:make-html-text
-         (gnc:html-markup-anchor
-          (if (null? account)
-              ""
-              (gnc:account-anchor-text account))
-          (account-namestring account
-                              (column-uses? 'sort-account-code      used-columns)
-                              #t
-                              (column-uses? 'sort-account-full-name used-columns))))))
-
-    (define (render-week-subheading split)
-      (gnc:date-get-week-year-string
+    (define (render-date renderer-key split)      
+      ((case renderer-key
+         ((week) gnc:date-get-week-year-string)
+         ((month) gnc:date-get-month-year-string)
+         ((quarter) gnc:date-get-quarter-year-string)
+         ((year) gnc:date-get-year-string))
        (gnc:timepair->date
         (gnc-transaction-get-date-posted
          (xaccSplitGetParent split)))))
-  
-    (define (render-month-subheading split)
-      (gnc:date-get-month-year-string
-       (gnc:timepair->date 
-        (gnc-transaction-get-date-posted
-         (xaccSplitGetParent split)))))
-  
-    (define (render-quarter-subheading split)
-      (gnc:date-get-quarter-year-string 
-       (gnc:timepair->date 
-        (gnc-transaction-get-date-posted
-         (xaccSplitGetParent split)))))
 
-
-    (define (render-year-subheading split)
-      (gnc:date-get-year-string 
-       (gnc:timepair->date 
-        (gnc-transaction-get-date-posted
-         (xaccSplitGetParent split)))))
-
-    (define (render-account-subtotal split)
-      (account-namestring (xaccSplitGetAccount split)
-                          (column-uses? 'sort-account-code      used-columns)
-                          #t
-                          (column-uses? 'sort-account-full-name used-columns)))
-
-    (define (render-corresponding-account-subtotal split)
-      (account-namestring (xaccSplitGetAccount (xaccSplitGetOtherSplit split))
-                          (column-uses? 'sort-account-code      used-columns)
-                          #t
-                          (column-uses? 'sort-account-full-name used-columns)))
-
-    (define (render-week-subtotal split)
-      (let ((tm (gnc:timepair->date (gnc-transaction-get-date-posted (xaccSplitGetParent split)))))
-        (gnc:date-get-week-year-string tm)))
-
-    (define (render-month-subtotal split)
-      (let ((tm (gnc:timepair->date (gnc-transaction-get-date-posted (xaccSplitGetParent split)))))
-        (gnc:date-get-month-year-string tm)))
-
-    (define (render-quarter-subtotal split)
-      (let ((tm (gnc:timepair->date (gnc-transaction-get-date-posted (xaccSplitGetParent split)))))
-        (gnc:date-get-quarter-year-string tm)))
-
-    (define (render-year-subtotal split)
-      (let ((tm (gnc:timepair->date (gnc-transaction-get-date-posted (xaccSplitGetParent split)))))
-        (strftime "%Y" tm)))
+    (define (render-account renderer-key split anchor?)
+      (let* ((account (case renderer-key
+                        ((account) (xaccSplitGetAccount split))
+                        ((other-acc) (xaccSplitGetAccount (xaccSplitGetOtherSplit split)))))
+             (name (account-namestring account
+                                       (column-uses? 'sort-account-code      used-columns)
+                                       #t
+                                       (column-uses? 'sort-account-full-name used-columns))))
+        (if (and anchor? (not (null? account))) ;html anchor for 2-split transactions only
+            (gnc:make-html-text
+             (gnc:html-markup-anchor (gnc:account-anchor-text account) name))
+            name)))
+    
+    (define (render-summary split renderer-key anchor?)
+      (case renderer-key
+        ((week month quarter year) (render-date renderer-key split))
+        ((account other-acc) (render-account renderer-key split anchor?))
+        (else #f)))
 
     (define (render-grand-total)
       (_ "Grand Total"))
-    
-    (define (subheading-renderer split key)
-      ((case key
-         ((week)      render-week-subheading)
-         ((month)     render-month-subheading)
-         ((quarter)   render-quarter-subheading)
-         ((year)      render-year-subheading)
-         ((account)   render-account-subheading)
-         ((other-acc) render-corresponding-account-subheading))
-       split))
-    
-    (define (subtotal-renderer split key)
-      ((case key
-         ((week)      render-week-subtotal)
-         ((month)     render-month-subtotal)
-         ((quarter)   render-quarter-subtotal)
-         ((year)      render-year-subtotal)
-         ((account)   render-account-subtotal)
-         ((other-acc) render-corresponding-account-subtotal))
-       split))
     
     ;
     ;                                                                                                          
@@ -1097,7 +1030,6 @@ Credit Card, and Income accounts."))))))
     ;                                                                                                          
 
     (define (add-split-row split row-style transaction-row?)
-
       (let* ((row-contents '())
              (parent (xaccSplitGetParent split))
              (account (xaccSplitGetAccount split))
@@ -1112,6 +1044,10 @@ Credit Card, and Income accounts."))))))
                           (xaccSplitVoidFormerAmount split)
                           (xaccSplitGetAmount split)))
              (trans-date (gnc-transaction-get-date-posted parent))
+             (split-value-not-reversed (gnc:exchange-by-pricedb-nearest ; used for correct debit/credit
+                                        (gnc:make-gnc-monetary currency damount)
+                                        report-currency
+                                        (timespecCanonicalDayTime trans-date)))
              (split-value (gnc:exchange-by-pricedb-nearest
                            (gnc:make-gnc-monetary 
                             currency
@@ -1123,7 +1059,7 @@ Credit Card, and Income accounts."))))))
                            ;; on the same day.  Otherwise it uses midnight which will
                            ;; likely match a price on the previous day
                            (timespecCanonicalDayTime trans-date))))
-    
+        
         (if (column-uses? 'date used-columns)
             (addto! row-contents
                     (if transaction-row?
@@ -1198,23 +1134,24 @@ Credit Card, and Income accounts."))))))
                     (gnc:make-html-table-cell/markup
                      "number-cell" (gnc:html-transaction-anchor parent split-value))))
     
-        (if (column-uses? 'amount-double used-columns)        
-
-            (if (gnc-numeric-positive-p (gnc:gnc-monetary-amount split-value))
-
+        (if (column-uses? 'amount-double used-columns)
+            ;; I'm now using the split-value-not-reversed. Internal value representation
+            ;; is positive = debit amount
+            ;; is negative = credit amount
+            ;; This must be checked. FIXME.
+            (if (gnc-numeric-positive-p (gnc:gnc-monetary-amount split-value-not-reversed))
                 (begin
                   (addto! row-contents
                           (gnc:make-html-table-cell/markup
                            "number-cell" (gnc:html-transaction-anchor
-                                          parent split-value)))
+                                          parent split-value-not-reversed)))
                   (addto! row-contents ""))
-        
                 (begin
                   (addto! row-contents "")
                   (addto! row-contents
                           (gnc:make-html-table-cell/markup
                            "number-cell" (gnc:html-transaction-anchor
-                                          parent (gnc:monetary-neg split-value)))))))
+                                          parent (gnc:monetary-neg split-value-not-reversed)))))))
     
         (if (column-uses? 'running-balance used-columns)
             (begin
@@ -1298,45 +1235,45 @@ Credit Card, and Income accounts."))))))
             (total-collector
              'add (gnc:gnc-monetary-commodity split-value) (gnc:gnc-monetary-amount split-value))
             
-            (if (and primary-subtotal-pred
+            (if (and primary-subtotal-comparator
                      (or (not next)
                          (and next
-                              (not (equal? (primary-subtotal-pred current)
-                                           (primary-subtotal-pred next))))))
+                              (not (equal? (primary-subtotal-comparator current)
+                                           (primary-subtotal-comparator next))))))
                 
                 (begin                   
-                  (if secondary-subtotal-pred                      
+                  (if secondary-subtotal-comparator                      
                       (begin                        
                         (add-subtotal-row (total-string
-                                           (subtotal-renderer current secondary-sortkey))
+                                           (render-summary current secondary-renderer-key #f))
                                            secondary-subtotal-collector
                                            def:secondary-subtotal-style)
                         (secondary-subtotal-collector 'reset #f #f)))                  
                   (add-subtotal-row (total-string
-                                     (subtotal-renderer current primary-sortkey))
+                                     (render-summary current primary-renderer-key #f))
                                      primary-subtotal-collector
                                      def:primary-subtotal-style)                  
                   (primary-subtotal-collector 'reset #f #f)                  
                   (if next                      
                       (begin                         
-                        (add-subheading (subheading-renderer next primary-sortkey)
+                        (add-subheading (render-summary next primary-renderer-key #t)
                                         def:primary-subtotal-style)                        
-                        (if secondary-subtotal-pred
-                            (add-subheading (subheading-renderer next secondary-sortkey)
+                        (if secondary-subtotal-comparator
+                            (add-subheading (render-summary next secondary-renderer-key #t)
                                             def:secondary-subtotal-style)))))
                 
-                (if (and secondary-subtotal-pred
+                (if (and secondary-subtotal-comparator
                          (or (not next)
                              (and next
-                                  (not (equal? (secondary-subtotal-pred current)
-                                               (secondary-subtotal-pred next))))))
+                                  (not (equal? (secondary-subtotal-comparator current)
+                                               (secondary-subtotal-comparator next))))))
                     (begin (add-subtotal-row (total-string
-                                              (subtotal-renderer current secondary-sortkey))
+                                              (render-summary current secondary-renderer-key #f))
                                               secondary-subtotal-collector
                                              def:secondary-subtotal-style)                           
                            (secondary-subtotal-collector 'reset #f #f)                           
                            (if next
-                               (add-subheading (subheading-renderer next secondary-sortkey)
+                               (add-subheading (render-summary next secondary-renderer-key #t)
                                                def:secondary-subtotal-style)))))
             
             (do-rows-with-subtotals rest 
@@ -1347,12 +1284,12 @@ Credit Card, and Income accounts."))))))
     
     (gnc:html-table-set-col-headers! table headings)
     
-    (if primary-sortkey 
-        (add-subheading (subheading-renderer (car splits) primary-sortkey)
+    (if primary-renderer-key 
+        (add-subheading (render-summary (car splits) primary-renderer-key #t)
                         def:primary-subtotal-style))
     
-    (if secondary-sortkey
-        (add-subheading (subheading-renderer (car splits) secondary-sortkey)
+    (if secondary-renderer-key
+        (add-subheading (render-summary (car splits) secondary-renderer-key #t)
                         def:secondary-subtotal-style))
     
     (do-rows-with-subtotals splits #t
@@ -1543,12 +1480,11 @@ Credit Card, and Income accounts."))))))
                             (subtotal-get-info optname-prime-sortkey 
                                                optname-prime-subtotal
                                                optname-prime-date-subtotal
-                                               'renderer)
+                                               'renderer-key)
                             (subtotal-get-info optname-sec-sortkey 
                                                optname-sec-subtotal
                                                optname-sec-date-subtotal
-                                               'renderer)
-                            )))
+                                               'renderer-key))))
                 
                 (gnc:html-document-set-title! document report-title)
 
