@@ -5440,7 +5440,7 @@ parse_bayes_imap_info (std::string const & imap_bayes_entry)
     auto guid_start = imap_bayes_entry.size() - GUID_ENCODING_LENGTH;
     std::string keyword {imap_bayes_entry.substr (header_length + 1, guid_start - header_length - 2)};
     std::string account_guid {imap_bayes_entry.substr (guid_start)};
-    return {header, keyword, account_guid};
+    return std::tuple <std::string, std::string, std::string> {header, keyword, account_guid};
 }
 
 static void
@@ -5530,9 +5530,9 @@ gnc_account_delete_map_entry (Account *acc, char *full_category, gboolean empty)
     {
         xaccAccountBeginEdit (acc);
         if (empty)
-            qof_instance_slot_delete_if_empty (QOF_INSTANCE(acc), kvp_path);
+            qof_instance_slot_path_delete_if_empty (QOF_INSTANCE(acc), {kvp_path});
         else
-            qof_instance_slot_delete (QOF_INSTANCE(acc), kvp_path);
+            qof_instance_slot_path_delete (QOF_INSTANCE(acc), {kvp_path});
         PINFO("Account is '%s', path is '%s'", xaccAccountGetName (acc), kvp_path);
         qof_instance_set_dirty (QOF_INSTANCE(acc));
         xaccAccountCommitEdit (acc);
@@ -5620,7 +5620,7 @@ static std::vector<std::pair<std::string, KvpValue*>>
 get_new_guid_imap (Account * acc)
 {
     auto frame = qof_instance_get_slots (QOF_INSTANCE (acc));
-    auto slot = frame->get_slot (IMAP_FRAME_BAYES);
+    auto slot = frame->get_slot ({IMAP_FRAME_BAYES});
     if (!slot)
         return {};
     auto imap_frame = slot->get<KvpFrame*> ();
@@ -5640,9 +5640,9 @@ convert_imap_account_bayes_to_guid (Account *acc)
         return;
     auto new_imap = get_new_guid_imap(acc);
     xaccAccountBeginEdit(acc);
-    frame->set(IMAP_FRAME_BAYES, nullptr);
+    frame->set({IMAP_FRAME_BAYES}, nullptr);
     std::for_each(new_imap.begin(), new_imap.end(), [&frame] (std::pair<std::string, KvpValue*> const & entry) {
-        frame->set(entry.first.c_str(), entry.second);
+        frame->set({entry.first.c_str()}, entry.second);
     });
     qof_instance_set_dirty (QOF_INSTANCE (acc));
     xaccAccountCommitEdit(acc);

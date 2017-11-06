@@ -106,13 +106,13 @@ KvpFrame*
 _GncABTransTempl::make_kvp_frame()
 {
     auto frame = new KvpFrame;
-    frame->set(TT_NAME, new KvpValue(m_name.c_str()));
-    frame->set(TT_RNAME, new KvpValue(m_recipient_name.c_str()));
-    frame->set(TT_RACC, new KvpValue(m_recipient_account.c_str()));
-    frame->set(TT_RBCODE, new KvpValue(m_recipient_bankcode.c_str()));
-    frame->set(TT_AMOUNT, new KvpValue(m_amount));
-    frame->set(TT_PURPOS, new KvpValue(m_purpose.c_str()));
-    frame->set(TT_PURPOSCT, new KvpValue(m_purpose_continuation.c_str()));
+    frame->set({TT_NAME}, new KvpValue(m_name.c_str()));
+    frame->set({TT_RNAME}, new KvpValue(m_recipient_name.c_str()));
+    frame->set({TT_RACC}, new KvpValue(m_recipient_account.c_str()));
+    frame->set({TT_RBCODE}, new KvpValue(m_recipient_bankcode.c_str()));
+    frame->set({TT_AMOUNT}, new KvpValue(m_amount));
+    frame->set({TT_PURPOS}, new KvpValue(m_purpose.c_str()));
+    frame->set({TT_PURPOSCT}, new KvpValue(m_purpose_continuation.c_str()));
     return frame;
 }
 
@@ -145,12 +145,12 @@ gnc_ab_trans_templ_list_new_from_book(QofBook *b)
     {
         KvpFrame *frame = static_cast<KvpValue*>(node->data)->get<KvpFrame*>();
         auto c_func = [frame](const char* key)
-            { auto slot = frame->get_slot(key);
+            { auto slot = frame->get_slot({key});
               return slot == nullptr ? std::string("") : std::string(slot->get<const char*>());};
         auto n_func = [frame](const char* key)
-            { auto slot = frame->get_slot(key);
+            { auto slot = frame->get_slot({key});
               return slot == nullptr ? gnc_numeric_zero() : slot->get<gnc_numeric>();};
-        auto amt_slot = frame->get_slot(TT_AMOUNT);
+        auto amt_slot = frame->get_slot({TT_AMOUNT});
         auto templ = new _GncABTransTempl (c_func(TT_NAME), c_func(TT_RNAME),
                                            c_func(TT_RACC), c_func(TT_RBCODE),
                                            n_func(TT_AMOUNT), c_func(TT_PURPOS),

@@ -381,7 +381,7 @@ get_random_kvp_frame_depth (gint depth)
 
         val_added = TRUE;
 
-        ret->set_path(key, val);
+        ret->set_path({key}, val);
 
         g_free(key);
     }

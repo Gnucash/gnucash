@@ -153,8 +153,8 @@ setup (Fixture *fixture, gconstpointer pData)
         xaccTransSetCurrency (txn, fixture->curr);
         xaccSplitSetParent (split1, txn);
         xaccSplitSetParent (split2, txn);
-        frame->set(trans_notes_str, new KvpValue("Salt pork sausage"));
-        frame->set_path("/qux/quux/corge", new KvpValue(123.456));
+        frame->set({trans_notes_str}, new KvpValue("Salt pork sausage"));
+        frame->set_path({"qux", "quux", "corge"}, new KvpValue(123.456));
         qof_instance_set_slots (QOF_INSTANCE (txn), frame);
     }
     xaccTransCommitEdit (txn);
@@ -562,7 +562,7 @@ test_dupe_trans (Fixture *fixture, gconstpointer pData)
 
     oldtxn->date_posted = posted;
     oldtxn->date_entered = entered;
-    oldtxn->inst.kvp_data->set("/foo/bar/baz",
+    oldtxn->inst.kvp_data->set({"foo", "bar", "baz"},
                                new KvpValue("The Great Waldo Pepper"));
 
     newtxn = fixture->func->dupe_trans (oldtxn);
@@ -881,7 +881,7 @@ test_xaccTransEqual (Fixture *fixture, gconstpointer pData)
     g_free(clone->description);
     clone->description = static_cast<char*>(CACHE_INSERT ("Waldo Pepper"));
     auto frame = qof_instance_get_slots (QOF_INSTANCE (clone));
-    frame->set("/qux/quux/corge", new KvpValue(654.321));
+    frame->set({"qux", "quux", "corge"}, new KvpValue(654.321));
     xaccTransCommitEdit (clone);
     g_free (cleanup->msg);
     g_free (check->msg);
@@ -893,7 +893,7 @@ test_xaccTransEqual (Fixture *fixture, gconstpointer pData)
     xaccTransBeginEdit (clone);
     cleanup->msg = g_strdup_printf (cleanup_fmt, clone->orig);
     clone->description = static_cast<char*>(CACHE_INSERT ("Waldo Pepper"));
-    frame->set("/qux/quux/corge", new KvpValue(123.456));
+    frame->set({"qux", "quux", "corge"}, new KvpValue(123.456));
     xaccTransCommitEdit (clone);
     g_free (cleanup->msg);
     g_free (check->msg);
@@ -1858,22 +1858,22 @@ test_xaccTransVoid (Fixture *fixture, gconstpointer pData)
     /* Actual function variables start here. */
     auto frame = fixture->txn->inst.kvp_data;
     auto void_reason = "Voided for Unit Test";
-    auto txn_notes = g_strdup (frame->get_slot(trans_notes_str)->get<const char*>());
+    auto txn_notes = g_strdup (frame->get_slot({trans_notes_str})->get<const char*>());
     Timespec now = timespec_now ();
     char iso8601_str[ISO_DATELENGTH + 1] = "";
     GList *split = NULL;
 
     xaccTransVoid (fixture->txn, void_reason);
-    g_assert_cmpstr (frame->get_slot(trans_notes_str)->get<const char*>(), ==,
+    g_assert_cmpstr (frame->get_slot({trans_notes_str})->get<const char*>(), ==,
                      "Voided transaction");
-    g_assert_cmpstr (frame->get_slot(void_former_notes_str)->get<const char*>(),
+    g_assert_cmpstr (frame->get_slot({void_former_notes_str})->get<const char*>(),
                      ==, txn_notes);
-    g_assert_cmpstr (frame->get_slot(void_reason_str)->get<const char*>(), ==,
+    g_assert_cmpstr (frame->get_slot({void_reason_str})->get<const char*>(), ==,
                      void_reason);
     gnc_timespec_to_iso8601_buff (now, iso8601_str);
-    g_assert_cmpstr (frame->get_slot(void_time_str)->get<const char*>(), ==,
+    g_assert_cmpstr (frame->get_slot({void_time_str})->get<const char*>(), ==,
                      iso8601_str);
-    g_assert_cmpstr (frame->get_slot(TRANS_READ_ONLY_REASON)->get<const char*>(),
+    g_assert_cmpstr (frame->get_slot({TRANS_READ_ONLY_REASON})->get<const char*>(),
                      ==, "Transaction Voided");
     for (split = fixture->txn->splits; split; split=g_list_next (split))
     {
@@ -1883,12 +1883,12 @@ test_xaccTransVoid (Fixture *fixture, gconstpointer pData)
 
     xaccTransUnvoid (fixture->txn);
 
-    g_assert_cmpstr (frame->get_slot(trans_notes_str)->get<const char*>(), ==,
+    g_assert_cmpstr (frame->get_slot({trans_notes_str})->get<const char*>(), ==,
                      txn_notes);
-    g_assert (frame->get_slot(void_former_notes_str) == NULL);
-    g_assert (frame->get_slot(void_reason_str) == NULL);
-    g_assert (frame->get_slot(void_time_str) == NULL);
-    g_assert (frame->get_slot(TRANS_READ_ONLY_REASON) == NULL);
+    g_assert (frame->get_slot({void_former_notes_str}) == NULL);
+    g_assert (frame->get_slot({void_reason_str}) == NULL);
+    g_assert (frame->get_slot({void_time_str}) == NULL);
+    g_assert (frame->get_slot({TRANS_READ_ONLY_REASON}) == NULL);
     for (split = fixture->txn->splits; split; split=g_list_next (split))
     {
         g_assert (!gnc_numeric_zero_p (((Split*)(split->data))->value));
@@ -1909,7 +1909,7 @@ test_xaccTransReverse (Fixture *fixture, gconstpointer pData)
     auto frame = fixture->txn->inst.kvp_data;
     GList *orig_splits = NULL, *rev_splits = NULL;
 
-    g_assert (guid_equal (frame->get_slot(TRANS_REVERSED_BY)->get<GncGUID*>(),
+    g_assert (guid_equal (frame->get_slot({TRANS_REVERSED_BY})->get<GncGUID*>(),
                           xaccTransGetGUID (rev)));
 
     g_assert (!qof_instance_is_dirty (QOF_INSTANCE (rev))); //Cleared by commit

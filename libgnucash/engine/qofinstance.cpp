@@ -1144,8 +1144,8 @@ qof_instance_kvp_add_guid (const QofInstance *inst, const char* path,
     g_return_if_fail (inst->kvp_data != NULL);
 
     auto container = new KvpFrame;
-    container->set(key, new KvpValue(const_cast<GncGUID*>(guid)));
-    container->set("date", new KvpValue(time));
+    container->set({key}, new KvpValue(const_cast<GncGUID*>(guid)));
+    container->set({"date"}, new KvpValue(time));
     delete inst->kvp_data->set_path({path}, new KvpValue(container));
 }
 
@@ -1286,7 +1286,7 @@ bool qof_instance_has_path_slot (QofInstance const * inst, std::vector<std::stri
 gboolean
 qof_instance_has_slot (const QofInstance *inst, const char *path)
 {
-    return inst->kvp_data->get_slot(path) != NULL;
+    return inst->kvp_data->get_slot({path}) != NULL;
 }
 
 void qof_instance_slot_path_delete (QofInstance const * inst, std::vector<std::string> const & path)
@@ -1304,12 +1304,6 @@ qof_instance_slot_var_delete (QofInstance const *inst, unsigned count, ...)
         path.push_back (va_arg (args, char const *));
     va_end (args);
     delete inst->kvp_data->set (path, nullptr);
-}
-
-void
-qof_instance_slot_delete (const QofInstance *inst, const char *path)
-{
-    delete inst->kvp_data->set(path, nullptr);
 }
 
 void qof_instance_slot_path_delete_if_empty (QofInstance const * inst, std::vector<std::string> const & path)
@@ -1338,18 +1332,6 @@ qof_instance_slot_var_delete_if_empty (QofInstance const *inst, unsigned count, 
         auto frame = slot->get <KvpFrame*> ();
         if (frame && frame->empty ())
             delete inst->kvp_data->set (path, nullptr);
-    }
-}
-
-void
-qof_instance_slot_delete_if_empty (const QofInstance *inst, const char *path)
-{
-    auto slot = inst->kvp_data->get_slot(path);
-    if (slot)
-    {
-        auto frame = slot->get<KvpFrame*>();
-        if (frame && frame->empty())
-            delete inst->kvp_data->set(path, nullptr);
     }
 }
 
@@ -1393,7 +1375,7 @@ qof_instance_foreach_slot (const QofInstance *inst, const char* path,
                            void (*proc)(const char*, const GValue*, void*),
                            void* data)
 {
-    auto slot = inst->kvp_data->get_slot(path);
+    auto slot = inst->kvp_data->get_slot({path});
     if (slot == nullptr || slot->get_type() != KvpValue::Type::FRAME)
         return;
     auto frame = slot->get<KvpFrame*>();

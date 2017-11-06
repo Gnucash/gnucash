@@ -226,7 +226,7 @@ set_slot_from_value (slot_info_t* pInfo, KvpValue* pValue)
     case FRAME:
     {
         auto key = get_key_from_path (pInfo->path);
-        pInfo->pKvpFrame->set (key.c_str(), pValue);
+        pInfo->pKvpFrame->set ({key.c_str()}, pValue);
         break;
     }
     case LIST:
@@ -245,7 +245,7 @@ set_slot_from_value (slot_info_t* pInfo, KvpValue* pValue)
             frame->set_path ({path.c_str(), key.c_str()}, pValue);
         }
         else
-            frame->set (key.c_str(), pValue);
+            frame->set ({key.c_str()}, pValue);
         break;
     }
     }
@@ -464,7 +464,7 @@ set_guid_val (gpointer pObject,  gpointer pValue)
 
         slots_load_info (newInfo);
         pValue = new KvpValue {newInfo->pList};
-        pInfo->pKvpFrame->set (key.c_str(), pValue);
+        pInfo->pKvpFrame->set ({key.c_str()}, pValue);
 	delete newInfo;
         break;
     }
@@ -487,7 +487,7 @@ set_guid_val (gpointer pObject,  gpointer pValue)
         default:
         {
             auto key = get_key_from_path (pInfo->path);
-            pInfo->pKvpFrame->set (key.c_str(), new KvpValue {newFrame});
+            pInfo->pKvpFrame->set ({key.c_str()}, new KvpValue {newFrame});
             break;
         }
         }

@@ -154,10 +154,7 @@ void qof_instance_kvp_merge_guids (const QofInstance *target,
                                    const QofInstance *donor, const char* path);
 gboolean qof_instance_has_slot (const QofInstance *inst, const char *path);
 void qof_instance_slot_var_delete (const QofInstance *, unsigned count, ...);
-void qof_instance_slot_delete (const QofInstance *inst, const char *path);
 void qof_instance_slot_var_delete_if_empty (const QofInstance *, unsigned count, ...);
-void qof_instance_slot_delete_if_empty (const QofInstance *inst,
-                                        const char *path);
 void qof_instance_foreach_slot (const QofInstance *inst, const char *path,
                                 void(*proc)(const char*, const GValue*, void*),
                                 void* data);
@@ -183,7 +180,7 @@ template<typename func_type, typename data_type>
 void qof_instance_foreach_slot_temp (QofInstance const * inst, std::string const & path,
         func_type const & func, data_type & data)
 {
-    auto slot = inst->kvp_data->get_slot(path.c_str());
+    auto slot = inst->kvp_data->get_slot({path});
     if (slot == nullptr || slot->get_type() != KvpValue::Type::FRAME)
         return;
     auto frame = slot->get<KvpFrame*>();

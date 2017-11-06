@@ -69,7 +69,7 @@ setup_kvp (Fixture *fixture, gconstpointer pData)
                      "autoreadonly-days", (double)21,
                      NULL);
 
-    slots->set_path("options/Business/Company Name",
+    slots->set_path({"options", "Business", "Company Name"},
                new KvpValue("Bogus Company"));
     qof_commit_edit (QOF_INSTANCE (book));
 }
@@ -120,10 +120,10 @@ test_option_save (Fixture *fixture, gconstpointer pData)
 					       OPTION_NAME_AUTO_READONLY_DAYS,
 					       17));
     qof_book_save_options (book, gnc_option_db_save, odb, TRUE);
-    g_assert_cmpstr (slots->get_slot("options/Accounts/Use Trading Accounts")->get<const char*>(), == , "t");
-    g_assert_cmpstr (slots->get_slot("options/Accounts/Use Split Action Field for Number")->get<const char*>(), == , "t");
-    g_assert_cmpstr (slots->get_slot("options/Business/Company Name")->get<const char*>(), ==, "Bogus Company");
-    g_assert_cmpfloat (slots->get_slot("options/Accounts/Day Threshold for Read-Only Transactions (red line)")->get<double>(), ==, 17);
+    g_assert_cmpstr (slots->get_slot({"options", "Accounts", "Use Trading Accounts"})->get<const char*>(), == , "t");
+    g_assert_cmpstr (slots->get_slot({"options", "Accounts", "Use Split Action Field for Number"})->get<const char*>(), == , "t");
+    g_assert_cmpstr (slots->get_slot({"options", "Business", "Company Name"})->get<const char*>(), ==, "Bogus Company");
+    g_assert_cmpfloat (slots->get_slot({"options", "Accounts", "Day Threshold for Read-Only Transactions (red line)"})->get<double>(), ==, 17);
 
     gnc_option_db_destroy (odb);
 }

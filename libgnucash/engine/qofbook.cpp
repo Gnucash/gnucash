@@ -1040,7 +1040,7 @@ GDate* qof_book_get_autoreadonly_gdate (const QofBook *book)
 const char*
 qof_book_get_string_option(const QofBook* book, const char* opt_name)
 {
-    auto slot = qof_instance_get_slots(QOF_INSTANCE (book))->get_slot(opt_name);
+    auto slot = qof_instance_get_slots(QOF_INSTANCE (book))->get_slot({opt_name});
     if (slot == nullptr)
         return nullptr;
     return slot->get<const char*>();
@@ -1052,9 +1052,9 @@ qof_book_set_string_option(QofBook* book, const char* opt_name, const char* opt_
     qof_book_begin_edit(book);
     auto frame = qof_instance_get_slots(QOF_INSTANCE(book));
     if (opt_val && (*opt_val != '\0'))
-        delete frame->set(opt_name, new KvpValue(g_strdup(opt_val)));
+        delete frame->set({opt_name}, new KvpValue(g_strdup(opt_val)));
     else
-        delete frame->set(opt_name, nullptr);
+        delete frame->set({opt_name}, nullptr);
     qof_instance_set_dirty (QOF_INSTANCE (book));
     qof_book_commit_edit(book);
 }
@@ -1086,7 +1086,7 @@ qof_book_get_features (QofBook *book)
     GHashTable *features = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                   NULL, g_free);
 
-    auto slot = frame->get_slot(GNC_FEATURES);
+    auto slot = frame->get_slot({GNC_FEATURES});
     if (slot != nullptr)
     {
         frame = slot->get<KvpFrame*>();
@@ -1100,11 +1100,11 @@ qof_book_set_feature (QofBook *book, const gchar *key, const gchar *descr)
 {
     KvpFrame *frame = qof_instance_get_slots (QOF_INSTANCE (book));
     KvpValue* feature = nullptr;
-    auto feature_slot = frame->get_slot(GNC_FEATURES);
+    auto feature_slot = frame->get_slot({GNC_FEATURES});
     if (feature_slot)
     {
         auto feature_frame = feature_slot->get<KvpFrame*>();
-        feature = feature_frame->get_slot(key);
+        feature = feature_frame->get_slot({key});
     }
     if (feature == nullptr || g_strcmp0 (feature->get<const char*>(), descr))
     {
@@ -1178,7 +1178,7 @@ qof_book_options_delete (QofBook *book, GSList *path)
         delete root->set_path(path_v, nullptr);
     }
     else
-        delete root->set_path(KVP_OPTION_PATH, nullptr);
+        delete root->set_path({KVP_OPTION_PATH}, nullptr);
 }
 
 /* QofObject function implementation and registration */

@@ -141,7 +141,7 @@ struct KvpFrameImpl
      * @param newvalue: The value to set at key.
      * @return The old value if there was one or nullptr.
      */
-    KvpValue* set(const char * key, KvpValue* newvalue) noexcept;
+    //KvpValue* set(const char * key, KvpValue* newvalue) noexcept;
     /**
      * Set the value with the key in a subframe following the keys in path,
      * replacing and returning the old value if it exists or nullptr if it
@@ -156,18 +156,6 @@ struct KvpFrameImpl
      * @return The old value if there was one or nullptr.
      */
     KvpValue* set(Path path, KvpValue* newvalue) noexcept;
-    /**
-     * Set the value with the key in a subframe following the keys in path,
-     * replacing and returning the old value if it exists or nullptr if it
-     * doesn't. Creates any missing intermediate frames. Takes
-     * ownership of new value and releases ownership of the returned old
-     * value. Values must be allocated on the free store with operator new.
-     * @param path: The path of subframes as a '/'-delimited string leading to
-     * the frame in which to insert/replace.
-     * @param newvalue: The value to set at key.
-     * @return The old value if there was one or nullptr.
-     */
-    KvpValue* set_path(const char* path, KvpValue* newvalue) noexcept;
      /**
      * Set the value with the key in a subframe following the keys in path,
      * replacing and returning the old value if it exists or nullptr if it
@@ -198,16 +186,11 @@ struct KvpFrameImpl
      */
     std::vector<std::string> get_keys() const noexcept;
 
-    /** Get the value for the key or nullptr if it doesn't exist.
-     * @param key: The key.
-     * @return The value at the key or nullptr.
-     */
-    KvpValue* get_slot(const char * key) const noexcept;
     /** Get the value for the tail of the path or nullptr if it doesn't exist.
      * @param path: Path of keys leading to the desired value.
      * @return The value at the key or nullptr.
      */
-    KvpValue* get_slot(Path keys) const noexcept;
+    KvpValue* get_slot(Path keys) noexcept;
 
     /**
      * proc is called with each of the immediate contents of this frame, passing it the key,
@@ -240,7 +223,7 @@ struct KvpFrameImpl
      * the frame-containing values.
      */
     std::vector <std::pair <std::vector <std::string>, KvpValue*>>
-    flatten_kvp(void) const;
+    flatten_kvp(void) const noexcept;
 
     /** Test for emptiness
      * @return true if the frame contains nothing.
@@ -251,7 +234,10 @@ struct KvpFrameImpl
     private:
     map_type m_valuemap;
 
-    void flatten_kvp_impl(std::vector <std::string>, std::vector <std::pair <std::vector <std::string>, KvpValue*>> &) const;
+    KvpFrame * get_child_frame_or_nullptr (Path const &) noexcept;
+    KvpFrame * get_child_frame_or_create (Path const &) noexcept;
+    void flatten_kvp_impl(std::vector <std::string>, std::vector <std::pair <std::vector <std::string>, KvpValue*>> &) const noexcept;
+    KvpValue * set_impl (std::string const &, KvpValue *) noexcept;
 };
 
 template<typename func_type>

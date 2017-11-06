@@ -440,7 +440,7 @@ dom_tree_to_kvp_frame_given (xmlNodePtr node, KvpFrame* frame)
                 if (val)
                 {
                     //We're deleting the old KvpValue returned by replace_nc().
-                    delete frame->set (key, val);
+                    delete frame->set ({key}, val);
                 }
                 else
                 {
