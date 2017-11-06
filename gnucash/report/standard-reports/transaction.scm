@@ -9,7 +9,9 @@
 ;; Michael T. Garrison Stuber
 ;; Modified account names display by Tomas Pospisek
 ;; <tpo_deb@sourcepole.ch> with a lot of help from "warlord"
-;; Refactored by Christopher Lam
+;; Refactored by Christopher Lam (2017)
+;; - introduced account/transaction substring/regex matcher
+;; - add custom query/sorter in scheme
 ;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -111,22 +113,21 @@ options specified in the Options panels."))
 
 (define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
 
-
-;
-;                               ;
-;                         ;     ;
-;                         ;     ;
-;    ;;;;   ;;;   ;; ;;  ;;;;;  ;   ;   ;;;   ;   ;   ;;;;
-;   ;   ;  ;   ;   ;; ;   ;     ;  ;   ;   ;  ;   ;  ;   ;
-;   ;;     ;   ;   ;      ;     ; ;    ;   ;   ;  ;  ;;
-;     ;;   ;   ;   ;      ;     ;;;    ;;;;;   ; ;     ;;
-;       ;  ;   ;   ;      ;     ; ;;   ;       ; ;       ;
-;   ;   ;  ;   ;   ;      ;     ;  ;;  ;;      ; ;   ;   ;
-;   ;;;;    ;;;   ;;;;     ;;;  ;   ;;  ;;;;    ;    ;;;;
-;                                               ;
-;                                              ;;
-;                                             ;
-;
+;                                                          
+;                               ;                          
+;                         ;     ;                          
+;                         ;     ;                          
+;    ;;;;   ;;;   ;; ;;  ;;;;;  ;   ;   ;;;   ;   ;   ;;;; 
+;   ;   ;  ;   ;   ;; ;   ;     ;  ;   ;   ;  ;   ;  ;   ; 
+;   ;;     ;   ;   ;      ;     ; ;    ;   ;   ;  ;  ;;    
+;     ;;   ;   ;   ;      ;     ;;;    ;;;;;   ; ;     ;;  
+;       ;  ;   ;   ;      ;     ; ;;   ;       ; ;       ; 
+;   ;   ;  ;   ;   ;      ;     ;  ;;  ;;      ; ;   ;   ; 
+;   ;;;;    ;;;   ;;;;     ;;;  ;   ;;  ;;;;    ;    ;;;;  
+;                                               ;          
+;                                              ;;          
+;                                             ;            
+;                                                          
 
 (define sortkey-list
   ;;
@@ -182,7 +183,7 @@ options specified in the Options panels."))
 
         (cons 'amount        (list (cons 'sortkey (list SPLIT-VALUE))
                                    (cons 'split-sortvalue #f)
-                                   (cons 'text (N_ "Amount."))
+                                   (cons 'text (N_ "Amount"))
                                    (cons 'tip (N_ "Sort by amount."))
                                    (cons 'renderer-key #f)))
 
@@ -277,23 +278,21 @@ options specified in the Options panels."))
 (define (date-subtotal-get-info sortkey info)
   (cdr (assq info (cdr (assq sortkey date-subtotal-list)))))
 
-;
-;
-;
-;
-;   ;;;;;;  ;;;;;    ;;;;;   ;;;;            ;;;;    ;;;;   ;;;;;;  ;;;;;    ;;;;   ;;   ;   ;;;;
-;     ;     ;    ;   ;       ;   ;          ;   ;;   ;   ;    ;       ;     ;   ;;  ;;   ;  ;    ;
-;     ;     ;    ;   ;       ;   ;          ;    ;   ;   ;    ;       ;     ;    ;  ; ;  ;  ;
-;     ;     ;   ;;   ;       ;   ;          ;    ;   ;   ;    ;       ;     ;    ;  ; ;  ;  ;;
-;     ;     ;;;;;    ;;;;    ;   ;  ;;;;;;  ;    ;   ;   ;    ;       ;     ;    ;  ; ;  ;    ;;;
-;     ;     ;  ;     ;       ;;;;           ;    ;   ;;;;     ;       ;     ;    ;  ;  ; ;      ;;
-;     ;     ;   ;    ;       ;              ;    ;   ;        ;       ;     ;    ;  ;  ; ;       ;
-;     ;     ;   ;;   ;       ;              ;;  ;;   ;        ;       ;     ;;  ;;  ;   ;;  ;   ;;
-;     ;     ;    ;   ;;;;;   ;               ;;;;    ;        ;     ;;;;;    ;;;;   ;   ;;  ;;;;;
-;
-;
-;
-;
+;                                                                                      
+;                                                                                      
+;  ;;;;;;; ;;;;;   ;;;;  ;;;;;          ;;;   ;;;;; ;;;;;;; ;;;;;   ;;;   ;;  ;   ;;;  
+;     ;    ;   ;   ;     ;   ;         ;   ;  ;   ;    ;      ;    ;   ;  ;;  ;  ;   ; 
+;     ;    ;   ;   ;     ;    ;        ;   ;  ;    ;   ;      ;    ;   ;  ;;  ;  ;     
+;     ;    ;   ;   ;     ;    ;        ;    ; ;    ;   ;      ;    ;    ; ; ; ;  ;;    
+;     ;    ;;;;    ;;;;  ;   ;  ;;;;;  ;    ; ;   ;    ;      ;    ;    ; ; ; ;    ;;; 
+;     ;    ;  ;    ;     ;;;;          ;    ; ;;;;     ;      ;    ;    ; ; ; ;      ; 
+;     ;    ;  ;    ;     ;             ;   ;  ;        ;      ;    ;   ;  ;  ;;      ; 
+;     ;    ;   ;   ;     ;             ;   ;  ;        ;      ;    ;   ;  ;  ;;  ;   ; 
+;     ;    ;   ;;  ;;;;  ;              ;;;   ;        ;    ;;;;;   ;;;   ;   ;  ;;;;  
+;                                                                                      
+;                                                                                      
+;                                                                                      
+;                                                                                      
 
 (define (trep-options-generator)
   (define options (gnc:new-options))
@@ -301,26 +300,36 @@ options specified in the Options panels."))
     (gnc:register-option options new-option))
 
   ;; General options
-  ;
-  ;
-  ;
-  ;                                                   ;;;
-  ;                                                     ;
-  ;        ;                                            ;
-  ;    ;;;;;   ;;;;   ; ;;;    ;;;;   ;; ;;;  ;;;;      ;
-  ;   ;   ;   ;;  ;   ;;  ;   ;;  ;    ;;  ;      ;     ;
-  ;   ;   ;   ;    ;  ;   ;;  ;    ;   ;;         ;     ;
-  ;   ;   ;   ;;;;;;  ;   ;;  ;;;;;;   ;;      ;;;;     ;
-  ;    ;;;    ;       ;   ;;  ;        ;;     ;   ;     ;
-  ;   ;       ;;      ;   ;;  ;;       ;;     ;   ;     ;
-  ;    ;;;;    ;;;;;  ;   ;;   ;;;;;  ;;;;     ;;;;;    ;;;;
-  ;        ;
-  ;   ;    ;
-  ;    ;;;;
-  ;
+
+  ;                                                   
+  ;                                             ;;;   
+  ;                                               ;   
+  ;        ;                                      ;   
+  ;    ;;;;;  ;;;   ; ;;;   ;;;   ;; ;;  ;;;;     ;   
+  ;   ;   ;  ;   ;  ;;  ;  ;   ;   ;; ;      ;    ;   
+  ;   ;   ;  ;   ;  ;   ;  ;   ;   ;         ;    ;   
+  ;   ;   ;  ;;;;;  ;   ;  ;;;;;   ;      ;;;;    ;   
+  ;    ;;;   ;      ;   ;  ;       ;     ;   ;    ;   
+  ;   ;      ;;     ;   ;  ;;      ;     ;   ;    ;   
+  ;    ;;;;   ;;;;  ;   ;   ;;;;  ;;;;   ;;;;;    ;;; 
+  ;       ;                                           
+  ;   ;   ;                                           
+  ;   ;;;;;                                           
+  ;                                                   
+
 
   (gnc:options-add-date-interval!
    options gnc:pagename-general optname-startdate optname-enddate "a")
+
+  (gnc:register-trep-option
+   (gnc:make-simple-boolean-option
+    gnc:pagename-general "Custom Query Algorithm"
+    "z1" "Use custom query instead of qof-query" #f))
+
+  (gnc:register-trep-option
+   (gnc:make-simple-boolean-option
+    gnc:pagename-general "Custom Sort Algorithm"
+    "z2" "Use custom sorting instead of qof-query" #f))
 
   (gnc:register-trep-option
    (gnc:make-complex-boolean-option
@@ -340,23 +349,22 @@ options specified in the Options panels."))
 
   ;; Filtering Options
 
-  ;
-  ;
-  ;
-  ;      ;;;    ;;    ;;;                               ;;
-  ;     ;       ;;      ;       ;                       ;;
-  ;     ;               ;       ;                                          ;
-  ;     ;      ;;;      ;     ;;;;;    ;;;;   ;; ;;;   ;;;    ; ;;;    ;;;;;
-  ;   ;;;;;      ;      ;       ;     ;;  ;    ;;  ;     ;    ;;  ;   ;   ;
-  ;     ;        ;      ;       ;     ;    ;   ;;        ;    ;   ;;  ;   ;
-  ;     ;        ;      ;       ;     ;;;;;;   ;;        ;    ;   ;;  ;   ;
-  ;     ;        ;      ;       ;     ;        ;;        ;    ;   ;;   ;;;
-  ;     ;        ;      ;       ;     ;;       ;;        ;    ;   ;;  ;
-  ;     ;      ;;;;;    ;;;;    ;;;;   ;;;;;  ;;;;     ;;;;;  ;   ;;   ;;;;
-  ;                                                                        ;
-  ;                                                                   ;    ;
-  ;                                                                    ;;;;
-  ;
+  ;                                                                 
+  ;     ;;;;   ;    ;;;                           ;                 
+  ;     ;      ;      ;     ;                     ;                 
+  ;     ;             ;     ;                                      ;
+  ;     ;     ;;      ;    ;;;;;   ;;;   ;; ;;   ;;    ; ;;;   ;;;;;
+  ;   ;;;;;    ;      ;     ;     ;   ;   ;; ;    ;    ;;  ;  ;   ; 
+  ;     ;      ;      ;     ;     ;   ;   ;       ;    ;   ;  ;   ; 
+  ;     ;      ;      ;     ;     ;;;;;   ;       ;    ;   ;  ;   ; 
+  ;     ;      ;      ;     ;     ;       ;       ;    ;   ;   ;;;  
+  ;     ;      ;      ;     ;     ;;      ;       ;    ;   ;  ;     
+  ;     ;    ;;;;;    ;;;    ;;;   ;;;;  ;;;;   ;;;;;  ;   ;   ;;;; 
+  ;                                                               ; 
+  ;                                                           ;   ; 
+  ;                                                           ;;;;; 
+  ;                                                                 
+
 
   (gnc:register-trep-option
    (gnc:make-string-option
@@ -404,24 +412,21 @@ tags within description, notes or memo. ")
           (vector '(#\y)  (N_ "Reconciled")    (N_ "Reconciled only")))))
 
   ;; Accounts options
-
-  ;
-  ;
-  ;
-  ;
-  ;                                                     ;
-  ;                                                     ;
-  ;   ;;;;      ;;;     ;;;    ;;;;   ;   ;;  ; ;;;   ;;;;;    ;;;;
-  ;       ;    ;   ;   ;   ;  ;;  ;   ;   ;;  ;;  ;     ;     ;;  ;
-  ;       ;   ;       ;       ;    ;  ;   ;;  ;   ;;    ;     ;;
-  ;    ;;;;   ;       ;       ;    ;  ;   ;;  ;   ;;    ;       ;;;
-  ;   ;   ;   ;       ;       ;    ;  ;   ;;  ;   ;;    ;         ;
-  ;   ;   ;    ;       ;      ;;  ;   ;   ;;  ;   ;;    ;     ;   ;;
-  ;    ;;;;;    ;;;;    ;;;;   ;;;;    ;;; ;  ;   ;;    ;;;;   ;;;;
-  ;
-  ;
-  ;
-  ;
+  ;                                                          
+  ;                                                          
+  ;                                              ;           
+  ;                                              ;           
+  ;   ;;;;    ;;;;   ;;;;   ;;;   ;   ;  ; ;;;  ;;;;;   ;;;; 
+  ;       ;   ;  ;   ;  ;  ;   ;  ;   ;  ;;  ;   ;     ;   ; 
+  ;       ;  ;      ;      ;   ;  ;   ;  ;   ;   ;     ;;    
+  ;    ;;;;  ;      ;      ;   ;  ;   ;  ;   ;   ;       ;;  
+  ;   ;   ;  ;      ;      ;   ;  ;   ;  ;   ;   ;         ; 
+  ;   ;   ;   ;      ;     ;   ;  ;   ;  ;   ;   ;     ;   ; 
+  ;   ;;;;;   ;;;;   ;;;;   ;;;    ;;;;  ;   ;    ;;;  ;;;;  
+  ;                                                          
+  ;                                                          
+  ;                                                          
+  ;                                                          
 
   ;; account to do report on
   (gnc:register-trep-option
@@ -472,24 +477,22 @@ tags within description, notes or memo. ")
      (vector 'both          (N_ "Both") (N_ "Show both (and include void transactions in totals).")))))
 
   ;; Sorting options
+  ;                                                   
+  ;                                 ;                 
+  ;                         ;       ;                 
+  ;                         ;                        ;
+  ;    ;;;;   ;;;   ;; ;;  ;;;;;   ;;    ; ;;;   ;;;;;
+  ;   ;   ;  ;   ;   ;; ;   ;       ;    ;;  ;  ;   ; 
+  ;   ;;     ;   ;   ;      ;       ;    ;   ;  ;   ; 
+  ;     ;;   ;   ;   ;      ;       ;    ;   ;  ;   ; 
+  ;       ;  ;   ;   ;      ;       ;    ;   ;   ;;;  
+  ;   ;   ;  ;   ;   ;      ;       ;    ;   ;  ;     
+  ;   ;;;;    ;;;   ;;;;     ;;;  ;;;;;  ;   ;   ;;;; 
+  ;                                                 ; 
+  ;                                             ;   ; 
+  ;                                             ;;;;; 
+  ;                                                   
 
-  ;
-  ;
-  ;
-  ;                                     ;;
-  ;                             ;       ;;
-  ;                             ;                          ;
-  ;    ;;;;    ;;;;   ;; ;;;  ;;;;;    ;;;    ; ;;;    ;;;;;
-  ;   ;;  ;   ;;  ;    ;;  ;    ;        ;    ;;  ;   ;   ;
-  ;   ;;      ;    ;   ;;       ;        ;    ;   ;;  ;   ;
-  ;     ;;;   ;    ;   ;;       ;        ;    ;   ;;  ;   ;
-  ;       ;   ;    ;   ;;       ;        ;    ;   ;;   ;;;
-  ;   ;   ;;  ;;  ;    ;;       ;        ;    ;   ;;  ;
-  ;    ;;;;    ;;;;   ;;;;      ;;;;   ;;;;;  ;   ;;   ;;;;
-  ;                                                        ;
-  ;                                                   ;    ;
-  ;                                                    ;;;;
-  ;
 
   (let ((ascending-choice-list
          (list (vector 'ascend
@@ -657,24 +660,22 @@ tags within description, notes or memo. ")
       ascending-choice-list)))
 
   ;; Display options
+  ;                                                   
+  ;       ;    ;                  ;;;                 
+  ;       ;    ;                    ;                 
+  ;       ;                         ;                 
+  ;    ;;;;   ;;     ;;;;  ; ;;     ;    ;;;;   ;   ; 
+  ;   ;   ;    ;    ;   ;  ;;  ;    ;        ;  ;   ; 
+  ;   ;   ;    ;    ;;     ;   ;    ;        ;   ;  ; 
+  ;   ;   ;    ;      ;;   ;   ;    ;     ;;;;   ; ;  
+  ;   ;   ;    ;        ;  ;   ;    ;    ;   ;   ; ;  
+  ;   ;   ;    ;    ;   ;  ;   ;    ;    ;   ;   ; ;  
+  ;    ;;;;  ;;;;;  ;;;;   ;;;;     ;;;  ;;;;;    ;   
+  ;                        ;                      ;   
+  ;                        ;                     ;;   
+  ;                        ;                    ;     
+  ;                                                   
 
-  ;
-  ;
-  ;
-  ;       ;;    ;;                    ;;;
-  ;       ;;    ;;                      ;
-  ;       ;;                            ;
-  ;    ;;;;;   ;;;     ;;;;   ; ;;;     ;     ;;;;    ;    ;
-  ;   ;;  ;;     ;    ;;  ;   ;;  ;;    ;         ;   ;   ;
-  ;   ;   ;;     ;    ;;      ;    ;    ;         ;    ;  ;
-  ;   ;   ;;     ;      ;;;   ;    ;    ;      ;;;;    ;  ;
-  ;   ;   ;;     ;        ;   ;    ;    ;     ;   ;    ; ;
-  ;   ;;  ;;     ;    ;   ;;  ;;  ;     ;     ;   ;     ;;
-  ;    ;;;;;   ;;;;;   ;;;;   ; ;;;     ;;;;   ;;;;;    ;;
-  ;                           ;                         ;
-  ;                           ;                         ;
-  ;                           ;                       ;;
-  ;
 
   (let ((disp-memo? #t)
         (disp-accname? #t)
@@ -813,23 +814,21 @@ Credit Card, and Income accounts."))))))
 
 ;; ;;;;;;;;;;;;;;;;;;;;
 ;; Here comes the big function that builds the whole table.
-;
-;
-;
-;
-;   ;;  ;;    ;;    ;;   ;   ;;;;;           ;;;;    ;;;;    ;      ;;;;;   ;;;;;;          ;;;;;;    ;;    ;;;;;    ;       ;;;;;
-;   ;;  ;;    ;;    ;;  ;    ;              ;    ;   ;   ;   ;        ;       ;               ;       ;;    ;   ;    ;       ;
-;   ;;  ;;   ; ;    ;; ;     ;              ;        ;   ;   ;        ;       ;               ;      ; ;    ;   ;;   ;       ;
-;   ;; ; ;   ;  ;   ;;;      ;              ;;       ;   ;   ;        ;       ;               ;      ;  ;   ;   ;    ;       ;
-;   ; ;; ;   ;  ;   ;;;      ;;;;   ;;;;;;    ;;;    ;   ;   ;        ;       ;     ;;;;;;    ;      ;  ;   ;;;;     ;       ;;;;
-;   ; ;; ;  ;;  ;   ;; ;     ;                  ;;   ;;;;    ;        ;       ;               ;     ;;  ;   ;   ;;   ;       ;
-;   ; ;; ;  ;;;;;;  ;; ;;    ;                   ;   ;       ;        ;       ;               ;     ;;;;;;  ;    ;   ;       ;
-;  ;;    ;  ;    ;  ;;  ;    ;              ;   ;;   ;       ;        ;       ;               ;     ;    ;  ;    ;   ;       ;
-;  ;     ; ;;    ;; ;;   ;;  ;;;;;          ;;;;;    ;       ;;;;;  ;;;;;     ;               ;    ;;    ;; ;;;;;    ;;;;;   ;;;;;
-;
-;
-;
-;
+;                                                                                                                  
+;                                                                                                                  
+;   ;   ;    ;    ;   ;;  ;;;;          ;;;   ;;;;;   ;     ;;;;; ;;;;;;;       ;;;;;;;   ;    ;;;;    ;      ;;;; 
+;   ;;  ;   ; ;   ;  ;;   ;            ;   ;  ;   ;   ;       ;      ;             ;     ; ;   ;   ;   ;      ;    
+;   ;; ; ;  ; ;   ;  ;    ;            ;      ;    ;  ;       ;      ;             ;     ; ;   ;   ;   ;      ;    
+;   ;; ; ;  ; ;   ; ;     ;            ;;     ;    ;  ;       ;      ;             ;     ; ;   ;   ;   ;      ;    
+;   ;; ; ;  ;  ;  ;;;     ;;;;  ;;;;;    ;;;  ;   ;   ;       ;      ;    ;;;;;    ;     ;  ;  ;;;;    ;      ;;;; 
+;   ; ;; ; ;   ;  ; ;;    ;                ;  ;;;;    ;       ;      ;             ;    ;   ;  ;   ;   ;      ;    
+;  ;  ;  ; ;;;;;  ;  ;    ;                ;  ;       ;       ;      ;             ;    ;;;;;  ;   ;   ;      ;    
+;  ;     ; ;   ;; ;   ;   ;            ;   ;  ;       ;       ;      ;             ;    ;   ;; ;   ;   ;      ;    
+;  ;     ;;     ; ;   ;;  ;;;;         ;;;;   ;       ;;;;  ;;;;;    ;             ;   ;     ; ;;;;    ;;;;   ;;;; 
+;                                                                                                                  
+;                                                                                                                  
+;                                                                                                                  
+;                                                                                                                  
 
 (define (make-split-table splits options
                           primary-subtotal-comparator
@@ -903,8 +902,6 @@ Credit Card, and Income accounts."))))))
              (_ "Price"))
      (add-if (column-uses? 'amount-single columns-used)
              (_ "Amount"))
-     ;; FIXME: Proper labels: what?
-     ;; formerly Debit/Credit, but not always true; change to Positive/Negative for now
      (add-if (column-uses? 'amount-double columns-used)
              (_ "Debit")
              (_ "Credit"))
@@ -961,21 +958,21 @@ Credit Card, and Income accounts."))))))
 
     (define (total-string str) (string-append (_ "Total For ") str))
     ;
-    ;
-    ;                               ;;
-    ;                               ;;
-    ;                               ;;
-    ;   ;; ;;;   ;;;;   ; ;;;    ;;;;;   ;;;;   ;; ;;;   ;;;;   ;; ;;;   ;;;;
-    ;    ;;  ;  ;;  ;   ;;  ;   ;;  ;;  ;;  ;    ;;  ;  ;;  ;    ;;  ;  ;;  ;
-    ;    ;;     ;    ;  ;   ;;  ;   ;;  ;    ;   ;;     ;    ;   ;;     ;;
-    ;    ;;     ;;;;;;  ;   ;;  ;   ;;  ;;;;;;   ;;     ;;;;;;   ;;       ;;;
-    ;    ;;     ;       ;   ;;  ;   ;;  ;        ;;     ;        ;;         ;
-    ;    ;;     ;;      ;   ;;  ;;  ;;  ;;       ;;     ;;       ;;     ;   ;;
-    ;   ;;;;     ;;;;;  ;   ;;   ;;;;;   ;;;;;  ;;;;     ;;;;;  ;;;;     ;;;;
-    ;
-    ;
-    ;
-    ;
+    ;                                                                 
+    ;                            ;                                    
+    ;                            ;                                    
+    ;                            ;                                    
+    ;   ;; ;;   ;;;   ; ;;;   ;;;;   ;;;   ;; ;;   ;;;   ;; ;;   ;;;; 
+    ;    ;; ;  ;   ;  ;;  ;  ;   ;  ;   ;   ;; ;  ;   ;   ;; ;  ;   ; 
+    ;    ;     ;   ;  ;   ;  ;   ;  ;   ;   ;     ;   ;   ;     ;;    
+    ;    ;     ;;;;;  ;   ;  ;   ;  ;;;;;   ;     ;;;;;   ;       ;;  
+    ;    ;     ;      ;   ;  ;   ;  ;       ;     ;       ;         ; 
+    ;    ;     ;;     ;   ;  ;   ;  ;;      ;     ;;      ;     ;   ; 
+    ;   ;;;;    ;;;;  ;   ;   ;;;;   ;;;;  ;;;;    ;;;;  ;;;;   ;;;;  
+    ;                                                                 
+    ;                                                                 
+    ;                                                                 
+    ;                                                                 
 
     ;; display an account name depending on the options the user has set
     (define (account-namestring account show-account-code? show-account-name? show-account-full-name?)
@@ -1028,24 +1025,21 @@ Credit Card, and Income accounts."))))))
     (define (render-grand-total)
       (_ "Grand Total"))
 
-    ;
-    ;
-    ;
-    ;
-    ;               ;;      ;;                          ;;;       ;;
-    ;               ;;      ;;                            ;       ;;      ;
-    ;               ;;      ;;                            ;               ;
-    ;   ;;;;     ;;;;;   ;;;;;           ;;;;   ; ;;;     ;      ;;;    ;;;;;           ;; ;;;   ;;;;  ;     ;;
-    ;       ;   ;;  ;;  ;;  ;;          ;;  ;   ;;  ;;    ;        ;      ;              ;;  ;  ;;  ;  ;; ;; ;
-    ;       ;   ;   ;;  ;   ;;  ;;;;;;  ;;      ;    ;    ;        ;      ;     ;;;;;;   ;;     ;    ;  ; ;; ;
-    ;    ;;;;   ;   ;;  ;   ;;            ;;;   ;    ;    ;        ;      ;              ;;     ;    ;  ; ;; ;
-    ;   ;   ;   ;   ;;  ;   ;;              ;   ;    ;    ;        ;      ;              ;;     ;    ;  ; ;; ;
-    ;   ;   ;   ;;  ;;  ;;  ;;          ;   ;;  ;;  ;     ;        ;      ;              ;;     ;;  ;   ;;  ;;
-    ;    ;;;;;   ;;;;;   ;;;;;           ;;;;   ; ;;;     ;;;;   ;;;;;    ;;;;          ;;;;     ;;;;   ;;  ;
-    ;                                           ;
-    ;                                           ;
-    ;                                           ;
-    ;
+    ;                                                                                             
+    ;              ;      ;                       ;;;      ;                                      
+    ;              ;      ;                         ;      ;     ;                                
+    ;              ;      ;                         ;            ;                                
+    ;   ;;;;    ;;;;   ;;;;          ;;;;  ; ;;     ;     ;;    ;;;;;         ;; ;;   ;;;  ;     ;
+    ;       ;  ;   ;  ;   ;         ;   ;  ;;  ;    ;      ;     ;             ;; ;  ;   ; ;  ;  ;
+    ;       ;  ;   ;  ;   ;  ;;;;;  ;;     ;   ;    ;      ;     ;     ;;;;;   ;     ;   ;  ; ;; ;
+    ;    ;;;;  ;   ;  ;   ;           ;;   ;   ;    ;      ;     ;             ;     ;   ;  ;; ;; 
+    ;   ;   ;  ;   ;  ;   ;             ;  ;   ;    ;      ;     ;             ;     ;   ;  ;; ;; 
+    ;   ;   ;  ;   ;  ;   ;         ;   ;  ;   ;    ;      ;     ;             ;     ;   ;  ;; ;; 
+    ;   ;;;;;   ;;;;   ;;;;         ;;;;   ;;;;     ;;;  ;;;;;    ;;;         ;;;;    ;;;   ;; ;; 
+    ;                                      ;                                                      
+    ;                                      ;                                                      
+    ;                                      ;                                                      
+    ;                                                                                             
 
     (define (add-split-row split row-style transaction-row?)
       (let* ((row-contents '())
@@ -1100,7 +1094,8 @@ Credit Card, and Income accounts."))))))
                     (if transaction-row?
                         (if BOOK-SPLIT-ACTION
                             (let* ((num (gnc-get-num-action parent split))
-                                   (t-num (if (if (gnc:lookup-option options gnc:pagename-display
+                                   (t-num (if (if (gnc:lookup-option options
+                                                                     gnc:pagename-display
                                                                      (N_ "Trans Number"))
                                                   (opt-val gnc:pagename-display (N_ "Trans Number"))
                                                   "")
@@ -1185,24 +1180,21 @@ Credit Card, and Income accounts."))))))
 
         split-value-not-reversed))
 
-
-
-
-    ;
-    ;                                                                  ;                                  ;;;
-    ;                                                                  ;       ;             ;              ;
-    ;                                                                  ;       ;             ;              ;
-    ;   ;; ;;   ;;;  ;     ;  ;;;;        ;     ;         ;;;;  ;   ;  ; ;;   ;;;;;   ;;;   ;;;;;  ;;;;     ;     ;;;;
-    ;    ;; ;  ;   ; ;  ;  ; ;   ;        ;  ;  ;        ;   ;  ;   ;  ;;  ;   ;     ;   ;   ;         ;    ;    ;   ;
-    ;    ;     ;   ;  ; ;; ; ;;     ;;;;;  ; ;; ; ;;;;;  ;;     ;   ;  ;   ;   ;     ;   ;   ;         ;    ;    ;;
-    ;    ;     ;   ;  ;; ;;    ;;          ;; ;;           ;;   ;   ;  ;   ;   ;     ;   ;   ;      ;;;;    ;      ;;
-    ;    ;     ;   ;  ;; ;;      ;         ;; ;;             ;  ;   ;  ;   ;   ;     ;   ;   ;     ;   ;    ;        ;
-    ;    ;     ;   ;  ;; ;;  ;   ;         ;; ;;         ;   ;  ;   ;  ;   ;   ;     ;   ;   ;     ;   ;    ;    ;   ;
-    ;   ;;;;    ;;;   ;; ;;  ;;;;          ;; ;;         ;;;;    ;;;;  ;;;;     ;;;   ;;;     ;;;  ;;;;;    ;;;  ;;;;
-    ;
-    ;
-    ;
-    ;
+    ;                                                                                                                  
+    ;                                                                  ;                                  ;;;          
+    ;                                                                  ;       ;             ;              ;          
+    ;                                                                  ;       ;             ;              ;          
+    ;   ;; ;;   ;;;  ;     ;  ;;;;        ;     ;         ;;;;  ;   ;  ; ;;   ;;;;;   ;;;   ;;;;;  ;;;;     ;     ;;;; 
+    ;    ;; ;  ;   ; ;  ;  ; ;   ;        ;  ;  ;        ;   ;  ;   ;  ;;  ;   ;     ;   ;   ;         ;    ;    ;   ; 
+    ;    ;     ;   ;  ; ;; ; ;;     ;;;;;  ; ;; ; ;;;;;  ;;     ;   ;  ;   ;   ;     ;   ;   ;         ;    ;    ;;    
+    ;    ;     ;   ;  ;; ;;    ;;          ;; ;;           ;;   ;   ;  ;   ;   ;     ;   ;   ;      ;;;;    ;      ;;  
+    ;    ;     ;   ;  ;; ;;      ;         ;; ;;             ;  ;   ;  ;   ;   ;     ;   ;   ;     ;   ;    ;        ; 
+    ;    ;     ;   ;  ;; ;;  ;   ;         ;; ;;         ;   ;  ;   ;  ;   ;   ;     ;   ;   ;     ;   ;    ;    ;   ; 
+    ;   ;;;;    ;;;   ;; ;;  ;;;;          ;; ;;         ;;;;    ;;;;  ;;;;     ;;;   ;;;     ;;;  ;;;;;    ;;;  ;;;;  
+    ;                                                                                                                  
+    ;                                                                                                                  
+    ;                                                                                                                  
+    ;                                                                                                                  
 
 
     (define (do-rows-with-subtotals splits
@@ -1319,24 +1311,21 @@ Credit Card, and Income accounts."))))))
 
 ;; ;;;;;;;;;;;;;;;;;;;;
 ;; Here comes the renderer function for this report.
-
-;
-;
-;
-;
-;   ;;;;;;  ;;;;;    ;;;;;   ;;;;           ;;;;;    ;;;;;  ;;   ;  ;;;;     ;;;;;  ;;;;;    ;;;;;  ;;;;;
-;     ;     ;    ;   ;       ;   ;          ;    ;   ;      ;;   ;  ;   ;;   ;      ;    ;   ;      ;    ;
-;     ;     ;    ;   ;       ;   ;          ;    ;   ;      ; ;  ;  ;    ;   ;      ;    ;   ;      ;    ;
-;     ;     ;   ;;   ;       ;   ;          ;   ;;   ;      ; ;  ;  ;    ;   ;      ;   ;;   ;      ;   ;;
-;     ;     ;;;;;    ;;;;    ;   ;  ;;;;;;  ;;;;;    ;;;;   ; ;  ;  ;    ;   ;;;;   ;;;;;    ;;;;   ;;;;;
-;     ;     ;  ;     ;       ;;;;           ;  ;     ;      ;  ; ;  ;    ;   ;      ;  ;     ;      ;  ;
-;     ;     ;   ;    ;       ;              ;   ;    ;      ;  ; ;  ;    ;   ;      ;   ;    ;      ;   ;
-;     ;     ;   ;;   ;       ;              ;   ;;   ;      ;   ;;  ;   ;    ;      ;   ;;   ;      ;   ;;
-;     ;     ;    ;   ;;;;;   ;              ;    ;   ;;;;;  ;   ;;  ;;;;     ;;;;;  ;    ;   ;;;;;  ;    ;
-;
-;
-;
-;
+;                                                                                             
+;                                                                                             
+;  ;;;;;;; ;;;;;   ;;;;  ;;;;;         ;;;;;   ;;;;  ;;  ;  ;;;;    ;;;;  ;;;;;   ;;;;  ;;;;; 
+;     ;    ;   ;   ;     ;   ;         ;   ;   ;     ;;  ;  ;   ;   ;     ;   ;   ;     ;   ; 
+;     ;    ;   ;   ;     ;    ;        ;   ;   ;     ;;  ;  ;   ;   ;     ;   ;   ;     ;   ; 
+;     ;    ;   ;   ;     ;    ;        ;   ;   ;     ; ; ;  ;   ;;  ;     ;   ;   ;     ;   ; 
+;     ;    ;;;;    ;;;;  ;   ;  ;;;;;  ;;;;    ;;;;  ; ; ;  ;    ;  ;;;;  ;;;;    ;;;;  ;;;;  
+;     ;    ;  ;    ;     ;;;;          ;  ;    ;     ; ; ;  ;   ;;  ;     ;  ;    ;     ;  ;  
+;     ;    ;  ;    ;     ;             ;  ;    ;     ;  ;;  ;   ;   ;     ;  ;    ;     ;  ;  
+;     ;    ;   ;   ;     ;             ;   ;   ;     ;  ;;  ;   ;   ;     ;   ;   ;     ;   ; 
+;     ;    ;   ;;  ;;;;  ;             ;   ;;  ;;;;  ;   ;  ;;;;    ;;;;  ;   ;;  ;;;;  ;   ;;
+;                                                                                             
+;                                                                                             
+;                                                                                             
+;                                                                                             
 
 (define (trep-renderer report-obj)
   (define options (gnc:report-options report-obj))
@@ -1410,8 +1399,71 @@ Credit Card, and Income accounts."))))))
          (secondary-order (opt-val pagename-sorting optname-sec-sortorder))
          (void-status (opt-val gnc:pagename-accounts optname-void-transactions))
          (splits '())
+         (custom-query? (opt-val gnc:pagename-general "Custom Query Algorithm"))
+         (custom-sort? (opt-val gnc:pagename-general "Custom Sort Algorithm"))
          (query (qof-query-create-for-splits)))
 
+    (define (generic-less? X Y key date-subtotal ascend?)
+      (define comparator-function
+        (if (member key DATE-SORTING-TYPES)
+            (let* ((date (lambda (s)
+                           (cdr
+                            (assq key
+                                  (list
+                                   (cons 'date (gnc-transaction-get-date-posted (xaccSplitGetParent s)))
+                                   (cons 'reconciled-date (gnc-split-get-date-reconciled s)))))))
+                   (year (lambda (s) (gnc:timepair-get-year (date s))))
+                   (month (lambda (s) (gnc:timepair-get-month (date s))))
+                   (quarter (lambda (s) (gnc:timepair-get-quarter (date s))))
+                   (week (lambda (s) (gnc:timepair-get-week (date s))))
+                   (secs (lambda (s) (gnc:timepair->secs (date s)))))
+              (cdr
+               (assq date-subtotal
+                     (list
+                      (cons 'yearly    (lambda (s) (year s)))
+                      (cons 'monthly   (lambda (s) (+ (* 100 (year s)) (month s))))
+                      (cons 'quarterly (lambda (s) (+ (*  10 (year s)) (quarter s))))
+                      (cons 'weekly    (lambda (s) (+ (* 100 (year s)) (week s))))
+                      (cons 'none      (lambda (s) (secs s)))))))
+            (cdr (assq key
+                       (list
+                        (cons 'account-name (lambda (s) (gnc-account-get-full-name (xaccSplitGetAccount s))))
+                        (cons 'account-code (lambda (s) (xaccAccountGetCode (xaccSplitGetAccount s))))
+                        (cons 'corresponding-acc-name (lambda (s) (xaccSplitGetCorrAccountFullName s)))
+                        (cons 'corresponding-acc-code (lambda (s) (xaccSplitGetCorrAccountCode s)))
+                        (cons 'amount (lambda (s) (let* ((val (xaccSplitGetValue s))
+                                                         (num (gnc:gnc-numeric-num val))
+                                                         (denom (gnc:gnc-numeric-denom val)))
+                                                    (/ num denom 1.0))))
+                        (cons 'description (lambda (s) (xaccTransGetDescription (xaccSplitGetParent s))))
+                        (cons 'number (lambda (s)
+                                        (if (qof-book-use-split-action-for-num-field (gnc-get-current-book))
+                                            (xaccSplitGetAction s)
+                                            (xaccTransGetNum (xaccSplitGetParent s)))))
+                        (cons 't-number (lambda (s) (xaccTransGetNum (xaccSplitGetParent s))))
+                        (cons 'register-order (lambda (s) #f))
+                        (cons 'memo (lambda (s) (xaccSplitGetMemo s)))
+                        (cons 'none (lambda (s) #f)))))))
+      ;(gnc:warn "comparing " (comparator-function X) (if ascend? "<" ">") (comparator-function Y))
+      (cond
+        ((string? (comparator-function X)) ((if ascend? string<? string>?) (comparator-function X) (comparator-function Y)))
+        ((comparator-function X)           ((if ascend? < >)               (comparator-function X) (comparator-function Y)))
+        (else                              #f)))
+    
+    (define (primary-comparator? X Y)
+      (generic-less? X Y primary-key 
+                     (opt-val pagename-sorting optname-prime-date-subtotal)
+                     (eq? primary-order 'ascend)))
+    
+    (define (secondary-comparator? X Y)
+      (generic-less? X Y secondary-key 
+                     (opt-val pagename-sorting optname-sec-date-subtotal)
+                     (eq? secondary-order 'ascend)))
+
+    ; This will, by default, sort the split list by ascending posted-date.
+    (define (date-comparator? X Y) 
+      (generic-less? X Y 'date 'none #t))
+    
     ;;(gnc:warn "accts in trep-renderer:" c_account_1)
     ;;(gnc:warn "Report Account names:" (get-other-account-names c_account_1))
 
@@ -1424,7 +1476,7 @@ Credit Card, and Income accounts."))))))
              document
              (gnc:html-make-no-account-warning report-title (gnc:report-id report-obj)))
 
-            ;; error condition: accounts were specified but none matcher string/regex
+            ;; error condition: accounts were specified but none matched string/regex
             (gnc:html-document-add-object!
              document
              (gnc:make-html-text
@@ -1433,28 +1485,52 @@ Credit Card, and Income accounts."))))))
 
         (begin
 
-          (qof-query-set-book query (gnc-get-current-book))
-          (xaccQueryAddAccountMatch query c_account_1 QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-          (xaccQueryAddDateMatchTS query #t begindate #t enddate QOF-QUERY-AND)
-          (qof-query-set-sort-order query
-                                    (sortkey-get-info primary-key 'sortkey)
-                                    (sortkey-get-info secondary-key 'sortkey)
-                                    '())
-          (qof-query-set-sort-increasing query
-                                         (eq? primary-order 'ascend)
-                                         (eq? secondary-order 'ascend)
-                                         #t)
-          (case void-status
-            ((non-void-only) (gnc:query-set-match-non-voids-only! query (gnc-get-current-book)))
-            ((void-only)     (gnc:query-set-match-voids-only! query (gnc-get-current-book)))
-            (else #f))
-          (set! splits (qof-query-run query))
+          (if (not custom-query?)
 
-          ; this qof-query destroyer was formerly after
-          ; (gnc:html-document-add-object! document table) --
-          ; move it here
-          (qof-query-destroy query)
+              (begin              
+                (qof-query-set-book query (gnc-get-current-book))
+                (xaccQueryAddAccountMatch query c_account_1 QOF-GUID-MATCH-ANY QOF-QUERY-AND)
+                (xaccQueryAddDateMatchTS query #t begindate #t enddate QOF-QUERY-AND)
+                (case void-status
+                  ((non-void-only) (gnc:query-set-match-non-voids-only! query (gnc-get-current-book)))
+                  ((void-only)     (gnc:query-set-match-voids-only! query (gnc-get-current-book)))
+                  (else #f))
+                (if (not custom-sort?)
+                    (begin
+                      (qof-query-set-sort-order query
+                                                (sortkey-get-info primary-key 'sortkey)
+                                                (sortkey-get-info secondary-key 'sortkey)
+                                                '())
+                      (qof-query-set-sort-increasing query
+                                                     (eq? primary-order 'ascend)
+                                                     (eq? secondary-order 'ascend)
+                                                     #t)))
+                (set! splits (qof-query-run query))                
+                ; this qof-query destroyer was formerly after
+                ; (gnc:html-document-add-object! document table) --
+                ; move it here
+                (qof-query-destroy query))
 
+              (begin
+                (set! splits (filter
+                              (lambda (split)
+                                (let* ((trans (xaccSplitGetParent split))
+                                       (trans-date (gnc-transaction-get-date-posted trans))
+                                       (void (xaccTransGetVoidStatus trans)))
+                                  (and (>= (car trans-date) (car begindate))
+                                       (<= (car trans-date) (car enddate))
+                                       (case void-status
+                                         ((both) #t)
+                                         ((non-void-only) (not void))
+                                         ((void-only) void)))))
+                              (concatenate! (map xaccAccountGetSplitList c_account_1))))))
+          
+          (if (or custom-sort? custom-query?)
+              (begin
+                (set! splits (stable-sort! splits date-comparator?))
+                (set! splits (stable-sort! splits secondary-comparator?))
+                (set! splits (stable-sort! splits primary-comparator?))))
+          
           ; Combined Filter:
           ; - include/exclude splits to/from selected accounts
           ; - substring/regex matcher for Transaction Description/Notes/Memo
@@ -1514,6 +1590,53 @@ Credit Card, and Income accounts."))))))
                             (_ "From %s to %s")
                             (gnc-print-date begindate)
                             (gnc-print-date enddate)))))
+
+                (gnc:html-document-add-object!
+                 document
+                 (gnc:make-html-text
+                  ;"<h3>Summary of settings used</h3>"
+                  ;"<b>Accounts selected: </b>" (string-join (map xaccAccountGetName c_account_0) ", ") "<br>"
+                  (if (string-null? account-matcher)
+                      ""
+                      (string-append
+                       "<b>Account "
+                       (if (opt-val pagename-filter optname-account-matcher-regex) "regex" "substring")
+                       " Matcher: </b>'" account-matcher "'<br><b>Accounts produced: </b>"
+                       (string-join (map xaccAccountGetName c_account_1) ", ") "<br>"))
+                  (if (eq? filter-mode 'none)
+                      ""
+                      (string-append
+                       "<b>Filters used : " (symbol->string filter-mode) " accounts</b> "
+                       (string-join (map xaccAccountGetName c_account_2) ", ") "<br>"))
+                  (if (eq? primary-key 'none)
+                      ""
+                      (string-append
+                       "<b>Primary SortKey: </b>" (symbol->string primary-key) " "
+                       (symbol->string primary-order) "ing "
+                       (if (eq? primary-key 'date)
+                           (string-append "with "
+                                          (symbol->string (opt-val pagename-sorting optname-prime-date-subtotal))
+                                          " subtotals")
+                           "")
+                       "<br>"))
+                  (if (eq? secondary-key 'none)
+                      ""
+                      (string-append
+                       "<b>Secondary SortKey: </b>" (symbol->string secondary-key) " "
+                       (symbol->string secondary-order) "ing "
+                       (if (eq? secondary-key 'date)
+                           (string-append "with "
+                                          (symbol->string (opt-val pagename-sorting optname-sec-date-subtotal))
+                                          " subtotals")
+                           "")
+                       "<br>"))
+                  (if (string-null? transaction-matcher)
+                      ""
+                      (string-append
+                       "<b>Transaction "
+                       (if (opt-val pagename-filter optname-transaction-matcher-regex) "regex" "substring")
+                       " Matcher: </b>'" transaction-matcher "'<br>"))
+                  "<br>"))
 
                 (gnc:html-document-add-object! document table)))))
 
