@@ -396,8 +396,13 @@ sqlite3_error_fn( dbi_conn conn, /*@ unused @*/ void* user_data )
     const gchar* msg;
     GncDbiBackend *be = (GncDbiBackend*)user_data;
     GncDbiSqlConnection *dbi_conn = (GncDbiSqlConnection*)(be->sql_be.conn);
-
-    (void)dbi_conn_error( conn, &msg );
+    int err_num = dbi_conn_error( conn, &msg );
+    /* BADIDX is raised if we attempt to seek outside of a result. We
+     * handle that possibility after checking the return value of the
+     * seek. Having this raise a critical error breaks looping by
+     * testing for the return value of the seek.
+     */
+    if (err_num == DBI_ERROR_BADIDX) return;
     PERR( "DBI error: %s\n", msg );
     gnc_dbi_set_error( dbi_conn, ERR_BACKEND_MISC, 0, FALSE );
 }
@@ -611,14 +616,18 @@ mysql_error_fn( dbi_conn conn, void* user_data )
     GncDbiBackend *be = (GncDbiBackend*)user_data;
     GncDbiSqlConnection *dbi_conn = (GncDbiSqlConnection*)be->sql_be.conn;
     const gchar* msg;
-    gint err_num;
 #ifdef G_OS_WIN32
     const guint backoff_msecs = 1;
 #else
     const guint backoff_usecs = 1000;
 #endif
-
-    err_num = dbi_conn_error( conn, &msg );
+    int err_num = dbi_conn_error( conn, &msg );
+    /* BADIDX is raised if we attempt to seek outside of a result. We
+     * handle that possibility after checking the return value of the
+     * seek. Having this raise a critical error breaks looping by
+     * testing for the return value of the seek.
+     */
+    if (err_num == DBI_ERROR_BADIDX) return;
 
     /* Note: the sql connection may not have been initialized yet
      *       so let's be careful with using it
@@ -1331,8 +1340,14 @@ pgsql_error_fn( dbi_conn conn, void* user_data )
 #else
     const guint backoff_usecs = 1000;
 #endif
+    int err_num = dbi_conn_error( conn, &msg );
+    /* BADIDX is raised if we attempt to seek outside of a result. We
+     * handle that possibility after checking the return value of the
+     * seek. Having this raise a critical error breaks looping by
+     * testing for the return value of the seek.
+     */
+    if (err_num == DBI_ERROR_BADIDX) return;
 
-    (void)dbi_conn_error( conn, &msg );
     if ( g_str_has_prefix( msg, "FATAL:  database" ) &&
             g_str_has_suffix( msg, "does not exist\n" ) )
     {
