@@ -33,7 +33,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report standard-reports transaction))
+(define-module (gnucash report standard-reports transaction-plus))
 
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (srfi srfi-1))
@@ -861,7 +861,9 @@ Credit Card, and Income accounts."))))))
           (cons 'price (opt-val gnc:pagename-display (N_ "Price")))
           (cons 'amount-single (eq? amount-setting 'single))
           (cons 'amount-double (eq? amount-setting 'double))
-          (cons 'amount-original-currency (opt-val gnc:pagename-general optname-orig-currency))
+          (cons 'amount-original-currency
+                (and (opt-val gnc:pagename-general optname-orig-currency)
+                     (opt-val gnc:pagename-general optname-common-currency)))
           (cons 'running-balance (opt-val gnc:pagename-display (N_ "Running Balance")))
           (cons 'account-full-name (opt-val gnc:pagename-display (N_ "Use Full Account Name")))
           (cons 'memo (opt-val gnc:pagename-display (N_ "Memo")))
@@ -946,8 +948,11 @@ Credit Card, and Income accounts."))))))
         (gnc:html-table-append-row/markup!
          table subheading-style (list heading-cell))))
 
-    (define (add-subtotal-row subtotal-string subtotal-collectors subtotal-style)
+    (define (add-subtotal-row subtotal-string subtotal-collectors-and-calculated-cells subtotal-style)
       (let* ((row-contents '())
+             (subtotal-collectors (map car subtotal-collectors-and-calculated-cells))
+             (calculated-cells  (map cadr subtotal-collectors-and-calculated-cells))
+             (merge-list (map (lambda (cell) (vector-ref cell 4)) calculated-cells))
              (columns (map (lambda (coll) (coll 'format gnc:make-gnc-monetary #f)) subtotal-collectors))
              (list-of-commodities (delete-duplicates (map gnc:gnc-monetary-commodity (concatenate columns))
                                                      gnc-commodity-equal)))
@@ -966,15 +971,48 @@ Credit Card, and Income accounts."))))))
                 (for-each (lambda (cell) (addto! row-contents cell))
                           (gnc:html-make-empty-cells (- width 1))))
               (addto! row-contents (gnc:make-html-table-cell/size/markup 1 width "total-label-cell" string))))
-
+        
         (define (add-columns commodity)
-          (for-each (lambda (column)
-                      (addto! row-contents
-                              (gnc:make-html-table-cell/markup
-                               "total-number-cell"
-                               (retrieve-commodity column commodity))))
-                    columns))
-
+          (let ((merging? #f)
+                (merging-subtotal (gnc:make-gnc-numeric 0 1))
+                (width 0))
+            (for-each (lambda (column merge?)
+                        (let* ((mon (retrieve-commodity column commodity))
+                               (col (and mon (gnc:gnc-monetary-amount mon))))
+                          (gnc:warn column merge? merging? merging-subtotal width)
+                          (if merge?
+                              (begin
+                                (set! merging? #t)
+                                (if col (set! merging-subtotal (gnc-numeric-add
+                                                                merging-subtotal col
+                                                                GNC-DENOM-AUTO
+                                                                GNC-RND-ROUND)))
+                                (set! width (+ width 1)))                              
+                              (if merging?
+                                  (begin
+                                    (set! merging? #f)
+                                    (if col (set! merging-subtotal (gnc-numeric-add
+                                                                    merging-subtotal col
+                                                                    GNC-DENOM-AUTO
+                                                                    GNC-RND-ROUND)))
+                                    (set! width (+ width 1))
+                                    (addto! row-contents
+                                            (gnc:make-html-table-cell/size/markup
+                                             1 width "total-number-cell"
+                                             (gnc:make-gnc-monetary commodity merging-subtotal)))
+                                    (set! width 0)
+                                    (set! merging-subtotal (gnc:make-gnc-numeric 0 1)))
+                                  (addto! row-contents
+                                          (gnc:make-html-table-cell/markup
+                                           "total-number-cell"
+                                           (retrieve-commodity column commodity)))))))
+                      columns
+                      merge-list)))
+          
+        (gnc:warn subtotal-collectors)
+        (gnc:warn calculated-cells)
+        (gnc:warn merge-list)
+        
         ;first row
         (add-first-column subtotal-string)
         (add-columns (if (pair? list-of-commodities)
@@ -1039,24 +1077,28 @@ Credit Card, and Income accounts."))))))
                                          #f)))
            (credit-amount (lambda (s) (if (gnc-numeric-positive-p (gnc:gnc-monetary-amount (split-value s)))
                                           #f
-                                          (gnc:monetary-neg (split-value s)))))
+                                          (split-value s))))
            (original-amount (lambda (s) (gnc:make-gnc-monetary (currency s) (damount s))))
            (running-balance (lambda (s) (gnc:make-gnc-monetary (currency s) (xaccSplitGetBalance s)))))
         (append
          ; each column will be a vector
-         ; (vector heading calculator-function reverse-column? subtotal?)
+         ; (vector heading calculator-function reverse-column? subtotal? merge?)
+         ; (calculator-function split) to obtain amount
+         ; (reverse-column? split) to optionally reverse signs
+         ; subtotal? to allow subtotals (ie irrelevant for running balance)
+         ; merge? to merge with the next cell (ie for debit/credit cells)
          (if (column-uses? 'amount-single used-columns)
-             (list (vector "Amount" amount reverse? #t))
+             (list (vector "Amount" amount reverse? #t #f))
              '())
          (if (column-uses? 'amount-double used-columns)
-             (list (vector "Debit" debit-amount dont-reverse #t)
-                   (vector "Credit" credit-amount dont-reverse #t))
+             (list (vector "Debit" debit-amount dont-reverse #t #t)
+                   (vector "Credit" credit-amount reverse? #t #f))
              '())
          (if (column-uses? 'amount-original-currency used-columns)
-             (list (vector "Original" original-amount reverse? #t))
+             (list (vector "Original" original-amount reverse? #t #f))
              '())
          (if (column-uses? 'running-balance used-columns)
-             (list (vector "Running Balance" running-balance reverse? #f))
+             (list (vector "Running Balance" running-balance reverse? #f #f))
              '()))))
 
     ;
@@ -1109,7 +1151,8 @@ Credit Card, and Income accounts."))))))
                                        (column-uses? 'sort-account-code      used-columns)
                                        #t
                                        (column-uses? 'sort-account-full-name used-columns)))
-             (description (if (column-uses? 'sort-account-description used-columns)
+             (description (if (and (column-uses? 'sort-account-description used-columns)
+                                   (not (string-null? (xaccAccountGetDescription account))))
                               (string-append ": " (xaccAccountGetDescription account))
                               "")))
         (if (and anchor? (not (null? account))) ;html anchor for 2-split transactions only
@@ -1257,7 +1300,7 @@ Credit Card, and Income accounts."))))))
                      (subtotal? (vector-ref cell 2)))
                  (and subtotal? cell-content)))
              cells)))
-
+    
     ;                                                                                                                  
     ;                                                                  ;                                  ;;;          
     ;                                                                  ;       ;             ;              ;          
@@ -1295,7 +1338,7 @@ Credit Card, and Income accounts."))))))
                1 (+ width width-amount) (gnc:make-html-text (gnc:html-markup-hr)))))
 
             (if (opt-val gnc:pagename-display "Totals")
-                (add-subtotal-row (render-grand-total) total-collectors def:grand-total-style)))
+                (add-subtotal-row (render-grand-total) (zip total-collectors calculated-cells) def:grand-total-style)))
 
           (let* ((current (car splits))
                  (rest (cdr splits))
@@ -1344,13 +1387,13 @@ Credit Card, and Income accounts."))))))
                       (begin
                         (add-subtotal-row (total-string
                                            (render-summary current secondary-renderer-key #f))
-                                          secondary-subtotal-collectors
+                                          (zip secondary-subtotal-collectors calculated-cells)
                                           def:secondary-subtotal-style)
                         (for-each (lambda (coll) (coll 'reset #f #f))
                                   secondary-subtotal-collectors)))
                   (add-subtotal-row (total-string
                                      (render-summary current primary-renderer-key #f))
-                                    primary-subtotal-collectors
+                                    (zip primary-subtotal-collectors calculated-cells)
                                     def:primary-subtotal-style)
                   (for-each (lambda (coll) (coll 'reset #f #f))
                             primary-subtotal-collectors)
@@ -1369,7 +1412,7 @@ Credit Card, and Income accounts."))))))
                                                (secondary-subtotal-comparator next))))))
                     (begin (add-subtotal-row (total-string
                                               (render-summary current secondary-renderer-key #f))
-                                             secondary-subtotal-collectors
+                                             (zip secondary-subtotal-collectors calculated-cells)
                                              def:secondary-subtotal-style)
                            (for-each (lambda (coll) (coll 'reset #f #f))
                                      secondary-subtotal-collectors)
