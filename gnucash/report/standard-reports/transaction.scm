@@ -675,7 +675,8 @@ tags within description, notes or memo. ")
   (let ((disp-memo? #t)
         (disp-accname? #t)
         (disp-other-accname? #f)
-        (is-single? #t))
+        (detail-is-single? #t)
+        (amount-is-single? #t))
 
     (define (apply-selectable-by-name-display-options)
       (gnc-option-db-set-option-selectable-by-name
@@ -684,15 +685,19 @@ tags within description, notes or memo. ")
 
       (gnc-option-db-set-option-selectable-by-name
        options gnc:pagename-display (N_ "Other Account Name")
-       is-single?)
+       detail-is-single?)
+
+      (gnc-option-db-set-option-selectable-by-name
+       options gnc:pagename-display (N_ "Sign Reverses")
+       amount-is-single?)
 
       (gnc-option-db-set-option-selectable-by-name
        options gnc:pagename-display (N_ "Use Full Other Account Name")
-       (and disp-other-accname? is-single?))
+       (and disp-other-accname? detail-is-single?))
 
       (gnc-option-db-set-option-selectable-by-name
        options gnc:pagename-display (N_ "Other Account Code")
-       is-single?)
+       detail-is-single?)
 
       (gnc-option-db-set-option-selectable-by-name
        options gnc:pagename-display (N_ "Notes")
@@ -775,18 +780,22 @@ tags within description, notes or memo. ")
                     (N_ "Display one line per transaction, merging multiple splits where required.")))
       #f
       (lambda (x)
-        (set! is-single? (eq? x 'single))
+        (set! detail-is-single? (eq? x 'single))
         (apply-selectable-by-name-display-options))))
 
     (gnc:register-trep-option
-     (gnc:make-multichoice-option
+     (gnc:make-multichoice-callback-option
       gnc:pagename-display (N_ "Amount")
       "m" (N_ "Display the amount?")
       'single
       (list
        (vector 'none   (N_ "None") (N_ "No amount display."))
        (vector 'single (N_ "Single") (N_ "Single Column Display."))
-       (vector 'double (N_ "Double") (N_ "Two Column Display.")))))
+       (vector 'double (N_ "Double") (N_ "Two Column Display.")))
+      #f
+      (lambda (x)
+        (set! amount-is-single? (eq? x 'single))
+        (apply-selectable-by-name-display-options))))
 
     (gnc:register-trep-option
      (gnc:make-multichoice-option
