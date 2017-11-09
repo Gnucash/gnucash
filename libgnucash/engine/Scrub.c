@@ -50,7 +50,7 @@
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "gnc-commodity.h"
-#include <qofinstance-p.h>
+#include "qofinstance-p.h"
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.engine.scrub"
@@ -1342,7 +1342,7 @@ xaccAccountScrubKvp (Account *account)
     {
         str2 = g_strstrip(g_value_dup_string(&v));
         if (strlen(str2) == 0)
-            qof_instance_slot_var_delete (QOF_INSTANCE (account), 1, "notes");
+            qof_instance_slot_delete (QOF_INSTANCE (account), "notes");
         g_free(str2);
     }
 
@@ -1350,9 +1350,9 @@ xaccAccountScrubKvp (Account *account)
     if ((G_VALUE_HOLDS_STRING (&v) &&
         strcmp(g_value_get_string (&v), "false") == 0) ||
         (G_VALUE_HOLDS_BOOLEAN (&v) && ! g_value_get_boolean (&v)))
-        qof_instance_slot_var_delete (QOF_INSTANCE (account), 1, "placeholder");
+        qof_instance_slot_delete (QOF_INSTANCE (account), "placeholder");
 
-    qof_instance_slot_var_delete_if_empty (QOF_INSTANCE (account), 1, "hbci");
+    qof_instance_slot_delete_if_empty (QOF_INSTANCE (account), "hbci");
 }
 
 /* ================================================================ */

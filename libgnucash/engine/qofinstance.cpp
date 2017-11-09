@@ -1295,15 +1295,9 @@ void qof_instance_slot_path_delete (QofInstance const * inst, std::vector<std::s
 }
 
 void
-qof_instance_slot_var_delete (QofInstance const *inst, unsigned count, ...)
+qof_instance_slot_delete (QofInstance const *inst, char const * path)
 {
-    std::vector<std::string> path;
-    va_list args;
-    va_start (args, count);
-    for (unsigned i{0}; i < count; ++i)
-        path.push_back (va_arg (args, char const *));
-    va_end (args);
-    delete inst->kvp_data->set (path, nullptr);
+    delete inst->kvp_data->set ({path}, nullptr);
 }
 
 void qof_instance_slot_path_delete_if_empty (QofInstance const * inst, std::vector<std::string> const & path)
@@ -1318,20 +1312,14 @@ void qof_instance_slot_path_delete_if_empty (QofInstance const * inst, std::vect
 }
 
 void
-qof_instance_slot_var_delete_if_empty (QofInstance const *inst, unsigned count, ...)
+qof_instance_slot_delete_if_empty (QofInstance const *inst, char const * path)
 {
-    std::vector<std::string> path;
-    va_list args;
-    va_start (args, count);
-    for (unsigned i{0}; i < count; ++i)
-        path.push_back (va_arg (args, char const *));
-    va_end (args);
-    auto slot = inst->kvp_data->get_slot (path);
+    auto slot = inst->kvp_data->get_slot ({path});
     if (slot)
     {
         auto frame = slot->get <KvpFrame*> ();
         if (frame && frame->empty ())
-            delete inst->kvp_data->set (path, nullptr);
+            delete inst->kvp_data->set ({path}, nullptr);
     }
 }
 
