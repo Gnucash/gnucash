@@ -1132,7 +1132,9 @@ Credit Card, and Income accounts."))))))
                                                      (column-uses? 'other-account-full-name used-columns))))
 
         (if (column-uses? 'shares used-columns)
-            (addto! row-contents (xaccSplitGetAmount split)))
+            (addto! row-contents (gnc:make-html-table-cell/markup
+                                  "number-cell"
+                                  (xaccSplitGetAmount split))))
 
         (if (column-uses? 'price used-columns)
             (addto! row-contents  (gnc:make-gnc-monetary (xaccTransGetCurrency parent)
