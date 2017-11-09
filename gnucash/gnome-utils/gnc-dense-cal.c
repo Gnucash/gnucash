@@ -1234,6 +1234,17 @@ populate_hover_window(GncDenseCal *dcal, gint doc)
             gtk_list_store_set(model, &iter, 0, (gdcmd->name ? gdcmd->name : _("(unnamed)")), 1, gdcmd->info, -1);
         }
 
+        // if there are no rows, add one
+        if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL(model), NULL) == 0)
+        {
+            GtkTreeIter iter;
+            gtk_list_store_insert(model, &iter, -1);
+        }
+
+        // make sure all pending events are processed
+        while(gtk_events_pending())
+            gtk_main_iteration();
+
         g_date_free(date);
     }
 }
