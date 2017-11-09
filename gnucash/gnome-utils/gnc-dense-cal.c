@@ -1292,11 +1292,11 @@ gnc_dense_cal_button_press(GtkWidget *widget,
         // trick with a bit of flicker.
         gtk_window_move(GTK_WINDOW(dcal->transPopup), evt->x_root + 5, evt->y_root + 5);
 
-        gtk_widget_get_allocation(GTK_WIDGET(dcal->transPopup), &alloc);
-
         populate_hover_window(dcal);
         gtk_widget_queue_resize(GTK_WIDGET(dcal->transPopup));
         gtk_widget_show_all(GTK_WIDGET(dcal->transPopup));
+
+        gtk_widget_get_allocation(GTK_WIDGET(dcal->transPopup), &alloc);
 
         if (evt->x_root + 5 + alloc.width > dcal->screen_width)
             win_xpos = evt->x_root - 2 - alloc.width;
