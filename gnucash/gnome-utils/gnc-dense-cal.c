@@ -1311,7 +1311,7 @@ gnc_dense_cal_button_press(GtkWidget *widget,
         dcal->doc = -1;
         gtk_widget_hide(GTK_WIDGET(dcal->transPopup));
     }
-    return FALSE;
+    return TRUE;
 }
 
 static gint
