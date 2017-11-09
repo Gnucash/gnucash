@@ -59,6 +59,7 @@ struct _GncDenseCal
     GtkWindow *transPopup;
     gint screen_width;
     gint screen_height;
+    gint doc;
 
     gint min_x_scale;
     gint min_y_scale;

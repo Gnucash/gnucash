@@ -131,7 +131,7 @@ static gint wheres_this(GncDenseCal *dcal, int x, int y);
 static void recompute_x_y_scales(GncDenseCal *dcal);
 static void recompute_mark_storage(GncDenseCal *dcal);
 static void recompute_extents(GncDenseCal *dcal);
-static void populate_hover_window(GncDenseCal *dcal, gint doc);
+static void populate_hover_window(GncDenseCal *dcal);
 
 static void month_coords(GncDenseCal *dcal, int monthOfCal, GList **outList);
 static void doc_coords(GncDenseCal *dcal, int dayOfCal,
@@ -1197,14 +1197,14 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
 }
 
 static void
-populate_hover_window(GncDenseCal *dcal, gint doc)
+populate_hover_window(GncDenseCal *dcal)
 {
     GtkWidget *w;
     GDate *date;
     static const int MAX_STRFTIME_BUF_LEN = 64;
     gchar strftimeBuf[MAX_STRFTIME_BUF_LEN];
 
-    if (doc >= 0)
+    if (dcal->doc >= 0)
     {
         GObject *o;
         GtkListStore *model;
@@ -1212,7 +1212,7 @@ populate_hover_window(GncDenseCal *dcal, gint doc)
 
         w = GTK_WIDGET(g_object_get_data(G_OBJECT(dcal->transPopup), "dateLabel"));
         date = g_date_new_dmy(1, dcal->month, dcal->year);
-        g_date_add_days(date, doc);
+        g_date_add_days(date, dcal->doc);
         /* Note: the ISO date format (%F or equivalently
          * %Y-%m-%d) is not a good idea here since many
          * locales will want to use a very different date
@@ -1224,7 +1224,7 @@ populate_hover_window(GncDenseCal *dcal, gint doc)
         o = G_OBJECT(dcal->transPopup);
         model = GTK_LIST_STORE(g_object_get_data(o, "model"));
         gtk_list_store_clear(model);
-        for (l = dcal->marks[doc]; l; l = l->next)
+        for (l = dcal->marks[dcal->doc]; l; l = l->next)
         {
             GtkTreeIter iter;
             gdc_mark_data *gdcmd;
@@ -1261,7 +1261,6 @@ gnc_dense_cal_button_press(GtkWidget *widget,
     GdkScreen *screen = gdk_screen_get_default ();
 #endif
     GtkAllocation alloc;
-    gint doc;
     GncDenseCal *dcal = GNC_DENSE_CAL(widget);
     gint win_xpos = evt->x_root + 5;
     gint win_ypos = evt->y_root + 5;
@@ -1276,9 +1275,9 @@ gnc_dense_cal_button_press(GtkWidget *widget,
     dcal->screen_height = gdk_screen_get_height (screen);
 #endif
 
-    doc = wheres_this(dcal, evt->x, evt->y);
+    dcal->doc = wheres_this(dcal, evt->x, evt->y);
     dcal->showPopup = ~(dcal->showPopup);
-    if (dcal->showPopup && doc >= 0)
+    if (dcal->showPopup && dcal->doc >= 0)
     {
         // Do the move twice in case the WM is ignoring the first one
         // because the window hasn't been shown, yet.  The WM is free
@@ -1290,7 +1289,7 @@ gnc_dense_cal_button_press(GtkWidget *widget,
 
         gtk_widget_get_allocation(GTK_WIDGET(dcal->transPopup), &alloc);
 
-        populate_hover_window(dcal, doc);
+        populate_hover_window(dcal);
         gtk_widget_queue_resize(GTK_WIDGET(dcal->transPopup));
         gtk_widget_show_all(GTK_WIDGET(dcal->transPopup));
 
@@ -1303,7 +1302,10 @@ gnc_dense_cal_button_press(GtkWidget *widget,
         gtk_window_move(GTK_WINDOW(dcal->transPopup), win_xpos, win_ypos);
     }
     else
+    {
+        dcal->doc = -1;
         gtk_widget_hide(GTK_WIDGET(dcal->transPopup));
+    }
     return FALSE;
 }
 
@@ -1340,9 +1342,14 @@ gnc_dense_cal_motion_notify(GtkWidget *widget,
     doc = wheres_this(dcal, event->x, event->y);
     if (doc >= 0)
     {
+        if (dcal->doc != doc) // if we are on the same day, no need to reload
+        {
+            dcal->doc = doc;
+            populate_hover_window(dcal);
+            gtk_widget_queue_resize(GTK_WIDGET(dcal->transPopup));
+            gtk_widget_show_all(GTK_WIDGET(dcal->transPopup));
+        }
         gtk_widget_get_allocation(GTK_WIDGET(dcal->transPopup), &alloc);
-
-        gtk_widget_show_all(GTK_WIDGET(dcal->transPopup));
 
         if (event->x_root + 5 + alloc.width > dcal->screen_width)
             win_xpos = event->x_root - 2 - alloc.width;
@@ -1353,7 +1360,10 @@ gnc_dense_cal_motion_notify(GtkWidget *widget,
         gtk_window_move(GTK_WINDOW(dcal->transPopup), win_xpos, win_ypos);
     }
     else
+    {
+        dcal->doc = -1;
         gtk_widget_hide(GTK_WIDGET(dcal->transPopup));
+    }
     return TRUE;
 }
 
