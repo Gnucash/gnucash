@@ -1210,7 +1210,7 @@ gboolean gnc_ui_payment_is_customer_payment(const Transaction *txn)
 
 // ///////////////
 
-PaymentWindow * gnc_ui_payment_new_with_txn (GncOwner *owner, Transaction *txn)
+PaymentWindow * gnc_ui_payment_new_with_txn (GtkWidget* parent, GncOwner *owner, Transaction *txn)
 {
     Split *assetaccount_split;
     Split *postaccount_split;
@@ -1224,9 +1224,19 @@ PaymentWindow * gnc_ui_payment_new_with_txn (GncOwner *owner, Transaction *txn)
 
     if (!xaccTransGetSplitList(txn))
         return NULL;
+
     assetaccount_split = xaccTransGetFirstPaymentAcctSplit(txn);
     if (!assetaccount_split)
     {
+
+        GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW(parent),
+                                                    GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                    GTK_MESSAGE_INFO,
+                                                    GTK_BUTTONS_CLOSE,
+                                                    "%s",
+                                                    _("The selected transaction doesn't have splits that can be assigned as a payment"));
+        gtk_dialog_run (GTK_DIALOG(dialog));
+        gtk_widget_destroy (dialog);
         g_message("No asset splits in txn \"%s\"; cannot use this for assigning a payment.",
                   xaccTransGetDescription(txn));
         return NULL;

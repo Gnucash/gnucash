@@ -827,7 +827,7 @@ static void gnc_business_assign_payment (GtkWidget *parent,
         return;
 
     //g_message("Creating payment dialog with trans %p", trans);
-    gnc_ui_payment_new_with_txn(owner, trans);
+    gnc_ui_payment_new_with_txn(parent, owner, trans);
 }
 
 static void gnc_plugin_business_cmd_assign_payment (GtkAction *action,

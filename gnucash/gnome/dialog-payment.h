@@ -34,7 +34,7 @@ PaymentWindow * gnc_ui_payment_new (GncOwner *owner, QofBook *book);
 PaymentWindow * gnc_ui_payment_new_with_invoice (const GncOwner *owner,
         QofBook *book,
         GncInvoice *invoice);
-PaymentWindow * gnc_ui_payment_new_with_txn (GncOwner *owner, Transaction *txn);
+PaymentWindow * gnc_ui_payment_new_with_txn (GtkWidget *parent, GncOwner *owner, Transaction *txn);
 
 /** Returns TRUE if the given transaction (to be used with gnc_ui_payment_new_with_txn() )
  * is for a customer, or FALSE if it's from a vendor or employee voucher. */
