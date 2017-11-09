@@ -687,7 +687,8 @@ tags within description, notes or memo. ")
   (let ((disp-memo? #t)
         (disp-accname? #t)
         (disp-other-accname? #f)
-        (is-single? #t))
+        (detail-is-single? #t)
+        (amount-is-single? #t))
 
     (define (apply-selectable-by-name-display-options)
       (gnc-option-db-set-option-selectable-by-name
@@ -696,15 +697,19 @@ tags within description, notes or memo. ")
 
       (gnc-option-db-set-option-selectable-by-name
        options gnc:pagename-display (N_ "Other Account Name")
-       is-single?)
+       detail-is-single?)
+
+      (gnc-option-db-set-option-selectable-by-name
+       options gnc:pagename-display (N_ "Sign Reverses")
+       amount-is-single?)
 
       (gnc-option-db-set-option-selectable-by-name
        options gnc:pagename-display (N_ "Use Full Other Account Name")
-       (and disp-other-accname? is-single?))
+       (and disp-other-accname? detail-is-single?))
 
       (gnc-option-db-set-option-selectable-by-name
        options gnc:pagename-display (N_ "Other Account Code")
-       is-single?)
+       detail-is-single?)
 
       (gnc-option-db-set-option-selectable-by-name
        options gnc:pagename-display (N_ "Notes")
@@ -787,18 +792,22 @@ tags within description, notes or memo. ")
                     (N_ "Display one line per transaction, merging multiple splits where required.")))
       #f
       (lambda (x)
-        (set! is-single? (eq? x 'single))
+        (set! detail-is-single? (eq? x 'single))
         (apply-selectable-by-name-display-options))))
 
     (gnc:register-trep-option
-     (gnc:make-multichoice-option
+     (gnc:make-multichoice-callback-option
       gnc:pagename-display (N_ "Amount")
       "m" (N_ "Display the amount?")
       'single
       (list
        (vector 'none   (N_ "None") (N_ "No amount display."))
        (vector 'single (N_ "Single") (N_ "Single Column Display."))
-       (vector 'double (N_ "Double") (N_ "Two Column Display.")))))
+       (vector 'double (N_ "Double") (N_ "Two Column Display.")))
+      #f
+      (lambda (x)
+        (set! amount-is-single? (eq? x 'single))
+        (apply-selectable-by-name-display-options))))
 
     (gnc:register-trep-option
      (gnc:make-multichoice-option
@@ -846,7 +855,7 @@ Credit Card, and Income accounts."))))))
   (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
 
   (define (build-columns-used)
-    (define is-single? (eq? (opt-val gnc:pagename-display optname-detail-level) 'single))
+    (define detail-is-single? (eq? (opt-val gnc:pagename-display optname-detail-level) 'single))
     (define amount-setting (opt-val gnc:pagename-display (N_ "Amount")))
     (list (cons 'date (opt-val gnc:pagename-display (N_ "Date")))
           (cons 'reconciled-date (opt-val gnc:pagename-display (N_ "Reconciled Date")))
@@ -855,7 +864,7 @@ Credit Card, and Income accounts."))))))
                          (opt-val gnc:pagename-display (N_ "Num/Action"))))
           (cons 'description (opt-val gnc:pagename-display (N_ "Description")))
           (cons 'account-name (opt-val gnc:pagename-display (N_ "Account Name")))
-          (cons 'other-account-name (and is-single?
+          (cons 'other-account-name (and detail-is-single?
                                          (opt-val gnc:pagename-display (N_ "Other Account Name"))))
           (cons 'shares (opt-val gnc:pagename-display (N_ "Shares")))
           (cons 'price (opt-val gnc:pagename-display (N_ "Price")))
@@ -868,9 +877,9 @@ Credit Card, and Income accounts."))))))
           (cons 'account-full-name (opt-val gnc:pagename-display (N_ "Use Full Account Name")))
           (cons 'memo (opt-val gnc:pagename-display (N_ "Memo")))
           (cons 'account-code (opt-val gnc:pagename-display (N_ "Account Code")))
-          (cons 'other-account-code (and is-single?
+          (cons 'other-account-code (and detail-is-single?
                                          (opt-val gnc:pagename-display (N_ "Other Account Code"))))
-          (cons 'other-account-full-name (and is-single?
+          (cons 'other-account-full-name (and detail-is-single?
                                               (opt-val gnc:pagename-display (N_ "Use Full Other Account Name"))))
           (cons 'sort-account-code (opt-val pagename-sorting (N_ "Show Account Code")))
           (cons 'sort-account-full-name (opt-val pagename-sorting (N_ "Show Full Account Name")))
@@ -976,25 +985,25 @@ Credit Card, and Income accounts."))))))
           (let ((merging? #f)
                 (merging-subtotal (gnc:make-gnc-numeric 0 1))
                 (width 0))
-            (for-each (lambda (column merge?)
+            (for-each (lambda (column merge-entry)
                         (let* ((mon (retrieve-commodity column commodity))
-                               (col (and mon (gnc:gnc-monetary-amount mon))))
+                               (col (and mon (gnc:gnc-monetary-amount mon)))
+                               (merge? (vector-ref merge-entry 0))
+                               (merge-fn (vector-ref merge-entry 1)))
                           (gnc:warn column merge? merging? merging-subtotal width)
                           (if merge?
                               (begin
                                 (set! merging? #t)
-                                (if col (set! merging-subtotal (gnc-numeric-add
-                                                                merging-subtotal col
-                                                                GNC-DENOM-AUTO
-                                                                GNC-RND-ROUND)))
+                                (if col
+                                    (set! merging-subtotal
+                                          (merge-fn merging-subtotal col GNC-DENOM-AUTO GNC-RND-ROUND)))
                                 (set! width (+ width 1)))                              
                               (if merging?
                                   (begin
                                     (set! merging? #f)
-                                    (if col (set! merging-subtotal (gnc-numeric-add
-                                                                    merging-subtotal col
-                                                                    GNC-DENOM-AUTO
-                                                                    GNC-RND-ROUND)))
+                                    (if col
+                                        (set! merging-subtotal
+                                              (merge-fn merging-subtotal col GNC-DENOM-AUTO GNC-RND-ROUND)))
                                     (set! width (+ width 1))
                                     (addto! row-contents
                                             (gnc:make-html-table-cell/size/markup
@@ -1053,8 +1062,6 @@ Credit Card, and Income accounts."))))))
            (damount (lambda (s) (if (gnc:split-voided? s)
                                     (xaccSplitVoidFormerAmount s)
                                    (xaccSplitGetAmount s))))
-           (reverse? (lambda (s) (member (xaccAccountGetType (xaccSplitGetAccount s))
-                                         account-types-to-reverse)))
            (dont-reverse (lambda (s) #f))
            (trans-date (lambda (s) (gnc-transaction-get-date-posted (xaccSplitGetTransaction s))))
            (currency (lambda (s) (xaccAccountGetCommodity (xaccSplitGetAccount s))))
@@ -1077,28 +1084,28 @@ Credit Card, and Income accounts."))))))
                                          #f)))
            (credit-amount (lambda (s) (if (gnc-numeric-positive-p (gnc:gnc-monetary-amount (split-value s)))
                                           #f
-                                          (split-value s))))
+                                          (gnc:monetary-neg (split-value s)))))
            (original-amount (lambda (s) (gnc:make-gnc-monetary (currency s) (damount s))))
            (running-balance (lambda (s) (gnc:make-gnc-monetary (currency s) (xaccSplitGetBalance s)))))
         (append
          ; each column will be a vector
-         ; (vector heading calculator-function reverse-column? subtotal? merge?)
+         ; (vector heading calculator-function reverse-column? subtotal? (vector merge? merging-function))
          ; (calculator-function split) to obtain amount
-         ; (reverse-column? split) to optionally reverse signs
+         ; reverse? to optionally reverse signs
          ; subtotal? to allow subtotals (ie irrelevant for running balance)
          ; merge? to merge with the next cell (ie for debit/credit cells)
          (if (column-uses? 'amount-single used-columns)
-             (list (vector "Amount" amount reverse? #t #f))
+             (list (vector "Amount" amount #t #t (vector #f #f)))
              '())
          (if (column-uses? 'amount-double used-columns)
-             (list (vector "Debit" debit-amount dont-reverse #t #t)
-                   (vector "Credit" credit-amount reverse? #t #f))
+             (list (vector "Debit" debit-amount #f #t (vector #t gnc-numeric-add))
+                   (vector "Credit" credit-amount #f #t (vector #f gnc-numeric-sub)))
              '())
          (if (column-uses? 'amount-original-currency used-columns)
-             (list (vector "Original" original-amount reverse? #t #f))
+             (list (vector "Original" original-amount #t #t (vector #f #f)))
              '())
          (if (column-uses? 'running-balance used-columns)
-             (list (vector "Running Balance" running-balance reverse? #f #f))
+             (list (vector "Running Balance" running-balance #t #f (vector #f #f)))
              '()))))
 
     ;
@@ -1188,12 +1195,13 @@ Credit Card, and Income accounts."))))))
 
     (define (add-split-row split cell-calculators row-style transaction-row?)
       (let* ((row-contents '())
-             (trans (xaccSplitGetParent split)))
+             (trans (xaccSplitGetParent split))
+             (account (xaccSplitGetAccount split)))
         
         (define cells
           (map (lambda (cell)
                  (let* ((calculator (vector-ref cell 1))
-                        (reverse? ((vector-ref cell 2) split))
+                        (reverse? (vector-ref cell 2))
                         (subtotal? (vector-ref cell 3))
                         (calculated (calculator split)))
                    (vector calculated reverse? subtotal?)))
@@ -1251,7 +1259,7 @@ Credit Card, and Income accounts."))))))
                   (addto! row-contents memo))))
 
         (if (or (column-uses? 'account-name used-columns) (column-uses? 'account-code used-columns))
-            (addto! row-contents (account-namestring (xaccSplitGetAccount split)
+            (addto! row-contents (account-namestring account
                                                      (column-uses? 'account-code      used-columns)
                                                      (column-uses? 'account-name      used-columns)
                                                      (column-uses? 'account-full-name used-columns))))
@@ -1263,7 +1271,9 @@ Credit Card, and Income accounts."))))))
                                                      (column-uses? 'other-account-full-name used-columns))))
 
         (if (column-uses? 'shares used-columns)
-            (addto! row-contents (xaccSplitGetAmount split)))
+            (addto! row-contents (gnc:make-html-table-cell/markup
+                                  "number-cell"
+                                  (xaccSplitGetAmount split))))
 
         (if (column-uses? 'price used-columns)
             (addto! row-contents
@@ -1287,7 +1297,8 @@ Credit Card, and Income accounts."))))))
                                    "number-cell"
                                    (gnc:html-transaction-anchor
                                     trans
-                                    (if reverse?
+                                    (if (and reverse?
+                                             (member (xaccAccountGetType account) account-types-to-reverse))
                                         (reverse-amount cell-content)
                                         cell-content))))
                           (addto! row-contents (gnc:html-make-empty-cell)))))
