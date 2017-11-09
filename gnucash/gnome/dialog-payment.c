@@ -57,6 +57,19 @@
 #define DIALOG_PAYMENT_CUSTOMER_CM_CLASS "customer-payment-dialog"
 #define DIALOG_PAYMENT_VENDOR_CM_CLASS "vendor-payment-dialog"
 
+typedef struct
+{
+    GNCLot      * lot;
+    gnc_numeric   amount;
+} PreExistLotInfo;
+
+typedef struct
+{
+    Transaction * txn;
+    Account     * post_acct;
+    GList       * lots;
+} PreExistTxnInfo;
+
 struct _payment_window
 {
     GtkWidget   * dialog;
@@ -78,14 +91,13 @@ struct _payment_window
     gint          component_id;
     QofBook     * book;
     GncOwner      owner;
-    GncInvoice  * invoice;
     Account     * post_acct;
     Account     * xfer_acct;
     gnc_numeric   amount_tot;
     GList       * acct_types;
     GList       * acct_commodities;
 
-    Transaction * pre_existing_txn;
+    PreExistTxnInfo *tx_info;
     gboolean      print_check_state;
 };
 
@@ -164,7 +176,7 @@ void gnc_ui_payment_window_set_xferaccount (PaymentWindow *pw, const Account* ac
 
 static gboolean gnc_payment_dialog_has_pre_existing_txn(const PaymentWindow* pw)
 {
-    return pw->pre_existing_txn != NULL;
+    return pw->tx_info->txn != NULL;
 }
 int  gnc_payment_dialog_post_to_changed_cb (GtkWidget *widget, gpointer data);
 void gnc_payment_dialog_document_selection_changed_cb (GtkWidget *widget, gpointer data);
@@ -334,45 +346,53 @@ gnc_payment_dialog_document_selection_changed (PaymentWindow *pw)
     gnc_ui_payment_window_set_amount(pw, val);
 }
 
-static void
-gnc_payment_dialog_highlight_document (PaymentWindow *pw)
+static gint
+_gnc_lotinfo_find_by_lot(PreExistLotInfo *lotinfo_inst, GNCLot *lot_to_find)
 {
-    if (pw->invoice)
-    {
-        GtkTreeIter iter;
-        GtkTreeModel *model = gtk_tree_view_get_model(GTK_TREE_VIEW(pw->docs_list_tree_view));
-        GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(pw->docs_list_tree_view));
-        gtk_tree_selection_unselect_all (selection);
-
-        if (gtk_tree_model_get_iter_first (model, &iter))
-        {
-            do
-            {
-                GValue value = { 0 };
-                GNCLot *lot;
-                GncInvoice *invoice;
-
-                gtk_tree_model_get_value (model, &iter, 5, &value);
-                lot = (GNCLot *) g_value_get_pointer (&value);
-                g_value_unset (&value);
-
-                if (!lot)
-                    continue; /* Lot has been deleted behind our back... */
-
-                invoice = gncInvoiceGetInvoiceFromLot (lot);
-                if (!invoice)
-                    continue;
-
-                if (pw->invoice == invoice)
-                {
-                    gtk_tree_selection_select_iter (selection, &iter);
-                    gnc_payment_dialog_document_selection_changed (pw);
-                }
-            }
-            while (gtk_tree_model_iter_next (model, &iter));
-        }
-    }
+    if (lotinfo_inst->lot == lot_to_find)
+        return 0;
+    return -1;
 }
+
+static void
+gnc_payment_dialog_highlight_documents (PaymentWindow *pw)
+{
+    gboolean selection_changed = FALSE;
+    GtkTreeIter iter;
+    GtkTreeModel *model = gtk_tree_view_get_model(GTK_TREE_VIEW(pw->docs_list_tree_view));
+    GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(pw->docs_list_tree_view));
+    gtk_tree_selection_unselect_all (selection);
+
+    if (gtk_tree_model_get_iter_first (model, &iter))
+    {
+        do
+        {
+            GValue value = { 0 };
+            GNCLot *lot;
+            GList *li_node;
+
+            gtk_tree_model_get_value (model, &iter, 5, &value);
+            lot = (GNCLot *) g_value_get_pointer (&value);
+            g_value_unset (&value);
+
+            if (!lot)
+                continue; /* Lot has been deleted behind our back... */
+
+            li_node = g_list_find_custom (pw->tx_info->lots, lot,
+                                            (GCompareFunc)_gnc_lotinfo_find_by_lot);
+            if (li_node)
+            {
+                gtk_tree_selection_select_iter (selection, &iter);
+                selection_changed = TRUE;
+            }
+        }
+        while (gtk_tree_model_iter_next (model, &iter));
+    }
+
+    if (selection_changed)
+        gnc_payment_dialog_document_selection_changed (pw);
+}
+
 
 void
 gnc_payment_window_fill_docs_list (PaymentWindow *pw)
@@ -380,6 +400,7 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
     GtkListStore *store;
     GtkTreeSelection *selection;
     GList *list = NULL, *node;
+    GNCLot *tx_lot = NULL;
 
     g_return_if_fail (pw->docs_list_tree_view && GTK_IS_TREE_VIEW(pw->docs_list_tree_view));
 
@@ -387,6 +408,50 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
     if (pw->owner.owner.undefined)
         list = xaccAccountFindOpenLots (pw->post_acct, gncOwnerLotMatchOwnerFunc,
                                         &pw->owner, NULL);
+
+    /* If pre-existing transaction's post account equals the selected post account
+     * and we have lots for this transaction then compensate the document list for those.
+     * The presence of such lots indicates the pre-existing transaction is an existing payment that
+     * we are about to replace. So we should make sure this existing payment info can be reselected
+     * by the user (within the practical limits of the payment window*) to redo the same
+     * payment again.
+     * If the txn's lots are closed they are ignored by default so we should explicitly readd
+     * them here.
+     * And for all lots in the pre-existing transaction we need to readd the split amount
+     * for that lot or the existing payment values would not be taken into account.
+     * This will happen further below though.
+     *
+     * Finally all this is only relevant if the lot belongs to the same owner...
+     *
+     * * The practical limits are
+     * - The payment dialog can handle only one transfer split. If the pre-existing
+     *   transaction has more possible candidates, all but the first will be used
+     * - The payment dialog can't handle AR/AP splits that aren't linked to a lot
+     *   in the current post account. Such splits will be ignored as well.
+     * In both cases the user will have been informed before and given the option to abort.
+     */
+    if (pw->tx_info->post_acct == pw->post_acct)
+        for (node = pw->tx_info->lots; node; node = node->next)
+        {
+            PreExistLotInfo *lot_info = node->data;
+            if (!gnc_numeric_zero_p (gnc_lot_get_balance (lot_info->lot)))
+                /* This case will be handled below when the lot is processed as part of the open lots */
+                tx_lot = lot_info->lot;
+            else
+            {
+                GncOwner lotowner;
+                if (!gncOwnerGetOwnerFromLot(lot_info->lot, &lotowner))
+                {
+                    const GncOwner *owner;
+                    const GncInvoice *invoice = gncInvoiceGetInvoiceFromLot(lot_info->lot);
+                    if (invoice)
+                        owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice));
+                    gncOwnerCopy (owner, &lotowner);
+                }
+                if (gncOwnerEqual(&pw->owner, &lotowner))
+                    list = g_list_prepend (list, lot_info->lot);
+            }
+        }
 
     /* Clear the existing list */
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(pw->docs_list_tree_view));
@@ -398,6 +463,7 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
     for (node = list; node; node = node->next)
     {
         GNCLot *lot = node->data;
+        GList *li_node;
         time64 doc_date_time = 0;
         const gchar *doc_type_str = NULL;
         const gchar *doc_id_str   = NULL;
@@ -449,10 +515,25 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
          */
         value = gnc_lot_get_balance (lot);
 
+        /* If this lot is linked to the pre-existing transaction, compensate
+         * its amount so the same pre-existing transaction can be reselected bye the user
+         * (within applicable limits)
+         */
+        li_node = g_list_find_custom (pw->tx_info->lots, lot,
+                                      (GCompareFunc)_gnc_lotinfo_find_by_lot);
+        if (li_node)
+        {
+            PreExistLotInfo *lot_info = li_node->data;
+            value = gnc_numeric_sub(value, lot_info->amount,
+                                    gnc_commodity_get_fraction (xaccAccountGetCommodity (pw->post_acct)),
+                                    GNC_HOW_RND_ROUND_HALF_UP);
+        }
+
         if (gnc_numeric_positive_p (value))
             debit = value;
         else
             credit = gnc_numeric_neg (value);
+
 
         /* Only display non-zero debits/credits */
         if (!gnc_numeric_zero_p (debit))
@@ -475,7 +556,7 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
     g_list_free (list);
 
     /* Highlight the preset invoice if it's in the new list */
-    gnc_payment_dialog_highlight_document (pw);
+    gnc_payment_dialog_highlight_documents (pw);
 }
 
 static void
@@ -484,9 +565,6 @@ gnc_payment_dialog_owner_changed (PaymentWindow *pw)
     Account *last_acct = NULL;
     GncGUID *guid = NULL;
     GncOwner *owner = &pw->owner;
-
-    /* If the owner changed, the initial invoice is no longer valid */
-    pw->invoice = NULL;
 
     /* Now handle the account tree */
     if (gncOwnerIsValid(owner))
@@ -621,14 +699,14 @@ gnc_payment_dialog_post_to_changed_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer
 
     post_acct = gnc_account_select_combo_get_active (pw->post_combo);
 
-    /* If this invoice really changed, then reset ourselves */
+    /* If this post account really changed, then reset ourselves */
     if (post_acct != pw->post_acct)
     {
         pw->post_acct = post_acct;
         gnc_payment_dialog_post_to_changed(pw);
     }
     else
-        gnc_payment_dialog_highlight_document (pw);
+        gnc_payment_dialog_highlight_documents (pw);
 
     /* Reflect if the payment could complete now */
     gnc_payment_window_check_payment (pw);
@@ -740,7 +818,7 @@ gnc_payment_ok_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
         else
             auto_pay = gnc_prefs_get_bool (GNC_PREFS_GROUP_BILL, GNC_PREF_AUTO_PAY);
 
-        gncOwnerApplyPayment (&pw->owner, &(pw->pre_existing_txn), selected_lots,
+        gncOwnerApplyPayment (&pw->owner, &(pw->tx_info->txn), selected_lots,
                               pw->post_acct, pw->xfer_acct, pw->amount_tot, exch,
                               ts, memo, num, auto_pay);
     }
@@ -752,7 +830,7 @@ gnc_payment_ok_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
     if (gtk_widget_is_sensitive (pw->print_check) &&
         gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(pw->print_check)))
     {
-        Split *split = xaccTransFindSplitByAccount (pw->pre_existing_txn, pw->xfer_acct);
+        Split *split = xaccTransFindSplitByAccount (pw->tx_info->txn, pw->xfer_acct);
         GList *splits = NULL;
         splits = g_list_append(splits, split);
         gnc_ui_print_check_dialog_create(NULL, splits);
@@ -779,6 +857,8 @@ gnc_payment_window_destroy_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
 
     g_list_free (pw->acct_types);
     g_list_free (pw->acct_commodities);
+    if (pw->tx_info->lots)
+        g_list_free_full (pw->tx_info->lots, g_free);
     g_free (pw);
 }
 
@@ -880,7 +960,7 @@ static void print_date (G_GNUC_UNUSED GtkTreeViewColumn *tree_column,
 }
 
 static PaymentWindow *
-new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
+new_payment_window (GncOwner *owner, QofBook *book, PreExistTxnInfo *tx_info)
 {
     PaymentWindow *pw;
     GtkBuilder *builder;
@@ -892,10 +972,16 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
                        DIALOG_PAYMENT_CUSTOMER_CM_CLASS :
                        DIALOG_PAYMENT_VENDOR_CM_CLASS);
 
+    /* Ensure we always have a properly initialized PreExistTxnInfo struct to work with */
+    if (!tx_info)
+    {
+        tx_info = g_new0 (PreExistTxnInfo, 1);
+    }
+
     /*
      * Find an existing payment window.  If found, bring it to
      * the front.  If we have an actual owner, then set it in
-     * the window.
+     * the window. And update the PreExistTxnInfo (tx_info) for this window.
      */
 
     pw = gnc_find_first_gui_component (cm_class, find_handler, NULL);
@@ -904,8 +990,11 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
         if (gncOwnerIsValid(owner))
             gnc_payment_set_owner (pw, owner);
 
-        // Reset the setting about the pre-existing TXN
-        pw->pre_existing_txn = NULL;
+        // Reset the current
+        if (pw->tx_info->lots)
+            g_list_free_full (pw->tx_info->lots, g_free);
+        g_free (pw->tx_info);
+        pw->tx_info = tx_info;
 
         gtk_window_present (GTK_WINDOW(pw->dialog));
         return(pw);
@@ -915,6 +1004,7 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
 
     pw = g_new0 (PaymentWindow, 1);
     pw->book = book;
+    pw->tx_info = tx_info;
     gncOwnerCopy (owner, &(pw->owner));
 
     /* Compute the post-to account types */
@@ -1046,19 +1136,9 @@ new_payment_window (GncOwner *owner, QofBook *book, GncInvoice *invoice)
      * Note that this also sets the post account tree. */
     gnc_payment_dialog_owner_changed(pw);
 
-    /* Set the dialog for the 'new' invoice */
-    pw->invoice = invoice;
-    if (invoice)
-    {
-        Account *postacct = gncInvoiceGetPostedAcc (invoice);
-        if (postacct)
-        {
-            gchar *acct_string = gnc_account_get_full_name (postacct);
-            gnc_cbwe_set_by_string(GTK_COMBO_BOX(pw->post_combo), acct_string);
-            gnc_payment_dialog_post_to_changed_cb (pw->post_combo, pw);
-            g_free(acct_string);
-        }
-    }
+    if (pw->tx_info->post_acct)
+        gnc_ui_payment_window_set_postaccount (pw, tx_info->post_acct);
+    gnc_payment_dialog_post_to_changed_cb (pw->post_combo, pw);
 
     /* Setup signals */
     gtk_builder_connect_signals_full( builder,
@@ -1134,6 +1214,7 @@ void
 gnc_ui_payment_window_destroy (PaymentWindow *pw)
 {
     if (!pw) return;
+
     gnc_close_gui_component (pw->component_id);
 }
 
@@ -1142,6 +1223,8 @@ gnc_ui_payment_new_with_invoice (const GncOwner *owner, QofBook *book,
                                  GncInvoice *invoice)
 {
     GncOwner owner_def;
+    GNCLot *postlot;
+    PreExistTxnInfo *tx_info;
 
     if (!book) return NULL;
     if (owner)
@@ -1154,7 +1237,18 @@ gnc_ui_payment_new_with_invoice (const GncOwner *owner, QofBook *book,
         gncOwnerInitCustomer (&owner_def, NULL);
     }
 
-    return new_payment_window (&owner_def, book, invoice);
+    tx_info = g_new0 (PreExistTxnInfo, 1);
+    tx_info->post_acct = gncInvoiceGetPostedAcc (invoice);
+
+    postlot = gncInvoiceGetPostedLot (invoice);
+    if (postlot)
+    {
+        PreExistLotInfo *lot_info = g_new0 (PreExistLotInfo, 1);
+        lot_info->lot = postlot;
+        lot_info->amount = gnc_numeric_zero ();
+        tx_info->lots = g_list_prepend (tx_info->lots, lot_info);
+    }
+    return new_payment_window (&owner_def, book, tx_info);
 }
 
 PaymentWindow *
@@ -1216,21 +1310,25 @@ gboolean gnc_ui_payment_is_customer_payment(const Transaction *txn)
 
 PaymentWindow * gnc_ui_payment_new_with_txn (GtkWidget* parent, GncOwner *owner, Transaction *txn)
 {
-    Split *assetaccount_split;
-    Split *postaccount_split;
-    gnc_numeric amount;
+    SplitList *payment_splits = NULL, *post_splits = NULL, *no_lot_post_splits = NULL;
+    SplitList *iter;
+    gnc_numeric value;
+    Account *xfer_acct, *post_acct = NULL;
     PaymentWindow *pw;
+    PreExistTxnInfo *tx_info = NULL;
+    GNCLot *postlot = NULL;
+    GList *txn_lots = NULL;
+    gboolean has_no_lot_apar_splits = FALSE;
 
     if (!txn)
         return NULL;
 
     // We require the txn to have one split in an Asset account.
-
     if (!xaccTransGetSplitList(txn))
         return NULL;
 
-    assetaccount_split = xaccTransGetFirstPaymentAcctSplit(txn);
-    if (!assetaccount_split)
+    payment_splits = xaccTransGetPaymentAcctSplitList (txn);
+    if (!payment_splits)
     {
 
         GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW(parent),
@@ -1246,30 +1344,117 @@ PaymentWindow * gnc_ui_payment_new_with_txn (GtkWidget* parent, GncOwner *owner,
         return NULL;
     }
 
-    // Prefer true business split (one that's linked to a lot)
-    postaccount_split = xaccTransGetFirstAPARAcctSplit(txn, TRUE); // watch out: Might be NULL
-    if (!postaccount_split)
-        // No true business split found, try again but this time more relaxed
-        postaccount_split = xaccTransGetFirstAPARAcctSplit(txn, FALSE); // watch out: Might be NULL
-    amount = xaccSplitGetValue(assetaccount_split);
+    g_assert(payment_splits->data); // we can rely on this because of the check above
+    value = xaccSplitGetValue(payment_splits->data);
+    xfer_acct = xaccSplitGetAccount(payment_splits->data);
 
-    pw = gnc_ui_payment_new(owner,
-                            qof_instance_get_book(QOF_INSTANCE(txn)));
-    g_assert(assetaccount_split); // we can rely on this because of the check above
-    g_debug("Amount=%s", gnc_numeric_to_string(amount));
+    if (g_list_length(payment_splits) > 1)
+    {
+        int answer = GTK_BUTTONS_OK;
+        const char *acct_name = xaccAccountGetName (xfer_acct);
+        const char *print_amt = xaccPrintAmount(value, gnc_account_print_info (xfer_acct, TRUE));
+        GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW(parent),
+                                                    GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                    GTK_MESSAGE_WARNING,
+                                                    GTK_BUTTONS_CANCEL,
+                                                    _("The transaction has multiple splits that can be considered as 'the payment split'.\n"
+                                                    "If you continue only the following split will be used:\n\n"
+                                                    "%s: %s (%s)\n\n"
+                                                    "Do you wish to continue and ignore the other possible payment splits ?"),
+                                                    acct_name, print_amt,
+                                                    gnc_get_action_num (txn, payment_splits->data));
+        gtk_dialog_add_buttons (GTK_DIALOG(dialog),
+                                _("Continue"), GTK_BUTTONS_OK, NULL);
+        gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_BUTTONS_CANCEL);
+        answer = gtk_dialog_run (GTK_DIALOG(dialog));
+        gtk_widget_destroy (dialog);
+        if (answer != GTK_BUTTONS_OK)
+            return NULL;
+    }
+
+    /* Get all APAR splits */
+    // Prefer true business split (one that's linked to a lot)
+    post_splits = xaccTransGetAPARAcctSplitList (txn, TRUE); // watch out: Might be NULL
+    if (!post_splits)
+        // No true business split found, try again but this time more relaxed
+        post_splits = xaccTransGetAPARAcctSplitList (txn, FALSE); // watch out: Might be NULL
+    for (iter = post_splits; iter; iter = iter->next)
+    {
+        Split *post_split = iter->data;
+        postlot = xaccSplitGetLot (post_split);
+        if (postlot)
+        {
+            PreExistLotInfo *lot_info = g_new0 (PreExistLotInfo, 1);
+            lot_info->lot = postlot;
+            lot_info->amount = xaccSplitGetValue (post_split);
+            txn_lots = g_list_prepend (txn_lots, lot_info);
+            post_acct = xaccSplitGetAccount (post_split);
+        }
+        else
+        {
+            /* Make sure not to override post_acct if it was set above from a lot split */
+            if (!post_acct)
+                post_acct = xaccSplitGetAccount (post_split);
+            no_lot_post_splits = g_list_prepend (no_lot_post_splits, post_split);
+            has_no_lot_apar_splits = TRUE;
+        }
+    }
+
+    /* If the APAR has both splits linked to a business lot and
+     * splits that are not, issue a warning some will be discarded.
+     */
+    if (has_no_lot_apar_splits && (g_list_length (txn_lots) > 0))
+    {
+        GtkWidget *dialog;
+        int answer = GTK_BUTTONS_OK;
+        char *split_str = g_strdup ("");
+        for (iter = no_lot_post_splits; iter; iter = iter->next)
+        {
+            Split *post_split = iter->data;
+            Account *acct = xaccSplitGetAccount(post_split);
+            const char *acct_name = xaccAccountGetName (acct);
+            const char *print_amt = xaccPrintAmount(value, gnc_account_print_info (acct, TRUE));
+            char *tmp_str = g_strdup_printf("%s%s: %s (%s)\n", split_str, acct_name, print_amt,
+                                            gnc_get_action_num (txn, post_split));
+            g_free (split_str);
+            split_str = tmp_str;
+        }
+
+        dialog = gtk_message_dialog_new (GTK_WINDOW(parent),
+                                         GTK_DIALOG_DESTROY_WITH_PARENT,
+                                         GTK_MESSAGE_WARNING,
+                                         GTK_BUTTONS_CANCEL,
+                                         _("The transaction has at least one split in a business account that is not part a business transaction.\n"
+                                         "If you continue these splits will be ignored:\n\n%s\n"
+                                         "Do you wish to continue and ignore these splits ?"),
+                                         split_str);
+        gtk_dialog_add_buttons (GTK_DIALOG(dialog),
+                                _("Continue"), GTK_BUTTONS_OK, NULL);
+        gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_BUTTONS_CANCEL);
+        answer = gtk_dialog_run (GTK_DIALOG(dialog));
+        gtk_widget_destroy (dialog);
+        g_free (split_str);
+        if (answer != GTK_BUTTONS_OK)
+            return NULL;
+    }
 
     // Fill in the values from the given txn
-    pw->pre_existing_txn = txn;
-    gnc_ui_payment_window_set_num(pw, gnc_get_num_action(txn, assetaccount_split));
+    tx_info = g_new0(PreExistTxnInfo, 1);
+    tx_info->txn = txn;
+    tx_info->post_acct = post_acct;
+    tx_info->lots = txn_lots;
+
+    pw = new_payment_window (owner,
+                            qof_instance_get_book(QOF_INSTANCE(txn)),
+                            tx_info);
+
+    gnc_ui_payment_window_set_num(pw, gnc_get_num_action (txn, payment_splits->data));
     gnc_ui_payment_window_set_memo(pw, xaccTransGetDescription(txn));
     {
         GDate txn_date = xaccTransGetDatePostedGDate (txn);
         gnc_ui_payment_window_set_date(pw, &txn_date);
     }
-    gnc_ui_payment_window_set_amount(pw, amount);
-    gnc_ui_payment_window_set_xferaccount(pw, xaccSplitGetAccount(assetaccount_split));
-    if (postaccount_split)
-        gnc_ui_payment_window_set_postaccount(pw, xaccSplitGetAccount(postaccount_split));
-
+    gnc_ui_payment_window_set_amount(pw, value);
+    gnc_ui_payment_window_set_xferaccount(pw, xfer_acct);
     return pw;
 }
