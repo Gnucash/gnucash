@@ -93,7 +93,6 @@ extern "C"
 
 #if LIBDBI_VERSION >= 900
 #define HAVE_LIBDBI_R 1
-#define HAVE_LIBDBI_TO_LONGLONG 1
 static dbi_inst dbi_instance = nullptr;
 #else
 #define HAVE_LIBDBI_R 0
@@ -253,8 +252,8 @@ GncDbiBackend<Type>::set_standard_connection_options (dbi_conn conn,
     return true;
 }
 
-template <DbType Type> void error_handler(void* conn, void* data);
-void error_handler(void* conn, void* data);
+template <DbType Type> void error_handler(dbi_conn conn, void* data);
+void error_handler(dbi_conn conn, void* data);
 
 template <DbType Type> dbi_conn
 GncDbiBackend<Type>::conn_setup (PairVec& options, UriStrings& uri)

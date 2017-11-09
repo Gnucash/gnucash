@@ -36,6 +36,12 @@ extern "C"
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 
+#if LIBDBI_VERSION >= 900
+#define HAVE_LIBDBI_TO_LONGLONG 1
+#else
+#define HAVE_LIBDBI_TO_LONGLONG 0
+#endif
+
 GncDbiSqlResult::~GncDbiSqlResult()
 {
     int status = dbi_result_free (m_dbi_result);
@@ -152,17 +158,17 @@ GncDbiSqlResult::IteratorImpl::get_string_at_col(const char* col) const
 time64
 GncDbiSqlResult::IteratorImpl::get_time64_at_col (const char* col) const
 {
-    auto type = dbi_result_get_field_type (m_inst->m_dbi_result, col);
-    auto attrs = dbi_result_get_field_attribs (m_inst->m_dbi_result, col);
+    auto result = (dbi_result_t*) (m_inst->m_dbi_result);
+    auto type = dbi_result_get_field_type (result, col);
+    auto attrs = dbi_result_get_field_attribs (result, col);
     if (type != DBI_TYPE_DATETIME)
         throw (std::invalid_argument{"Requested time64 from non-time64 column."});
     gnc_push_locale (LC_NUMERIC, "C");
 #if HAVE_LIBDBI_TO_LONGLONG
-    /* A less evil hack than the one equrie by libdbi-0.8, but
+    /* A less evil hack than the one required by libdbi-0.8, but
      * still necessary to work around the same bug.
      */
-    auto retval = dbi_result_get_as_longlong(dbi_row->result,
-                                             col_name);
+    auto retval = dbi_result_get_as_longlong(result, col);
 #else
     /* A seriously evil hack to work around libdbi bug #15
      * https://sourceforge.net/p/libdbi/bugs/15/. When libdbi
@@ -170,7 +176,6 @@ GncDbiSqlResult::IteratorImpl::get_time64_at_col (const char* col) const
      * dbi_result_get_as_longlong.
      * Note: 0.9 is available in Debian Jessie and Fedora 21.
      */
-    auto result = (dbi_result_t*) (m_inst->m_dbi_result);
     auto row = dbi_result_get_currow (result);
     auto idx = dbi_result_get_field_idx (result, col) - 1;
     time64 retval = result->rows[row]->field_values[idx].d_datetime;
