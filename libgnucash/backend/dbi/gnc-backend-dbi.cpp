@@ -27,7 +27,7 @@
  */
 extern "C"
 {
-#include <config.h>
+#include "config.h"
 
 #include <platform.h>
 #ifdef __STRICT_ANSI__
@@ -361,7 +361,13 @@ error_handler<DbType::DBI_SQLITE> (dbi_conn conn, void* user_data)
     const char* msg;
     GncDbiBackend<DbType::DBI_SQLITE> *dbi_be =
         static_cast<decltype(dbi_be)>(user_data);
-    int errnum = dbi_conn_error (conn, &msg);
+    int err_num = dbi_conn_error (conn, &msg);
+    /* BADIDX is raised if we attempt to seek outside of a result. We
+     * handle that possibility after checking the return value of the
+     * seek. Having this raise a critical error breaks looping by
+     * testing for the return value of the seek.
+     */
+    if (err_num == DBI_ERROR_BADIDX) return;
     PERR ("DBI error: %s\n", msg);
     if (dbi_be->connected())
         dbi_be->set_dbi_error (ERR_BACKEND_MISC, 0, false);
@@ -478,6 +484,12 @@ error_handler<DbType::DBI_MYSQL> (dbi_conn conn, void* user_data)
     const char* msg;
 
     auto err_num = dbi_conn_error (conn, &msg);
+    /* BADIDX is raised if we attempt to seek outside of a result. We
+     * handle that possibility after checking the return value of the
+     * seek. Having this raise a critical error breaks looping by
+     * testing for the return value of the seek.
+     */
+    if (err_num == DBI_ERROR_BADIDX) return;
 
     /* Note: the sql connection may not have been initialized yet
      *       so let's be careful with using it
@@ -724,7 +736,13 @@ error_handler<DbType::DBI_PGSQL> (dbi_conn conn, void* user_data)
         static_cast<decltype(dbi_be)>(user_data);
     const char* msg;
 
-    (void)dbi_conn_error (conn, &msg);
+    auto err_num = dbi_conn_error (conn, &msg);
+    /* BADIDX is raised if we attempt to seek outside of a result. We
+     * handle that possibility after checking the return value of the
+     * seek. Having this raise a critical error breaks looping by
+     * testing for the return value of the seek.
+     */
+    if (err_num == DBI_ERROR_BADIDX) return;
     if (g_str_has_prefix (msg, "FATAL:  database") &&
         g_str_has_suffix (msg, "does not exist\n"))
     {

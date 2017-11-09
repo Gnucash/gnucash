@@ -518,7 +518,7 @@ gncScrubBusinessLot (GNCLot *lot)
 gboolean
 gncScrubBusinessSplit (Split *split)
 {
-    const gchar *memo = _("Please delete this transaction. Explanation at http://wiki.gnucash.org/wiki/Business_Features_Issues#Double_Posting");
+    const gchar *memo = _("Please delete this transaction. Explanation at https://wiki.gnucash.org/wiki/Business_Features_Issues#Double_posting");
     Transaction *txn;
     gboolean deleted_split = FALSE;
 

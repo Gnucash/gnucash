@@ -1,12 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
-<interface>
   <requires lib="gtk+" version="3.10"/>
+  <object class="GtkDialog" id="filter_by_dialog">
   <object class="GtkDialog" id="filter_by_dialog">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Filter register by...</property>
+    <property name="title" translatable="yes" comments="Filter register by... Dialog">Filter register by...</property>
     <property name="resizable">False</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
@@ -73,7 +75,7 @@
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkRadioButton" id="filter_show_all">
-                    <property name="label" translatable="yes">Show _All</property>
+                    <property name="label" translatable="yes" comments="Filter By Dialog, Date Tab">Show _All</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -124,7 +126,7 @@
                     <child>
                       <object class="GtkLabel" id="label847682">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Start:</property>
                         <property name="label" translatable="yes">Start:</property>
                       </object>
                       <packing>
@@ -211,7 +213,7 @@
                     <child>
                       <object class="GtkLabel" id="label847684">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">End:</property>
                         <property name="label" translatable="yes">End:</property>
                       </object>
                       <packing>
@@ -341,7 +343,7 @@
                     <property name="border_width">12</property>
                     <child>
                       <object class="GtkCheckButton" id="filter_status_unreconciled">
-                        <property name="label" translatable="yes">_Unreconciled</property>
+                        <property name="label" translatable="yes" comments="Filter By Dialog, State Tab">_Unreconciled</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -484,7 +486,7 @@
             <property name="can_focus">False</property>
             <child>
               <object class="GtkCheckButton" id="filter_save">
-                <property name="label" translatable="yes">Sa_ve Filter</property>
+                <property name="label" translatable="yes" comments="Filter By Dialog, below tabs">Sa_ve Filter</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -523,7 +525,7 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Sort register by...</property>
+    <property name="title" translatable="yes" comments="Sort register by Dialog">Sort register by...</property>
     <property name="resizable">False</property>
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
@@ -832,11 +834,11 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="sort_reverse">
-                    <property name="label" translatable="yes">Reverse Order</property>
+                    <property name="label" translatable="yes">_Reverse Order</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Sort in descending order.</property>
+                    <property name="halign">start</property>
                     <property name="halign">start</property>
                     <property name="draw_indicator">True</property>
                     <signal name="toggled" handler="gnc_plugin_page_register_sort_order_reverse_cb" swapped="no"/>

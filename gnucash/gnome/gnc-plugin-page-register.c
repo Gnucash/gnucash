@@ -391,7 +391,9 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
         G_CALLBACK (gnc_plugin_page_register_cmd_schedule)
     },
     {
-        "ScrubAllAction", NULL, N_("_All transactions"), NULL, NULL,
+        "ScrubAllAction", NULL,
+		/* Translators: The following 2 are Scrub actions in register view */
+		N_("_All transactions"), NULL, NULL,
         G_CALLBACK (gnc_plugin_page_register_cmd_scrub_all)
     },
     {

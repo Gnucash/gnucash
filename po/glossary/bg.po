@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.2.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-13 00:33+0200\n"
+"POT-Creation-Date: 2017-10-20 19:04+0200\n"
 "PO-Revision-Date: 2011-10-25 13:18+0200\n"
 "Last-Translator: Rosi Dimova <pocu@bk.ru>\n"
 "Language-Team: BG <bg@li.org>\n"
@@ -48,6 +48,11 @@ msgstr "account type: Актив"
 msgid "account type: Asset"
 msgstr "account type: Актив"
 
+#. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
+#, fuzzy
+msgid "account type: Assets & Liabilities"
+msgstr "account type: Пасив"
+
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
 msgstr "account type: разплащателна сметка"
@@ -83,6 +88,11 @@ msgstr "account type: взаимни фондове"
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugzilla.gnome.org/show_bug.cgi?id=421766"
 #, fuzzy
 msgid "account type: Passive"
+msgstr "account type: Актив"
+
+#. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
+#, fuzzy
+msgid "account type: Profit & Loss"
 msgstr "account type: Актив"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
@@ -158,7 +168,7 @@ msgstr "action: заем"
 msgid "action: payment"
 msgstr "action: плащане"
 
-#. "-"
+#. "Point of sale"
 msgid "action: POS"
 msgstr "action: ПОС-терминал"
 
@@ -403,7 +413,7 @@ msgid "gain"
 msgstr "печалба"
 
 # Ausgleichskonto
-#. "Name of an automaticly created account to get imbalanced transactions back in balance"
+#. "Name of an automatically created account to get imbalanced transactions back in balance"
 msgid "imbalance"
 msgstr "неравнена сметка"
 
@@ -423,11 +433,6 @@ msgstr "лихва"
 #. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out (to a customer), whereas a 'bill' is one that we received (from a vendor)."
 msgid "invoice"
 msgstr "фактура на клиент"
-
-# (издадена фактура)
-#. "The customer (or vendor) to which this invoice is sent to."
-msgid "invoice owner"
-msgstr "получател на фактура"
 
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
@@ -529,6 +534,10 @@ msgstr "поръчка"
 #. "Name of an automatically created account that holds splits that have no account."
 msgid "orphan"
 msgstr "изоставен"
+
+#. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
+msgid "owner (of bill, invoice or expense voucher)"
+msgstr ""
 
 #. "A secret phrase that one needs to know in order to get access to a user account "
 msgid "passphrase"
@@ -705,7 +714,7 @@ msgstr "таблица със стил"
 msgid "subtotal"
 msgstr "междинна сума"
 
-#. "On the goverment's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
+#. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
 msgid "tax code"
 msgstr "данъчен код"
 
@@ -793,3 +802,7 @@ msgstr "ваучер"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "задължавам, дебитирам"
+
+# (издадена фактура)
+#~ msgid "invoice owner"
+#~ msgstr "получател на фактура"

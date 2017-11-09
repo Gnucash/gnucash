@@ -202,7 +202,7 @@
   <gnc:account version="2.0.0">
     <act:name>1100 Postbank</act:name>
     <act:id type="new">9fe8d61dac9cf62b3f12e6c71a4385b2</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>BANK</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>
@@ -214,7 +214,7 @@
   <gnc:account version="2.0.0">
     <act:name>1200 Bankkonto</act:name>
     <act:id type="new">875ec51cd332f3b75c15a2a9ca309ebd</act:id>
-    <act:type>ASSET</act:type>
+    <act:type>BANK</act:type>
     <act:commodity>
       <cmdty:space>ISO4217</cmdty:space>
       <cmdty:id>EUR</cmdty:id>

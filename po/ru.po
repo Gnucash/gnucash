@@ -9,14 +9,15 @@
 # Sergey Belyashov <Sergey.Belyashov@gmail.com>, 2009, 2011.
 # Dmitry Pavlov  <zeldigas@gmail.com>, 2014.
 # ashed <craysy@gmail.com>, 2017
+# Dmitriy Mangul <dimang.freetime@gmail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.6.18\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-10-02 06:36+0200\n"
 "PO-Revision-Date: 2017-10-01 04:09+0500\n"
-"Last-Translator: ashed <craysy@gmail.com>\n"
-"Language-Team: russian <ru@li.org>\n"
+"Last-Translator: Dmitriy Mangul <dimang.freetime@gmail.com>\n"
+"Language-Team: russian <gnucash-ru@googlegroups.com>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -47,7 +48,7 @@ msgstr "Адрес фирмы"
 
 #: ../src/app-utils/app-utils.scm:308
 msgid "Company ID"
-msgstr "ID фирмы"
+msgstr "Идентификатор фирмы"
 
 #: ../src/app-utils/app-utils.scm:309
 msgid "Company Phone Number"
@@ -71,7 +72,7 @@ msgstr "Контактное лицо фирмы"
 
 #: ../src/app-utils/business-prefs.scm:24
 msgid "Counters"
-msgstr "Счётчики"
+msgstr "Номера"
 
 #: ../src/app-utils/business-prefs.scm:31
 msgid "Customer number format"
@@ -296,7 +297,7 @@ msgstr "URL адрес вашего сайта."
 
 #: ../src/app-utils/business-prefs.scm:107
 msgid "The ID for your company (eg 'Tax-ID: 00-000000)."
-msgstr "ID вашей фирмы (например 'Tax-ID:00-000000)."
+msgstr "Идентификатор вашей фирмы (например 'Tax-ID:00-000000)."
 
 #: ../src/app-utils/business-prefs.scm:112
 msgid "Default Customer TaxTable"
@@ -316,11 +317,11 @@ msgstr "Таблица налогов применяемая по умолчан
 
 #: ../src/app-utils/business-prefs.scm:124
 msgid "Fancy Date Format"
-msgstr "Современный формат даты"
+msgstr "Расширенный формат даты"
 
 #: ../src/app-utils/business-prefs.scm:125
 msgid "The default date format used for fancy printed dates."
-msgstr "Формат даты используемый для печати современных дат"
+msgstr "Настройки для печати даты в расширенном формате."
 
 #: ../src/app-utils/business-prefs.scm:133
 msgid ""
@@ -339,9 +340,10 @@ msgid ""
 msgstr ""
 "Укажите число дней после истечения которых проводки будут доступны только "
 "для просмотра и не смогут быть отредактированы. Эта граница помечена красной "
-"линией в окне журнала проводок. Если значение установлено в 0, все "
-"транзакции можно изменять."
+"линией в окне журнала проводок. Если установлено значение 0, то можно изменять "
+"все транзакции."
 
+# TODO: check translation
 # "Отметьте для размещения поля с типом проводки,  для ввода номеров проводок. "
 # "Номер проводки отображаемый как \"№\" на второй строке реестра"
 #: ../src/app-utils/business-prefs.scm:150
@@ -358,7 +360,7 @@ msgstr ""
 
 #: ../src/app-utils/business-prefs.scm:158
 msgid "Budget to be used when none has been otherwise specified."
-msgstr "Используемый бюджет, если явно не указано."
+msgstr "Бюджет, который будет использоваться по умолчанию, если не указано что-то другое."
 
 #: ../src/app-utils/date-utilities.scm:122
 #: ../src/report/standard-reports/account-piecharts.scm:470
@@ -841,7 +843,6 @@ msgstr ""
 #: ../src/app-utils/prefs.scm:63
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3184
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3191
-#, fuzzy
 msgid "Funds In"
 msgstr "Средства в"
 
@@ -990,7 +991,6 @@ msgstr "Счёт-фактура"
 #: ../src/app-utils/prefs.scm:80
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3103
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3110
-#, fuzzy
 msgid "Funds Out"
 msgstr "Средства из"
 
@@ -1199,7 +1199,7 @@ msgid ""
 "This copy was built from %s rev %s on %s."
 msgstr ""
 "%s\n"
-"Эта копия собрана из %s, ревизия %s. Дата сборки %s."
+"Эта копия собрана из %s, ревизия %s. \nДата сборки %s."
 
 #: ../src/bin/gnucash-bin.c:458
 #, c-format
@@ -1334,7 +1334,7 @@ msgstr "Нет такого счета: %s"
 
 #: ../src/business/business-gnome/dialog-billterms.c:265
 msgid "Discount days cannot be more than due days."
-msgstr "Дни скидок не могут быть больше, чем в выходные дни."
+msgstr "Дисконтных дней не может быть больше, чем дней для оплаты."
 
 #: ../src/business/business-gnome/dialog-billterms.c:324
 msgid "You must provide a name for this Billing Term."
@@ -1397,7 +1397,7 @@ msgid ""
 "below."
 msgstr ""
 "Эта проводка должна быть назначена поставщику. Пожалуйста, выберите "
-"поставщика ниже."
+"Поставщика ниже."
 
 #: ../src/business/business-gnome/dialog-customer.c:329
 msgid ""
@@ -2307,7 +2307,7 @@ msgstr "Открыть диалог создания новых операций
 #: ../src/business/business-gnome/gnc-plugin-business.c:185
 #: ../src/business/business-gnome/gnc-plugin-business.c:228
 msgid "Find Jo_b..."
-msgstr "Найти _задачу..."
+msgstr "Найти о_перацию..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:186
 #: ../src/business/business-gnome/gnc-plugin-business.c:229
@@ -2979,7 +2979,7 @@ msgid ""
 "well. Otherwise they are not shown."
 msgstr ""
 "При включении, отображаются дополнительные кнопки для стандартных бизнес "
-"операций. В противном случае они не показываются"
+"операций. В противном случае они не показываются."
 
 #: ../src/business/business-gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in.h:11
 #: ../src/business/business-gnome/gtkbuilder/business-prefs.glade.h:23
@@ -3203,7 +3203,7 @@ msgstr "Подтвердить этот срок оплаты"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-billterms.glade.h:3
 msgid "<b>Term Definition</b>"
-msgstr "<b>Определение срока</b>"
+msgstr "<b>Параметры срока</b>"
 
 #: ../src/business/business-gnome/gtkbuilder/dialog-billterms.glade.h:4
 msgid "De_scription:"
@@ -9172,7 +9172,7 @@ msgstr "Конец"
 # Частичное гашение долга
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:21
 msgid "<b>Compounding:</b>"
-msgstr "<b>Компаундинг:</b>"
+msgstr "<b>Начисление процентов:</b>"
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:22
 msgid "<b>Period:</b>"
@@ -12026,7 +12026,7 @@ msgstr "Настройки книги"
 #: ../src/gnome-utils/gnc-main-window.c:4370
 msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
 msgstr ""
-"Персональный финансовый менеджер GnuCash. GNU-способ распоряжения вашими "
+"Персональный финансовый менеджер GnuCash. \nGNU-способ распоряжения вашими "
 "деньгами!"
 
 #: ../src/gnome-utils/gnc-main-window.c:4372
@@ -12046,7 +12046,8 @@ msgstr ""
 "Владимир Турбаевский\n"
 "Сергей Беляшов\n"
 "Дмитрий Павлов <zeldigas@gmail.com>\n"
-"ashed <craysy@gmail.com>"
+"ashed <craysy@gmail.com>\n"
+"Дмитрий Мангул <dimang.freetime@gmail.com>"
 
 #: ../src/gnome-utils/gnc-period-select.c:73
 msgid "Start of this quarter"
@@ -12509,7 +12510,7 @@ msgstr "_Пересчитать"
 #: ../src/report/standard-reports/transaction.scm:954
 #: ../src/report/standard-reports/trial-balance.scm:664
 msgid "Account Name"
-msgstr "Название счета"
+msgstr "Название счёта"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:730
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3016
@@ -12527,7 +12528,7 @@ msgstr "Товар"
 #: ../src/report/standard-reports/transaction.scm:790
 #: ../src/report/standard-reports/transaction.scm:956
 msgid "Account Code"
-msgstr "Код счета"
+msgstr "Код счёта"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:748
 msgid "Last Num"
@@ -13979,7 +13980,7 @@ msgstr "<b>Дополнение даты</b>"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:60
 msgid "When a date is entered without year, it should be taken:"
-msgstr "Если дата введена без года, то она должна быть взята:"
+msgstr "Если дата введена без года, то она должна быть дополнена:"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:62
 msgid ""
@@ -14285,7 +14286,7 @@ msgstr "<b>Стиль по умолчанию</b>"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:146
 msgid "<b>Other Defaults</b>"
-msgstr "<b>Другие Умолчания</b>"
+msgstr "<b>Другие Настройки</b>"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:147
 msgid "_Basic ledger"
@@ -14361,7 +14362,7 @@ msgstr "Отображать даты создания и согласовани
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:171
 msgid "Register Defaults"
-msgstr "Умолчания журнала"
+msgstr "Настройки журнала"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:174
 msgid "<b>Default Report Currency</b>"
@@ -14523,7 +14524,7 @@ msgstr "_Название: "
 
 #: ../src/gnome-utils/gtkbuilder/dialog-tax-table.glade.h:7
 msgid "Tax Tables"
-msgstr "<b>Таблицы налогов</b>"
+msgstr "Таблицы налогов"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-tax-table.glade.h:8
 msgid "<b>Tax Tables</b>"
@@ -14638,19 +14639,19 @@ msgstr "%Y-%m-%d"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:5
 msgid "Include Century"
-msgstr "Включить век"
+msgstr "Указывать век"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:7
 msgid "Abbreviation"
-msgstr "Аббревиатура"
+msgstr "Сокращение"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:9
 msgid "Months:"
-msgstr "Месяцы:"
+msgstr "Месяца:"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:10
 msgid "Years:"
-msgstr "Годы:"
+msgstr "Года:"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:11
 #: ../src/import-export/dialog-import.glade.h:5
@@ -14683,7 +14684,7 @@ msgstr "UTC - Скоординированное универсальное вр
 
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:21
 msgid "No Fancy Date Format"
-msgstr "Нет Современного формата даты"
+msgstr "Нет расширенного формата даты"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:3
 msgid "Not scheduled"
@@ -25691,7 +25692,7 @@ msgstr "Использовать торговые счета"
 
 #: ../src/libqof/qof/qofbookslots.h:67
 msgid "Day Threshold for Read-Only Transactions (red line)"
-msgstr "Граница начала неизм-х проводок в днях (красн. линия)"
+msgstr "Дневной лимит для неизменяемых проводок (красная линия)"
 
 #: ../src/libqof/qof/qofbookslots.h:68
 msgid "Use Split Action Field for Number"
@@ -25720,7 +25721,7 @@ msgid ""
 "The GnuCash online manual has lots of helpful information. You can access "
 "the manual under the Help menu."
 msgstr ""
-"Онлайновое руководство по GnuCash содержит много полезной информации. "
+"Практическое руководство по GnuCash содержит много полезной информации. "
 "Получить доступ к руководству можно через меню \"Справка\"."
 
 #: ../doc/tip_of_the_day.list.in:4
@@ -25731,7 +25732,7 @@ msgid ""
 "follow the instructions provided."
 msgstr ""
 "Вы можете очень просто импортировать имеющиеся у вас финансовые данные из "
-"таких программ, как Qucken, MS Money и других, позволяющих экспортировать в "
+"таких программ, как Quicken, MS Money и других, позволяющих экспортировать данные в "
 "формат файлов QIF или OFX. В меню \"Файл\" выберите подменю \"Импорт\" и "
 "выберите нужный файл QIF или OFX. Далее следуйте предложенным инструкциям."
 
@@ -25745,7 +25746,7 @@ msgstr ""
 "Если вы уже работали с другими финансовыми программами, такими как Quicken, "
 "заметьте, что GnuCash использует счета вместо категорий для отслеживания "
 "приходов и расходов. За дополнительной информацией о счетах Приход и Расход, "
-"пожалуйста, обращайтесь к онлайновому руководству GnuCash."
+"пожалуйста, обращайтесь к практическому руководству GnuCash."
 
 #: ../doc/tip_of_the_day.list.in:14
 msgid ""
@@ -25757,7 +25758,7 @@ msgstr ""
 "Создавайте новые счета нажатием кнопки \"Новый\" на панели инструментов "
 "главного окна. Это вызовет появление диалога, где вы сможете указать "
 "различные параметры счёта. За дополнительной информацией по выбору типа "
-"счёта или настройке плана счетов, обращайтесь к онлайновому руководству "
+"счёта или настройке плана счетов, обращайтесь к практическому руководству "
 "GnuCash."
 
 #: ../doc/tip_of_the_day.list.in:20
@@ -25778,9 +25779,9 @@ msgid ""
 "View menu, you can choose the register style Auto-Split Ledger or "
 "Transaction Journal."
 msgstr ""
-"Чтобы ввести проводку, состоящую из нескольких частей, такую как Платёж по "
+"Чтобы ввести проводку, состоящую из нескольких частей, такую как платёж по "
 "чеку с различными удержаниями, нажмите кнопку \"Части\" на панели "
-"инструментов. Также вы можете выбрать стиль журнала в меню \"Вид\",например "
+"инструментов. Также вы можете выбрать стиль журнала в меню \"Вид\", например "
 "\"Авторазворачиваемый\" или \"Журнал проводок\"."
 
 #: ../doc/tip_of_the_day.list.in:30
@@ -25803,8 +25804,8 @@ msgid ""
 "was last entered."
 msgstr ""
 "Быстрое заполнение упрощает ввод повторяющихся проводок. Когда вы набираете "
-"первые буквы описания какой-либо частой проводки, GnuCash будет "
-"автоматически дополнять оставшуюся часть описания так, как она была введена "
+"первые буквы описания какой-либо частой проводки, GnuCash "
+"автоматически дополняет оставшуюся часть описания так, как она была введена "
 "до этого."
 
 #: ../doc/tip_of_the_day.list.in:40
@@ -25817,8 +25818,8 @@ msgid ""
 msgstr ""
 "Наберите первые несколько букв существующего имени счёта в колонке \"Передать"
 "\" журнала проводок, и GnuCash завершит название из вашего списка счетов. "
-"Для подсчетов, наберите первые буквы родительского счёта, затем символ "
-"двоеточия и первые буквы субсчетов (например, А:Н для получения Активы:"
+"Для субсчетов, наберите первые буквы родительского счёта, затем символ "
+"двоеточия и первые буквы субсчёта (например, А:Н для получения Активы:"
 "Наличные)."
 
 #: ../doc/tip_of_the_day.list.in:46
@@ -25828,8 +25829,8 @@ msgid ""
 "Edit -> Open Subaccounts from the menu."
 msgstr ""
 "Желаете увидеть все проводки субсчетов в одном журнале? Во вкладке Счета "
-"главного окна выделите родительский счёт и выберите из меню Правка -> "
-"Открыть субсчета."
+"главного окна выделите родительский счёт и выберите из меню \"Правка\" -> "
+"\"Открыть субсчета\"."
 
 #: ../doc/tip_of_the_day.list.in:50
 msgid ""
@@ -25886,7 +25887,7 @@ msgid ""
 "report as a report option, and use the Edit -> Style Sheets menu to "
 "customize style sheets."
 msgstr ""
-"Стили оформления действуют на то, как будут показываться отчеты. Выберите "
+"Стили оформления влияют на то, как будут показываться отчеты. Выберите "
 "стиль оформления для вашего отчета и используйте меню \"Правка\" - \"Стили "
 "оформления\" для его настройки."
 
@@ -25964,7 +25965,7 @@ msgid ""
 "from the main accounts hierarchy page. To limit your search to a single "
 "account, start the search from that account's register."
 msgstr ""
-"Для поиска по всем транзакциям, откройте диалог поиска (Правка -> Найти...) "
+"Для поиска по всем транзакциям, откройте диалог поиска (\"Правка\" -> \"Найти...\") "
 "со страницы иерархии счетов. Чтобы искать в пределах одного счета, откройте "
 "диалог поиска со страницы журнала этого счета."
 
@@ -25974,8 +25975,8 @@ msgid ""
 "select Window -> New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
-"Чтобы визуально сравнить на экране содержимое двух вкладок в одной из "
-"вкладок, выберите Окно -> Новое окно со страницей из меню, чтобы дублировать "
+"Чтобы визуально сравнить на экране содержимое двух вкладок, выберите в одной из "
+"вкладок \"Окно\" -> \"Новое окно со страницей\" из меню, чтобы продублировать "
 "эту вкладку в новом окне."
 
 #~ msgid "Dummy message"

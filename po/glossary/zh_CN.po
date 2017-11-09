@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary\n"
-"POT-Creation-Date: 2014-10-13 00:33+0200\n"
+"POT-Creation-Date: 2017-10-20 19:04+0200\n"
 "PO-Revision-Date: 2010-05-05 13:47+1000\n"
 "Last-Translator: Tao Wang <dancefire@gmail.com>\n"
 "Language-Team: Simplified Chinese <LL@li.org>\n"
@@ -48,6 +48,12 @@ msgstr "科目类型：资产"
 msgid "account type: Asset"
 msgstr "科目类型：资产"
 
+# 债务，财政义务
+#. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
+#, fuzzy
+msgid "account type: Assets & Liabilities"
+msgstr "科目类型：负债"
+
 # 英国称为 current account 即，现金流账户。是指一个可以随意从银行取款而不需要事先通知的银行账户
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
@@ -87,6 +93,12 @@ msgstr "科目类型：投资基金"
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugzilla.gnome.org/show_bug.cgi?id=421766"
 #, fuzzy
 msgid "account type: Passive"
+msgstr "科目类型：资产"
+
+# 某人或某公司持有的某个事物，其有价值并且可以被使用或销售以支付债务
+#. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
+#, fuzzy
+msgid "account type: Profit & Loss"
 msgstr "科目类型：资产"
 
 # 1. (美国) 任何赚取利息的账户类型
@@ -174,7 +186,7 @@ msgstr "操作：贷款"
 msgid "action: payment"
 msgstr "操作：支付"
 
-#. "-"
+#. "Point of sale"
 msgid "action: POS"
 msgstr "操作：POS"
 
@@ -472,7 +484,7 @@ msgid "gain"
 msgstr "收益"
 
 # 自动创建科目的名字，用以将不平衡的交易恢复平衡。
-#. "Name of an automaticly created account to get imbalanced transactions back in balance"
+#. "Name of an automatically created account to get imbalanced transactions back in balance"
 msgid "imbalance"
 msgstr "不平衡"
 
@@ -497,15 +509,6 @@ msgstr "利息"
 # Post Invoice，应该翻译为“入账”。
 #. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out (to a customer), whereas a 'bill' is one that we received (from a vendor)."
 msgid "invoice"
-msgstr "发票"
-
-# 一个销售的物品或提供的服务含收费价格的列表。
-# 见：账单
-# 在 GnuCash 中，“发票”是我们发出(给客户)的声明，而“账单”是我们(从厂商)收到的声明。
-# Post Invoice，应该翻译为“入账”。
-#. "The customer (or vendor) to which this invoice is sent to."
-#, fuzzy
-msgid "invoice owner"
 msgstr "发票"
 
 # 在商业会计中：任务是一个你可以将同一个客户或厂商的多个发票或账单合起来的一种机制。任务描述了订购过程中一(大)块工作或任务，会处理它的一个或多个发票或账单。
@@ -635,6 +638,10 @@ msgstr "订单"
 #. "Name of an automatically created account that holds splits that have no account."
 msgid "orphan"
 msgstr "孤立的"
+
+#. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
+msgid "owner (of bill, invoice or expense voucher)"
+msgstr ""
 
 # 用于访问用户账户所需要知道的秘密用语。
 #. "A secret phrase that one needs to know in order to get access to a user account "
@@ -847,7 +854,7 @@ msgid "subtotal"
 msgstr "小计"
 
 # 科目的一个字段
-#. "On the goverment's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
+#. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
 #, fuzzy
 msgid "tax code"
 msgstr "税务信息"
@@ -954,3 +961,11 @@ msgstr "凭证"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "取款 (在对账对话框)"
+
+# 一个销售的物品或提供的服务含收费价格的列表。
+# 见：账单
+# 在 GnuCash 中，“发票”是我们发出(给客户)的声明，而“账单”是我们(从厂商)收到的声明。
+# Post Invoice，应该翻译为“入账”。
+#, fuzzy
+#~ msgid "invoice owner"
+#~ msgstr "发票"

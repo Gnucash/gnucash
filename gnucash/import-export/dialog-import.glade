@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
 <interface>
@@ -301,7 +303,7 @@
         <property name="can_focus">False</property>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.import.generic/enable-skip">
-            <property name="label" translatable="yes">Enable skip transaction action</property>
+            <property name="label" translatable="yes" comments="Preferences->Online Banking:Generic">Enable skip transaction action</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -321,7 +323,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.import.generic/enable-update">
-            <property name="label" translatable="yes">Enable update match action</property>
+            <property name="label" translatable="yes" comments="Preferences->Online Banking:Generic">Enable update match action</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -437,9 +439,9 @@
         <child>
           <object class="GtkLabel" id="label847789">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="margin_left">12</property>
+            <property name="label" translatable="yes">Commercial ATM _fees threshold</property>
             <property name="label" translatable="yes">Commercial ATM _fees threshold</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">pref/dialogs.import.generic/atm-fee-threshold</property>
@@ -452,9 +454,9 @@
         <child>
           <object class="GtkLabel" id="label847788">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="margin_left">12</property>
+            <property name="label" translatable="yes">Auto-c_lear threshold</property>
             <property name="label" translatable="yes">Auto-c_lear threshold</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">pref/dialogs.import.generic/auto-clear-threshold</property>
@@ -467,9 +469,9 @@
         <child>
           <object class="GtkLabel" id="label847787">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="margin_left">12</property>
+            <property name="label" translatable="yes">Auto-_add threshold</property>
             <property name="label" translatable="yes">Auto-_add threshold</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">pref/dialogs.import.generic/auto-add-threshold</property>
@@ -482,9 +484,9 @@
         <child>
           <object class="GtkLabel" id="label847786">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="margin_left">12</property>
+            <property name="label" translatable="yes">Match _display threshold</property>
             <property name="label" translatable="yes">Match _display threshold</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">pref/dialogs.import.generic/match-threshold</property>
@@ -496,7 +498,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.import.generic/use-bayes">
-            <property name="label" translatable="yes">Use _bayesian matching</property>
+            <property name="label" translatable="yes" comments="Preferences->Online Banking:Generic">Use _bayesian matching</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -516,7 +518,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.import.generic/auto-create-commodity">
-            <property name="label" translatable="yes">Automatically create new commodities</property>
+            <property name="label" translatable="yes" comments="Preferences->Online Banking:Generic">Automatically create new commodities</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -561,7 +563,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkCheckButton" id="hide_reconciled_check1">
-                <property name="label" translatable="yes">Show Reconciled</property>
+                <property name="label" translatable="yes" comments="Dialog Select matching transactions">Show Reconciled</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -620,7 +622,7 @@
             <child>
               <object class="GtkLabel" id="label847772">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Imported transaction's first split:</property>
                 <property name="label" translatable="yes">Imported transaction's first split:</property>
                 <property name="justify">center</property>
               </object>
@@ -655,7 +657,7 @@
             <child>
               <object class="GtkLabel" id="label847766">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Potential splits matching the selected transaction: </property>
                 <property name="label" translatable="yes">Potential splits matching the selected transaction: </property>
                 <property name="justify">center</property>
               </object>

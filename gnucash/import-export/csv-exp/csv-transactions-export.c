@@ -1,5 +1,5 @@
 /*******************************************************************\
- * csv-transactions-export.c -- Export Transactions to a file       *
+ * csv-actions-export.c -- Export Transactions to a file       *
  *                                                                  *
  * Copyright (C) 2012 Robert Fewell                                 *
  *                                                                  *
@@ -24,7 +24,7 @@
     @brief CSV Export Transactions
     @author Copyright (c) 2012 Robert Fewell
 */
-#include <config.h>
+#include "config.h"
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
@@ -605,7 +605,10 @@ void csv_transactions_export (CsvExportInfo *info)
         /* Header string */
         if (info->simple_layout)
         {
-            header = g_strconcat (info->end_sep, _("Date"), info->mid_sep, _("Account Name"),
+            header = g_strconcat (info->end_sep,
+                         /* Translators: The following symbols will build the *
+                          * header line of exported CSV files:                */
+                                  _("Date"), info->mid_sep, _("Account Name"),
                                   info->mid_sep, (num_action ? _("Transaction Number") : _("Number")),
                                   info->mid_sep, _("Description"), info->mid_sep, _("Full Category Path"),
                                   info->mid_sep, _("Reconcile"), info->mid_sep, _("Amount With Sym"),
