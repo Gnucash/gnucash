@@ -96,7 +96,7 @@ IF(WITH_PYTHON)
     DEPENDS ${SWIG_GNUCASH_CORE_C})
 
   ADD_CUSTOM_TARGET(gnucash-core-c-build ALL
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/lib/gnucash/_gnucash_core_c${CMAKE_SHARED_LIBRARY_SUFFIX} ${PYTHON_SYSCONFIG_BUILD}/gnucash
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/lib/gnucash/_gnucash_core_c${CMAKE_SHARED_MODULE_SUFFIX} ${PYTHON_SYSCONFIG_BUILD}/gnucash
     DEPENDS gnucash_core_c)
     
 ENDIF()
