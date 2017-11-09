@@ -1256,26 +1256,24 @@ gnc_dense_cal_button_press(GtkWidget *widget,
 #if GTK_CHECK_VERSION(3,22,0)
     GdkWindow *win = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
     GdkMonitor *mon = gdk_display_get_monitor_at_window (gtk_widget_get_display (widget), win);
-    GdkRectangle monitor_size;
+    GdkRectangle work_area_size;
 #else
     GdkScreen *screen = gdk_screen_get_default ();
 #endif
     GtkAllocation alloc;
     gint doc;
-    gint screen_width;
-    gint screen_height;
     GncDenseCal *dcal = GNC_DENSE_CAL(widget);
     gint win_xpos = evt->x_root + 5;
     gint win_ypos = evt->y_root + 5;
 
 #if GTK_CHECK_VERSION(3,22,0)
-    gdk_monitor_get_geometry (mon, &monitor_size);
+    gdk_monitor_get_workarea (mon, &work_area_size);
 
-    screen_width = monitor_size.width;
-    screen_height = monitor_size.height;
+    dcal->screen_width = work_area_size.width;
+    dcal->screen_height = work_area_size.height;
 #else
-    screen_width = gdk_screen_get_width (screen);
-    screen_height = gdk_screen_get_height (screen);
+    dcal->screen_width = gdk_screen_get_width (screen);
+    dcal->screen_height = gdk_screen_get_height (screen);
 #endif
 
     doc = wheres_this(dcal, evt->x, evt->y);
@@ -1296,10 +1294,10 @@ gnc_dense_cal_button_press(GtkWidget *widget,
         gtk_widget_queue_resize(GTK_WIDGET(dcal->transPopup));
         gtk_widget_show_all(GTK_WIDGET(dcal->transPopup));
 
-        if (evt->x_root + 5 + alloc.width > screen_width)
+        if (evt->x_root + 5 + alloc.width > dcal->screen_width)
             win_xpos = evt->x_root - 2 - alloc.width;
 
-        if (evt->y_root + 5 + alloc.height > screen_height)
+        if (evt->y_root + 5 + alloc.height > dcal->screen_height)
             win_ypos = evt->y_root - 2 - alloc.height;
 
         gtk_window_move(GTK_WINDOW(dcal->transPopup), win_xpos, win_ypos);
@@ -1313,12 +1311,9 @@ static gint
 gnc_dense_cal_motion_notify(GtkWidget *widget,
                             GdkEventMotion *event)
 {
-    GdkScreen *screen = gdk_screen_get_default ();
     GncDenseCal *dcal;
     GtkAllocation alloc;
     gint doc;
-    gint screen_width;
-    gint screen_height;
     int unused;
     GdkModifierType unused2;
     gint win_xpos = event->x_root + 5;
@@ -1345,30 +1340,14 @@ gnc_dense_cal_motion_notify(GtkWidget *widget,
     doc = wheres_this(dcal, event->x, event->y);
     if (doc >= 0)
     {
-#if GTK_CHECK_VERSION(3,22,0)
-        GdkWindow *win = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
-        GdkMonitor *mon = gdk_display_get_monitor_at_window (gtk_widget_get_display (widget), win);
-        GdkRectangle monitor_size;
-
-        gdk_monitor_get_geometry (mon, &monitor_size);
-
-        screen_width = monitor_size.width;
-        screen_height = monitor_size.height;
-#else
-        screen_width = gdk_screen_get_width (screen);
-        screen_height = gdk_screen_get_height (screen);
-#endif
-        populate_hover_window(dcal, doc);
-        gtk_widget_queue_resize(GTK_WIDGET(dcal->transPopup));
-
         gtk_widget_get_allocation(GTK_WIDGET(dcal->transPopup), &alloc);
 
         gtk_widget_show_all(GTK_WIDGET(dcal->transPopup));
 
-        if (event->x_root + 5 + alloc.width > screen_width)
+        if (event->x_root + 5 + alloc.width > dcal->screen_width)
             win_xpos = event->x_root - 2 - alloc.width;
 
-        if (event->y_root + 5 + alloc.height > screen_height)
+        if (event->y_root + 5 + alloc.height > dcal->screen_height)
             win_ypos = event->y_root - 2 - alloc.height;
 
         gtk_window_move(GTK_WINDOW(dcal->transPopup), win_xpos, win_ypos);
