@@ -812,7 +812,7 @@ tags within description, notes or memo. ")
     (gnc:register-trep-option
      (gnc:make-multichoice-option
       gnc:pagename-display (N_ "Sign Reverses")
-      "p" (N_ "Reverse amount display for certain account types.")
+      "m1" (N_ "Reverse amount display for certain account types.")
       'credit-accounts
       (list (vector 'none
                     (N_ "None")
@@ -990,7 +990,6 @@ Credit Card, and Income accounts."))))))
                                (col (and mon (gnc:gnc-monetary-amount mon)))
                                (merge? (vector-ref merge-entry 0))
                                (merge-fn (vector-ref merge-entry 1)))
-                          (gnc:warn column merge? merging? merging-subtotal width)
                           (if merge?
                               (begin
                                 (set! merging? #t)
@@ -1017,11 +1016,7 @@ Credit Card, and Income accounts."))))))
                                            (retrieve-commodity column commodity)))))))
                       columns
                       merge-list)))
-          
-        (gnc:warn subtotal-collectors)
-        (gnc:warn calculated-cells)
-        (gnc:warn merge-list)
-        
+
         ;first row
         (add-first-column subtotal-string)
         (add-columns (if (pair? list-of-commodities)
@@ -1585,7 +1580,6 @@ Credit Card, and Income accounts."))))))
                         (cons 'register-order (lambda (s) #f))
                         (cons 'memo (lambda (s) (xaccSplitGetMemo s)))
                         (cons 'none (lambda (s) #f)))))))
-      ;(gnc:warn "comparing " (comparator-function X) (if ascend? "<" ">") (comparator-function Y))
       (cond
         ((string? (comparator-function X)) ((if ascend? string<? string>?) (comparator-function X) (comparator-function Y)))
         ((comparator-function X)           ((if ascend? < >)               (comparator-function X) (comparator-function Y)))
@@ -1650,8 +1644,6 @@ Credit Card, and Income accounts."))))))
             (if (opt-val pagename-filter optname-transaction-matcher-regex) "regex" "substring")
             " Matcher: </b>'" transaction-matcher "'<br>"))
        "<br>"))
-    ;;(gnc:warn "accts in trep-renderer:" c_account_1)
-    ;;(gnc:warn "Report Account names:" (get-other-account-names c_account_1))
 
     (if (or (null? c_account_1) (and-map not c_account_1))
 
@@ -1663,12 +1655,17 @@ Credit Card, and Income accounts."))))))
              (gnc:html-make-no-account-warning report-title (gnc:report-id report-obj)))
 
             ;; error condition: accounts were specified but none matched string/regex
-            (gnc:html-document-add-object!
-             document
-             (gnc:make-html-text
-              (gnc:html-markup-h2 NO-MATCHING-ACCT-HEADER)
-              (gnc:html-markup-p NO-MATCHING-ACCT-TEXT))))
+            (begin
+              (gnc:html-document-add-object!
+               document
+               (gnc:make-html-text
+                (gnc:html-markup-h2 NO-MATCHING-ACCT-HEADER)
+                (gnc:html-markup-p NO-MATCHING-ACCT-TEXT)))
 
+              (gnc:html-document-add-object!
+               document                 
+               (infobox))))
+            
         (begin
 
           (qof-query-set-book query (gnc-get-current-book))
@@ -1724,12 +1721,17 @@ Credit Card, and Income accounts."))))))
           (if (null? splits)
 
               ;; error condition: no splits found
-              (gnc:html-document-add-object!
-               document
-               (gnc:make-html-text
-                (gnc:html-markup-h2 NO-MATCHING-TRANS-HEADER)
-                (gnc:html-markup-p NO-MATCHING-TRANS-TEXT)))
-
+              (begin
+                (gnc:html-document-add-object!
+                 document
+                 (gnc:make-html-text
+                  (gnc:html-markup-h2 NO-MATCHING-TRANS-HEADER)
+                  (gnc:html-markup-p NO-MATCHING-TRANS-TEXT)))
+                
+                (gnc:html-document-add-object!
+                 document                 
+                 (infobox)))
+              
               (let ((table (make-split-table
                             splits options
                             (subtotal-get-info optname-prime-sortkey
