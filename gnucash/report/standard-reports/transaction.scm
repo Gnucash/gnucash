@@ -996,7 +996,7 @@ Credit Card, and Income accounts."))))))
                                 (if col
                                     (set! merging-subtotal
                                           (merge-fn merging-subtotal col GNC-DENOM-AUTO GNC-RND-ROUND)))
-                                (set! width (+ width 1)))                              
+                                (set! width (+ width 1)))
                               (if merging?
                                   (begin
                                     (set! merging? #f)
@@ -1011,9 +1011,7 @@ Credit Card, and Income accounts."))))))
                                     (set! width 0)
                                     (set! merging-subtotal (gnc:make-gnc-numeric 0 1)))
                                   (addto! row-contents
-                                          (gnc:make-html-table-cell/markup
-                                           "total-number-cell"
-                                           (retrieve-commodity column commodity)))))))
+                                          (gnc:make-html-table-cell/markup "total-number-cell" mon))))))
                       columns
                       merge-list)))
 
@@ -1053,11 +1051,9 @@ Credit Card, and Income accounts."))))))
     ;                                                                                                                  
     (define calculated-cells
       (letrec
-          ((parent (lambda (s) (xaccSplitGetTransaction s)))
-           (damount (lambda (s) (if (gnc:split-voided? s)
+          ((damount (lambda (s) (if (gnc:split-voided? s)
                                     (xaccSplitVoidFormerAmount s)
-                                   (xaccSplitGetAmount s))))
-           (dont-reverse (lambda (s) #f))
+                                    (xaccSplitGetAmount s))))
            (trans-date (lambda (s) (gnc-transaction-get-date-posted (xaccSplitGetTransaction s))))
            (currency (lambda (s) (xaccAccountGetCommodity (xaccSplitGetAccount s))))
            (report-currency (lambda (s) (if (opt-val gnc:pagename-general optname-common-currency)
@@ -1072,7 +1068,6 @@ Credit Card, and Income accounts."))))))
                        ;; likely match a price on the previous day
                        (timespecCanonicalDayTime trans-date))))
            (split-value (lambda (s) (convert s (damount s)))) ; used for correct debit/credit
-           
            (amount (lambda (s) (split-value s)))
            (debit-amount (lambda (s) (if (gnc-numeric-positive-p (gnc:gnc-monetary-amount (split-value s)))
                                          (split-value s)
@@ -1272,10 +1267,10 @@ Credit Card, and Income accounts."))))))
 
         (if (column-uses? 'price used-columns)
             (addto! row-contents
-                     (gnc:make-html-table-cell/markup
-                      "number-cell"
-                      (gnc:make-gnc-monetary (xaccTransGetCurrency trans)
-                                             (xaccSplitGetSharePrice split)))))
+                    (gnc:make-html-table-cell/markup
+                     "number-cell"
+                     (gnc:make-gnc-monetary (xaccTransGetCurrency trans)
+                                            (xaccSplitGetSharePrice split)))))
 
         (for-each (lambda (cell)
                     (let ((cell-content (vector-ref cell 0))
