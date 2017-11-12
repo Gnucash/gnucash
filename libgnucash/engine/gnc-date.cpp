@@ -486,6 +486,15 @@ timespecCanonicalDayTime(Timespec t)
     return retval;
 }
 
+time64
+time64CanonicalDayTime (time64 t)
+{
+    struct tm tm;
+    gnc_localtime_r(&t, &tm);
+    gnc_tm_set_day_middle(&tm);
+    return gnc_mktime (&tm);
+}
+
 /* NB: month is 1-12, year is 0001 - 9999. */
 int gnc_date_get_last_mday (int month, int year)
 {
