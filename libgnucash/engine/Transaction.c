@@ -2458,6 +2458,12 @@ xaccTransGetDateDueTS (const Transaction *trans, Timespec *ts)
         xaccTransGetDatePostedTS (trans, ts);
 }
 
+time64
+xaccTransRetDateDueTime64 (const Transaction *trans)
+{
+    return xaccTransRetDateDueTS (trans).tv_sec;
+}
+
 Timespec
 xaccTransRetDateDueTS (const Transaction *trans)
 {

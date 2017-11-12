@@ -674,6 +674,7 @@ Timespec      xaccTransRetDateEnteredTS (const Transaction *trans);
 
 /** Dates and txn-type for A/R and A/P "invoice" postings */
 Timespec      xaccTransRetDateDueTS (const Transaction *trans);
+time64        xaccTransRetDateDueTime64 (const Transaction *trans);
 /** Dates and txn-type for A/R and A/P "invoice" postings */
 void	      xaccTransGetDateDueTS (const Transaction *trans, Timespec *ts);
 /** @} */

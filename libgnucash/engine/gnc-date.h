@@ -335,6 +335,8 @@ Timespec timespec_abs(const Timespec *t);
  * returning a Timespec. */
 Timespec timespecCanonicalDayTime(Timespec t);
 
+time64 time64CanonicalDayTime(time64 t);
+
 /** Returns the current clock time as a Timespec, taken from time(2). */
 Timespec timespec_now (void);
 
