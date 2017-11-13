@@ -3249,13 +3249,13 @@ gnc_option_set_ui_value_date (GNCOption *option, gboolean use_default,
             }
             else if (g_strcmp0(symbol_str, "absolute") == 0)
             {
-                Timespec ts;
+                time64 time;
 
-                ts = gnc_date_option_value_get_absolute (value);
+                time = gnc_date_option_value_get_absolute (value);
 
                 if (g_strcmp0(date_option_type, "absolute") == 0)
                 {
-                    gnc_date_edit_set_time(GNC_DATE_EDIT(widget), ts.tv_sec);
+                    gnc_date_edit_set_time(GNC_DATE_EDIT(widget), time);
                 }
                 else if (g_strcmp0(date_option_type, "both") == 0)
                 {
@@ -3267,7 +3267,7 @@ gnc_option_set_ui_value_date (GNCOption *option, gboolean use_default,
                                                 GNC_RD_WID_AB_WIDGET_POS);
                     g_list_free(widget_list);
                     gnc_date_option_set_select_method(option, TRUE, TRUE);
-                    gnc_date_edit_set_time(GNC_DATE_EDIT(ab_widget), ts.tv_sec);
+                    gnc_date_edit_set_time(GNC_DATE_EDIT(ab_widget), time);
                 }
                 else
                 {
