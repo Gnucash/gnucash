@@ -28,6 +28,7 @@
  *
  * HISTORY:
  * Copyright (c) 2000 Dave Peticolas <dave@krondo.com>
+ * Copyright (c) 2017 Aaron Laws
  */
 
 #include <config.h>
@@ -686,7 +687,7 @@ gnc_date_cell_enter (BasicCell *bcell,
 static void
 gnc_date_cell_leave (BasicCell *bcell)
 {
-    Timespec ts;
+    time64 time;
     PopBox *box = bcell->gui_private;
 
     date_picker_disconnect_signals ((DateCell *) bcell);
@@ -697,8 +698,8 @@ gnc_date_cell_leave (BasicCell *bcell)
     box->calendar_popped = FALSE;
 
     /* Refresh the date to expand any shortcuts. */
-    gnc_date_cell_get_date ((DateCell *)bcell, &ts);
-    gnc_date_cell_set_value_secs ((DateCell *)bcell, ts.tv_sec);
+    gnc_date_cell_get_date ((DateCell *)bcell, &time);
+    gnc_date_cell_set_value_secs ((DateCell *)bcell, time);
 }
 
 void
@@ -718,17 +719,13 @@ gnc_date_cell_get_date_gdate (DateCell *cell, GDate *date)
 }
 
 void
-gnc_date_cell_get_date (DateCell *cell, Timespec *ts)
+gnc_date_cell_get_date (DateCell *cell, time64 *time)
 {
     PopBox *box = cell->cell.gui_private;
-
-    if (!cell || !ts)
+    if (!cell || !time)
         return;
-
     gnc_parse_date (&(box->date), cell->cell.value);
-
-    ts->tv_sec = gnc_mktime (&box->date);
-    ts->tv_nsec = 0;
+    *time = gnc_mktime (&box->date);
 }
 
 static void
