@@ -182,14 +182,6 @@ char * gnc_option_db_lookup_multichoice_option(GNCOptionDB *odb,
         const char *name,
         const char *default_value);
 
-time64 gnc_option_db_lookup_date_option(GNCOptionDB *odb,
-                                        const char *section,
-                                        const char *name,
-                                        gboolean *is_relative,
-                                        Timespec *set_ab_value,
-                                        char **set_rel_value,
-                                        Timespec *default_value);
-
 gdouble gnc_option_db_lookup_number_option(GNCOptionDB *odb,
         const char *section,
         const char *name,
