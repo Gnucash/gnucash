@@ -1,5 +1,6 @@
 /********************************************************************\
  * split-register-model-save.c -- split register model object       *
+ * Copyright (C) 2017 Aaron Laws                                    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -96,19 +97,16 @@ gnc_split_register_save_due_date_cell (BasicCell * cell,
 {
     SRSaveData *sd = save_data;
     const char *value;
+    time64 time;
     Timespec ts;
-
     g_return_if_fail (gnc_basic_cell_has_name (cell, DDUE_CELL));
-
     value = gnc_basic_cell_get_value (cell);
-
     /* commit any pending changes */
     gnc_date_cell_commit ((DateCell *) cell);
-
     DEBUG ("DATE: %s", value ? value : "(null)");
-
-    gnc_date_cell_get_date ((DateCell *) cell, &ts);
-
+    gnc_date_cell_get_date ((DateCell *) cell, &time);
+    ts.tv_sec = time;
+    ts.tv_nsec = 0;
     xaccTransSetDateDueTS (sd->trans, &ts);
 }
 
