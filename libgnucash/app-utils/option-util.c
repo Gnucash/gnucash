@@ -1,6 +1,7 @@
 /********************************************************************\
  * option-util.c -- GNOME<->guile option interface                  *
  * Copyright (C) 2000 Dave Peticolas                                *
+ * Copyright (C) 2017 Aaron Laws                                    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -2503,18 +2504,15 @@ gnc_date_option_value_get_type (SCM option_value)
  *   get the absolute time of a date option value                  *
  *                                                                 *
  * Args: option_value - option value to get absolute time of       *
- * Return: Timespec value                                          *
+ * Return: time64 value                                            *
 \*******************************************************************/
-Timespec
+time64
 gnc_date_option_value_get_absolute (SCM option_value)
 {
     SCM value;
-
     initialize_getters();
-
     value = scm_call_1 (getters.date_option_value_absolute, option_value);
-
-    return gnc_timepair2timespec (value);
+    return gnc_timepair2timespec (value).tv_sec;
 }
 
 /*******************************************************************\
