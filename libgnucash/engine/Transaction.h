@@ -370,10 +370,27 @@ int xaccTransGetSplitIndex(const Transaction *trans, const Split *split);
 
 /** The xaccTransGetSplitList() method returns a GList of the splits
     in a transaction.
+    @param trans The transaction
     @return The list of splits. This list must NOT be modified.  Do *NOT* free
     this list when you are done with it. */
 /*@ dependent @*/
 SplitList *   xaccTransGetSplitList (const Transaction *trans);
+
+/** The xaccTransGetPaymentAcctSplitList() method returns a GList of the splits
+    in a transaction that belong to an account which is considered a
+    valid account for business payments.
+    @param trans The transaction
+    @return The list of splits. This list must be freed when you are done with it. */
+SplitList *   xaccTransGetPaymentAcctSplitList (const Transaction *trans);
+
+/** The xaccTransGetAPARSplitList() method returns a GList of the splits
+    in a transaction that belong to an AR or AP account.
+    @param trans The transaction
+    @param strict This slightly modifies the test to only consider splits in an AR or AP account and the split is part of a business lot
+    @return The list of splits. This list must be freed when you are done with it. */
+SplitList *   xaccTransGetAPARAcctSplitList (const Transaction *trans, gboolean strict);
+
+
 gboolean      xaccTransStillHasSplit(const Transaction *trans, const Split *s);
 
 /** The xaccTransGetFirstPaymentAcctSplit() method returns a pointer to the first
@@ -387,9 +404,10 @@ Split *       xaccTransGetFirstPaymentAcctSplit (const Transaction *trans);
 /** The xaccTransGetFirstPaymentAcctSplit() method returns a pointer to the first
     split in this transaction that belongs to an AR or AP account.
     @param trans The transaction
+    @param strict This slightly modifies the test to only consider splits in an AR or AP account and the split is part of a business lot
 
     If there is no such split in the transaction NULL will be returned. */
-Split *       xaccTransGetFirstAPARAcctSplit (const Transaction *trans);
+Split *       xaccTransGetFirstAPARAcctSplit (const Transaction *trans, gboolean strict);
 
 /** Set the transaction to be ReadOnly by setting a non-NULL value as "reason".
  *

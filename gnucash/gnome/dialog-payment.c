@@ -1179,7 +1179,11 @@ gboolean gnc_ui_payment_is_customer_payment(const Transaction *txn)
 
     /* First test if one split is in an A/R or A/P account.
      * That will give us the best Customer vs Vendor/Employee distinction */
-    aparaccount_split = xaccTransGetFirstAPARAcctSplit(txn);
+    // Prefer true business split (one that's linked to a lot)
+    aparaccount_split = xaccTransGetFirstAPARAcctSplit(txn, TRUE);
+    if (!aparaccount_split)
+        // No true business split found, try again but this time more relaxed
+        aparaccount_split = xaccTransGetFirstAPARAcctSplit(txn, FALSE);
     if (aparaccount_split)
     {
         if (xaccAccountGetType (xaccSplitGetAccount (aparaccount_split)) == ACCT_TYPE_RECEIVABLE)
@@ -1242,7 +1246,11 @@ PaymentWindow * gnc_ui_payment_new_with_txn (GtkWidget* parent, GncOwner *owner,
         return NULL;
     }
 
-    postaccount_split = xaccTransGetFirstAPARAcctSplit(txn); // watch out: Might be NULL
+    // Prefer true business split (one that's linked to a lot)
+    postaccount_split = xaccTransGetFirstAPARAcctSplit(txn, TRUE); // watch out: Might be NULL
+    if (!postaccount_split)
+        // No true business split found, try again but this time more relaxed
+        postaccount_split = xaccTransGetFirstAPARAcctSplit(txn, FALSE); // watch out: Might be NULL
     amount = xaccSplitGetValue(assetaccount_split);
 
     pw = gnc_ui_payment_new(owner,

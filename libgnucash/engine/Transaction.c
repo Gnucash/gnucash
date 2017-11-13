@@ -66,6 +66,8 @@ struct timeval
 #include "SchedXaction.h"
 #include "gncBusiness.h"
 #include <qofinstance-p.h>
+#include "gncInvoice.h"
+#include "gncOwner.h"
 
 /* Notes about xaccTransBeginEdit(), xaccTransCommitEdit(), and
  *  xaccTransRollback():
@@ -2241,23 +2243,76 @@ xaccTransGetSplitList (const Transaction *trans)
     return trans ? trans->splits : NULL;
 }
 
+SplitList *
+xaccTransGetPaymentAcctSplitList (const Transaction *trans)
+{
+    GList *pay_splits = NULL;
+    FOR_EACH_SPLIT (trans,
+                    const Account *account = xaccSplitGetAccount(s);
+                    if (account && gncBusinessIsPaymentAcctType(xaccAccountGetType(account)))
+                        pay_splits = g_list_prepend (pay_splits, s);
+    );
+
+    pay_splits = g_list_reverse (pay_splits);
+    return pay_splits;
+}
+
+SplitList *
+xaccTransGetAPARAcctSplitList (const Transaction *trans, gboolean strict)
+{
+    GList *apar_splits = NULL;
+    FOR_EACH_SPLIT (trans,
+                    const Account *account = xaccSplitGetAccount(s);
+                    if (account && xaccAccountIsAPARType(xaccAccountGetType(account)))
+                    {
+
+                        if (!strict)
+                            apar_splits = g_list_prepend (apar_splits, s);
+                        else
+                        {
+                            GncOwner owner;
+                            GNCLot *lot = xaccSplitGetLot(s);
+                            if (lot &&
+                                (gncInvoiceGetInvoiceFromLot (lot) ||
+                                gncOwnerGetOwnerFromLot (lot, &owner)))
+                                apar_splits = g_list_prepend (apar_splits, s);
+                        }
+                    }
+    );
+
+    apar_splits = g_list_reverse (apar_splits);
+    return apar_splits;
+}
+
 Split *xaccTransGetFirstPaymentAcctSplit(const Transaction *trans)
 {
     FOR_EACH_SPLIT (trans,
                     const Account *account = xaccSplitGetAccount(s);
-                    if (gncBusinessIsPaymentAcctType(xaccAccountGetType(account)))
+                    if (account && gncBusinessIsPaymentAcctType(xaccAccountGetType(account)))
                         return s;
                    );
 
     return NULL;
 }
 
-Split *xaccTransGetFirstAPARAcctSplit(const Transaction *trans)
+Split *xaccTransGetFirstAPARAcctSplit (const Transaction *trans, gboolean strict)
 {
     FOR_EACH_SPLIT (trans,
                     const Account *account = xaccSplitGetAccount(s);
-                    if (xaccAccountIsAPARType(xaccAccountGetType(account)))
-                        return s;
+                    if (account && xaccAccountIsAPARType(xaccAccountGetType(account)))
+                    {
+                        GNCLot *lot;
+                        GncOwner owner;
+
+                        if (!strict)
+                            return s;
+
+                        lot = xaccSplitGetLot(s);
+                        if (lot &&
+                            (gncInvoiceGetInvoiceFromLot (lot) ||
+                            gncOwnerGetOwnerFromLot (lot, &owner)))
+                            return s;
+                    }
                    );
 
     return NULL;
