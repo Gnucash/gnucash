@@ -180,7 +180,7 @@ void gnc_payment_window_fill_docs_list (PaymentWindow *pw);
 
 
 static void
-gnc_payment_window_refresh_handler (GHashTable *changes, gpointer data)
+gnc_payment_window_refresh_handler (G_GNUC_UNUSED GHashTable *changes, gpointer data)
 {
     PaymentWindow *pw = data;
 
@@ -275,7 +275,7 @@ gnc_payment_window_close_handler (gpointer data)
 
 static void
 calculate_selected_total_helper (GtkTreeModel *model,
-                                 GtkTreePath *path,
+                                 G_GNUC_UNUSED GtkTreePath *path,
                                  GtkTreeIter *iter,
                                  gpointer data)
 {
@@ -564,7 +564,7 @@ gnc_payment_set_owner (PaymentWindow *pw, GncOwner *owner)
 }
 
 static int
-gnc_payment_dialog_owner_changed_cb (GtkWidget *widget, gpointer data)
+gnc_payment_dialog_owner_changed_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
 {
     PaymentWindow *pw = data;
     GncOwner owner;
@@ -588,7 +588,7 @@ gnc_payment_dialog_owner_changed_cb (GtkWidget *widget, gpointer data)
 }
 
 void
-gnc_payment_dialog_document_selection_changed_cb (GtkWidget *widget, gpointer data)
+gnc_payment_dialog_document_selection_changed_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
 {
     PaymentWindow *pw = data;
 
@@ -601,7 +601,7 @@ gnc_payment_dialog_document_selection_changed_cb (GtkWidget *widget, gpointer da
 }
 
 void
-gnc_payment_dialog_xfer_acct_changed_cb (GtkWidget *widget, gpointer data)
+gnc_payment_dialog_xfer_acct_changed_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
 {
     PaymentWindow *pw = data;
 
@@ -612,7 +612,7 @@ gnc_payment_dialog_xfer_acct_changed_cb (GtkWidget *widget, gpointer data)
 }
 
 int
-gnc_payment_dialog_post_to_changed_cb (GtkWidget *widget, gpointer data)
+gnc_payment_dialog_post_to_changed_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
 {
     PaymentWindow *pw = data;
     Account *post_acct;
@@ -643,7 +643,7 @@ gnc_payment_dialog_post_to_changed_cb (GtkWidget *widget, gpointer data)
  */
 static void
 get_selected_lots (GtkTreeModel *model,
-                   GtkTreePath *path,
+                   G_GNUC_UNUSED GtkTreePath *path,
                    GtkTreeIter *iter,
                    gpointer data)
 {
@@ -660,7 +660,7 @@ get_selected_lots (GtkTreeModel *model,
 }
 
 void
-gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
+gnc_payment_ok_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
 {
     PaymentWindow *pw = data;
     const char *text = NULL;
@@ -762,14 +762,14 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
 }
 
 void
-gnc_payment_cancel_cb (GtkWidget *widget, gpointer data)
+gnc_payment_cancel_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
 {
     PaymentWindow *pw = data;
     gnc_ui_payment_window_destroy (pw);
 }
 
 void
-gnc_payment_window_destroy_cb (GtkWidget *widget, gpointer data)
+gnc_payment_window_destroy_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
 {
     PaymentWindow *pw = data;
 
@@ -784,7 +784,7 @@ gnc_payment_window_destroy_cb (GtkWidget *widget, gpointer data)
 
 void
 gnc_payment_acct_tree_row_activated_cb (GtkWidget *widget, GtkTreePath *path,
-                                        GtkTreeViewColumn *column, PaymentWindow *pw)
+                                        G_GNUC_UNUSED GtkTreeViewColumn *column, PaymentWindow *pw)
 {
     GtkTreeView *view;
     GtkTreeModel *model;
@@ -813,7 +813,8 @@ gnc_payment_acct_tree_row_activated_cb (GtkWidget *widget, GtkTreePath *path,
 }
 
 void
-gnc_payment_leave_amount_cb (GtkWidget *widget, GdkEventFocus *event,
+gnc_payment_leave_amount_cb (G_GNUC_UNUSED GtkWidget *widget,
+                             G_GNUC_UNUSED GdkEventFocus *event,
                              PaymentWindow *pw)
 {
     gnc_numeric amount_deb, amount_cred, amount_tot;
@@ -850,18 +851,18 @@ gnc_payment_set_account_types (GncTreeViewAccount *tree)
 }
 
 static gboolean
-find_handler (gpointer find_data, gpointer user_data)
+find_handler (G_GNUC_UNUSED gpointer find_data, gpointer user_data)
 {
     PaymentWindow *pw = user_data;
 
     return (pw != NULL);
 }
 
-static void print_date (GtkTreeViewColumn *tree_column,
+static void print_date (G_GNUC_UNUSED GtkTreeViewColumn *tree_column,
                         GtkCellRenderer *cell,
                         GtkTreeModel *tree_model,
                         GtkTreeIter *iter,
-                        gpointer data)
+                        G_GNUC_UNUSED gpointer data)
 {
     GValue value = { 0 };
     time64 doc_date_time;
