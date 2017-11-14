@@ -153,6 +153,16 @@ gnc_plugin_page_register_get_query (GncPluginPage *plugin_page);
 Account *
 gnc_plugin_page_register_get_account (GncPluginPageRegister *page);
 
+/** Get the currently selected transaction in this register page.
+ *
+ *  @param page A "register" page.
+ *
+ *  @return The currently active transaction or NULL if there currently
+ *  is no currently selected.
+ */
+Transaction *
+gnc_plugin_page_register_get_current_txn (GncPluginPageRegister *page);
+
 G_END_DECLS
 /** @} */
 /** @} */

@@ -48,6 +48,7 @@
 #include "gnc-plugin-register.h"
 #include "gnc-plugin-menu-additions.h"
 #include "gnc-plugin-page-report.h"
+#include "gnc-plugin-business.h"
 
 #include "dialog-account.h"
 #include "dialog-find-account.h"
@@ -823,6 +824,17 @@ gnc_plugin_page_register_get_account (GncPluginPageRegister *page)
     return NULL;
 }
 
+Transaction *
+gnc_plugin_page_register_get_current_txn (GncPluginPageRegister *page)
+{
+    GncPluginPageRegisterPrivate *priv;
+    SplitRegister *reg;
+
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+    reg = gnc_ledger_display_get_split_register(priv->ledger);
+    return gnc_split_register_get_current_trans(reg);
+}
+
 /* This is the list of actions which are switched inactive in a read-only book. */
 static const char* readonly_inactive_actions[] =
 {
@@ -949,10 +961,9 @@ gnc_plugin_page_register_ui_update (gpointer various, GncPluginPageRegister *pag
     uri = xaccTransGetAssociation(trans);
     action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
                                          "ExecAssociatedTransactionAction");
-    if (g_strcmp0 (uri, "") != 0 && g_strcmp0 (uri, NULL) != 0)
-        gtk_action_set_sensitive (GTK_ACTION(action), TRUE);
-    else
-        gtk_action_set_sensitive (GTK_ACTION(action), FALSE);
+    gtk_action_set_sensitive (GTK_ACTION(action), (uri && *uri));
+
+    gnc_plugin_business_split_reg_ui_update (GNC_PLUGIN_PAGE(page));
 
     /* If we are in a readonly book, make any modifying action inactive */
     if (qof_book_is_readonly(gnc_get_current_book()))

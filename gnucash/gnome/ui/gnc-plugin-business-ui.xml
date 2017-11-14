@@ -2,7 +2,8 @@
   <menubar>
     <menu name="Edit" action="EditAction">
       <placeholder name="EditSelectedPlaceholder">
-        <menuitem name="RegisterAssignPayment"       action="RegisterAssignPayment"/>
+          <menuitem name="RegisterAssignPayment"       action="RegisterAssignPayment"/>
+          <menuitem name="RegisterEditPayment"       action="RegisterEditPayment"/>
       </placeholder>
     </menu>
 
@@ -73,7 +74,8 @@
   <popup name="MainPopup" action="FakeToplevel">
     <!--separator name="PopupSep3"/-->
     <placeholder name="PopupPlaceholder3">
-      <menuitem name="RegisterAssignPayment"       action="RegisterAssignPayment"/>
+        <menuitem name="RegisterAssignPayment"       action="RegisterAssignPayment"/>
+        <menuitem name="RegisterEditPayment"       action="RegisterEditPayment"/>
     </placeholder>
   </popup>
 </ui>

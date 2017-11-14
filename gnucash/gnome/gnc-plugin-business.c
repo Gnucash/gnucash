@@ -319,6 +319,11 @@ static GtkActionEntry gnc_plugin_actions [] =
         N_("Assign the selected transaction as payment"),
         G_CALLBACK (gnc_plugin_business_cmd_assign_payment)
     },
+    {
+        "RegisterEditPayment", NULL, N_("Edit payment..."), NULL,
+        N_("Edit the payment this transaction is a part of"),
+        G_CALLBACK (gnc_plugin_business_cmd_assign_payment)
+    },
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
@@ -888,12 +893,18 @@ static const gchar *register_txn_actions[] =
     NULL
 };
 
+static const gchar *register_bus_txn_actions[] =
+{
+    "RegisterEditPayment",
+    NULL
+};
+
 static void
 gnc_plugin_business_update_menus (GncPluginPage *plugin_page)
 {
     GncMainWindow  *window;
     GtkActionGroup *action_group;
-    gboolean is_txn_register;
+    gboolean is_txn_register, is_bus_txn = FALSE;
 
     // We continue only if the current page is a plugin page
     if (!plugin_page || !GNC_IS_PLUGIN_PAGE(plugin_page))
@@ -905,11 +916,21 @@ gnc_plugin_business_update_menus (GncPluginPage *plugin_page)
     action_group = gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
     g_return_if_fail(GTK_IS_ACTION_GROUP(action_group));
 
+    if (is_txn_register)
+    {
+        Transaction *trans = gnc_plugin_page_register_get_current_txn (GNC_PLUGIN_PAGE_REGISTER(plugin_page));
+        if (xaccTransCountSplits(trans) > 0)
+            is_bus_txn = (xaccTransGetFirstAPARAcctSplit(trans, TRUE) != NULL);
+    }
     // Change visibility and also sensitivity according to whether we are in a txn register
     gnc_plugin_update_actions (action_group, register_txn_actions,
-                               "sensitive", is_txn_register);
+                               "sensitive", is_txn_register && !is_bus_txn);
     gnc_plugin_update_actions (action_group, register_txn_actions,
-                               "visible", is_txn_register);
+                               "visible", is_txn_register && !is_bus_txn);
+    gnc_plugin_update_actions (action_group, register_bus_txn_actions,
+                               "sensitive", is_txn_register && is_bus_txn);
+    gnc_plugin_update_actions (action_group, register_bus_txn_actions,
+                               "visible", is_txn_register && is_bus_txn);
 }
 
 
@@ -919,6 +940,12 @@ static void gnc_plugin_business_main_window_page_changed(GncMainWindow *window,
 {
     gnc_plugin_business_update_menus(page);
     update_inactive_actions(page);
+}
+
+
+void gnc_plugin_business_split_reg_ui_update (GncPluginPage *plugin_page)
+{
+    gnc_plugin_business_main_window_page_changed(NULL, plugin_page, NULL);
 }
 
 static void
@@ -1011,6 +1038,7 @@ static const gchar* readonly_inactive_actions[] =
     "EmployeeProcessPaymentAction",
     "ToolbarNewInvoiceAction",
     "RegisterAssignPayment",
+    "RegisterEditPayment",
     NULL
 };
 
