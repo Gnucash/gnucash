@@ -1307,6 +1307,29 @@ gboolean gnc_ui_payment_is_customer_payment(const Transaction *txn)
 }
 
 // ///////////////
+static char *gen_split_desc (Transaction *txn, Split *split)
+{
+    gnc_numeric value = xaccSplitGetValue(split);
+    Account *xfer_acct = xaccSplitGetAccount(split);
+    char *acct_name = gnc_account_get_full_name (xfer_acct);
+    const char *action = gnc_get_action_num (txn, split);
+    const char *memo = xaccSplitGetMemo (split);
+    const char *print_amt = xaccPrintAmount(value, gnc_account_print_info (xfer_acct, TRUE));
+    char *split_str = NULL;
+
+    if (action && *action && memo && *memo)
+        split_str = g_strdup_printf ("%s: %s (%s, %s)", acct_name, print_amt,
+                                        action, memo);
+    else if((action && *action) || (memo && *memo))
+        split_str = g_strdup_printf ("%s: %s (%s)", acct_name, print_amt,
+                                        action ? action : memo);
+    else
+        split_str = g_strdup_printf ("%s: %s", acct_name, print_amt);
+    g_free (acct_name);
+
+    return split_str;
+}
+
 static Split *select_payment_split (GtkWidget *parent, Transaction *txn)
 {
     GList *payment_splits = xaccTransGetPaymentAcctSplitList (txn);
@@ -1350,23 +1373,7 @@ static Split *select_payment_split (GtkWidget *parent, Transaction *txn)
         {
             GtkWidget *rbutton;
             Split *split = node->data;
-            gnc_numeric value = xaccSplitGetValue(split);
-            Account *xfer_acct = xaccSplitGetAccount(split);
-            char *acct_name = gnc_account_get_full_name (xfer_acct);
-            const char *action = gnc_get_action_num (txn, split);
-            const char *memo = xaccSplitGetMemo (split);
-            const char *print_amt = xaccPrintAmount(value, gnc_account_print_info (xfer_acct, TRUE));
-            char *split_str = NULL;
-
-            if (action && *action && memo && *memo)
-                split_str = g_strdup_printf ("%s: %s (%s, %s)", acct_name, print_amt,
-                                             action, memo);
-            else if((action && *action) || (memo && *memo))
-                split_str = g_strdup_printf ("%s: %s (%s)", acct_name, print_amt,
-                                             action ? action : memo);
-            else
-                split_str = g_strdup_printf ("%s: %s", acct_name, print_amt);
-            g_free (acct_name);
+            char *split_str = gen_split_desc (txn, split);
 
             if (node == payment_splits)
             {
@@ -1379,6 +1386,7 @@ static Split *select_payment_split (GtkWidget *parent, Transaction *txn)
             g_object_set_data(G_OBJECT(rbutton), "split", split);
             gtk_box_pack_start (GTK_BOX(content), rbutton, FALSE, FALSE, 0);
 
+            g_free (split_str);
         }
 
         gtk_dialog_set_default_response (dialog, GTK_BUTTONS_CANCEL);
@@ -1407,18 +1415,93 @@ static Split *select_payment_split (GtkWidget *parent, Transaction *txn)
         return payment_splits->data;
 }
 
-PaymentWindow * gnc_ui_payment_new_with_txn (GtkWidget* parent, GncOwner *owner, Transaction *txn)
+static GList *select_txn_lots (GtkWidget *parent, Transaction *txn, Account **post_acct, gboolean *abort)
 {
+    gboolean has_no_lot_apar_splits = FALSE;
     SplitList *post_splits = NULL, *no_lot_post_splits = NULL;
     SplitList *iter;
-    Split *payment_split = NULL;
-    gnc_numeric value;
-    Account *xfer_acct, *post_acct = NULL;
-    PaymentWindow *pw;
-    PreExistTxnInfo *tx_info = NULL;
-    GNCLot *postlot = NULL;
     GList *txn_lots = NULL;
-    gboolean has_no_lot_apar_splits = FALSE;
+
+    /* There's no use in continuing if I can't set the post_acct or abort variables */
+    if (!post_acct || !abort)
+        return NULL;
+
+    *abort = FALSE;
+    *post_acct = NULL;
+
+    post_splits = xaccTransGetAPARAcctSplitList (txn, FALSE);
+    for (iter = post_splits; iter; iter = iter->next)
+    {
+        GNCLot *postlot = NULL;
+        Split *post_split = iter->data;
+        postlot = xaccSplitGetLot (post_split);
+        if (postlot)
+        {
+            PreExistLotInfo *lot_info = g_new0 (PreExistLotInfo, 1);
+            lot_info->lot = postlot;
+            lot_info->amount = xaccSplitGetValue (post_split);
+            txn_lots = g_list_prepend (txn_lots, lot_info);
+            *post_acct = xaccSplitGetAccount (post_split);
+        }
+        else
+        {
+            /* Make sure not to override post_acct if it was set above from a lot split */
+            if (!*post_acct)
+                *post_acct = xaccSplitGetAccount (post_split);
+            no_lot_post_splits = g_list_prepend (no_lot_post_splits, post_split);
+            has_no_lot_apar_splits = TRUE;
+        }
+    }
+
+    /* If the txn has both APAR splits linked to a business lot and
+     * splits that are not, issue a warning some will be discarded.
+     */
+    if (has_no_lot_apar_splits && (g_list_length (txn_lots) > 0))
+    {
+        GtkWidget *dialog;
+        char *split_str = g_strdup ("");
+        for (iter = no_lot_post_splits; iter; iter = iter->next)
+        {
+            Split *post_split = iter->data;
+            char *tmp_str = gen_split_desc (txn, post_split);
+            char *tmp_str2 = g_strconcat(split_str, "• ", tmp_str, "\n", NULL);
+            g_free (tmp_str);
+            g_free (split_str);
+            split_str = tmp_str2;
+        }
+
+        dialog = gtk_message_dialog_new (GTK_WINDOW(parent),
+                                         GTK_DIALOG_DESTROY_WITH_PARENT,
+                                         GTK_MESSAGE_WARNING,
+                                         GTK_BUTTONS_CANCEL,
+                                         _("The transaction has at least one split in a business account that is not part of a business transaction.\n"
+                                         "If you continue these splits will be ignored:\n\n%s\n"
+                                         "Do you wish to continue and ignore these splits ?"),
+                                         split_str);
+        gtk_dialog_add_buttons (GTK_DIALOG(dialog),
+                                _("Continue"), GTK_BUTTONS_OK, NULL);
+        gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_BUTTONS_CANCEL);
+        if (gtk_dialog_run (GTK_DIALOG(dialog)) != GTK_BUTTONS_OK)
+        {
+            *abort = TRUE;
+            g_list_free_full (txn_lots, g_free);
+            txn_lots = NULL;
+        }
+        gtk_widget_destroy (dialog);
+        g_free (split_str);
+    }
+
+    return txn_lots;
+}
+
+PaymentWindow * gnc_ui_payment_new_with_txn (GtkWidget* parent, GncOwner *owner, Transaction *txn)
+{
+    Split *payment_split = NULL;
+    Account *post_acct = NULL;
+    PreExistTxnInfo *tx_info = NULL;
+    GList *txn_lots = NULL;
+    gboolean abort = FALSE;
+    PaymentWindow *pw;
 
     if (!txn)
         return NULL;
@@ -1431,75 +1514,10 @@ PaymentWindow * gnc_ui_payment_new_with_txn (GtkWidget* parent, GncOwner *owner,
     if (!payment_split)
         return NULL;
 
-    g_assert(payment_split); // we can rely on this because of the check above
-    value = xaccSplitGetValue(payment_split);
-    xfer_acct = xaccSplitGetAccount(payment_split);
-
-    /* Get all APAR splits */
-    // Prefer true business split (one that's linked to a lot)
-    post_splits = xaccTransGetAPARAcctSplitList (txn, TRUE); // watch out: Might be NULL
-    if (!post_splits)
-        // No true business split found, try again but this time more relaxed
-        post_splits = xaccTransGetAPARAcctSplitList (txn, FALSE); // watch out: Might be NULL
-    for (iter = post_splits; iter; iter = iter->next)
-    {
-        Split *post_split = iter->data;
-        postlot = xaccSplitGetLot (post_split);
-        if (postlot)
-        {
-            PreExistLotInfo *lot_info = g_new0 (PreExistLotInfo, 1);
-            lot_info->lot = postlot;
-            lot_info->amount = xaccSplitGetValue (post_split);
-            txn_lots = g_list_prepend (txn_lots, lot_info);
-            post_acct = xaccSplitGetAccount (post_split);
-        }
-        else
-        {
-            /* Make sure not to override post_acct if it was set above from a lot split */
-            if (!post_acct)
-                post_acct = xaccSplitGetAccount (post_split);
-            no_lot_post_splits = g_list_prepend (no_lot_post_splits, post_split);
-            has_no_lot_apar_splits = TRUE;
-        }
-    }
-
-    /* If the APAR has both splits linked to a business lot and
-     * splits that are not, issue a warning some will be discarded.
-     */
-    if (has_no_lot_apar_splits && (g_list_length (txn_lots) > 0))
-    {
-        GtkWidget *dialog;
-        int answer = GTK_BUTTONS_OK;
-        char *split_str = g_strdup ("");
-        for (iter = no_lot_post_splits; iter; iter = iter->next)
-        {
-            Split *post_split = iter->data;
-            Account *acct = xaccSplitGetAccount(post_split);
-            const char *acct_name = xaccAccountGetName (acct);
-            const char *print_amt = xaccPrintAmount(value, gnc_account_print_info (acct, TRUE));
-            char *tmp_str = g_strdup_printf("%s%s: %s (%s)\n", split_str, acct_name, print_amt,
-                                            gnc_get_action_num (txn, post_split));
-            g_free (split_str);
-            split_str = tmp_str;
-        }
-
-        dialog = gtk_message_dialog_new (GTK_WINDOW(parent),
-                                         GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_MESSAGE_WARNING,
-                                         GTK_BUTTONS_CANCEL,
-                                         _("The transaction has at least one split in a business account that is not part a business transaction.\n"
-                                         "If you continue these splits will be ignored:\n\n%s\n"
-                                         "Do you wish to continue and ignore these splits ?"),
-                                         split_str);
-        gtk_dialog_add_buttons (GTK_DIALOG(dialog),
-                                _("Continue"), GTK_BUTTONS_OK, NULL);
-        gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_BUTTONS_CANCEL);
-        answer = gtk_dialog_run (GTK_DIALOG(dialog));
-        gtk_widget_destroy (dialog);
-        g_free (split_str);
-        if (answer != GTK_BUTTONS_OK)
-            return NULL;
-    }
+    /* Get all APAR related lots. Watch out: there might be none */
+    txn_lots = select_txn_lots (parent, txn, &post_acct, &abort);
+    if (abort)
+        return NULL;
 
     // Fill in the values from the given txn
     tx_info = g_new0(PreExistTxnInfo, 1);
@@ -1517,7 +1535,7 @@ PaymentWindow * gnc_ui_payment_new_with_txn (GtkWidget* parent, GncOwner *owner,
         GDate txn_date = xaccTransGetDatePostedGDate (txn);
         gnc_ui_payment_window_set_date(pw, &txn_date);
     }
-    gnc_ui_payment_window_set_amount(pw, value);
-    gnc_ui_payment_window_set_xferaccount(pw, xfer_acct);
+    gnc_ui_payment_window_set_amount(pw, xaccSplitGetValue(payment_split));
+    gnc_ui_payment_window_set_xferaccount(pw, xaccSplitGetAccount(payment_split));
     return pw;
 }
