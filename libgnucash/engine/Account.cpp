@@ -5326,10 +5326,6 @@ change_imap_entry (GncImportMatchMap *imap, std::string const & path, int64_t to
 
     // Add or Update the entry based on guid
     qof_instance_set_path_kvp (QOF_INSTANCE (imap->acc), &value, {path});
-
-    /* Set a feature flag in the book for the change to use guid.
-     * This will prevent older GnuCash versions that don't support this feature
-     * from opening this file. */
     gnc_features_set_used (imap->book, GNC_FEATURE_GUID_BAYESIAN);
 }
 
@@ -5605,7 +5601,8 @@ get_guid_from_account_name (Account * root, std::string const & name)
 static std::pair <std::string, KvpValue*>
 convert_entry (std::pair <std::vector <std::string>, KvpValue*> entry, Account* root)
 {
-    auto const & account_name = entry.first.back();
+    /*We need to make a copy here.*/
+    auto account_name = entry.first.back();
     entry.first.pop_back();
     auto guid_str = get_guid_from_account_name (root, account_name);
     entry.first.emplace_back ("/");
@@ -5632,20 +5629,26 @@ get_new_guid_imap (Account * acc)
     return ret;
 }
 
-static void
+static bool
 convert_imap_account_bayes_to_guid (Account *acc)
 {
     auto frame = qof_instance_get_slots (QOF_INSTANCE (acc));
     if (!frame->get_keys().size())
-        return;
+        return false;
     auto new_imap = get_new_guid_imap(acc);
     xaccAccountBeginEdit(acc);
     frame->set({IMAP_FRAME_BAYES}, nullptr);
+    if (!new_imap.size ())
+    {
+        xaccAccountCommitEdit(acc);
+        return false;
+    }
     std::for_each(new_imap.begin(), new_imap.end(), [&frame] (std::pair<std::string, KvpValue*> const & entry) {
         frame->set({entry.first.c_str()}, entry.second);
     });
     qof_instance_set_dirty (QOF_INSTANCE (acc));
     xaccAccountCommitEdit(acc);
+    return true;
 }
 
 char const * run_once_key_to_guid {"changed-bayesian-to-guid"};
@@ -5658,7 +5661,8 @@ imap_convert_bayes_to_guid (QofBook * book)
     for (auto ptr = accts; ptr; ptr = g_list_next (ptr))
     {
         Account *acc = static_cast <Account*> (ptr->data);
-        convert_imap_account_bayes_to_guid (acc);
+        if (convert_imap_account_bayes_to_guid (acc))
+            gnc_features_set_used (book, GNC_FEATURE_GUID_BAYESIAN);
     }
     g_list_free (accts);
 }
