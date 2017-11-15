@@ -54,8 +54,13 @@
 #include "dialog-print-check.h"
 #include "gnc-general-search.h"
 
-#define DIALOG_PAYMENT_CUSTOMER_CM_CLASS "customer-payment-dialog"
-#define DIALOG_PAYMENT_VENDOR_CM_CLASS "vendor-payment-dialog"
+#define DIALOG_PAYMENT_CM_CLASS "payment-dialog"
+
+typedef enum
+{
+    COL_OWNER_TYPE_NAME ,
+    COL_OWNER_TYPE_NUM ,
+} OwnerTypeCols;
 
 typedef struct
 {
@@ -65,10 +70,11 @@ typedef struct
 
 typedef struct
 {
+    GncOwner      owner;
     Transaction * txn;
     Account     * post_acct;
     GList       * lots;
-} PreExistTxnInfo;
+} InitialPaymentInfo;
 
 struct _payment_window
 {
@@ -79,9 +85,13 @@ struct _payment_window
     GtkWidget   * num_entry;
     GtkWidget   * memo_entry;
     GtkWidget   * post_combo;
+    GtkWidget   * owner_box;
+    GtkWidget   * owner_type_combo;
     GtkWidget   * owner_choice;
     GtkWidget   * amount_debit_edit;
     GtkWidget   * amount_credit_edit;
+    GtkWidget   * amount_payment_box;
+    GtkWidget   * amount_refund_box;
     GtkWidget   * date_edit;
     GtkWidget   * acct_tree;
     GtkWidget   * docs_list_tree_view;
@@ -91,13 +101,14 @@ struct _payment_window
     gint          component_id;
     QofBook     * book;
     GncOwner      owner;
+    GncOwnerType  owner_type;
     Account     * post_acct;
     Account     * xfer_acct;
     gnc_numeric   amount_tot;
     GList       * acct_types;
     GList       * acct_commodities;
 
-    PreExistTxnInfo *tx_info;
+    InitialPaymentInfo *tx_info;
     gboolean      print_check_state;
 };
 
@@ -178,6 +189,7 @@ static gboolean gnc_payment_dialog_has_pre_existing_txn(const PaymentWindow* pw)
 {
     return pw->tx_info->txn != NULL;
 }
+int  gnc_payment_dialog_owner_changed_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data);
 int  gnc_payment_dialog_post_to_changed_cb (GtkWidget *widget, gpointer data);
 void gnc_payment_dialog_document_selection_changed_cb (GtkWidget *widget, gpointer data);
 void gnc_payment_dialog_xfer_acct_changed_cb (GtkWidget *widget, gpointer data);
@@ -560,17 +572,15 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
 }
 
 static void
+gnc_payment_dialog_post_to_changed (PaymentWindow *pw)
+{
+    gnc_payment_window_fill_docs_list (pw);
+}
+
+static void
 gnc_payment_dialog_owner_changed (PaymentWindow *pw)
 {
-    Account *last_acct = NULL;
-    GncGUID *guid = NULL;
     GncOwner *owner = &pw->owner;
-
-    /* Now handle the account tree */
-    if (gncOwnerIsValid(owner))
-        qof_instance_get (qofOwnerGetOwner (owner),
-                          "payment-last-account", &guid,
-                          NULL);
 
     /* refresh the post and acc available accounts, but cleanup first */
     if (pw->acct_types)
@@ -588,33 +598,89 @@ gnc_payment_dialog_owner_changed (PaymentWindow *pw)
     pw->acct_types = gncOwnerGetAccountTypesList(owner);
     if (gncOwnerIsValid(owner))
         pw->acct_commodities = gncOwnerGetCommoditiesList (owner);
+
     pw->post_acct = gnc_account_select_combo_fill (pw->post_combo, pw->book, pw->acct_types, pw->acct_commodities);
+    if (gncOwnerEqual(&pw->owner, &pw->tx_info->owner) && pw->tx_info->post_acct)
+    {
+        pw->post_acct = pw->tx_info->post_acct;
+        gnc_ui_payment_window_set_postaccount (pw, pw->post_acct);
+    }
+    gnc_payment_dialog_post_to_changed (pw);
 
     if (pw->post_acct)
         gnc_ui_payment_window_set_commodity (pw, pw->post_acct);
 
-
-    /* Update list of documents and pre-payments */
-    gnc_payment_window_fill_docs_list (pw);
-
-    if (guid)
-    {
-        last_acct = xaccAccountLookup(guid, pw->book);
-    }
-
     /* Set the last-used transfer account, but only if we didn't
      * create this dialog from a pre-existing transaction. */
-    if (last_acct && !gnc_payment_dialog_has_pre_existing_txn(pw))
+    if (!gnc_payment_dialog_has_pre_existing_txn(pw))
     {
-        gnc_tree_view_account_set_selected_account(GNC_TREE_VIEW_ACCOUNT(pw->acct_tree),
+        GncGUID *guid = NULL;
+        Account *last_acct = NULL;
+
+        if (gncOwnerIsValid(owner))
+            qof_instance_get (qofOwnerGetOwner (owner),
+                            "payment-last-account", &guid,
+                            NULL);
+        last_acct = xaccAccountLookup(guid, pw->book);
+        if (last_acct)
+            gnc_tree_view_account_set_selected_account(GNC_TREE_VIEW_ACCOUNT(pw->acct_tree),
                 last_acct);
     }
 }
 
+
 static void
-gnc_payment_dialog_post_to_changed (PaymentWindow *pw)
+gnc_payment_dialog_owner_type_changed (PaymentWindow *pw)
 {
-    gnc_payment_window_fill_docs_list (pw);
+    GtkWidget *debit_box, *credit_box;
+
+    /* Some terminology:
+     * Invoices are paid, credit notes are refunded.
+     * A customer payment is a credit action, paying a vendor is debit
+     *
+     * So depending on the owner the payment amount should be considered
+     * credit (customer) or debit (vendor/employee) and refunds should be
+     * considered debit (customer) or credit (vendor/employee).
+     * For visual consistency, the dialog box will always show a payment and
+     * a refund field. Internally they are treated as credit or debit depending
+     * on the owner type.
+     */
+    if (pw->owner_type == GNC_OWNER_CUSTOMER)
+    {
+        debit_box = pw->amount_refund_box;
+        credit_box = pw->amount_payment_box;
+    }
+    else
+    {
+        debit_box = pw->amount_payment_box;
+        credit_box = pw->amount_refund_box;
+    }
+
+    g_object_ref (G_OBJECT (pw->amount_debit_edit));
+    g_object_ref (G_OBJECT (pw->amount_credit_edit));
+
+    if (gtk_widget_is_ancestor(pw->amount_debit_edit, credit_box))
+        gtk_container_remove (GTK_CONTAINER (credit_box), pw->amount_debit_edit);
+    if (gtk_widget_is_ancestor(pw->amount_credit_edit, debit_box))
+        gtk_container_remove (GTK_CONTAINER (debit_box), pw->amount_credit_edit);
+
+    if (!gtk_widget_is_ancestor(pw->amount_debit_edit, debit_box))
+        gtk_box_pack_start (GTK_BOX (debit_box), pw->amount_debit_edit, TRUE, TRUE, 0);
+    if (!gtk_widget_is_ancestor(pw->amount_credit_edit, credit_box))
+        gtk_box_pack_start (GTK_BOX (credit_box), pw->amount_credit_edit, TRUE, TRUE, 0);
+
+    g_object_unref (G_OBJECT (pw->amount_debit_edit));
+    g_object_unref (G_OBJECT (pw->amount_credit_edit));
+
+    /* Redo the owner_choice widget */
+    if (pw->owner_choice)
+        gtk_widget_destroy(pw->owner_choice);
+    pw->owner_choice = gnc_owner_select_create (NULL, pw->owner_box, pw->book, &pw->owner);
+    gtk_widget_show (pw->owner_choice);
+    gnc_payment_dialog_owner_changed (pw);
+
+    g_signal_connect (G_OBJECT (pw->owner_choice), "changed",
+                      G_CALLBACK (gnc_payment_dialog_owner_changed_cb), pw);
 }
 
 static void
@@ -641,7 +707,43 @@ gnc_payment_set_owner (PaymentWindow *pw, GncOwner *owner)
     gnc_payment_dialog_owner_changed(pw);
 }
 
-static int
+
+static void
+gnc_payment_set_owner_type (PaymentWindow *pw, GncOwnerType owner_type)
+{
+    gboolean valid;
+    GtkTreeModel *store;
+    GtkTreeIter iter;
+
+    switch (owner_type)
+    {
+        case GNC_OWNER_CUSTOMER:
+        case GNC_OWNER_EMPLOYEE:
+        case GNC_OWNER_VENDOR:
+            pw->owner_type = owner_type;
+            break;
+        default:
+            pw->owner_type = GNC_OWNER_CUSTOMER;
+    }
+
+    store = gtk_combo_box_get_model (GTK_COMBO_BOX(pw->owner_type_combo));
+    valid = gtk_tree_model_get_iter_first (store, &iter);
+    while (valid)
+    {
+        GncOwnerType owner_type;
+        gtk_tree_model_get (store, &iter, COL_OWNER_TYPE_NUM, &owner_type, -1);
+        if (owner_type == pw->owner_type)
+        {
+            gtk_combo_box_set_active_iter (GTK_COMBO_BOX(pw->owner_type_combo), &iter);
+            break;
+        }
+        valid = gtk_tree_model_iter_next (store, &iter);
+    }
+
+    gnc_payment_dialog_owner_type_changed (pw);
+}
+
+int
 gnc_payment_dialog_owner_changed_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
 {
     PaymentWindow *pw = data;
@@ -657,6 +759,55 @@ gnc_payment_dialog_owner_changed_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer d
     {
         gncOwnerCopy (&owner, &(pw->owner));
         gnc_payment_dialog_owner_changed(pw);
+    }
+
+    /* Reflect if the payment could complete now */
+    gnc_payment_window_check_payment (pw);
+
+    return FALSE;
+}
+
+static int
+gnc_payment_dialog_owner_type_changed_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
+{
+    PaymentWindow *pw = data;
+    GtkTreeIter iter;
+    GtkTreeModel *model;
+    GncOwnerType owner_type;
+
+    if (!pw) return FALSE;
+
+    gtk_combo_box_get_active_iter (GTK_COMBO_BOX(pw->owner_type_combo), &iter);
+    model = gtk_combo_box_get_model (GTK_COMBO_BOX(pw->owner_type_combo));
+    gtk_tree_model_get (model, &iter, COL_OWNER_TYPE_NUM, &owner_type, -1);
+
+    if (owner_type != pw->owner_type)
+    {
+        pw->owner_type = owner_type;
+
+        /* If type changed, the currently selected owner can't be valid any more
+         * If the initial owner is of the new owner_type, we propose that one
+         * otherwise we just reset the owner
+         */
+        if (gncOwnerGetType (&pw->tx_info->owner) == pw->owner_type)
+            gncOwnerCopy (&pw->tx_info->owner, &pw->owner);
+        else
+        {
+            switch (pw->owner_type)
+            {
+                case GNC_OWNER_VENDOR:
+                    gncOwnerInitVendor (&pw->owner, NULL);
+                    break;
+                case GNC_OWNER_EMPLOYEE:
+                    gncOwnerInitEmployee (&pw->owner, NULL);
+                    break;
+                default:
+                    gncOwnerInitCustomer (&pw->owner, NULL);
+            }
+
+        }
+
+        gnc_payment_dialog_owner_type_changed (pw);
     }
 
     /* Reflect if the payment could complete now */
@@ -960,22 +1111,22 @@ static void print_date (G_GNUC_UNUSED GtkTreeViewColumn *tree_column,
 }
 
 static PaymentWindow *
-new_payment_window (GncOwner *owner, QofBook *book, PreExistTxnInfo *tx_info)
+new_payment_window (GtkWidget *parent, QofBook *book, InitialPaymentInfo *tx_info)
 {
     PaymentWindow *pw;
     GtkBuilder *builder;
-    GtkWidget *box, *label, *credit_box, *debit_box;
+    GtkWidget *box;
     GtkTreeSelection *selection;
     GtkTreeViewColumn *column;
     GtkCellRenderer *renderer;
-    char * cm_class = (gncOwnerGetType (owner) == GNC_OWNER_CUSTOMER ?
-                       DIALOG_PAYMENT_CUSTOMER_CM_CLASS :
-                       DIALOG_PAYMENT_VENDOR_CM_CLASS);
+    GtkTreeModel *store;
+    GtkTreeIter iter;
 
     /* Ensure we always have a properly initialized PreExistTxnInfo struct to work with */
     if (!tx_info)
     {
-        tx_info = g_new0 (PreExistTxnInfo, 1);
+        tx_info = g_new0 (InitialPaymentInfo, 1);
+        gncOwnerInitCustomer (&tx_info->owner, NULL);
     }
 
     /*
@@ -984,17 +1135,18 @@ new_payment_window (GncOwner *owner, QofBook *book, PreExistTxnInfo *tx_info)
      * the window. And update the PreExistTxnInfo (tx_info) for this window.
      */
 
-    pw = gnc_find_first_gui_component (cm_class, find_handler, NULL);
+    pw = gnc_find_first_gui_component (DIALOG_PAYMENT_CM_CLASS, find_handler, NULL);
     if (pw)
     {
-        if (gncOwnerIsValid(owner))
-            gnc_payment_set_owner (pw, owner);
 
         // Reset the current
         if (pw->tx_info->lots)
             g_list_free_full (pw->tx_info->lots, g_free);
         g_free (pw->tx_info);
         pw->tx_info = tx_info;
+
+        gncOwnerCopy (&pw->tx_info->owner, &(pw->owner));
+        gnc_payment_set_owner_type (pw, gncOwnerGetType(&pw->tx_info->owner));
 
         gtk_window_present (GTK_WINDOW(pw->dialog));
         return(pw);
@@ -1005,13 +1157,6 @@ new_payment_window (GncOwner *owner, QofBook *book, PreExistTxnInfo *tx_info)
     pw = g_new0 (PaymentWindow, 1);
     pw->book = book;
     pw->tx_info = tx_info;
-    gncOwnerCopy (owner, &(pw->owner));
-
-    /* Compute the post-to account types */
-    pw->acct_types = gncOwnerGetAccountTypesList (owner);
-
-    if (gncOwnerIsValid(owner))
-        pw->acct_commodities = gncOwnerGetCommoditiesList (owner);
 
     /* Open and read the Glade File */
     builder = gtk_builder_new();
@@ -1019,6 +1164,7 @@ new_payment_window (GncOwner *owner, QofBook *book, PreExistTxnInfo *tx_info)
     gnc_builder_add_from_file (builder, "dialog-payment.glade", "docs_list_vert_adj");
     gnc_builder_add_from_file (builder, "dialog-payment.glade", "docs_list_model");
     gnc_builder_add_from_file (builder, "dialog-payment.glade", "post_combo_model");
+    gnc_builder_add_from_file (builder, "dialog-payment.glade", "owner_type_combo_model");
     gnc_builder_add_from_file (builder, "dialog-payment.glade", "payment_dialog");
     pw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "payment_dialog"));
 
@@ -1035,34 +1181,31 @@ new_payment_window (GncOwner *owner, QofBook *book, PreExistTxnInfo *tx_info)
     gtk_combo_box_set_entry_text_column( GTK_COMBO_BOX( pw->post_combo ), 0 );
     gnc_cbwe_require_list_item(GTK_COMBO_BOX(pw->post_combo));
 
-    label = GTK_WIDGET (gtk_builder_get_object (builder, "owner_label"));
-    box = GTK_WIDGET (gtk_builder_get_object (builder, "owner_box"));
-    pw->owner_choice = gnc_owner_select_create (label, box, book, owner);
-
-    /* Some terminology:
-     * Invoices are paid, credit notes are refunded.
-     * A customer payment is a credit action, paying a vendor is debit
-     *
-     * So depending on the owner the payment amount should be considered
-     * credit (customer) or debit (vendor/employee) and refunds should be
-     * considered debit (customer) or credit (vendor/employee).
-     * For visual consistency, the dialog box will always show a payment and
-     * a refund field. Internally they are treated as credit or debit depending
-     * on the owner type.
+    pw->owner_type_combo = GTK_WIDGET (gtk_builder_get_object (builder, "owner_type_combo"));
+    /* Add the respective GNC_OWNER_TYPEs to the combo box model
+     * ATTENTION: the order here should match the order of the
+     * store's entries as set in the glade file !
      */
-    if (gncOwnerGetType (owner) == GNC_OWNER_CUSTOMER)
-    {
-        debit_box = GTK_WIDGET (gtk_builder_get_object (builder, "amount_refund_box"));
-        credit_box = GTK_WIDGET (gtk_builder_get_object (builder, "amount_payment_box"));
-    }
-    else
-    {
-        debit_box = GTK_WIDGET (gtk_builder_get_object (builder, "amount_payment_box"));
-        credit_box = GTK_WIDGET (gtk_builder_get_object (builder, "amount_refund_box"));
-    }
+    store = gtk_combo_box_get_model (GTK_COMBO_BOX(pw->owner_type_combo));
+    gtk_tree_model_get_iter_first (store, &iter);
+    gtk_list_store_set (GTK_LIST_STORE(store), &iter,
+                        COL_OWNER_TYPE_NAME, _("Customer"),
+                        COL_OWNER_TYPE_NUM, GNC_OWNER_CUSTOMER, -1);
+    gtk_tree_model_iter_next (store, &iter);
+    gtk_list_store_set (GTK_LIST_STORE(store), &iter,
+                        COL_OWNER_TYPE_NAME, _("Vendor"),
+                        COL_OWNER_TYPE_NUM, GNC_OWNER_VENDOR, -1);
+    gtk_tree_model_iter_next (store, &iter);
+    gtk_list_store_set (GTK_LIST_STORE(store), &iter,
+                        COL_OWNER_TYPE_NAME, _("Employee"),
+                        COL_OWNER_TYPE_NUM, GNC_OWNER_EMPLOYEE, -1);
+
+    pw->owner_box = GTK_WIDGET (gtk_builder_get_object (builder, "owner_box"));
+
+    pw->amount_refund_box = GTK_WIDGET (gtk_builder_get_object (builder, "amount_refund_box"));
+    pw->amount_payment_box = GTK_WIDGET (gtk_builder_get_object (builder, "amount_payment_box"));
 
     pw->amount_debit_edit = gnc_amount_edit_new ();
-    gtk_box_pack_start (GTK_BOX (debit_box), pw->amount_debit_edit, TRUE, TRUE, 0);
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (pw->amount_debit_edit),
                                            TRUE);
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (pw->amount_debit_edit), gnc_numeric_zero());
@@ -1071,7 +1214,6 @@ new_payment_window (GncOwner *owner, QofBook *book, PreExistTxnInfo *tx_info)
                      G_CALLBACK(gnc_payment_leave_amount_cb), pw);
 
     pw->amount_credit_edit = gnc_amount_edit_new ();
-    gtk_box_pack_start (GTK_BOX (credit_box), pw->amount_credit_edit, TRUE, TRUE, 0);
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (pw->amount_credit_edit),
                                            TRUE);
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (pw->amount_credit_edit), gnc_numeric_zero());
@@ -1104,7 +1246,7 @@ new_payment_window (GncOwner *owner, QofBook *book, PreExistTxnInfo *tx_info)
     /* Configure document number column */
     column = gtk_tree_view_get_column (GTK_TREE_VIEW (pw->docs_list_tree_view), 1);
     tree_view_column_set_default_width (GTK_TREE_VIEW (pw->docs_list_tree_view),
-                                        column, "INV2013-016");
+                                        column, _("Pre-Payment"));
 
     /* Configure document type column */
     column = gtk_tree_view_get_column (GTK_TREE_VIEW (pw->docs_list_tree_view), 2);
@@ -1114,12 +1256,12 @@ new_payment_window (GncOwner *owner, QofBook *book, PreExistTxnInfo *tx_info)
     /* Configure debit column */
     column = gtk_tree_view_get_column (GTK_TREE_VIEW (pw->docs_list_tree_view), 3);
     tree_view_column_set_default_width (GTK_TREE_VIEW (pw->docs_list_tree_view),
-                                        column, "11,999.00");
+                                        column, "9,999,999.00");
 
     /* Configure credit column */
     column = gtk_tree_view_get_column (GTK_TREE_VIEW (pw->docs_list_tree_view), 4);
     tree_view_column_set_default_width (GTK_TREE_VIEW (pw->docs_list_tree_view),
-                                        column, "11,999.00");
+                                        column, "9,999,999.00");
 
     gtk_tree_sortable_set_sort_column_id (
         GTK_TREE_SORTABLE (gtk_tree_view_get_model (GTK_TREE_VIEW (pw->docs_list_tree_view))),
@@ -1132,24 +1274,21 @@ new_payment_window (GncOwner *owner, QofBook *book, PreExistTxnInfo *tx_info)
     gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(pw->acct_tree), FALSE);
     gnc_payment_set_account_types (GNC_TREE_VIEW_ACCOUNT (pw->acct_tree));
 
-    /* Set the dialog for the 'new' owner.
+    /* Set the dialog for the 'new' owner and owner type.
      * Note that this also sets the post account tree. */
-    gnc_payment_dialog_owner_changed(pw);
-
-    if (pw->tx_info->post_acct)
-        gnc_ui_payment_window_set_postaccount (pw, tx_info->post_acct);
-    gnc_payment_dialog_post_to_changed_cb (pw->post_combo, pw);
+    gncOwnerCopy (&pw->tx_info->owner, &(pw->owner));
+    gnc_payment_set_owner_type (pw, gncOwnerGetType (&pw->tx_info->owner));
 
     /* Setup signals */
     gtk_builder_connect_signals_full( builder,
                                       gnc_builder_connect_full_func,
                                       pw);
 
-    g_signal_connect (G_OBJECT (pw->owner_choice), "changed",
-                      G_CALLBACK (gnc_payment_dialog_owner_changed_cb), pw);
-
     g_signal_connect (G_OBJECT (pw->acct_tree), "row-activated",
                       G_CALLBACK (gnc_payment_acct_tree_row_activated_cb), pw);
+
+    g_signal_connect (G_OBJECT (pw->owner_type_combo), "changed",
+                      G_CALLBACK (gnc_payment_dialog_owner_type_changed_cb), pw);
 
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(pw->acct_tree));
     g_signal_connect (G_OBJECT (selection), "changed",
@@ -1158,7 +1297,7 @@ new_payment_window (GncOwner *owner, QofBook *book, PreExistTxnInfo *tx_info)
 
     /* Register with the component manager */
     pw->component_id =
-        gnc_register_gui_component (cm_class,
+        gnc_register_gui_component (DIALOG_PAYMENT_CM_CLASS,
                                     gnc_payment_window_refresh_handler,
                                     gnc_payment_window_close_handler,
                                     pw);
@@ -1222,22 +1361,24 @@ PaymentWindow *
 gnc_ui_payment_new_with_invoice (const GncOwner *owner, QofBook *book,
                                  GncInvoice *invoice)
 {
-    GncOwner owner_def;
     GNCLot *postlot;
-    PreExistTxnInfo *tx_info;
+    InitialPaymentInfo *tx_info;
 
     if (!book) return NULL;
+
+
+    tx_info = g_new0 (InitialPaymentInfo, 1);
+
     if (owner)
     {
         /* Figure out the company */
-        gncOwnerCopy (gncOwnerGetEndOwner (owner), &owner_def);
+        gncOwnerCopy (gncOwnerGetEndOwner (owner), &tx_info->owner);
     }
     else
     {
-        gncOwnerInitCustomer (&owner_def, NULL);
+        gncOwnerInitCustomer (&tx_info->owner, NULL);
     }
 
-    tx_info = g_new0 (PreExistTxnInfo, 1);
     tx_info->post_acct = gncInvoiceGetPostedAcc (invoice);
 
     postlot = gncInvoiceGetPostedLot (invoice);
@@ -1248,7 +1389,7 @@ gnc_ui_payment_new_with_invoice (const GncOwner *owner, QofBook *book,
         lot_info->amount = gnc_numeric_zero ();
         tx_info->lots = g_list_prepend (tx_info->lots, lot_info);
     }
-    return new_payment_window (&owner_def, book, tx_info);
+    return new_payment_window (NULL, book, tx_info);
 }
 
 PaymentWindow *
@@ -1498,7 +1639,7 @@ PaymentWindow * gnc_ui_payment_new_with_txn (GtkWidget* parent, GncOwner *owner,
 {
     Split *payment_split = NULL;
     Account *post_acct = NULL;
-    PreExistTxnInfo *tx_info = NULL;
+    InitialPaymentInfo *tx_info = NULL;
     GList *txn_lots = NULL;
     gboolean abort = FALSE;
     PaymentWindow *pw;
@@ -1520,12 +1661,13 @@ PaymentWindow * gnc_ui_payment_new_with_txn (GtkWidget* parent, GncOwner *owner,
         return NULL;
 
     // Fill in the values from the given txn
-    tx_info = g_new0(PreExistTxnInfo, 1);
+    tx_info = g_new0(InitialPaymentInfo, 1);
     tx_info->txn = txn;
     tx_info->post_acct = post_acct;
     tx_info->lots = txn_lots;
+    gncOwnerCopy (owner, &tx_info->owner);
 
-    pw = new_payment_window (owner,
+    pw = new_payment_window (NULL,
                             qof_instance_get_book(QOF_INSTANCE(txn)),
                             tx_info);
 
