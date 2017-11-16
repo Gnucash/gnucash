@@ -41,6 +41,7 @@
 #include "dialog-sx-since-last-run.h"
 
 #include "gnc-prefs.h"
+#include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "Query.h"
 #include "qof.h"
@@ -847,7 +848,7 @@ gnc_sx_sxsincelast_book_opened(void)
 
     if (summary.need_dialog)
     {
-        gnc_ui_sx_since_last_run_dialog(inst_model, auto_created_txns);
+        gnc_ui_sx_since_last_run_dialog (gnc_ui_get_main_window (NULL), inst_model, auto_created_txns);
         auto_created_txns = NULL;
     }
     else
@@ -858,7 +859,7 @@ gnc_sx_sxsincelast_book_opened(void)
                 return;
 
             gnc_info_dialog
-            (NULL,
+            (gnc_ui_get_main_window (NULL),
              ngettext
              ("There are no Scheduled Transactions to be entered at this time. "
               "(One transaction automatically created)",
@@ -959,7 +960,7 @@ variable_value_changed_cb(GtkCellRendererText *cell,
 }
 
 GncSxSinceLastRunDialog*
-gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances, GList *auto_created_txn_guids)
+gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_instances, GList *auto_created_txn_guids)
 {
     GncSxSinceLastRunDialog *dialog;
     GtkBuilder *builder;
@@ -970,6 +971,7 @@ gnc_ui_sx_since_last_run_dialog(GncSxInstanceModel *sx_instances, GList *auto_cr
     gnc_builder_add_from_file (builder, "dialog-sx.glade", "since_last_run_dialog");
 
     dialog->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "since_last_run_dialog"));
+    gtk_window_set_transient_for (GTK_WINDOW (dialog->dialog), parent);
 
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(dialog->dialog), "GncSxSinceLastRunDialog");

@@ -551,7 +551,7 @@ gnc_main_window_cmd_actions_scheduled_transaction_editor (GtkAction *action, Gnc
 static void
 gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActionData *data)
 {
-    GncMainWindow *window;
+    GtkWindow *window;
     GncSxInstanceModel *sx_instances;
     GncSxSummary summary;
     GList *auto_created_txns = NULL;
@@ -560,7 +560,7 @@ gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActi
 
     g_return_if_fail (data != NULL);
 
-    window = data->window;
+    window = GTK_WINDOW (data->window);
 
     if (qof_book_is_readonly(gnc_get_current_book()))
     {
@@ -573,18 +573,18 @@ gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActi
     gnc_sx_instance_model_effect_change(sx_instances, TRUE, &auto_created_txns, NULL);
     if (summary.need_dialog)
     {
-        gnc_ui_sx_since_last_run_dialog(sx_instances, auto_created_txns);
+        gnc_ui_sx_since_last_run_dialog (window, sx_instances, auto_created_txns);
         auto_created_txns = NULL;
     }
     else
     {
         if (summary.num_auto_create_no_notify_instances == 0)
         {
-            gnc_info_dialog(GTK_WINDOW (window), "%s", nothing_to_do_msg);
+            gnc_info_dialog (window, "%s", nothing_to_do_msg);
         }
         else
         {
-            gnc_info_dialog(GTK_WINDOW (window), ngettext
+            gnc_info_dialog(window, ngettext
                             /* Translators: %d is the number of transactions. This is a
                                ngettext(3) message. */
                             ("There are no Scheduled Transactions to be entered at this time. "
