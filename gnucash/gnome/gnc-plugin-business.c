@@ -800,7 +800,7 @@ gnc_plugin_business_cmd_bills_due_reminder (GtkAction *action,
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
-    gnc_invoice_remind_bills_due();
+    gnc_invoice_remind_bills_due (GTK_WINDOW (mw->window));
 }
 
 
@@ -811,7 +811,7 @@ gnc_plugin_business_cmd_invoices_due_reminder (GtkAction *action,
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
-    gnc_invoice_remind_invoices_due();
+    gnc_invoice_remind_invoices_due (GTK_WINDOW (mw->window));
 }
 
 static void

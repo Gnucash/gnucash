@@ -210,7 +210,7 @@ struct _invoice_window
 void gnc_invoice_window_closeCB (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_active_toggled_cb (GtkWidget *widget, gpointer data);
 gboolean gnc_invoice_window_leave_notes_cb (GtkWidget *widget, GdkEventFocus *event, gpointer data);
-DialogQueryView *gnc_invoice_show_bills_due (QofBook *book, double days_in_advance, GncWhichDueType duetype);
+DialogQueryView *gnc_invoice_show_docs_due (GtkWindow *parent, QofBook *book, double days_in_advance, GncWhichDueType duetype);
 
 #define INV_WIDTH_PREFIX "invoice_reg"
 #define BILL_WIDTH_PREFIX "bill_reg"
@@ -3276,7 +3276,7 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
 }
 
 DialogQueryView *
-gnc_invoice_show_bills_due (QofBook *book, double days_in_advance, GncWhichDueType duetype)
+gnc_invoice_show_docs_due (GtkWindow *parent, QofBook *book, double days_in_advance, GncWhichDueType duetype)
 {
     QofIdType type = GNC_INVOICE_MODULE_NAME;
     Query *q;
@@ -3411,7 +3411,7 @@ gnc_invoice_show_bills_due (QofBook *book, double days_in_advance, GncWhichDueTy
                       len);
         title = _("Due Invoices Reminder");
     }
-    dialog = gnc_dialog_query_view_create(param_list, q,
+    dialog = gnc_dialog_query_view_create(parent, param_list, q,
                                           title,
                                           message,
                                           TRUE, FALSE,
@@ -3426,7 +3426,7 @@ gnc_invoice_show_bills_due (QofBook *book, double days_in_advance, GncWhichDueTy
 }
 
 void
-gnc_invoice_remind_bills_due (void)
+gnc_invoice_remind_bills_due (GtkWindow *parent)
 {
     QofBook *book;
     gint days;
@@ -3435,11 +3435,11 @@ gnc_invoice_remind_bills_due (void)
     book = qof_session_get_book(gnc_get_current_session());
     days = gnc_prefs_get_float(GNC_PREFS_GROUP_BILL, GNC_PREF_DAYS_IN_ADVANCE);
 
-    gnc_invoice_show_bills_due(book, days, DUE_FOR_VENDOR);
+    gnc_invoice_show_docs_due (parent, book, days, DUE_FOR_VENDOR);
 }
 
 void
-gnc_invoice_remind_invoices_due (void)
+gnc_invoice_remind_invoices_due (GtkWindow *parent)
 {
     QofBook *book;
     gint days;
@@ -3448,7 +3448,7 @@ gnc_invoice_remind_invoices_due (void)
     book = qof_session_get_book(gnc_get_current_session());
     days = gnc_prefs_get_float(GNC_PREFS_GROUP_INVOICE, GNC_PREF_DAYS_IN_ADVANCE);
 
-    gnc_invoice_show_bills_due(book, days, DUE_FOR_CUSTOMER);
+    gnc_invoice_show_docs_due (parent, book, days, DUE_FOR_CUSTOMER);
 }
 
 void
@@ -3457,7 +3457,7 @@ gnc_invoice_remind_bills_due_cb (void)
     if (!gnc_prefs_get_bool(GNC_PREFS_GROUP_BILL, GNC_PREF_NOTIFY_WHEN_DUE))
         return;
 
-    gnc_invoice_remind_bills_due();
+    gnc_invoice_remind_bills_due (GTK_WINDOW(gnc_ui_get_main_window (NULL)));
 }
 
 void
@@ -3466,5 +3466,5 @@ gnc_invoice_remind_invoices_due_cb (void)
     if (!gnc_prefs_get_bool(GNC_PREFS_GROUP_INVOICE, GNC_PREF_NOTIFY_WHEN_DUE))
         return;
 
-    gnc_invoice_remind_invoices_due();
+    gnc_invoice_remind_invoices_due (GTK_WINDOW(gnc_ui_get_main_window (NULL)));
 }
