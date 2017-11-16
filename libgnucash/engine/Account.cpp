@@ -5234,10 +5234,8 @@ get_first_pass_probabilities(GncImportMatchMap * imap, GList * tokens)
      * in the input tokens list. */
     for (auto current_token = tokens; current_token; current_token = current_token->next)
     {
-        auto translated_token = std::string {static_cast <char const *> (current_token->data)};
-        std::replace (translated_token.begin (), translated_token.end (), '/', '-');
         token_accounts_info tokenInfo{};
-        auto path = std::string{IMAP_FRAME_BAYES "-"} + translated_token;
+        auto path = std::string{IMAP_FRAME_BAYES "/"} + static_cast <char const *> (current_token->data);
         qof_instance_foreach_slot_prefix (QOF_INSTANCE (imap->acc), path, &build_token_info, tokenInfo);
         for (auto const & current_account_token : tokenInfo.accounts)
         {
@@ -5329,7 +5327,6 @@ change_imap_entry (GncImportMatchMap *imap, std::string const & path, int64_t to
     gnc_features_set_used (imap->book, GNC_FEATURE_GUID_BAYESIAN);
 }
 
-
 /** Updates the imap for a given account using a list of tokens */
 void
 gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
@@ -5369,9 +5366,7 @@ gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
         /* start off with one token for this account */
         token_count = 1;
         PINFO("adding token '%s'", (char*)current_token->data);
-        std::string translated_token {static_cast<char*>(current_token->data)};
-        std::replace(translated_token.begin(), translated_token.end(), '/', '-');
-        auto path = std::string {IMAP_FRAME_BAYES} + '-' + translated_token + '-' + guid_string;
+        auto path = std::string {IMAP_FRAME_BAYES} + '/' + static_cast<char*>(current_token->data) + '/' + guid_string;
         /* change the imap entry for the account */
         change_imap_entry (imap, path, token_count);
     }
@@ -5450,7 +5445,7 @@ build_bayes (const char *key, KvpValue * value, imap_info & imapInfo)
         auto temp_guid = gnc::GUID::from_string (std::get <2> (parsed_key));
         GncGUID guid = temp_guid;
         auto map_account = xaccAccountLookup (&guid, gnc_account_get_book (imapInfo.source_account));
-        std::string category_head {std::get <0> (parsed_key) + "-" + std::get <1> (parsed_key)};
+        std::string category_head {std::get <0> (parsed_key) + "/" + std::get <1> (parsed_key)};
         auto imap_node = static_cast <imap_info*> (g_malloc (sizeof (imap_info)));
         auto count = entry.second->get <int64_t> ();
         imap_node->source_account = imapInfo.source_account;
@@ -5609,7 +5604,6 @@ convert_entry (std::pair <std::vector <std::string>, KvpValue*> entry, Account* 
     entry.first.emplace_back (guid_str);
     std::string new_key {std::accumulate (entry.first.begin(), entry.first.end(), std::string {})};
     new_key = IMAP_FRAME_BAYES + new_key;
-    std::replace (new_key.begin(), new_key.end(), '/', '-');
     return {new_key, entry.second};
 }
 
