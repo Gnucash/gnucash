@@ -377,8 +377,6 @@ gnc_main_gui_init (void)
     gnc_html_register_url_handler (URL_TYPE_PRICE,
                                    gnc_html_price_url_cb);
 
-    gnc_ui_sx_initialize();
-
     /* Register the Owner search type */
     gnc_search_core_register_type (GNC_OWNER_MODULE_NAME,
                                     (GNCSearchCoreNew) gnc_search_owner_new);
@@ -420,6 +418,8 @@ gnc_main_gui_init (void)
                          (GFunc)gnc_invoice_remind_bills_due_cb, NULL);
     gnc_hook_add_dangler(HOOK_BOOK_OPENED,
                          (GFunc)gnc_invoice_remind_invoices_due_cb, NULL);
+
+    gnc_ui_sx_initialize();
 
     /* Add to preferences under Business */
     /* The parameters are; glade file, items to add from glade file - last being the dialog, preference tab name */

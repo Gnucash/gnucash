@@ -720,8 +720,8 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
         if (active_windows)
             DEBUG("first window %p.", active_windows->data);
         window = gnc_main_window_new();
-        gtk_widget_show(GTK_WIDGET(window));
     }
+    gtk_widget_show(GTK_WIDGET(window));
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
@@ -952,6 +952,7 @@ gnc_main_window_restore_default_state(GncMainWindow *window)
     DEBUG("no saved state file");
     if (!window)
         window = g_list_nth_data(active_windows, 0);
+    gtk_widget_show (GTK_WIDGET(window));
     action = gnc_main_window_find_action(window, "ViewAccountTreeAction");
     gtk_action_activate(action);
 }
@@ -4554,7 +4555,8 @@ gnc_main_window_show_all_windows(void)
 #endif
 }
 
-/** Get a pointer to the first active top level window or NULL
+/** Get a pointer to the first active top level window. If there is
+ *  none, return the first mapped window or NULL
  *  if there is none.
  *
  *  @return A pointer to a GtkWindow object. */
@@ -4565,6 +4567,10 @@ gnc_ui_get_toplevel (void)
 
     for (window = active_windows; window; window = window->next)
         if (gtk_window_is_active (GTK_WINDOW (window->data)))
+            return window->data;
+
+    for (window = active_windows; window; window = window->next)
+        if (gtk_widget_get_mapped (GTK_WIDGET(window->data)))
             return window->data;
 
     return NULL;
