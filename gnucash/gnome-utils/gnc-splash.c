@@ -206,3 +206,8 @@ gnc_update_splash_screen (const gchar *string, double percentage)
             gtk_main_iteration ();
     }
 }
+
+GtkWindow *gnc_get_splash_screen (void)
+{
+    return GTK_WINDOW(splash);
+}

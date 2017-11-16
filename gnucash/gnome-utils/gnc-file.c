@@ -775,17 +775,16 @@ RESTART:
                      );
         int rc;
 
+        GtkWindow *parent = gnc_get_splash_screen();
+        if (!parent)
+            parent = GTK_WINDOW(gnc_ui_get_toplevel());
+
         if (! gnc_uri_is_file_uri (newfile)) /* Hide the db password in error messages */
             displayname = gnc_uri_normalize_uri ( newfile, FALSE);
         else
             displayname = g_strdup (newfile);
 
-        // Bug#467521: on Mac (and maybe Win?), the dialog will appear below the
-        // splash, but is modal, so we can't get rid of the splash...  So, get
-        // rid of it now.
-        gnc_destroy_splash_screen();
-
-        dialog = gtk_message_dialog_new(NULL,
+        dialog = gtk_message_dialog_new(parent,
                                         0,
                                         GTK_MESSAGE_WARNING,
                                         GTK_BUTTONS_NONE,
@@ -820,16 +819,10 @@ RESTART:
             break;
         case RESPONSE_READONLY:
             is_readonly = TRUE;
-            // re-enable the splash screen, file loading and display of
-            // reports may take some time
-            gnc_show_splash_screen();
             /* user told us to open readonly. We do ignore locks (just as before), but now also force the opening. */
             qof_session_begin (new_session, newfile, is_readonly, FALSE, TRUE);
             break;
         case RESPONSE_OPEN:
-            // re-enable the splash screen, file loading and display of
-            // reports may take some time
-            gnc_show_splash_screen();
             /* user told us to ignore locks. So ignore them. */
             qof_session_begin (new_session, newfile, TRUE, FALSE, FALSE);
             break;
