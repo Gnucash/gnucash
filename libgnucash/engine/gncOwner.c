@@ -751,6 +751,8 @@ gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction **preset_txn,
 
     if (txn)
     {
+        xaccTransSetDescription (txn, name ? name : "");
+
         /* Pre-existing transaction was specified. We completely clear it,
          * except for the split in the transfer account, unless the
          * transaction can't be reused (wrong currency, wrong transfer account).
