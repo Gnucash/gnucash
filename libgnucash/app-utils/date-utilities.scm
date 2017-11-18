@@ -64,9 +64,8 @@
   (+ (tm:wday datevec) 1))
 ;; jan 1 == 1
 (define (gnc:date-get-week datevec)
-  (gnc:date-to-week (gnc:timepair->secs
-		     (gnc:timepair-start-day-time
-		      (gnc:date->timepair datevec)))))
+  (gnc:date-to-week (gnc:time64-start-day-time
+                     (gnc-mktime datevec))))
 
 (define (gnc:date-get-year-day datevec)
   (+ (tm:yday datevec) 1))
@@ -235,7 +234,7 @@
   (/ (- (/ (/ caltime 3600.0) 24) 3) 7))
 
 (define (gnc:date-to-week caltime)
-  (quotient (- (quotient caltime 86400) 3) 7))
+  (floor (/ (- (/ caltime 86400) 3) 7)))
 
 ;; convert a date in seconds since 1970 into # of days since Feb 28, 1970
 ;; ignoring leap-seconds
