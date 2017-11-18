@@ -541,7 +541,10 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
                                     GNC_HOW_RND_ROUND_HALF_UP);
         }
 
-        if (gnc_numeric_positive_p (value))
+        if (gnc_numeric_zero_p (value))
+        /* If the lot's balance is 0 after the above compensation, skip this lot */
+            continue;
+        else if (gnc_numeric_positive_p (value))
             debit = value;
         else
             credit = gnc_numeric_neg (value);
@@ -1473,16 +1476,23 @@ static char *gen_split_desc (Transaction *txn, Split *split)
 
 static Split *select_payment_split (GtkWidget *parent, Transaction *txn)
 {
+    /* We require the txn to have one split in an Asset account.
+     * The only exception would be a lot link transaction
+     */
     GList *payment_splits = xaccTransGetPaymentAcctSplitList (txn);
     if (!payment_splits)
     {
+        GtkWidget *dialog;
 
-        GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW(parent),
-                                                    GTK_DIALOG_DESTROY_WITH_PARENT,
-                                                    GTK_MESSAGE_INFO,
-                                                    GTK_BUTTONS_CLOSE,
-                                                    "%s",
-                                                    _("The selected transaction doesn't have splits that can be assigned as a payment"));
+        if (xaccTransGetTxnType(txn) == TXN_TYPE_LINK)
+            return NULL;
+
+        dialog = gtk_message_dialog_new (GTK_WINDOW(parent),
+                                         GTK_DIALOG_DESTROY_WITH_PARENT,
+                                         GTK_MESSAGE_INFO,
+                                         GTK_BUTTONS_CLOSE,
+                                         "%s",
+                                         _("The selected transaction doesn't have splits that can be assigned as a payment"));
         gtk_dialog_run (GTK_DIALOG(dialog));
         gtk_widget_destroy (dialog);
         g_message("No asset splits in txn \"%s\"; cannot use this for assigning a payment.",
@@ -1647,12 +1657,14 @@ PaymentWindow * gnc_ui_payment_new_with_txn (GtkWidget* parent, GncOwner *owner,
     if (!txn)
         return NULL;
 
-    // We require the txn to have one split in an Asset account.
     if (!xaccTransGetSplitList(txn))
         return NULL;
 
+    /* We require the txn to have one split in an Asset account.
+     * The only exception would be a lot link transaction
+     */
     payment_split = select_payment_split (parent, txn);
-    if (!payment_split)
+    if (!payment_split && (xaccTransGetTxnType(txn) != TXN_TYPE_LINK))
         return NULL;
 
     /* Get all APAR related lots. Watch out: there might be none */
@@ -1678,6 +1690,7 @@ PaymentWindow * gnc_ui_payment_new_with_txn (GtkWidget* parent, GncOwner *owner,
         gnc_ui_payment_window_set_date(pw, &txn_date);
     }
     gnc_ui_payment_window_set_amount(pw, xaccSplitGetValue(payment_split));
-    gnc_ui_payment_window_set_xferaccount(pw, xaccSplitGetAccount(payment_split));
+    if (payment_split)
+        gnc_ui_payment_window_set_xferaccount(pw, xaccSplitGetAccount(payment_split));
     return pw;
 }

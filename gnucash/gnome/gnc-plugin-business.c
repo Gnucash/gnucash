@@ -904,7 +904,7 @@ gnc_plugin_business_update_menus (GncPluginPage *plugin_page)
 {
     GncMainWindow  *window;
     GtkActionGroup *action_group;
-    gboolean is_txn_register, is_bus_txn = FALSE;
+    gboolean is_txn_register, is_bus_txn = FALSE, is_bus_doc = FALSE;
 
     // We continue only if the current page is a plugin page
     if (!plugin_page || !GNC_IS_PLUGIN_PAGE(plugin_page))
@@ -921,16 +921,17 @@ gnc_plugin_business_update_menus (GncPluginPage *plugin_page)
         Transaction *trans = gnc_plugin_page_register_get_current_txn (GNC_PLUGIN_PAGE_REGISTER(plugin_page));
         if (xaccTransCountSplits(trans) > 0)
             is_bus_txn = (xaccTransGetFirstAPARAcctSplit(trans, TRUE) != NULL);
+        is_bus_doc = (xaccTransGetTxnType (trans) == TXN_TYPE_INVOICE);
     }
     // Change visibility and also sensitivity according to whether we are in a txn register
     gnc_plugin_update_actions (action_group, register_txn_actions,
-                               "sensitive", is_txn_register && !is_bus_txn);
+                               "sensitive", is_txn_register && !is_bus_txn && !is_bus_doc);
     gnc_plugin_update_actions (action_group, register_txn_actions,
-                               "visible", is_txn_register && !is_bus_txn);
+                               "visible", is_txn_register && !is_bus_txn && !is_bus_doc);
     gnc_plugin_update_actions (action_group, register_bus_txn_actions,
-                               "sensitive", is_txn_register && is_bus_txn);
+                               "sensitive", is_txn_register && is_bus_txn && !is_bus_doc);
     gnc_plugin_update_actions (action_group, register_bus_txn_actions,
-                               "visible", is_txn_register && is_bus_txn);
+                               "visible", is_txn_register && is_bus_txn && !is_bus_doc);
 }
 
 
