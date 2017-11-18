@@ -452,13 +452,16 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
             else
             {
                 GncOwner lotowner;
+                gncOwnerInitUndefined(&lotowner, NULL);
                 if (!gncOwnerGetOwnerFromLot(lot_info->lot, &lotowner))
                 {
                     const GncOwner *owner;
                     const GncInvoice *invoice = gncInvoiceGetInvoiceFromLot(lot_info->lot);
                     if (invoice)
+                    {
                         owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice));
-                    gncOwnerCopy (owner, &lotowner);
+                        gncOwnerCopy (owner, &lotowner);
+                    }
                 }
                 if (gncOwnerEqual(&pw->owner, &lotowner))
                     list = g_list_prepend (list, lot_info->lot);
@@ -1504,7 +1507,7 @@ static Split *select_payment_split (GtkWidget *parent, Transaction *txn)
     {
         Split *selected_split = NULL;
         GList *node;
-        GtkWidget *first_rb;
+        GtkWidget *first_rb = NULL;
         int answer = GTK_BUTTONS_OK;
         const char *message = _("While this transaction has multiple splits that can be considered\nas 'the payment split', gnucash only knows how to handle one.\n"
                                 "Please select one, the others will be ignored.\n\n");
