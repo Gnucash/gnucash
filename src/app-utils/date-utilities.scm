@@ -198,7 +198,7 @@
   (/ (- (/ (/ caltime 3600.0) 24) 3) 7))
 
 (define (gnc:date-to-week caltime)
-  (quotient (- (quotient caltime 86400) 3) 7))
+  (floor (/ (- (/ caltime 86400) 3) 7)))
 
 ;; convert a date in seconds since 1970 into # of days since Feb 28, 1970
 ;; ignoring leap-seconds
