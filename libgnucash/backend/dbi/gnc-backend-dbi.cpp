@@ -582,7 +582,7 @@ adjust_sql_options (dbi_conn connection)
 
     std::string adjusted_str{adjust_sql_options_string(str)};
     PINFO("Setting sql_mode to %s", adjusted_str.c_str());
-    std::string set_str{"SET sql_mode=" + std::move(adjusted_str)};
+    std::string set_str{"SET sql_mode='" + std::move(adjusted_str) + "'"};
     dbi_result set_result = dbi_conn_query(connection,
                                            set_str.c_str());
     if (set_result)
