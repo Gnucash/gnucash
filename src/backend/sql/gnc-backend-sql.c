@@ -30,6 +30,7 @@
 #include "config.h"
 
 #include <errno.h>
+#include <stdint.h>
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
@@ -1904,27 +1905,43 @@ load_timespec( const GncSqlBackend* be, GncSqlRow* row,
     }
     else
     {
+        /* MySQL's TIMESTAMP type is not compliant with the SQL
+         * standard in that it is valid only from 1970-01-01 00:00:01
+         * to 2038-01-15 23:59:59. Times outside that range are set to
+         * "0000-00-00 00:00:00"; depending on the libdbi version we
+         * may get either the string value or the time64 representing
+         * it. In either case leave the timespec at 0.
+         */
         if ( G_VALUE_HOLDS_INT64( val ) )
         {
-	    timespecFromTime64 (&ts, (time64)(g_value_get_int64 (val)));
-	    isOK = TRUE;
+            const time64 MINTIME = INT64_C(-62135596800);
+            const time64 MAXTIME = INT64_C(253402300799);
+            const time64 t = (time64)(g_value_get_int64 (val));
+            if (t >= MINTIME && t <= MAXTIME)
+            {
+                timespecFromTime64 (&ts, t);
+            }
+            isOK = TRUE;
 	}
 	else if (G_VALUE_HOLDS_STRING (val))
 	{
             const gchar* s = g_value_get_string( val );
             if ( s != NULL )
             {
-                gchar* buf;
-                buf = g_strdup_printf( "%c%c%c%c-%c%c-%c%c %c%c:%c%c:%c%c",
-                                       s[0], s[1], s[2], s[3],
-                                       s[4], s[5],
-                                       s[6], s[7],
-                                       s[8], s[9],
-                                       s[10], s[11],
-                                       s[12], s[13] );
-                ts = gnc_iso8601_to_timespec_gmt( buf );
-                g_free( buf );
-                isOK = TRUE;
+                 if (! g_str_has_prefix (s, "0000-00-00"))
+                 {
+                      gchar* buf;
+                      buf = g_strdup_printf( "%c%c%c%c-%c%c-%c%c %c%c:%c%c:%c%c",
+                                             s[0], s[1], s[2], s[3],
+                                             s[4], s[5],
+                                             s[6], s[7],
+                                             s[8], s[9],
+                                             s[10], s[11],
+                                             s[12], s[13] );
+                      ts = gnc_iso8601_to_timespec_gmt( buf );
+                      g_free( buf );
+                 }
+                 isOK = TRUE;
             }
         }
         else
