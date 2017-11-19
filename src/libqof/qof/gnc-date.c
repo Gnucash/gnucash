@@ -1503,8 +1503,8 @@ gnc_iso8601_to_timespec_gmt(const char *str)
     {
 	time.tv_sec = g_date_time_to_unix (gdt);
 	time.tv_nsec = g_date_time_get_microsecond (gdt) * 1000;
+        g_date_time_unref (gdt);
     }
-    g_date_time_unref (gdt);
     return time;
 }
 
