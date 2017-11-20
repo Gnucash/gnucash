@@ -1,6 +1,8 @@
 ADD_SUBDIRECTORY(example_scripts)
 ADD_SUBDIRECTORY(tests)
 
+SET(PYEXEC_FILES  __init__.py function_class.py gnucash_business.py gnucash_core.py)
+
 IF (BUILDING_FROM_VCS)
   SET(SWIG_FILES ${CMAKE_CURRENT_SOURCE_DIR}/gnucash_core.i ${CMAKE_CURRENT_SOURCE_DIR}/timespec.i)
   SET(GNUCASH_CORE_C_INCLUDES
@@ -64,8 +66,6 @@ IF(WITH_PYTHON)
     ${PYTHON_INCLUDE_DIRS}
   )
 
-  SET(PYEXEC_FILES  __init__.py function_class.py gnucash_business.py gnucash_core.py)
-
   ADD_LIBRARY(gnucash_core_c MODULE ${SWIG_GNUCASH_CORE_C})
   TARGET_INCLUDE_DIRECTORIES(gnucash_core_c PRIVATE ${gnucash_core_c_INCLUDE_DIRS})
 
@@ -102,10 +102,12 @@ IF(WITH_PYTHON)
 ENDIF()
 
 SET(python_bindings_DATA ${PYEXEC_FILES}
-        gnucash_core.i
-        sqlite3test.c
-        timespec.i)
+  gnucash_core.i
+  sqlite3test.c
+  timespec.i)
 
-SET_LOCAL_DIST(python_bindings_DIST_local CMakeLists.txt Makefile.am ${python_bindings_DATA})
+SET_LOCAL_DIST(python_bindings_DIST_local CMakeLists.txt Makefile.am
+  ${python_bindings_DATA})
 
-SET(python_bindings_DIST ${python_bindings_DIST_local} ${test_python_bindings_DIST} ${example_scripts_DIST} PARENT_SCOPE)
+SET(python_bindings_DIST ${python_bindings_DIST_local}
+  ${test_python_bindings_DIST} ${example_scripts_DIST} PARENT_SCOPE)
