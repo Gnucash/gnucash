@@ -161,9 +161,11 @@
                ACCT-TYPE-EQUITY ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
 	 (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
       #f #t))
+    
     (gnc:options-add-account-levels!
      options gnc:pagename-accounts optname-depth-limit
      "b" opthelp-depth-limit 3)
+    
     (add-option
      (gnc:make-multichoice-option
       gnc:pagename-accounts optname-bottom-behavior
@@ -267,7 +269,7 @@
   (let* (
 	 (report-title (get-option gnc:pagename-general optname-report-title))
 	 (company-name (get-option gnc:pagename-general optname-party-name))
-         (date-tp (gnc:timepair-end-day-time 
+         (report-date (gnc:time64-end-day-time 
                       (gnc:date-option-absolute-time
                        (get-option gnc:pagename-general
                                    optname-date))))
@@ -320,12 +322,12 @@
 			 depth-limit))
          ;; exchange rates calculation parameters
 	 (exchange-fn
-	  (gnc:case-exchange-fn price-source report-commodity date-tp))
+	  (gnc:case-exchange-fn price-source report-commodity report-date))
 	 )
     
     (gnc:html-document-set-title! 
      doc (string-append company-name " " report-title " "
-			(gnc-print-date date-tp))
+			(qof-print-date report-date))
      )
     
     (if (null? accounts)
@@ -346,11 +348,11 @@
 	       (get-total-balance-fn
 		(lambda (account)
 		  (gnc:account-get-comm-balance-at-date 
-		   account date-tp #f)))
+		   account report-date #f)))
 	       (table-env                      ;; parameters for :make-
 		(list
 		 (list 'start-date #f)
-		 (list 'end-date date-tp)
+		 (list 'end-date report-date)
 		 (list 'display-tree-depth tree-depth)
 		 (list 'depth-limit-behavior bottom-behavior)
 		 (list 'report-commodity report-commodity)
@@ -501,8 +503,7 @@
 	)
     
     (gnc:report-finished)
-    doc)
-  )
+    doc))
 
 (gnc:define-report 
  'version 1
