@@ -37,9 +37,8 @@ GNC_ADD_SCHEME_TARGETS(scm-test-report-system-2
 SET_DIST_LIST(test_report_system_DIST
   CMakeLists.txt
   Makefile.am
-  test-collectors.scm
+  ${scm_test_report_system_SOURCES}
   test-extras.scm
   test-link-module.c
-  test-report-utilities.scm
-  test-list-extras.scm
+  test-test-extras.scm
 )

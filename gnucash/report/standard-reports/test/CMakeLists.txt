@@ -28,6 +28,5 @@ GNC_ADD_SCHEME_TARGETS(scm-test-standard-reports
   FALSE
 )
 
-SET_DIST_LIST(test_standard_reports_DIST CMakeLists.txt Makefile.am ${scm_test_standard_reports_SOURCES}
-        test-cash-flow.scm test-cashflow-barchart.scm test-standard-category-report.scm test-standard-net-barchart.scm
-        test-standard-net-linechart.scm)
+SET_DIST_LIST(test_standard_reports_DIST CMakeLists.txt Makefile.am
+  ${scm_test_standard_reports_SOURCES} ${scm_test_report_SUPPORT})

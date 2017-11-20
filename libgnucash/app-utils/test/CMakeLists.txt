@@ -56,5 +56,6 @@ SET_DIST_LIST(test_app_utils_DIST
   test-print-queries.cpp
   test-scm-query-string.cpp
   test-sx.cpp
+  test-load-app-utils-module.scm
   ${test_app_utils_SOURCES}
 )
