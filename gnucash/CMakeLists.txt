@@ -237,9 +237,16 @@ IF (WIN32)
   INSTALL(PROGRAMS ${CMD_FILE} DESTINATION bin)
 ENDIF(WIN32)
 
+# The GResource Files are absolute paths but SET_LOCAL_DIST requires
+# relative paths.
+FOREACH(gres_file ${gresource_files})
+  FILE(RELATIVE_PATH rel_file ${CMAKE_CURRENT_SOURCE_DIR} ${gres_file})
+  LIST(REMOVE_ITEM gresource_files ${gres_file})
+  LIST(APPEND gresource_files ${rel_file})
+ENDFOREACH()
 
 SET_LOCAL_DIST(gnucash_DIST_local CMakeLists.txt environment.in generate-gnc-script
-               gnucash-bin.c gnucash.rc.in gnucash-valgrind.in gnucash-gresourses.xml ${gresource_files}
+               gnucash-bin.c gnucash.rc.in gnucash-valgrind.in gnucash-gresources.xml ${gresource_files}
                Makefile.am ${gnucash_EXTRA_DIST})
 
 SET(gnucash_DIST ${gnucash_DIST_local} ${gnome_DIST} ${gnome_search_DIST}
