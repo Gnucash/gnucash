@@ -381,6 +381,7 @@ draw_cell (GnucashSheet *sheet,
            cairo_t *cr,
            int x, int y, int width, int height)
 {
+    GncItemEdit *item_edit = GNC_ITEM_EDIT(sheet->item_editor);
     Table *table = sheet->table;
     PhysicalCellBorders borders;
     const char *text;
@@ -398,11 +399,8 @@ draw_cell (GnucashSheet *sheet,
 
     gtk_style_context_save (stylectxt);
 
-    // Get the background and foreground color types and apply the css class
-    color_type = gnc_table_get_bg_color (table, virt_loc, &hatching);
-    gnucash_get_style_classes (sheet, stylectxt, color_type);
-
-    color_type = gnc_table_get_fg_color (table, virt_loc);
+    // Get the color type and apply the css class
+    color_type = gnc_table_get_color (table, virt_loc, &hatching);
     gnucash_get_style_classes (sheet, stylectxt, color_type);
 
     // Are we in a read-only row? Then make the background color somewhat more grey.
@@ -417,7 +415,10 @@ draw_cell (GnucashSheet *sheet,
     gtk_render_background (stylectxt, cr, x, y, width, height);
 
     gdk_rgba_parse (&color, "black");
-    gnc_style_context_get_background_color (stylectxt, GTK_STATE_FLAG_NORMAL, &color);
+    if (gtk_style_context_get_state (stylectxt) == GTK_STATE_FLAG_INSENSITIVE)
+        gnc_style_context_get_background_color (stylectxt, GTK_STATE_FLAG_INSENSITIVE, &color);
+    else
+        gnc_style_context_get_background_color (stylectxt, GTK_STATE_FLAG_NORMAL, &color);
     bg_color = &color;
 
     get_cell_borders (sheet, virt_loc, &borders);
@@ -524,39 +525,19 @@ draw_cell (GnucashSheet *sheet,
         goto exit;
     }
 
-    pango_layout_get_pixel_extents(layout,
-                                   NULL,
-                                   &logical_rect);
+    pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 
-    rect.x      = x + CELL_HPADDING;
-    rect.y      = y + CELL_VPADDING;
-    rect.width  = MAX (0, width - (2 * CELL_HPADDING));
-    rect.height = height - 2;
+    gnucash_sheet_set_text_bounds (sheet, &rect, x, y, width, height);
 
     cairo_save (cr);
     cairo_rectangle (cr, rect.x, rect.y, rect.width, rect.height);
     cairo_clip (cr);
 
-    switch (gnc_table_get_align (table, virt_loc))
-    {
-    default:
-    case CELL_ALIGN_LEFT:
-        x_offset = 0;
-        break;
+    x_offset = gnucash_sheet_get_text_offset (sheet, virt_loc,
+                                              rect.width, logical_rect.width);
 
-    case CELL_ALIGN_RIGHT:
-        x_offset = width - 2 * CELL_HPADDING - logical_rect.width - 3;
-        break;
-
-    case CELL_ALIGN_CENTER:
-        if (logical_rect.width > width - 2 * CELL_HPADDING)
-            x_offset = 0;
-        else
-            x_offset = (width - 2 * CELL_HPADDING -
-                        logical_rect.width) / 2;
-        break;
-    }
-    gtk_render_layout (stylectxt, cr, rect.x + x_offset + 1, rect.y, layout);
+    gtk_render_layout (stylectxt, cr, rect.x + x_offset,
+                       rect.y + gnc_item_edit_get_padding_border (item_edit, top), layout);
 
     cairo_restore (cr);
 
@@ -701,7 +682,7 @@ gnucash_sheet_draw_cursor (GnucashCursor *cursor, cairo_t *cr)
     cairo_stroke (cr);
 
     // make the bottom line thicker
-    cairo_move_to (cr, cursor->x - x + 0.5, cursor->y - y + cursor->h - 1.5);
+    cairo_move_to (cr, cursor->x - x + 0.5, cursor->y - y + cursor->h - 3.5);
     cairo_rel_line_to (cr, cursor->w, 0);
     cairo_set_line_width (cr, 1.0);
     cairo_stroke (cr);
