@@ -46,7 +46,7 @@
           (gnc:make-color-option
            (N_ "General")
            (N_ "Background Color") "a" (N_ "Background color for reports.")
-           (list #xff #xff #xff 0)
+           (list #xff #xff #xff #xff)
            255 #f))
          (opt-register
           (gnc:make-pixmap-option
@@ -62,7 +62,7 @@
           (gnc:make-color-option
            (N_ "Colors")
            (N_ "Alternate Table Cell Color") "a" (N_ "Background color for alternate lines.")
-           (list #xff #xff #xff 0)
+           (list #xff #xff #xff #xff)
            255 #f))
          (opt-register
           (gnc:make-number-range-option

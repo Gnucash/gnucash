@@ -118,7 +118,7 @@
       gnc:pagename-display optname-markercolor
       "b"
       (N_ "Color of the marker.")
-      (list #xb2 #x22 #x22 0)
+      (list #xb2 #x22 #x22 #xff)
       255 #f))
 
     (gnc:options-set-default-section options gnc:pagename-general)

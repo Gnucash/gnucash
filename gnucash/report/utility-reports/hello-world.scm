@@ -159,14 +159,14 @@
      (gnc:make-color-option
       (N_ "Hello, World!") (N_ "Background Color")
       "f" (N_ "This is a color option.")
-      (list #xf6 #xff #xdb 0)
+      (list #xf6 #xff #xdb #xff)
       255
       #f))
     (add-option
      (gnc:make-color-option
       (N_ "Hello, World!") (N_ "Text Color")
       "f" (N_ "This is a color option.")
-      (list #x00 #x00 #x00 0)
+      (list #x00 #x00 #x00 #xff)
       255
       #f))
     
