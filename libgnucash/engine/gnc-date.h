@@ -346,6 +346,8 @@ void timespecFromTime64 (Timespec *ts, time64 t );
 /** Turns a Timespec into a time64 */
 time64 timespecToTime64 (Timespec ts);
 
+GDate time64_to_gdate (time64 t);
+
 /** Turns a Timespec into a GDate */
 GDate timespec_to_gdate (Timespec ts);
 
