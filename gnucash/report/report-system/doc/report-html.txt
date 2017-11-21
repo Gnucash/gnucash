@@ -363,7 +363,7 @@ We have three different kinds of style control information available:
             (gnc:make-color-option
               (_ "Style Sheet Options")
 	      (_ "Background Color") "a" (_ "Background color for reports.")
-	      (list #xff #xff #xff 0)
+	      (list #xff #xff #xff #xff)
 	      255 #f))
           options))
 

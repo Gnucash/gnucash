@@ -101,28 +101,28 @@
      (gnc:make-color-option
       (N_ "Colors")
       (N_ "Background Color") "a" (N_ "General background color for report.")
-      (list #xff #xff #xff 0)
+      (list #xff #xff #xff #xff)
       255 #f))      
 
     (opt-register
      (gnc:make-color-option
       (N_ "Colors")
       (N_ "Text Color") "b" (N_ "Normal body text color.")
-      (list #x00 #x00 #x00 0)
+      (list #x00 #x00 #x00 #xff)
       255 #f))      
 
     (opt-register
      (gnc:make-color-option
       (N_ "Colors")
       (N_ "Link Color") "c" (N_ "Link text color.")
-      (list #xb2 #x22 #x22 0)
+      (list #xb2 #x22 #x22 #xff)
       255 #f))
 
     (opt-register
      (gnc:make-color-option
       (N_ "Colors")
       (N_ "Table Cell Color") "c" (N_ "Default background for table cells.")
-      (list #xff #xff #xff 0)
+      (list #xff #xff #xff #xff)
       255 #f))      
 
     (opt-register
@@ -130,7 +130,7 @@
       (N_ "Colors")
       (N_ "Alternate Table Cell Color") "d"
       (N_ "Default alternate background for table cells.")
-      (list #xff #xff #xff 0)
+      (list #xff #xff #xff #xff)
       255 #f))
 
     (opt-register
@@ -138,7 +138,7 @@
       (N_ "Colors")
       (N_ "Subheading/Subtotal Cell Color") "e"
       (N_ "Default color for subtotal rows.")
-      (list #xee #xe8 #xaa 0)
+      (list #xee #xe8 #xaa #xff)
       255 #f))
 
     (opt-register
@@ -146,7 +146,7 @@
       (N_ "Colors")
       (N_ "Sub-subheading/total Cell Color") "f"
       (N_ "Color for subsubtotals.")
-      (list #xfa #xfa #xd2 0)
+      (list #xfa #xfa #xd2 #xff)
       255 #f))
 
     (opt-register
@@ -154,7 +154,7 @@
       (N_ "Colors")
       (N_ "Grand Total Cell Color") "g"
       (N_ "Color for grand totals.")
-      (list #xff #xff #x00 0)
+      (list #xff #xff #x00 #xff)
       255 #f))
 
     (opt-register 
