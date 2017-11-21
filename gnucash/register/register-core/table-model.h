@@ -76,7 +76,10 @@ typedef char * (*TableGetHelpHandler) (VirtualLocation virt_loc,
 typedef CellIOFlags (*TableGetCellIOFlagsHandler) (VirtualLocation virt_loc,
         gpointer user_data);
 
-typedef guint32 (*TableGetCellColorHandler) (VirtualLocation virt_loc,
+typedef guint32 (*TableGetFGColorHandler) (VirtualLocation virt_loc,
+        gpointer user_data);
+
+typedef guint32 (*TableGetBGColorHandler) (VirtualLocation virt_loc,
         gboolean *hatching,
         gpointer user_data);
 
@@ -104,7 +107,8 @@ typedef struct
     GHashTable *label_handlers;
     GHashTable *help_handlers;
     GHashTable *io_flags_handlers;
-    GHashTable *cell_color_handlers;
+    GHashTable *fg_color_handlers;
+    GHashTable *bg_color_handlers;
     GHashTable *cell_border_handlers;
     GHashTable *confirm_handlers;
 
@@ -185,14 +189,25 @@ TableGetCellIOFlagsHandler gnc_table_model_get_io_flags_handler
 (TableModel *model,
  const char * cell_name);
 
-void gnc_table_model_set_cell_color_handler
+void gnc_table_model_set_fg_color_handler
 (TableModel *model,
- TableGetCellColorHandler io_flags_handler,
+ TableGetFGColorHandler io_flags_handler,
  const char * cell_name);
- void gnc_table_model_set_default_cell_color_handler
+void gnc_table_model_set_default_fg_color_handler
 (TableModel *model,
- TableGetCellColorHandler io_flags_handler);
-TableGetCellColorHandler gnc_table_model_get_cell_color_handler
+ TableGetFGColorHandler io_flags_handler);
+TableGetFGColorHandler gnc_table_model_get_fg_color_handler
+(TableModel *model,
+ const char * cell_name);
+
+void gnc_table_model_set_bg_color_handler
+(TableModel *model,
+ TableGetBGColorHandler io_flags_handler,
+ const char * cell_name);
+void gnc_table_model_set_default_bg_color_handler
+(TableModel *model,
+ TableGetBGColorHandler io_flags_handler);
+TableGetBGColorHandler gnc_table_model_get_bg_color_handler
 (TableModel *model,
  const char * cell_name);
 

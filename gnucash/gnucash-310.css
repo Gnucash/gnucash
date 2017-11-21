@@ -21,14 +21,13 @@
   color: mix (currentColor, grey, 0.2);
 }
 
-/* Register Cursor settings, top, right, bottom, left */
-.cursor .entry {
-  margin: 2px 5px 2px 5px;  /* this only works by doing it in code, yellow area */
-  padding: 2px 2px 2px 2px; /* all work with different values, around the text blue area */
+/* Register Cursor padding settings, make sure entry matches sheet.h */
+cursor entry {
+  padding: 2px 5px 2px 5px;
 }
 
-.cursor .toggle-button {
-  margin: 1px 1px 1px 1px; /* does not work, not used, here for completeness */
+cursor button {
+  padding: 1px 1px 1px 1px;
 }
 
 /* Register defaults */
@@ -38,7 +37,7 @@
 @define-color register_split_bg_color #EDE7D3;
 @define-color register_cursor_bg_color #FFEF98;
 
-*.register-header {
+.register-header {
   background-color: @register_header_bg_color;
 }
 

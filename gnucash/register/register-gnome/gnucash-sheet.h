@@ -33,6 +33,10 @@
  * @brief Public declarations of GnucashSheet class.
  */
 
+#define CELL_VPADDING 2
+#define CELL_HPADDING 5
+
+
 #define GNUCASH_TYPE_SHEET     (gnucash_sheet_get_type ())
 #define GNUCASH_SHEET(obj)     (G_TYPE_CHECK_INSTANCE_CAST((obj), GNUCASH_TYPE_SHEET, GnucashSheet))
 #define GNUCASH_SHEET_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), GNUCASH_TYPE_SHEET))
@@ -103,12 +107,6 @@ void gnucash_sheet_set_window (GnucashSheet *sheet, GtkWidget *window);
 
 void gnucash_get_style_classes (GnucashSheet *sheet, GtkStyleContext *stylectxt,
                                 RegisterColor field_type);
-
-void gnucash_sheet_set_text_bounds (GnucashSheet *sheet, GdkRectangle *rect,
-                                    gint x, gint y, gint width, gint height);
-
-gint gnucash_sheet_get_text_offset (GnucashSheet *sheet, const VirtualLocation virt_loc,
-                                    gint rect_width, gint logical_width);
 
 /** @} */
 #endif

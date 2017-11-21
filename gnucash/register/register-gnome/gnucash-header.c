@@ -69,7 +69,6 @@ static void
 gnc_header_draw_offscreen (GncHeader *header)
 {
     SheetBlockStyle *style = header->style;
-    GncItemEdit *item_edit = GNC_ITEM_EDIT(header->sheet->item_editor);
     Table *table = header->sheet->table;
     VirtualLocation virt_loc;
     VirtualCell *vcell;
@@ -88,8 +87,8 @@ gnc_header_draw_offscreen (GncHeader *header)
 
     gtk_style_context_save (stylectxt);
 
-    // Get the color type and apply the css class
-    color_type = gnc_table_get_color (table, virt_loc, NULL);
+    // Get the background color type and apply the css class
+    color_type = gnc_table_get_bg_color (table, virt_loc, NULL);
     gnucash_get_style_classes (header->sheet, stylectxt, color_type);
 
     if (header->surface)
@@ -126,7 +125,7 @@ gnc_header_draw_offscreen (GncHeader *header)
     for (i = 0; i < style->nrows; i++)
     {
         int col_offset = 0;
-        int height = 0, j;
+        int h = 0, j;
         virt_loc.phys_row_offset = i;
 
         /* TODO: This routine is duplicated in several places.
@@ -140,29 +139,26 @@ gnc_header_draw_offscreen (GncHeader *header)
             double text_x, text_y, text_w, text_h;
             BasicCell *cell;
             const char *text;
-            int width;
+            int w;
             PangoLayout *layout;
-            PangoRectangle logical_rect;
-            GdkRectangle rect;
-            int x_offset;
 
             virt_loc.phys_col_offset = j;
 
             cd = gnucash_style_get_cell_dimensions (style, i, j);
-            height = cd->pixel_height;
+            h = cd->pixel_height;
             if (header->in_resize && (j == header->resize_col))
-                width = header->resize_col_width;
+                w = header->resize_col_width;
             else
-                width = cd->pixel_width;
+                w = cd->pixel_width;
 
             cell = gnc_cellblock_get_cell (cb, i, j);
             if (!cell || !cell->cell_name)
             {
-                col_offset += width;
+                col_offset += w;
                 continue;
             }
 
-            cairo_rectangle (cr, col_offset - 0.5, row_offset + 0.5, width, height);
+            cairo_rectangle (cr, col_offset - 0.5, row_offset + 0.5, w, h);
             cairo_set_line_width (cr, 1.0);
             cairo_stroke (cr);
 
@@ -173,28 +169,38 @@ gnc_header_draw_offscreen (GncHeader *header)
                 text = "";
 
             layout = gtk_widget_create_pango_layout (GTK_WIDGET (header->sheet), text);
+            switch (gnc_table_get_align (table, virt_loc))
+            {
+            default:
+            case CELL_ALIGN_LEFT:
+                pango_layout_set_alignment (layout, PANGO_ALIGN_LEFT);
+                break;
 
-            pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+            case CELL_ALIGN_RIGHT:
+                pango_layout_set_alignment (layout, PANGO_ALIGN_RIGHT);
+                break;
 
-            gnucash_sheet_set_text_bounds (header->sheet, &rect,
-                                           col_offset, row_offset, width, height);
+            case CELL_ALIGN_CENTER:
+                pango_layout_set_alignment (layout, PANGO_ALIGN_CENTER);
+                break;
+            }
 
+            text_x = col_offset + CELL_HPADDING;
+            text_y = row_offset + 1;
+            text_w = MAX (0, w - (2 * CELL_HPADDING));
+            text_h = h - 2;
             cairo_save (cr);
-            cairo_rectangle (cr, rect.x, rect.y, rect.width, rect.height);
+            cairo_rectangle (cr, text_x, text_y, text_w, text_h);
             cairo_clip (cr);
 
-            x_offset = gnucash_sheet_get_text_offset (header->sheet, virt_loc,
-                                                      rect.width, logical_rect.width);
-
-            gtk_render_layout (stylectxt, cr, rect.x + x_offset,
-                               rect.y + gnc_item_edit_get_padding_border (item_edit, top), layout);
+            gtk_render_layout (stylectxt, cr, text_x, text_y, layout);
 
             cairo_restore (cr);
             g_object_unref (layout);
 
-            col_offset += width;
+            col_offset += w;
         }
-        row_offset += height;
+        row_offset += h;
     }
     gtk_style_context_restore (stylectxt);
 

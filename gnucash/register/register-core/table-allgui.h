@@ -179,18 +179,34 @@ struct table
 };
 
 /** Color definitions used for table elements */
-typedef enum {
-    COLOR_UNDEFINED = 0,      // 0
-    COLOR_HEADER,             // 1
-    COLOR_PRIMARY,            // 2
-    COLOR_PRIMARY_ACTIVE,     // 3
-    COLOR_SECONDARY,          // 4
-    COLOR_SECONDARY_ACTIVE,   // 5
-    COLOR_SPLIT,              // 6
-    COLOR_SPLIT_ACTIVE,       // 7
-    COLOR_NEGATIVE = 16,      // 16
-} RegisterColor;
+typedef enum
+{
+    /* Colors used for background drawing */
+    COLOR_UNKNOWN_BG,          // 0
+    COLOR_HEADER_BG,           // 1
+    COLOR_PRIMARY_BG,          // 2
+    COLOR_PRIMARY_BG_ACTIVE,   // 3
+    COLOR_SECONDARY_BG,        // 4
+    COLOR_SECONDARY_BG_ACTIVE, // 5
+    COLOR_SPLIT_BG,            // 6
+    COLOR_SPLIT_BG_ACTIVE,     // 7
 
+    /* Colors used for foreground drawing (text etc)
+     * ATTENTION: the background and foreground lists should have
+     *            the same types (the same amount of entries) !
+     *            The code relies on this ! */
+    COLOR_UNKNOWN_FG,          // 8
+    COLOR_HEADER_FG,           // 9
+    COLOR_PRIMARY_FG,          // 10
+    COLOR_PRIMARY_FG_ACTIVE,   // 11
+    COLOR_SECONDARY_FG,        // 12
+    COLOR_SECONDARY_FG_ACTIVE, // 13
+    COLOR_SPLIT_FG,            // 14
+    COLOR_SPLIT_FG_ACTIVE,     // 15
+
+    /* Other colors */
+    COLOR_NEGATIVE,            // 16 Color to use for negative numbers
+} RegisterColor;
 
 /** Set the default gui handlers used by new tables. */
 void gnc_table_set_default_gui_handlers (TableGUIHandlers *gui_handlers);
@@ -242,7 +258,9 @@ const char *   gnc_table_get_label (Table *table, VirtualLocation virt_loc);
 
 CellIOFlags    gnc_table_get_io_flags (Table *table, VirtualLocation virt_loc);
 
-guint32        gnc_table_get_color (Table *table, VirtualLocation virt_loc,
+guint32        gnc_table_get_fg_color (Table *table, VirtualLocation virt_loc);
+
+guint32        gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc,
                                        gboolean *hatching);
 
 void           gnc_table_get_borders (Table *table, VirtualLocation virt_loc,

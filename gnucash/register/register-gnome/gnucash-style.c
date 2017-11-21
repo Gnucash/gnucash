@@ -169,7 +169,6 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
     int row, col;
     gint max_height = -1;
     PangoLayout *layout;
-    GncItemEdit *item_edit = GNC_ITEM_EDIT(sheet->item_editor);
 
     /* g_return_if_fail (font != NULL); */
 
@@ -197,17 +196,13 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
                 layout = gtk_widget_create_pango_layout (GTK_WIDGET (sheet), text);
                 pango_layout_get_pixel_size (layout, &width, &cd->pixel_height);
                 g_object_unref (layout);
-                width += gnc_item_edit_get_margin (item_edit, left_right) +
-                         gnc_item_edit_get_padding_border (item_edit, left_right);
-
-                cd->pixel_height += gnc_item_edit_get_margin (item_edit, top_bottom) +
-                                    gnc_item_edit_get_padding_border (item_edit, top_bottom);
+                width += 2 * CELL_HPADDING;
+                cd->pixel_height += 2 * CELL_VPADDING;
             }
             else
             {
                 width = 0;
-                cd->pixel_height = gnc_item_edit_get_margin (item_edit, top_bottom) +
-                                   gnc_item_edit_get_padding_border (item_edit, top_bottom);
+                cd->pixel_height = (2 * CELL_VPADDING);
             }
 
             max_height = MAX(max_height, cd->pixel_height);
@@ -215,10 +210,9 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
             if (cd->pixel_width > 0)
                 continue;
 
-            // This is used on new account popup cells to get the default
-            // width of text plus toggle button.
             if (cell && cell->is_popup)
-                width += cd->pixel_height; // toggle button is square, use cell height
+                width += gnc_item_edit_get_toggle_offset
+                         (cd->pixel_height);
 
             cd->pixel_width = MAX (cd->pixel_width, width);
         }
@@ -245,7 +239,6 @@ static void
 set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
 {
     SheetBlockStyle *style;
-    GncItemEdit *item_edit = GNC_ITEM_EDIT(sheet->item_editor);
     BlockDimensions *dimensions;
     CellDimensions *cd;
     GTable *cd_table;
@@ -322,8 +315,7 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
                 pango_layout_get_pixel_size (layout, &sample_width, NULL);
                 g_object_unref (layout);
                 /*sample_width = gdk_string_width (font, text);*/
-                sample_width += gnc_item_edit_get_margin (item_edit, left_right) +
-                                gnc_item_edit_get_padding_border (item_edit, left_right);
+                sample_width += 2 * CELL_HPADDING;
             }
             else
                 sample_width = 0;
