@@ -131,7 +131,7 @@ static gint wheres_this(GncDenseCal *dcal, int x, int y);
 static void recompute_x_y_scales(GncDenseCal *dcal);
 static void recompute_mark_storage(GncDenseCal *dcal);
 static void recompute_extents(GncDenseCal *dcal);
-static void populate_hover_window(GncDenseCal *dcal, gint doc);
+static void populate_hover_window(GncDenseCal *dcal);
 
 static void month_coords(GncDenseCal *dcal, int monthOfCal, GList **outList);
 static void doc_coords(GncDenseCal *dcal, int dayOfCal,
@@ -338,6 +338,11 @@ gnc_dense_cal_init(GncDenseCal *dcal)
         gtk_widget_set_name (GTK_WIDGET(dcal->transPopup), "dense-cal-popup");
 
         l = gtk_label_new(_("Date: "));
+#if GTK_CHECK_VERSION(3,12,0)
+        gtk_widget_set_margin_start (l, 5);
+#else
+        gtk_widget_set_margin_left (l, 5);
+#endif
         gtk_container_add(GTK_CONTAINER(hbox), l);
         l = gtk_label_new("YY/MM/DD");
         g_object_set_data(G_OBJECT(dcal->transPopup), "dateLabel", l);
@@ -1197,14 +1202,14 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
 }
 
 static void
-populate_hover_window(GncDenseCal *dcal, gint doc)
+populate_hover_window(GncDenseCal *dcal)
 {
     GtkWidget *w;
     GDate *date;
     static const int MAX_STRFTIME_BUF_LEN = 64;
     gchar strftimeBuf[MAX_STRFTIME_BUF_LEN];
 
-    if (doc >= 0)
+    if (dcal->doc >= 0)
     {
         GObject *o;
         GtkListStore *model;
@@ -1212,7 +1217,7 @@ populate_hover_window(GncDenseCal *dcal, gint doc)
 
         w = GTK_WIDGET(g_object_get_data(G_OBJECT(dcal->transPopup), "dateLabel"));
         date = g_date_new_dmy(1, dcal->month, dcal->year);
-        g_date_add_days(date, doc);
+        g_date_add_days(date, dcal->doc);
         /* Note: the ISO date format (%F or equivalently
          * %Y-%m-%d) is not a good idea here since many
          * locales will want to use a very different date
@@ -1224,7 +1229,7 @@ populate_hover_window(GncDenseCal *dcal, gint doc)
         o = G_OBJECT(dcal->transPopup);
         model = GTK_LIST_STORE(g_object_get_data(o, "model"));
         gtk_list_store_clear(model);
-        for (l = dcal->marks[doc]; l; l = l->next)
+        for (l = dcal->marks[dcal->doc]; l; l = l->next)
         {
             GtkTreeIter iter;
             gdc_mark_data *gdcmd;
@@ -1233,6 +1238,17 @@ populate_hover_window(GncDenseCal *dcal, gint doc)
             gtk_list_store_insert(model, &iter, INT_MAX);
             gtk_list_store_set(model, &iter, 0, (gdcmd->name ? gdcmd->name : _("(unnamed)")), 1, gdcmd->info, -1);
         }
+
+        // if there are no rows, add one
+        if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL(model), NULL) == 0)
+        {
+            GtkTreeIter iter;
+            gtk_list_store_insert(model, &iter, -1);
+        }
+
+        // make sure all pending events are processed
+        while(gtk_events_pending())
+            gtk_main_iteration();
 
         g_date_free(date);
     }
@@ -1245,31 +1261,28 @@ gnc_dense_cal_button_press(GtkWidget *widget,
 #if GTK_CHECK_VERSION(3,22,0)
     GdkWindow *win = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
     GdkMonitor *mon = gdk_display_get_monitor_at_window (gtk_widget_get_display (widget), win);
-    GdkRectangle monitor_size;
+    GdkRectangle work_area_size;
 #else
     GdkScreen *screen = gdk_screen_get_default ();
 #endif
     GtkAllocation alloc;
-    gint doc;
-    gint screen_width;
-    gint screen_height;
     GncDenseCal *dcal = GNC_DENSE_CAL(widget);
     gint win_xpos = evt->x_root + 5;
     gint win_ypos = evt->y_root + 5;
 
 #if GTK_CHECK_VERSION(3,22,0)
-    gdk_monitor_get_geometry (mon, &monitor_size);
+    gdk_monitor_get_workarea (mon, &work_area_size);
 
-    screen_width = monitor_size.width;
-    screen_height = monitor_size.height;
+    dcal->screen_width = work_area_size.width;
+    dcal->screen_height = work_area_size.height;
 #else
-    screen_width = gdk_screen_get_width (screen);
-    screen_height = gdk_screen_get_height (screen);
+    dcal->screen_width = gdk_screen_get_width (screen);
+    dcal->screen_height = gdk_screen_get_height (screen);
 #endif
 
-    doc = wheres_this(dcal, evt->x, evt->y);
+    dcal->doc = wheres_this(dcal, evt->x, evt->y);
     dcal->showPopup = ~(dcal->showPopup);
-    if (dcal->showPopup && doc >= 0)
+    if (dcal->showPopup && dcal->doc >= 0)
     {
         // Do the move twice in case the WM is ignoring the first one
         // because the window hasn't been shown, yet.  The WM is free
@@ -1279,35 +1292,35 @@ gnc_dense_cal_button_press(GtkWidget *widget,
         // trick with a bit of flicker.
         gtk_window_move(GTK_WINDOW(dcal->transPopup), evt->x_root + 5, evt->y_root + 5);
 
-        gtk_widget_get_allocation(GTK_WIDGET(dcal->transPopup), &alloc);
-
-        populate_hover_window(dcal, doc);
+        populate_hover_window(dcal);
         gtk_widget_queue_resize(GTK_WIDGET(dcal->transPopup));
         gtk_widget_show_all(GTK_WIDGET(dcal->transPopup));
 
-        if (evt->x_root + 5 + alloc.width > screen_width)
+        gtk_widget_get_allocation(GTK_WIDGET(dcal->transPopup), &alloc);
+
+        if (evt->x_root + 5 + alloc.width > dcal->screen_width)
             win_xpos = evt->x_root - 2 - alloc.width;
 
-        if (evt->y_root + 5 + alloc.height > screen_height)
+        if (evt->y_root + 5 + alloc.height > dcal->screen_height)
             win_ypos = evt->y_root - 2 - alloc.height;
 
         gtk_window_move(GTK_WINDOW(dcal->transPopup), win_xpos, win_ypos);
     }
     else
+    {
+        dcal->doc = -1;
         gtk_widget_hide(GTK_WIDGET(dcal->transPopup));
-    return FALSE;
+    }
+    return TRUE;
 }
 
 static gint
 gnc_dense_cal_motion_notify(GtkWidget *widget,
                             GdkEventMotion *event)
 {
-    GdkScreen *screen = gdk_screen_get_default ();
     GncDenseCal *dcal;
     GtkAllocation alloc;
     gint doc;
-    gint screen_width;
-    gint screen_height;
     int unused;
     GdkModifierType unused2;
     gint win_xpos = event->x_root + 5;
@@ -1334,36 +1347,28 @@ gnc_dense_cal_motion_notify(GtkWidget *widget,
     doc = wheres_this(dcal, event->x, event->y);
     if (doc >= 0)
     {
-#if GTK_CHECK_VERSION(3,22,0)
-        GdkWindow *win = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
-        GdkMonitor *mon = gdk_display_get_monitor_at_window (gtk_widget_get_display (widget), win);
-        GdkRectangle monitor_size;
-
-        gdk_monitor_get_geometry (mon, &monitor_size);
-
-        screen_width = monitor_size.width;
-        screen_height = monitor_size.height;
-#else
-        screen_width = gdk_screen_get_width (screen);
-        screen_height = gdk_screen_get_height (screen);
-#endif
-        populate_hover_window(dcal, doc);
-        gtk_widget_queue_resize(GTK_WIDGET(dcal->transPopup));
-
+        if (dcal->doc != doc) // if we are on the same day, no need to reload
+        {
+            dcal->doc = doc;
+            populate_hover_window(dcal);
+            gtk_widget_queue_resize(GTK_WIDGET(dcal->transPopup));
+            gtk_widget_show_all(GTK_WIDGET(dcal->transPopup));
+        }
         gtk_widget_get_allocation(GTK_WIDGET(dcal->transPopup), &alloc);
 
-        gtk_widget_show_all(GTK_WIDGET(dcal->transPopup));
-
-        if (event->x_root + 5 + alloc.width > screen_width)
+        if (event->x_root + 5 + alloc.width > dcal->screen_width)
             win_xpos = event->x_root - 2 - alloc.width;
 
-        if (event->y_root + 5 + alloc.height > screen_height)
+        if (event->y_root + 5 + alloc.height > dcal->screen_height)
             win_ypos = event->y_root - 2 - alloc.height;
 
         gtk_window_move(GTK_WINDOW(dcal->transPopup), win_xpos, win_ypos);
     }
     else
+    {
+        dcal->doc = -1;
         gtk_widget_hide(GTK_WIDGET(dcal->transPopup));
+    }
     return TRUE;
 }
 
