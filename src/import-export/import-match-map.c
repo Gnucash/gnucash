@@ -33,6 +33,7 @@
 #include "import-match-map.h"
 #include "gnc-ui-util.h"
 #include "gnc-engine.h"
+#include "gnc-features.h"
 
 /********************************************************************\
  *   Constants   *
@@ -173,8 +174,8 @@ void gnc_imap_add_account (GncImportMatchMap *imap, const char *category,
 
 struct account_token_count
 {
-    char* account_name;
-    gint64 token_count; /**< occurances of a given token for this account_name */
+    char * account_guid;
+    gint64 token_count; /**< occurances of a given token for this account_guid */
 };
 
 /** total_count and the token_count for a given account let us calculate the
@@ -184,32 +185,60 @@ struct token_accounts_info
 {
     GList *accounts; /**< array of struct account_token_count */
     gint64 total_count;
+    QofBook * book;
 };
 
-/** gpointer is a pointer to a struct token_accounts_info
- * \note Can always assume that keys are unique, reduces code in this function
+static struct account_token_count * findAccountTokenCount (GList * haystack, struct account_token_count * needle)
+{
+    GList * iter = haystack;
+    for ( ; iter; iter = iter->next)
+    {
+        struct account_token_count * element = iter->data;
+        if (!g_strcmp0 (needle->account_guid, element->account_guid))
+            return element;
+    }
+    return NULL;
+}
+
+/**
+ * \note Cannot assume keys are unique. Account names and GUIDs can both
+ * come through here referring to the same account.
  */
 static void buildTokenInfo(const char *key, kvp_value *value, gpointer data)
 {
-    struct token_accounts_info *tokenInfo = (struct token_accounts_info*)data;
-    struct account_token_count* this_account;
-
-    //  PINFO("buildTokenInfo: account '%s', token_count: '%ld'\n", (char*)key,
-    //			(long)kvp_value_get_gint64(value));
-
-    /* add the count to the total_count */
+    struct token_accounts_info * tokenInfo = (struct token_accounts_info*)data;
+    struct account_token_count * otherTokenInfo = NULL;
+    struct account_token_count * this_account;
+    GncGUID temp_guid;
     tokenInfo->total_count += kvp_value_get_gint64(value);
-
-    /* allocate a new structure for this account and it's token count */
-    this_account = (struct account_token_count*)
-                   g_new0(struct account_token_count, 1);
-
-    /* fill in the account name and number of tokens found for this account name */
-    this_account->account_name = (char*)key;
+    this_account = (struct account_token_count*) g_new0(struct account_token_count, 1);
+    if (string_to_guid (key, &temp_guid))
+    { /*the key is a guid*/
+        this_account->account_guid = g_strdup (key);
+    }
+    else
+    {
+        Account * account = gnc_account_lookup_by_full_name(
+                gnc_book_get_root_account(tokenInfo->book), key);
+        gchar tempbuff [GUID_ENCODING_LENGTH + 1];
+        if (!account)
+            /* dud record. */
+            return;
+        guid_to_string_buff (xaccAccountGetGUID (account), tempbuff);
+        this_account->account_guid = g_strdup (tempbuff);
+    }
     this_account->token_count = kvp_value_get_gint64(value);
-
-    /* append onto the glist a pointer to the new account_token_count structure */
-    tokenInfo->accounts = g_list_prepend(tokenInfo->accounts, this_account);
+    if ((otherTokenInfo = findAccountTokenCount (tokenInfo->accounts, this_account)))
+    {
+        /* This is a duplicate. Aggregate it. */
+        otherTokenInfo->token_count += this_account->token_count;
+        g_free (this_account->account_guid);
+        g_free (this_account);
+    }
+    else
+    {
+        tokenInfo->accounts = g_list_prepend(tokenInfo->accounts, this_account);
+    }
 }
 
 /** intermediate values used to calculate the bayes probability of a given account
@@ -249,6 +278,7 @@ static void buildProbabilities(gpointer key, gpointer value, gpointer data)
 /** Frees an array of the same time that buildProperties built */
 static void freeProbabilities(gpointer key, gpointer value, gpointer data)
 {
+    g_free(key);
     /* free up the struct account_probability that was allocated
      * in gnc_imap_find_account_bayes()
      */
@@ -260,7 +290,7 @@ static void freeProbabilities(gpointer key, gpointer value, gpointer data)
  */
 struct account_info
 {
-    char* account_name;
+    char* account_guid;
     gint32 probability;
 };
 
@@ -279,18 +309,97 @@ static void highestProbability(gpointer key, gpointer value, gpointer data)
     {
         /* Save the new highest probability and the assoaciated account name */
         account_i->probability = GPOINTER_TO_INT(value);
-        account_i->account_name = key;
+        g_free (account_i->account_guid);
+        account_i->account_guid = g_strdup (key);
     }
 }
 
+static struct token_accounts_info *
+get_flat_account_tokens (char const * token, KvpFrame * imap_frame, QofBook * book)
+{
+    gchar * path_prefix = g_strdup_printf ("%s/%s", IMAP_FRAME_BAYES, token);
+    GList * matching_keys = kvp_frame_get_keys_matching_prefix (imap_frame, path_prefix);
+    GList const * iter = matching_keys;
+    struct token_accounts_info * ret = (struct token_accounts_info *)
+        g_new0 (struct token_accounts_info, 1);
+    for ( ; iter; iter = iter->next)
+    {
+        /* This needs to be const because the string actually
+         * belongs to the string cache in KVP. */
+        gchar const * temp_key = iter->data;
+        struct account_token_count * temp_token_count = (struct account_token_count *)
+            g_new0 (struct account_token_count, 1);
+        /*The guid part of the key is just after the last '/'.*/
+        gchar const * guid_str = g_strrstr (temp_key, "/") + 1;
+        gchar * temp_path = g_strdup_printf ("%s/%s", path_prefix, guid_str);
+        KvpValue const * temp_count_value = kvp_frame_get_slot_path (imap_frame, temp_path, NULL);
+        GncGUID guid;
+        Account const * temp_account;
+        string_to_guid(guid_str, &guid);
+        temp_account = xaccAccountLookup (&guid, book);
+        temp_token_count->account_guid = g_strdup (guid_str);
+        temp_token_count->token_count = kvp_value_get_gint64 (temp_count_value);
+        ret->total_count += temp_token_count->token_count;
+        ret->accounts = g_list_prepend (ret->accounts, temp_token_count);
+        g_free (temp_path);
+    }
+    g_list_free (matching_keys);
+    g_free (path_prefix);
+    return ret;
+}
+
+static struct token_accounts_info *
+get_not_flat_account_tokens (char const * token, KvpFrame * imap_frame, QofBook * book)
+{
+    KvpValue * value;
+    KvpFrame * token_frame;
+    struct token_accounts_info * tokenInfo = (struct token_accounts_info *)
+        g_new0 (struct token_accounts_info, 1); /**< holds the accounts and total
+             * token count for a single token */
+    tokenInfo->book = book;
+    /* zero out the token_accounts_info structure */
+    PINFO("token: '%s'", token);
+    /* find the slot for the given token off of the source account
+     * for these tokens, search off of the IMAP_FRAME_BAYES path so
+     * we aren't looking from the parent of the entire kvp tree
+     */
+    value = kvp_frame_get_slot_path(imap_frame, IMAP_FRAME_BAYES, token, NULL);
+    /* if value is null we should skip over this token */
+    if (!value)
+        return NULL;
+    /* convert the slot(value) into a the frame that contains the
+     * list of accounts
+     */
+    token_frame = kvp_value_get_frame(value);
+    /* token_frame should NEVER be null */
+    if (!token_frame)
+    {
+        PERR("token '%s' has no accounts", token);
+        return NULL;
+    }
+    /* process the accounts for this token, adding the account if it
+     * doesn't already exist or adding to the existing accounts token
+     * count if it does
+     */
+    kvp_frame_for_each_slot(token_frame, buildTokenInfo, tokenInfo);
+    return tokenInfo;
+}
+
+static struct token_accounts_info *
+get_account_tokens (char const * token, KvpFrame * imap_frame, QofBook * book,
+        gboolean flat_bayes)
+{
+    struct token_accounts_info * ret;
+    if (flat_bayes)
+        return get_flat_account_tokens (token, imap_frame, book);
+    return get_not_flat_account_tokens (token, imap_frame, book);
+}
 
 #define threshold (.90 * PROBABILITY_FACTOR) /* 90% */
 
 /** Look up an Account in the map */
 Account* gnc_imap_find_account_bayes(GncImportMatchMap *imap, GList *tokens)
 {
-    struct token_accounts_info tokenInfo; /**< holds the accounts and total
-					 * token count for a single token */
     GList *current_token;		        /**< pointer to the current token from the
 				         * input GList *tokens */
     GList *current_account_token;		/**< pointer to the struct
@@ -306,6 +415,8 @@ Account* gnc_imap_find_account_bayes(GncImportMatchMap *imap, GList *tokens)
     struct account_info account_i;
     kvp_value* value;
     kvp_frame* token_frame;
+    /* if guid flat bayes, all records should be in flat guid storage*/
+    gboolean flat_bayes = gnc_features_check_used (imap->book, GNC_FEATURE_GUID_FLAT_BAYESIAN);
 
     ENTER(" ");
 
@@ -322,56 +433,27 @@ Account* gnc_imap_find_account_bayes(GncImportMatchMap *imap, GList *tokens)
      */
     for (current_token = tokens; current_token; current_token = current_token->next)
     {
-        /* zero out the token_accounts_info structure */
-        memset(&tokenInfo, 0, sizeof(struct token_accounts_info));
+        struct token_accounts_info * account_tokens = get_account_tokens ((char const *) current_token->data,
+                imap->frame, imap->book, flat_bayes);
 
-        PINFO("token: '%s'", (char*)current_token->data);
-
-        /* find the slot for the given token off of the source account
-         * for these tokens, search off of the IMAP_FRAME_BAYES path so
-         * we aren't looking from the parent of the entire kvp tree
-         */
-        value = kvp_frame_get_slot_path(imap->frame, IMAP_FRAME_BAYES,
-                                        (char*)current_token->data, NULL);
-
-        /* if value is null we should skip over this token */
-        if (!value)
+        if (!account_tokens)
             continue;
-
-        /* convert the slot(value) into a the frame that contains the
-         * list of accounts
-         */
-        token_frame = kvp_value_get_frame(value);
-
-        /* token_frame should NEVER be null */
-        if (!token_frame)
-        {
-            PERR("token '%s' has no accounts", (char*)current_token->data);
-            continue; /* skip over this token */
-        }
-
-        /* process the accounts for this token, adding the account if it
-         * doesn't already exist or adding to the existing accounts token
-         * count if it does
-         */
-        kvp_frame_for_each_slot(token_frame, buildTokenInfo, &tokenInfo);
-
         /* for each account we have just found, see if the account already exists
          * in the list of account probabilities, if not add it
          */
-        for (current_account_token = tokenInfo.accounts; current_account_token;
+        for (current_account_token = account_tokens->accounts; current_account_token;
                 current_account_token = current_account_token->next)
         {
             /* get the account name and corresponding token count */
             account_c = (struct account_token_count*)current_account_token->data;
 
-            PINFO("account_c->account_name('%s'), "
+            PINFO("account_c->account_guid('%s'), "
                   "account_c->token_count('%ld')/total_count('%ld')",
-                  account_c->account_name, (long)account_c->token_count,
-                  (long)tokenInfo.total_count);
+                  account_c->account_guid, (long)account_c->token_count,
+                  (long)account_tokens->total_count);
 
             account_p = g_hash_table_lookup(running_probabilities,
-                                            account_c->account_name);
+                                            account_c->account_guid);
 
             /* if the account exists in the list then continue
              * the running probablities
@@ -379,14 +461,15 @@ Account* gnc_imap_find_account_bayes(GncImportMatchMap *imap, GList *tokens)
             if (account_p)
             {
                 account_p->product =
-                    ((double)account_c->token_count / (double)tokenInfo.total_count)
+                    ((double)account_c->token_count / (double)account_tokens->total_count)
                     * account_p->product;
                 account_p->product_difference =
                     ((double)1 - ((double)account_c->token_count /
-                                  (double)tokenInfo.total_count))
+                                  (double)account_tokens->total_count))
                     * account_p->product_difference;
                 PINFO("product == %f, product_difference == %f",
                       account_p->product, account_p->product_difference);
+                g_free (account_c->account_guid);
             }
             else
             {
@@ -397,10 +480,10 @@ Account* gnc_imap_find_account_bayes(GncImportMatchMap *imap, GList *tokens)
 
                 /* set the product and product difference values */
                 account_p->product = ((double)account_c->token_count /
-                                      (double)tokenInfo.total_count);
+                                      (double)account_tokens->total_count);
                 account_p->product_difference =
                     (double)1 - ((double)account_c->token_count /
-                                 (double)tokenInfo.total_count);
+                                 (double)account_tokens->total_count);
 
                 PINFO("product == %f, product_difference == %f",
                       account_p->product, account_p->product_difference);
@@ -408,19 +491,19 @@ Account* gnc_imap_find_account_bayes(GncImportMatchMap *imap, GList *tokens)
                 /* add the account name and (struct account_probability*)
                  * to the hash table */
                 g_hash_table_insert(running_probabilities,
-                                    account_c->account_name, account_p);
+                                    (char *)account_c->account_guid, account_p);
             }
         } /* for all accounts in tokenInfo */
 
         /* free the data in tokenInfo */
-        for (current_account_token = tokenInfo.accounts; current_account_token;
+        for (current_account_token = account_tokens->accounts; current_account_token;
                 current_account_token = current_account_token->next)
         {
-            /* free up each struct account_token_count we allocated */
             g_free((struct account_token_count*)current_account_token->data);
         }
 
-        g_list_free(tokenInfo.accounts); /* free the accounts GList */
+        g_list_free(account_tokens->accounts);
+        g_free(account_tokens);
     }
 
     /* build a hash table of account names and their final probabilities
@@ -441,7 +524,7 @@ Account* gnc_imap_find_account_bayes(GncImportMatchMap *imap, GList *tokens)
     g_hash_table_destroy(final_probabilities);
 
     PINFO("highest P('%s') = '%d'",
-          account_i.account_name ? account_i.account_name : "(null)",
+          account_i.account_guid ? account_i.account_guid : "(null)",
           account_i.probability);
 
     /* has this probability met our threshold? */
@@ -451,13 +534,13 @@ Account* gnc_imap_find_account_bayes(GncImportMatchMap *imap, GList *tokens)
         PINFO("Probability has met threshold");
 
         account = gnc_account_lookup_by_full_name(gnc_book_get_root_account(imap->book),
-                                               account_i.account_name);
+                                               account_i.account_guid);
 
         if (account == NULL) // Possibly we have a Guid or account not found
         {
             GncGUID *guid = g_new (GncGUID, 1);
 
-            if (string_to_guid (account_i.account_name, guid))
+            if (string_to_guid (account_i.account_guid, guid))
                 account = xaccAccountLookup (guid, imap->book);
 
             g_free (guid);
@@ -466,7 +549,7 @@ Account* gnc_imap_find_account_bayes(GncImportMatchMap *imap, GList *tokens)
         if (account != NULL)
             LEAVE("Return account is '%s'", xaccAccountGetName (account));
         else
-            LEAVE("Return NULL, account for string '%s' can not be found", account_i.account_name);
+            LEAVE("Return NULL, account for string '%s' can not be found", account_i.account_guid);
 
         return account;
     }
@@ -475,7 +558,6 @@ Account* gnc_imap_find_account_bayes(GncImportMatchMap *imap, GList *tokens)
 
     return NULL; /* we didn't meet our threshold, return NULL for an account */
 }
-
 
 /** Updates the imap for a given account using a list of tokens */
 void gnc_imap_add_account_bayes(GncImportMatchMap *imap, GList *tokens, Account *acc)
@@ -486,7 +568,9 @@ void gnc_imap_add_account_bayes(GncImportMatchMap *imap, GList *tokens, Account 
     char* account_fullname;
     kvp_value *new_value; /* the value that will be added back into the kvp tree */
     const gchar *guid_string;
-    gboolean use_fullname = TRUE;
+    gchar *guid_path;
+    gboolean guid_bayes = gnc_features_check_used (imap->book, GNC_FEATURE_GUID_BAYESIAN);
+    gboolean flat_bayes = gnc_features_check_used (imap->book, GNC_FEATURE_GUID_FLAT_BAYESIAN);
 
     ENTER(" ");
 
@@ -509,6 +593,8 @@ void gnc_imap_add_account_bayes(GncImportMatchMap *imap, GList *tokens, Account 
     for (current_token = g_list_first(tokens); current_token;
             current_token = current_token->next)
     {
+        gchar const * name_or_guid;
+        gchar * flat_path = NULL;
         /* Jump to next iteration if the pointer is not valid or if the
         	 string is empty. In HBCI import we almost always get an empty
         	 string, which doesn't work in the kvp loopkup later. So we
@@ -521,57 +607,40 @@ void gnc_imap_add_account_bayes(GncImportMatchMap *imap, GList *tokens, Account 
 
         PINFO("adding token '%s'\n", (char*)current_token->data);
 
-        /* is this token/account_name already in the kvp tree under fullname? */
-        value = kvp_frame_get_slot_path(imap->frame, IMAP_FRAME_BAYES,
-                                        (char*)current_token->data, account_fullname,
-                                        NULL);
-
-        if (!value) // we have not found entry under the fullname, maybe guid
+        if (flat_bayes)
         {
-            value = kvp_frame_get_slot_path(imap->frame, IMAP_FRAME_BAYES,
-                                            (char*)current_token->data, guid_string,
-                                            NULL);
-            if (value)
-                use_fullname = FALSE;
+            flat_path = g_strdup_printf ("%s/%s/%s", IMAP_FRAME_BAYES,
+                    (char*)current_token->data, guid_string);
+            value = kvp_frame_get_slot(imap->frame, flat_path);
         }
-
-        /* if the token/account is already in the tree, read the current
-         * value from the tree and use this for the basis of the value we
-         * are putting back
-         */
+        else
+        {
+            if (guid_bayes)
+                name_or_guid = guid_string;
+            else
+                name_or_guid = account_fullname;
+            value = kvp_frame_get_slot_path(imap->frame, IMAP_FRAME_BAYES,
+                                            (char*)current_token->data, name_or_guid,
+                                            NULL);
+        }
         if (value)
         {
             PINFO("found existing value of '%ld'\n",
                   (long)kvp_value_get_gint64(value));
-
-            /* convert this value back into an integer */
             token_count += kvp_value_get_gint64(value);
         }
-
-        /* increment the token count */
         token_count++;
-
-        /* create a new value */
         new_value = kvp_value_new_gint64(token_count);
-
-        /* insert the value into the kvp tree at
-         * /imap->frame/IMAP_FRAME/token_string/account_fullname or guid
-         */
-        if (use_fullname == TRUE)
+        if (flat_bayes)
         {
-            KvpFrame  *book_frame = qof_book_get_slots (imap->book);
-            const gchar *book_path = "changed-bayesian-to-guid";
-
-            kvp_frame_set_slot_path(imap->frame, new_value, IMAP_FRAME_BAYES,
-                                    (char*)current_token->data, account_fullname, NULL);
-
-            /* Reset the run once kvp flag for versions 2.7.0 and later */
-            if (kvp_frame_get_string(book_frame, book_path) != NULL)
-                kvp_frame_set_string(book_frame, book_path, "false");
+            kvp_frame_set_slot(imap->frame, flat_path, new_value);
+            g_free (flat_path);
         }
         else
+        {
             kvp_frame_set_slot_path(imap->frame, new_value, IMAP_FRAME_BAYES,
-                                    (char*)current_token->data, guid_string, NULL);
+                                        (char*)current_token->data, name_or_guid, NULL);
+        }
         /* kvp_frame_set_slot_path() copied the value so we
          * need to delete this one ;-) */
         kvp_value_delete(new_value);

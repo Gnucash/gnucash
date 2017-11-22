@@ -1638,6 +1638,30 @@ kvp_frame_to_string(const KvpFrame *frame)
     return tmp1;
 }
 
+struct key_frame_keys_helper
+{
+    GList * keys;
+    gchar const * prefix;
+};
+
+static void
+kvp_frame_keys_cb (gpointer keyp, gpointer value, gpointer data)
+{
+    struct key_frame_keys_helper * helper = data;
+    gchar const * key = keyp;
+    gboolean prefixed = g_str_has_prefix (keyp, helper->prefix);
+    if (prefixed)
+        helper->keys = g_list_append (helper->keys, g_strdup (keyp));
+}
+
+GList *
+kvp_frame_get_keys_matching_prefix (KvpFrame * frame, const gchar * prefix)
+{
+    struct key_frame_keys_helper helper = {NULL, prefix};
+    g_hash_table_foreach (frame->hash, &kvp_frame_keys_cb, &helper);
+    return helper.keys;
+}
+
 GHashTable*
 kvp_frame_get_hash(const KvpFrame *frame)
 {

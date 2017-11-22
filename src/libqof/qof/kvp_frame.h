@@ -191,6 +191,8 @@ void kvp_frame_set_guid(KvpFrame * frame, const gchar * path, const GncGUID *gui
 void kvp_frame_set_frame(KvpFrame *frame, const gchar *path, KvpFrame *chld);
 void kvp_frame_set_frame_nc(KvpFrame *frame, const gchar *path, KvpFrame *chld);
 
+GList * kvp_frame_get_keys_matching_prefix (KvpFrame *, const gchar *);
+
 /** The kvp_frame_set_value() routine copies the value into the frame,
  *    at the location 'path'.   If the path contains slashes '/', these
  *    are assumed to represent a sequence of keys.  The returned value

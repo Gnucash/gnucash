@@ -45,6 +45,7 @@
 #define GNC_FEATURE_NUM_FIELD_SOURCE "Number Field Source"
 #define GNC_FEATURE_KVP_EXTRA_DATA "Extra data in addresses, jobs or invoice entries"
 #define GNC_FEATURE_GUID_BAYESIAN "Account GUID based Bayesian data"
+#define GNC_FEATURE_GUID_FLAT_BAYESIAN "Account GUID based bayesian with flat KVP"
 
 /** @} */
 
@@ -62,6 +63,8 @@ gchar *gnc_features_test_unknown (QofBook *book);
  * this book.
  */
 void gnc_features_set_used (QofBook *book, const gchar *feature);
+
+gboolean gnc_features_check_used (QofBook *book, const gchar * feature);
 
 #endif /* GNC_FEATURES_H */
 /** @} */

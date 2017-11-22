@@ -45,6 +45,7 @@ static gncFeature known_features[] =
     { GNC_FEATURE_NUM_FIELD_SOURCE, "User specifies source of 'num' field'; either transaction number or split action (requires at least GnuCash 2.5.0)" },
     { GNC_FEATURE_KVP_EXTRA_DATA, "Extra data for addresses, jobs or invoice entries (requires at least GnuCash 2.6.4)" },
     { GNC_FEATURE_GUID_BAYESIAN, "Use account GUID as key for Bayesian data (requires at least GnuCash 2.6.12)" },
+    { GNC_FEATURE_GUID_FLAT_BAYESIAN, "Use account GUID as key for bayesian data and store KVP flat" },
     { NULL },
 };
 
@@ -159,4 +160,35 @@ void gnc_features_set_used (QofBook *book, const gchar *feature)
     qof_book_kvp_changed (book);
 
 
+}
+
+struct check_feature
+{
+    gchar const * checked_feature;
+    gboolean found;
+};
+
+static void
+gnc_feature_check_feature_cb (gchar const * key, KvpValue * value, gpointer data)
+{
+    struct check_feature * check_data = data;
+    if (!g_strcmp0 (key, check_data->checked_feature))
+        check_data->found = TRUE;
+}
+
+gboolean gnc_features_check_used (QofBook *book, const gchar * feature)
+{
+    KvpFrame *frame = qof_book_get_slots (book);
+    KvpValue *value;
+    struct check_feature check_data = {feature, FALSE};
+    /* Setup the known_features hash table */
+    gnc_features_init();
+    g_assert(frame);
+    value = kvp_frame_get_value(frame, "features");
+    if (!value) return FALSE;
+    frame = kvp_value_get_frame(value);
+    g_assert(frame);
+    /* Iterate over the members of this frame for unknown features */
+    kvp_frame_for_each_slot (frame, &gnc_feature_check_feature_cb, &check_data);
+    return check_data.found;
 }
