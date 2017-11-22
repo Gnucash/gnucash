@@ -2512,7 +2512,7 @@ gnc_date_option_value_get_absolute (SCM option_value)
     SCM value;
     initialize_getters();
     value = scm_call_1 (getters.date_option_value_absolute, option_value);
-    return gnc_timepair2timespec (value).tv_sec;
+    return scm_to_int64 (value);
 }
 
 /*******************************************************************\
