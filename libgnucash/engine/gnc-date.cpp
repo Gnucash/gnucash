@@ -1346,6 +1346,20 @@ GDate timespec_to_gdate (Timespec ts)
     return result;
 }
 
+GDate time64_to_gdate (time64 t)
+{
+    GDate result;
+
+    g_date_clear (&result, 1);
+    GncDateTime time(t);
+    auto date = time.date().year_month_day();
+    g_date_set_dmy (&result, date.day, static_cast<GDateMonth>(date.month),
+                    date.year);
+    g_assert(g_date_valid (&result));
+
+    return result;
+}
+
 GDate* gnc_g_date_new_today ()
 {
     GncDate gncd;
