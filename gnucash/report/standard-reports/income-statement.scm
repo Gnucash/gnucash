@@ -302,11 +302,11 @@
          (start-date-printable (gnc:date-option-absolute-time
 				(get-option gnc:pagename-general
 					    optname-start-date)))
-         (start-date-tp (gnc:timepair-start-day-time
+         (start-date (gnc:time64-start-day-time
 			 (gnc:date-option-absolute-time
 			  (get-option gnc:pagename-general
 				      optname-start-date))))
-         (end-date-tp (gnc:timepair-end-day-time
+         (end-date (gnc:time64-end-day-time
 		       (gnc:date-option-absolute-time
 			(get-option gnc:pagename-general
 				    optname-end-date))))
@@ -388,7 +388,7 @@
 			 depth-limit))
          ;; exchange rates calculation parameters
 	 (exchange-fn
-	  (gnc:case-exchange-fn price-source report-commodity end-date-tp))
+	  (gnc:case-exchange-fn price-source report-commodity end-date))
 	 )
     
     ;; Wrapper to call gnc:html-table-add-labeled-amount-line!
@@ -434,8 +434,8 @@
 		  (string-append "%s %s "
 				 (_ "For Period Covering %s to %s"))
 		  company-name report-title
-                  (gnc-print-date start-date-printable)
-                  (gnc-print-date end-date-tp)))
+                  (qof-print-date start-date-printable)
+                  (qof-print-date end-date)))
     
     (if (null? accounts)
 	
@@ -473,8 +473,8 @@
 	       (period-for (if terse-period?
 			       (string-append " " (_ "for Period"))
 			       (sprintf #f (string-append ", " (_ "%s to %s"))
-					(gnc-print-date start-date-printable)
-					(gnc-print-date end-date-tp))
+					(qof-print-date start-date-printable)
+					(qof-print-date end-date))
 			       )
 			   )
 	       )
@@ -518,29 +518,29 @@
 	  (set! revenue-closing
 		(gnc:account-get-trans-type-balance-interval-with-closing
 		 revenue-accounts closing-pattern
-		 start-date-tp end-date-tp)
+		 start-date end-date)
 		) ;; this is norm positive (debit)
 	  (set! expense-closing
 		(gnc:account-get-trans-type-balance-interval-with-closing
 		 expense-accounts closing-pattern
-		 start-date-tp end-date-tp)
+		 start-date end-date)
 		) ;; this is norm negative (credit)
 	  (set! expense-total
 		(gnc:accountlist-get-comm-balance-interval-with-closing
 		 expense-accounts
-		 start-date-tp end-date-tp))
+		 start-date end-date))
 	  (expense-total 'minusmerge expense-closing #f)
 	  (set! neg-revenue-total
 		(gnc:accountlist-get-comm-balance-interval-with-closing
 		 revenue-accounts
-		 start-date-tp end-date-tp))
+		 start-date end-date))
 	  (neg-revenue-total 'minusmerge revenue-closing #f)
 	  (set! revenue-total (gnc:make-commodity-collector))
 	  (revenue-total 'minusmerge neg-revenue-total #f)
           (set! trading-total 
                 (gnc:accountlist-get-comm-balance-interval-with-closing
                  trading-accounts
-                 start-date-tp end-date-tp))
+                 start-date end-date))
 	  ;; calculate net income
 	  (set! net-income (gnc:make-commodity-collector))
 	  (net-income 'merge revenue-total #f)
@@ -549,8 +549,8 @@
 	  
 	  (set! table-env
 		(list
-		 (list 'start-date start-date-tp)
-		 (list 'end-date end-date-tp)
+		 (list 'start-date start-date)
+		 (list 'end-date end-date)
 		 (list 'display-tree-depth tree-depth)
 		 (list 'depth-limit-behavior (if bottom-behavior
 						 'flatten
@@ -714,9 +714,7 @@
     
     (gnc:report-finished)
     
-    doc
-    )
-  )
+    doc))
 
 (define is-reportname (N_ "Income Statement"))
 (define pnl-reportname (N_ "Profit & Loss"))
@@ -738,8 +736,7 @@
  'report-guid "0b81a3bdfd504aff849ec2e8630524bc"
  'menu-path (list gnc:menuname-income-expense)
  'options-generator income-statement-options-generator
- 'renderer income-statement-renderer
- )
+ 'renderer income-statement-renderer)
 
 ;; Also make a "Profit & Loss" report, even if it's the exact same one,
 ;; just relabeled.
@@ -749,7 +746,6 @@
  'report-guid "8758ba23984c40dea5527f5f0ca2779e"
  'menu-path (list gnc:menuname-income-expense)
  'options-generator profit-and-loss-options-generator
- 'renderer profit-and-loss-renderer
- )
+ 'renderer profit-and-loss-renderer)
 
 ;; END
