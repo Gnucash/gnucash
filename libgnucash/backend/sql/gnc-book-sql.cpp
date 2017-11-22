@@ -73,7 +73,7 @@ static const EntryVec col_table
 };
 
 GncSqlBookBackend::GncSqlBookBackend() :
-    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_BOOK,
+    GncSqlObjectBackend(TABLE_VERSION, GNC_ID_BOOK,
                         BOOK_TABLE, col_table) {}
 
 /* ================================================================= */

@@ -75,7 +75,7 @@ static EntryVec col_table
 });
 
 GncSqlOrderBackend::GncSqlOrderBackend() :
-    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_ORDER,
+    GncSqlObjectBackend(TABLE_VERSION, GNC_ID_ORDER,
                         TABLE_NAME, col_table) {}
 
 static GncOrder*

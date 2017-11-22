@@ -103,7 +103,7 @@ static EntryVec billterm_parent_col_table
 };
 
 GncSqlBillTermBackend::GncSqlBillTermBackend() :
-        GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_BILLTERM,
+        GncSqlObjectBackend(TABLE_VERSION, GNC_ID_BILLTERM,
                             TABLE_NAME, col_table) {}
 
 struct BillTermParentGuid
@@ -315,7 +315,7 @@ GncSqlBillTermBackend::create_tables (GncSqlBackend* sql_be)
     {
         sql_be->create_table(TABLE_NAME, TABLE_VERSION, col_table);
     }
-    else if (version == 1)
+    else if (version < m_version)
     {
         /* Upgrade 64 bit int handling */
         sql_be->upgrade_table(TABLE_NAME, col_table);

@@ -101,7 +101,7 @@ static EntryVec col_table
 });
 
 GncSqlInvoiceBackend::GncSqlInvoiceBackend() :
-    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_INVOICE,
+    GncSqlObjectBackend(TABLE_VERSION, GNC_ID_INVOICE,
                         TABLE_NAME, col_table) {}
 
 static GncInvoice*

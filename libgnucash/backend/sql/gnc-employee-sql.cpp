@@ -79,7 +79,7 @@ static EntryVec col_table
 });
 
 GncSqlEmployeeBackend::GncSqlEmployeeBackend() :
-    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_EMPLOYEE,
+    GncSqlObjectBackend(TABLE_VERSION, GNC_ID_EMPLOYEE,
                         TABLE_NAME, col_table) {}
 
 static GncEmployee*
@@ -138,7 +138,7 @@ GncSqlEmployeeBackend::create_tables (GncSqlBackend* sql_be)
     {
         sql_be->create_table(TABLE_NAME, TABLE_VERSION, col_table);
     }
-    else if (version == 1)
+    else if (version < m_version)
     {
         /* Upgrade 64 bit int handling */
         sql_be->upgrade_table(TABLE_NAME, col_table);

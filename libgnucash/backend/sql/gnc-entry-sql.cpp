@@ -129,7 +129,7 @@ static EntryVec col_table
 });
 
 GncSqlEntryBackend::GncSqlEntryBackend() :
-    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_ENTRY,
+    GncSqlObjectBackend(TABLE_VERSION, GNC_ID_ENTRY,
                         TABLE_NAME, col_table) {}
 
 static void

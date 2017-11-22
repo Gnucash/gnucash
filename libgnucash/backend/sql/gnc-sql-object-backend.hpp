@@ -38,7 +38,6 @@ using GncSqlColumnTableEntryPtr = std::shared_ptr<GncSqlColumnTableEntry>;
 using EntryVec = std::vector<GncSqlColumnTableEntryPtr>;
 
 #define GNC_SQL_BACKEND "gnc:sql:1"
-#define GNC_SQL_BACKEND_VERSION 1
 
 /**
  * Encapsulates per-class table schema with functions to load, create a table,

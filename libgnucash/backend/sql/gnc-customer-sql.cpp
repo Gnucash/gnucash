@@ -94,7 +94,7 @@ static EntryVec col_table
 });
 
 GncSqlCustomerBackend::GncSqlCustomerBackend() :
-    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_CUSTOMER,
+    GncSqlObjectBackend(TABLE_VERSION, GNC_ID_CUSTOMER,
                         TABLE_NAME, col_table) {}
 
 static GncCustomer*
@@ -152,7 +152,7 @@ GncSqlCustomerBackend::create_tables (GncSqlBackend* sql_be)
     {
         sql_be->create_table(TABLE_NAME, TABLE_VERSION, col_table);
     }
-    else if (version == 1)
+    else if (version < m_version)
     {
         /* Upgrade 64 bit int handling */
         sql_be->upgrade_table(TABLE_NAME, col_table);

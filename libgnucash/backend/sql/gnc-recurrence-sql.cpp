@@ -117,7 +117,7 @@ static const EntryVec weekend_adjust_col_table
  * write() implementation is also a no-op.
  */
 GncSqlRecurrenceBackend::GncSqlRecurrenceBackend() :
-        GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_ACCOUNT, TABLE_NAME, col_table) {}
+        GncSqlObjectBackend(TABLE_VERSION, GNC_ID_ACCOUNT, TABLE_NAME, col_table) {}
 
 /* ================================================================= */
 
@@ -415,7 +415,7 @@ GncSqlRecurrenceBackend::create_tables (GncSqlBackend* sql_be)
         /* Upgrade:
             1->2: Add recurrence_weekend_adjust field (mandatory, non-null field)
         */
-        if (version == 1)
+        if (version < m_version)
         {
             upgrade_recurrence_table_1_2 (sql_be);
         }

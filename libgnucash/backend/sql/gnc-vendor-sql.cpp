@@ -83,7 +83,7 @@ static EntryVec col_table
 });
 
 GncSqlVendorBackend::GncSqlVendorBackend() :
-    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_VENDOR,
+    GncSqlObjectBackend(TABLE_VERSION, GNC_ID_VENDOR,
                         TABLE_NAME, col_table) {}
 
 static GncVendor*

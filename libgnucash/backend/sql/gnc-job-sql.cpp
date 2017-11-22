@@ -73,7 +73,7 @@ static EntryVec col_table
 });
 
 GncSqlJobBackend::GncSqlJobBackend() :
-    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_JOB,
+    GncSqlObjectBackend(TABLE_VERSION, GNC_ID_JOB,
                         TABLE_NAME, col_table) {}
 
 static GncJob*

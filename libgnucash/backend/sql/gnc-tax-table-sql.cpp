@@ -121,7 +121,7 @@ static EntryVec guid_col_table
 });
 
 GncSqlTaxTableBackend::GncSqlTaxTableBackend() :
-    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_TAXTABLE,
+    GncSqlObjectBackend(TT_TABLE_VERSION, GNC_ID_TAXTABLE,
                         TT_TABLE_NAME, tt_col_table) {}
 
 struct TaxTblParentGuid
@@ -345,7 +345,7 @@ GncSqlTaxTableBackend::create_tables (GncSqlBackend* sql_be)
     {
         sql_be->create_table(TT_TABLE_NAME, TT_TABLE_VERSION, tt_col_table);
     }
-    else if (version == 1)
+    else if (version < m_version)
     {
         /* Upgrade 64 bit int handling */
         sql_be->upgrade_table(TT_TABLE_NAME, tt_col_table);
@@ -360,7 +360,7 @@ GncSqlTaxTableBackend::create_tables (GncSqlBackend* sql_be)
         sql_be->create_table(TTENTRIES_TABLE_NAME, TTENTRIES_TABLE_VERSION,
                               ttentries_col_table);
     }
-    else if (version == 1)
+    else if (version < TTENTRIES_TABLE_VERSION)
     {
         /* Upgrade 64 bit int handling */
         sql_be->upgrade_table(TTENTRIES_TABLE_NAME, ttentries_col_table);

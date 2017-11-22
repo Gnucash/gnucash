@@ -180,7 +180,7 @@ static const EntryVec gdate_col_table
 };
 
 GncSqlSlotsBackend::GncSqlSlotsBackend() :
-    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_ACCOUNT,
+    GncSqlObjectBackend(TABLE_VERSION, GNC_ID_ACCOUNT,
                         TABLE_NAME, col_table) {}
 
 /* ================================================================= */
@@ -981,6 +981,10 @@ GncSqlSlotsBackend::create_tables (GncSqlBackend* sql_be)
             {
                 PERR ("Unable to add gdate column\n");
             }
+        }
+        else if (version < m_version)
+        {
+            sql_be->upgrade_table(TABLE_NAME, col_table);
         }
         sql_be->set_table_version (TABLE_NAME, TABLE_VERSION);
         PINFO ("Slots table upgraded from version %d to version %d\n", version,

@@ -68,7 +68,7 @@ static const EntryVec col_table
 });
 
 GncSqlLotsBackend::GncSqlLotsBackend() :
-    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_LOT,
+    GncSqlObjectBackend(TABLE_VERSION, GNC_ID_LOT,
                         TABLE_NAME, col_table) {}
 
 /* ================================================================= */
@@ -156,7 +156,7 @@ GncSqlLotsBackend::create_tables (GncSqlBackend* sql_be)
         /* The table doesn't exist, so create it */
         (void)sql_be->create_table(TABLE_NAME, TABLE_VERSION, col_table);
     }
-    else if (version == 1)
+    else if (version < m_version)
     {
         /* Version 1 -> 2 removes the 'NOT NULL' constraint on the account_guid
         field.

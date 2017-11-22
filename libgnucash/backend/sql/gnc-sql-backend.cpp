@@ -224,7 +224,6 @@ GncSqlBackend::ObjectBackendRegistry::load_remaining(GncSqlBackend* sql_be)
         std::string type;
         GncSqlObjectBackendPtr obe = nullptr;
         std::tie(type, obe) = entry;
-        if (!obe->is_version(GNC_SQL_BACKEND_VERSION)) continue;
 
         /* Don't need to load anything if it has already been loaded with
          * the fixed order.

@@ -143,11 +143,11 @@ static const EntryVec tx_guid_col_table
 };
 
 GncSqlTransBackend::GncSqlTransBackend() :
-    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_TRANS,
+    GncSqlObjectBackend(TX_TABLE_VERSION, GNC_ID_TRANS,
                         TRANSACTION_TABLE, tx_col_table) {}
 
 GncSqlSplitBackend::GncSqlSplitBackend() :
-    GncSqlObjectBackend(GNC_SQL_BACKEND_VERSION, GNC_ID_SPLIT,
+    GncSqlObjectBackend(SPLIT_TABLE_VERSION, GNC_ID_SPLIT,
                         SPLIT_TABLE, split_col_table) {}
 
 /* These functions exist but have not been tested.
