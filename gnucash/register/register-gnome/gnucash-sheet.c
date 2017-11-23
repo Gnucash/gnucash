@@ -261,6 +261,47 @@ gnucash_sheet_deactivate_cursor_cell (GnucashSheet *sheet)
     gnucash_sheet_redraw_block (sheet, virt_loc.vcell_loc);
 }
 
+void
+gnucash_sheet_set_text_bounds (GnucashSheet *sheet, GdkRectangle *rect,
+                               gint x, gint y, gint width, gint height)
+{
+    GncItemEdit *item_edit = GNC_ITEM_EDIT(sheet->item_editor);
+
+    rect->x = x + gnc_item_edit_get_margin (item_edit, left);
+    rect->y = y + gnc_item_edit_get_margin (item_edit, top);
+    rect->width = MAX (0, width - gnc_item_edit_get_margin (item_edit, left_right));
+    rect->height = height - gnc_item_edit_get_margin (item_edit, top_bottom);
+}
+
+gint
+gnucash_sheet_get_text_offset (GnucashSheet *sheet, const VirtualLocation virt_loc,
+                                gint rect_width, gint logical_width)
+{
+    GncItemEdit *item_edit = GNC_ITEM_EDIT(sheet->item_editor);
+    Table *table = sheet->table;
+    gint x_offset = 0;
+
+    // Get the alignment of the cell
+    switch (gnc_table_get_align (table, virt_loc))
+    {
+    default:
+    case CELL_ALIGN_LEFT:
+        x_offset = gnc_item_edit_get_padding_border (item_edit, left);
+        break;
+
+    case CELL_ALIGN_RIGHT:
+        x_offset = rect_width - gnc_item_edit_get_padding_border (item_edit, right) - logical_width - 1;
+        break;
+
+    case CELL_ALIGN_CENTER:
+        if (logical_width > rect_width)
+            x_offset = 0;
+        else
+            x_offset = (rect_width - logical_width) / 2;
+        break;
+    }
+    return x_offset;
+}
 
 static gint
 gnucash_sheet_get_text_cursor_position (GnucashSheet *sheet, const VirtualLocation virt_loc)
@@ -2229,7 +2270,7 @@ gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col)
                 pango_layout_set_text (layout, text, strlen (text));
                 pango_layout_get_pixel_size (layout, &width, NULL);
 
-                width += 2 * CELL_HPADDING;
+                width += gnc_item_edit_get_margin (item_edit, left_right);
 
                 max = MAX (max, width);
             }
