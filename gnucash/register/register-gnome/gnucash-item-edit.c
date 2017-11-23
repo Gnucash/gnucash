@@ -344,11 +344,8 @@ draw_background_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
 
     gtk_style_context_save (stylectxt);
 
-    // Get the background and foreground color types and apply the css class
-    color_type = gnc_table_get_bg_color (item_edit->sheet->table, item_edit->virt_loc, NULL);
-    gnucash_get_style_classes (item_edit->sheet, stylectxt, color_type);
-
-    color_type = gnc_table_get_fg_color (item_edit->sheet->table, item_edit->virt_loc);
+    // Get the color type and apply the css class
+    color_type = gnc_table_get_color (item_edit->sheet->table, item_edit->virt_loc, NULL);
     gnucash_get_style_classes (item_edit->sheet, stylectxt, color_type);
 
     gtk_render_background (stylectxt, cr, 0, 1, width, height - 2);
