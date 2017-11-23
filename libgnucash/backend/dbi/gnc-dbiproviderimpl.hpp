@@ -130,7 +130,7 @@ GncDbiProviderImpl<DbType::DBI_MYSQL>::append_col_def (std::string& ddl,
     }
     else if (info.m_type == BCT_DATETIME)
     {
-        type_name = "TIMESTAMP NULL DEFAULT 0";
+        type_name = "DATETIME NULL DEFAULT '1970-01-01 00:00:00'";
     }
     else
     {

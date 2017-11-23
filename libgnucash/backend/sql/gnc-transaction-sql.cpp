@@ -69,7 +69,7 @@ extern "C"
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TRANSACTION_TABLE "transactions"
-#define TX_TABLE_VERSION 3
+#define TX_TABLE_VERSION 4
 #define SPLIT_TABLE "splits"
 #define SPLIT_TABLE_VERSION 4
 
@@ -481,6 +481,7 @@ GncSqlTransBackend::create_tables (GncSqlBackend* sql_be)
         /* Upgrade:
             1->2: 64 bit int handling
             2->3: allow dates to be NULL
+            3->4: Use DATETIME instead of TIMESTAMP in MySQL
         */
         sql_be->upgrade_table(m_table_name.c_str(), tx_col_table);
         sql_be->set_table_version (m_table_name.c_str(), m_version);

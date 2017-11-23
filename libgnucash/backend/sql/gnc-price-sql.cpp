@@ -51,7 +51,7 @@ extern "C"
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "prices"
-#define TABLE_VERSION 2
+#define TABLE_VERSION 3
 
 #define PRICE_MAX_SOURCE_LEN 2048
 #define PRICE_MAX_TYPE_LEN 2048
@@ -148,7 +148,10 @@ GncSqlPriceBackend::create_tables (GncSqlBackend* sql_be)
     }
     else if (version < m_version)
     {
-        /* Upgrade 64 bit int handling */
+        /*
+          1->2: Upgrade 64 bit int handling
+          2->3: Use DATETIME instead of TIMESTAMP in MySQL
+        */
         sql_be->upgrade_table(TABLE_NAME, col_table);
         sql_be->set_table_version (TABLE_NAME, TABLE_VERSION);
 

@@ -54,7 +54,7 @@ extern "C"
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "slots"
-#define TABLE_VERSION 3
+#define TABLE_VERSION 4
 
 typedef enum
 {
@@ -958,11 +958,12 @@ GncSqlSlotsBackend::create_tables (GncSqlBackend* sql_be)
             PERR ("Unable to create index\n");
         }
     }
-    else if (version < TABLE_VERSION)
+    else if (version < m_version)
     {
         /* Upgrade:
             1->2: 64-bit int values to proper definition, add index
             2->3: Add gdate field
+            3->4: Use DATETIME instead of TIMESTAMP in MySQL
         */
         if (version == 1)
         {
@@ -982,7 +983,7 @@ GncSqlSlotsBackend::create_tables (GncSqlBackend* sql_be)
                 PERR ("Unable to add gdate column\n");
             }
         }
-        else if (version < m_version)
+        else
         {
             sql_be->upgrade_table(TABLE_NAME, col_table);
         }

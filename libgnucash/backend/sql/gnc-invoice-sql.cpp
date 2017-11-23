@@ -56,7 +56,7 @@ extern "C"
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define TABLE_NAME "invoices"
-#define TABLE_VERSION 3
+#define TABLE_VERSION 4
 
 #define MAX_ID_LEN 2048
 #define MAX_NOTES_LEN 2048
@@ -164,6 +164,7 @@ GncSqlInvoiceBackend::create_tables (GncSqlBackend* sql_be)
         /* Upgrade:
              1->2: 64 bit int handling
              2->3: invoice open date can be NULL
+             3->4: Use DATETIME instead of TIMESTAMP in MySQL
         */
         sql_be->upgrade_table(TABLE_NAME, col_table);
         sql_be->set_table_version (TABLE_NAME, TABLE_VERSION);
