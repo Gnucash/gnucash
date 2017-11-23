@@ -739,6 +739,25 @@ gnc_item_edit_new (GnucashSheet *sheet)
     return GTK_WIDGET(item_edit);
 }
 
+static void
+check_popup_height_is_true (GtkWidget    *widget,
+                            GdkRectangle *allocation,
+                            gpointer user_data)
+{
+    GncItemEdit *item_edit = GNC_ITEM_EDIT(user_data);
+    GnucashSheet *sheet = item_edit->sheet;
+
+    // if a larger font is specified in css for the sheet, the popup returned height value
+    // on first pop does not reflect the true height but the minimum height so just to be
+    // sure check this value against the allocated one.
+    if (allocation->height != item_edit->popup_returned_height)
+    {
+        gtk_container_remove (GTK_CONTAINER(item_edit->sheet), item_edit->popup_item);
+
+        g_idle_add_full (G_PRIORITY_HIGH_IDLE,
+                        (GSourceFunc) gnc_item_edit_update, item_edit, NULL);
+    }
+}
 
 void
 gnc_item_edit_show_popup (GncItemEdit *item_edit)
@@ -806,6 +825,11 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
 
     if (!gtk_widget_get_parent (item_edit->popup_item))
         gtk_layout_put (GTK_LAYOUT(sheet), item_edit->popup_item, popup_x, popup_y);
+
+    // Lets check popup height is the true height
+    item_edit->popup_returned_height = popup_h;
+    g_signal_connect_after (item_edit->popup_item, "size-allocate",
+                            G_CALLBACK(check_popup_height_is_true), item_edit);
 
     gtk_widget_set_size_request (item_edit->popup_item, popup_w - 1, popup_h);
 
