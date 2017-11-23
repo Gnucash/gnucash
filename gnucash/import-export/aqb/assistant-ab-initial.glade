@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.0 -->
 <interface>
-  <requires lib="gtk+" version="2.16"/>
-  <!-- interface-naming-policy project-wide -->
+  <requires lib="gtk+" version="3.10"/>
   <object class="GtkAssistant" id="aqbanking_init_assistant">
     <property name="can_focus">False</property>
     <property name="border_width">12</property>
     <property name="title" translatable="yes">AqBanking Initial Assistant</property>
+    <property name="default_width">400</property>
+    <signal name="cancel" handler="aai_on_cancel" swapped="no"/>
     <signal name="close" handler="aai_on_finish" swapped="no"/>
     <signal name="prepare" handler="aai_on_prepare" swapped="no"/>
-    <signal name="cancel" handler="aai_on_cancel" swapped="no"/>
     <child>
       <placeholder/>
     </child>
@@ -41,10 +42,11 @@ Press "Cancel" if you do not wish to setup any Online Banking connection now.
       </packing>
     </child>
     <child>
-      <object class="GtkVBox" id="wizard_page">
+      <object class="GtkBox" id="wizard_page">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="border_width">12</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
           <object class="GtkLabel" id="label8877441">
@@ -88,27 +90,30 @@ Press "Cancel" if you do not wish to setup any Online Banking connection now.
       </packing>
     </child>
     <child>
-      <object class="GtkVBox" id="account_match_page">
+      <object class="GtkBox" id="account_match_page">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="border_width">12</property>
+        <property name="orientation">vertical</property>
         <child>
-          <object class="GtkVBox" id="vbox157">
+          <object class="GtkBox" id="vbox157">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
             <property name="spacing">12</property>
             <child>
               <object class="GtkScrolledWindow" id="scrolledwindow25">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="hscrollbar_policy">automatic</property>
-                <property name="vscrollbar_policy">automatic</property>
                 <property name="shadow_type">in</property>
                 <child>
                   <object class="GtkTreeView" id="account_page_view">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="rules_hint">True</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection"/>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -122,7 +127,7 @@ Press "Cancel" if you do not wish to setup any Online Banking connection now.
               <object class="GtkLabel" id="label828">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Double Click on the line of an Online Banking account name if you want to match it to a GnuCash account. Click "Forward" when all desired accounts are matching.</property>
+                <property name="label" translatable="yes">Double Click on the line of an Online Banking account name if you want to match it to a GnuCash account. Click "Next" when all desired accounts are matching.</property>
                 <property name="wrap">True</property>
               </object>
               <packing>
@@ -159,6 +164,11 @@ Press "Apply" now.</property>
         <property name="title" translatable="yes">Online Banking Setup Finished</property>
         <property name="complete">True</property>
       </packing>
+    </child>
+    <child internal-child="action_area">
+      <object class="GtkBox">
+        <property name="can_focus">False</property>
+      </object>
     </child>
   </object>
 </interface>
