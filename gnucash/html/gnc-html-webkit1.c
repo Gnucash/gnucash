@@ -125,9 +125,10 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
 {
     GncHtmlWebkitPrivate* priv;
     GncHtmlWebkitPrivate* new_priv;
-
+    GtkStyleContext *stylecontext;
     WebKitWebSettings* webkit_settings = NULL;
     const char* default_font_family = NULL;
+    PangoFontDescription *font_desc;
     gdouble zoom = 1.0;
 
     new_priv = g_realloc( GNC_HTML(self)->priv, sizeof(GncHtmlWebkitPrivate) );
@@ -137,9 +138,13 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
     priv->html_string = NULL;
     priv->web_view = WEBKIT_WEB_VIEW(webkit_web_view_new());
 
+    /* Get the default font family from GtkStyleContext of a GtkWidget(priv->web_view). */
+    stylecontext = gtk_widget_get_style_context (GTK_WIDGET(priv->web_view));
+    gtk_style_context_get (stylecontext, gtk_widget_get_state_flags (GTK_WIDGET(priv->web_view)),
+                           "font", &font_desc, NULL);
 
-    /* Get the default font family from GtkStyle of a GtkWidget(priv-web_view). */
-    default_font_family = pango_font_description_get_family( gtk_rc_get_style(GTK_WIDGET(priv->web_view))->font_desc );
+    default_font_family = pango_font_description_get_family (font_desc);
+    pango_font_description_free (font_desc);
 
     /* Set default webkit settings */
     webkit_settings = webkit_web_view_get_settings (priv->web_view);
@@ -1188,8 +1193,8 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
         dialog = gtk_file_chooser_dialog_new (_("Export to PDF File"),
                                               NULL,
                                               GTK_FILE_CHOOSER_ACTION_SAVE,
-                                              GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                                              GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+                                              _("_Cancel"), GTK_RESPONSE_CANCEL,
+                                              _("_Save"), GTK_RESPONSE_ACCEPT,
                                               NULL);
         gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
 
