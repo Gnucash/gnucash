@@ -1,9 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<?xml version="1.0" encoding="utf-8"?>
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
+<interface>
   <requires lib="gtk+" version="3.10"/>
-  <object class="GtkDialog" id="filter_by_dialog">
   <object class="GtkDialog" id="filter_by_dialog">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -126,8 +124,7 @@
                     <child>
                       <object class="GtkLabel" id="label847682">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Start:</property>
-                        <property name="label" translatable="yes">Start:</property>
+                        <property name="label" translatable="yes" comments="Filter By Dialog, Date Tab, Start section">Start:</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -213,8 +210,7 @@
                     <child>
                       <object class="GtkLabel" id="label847684">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">End:</property>
-                        <property name="label" translatable="yes">End:</property>
+                        <property name="label" translatable="yes" comments="Filter By Dialog, Date Tab, End section">End:</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -838,8 +834,9 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="tooltip_text" translatable="yes">Sort in descending order.</property>
                     <property name="halign">start</property>
-                    <property name="halign">start</property>
+                    <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <signal name="toggled" handler="gnc_plugin_page_register_sort_order_reverse_cb" swapped="no"/>
                   </object>
@@ -879,7 +876,7 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Duplicate Transaction</property>
+    <property name="title" translatable="yes" comments="Duplicate Transaction Dialog">Duplicate Transaction</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
