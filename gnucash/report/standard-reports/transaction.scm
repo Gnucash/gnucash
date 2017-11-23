@@ -1099,7 +1099,7 @@ Credit Card, and Income accounts."))))))
                     (if transaction-row?
                         (gnc:make-html-table-cell/markup
                          "date-cell"
-                         (gnc-print-date (gnc-transaction-get-date-posted trans)))
+                         (qof-print-date (xaccTransGetDate trans)))
                         "")))
 
         (if (column-uses? 'reconciled-date used-columns)
@@ -1577,8 +1577,10 @@ Credit Card, and Income accounts."))))))
                                            (if transaction-matcher-regexp
                                                (regexp-exec transaction-matcher-regexp str)
                                                (string-contains str transaction-matcher)))))
-                            (and (or (not (eq? filter-mode 'include)) (is-filter-member split c_account_2))
-                                 (not (and (eq? filter-mode 'exclude) (is-filter-member split c_account_2)))
+                            (and (case filter-mode
+				   ((none) #t)
+				   ((include) (is-filter-member split c_account_2))
+				   ((exclude) (not (is-filter-member split c_account_2))))
                                  (or (string-null? transaction-matcher) ; null-string=ignore filters
                                      (match? (xaccTransGetDescription trans))
                                      (match? (xaccTransGetNotes trans))
