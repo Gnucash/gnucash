@@ -94,14 +94,6 @@ gnc_item_edit_get_pixel_coords (GncItemEdit *item_edit,
     *y += yd;
 }
 
-
-int
-gnc_item_edit_get_toggle_offset (int row_height)
-{
-    /* sync with gnc_item_edit_update */
-    return row_height - (2 * (CELL_VPADDING + 1)) + 3;
-}
-
 static gboolean
 gnc_item_edit_update (GncItemEdit *item_edit)
 {

@@ -133,8 +133,6 @@ void gnc_item_edit_set_popup (GncItemEdit    *item_edit,
 void gnc_item_edit_show_popup (GncItemEdit *item_edit);
 void gnc_item_edit_hide_popup (GncItemEdit *item_edit);
 
-int gnc_item_edit_get_toggle_offset (int row_height);
-
 void gnc_item_edit_cut_clipboard (GncItemEdit *item_edit);
 void gnc_item_edit_copy_clipboard (GncItemEdit *item_edit);
 void gnc_item_edit_paste_clipboard (GncItemEdit *item_edit);
