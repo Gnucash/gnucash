@@ -37,6 +37,10 @@
 #define GNC_ITEM_EDIT_CLASS(k)    (G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_ITEM_EDIT, GncItemEditClass))
 #define GNC_IS_ITEM_EDIT(o)       (G_TYPE_CHECK_INSTANCE_TYPE((o), GNC_TYPE_ITEM_EDIT))
 
+#define GNC_TYPE_ITEM_EDIT_TB        (gnc_item_edit_tb_get_type ())
+#define GNC_ITEM_EDIT_TB(o)          (G_TYPE_CHECK_INSTANCE_CAST((o), GNC_TYPE_ITEM_EDIT_TB, GncItemEditTb))
+#define GNC_ITEM_EDIT_TB_CLASS(k)    (G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_ITEM_EDIT_TB, GncItemEditTbClass))
+#define GNC_IS_ITEM_EDIT_TB(o)       (G_TYPE_CHECK_INSTANCE_TYPE((o), GNC_TYPE_ITEM_EDIT_TB))
 
 typedef int (*PopupGetHeight) (GtkWidget *item,
                                int space_available,
@@ -102,6 +106,19 @@ typedef struct
     GtkBoxClass parent_class;
 } GncItemEditClass;
 
+typedef struct
+{
+    GtkToggleButton tb;
+    GnucashSheet *sheet;
+} GncItemEditTb;
+
+typedef struct
+{
+    GtkToggleButtonClass parent_class;
+
+    void (* toggled) (GncItemEditTb *item_edit_tb);
+} GncItemEditTbClass;
+
 typedef enum
 {
     left,
@@ -144,6 +161,9 @@ void gnc_item_edit_focus_out (GncItemEdit *item_edit);
 
 gint gnc_item_edit_get_margin (GncItemEdit *item_edit, Sides side);
 gint gnc_item_edit_get_padding_border (GncItemEdit *item_edit, Sides side);
+
+GType gnc_item_edit_tb_get_type (void);
+GtkWidget *gnc_item_edit_tb_new (GnucashSheet *sheet);
 
 /** @} */
 #endif /* GNUCASH_ITEM_EDIT_H */

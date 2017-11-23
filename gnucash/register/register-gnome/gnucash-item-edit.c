@@ -58,6 +58,155 @@ enum
 
 static GtkBoxClass *gnc_item_edit_parent_class;
 
+static GtkToggleButtonClass *gnc_item_edit_tb_parent_class;
+
+static void
+gnc_item_edit_tb_init (GncItemEditTb *item_edit_tb)
+{
+    item_edit_tb->sheet = NULL;
+}
+
+static void
+gnc_item_edit_tb_get_property (GObject *object,
+                               guint param_id,
+                               GValue *value,
+                               GParamSpec *pspec)
+{
+    GncItemEditTb *item_edit_tb = GNC_ITEM_EDIT_TB (object);
+
+    switch (param_id)
+    {
+    case PROP_SHEET:
+        g_value_take_object (value, item_edit_tb->sheet);
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+        break;
+    }
+}
+
+static void
+gnc_item_edit_tb_set_property (GObject *object,
+                               guint param_id,
+                               const GValue *value,
+                               GParamSpec *pspec)
+{
+    GncItemEditTb *item_edit_tb = GNC_ITEM_EDIT_TB (object);
+
+    switch (param_id)
+    {
+    case PROP_SHEET:
+        item_edit_tb->sheet = GNUCASH_SHEET (g_value_get_object (value));
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+        break;
+    }
+}
+
+static void
+gnc_item_edit_tb_get_preferred_width (GtkWidget *widget,
+                                   gint *minimal_width,
+                                   gint *natural_width)
+{
+    GncItemEditTb *tb = GNC_ITEM_EDIT_TB (widget);
+    GncItemEdit *item_edit = GNC_ITEM_EDIT(tb->sheet->item_editor);
+    gint x, y, w, h, width = 0;
+    gnc_item_edit_get_pixel_coords (GNC_ITEM_EDIT (item_edit), &x, &y, &w, &h);
+    width = ((h - 2)*2)/3;
+    if (width < 20) // minimum size for a button
+        width = 20;
+    *minimal_width = *natural_width = width;
+}
+
+static void
+gnc_item_edit_tb_get_preferred_height (GtkWidget *widget,
+                                    gint *minimal_width,
+                                    gint *natural_width)
+{
+    GncItemEditTb *tb = GNC_ITEM_EDIT_TB (widget);
+    GncItemEdit *item_edit = GNC_ITEM_EDIT(tb->sheet->item_editor);
+    gint x, y, w, h;
+    gnc_item_edit_get_pixel_coords (GNC_ITEM_EDIT (item_edit), &x, &y, &w, &h);
+    *minimal_width = *natural_width = (h - 2);
+}
+
+static void
+gnc_item_edit_tb_class_init (GncItemEditTbClass *gnc_item_edit_tb_class)
+{
+    GObjectClass  *object_class;
+    GtkWidgetClass *widget_class;
+
+#if GTK_CHECK_VERSION(3,20,0)
+    gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(gnc_item_edit_tb_class), "button");
+#endif
+
+    gnc_item_edit_tb_parent_class = g_type_class_peek_parent (gnc_item_edit_tb_class);
+
+    object_class = G_OBJECT_CLASS (gnc_item_edit_tb_class);
+    widget_class = GTK_WIDGET_CLASS (gnc_item_edit_tb_class);
+
+    object_class->get_property = gnc_item_edit_tb_get_property;
+    object_class->set_property = gnc_item_edit_tb_set_property;
+
+    g_object_class_install_property (object_class,
+                                     PROP_SHEET,
+                                     g_param_spec_object ("sheet",
+                                             "Sheet Value",
+                                             "Sheet Value",
+                                             GNUCASH_TYPE_SHEET,
+                                             G_PARAM_READWRITE));
+
+    /* GtkWidget method overrides */
+    widget_class->get_preferred_width = gnc_item_edit_tb_get_preferred_width;
+    widget_class->get_preferred_height = gnc_item_edit_tb_get_preferred_height;
+}
+
+GType
+gnc_item_edit_tb_get_type (void)
+{
+    static GType gnc_item_edit_tb_type = 0;
+
+    if (!gnc_item_edit_tb_type)
+    {
+        static const GTypeInfo gnc_item_edit_tb_info =
+        {
+            sizeof (GncItemEditTbClass),
+            NULL,
+            NULL,
+            (GClassInitFunc) gnc_item_edit_tb_class_init,
+            NULL,
+            NULL,
+            sizeof (GncItemEditTb),
+            0, /* n_preallocs */
+            (GInstanceInitFunc) gnc_item_edit_tb_init,
+            NULL,
+        };
+        gnc_item_edit_tb_type =
+            g_type_register_static(GTK_TYPE_TOGGLE_BUTTON,
+                                   "GncItemEditTb",
+                                   &gnc_item_edit_tb_info, 0);
+    }
+    return gnc_item_edit_tb_type;
+}
+
+GtkWidget *
+gnc_item_edit_tb_new (GnucashSheet *sheet)
+{
+    GtkStyleContext *context;
+    GncItemEditTb *item_edit_tb =
+            g_object_new (GNC_TYPE_ITEM_EDIT_TB,
+                          "sheet", sheet,
+                           NULL);
+
+    // This sets a style class for when Gtk+ version is less than 3.20
+    gnc_widget_set_css_name (GTK_WIDGET(item_edit_tb), "button");
+
+    context = gtk_widget_get_style_context (GTK_WIDGET(item_edit_tb));
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
+
+    return GTK_WIDGET(item_edit_tb);
+}
 
 /*
  * Returns the coordinates for the editor bounding box
@@ -719,7 +868,7 @@ gnc_item_edit_new (GnucashSheet *sheet)
     /* Create the popup button
        It will only be displayed when the cell being edited provides
        a popup item (like a calendar or account list) */
-    item_edit->popup_toggle.tbutton = gtk_toggle_button_new();
+    item_edit->popup_toggle.tbutton = gnc_item_edit_tb_new (sheet);
     gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (item_edit->popup_toggle.tbutton), FALSE);
 
     /* Wrap the popup button in an event box to give it its own gdkwindow.
