@@ -858,12 +858,12 @@ Credit Card, and Income accounts."))))))
          (width (length headings))
          (width-amount (length amount-headings))
          (account-types-to-reverse
-          (cdr (assq (opt-val gnc:pagename-display (N_ "Sign Reverses"))
-                     (list (cons 'none '())
-                           (cons 'income-expense (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE))
-                           (cons 'credit-accounts  (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE
-                                                         ACCT-TYPE-EQUITY ACCT-TYPE-CREDIT
-                                                         ACCT-TYPE-INCOME))))))
+          (case (opt-val gnc:pagename-display (N_ "Sign Reverses"))
+            ((none) '())
+            ((income-expense) (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE))
+            ((credit-accounts)  (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE
+                                      ACCT-TYPE-EQUITY ACCT-TYPE-CREDIT
+                                      ACCT-TYPE-INCOME))))
          (is-multiline? (eq? (opt-val gnc:pagename-display optname-detail-level) 'multi-line))
          (export? (opt-val gnc:pagename-general optname-table-export)))
 
@@ -931,8 +931,8 @@ Credit Card, and Income accounts."))))))
                                     (set! width 0)
                                     (set! merging-subtotal (gnc:make-gnc-numeric 0 1)))
 
-				  ;; Default; not merging/completed merge. Just
-				  ;; display monetary amount
+                                  ;; Default; not merging/completed merge. Just
+                                  ;; display monetary amount
                                   (addto! row-contents
                                           (gnc:make-html-table-cell/markup "total-number-cell" mon))))))
                       columns
@@ -1412,44 +1412,39 @@ Credit Card, and Income accounts."))))))
       (define comparator-function
         (if (member key DATE-SORTING-TYPES)
             (let* ((date (lambda (s)
-                           (cdr
-                            (assq key
-                                  (list
-                                   (cons 'date (xaccTransGetDate (xaccSplitGetParent s)))
-                                   (cons 'reconciled-date (xaccSplitGetDateReconciled s)))))))
-                   (year (lambda (s) (gnc:date-get-year (gnc-localtime (date s)))))
-                   (month (lambda (s) (gnc:date-get-month (gnc-localtime (date s)))))
+                           (case key
+                             ((date) (xaccTransGetDate (xaccSplitGetParent s)))
+                             ((reconciled-date) (xaccSplitGetDateReconciled s)))))
+                   (year    (lambda (s) (gnc:date-get-year (gnc-localtime (date s)))))
+                   (month   (lambda (s) (gnc:date-get-month (gnc-localtime (date s)))))
                    (quarter (lambda (s) (gnc:date-get-quarter (gnc-localtime (date s)))))
-                   (week (lambda (s) (gnc:date-get-week (gnc-localtime (date s)))))
-                   (secs (lambda (s) (date s))))
-              (cdr
-               (assq date-subtotal
-                     (list
-                      (cons 'yearly    (lambda (s) (year s)))
-                      (cons 'monthly   (lambda (s) (+ (* 100 (year s)) (month s))))
-                      (cons 'quarterly (lambda (s) (+ (*  10 (year s)) (quarter s))))
-                      (cons 'weekly    (lambda (s) (week s)))
-                      (cons 'none      (lambda (s) (secs s)))))))
-            (cdr (assq key
-                       (list
-                        (cons 'account-name (lambda (s) (gnc-account-get-full-name (xaccSplitGetAccount s))))
-                        (cons 'account-code (lambda (s) (xaccAccountGetCode (xaccSplitGetAccount s))))
-                        (cons 'corresponding-acc-name (lambda (s) (xaccSplitGetCorrAccountFullName s)))
-                        (cons 'corresponding-acc-code (lambda (s) (xaccSplitGetCorrAccountCode s)))
-                        (cons 'amount (lambda (s) (gnc-numeric-to-double (xaccSplitGetValue s))))
-                        (cons 'description (lambda (s) (xaccTransGetDescription (xaccSplitGetParent s))))
-                        (cons 'number (lambda (s)
-                                        (if BOOK-SPLIT-ACTION
-                                            (xaccSplitGetAction s)
-                                            (xaccTransGetNum (xaccSplitGetParent s)))))
-                        (cons 't-number (lambda (s) (xaccTransGetNum (xaccSplitGetParent s))))
-                        (cons 'register-order (lambda (s) #f))
-                        (cons 'memo (lambda (s) (xaccSplitGetMemo s)))
-                        (cons 'none (lambda (s) #f)))))))
+                   (week    (lambda (s) (gnc:date-get-week (gnc-localtime (date s)))))
+                   (secs    (lambda (s) (date s))))
+              (case date-subtotal
+                ((yearly)    (lambda (s) (year s)))
+                ((monthly)   (lambda (s) (+ (* 100 (year s)) (month s))))
+                ((quarterly) (lambda (s) (+ (*  10 (year s)) (quarter s))))
+                ((weekly)    (lambda (s) (week s)))
+                ((none)      (lambda (s) (secs s)))))
+            (case key
+              ((account-name) (lambda (s) (gnc-account-get-full-name (xaccSplitGetAccount s))))
+              ((account-code) (lambda (s) (xaccAccountGetCode (xaccSplitGetAccount s))))
+              ((corresponding-acc-name) (lambda (s) (xaccSplitGetCorrAccountFullName s)))
+              ((corresponding-acc-code) (lambda (s) (xaccSplitGetCorrAccountCode s)))
+              ((amount) (lambda (s) (gnc-numeric-to-double (xaccSplitGetValue s))))
+              ((description) (lambda (s) (xaccTransGetDescription (xaccSplitGetParent s))))
+              ((number) (lambda (s)
+                          (if BOOK-SPLIT-ACTION
+                              (xaccSplitGetAction s)
+                              (xaccTransGetNum (xaccSplitGetParent s)))))
+              ((t-number) (lambda (s) (xaccTransGetNum (xaccSplitGetParent s))))
+              ((register-order) (lambda (s) #f))
+              ((memo) (lambda (s) (xaccSplitGetMemo s)))
+              ((none) (lambda (s) #f)))))
       (cond
-        ((string? (comparator-function X)) ((if ascend? string<? string>?) (comparator-function X) (comparator-function Y)))
-        ((comparator-function X)           ((if ascend? < >)               (comparator-function X) (comparator-function Y)))
-        (else                              #f)))
+       ((string? (comparator-function X)) ((if ascend? string<? string>?) (comparator-function X) (comparator-function Y)))
+       ((comparator-function X)           ((if ascend? < >)               (comparator-function X) (comparator-function Y)))
+       (else                              #f)))
     
     (define (primary-comparator? X Y)
       (generic-less? X Y primary-key 
@@ -1487,9 +1482,10 @@ Credit Card, and Income accounts."))))))
             "<b>Split Reconciled Status: </b>"
             (string-join
              (map (lambda (item)
-                    (cdr (assq item (list (cons #\n "unreconciled")
-                                          (cons #\c "cleared")
-                                          (cons #\y "reconciled")))))
+                    (case item
+                      ((#\n) "unreconciled")
+                      ((#\c) "cleared")
+                      ((#\y) "reconciled")))
                   reconcile-status-filter)
              ", ")
             "<br>")
@@ -1500,7 +1496,7 @@ Credit Card, and Income accounts."))))))
             "<b>Primary SortKey: </b>" (symbol->string primary-key) " "
             (symbol->string primary-order) "ing"
             (if (and (eq? primary-key 'date)
-		     (not (eq? (opt-val pagename-sorting optname-prime-date-subtotal) 'none)))
+                     (not (eq? (opt-val pagename-sorting optname-prime-date-subtotal) 'none)))
                 (string-append " with " (symbol->string (opt-val pagename-sorting optname-prime-date-subtotal))
                                " subtotals")
                 "")
@@ -1511,7 +1507,7 @@ Credit Card, and Income accounts."))))))
             "<b>Secondary SortKey: </b>" (symbol->string secondary-key) " "
             (symbol->string secondary-order) "ing"
             (if (and (eq? secondary-key 'date)
-		     (not (eq? (opt-val pagename-sorting optname-sec-date-subtotal) 'none)))
+                     (not (eq? (opt-val pagename-sorting optname-sec-date-subtotal) 'none)))
                 (string-append " with " (symbol->string (opt-val pagename-sorting optname-sec-date-subtotal))
                                " subtotals")
                 "")
@@ -1524,19 +1520,20 @@ Credit Card, and Income accounts."))))))
             " Matcher: </b>'" transaction-matcher "'<br>"))
        (string-append "<b>Void status: </b>" (symbol->string void-status) "<br>")
        (if reconcile-status-filter
-	   (string-append
-	    "<b>Reconciled Status: </b>"
-	    (string-join
-	     (map (lambda (x) (assq-ref (list (cons #\c "cleared")
-					      (cons #\f "frozen")
-					      (cons #\n "non-reconciled/cleared")
-					      (cons #\y "reconciled")
-					      (cons #\v "void"))
-					x))
-			       reconcile-status-filter)
-	     ", ")
-	    "<br>")
-	   "")
+           (string-append
+            "<b>Reconciled Status: </b>"
+            (string-join
+             (map (lambda (x) (case x
+                                ((#\c) "cleared")
+                                ((#\f) "frozen")
+                                ((#\n) "non-reconciled/cleared")
+                                ((#\y) "reconciled")
+                                ((#\v) "void")
+                                (else "unknown")))
+                  reconcile-status-filter)
+             ", ")
+            "<br>")
+           "")
        "<br>"))
 
     (if (or (null? c_account_1) (and-map not c_account_1))
@@ -1601,14 +1598,14 @@ Credit Card, and Income accounts."))))))
                                                (regexp-exec transaction-matcher-regexp str)
                                                (string-contains str transaction-matcher)))))
                             (and (case filter-mode
-				   ((none) #t)
-				   ((include) (is-filter-member split c_account_2))
-				   ((exclude) (not (is-filter-member split c_account_2))))
+                                   ((none) #t)
+                                   ((include) (is-filter-member split c_account_2))
+                                   ((exclude) (not (is-filter-member split c_account_2))))
                                  (or (string-null? transaction-matcher) ; null-string = ignore filters
                                      (match? (xaccTransGetDescription trans))
                                      (match? (xaccTransGetNotes trans))
                                      (match? (xaccSplitGetMemo split)))
-                                 (or (not reconcile-status-filter)  ; #f = ignore next filter
+                                 (or (not reconcile-status-filter) ; #f = ignore next filter
                                      (member (xaccSplitGetReconcile split) reconcile-status-filter)))))
                         splits))
 
