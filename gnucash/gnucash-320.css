@@ -12,13 +12,14 @@
   color: @negative-numbers;
 }
 
-/* Register Cursor padding settings, make sure entry matches sheet.h */
+/* Register Cursor settings, top, right, bottom, left */
 cursor entry {
-  padding: 2px 5px 2px 5px;
+  margin: 2px 5px 2px 5px;
+  padding: 0px 2px 0px 2px;
 }
 
 cursor button {
-  padding: 1px 1px 1px 1px;
+  margin: 1px 1px 1px 1px;
 }
 
 /* Register defaults */
@@ -28,7 +29,7 @@ cursor button {
 @define-color register_split_bg_color #EDE7D3;
 @define-color register_cursor_bg_color #FFEF98;
 
-.register-header {
+*.register-header {
   background-color: @register_header_bg_color;
 }
 

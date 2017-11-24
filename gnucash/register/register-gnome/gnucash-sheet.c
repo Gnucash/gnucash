@@ -261,6 +261,47 @@ gnucash_sheet_deactivate_cursor_cell (GnucashSheet *sheet)
     gnucash_sheet_redraw_block (sheet, virt_loc.vcell_loc);
 }
 
+void
+gnucash_sheet_set_text_bounds (GnucashSheet *sheet, GdkRectangle *rect,
+                               gint x, gint y, gint width, gint height)
+{
+    GncItemEdit *item_edit = GNC_ITEM_EDIT(sheet->item_editor);
+
+    rect->x = x + gnc_item_edit_get_margin (item_edit, left);
+    rect->y = y + gnc_item_edit_get_margin (item_edit, top);
+    rect->width = MAX (0, width - gnc_item_edit_get_margin (item_edit, left_right));
+    rect->height = height - gnc_item_edit_get_margin (item_edit, top_bottom);
+}
+
+gint
+gnucash_sheet_get_text_offset (GnucashSheet *sheet, const VirtualLocation virt_loc,
+                                gint rect_width, gint logical_width)
+{
+    GncItemEdit *item_edit = GNC_ITEM_EDIT(sheet->item_editor);
+    Table *table = sheet->table;
+    gint x_offset = 0;
+
+    // Get the alignment of the cell
+    switch (gnc_table_get_align (table, virt_loc))
+    {
+    default:
+    case CELL_ALIGN_LEFT:
+        x_offset = gnc_item_edit_get_padding_border (item_edit, left);
+        break;
+
+    case CELL_ALIGN_RIGHT:
+        x_offset = rect_width - gnc_item_edit_get_padding_border (item_edit, right) - logical_width - 1;
+        break;
+
+    case CELL_ALIGN_CENTER:
+        if (logical_width > rect_width)
+            x_offset = 0;
+        else
+            x_offset = (rect_width - logical_width) / 2;
+        break;
+    }
+    return x_offset;
+}
 
 static gint
 gnucash_sheet_get_text_cursor_position (GnucashSheet *sheet, const VirtualLocation virt_loc)
@@ -271,7 +312,7 @@ gnucash_sheet_get_text_cursor_position (GnucashSheet *sheet, const VirtualLocati
     PangoLayout *layout;
     PangoRectangle logical_rect;
     GdkRectangle rect;
-    gint x, y, w, h;
+    gint x, y, width, height;
     gint index, trailing;
     gboolean result;
     gint x_offset = 0;
@@ -280,7 +321,7 @@ gnucash_sheet_get_text_cursor_position (GnucashSheet *sheet, const VirtualLocati
         return 0;
 
     // Get the item_edit position
-    gnc_item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
+    gnc_item_edit_get_pixel_coords (item_edit, &x, &y, &width, &height);
 
     layout = gtk_widget_create_pango_layout (GTK_WIDGET (sheet), text);
 
@@ -289,35 +330,14 @@ gnucash_sheet_get_text_cursor_position (GnucashSheet *sheet, const VirtualLocati
 
     pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 
-    rect.x      = x + CELL_HPADDING;
-    rect.y      = y + CELL_VPADDING;
-    rect.width  = MAX (0, w - (2 * CELL_HPADDING));
-    rect.height = h - 2;
+    gnucash_sheet_set_text_bounds (sheet, &rect, x, y, width, height);
 
-    // Get the alignment of the cell
-    switch (gnc_table_get_align (table, virt_loc))
-    {
-    default:
-    case CELL_ALIGN_LEFT:
-        x_offset = 0;
-        break;
-
-    case CELL_ALIGN_RIGHT:
-        x_offset = w - 2 * CELL_HPADDING - logical_rect.width - 3;
-        break;
-
-    case CELL_ALIGN_CENTER:
-        if (logical_rect.width > w - 2 * CELL_HPADDING)
-            x_offset = 0;
-        else
-            x_offset = (w - 2 * CELL_HPADDING -
-                        logical_rect.width) / 2;
-        break;
-    }
+    x_offset = gnucash_sheet_get_text_offset (sheet, virt_loc,
+                                              rect.width, logical_rect.width);
 
     result = pango_layout_xy_to_index (layout,
                  PANGO_SCALE * (sheet->button_x - rect.x - x_offset),
-                 PANGO_SCALE * (h/2), &index, &trailing);
+                 PANGO_SCALE * (height/2), &index, &trailing);
 
     g_object_unref (layout);
 
@@ -2190,6 +2210,7 @@ gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col)
     SheetBlock *block;
     SheetBlockStyle *style;
     PangoLayout *layout = gtk_widget_create_pango_layout (GTK_WIDGET (sheet), "");
+    GncItemEdit *item_edit = GNC_ITEM_EDIT(sheet->item_editor);
 
     g_return_val_if_fail (virt_col >= 0, 0);
     g_return_val_if_fail (virt_col < sheet->num_virt_cols, 0);
@@ -2229,7 +2250,7 @@ gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col)
                 pango_layout_set_text (layout, text, strlen (text));
                 pango_layout_get_pixel_size (layout, &width, NULL);
 
-                width += 2 * CELL_HPADDING;
+                width += gnc_item_edit_get_margin (item_edit, left_right);
 
                 max = MAX (max, width);
             }
@@ -2407,52 +2428,46 @@ gnucash_sheet_table_load (GnucashSheet *sheet, gboolean do_scroll)
 
 /*************************************************************/
 
-/** Map a cell type to a css style class. */
+/** Map a cell color type to a css style class. */
 void
 gnucash_get_style_classes (GnucashSheet *sheet, GtkStyleContext *stylectxt,
                            RegisterColor field_type)
 {
     gchar *full_class, *style_class = NULL;
 
+    if (field_type >= COLOR_NEGATIVE) // Require a Negative fg color
+    {
+        gtk_style_context_add_class (stylectxt, "negative-numbers");
+        field_type -= COLOR_NEGATIVE;
+    }
+
     switch (field_type)
     {
     default:
-    case COLOR_UNKNOWN_BG:
-    case COLOR_UNKNOWN_FG:
+    case COLOR_UNDEFINED:
         gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_BACKGROUND);
         return;
 
-    case COLOR_NEGATIVE:
-        gtk_style_context_add_class (stylectxt, "negative-numbers");
-        return;
-
-    case COLOR_HEADER_BG:
-    case COLOR_HEADER_FG:
+    case COLOR_HEADER:
         style_class = "header";
         break;
 
-    case COLOR_PRIMARY_BG:
-    case COLOR_PRIMARY_FG:
+    case COLOR_PRIMARY:
         style_class = "primary";
         break;
 
-    case COLOR_PRIMARY_BG_ACTIVE:
-    case COLOR_PRIMARY_FG_ACTIVE:
-    case COLOR_SECONDARY_BG_ACTIVE:
-    case COLOR_SECONDARY_FG_ACTIVE:
-    case COLOR_SPLIT_BG_ACTIVE:
-    case COLOR_SPLIT_FG_ACTIVE:
+    case COLOR_PRIMARY_ACTIVE:
+    case COLOR_SECONDARY_ACTIVE:
+    case COLOR_SPLIT_ACTIVE:
         gtk_style_context_set_state (stylectxt, GTK_STATE_FLAG_SELECTED);
         style_class = "cursor";
         break;
 
-    case COLOR_SECONDARY_BG:
-    case COLOR_SECONDARY_FG:
+    case COLOR_SECONDARY:
         style_class = "secondary";
         break;
 
-    case COLOR_SPLIT_BG:
-    case COLOR_SPLIT_FG:
+    case COLOR_SPLIT:
         style_class = "split";
         break;
     }

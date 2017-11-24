@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
-<?xml version="1.0" encoding="utf-8"?>
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
 <interface>
@@ -1128,8 +1126,7 @@ many months before the current month:</property>
                   <object class="GtkLabel" id="label50">
                     <property name="visible">True</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;General&lt;/b&gt;</property>
-                    <property name="label" translatable="yes">&lt;b&gt;General&lt;/b&gt;</property>
+                    <property name="label" translatable="yes" comments="Preferences Dialog, General Tab">&lt;b&gt;General&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
                   </object>
                   <packing>
@@ -1618,8 +1615,7 @@ many months before the current month:</property>
                     <property name="visible">True</property>
                     <property name="halign">start</property>
                     <property name="margin_left">12</property>
-                    <property name="label" translatable="yes">Time to wait for answer:</property>
-                    <property name="label" translatable="yes">Time to wait for answer:</property>
+                    <property name="label" translatable="yes">Time to _wait for answer:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">pref/general/autosave-interval-minutes</property>
                   </object>
@@ -2526,8 +2522,7 @@ many months before the current month:</property>
                     <property name="visible">True</property>
                     <property name="halign">start</property>
                     <property name="margin_left">12</property>
-                    <property name="label" translatable="yes">Number of _characters for auto complete:</property>
-                    <property name="label" translatable="yes">Number of _characters for auto complete:</property>
+                    <property name="label" translatable="yes" comments="Register2 feature">Number of _characters for auto complete:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">pref/general.register/key-length</property>
                   </object>
@@ -2566,7 +2561,6 @@ many months before the current month:</property>
                     <property name="tooltip_text" translatable="yes">Show the date when the transaction was entered below the posted date and reconciled date on split row.</property>
                     <property name="halign">start</property>
                     <property name="margin_left">12</property>
-                    <property name="margin_left">12</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -2583,7 +2577,6 @@ many months before the current month:</property>
                     <property name="receives_default">False</property>
                     <property name="tooltip_text" translatable="yes">Show the calendar buttons Cancel, Today and Select.</property>
                     <property name="halign">start</property>
-                    <property name="margin_left">12</property>
                     <property name="margin_left">12</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
@@ -2602,7 +2595,6 @@ many months before the current month:</property>
                     <property name="tooltip_text" translatable="yes">This will move the selection to the blank split when the transaction is expanded.</property>
                     <property name="halign">start</property>
                     <property name="margin_left">12</property>
-                    <property name="margin_left">12</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -2619,7 +2611,6 @@ many months before the current month:</property>
                     <property name="receives_default">False</property>
                     <property name="tooltip_text" translatable="yes">Show the entered date and reconciled date on transaction selection.</property>
                     <property name="halign">start</property>
-                    <property name="margin_left">12</property>
                     <property name="margin_left">12</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
