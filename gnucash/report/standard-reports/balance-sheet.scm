@@ -294,11 +294,11 @@
   (let* (
 	 (report-title (get-option gnc:pagename-general optname-report-title))
 	 (company-name (get-option gnc:pagename-general optname-party-name))
-         (date-tp (gnc:timepair-end-day-time 
+         (reportdate (gnc:time64-end-day-time 
                       (gnc:date-option-absolute-time
                        (get-option gnc:pagename-general
                                    optname-date))))
-         (date-secs (gnc:timepair->secs date-tp))
+         (date-secs reportdate)
          (report-form? (get-option gnc:pagename-general
                                optname-report-form))
          (standard-order? (get-option gnc:pagename-general 
@@ -373,9 +373,8 @@
                          (gnc:get-current-account-tree-depth) 
 			 depth-limit))
          ;; exchange rates calculation parameters
-	 (exchange-fn
-	  (gnc:case-exchange-fn price-source report-commodity date-tp))
-	 )
+         (exchange-fn
+          (gnc:case-exchange-fn price-source report-commodity reportdate)))
     
     ;; Wrapper to call gnc:html-table-add-labeled-amount-line!
     ;; with the proper arguments.
@@ -452,7 +451,7 @@
     ;;(gnc:warn "account names" liability-account-names)
     (gnc:html-document-set-title! 
      doc (string-append company-name " " report-title " "
-			(gnc-print-date date-tp))
+                        (qof-print-date reportdate))
      )
     
     (if (null? accounts)
@@ -492,10 +491,10 @@
 	       (get-total-balance-fn
 		(lambda (account)
 		  (gnc:account-get-comm-balance-at-date 
-		   account date-tp #f)))
+		   account reportdate #f)))
                (get-total-value-fn
                 (lambda (account)
-                  (gnc:account-get-comm-value-at-date account date-tp #f)))
+                  (gnc:account-get-comm-value-at-date account reportdate #f)))
 	       )
 	  
 	  ;; If you ask me, any outstanding(TM) retained earnings and
@@ -544,12 +543,12 @@
           ;; commodity trading accounts they will automatically accumulate the gains.
           (set! unrealized-gain-collector (gnc:make-commodity-collector))
           (if compute-unrealized-gains?
-              (let ((asset-basis 
-                     (gnc:accounts-get-comm-total-assets asset-accounts
-                                                         get-total-value-fn))
-                    (neg-liability-basis 
-                     (gnc:accounts-get-comm-total-assets liability-accounts
-                                                         get-total-value-fn)))
+              (let ((asset-basis (gnc:accounts-get-comm-total-assets
+                                  asset-accounts
+                                  get-total-value-fn))
+                    (neg-liability-basis (gnc:accounts-get-comm-total-assets
+                                          liability-accounts
+                                          get-total-value-fn)))
                 ;; Calculate unrealized gains from assets.
                 (unrealized-gain-collector 'merge asset-balance #f)
                 (unrealized-gain-collector 'minusmerge asset-basis #f)
@@ -590,7 +589,7 @@
 	  (set! table-env
 		(list
 		 (list 'start-date #f)
-		 (list 'end-date date-tp)
+		 (list 'end-date reportdate)
 		 (list 'display-tree-depth tree-depth)
 		 (list 'depth-limit-behavior (if bottom-behavior
 						 'flatten
@@ -743,9 +742,7 @@
     
     (gnc:report-finished)
     
-    doc
-    )
-  )
+    doc))
 
 (gnc:define-report 
  'version 1
