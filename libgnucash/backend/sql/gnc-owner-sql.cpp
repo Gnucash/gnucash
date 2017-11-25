@@ -224,12 +224,12 @@ GncSqlColumnTableEntryImpl<CT_OWNERREF>::add_to_query(QofIdTypeConst obj_name,
     std::ostringstream buf;
 
     buf << type;
-    vec.emplace_back(std::make_pair(type_hdr, buf.str()));
+    vec.emplace_back(std::make_pair(type_hdr, quote_string(buf.str())));
     buf.str("");
     auto guid = qof_instance_get_guid(inst);
     if (guid != nullptr)
         buf << guid_to_string(guid);
     else
         buf << "NULL";
-    vec.emplace_back(std::make_pair(guid_hdr, buf.str()));
+    vec.emplace_back(std::make_pair(guid_hdr, quote_string(buf.str())));
 }

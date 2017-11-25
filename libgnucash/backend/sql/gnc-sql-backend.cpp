@@ -883,7 +883,7 @@ GncSqlBackend::build_insert_statement (const char* table_name,
     {
         if (col_value != *values.begin())
             sql << ",";
-        sql << quote_string(col_value.second);
+        sql << col_value.second;
     }
     sql << ")";
 
@@ -914,7 +914,7 @@ GncSqlBackend::build_update_statement(const gchar* table_name,
         if (col_value != *values.begin())
             sql << ",";
         sql << col_value.first << "=" <<
-            quote_string(col_value.second);
+            col_value.second;
     }
 
     stmt = create_statement_from_sql(sql.str());

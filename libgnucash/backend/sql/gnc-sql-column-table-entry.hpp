@@ -30,6 +30,7 @@ extern "C"
 }
 #include <memory>
 #include <vector>
+#include <iostream>
 #include "gnc-sql-result.hpp"
 
 struct GncSqlColumnInfo;
@@ -85,6 +86,27 @@ enum GncSqlObjectType
     CT_OWNERREF,
     CT_TAXTABLEREF
 };
+
+static inline std::string
+quote_string(const std::string& str)
+{
+    if (str == "NULL" || str == "null") return "NULL";
+    /* FIXME: This is here because transactions.num has a NULL
+     * constraint, which is dumb; it's often empty.
+     */
+    if (str.empty()) return "''";
+    std::string retval;
+    retval.reserve(str.length() + 2);
+    retval.insert(0, 1, '\'');
+    for (auto c = str.begin(); c != str.end(); ++c)
+    {
+        if (*c == '\'')
+            retval += *c;
+        retval += *c;
+    }
+    retval += '\'';
+    return retval;
+}
 
 /**
  * Contains all of the information required to copy information between an

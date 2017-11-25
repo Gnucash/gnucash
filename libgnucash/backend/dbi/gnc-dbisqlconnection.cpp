@@ -73,8 +73,10 @@ GncDbiSqlStatement::add_where_cond(QofIdTypeConst type_name,
     {
         if (colpair != *col_values.begin())
             m_sql += " AND ";
-        m_sql += colpair.first + " = " +
-            m_conn->quote_string (colpair.second.c_str());
+        if (colpair.second == "NULL")
+            m_sql += colpair.first + " IS " + colpair.second;
+        else
+            m_sql += colpair.first + " = " + colpair.second;
     }
 }
 

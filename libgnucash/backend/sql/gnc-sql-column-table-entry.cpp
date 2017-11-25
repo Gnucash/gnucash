@@ -50,6 +50,7 @@ set_autoinc_id (void* object, void* item)
     // Nowhere to put the ID
 }
 
+
 QofAccessFunc
 GncSqlColumnTableEntry::get_getter (QofIdTypeConst obj_name) const noexcept
 {
@@ -103,7 +104,7 @@ GncSqlColumnTableEntry::add_objectref_guid_to_query (QofIdTypeConst obj_name,
     auto guid = qof_instance_get_guid (inst);
     if (guid != nullptr)
         vec.emplace_back (std::make_pair (std::string{m_col_name},
-                                          std::string{guid_to_string(guid)}));
+                                          quote_string(guid_to_string(guid))));
 }
 
 void
@@ -153,7 +154,8 @@ GncSqlColumnTableEntryImpl<CT_STRING>::add_to_query(QofIdTypeConst obj_name,
     {
         std::ostringstream stream;
         stream << s;
-        vec.emplace_back (std::make_pair (std::string{m_col_name}, stream.str()));
+        vec.emplace_back (std::make_pair (std::string{m_col_name},
+                                          quote_string(stream.str())));
         return;
     }
 }
@@ -360,7 +362,7 @@ GncSqlColumnTableEntryImpl<CT_GUID>::add_to_query(QofIdTypeConst obj_name,
     {
 
         vec.emplace_back (std::make_pair (std::string{m_col_name},
-                                          std::string{guid_to_string(s)}));
+                                          quote_string(guid_to_string(s))));
         return;
     }
 }
@@ -467,7 +469,7 @@ GncSqlColumnTableEntryImpl<CT_TIMESPEC>::add_to_query(QofIdTypeConst obj_name,
 
     GncDateTime time(ts.tv_sec);
     vec.emplace_back (std::make_pair (std::string{m_col_name},
-                                      time.format_zulu ("%Y-%m-%d %H:%M:%S")));
+                                      time.format_zulu ("'%Y-%m-%d %H:%M:%S'")));
 }
 
 /* ----------------------------------------------------------------- */
@@ -539,7 +541,8 @@ GncSqlColumnTableEntryImpl<CT_GDATE>::add_to_query(QofIdTypeConst obj_name,
         buf << std::setfill ('0') << std::setw (4) << g_date_get_year (date) <<
             std::setw (2) << g_date_get_month (date) <<
             std::setw (2) << static_cast<int>(g_date_get_day (date));
-        vec.emplace_back (std::make_pair (std::string{m_col_name}, buf.str()));
+        vec.emplace_back (std::make_pair (std::string{m_col_name},
+                                          quote_string(buf.str())));
         return;
     }
 }
