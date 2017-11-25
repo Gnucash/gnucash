@@ -232,8 +232,8 @@ gnc_report_edit_options(SCM report, GtkWindow *parent)
     options = scm_call_1(get_options, report);
     if (options == SCM_BOOL_F)
     {
-        gnc_warning_dialog(GTK_WIDGET(gnc_ui_get_toplevel()), "%s",
-                           _("There are no options for this report."));
+        gnc_warning_dialog (GTK_WIDGET (parent), "%s",
+                            _("There are no options for this report."));
         return FALSE;
     }
 

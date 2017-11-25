@@ -141,7 +141,34 @@ gboolean gnc_get_username_password (GtkWidget *parent,
 
 /* Managing the GUI Windows *****************************************/
 
-GtkWidget *gnc_ui_get_toplevel (void);
+/** Get a pointer to the widget's immediate top level GtkWindow. This can be a dialog
+ *  window or a GncMainWindow. If the widget is not a child of
+ *  a GtkWindow (yet), NULL is returned.
+ *
+ *  @param widget the widget to find a GtkWindow for.
+ *  @return A pointer to a GtkWindow object or NULL if no toplevel was found. */
+GtkWindow *gnc_ui_get_gtk_window (GtkWidget *widget);
+
+/** Get a pointer to the final GncMainWindow widget is rooted
+ * in. If widget is a child of a GncMainWindow return that window.
+ * If it's a child of a dialog window recursively query the
+ * dialog's transient parent until the first parent that's a GncMainWindow
+ * and return that. If widget is NULL or not part of any GtkWindow,
+ * get a pointer to the first active top level window. If there is
+ * none, return the first mapped window. If there's no mapped window
+ * return NULL.
+ *
+ * An example of why searching for a GncMainWindow makes sense: suppose
+ * a user has opened a search dialog for vendors and in that dialog has
+ * clicked "View vendor invoices". This opens another search window in
+ * which the user can click "View/Edit bill". Clicking that button should
+ * open a new tab in the GncMainWindow from which the first search dialog
+ * was opened.
+ *
+ * @param widget the widget to find a GncMainWindow for.
+ * @return A pointer to a GtkWindow object. */
+
+GtkWindow *gnc_ui_get_main_window (GtkWidget *widget);
 
 /* Changing the GUI Cursor ******************************************/
 

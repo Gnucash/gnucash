@@ -140,8 +140,7 @@ gnc_file_dialog (const char * title,
 
     gtk_window_set_modal(GTK_WINDOW(file_box), TRUE);
     /*
-    gtk_window_set_transient_for(GTK_WINDOW(file_box),
-    		       GTK_WINDOW(gnc_ui_get_toplevel()));
+    gtk_window_set_transient_for(GTK_WINDOW(file_box), gnc_ui_get_main_window(NULL));
     */
 
     if (filters != NULL)
@@ -199,7 +198,7 @@ show_session_error (QofBackendError io_error,
                     const char *newfile,
                     GNCFileDialogType type)
 {
-    GtkWidget *parent = gnc_ui_get_toplevel();
+    GtkWidget *parent = GTK_WIDGET (gnc_ui_get_main_window(NULL));
     GtkWidget *dialog;
     gboolean uh_oh = TRUE;
     const char *fmt, *label;
@@ -570,7 +569,7 @@ gnc_file_new (void)
 gboolean
 gnc_file_query_save (gboolean can_cancel)
 {
-    GtkWidget *parent = gnc_ui_get_toplevel();
+    GtkWidget *parent = GTK_WIDGET (gnc_ui_get_main_window(NULL));
     QofBook *current_book;
 
     if (!gnc_current_session_exist())
@@ -777,7 +776,7 @@ RESTART:
 
         GtkWindow *parent = gnc_get_splash_screen();
         if (!parent)
-            parent = GTK_WINDOW(gnc_ui_get_toplevel());
+            parent = gnc_ui_get_main_window(NULL);
 
         if (! gnc_uri_is_file_uri (newfile)) /* Hide the db password in error messages */
             displayname = gnc_uri_normalize_uri ( newfile, FALSE);
@@ -949,7 +948,7 @@ RESTART:
                 uh_oh = TRUE;
 
                 // XXX: should pull out the file name here */
-                gnc_error_dialog(gnc_ui_get_toplevel(), msg, "");
+                gnc_error_dialog(GTK_WIDGET (gnc_ui_get_main_window(NULL)), msg, "");
                 g_free (msg);
             }
             if (template_root != NULL)
@@ -1309,7 +1308,7 @@ gnc_file_save (void)
 
     if (qof_book_is_readonly(qof_session_get_book(session)))
     {
-        gint response = gnc_ok_cancel_dialog(gnc_ui_get_toplevel(),
+        gint response = gnc_ok_cancel_dialog(GTK_WIDGET (gnc_ui_get_main_window(NULL)),
                                              GTK_RESPONSE_CANCEL,
                                              _("The database was opened read-only. "
                                                "Do you want to save it to a different place?"));

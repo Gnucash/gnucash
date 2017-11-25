@@ -553,7 +553,7 @@ sxftd_ok_clicked(SXFromTransInfo *sxfti)
     {
         if ( sx_error == SXFTD_ERRNO_UNBALANCED_XACTION )
         {
-            gnc_error_dialog( gnc_ui_get_toplevel(), "%s",
+            gnc_error_dialog (NULL, "%s",
                               _( "The Scheduled Transaction is unbalanced. "
                                  "You are strongly encouraged to correct this situation." ) );
         }
@@ -781,7 +781,7 @@ gnc_sx_create_from_trans( Transaction *trans )
     {
         if ( errno == SXFTD_ERRNO_OPEN_XACTION )
         {
-            gnc_error_dialog( gnc_ui_get_toplevel(), "%s",
+            gnc_error_dialog (NULL, "%s",
                               _( "Cannot create a Scheduled Transaction "
                                  "from a Transaction currently "
                                  "being edited. Please Enter the "

@@ -229,7 +229,7 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
     /* Before importing the results, if this is a new book, let user specify
      * book options, since they affect how transactions are created */
     if (gnc_is_new_book())
-        gnc_new_book_option_display(gnc_ui_get_toplevel());
+        gnc_new_book_option_display (GTK_WIDGET (gnc_ui_get_main_window(NULL)));
 
     /* Import the results */
     ieci = gnc_ab_import_context(context, AWAIT_TRANSACTIONS,

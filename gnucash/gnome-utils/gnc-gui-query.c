@@ -60,7 +60,7 @@ gnc_ok_cancel_dialog(GtkWidget *parent,
     va_list args;
 
     if (parent == NULL)
-        parent = gnc_ui_get_toplevel();
+        parent = GTK_WIDGET (gnc_ui_get_main_window(NULL));
 
     va_start(args, format);
     buffer = g_strdup_vprintf(format, args);
@@ -108,7 +108,7 @@ gnc_verify_dialog(GtkWidget *parent, gboolean yes_is_default,
     va_list args;
 
     if (parent == NULL)
-        parent = gnc_ui_get_toplevel();
+        parent = GTK_WIDGET (gnc_ui_get_main_window(NULL));
 
     va_start(args, format);
     buffer = g_strdup_vprintf(format, args);
@@ -151,7 +151,7 @@ gnc_info_dialog(GtkWidget *parent, const gchar *format, ...)
     va_list args;
 
     if (parent == NULL)
-        parent = gnc_ui_get_toplevel();
+        parent = GTK_WIDGET (gnc_ui_get_main_window (NULL));
 
     va_start(args, format);
     buffer = g_strdup_vprintf(format, args);
@@ -190,7 +190,7 @@ gnc_warning_dialog_common(GtkWidget *parent, const gchar *format, va_list args)
     gchar *buffer;
 
     if (parent == NULL)
-        parent = GTK_WIDGET(gnc_ui_get_toplevel());
+        parent = GTK_WIDGET(gnc_ui_get_main_window(NULL));
 
     buffer = g_strdup_vprintf(format, args);
     dialog = gtk_message_dialog_new (GTK_WINDOW(parent),
@@ -237,7 +237,7 @@ gnc_error_dialog_common(GtkWidget *parent, const gchar *format, va_list args)
     gchar *buffer;
 
     if (parent == NULL)
-        parent = GTK_WIDGET(gnc_ui_get_toplevel());
+        parent = GTK_WIDGET(gnc_ui_get_main_window(NULL));
 
     buffer = g_strdup_vprintf(format, args);
     dialog = gtk_message_dialog_new (GTK_WINDOW(parent),

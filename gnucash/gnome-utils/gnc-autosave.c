@@ -187,7 +187,7 @@ static gboolean autosave_timeout_cb(gpointer user_data)
         return FALSE;
 
     /* Store the current toplevel window for later use. */
-    toplevel = gnc_ui_get_toplevel();
+    toplevel = GTK_WIDGET (gnc_ui_get_main_window (NULL));
 
     /* Lookup preference to show an explanatory dialog, if wanted. */
     show_explanation =

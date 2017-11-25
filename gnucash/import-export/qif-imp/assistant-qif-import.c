@@ -3617,8 +3617,7 @@ gnc_ui_qif_import_assistant_make(QIFImportWindow *qif_win)
     get_assistant_widgets(qif_win, builder);
 
     /* Make this window stay on top */
-    gtk_window_set_transient_for (GTK_WINDOW (qif_win->window),
-				  GTK_WINDOW (gnc_ui_get_toplevel ()));
+    gtk_window_set_transient_for (GTK_WINDOW (qif_win->window), gnc_ui_get_main_window(NULL));
 
     /* Build the details of all GtkTreeView widgets. */
     build_views(qif_win);

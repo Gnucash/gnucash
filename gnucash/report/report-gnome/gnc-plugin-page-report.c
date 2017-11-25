@@ -413,7 +413,7 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     report = GNC_PLUGIN_PAGE_REPORT(page);
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
 
-    topLvl = GTK_WINDOW(gnc_ui_get_toplevel());
+    topLvl = gnc_ui_get_main_window (NULL);
 //        priv->html = gnc_html_new( topLvl );
     priv->html = gnc_html_factory_create_html();
     gnc_html_set_parent( priv->html, topLvl );
