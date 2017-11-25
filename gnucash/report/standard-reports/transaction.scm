@@ -318,7 +318,7 @@ options specified in the Options panels."))
    (gnc:make-simple-boolean-option
     gnc:pagename-general optname-orig-currency
     "f1" "Also show original currency amounts" #f))
-  
+
   (gnc:register-trep-option
    (gnc:make-simple-boolean-option
     gnc:pagename-general optname-table-export
@@ -329,7 +329,7 @@ options specified in the Options panels."))
   ;; Filtering Options
 
   ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  
+
 
   (gnc:register-trep-option
    (gnc:make-string-option
@@ -440,7 +440,7 @@ tags within description, notes or memo. ")
   ;; Sorting options
 
   ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  
+
   (let ((ascending-choice-list
          (list (vector 'ascend
                        (N_ "Ascending")
@@ -611,7 +611,7 @@ tags within description, notes or memo. ")
   ;; Display options
 
   ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  
+
   (let ((disp-memo? #t)
         (disp-accname? #t)
         (disp-other-accname? #f)
@@ -896,7 +896,7 @@ Credit Card, and Income accounts."))))))
                 (for-each (lambda (cell) (addto! row-contents cell))
                           (gnc:html-make-empty-cells (- width 1))))
               (addto! row-contents (gnc:make-html-table-cell/size/markup 1 width "total-label-cell" string))))
-        
+
         (define (add-columns commodity)
           (let ((merging? #f)
                 (merging-subtotal (gnc:make-gnc-numeric 0 1))
@@ -961,7 +961,7 @@ Credit Card, and Income accounts."))))))
     ;; calculated-cells
     ;;
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    
+
     (define calculated-cells
       (letrec
           ((damount (lambda (s) (if (gnc:split-voided? s)
@@ -1018,7 +1018,7 @@ Credit Card, and Income accounts."))))))
     ;; renderers
 
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    
+
     ;; display an account name depending on the options the user has set
     (define (account-namestring account show-account-code? show-account-name? show-account-full-name?)
       ;;# on multi-line splits we can get an empty ('()) account
@@ -1076,12 +1076,12 @@ Credit Card, and Income accounts."))))))
     ;; add-split-row
     ;;
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    
+
     (define (add-split-row split cell-calculators row-style transaction-row?)
       (let* ((row-contents '())
              (trans (xaccSplitGetParent split))
              (account (xaccSplitGetAccount split)))
-        
+
         (define cells
           (map (lambda (cell)
                  (let* ((calculator (vector-ref cell 1))
@@ -1100,7 +1100,7 @@ Credit Card, and Income accounts."))))))
                                calculated)
                            subtotal?)))
                cell-calculators))
-        
+
         (if (column-uses? 'date used-columns)
             (addto! row-contents
                     (if transaction-row?
@@ -1189,13 +1189,13 @@ Credit Card, and Income accounts."))))))
                   cells)
 
         (gnc:html-table-append-row/markup! table row-style (reverse row-contents))
-        
+
         (map (lambda (cell)
                (let ((cell-content (vector-ref cell 0))
                      (subtotal? (vector-ref cell 1)))
                  (and subtotal? cell-content)))
              cells)))
-    
+
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     ;; do-rows-with-subtotals
@@ -1445,25 +1445,25 @@ Credit Card, and Income accounts."))))))
        ((string? (comparator-function X)) ((if ascend? string<? string>?) (comparator-function X) (comparator-function Y)))
        ((comparator-function X)           ((if ascend? < >)               (comparator-function X) (comparator-function Y)))
        (else                              #f)))
-    
+
     (define (primary-comparator? X Y)
-      (generic-less? X Y primary-key 
+      (generic-less? X Y primary-key
                      (opt-val pagename-sorting optname-prime-date-subtotal)
                      (eq? primary-order 'ascend)))
-    
+
     (define (secondary-comparator? X Y)
-      (generic-less? X Y secondary-key 
+      (generic-less? X Y secondary-key
                      (opt-val pagename-sorting optname-sec-date-subtotal)
                      (eq? secondary-order 'ascend)))
 
     ;; This will, by default, sort the split list by ascending posted-date.
-    (define (date-comparator? X Y) 
+    (define (date-comparator? X Y)
       (generic-less? X Y 'date 'none #t))
 
 
     ;; infobox
     (define (infobox)
-      (gnc:make-html-text                  
+      (gnc:make-html-text
        ;;"<h3>Summary of settings used</h3>"
        ;;"<b>Accounts selected: </b>" (string-join (map xaccAccountGetName c_account_0) ", ") "<br>"
        (if (string-null? account-matcher)
@@ -1554,9 +1554,9 @@ Credit Card, and Income accounts."))))))
                 (gnc:html-markup-p NO-MATCHING-ACCT-TEXT)))
 
               (gnc:html-document-add-object!
-               document                 
+               document
                (infobox))))
-            
+
         (begin
 
           (qof-query-set-book query (gnc-get-current-book))
@@ -1576,16 +1576,16 @@ Credit Card, and Income accounts."))))))
                                                (eq? primary-order 'ascend)
                                                (eq? secondary-order 'ascend)
                                                #t)))
-          (set! splits (qof-query-run query))                
+          (set! splits (qof-query-run query))
 
           (qof-query-destroy query)
-          
+
           (if custom-sort?
               (begin
                 (set! splits (stable-sort! splits date-comparator?))
                 (set! splits (stable-sort! splits secondary-comparator?))
                 (set! splits (stable-sort! splits primary-comparator?))))
-          
+
           ;; Combined Filter:
           ;; - include/exclude splits to/from selected accounts
           ;; - substring/regex matcher for Transaction Description/Notes/Memo
@@ -1618,11 +1618,11 @@ Credit Card, and Income accounts."))))))
                  (gnc:make-html-text
                   (gnc:html-markup-h2 NO-MATCHING-TRANS-HEADER)
                   (gnc:html-markup-p NO-MATCHING-TRANS-TEXT)))
-                
+
                 (gnc:html-document-add-object!
-                 document                 
+                 document
                  (infobox)))
-              
+
               (let ((table (make-split-table
                             splits options
                             (subtotal-get-info optname-prime-sortkey
@@ -1654,7 +1654,7 @@ Credit Card, and Income accounts."))))))
                             (gnc-print-date enddate)))))
 
                 (gnc:html-document-add-object!
-                 document                 
+                 document
                  (infobox))
 
                 (gnc:html-document-add-object! document table)))))
