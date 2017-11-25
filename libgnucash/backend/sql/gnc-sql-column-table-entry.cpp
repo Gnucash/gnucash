@@ -397,7 +397,7 @@ GncSqlColumnTableEntryImpl<CT_TIMESPEC>::load (const GncSqlBackend* sql_be,
         {
             constexpr size_t datelen = 14;
             auto val = row.get_string_at_col(m_col_name);
-            if (val.length() == datelen)
+            if (val.length() == datelen && val != "0000-00-00 00:00:00")
             {
                 using std::stoi;
 #ifdef HAVE_STRUCT_TM_GMTOFF

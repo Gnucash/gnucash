@@ -1,7 +1,5 @@
 # Post install actions go here.
 
-INSTALL(CODE "EXECUTE_PROCESS(COMMAND ${GLIB_COMPILE_SCHEMAS} ${CMAKE_INSTALL_PREFIX}/share/glib-2.0/schemas)")
-
 IF (APPLE)
   INSTALL(CODE "EXECUTE_PROCESS(
                 COMMAND /usr/bin/install_name_tool -add_rpath ${CMAKE_INSTALL_PREFIX}/lib
@@ -21,18 +19,20 @@ SET(schema-targets csv-exp-gschema csv-imp-gschema
 IF (WITH_AQBANKING)
   LIST(APPEND schema-targets aqb-gschema)
 ENDIF (WITH_AQBANKING)
-    
+
 IF (WITH_OFX)
   LIST(APPEND schema-targets ofx-gschema)
 ENDIF (WITH_OFX)
-    
-SET(SCHEMA_DIRECTORY ${DATADIR_BUILD}/glib-2.0/schemas)
+
+SET(SCHEMA_BUILD_DIR ${DATADIR_BUILD}/glib-2.0/schemas)
 ADD_CUSTOM_COMMAND(
-  OUTPUT ${SCHEMA_DIRECTORY}/gschemas.compiled
-  COMMAND ${CMAKE_COMMAND_TMP} ${GLIB_COMPILE_SCHEMAS} ${SCHEMA_DIRECTORY}
+  OUTPUT ${SCHEMA_BUILD_DIR}/gschemas.compiled
+  COMMAND ${CMAKE_COMMAND_TMP} ${GLIB_COMPILE_SCHEMAS} ${SCHEMA_BUILD_DIR}
   DEPENDS ${schema-targets}
 )
 
-ADD_CUSTOM_TARGET(compiled-schemas ALL DEPENDS ${SCHEMA_DIRECTORY}/gschemas.compiled)
+ADD_CUSTOM_TARGET(compiled-schemas ALL DEPENDS ${SCHEMA_BUILD_DIR}/gschemas.compiled)
+
+INSTALL(FILES ${SCHEMA_BUILD_DIR}/gschemas.compiled DESTINATION ${DATADIR}/glib-2.0/schemas)
 
 SET_DIST_LIST(cmake_DIST CMakeLists.txt README_CMAKE.txt cmake_uninstall.cmake.in)

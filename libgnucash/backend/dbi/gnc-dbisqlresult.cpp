@@ -179,9 +179,9 @@ GncDbiSqlResult::IteratorImpl::get_time64_at_col (const char* col) const
     auto row = dbi_result_get_currow (result);
     auto idx = dbi_result_get_field_idx (result, col) - 1;
     time64 retval = result->rows[row]->field_values[idx].d_datetime;
+#endif //HAVE_LIBDBI_TO_LONGLONG
     if (retval < MINTIME || retval > MAXTIME)
         retval = 0;
-#endif //HAVE_LIBDBI_TO_LONGLONG
     gnc_pop_locale (LC_NUMERIC);
     return retval;
 }

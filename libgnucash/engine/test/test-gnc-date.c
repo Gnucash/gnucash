@@ -1917,23 +1917,14 @@ gnc_timezone (const struct tm *tm)// C: 5 in 2  Local: 2:0:0
 test_gnc_timezone (void)
 {
 }*/
-/* timespecFromTime64
+/* timespecFromtime64
 void
-timespecFromTime64( Timespec *ts, time64 t )// C: 22 in 11  Local: 0:0:0
+timespecFromtime64( Timespec *ts, time64 t )// C: 22 in 11  Local: 0:0:0
 */
-static void
-test_timespecFromTime64 (void)
+/* static void
+test_timespecFromtime64 (void)
 {
-     Timespec ts = {-9999, 0};
-     timespecFromTime64 (&ts, MINTIME - 1);
-     g_assert_cmpint (0, ==, ts.tv_sec);
-     timespecFromTime64 (&ts, MINTIME + 1);
-     g_assert_cmpint (MINTIME + 1, ==, ts.tv_sec);
-     timespecFromTime64 (&ts, MAXTIME + 1);
-     g_assert_cmpint (MAXTIME, ==, ts.tv_sec);
-     timespecFromTime64 (&ts, MAXTIME - 1);
-     g_assert_cmpint (MAXTIME - 1, ==, ts.tv_sec);
-}
+}*/
 /* timespec_now
 Timespec
 timespec_now()// C: 2 in 2  Local: 0:0:0
@@ -2262,7 +2253,7 @@ test_suite_gnc_date (void)
     GNC_TEST_ADD (suitename, "gnc dmy2timespec end", FixtureB, NULL, setup_end, test_gnc_dmy2timespec_end, NULL);
     GNC_TEST_ADD (suitename, "gnc dmy2timespec Neutral", FixtureB, NULL, setup_neutral, test_gnc_dmy2timespec_neutral, NULL);
 // GNC_TEST_ADD_FUNC (suitename, "gnc timezone", test_gnc_timezone);
-    GNC_TEST_ADD_FUNC (suitename, "timespecFromTime64", test_timespecFromTime64);
+// GNC_TEST_ADD_FUNC (suitename, "timespecFromTime t", test_timespecFromtime64);
 // GNC_TEST_ADD_FUNC (suitename, "timespec now", test_timespec_now);
 // GNC_TEST_ADD_FUNC (suitename, "timespecToTime t", test_timespecTotime64);
     GNC_TEST_ADD (suitename, "timespec to gdate", FixtureA, NULL, setup, test_timespec_to_gdate, NULL);

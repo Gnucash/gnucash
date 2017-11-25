@@ -71,6 +71,7 @@ po/POTFILES
 po/POTFILES.in
 po/gnucash.pot
 po/stamp-it
+po/glossary/gnc-glossary.pot
 py-compile
 bindings/python/.py-links
 bindings/python/gnucash/

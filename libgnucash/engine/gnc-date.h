@@ -75,7 +75,7 @@ extern "C"
  
 #include <glib-object.h>
 #include <time.h>
-#include <stdint.h>
+
 /**
  * Many systems, including Microsoft Windows and BSD-derived Unixes
  * like Darwin, are retaining the int-32 typedef for time_t. Since
