@@ -346,11 +346,6 @@ options specified in the Options panels."))
    options gnc:pagename-general optname-startdate optname-enddate "a")
 
   (gnc:register-trep-option
-   (gnc:make-simple-boolean-option
-    gnc:pagename-general "Custom Sort Algorithm"
-    "z1" "Use custom sorting instead of qof-query" #f))
-
-  (gnc:register-trep-option
    (gnc:make-complex-boolean-option
     gnc:pagename-general optname-common-currency
     "e" (N_ "Convert all transactions into a common currency.") #f
@@ -1427,11 +1422,16 @@ Credit Card, and Income accounts."))))))
          (report-title (opt-val gnc:pagename-general gnc:optname-reportname))
          (primary-key (opt-val pagename-sorting optname-prime-sortkey))
          (primary-order (opt-val pagename-sorting optname-prime-sortorder))
+         (primary-date-subtotal (opt-val pagename-sorting optname-prime-date-subtotal))
          (secondary-key (opt-val pagename-sorting optname-sec-sortkey))
          (secondary-order (opt-val pagename-sorting optname-sec-sortorder))
+         (secondary-date-subtotal (opt-val pagename-sorting optname-sec-date-subtotal))
          (void-status (opt-val gnc:pagename-accounts optname-void-transactions))
          (splits '())
-         (custom-sort? (opt-val gnc:pagename-general "Custom Sort Algorithm"))
+         (custom-sort? (or (and (member primary-key DATE-SORTING-TYPES)
+                                (not (eq? primary-date-subtotal 'none)))
+                           (and (member secondary-key DATE-SORTING-TYPES)
+                                (not (eq? secondary-date-subtotal 'none)))))
          (query (qof-query-create-for-splits)))
 
     (define (generic-less? X Y key date-subtotal ascend?)
