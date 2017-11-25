@@ -313,6 +313,16 @@ options specified in the Options panels."))
                  (cons 'text (N_ "Reconciled"))
                  (cons 'tip (N_ "Reconciled only"))))))
 
+
+(define ascending-list
+  (list
+   (cons 'ascend (list
+                  (cons 'text (N_ "Ascending"))
+                  (cons 'tip (N_ "Smallest to largest, earliest to latest."))))
+   (cons 'descend (list
+                   (cons 'text (N_ "Descending"))
+                   (cons 'tip (N_ "Largest to smallest, latest to earliest."))))))
+
 (define (keylist-get-info keylist key info)
   (cdr (assq info (cdr (assq key keylist)))))
 
@@ -474,13 +484,7 @@ tags within description, notes or memo. ")
 
   ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-  (let ((ascending-choice-list
-         (list (vector 'ascend
-                       (N_ "Ascending")
-                       (N_ "Smallest to largest, earliest to latest."))
-               (vector 'descend
-                       (N_ "Descending")
-                       (N_ "Largest to smallest, latest to earliest."))))
+  (let ((ascending-choice-list (keylist->vectorlist ascending-list))        
         (prime-sortkey 'account-name)
         (prime-sortkey-subtotal-true #t)
         (sec-sortkey 'register-order)
@@ -1489,54 +1493,70 @@ Credit Card, and Income accounts."))))))
 
     ;; infobox
     (define (infobox)
+      (define (highlight title . data)
+        (string-append "<b>" title "</b>: " (string-join data " ") "<br/>"))
       (gnc:make-html-text
        (if (string-null? account-matcher)
            ""
            (string-append
-            "<b>Account " (if (opt-val pagename-filter optname-account-matcher-regex) "regex" "substring")
-            " Matcher: </b>'" account-matcher "'<br><b>Accounts produced: </b>"
-            (string-join (map xaccAccountGetName c_account_1) ", ") "<br>"))
+            (highlight
+             (string-append optname-account-matcher
+                            (if (opt-val pagename-filter optname-account-matcher-regex)
+                                (N_ " regex")
+                                ""))
+             account-matcher)
+            (highlight
+             (N_ "Accounts produced")
+             (string-join (map xaccAccountGetName c_account_1) ", "))))
        (if (eq? filter-mode 'none)
            ""
-           (string-append
-            "<b>" (keylist-get-info filter-list filter-mode 'text) ": </b>"
-            (string-join (map xaccAccountGetName c_account_2) ", ") "<br>"))
-       (if reconcile-status-filter
-           (string-append
-            "<b>Split Reconciled Status: </b>"
-            (keylist-get-info reconcile-status-list reconcile-status-filter 'text)
-            "<br>")
-           "")
-       (if (eq? primary-key 'none)
-           ""
-           (string-append
-            "<b>Primary SortKey: </b>" (symbol->string primary-key) " "
-            (symbol->string primary-order) "ing"
-            (if (and (eq? primary-key 'date)
-                     (not (eq? (opt-val pagename-sorting optname-prime-date-subtotal) 'none)))
-                (string-append " with " (symbol->string (opt-val pagename-sorting optname-prime-date-subtotal))
-                               " subtotals")
-                "")
-            "<br>"))
-       (if (eq? secondary-key 'none)
-           ""
-           (string-append
-            "<b>Secondary SortKey: </b>" (symbol->string secondary-key) " "
-            (symbol->string secondary-order) "ing"
-            (if (and (eq? secondary-key 'date)
-                     (not (eq? (opt-val pagename-sorting optname-sec-date-subtotal) 'none)))
-                (string-append " with " (symbol->string (opt-val pagename-sorting optname-sec-date-subtotal))
-                               " subtotals")
-                "")
-            "<br>"))
+           (highlight
+            (keylist-get-info filter-list filter-mode 'text)
+            (string-join (map xaccAccountGetName c_account_2) ", ")))
        (if (string-null? transaction-matcher)
            ""
            (string-append
-            "<b>Transaction "
-            (if (opt-val pagename-filter optname-transaction-matcher-regex) "regex" "substring")
-            " Matcher: </b>'" transaction-matcher "'<br>"))
-       (string-append "<b>Void status: </b>" (keylist-get-info show-void-list void-status 'text) "<br>")
-       "<br>"))
+            (highlight
+             (string-append optname-transaction-matcher
+                            (if (opt-val pagename-filter optname-transaction-matcher-regex)
+                                (N_ " regex")
+                                ""))
+             transaction-matcher)))
+       (if reconcile-status-filter
+           (highlight
+            optname-reconcile-status
+            (keylist-get-info reconcile-status-list reconcile-status-filter 'text))
+           "")
+       (if (eq? void-status 'non-void-only)
+           ""
+           (highlight
+            optname-void-transactions
+            (keylist-get-info show-void-list void-status 'text)))
+       (if (eq? primary-key 'none)
+           ""
+           (highlight
+            optname-prime-sortkey
+            (keylist-get-info sortkey-list primary-key 'text)
+            (keylist-get-info ascending-list primary-order 'text)))
+       (if (and (member primary-key DATE-SORTING-TYPES)
+                (not (eq? primary-date-subtotal 'none)))
+           (highlight
+            optname-prime-date-subtotal
+            (keylist-get-info date-subtotal-list primary-date-subtotal 'text))
+           "")
+       (if (eq? secondary-key 'none)
+           ""
+           (highlight
+            optname-sec-sortkey
+            (keylist-get-info sortkey-list secondary-key 'text)
+            (keylist-get-info ascending-list secondary-order 'text)))
+       (if (and (member secondary-key DATE-SORTING-TYPES)
+                (not (eq? secondary-date-subtotal 'none)))
+           (highlight
+            optname-sec-date-subtotal
+            (keylist-get-info date-subtotal-list secondary-date-subtotal 'text))
+           "")
+       "<br/>"))
 
     (if (or (null? c_account_1) (and-map not c_account_1))
 
