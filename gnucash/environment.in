@@ -63,9 +63,8 @@ GUILE_WARN_DEPRECATED=no
 # GUILE_LIBS=
 # GUILE_COMPILED_LIBS=
 GUILE_LOAD_PATH={GNC_DATA}/scm;{GUILE_LIBS};{GUILE_LOAD_PATH}
-# Note the use of {SYS_LIB}/lib here instead of {GNC_LIB}. The latter points to
-# the wrong directory on Windows for this particular purpose.
-GUILE_LOAD_COMPILED_PATH={SYS_LIB}/gnucash/scm/ccache/@-GUILE_EFFECTIVE_VERSION-@;{GUILE_COMPILED_LIBS};{GUILE_LOAD_COMPILED_PATH}
+
+GUILE_LOAD_COMPILED_PATH={SYS_LIB}/guile/2.0/ccache;{GNC_LIB}ccache/@-GUILE_EFFECTIVE_VERSION-@;{GUILE_COMPILED_LIBS};{GUILE_LOAD_COMPILED_PATH}
 
 # Tell Guile where to find GnuCash specific shared libraries
 GNC_LIBRARY_PATH={SYS_LIB};{GNC_LIB}
