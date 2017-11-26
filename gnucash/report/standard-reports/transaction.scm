@@ -326,6 +326,28 @@ options specified in the Options panels."))
                    (cons 'text (N_ "Descending"))
                    (cons 'tip (N_ "Largest to smallest, latest to earliest."))))))
 
+(define sign-reverse-list
+  (list
+   (cons 'none
+         (list
+          (cons 'text (N_ "None"))
+          (cons 'tip (N_ "Don't change any displayed amounts."))
+          (cons 'acct-types '())))
+   (cons 'income-expense
+         (list
+          (cons 'text (N_ "Income and Expense"))
+          (cons 'tip (N_ "Reverse amount display for Income and Expense Accounts."))
+          (cons 'acct-types (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE))))
+   (cons 'credit-accounts
+         (list
+          (cons 'text (N_ "Credit Accounts"))
+          (cons 'tip (N_ "Reverse amount display for Liability, Payable, Equity, \
+Credit Card, and Income accounts."))
+          (cons 'acct-types (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE
+                                  ACCT-TYPE-EQUITY ACCT-TYPE-CREDIT
+                                  ACCT-TYPE-INCOME))))))
+
+
 (define (keylist-get-info keylist key info)
   (cdr (assq info (cdr (assq key keylist)))))
 
@@ -488,12 +510,12 @@ tags within description, notes or memo. ")
   ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   (let ((ascending-choice-list (keylist->vectorlist ascending-list))
+        (key-choice-list (keylist->vectorlist sortkey-list))
+        (date-subtotal-choice-list (keylist->vectorlist date-subtotal-list))
         (prime-sortkey 'account-name)
         (prime-sortkey-subtotal-true #t)
         (sec-sortkey 'register-order)
-        (sec-sortkey-subtotal-true #f)
-        (key-choice-list (keylist->vectorlist sortkey-list))
-        (date-subtotal-choice-list (keylist->vectorlist date-subtotal-list)))
+        (sec-sortkey-subtotal-true #f))
 
     (define (apply-selectable-by-name-sorting-options)
       (let* ((prime-sortkey-enabled (not (eq? prime-sortkey 'none)))
@@ -770,16 +792,7 @@ tags within description, notes or memo. ")
       gnc:pagename-display (N_ "Sign Reverses")
       "m1" (N_ "Reverse amount display for certain account types.")
       'credit-accounts
-      (list (vector 'none
-                    (N_ "None")
-                    (N_ "Don't change any displayed amounts."))
-            (vector 'income-expense
-                    (N_ "Income and Expense")
-                    (N_ "Reverse amount display for Income and Expense Accounts."))
-            (vector 'credit-accounts
-                    (N_ "Credit Accounts")
-                    (N_ "Reverse amount display for Liability, Payable, Equity, \
-Credit Card, and Income accounts."))))))
+      (keylist->vectorlist sign-reverse-list))))
 
   (gnc:options-set-default-section options gnc:pagename-general)
   options)
@@ -886,12 +899,9 @@ Credit Card, and Income accounts."))))))
          (width (length headings))
          (width-amount (length amount-headings))
          (account-types-to-reverse
-          (case (opt-val gnc:pagename-display (N_ "Sign Reverses"))
-            ((none) '())
-            ((income-expense) (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE))
-            ((credit-accounts)  (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE
-                                      ACCT-TYPE-EQUITY ACCT-TYPE-CREDIT
-                                      ACCT-TYPE-INCOME))))
+          (keylist-get-info sign-reverse-list
+                            (opt-val gnc:pagename-display (N_ "Sign Reverses"))
+                            'acct-types))
          (is-multiline? (eq? (opt-val gnc:pagename-display optname-detail-level) 'multi-line))
          (export? (opt-val gnc:pagename-general optname-table-export)))
 
