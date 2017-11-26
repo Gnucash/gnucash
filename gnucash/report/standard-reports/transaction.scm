@@ -13,6 +13,9 @@
 ;; - introduced account/transaction substring/regex matcher
 ;; - add custom sorter in scheme
 ;; - common currency - optionally show original currency amount
+;;   and enable multiple data columns
+;; - add informational box, summarising options used, useful
+;;   to troubleshoot reports
 ;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
