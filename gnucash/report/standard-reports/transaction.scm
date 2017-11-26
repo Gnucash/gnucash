@@ -32,7 +32,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report standard-reports transaction-plus))
+(define-module (gnucash report standard-reports transaction))
 
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (srfi srfi-1))
@@ -1623,7 +1623,7 @@ Credit Card, and Income accounts."))))))
 ;; Define the report.
 (gnc:define-report
  'version 2
- 'name (string-append reportname " Plus")
- 'report-guid "2fe3b9833af044abb929a88d5a59620f Plus"
+ 'name reportname
+ 'report-guid "2fe3b9833af044abb929a88d5a59620f"
  'options-generator trep-options-generator
  'renderer trep-renderer)
