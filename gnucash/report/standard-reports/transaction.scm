@@ -1525,11 +1525,16 @@ Credit Card, and Income accounts."))))))
              (gnc:html-make-no-account-warning report-title (gnc:report-id report-obj)))
 
             ;; error condition: accounts were specified but none matched string/regex
-            (gnc:html-document-add-object!
-             document
-             (gnc:make-html-text
-              (gnc:html-markup-h2 NO-MATCHING-ACCT-HEADER)
-              (gnc:html-markup-p NO-MATCHING-ACCT-TEXT))))
+            (begin
+             (gnc:html-document-add-object!
+              document
+              (gnc:make-html-text
+               (gnc:html-markup-h2 NO-MATCHING-ACCT-HEADER)
+               (gnc:html-markup-p NO-MATCHING-ACCT-TEXT)))
+ 
+             (gnc:html-document-add-object!
+              document                 
+              (infobox))))
 
         (begin
           (qof-query-set-book query (gnc-get-current-book))
@@ -1585,11 +1590,16 @@ Credit Card, and Income accounts."))))))
           (if (null? splits)
 
               ;; error condition: no splits found
-              (gnc:html-document-add-object!
-               document
-               (gnc:make-html-text
-                (gnc:html-markup-h2 NO-MATCHING-TRANS-HEADER)
-                (gnc:html-markup-p NO-MATCHING-TRANS-TEXT)))
+              (begin
+               (gnc:html-document-add-object!
+                document
+                (gnc:make-html-text
+                 (gnc:html-markup-h2 NO-MATCHING-TRANS-HEADER)
+                 (gnc:html-markup-p NO-MATCHING-TRANS-TEXT)))
+
+               (gnc:html-document-add-object!
+                document                 
+                (infobox)))
 
               (let ((table (make-split-table
                             splits options
