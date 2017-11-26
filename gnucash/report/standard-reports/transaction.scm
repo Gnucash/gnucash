@@ -907,8 +907,7 @@ Credit Card, and Income accounts."))))))
                               (begin
                                 (if column-amount
                                     (set! merging-subtotal
-                                          (merge-fn merging-subtotal column-amount
-                                                    GNC-DENOM-AUTO GNC-RND-ROUND)))
+                                          (merge-fn merging-subtotal column-amount)))
                                 (set! merging? #t)
                                 (set! width (+ width 1)))
                               (if merging?
@@ -917,8 +916,7 @@ Credit Card, and Income accounts."))))))
                                     ;; and add the column (with increased width).
                                     (if column-amount
                                         (set! merging-subtotal
-                                              (merge-fn merging-subtotal column-amount
-                                                        GNC-DENOM-AUTO GNC-RND-ROUND)))
+                                              (merge-fn merging-subtotal column-amount)))
                                     (set! width (+ width 1))
                                     (addto! row-contents
                                             (gnc:make-html-table-cell/size/markup
@@ -993,12 +991,13 @@ Credit Card, and Income accounts."))))))
          ; reverse? to optionally reverse signs
          ; subtotal? to allow subtotals (ie irrelevant for running balance)
          ; merge? to merge with the next cell (ie for debit/credit cells)
+         ; merging-function - function (usually gnc-numeric-add/sub-fixed to apply to merging-subtotal
          (if (column-uses? 'amount-single used-columns)
              (list (vector "Amount" amount #t #t (vector #f #f)))
              '())
          (if (column-uses? 'amount-double used-columns)
-             (list (vector "Debit" debit-amount #f #t (vector #t gnc-numeric-add))
-                   (vector "Credit" credit-amount #f #t (vector #f gnc-numeric-sub)))
+             (list (vector "Debit" debit-amount #f #t (vector #t gnc-numeric-add-fixed))
+                   (vector "Credit" credit-amount #f #t (vector #f gnc-numeric-sub-fixed)))
              '())
          (if (column-uses? 'amount-original-currency used-columns)
              (list (vector "Original" original-amount #f #t (vector #f #f)))
