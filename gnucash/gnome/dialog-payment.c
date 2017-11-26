@@ -954,7 +954,7 @@ gnc_payment_ok_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
             text = _("The transfer and post accounts are associated with different currencies. Please specify the conversion rate.");
 
             xfer = gnc_xfer_dialog(pw->dialog, pw->post_acct);
-            gnc_info_dialog(pw->dialog, "%s", text);
+            gnc_info_dialog (GTK_WINDOW (pw->dialog), "%s", text);
 
             gnc_xfer_dialog_select_to_account(xfer, pw->xfer_acct);
             gnc_xfer_dialog_set_amount(xfer, pw->amount_tot);
@@ -1341,7 +1341,7 @@ new_payment_window (GtkWidget *parent, QofBook *book, InitialPaymentInfo *tx_inf
              * Let's assert this to protect from potential future changes. */
             g_assert (g_list_length (pw->acct_types) == 1);
             acct_type = xaccAccountGetTypeStr(GPOINTER_TO_INT(pw->acct_types->data));
-            gnc_warning_dialog(pw->dialog,
+            gnc_warning_dialog(GTK_WINDOW (pw->dialog),
                                _("You have no valid \"Post To\" accounts. "
                                  "Please create an account of type \"%s\" "
                                  "before you continue to process this payment. "

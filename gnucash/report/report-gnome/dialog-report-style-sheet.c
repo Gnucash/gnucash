@@ -254,7 +254,7 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
         {
             /* If the name is empty, we display an error dialog but
              * refuse to create the new style sheet. */
-            gnc_error_dialog (ssd->toplevel, "%s", _("You must provide a name for the new style sheet."));
+            gnc_error_dialog (GTK_WINDOW (ssd->toplevel), "%s", _("You must provide a name for the new style sheet."));
             name_str = NULL;
         }
         if (template_str && name_str)

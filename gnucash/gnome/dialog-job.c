@@ -137,7 +137,7 @@ gnc_job_verify_ok (JobWindow *jw)
     if (g_strcmp0 (res, "") == 0)
     {
         const char *message = _("The Job must be given a name.");
-        gnc_error_dialog(jw->dialog, "%s", message);
+        gnc_error_dialog (GTK_WINDOW (jw->dialog), "%s", message);
         return FALSE;
     }
 
@@ -147,7 +147,7 @@ gnc_job_verify_ok (JobWindow *jw)
     if (res == NULL || g_strcmp0 (res, "") == 0)
     {
         const char *message = _("You must choose an owner for this job.");
-        gnc_error_dialog(jw->dialog, "%s", message);
+        gnc_error_dialog (GTK_WINDOW (jw->dialog), "%s", message);
         return FALSE;
     }
 

@@ -198,7 +198,7 @@ show_session_error (QofBackendError io_error,
                     const char *newfile,
                     GNCFileDialogType type)
 {
-    GtkWidget *parent = GTK_WIDGET (gnc_ui_get_main_window(NULL));
+    GtkWindow *parent = gnc_ui_get_main_window (NULL);
     GtkWidget *dialog;
     gboolean uh_oh = TRUE;
     const char *fmt, *label;
@@ -305,7 +305,7 @@ show_session_error (QofBackendError io_error,
             break;
         }
 
-        dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
+        dialog = gtk_message_dialog_new(parent,
                                         GTK_DIALOG_DESTROY_WITH_PARENT,
                                         GTK_MESSAGE_QUESTION,
                                         GTK_BUTTONS_NONE,
@@ -315,7 +315,7 @@ show_session_error (QofBackendError io_error,
                                _("_Cancel"), GTK_RESPONSE_CANCEL,
                                label, GTK_RESPONSE_YES,
                                NULL);
-        if (parent == NULL)
+        if (!parent)
             gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
         response = gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
@@ -948,7 +948,7 @@ RESTART:
                 uh_oh = TRUE;
 
                 // XXX: should pull out the file name here */
-                gnc_error_dialog(GTK_WIDGET (gnc_ui_get_main_window(NULL)), msg, "");
+                gnc_error_dialog (gnc_ui_get_main_window (NULL), msg, "");
                 g_free (msg);
             }
             if (template_root != NULL)
@@ -1308,7 +1308,7 @@ gnc_file_save (void)
 
     if (qof_book_is_readonly(qof_session_get_book(session)))
     {
-        gint response = gnc_ok_cancel_dialog(GTK_WIDGET (gnc_ui_get_main_window(NULL)),
+        gint response = gnc_ok_cancel_dialog(gnc_ui_get_main_window (NULL),
                                              GTK_RESPONSE_CANCEL,
                                              _("The database was opened read-only. "
                                                "Do you want to save it to a different place?"));

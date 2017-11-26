@@ -580,11 +580,11 @@ gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActi
     {
         if (summary.num_auto_create_no_notify_instances == 0)
         {
-            gnc_info_dialog(GTK_WIDGET(&window->gtk_window), "%s", nothing_to_do_msg);
+            gnc_info_dialog(GTK_WINDOW (window), "%s", nothing_to_do_msg);
         }
         else
         {
-            gnc_info_dialog(GTK_WIDGET(&window->gtk_window), ngettext
+            gnc_info_dialog(GTK_WINDOW (window), ngettext
                             /* Translators: %d is the number of transactions. This is a
                                ngettext(3) message. */
                             ("There are no Scheduled Transactions to be entered at this time. "

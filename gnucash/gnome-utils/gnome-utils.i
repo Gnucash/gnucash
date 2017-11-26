@@ -57,18 +57,18 @@ void gnc_options_dialog_set_scm_callbacks (GNCOptionWin *win,
         SCM apply_cb, SCM close_cb);
 
 gboolean
-gnc_verify_dialog(GtkWidget *parent, gboolean yes_is_default,
-		  const gchar *format, ...);
+gnc_verify_dialog (GtkWindow *parent, gboolean yes_is_default,
+		   const gchar *format, ...);
 
 void
-gnc_warning_dialog(GtkWidget *parent,
-                   const gchar *format, ...);
+gnc_warning_dialog (GtkWindow *parent,
+                    const gchar *format, ...);
 void
-gnc_error_dialog(GtkWidget *parent,
+gnc_error_dialog (GtkWindow *parent,
+		  const char *format, ...);
+void
+gnc_info_dialog (GtkWindow *parent,
 		 const char *format, ...);
-void
-gnc_info_dialog(GtkWidget *parent,
-		const char *format, ...);
 
 void gnc_add_scm_extension (SCM extension);
 

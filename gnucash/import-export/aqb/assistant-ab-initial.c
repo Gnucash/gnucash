@@ -373,7 +373,7 @@ aai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
     {
         g_warning("on_aqhbci_button: Oops, no aqhbci setup wizard found.");
         gnc_error_dialog
-        (info->window,
+        (GTK_WINDOW (info->window),
          _("The external program \"AqBanking Setup Wizard\" has not "
            "been found. \n\n"
            "The %s package should include the "
@@ -530,7 +530,7 @@ child_exit_cb(GPid pid, gint status, gpointer data)
                       "value: %d. The called program was \"%s\".\n",
                       exit_status, deferred_info->wizard_path);
             gnc_error_dialog
-            (info->window, "%s",
+            (GTK_WINDOW (info->window), "%s",
              _("The external program \"AqBanking Setup Wizard\" failed "
                "to run successfully because the "
                "additional software \"Qt\" was not found. "
@@ -551,7 +551,7 @@ child_exit_cb(GPid pid, gint status, gpointer data)
                       "value: %d. The called program was \"%s\".\n",
                       exit_status, deferred_info->wizard_path);
             gnc_error_dialog
-            (info->window, "%s",
+            (GTK_WINDOW (info->window), "%s",
              _("The external program \"AqBanking Setup Wizard\" failed "
                "to run successfully. Online Banking can only be setup "
                "if this wizard has run successfully. "

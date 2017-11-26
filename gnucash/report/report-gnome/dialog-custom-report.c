@@ -309,7 +309,7 @@ custom_report_delete (SCM guid, CustomReportDialog *crd)
     report_name = gnc_scm_to_utf8_string(scm_call_2(template_menu_name, guid, SCM_BOOL_F));
 
     /* we must confirm the user wants to delete their precious custom report! */
-    if (gnc_verify_dialog(crd->dialog, FALSE, _("Are you sure you want to delete %s?"), report_name))
+    if (gnc_verify_dialog( GTK_WINDOW (crd->dialog), FALSE, _("Are you sure you want to delete %s?"), report_name))
     {
         SCM del_report = scm_c_eval_string("gnc:delete-report");
         scm_call_1(del_report, guid);
@@ -352,7 +352,7 @@ get_custom_report_selection(CustomReportDialog *crd,
     else
     {
         /* no selection, notify user */
-        gnc_error_dialog(GTK_WIDGET(crd->window), "%s", message);
+        gnc_error_dialog (GTK_WINDOW (crd->dialog), "%s", message);
         return SCM_EOL;
 
     }
@@ -446,8 +446,8 @@ void custom_report_name_edited_cb(GtkCellRendererText *renderer, gchar *path, gc
     if (scm_is_true (scm_call_2 (unique_name_func, guid, new_name_scm)))
         custom_report_edit_report_name (guid, crd, new_text);
     else
-        gnc_error_dialog(crd->dialog, "%s",
-                         _("A saved report configuration with this name already exists, please choose another name.") );
+        gnc_error_dialog (GTK_WINDOW (crd->dialog), "%s",
+                          _("A saved report configuration with this name already exists, please choose another name.") );
 
 
 }

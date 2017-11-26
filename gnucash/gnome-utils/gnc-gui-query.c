@@ -50,7 +50,7 @@
  * Return: the result the user selected                             *
 \********************************************************************/
 gint
-gnc_ok_cancel_dialog(GtkWidget *parent,
+gnc_ok_cancel_dialog(GtkWindow *parent,
                      gint default_result,
                      const gchar *format, ...)
 {
@@ -59,12 +59,12 @@ gnc_ok_cancel_dialog(GtkWidget *parent,
     gchar *buffer;
     va_list args;
 
-    if (parent == NULL)
-        parent = GTK_WIDGET (gnc_ui_get_main_window(NULL));
+    if (!parent)
+        parent = gnc_ui_get_main_window (NULL);
 
     va_start(args, format);
     buffer = g_strdup_vprintf(format, args);
-    dialog = gtk_message_dialog_new (GTK_WINDOW(parent),
+    dialog = gtk_message_dialog_new (parent,
                                      GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
                                      GTK_MESSAGE_QUESTION,
                                      GTK_BUTTONS_OK_CANCEL,
@@ -73,7 +73,7 @@ gnc_ok_cancel_dialog(GtkWidget *parent,
     g_free(buffer);
     va_end(args);
 
-    if (parent == NULL)
+    if (!parent)
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
 
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), default_result);
@@ -99,7 +99,7 @@ gnc_ok_cancel_dialog(GtkWidget *parent,
  *                string.                                           *
 \********************************************************************/
 gboolean
-gnc_verify_dialog(GtkWidget *parent, gboolean yes_is_default,
+gnc_verify_dialog(GtkWindow *parent, gboolean yes_is_default,
                   const gchar *format, ...)
 {
     GtkWidget *dialog;
@@ -107,12 +107,12 @@ gnc_verify_dialog(GtkWidget *parent, gboolean yes_is_default,
     gint result;
     va_list args;
 
-    if (parent == NULL)
-        parent = GTK_WIDGET (gnc_ui_get_main_window(NULL));
+    if (!parent)
+        parent = gnc_ui_get_main_window (NULL);
 
     va_start(args, format);
     buffer = g_strdup_vprintf(format, args);
-    dialog = gtk_message_dialog_new (GTK_WINDOW(parent),
+    dialog = gtk_message_dialog_new (parent,
                                      GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
                                      GTK_MESSAGE_QUESTION,
                                      GTK_BUTTONS_YES_NO,
@@ -121,7 +121,7 @@ gnc_verify_dialog(GtkWidget *parent, gboolean yes_is_default,
     g_free(buffer);
     va_end(args);
 
-    if (parent == NULL)
+    if (!parent)
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
 
     gtk_dialog_set_default_response(GTK_DIALOG(dialog),
@@ -131,6 +131,30 @@ gnc_verify_dialog(GtkWidget *parent, gboolean yes_is_default,
     return (result == GTK_RESPONSE_YES);
 }
 
+static void
+gnc_message_dialog_common (GtkWindow *parent, const gchar *format, GtkMessageType msg_type, va_list args)
+{
+    GtkWidget *dialog = NULL;
+    gchar *buffer;
+
+    if (!parent)
+        parent = gnc_ui_get_main_window (NULL);
+
+    buffer = g_strdup_vprintf(format, args);
+    dialog = gtk_message_dialog_new (parent,
+                                     GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                     msg_type,
+                                     GTK_BUTTONS_CLOSE,
+                                     "%s",
+                                     buffer);
+    g_free(buffer);
+
+    if (!parent)
+        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
+
+    gtk_dialog_run (GTK_DIALOG (dialog));
+    gtk_widget_destroy (dialog);
+}
 
 /********************************************************************\
  * gnc_info_dialog                                                  *
@@ -144,36 +168,19 @@ gnc_verify_dialog(GtkWidget *parent, gboolean yes_is_default,
  * Return: none                                                     *
 \********************************************************************/
 void
-gnc_info_dialog(GtkWidget *parent, const gchar *format, ...)
+gnc_info_dialog (GtkWindow *parent, const gchar *format, ...)
 {
-    GtkWidget *dialog;
-    gchar *buffer;
     va_list args;
 
-    if (parent == NULL)
-        parent = GTK_WIDGET (gnc_ui_get_main_window (NULL));
-
     va_start(args, format);
-    buffer = g_strdup_vprintf(format, args);
-    dialog = gtk_message_dialog_new (GTK_WINDOW(parent),
-                                     GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                     GTK_MESSAGE_INFO,
-                                     GTK_BUTTONS_CLOSE,
-                                     "%s",
-                                     buffer);
+    gnc_message_dialog_common (parent, format, GTK_MESSAGE_INFO, args);
     va_end(args);
-
-    if (parent == NULL)
-        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
-
-    gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_destroy (dialog);
 }
 
 
 
 /********************************************************************\
- * gnc_warning_dialog_common                                        *
+ * gnc_warning_dialog                                               *
  *   displays a warning dialog box                                  *
  *                                                                  *
  * Args:   parent  - the parent window                              *
@@ -183,44 +190,20 @@ gnc_info_dialog(GtkWidget *parent, const gchar *format, ...)
  *                string.                                           *
  * Return: none                                                     *
 \********************************************************************/
-static void
-gnc_warning_dialog_common(GtkWidget *parent, const gchar *format, va_list args)
-{
-    GtkWidget *dialog = NULL;
-    gchar *buffer;
-
-    if (parent == NULL)
-        parent = GTK_WIDGET(gnc_ui_get_main_window(NULL));
-
-    buffer = g_strdup_vprintf(format, args);
-    dialog = gtk_message_dialog_new (GTK_WINDOW(parent),
-                                     GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                     GTK_MESSAGE_WARNING,
-                                     GTK_BUTTONS_CLOSE,
-                                     "%s",
-                                     buffer);
-    g_free(buffer);
-
-    if (parent == NULL)
-        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
-
-    gtk_dialog_run (GTK_DIALOG (dialog));
-    gtk_widget_destroy (dialog);
-}
 
 void
-gnc_warning_dialog(GtkWidget *parent, const gchar *format, ...)
+gnc_warning_dialog (GtkWindow *parent, const gchar *format, ...)
 {
     va_list args;
 
     va_start(args, format);
-    gnc_warning_dialog_common(parent, format, args);
+    gnc_message_dialog_common (parent, format, GTK_MESSAGE_WARNING, args);
     va_end(args);
 }
 
 
 /********************************************************************\
- * gnc_error_dialog_common                                          *
+ * gnc_error_dialog                                                 *
  *   displays an error dialog box                                   *
  *                                                                  *
  * Args:   parent  - the parent window                              *
@@ -230,38 +213,12 @@ gnc_warning_dialog(GtkWidget *parent, const gchar *format, ...)
  *                string.                                           *
  * Return: none                                                     *
 \********************************************************************/
-static void
-gnc_error_dialog_common(GtkWidget *parent, const gchar *format, va_list args)
-{
-    GtkWidget *dialog;
-    gchar *buffer;
-
-    if (parent == NULL)
-        parent = GTK_WIDGET(gnc_ui_get_main_window(NULL));
-
-    buffer = g_strdup_vprintf(format, args);
-    dialog = gtk_message_dialog_new (GTK_WINDOW(parent),
-                                     GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                     GTK_MESSAGE_ERROR,
-                                     GTK_BUTTONS_CLOSE,
-                                     "%s",
-                                     buffer);
-    g_free(buffer);
-
-    if (parent == NULL)
-        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
-
-    gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_destroy (dialog);
-}
-
-void
-gnc_error_dialog(GtkWidget *parent, const gchar *format, ...)
+void gnc_error_dialog (GtkWindow* parent, const char* format, ...)
 {
     va_list args;
 
     va_start(args, format);
-    gnc_error_dialog_common(parent, format, args);
+    gnc_message_dialog_common (parent, format, GTK_MESSAGE_ERROR, args);
     va_end(args);
 }
 

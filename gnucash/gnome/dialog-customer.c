@@ -279,14 +279,14 @@ static void gnc_ui_to_customer (CustomerWindow *cw, GncCustomer *cust)
     gnc_resume_gui_refresh ();
 }
 
-static gboolean check_edit_amount (GtkWidget *dialog, GtkWidget *amount,
+static gboolean check_edit_amount (GtkWidget *amount,
                                    gnc_numeric *min, gnc_numeric *max,
                                    const char * error_message)
 {
     if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (amount)))
     {
         if (error_message)
-            gnc_error_dialog (dialog, "%s", error_message);
+            gnc_error_dialog (gnc_ui_get_gtk_window (amount), "%s", error_message);
         return TRUE;
     }
     /* We've got a valid-looking number; check mix/max */
@@ -297,21 +297,21 @@ static gboolean check_edit_amount (GtkWidget *dialog, GtkWidget *amount,
                 (max && gnc_numeric_compare (val, *max) > 0))
         {
             if (error_message)
-                gnc_error_dialog (dialog, "%s", error_message);
+                gnc_error_dialog (gnc_ui_get_gtk_window (amount), "%s", error_message);
             return TRUE;
         }
     }
     return FALSE;
 }
 
-static gboolean check_entry_nonempty (GtkWidget *dialog, GtkWidget *entry,
+static gboolean check_entry_nonempty (GtkWidget *entry,
                                       const char * error_message)
 {
     const char *res = gtk_entry_get_text (GTK_ENTRY (entry));
     if (g_strcmp0 (res, "") == 0)
     {
         if (error_message)
-            gnc_error_dialog (dialog, "%s", error_message);
+            gnc_error_dialog (gnc_ui_get_gtk_window (entry), "%s", error_message);
         return TRUE;
     }
     return FALSE;
@@ -325,7 +325,7 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
     gchar *string;
 
     /* Check for valid company name */
-    if (check_entry_nonempty (cw->dialog, cw->company_entry,
+    if (check_entry_nonempty (cw->company_entry,
                               _("You must enter a company name. "
                                 "If this customer is an individual (and not a company) "
                                 "you should enter the same value for:\nIdentification "
@@ -333,13 +333,13 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
         return;
 
     /* Make sure we have an address */
-    if (check_entry_nonempty (cw->dialog, cw->addr1_entry, NULL) &&
-            check_entry_nonempty (cw->dialog, cw->addr2_entry, NULL) &&
-            check_entry_nonempty (cw->dialog, cw->addr3_entry, NULL) &&
-            check_entry_nonempty (cw->dialog, cw->addr4_entry, NULL))
+    if (check_entry_nonempty (cw->addr1_entry, NULL) &&
+            check_entry_nonempty (cw->addr2_entry, NULL) &&
+            check_entry_nonempty (cw->addr3_entry, NULL) &&
+            check_entry_nonempty (cw->addr4_entry, NULL))
     {
         const char *msg = _("You must enter a billing address.");
-        gnc_error_dialog (cw->dialog, "%s", msg);
+        gnc_error_dialog (gnc_ui_get_gtk_window (widget), "%s", msg);
         return;
     }
 
@@ -347,12 +347,12 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
     min = gnc_numeric_zero ();
     max = gnc_numeric_create (100, 1);
 
-    if (check_edit_amount (cw->dialog, cw->discount_amount, &min, &max,
+    if (check_edit_amount (cw->discount_amount, &min, &max,
                            _("Discount percentage must be between 0-100 "
                              "or you must leave it blank.")))
         return;
 
-    if (check_edit_amount (cw->dialog, cw->credit_amount, &min, NULL,
+    if (check_edit_amount (cw->credit_amount, &min, NULL,
                            _("Credit must be a positive amount or "
                              "you must leave it blank.")))
         return;

@@ -193,7 +193,7 @@ gnc_account_separator_validate_cb (GtkEntry *entry, GdkEvent *event, GtkWidget *
 
     if (conflict_msg)
     {
-        gnc_warning_dialog(dialog, "%s", conflict_msg);
+        gnc_warning_dialog (GTK_WINDOW (dialog), "%s", conflict_msg);
         g_free ( conflict_msg );
     }
     g_free (separator);

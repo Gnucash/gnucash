@@ -56,8 +56,8 @@ save_templates(GtkWidget *parent, Account *gnc_acc, GList *templates,
                gboolean dont_ask)
 {
     g_return_if_fail(gnc_acc);
-    if (dont_ask || gnc_verify_dialog(
-                parent, FALSE, "%s",
+    if (dont_ask || gnc_verify_dialog (
+                GTK_WINDOW (parent), FALSE, "%s",
                 _("You have changed the list of online transfer templates, "
                   "but you cancelled the transfer dialog. "
                   "Do you nevertheless want to store the changes?")))
@@ -113,7 +113,7 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
     if (!ab_acc)
     {
         g_warning("gnc_ab_gettrans: No AqBanking account found");
-        gnc_error_dialog(parent, _("No valid online banking account assigned."));
+        gnc_error_dialog (GTK_WINDOW (parent), _("No valid online banking account assigned."));
         goto cleanup;
     }
 
@@ -180,8 +180,8 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
 #endif
                                             ))
         {
-            if (!gnc_verify_dialog(
-                        parent, FALSE, "%s",
+            if (!gnc_verify_dialog (
+                        GTK_WINDOW (parent), FALSE, "%s",
                         _("The backend found an error during the preparation "
                           "of the job. It is not possible to execute this job. \n"
                           "\n"
@@ -289,8 +289,8 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
                     && job_status != AB_Job_StatusPending)
             {
                 successful = FALSE;
-                if (!gnc_verify_dialog(
-                            parent, FALSE, "%s",
+                if (!gnc_verify_dialog (
+                            GTK_WINDOW (parent), FALSE, "%s",
                             _("An error occurred while executing the job. Please check "
                               "the log window for the exact error message.\n"
                               "\n"

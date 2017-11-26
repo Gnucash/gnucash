@@ -834,7 +834,7 @@ gnc_option_changed_gain_loss_account_widget_cb (GtkTreeSelection *selection,
                         "the placeholder account by clicking on the arrow " \
                         "to the left.)");
 
-            gnc_error_dialog(NULL, "%s", message);
+            gnc_error_dialog (gnc_ui_get_gtk_window (book_currency_data->default_gain_loss_account_widget), "%s", message);
             if (book_currency_data->prior_gain_loss_account)
             {
                 (gnc_tree_view_account_set_selected_account

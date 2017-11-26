@@ -190,14 +190,14 @@ static void gnc_ui_to_vendor (VendorWindow *vw, GncVendor *vendor)
     gnc_resume_gui_refresh ();
 }
 
-static gboolean check_entry_nonempty (GtkWidget *dialog, GtkWidget *entry,
+static gboolean check_entry_nonempty (GtkWidget *entry,
                                       const char * error_message)
 {
     const char *res = gtk_entry_get_text (GTK_ENTRY (entry));
     if (g_strcmp0 (res, "") == 0)
     {
         if (error_message)
-            gnc_error_dialog (dialog, "%s", error_message);
+            gnc_error_dialog (gnc_ui_get_gtk_window (entry), "%s", error_message);
         return TRUE;
     }
     return FALSE;
@@ -210,7 +210,7 @@ gnc_vendor_window_ok_cb (GtkWidget *widget, gpointer data)
     gchar *string;
 
     /* Check for valid company name */
-    if (check_entry_nonempty (vw->dialog, vw->company_entry,
+    if (check_entry_nonempty (vw->company_entry,
                               _("You must enter a company name. "
                                 "If this vendor is an individual (and not a company) "
                                 "you should enter the same value for:\nIdentification "
@@ -218,13 +218,13 @@ gnc_vendor_window_ok_cb (GtkWidget *widget, gpointer data)
         return;
 
     /* Make sure we have an address */
-    if (check_entry_nonempty (vw->dialog, vw->addr1_entry, NULL) &&
-            check_entry_nonempty (vw->dialog, vw->addr2_entry, NULL) &&
-            check_entry_nonempty (vw->dialog, vw->addr3_entry, NULL) &&
-            check_entry_nonempty (vw->dialog, vw->addr4_entry, NULL))
+    if (check_entry_nonempty (vw->addr1_entry, NULL) &&
+            check_entry_nonempty (vw->addr2_entry, NULL) &&
+            check_entry_nonempty (vw->addr3_entry, NULL) &&
+            check_entry_nonempty (vw->addr4_entry, NULL))
     {
         const char *msg = _("You must enter a payment address.");
-        gnc_error_dialog (vw->dialog, "%s", msg);
+        gnc_error_dialog (gnc_ui_get_gtk_window (widget), "%s", msg);
         return;
     }
 

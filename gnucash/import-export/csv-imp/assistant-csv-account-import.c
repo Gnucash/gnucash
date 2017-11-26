@@ -168,7 +168,7 @@ csv_import_file_chooser_confirm_cb (GtkWidget *button, CsvImportInfo *info)
         gtk_list_store_clear (info->store);
         res = csv_import_read_file (info->file_name, info->regexp->str, info->store, 1 );
         if (res == RESULT_OPEN_FAILED)
-            gnc_error_dialog (info->window, _("The input file can not be opened."));
+            gnc_error_dialog (GTK_WINDOW (info->window), _("The input file can not be opened."));
         else if (res == RESULT_OK)
             gtk_assistant_set_page_complete (assistant, page, TRUE);
         else if (res == MATCH_FOUND)

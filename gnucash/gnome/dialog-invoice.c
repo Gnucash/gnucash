@@ -389,7 +389,7 @@ gnc_invoice_window_verify_ok (InvoiceWindow *iw)
     res = gncOwnerGetName (&(iw->owner));
     if (res == NULL || g_strcmp0 (res, "") == 0)
     {
-        gnc_error_dialog (iw_get_window(iw), "%s",
+        gnc_error_dialog (GTK_WINDOW (iw_get_window(iw)), "%s",
                           /* Translators: In this context,
                            * 'Billing information' maps to the
                            * label in the frame and means
@@ -600,7 +600,7 @@ gnc_invoice_window_deleteCB (GtkWidget *widget, gpointer data)
         else
             msg = g_strdup (message);
 
-        result = gnc_verify_dialog (iw_get_window(iw), FALSE, "%s", msg);
+        result = gnc_verify_dialog (GTK_WINDOW (iw_get_window(iw)), FALSE, "%s", msg);
         g_free (msg);
 
         if (!result)
@@ -794,7 +794,7 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
     /* Check that there is at least one Entry */
     if (gncInvoiceGetEntries (invoice) == NULL)
     {
-        gnc_error_dialog (iw_get_window(iw), "%s",
+        gnc_error_dialog (GTK_WINDOW (iw_get_window(iw)), "%s",
                           _("The Invoice must have at least one Entry."));
         return;
     }
@@ -853,7 +853,7 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
          */
         if (show_dialog)
         {
-            gnc_info_dialog(iw_get_window(iw), "%s", text);
+            gnc_info_dialog(GTK_WINDOW (iw_get_window(iw)), "%s", text);
             show_dialog = FALSE;
         }
 
@@ -967,7 +967,7 @@ cleanup:
     else
     {
         text = _("The post action was canceled because not all exchange rates were given.");
-        gnc_info_dialog(iw_get_window(iw), "%s", text);
+        gnc_info_dialog(GTK_WINDOW (iw_get_window(iw)), "%s", text);
     }
 
     /* ... and redisplay here. */
@@ -2943,7 +2943,7 @@ multi_post_invoice_cb (GList *invoice_list, gpointer user_data)
     gnc_resume_gui_refresh ();
     if (test)
     {
-        gnc_error_dialog (iw_get_window(iw), "%s",
+        gnc_error_dialog (GTK_WINDOW (iw_get_window(iw)), "%s",
                           _("One or more selected invoices have already been posted.\nRe-check your selection."));
         return;
     }

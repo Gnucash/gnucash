@@ -824,7 +824,7 @@ void
 gnc_tree_util_split_reg_set_value_for (GncTreeViewSplitReg *view, Transaction *trans, Split *split, gnc_numeric input, gboolean force)
 {
 //    GncTreeModelSplitReg *model;
-    GtkWidget *window;
+    GtkWindow *window;
 //    Account *anchor;
 //    Account *acct = xaccSplitGetAccount (split);
 //    gnc_commodity *currency;
@@ -845,7 +845,7 @@ gnc_tree_util_split_reg_set_value_for (GncTreeViewSplitReg *view, Transaction *t
         return;
     }
 
-    window = gnc_tree_view_split_reg_get_parent (view);
+    window = gnc_ui_get_main_window (GTK_WIDGET (view));
 
     if (gtu_sr_needs_exchange_rate (view, trans, split))
     {

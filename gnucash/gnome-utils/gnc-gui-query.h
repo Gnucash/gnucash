@@ -24,12 +24,11 @@
 #define QUERY_USER_H
 
 extern void
-gnc_info_dialog(GtkWidget *parent,
-                const char *format, ...) G_GNUC_PRINTF (2, 3);
-
-
-extern void
-gnc_error_dialog(GtkWidget *parent,
+gnc_info_dialog (GtkWindow *parent,
                  const char *format, ...) G_GNUC_PRINTF (2, 3);
+
+
+void gnc_error_dialog (GtkWindow* parent, const char* format, ...) G_GNUC_PRINTF (2, 3);
+
 
 #endif

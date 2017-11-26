@@ -1322,7 +1322,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
         if (force_dialog)
         {
             message = _("This register does not support editing exchange rates.");
-            gnc_error_dialog(gnc_split_register_get_parent(reg), "%s", message);
+            gnc_error_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)), "%s", message);
         }
         LEAVE("no rate cell");
         return FALSE;
@@ -1335,7 +1335,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
         if (force_dialog)
         {
             message = _("This register does not support editing exchange rates.");
-            gnc_error_dialog(gnc_split_register_get_parent(reg), "%s", message);
+            gnc_error_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)), "%s", message);
         }
         LEAVE("null rate cell");
         return FALSE;
@@ -1362,7 +1362,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
         {
             message = _("You need to select a split in order to modify its exchange "
                         "rate.");
-            gnc_error_dialog(gnc_split_register_get_parent(reg), "%s", message);
+            gnc_error_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)), "%s", message);
         }
         LEAVE("expanded with transaction cursor; nothing to do");
         return FALSE;
@@ -1377,7 +1377,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
     {
         message = _("You need to expand the transaction in order to modify its "
                     "exchange rates.");
-        gnc_error_dialog (gnc_split_register_get_parent (reg), "%s", message);
+        gnc_error_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)), "%s", message);
         LEAVE("%s", message);
         return TRUE;
     }
@@ -1388,7 +1388,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
         if (force_dialog)
         {
             message = _("The entered account could not be found.");
-            gnc_error_dialog(gnc_split_register_get_parent(reg), "%s", message);
+            gnc_error_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)), "%s", message);
         }
         LEAVE("no xfer account");
         return FALSE;
@@ -1423,7 +1423,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
         if (expanded || osplit == NULL)
         {
             message = _("The two currencies involved equal each other.");
-            gnc_error_dialog(gnc_split_register_get_parent(reg), "%s", message);
+            gnc_error_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)), "%s", message);
             LEAVE("register is expanded or osplit == NULL; not forcing dialog");
             return FALSE;
         }
@@ -1436,7 +1436,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
         if (gnc_commodity_equal (txn_cur, xfer_com))
         {
             message = _("The two currencies involved equal each other.");
-            gnc_error_dialog(gnc_split_register_get_parent(reg), "%s", message);
+            gnc_error_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)), "%s", message);
             LEAVE("reg commodity == txn commodity; not forcing");
             return FALSE;
         }
@@ -1454,7 +1454,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
                     "exchange rates.");
         if (force_dialog)
         {
-            gnc_error_dialog (gnc_split_register_get_parent (reg), "%s", message);
+            gnc_error_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)), "%s", message);
         }
         LEAVE("%s", message);
         return TRUE;
@@ -1487,7 +1487,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
         if (force_dialog)
         {
             message = _("The split's amount is zero, so no exchange rate is needed.");
-            gnc_error_dialog(gnc_split_register_get_parent(reg), "%s", message);
+            gnc_error_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)), "%s", message);
         }
         LEAVE("amount is zero; no exchange rate needed");
         return FALSE;

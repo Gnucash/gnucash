@@ -658,7 +658,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
                             // whether to continue or abort.
                             choosing_account =
                                 gnc_verify_dialog(
-                                    gnc_gen_trans_list_widget(gnc_ofx_importer_gui), TRUE,
+                                    GTK_WINDOW (gnc_gen_trans_list_widget(gnc_ofx_importer_gui)), TRUE,
                                     "The chosen account \"%s\" does not have the correct "
                                     "currency/security \"%s\" (it has \"%s\" instead). "
                                     "This account cannot be used. "

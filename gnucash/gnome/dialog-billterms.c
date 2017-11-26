@@ -289,14 +289,14 @@ verify_term_ok (NewBillTerm *nbt)
     case GNC_TERM_TYPE_DAYS:
         if (days_due_days<days_disc_days)
         {
-              gnc_error_dialog (nbt->dialog, "%s", message);
+              gnc_error_dialog (GTK_WINDOW (nbt->dialog), "%s", message);
               result=FALSE;
         }
         break;
     case GNC_TERM_TYPE_PROXIMO:
 	if (prox_due_days<prox_disc_days)
         {
-            gnc_error_dialog (nbt->dialog, "%s", message);
+            gnc_error_dialog (GTK_WINDOW (nbt->dialog), "%s", message);
             result=FALSE;
         }
         break;
@@ -324,7 +324,7 @@ new_billterm_ok_cb (NewBillTerm *nbt)
         if (name == NULL || *name == '\0')
         {
             message = _("You must provide a name for this Billing Term.");
-            gnc_error_dialog (nbt->dialog, "%s", message);
+            gnc_error_dialog (GTK_WINDOW (nbt->dialog), "%s", message);
             return FALSE;
         }
         if (gncBillTermLookupByName (btw->book, name))
@@ -332,7 +332,7 @@ new_billterm_ok_cb (NewBillTerm *nbt)
             message = g_strdup_printf(_(
                                           "You must provide a unique name for this Billing Term. "
                                           "Your choice \"%s\" is already in use."), name);
-            gnc_error_dialog (nbt->dialog, "%s", message);
+            gnc_error_dialog (GTK_WINDOW (nbt->dialog), "%s", message);
             g_free (message);
             return FALSE;
         }
@@ -664,13 +664,13 @@ billterms_delete_term_cb (GtkButton *button, BillTermsWindow *btw)
 
     if (gncBillTermGetRefcount (btw->current_term) > 0)
     {
-        gnc_error_dialog (btw->dialog,
+        gnc_error_dialog (GTK_WINDOW (btw->dialog),
                           _("Term \"%s\" is in use. You cannot delete it."),
                           gncBillTermGetName (btw->current_term));
         return;
     }
 
-    if (gnc_verify_dialog (btw->dialog, FALSE,
+    if (gnc_verify_dialog (GTK_WINDOW (btw->dialog), FALSE,
                            _("Are you sure you want to delete \"%s\"?"),
                            gncBillTermGetName (btw->current_term)))
     {

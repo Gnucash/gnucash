@@ -606,7 +606,7 @@ gnc_ab_trans_dialog_verify_values(GncABTransDialog *td)
             const char* localBankCode = AB_Transaction_GetLocalBankCode(td->ab_trans);
             const char* localAccountCode = AB_Transaction_GetLocalAccountNumber(td->ab_trans);
             values_ok = FALSE;
-            gnc_error_dialog(td->dialog,
+            gnc_error_dialog(GTK_WINDOW (td->dialog),
                              _("Your local bank account does not yet have the SEPA account information stored."
                                " We are sorry, but in this development version one additional step is necessary "
                                "which has not yet been implemented directly in gnucash. "
@@ -1179,7 +1179,7 @@ gnc_ab_trans_dialog_add_templ_cb(GtkButton *button, gpointer user_data)
                                find_templ_helper, &data);
         if (data.pointer)
         {
-            gnc_error_dialog(dialog, "%s",
+            gnc_error_dialog(GTK_WINDOW (dialog), "%s",
                              _("A template with the given name already exists. "
                                "Please enter another name."));
             continue;
@@ -1313,8 +1313,8 @@ gnc_ab_trans_dialog_del_templ_cb(GtkButton *button, gpointer user_data)
     }
 
     gtk_tree_model_get(model, &iter, TEMPLATE_NAME, &name, -1);
-    if (gnc_verify_dialog(
-                td->parent, FALSE,
+    if (gnc_verify_dialog (
+                GTK_WINDOW (td->parent), FALSE,
                 _("Do you really want to delete the template with the name \"%s\"?"),
                 name))
     {

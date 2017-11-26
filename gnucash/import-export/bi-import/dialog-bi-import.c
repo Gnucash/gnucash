@@ -98,7 +98,7 @@ gnc_bi_import_read_file (const gchar * filename, const gchar * parser_regexp,
     f = g_fopen (filename, "rt");
     if (!f)
     {
-        //gnc_error_dialog( 0, _("File %s cannot be opened."), filename );
+        //gnc_error_dialog (NULL, _("File %s cannot be opened."), filename );
         return RESULT_OPEN_FAILED;
     }
 

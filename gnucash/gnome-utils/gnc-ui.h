@@ -79,26 +79,26 @@
 /* Dialog windows ***************************************************/
 
 extern gboolean
-gnc_verify_dialog(GtkWidget *parent,
-                  gboolean yes_is_default,
-                  const char *format, ...) G_GNUC_PRINTF (3, 4);
+gnc_verify_dialog (GtkWindow *parent,
+                   gboolean yes_is_default,
+                   const char *format, ...) G_GNUC_PRINTF (3, 4);
 
 extern gint
-gnc_ok_cancel_dialog(GtkWidget *parent,
-                     gint default_result,
-                     const char *format, ...) G_GNUC_PRINTF (3, 4);
+gnc_ok_cancel_dialog (GtkWindow *parent,
+                      gint default_result,
+                      const char *format, ...) G_GNUC_PRINTF (3, 4);
 
 extern void
-gnc_warning_dialog(GtkWidget *parent,
-                   const char *format, ...) G_GNUC_PRINTF (2, 3);
+gnc_warning_dialog (GtkWindow *parent,
+                    const char *format, ...) G_GNUC_PRINTF (2, 3);
 
 extern void
-gnc_info_dialog(GtkWidget *parent,
-                const char *format, ...) G_GNUC_PRINTF (2, 3);
-
-extern void
-gnc_error_dialog(GtkWidget *parent,
+gnc_info_dialog (GtkWindow *parent,
                  const char *format, ...) G_GNUC_PRINTF (2, 3);
+
+extern void
+gnc_error_dialog (GtkWindow *parent,
+                  const char *format, ...) G_GNUC_PRINTF (2, 3);
 
 
 extern void
