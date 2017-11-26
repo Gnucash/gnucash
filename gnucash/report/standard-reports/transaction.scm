@@ -800,7 +800,7 @@ tags within description, notes or memo. ")
     (gnc:register-trep-option
      (gnc:make-multichoice-option
       gnc:pagename-display (N_ "Sign Reverses")
-      "p" (N_ "Reverse amount display for certain account types.")
+      "m1" (N_ "Reverse amount display for certain account types.")
       'credit-accounts
       (list (vector 'none
                     (N_ "None")
