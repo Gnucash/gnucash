@@ -286,11 +286,11 @@ options specified in the Options panels."))
    (cons 'non-void-only (list
                          (cons 'text (N_ "Non-void only"))
                          (cons 'tip (N_ "Show only non-voided transactions."))))
-         
+
    (cons 'void-only (list
                      (cons 'text (N_ "Void only"))
                      (cons 'tip (N_ "Show only voided transactions."))))
-   
+
    (cons 'both (list
                 (cons 'text (N_ "Both"))
                 (cons 'tip (N_ "Show both (and include void transactions in totals)."))))))
@@ -304,11 +304,11 @@ options specified in the Options panels."))
    (cons '(#\n) (list
                  (cons 'text (N_ "Unreconciled"))
                  (cons 'tip (N_ "Unreconciled only"))))
-   
+
    (cons '(#\c) (list
                  (cons 'text (N_ "Cleared"))
                  (cons 'tip (N_ "Cleared only"))))
-   
+
    (cons '(#\y) (list
                  (cons 'text (N_ "Reconciled"))
                  (cons 'tip (N_ "Reconciled only"))))))
@@ -484,7 +484,7 @@ tags within description, notes or memo. ")
 
   ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-  (let ((ascending-choice-list (keylist->vectorlist ascending-list))        
+  (let ((ascending-choice-list (keylist->vectorlist ascending-list))
         (prime-sortkey 'account-name)
         (prime-sortkey-subtotal-true #t)
         (sec-sortkey 'register-order)
