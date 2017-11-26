@@ -12,6 +12,7 @@
 ;; Refactored by Christopher Lam (2017)
 ;; - introduced account/transaction substring/regex matcher
 ;; - add custom sorter in scheme
+;; - common currency - optionally show original currency amount
 ;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -78,6 +79,7 @@
 (define optname-enddate (N_ "End Date"))
 (define optname-table-export (N_ "Table for Exporting"))
 (define optname-common-currency (N_ "Common Currency"))
+(define optname-orig-currency (N_ "Show original currency amount"))
 (define optname-currency (N_ "Report's currency"))
 
 ;Filtering
@@ -332,11 +334,21 @@ options specified in the Options panels."))
     "e" (N_ "Convert all transactions into a common currency.") #f
     #f
     (lambda (x)
-      (gnc-option-db-set-option-selectable-by-name
-       options gnc:pagename-general optname-currency x))))
+      (begin
+        (gnc-option-db-set-option-selectable-by-name options
+                                                     gnc:pagename-general
+                                                     optname-currency x)
+        (gnc-option-db-set-option-selectable-by-name options
+                                                     gnc:pagename-general
+                                                     optname-orig-currency x)))))
 
   (gnc:options-add-currency! options gnc:pagename-general optname-currency "f")
 
+  (gnc:register-trep-option
+   (gnc:make-simple-boolean-option
+    gnc:pagename-general optname-orig-currency
+    "f1" "Also show original currency amounts" #f))
+  
   (gnc:register-trep-option
    (gnc:make-simple-boolean-option
     gnc:pagename-general optname-table-export
@@ -843,7 +855,7 @@ Credit Card, and Income accounts."))))))
   (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
 
   (define (build-columns-used)
-    (define is-single? (eq? (opt-val gnc:pagename-display optname-detail-level) 'single))
+    (define detail-is-single? (eq? (opt-val gnc:pagename-display optname-detail-level) 'single))
     (define amount-setting (opt-val gnc:pagename-display (N_ "Amount")))
     (list (cons 'date (opt-val gnc:pagename-display (N_ "Date")))
           (cons 'reconciled-date (opt-val gnc:pagename-display (N_ "Reconciled Date")))
@@ -852,19 +864,22 @@ Credit Card, and Income accounts."))))))
                          (opt-val gnc:pagename-display (N_ "Num/Action"))))
           (cons 'description (opt-val gnc:pagename-display (N_ "Description")))
           (cons 'account-name (opt-val gnc:pagename-display (N_ "Account Name")))
-          (cons 'other-account-name (and is-single?
+          (cons 'other-account-name (and detail-is-single?
                                          (opt-val gnc:pagename-display (N_ "Other Account Name"))))
           (cons 'shares (opt-val gnc:pagename-display (N_ "Shares")))
           (cons 'price (opt-val gnc:pagename-display (N_ "Price")))
           (cons 'amount-single (eq? amount-setting 'single))
           (cons 'amount-double (eq? amount-setting 'double))
+          (cons 'amount-original-currency
+                (and (opt-val gnc:pagename-general optname-orig-currency)
+                     (opt-val gnc:pagename-general optname-common-currency)))
           (cons 'running-balance (opt-val gnc:pagename-display (N_ "Running Balance")))
           (cons 'account-full-name (opt-val gnc:pagename-display (N_ "Use Full Account Name")))
           (cons 'memo (opt-val gnc:pagename-display (N_ "Memo")))
           (cons 'account-code (opt-val gnc:pagename-display (N_ "Account Code")))
-          (cons 'other-account-code (and is-single?
+          (cons 'other-account-code (and detail-is-single?
                                          (opt-val gnc:pagename-display (N_ "Other Account Code"))))
-          (cons 'other-account-full-name (and is-single?
+          (cons 'other-account-full-name (and detail-is-single?
                                               (opt-val gnc:pagename-display (N_ "Use Full Other Account Name"))))
           (cons 'sort-account-code (opt-val pagename-sorting (N_ "Show Account Code")))
           (cons 'sort-account-full-name (opt-val pagename-sorting (N_ "Show Full Account Name")))
@@ -903,12 +918,18 @@ Credit Card, and Income accounts."))))))
      (add-if (column-uses? 'shares columns-used)
              (_ "Shares"))
      (add-if (column-uses? 'price columns-used)
-             (_ "Price"))
+             (_ "Price"))))
+
+  (define (make-amount-heading-list columns-used)
+    (define (add-if pred? . items) (if pred? items '()))
+    (append
      (add-if (column-uses? 'amount-single columns-used)
              (_ "Amount"))
      (add-if (column-uses? 'amount-double columns-used)
              (_ "Debit")
              (_ "Credit"))
+     (add-if (column-uses? 'amount-original-currency columns-used)
+             (_ "Original"))
      (add-if (column-uses? 'running-balance columns-used)
              (_ "Balance"))))
 
@@ -917,7 +938,9 @@ Credit Card, and Income accounts."))))))
          (table (gnc:make-html-table))
          (used-columns (build-columns-used))
          (headings (make-heading-list used-columns))
+         (amount-headings (make-amount-heading-list used-columns))
          (width (length headings))
+         (width-amount (length amount-headings))
          (account-types-to-reverse
           (cdr (assq (opt-val gnc:pagename-display (N_ "Sign Reverses"))
                      (list (cons 'none '())
@@ -930,37 +953,159 @@ Credit Card, and Income accounts."))))))
 
     (define (add-subheading data subheading-style)
       (let ((heading-cell (gnc:make-html-table-cell data)))
-        (gnc:html-table-cell-set-colspan! heading-cell width)
+        (gnc:html-table-cell-set-colspan! heading-cell (+ width width-amount))
         (gnc:html-table-append-row/markup!
          table subheading-style (list heading-cell))))
 
-    (define (add-subtotal-row string collector style)
-      (let ((currency-totals (collector 'format gnc:make-gnc-monetary #f)))
-        (gnc:html-table-append-row/markup!
-         table style
-         (if export?
-             (append! (cons (gnc:make-html-table-cell/markup "total-label-cell" string)
-                            (gnc:html-make-empty-cells (- width 2)))
-                      (list (gnc:make-html-table-cell/markup
-                             "total-number-cell"
-                             (car currency-totals))))
-             (list (gnc:make-html-table-cell/size/markup 1 (- width 1) "total-label-cell"
-                                                         string)
-                   (gnc:make-html-table-cell/markup
-                    "total-number-cell"
-                    (car currency-totals)))))
-        (for-each (lambda (currency)
-                    (gnc:html-table-append-row/markup!
-                     table style
-                     (append!
-                      (if export?
-                          (gnc:html-make-empty-cells (- width 1))
-                          (list (gnc:make-html-table-cell/size 1 (- width 1) #f)))
-                      (list (gnc:make-html-table-cell/markup
-                             "total-number-cell" currency)))))
-                  (cdr currency-totals))))
+    (define (add-subtotal-row subtotal-string subtotal-collectors-and-calculated-cells subtotal-style)
+      (let* ((row-contents '())
+             (subtotal-collectors (map car subtotal-collectors-and-calculated-cells))
+             (calculated-cells  (map cadr subtotal-collectors-and-calculated-cells))
+             (merge-list (map (lambda (cell) (vector-ref cell 4)) calculated-cells))
+             (columns (map (lambda (coll) (coll 'format gnc:make-gnc-monetary #f)) subtotal-collectors))
+             (list-of-commodities (delete-duplicates (map gnc:gnc-monetary-commodity (concatenate columns))
+                                                     gnc-commodity-equal)))
+
+        (define (retrieve-commodity list-of-monetary commodity)
+          (if (null? list-of-monetary)
+              #f
+              (if (gnc-commodity-equal (gnc:gnc-monetary-commodity (car list-of-monetary)) commodity)
+                  (car list-of-monetary)
+                  (retrieve-commodity (cdr list-of-monetary) commodity))))
+
+        (define (add-first-column string)
+          (if export?
+              (begin
+                (addto! row-contents (gnc:make-html-table-cell/markup "total-label-cell" string))
+                (for-each (lambda (cell) (addto! row-contents cell))
+                          (gnc:html-make-empty-cells (- width 1))))
+              (addto! row-contents (gnc:make-html-table-cell/size/markup 1 width "total-label-cell" string))))
+        
+        (define (add-columns commodity)
+          (let ((merging? #f)
+                (merging-subtotal (gnc:make-gnc-numeric 0 1))
+                (width 0))
+            (for-each (lambda (column merge-entry)
+                        (let* ((mon (retrieve-commodity column commodity))
+                               (column-amount (and mon (gnc:gnc-monetary-amount mon)))
+                               (merge? (vector-ref merge-entry 0))
+                               (merge-fn (vector-ref merge-entry 1)))
+                          (if merge?
+                              ;; We're merging. Run merge-fn (usu gnc-numeric-add or sub)
+                              ;; and store total in merging-subtotal. Do NOT add column.
+                              (begin
+                                (if column-amount
+                                    (set! merging-subtotal
+                                          (merge-fn merging-subtotal column-amount
+                                                    GNC-DENOM-AUTO GNC-RND-ROUND)))
+                                (set! merging? #t)
+                                (set! width (+ width 1)))
+                              (if merging?
+                                  (begin
+                                    ;; We've completed merging. Add this column amount
+                                    ;; and add the column (with increased width).
+                                    (if column-amount
+                                        (set! merging-subtotal
+                                              (merge-fn merging-subtotal column-amount
+                                                        GNC-DENOM-AUTO GNC-RND-ROUND)))
+                                    (set! width (+ width 1))
+                                    (addto! row-contents
+                                            (gnc:make-html-table-cell/size/markup
+                                             1 width "total-number-cell"
+                                             (gnc:make-gnc-monetary commodity merging-subtotal)))
+                                    (set! merging? #f)
+                                    (set! width 0)
+                                    (set! merging-subtotal (gnc:make-gnc-numeric 0 1)))
+
+                                  (addto! row-contents
+                                          (gnc:make-html-table-cell/markup "total-number-cell" mon))))))
+                      columns
+                      merge-list)))
+
+        ;first row
+        (add-first-column subtotal-string)
+        (add-columns (if (pair? list-of-commodities)
+                         (car list-of-commodities)
+                         #f)) ;to account for empty-row subtotals
+        (gnc:html-table-append-row/markup! table subtotal-style (reverse row-contents))
+
+        ;subsequent rows
+        (if (pair? list-of-commodities)
+            (for-each (lambda (commodity)
+                        (set! row-contents '())
+                        (add-first-column "")
+                        (add-columns commodity)
+                        (gnc:html-table-append-row/markup! table subtotal-style (reverse row-contents)))
+                      (cdr list-of-commodities)))))
 
     (define (total-string str) (string-append (_ "Total For ") str))
+
+    
+    ;                                                                                                                  
+    ;                 ;;;                  ;;;                             ;                       ;;;    ;;;          
+    ;                   ;                    ;            ;                ;                         ;      ;          
+    ;                   ;                    ;            ;                ;                         ;      ;          
+    ;    ;;;;  ;;;;     ;     ;;;;  ;   ;    ;    ;;;;   ;;;;;   ;;;    ;;;;          ;;;;   ;;;     ;      ;     ;;;; 
+    ;    ;  ;      ;    ;     ;  ;  ;   ;    ;        ;   ;     ;   ;  ;   ;          ;  ;  ;   ;    ;      ;    ;   ; 
+    ;   ;          ;    ;    ;      ;   ;    ;        ;   ;     ;   ;  ;   ;  ;;;;;  ;      ;   ;    ;      ;    ;;    
+    ;   ;       ;;;;    ;    ;      ;   ;    ;     ;;;;   ;     ;;;;;  ;   ;         ;      ;;;;;    ;      ;      ;;  
+    ;   ;      ;   ;    ;    ;      ;   ;    ;    ;   ;   ;     ;      ;   ;         ;      ;        ;      ;        ; 
+    ;    ;     ;   ;    ;     ;     ;   ;    ;    ;   ;   ;     ;;     ;   ;          ;     ;;       ;      ;    ;   ; 
+    ;    ;;;;  ;;;;;    ;;;   ;;;;   ;;;;    ;;;  ;;;;;    ;;;   ;;;;   ;;;;          ;;;;   ;;;;    ;;;    ;;;  ;;;;  
+    ;                                                                                                                  
+    ;                                                                                                                  
+    ;                                                                                                                  
+    ;                                                                                                                  
+    (define calculated-cells
+      (letrec
+          ((damount (lambda (s) (if (gnc:split-voided? s)
+                                    (xaccSplitVoidFormerAmount s)
+                                    (xaccSplitGetAmount s))))
+           (trans-date (lambda (s) (xaccTransGetDate (xaccSplitGetParent s))))
+           (currency (lambda (s) (xaccAccountGetCommodity (xaccSplitGetAccount s))))
+           (report-currency (lambda (s) (if (opt-val gnc:pagename-general optname-common-currency)
+                                            (opt-val gnc:pagename-general optname-currency)
+                                            (currency s))))
+           (time64CanonicalDayTime (lambda (t64)  (gnc-tm-set-day-middle (gnc-localtime t64))))
+           (convert (lambda (s num)
+                      (gnc:exchange-by-pricedb-nearest
+                       (gnc:make-gnc-monetary (currency s) num)
+                       (report-currency s)
+                       ;; Use midday as the transaction time so it matches a price
+                       ;; on the same day.  Otherwise it uses midnight which will
+                       ;; likely match a price on the previous day
+                       (time64CanonicalDayTime (trans-date s)))))
+           (split-value (lambda (s) (convert s (damount s)))) ; used for correct debit/credit
+           (amount (lambda (s) (split-value s)))
+           (debit-amount (lambda (s) (if (gnc-numeric-positive-p (gnc:gnc-monetary-amount (split-value s)))
+                                         (split-value s)
+                                         #f)))
+           (credit-amount (lambda (s) (if (gnc-numeric-positive-p (gnc:gnc-monetary-amount (split-value s)))
+                                          #f
+                                          (gnc:monetary-neg (split-value s)))))
+           (original-amount (lambda (s) (gnc:make-gnc-monetary (currency s) (damount s))))
+           (running-balance (lambda (s) (gnc:make-gnc-monetary (currency s) (xaccSplitGetBalance s)))))
+        (append
+         ; each column will be a vector
+         ; (vector heading calculator-function reverse-column? subtotal? (vector merge? merging-function))
+         ; (calculator-function split) to obtain amount
+         ; reverse? to optionally reverse signs
+         ; subtotal? to allow subtotals (ie irrelevant for running balance)
+         ; merge? to merge with the next cell (ie for debit/credit cells)
+         (if (column-uses? 'amount-single used-columns)
+             (list (vector "Amount" amount #t #t (vector #f #f)))
+             '())
+         (if (column-uses? 'amount-double used-columns)
+             (list (vector "Debit" debit-amount #f #t (vector #t gnc-numeric-add))
+                   (vector "Credit" credit-amount #f #t (vector #f gnc-numeric-sub)))
+             '())
+         (if (column-uses? 'amount-original-currency used-columns)
+             (list (vector "Original" original-amount #f #t (vector #f #f)))
+             '())
+         (if (column-uses? 'running-balance used-columns)
+             (list (vector "Running Balance" running-balance #t #f (vector #f #f)))
+             '()))))
+
     ;
     ;                                                                 
     ;                            ;                                    
@@ -1046,37 +1191,30 @@ Credit Card, and Income accounts."))))))
     ;                                      ;                                                      
     ;                                                                                             
 
-    (define (add-split-row split row-style transaction-row?)
+    (define (add-split-row split cell-calculators row-style transaction-row?)
       (let* ((row-contents '())
-             (parent (xaccSplitGetParent split))
-             (account (xaccSplitGetAccount split))
-             (account-type (xaccAccountGetType account))
-             (currency (if (null? account)
-                           (gnc-default-currency)
-                           (xaccAccountGetCommodity account)))
-             (report-currency (if (opt-val gnc:pagename-general optname-common-currency)
-                                  (opt-val gnc:pagename-general optname-currency)
-                                  currency))
-             (damount (if (gnc:split-voided? split)
-                          (xaccSplitVoidFormerAmount split)
-                          (xaccSplitGetAmount split)))
-             (trans-date (gnc-transaction-get-date-posted parent))
-             (split-value-not-reversed (gnc:exchange-by-pricedb-nearest ; used for correct debit/credit
-                                        (gnc:make-gnc-monetary currency damount)
-                                        report-currency
-                                        (timespecCanonicalDayTime trans-date)))
-             (split-value (gnc:exchange-by-pricedb-nearest
-                           (gnc:make-gnc-monetary
-                            currency
-                            (if (member account-type account-types-to-reverse)
-                                (gnc-numeric-neg damount)
-                                damount))
-                           report-currency
-                           ;; Use midday as the transaction time so it matches a price
-                           ;; on the same day.  Otherwise it uses midnight which will
-                           ;; likely match a price on the previous day
-                           (timespecCanonicalDayTime trans-date))))
-
+             (trans (xaccSplitGetParent split))
+             (account (xaccSplitGetAccount split)))
+        
+        (define cells
+          (map (lambda (cell)
+                 (let* ((calculator (vector-ref cell 1))
+                        (reverse? (vector-ref cell 2))
+                        (subtotal? (vector-ref cell 3))
+                        (calculated (calculator split))
+                        (reverse-amount (lambda (mon)
+                                            (let ((currency (gnc:gnc-monetary-commodity mon))
+                                                  (amount (gnc:gnc-monetary-amount mon)))
+                                              (gnc:make-gnc-monetary
+                                               currency
+                                               (gnc-numeric-neg amount))))))
+                   (vector (if (and reverse?
+                                    (member (xaccAccountGetType account) account-types-to-reverse))
+                               (reverse-amount calculated)
+                               calculated)
+                           subtotal?)))
+               cell-calculators))
+        
         (if (column-uses? 'date used-columns)
             (addto! row-contents
                     (if transaction-row?
@@ -1146,47 +1284,32 @@ Credit Card, and Income accounts."))))))
                                   (xaccSplitGetAmount split))))
 
         (if (column-uses? 'price used-columns)
-            (addto! row-contents  (gnc:make-gnc-monetary (xaccTransGetCurrency parent)
-                                                         (xaccSplitGetSharePrice split))))
-
-        (if (column-uses? 'amount-single used-columns)
             (addto! row-contents
                     (gnc:make-html-table-cell/markup
-                     "number-cell" (gnc:html-transaction-anchor parent split-value))))
+                     "number-cell"
+                     (gnc:make-gnc-monetary (xaccTransGetCurrency trans)
+                                            (xaccSplitGetSharePrice split)))))
 
-        (if (column-uses? 'amount-double used-columns)
-            ;; I'm now using the split-value-not-reversed. Internal value representation
-            ;; is positive = debit amount
-            ;; is negative = credit amount
-            ;; This must be checked. FIXME.
-            (if (gnc-numeric-positive-p (gnc:gnc-monetary-amount split-value-not-reversed))
-                (begin
-                  (addto! row-contents
-                          (gnc:make-html-table-cell/markup
-                           "number-cell" (gnc:html-transaction-anchor
-                                          parent split-value-not-reversed)))
-                  (addto! row-contents ""))
-                (begin
-                  (addto! row-contents "")
-                  (addto! row-contents
-                          (gnc:make-html-table-cell/markup
-                           "number-cell" (gnc:html-transaction-anchor
-                                          parent (gnc:monetary-neg split-value-not-reversed)))))))
-
-        (if (column-uses? 'running-balance used-columns)
-            (begin
-              ;(gnc:debug "split is " split)
-              ;(gnc:debug "split get balance:" (xaccSplitGetBalance split))
-              (addto! row-contents
-                      (gnc:make-html-table-cell/markup
-                       "number-cell"
-                       (gnc:make-gnc-monetary currency
-                                              (xaccSplitGetBalance split))))))
+        (for-each (lambda (cell)
+                    (let ((cell-content (vector-ref cell 0)))
+                      (if cell-content
+                          (addto! row-contents
+                                  (gnc:make-html-table-cell/markup
+                                   "number-cell"
+                                   (gnc:html-transaction-anchor
+                                    trans
+                                    cell-content)))
+                          (addto! row-contents (gnc:html-make-empty-cell)))))
+                  cells)
 
         (gnc:html-table-append-row/markup! table row-style (reverse row-contents))
-
-        split-value-not-reversed))
-
+        
+        (map (lambda (cell)
+               (let ((cell-content (vector-ref cell 0))
+                     (subtotal? (vector-ref cell 1)))
+                 (and subtotal? cell-content)))
+             cells)))
+    
     ;                                                                                                                  
     ;                                                                  ;                                  ;;;          
     ;                                                                  ;       ;             ;              ;          
@@ -1206,9 +1329,9 @@ Credit Card, and Income accounts."))))))
 
     (define (do-rows-with-subtotals splits
                                     odd-row?
-                                    primary-subtotal-collector
-                                    secondary-subtotal-collector
-                                    total-collector)
+                                    primary-subtotal-collectors
+                                    secondary-subtotal-collectors
+                                    total-collectors)
 
       (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
 
@@ -1221,36 +1344,46 @@ Credit Card, and Income accounts."))))))
              table def:grand-total-style
              (list
               (gnc:make-html-table-cell/size
-               1 width (gnc:make-html-text (gnc:html-markup-hr)))))
+               1 (+ width width-amount) (gnc:make-html-text (gnc:html-markup-hr)))))
 
             (if (opt-val gnc:pagename-display "Totals")
-                (add-subtotal-row (render-grand-total) total-collector def:grand-total-style)))
+                (add-subtotal-row (render-grand-total) (zip total-collectors calculated-cells) def:grand-total-style)))
 
           (let* ((current (car splits))
                  (rest (cdr splits))
                  (next (if (null? rest) #f (car rest)))
-                 (split-value (add-split-row
-                               current
-                               (if is-multiline? def:normal-row-style
-                                   (if odd-row?
-                                       def:normal-row-style
-                                       def:alternate-row-style))
-                               #t)))
+                 (split-values (add-split-row
+                                current
+                                calculated-cells
+                                (if is-multiline? def:normal-row-style
+                                    (if odd-row?
+                                        def:normal-row-style
+                                        def:alternate-row-style))
+                                #t)))
 
             (if is-multiline?
                 (for-each
                  (lambda (othersplits)
-                   (add-split-row othersplits def:alternate-row-style #f))
+                   (add-split-row othersplits calculated-cells def:alternate-row-style #f))
                  (delete current (xaccTransGetSplitList (xaccSplitGetParent current)))))
 
-            (primary-subtotal-collector
-             'add (gnc:gnc-monetary-commodity split-value) (gnc:gnc-monetary-amount split-value))
+            (map (lambda (collector value)
+                   (if value
+                       (collector 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))))
+                 primary-subtotal-collectors
+                 split-values)
 
-            (secondary-subtotal-collector
-             'add (gnc:gnc-monetary-commodity split-value) (gnc:gnc-monetary-amount split-value))
+            (map (lambda (collector value)
+                   (if value
+                       (collector 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))))
+                 secondary-subtotal-collectors
+                 split-values)
 
-            (total-collector
-             'add (gnc:gnc-monetary-commodity split-value) (gnc:gnc-monetary-amount split-value))
+            (map (lambda (collector value)
+                   (if value
+                       (collector 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))))
+                 total-collectors
+                 split-values)
 
             (if (and primary-subtotal-comparator
                      (or (not next)
@@ -1263,14 +1396,16 @@ Credit Card, and Income accounts."))))))
                       (begin
                         (add-subtotal-row (total-string
                                            (render-summary current secondary-renderer-key #f))
-                                          secondary-subtotal-collector
+                                          (zip secondary-subtotal-collectors calculated-cells)
                                           def:secondary-subtotal-style)
-                        (secondary-subtotal-collector 'reset #f #f)))
+                        (for-each (lambda (coll) (coll 'reset #f #f))
+                                  secondary-subtotal-collectors)))
                   (add-subtotal-row (total-string
                                      (render-summary current primary-renderer-key #f))
-                                    primary-subtotal-collector
+                                    (zip primary-subtotal-collectors calculated-cells)
                                     def:primary-subtotal-style)
-                  (primary-subtotal-collector 'reset #f #f)
+                  (for-each (lambda (coll) (coll 'reset #f #f))
+                            primary-subtotal-collectors)
                   (if next
                       (begin
                         (add-subheading (render-summary next primary-renderer-key #t)
@@ -1286,20 +1421,21 @@ Credit Card, and Income accounts."))))))
                                                (secondary-subtotal-comparator next))))))
                     (begin (add-subtotal-row (total-string
                                               (render-summary current secondary-renderer-key #f))
-                                             secondary-subtotal-collector
+                                             (zip secondary-subtotal-collectors calculated-cells)
                                              def:secondary-subtotal-style)
-                           (secondary-subtotal-collector 'reset #f #f)
+                           (for-each (lambda (coll) (coll 'reset #f #f))
+                                     secondary-subtotal-collectors)
                            (if next
                                (add-subheading (render-summary next secondary-renderer-key #t)
                                                def:secondary-subtotal-style)))))
 
             (do-rows-with-subtotals rest
                                     (not odd-row?)
-                                    primary-subtotal-collector
-                                    secondary-subtotal-collector
-                                    total-collector))))
+                                    primary-subtotal-collectors
+                                    secondary-subtotal-collectors
+                                    total-collectors))))
 
-    (gnc:html-table-set-col-headers! table headings)
+    (gnc:html-table-set-col-headers! table (concatenate (list headings amount-headings)))
 
     (if primary-renderer-key
         (add-subheading (render-summary (car splits) primary-renderer-key #t)
@@ -1310,9 +1446,9 @@ Credit Card, and Income accounts."))))))
                         def:secondary-subtotal-style))
 
     (do-rows-with-subtotals splits #t
-                            (gnc:make-commodity-collector)
-                            (gnc:make-commodity-collector)
-                            (gnc:make-commodity-collector))
+                            (map (lambda (x) (gnc:make-commodity-collector)) calculated-cells)
+                            (map (lambda (x) (gnc:make-commodity-collector)) calculated-cells)
+                            (map (lambda (x) (gnc:make-commodity-collector)) calculated-cells))
 
     table))
 
