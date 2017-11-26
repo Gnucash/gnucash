@@ -296,6 +296,9 @@ options specified in the Options panels."))
                 (cons 'tip (N_ "Show both (and include void transactions in totals)."))))))
 
 (define reconcile-status-list
+  ;; value will be either #f to disable reconciled-status filter
+  ;; or a list of xaccSplitGetReconcile values. e.g. value can
+  ;; be '(#\c #\y) to retrieve list of cleared and reconciled splits.
   (list
    (cons  #f (list
               (cons 'text (N_ "All"))
@@ -1441,9 +1444,9 @@ Credit Card, and Income accounts."))))))
          (secondary-date-subtotal (opt-val pagename-sorting optname-sec-date-subtotal))
          (void-status (opt-val gnc:pagename-accounts optname-void-transactions))
          (splits '())
-         (custom-sort? (or (and (member primary-key DATE-SORTING-TYPES)
-                                (not (eq? primary-date-subtotal 'none)))
-                           (and (member secondary-key DATE-SORTING-TYPES)
+         (custom-sort? (or (and (member primary-key DATE-SORTING-TYPES)   ; this will remain
+                                (not (eq? primary-date-subtotal 'none)))  ; until qof-query
+                           (and (member secondary-key DATE-SORTING-TYPES) ; is upgraded
                                 (not (eq? secondary-date-subtotal 'none)))))
          (query (qof-query-create-for-splits)))
 
@@ -1487,12 +1490,12 @@ Credit Card, and Income accounts."))))))
 
     (define (primary-comparator? X Y)
       (generic-less? X Y primary-key
-                     (opt-val pagename-sorting optname-prime-date-subtotal)
+                     primary-date-subtotal
                      (eq? primary-order 'ascend)))
 
     (define (secondary-comparator? X Y)
       (generic-less? X Y secondary-key
-                     (opt-val pagename-sorting optname-sec-date-subtotal)
+                     secondary-date-subtotal
                      (eq? secondary-order 'ascend)))
 
     ;; This will, by default, sort the split list by ascending posted-date.
