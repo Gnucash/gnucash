@@ -827,8 +827,8 @@ tags within description, notes or memo. ")
 
     (define (column-uses? param)
       (cdr (assq param used-columns)))
-    
-    (define headings
+
+    (define left-columns
       (let* ((add-if (lambda pred? . items) (if pred? items '())))
         (append
          (add-if (column-uses? 'date)
@@ -855,106 +855,7 @@ tags within description, notes or memo. ")
          (add-if (column-uses? 'shares)
                  (_ "Shares"))
          (add-if (column-uses? 'price)
-                 (_ "Price")))))
-
-    (define width (length headings))
-
-    (define (add-subheading data subheading-style)
-      (let ((heading-cell (gnc:make-html-table-cell data)))
-        (gnc:html-table-cell-set-colspan! heading-cell (+ width width-amount))
-        (gnc:html-table-append-row/markup!
-         table subheading-style
-         (list heading-cell))))
-
-
-    (define (add-subtotal-row subtotal-string subtotal-collectors-and-calculated-cells subtotal-style)
-      (let* ((row-contents '())
-             (subtotal-collectors (map car subtotal-collectors-and-calculated-cells))
-             (calculated-cells  (map cadr subtotal-collectors-and-calculated-cells))
-             (merge-list (map (lambda (cell) (vector-ref cell 4)) calculated-cells))
-             (columns (map (lambda (coll) (coll 'format gnc:make-gnc-monetary #f)) subtotal-collectors))
-             (list-of-commodities (delete-duplicates (map gnc:gnc-monetary-commodity (concatenate columns))
-                                                     gnc-commodity-equal)))
-
-        (define (retrieve-commodity list-of-monetary commodity)
-          (and (not (null? list-of-monetary))
-               (if (gnc-commodity-equal (gnc:gnc-monetary-commodity (car list-of-monetary)) commodity)
-                   (car list-of-monetary)
-                   (retrieve-commodity (cdr list-of-monetary) commodity))))
-
-        (define (add-first-column string)
-          (if export?
-              (begin
-                (addto! row-contents (gnc:make-html-table-cell/markup "total-label-cell" string))
-                (for-each (lambda (cell) (addto! row-contents cell))
-                          (gnc:html-make-empty-cells (- width 1))))
-              (addto! row-contents (gnc:make-html-table-cell/size/markup 1 width "total-label-cell" string))))
-
-        (define (add-columns commodity)
-          (let ((start-dual-column? #f)
-                (dual-subtotal (gnc:make-gnc-numeric 0 1)))
-            (for-each (lambda (column merge-entry)
-                        (let* ((mon (retrieve-commodity column commodity))
-                               (col (and mon (gnc:gnc-monetary-amount mon)))
-                               (merge? (vector-ref merge-entry 0))
-                               (merge-fn (vector-ref merge-entry 1)))
-                          (if merge?
-                              ;; We're merging. Run merge-fn (usu gnc-numeric-add or sub)
-                              ;; and store total in dual-subtotal. Do NOT add column.
-                              (begin
-                                (if column-amount
-                                    (set! dual-subtotal
-                                          (merge-fn dual-subtotal column-amount
-                                                    GNC-DENOM-AUTO GNC-HOW-RND-ROUND)))
-                                (set! start-dual-column? #t))
-                              (if start-dual-column?
-                                  (begin
-                                    ;; We've completed merging. Add this column amount
-                                    ;; and add the columns.
-                                    (if column-amount
-                                        (set! dual-subtotal
-                                              (merge-fn dual-subtotal column-amount
-                                                        GNC-DENOM-AUTO GNC-HOW-RND-ROUND)))
-                                    (if (gnc-numeric-positive-p dual-subtotal)
-                                        (begin
-                                          (addto! row-contents
-                                                  (gnc:make-html-table-cell/markup
-                                                   "total-number-cell"
-                                                   (gnc:make-gnc-monetary commodity dual-subtotal)))
-                                          (addto! row-contents ""))
-                                        (begin
-                                          (addto! row-contents "")
-                                          (addto! row-contents
-                                                  (gnc:make-html-table-cell/markup
-                                                   "total-number-cell"
-                                                   (gnc:make-gnc-monetary
-                                                    commodity
-                                                    (gnc-numeric-neg dual-subtotal))))))
-                                    (set! start-dual-column? #f)
-                                    (set! dual-subtotal (gnc:make-gnc-numeric 0 1)))
-				  ;; Default; not merging/completed merge. Just
-				  ;; display monetary amount
-                                  (addto! row-contents
-                                          (gnc:make-html-table-cell/markup "total-number-cell" mon))))))
-                      columns
-                      merge-list)))
-
-        ;;first row
-        (add-first-column subtotal-string)
-        (add-columns (and (pair? list-of-commodities)
-                          (car list-of-commodities))) ;to account for empty-row subtotals
-        (gnc:html-table-append-row/markup! table subtotal-style (reverse row-contents))
-
-        ;;subsequent rows
-        (if (pair? list-of-commodities)
-            (for-each (lambda (commodity)
-                        (set! row-contents '())
-                        (add-first-column "")
-                        (add-columns commodity)
-                        (gnc:html-table-append-row/markup! table subtotal-style (reverse row-contents)))
-                      (cdr list-of-commodities)))))
-
-    (define (total-string str) (string-append (_ "Total For ") str))
+                 (_ "Price"))))
 
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;;
@@ -998,11 +899,9 @@ tags within description, notes or memo. ")
                                           #f
                                           (gnc:monetary-neg (split-value s)))))
            (original-amount (lambda (s) (gnc:make-gnc-monetary (currency s) (damount s))))
-
            (original-debit-amount (lambda (s) (if (gnc-numeric-positive-p (damount s))
                                                   (original-amount s)
                                                   #f)))
-
            (original-credit-amount (lambda (s) (if (gnc-numeric-positive-p (damount s))
                                                    #f
                                                    (gnc:monetary-neg (original-amount s)))))
@@ -1052,12 +951,113 @@ tags within description, notes or memo. ")
                            (vector #f #f)))
              '()))))
 
-    (define amount-headings
+    (define headings-left-columns
+      (map (lambda (column)
+             (vector-ref column 0))
+           left-columns))
+
+    (define headings-right-columns
       (map (lambda (column)
              (vector-ref column 0))
            calculated-cells))
 
-    (define width-amount (length amount-headings))
+    (define width-left-columns (length left-columns))
+    (define width-right-columns (length calculated-cells))
+
+    (define (add-subheading data subheading-style)
+      (let ((heading-cell (gnc:make-html-table-cell data)))
+        (gnc:html-table-cell-set-colspan! heading-cell (+ width-left-columns width-right-columns))
+        (gnc:html-table-append-row/markup!
+         table subheading-style (list heading-cell))))
+
+    (define (add-subtotal-row subtotal-string subtotal-collectors subtotal-style)
+      (let* ((row-contents '())
+             (merge-list (map (lambda (cell) (vector-ref cell 4)) calculated-cells))
+             (columns (map (lambda (coll) (coll 'format gnc:make-gnc-monetary #f)) subtotal-collectors))
+             (list-of-commodities (delete-duplicates (map gnc:gnc-monetary-commodity (concatenate columns))
+                                                     gnc-commodity-equal)))
+
+        (define (retrieve-commodity list-of-monetary commodity)
+          (if (null? list-of-monetary)
+              #f
+              (if (gnc-commodity-equal (gnc:gnc-monetary-commodity (car list-of-monetary)) commodity)
+                  (car list-of-monetary)
+                  (retrieve-commodity (cdr list-of-monetary) commodity))))
+
+        (define (add-first-column string)
+          (if export?
+              (begin
+                (addto! row-contents (gnc:make-html-table-cell/markup "total-label-cell" string))
+                (for-each (lambda (cell) (addto! row-contents cell))
+                          (gnc:html-make-empty-cells (- width-left-columns 1))))
+              (addto! row-contents (gnc:make-html-table-cell/size/markup 1 width-left-columns "total-label-cell" string))))
+
+        (define (add-columns commodity)
+          (let ((start-dual-column? #f)
+                (dual-subtotal (gnc:make-gnc-numeric 0 1)))
+            (for-each (lambda (column merge-entry)
+                        (let* ((mon (retrieve-commodity column commodity))
+                               (column-amount (and mon (gnc:gnc-monetary-amount mon)))
+                               (merge? (vector-ref merge-entry 0))
+                               (merge-fn (vector-ref merge-entry 1)))
+                          (if merge?
+                              ;; We're merging. Run merge-fn (usu gnc-numeric-add or sub)
+                              ;; and store total in dual-subtotal. Do NOT add column.
+                              (begin
+                                (if column-amount
+                                    (set! dual-subtotal
+                                          (merge-fn dual-subtotal column-amount
+                                                    GNC-DENOM-AUTO GNC-HOW-RND-ROUND)))
+                                (set! start-dual-column? #t))
+                              (if start-dual-column?
+                                  (begin
+                                    ;; We've completed merging. Add this column amount
+                                    ;; and add the columns.
+                                    (if column-amount
+                                        (set! dual-subtotal
+                                              (merge-fn dual-subtotal column-amount
+                                                        GNC-DENOM-AUTO GNC-HOW-RND-ROUND)))
+                                    (if (gnc-numeric-positive-p dual-subtotal)
+                                        (begin
+                                          (addto! row-contents
+                                                  (gnc:make-html-table-cell/markup
+                                                   "total-number-cell"
+                                                   (gnc:make-gnc-monetary commodity dual-subtotal)))
+                                          (addto! row-contents ""))
+                                        (begin
+                                          (addto! row-contents "")
+                                          (addto! row-contents
+                                                  (gnc:make-html-table-cell/markup
+                                                   "total-number-cell"
+                                                   (gnc:make-gnc-monetary
+                                                    commodity
+                                                    (gnc-numeric-neg dual-subtotal))))))
+                                    (set! start-dual-column? #f)
+                                    (set! dual-subtotal (gnc:make-gnc-numeric 0 1)))
+                                  ;; Default; not merging/completed merge. Just
+                                  ;; display monetary amount
+                                  (addto! row-contents
+                                          (gnc:make-html-table-cell/markup "total-number-cell" mon))))))
+                      columns
+                      merge-list)))
+
+        ;;first row
+        (add-first-column subtotal-string)
+        (add-columns (if (pair? list-of-commodities)
+                         (car list-of-commodities)
+                         #f)) ;to account for empty-row subtotals
+        (gnc:html-table-append-row/markup! table subtotal-style (reverse row-contents))
+
+        ;;subsequent rows
+        (if (pair? list-of-commodities)
+            (for-each (lambda (commodity)
+                        (set! row-contents '())
+                        (add-first-column "")
+                        (add-columns commodity)
+                        (gnc:html-table-append-row/markup! table subtotal-style (reverse row-contents)))
+                      (cdr list-of-commodities)))))
+
+    (define (total-string str) (string-append (_ "Total For ") str))
 
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1269,10 +1269,10 @@ tags within description, notes or memo. ")
              table def:grand-total-style
              (list
               (gnc:make-html-table-cell/size
-               1 (+ width width-amount) (gnc:make-html-text (gnc:html-markup-hr)))))
+               1 (+ width-left-columns width-right-columns) (gnc:make-html-text (gnc:html-markup-hr)))))
 
             (if (opt-val gnc:pagename-display "Totals")
-                (add-subtotal-row (render-grand-total) (zip total-collectors calculated-cells) def:grand-total-style)))
+                (add-subtotal-row (render-grand-total) total-collectors def:grand-total-style)))
 
           (let* ((current (car splits))
                  (rest (cdr splits))
@@ -1321,13 +1321,13 @@ tags within description, notes or memo. ")
                       (begin
                         (add-subtotal-row (total-string
                                            (render-summary current secondary-renderer-key #f))
-                                          (zip secondary-subtotal-collectors calculated-cells)
+                                          secondary-subtotal-collectors
                                           def:secondary-subtotal-style)
                         (for-each (lambda (coll) (coll 'reset #f #f))
                                   secondary-subtotal-collectors)))
                   (add-subtotal-row (total-string
                                      (render-summary current primary-renderer-key #f))
-                                    (zip primary-subtotal-collectors calculated-cells)
+                                    primary-subtotal-collectors
                                     def:primary-subtotal-style)
                   (for-each (lambda (coll) (coll 'reset #f #f))
                             primary-subtotal-collectors)
@@ -1346,7 +1346,7 @@ tags within description, notes or memo. ")
                                                (secondary-subtotal-comparator next))))))
                     (begin (add-subtotal-row (total-string
                                               (render-summary current secondary-renderer-key #f))
-                                             (zip secondary-subtotal-collectors calculated-cells)
+                                             secondary-subtotal-collectors
                                              def:secondary-subtotal-style)
                            (for-each (lambda (coll) (coll 'reset #f #f))
                                      secondary-subtotal-collectors)
@@ -1360,7 +1360,7 @@ tags within description, notes or memo. ")
                                     secondary-subtotal-collectors
                                     total-collectors))))
 
-    (gnc:html-table-set-col-headers! table (concatenate (list headings amount-headings)))
+    (gnc:html-table-set-col-headers! table (concatenate (list headings-left-columns headings-right-columns)))
 
     (if primary-renderer-key
         (add-subheading (render-summary (car splits) primary-renderer-key #t)
