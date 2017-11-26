@@ -1194,10 +1194,10 @@ tags within description, notes or memo. ")
             (addto! row-contents
                     (gnc:make-html-table-cell/markup
                      "date-cell"
-                     (let ((date (gnc-split-get-date-reconciled split)))
-                       (if (equal? date (cons 0 0))
+                     (let ((date (xaccSplitGetDateReconciled split)))
+                       (if (zero? date)
                            ""
-                           (gnc-print-date date))))))
+                           (qof-print-date date))))))
 
         (if (column-uses? 'num)
             (addto! row-contents
