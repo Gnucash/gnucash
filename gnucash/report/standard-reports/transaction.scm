@@ -1597,9 +1597,6 @@ Credit Card, and Income accounts."))))))
                                      (member (xaccSplitGetReconcile split) reconcile-status-filter)))))
                         splits))
 
-          (gnc:warn "(opt-val gnc:pagename-general optname-startdate) is "
-                    (opt-val gnc:pagename-general optname-startdate))
-          
           (if (null? splits)
 
               ;; error condition: no splits found
