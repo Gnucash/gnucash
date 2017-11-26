@@ -936,7 +936,8 @@ Credit Card, and Income accounts."))))))
                               (begin
                                 (if column-amount
                                     (set! dual-subtotal
-                                          (merge-fn dual-subtotal column-amount)))
+                                          (merge-fn dual-subtotal column-amount
+                                                    GNC-DENOM-AUTO GNC-HOW-RND-ROUND)))
                                 (set! start-dual-column? #t))
                               (if start-dual-column?
                                   (begin
@@ -944,7 +945,8 @@ Credit Card, and Income accounts."))))))
                                     ;; and add the column.
                                     (if column-amount
                                         (set! dual-subtotal
-                                              (merge-fn dual-subtotal column-amount)))
+                                              (merge-fn dual-subtotal column-amount
+                                                        GNC-DENOM-AUTO GNC-HOW-RND-ROUND)))
                                     (if (gnc-numeric-positive-p dual-subtotal)
                                         (begin
                                           (addto! row-contents
@@ -1035,8 +1037,8 @@ Credit Card, and Income accounts."))))))
              (list (vector "Amount" amount #t #t (vector #f #f)))
              '())
          (if (column-uses? 'amount-double used-columns)
-             (list (vector "Debit" debit-amount #f #t (vector #t gnc-numeric-add-fixed))
-                   (vector "Credit" credit-amount #f #t (vector #f gnc-numeric-sub-fixed)))
+             (list (vector "Debit" debit-amount #f #t (vector #t gnc-numeric-add))
+                   (vector "Credit" credit-amount #f #t (vector #f gnc-numeric-sub)))
              '())
          (if (column-uses? 'amount-original-currency used-columns)
              (list (vector "Original" original-amount #f #t (vector #f #f)))
