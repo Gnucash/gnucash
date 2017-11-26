@@ -1229,7 +1229,7 @@ Credit Card, and Income accounts."))))))
                     (if transaction-row?
                         (gnc:make-html-table-cell/markup
                          "date-cell"
-                         (gnc-print-date trans-date))
+                         (gnc-print-date (gnc-transaction-get-date-posted trans)))
                         "")))
 
         (if (column-uses? 'reconciled-date used-columns)
@@ -1245,20 +1245,20 @@ Credit Card, and Income accounts."))))))
             (addto! row-contents
                     (if transaction-row?
                         (if BOOK-SPLIT-ACTION
-                            (let* ((num (gnc-get-num-action parent split))
+                            (let* ((num (gnc-get-num-action trans split))
                                    (t-num (if (if (gnc:lookup-option options
                                                                      gnc:pagename-display
                                                                      (N_ "Trans Number"))
                                                   (opt-val gnc:pagename-display (N_ "Trans Number"))
                                                   "")
-                                              (gnc-get-num-action parent #f)
+                                              (gnc-get-num-action trans #f)
                                               ""))
                                    (num-string (if (string-null? t-num)
                                                    num
                                                    (string-append num "/" t-num))))
                               (gnc:make-html-table-cell/markup "text-cell" num-string))
                             (gnc:make-html-table-cell/markup "text-cell"
-                                                             (gnc-get-num-action parent split)))
+                                                             (gnc-get-num-action trans split)))
                         "")))
 
         (if (column-uses? 'description used-columns)
@@ -1266,13 +1266,13 @@ Credit Card, and Income accounts."))))))
                     (if transaction-row?
                         (gnc:make-html-table-cell/markup
                          "text-cell"
-                         (xaccTransGetDescription parent))
+                         (xaccTransGetDescription trans))
                         "")))
 
         (if (column-uses? 'memo used-columns)
             (let ((memo (xaccSplitGetMemo split)))
               (if (and (string-null? memo) (column-uses? 'notes used-columns))
-                  (addto! row-contents (xaccTransGetNotes parent))
+                  (addto! row-contents (xaccTransGetNotes trans))
                   (addto! row-contents memo))))
 
         (if (or (column-uses? 'account-name used-columns) (column-uses? 'account-code used-columns))
@@ -1585,14 +1585,13 @@ Credit Card, and Income accounts."))))))
                         (cons 'amount (lambda (s) (gnc-numeric-to-double (xaccSplitGetValue s))))
                         (cons 'description (lambda (s) (xaccTransGetDescription (xaccSplitGetParent s))))
                         (cons 'number (lambda (s)
-                                        (if (qof-book-use-split-action-for-num-field (gnc-get-current-book))
+                                        (if BOOK-SPLIT-ACTION
                                             (xaccSplitGetAction s)
                                             (xaccTransGetNum (xaccSplitGetParent s)))))
                         (cons 't-number (lambda (s) (xaccTransGetNum (xaccSplitGetParent s))))
                         (cons 'register-order (lambda (s) #f))
                         (cons 'memo (lambda (s) (xaccSplitGetMemo s)))
                         (cons 'none (lambda (s) #f)))))))
-      ;(gnc:warn "comparing " (comparator-function X) (if ascend? "<" ">") (comparator-function Y))
       (cond
         ((string? (comparator-function X)) ((if ascend? string<? string>?) (comparator-function X) (comparator-function Y)))
         ((comparator-function X)           ((if ascend? < >)               (comparator-function X) (comparator-function Y)))
