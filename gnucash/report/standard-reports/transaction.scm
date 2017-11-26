@@ -377,7 +377,7 @@ options specified in the Options panels."))
   (gnc:register-trep-option
    (gnc:make-simple-boolean-option
     gnc:pagename-general optname-orig-currency
-    "f1" "Also show original currency amounts" #f))
+    "f1" (N_ "Also show original currency amounts") #f))
 
   (gnc:register-trep-option
    (gnc:make-simple-boolean-option
