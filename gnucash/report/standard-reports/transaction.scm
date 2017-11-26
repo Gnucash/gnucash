@@ -1027,15 +1027,6 @@ Credit Card, and Income accounts."))))))
                    (xaccAccountGetName account))
                ""))))
 
-;    (define (render-date renderer-key split)
-;      ((case renderer-key
-;         ((week) gnc:date-get-week-year-string)
-;         ((month) gnc:date-get-month-year-string)
-;         ((quarter) gnc:date-get-quarter-year-string)
-;         ((year) gnc:date-get-year-string))
-;       (gnc:timepair->date
-;        (gnc-transaction-get-date-posted
-; 
     (define (render-date renderer-key split)
       ((case renderer-key
          ((week) gnc:date-get-week-year-string)
