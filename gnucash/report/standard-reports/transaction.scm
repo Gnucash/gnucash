@@ -968,17 +968,21 @@ tags within description, notes or memo. ")
                            (vector #f gnc-numeric-sub)))
              '())
 
-         (if (column-uses? 'amount-original-currency)
-             (if (column-uses? 'amount-double)
-                 (list (vector (_ "Debit")
-                               original-debit-amount #f #t
-                               (vector #t gnc-numeric-add))
-                       (vector (_ "Credit")
-                               original-credit-amount #f #t
-                               (vector #f gnc-numeric-sub)))
-                 (list (vector (_ "Amount")
-                               original-amount #t #t
-                               (vector #f #f))))
+         (if (and (column-uses? 'amount-original-currency)
+                  (column-uses? 'amount-single))
+             (list (vector (_ "Amount")
+                           original-amount #t #t
+                           (vector #f #f)))
+             '())
+
+         (if (and (column-uses? 'amount-original-currency)
+                  (column-uses? 'amount-double))
+             (list (vector (_ "Debit")
+                           original-debit-amount #f #t
+                           (vector #t gnc-numeric-add))
+                   (vector (_ "Credit")
+                           original-credit-amount #f #t
+                           (vector #f gnc-numeric-sub)))
              '())
 
          (if (column-uses? 'running-balance)
