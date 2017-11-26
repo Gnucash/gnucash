@@ -104,8 +104,8 @@
 (define NO-MATCHING-TRANS-TEXT (_ "No transactions were found that \
 match the time interval and account selection specified \
 in the Options panel."))
-(define NO-MATCHING-ACCT-HEADER (N_ "No matching accounts found"))
-(define NO-MATCHING-ACCT-TEXT (N_ "No account were found that match the \
+(define NO-MATCHING-ACCT-HEADER (_ "No matching accounts found"))
+(define NO-MATCHING-ACCT-TEXT (_ "No account were found that match the \
 options specified in the Options panels."))
 
 ;; bugfix - this was formerly 'date 'register-order
@@ -136,87 +136,87 @@ options specified in the Options panels."))
   ;;
   (list (cons 'account-name  (list (cons 'sortkey (list SPLIT-ACCT-FULLNAME))
                                    (cons 'split-sortvalue (lambda (a) (gnc-account-get-full-name (xaccSplitGetAccount a))))
-                                   (cons 'text (N_ "Account Name"))
-                                   (cons 'tip (N_ "Sort & subtotal by account name."))
+                                   (cons 'text (_ "Account Name"))
+                                   (cons 'tip (_ "Sort & subtotal by account name."))
                                    (cons 'renderer-key 'account)))
 
         (cons 'account-code (list (cons 'sortkey (list SPLIT-ACCOUNT ACCOUNT-CODE-))
                                   (cons 'split-sortvalue (lambda (a) (xaccAccountGetCode (xaccSplitGetAccount a))))
-                                  (cons 'text (N_ "Account Code"))
-                                  (cons 'tip (N_ "Sort & subtotal by account code."))
+                                  (cons 'text (_ "Account Code"))
+                                  (cons 'tip (_ "Sort & subtotal by account code."))
                                   (cons 'renderer-key 'account)))
 
         (cons 'date         (list (cons 'sortkey (list SPLIT-TRANS TRANS-DATE-POSTED))
                                   (cons 'split-sortvalue #f)
-                                  (cons 'text (N_ "Date"))
-                                  (cons 'tip (N_ "Sort by date."))
+                                  (cons 'text (_ "Date"))
+                                  (cons 'tip (_ "Sort by date."))
                                   (cons 'renderer-key #f)))
 
         (cons 'reconciled-date (list (cons 'sortkey (list SPLIT-DATE-RECONCILED))
                                      (cons 'split-sortvalue #f)
-                                     (cons 'text (N_ "Reconciled Date"))
-                                     (cons 'tip (N_ "Sort by the Reconciled Date."))
+                                     (cons 'text (_ "Reconciled Date"))
+                                     (cons 'tip (_ "Sort by the Reconciled Date."))
                                      (cons 'renderer-key #f)))
 
         (cons 'register-order (list (cons 'sortkey (list QUERY-DEFAULT-SORT))
                                     (cons 'split-sortvalue #f)
-                                    (cons 'text (N_ "Register Order"))
-                                    (cons 'tip (N_ "Sort as in the register."))
+                                    (cons 'text (_ "Register Order"))
+                                    (cons 'tip (_ "Sort as in the register."))
                                     (cons 'renderer-key #f)))
 
         (cons 'corresponding-acc-name (list (cons 'sortkey (list SPLIT-CORR-ACCT-NAME))
                                             (cons 'split-sortvalue (lambda (a) (xaccSplitGetCorrAccountFullName a)))
-                                            (cons 'text (N_ "Other Account Name"))
-                                            (cons 'tip (N_ "Sort by account transferred from/to's name."))
+                                            (cons 'text (_ "Other Account Name"))
+                                            (cons 'tip (_ "Sort by account transferred from/to's name."))
                                             (cons 'renderer-key 'other-acc)))
 
         (cons 'corresponding-acc-code (list (cons 'sortkey (list SPLIT-CORR-ACCT-CODE))
                                             (cons 'split-sortvalue (lambda (a) (xaccSplitGetCorrAccountCode a)))
-                                            (cons 'text (N_ "Other Account Code"))
-                                            (cons 'tip (N_ "Sort by account transferred from/to's code."))
+                                            (cons 'text (_ "Other Account Code"))
+                                            (cons 'tip (_ "Sort by account transferred from/to's code."))
                                             (cons 'renderer-key 'other-acct)))
 
         (cons 'amount        (list (cons 'sortkey (list SPLIT-VALUE))
                                    (cons 'split-sortvalue #f)
-                                   (cons 'text (N_ "Amount"))
-                                   (cons 'tip (N_ "Sort by amount."))
+                                   (cons 'text (_ "Amount"))
+                                   (cons 'tip (_ "Sort by amount."))
                                    (cons 'renderer-key #f)))
 
         (cons 'description   (list (cons 'sortkey (list SPLIT-TRANS TRANS-DESCRIPTION))
                                    (cons 'split-sortvalue #f)
-                                   (cons 'text (N_ "Description"))
-                                   (cons 'tip (N_ "Sort by description."))
+                                   (cons 'text (_ "Description"))
+                                   (cons 'tip (_ "Sort by description."))
                                    (cons 'renderer-key #f)))
 
         (if BOOK-SPLIT-ACTION
             (cons 'number    (list (cons 'sortkey (list SPLIT-ACTION))
                                    (cons 'split-sortvalue #f)
-                                   (cons 'text (N_ "Number/Action"))
-                                   (cons 'tip (N_ "Sort by check number/action."))
+                                   (cons 'text (_ "Number/Action"))
+                                   (cons 'tip (_ "Sort by check number/action."))
                                    (cons 'renderer-key #f)))
 
             (cons 'number    (list (cons 'sortkey (list SPLIT-TRANS TRANS-NUM))
                                    (cons 'split-sortvalue #f)
-                                   (cons 'text (N_ "Number"))
-                                   (cons 'tip (N_ "Sort by check/transaction number."))
+                                   (cons 'text (_ "Number"))
+                                   (cons 'tip (_ "Sort by check/transaction number."))
                                    (cons 'renderer-key #f))))
 
         (cons 't-number      (list (cons 'sortkey (list SPLIT-TRANS TRANS-NUM))
                                    (cons 'split-sortvalue #f)
-                                   (cons 'text (N_ "Transaction Number"))
-                                   (cons 'tip (N_ "Sort by transaction number."))
+                                   (cons 'text (_ "Transaction Number"))
+                                   (cons 'tip (_ "Sort by transaction number."))
                                    (cons 'renderer-key #f)))
 
         (cons 'memo          (list (cons 'sortkey (list SPLIT-MEMO))
                                    (cons 'split-sortvalue #f)
-                                   (cons 'text (N_ "Memo"))
-                                   (cons 'tip (N_ "Sort by memo."))
+                                   (cons 'text (_ "Memo"))
+                                   (cons 'tip (_ "Sort by memo."))
                                    (cons 'renderer-key #f)))
 
         (cons 'none          (list (cons 'sortkey '())
                                    (cons 'split-sortvalue #f)
-                                   (cons 'text (N_ "None"))
-                                   (cons 'tip (N_ "Do not sort."))
+                                   (cons 'text (_ "None"))
+                                   (cons 'tip (_ "Do not sort."))
                                    (cons 'renderer-key #f)))))
 
 
@@ -239,61 +239,61 @@ options specified in the Options panels."))
   (list
    (cons 'none (list
                 (cons 'split-sortvalue #f)
-                (cons 'text (N_ "None"))
-                (cons 'tip (N_ "None."))
+                (cons 'text (_ "None"))
+                (cons 'tip (_ "None."))
                 (cons 'renderer-key #f)))
 
    (cons 'weekly (list
                   (cons 'split-sortvalue split-week)
-                  (cons 'text (N_ "Weekly"))
-                  (cons 'tip (N_ "Weekly."))
+                  (cons 'text (_ "Weekly"))
+                  (cons 'tip (_ "Weekly."))
                   (cons 'renderer-key 'week)))
 
    (cons 'monthly (list
                    (cons 'split-sortvalue split-month)
-                   (cons 'text (N_ "Monthly"))
-                   (cons 'tip (N_ "Monthly."))
+                   (cons 'text (_ "Monthly"))
+                   (cons 'tip (_ "Monthly."))
                    (cons 'renderer-key 'month)))
 
    (cons 'quarterly (list
                      (cons 'split-sortvalue split-quarter)
-                     (cons 'text (N_ "Quarterly"))
-                     (cons 'tip (N_ "Quarterly."))
+                     (cons 'text (_ "Quarterly"))
+                     (cons 'tip (_ "Quarterly."))
                      (cons 'renderer-key 'quarter)))
 
    (cons 'yearly (list
                   (cons 'split-sortvalue split-year)
-                  (cons 'text (N_ "Yearly"))
-                  (cons 'tip (N_ "Yearly."))
+                  (cons 'text (_ "Yearly"))
+                  (cons 'tip (_ "Yearly."))
                   (cons 'renderer-key 'year)))))
 
 (define filter-list
   (list
    (cons 'none (list
-                (cons 'text (N_ "None"))
-                (cons 'tip (N_ "Do not do any filtering."))))
+                (cons 'text (_ "None"))
+                (cons 'tip (_ "Do not do any filtering."))))
 
    (cons 'include (list
-                   (cons 'text (N_ "Include Transactions to/from Filter Accounts"))
-                   (cons 'tip (N_ "Include transactions to/from filter accounts only."))))
+                   (cons 'text (_ "Include Transactions to/from Filter Accounts"))
+                   (cons 'tip (_ "Include transactions to/from filter accounts only."))))
 
    (cons 'exclude (list
-                   (cons 'text (N_ "Exclude Transactions to/from Filter Accounts"))
-                   (cons 'tip (N_ "Exclude transactions to/from all filter accounts."))))))
+                   (cons 'text (_ "Exclude Transactions to/from Filter Accounts"))
+                   (cons 'tip (_ "Exclude transactions to/from all filter accounts."))))))
 
 (define show-void-list
   (list
    (cons 'non-void-only (list
-                         (cons 'text (N_ "Non-void only"))
-                         (cons 'tip (N_ "Show only non-voided transactions."))))
+                         (cons 'text (_ "Non-void only"))
+                         (cons 'tip (_ "Show only non-voided transactions."))))
 
    (cons 'void-only (list
-                     (cons 'text (N_ "Void only"))
-                     (cons 'tip (N_ "Show only voided transactions."))))
+                     (cons 'text (_ "Void only"))
+                     (cons 'tip (_ "Show only voided transactions."))))
 
    (cons 'both (list
-                (cons 'text (N_ "Both"))
-                (cons 'tip (N_ "Show both (and include void transactions in totals)."))))))
+                (cons 'text (_ "Both"))
+                (cons 'tip (_ "Show both (and include void transactions in totals)."))))))
 
 (define reconcile-status-list
   ;; value will be either #f to disable reconciled-status filter
@@ -301,52 +301,52 @@ options specified in the Options panels."))
   ;; be '(#\c #\y) to retrieve list of cleared and reconciled splits.
   (list
    (cons  #f (list
-              (cons 'text (N_ "All"))
-              (cons 'tip (N_ "Show All Transactions"))))
+              (cons 'text (_ "All"))
+              (cons 'tip (_ "Show All Transactions"))))
 
    (cons '(#\n) (list
-                 (cons 'text (N_ "Unreconciled"))
-                 (cons 'tip (N_ "Unreconciled only"))))
+                 (cons 'text (_ "Unreconciled"))
+                 (cons 'tip (_ "Unreconciled only"))))
 
    (cons '(#\c) (list
-                 (cons 'text (N_ "Cleared"))
-                 (cons 'tip (N_ "Cleared only"))))
+                 (cons 'text (_ "Cleared"))
+                 (cons 'tip (_ "Cleared only"))))
 
    (cons '(#\y) (list
-                 (cons 'text (N_ "Reconciled"))
-                 (cons 'tip (N_ "Reconciled only"))))))
+                 (cons 'text (_ "Reconciled"))
+                 (cons 'tip (_ "Reconciled only"))))))
 
 
 (define ascending-list
   (list
    (cons 'ascend (list
-                  (cons 'text (N_ "Ascending"))
-                  (cons 'tip (N_ "Smallest to largest, earliest to latest."))))
+                  (cons 'text (_ "Ascending"))
+                  (cons 'tip (_ "Smallest to largest, earliest to latest."))))
    (cons 'descend (list
-                   (cons 'text (N_ "Descending"))
-                   (cons 'tip (N_ "Largest to smallest, latest to earliest."))))))
+                   (cons 'text (_ "Descending"))
+                   (cons 'tip (_ "Largest to smallest, latest to earliest."))))))
 
 (define sign-reverse-list
   (list
    (cons 'global
          (list
-          (cons 'text (N_ "Use Global Preference"))
-          (cons 'tip (N_ "Use reversing option specified in global preference."))
+          (cons 'text (_ "Use Global Preference"))
+          (cons 'tip (_ "Use reversing option specified in global preference."))
           (cons 'acct-types #f)))
    (cons 'none
          (list
-          (cons 'text (N_ "None"))
-          (cons 'tip (N_ "Don't change any displayed amounts."))
+          (cons 'text (_ "None"))
+          (cons 'tip (_ "Don't change any displayed amounts."))
           (cons 'acct-types '())))
    (cons 'income-expense
          (list
-          (cons 'text (N_ "Income and Expense"))
-          (cons 'tip (N_ "Reverse amount display for Income and Expense Accounts."))
+          (cons 'text (_ "Income and Expense"))
+          (cons 'tip (_ "Reverse amount display for Income and Expense Accounts."))
           (cons 'acct-types (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE))))
    (cons 'credit-accounts
          (list
-          (cons 'text (N_ "Credit Accounts"))
-          (cons 'tip (N_ "Reverse amount display for Liability, Payable, Equity, \
+          (cons 'text (_ "Credit Accounts"))
+          (cons 'tip (_ "Reverse amount display for Liability, Payable, Equity, \
 Credit Card, and Income accounts."))
           (cons 'acct-types (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE
                                   ACCT-TYPE-EQUITY ACCT-TYPE-CREDIT
@@ -388,7 +388,7 @@ Credit Card, and Income accounts."))
   (gnc:register-trep-option
    (gnc:make-complex-boolean-option
     gnc:pagename-general optname-common-currency
-    "e" (N_ "Convert all transactions into a common currency.") #f
+    "e" (_ "Convert all transactions into a common currency.") #f
     #f
     (lambda (x)
       (begin
@@ -404,12 +404,12 @@ Credit Card, and Income accounts."))
   (gnc:register-trep-option
    (gnc:make-simple-boolean-option
     gnc:pagename-general optname-orig-currency
-    "f1" (N_ "Also show original currency amounts") #f))
+    "f1" (_ "Also show original currency amounts") #f))
 
   (gnc:register-trep-option
    (gnc:make-simple-boolean-option
     gnc:pagename-general optname-table-export
-    "g" (N_ "Formats the table suitable for cut & paste exporting with extra cells.") #f))
+    "g" (_ "Formats the table suitable for cut & paste exporting with extra cells.") #f))
 
   ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -421,7 +421,7 @@ Credit Card, and Income accounts."))
   (gnc:register-trep-option
    (gnc:make-string-option
     pagename-filter optname-account-matcher
-    "a5" (N_ "Match only accounts whose fullname is matched e.g. ':Travel' will match \
+    "a5" (_ "Match only accounts whose fullname is matched e.g. ':Travel' will match \
 Expenses:Travel:Holiday and Expenses:Business:Travel. It can be left blank, which will \
 disable the matcher.")
     ""))
@@ -430,7 +430,7 @@ disable the matcher.")
    (gnc:make-simple-boolean-option
     pagename-filter optname-account-matcher-regex
     "a6"
-    (N_ "By default the account matcher will search substring only. Set this to true to \
+    (_ "By default the account matcher will search substring only. Set this to true to \
 enable full POSIX regular expressions capabilities. 'Car|Flights' will match both \
 Expenses:Car and Expenses:Flights. Use a period (.) to match a single character e.g. \
 '20../.' will match 'Travel 2017/1 London'. ")
@@ -439,7 +439,7 @@ Expenses:Car and Expenses:Flights. Use a period (.) to match a single character 
   (gnc:register-trep-option
    (gnc:make-string-option
     pagename-filter optname-transaction-matcher
-    "i1" (N_ "Match only transactions whose substring is matched e.g. '#gift' \
+    "i1" (_ "Match only transactions whose substring is matched e.g. '#gift' \
 will find all transactions with #gift in description, notes or memo. It can be left \
 blank, which will disable the matcher.")
     ""))
@@ -448,7 +448,7 @@ blank, which will disable the matcher.")
    (gnc:make-simple-boolean-option
     pagename-filter optname-transaction-matcher-regex
     "i2"
-    (N_ "By default the transaction matcher will search substring only. Set this to true to \
+    (_ "By default the transaction matcher will search substring only. Set this to true to \
 enable full POSIX regular expressions capabilities. '#work|#family' will match both \
 tags within description, notes or memo. ")
     #f))
@@ -456,7 +456,7 @@ tags within description, notes or memo. ")
   (gnc:register-trep-option
    (gnc:make-multichoice-option
     pagename-filter optname-reconcile-status
-    "j1" (N_ "Filter by reconcile status.")
+    "j1" (_ "Filter by reconcile status.")
     #f
     (keylist->vectorlist reconcile-status-list)))
 
@@ -477,7 +477,7 @@ tags within description, notes or memo. ")
   (gnc:register-trep-option
    (gnc:make-account-list-option
     gnc:pagename-accounts optname-accounts
-    "a" (N_ "Report on these accounts.")
+    "a" (_ "Report on these accounts.")
     ;; select, by default, no accounts! Selecting all accounts will
     ;; always imply an insanely long waiting time upon opening, and it
     ;; is almost never useful. So we instead display the normal error
@@ -490,7 +490,7 @@ tags within description, notes or memo. ")
   (gnc:register-trep-option
    (gnc:make-account-list-option
     gnc:pagename-accounts optname-filterby
-    "c1" (N_ "Filter on these accounts.")
+    "c1" (_ "Filter on these accounts.")
     (lambda ()
       '())
     #f #t))
@@ -498,7 +498,7 @@ tags within description, notes or memo. ")
   (gnc:register-trep-option
    (gnc:make-multichoice-callback-option
     gnc:pagename-accounts optname-filtertype
-    "c" (N_ "Filter account.")
+    "c" (_ "Filter account.")
     'none
     (keylist->vectorlist filter-list)
     #f
@@ -573,7 +573,7 @@ tags within description, notes or memo. ")
     (gnc:register-trep-option
      (gnc:make-multichoice-callback-option
       pagename-sorting optname-prime-sortkey
-      "a" (N_ "Sort by this criterion first.")
+      "a" (_ "Sort by this criterion first.")
       prime-sortkey
       key-choice-list #f
       (lambda (x)
@@ -584,28 +584,28 @@ tags within description, notes or memo. ")
      (gnc:make-simple-boolean-option
       pagename-sorting optname-full-account-name
       "j1"
-      (N_ "Show the full account name for subtotals and subheadings?")
+      (_ "Show the full account name for subtotals and subheadings?")
       #f))
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
       pagename-sorting optname-show-account-code
       "j2"
-      (N_ "Show the account code for subtotals and subheadings?")
+      (_ "Show the account code for subtotals and subheadings?")
       #f))
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
       pagename-sorting optname-show-account-description
       "j3"
-      (N_ "Show the account description for subheadings?")
+      (_ "Show the account description for subheadings?")
       #f))
 
     (gnc:register-trep-option
      (gnc:make-complex-boolean-option
       pagename-sorting optname-prime-subtotal
       "e5"
-      (N_ "Subtotal according to the primary key?")
+      (_ "Subtotal according to the primary key?")
       prime-sortkey-subtotal-true #f
       (lambda (x)
         (set! prime-sortkey-subtotal-true x)
@@ -614,14 +614,14 @@ tags within description, notes or memo. ")
     (gnc:register-trep-option
      (gnc:make-multichoice-option
       pagename-sorting optname-prime-date-subtotal
-      "e2" (N_ "Do a date subtotal.")
+      "e2" (_ "Do a date subtotal.")
       'monthly
       date-subtotal-choice-list))
 
     (gnc:register-trep-option
      (gnc:make-multichoice-option
       pagename-sorting optname-prime-sortorder
-      "e" (N_ "Order of primary sorting.")
+      "e" (_ "Order of primary sorting.")
       'ascend
       ascending-choice-list))
 
@@ -630,7 +630,7 @@ tags within description, notes or memo. ")
      (gnc:make-multichoice-callback-option
       pagename-sorting optname-sec-sortkey
       "f"
-      (N_ "Sort by this criterion second.")
+      (_ "Sort by this criterion second.")
       sec-sortkey
       key-choice-list #f
       (lambda (x)
@@ -641,7 +641,7 @@ tags within description, notes or memo. ")
      (gnc:make-complex-boolean-option
       pagename-sorting optname-sec-subtotal
       "i5"
-      (N_ "Subtotal according to the secondary key?")
+      (_ "Subtotal according to the secondary key?")
       sec-sortkey-subtotal-true #f
       (lambda (x)
         (set! sec-sortkey-subtotal-true x)
@@ -650,14 +650,14 @@ tags within description, notes or memo. ")
     (gnc:register-trep-option
      (gnc:make-multichoice-option
       pagename-sorting optname-sec-date-subtotal
-      "i2" (N_ "Do a date subtotal.")
+      "i2" (_ "Do a date subtotal.")
       'monthly
       date-subtotal-choice-list))
 
     (gnc:register-trep-option
      (gnc:make-multichoice-option
       pagename-sorting optname-sec-sortorder
-      "i" (N_ "Order of Secondary sorting.")
+      "i" (_ "Order of Secondary sorting.")
       'ascend
       ascending-choice-list)))
 
@@ -706,37 +706,37 @@ tags within description, notes or memo. ")
      ;; One list per option here with: option-name, sort-tag,
      ;; help-string, default-value
      (list
-      (list (N_ "Date")                         "a"  (N_ "Display the date?") #t)
-      (list (N_ "Reconciled Date")              "a2" (N_ "Display the reconciled date?") #f)
+      (list (N_ "Date")                         "a"  (_ "Display the date?") #t)
+      (list (N_ "Reconciled Date")              "a2" (_ "Display the reconciled date?") #f)
       (if BOOK-SPLIT-ACTION
-          (list (N_ "Num/Action")               "b"  (N_ "Display the check number?") #t)
-          (list (N_ "Num")                      "b"  (N_ "Display the check number?") #t))
-      (list (N_ "Description")                  "c"  (N_ "Display the description?") #t)
-      (list (N_ "Notes")                        "d2" (N_ "Display the notes if the memo is unavailable?") #t)
+          (list (N_ "Num/Action")               "b"  (_ "Display the check number?") #t)
+          (list (N_ "Num")                      "b"  (_ "Display the check number?") #t))
+      (list (N_ "Description")                  "c"  (_ "Display the description?") #t)
+      (list (N_ "Notes")                        "d2" (_ "Display the notes if the memo is unavailable?") #t)
       ;; account name option appears here
-      (list (N_ "Use Full Account Name")        "f"  (N_ "Display the full account name?") #t)
-      (list (N_ "Account Code")                 "g"  (N_ "Display the account code?") #f)
+      (list (N_ "Use Full Account Name")        "f"  (_ "Display the full account name?") #t)
+      (list (N_ "Account Code")                 "g"  (_ "Display the account code?") #f)
       ;; other account name option appears here
-      (list (N_ "Use Full Other Account Name")  "i"  (N_ "Display the full account name?") #f)
-      (list (N_ "Other Account Code")           "j"  (N_ "Display the other account code?") #f)
-      (list (N_ "Shares")                       "k"  (N_ "Display the number of shares?") #f)
-      (list (N_ "Price")                        "l"  (N_ "Display the shares price?") #f)
+      (list (N_ "Use Full Other Account Name")  "i"  (_ "Display the full account name?") #f)
+      (list (N_ "Other Account Code")           "j"  (_ "Display the other account code?") #f)
+      (list (N_ "Shares")                       "k"  (_ "Display the number of shares?") #f)
+      (list (N_ "Price")                        "l"  (_ "Display the shares price?") #f)
       ;; note the "Amount" multichoice option in between here
-      (list (N_ "Running Balance")              "n"  (N_ "Display a running balance?") #f)
-      (list (N_ "Totals")                       "o"  (N_ "Display the totals?") #t)))
+      (list (N_ "Running Balance")              "n"  (_ "Display a running balance?") #f)
+      (list (N_ "Totals")                       "o"  (_ "Display the totals?") #t)))
 
     (if BOOK-SPLIT-ACTION
         (gnc:register-trep-option
          (gnc:make-simple-boolean-option
           gnc:pagename-display (N_ "Trans Number")
-          "b2" (N_ "Display the trans number?") #f)))
+          "b2" (_ "Display the trans number?") #f)))
 
     ;; Add an option to display the memo, and disable the notes option
     ;; when memos are not included.
     (gnc:register-trep-option
      (gnc:make-complex-boolean-option
       gnc:pagename-display (N_ "Memo")
-      "d"  (N_ "Display the memo?") #t
+      "d"  (_ "Display the memo?") #t
       disp-memo?
       (lambda (x)
         (set! disp-memo? x)
@@ -746,7 +746,7 @@ tags within description, notes or memo. ")
     (gnc:register-trep-option
      (gnc:make-complex-boolean-option
       gnc:pagename-display (N_ "Account Name")
-      "e"  (N_ "Display the account name?") #t
+      "e"  (_ "Display the account name?") #t
       disp-accname?
       (lambda (x)
         (set! disp-accname? x)
@@ -756,7 +756,7 @@ tags within description, notes or memo. ")
     (gnc:register-trep-option
      (gnc:make-complex-boolean-option
       gnc:pagename-display (N_ "Other Account Name")
-      "h5"  (N_ "Display the other account name? (if this is a split transaction, this parameter is guessed).") #f
+      "h5"  (_ "Display the other account name? (if this is a split transaction, this parameter is guessed).") #f
       disp-other-accname?
       (lambda (x)
         (set! disp-other-accname? x)
@@ -765,14 +765,14 @@ tags within description, notes or memo. ")
     (gnc:register-trep-option
      (gnc:make-multichoice-callback-option
       gnc:pagename-display optname-detail-level
-      "h" (N_ "Amount of detail to display per transaction.")
+      "h" (_ "Amount of detail to display per transaction.")
       'single
       (list (vector 'multi-line
-                    (N_ "Multi-Line")
-                    (N_ "Display all splits in a transaction on a separate line."))
+                    (_ "Multi-Line")
+                    (_ "Display all splits in a transaction on a separate line."))
             (vector 'single
-                    (N_ "Single")
-                    (N_ "Display one line per transaction, merging multiple splits where required.")))
+                    (_ "Single")
+                    (_ "Display one line per transaction, merging multiple splits where required.")))
       #f
       (lambda (x)
         (set! detail-is-single? (eq? x 'single))
@@ -781,12 +781,12 @@ tags within description, notes or memo. ")
     (gnc:register-trep-option
      (gnc:make-multichoice-callback-option
       gnc:pagename-display (N_ "Amount")
-      "m" (N_ "Display the amount?")
+      "m" (_ "Display the amount?")
       'single
       (list
-       (vector 'none   (N_ "None") (N_ "No amount display."))
-       (vector 'single (N_ "Single") (N_ "Single Column Display."))
-       (vector 'double (N_ "Double") (N_ "Two Column Display.")))
+       (vector 'none   (_ "None") (_ "No amount display."))
+       (vector 'single (_ "Single") (_ "Single Column Display."))
+       (vector 'double (_ "Double") (_ "Two Column Display.")))
       #f
       (lambda (x)
         (set! amount-is-single? (eq? x 'single))
@@ -795,7 +795,7 @@ tags within description, notes or memo. ")
     (gnc:register-trep-option
      (gnc:make-multichoice-option
       gnc:pagename-display (N_ "Sign Reverses")
-      "m1" (N_ "Reverse amount display for certain account types.")
+      "m1" (_ "Reverse amount display for certain account types.")
       'global
       (keylist->vectorlist sign-reverse-list))))
 
@@ -954,35 +954,35 @@ tags within description, notes or memo. ")
          ;; merge? to merge with the next cell (ie for debit/credit cells)
          ;; merging-function - function (usually gnc-numeric-add/sub-fixed to apply to dual-subtotal
          (if (column-uses? 'amount-single)
-             (list (vector (header-commodity (N_ "Amount"))
+             (list (vector (header-commodity (_ "Amount"))
                            amount #t #t
                            (vector #f #f)))
              '())
 
          (if (column-uses? 'amount-double)
-             (list (vector (header-commodity (N_ "Debit"))
+             (list (vector (header-commodity (_ "Debit"))
                            debit-amount #f #t
                            (vector #t gnc-numeric-add))
-                   (vector (header-commodity (N_ "Credit"))
+                   (vector (header-commodity (_ "Credit"))
                            credit-amount #f #t
                            (vector #f gnc-numeric-sub)))
              '())
 
          (if (column-uses? 'amount-original-currency)
              (if (column-uses? 'amount-double)
-                 (list (vector (N_ "Debit")
+                 (list (vector (_ "Debit")
                                original-debit-amount #f #t
                                (vector #t gnc-numeric-add))
-                       (vector (N_ "Credit")
+                       (vector (_ "Credit")
                                original-credit-amount #f #t
                                (vector #f gnc-numeric-sub)))
-                 (list (vector (N_ "Amount")
+                 (list (vector (_ "Amount")
                                original-amount #t #t
                                (vector #f #f))))
              '())
 
          (if (column-uses? 'running-balance)
-             (list (vector (N_ "Running Balance")
+             (list (vector (_ "Running Balance")
                            running-balance #t #f
                            (vector #f #f)))
              '()))))
@@ -1557,11 +1557,11 @@ tags within description, notes or memo. ")
             (highlight
              (string-append optname-account-matcher
                             (if (opt-val pagename-filter optname-account-matcher-regex)
-                                (N_ " regex")
+                                (_ " regex")
                                 ""))
              account-matcher)
             (highlight
-             (N_ "Accounts produced")
+             (_ "Accounts produced")
              (string-join (map xaccAccountGetName c_account_1) ", "))))
        (if (eq? filter-mode 'none)
            ""
@@ -1574,7 +1574,7 @@ tags within description, notes or memo. ")
             (highlight
              (string-append optname-transaction-matcher
                             (if (opt-val pagename-filter optname-transaction-matcher-regex)
-                                (N_ " regex")
+                                (_ " regex")
                                 ""))
              transaction-matcher)))
        (if reconcile-status-filter
