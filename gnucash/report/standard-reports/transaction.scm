@@ -455,6 +455,13 @@ tags within description, notes or memo. ")
     #f
     (keylist->vectorlist reconcile-status-list)))
 
+  (gnc:register-trep-option
+   (gnc:make-multichoice-option
+    pagename-filter optname-void-transactions
+    "k" (N_ "How to handle void transactions.")
+    'non-void-only
+    (keylist->vectorlist show-void-list)))
+
   ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   ;; Accounts options
@@ -495,13 +502,6 @@ tags within description, notes or memo. ")
        options gnc:pagename-accounts optname-filterby
        (not (eq? x 'none))))))
   ;;
-
-  (gnc:register-trep-option
-   (gnc:make-multichoice-option
-    gnc:pagename-accounts optname-void-transactions
-    "d" (N_ "How to handle void transactions.")
-    'non-void-only
-    (keylist->vectorlist show-void-list)))
 
   ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1452,7 +1452,7 @@ tags within description, notes or memo. ")
          (secondary-key (opt-val pagename-sorting optname-sec-sortkey))
          (secondary-order (opt-val pagename-sorting optname-sec-sortorder))
          (secondary-date-subtotal (opt-val pagename-sorting optname-sec-date-subtotal))
-         (void-status (opt-val gnc:pagename-accounts optname-void-transactions))
+         (void-status (opt-val pagename-filter optname-void-transactions))
          (splits '())
          (custom-sort? (or (and (member primary-key DATE-SORTING-TYPES)   ; this will remain
                                 (not (eq? primary-date-subtotal 'none)))  ; until qof-query
