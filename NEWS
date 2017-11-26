@@ -1,5 +1,102 @@
 Version history:
 ------- -------
+2.7.2 - 26 November 2017
+
+    The Gnucash Development Team is pleased to release Gnucash 2.7.2,
+    the third release of an unstable series leading to Gnucash 2.8.0.
+
+    This release is UNSTABLE and SHOULD NOT BE USED in production.
+    See the KNOWN PROBLEMS list at the bottom of the announcement.
+
+    This release changes file locations, binding APIs, report options,
+    and can make your data file no longer compatible with previous
+    versions. See https://wiki.gnucash.org/wiki/UpdateNotes for
+    details.
+
+New Features For Users:
+    No new features this time, but a raft of fixes and improvements!
+
+The following bugs are fixed only in unstable/master:
+    Bug 734865 - Assign as Payment... can silently 'unpay' a payed invoice
+       * if the selected transaction is already linked to an existing
+         payment, the payment dialog will present this payment again
+         (same partner, post-to account, same selected document(s), same
+         amount, memo, and transfer account).
+       * if the selected transaction is not linked to an existing business
+         transaction the logic will make a best guess as to whether the
+         payment should be for a customer or vendor.
+       * in both situations if the existing transaction has multiple splits
+         that can be considered as transfer (or 'payment') splits the payment
+         dialog can't work with it (it can only deal with one transfer split).
+         In this case the user will be informed that only one valid transfer
+         split will be retained and the others ignored.
+       * the other thing the payment dialog can't handle are APAR type splits
+         that are not associated to a lot at all. In case of transactions not
+         part of a business transaction they will be silently ignored on the
+         assumptions these were manually entered transactions with the
+         intention to be linked to business transactions. On the other hand
+         if such a split is part of a transaction that is also linked to a
+         business payment already, a warning will be issued these splits will
+         be removed from the new payment.
+    Bug 778692 - Assign as payment should work for employee expense vouchers
+       * if gnucash can deduce a partner from the transaction
+         that partner will be proposed this works for all transactions
+         that are part of a business transaction already and will
+         correctly detect pre-existing customer, vendor and employee
+         payments
+       * if no partner can be deduced gnucash will assume the
+         transaction to be a vendor or customer payment based on
+         the sign
+       * in all cases the user can change the partner type in the
+         payment window that's presented to any of customer, vendor
+         or employee to correct gnucash' suggestion.
+    Bug 784623 - GNUCash does not work with sql backend.
+        Wherin the problem is that MySQL's TIMESTAMP has a date range of
+        1970-01-01 00:00:01 to 2038-01-19 03:14:07 and is unable to handle
+        time_t of 0. MySQL's TIMESTAMP also assumes that input is in the
+        server's timezone and adjusts it to UTC. GnuCash has already done
+        that conversion.
+    Bug 789608 - Compilation problems when linking libraries.
+    Bug 789928 - FTBFS with libdbi 0.9.0-5 on Debian.
+        This one required handling a new error condition.
+    Bug 790550 - FTBFS: missing __init__.py
+
+
+Other repairs not marked as bugs in git:
+
+    SQL parameter quoting is corrected in the backend so that only string
+    parameters are quoted. This caused trouble when trying to store SQL NULL;
+    the string 'NULL' is different from the value NULL.
+
+    SQL table versions weren't set consistently and a bogus version test could
+    cause some tables to be not loaded.
+
+    Better, more targeted handling of MySQL's penchant for setting
+    date-time fields to "0000-00-00 00:00:00" if it doesn't like the
+    input. This should be much less common thanks to fixing Bug
+    784623.
+
+    Major repairs to the "Dense Calendar" date selector.
+
+    Fix colors on graph reports so that the selections work and the defaults
+    are no longer transparent.
+
+    Two large batches of styling fixes for Gtk3 from Bob Fewell.
+
+    Fix the guile-compiled path in the environment file so that
+    GnuCash can start on Windows.
+
+    Convert the graphical reports to use GnuCash's rational numbers instead of
+    doubles for better accuracy.
+
+
+KNOWN PROBLEMS:
+
+    On Microsoft Windows starting the AQBanking Setup Wizard crashes GnuCash.
+
+    test-import-bayes built with autotools intermittently fails at
+    line 381, where the returned value is 1 instead of the expected 6.
+
 2.7.1 - 29 October 2017
 
     The Gnucash Development Team is pleased to release Gnucash 2.7.1,

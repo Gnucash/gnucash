@@ -1,6 +1,378 @@
+2017-11-25 John Ralls 
+
+	* Release 2.7.2 (HEAD -> unstable)
+
+2017-11-25 John Ralls 
+
+	* Merge branch 'maint' into unstable
+
+2017-11-25 John Ralls 
+
+	* Correct GUILE_LOAD_COMPILE_PATH to include Guile's own modules as well as ours. (origin/unstable)
+
+2017-11-24 John Ralls 
+
+	* Correct quoting for SQL backends.
+
+2017-11-24 Geert Janssens 
+
+	* Merge branch 'gtk3-update8' of https://github.com/Bob-IT/gnucash into unstable
+
+2017-11-21 Jose Marino 
+
+	* report: fix default colors incorrectly set to transparent
+
+2017-11-23 John Ralls 
+
+	* Bug 784623 - GNUCash does not work with sql backend.
+
+2017-11-23 Rob Gowin 
+
+	* Bug 790620 - Failed to create file “/usr/share/glib-2.0/schemas/gschemas.compiled.XY789Y” (origin/maint, maint)
+
+2017-11-23 Robert Fewell 
+
+	* Fix some corrupted glade files
+
+2017-11-23 Robert Fewell 
+
+	* Change assistant-ab-initial.glade to gtk3.10 version
+
+2017-11-23 Robert Fewell 
+
+	* Replace deprecated GTK_STOCK_ macro identifiers
+
+2017-11-23 Robert Fewell 
+
+	* Change a couple of deprecated functions in gnc-html-webkit1.c
+
+2017-11-23 Robert Fewell 
+
+	* Control the toggle button width
+
+2017-11-23 Robert Fewell 
+
+	* Move the double line to be inside the cursor cell
+
+2017-11-23 Robert Fewell 
+
+	* If a font size is specified for the sheet, popup size may be wrong
+
+2017-11-23 Robert Fewell 
+
+	* Use previously created functions
+
+2017-11-23 Robert Fewell 
+
+	* Provide two functions for common code
+
+2017-11-23 Robert Fewell 
+
+	* This function doesn't do much and is only used for new account registers
+
+2017-11-23 Robert Fewell 
+
+	* Adjust the sheet to get its spacings from the item_edit CSS
+
+2017-11-23 Robert Fewell 
+
+	* Get the item_edit cell padding from CSS instead of defines
+
+2017-11-23 Robert Fewell 
+
+	* Replace the cell foreground and background colour handlers
+
+2017-11-01 Robert Fewell 
+
+	* Test the widget state to get the correct background colour.
+
+2017-11-21 John Ralls 
+
+	* Set GncSqlObjectBackend::m_version to the appropriate TABLE_VERSION.
+
+2017-11-21 John Ralls 
+
+	* Fix python build and test errors on Mac.
+
+2017-11-21 Geert Janssens 
+
+	* Revert "Merge branch 'gtk3-update8' of https://github.com/Bob-IT/gnucash into unstable"
+
+2017-11-21 Geert Janssens 
+
+	* Merge branch 'gtk3-update8' of https://github.com/Bob-IT/gnucash into unstable (origin/master, origin/HEAD)
+
+2017-11-21 Geert Janssens 
+
+	* Merge branch 'gtk3-update9' of https://github.com/Bob-IT/gnucash into unstable
+
+2017-11-19 John Ralls 
+
+	* Fix missing/misspelled files for distribution.
+
+2017-11-19 John Ralls 
+
+	* Bug 790550 - FTBFS: missing __init__.py
+
+2017-11-19 John Ralls 
+
+	* Fix distribution paths for resource files.
+
+2017-11-19 John Ralls 
+
+	* Fix bad string construction in adjust_sql_options.
+
+2017-11-19 John Ralls 
+
+	* A better way to handle MySQL's 0000-00-00 invalid date indicator.
+
+2017-11-19 John Ralls 
+
+	* Don't try to unref a NULL GDateTime*.
+
+2017-11-18 Geert Janssens 
+
+	* Fix a few travis failures (potentially uninitialized use)
+
+2017-11-18 Geert Janssens 
+
+	* Bug 736765 - Assign as payment... should re-populate the payment represented by the selected transaction if any
+
+2017-11-15 Geert Janssens 
+
+	* Bug 778692 - Assign as payment should work for employee expense vouchers
+
+2017-11-18 Geert Janssens 
+
+	* Assign as payment - when random transaction is selected, reset transaction description to owner
+
+2017-11-14 Geert Janssens 
+
+	* Assign as payment - refactor a few code blocks into separate functions
+
+2017-11-14 Geert Janssens 
+
+	* Assign as payment - Differentiate between new and existing payments for 'Assign as payment'
+
+2017-11-14 Geert Janssens 
+
+	* Assign as payment - offer possible payment splits to user in case there are multiple valid candidates for assignment
+
+2017-11-09 Geert Janssens 
+
+	* Bug 734865 - Assign as Payment... can silently 'unpay' a payed invoice
+
+2017-11-13 Geert Janssens 
+
+	* Add functions to retrieve a copy of splits of a certain type from business transactions
+
+2017-11-09 Geert Janssens 
+
+	* Inform the user when assign as payment can't be used
+
+2017-11-14 Geert Janssens 
+
+	* Mark unused function parameters as such in dialog-payment.c
+
+2017-11-15 fell 
+
+	* Add po/glossary/gnc-glossary.pot to .gitignore
+
+2017-11-15 fell 
+
+	* Fix a few encodings and Content-* tags in glossary
+
+2017-11-09 John Ralls 
+
+	* Bug 789608 - Compilation problems when linking libraries.
+
+2017-11-09 John Ralls 
+
+	* Merge branch 'maint' into unstable
+
+2017-11-09 John Ralls 
+
+	* Fix with_Python build in cmake.
+
+2017-11-09 Robert Fewell 
+
+	* Prevent the rename popup from appearing in the dense calendar
+
+2017-11-09 Robert Fewell 
+
+	* Dense calendar popup window of screen at bottom
+
+2017-11-09 Robert Fewell 
+
+	* Add a margin to the Date label
+
+2017-11-09 Robert Fewell 
+
+	* Don't re-populate dense calendar treeview on every mouse move
+
+2017-11-09 Robert Fewell 
+
+	* Save the screen dimensions on button click
+
+2017-11-09 Robert Fewell 
+
+	* If there are no marked days on Windows the dense calendar crashes
+
+2017-11-07 John Ralls 
+
+	* Bug 789928 - FTBFS with libdbi 0.9.0-5 on Debian
+
+2017-11-07 John Ralls 
+
+	* Merge J. Marino's 'fix-negative-colors' into unstable.
+
+2017-10-31 John Ralls 
+
+	* Convert shell-executed scheme tests to run directly from Guile.
+
+2017-11-02 John Ralls 
+
+	* Remove extraneous parameters from GNC_ADD_SCHEME_TARGETS
+
+2017-11-02 Jose Marino 
+
+	* report: fix negative colors in barcharts
+
+2017-11-01 Robert Fewell 
+
+	* Update the register for the change in RegisterColor enums
+
+2017-11-01 Robert Fewell 
+
+	* Change the split and entry models to reflect the colour changes
+
+2017-11-01 Robert Fewell 
+
+	* Reduce the RegisterColor enums so there is one for each type
+
+2017-11-01 Robert Fewell 
+
+	* Replace the cell foreground and background colour handlers
+
+2017-11-01 Robert Fewell 
+
+	* Test the widget state to get the correct background colour.
+
+2017-11-01 Robert Fewell 
+
+	* Change the look of the toggle button
+
+2017-11-01 Robert Fewell 
+
+	* Control the toggle button width
+
+2017-11-01 Robert Fewell 
+
+	* Move the double line to be inside the cursor cell
+
+2017-11-01 Robert Fewell 
+
+	* If a font size is specified for the sheet, popup size may be wrong
+
+2017-11-01 Robert Fewell 
+
+	* Use previously created functions
+
+2017-11-01 Robert Fewell 
+
+	* Provide two functions for common code
+
+2017-11-01 Robert Fewell 
+
+	* This function doesn't do much and is only used for new account registers
+
+2017-11-01 Robert Fewell 
+
+	* Adjust the sheet to get its spacings from the item_edit CSS
+
+2017-11-01 Robert Fewell 
+
+	* Get the item_edit cell padding from CSS instead of defines
+
+2017-10-31 John Ralls 
+
+	* Merge branch J. Marino's fix-report-colors into unstable (manjusri/master)
+
+2017-10-31 John Ralls 
+
+	* Merge J. Marino's 'fix/report-net-barchart' into unstable
+
+2017-10-18 Jose Marino 
+
+	* report/category-barchart: fix unit test to work with gnc-monetary
+
+2017-10-18 Jose Marino 
+
+	* report/category-barchart: calculate using gnc-monetary instead of double
+
+2017-10-18 Jose Marino 
+
+	* report/net-linechart: fix unit test to work with gnc-monetary
+
+2017-10-18 Jose Marino 
+
+	* report/net-linechart: calculate using gnc-monetary instead of double
+
+2017-10-17 Jose Marino 
+
+	* report/net-barchart: fix unit test to work with gnc-monetary
+
+2017-10-17 Jose Marino 
+
+	* report/net-barchart: default to list of zeros instead of empty list
+
+2017-10-13 Jose Marino 
+
+	* report/net-barchart: calculate using gnc-monetary instead of double
+
+2017-10-31 John Ralls 
+
+	* [Gwenhywfar] Use the new getpassword API only on the gwen5 branch.
+
+2017-10-31 John Ralls 
+
+	* Provide for report/report-system/test/test-extras to be built before other tests.
+
+2017-10-31 John Ralls 
+
+	* Ensure that report unit tests dependencies are built with  target.
+
+2017-10-31 John Ralls 
+
+	* Merge J. Marino's cashflow-barchart updates into unstable.
+
+2017-10-31 Jose Marino 
+
+	* report-test: move add-to-load-path to build system
+
+2017-10-30 John Ralls 
+
+	* Remove X11 error handler
+
+2017-10-31 Geert Janssens 
+
+	* Merge branch 'gtk3-update7' of https://github.com/Bob-IT/gnucash into unstable
+
+2017-10-02 Robert Fewell 
+
+	* Move the CSS files to a Gresource file
+
 2017-10-28 John Ralls 
 
-	* Don't copy ChangeLog on a tarball build. (HEAD -> unstable, origin/unstable)
+	* Release 2.7.1 (tag: 2.7.1)
+
+2017-10-29 John Ralls 
+
+	* Set relative path to icon file in Windows resource script.
+
+2017-10-28 John Ralls 
+
+	* Don't copy ChangeLog on a tarball build.
 
 2017-10-28 John Ralls 
 
@@ -9,6 +381,18 @@
 2017-10-27 John Ralls 
 
 	* Set a parent window for the options dialogs.
+
+2017-10-27 Jose Marino 
+
+	* cashflow-barchart: split option "show money in/out" into two separate ones
+
+2017-10-27 Jose Marino 
+
+	* cashflow-barchart: delete unnecessary intermediate lists
+
+2017-10-27 Jose Marino 
+
+	* cashflow-barchart: use direct gnc-monetary math instead of collectors
 
 2017-10-27 John Ralls 
 
@@ -20,7 +404,7 @@
 
 2017-10-27 John Ralls 
 
-	* Merge Aaron Law's branch 'buildfix' to unstable. (origin/master, origin/HEAD)
+	* Merge Aaron Law's branch 'buildfix' to unstable.
 
 2017-10-27 John Ralls 
 
@@ -134,9 +518,33 @@
 
 	* Add fixed bugs for 2.7.0 to NEWS.
 
+2017-10-20 fell 
+
+	* Add a bunch of translator comments and a few accelerators to glade files (manjusri/maint)
+
 2017-10-20 Geert Janssens 
 
 	* Remove configure option --enable-locale-specific-tax and make gnucash always behave as if it was set
+
+2017-10-20 fell 
+
+	* Add a bunch of translator comments to C files
+
+2017-10-20 fell 
+
+	* Improve type of bank accounts in SKR03
+
+2017-10-20 fell 
+
+	* Add "Assets & Liabilities", "Profit & Loss" to the glossary,
+
+2017-10-20 fell 
+
+	* Mayor overhaul of de.po
+
+2017-10-20 fell 
+
+	* Fix wiki link
 
 2017-10-19 Jose Marino 
 
@@ -198,6 +606,26 @@
 
 	* Fix html temp-file URI.
 
+2017-10-13 fell 
+
+	* update de.po to commit f283437
+
+2017-10-12 Jose Marino 
+
+	* report: render linechart with requested line colors
+
+2017-10-12 Jose Marino 
+
+	* report: render piechart with requested colors
+
+2017-10-12 Jose Marino 
+
+	* report: render barchart with requested bar colors
+
+2017-10-11 fell 
+
+	* Merge branch 'maint' of https://github.com/DiMan/Gnucash into maint
+
 2017-10-11 fell 
 
 	* reapply commit 3cdac65 on the new dialog-ab-pref and remove obsolete section from dialog-ab.gade
@@ -205,6 +633,10 @@
 2017-10-11 Jose Marino 
 
 	* add new report: cashflow-barchart.scm
+
+2017-10-07 Di Mang 
+
+	* Adjustment of some Russian translations
 
 2017-10-06 fell 
 
@@ -244,7 +676,7 @@
 
 2017-10-02 fell 
 
-	* Readd the missing glade msgctx strings to ru.po (maint)
+	* Readd the missing glade msgctx strings to ru.po
 
 2017-10-02 fell 
 
@@ -444,7 +876,7 @@
 
 2017-09-26 Geert Janssens 
 
-	* Fix build failures if userdata_home exists but gnc_userdata_home  doesn't (master)
+	* Fix build failures if userdata_home exists but gnc_userdata_home  doesn't
 
 2017-09-26 Josep-Maria Prat 
 
@@ -528,7 +960,7 @@
 
 2017-09-16 John Ralls 
 
-	* Fix the fix from mac for test-userdata-dir.c
+	* Fix the fix from mac for test-userdata-dir.c (master)
 
 2017-09-16 John Ralls 
 
@@ -6609,8 +7041,4 @@
 2016-01-02 John Ralls 
 
 	* Remove xaccSchedXactionGetInstanceAfter
-
-2016-01-02 fell 
-
-	* Add a missing gettext in plugin page owner tree
 
