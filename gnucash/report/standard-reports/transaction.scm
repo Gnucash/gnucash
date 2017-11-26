@@ -1077,7 +1077,7 @@ tags within description, notes or memo. ")
                                original-credit-amount #f #t
                                (vector #f gnc-numeric-sub)))
                  (list (vector (N_ "Amount")
-                               original-amount #f #t
+                               original-amount #t #t
                                (vector #f #f))))
              '())
 
