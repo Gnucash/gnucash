@@ -1628,6 +1628,18 @@ Credit Card, and Income accounts."))))))
            (string-append
             "<b>Filters used : " (symbol->string filter-mode) " accounts</b> "
             (string-join (map xaccAccountGetName c_account_2) ", ") "<br>"))
+       (if reconcile-status-filter
+           (string-append
+            "<b>Split Reconciled Status: </b>"
+            (string-join
+             (map (lambda (item)
+                    (cdr (assq item (list (cons #\n "unreconciled")
+                                          (cons #\c "cleared")
+                                          (cons #\y "reconciled")))))
+                  reconcile-status-filter)
+             ", ")
+            "<br>")
+           "")
        (if (eq? primary-key 'none)
            ""
            (string-append
@@ -1654,10 +1666,8 @@ Credit Card, and Income accounts."))))))
            (string-append
             "<b>Transaction "
             (if (opt-val pagename-filter optname-transaction-matcher-regex) "regex" "substring")
-            " Matcher: </b>'" transaction-matcher "'<br>"))
+            " Matcher: </b>'" transaction-matcher "'<br>"))       
        "<br>"))
-    ;;(gnc:warn "accts in trep-renderer:" c_account_1)
-    ;;(gnc:warn "Report Account names:" (get-other-account-names c_account_1))
 
     (if (or (null? c_account_1) (and-map not c_account_1))
 
@@ -1670,17 +1680,18 @@ Credit Card, and Income accounts."))))))
 
             ;; error condition: accounts were specified but none matched string/regex
             (begin
-             (gnc:html-document-add-object!
-              document
-              (gnc:make-html-text
-               (gnc:html-markup-h2 NO-MATCHING-ACCT-HEADER)
-               (gnc:html-markup-p NO-MATCHING-ACCT-TEXT)))
- 
-             (gnc:html-document-add-object!
-              document                 
-              (infobox))))
+              (gnc:html-document-add-object!
+               document
+               (gnc:make-html-text
+                (gnc:html-markup-h2 NO-MATCHING-ACCT-HEADER)
+                (gnc:html-markup-p NO-MATCHING-ACCT-TEXT)))
 
+              (gnc:html-document-add-object!
+               document                 
+               (infobox))))
+            
         (begin
+
           (qof-query-set-book query (gnc-get-current-book))
           (xaccQueryAddAccountMatch query c_account_1 QOF-GUID-MATCH-ANY QOF-QUERY-AND)
           (xaccQueryAddDateMatchTS query #t begindate #t enddate QOF-QUERY-AND)
@@ -1721,30 +1732,34 @@ Credit Card, and Income accounts."))))))
                                            (if transaction-matcher-regexp
                                                (regexp-exec transaction-matcher-regexp str)
                                                (string-contains str transaction-matcher)))))
-                            (and (if (eq? filter-mode 'include) (is-filter-member split c_account_2) #t)
-                                 (if (eq? filter-mode 'exclude) (not (is-filter-member split c_account_2)) #t)
+                            (and (or (not (eq? filter-mode 'include)) (is-filter-member split c_account_2))
+                                 (not (and (eq? filter-mode 'exclude) (is-filter-member split c_account_2)))
                                  (or (string-null? transaction-matcher) ; null-string=ignore filters
                                      (match? (xaccTransGetDescription trans))
                                      (match? (xaccTransGetNotes trans))
                                      (match? (xaccSplitGetMemo split)))
-                                 (or (not reconcile-status-filter)  ;#f=ignore next filter
+                                 (or (not reconcile-status-filter)  ;#f = ignore next filter
                                      (member (xaccSplitGetReconcile split) reconcile-status-filter)))))
                         splits))
 
+
+          (gnc:warn "(opt-val gnc:pagename-general optname-startdate) is "
+                    (opt-val gnc:pagename-general optname-startdate))
+          
           (if (null? splits)
 
               ;; error condition: no splits found
               (begin
-               (gnc:html-document-add-object!
-                document
-                (gnc:make-html-text
-                 (gnc:html-markup-h2 NO-MATCHING-TRANS-HEADER)
-                 (gnc:html-markup-p NO-MATCHING-TRANS-TEXT)))
-
-               (gnc:html-document-add-object!
-                document                 
-                (infobox)))
-
+                (gnc:html-document-add-object!
+                 document
+                 (gnc:make-html-text
+                  (gnc:html-markup-h2 NO-MATCHING-TRANS-HEADER)
+                  (gnc:html-markup-p NO-MATCHING-TRANS-TEXT)))
+                
+                (gnc:html-document-add-object!
+                 document                 
+                 (infobox)))
+              
               (let ((table (make-split-table
                             splits options
                             (subtotal-get-info optname-prime-sortkey
