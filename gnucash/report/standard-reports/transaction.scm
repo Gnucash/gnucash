@@ -1025,13 +1025,25 @@ tags within description, notes or memo. ")
                        (time64CanonicalDayTime (trans-date s)))))
            (split-value (lambda (s) (convert s (damount s)))) ; used for correct debit/credit
            (amount (lambda (s) (split-value s)))
+
            (debit-amount (lambda (s) (if (gnc-numeric-positive-p (gnc:gnc-monetary-amount (split-value s)))
                                          (split-value s)
                                          #f)))
            (credit-amount (lambda (s) (if (gnc-numeric-positive-p (gnc:gnc-monetary-amount (split-value s)))
                                           #f
                                           (gnc:monetary-neg (split-value s)))))
+
            (original-amount (lambda (s) (gnc:make-gnc-monetary (currency s) (damount s))))
+
+           (original-debit-amount (lambda (s) (if (gnc-numeric-positive-p (damount s))
+                                                  (gnc:make-gnc-monetary (currency s) (damount s))
+                                                  #f)))
+
+           (original-credit-amount (lambda (s) (if (gnc-numeric-positive-p (damount s))
+                                                   #f
+                                                   (gnc:make-gnc-monetary (currency s)
+                                                                          (gnc-numeric-neg (damount s))))))
+
            (running-balance (lambda (s) (gnc:make-gnc-monetary (currency s) (xaccSplitGetBalance s)))))
         (append
          ;; each column will be a vector
@@ -1046,6 +1058,7 @@ tags within description, notes or memo. ")
                            amount #t #t
                            (vector #f #f)))
              '())
+
          (if (column-uses? 'amount-double)
              (list (vector (header-commodity (N_ "Debit"))
                            debit-amount #f #t
@@ -1054,11 +1067,20 @@ tags within description, notes or memo. ")
                            credit-amount #f #t
                            (vector #f gnc-numeric-sub)))
              '())
+
          (if (column-uses? 'amount-original-currency)
-             (list (vector (N_ "Original")
-                           original-amount #f #t
-                           (vector #f #f)))
+             (if (column-uses? 'amount-double)
+                 (list (vector (N_ "Debit")
+                               original-debit-amount #f #t
+                               (vector #t gnc-numeric-add))
+                       (vector (N_ "Credit")
+                               original-credit-amount #f #t
+                               (vector #f gnc-numeric-sub)))
+                 (list (vector (N_ "Amount")
+                               original-amount #f #t
+                               (vector #f #f))))
              '())
+
          (if (column-uses? 'running-balance)
              (list (vector (N_ "Running Balance")
                            running-balance #t #f
