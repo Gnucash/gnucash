@@ -247,25 +247,29 @@ options specified in the Options panels."))
                   (cons 'split-sortvalue split-week)
                   (cons 'text (_ "Weekly"))
                   (cons 'tip (_ "Weekly."))
-                  (cons 'renderer-key 'week)))
+                  (cons 'renderer-key 'weekly)
+                  (cons 'renderer-fn gnc:date-get-week-year-string)))
 
    (cons 'monthly (list
                    (cons 'split-sortvalue split-month)
                    (cons 'text (_ "Monthly"))
                    (cons 'tip (_ "Monthly."))
-                   (cons 'renderer-key 'month)))
+                   (cons 'renderer-key 'monthly)
+                   (cons 'renderer-fn gnc:date-get-month-year-string)))
 
    (cons 'quarterly (list
                      (cons 'split-sortvalue split-quarter)
                      (cons 'text (_ "Quarterly"))
                      (cons 'tip (_ "Quarterly."))
-                     (cons 'renderer-key 'quarter)))
+                     (cons 'renderer-key 'quarterly)
+                     (cons 'renderer-fn gnc:date-get-quarter-year-string)))
 
    (cons 'yearly (list
                   (cons 'split-sortvalue split-year)
                   (cons 'text (_ "Yearly"))
                   (cons 'tip (_ "Yearly."))
-                  (cons 'renderer-key 'year)))))
+                  (cons 'renderer-key 'yearly)
+                  (cons 'renderer-fn gnc:date-get-year-string)))))
 
 (define filter-list
   (list
@@ -915,7 +919,7 @@ tags within description, notes or memo. ")
                                 str
                                 (if (column-uses? 'common-currency)
                                     (string-append
-                                     "<br/>"
+                                     "<br>"
                                      (gnc-commodity-get-mnemonic
                                       (opt-val gnc:pagename-general optname-currency)))
                                     ""))))
@@ -1117,11 +1121,7 @@ tags within description, notes or memo. ")
                ""))))
 
     (define (render-date renderer-key split)
-      ((case renderer-key
-         ((week) gnc:date-get-week-year-string)
-         ((month) gnc:date-get-month-year-string)
-         ((quarter) gnc:date-get-quarter-year-string)
-         ((year) gnc:date-get-year-string))
+      ((keylist-get-info date-subtotal-list renderer-key 'renderer-fn)
        (gnc-localtime
         (xaccTransGetDate
          (xaccSplitGetParent split)))))
@@ -1146,7 +1146,7 @@ tags within description, notes or memo. ")
 
     (define (render-summary split renderer-key anchor?)
       (case renderer-key
-        ((week month quarter year) (render-date renderer-key split))
+        ((weekly monthly quarterly yearly) (render-date renderer-key split))
         ((account other-acc) (render-account renderer-key split anchor?))
         (else #f)))
 
@@ -1252,17 +1252,17 @@ tags within description, notes or memo. ")
 
         (for-each (lambda (cell)
                     (let ((cell-content (vector-ref cell 0))
-                          (reverse? (vector-ref cell 1)))
+                          (reverse? (and (vector-ref cell 1)
+                                         (if account-types-to-reverse
+                                             (member (xaccAccountGetType account) account-types-to-reverse)
+                                             (gnc-reverse-balance account)))))
                       (if cell-content
                           (addto! row-contents
                                   (gnc:make-html-table-cell/markup
                                    "number-cell"
                                    (gnc:html-transaction-anchor
                                     trans
-                                    (if (and reverse?
-                                             (if account-types-to-reverse
-                                                 (member (xaccAccountGetType account) account-types-to-reverse)
-                                                 (gnc-reverse-balance account)))
+                                    (if reverse?
                                         (gnc:monetary-neg cell-content)
                                         cell-content))))
                           (addto! row-contents (gnc:html-make-empty-cell)))))
