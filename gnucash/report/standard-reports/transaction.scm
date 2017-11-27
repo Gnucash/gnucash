@@ -900,7 +900,7 @@ tags within description, notes or memo. ")
     ;;
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    (define calculated-cells
+    (define (calculated-cells)
       (letrec
           ((damount (lambda (s) (if (gnc:split-voided? s)
                                     (xaccSplitVoidFormerAmount s)
@@ -994,20 +994,20 @@ tags within description, notes or memo. ")
     (define (headings-right-columns)
       (map (lambda (column)
              (vector-ref column 0))
-           calculated-cells))
+           (calculated-cells)))
 
-    (define width-left-columns (length (headings-left-columns)))
-    (define width-right-columns (length (headings-right-columns)))
+    (define (width-left-columns) (length (headings-left-columns)))
+    (define (width-right-columns) (length (headings-right-columns)))
 
     (define (add-subheading data subheading-style)
       (let ((heading-cell (gnc:make-html-table-cell data)))
-        (gnc:html-table-cell-set-colspan! heading-cell (+ width-left-columns width-right-columns))
+        (gnc:html-table-cell-set-colspan! heading-cell (+ (width-left-columns) (width-right-columns)))
         (gnc:html-table-append-row/markup!
          table subheading-style (list heading-cell))))
 
     (define (add-subtotal-row subtotal-string subtotal-collectors subtotal-style)
       (let* ((row-contents '())
-             (merge-list (map (lambda (cell) (vector-ref cell 4)) calculated-cells))
+             (merge-list (map (lambda (cell) (vector-ref cell 4)) (calculated-cells)))
              (columns (map (lambda (coll) (coll 'format gnc:make-gnc-monetary #f)) subtotal-collectors))
              (list-of-commodities (delete-duplicates (map gnc:gnc-monetary-commodity (concatenate columns))
                                                      gnc-commodity-equal)))
@@ -1024,8 +1024,8 @@ tags within description, notes or memo. ")
               (begin
                 (addto! row-contents (gnc:make-html-table-cell/markup "total-label-cell" string))
                 (for-each (lambda (cell) (addto! row-contents cell))
-                          (gnc:html-make-empty-cells (- width-left-columns 1))))
-              (addto! row-contents (gnc:make-html-table-cell/size/markup 1 width-left-columns "total-label-cell" string))))
+                          (gnc:html-make-empty-cells (- (width-left-columns) 1))))
+              (addto! row-contents (gnc:make-html-table-cell/size/markup 1 (width-left-columns) "total-label-cell" string))))
 
         (define (add-columns commodity)
           (let ((start-dual-column? #f)
@@ -1303,7 +1303,7 @@ tags within description, notes or memo. ")
              table def:grand-total-style
              (list
               (gnc:make-html-table-cell/size
-               1 (+ width-left-columns width-right-columns) (gnc:make-html-text (gnc:html-markup-hr)))))
+               1 (+ (width-left-columns) (width-right-columns)) (gnc:make-html-text (gnc:html-markup-hr)))))
 
             (if (opt-val gnc:pagename-display "Totals")
                 (add-subtotal-row (render-grand-total) total-collectors def:grand-total-style)))
@@ -1313,7 +1313,7 @@ tags within description, notes or memo. ")
                  (next (if (null? rest) #f (car rest)))
                  (split-values (add-split-row
                                 current
-                                calculated-cells
+                                (calculated-cells)
                                 (if is-multiline? def:normal-row-style
                                     (if odd-row?
                                         def:normal-row-style
@@ -1323,7 +1323,7 @@ tags within description, notes or memo. ")
             (if is-multiline?
                 (for-each
                  (lambda (othersplits)
-                   (add-split-row othersplits calculated-cells def:alternate-row-style #f))
+                   (add-split-row othersplits (calculated-cells) def:alternate-row-style #f))
                  (delete current (xaccTransGetSplitList (xaccSplitGetParent current)))))
 
             (map (lambda (collector value)
@@ -1405,9 +1405,9 @@ tags within description, notes or memo. ")
                         def:secondary-subtotal-style))
 
     (do-rows-with-subtotals splits #t
-                            (map (lambda (x) (gnc:make-commodity-collector)) calculated-cells)
-                            (map (lambda (x) (gnc:make-commodity-collector)) calculated-cells)
-                            (map (lambda (x) (gnc:make-commodity-collector)) calculated-cells))
+                            (map (lambda (x) (gnc:make-commodity-collector)) (calculated-cells))
+                            (map (lambda (x) (gnc:make-commodity-collector)) (calculated-cells))
+                            (map (lambda (x) (gnc:make-commodity-collector)) (calculated-cells)))
 
     table))
 
