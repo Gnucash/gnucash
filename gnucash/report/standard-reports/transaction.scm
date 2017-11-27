@@ -1521,7 +1521,22 @@ Credit Card, and Income accounts."))))))
            (string-append
             "<b>Transaction "
             (if (opt-val pagename-filter optname-transaction-matcher-regex) "regex" "substring")
-            " Matcher: </b>'" transaction-matcher "'<br>"))       
+            " Matcher: </b>'" transaction-matcher "'<br>"))
+       (string-append "<b>Void status: </b>" (symbol->string void-status) "<br>")
+       (if reconcile-status-filter
+	   (string-append
+	    "<b>Reconciled Status: </b>"
+	    (string-join
+	     (map (lambda (x) (assq-ref (list (cons #\c "cleared")
+					      (cons #\f "frozen")
+					      (cons #\n "non-reconciled/cleared")
+					      (cons #\y "reconciled")
+					      (cons #\v "void"))
+					x))
+			       reconcile-status-filter)
+	     ", ")
+	    "<br>")
+	   "")
        "<br>"))
 
     (if (or (null? c_account_1) (and-map not c_account_1))
