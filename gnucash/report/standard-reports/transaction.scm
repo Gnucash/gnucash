@@ -849,38 +849,34 @@ tags within description, notes or memo. ")
           (cons 'sort-account-description (opt-val pagename-sorting (N_ "Show Account Description")))
           (cons 'notes (opt-val gnc:pagename-display (N_ "Notes")))))
 
-
-  (define (subtotal-get-info name-sortkey name-subtotal name-date-subtotal info)
-    (let ((sortkey (opt-val pagename-sorting name-sortkey)))
+  (define (primary-get-info info)
+    (let ((sortkey (opt-val pagename-sorting optname-prime-sortkey)))
       (if (member sortkey DATE-SORTING-TYPES)
-          (keylist-get-info date-subtotal-list (opt-val pagename-sorting name-date-subtotal) info)
+          (keylist-get-info date-subtotal-list (opt-val pagename-sorting optname-prime-date-subtotal) info)
           (and (member sortkey SUBTOTAL-ENABLED)
-               (and (opt-val pagename-sorting name-subtotal)
+               (and (opt-val pagename-sorting optname-prime-subtotal)
+                    (keylist-get-info sortkey-list sortkey info))))))
+
+  
+  (define (secondary-get-info info)
+    (let ((sortkey (opt-val pagename-sorting optname-sec-sortkey)))
+      (if (member sortkey DATE-SORTING-TYPES)
+          (keylist-get-info date-subtotal-list (opt-val pagename-sorting optname-sec-date-subtotal) info)
+          (and (member sortkey SUBTOTAL-ENABLED)
+               (and (opt-val pagename-sorting optname-sec-subtotal)
                     (keylist-get-info sortkey-list sortkey info))))))
 
   (define primary-subtotal-comparator
-    (subtotal-get-info optname-prime-sortkey
-                       optname-prime-subtotal
-                       optname-prime-date-subtotal
-                       'split-sortvalue))
-
-  (define secondary-subtotal-comparator
-    (subtotal-get-info optname-sec-sortkey
-                       optname-sec-subtotal
-                       optname-sec-date-subtotal
-                       'split-sortvalue))
+    (primary-get-info 'split-sortvalue))
 
   (define primary-renderer-key
-    (subtotal-get-info optname-prime-sortkey
-                       optname-prime-subtotal
-                       optname-prime-date-subtotal
-                       'renderer-key))
+    (primary-get-info 'renderer-key))
+
+  (define secondary-subtotal-comparator
+    (secondary-get-info 'split-sortvalue))
 
   (define secondary-renderer-key
-    (subtotal-get-info optname-sec-sortkey
-                       optname-sec-subtotal
-                       optname-sec-date-subtotal
-                       'renderer-key))
+    (secondary-get-info 'renderer-key))
 
   (let* ((work-to-do (length splits))
          (work-done 0)
