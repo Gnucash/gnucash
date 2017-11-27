@@ -1169,19 +1169,9 @@ tags within description, notes or memo. ")
                  (let* ((calculator (vector-ref cell 1))
                         (reverse? (vector-ref cell 2))
                         (subtotal? (vector-ref cell 3))
-                        (calculated (calculator split))
-                        (reverse-amount (lambda (mon)
-                                            (let ((currency (gnc:gnc-monetary-commodity mon))
-                                                  (amount (gnc:gnc-monetary-amount mon)))
-                                              (gnc:make-gnc-monetary
-                                               currency
-                                               (gnc-numeric-neg amount))))))
-                   (vector (if (and reverse?
-                                    (if account-types-to-reverse
-                                        (member (xaccAccountGetType account) account-types-to-reverse)
-                                        (gnc-reverse-balance account)))
-                               (reverse-amount calculated)
-                               calculated)
+                        (calculated (calculator split)))
+                   (vector calculated
+                           reverse?
                            subtotal?)))
                cell-calculators))
 
@@ -1261,14 +1251,20 @@ tags within description, notes or memo. ")
                                             (xaccSplitGetSharePrice split)))))
 
         (for-each (lambda (cell)
-                    (let ((cell-content (vector-ref cell 0)))
+                    (let ((cell-content (vector-ref cell 0))
+                          (reverse? (vector-ref cell 1)))
                       (if cell-content
                           (addto! row-contents
                                   (gnc:make-html-table-cell/markup
                                    "number-cell"
                                    (gnc:html-transaction-anchor
                                     trans
-                                    cell-content)))
+                                    (if (and reverse?
+                                             (if account-types-to-reverse
+                                                 (member (xaccAccountGetType account) account-types-to-reverse)
+                                                 (gnc-reverse-balance account)))
+                                        (gnc:monetary-neg cell-content)
+                                        cell-content))))
                           (addto! row-contents (gnc:html-make-empty-cell)))))
                   cells)
 
@@ -1276,7 +1272,7 @@ tags within description, notes or memo. ")
 
         (map (lambda (cell)
                (let ((cell-content (vector-ref cell 0))
-                     (subtotal? (vector-ref cell 1)))
+                     (subtotal? (vector-ref cell 2)))
                  (and subtotal? cell-content)))
              cells)))
 
