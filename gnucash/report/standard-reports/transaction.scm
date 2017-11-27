@@ -54,16 +54,16 @@
 ;; Define the strings here to avoid typos and make changes easier.
 (define reportname (N_ "Transaction Report"))
 
-;Accounts
+;;Accounts
 (define optname-accounts (N_ "Accounts"))
 (define optname-filterby (N_ "Filter By..."))
 (define optname-filtertype (N_ "Filter Type"))
 (define optname-void-transactions (N_ "Void Transactions"))
 
-;Display
+;;Display
 (define optname-detail-level (N_ "Detail Level"))
 
-;Sorting
+;;Sorting
 (define pagename-sorting (N_ "Sorting"))
 (define optname-prime-sortkey (N_ "Primary Key"))
 (define optname-prime-subtotal (N_ "Primary Subtotal"))
@@ -77,7 +77,7 @@
 (define optname-sec-sortorder  (N_ "Secondary Sort Order"))
 (define optname-sec-date-subtotal (N_ "Secondary Subtotal for Date Key"))
 
-;General
+;;General
 (define optname-startdate (N_ "Start Date"))
 (define optname-enddate (N_ "End Date"))
 (define optname-table-export (N_ "Table for Exporting"))
@@ -85,7 +85,7 @@
 (define optname-orig-currency (N_ "Show original currency amount"))
 (define optname-currency (N_ "Report's currency"))
 
-;Filtering
+;;Filtering
 (define pagename-filter (N_ "Filter"))
 (define optname-account-matcher (N_ "Account Matcher"))
 (define optname-account-matcher-regex (N_ "Account Matcher uses regular expressions for extended matching"))
@@ -93,7 +93,7 @@
 (define optname-transaction-matcher-regex (N_ "Transaction Matcher uses regular expressions for extended matching"))
 (define optname-reconcile-status (N_ "Reconcile Status"))
 
-;Styles
+;;Styles
 (define def:grand-total-style "grand-total")
 (define def:normal-row-style "normal-row")
 (define def:alternate-row-style "alternate-row")
@@ -926,19 +926,21 @@ Credit Card, and Income accounts."))))))
                                     (set! width 0)
                                     (set! merging-subtotal (gnc:make-gnc-numeric 0 1)))
 
+				  ;; Default; not merging/completed merge. Just
+				  ;; display monetary amount
                                   (addto! row-contents
                                           (gnc:make-html-table-cell/markup "total-number-cell" mon))))))
                       columns
                       merge-list)))
 
-        ;first row
+        ;;first row
         (add-first-column subtotal-string)
         (add-columns (if (pair? list-of-commodities)
                          (car list-of-commodities)
                          #f)) ;to account for empty-row subtotals
         (gnc:html-table-append-row/markup! table subtotal-style (reverse row-contents))
 
-        ;subsequent rows
+        ;;subsequent rows
         (if (pair? list-of-commodities)
             (for-each (lambda (commodity)
                         (set! row-contents '())
@@ -985,13 +987,13 @@ Credit Card, and Income accounts."))))))
            (original-amount (lambda (s) (gnc:make-gnc-monetary (currency s) (damount s))))
            (running-balance (lambda (s) (gnc:make-gnc-monetary (currency s) (xaccSplitGetBalance s)))))
         (append
-         ; each column will be a vector
-         ; (vector heading calculator-function reverse-column? subtotal? (vector merge? merging-function))
-         ; (calculator-function split) to obtain amount
-         ; reverse? to optionally reverse signs
-         ; subtotal? to allow subtotals (ie irrelevant for running balance)
-         ; merge? to merge with the next cell (ie for debit/credit cells)
-         ; merging-function - function (usually gnc-numeric-add/sub-fixed to apply to merging-subtotal
+         ;; each column will be a vector
+         ;; (vector heading calculator-function reverse-column? subtotal? (vector merge? merging-function))
+         ;; (calculator-function split) to obtain amount
+         ;; reverse? to optionally reverse signs
+         ;; subtotal? to allow subtotals (ie irrelevant for running balance)
+         ;; merge? to merge with the next cell (ie for debit/credit cells)
+         ;; merging-function - function (usually gnc-numeric-add/sub-fixed to apply to merging-subtotal
          (if (column-uses? 'amount-single used-columns)
              (list (vector "Amount" amount #t #t (vector #f #f)))
              '())
@@ -1454,7 +1456,7 @@ Credit Card, and Income accounts."))))))
                      (opt-val pagename-sorting optname-sec-date-subtotal)
                      (eq? secondary-order 'ascend)))
 
-    ; This will, by default, sort the split list by ascending posted-date.
+    ;; This will, by default, sort the split list by ascending posted-date.
     (define (date-comparator? X Y) 
       (generic-less? X Y 'date 'none #t))
 
@@ -1462,8 +1464,8 @@ Credit Card, and Income accounts."))))))
     ;; infobox
     (define (infobox)
       (gnc:make-html-text                  
-       ;"<h3>Summary of settings used</h3>"
-       ;"<b>Accounts selected: </b>" (string-join (map xaccAccountGetName c_account_0) ", ") "<br>"
+       ;;"<h3>Summary of settings used</h3>"
+       ;;"<b>Accounts selected: </b>" (string-join (map xaccAccountGetName c_account_0) ", ") "<br>"
        (if (string-null? account-matcher)
            ""
            (string-append
@@ -1566,10 +1568,10 @@ Credit Card, and Income accounts."))))))
                 (set! splits (stable-sort! splits secondary-comparator?))
                 (set! splits (stable-sort! splits primary-comparator?))))
           
-          ; Combined Filter:
-          ; - include/exclude splits to/from selected accounts
-          ; - substring/regex matcher for Transaction Description/Notes/Memo
-          ; - by reconcile status
+          ;; Combined Filter:
+          ;; - include/exclude splits to/from selected accounts
+          ;; - substring/regex matcher for Transaction Description/Notes/Memo
+          ;; - by reconcile status
           (set! splits (filter
                         (lambda (split)
                           (let* ((trans (xaccSplitGetParent split))
@@ -1581,7 +1583,7 @@ Credit Card, and Income accounts."))))))
 				   ((none) #t)
 				   ((include) (is-filter-member split c_account_2))
 				   ((exclude) (not (is-filter-member split c_account_2))))
-                                 (or (string-null? transaction-matcher) ; null-string=ignore filters
+                                 (or (string-null? transaction-matcher) ; null-string = ignore filters
                                      (match? (xaccTransGetDescription trans))
                                      (match? (xaccTransGetNotes trans))
                                      (match? (xaccSplitGetMemo split)))
