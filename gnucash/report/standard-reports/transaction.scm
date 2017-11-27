@@ -1498,10 +1498,10 @@ Credit Card, and Income accounts."))))))
            ""
            (string-append
             "<b>Primary SortKey: </b>" (symbol->string primary-key) " "
-            (symbol->string primary-order) "ing "
-            (if (eq? primary-key 'date)
-                (string-append "with "
-                               (symbol->string (opt-val pagename-sorting optname-prime-date-subtotal))
+            (symbol->string primary-order) "ing"
+            (if (and (eq? primary-key 'date)
+		     (not (eq? (opt-val pagename-sorting optname-prime-date-subtotal) 'none)))
+                (string-append " with " (symbol->string (opt-val pagename-sorting optname-prime-date-subtotal))
                                " subtotals")
                 "")
             "<br>"))
@@ -1509,9 +1509,10 @@ Credit Card, and Income accounts."))))))
            ""
            (string-append
             "<b>Secondary SortKey: </b>" (symbol->string secondary-key) " "
-            (symbol->string secondary-order) "ing "
-            (if (eq? secondary-key 'date)
-                (string-append "with " (symbol->string (opt-val pagename-sorting optname-sec-date-subtotal))
+            (symbol->string secondary-order) "ing"
+            (if (and (eq? secondary-key 'date)
+		     (not (eq? (opt-val pagename-sorting optname-sec-date-subtotal) 'none)))
+                (string-append " with " (symbol->string (opt-val pagename-sorting optname-sec-date-subtotal))
                                " subtotals")
                 "")
             "<br>"))
