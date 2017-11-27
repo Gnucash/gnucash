@@ -58,7 +58,6 @@
 (define optname-accounts (N_ "Accounts"))
 (define optname-filterby (N_ "Filter By..."))
 (define optname-filtertype (N_ "Filter Type"))
-(define optname-void-transactions (N_ "Void Transactions"))
 
 ;;Display
 (define optname-detail-level (N_ "Detail Level"))
@@ -84,6 +83,7 @@
 (define optname-common-currency (N_ "Common Currency"))
 (define optname-orig-currency (N_ "Show original currency amount"))
 (define optname-currency (N_ "Report's currency"))
+(define optname-infobox-display (N_ "Add options summary"))
 
 ;;Filtering
 (define pagename-filter (N_ "Filter"))
@@ -92,6 +92,7 @@
 (define optname-transaction-matcher (N_ "Transaction Matcher"))
 (define optname-transaction-matcher-regex (N_ "Transaction Matcher uses regular expressions for extended matching"))
 (define optname-reconcile-status (N_ "Reconcile Status"))
+(define optname-void-transactions (N_ "Void Transactions"))
 
 ;;Styles
 (define def:grand-total-style "grand-total")
@@ -414,6 +415,21 @@ Credit Card, and Income accounts."))
    (gnc:make-simple-boolean-option
     gnc:pagename-general optname-table-export
     "g" (_ "Formats the table suitable for cut & paste exporting with extra cells.") #f))
+
+  (gnc:register-trep-option
+   (gnc:make-multichoice-option
+    gnc:pagename-general optname-infobox-display
+    "h" (_ "Add summary of options.")
+    '(no-match)
+    (list (vector '(no-match)
+                  (_ "If no transactions matched")
+                  (_ "Display summary if no transactions were matched."))
+          (vector '(no-match match)
+                  (_ "Always")
+                  (_ "Always display summary."))
+          (vector '()
+                  (_ "Never")
+                  (_ "Disable report summary.")))))
 
   ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1500,6 +1516,7 @@ tags within description, notes or memo. ")
                                 (not (eq? primary-date-subtotal 'none)))  ; until qof-query
                            (and (member secondary-key DATE-SORTING-TYPES) ; is upgraded
                                 (not (eq? secondary-date-subtotal 'none)))))
+         (infobox-display (opt-val gnc:pagename-general optname-infobox-display))
          (query (qof-query-create-for-splits)))
 
     (define (generic-less? X Y key date-subtotal ascend?)
@@ -1639,9 +1656,10 @@ tags within description, notes or memo. ")
                 (gnc:html-markup-h2 NO-MATCHING-ACCT-HEADER)
                 (gnc:html-markup-p NO-MATCHING-ACCT-TEXT)))
 
-              (gnc:html-document-add-object!
-               document
-               (infobox))))
+              (if (member 'nomatch infobox-display)
+                  (gnc:html-document-add-object!
+                   document
+                   (infobox)))))
 
         (begin
 
@@ -1705,9 +1723,10 @@ tags within description, notes or memo. ")
                   (gnc:html-markup-h2 NO-MATCHING-TRANS-HEADER)
                   (gnc:html-markup-p NO-MATCHING-TRANS-TEXT)))
 
-                (gnc:html-document-add-object!
-                 document
-                 (infobox)))
+                (if (member 'no-match infobox-display)
+                    (gnc:html-document-add-object!
+                     document
+                     (infobox))))
 
               (let ((table (make-split-table splits options)))
 
@@ -1722,9 +1741,10 @@ tags within description, notes or memo. ")
                             (gnc-print-date begindate)
                             (gnc-print-date enddate)))))
 
-                (gnc:html-document-add-object!
-                 document
-                 (infobox))
+                (if (member 'match infobox-display)
+                    (gnc:html-document-add-object!
+                     document
+                     (infobox)))
 
                 (gnc:html-document-add-object! document table)))))
 
