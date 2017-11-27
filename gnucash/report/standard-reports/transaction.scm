@@ -370,13 +370,13 @@ tags within description, notes or memo. ")
   (gnc:register-trep-option
    (gnc:make-account-list-option
     gnc:pagename-accounts optname-filterby
-    "b" (N_ "Filter on these accounts.")
+    "c1" (N_ "Filter on these accounts.")
     (lambda ()
       '())
     #f #t))
 
   (gnc:register-trep-option
-   (gnc:make-multichoice-option
+   (gnc:make-multichoice-callback-option
     gnc:pagename-accounts optname-filtertype
     "c" (N_ "Filter account.")
     'none
@@ -388,7 +388,12 @@ tags within description, notes or memo. ")
                   (N_ "Include transactions to/from filter accounts only."))
           (vector 'exclude
                   (N_ "Exclude Transactions to/from Filter Accounts")
-                  (N_ "Exclude transactions to/from all filter accounts.")))))
+                  (N_ "Exclude transactions to/from all filter accounts.")))
+   #f
+   (lambda (x)
+     (gnc-option-db-set-option-selectable-by-name
+      options gnc:pagename-accounts optname-filterby
+      (not (eq? x 'none))))))
   ;;
 
   (gnc:register-trep-option
