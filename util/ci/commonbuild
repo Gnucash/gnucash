@@ -11,7 +11,7 @@ if [[ "$BUILDTYPE" == "cmake-make" ]]; then
     make -j 4
     make check || ../afterfailure
 elif [[ "$BUILDTYPE" == "cmake-ninja" ]]; then
-    cmake ../gnucash -DWITH_PYTHON=ON -DCMAKE_BUILD_TYPE=debug -DENABLE_DEBUG=on -G Ninja
+    cmake ../gnucash -DWITH_PYTHON=ON -DCMAKE_BUILD_TYPE=debug -G Ninja
     ninja
     ninja check || ../afterfailure;
 elif [[ "$BUILDTYPE" == "autotools" ]]; then
