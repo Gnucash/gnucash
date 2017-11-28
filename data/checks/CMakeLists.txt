@@ -8,7 +8,7 @@ SET(checks_DATA
   quicken_3part.chk
 )
 
-INSTALL(FILES ${checks_DATA} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/gnucash/checks)
+INSTALL(FILES ${checks_DATA} DESTINATION ${CMAKE_INSTALL_DATADIR}/gnucash/checks)
 
 FILE(COPY ${checks_DATA} DESTINATION ${DATADIR_BUILD}/gnucash/checks)
 

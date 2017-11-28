@@ -31,13 +31,13 @@ TARGET_INCLUDE_DIRECTORIES(gncmod-customer-import
 TARGET_COMPILE_DEFINITIONS(gncmod-customer-import PRIVATE -DG_LOG_DOMAIN=\"gnc.plugin.customer-import\")
 
 IF (APPLE)
-  SET_TARGET_PROPERTIES (gncmod-customer-import PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib/gnucash")
+  SET_TARGET_PROPERTIES (gncmod-customer-import PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_LIBDIR}/gnucash")
 ENDIF()
 
 INSTALL(TARGETS gncmod-customer-import
-  LIBRARY DESTINATION lib/gnucash
-  ARCHIVE DESTINATION lib/gnucash
-  RUNTIME DESTINATION bin)
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 # No headers to install.
 
 SET_LOCAL_DIST(customer_import_DIST_local CMakeLists.txt Makefile.am ${customer_import_SOURCES} ${customer_import_noinst_HEADERS})

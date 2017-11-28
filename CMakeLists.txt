@@ -46,6 +46,7 @@ INCLUDE (GncConfigure)
 INCLUDE (GncAddGSchemaTargets)
 INCLUDE (GncAddTest)
 INCLUDE (MakeDistFiles)
+INCLUDE (GNUInstallDirs)
 
 # ############################################################
 # These options are settable from the CMake command line. For example, to disable
@@ -73,17 +74,17 @@ OPTION (AUTOTOOLS_IN_DIST "Add autotools support to distribution tarballs." ON)
 # These are also settable from the command line in a similar way.
 
 SET(GNUCASH_BUILD_ID "" CACHE STRING "Overrides the GnuCash build identification (Build ID) which defaults to a description of the vcs commit from which gnucash is built. Distributions may want to insert a package management based version number instead")
-SET(BINDIR ${CMAKE_INSTALL_PREFIX}/bin CACHE STRING "user executables")
-SET(SYSCONFDIR ${CMAKE_INSTALL_PREFIX}/etc CACHE STRING "read-only single-machine data")
-SET(DATAROOTDIR ${CMAKE_INSTALL_PREFIX}/share CACHE STRING "read-only arch.-independent data root")
-SET(DATADIR ${DATAROOTDIR} CACHE STRING "read-only architecture-independent data")
-SET(LIBDIR ${CMAKE_INSTALL_PREFIX}/lib CACHE STRING "object code libraries")
+SET(BINDIR ${CMAKE_INSTALL_BINDIR} CACHE STRING "user executables")
+SET(SYSCONFDIR ${CMAKE_INSTALL_SYSCONFDIR} CACHE STRING "read-only single-machine data")
+SET(DATAROOTDIR ${CMAKE_INSTALL_DATAROOTDIR} CACHE STRING "read-only arch.-independent data root")
+SET(DATADIR ${CMAKE_INSTALL_DATADIR} CACHE STRING "read-only architecture-independent data")
+SET(LIBDIR ${CMAKE_INSTALL_LIBDIR} CACHE STRING "object code libraries")
 SET(LOCALEDIR ${DATAROOTDIR}/locale CACHE STRING "locale-dependent data")
 SET(GNC_HELPDIR ${DATADIR} CACHE STRING "where to store help files")
 SET(DATADIRNAME share)
 SET(GNC_SYSTEM_XDG_DATA_DIRS /usr/local/share /usr/share)
 SET(GNC_DBD_DIR ${CMAKE_PREFIX_PATH}/lib/dbd CACHE PATH "specify location of libdbi drivers")
-SET(PKGLIBDIR ${CMAKE_INSTALL_PREFIX}/lib/gnucash)
+SET(PKGLIBDIR ${CMAKE_INSTALL_LIBDIR}/gnucash)
 SET(TEST_MYSQL_URL "" CACHE STRING "MySQL database URL for testing")
 SET(TEST_PGSQL_URL "" CACHE STRING "PgSQL database URL for testing")
 
@@ -492,11 +493,11 @@ SET( CMAKE_CXX_FLAGS_DEBUG "-O0 -g ${CMAKE_CXX_FLAGS} -Wno-deprecated-declaratio
 
 IF (APPLE AND WITH_GNUCASH)
   SET(CMAKE_MACOSX_RPATH ON)
-  SET(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
+  SET(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}")
 ENDIF (APPLE AND WITH_GNUCASH)
 
 IF (UNIX)
-  SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/lib/gnucash")
+  SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}:${PKGLIBDIR}")
 ENDIF()
 
 SET(BUILD_SHARED_LIBS ON)
@@ -564,7 +565,7 @@ SET(gnucash_DOCS
 )
 
 
-INSTALL(FILES ${gnucash_DOCS} DESTINATION share/doc/gnucash)
+INSTALL(FILES ${gnucash_DOCS} DESTINATION ${CMAKE_INSTALL_DOCDIR})
 
 # ############################################################
 
@@ -689,8 +690,8 @@ ADD_DEFINITIONS (-DHAVE_CONFIG_H)
 SET (CONFIG_H ${CMAKE_CURRENT_BINARY_DIR}/common/config.h)
 CONFIGURE_FILE (${CMAKE_CURRENT_SOURCE_DIR}/common/config.h.cmake.in ${CONFIG_H})
 
-SET(SCHEME_INSTALLED_SOURCE_DIR ${CMAKE_INSTALL_PREFIX}/share/gnucash/scm)
-SET(SCHEME_INSTALLED_CACHE_DIR ${CMAKE_INSTALL_PREFIX}/lib/gnucash/scm/ccache/${GUILE_EFFECTIVE_VERSION})
+SET(SCHEME_INSTALLED_SOURCE_DIR ${CMAKE_INSTALL_DATADIR}/gnucash/scm)
+SET(SCHEME_INSTALLED_CACHE_DIR ${PKGLIBDIR}/scm/ccache/${GUILE_EFFECTIVE_VERSION})
 
 # The subdirectories
 ADD_SUBDIRECTORY (borrowed)
@@ -834,9 +835,9 @@ IF (BUILDING_FROM_VCS)
     COMMAND ${GIT_EXECUTABLE} log --format=\"%ad %aN %n%n%x09* %s%d%n\" --date=short --since=2016-01-01 > ${CMAKE_BINARY_DIR}/ChangeLog
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
   )
-  INSTALL(FILES ${CMAKE_BINARY_DIR}/ChangeLog DESTINATION share/doc/gnucash)
+  INSTALL(FILES ${CMAKE_BINARY_DIR}/ChangeLog DESTINATION ${CMAKE_INSTALL_DOCDIR})
 ELSE()
-  INSTALL(FILES ${CMAKE_SOURCE_DIR}/ChangeLog DESTINATION share/doc/gnucash)
+  INSTALL(FILES ${CMAKE_SOURCE_DIR}/ChangeLog DESTINATION ${CMAKE_INSTALL_DOCDIR})
 ENDIF()
 
 #Link LICENSE to COPYING so that people expecting to find it,
@@ -850,7 +851,7 @@ ENDIF()
 INSTALL(CODE
 " EXECUTE_PROCESS(
       COMMAND ${CMAKE_COMMAND} -E ${_CMD} LICENSE COPYING
-      WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}/share/doc/gnucash
+      WORKING_DIRECTORY ${CMAKE_INSTALL_DOCDIR}
   )"
 )
 
@@ -860,7 +861,7 @@ IF (WIN32)
   FIND_LIBRARY(LIBSTDC++ libstdc++-6.dll)
   FIND_LIBRARY(LIBDW2 libgcc_s_dw2-1.dll)
   SET(MINGW_DLLS ${LIBSTDC++} ${LIBDW2})
-  INSTALL(PROGRAMS ${MINGW_DLLS} DESTINATION bin)
+  INSTALL(PROGRAMS ${MINGW_DLLS} DESTINATION ${CMAKE_INSTALL_BINDIR})
   FILE(COPY ${MINGW_DLLS} DESTINATION ${BINDIR_BUILD}
     # Do permissions matter for windows?
     FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE

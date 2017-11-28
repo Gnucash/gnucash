@@ -73,4 +73,4 @@ ADD_LIBRARY(gmock STATIC  ${lib_gmock_SOURCES})
 TARGET_INCLUDE_DIRECTORIES(gmock PUBLIC
   ${GTEST_INCLUDE_DIR} ${GTEST_SRC_DIR}
   ${GMOCK_INCLUDE_DIR} ${GMOCK_SRC_DIR})
-INSTALL(FILES unittest-support.h DESTINATION libexec/gnucash/libgnucash/engine/test)
+INSTALL(FILES unittest-support.h DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}/gnucash/libgnucash/engine/test)

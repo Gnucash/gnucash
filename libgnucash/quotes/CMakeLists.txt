@@ -47,7 +47,7 @@ ENDFOREACH(file)
 ADD_CUSTOM_TARGET(quotes-man ALL DEPENDS ${_MAN_FILES})
 ADD_CUSTOM_TARGET(quotes-bin ALL DEPENDS gnc-fq-check gnc-fq-update)
 INSTALL(FILES ${_MAN_FILES} DESTINATION share/man/man1)
-INSTALL(PROGRAMS ${_BIN_FILES} DESTINATION bin)
+INSTALL(PROGRAMS ${_BIN_FILES} DESTINATION })
 
 SET_DIST_LIST(quotes_DIST CMakeLists.txt gnc-fq-check.in gnc-fq-dump gnc-fq-helper.in gnc-fq-update.in
         gnc-value-portfolio Makefile.am Quote_example.pl README)

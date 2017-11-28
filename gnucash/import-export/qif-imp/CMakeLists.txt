@@ -26,13 +26,13 @@ TARGET_LINK_LIBRARIES(gncmod-qif-import gncmod-app-utils gncmod-gnome-utils gnc-
 TARGET_COMPILE_DEFINITIONS(gncmod-qif-import PRIVATE -DG_LOG_DOMAIN=\"gnc.import.qif.import\")
 
 IF (APPLE)
-  SET_TARGET_PROPERTIES (gncmod-qif-import PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib/gnucash")
+  SET_TARGET_PROPERTIES (gncmod-qif-import PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_LIBDIR}/gnucash")
 ENDIF()
 
 INSTALL(TARGETS gncmod-qif-import
-  LIBRARY DESTINATION lib/gnucash
-  ARCHIVE DESTINATION lib/gnucash
-  RUNTIME DESTINATION bin)
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 # No headers to install.
 
 

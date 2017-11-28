@@ -52,7 +52,7 @@ GNC_ADD_SCHEME_TARGETS(scm-scm-3
 
 ADD_CUSTOM_TARGET(scm-scm ALL DEPENDS scm-scm-3 scm-scm-2 scm-scm-1 scm-scm-0 scm-gnumeric)
 
-INSTALL(FILES config DESTINATION etc/gnucash)
+INSTALL(FILES config DESTINATION ${CMAKE_INSTALL_FULL_SYSCONFDIR}/gnucash)
 
 SET_LOCAL_DIST(scm_DIST_local config CMakeLists.txt Makefile.am fin.scm string.scm build-config.scm.in substring-search.scm
                               xml-generator.scm main.scm price-quotes.scm printf.scm ${scm_SCHEME_4})

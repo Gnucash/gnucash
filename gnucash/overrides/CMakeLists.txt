@@ -28,5 +28,5 @@ INSTALL(
     PROGRAMS
       ${SCRIPT_OUTPUT_DIR}/gnucash-env
       ${SCRIPT_OUTPUT_DIR}/gnucash-make-guids
-    DESTINATION libexec/gnucash/overrides
+    DESTINATION }exec/gnucash/overrides
 )

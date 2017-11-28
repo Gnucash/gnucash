@@ -36,7 +36,7 @@ SET(accounts_SUBDIRS
   zh_TW
 )
 
-SET(ACCOUNTS_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/share/gnucash/accounts)
+SET(ACCOUNTS_INSTALL_DIR ${CMAKE_INSTALL_DATADIR}/gnucash/accounts)
 SET(ACCOUNTS_BUILD_DIR ${DATADIR_BUILD}/gnucash/accounts)
 
 

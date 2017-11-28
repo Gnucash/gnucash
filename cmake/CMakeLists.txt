@@ -2,9 +2,9 @@
 
 IF (APPLE)
   INSTALL(CODE "EXECUTE_PROCESS(
-                COMMAND /usr/bin/install_name_tool -add_rpath ${CMAKE_INSTALL_PREFIX}/lib
-                                                   -add_rpath ${CMAKE_INSTALL_PREFIX}/lib/gnucash
-                                                   ${CMAKE_INSTALL_PREFIX}/bin/gnucash)")
+                COMMAND /usr/bin/install_name_tool -add_rpath ${CMAKE_INSTALL_LIBDIR}
+                                                   -add_rpath ${PKGLIBDIR}
+                                                   ${CMAKE_INSTALL_BINDIR}/gnucash)")
 ENDIF(APPLE)
 
 
