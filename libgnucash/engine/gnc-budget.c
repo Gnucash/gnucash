@@ -489,7 +489,7 @@ void
 gnc_budget_unset_account_period_value(GncBudget *budget, const Account *account,
                                       guint period_num)
 {
-    gchar path_part_one [GUID_ENCODING_LENGTH];
+    gchar path_part_one [GUID_ENCODING_LENGTH + 1];
     gchar path_part_two [GNC_BUDGET_MAX_NUM_PERIODS_DIGITS];
 
     g_return_if_fail (budget != NULL);
@@ -511,7 +511,7 @@ void
 gnc_budget_set_account_period_value(GncBudget *budget, const Account *account,
                                     guint period_num, gnc_numeric val)
 {
-    gchar path_part_one [GUID_ENCODING_LENGTH];
+    gchar path_part_one [GUID_ENCODING_LENGTH + 1];
     gchar path_part_two [GNC_BUDGET_MAX_NUM_PERIODS_DIGITS];
 
     /* Watch out for an off-by-one error here:
@@ -553,7 +553,7 @@ gnc_budget_is_account_period_value_set(const GncBudget *budget,
                                        guint period_num)
 {
     GValue v = G_VALUE_INIT;
-    gchar path_part_one [GUID_ENCODING_LENGTH];
+    gchar path_part_one [GUID_ENCODING_LENGTH + 1];
     gchar path_part_two [GNC_BUDGET_MAX_NUM_PERIODS_DIGITS];
     gconstpointer ptr = NULL;
 
@@ -573,7 +573,7 @@ gnc_budget_get_account_period_value(const GncBudget *budget,
                                     guint period_num)
 {
     gnc_numeric *numeric = NULL;
-    gchar path_part_one [GUID_ENCODING_LENGTH];
+    gchar path_part_one [GUID_ENCODING_LENGTH + 1];
     gchar path_part_two [GNC_BUDGET_MAX_NUM_PERIODS_DIGITS];
     GValue v = G_VALUE_INIT;
 
