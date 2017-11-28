@@ -826,7 +826,6 @@ tags within description, notes or memo. ")
                (and (opt-val pagename-sorting optname-prime-subtotal)
                     (keylist-get-info sortkey-list sortkey info))))))
 
-  
   (define (secondary-get-info info)
     (let ((sortkey (opt-val pagename-sorting optname-sec-sortkey)))
       (if (member sortkey DATE-SORTING-TYPES)
@@ -834,18 +833,6 @@ tags within description, notes or memo. ")
           (and (member sortkey SUBTOTAL-ENABLED)
                (and (opt-val pagename-sorting optname-sec-subtotal)
                     (keylist-get-info sortkey-list sortkey info))))))
-
-  (define primary-subtotal-comparator
-    (primary-get-info 'split-sortvalue))
-
-  (define primary-renderer-key
-    (primary-get-info 'renderer-key))
-
-  (define secondary-subtotal-comparator
-    (secondary-get-info 'split-sortvalue))
-
-  (define secondary-renderer-key
-    (secondary-get-info 'renderer-key))
 
   (let* ((work-to-do (length splits))
          (work-done 0)
@@ -1140,11 +1127,14 @@ tags within description, notes or memo. ")
              description)
             name)))
 
-    (define (render-summary split renderer-key anchor?)
-      (case renderer-key
-        ((weekly monthly quarterly yearly) (render-date renderer-key split))
-        ((account other-acc) (render-account renderer-key split anchor?))
-        (else #f)))
+    (define (render-summary split level anchor?)
+      (let ((renderer-key (case level
+                            ((primary) (primary-get-info 'renderer-key))
+                            ((secondary) (secondary-get-info 'renderer-key)))))
+        (case renderer-key
+          ((weekly monthly quarterly yearly) (render-date renderer-key split))
+          ((account other-acc) (render-account renderer-key split anchor?))
+          (else #f))))
 
     (define (render-grand-total)
       (_ "Grand Total"))
@@ -1293,6 +1283,8 @@ tags within description, notes or memo. ")
       (map (lambda (x) (gnc:make-commodity-collector)) calculated-cells))
 
     (define (do-rows-with-subtotals splits odd-row?)
+      (define primary-subtotal-comparator (primary-get-info 'split-sortvalue))
+      (define secondary-subtotal-comparator (secondary-get-info 'split-sortvalue))
 
       (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
 
@@ -1357,23 +1349,23 @@ tags within description, notes or memo. ")
                   (if secondary-subtotal-comparator
                       (begin
                         (add-subtotal-row (total-string
-                                           (render-summary current secondary-renderer-key #f))
+                                           (render-summary current 'secondary #f))
                                           secondary-subtotal-collectors
                                           def:secondary-subtotal-style)
                         (for-each (lambda (coll) (coll 'reset #f #f))
                                   secondary-subtotal-collectors)))
                   (add-subtotal-row (total-string
-                                     (render-summary current primary-renderer-key #f))
+                                     (render-summary current 'primary #f))
                                     primary-subtotal-collectors
                                     def:primary-subtotal-style)
                   (for-each (lambda (coll) (coll 'reset #f #f))
                             primary-subtotal-collectors)
                   (if next
                       (begin
-                        (add-subheading (render-summary next primary-renderer-key #t)
+                        (add-subheading (render-summary next 'primary #t)
                                         def:primary-subtotal-style)
                         (if secondary-subtotal-comparator
-                            (add-subheading (render-summary next secondary-renderer-key #t)
+                            (add-subheading (render-summary next 'secondary #t)
                                             def:secondary-subtotal-style)))))
 
                 (if (and secondary-subtotal-comparator
@@ -1382,25 +1374,25 @@ tags within description, notes or memo. ")
                                   (not (equal? (secondary-subtotal-comparator current)
                                                (secondary-subtotal-comparator next))))))
                     (begin (add-subtotal-row (total-string
-                                              (render-summary current secondary-renderer-key #f))
+                                              (render-summary current 'secondary #f))
                                              secondary-subtotal-collectors
                                              def:secondary-subtotal-style)
                            (for-each (lambda (coll) (coll 'reset #f #f))
                                      secondary-subtotal-collectors)
                            (if next
-                               (add-subheading (render-summary next secondary-renderer-key #t)
+                               (add-subheading (render-summary next 'secondary #t)
                                                def:secondary-subtotal-style)))))
 
             (do-rows-with-subtotals rest (not odd-row?)))))
 
     (gnc:html-table-set-col-headers! table (concatenate (list headings-left-columns headings-right-columns)))
 
-    (if primary-renderer-key
-        (add-subheading (render-summary (car splits) primary-renderer-key #t)
+    (if (primary-get-info 'renderer-key)
+        (add-subheading (render-summary (car splits) 'primary #t)
                         def:primary-subtotal-style))
     
-    (if secondary-renderer-key
-        (add-subheading (render-summary (car splits) secondary-renderer-key #t)
+    (if (secondary-get-info 'renderer-key)
+        (add-subheading (render-summary (car splits) 'secondary #t)
                         def:secondary-subtotal-style))
     
     (do-rows-with-subtotals splits #t)
