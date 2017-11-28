@@ -36,6 +36,7 @@ IF (BUILDING_FROM_VCS)
 ELSE()
   SET (SWIG_UNITTEST_SUPPORT_GUILE_C  swig-unittest-support-guile.c)
   SET (SWIG_UNITTEST_SUPPORT_PYTHON_C swig-unittest-support-python.c)
+  FILE(COPY unittest_support.py DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 ENDIF()
 
 

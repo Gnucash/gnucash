@@ -12,6 +12,7 @@ SET(test_python_bindings_DATA
         test_account.py
         test_book.py
         test_business.py
+        test_commodity.py
         test_split.py
         test_transaction.py)
 
