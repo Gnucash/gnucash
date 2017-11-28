@@ -849,33 +849,37 @@ tags within description, notes or memo. ")
       (cdr (assq param used-columns)))
 
     (define left-columns
-      (let* ((add-if (lambda pred? . items) (if pred? items '())))
-        (append
-         (add-if (column-uses? 'date)
-                 (_ "Date"))
-         (add-if (column-uses? 'reconciled-date)
-                 (_ "Reconciled Date"))
-         (add-if (column-uses? 'num)
-                 (if (and BOOK-SPLIT-ACTION
-                          (opt-val gnc:pagename-display (N_ "Trans Number")))
-                     (_ "Num/T-Num")
-                     (_ "Num")))
-         (add-if (column-uses? 'description)
-                 (_ "Description"))
-         (add-if (column-uses? 'memo)
-                 (if (column-uses? 'notes)
-                     (string-append (_ "Memo") "/" (_ "Notes"))
-                     (_ "Memo")))
-         (add-if (or (column-uses? 'account-name)
-                     (column-uses? 'account-code))
-                 (_ "Account"))
-         (add-if (or (column-uses? 'other-account-name)
-                     (column-uses? 'other-account-code))
-                 (_ "Transfer from/to"))
-         (add-if (column-uses? 'shares)
-                 (_ "Shares"))
-         (add-if (column-uses? 'price)
-                 (_ "Price"))))
+      (let* ((add-if (lambda (pred? . items) (if pred? items '())))
+             (left-cols-list
+              (append
+               (add-if (column-uses? 'date)
+                       (_ "Date"))
+               (add-if (column-uses? 'reconciled-date)
+                       (_ "Reconciled Date"))
+               (add-if (column-uses? 'num)
+                       (if (and BOOK-SPLIT-ACTION
+                                (opt-val gnc:pagename-display (N_ "Trans Number")))
+                           (_ "Num/T-Num")
+                           (_ "Num")))
+               (add-if (column-uses? 'description)
+                       (_ "Description"))
+               (add-if (column-uses? 'memo)
+                       (if (column-uses? 'notes)
+                           (string-append (_ "Memo") "/" (_ "Notes"))
+                           (_ "Memo")))
+               (add-if (or (column-uses? 'account-name)
+                           (column-uses? 'account-code))
+                       (_ "Account"))
+               (add-if (or (column-uses? 'other-account-name)
+                           (column-uses? 'other-account-code))
+                       (_ "Transfer from/to"))
+               (add-if (column-uses? 'shares)
+                       (_ "Shares"))
+               (add-if (column-uses? 'price)
+                       (_ "Price")))))
+        (if (null? headings-list)
+            (list "")
+            headings-list)))
 
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;;
@@ -1236,6 +1240,11 @@ tags within description, notes or memo. ")
                      (gnc:make-gnc-monetary (xaccTransGetCurrency trans)
                                             (xaccSplitGetSharePrice split)))))
 
+        ;; hack to ensure cell alignment is corrected when no left columns were selected
+        ;; this is needed because subtotal renderer will always insert at least 1 column
+        (if (null? row-contents)
+            (addto! row-contents (gnc:html-make-empty-cell)))
+        
         (for-each (lambda (cell)
                     (let ((cell-content (vector-ref cell 0))
                           ;; reverse? returns a bool - will check if the cell type has reversible sign,
