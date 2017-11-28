@@ -174,7 +174,7 @@ struct to_string_visitor : boost::static_visitor<void>
         {
             output << "(null)";
         }
-        output << " (timespec)";
+        output << " (gnc_numeric)";
     }
 
     void operator()(GncGUID * val)
