@@ -175,18 +175,6 @@ void qof_instance_slot_path_delete_if_empty (QofInstance const *, std::vector<st
 std::vector <std::pair <std::string, KvpValue*>>
 qof_instance_get_slots_prefix (QofInstance const *, std::string const & prefix);
 
-/* Don't pass nullptr as the function */
-template<typename func_type, typename data_type>
-void qof_instance_foreach_slot_temp (QofInstance const * inst, std::string const & path,
-        func_type const & func, data_type & data)
-{
-    auto slot = inst->kvp_data->get_slot({path});
-    if (slot == nullptr || slot->get_type() != KvpValue::Type::FRAME)
-        return;
-    auto frame = slot->get<KvpFrame*>();
-    frame->for_each_slot(func, data);
-}
-
 /**
  * Similar to qof_instance_foreach_slot, but we don't traverse the depth of the key value frame,
  * we only check the root level for keys that match the specified prefix.

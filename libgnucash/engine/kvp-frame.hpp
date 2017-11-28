@@ -192,12 +192,6 @@ struct KvpFrameImpl
      */
     KvpValue* get_slot(Path keys) noexcept;
 
-    /**
-     * proc is called with each of the immediate contents of this frame, passing it the key,
-     * value, and specified data.
-     */
-    void for_each_slot(void (*proc)(const char *key, KvpValue *, void *data), void* data) const noexcept;
-
     /** The function should be of the form:
      * <anything> func (char const *, KvpValue *, data_type &);
      * Do not pass nullptr as the function.
