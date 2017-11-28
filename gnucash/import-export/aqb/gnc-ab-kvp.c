@@ -99,9 +99,17 @@ Timespec
 gnc_ab_get_account_trans_retrieval(const Account *a)
 {
     Timespec *t = NULL;
+    Timespec never;
+    never.tv_nsec = 0;
+    never.tv_sec = 0;
+    
     qof_instance_get (QOF_INSTANCE (a),
 		      "ab-trans-retrieval", &t,
 		      NULL);
+    if (!t)
+    {
+      return never;
+    }
     return *t;
 }
 
