@@ -102,7 +102,7 @@ gnc_ab_get_account_trans_retrieval(const Account *a)
     qof_instance_get (QOF_INSTANCE (a),
 		      "ab-trans-retrieval", &t,
 		      NULL);
-    return *t;
+    return t ? *t : (Timespec){0, 0};
 }
 
 void
