@@ -1051,12 +1051,11 @@ tags within description, notes or memo. ")
                                           (gnc:monetary-neg (split-value s)))))
            (original-amount (lambda (s) (gnc:make-gnc-monetary (currency s) (damount s))))
            (original-debit-amount (lambda (s) (if (gnc-numeric-positive-p (damount s))
-                                                  (gnc:make-gnc-monetary (currency s) (damount s))
+                                                  (original-amount s)
                                                   #f)))
            (original-credit-amount (lambda (s) (if (gnc-numeric-positive-p (damount s))
                                                    #f
-                                                   (gnc:make-gnc-monetary (currency s)
-                                                                          (gnc-numeric-neg (damount s))))))
+                                                   (gnc:monetary-neg (original-amount s)))))
            (running-balance (lambda (s) (gnc:make-gnc-monetary (currency s) (xaccSplitGetBalance s)))))
         (append
          ;; each column will be a vector
@@ -1104,19 +1103,18 @@ tags within description, notes or memo. ")
                            (vector #f #f)))
              '()))))
 
-    
     (define (headings-left-columns)
       (map (lambda (column)
              (vector-ref column 0))
            (left-columns)))
-    
+
     (define (headings-right-columns)
       (map (lambda (column)
              (vector-ref column 0))
            (calculated-cells)))
 
-    (define (width-left-columns) (length (headings-left-columns)))
-    (define (width-right-columns) (length (headings-right-columns)))
+    (define (width-left-columns) (length (left-columns)))
+    (define (width-right-columns) (length (calculated-cells)))
 
     (define (add-subheading data subheading-style)
       (let ((heading-cell (gnc:make-html-table-cell data)))
@@ -1299,7 +1297,7 @@ tags within description, notes or memo. ")
                            reverse?
                            subtotal?)))
                cell-calculators))
-        
+
         (for-each (lambda (col)
                     (addto! row-contents col))
                   left-cols)
@@ -1344,7 +1342,7 @@ tags within description, notes or memo. ")
 
     (define total-collectors
       (map (lambda (x) (gnc:make-commodity-collector)) (calculated-cells)))
-    
+
     (define (do-rows-with-subtotals splits odd-row?)
       (define primary-subtotal-comparator (primary-get-info 'split-sortvalue))
       (define secondary-subtotal-comparator (secondary-get-info 'split-sortvalue))
@@ -1355,14 +1353,15 @@ tags within description, notes or memo. ")
 
       (if (null? splits)
 
-          (begin
-            (gnc:html-table-append-row/markup!
-             table def:grand-total-style
-             (list
-              (gnc:make-html-table-cell/size
-               1 (+ (width-left-columns) (width-right-columns)) (gnc:make-html-text (gnc:html-markup-hr)))))
+          (if (opt-val gnc:pagename-display "Totals")
+              (begin
+                (gnc:html-table-append-row/markup!
+                 table def:grand-total-style
+                 (list
+                  (gnc:make-html-table-cell/size
+                   1 (+ (width-left-columns) (width-right-columns))
+                   (gnc:make-html-text (gnc:html-markup-hr)))))
 
-            (if (opt-val gnc:pagename-display "Totals")
                 (add-subtotal-row (render-grand-total) total-collectors def:grand-total-style)))
 
           (let* ((current (car splits))
@@ -1452,11 +1451,11 @@ tags within description, notes or memo. ")
     (if (primary-get-info 'renderer-key)
         (add-subheading (render-summary (car splits) 'primary #t)
                         def:primary-subtotal-style))
-    
+
     (if (secondary-get-info 'renderer-key)
         (add-subheading (render-summary (car splits) 'secondary #t)
                         def:secondary-subtotal-style))
-    
+
     (do-rows-with-subtotals splits #t)
 
     table))
