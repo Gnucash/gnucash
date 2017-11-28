@@ -1323,11 +1323,16 @@ tags within description, notes or memo. ")
 
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    (define (do-rows-with-subtotals splits
-                                    odd-row?
-                                    primary-subtotal-collectors
-                                    secondary-subtotal-collectors
-                                    total-collectors)
+    (define primary-subtotal-collectors
+      (map (lambda (x) (gnc:make-commodity-collector)) (calculated-cells)))
+
+    (define secondary-subtotal-collectors
+      (map (lambda (x) (gnc:make-commodity-collector)) (calculated-cells)))
+
+    (define total-collectors
+      (map (lambda (x) (gnc:make-commodity-collector)) (calculated-cells)))
+        
+    (define (do-rows-with-subtotals splits odd-row?)
 
       (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
 
@@ -1425,26 +1430,19 @@ tags within description, notes or memo. ")
                                (add-subheading (render-summary next secondary-renderer-key #t)
                                                def:secondary-subtotal-style)))))
 
-            (do-rows-with-subtotals rest
-                                    (not odd-row?)
-                                    primary-subtotal-collectors
-                                    secondary-subtotal-collectors
-                                    total-collectors))))
+            (do-rows-with-subtotals rest (not odd-row?)))))
 
     (gnc:html-table-set-col-headers! table (concatenate (list (headings-left-columns) (headings-right-columns))))
 
     (if primary-renderer-key
         (add-subheading (render-summary (car splits) primary-renderer-key #t)
                         def:primary-subtotal-style))
-
+    
     (if secondary-renderer-key
         (add-subheading (render-summary (car splits) secondary-renderer-key #t)
                         def:secondary-subtotal-style))
-
-    (do-rows-with-subtotals splits #t
-                            (map (lambda (x) (gnc:make-commodity-collector)) (calculated-cells))
-                            (map (lambda (x) (gnc:make-commodity-collector)) (calculated-cells))
-                            (map (lambda (x) (gnc:make-commodity-collector)) (calculated-cells)))
+    
+    (do-rows-with-subtotals splits #t)
 
     table))
 
