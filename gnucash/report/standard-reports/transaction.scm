@@ -114,8 +114,8 @@ options specified in the Options panels."))
 
 ;; The option-values of the sorting key multichoice option, for
 ;; which a subtotal should be enabled.
-(define SUBTOTAL-ENABLED '(account-name corresponding-acc-name
-                           account-code corresponding-acc-code))
+(define SUBTOTAL-ENABLED (list 'account-name 'corresponding-acc-name
+                               'account-code 'corresponding-acc-code))
 
 (define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
 
@@ -895,40 +895,117 @@ tags within description, notes or memo. ")
     (define (column-uses? param)
       (cdr (assq param used-columns)))
 
-    (define (headings-left-columns)
+    (define (left-columns)
       (define (add-if pred? . items) (if pred? items '()))
-      (define headings-list
+      (define (left-cols-list)
         (append
          (add-if (column-uses? 'date)
-                 (_ "Date"))
+                 (vector (_ "Date")
+                         (lambda (split transaction-row?)
+                           (if transaction-row?
+                               (gnc:make-html-table-cell/markup
+                                "date-cell"
+                                (qof-print-date (xaccTransGetDate (xaccSplitGetParent split))))
+                               ""))))
+
          (add-if (column-uses? 'reconciled-date)
-                 (_ "Reconciled Date"))
+                 (vector (_ "Reconciled Date")
+                         (lambda (split transaction-row?)
+                           (gnc:make-html-table-cell/markup
+                            "date-cell"
+                            (let ((date (xaccSplitGetDateReconciled split)))
+                              (if (zero? date)
+                                  ""
+                                  (qof-print-date date)))))))
+
          (add-if (column-uses? 'num)
-                 (if (and BOOK-SPLIT-ACTION
-                          (if (gnc:lookup-option options gnc:pagename-display (N_ "Trans Number"))
-                              (opt-val gnc:pagename-display (N_ "Trans Number"))
-                              #f))
-                     (_ "Num/T-Num")
-                     (_ "Num")))
+                 (vector (if (and BOOK-SPLIT-ACTION
+                                  (if (gnc:lookup-option options gnc:pagename-display (N_ "Trans Number"))
+                                      (opt-val gnc:pagename-display (N_ "Trans Number"))
+                                      #f))
+                             (_ "Num/T-Num")
+                             (_ "Num"))
+                         (lambda (split transaction-row?)
+                           (define trans (xaccSplitGetParent split))
+                           (if transaction-row?
+                               (if BOOK-SPLIT-ACTION
+                                   (let* ((num (gnc-get-num-action trans split))
+                                          (t-num (if (if (gnc:lookup-option options
+                                                                            gnc:pagename-display
+                                                                            (N_ "Trans Number"))
+                                                         (opt-val gnc:pagename-display (N_ "Trans Number"))
+                                                         "")
+                                                     (gnc-get-num-action trans #f)
+                                                     ""))
+                                          (num-string (if (string-null? t-num)
+                                                          num
+                                                          (string-append num "/" t-num))))
+                                     (gnc:make-html-table-cell/markup "text-cell" num-string))
+                                   (gnc:make-html-table-cell/markup "text-cell"
+                                                                    (gnc-get-num-action trans split)))
+                               ""))))
+
          (add-if (column-uses? 'description)
-                 (_ "Description"))
+                 (vector (_ "Description")
+                         (lambda (split transaction-row?)
+                           (define trans (xaccSplitGetParent split))
+                           (if transaction-row?
+                               (gnc:make-html-table-cell/markup
+                                "text-cell"
+                                (xaccTransGetDescription trans))
+                               ""))))
+
          (add-if (column-uses? 'memo)
-                 (if (column-uses? 'notes)
-                     (string-append (_ "Memo") "/" (_ "Notes"))
-                     (_ "Memo")))
-         (add-if (or (column-uses? 'account-name)
-                     (column-uses? 'account-code))
-                 (_ "Account"))
-         (add-if (or (column-uses? 'other-account-name)
-                     (column-uses? 'other-account-code))
-                 (_ "Transfer from/to"))
+                 (vector (if (column-uses? 'notes)
+                             (string-append (_ "Memo") "/" (_ "Notes"))
+                             (_ "Memo"))
+                         (lambda (split transaction-row?)
+                           (define trans (xaccSplitGetParent split))
+                           (define memo (xaccSplitGetMemo split))
+                           (if (and (string-null? memo) (column-uses? 'notes))
+                               (xaccTransGetNotes trans)
+                               memo))))
+
+         (add-if (or (column-uses? 'account-name) (column-uses? 'account-code))
+                 (vector (_ "Account")
+                         (lambda (split transaction-row?)
+                           (define account (xaccSplitGetAccount split))
+                           (account-namestring account
+                                               (column-uses? 'account-code)
+                                               (column-uses? 'account-name)
+                                               (column-uses? 'account-full-name)))))
+
+         (add-if (or (column-uses? 'other-account-name) (column-uses? 'other-account-code))
+                 (vector (_ "Transfer from/to")
+                         (lambda (split transaction-row?)
+                           (define other-account (xaccSplitGetAccount (xaccSplitGetOtherSplit split)))
+                           (account-namestring other-account
+                                               (column-uses? 'other-account-code)
+                                               (column-uses? 'other-account-name)
+                                               (column-uses? 'other-account-full-name)))))
+
          (add-if (column-uses? 'shares)
-                 (_ "Shares"))
+                 (vector (_ "Shares")
+                         (lambda (split transaction-row?)
+                           (gnc:make-html-table-cell/markup
+                            "number-cell"
+                            (xaccSplitGetAmount split)))))
+
          (add-if (column-uses? 'price)
-                 (_ "Price"))))
-      (if (null? headings-list)
-          (list "")
-          headings-list))
+                 (vector (_ "Price")
+                         (lambda (split transaction-row?)
+                           (define trans (xaccSplitGetParent split))
+                           (gnc:make-html-table-cell/markup
+                            "number-cell"
+                            (gnc:make-gnc-monetary (xaccTransGetCurrency trans)
+                                                   (xaccSplitGetSharePrice split))))))))
+
+      (if (and (null? (left-cols-list))
+               (or (opt-val gnc:pagename-display "Totals")
+                   (primary-get-info 'renderer-key)
+                   (secondary-get-info 'renderer-key)))
+          (list (vector "" (lambda (s t) #f)))
+          (left-cols-list)))
 
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;;
@@ -1027,6 +1104,12 @@ tags within description, notes or memo. ")
                            (vector #f #f)))
              '()))))
 
+    
+    (define (headings-left-columns)
+      (map (lambda (column)
+             (vector-ref column 0))
+           (left-columns)))
+    
     (define (headings-right-columns)
       (map (lambda (column)
              (vector-ref column 0))
@@ -1199,6 +1282,13 @@ tags within description, notes or memo. ")
              (trans (xaccSplitGetParent split))
              (account (xaccSplitGetAccount split)))
 
+        (define left-cols
+          (map (lambda (left-col)
+                 (let* ((col-fn (vector-ref left-col 1))
+                        (col-data (col-fn split transaction-row?)))
+                   col-data))
+               (left-columns)))
+
         (define cells
           (map (lambda (cell)
                  (let* ((calculator (vector-ref cell 1))
@@ -1209,87 +1299,11 @@ tags within description, notes or memo. ")
                            reverse?
                            subtotal?)))
                cell-calculators))
-
-        (if (column-uses? 'date)
-            (addto! row-contents
-                    (if transaction-row?
-                        (gnc:make-html-table-cell/markup
-                         "date-cell"
-                         (qof-print-date (xaccTransGetDate trans)))
-                        "")))
-
-        (if (column-uses? 'reconciled-date)
-            (addto! row-contents
-                    (gnc:make-html-table-cell/markup
-                     "date-cell"
-                     (let ((date (xaccSplitGetDateReconciled split)))
-                       (if (zero? date)
-                           ""
-                           (qof-print-date date))))))
-
-        (if (column-uses? 'num)
-            (addto! row-contents
-                    (if transaction-row?
-                        (if BOOK-SPLIT-ACTION
-                            (let* ((num (gnc-get-num-action trans split))
-                                   (t-num (if (if (gnc:lookup-option options
-                                                                     gnc:pagename-display
-                                                                     (N_ "Trans Number"))
-                                                  (opt-val gnc:pagename-display (N_ "Trans Number"))
-                                                  "")
-                                              (gnc-get-num-action trans #f)
-                                              ""))
-                                   (num-string (if (string-null? t-num)
-                                                   num
-                                                   (string-append num "/" t-num))))
-                              (gnc:make-html-table-cell/markup "text-cell" num-string))
-                            (gnc:make-html-table-cell/markup "text-cell"
-                                                             (gnc-get-num-action trans split)))
-                        "")))
-
-        (if (column-uses? 'description)
-            (addto! row-contents
-                    (if transaction-row?
-                        (gnc:make-html-table-cell/markup
-                         "text-cell"
-                         (xaccTransGetDescription trans))
-                        "")))
-
-        (if (column-uses? 'memo)
-            (let ((memo (xaccSplitGetMemo split)))
-              (if (and (string-null? memo) (column-uses? 'notes))
-                  (addto! row-contents (xaccTransGetNotes trans))
-                  (addto! row-contents memo))))
-
-        (if (or (column-uses? 'account-name) (column-uses? 'account-code))
-            (addto! row-contents (account-namestring account
-                                                     (column-uses? 'account-code)
-                                                     (column-uses? 'account-name)
-                                                     (column-uses? 'account-full-name))))
-
-        (if (or (column-uses? 'other-account-name) (column-uses? 'other-account-code))
-            (addto! row-contents (account-namestring (xaccSplitGetAccount (xaccSplitGetOtherSplit split))
-                                                     (column-uses? 'other-account-code)
-                                                     (column-uses? 'other-account-name)
-                                                     (column-uses? 'other-account-full-name))))
-
-        (if (column-uses? 'shares)
-            (addto! row-contents (gnc:make-html-table-cell/markup
-                                  "number-cell"
-                                  (xaccSplitGetAmount split))))
-
-        (if (column-uses? 'price)
-            (addto! row-contents
-                    (gnc:make-html-table-cell/markup
-                     "number-cell"
-                     (gnc:make-gnc-monetary (xaccTransGetCurrency trans)
-                                            (xaccSplitGetSharePrice split)))))
-
-        ;; hack to ensure cell alignment is corrected when no left columns were selected
-        ;; this is needed because subtotal renderer will always insert at least 1 column
-        (if (null? row-contents)
-            (addto! row-contents (gnc:html-make-empty-cell)))
         
+        (for-each (lambda (col)
+                    (addto! row-contents col))
+                  left-cols)
+
         (for-each (lambda (cell)
                     (let ((cell-content (vector-ref cell 0))
                           (reverse? (and (vector-ref cell 1)
@@ -1330,7 +1344,7 @@ tags within description, notes or memo. ")
 
     (define total-collectors
       (map (lambda (x) (gnc:make-commodity-collector)) (calculated-cells)))
-        
+    
     (define (do-rows-with-subtotals splits odd-row?)
       (define primary-subtotal-comparator (primary-get-info 'split-sortvalue))
       (define secondary-subtotal-comparator (secondary-get-info 'split-sortvalue))
@@ -1466,14 +1480,14 @@ tags within description, notes or memo. ")
            (other-accounts (map xaccSplitGetAccount other-splits))
            (is-in-account-list? (lambda (acc) (member acc account-list))))
       (cond
-        ;; A 2-split transaction - test separately so it can be optimized
-        ;; to significantly reduce the number of splits to traverse
-        ;; in guile code
-        ((= splitcount 2) (is-in-account-list? other-account))
-        ;; A multi-split transaction - run over all splits
-        ((> splitcount 2) (or-map is-in-account-list? other-accounts))
-        ;; Single transaction splits
-        (else #f))))
+       ;; A 2-split transaction - test separately so it can be optimized
+       ;; to significantly reduce the number of splits to traverse
+       ;; in guile code
+       ((= splitcount 2) (is-in-account-list? other-account))
+       ;; A multi-split transaction - run over all splits
+       ((> splitcount 2) (or-map is-in-account-list? other-accounts))
+       ;; Single transaction splits
+       (else #f))))
 
   (gnc:report-starting reportname)
 
