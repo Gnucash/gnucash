@@ -117,8 +117,6 @@ options specified in the Options panels."))
 (define SUBTOTAL-ENABLED (list 'account-name 'corresponding-acc-name
                                'account-code 'corresponding-acc-code))
 
-(define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
-
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; sortkeys
@@ -189,7 +187,7 @@ options specified in the Options panels."))
                                    (cons 'tip (_ "Sort by description."))
                                    (cons 'renderer-key #f)))
 
-        (if BOOK-SPLIT-ACTION
+        (if (qof-book-use-split-action-for-num-field (gnc-get-current-book))
             (cons 'number    (list (cons 'sortkey (list SPLIT-ACTION))
                                    (cons 'split-sortvalue #f)
                                    (cons 'text (_ "Number/Action"))
@@ -378,6 +376,7 @@ Credit Card, and Income accounts."))
 
 (define (trep-options-generator)
   (define options (gnc:new-options))
+  (define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
   (define (gnc:register-trep-option new-option)
     (gnc:register-option options new-option))
 
@@ -829,7 +828,7 @@ tags within description, notes or memo. ")
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (make-split-table splits options)
-
+  (define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
   (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
 
   (define (build-columns-used)
@@ -837,9 +836,9 @@ tags within description, notes or memo. ")
     (define amount-setting (opt-val gnc:pagename-display (N_ "Amount")))
     (list (cons 'date (opt-val gnc:pagename-display (N_ "Date")))
           (cons 'reconciled-date (opt-val gnc:pagename-display (N_ "Reconciled Date")))
-          (cons 'num (if (gnc:lookup-option options gnc:pagename-display (N_ "Num"))
-                         (opt-val gnc:pagename-display (N_ "Num"))
-                         (opt-val gnc:pagename-display (N_ "Num/Action"))))
+          (cons 'num (if BOOK-SPLIT-ACTION
+                         (opt-val gnc:pagename-display (N_ "Num/Action"))
+                         (opt-val gnc:pagename-display (N_ "Num"))))
           (cons 'description (opt-val gnc:pagename-display (N_ "Description")))
           (cons 'account-name (opt-val gnc:pagename-display (N_ "Account Name")))
           (cons 'other-account-name (and detail-is-single?
@@ -1468,6 +1467,7 @@ tags within description, notes or memo. ")
 
 (define (trep-renderer report-obj)
   (define options (gnc:report-options report-obj))
+  (define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
   (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
 
   (define (is-filter-member split account-list)
