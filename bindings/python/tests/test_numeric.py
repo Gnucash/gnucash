@@ -28,10 +28,12 @@ class TestGncNumeric( TestCase ):
         self.assertEqual(num.num(), 3)
         self.assertEqual(num.denom(), 1)
 
-        #One might think this would be an overflow error, but SWIG type-checks
-        #it first and discovers that it's too big to be an int64_t.
-        with self.assertRaises(TypeError):
+        with self.assertRaises(Exception) as context:
             GncNumeric((2**64)+1)
+
+        #On Linux it raises an OverflowError while on MacOS it's a TypeError.
+        self.assertTrue(isinstance(context.exception, TypeError) or
+                        isinstance(context.exception, OverflowError))
 
     def test_from_float(self):
         num = GncNumeric(3.1, 20, GNC_HOW_DENOM_FIXED | GNC_HOW_RND_NEVER)
