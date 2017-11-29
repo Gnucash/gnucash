@@ -13,9 +13,10 @@ from test_split import TestSplit
 from test_transaction import TestTransaction
 from test_business import TestBusiness
 from test_commodity import TestCommodity, TestCommodityNamespace
+from test_numeric import TestGncNumeric
 
 def test_main():
-    test_support.run_unittest(TestBook, TestAccount, TestSplit, TestTransaction, TestBusiness, TestCommodity, TestCommodityNamespace)
+    test_support.run_unittest(TestBook, TestAccount, TestSplit, TestTransaction, TestBusiness, TestCommodity, TestCommodityNamespace, TestGncNumeric)
 
 if __name__ == '__main__':
     test_main()

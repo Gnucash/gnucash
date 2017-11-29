@@ -40,7 +40,7 @@ class TestAccount( AccountSession ):
         s1a = Split(self.book)
         s1a.SetParent(tx)
         s1a.SetAccount(self.account)
-        s1a.SetAmount(GncNumeric(1.0))
+        s1a.SetAmount(GncNumeric(1.3))
         s1a.SetValue(GncNumeric(100.0))
 
         s1b = Split(self.book)
@@ -52,7 +52,7 @@ class TestAccount( AccountSession ):
         s2a = Split(self.book)
         s2a.SetParent(tx)
         s2a.SetAccount(self.account)
-        s2a.SetAmount(GncNumeric(-0.5))
+        s2a.SetAmount(GncNumeric(-1.3))
         s2a.SetValue(GncNumeric(-100.0))
 
         s2b = Split(self.book)

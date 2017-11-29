@@ -19,12 +19,25 @@ ENDMACRO (GNC_ADD_SWIG_COMMAND)
 
 MACRO (GNC_ADD_SWIG_PYTHON_COMMAND _target _output _input)
 
-  ADD_CUSTOM_COMMAND(OUTPUT ${_output}
+  set (DEFAULT_SWIG_PYTHON_FLAGS
+    -python
+    -Wall -Werror
+    ${SWIG_ARGS}
+  )
+  set (DEFAULT_SWIG_PYTHON_C_INCLUDES
+    ${GLIB2_INCLUDE_DIRS}
+    ${CMAKE_SOURCE_DIR}/common
+    ${CMAKE_SOURCE_DIR}/libgnucash/engine
+    ${CMAKE_SOURCE_DIR}/libgnucash/app-utils
+  )
 
-    COMMAND ${SWIG_EXECUTABLE} -python -Wall -Werror ${SWIG_ARGS}
-       -I${CMAKE_SOURCE_DIR}/common
-       -I${CMAKE_SOURCE_DIR}/libgnucash/engine -I${CMAKE_SOURCE_DIR}/libgnucash/app-utils
-       -o ${_output} ${_input}
+
+  set (PYTHON_SWIG_FLAGS ${DEFAULT_SWIG_PYTHON_FLAGS})
+  foreach (dir ${DEFAULT_SWIG_PYTHON_C_INCLUDES})
+    list (APPEND PYTHON_SWIG_FLAGS "-I${dir}")
+  endforeach (dir)
+  ADD_CUSTOM_COMMAND(OUTPUT ${_output}
+    COMMAND ${SWIG_EXECUTABLE} ${PYTHON_SWIG_FLAGS} -o ${_output} ${_input}
     DEPENDS ${_input} ${CMAKE_SOURCE_DIR}/common/base-typemaps.i ${ARGN}
   )
   ADD_CUSTOM_TARGET(${_target} ALL DEPENDS ${_output} ${CMAKE_SOURCE_DIR}/common/base-typemaps.i ${_input} ${ARGN})
