@@ -919,30 +919,24 @@ tags within description, notes or memo. ")
 
          (add-if (column-uses? 'num)
                  (vector (if (and BOOK-SPLIT-ACTION
-                                  (if (gnc:lookup-option options gnc:pagename-display (N_ "Trans Number"))
-                                      (opt-val gnc:pagename-display (N_ "Trans Number"))
-                                      #f))
+                                  (gnc:lookup-option options gnc:pagename-display (N_ "Trans Number"))
+                                  (opt-val gnc:pagename-display (N_ "Trans Number")))
                              (_ "Num/T-Num")
                              (_ "Num"))
                          (lambda (split transaction-row?)
-                           (define trans (xaccSplitGetParent split))
-                           (if transaction-row?
-                               (if BOOK-SPLIT-ACTION
-                                   (let* ((num (gnc-get-num-action trans split))
-                                          (t-num (if (if (gnc:lookup-option options
-                                                                            gnc:pagename-display
-                                                                            (N_ "Trans Number"))
-                                                         (opt-val gnc:pagename-display (N_ "Trans Number"))
-                                                         "")
-                                                     (gnc-get-num-action trans #f)
-                                                     ""))
-                                          (num-string (if (string-null? t-num)
-                                                          num
-                                                          (string-append num "/" t-num))))
-                                     (gnc:make-html-table-cell/markup "text-cell" num-string))
-                                   (gnc:make-html-table-cell/markup "text-cell"
-                                                                    (gnc-get-num-action trans split)))
-                               ""))))
+                           (let* ((trans (xaccSplitGetParent split))
+                                  (num (gnc-get-num-action trans split))
+                                  (t-num (if (and BOOK-SPLIT-ACTION
+                                                  (gnc:lookup-option options gnc:pagename-display (N_ "Trans Number"))
+                                                  (opt-val gnc:pagename-display (N_ "Trans Number")))
+                                             (gnc-get-num-action trans #f)
+                                             ""))
+                                  (num-string (if (string-null? t-num)
+                                                  num
+                                                  (string-append num "/" t-num))))
+                             (if transaction-row?
+                                 (gnc:make-html-table-cell/markup "text-cell" num-string)
+                                 "")))))
 
          (add-if (column-uses? 'description)
                  (vector (_ "Description")
