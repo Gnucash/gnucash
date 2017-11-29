@@ -1814,6 +1814,25 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
         xaccTransCommitEdit (trans);
     }
 
+    /* If there are splits in the unreconcile list and we are committing
+     * we need to unreconcile them */
+    if (do_commit && (reg->unrecn_splits != NULL))
+    {
+        GList *node;
+
+        PINFO ("Unreconcile %d splits of reconciled transaction", g_list_length (reg->unrecn_splits));
+
+        for (node = reg->unrecn_splits; node; node = node->next)
+        {
+            Split *split = node->data;
+
+            if (xaccSplitGetReconcile (split) == YREC)
+                xaccSplitSetReconcile (split, NREC);
+        }
+        g_list_free (reg->unrecn_splits);
+        reg->unrecn_splits = NULL;
+    }
+
     gnc_table_clear_current_cursor_changes (reg->table);
 
     gnc_resume_gui_refresh ();
@@ -2715,6 +2734,8 @@ gnc_split_register_init (SplitRegister *reg,
 
     reg->sr_info = NULL;
 
+    reg->unrecn_splits = NULL;
+
     reg->type = type;
     reg->style = style;
     reg->use_double_line = use_double_line;
@@ -2854,6 +2875,12 @@ gnc_split_register_destroy_info (SplitRegister *reg)
 
     if (reg == NULL)
         return;
+
+    if (reg->unrecn_splits != NULL)
+    {
+        g_list_free (reg->unrecn_splits);
+        reg->unrecn_splits =  NULL;
+    }
 
     info = reg->sr_info;
     if (!info)

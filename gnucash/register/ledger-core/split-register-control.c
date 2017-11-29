@@ -512,6 +512,10 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
         info->cursor_hint_cursor_class = new_class;
     }
 
+    /* change from split row to trans row */
+    if (old_class != new_class)
+        info->change_confirmed = FALSE;
+
     if (old_split != new_split)
     {
         info->change_confirmed = FALSE;
@@ -1568,6 +1572,13 @@ transaction_changed_confirm(VirtualLocation *p_new_virt_loc,
         Split *new_split;
         Split *trans_split;
         CursorClass new_class;
+
+        /* Clear unreconcile split list */
+        if (reg->unrecn_splits != NULL)
+        {
+            g_list_free (reg->unrecn_splits);
+            reg->unrecn_splits =  NULL;
+        }
 
         new_split = gnc_split_register_get_split (reg, virt_loc->vcell_loc);
         trans_split = gnc_split_register_get_trans_split (reg,

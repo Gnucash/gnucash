@@ -1993,7 +1993,9 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
     Split *split;
     char recn;
     const char *cell_name;
-    gboolean change_ok;
+    gboolean protected_split_cell, protected_trans_cell;
+    const gchar *title = NULL;
+    const gchar *message = NULL;
 
     /* This assumes we reset the flag whenever we change splits.
      * This happens in gnc_split_register_move_cursor(). */
@@ -2007,6 +2009,10 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
     trans = xaccSplitGetParent (split);
     if (xaccTransWarnReadOnly(trans))
         return FALSE;
+
+    if (!xaccTransHasReconciledSplits (trans))
+        return TRUE;
+
     if (gnc_table_layout_get_cell_changed (reg->table->layout, RECN_CELL, FALSE))
         recn = gnc_recn_cell_get_flag
                ((RecnCell *) gnc_table_layout_get_cell (reg->table->layout, RECN_CELL));
@@ -2016,30 +2022,66 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
     /* What Cell are we in */
     cell_name = gnc_table_get_cell_name (reg->table, virt_loc);
 
-    /* These cells can be changed */
-    change_ok = (g_strcmp0(cell_name, "notes") == 0) || (g_strcmp0(cell_name, "memo") == 0) || (g_strcmp0(cell_name, "action") == 0);
+    /* if we change a transfer cell, we want the other split */
+    if (g_strcmp0(cell_name, "transfer") == 0)
+        recn = xaccSplitGetReconcile (xaccSplitGetOtherSplit (split));
 
-    if ((recn == YREC || xaccTransHasReconciledSplits (trans)) && !change_ok)
+    /* These cells can not be changed */
+    protected_split_cell = (g_strcmp0(cell_name, "account") == 0) || (g_strcmp0(cell_name, "transfer") == 0) || (g_strcmp0(cell_name, "debit") == 0) || (g_strcmp0(cell_name, "credit") == 0);
+    protected_trans_cell = (g_strcmp0(cell_name, "date") == 0) || (g_strcmp0(cell_name, "num") == 0) || (g_strcmp0(cell_name, "description") == 0);
+
+    PINFO ("Protected transaction cell %d, Protected split cell %d, Cell is %s", protected_trans_cell, protected_split_cell, cell_name);
+
+    if (protected_trans_cell)
+    {
+        GList *node;
+        gchar *acc_list = NULL;
+        gchar *message_format;
+
+        for (node = xaccTransGetSplitList (trans); node; node = node->next)
+        {
+            Split *split = node->data;
+
+            if (xaccSplitGetReconcile (split) == YREC)
+            {
+                Account *acc = xaccSplitGetAccount (split);
+                gchar *name = gnc_account_get_full_name (acc);
+
+                if (acc_list == NULL)
+                    acc_list = g_strconcat ("\n", name, NULL);
+                else
+                {
+                    gchar *acc_list_copy = g_strdup(acc_list);
+                    g_free (acc_list);
+                    acc_list = g_strconcat (acc_list_copy, "\n", name, NULL);
+                    g_free (acc_list_copy);
+                }
+                g_free (name);
+            }
+        }
+        title = _("Change Transaction containing a reconciled split?");
+        message_format =
+         _("You are about to change a protected transaction field as it contains reconciled splits in the following accounts... \n%s"
+           "\n\nAfter transaction editing is completed, all reconciled splits will be unreconcile and "
+          "this might make future reconciliation difficult! Continue with this change?");
+
+        message = g_strdup_printf (message_format, acc_list);
+        g_free (acc_list);
+    }
+
+    if (protected_split_cell)
+    {
+        title = _("Change reconciled split?");
+        message =
+         _("You are about to change a protected field of a reconciled split. "
+           "After transaction editing is completed, this split will be unreconciled "
+           "and this might make future reconciliation difficult! Continue with this change?");
+    }
+
+    if ((recn == YREC && protected_split_cell) || protected_trans_cell)
     {
         GtkWidget *dialog, *window;
         gint response;
-        const gchar *title;
-        const gchar *message;
-
-        if(recn == YREC)
-        {
-            title = _("Change reconciled split?");
-            message =
-             _("You are about to change a reconciled split. Doing so might make "
-               "future reconciliation difficult! Continue with this change?");
-        }
-        else
-        {
-            title = _("Change split linked to a reconciled split?");
-            message =
-            _("You are about to change a split that is linked to a reconciled split. "
-              "Doing so might make future reconciliation difficult! Continue with this change?");
-        }
 
         /* Does the user want to be warned? */
         window = gnc_split_register_get_parent(reg);
@@ -2051,16 +2093,36 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
                                    "%s", title);
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                 "%s", message);
-        gtk_dialog_add_button(GTK_DIALOG(dialog), _("Chan_ge Split"),
+
+        if (protected_split_cell)
+            gtk_dialog_add_button(GTK_DIALOG(dialog), _("Chan_ge Split"),
+                              GTK_RESPONSE_YES);
+        else
+            gtk_dialog_add_button(GTK_DIALOG(dialog), _("Chan_ge Transaction"),
                               GTK_RESPONSE_YES);
         response = gnc_dialog_run(GTK_DIALOG(dialog), GNC_PREF_WARN_REG_RECD_SPLIT_MOD);
         gtk_widget_destroy(dialog);
         if (response != GTK_RESPONSE_YES)
             return FALSE;
 
+        // Response is Change, so record the splits
+        if (recn == YREC && protected_split_cell)
+        {
+            if (g_list_index (reg->unrecn_splits, split) == -1)
+                reg->unrecn_splits = g_list_append (reg->unrecn_splits, split);
+        }
+
+        if (protected_trans_cell)
+        {
+            if (reg->unrecn_splits != NULL)
+                g_list_free (reg->unrecn_splits);
+
+            reg->unrecn_splits = g_list_copy (xaccTransGetSplitList (trans));
+        }
+
+        PINFO ("Unreconcile split list length is %d", g_list_length(reg->unrecn_splits));
         info->change_confirmed = TRUE;
     }
-
     return TRUE;
 }
 

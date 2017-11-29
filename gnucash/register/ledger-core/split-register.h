@@ -252,6 +252,8 @@ struct split_register
     gboolean is_template;
     gboolean do_auto_complete; /**< whether to use auto-completion */
 
+    SplitList *unrecn_splits; /**< list of splits to unreconcile after transaction edit */
+
     SRInfo * sr_info;   /**< private data; outsiders should not access this */
 };
 
