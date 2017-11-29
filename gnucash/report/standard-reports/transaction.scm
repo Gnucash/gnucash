@@ -131,102 +131,98 @@ options specified in the Options panels."))
   ;;  'split-sortvalue     - function which retrieves number/string used for comparing splits
   ;;  'text                - text displayed in Display tab
   ;;  'tip                 - tooltip displayed in Display tab
-  ;;  'renderer-key        - helper symbol to select subtotal/subheading renderer
+  ;;  'renderer-fn         - helper function to select subtotal/subheading renderer
   ;;
   (list (cons 'account-name  (list (cons 'sortkey (list SPLIT-ACCT-FULLNAME))
                                    (cons 'split-sortvalue (lambda (a) (gnc-account-get-full-name (xaccSplitGetAccount a))))
                                    (cons 'text (_ "Account Name"))
                                    (cons 'tip (_ "Sort & subtotal by account name."))
-                                   (cons 'renderer-key 'account)))
+                                   (cons 'renderer-fn (lambda (a) (xaccSplitGetAccount a)))))
 
         (cons 'account-code (list (cons 'sortkey (list SPLIT-ACCOUNT ACCOUNT-CODE-))
                                   (cons 'split-sortvalue (lambda (a) (xaccAccountGetCode (xaccSplitGetAccount a))))
                                   (cons 'text (_ "Account Code"))
                                   (cons 'tip (_ "Sort & subtotal by account code."))
-                                  (cons 'renderer-key 'account)))
+                                  (cons 'renderer-fn (lambda (a) (xaccSplitGetAccount a)))))
 
         (cons 'date         (list (cons 'sortkey (list SPLIT-TRANS TRANS-DATE-POSTED))
                                   (cons 'split-sortvalue #f)
                                   (cons 'text (_ "Date"))
                                   (cons 'tip (_ "Sort by date."))
-                                  (cons 'renderer-key #f)))
+                                  (cons 'renderer-fn #f)))
 
         (cons 'reconciled-date (list (cons 'sortkey (list SPLIT-DATE-RECONCILED))
                                      (cons 'split-sortvalue #f)
                                      (cons 'text (_ "Reconciled Date"))
                                      (cons 'tip (_ "Sort by the Reconciled Date."))
-                                     (cons 'renderer-key #f)))
+                                     (cons 'renderer-fn #f)))
 
         (cons 'register-order (list (cons 'sortkey (list QUERY-DEFAULT-SORT))
                                     (cons 'split-sortvalue #f)
                                     (cons 'text (_ "Register Order"))
                                     (cons 'tip (_ "Sort as in the register."))
-                                    (cons 'renderer-key #f)))
+                                    (cons 'renderer-fn #f)))
 
         (cons 'corresponding-acc-name (list (cons 'sortkey (list SPLIT-CORR-ACCT-NAME))
                                             (cons 'split-sortvalue (lambda (a) (xaccSplitGetCorrAccountFullName a)))
                                             (cons 'text (_ "Other Account Name"))
                                             (cons 'tip (_ "Sort by account transferred from/to's name."))
-                                            (cons 'renderer-key 'other-acc)))
+                                            (cons 'renderer-fn (lambda (a) (xaccSplitGetAccount (xaccSplitGetOtherSplit a))))))
 
         (cons 'corresponding-acc-code (list (cons 'sortkey (list SPLIT-CORR-ACCT-CODE))
                                             (cons 'split-sortvalue (lambda (a) (xaccSplitGetCorrAccountCode a)))
                                             (cons 'text (_ "Other Account Code"))
                                             (cons 'tip (_ "Sort by account transferred from/to's code."))
-                                            (cons 'renderer-key 'other-acct)))
+                                            (cons 'renderer-fn (lambda (a) (xaccSplitGetAccount (xaccSplitGetOtherSplit a))))))
 
         (cons 'amount        (list (cons 'sortkey (list SPLIT-VALUE))
                                    (cons 'split-sortvalue #f)
                                    (cons 'text (_ "Amount"))
                                    (cons 'tip (_ "Sort by amount."))
-                                   (cons 'renderer-key #f)))
+                                   (cons 'renderer-fn #f)))
 
         (cons 'description   (list (cons 'sortkey (list SPLIT-TRANS TRANS-DESCRIPTION))
                                    (cons 'split-sortvalue #f)
                                    (cons 'text (_ "Description"))
                                    (cons 'tip (_ "Sort by description."))
-                                   (cons 'renderer-key #f)))
+                                   (cons 'renderer-fn #f)))
 
         (if (qof-book-use-split-action-for-num-field (gnc-get-current-book))
             (cons 'number    (list (cons 'sortkey (list SPLIT-ACTION))
                                    (cons 'split-sortvalue #f)
                                    (cons 'text (_ "Number/Action"))
                                    (cons 'tip (_ "Sort by check number/action."))
-                                   (cons 'renderer-key #f)))
+                                   (cons 'renderer-fn #f)))
 
             (cons 'number    (list (cons 'sortkey (list SPLIT-TRANS TRANS-NUM))
                                    (cons 'split-sortvalue #f)
                                    (cons 'text (_ "Number"))
                                    (cons 'tip (_ "Sort by check/transaction number."))
-                                   (cons 'renderer-key #f))))
+                                   (cons 'renderer-fn #f))))
 
         (cons 't-number      (list (cons 'sortkey (list SPLIT-TRANS TRANS-NUM))
                                    (cons 'split-sortvalue #f)
                                    (cons 'text (_ "Transaction Number"))
                                    (cons 'tip (_ "Sort by transaction number."))
-                                   (cons 'renderer-key #f)))
+                                   (cons 'renderer-fn #f)))
 
         (cons 'memo          (list (cons 'sortkey (list SPLIT-MEMO))
                                    (cons 'split-sortvalue #f)
                                    (cons 'text (_ "Memo"))
                                    (cons 'tip (_ "Sort by memo."))
-                                   (cons 'renderer-key #f)))
+                                   (cons 'renderer-fn #f)))
 
         (cons 'none          (list (cons 'sortkey '())
                                    (cons 'split-sortvalue #f)
                                    (cons 'text (_ "None"))
                                    (cons 'tip (_ "Do not sort."))
-                                   (cons 'renderer-key #f)))))
+                                   (cons 'renderer-fn #f)))))
 
-
-(define (time64-year tp)    (gnc:date-get-year (gnc-localtime tp)))
-(define (time64-quarter tp) (+ (* 10 (gnc:date-get-year (gnc-localtime tp)))  (gnc:date-get-quarter (gnc-localtime tp))))
-(define (time64-month tp)   (+ (* 100 (gnc:date-get-year (gnc-localtime tp))) (gnc:date-get-month (gnc-localtime tp))))
-(define (time64-week tp)    (gnc:date-get-week (gnc-localtime tp)))
-(define (split-week a) (time64-week (xaccTransGetDate (xaccSplitGetParent a))))
-(define (split-month a) (time64-month (xaccTransGetDate (xaccSplitGetParent a))))
-(define (split-quarter a) (time64-quarter (xaccTransGetDate (xaccSplitGetParent a))))
-(define (split-year a) (time64-year (xaccTransGetDate (xaccSplitGetParent a))))
+(define (split->date s) (gnc-localtime (xaccTransGetDate (xaccSplitGetParent s))))
+(define (date->year dt)    (gnc:date-get-year dt))
+(define (date->quarter dt) (+ (* 10 (gnc:date-get-year dt))  (gnc:date-get-quarter dt)))
+(define (date->month dt)   (+ (* 100 (gnc:date-get-year dt)) (gnc:date-get-month dt)))
+(define (date->week dt)    (gnc:date-get-week dt))
 
 (define date-subtotal-list
   ;; List for date option.
@@ -234,41 +230,37 @@ options specified in the Options panels."))
   ;;  'split-sortvalue     - function which retrieves number/string used for comparing splits
   ;;  'text                - text displayed in Display tab
   ;;  'tip                 - tooltip displayed in Display tab
-  ;;  'renderer-key        - helper symbol to select subtotal/subheading renderer
+  ;;  'renderer-fn         - func retrieve string for subtotal/subheading renderer
   (list
    (cons 'none (list
                 (cons 'split-sortvalue #f)
                 (cons 'text (_ "None"))
                 (cons 'tip (_ "None."))
-                (cons 'renderer-key #f)))
+                (cons 'renderer-fn #f)))
 
    (cons 'weekly (list
-                  (cons 'split-sortvalue split-week)
+                  (cons 'split-sortvalue (lambda (s) (date->week (split->date s))))
                   (cons 'text (_ "Weekly"))
                   (cons 'tip (_ "Weekly."))
-                  (cons 'renderer-key 'weekly)
-                  (cons 'renderer-fn gnc:date-get-week-year-string)))
-
+                  (cons 'renderer-fn (lambda (s) (gnc:date-get-week-year-string (split->date s))))))
+   
    (cons 'monthly (list
-                   (cons 'split-sortvalue split-month)
+                   (cons 'split-sortvalue (lambda (s) (date->month (split->date s))))
                    (cons 'text (_ "Monthly"))
                    (cons 'tip (_ "Monthly."))
-                   (cons 'renderer-key 'monthly)
-                   (cons 'renderer-fn gnc:date-get-month-year-string)))
+                   (cons 'renderer-fn (lambda (s) (gnc:date-get-month-year-string (split->date s))))))
 
    (cons 'quarterly (list
-                     (cons 'split-sortvalue split-quarter)
+                     (cons 'split-sortvalue (lambda (s) (date->quarter (split->date s))))
                      (cons 'text (_ "Quarterly"))
                      (cons 'tip (_ "Quarterly."))
-                     (cons 'renderer-key 'quarterly)
-                     (cons 'renderer-fn gnc:date-get-quarter-year-string)))
+                     (cons 'renderer-fn (lambda (s) (gnc:date-get-quarter-year-string (split->date s))))))
 
    (cons 'yearly (list
-                  (cons 'split-sortvalue split-year)
+                  (cons 'split-sortvalue (lambda (s) (date->year (split->date s))))
                   (cons 'text (_ "Yearly"))
                   (cons 'tip (_ "Yearly."))
-                  (cons 'renderer-key 'yearly)
-                  (cons 'renderer-fn gnc:date-get-year-string)))))
+                  (cons 'renderer-fn (lambda (s) (gnc:date-get-year-string (split->date s))))))))
 
 (define filter-list
   (list
@@ -995,8 +987,8 @@ tags within description, notes or memo. ")
 
       (if (and (null? (left-cols-list))
                (or (opt-val gnc:pagename-display "Totals")
-                   (primary-get-info 'renderer-key)
-                   (secondary-get-info 'renderer-key)))
+                   (primary-get-info 'renderer-fn)
+                   (secondary-get-info 'renderer-fn)))
           (list (vector "" (lambda (s t) #f)))
           (left-cols-list)))
 
@@ -1226,16 +1218,11 @@ tags within description, notes or memo. ")
                    (xaccAccountGetName account))
                ""))))
 
-    (define (render-date renderer-key split)
-      ((keylist-get-info date-subtotal-list renderer-key 'renderer-fn)
-       (gnc-localtime
-        (xaccTransGetDate
-         (xaccSplitGetParent split)))))
+    (define (render-date date-subtotal-key split)
+      ((keylist-get-info date-subtotal-list date-subtotal-key 'renderer-fn) split))
 
-    (define (render-account renderer-key split anchor?)
-      (let* ((account (case renderer-key
-                        ((account) (xaccSplitGetAccount split))
-                        ((other-acc) (xaccSplitGetAccount (xaccSplitGetOtherSplit split)))))
+    (define (render-account sortkey split anchor?)
+      (let* ((account ((keylist-get-info sortkey-list sortkey 'renderer-fn) split))
              (name (account-namestring account
                                        (column-uses? 'sort-account-code)
                                        #t
@@ -1251,14 +1238,18 @@ tags within description, notes or memo. ")
             name)))
 
     (define (render-summary split level anchor?)
-      (let ((renderer-key (case level
-                            ((primary) (primary-get-info 'renderer-key))
-                            ((secondary) (secondary-get-info 'renderer-key)))))
-        (case renderer-key
-          ((weekly monthly quarterly yearly) (render-date renderer-key split))
-          ((account other-acc) (render-account renderer-key split anchor?))
-          (else #f))))
-
+      (let ((sortkey (opt-val pagename-sorting
+                              (case level
+                                ((primary) optname-prime-sortkey)
+                                ((secondary) optname-sec-sortkey))))
+            (date-subtotal-key (opt-val pagename-sorting
+                                        (case level
+                                          ((primary) optname-prime-date-subtotal)
+                                          ((secondary) optname-sec-date-subtotal)))))
+        (if (member sortkey DATE-SORTING-TYPES)
+            (render-date date-subtotal-key split)
+            (render-account sortkey split anchor?))))
+    
     (define (render-grand-total)
       (_ "Grand Total"))
 
@@ -1441,11 +1432,11 @@ tags within description, notes or memo. ")
 
     (gnc:html-table-set-col-headers! table (concatenate (list (headings-left-columns) (headings-right-columns))))
 
-    (if (primary-get-info 'renderer-key)
+    (if (primary-get-info 'renderer-fn)
         (add-subheading (render-summary (car splits) 'primary #t)
                         def:primary-subtotal-style))
 
-    (if (secondary-get-info 'renderer-key)
+    (if (secondary-get-info 'renderer-fn)
         (add-subheading (render-summary (car splits) 'secondary #t)
                         def:secondary-subtotal-style))
 
@@ -1528,21 +1519,16 @@ tags within description, notes or memo. ")
     (define (generic-less? X Y key date-subtotal ascend?)
       (define comparator-function
         (if (member key DATE-SORTING-TYPES)
-            (let* ((date (lambda (s)
-                           (case key
-                             ((date) (xaccTransGetDate (xaccSplitGetParent s)))
-                             ((reconciled-date) (xaccSplitGetDateReconciled s)))))
-                   (year    (lambda (s) (gnc:date-get-year (gnc-localtime (date s)))))
-                   (month   (lambda (s) (gnc:date-get-month (gnc-localtime (date s)))))
-                   (quarter (lambda (s) (gnc:date-get-quarter (gnc-localtime (date s)))))
-                   (week    (lambda (s) (gnc:date-get-week (gnc-localtime (date s)))))
-                   (secs    (lambda (s) (date s))))
+            (let ((date (lambda (s)
+                          (case key
+                            ((date) (xaccTransGetDate (xaccSplitGetParent s)))
+                            ((reconciled-date) (xaccSplitGetDateReconciled s))))))
               (case date-subtotal
-                ((yearly)    (lambda (s) (year s)))
-                ((monthly)   (lambda (s) (+ (* 100 (year s)) (month s))))
-                ((quarterly) (lambda (s) (+ (*  10 (year s)) (quarter s))))
-                ((weekly)    (lambda (s) (week s)))
-                ((none)      (lambda (s) (secs s)))))
+                ((yearly)    (lambda (s) (date->year (gnc-localtime (date s)))))
+                ((monthly)   (lambda (s) (date->month (gnc-localtime (date s)))))
+                ((quarterly) (lambda (s) (date->quarter (gnc-localtime (date s)))))
+                ((weekly)    (lambda (s) (date->week (gnc-localtime (date s)))))
+                ((none)      (lambda (s) (date s)))))
             (case key
               ((account-name) (lambda (s) (gnc-account-get-full-name (xaccSplitGetAccount s))))
               ((account-code) (lambda (s) (xaccAccountGetCode (xaccSplitGetAccount s))))
