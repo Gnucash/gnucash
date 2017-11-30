@@ -16,6 +16,7 @@
 ;;   and enable multiple data columns
 ;; - add informational box, summarising options used, useful
 ;;   to troubleshoot reports
+;; - add support for indenting for better grouping
 ;;
 ;; This program is free software; you can redistribute it and/or    
 ;; modify it under the terms of the GNU General Public License as   
@@ -72,6 +73,7 @@
 (define optname-show-account-code (N_ "Show Account Code"))
 (define optname-show-account-description (N_ "Show Account Description"))
 (define optname-show-informal-headers (N_ "Show Informal Debit/Credit Headers"))
+(define optname-indenting (N_ "Add indenting columns"))
 (define optname-sec-sortkey (N_ "Secondary Key"))
 (define optname-sec-subtotal (N_ "Secondary Subtotal"))
 (define optname-sec-sortorder  (N_ "Secondary Sort Order"))
@@ -264,7 +266,7 @@ options specified in the Options panels."))
                   (cons 'text (_ "Weekly"))
                   (cons 'tip (_ "Weekly."))
                   (cons 'renderer-fn (lambda (s) (gnc:date-get-week-year-string (gnc-localtime (split->time64 s)))))))
-   
+
    (cons 'monthly (list
                    (cons 'split-sortvalue (lambda (s) (time64-month (split->time64 s))))
                    (cons 'text (_ "Monthly"))
@@ -578,10 +580,15 @@ tags within description, notes or memo. ")
              (and sec-sortkey-subtotal-enabled sec-sortkey-subtotal-true)))
 
         (gnc-option-db-set-option-selectable-by-name
+         options pagename-sorting optname-indenting
+         (or (and prime-sortkey-subtotal-enabled prime-sortkey-subtotal-true)
+             (and sec-sortkey-subtotal-enabled sec-sortkey-subtotal-true)))
+
+        (gnc-option-db-set-option-selectable-by-name
          options pagename-sorting optname-show-informal-headers
          (or (member prime-sortkey (list 'account-name 'account-code))
              (member sec-sortkey (list 'account-name 'account-code))))
-        
+
         (gnc-option-db-set-option-selectable-by-name
          options pagename-sorting optname-prime-date-subtotal
          prime-date-sortingtype-enabled)
@@ -622,13 +629,19 @@ tags within description, notes or memo. ")
       (_ "Show the account description for subheadings?")
       #f))
 
-
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
       pagename-sorting optname-show-informal-headers
       "j4"
       (_ "Show the informal headers for debit/credit accounts?")
       #f))
+
+    (gnc:register-trep-option
+     (gnc:make-simple-boolean-option
+      pagename-sorting optname-indenting
+      "j5"
+      (_ "Add indenting columns with grouping and subtotals?")
+      #t))
 
     (gnc:register-trep-option
      (gnc:make-complex-boolean-option
@@ -855,6 +868,7 @@ tags within description, notes or memo. ")
           (cons 'amount-original-currency
                 (and (opt-val gnc:pagename-general optname-common-currency)
                      (opt-val gnc:pagename-general optname-orig-currency)))
+          (cons 'indenting (opt-val pagename-sorting optname-indenting))
           (cons 'running-balance (opt-val gnc:pagename-display (N_ "Running Balance")))
           (cons 'account-full-name (opt-val gnc:pagename-display (N_ "Use Full Account Name")))
           (cons 'memo (opt-val gnc:pagename-display (N_ "Memo")))
@@ -1119,36 +1133,61 @@ tags within description, notes or memo. ")
     (define width-left-columns (length left-columns))
     (define width-right-columns (length calculated-cells))
 
+    (define primary-indent
+      (if (and (column-uses? 'indenting)
+               (primary-get-info 'renderer-fn))
+          1 0))
+
+    (define secondary-indent
+      (if (and (column-uses? 'indenting)
+               (secondary-get-info 'renderer-fn))
+          1 0))
+
+    (define indent-level
+      (+ primary-indent secondary-indent))
+
+
     (define (add-subheading data subheading-style split level)
-      (let ((sortkey (opt-val pagename-sorting
-                           (case level
-                             ((primary) optname-prime-sortkey)
-                             ((secondary) optname-sec-sortkey)))))
+      (let* ((row-contents '())
+             (sortkey (opt-val pagename-sorting
+                               (case level
+                                 ((primary) optname-prime-sortkey)
+                                 ((secondary) optname-sec-sortkey))))
+             (left-indent (case level
+                            ((primary total) 0)
+                            ((secondary) primary-indent)))
+             (right-indent (- indent-level left-indent)))
+        (for-each (lambda (cell) (addto! row-contents cell))
+                  (gnc:html-make-empty-cells left-indent))
         (if (and (opt-val pagename-sorting optname-show-informal-headers)
                  (member sortkey SORTKEY-INFORMAL-HEADERS))
-            (let ((row-contents '()))
-              (begin
-                (if export?
-                    (begin (addto! row-contents (gnc:make-html-table-cell subheading-style data))
-                           (for-each (lambda (cell) (addto! row-contents cell))
-                                     (gnc:html-make-empty-cells (- width-left-columns 1))))
-                    (addto! row-contents (gnc:make-html-table-cell/size 1 width-left-columns data)))
-                (map (lambda (col)
-                       (addto! row-contents
-                               (gnc:make-html-table-cell
-                                "<b>"
-                                ((vector-ref col 5)
-                                 ((keylist-get-info sortkey-list sortkey 'renderer-fn) split))
-                                "</b>")))
-                     calculated-cells)
-                (gnc:html-table-append-row/markup! table subheading-style (reverse row-contents))))
-            (let ((heading-cell (gnc:make-html-table-cell data)))
-              (gnc:html-table-cell-set-colspan! heading-cell (+ width-left-columns width-right-columns))
-              (gnc:html-table-append-row/markup!
-               table subheading-style (list heading-cell))))))
+            (begin
+              (if export?
+                  (begin
+                    (addto! row-contents (gnc:make-html-table-cell data))
+                    (for-each (lambda (cell) (addto! row-contents cell))
+                              (gnc:html-make-empty-cells (+ right-indent width-left-columns -1))))
+                  (addto! row-contents (gnc:make-html-table-cell/size
+                                        1 (+ right-indent width-left-columns) data)))
+              (for-each (lambda (cell)
+                          (addto! row-contents
+                                  (gnc:make-html-table-cell
+                                   "<b>"
+                                   ((vector-ref cell 5)
+                                    ((keylist-get-info sortkey-list sortkey 'renderer-fn) split))
+                                   "</b>")))
+                        calculated-cells))
+            (addto! row-contents (gnc:make-html-table-cell/size
+                                    1 (+ right-indent width-left-columns width-right-columns) data)))
+        (gnc:html-table-append-row/markup! table subheading-style (reverse row-contents))))
 
-    (define (add-subtotal-row subtotal-string subtotal-collectors subtotal-style)
+    (define (add-subtotal-row subtotal-string subtotal-collectors subtotal-style level)
       (let* ((row-contents '())
+             (left-indent (case level
+                            ((total) 0)
+                            ((primary) primary-indent)
+                            ((secondary) (+ primary-indent secondary-indent))))
+             (right-indent (- indent-level left-indent))
              (merge-list (map (lambda (cell) (vector-ref cell 4)) calculated-cells))
              (columns (map (lambda (coll) (coll 'format gnc:make-gnc-monetary #f)) subtotal-collectors))
              (list-of-commodities (delete-duplicates (map gnc:gnc-monetary-commodity (concatenate columns))
@@ -1166,8 +1205,8 @@ tags within description, notes or memo. ")
               (begin
                 (addto! row-contents (gnc:make-html-table-cell/markup "total-label-cell" string))
                 (for-each (lambda (cell) (addto! row-contents cell))
-                          (gnc:html-make-empty-cells (- width-left-columns 1))))
-              (addto! row-contents (gnc:make-html-table-cell/size/markup 1 width-left-columns "total-label-cell" string))))
+                          (gnc:html-make-empty-cells (+ right-indent width-left-columns -1))))
+              (addto! row-contents (gnc:make-html-table-cell/size/markup 1 (+ right-indent width-left-columns) "total-label-cell" string))))
 
         (define (add-columns commodity)
           (let ((start-dual-column? #f)
@@ -1219,6 +1258,8 @@ tags within description, notes or memo. ")
                       merge-list)))
 
         ;;first row
+        (for-each (lambda (cell) (addto! row-contents cell))
+                  (gnc:html-make-empty-cells left-indent))
         (add-first-column subtotal-string)
         (add-columns (if (pair? list-of-commodities)
                          (car list-of-commodities)
@@ -1229,6 +1270,8 @@ tags within description, notes or memo. ")
         (if (pair? list-of-commodities)
             (for-each (lambda (commodity)
                         (set! row-contents '())
+                        (for-each (lambda (cell) (addto! row-contents cell))
+                                  (gnc:html-make-empty-cells left-indent))
                         (add-first-column "")
                         (add-columns commodity)
                         (gnc:html-table-append-row/markup! table subtotal-style (reverse row-contents)))
@@ -1301,7 +1344,7 @@ tags within description, notes or memo. ")
           (render-account sortkey split anchor?))
          ((eq? sortkey 'reconciled-status)
           (render-generic sortkey split)))))
-    
+
     (define (render-grand-total)
       (_ "Grand Total"))
 
@@ -1333,7 +1376,10 @@ tags within description, notes or memo. ")
                            reverse?
                            subtotal?)))
                cell-calculators))
-        
+
+        (for-each (lambda (cell) (addto! row-contents cell))
+                  (gnc:html-make-empty-cells indent-level))
+
         (for-each (lambda (col)
                     (addto! row-contents col))
                   left-cols)
@@ -1400,10 +1446,10 @@ tags within description, notes or memo. ")
                  table def:grand-total-style
                  (list
                   (gnc:make-html-table-cell/size
-                   1 (+ width-left-columns width-right-columns)
+                   1 (+ indent-level width-left-columns width-right-columns)
                    (gnc:make-html-text (gnc:html-markup-hr)))))
 
-                (add-subtotal-row (render-grand-total) total-collectors def:grand-total-style)))
+                (add-subtotal-row (render-grand-total) total-collectors def:grand-total-style 'total)))
 
           (let* ((current (car splits))
                  (rest (cdr splits))
@@ -1453,13 +1499,15 @@ tags within description, notes or memo. ")
                         (add-subtotal-row (total-string
                                            (render-summary current 'secondary #f))
                                           secondary-subtotal-collectors
-                                          def:secondary-subtotal-style)
+                                          def:secondary-subtotal-style
+                                          'secondary)
                         (for-each (lambda (coll) (coll 'reset #f #f))
                                   secondary-subtotal-collectors)))
                   (add-subtotal-row (total-string
                                      (render-summary current 'primary #f))
                                     primary-subtotal-collectors
-                                    def:primary-subtotal-style)
+                                    def:primary-subtotal-style
+                                    'primary)
                   (for-each (lambda (coll) (coll 'reset #f #f))
                             primary-subtotal-collectors)
                   (if next
@@ -1478,7 +1526,8 @@ tags within description, notes or memo. ")
                     (begin (add-subtotal-row (total-string
                                               (render-summary current 'secondary #f))
                                              secondary-subtotal-collectors
-                                             def:secondary-subtotal-style)
+                                             def:secondary-subtotal-style
+                                             'secondary)
                            (for-each (lambda (coll) (coll 'reset #f #f))
                                      secondary-subtotal-collectors)
                            (if next
@@ -1487,7 +1536,10 @@ tags within description, notes or memo. ")
 
             (do-rows-with-subtotals rest (not odd-row?)))))
 
-    (gnc:html-table-set-col-headers! table (concatenate (list headings-left-columns headings-right-columns)))
+    (gnc:html-table-set-col-headers! table (concatenate (list
+                                                         (gnc:html-make-empty-cells indent-level)
+                                                         headings-left-columns
+                                                         headings-right-columns)))
 
     (if (primary-get-info 'renderer-fn)
         (add-subheading (render-summary (car splits) 'primary #t)
