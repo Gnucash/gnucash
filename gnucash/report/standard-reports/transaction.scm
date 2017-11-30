@@ -71,6 +71,7 @@
 (define optname-full-account-name (N_ "Show Full Account Name"))
 (define optname-show-account-code (N_ "Show Account Code"))
 (define optname-show-account-description (N_ "Show Account Description"))
+(define optname-show-informal-headers (N_ "Show Informal Debit/Credit Headers"))
 (define optname-sec-sortkey (N_ "Secondary Key"))
 (define optname-sec-subtotal (N_ "Secondary Subtotal"))
 (define optname-sec-sortorder  (N_ "Secondary Sort Order"))
@@ -573,6 +574,11 @@ tags within description, notes or memo. ")
              (and sec-sortkey-subtotal-enabled sec-sortkey-subtotal-true)))
 
         (gnc-option-db-set-option-selectable-by-name
+         options pagename-sorting optname-show-informal-headers
+         (or (member prime-sortkey (list 'account-name 'account-code))
+             (member sec-sortkey (list 'account-name 'account-code))))
+        
+        (gnc-option-db-set-option-selectable-by-name
          options pagename-sorting optname-prime-date-subtotal
          prime-date-sortingtype-enabled)
 
@@ -610,6 +616,14 @@ tags within description, notes or memo. ")
       pagename-sorting optname-show-account-description
       "j3"
       (_ "Show the account description for subheadings?")
+      #f))
+
+
+    (gnc:register-trep-option
+     (gnc:make-simple-boolean-option
+      pagename-sorting optname-show-informal-headers
+      "j4"
+      (_ "Show the informal headers for debit/credit accounts?")
       #f))
 
     (gnc:register-trep-option
@@ -1116,7 +1130,8 @@ tags within description, notes or memo. ")
                            (case level
                              ((primary) optname-prime-sortkey)
                              ((secondary) optname-sec-sortkey)))))
-        (if (member sortkey (list 'account-name 'account-code))
+        (if (and (opt-val pagename-sorting optname-show-informal-headers)
+                 (member sortkey (list 'account-name 'account-code)))
             (let ((row-contents '()))
               (begin
                 (if export?
