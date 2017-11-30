@@ -116,7 +116,12 @@ options specified in the Options panels."))
 ;; The option-values of the sorting key multichoice option, for
 ;; which a subtotal should be enabled.
 (define SUBTOTAL-ENABLED (list 'account-name 'corresponding-acc-name
-                               'account-code 'corresponding-acc-code))
+                               'account-code 'corresponding-acc-code
+                               'reconciled-status))
+
+(define ACCOUNT-SORTING-TYPES (list 'account-name 'corresponding-acc-name
+                                    'account-code 'corresponding-acc-code))
+(define CUSTOM-SORTING (list 'reconciled-status))
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -157,6 +162,19 @@ options specified in the Options panels."))
                                      (cons 'text (_ "Reconciled Date"))
                                      (cons 'tip (_ "Sort by the Reconciled Date."))
                                      (cons 'renderer-fn #f)))
+
+        (cons 'reconciled-status (list (cons 'sortkey #f)
+                                       (cons 'split-sortvalue (lambda (s) (length (memq (xaccSplitGetReconcile s)
+                                                                                        '(#\n #\c #\y #\f #\v)))))
+                                       (cons 'text (_ "Reconciled Status"))
+                                       (cons 'tip (_ "Sort by the Reconciled Status"))
+                                       (cons 'renderer-fn (lambda (s) (case (xaccSplitGetReconcile s)
+                                                                        ((#\y) (_ "Reconciled"))
+                                                                        ((#\c) (_ "Cleared"))
+                                                                        ((#\n) (_ "Unreconciled"))
+                                                                        ((#\f) (_ "Frozen"))
+                                                                        ((#\v) (_ "Voided"))
+                                                                        (else (_ "Unknown")))))))
 
         (cons 'register-order (list (cons 'sortkey (list QUERY-DEFAULT-SORT))
                                     (cons 'split-sortvalue #f)
@@ -1283,6 +1301,9 @@ tags within description, notes or memo. ")
              description)
             name)))
 
+    (define (render-generic sortkey split)
+      ((keylist-get-info sortkey-list sortkey 'renderer-fn) split))
+
     (define (render-summary split level anchor?)
       (let ((sortkey (opt-val pagename-sorting
                               (case level
@@ -1292,9 +1313,13 @@ tags within description, notes or memo. ")
                                         (case level
                                           ((primary) optname-prime-date-subtotal)
                                           ((secondary) optname-sec-date-subtotal)))))
-        (if (member sortkey DATE-SORTING-TYPES)
-            (render-date date-subtotal-key split)
-            (render-account sortkey split anchor?))))
+        (cond
+         ((member sortkey DATE-SORTING-TYPES)
+          (render-date date-subtotal-key split))
+         ((member sortkey ACCOUNT-SORTING-TYPES)
+          (render-account sortkey split anchor?))
+         ((eq? sortkey 'reconciled-status)
+          (render-generic sortkey split)))))
     
     (define (render-grand-total)
       (_ "Grand Total"))
@@ -1558,7 +1583,9 @@ tags within description, notes or memo. ")
          (custom-sort? (or (and (member primary-key DATE-SORTING-TYPES)   ; this will remain
                                 (not (eq? primary-date-subtotal 'none)))  ; until qof-query
                            (and (member secondary-key DATE-SORTING-TYPES) ; is upgraded
-                                (not (eq? secondary-date-subtotal 'none)))))
+                                (not (eq? secondary-date-subtotal 'none)))
+                           (or (member primary-key CUSTOM-SORTING)
+                               (member secondary-key CUSTOM-SORTING))))
          (infobox-display (opt-val gnc:pagename-general optname-infobox-display))
          (query (qof-query-create-for-splits)))
 
@@ -1580,6 +1607,8 @@ tags within description, notes or memo. ")
               ((account-code) (lambda (s) (xaccAccountGetCode (xaccSplitGetAccount s))))
               ((corresponding-acc-name) (lambda (s) (xaccSplitGetCorrAccountFullName s)))
               ((corresponding-acc-code) (lambda (s) (xaccSplitGetCorrAccountCode s)))
+              ((reconciled-status) (lambda (s) (length (memq (xaccSplitGetReconcile s)
+                                                             '(#\n #\c #\y #\f #\v)))))
               ((amount) (lambda (s) (gnc-numeric-to-double (xaccSplitGetValue s))))
               ((description) (lambda (s) (xaccTransGetDescription (xaccSplitGetParent s))))
               ((number) (lambda (s)
