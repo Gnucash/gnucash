@@ -71,8 +71,9 @@ _gnucash_core_c_includes= \
 
 gnucash_core.c: $(SWIG_FILES) ${top_srcdir}/common/base-typemaps.i ${top_srcdir}/libgnucash/engine/engine-common.i $(_gnucash_core_c_includes)
 	$(SWIG) -python -Wall -Werror \
-	-I$(top_srcdir)/common -I$(top_srcdir)/libgnucash/engine \
-	-I$(top_srcdir)/libgnucash/app-utils -o $@ $<
+	-I$(GLIB_CFLAGS) -I$(top_srcdir)/common \
+	-I$(top_srcdir)/libgnucash/engine \
+	-I$(top_srcdir)/libgnucash/app-utils -I${srcdir} -o $@ $<
 
 gnucash_core_c.py: gnucash_core.c $(SWIG_FILES)
 endif
