@@ -180,7 +180,7 @@ ADD_CUSTOM_COMMAND(
 
 ADD_CUSTOM_TARGET(gnucash-appdata ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml)
 
-INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml DESTINATION share/appdata)
+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml DESTINATION  ${CMAKE_INSTALL_DATADIR}/appdata)
 
 #=======
 
@@ -198,7 +198,7 @@ ADD_CUSTOM_COMMAND(
 
 ADD_CUSTOM_TARGET(gnucash-desktop ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop)
 
-INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop DESTINATION share/applications)
+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop DESTINATION  ${CMAKE_INSTALL_DATADIR}/applications)
 
 SET_LOCAL_DIST(gnome_DIST_local
         CMakeLists.txt Makefile.am gnome.i gnucash.appdata.xml.in gnucash.desktop.in.in

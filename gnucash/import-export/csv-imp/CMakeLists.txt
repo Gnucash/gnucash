@@ -86,11 +86,11 @@ INSTALL(TARGETS gncmod-csv-import
 SET(csv_import_GLADE assistant-csv-account-import.glade
       assistant-csv-trans-import.glade)
 
-INSTALL(FILES ${csv_import_GLADE} DESTINATION share/gnucash/gtkbuilder)
+INSTALL(FILES ${csv_import_GLADE} DESTINATION ${CMAKE_INSTALL_DATADIR}/gnucash/gtkbuilder)
 
 SET(csv_import_UI gnc-plugin-csv-import-ui.xml)
 
-INSTALL(FILES ${csv_import_UI} DESTINATION share/gnucash/ui)
+INSTALL(FILES ${csv_import_UI} DESTINATION ${CMAKE_INSTALL_DATADIR}/gnucash/ui)
 
 FILE(COPY ${csv_import_UI}
   DESTINATION ${DATADIR_BUILD}/gnucash/ui)

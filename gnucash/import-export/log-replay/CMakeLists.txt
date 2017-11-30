@@ -32,7 +32,7 @@ INSTALL(TARGETS gncmod-log-replay
 
 SET(log_replay_UI gnc-plugin-log-replay-ui.xml)
 
-INSTALL(FILES ${log_replay_UI} DESTINATION share/gnucash/ui)
+INSTALL(FILES ${log_replay_UI} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/ui)
 
 FILE(COPY ${log_replay_UI}
   DESTINATION ${DATADIR_BUILD}/gnucash/ui)

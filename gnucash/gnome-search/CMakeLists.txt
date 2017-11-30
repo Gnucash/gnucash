@@ -65,7 +65,7 @@ INSTALL(FILES ${gnome_search_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gn
 
 SET(gnome_search_GLADE dialog-search.glade)
 
-INSTALL(FILES ${gnome_search_GLADE} DESTINATION share/gnucash/gtkbuilder)
+INSTALL(FILES ${gnome_search_GLADE} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/gtkbuilder)
 
 FILE(COPY .
     DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder

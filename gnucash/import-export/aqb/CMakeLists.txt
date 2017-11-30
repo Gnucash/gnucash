@@ -81,9 +81,9 @@ ENDIF()
 # No headers to install
 
 
-  INSTALL(FILES ${aqbanking_GLADE} DESTINATION share/gnucash/gtkbuilder)
+  INSTALL(FILES ${aqbanking_GLADE} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/gtkbuilder)
 
-  INSTALL(FILES ${aqbanking_UI} DESTINATION share/gnucash/ui)
+  INSTALL(FILES ${aqbanking_UI} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/ui)
 
   FILE(COPY ${aqbanking_UI}
     DESTINATION ${DATADIR_BUILD}/gnucash/ui)

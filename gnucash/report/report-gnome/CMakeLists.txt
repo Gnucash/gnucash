@@ -65,11 +65,11 @@ GNC_ADD_SCHEME_TARGETS(scm-report-gnome
 
 SET(report_gnome_GLADE dialog-custom-report.glade dialog-report.glade)
 
-INSTALL(FILES ${report_gnome_GLADE} DESTINATION share/gnucash/gtkbuilder)
+INSTALL(FILES ${report_gnome_GLADE} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/gtkbuilder)
 
 SET(report_gnome_UI gnc-plugin-page-report-ui.xml)
 
-INSTALL(FILES ${report_gnome_UI} DESTINATION share/gnucash/ui)
+INSTALL(FILES ${report_gnome_UI} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/ui)
 
 FILE(COPY ${report_gnome_UI} DESTINATION ${DATADIR_BUILD}/gnucash/ui)
 FILE(COPY ${report_gnome_GLADE} DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder)

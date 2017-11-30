@@ -37,11 +37,11 @@ INSTALL(TARGETS gncmod-csv-export
 
 SET(csv_export_GLADE assistant-csv-export.glade)
 
-INSTALL(FILES ${csv_export_GLADE} DESTINATION share/gnucash/gtkbuilder)
+INSTALL(FILES ${csv_export_GLADE} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/gtkbuilder)
 
 SET(csv_export_UI gnc-plugin-csv-export-ui.xml)
 
-INSTALL(FILES ${csv_export_UI} DESTINATION share/gnucash/ui)
+INSTALL(FILES ${csv_export_UI} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/ui)
 
 FILE(COPY ${csv_export_UI}
   DESTINATION ${DATADIR_BUILD}/gnucash/ui)

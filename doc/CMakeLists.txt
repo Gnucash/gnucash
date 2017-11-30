@@ -21,7 +21,7 @@ SET(doc_noinst_DATA
         Makefile.am misc-notes.txt README.build-system README.HBCI README.OFX README.translator.txt tip_of_the_day.list.in
         TRANSLATION_HOWTO)
 
-INSTALL(FILES ${doc_DATA} DESTINATION share/doc/gnucash)
+INSTALL(FILES ${doc_DATA} DESTINATION  ${CMAKE_INSTALL_DATADIR}/doc/gnucash)
 
 SET_LOCAL_DIST(doc_DIST_local ${doc_DATA} ${doc_noinst_DATA})
 SET(doc_DIST ${doc_DIST_local} ${examples_DIST} PARENT_SCOPE)
@@ -49,7 +49,7 @@ STRING(CONCAT FINAL_TOTD ${TOTD_OUTPUT})
 
 FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/tip_of_the_day.list "${FINAL_TOTD}")
 
-INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tip_of_the_day.list DESTINATION share/gnucash)
+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tip_of_the_day.list DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash)
 
 FILE(COPY ${CMAKE_CURRENT_BINARY_DIR}/tip_of_the_day.list
   DESTINATION ${DATADIR_BUILD}/gnucash)
@@ -85,4 +85,4 @@ ADD_CUSTOM_COMMAND(OUTPUT gnucash.1
   )
 ADD_CUSTOM_TARGET(gnucash-manpage DEPENDS gnucash.1)
 
-INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.1 DESTINATION share/man/man1)
+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.1 DESTINATION  ${CMAKE_INSTALL_MANDIR}/man1)

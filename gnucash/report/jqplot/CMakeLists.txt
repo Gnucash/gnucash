@@ -30,6 +30,6 @@ SET(gncjqplot_DATA
   plugins/jqplot.trendline.js
 )
 
-INSTALL(FILES ${gncjqplot_DATA} DESTINATION share/gnucash/jqplot)
+INSTALL(FILES ${gncjqplot_DATA} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/jqplot)
 
 SET_DIST_LIST(jqplot_DIST CMakeLists.txt Makefile.am jquery.js ${gncjqplot_DATA})

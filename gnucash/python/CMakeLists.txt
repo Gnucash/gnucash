@@ -16,8 +16,8 @@ IF (WITH_PYTHON)
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
   )
 
-  INSTALL(DIRECTORY pycons DESTINATION share/gnucash/python)
-  INSTALL(FILES init.py DESTINATION share/gnucash/python)
+  INSTALL(DIRECTORY pycons DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/python)
+  INSTALL(FILES init.py DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/python)
 
   FILE(COPY init.py DESTINATION ${CMAKE_BINARY_DIR}/share/gnucash/python)
   FILE(COPY pycons DESTINATION ${CMAKE_BINARY_DIR}/share/gnucash/python)

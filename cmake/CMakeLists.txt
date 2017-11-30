@@ -33,6 +33,6 @@ ADD_CUSTOM_COMMAND(
 
 ADD_CUSTOM_TARGET(compiled-schemas ALL DEPENDS ${SCHEMA_BUILD_DIR}/gschemas.compiled)
 
-INSTALL(FILES ${SCHEMA_BUILD_DIR}/gschemas.compiled DESTINATION ${DATADIR}/glib-2.0/schemas)
+INSTALL(FILES ${SCHEMA_BUILD_DIR}/gschemas.compiled DESTINATION ${CMAKE_INSTALL_DATADIR}/glib-2.0/schemas)
 
 SET_DIST_LIST(cmake_DIST CMakeLists.txt README_CMAKE.txt cmake_uninstall.cmake.in)

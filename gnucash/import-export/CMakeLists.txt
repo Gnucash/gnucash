@@ -78,7 +78,7 @@ INSTALL(FILES ${generic_import_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/
 
 SET(generic_import_GLADE dialog-import.glade)
 
-INSTALL(FILES ${generic_import_GLADE} DESTINATION share/gnucash/gtkbuilder)
+INSTALL(FILES ${generic_import_GLADE} DESTINATION ${CMAKE_INSTALL_DATADIR}/gnucash/gtkbuilder)
 
 
 FILE(COPY ${generic_import_GLADE} DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder)

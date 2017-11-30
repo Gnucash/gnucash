@@ -72,11 +72,11 @@ GNC_ADD_SCHEME_TARGETS(scm-qif-import
 
 SET(qif_import_GLADE assistant-qif-import.glade dialog-account-picker.glade)
 
-INSTALL(FILES ${qif_import_GLADE} DESTINATION share/gnucash/gtkbuilder)
+INSTALL(FILES ${qif_import_GLADE} DESTINATION ${CMAKE_INSTALL_DATADIR}/gnucash/gtkbuilder)
 
 SET(qif_import_UI gnc-plugin-qif-import-ui.xml)
 
-INSTALL(FILES ${qif_import_UI} DESTINATION share/gnucash/ui)
+INSTALL(FILES ${qif_import_UI} DESTINATION ${CMAKE_INSTALL_DATADIR}/gnucash/ui)
 
 FILE(COPY ${qif_import_UI}
   DESTINATION ${DATADIR_BUILD}/gnucash/ui)

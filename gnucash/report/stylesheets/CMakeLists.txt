@@ -68,7 +68,7 @@ ADD_CUSTOM_TARGET(scm-report-stylesheets ALL DEPENDS scm-report-stylesheets-1 sc
 
 SET(stylesheets_UI gnc-plugin-stylesheets-ui.xml)
 
-INSTALL(FILES ${stylesheets_UI} DESTINATION share/gnucash/ui)
+INSTALL(FILES ${stylesheets_UI} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/ui)
 
 FILE(COPY ${stylesheets_UI}
   DESTINATION ${DATADIR_BUILD}/gnucash/ui)
