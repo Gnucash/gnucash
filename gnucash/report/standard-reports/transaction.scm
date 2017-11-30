@@ -1008,6 +1008,8 @@ tags within description, notes or memo. ")
            (report-currency (lambda (s) (if (column-uses? 'common-currency)
                                             (opt-val gnc:pagename-general optname-currency)
                                             (currency s))))
+           (friendly-debit (lambda (a) (gnc:get-debit-string (xaccAccountGetType a))))
+           (friendly-credit (lambda (a) (gnc:get-credit-string (xaccAccountGetType a))))
            (header-commodity (lambda (str)
                                (string-append
                                 str
@@ -1044,48 +1046,56 @@ tags within description, notes or memo. ")
            (running-balance (lambda (s) (gnc:make-gnc-monetary (currency s) (xaccSplitGetBalance s)))))
         (append
          ;; each column will be a vector
-         ;; (vector heading calculator-function reverse-column? subtotal? (vector start-dual-column? merging-function))
-         ;; (calculator-function split) to obtain amount
-         ;; reverse? to optionally reverse signs
-         ;; subtotal? to allow subtotals (ie irrelevant for running balance)
-         ;; merge? to merge with the next cell (ie for debit/credit cells)
-         ;; merging-function - function (usually gnc-numeric-add/sub-fixed to apply to dual-subtotal
+         ;; (vector heading
+         ;;         calculator-function                          ;; (calculator-function split) to obtain amount
+         ;;         reverse-column?                              ;; to optionally reverse signs
+         ;;         subtotal?                                    ;; subtotal? to allow subtotals (ie irrelevant for running balance)
+         ;;         (vector start-dual-column?                   ;; #t for the left side of a dual column (i.e. debit/credit)
+         ;;                 merging-function))                   ;; function to apply to dual-subtotal (gnc-numeric-add/sub)
+         ;;         friendly-heading-fn                          ;; retrieve friendly heading name for account debit/credit
          (if (column-uses? 'amount-single)
              (list (vector (header-commodity (_ "Amount"))
                            amount #t #t
-                           (vector #f #f)))
+                           (vector #f #f)
+                           (lambda (a) "")))
              '())
 
          (if (column-uses? 'amount-double)
              (list (vector (header-commodity (_ "Debit"))
                            debit-amount #f #t
-                           (vector #t gnc-numeric-add))
+                           (vector #t gnc-numeric-add)
+                           friendly-debit)
                    (vector (header-commodity (_ "Credit"))
                            credit-amount #f #t
-                           (vector #f gnc-numeric-sub)))
+                           (vector #f gnc-numeric-sub)
+                           friendly-credit))
              '())
 
          (if (and (column-uses? 'amount-original-currency)
                   (column-uses? 'amount-single))
              (list (vector (_ "Amount")
                            original-amount #t #t
-                           (vector #f #f)))
+                           (vector #f #f)
+                           (lambda (a) "")))
              '())
 
          (if (and (column-uses? 'amount-original-currency)
                   (column-uses? 'amount-double))
              (list (vector (_ "Debit")
                            original-debit-amount #f #t
-                           (vector #t gnc-numeric-add))
+                           (vector #t gnc-numeric-add)
+                           friendly-debit)
                    (vector (_ "Credit")
                            original-credit-amount #f #t
-                           (vector #f gnc-numeric-sub)))
+                           (vector #f gnc-numeric-sub)
+                           friendly-credit))
              '())
 
          (if (column-uses? 'running-balance)
              (list (vector (_ "Running Balance")
                            running-balance #t #f
-                           (vector #f #f)))
+                           (vector #f #f)
+                           (lambda (a) "")))
              '()))))
 
     (define (headings-left-columns)
@@ -1101,11 +1111,32 @@ tags within description, notes or memo. ")
     (define (width-left-columns) (length (left-columns)))
     (define (width-right-columns) (length (calculated-cells)))
 
-    (define (add-subheading data subheading-style)
-      (let ((heading-cell (gnc:make-html-table-cell data)))
-        (gnc:html-table-cell-set-colspan! heading-cell (+ (width-left-columns) (width-right-columns)))
-        (gnc:html-table-append-row/markup!
-         table subheading-style (list heading-cell))))
+    (define (add-subheading data subheading-style split level)
+      (let ((sortkey (opt-val pagename-sorting
+                           (case level
+                             ((primary) optname-prime-sortkey)
+                             ((secondary) optname-sec-sortkey)))))
+        (if (member sortkey (list 'account-name 'account-code))
+            (let ((row-contents '()))
+              (begin
+                (if export?
+                    (begin (addto! row-contents (gnc:make-html-table-cell subheading-style data))
+                           (for-each (lambda (cell) (addto! row-contents cell))
+                                     (gnc:html-make-empty-cells (- (width-left-columns) 1))))
+                    (addto! row-contents (gnc:make-html-table-cell/size 1 (width-left-columns) data)))
+                (map (lambda (col)
+                       (addto! row-contents
+                               (gnc:make-html-table-cell
+                                "<b>"
+                                ((vector-ref col 5)
+                                 ((keylist-get-info sortkey-list sortkey 'renderer-fn) split))
+                                "</b>")))
+                     (calculated-cells))
+                (gnc:html-table-append-row/markup! table subheading-style (reverse row-contents))))
+            (let ((heading-cell (gnc:make-html-table-cell data)))
+              (gnc:html-table-cell-set-colspan! heading-cell (+ (width-left-columns) (width-right-columns)))
+              (gnc:html-table-append-row/markup!
+               table subheading-style (list heading-cell))))))
 
     (define (add-subtotal-row subtotal-string subtotal-collectors subtotal-style)
       (let* ((row-contents '())
@@ -1408,10 +1439,10 @@ tags within description, notes or memo. ")
                   (if next
                       (begin
                         (add-subheading (render-summary next 'primary #t)
-                                        def:primary-subtotal-style)
+                                        def:primary-subtotal-style next 'primary)
                         (if secondary-subtotal-comparator
                             (add-subheading (render-summary next 'secondary #t)
-                                            def:secondary-subtotal-style)))))
+                                            def:secondary-subtotal-style next 'secondary)))))
 
                 (if (and secondary-subtotal-comparator
                          (or (not next)
@@ -1426,7 +1457,7 @@ tags within description, notes or memo. ")
                                      secondary-subtotal-collectors)
                            (if next
                                (add-subheading (render-summary next 'secondary #t)
-                                               def:secondary-subtotal-style)))))
+                                               def:secondary-subtotal-style next 'secondary)))))
 
             (do-rows-with-subtotals rest (not odd-row?)))))
 
@@ -1434,11 +1465,11 @@ tags within description, notes or memo. ")
 
     (if (primary-get-info 'renderer-fn)
         (add-subheading (render-summary (car splits) 'primary #t)
-                        def:primary-subtotal-style))
+                        def:primary-subtotal-style (car splits) 'primary))
 
     (if (secondary-get-info 'renderer-fn)
         (add-subheading (render-summary (car splits) 'secondary #t)
-                        def:secondary-subtotal-style))
+                        def:secondary-subtotal-style (car splits) 'secondary))
 
     (do-rows-with-subtotals splits #t)
 
