@@ -55,7 +55,7 @@ libgncmod_html_la_LIBADD = \
 if BUILDING_FROM_VCS
 swig-gnc-html.c: gnc-html.i gnc-html.h \
                     ${top_srcdir}/common/base-typemaps.i
-	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
+	$(SWIG) -guile -Linkage module \
 	-I${top_srcdir}/common -o $@ $<
 if ! OS_WIN32
 if ! SWIG_DIST_FAIL

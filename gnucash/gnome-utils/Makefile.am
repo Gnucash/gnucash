@@ -220,7 +220,7 @@ gnc-warnings.h: gschemas/org.gnucash.warnings.gschema.xml.in make-gnc-warnings-h
 if BUILDING_FROM_VCS
 swig-gnome-utils.c: gnome-utils.i \
                     ${top_srcdir}/common/base-typemaps.i
-	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
+	$(SWIG) -guile -Linkage module \
 	-I${top_srcdir}/common -o $@ $<
 if ! OS_WIN32
 if ! SWIG_DIST_FAIL

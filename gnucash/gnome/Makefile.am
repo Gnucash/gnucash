@@ -150,7 +150,7 @@ noinst_HEADERS = \
 
 if BUILDING_FROM_VCS
 swig-gnome.c: gnome.i dialog-progress.h ${top_srcdir}/common/base-typemaps.i
-	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
+	$(SWIG) -guile -Linkage module \
 	-I${top_srcdir}/common -o $@ $<
 if ! OS_WIN32
 if ! SWIG_DIST_FAIL

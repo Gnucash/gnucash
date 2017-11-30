@@ -28,7 +28,7 @@ libgncmodbaz_la_LIBADD = \
 
 if BUILDING_FROM_VCS
 swig-baz.c: baz.i
-	$(SWIG) -guile $(SWIG_ARGS) -Linkage module -o $@ $<
+	$(SWIG) -guile -Linkage module -o $@ $<
 if ! OS_WIN32
 if ! SWIG_DIST_FAIL
 	if ! `grep "define scm_from_utf8_string" $@ > /dev/null 2>&1`; then \

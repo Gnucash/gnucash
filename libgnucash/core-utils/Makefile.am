@@ -40,7 +40,7 @@ noinst_HEADERS = \
 
 if BUILDING_FROM_VCS
 swig-core-utils-guile.c: core-utils.i ${top_srcdir}/common/base-typemaps.i
-	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
+	$(SWIG) -guile -Linkage module \
 	-I${top_srcdir}/common -o $@ $<
 if ! OS_WIN32
 if ! SWIG_DIST_FAIL
@@ -50,8 +50,8 @@ if ! SWIG_DIST_FAIL
 endif
 endif
 swig-core-utils-python.c: core-utils.i ${top_srcdir}/common/base-typemaps.i
-	$(SWIG) -python -Wall -Werror $(SWIG_ARGS) \
-	-I${GLIB_CFLAGS} -I${top_srcdir}/common -o $@ $<
+	$(SWIG) -python -Wall -Werror \
+	-I${GLIB_CFLAGS} -I${top_srcdir}/common -I${srcdir} -o $@ $<
 endif
 
 AM_CPPFLAGS = \

@@ -103,7 +103,7 @@ libgncmod_app_utils_la_LIBADD = \
 
 if BUILDING_FROM_VCS
 swig-app-utils-guile.c: app-utils.i ${top_srcdir}/common/base-typemaps.i
-	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
+	$(SWIG) -guile -Linkage module \
 	-I${top_srcdir}/common -o $@ $<
 if ! OS_WIN32
 if ! SWIG_DIST_FAIL
@@ -113,7 +113,7 @@ if ! SWIG_DIST_FAIL
 endif
 endif
 swig-app-utils-python.c: app-utils.i ${top_srcdir}/common/base-typemaps.i
-	$(SWIG) -python -Wall -Werror $(SWIG_ARGS) \
+	$(SWIG) -python -Wall -Werror \
 	-I${GLIB_CFLAGS} -I${top_srcdir}/common -o $@ $<
 endif
 

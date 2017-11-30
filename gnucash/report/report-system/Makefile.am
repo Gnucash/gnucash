@@ -25,7 +25,7 @@ libgncmod_report_system_la_LIBADD = \
 
 if BUILDING_FROM_VCS
 swig-report-system.c: report-system.i ${top_srcdir}/common/base-typemaps.i
-	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
+	$(SWIG) -guile -Linkage module \
 	-I${top_srcdir}/common -o $@ $<
 if ! OS_WIN32
 if ! SWIG_DIST_FAIL

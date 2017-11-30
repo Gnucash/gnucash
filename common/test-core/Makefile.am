@@ -25,7 +25,7 @@ libtest_core_la_LDFLAGS = \
 
 if BUILDING_FROM_VCS
 swig-unittest-support-guile.c: unittest-support.i $(top_srcdir)/common/base-typemaps.i
-	$(SWIG) -guile $(SWIG_ARGS) -Linkage module \
+	$(SWIG) -guile -Linkage module \
 	-I${top_srcdir}/common \
 	${AM_CPPFLAGS} -o $@ $<
 if ! OS_WIN32
@@ -37,7 +37,7 @@ endif
 endif
 
 swig-unittest-support-python.c: unittest-support.i $(top_srcdir)/common/base-typemaps.i
-	$(SWIG) -python  -Wall -Werror $(SWIG_ARGS) \
+	$(SWIG) -python  -Wall -Werror \
 	-I${GLIB_CFLAGS} -I${top_srcdir}/common \
 	${AM_CPPFLAGS} -o $@ $<
 
