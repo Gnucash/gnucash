@@ -1,5 +1,5 @@
 /*******************************************************************\
- * gnc-csv-trans-settings.c -- Save and Load CSV Import Settings    *
+ * gnc-csv-import-settings.c -- Save and Load CSV Import Settings   *
  *                                                                  *
  * Copyright (C) 2014 Robert Fewell                                 *
  *                                                                  *
@@ -20,13 +20,13 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/** @file gnc-csv-trans-settings.c
+/** @file gnc-csv-import-settings.c
     @brief CSV Import Settings
     @author Copyright (c) 2014 Robert Fewell
     @author Copyright (c) 2016 Geert Janssens
 */
 
-#include "gnc-csv-trans-settings.hpp"
+#include "gnc-csv-import-settings.hpp"
 #include <sstream>
 
 extern "C"
@@ -70,18 +70,18 @@ G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 
 preset_vec presets;
 
-static std::shared_ptr<CsvTransSettings> create_int_no_preset(const std::string& set_type)
+static std::shared_ptr<CsvImportSettings> create_int_no_preset(const std::string& set_type)
 {
-    auto preset = std::make_shared<CsvTransSettings>();
+    auto preset = std::make_shared<CsvImportSettings>();
     preset->m_name = no_settings;
     preset->m_settings_type = set_type;
 
     return preset;
 }
 
-static std::shared_ptr<CsvTransSettings> create_int_gnc_exp_preset(void)
+static std::shared_ptr<CsvImportSettings> create_int_gnc_exp_preset(void)
 {
-    auto preset = std::make_shared<CsvTransSettings>();
+    auto preset = std::make_shared<CsvImportSettings>();
     preset->m_name = gnc_exp;
     preset->m_skip_start_lines = 1;
     preset->m_multi_split = true;
@@ -119,7 +119,7 @@ static std::shared_ptr<CsvTransSettings> create_int_gnc_exp_preset(void)
  * find all settings entries in the state key file
  * based on settings type.
  **************************************************/
-const preset_vec& get_trans_presets (const std::string& set_type)
+const preset_vec& get_import_presets (const std::string& set_type)
 {
 
     // Search all Groups in the state key file for ones starting with prefix
@@ -157,7 +157,7 @@ const preset_vec& get_trans_presets (const std::string& set_type)
     /* Then add all the ones we found in the state file */
     for (auto preset_name : preset_names)
     {
-        auto preset = std::make_shared<CsvTransSettings>();
+        auto preset = std::make_shared<CsvImportSettings>();
         preset->m_settings_type = set_type;
         preset->m_name = preset_name;
         preset->load();
@@ -166,7 +166,7 @@ const preset_vec& get_trans_presets (const std::string& set_type)
     return presets;
 }
 
-bool trans_preset_is_reserved_name (const std::string& name)
+bool preset_is_reserved_name (const std::string& name)
 {
     return ((name == no_settings) ||
             (name == _(no_settings.c_str())) ||
@@ -205,9 +205,9 @@ handle_load_error (GError **key_error, const std::string& group)
  * load the settings from a state key file
  **************************************************/
 bool
-CsvTransSettings::load (void)
+CsvImportSettings::load (void)
 {
-    if (trans_preset_is_reserved_name (m_name))
+    if (preset_is_reserved_name (m_name))
         return true;
 
     GError *key_error = nullptr;
@@ -355,9 +355,9 @@ CsvTransSettings::load (void)
  * save settings to a key file
  **************************************************/
 bool
-CsvTransSettings::save (void)
+CsvImportSettings::save (void)
 {
-    if (trans_preset_is_reserved_name (m_name))
+    if (preset_is_reserved_name (m_name))
     {
         PWARN ("Ignoring attempt to save to reserved name '%s'", m_name.c_str());
         return true;
@@ -471,9 +471,9 @@ CsvTransSettings::save (void)
 }
 
 void
-CsvTransSettings::remove (void)
+CsvImportSettings::remove (void)
 {
-    if (trans_preset_is_reserved_name (m_name))
+    if (preset_is_reserved_name (m_name))
         return;
 
     auto keyfile = gnc_state_get_current ();
@@ -483,7 +483,7 @@ CsvTransSettings::remove (void)
 
 
 bool
-CsvTransSettings::read_only (void)
+CsvImportSettings::read_only (void)
 {
     return ((m_name == no_settings) ||
             (m_name == _(no_settings.c_str())) ||
