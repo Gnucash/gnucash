@@ -1,9 +1,6 @@
 if WITH_PYTHON
    PYTHON_DIR = python
 endif
-if !PLATFORM_WIN32
-  OVERRIDES_DIR = overrides
-endif
 # Order is important here.
 SUBDIRS = \
   ${PYTHON_DIR} \
@@ -15,7 +12,6 @@ SUBDIRS = \
   gnome \
   import-export \
   . \
-  ${OVERRIDES_DIR} \
   test
 
 AM_CPPFLAGS = -I${top_builddir} ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GTK_CFLAGS} \

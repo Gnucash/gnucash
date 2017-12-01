@@ -1654,7 +1654,6 @@ AC_CONFIG_FILES(
   doc/Makefile
   doc/examples/Makefile
   gnucash/Makefile
-  gnucash/overrides/Makefile
   gnucash/test/Makefile
   gnucash/gnome/Makefile
   gnucash/gnome/gtkbuilder/Makefile
@@ -1782,8 +1781,7 @@ AC_CONFIG_FILES([libgnucash/backend/xml/test/test-real-data.sh],
 AC_CONFIG_FILES([gnucash/test/test-version],
                 [chmod +x gnucash/test/test-version])
 
-# A few files need extra actions at creation time
-AC_CONFIG_FILES([gnucash/overrides/gnucash-make-guids], [chmod u+x gnucash/overrides/gnucash-make-guids])
+
 #Link (copy on Windows) test data files:
 AC_CONFIG_LINKS([gnucash/import-export/csv-imp/test/sample1.csv:gnucash/import-export/csv-imp/test/sample1.csv])
 LDFLAGS="${LDFLAGS} ${NOUNDEF}"
