@@ -284,9 +284,9 @@ void GncPriceImport::settings (const CsvTransSettings& settings)
     /* First apply file format as this may recreate the tokenizer */
     file_format (settings.m_file_format);
     /* Only then apply the other settings */
+    m_settings = settings;
     from_commodity (m_settings.m_from_commodity);
     to_currency (m_settings.m_to_currency);
-    m_settings = settings;
     encoding (m_settings.m_encoding);
 
     if (file_format() == GncImpFileFormat::CSV)

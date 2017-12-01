@@ -46,12 +46,12 @@ extern "C" {
 #include <boost/optional.hpp>
 
 /* A set of currency formats that the user sees. */
-extern const int num_currency_formats;
-extern const gchar* currency_format_user[];
+extern const int num_currency_formats_price;
+extern const gchar* currency_format_user_price[];
 
 /* A set of date formats that the user sees. */
-extern const int num_date_formats;
-extern const gchar* date_format_user[];
+extern const int num_date_formats_price;
+extern const gchar* date_format_user_price[];
 
 /** Tuple to hold
  *  - a tokenized line of input
