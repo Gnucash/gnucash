@@ -13,6 +13,7 @@ libgncmod_csv_import_la_SOURCES = \
   gnc-csv-gnumeric-popup.c \
   gnc-dummy-tokenizer.cpp \
   gnc-fw-tokenizer.cpp \
+  gnc-price-props.cpp \
   gnc-tokenizer.cpp \
   gnc-tx-import.cpp \
   gnc-trans-props.cpp \
@@ -28,6 +29,7 @@ noinst_HEADERS = \
   gnc-csv-gnumeric-popup.h \
   gnc-dummy-tokenizer.hpp \
   gnc-fw-tokenizer.hpp \
+  gnc-price-props.hpp \
   gnc-tokenizer.hpp \
   gnc-tx-import.hpp \
   gnc-trans-props.hpp \
