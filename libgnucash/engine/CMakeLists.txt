@@ -259,16 +259,6 @@ INSTALL(TARGETS gncmod-engine
 
 INSTALL(FILES ${engine_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)
 
-SET(qof_test_HEADERS
-kvp-frame.hpp
-qofbook.h
-qofinstance.h
-qofobject.h
-qofsession.h
-)
-
-INSTALL(FILES ${qof_test_HEADERS} DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}/gnucash/libgnucash/engine/test)
-
 # Scheme
 
 SET (engine_SCHEME_0
