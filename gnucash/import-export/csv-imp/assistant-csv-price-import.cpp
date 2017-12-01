@@ -94,6 +94,7 @@ public:
     void preview_update_currency_format ();
     void preview_update_currency ();
     void preview_update_commodity ();
+    void preview_reparse_col_type (GncPricePropType type);
     void preview_update_col_type (GtkComboBox* cbox);
     void preview_update_fw_columns (GtkTreeView* treeview, GdkEventButton* event);
 
@@ -1138,6 +1139,22 @@ enum PreviewDataTableCols {
     PREV_COL_ERR_ICON,
     PREV_N_FIXED_COLS };
 
+
+void
+CsvImpPriceAssist::preview_reparse_col_type (GncPricePropType type)
+{
+    auto column_types = price_imp->column_types_price();
+
+    // look for column type and force a reparse
+    auto col_type = std::find (column_types.begin(),
+                column_types.end(), type);
+    if (col_type != column_types.end())
+    {
+        price_imp->set_column_type_price (col_type -column_types.begin(),
+                        type, true);
+    }
+}
+
 /** Event handler for the user selecting a new column type. When the
  * user selects a new column type, that column's text must be changed
  * to the selection, and any other columns containing that selection
@@ -1157,7 +1174,25 @@ void CsvImpPriceAssist::preview_update_col_type (GtkComboBox* cbox)
     gtk_tree_model_get (model, &iter, COL_TYPE_ID, &new_col_type, -1);
 
     auto col_num = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT(cbox), "col-num"));
+
+    auto column_types = price_imp->column_types_price();
+    auto old_col_type = column_types.at(col_num);
+
     price_imp->set_column_type_price (col_num, new_col_type);
+
+    // if old_col_type is TO_CURRENCY, force a reparse of commodity
+    if (old_col_type == GncPricePropType::TO_CURRENCY)
+    {
+        // look for a from_commodity column to reparse
+        preview_reparse_col_type (GncPricePropType::FROM_COMMODITY);
+    }
+
+    // if old_col_type is FROM_COMMODITY, force a reparse of currency
+    if (old_col_type == GncPricePropType::FROM_COMMODITY)
+    {
+        // look for a to_currency column to reparse
+        preview_reparse_col_type (GncPricePropType::TO_CURRENCY);
+    }
 
     /* Delay rebuilding our data table to avoid critical warnings due to
      * pending events still acting on them after this event is processed.
@@ -1580,7 +1615,7 @@ void CsvImpPriceAssist::preview_refresh_table ()
 
     auto column_types = price_imp->column_types_price();
 
-    // look for a commodity column, clear the commdoity combo
+    // look for a commodity column, clear the commodity combo
     auto col_type_comm = std::find (column_types.begin(),
                 column_types.end(), GncPricePropType::FROM_COMMODITY);
     if (col_type_comm != column_types.end())
