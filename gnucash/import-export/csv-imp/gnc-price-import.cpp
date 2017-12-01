@@ -62,7 +62,7 @@ const gchar* currency_format_user_price[] = {N_("Locale"),
 
 
 /** Constructor for GncPriceImport.
- * @return Pointer to a new GncCSvParseData
+ * @return Pointer to a new GncCsvParseData
  */
 GncPriceImport::GncPriceImport(GncImpFileFormat format)
 {
@@ -142,7 +142,7 @@ bool GncPriceImport::over_write () { return m_over_write; }
 /** Sets a from commodity. This is the commodity all import data relates to.
  *  When a from commodity is set, there can't be any from columns selected
  *  in the import data.
- * @param from_commodity Pointer to a commodity or NULL.
+ * @param from_commodity pointer to a commodity or NULL.
  */
 void GncPriceImport::from_commodity (gnc_commodity* from_commodity)
 {
@@ -164,7 +164,7 @@ gnc_commodity *GncPriceImport::from_commodity () { return m_settings.m_from_comm
 /** Sets a to currency. This is the to currency all import data relates to.
  *  When a to currency is set, there can't be any to currency columns selected
  *  in the import data.
- * @param to_currency Pointer to a commodity or NULL.
+ * @param to_currency pointer to a commodity or NULL.
  */
 void GncPriceImport::to_currency (gnc_commodity* to_currency)
 {
@@ -221,7 +221,6 @@ int GncPriceImport::date_format () { return m_settings.m_date_format; }
  */
 void GncPriceImport::encoding (const std::string& encoding)
 {
-
     // TODO investigate if we can catch conversion errors and report them
     if (m_tokenizer)
     {
@@ -309,12 +308,10 @@ void GncPriceImport::settings (const CsvTransSettings& settings)
     std::copy_n (settings.m_column_types_price.begin(),
             std::min (m_settings.m_column_types_price.size(), settings.m_column_types_price.size()),
             m_settings.m_column_types_price.begin());
-
 }
 
 bool GncPriceImport::save_settings ()
 {
-
     if (trans_preset_is_reserved_name (m_settings.m_name))
         return true;
 
@@ -327,7 +324,6 @@ bool GncPriceImport::save_settings ()
         auto fwtok = dynamic_cast<GncFwTokenizer*>(m_tokenizer.get());
         m_settings.m_column_widths = fwtok->get_columns();
     }
-
     return m_settings.save();
 }
 
@@ -342,7 +338,6 @@ std::string GncPriceImport::settings_name () { return m_settings.m_name; }
  */
 void GncPriceImport::load_file (const std::string& filename)
 {
-
     /* Get the raw data first and handle an error if one occurs. */
     try
     {
@@ -407,7 +402,6 @@ void GncPriceImport::tokenize (bool guessColTypes)
     }
 }
 
-
 struct ErrorListPrice
 {
 public:
@@ -427,7 +421,6 @@ std::string ErrorListPrice::str()
 {
     return m_error.substr(0, m_error.size() - 1);
 }
-
 
 /* Test for the required minimum number of columns selected and
  * the selection is consistent.
@@ -450,7 +443,7 @@ void GncPriceImport::verify_column_selections (ErrorListPrice& error_msg)
     if (!check_for_column_type(GncPricePropType::TO_CURRENCY))
     {
         if (!m_settings.m_to_currency)
-            error_msg.add_error( _("Please select a Currency to column or set a Currency in the Currency To field."));
+            error_msg.add_error( _("Please select a 'Currency to' column or set a Currency in the 'Currency To' field."));
     }
 
     /* Verify a Commodity from column is selected.
@@ -458,10 +451,9 @@ void GncPriceImport::verify_column_selections (ErrorListPrice& error_msg)
     if (!check_for_column_type(GncPricePropType::FROM_COMMODITY))
     {
         if (!m_settings.m_from_commodity)
-            error_msg.add_error( _("Please select a Commodity from column or set a Commodity in the Commodity From field."));
+            error_msg.add_error( _("Please select a 'Commodity from' column or set a Commodity in the 'Commodity From' field."));
     }
 }
-
 
 /* Check whether the chosen settings can successfully parse
  * the import data. This will check:
@@ -547,7 +539,7 @@ void GncPriceImport::create_price (std::vector<parse_line_t>::iterator& parsed_l
 
     error_message.clear();
 
-    // Add a CURRENCY_TO property with the default currency to if no currency to column was set by the user
+    // Add a CURRENCY_TO property with the selected 'currency to' if no 'currency to' column was set by the user
     auto line_to_currency = price_props->get_to_currency();
     if (!line_to_currency)
     {
@@ -555,16 +547,16 @@ void GncPriceImport::create_price (std::vector<parse_line_t>::iterator& parsed_l
             price_props->set_to_currency(m_settings.m_to_currency);
         else
         {
-            // Oops - the user didn't select an Account column *and* we didn't get a default value either!
+            // Oops - the user didn't select a 'currency to' column *and* we didn't get a selected value either!
             // Note if you get here this suggests a bug in the code!
-            error_message = _("No Currency to column selected and no default Currency specified either.\n"
+            error_message = _("No 'Currency to' column selected and no selected Currency specified either.\n"
                                        "This should never happen. Please report this as a bug.");
             PINFO("User warning: %s", error_message.c_str());
             throw std::invalid_argument(error_message);
         }
     }
 
-    // Add a COMMODITY_FROM property with the default commodity from if no commodity from column was set by the user
+    // Add a COMMODITY_FROM property with the selected 'commodity from' if no 'commodity from' column was set by the user
     auto line_from_commodity = price_props->get_from_commodity();
     if (!line_from_commodity)
     {
@@ -572,9 +564,9 @@ void GncPriceImport::create_price (std::vector<parse_line_t>::iterator& parsed_l
             price_props->set_from_commodity(m_settings.m_from_commodity);
         else
         {
-            // Oops - the user didn't select an Account column *and* we didn't get a default value either!
+            // Oops - the user didn't select a 'commodity from' column *and* we didn't get a selected value either!
             // Note if you get here this suggests a bug in the code!
-            error_message = _("No Commodity from column selected and no default Commodity specified either.\n"
+            error_message = _("No 'Commodity from' column selected and no selected Commodity specified either.\n"
                                        "This should never happen. Please report this as a bug.");
             PINFO("User warning: %s", error_message.c_str());
             throw std::invalid_argument(error_message);
@@ -604,7 +596,6 @@ void GncPriceImport::create_price (std::vector<parse_line_t>::iterator& parsed_l
         PINFO("User warning: %s", error_message.c_str());
     }
 }
-
 
 /** Creates a list of prices from parsed data. The parsed data
  * will first be validated. If any errors are found in lines that are marked
@@ -697,11 +688,11 @@ GncPriceImport::set_column_type_price (uint32_t position, GncPricePropType type,
 
     m_settings.m_column_types_price.at (position) = type;
 
-    // If the user has set a Commodity from column, we can't have a commodity from default set
+    // If the user has set a 'commodity from' column, we can't have a commodity from selected
     if (type == GncPricePropType::FROM_COMMODITY)
         from_commodity (nullptr);
 
-    // If the user has set a Currency to column, we can't have a currency to default set
+    // If the user has set a 'currency to' column, we can't have a currency to selected
     if (type == GncPricePropType::TO_CURRENCY)
         to_currency (nullptr);
 

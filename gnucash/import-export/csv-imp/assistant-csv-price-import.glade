@@ -44,20 +44,26 @@
     <signal name="prepare" handler="csv_price_imp_assist_prepare_cb" swapped="no"/>
     <signal name="cancel" handler="csv_price_imp_assist_cancel_cb" swapped="no"/>
     <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
       <object class="GtkLabel" id="start_page">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">This assistant will help you import Prices from a CSV file.
 
-There is a minimum number of columns that have to be present for a successful import, for Stock prices these are Date, Amount, Symbol From and for Currency they are Date, Amount, Currency From and Currency To.
+There is a minimum number of columns that have to be present for a successful import, these are Date, Amount, Commodity From and Currency To. If all entries are for the same Commodity / Currency then you can select them and then the columns will be Date and Amount.
 
-Various options exist for specifying the delimiter as well as a fixed width option. With the fixed width option, double click on the bar above the displayed rows to set the column width.
+Various options exist for specifying the delimiter as well as a fixed width option. With the fixed width option, double click on the table of rows displayed to set a column width, then right mouse to change if required.
 
 Examples are "RR.L","21/11/2016",5.345,"GBP" and "USD","2016-11-21",1.56,"GBP"
 
 There is an option for specifying the start row, end row and an option to skip alternate rows beginning from the start row which can be used if you have some header text. Also there is an option to over write existing prices for that day if required.
 
-On the preview page you can Load and Save the settings. To save the settings, select a previously saved entry or replace the text and press the Save Settings button.
+Lastly, for repeated imports the preview page has buttons to Load and Save the settings. To save the settings, tweak the settings to your preferences (optionally starting from an existing preset), then (optionally change the settings name and press the Save Settings button. Note you can't save to built-in presets.
 
 This operation is not reversable, so make sure you have a working backup.
 
@@ -536,6 +542,7 @@ Select location and file name for the Import, then click 'OK'...
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="tooltip_text" translatable="yes">Normally prices are not over written, select this to change that. This setting is not saved.</property>
+                                <property name="focus_on_click">False</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="csv_price_imp_preview_overwrite_cb" swapped="no"/>
                               </object>
@@ -1094,8 +1101,9 @@ For example
               <object class="GtkLabel" id="finish_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Press Apply to add Prices.
-Cancel to abort.</property>
+                <property name="label" translatable="yes">&lt;b&gt;Press Apply to add the Prices.
+Cancel to abort.&lt;/b&gt;</property>
+                <property name="use_markup">True</property>
                 <property name="justify">center</property>
                 <property name="wrap">True</property>
               </object>

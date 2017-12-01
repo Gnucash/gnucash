@@ -160,7 +160,7 @@ time64 parse_date_price (const std::string &date_str, int format)
 }
 
 
-/** Convert str into a GncRational using the user-specified (import) currency format.
+/** Convert str into a GncNumeric using the user-specified (import) currency format.
  * @param str The string to be parsed
  * @param currency_format The currency format to use.
  * @return a GncNumeric
@@ -200,6 +200,11 @@ GncNumeric parse_amount_price (const std::string &str, int currency_format)
     return GncNumeric(val);
 }
 
+/** Convert comm_str into a gnc_commodity.
+ * @param comm_str The string to be parsed
+ * @return a gnc_commodity
+ * @exception May throw std::invalid argument if string can't be parsed properly
+ */
 gnc_commodity* parse_commodity_price_comm (const std::string& comm_str)
 {
     if (comm_str.empty())
@@ -324,9 +329,9 @@ std::string GncImportPrice::verify_essentials (void)
     else if (m_amount == boost::none)
         return _("No amount column.");
     else if (m_to_currency == boost::none)
-        return _("No Currency to column.");
+        return _("No 'Currency to' column.");
     else if (m_from_commodity == boost::none)
-        return _("No Commodity from column.");
+        return _("No 'Commodity from' column.");
     else
         return std::string();
 }
@@ -417,7 +422,6 @@ Result GncImportPrice::create_price (QofBook* book, GNCPriceDB *pdb, bool over)
 
         if (perr == false)
             throw std::invalid_argument (_("Failed to create price from selected columns."));
-//FIXME Not sure about this, should this be a PWARN
     }
     else
     {

@@ -434,7 +434,7 @@ GtkTreeModel *get_model (bool all_commodity)
         /* Hide the template entry */
         if (g_utf8_collate (tmp_namespace, "template" ) != 0)
         {
-            if ((g_utf8_collate (tmp_namespace, GNC_COMMODITY_NS_CURRENCY ) == 0) || (all_commodity == true)) 
+            if ((g_utf8_collate (tmp_namespace, GNC_COMMODITY_NS_CURRENCY ) == 0) || (all_commodity == true))
             {
                 commodity_list = gnc_commodity_table_get_commodities (commodity_table, tmp_namespace);
                 commodity_list  = g_list_first (commodity_list);
@@ -1727,10 +1727,10 @@ CsvImpPriceAssist::assist_summary_page_prepare ()
 {
     auto text = std::string("<span size=\"medium\"><b>");
     text += _("The prices were imported from the file '") + m_file_name + "'.";
-    text += _("\n\nThe number of Prices added was ") + std::to_string(price_imp->m_prices_added);
-    text += _(", duplicated was ") + std::to_string(price_imp->m_prices_duplicated);
-    text += _(" and replaced was ") + std::to_string(price_imp->m_prices_replaced);
-    text += ".</b></span>";
+    text += _("\n\nThere were ") + std::to_string(price_imp->m_prices_added);
+    text += _(" Prices added, ") + std::to_string(price_imp->m_prices_duplicated);
+    text += _(" duplicated and ") + std::to_string(price_imp->m_prices_replaced);
+    text += _(" replaced.</b></span>");
 
     gtk_label_set_markup (GTK_LABEL(summary_label), text.c_str());
 }
