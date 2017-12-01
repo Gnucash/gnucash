@@ -44,7 +44,7 @@ extern "C" {
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 
 /* This map contains a set of strings representing the different column types. */
-std::map<GncPricePropType, const char*> gnc_csv_price_col_type_strs = {
+std::map<GncPricePropType, const char*> gnc_price_col_type_strs = {
         { GncPricePropType::NONE, N_("None") },
         { GncPricePropType::DATE, N_("Date") },
         { GncPricePropType::AMOUNT, N_("Amount") },
@@ -341,7 +341,7 @@ void GncImportPrice::set (GncPricePropType prop_type, const std::string& value)
     }
     catch (const std::invalid_argument& e)
     {
-        auto err_str = std::string(_(gnc_csv_price_col_type_strs[prop_type])) +
+        auto err_str = std::string(_(gnc_price_col_type_strs[prop_type])) +
                        std::string(_(" could not be understood.\n")) +
                        e.what();
         m_errors.emplace(prop_type, err_str);
@@ -349,7 +349,7 @@ void GncImportPrice::set (GncPricePropType prop_type, const std::string& value)
     }
     catch (const std::out_of_range& e)
     {
-        auto err_str = std::string(_(gnc_csv_price_col_type_strs[prop_type])) +
+        auto err_str = std::string(_(gnc_price_col_type_strs[prop_type])) +
                        std::string(_(" could not be understood.\n")) +
                        e.what();
         m_errors.emplace(prop_type, err_str);
