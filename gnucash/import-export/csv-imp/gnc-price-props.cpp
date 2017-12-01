@@ -269,7 +269,11 @@ void GncImportPrice::set (GncPricePropType prop_type, const std::string& value)
                 m_from_commodity = boost::none;
                 comm = parse_commodity_price_comm (value); // Throws if parsing fails
                 if (comm)
+                {
+                    if (m_to_currency == comm)
+                        throw std::invalid_argument (_("'Commodity From' can not be the same as 'Currency To' column type."));
                     m_from_commodity = comm;
+                }
                 break;
 
             case GncPricePropType::TO_CURRENCY:
@@ -277,6 +281,8 @@ void GncImportPrice::set (GncPricePropType prop_type, const std::string& value)
                 comm = parse_commodity_price_comm (value); // Throws if parsing fails
                 if (comm)
                 {
+                    if (m_from_commodity == comm)
+                        throw std::invalid_argument (_("'Currency To' can not be the same as 'Commodity From' column type."));
                     if (gnc_commodity_is_currency (comm) != true)
                         throw std::invalid_argument (_("Value parsed into an invalid currency for a currency column type."));
                     m_to_currency = comm;
@@ -332,6 +338,8 @@ std::string GncImportPrice::verify_essentials (void)
         return _("No 'Currency to' column.");
     else if (m_from_commodity == boost::none)
         return _("No 'Commodity from' column.");
+    else if (gnc_commodity_equal (*m_from_commodity, *m_to_currency))
+        return _("'Commodity from' can not be the same as 'Currency to'.");
     else
         return std::string();
 }
