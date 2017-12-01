@@ -90,6 +90,7 @@ public:
     void set_date_format (int date_format) { m_date_format = date_format ;}
     void set_currency_format (int currency_format) { m_currency_format = currency_format ;}
     void reset (GncPricePropType prop_type);
+    std::string verify_essentials (void);
     Result create_price (QofBook* book, GNCPriceDB *pdb, bool over);
 
     gnc_commodity* get_from_commodity () { if (m_from_commodity) return *m_from_commodity; else return nullptr; }
