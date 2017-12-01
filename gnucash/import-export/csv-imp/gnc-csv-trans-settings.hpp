@@ -31,6 +31,7 @@
 extern "C" {
 #include <config.h>
 #include "Account.h"
+#include "gnc-commodity.h"
 }
 
 #include <string>
@@ -53,8 +54,8 @@ struct CsvTransSettings
     CsvTransSettings() : m_file_format (GncImpFileFormat::CSV), m_encoding {"UTF-8"},
             m_multi_split (false), m_date_format {0}, m_currency_format {0},
             m_skip_start_lines{0}, m_skip_end_lines{0}, m_skip_alt_lines (false),
-            m_separators {","}, m_base_account {nullptr},
-            m_load_error {false} { }
+            m_separators {","}, m_base_account {nullptr}, m_to_currency {nullptr},
+            m_from_commodity {nullptr}, m_load_error {false} { }
 
 /** Save the gathered widget properties to a key File.
  *
@@ -96,6 +97,9 @@ Account      *m_base_account;                 // Base account
 std::vector<GncTransPropType> m_column_types; // The Column types in order
 std::vector<GncPricePropType> m_column_types_price; // The Column Price types in order
 std::vector<uint32_t> m_column_widths;        // The Column widths
+
+gnc_commodity *m_to_currency;                 //  Price To Currency
+gnc_commodity *m_from_commodity;              //  Price From Commodity
 
 bool          m_load_error;                   // Was there an error while parsing the state file ?
 };

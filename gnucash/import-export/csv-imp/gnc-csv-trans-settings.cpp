@@ -63,6 +63,8 @@ const std::string gnc_exp{N_("GnuCash Export Format")};
 #define CSV_COL_TYPES    "ColumnTypes"
 #define CSV_COL_WIDTHS   "ColumnWidths"
 #define CSV_ACCOUNT      "BaseAccount"
+#define CSV_TO_CURR      "PriceToCurrency"
+#define CSV_FROM_COMM    "PriceFromCommodity"
 
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 
@@ -111,9 +113,8 @@ static std::shared_ptr<CsvTransSettings> create_int_gnc_exp_preset(void)
     preset->m_column_types_price = {
             GncPricePropType::DATE,
             GncPricePropType::AMOUNT,
-            GncPricePropType::CURRENCY_FROM,
-            GncPricePropType::CURRENCY_TO,
-            GncPricePropType::SYMBOL_FROM
+            GncPricePropType::FROM_COMMODITY,
+            GncPricePropType::TO_CURRENCY,
     };
 
     return preset;
@@ -266,6 +267,22 @@ CsvTransSettings::load (void)
     if (key_char)
         g_free (key_char);
 
+    key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_TO_CURR, &key_error);
+    if (key_char && *key_char != '\0')
+//FIXME        m_to_currency = gnc_account_lookup_by_full_name (gnc_get_current_root_account(), key_char);
+        m_to_currency = nullptr;
+    m_load_error |= handle_load_error (&key_error, group);
+    if (key_char)
+        g_free (key_char);
+
+    key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_FROM_COMM, &key_error);
+    if (key_char && *key_char != '\0')
+//FIXME        m_from_commodity = gnc_account_lookup_by_full_name (gnc_get_current_root_account(), key_char);
+        m_from_commodity = nullptr;
+    m_load_error |= handle_load_error (&key_error, group);
+    if (key_char)
+        g_free (key_char);
+
     m_column_types.clear();
     gsize list_len;
     gchar** col_types_str = g_key_file_get_string_list (keyfile, group.c_str(), CSV_COL_TYPES,
@@ -360,6 +377,12 @@ CsvTransSettings::save (void)
 
     if (m_base_account)
         g_key_file_set_string (keyfile, group.c_str(), CSV_ACCOUNT, gnc_account_get_full_name(m_base_account));
+
+    if (m_to_currency)
+        g_key_file_set_string (keyfile, group.c_str(), CSV_TO_CURR, gnc_commodity_get_fullname(m_to_currency));
+
+    if (m_from_commodity)
+        g_key_file_set_string (keyfile, group.c_str(), CSV_FROM_COMM, gnc_commodity_get_fullname(m_from_commodity));
 
     std::vector<const char*> col_types_str;
     for (auto col_type : m_column_types)
