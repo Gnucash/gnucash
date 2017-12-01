@@ -19,6 +19,7 @@ SET(csv_import_SOURCES
   gnc-csv-trans-settings.cpp
   gnc-dummy-tokenizer.cpp
   gnc-fw-tokenizer.cpp
+  gnc-price-import.cpp
   gnc-price-props.cpp
   gnc-tokenizer.cpp
   gnc-trans-props.cpp
@@ -45,6 +46,7 @@ SET(csv_import_noinst_HEADERS
   gnc-csv-trans-settings.hpp
   gnc-dummy-tokenizer.hpp
   gnc-fw-tokenizer.hpp
+  gnc-price-import.hpp
   gnc-price-props.hpp
   gnc-tokenizer.hpp
   gnc-trans-props.hpp
