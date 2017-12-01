@@ -68,11 +68,10 @@ struct ErrorListPrice;
  * - set a file format
  * - load a file
  * - optionally convert it's encoding
- * - parse the file into lines, which in turn are split up in columns
+ * - parse the file into lines, which in turn are split up in to columns
  *   the result of this step can be queried from tokenizer
  * - the user should now map the columns to types, which is stored in column_types
- * - last step is convert the mapped columns into a list of transactions
- * - this list will then be passed on the the generic importer for further processing */
+ * - last step is convert the mapped columns into a list of prices to add */
 class GncPriceImport
 {
 public:

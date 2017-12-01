@@ -400,7 +400,7 @@ void GncPriceImport::verify_column_selections (ErrorListPrice& error_msg)
     if (!check_for_column_type(GncPricePropType::AMOUNT))
         error_msg.add_error( _("Please select an amount column."));
 
-    /* Verify an Currency to column is selected.
+    /* Verify a Currency to column is selected.
      */
     if (!check_for_column_type(GncPricePropType::CURRENCY_TO))
         error_msg.add_error( _("Please select a Currency to column."));
