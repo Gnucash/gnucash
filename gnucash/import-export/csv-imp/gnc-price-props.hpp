@@ -49,11 +49,12 @@ enum class GncPricePropType {
     NONE,
     DATE,
     AMOUNT,
-    CURRENCY_FROM,
-    CURRENCY_TO,
-    SYMBOL_FROM,
-    PRICE_PROPS = SYMBOL_FROM
+    FROM_COMMODITY,
+    TO_CURRENCY,
+    PRICE_PROPS = TO_CURRENCY
 };
+
+enum Result { FAILED, ADDED, DUPLICATED, REPLACED };
 
 /** Maps all column types to a string representation.
  *  The actual definition is in gnc-price-props.cpp.
@@ -91,7 +92,14 @@ public:
     void set_currency_format (int currency_format) { m_currency_format = currency_format ;}
     void reset (GncPricePropType prop_type);
     std::string verify_essentials (void);
-    bool create_price (QofBook* book, GNCPriceDB *pdb, bool over);
+    Result create_price (QofBook* book, GNCPriceDB *pdb, bool over);
+
+    gnc_commodity* get_from_commodity () { if (m_from_commodity) return *m_from_commodity; else return nullptr; }
+    void set_from_commodity (gnc_commodity* comm) { if (comm) m_from_commodity = comm; else m_from_commodity = boost::none; }
+
+    gnc_commodity* get_to_currency () { if (m_to_currency) return *m_to_currency; else return nullptr; }
+    void set_to_currency (gnc_commodity* curr) { if (curr) m_to_currency = curr; else m_to_currency = boost::none; }
+
     std::string errors();
 
 private:
@@ -99,9 +107,8 @@ private:
     int m_currency_format;
     boost::optional<time64> m_date;
     boost::optional<GncNumeric> m_amount;
-    boost::optional<gnc_commodity*> m_currency_from;
-    boost::optional<gnc_commodity*> m_currency_to;
-    boost::optional<gnc_commodity*> m_symbol_from;
+    boost::optional<gnc_commodity*> m_from_commodity;
+    boost::optional<gnc_commodity*> m_to_currency;
     bool created = false;
 
     std::map<GncPricePropType, std::string> m_errors;

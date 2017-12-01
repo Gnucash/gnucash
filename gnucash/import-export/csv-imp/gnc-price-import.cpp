@@ -125,7 +125,6 @@ void GncPriceImport::file_format(GncImpFileFormat format)
         auto fwtok = dynamic_cast<GncFwTokenizer*>(m_tokenizer.get());
         fwtok->columns (m_settings.m_column_widths);
     }
-
 }
 
 GncImpFileFormat GncPriceImport::file_format()
@@ -139,6 +138,50 @@ void GncPriceImport::over_write (bool over)
 }
 
 bool GncPriceImport::over_write () { return m_over_write; }
+
+/** Sets a from commodity. This is the commodity all import data relates to.
+ *  When a from commodity is set, there can't be any from columns selected
+ *  in the import data.
+ * @param from_commodity Pointer to a commodity or NULL.
+ */
+void GncPriceImport::from_commodity (gnc_commodity* from_commodity)
+{
+    m_settings.m_from_commodity = from_commodity;
+
+    if (m_settings.m_from_commodity)
+    {
+        auto col_type = std::find (m_settings.m_column_types_price.begin(),
+                m_settings.m_column_types_price.end(), GncPricePropType::FROM_COMMODITY);
+
+        if (col_type != m_settings.m_column_types_price.end())
+            set_column_type_price (col_type -m_settings.m_column_types_price.begin(),
+                            GncPricePropType::NONE);
+    }
+}
+
+gnc_commodity *GncPriceImport::from_commodity () { return m_settings.m_from_commodity; }
+
+/** Sets a to currency. This is the to currency all import data relates to.
+ *  When a to currency is set, there can't be any to currency columns selected
+ *  in the import data.
+ * @param to_currency Pointer to a commodity or NULL.
+ */
+void GncPriceImport::to_currency (gnc_commodity* to_currency)
+{
+    m_settings.m_to_currency = to_currency;
+
+    if (m_settings.m_to_currency)
+    {
+        auto col_type = std::find (m_settings.m_column_types_price.begin(),
+                m_settings.m_column_types_price.end(), GncPricePropType::TO_CURRENCY);
+
+        if (col_type != m_settings.m_column_types_price.end())
+            set_column_type_price (col_type -m_settings.m_column_types_price.begin(),
+                            GncPricePropType::NONE);
+    }
+}
+
+gnc_commodity *GncPriceImport::to_currency () { return m_settings.m_to_currency; }
 
 void GncPriceImport::reset_formatted_column (std::vector<GncPricePropType>& col_types)
 {
@@ -241,6 +284,8 @@ void GncPriceImport::settings (const CsvTransSettings& settings)
     /* First apply file format as this may recreate the tokenizer */
     file_format (settings.m_file_format);
     /* Only then apply the other settings */
+    from_commodity (m_settings.m_from_commodity);
+    to_currency (m_settings.m_to_currency);
     m_settings = settings;
     encoding (m_settings.m_encoding);
 
@@ -402,14 +447,19 @@ void GncPriceImport::verify_column_selections (ErrorListPrice& error_msg)
 
     /* Verify a Currency to column is selected.
      */
-    if (!check_for_column_type(GncPricePropType::CURRENCY_TO))
-        error_msg.add_error( _("Please select a Currency to column."));
+    if (!check_for_column_type(GncPricePropType::TO_CURRENCY))
+    {
+        if (!m_settings.m_to_currency)
+            error_msg.add_error( _("Please select a Currency to column or set a Currency in the Currency To field."));
+    }
 
-    /* Verify at least one from column (symbol_from or currency_from) column is selected.
+    /* Verify a Commodity from column is selected.
      */
-    if (!check_for_column_type(GncPricePropType::SYMBOL_FROM) &&
-        !check_for_column_type(GncPricePropType::CURRENCY_FROM))
-        error_msg.add_error( _("Please select a symbol or currency from column."));
+    if (!check_for_column_type(GncPricePropType::FROM_COMMODITY))
+    {
+        if (!m_settings.m_from_commodity)
+            error_msg.add_error( _("Please select a Commodity from column or set a Commodity in the Commodity From field."));
+    }
 }
 
 
@@ -497,6 +547,40 @@ void GncPriceImport::create_price (std::vector<parse_line_t>::iterator& parsed_l
 
     error_message.clear();
 
+    // Add a CURRENCY_TO property with the default currency to if no currency to column was set by the user
+    auto line_to_currency = price_props->get_to_currency();
+    if (!line_to_currency)
+    {
+        if (m_settings.m_to_currency)
+            price_props->set_to_currency(m_settings.m_to_currency);
+        else
+        {
+            // Oops - the user didn't select an Account column *and* we didn't get a default value either!
+            // Note if you get here this suggests a bug in the code!
+            error_message = _("No Currency to column selected and no default Currency specified either.\n"
+                                       "This should never happen. Please report this as a bug.");
+            PINFO("User warning: %s", error_message.c_str());
+            throw std::invalid_argument(error_message);
+        }
+    }
+
+    // Add a COMMODITY_FROM property with the default commodity from if no commodity from column was set by the user
+    auto line_from_commodity = price_props->get_from_commodity();
+    if (!line_from_commodity)
+    {
+        if (m_settings.m_from_commodity)
+            price_props->set_from_commodity(m_settings.m_from_commodity);
+        else
+        {
+            // Oops - the user didn't select an Account column *and* we didn't get a default value either!
+            // Note if you get here this suggests a bug in the code!
+            error_message = _("No Commodity from column selected and no default Commodity specified either.\n"
+                                       "This should never happen. Please report this as a bug.");
+            PINFO("User warning: %s", error_message.c_str());
+            throw std::invalid_argument(error_message);
+        }
+    }
+
     /* If column parsing was successful, convert price properties into a price. */
     try
     {
@@ -507,11 +591,12 @@ void GncPriceImport::create_price (std::vector<parse_line_t>::iterator& parsed_l
 
         /* If all went well, add this price to the list. */
         auto price_created = price_props->create_price (book, pdb, m_over_write);
-//FIXME Need to look at this
-        if (price_created)
+        if (price_created == ADDED)
             m_prices_added++;
-        else
+        else if (price_created == DUPLICATED)
             m_prices_duplicated++;
+        else if (price_created == REPLACED)
+            m_prices_replaced++;
     }
     catch (const std::invalid_argument& e)
     {
@@ -537,6 +622,7 @@ void GncPriceImport::create_prices ()
 
     m_prices_added = 0;
     m_prices_duplicated = 0;
+    m_prices_replaced = 0;
 
     /* Iterate over all parsed lines */
     for (auto parsed_lines_it = m_parsed_lines.begin();
@@ -550,8 +636,8 @@ void GncPriceImport::create_prices ()
         /* Should not throw anymore, otherwise verify needs revision */
         create_price (parsed_lines_it);
     }
-    PINFO("Number of lines is %d, added is %d, duplicates is %d",
-         (int)m_parsed_lines.size(), m_prices_added, m_prices_duplicated);
+    PINFO("Number of lines is %d, added %d, duplicated %d, replaced %d",
+         (int)m_parsed_lines.size(), m_prices_added, m_prices_duplicated, m_prices_replaced);
 }
 
 bool
@@ -610,6 +696,14 @@ GncPriceImport::set_column_type_price (uint32_t position, GncPricePropType type,
             type, GncPricePropType::NONE);
 
     m_settings.m_column_types_price.at (position) = type;
+
+    // If the user has set a Commodity from column, we can't have a commodity from default set
+    if (type == GncPricePropType::FROM_COMMODITY)
+        from_commodity (nullptr);
+
+    // If the user has set a Currency to column, we can't have a currency to default set
+    if (type == GncPricePropType::TO_CURRENCY)
+        to_currency (nullptr);
 
     /* Update the preparsed data */
     for (auto parsed_lines_it = m_parsed_lines.begin();
