@@ -362,31 +362,9 @@ Result GncImportPrice::create_price (QofBook* book, GNCPriceDB *pdb, bool over)
 
     bool rev = false;
     auto amount = *m_amount;
+    Result ret_val = ADDED;
 
     GNCPrice *old_price = gnc_pricedb_lookup_day (pdb, *m_from_commodity, *m_to_currency, date);
-
-    if (gnc_commodity_is_currency (*m_from_commodity)) // Currency Import
-    {
-        // Check for currency in reverse direction.
-        if (old_price != nullptr)
-        {
-            // Check for price in reverse direction.
-            if (gnc_commodity_equiv (gnc_price_get_currency (old_price), *m_from_commodity))
-                rev = true;
-
-            DEBUG("Commodity from is a Currency");
-        }
-
-        // Check for price less than 1, reverse if so.
-        if (*m_amount < GncNumeric(1,1))
-            rev = true;
-
-    }
-    DEBUG("Date is %s, Rev is %d, Commodity from is '%s', Currency is '%s', Amount is %s", gnc_print_date (date),
-        rev, gnc_commodity_get_fullname (*m_from_commodity), gnc_commodity_get_fullname (*m_to_currency),
-        amount.to_string().c_str());
-
-    Result ret_val = ADDED;
 
     // Should old price be over writen
     if ((old_price != nullptr) && (over == true))
@@ -397,6 +375,26 @@ Result GncImportPrice::create_price (QofBook* book, GNCPriceDB *pdb, bool over)
         old_price = nullptr;
         ret_val = REPLACED;
     }
+
+    if (gnc_commodity_is_currency (*m_from_commodity)) // Currency Import
+    {
+        // Check for currency in reverse direction.
+        if (old_price != nullptr)
+        {
+            // Check for price in reverse direction.
+            if (gnc_commodity_equiv (gnc_price_get_currency (old_price), *m_from_commodity))
+                rev = true;
+        }
+        DEBUG("Commodity from is a Currency");
+
+        // Check for price less than 1, reverse if so.
+        if (*m_amount < GncNumeric(1,1))
+            rev = true;
+
+    }
+    DEBUG("Date is %s, Rev is %d, Commodity from is '%s', Currency is '%s', Amount is %s", gnc_print_date (date),
+        rev, gnc_commodity_get_fullname (*m_from_commodity), gnc_commodity_get_fullname (*m_to_currency),
+        amount.to_string().c_str());
 
     // Create the new price
     if (old_price == nullptr)
