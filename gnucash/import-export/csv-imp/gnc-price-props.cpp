@@ -32,8 +32,6 @@ extern "C" {
 
 #include "engine-helpers.h"
 #include "gnc-ui-util.h"
-#include "gnc-pricedb.h"
-
 }
 
 #include <string>
@@ -48,9 +46,8 @@ std::map<GncPricePropType, const char*> gnc_price_col_type_strs = {
         { GncPricePropType::NONE, N_("None") },
         { GncPricePropType::DATE, N_("Date") },
         { GncPricePropType::AMOUNT, N_("Amount") },
-        { GncPricePropType::CURRENCY_FROM, N_("Currency From") },
-        { GncPricePropType::CURRENCY_TO, N_("Currency To") },
-        { GncPricePropType::SYMBOL_FROM, N_("Symbol From") },
+        { GncPricePropType::FROM_COMMODITY, N_("Commodity From") },
+        { GncPricePropType::TO_CURRENCY, N_("Currency To") },
 };
 
 /* Regular expressions used to parse dates per date format */
@@ -243,6 +240,7 @@ gnc_commodity* parse_commodity_price_comm (const std::string& comm_str)
         return comm;
 }
 
+//FIXME can we change above to do below
 gnc_commodity * parse_commodity_price_sym (const std::string& sym_str, bool is_currency)
 {
     if (sym_str.empty())
@@ -285,8 +283,8 @@ gnc_commodity * parse_commodity_price_sym (const std::string& sym_str, bool is_c
         throw std::invalid_argument (_("Value can't be parsed into a valid commodity."));
     else
     {
-        if (gnc_commodity_is_currency (retval) != is_currency)
-            throw std::invalid_argument (_("Value parsed into an invalid commodity for column type."));
+        if ((is_currency == true) && (gnc_commodity_is_currency (retval) != true))
+                throw std::invalid_argument (_("Value parsed into an invalid currency for currency column type."));
         else
             return retval;
     }
@@ -312,25 +310,18 @@ void GncImportPrice::set (GncPricePropType prop_type, const std::string& value)
                 m_amount = parse_amount_price (value, m_currency_format); // Will throw if parsing fails
                 break;
 
-            case GncPricePropType::CURRENCY_FROM:
-                m_currency_from = boost::none;
-                comm = parse_commodity_price_sym (value, true); // Throws if parsing fails
-                if (comm)
-                    m_currency_from = comm;
-                break;
-
-            case GncPricePropType::CURRENCY_TO:
-                m_currency_to = boost::none;
-                comm = parse_commodity_price_sym (value, true); // Throws if parsing fails
-                if (comm)
-                    m_currency_to = comm;
-                break;
-
-            case GncPricePropType::SYMBOL_FROM:
-                m_symbol_from = boost::none;
+            case GncPricePropType::FROM_COMMODITY:
+                m_from_commodity = boost::none;
                 comm = parse_commodity_price_sym (value, false); // Throws if parsing fails
                 if (comm)
-                    m_symbol_from = comm;
+                    m_from_commodity = comm;
+                break;
+
+            case GncPricePropType::TO_CURRENCY:
+                m_to_currency = boost::none;
+                comm = parse_commodity_price_sym (value, true); // Throws if parsing fails
+                if (comm)
+                    m_to_currency = comm;
                 break;
 
             default:
@@ -378,15 +369,15 @@ std::string GncImportPrice::verify_essentials (void)
         return _("No date column.");
     else if (m_amount == boost::none)
         return _("No amount column.");
-    else if (m_currency_to == boost::none)
+    else if (m_to_currency == boost::none)
         return _("No Currency to column.");
-    else if ((m_symbol_from == boost::none) && (m_currency_from == boost::none))
-        return _("No from column.");
+    else if (m_from_commodity == boost::none)
+        return _("No Commodity from column.");
     else
         return std::string();
 }
 
-bool GncImportPrice::create_price (QofBook* book, GNCPriceDB *pdb, bool over)
+Result GncImportPrice::create_price (QofBook* book, GNCPriceDB *pdb, bool over)
 {
     /* Gently refuse to create the price if the basics are not set correctly
      * This should have been tested before calling this function though!
@@ -395,47 +386,40 @@ bool GncImportPrice::create_price (QofBook* book, GNCPriceDB *pdb, bool over)
     if (!check.empty())
     {
         PWARN ("Refusing to create price because essentials not set properly: %s", check.c_str());
-        return false;
+        return FAILED;
     }
 
     Timespec date;
     timespecFromTime64 (&date, *m_date);
     date.tv_nsec = 0;
 
-#ifdef skip
-//FIXME Numeric needs changing, copied from old version...
     bool rev = false;
-    gnc_commodity *comm_from = nullptr;
+    auto amount = *m_amount;
 
-    if (m_currency_from != boost::none) // Currency Import
+    GNCPrice *old_price = gnc_pricedb_lookup_day (pdb, *m_from_commodity, *m_to_currency, date);
+
+    if (gnc_commodity_is_currency (*m_from_commodity)) // Currency Import
     {
         // Check for currency in reverse direction.
-        GNCPrice *rev_price = gnc_pricedb_lookup_day (pdb, *m_currency_to, *m_currency_from, date);
-        if (rev_price != nullptr)
-            rev = true;
-        gnc_price_unref (rev_price);
+        if (old_price != nullptr)
+        {
+            // Check for price in reverse direction.
+            if (gnc_commodity_equiv (gnc_price_get_currency (old_price), *m_from_commodity))
+                rev = true;
+
+            DEBUG("Commodity from is a Currency");
+        }
 
         // Check for price less than 1, reverse if so.
-        if (gnc_numeric_compare (*m_amount, gnc_numeric_create (1, 1)) != 1)
+        if (*m_amount < GncNumeric(1,1))
             rev = true;
 
-        comm_from = *m_currency_from;
-        DEBUG("Commodity from is a Currency");
     }
-    else
-        comm_from = *m_symbol_from;
-
     DEBUG("Date is %s, Rev is %d, Commodity from is '%s', Currency is '%s', Amount is %s", gnc_print_date (date),
-          rev, gnc_commodity_get_fullname (comm_from), gnc_commodity_get_fullname (*m_currency_to),
-          gnc_num_dbg_to_string (*m_amount)           );
+        rev, gnc_commodity_get_fullname (*m_from_commodity), gnc_commodity_get_fullname (*m_to_currency),
+        amount.to_string().c_str());
 
-    GNCPrice *old_price = nullptr;
-
-    // Should the commodities be reversed
-    if (rev)
-        old_price = gnc_pricedb_lookup_day (pdb, *m_currency_to, comm_from, date);
-    else
-        old_price = gnc_pricedb_lookup_day (pdb, comm_from, *m_currency_to, date);
+    Result ret_val = ADDED;
 
     // Should old price be over writen
     if ((old_price != nullptr) && (over == true))
@@ -444,31 +428,29 @@ bool GncImportPrice::create_price (QofBook* book, GNCPriceDB *pdb, bool over)
         gnc_pricedb_remove_price (pdb, old_price);
         gnc_price_unref (old_price);
         old_price = nullptr;
+        ret_val = REPLACED;
     }
-#endif
-    bool ret_val = true;
-#ifdef skip
+
     // Create the new price
     if (old_price == nullptr)
     {
         DEBUG("Create");
         GNCPrice *price = gnc_price_create (book);
         gnc_price_begin_edit (price);
-
         if (rev)
         {
-            gnc_price_set_commodity (price, *m_currency_to);
-            gnc_price_set_currency (price, comm_from);
-            *m_amount = gnc_numeric_convert (gnc_numeric_invert (*m_amount),
-                                          CURRENCY_DENOM, GNC_HOW_RND_ROUND_HALF_UP);
-            gnc_price_set_value (price, *m_amount);
+            amount = amount.inv(); //invert the amount
+            gnc_price_set_commodity (price, *m_to_currency);
+            gnc_price_set_currency (price, *m_from_commodity);
         }
         else
         {
-            gnc_price_set_commodity (price, comm_from);
-            gnc_price_set_currency (price, *m_currency_to);
-            gnc_price_set_value (price, *m_amount);
+            gnc_price_set_commodity (price, *m_from_commodity);
+            gnc_price_set_currency (price, *m_to_currency);
         }
+        auto amount_conv = amount.convert<RoundType::half_up>(CURRENCY_DENOM);
+        gnc_price_set_value (price, static_cast<gnc_numeric>(amount_conv));
+
         gnc_price_set_time (price, date);
         gnc_price_set_source (price, PRICE_SOURCE_USER_PRICE);
 //FIXME Not sure which one        gnc_price_set_source (price, PRICE_SOURCE_FQ);
@@ -479,15 +461,15 @@ bool GncImportPrice::create_price (QofBook* book, GNCPriceDB *pdb, bool over)
 
         gnc_price_unref (price);
 
-         if (perr == false)
+        if (perr == false)
             throw std::invalid_argument (_("Failed to create price from selected columns."));
 //FIXME Not sure about this, should this be a PWARN
     }
     else
-
-#endif
-        ret_val = false;
-
+    {
+        gnc_price_unref (old_price);
+        ret_val = DUPLICATED;
+    }
     return ret_val;
 }
 

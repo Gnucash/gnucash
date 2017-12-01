@@ -90,6 +90,8 @@ public:
     void preview_update_encoding (const char* encoding);
     void preview_update_date_format ();
     void preview_update_currency_format ();
+    void preview_update_currency ();
+    void preview_update_commodity ();
     void preview_update_col_type (GtkComboBox* cbox);
     void preview_update_fw_columns (GtkTreeView* treeview, GdkEventButton* event);
 
@@ -134,6 +136,8 @@ private:
     GtkWidget       *csv_button;                    /**< The widget for the CSV button */
     GtkWidget       *fixed_button;                  /**< The widget for the Fixed Width button */
     GtkWidget       *over_write_cbutton;            /**< The widget for Price Over Write */
+    GtkWidget       *commodity_selector;            /**< The widget for commodity combo box */
+    GtkWidget       *currency_selector;             /**< The widget for currency combo box */
     GOCharmapSel    *encselector;                   /**< The widget for selecting the encoding */
     GtkWidget       *separator_table;               /**< Container for the separator checkboxes */
     GtkCheckButton  *sep_button[SEP_NUM_OF_TYPES];  /**< Checkbuttons for common separators */
@@ -321,6 +325,16 @@ static void csv_price_imp_preview_currency_fmt_sel_cb (GtkComboBox* format_selec
     info->preview_update_currency_format();
 }
 
+static void csv_price_imp_preview_currency_sel_cb (GtkComboBox* currency_selector, CsvImpPriceAssist* info)
+{
+    info->preview_update_currency();
+}
+
+static void csv_price_imp_preview_commodity_sel_cb (GtkComboBox* commodity_selector, CsvImpPriceAssist* info)
+{
+    info->preview_update_commodity();
+}
+
 void csv_price_imp_preview_col_type_changed_cb (GtkComboBox* cbox, CsvImpPriceAssist* info)
 {
     info->preview_update_col_type (cbox);
@@ -334,6 +348,126 @@ csv_price_imp_preview_treeview_clicked_cb (GtkTreeView* treeview, GdkEventButton
     return false;
 }
 
+static
+gnc_commodity *get_commodity_from_combo (GtkComboBox *combo)
+{
+    GtkTreeModel *model, *sort_model;
+    GtkTreeIter  iter, siter;
+    gchar *string;
+   gnc_commodity *comm;
+
+    if (!gtk_combo_box_get_active_iter (combo, &siter))
+        return nullptr;
+
+    sort_model = gtk_combo_box_get_model (combo);
+    model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT(sort_model));
+
+    gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT(sort_model),
+                                                    &iter, &siter);
+
+    gtk_tree_model_get (GTK_TREE_MODEL (model), &iter, 0, &string, 2, &comm, -1);
+
+    PINFO("Commodity string is %s", string);
+
+    g_free (string);
+    return comm;
+}
+
+static void
+set_commodity_for_combo (GtkComboBox *combo, gnc_commodity *comm)
+{
+    GtkTreeModel *model, *sort_model;
+    GtkTreeIter  iter, siter;
+    gnc_commodity *model_comm;
+    gboolean valid;
+
+    sort_model = gtk_combo_box_get_model (combo);
+    model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT(sort_model));
+    valid = gtk_tree_model_get_iter_first (model, &iter);
+
+    while (valid)
+    {
+        gtk_tree_model_get (model, &iter, 2, &model_comm, -1);
+        if (model_comm == comm)
+        {
+            if (gtk_tree_model_sort_convert_child_iter_to_iter (GTK_TREE_MODEL_SORT(sort_model), &siter, &iter))
+            {
+                gtk_combo_box_set_active_iter (combo, &siter);
+                return;
+            }
+        }
+        /* Make iter point to the next row in the list store */
+        valid = gtk_tree_model_iter_next (model, &iter);
+    }
+    // Not found, set it to first iter
+    valid = gtk_tree_model_get_iter_first (model, &iter);
+    if (gtk_tree_model_sort_convert_child_iter_to_iter (GTK_TREE_MODEL_SORT(sort_model), &siter, &iter))
+        gtk_combo_box_set_active_iter (combo, &siter);
+}
+
+static
+GtkTreeModel *get_model (bool all_commodity)
+{
+    GtkTreeModel *store, *model;
+    const gnc_commodity_table *commodity_table = gnc_get_current_commodities ();
+    gnc_commodity *tmp_commodity = nullptr;
+    char  *tmp_namespace = nullptr;
+    GList *commodity_list = nullptr;
+    GList *namespace_list = gnc_commodity_table_get_namespaces (commodity_table);
+    GtkTreeIter iter;
+
+    store = GTK_TREE_MODEL(gtk_list_store_new (3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_POINTER));
+    model = gtk_tree_model_sort_new_with_model (store);
+    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model),
+                                        0, GTK_SORT_ASCENDING);
+
+    gtk_list_store_append (GTK_LIST_STORE(store), &iter);
+    gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0, " ", 1, nullptr, -1);
+
+    namespace_list = g_list_first (namespace_list);
+    while (namespace_list != nullptr)
+    {
+        tmp_namespace = (char*)namespace_list->data;
+        DEBUG("Looking at namespace %s", tmp_namespace);
+
+        /* Hide the template entry */
+        if (g_utf8_collate (tmp_namespace, "template" ) != 0)
+        {
+            if ((g_utf8_collate (tmp_namespace, GNC_COMMODITY_NS_CURRENCY ) == 0) || (all_commodity == true)) 
+            {
+                commodity_list = gnc_commodity_table_get_commodities (commodity_table, tmp_namespace);
+                commodity_list  = g_list_first (commodity_list);
+                while (commodity_list != nullptr)
+                {
+                    gchar *name_str;
+                    gchar *save_str;
+                    gchar *settings_str;
+                    tmp_commodity = (gnc_commodity*)commodity_list->data;
+                    DEBUG("Looking at commodity %s", gnc_commodity_get_fullname (tmp_commodity));
+
+                    name_str = g_strconcat (tmp_namespace, " : (", gnc_commodity_get_mnemonic (tmp_commodity),
+                                            ") ", gnc_commodity_get_fullname (tmp_commodity), nullptr);
+
+                    settings_str = g_strconcat (tmp_namespace, "::", gnc_commodity_get_mnemonic (tmp_commodity), nullptr);
+                    DEBUG("Name string is %s, Save string is %s", name_str, settings_str);
+
+                    gtk_list_store_append (GTK_LIST_STORE(store), &iter);
+                    gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0, name_str, 1, settings_str, 2, tmp_commodity, -1);
+
+                    g_free (name_str);
+                    g_free (settings_str);
+                    commodity_list = g_list_next (commodity_list);
+                }
+            }
+        }
+        namespace_list = g_list_next (namespace_list);
+    }
+    g_list_free (commodity_list);
+    g_list_free (namespace_list);
+
+    return model;
+}
+
 
 /*******************************************************
  * Assistant Constructor
@@ -343,6 +477,8 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
     auto builder = gtk_builder_new();
     gnc_builder_add_from_file  (builder , "assistant-csv-price-import.glade", "start_row_adj");
     gnc_builder_add_from_file  (builder , "assistant-csv-price-import.glade", "end_row_adj");
+    gnc_builder_add_from_file  (builder , "assistant-csv-price-import.glade", "liststore1");
+    gnc_builder_add_from_file  (builder , "assistant-csv-price-import.glade", "liststore2");
     gnc_builder_add_from_file  (builder , "assistant-csv-price-import.glade", "CSV Price Assistant");
     csv_imp_asst = GTK_ASSISTANT(gtk_builder_get_object (builder, "CSV Price Assistant"));
 
@@ -452,6 +588,18 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
         auto encoding_container = GTK_CONTAINER(gtk_builder_get_object (builder, "encoding_container"));
         gtk_container_add (encoding_container, GTK_WIDGET(encselector));
         gtk_widget_show_all (GTK_WIDGET(encoding_container));
+
+        /* Add commodity selection widget */
+        commodity_selector = GTK_WIDGET(gtk_builder_get_object (builder, "commodity_cbox"));
+        gtk_combo_box_set_model (GTK_COMBO_BOX(commodity_selector), get_model (true));
+        g_signal_connect(G_OBJECT(commodity_selector), "changed",
+                         G_CALLBACK(csv_price_imp_preview_commodity_sel_cb), this);
+
+        /* Add currency selection widget */
+        currency_selector = GTK_WIDGET(gtk_builder_get_object (builder, "currency_cbox"));
+        gtk_combo_box_set_model (GTK_COMBO_BOX(currency_selector), get_model (false));
+        g_signal_connect(G_OBJECT(currency_selector), "changed",
+                         G_CALLBACK(csv_price_imp_preview_currency_sel_cb), this);
 
         /* The instructions label and image */
         instructions_label = GTK_LABEL(gtk_builder_get_object (builder, "instructions_label"));
@@ -569,6 +717,9 @@ CsvImpPriceAssist::file_confirm_cb ()
     /* Get settings store and populate */
     preview_populate_settings_combo();
     gtk_combo_box_set_active (settings_combo, 0);
+
+    // set over_write to false as default
+    price_imp->over_write (false);
 
     auto num = gtk_assistant_get_current_page (csv_imp_asst);
     gtk_assistant_set_current_page (csv_imp_asst, num + 1);
@@ -948,6 +1099,22 @@ void
 CsvImpPriceAssist::preview_update_currency_format ()
 {
     price_imp->currency_format (gtk_combo_box_get_active (GTK_COMBO_BOX(currency_format_combo)));
+    preview_refresh_table ();
+}
+
+void
+CsvImpPriceAssist::preview_update_currency ()
+{
+    gnc_commodity *comm = get_commodity_from_combo (GTK_COMBO_BOX(currency_selector));
+    price_imp->to_currency (comm);
+    preview_refresh_table ();
+}
+
+void
+CsvImpPriceAssist::preview_update_commodity ()
+{
+    gnc_commodity *comm = get_commodity_from_combo (GTK_COMBO_BOX(commodity_selector));
+    price_imp->from_commodity (comm);
     preview_refresh_table ();
 }
 
@@ -1413,6 +1580,28 @@ void CsvImpPriceAssist::preview_refresh_table ()
     for (uint32_t i = 0; i < ntcols; i++)
         preview_style_column (i, combostore);
 
+    auto column_types = price_imp->column_types_price();
+
+    // look for a commodity column, clear the commdoity combo
+    auto col_type_comm = std::find (column_types.begin(),
+                column_types.end(), GncPricePropType::FROM_COMMODITY);
+    if (col_type_comm != column_types.end())
+    {
+        g_signal_handlers_block_by_func (commodity_selector, (gpointer) csv_price_imp_preview_commodity_sel_cb, this);
+        set_commodity_for_combo (GTK_COMBO_BOX(commodity_selector), nullptr);
+        g_signal_handlers_unblock_by_func (commodity_selector, (gpointer) csv_price_imp_preview_commodity_sel_cb, this);
+    }
+
+    // look for a currency column, clear the currency combo
+    auto col_type_curr = std::find (column_types.begin(),
+                column_types.end(), GncPricePropType::TO_CURRENCY);
+    if (col_type_curr != column_types.end())
+    {
+        g_signal_handlers_block_by_func (currency_selector, (gpointer) csv_price_imp_preview_currency_sel_cb, this);
+        set_commodity_for_combo (GTK_COMBO_BOX(currency_selector), nullptr);
+        g_signal_handlers_unblock_by_func (currency_selector, (gpointer) csv_price_imp_preview_currency_sel_cb, this);
+    }
+
     /* Release our reference for the stores to allow proper memory management. */
     g_object_unref (store);
     g_object_unref (combostore);
@@ -1459,6 +1648,13 @@ CsvImpPriceAssist::preview_refresh ()
     gtk_combo_box_set_active (GTK_COMBO_BOX(currency_format_combo),
             price_imp->currency_format());
     go_charmap_sel_set_encoding (encselector, price_imp->encoding().c_str());
+
+    // Set the commodity and currency combos
+    set_commodity_for_combo(GTK_COMBO_BOX(commodity_selector),
+            price_imp->from_commodity());
+
+    set_commodity_for_combo(GTK_COMBO_BOX(currency_selector),
+            price_imp->to_currency());
 
     // Handle separator checkboxes and custom field, only relevant if the file format is csv
     if (price_imp->file_format() == GncImpFileFormat::CSV)
@@ -1533,9 +1729,9 @@ CsvImpPriceAssist::assist_summary_page_prepare ()
     auto text = std::string("<span size=\"medium\"><b>");
     text += _("The prices were imported from the file '") + m_file_name + "'.";
     text += _("\n\nThe number of Prices added was ") + std::to_string(price_imp->m_prices_added);
-    text += _(" and ") + std::to_string(price_imp->m_prices_duplicated);
-    text += _(" were duplicated.");
-    text += "</b></span>";
+    text += _(", duplicated was ") + std::to_string(price_imp->m_prices_duplicated);
+    text += _(" and replaced was ") + std::to_string(price_imp->m_prices_replaced);
+    text += ".</b></span>";
 
     gtk_label_set_markup (GTK_LABEL(summary_label), text.c_str());
 }

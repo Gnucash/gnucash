@@ -32,7 +32,7 @@
 
 extern "C" {
 #include "config.h"
-
+#include "gnc-commodity.h"
 }
 
 #include <vector>
@@ -85,6 +85,12 @@ public:
     void over_write (bool over);
     bool over_write ();
 
+    void from_commodity (gnc_commodity *from_commodity);
+    gnc_commodity *from_commodity ();
+
+    void to_currency (gnc_commodity *to_currency);
+    gnc_commodity *to_currency ();
+
     void currency_format (int currency_format);
     int currency_format ();
 
@@ -131,6 +137,7 @@ public:
                                                      price properties. */
     int  m_prices_added;
     int  m_prices_duplicated;
+    int  m_prices_replaced;
 
 private:
     /** A helper function used by create_prices. It will attempt
