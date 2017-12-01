@@ -240,56 +240,6 @@ gnc_commodity* parse_commodity_price_comm (const std::string& comm_str)
         return comm;
 }
 
-//FIXME can we change above to do below
-gnc_commodity * parse_commodity_price_sym (const std::string& sym_str, bool is_currency)
-{
-    if (sym_str.empty())
-        return nullptr;
-
-    auto commodity_table = gnc_get_current_commodities ();
-    GList         *namespaces;
-    gnc_commodity *retval = nullptr;
-    gnc_commodity *tmp_commodity = nullptr;
-    char  *tmp_namespace = nullptr;
-    GList *commodity_list = NULL;
-    GList *namespace_list = gnc_commodity_table_get_namespaces (commodity_table);
-
-    namespace_list = g_list_first (namespace_list);
-    while (namespace_list != NULL && retval == NULL)
-    {
-        tmp_namespace = (char*)namespace_list->data;
-        DEBUG("Looking at namespace %s", tmp_namespace);
-        commodity_list = gnc_commodity_table_get_commodities (commodity_table, tmp_namespace);
-        commodity_list  = g_list_first (commodity_list);
-        while (commodity_list != NULL && retval == NULL)
-        {
-            const char* tmp_mnemonic = NULL;
-            tmp_commodity = (gnc_commodity*)commodity_list->data;
-            DEBUG("Looking at commodity %s", gnc_commodity_get_fullname (tmp_commodity));
-            tmp_mnemonic = gnc_commodity_get_mnemonic (tmp_commodity);
-            if (g_strcmp0 (tmp_mnemonic, sym_str.c_str()) == 0)
-            {
-                retval = tmp_commodity;
-                DEBUG("Commodity %s%s", gnc_commodity_get_fullname (retval), " matches.");
-            }
-            commodity_list = g_list_next (commodity_list);
-        }
-        namespace_list = g_list_next (namespace_list);
-    }
-    g_list_free (commodity_list);
-    g_list_free (namespace_list);
-
-    if (!retval)
-        throw std::invalid_argument (_("Value can't be parsed into a valid commodity."));
-    else
-    {
-        if ((is_currency == true) && (gnc_commodity_is_currency (retval) != true))
-                throw std::invalid_argument (_("Value parsed into an invalid currency for currency column type."));
-        else
-            return retval;
-    }
-}
-
 void GncImportPrice::set (GncPricePropType prop_type, const std::string& value)
 {
     try
@@ -307,21 +257,25 @@ void GncImportPrice::set (GncPricePropType prop_type, const std::string& value)
 
             case GncPricePropType::AMOUNT:
                 m_amount = boost::none;
-                m_amount = parse_amount_price (value, m_currency_format); // Will throw if parsing fails
+                m_amount = parse_amount_price (value, m_currency_format); // Throws if parsing fails
                 break;
 
             case GncPricePropType::FROM_COMMODITY:
                 m_from_commodity = boost::none;
-                comm = parse_commodity_price_sym (value, false); // Throws if parsing fails
+                comm = parse_commodity_price_comm (value); // Throws if parsing fails
                 if (comm)
                     m_from_commodity = comm;
                 break;
 
             case GncPricePropType::TO_CURRENCY:
                 m_to_currency = boost::none;
-                comm = parse_commodity_price_sym (value, true); // Throws if parsing fails
+                comm = parse_commodity_price_comm (value); // Throws if parsing fails
                 if (comm)
+                {
+                    if (gnc_commodity_is_currency (comm) != true)
+                        throw std::invalid_argument (_("Value parsed into an invalid currency for a currency column type."));
                     m_to_currency = comm;
+                }
                 break;
 
             default:

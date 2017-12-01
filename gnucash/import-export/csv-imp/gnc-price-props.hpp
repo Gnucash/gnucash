@@ -78,7 +78,6 @@ private:
 
 time64 parse_date_price (const std::string &date_str, int format);
 gnc_commodity* parse_commodity_price_comm (const std::string& comm_str);
-gnc_commodity* parse_commodity_price_sym (const std::string& comm_str, bool is_currency);
 GncNumeric parse_amount_price (const std::string &str, int currency_format);
 
 struct GncImportPrice
