@@ -108,6 +108,14 @@ static std::shared_ptr<CsvTransSettings> create_int_gnc_exp_preset(void)
             GncTransPropType::PRICE
     };
 
+    preset->m_column_types_price = {
+            GncPricePropType::DATE,
+            GncPricePropType::AMOUNT,
+            GncPricePropType::CURRENCY_FROM,
+            GncPricePropType::CURRENCY_TO,
+            GncPricePropType::SYMBOL_FROM
+    };
+
     return preset;
 }
 

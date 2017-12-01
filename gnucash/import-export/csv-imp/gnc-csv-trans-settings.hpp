@@ -36,6 +36,7 @@ extern "C" {
 #include <string>
 #include <vector>
 #include "gnc-trans-props.hpp"
+#include "gnc-price-props.hpp"
 #include "gnc-tokenizer.hpp"
 
 /** Enumeration for separator checkbutton types. These are the
@@ -93,7 +94,8 @@ std::string   m_separators;                   // Separators for csv format
 
 Account      *m_base_account;                 // Base account
 std::vector<GncTransPropType> m_column_types; // The Column types in order
-std::vector<uint32_t> m_column_widths;            // The Column widths
+std::vector<GncPricePropType> m_column_types_price; // The Column Price types in order
+std::vector<uint32_t> m_column_widths;        // The Column widths
 
 bool          m_load_error;                   // Was there an error while parsing the state file ?
 };

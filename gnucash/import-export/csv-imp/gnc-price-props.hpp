@@ -31,7 +31,7 @@ extern "C" {
 #endif
 
 #include <glib/gi18n.h>
-
+#include "gnc-pricedb.h"
 #include "gnc-commodity.h"
 }
 
