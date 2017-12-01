@@ -56,10 +56,10 @@ enum class GncPricePropType {
 };
 
 /** Maps all column types to a string representation.
- *  The actual definition is in gnc-csv-imp-prices.cpp.
+ *  The actual definition is in gnc-price-props.cpp.
  *  Attention: that definition should be adjusted for any
  *  changes to enum class GncPricePropType ! */
-extern std::map<GncPricePropType, const char*> gnc_csv_price_col_type_strs;
+extern std::map<GncPricePropType, const char*> gnc_price_col_type_strs;
 
 /** Functor to check if the above map has an element of which
  *  the value equals name. To be used with std::find_if.
