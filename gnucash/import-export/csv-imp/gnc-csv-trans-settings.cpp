@@ -294,7 +294,7 @@ CsvTransSettings::load (void)
         if (col_types_str)
             g_strfreev (col_types_str);
     }
- 
+
     // Price
     if (m_settings_type.compare("PRICE") == 0)
     {
@@ -424,10 +424,20 @@ CsvTransSettings::save (void)
     if (m_settings_type.compare("PRICE") == 0)
     {
         if (m_to_currency)
-            g_key_file_set_string (keyfile, group.c_str(), CSV_TO_CURR, gnc_commodity_get_mnemonic(m_to_currency));
+        {
+            auto unique_name = g_strconcat (gnc_commodity_get_namespace (m_to_currency), "::",
+                               gnc_commodity_get_mnemonic (m_to_currency), nullptr);
+            g_key_file_set_string (keyfile, group.c_str(), CSV_TO_CURR, unique_name);
+            g_free (unique_name);
+        }
 
         if (m_from_commodity)
-            g_key_file_set_string (keyfile, group.c_str(), CSV_FROM_COMM, gnc_commodity_get_mnemonic(m_from_commodity));
+        {
+            auto unique_name = g_strconcat (gnc_commodity_get_namespace (m_from_commodity), "::",
+                               gnc_commodity_get_mnemonic (m_from_commodity), nullptr);
+            g_key_file_set_string (keyfile, group.c_str(), CSV_FROM_COMM, unique_name);
+            g_free (unique_name);
+        }
 
         std::vector<const char*> col_types_str_price;
         for (auto col_type : m_column_types_price)

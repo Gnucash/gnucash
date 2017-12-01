@@ -419,11 +419,11 @@ GtkTreeModel *get_model (bool all_commodity)
 
     store = GTK_TREE_MODEL(gtk_list_store_new (3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_POINTER));
     model = gtk_tree_model_sort_new_with_model (store);
-    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model),
-                                        0, GTK_SORT_ASCENDING);
+    // set sort to sort on second string, first string will be shown
+    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model), 1, GTK_SORT_ASCENDING);
 
     gtk_list_store_append (GTK_LIST_STORE(store), &iter);
-    gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0, " ", 1, nullptr, -1);
+    gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0, " ", 1, " ", 2, nullptr, -1);
 
     namespace_list = g_list_first (namespace_list);
     while (namespace_list != nullptr)
@@ -440,23 +440,20 @@ GtkTreeModel *get_model (bool all_commodity)
                 commodity_list  = g_list_first (commodity_list);
                 while (commodity_list != nullptr)
                 {
-                    gchar *name_str;
-                    gchar *save_str;
-                    gchar *settings_str;
+                    const gchar *name_str;
+                    gchar *sort_str;
                     tmp_commodity = (gnc_commodity*)commodity_list->data;
                     DEBUG("Looking at commodity %s", gnc_commodity_get_fullname (tmp_commodity));
 
-                    name_str = g_strconcat (tmp_namespace, " : (", gnc_commodity_get_mnemonic (tmp_commodity),
-                                            ") ", gnc_commodity_get_fullname (tmp_commodity), nullptr);
+                    name_str = gnc_commodity_get_printname (tmp_commodity);
 
-                    settings_str = g_strconcat (tmp_namespace, "::", gnc_commodity_get_mnemonic (tmp_commodity), nullptr);
-                    DEBUG("Name string is %s, Save string is %s", name_str, settings_str);
+                    sort_str = g_strconcat (tmp_namespace, "::", gnc_commodity_get_mnemonic (tmp_commodity), nullptr);
+                    DEBUG("Name string is %s, Sort string is %s", name_str, sort_str);
 
                     gtk_list_store_append (GTK_LIST_STORE(store), &iter);
-                    gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0, name_str, 1, settings_str, 2, tmp_commodity, -1);
+                    gtk_list_store_set (GTK_LIST_STORE(store), &iter, 0, name_str, 1, sort_str, 2, tmp_commodity, -1);
 
-                    g_free (name_str);
-                    g_free (settings_str);
+                    g_free (sort_str);
                     commodity_list = g_list_next (commodity_list);
                 }
             }
