@@ -8,6 +8,7 @@ pkglib_LTLIBRARIES = libgncmod-engine.la
 AM_CPPFLAGS = \
 	-I${top_srcdir}/borrowed/libc \
 	-I${top_srcdir}/libgnucash/core-utils \
+	-I${top_builddir}/libgnucash/core-utils \
 	-I${top_srcdir}/common \
 	-I${top_builddir}/common \
 	-I${top_srcdir}/libgnucash/gnc-module \
