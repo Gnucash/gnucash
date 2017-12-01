@@ -607,9 +607,9 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
 
         /* Add in the date format combo box and hook it up to an event handler. */
         date_format_combo = GTK_COMBO_BOX_TEXT(gtk_combo_box_text_new());
-        for (int i = 0; i < num_date_formats; i++)
+        for (int i = 0; i < num_date_formats_price; i++)
         {
-            gtk_combo_box_text_append_text (date_format_combo, _(date_format_user[i]));
+            gtk_combo_box_text_append_text (date_format_combo, _(date_format_user_price[i]));
         }
         gtk_combo_box_set_active (GTK_COMBO_BOX(date_format_combo), 0);
         g_signal_connect (G_OBJECT(date_format_combo), "changed",
@@ -622,9 +622,9 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
 
         /* Add in the currency format combo box and hook it up to an event handler. */
         currency_format_combo = GTK_COMBO_BOX_TEXT(gtk_combo_box_text_new());
-        for (int i = 0; i < num_currency_formats; i++)
+        for (int i = 0; i < num_currency_formats_price; i++)
         {
-            gtk_combo_box_text_append_text (currency_format_combo, _(currency_format_user[i]));
+            gtk_combo_box_text_append_text (currency_format_combo, _(currency_format_user_price[i]));
         }
         /* Default will the locale */
         gtk_combo_box_set_active (GTK_COMBO_BOX(currency_format_combo), 0);
