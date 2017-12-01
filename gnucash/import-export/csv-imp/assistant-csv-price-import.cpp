@@ -76,7 +76,7 @@ public:
     void assist_preview_page_prepare ();
     void assist_confirm_page_prepare ();
     void assist_summary_page_prepare ();
-    void assist_finish (bool canceled);
+    void assist_finish ();
     void assist_compmgr_close ();
 
     void file_confirm_cb ();
@@ -213,7 +213,6 @@ csv_price_imp_assist_destroy_cb (GtkWidget *object, CsvImpPriceAssist* info)
 void
 csv_price_imp_assist_cancel_cb (GtkAssistant *assistant, CsvImpPriceAssist* info)
 {
-    info->assist_finish (true);
     gnc_close_gui_component_by_data (ASSISTANT_CSV_IMPORT_PRICE_CM_CLASS, info);
 }
 
@@ -226,7 +225,7 @@ csv_price_imp_assist_close_cb (GtkAssistant *assistant, CsvImpPriceAssist* info)
 void
 csv_price_imp_assist_finish_cb (GtkAssistant *assistant, CsvImpPriceAssist* info)
 {
-    info->assist_finish (false);
+    info->assist_finish ();
 }
 
 void csv_price_imp_file_confirm_cb (GtkWidget *button, CsvImpPriceAssist *info)
@@ -356,7 +355,7 @@ gnc_commodity *get_commodity_from_combo (GtkComboBox *combo)
     GtkTreeModel *model, *sort_model;
     GtkTreeIter  iter, siter;
     gchar *string;
-   gnc_commodity *comm;
+    gnc_commodity *comm;
 
     if (!gtk_combo_box_get_active_iter (combo, &siter))
         return nullptr;
@@ -741,7 +740,6 @@ void CsvImpPriceAssist::preview_populate_settings_combo()
     gtk_list_store_clear (GTK_LIST_STORE(model));
 
     // Append the default entry
-//FIXME get_trans_presets ????
     auto presets = get_trans_presets (settings_type);
     for (auto preset : presets)
     {
@@ -773,7 +771,7 @@ void CsvImpPriceAssist::preview_handle_save_del_sensitivity (GtkComboBox* combo)
         CsvTransSettings *preset;
         GtkTreeModel *model = gtk_combo_box_get_model (combo);
         gtk_tree_model_get (model, &iter, SET_GROUP, &preset, -1);
-//FIXME
+
         if (preset && !trans_preset_is_reserved_name (preset->m_name))
         {
             /* Current preset is not read_only, so buttons can be enabled */
@@ -781,7 +779,6 @@ void CsvImpPriceAssist::preview_handle_save_del_sensitivity (GtkComboBox* combo)
             can_save = true;
         }
     }
-//FIXME
     else if (entry_text && (strlen (entry_text) > 0) &&
             !trans_preset_is_reserved_name (std::string(entry_text)))
         can_save = true;
@@ -944,6 +941,8 @@ void CsvImpPriceAssist::preview_update_skipped_rows ()
     preview_refresh_table ();
 }
 
+/* Callback triggered when user clicks on Over Write option
+ */
 void CsvImpPriceAssist::preview_over_write (bool over)
 {
     price_imp->over_write (over);
@@ -1723,6 +1722,7 @@ CsvImpPriceAssist::assist_preview_page_prepare ()
 void
 CsvImpPriceAssist::assist_confirm_page_prepare ()
 {
+    /* Confirm Page */
 }
 
 void
@@ -1752,19 +1752,9 @@ CsvImpPriceAssist::assist_prepare_cb (GtkWidget *page)
 }
 
 void
-CsvImpPriceAssist::assist_finish (bool canceled)
+CsvImpPriceAssist::assist_finish ()
 {
     /* Start the import */
-//FIXME Apply button
-g_print("Finish\n");
-//    if (canceled || price_imp->m_transactions.empty())
-//        gnc_gen_trans_list_delete (gnc_csv_importer_gui);
-//    else
-//        gnc_gen_trans_assist_start (gnc_csv_importer_gui);
-
-
-//FIXME Cancel comes here to, check when nothing set, goes to catch below also
-
     /* Create prices from the parsed data */
     try
     {
