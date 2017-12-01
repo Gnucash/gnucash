@@ -87,7 +87,6 @@ public:
     void preview_over_write (bool over);
     void preview_update_separators (GtkWidget* widget);
     void preview_update_file_format ();
-    void preview_update_account ();
     void preview_update_encoding (const char* encoding);
     void preview_update_date_format ();
     void preview_update_currency_format ();
@@ -304,11 +303,6 @@ void csv_price_imp_preview_sep_button_cb (GtkWidget* widget, CsvImpPriceAssist* 
 void csv_price_imp_preview_sep_fixed_sel_cb (GtkToggleButton* csv_button, CsvImpPriceAssist* info)
 {
     info->preview_update_file_format();
-}
-
-void csv_price_imp_preview_acct_sel_cb (GtkWidget* widget, CsvImpPriceAssist* info)
-{
-    info->preview_update_account();
 }
 
 void csv_price_imp_preview_enc_sel_cb (GOCharmapSel* selector, const char* encoding,
