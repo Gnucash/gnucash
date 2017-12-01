@@ -42,7 +42,7 @@ extern "C" {
 
 #include "gnc-tokenizer.hpp"
 #include "gnc-price-props.hpp"
-#include "gnc-csv-trans-settings.hpp"
+#include "gnc-csv-import-settings.hpp"
 #include <boost/optional.hpp>
 
 /* A set of currency formats that the user sees. */
@@ -110,7 +110,7 @@ public:
     void separators (std::string separators);
     std::string separators ();
 
-    void settings (const CsvTransSettings& settings);
+    void settings (const CsvImportSettings& settings);
     bool save_settings ();
 
     void settings_name (std::string name);
@@ -157,7 +157,7 @@ private:
     void update_price_props (uint32_t row, uint32_t col, GncPricePropType prop_type);
 
     struct CsvTranSettings;
-    CsvTransSettings m_settings;
+    CsvImportSettings m_settings;
     bool m_skip_errors;
     bool m_over_write;
 };

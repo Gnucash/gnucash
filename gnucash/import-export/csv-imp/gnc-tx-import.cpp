@@ -39,7 +39,7 @@ extern "C" {
 #include "gnc-trans-props.hpp"
 #include "gnc-csv-tokenizer.hpp"
 #include "gnc-fw-tokenizer.hpp"
-#include "gnc-csv-trans-settings.hpp"
+#include "gnc-csv-import-settings.hpp"
 
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 
@@ -293,7 +293,7 @@ void GncTxImport::separators (std::string separators)
 }
 std::string GncTxImport::separators () { return m_settings.m_separators; }
 
-void GncTxImport::settings (const CsvTransSettings& settings)
+void GncTxImport::settings (const CsvImportSettings& settings)
 {
     /* First apply file format as this may recreate the tokenizer */
     file_format (settings.m_file_format);
@@ -329,7 +329,7 @@ void GncTxImport::settings (const CsvTransSettings& settings)
 bool GncTxImport::save_settings ()
 {
 
-    if (trans_preset_is_reserved_name (m_settings.m_name))
+    if (preset_is_reserved_name (m_settings.m_name))
         return true;
 
     /* separators are already copied to m_settings in the separators

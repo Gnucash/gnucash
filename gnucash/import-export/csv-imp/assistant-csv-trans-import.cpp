@@ -58,7 +58,7 @@ extern "C"
 #include "go-charmap-sel.h"
 }
 
-#include "gnc-csv-trans-settings.hpp"
+#include "gnc-csv-import-settings.hpp"
 #include "gnc-tx-import.hpp"
 #include "gnc-fw-tokenizer.hpp"
 #include "gnc-csv-tokenizer.hpp"
@@ -679,7 +679,7 @@ void CsvImpTransAssist::preview_populate_settings_combo()
 
     // Append the default entry
 
-    auto presets = get_trans_presets (settings_type);
+    auto presets = get_import_presets (settings_type);
     for (auto preset : presets)
     {
         GtkTreeIter iter;
@@ -707,11 +707,11 @@ void CsvImpTransAssist::preview_handle_save_del_sensitivity (GtkComboBox* combo)
     /* Handle sensitivity of the delete and save button */
     if (gtk_combo_box_get_active_iter (combo, &iter))
     {
-        CsvTransSettings *preset;
+        CsvImportSettings *preset;
         GtkTreeModel *model = gtk_combo_box_get_model (combo);
         gtk_tree_model_get (model, &iter, SET_GROUP, &preset, -1);
 
-        if (preset && !trans_preset_is_reserved_name (preset->m_name))
+        if (preset && !preset_is_reserved_name (preset->m_name))
         {
             /* Current preset is not read_only, so buttons can be enabled */
             can_delete = true;
@@ -719,7 +719,7 @@ void CsvImpTransAssist::preview_handle_save_del_sensitivity (GtkComboBox* combo)
         }
     }
     else if (entry_text && (strlen (entry_text) > 0) &&
-            !trans_preset_is_reserved_name (std::string(entry_text)))
+            !preset_is_reserved_name (std::string(entry_text)))
         can_save = true;
 
     gtk_widget_set_sensitive (save_button, can_save);
@@ -752,7 +752,7 @@ CsvImpTransAssist::preview_settings_load ()
     if (!gtk_combo_box_get_active_iter (settings_combo, &iter))
         return;
 
-    CsvTransSettings *preset = nullptr;
+    CsvImportSettings *preset = nullptr;
     auto model = gtk_combo_box_get_model (settings_combo);
     gtk_tree_model_get (model, &iter, SET_GROUP, &preset, -1);
 
@@ -779,7 +779,7 @@ CsvImpTransAssist::preview_settings_delete ()
     if (!gtk_combo_box_get_active_iter (settings_combo, &iter))
         return;
 
-    CsvTransSettings *preset = nullptr;
+    CsvImportSettings *preset = nullptr;
     auto model = gtk_combo_box_get_model (settings_combo);
     gtk_tree_model_get (model, &iter, SET_GROUP, &preset, -1);
 
@@ -812,7 +812,7 @@ CsvImpTransAssist::preview_settings_save ()
         while (valid)
         {
             // Walk through the list, reading each row
-            CsvTransSettings *preset;
+            CsvImportSettings *preset;
             gtk_tree_model_get (model, &iter, SET_GROUP, &preset, -1);
 
             if (preset && (preset->m_name == std::string(new_name)))
