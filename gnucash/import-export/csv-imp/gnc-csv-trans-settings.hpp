@@ -54,8 +54,8 @@ struct CsvTransSettings
     CsvTransSettings() : m_file_format (GncImpFileFormat::CSV), m_encoding {"UTF-8"},
             m_multi_split (false), m_date_format {0}, m_currency_format {0},
             m_skip_start_lines{0}, m_skip_end_lines{0}, m_skip_alt_lines (false),
-            m_separators {","}, m_base_account {nullptr}, m_to_currency {nullptr},
-            m_from_commodity {nullptr}, m_load_error {false} { }
+            m_separators {","}, m_load_error {false}, m_base_account {nullptr},
+            m_from_commodity {nullptr}, m_to_currency {nullptr} { }
 
 /** Save the gathered widget properties to a key File.
  *
@@ -81,7 +81,9 @@ void remove (void);
  */
 bool read_only (void);
 
+std::string   m_settings_type;                // Settings Type, TRANS, PRICE etc.
 
+// Common Settings
 std::string   m_name;                         // Name given to this preset by the user
 GncImpFileFormat m_file_format;               // CSV import Format
 std::string   m_encoding;                     // File encoding
@@ -92,16 +94,17 @@ uint32_t      m_skip_start_lines;             // Number of header rows to skip
 uint32_t      m_skip_end_lines;               // Number of footer rows to skip
 bool          m_skip_alt_lines;               // Skip alternate rows
 std::string   m_separators;                   // Separators for csv format
-
-Account      *m_base_account;                 // Base account
-std::vector<GncTransPropType> m_column_types; // The Column types in order
-std::vector<GncPricePropType> m_column_types_price; // The Column Price types in order
+bool          m_load_error;                   // Was there an error while parsing the state file ?
 std::vector<uint32_t> m_column_widths;        // The Column widths
 
-gnc_commodity *m_to_currency;                 //  Price To Currency
-gnc_commodity *m_from_commodity;              //  Price From Commodity
+// Transaction Settings
+Account      *m_base_account;                 // Base account
+std::vector<GncTransPropType> m_column_types; // The Column types in order
 
-bool          m_load_error;                   // Was there an error while parsing the state file ?
+// Price Settings
+gnc_commodity *m_from_commodity;              //  Price From Commodity
+gnc_commodity *m_to_currency;                 //  Price To Currency
+std::vector<GncPricePropType> m_column_types_price; // The Price Column types in order
 };
 
 using preset_vec = std::vector<std::shared_ptr<CsvTransSettings>>;
@@ -109,9 +112,12 @@ using preset_vec = std::vector<std::shared_ptr<CsvTransSettings>>;
  *  - one or more internally defined presets
  *  - all preset found in the state key file.
  *
+ *  @param set_type The type of setting stored in the
+ *  key file, TRANS, PRICE, etc.
+ *
  *  @return a reference to the populated vector.
  */
-const preset_vec& get_trans_presets (void);
+const preset_vec& get_trans_presets (const std::string& set_type);
 
 /** Check whether name can be used as a preset name.
  *  The names of the internal presets are considered reserved.

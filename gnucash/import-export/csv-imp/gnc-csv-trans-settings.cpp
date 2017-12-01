@@ -41,7 +41,7 @@ extern "C"
 #include "gnc-ui-util.h"
 }
 
-const std::string csv_group_prefix{"CSV - "};
+const std::string csv_group_prefix{"CSV-"};
 const std::string no_settings{N_("No Settings")};
 const std::string gnc_exp{N_("GnuCash Export Format")};
 #define CSV_NAME         "Name"
@@ -70,10 +70,11 @@ G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 
 preset_vec presets;
 
-static std::shared_ptr<CsvTransSettings> create_int_no_preset(void)
+static std::shared_ptr<CsvTransSettings> create_int_no_preset(const std::string& set_type)
 {
     auto preset = std::make_shared<CsvTransSettings>();
     preset->m_name = no_settings;
+    preset->m_settings_type = set_type;
 
     return preset;
 }
@@ -109,14 +110,6 @@ static std::shared_ptr<CsvTransSettings> create_int_gnc_exp_preset(void)
             GncTransPropType::REC_DATE,
             GncTransPropType::PRICE
     };
-
-    preset->m_column_types_price = {
-            GncPricePropType::DATE,
-            GncPricePropType::AMOUNT,
-            GncPricePropType::FROM_COMMODITY,
-            GncPricePropType::TO_CURRENCY,
-    };
-
     return preset;
 }
 
@@ -124,8 +117,9 @@ static std::shared_ptr<CsvTransSettings> create_int_gnc_exp_preset(void)
  * find
  *
  * find all settings entries in the state key file
+ * based on settings type.
  **************************************************/
-const preset_vec& get_trans_presets (void)
+const preset_vec& get_trans_presets (const std::string& set_type)
 {
 
     // Search all Groups in the state key file for ones starting with prefix
@@ -138,11 +132,12 @@ const preset_vec& get_trans_presets (void)
     for (gsize i=0; i < grouplength; i++)
     {
         auto group = std::string(groups[i]);
-        auto pos = group.find(csv_group_prefix);
+        auto gp = csv_group_prefix + set_type + " - ";
+        auto pos = group.find(gp);
         if (pos == std::string::npos)
             continue;
 
-        preset_names.push_back(group.substr(csv_group_prefix.size()));
+        preset_names.push_back(group.substr(gp.size()));
     }
     // string array from the state file is no longer needed now.
     g_strfreev (groups);
@@ -154,18 +149,20 @@ const preset_vec& get_trans_presets (void)
     presets.clear();
 
     /* Start with the internally generated ones */
-    presets.push_back(create_int_no_preset());
-    presets.push_back(create_int_gnc_exp_preset());
+    presets.push_back(create_int_no_preset(set_type));
+
+    if (set_type.compare("TRANS") == 0)
+        presets.push_back(create_int_gnc_exp_preset());
 
     /* Then add all the ones we found in the state file */
     for (auto preset_name : preset_names)
     {
         auto preset = std::make_shared<CsvTransSettings>();
+        preset->m_settings_type = set_type;
         preset->m_name = preset_name;
         preset->load();
         presets.push_back(preset);
     }
-
     return presets;
 }
 
@@ -215,7 +212,7 @@ CsvTransSettings::load (void)
 
     GError *key_error = nullptr;
     m_load_error = false;
-    auto group = csv_group_prefix + m_name;
+    auto group = csv_group_prefix + m_settings_type + " - " + m_name;
     auto keyfile = gnc_state_get_current ();
 
     m_skip_start_lines = g_key_file_get_integer (keyfile, group.c_str(), CSV_SKIP_START, &key_error);
@@ -260,56 +257,82 @@ CsvTransSettings::load (void)
     if (key_char)
         g_free (key_char);
 
-    key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_ACCOUNT, &key_error);
-    if (key_char && *key_char != '\0')
-        m_base_account = gnc_account_lookup_by_full_name (gnc_get_current_root_account(), key_char);
-    m_load_error |= handle_load_error (&key_error, group);
-    if (key_char)
-        g_free (key_char);
-
-    key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_TO_CURR, &key_error);
-    if (key_char && *key_char != '\0')
-//FIXME        m_to_currency = gnc_account_lookup_by_full_name (gnc_get_current_root_account(), key_char);
-        m_to_currency = nullptr;
-    m_load_error |= handle_load_error (&key_error, group);
-    if (key_char)
-        g_free (key_char);
-
-    key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_FROM_COMM, &key_error);
-    if (key_char && *key_char != '\0')
-//FIXME        m_from_commodity = gnc_account_lookup_by_full_name (gnc_get_current_root_account(), key_char);
-        m_from_commodity = nullptr;
-    m_load_error |= handle_load_error (&key_error, group);
-    if (key_char)
-        g_free (key_char);
-
-    m_column_types.clear();
     gsize list_len;
-    gchar** col_types_str = g_key_file_get_string_list (keyfile, group.c_str(), CSV_COL_TYPES,
-            &list_len, &key_error);
-    for (uint32_t i = 0; i < list_len; i++)
+
+    // Transactions
+    if (m_settings_type.compare("TRANS") == 0)
     {
-        auto col_types_it = std::find_if (gnc_csv_col_type_strs.begin(),
-                gnc_csv_col_type_strs.end(), test_prop_type_str (col_types_str[i]));
-        if (col_types_it != gnc_csv_col_type_strs.end())
+        key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_ACCOUNT, &key_error);
+        if (key_char && *key_char != '\0')
+            m_base_account = gnc_account_lookup_by_full_name (gnc_get_current_root_account(), key_char);
+        m_load_error |= handle_load_error (&key_error, group);
+        if (key_char)
+            g_free (key_char);
+
+        m_column_types.clear();
+        gchar** col_types_str = g_key_file_get_string_list (keyfile, group.c_str(), CSV_COL_TYPES,
+                &list_len, &key_error);
+        for (uint32_t i = 0; i < list_len; i++)
         {
-            /* Found a valid column type. Now check whether it is allowed
-             * in the selected mode (two-split vs multi-split) */
-            auto prop = sanitize_trans_prop (col_types_it->first, m_multi_split);
-                m_column_types.push_back(prop);
-            if (prop != col_types_it->first)
-                PWARN("Found column type '%s', but this is blacklisted when multi-split mode is %s. "
-                        "Inserting column type 'NONE' instead'.",
-                        col_types_it->second, m_multi_split ? "enabled" : "disabled");
+            auto col_types_it = std::find_if (gnc_csv_col_type_strs.begin(),
+                    gnc_csv_col_type_strs.end(), test_prop_type_str (col_types_str[i]));
+            if (col_types_it != gnc_csv_col_type_strs.end())
+            {
+                /* Found a valid column type. Now check whether it is allowed
+                 * in the selected mode (two-split vs multi-split) */
+                auto prop = sanitize_trans_prop (col_types_it->first, m_multi_split);
+                    m_column_types.push_back(prop);
+                if (prop != col_types_it->first)
+                    PWARN("Found column type '%s', but this is blacklisted when multi-split mode is %s. "
+                            "Inserting column type 'NONE' instead'.",
+                            col_types_it->second, m_multi_split ? "enabled" : "disabled");
+            }
+            else
+                PWARN("Found invalid column type '%s'. Inserting column type 'NONE' instead'.",
+                        col_types_str[i]);
         }
-        else
-            PWARN("Found invalid column type '%s'. Inserting column type 'NONE' instead'.",
-                    col_types_str[i]);
-
+        if (col_types_str)
+            g_strfreev (col_types_str);
     }
-    if (col_types_str)
-        g_strfreev (col_types_str);
+ 
+    // Price
+    if (m_settings_type.compare("PRICE") == 0)
+    {
+        key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_TO_CURR, &key_error);
+        if (key_char && *key_char != '\0')
+            m_to_currency = parse_commodity_price_comm (key_char);
+        m_load_error |= handle_load_error (&key_error, group);
+        if (key_char)
+            g_free (key_char);
 
+        key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_FROM_COMM, &key_error);
+        if (key_char && *key_char != '\0')
+            m_from_commodity = parse_commodity_price_comm (key_char);
+        m_load_error |= handle_load_error (&key_error, group);
+        if (key_char)
+            g_free (key_char);
+
+        m_column_types.clear();
+        gchar** col_types_str_price = g_key_file_get_string_list (keyfile, group.c_str(), CSV_COL_TYPES,
+                &list_len, &key_error);
+        for (uint32_t i = 0; i < list_len; i++)
+        {
+            auto col_types_it = std::find_if (gnc_price_col_type_strs.begin(),
+                    gnc_price_col_type_strs.end(), test_price_prop_type_str (col_types_str_price[i]));
+            if (col_types_it != gnc_price_col_type_strs.end())
+            {
+                // Found a valid column type
+                m_column_types_price.push_back(col_types_it->first);
+            }
+            else
+                PWARN("Found invalid column type '%s'. Inserting column type 'NONE' instead'.",
+                        col_types_str_price[i]);
+        }
+        if (col_types_str_price)
+            g_strfreev (col_types_str_price);
+    }
+
+    // Widths
     m_column_widths.clear();
     gint *col_widths_int = g_key_file_get_integer_list (keyfile, group.c_str(), CSV_COL_WIDTHS,
             &list_len, &key_error);
@@ -347,14 +370,15 @@ CsvTransSettings::save (void)
     }
 
     auto keyfile = gnc_state_get_current ();
-    auto group = csv_group_prefix + m_name;
+    auto group = csv_group_prefix + m_settings_type + " - " + m_name;
 
     // Drop previous saved settings with this name
     g_key_file_remove_group (keyfile, group.c_str(), nullptr);
 
     // Start Saving the settings
+    // Common
     g_key_file_set_string (keyfile, group.c_str(), CSV_NAME, m_name.c_str());
-    g_key_file_set_boolean (keyfile, group.c_str(), CSV_MULTI_SPLIT, m_multi_split);
+
     g_key_file_set_integer (keyfile, group.c_str(), CSV_SKIP_START, m_skip_start_lines);
     g_key_file_set_integer (keyfile, group.c_str(), CSV_SKIP_END, m_skip_end_lines);
     g_key_file_set_boolean (keyfile, group.c_str(), CSV_SKIP_ALT, m_skip_alt_lines);
@@ -375,26 +399,44 @@ CsvTransSettings::save (void)
     g_key_file_set_integer (keyfile, group.c_str(), CSV_CURRENCY, m_currency_format);
     g_key_file_set_string (keyfile, group.c_str(), CSV_ENCODING, m_encoding.c_str());
 
-    if (m_base_account)
-        g_key_file_set_string (keyfile, group.c_str(), CSV_ACCOUNT, gnc_account_get_full_name(m_base_account));
-
-    if (m_to_currency)
-        g_key_file_set_string (keyfile, group.c_str(), CSV_TO_CURR, gnc_commodity_get_fullname(m_to_currency));
-
-    if (m_from_commodity)
-        g_key_file_set_string (keyfile, group.c_str(), CSV_FROM_COMM, gnc_commodity_get_fullname(m_from_commodity));
-
-    std::vector<const char*> col_types_str;
-    for (auto col_type : m_column_types)
-        col_types_str.push_back(gnc_csv_col_type_strs[col_type]);
-
-    if (!col_types_str.empty())
-        g_key_file_set_string_list (keyfile, group.c_str(), CSV_COL_TYPES,
-                col_types_str.data(), col_types_str.size());
-
     if (!m_column_widths.empty())
         g_key_file_set_integer_list (keyfile, group.c_str(), CSV_COL_WIDTHS,
                 (gint*)(m_column_widths.data()), m_column_widths.size());
+
+    // Transaction
+    if (m_settings_type.compare("TRANS") == 0)
+    {
+        g_key_file_set_boolean (keyfile, group.c_str(), CSV_MULTI_SPLIT, m_multi_split);
+
+        if (m_base_account)
+            g_key_file_set_string (keyfile, group.c_str(), CSV_ACCOUNT, gnc_account_get_full_name(m_base_account));
+
+        std::vector<const char*> col_types_str;
+        for (auto col_type : m_column_types)
+            col_types_str.push_back(gnc_csv_col_type_strs[col_type]);
+
+        if (!col_types_str.empty())
+            g_key_file_set_string_list (keyfile, group.c_str(), CSV_COL_TYPES,
+                    col_types_str.data(), col_types_str.size());
+    }
+
+    // Price
+    if (m_settings_type.compare("PRICE") == 0)
+    {
+        if (m_to_currency)
+            g_key_file_set_string (keyfile, group.c_str(), CSV_TO_CURR, gnc_commodity_get_mnemonic(m_to_currency));
+
+        if (m_from_commodity)
+            g_key_file_set_string (keyfile, group.c_str(), CSV_FROM_COMM, gnc_commodity_get_mnemonic(m_from_commodity));
+
+        std::vector<const char*> col_types_str_price;
+        for (auto col_type : m_column_types_price)
+            col_types_str_price.push_back(gnc_price_col_type_strs[col_type]);
+
+        if (!col_types_str_price.empty())
+            g_key_file_set_string_list (keyfile, group.c_str(), CSV_COL_TYPES,
+                    col_types_str_price.data(), col_types_str_price.size());
+    }
 
     // Do a test read of encoding
     GError *key_error = nullptr;
@@ -425,7 +467,7 @@ CsvTransSettings::remove (void)
         return;
 
     auto keyfile = gnc_state_get_current ();
-    auto group = csv_group_prefix + m_name;
+    auto group = csv_group_prefix + m_settings_type + " - " + m_name;
     g_key_file_remove_group (keyfile, group.c_str(), nullptr);
 }
 

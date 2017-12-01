@@ -64,6 +64,8 @@ extern "C"
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_ASSISTANT;
 
+const std::string settings_type = "PRICE";
+
 class  CsvImpPriceAssist
 {
 public:
@@ -740,7 +742,7 @@ void CsvImpPriceAssist::preview_populate_settings_combo()
 
     // Append the default entry
 //FIXME get_trans_presets ????
-    auto presets = get_trans_presets ();
+    auto presets = get_trans_presets (settings_type);
     for (auto preset : presets)
     {
         GtkTreeIter iter;
