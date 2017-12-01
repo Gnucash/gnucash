@@ -10,6 +10,7 @@ SET(csv_import_remote_SOURCES
 SET(csv_import_SOURCES
   gncmod-csv-import.c
   assistant-csv-account-import.c
+  assistant-csv-price-import.cpp
   assistant-csv-trans-import.cpp
   gnc-plugin-csv-import.c
   csv-account-import.c
@@ -37,6 +38,7 @@ SET(csv_import_remote_HEADERS
 
 SET(csv_import_noinst_HEADERS
   assistant-csv-account-import.h
+  assistant-csv-price-import.h
   assistant-csv-trans-import.h
   gnc-plugin-csv-import.h
   csv-account-import.h
@@ -88,7 +90,7 @@ INSTALL(TARGETS gncmod-csv-import
 # No headers to install
 
 SET(csv_import_GLADE assistant-csv-account-import.glade
-      assistant-csv-trans-import.glade)
+      assistant-csv-price-import.glade assistant-csv-trans-import.glade)
 
 INSTALL(FILES ${csv_import_GLADE} DESTINATION ${CMAKE_INSTALL_DATADIR}/gnucash/gtkbuilder)
 
