@@ -5193,10 +5193,10 @@ build_token_info(char const * key, KvpValue * value, token_accounts_info & token
     tokenInfo.accounts.push_back(this_account);
 }
 
-/** We scale the probability values by PROBABILITY_FACTOR.
-  ie. with PROBABILITY_FACTOR of 100000, 10% would be
+/** We scale the probability values by probability_factor.
+  ie. with probability_factor of 100000, 10% would be
   0.10 * 100000 = 10000 */
-#define PROBABILITY_FACTOR 100000
+static constexpr int probability_factor = 100000;
 
 static std::vector<std::pair<std::string, int32_t>>
 build_probabilities(std::vector<std::pair<std::string, account_probability>> const & first_pass)
@@ -5210,7 +5210,7 @@ build_probabilities(std::vector<std::pair<std::string, account_probability>> con
          * and product difference ((1-A)(1-B)...)
          */
         int32_t probability = (account_probability.product /
-                (account_probability.product + account_probability.product_difference)) * PROBABILITY_FACTOR;
+                (account_probability.product + account_probability.product_difference)) * probability_factor;
         ret.push_back({first_pass_prob.first, probability});
     }
     return ret;
@@ -5264,7 +5264,7 @@ get_first_pass_probabilities(GncImportMatchMap * imap, GList * tokens)
     return ret;
 }
 
-#define threshold (.90 * PROBABILITY_FACTOR) /* 90% */
+static constexpr double threshold = .90 * probability_factor; /* 90% */
 
 /** Look up an Account in the map */
 Account*
