@@ -33,6 +33,7 @@
 #ifndef __BINRELOC_C__
 #define __BINRELOC_C__
 #include <config.h>
+#include "gncla-dir.h"
 
 #include <platform.h>
 #if PLATFORM(WINDOWS)
@@ -548,7 +549,7 @@ gnc_gbr_find_lib_dir (const gchar *default_lib_dir)
             return NULL;
     }
 
-    dir = g_build_filename (prefix, "lib", NULL);
+    dir = g_build_filename (prefix, LIBDIR, NULL);
     g_free (prefix);
     return dir;
 }
