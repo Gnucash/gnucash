@@ -192,9 +192,6 @@ gnucash/gnucash-launcher
 gnucash/gnucash-make-guids
 gnucash/gnucash-setup-env
 gnucash/gnucash-valgrind
-gnucash/overrides/gnucash-build-env
-gnucash/overrides/gnucash-env
-gnucash/overrides/guile
 gnucash/gnome/gnucash
 gnucash/gnome/gnucash.desktop
 gnucash/gnome/gnucash.desktop.in

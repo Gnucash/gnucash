@@ -1654,7 +1654,6 @@ AC_CONFIG_FILES(
   doc/Makefile
   doc/examples/Makefile
   gnucash/Makefile
-  gnucash/test/Makefile
   gnucash/gnome/Makefile
   gnucash/gnome/gtkbuilder/Makefile
   gnucash/gnome/gschemas/Makefile
