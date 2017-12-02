@@ -16,6 +16,8 @@
 ;;   and enable multiple data columns
 ;; - add informational box, summarising options used, useful
 ;;   to troubleshoot reports
+;; - add support for indenting for better grouping
+;; - add defaults suitable for a reconciliation report
 ;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -386,6 +388,24 @@ Credit Card, and Income accounts."))
 ;;
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;
+;; Set defaults for reconcilation report
+;;
+(define (reconcile-report-options-generator)
+  (define options (trep-options-generator))
+  (gnc:option-set-value (gnc:lookup-option options pagename-sorting optname-prime-sortkey) 'reconciled-status)
+  (gnc:option-set-value (gnc:lookup-option options pagename-sorting optname-sec-sortkey)   'date)
+  (gnc:option-set-value (gnc:lookup-option options pagename-sorting optname-sec-date-subtotal) 'none)
+  (gnc:option-set-value (gnc:lookup-option options gnc:pagename-general optname-startdate) (cons 'relative 'start-prev-quarter))
+  (gnc:option-set-value (gnc:lookup-option options gnc:pagename-general optname-enddate)   (cons 'relative 'today))
+  (gnc:option-set-value (gnc:lookup-option options gnc:pagename-display (N_ "Reconciled Date")) #t)
+  (gnc:option-set-value (gnc:lookup-option options gnc:pagename-display (N_ "Running Balance")) #t)
+  (gnc:option-set-value (gnc:lookup-option options gnc:pagename-display (N_ "Memo")) #f)
+  options)
+
+;;
+;; Default Transaction Report
+;;
 (define (trep-options-generator)
   (define options (gnc:new-options))
   (define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
@@ -1878,6 +1898,14 @@ tags within description, notes or memo. ")
     (gnc:report-finished)
 
     document))
+
+;; Define the report.
+(gnc:define-report
+ 'version 2
+ 'name (_ "Reconciliation Report")
+ 'report-guid "e45218c6d76f11e7b5ef0800277ef320"
+ 'options-generator reconcile-report-options-generator
+ 'renderer trep-renderer)
 
 ;; Define the report.
 (gnc:define-report
