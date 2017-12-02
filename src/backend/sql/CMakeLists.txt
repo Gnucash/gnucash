@@ -59,20 +59,23 @@ SET(backend_sql_DIST ${backend_sql_DIST_local} ${test_backend_sql_DIST} PARENT_S
 # Add dependency on config.h
 SET_SOURCE_FILES_PROPERTIES (${gnc_backend_sql_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
-ADD_LIBRARY	(gnc-backend-sql
-  ${backend_sql_SOURCES}
-  ${backend_sql_noinst_HEADERS}
-)
+IF (WITH_SQL)
 
-TARGET_LINK_LIBRARIES(gnc-backend-sql gncmod-engine gnc-qof)
+  ADD_LIBRARY	(gnc-backend-sql
+    ${backend_sql_SOURCES}
+    ${backend_sql_noinst_HEADERS}
+  )
 
-TARGET_COMPILE_DEFINITIONS (gnc-backend-sql PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.sql\")
+  TARGET_LINK_LIBRARIES(gnc-backend-sql gncmod-engine gnc-qof)
 
-TARGET_INCLUDE_DIRECTORIES(gnc-backend-sql PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+  TARGET_COMPILE_DEFINITIONS (gnc-backend-sql PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.sql\")
 
-INSTALL(TARGETS gnc-backend-sql
-  LIBRARY DESTINATION lib
-  ARCHIVE DESTINATION lib
-  RUNTIME DESTINATION bin)
+  TARGET_INCLUDE_DIRECTORIES(gnc-backend-sql PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+  INSTALL(TARGETS gnc-backend-sql
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin)
+ENDIF(WITH_SQL)
 
 # No headers to install
