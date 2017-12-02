@@ -1692,7 +1692,11 @@ tags within description, notes or memo. ")
     ;; infobox
     (define (infobox)
       (define (highlight title . data)
-        (string-append "<b>" title "</b>: " (string-join data " ") "<br/>"))
+        (string-append "<b>" title "</b>: " (string-join data " ") "<br>"))
+      (define (bool->string tf)
+        (if tf
+            (_ "Enabled")
+            (_ "Disabled")))
       (gnc:make-html-text
        (if (string-null? account-matcher)
            ""
@@ -1736,25 +1740,31 @@ tags within description, notes or memo. ")
             optname-prime-sortkey
             (keylist-get-info sortkey-list primary-key 'text)
             (keylist-get-info ascending-list primary-order 'text)))
-       (if (and (member primary-key DATE-SORTING-TYPES)
-                (not (eq? primary-date-subtotal 'none)))
-           (highlight
-            optname-prime-date-subtotal
-            (keylist-get-info date-subtotal-list primary-date-subtotal 'text))
-           "")
+       (if (eq? primary-key 'none)
+           ""
+           (if (member primary-key DATE-SORTING-TYPES)
+               (highlight
+                optname-prime-date-subtotal
+                (keylist-get-info date-subtotal-list primary-date-subtotal 'text))
+               (highlight
+                optname-prime-subtotal
+                (bool->string (opt-val pagename-sorting optname-prime-subtotal)))))
        (if (eq? secondary-key 'none)
            ""
            (highlight
             optname-sec-sortkey
             (keylist-get-info sortkey-list secondary-key 'text)
             (keylist-get-info ascending-list secondary-order 'text)))
-       (if (and (member secondary-key DATE-SORTING-TYPES)
-                (not (eq? secondary-date-subtotal 'none)))
-           (highlight
-            optname-sec-date-subtotal
-            (keylist-get-info date-subtotal-list secondary-date-subtotal 'text))
-           "")
-       "<br/>"))
+       (if (eq? secondary-key 'none)
+           ""
+           (if (member secondary-key DATE-SORTING-TYPES)
+               (highlight
+                optname-sec-date-subtotal
+                (keylist-get-info date-subtotal-list secondary-date-subtotal 'text))
+               (highlight
+                optname-sec-subtotal
+                (bool->string (opt-val pagename-sorting optname-sec-subtotal)))))
+       "<br>"))
 
     (if (or (null? c_account_1) (and-map not c_account_1))
 
