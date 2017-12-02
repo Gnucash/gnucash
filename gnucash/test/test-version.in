@@ -1,5 +1,0 @@
-#! @SHELL@
-GUILE_WARN_DEPRECATED="no"
-export GUILE_WARN_DEPRECATED
-
-exec ../overrides/gnucash-build-env ../gnucash --version

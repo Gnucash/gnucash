@@ -1777,8 +1777,6 @@ AC_CONFIG_FILES(
 dnl # Shell scripts, to have their shells set
 AC_CONFIG_FILES([libgnucash/backend/xml/test/test-real-data.sh],
                 [chmod +x libgnucash/backend/xml/test/test-real-data.sh])
-AC_CONFIG_FILES([gnucash/test/test-version],
-                [chmod +x gnucash/test/test-version])
 
 
 #Link (copy on Windows) test data files:
