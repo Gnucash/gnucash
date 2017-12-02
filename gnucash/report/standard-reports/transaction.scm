@@ -452,6 +452,9 @@ Credit Card, and Income accounts."))
     gnc:pagename-general optname-infobox-display
     "h" (_ "Add summary of options.")
     '(no-match)
+    ;; This is an alist of conditions for displaying the infobox
+    ;; 'no-match for empty-report
+    ;; 'match for generated report
     (list (vector '(no-match)
                   (_ "If no transactions matched")
                   (_ "Display summary if no transactions were matched."))
@@ -1257,7 +1260,7 @@ tags within description, notes or memo. ")
                               (if start-dual-column?
                                   (begin
                                     ;; We've completed merging. Add this column amount
-                                    ;; and add the column.
+                                    ;; and add the columns.
                                     (if column-amount
                                         (set! dual-subtotal
                                               (merge-fn dual-subtotal column-amount
@@ -1330,9 +1333,11 @@ tags within description, notes or memo. ")
                    (xaccAccountGetName account))
                ""))))
 
+    ;; retrieve date renderer from the date-subtotal-list
     (define (render-date date-subtotal-key split)
       ((keylist-get-info date-subtotal-list date-subtotal-key 'renderer-fn) split))
 
+    ;; generate account name, optionally with anchor to account register
     (define (render-account sortkey split anchor?)
       (let* ((account ((keylist-get-info sortkey-list sortkey 'renderer-fn) split))
              (name (account-namestring account
@@ -1349,6 +1354,7 @@ tags within description, notes or memo. ")
              description)
             name)))
 
+    ;; generic renderer. retrieve renderer-fn which should return a str
     (define (render-generic sortkey split)
       ((keylist-get-info sortkey-list sortkey 'renderer-fn) split))
 
@@ -1423,6 +1429,9 @@ tags within description, notes or memo. ")
 
         (for-each (lambda (cell)
                     (let ((cell-content (vector-ref cell 0))
+                          ;; reverse? returns a bool - will check if the cell type has reversible sign,
+                          ;; whether the account is also reversible according to Report Option, or
+                          ;; if Report Option follows Global Settings, will retrieve bool from it.
                           (reverse? (and (vector-ref cell 1)
                                          (if account-types-to-reverse
                                              (member (xaccAccountGetType account) account-types-to-reverse)
@@ -1433,6 +1442,8 @@ tags within description, notes or memo. ")
                                    "number-cell"
                                    (gnc:html-transaction-anchor
                                     trans
+                                    ;; if conditions for reverse are satisfied, apply sign reverse to
+                                    ;; monetary amount
                                     (if reverse?
                                         (gnc:monetary-neg cell-content)
                                         cell-content))))
