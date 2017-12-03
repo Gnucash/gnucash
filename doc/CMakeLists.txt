@@ -18,7 +18,7 @@ SET(doc_DATA
 
 SET(doc_noinst_DATA
         build-aix.txt build-solaris.txt CMakeLists.txt gnc-fq-dump.1 gnc-fq-helper.1 gnucash.1.in gtkrc-2.0.gnucash
-        Makefile.am misc-notes.txt README.build-system README.HBCI README.OFX README.translator.txt tip_of_the_day.list.in
+        misc-notes.txt README.build-system README.HBCI README.OFX README.translator.txt tip_of_the_day.list.in
         TRANSLATION_HOWTO)
 
 INSTALL(FILES ${doc_DATA} DESTINATION  ${CMAKE_INSTALL_DATADIR}/doc/gnucash)

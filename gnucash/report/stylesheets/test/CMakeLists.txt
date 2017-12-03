@@ -21,4 +21,4 @@ GNC_ADD_SCHEME_TARGETS(scm-test-load-report-stylesheets-module
 
 GNC_ADD_SCHEME_TESTS("test-load-report-stylesheets-module.scm")
 
-SET_DIST_LIST(test_stylesheets_DIST CMakeLists.txt Makefile.am test-load-report-stylesheets-module.scm)
+SET_DIST_LIST(test_stylesheets_DIST CMakeLists.txt test-load-report-stylesheets-module.scm)

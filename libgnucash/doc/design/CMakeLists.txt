@@ -46,4 +46,4 @@ ELSE()
   )
 ENDIF()
 
-SET_DIST_LIST(doc_design_DIST CMakeLists.txt Makefile.am gnucash-design.texi ${gnucash_design_TEXINFOS})
+SET_DIST_LIST(doc_design_DIST CMakeLists.txt gnucash-design.texi ${gnucash_design_TEXINFOS})

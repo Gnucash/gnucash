@@ -107,7 +107,7 @@ FILE(COPY ${csv_import_UI}
 FILE(COPY ${csv_import_GLADE}
   DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder)
 
-SET_LOCAL_DIST(csv_import_DIST_local CMakeLists.txt Makefile.am
+SET_LOCAL_DIST(csv_import_DIST_local CMakeLists.txt 
         ${csv_import_SOURCES} ${csv_import_noinst_HEADERS}
         ${csv_import_GLADE} ${csv_import_UI})
 SET(csv_import_DIST ${csv_import_DIST_local} ${test_csv_import_DIST} ${csv_import_gschema_DIST} PARENT_SCOPE)

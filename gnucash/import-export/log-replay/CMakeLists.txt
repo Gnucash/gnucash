@@ -37,5 +37,5 @@ INSTALL(FILES ${log_replay_UI} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/ui)
 FILE(COPY ${log_replay_UI}
   DESTINATION ${DATADIR_BUILD}/gnucash/ui)
 
-SET_DIST_LIST(log_report_DIST CMakeLists.txt Makefile.am
+SET_DIST_LIST(log_report_DIST CMakeLists.txt 
         ${log_replay_SOURCES} ${log_replay_noinst_HEADERS} ${log_replay_UI})

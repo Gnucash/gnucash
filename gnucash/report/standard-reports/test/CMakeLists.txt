@@ -28,5 +28,5 @@ GNC_ADD_SCHEME_TARGETS(scm-test-standard-reports
   FALSE
 )
 
-SET_DIST_LIST(test_standard_reports_DIST CMakeLists.txt Makefile.am
+SET_DIST_LIST(test_standard_reports_DIST CMakeLists.txt 
   ${scm_test_standard_reports_SOURCES} ${scm_test_report_SUPPORT})

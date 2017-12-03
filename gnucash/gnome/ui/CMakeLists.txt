@@ -32,6 +32,6 @@ SET(gnome_UI
       gnc-sxed-window-ui-full.xml
       gnc-sxed-window-ui.xml)
 
-SET_DIST_LIST(gnome_ui_DIST CMakeLists.txt Makefile.am ${gnome_UI})
+SET_DIST_LIST(gnome_ui_DIST CMakeLists.txt ${gnome_UI})
 
 

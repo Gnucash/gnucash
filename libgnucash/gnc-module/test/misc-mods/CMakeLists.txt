@@ -18,4 +18,4 @@ LIBRARY_OUTPUT_DIRECTORY ${LIBDIR_BUILD}/gnucash/test
 ARCHIVE_OUTPUT_DIRECTORY ${LIBDIR_BUILD}/gnucash/test
 RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-SET_DIST_LIST(misc_mods_DIST CMakeLists.txt Makefile.am agedver.c futuremodsys.c incompatdep.c)
+SET_DIST_LIST(misc_mods_DIST CMakeLists.txt agedver.c futuremodsys.c incompatdep.c)

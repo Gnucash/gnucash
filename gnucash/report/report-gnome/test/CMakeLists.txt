@@ -25,5 +25,5 @@ GNC_ADD_SCHEME_TARGETS(scm-test-load-report-gnome-module
 )
 GNC_ADD_SCHEME_TESTS(test-load-report-gnome-module.scm)
 
-SET_DIST_LIST(test_report_gnome_DIST CMakeLists.txt Makefile.am test-link-module.c test-load-report-gnome-module.scm)
+SET_DIST_LIST(test_report_gnome_DIST CMakeLists.txt test-link-module.c test-load-report-gnome-module.scm)
 

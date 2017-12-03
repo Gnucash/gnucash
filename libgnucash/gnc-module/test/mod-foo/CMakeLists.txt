@@ -33,4 +33,4 @@ LIBRARY_OUTPUT_DIRECTORY ${LIBDIR_BUILD}/gnucash/test
 ARCHIVE_OUTPUT_DIRECTORY ${LIBDIR_BUILD}/gnucash/test
 RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-SET_DIST_LIST(mod_foo_DIST CMakeLists.txt Makefile.am foo.i gnucash/foo.scm foo.c foo.h gnc-mod-foo.c)
+SET_DIST_LIST(mod_foo_DIST CMakeLists.txt foo.i gnucash/foo.scm foo.c foo.h gnc-mod-foo.c)

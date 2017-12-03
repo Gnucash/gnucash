@@ -63,6 +63,6 @@ INSTALL(TARGETS gncmod-register-gnome
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 # No headers to install
 
-SET_LOCAL_DIST(register_gnome_DIST_local CMakeLists.txt Makefile.am ${register_gnome_SOURCES} ${register_gnome_noinst_HEADERS})
+SET_LOCAL_DIST(register_gnome_DIST_local CMakeLists.txt ${register_gnome_SOURCES} ${register_gnome_noinst_HEADERS})
 
 SET(register_gnome_DIST ${register_gnome_DIST_local} ${test_register_gnome_DIST} PARENT_SCOPE)

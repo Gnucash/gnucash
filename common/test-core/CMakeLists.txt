@@ -19,7 +19,7 @@ INCLUDE_DIRECTORIES(
 )
 
 SET_DIST_LIST(test_core_DIST ${test_core_SOURCES} ${test_core_noinst_HEADERS} CMakeLists.txt
-        Makefile.am unittest-support.i unittest-support.scm)
+        unittest-support.i unittest-support.scm)
 
 ADD_LIBRARY(test-core STATIC ${test_core_SOURCES} ${test_core_noinst_HEADERS})
 TARGET_LINK_LIBRARIES(test-core gncmod-engine ${GLIB2_LDFLAGS})

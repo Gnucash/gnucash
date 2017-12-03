@@ -265,7 +265,7 @@ GNC_ADD_SCHEME_TARGETS(scm-gnome-utils-2
 
 ADD_CUSTOM_TARGET(scm-gnome-utils ALL DEPENDS scm-gnome-utils-2 scm-gnome-utils-1)
 
-SET_LOCAL_DIST(gnome_utils_DIST_local CMakeLists.txt Makefile.am ${gnome_utils_SOURCES} ${gnome_utils_HEADERS}
+SET_LOCAL_DIST(gnome_utils_DIST_local CMakeLists.txt ${gnome_utils_SOURCES} ${gnome_utils_HEADERS}
         ${gnome_utils_noinst_HEADERS} gnome-utils.scm gnome-utils.i gnc-menu-extensions.scm
         make-gnc-warnings-c.xsl make-gnc-warnings-h.xsl)
 SET(gnome_utils_DIST ${gnome_utils_DIST_local} ${gnome_utils_gschema_DIST} ${test_gnome_utils_DIST}

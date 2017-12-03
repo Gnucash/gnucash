@@ -1,1 +1,1 @@
-SET_DIST_LIST(example_glade_DIST CMakeLists.txt Makefile.am)
+SET_DIST_LIST(example_glade_DIST CMakeLists.txt )

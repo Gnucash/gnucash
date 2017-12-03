@@ -10,4 +10,4 @@ GNC_ADD_SCHEME_TARGETS(scm-gnumeric
   FALSE
 )
 
-SET_DIST_LIST(scm_gnumeric_DIST CMakeLists.txt Makefile.am ${gnumeric_SCHEME})
+SET_DIST_LIST(scm_gnumeric_DIST CMakeLists.txt ${gnumeric_SCHEME})

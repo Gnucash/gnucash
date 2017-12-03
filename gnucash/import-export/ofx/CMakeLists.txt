@@ -44,5 +44,5 @@ ENDIF()
     DESTINATION ${DATADIR_BUILD}/gnucash/ui)
 ENDIF()
 
-SET_LOCAL_DIST(ofx_DIST_local CMakeLists.txt Makefile.am migratable-prefs-ofx.xml ${ofx_SOURCES} ${ofx_noinst_HEADERS} ${ofx_UI})
+SET_LOCAL_DIST(ofx_DIST_local CMakeLists.txt migratable-prefs-ofx.xml ${ofx_SOURCES} ${ofx_noinst_HEADERS} ${ofx_UI})
 SET(ofx_DIST ${ofx_DIST_local} ${test_ofx_DIST} ${ofx_gschema_DIST} PARENT_SCOPE)

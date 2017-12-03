@@ -63,7 +63,7 @@ GNC_ADD_TEST_WITH_GUILE(test-app-utils "${test_app_utils_SOURCES}" APP_UTILS_TES
 
 SET_DIST_LIST(test_app_utils_DIST
   CMakeLists.txt
-  Makefile.am
+  
   test-exp-parser.c
   test-link-module.c
   test-print-parse-amount.cpp

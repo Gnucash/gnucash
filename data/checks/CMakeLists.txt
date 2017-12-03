@@ -12,4 +12,4 @@ INSTALL(FILES ${checks_DATA} DESTINATION ${CMAKE_INSTALL_DATADIR}/gnucash/checks
 
 FILE(COPY ${checks_DATA} DESTINATION ${DATADIR_BUILD}/gnucash/checks)
 
-SET_DIST_LIST(checks_DIST CMakeLists.txt Makefile.am ${checks_DATA})
+SET_DIST_LIST(checks_DIST CMakeLists.txt ${checks_DATA})

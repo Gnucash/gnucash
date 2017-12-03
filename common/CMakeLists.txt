@@ -19,6 +19,6 @@ ELSE()
 ENDIF()
 
 
-SET_LOCAL_DIST(common_DIST_local CMakeLists.txt Makefile.am ${common_EXTRA_DIST})
+SET_LOCAL_DIST(common_DIST_local CMakeLists.txt ${common_EXTRA_DIST})
 
 SET(common_DIST ${common_DIST_local} ${cmake_modules_DIST} ${debug_DIST} ${test_core_DIST} PARENT_SCOPE)

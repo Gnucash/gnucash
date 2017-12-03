@@ -71,7 +71,7 @@ SET (backend_xml_utils_SOURCES
 
 SET_LOCAL_DIST(backend_xml_DIST_local ${backend_xml_utils_SOURCES}
   ${backend_xml_utils_noinst_HEADERS} gnc-backend-xml.cpp CMakeLists.txt
-  Makefile.am)
+  )
 SET(backend_xml_DIST ${backend_xml_DIST_local} ${test_backend_xml_DIST} PARENT_SCOPE)
 
 # Add dependency on config.h

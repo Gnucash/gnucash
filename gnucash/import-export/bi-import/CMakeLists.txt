@@ -49,5 +49,5 @@ INSTALL(TARGETS gncmod-bi-import
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 # No headers to install.
 
-SET_LOCAL_DIST(bi_import_DIST_local CMakeLists.txt Makefile.am README ${bi_import_SOURCES} ${bi_import_noinst_HEADERS})
+SET_LOCAL_DIST(bi_import_DIST_local CMakeLists.txt README ${bi_import_SOURCES} ${bi_import_noinst_HEADERS})
 SET(bi_import_DIST ${bi_import_DIST_local} ${bi_import_ui_DIST} ${bi_import_glade_DIST} PARENT_SCOPE)

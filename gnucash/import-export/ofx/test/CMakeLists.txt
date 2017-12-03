@@ -7,4 +7,4 @@ IF(WITH_OFX)
   GNC_ADD_TEST(test-link-ofx test-link.c OFX_TEST_INCLUDE_DIRS OFX_TEST_LIBS)
 ENDIF(WITH_OFX)
 
-SET_DIST_LIST(test_ofx_DIST CMakeLists.txt Makefile.am test-link.c)
+SET_DIST_LIST(test_ofx_DIST CMakeLists.txt test-link.c)

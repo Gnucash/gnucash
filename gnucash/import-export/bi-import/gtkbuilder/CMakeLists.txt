@@ -10,4 +10,4 @@ INSTALL(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     PATTERN Makefile.* EXCLUDE
     PATTERN CMakeLists.txt EXCLUDE)
 
-SET_DIST_LIST(bi_import_glade_DIST CMakeLists.txt Makefile.am dialog-bi-import-gui.glade)
+SET_DIST_LIST(bi_import_glade_DIST CMakeLists.txt dialog-bi-import-gui.glade)

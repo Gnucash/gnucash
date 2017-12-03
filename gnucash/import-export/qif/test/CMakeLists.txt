@@ -15,4 +15,4 @@ IF (FALSE)
     GNC_TEST_FILES=${CMAKE_CURRENT_SOURCE_DIR}/test-files)
 ENDIF()
 
-SET_DIST_LIST(test_qif_DIST CMakeLists.txt Makefile.am test-link.c test-qif.c test-files/test-1-bank-txn.qif)
+SET_DIST_LIST(test_qif_DIST CMakeLists.txt test-link.c test-qif.c test-files/test-1-bank-txn.qif)

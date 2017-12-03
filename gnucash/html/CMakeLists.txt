@@ -33,7 +33,7 @@ ELSE ()
   SET(html_EXTRA_DIST gnc-html-webkit1.h gnc-html-webkit1.c)
 ENDIF ()
 
-SET_DIST_LIST(html_DIST CMakeLists.txt Makefile.am ${html_HEADERS} ${html_SOURCES} gnc-html.i ${html_EXTRA_DIST})
+SET_DIST_LIST(html_DIST CMakeLists.txt ${html_HEADERS} ${html_SOURCES} gnc-html.i ${html_EXTRA_DIST})
 
 ADD_LIBRARY (gncmod-html
   ${html_SOURCES}

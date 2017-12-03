@@ -52,6 +52,6 @@ set(test_gnc_path_util_SOURCES
 gnc_add_test(test-gnc-path-util "${test_gnc_path_util_SOURCES}"
   gtest_core_utils_INCLUDES gtest_core_utils_LIBS "GNC_UNINSTALLED=yes")
 
-SET_DIST_LIST(test_core_utils_DIST CMakeLists.txt Makefile.am
+SET_DIST_LIST(test_core_utils_DIST CMakeLists.txt
   test-gnc-glib-utils.c test-resolve-file-path.c test-userdata-dir.c
   test-userdata-dir-invalid-home.c gtest-path-utilities.cpp)

@@ -77,7 +77,7 @@ ADD_SUBDIRECTORY(zh_CN)
 ADD_SUBDIRECTORY(zh_HK)
 ADD_SUBDIRECTORY(zh_TW)
 
-SET_LOCAL_DIST(dist_list CMakeLists.txt Makefile.am)
+SET_LOCAL_DIST(dist_list CMakeLists.txt )
 
 SET(accounts_DIST ${C_DIST} ${CA_DIST} ${CS_DIST} ${DA_DIST} ${DE_AT_DIST} ${DE_CH_DIST} ${DE_DE_DIST} ${EL_GR_DIST}
                   ${EN_GB_DIST} ${ES_ES_DIST} ${ES_MX_DIST} ${FI_FI_DIST} ${FR_CA_DIST} ${FR_CH_DIST}

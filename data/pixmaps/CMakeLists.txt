@@ -88,6 +88,6 @@ SET(gncscalableicon_DATA
     hicolor/scalable/apps/gnucash-icon.svg
 )
 
-SET_LOCAL_DIST(pixmaps_DIST_local CMakeLists.txt Makefile.am ${gncpixmap_DATA}
+SET_LOCAL_DIST(pixmaps_DIST_local CMakeLists.txt ${gncpixmap_DATA}
     ${gncicon_DATA} ${gncscalableicon_DATA})
 SET(pixmaps_DIST ${pixmaps_DIST_local} PARENT_SCOPE)

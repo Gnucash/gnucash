@@ -10,4 +10,4 @@ SET(pycons_DATA
         simple_plot.py
 )
 
-SET_DIST_LIST(pycons_DIST CMakeLists.txt Makefile.am ${pycons_DATA})
+SET_DIST_LIST(pycons_DIST CMakeLists.txt ${pycons_DATA})

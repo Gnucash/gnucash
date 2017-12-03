@@ -29,4 +29,4 @@ SET(gnome_utils_GLADE
         gnc-tree-view-owner.glade
 )
 
-SET_DIST_LIST(gnome_utils_gtkbuilder_DIST CMakeLists.txt Makefile.am ${gnome_utils_GLADE})
+SET_DIST_LIST(gnome_utils_gtkbuilder_DIST CMakeLists.txt ${gnome_utils_GLADE})

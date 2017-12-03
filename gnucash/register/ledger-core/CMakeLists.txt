@@ -64,6 +64,6 @@ INSTALL(TARGETS gncmod-ledger-core
 # No headers to install
 
 
-SET_LOCAL_DIST(ledger_core_DIST_local CMakeLists.txt Makefile.am ${ledger_core_SOURCES} ${ledger_core_HEADERS})
+SET_LOCAL_DIST(ledger_core_DIST_local CMakeLists.txt ${ledger_core_SOURCES} ${ledger_core_HEADERS})
 SET(ledger_core_DIST ${ledger_core_DIST_local} ${test_ledger_core_DIST} PARENT_SCOPE)
 
