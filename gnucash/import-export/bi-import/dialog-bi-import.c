@@ -504,7 +504,8 @@ void
 gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                           guint * n_invoices_created,
                           guint * n_invoices_updated,
-                          gchar * type, gchar * open_mode, GString * info)
+                          gchar * type, gchar * open_mode, GString * info,
+                          GtkWindow *parent)
 {
     gboolean valid;
     GtkTreeIter iter;
@@ -628,7 +629,6 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             (*n_invoices_created)++;
             update = YES;
 
-            
             gncInvoiceCommitEdit (invoice);
         }
 // I want to warn the user that an existing billvoice exists, but not every
@@ -645,7 +645,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             }
             if (update != YES)	// Pop up a dialog to ask if updates are the expected action
             {
-                dialog = gtk_message_dialog_new (NULL,
+                dialog = gtk_message_dialog_new (parent,
                                                  GTK_DIALOG_MODAL,
                                                  GTK_MESSAGE_ERROR,
                                                  GTK_BUTTONS_YES_NO,
@@ -840,7 +840,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                 || (g_ascii_strcasecmp(open_mode, "NOT_POSTED") == 0
                     && strlen(date_posted) == 0))
         {
-            iw =  gnc_ui_invoice_edit (invoice);
+            iw =  gnc_ui_invoice_edit (parent, invoice);
             gnc_plugin_page_invoice_new (iw);
         }
 

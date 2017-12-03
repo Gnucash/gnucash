@@ -539,7 +539,7 @@ find_handler (gpointer find_data, gpointer user_data)
 }
 
 static OrderWindow *
-gnc_order_new_window (QofBook *bookp, OrderDialogType type,
+gnc_order_new_window (GtkWindow *parent, QofBook *bookp, OrderDialogType type,
                       GncOrder *order, GncOwner *owner)
 {
     OrderWindow *ow;
@@ -573,6 +573,7 @@ gnc_order_new_window (QofBook *bookp, OrderDialogType type,
         if (ow)
         {
             gtk_window_present (GTK_WINDOW(ow->dialog));
+            gtk_window_set_transient_for (GTK_WINDOW(ow->dialog), parent);
             return(ow);
         }
     }
@@ -591,6 +592,7 @@ gnc_order_new_window (QofBook *bookp, OrderDialogType type,
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-order.glade", "order_entry_dialog");
     ow->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "order_entry_dialog"));
+    gtk_window_set_transient_for (GTK_WINDOW(ow->dialog), parent);
 
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(ow->dialog), "GncOrderDialog");
@@ -683,7 +685,7 @@ gnc_order_new_window (QofBook *bookp, OrderDialogType type,
 }
 
 static OrderWindow *
-gnc_order_window_new_order (QofBook *bookp, GncOwner *owner)
+gnc_order_window_new_order (GtkWindow *parent, QofBook *bookp, GncOwner *owner)
 {
     OrderWindow *ow;
     GtkBuilder *builder;
@@ -706,6 +708,7 @@ gnc_order_window_new_order (QofBook *bookp, GncOwner *owner)
     gnc_builder_add_from_file (builder, "dialog-order.glade", "new_order_dialog");
 
     ow->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "new_order_dialog"));
+    gtk_window_set_transient_for (GTK_WINDOW(ow->dialog), parent);
 
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(ow->dialog), "GncOrderDialog");
@@ -759,7 +762,7 @@ gnc_order_window_new_order (QofBook *bookp, GncOwner *owner)
 }
 
 OrderWindow *
-gnc_ui_order_edit (GncOrder *order)
+gnc_ui_order_edit (GtkWindow *parent, GncOrder *order)
 {
     OrderWindow *ow;
     OrderDialogType type;
@@ -773,14 +776,14 @@ gnc_ui_order_edit (GncOrder *order)
             type = VIEW_ORDER;
     }
 
-    ow = gnc_order_new_window (gncOrderGetBook(order), type, order,
+    ow = gnc_order_new_window (parent, gncOrderGetBook(order), type, order,
                                gncOrderGetOwner (order));
 
     return ow;
 }
 
 OrderWindow *
-gnc_ui_order_new (GncOwner *ownerp, QofBook *bookp)
+gnc_ui_order_new (GtkWindow *parent, GncOwner *ownerp, QofBook *bookp)
 {
     OrderWindow *ow;
     GncOwner owner;
@@ -806,7 +809,7 @@ gnc_ui_order_new (GncOwner *ownerp, QofBook *bookp)
     /* Make sure required options exist */
     if (!bookp) return NULL;
 
-    ow = gnc_order_window_new_order (bookp, &owner);
+    ow = gnc_order_window_new_order (parent, bookp, &owner);
 
     return ow;
 }
@@ -823,7 +826,7 @@ edit_order_cb (gpointer *order_p, gpointer user_data)
     order = *order_p;
 
     if (order)
-        gnc_ui_order_edit (order);
+        gnc_ui_order_edit (NULL, order);
 
     return;
 }
@@ -836,7 +839,7 @@ new_order_cb (gpointer user_data)
 
     g_return_val_if_fail (user_data, NULL);
 
-    ow = gnc_ui_order_new (sw->owner, sw->book);
+    ow = gnc_ui_order_new (NULL, sw->owner, sw->book);
     return ow_get_order (ow);
 }
 
@@ -980,7 +983,7 @@ GNCSearchWindow *
 gnc_order_search_edit (gpointer start, gpointer book)
 {
     if (start)
-        gnc_ui_order_edit (start);
+        gnc_ui_order_edit (NULL, start);
 
     return NULL;
 }

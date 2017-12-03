@@ -56,10 +56,10 @@
  ********************************************************************/
 
 void
-reportWindow(int report_id)
+reportWindow(int report_id, GtkWindow *parent)
 {
     gnc_set_busy_cursor (NULL, TRUE);
-    gnc_main_window_open_report(report_id, NULL);
+    gnc_main_window_open_report(report_id, GNC_MAIN_WINDOW(parent));
     gnc_unset_busy_cursor (NULL);
 }
 
@@ -324,7 +324,7 @@ gnc_html_options_url_cb (const char *location, const char *label,
             return FALSE;
         }
 
-        gnc_report_edit_options (report, NULL);
+        gnc_report_edit_options (report, GTK_WINDOW(result->parent));
 
         return TRUE;
     }
@@ -350,7 +350,7 @@ gnc_html_report_url_cb (const char *location, const char *label,
         char *url;
 
         url = gnc_build_url (URL_TYPE_REPORT, location, label);
-        gnc_main_window_open_report_url (url, NULL);
+        gnc_main_window_open_report_url (url, GNC_MAIN_WINDOW(result->parent));
         g_free (url);
 
         result->load_to_stream = FALSE;

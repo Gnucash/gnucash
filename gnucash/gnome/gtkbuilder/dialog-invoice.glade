@@ -677,7 +677,6 @@
     </columns>
   </object>
   <object class="GtkDialog" id="new_invoice_dialog">
-    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">New Invoice</property>
     <property name="type_hint">dialog</property>
@@ -1282,7 +1281,6 @@
     </action-widgets>
   </object>
   <object class="GtkDialog" id="unpost_message_dialog">
-    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>

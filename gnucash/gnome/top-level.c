@@ -183,7 +183,7 @@ gnc_html_register_url_cb (const char *location, const char *label,
     }
 
     page = gnc_plugin_page_register_new (account, FALSE);
-    gnc_main_window_open_page (NULL, page);
+    gnc_main_window_open_page (GNC_MAIN_WINDOW (result->parent), page);
     if (split)
     {
         gsr = gnc_plugin_page_register_get_gsr(page);
@@ -213,7 +213,7 @@ gnc_html_price_url_cb (const char *location, const char *label,
         if (!validate_type("price-guid=", location, GNC_ID_PRICE, result, &guid, &entity))
             return FALSE;
 
-        if (!gnc_price_edit_by_guid (NULL, &guid))
+        if (!gnc_price_edit_by_guid (GTK_WIDGET (result->parent), &guid))
         {
             result->error_message = g_strdup_printf (_("No such price: %s"),
                                     location);

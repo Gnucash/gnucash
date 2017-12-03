@@ -31,8 +31,8 @@ typedef struct _employee_window EmployeeWindow;
 #include "dialog-search.h"
 
 /* Functions to edit and create employees */
-EmployeeWindow * gnc_ui_employee_edit (GncEmployee *employee);
-EmployeeWindow * gnc_ui_employee_new (QofBook *book);
+EmployeeWindow * gnc_ui_employee_edit (GtkWindow *parent, GncEmployee *employee);
+EmployeeWindow * gnc_ui_employee_new (GtkWindow *parent, QofBook *book);
 
 /* Search for an employee */
 GNCSearchWindow * gnc_employee_search (GncEmployee *start, QofBook *book);

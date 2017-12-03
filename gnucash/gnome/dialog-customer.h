@@ -31,8 +31,8 @@ typedef struct _customer_window CustomerWindow;
 #include "dialog-search.h"
 
 /* Functions to create and edit a customer */
-CustomerWindow * gnc_ui_customer_edit (GncCustomer *cust);
-CustomerWindow * gnc_ui_customer_new (QofBook *book);
+CustomerWindow * gnc_ui_customer_edit (GtkWindow *parent, GncCustomer *cust);
+CustomerWindow * gnc_ui_customer_new (GtkWindow *parent, QofBook *book);
 
 /* Search for customers */
 GNCSearchWindow *gnc_customer_search (GncCustomer *start, QofBook *book);

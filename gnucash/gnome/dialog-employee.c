@@ -46,6 +46,7 @@
 #include "dialog-employee.h"
 #include "dialog-invoice.h"
 #include "dialog-payment.h"
+#include "business-gnome-utils.h"
 
 #define DIALOG_NEW_EMPLOYEE_CM_CLASS "dialog-new-employee"
 #define DIALOG_EDIT_EMPLOYEE_CM_CLASS "dialog-edit-employee"
@@ -364,7 +365,8 @@ find_handler (gpointer find_data, gpointer user_data)
 }
 
 static EmployeeWindow *
-gnc_employee_new_window (QofBook *bookp,
+gnc_employee_new_window (GtkWindow *parent,
+                         QofBook *bookp,
                          GncEmployee *employee)
 {
     EmployeeWindow *ew;
@@ -388,6 +390,7 @@ gnc_employee_new_window (QofBook *bookp,
                                            find_handler, &employee_guid);
         if (ew)
         {
+            gtk_window_set_transient_for (GTK_WINDOW(ew->dialog), parent);
             gtk_window_present (GTK_WINDOW(ew->dialog));
             return(ew);
         }
@@ -410,6 +413,7 @@ gnc_employee_new_window (QofBook *bookp,
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-employee.glade", "employee_dialog");
     ew->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "employee_dialog"));
+    gtk_window_set_transient_for (GTK_WINDOW(ew->dialog), parent);
 
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(ew->dialog), "GncEmployeeDialog");
@@ -570,26 +574,26 @@ gnc_employee_new_window (QofBook *bookp,
 }
 
 EmployeeWindow *
-gnc_ui_employee_new (QofBook *bookp)
+gnc_ui_employee_new (GtkWindow *parent, QofBook *bookp)
 {
     EmployeeWindow *ew;
 
     /* Make sure required options exist */
     if (!bookp) return NULL;
 
-    ew = gnc_employee_new_window (bookp, NULL);
+    ew = gnc_employee_new_window (parent, bookp, NULL);
 
     return ew;
 }
 
 EmployeeWindow *
-gnc_ui_employee_edit (GncEmployee *employee)
+gnc_ui_employee_edit (GtkWindow *parent, GncEmployee *employee)
 {
     EmployeeWindow *ew;
 
     if (!employee) return NULL;
 
-    ew = gnc_employee_new_window (gncEmployeeGetBook(employee), employee);
+    ew = gnc_employee_new_window (parent, gncEmployeeGetBook(employee), employee);
 
     return ew;
 }
@@ -630,7 +634,7 @@ payment_employee_cb (gpointer *employee_p, gpointer user_data)
         return;
 
     gncOwnerInitEmployee (&owner, employee);
-    gnc_ui_payment_new (&owner, sw->book);
+    gnc_ui_payment_new (NULL, &owner, sw->book);
     return;
 }
 
@@ -646,7 +650,7 @@ edit_employee_cb (gpointer *employee_p, gpointer user_data)
     if (!employee)
         return;
 
-    gnc_ui_employee_edit (employee);
+    gnc_ui_employee_edit (NULL, employee);
     return;
 }
 
@@ -658,7 +662,7 @@ new_employee_cb (gpointer user_data)
 
     g_return_val_if_fail (user_data, NULL);
 
-    ew = gnc_ui_employee_new (sw->book);
+    ew = gnc_ui_employee_new (NULL, sw->book);
     return ew_get_employee (ew);
 }
 
@@ -751,7 +755,7 @@ GNCSearchWindow *
 gnc_employee_search_edit (gpointer start, gpointer book)
 {
     if (start)
-        gnc_ui_employee_edit (start);
+        gnc_ui_employee_edit (NULL, start);
 
     return NULL;
 }

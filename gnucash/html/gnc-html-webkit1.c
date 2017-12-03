@@ -881,6 +881,7 @@ impl_webkit_show_url( GncHtml* self, URLType type,
         result.base_type = URL_TYPE_FILE;
         result.base_location = NULL;
         result.error_message = NULL;
+        result.parent = GTK_WINDOW (priv->base.parent);
 
         ok = url_handler( location, label, new_window, &result );
         if ( !ok )

@@ -39,7 +39,7 @@ typedef struct _bi_import_gui BillImportGui;
 /**
  * File chooser
  */
-BillImportGui *gnc_plugin_bi_import_showGUI(void);
+BillImportGui *gnc_plugin_bi_import_showGUI(GtkWindow *parent);
 
 G_END_DECLS
 

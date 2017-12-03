@@ -775,7 +775,7 @@ gnc_plugin_page_owner_tree_recreate_page (GtkWidget *window,
 }
 
 /* Wrapper function to open the proper edit dialog, depending on the owner type */
-static void gnc_ui_owner_edit (GncOwner *owner)
+static void gnc_ui_owner_edit (GtkWindow *parent, GncOwner *owner)
 {
     if (NULL == owner) return;
 
@@ -786,22 +786,22 @@ static void gnc_ui_owner_edit (GncOwner *owner)
         break;
     case GNC_OWNER_CUSTOMER :
     {
-        gnc_ui_customer_edit (owner->owner.customer);
+        gnc_ui_customer_edit (parent, owner->owner.customer);
         break;
     }
     case GNC_OWNER_JOB :
     {
-        gnc_ui_job_edit (owner->owner.job);
+        gnc_ui_job_edit (parent, owner->owner.job);
         break;
     }
     case GNC_OWNER_VENDOR :
     {
-        gnc_ui_vendor_edit (owner->owner.vendor);
+        gnc_ui_vendor_edit (parent, owner->owner.vendor);
         break;
     }
     case GNC_OWNER_EMPLOYEE :
     {
-        gnc_ui_employee_edit (owner->owner.employee);
+        gnc_ui_employee_edit (parent, owner->owner.employee);
         break;
     }
     }
@@ -842,10 +842,12 @@ gnc_plugin_page_owner_tree_double_click_cb (GtkTreeView        *treeview,
         GncPluginPageOwnerTree *page)
 {
     GncOwner *owner;
+    GtkWindow *parent;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_OWNER_TREE (page));
     owner = gnc_tree_view_owner_get_owner_from_path (GNC_TREE_VIEW_OWNER(treeview), path);
-    gnc_ui_owner_edit (owner);
+    parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
+    gnc_ui_owner_edit (parent, owner);
 }
 
 static void
@@ -993,10 +995,12 @@ static void
 gnc_plugin_page_owner_tree_cmd_new_owner (GtkAction *action, GncPluginPageOwnerTree *page)
 {
     GncPluginPageOwnerTreePrivate *priv;
+    GtkWindow *parent;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_OWNER_TREE(page));
 
     priv = GNC_PLUGIN_PAGE_OWNER_TREE_GET_PRIVATE (page);
+    parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
 
     switch (priv->owner_type)
     {
@@ -1005,7 +1009,7 @@ gnc_plugin_page_owner_tree_cmd_new_owner (GtkAction *action, GncPluginPageOwnerT
         break;
     case GNC_OWNER_CUSTOMER :
     {
-        gnc_ui_customer_new (gnc_get_current_book ());
+        gnc_ui_customer_new (parent, gnc_get_current_book ());
         break;
     }
     case GNC_OWNER_JOB :
@@ -1016,12 +1020,12 @@ gnc_plugin_page_owner_tree_cmd_new_owner (GtkAction *action, GncPluginPageOwnerT
     }
     case GNC_OWNER_VENDOR :
     {
-        gnc_ui_vendor_new (gnc_get_current_book ());
+        gnc_ui_vendor_new (parent, gnc_get_current_book ());
         break;
     }
     case GNC_OWNER_EMPLOYEE :
     {
-        gnc_ui_employee_new (gnc_get_current_book ());
+        gnc_ui_employee_new (parent, gnc_get_current_book ());
         break;
     }
     }
@@ -1030,12 +1034,14 @@ gnc_plugin_page_owner_tree_cmd_new_owner (GtkAction *action, GncPluginPageOwnerT
 static void
 gnc_plugin_page_owner_tree_cmd_edit_owner (GtkAction *action, GncPluginPageOwnerTree *page)
 {
+    GtkWindow *parent;
     GncOwner *owner = gnc_plugin_page_owner_tree_get_current_owner (page);
     if (NULL == owner) return;
 
     ENTER("action %p, page %p", action, page);
 
-    gnc_ui_owner_edit (owner);
+    parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
+    gnc_ui_owner_edit (parent, owner);
 
     LEAVE(" ");
 }
@@ -1132,6 +1138,7 @@ gnc_plugin_page_owner_tree_cmd_new_invoice (GtkAction *action,
 {
     GncPluginPageOwnerTreePrivate *priv;
     GncOwner current_owner;
+    GtkWindow *parent;
 
     ENTER("action %p, page %p", action, page);
 
@@ -1168,8 +1175,9 @@ gnc_plugin_page_owner_tree_cmd_new_invoice (GtkAction *action,
     }
     }
 
+    parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
     if (gncOwnerGetType(&current_owner) != GNC_OWNER_UNDEFINED)
-        gnc_ui_invoice_new (&current_owner, gnc_get_current_book());
+        gnc_ui_invoice_new (parent, &current_owner, gnc_get_current_book ());
 
     LEAVE(" ");
 }

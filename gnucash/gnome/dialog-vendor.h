@@ -31,8 +31,8 @@ typedef struct _vendor_window VendorWindow;
 #include "dialog-search.h"
 
 /* Create or Edit Vendors */
-VendorWindow * gnc_ui_vendor_edit (GncVendor *vendor);
-VendorWindow * gnc_ui_vendor_new (QofBook *book);
+VendorWindow * gnc_ui_vendor_edit (GtkWindow *parent, GncVendor *vendor);
+VendorWindow * gnc_ui_vendor_new (GtkWindow *parent, QofBook *book);
 
 /* Search for vendors */
 GNCSearchWindow * gnc_vendor_search (GncVendor *start, QofBook *book);

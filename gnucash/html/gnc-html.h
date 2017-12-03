@@ -67,6 +67,9 @@ typedef struct
     URLType base_type;
     gchar* base_location;
 
+    /* The window that triggered this URL request */
+    GtkWindow *parent;
+
     /* The following members are used if the handler fails (returns FALSE). */
     gchar* error_message;
 } GNCURLResult;

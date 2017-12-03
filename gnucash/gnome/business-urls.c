@@ -95,7 +95,7 @@ customerCB (const char *location, const char *label,
     /* href="...:customer=<guid>" */
     HANDLE_TYPE ("customer=", GNC_ID_CUSTOMER);
     customer = (GncCustomer *) entity;
-    gnc_ui_customer_edit (customer);
+    gnc_ui_customer_edit (result->parent, customer);
 
     return TRUE;
 }
@@ -110,7 +110,7 @@ vendorCB (const char *location, const char *label,
     /* href="...:vendor=<guid>" */
     HANDLE_TYPE ("vendor=", GNC_ID_VENDOR);
     vendor = (GncVendor *) entity;
-    gnc_ui_vendor_edit (vendor);
+    gnc_ui_vendor_edit (result->parent, vendor);
 
     return TRUE;
 }
@@ -126,7 +126,7 @@ employeeCB (const char *location, const char *label,
     HANDLE_TYPE ("employee=", GNC_ID_EMPLOYEE);
 
     employee = (GncEmployee *) entity;
-    gnc_ui_employee_edit (employee);
+    gnc_ui_employee_edit (result->parent, employee);
 
     return TRUE;
 }
@@ -141,7 +141,7 @@ invoiceCB (const char *location, const char *label,
     /* href="...:invoice=<guid>" */
     HANDLE_TYPE ("invoice=", GNC_ID_INVOICE);
     invoice = (GncInvoice *) entity;
-    gnc_ui_invoice_edit (invoice);
+    gnc_ui_invoice_edit (result->parent, invoice);
 
     return TRUE;
 }
@@ -156,7 +156,7 @@ jobCB (const char *location, const char *label,
     /* href="...:job=<guid>" */
     HANDLE_TYPE ("job=", GNC_ID_JOB);
     job = (GncJob *) entity;
-    gnc_ui_job_edit (job);
+    gnc_ui_job_edit (result->parent, job);
 
     return TRUE;
 }
@@ -306,7 +306,7 @@ ownerreportCB (const char *location, const char *label,
     }
 
     /* Ok, let's run this report */
-    gnc_business_call_owner_report (&owner, acc);
+    gnc_business_call_owner_report (result->parent, &owner, acc);
 
     return TRUE;
 }

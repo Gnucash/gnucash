@@ -395,7 +395,7 @@ find_handler (gpointer find_data, gpointer user_data)
 }
 
 static VendorWindow *
-gnc_vendor_new_window (QofBook *bookp, GncVendor *vendor)
+gnc_vendor_new_window (GtkWindow *parent, QofBook *bookp, GncVendor *vendor)
 {
     VendorWindow *vw;
     GtkBuilder *builder;
@@ -415,6 +415,7 @@ gnc_vendor_new_window (QofBook *bookp, GncVendor *vendor)
                                            find_handler, &vendor_guid);
         if (vw)
         {
+            gtk_window_set_transient_for (GTK_WINDOW(vw->dialog), parent);
             gtk_window_present (GTK_WINDOW(vw->dialog));
             return(vw);
         }
@@ -440,6 +441,7 @@ gnc_vendor_new_window (QofBook *bookp, GncVendor *vendor)
     gnc_builder_add_from_file (builder, "dialog-vendor.glade", "taxtable_store");
     gnc_builder_add_from_file (builder, "dialog-vendor.glade", "vendor_dialog");
     vw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "vendor_dialog"));
+    gtk_window_set_transient_for (GTK_WINDOW(vw->dialog), parent);
 
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(vw->dialog), "GncVendorDialog");
@@ -559,25 +561,25 @@ gnc_vendor_new_window (QofBook *bookp, GncVendor *vendor)
 }
 
 VendorWindow *
-gnc_ui_vendor_new (QofBook *bookp)
+gnc_ui_vendor_new (GtkWindow *parent, QofBook *bookp)
 {
     VendorWindow *vw;
 
     /* Make sure required options exist */
     if (!bookp) return NULL;
 
-    vw = gnc_vendor_new_window (bookp, NULL);
+    vw = gnc_vendor_new_window (parent, bookp, NULL);
     return vw;
 }
 
 VendorWindow *
-gnc_ui_vendor_edit (GncVendor *vendor)
+gnc_ui_vendor_edit (GtkWindow *parent, GncVendor *vendor)
 {
     VendorWindow *vw;
 
     if (!vendor) return NULL;
 
-    vw = gnc_vendor_new_window (gncVendorGetBook(vendor), vendor);
+    vw = gnc_vendor_new_window (parent, gncVendorGetBook(vendor), vendor);
 
     return vw;
 }
@@ -656,7 +658,7 @@ payment_vendor_cb (gpointer *vendor_p, gpointer user_data)
         return;
 
     gncOwnerInitVendor (&owner, vendor);
-    gnc_ui_payment_new (&owner, sw->book);
+    gnc_ui_payment_new (NULL, &owner, sw->book);
     return;
 }
 
@@ -672,7 +674,7 @@ edit_vendor_cb (gpointer *vendor_p, gpointer user_data)
     if (!vendor)
         return;
 
-    gnc_ui_vendor_edit (vendor);
+    gnc_ui_vendor_edit (NULL, vendor);
     return;
 }
 
@@ -684,7 +686,7 @@ new_vendor_cb (gpointer user_data)
 
     g_return_val_if_fail (user_data, NULL);
 
-    vw = gnc_ui_vendor_new (sw->book);
+    vw = gnc_ui_vendor_new (NULL, sw->book);
     return vw_get_vendor (vw);
 }
 
@@ -778,7 +780,7 @@ GNCSearchWindow *
 gnc_vendor_search_edit (gpointer start, gpointer book)
 {
     if (start)
-        gnc_ui_vendor_edit (start);
+        gnc_ui_vendor_edit (NULL, start);
 
     return NULL;
 }

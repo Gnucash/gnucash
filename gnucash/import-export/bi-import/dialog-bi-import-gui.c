@@ -44,6 +44,7 @@
 
 struct _bi_import_gui
 {
+    GtkWindow    *parent;
     GtkWidget    *dialog;
     GtkWidget    *tree_view;
     GtkWidget    *entryFilename;
@@ -81,7 +82,7 @@ static void gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar
 static QofLogModule UNUSED_VAR log_module = G_LOG_DOMAIN; //G_LOG_BUSINESS;
 
 BillImportGui *
-gnc_plugin_bi_import_showGUI(void)
+gnc_plugin_bi_import_showGUI (GtkWindow *parent)
 {
     BillImportGui *gui;
     GtkBuilder *builder;
@@ -96,6 +97,9 @@ gnc_plugin_bi_import_showGUI(void)
         // window found
         gui = g_list_nth_data (glist, 0);
         g_list_free (glist);
+
+        gtk_window_set_transient_for(GTK_WINDOW(gui->dialog), GTK_WINDOW(parent));
+        gui->parent = parent;
         gtk_window_present (GTK_WINDOW(gui->dialog));
         return gui;
     }
@@ -108,6 +112,8 @@ gnc_plugin_bi_import_showGUI(void)
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-bi-import-gui.glade", "bi_import_dialog");
     gui->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "bi_import_dialog"));
+    gtk_window_set_transient_for(GTK_WINDOW(gui->dialog), GTK_WINDOW(parent));
+    gui->parent = parent;
     gui->tree_view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview1"));
     gui->entryFilename = GTK_WIDGET(gtk_builder_get_object (builder, "entryFilename"));
 
@@ -208,7 +214,8 @@ gnc_bi_import_gui_ok_cb (GtkWidget *widget, gpointer data)
     if (res == RESULT_OK)
     {
         gnc_bi_import_fix_bis (gui->store, &n_fixed, &n_deleted, info, gui->type);
-        gnc_bi_import_create_bis (gui->store, gui->book, &n_invoices_created, &n_invoices_updated, gui->type, gui->open_mode, info);
+        gnc_bi_import_create_bis (gui->store, gui->book, &n_invoices_created, &n_invoices_updated,
+                                  gui->type, gui->open_mode, info, gui->parent);
         if (info->len > 0)
             gnc_info_dialog (GTK_WINDOW (gui->dialog), "%s", info->str);
         g_string_free( info, TRUE );
