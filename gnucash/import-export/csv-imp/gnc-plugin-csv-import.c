@@ -57,7 +57,7 @@ static GtkActionEntry gnc_plugin_actions [] =
         G_CALLBACK (gnc_plugin_csv_import_trans_cmd)
     },
     {
-        "CsvImportPriceAction", GTK_STOCK_CONVERT, N_("Import _Prices from a CSV file..."), NULL,
+        "CsvImportPriceAction", "go-previous", N_("Import _Prices from a CSV file..."), NULL,
         N_("Import Prices from a CSV file"),
         G_CALLBACK (gnc_plugin_csv_import_price_cmd)
     },
