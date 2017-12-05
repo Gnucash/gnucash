@@ -74,6 +74,7 @@
 (define optname-show-account-code (N_ "Show Account Code"))
 (define optname-show-account-description (N_ "Show Account Description"))
 (define optname-show-informal-headers (N_ "Show Informal Debit/Credit Headers"))
+(define optname-show-subtotals-only (N_ "Show subtotals only (hide transactional data)"))
 (define optname-indenting (N_ "Add indenting columns"))
 (define optname-sec-sortkey (N_ "Secondary Key"))
 (define optname-sec-subtotal (N_ "Secondary Subtotal"))
@@ -612,6 +613,11 @@ tags within description, notes or memo. ")
              (and sec-sortkey-subtotal-enabled sec-sortkey-subtotal-true)))
 
         (gnc-option-db-set-option-selectable-by-name
+         options pagename-sorting optname-show-subtotals-only
+         (or (and prime-sortkey-subtotal-enabled prime-sortkey-subtotal-true)
+             (and sec-sortkey-subtotal-enabled sec-sortkey-subtotal-true)))
+
+        (gnc-option-db-set-option-selectable-by-name
          options pagename-sorting optname-show-informal-headers
          (or (member prime-sortkey (list 'account-name 'account-code))
              (member sec-sortkey (list 'account-name 'account-code))))
@@ -669,6 +675,13 @@ tags within description, notes or memo. ")
       "j5"
       (_ "Add indenting columns with grouping and subtotals?")
       #t))
+
+    (gnc:register-trep-option
+     (gnc:make-simple-boolean-option
+      pagename-sorting optname-show-subtotals-only
+      "j6"
+      (_ "Show subtotals only, hiding transactional detail?")
+      #f))
 
     (gnc:register-trep-option
      (gnc:make-complex-boolean-option
@@ -896,6 +909,9 @@ tags within description, notes or memo. ")
                 (and (opt-val gnc:pagename-general optname-common-currency)
                      (opt-val gnc:pagename-general optname-orig-currency)))
           (cons 'indenting (opt-val pagename-sorting optname-indenting))
+          (cons 'subtotals-only (and (opt-val pagename-sorting optname-show-subtotals-only)
+                                     (or (primary-get-info 'renderer-fn)
+                                         (secondary-get-info 'renderer-fn))))
           (cons 'running-balance (opt-val gnc:pagename-display (N_ "Running Balance")))
           (cons 'account-full-name (opt-val gnc:pagename-display (N_ "Use Full Account Name")))
           (cons 'memo (opt-val gnc:pagename-display (N_ "Memo")))
@@ -1206,7 +1222,8 @@ tags within description, notes or memo. ")
                         calculated-cells))
             (addto! row-contents (gnc:make-html-table-cell/size
                                     1 (+ right-indent width-left-columns width-right-columns) data)))
-        (gnc:html-table-append-row/markup! table subheading-style (reverse row-contents))))
+        (if (not (column-uses? 'subtotals-only))
+            (gnc:html-table-append-row/markup! table subheading-style (reverse row-contents)))))
 
     (define (add-subtotal-row subtotal-string subtotal-collectors subtotal-style level)
       (let* ((row-contents '())
@@ -1434,7 +1451,8 @@ tags within description, notes or memo. ")
                           (addto! row-contents (gnc:html-make-empty-cell)))))
                   cells)
 
-        (gnc:html-table-append-row/markup! table row-style (reverse row-contents))
+        (if (not (column-uses? 'subtotals-only))
+            (gnc:html-table-append-row/markup! table row-style (reverse row-contents)))
 
         (map (lambda (cell)
                (let ((cell-content (vector-ref cell 0))
