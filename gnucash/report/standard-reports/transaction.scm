@@ -245,6 +245,8 @@ options specified in the Options panels."))
 (define (date->quarter dt) (+ (* 10 (gnc:date-get-year dt))  (gnc:date-get-quarter dt)))
 (define (date->month dt)   (+ (* 100 (gnc:date-get-year dt)) (gnc:date-get-month dt)))
 (define (date->week dt)    (gnc:date-get-week dt))
+(define (date->day dt) (+ (* (gnc:date-get-year dt) 500) (gnc:date-get-year-day dt)))
+(define (gnc:date-get-daily-string dt) (qof-print-date (gnc-mktime dt)))
 
 (define date-subtotal-list
   ;; List for date option.
@@ -259,6 +261,12 @@ options specified in the Options panels."))
                 (cons 'text (_ "None"))
                 (cons 'tip (_ "None."))
                 (cons 'renderer-fn #f)))
+
+   (cons 'daily (list
+                  (cons 'split-sortvalue (lambda (s) (date->day (split->date s))))
+                  (cons 'text (_ "Daily"))
+                  (cons 'tip (_ "Daily."))
+                  (cons 'renderer-fn (lambda (s) (gnc:date-get-daily-string (split->date s))))))
 
    (cons 'weekly (list
                   (cons 'split-sortvalue (lambda (s) (date->week (split->date s))))
@@ -1682,6 +1690,7 @@ tags within description, notes or memo. ")
                 ((monthly)   (lambda (s) (date->month (gnc-localtime (date s)))))
                 ((quarterly) (lambda (s) (date->quarter (gnc-localtime (date s)))))
                 ((weekly)    (lambda (s) (date->week (gnc-localtime (date s)))))
+                ((daily)     (lambda (s) (date->day (gnc-localtime (date s)))))
                 ((none)      (lambda (s) (date s)))))
             (case key
               ((account-name) (lambda (s) (gnc-account-get-full-name (xaccSplitGetAccount s))))
