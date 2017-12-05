@@ -30,4 +30,4 @@
 #define BINDIR "@-bindir-@"
 #define LIBDIR "@-libdir-@"
 
-#define LOCALE_DATADIRNAME "@-DATADIRNAME-@"
+#define LOCALEDIR "@-localedir-@"

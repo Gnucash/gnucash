@@ -105,12 +105,7 @@ static char* get_default_module_dir(const char* rel_path)
     if (uninstalled)
     {
 #ifdef CMAKE_BUILD
-    #ifdef WIN32
-        #define MODULE_LIBDIR "bin"
-    #else
-        #define MODULE_LIBDIR LIBDIR "/gnucash"
-    #endif
-        pkglibdir = g_build_path (G_DIR_SEPARATOR_S, builddir, MODULE_LIBDIR, NULL);
+        pkglibdir = gnc_path_get_pkglibdir ();
 #else
         if (rel_path)
             pkglibdir = g_build_path (G_DIR_SEPARATOR_S, builddir,

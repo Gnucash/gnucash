@@ -138,11 +138,16 @@ gchar *gnc_path_get_gtkbuilderdir()
  * @returns A newly allocated string. */
 gchar *gnc_path_get_localedir()
 {
-    gchar *prefix = gnc_path_get_prefix();
-    gchar *result = g_build_filename (prefix, LOCALE_DATADIRNAME, "locale", (char*)NULL);
-    g_free (prefix);
-    //printf("Returning localedir %s\n", result);
-    return result;
+    if (g_path_is_absolute (LOCALEDIR))
+        return g_strdup(LOCALEDIR);
+    else
+    {
+        gchar *prefix = gnc_path_get_prefix();
+        gchar *result = g_build_filename (prefix, LOCALEDIR, (char*)NULL);
+        g_free (prefix);
+        //printf("Returning localedir %s\n", result);
+        return result;
+    }
 }
 
 /** Returns the accounts file path, usually
