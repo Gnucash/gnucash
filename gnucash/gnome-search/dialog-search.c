@@ -1300,7 +1300,8 @@ gnc_search_dialog_raise (GNCSearchWindow *sw)
 }
 
 GNCSearchWindow *
-gnc_search_dialog_create (QofIdTypeConst obj_type, const gchar *title,
+gnc_search_dialog_create (GtkWindow *parent,
+                          QofIdTypeConst obj_type, const gchar *title,
                           GList *param_list,
                           GList *display_list,
                           QofQuery *start_query, QofQuery *show_start_query,
@@ -1345,6 +1346,7 @@ gnc_search_dialog_create (QofIdTypeConst obj_type, const gchar *title,
     gnc_search_dialog_init_widgets (sw, title);
     if (sw->prefs_group)
         gnc_restore_window_size(sw->prefs_group, GTK_WINDOW(sw->dialog));
+    gtk_window_set_transient_for(GTK_WINDOW(sw->dialog), parent);
     gtk_widget_show(sw->dialog);
 
     // Set the style context for this dialog so it can be easily manipulated with css
@@ -1494,7 +1496,7 @@ gnc_search_dialog_test (void)
         display = get_display_list (GNC_ID_SPLIT);
 
 /* FIXME: All this does is leak. */
-    gnc_search_dialog_create (GNC_ID_SPLIT, _("Find Transaction"),
+    gnc_search_dialog_create (NULL, GNC_ID_SPLIT, _("Find Transaction"),
 			      params, display,
 			      NULL, NULL, buttons, NULL, NULL, NULL, NULL,
 			      NULL, NULL, NULL);

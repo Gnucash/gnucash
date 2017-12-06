@@ -795,7 +795,7 @@ invoice_customer_cb (gpointer *cust_p, gpointer user_data)
         return;
 
     gncOwnerInitCustomer (&owner, cust);
-    gnc_invoice_search (NULL, &owner, sw->book);
+    gnc_invoice_search (NULL, NULL, &owner, sw->book);
     return;
 }
 
@@ -814,7 +814,7 @@ order_customer_cb (gpointer *cust_p, gpointer user_data)
         return;
 
     gncOwnerInitCustomer (&owner, cust);
-    gnc_order_search (NULL, &owner, sw->book);
+    gnc_order_search (NULL, NULL, &owner, sw->book);
     return;
 }
 
@@ -833,7 +833,7 @@ jobs_customer_cb (gpointer *cust_p, gpointer user_data)
         return;
 
     gncOwnerInitCustomer (&owner, cust);
-    gnc_job_search (NULL, &owner, sw->book);
+    gnc_job_search (NULL, NULL, &owner, sw->book);
     return;
 }
 
@@ -896,7 +896,7 @@ free_userdata_cb (gpointer user_data)
 }
 
 GNCSearchWindow *
-gnc_customer_search (GncCustomer *start, QofBook *book)
+gnc_customer_search (GtkWindow *parent, GncCustomer *start, QofBook *book)
 {
     QofQuery *q, *q2 = NULL;
     QofIdType type = GNC_CUSTOMER_MODULE_NAME;
@@ -959,7 +959,7 @@ gnc_customer_search (GncCustomer *start, QofBook *book)
     sw->book = book;
     sw->q = q;
 
-    return gnc_search_dialog_create (type, _("Find Customer"),
+    return gnc_search_dialog_create (parent, type, _("Find Customer"),
                                      params, columns, q, q2, buttons, NULL,
                                      new_customer_cb, sw, free_userdata_cb,
                                      GNC_PREFS_GROUP_SEARCH, NULL,
@@ -971,7 +971,7 @@ gnc_customer_search_select (gpointer start, gpointer book)
 {
     if (!book) return NULL;
 
-    return gnc_customer_search (start, book);
+    return gnc_customer_search (NULL, start, book);
 }
 
 GNCSearchWindow *

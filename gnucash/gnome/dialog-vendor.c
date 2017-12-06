@@ -601,7 +601,7 @@ invoice_vendor_cb (gpointer *vendor_p, gpointer user_data)
         return;
 
     gncOwnerInitVendor (&owner, vendor);
-    gnc_invoice_search (NULL, &owner, sw->book);
+    gnc_invoice_search (NULL, NULL, &owner, sw->book);
     return;
 }
 
@@ -620,7 +620,7 @@ order_vendor_cb (gpointer *vendor_p, gpointer user_data)
         return;
 
     gncOwnerInitVendor (&owner, vendor);
-    gnc_order_search (NULL, &owner, sw->book);
+    gnc_order_search (NULL, NULL, &owner, sw->book);
     return;
 }
 
@@ -639,7 +639,7 @@ jobs_vendor_cb (gpointer *vendor_p, gpointer user_data)
         return;
 
     gncOwnerInitVendor (&owner, vendor);
-    gnc_job_search (NULL, &owner, sw->book);
+    gnc_job_search (NULL, NULL, &owner, sw->book);
     return;
 }
 
@@ -701,7 +701,7 @@ free_vendor_cb (gpointer user_data)
 }
 
 GNCSearchWindow *
-gnc_vendor_search (GncVendor *start, QofBook *book)
+gnc_vendor_search (GtkWindow *parent, GncVendor *start, QofBook *book)
 {
     QofIdType type = GNC_VENDOR_MODULE_NAME;
     struct _vendor_select_window *sw;
@@ -761,7 +761,7 @@ gnc_vendor_search (GncVendor *start, QofBook *book)
     sw->book = book;
     sw->q = q;
 
-    return gnc_search_dialog_create (type, _("Find Vendor"),
+    return gnc_search_dialog_create (parent, type, _("Find Vendor"),
                                      params, columns, q, q2, buttons, NULL,
                                      new_vendor_cb, sw, free_vendor_cb,
                                      GNC_PREFS_GROUP_SEARCH, NULL,
@@ -773,7 +773,7 @@ gnc_vendor_search_select (gpointer start, gpointer book)
 {
     if (!book) return NULL;
 
-    return gnc_vendor_search (start, book);
+    return gnc_vendor_search (NULL, start, book);
 }
 
 GNCSearchWindow *

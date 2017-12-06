@@ -615,7 +615,7 @@ invoice_employee_cb (gpointer *employee_p, gpointer user_data)
         return;
 
     gncOwnerInitEmployee (&owner, employee);
-    gnc_invoice_search (NULL, &owner, sw->book);
+    gnc_invoice_search (NULL, NULL, &owner, sw->book);
     return;
 }
 
@@ -678,7 +678,7 @@ free_employee_cb (gpointer user_data)
 }
 
 GNCSearchWindow *
-gnc_employee_search (GncEmployee *start, QofBook *book)
+gnc_employee_search (GtkWindow *parent, GncEmployee *start, QofBook *book)
 {
     QofIdType type = GNC_EMPLOYEE_MODULE_NAME;
     struct _employee_select_window *sw;
@@ -735,7 +735,7 @@ gnc_employee_search (GncEmployee *start, QofBook *book)
     sw->book = book;
     sw->q = q;
 
-    return gnc_search_dialog_create (type, _("Find Employee"),
+    return gnc_search_dialog_create (parent, type, _("Find Employee"),
                                      params, columns, q, q2,
                                      buttons, NULL, new_employee_cb,
                                      sw, free_employee_cb,
@@ -748,7 +748,7 @@ gnc_employee_search_select (gpointer start, gpointer book)
 {
     if (!book) return NULL;
 
-    return gnc_employee_search (start, book);
+    return gnc_employee_search (NULL, start, book);
 }
 
 GNCSearchWindow *

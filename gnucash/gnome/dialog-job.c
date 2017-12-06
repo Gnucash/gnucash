@@ -500,7 +500,7 @@ invoice_job_cb (gpointer *job_p, gpointer user_data)
         return;
 
     gncOwnerInitJob (&owner, job);
-    gnc_invoice_search (NULL, &owner, sw->book);
+    gnc_invoice_search (NULL, NULL, &owner, sw->book);
 }
 
 static void
@@ -546,7 +546,7 @@ free_userdata_cb (gpointer user_data)
 }
 
 GNCSearchWindow *
-gnc_job_search (GncJob *start, GncOwner *owner, QofBook *book)
+gnc_job_search (GtkWindow *parent, GncJob *start, GncOwner *owner, QofBook *book)
 {
     QofQuery *q, *q2 = NULL;
     QofIdType type = GNC_JOB_MODULE_NAME;
@@ -640,7 +640,7 @@ gnc_job_search (GncJob *start, GncOwner *owner, QofBook *book)
     sw->book = book;
     sw->q = q;
 
-    return gnc_search_dialog_create (type, _("Find Job"),
+    return gnc_search_dialog_create (parent, type, _("Find Job"),
                                      params, columns, q, q2, buttons, NULL,
                                      new_job_cb, sw, free_userdata_cb,
                                      GNC_PREFS_GROUP_SEARCH, NULL,
@@ -665,7 +665,7 @@ gnc_job_search_select (gpointer start, gpointer book)
     else
         gncOwnerInitCustomer (&owner, NULL); /* XXX */
 
-    return gnc_job_search (start, &owner, book);
+    return gnc_job_search (NULL, start, &owner, book);
 }
 
 GNCSearchWindow *

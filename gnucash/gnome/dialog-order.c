@@ -246,7 +246,7 @@ gnc_order_window_invoice_cb (GtkWidget *widget, gpointer data)
         return;
 
     /* Ok, go make an invoice */
-    gnc_invoice_search (NULL, &(ow->owner), ow->book);
+    gnc_invoice_search (gtk_window_get_transient_for(GTK_WINDOW(ow->dialog)), NULL, &(ow->owner), ow->book);
 
     /* refresh the window */
     gnc_order_update_window (ow);
@@ -855,7 +855,7 @@ free_order_cb (gpointer user_data)
 }
 
 GNCSearchWindow *
-gnc_order_search (GncOrder *start, GncOwner *owner, QofBook *book)
+gnc_order_search (GtkWindow *parent, GncOrder *start, GncOwner *owner, QofBook *book)
 {
     QofIdType type = GNC_ORDER_MODULE_NAME;
     struct _order_select_window *sw;
@@ -953,7 +953,7 @@ gnc_order_search (GncOrder *start, GncOwner *owner, QofBook *book)
     sw->book = book;
     sw->q = q;
 
-    return gnc_search_dialog_create (type, _("Find Order"),
+    return gnc_search_dialog_create (parent, type, _("Find Order"),
                                      params, columns, q, q2,
                                      buttons, NULL, new_order_cb,
                                      sw, free_order_cb, GNC_PREFS_GROUP_SEARCH,
@@ -976,7 +976,7 @@ gnc_order_search_select (gpointer start, gpointer book)
     else
         gncOwnerInitCustomer (&owner, NULL); /* XXX */
 
-    return gnc_order_search (start, NULL, book);
+    return gnc_order_search (NULL, start, NULL, book);
 }
 
 GNCSearchWindow *

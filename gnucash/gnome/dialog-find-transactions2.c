@@ -98,6 +98,7 @@ gnc_ui_find_transactions_dialog_create2 (GNCLedgerDisplay2 * orig_ledg)
     QofQuery *start_q, *show_q = NULL;
     gboolean num_action =
                 qof_book_use_split_action_for_num_field(gnc_get_current_book());
+    GtkWindow *parent = GTK_WINDOW(gnc_ledger_display2_get_parent (orig_ledg));
 
     /* Build parameter list in reverse order */
     if (params == NULL)
@@ -222,7 +223,7 @@ gnc_ui_find_transactions_dialog_create2 (GNCLedgerDisplay2 * orig_ledg)
         ftd->q = start_q;		/* save this to destroy it later */
     }
 
-    ftd->sw = gnc_search_dialog_create (type, _("Find Transaction"),
+    ftd->sw = gnc_search_dialog_create (parent, type, _("Find Transaction"),
                                         params, NULL, start_q, show_q,
                                         NULL, do_find_cb, NULL,
                                         ftd, free_ftd_cb, GNC_PREFS_GROUP_SEARCH, NULL,

@@ -35,7 +35,7 @@ VendorWindow * gnc_ui_vendor_edit (GtkWindow *parent, GncVendor *vendor);
 VendorWindow * gnc_ui_vendor_new (GtkWindow *parent, QofBook *book);
 
 /* Search for vendors */
-GNCSearchWindow * gnc_vendor_search (GncVendor *start, QofBook *book);
+GNCSearchWindow * gnc_vendor_search (GtkWindow *parent, GncVendor *start, QofBook *book);
 
 /*
  * These callbacks are for use with the gnc_general_search widget

@@ -196,7 +196,7 @@ gnc_invoice_select_search_cb (gpointer start, gpointer isip)
     if (!isi) return NULL;
     g_assert(isi->book);
 
-    return gnc_invoice_search (start,
+    return gnc_invoice_search (NULL, start,
                                isi->have_owner ? &isi->owner : NULL,
                                isi->book);
 }

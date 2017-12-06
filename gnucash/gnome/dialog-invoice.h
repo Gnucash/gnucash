@@ -63,7 +63,7 @@ InvoiceWindow * gnc_ui_invoice_new (GtkWindow *parent, GncOwner *owner, QofBook 
 InvoiceWindow* gnc_ui_invoice_duplicate (GtkWindow* parent, GncInvoice* old_invoice, gboolean open_properties, const GDate* new_date);
 
 /* Search for invoices */
-GNCSearchWindow * gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book);
+GNCSearchWindow * gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBook *book);
 
 void gnc_business_call_owner_report (GtkWindow* parent, GncOwner *owner, Account *acc);
 

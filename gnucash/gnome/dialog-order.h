@@ -36,7 +36,7 @@ OrderWindow * gnc_ui_order_edit (GtkWindow *parent, GncOrder *order);
 OrderWindow * gnc_ui_order_new (GtkWindow *parent, GncOwner *owner, QofBook *book);
 
 /* Search for orders */
-GNCSearchWindow * gnc_order_search (GncOrder *start, GncOwner *owner,
+GNCSearchWindow * gnc_order_search (GtkWindow *parent, GncOrder *start, GncOwner *owner,
                                     QofBook *book);
 
 /*

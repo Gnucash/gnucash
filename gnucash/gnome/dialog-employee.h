@@ -35,7 +35,7 @@ EmployeeWindow * gnc_ui_employee_edit (GtkWindow *parent, GncEmployee *employee)
 EmployeeWindow * gnc_ui_employee_new (GtkWindow *parent, QofBook *book);
 
 /* Search for an employee */
-GNCSearchWindow * gnc_employee_search (GncEmployee *start, QofBook *book);
+GNCSearchWindow * gnc_employee_search (GtkWindow *parent, GncEmployee *start, QofBook *book);
 
 /*
  * These callbacks are for use with the gnc_general_search widget

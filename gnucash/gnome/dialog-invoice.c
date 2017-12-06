@@ -1294,7 +1294,7 @@ gnc_invoice_select_job_cb (gpointer jobp, gpointer user_data)
     else
         gncOwnerCopy (&(iw->owner), &owner);
 
-    return gnc_job_search (j, &owner, iw->book);
+    return gnc_job_search (GTK_WINDOW(iw_get_window(iw)), j, &owner, iw->book);
 }
 
 static void
@@ -1356,7 +1356,7 @@ gnc_invoice_select_proj_job_cb (gpointer jobp, gpointer user_data)
     else
         gncOwnerCopy (&(iw->proj_cust), &owner);
 
-    return gnc_job_search (j, &owner, iw->book);
+    return gnc_job_search (GTK_WINDOW(iw_get_window(iw)), j, &owner, iw->book);
 }
 
 static int
@@ -2997,7 +2997,7 @@ free_invoice_cb (gpointer user_data)
 }
 
 GNCSearchWindow *
-gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
+gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBook *book)
 {
     QofIdType type = GNC_INVOICE_MODULE_NAME;
     struct _invoice_select_window *sw;
@@ -3264,7 +3264,7 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book)
         buttons = inv_buttons;
         break;
     }
-    return gnc_search_dialog_create (type, title, params, columns, q, q2,
+    return gnc_search_dialog_create (parent, type, title, params, columns, q, q2,
                                      buttons, NULL, new_invoice_cb,
                                      sw, free_invoice_cb, GNC_PREFS_GROUP_SEARCH,
                                      label, style_class);

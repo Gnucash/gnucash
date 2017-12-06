@@ -488,7 +488,7 @@ gnc_plugin_business_cmd_customer_find_customer (GtkAction *action,
     plugin = GNC_PLUGIN_BUSINESS (mw->data);
     priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
     customer = gncOwnerGetCustomer (priv->last_customer);
-    gnc_customer_search (customer, gnc_get_current_book());
+    gnc_customer_search (GTK_WINDOW (mw->window), customer, gnc_get_current_book ());
 }
 
 static void
@@ -520,7 +520,7 @@ gnc_plugin_business_cmd_customer_find_invoice (GtkAction *action,
     plugin = GNC_PLUGIN_BUSINESS (mw->data);
     priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
     last_window = mw->window;
-    gnc_invoice_search (NULL, priv->last_customer, gnc_get_current_book());
+    gnc_invoice_search (GTK_WINDOW (mw->window), NULL, priv->last_customer, gnc_get_current_book ());
 }
 
 static void
@@ -550,7 +550,7 @@ gnc_plugin_business_cmd_customer_find_job (GtkAction *action,
 
     plugin = GNC_PLUGIN_BUSINESS (mw->data);
     priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
-    gnc_job_search (NULL, priv->last_customer, gnc_get_current_book());
+    gnc_job_search (GTK_WINDOW (mw->window), NULL, priv->last_customer, gnc_get_current_book ());
 }
 
 static void
@@ -605,7 +605,7 @@ gnc_plugin_business_cmd_vendor_find_vendor (GtkAction *action,
     plugin = GNC_PLUGIN_BUSINESS (mw->data);
     priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
     vendor = gncOwnerGetVendor (priv->last_vendor);
-    gnc_vendor_search (vendor, gnc_get_current_book());
+    gnc_vendor_search (GTK_WINDOW (mw->window), vendor, gnc_get_current_book ());
 }
 
 static void
@@ -637,7 +637,7 @@ gnc_plugin_business_cmd_vendor_find_bill (GtkAction *action,
     plugin = GNC_PLUGIN_BUSINESS (mw->data);
     priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
     last_window = mw->window;
-    gnc_invoice_search (NULL, priv->last_vendor, gnc_get_current_book());
+    gnc_invoice_search (GTK_WINDOW (mw->window), NULL, priv->last_vendor, gnc_get_current_book ());
 }
 
 static void
@@ -667,7 +667,7 @@ gnc_plugin_business_cmd_vendor_find_job (GtkAction *action,
 
     plugin = GNC_PLUGIN_BUSINESS (mw->data);
     priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
-    gnc_job_search (NULL, priv->last_vendor, gnc_get_current_book());
+    gnc_job_search (GTK_WINDOW (mw->window), NULL, priv->last_vendor, gnc_get_current_book ());
 }
 
 static void
@@ -722,7 +722,7 @@ gnc_plugin_business_cmd_employee_find_employee (GtkAction *action,
     plugin = GNC_PLUGIN_BUSINESS (mw->data);
     priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
     employee = gncOwnerGetEmployee (priv->last_employee);
-    gnc_employee_search (employee, gnc_get_current_book());
+    gnc_employee_search (GTK_WINDOW (mw->window), employee, gnc_get_current_book ());
 }
 
 static void
@@ -754,7 +754,7 @@ gnc_plugin_business_cmd_employee_find_expense_voucher (GtkAction *action,
     plugin = GNC_PLUGIN_BUSINESS (mw->data);
     priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
     last_window = mw->window;
-    gnc_invoice_search (NULL, priv->last_employee, gnc_get_current_book());
+    gnc_invoice_search (GTK_WINDOW (mw->window), NULL, priv->last_employee, gnc_get_current_book ());
 }
 
 static void
