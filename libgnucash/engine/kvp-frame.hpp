@@ -92,6 +92,7 @@
 #include <algorithm>
 #include <iostream>
 using Path = std::vector<std::string>;
+using KvpEntry = std::pair <std::vector <std::string>, KvpValue*>;
 
 /** Implements KvpFrame.
  *  It's a struct because QofInstance needs to use the typename to declare a
@@ -216,7 +217,7 @@ struct KvpFrameImpl
      * Returns all keys and values of this frame recursively, flattening
      * the frame-containing values.
      */
-    std::vector <std::pair <std::vector <std::string>, KvpValue*>>
+    std::vector <KvpEntry>
     flatten_kvp(void) const noexcept;
 
     /** Test for emptiness
@@ -230,7 +231,7 @@ struct KvpFrameImpl
 
     KvpFrame * get_child_frame_or_nullptr (Path const &) noexcept;
     KvpFrame * get_child_frame_or_create (Path const &) noexcept;
-    void flatten_kvp_impl(std::vector <std::string>, std::vector <std::pair <std::vector <std::string>, KvpValue*>> &) const noexcept;
+    void flatten_kvp_impl(std::vector <std::string>, std::vector <KvpEntry> &) const noexcept;
     KvpValue * set_impl (std::string const &, KvpValue *) noexcept;
 };
 

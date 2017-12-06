@@ -58,6 +58,10 @@ static const char *KEY_ASSOC_INCOME_ACCOUNT = "ofx/associated-income-account";
 #define AB_BANK_CODE "bank-code"
 #define AB_TRANS_RETRIEVAL "trans-retrieval"
 
+using FinalProbabilityVec=std::vector<std::pair<std::string, int32_t>>;
+using ProbabilityVec=std::vector<std::pair<std::string, struct AccountProbability>>;
+using FlatKvpEntry=std::pair<std::string, KvpValue*>;
+
 enum
 {
     LAST_SIGNAL
@@ -3027,6 +3031,7 @@ gnc_account_get_full_name(const Account *account)
     AccountPrivate *priv;
     const Account *a;
     char *fullname;
+    gchar **names;
     int level;
 
     /* So much for hardening the API. Too many callers to this function don't
@@ -3053,7 +3058,7 @@ gnc_account_get_full_name(const Account *account)
 
     /* Get all the pointers in the right order. The root node "entry"
      * becomes the terminating NULL pointer for the array of strings. */
-    gchar* names[level*sizeof(gchar*)];
+    names = (gchar **)g_malloc(level * sizeof(gchar *));
     names[--level] = NULL;
     for (a = account; level > 0; a = priv->parent)
     {
@@ -3063,6 +3068,7 @@ gnc_account_get_full_name(const Account *account)
 
     /* Build the full name */
     fullname =  g_strjoinv(account_separator, names);
+    g_free(names);
 
     return fullname;
 }
@@ -5151,13 +5157,13 @@ gnc_account_imap_delete_account (GncImportMatchMap *imap,
   where p(AB) = (a*b)/[a*b + (1-a)(1-b)], product is (a*b),
   product_difference is (1-a) * (1-b)
  */
-struct account_probability
+struct AccountProbability
 {
     double product; /* product of probabilities */
     double product_difference; /* product of (1-probabilities) */
 };
 
-struct account_token_count
+struct AccountTokenCount
 {
     std::string account_guid;
     int64_t token_count; /** occurrences of a given token for this account_guid */
@@ -5166,26 +5172,26 @@ struct account_token_count
 /** total_count and the token_count for a given account let us calculate the
  * probability of a given account with any single token
  */
-struct token_accounts_info
+struct TokenAccountsInfo
 {
-    std::vector<account_token_count> accounts;
+    std::vector<AccountTokenCount> accounts;
     int64_t total_count;
 };
 
 /** holds an account guid and its corresponding integer probability
   the integer probability is some factor of 10
  */
-struct account_info
+struct AccountInfo
 {
     std::string account_guid;
     int32_t probability;
 };
 
 static void
-build_token_info(char const * key, KvpValue * value, token_accounts_info & tokenInfo)
+build_token_info(char const * key, KvpValue * value, TokenAccountsInfo & tokenInfo)
 {
     tokenInfo.total_count += value->get<int64_t>();
-    account_token_count this_account;
+    AccountTokenCount this_account;
     std::string account_guid {key};
     /*By convention, the key ends with the account GUID.*/
     this_account.account_guid = account_guid.substr(account_guid.size() - GUID_ENCODING_LENGTH);
@@ -5198,10 +5204,10 @@ build_token_info(char const * key, KvpValue * value, token_accounts_info & token
   0.10 * 100000 = 10000 */
 static constexpr int probability_factor = 100000;
 
-static std::vector<std::pair<std::string, int32_t>>
-build_probabilities(std::vector<std::pair<std::string, account_probability>> const & first_pass)
+static FinalProbabilityVec
+build_probabilities(ProbabilityVec const & first_pass)
 {
-    std::vector<std::pair<std::string, int32_t>> ret;
+    FinalProbabilityVec ret;
     for (auto const & first_pass_prob : first_pass)
     {
         auto const & account_probability = first_pass_prob.second;
@@ -5216,31 +5222,31 @@ build_probabilities(std::vector<std::pair<std::string, account_probability>> con
     return ret;
 }
 
-static account_info
-highest_probability(std::vector<std::pair<std::string, int32_t>> const & probabilities)
+static AccountInfo
+highest_probability(FinalProbabilityVec const & probabilities)
 {
-    account_info ret {"", std::numeric_limits<int32_t>::min()};
+    AccountInfo ret {"", std::numeric_limits<int32_t>::min()};
     for (auto const & prob : probabilities)
         if (prob.second > ret.probability)
-            ret = account_info{prob.first, prob.second};
+            ret = AccountInfo {prob.first, prob.second};
     return ret;
 }
 
-static std::vector<std::pair<std::string, account_probability>>
+static ProbabilityVec
 get_first_pass_probabilities(GncImportMatchMap * imap, GList * tokens)
 {
-    std::vector<std::pair<std::string, account_probability>> ret;
+    ProbabilityVec ret;
     /* find the probability for each account that contains any of the tokens
      * in the input tokens list. */
     for (auto current_token = tokens; current_token; current_token = current_token->next)
     {
-        token_accounts_info tokenInfo{};
+        TokenAccountsInfo tokenInfo{};
         auto path = std::string{IMAP_FRAME_BAYES "/"} + static_cast <char const *> (current_token->data);
         qof_instance_foreach_slot_prefix (QOF_INSTANCE (imap->acc), path, &build_token_info, tokenInfo);
         for (auto const & current_account_token : tokenInfo.accounts)
         {
             auto item = std::find_if(ret.begin(), ret.end(), [&current_account_token]
-                (std::pair<std::string, account_probability> const & a) {
+                (std::pair<std::string, AccountProbability> const & a) {
                     return current_account_token.account_guid == a.first;
                 });
             if (item != ret.end())
@@ -5253,7 +5259,7 @@ get_first_pass_probabilities(GncImportMatchMap * imap, GList * tokens)
             else
             {
                 /* add a new entry */
-                account_probability new_probability;
+                AccountProbability new_probability;
                 new_probability.product = ((double)current_account_token.token_count /
                                       (double)tokenInfo.total_count);
                 new_probability.product_difference = 1 - (new_probability.product);
@@ -5385,16 +5391,11 @@ build_non_bayes (const char *key, const GValue *value, gpointer user_data)
 {
     if (!G_VALUE_HOLDS_BOXED (value))
         return;
-
     QofBook     *book;
     GncGUID     *guid = NULL;
     gchar       *kvp_path;
     gchar       *guid_string = NULL;
-
-    struct imap_info *imapInfo_node;
-
-    struct imap_info *imapInfo = (struct imap_info*)user_data;
-
+    auto imapInfo = (GncImapInfo*)user_data;
     // Get the book
     book = qof_instance_get_book (imapInfo->source_account);
 
@@ -5408,7 +5409,7 @@ build_non_bayes (const char *key, const GValue *value, gpointer user_data)
 
     PINFO("build_non_bayes: kvp_path is '%s'", kvp_path);
 
-    imapInfo_node = static_cast <imap_info*> (g_malloc(sizeof(*imapInfo_node)));
+    auto imapInfo_node = static_cast <GncImapInfo*> (g_malloc(sizeof(GncImapInfo)));
 
     imapInfo_node->source_account = imapInfo->source_account;
     imapInfo_node->map_account    = xaccAccountLookup (guid, book);
@@ -5435,7 +5436,7 @@ parse_bayes_imap_info (std::string const & imap_bayes_entry)
 }
 
 static void
-build_bayes (const char *key, KvpValue * value, imap_info & imapInfo)
+build_bayes (const char *key, KvpValue * value, GncImapInfo & imapInfo)
 {
     auto slots = qof_instance_get_slots_prefix (QOF_INSTANCE (imapInfo.source_account), IMAP_FRAME_BAYES);
     if (!slots.size()) return;
@@ -5446,7 +5447,7 @@ build_bayes (const char *key, KvpValue * value, imap_info & imapInfo)
         GncGUID guid = temp_guid;
         auto map_account = xaccAccountLookup (&guid, gnc_account_get_book (imapInfo.source_account));
         std::string category_head {std::get <0> (parsed_key) + "/" + std::get <1> (parsed_key)};
-        auto imap_node = static_cast <imap_info*> (g_malloc (sizeof (imap_info)));
+        auto imap_node = static_cast <GncImapInfo*> (g_malloc (sizeof (GncImapInfo)));
         auto count = entry.second->get <int64_t> ();
         imap_node->source_account = imapInfo.source_account;
         imap_node->map_account = map_account;
@@ -5534,29 +5535,23 @@ gnc_account_delete_map_entry (Account *acc, char *full_category, gboolean empty)
 
 /*******************************************************************************/
 
-static gchar *
-look_for_old_separator_descendants (Account *root, gchar const *full_name, const gchar *separator)
+static std::string
+look_for_old_separator_descendants (Account *root, std::string const & full_name, const gchar *separator)
 {
     GList *top_accounts, *ptr;
     gint   found_len = 0;
     gchar  found_sep;
-    gchar * new_name = nullptr;
-
     top_accounts = gnc_account_get_descendants (root);
-
-    PINFO("Incoming full_name is '%s', current separator is '%s'", full_name, separator);
-
+    PINFO("Incoming full_name is '%s', current separator is '%s'", full_name.c_str (), separator);
     /* Go through list of top level accounts */
     for (ptr = top_accounts; ptr; ptr = g_list_next (ptr))
     {
         const gchar *name = xaccAccountGetName (static_cast <Account const *> (ptr->data));
-
         // we are looking for the longest top level account that matches
-        if (g_str_has_prefix (full_name, name))
+        if (g_str_has_prefix (full_name.c_str (), name))
         {
             gint name_len = strlen (name);
             const gchar old_sep = full_name[name_len];
-
             if (!g_ascii_isalnum (old_sep)) // test for non alpha numeric
             {
                 if (name_len > found_len)
@@ -5568,13 +5563,10 @@ look_for_old_separator_descendants (Account *root, gchar const *full_name, const
         }
     }
     g_list_free (top_accounts); // Free the List
-    new_name = g_strdup (full_name);
-
+    std::string new_name {full_name};
     if (found_len > 1)
-        g_strdelimit (new_name, &found_sep, *separator);
-
+        std::replace (new_name.begin (), new_name.end (), found_sep, *separator);
     PINFO("Return full_name is '%s'", new_name);
-
     return new_name;
 }
 
@@ -5584,17 +5576,16 @@ get_guid_from_account_name (Account * root, std::string const & name)
     auto map_account = gnc_account_lookup_by_full_name (root, name.c_str ());
     if (!map_account)
     {
-        auto temp_account_name = look_for_old_separator_descendants (root, name.c_str (),
+        auto temp_account_name = look_for_old_separator_descendants (root, name,
              gnc_get_account_separator_string ());
-        map_account = gnc_account_lookup_by_full_name (root, temp_account_name);
-        g_free (temp_account_name);
+        map_account = gnc_account_lookup_by_full_name (root, temp_account_name.c_str ());
     }
     auto temp_guid = gnc::GUID {*xaccAccountGetGUID (map_account)};
     return temp_guid.to_string ();
 }
 
-static std::pair <std::string, KvpValue*>
-convert_entry (std::pair <std::vector <std::string>, KvpValue*> entry, Account* root)
+static FlatKvpEntry
+convert_entry (KvpEntry entry, Account* root)
 {
     /*We need to make a copy here.*/
     auto account_name = entry.first.back();
@@ -5607,7 +5598,7 @@ convert_entry (std::pair <std::vector <std::string>, KvpValue*> entry, Account* 
     return {new_key, entry.second};
 }
 
-static std::vector<std::pair<std::string, KvpValue*>>
+static std::vector<FlatKvpEntry>
 get_new_guid_imap (Account * acc)
 {
     auto frame = qof_instance_get_slots (QOF_INSTANCE (acc));
@@ -5617,7 +5608,7 @@ get_new_guid_imap (Account * acc)
     auto imap_frame = slot->get<KvpFrame*> ();
     auto flat_kvp = imap_frame->flatten_kvp ();
     auto root = gnc_account_get_root (acc);
-    std::vector <std::pair <std::string, KvpValue*>> ret;
+    std::vector <FlatKvpEntry> ret;
     for (auto const & flat_entry : flat_kvp)
         ret.emplace_back (convert_entry (flat_entry, root));
     return ret;
@@ -5637,7 +5628,7 @@ convert_imap_account_bayes_to_guid (Account *acc)
         xaccAccountCommitEdit(acc);
         return false;
     }
-    std::for_each(new_imap.begin(), new_imap.end(), [&frame] (std::pair<std::string, KvpValue*> const & entry) {
+    std::for_each(new_imap.begin(), new_imap.end(), [&frame] (FlatKvpEntry const & entry) {
         frame->set({entry.first.c_str()}, entry.second);
     });
     qof_instance_set_dirty (QOF_INSTANCE (acc));

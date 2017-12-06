@@ -423,7 +423,7 @@ gnc_value_list_get_type (void)
 }
 
 void
-KvpFrame::flatten_kvp_impl(std::vector <std::string> path, std::vector <std::pair <std::vector <std::string>, KvpValue*>> & entries) const noexcept
+KvpFrame::flatten_kvp_impl(std::vector <std::string> path, std::vector <KvpEntry> & entries) const noexcept
 {
     for (auto const & entry : m_valuemap)
     {
@@ -443,10 +443,10 @@ KvpFrame::flatten_kvp_impl(std::vector <std::string> path, std::vector <std::pai
     }
 }
 
-std::vector <std::pair <std::vector <std::string>, KvpValue*>>
+std::vector <KvpEntry>
 KvpFrame::flatten_kvp(void) const noexcept
 {
-    std::vector <std::pair <std::vector <std::string>, KvpValue*>> ret;
+    std::vector <KvpEntry> ret;
     flatten_kvp_impl({}, ret);
     return ret;
 }
