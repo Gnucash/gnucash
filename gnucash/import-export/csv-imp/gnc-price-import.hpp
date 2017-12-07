@@ -49,10 +49,6 @@ extern "C" {
 extern const int num_currency_formats_price;
 extern const gchar* currency_format_user_price[];
 
-/* A set of date formats that the user sees. */
-extern const int num_date_formats_price;
-extern const gchar* date_format_user_price[];
-
 /** Tuple to hold
  *  - a tokenized line of input
  *  - an optional error string

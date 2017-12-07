@@ -46,14 +46,6 @@ extern "C" {
 
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 
-const int num_date_formats_price = 5;
-const gchar* date_format_user_price[] = {N_("y-m-d"),
-                                   N_("d-m-y"),
-                                   N_("m-d-y"),
-                                   N_("d-m"),
-                                   N_("m-d")
-                                  };
-
 const int num_currency_formats_price = 3;
 const gchar* currency_format_user_price[] = {N_("Locale"),
                                        N_("Period: 123,456.78"),
