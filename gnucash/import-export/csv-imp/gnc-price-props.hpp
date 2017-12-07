@@ -39,6 +39,7 @@ extern "C" {
 #include <map>
 #include <memory>
 #include <boost/optional.hpp>
+#include <gnc-datetime.hpp>
 #include <gnc-numeric.hpp>
 
 /** Enumeration for column types. These are the different types of
@@ -76,7 +77,6 @@ private:
     const char *m_name;
 };
 
-time64 parse_date_price (const std::string &date_str, int format);
 gnc_commodity* parse_commodity_price_comm (const std::string& comm_str);
 GncNumeric parse_amount_price (const std::string &str, int currency_format);
 
@@ -104,7 +104,7 @@ public:
 private:
     int m_date_format;
     int m_currency_format;
-    boost::optional<time64> m_date;
+    boost::optional<GncDate> m_date;
     boost::optional<GncNumeric> m_amount;
     boost::optional<gnc_commodity*> m_from_commodity;
     boost::optional<gnc_commodity*> m_to_currency;
