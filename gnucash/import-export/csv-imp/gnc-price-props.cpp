@@ -135,12 +135,16 @@ gnc_commodity* parse_commodity_price_comm (const std::string& comm_str)
         return comm;
 }
 
-void GncImportPrice::set (GncPricePropType prop_type, const std::string& value)
+void GncImportPrice::set (GncPricePropType prop_type, const std::string& value, bool enable_test_empty)
 {
     try
     {
         // Drop any existing error for the prop_type we're about to set
         m_errors.erase(prop_type);
+
+        // conditional test for empty values
+        if (value.empty() && enable_test_empty)
+            throw std::invalid_argument (_("Column value can not be empty."));
 
         gnc_commodity *comm = nullptr;
         switch (prop_type)
@@ -207,7 +211,8 @@ void GncImportPrice::reset (GncPricePropType prop_type)
 {
     try
     {
-        set (prop_type, std::string());
+        // set enable_test_empty to false to allow empty values
+        set (prop_type, std::string(), false);
     }
     catch (...)
     {

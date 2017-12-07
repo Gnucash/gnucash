@@ -649,15 +649,13 @@ void GncPriceImport::update_price_props (uint32_t row, uint32_t col, GncPricePro
         return; /* Only deal with price related properties. */
 
     auto price_props = std::make_shared<GncImportPrice> (*(std::get<2>(m_parsed_lines[row])).get());
-    auto value = std::string();
 
-    if (col < std::get<0>(m_parsed_lines[row]).size())
-        value = std::get<0>(m_parsed_lines[row]).at(col);
-
-    if (value.empty())
-        price_props->reset (prop_type);
+    if (col >= std::get<0>(m_parsed_lines[row]).size())
+        price_props->reset (prop_type); //reset errors
     else
     {
+        auto value = std::get<0>(m_parsed_lines[row]).at(col);
+        bool enable_test_empty = true;
         try
         {
             // set the from_commodity based on combo so we can test for same.
@@ -665,14 +663,20 @@ void GncPriceImport::update_price_props (uint32_t row, uint32_t col, GncPricePro
             {
                 if (m_settings.m_from_commodity)
                     price_props->set_from_commodity (m_settings.m_from_commodity);
+
+                if (m_settings.m_to_currency)
+                    enable_test_empty = false;
             }
             // set the to_currency based on combo so we can test for same.
             if (prop_type == GncPricePropType::FROM_COMMODITY)
             {
                 if (m_settings.m_to_currency)
                     price_props->set_to_currency (m_settings.m_to_currency);
+
+                if (m_settings.m_from_commodity)
+                    enable_test_empty = false;
             }
-            price_props->set(prop_type, value);
+            price_props->set(prop_type, value, enable_test_empty);
         }
         catch (const std::exception& e)
         {
