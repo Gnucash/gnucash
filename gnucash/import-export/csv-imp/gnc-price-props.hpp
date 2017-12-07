@@ -86,7 +86,7 @@ public:
     GncImportPrice (int date_format, int currency_format) : m_date_format{date_format},
         m_currency_format{currency_format}{};
 
-    void set (GncPricePropType prop_type, const std::string& value);
+    void set (GncPricePropType prop_type, const std::string& value, bool enable_test_empty);
     void set_date_format (int date_format) { m_date_format = date_format ;}
     void set_currency_format (int currency_format) { m_currency_format = currency_format ;}
     void reset (GncPricePropType prop_type);
