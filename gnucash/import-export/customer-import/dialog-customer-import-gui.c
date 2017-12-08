@@ -154,7 +154,7 @@ gnc_plugin_customer_import_showGUI(void)
 }
 
 static gchar *
-gnc_plugin_customer_import_getFilename(void)
+gnc_plugin_customer_import_getFilename (GtkWindow *parent)
 {
     // prepare file import dialog
     gchar *filename;
@@ -169,7 +169,8 @@ gnc_plugin_customer_import_getFilename(void)
     gtk_file_filter_set_name (filter, "text files (*.txt)");
     gtk_file_filter_add_pattern (filter, "*.txt");
     filters = g_list_append( filters, filter );
-    filename = gnc_file_dialog(_("Import Customers from csv"), filters, NULL, GNC_FILE_DIALOG_IMPORT);
+    filename = gnc_file_dialog(parent,
+                               _("Import Customers from csv"), filters, NULL, GNC_FILE_DIALOG_IMPORT);
 
     return filename;
 }
@@ -256,7 +257,7 @@ void gnc_customer_import_gui_buttonOpen_cb (GtkWidget *widget, gpointer data)
     gchar *filename;
     CustomerImportGui *gui = data;
 
-    filename = gnc_plugin_customer_import_getFilename();
+    filename = gnc_plugin_customer_import_getFilename (gnc_ui_get_gtk_window (widget));
     if (filename)
     {
         gtk_entry_set_text( GTK_ENTRY(gui->entryFilename), filename );

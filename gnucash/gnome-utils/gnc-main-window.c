@@ -1294,7 +1294,7 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
     switch (response)
     {
     case GTK_RESPONSE_APPLY:
-        gnc_file_save();
+        gnc_file_save (GTK_WINDOW (window));
         return FALSE;
 
     case GTK_RESPONSE_CLOSE:

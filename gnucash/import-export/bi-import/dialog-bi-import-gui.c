@@ -176,7 +176,7 @@ gnc_plugin_bi_import_showGUI (GtkWindow *parent)
 }
 
 static gchar *
-gnc_plugin_bi_import_getFilename(void)
+gnc_plugin_bi_import_getFilename(GtkWindow *parent)
 {
     // prepare file import dialog
     gchar *filename = NULL;
@@ -191,7 +191,7 @@ gnc_plugin_bi_import_getFilename(void)
     gtk_file_filter_set_name (filter, "text files (*.txt)");
     gtk_file_filter_add_pattern (filter, "*.txt");
     filters = g_list_append( filters, filter );
-    filename = gnc_file_dialog(_("Import Bills or Invoices from csv"), filters, NULL, GNC_FILE_DIALOG_IMPORT);
+    filename = gnc_file_dialog(parent, _("Import Bills or Invoices from csv"), filters, NULL, GNC_FILE_DIALOG_IMPORT);
 
     return filename;
 }
@@ -279,7 +279,7 @@ void gnc_bi_import_gui_buttonOpen_cb (GtkWidget *widget, gpointer data)
     gchar *filename = NULL;
     BillImportGui *gui = data;
 
-    filename = gnc_plugin_bi_import_getFilename();
+    filename = gnc_plugin_bi_import_getFilename (gnc_ui_get_gtk_window (widget));
     if (filename)
     {
         //printf("Setting filename"); // debug

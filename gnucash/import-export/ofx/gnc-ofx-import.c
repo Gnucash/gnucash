@@ -965,7 +965,7 @@ double ofx_get_investment_amount(const struct OfxTransactionData* data)
     }
 }
 
-void gnc_file_ofx_import (void)
+void gnc_file_ofx_import (GtkWindow *parent)
 {
     extern int ofx_PARSER_msg;
     extern int ofx_DEBUG_msg;
@@ -987,7 +987,8 @@ void gnc_file_ofx_import (void)
     DEBUG("gnc_file_ofx_import(): Begin...\n");
 
     default_dir = gnc_get_default_directory(GNC_PREFS_GROUP);
-    selected_filename = gnc_file_dialog(_("Select an OFX/QFX file to process"),
+    selected_filename = gnc_file_dialog(parent,
+                                        _("Select an OFX/QFX file to process"),
                                         NULL,
                                         default_dir,
                                         GNC_FILE_DIALOG_IMPORT);

@@ -144,15 +144,15 @@ gnc_ui_file_access_response_cb(GtkDialog *dialog, gint response, GtkDialog *unus
             gboolean open_readonly = faw->readonly_checkbutton
                                      ? gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(faw->readonly_checkbutton))
                                      : FALSE;
-            gnc_file_open_file( url, open_readonly );
+            gnc_file_open_file (gnc_ui_get_main_window (GTK_WIDGET (dialog)), url, open_readonly);
         }
         else if ( faw->type == FILE_ACCESS_SAVE_AS )
         {
-            gnc_file_do_save_as( url );
+            gnc_file_do_save_as (gnc_ui_get_main_window (GTK_WIDGET (dialog)), url);
         }
         else if ( faw->type == FILE_ACCESS_EXPORT )
         {
-            gnc_file_do_export( url );
+            gnc_file_do_export (gnc_ui_get_main_window (GTK_WIDGET (dialog)), url);
         }
         break;
 
@@ -240,7 +240,7 @@ get_default_database( void )
 }
 
 static void
-gnc_ui_file_access( int type )
+gnc_ui_file_access (GtkWindow *parent, int type)
 {
     FileAccessWindow *faw;
     GtkBuilder* builder;
@@ -275,6 +275,7 @@ gnc_ui_file_access( int type )
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-file-access.glade", "file_access_dialog" );
     faw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "file_access_dialog" ));
+    gtk_window_set_transient_for (GTK_WINDOW (faw->dialog), parent);
     g_object_set_data_full( G_OBJECT(faw->dialog), "FileAccessWindow", faw, g_free );
 
     // Set the style context for this dialog so it can be easily manipulated with css
@@ -446,21 +447,21 @@ gnc_ui_file_access( int type )
 }
 
 void
-gnc_ui_file_access_for_open( void )
+gnc_ui_file_access_for_open (GtkWindow *parent)
 {
-    gnc_ui_file_access( FILE_ACCESS_OPEN );
+    gnc_ui_file_access (parent, FILE_ACCESS_OPEN);
 }
 
 
 void
-gnc_ui_file_access_for_save_as( void )
+gnc_ui_file_access_for_save_as (GtkWindow *parent)
 {
-    gnc_ui_file_access( FILE_ACCESS_SAVE_AS );
+    gnc_ui_file_access (parent, FILE_ACCESS_SAVE_AS);
 }
 
 
 void
-gnc_ui_file_access_for_export( void )
+gnc_ui_file_access_for_export (GtkWindow *parent)
 {
-    gnc_ui_file_access( FILE_ACCESS_EXPORT );
+    gnc_ui_file_access (parent, FILE_ACCESS_EXPORT);
 }

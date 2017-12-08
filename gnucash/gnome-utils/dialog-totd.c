@@ -34,6 +34,7 @@
 #include "gnc-prefs.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-engine.h"
+#include "gnc-ui.h"
 
 #define GNC_PREFS_GROUP      "dialogs.totd"
 #define GNC_PREF_CURRENT_TIP "current-tip"
@@ -274,7 +275,8 @@ show_handler (const char *class_name, gint component_id,
         return(FALSE);
     }
 
-    gtk_window_present(GTK_WINDOW(totd_dialog->dialog));
+    gtk_window_set_transient_for (GTK_WINDOW (totd_dialog->dialog),
+                                  gnc_ui_get_main_window (NULL));
     LEAVE(" ");
     return(TRUE);
 }
@@ -373,4 +375,18 @@ gnc_totd_dialog (GtkWindow *parent, gboolean startup)
     g_object_unref(G_OBJECT(builder));
 
     LEAVE("");
+}
+
+
+
+/****************************************************
+ *  Set the totd dialog transient for the currently
+ *  active main window. This will prevent the totd
+ *  dialog from accidentally hiding behind a main
+ *  window.
+ ****************************************************/
+void
+gnc_totd_dialog_reparent (void)
+{
+    gnc_forall_gui_components(DIALOG_TOTD_CM_CLASS, show_handler, NULL);
 }

@@ -295,6 +295,8 @@ cleanup:
         g_error_free(error);
     if (file_guid)
         g_free(file_guid);
+
+    gnc_totd_dialog_reparent ();
 }
 
 

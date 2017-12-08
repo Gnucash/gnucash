@@ -422,7 +422,7 @@ gnc_plugin_basic_commands_class_init (GncPluginBasicCommandsClass *klass)
 /** Initialize a new instance of a basic commands plugin.  This
  *  function currently does nothing.
  *
- *  @param page The new object instance created by the object
+ *  @param plugin The new object instance created by the object
  *  system. */
 static void
 gnc_plugin_basic_commands_init (GncPluginBasicCommands *plugin)
@@ -456,7 +456,7 @@ gnc_main_window_cmd_file_new (GtkAction *action, GncMainWindowActionData *data)
     if (!gnc_main_window_all_finish_pending())
         return;
 
-    gnc_file_new ();
+    gnc_file_new (GTK_WINDOW (data->window));
 }
 
 static void
@@ -469,9 +469,9 @@ gnc_main_window_cmd_file_open (GtkAction *action, GncMainWindowActionData *data)
 
     gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
 #ifdef HAVE_DBI_DBI_H
-    gnc_ui_file_access_for_open();
+    gnc_ui_file_access_for_open (GTK_WINDOW (data->window));
 #else
-    gnc_file_open ();
+    gnc_file_open (GTK_WINDOW (data->window));
 #endif
     gnc_window_set_progressbar_window (NULL);
 }
@@ -485,7 +485,7 @@ gnc_main_window_cmd_file_save (GtkAction *action, GncMainWindowActionData *data)
         return;
 
     gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
-    gnc_file_save ();
+    gnc_file_save (GTK_WINDOW (data->window));
     gnc_window_set_progressbar_window (NULL);
 }
 
@@ -499,9 +499,9 @@ gnc_main_window_cmd_file_save_as (GtkAction *action, GncMainWindowActionData *da
 
     gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
 #ifdef HAVE_DBI_DBI_H
-    gnc_ui_file_access_for_save_as();
+    gnc_ui_file_access_for_save_as (GTK_WINDOW (data->window));
 #else
-    gnc_file_save_as ();
+    gnc_file_save_as (GTK_WINDOW (data->window));
 #endif
     gnc_window_set_progressbar_window (NULL);
 }
@@ -515,7 +515,7 @@ gnc_main_window_cmd_file_revert (GtkAction *action, GncMainWindowActionData *dat
         return;
 
     gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
-    gnc_file_revert();
+    gnc_file_revert(GTK_WINDOW (data->window));
     gnc_window_set_progressbar_window (NULL);
 }
 
@@ -526,7 +526,7 @@ gnc_main_window_cmd_file_export_accounts (GtkAction *action, GncMainWindowAction
 
     gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
 #ifdef HAVE_DBI_DBI_H
-    gnc_ui_file_access_for_export();
+    gnc_ui_file_access_for_export (GTK_WINDOW (data->window));
 #else
     gnc_file_export ();
 #endif

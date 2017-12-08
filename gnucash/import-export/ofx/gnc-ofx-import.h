@@ -25,10 +25,12 @@
 #ifndef OFX_IMPORT_H
 #define OFX_IMPORT_H
 
+#include <gtk/gtk.h>
+
 /** The gnc_file_ofx_import() routine will pop up a standard file
  *     selection dialogue asking the user to pick a OFX/QFX file. If one
  *     is selected the the OFX file is opened and read. It's contents
  *     are merged into the existing session (if any). The current
  *     session continues to remain open for editing. */
-void              gnc_file_ofx_import (void);
+void              gnc_file_ofx_import (GtkWindow *parent);
 #endif

@@ -58,6 +58,7 @@
 #include "gnc-path.h"
 #include "gnc-gui-query.h"
 #include "gnc-tree-view-account.h"
+#include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "io-example-account.h"
 #include "top-level.h"
@@ -1317,7 +1318,7 @@ static void
 after_assistant(void)
 {
     qof_book_mark_session_dirty(gnc_get_current_book());
-    gnc_ui_file_access_for_save_as();
+    gnc_ui_file_access_for_save_as (gnc_ui_get_main_window (NULL));
 }
 
 static void

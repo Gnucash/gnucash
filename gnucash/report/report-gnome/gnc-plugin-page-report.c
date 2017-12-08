@@ -1486,7 +1486,8 @@ gnc_get_export_filename (SCM choice)
     title = g_strdup_printf (_("Save %s To File"), type);
     default_dir = gnc_get_default_directory(GNC_PREFS_GROUP_REPORT);
 
-    filepath = gnc_file_dialog (title, NULL, default_dir, GNC_FILE_DIALOG_EXPORT);
+    filepath = gnc_file_dialog (gnc_ui_get_main_window (NULL),
+                                title, NULL, default_dir, GNC_FILE_DIALOG_EXPORT);
 
     /* Try to test for extension on file name, add if missing */
     if (g_strrstr(filepath, ".") == NULL)

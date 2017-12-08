@@ -68,7 +68,8 @@ typedef GWEN_SYNCIO GWEN_IO_LAYER;
 static QofLogModule log_module = GNC_MOD_IMPORT;
 
 void
-gnc_file_aqbanking_import(const gchar *aqbanking_importername,
+gnc_file_aqbanking_import(GtkWindow *parent,
+                          const gchar *aqbanking_importername,
                           const gchar *aqbanking_profilename,
                           gboolean execute_transactions)
 {
@@ -96,7 +97,7 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
 
     /* Select a file */
     default_dir = gnc_get_default_directory(GNC_PREFS_GROUP_AQBANKING);
-    selected_filename = gnc_file_dialog(_("Select a file to import"),
+    selected_filename = gnc_file_dialog(parent, _("Select a file to import"),
                                         NULL, default_dir,
                                         GNC_FILE_DIALOG_IMPORT);
     g_free(default_dir);
@@ -141,7 +142,7 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
     if (!importer)
     {
         g_warning("Import module %s not found", aqbanking_importername);
-        gnc_error_dialog(NULL, "%s",
+        gnc_error_dialog(parent, "%s",
                          _("Import module for DTAUS import not found."));
         goto cleanup;
     }
@@ -229,7 +230,7 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
     /* Before importing the results, if this is a new book, let user specify
      * book options, since they affect how transactions are created */
     if (gnc_is_new_book())
-        gnc_new_book_option_display (GTK_WIDGET (gnc_ui_get_main_window(NULL)));
+        gnc_new_book_option_display (GTK_WIDGET (parent));
 
     /* Import the results */
     ieci = gnc_ab_import_context(context, AWAIT_TRANSACTIONS,
@@ -319,7 +320,7 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
             if (!successful)
             {
                 g_warning("%s", errstr->str);
-                gnc_error_dialog(NULL,
+                gnc_error_dialog(parent,
                                  _("An error occurred while executing jobs: %d of %d failed. "
                                    "Please check the log window or gnucash.trace for the exact "
                                    "error message.\n\n%s")
@@ -329,13 +330,13 @@ gnc_file_aqbanking_import(const gchar *aqbanking_importername,
             {
                 if (num_jobs == 0)
                 {
-                    gnc_info_dialog(NULL,
+                    gnc_info_dialog(parent,
                                     _("No jobs to be send.")
                                    );
                 }
                 else
                 {
-                    gnc_info_dialog(NULL, ngettext
+                    gnc_info_dialog(parent, ngettext
                                     ("The job was executed successfully, but as a precaution "
                                      "please check the log window for potential errors.",
                                      "All %d jobs were executed successfully, but as a precaution "

@@ -664,7 +664,8 @@ gnc_plugin_ab_cmd_mt940_import(GtkAction *action, GncMainWindowActionData *data)
     gchar *format = gnc_prefs_get_string(GNC_PREFS_GROUP_AQBANKING,
                                          GNC_PREF_FORMAT_SWIFT940);
     gnc_main_window = data->window;
-    gnc_file_aqbanking_import("swift", format ? format : "swift-mt940", FALSE);
+    gnc_file_aqbanking_import (GTK_WINDOW (gnc_main_window),
+                               "swift", format ? format : "swift-mt940", FALSE);
     g_free(format);
 }
 
@@ -674,7 +675,8 @@ gnc_plugin_ab_cmd_mt942_import(GtkAction *action, GncMainWindowActionData *data)
     gchar *format = gnc_prefs_get_string(GNC_PREFS_GROUP_AQBANKING,
                                          GNC_PREF_FORMAT_SWIFT942);
     gnc_main_window = data->window;
-    gnc_file_aqbanking_import("swift", format ? format : "swift-mt942", FALSE);
+    gnc_file_aqbanking_import (GTK_WINDOW (gnc_main_window),
+                               "swift", format ? format : "swift-mt942", FALSE);
     g_free(format);
 }
 
@@ -684,7 +686,8 @@ gnc_plugin_ab_cmd_dtaus_import(GtkAction *action, GncMainWindowActionData *data)
     gchar *format = gnc_prefs_get_string(GNC_PREFS_GROUP_AQBANKING,
                                          GNC_PREF_FORMAT_DTAUS);
     gnc_main_window = data->window;
-    gnc_file_aqbanking_import("dtaus", format ? format : "default", FALSE);
+    gnc_file_aqbanking_import (GTK_WINDOW (gnc_main_window),
+                               "dtaus", format ? format : "default", FALSE);
     g_free(format);
 }
 
@@ -695,7 +698,8 @@ gnc_plugin_ab_cmd_dtaus_importsend(GtkAction *action,
     gchar *format = gnc_prefs_get_string(GNC_PREFS_GROUP_AQBANKING,
                                          GNC_PREF_FORMAT_DTAUS);
     gnc_main_window = data->window;
-    gnc_file_aqbanking_import("dtaus", format ? format : "default", TRUE);
+    gnc_file_aqbanking_import (GTK_WINDOW (gnc_main_window),
+                               "dtaus", format ? format : "default", TRUE);
     g_free(format);
 }
 

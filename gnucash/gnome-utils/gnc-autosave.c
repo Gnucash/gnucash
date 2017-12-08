@@ -211,7 +211,7 @@ static gboolean autosave_timeout_cb(gpointer user_data)
         else
             g_debug("autosave_timeout_cb: toplevel is not a GNC_WINDOW\n");
 
-        gnc_file_save();
+        gnc_file_save (GTK_WINDOW (toplevel));
 
         gnc_main_window_set_progressbar_window(NULL);
 

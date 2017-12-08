@@ -67,7 +67,7 @@ after_hierarchy_assistant(void)
     gnc_set_first_startup (FALSE);
 
     qof_book_mark_session_dirty(gnc_get_current_book());
-    gnc_ui_file_access_for_save_as();
+    gnc_ui_file_access_for_save_as (gnc_ui_get_main_window (NULL));
 }
 
 void

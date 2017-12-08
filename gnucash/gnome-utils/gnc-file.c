@@ -76,7 +76,8 @@ static gint save_in_progress = 0;
 \********************************************************************/
 
 char *
-gnc_file_dialog (const char * title,
+gnc_file_dialog (GtkWindow *parent,
+                 const char * title,
                  GList * filters,
                  const char * starting_dir,
                  GNCFileDialogType type
@@ -124,7 +125,7 @@ gnc_file_dialog (const char * title,
 
     file_box = gtk_file_chooser_dialog_new(
                    title,
-                   NULL,
+                   parent,
                    action,
                    _("_Cancel"), GTK_RESPONSE_CANCEL,
                    NULL);
@@ -139,9 +140,6 @@ gnc_file_dialog (const char * title,
                                             starting_dir);
 
     gtk_window_set_modal(GTK_WINDOW(file_box), TRUE);
-    /*
-    gtk_window_set_transient_for(GTK_WINDOW(file_box), gnc_ui_get_main_window(NULL));
-    */
 
     if (filters != NULL)
     {
@@ -194,11 +192,11 @@ gnc_file_dialog (const char * title,
 
 
 gboolean
-show_session_error (QofBackendError io_error,
+show_session_error (GtkWindow *parent,
+                    QofBackendError io_error,
                     const char *newfile,
                     GNCFileDialogType type)
 {
-    GtkWindow *parent = gnc_ui_get_main_window (NULL);
     GtkWidget *dialog;
     gboolean uh_oh = TRUE;
     const char *fmt, *label;
@@ -530,13 +528,13 @@ gnc_book_opened (void)
 }
 
 void
-gnc_file_new (void)
+gnc_file_new (GtkWindow *parent)
 {
     QofSession *session;
 
     /* If user attempts to start a new session before saving results of
      * the last one, prompt them to clean up their act. */
-    if (!gnc_file_query_save (TRUE))
+    if (!gnc_file_query_save (parent, TRUE))
         return;
 
     if (gnc_current_session_exist())
@@ -567,9 +565,8 @@ gnc_file_new (void)
 }
 
 gboolean
-gnc_file_query_save (gboolean can_cancel)
+gnc_file_query_save (GtkWindow *parent, gboolean can_cancel)
 {
-    GtkWidget *parent = GTK_WIDGET (gnc_ui_get_main_window(NULL));
     QofBook *current_book;
 
     if (!gnc_current_session_exist())
@@ -594,7 +591,7 @@ gnc_file_query_save (gboolean can_cancel)
         time64 oldest_change;
         gint minutes;
 
-        dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
+        dialog = gtk_message_dialog_new(parent,
                                         GTK_DIALOG_DESTROY_WITH_PARENT,
                                         GTK_MESSAGE_QUESTION,
                                         GTK_BUTTONS_NONE,
@@ -622,7 +619,7 @@ gnc_file_query_save (gboolean can_cancel)
         switch (response)
         {
         case GTK_RESPONSE_YES:
-            gnc_file_save ();
+            gnc_file_save (parent);
             /* Go check the loop condition. */
             break;
 
@@ -650,7 +647,7 @@ gnc_file_query_save (gboolean can_cancel)
 #define RESPONSE_READONLY 4
 
 static gboolean
-gnc_post_file_open (const char * filename, gboolean is_readonly)
+gnc_post_file_open (GtkWindow *parent, const char * filename, gboolean is_readonly)
 {
     QofSession *current_session, *new_session;
     QofBook *new_book;
@@ -676,7 +673,8 @@ RESTART:
     newfile = gnc_uri_normalize_uri ( filename, TRUE );
     if (!newfile)
     {
-        show_session_error (ERR_FILEIO_FILE_NOT_FOUND, filename,
+        show_session_error (parent,
+                            ERR_FILEIO_FILE_NOT_FOUND, filename,
                             GNC_FILE_DIALOG_OPEN);
         return FALSE;
     }
@@ -742,14 +740,14 @@ RESTART:
     if (ERR_BACKEND_BAD_URL == io_err)
     {
         gchar *directory;
-        show_session_error (io_err, newfile, GNC_FILE_DIALOG_OPEN);
+        show_session_error (parent, io_err, newfile, GNC_FILE_DIALOG_OPEN);
         io_err = ERR_BACKEND_NO_ERR;
         if (g_file_test (filename, G_FILE_TEST_IS_DIR))
             directory = g_strdup (filename);
         else
             directory = gnc_get_default_directory (GNC_PREFS_GROUP_OPEN_SAVE);
 
-        filename = gnc_file_dialog (NULL, NULL, directory,
+        filename = gnc_file_dialog (parent, NULL, NULL, directory,
                                     GNC_FILE_DIALOG_OPEN);
         qof_session_destroy (new_session);
         new_session = NULL;
@@ -773,10 +771,6 @@ RESTART:
                         "What would you like to do?")
                      );
         int rc;
-
-        GtkWindow *parent = gnc_get_splash_screen();
-        if (!parent)
-            parent = gnc_ui_get_main_window(NULL);
 
         if (! gnc_uri_is_file_uri (newfile)) /* Hide the db password in error messages */
             displayname = gnc_uri_normalize_uri ( newfile, FALSE);
@@ -830,14 +824,14 @@ RESTART:
              * database so that the user will get a window that
              * they can click "Exit" on.
              */
-            gnc_file_new ();
+            gnc_file_new (parent);
             break;
         }
     }
     /* if the database doesn't exist, ask the user ... */
     else if ((ERR_BACKEND_NO_SUCH_DB == io_err))
     {
-        if (FALSE == show_session_error (io_err, newfile, GNC_FILE_DIALOG_OPEN))
+        if (!show_session_error (parent, io_err, newfile, GNC_FILE_DIALOG_OPEN))
         {
             /* user told us to create a new database. Do it. We
             	     * shouldn't have to worry about locking or clobbering,
@@ -859,7 +853,7 @@ RESTART:
 
     else
     {
-        uh_oh = show_session_error (io_err, newfile, GNC_FILE_DIALOG_OPEN);
+        uh_oh = show_session_error (parent, io_err, newfile, GNC_FILE_DIALOG_OPEN);
     }
 
     if (!uh_oh)
@@ -906,14 +900,14 @@ RESTART:
             }
         }
 
-        uh_oh = show_session_error (io_err, newfile, GNC_FILE_DIALOG_OPEN);
+        uh_oh = show_session_error (parent, io_err, newfile, GNC_FILE_DIALOG_OPEN);
         /* Attempt to update the database if it's too old */
         if ( !uh_oh && io_err == ERR_SQL_DB_TOO_OLD )
         {
             gnc_window_show_progress(_("Re-saving user data..."), 0.0);
             qof_session_safe_save(new_session, gnc_window_show_progress);
             io_err = qof_session_get_error(new_session);
-            uh_oh = show_session_error(io_err, newfile, GNC_FILE_DIALOG_SAVE);
+            uh_oh = show_session_error(parent, io_err, newfile, GNC_FILE_DIALOG_SAVE);
         }
         /* Database is either too old and couldn't (or user didn't
          * want it to) be updated or it's too new. Mark it as
@@ -932,7 +926,7 @@ RESTART:
          * The backend forgot to set an error. So make one up. */
         if (!uh_oh && !new_root)
         {
-            uh_oh = show_session_error (ERR_BACKEND_MISC, newfile,
+            uh_oh = show_session_error (parent, ERR_BACKEND_MISC, newfile,
                                         GNC_FILE_DIALOG_OPEN);
         }
 
@@ -948,7 +942,7 @@ RESTART:
                 uh_oh = TRUE;
 
                 // XXX: should pull out the file name here */
-                gnc_error_dialog (gnc_ui_get_main_window (NULL), msg, "");
+                gnc_error_dialog (parent, msg, "");
                 g_free (msg);
             }
             if (template_root != NULL)
@@ -1044,14 +1038,14 @@ RESTART:
  *       paths, never db uris.
  */
 gboolean
-gnc_file_open (void)
+gnc_file_open (GtkWindow *parent)
 {
     const gchar * newfile;
     gchar *last = NULL;
     gchar *default_dir = NULL;
     gboolean result;
 
-    if (!gnc_file_query_save (TRUE))
+    if (!gnc_file_query_save (parent, TRUE))
         return FALSE;
 
     if ( last && gnc_uri_is_file_uri ( last ) )
@@ -1063,11 +1057,11 @@ gnc_file_open (void)
     else
         default_dir = gnc_get_default_directory(GNC_PREFS_GROUP_OPEN_SAVE);
 
-    newfile = gnc_file_dialog (_("Open"), NULL, default_dir, GNC_FILE_DIALOG_OPEN);
+    newfile = gnc_file_dialog (parent, _("Open"), NULL, default_dir, GNC_FILE_DIALOG_OPEN);
     g_free ( last );
     g_free ( default_dir );
 
-    result = gnc_post_file_open ( newfile, /*is_readonly*/ FALSE );
+    result = gnc_post_file_open (parent, newfile, /*is_readonly*/ FALSE );
 
     /* This dialogue can show up early in the startup process. If the
      * user fails to pick a file (by e.g. hitting the cancel button), we
@@ -1079,14 +1073,14 @@ gnc_file_open (void)
 }
 
 gboolean
-gnc_file_open_file (const char * newfile, gboolean open_readonly)
+gnc_file_open_file (GtkWindow *parent, const char * newfile, gboolean open_readonly)
 {
     if (!newfile) return FALSE;
 
-    if (!gnc_file_query_save (TRUE))
+    if (!gnc_file_query_save (parent, TRUE))
         return FALSE;
 
-    return gnc_post_file_open (newfile, open_readonly);
+    return gnc_post_file_open (parent, newfile, open_readonly);
 }
 
 /* Note: this dialog will only be used when dbi is not enabled
@@ -1094,7 +1088,7 @@ gnc_file_open_file (const char * newfile, gboolean open_readonly)
  *       never db uris
  */
 void
-gnc_file_export (void)
+gnc_file_export (GtkWindow *parent)
 {
     const char *filename;
     char *default_dir = NULL;        /* Default to last open */
@@ -1112,13 +1106,14 @@ gnc_file_export (void)
     else
         default_dir = gnc_get_default_directory(GNC_PREFS_GROUP_EXPORT);
 
-    filename = gnc_file_dialog (_("Save"), NULL, default_dir,
+    filename = gnc_file_dialog (parent,
+                                _("Save"), NULL, default_dir,
                                 GNC_FILE_DIALOG_SAVE);
     g_free ( last );
     g_free ( default_dir );
     if (!filename) return;
 
-    gnc_file_do_export( filename );
+    gnc_file_do_export (parent, filename);
 
     LEAVE (" ");
 }
@@ -1155,7 +1150,7 @@ check_file_path (const char *path)
 
 
 void
-gnc_file_do_export(const char * filename)
+gnc_file_do_export(GtkWindow *parent, const char * filename)
 {
     QofSession *current_session, *new_session;
     gboolean ok;
@@ -1178,7 +1173,7 @@ gnc_file_do_export(const char * filename)
     norm_file = gnc_uri_normalize_uri ( filename, TRUE );
     if (!norm_file)
     {
-        show_session_error (ERR_FILEIO_FILE_NOT_FOUND, filename,
+        show_session_error (parent, ERR_FILEIO_FILE_NOT_FOUND, filename,
                             GNC_FILE_DIALOG_EXPORT);
         return;
     }
@@ -1206,7 +1201,7 @@ gnc_file_do_export(const char * filename)
     {
 	if (check_file_path (path))
 	{
-	    show_session_error (ERR_FILEIO_RESERVED_WRITE, newfile,
+	    show_session_error (parent, ERR_FILEIO_RESERVED_WRITE, newfile,
 				GNC_FILE_DIALOG_SAVE);
 	    return;
 	}
@@ -1220,7 +1215,7 @@ gnc_file_do_export(const char * filename)
     if (strlen (oldfile) && (strcmp(oldfile, newfile) == 0))
     {
         g_free (newfile);
-        show_session_error (ERR_FILEIO_WRITE_ERROR, filename,
+        show_session_error (parent, ERR_FILEIO_WRITE_ERROR, filename,
                             GNC_FILE_DIALOG_EXPORT);
         return;
     }
@@ -1254,7 +1249,7 @@ gnc_file_do_export(const char * filename)
     /* if file appears to be locked, ask the user ... */
     if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err)
     {
-        if (FALSE == show_session_error (io_err, newfile, GNC_FILE_DIALOG_EXPORT))
+        if (!show_session_error (parent, io_err, newfile, GNC_FILE_DIALOG_EXPORT))
         {
             /* user told us to ignore locks. So ignore them. */
             qof_session_begin (new_session, newfile, TRUE, FALSE, FALSE);
@@ -1288,7 +1283,7 @@ gnc_file_do_export(const char * filename)
 static gboolean been_here_before = FALSE;
 
 void
-gnc_file_save (void)
+gnc_file_save (GtkWindow *parent)
 {
     QofBackendError io_err;
     const char * newfile;
@@ -1302,19 +1297,19 @@ gnc_file_save (void)
 
     if (!strlen (qof_session_get_url (session)))
     {
-        gnc_file_save_as ();
+        gnc_file_save_as (parent);
         return;
     }
 
     if (qof_book_is_readonly(qof_session_get_book(session)))
     {
-        gint response = gnc_ok_cancel_dialog(gnc_ui_get_main_window (NULL),
+        gint response = gnc_ok_cancel_dialog(parent,
                                              GTK_RESPONSE_CANCEL,
                                              _("The database was opened read-only. "
                                                "Do you want to save it to a different place?"));
         if (response == GTK_RESPONSE_OK)
         {
-            gnc_file_save_as ();
+            gnc_file_save_as (parent);
         }
         return;
     }
@@ -1334,11 +1329,11 @@ gnc_file_save (void)
     if (ERR_BACKEND_NO_ERR != io_err)
     {
         newfile = qof_session_get_url(session);
-        show_session_error (io_err, newfile, GNC_FILE_DIALOG_SAVE);
+        show_session_error (parent, io_err, newfile, GNC_FILE_DIALOG_SAVE);
 
         if (been_here_before) return;
         been_here_before = TRUE;
-        gnc_file_save_as ();   /* been_here prevents infinite recursion */
+        gnc_file_save_as (parent);   /* been_here prevents infinite recursion */
         been_here_before = FALSE;
         return;
     }
@@ -1354,7 +1349,7 @@ gnc_file_save (void)
  *       never db uris. See gnc_file_do_save_as for that.
  */
 void
-gnc_file_save_as (void)
+gnc_file_save_as (GtkWindow *parent)
 {
     const gchar *filename;
     gchar *default_dir = NULL;        /* Default to last open */
@@ -1372,19 +1367,20 @@ gnc_file_save_as (void)
     else
         default_dir = gnc_get_default_directory(GNC_PREFS_GROUP_OPEN_SAVE);
 
-    filename = gnc_file_dialog (_("Save"), NULL, default_dir,
+    filename = gnc_file_dialog (parent,
+                                _("Save"), NULL, default_dir,
                                 GNC_FILE_DIALOG_SAVE);
     g_free ( last );
     g_free ( default_dir );
     if (!filename) return;
 
-    gnc_file_do_save_as( filename );
+    gnc_file_do_save_as (parent, filename);
 
     LEAVE (" ");
 }
 
 void
-gnc_file_do_save_as (const char* filename)
+gnc_file_do_save_as (GtkWindow *parent, const char* filename)
 {
     QofSession *new_session;
     QofSession *session;
@@ -1409,7 +1405,7 @@ gnc_file_do_save_as (const char* filename)
     norm_file = gnc_uri_normalize_uri ( filename, TRUE );
     if (!norm_file)
     {
-        show_session_error (ERR_FILEIO_FILE_NOT_FOUND, filename,
+        show_session_error (parent, ERR_FILEIO_FILE_NOT_FOUND, filename,
                             GNC_FILE_DIALOG_SAVE);
         return;
     }
@@ -1437,7 +1433,7 @@ gnc_file_do_save_as (const char* filename)
     {
 	if (check_file_path (path))
 	{
-	    show_session_error (ERR_FILEIO_RESERVED_WRITE, newfile,
+	    show_session_error (parent, ERR_FILEIO_RESERVED_WRITE, newfile,
 				GNC_FILE_DIALOG_SAVE);
 	    return;
 	}
@@ -1452,7 +1448,7 @@ gnc_file_do_save_as (const char* filename)
     if (strlen (oldfile) && (strcmp(oldfile, newfile) == 0))
     {
         g_free (newfile);
-        gnc_file_save ();
+        gnc_file_save (parent);
         return;
     }
 
@@ -1495,7 +1491,7 @@ gnc_file_do_save_as (const char* filename)
     /* if file appears to be locked, ask the user ... */
     else if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err)
     {
-        if (FALSE == show_session_error (io_err, newfile, GNC_FILE_DIALOG_SAVE))
+        if (!show_session_error (parent, io_err, newfile, GNC_FILE_DIALOG_SAVE))
         {
             /* user told us to ignore locks. So ignore them. */
             qof_session_begin (new_session, newfile, TRUE, FALSE, FALSE);
@@ -1507,7 +1503,7 @@ gnc_file_do_save_as (const char* filename)
              (ERR_BACKEND_NO_SUCH_DB == io_err) ||
              (ERR_SQL_DB_TOO_OLD == io_err))
     {
-        if (FALSE == show_session_error (io_err, newfile, GNC_FILE_DIALOG_SAVE))
+        if (!show_session_error (parent, io_err, newfile, GNC_FILE_DIALOG_SAVE))
         {
             /* user told us to create a new database. Do it. */
             qof_session_begin (new_session, newfile, FALSE, TRUE, FALSE);
@@ -1521,7 +1517,7 @@ gnc_file_do_save_as (const char* filename)
     io_err = qof_session_get_error (new_session);
     if (ERR_BACKEND_NO_ERR != io_err)
     {
-        show_session_error (io_err, newfile, GNC_FILE_DIALOG_SAVE);
+        show_session_error (parent, io_err, newfile, GNC_FILE_DIALOG_SAVE);
         xaccLogDisable();
         qof_session_destroy (new_session);
         xaccLogEnable();
@@ -1567,7 +1563,7 @@ gnc_file_do_save_as (const char* filename)
         /* Well, poop. The save failed, so the new session is invalid and we
          * need to restore the old one.
          */
-        show_session_error (io_err, newfile, GNC_FILE_DIALOG_SAVE);
+        show_session_error (parent, io_err, newfile, GNC_FILE_DIALOG_SAVE);
         qof_event_suspend();
         qof_session_swap_data( new_session, session );
         qof_session_destroy( new_session );
@@ -1596,7 +1592,7 @@ gnc_file_do_save_as (const char* filename)
 }
 
 void
-gnc_file_revert (void)
+gnc_file_revert (GtkWindow *parent)
 {
     QofSession *session;
     const gchar *fileurl, *filename, *tmp;
@@ -1618,7 +1614,7 @@ gnc_file_revert (void)
         return;
 
     qof_book_mark_session_saved (qof_session_get_book (session));
-    gnc_file_open_file (fileurl, qof_book_is_readonly(gnc_get_current_book()));}
+    gnc_file_open_file (parent, fileurl, qof_book_is_readonly(gnc_get_current_book()));}
 
 void
 gnc_file_quit (void)

@@ -1365,7 +1365,7 @@ gnc_ui_qif_import_close_cb(GtkAssistant *gtkassistant, gpointer user_data)
     if (!wind->acct_tree_found)
     {
         qof_book_mark_session_dirty(gnc_get_current_book());
-        gnc_ui_file_access_for_save_as();
+        gnc_ui_file_access_for_save_as (gnc_ui_get_main_window (GTK_WIDGET (gtkassistant)));
     }
 
     gnc_close_gui_component_by_data( ASSISTANT_QIF_IMPORT_CM_CLASS, wind );
@@ -1617,7 +1617,8 @@ gnc_ui_qif_import_select_file_cb(GtkButton * button,
     filter = gtk_file_filter_new();
     gtk_file_filter_set_name(filter, "*.qif");
     gtk_file_filter_add_pattern(filter, "*.[Qq][Ii][Ff]");
-    new_file_name = gnc_file_dialog(_("Select QIF File"),
+    new_file_name = gnc_file_dialog(gnc_ui_get_gtk_window (GTK_WIDGET (button)),
+                                    _("Select QIF File"),
                                     g_list_prepend (NULL, filter),
                                     default_dir,
                                     GNC_FILE_DIALOG_IMPORT);

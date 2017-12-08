@@ -544,7 +544,7 @@ static void  process_trans_record(  FILE *log_file)
     }
 }
 
-void gnc_file_log_replay (void)
+void gnc_file_log_replay (GtkWindow *parent)
 {
     char *selected_filename;
     char *default_dir;
@@ -574,7 +574,8 @@ void gnc_file_log_replay (void)
     filter = gtk_file_filter_new();
     gtk_file_filter_set_name(filter, "*.log");
     gtk_file_filter_add_pattern(filter, "*.[Ll][Oo][Gg]");
-    selected_filename = gnc_file_dialog(_("Select a .log file to replay"),
+    selected_filename = gnc_file_dialog(parent,
+                                        _("Select a .log file to replay"),
                                         g_list_prepend(NULL, filter),
                                         default_dir,
                                         GNC_FILE_DIALOG_OPEN);
