@@ -70,8 +70,8 @@ typedef enum
 
 struct _vendor_select_window
 {
-    QofBook *	book;
-    QofQuery *	q;
+    QofBook  *book;
+    QofQuery *q;
 };
 
 struct _vendor_window
@@ -587,7 +587,7 @@ gnc_ui_vendor_edit (GtkWindow *parent, GncVendor *vendor)
 /* Functions for vendor selection widgets */
 
 static void
-invoice_vendor_cb (gpointer *vendor_p, gpointer user_data)
+invoice_vendor_cb (GtkWindow *dialog, gpointer *vendor_p, gpointer user_data)
 {
     struct _vendor_select_window *sw = user_data;
     GncOwner owner;
@@ -601,12 +601,12 @@ invoice_vendor_cb (gpointer *vendor_p, gpointer user_data)
         return;
 
     gncOwnerInitVendor (&owner, vendor);
-    gnc_invoice_search (NULL, NULL, &owner, sw->book);
+    gnc_invoice_search (dialog, NULL, &owner, sw->book);
     return;
 }
 
 static void
-order_vendor_cb (gpointer *vendor_p, gpointer user_data)
+order_vendor_cb (GtkWindow *dialog, gpointer *vendor_p, gpointer user_data)
 {
     struct _vendor_select_window *sw = user_data;
     GncOwner owner;
@@ -620,12 +620,12 @@ order_vendor_cb (gpointer *vendor_p, gpointer user_data)
         return;
 
     gncOwnerInitVendor (&owner, vendor);
-    gnc_order_search (NULL, NULL, &owner, sw->book);
+    gnc_order_search (dialog, NULL, &owner, sw->book);
     return;
 }
 
 static void
-jobs_vendor_cb (gpointer *vendor_p, gpointer user_data)
+jobs_vendor_cb (GtkWindow *dialog, gpointer *vendor_p, gpointer user_data)
 {
     struct _vendor_select_window *sw = user_data;
     GncOwner owner;
@@ -639,12 +639,12 @@ jobs_vendor_cb (gpointer *vendor_p, gpointer user_data)
         return;
 
     gncOwnerInitVendor (&owner, vendor);
-    gnc_job_search (NULL, NULL, &owner, sw->book);
+    gnc_job_search (dialog, NULL, &owner, sw->book);
     return;
 }
 
 static void
-payment_vendor_cb (gpointer *vendor_p, gpointer user_data)
+payment_vendor_cb (GtkWindow *dialog, gpointer *vendor_p, gpointer user_data)
 {
     struct _vendor_select_window *sw = user_data;
     GncOwner owner;
@@ -658,12 +658,12 @@ payment_vendor_cb (gpointer *vendor_p, gpointer user_data)
         return;
 
     gncOwnerInitVendor (&owner, vendor);
-    gnc_ui_payment_new (NULL, &owner, sw->book);
+    gnc_ui_payment_new (dialog, &owner, sw->book);
     return;
 }
 
 static void
-edit_vendor_cb (gpointer *vendor_p, gpointer user_data)
+edit_vendor_cb (GtkWindow *dialog, gpointer *vendor_p, gpointer user_data)
 {
     GncVendor *vendor;
 
@@ -674,19 +674,19 @@ edit_vendor_cb (gpointer *vendor_p, gpointer user_data)
     if (!vendor)
         return;
 
-    gnc_ui_vendor_edit (NULL, vendor);
+    gnc_ui_vendor_edit (dialog, vendor);
     return;
 }
 
 static gpointer
-new_vendor_cb (gpointer user_data)
+new_vendor_cb (GtkWindow *dialog, gpointer user_data)
 {
     struct _vendor_select_window *sw = user_data;
     VendorWindow *vw;
 
     g_return_val_if_fail (user_data, NULL);
 
-    vw = gnc_ui_vendor_new (NULL, sw->book);
+    vw = gnc_ui_vendor_new (dialog, sw->book);
     return vw_get_vendor (vw);
 }
 
@@ -769,18 +769,18 @@ gnc_vendor_search (GtkWindow *parent, GncVendor *start, QofBook *book)
 }
 
 GNCSearchWindow *
-gnc_vendor_search_select (gpointer start, gpointer book)
+gnc_vendor_search_select (GtkWindow *parent, gpointer start, gpointer book)
 {
     if (!book) return NULL;
 
-    return gnc_vendor_search (NULL, start, book);
+    return gnc_vendor_search (parent, start, book);
 }
 
 GNCSearchWindow *
-gnc_vendor_search_edit (gpointer start, gpointer book)
+gnc_vendor_search_edit (GtkWindow *parent, gpointer start, gpointer book)
 {
     if (start)
-        gnc_ui_vendor_edit (NULL, start);
+        gnc_ui_vendor_edit (parent, start);
 
     return NULL;
 }

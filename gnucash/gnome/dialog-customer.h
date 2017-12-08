@@ -43,7 +43,7 @@ GNCSearchWindow *gnc_customer_search (GtkWindow *parent, GncCustomer *start, Qof
  * select() provides a Select Dialog and returns it.
  * edit() opens the existing customer for editing and returns NULL.
  */
-GNCSearchWindow * gnc_customer_search_select (gpointer start, gpointer book);
-GNCSearchWindow * gnc_customer_search_edit (gpointer start, gpointer book);
+GNCSearchWindow * gnc_customer_search_select (GtkWindow *parent, gpointer start, gpointer book);
+GNCSearchWindow * gnc_customer_search_edit (GtkWindow *parent, gpointer start, gpointer book);
 
 #endif /* GNC_DIALOG_CUSTOMER_H_ */

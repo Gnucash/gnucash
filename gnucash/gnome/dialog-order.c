@@ -71,10 +71,10 @@ typedef enum
 
 struct _order_select_window
 {
-    QofBook *	book;
-    GncOwner *	owner;
-    QofQuery *	q;
-    GncOwner	owner_def;
+    QofBook  *book;
+    GncOwner *owner;
+    QofQuery *q;
+    GncOwner  owner_def;
 };
 
 struct _order_window
@@ -817,7 +817,7 @@ gnc_ui_order_new (GtkWindow *parent, GncOwner *ownerp, QofBook *bookp)
 /* Functions for order selection widgets */
 
 static void
-edit_order_cb (gpointer *order_p, gpointer user_data)
+edit_order_cb (GtkWindow *dialog, gpointer *order_p, gpointer user_data)
 {
     GncOrder *order;
 
@@ -826,20 +826,20 @@ edit_order_cb (gpointer *order_p, gpointer user_data)
     order = *order_p;
 
     if (order)
-        gnc_ui_order_edit (NULL, order);
+        gnc_ui_order_edit (dialog, order);
 
     return;
 }
 
 static gpointer
-new_order_cb (gpointer user_data)
+new_order_cb (GtkWindow *dialog, gpointer user_data)
 {
     struct _order_select_window *sw = user_data;
     OrderWindow *ow;
 
     g_return_val_if_fail (user_data, NULL);
 
-    ow = gnc_ui_order_new (NULL, sw->owner, sw->book);
+    ow = gnc_ui_order_new (dialog, sw->owner, sw->book);
     return ow_get_order (ow);
 }
 
@@ -961,7 +961,7 @@ gnc_order_search (GtkWindow *parent, GncOrder *start, GncOwner *owner, QofBook *
 }
 
 GNCSearchWindow *
-gnc_order_search_select (gpointer start, gpointer book)
+gnc_order_search_select (GtkWindow *parent, gpointer start, gpointer book)
 {
     GncOrder *o = start;
     GncOwner owner, *ownerp;
@@ -976,14 +976,14 @@ gnc_order_search_select (gpointer start, gpointer book)
     else
         gncOwnerInitCustomer (&owner, NULL); /* XXX */
 
-    return gnc_order_search (NULL, start, NULL, book);
+    return gnc_order_search (parent, start, NULL, book);
 }
 
 GNCSearchWindow *
-gnc_order_search_edit (gpointer start, gpointer book)
+gnc_order_search_edit (GtkWindow *parent, gpointer start, gpointer book)
 {
     if (start)
-        gnc_ui_order_edit (NULL, start);
+        gnc_ui_order_edit (parent, start);
 
     return NULL;
 }

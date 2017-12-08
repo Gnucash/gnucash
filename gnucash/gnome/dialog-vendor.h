@@ -43,7 +43,7 @@ GNCSearchWindow * gnc_vendor_search (GtkWindow *parent, GncVendor *start, QofBoo
  * select() provides a Select Dialog and returns it.
  * edit() opens the existing vendor for editing and returns NULL.
  */
-GNCSearchWindow * gnc_vendor_search_select (gpointer start, gpointer book);
-GNCSearchWindow * gnc_vendor_search_edit (gpointer start, gpointer book);
+GNCSearchWindow * gnc_vendor_search_select (GtkWindow *parent, gpointer start, gpointer book);
+GNCSearchWindow * gnc_vendor_search_edit (GtkWindow *parent, gpointer start, gpointer book);
 
 #endif /* GNC_DIALOG_VENDOR_H_ */

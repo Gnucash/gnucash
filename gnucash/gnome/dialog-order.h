@@ -45,7 +45,7 @@ GNCSearchWindow * gnc_order_search (GtkWindow *parent, GncOrder *start, GncOwner
  * select() provides a Select Dialog and returns it.
  * edit() opens the existing order for editing and returns NULL.
  */
-GNCSearchWindow * gnc_order_search_select (gpointer start, gpointer book);
-GNCSearchWindow * gnc_order_search_edit (gpointer start, gpointer book);
+GNCSearchWindow * gnc_order_search_select (GtkWindow *parent, gpointer start, gpointer book);
+GNCSearchWindow * gnc_order_search_edit (GtkWindow *parent, gpointer start, gpointer book);
 
 #endif /* GNC_DIALOG_ORDER_H_ */

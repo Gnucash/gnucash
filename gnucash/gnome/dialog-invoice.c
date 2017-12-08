@@ -120,10 +120,10 @@ typedef enum
 
 struct _invoice_select_window
 {
-    QofBook *	book;
-    GncOwner *	owner;
-    QofQuery *	q;
-    GncOwner	owner_def;
+    QofBook  *book;
+    GncOwner *owner;
+    QofQuery *q;
+    GncOwner  owner_def;
 };
 
 #define UNUSED_VAR     __attribute__ ((unused))
@@ -757,6 +757,7 @@ struct post_invoice_params
     char *memo;             /* Memo for posting transaction */
     Account *acc;           /* Account to post to */
     gboolean accumulate;    /* Whether to accumulate splits */
+    GtkWindow *parent;
 };
 
 static void
@@ -1278,7 +1279,7 @@ gnc_invoice_job_changed_cb (GtkWidget *widget, gpointer data)
 }
 
 static GNCSearchWindow *
-gnc_invoice_select_job_cb (gpointer jobp, gpointer user_data)
+gnc_invoice_select_job_cb (GtkWindow *parent, gpointer jobp, gpointer user_data)
 {
     GncJob *j = jobp;
     InvoiceWindow *iw = user_data;
@@ -1294,7 +1295,7 @@ gnc_invoice_select_job_cb (gpointer jobp, gpointer user_data)
     else
         gncOwnerCopy (&(iw->owner), &owner);
 
-    return gnc_job_search (GTK_WINDOW(iw_get_window(iw)), j, &owner, iw->book);
+    return gnc_job_search (parent, j, &owner, iw->book);
 }
 
 static void
@@ -1340,7 +1341,7 @@ gnc_invoice_update_job_choice (InvoiceWindow *iw)
 }
 
 static GNCSearchWindow *
-gnc_invoice_select_proj_job_cb (gpointer jobp, gpointer user_data)
+gnc_invoice_select_proj_job_cb (GtkWindow *parent, gpointer jobp, gpointer user_data)
 {
     GncJob *j = jobp;
     InvoiceWindow *iw = user_data;
@@ -1356,7 +1357,7 @@ gnc_invoice_select_proj_job_cb (gpointer jobp, gpointer user_data)
     else
         gncOwnerCopy (&(iw->proj_cust), &owner);
 
-    return gnc_job_search (GTK_WINDOW(iw_get_window(iw)), j, &owner, iw->book);
+    return gnc_job_search (parent, j, &owner, iw->book);
 }
 
 static int
@@ -2681,7 +2682,8 @@ gnc_ui_invoice_edit (GtkWindow *parent, GncInvoice *invoice)
         type = EDIT_INVOICE;
 
     iw = gnc_invoice_new_page (gncInvoiceGetBook(invoice), type,
-                               invoice, gncInvoiceGetOwner (invoice), GNC_MAIN_WINDOW(parent));
+                               invoice, gncInvoiceGetOwner (invoice),
+                               GNC_MAIN_WINDOW(gnc_ui_get_main_window (GTK_WIDGET (parent))));
 
     return iw;
 }
@@ -2798,47 +2800,67 @@ gnc_ui_invoice_new (GtkWindow *parent, GncOwner *owner, QofBook *book)
 /* Functions for invoice selection widgets */
 
 static void
-edit_invoice_direct (gpointer invoice, gpointer user_data)
+edit_invoice_direct (GtkWindow *dialog, gpointer invoice, gpointer user_data)
 {
     g_return_if_fail (invoice);
-    gnc_ui_invoice_edit (NULL, invoice);
+    gnc_ui_invoice_edit (gnc_ui_get_main_window (GTK_WIDGET (dialog)), invoice);
 }
 
 static void
-edit_invoice_cb (gpointer inv, gpointer user_data)
+edit_invoice_cb (GtkWindow *dialog, gpointer inv, gpointer user_data)
 {
     GncInvoice *invoice = inv;
     g_return_if_fail (invoice && user_data);
-    edit_invoice_direct (invoice, user_data);
+    edit_invoice_direct (dialog, invoice, user_data);
 }
 
-static void
-multi_edit_invoice_cb (GList *invoice_list, gpointer user_data)
+
+struct multi_edit_invoice_data
 {
-    g_list_foreach(invoice_list, edit_invoice_cb, user_data);
+    gpointer user_data;
+    GtkWindow *parent;
+};
+
+static void
+multi_edit_invoice_one (gpointer inv, gpointer user_data)
+{
+    struct multi_edit_invoice_data *meid = user_data;
+    edit_invoice_cb (meid->parent, inv, meid->user_data);
 }
 
 static void
-pay_invoice_direct (gpointer inv, gpointer user_data)
+multi_edit_invoice_cb (GtkWindow *dialog, GList *invoice_list, gpointer user_data)
+{
+    struct multi_edit_invoice_data meid;
+
+    meid.user_data = user_data;
+    meid.parent = dialog;
+    g_list_foreach (invoice_list, multi_edit_invoice_one, &meid);
+}
+
+static void
+pay_invoice_direct (GtkWindow *dialog, gpointer inv, gpointer user_data)
 {
     GncInvoice *invoice = inv;
 
     g_return_if_fail (invoice);
-    gnc_ui_payment_new_with_invoice (NULL, gncInvoiceGetOwner (invoice),
+    gnc_ui_payment_new_with_invoice (dialog, gncInvoiceGetOwner (invoice),
                                      gncInvoiceGetBook (invoice), invoice);
 }
 
 static void
-pay_invoice_cb (gpointer *invoice_p, gpointer user_data)
+pay_invoice_cb (GtkWindow *dialog, gpointer *invoice_p, gpointer user_data)
 {
     g_return_if_fail (invoice_p && user_data);
     if (! *invoice_p)
         return;
-    pay_invoice_direct (*invoice_p, user_data);
+    pay_invoice_direct (dialog, *invoice_p, user_data);
 }
+
 struct multi_duplicate_invoice_data
 {
     GDate date;
+    GtkWindow *parent;
 };
 
 static void multi_duplicate_invoice_one(gpointer data, gpointer user_data)
@@ -2853,7 +2875,7 @@ static void multi_duplicate_invoice_one(gpointer data, gpointer user_data)
         // In this simplest form, we just use the existing duplication
         // algorithm, only without opening the "edit invoice" window for editing
         // the number etc. for each of the invoices.
-        InvoiceWindow *iw = gnc_ui_invoice_duplicate(NULL, old_invoice, FALSE, &dup_user_data->date);
+        InvoiceWindow *iw = gnc_ui_invoice_duplicate(dup_user_data->parent, old_invoice, FALSE, &dup_user_data->date);
         // FIXME: Now we could use this invoice and manipulate further data.
         g_assert(iw);
         new_invoice = iw_get_invoice(iw);
@@ -2862,7 +2884,7 @@ static void multi_duplicate_invoice_one(gpointer data, gpointer user_data)
 }
 
 static void
-multi_duplicate_invoice_cb (GList *invoice_list, gpointer user_data)
+multi_duplicate_invoice_cb (GtkWindow *dialog, GList *invoice_list, gpointer user_data)
 {
     g_return_if_fail (invoice_list);
     switch (g_list_length(invoice_list))
@@ -2873,7 +2895,7 @@ multi_duplicate_invoice_cb (GList *invoice_list, gpointer user_data)
     {
         // Duplicate exactly one invoice
         GncInvoice *old_invoice = invoice_list->data;
-        gnc_ui_invoice_duplicate(NULL, old_invoice, TRUE, NULL);
+        gnc_ui_invoice_duplicate(dialog, old_invoice, TRUE, NULL);
         return;
     }
     default:
@@ -2884,7 +2906,8 @@ multi_duplicate_invoice_cb (GList *invoice_list, gpointer user_data)
 
         // Default date: Today
         gnc_gdate_set_time64(&dup_user_data.date, gnc_time (NULL));
-        dialog_ok = gnc_dup_date_dialog (NULL, _("Date of duplicated entries"), &dup_user_data.date);
+        dup_user_data.parent = dialog;
+        dialog_ok = gnc_dup_date_dialog (GTK_WIDGET(dialog), _("Date of duplicated entries"), &dup_user_data.date);
         if (!dialog_ok)
         {
             // User pressed cancel, so don't duplicate anything here.
@@ -2904,7 +2927,7 @@ static void post_one_invoice_cb(gpointer data, gpointer user_data)
 {
     GncInvoice *invoice = data;
     struct post_invoice_params *post_params = user_data;
-    InvoiceWindow *iw = gnc_ui_invoice_edit(NULL, invoice);
+    InvoiceWindow *iw = gnc_ui_invoice_edit(post_params->parent, invoice);
     gnc_invoice_post(iw, post_params);
 }
 
@@ -2921,7 +2944,7 @@ static void gnc_invoice_is_posted(gpointer inv, gpointer test_value)
 
 
 static void
-multi_post_invoice_cb (GList *invoice_list, gpointer user_data)
+multi_post_invoice_cb (GtkWindow *dialog, GList *invoice_list, gpointer user_data)
 {
     struct post_invoice_params post_params;
     gboolean test;
@@ -2930,7 +2953,7 @@ multi_post_invoice_cb (GList *invoice_list, gpointer user_data)
     if (g_list_length(invoice_list) == 0)
         return;
     // Get the posting parameters for these invoices
-    iw = gnc_ui_invoice_edit(NULL, invoice_list->data);
+    iw = gnc_ui_invoice_edit(dialog, invoice_list->data);
     test = FALSE;
     gnc_suspend_gui_refresh (); // Turn off GUI refresh for the duration.
     // Check if any of the selected invoices have already been posted.
@@ -2948,6 +2971,7 @@ multi_post_invoice_cb (GList *invoice_list, gpointer user_data)
                                  &post_params.memo, &post_params.acc,
                                  &post_params.accumulate))
         return;
+    post_params.parent = dialog;
 
     // Turn off GUI refresh for the duration.  This is more than just an
     // optimization.  If the search that got us here is based on the "posted"
@@ -2958,30 +2982,41 @@ multi_post_invoice_cb (GList *invoice_list, gpointer user_data)
     gnc_resume_gui_refresh ();
 }
 
-static void print_one_invoice_cb(gpointer data, gpointer user_data)
+static void print_one_invoice_cb(GtkWindow *dialog, gpointer data, gpointer user_data)
 {
     GncInvoice *invoice = data;
-    gnc_invoice_window_print_invoice(NULL, invoice); // that's all!
+    gnc_invoice_window_print_invoice (dialog, invoice);
 }
 
 static void
-multi_print_invoice_cb (GList *invoice_list, gpointer user_data)
+multi_print_invoice_one (gpointer data, gpointer user_data)
 {
+    struct multi_edit_invoice_data *meid = user_data;
+    print_one_invoice_cb (meid->parent, data, meid->user_data);
+}
+
+static void
+multi_print_invoice_cb (GtkWindow *dialog, GList *invoice_list, gpointer user_data)
+{
+    struct multi_edit_invoice_data meid;
+
     if (g_list_length(invoice_list) == 0)
         return;
 
-    g_list_foreach(invoice_list, print_one_invoice_cb, user_data);
+    meid.user_data = user_data;
+    meid.parent = dialog;
+    g_list_foreach (invoice_list, multi_print_invoice_one, &meid);
 }
 
 static gpointer
-new_invoice_cb (gpointer user_data)
+new_invoice_cb (GtkWindow *dialog, gpointer user_data)
 {
     struct _invoice_select_window *sw = user_data;
     InvoiceWindow *iw;
 
     g_return_val_if_fail (user_data, NULL);
 
-    iw = gnc_ui_invoice_new (NULL, sw->owner, sw->book);
+    iw = gnc_ui_invoice_new (dialog, sw->owner, sw->book);
     return iw_get_invoice (iw);
 }
 
@@ -3406,6 +3441,7 @@ gnc_invoice_show_docs_due (GtkWindow *parent, QofBook *book, double days_in_adva
                       len);
         title = _("Due Invoices Reminder");
     }
+
     dialog = gnc_dialog_query_view_create(parent, param_list, q,
                                           title,
                                           message,

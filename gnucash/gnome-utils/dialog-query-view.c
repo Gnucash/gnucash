@@ -85,7 +85,7 @@ gnc_dialog_query_run_callback (GNCDisplayViewButton *cb, gpointer item,
         return;
 
     if (cb->cb_fcn)
-        (cb->cb_fcn)(item, dqv->user_data);
+        (cb->cb_fcn)(GTK_WINDOW (dqv->dialog), item, dqv->user_data);
 }
 
 static void

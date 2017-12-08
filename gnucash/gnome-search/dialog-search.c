@@ -162,13 +162,13 @@ gnc_search_callback_button_execute (GNCSearchCallbackButton *cb,
         sw->selected_item_list = g_list_reverse(sw->selected_item_list);
 
         // Call the callback
-        (cb->cb_multiselect_fn)(sw->selected_item_list, sw->user_data);
+        (cb->cb_multiselect_fn)(GTK_WINDOW (sw->dialog), sw->selected_item_list, sw->user_data);
     }
     else
     {
         // No, stick to the single-item callback
         if (cb->cb_fcn)
-            (cb->cb_fcn)(&(sw->selected_item), sw->user_data);
+            (cb->cb_fcn)(GTK_WINDOW (sw->dialog), &(sw->selected_item), sw->user_data);
     }
 }
 
@@ -238,7 +238,7 @@ gnc_search_dialog_select_cb (GtkButton *button, GNCSearchWindow *sw)
         return;
     }
 
-    (sw->selected_cb)(sw->selected_item, sw->select_arg);
+    (sw->selected_cb)(GTK_WINDOW (sw->dialog), sw->selected_item, sw->select_arg);
     gnc_search_dialog_destroy (sw);
 }
 
@@ -637,7 +637,7 @@ search_new_item_cb (GtkButton *button, GNCSearchWindow *sw)
 
     g_return_if_fail (sw->new_item_cb);
 
-    res = (sw->new_item_cb)(sw->user_data);
+    res = (sw->new_item_cb)(GTK_WINDOW (sw->dialog), sw->user_data);
 
     if (res)
     {
@@ -1467,7 +1467,7 @@ get_display_list (QofIdTypeConst type)
 
 
 static void
-do_nothing (gpointer *a, gpointer b)
+do_nothing (GtkWindow *dialog, gpointer *a, gpointer b)
 {
     return;
 }

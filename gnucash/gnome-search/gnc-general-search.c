@@ -39,6 +39,7 @@
 #include "gnc-component-manager.h"
 #include "qof.h"
 #include "gnc-general-search.h"
+#include "gnc-ui.h"
 
 #define GNCGENERALSEARCH_CLASS	"gnc-general-search-widget"
 
@@ -217,7 +218,7 @@ refresh_handler (GHashTable *changes, gpointer data)
 
 /* The user has selected from the search dialog */
 static void
-new_item_selected_cb (gpointer item, gpointer user_data)
+new_item_selected_cb (GtkWindow *dialog, gpointer item, gpointer user_data)
 {
     GNCGeneralSearch *gsl = user_data;
     gnc_general_search_set_selected (gsl, item);
@@ -250,7 +251,7 @@ search_cb(GtkButton * button, gpointer user_data)
         return;
     }
 
-    sw = (priv->search_cb)(gsl->selected_item, priv->user_data);
+    sw = (priv->search_cb)(gnc_ui_get_gtk_window (GTK_WIDGET (button)), gsl->selected_item, priv->user_data);
 
     /* NULL means nothing to 'select' */
     if (sw == NULL)
@@ -284,7 +285,7 @@ search_cb(GtkButton * button, gpointer user_data)
  *   @param comp_iter The iter in the completion's temporary model
  *   that represents the user selected match.
  *
- *   @param cbe A pointer to a currency entry widget. */
+ *   @param gsl A pointer to a currency entry widget. */
 static gboolean
 gnc_gsl_match_selected_cb (GtkEntryCompletion *completion,
                            GtkTreeModel       *comp_model,

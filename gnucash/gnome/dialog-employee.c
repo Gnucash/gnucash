@@ -68,8 +68,8 @@ typedef enum
 
 struct _employee_select_window
 {
-    QofBook *	book;
-    QofQuery *	q;
+    QofBook  *book;
+    QofQuery *q;
 };
 
 struct _employee_window
@@ -601,7 +601,7 @@ gnc_ui_employee_edit (GtkWindow *parent, GncEmployee *employee)
 /* Functions for employee selection widgets */
 
 static void
-invoice_employee_cb (gpointer *employee_p, gpointer user_data)
+invoice_employee_cb (GtkWindow *dialog, gpointer *employee_p, gpointer user_data)
 {
     struct _employee_select_window *sw = user_data;
     GncOwner owner;
@@ -615,12 +615,12 @@ invoice_employee_cb (gpointer *employee_p, gpointer user_data)
         return;
 
     gncOwnerInitEmployee (&owner, employee);
-    gnc_invoice_search (NULL, NULL, &owner, sw->book);
+    gnc_invoice_search (dialog, NULL, &owner, sw->book);
     return;
 }
 
 static void
-payment_employee_cb (gpointer *employee_p, gpointer user_data)
+payment_employee_cb (GtkWindow *dialog, gpointer *employee_p, gpointer user_data)
 {
     struct _employee_select_window *sw = user_data;
     GncOwner owner;
@@ -634,12 +634,12 @@ payment_employee_cb (gpointer *employee_p, gpointer user_data)
         return;
 
     gncOwnerInitEmployee (&owner, employee);
-    gnc_ui_payment_new (NULL, &owner, sw->book);
+    gnc_ui_payment_new (dialog, &owner, sw->book);
     return;
 }
 
 static void
-edit_employee_cb (gpointer *employee_p, gpointer user_data)
+edit_employee_cb (GtkWindow *dialog, gpointer *employee_p, gpointer user_data)
 {
     GncEmployee *employee;
 
@@ -650,19 +650,19 @@ edit_employee_cb (gpointer *employee_p, gpointer user_data)
     if (!employee)
         return;
 
-    gnc_ui_employee_edit (NULL, employee);
+    gnc_ui_employee_edit (dialog, employee);
     return;
 }
 
 static gpointer
-new_employee_cb (gpointer user_data)
+new_employee_cb (GtkWindow *dialog, gpointer user_data)
 {
     struct _employee_select_window *sw = user_data;
     EmployeeWindow *ew;
 
     g_return_val_if_fail (user_data, NULL);
 
-    ew = gnc_ui_employee_new (NULL, sw->book);
+    ew = gnc_ui_employee_new (dialog, sw->book);
     return ew_get_employee (ew);
 }
 
@@ -744,18 +744,18 @@ gnc_employee_search (GtkWindow *parent, GncEmployee *start, QofBook *book)
 }
 
 GNCSearchWindow *
-gnc_employee_search_select (gpointer start, gpointer book)
+gnc_employee_search_select (GtkWindow *parent, gpointer start, gpointer book)
 {
     if (!book) return NULL;
 
-    return gnc_employee_search (NULL, start, book);
+    return gnc_employee_search (parent, start, book);
 }
 
 GNCSearchWindow *
-gnc_employee_search_edit (gpointer start, gpointer book)
+gnc_employee_search_edit (GtkWindow *parent, gpointer start, gpointer book)
 {
     if (start)
-        gnc_ui_employee_edit (NULL, start);
+        gnc_ui_employee_edit (parent, start);
 
     return NULL;
 }

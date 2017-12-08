@@ -63,10 +63,10 @@ typedef enum
 
 struct _job_select_window
 {
-    QofBook *	book;
-    GncOwner *	owner;
-    QofQuery *	q;
-    GncOwner	owner_def;
+    QofBook  *book;
+    GncOwner *owner;
+    QofQuery *q;
+    GncOwner  owner_def;
 };
 
 struct _job_window
@@ -472,7 +472,7 @@ gnc_ui_job_edit (GtkWindow *parent, GncJob *job)
 /* Search functionality */
 
 static void
-edit_job_cb (gpointer *job_p, gpointer user_data)
+edit_job_cb (GtkWindow *dialog, gpointer *job_p, gpointer user_data)
 {
     GncJob *job;
 
@@ -483,11 +483,11 @@ edit_job_cb (gpointer *job_p, gpointer user_data)
     if (!job)
         return;
 
-    gnc_ui_job_edit (NULL, job);
+    gnc_ui_job_edit (dialog, job);
 }
 
 static void
-invoice_job_cb (gpointer *job_p, gpointer user_data)
+invoice_job_cb (GtkWindow *dialog, gpointer *job_p, gpointer user_data)
 {
     struct _job_select_window * sw = user_data;
     GncJob *job;
@@ -500,11 +500,11 @@ invoice_job_cb (gpointer *job_p, gpointer user_data)
         return;
 
     gncOwnerInitJob (&owner, job);
-    gnc_invoice_search (NULL, NULL, &owner, sw->book);
+    gnc_invoice_search (dialog, NULL, &owner, sw->book);
 }
 
 static void
-payment_job_cb (gpointer *job_p, gpointer user_data)
+payment_job_cb (GtkWindow *dialog, gpointer *job_p, gpointer user_data)
 {
     struct _job_select_window *sw = user_data;
     GncOwner owner;
@@ -518,19 +518,19 @@ payment_job_cb (gpointer *job_p, gpointer user_data)
         return;
 
     gncOwnerInitJob (&owner, job);
-    gnc_ui_payment_new (NULL, &owner, sw->book);
+    gnc_ui_payment_new (dialog, &owner, sw->book);
     return;
 }
 
 static gpointer
-new_job_cb (gpointer user_data)
+new_job_cb (GtkWindow *dialog, gpointer user_data)
 {
     struct _job_select_window *sw = user_data;
     JobWindow *jw;
 
     g_return_val_if_fail (user_data, NULL);
 
-    jw = gnc_ui_job_new (NULL, sw->owner, sw->book);
+    jw = gnc_ui_job_new (dialog, sw->owner, sw->book);
     return jw_get_job (jw);
 }
 
@@ -650,7 +650,7 @@ gnc_job_search (GtkWindow *parent, GncJob *start, GncOwner *owner, QofBook *book
 /* Functions for widgets for job selection */
 
 GNCSearchWindow *
-gnc_job_search_select (gpointer start, gpointer book)
+gnc_job_search_select (GtkWindow *parent, gpointer start, gpointer book)
 {
     GncJob *j = start;
     GncOwner owner, *ownerp;
@@ -665,14 +665,14 @@ gnc_job_search_select (gpointer start, gpointer book)
     else
         gncOwnerInitCustomer (&owner, NULL); /* XXX */
 
-    return gnc_job_search (NULL, start, &owner, book);
+    return gnc_job_search (parent, start, &owner, book);
 }
 
 GNCSearchWindow *
-gnc_job_search_edit (gpointer start, gpointer book)
+gnc_job_search_edit (GtkWindow *parent, gpointer start, gpointer book)
 {
     if (start)
-        gnc_ui_job_edit (NULL, start);
+        gnc_ui_job_edit (parent, start);
 
     return NULL;
 }

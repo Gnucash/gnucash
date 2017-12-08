@@ -189,14 +189,14 @@ typedef struct _invoice_select_info
 } GncISI;
 
 static GNCSearchWindow *
-gnc_invoice_select_search_cb (gpointer start, gpointer isip)
+gnc_invoice_select_search_cb (GtkWindow *parent, gpointer start, gpointer isip)
 {
     GncISI *isi = isip;
 
     if (!isi) return NULL;
     g_assert(isi->book);
 
-    return gnc_invoice_search (NULL, start,
+    return gnc_invoice_search (parent, start,
                                isi->have_owner ? &isi->owner : NULL,
                                isi->book);
 }

@@ -115,8 +115,8 @@ typedef enum
 
 struct _customer_select_window
 {
-    QofBook *	book;
-    QofQuery *	q;
+    QofBook  *book;
+    QofQuery *q;
 };
 
 struct _customer_window
@@ -781,7 +781,7 @@ gnc_ui_customer_new (GtkWindow *parent, QofBook *bookp)
 /* Functions for customer selection widgets */
 
 static void
-invoice_customer_cb (gpointer *cust_p, gpointer user_data)
+invoice_customer_cb (GtkWindow *dialog, gpointer *cust_p, gpointer user_data)
 {
     struct _customer_select_window *sw = user_data;
     GncOwner owner;
@@ -795,12 +795,12 @@ invoice_customer_cb (gpointer *cust_p, gpointer user_data)
         return;
 
     gncOwnerInitCustomer (&owner, cust);
-    gnc_invoice_search (NULL, NULL, &owner, sw->book);
+    gnc_invoice_search (dialog, NULL, &owner, sw->book);
     return;
 }
 
 static void
-order_customer_cb (gpointer *cust_p, gpointer user_data)
+order_customer_cb (GtkWindow *dialog, gpointer *cust_p, gpointer user_data)
 {
     struct _customer_select_window *sw = user_data;
     GncOwner owner;
@@ -814,12 +814,12 @@ order_customer_cb (gpointer *cust_p, gpointer user_data)
         return;
 
     gncOwnerInitCustomer (&owner, cust);
-    gnc_order_search (NULL, NULL, &owner, sw->book);
+    gnc_order_search (dialog, NULL, &owner, sw->book);
     return;
 }
 
 static void
-jobs_customer_cb (gpointer *cust_p, gpointer user_data)
+jobs_customer_cb (GtkWindow *dialog, gpointer *cust_p, gpointer user_data)
 {
     struct _customer_select_window *sw = user_data;
     GncOwner owner;
@@ -833,12 +833,12 @@ jobs_customer_cb (gpointer *cust_p, gpointer user_data)
         return;
 
     gncOwnerInitCustomer (&owner, cust);
-    gnc_job_search (NULL, NULL, &owner, sw->book);
+    gnc_job_search (dialog, NULL, &owner, sw->book);
     return;
 }
 
 static void
-payment_customer_cb (gpointer *cust_p, gpointer user_data)
+payment_customer_cb (GtkWindow *dialog, gpointer *cust_p, gpointer user_data)
 {
     struct _customer_select_window *sw = user_data;
     GncOwner owner;
@@ -852,12 +852,12 @@ payment_customer_cb (gpointer *cust_p, gpointer user_data)
         return;
 
     gncOwnerInitCustomer (&owner, cust);
-    gnc_ui_payment_new (NULL, &owner, sw->book);
+    gnc_ui_payment_new (dialog, &owner, sw->book);
     return;
 }
 
 static void
-edit_customer_cb (gpointer *cust_p, gpointer user_data)
+edit_customer_cb (GtkWindow *dialog, gpointer *cust_p, gpointer user_data)
 {
     GncCustomer *cust;
 
@@ -867,20 +867,20 @@ edit_customer_cb (gpointer *cust_p, gpointer user_data)
     if (!cust)
         return;
 
-    gnc_ui_customer_edit (NULL, cust);
+    gnc_ui_customer_edit (dialog, cust);
 
     return;
 }
 
 static gpointer
-new_customer_cb (gpointer user_data)
+new_customer_cb (GtkWindow *dialog, gpointer user_data)
 {
     struct _customer_select_window *sw = user_data;
     CustomerWindow *cw;
 
     g_return_val_if_fail (sw, NULL);
 
-    cw = gnc_ui_customer_new (NULL, sw->book);
+    cw = gnc_ui_customer_new (dialog, sw->book);
     return cw_get_customer (cw);
 }
 
@@ -967,18 +967,18 @@ gnc_customer_search (GtkWindow *parent, GncCustomer *start, QofBook *book)
 }
 
 GNCSearchWindow *
-gnc_customer_search_select (gpointer start, gpointer book)
+gnc_customer_search_select (GtkWindow *parent, gpointer start, gpointer book)
 {
     if (!book) return NULL;
 
-    return gnc_customer_search (NULL, start, book);
+    return gnc_customer_search (parent, start, book);
 }
 
 GNCSearchWindow *
-gnc_customer_search_edit (gpointer start, gpointer book)
+gnc_customer_search_edit (GtkWindow *parent, gpointer start, gpointer book)
 {
     if (start)
-        gnc_ui_customer_edit (NULL, start);
+        gnc_ui_customer_edit (parent, start);
 
     return NULL;
 }

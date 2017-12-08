@@ -31,7 +31,7 @@
 
 typedef struct _DialogQueryView DialogQueryView;
 
-typedef void (*GNCDisplayViewCB)(gpointer obj, gpointer user_data);
+typedef void (*GNCDisplayViewCB)(GtkWindow *dialog, gpointer obj, gpointer user_data);
 typedef struct
 {
     const char         *label;
