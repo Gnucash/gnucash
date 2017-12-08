@@ -13,7 +13,7 @@ TARGET_COMPILE_DEFINITIONS(gncmod-locale-reports-us PRIVATE -DG_LOG_DOMAIN=\"gnc
 
 
 IF (APPLE)
-  SET_TARGET_PROPERTIES (gncmod-locale-reports-us PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_LIBDIR}/gnucash")
+  SET_TARGET_PROPERTIES (gncmod-locale-reports-us PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
 ENDIF()
 
 INSTALL(TARGETS gncmod-locale-reports-us
