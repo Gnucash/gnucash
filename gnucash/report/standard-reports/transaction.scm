@@ -1577,7 +1577,8 @@ Credit Card, and Income accounts."))))))
                                                (string-contains str transaction-matcher)))))
                             (and (if (eq? filter-mode 'include) (is-filter-member split c_account_2) #t)
                                  (if (eq? filter-mode 'exclude) (not (is-filter-member split c_account_2)) #t)
-                                 (or (match? (xaccTransGetDescription trans))
+                                 (or (string-null? transaction-matcher) ; null-string = ignore filters
+                                     (match? (xaccTransGetDescription trans))
                                      (match? (xaccTransGetNotes trans))
                                      (match? (xaccSplitGetMemo split)))
                                  (or (not reconcile-status-filter) ; #f = ignore next filter
