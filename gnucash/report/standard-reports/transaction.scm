@@ -159,13 +159,6 @@ options specified in the Options panels."))
         (tp-b (gnc-transaction-get-date-posted (xaccSplitGetParent b))))
     (timepair-same-year tp-a tp-b)))
 
-(define (set-last-row-style! table tag . rest)
-  (let ((arg-list
-         (cons table
-               (cons (- (gnc:html-table-num-rows table) 1)
-                     (cons tag rest)))))
-    (apply gnc:html-table-set-row-style! arg-list)))
-
 (define (add-subheading-row data table width subheading-style)
   (let ((heading-cell (gnc:make-html-table-cell data)))
     (gnc:html-table-cell-set-colspan! heading-cell width)
@@ -803,7 +796,7 @@ Use a period (.) to match a single character e.g. '20../.' will match 'Travel 20
                    (vector 'number
                            (N_ "Number/Action")
                            (N_ "Sort by check number/action."))
-
+  
                    (vector 't-number
                            (N_ "Transaction Number")
                            (N_ "Sort by transaction number."))
@@ -1146,40 +1139,9 @@ Credit Card, and Income accounts."))))))
   (gnc:options-set-default-section options gnc:pagename-general)
   options)
 
-
-(define (get-primary-subtotal-style options)
-  (let ((bgcolor (gnc:lookup-option options
-                                    (N_ "Colors")
-                                    (N_ "Primary Subtotals/headings"))))
-    (list 'attribute (list "bgcolor" (gnc:color-option->html bgcolor)))))
-
-(define (get-secondary-subtotal-style options)
-  (let ((bgcolor (gnc:lookup-option options
-                                    (N_ "Colors")
-                                    (N_ "Secondary Subtotals/headings"))))
-    (list 'attribute (list "bgcolor" (gnc:color-option->html bgcolor)))))
-
-(define (get-grand-total-style options)
-  (let ((bgcolor (gnc:lookup-option options
-                                    (N_ "Colors")
-                                    (N_ "Grand Total"))))
-    (list 'attribute (list "bgcolor" (gnc:color-option->html bgcolor)))))
-
-(define (get-odd-row-style options)
-  (let ((bgcolor (gnc:lookup-option options
-                                    (N_ "Colors")
-                                    (N_ "Split Odd"))))
-    (list 'attribute (list "bgcolor" (gnc:color-option->html bgcolor)))))
-
-(define (get-even-row-style options)
-  (let ((bgcolor (gnc:lookup-option options
-                                    (N_ "Colors")
-                                    (N_ "Split Even"))))
-    (list 'attribute (list "bgcolor" (gnc:color-option->html bgcolor)))))
-
-
 ;; ;;;;;;;;;;;;;;;;;;;;
 ;; Here comes the big function that builds the whole table.
+
 (define (make-split-table splits options
                           primary-subtotal-pred
                           secondary-subtotal-pred
@@ -1384,6 +1346,8 @@ Credit Card, and Income accounts."))))))
 
 ;; ;;;;;;;;;;;;;;;;;;;;
 ;; Here comes the renderer function for this report.
+
+
 (define (trep-renderer report-obj)
   (define options (gnc:report-options report-obj))
   (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
