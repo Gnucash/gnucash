@@ -1709,6 +1709,7 @@
                                         "Use Full Account Name?" (cons #f "Use Full Account Name")
                                         "Use Full Other Account Name?" (cons #f "Use Full Other Account Name")
                                         "Void Transactions?" (cons #f "Void Transactions")
+                                        "Account Substring" (cons "Filter" "Account Matcher")
                                         ))
                        (name-match (member name new-names-list)))
 

@@ -658,6 +658,26 @@ options specified in the Options panels."))
     gnc:pagename-general optname-table-export
     "g" (N_ "Formats the table suitable for cut & paste exporting with extra cells.") #f))
 
+  ;; Filtering Options
+
+  (gnc:register-trep-option
+   (gnc:make-string-option
+    pagename-filter optname-account-matcher
+    "a5" (N_ "Match only accounts whose fullname is matched e.g. ':Travel' will match \
+Expenses:Travel:Holiday and Expenses:Business:Travel. It can be left blank, which will \
+disable the matcher.")
+    ""))
+
+  (gnc:register-trep-option
+   (gnc:make-simple-boolean-option
+    pagename-filter optname-account-matcher-regex
+    "a6"
+    (N_ "By default the account matcher will search substring only. Set this to true to \
+enable full POSIX regular expressions capabilities. 'Car|Flights' will match both \
+Expenses:Car and Expenses:Flights. Use a period (.) to match a single character e.g. \
+'20../.' will match 'Travel 2017/1 London'. ")
+    #f))
+
   (gnc:register-trep-option
    (gnc:make-string-option
     pagename-filter optname-transaction-matcher
@@ -690,23 +710,6 @@ tags within description, notes or memo. ")
     (lambda ()
       '())
     #f #t))
-
-  (gnc:register-trep-option
-   (gnc:make-string-option
-    gnc:pagename-accounts optname-account-matcher
-    "a5" (N_ "Match only above accounts whose fullname is matched e.g. ':Travel' will match \
-Expenses:Travel:Holiday and Expenses:Business:Travel. It can be left blank, which will disable \
-the matcher.")
-    ""))
-
-  (gnc:register-trep-option
-   (gnc:make-simple-boolean-option
-    gnc:pagename-accounts optname-account-matcher-regex
-    "a6"
-    (N_ "By default the account matcher will search substring only. Set this to true to enable full \
-POSIX regular expressions capabilities. 'Car|Flights' will match both Expenses:Car and Expenses:Flights. \
-Use a period (.) to match a single character e.g. '20../.' will match 'Travel 2017/1 London'. ")
-    #f))
 
   (gnc:register-trep-option
    (gnc:make-account-list-option
