@@ -65,10 +65,213 @@ TEST(gnc_timezone_constructors, test_posix_timezone)
     std::string timezone("FST08FDT07,M4.1.0,M10.31.0");
     TimeZoneProvider tzp(timezone);
     TZ_Ptr tz = tzp.get(2006);
-    EXPECT_TRUE(tz->std_zone_abbrev() == "FST");
-    EXPECT_TRUE(tz->dst_zone_abbrev() == "FDT");
-    EXPECT_TRUE(tz->base_utc_offset().hours() == 8L);
-    EXPECT_TRUE(tz->dst_offset().hours() == 7L);
+    EXPECT_EQ(tz->std_zone_abbrev(), "FST");
+    EXPECT_EQ(tz->dst_zone_abbrev(), "FDT");
+    EXPECT_EQ(tz->base_utc_offset().hours(), 8L);
+    EXPECT_EQ(tz->dst_offset().hours(), 7L);
+}
+
+TEST(gnc_timezone_constructors, test_IANA_Belize_tz)
+{
+    TimeZoneProvider tzp("America/Belize");
+    for (int year = 1908; year < 1990; ++year)
+    {
+        auto tz = tzp.get(year);
+        if (year < 1912)
+        {
+            EXPECT_EQ(tz->std_zone_abbrev(), "LMT");
+            EXPECT_FALSE(tz->has_dst());
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), -21168);
+        }
+        else if (year < 1918)
+        {
+            EXPECT_EQ(tz->std_zone_abbrev(), "CST");
+            EXPECT_FALSE(tz->has_dst());
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), -21600);
+        }
+        else if (year < 1943)
+        {
+            EXPECT_EQ(tz->std_zone_abbrev(), "CST");
+            EXPECT_TRUE(tz->has_dst());
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), -21600);
+            EXPECT_EQ(tz->dst_zone_abbrev(), "-0530");
+            EXPECT_EQ(tz->dst_offset().total_seconds(), 1800);
+        }
+        else if (year == 1973 || year == 1982)
+        {
+            EXPECT_EQ(tz->std_zone_abbrev(), "CST");
+            EXPECT_TRUE(tz->has_dst());
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), -21600);
+            EXPECT_EQ(tz->dst_zone_abbrev(), "CDT");
+            EXPECT_EQ(tz->dst_offset().total_seconds(), 3600);
+        }
+        else
+        {
+            EXPECT_EQ(tz->std_zone_abbrev(), "CST");
+            EXPECT_FALSE(tz->has_dst());
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), -21600);
+        }
+   }
+}
+
+TEST(gnc_timezone_constructors, test_IANA_Perth_tz)
+{
+    TimeZoneProvider tzp("Australia/Perth");
+    for (int year = 1893; year < 2048; ++year)
+    {
+        auto tz = tzp.get(year);
+        if (year < 1895)
+        {
+            EXPECT_EQ(tz->std_zone_abbrev(), "LMT");
+            EXPECT_FALSE(tz->has_dst());
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 27804);
+        }
+        else if (year < 1916)
+        {
+            EXPECT_EQ(tz->std_zone_abbrev(), "AWST");
+            EXPECT_FALSE(tz->has_dst());
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 28800);
+        }
+        else if (year < 1917)
+        {
+            EXPECT_EQ(tz->std_zone_abbrev(), "AWST");
+            EXPECT_TRUE(tz->has_dst());
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 28800);
+            EXPECT_EQ(tz->dst_zone_abbrev(), "AWDT");
+            EXPECT_EQ(tz->dst_offset().total_seconds(), 3600);
+        }
+        else if (year < 1941)
+        {
+            EXPECT_EQ(tz->std_zone_abbrev(), "AWST");
+            EXPECT_FALSE(tz->has_dst());
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 28800);
+        }
+        else if (year < 1943)
+        {
+            EXPECT_EQ(tz->std_zone_abbrev(), "AWST");
+            EXPECT_TRUE(tz->has_dst());
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 28800);
+            EXPECT_EQ(tz->dst_zone_abbrev(), "AWDT");
+            EXPECT_EQ(tz->dst_offset().total_seconds(), 3600);
+        }
+        else if (year == 1974 || year == 1983 || year == 1991 ||
+                 (year > 2005 && year < 2009))
+        {
+            EXPECT_EQ(tz->std_zone_abbrev(), "AWST");
+            EXPECT_TRUE(tz->has_dst());
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 28800);
+            EXPECT_EQ(tz->dst_zone_abbrev(), "AWDT");
+            EXPECT_EQ(tz->dst_offset().total_seconds(), 3600);
+        }
+        else
+        {
+            EXPECT_EQ(tz->std_zone_abbrev(), "AWST");
+            EXPECT_FALSE(tz->has_dst());
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 28800);
+        }
+    }
+}
+
+TEST(gnc_timezone_constructors, test_IANA_Minsk_tz)
+{
+    TimeZoneProvider tzp("Europe/Minsk");
+    for (int year = 1870; year < 2020; ++year)
+    {
+        auto tz = tzp.get(year);
+        if (year < 1879)
+        {
+            EXPECT_EQ(tz->std_zone_abbrev(), "LMT");
+            EXPECT_FALSE(tz->has_dst());
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 6616);
+        }
+        else if (year < 1924)
+        {
+            EXPECT_EQ(tz->std_zone_abbrev(), "MMT");
+            EXPECT_FALSE(tz->has_dst());
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 6600);
+        }
+        else if (year < 1930)
+        {
+            EXPECT_EQ(tz->std_zone_abbrev(), "EET");
+            EXPECT_FALSE(tz->has_dst());
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 7200);
+        }
+        else if (year < 1941)
+        {
+            EXPECT_EQ(tz->std_zone_abbrev(), "MSK");
+            EXPECT_FALSE(tz->has_dst());
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 10800);
+        }
+        /* The TZInfo says Minsk had DST from June 1941 - Nov
+         * 1942. Boost::date_time doesn't know how to model that so we
+         * just pretend that it was a weird standard time. Note that
+         * Minsk was under German occupation and got shifted to Berlin
+         * time, sort of.
+         */
+        else if (year < 1943)
+        {
+            EXPECT_EQ(tz->std_zone_abbrev(), "CEST");
+            EXPECT_FALSE(tz->has_dst());
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 7200);
+            EXPECT_EQ(tz->dst_zone_abbrev(), "");
+            EXPECT_EQ(tz->dst_offset().total_seconds(), 0);
+        }
+        else if (year == 1943)
+        {
+            EXPECT_EQ(tz->std_zone_abbrev(), "CET");
+            EXPECT_TRUE(tz->has_dst());
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 3600);
+            EXPECT_EQ(tz->dst_zone_abbrev(), "CEST");
+            EXPECT_EQ(tz->dst_offset().total_seconds(), 3600);
+        }
+        /* Minsk was "liberated" by the Soviets 2 Jul 1944 and went
+         * back to a more reasonable local time with no DST. Another
+         * case that's too hard for boost::timezone to model correctly
+         * so we fudge.
+         */
+        else if (year == 1944)
+        {
+            EXPECT_EQ(tz->std_zone_abbrev(), "MSK");
+            EXPECT_TRUE(tz->has_dst());
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 10800);
+            EXPECT_EQ(tz->dst_zone_abbrev(), "CEST");
+            EXPECT_EQ(tz->dst_offset().total_seconds(), -3600);
+        }
+        else if (year < 1981)
+        {
+            EXPECT_EQ(tz->std_zone_abbrev(), "MSK");
+            EXPECT_FALSE(tz->has_dst());
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 10800);
+        }
+        else if (year < 1989)
+        {
+            EXPECT_EQ(tz->std_zone_abbrev(), "MSK");
+            EXPECT_TRUE(tz->has_dst());
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 10800);
+            EXPECT_EQ(tz->dst_zone_abbrev(), "MSD");
+            EXPECT_EQ(tz->dst_offset().total_seconds(), 3600);
+        }
+        else if (year < 1991)
+        {
+            EXPECT_EQ(tz->std_zone_abbrev(), "MSK");
+            EXPECT_FALSE(tz->has_dst());
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 10800);
+        }
+        else if (year < 2011)
+        {
+            EXPECT_EQ(tz->std_zone_abbrev(), "EET");
+            EXPECT_TRUE(tz->has_dst());
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 7200);
+            EXPECT_EQ(tz->dst_zone_abbrev(), "EEST");
+            EXPECT_EQ(tz->dst_offset().total_seconds(), 3600);
+        }
+        else
+        {
+            EXPECT_EQ(tz->std_zone_abbrev(), "+03");
+            EXPECT_FALSE(tz->has_dst());
+            EXPECT_EQ(tz->base_utc_offset().total_seconds(), 10800);
+        }
+     }
 }
 #endif
 

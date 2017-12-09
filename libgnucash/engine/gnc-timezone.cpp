@@ -603,6 +603,8 @@ void
 TimeZoneProvider::parse_file(const std::string& tzname)
 {
     IANAParser::IANAParser parser(tzname);
+    using boost::posix_time::hours;
+    const auto one_year = hours(366 * 24); //Might be a leap year.
     auto last_info = std::find_if(parser.tzinfo.begin(), parser.tzinfo.end(),
                                   [](IANAParser::TZInfo tz)
                                   {return !tz.info.isdst;});
@@ -620,34 +622,48 @@ TimeZoneProvider::parse_file(const std::string& tzname)
         auto this_time = ptime(date(1970, 1, 1),
                                time_duration(txi->timestamp / 3600, 0,
                                              txi->timestamp % 3600));
+        /* Note: The "get" function retrieves the last zone with a
+         * year *earlier* than the requested year: Zone periods run
+         * from the saved year to the beginning year of the next zone.
+         */
         try
         {
             auto this_year = this_time.date().year();
             //Initial case
             if (last_time.is_not_a_date_time())
-                zone_vector.push_back(zone_no_dst(this_year - 1, last_info));
-            //gap in transitions > 1 year, non-dst zone
-            //change. In the last case the exact date of the change will be
-            //wrong because boost::local_date::timezone isn't able to
-            //represent it. For GnuCash's purposes this isn't likely to be
-            //important as the last time this sort of transition happened
-            //was 1946, but we have to handle the case in order to parse
-            //the tz file.
-            else if (this_year - last_time.date().year() > 1 ||
-                     last_info->info.isdst == this_info->info.isdst)
             {
-                zone_vector.push_back(zone_no_dst(this_year, last_info));
+                zone_vector.push_back(zone_no_dst(this_year - 1, last_info));
+                zone_vector.push_back(zone_no_dst(this_year, this_info));
             }
-
-            else
+            // No change in is_dst means a permanent zone change.
+            else if (last_info->info.isdst == this_info->info.isdst)
+            {
+                zone_vector.push_back(zone_no_dst(this_year, this_info));
+            }
+            /* If there have been no transitions in at least a year
+             * then we need to create a no-DST rule with last_info to
+             * reflect the frozen timezone.
+             */
+            else if (this_time - last_time > one_year)
+            {
+                auto year = last_time.date().year();
+                if (zone_vector.back().first == year)
+                    year = year + 1; // no operator ++ or +=, sigh.
+                zone_vector.push_back(zone_no_dst(year, last_info));
+            }
+            /* It's been less than a year, so it's probably a DST
+             * cycle. This consumes two transitions so we want only
+             * the return-to-standard-time one to make a DST rule.
+             */
+            else if (!this_info->info.isdst)
             {
                 DSTRule::DSTRule new_rule(last_info, this_info,
                                           last_time, this_time);
                 if (new_rule != last_rule)
                 {
                     last_rule = new_rule;
-                    zone_vector.push_back(zone_from_rule (this_time.date().year(),
-                                                          new_rule));
+                    auto year = last_time.date().year();
+                    zone_vector.push_back(zone_from_rule(year, new_rule));
                 }
             }
         }
@@ -658,12 +674,12 @@ TimeZoneProvider::parse_file(const std::string& tzname)
         last_time = this_time;
         last_info = this_info;
     }
-
+/* if the transitions end before the end of the zoneinfo coverage
+ * period then the zone rescinded DST and we need a final no-dstzone.
+ */
     if (last_time.is_not_a_date_time() ||
         last_time.date().year() < parser.last_year)
-        zone_vector.push_back(zone_no_dst(max_year, last_info));
-    else //Last DST rule forever after.
-        zone_vector.push_back(zone_from_rule(max_year, last_rule));
+        zone_vector.push_back(zone_no_dst(last_time.date().year(), last_info));
 }
 
 bool
@@ -714,13 +730,11 @@ TimeZoneProvider::TimeZoneProvider(const std::string& tzname) :  zone_vector {}
 TZ_Ptr
 TimeZoneProvider::get(int year) const noexcept
 {
+    if (zone_vector.empty())
+        return TZ_Ptr(new PTZ("UTC0"));
     auto iter = find_if(zone_vector.rbegin(), zone_vector.rend(),
 			[=](TZ_Entry e) { return e.first <= year; });
     if (iter == zone_vector.rend())
-    {
-        if (!zone_vector.empty())
             return zone_vector.front().second;
-        return TZ_Ptr(new PTZ("UTC0"));
-    }
     return iter->second;
 }
