@@ -66,8 +66,11 @@
 (define optname-currency (N_ "Report's currency"))
 (define optname-account-matcher (N_ "Account Matcher"))
 (define optname-account-matcher-regex (N_ "Account Matcher uses regular expressions for extended matching"))
+
+(define pagename-filter (N_ "Filter"))
 (define optname-transaction-matcher (N_ "Transaction Matcher"))
 (define optname-transaction-matcher-regex (N_ "Transaction Matcher uses regular expressions for extended matching"))
+
 (define def:grand-total-style "grand-total")
 (define def:normal-row-style "normal-row")
 (define def:alternate-row-style "alternate-row")
@@ -646,7 +649,7 @@
 
   (gnc:register-trep-option
    (gnc:make-string-option
-    gnc:pagename-general optname-transaction-matcher
+    pagename-filter optname-transaction-matcher
     "i1" (N_ "Match only transactions whose substring is matched e.g. '#gift' \
 will find all transactions with #gift in description, notes or memo. It can be left \
 blank, which will disable the matcher.")
@@ -654,7 +657,7 @@ blank, which will disable the matcher.")
 
   (gnc:register-trep-option
    (gnc:make-simple-boolean-option
-    gnc:pagename-general optname-transaction-matcher-regex
+    pagename-filter optname-transaction-matcher-regex
     "i2"
     (N_ "By default the transaction matcher will search substring only. Set this to true to \
 enable full POSIX regular expressions capabilities. '#work|#family' will match both \
@@ -1568,8 +1571,8 @@ Credit Card, and Income accounts."))))))
         (enddate (gnc:timepair-end-day-time
                   (gnc:date-option-absolute-time
                    (opt-val gnc:pagename-general "End Date"))))
-        (transaction-matcher (opt-val gnc:pagename-general optname-transaction-matcher))
-        (transaction-matcher-regexp (if (opt-val gnc:pagename-general optname-transaction-matcher-regex)
+        (transaction-matcher (opt-val pagename-filter optname-transaction-matcher))
+        (transaction-matcher-regexp (if (opt-val pagename-filter optname-transaction-matcher-regex)
                                         (make-regexp transaction-matcher)
                                         #f))
         (report-title (opt-val 
