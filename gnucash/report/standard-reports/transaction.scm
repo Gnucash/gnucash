@@ -240,25 +240,29 @@ options specified in the Options panels."))
                   (cons 'split-sortvalue split-week)
                   (cons 'text (_ "Weekly"))
                   (cons 'tip (_ "Weekly."))
-                  (cons 'renderer-key 'week)))
+                  (cons 'renderer-key 'weekly)
+                  (cons 'renderer-fn gnc:date-get-week-year-string)))
 
    (cons 'monthly (list
                    (cons 'split-sortvalue split-month)
                    (cons 'text (_ "Monthly"))
                    (cons 'tip (_ "Monthly."))
-                   (cons 'renderer-key 'month)))
+                   (cons 'renderer-key 'monthly)
+                   (cons 'renderer-fn gnc:date-get-month-year-string)))
 
    (cons 'quarterly (list
                      (cons 'split-sortvalue split-quarter)
                      (cons 'text (_ "Quarterly"))
                      (cons 'tip (_ "Quarterly."))
-                     (cons 'renderer-key 'quarter)))
+                     (cons 'renderer-key 'quarterly)
+                     (cons 'renderer-fn gnc:date-get-quarter-year-string)))
 
    (cons 'yearly (list
                   (cons 'split-sortvalue split-year)
                   (cons 'text (_ "Yearly"))
                   (cons 'tip (_ "Yearly."))
-                  (cons 'renderer-key 'year)))))
+                  (cons 'renderer-key 'yearly)
+                  (cons 'renderer-fn gnc:date-get-year-string)))))
 
 (define filter-list
   (list
@@ -776,11 +780,7 @@ tags within description, notes or memo. ")
 ;; ;;;;;;;;;;;;;;;;;;;;
 ;; Here comes the big function that builds the whole table.
 
-(define (make-split-table splits options
-                          primary-subtotal-comparator
-                          secondary-subtotal-comparator
-                          primary-renderer-key
-                          secondary-renderer-key)
+(define (make-split-table splits options)
 
   (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
   (define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
@@ -818,6 +818,38 @@ tags within description, notes or memo. ")
           (cons 'sort-account-description (opt-val pagename-sorting (N_ "Show Account Description")))
           (cons 'notes (opt-val gnc:pagename-display (N_ "Notes")))))
 
+
+  (define (subtotal-get-info name-sortkey name-subtotal name-date-subtotal info)
+    (let ((sortkey (opt-val pagename-sorting name-sortkey)))
+      (if (member sortkey DATE-SORTING-TYPES)
+          (keylist-get-info date-subtotal-list (opt-val pagename-sorting name-date-subtotal) info)
+          (and (member sortkey SUBTOTAL-ENABLED)
+               (and (opt-val pagename-sorting name-subtotal)
+                    (keylist-get-info sortkey-list sortkey info))))))
+
+  (define primary-subtotal-comparator
+    (subtotal-get-info optname-prime-sortkey
+                       optname-prime-subtotal
+                       optname-prime-date-subtotal
+                       'split-sortvalue))
+
+  (define secondary-subtotal-comparator
+    (subtotal-get-info optname-sec-sortkey
+                       optname-sec-subtotal
+                       optname-sec-date-subtotal
+                       'split-sortvalue))
+
+  (define primary-renderer-key
+    (subtotal-get-info optname-prime-sortkey
+                       optname-prime-subtotal
+                       optname-prime-date-subtotal
+                       'renderer-key))
+
+  (define secondary-renderer-key
+    (subtotal-get-info optname-sec-sortkey
+                       optname-sec-subtotal
+                       optname-sec-date-subtotal
+                       'renderer-key))
 
   (let* ((work-to-do (length splits))
          (work-done 0)
@@ -1089,11 +1121,7 @@ tags within description, notes or memo. ")
                ""))))
 
     (define (render-date renderer-key split)
-      ((case renderer-key
-         ((week) gnc:date-get-week-year-string)
-         ((month) gnc:date-get-month-year-string)
-         ((quarter) gnc:date-get-quarter-year-string)
-         ((year) gnc:date-get-year-string))
+      ((keylist-get-info date-subtotal-list renderer-key 'renderer-fn)
        (gnc-localtime
         (xaccTransGetDate
          (xaccSplitGetParent split)))))
@@ -1118,7 +1146,7 @@ tags within description, notes or memo. ")
 
     (define (render-summary split renderer-key anchor?)
       (case renderer-key
-        ((week month quarter year) (render-date renderer-key split))
+        ((weekly monthly quarterly yearly) (render-date renderer-key split))
         ((account other-acc) (render-account renderer-key split anchor?))
         (else #f)))
 
@@ -1393,22 +1421,6 @@ tags within description, notes or memo. ")
   (define options (gnc:report-options report-obj))
   (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
   (define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
-
-  (define (subtotal-get-info name-sortkey name-subtotal name-date-subtotal info)
-    ;; The value of the sorting-key multichoice option.
-    (let ((sortkey (opt-val pagename-sorting name-sortkey)))
-      (if (member sortkey DATE-SORTING-TYPES)
-          ;; If sorting by date, look up the value of the
-          ;; date-subtotalling multichoice option and return the
-          ;; corresponding funcs in the assoc-list.
-          (keylist-get-info date-subtotal-list (opt-val pagename-sorting name-date-subtotal) info)
-          ;; For everything else: 1. check whether sortkey has
-          ;; subtotalling enabled at all, 2. check whether the
-          ;; enable-subtotal boolean option is #t, 3. look up the
-          ;; appropriate funcs in the assoc-list.
-          (and (member sortkey SUBTOTAL-ENABLED)
-               (and (opt-val pagename-sorting name-subtotal)
-                    (keylist-get-info sortkey-list sortkey info))))))
 
   (define (is-filter-member split account-list)
     (let* ((txn (xaccSplitGetParent split))
@@ -1685,24 +1697,7 @@ tags within description, notes or memo. ")
                  document
                  (infobox)))
 
-              (let ((table (make-split-table
-                            splits options
-                            (subtotal-get-info optname-prime-sortkey
-                                               optname-prime-subtotal
-                                               optname-prime-date-subtotal
-                                               'split-sortvalue)
-                            (subtotal-get-info optname-sec-sortkey
-                                               optname-sec-subtotal
-                                               optname-sec-date-subtotal
-                                               'split-sortvalue)
-                            (subtotal-get-info optname-prime-sortkey
-                                               optname-prime-subtotal
-                                               optname-prime-date-subtotal
-                                               'renderer-key)
-                            (subtotal-get-info optname-sec-sortkey
-                                               optname-sec-subtotal
-                                               optname-sec-date-subtotal
-                                               'renderer-key))))
+              (let ((table (make-split-table splits options)))
 
                 (gnc:html-document-set-title! document report-title)
 
