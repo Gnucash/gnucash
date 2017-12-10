@@ -14,6 +14,8 @@
 ;; - add custom sorter in scheme
 ;; - common currency - optionally show original currency amount
 ;;   and enable multiple data columns
+;; - add informational box, summarising options used, useful
+;;   to troubleshoot reports
 ;;
 ;; This program is free software; you can redistribute it and/or    
 ;; modify it under the terms of the GNU General Public License as   
@@ -1466,6 +1468,82 @@ Credit Card, and Income accounts."))))))
       (generic-less? X Y 'date 'none #t))
 
 
+    ;; infobox
+    (define (infobox)
+      (define (highlight title . data)
+        (string-append "<b>" title "</b>: " (string-join data " ") "<br>"))
+      (define (bool->string tf)
+        (if tf
+            (_ "Enabled")
+            (_ "Disabled")))
+      (gnc:make-html-text
+       (if (string-null? account-matcher)
+           ""
+           (string-append
+            (highlight
+             (string-append optname-account-matcher
+                            (if (opt-val pagename-filter optname-account-matcher-regex)
+                                (N_ " regex")
+                                ""))
+             account-matcher)
+            (highlight
+             (N_ "Accounts produced")
+             (string-join (map xaccAccountGetName c_account_1) ", "))))
+       (if (eq? filter-mode 'none)
+           ""
+           (highlight
+            (keylist-get-info filter-list filter-mode 'text)
+            (string-join (map xaccAccountGetName c_account_2) ", ")))
+       (if (string-null? transaction-matcher)
+           ""
+           (string-append
+            (highlight
+             (string-append optname-transaction-matcher
+                            (if (opt-val pagename-filter optname-transaction-matcher-regex)
+                                (N_ " regex")
+                                ""))
+             transaction-matcher)))
+       (if reconcile-status-filter
+           (highlight
+            optname-reconcile-status
+            (keylist-get-info reconcile-status-list reconcile-status-filter 'text))
+           "")
+       (if (eq? void-status 'non-void-only)
+           ""
+           (highlight
+            optname-void-transactions
+            (keylist-get-info show-void-list void-status 'text)))
+       (if (eq? primary-key 'none)
+           ""
+           (highlight
+            optname-prime-sortkey
+            (keylist-get-info sortkey-list primary-key 'text)
+            (keylist-get-info ascending-list primary-order 'text)))
+       (if (eq? primary-key 'none)
+           ""
+           (if (member primary-key DATE-SORTING-TYPES)
+               (highlight
+                optname-prime-date-subtotal
+                (keylist-get-info date-subtotal-list primary-date-subtotal 'text))
+               (highlight
+                optname-prime-subtotal
+                (bool->string (opt-val pagename-sorting optname-prime-subtotal)))))
+       (if (eq? secondary-key 'none)
+           ""
+           (highlight
+            optname-sec-sortkey
+            (keylist-get-info sortkey-list secondary-key 'text)
+            (keylist-get-info ascending-list secondary-order 'text)))
+       (if (eq? secondary-key 'none)
+           ""
+           (if (member secondary-key DATE-SORTING-TYPES)
+               (highlight
+                optname-sec-date-subtotal
+                (keylist-get-info date-subtotal-list secondary-date-subtotal 'text))
+               (highlight
+                optname-sec-subtotal
+                (bool->string (opt-val pagename-sorting optname-sec-subtotal)))))
+       "<br>"))
 
     (if (or (null? c_account_1) (and-map not c_account_1))
 
@@ -1477,12 +1555,17 @@ Credit Card, and Income accounts."))))))
              (gnc:html-make-no-account-warning report-title (gnc:report-id report-obj)))
 
             ;; error condition: accounts were specified but none matched string/regex
-            (gnc:html-document-add-object!
-             document
-             (gnc:make-html-text
-              (gnc:html-markup-h2 NO-MATCHING-ACCT-HEADER)
-              (gnc:html-markup-p NO-MATCHING-ACCT-TEXT))))
+            (begin
+              (gnc:html-document-add-object!
+               document
+               (gnc:make-html-text
+                (gnc:html-markup-h2 NO-MATCHING-ACCT-HEADER)
+                (gnc:html-markup-p NO-MATCHING-ACCT-TEXT)))
 
+              (gnc:html-document-add-object!
+               document                 
+               (infobox))))
+            
         (begin
 
           (qof-query-set-book query (gnc-get-current-book))
@@ -1538,11 +1621,16 @@ Credit Card, and Income accounts."))))))
           (if (null? splits)
 
               ;; error condition: no splits found
-              (gnc:html-document-add-object!
-               document
-               (gnc:make-html-text
-                (gnc:html-markup-h2 NO-MATCHING-TRANS-HEADER)
-                (gnc:html-markup-p NO-MATCHING-TRANS-TEXT)))
+              (begin
+                (gnc:html-document-add-object!
+                 document
+                 (gnc:make-html-text
+                  (gnc:html-markup-h2 NO-MATCHING-TRANS-HEADER)
+                  (gnc:html-markup-p NO-MATCHING-TRANS-TEXT)))
+
+                (gnc:html-document-add-object!
+                 document
+                 (infobox)))
 
               (let ((table (make-split-table
                             splits options
@@ -1573,6 +1661,10 @@ Credit Card, and Income accounts."))))))
                             (_ "From %s to %s")
                             (gnc-print-date begindate)
                             (gnc-print-date enddate)))))
+
+                (gnc:html-document-add-object!
+                 document                 
+                 (infobox))
 
                 (gnc:html-document-add-object! document table)))))
 
