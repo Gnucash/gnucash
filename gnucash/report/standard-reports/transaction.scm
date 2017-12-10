@@ -109,7 +109,6 @@ options specified in the Options panels."))
 (define SUBTOTAL-ENABLED (list 'account-name 'corresponding-acc-name
                                'account-code 'corresponding-acc-code))
 
-
 (define (add-subheading-row data table width subheading-style)
   (let ((heading-cell (gnc:make-html-table-cell data)))
     (gnc:html-table-cell-set-colspan! heading-cell width)
@@ -360,7 +359,7 @@ options specified in the Options panels."))
                                    (cons 'subheading-renderer #f)
                                    (cons 'subtotal-renderer #f)))
 
-        (if BOOK-SPLIT-ACTION
+        (if (qof-book-use-split-action-for-num-field (gnc-get-current-book))
             (cons 'number    (list (cons 'sortkey (list SPLIT-ACTION))
                                    (cons 'split-sortvalue #f)
                                    (cons 'text (N_ "Number/Action"))
@@ -604,7 +603,7 @@ options specified in the Options panels."))
 (define (trep-options-generator)
 
   (define options (gnc:new-options))
-
+  (define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
   (define (gnc:register-trep-option new-option)
     (gnc:register-option options new-option))
 
@@ -914,7 +913,7 @@ tags within description, notes or memo. ")
      (list
       (list (N_ "Date")                         "a"  (N_ "Display the date?") #t)
       (list (N_ "Reconciled Date")              "a2" (N_ "Display the reconciled date?") #f)
-      (if (qof-book-use-split-action-for-num-field (gnc-get-current-book))
+      (if BOOK-SPLIT-ACTION
           (list (N_ "Num/Action")               "b"  (N_ "Display the check number?") #t)
           (list (N_ "Num")                      "b"  (N_ "Display the check number?") #t))
       (list (N_ "Description")                  "c"  (N_ "Display the description?") #t)
@@ -931,7 +930,7 @@ tags within description, notes or memo. ")
       (list (N_ "Running Balance")              "n"  (N_ "Display a running balance?") #f)
       (list (N_ "Totals")                       "o"  (N_ "Display the totals?") #t)))
 
-    (if (qof-book-use-split-action-for-num-field (gnc-get-current-book))
+    (if BOOK-SPLIT-ACTION
         (gnc:register-trep-option
          (gnc:make-simple-boolean-option
           gnc:pagename-display (N_ "Trans Number")
@@ -1025,15 +1024,16 @@ Credit Card, and Income accounts."))))))
                           secondary-subtotal-renderer)
 
   (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
+  (define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
 
   (define (build-columns-used)
     (define is-single? (eq? (opt-val gnc:pagename-display optname-detail-level) 'single))
     (define amount-setting (opt-val gnc:pagename-display (N_ "Amount")))
     (list (cons 'date (opt-val gnc:pagename-display (N_ "Date")))
           (cons 'reconciled-date (opt-val gnc:pagename-display (N_ "Reconciled Date")))
-          (cons 'num (if (gnc:lookup-option options gnc:pagename-display (N_ "Num"))
-                         (opt-val gnc:pagename-display (N_ "Num"))
-                         (opt-val gnc:pagename-display (N_ "Num/Action"))))
+          (cons 'num (if BOOK-SPLIT-ACTION
+                         (opt-val gnc:pagename-display (N_ "Num/Action"))
+                         (opt-val gnc:pagename-display (N_ "Num"))))
           (cons 'description (opt-val gnc:pagename-display (N_ "Description")))
           (cons 'account-name (opt-val gnc:pagename-display (N_ "Account Name")))
           (cons 'other-account-name (and is-single?
@@ -1297,6 +1297,7 @@ Credit Card, and Income accounts."))))))
 (define (trep-renderer report-obj)
   (define options (gnc:report-options report-obj))
   (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
+  (define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
 
   (define (subtotal-get-info name-sortkey name-subtotal name-date-subtotal info)
     ;; The value of the sorting-key multichoice option.
