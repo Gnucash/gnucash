@@ -855,9 +855,8 @@ Credit Card, and Income accounts."))))))
               (addto! row-contents (gnc:make-html-table-cell/size/markup 1 width "total-label-cell" string))))
 
         (define (add-columns commodity)
-          (let ((merging? #f)
-                (merging-subtotal (gnc:make-gnc-numeric 0 1))
-                (width 0))
+          (let ((start-dual-column? #f)
+                (dual-subtotal (gnc:make-gnc-numeric 0 1)))
             (for-each (lambda (column merge-entry)
                         (let* ((mon (retrieve-commodity column commodity))
                                (col (and mon (gnc:gnc-monetary-amount mon)))
@@ -868,30 +867,37 @@ Credit Card, and Income accounts."))))))
                               ;; and store total in dual-subtotal. Do NOT add column.
                               (begin
                                 (if column-amount
-                                    (set! merging-subtotal
-                                          (merge-fn merging-subtotal column-amount)))
-                                (set! merging? #t)
-                                (if col
-                                    (set! merging-subtotal
-                                          (merge-fn merging-subtotal col GNC-DENOM-AUTO GNC-RND-ROUND)))
-                                (set! width (+ width 1)))
-                              (if merging?
+                                    (set! dual-subtotal
+                                          (merge-fn dual-subtotal column-amount
+                                                    GNC-DENOM-AUTO GNC-HOW-RND-ROUND)))
+                                (set! start-dual-column? #t))
+                              (if start-dual-column?
                                   (begin
                                     ;; We've completed merging. Add this column amount
                                     ;; and add the columns.
-                                    (set! merging? #f)
-                                    (if col
-                                        (set! merging-subtotal
-                                              (merge-fn merging-subtotal column-amount)))
-                                    (set! width (+ width 1))
-                                    (addto! row-contents
-                                            (gnc:make-html-table-cell/size/markup
-                                             1 width "total-number-cell"
-                                             (gnc:make-gnc-monetary commodity merging-subtotal)))
-                                    (set! width 0)
-                                    (set! merging-subtotal (gnc:make-gnc-numeric 0 1)))
-                                  ;; Default; not merging/completed merge. Just
-                                  ;; display monetary amount
+                                    (if column-amount
+                                        (set! dual-subtotal
+                                              (merge-fn dual-subtotal column-amount
+                                                        GNC-DENOM-AUTO GNC-HOW-RND-ROUND)))
+                                    (if (gnc-numeric-positive-p dual-subtotal)
+                                        (begin
+                                          (addto! row-contents
+                                                  (gnc:make-html-table-cell/markup
+                                                   "total-number-cell"
+                                                   (gnc:make-gnc-monetary commodity dual-subtotal)))
+                                          (addto! row-contents ""))
+                                        (begin
+                                          (addto! row-contents "")
+                                          (addto! row-contents
+                                                  (gnc:make-html-table-cell/markup
+                                                   "total-number-cell"
+                                                   (gnc:make-gnc-monetary
+                                                    commodity
+                                                    (gnc-numeric-neg dual-subtotal))))))
+                                    (set! start-dual-column? #f)
+                                    (set! dual-subtotal (gnc:make-gnc-numeric 0 1)))
+				  ;; Default; not merging/completed merge. Just
+				  ;; display monetary amount
                                   (addto! row-contents
                                           (gnc:make-html-table-cell/markup "total-number-cell" mon))))))
                       columns
@@ -949,18 +955,18 @@ Credit Card, and Income accounts."))))))
            (running-balance (lambda (s) (gnc:make-gnc-monetary (currency s) (xaccSplitGetBalance s)))))
         (append
          ;; each column will be a vector
-         ;; (vector heading calculator-function reverse-column? subtotal? (vector merge? merging-function))
+         ;; (vector heading calculator-function reverse-column? subtotal? (vector start-dual-column? merging-function))
          ;; (calculator-function split) to obtain amount
          ;; reverse? to optionally reverse signs
          ;; subtotal? to allow subtotals (ie irrelevant for running balance)
          ;; merge? to merge with the next cell (ie for debit/credit cells)
-         ;; merging-function - function (usually gnc-numeric-add/sub-fixed to apply to merging-subtotal
+         ;; merging-function - function (usually gnc-numeric-add/sub-fixed to apply to dual-subtotal
          (if (column-uses? 'amount-single used-columns)
              (list (vector "Amount" amount #t #t (vector #f #f)))
              '())
          (if (column-uses? 'amount-double used-columns)
-             (list (vector "Debit" debit-amount #f #t (vector #t gnc-numeric-add-fixed))
-                   (vector "Credit" credit-amount #f #t (vector #f gnc-numeric-sub-fixed)))
+             (list (vector "Debit" debit-amount #f #t (vector #t gnc-numeric-add))
+                   (vector "Credit" credit-amount #f #t (vector #f gnc-numeric-sub)))
              '())
          (if (column-uses? 'amount-original-currency used-columns)
              (list (vector "Original" original-amount #t #t (vector #f #f)))
