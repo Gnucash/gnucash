@@ -49,6 +49,18 @@ extern "C" {
 extern const int num_currency_formats_price;
 extern const gchar* currency_format_user_price[];
 
+/** An enum describing the columns found in a parse_line_t. Currently these are:
+ *  - a tokenized line of input
+ *  - an optional error string
+ *  - a struct to hold user selected properties for a price
+ *  - a boolean to mark the line as skipped by error and/or user or not */
+enum parse_line_cols {
+    PL_INPUT,
+    PL_ERROR,
+    PL_PREPRICE,
+    PL_SKIP
+};
+
 /** Tuple to hold
  *  - a tokenized line of input
  *  - an optional error string

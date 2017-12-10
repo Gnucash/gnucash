@@ -1564,12 +1564,12 @@ void CsvImpPriceAssist::preview_refresh_table ()
         GtkTreeIter iter;
         gtk_list_store_append (store, &iter);
         preview_row_fill_state_cells (store, &iter,
-                std::get<1>(parse_line), std::get<3>(parse_line));
+                std::get<PL_ERROR>(parse_line), std::get<PL_SKIP>(parse_line));
 
         /* Fill the data cells. */
-        for (auto cell_str_it = std::get<0>(parse_line).cbegin(); cell_str_it != std::get<0>(parse_line).cend(); cell_str_it++)
+        for (auto cell_str_it = std::get<PL_INPUT>(parse_line).cbegin(); cell_str_it != std::get<PL_INPUT>(parse_line).cend(); cell_str_it++)
         {
-            uint32_t pos = PREV_N_FIXED_COLS + cell_str_it - std::get<0>(parse_line).cbegin();
+            uint32_t pos = PREV_N_FIXED_COLS + cell_str_it - std::get<PL_INPUT>(parse_line).cbegin();
             gtk_list_store_set (store, &iter, pos, cell_str_it->c_str(), -1);
         }
     }

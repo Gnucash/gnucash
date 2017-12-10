@@ -54,7 +54,6 @@ const gchar* currency_format_user_price[] = {N_("Locale"),
 
 
 /** Constructor for GncPriceImport.
- * @return Pointer to a new GncCsvParseData
  */
 GncPriceImport::GncPriceImport(GncImpFileFormat format)
 {
@@ -247,12 +246,12 @@ void GncPriceImport::update_skipped_lines(boost::optional<uint32_t> start, boost
 
     for (uint32_t i = 0; i < m_parsed_lines.size(); i++)
     {
-        std::get<3>(m_parsed_lines[i]) =
+        std::get<PL_SKIP>(m_parsed_lines[i]) =
             ((i < skip_start_lines()) ||             // start rows to skip
              (i >= m_parsed_lines.size() - skip_end_lines()) ||          // end rows to skip
              (((i - skip_start_lines()) % 2 == 1) && // skip every second row...
                   skip_alt_lines()) ||                   // ...if requested
-             (m_skip_errors && !std::get<1>(m_parsed_lines[i]).empty())); // skip lines with errors
+             (m_skip_errors && !std::get<PL_ERROR>(m_parsed_lines[i]).empty())); // skip lines with errors
     }
 }
 
@@ -493,7 +492,7 @@ std::string GncPriceImport::verify ()
     auto have_line_errors = false;
     for (auto line : m_parsed_lines)
     {
-        if (!std::get<3>(line) && !std::get<1>(line).empty())
+        if (!std::get<PL_SKIP>(line) && !std::get<PL_ERROR>(line).empty())
         {
             have_line_errors = true;
             break;
@@ -624,7 +623,7 @@ void GncPriceImport::create_prices ()
             ++parsed_lines_it)
     {
         /* Skip current line if the user specified so */
-        if ((std::get<3>(*parsed_lines_it)))
+        if ((std::get<PL_SKIP>(*parsed_lines_it)))
             continue;
 
         /* Should not throw anymore, otherwise verify needs revision */
@@ -648,13 +647,13 @@ void GncPriceImport::update_price_props (uint32_t row, uint32_t col, GncPricePro
     if (prop_type == GncPricePropType::NONE)
         return; /* Only deal with price related properties. */
 
-    auto price_props = std::make_shared<GncImportPrice> (*(std::get<2>(m_parsed_lines[row])).get());
+    auto price_props = std::make_shared<GncImportPrice> (*(std::get<PL_PREPRICE>(m_parsed_lines[row])).get());
 
-    if (col >= std::get<0>(m_parsed_lines[row]).size())
+    if (col >= std::get<PL_INPUT>(m_parsed_lines[row]).size())
         price_props->reset (prop_type); //reset errors
     else
     {
-        auto value = std::get<0>(m_parsed_lines[row]).at(col);
+        auto value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col);
         bool enable_test_empty = true;
         try
         {
@@ -683,12 +682,12 @@ void GncPriceImport::update_price_props (uint32_t row, uint32_t col, GncPricePro
             /* Do nothing, just prevent the exception from escalating up
              * However log the error if it happens on a row that's not skipped
              */
-            if (!std::get<3>(m_parsed_lines[row]))
+            if (!std::get<PL_SKIP>(m_parsed_lines[row]))
                 PINFO("User warning: %s", e.what());
         }
     }
     /* Store the result */
-    std::get<2>(m_parsed_lines[row]) = price_props;
+    std::get<PL_PREPRICE>(m_parsed_lines[row]) = price_props;
 }
 
 void
@@ -723,8 +722,8 @@ GncPriceImport::set_column_type_price (uint32_t position, GncPricePropType type,
         /* Reset date and currency formats for each price props object
          * to ensure column updates use the most recent one
          */
-        std::get<2>(*parsed_lines_it)->set_date_format (m_settings.m_date_format);
-        std::get<2>(*parsed_lines_it)->set_currency_format (m_settings.m_currency_format);
+        std::get<PL_PREPRICE>(*parsed_lines_it)->set_date_format (m_settings.m_date_format);
+        std::get<PL_PREPRICE>(*parsed_lines_it)->set_currency_format (m_settings.m_currency_format);
 
         uint32_t row = parsed_lines_it - m_parsed_lines.begin();
 
@@ -733,7 +732,7 @@ GncPriceImport::set_column_type_price (uint32_t position, GncPricePropType type,
          */
         if (old_type != type)
         {
-            auto old_col = std::get<0>(*parsed_lines_it).size(); // Deliberately out of bounds to trigger a reset!
+            auto old_col = std::get<PL_INPUT>(*parsed_lines_it).size(); // Deliberately out of bounds to trigger a reset!
             if ((old_type > GncPricePropType::NONE)
                     && (old_type <= GncPricePropType::PRICE_PROPS))
                 update_price_props (row, old_col, old_type);
@@ -744,8 +743,8 @@ GncPriceImport::set_column_type_price (uint32_t position, GncPricePropType type,
             update_price_props (row, position, type);
 
         /* Report errors if there are any */
-        auto price_errors = std::get<2>(*parsed_lines_it)->errors();
-        std::get<1>(*parsed_lines_it) =
+        auto price_errors = std::get<PL_PREPRICE>(*parsed_lines_it)->errors();
+        std::get<PL_ERROR>(*parsed_lines_it) =
                 price_errors +
                 (price_errors.empty() ? std::string() : "\n");
     }
