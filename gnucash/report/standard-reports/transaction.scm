@@ -796,6 +796,7 @@ tags within description, notes or memo. ")
           (cons 'price (opt-val gnc:pagename-display (N_ "Price")))
           (cons 'amount-single (eq? amount-setting 'single))
           (cons 'amount-double (eq? amount-setting 'double))
+          (cons 'common-currency (opt-val gnc:pagename-general optname-common-currency))
           (cons 'amount-original-currency
                 (and (opt-val gnc:pagename-general optname-common-currency)
                      (opt-val gnc:pagename-general optname-orig-currency)))
@@ -854,22 +855,9 @@ tags within description, notes or memo. ")
          (add-if (column-uses? 'shares)
                  (_ "Shares"))
          (add-if (column-uses? 'price)
-                 (_ "Price"))))
-    
-    (define amount-headings
-      (let* ((add-if (lambda pred? . items) (if pred? items '())))
-        (append (add-if (column-uses? 'amount-single)
-                        (_ "Amount"))
-                (add-if (column-uses? 'amount-double)
-                        (_ "Debit")
-                        (_ "Credit"))
-                (add-if (column-uses? 'amount-original-currency)
-                        (_ "Original"))
-                (add-if (column-uses? 'running-balance)
-                        (_ "Balance")))))
+                 (_ "Price")))))
 
     (define width (length headings))
-    (define width-amount (length amount-headings))
 
     (define (add-subheading data subheading-style)
       (let ((heading-cell (gnc:make-html-table-cell data)))
@@ -981,9 +969,19 @@ tags within description, notes or memo. ")
                                     (xaccSplitGetAmount s))))
            (trans-date (lambda (s) (gnc-transaction-get-date-posted (xaccSplitGetTransaction s))))
            (currency (lambda (s) (xaccAccountGetCommodity (xaccSplitGetAccount s))))
-           (report-currency (lambda (s) (if (opt-val gnc:pagename-general optname-common-currency)
+           (report-currency (lambda (s) (if (column-uses? 'common-currency)
                                             (opt-val gnc:pagename-general optname-currency)
                                             (currency s))))
+           (header-commodity (lambda (str)
+                               (string-append
+                                str
+                                (if (column-uses? 'common-currency)
+                                    (string-append
+                                     "<br>"
+                                     (gnc-commodity-get-mnemonic
+                                      (opt-val gnc:pagename-general optname-currency)))
+                                    ""))))
+           (time64CanonicalDayTime (lambda (t64)  (gnc-tm-set-day-middle (gnc-localtime t64))))
            (convert (lambda (s num)
                       (gnc:exchange-by-pricedb-nearest
                        (gnc:make-gnc-monetary (currency s) num)
@@ -1010,18 +1008,35 @@ tags within description, notes or memo. ")
          ;; merge? to merge with the next cell (ie for debit/credit cells)
          ;; merging-function - function (usually gnc-numeric-add/sub-fixed to apply to dual-subtotal
          (if (column-uses? 'amount-single)
-             (list (vector "Amount" amount #t #t (vector #f #f)))
+             (list (vector (header-commodity (N_ "Amount"))
+                           amount #t #t
+                           (vector #f #f)))
              '())
          (if (column-uses? 'amount-double)
-             (list (vector "Debit" debit-amount #f #t (vector #t gnc-numeric-add))
-                   (vector "Credit" credit-amount #f #t (vector #f gnc-numeric-sub)))
+             (list (vector (header-commodity (N_ "Debit"))
+                           debit-amount #f #t
+                           (vector #t gnc-numeric-add))
+                   (vector (header-commodity (N_ "Credit"))
+                           credit-amount #f #t
+                           (vector #f gnc-numeric-sub)))
              '())
          (if (column-uses? 'amount-original-currency)
-             (list (vector "Original" original-amount #f #t (vector #f #f)))
+             (list (vector (N_ "Original")
+                           original-amount #t #t
+                           (vector #f #f)))
              '())
          (if (column-uses? 'running-balance)
-             (list (vector "Running Balance" running-balance #t #f (vector #f #f)))
+             (list (vector (N_ "Running Balance")
+                           running-balance #t #f
+                           (vector #f #f)))
              '()))))
+
+    (define amount-headings
+      (map (lambda (column)
+             (vector-ref column 0))
+           calculated-cells))
+
+    (define width-amount (length amount-headings))
 
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
