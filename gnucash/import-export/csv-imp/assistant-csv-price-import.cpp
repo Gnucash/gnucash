@@ -704,13 +704,13 @@ CsvImpPriceAssist::file_confirm_cb ()
     catch (std::ifstream::failure& e)
     {
         /* File loading failed ... */
-        gnc_error_dialog (GTK_WIDGET(csv_imp_asst), "%s", e.what());
+        gnc_error_dialog (GTK_WINDOW(csv_imp_asst), "%s", e.what());
         return;
     }
     catch (std::range_error &e)
     {
         /* Parsing failed ... */
-        gnc_error_dialog (GTK_WIDGET(csv_imp_asst), "%s", e.what());
+        gnc_error_dialog (GTK_WINDOW(csv_imp_asst), "%s", e.what());
         return;
     }
     /* Get settings store and populate */
@@ -818,7 +818,7 @@ CsvImpPriceAssist::preview_settings_load ()
 
     price_imp->settings (*preset);
     if (preset->m_load_error)
-        gnc_error_dialog (GTK_WIDGET(csv_imp_asst),
+        gnc_error_dialog (GTK_WINDOW(csv_imp_asst),
             "%s", _("There were problems reading some saved settings, continuing to load.\n"
                     "Please review and save again."));
 
@@ -840,7 +840,7 @@ CsvImpPriceAssist::preview_settings_delete ()
     auto model = gtk_combo_box_get_model (settings_combo);
     gtk_tree_model_get (model, &iter, SET_GROUP, &preset, -1);
 
-    auto response = gnc_ok_cancel_dialog (GTK_WIDGET(csv_imp_asst),
+    auto response = gnc_ok_cancel_dialog (GTK_WINDOW(csv_imp_asst),
                                 GTK_RESPONSE_CANCEL,
                                 "%s", _("Delete the Import Settings."));
     if (response == GTK_RESPONSE_OK)
@@ -875,7 +875,7 @@ CsvImpPriceAssist::preview_settings_save ()
 
             if (preset && (preset->m_name == std::string(new_name)))
             {
-                auto response = gnc_ok_cancel_dialog (GTK_WIDGET(csv_imp_asst),
+                auto response = gnc_ok_cancel_dialog (GTK_WINDOW(csv_imp_asst),
                         GTK_RESPONSE_OK,
                         "%s", _("Setting name already exists, over write?"));
                 if (response != GTK_RESPONSE_OK)
@@ -890,7 +890,7 @@ CsvImpPriceAssist::preview_settings_save ()
     /* All checks passed, let's save this preset */
     if (!price_imp->save_settings())
     {
-        gnc_info_dialog (GTK_WIDGET(csv_imp_asst),
+        gnc_info_dialog (GTK_WINDOW(csv_imp_asst),
             "%s", _("The settings have been saved."));
 
         // Update the settings store
@@ -915,7 +915,7 @@ CsvImpPriceAssist::preview_settings_save ()
         }
     }
     else
-        gnc_error_dialog (GTK_WIDGET(csv_imp_asst),
+        gnc_error_dialog (GTK_WINDOW(csv_imp_asst),
             "%s", _("There was a problem saving the settings, please try again."));
 }
 
@@ -996,7 +996,7 @@ void CsvImpPriceAssist::preview_update_separators (GtkWidget* widget)
         /* Warn the user there was a problem and try to undo what caused
          * the error. (This will cause a reparsing and ideally a usable
          * configuration.) */
-        gnc_error_dialog (GTK_WIDGET(csv_imp_asst), "Error in parsing");
+        gnc_error_dialog (GTK_WINDOW(csv_imp_asst), "Error in parsing");
         /* If we're here because the user changed the file format, we should just wait for the user
          * to update the configuration */
         if (!widget)
@@ -1046,7 +1046,7 @@ void CsvImpPriceAssist::preview_update_file_format ()
     catch (std::range_error &e)
     {
         /* Parsing failed ... */
-        gnc_error_dialog (nullptr, "%s", e.what());
+        gnc_error_dialog (GTK_WINDOW (csv_imp_asst), "%s", e.what());
         return;
     }
     catch (...)
@@ -1082,7 +1082,7 @@ CsvImpPriceAssist::preview_update_encoding (const char* encoding)
         catch (...)
         {
             /* If it fails, change back to the old encoding. */
-            gnc_error_dialog (nullptr, "%s", _("Invalid encoding selected"));
+            gnc_error_dialog (GTK_WINDOW (csv_imp_asst), "%s", _("Invalid encoding selected"));
             go_charmap_sel_set_encoding (encselector, previous_encoding.c_str());
         }
     }
@@ -1319,7 +1319,7 @@ fixed_context_menu_handler_price (GnumericPopupMenuElement const *element,
     }
     catch(std::range_error& e)
     {
-        gnc_error_dialog (nullptr, "%s", e.what());
+        gnc_error_dialog (GTK_WINDOW (info->csv_imp_asst), "%s", e.what());
         return false;
     }
     info->preview_refresh_table ();
@@ -1364,7 +1364,7 @@ CsvImpPriceAssist::preview_split_column (int col, int offset)
     }
     catch (std::range_error& e)
     {
-        gnc_error_dialog (nullptr, "%s", e.what());
+        gnc_error_dialog (GTK_WINDOW (csv_imp_asst), "%s", e.what());
         return;
     }
     preview_refresh_table();
@@ -1799,7 +1799,7 @@ CsvImpPriceAssist::assist_finish ()
         /* Oops! This shouldn't happen when using the import assistant !
          * Inform the user and go back to the preview page.
          */
-        gnc_error_dialog (GTK_WIDGET(csv_imp_asst),
+        gnc_error_dialog (GTK_WINDOW(csv_imp_asst),
             _("An unexpected error has occurred while creating prices. Please report this as a bug.\n\n"
               "Error message:\n%s"), err.what());
         gtk_assistant_set_current_page (csv_imp_asst, 2);
