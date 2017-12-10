@@ -108,44 +108,6 @@ options specified in the Options panels."))
                            corresponding-acc-name
                            corresponding-acc-code))
 
-(define (timepair-same-year tp-a tp-b)
-  (= (gnc:timepair-get-year tp-a)
-     (gnc:timepair-get-year tp-b)))
-
-(define (timepair-same-quarter tp-a tp-b)
-  (and (timepair-same-year tp-a tp-b)
-       (= (gnc:timepair-get-quarter tp-a)
-          (gnc:timepair-get-quarter tp-b))))
-
-(define (timepair-same-month tp-a tp-b)
-  (and (timepair-same-year tp-a tp-b)
-       (= (gnc:timepair-get-month tp-a)
-          (gnc:timepair-get-month tp-b))))
-
-(define (timepair-same-week tp-a tp-b)
-  (and (timepair-same-year tp-a tp-b)
-       (= (gnc:timepair-get-week tp-a)
-          (gnc:timepair-get-week tp-b))))
-
-(define (split-same-week? a b)
-  (let ((tp-a (gnc-transaction-get-date-posted (xaccSplitGetParent a)))
-        (tp-b (gnc-transaction-get-date-posted (xaccSplitGetParent b))))
-    (timepair-same-week tp-a tp-b)))
-
-(define (split-same-month? a b)
-  (let ((tp-a (gnc-transaction-get-date-posted (xaccSplitGetParent a)))
-        (tp-b (gnc-transaction-get-date-posted (xaccSplitGetParent b))))
-    (timepair-same-month tp-a tp-b)))
-
-(define (split-same-quarter? a b)
-  (let ((tp-a (gnc-transaction-get-date-posted (xaccSplitGetParent a)))
-        (tp-b (gnc-transaction-get-date-posted (xaccSplitGetParent b))))
-    (timepair-same-quarter tp-a tp-b)))
-
-(define (split-same-year? a b)
-  (let ((tp-a (gnc-transaction-get-date-posted (xaccSplitGetParent a)))
-        (tp-b (gnc-transaction-get-date-posted (xaccSplitGetParent b))))
-    (timepair-same-year tp-a tp-b)))
 
 (define (add-subheading-row data table width subheading-style)
   (let ((heading-cell (gnc:make-html-table-cell data)))
@@ -436,6 +398,60 @@ options specified in the Options panels."))
 (define (sortkey-get-info sortkey info)
   (cdr (assq info (cdr (assq sortkey sortkey-list)))))
 
+(define (timepair-year tp)    (gnc:timepair-get-year tp))
+(define (timepair-quarter tp) (+ (* 10 (timepair-year tp))  (gnc:timepair-get-quarter tp)))
+(define (timepair-month tp)   (+ (* 100 (timepair-year tp)) (gnc:timepair-get-month tp)))
+(define (timepair-week tp)    (+ (* 100 (timepair-year tp)) (gnc:timepair-get-week tp)))
+(define (split-week a) (timepair-week (gnc-transaction-get-date-posted (xaccSplitGetParent a))))
+(define (split-month a) (timepair-month (gnc-transaction-get-date-posted (xaccSplitGetParent a))))
+(define (split-quarter a) (timepair-quarter (gnc-transaction-get-date-posted (xaccSplitGetParent a))))
+(define (split-year a) (timepair-year (gnc-transaction-get-date-posted (xaccSplitGetParent a))))
+
+(define date-subtotal-list
+  ;; Extra list for date option. Each entry: (cons
+  ;; 'date-subtotal-option-value (vector subtotal-function
+  ;; subtotal-renderer))
+  (list
+   (cons 'none (list
+                (cons 'split-sortvalue #f)
+                (cons 'text (N_ "None"))
+                (cons 'tip (N_ "None."))
+                (cons 'subheading-renderer #f)
+                (cons 'subtotal-renderer #f)))
+   (cons 'weekly (list
+                  (cons 'split-sortvalue split-week)
+                  (cons 'text (N_ "Weekly"))
+                  (cons 'tip (N_ "Weekly."))
+                  (cons 'subheading-renderer render-week-subheading)
+                  (cons 'subtotal-renderer render-week-subtotal)))
+   (cons 'monthly (list
+                   (cons 'split-sortvalue split-month)
+                   (cons 'text (N_ "Monthly"))
+                   (cons 'tip (N_ "Monthly."))
+                   (cons 'subheading-renderer render-month-subheading)
+                   (cons 'subtotal-renderer render-month-subtotal)))
+   (cons 'quarterly (list
+                     (cons 'split-sortvalue split-quarter)
+                     (cons 'text (N_ "Quarterly"))
+                     (cons 'tip (N_ "Quarterly."))
+                     (cons 'subheading-renderer render-quarter-subheading)
+                     (cons 'subtotal-renderer render-quarter-subtotal)))
+   (cons 'yearly (list
+                  (cons 'split-sortvalue split-year)
+                  (cons 'text (N_ "Yearly"))
+                  (cons 'tip (N_ "Yearly."))
+                  (cons 'subheading-renderer render-year-subheading)
+                  (cons 'subtotal-renderer render-year-subtotal)))))
+
+(define (date-subtotal-get-info sortkey info)
+  (cdr (assq info (cdr (assq sortkey date-subtotal-list)))))
+
+(define date-subtotal-choice-list
+  (map (lambda (date-sortpair)
+         (vector (car date-sortpair)
+                 (date-subtotal-get-info (car date-sortpair) 'text)
+                 (date-subtotal-get-info (car date-sortpair) 'tip)))
+       date-subtotal-list))
 
 (define (add-split-row table split column-vector options
                        row-style account-types-to-reverse transaction-row?)
@@ -777,14 +793,6 @@ tags within description, notes or memo. ")
                   (N_ "Descending")
                   (N_ "Largest to smallest, latest to earliest."))))
 
-        (subtotal-choice-list
-         (list
-          (vector 'none (N_ "None") (N_ "None."))
-          (vector 'weekly (N_ "Weekly") (N_ "Weekly."))
-          (vector 'monthly (N_ "Monthly") (N_ "Monthly."))
-          (vector 'quarterly (N_ "Quarterly") (N_ "Quarterly."))
-          (vector 'yearly (N_ "Yearly") (N_ "Yearly."))))
-
         (prime-sortkey 'account-name)
         (prime-sortkey-subtotal-true #t)
         (sec-sortkey 'register-order)
@@ -872,7 +880,7 @@ tags within description, notes or memo. ")
       pagename-sorting optname-prime-date-subtotal
       "e2" (N_ "Do a date subtotal.")
       'monthly
-      subtotal-choice-list))
+      date-subtotal-choice-list))
 
     (gnc:register-trep-option
      (gnc:make-multichoice-option
@@ -908,7 +916,7 @@ tags within description, notes or memo. ")
       pagename-sorting optname-sec-date-subtotal
       "i2" (N_ "Do a date subtotal.")
       'monthly
-      subtotal-choice-list))
+      date-subtotal-choice-list))
 
     (gnc:register-trep-option
      (gnc:make-multichoice-option
@@ -1219,7 +1227,8 @@ Credit Card, and Income accounts."))))))
             (if (and primary-subtotal-pred
                      (or (not next)
                          (and next
-                              (not (primary-subtotal-pred current next)))))
+                              (not (equal? (primary-subtotal-pred current)
+                                           (primary-subtotal-pred next))))))
 
                 (begin
 
@@ -1257,7 +1266,8 @@ Credit Card, and Income accounts."))))))
                 (if (and secondary-subtotal-pred
                          (or (not next)
                              (and next
-                                  (not (secondary-subtotal-pred current next)))))
+                                  (not (equal? (secondary-subtotal-pred current)
+                                               (secondary-subtotal-pred next))))))
 
                     (begin (secondary-subtotal-renderer
                             table width current
@@ -1336,18 +1346,15 @@ Credit Card, and Income accounts."))))))
 (define (trep-renderer report-obj)
   (define options (gnc:report-options report-obj))
   (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
-  (define (get-subtotalstuff-helper name-sortkey name-subtotal name-date-subtotal
-           comp-index date-index)
+
+  (define (subtotal-get-info name-sortkey name-subtotal name-date-subtotal info)
     ;; The value of the sorting-key multichoice option.
     (let ((sortkey (opt-val pagename-sorting name-sortkey)))
       (if (member sortkey date-sorting-types)
           ;; If sorting by date, look up the value of the
           ;; date-subtotalling multichoice option and return the
           ;; corresponding funcs in the assoc-list.
-          (vector-ref
-           (cdr (assq (opt-val pagename-sorting name-date-subtotal)
-                      date-comp-funcs-assoc-list))
-           date-index)
+          (date-subtotal-get-info (opt-val pagename-sorting name-date-subtotal) info)
           ;; For everything else: 1. check whether sortkey has
           ;; subtotalling enabled at all, 2. check whether the
           ;; enable-subtotal boolean option is #t, 3. look up the
@@ -1355,18 +1362,6 @@ Credit Card, and Income accounts."))))))
           (and (member sortkey subtotal-enabled)
                (and (opt-val pagename-sorting name-subtotal)
                     (sortkey-get-info sortkey info))))))
-
-  (define (get-query-sortkey sort-option-value)
-    (vector-ref  (cdr (assq sort-option-value comp-funcs-assoc-list)) 0))
-
-  (define (get-subtotal-pred name-sortkey name-subtotal name-date-subtotal)
-    (get-subtotalstuff-helper name-sortkey name-subtotal name-date-subtotal 1 0))
-
-  (define (get-subheading-renderer name-sortkey name-subtotal name-date-subtotal)
-    (get-subtotalstuff-helper name-sortkey name-subtotal name-date-subtotal 2 1))
-
-  (define (get-subtotal-renderer name-sortkey name-subtotal name-date-subtotal)
-    (get-subtotalstuff-helper name-sortkey name-subtotal name-date-subtotal 3 2))
 
   (define (is-filter-member split account-list)
     (let* ((txn (xaccSplitGetParent split))
