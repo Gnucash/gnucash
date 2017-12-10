@@ -998,6 +998,14 @@ tags within description, notes or memo. ")
                                           #f
                                           (gnc:monetary-neg (split-value s)))))
            (original-amount (lambda (s) (gnc:make-gnc-monetary (currency s) (damount s))))
+
+           (original-debit-amount (lambda (s) (if (gnc-numeric-positive-p (damount s))
+                                                  (original-amount s)
+                                                  #f)))
+
+           (original-credit-amount (lambda (s) (if (gnc-numeric-positive-p (damount s))
+                                                   #f
+                                                   (gnc:monetary-neg (original-amount s)))))
            (running-balance (lambda (s) (gnc:make-gnc-monetary (currency s) (xaccSplitGetBalance s)))))
         (append
          ;; each column will be a vector
@@ -1020,11 +1028,24 @@ tags within description, notes or memo. ")
                            credit-amount #f #t
                            (vector #f gnc-numeric-sub)))
              '())
-         (if (column-uses? 'amount-original-currency)
-             (list (vector (N_ "Original")
+
+         (if (and (column-uses? 'amount-original-currency)
+                  (column-uses? 'amount-single))
+             (list (vector (_ "Amount")
                            original-amount #t #t
                            (vector #f #f)))
              '())
+
+         (if (and (column-uses? 'amount-original-currency)
+                  (column-uses? 'amount-double))
+             (list (vector (_ "Debit")
+                           original-debit-amount #f #t
+                           (vector #t gnc-numeric-add))
+                   (vector (_ "Credit")
+                           original-credit-amount #f #t
+                           (vector #f gnc-numeric-sub)))
+             '())
+
          (if (column-uses? 'running-balance)
              (list (vector (N_ "Running Balance")
                            running-balance #t #f
