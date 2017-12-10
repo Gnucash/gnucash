@@ -497,7 +497,7 @@ gnc_budget_unset_account_period_value(GncBudget *budget, const Account *account,
     make_period_path (account, period_num, path_part_one, path_part_two);
 
     gnc_budget_begin_edit(budget);
-    qof_instance_set_var_kvp (QOF_INSTANCE (budget), NULL, 2, path_part_one, path_part_two);
+    qof_instance_set_kvp (QOF_INSTANCE (budget), NULL, 2, path_part_one, path_part_two);
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
 
@@ -529,13 +529,13 @@ gnc_budget_set_account_period_value(GncBudget *budget, const Account *account,
 
     gnc_budget_begin_edit(budget);
     if (gnc_numeric_check(val))
-        qof_instance_set_var_kvp (QOF_INSTANCE (budget), NULL, 2, path_part_one, path_part_two);
+        qof_instance_set_kvp (QOF_INSTANCE (budget), NULL, 2, path_part_one, path_part_two);
     else
     {
         GValue v = G_VALUE_INIT;
         g_value_init (&v, GNC_TYPE_NUMERIC);
         g_value_set_boxed (&v, &val);
-        qof_instance_set_var_kvp (QOF_INSTANCE (budget), &v, 2, path_part_one, path_part_two);
+        qof_instance_set_kvp (QOF_INSTANCE (budget), &v, 2, path_part_one, path_part_two);
     }
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
@@ -561,7 +561,7 @@ gnc_budget_is_account_period_value_set(const GncBudget *budget,
     g_return_val_if_fail(account, FALSE);
 
     make_period_path (account, period_num, path_part_one, path_part_two);
-    qof_instance_get_var_kvp (QOF_INSTANCE (budget), &v, 2, path_part_one, path_part_two);
+    qof_instance_get_kvp (QOF_INSTANCE (budget), &v, 2, path_part_one, path_part_two);
     if (G_VALUE_HOLDS_BOXED (&v))
         ptr = g_value_get_boxed (&v);
     return (ptr != NULL);
@@ -581,7 +581,7 @@ gnc_budget_get_account_period_value(const GncBudget *budget,
     g_return_val_if_fail(account, gnc_numeric_zero());
 
     make_period_path (account, period_num, path_part_one, path_part_two);
-    qof_instance_get_var_kvp (QOF_INSTANCE (budget), &v, 2, path_part_one, path_part_two);
+    qof_instance_get_kvp (QOF_INSTANCE (budget), &v, 2, path_part_one, path_part_two);
     if (G_VALUE_HOLDS_BOXED (&v))
         numeric = (gnc_numeric*)g_value_get_boxed (&v);
 

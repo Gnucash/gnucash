@@ -1066,7 +1066,7 @@ void qof_instance_set_path_kvp (QofInstance * inst, GValue const * value, std::v
 }
 
 void
-qof_instance_set_var_kvp (QofInstance * inst, GValue const * value, unsigned count, ...)
+qof_instance_set_kvp (QofInstance * inst, GValue const * value, unsigned count, ...)
 {
     std::vector<std::string> path;
     va_list args;
@@ -1091,7 +1091,7 @@ void qof_instance_get_path_kvp (QofInstance * inst, GValue * value, std::vector<
 }
 
 void
-qof_instance_get_var_kvp (QofInstance * inst, GValue * value, unsigned count, ...)
+qof_instance_get_kvp (QofInstance * inst, GValue * value, unsigned count, ...)
 {
     std::vector<std::string> path;
     va_list args;

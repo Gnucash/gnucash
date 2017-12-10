@@ -163,13 +163,13 @@ gnc_employee_get_property (GObject         *object,
         g_value_take_object(value, emp->ccard_acc);
         break;
     case PROP_PDF_DIRNAME:
-        qof_instance_get_var_kvp (QOF_INSTANCE (emp), value, 1, OWNER_EXPORT_PDF_DIRNAME);
+        qof_instance_get_kvp (QOF_INSTANCE (emp), value, 1, OWNER_EXPORT_PDF_DIRNAME);
         break;
     case PROP_LAST_POSTED:
-        qof_instance_get_var_kvp (QOF_INSTANCE (emp), value, 1, LAST_POSTED_TO_ACCT);
+        qof_instance_get_kvp (QOF_INSTANCE (emp), value, 1, LAST_POSTED_TO_ACCT);
         break;
     case PROP_PAYMENT_LAST_ACCT:
-        qof_instance_get_var_kvp (QOF_INSTANCE (emp), value, 2, GNC_PAYMENT, GNC_LAST_ACCOUNT);
+        qof_instance_get_kvp (QOF_INSTANCE (emp), value, 2, GNC_PAYMENT, GNC_LAST_ACCOUNT);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -220,13 +220,13 @@ gnc_employee_set_property (GObject         *object,
         gncEmployeeSetCCard(emp, g_value_get_object(value));
         break;
     case PROP_PDF_DIRNAME:
-        qof_instance_set_var_kvp (QOF_INSTANCE (emp), value, 1, OWNER_EXPORT_PDF_DIRNAME);
+        qof_instance_set_kvp (QOF_INSTANCE (emp), value, 1, OWNER_EXPORT_PDF_DIRNAME);
         break;
     case PROP_LAST_POSTED:
-        qof_instance_set_var_kvp (QOF_INSTANCE (emp), value, 1, LAST_POSTED_TO_ACCT);
+        qof_instance_set_kvp (QOF_INSTANCE (emp), value, 1, LAST_POSTED_TO_ACCT);
         break;
     case PROP_PAYMENT_LAST_ACCT:
-        qof_instance_set_var_kvp (QOF_INSTANCE (emp), value, 2, GNC_PAYMENT, GNC_LAST_ACCOUNT);
+        qof_instance_set_kvp (QOF_INSTANCE (emp), value, 2, GNC_PAYMENT, GNC_LAST_ACCOUNT);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);

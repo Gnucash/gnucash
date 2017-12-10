@@ -124,7 +124,7 @@ gboolean qof_instance_has_kvp (QofInstance *inst);
  * @param value: A GValue containing an item of a type which KvpValue knows
  *           how to store.
  */
-void qof_instance_set_var_kvp (QofInstance *, GValue const * value, unsigned count, ...);
+void qof_instance_set_kvp (QofInstance *, GValue const * value, unsigned count, ...);
 
 /** Retrieves the contents of a KVP slot into a provided GValue.
  * @param inst: The QofInstance
@@ -132,7 +132,7 @@ void qof_instance_set_var_kvp (QofInstance *, GValue const * value, unsigned cou
  * @param value: A GValue into which to store the value of the slot. It will be
  *               set to the correct type.
  */
-void qof_instance_get_var_kvp (QofInstance *, GValue * value, unsigned count, ...);
+void qof_instance_get_kvp (QofInstance *, GValue * value, unsigned count, ...);
 
 /** @} Close out the DOxygen ingroup */
 /* Functions to isolate the KVP mechanism inside QOF for cases where

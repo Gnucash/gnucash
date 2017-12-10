@@ -120,7 +120,7 @@ gnc_job_get_property (GObject         *object,
         g_value_set_string(value, job->name);
         break;
     case PROP_PDF_DIRNAME:
-        qof_instance_get_var_kvp (QOF_INSTANCE (job), value, 1, OWNER_EXPORT_PDF_DIRNAME);
+        qof_instance_get_kvp (QOF_INSTANCE (job), value, 1, OWNER_EXPORT_PDF_DIRNAME);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -148,7 +148,7 @@ gnc_job_set_property (GObject         *object,
         gncJobSetName(job, g_value_get_string(value));
         break;
     case PROP_PDF_DIRNAME:
-        qof_instance_set_var_kvp (QOF_INSTANCE (job), value, 1, OWNER_EXPORT_PDF_DIRNAME);
+        qof_instance_set_kvp (QOF_INSTANCE (job), value, 1, OWNER_EXPORT_PDF_DIRNAME);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -316,11 +316,11 @@ void gncJobSetRate (GncJob *job, gnc_numeric rate)
         GValue v = G_VALUE_INIT;
         g_value_init (&v, GNC_TYPE_NUMERIC);
         g_value_set_boxed (&v, &rate);
-        qof_instance_set_var_kvp (QOF_INSTANCE (job), &v, 1, GNC_JOB_RATE);
+        qof_instance_set_kvp (QOF_INSTANCE (job), &v, 1, GNC_JOB_RATE);
     }
     else
     {
-        qof_instance_set_var_kvp (QOF_INSTANCE (job), NULL, 1, GNC_JOB_RATE);
+        qof_instance_set_kvp (QOF_INSTANCE (job), NULL, 1, GNC_JOB_RATE);
     }
     mark_job (job);
     gncJobCommitEdit (job);
@@ -454,7 +454,7 @@ gnc_numeric gncJobGetRate (const GncJob *job)
     GValue v = G_VALUE_INIT;
     gnc_numeric *rate = NULL;
     if (!job) return gnc_numeric_zero ();
-    qof_instance_get_var_kvp (QOF_INSTANCE (job), &v, 1, GNC_JOB_RATE);
+    qof_instance_get_kvp (QOF_INSTANCE (job), &v, 1, GNC_JOB_RATE);
     if (G_VALUE_HOLDS_BOXED (&v))
         rate = (gnc_numeric*)g_value_get_boxed (&v);
     if (rate)
