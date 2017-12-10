@@ -574,7 +574,8 @@ tags within description, notes or memo. ")
   (let ((disp-memo? #t)
         (disp-accname? #t)
         (disp-other-accname? #f)
-        (is-single? #t))
+        (detail-is-single? #t)
+        (amount-is-single? #t))
 
     (define (apply-selectable-by-name-display-options)
       (gnc-option-db-set-option-selectable-by-name
@@ -583,15 +584,19 @@ tags within description, notes or memo. ")
 
       (gnc-option-db-set-option-selectable-by-name
        options gnc:pagename-display (N_ "Other Account Name")
-       is-single?)
+       detail-is-single?)
+
+      (gnc-option-db-set-option-selectable-by-name
+       options gnc:pagename-display (N_ "Sign Reverses")
+       amount-is-single?)
 
       (gnc-option-db-set-option-selectable-by-name
        options gnc:pagename-display (N_ "Use Full Other Account Name")
-       (and disp-other-accname? is-single?))
+       (and disp-other-accname? detail-is-single?))
 
       (gnc-option-db-set-option-selectable-by-name
        options gnc:pagename-display (N_ "Other Account Code")
-       is-single?)
+       detail-is-single?)
 
       (gnc-option-db-set-option-selectable-by-name
        options gnc:pagename-display (N_ "Notes")
@@ -674,18 +679,22 @@ tags within description, notes or memo. ")
                     (N_ "Display one line per transaction, merging multiple splits where required.")))
       #f
       (lambda (x)
-        (set! is-single? (eq? x 'single))
+        (set! detail-is-single? (eq? x 'single))
         (apply-selectable-by-name-display-options))))
 
     (gnc:register-trep-option
-     (gnc:make-multichoice-option
+     (gnc:make-multichoice-callback-option
       gnc:pagename-display (N_ "Amount")
       "m" (N_ "Display the amount?")
       'single
       (list
        (vector 'none   (N_ "None") (N_ "No amount display."))
        (vector 'single (N_ "Single") (N_ "Single Column Display."))
-       (vector 'double (N_ "Double") (N_ "Two Column Display.")))))
+       (vector 'double (N_ "Double") (N_ "Two Column Display.")))
+      #f
+      (lambda (x)
+        (set! amount-is-single? (eq? x 'single))
+        (apply-selectable-by-name-display-options))))
 
     (gnc:register-trep-option
      (gnc:make-multichoice-option
@@ -719,7 +728,7 @@ Credit Card, and Income accounts."))))))
   (define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
 
   (define (build-columns-used)
-    (define is-single? (eq? (opt-val gnc:pagename-display optname-detail-level) 'single))
+    (define detail-is-single? (eq? (opt-val gnc:pagename-display optname-detail-level) 'single))
     (define amount-setting (opt-val gnc:pagename-display (N_ "Amount")))
     (list (cons 'date (opt-val gnc:pagename-display (N_ "Date")))
           (cons 'reconciled-date (opt-val gnc:pagename-display (N_ "Reconciled Date")))
@@ -728,7 +737,7 @@ Credit Card, and Income accounts."))))))
                          (opt-val gnc:pagename-display (N_ "Num"))))
           (cons 'description (opt-val gnc:pagename-display (N_ "Description")))
           (cons 'account-name (opt-val gnc:pagename-display (N_ "Account Name")))
-          (cons 'other-account-name (and is-single?
+          (cons 'other-account-name (and detail-is-single?
                                          (opt-val gnc:pagename-display (N_ "Other Account Name"))))
           (cons 'shares (opt-val gnc:pagename-display (N_ "Shares")))
           (cons 'price (opt-val gnc:pagename-display (N_ "Price")))
@@ -741,9 +750,9 @@ Credit Card, and Income accounts."))))))
           (cons 'account-full-name (opt-val gnc:pagename-display (N_ "Use Full Account Name")))
           (cons 'memo (opt-val gnc:pagename-display (N_ "Memo")))
           (cons 'account-code (opt-val gnc:pagename-display (N_ "Account Code")))
-          (cons 'other-account-code (and is-single?
+          (cons 'other-account-code (and detail-is-single?
                                          (opt-val gnc:pagename-display (N_ "Other Account Code"))))
-          (cons 'other-account-full-name (and is-single?
+          (cons 'other-account-full-name (and detail-is-single?
                                               (opt-val gnc:pagename-display (N_ "Use Full Other Account Name"))))
           (cons 'sort-account-code (opt-val pagename-sorting (N_ "Show Account Code")))
           (cons 'sort-account-full-name (opt-val pagename-sorting (N_ "Show Full Account Name")))
@@ -1029,7 +1038,8 @@ Credit Card, and Income accounts."))))))
 
     (define (add-split-row split cell-calculators row-style transaction-row?)
       (let* ((row-contents '())
-             (trans (xaccSplitGetParent split)))
+             (trans (xaccSplitGetParent split))
+             (account (xaccSplitGetAccount split)))
 
         (define cells
           (map (lambda (cell)
@@ -1092,7 +1102,7 @@ Credit Card, and Income accounts."))))))
                   (addto! row-contents memo))))
 
         (if (or (column-uses? 'account-name used-columns) (column-uses? 'account-code used-columns))
-            (addto! row-contents (account-namestring (xaccSplitGetAccount split)
+            (addto! row-contents (account-namestring account
                                                      (column-uses? 'account-code      used-columns)
                                                      (column-uses? 'account-name      used-columns)
                                                      (column-uses? 'account-full-name used-columns))))
