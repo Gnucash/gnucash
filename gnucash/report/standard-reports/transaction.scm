@@ -58,7 +58,6 @@
 (define optname-accounts (N_ "Accounts"))
 (define optname-filterby (N_ "Filter By..."))
 (define optname-filtertype (N_ "Filter Type"))
-(define optname-void-transactions (N_ "Void Transactions"))
 
 ;;Display
 (define optname-detail-level (N_ "Detail Level"))
@@ -92,6 +91,7 @@
 (define optname-transaction-matcher (N_ "Transaction Matcher"))
 (define optname-transaction-matcher-regex (N_ "Transaction Matcher uses regular expressions for extended matching"))
 (define optname-reconcile-status (N_ "Reconcile Status"))
+(define optname-void-transactions (N_ "Void Transactions"))
 
 ;;Styles
 (define def:grand-total-style "grand-total")
@@ -437,6 +437,13 @@ tags within description, notes or memo. ")
     #f
     (keylist->vectorlist reconcile-status-list)))
 
+  (gnc:register-trep-option
+   (gnc:make-multichoice-option
+    pagename-filter optname-void-transactions
+    "k" (N_ "How to handle void transactions.")
+    'non-void-only
+    (keylist->vectorlist show-void-list)))
+
   ;; Accounts options
 
   ;; account to do report on
@@ -474,12 +481,6 @@ tags within description, notes or memo. ")
        (not (eq? x 'none))))))
   ;;
 
-  (gnc:register-trep-option
-   (gnc:make-multichoice-option
-    gnc:pagename-accounts optname-void-transactions
-    "d" (N_ "How to handle void transactions.")
-    'non-void-only
-    (keylist->vectorlist show-void-list)))
 
   ;; Sorting options
 
@@ -1417,7 +1418,7 @@ tags within description, notes or memo. ")
          (secondary-key (opt-val pagename-sorting optname-sec-sortkey))
          (secondary-order (opt-val pagename-sorting optname-sec-sortorder))
          (secondary-date-subtotal (opt-val pagename-sorting optname-sec-date-subtotal))
-         (void-status (opt-val gnc:pagename-accounts optname-void-transactions))
+         (void-status (opt-val pagename-filter optname-void-transactions))
          (splits '())
          (custom-sort? (or (and (member primary-key DATE-SORTING-TYPES)   ; this will remain
                                 (not (eq? primary-date-subtotal 'none)))  ; until qof-query
