@@ -478,14 +478,14 @@ tags within description, notes or memo. ")
      (gnc:make-simple-boolean-option
       pagename-sorting optname-full-account-name
       "j1"
-      (N_ "Show the full account name for subtotals and subtitles?")
+      (N_ "Show the full account name for subtotals and subheadings?")
       #f))
 
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
       pagename-sorting optname-show-account-code
       "j2"
-      (N_ "Show the account code for subtotals and subtitles?")
+      (N_ "Show the account code for subtotals and subheadings?")
       #f))
 
     (gnc:register-trep-option
