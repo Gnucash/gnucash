@@ -1016,19 +1016,7 @@ Credit Card, and Income accounts."))))))
 
 
     (define (do-rows-with-subtotals splits
-                                    table
-                                    used-columns
-                                    width
-                                    multi-rows?
                                     odd-row?
-                                    export?
-                                    account-types-to-reverse
-                                    primary-subtotal-pred
-                                    secondary-subtotal-pred
-                                    primary-subheading-renderer
-                                    secondary-subheading-renderer
-                                    primary-subtotal-renderer
-                                    secondary-subtotal-renderer
                                     primary-subtotal-collector
                                     secondary-subtotal-collector
                                     total-collector)
@@ -1052,55 +1040,38 @@ Credit Card, and Income accounts."))))))
 
           (let* ((current (car splits))
                  (rest (cdr splits))
-                 (next (if (null? rest) #f (car rest))))
+                 (next (if (null? rest) #f (car rest)))
+                 (split-value (add-split-row
+                               current
+                               (if is-multiline? def:normal-row-style
+                                   (if odd-row?
+                                       def:normal-row-style
+                                       def:alternate-row-style))
+                               #t)))
 
-            (define split-value (add-split-row
-                                 table
-                                 current
-                                 used-columns
-                                 options
-                                 (if multi-rows? def:normal-row-style
-                                     (if odd-row?
-                                         def:normal-row-style
-                                         def:alternate-row-style))
-                                 account-types-to-reverse
-                                 #t))
-            
-            (if multi-rows?
+            (if is-multiline?
+                (for-each
+                 (lambda (othersplits)
+                   (add-split-row othersplits def:alternate-row-style #f))
+                 (delete current (xaccTransGetSplitList (xaccSplitGetParent current)))))
 
-                (for-each (lambda (othersplits)
-                            (add-split-row table
-                                           othersplits
-                                           used-columns
-                                           options
-                                           def:alternate-row-style
-                                           account-types-to-reverse
-                                           #f))
-                          (delete current (xaccTransGetSplitList
-                                           (xaccSplitGetParent current)))))
+            (primary-subtotal-collector
+             'add (gnc:gnc-monetary-commodity split-value) (gnc:gnc-monetary-amount split-value))
 
-            (primary-subtotal-collector 'add
-                                        (gnc:gnc-monetary-commodity split-value) 
-                                        (gnc:gnc-monetary-amount split-value))
+            (secondary-subtotal-collector
+             'add (gnc:gnc-monetary-commodity split-value) (gnc:gnc-monetary-amount split-value))
 
-            (secondary-subtotal-collector 'add
-                                          (gnc:gnc-monetary-commodity split-value)
-                                          (gnc:gnc-monetary-amount split-value))
-            
-            (total-collector 'add
-                             (gnc:gnc-monetary-commodity split-value)
-                             (gnc:gnc-monetary-amount split-value))
-            
-            (if (and primary-subtotal-pred
+            (total-collector
+             'add (gnc:gnc-monetary-commodity split-value) (gnc:gnc-monetary-amount split-value))
+
+            (if (and primary-subtotal-comparator
                      (or (not next)
                          (and next
-                              (not (equal? (primary-subtotal-pred current)
-                                           (primary-subtotal-pred next))))))
+                              (not (equal? (primary-subtotal-comparator current)
+                                           (primary-subtotal-comparator next))))))
 
                 (begin
-
-                  (if secondary-subtotal-pred
-                      
+                  (if secondary-subtotal-comparator
                       (begin
                         (add-subtotal-row (total-string
                                            (render-summary current secondary-renderer-key #f))
@@ -1123,27 +1094,21 @@ Credit Card, and Income accounts."))))))
                             (add-subheading (render-summary next secondary-renderer-key #t)
                                             def:secondary-subtotal-style)))))
 
-                (if (and secondary-subtotal-pred
+                (if (and secondary-subtotal-comparator
                          (or (not next)
                              (and next
-                                  (not (equal? (secondary-subtotal-pred current)
-                                               (secondary-subtotal-pred next))))))
+                                  (not (equal? (secondary-subtotal-comparator current)
+                                               (secondary-subtotal-comparator next))))))
                     (begin (add-subtotal-row (total-string
                                               (render-summary current secondary-renderer-key #f))
                                              secondary-subtotal-collector
                                              def:secondary-subtotal-style)
-                           
                            (secondary-subtotal-collector 'reset #f #f)
-                           
                            (if next
                                (add-subheading (render-summary next secondary-renderer-key #t)
                                                def:secondary-subtotal-style)))))
 
             (do-rows-with-subtotals rest
-                                    table
-                                    used-columns
-                                    width
-                                    multi-rows?
                                     (not odd-row?)
                                     primary-subtotal-collector
                                     secondary-subtotal-collector
