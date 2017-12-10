@@ -211,9 +211,6 @@ options specified in the Options panels."))
                                    (cons 'renderer-key #f)))))
 
 
-(define (sortkey-get-info sortkey info)
-  (cdr (assq info (cdr (assq sortkey sortkey-list)))))
-
 (define (time64-year t64)    (gnc:date-get-year (gnc-localtime t64)))
 (define (time64-quarter t64) (+ (* 10 (gnc:date-get-year (gnc-localtime t64)))  (gnc:date-get-quarter (gnc-localtime t64))))
 (define (time64-month t64)   (+ (* 100 (gnc:date-get-year (gnc-localtime t64))) (gnc:date-get-month (gnc-localtime t64))))
@@ -261,8 +258,76 @@ options specified in the Options panels."))
                   (cons 'tip (N_ "Yearly."))
                   (cons 'renderer-key 'year)))))
 
-(define (date-subtotal-get-info sortkey info)
-  (cdr (assq info (cdr (assq sortkey date-subtotal-list)))))
+(define filter-list
+  (list
+   (cons 'none (list
+                (cons 'text (N_ "None"))
+                (cons 'tip (N_ "Do not do any filtering."))))
+
+   (cons 'include (list
+                   (cons 'text (N_ "Include Transactions to/from Filter Accounts"))
+                   (cons 'tip (N_ "Include transactions to/from filter accounts only."))))
+
+   (cons 'exclude (list
+                   (cons 'text (N_ "Exclude Transactions to/from Filter Accounts"))
+                   (cons 'tip (N_ "Exclude transactions to/from all filter accounts."))))))
+
+(define show-void-list
+  (list
+   (cons 'non-void-only (list
+                         (cons 'text (N_ "Non-void only"))
+                         (cons 'tip (N_ "Show only non-voided transactions."))))
+         
+   (cons 'void-only (list
+                     (cons 'text (N_ "Void only"))
+                     (cons 'tip (N_ "Show only voided transactions."))))
+   
+   (cons 'both (list
+                (cons 'text (N_ "Both"))
+                (cons 'tip (N_ "Show both (and include void transactions in totals)."))))))
+
+(define reconcile-status-list
+  ;; value will be either #f to disable reconciled-status filter
+  ;; or a list of xaccSplitGetReconcile values. e.g. value can
+  ;; be '(#\c #\y) to retrieve list of cleared and reconciled splits.
+  (list
+   (cons  #f (list
+              (cons 'text (N_ "All"))
+              (cons 'tip (N_ "Show All Transactions"))))
+
+   (cons '(#\n) (list
+                 (cons 'text (N_ "Unreconciled"))
+                 (cons 'tip (N_ "Unreconciled only"))))
+   
+   (cons '(#\c) (list
+                 (cons 'text (N_ "Cleared"))
+                 (cons 'tip (N_ "Cleared only"))))
+   
+   (cons '(#\y) (list
+                 (cons 'text (N_ "Reconciled"))
+                 (cons 'tip (N_ "Reconciled only"))))))
+
+
+(define ascending-list
+  (list
+   (cons 'ascend (list
+                  (cons 'text (N_ "Ascending"))
+                  (cons 'tip (N_ "Smallest to largest, earliest to latest."))))
+   (cons 'descend (list
+                   (cons 'text (N_ "Descending"))
+                   (cons 'tip (N_ "Largest to smallest, latest to earliest."))))))
+
+(define (keylist-get-info keylist key info)
+  (cdr (assq info (cdr (assq key keylist)))))
+
+(define (keylist->vectorlist keylist)
+  (map
+   (lambda (item)
+     (vector
+      (car item)
+      (keylist-get-info keylist (car item) 'text)
+      (keylist-get-info keylist (car item) 'tip)))
+   keylist))
 
 
 (define (trep-options-generator)
@@ -346,10 +411,7 @@ tags within description, notes or memo. ")
     pagename-filter optname-reconcile-status
     "j1" (N_ "Filter by reconcile status.")
     #f
-    (list (vector #f      (N_ "All")           (N_ "Show All Transactions"))
-          (vector '(#\n)  (N_ "Unreconciled")  (N_ "Unreconciled only"))
-          (vector '(#\c)  (N_ "Cleared")       (N_ "Cleared only"))
-          (vector '(#\y)  (N_ "Reconciled")    (N_ "Reconciled only")))))
+    (keylist->vectorlist reconcile-status-list)))
 
   ;; Accounts options
 
@@ -380,20 +442,12 @@ tags within description, notes or memo. ")
     gnc:pagename-accounts optname-filtertype
     "c" (N_ "Filter account.")
     'none
-    (list (vector 'none
-                  (N_ "None")
-                  (N_ "Do not do any filtering."))
-          (vector 'include
-                  (N_ "Include Transactions to/from Filter Accounts")
-                  (N_ "Include transactions to/from filter accounts only."))
-          (vector 'exclude
-                  (N_ "Exclude Transactions to/from Filter Accounts")
-                  (N_ "Exclude transactions to/from all filter accounts.")))
-   #f
-   (lambda (x)
-     (gnc-option-db-set-option-selectable-by-name
-      options gnc:pagename-accounts optname-filterby
-      (not (eq? x 'none))))))
+    (keylist->vectorlist filter-list)
+    #f
+    (lambda (x)
+      (gnc-option-db-set-option-selectable-by-name
+       options gnc:pagename-accounts optname-filterby
+       (not (eq? x 'none))))))
   ;;
 
   (gnc:register-trep-option
@@ -401,39 +455,17 @@ tags within description, notes or memo. ")
     gnc:pagename-accounts optname-void-transactions
     "d" (N_ "How to handle void transactions.")
     'non-void-only
-    (list
-     (vector 'non-void-only (N_ "Non-void only") (N_ "Show only non-voided transactions."))
-     (vector 'void-only     (N_ "Void only") (N_ "Show only voided transactions."))
-     (vector 'both          (N_ "Both") (N_ "Show both (and include void transactions in totals).")))))
+    (keylist->vectorlist show-void-list)))
 
   ;; Sorting options
-  
 
-  (let ((ascending-choice-list 
-         (list (vector 'ascend
-                       (N_ "Ascending")
-                       (N_ "Smallest to largest, earliest to latest."))
-               (vector 'descend
-                       (N_ "Descending")
-                       (N_ "Largest to smallest, latest to earliest."))))
+  (let ((ascending-choice-list (keylist->vectorlist ascending-list))        
         (prime-sortkey 'account-name)
         (prime-sortkey-subtotal-true #t)
         (sec-sortkey 'register-order)
-        (sec-sortkey-subtotal-true #f)       
-        (key-choice-list (map
-                          (lambda (sortpair)
-                            (vector
-                             (car sortpair)
-                             (sortkey-get-info (car sortpair) 'text)
-                             (sortkey-get-info (car sortpair) 'tip)))
-                          sortkey-list))
-        (date-subtotal-choice-list (map
-                                    (lambda (date-sortpair)
-                                      (vector
-                                       (car date-sortpair)
-                                       (date-subtotal-get-info (car date-sortpair) 'text)
-                                       (date-subtotal-get-info (car date-sortpair) 'tip)))
-                                    date-subtotal-list)))
+        (sec-sortkey-subtotal-true #f)
+        (key-choice-list (keylist->vectorlist sortkey-list))
+        (date-subtotal-choice-list (keylist->vectorlist date-subtotal-list)))
 
     (define (apply-selectable-by-name-sorting-options)
       (let* ((prime-sortkey-enabled (not (eq? prime-sortkey 'none)))
@@ -1314,14 +1346,14 @@ Credit Card, and Income accounts."))))))
           ;; If sorting by date, look up the value of the
           ;; date-subtotalling multichoice option and return the
           ;; corresponding funcs in the assoc-list.
-          (date-subtotal-get-info (opt-val pagename-sorting name-date-subtotal) info)
+          (keylist-get-info date-subtotal-list (opt-val pagename-sorting name-date-subtotal) info)
           ;; For everything else: 1. check whether sortkey has
           ;; subtotalling enabled at all, 2. check whether the
           ;; enable-subtotal boolean option is #t, 3. look up the
           ;; appropriate funcs in the assoc-list.
           (and (member sortkey SUBTOTAL-ENABLED)
                (and (opt-val pagename-sorting name-subtotal)
-                    (sortkey-get-info sortkey info))))))
+                    (keylist-get-info sortkey-list sortkey info))))))
 
   (define (is-filter-member split account-list)
     (let* ((txn (xaccSplitGetParent split))
@@ -1463,8 +1495,8 @@ Credit Card, and Income accounts."))))))
           (if (not custom-sort?)
               (begin
                 (qof-query-set-sort-order query
-                                          (sortkey-get-info primary-key 'sortkey)
-                                          (sortkey-get-info secondary-key 'sortkey)
+                                          (keylist-get-info sortkey-list primary-key 'sortkey)
+                                          (keylist-get-info sortkey-list secondary-key 'sortkey)
                                           '())
                 (qof-query-set-sort-increasing query
                                                (eq? primary-order 'ascend)
