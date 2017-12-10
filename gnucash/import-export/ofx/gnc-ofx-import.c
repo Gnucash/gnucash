@@ -658,7 +658,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
                             // whether to continue or abort.
                             choosing_account =
                                 gnc_verify_dialog(
-                                    gnc_gen_trans_list_widget(gnc_ofx_importer_gui), TRUE,
+                                    GTK_WINDOW (gnc_gen_trans_list_widget(gnc_ofx_importer_gui)), TRUE,
                                     "The chosen account \"%s\" does not have the correct "
                                     "currency/security \"%s\" (it has \"%s\" instead). "
                                     "This account cannot be used. "
@@ -919,7 +919,7 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
          * calling 'gnc_import_select_account', allow the user to set book
          * options. */
         if (new_book)
-            new_book = gnc_new_book_option_display(gnc_ui_get_toplevel());
+            new_book = gnc_new_book_option_display (GTK_WIDGET (gnc_ui_get_main_window (NULL)));
 
         gnc_utf8_strip_invalid(data.account_name);
         gnc_utf8_strip_invalid(data.account_id);
@@ -965,7 +965,7 @@ double ofx_get_investment_amount(const struct OfxTransactionData* data)
     }
 }
 
-void gnc_file_ofx_import (void)
+void gnc_file_ofx_import (GtkWindow *parent)
 {
     extern int ofx_PARSER_msg;
     extern int ofx_DEBUG_msg;
@@ -987,7 +987,8 @@ void gnc_file_ofx_import (void)
     DEBUG("gnc_file_ofx_import(): Begin...\n");
 
     default_dir = gnc_get_default_directory(GNC_PREFS_GROUP);
-    selected_filename = gnc_file_dialog(_("Select an OFX/QFX file to process"),
+    selected_filename = gnc_file_dialog(parent,
+                                        _("Select an OFX/QFX file to process"),
                                         NULL,
                                         default_dir,
                                         GNC_FILE_DIALOG_IMPORT);

@@ -126,30 +126,34 @@ typedef enum
     GNC_FILE_DIALOG_EXPORT
 } GNCFileDialogType;
 
-void gnc_file_new (void);
-gboolean gnc_file_open (void);
-void gnc_file_export(void);
-void gnc_file_save (void);
-void gnc_file_save_as (void);
-void gnc_file_do_export(const char* filename);
-void gnc_file_do_save_as(const char* filename);
-void gnc_file_revert (void);
+void gnc_file_new (GtkWindow *parent);
+gboolean gnc_file_open (GtkWindow *parent);
+void gnc_file_export(GtkWindow *parent);
+void gnc_file_save (GtkWindow *parent);
+void gnc_file_save_as (GtkWindow *parent);
+void gnc_file_do_export(GtkWindow *parent, const char* filename);
+void gnc_file_do_save_as(GtkWindow *parent, const char* filename);
+void gnc_file_revert (GtkWindow *parent);
 
 /** Tell the user about errors in the backends
 
 */
-gboolean show_session_error (QofBackendError io_error,
+gboolean show_session_error (GtkWindow *parent,
+                             QofBackendError io_error,
                              const char *newfile,
                              GNCFileDialogType type);
 
-char * gnc_file_dialog (const char * title,
+char * gnc_file_dialog (GtkWindow *parent,
+                        const char * title,
                         GList * filters,
                         const char * starting_dir,
                         GNCFileDialogType type);
 
-gboolean gnc_file_open_file (const char *filename, gboolean open_readonly);
+gboolean gnc_file_open_file (GtkWindow *parent,
+                             const char *filename,
+                             gboolean open_readonly);
 
-gboolean gnc_file_query_save (gboolean can_cancel);
+gboolean gnc_file_query_save (GtkWindow *parent, gboolean can_cancel);
 
 void gnc_file_quit (void);
 

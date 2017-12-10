@@ -41,9 +41,10 @@
 
 struct _ftd_data
 {
-    QofQuery *		q;
-    QofQuery *		ledger_q;
-    GNCSearchWindow *	sw;
+    QofQuery        *q;
+    QofQuery        *ledger_q;
+    GNCSearchWindow *sw;
+    GtkWindow       *parent;
 };
 
 static void
@@ -69,7 +70,7 @@ do_find_cb (QofQuery *query, gpointer user_data, gpointer *result)
     if (new_ledger)
     {
         page = gnc_plugin_page_register_new_ledger (ledger);
-        gnc_main_window_open_page (NULL, page);
+        gnc_main_window_open_page (GNC_MAIN_WINDOW(ftd->parent), page);
     }
 
     qof_query_destroy (ftd->q);
@@ -97,6 +98,7 @@ gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg)
     QofQuery *start_q, *show_q = NULL;
     gboolean num_action =
                 qof_book_use_split_action_for_num_field(gnc_get_current_book());
+    GtkWindow *parent = GTK_WINDOW(gnc_ledger_display_get_parent(orig_ledg));
 
     /* Build parameter list in reverse order */
     if (params == NULL)
@@ -221,7 +223,9 @@ gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg)
         ftd->q = start_q;		/* save this to destroy it later */
     }
 
-    ftd->sw = gnc_search_dialog_create (type, _("Find Transaction"),
+    ftd->parent = parent;
+
+    ftd->sw = gnc_search_dialog_create (parent, type, _("Find Transaction"),
                                         params, NULL, start_q, show_q,
                                         NULL, do_find_cb, NULL,
                                         ftd, free_ftd_cb, GNC_PREFS_GROUP_SEARCH, NULL,

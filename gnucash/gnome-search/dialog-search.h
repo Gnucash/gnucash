@@ -40,7 +40,7 @@ typedef struct _GNCSearchWindow GNCSearchWindow;
  * result will be a pointer to the selected item (if one is selected)
  * and the callback may change the value.
  */
-typedef void (*GNCSearchCallback) (gpointer *obj_p, gpointer user_data);
+typedef void (*GNCSearchCallback) (GtkWindow *dialog, gpointer *obj_p, gpointer user_data);
 typedef void (*GNCSearchResultCB) (QofQuery *query, gpointer user_data,
                                    gpointer *result);
 
@@ -50,7 +50,7 @@ typedef void (*GNCSearchResultCB) (QofQuery *query, gpointer user_data,
  * will be added to the query, but not selected.  This means the GncGUID
  * must be set.
  */
-typedef gpointer (*GNCSearchNewItemCB) (gpointer user_data);
+typedef gpointer (*GNCSearchNewItemCB) (GtkWindow *dialog, gpointer user_data);
 
 /* Free the general user_data object */
 typedef void (*GNCSearchFree) (gpointer user_data);
@@ -59,15 +59,17 @@ typedef void (*GNCSearchFree) (gpointer user_data);
  * button.  The search dialog will close when this callback function
  * returns.
  */
-typedef void (*GNCSearchSelectedCB) (gpointer selected_object,
+typedef void (*GNCSearchSelectedCB) (GtkWindow *dialog,
+                                     gpointer selected_object,
                                      gpointer user_data);
 
 /** This callback is called when (if) the user clicks the 'select'
  * button.  The search dialog will close when this callback function
  * returns.
  */
-typedef void (*GNCSearchMultiSelectedCB) (GList *list_of_selected_objects,
-        gpointer user_data);
+typedef void (*GNCSearchMultiSelectedCB) (GtkWindow *dialog,
+                                          GList *list_of_selected_objects,
+                                          gpointer user_data);
 
 typedef struct
 {
@@ -103,7 +105,8 @@ typedef struct
  * the dialog will use the obj_type instead.
  */
 GNCSearchWindow *
-gnc_search_dialog_create (QofIdTypeConst obj_type, const gchar *title,
+gnc_search_dialog_create (GtkWindow *parent,
+                          QofIdTypeConst obj_type, const gchar *title,
                           GList *param_list,
                           GList *display_list,
                           QofQuery *start_query, QofQuery *show_start_query,

@@ -56,10 +56,10 @@
  ********************************************************************/
 
 void
-reportWindow(int report_id)
+reportWindow(int report_id, GtkWindow *parent)
 {
     gnc_set_busy_cursor (NULL, TRUE);
-    gnc_main_window_open_report(report_id, NULL);
+    gnc_main_window_open_report(report_id, GNC_MAIN_WINDOW(parent));
     gnc_unset_busy_cursor (NULL);
 }
 
@@ -232,8 +232,8 @@ gnc_report_edit_options(SCM report, GtkWindow *parent)
     options = scm_call_1(get_options, report);
     if (options == SCM_BOOL_F)
     {
-        gnc_warning_dialog(GTK_WIDGET(gnc_ui_get_toplevel()), "%s",
-                           _("There are no options for this report."));
+        gnc_warning_dialog (parent, "%s",
+                            _("There are no options for this report."));
         return FALSE;
     }
 
@@ -324,7 +324,7 @@ gnc_html_options_url_cb (const char *location, const char *label,
             return FALSE;
         }
 
-        gnc_report_edit_options (report, NULL);
+        gnc_report_edit_options (report, GTK_WINDOW(result->parent));
 
         return TRUE;
     }
@@ -350,7 +350,7 @@ gnc_html_report_url_cb (const char *location, const char *label,
         char *url;
 
         url = gnc_build_url (URL_TYPE_REPORT, location, label);
-        gnc_main_window_open_report_url (url, NULL);
+        gnc_main_window_open_report_url (url, GNC_MAIN_WINDOW(result->parent));
         g_free (url);
 
         result->load_to_stream = FALSE;

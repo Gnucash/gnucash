@@ -51,7 +51,7 @@
  * it actually returns a search-window, then this widget will set up the
  * appropriate callbacks to the search window to obtain selections.
  */
-typedef GNCSearchWindow *(*GNCSearchCB) (gpointer start, gpointer user_data);
+typedef GNCSearchWindow *(*GNCSearchCB) (GtkWindow *parent, gpointer start, gpointer user_data);
 
 typedef struct
 {

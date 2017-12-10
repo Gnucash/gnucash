@@ -762,8 +762,8 @@ gsr_default_reverse_txn_handler (GNCSplitReg *gsr, gpointer data)
 
     if (xaccTransGetReversedBy(trans))
     {
-        gnc_error_dialog(gsr->window, "%s",
-                         _("A reversing entry has already been created for this transaction."));
+        gnc_error_dialog (GTK_WINDOW (gsr->window), "%s",
+                          _("A reversing entry has already been created for this transaction."));
         return;
     }
 
@@ -1114,7 +1114,7 @@ gsr_default_execassociated_handler (GNCSplitReg *gsr, gpointer data)
     uri = xaccTransGetAssociation (trans);
 
     if (g_strcmp0 (uri, "") == 0 && g_strcmp0 (uri, NULL) == 0)
-        gnc_error_dialog (NULL, "%s", _("This transaction is not associated with a URI."));
+        gnc_error_dialog (GTK_WINDOW (gsr->window), "%s", _("This transaction is not associated with a URI."));
     else
     {
         if (g_str_has_prefix (uri,"file:/") && !g_str_has_prefix (uri,"file://")) // Check for relative path
@@ -1140,7 +1140,7 @@ gsr_default_execassociated_handler (GNCSplitReg *gsr, gpointer data)
             g_free (uri_scheme);
         }
         else
-            gnc_error_dialog (NULL, "%s", _("This transaction is not associated with a valid URI."));
+            gnc_error_dialog (GTK_WINDOW (gsr->window), "%s", _("This transaction is not associated with a valid URI."));
     }
     return;
 }

@@ -736,7 +736,7 @@ gnc_gui_init(void)
     /* Load css configuration file */
     gnc_add_css_file ();
 
-    gnc_totd_dialog(GTK_WINDOW(main_window), TRUE);
+    gnc_totd_dialog (gnc_get_splash_screen (), TRUE);
 
     LEAVE ("");
     return main_window;
@@ -782,7 +782,7 @@ gnc_shutdown (int exit_status)
     {
         if (!gnome_is_terminating)
         {
-            if (gnc_file_query_save(FALSE))
+            if (gnc_file_query_save (gnc_ui_get_main_window (NULL), FALSE))
             {
                 gnc_hook_run(HOOK_UI_SHUTDOWN, NULL);
                 gnc_gui_shutdown();

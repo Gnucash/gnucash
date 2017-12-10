@@ -954,7 +954,7 @@ gnc_payment_ok_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
             text = _("The transfer and post accounts are associated with different currencies. Please specify the conversion rate.");
 
             xfer = gnc_xfer_dialog(pw->dialog, pw->post_acct);
-            gnc_info_dialog(pw->dialog, "%s", text);
+            gnc_info_dialog (GTK_WINDOW (pw->dialog), "%s", text);
 
             gnc_xfer_dialog_select_to_account(xfer, pw->xfer_acct);
             gnc_xfer_dialog_set_amount(xfer, pw->amount_tot);
@@ -1117,7 +1117,7 @@ static void print_date (G_GNUC_UNUSED GtkTreeViewColumn *tree_column,
 }
 
 static PaymentWindow *
-new_payment_window (GtkWidget *parent, QofBook *book, InitialPaymentInfo *tx_info)
+new_payment_window (GtkWindow *parent, QofBook *book, InitialPaymentInfo *tx_info)
 {
     PaymentWindow *pw;
     GtkBuilder *builder;
@@ -1154,6 +1154,7 @@ new_payment_window (GtkWidget *parent, QofBook *book, InitialPaymentInfo *tx_inf
         gncOwnerCopy (&pw->tx_info->owner, &(pw->owner));
         gnc_payment_set_owner_type (pw, gncOwnerGetType(&pw->tx_info->owner));
 
+        gtk_window_set_transient_for (GTK_WINDOW(pw->dialog), parent);
         gtk_window_present (GTK_WINDOW(pw->dialog));
         return(pw);
     }
@@ -1173,6 +1174,7 @@ new_payment_window (GtkWidget *parent, QofBook *book, InitialPaymentInfo *tx_inf
     gnc_builder_add_from_file (builder, "dialog-payment.glade", "owner_type_combo_model");
     gnc_builder_add_from_file (builder, "dialog-payment.glade", "payment_dialog");
     pw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "payment_dialog"));
+    gtk_window_set_transient_for (GTK_WINDOW(pw->dialog), parent);
 
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(pw->dialog), "GncPaymentDialog");
@@ -1341,7 +1343,7 @@ new_payment_window (GtkWidget *parent, QofBook *book, InitialPaymentInfo *tx_inf
              * Let's assert this to protect from potential future changes. */
             g_assert (g_list_length (pw->acct_types) == 1);
             acct_type = xaccAccountGetTypeStr(GPOINTER_TO_INT(pw->acct_types->data));
-            gnc_warning_dialog(pw->dialog,
+            gnc_warning_dialog(GTK_WINDOW (pw->dialog),
                                _("You have no valid \"Post To\" accounts. "
                                  "Please create an account of type \"%s\" "
                                  "before you continue to process this payment. "
@@ -1364,8 +1366,8 @@ gnc_ui_payment_window_destroy (PaymentWindow *pw)
 }
 
 PaymentWindow *
-gnc_ui_payment_new_with_invoice (const GncOwner *owner, QofBook *book,
-                                 GncInvoice *invoice)
+gnc_ui_payment_new_with_invoice (GtkWindow *parent, const GncOwner *owner,
+                                 QofBook *book, GncInvoice *invoice)
 {
     GNCLot *postlot;
     InitialPaymentInfo *tx_info;
@@ -1395,13 +1397,13 @@ gnc_ui_payment_new_with_invoice (const GncOwner *owner, QofBook *book,
         lot_info->amount = gnc_numeric_zero ();
         tx_info->lots = g_list_prepend (tx_info->lots, lot_info);
     }
-    return new_payment_window (NULL, book, tx_info);
+    return new_payment_window (parent, book, tx_info);
 }
 
 PaymentWindow *
-gnc_ui_payment_new (GncOwner *owner, QofBook *book)
+gnc_ui_payment_new (GtkWindow *parent, GncOwner *owner, QofBook *book)
 {
-    return gnc_ui_payment_new_with_invoice (owner, book, NULL);
+    return gnc_ui_payment_new_with_invoice (parent, owner, book, NULL);
 }
 
 // ///////////////
@@ -1477,7 +1479,7 @@ static char *gen_split_desc (Transaction *txn, Split *split)
     return split_str;
 }
 
-static Split *select_payment_split (GtkWidget *parent, Transaction *txn)
+static Split *select_payment_split (GtkWindow *parent, Transaction *txn)
 {
     /* We require the txn to have one split in an Asset account.
      * The only exception would be a lot link transaction
@@ -1490,7 +1492,7 @@ static Split *select_payment_split (GtkWidget *parent, Transaction *txn)
         if (xaccTransGetTxnType(txn) == TXN_TYPE_LINK)
             return NULL;
 
-        dialog = gtk_message_dialog_new (GTK_WINDOW(parent),
+        dialog = gtk_message_dialog_new (parent,
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
                                          GTK_MESSAGE_INFO,
                                          GTK_BUTTONS_CLOSE,
@@ -1513,7 +1515,7 @@ static Split *select_payment_split (GtkWidget *parent, Transaction *txn)
                                 "Please select one, the others will be ignored.\n\n");
         GtkDialog *dialog = GTK_DIALOG(
                             gtk_dialog_new_with_buttons (_("Warning"),
-                                                         GTK_WINDOW(parent),
+                                                         parent,
                                                          GTK_DIALOG_DESTROY_WITH_PARENT,
                                                          _("Continue"), GTK_BUTTONS_OK,
                                                          _("Cancel"), GTK_BUTTONS_CANCEL,
@@ -1569,7 +1571,7 @@ static Split *select_payment_split (GtkWidget *parent, Transaction *txn)
         return payment_splits->data;
 }
 
-static GList *select_txn_lots (GtkWidget *parent, Transaction *txn, Account **post_acct, gboolean *abort)
+static GList *select_txn_lots (GtkWindow *parent, Transaction *txn, Account **post_acct, gboolean *abort)
 {
     gboolean has_no_lot_apar_splits = FALSE;
     SplitList *post_splits = NULL, *no_lot_post_splits = NULL;
@@ -1624,7 +1626,7 @@ static GList *select_txn_lots (GtkWidget *parent, Transaction *txn, Account **po
             split_str = tmp_str2;
         }
 
-        dialog = gtk_message_dialog_new (GTK_WINDOW(parent),
+        dialog = gtk_message_dialog_new (parent,
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
                                          GTK_MESSAGE_WARNING,
                                          GTK_BUTTONS_CANCEL,
@@ -1648,7 +1650,7 @@ static GList *select_txn_lots (GtkWidget *parent, Transaction *txn, Account **po
     return txn_lots;
 }
 
-PaymentWindow * gnc_ui_payment_new_with_txn (GtkWidget* parent, GncOwner *owner, Transaction *txn)
+PaymentWindow * gnc_ui_payment_new_with_txn (GtkWindow* parent, GncOwner *owner, Transaction *txn)
 {
     Split *payment_split = NULL;
     Account *post_acct = NULL;
@@ -1682,7 +1684,7 @@ PaymentWindow * gnc_ui_payment_new_with_txn (GtkWidget* parent, GncOwner *owner,
     tx_info->lots = txn_lots;
     gncOwnerCopy (owner, &tx_info->owner);
 
-    pw = new_payment_window (NULL,
+    pw = new_payment_window (parent,
                             qof_instance_get_book(QOF_INSTANCE(txn)),
                             tx_info);
 

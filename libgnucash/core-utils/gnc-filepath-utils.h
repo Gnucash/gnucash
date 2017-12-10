@@ -41,6 +41,14 @@
  */
 gchar *gnc_resolve_file_path (const gchar *filefrag);
 
+/** Given a prefix and a path return the relative portion of the path.
+ * @param prefix The prefix that might be the first part of the path
+ * @param path The path from which the prefix might be removed
+ * @return a char* that must be g_freed containing the path without
+ *        the prefix if path begins with prefix, otherwise a copy of path.
+ */
+gchar *gnc_file_path_relative_part (const gchar *prefix, const gchar *path);
+
 /** @brief Find an absolute path to a localized version of a given
  *  relative path to a html or html related file.
  *  If no localized version exists, an absolute path to the file

@@ -561,7 +561,7 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
                {
                     if ( !https_allowed() )
                     {
-                         gnc_error_dialog( priv->base.parent, "%s",
+                        gnc_error_dialog (GTK_WINDOW (priv->base.parent), "%s",
                                            _("Secure HTTP access is disabled. "
                                              "You can enable it in the Network section of "
                                              "the Preferences dialog."));
@@ -571,7 +571,7 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
 
                if ( !http_allowed() )
                {
-                    gnc_error_dialog( priv->base.parent, "%s",
+                   gnc_error_dialog (GTK_WINDOW (priv->base.parent), "%s",
                                       _("Network HTTP access is disabled. "
                                         "You can enable it in the Network section of "
                                         "the Preferences dialog."));
@@ -853,18 +853,19 @@ impl_webkit_show_url( GncHtml* self, URLType type,
           result.base_type = URL_TYPE_FILE;
           result.base_location = NULL;
           result.error_message = NULL;
+          result.parent = GTK_WINDOW (priv->base.parent);
 
           ok = url_handler( location, label, new_window, &result );
           if ( !ok )
           {
                if ( result.error_message )
                {
-                    gnc_error_dialog( priv->base.parent, "%s", result.error_message );
+                   gnc_error_dialog (GTK_WINDOW (priv->base.parent), "%s", result.error_message );
                }
                else
                {
                     /* %s is a URL (some location somewhere). */
-                    gnc_error_dialog( priv->base.parent, _("There was an error accessing %s."), location );
+                    gnc_error_dialog (GTK_WINDOW (priv->base.parent), _("There was an error accessing %s."), location );
                }
 
                if ( priv->base.load_cb )
@@ -930,7 +931,7 @@ impl_webkit_show_url( GncHtml* self, URLType type,
                {
                     if ( !https_allowed() )
                     {
-                         gnc_error_dialog( priv->base.parent, "%s",
+                        gnc_error_dialog (GTK_WINDOW (priv->base.parent), "%s",
                                            _("Secure HTTP access is disabled. "
                                              "You can enable it in the Network section of "
                                              "the Preferences dialog.") );
@@ -942,7 +943,7 @@ impl_webkit_show_url( GncHtml* self, URLType type,
                {
                     if ( !http_allowed() )
                     {
-                         gnc_error_dialog( priv->base.parent, "%s",
+                        gnc_error_dialog (GTK_WINDOW (priv->base.parent), "%s",
                                            _("Network HTTP access is disabled. "
                                              "You can enable it in the Network section of "
                                              "the Preferences dialog.") );

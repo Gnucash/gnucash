@@ -179,9 +179,9 @@ gnc_split_register_begin_edit_or_warn(SRInfo *info, Transaction *trans)
         }
         else
         {
-            GtkWidget *parent = NULL;
+            GtkWindow *parent = NULL;
             if (info->get_parent)
-                parent = info->get_parent(info->user_data);
+                parent = GTK_WINDOW (info->get_parent (info->user_data));
             gnc_error_dialog(parent, "%s", _("This transaction is already being edited in another register. Please finish editing it there first."));
             LEAVE("already editing");
             return TRUE;
@@ -455,7 +455,7 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
               "record the changes before duplicating the transaction, or "
               "cancel the duplication?");
 
-        window = gnc_split_register_get_parent(reg);
+        window = gnc_split_register_get_parent (reg);
         dialog = gtk_message_dialog_new(GTK_WINDOW(window),
                                         GTK_DIALOG_DESTROY_WITH_PARENT,
                                         GTK_MESSAGE_QUESTION,
@@ -922,7 +922,7 @@ gnc_split_register_paste_current (SplitRegister *reg)
 
         /* Ask before overwriting an existing split. */
         if (split != NULL &&
-                !gnc_verify_dialog (gnc_split_register_get_parent (reg),
+                !gnc_verify_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)),
                                     FALSE, "%s", message))
         {
             LEAVE("user cancelled");
@@ -960,7 +960,7 @@ gnc_split_register_paste_current (SplitRegister *reg)
 
         /* Ask before overwriting an existing transaction. */
         if (split != blank_split &&
-                !gnc_verify_dialog(gnc_split_register_get_parent(reg),
+                !gnc_verify_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)),
                                    FALSE, "%s", message))
         {
             LEAVE("user cancelled");
@@ -1846,7 +1846,7 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
     if (!account && !creating_account)
     {
         /* Ask if they want to create a new one. */
-        if (!gnc_verify_dialog (gnc_split_register_get_parent (reg),
+        if (!gnc_verify_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)),
                                 TRUE, missing, name))
             return NULL;
         creating_account = TRUE;
@@ -1870,7 +1870,7 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
     /* See if the account (either old or new) is a placeholder. */
     if (xaccAccountGetPlaceholder (account))
     {
-        gnc_error_dialog (gnc_split_register_get_parent (reg),
+        gnc_error_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)),
                           placeholder, name);
     }
 

@@ -1132,7 +1132,7 @@ cleanup_parse_file:
     }
     if (message)
     {
-        gnc_error_dialog (data->assistant, "%s", message);
+        gnc_error_dialog (GTK_WINDOW (data->assistant), "%s", message);
     }
     if (!success)
         gxi_session_destroy (data);
@@ -1306,7 +1306,7 @@ gxi_add_encoding (GncXmlImportData *data, gpointer encoding_ptr)
     if (g_list_find (data->encodings, encoding_ptr))
     {
         message = _("This encoding has been added to the list already.");
-        gnc_error_dialog (data->encodings_dialog, "%s", message);
+        gnc_error_dialog (GTK_WINDOW (data->encodings_dialog), "%s", message);
         return;
     }
 
@@ -1317,7 +1317,7 @@ gxi_add_encoding (GncXmlImportData *data, gpointer encoding_ptr)
         g_iconv_close (iconv);
         g_free (enc_string);
         message = _("This is an invalid encoding.");
-        gnc_error_dialog (data->encodings_dialog, "%s", message);
+        gnc_error_dialog (GTK_WINDOW (data->encodings_dialog), "%s", message);
         return;
     }
     g_iconv_close (iconv);

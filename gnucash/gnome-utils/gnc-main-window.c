@@ -720,8 +720,8 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
         if (active_windows)
             DEBUG("first window %p.", active_windows->data);
         window = gnc_main_window_new();
-        gtk_widget_show(GTK_WIDGET(window));
     }
+    gtk_widget_show(GTK_WIDGET(window));
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
@@ -952,6 +952,7 @@ gnc_main_window_restore_default_state(GncMainWindow *window)
     DEBUG("no saved state file");
     if (!window)
         window = g_list_nth_data(active_windows, 0);
+    gtk_widget_show (GTK_WIDGET(window));
     action = gnc_main_window_find_action(window, "ViewAccountTreeAction");
     gtk_action_activate(action);
 }
@@ -1293,7 +1294,7 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
     switch (response)
     {
     case GTK_RESPONSE_APPLY:
-        gnc_file_save();
+        gnc_file_save (GTK_WINDOW (window));
         return FALSE;
 
     case GTK_RESPONSE_CLOSE:
@@ -1600,14 +1601,13 @@ static guint gnc_statusbar_notification_messageid = 0;
  * statusbar by generate_statusbar_lastmodified_message. */
 static gboolean statusbar_notification_off(gpointer user_data_unused)
 {
-    GtkWidget *widget = gnc_ui_get_toplevel();
+    GncMainWindow *mainwindow = GNC_MAIN_WINDOW (gnc_ui_get_main_window (NULL));
     //g_warning("statusbar_notification_off\n");
     if (gnc_statusbar_notification_messageid == 0)
         return FALSE;
 
-    if (widget && GNC_IS_MAIN_WINDOW(widget))
+    if (mainwindow)
     {
-        GncMainWindow *mainwindow = GNC_MAIN_WINDOW(widget);
         GtkWidget *statusbar = gnc_main_window_get_statusbar(GNC_WINDOW(mainwindow));
         gtk_statusbar_remove(GTK_STATUSBAR(statusbar), 0, gnc_statusbar_notification_messageid);
         gnc_statusbar_notification_messageid = 0;
@@ -2670,16 +2670,16 @@ GncMainWindow *
 gnc_main_window_new (void)
 {
     GncMainWindow *window;
-    GtkWidget *old_window;
+    GtkWindow *old_window;
 
     window = g_object_new (GNC_TYPE_MAIN_WINDOW, NULL);
     gtk_window_set_default_size(GTK_WINDOW(window), 800, 600);
 
-    old_window = gnc_ui_get_toplevel();
+    old_window = gnc_ui_get_main_window (NULL);
     if (old_window)
     {
         gint width, height;
-        gtk_window_get_size (GTK_WINDOW (old_window), &width, &height);
+        gtk_window_get_size (old_window, &width, &height);
         gtk_window_resize (GTK_WINDOW (window), width, height);
         if ((gdk_window_get_state((gtk_widget_get_window (GTK_WIDGET(old_window))))
                 & GDK_WINDOW_STATE_MAXIMIZED) != 0)
@@ -4554,17 +4554,39 @@ gnc_main_window_show_all_windows(void)
 #endif
 }
 
-/** Get a pointer to the first active top level window or NULL
- *  if there is none.
- *
- *  @return A pointer to a GtkWindow object. */
-GtkWidget *
-gnc_ui_get_toplevel (void)
+GtkWindow *
+gnc_ui_get_gtk_window (GtkWidget *widget)
+{
+    GtkWidget *toplevel;
+
+    if (!widget)
+        return NULL;
+
+    toplevel = gtk_widget_get_toplevel (widget);
+    if (toplevel && GTK_IS_WINDOW (toplevel))
+        return GTK_WINDOW (toplevel);
+    else
+        return NULL;
+}
+
+GtkWindow *
+gnc_ui_get_main_window (GtkWidget *widget)
 {
     GList *window;
 
+    GtkWindow *toplevel = gnc_ui_get_gtk_window (widget);
+    while (toplevel && !GNC_IS_MAIN_WINDOW (toplevel))
+        toplevel = gtk_window_get_transient_for(toplevel);
+
+    if (toplevel)
+        return toplevel;
+
     for (window = active_windows; window; window = window->next)
         if (gtk_window_is_active (GTK_WINDOW (window->data)))
+            return window->data;
+
+    for (window = active_windows; window; window = window->next)
+        if (gtk_widget_get_mapped (GTK_WIDGET(window->data)))
             return window->data;
 
     return NULL;

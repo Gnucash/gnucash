@@ -187,7 +187,7 @@ static gboolean autosave_timeout_cb(gpointer user_data)
         return FALSE;
 
     /* Store the current toplevel window for later use. */
-    toplevel = gnc_ui_get_toplevel();
+    toplevel = GTK_WIDGET (gnc_ui_get_main_window (NULL));
 
     /* Lookup preference to show an explanatory dialog, if wanted. */
     show_explanation =
@@ -211,7 +211,7 @@ static gboolean autosave_timeout_cb(gpointer user_data)
         else
             g_debug("autosave_timeout_cb: toplevel is not a GNC_WINDOW\n");
 
-        gnc_file_save();
+        gnc_file_save (GTK_WINDOW (toplevel));
 
         gnc_main_window_set_progressbar_window(NULL);
 

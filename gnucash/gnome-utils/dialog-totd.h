@@ -26,5 +26,6 @@
 #define DIALOG_TOTD_H
 
 void gnc_totd_dialog (GtkWindow *parent, gboolean startup);
+void gnc_totd_dialog_reparent (void);
 
 #endif

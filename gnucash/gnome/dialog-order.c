@@ -71,10 +71,10 @@ typedef enum
 
 struct _order_select_window
 {
-    QofBook *	book;
-    GncOwner *	owner;
-    QofQuery *	q;
-    GncOwner	owner_def;
+    QofBook  *book;
+    GncOwner *owner;
+    QofQuery *q;
+    GncOwner  owner_def;
 };
 
 struct _order_window
@@ -168,7 +168,7 @@ gnc_order_window_verify_ok (OrderWindow *ow)
     res = gtk_entry_get_text (GTK_ENTRY (ow->id_entry));
     if (g_strcmp0 (res, "") == 0)
     {
-        gnc_error_dialog (ow->dialog, "%s",
+        gnc_error_dialog (GTK_WINDOW (ow->dialog), "%s",
                           _("The Order must be given an ID."));
         return FALSE;
     }
@@ -178,7 +178,7 @@ gnc_order_window_verify_ok (OrderWindow *ow)
     res = gncOwnerGetName (&(ow->owner));
     if (res == NULL || g_strcmp0 (res, "") == 0)
     {
-        gnc_error_dialog (ow->dialog, "%s",
+        gnc_error_dialog (GTK_WINDOW (ow->dialog), "%s",
                           _("You need to supply Billing Information."));
         return FALSE;
     }
@@ -246,7 +246,7 @@ gnc_order_window_invoice_cb (GtkWidget *widget, gpointer data)
         return;
 
     /* Ok, go make an invoice */
-    gnc_invoice_search (NULL, &(ow->owner), ow->book);
+    gnc_invoice_search (gtk_window_get_transient_for(GTK_WINDOW(ow->dialog)), NULL, &(ow->owner), ow->book);
 
     /* refresh the window */
     gnc_order_update_window (ow);
@@ -274,7 +274,7 @@ gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data)
     /* Check that there is at least one Entry */
     if (gncOrderGetEntries (order) == NULL)
     {
-        gnc_error_dialog (ow->dialog, "%s",
+        gnc_error_dialog (GTK_WINDOW (ow->dialog), "%s",
                           _("The Order must have at least one Entry."));
         return;
     }
@@ -301,7 +301,7 @@ gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data)
                     "Are you sure you want to close it out before "
                     "you invoice all the entries?");
 
-        if (gnc_verify_dialog (ow->dialog, FALSE, "%s", message) == FALSE)
+        if (gnc_verify_dialog (GTK_WINDOW (ow->dialog), FALSE, "%s", message) == FALSE)
             return;
     }
 
@@ -539,7 +539,7 @@ find_handler (gpointer find_data, gpointer user_data)
 }
 
 static OrderWindow *
-gnc_order_new_window (QofBook *bookp, OrderDialogType type,
+gnc_order_new_window (GtkWindow *parent, QofBook *bookp, OrderDialogType type,
                       GncOrder *order, GncOwner *owner)
 {
     OrderWindow *ow;
@@ -573,6 +573,7 @@ gnc_order_new_window (QofBook *bookp, OrderDialogType type,
         if (ow)
         {
             gtk_window_present (GTK_WINDOW(ow->dialog));
+            gtk_window_set_transient_for (GTK_WINDOW(ow->dialog), parent);
             return(ow);
         }
     }
@@ -591,6 +592,7 @@ gnc_order_new_window (QofBook *bookp, OrderDialogType type,
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-order.glade", "order_entry_dialog");
     ow->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "order_entry_dialog"));
+    gtk_window_set_transient_for (GTK_WINDOW(ow->dialog), parent);
 
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(ow->dialog), "GncOrderDialog");
@@ -683,7 +685,7 @@ gnc_order_new_window (QofBook *bookp, OrderDialogType type,
 }
 
 static OrderWindow *
-gnc_order_window_new_order (QofBook *bookp, GncOwner *owner)
+gnc_order_window_new_order (GtkWindow *parent, QofBook *bookp, GncOwner *owner)
 {
     OrderWindow *ow;
     GtkBuilder *builder;
@@ -706,6 +708,7 @@ gnc_order_window_new_order (QofBook *bookp, GncOwner *owner)
     gnc_builder_add_from_file (builder, "dialog-order.glade", "new_order_dialog");
 
     ow->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "new_order_dialog"));
+    gtk_window_set_transient_for (GTK_WINDOW(ow->dialog), parent);
 
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(ow->dialog), "GncOrderDialog");
@@ -759,7 +762,7 @@ gnc_order_window_new_order (QofBook *bookp, GncOwner *owner)
 }
 
 OrderWindow *
-gnc_ui_order_edit (GncOrder *order)
+gnc_ui_order_edit (GtkWindow *parent, GncOrder *order)
 {
     OrderWindow *ow;
     OrderDialogType type;
@@ -773,14 +776,14 @@ gnc_ui_order_edit (GncOrder *order)
             type = VIEW_ORDER;
     }
 
-    ow = gnc_order_new_window (gncOrderGetBook(order), type, order,
+    ow = gnc_order_new_window (parent, gncOrderGetBook(order), type, order,
                                gncOrderGetOwner (order));
 
     return ow;
 }
 
 OrderWindow *
-gnc_ui_order_new (GncOwner *ownerp, QofBook *bookp)
+gnc_ui_order_new (GtkWindow *parent, GncOwner *ownerp, QofBook *bookp)
 {
     OrderWindow *ow;
     GncOwner owner;
@@ -806,7 +809,7 @@ gnc_ui_order_new (GncOwner *ownerp, QofBook *bookp)
     /* Make sure required options exist */
     if (!bookp) return NULL;
 
-    ow = gnc_order_window_new_order (bookp, &owner);
+    ow = gnc_order_window_new_order (parent, bookp, &owner);
 
     return ow;
 }
@@ -814,7 +817,7 @@ gnc_ui_order_new (GncOwner *ownerp, QofBook *bookp)
 /* Functions for order selection widgets */
 
 static void
-edit_order_cb (gpointer *order_p, gpointer user_data)
+edit_order_cb (GtkWindow *dialog, gpointer *order_p, gpointer user_data)
 {
     GncOrder *order;
 
@@ -823,20 +826,20 @@ edit_order_cb (gpointer *order_p, gpointer user_data)
     order = *order_p;
 
     if (order)
-        gnc_ui_order_edit (order);
+        gnc_ui_order_edit (dialog, order);
 
     return;
 }
 
 static gpointer
-new_order_cb (gpointer user_data)
+new_order_cb (GtkWindow *dialog, gpointer user_data)
 {
     struct _order_select_window *sw = user_data;
     OrderWindow *ow;
 
     g_return_val_if_fail (user_data, NULL);
 
-    ow = gnc_ui_order_new (sw->owner, sw->book);
+    ow = gnc_ui_order_new (dialog, sw->owner, sw->book);
     return ow_get_order (ow);
 }
 
@@ -852,7 +855,7 @@ free_order_cb (gpointer user_data)
 }
 
 GNCSearchWindow *
-gnc_order_search (GncOrder *start, GncOwner *owner, QofBook *book)
+gnc_order_search (GtkWindow *parent, GncOrder *start, GncOwner *owner, QofBook *book)
 {
     QofIdType type = GNC_ORDER_MODULE_NAME;
     struct _order_select_window *sw;
@@ -950,7 +953,7 @@ gnc_order_search (GncOrder *start, GncOwner *owner, QofBook *book)
     sw->book = book;
     sw->q = q;
 
-    return gnc_search_dialog_create (type, _("Find Order"),
+    return gnc_search_dialog_create (parent, type, _("Find Order"),
                                      params, columns, q, q2,
                                      buttons, NULL, new_order_cb,
                                      sw, free_order_cb, GNC_PREFS_GROUP_SEARCH,
@@ -958,7 +961,7 @@ gnc_order_search (GncOrder *start, GncOwner *owner, QofBook *book)
 }
 
 GNCSearchWindow *
-gnc_order_search_select (gpointer start, gpointer book)
+gnc_order_search_select (GtkWindow *parent, gpointer start, gpointer book)
 {
     GncOrder *o = start;
     GncOwner owner, *ownerp;
@@ -973,14 +976,14 @@ gnc_order_search_select (gpointer start, gpointer book)
     else
         gncOwnerInitCustomer (&owner, NULL); /* XXX */
 
-    return gnc_order_search (start, NULL, book);
+    return gnc_order_search (parent, start, NULL, book);
 }
 
 GNCSearchWindow *
-gnc_order_search_edit (gpointer start, gpointer book)
+gnc_order_search_edit (GtkWindow *parent, gpointer start, gpointer book)
 {
     if (start)
-        gnc_ui_order_edit (start);
+        gnc_ui_order_edit (parent, start);
 
     return NULL;
 }

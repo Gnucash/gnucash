@@ -73,6 +73,23 @@ OPTION (AUTOTOOLS_IN_DIST "Add autotools support to distribution tarballs." ON)
 # These are also settable from the command line in a similar way.
 
 SET(GNUCASH_BUILD_ID "" CACHE STRING "Overrides the GnuCash build identification (Build ID) which defaults to a description of the vcs commit from which gnucash is built. Distributions may want to insert a package management based version number instead")
+
+# Check that all of the absolute install paths are inside
+# ${CMAKE_INSTALL_PREFIX}. If they're not, disable binreloc as it
+# won't be able to find paths that aren't relative to the location of
+# the executable.
+foreach(install_dir ${CMAKE_INSTALL_FULL_BINDIR}
+    ${CMAKE_INSTALL_FULL_SYSCONFDIR} ${CMAKE_INSTALL_FULL_DATAROOTDIR}
+    ${CMAKE_INSTALL_FULL_DATADIR} ${CMAKE_INSTALL_FULL_LIBDIR})
+  string(FIND ${install_dir} ${CMAKE_INSTALL_PREFIX} in_prefix)
+  if(in_prefix EQUAL -1)
+    set(ENABLE_BINRELOC OFF)
+    message(WARNING "${install_dir} is set outside of the intallation prefix ${CMAKE_INSTALL_PREFIX}. That will break relocation so ENABLE_BINRELOC is set to off. With relocation disabled GnuCash will run only in its configured install location. You must set GNC_UNINSTALLED=1 and GNC_BUILDDIR=/path/to/builddir to run from the build directory. GnuCash will not run from a DESTDIR.")
+    break()
+  endif()
+endforeach()
+
+# GnuCash installs two files in ${CMAKE_INSTALL_SYSCONFDIR}
 SET(BINDIR ${CMAKE_INSTALL_BINDIR} CACHE STRING "user executables")
 SET(SYSCONFDIR ${CMAKE_INSTALL_SYSCONFDIR} CACHE STRING "read-only single-machine data")
 SET(DATAROOTDIR ${CMAKE_INSTALL_DATAROOTDIR} CACHE STRING "read-only arch.-independent data root")
@@ -82,7 +99,7 @@ SET(LOCALEDIR ${DATAROOTDIR}/locale CACHE STRING "locale-dependent data")
 SET(GNC_HELPDIR ${DATADIR} CACHE STRING "where to store help files")
 SET(DATADIRNAME share)
 SET(GNC_SYSTEM_XDG_DATA_DIRS /usr/local/share /usr/share)
-SET(GNC_DBD_DIR ${CMAKE_PREFIX_PATH}/lib/dbd CACHE PATH "specify location of libdbi drivers")
+SET(GNC_DBD_DIR ${CMAKE_PREFIX_LIBDIR}/dbd CACHE PATH "specify location of libdbi drivers")
 SET(PKGLIBDIR ${CMAKE_INSTALL_LIBDIR}/gnucash)
 SET(TEST_MYSQL_URL "" CACHE STRING "MySQL database URL for testing")
 SET(TEST_PGSQL_URL "" CACHE STRING "PgSQL database URL for testing")

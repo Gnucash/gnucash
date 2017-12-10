@@ -115,8 +115,8 @@ typedef enum
 
 struct _customer_select_window
 {
-    QofBook *	book;
-    QofQuery *	q;
+    QofBook  *book;
+    QofQuery *q;
 };
 
 struct _customer_window
@@ -279,14 +279,14 @@ static void gnc_ui_to_customer (CustomerWindow *cw, GncCustomer *cust)
     gnc_resume_gui_refresh ();
 }
 
-static gboolean check_edit_amount (GtkWidget *dialog, GtkWidget *amount,
+static gboolean check_edit_amount (GtkWidget *amount,
                                    gnc_numeric *min, gnc_numeric *max,
                                    const char * error_message)
 {
     if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (amount)))
     {
         if (error_message)
-            gnc_error_dialog (dialog, "%s", error_message);
+            gnc_error_dialog (gnc_ui_get_gtk_window (amount), "%s", error_message);
         return TRUE;
     }
     /* We've got a valid-looking number; check mix/max */
@@ -297,21 +297,21 @@ static gboolean check_edit_amount (GtkWidget *dialog, GtkWidget *amount,
                 (max && gnc_numeric_compare (val, *max) > 0))
         {
             if (error_message)
-                gnc_error_dialog (dialog, "%s", error_message);
+                gnc_error_dialog (gnc_ui_get_gtk_window (amount), "%s", error_message);
             return TRUE;
         }
     }
     return FALSE;
 }
 
-static gboolean check_entry_nonempty (GtkWidget *dialog, GtkWidget *entry,
+static gboolean check_entry_nonempty (GtkWidget *entry,
                                       const char * error_message)
 {
     const char *res = gtk_entry_get_text (GTK_ENTRY (entry));
     if (g_strcmp0 (res, "") == 0)
     {
         if (error_message)
-            gnc_error_dialog (dialog, "%s", error_message);
+            gnc_error_dialog (gnc_ui_get_gtk_window (entry), "%s", error_message);
         return TRUE;
     }
     return FALSE;
@@ -325,7 +325,7 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
     gchar *string;
 
     /* Check for valid company name */
-    if (check_entry_nonempty (cw->dialog, cw->company_entry,
+    if (check_entry_nonempty (cw->company_entry,
                               _("You must enter a company name. "
                                 "If this customer is an individual (and not a company) "
                                 "you should enter the same value for:\nIdentification "
@@ -333,13 +333,13 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
         return;
 
     /* Make sure we have an address */
-    if (check_entry_nonempty (cw->dialog, cw->addr1_entry, NULL) &&
-            check_entry_nonempty (cw->dialog, cw->addr2_entry, NULL) &&
-            check_entry_nonempty (cw->dialog, cw->addr3_entry, NULL) &&
-            check_entry_nonempty (cw->dialog, cw->addr4_entry, NULL))
+    if (check_entry_nonempty (cw->addr1_entry, NULL) &&
+            check_entry_nonempty (cw->addr2_entry, NULL) &&
+            check_entry_nonempty (cw->addr3_entry, NULL) &&
+            check_entry_nonempty (cw->addr4_entry, NULL))
     {
         const char *msg = _("You must enter a billing address.");
-        gnc_error_dialog (cw->dialog, "%s", msg);
+        gnc_error_dialog (gnc_ui_get_gtk_window (widget), "%s", msg);
         return;
     }
 
@@ -347,12 +347,12 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
     min = gnc_numeric_zero ();
     max = gnc_numeric_create (100, 1);
 
-    if (check_edit_amount (cw->dialog, cw->discount_amount, &min, &max,
+    if (check_edit_amount (cw->discount_amount, &min, &max,
                            _("Discount percentage must be between 0-100 "
                              "or you must leave it blank.")))
         return;
 
-    if (check_edit_amount (cw->dialog, cw->credit_amount, &min, NULL,
+    if (check_edit_amount (cw->credit_amount, &min, NULL,
                            _("Credit must be a positive amount or "
                              "you must leave it blank.")))
         return;
@@ -528,7 +528,7 @@ find_handler (gpointer find_data, gpointer user_data)
 }
 
 static CustomerWindow *
-gnc_customer_new_window (QofBook *bookp, GncCustomer *cust)
+gnc_customer_new_window (GtkWindow *parent, QofBook *bookp, GncCustomer *cust)
 {
     CustomerWindow *cw;
     GtkBuilder *builder;
@@ -549,6 +549,7 @@ gnc_customer_new_window (QofBook *bookp, GncCustomer *cust)
                                            find_handler, &customer_guid);
         if (cw)
         {
+            gtk_window_set_transient_for (GTK_WINDOW(cw->dialog), parent);
             gtk_window_present (GTK_WINDOW(cw->dialog));
             return(cw);
         }
@@ -574,6 +575,7 @@ gnc_customer_new_window (QofBook *bookp, GncCustomer *cust)
     gnc_builder_add_from_file (builder, "dialog-customer.glade", "taxtable_store");
     gnc_builder_add_from_file (builder, "dialog-customer.glade", "customer_dialog");
     cw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "customer_dialog"));
+    gtk_window_set_transient_for (GTK_WINDOW(cw->dialog), parent);
 
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(cw->dialog), "GncCustomerDialog");
@@ -752,26 +754,26 @@ gnc_customer_new_window (QofBook *bookp, GncCustomer *cust)
 }
 
 CustomerWindow *
-gnc_ui_customer_edit (GncCustomer *cust)
+gnc_ui_customer_edit (GtkWindow *parent, GncCustomer *cust)
 {
     CustomerWindow *cw;
 
     if (!cust) return NULL;
 
-    cw = gnc_customer_new_window (gncCustomerGetBook(cust), cust);
+    cw = gnc_customer_new_window (parent, gncCustomerGetBook(cust), cust);
 
     return cw;
 }
 
 CustomerWindow *
-gnc_ui_customer_new (QofBook *bookp)
+gnc_ui_customer_new (GtkWindow *parent, QofBook *bookp)
 {
     CustomerWindow *cw;
 
     /* Make sure required options exist */
     if (!bookp) return NULL;
 
-    cw = gnc_customer_new_window (bookp, NULL);
+    cw = gnc_customer_new_window (parent, bookp, NULL);
 
     return cw;
 }
@@ -779,7 +781,7 @@ gnc_ui_customer_new (QofBook *bookp)
 /* Functions for customer selection widgets */
 
 static void
-invoice_customer_cb (gpointer *cust_p, gpointer user_data)
+invoice_customer_cb (GtkWindow *dialog, gpointer *cust_p, gpointer user_data)
 {
     struct _customer_select_window *sw = user_data;
     GncOwner owner;
@@ -793,12 +795,12 @@ invoice_customer_cb (gpointer *cust_p, gpointer user_data)
         return;
 
     gncOwnerInitCustomer (&owner, cust);
-    gnc_invoice_search (NULL, &owner, sw->book);
+    gnc_invoice_search (dialog, NULL, &owner, sw->book);
     return;
 }
 
 static void
-order_customer_cb (gpointer *cust_p, gpointer user_data)
+order_customer_cb (GtkWindow *dialog, gpointer *cust_p, gpointer user_data)
 {
     struct _customer_select_window *sw = user_data;
     GncOwner owner;
@@ -812,12 +814,12 @@ order_customer_cb (gpointer *cust_p, gpointer user_data)
         return;
 
     gncOwnerInitCustomer (&owner, cust);
-    gnc_order_search (NULL, &owner, sw->book);
+    gnc_order_search (dialog, NULL, &owner, sw->book);
     return;
 }
 
 static void
-jobs_customer_cb (gpointer *cust_p, gpointer user_data)
+jobs_customer_cb (GtkWindow *dialog, gpointer *cust_p, gpointer user_data)
 {
     struct _customer_select_window *sw = user_data;
     GncOwner owner;
@@ -831,12 +833,12 @@ jobs_customer_cb (gpointer *cust_p, gpointer user_data)
         return;
 
     gncOwnerInitCustomer (&owner, cust);
-    gnc_job_search (NULL, &owner, sw->book);
+    gnc_job_search (dialog, NULL, &owner, sw->book);
     return;
 }
 
 static void
-payment_customer_cb (gpointer *cust_p, gpointer user_data)
+payment_customer_cb (GtkWindow *dialog, gpointer *cust_p, gpointer user_data)
 {
     struct _customer_select_window *sw = user_data;
     GncOwner owner;
@@ -850,12 +852,12 @@ payment_customer_cb (gpointer *cust_p, gpointer user_data)
         return;
 
     gncOwnerInitCustomer (&owner, cust);
-    gnc_ui_payment_new (&owner, sw->book);
+    gnc_ui_payment_new (dialog, &owner, sw->book);
     return;
 }
 
 static void
-edit_customer_cb (gpointer *cust_p, gpointer user_data)
+edit_customer_cb (GtkWindow *dialog, gpointer *cust_p, gpointer user_data)
 {
     GncCustomer *cust;
 
@@ -865,20 +867,20 @@ edit_customer_cb (gpointer *cust_p, gpointer user_data)
     if (!cust)
         return;
 
-    gnc_ui_customer_edit (cust);
+    gnc_ui_customer_edit (dialog, cust);
 
     return;
 }
 
 static gpointer
-new_customer_cb (gpointer user_data)
+new_customer_cb (GtkWindow *dialog, gpointer user_data)
 {
     struct _customer_select_window *sw = user_data;
     CustomerWindow *cw;
 
     g_return_val_if_fail (sw, NULL);
 
-    cw = gnc_ui_customer_new (sw->book);
+    cw = gnc_ui_customer_new (dialog, sw->book);
     return cw_get_customer (cw);
 }
 
@@ -894,7 +896,7 @@ free_userdata_cb (gpointer user_data)
 }
 
 GNCSearchWindow *
-gnc_customer_search (GncCustomer *start, QofBook *book)
+gnc_customer_search (GtkWindow *parent, GncCustomer *start, QofBook *book)
 {
     QofQuery *q, *q2 = NULL;
     QofIdType type = GNC_CUSTOMER_MODULE_NAME;
@@ -957,7 +959,7 @@ gnc_customer_search (GncCustomer *start, QofBook *book)
     sw->book = book;
     sw->q = q;
 
-    return gnc_search_dialog_create (type, _("Find Customer"),
+    return gnc_search_dialog_create (parent, type, _("Find Customer"),
                                      params, columns, q, q2, buttons, NULL,
                                      new_customer_cb, sw, free_userdata_cb,
                                      GNC_PREFS_GROUP_SEARCH, NULL,
@@ -965,18 +967,18 @@ gnc_customer_search (GncCustomer *start, QofBook *book)
 }
 
 GNCSearchWindow *
-gnc_customer_search_select (gpointer start, gpointer book)
+gnc_customer_search_select (GtkWindow *parent, gpointer start, gpointer book)
 {
     if (!book) return NULL;
 
-    return gnc_customer_search (start, book);
+    return gnc_customer_search (parent, start, book);
 }
 
 GNCSearchWindow *
-gnc_customer_search_edit (gpointer start, gpointer book)
+gnc_customer_search_edit (GtkWindow *parent, gpointer start, gpointer book)
 {
     if (start)
-        gnc_ui_customer_edit (start);
+        gnc_ui_customer_edit (parent, start);
 
     return NULL;
 }

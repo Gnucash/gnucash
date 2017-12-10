@@ -154,7 +154,7 @@ gnc_plugin_customer_import_showGUI(void)
 }
 
 static gchar *
-gnc_plugin_customer_import_getFilename(void)
+gnc_plugin_customer_import_getFilename (GtkWindow *parent)
 {
     // prepare file import dialog
     gchar *filename;
@@ -169,7 +169,8 @@ gnc_plugin_customer_import_getFilename(void)
     gtk_file_filter_set_name (filter, "text files (*.txt)");
     gtk_file_filter_add_pattern (filter, "*.txt");
     filters = g_list_append( filters, filter );
-    filename = gnc_file_dialog(_("Import Customers from csv"), filters, NULL, GNC_FILE_DIALOG_IMPORT);
+    filename = gnc_file_dialog(parent,
+                               _("Import Customers from csv"), filters, NULL, GNC_FILE_DIALOG_IMPORT);
 
     return filename;
 }
@@ -194,7 +195,7 @@ gnc_customer_import_gui_ok_cb (GtkWidget *widget, gpointer data)
     {
         gnc_customer_import_fix_customers (gui->store, &n_fixed, &n_deleted, gui->type);
         gnc_customer_import_create_customers (gui->store, gui->book, &n_customers_created, &n_customers_updated, gui->type);
-        gnc_info_dialog (gui->dialog, _("Import results:\n%i lines were ignored\n%i lines imported:\n   %u %s fixed\n   %u %s ignored (not fixable)\n\n   %u %s created\n   %u %s updated (based on id)"), \
+        gnc_info_dialog (GTK_WINDOW (gui->dialog), _("Import results:\n%i lines were ignored\n%i lines imported:\n   %u %s fixed\n   %u %s ignored (not fixable)\n\n   %u %s created\n   %u %s updated (based on id)"), \
                          stats.n_ignored, stats.n_imported, n_fixed, cv_type_text, n_deleted, cv_type_text, n_customers_created, cv_type_text, n_customers_updated, cv_type_text);
 
         if (stats.n_ignored > 0)
@@ -205,11 +206,11 @@ gnc_customer_import_gui_ok_cb (GtkWidget *widget, gpointer data)
     }
     else if (res == CI_RESULT_OPEN_FAILED)
     {
-        gnc_error_dialog (gui->dialog, _("The input file can not be opened."));
+        gnc_error_dialog (GTK_WINDOW (gui->dialog), _("The input file can not be opened."));
     }
     else if (res == CI_RESULT_ERROR_IN_REGEXP)
     {
-        //gnc_error_dialog (gui->dialog, "The regular expression is faulty:\n\n%s", stats.err->str);
+        //gnc_error_dialog (GTK_WINDOW (gui->dialog), "The regular expression is faulty:\n\n%s", stats.err->str);
     }
 }
 
@@ -256,7 +257,7 @@ void gnc_customer_import_gui_buttonOpen_cb (GtkWidget *widget, gpointer data)
     gchar *filename;
     CustomerImportGui *gui = data;
 
-    filename = gnc_plugin_customer_import_getFilename();
+    filename = gnc_plugin_customer_import_getFilename (gnc_ui_get_gtk_window (widget));
     if (filename)
     {
         gtk_entry_set_text( GTK_ENTRY(gui->entryFilename), filename );

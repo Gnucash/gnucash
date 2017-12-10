@@ -193,6 +193,14 @@ gnc_resolve_file_path (const gchar * filefrag)
 
 }
 
+gchar *gnc_file_path_relative_part (const gchar *prefix, const gchar *path)
+{
+    std::string p{path};
+    if (p.find(prefix) == 0)
+        return g_strdup(p.substr(strlen(prefix)).c_str());
+    return g_strdup(path);
+}
+
 /* Searches for a file fragment paths set via GNC_DOC_PATH environment
  * variable. If this variable is not set, fall back to search in
  * - a html directory in the local user's gnucash settings directory

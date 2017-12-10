@@ -158,7 +158,7 @@ gnc_entry_ledger_verify_acc_cell_ok (GncEntryLedger *ledger,
         const char *format = ("%s %s");
         const char *gen_msg = _("Invalid Entry: You need to supply an account in the right currency for this position.");
 
-        gnc_error_dialog (ledger->parent, format, gen_msg, cell_msg);
+        gnc_error_dialog (GTK_WINDOW (ledger->parent), format, gen_msg, cell_msg);
         return FALSE;
     }
     return TRUE;
@@ -762,7 +762,7 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
         {
             const char *format = _("The tax table %s does not exist. "
                                    "Would you like to create it?");
-            if (!gnc_verify_dialog (ledger->parent, TRUE, format, name))
+            if (!gnc_verify_dialog (GTK_WINDOW (ledger->parent), TRUE, format, name))
                 break;
         }
 
@@ -995,7 +995,7 @@ gnc_entry_ledger_check_close_internal (GtkWidget *parent,
     if (!gnc_entry_ledger_verify_can_save (ledger))
         return FALSE;
 
-    if (dontask || gnc_verify_dialog (parent, TRUE, "%s", message))
+    if (dontask || gnc_verify_dialog (GTK_WINDOW (parent), TRUE, "%s", message))
         gnc_entry_ledger_save (ledger, TRUE);
     else
         gnc_entry_ledger_cancel_cursor_changes (ledger);

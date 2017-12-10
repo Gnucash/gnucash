@@ -1087,7 +1087,7 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title, const gchar *text,
             gchar *msg = g_strdup_printf(
                              _("The PIN needs to be at least %d characters \n"
                                "long. Do you want to try again?"), min_len);
-            retval = gnc_verify_dialog(gui->parent, TRUE, "%s", msg);
+            retval = gnc_verify_dialog (GTK_WINDOW (gui->parent), TRUE, "%s", msg);
             g_free(msg);
             if (!retval)
                 break;
@@ -1589,7 +1589,7 @@ ggg_delete_event_cb(GtkWidget *widget, GdkEvent *event, gpointer user_data)
         const char *still_running_msg =
             _("The Online Banking job is still running; are you "
               "sure you want to cancel?");
-        if (!gnc_verify_dialog(gui->dialog, FALSE, "%s", still_running_msg))
+        if (!gnc_verify_dialog (GTK_WINDOW (gui->dialog), FALSE, "%s", still_running_msg))
             return FALSE;
 
         set_aborted(gui);

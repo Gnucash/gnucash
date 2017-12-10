@@ -85,7 +85,7 @@ gnc_dialog_query_run_callback (GNCDisplayViewButton *cb, gpointer item,
         return;
 
     if (cb->cb_fcn)
-        (cb->cb_fcn)(item, dqv->user_data);
+        (cb->cb_fcn)(GTK_WINDOW (dqv->dialog), item, dqv->user_data);
 }
 
 static void
@@ -177,7 +177,7 @@ gnc_dialog_query_view_close (GtkButton *button, DialogQueryView *dqv)
 /* PUBLIC INTERFACES */
 
 DialogQueryView *
-gnc_dialog_query_view_new (GList *param_list, Query *q)
+gnc_dialog_query_view_new (GtkWindow *parent, GList *param_list, Query *q)
 {
     GtkBuilder  *builder;
     DialogQueryView *dqv;
@@ -191,6 +191,7 @@ gnc_dialog_query_view_new (GList *param_list, Query *q)
     /* Grab the dialog, save the dialog info */
     dqv->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "query_view_dialog"));
     g_object_set_data (G_OBJECT (dqv->dialog), "dialog-info", dqv);
+    gtk_window_set_transient_for(GTK_WINDOW(dqv->dialog), parent);
 
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(dqv->dialog), "GncQueryViewDialog");
@@ -313,7 +314,7 @@ void gnc_dialog_query_view_destroy (DialogQueryView *dqv)
 }
 
 DialogQueryView *
-gnc_dialog_query_view_create (GList *param_list, Query *q,
+gnc_dialog_query_view_create (GtkWindow *parent, GList *param_list, Query *q,
                               const char *title, const char *label,
                               gboolean abs, gboolean inv_sort,
                               gint sort_column, GtkSortType order,
@@ -324,7 +325,7 @@ gnc_dialog_query_view_create (GList *param_list, Query *q,
     if (!param_list || !q)
         return NULL;
 
-    dqv = gnc_dialog_query_view_new (param_list, q);
+    dqv = gnc_dialog_query_view_new (parent, param_list, q);
     if (!dqv)
         return NULL;
 

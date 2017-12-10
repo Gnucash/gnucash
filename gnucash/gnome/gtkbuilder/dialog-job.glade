@@ -3,7 +3,6 @@
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkDialog" id="job_dialog">
-    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Job Dialog</property>
     <property name="resizable">False</property>
@@ -232,11 +231,11 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="labelrate">
+                          <object class="GtkLabel" id="label4">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
-                            <property name="label" translatable="yes">Rate</property>
+                            <property name="label" translatable="yes">Billing ID</property>
                             <property name="justify">right</property>
                           </object>
                           <packing>
@@ -246,11 +245,11 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="label4">
+                          <object class="GtkLabel" id="labelrate">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
-                            <property name="label" translatable="yes">Billing ID</property>
+                            <property name="label" translatable="yes">Rate</property>
                             <property name="justify">right</property>
                           </object>
                           <packing>
@@ -288,20 +287,6 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkBox" id="rate_entry">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <child>
-                              <placeholder/>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="GtkEntry" id="desc_entry">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -312,6 +297,20 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="rate_entry">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
                             <property name="position">1</property>
                           </packing>
                         </child>

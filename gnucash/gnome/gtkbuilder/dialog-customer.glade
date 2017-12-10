@@ -27,7 +27,6 @@
     </columns>
   </object>
   <object class="GtkDialog" id="customer_dialog">
-    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">New Customer</property>
     <property name="type_hint">dialog</property>

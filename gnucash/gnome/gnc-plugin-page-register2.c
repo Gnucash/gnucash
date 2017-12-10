@@ -678,7 +678,8 @@ gnc_plugin_page_register2_new (Account *account, gboolean subaccounts)
 
         if (guid_equal (xaccAccountGetGUID (account), xaccAccountGetGUID (old_account)))
         {
-            gnc_error_dialog (NULL, "%s",
+            GtkWindow *window = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (old_register_page)));
+            gnc_error_dialog (window, "%s",
                          _("You have tried to open an account in the new register while it is open in the old register."));
             return NULL;
         }
@@ -2624,7 +2625,7 @@ gnc_plugin_page_register2_cmd_print_check (GtkAction *action,
                     gnc_ui_print_check_dialog_create (window, splits);
                     g_list_free(splits);
                 }
-            }           
+            }
         }
     }
     else if (ledger_type == LD2_GL && model->type == SEARCH_LEDGER2)
@@ -2675,7 +2676,7 @@ gnc_plugin_page_register2_cmd_print_check (GtkAction *action,
     }
     else
     {
-        gnc_error_dialog (window, "%s",
+        gnc_error_dialog (GTK_WINDOW (window), "%s",
                          _("You can only print checks from a bank account register or search results."));
         LEAVE("Unsupported ledger type");
         return;
@@ -2769,7 +2770,7 @@ gnc_plugin_page_register2_cmd_find_account (GtkAction *action,
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER2(page));
 
-    window = gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page));
+    window = gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page));
 
     gnc_find_account_dialog (window, NULL);
 }
@@ -2869,6 +2870,7 @@ gnc_plugin_page_register2_cmd_void_transaction (GtkAction *action,
     }
     if (xaccTransHasReconciledSplits (trans) || xaccTransHasSplitsInState (trans, CREC))
     {
+        GtkWindow *window = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
         gnc_error_dialog (NULL, "%s", _("You cannot void a transaction with reconciled or cleared splits."));
         LEAVE("trans with reconciled splits");
         return;
@@ -4032,7 +4034,7 @@ gnc_plugin_page_register2_event_handler (QofInstance *entity,
     ENTER("entity %p of type %d, page %p, event data %p",
           entity, event_type, page, ed);
 
-    window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page));
+    window = gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page));
 
     if (GNC_IS_ACCOUNT(entity))
     {

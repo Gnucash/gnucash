@@ -46,6 +46,7 @@
 #include "dialog-employee.h"
 #include "dialog-invoice.h"
 #include "dialog-payment.h"
+#include "business-gnome-utils.h"
 
 #define DIALOG_NEW_EMPLOYEE_CM_CLASS "dialog-new-employee"
 #define DIALOG_EDIT_EMPLOYEE_CM_CLASS "dialog-edit-employee"
@@ -67,8 +68,8 @@ typedef enum
 
 struct _employee_select_window
 {
-    QofBook *	book;
-    QofQuery *	q;
+    QofBook  *book;
+    QofQuery *q;
 };
 
 struct _employee_window
@@ -174,41 +175,14 @@ static void gnc_ui_to_employee (EmployeeWindow *ew, GncEmployee *employee)
     gnc_resume_gui_refresh ();
 }
 
-#if 0
-static gboolean check_edit_amount (GtkWidget *dialog, GtkWidget *amount,
-                                   gnc_numeric *min, gnc_numeric *max,
-                                   const char * error_message)
-{
-    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (amount)))
-    {
-        if (error_message)
-            gnc_error_dialog (dialog, error_message);
-        return TRUE;
-    }
-    /* We've got a valid-looking number; check mix/max */
-    if (min || max)
-    {
-        gnc_numeric val = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (amount));
-        if ((min && gnc_numeric_compare (*min, val) > 0) ||
-                (max && gnc_numeric_compare (val, *max) > 0))
-        {
-            if (error_message)
-                gnc_error_dialog (dialog, error_message);
-            return TRUE;
-        }
-    }
-    return FALSE;
-}
-#endif
-
-static gboolean check_entry_nonempty (GtkWidget *dialog, GtkWidget *entry,
+static gboolean check_entry_nonempty (GtkWidget *entry,
                                       const char * error_message)
 {
     const char *res = gtk_entry_get_text (GTK_ENTRY (entry));
     if (g_strcmp0 (res, "") == 0)
     {
         if (error_message)
-            gnc_error_dialog (dialog, "%s", error_message);
+            gnc_error_dialog (gnc_ui_get_gtk_window(entry), "%s", error_message);
         return TRUE;
     }
     return FALSE;
@@ -221,23 +195,23 @@ gnc_employee_window_ok_cb (GtkWidget *widget, gpointer data)
     gchar *string;
 
     /* Check for valid username */
-    if (check_entry_nonempty (ew->dialog, ew->username_entry,
+    if (check_entry_nonempty (ew->username_entry,
                               _("You must enter a username.")))
         return;
 
     /* Check for valid username */
-    if (check_entry_nonempty (ew->dialog, ew->name_entry,
+    if (check_entry_nonempty (ew->name_entry,
                               _("You must enter the employee's name.")))
         return;
 
     /* Make sure we have an address */
-    if (check_entry_nonempty (ew->dialog, ew->addr1_entry, NULL) &&
-            check_entry_nonempty (ew->dialog, ew->addr2_entry, NULL) &&
-            check_entry_nonempty (ew->dialog, ew->addr3_entry, NULL) &&
-            check_entry_nonempty (ew->dialog, ew->addr4_entry, NULL))
+    if (check_entry_nonempty (ew->addr1_entry, NULL) &&
+            check_entry_nonempty (ew->addr2_entry, NULL) &&
+            check_entry_nonempty (ew->addr3_entry, NULL) &&
+            check_entry_nonempty (ew->addr4_entry, NULL))
     {
         const char *msg = _("You must enter an address.");
-        gnc_error_dialog (ew->dialog, "%s", msg);
+        gnc_error_dialog (gnc_ui_get_gtk_window (widget), "%s", msg);
         return;
     }
 
@@ -391,7 +365,8 @@ find_handler (gpointer find_data, gpointer user_data)
 }
 
 static EmployeeWindow *
-gnc_employee_new_window (QofBook *bookp,
+gnc_employee_new_window (GtkWindow *parent,
+                         QofBook *bookp,
                          GncEmployee *employee)
 {
     EmployeeWindow *ew;
@@ -415,6 +390,7 @@ gnc_employee_new_window (QofBook *bookp,
                                            find_handler, &employee_guid);
         if (ew)
         {
+            gtk_window_set_transient_for (GTK_WINDOW(ew->dialog), parent);
             gtk_window_present (GTK_WINDOW(ew->dialog));
             return(ew);
         }
@@ -437,6 +413,7 @@ gnc_employee_new_window (QofBook *bookp,
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-employee.glade", "employee_dialog");
     ew->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "employee_dialog"));
+    gtk_window_set_transient_for (GTK_WINDOW(ew->dialog), parent);
 
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(ew->dialog), "GncEmployeeDialog");
@@ -597,26 +574,26 @@ gnc_employee_new_window (QofBook *bookp,
 }
 
 EmployeeWindow *
-gnc_ui_employee_new (QofBook *bookp)
+gnc_ui_employee_new (GtkWindow *parent, QofBook *bookp)
 {
     EmployeeWindow *ew;
 
     /* Make sure required options exist */
     if (!bookp) return NULL;
 
-    ew = gnc_employee_new_window (bookp, NULL);
+    ew = gnc_employee_new_window (parent, bookp, NULL);
 
     return ew;
 }
 
 EmployeeWindow *
-gnc_ui_employee_edit (GncEmployee *employee)
+gnc_ui_employee_edit (GtkWindow *parent, GncEmployee *employee)
 {
     EmployeeWindow *ew;
 
     if (!employee) return NULL;
 
-    ew = gnc_employee_new_window (gncEmployeeGetBook(employee), employee);
+    ew = gnc_employee_new_window (parent, gncEmployeeGetBook(employee), employee);
 
     return ew;
 }
@@ -624,7 +601,7 @@ gnc_ui_employee_edit (GncEmployee *employee)
 /* Functions for employee selection widgets */
 
 static void
-invoice_employee_cb (gpointer *employee_p, gpointer user_data)
+invoice_employee_cb (GtkWindow *dialog, gpointer *employee_p, gpointer user_data)
 {
     struct _employee_select_window *sw = user_data;
     GncOwner owner;
@@ -638,12 +615,12 @@ invoice_employee_cb (gpointer *employee_p, gpointer user_data)
         return;
 
     gncOwnerInitEmployee (&owner, employee);
-    gnc_invoice_search (NULL, &owner, sw->book);
+    gnc_invoice_search (dialog, NULL, &owner, sw->book);
     return;
 }
 
 static void
-payment_employee_cb (gpointer *employee_p, gpointer user_data)
+payment_employee_cb (GtkWindow *dialog, gpointer *employee_p, gpointer user_data)
 {
     struct _employee_select_window *sw = user_data;
     GncOwner owner;
@@ -657,12 +634,12 @@ payment_employee_cb (gpointer *employee_p, gpointer user_data)
         return;
 
     gncOwnerInitEmployee (&owner, employee);
-    gnc_ui_payment_new (&owner, sw->book);
+    gnc_ui_payment_new (dialog, &owner, sw->book);
     return;
 }
 
 static void
-edit_employee_cb (gpointer *employee_p, gpointer user_data)
+edit_employee_cb (GtkWindow *dialog, gpointer *employee_p, gpointer user_data)
 {
     GncEmployee *employee;
 
@@ -673,19 +650,19 @@ edit_employee_cb (gpointer *employee_p, gpointer user_data)
     if (!employee)
         return;
 
-    gnc_ui_employee_edit (employee);
+    gnc_ui_employee_edit (dialog, employee);
     return;
 }
 
 static gpointer
-new_employee_cb (gpointer user_data)
+new_employee_cb (GtkWindow *dialog, gpointer user_data)
 {
     struct _employee_select_window *sw = user_data;
     EmployeeWindow *ew;
 
     g_return_val_if_fail (user_data, NULL);
 
-    ew = gnc_ui_employee_new (sw->book);
+    ew = gnc_ui_employee_new (dialog, sw->book);
     return ew_get_employee (ew);
 }
 
@@ -701,7 +678,7 @@ free_employee_cb (gpointer user_data)
 }
 
 GNCSearchWindow *
-gnc_employee_search (GncEmployee *start, QofBook *book)
+gnc_employee_search (GtkWindow *parent, GncEmployee *start, QofBook *book)
 {
     QofIdType type = GNC_EMPLOYEE_MODULE_NAME;
     struct _employee_select_window *sw;
@@ -758,7 +735,7 @@ gnc_employee_search (GncEmployee *start, QofBook *book)
     sw->book = book;
     sw->q = q;
 
-    return gnc_search_dialog_create (type, _("Find Employee"),
+    return gnc_search_dialog_create (parent, type, _("Find Employee"),
                                      params, columns, q, q2,
                                      buttons, NULL, new_employee_cb,
                                      sw, free_employee_cb,
@@ -767,18 +744,18 @@ gnc_employee_search (GncEmployee *start, QofBook *book)
 }
 
 GNCSearchWindow *
-gnc_employee_search_select (gpointer start, gpointer book)
+gnc_employee_search_select (GtkWindow *parent, gpointer start, gpointer book)
 {
     if (!book) return NULL;
 
-    return gnc_employee_search (start, book);
+    return gnc_employee_search (parent, start, book);
 }
 
 GNCSearchWindow *
-gnc_employee_search_edit (gpointer start, gpointer book)
+gnc_employee_search_edit (GtkWindow *parent, gpointer start, gpointer book)
 {
     if (start)
-        gnc_ui_employee_edit (start);
+        gnc_ui_employee_edit (parent, start);
 
     return NULL;
 }

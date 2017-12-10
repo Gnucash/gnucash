@@ -452,7 +452,7 @@ gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
         GList *comm_list = gnc_prices_dialog_get_commodities (pdb_dialog->remove_view);
 
         // Are you sure you want to delete the entries and we have commodities
-        if ((g_list_length (comm_list) != 0) && (gnc_verify_dialog (pdb_dialog->remove_dialog, FALSE, fmt, NULL)))
+        if ((g_list_length (comm_list) != 0) && (gnc_verify_dialog (GTK_WINDOW (pdb_dialog->remove_dialog), FALSE, fmt, NULL)))
         {
             Timespec last_ts;
             GDate fiscal_end_date = get_fiscal_end_date ();
@@ -550,7 +550,7 @@ gnc_prices_dialog_get_quotes_clicked (GtkWidget *widget, gpointer data)
     }
 
     scm_window =  SWIG_NewPointerObj(pdb_dialog->dialog,
-                                     SWIG_TypeQuery("_p_GtkWidget"), 0);
+                                     SWIG_TypeQuery("_p_GtkWindow"), 0);
 
     gnc_set_busy_cursor (NULL, TRUE);
     scm_call_2 (quotes_func, scm_window, book_scm);

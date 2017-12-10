@@ -1365,7 +1365,7 @@ gnc_ui_qif_import_close_cb(GtkAssistant *gtkassistant, gpointer user_data)
     if (!wind->acct_tree_found)
     {
         qof_book_mark_session_dirty(gnc_get_current_book());
-        gnc_ui_file_access_for_save_as();
+        gnc_ui_file_access_for_save_as (gnc_ui_get_main_window (GTK_WIDGET (gtkassistant)));
     }
 
     gnc_close_gui_component_by_data( ASSISTANT_QIF_IMPORT_CM_CLASS, wind );
@@ -1535,11 +1535,11 @@ gnc_ui_qif_import_load_file_complete (GtkAssistant  *assistant,
 
     /* Validate the chosen filename. */
     if (strlen(path_to_load) == 0)
-        gnc_error_dialog(wind->window, "%s", _("Please select a file to load."));
+        gnc_error_dialog (GTK_WINDOW (assistant), "%s", _("Please select a file to load."));
     else if (g_access(path_to_load, R_OK) < 0)
-        gnc_error_dialog(wind->window, "%s",
-                         _("File not found or read permission denied. "
-                           "Please select another file."));
+        gnc_error_dialog (GTK_WINDOW (assistant), "%s",
+                          _("File not found or read permission denied. "
+                            "Please select another file."));
     else
     {
         SCM qif_file_loaded = scm_c_eval_string("qif-dialog:qif-file-loaded?");
@@ -1548,9 +1548,9 @@ gnc_ui_qif_import_load_file_complete (GtkAssistant  *assistant,
         if (scm_call_2(qif_file_loaded,
                        scm_from_locale_string(path_to_load ? path_to_load : ""),
                        wind->imported_files) == SCM_BOOL_T)
-            gnc_error_dialog(wind->window, "%s",
-                             _("That QIF file is already loaded. "
-                               "Please select another file."));
+            gnc_error_dialog (GTK_WINDOW (assistant), "%s",
+                              _("That QIF file is already loaded. "
+                                "Please select another file."));
         else
         {
             /* Passed all checks; proceed to the next page. */
@@ -1617,7 +1617,8 @@ gnc_ui_qif_import_select_file_cb(GtkButton * button,
     filter = gtk_file_filter_new();
     gtk_file_filter_set_name(filter, "*.qif");
     gtk_file_filter_add_pattern(filter, "*.[Qq][Ii][Ff]");
-    new_file_name = gnc_file_dialog(_("Select QIF File"),
+    new_file_name = gnc_file_dialog(gnc_ui_get_gtk_window (GTK_WIDGET (button)),
+                                    _("Select QIF File"),
                                     g_list_prepend (NULL, filter),
                                     default_dir,
                                     GNC_FILE_DIALOG_IMPORT);
@@ -1703,8 +1704,9 @@ gnc_ui_qif_import_load_progress_start_cb(GtkButton * button,
         gpointer user_data)
 {
     QIFImportWindow   *wind = user_data;
-    gint num = gtk_assistant_get_current_page (GTK_ASSISTANT(wind->window));
-    GtkWidget *page = gtk_assistant_get_nth_page (GTK_ASSISTANT(wind->window), num);
+    GtkAssistant *assistant = GTK_ASSISTANT(wind->window);
+    gint num = gtk_assistant_get_current_page (assistant);
+    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     const gchar * path_to_load;
 
@@ -1784,8 +1786,8 @@ gnc_ui_qif_import_load_progress_start_cb(GtkButton * button,
                                        _( "An error occurred while loading the QIF file."));
         gnc_progress_dialog_set_sub(wind->load_progress, _("Failed"));
         gnc_progress_dialog_reset_value(wind->load_progress);
-        gnc_error_dialog(wind->window, "%s",
-                         _( "An error occurred while loading the QIF file."));
+        gnc_error_dialog (GTK_WINDOW (assistant), "%s",
+                          _( "An error occurred while loading the QIF file."));
         /* FIXME: How should we request that the user report this problem? */
 
         wind->busy = FALSE;
@@ -1863,8 +1865,8 @@ gnc_ui_qif_import_load_progress_start_cb(GtkButton * button,
                                        _( "A bug was detected while parsing the QIF file."));
         gnc_progress_dialog_set_sub(wind->load_progress, _("Failed"));
         gnc_progress_dialog_reset_value(wind->load_progress);
-        gnc_error_dialog(wind->window, "%s",
-                         _( "A bug was detected while parsing the QIF file."));
+        gnc_error_dialog (GTK_WINDOW (assistant), "%s",
+                          _( "A bug was detected while parsing the QIF file."));
         /* FIXME: How should we request that the user report this problem? */
 
         wind->busy = FALSE;
@@ -1927,7 +1929,7 @@ gnc_ui_qif_import_load_progress_start_cb(GtkButton * button,
     }
 
     /* Enable the assistant Forward button */
-    gtk_assistant_set_page_complete (GTK_ASSISTANT(wind->window), page, TRUE);
+    gtk_assistant_set_page_complete (assistant, page, TRUE);
 
     /* Set Pause and Start buttons */
     gtk_widget_set_sensitive(wind->load_pause, FALSE);
@@ -1947,7 +1949,7 @@ gnc_ui_qif_import_load_progress_start_cb(GtkButton * button,
         wind->busy = FALSE;
 
         /* Auto step to next page */
-        gtk_assistant_set_current_page (GTK_ASSISTANT(wind->window), num + 1);
+        gtk_assistant_set_current_page (assistant, num + 1);
     }
 }
 
@@ -2689,14 +2691,14 @@ gnc_ui_qif_import_comm_valid (GtkAssistant *assistant,
 
     if (!name || (name[0] == 0))
     {
-        gnc_warning_dialog(wind->window, "%s",
+        gnc_warning_dialog(GTK_WINDOW (assistant), "%s",
                            _("Enter a name or short description, such as \"Red Hat Stock\"."));
         g_free(name_space);
         return FALSE;
     }
     else if (!mnemonic || (mnemonic[0] == 0))
     {
-        gnc_warning_dialog(wind->window, "%s",
+        gnc_warning_dialog(GTK_WINDOW (assistant), "%s",
                            _("Enter the ticker symbol or other well known abbreviation, such as"
                              " \"RHT\". If there isn't one, or you don't know it, create your own."));
         g_free(name_space);
@@ -2704,7 +2706,7 @@ gnc_ui_qif_import_comm_valid (GtkAssistant *assistant,
     }
     else if (!name_space || (name_space[0] == 0))
     {
-        gnc_warning_dialog(wind->window, "%s",
+        gnc_warning_dialog(GTK_WINDOW (assistant), "%s",
                            _("Select the exchange on which the symbol is traded, or select the"
                              " type of investment (such as FUND for mutual funds.) If you don't"
                              " see your exchange or an appropriate investment type, you can"
@@ -2724,7 +2726,7 @@ gnc_ui_qif_import_comm_valid (GtkAssistant *assistant,
     if (gnc_commodity_namespace_is_iso(name_space) &&
             !gnc_commodity_table_lookup(table, name_space, mnemonic))
     {
-        gnc_warning_dialog(wind->window, "%s",
+        gnc_warning_dialog(GTK_WINDOW (assistant), "%s",
                            _("You must enter an existing national "
                              "currency or enter a different type."));
 
@@ -2821,8 +2823,9 @@ gnc_ui_qif_import_convert_progress_start_cb(GtkButton * button,
         gpointer user_data)
 {
     QIFImportWindow   *wind = user_data;
-    gint num = gtk_assistant_get_current_page (GTK_ASSISTANT(wind->window));
-    GtkWidget *page = gtk_assistant_get_nth_page (GTK_ASSISTANT(wind->window), num);
+    GtkAssistant *assistant = GTK_ASSISTANT (wind->window);
+    gint num = gtk_assistant_get_current_page (assistant);
+    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     SCM qif_to_gnc      = scm_c_eval_string("qif-import:qif-to-gnc");
     SCM find_duplicates = scm_c_eval_string("gnc:account-tree-find-duplicates");
@@ -2904,8 +2907,8 @@ gnc_ui_qif_import_convert_progress_start_cb(GtkButton * button,
                                        _( "A bug was detected while converting the QIF data."));
         gnc_progress_dialog_set_sub(wind->convert_progress, _("Failed"));
         gnc_progress_dialog_reset_value(wind->convert_progress);
-        gnc_error_dialog(wind->window, "%s",
-                         _( "A bug was detected while converting the QIF data."));
+        gnc_error_dialog (GTK_WINDOW (assistant), "%s",
+                          _( "A bug was detected while converting the QIF data."));
         /* FIXME: How should we request that the user report this problem? */
 
         wind->busy = FALSE;
@@ -2972,8 +2975,8 @@ gnc_ui_qif_import_convert_progress_start_cb(GtkButton * button,
                                        _( "A bug was detected while detecting duplicates."));
         gnc_progress_dialog_set_sub(wind->convert_progress, _("Failed"));
         gnc_progress_dialog_reset_value(wind->convert_progress);
-        gnc_error_dialog(wind->window, "%s",
-                         _( "A bug was detected while detecting duplicates."));
+        gnc_error_dialog (GTK_WINDOW (assistant), "%s",
+                          _( "A bug was detected while detecting duplicates."));
         /* FIXME: How should we request that the user report this problem? */
 
         gtk_widget_set_sensitive(wind->convert_pause, FALSE);
@@ -2982,7 +2985,7 @@ gnc_ui_qif_import_convert_progress_start_cb(GtkButton * button,
     }
 
     /* Enable the Assistant Forward Button */
-    gtk_assistant_set_page_complete (GTK_ASSISTANT(wind->window), page, TRUE);
+    gtk_assistant_set_page_complete (assistant, page, TRUE);
 
     /* Set Pause and Start buttons */
     gtk_widget_set_sensitive(wind->convert_pause, FALSE);
@@ -3000,7 +3003,7 @@ gnc_ui_qif_import_convert_progress_start_cb(GtkButton * button,
 
         /* If the log is empty, move on to the next page automatically. */
         if (gtk_text_buffer_get_char_count(gtk_text_view_get_buffer(GTK_TEXT_VIEW(wind->convert_log))) == 0)
-            gtk_assistant_set_current_page (GTK_ASSISTANT(wind->window), num + 1);
+            gtk_assistant_set_current_page (assistant, num + 1);
     }
 }
 
@@ -3184,7 +3187,7 @@ gnc_ui_qif_import_end_page_prepare (GtkAssistant *assistant,
  * Invoked when the "Apply" button is clicked on the final page.
  ********************************************************************/
 void
-gnc_ui_qif_import_finish_cb (GtkAssistant *gtkassistant,
+gnc_ui_qif_import_finish_cb (GtkAssistant *assistant,
                              gpointer user_data)
 {
     QIFImportWindow * wind = user_data;
@@ -3219,7 +3222,7 @@ gnc_ui_qif_import_finish_cb (GtkAssistant *gtkassistant,
                            SCM_EOL);
 
     if (scm_result == SCM_BOOL_F)
-        gnc_warning_dialog(wind->window, "%s",
+        gnc_warning_dialog(GTK_WINDOW (assistant), "%s",
                            _("GnuCash was unable to save your mapping preferences."));
 
     /* Open an account tab in the main window if one doesn't exist already. */
@@ -3617,8 +3620,7 @@ gnc_ui_qif_import_assistant_make(QIFImportWindow *qif_win)
     get_assistant_widgets(qif_win, builder);
 
     /* Make this window stay on top */
-    gtk_window_set_transient_for (GTK_WINDOW (qif_win->window),
-				  GTK_WINDOW (gnc_ui_get_toplevel ()));
+    gtk_window_set_transient_for (GTK_WINDOW (qif_win->window), gnc_ui_get_main_window(NULL));
 
     /* Build the details of all GtkTreeView widgets. */
     build_views(qif_win);

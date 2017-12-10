@@ -256,7 +256,7 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
     }
 
     if ( ! gnc_numeric_zero_p( runningBalance )
-            && !gnc_verify_dialog( (GtkWidget *)sxfti->dialog,
+            && !gnc_verify_dialog (GTK_WINDOW (sxfti->dialog),
                                    FALSE, "%s",
                                    _("The Scheduled Transaction Editor "
                                      "cannot automatically balance "
@@ -553,7 +553,7 @@ sxftd_ok_clicked(SXFromTransInfo *sxfti)
     {
         if ( sx_error == SXFTD_ERRNO_UNBALANCED_XACTION )
         {
-            gnc_error_dialog( gnc_ui_get_toplevel(), "%s",
+            gnc_error_dialog (GTK_WINDOW (sxfti->dialog), "%s",
                               _( "The Scheduled Transaction is unbalanced. "
                                  "You are strongly encouraged to correct this situation." ) );
         }
@@ -781,7 +781,7 @@ gnc_sx_create_from_trans( Transaction *trans )
     {
         if ( errno == SXFTD_ERRNO_OPEN_XACTION )
         {
-            gnc_error_dialog( gnc_ui_get_toplevel(), "%s",
+            gnc_error_dialog (NULL, "%s",
                               _( "Cannot create a Scheduled Transaction "
                                  "from a Transaction currently "
                                  "being edited. Please Enter the "

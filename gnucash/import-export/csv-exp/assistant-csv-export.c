@@ -146,7 +146,7 @@ csv_export_file_chooser_confirm_cb (GtkWidget *button, CsvExportInfo *info)
                                    "Are you sure you want to overwrite it?");
 
             /* if user says cancel, we should break out */
-            if (!gnc_verify_dialog (NULL, FALSE, format, file_name))
+            if (!gnc_verify_dialog (GTK_WINDOW (assistant), FALSE, format, file_name))
                 return;
         }
 

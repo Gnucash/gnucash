@@ -646,7 +646,7 @@ inner_main (void *closure, int argc, char **argv)
     if (!nofile && (fn = get_file_to_load()))
     {
         gnc_update_splash_screen(_("Loading data..."), GNC_SPLASH_PERCENTAGE_UNKNOWN);
-        gnc_file_open_file(fn, /*open_readonly*/ FALSE);
+        gnc_file_open_file(gnc_get_splash_screen(), fn, /*open_readonly*/ FALSE);
         g_free(fn);
     }
     else if (gnc_prefs_get_bool(GNC_PREFS_GROUP_NEW_USER, GNC_PREF_FIRST_STARTUP))

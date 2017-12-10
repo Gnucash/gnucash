@@ -398,7 +398,7 @@ calc_value(FinCalcDialog *fcd, FinCalcValue value)
     {
         GtkWidget *entry;
 
-        gnc_error_dialog(fcd->dialog, "%s", string);
+        gnc_error_dialog (GTK_WINDOW (fcd->dialog), "%s", string);
         if (error_item == 0)
             entry = fcd->amounts[0];
         else

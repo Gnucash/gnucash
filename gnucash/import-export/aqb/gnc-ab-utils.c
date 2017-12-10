@@ -715,7 +715,7 @@ txn_transaction_cb(const AB_TRANSACTION *element, gpointer user_data)
         {
             /* Oops, no job, probably not supported by bank */
             if (gnc_verify_dialog(
-                        NULL, FALSE, "%s",
+                        GTK_WINDOW (data->parent), FALSE, "%s",
                         _("The backend found an error during the preparation "
                           "of the job. It is not possible to execute this job. \n"
                           "\n"
@@ -726,7 +726,8 @@ txn_transaction_cb(const AB_TRANSACTION *element, gpointer user_data)
                           "\n"
                           "Do you want to enter the job again?")))
             {
-                gnc_error_dialog(NULL, "Sorry, not implemented yet. Please check the console or trace file logs to see which job was rejected.");
+                gnc_error_dialog (GTK_WINDOW (data->parent),
+                                  "Sorry, not implemented yet. Please check the console or trace file logs to see which job was rejected.");
             }
         }
         else
@@ -807,7 +808,7 @@ txn_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
 
     if (!(data->awaiting & AWAIT_TRANSACTIONS))
     {
-        if (gnc_verify_dialog(data->parent, TRUE, "%s",
+        if (gnc_verify_dialog (GTK_WINDOW (data->parent), TRUE, "%s",
                               _("The bank has sent transaction information "
                                 "in its response."
                                 "\n"
@@ -834,7 +835,7 @@ txn_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
         data->ab_acc = gnc_ab_get_ab_account(data->api, gnc_acc);
         if (!data->ab_acc)
         {
-            gnc_error_dialog(NULL, "%s",
+            gnc_error_dialog(GTK_WINDOW (data->parent), "%s",
                              _("No Online Banking account found for this "
                                "gnucash account. These transactions will "
                                "not be executed by Online Banking."));
@@ -911,7 +912,7 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
             return NULL;
 
         /* Ask the user whether to import unawaited non-zero balance */
-        if (gnc_verify_dialog(data->parent, TRUE, "%s",
+        if (gnc_verify_dialog (GTK_WINDOW (data->parent), TRUE, "%s",
                               _("The bank has sent balance information "
                                 "in its response."
                                 "\n"
@@ -1047,7 +1048,7 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
         {
             const char *message3 = _("Reconcile account now?");
 
-            show_recn_window = gnc_verify_dialog(data->parent, TRUE, "%s\n%s\n%s",
+            show_recn_window = gnc_verify_dialog (GTK_WINDOW (data->parent), TRUE, "%s\n%s\n%s",
                                                  message1, message2, message3);
         }
         g_free(booked_str);
@@ -1110,7 +1111,7 @@ gnc_ab_import_context(AB_IMEXPORTER_CONTEXT *context,
         {
             const char* subject = AB_Message_GetSubject(bankmsg);
             const char* text = AB_Message_GetText(bankmsg);
-            gnc_info_dialog(data->parent, "%s\n%s %s\n%s",
+            gnc_info_dialog(GTK_WINDOW (data->parent), "%s\n%s %s\n%s",
                             _("The bank has sent a message in its response."),
                             _("Subject:"),
                             subject,

@@ -31,11 +31,11 @@ typedef struct _customer_window CustomerWindow;
 #include "dialog-search.h"
 
 /* Functions to create and edit a customer */
-CustomerWindow * gnc_ui_customer_edit (GncCustomer *cust);
-CustomerWindow * gnc_ui_customer_new (QofBook *book);
+CustomerWindow * gnc_ui_customer_edit (GtkWindow *parent, GncCustomer *cust);
+CustomerWindow * gnc_ui_customer_new (GtkWindow *parent, QofBook *book);
 
 /* Search for customers */
-GNCSearchWindow *gnc_customer_search (GncCustomer *start, QofBook *book);
+GNCSearchWindow *gnc_customer_search (GtkWindow *parent, GncCustomer *start, QofBook *book);
 
 /*
  * These callbacks are for use with the gnc_general_search widget
@@ -43,7 +43,7 @@ GNCSearchWindow *gnc_customer_search (GncCustomer *start, QofBook *book);
  * select() provides a Select Dialog and returns it.
  * edit() opens the existing customer for editing and returns NULL.
  */
-GNCSearchWindow * gnc_customer_search_select (gpointer start, gpointer book);
-GNCSearchWindow * gnc_customer_search_edit (gpointer start, gpointer book);
+GNCSearchWindow * gnc_customer_search_select (GtkWindow *parent, gpointer start, gpointer book);
+GNCSearchWindow * gnc_customer_search_edit (GtkWindow *parent, gpointer start, gpointer book);
 
 #endif /* GNC_DIALOG_CUSTOMER_H_ */

@@ -134,7 +134,7 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
     if (!ab_acc)
     {
         g_warning("gnc_ab_gettrans: No AqBanking account found");
-        gnc_error_dialog(parent, _("No valid online banking account assigned."));
+        gnc_error_dialog (GTK_WINDOW (parent), _("No valid online banking account assigned."));
         goto cleanup;
     }
 
@@ -157,7 +157,7 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
     {
         g_warning("gnc_ab_gettrans: JobGetTransactions not available for this "
                   "account");
-        gnc_error_dialog(parent, _("Online action \"Get Transactions\" not available for this account."));
+        gnc_error_dialog (GTK_WINDOW (parent), _("Online action \"Get Transactions\" not available for this account."));
         goto cleanup;
     }
     AB_JobGetTransactions_SetFromTime(job, from_date);
@@ -192,9 +192,9 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
             && job_status != AB_Job_StatusPending)
     {
         g_warning("gnc_ab_gettrans: Error on executing job");
-        gnc_error_dialog(parent, _("Error on executing job.\n\nStatus: %s - %s")
-                         , AB_Job_Status2Char(job_status)
-                         , AB_Job_GetResultText(job));
+        gnc_error_dialog (GTK_WINDOW (parent), _("Error on executing job.\n\nStatus: %s - %s"),
+                          AB_Job_Status2Char(job_status),
+                          AB_Job_GetResultText(job));
         goto cleanup;
     }
 

@@ -162,13 +162,13 @@ gnc_search_callback_button_execute (GNCSearchCallbackButton *cb,
         sw->selected_item_list = g_list_reverse(sw->selected_item_list);
 
         // Call the callback
-        (cb->cb_multiselect_fn)(sw->selected_item_list, sw->user_data);
+        (cb->cb_multiselect_fn)(GTK_WINDOW (sw->dialog), sw->selected_item_list, sw->user_data);
     }
     else
     {
         // No, stick to the single-item callback
         if (cb->cb_fcn)
-            (cb->cb_fcn)(&(sw->selected_item), sw->user_data);
+            (cb->cb_fcn)(GTK_WINDOW (sw->dialog), &(sw->selected_item), sw->user_data);
     }
 }
 
@@ -234,11 +234,11 @@ gnc_search_dialog_select_cb (GtkButton *button, GNCSearchWindow *sw)
     if (sw->selected_item == NULL && sw->allow_clear == FALSE)
     {
         char *msg = _("You must select an item from the list");
-        gnc_error_dialog (sw->dialog, "%s", msg);
+        gnc_error_dialog (GTK_WINDOW (sw->dialog), "%s", msg);
         return;
     }
 
-    (sw->selected_cb)(sw->selected_item, sw->select_arg);
+    (sw->selected_cb)(GTK_WINDOW (sw->dialog), sw->selected_item, sw->select_arg);
     gnc_search_dialog_destroy (sw);
 }
 
@@ -637,7 +637,7 @@ search_new_item_cb (GtkButton *button, GNCSearchWindow *sw)
 
     g_return_if_fail (sw->new_item_cb);
 
-    res = (sw->new_item_cb)(sw->user_data);
+    res = (sw->new_item_cb)(GTK_WINDOW (sw->dialog), sw->user_data);
 
     if (res)
     {
@@ -1300,7 +1300,8 @@ gnc_search_dialog_raise (GNCSearchWindow *sw)
 }
 
 GNCSearchWindow *
-gnc_search_dialog_create (QofIdTypeConst obj_type, const gchar *title,
+gnc_search_dialog_create (GtkWindow *parent,
+                          QofIdTypeConst obj_type, const gchar *title,
                           GList *param_list,
                           GList *display_list,
                           QofQuery *start_query, QofQuery *show_start_query,
@@ -1345,6 +1346,7 @@ gnc_search_dialog_create (QofIdTypeConst obj_type, const gchar *title,
     gnc_search_dialog_init_widgets (sw, title);
     if (sw->prefs_group)
         gnc_restore_window_size(sw->prefs_group, GTK_WINDOW(sw->dialog));
+    gtk_window_set_transient_for(GTK_WINDOW(sw->dialog), parent);
     gtk_widget_show(sw->dialog);
 
     // Set the style context for this dialog so it can be easily manipulated with css
@@ -1465,7 +1467,7 @@ get_display_list (QofIdTypeConst type)
 
 
 static void
-do_nothing (gpointer *a, gpointer b)
+do_nothing (GtkWindow *dialog, gpointer *a, gpointer b)
 {
     return;
 }
@@ -1494,7 +1496,7 @@ gnc_search_dialog_test (void)
         display = get_display_list (GNC_ID_SPLIT);
 
 /* FIXME: All this does is leak. */
-    gnc_search_dialog_create (GNC_ID_SPLIT, _("Find Transaction"),
+    gnc_search_dialog_create (NULL, GNC_ID_SPLIT, _("Find Transaction"),
 			      params, display,
 			      NULL, NULL, buttons, NULL, NULL, NULL, NULL,
 			      NULL, NULL, NULL);

@@ -1282,8 +1282,8 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
             gnc_commodity_commit_edit(c);
             return TRUE;
         }
-        gnc_warning_dialog(w->dialog, "%s",
-                           _("You may not create a new national currency."));
+        gnc_warning_dialog (GTK_WINDOW (w->dialog), "%s",
+                            _("You may not create a new national currency."));
         return FALSE;
     }
 
@@ -1292,10 +1292,10 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
      */
     if (g_utf8_collate(name_space, GNC_COMMODITY_NS_TEMPLATE) == 0)
     {
-	gnc_warning_dialog (w->dialog,
-			    _("%s is a reserved commodity type."
+        gnc_warning_dialog (GTK_WINDOW (w->dialog),
+                            _("%s is a reserved commodity type."
                             " Please use something else."), GNC_COMMODITY_NS_TEMPLATE);
-	return FALSE;
+        return FALSE;
     }
 
     if (fullname && fullname[0] &&
@@ -1308,7 +1308,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
         if ((!w->edit_commodity && c) ||
                 (w->edit_commodity && c && (c != w->edit_commodity)))
         {
-            gnc_warning_dialog (w->dialog, "%s",  _("That commodity already exists."));
+            gnc_warning_dialog (GTK_WINDOW (w->dialog), "%s",  _("That commodity already exists."));
             g_free(name_space);
             return FALSE;
         }
@@ -1356,10 +1356,10 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
     }
     else
     {
-        gnc_warning_dialog(w->dialog, "%s",
-                           _("You must enter a non-empty \"Full name\", "
-                             "\"Symbol/abbreviation\", "
-                             "and \"Type\" for the commodity."));
+        gnc_warning_dialog (GTK_WINDOW (w->dialog), "%s",
+                            _("You must enter a non-empty \"Full name\", "
+                              "\"Symbol/abbreviation\", "
+                              "and \"Type\" for the commodity."));
         g_free(name_space);
         return FALSE;
     }

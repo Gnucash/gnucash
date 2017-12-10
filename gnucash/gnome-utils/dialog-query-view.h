@@ -31,7 +31,7 @@
 
 typedef struct _DialogQueryView DialogQueryView;
 
-typedef void (*GNCDisplayViewCB)(gpointer obj, gpointer user_data);
+typedef void (*GNCDisplayViewCB)(GtkWindow *dialog, gpointer obj, gpointer user_data);
 typedef struct
 {
     const char         *label;
@@ -39,7 +39,7 @@ typedef struct
 } GNCDisplayViewButton;
 
 DialogQueryView *
-gnc_dialog_query_view_new (GList *param_list, Query *q);
+gnc_dialog_query_view_new (GtkWindow *parent, GList *param_list, Query *q);
 
 void gnc_dialog_query_view_set_title (DialogQueryView *dqv, const char *title);
 void gnc_dialog_query_view_set_label (DialogQueryView *dqv, const char *label);
@@ -53,7 +53,7 @@ void gnc_dialog_query_view_refresh (DialogQueryView *dqv);
 void gnc_dialog_query_view_destroy (DialogQueryView *dqv);
 
 DialogQueryView *
-gnc_dialog_query_view_create (GList *param_list, Query *q,
+gnc_dialog_query_view_create (GtkWindow *parent, GList *param_list, Query *q,
                               const char *title, const char *label,
                               gboolean abs, gboolean inv_sort,
                               gint sort_column, GtkSortType order,

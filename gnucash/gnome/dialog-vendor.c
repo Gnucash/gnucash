@@ -70,8 +70,8 @@ typedef enum
 
 struct _vendor_select_window
 {
-    QofBook *	book;
-    QofQuery *	q;
+    QofBook  *book;
+    QofQuery *q;
 };
 
 struct _vendor_window
@@ -190,14 +190,14 @@ static void gnc_ui_to_vendor (VendorWindow *vw, GncVendor *vendor)
     gnc_resume_gui_refresh ();
 }
 
-static gboolean check_entry_nonempty (GtkWidget *dialog, GtkWidget *entry,
+static gboolean check_entry_nonempty (GtkWidget *entry,
                                       const char * error_message)
 {
     const char *res = gtk_entry_get_text (GTK_ENTRY (entry));
     if (g_strcmp0 (res, "") == 0)
     {
         if (error_message)
-            gnc_error_dialog (dialog, "%s", error_message);
+            gnc_error_dialog (gnc_ui_get_gtk_window (entry), "%s", error_message);
         return TRUE;
     }
     return FALSE;
@@ -210,7 +210,7 @@ gnc_vendor_window_ok_cb (GtkWidget *widget, gpointer data)
     gchar *string;
 
     /* Check for valid company name */
-    if (check_entry_nonempty (vw->dialog, vw->company_entry,
+    if (check_entry_nonempty (vw->company_entry,
                               _("You must enter a company name. "
                                 "If this vendor is an individual (and not a company) "
                                 "you should enter the same value for:\nIdentification "
@@ -218,13 +218,13 @@ gnc_vendor_window_ok_cb (GtkWidget *widget, gpointer data)
         return;
 
     /* Make sure we have an address */
-    if (check_entry_nonempty (vw->dialog, vw->addr1_entry, NULL) &&
-            check_entry_nonempty (vw->dialog, vw->addr2_entry, NULL) &&
-            check_entry_nonempty (vw->dialog, vw->addr3_entry, NULL) &&
-            check_entry_nonempty (vw->dialog, vw->addr4_entry, NULL))
+    if (check_entry_nonempty (vw->addr1_entry, NULL) &&
+            check_entry_nonempty (vw->addr2_entry, NULL) &&
+            check_entry_nonempty (vw->addr3_entry, NULL) &&
+            check_entry_nonempty (vw->addr4_entry, NULL))
     {
         const char *msg = _("You must enter a payment address.");
-        gnc_error_dialog (vw->dialog, "%s", msg);
+        gnc_error_dialog (gnc_ui_get_gtk_window (widget), "%s", msg);
         return;
     }
 
@@ -395,7 +395,7 @@ find_handler (gpointer find_data, gpointer user_data)
 }
 
 static VendorWindow *
-gnc_vendor_new_window (QofBook *bookp, GncVendor *vendor)
+gnc_vendor_new_window (GtkWindow *parent, QofBook *bookp, GncVendor *vendor)
 {
     VendorWindow *vw;
     GtkBuilder *builder;
@@ -415,6 +415,7 @@ gnc_vendor_new_window (QofBook *bookp, GncVendor *vendor)
                                            find_handler, &vendor_guid);
         if (vw)
         {
+            gtk_window_set_transient_for (GTK_WINDOW(vw->dialog), parent);
             gtk_window_present (GTK_WINDOW(vw->dialog));
             return(vw);
         }
@@ -440,6 +441,7 @@ gnc_vendor_new_window (QofBook *bookp, GncVendor *vendor)
     gnc_builder_add_from_file (builder, "dialog-vendor.glade", "taxtable_store");
     gnc_builder_add_from_file (builder, "dialog-vendor.glade", "vendor_dialog");
     vw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "vendor_dialog"));
+    gtk_window_set_transient_for (GTK_WINDOW(vw->dialog), parent);
 
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(vw->dialog), "GncVendorDialog");
@@ -559,25 +561,25 @@ gnc_vendor_new_window (QofBook *bookp, GncVendor *vendor)
 }
 
 VendorWindow *
-gnc_ui_vendor_new (QofBook *bookp)
+gnc_ui_vendor_new (GtkWindow *parent, QofBook *bookp)
 {
     VendorWindow *vw;
 
     /* Make sure required options exist */
     if (!bookp) return NULL;
 
-    vw = gnc_vendor_new_window (bookp, NULL);
+    vw = gnc_vendor_new_window (parent, bookp, NULL);
     return vw;
 }
 
 VendorWindow *
-gnc_ui_vendor_edit (GncVendor *vendor)
+gnc_ui_vendor_edit (GtkWindow *parent, GncVendor *vendor)
 {
     VendorWindow *vw;
 
     if (!vendor) return NULL;
 
-    vw = gnc_vendor_new_window (gncVendorGetBook(vendor), vendor);
+    vw = gnc_vendor_new_window (parent, gncVendorGetBook(vendor), vendor);
 
     return vw;
 }
@@ -585,7 +587,7 @@ gnc_ui_vendor_edit (GncVendor *vendor)
 /* Functions for vendor selection widgets */
 
 static void
-invoice_vendor_cb (gpointer *vendor_p, gpointer user_data)
+invoice_vendor_cb (GtkWindow *dialog, gpointer *vendor_p, gpointer user_data)
 {
     struct _vendor_select_window *sw = user_data;
     GncOwner owner;
@@ -599,12 +601,12 @@ invoice_vendor_cb (gpointer *vendor_p, gpointer user_data)
         return;
 
     gncOwnerInitVendor (&owner, vendor);
-    gnc_invoice_search (NULL, &owner, sw->book);
+    gnc_invoice_search (dialog, NULL, &owner, sw->book);
     return;
 }
 
 static void
-order_vendor_cb (gpointer *vendor_p, gpointer user_data)
+order_vendor_cb (GtkWindow *dialog, gpointer *vendor_p, gpointer user_data)
 {
     struct _vendor_select_window *sw = user_data;
     GncOwner owner;
@@ -618,12 +620,12 @@ order_vendor_cb (gpointer *vendor_p, gpointer user_data)
         return;
 
     gncOwnerInitVendor (&owner, vendor);
-    gnc_order_search (NULL, &owner, sw->book);
+    gnc_order_search (dialog, NULL, &owner, sw->book);
     return;
 }
 
 static void
-jobs_vendor_cb (gpointer *vendor_p, gpointer user_data)
+jobs_vendor_cb (GtkWindow *dialog, gpointer *vendor_p, gpointer user_data)
 {
     struct _vendor_select_window *sw = user_data;
     GncOwner owner;
@@ -637,12 +639,12 @@ jobs_vendor_cb (gpointer *vendor_p, gpointer user_data)
         return;
 
     gncOwnerInitVendor (&owner, vendor);
-    gnc_job_search (NULL, &owner, sw->book);
+    gnc_job_search (dialog, NULL, &owner, sw->book);
     return;
 }
 
 static void
-payment_vendor_cb (gpointer *vendor_p, gpointer user_data)
+payment_vendor_cb (GtkWindow *dialog, gpointer *vendor_p, gpointer user_data)
 {
     struct _vendor_select_window *sw = user_data;
     GncOwner owner;
@@ -656,12 +658,12 @@ payment_vendor_cb (gpointer *vendor_p, gpointer user_data)
         return;
 
     gncOwnerInitVendor (&owner, vendor);
-    gnc_ui_payment_new (&owner, sw->book);
+    gnc_ui_payment_new (dialog, &owner, sw->book);
     return;
 }
 
 static void
-edit_vendor_cb (gpointer *vendor_p, gpointer user_data)
+edit_vendor_cb (GtkWindow *dialog, gpointer *vendor_p, gpointer user_data)
 {
     GncVendor *vendor;
 
@@ -672,19 +674,19 @@ edit_vendor_cb (gpointer *vendor_p, gpointer user_data)
     if (!vendor)
         return;
 
-    gnc_ui_vendor_edit (vendor);
+    gnc_ui_vendor_edit (dialog, vendor);
     return;
 }
 
 static gpointer
-new_vendor_cb (gpointer user_data)
+new_vendor_cb (GtkWindow *dialog, gpointer user_data)
 {
     struct _vendor_select_window *sw = user_data;
     VendorWindow *vw;
 
     g_return_val_if_fail (user_data, NULL);
 
-    vw = gnc_ui_vendor_new (sw->book);
+    vw = gnc_ui_vendor_new (dialog, sw->book);
     return vw_get_vendor (vw);
 }
 
@@ -699,7 +701,7 @@ free_vendor_cb (gpointer user_data)
 }
 
 GNCSearchWindow *
-gnc_vendor_search (GncVendor *start, QofBook *book)
+gnc_vendor_search (GtkWindow *parent, GncVendor *start, QofBook *book)
 {
     QofIdType type = GNC_VENDOR_MODULE_NAME;
     struct _vendor_select_window *sw;
@@ -759,7 +761,7 @@ gnc_vendor_search (GncVendor *start, QofBook *book)
     sw->book = book;
     sw->q = q;
 
-    return gnc_search_dialog_create (type, _("Find Vendor"),
+    return gnc_search_dialog_create (parent, type, _("Find Vendor"),
                                      params, columns, q, q2, buttons, NULL,
                                      new_vendor_cb, sw, free_vendor_cb,
                                      GNC_PREFS_GROUP_SEARCH, NULL,
@@ -767,18 +769,18 @@ gnc_vendor_search (GncVendor *start, QofBook *book)
 }
 
 GNCSearchWindow *
-gnc_vendor_search_select (gpointer start, gpointer book)
+gnc_vendor_search_select (GtkWindow *parent, gpointer start, gpointer book)
 {
     if (!book) return NULL;
 
-    return gnc_vendor_search (start, book);
+    return gnc_vendor_search (parent, start, book);
 }
 
 GNCSearchWindow *
-gnc_vendor_search_edit (gpointer start, gpointer book)
+gnc_vendor_search_edit (GtkWindow *parent, gpointer start, gpointer book)
 {
     if (start)
-        gnc_ui_vendor_edit (start);
+        gnc_ui_vendor_edit (parent, start);
 
     return NULL;
 }

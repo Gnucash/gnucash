@@ -32,13 +32,12 @@ typedef struct _job_window JobWindow;
 #include "dialog-search.h"
 
 /* Create or Edit a job */
-GncJob * gnc_ui_job_new_return_handle (GncOwner *owner, QofBook *book);
-JobWindow * gnc_ui_job_edit (GncJob *job);
-JobWindow * gnc_ui_job_new (GncOwner *owner, QofBook *book);
+JobWindow * gnc_ui_job_edit (GtkWindow *parent, GncJob *job);
+JobWindow * gnc_ui_job_new (GtkWindow *parent, GncOwner *owner, QofBook *book);
 
 /* Search for Jobs */
-GNCSearchWindow * gnc_job_search (GncJob *start, GncOwner *owner,
-                                  QofBook *book);
+GNCSearchWindow * gnc_job_search (GtkWindow *parent, GncJob *start,
+                                  GncOwner *owner, QofBook *book);
 
 /*
  * These callbacks are for use with the gnc_general_search widget
@@ -46,7 +45,7 @@ GNCSearchWindow * gnc_job_search (GncJob *start, GncOwner *owner,
  * select() provides a Select Dialog and returns it.
  * edit() opens the existing customer for editing and returns NULL.
  */
-GNCSearchWindow * gnc_job_search_select (gpointer start, gpointer book);
-GNCSearchWindow * gnc_job_search_edit (gpointer start, gpointer book);
+GNCSearchWindow * gnc_job_search_select (GtkWindow *parent, gpointer start, gpointer book);
+GNCSearchWindow * gnc_job_search_edit (GtkWindow *parent, gpointer start, gpointer book);
 
 #endif /* GNC_DIALOG_JOB_H_ */

@@ -144,7 +144,7 @@ gnc_plugin_log_replay_cmd_new_log_replay (GtkAction *action,
         GncMainWindowActionData *data)
 {
     gnc_suspend_gui_refresh();
-    gnc_file_log_replay ();
+    gnc_file_log_replay (GTK_WINDOW (data->window));
     gnc_resume_gui_refresh();
 }
 

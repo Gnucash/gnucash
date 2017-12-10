@@ -747,6 +747,7 @@ gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page)
     GtkTreeSelection *selection;
     GList *selected_paths, *to_delete = NULL;
     GtkTreeModel *model;
+    GtkWindow *window;
 
     selection = gtk_tree_view_get_selection(priv->tree_view);
     selected_paths = gtk_tree_selection_get_selected_rows(selection, &model);
@@ -767,11 +768,12 @@ gnc_plugin_page_sx_list_cmd_delete(GtkAction *action, GncPluginPageSxList *page)
         }
     }
 
+    window = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
     /* FIXME: Does this always refer to only one transaction? Or could
        multiple SXs be deleted as well? Ideally, the number of
        to-be-deleted SXs should be mentioned here; see
        dialog-sx-since-last-run.c:807 */
-    if (gnc_verify_dialog(NULL, FALSE, "%s", _("Do you really want to delete this scheduled transaction?")))
+    if (gnc_verify_dialog (window, FALSE, "%s", _("Do you really want to delete this scheduled transaction?")))
     {
         g_list_foreach(to_delete, (GFunc)_destroy_sx, NULL);
     }

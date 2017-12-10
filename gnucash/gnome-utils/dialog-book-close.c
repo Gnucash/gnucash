@@ -297,14 +297,14 @@ gnc_book_close_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
 
         if (!income_acct)
         {
-            gnc_error_dialog(cbw->dialog, "%s",
+            gnc_error_dialog(GTK_WINDOW (cbw->dialog), "%s",
                              _("Please select an Equity account to hold the total Period Income."));
             break;
         }
 
         if (!expense_acct)
         {
-            gnc_error_dialog(cbw->dialog, "%s",
+            gnc_error_dialog(GTK_WINDOW (cbw->dialog), "%s",
                              _("Please select an Equity account to hold the total Period Expense."));
             break;
         }

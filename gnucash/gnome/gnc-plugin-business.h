@@ -60,8 +60,8 @@ GncPlugin *gnc_plugin_business_new      (void);
 G_END_DECLS
 
 GncMainWindow *gnc_plugin_business_get_window (void);
-void gnc_invoice_remind_bills_due (void);
-void gnc_invoice_remind_invoices_due (void);
+void gnc_invoice_remind_bills_due (GtkWindow *parent);
+void gnc_invoice_remind_invoices_due (GtkWindow *parent);
 void gnc_invoice_remind_bills_due_cb (void);
 void gnc_invoice_remind_invoices_due_cb (void);
 const char *gnc_plugin_business_get_invoice_printreport(void);

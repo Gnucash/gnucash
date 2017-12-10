@@ -34,9 +34,9 @@
  *  loading/open and for saving.
  */
 
-void gnc_ui_file_access_for_open( void );
-void gnc_ui_file_access_for_save_as( void );
-void gnc_ui_file_access_for_export( void );
+void gnc_ui_file_access_for_open (GtkWindow *parent);
+void gnc_ui_file_access_for_save_as (GtkWindow *parent);
+void gnc_ui_file_access_for_export (GtkWindow *parent);
 
 /** @} */
 

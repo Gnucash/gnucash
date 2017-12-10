@@ -31,11 +31,11 @@ typedef struct _employee_window EmployeeWindow;
 #include "dialog-search.h"
 
 /* Functions to edit and create employees */
-EmployeeWindow * gnc_ui_employee_edit (GncEmployee *employee);
-EmployeeWindow * gnc_ui_employee_new (QofBook *book);
+EmployeeWindow * gnc_ui_employee_edit (GtkWindow *parent, GncEmployee *employee);
+EmployeeWindow * gnc_ui_employee_new (GtkWindow *parent, QofBook *book);
 
 /* Search for an employee */
-GNCSearchWindow * gnc_employee_search (GncEmployee *start, QofBook *book);
+GNCSearchWindow * gnc_employee_search (GtkWindow *parent, GncEmployee *start, QofBook *book);
 
 /*
  * These callbacks are for use with the gnc_general_search widget
@@ -43,7 +43,7 @@ GNCSearchWindow * gnc_employee_search (GncEmployee *start, QofBook *book);
  * select() provides a Select Dialog and returns it.
  * edit() opens the existing vendor for editing and returns NULL.
  */
-GNCSearchWindow * gnc_employee_search_select (gpointer start, gpointer book);
-GNCSearchWindow * gnc_employee_search_edit (gpointer start, gpointer book);
+GNCSearchWindow * gnc_employee_search_select (GtkWindow *parent, gpointer start, gpointer book);
+GNCSearchWindow * gnc_employee_search_edit (GtkWindow *parent, gpointer start, gpointer book);
 
 #endif /* GNC_DIALOG_EMPLOYEE_H_ */

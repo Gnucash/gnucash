@@ -83,7 +83,7 @@ gnc_customer_import_read_file (const gchar *filename, const gchar *parser_regexp
     f = g_fopen( filename, "rt" );
     if (!f)
     {
-        //gnc_error_dialog( 0, _("File %s cannot be opened."), filename );
+        //gnc_error_dialog (NULL, _("File %s cannot be opened."), filename );
         return CI_RESULT_OPEN_FAILED;
     }
 
@@ -186,8 +186,6 @@ gnc_customer_import_read_file (const gchar *filename, const gchar *parser_regexp
     g_regex_unref (regexpat);
     regexpat = 0;
     fclose (f);
-
-    //gnc_info_dialog (0, _("Import results:\n%i customers imported\n%i lines ignored"), n_imported, n_ignored);
 
     if (stats == &stats_fallback)
         // stats are not requested -> free the string

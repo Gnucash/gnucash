@@ -167,13 +167,13 @@ gnc_tree_control_split_reg_trans_open_and_warn (GncTreeViewSplitReg *view, Trans
 gboolean
 gtc_sr_trans_test_for_edit (GncTreeViewSplitReg *view, Transaction *trans)
 {
-    GtkWidget *window;
+    GtkWindow *window;
     Transaction *dirty_trans;
 
     /* Make sure we have stopped editing */
     gnc_tree_view_split_reg_finish_edit (view);
 
-    window = gnc_tree_view_split_reg_get_parent (view);
+    window = gnc_ui_get_main_window (GTK_WIDGET (view));
 
     /* Get dirty_trans */
     dirty_trans = gnc_tree_view_split_reg_get_dirty_trans (view);
@@ -354,7 +354,7 @@ void
 gnc_tree_control_split_reg_exchange_rate (GncTreeViewSplitReg *view)
 {
     GncTreeModelSplitReg *model;
-    GtkWidget *window;
+    GtkWindow *window;
     Account *anchor;
     Transaction *trans;
     Split *split = NULL;
@@ -397,7 +397,7 @@ gnc_tree_control_split_reg_exchange_rate (GncTreeViewSplitReg *view)
     if (num_splits < 2)
         return;
 
-    window = gnc_tree_view_split_reg_get_parent (view);
+    window = gnc_ui_get_main_window (GTK_WIDGET (view));
 
     /* Make sure we NEED this for this type of register */
     if (!gnc_tree_util_split_reg_has_rate (view))
@@ -1078,7 +1078,7 @@ gnc_tree_control_split_reg_delete (GncTreeViewSplitReg *view, gpointer data)
 void
 gnc_tree_control_split_reg_reverse_current (GncTreeViewSplitReg *view)
 {
-    GtkWidget *window;
+    GtkWindow *window;
     Transaction *trans = NULL, *new_trans = NULL;
     GList *snode = NULL;
 
@@ -1113,7 +1113,7 @@ gnc_tree_control_split_reg_reverse_current (GncTreeViewSplitReg *view)
         return;
     }
 
-    window = gnc_tree_view_split_reg_get_parent (view);
+    window = gnc_ui_get_main_window (GTK_WIDGET (view));
 
     if (xaccTransGetReversedBy (trans))
     {
@@ -1167,7 +1167,7 @@ gboolean
 gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
 {
     GncTreeModelSplitReg *model;
-    GtkWidget *window;
+    GtkWindow *window;
     RowDepth depth;
     Transaction *trans;
     Split *blank_split;
@@ -1228,7 +1228,7 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
         return FALSE;
     }
 
-    window = gnc_tree_view_split_reg_get_parent (view);
+    window = gnc_ui_get_main_window (GTK_WIDGET (view));
 
     /* Ok, we are now ready to make the copy. */
     if (depth == SPLIT3)
@@ -1259,7 +1259,7 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
                 else
                     in_num = gnc_get_num_action (NULL, split);
 
-                if (!gnc_dup_trans_dialog (window, title, FALSE,
+                if (!gnc_dup_trans_dialog (GTK_WIDGET (window), title, FALSE,
                                            &date, in_num, &out_num, NULL, NULL))
                 {
                     LEAVE("dup cancelled");
@@ -1334,7 +1334,7 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
                                         ? gnc_get_num_action (trans, NULL)
                                         : NULL);
 
-        if (!gnc_dup_trans_dialog (window, NULL, TRUE,
+        if (!gnc_dup_trans_dialog (GTK_WIDGET (window), NULL, TRUE,
                                    &date, in_num, &out_num, in_tnum, &out_tnum))
         {
             LEAVE("dup cancelled");
@@ -1348,7 +1348,7 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
             gnc_gdate_set_time64 (&d, date);
             if (g_date_compare (&d, readonly_threshold) < 0)
             {
-                GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW (window),
+                GtkWidget *dialog = gtk_message_dialog_new (window,
                                     0,
                                     GTK_MESSAGE_ERROR,
                                     GTK_BUTTONS_OK,
@@ -1946,7 +1946,7 @@ gnc_tree_control_split_reg_recn_test (GncTreeViewSplitReg *view, GtkTreePath *sp
 Account *
 gnc_tree_control_split_reg_get_account_by_name (GncTreeViewSplitReg *view, const char *name)
 {
-    GtkWidget *window;
+    GtkWindow *window;
     const char *placeholder = _("The account %s does not allow transactions.");
     const char *missing = _("The account %s does not exist. "
                             "Would you like to create it?");
@@ -1964,7 +1964,7 @@ gnc_tree_control_split_reg_get_account_by_name (GncTreeViewSplitReg *view, const
     if (!account)
         account = gnc_account_lookup_by_code (gnc_get_current_root_account(), name);
 
-    window = gnc_tree_view_split_reg_get_parent (view);
+    window = gnc_ui_get_main_window (GTK_WIDGET (view));
 
     if (!account)
     {
@@ -2106,9 +2106,9 @@ gnc_tree_control_split_reg_paste_trans (GncTreeViewSplitReg *view)
     //FIXME You can not paste from gl to a register, is this too simplistic
     if (clipboard_acct == NULL && anchor_acct != NULL)
     {
-        GtkWidget *window;
+        GtkWindow *window;
 
-        window = gnc_tree_view_split_reg_get_parent (view);
+        window = gnc_ui_get_main_window (GTK_WIDGET (view));
         gnc_error_dialog (window, "%s",
                          _("You can not paste from the general journal to a register."));
         return;

@@ -44,6 +44,7 @@
 
 struct _bi_import_gui
 {
+    GtkWindow    *parent;
     GtkWidget    *dialog;
     GtkWidget    *tree_view;
     GtkWidget    *entryFilename;
@@ -81,7 +82,7 @@ static void gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar
 static QofLogModule UNUSED_VAR log_module = G_LOG_DOMAIN; //G_LOG_BUSINESS;
 
 BillImportGui *
-gnc_plugin_bi_import_showGUI(void)
+gnc_plugin_bi_import_showGUI (GtkWindow *parent)
 {
     BillImportGui *gui;
     GtkBuilder *builder;
@@ -96,6 +97,9 @@ gnc_plugin_bi_import_showGUI(void)
         // window found
         gui = g_list_nth_data (glist, 0);
         g_list_free (glist);
+
+        gtk_window_set_transient_for(GTK_WINDOW(gui->dialog), GTK_WINDOW(parent));
+        gui->parent = parent;
         gtk_window_present (GTK_WINDOW(gui->dialog));
         return gui;
     }
@@ -108,6 +112,8 @@ gnc_plugin_bi_import_showGUI(void)
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-bi-import-gui.glade", "bi_import_dialog");
     gui->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "bi_import_dialog"));
+    gtk_window_set_transient_for(GTK_WINDOW(gui->dialog), GTK_WINDOW(parent));
+    gui->parent = parent;
     gui->tree_view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview1"));
     gui->entryFilename = GTK_WIDGET(gtk_builder_get_object (builder, "entryFilename"));
 
@@ -170,7 +176,7 @@ gnc_plugin_bi_import_showGUI(void)
 }
 
 static gchar *
-gnc_plugin_bi_import_getFilename(void)
+gnc_plugin_bi_import_getFilename(GtkWindow *parent)
 {
     // prepare file import dialog
     gchar *filename = NULL;
@@ -185,7 +191,7 @@ gnc_plugin_bi_import_getFilename(void)
     gtk_file_filter_set_name (filter, "text files (*.txt)");
     gtk_file_filter_add_pattern (filter, "*.txt");
     filters = g_list_append( filters, filter );
-    filename = gnc_file_dialog(_("Import Bills or Invoices from csv"), filters, NULL, GNC_FILE_DIALOG_IMPORT);
+    filename = gnc_file_dialog(parent, _("Import Bills or Invoices from csv"), filters, NULL, GNC_FILE_DIALOG_IMPORT);
 
     return filename;
 }
@@ -208,11 +214,12 @@ gnc_bi_import_gui_ok_cb (GtkWidget *widget, gpointer data)
     if (res == RESULT_OK)
     {
         gnc_bi_import_fix_bis (gui->store, &n_fixed, &n_deleted, info, gui->type);
-        gnc_bi_import_create_bis (gui->store, gui->book, &n_invoices_created, &n_invoices_updated, gui->type, gui->open_mode, info);
+        gnc_bi_import_create_bis (gui->store, gui->book, &n_invoices_created, &n_invoices_updated,
+                                  gui->type, gui->open_mode, info, gui->parent);
         if (info->len > 0)
-            gnc_info_dialog (gui->dialog, "%s", info->str);
+            gnc_info_dialog (GTK_WINDOW (gui->dialog), "%s", info->str);
         g_string_free( info, TRUE );
-        gnc_info_dialog (gui->dialog, _("Import results:\n%i lines were ignored\n%i lines imported:\n   %u fixes\n   %u ignored (not fixable)\n\n   %u created\n   %u updated (based on id)"), stats.n_ignored, stats.n_imported, n_fixed, n_deleted, n_invoices_created, n_invoices_updated);
+        gnc_info_dialog (GTK_WINDOW (gui->dialog), _("Import results:\n%i lines were ignored\n%i lines imported:\n   %u fixes\n   %u ignored (not fixable)\n\n   %u created\n   %u updated (based on id)"), stats.n_ignored, stats.n_imported, n_fixed, n_deleted, n_invoices_created, n_invoices_updated);
         if (stats.n_ignored > 0)
             gnc_info2_dialog (gui->dialog, _("These lines were ignored during import"), stats.ignored_lines->str);
 
@@ -221,11 +228,11 @@ gnc_bi_import_gui_ok_cb (GtkWidget *widget, gpointer data)
     }
     else if (res ==  RESULT_OPEN_FAILED)
     {
-        gnc_error_dialog (gui->dialog, _("The input file can not be opened."));
+        gnc_error_dialog (GTK_WINDOW (gui->dialog), _("The input file can not be opened."));
     }
     else if (res ==  RESULT_ERROR_IN_REGEXP)
     {
-        //gnc_error_dialog (gui->dialog, "The regular expression is faulty:\n\n%s", stats.err->str);
+        //gnc_error_dialog (GTK_WINDOW (gui->dialog), "The regular expression is faulty:\n\n%s", stats.err->str);
     }
 }
 
@@ -272,7 +279,7 @@ void gnc_bi_import_gui_buttonOpen_cb (GtkWidget *widget, gpointer data)
     gchar *filename = NULL;
     BillImportGui *gui = data;
 
-    filename = gnc_plugin_bi_import_getFilename();
+    filename = gnc_plugin_bi_import_getFilename (gnc_ui_get_gtk_window (widget));
     if (filename)
     {
         //printf("Setting filename"); // debug

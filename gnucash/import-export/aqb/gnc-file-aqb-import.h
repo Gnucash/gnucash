@@ -57,7 +57,8 @@ G_BEGIN_DECLS
  * transactions as online jobs over aqbanking/HBCI.  If FALSE, just import the
  * transactions and that's it.
  */
-void gnc_file_aqbanking_import (const gchar *aqbanking_importername,
+void gnc_file_aqbanking_import (GtkWindow *parent,
+                                const gchar *aqbanking_importername,
                                 const gchar *aqbanking_formatname,
                                 gboolean exec_as_aqbanking_jobs);
 

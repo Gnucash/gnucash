@@ -141,7 +141,7 @@ static void
 gnc_plugin_ofx_cmd_import (GtkAction *action,
                            GncMainWindowActionData *data)
 {
-    gnc_file_ofx_import ();
+    gnc_file_ofx_import (GTK_WINDOW (data->window));
 }
 
 

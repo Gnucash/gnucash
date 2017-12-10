@@ -47,12 +47,12 @@ typedef enum
 
 
 /* Create and edit an invoice */
-InvoiceWindow * gnc_ui_invoice_edit (GncInvoice *invoice);
-InvoiceWindow * gnc_ui_invoice_new (GncOwner *owner, QofBook *book);
+InvoiceWindow * gnc_ui_invoice_edit (GtkWindow *parent, GncInvoice *invoice);
+InvoiceWindow * gnc_ui_invoice_new (GtkWindow *parent, GncOwner *owner, QofBook *book);
 
 /** Create a new invoice as a duplicate of the given existing invoice.
  *
- * \param invoice The invoice which is being duplicated
+ * \param old_invoice The invoice which is being duplicated
  * \param open_properties If TRUE, open the "invoice properties" dialog window after creating the new invoice
  * \param new_date If non-NULL, use this date as the date for the "opening date" and also as date for all invoice entries.
  *
@@ -60,12 +60,12 @@ InvoiceWindow * gnc_ui_invoice_new (GncOwner *owner, QofBook *book);
  * among others the "created_invoice" as a GncInvoice* pointer on the newly
  * created invoice.
  */
-InvoiceWindow * gnc_ui_invoice_duplicate (GncInvoice *invoice, gboolean open_properties, const GDate *new_date);
+InvoiceWindow* gnc_ui_invoice_duplicate (GtkWindow* parent, GncInvoice* old_invoice, gboolean open_properties, const GDate* new_date);
 
 /* Search for invoices */
-GNCSearchWindow * gnc_invoice_search (GncInvoice *start, GncOwner *owner, QofBook *book);
+GNCSearchWindow * gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBook *book);
 
-void gnc_business_call_owner_report (GncOwner *owner, Account *acc);
+void gnc_business_call_owner_report (GtkWindow* parent, GncOwner *owner, Account *acc);
 
 void gnc_invoice_window_sort (InvoiceWindow *iw, invoice_sort_type_t sort_code);
 
@@ -90,13 +90,13 @@ GtkWidget *gnc_invoice_get_register(InvoiceWindow *iw);
 /* definitions for CB functions */
 void gnc_invoice_window_destroy_cb (GtkWidget *widget, gpointer data);
 
-void gnc_invoice_window_new_invoice_cb (GtkWidget *widget, gpointer data);
-void gnc_invoice_window_printCB (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_new_invoice_cb (GtkWindow* parent, gpointer data);
+void gnc_invoice_window_printCB (GtkWindow* parent, gpointer data);
 void gnc_invoice_window_cut_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_copy_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_paste_cb (GtkWidget *widget, gpointer data);
-void gnc_invoice_window_editCB (GtkWidget *widget, gpointer data);
-void gnc_invoice_window_duplicateInvoiceCB (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_editCB (GtkWindow* parent, gpointer data);
+void gnc_invoice_window_duplicateInvoiceCB (GtkWindow* parent, gpointer data);
 void gnc_invoice_window_postCB (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_unpostCB (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_recordCB (GtkWidget *widget, gpointer data);
@@ -104,8 +104,8 @@ void gnc_invoice_window_cancelCB (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_deleteCB (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_blankCB (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_duplicateCB (GtkWidget *widget, gpointer data);
-void gnc_invoice_window_payment_cb (GtkWidget *widget, gpointer data);
-void gnc_invoice_window_report_owner_cb (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_payment_cb (GtkWindow *parent, gpointer data);
+void gnc_invoice_window_report_owner_cb (GtkWindow *parent, gpointer data);
 
 void gnc_invoice_window_entryUpCB (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_entryDownCB (GtkWidget *widget, gpointer data);

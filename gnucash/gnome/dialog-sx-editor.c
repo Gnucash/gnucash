@@ -200,7 +200,7 @@ sxed_confirmed_cancel(GncSxEditorDialog *sxed)
         const char *sx_changed_msg =
             _( "This Scheduled Transaction has changed; are you "
                "sure you want to cancel?" );
-        if (!gnc_verify_dialog(sxed->dialog, FALSE, "%s", sx_changed_msg))
+        if (!gnc_verify_dialog (GTK_WINDOW (sxed->dialog), FALSE, "%s", sx_changed_msg))
         {
             return FALSE;
         }
@@ -490,7 +490,7 @@ gnc_sxed_check_names (GncSxEditorDialog *sxed)
     {
         const char *sx_has_no_name_msg =
             _( "Please name the Scheduled Transaction." );
-        gnc_error_dialog( sxed->dialog, "%s", sx_has_no_name_msg );
+        gnc_error_dialog (GTK_WINDOW (sxed->dialog), "%s", sx_has_no_name_msg );
         g_free( name );
         return FALSE;
 
@@ -517,7 +517,7 @@ gnc_sxed_check_names (GncSxEditorDialog *sxed)
         const char *sx_has_existing_name_msg =
             _("A Scheduled Transaction with the name \"%s\" already exists. "
               "Are you sure you want to name this one the same?");
-        if (!gnc_verify_dialog (sxed->dialog, FALSE,
+        if (!gnc_verify_dialog (GTK_WINDOW (sxed->dialog), FALSE,
                                 sx_has_existing_name_msg, name))
         {
             g_free (name);
@@ -540,7 +540,7 @@ gnc_sxed_check_endpoint (GncSxEditorDialog *sxed)
     {
         const char *sx_end_spec_msg =
             _("Please provide a valid end selection.");
-        gnc_error_dialog (sxed->dialog, "%s", sx_end_spec_msg);
+        gnc_error_dialog (GTK_WINDOW (sxed->dialog), "%s", sx_end_spec_msg);
         return FALSE;
     }
 
@@ -555,7 +555,7 @@ gnc_sxed_check_endpoint (GncSxEditorDialog *sxed)
         {
             const char *sx_occur_count_zero_msg =
                 _("There must be some number of occurrences.");
-            gnc_error_dialog (sxed->dialog, "%s", sx_occur_count_zero_msg);
+            gnc_error_dialog (GTK_WINDOW (sxed->dialog), "%s", sx_occur_count_zero_msg);
             return FALSE;
         }
 
@@ -564,7 +564,7 @@ gnc_sxed_check_endpoint (GncSxEditorDialog *sxed)
             const char *sx_occur_counts_wrong_msg =
                 _("The number of remaining occurrences (%d) is greater than "
                   "the number of total occurrences (%d).");
-            gnc_error_dialog (sxed->dialog, sx_occur_counts_wrong_msg,
+            gnc_error_dialog (GTK_WINDOW (sxed->dialog), sx_occur_counts_wrong_msg,
                               rem, occur);
             return FALSE;
         }
@@ -593,7 +593,7 @@ gnc_sxed_check_endpoint (GncSxEditorDialog *sxed)
         const char *invalid_sx_check_msg =
             _("You have attempted to create a Scheduled Transaction which "
               "will never run. Do you really want to do this?");
-        if (!gnc_verify_dialog(sxed->dialog, FALSE,
+        if (!gnc_verify_dialog (GTK_WINDOW (sxed->dialog), FALSE,
                                "%s", invalid_sx_check_msg))
             return FALSE;
     }
@@ -612,7 +612,7 @@ gnc_sxed_check_autocreate (GncSxEditorDialog *sxed, int ttVarCount,
 
     if (((ttVarCount > 0) || multi_commodity) && autocreateState)
     {
-        gnc_warning_dialog(sxed->dialog, "%s",
+        gnc_warning_dialog(GTK_WINDOW (sxed->dialog), "%s",
                            _("Scheduled Transactions with variables "
                              "or involving more than one commodity "
                              "cannot be automatically created."));
@@ -623,7 +623,7 @@ gnc_sxed_check_autocreate (GncSxEditorDialog *sxed, int ttVarCount,
      * only valid if there's actually a transaction to create. */
     if (autocreateState && splitCount == 0)
     {
-        gnc_warning_dialog(sxed->dialog, "%s",
+        gnc_warning_dialog(GTK_WINDOW (sxed->dialog), "%s",
                            _("Scheduled Transactions without a template "
                              "transaction cannot be automatically created.") );
         return FALSE;
@@ -672,7 +672,7 @@ gnc_sxed_split_calculate_formula (GncSxEditorDialog *sxed, Split *s,
     {
         gchar *err = g_strdup_printf (_("Couldn't parse %s for split \"%s\"."),
                                       key, xaccSplitGetMemo (s));
-        gnc_error_dialog (GTK_WIDGET(sxed->dialog), "%s", err);
+        gnc_error_dialog (GTK_WINDOW (sxed->dialog), "%s", err);
         g_free (err);
 
         return FALSE;
@@ -870,7 +870,7 @@ gnc_sxed_check_consistent( GncSxEditorDialog *sxed )
         const char *msg =
             _("The Scheduled Transaction Editor cannot automatically "
               "balance this transaction. Should it still be entered?");
-        if (!gnc_verify_dialog (sxed->dialog, FALSE, "%s", msg))
+        if (!gnc_verify_dialog (GTK_WINDOW (sxed->dialog), FALSE, "%s", msg))
             return FALSE;
     }
 
@@ -1557,7 +1557,7 @@ gnc_sxed_reg_check_close(GncSxEditorDialog *sxed)
         return;
     }
 
-    if (gnc_verify_dialog(sxed->dialog, TRUE, "%s", message))
+    if (gnc_verify_dialog (GTK_WINDOW (sxed->dialog), TRUE, "%s", message))
     {
         if ( !gnc_split_register_save( reg, TRUE ) )
             return;
