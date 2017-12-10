@@ -110,234 +110,105 @@ options specified in the Options panels."))
                                'account-code 'corresponding-acc-code))
 
 
-(define (column-uses? param columns-used)
-  (cdr (assq param columns-used)))
-
-            
-;; display an account name depending on the options the user has set
-(define (account-namestring account show-account-code? show-account-name? show-account-full-name?)
-  ;;# on multi-line splits we can get an empty ('()) account
-  (if (null? account)
-      (_ "Split Transaction")
-      (string-append
-       ;; display account code?
-       (if show-account-code?
-           (string-append (xaccAccountGetCode account) " ")
-           "")
-       ;; display account name?
-       (if show-account-name?
-           ;; display full account name?
-           (if show-account-full-name?
-               (gnc-account-get-full-name account)
-               (xaccAccountGetName account))
-           ""))))
-
-;; render an account subheading - column-vector determines what is displayed
-(define (render-account-subheading split column-vector)
-  (let ((account (xaccSplitGetAccount split)))
-    (gnc:make-html-text
-     (gnc:html-markup-anchor
-      (gnc:account-anchor-text account)
-      (account-namestring account
-                          (column-uses? 'sort-account-code      column-vector)
-                          #t
-                          (column-uses? 'sort-account-full-name column-vector))))))                        
-
-(define (render-corresponding-account-subheading split column-vector)
-  (let ((account (xaccSplitGetAccount (xaccSplitGetOtherSplit split))))
-    (gnc:make-html-text
-     (gnc:html-markup-anchor
-      (if (null? account)
-          ""
-          (gnc:account-anchor-text account))
-      (account-namestring account
-                          (column-uses? 'sort-account-code      column-vector)
-                          #t
-                          (column-uses? 'sort-account-full-name column-vector))))))
-
-(define (render-week-subheading split column-vector)
-  (gnc:date-get-week-year-string
-   (gnc:timepair->date
-    (gnc-transaction-get-date-posted
-     (xaccSplitGetParent split)))))
-
-(define (render-month-subheading split column-vector)
-  (gnc:date-get-month-year-string
-   (gnc:timepair->date
-    (gnc-transaction-get-date-posted
-     (xaccSplitGetParent split)))))
-
-(define (render-quarter-subheading split column-vector)
-  (gnc:date-get-quarter-year-string
-   (gnc:timepair->date
-    (gnc-transaction-get-date-posted
-     (xaccSplitGetParent split)))))
-
-
-(define (render-year-subheading split column-vector)
-  (gnc:date-get-year-string
-   (gnc:timepair->date
-    (gnc-transaction-get-date-posted
-     (xaccSplitGetParent split)))))
-
-(define (total-string str) (string-append (_ "Total For ") str))
-
-(define (render-account-subtotal split column-vector)
-  (total-string (account-namestring (xaccSplitGetAccount split)
-                                    (column-uses? 'sort-account-code      column-vector)
-                                    #t
-                                    (column-uses? 'sort-account-full-name column-vector))))
-
-(define (render-corresponding-account-subtotal split column-vector)
-  (total-string (account-namestring (xaccSplitGetAccount (xaccSplitGetOtherSplit split))
-                                    (column-uses? 'sort-account-code      column-vector)
-                                    #t
-                                    (column-uses? 'sort-account-full-name column-vector))))
-
-(define (render-week-subtotal split column-vector)
-  (let ((tm (gnc:timepair->date (gnc-transaction-get-date-posted
-                                 (xaccSplitGetParent split)))))
-    (total-string (gnc:date-get-week-year-string tm))))
-
-(define (render-month-subtotal split column-vector)
-  (let ((tm (gnc:timepair->date (gnc-transaction-get-date-posted
-                                 (xaccSplitGetParent split)))))
-    (total-string (gnc:date-get-month-year-string tm))))
-
-(define (render-quarter-subtotal split column-vector)
-  (let ((tm (gnc:timepair->date (gnc-transaction-get-date-posted
-                                 (xaccSplitGetParent split)))))
-    (total-string (gnc:date-get-quarter-year-string tm))))
-
-(define (render-year-subtotal split column-vector)
-  (let ((tm (gnc:timepair->date (gnc-transaction-get-date-posted
-                                 (xaccSplitGetParent split)))))
-    (total-string (strftime "%Y" tm))))
-
-(define (render-grand-total)
-  (_ "Grand Total")) ; def:grand-total-style
-
-
-
 
 (define sortkey-list
+  ;;
   ;; Defines the different sorting keys, as an association-list 
   ;; together with the subtotal functions. Each entry: 
   ;;  'sortkey             - sort parameter sent via qof-query
   ;;  'split-sortvalue     - function which retrieves number/string used for comparing splits
   ;;  'text                - text displayed in Display tab
   ;;  'tip                 - tooltip displayed in Display tab
-  ;;  'subheading-renderer - function which renders the subheading
-  ;;  'subtotal-renderer   - function which renders the subtotal
+  ;;  'renderer            - helper symbol to select subtotal/subheading renderer
+  ;;
   (list (cons 'account-name  (list (cons 'sortkey (list SPLIT-ACCT-FULLNAME))
                                    (cons 'split-sortvalue (lambda (a) (gnc-account-get-full-name (xaccSplitGetAccount a))))
                                    (cons 'text (N_ "Account Name"))
                                    (cons 'tip (N_ "Sort & subtotal by account name."))
-                                   (cons 'subheading-renderer render-account-subheading)
-                                   (cons 'subtotal-renderer render-account-subtotal)))
+                                   (cons 'renderer 'account)))
         
         (cons 'account-code (list (cons 'sortkey (list SPLIT-ACCOUNT ACCOUNT-CODE-))
                                   (cons 'split-sortvalue (lambda (a) (xaccAccountGetCode (xaccSplitGetAccount a))))
                                   (cons 'text (N_ "Account Code"))
                                   (cons 'tip (N_ "Sort & subtotal by account code."))
-                                  (cons 'subheading-renderer render-account-subheading)
-                                  (cons 'subtotal-renderer render-account-subtotal)))
+                                  (cons 'renderer 'account)))
 
         (cons 'date         (list (cons 'sortkey (list SPLIT-TRANS TRANS-DATE-POSTED))
                                   (cons 'split-sortvalue #f)
                                   (cons 'text (N_ "Date"))
                                   (cons 'tip (N_ "Sort by date."))
-                                  (cons 'subheading-renderer #f)
-                                  (cons 'subtotal-renderer #f)))
+                                  (cons 'renderer #f)))
 
         (cons 'reconciled-date (list (cons 'sortkey (list SPLIT-DATE-RECONCILED))
                                      (cons 'split-sortvalue #f)
                                      (cons 'text (N_ "Reconciled Date"))
                                      (cons 'tip (N_ "Sort by the Reconciled Date."))
-                                     (cons 'subheading-renderer #f)
-                                     (cons 'subtotal-renderer #f)))
+                                     (cons 'renderer #f)))
 
         (cons 'register-order (list (cons 'sortkey (list QUERY-DEFAULT-SORT))
                                     (cons 'split-sortvalue #f)
                                     (cons 'text (N_ "Register Order"))
                                     (cons 'tip (N_ "Sort as in the register."))
-                                    (cons 'subheading-renderer #f)
-                                    (cons 'subtotal-renderer #f)))                                 
+                                    (cons 'renderer #f)))                                 
 
         (cons 'corresponding-acc-name (list (cons 'sortkey (list SPLIT-CORR-ACCT-NAME))
                                             (cons 'split-sortvalue (lambda (a) (xaccSplitGetCorrAccountFullName a)))
                                             (cons 'text (N_ "Other Account Name"))
                                             (cons 'tip (N_ "Sort by account transferred from/to's name."))
-                                            (cons 'subheading-renderer render-corresponding-account-subheading)
-                                            (cons 'subtotal-renderer render-corresponding-account-subtotal)))
+                                            (cons 'renderer 'other-acc)))
 
         (cons 'corresponding-acc-code (list (cons 'sortkey (list SPLIT-CORR-ACCT-CODE))
                                             (cons 'split-sortvalue (lambda (a) (xaccSplitGetCorrAccountCode a)))
                                             (cons 'text (N_ "Other Account Code"))
                                             (cons 'tip (N_ "Sort by account transferred from/to's code."))
-                                            (cons 'subheading-renderer render-corresponding-account-subheading)
-                                            (cons 'subtotal-renderer render-corresponding-account-subtotal)))
+                                            (cons 'renderer 'other-acct)))
 
         (cons 'amount        (list (cons 'sortkey (list SPLIT-VALUE))
                                    (cons 'split-sortvalue #f)
                                    (cons 'text (N_ "Amount"))
                                    (cons 'tip (N_ "Sort by amount."))
-                                   (cons 'subheading-renderer #f)
-                                   (cons 'subtotal-renderer #f)))
+                                   (cons 'renderer #f)))
 
         (cons 'description   (list (cons 'sortkey (list SPLIT-TRANS TRANS-DESCRIPTION))
                                    (cons 'split-sortvalue #f)
                                    (cons 'text (N_ "Description"))
                                    (cons 'tip (N_ "Sort by description."))
-                                   (cons 'subheading-renderer #f)
-                                   (cons 'subtotal-renderer #f)))
+                                   (cons 'renderer #f)))
 
         (if (qof-book-use-split-action-for-num-field (gnc-get-current-book))
             (cons 'number    (list (cons 'sortkey (list SPLIT-ACTION))
                                    (cons 'split-sortvalue #f)
                                    (cons 'text (N_ "Number/Action"))
                                    (cons 'tip (N_ "Sort by check number/action."))
-                                   (cons 'subheading-renderer #f)
-                                   (cons 'subtotal-renderer #f)))
+                                   (cons 'renderer #f)))
 
             (cons 'number    (list (cons 'sortkey (list SPLIT-TRANS TRANS-NUM))
                                    (cons 'split-sortvalue #f)
                                    (cons 'text (N_ "Number"))
                                    (cons 'tip (N_ "Sort by check/transaction number."))
-                                   (cons 'subheading-renderer #f)
-                                   (cons 'subtotal-renderer #f))))
+                                   (cons 'renderer #f))))
 
         (cons 't-number      (list (cons 'sortkey (list SPLIT-TRANS TRANS-NUM))
                                    (cons 'split-sortvalue #f)
                                    (cons 'text (N_ "Transaction Number"))
                                    (cons 'tip (N_ "Sort by transaction number."))
-                                   (cons 'subheading-renderer #f)
-                                   (cons 'subtotal-renderer #f)))
+                                   (cons 'renderer #f)))
 
         (cons 'memo          (list (cons 'sortkey (list SPLIT-MEMO))
                                    (cons 'split-sortvalue #f)
                                    (cons 'text (N_ "Memo"))
                                    (cons 'tip (N_ "Sort by memo."))
-                                   (cons 'subheading-renderer #f)
-                                   (cons 'subtotal-renderer #f)))
+                                   (cons 'renderer #f)))
 
         (cons 'none          (list (cons 'sortkey '())
                                    (cons 'split-sortvalue #f)
                                    (cons 'text (N_ "None"))
                                    (cons 'tip (N_ "Do not sort."))
-                                   (cons 'subheading-renderer #f)
-                                   (cons 'subtotal-renderer #f)))))
+                                   (cons 'renderer #f)))))
 
 
 (define (sortkey-get-info sortkey info)
   (cdr (assq info (cdr (assq sortkey sortkey-list)))))
-
-(define key-choice-list
-  (map (lambda (sortpair)
-         (vector (car sortpair)
-                 (sortkey-get-info (car sortpair) 'text)
-                 (sortkey-get-info (car sortpair) 'tip)))
-       sortkey-list))
 
 (define (timepair-year tp)    (gnc:timepair-get-year tp))
 (define (timepair-quarter tp) (+ (* 10 (timepair-year tp))  (gnc:timepair-get-quarter tp)))
@@ -387,12 +258,6 @@ options specified in the Options panels."))
 (define (date-subtotal-get-info sortkey info)
   (cdr (assq info (cdr (assq sortkey date-subtotal-list)))))
 
-(define date-subtotal-choice-list
-  (map (lambda (date-sortpair)
-         (vector (car date-sortpair)
-                 (date-subtotal-get-info (car date-sortpair) 'text)
-                 (date-subtotal-get-info (car date-sortpair) 'tip)))
-       date-subtotal-list))
 
 (define (add-split-row table split column-vector options
                        row-style account-types-to-reverse transaction-row?)
@@ -679,7 +544,21 @@ tags within description, notes or memo. ")
         (prime-sortkey 'account-name)
         (prime-sortkey-subtotal-true #t)
         (sec-sortkey 'register-order)
-        (sec-sortkey-subtotal-true #f))
+        (sec-sortkey-subtotal-true #f)       
+        (key-choice-list (map
+                          (lambda (sortpair)
+                            (vector
+                             (car sortpair)
+                             (sortkey-get-info (car sortpair) 'text)
+                             (sortkey-get-info (car sortpair) 'tip)))
+                          sortkey-list))
+        (date-subtotal-choice-list (map
+                                    (lambda (date-sortpair)
+                                      (vector
+                                       (car date-sortpair)
+                                       (date-subtotal-get-info (car date-sortpair) 'text)
+                                       (date-subtotal-get-info (car date-sortpair) 'tip)))
+                                    date-subtotal-list)))
 
     (define (apply-selectable-by-name-sorting-options)
       (let* ((prime-sortkey-enabled (not (eq? prime-sortkey 'none)))
@@ -987,6 +866,9 @@ Credit Card, and Income accounts."))))))
           (cons 'sort-account-full-name (opt-val pagename-sorting (N_ "Show Full Account Name")))
           (cons 'notes (opt-val gnc:pagename-display (N_ "Notes")))))
 
+  (define (column-uses? param columns-used)
+    (cdr (assq param columns-used)))
+
   (define (make-heading-list columns-used)
     (define (add-if pred? . items) (if pred? items '()))
     (append
@@ -1074,6 +956,125 @@ Credit Card, and Income accounts."))))))
                       (list (gnc:make-html-table-cell/markup
                              "total-number-cell" currency)))))
                   (cdr currency-totals))))
+
+    (define (total-string str) (string-append (_ "Total For ") str))
+
+    ;; display an account name depending on the options the user has set
+    (define (account-namestring account show-account-code? show-account-name? show-account-full-name?)
+      ;;# on multi-line splits we can get an empty ('()) account
+      (if (null? account)
+          (_ "Split Transaction")
+          (string-append
+           ;; display account code?
+           (if show-account-code?
+               (string-append (xaccAccountGetCode account) " ")
+               "")
+           ;; display account name?
+           (if show-account-name?
+               ;; display full account name?
+               (if show-account-full-name?
+                   (gnc-account-get-full-name account)
+                   (xaccAccountGetName account))
+               ""))))
+
+    ;; render an account subheading - used-columns determines what is displayed
+    (define (render-account-subheading split)
+      (let ((account (xaccSplitGetAccount split)))
+        (gnc:make-html-text
+         (gnc:html-markup-anchor
+          (gnc:account-anchor-text account)
+          (account-namestring account
+                              (column-uses? 'sort-account-code      used-columns)
+                              #t
+                              (column-uses? 'sort-account-full-name used-columns))))))                        
+
+    (define (render-corresponding-account-subheading split)
+      (let ((account (xaccSplitGetAccount (xaccSplitGetOtherSplit split))))
+        (gnc:make-html-text
+         (gnc:html-markup-anchor
+          (if (null? account)
+              ""
+              (gnc:account-anchor-text account))
+          (account-namestring account
+                              (column-uses? 'sort-account-code      used-columns)
+                              #t
+                              (column-uses? 'sort-account-full-name used-columns))))))
+
+    (define (render-week-subheading split)
+      (gnc:date-get-week-year-string
+       (gnc:timepair->date
+        (gnc-transaction-get-date-posted
+         (xaccSplitGetParent split)))))
+
+    (define (render-month-subheading split)
+      (gnc:date-get-month-year-string
+       (gnc:timepair->date
+        (gnc-transaction-get-date-posted
+         (xaccSplitGetParent split)))))
+
+    (define (render-quarter-subheading split)
+      (gnc:date-get-quarter-year-string
+       (gnc:timepair->date
+        (gnc-transaction-get-date-posted
+         (xaccSplitGetParent split)))))
+
+
+    (define (render-year-subheading split)
+      (gnc:date-get-year-string
+       (gnc:timepair->date
+        (gnc-transaction-get-date-posted
+         (xaccSplitGetParent split)))))
+
+    (define (render-account-subtotal split)
+      (account-namestring (xaccSplitGetAccount split)
+                          (column-uses? 'sort-account-code      used-columns)
+                          #t
+                          (column-uses? 'sort-account-full-name used-columns)))
+
+    (define (render-corresponding-account-subtotal split)
+      (account-namestring (xaccSplitGetAccount (xaccSplitGetOtherSplit split))
+                          (column-uses? 'sort-account-code      used-columns)
+                          #t
+                          (column-uses? 'sort-account-full-name used-columns)))
+
+    (define (render-week-subtotal split)
+      (let ((tm (gnc:timepair->date (gnc-transaction-get-date-posted (xaccSplitGetParent split)))))
+        (gnc:date-get-week-year-string tm)))
+
+    (define (render-month-subtotal split)
+      (let ((tm (gnc:timepair->date (gnc-transaction-get-date-posted (xaccSplitGetParent split)))))
+        (gnc:date-get-month-year-string tm)))
+
+    (define (render-quarter-subtotal split)
+      (let ((tm (gnc:timepair->date (gnc-transaction-get-date-posted (xaccSplitGetParent split)))))
+        (gnc:date-get-quarter-year-string tm)))
+
+    (define (render-year-subtotal split)
+      (let ((tm (gnc:timepair->date (gnc-transaction-get-date-posted (xaccSplitGetParent split)))))
+        (strftime "%Y" tm)))
+
+    (define (render-grand-total)
+      (_ "Grand Total"))
+
+    (define (subheading-renderer split key)
+      ((case key
+         ((week)      render-week-subheading)
+         ((month)     render-month-subheading)
+         ((quarter)   render-quarter-subheading)
+         ((year)      render-year-subheading)
+         ((account)   render-account-subheading)
+         ((other-acc) render-corresponding-account-subheading))
+       split))
+
+    (define (subtotal-renderer split key)
+      ((case key
+         ((week)      render-week-subtotal)
+         ((month)     render-month-subtotal)
+         ((quarter)   render-quarter-subtotal)
+         ((year)      render-year-subtotal)
+         ((account)   render-account-subtotal)
+         ((other-acc) render-corresponding-account-subtotal))
+       split))
 
     (define (do-rows-with-subtotals splits
                                     table
