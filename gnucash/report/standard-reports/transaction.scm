@@ -66,6 +66,7 @@
 (define optname-prime-date-subtotal (N_ "Primary Subtotal for Date Key"))
 (define optname-full-account-name (N_ "Show Full Account Name"))
 (define optname-show-account-code (N_ "Show Account Code"))
+(define optname-show-account-description (N_ "Show Account Description"))
 (define optname-sec-sortkey (N_ "Secondary Key"))
 (define optname-sec-subtotal (N_ "Secondary Subtotal"))
 (define optname-sec-sortorder  (N_ "Secondary Sort Order"))
@@ -456,6 +457,11 @@ tags within description, notes or memo. ")
              (and sec-sortkey-subtotal-enabled sec-sortkey-subtotal-true)))
 
         (gnc-option-db-set-option-selectable-by-name
+         options pagename-sorting optname-show-account-description
+         (or (and prime-sortkey-subtotal-enabled prime-sortkey-subtotal-true)
+             (and sec-sortkey-subtotal-enabled sec-sortkey-subtotal-true)))
+
+        (gnc-option-db-set-option-selectable-by-name
          options pagename-sorting optname-prime-date-subtotal
          prime-date-sortingtype-enabled)
 
@@ -488,6 +494,13 @@ tags within description, notes or memo. ")
       (N_ "Show the account code for subtotals and subtitles?")
       #f))
 
+    (gnc:register-trep-option
+     (gnc:make-simple-boolean-option
+      pagename-sorting optname-show-account-description
+      "j3"
+      (N_ "Show the account description for subheadings?")
+      #f))
+    
     (gnc:register-trep-option
      (gnc:make-complex-boolean-option
       pagename-sorting optname-prime-subtotal
@@ -725,6 +738,7 @@ Credit Card, and Income accounts."))))))
                                               (opt-val gnc:pagename-display (N_ "Use Full Other Account Name"))))
           (cons 'sort-account-code (opt-val pagename-sorting (N_ "Show Account Code")))
           (cons 'sort-account-full-name (opt-val pagename-sorting (N_ "Show Full Account Name")))
+          (cons 'sort-account-description (opt-val pagename-sorting (N_ "Show Account Description")))
           (cons 'notes (opt-val gnc:pagename-display (N_ "Notes")))))
 
   (define (column-uses? param columns-used)
@@ -913,6 +927,29 @@ Credit Card, and Income accounts."))))))
     (define (render-year-subtotal split)
       (let ((tm (gnc:timepair->date (gnc-transaction-get-date-posted (xaccSplitGetParent split)))))
         (strftime "%Y" tm)))
+    (define (render-account renderer-key split anchor?)
+      (let* ((account (case renderer-key
+                        ((account) (xaccSplitGetAccount split))
+                        ((other-acc) (xaccSplitGetAccount (xaccSplitGetOtherSplit split)))))
+             (name (account-namestring account
+                                       (column-uses? 'sort-account-code      used-columns)
+                                       #t
+                                       (column-uses? 'sort-account-full-name used-columns)))
+             (description (if (and (column-uses? 'sort-account-description used-columns)
+                                   (not (string-null? (xaccAccountGetDescription account))))
+                              (string-append ": " (xaccAccountGetDescription account))
+                              "")))
+        (if (and anchor? (not (null? account))) ;html anchor for 2-split transactions only
+            (gnc:make-html-text
+             (gnc:html-markup-anchor (gnc:account-anchor-text account) name)
+             description)
+            name)))
+
+    (define (render-summary split renderer-key anchor?)
+      (case renderer-key
+        ((week month quarter year) (render-date renderer-key split))
+        ((account other-acc) (render-account renderer-key split anchor?))
+        (else #f)))
 
     (define (render-grand-total)
       (_ "Grand Total"))
