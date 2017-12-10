@@ -322,6 +322,121 @@ options specified in the Options panels."))
                     total-collector def:grand-total-style export?))
 
 
+
+
+(define sortkey-list
+  ;; Defines the different sorting keys, as an association-list 
+  ;; together with the subtotal functions. Each entry: 
+  ;;  'sortkey             - sort parameter sent via qof-query
+  ;;  'split-sortvalue     - function which retrieves number/string used for comparing splits
+  ;;  'text                - text displayed in Display tab
+  ;;  'tip                 - tooltip displayed in Display tab
+  ;;  'subheading-renderer - function which renders the subheading
+  ;;  'subtotal-renderer   - function which renders the subtotal
+  (list (cons 'account-name  (list (cons 'sortkey (list SPLIT-ACCT-FULLNAME))
+                                   (cons 'split-sortvalue (lambda (a) (gnc-account-get-full-name (xaccSplitGetAccount a))))
+                                   (cons 'text (N_ "Account Name"))
+                                   (cons 'tip (N_ "Sort & subtotal by account name."))
+                                   (cons 'subheading-renderer render-account-subheading)
+                                   (cons 'subtotal-renderer render-account-subtotal)))
+        
+        (cons 'account-code (list (cons 'sortkey (list SPLIT-ACCOUNT ACCOUNT-CODE-))
+                                  (cons 'split-sortvalue (lambda (a) (xaccAccountGetCode (xaccSplitGetAccount a))))
+                                  (cons 'text (N_ "Account Code"))
+                                  (cons 'tip (N_ "Sort & subtotal by account code."))
+                                  (cons 'subheading-renderer render-account-subheading)
+                                  (cons 'subtotal-renderer render-account-subtotal)))
+
+        (cons 'date         (list (cons 'sortkey (list SPLIT-TRANS TRANS-DATE-POSTED))
+                                  (cons 'split-sortvalue #f)
+                                  (cons 'text (N_ "Date"))
+                                  (cons 'tip (N_ "Sort by date."))
+                                  (cons 'subheading-renderer #f)
+                                  (cons 'subtotal-renderer #f)))
+
+        (cons 'reconciled-date (list (cons 'sortkey (list SPLIT-DATE-RECONCILED))
+                                     (cons 'split-sortvalue #f)
+                                     (cons 'text (N_ "Reconciled Date"))
+                                     (cons 'tip (N_ "Sort by the Reconciled Date."))
+                                     (cons 'subheading-renderer #f)
+                                     (cons 'subtotal-renderer #f)))
+
+        (cons 'register-order (list (cons 'sortkey (list QUERY-DEFAULT-SORT))
+                                    (cons 'split-sortvalue #f)
+                                    (cons 'text (N_ "Register Order"))
+                                    (cons 'tip (N_ "Sort as in the register."))
+                                    (cons 'subheading-renderer #f)
+                                    (cons 'subtotal-renderer #f)))                                 
+
+        (cons 'corresponding-acc-name (list (cons 'sortkey (list SPLIT-CORR-ACCT-NAME))
+                                            (cons 'split-sortvalue (lambda (a) (xaccSplitGetCorrAccountFullName a)))
+                                            (cons 'text (N_ "Other Account Name"))
+                                            (cons 'tip (N_ "Sort by account transferred from/to's name."))
+                                            (cons 'subheading-renderer render-corresponding-account-subheading)
+                                            (cons 'subtotal-renderer render-corresponding-account-subtotal)))
+
+        (cons 'corresponding-acc-code (list (cons 'sortkey (list SPLIT-CORR-ACCT-CODE))
+                                            (cons 'split-sortvalue (lambda (a) (xaccSplitGetCorrAccountCode a)))
+                                            (cons 'text (N_ "Other Account Code"))
+                                            (cons 'tip (N_ "Sort by account transferred from/to's code."))
+                                            (cons 'subheading-renderer render-corresponding-account-subheading)
+                                            (cons 'subtotal-renderer render-corresponding-account-subtotal)))
+
+        (cons 'amount        (list (cons 'sortkey (list SPLIT-VALUE))
+                                   (cons 'split-sortvalue #f)
+                                   (cons 'text (N_ "Amount"))
+                                   (cons 'tip (N_ "Sort by amount."))
+                                   (cons 'subheading-renderer #f)
+                                   (cons 'subtotal-renderer #f)))
+
+        (cons 'description   (list (cons 'sortkey (list SPLIT-TRANS TRANS-DESCRIPTION))
+                                   (cons 'split-sortvalue #f)
+                                   (cons 'text (N_ "Description"))
+                                   (cons 'tip (N_ "Sort by description."))
+                                   (cons 'subheading-renderer #f)
+                                   (cons 'subtotal-renderer #f)))
+
+        (if BOOK-SPLIT-ACTION
+            (cons 'number    (list (cons 'sortkey (list SPLIT-ACTION))
+                                   (cons 'split-sortvalue #f)
+                                   (cons 'text (N_ "Number/Action"))
+                                   (cons 'tip (N_ "Sort by check number/action."))
+                                   (cons 'subheading-renderer #f)
+                                   (cons 'subtotal-renderer #f)))
+
+            (cons 'number    (list (cons 'sortkey (list SPLIT-TRANS TRANS-NUM))
+                                   (cons 'split-sortvalue #f)
+                                   (cons 'text (N_ "Number"))
+                                   (cons 'tip (N_ "Sort by check/transaction number."))
+                                   (cons 'subheading-renderer #f)
+                                   (cons 'subtotal-renderer #f))))
+
+        (cons 't-number      (list (cons 'sortkey (list SPLIT-TRANS TRANS-NUM))
+                                   (cons 'split-sortvalue #f)
+                                   (cons 'text (N_ "Transaction Number"))
+                                   (cons 'tip (N_ "Sort by transaction number."))
+                                   (cons 'subheading-renderer #f)
+                                   (cons 'subtotal-renderer #f)))
+
+        (cons 'memo          (list (cons 'sortkey (list SPLIT-MEMO))
+                                   (cons 'split-sortvalue #f)
+                                   (cons 'text (N_ "Memo"))
+                                   (cons 'tip (N_ "Sort by memo."))
+                                   (cons 'subheading-renderer #f)
+                                   (cons 'subtotal-renderer #f)))
+
+        (cons 'none          (list (cons 'sortkey '())
+                                   (cons 'split-sortvalue #f)
+                                   (cons 'text (N_ "None"))
+                                   (cons 'tip (N_ "Do not sort."))
+                                   (cons 'subheading-renderer #f)
+                                   (cons 'subtotal-renderer #f)))))
+
+
+(define (sortkey-get-info sortkey info)
+  (cdr (assq info (cdr (assq sortkey sortkey-list)))))
+
+
 (define (add-split-row table split column-vector options
                        row-style account-types-to-reverse transaction-row?)
 
@@ -1221,62 +1336,6 @@ Credit Card, and Income accounts."))))))
 (define (trep-renderer report-obj)
   (define options (gnc:report-options report-obj))
   (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
-  (define comp-funcs-assoc-list
-    ;; Defines the different sorting keys, together with the
-    ;; subtotal functions. Each entry: (cons
-    ;; 'sorting-key-option-value (vector 'query-sorting-key
-    ;; subtotal-function subtotal-renderer))
-    (list (cons 'account-name  (vector
-                                (list SPLIT-ACCT-FULLNAME)
-                                (lambda (a b) (zero? (xaccSplitCompareAccountFullNames a b))) 
-                                render-account-subheading
-                                render-account-subtotal))
-          (cons 'account-code  (vector
-                                (list SPLIT-ACCOUNT ACCOUNT-CODE-)
-                                (lambda (a b) (zero? (xaccSplitCompareAccountCodes a b)))
-                                render-account-subheading
-                                render-account-subtotal))
-          (cons 'date          (vector
-                                (list SPLIT-TRANS TRANS-DATE-POSTED)
-                                #f #f #f))
-          (cons 'reconciled-date (vector
-                                  (list SPLIT-DATE-RECONCILED)
-                                  #f #f #f))
-          (cons 'register-order (vector
-                                 (list QUERY-DEFAULT-SORT)
-                                 #f #f #f))
-          (cons 'corresponding-acc-name
-                (vector
-                 (list SPLIT-CORR-ACCT-NAME)
-                 (lambda (a b) (zero? (xaccSplitCompareOtherAccountFullNames a b))) 
-                 render-corresponding-account-subheading
-                 render-corresponding-account-subtotal))
-          (cons 'corresponding-acc-code
-                (vector
-                 (list SPLIT-CORR-ACCT-CODE)
-                 (lambda (a b) (zero? (xaccSplitCompareOtherAccountCodes a b)))
-                 render-corresponding-account-subheading
-                 render-corresponding-account-subtotal))
-          (cons 'amount        (vector (list SPLIT-VALUE) #f #f #f))
-          (cons 'description   (vector (list SPLIT-TRANS TRANS-DESCRIPTION) #f #f #f))
-          (if (qof-book-use-split-action-for-num-field (gnc-get-current-book))
-              (cons 'number    (vector (list SPLIT-ACTION) #f #f #f))
-              (cons 'number    (vector (list SPLIT-TRANS TRANS-NUM) #f #f #f)))
-          (cons 't-number      (vector (list SPLIT-TRANS TRANS-NUM) #f #f #f))
-          (cons 'memo          (vector (list SPLIT-MEMO) #f #f #f))
-          (cons 'none          (vector '() #f #f #f))))
-
-  (define date-comp-funcs-assoc-list
-    ;; Extra list for date option. Each entry: (cons
-    ;; 'date-subtotal-option-value (vector subtotal-function
-    ;; subtotal-renderer))
-    (list
-     (cons 'none (vector #f #f #f))
-     (cons 'weekly (vector split-same-week? render-week-subheading render-week-subtotal))
-     (cons 'monthly (vector split-same-month? render-month-subheading render-month-subtotal))
-     (cons 'quarterly (vector split-same-quarter? render-quarter-subheading render-quarter-subtotal))
-     (cons 'yearly (vector split-same-year? render-year-subheading render-year-subtotal))))
-
   (define (get-subtotalstuff-helper name-sortkey name-subtotal name-date-subtotal
            comp-index date-index)
     ;; The value of the sorting-key multichoice option.
@@ -1295,7 +1354,7 @@ Credit Card, and Income accounts."))))))
           ;; appropriate funcs in the assoc-list.
           (and (member sortkey subtotal-enabled)
                (and (opt-val pagename-sorting name-subtotal)
-                    (vector-ref (cdr (assq sortkey comp-funcs-assoc-list)) comp-index))))))
+                    (sortkey-get-info sortkey info))))))
 
   (define (get-query-sortkey sort-option-value)
     (vector-ref  (cdr (assq sort-option-value comp-funcs-assoc-list)) 0))
@@ -1389,8 +1448,8 @@ Credit Card, and Income accounts."))))))
           (xaccQueryAddAccountMatch query c_account_1 QOF-GUID-MATCH-ANY QOF-QUERY-AND)
           (xaccQueryAddDateMatchTS query #t begindate #t enddate QOF-QUERY-AND)
           (qof-query-set-sort-order query
-                                    (get-query-sortkey primary-key)
-                                    (get-query-sortkey secondary-key)
+                                    (sortkey-get-info primary-key 'sortkey)
+                                    (sortkey-get-info secondary-key 'sortkey)
                                     '())
           (qof-query-set-sort-increasing query
                                          (eq? primary-order 'ascend)
@@ -1436,25 +1495,31 @@ Credit Card, and Income accounts."))))))
 
               (let ((table (make-split-table
                             splits options
-                            (get-subtotal-pred optname-prime-sortkey
+                            (subtotal-get-info optname-prime-sortkey
                                                optname-prime-subtotal
-                                               optname-prime-date-subtotal)
-                            (get-subtotal-pred optname-sec-sortkey
+                                               optname-prime-date-subtotal
+                                               'split-sortvalue)
+                            (subtotal-get-info optname-sec-sortkey
                                                optname-sec-subtotal
-                                               optname-sec-date-subtotal)
-                            (get-subheading-renderer optname-prime-sortkey
-                                                     optname-prime-subtotal
-                                                     optname-prime-date-subtotal)
-                            (get-subheading-renderer optname-sec-sortkey
-                                                     optname-sec-subtotal
-                                                     optname-sec-date-subtotal)
-                            (get-subtotal-renderer   optname-prime-sortkey
-                                                     optname-prime-subtotal
-                                                     optname-prime-date-subtotal)
-                            (get-subtotal-renderer   optname-sec-sortkey
-                                                     optname-sec-subtotal
-                                                     optname-sec-date-subtotal))))
-
+                                               optname-sec-date-subtotal
+                                               'split-sortvalue)
+                            (subtotal-get-info optname-prime-sortkey
+                                               optname-prime-subtotal
+                                               optname-prime-date-subtotal
+                                               'subheading-renderer)
+                            (subtotal-get-info optname-sec-sortkey
+                                               optname-sec-subtotal
+                                               optname-sec-date-subtotal
+                                               'subheading-renderer)
+                            (subtotal-get-info   optname-prime-sortkey
+                                                 optname-prime-subtotal
+                                                 optname-prime-date-subtotal
+                                                 'subtotal-renderer)
+                            (subtotal-get-info   optname-sec-sortkey
+                                                 optname-sec-subtotal
+                                                 optname-sec-date-subtotal
+                                                 'subtotal-renderer))))
+                
                 (gnc:html-document-set-title! document report-title)
 
                 (gnc:html-document-add-object!
