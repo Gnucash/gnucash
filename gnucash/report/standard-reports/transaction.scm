@@ -358,14 +358,7 @@ tags within description, notes or memo. ")
     gnc:pagename-accounts optname-filterby
     "b" (N_ "Filter on these accounts.")
     (lambda ()
-      ;; FIXME : gnc:get-current-accounts disappeared.
-      (let* ((current-accounts '())
-             (root (gnc-get-current-root-account))
-             (num-accounts (gnc-account-n-children root))
-             (first-account (gnc-account-nth-child root 0)))
-        (cond ((not (null? current-accounts)) (list (car current-accounts)))
-              ((positive? num-accounts) (list first-account))
-              (else '()))))
+      '())
     #f #t))
 
   (gnc:register-trep-option
