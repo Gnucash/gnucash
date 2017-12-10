@@ -1055,7 +1055,7 @@ Credit Card, and Income accounts."))))))
           (cons 'notes (opt-val gnc:pagename-display (N_ "Notes")))))
 
   (define (make-heading-list columns-used)
-    (define (add-if pred? item) (if pred? (list item) '()))
+    (define (add-if pred? . items) (if pred? items '()))
     (append
      (add-if (column-uses? 'date columns-used)
              (_ "Date"))
@@ -1087,11 +1087,9 @@ Credit Card, and Income accounts."))))))
      (add-if (column-uses? 'amount-single columns-used)
              (_ "Amount"))
      ;; FIXME: Proper labels: what?
-     (if (column-uses? 'amount-double columns-used)
-         (list
-          (_ "Debit")
-          (_ "Credit"))
-         '())
+     (add-if (column-uses? 'amount-double columns-used)
+             (_ "Debit")
+             (_ "Credit"))
      (add-if (column-uses? 'running-balance columns-used)
              (_ "Balance"))))
 
