@@ -1141,19 +1141,9 @@ tags within description, notes or memo. ")
                  (let* ((calculator (vector-ref cell 1))
                         (reverse? (vector-ref cell 2))
                         (subtotal? (vector-ref cell 3))
-                        (calculated (calculator split))
-                        (reverse-amount (lambda (mon)
-                                            (let ((currency (gnc:gnc-monetary-commodity mon))
-                                                  (amount (gnc:gnc-monetary-amount mon)))
-                                              (gnc:make-gnc-monetary
-                                               currency
-                                               (gnc-numeric-neg amount))))))
-                   (vector (if (and reverse?
-                                    (if account-types-to-reverse
-                                        (member (xaccAccountGetType account) account-types-to-reverse)
-                                        (gnc-reverse-balance account)))
-                               (reverse-amount calculated)
-                               calculated)
+                        (calculated (calculator split)))
+                   (vector calculated
+                           reverse?
                            subtotal?)))
                cell-calculators))
 
@@ -1234,22 +1224,23 @@ tags within description, notes or memo. ")
 
         (for-each (lambda (cell)
                     (let ((cell-content (vector-ref cell 0))
-                          (reverse? (vector-ref cell 1))
-                          (reverse-amount (lambda (mon)
-                                            (let ((currency (gnc:gnc-monetary-commodity mon))
-                                                  (amount (gnc:gnc-monetary-amount mon)))
-                                              (gnc:make-gnc-monetary
-                                               currency
-                                               (gnc-numeric-neg amount))))))
+                          ;; reverse? returns a bool - will check if the cell type has reversible sign,
+                          ;; whether the account is also reversible according to Report Option, or
+                          ;; if Report Option follows Global Settings, will retrieve bool from it.
+                          (reverse? (and (vector-ref cell 1)
+                                         (if account-types-to-reverse
+                                             (member (xaccAccountGetType account) account-types-to-reverse)
+                                             (gnc-reverse-balance account)))))
                       (if cell-content
                           (addto! row-contents
                                   (gnc:make-html-table-cell/markup
                                    "number-cell"
                                    (gnc:html-transaction-anchor
                                     trans
-                                    (if (and reverse?
-                                             (member (xaccAccountGetType account) account-types-to-reverse))
-                                        (reverse-amount cell-content)
+                                    ;; if conditions for reverse are satisfied, apply sign reverse to
+                                    ;; monetary amount
+                                    (if reverse?
+                                        (gnc:monetary-neg cell-content)
                                         cell-content))))
                           (addto! row-contents (gnc:html-make-empty-cell)))))
                   cells)
