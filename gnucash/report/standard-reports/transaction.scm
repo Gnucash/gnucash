@@ -398,6 +398,13 @@ options specified in the Options panels."))
 (define (sortkey-get-info sortkey info)
   (cdr (assq info (cdr (assq sortkey sortkey-list)))))
 
+(define key-choice-list
+  (map (lambda (sortpair)
+         (vector (car sortpair)
+                 (sortkey-get-info (car sortpair) 'text)
+                 (sortkey-get-info (car sortpair) 'tip)))
+       sortkey-list))
+
 (define (timepair-year tp)    (gnc:timepair-get-year tp))
 (define (timepair-quarter tp) (+ (* 10 (timepair-year tp))  (gnc:timepair-get-quarter tp)))
 (define (timepair-month tp)   (+ (* 100 (timepair-year tp)) (gnc:timepair-get-month tp)))
@@ -728,71 +735,14 @@ tags within description, notes or memo. ")
 
   ;; Sorting options
   
-  (let ((key-choice-list
-         (append
-          (list (vector 'none
-                        (N_ "None")
-                        (N_ "Do not sort."))
 
-                (vector 'account-name
-                        (N_ "Account Name")
-                        (N_ "Sort & subtotal by account name."))
-
-                (vector 'account-code
-                        (N_ "Account Code")
-                        (N_ "Sort & subtotal by account code."))
-
-                (vector 'date
-                        (N_ "Date")
-                        (N_ "Sort by date."))
-
-                (vector 'reconciled-date
-                        (N_ "Reconciled Date")
-                        (N_ "Sort by the Reconciled Date."))
-
-                (vector 'register-order
-                        (N_ "Register Order")
-                        (N_ "Sort as in the register."))
-
-                (vector 'corresponding-acc-name
-                        (N_ "Other Account Name")
-                        (N_ "Sort by account transferred from/to's name."))
-
-                (vector 'corresponding-acc-code
-                        (N_ "Other Account Code")
-                        (N_ "Sort by account transferred from/to's code."))
-
-                (vector 'amount
-                        (N_ "Amount")
-                        (N_ "Sort by amount."))
-
-                (vector 'description
-                        (N_ "Description")
-                        (N_ "Sort by description."))
-
-                (vector 'number
-                        (N_ "Number/Action")
-                        (N_ "Sort by check number/action.")))
-          (if (qof-book-use-split-action-for-num-field (gnc-get-current-book))
-              (list
-               (vector 't-number
-                       (N_ "Transaction Number")
-                       (N_ "Sort by transaction number.")))
-              '())
-          (list
-           (vector 'memo
-                   (N_ "Memo")
-                   (N_ "Sort by memo.")))))
-
-        (ascending-choice-list
-         (list
-          (vector 'ascend
-                  (N_ "Ascending")
-                  (N_ "Smallest to largest, earliest to latest."))
-          (vector 'descend
-                  (N_ "Descending")
-                  (N_ "Largest to smallest, latest to earliest."))))
-
+  (let ((ascending-choice-list 
+         (list (vector 'ascend
+                       (N_ "Ascending")
+                       (N_ "Smallest to largest, earliest to latest."))
+               (vector 'descend
+                       (N_ "Descending")
+                       (N_ "Largest to smallest, latest to earliest."))))
         (prime-sortkey 'account-name)
         (prime-sortkey-subtotal-true #t)
         (sec-sortkey 'register-order)
