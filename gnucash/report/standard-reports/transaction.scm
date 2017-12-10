@@ -695,6 +695,16 @@ enable full POSIX regular expressions capabilities. '#work|#family' will match b
 tags within description, notes or memo. ")
     #f))
 
+  (gnc:register-trep-option
+   (gnc:make-multichoice-option
+    pagename-filter optname-reconcile-status
+    "j1" (N_ "Filter by reconcile status.")
+    #f
+    (list (vector #f      (N_ "All")           (N_ "Show All Transactions"))
+          (vector '(#\n)  (N_ "Unreconciled")  (N_ "Unreconciled only"))
+          (vector '(#\c)  (N_ "Cleared")       (N_ "Cleared only"))
+          (vector '(#\y)  (N_ "Reconciled")    (N_ "Reconciled only")))))
+
   ;; Accounts options
 
   ;; account to do report on
@@ -1554,9 +1564,10 @@ Credit Card, and Income accounts."))))))
 
           ;;(gnc:warn "Splits in trep-renderer:" splits)
 
-          ; Combined Filter:
-          ; - include/exclude splits to/from selected accounts
-          ; - substring/regex matcher for Transaction Description/Notes/Memo
+          ;; Combined Filter:
+          ;; - include/exclude splits to/from selected accounts
+          ;; - substring/regex matcher for Transaction Description/Notes/Memo
+          ;; - by reconcile status
           (set! splits (filter
                         (lambda (split)
                           (let* ((trans (xaccSplitGetParent split))
@@ -1568,7 +1579,9 @@ Credit Card, and Income accounts."))))))
                                  (if (eq? filter-mode 'exclude) (not (is-filter-member split c_account_2)) #t)
                                  (or (match? (xaccTransGetDescription trans))
                                      (match? (xaccTransGetNotes trans))
-                                     (match? (xaccSplitGetMemo split))))))
+                                     (match? (xaccSplitGetMemo split)))
+                                 (or (not reconcile-status-filter) ; #f = ignore next filter
+                                     (member (xaccSplitGetReconcile split) reconcile-status-filter)))))
                         splits))
 
           (if (null? splits)
