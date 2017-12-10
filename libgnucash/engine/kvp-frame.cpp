@@ -427,16 +427,15 @@ KvpFrame::flatten_kvp_impl(std::vector <std::string> path, std::vector <KvpEntry
 {
     for (auto const & entry : m_valuemap)
     {
+        std::vector<std::string> new_path {path};
+        new_path.push_back("/");
         if (entry.second->get_type() == KvpValue::Type::FRAME)
         {
-            std::vector<std::string> send_path {path};
-            send_path.push_back("/");
-            send_path.push_back(entry.first);
-            entry.second->get<KvpFrame*>()->flatten_kvp_impl(send_path, entries);
+            new_path.push_back(entry.first);
+            entry.second->get<KvpFrame*>()->flatten_kvp_impl(new_path, entries);
         }
         else
         {
-            std::vector <std::string> new_path {path};
             new_path.emplace_back (entry.first);
             entries.emplace_back (new_path, entry.second);
         }

@@ -1076,7 +1076,7 @@ static void
 add_feature_to_hash (const gchar *key, KvpValue *value, GHashTable * user_data)
 {
     gchar *descr = g_strdup(value->get<const char*>());
-    g_hash_table_insert (*(GHashTable**)user_data, (gchar*)key, descr);
+    g_hash_table_insert (user_data, (gchar*)key, descr);
 }
 
 GHashTable *

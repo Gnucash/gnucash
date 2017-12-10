@@ -318,13 +318,8 @@ TEST_F(ImapBayesTest, AddAccountBayes)
     EXPECT_EQ(2, value->get<int64_t>());
 }
 
-TEST_F(ImapBayesTest, ConvertAccountBayes)
+TEST_F(ImapBayesTest, ConvertBayesData)
 {
-    // prevent the embedded beginedit/committedit from doing anything
-    qof_instance_increase_editlevel(QOF_INSTANCE(t_bank_account));
-    qof_instance_mark_clean(QOF_INSTANCE(t_bank_account));
-    gnc_account_imap_add_account_bayes(t_imap, t_list1, t_expense_account1); //Food
-    gnc_account_imap_add_account_bayes(t_imap, t_list2, t_expense_account2); //Drink
     auto root = qof_instance_get_slots(QOF_INSTANCE(t_bank_account));
     auto book = qof_instance_get_slots(QOF_INSTANCE(t_imap->book));
     auto acct1_guid = guid_to_string (xaccAccountGetGUID(t_expense_account1)); //Food
@@ -334,15 +329,6 @@ TEST_F(ImapBayesTest, ConvertAccountBayes)
     auto val1 = new KvpValue(static_cast<int64_t>(10));
     auto val2 = new KvpValue(static_cast<int64_t>(5));
     auto val3 = new KvpValue(static_cast<int64_t>(2));
-    // Test for existing entries, all will be 1
-    auto value = root->get_slot({std::string{IMAP_FRAME_BAYES} + "/" + foo + "/" + acct1_guid});
-    EXPECT_EQ(1, value->get<int64_t>());
-    value = root->get_slot({std::string{IMAP_FRAME_BAYES} + "/" + bar + "/" + acct1_guid});
-    EXPECT_EQ(1, value->get<int64_t>());
-    value = root->get_slot({std::string{IMAP_FRAME_BAYES} + "/" + baz + "/" + acct2_guid});
-    EXPECT_EQ(1, value->get<int64_t>());
-    value = root->get_slot({std::string{IMAP_FRAME_BAYES} + "/" + waldo + "/" + acct2_guid});
-    EXPECT_EQ(1, value->get<int64_t>());
     // Set up some old entries
     root->set_path({IMAP_FRAME_BAYES, "severely", "divided", "token", "Asset-Bank"}, val1);
     root->set_path({IMAP_FRAME_BAYES, salt, "Asset-Bank#Bank"}, new KvpValue{*val1});
@@ -350,13 +336,11 @@ TEST_F(ImapBayesTest, ConvertAccountBayes)
     root->set_path({IMAP_FRAME_BAYES, pork, "Expense#Food"}, new KvpValue{*val2});
     root->set_path({IMAP_FRAME_BAYES, sausage, "Expense#Drink"}, val3);
     root->set_path({IMAP_FRAME_BAYES, foo, "Expense#Food"}, new KvpValue{*val2});
-    EXPECT_EQ(1, qof_instance_get_editlevel(QOF_INSTANCE(t_bank_account)));
-    EXPECT_TRUE(qof_instance_get_dirty_flag(QOF_INSTANCE(t_bank_account)));
-    qof_instance_mark_clean(QOF_INSTANCE(t_bank_account));
-    // Start Convert
-    gnc_account_imap_convert_bayes (t_imap->book);
+    root->set_path({IMAP_FRAME_BAYES, salt, acct1_guid}, new KvpValue{*val1});
+    /*Calling into the imap functions should trigger a conversion.*/
+    gnc_account_imap_add_account_bayes(t_imap, t_list5, t_expense_account2); //pork and sausage; account Food
     // convert from 'Asset-Bank' to 'Asset-Bank' guid
-    value = root->get_slot({std::string{IMAP_FRAME_BAYES} + "/severely/divided/token/" + acct3_guid});
+    auto value = root->get_slot({std::string{IMAP_FRAME_BAYES} + "/severely/divided/token/" + acct3_guid});
     EXPECT_EQ(10, value->get<int64_t>());
     // convert from 'Asset-Bank#Bank' to 'Sav Bank' guid
     value = root->get_slot({std::string{IMAP_FRAME_BAYES} + "/" + salt + "/" + acct4_guid});
@@ -366,14 +350,14 @@ TEST_F(ImapBayesTest, ConvertAccountBayes)
     EXPECT_EQ(5, value->get<int64_t>());
     // convert from 'Expense#Drink' to 'Drink' guid
     value = root->get_slot({std::string{IMAP_FRAME_BAYES} + "/" + sausage + "/" + acct2_guid});
-    EXPECT_EQ(2, value->get<int64_t>());
+    /*We put in 2, then called it once to bring it up to 3.*/
+    EXPECT_EQ(3, value->get<int64_t>());
     // convert from 'Expense#Food' to 'Food' guid but add to original value
     value = root->get_slot({std::string{IMAP_FRAME_BAYES} + "/" + foo + "/" + acct1_guid});
     EXPECT_EQ(5, value->get<int64_t>());
-    // Check for run once flag
-    auto vals = book->get_slot({"changed-bayesian-to-guid"});
-    EXPECT_STREQ("true", vals->get<const char*>());
-    EXPECT_EQ(1, qof_instance_get_editlevel(QOF_INSTANCE(t_bank_account)));
+    // Keep GUID value from original
+    value = root->get_slot({std::string{IMAP_FRAME_BAYES} + "/" + salt + "/" + acct1_guid});
+    EXPECT_EQ(10, value->get<int64_t>());
     EXPECT_TRUE(qof_instance_get_dirty_flag(QOF_INSTANCE(t_bank_account)));
 }
 

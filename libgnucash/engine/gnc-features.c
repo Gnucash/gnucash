@@ -46,6 +46,7 @@ static gncFeature known_features[] =
     { GNC_FEATURE_KVP_EXTRA_DATA, "Extra data for addresses, jobs or invoice entries (requires at least GnuCash 2.6.4)" },
     { GNC_FEATURE_BOOK_CURRENCY, "User specifies a 'book-currency'; costs of other currencies/commodities tracked in terms of book-currency (requires at least GnuCash 2.7.0)" },
     { GNC_FEATURE_GUID_BAYESIAN, "Use account GUID as key for Bayesian data (requires at least GnuCash 2.6.12)" },
+    { GNC_FEATURE_GUID_FLAT_BAYESIAN, "Use account GUID as key for bayesian data and store KVP flat" },
     { NULL },
 };
 
@@ -148,6 +149,32 @@ void gnc_features_set_used (QofBook *book, const gchar *feature)
     }
 
     qof_book_set_feature (book, feature, description);
-
-
 }
+
+struct CheckFeature
+{
+    gchar const * checked_feature;
+    gboolean found;
+};
+
+static void gnc_features_check_feature_cb (gpointer pkey, gpointer value,
+				  gpointer data)
+{
+    const gchar *key = (const gchar*)pkey;
+    struct CheckFeature * check_data = data;
+    g_assert(data);
+    if (!g_strcmp0 (key, check_data->checked_feature))
+        check_data->found = TRUE;
+}
+
+gboolean gnc_features_check_used (QofBook *book, const gchar * feature)
+{
+    GHashTable *features_used = qof_book_get_features (book);
+    struct CheckFeature check_data = {feature, FALSE};
+    /* Setup the known_features hash table */
+    gnc_features_init();
+    g_hash_table_foreach (features_used, &gnc_features_check_feature_cb, &check_data);
+    g_hash_table_unref (features_used);
+    return check_data.found;
+}
+

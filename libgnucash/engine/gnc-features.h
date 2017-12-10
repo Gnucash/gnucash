@@ -50,6 +50,7 @@ extern "C" {
 #define GNC_FEATURE_KVP_EXTRA_DATA "Extra data in addresses, jobs or invoice entries"
 #define GNC_FEATURE_BOOK_CURRENCY "Use a Book-Currency"
 #define GNC_FEATURE_GUID_BAYESIAN "Account GUID based Bayesian data"
+#define GNC_FEATURE_GUID_FLAT_BAYESIAN "Account GUID based bayesian with flat KVP"
 
 /** @} */
 
@@ -68,10 +69,14 @@ gchar *gnc_features_test_unknown (QofBook *book);
  */
 void gnc_features_set_used (QofBook *book, const gchar *feature);
 
+/*
+ * Returns true if the specified feature is used.
+ */
+gboolean gnc_features_check_used (QofBook *, char const * feature);
+
 #ifdef __cplusplus
 } /* extern "C" */
-#endif
-
+#endif /*__cplusplus*/
 #endif /* GNC_FEATURES_H */
 /** @} */
 /** @} */

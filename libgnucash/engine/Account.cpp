@@ -5270,6 +5270,160 @@ get_first_pass_probabilities(GncImportMatchMap * imap, GList * tokens)
     return ret;
 }
 
+static std::string
+look_for_old_separator_descendants (Account *root, std::string const & full_name, const gchar *separator)
+{
+    GList *top_accounts, *ptr;
+    gint   found_len = 0;
+    gchar  found_sep;
+    top_accounts = gnc_account_get_descendants (root);
+    PINFO("Incoming full_name is '%s', current separator is '%s'", full_name.c_str (), separator);
+    /* Go through list of top level accounts */
+    for (ptr = top_accounts; ptr; ptr = g_list_next (ptr))
+    {
+        const gchar *name = xaccAccountGetName (static_cast <Account const *> (ptr->data));
+        // we are looking for the longest top level account that matches
+        if (g_str_has_prefix (full_name.c_str (), name))
+        {
+            gint name_len = strlen (name);
+            const gchar old_sep = full_name[name_len];
+            if (!g_ascii_isalnum (old_sep)) // test for non alpha numeric
+            {
+                if (name_len > found_len)
+                {
+                    found_sep = full_name[name_len];
+                    found_len = name_len;
+                }
+            }
+        }
+    }
+    g_list_free (top_accounts); // Free the List
+    std::string new_name {full_name};
+    if (found_len > 1)
+        std::replace (new_name.begin (), new_name.end (), found_sep, *separator);
+    PINFO ("Return full_name is '%s'", new_name.c_str ());
+    return new_name;
+}
+
+static std::string
+get_guid_from_account_name (Account * root, std::string const & name)
+{
+    auto map_account = gnc_account_lookup_by_full_name (root, name.c_str ());
+    if (!map_account)
+    {
+        auto temp_account_name = look_for_old_separator_descendants (root, name,
+             gnc_get_account_separator_string ());
+        map_account = gnc_account_lookup_by_full_name (root, temp_account_name.c_str ());
+    }
+    auto temp_guid = gnc::GUID {*xaccAccountGetGUID (map_account)};
+    return temp_guid.to_string ();
+}
+
+static FlatKvpEntry
+convert_entry (KvpEntry entry, Account* root)
+{
+    /*We need to make a copy here.*/
+    auto account_name = entry.first.back();
+    if (!gnc::GUID::is_valid_guid (account_name))
+    {
+        /* Earlier version stored the account name in the import map, and
+         * there were early beta versions of 2.7 that stored a GUID.
+         * If there is no GUID, we assume it's an account name. */
+        /* Take off the account name and replace it with the GUID */
+        entry.first.pop_back();
+        auto guid_str = get_guid_from_account_name (root, account_name);
+        entry.first.emplace_back (guid_str);
+    }
+    std::string new_key {std::accumulate (entry.first.begin(), entry.first.end(), std::string {})};
+    new_key = IMAP_FRAME_BAYES + new_key;
+    return {new_key, entry.second};
+}
+
+static std::vector<FlatKvpEntry>
+get_new_flat_imap (Account * acc)
+{
+    auto frame = qof_instance_get_slots (QOF_INSTANCE (acc));
+    auto slot = frame->get_slot ({IMAP_FRAME_BAYES});
+    if (!slot)
+        return {};
+    auto imap_frame = slot->get<KvpFrame*> ();
+    auto flat_kvp = imap_frame->flatten_kvp ();
+    auto root = gnc_account_get_root (acc);
+    std::vector <FlatKvpEntry> ret;
+    for (auto const & flat_entry : flat_kvp)
+    {
+        auto converted_entry = convert_entry (flat_entry, root);
+        /*If the entry was invalid, we don't perpetuate it.*/
+        if (converted_entry.first.size())
+            ret.emplace_back (converted_entry);
+    }
+    return ret;
+}
+
+static bool
+convert_imap_account_bayes_to_flat (Account *acc)
+{
+    auto frame = qof_instance_get_slots (QOF_INSTANCE (acc));
+    if (!frame->get_keys().size())
+        return false;
+    auto new_imap = get_new_flat_imap(acc);
+    xaccAccountBeginEdit(acc);
+    frame->set({IMAP_FRAME_BAYES}, nullptr);
+    if (!new_imap.size ())
+    {
+        xaccAccountCommitEdit(acc);
+        return false;
+    }
+    std::for_each(new_imap.begin(), new_imap.end(), [&frame] (FlatKvpEntry const & entry) {
+        frame->set({entry.first.c_str()}, entry.second);
+    });
+    qof_instance_set_dirty (QOF_INSTANCE (acc));
+    xaccAccountCommitEdit(acc);
+    return true;
+}
+
+/*
+ * Checks for import map data and converts them when found.
+ */
+static bool
+imap_convert_bayes_to_flat (QofBook * book)
+{
+    auto root = gnc_book_get_root_account (book);
+    auto accts = gnc_account_get_descendants_sorted (root);
+    bool ret = false;
+    for (auto ptr = accts; ptr; ptr = g_list_next (ptr))
+    {
+        Account *acc = static_cast <Account*> (ptr->data);
+        if (convert_imap_account_bayes_to_flat (acc))
+        {
+            ret = true;
+            gnc_features_set_used (book, GNC_FEATURE_GUID_FLAT_BAYESIAN);
+        }
+    }
+    g_list_free (accts);
+    return ret;
+}
+
+/*
+ * Here we check to see the state of import map data.
+ *
+ * If the GUID_FLAT_BAYESIAN feature flag is set, everything
+ * should be fine.
+ *
+ * If it is not set, there are two possibilities: import data
+ * are present from a previous version or not. If they are,
+ * they are converted, and the feature flag set. If there are
+ * no previous data, nothing is done.
+ */
+static void
+check_import_map_data (QofBook *book)
+{
+    if (gnc_features_check_used (book, GNC_FEATURE_GUID_FLAT_BAYESIAN))
+        return;
+    /* This function will set GNC_FEATURE_GUID_FLAT_BAYESIAN if necessary.*/
+    imap_convert_bayes_to_flat (book);
+}
+
 static constexpr double threshold = .90 * probability_factor; /* 90% */
 
 /** Look up an Account in the map */
@@ -5278,6 +5432,7 @@ gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
 {
     if (!imap)
         return nullptr;
+    check_import_map_data (imap->book);
     auto first_pass = get_first_pass_probabilities(imap, tokens);
     if (!first_pass.size())
         return nullptr;
@@ -5330,7 +5485,7 @@ change_imap_entry (GncImportMatchMap *imap, std::string const & path, int64_t to
 
     // Add or Update the entry based on guid
     qof_instance_set_path_kvp (QOF_INSTANCE (imap->acc), &value, {path});
-    gnc_features_set_used (imap->book, GNC_FEATURE_GUID_BAYESIAN);
+    gnc_features_set_used (imap->book, GNC_FEATURE_GUID_FLAT_BAYESIAN);
 }
 
 /** Updates the imap for a given account using a list of tokens */
@@ -5350,6 +5505,7 @@ gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
         LEAVE(" ");
         return;
     }
+    check_import_map_data (imap->book);
 
     g_return_if_fail (acc != NULL);
     account_fullname = gnc_account_get_full_name(acc);
@@ -5462,6 +5618,7 @@ build_bayes (const char *key, KvpValue * value, GncImapInfo & imapInfo)
 GList *
 gnc_account_imap_get_info_bayes (Account *acc)
 {
+    check_import_map_data (gnc_account_get_book (acc));
     /* A dummy object which is used to hold the specified account, and the list
      * of data about which we care. */
     GncImapInfo imapInfo {acc, nullptr};
@@ -5531,151 +5688,6 @@ gnc_account_delete_map_entry (Account *acc, char *full_category, gboolean empty)
     }
     g_free (kvp_path);
     g_free (full_category);
-}
-
-/*******************************************************************************/
-
-static std::string
-look_for_old_separator_descendants (Account *root, std::string const & full_name, const gchar *separator)
-{
-    GList *top_accounts, *ptr;
-    gint   found_len = 0;
-    gchar  found_sep;
-    top_accounts = gnc_account_get_descendants (root);
-    PINFO("Incoming full_name is '%s', current separator is '%s'", full_name.c_str (), separator);
-    /* Go through list of top level accounts */
-    for (ptr = top_accounts; ptr; ptr = g_list_next (ptr))
-    {
-        const gchar *name = xaccAccountGetName (static_cast <Account const *> (ptr->data));
-        // we are looking for the longest top level account that matches
-        if (g_str_has_prefix (full_name.c_str (), name))
-        {
-            gint name_len = strlen (name);
-            const gchar old_sep = full_name[name_len];
-            if (!g_ascii_isalnum (old_sep)) // test for non alpha numeric
-            {
-                if (name_len > found_len)
-                {
-                    found_sep = full_name[name_len];
-                    found_len = name_len;
-                }
-            }
-        }
-    }
-    g_list_free (top_accounts); // Free the List
-    std::string new_name {full_name};
-    if (found_len > 1)
-        std::replace (new_name.begin (), new_name.end (), found_sep, *separator);
-    PINFO("Return full_name is '%s'", new_name);
-    return new_name;
-}
-
-static std::string
-get_guid_from_account_name (Account * root, std::string const & name)
-{
-    auto map_account = gnc_account_lookup_by_full_name (root, name.c_str ());
-    if (!map_account)
-    {
-        auto temp_account_name = look_for_old_separator_descendants (root, name,
-             gnc_get_account_separator_string ());
-        map_account = gnc_account_lookup_by_full_name (root, temp_account_name.c_str ());
-    }
-    auto temp_guid = gnc::GUID {*xaccAccountGetGUID (map_account)};
-    return temp_guid.to_string ();
-}
-
-static FlatKvpEntry
-convert_entry (KvpEntry entry, Account* root)
-{
-    /*We need to make a copy here.*/
-    auto account_name = entry.first.back();
-    entry.first.pop_back();
-    auto guid_str = get_guid_from_account_name (root, account_name);
-    entry.first.emplace_back ("/");
-    entry.first.emplace_back (guid_str);
-    std::string new_key {std::accumulate (entry.first.begin(), entry.first.end(), std::string {})};
-    new_key = IMAP_FRAME_BAYES + new_key;
-    return {new_key, entry.second};
-}
-
-static std::vector<FlatKvpEntry>
-get_new_guid_imap (Account * acc)
-{
-    auto frame = qof_instance_get_slots (QOF_INSTANCE (acc));
-    auto slot = frame->get_slot ({IMAP_FRAME_BAYES});
-    if (!slot)
-        return {};
-    auto imap_frame = slot->get<KvpFrame*> ();
-    auto flat_kvp = imap_frame->flatten_kvp ();
-    auto root = gnc_account_get_root (acc);
-    std::vector <FlatKvpEntry> ret;
-    for (auto const & flat_entry : flat_kvp)
-        ret.emplace_back (convert_entry (flat_entry, root));
-    return ret;
-}
-
-static bool
-convert_imap_account_bayes_to_guid (Account *acc)
-{
-    auto frame = qof_instance_get_slots (QOF_INSTANCE (acc));
-    if (!frame->get_keys().size())
-        return false;
-    auto new_imap = get_new_guid_imap(acc);
-    xaccAccountBeginEdit(acc);
-    frame->set({IMAP_FRAME_BAYES}, nullptr);
-    if (!new_imap.size ())
-    {
-        xaccAccountCommitEdit(acc);
-        return false;
-    }
-    std::for_each(new_imap.begin(), new_imap.end(), [&frame] (FlatKvpEntry const & entry) {
-        frame->set({entry.first.c_str()}, entry.second);
-    });
-    qof_instance_set_dirty (QOF_INSTANCE (acc));
-    xaccAccountCommitEdit(acc);
-    return true;
-}
-
-char const * run_once_key_to_guid {"changed-bayesian-to-guid"};
-
-static void
-imap_convert_bayes_to_guid (QofBook * book)
-{
-    auto root = gnc_book_get_root_account (book);
-    auto accts = gnc_account_get_descendants_sorted (root);
-    for (auto ptr = accts; ptr; ptr = g_list_next (ptr))
-    {
-        Account *acc = static_cast <Account*> (ptr->data);
-        if (convert_imap_account_bayes_to_guid (acc))
-            gnc_features_set_used (book, GNC_FEATURE_GUID_BAYESIAN);
-    }
-    g_list_free (accts);
-}
-
-static bool
-run_once_key_set (char const * key, QofBook * book)
-{
-    GValue value G_VALUE_INIT;
-    qof_instance_get_path_kvp (QOF_INSTANCE(book), &value, {key});
-    return G_VALUE_HOLDS_STRING(&value) && strcmp(g_value_get_string(&value), "true");
-}
-
-static void
-set_run_once_key (char const * key, QofBook * book)
-{
-    GValue value G_VALUE_INIT;
-    g_value_init(&value, G_TYPE_BOOLEAN);
-    g_value_set_boolean(&value, TRUE);
-    qof_instance_set_path_kvp(QOF_INSTANCE (book), &value, {key});
-}
-
-void
-gnc_account_imap_convert_bayes (QofBook *book)
-{
-    if (run_once_key_set (run_once_key_to_guid, book))
-        return;
-    imap_convert_bayes_to_guid (book);
-    set_run_once_key (run_once_key_to_guid, book);
 }
 
 /* ================================================================ */
