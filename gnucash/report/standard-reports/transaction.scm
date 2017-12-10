@@ -812,66 +812,64 @@ tags within description, notes or memo. ")
           (cons 'sort-account-description (opt-val pagename-sorting (N_ "Show Account Description")))
           (cons 'notes (opt-val gnc:pagename-display (N_ "Notes")))))
 
-  (define (column-uses? param columns-used)
-    (cdr (assq param columns-used)))
-
-  (define (make-heading-list columns-used)
-    (define (add-if pred? . items) (if pred? items '()))
-    (append
-     (add-if (column-uses? 'date columns-used)
-             (_ "Date"))
-     (add-if (column-uses? 'reconciled-date columns-used)
-             (_ "Reconciled Date"))
-     (add-if (column-uses? 'num columns-used)
-             (if (and (qof-book-use-split-action-for-num-field (gnc-get-current-book))
-                      (opt-val gnc:pagename-display (N_ "Trans Number")))
-                 (_ "Num/T-Num")
-                 (_ "Num")))
-     (add-if (column-uses? 'description columns-used)
-             (_ "Description"))
-     (add-if (column-uses? 'memo columns-used)
-             (if (column-uses? 'notes columns-used)
-                 (string-append (_ "Memo") "/" (_ "Notes"))
-                 (_ "Memo")))
-     (add-if (or (column-uses? 'account-name columns-used)
-                 (column-uses? 'account-code columns-used))
-             (_ "Account"))
-     (add-if (or (column-uses? 'other-account-name columns-used)
-                 (column-uses? 'other-account-code columns-used))
-             (_ "Transfer from/to"))
-     (add-if (column-uses? 'shares columns-used)
-             (_ "Shares"))
-     (add-if (column-uses? 'price columns-used)
-             (_ "Price"))))
-
-  (define (make-amount-heading-list columns-used)
-    (define (add-if pred? . items) (if pred? items '()))
-    (append
-     (add-if (column-uses? 'amount-single columns-used)
-             (_ "Amount"))
-     ;; FIXME: Proper labels: what?
-     (add-if (column-uses? 'amount-double columns-used)
-             (_ "Debit")
-             (_ "Credit"))
-     (add-if (column-uses? 'amount-original-currency columns-used)
-             (_ "Original"))
-     (add-if (column-uses? 'running-balance columns-used)
-             (_ "Balance"))))
 
   (let* ((work-to-do (length splits))
          (work-done 0)
          (table (gnc:make-html-table))
          (used-columns (build-columns-used))
-         (headings (make-heading-list used-columns))
-         (amount-headings (make-amount-heading-list used-columns))
-         (width (length headings))
-         (width-amount (length amount-headings))
          (account-types-to-reverse
           (keylist-get-info sign-reverse-list
                             (opt-val gnc:pagename-display (N_ "Sign Reverses"))
                             'acct-types))
          (is-multiline? (eq? (opt-val gnc:pagename-display optname-detail-level) 'multi-line))
          (export? (opt-val gnc:pagename-general optname-table-export)))
+
+    (define (column-uses? param)
+      (cdr (assq param used-columns)))
+    
+    (define headings
+      (let* ((add-if (lambda pred? . items) (if pred? items '())))
+        (append
+         (add-if (column-uses? 'date)
+                 (_ "Date"))
+         (add-if (column-uses? 'reconciled-date)
+                 (_ "Reconciled Date"))
+         (add-if (column-uses? 'num)
+                 (if (and BOOK-SPLIT-ACTION
+                          (opt-val gnc:pagename-display (N_ "Trans Number")))
+                     (_ "Num/T-Num")
+                     (_ "Num")))
+         (add-if (column-uses? 'description)
+                 (_ "Description"))
+         (add-if (column-uses? 'memo)
+                 (if (column-uses? 'notes)
+                     (string-append (_ "Memo") "/" (_ "Notes"))
+                     (_ "Memo")))
+         (add-if (or (column-uses? 'account-name)
+                     (column-uses? 'account-code))
+                 (_ "Account"))
+         (add-if (or (column-uses? 'other-account-name)
+                     (column-uses? 'other-account-code))
+                 (_ "Transfer from/to"))
+         (add-if (column-uses? 'shares)
+                 (_ "Shares"))
+         (add-if (column-uses? 'price)
+                 (_ "Price"))))
+    
+    (define amount-headings
+      (let* ((add-if (lambda pred? . items) (if pred? items '())))
+        (append (add-if (column-uses? 'amount-single)
+                        (_ "Amount"))
+                (add-if (column-uses? 'amount-double)
+                        (_ "Debit")
+                        (_ "Credit"))
+                (add-if (column-uses? 'amount-original-currency)
+                        (_ "Original"))
+                (add-if (column-uses? 'running-balance)
+                        (_ "Balance")))))
+
+    (define width (length headings))
+    (define width-amount (length amount-headings))
 
     (define (add-subheading data subheading-style)
       (let ((heading-cell (gnc:make-html-table-cell data)))
@@ -1011,17 +1009,17 @@ tags within description, notes or memo. ")
          ;; subtotal? to allow subtotals (ie irrelevant for running balance)
          ;; merge? to merge with the next cell (ie for debit/credit cells)
          ;; merging-function - function (usually gnc-numeric-add/sub-fixed to apply to dual-subtotal
-         (if (column-uses? 'amount-single used-columns)
+         (if (column-uses? 'amount-single)
              (list (vector "Amount" amount #t #t (vector #f #f)))
              '())
-         (if (column-uses? 'amount-double used-columns)
+         (if (column-uses? 'amount-double)
              (list (vector "Debit" debit-amount #f #t (vector #t gnc-numeric-add))
                    (vector "Credit" credit-amount #f #t (vector #f gnc-numeric-sub)))
              '())
-         (if (column-uses? 'amount-original-currency used-columns)
-             (list (vector "Original" original-amount #t #t (vector #f #f)))
+         (if (column-uses? 'amount-original-currency)
+             (list (vector "Original" original-amount #f #t (vector #f #f)))
              '())
-         (if (column-uses? 'running-balance used-columns)
+         (if (column-uses? 'running-balance)
              (list (vector "Running Balance" running-balance #t #f (vector #f #f)))
              '()))))
 
@@ -1064,10 +1062,10 @@ tags within description, notes or memo. ")
                         ((account) (xaccSplitGetAccount split))
                         ((other-acc) (xaccSplitGetAccount (xaccSplitGetOtherSplit split)))))
              (name (account-namestring account
-                                       (column-uses? 'sort-account-code      used-columns)
+                                       (column-uses? 'sort-account-code)
                                        #t
-                                       (column-uses? 'sort-account-full-name used-columns)))
-             (description (if (and (column-uses? 'sort-account-description used-columns)
+                                       (column-uses? 'sort-account-full-name)))
+             (description (if (and (column-uses? 'sort-account-description)
                                    (not (string-null? (xaccAccountGetDescription account))))
                               (string-append ": " (xaccAccountGetDescription account))
                               "")))
@@ -1106,7 +1104,7 @@ tags within description, notes or memo. ")
                    (vector calculated reverse? subtotal?)))
                cell-calculators))
 
-        (if (column-uses? 'date used-columns)
+        (if (column-uses? 'date)
             (addto! row-contents
                     (if transaction-row?
                         (gnc:make-html-table-cell/markup
@@ -1114,7 +1112,7 @@ tags within description, notes or memo. ")
                          (qof-print-date (xaccTransGetDate trans)))
                         "")))
 
-        (if (column-uses? 'reconciled-date used-columns)
+        (if (column-uses? 'reconciled-date)
             (addto! row-contents
                     (gnc:make-html-table-cell/markup
                      "date-cell"
@@ -1123,7 +1121,7 @@ tags within description, notes or memo. ")
                            ""
                            (qof-print-date date))))))
 
-        (if (column-uses? 'num used-columns)
+        (if (column-uses? 'num)
             (addto! row-contents
                     (if transaction-row?
                         (if BOOK-SPLIT-ACTION
@@ -1143,7 +1141,7 @@ tags within description, notes or memo. ")
                                                              (gnc-get-num-action trans split)))
                         "")))
 
-        (if (column-uses? 'description used-columns)
+        (if (column-uses? 'description)
             (addto! row-contents
                     (if transaction-row?
                         (gnc:make-html-table-cell/markup
@@ -1151,30 +1149,30 @@ tags within description, notes or memo. ")
                          (xaccTransGetDescription trans))
                         "")))
 
-        (if (column-uses? 'memo used-columns)
+        (if (column-uses? 'memo)
             (let ((memo (xaccSplitGetMemo split)))
-              (if (and (string-null? memo) (column-uses? 'notes used-columns))
+              (if (and (string-null? memo) (column-uses? 'notes))
                   (addto! row-contents (xaccTransGetNotes trans))
                   (addto! row-contents memo))))
 
-        (if (or (column-uses? 'account-name used-columns) (column-uses? 'account-code used-columns))
+        (if (or (column-uses? 'account-name) (column-uses? 'account-code))
             (addto! row-contents (account-namestring account
-                                                     (column-uses? 'account-code      used-columns)
-                                                     (column-uses? 'account-name      used-columns)
-                                                     (column-uses? 'account-full-name used-columns))))
+                                                     (column-uses? 'account-code)
+                                                     (column-uses? 'account-name)
+                                                     (column-uses? 'account-full-name))))
 
-        (if (or (column-uses? 'other-account-name used-columns) (column-uses? 'other-account-code used-columns))
+        (if (or (column-uses? 'other-account-name) (column-uses? 'other-account-code))
             (addto! row-contents (account-namestring (xaccSplitGetAccount (xaccSplitGetOtherSplit split))
-                                                     (column-uses? 'other-account-code      used-columns)
-                                                     (column-uses? 'other-account-name      used-columns)
-                                                     (column-uses? 'other-account-full-name used-columns))))
+                                                     (column-uses? 'other-account-code)
+                                                     (column-uses? 'other-account-name)
+                                                     (column-uses? 'other-account-full-name))))
 
-        (if (column-uses? 'shares used-columns)
+        (if (column-uses? 'shares)
             (addto! row-contents (gnc:make-html-table-cell/markup
                                   "number-cell"
                                   (xaccSplitGetAmount split))))
 
-        (if (column-uses? 'price used-columns)
+        (if (column-uses? 'price)
             (addto! row-contents
                     (gnc:make-html-table-cell/markup
                      "number-cell"
