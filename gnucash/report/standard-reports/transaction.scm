@@ -101,12 +101,13 @@ in the Options panel."))
 (define NO-MATCHING-ACCT-TEXT (N_ "No account were found that match the \
 options specified in the Options panels."))
 
+
+(define DATE-SORTING-TYPES (list 'date 'reconciled-date))
+
 ;; The option-values of the sorting key multichoice option, for
 ;; which a subtotal should be enabled.
-(define subtotal-enabled '(account-name
-                           account-code
-                           corresponding-acc-name
-                           corresponding-acc-code))
+(define SUBTOTAL-ENABLED (list 'account-name 'corresponding-acc-name
+                               'account-code 'corresponding-acc-code))
 
 
 (define (add-subheading-row data table width subheading-style)
@@ -119,6 +120,7 @@ options specified in the Options panels."))
 (define (column-uses? param columns-used)
   (cdr (assq param columns-used)))
 
+            
 ;; display an account name depending on the options the user has set
 (define (account-namestring account show-account-code? show-account-name? show-account-full-name?)
   ;;# on multi-line splits we can get an empty ('()) account
@@ -598,7 +600,6 @@ options specified in the Options panels."))
     split-value))
 
 
-(define date-sorting-types (list 'date 'reconciled-date))
 
 (define (trep-options-generator)
 
@@ -750,11 +751,11 @@ tags within description, notes or memo. ")
 
     (define (apply-selectable-by-name-sorting-options)
       (let* ((prime-sortkey-enabled (not (eq? prime-sortkey 'none)))
-             (prime-sortkey-subtotal-enabled (member prime-sortkey subtotal-enabled))
-             (prime-date-sortingtype-enabled (member prime-sortkey date-sorting-types))
+             (prime-sortkey-subtotal-enabled (member prime-sortkey SUBTOTAL-ENABLED))
+             (prime-date-sortingtype-enabled (member prime-sortkey DATE-SORTING-TYPES))
              (sec-sortkey-enabled (not (eq? sec-sortkey 'none)))
-             (sec-sortkey-subtotal-enabled (member sec-sortkey subtotal-enabled))
-             (sec-date-sortingtype-enabled (member sec-sortkey date-sorting-types)))
+             (sec-sortkey-subtotal-enabled (member sec-sortkey SUBTOTAL-ENABLED))
+             (sec-date-sortingtype-enabled (member sec-sortkey DATE-SORTING-TYPES)))
 
         (gnc-option-db-set-option-selectable-by-name
          options pagename-sorting optname-prime-subtotal
@@ -1300,7 +1301,7 @@ Credit Card, and Income accounts."))))))
   (define (subtotal-get-info name-sortkey name-subtotal name-date-subtotal info)
     ;; The value of the sorting-key multichoice option.
     (let ((sortkey (opt-val pagename-sorting name-sortkey)))
-      (if (member sortkey date-sorting-types)
+      (if (member sortkey DATE-SORTING-TYPES)
           ;; If sorting by date, look up the value of the
           ;; date-subtotalling multichoice option and return the
           ;; corresponding funcs in the assoc-list.
@@ -1309,7 +1310,7 @@ Credit Card, and Income accounts."))))))
           ;; subtotalling enabled at all, 2. check whether the
           ;; enable-subtotal boolean option is #t, 3. look up the
           ;; appropriate funcs in the assoc-list.
-          (and (member sortkey subtotal-enabled)
+          (and (member sortkey SUBTOTAL-ENABLED)
                (and (opt-val pagename-sorting name-subtotal)
                     (sortkey-get-info sortkey info))))))
 
@@ -1377,8 +1378,7 @@ Credit Card, and Income accounts."))))))
             ;; error condition: no accounts specified
             (gnc:html-document-add-object!
              document
-             (gnc:html-make-no-account-warning
-              report-title (gnc:report-id report-obj)))
+             (gnc:html-make-no-account-warning report-title (gnc:report-id report-obj)))
 
             ;; error condition: accounts were specified but none matched string/regex
             (gnc:html-document-add-object!
@@ -1472,9 +1472,9 @@ Credit Card, and Income accounts."))))))
                  (gnc:make-html-text
                   (gnc:html-markup-h3
                    (sprintf #f
-                           (_ "From %s to %s")
-                           (gnc-print-date begindate)
-                           (gnc-print-date enddate)))))
+                            (_ "From %s to %s")
+                            (gnc-print-date begindate)
+                            (gnc-print-date enddate)))))
 
                 (gnc:html-document-add-object! document table)))))
 
