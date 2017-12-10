@@ -1300,16 +1300,16 @@ tags within description, notes or memo. ")
       (set! work-done (+ 1 work-done))
 
       (if (null? splits)
-          
-          (begin
-            
-            (gnc:html-table-append-row/markup!
-             table def:grand-total-style
-             (list
-              (gnc:make-html-table-cell/size
-               1 (+ width-left-columns width-right-columns) (gnc:make-html-text (gnc:html-markup-hr)))))
 
-            (if (opt-val gnc:pagename-display "Totals")
+          (if (opt-val gnc:pagename-display "Totals")
+              (begin
+                (gnc:html-table-append-row/markup!
+                 table def:grand-total-style
+                 (list
+                  (gnc:make-html-table-cell/size
+                   1 (+ width-left-columns width-right-columns)
+                   (gnc:make-html-text (gnc:html-markup-hr)))))
+
                 (add-subtotal-row (render-grand-total) total-collectors def:grand-total-style)))
 
           (let* ((current (car splits))
