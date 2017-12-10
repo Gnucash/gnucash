@@ -389,9 +389,14 @@ ENDIF(NOT LIBXSLT_FOUND)
 SET(PKG_CONFIG_EXECUTABLE ${GNC_PKG_CONFIG_EXE})
 
 # libdbi
-FIND_PATH (LIBDBI_INCLUDE_PATH dbi/dbi.h HINTS ${CMAKE_PREFIX_PATH}/libdbi/include)
-FIND_LIBRARY (LIBDBI_LIBRARY dbi HINTS ${CMAKE_PREFIX_PATH}/libdbi/lib)
-FIND_PATH (LIBDBI_DRIVERS_DIR dbd HINTS ${CMAKE_PREFIX_PATH}/lib ${CMAKE_PREFIX_PATH}/libdbi-drivers/lib)
+FIND_PATH (LIBDBI_INCLUDE_PATH dbi/dbi.h)
+FIND_LIBRARY (LIBDBI_LIBRARY dbi)
+FIND_LIBRARY (LIBDBI_DRIVERS_DIR
+  NAMES dbdmysql dbdpgsql dbdsqlite3 NAMES_PER_DIR
+  PATH_SUFFIXES dbd libdbi-drivers/dbd
+  HINTS LIBDBI_LIBRARY
+  PATHS GNC_DBD_DIR
+  DOC "Libdbi Drivers Directory")
 IF (WITH_SQL)
   IF (NOT LIBDBI_INCLUDE_PATH)
     MESSAGE (SEND_ERROR "Include file <dbi/dbi.h> was not found - did you install libdbi0-dev or libdbi-dev?")
@@ -400,6 +405,12 @@ IF (WITH_SQL)
     MESSAGE (SEND_ERROR "Library libdbi was not found")
   ENDIF (NOT LIBDBI_LIBRARY)
   SET(HAVE_DBI_DBI_H 1)
+  IF (NOT LIBDBI_DRIVERS_DIR)
+    MESSAGE (SEND_ERROR "No libdbi drivers found, SQL tests will fail.")
+  ELSE()
+    get_filename_component(drivers_dir ${LIBDBI_DRIVERS_DIR} DIRECTORY)
+    set(LIBDBI_DRIVERS_DIR ${drivers_dir} CACHE FILEPATH "Directory containing the libdbi driver modules." FORCE)
+  ENDIF()
 ENDIF (WITH_SQL)
 
 # ############################################################
