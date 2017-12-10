@@ -1562,7 +1562,7 @@ Credit Card, and Income accounts."))))))
             (else #f))
           (set! splits (qof-query-run query))
 
-          ;;(gnc:warn "Splits in trep-renderer:" splits)
+          (qof-query-destroy query)
 
           ;; Combined Filter:
           ;; - include/exclude splits to/from selected accounts
@@ -1626,9 +1626,7 @@ Credit Card, and Income accounts."))))))
                            (gnc-print-date begindate)
                            (gnc-print-date enddate)))))
 
-                (gnc:html-document-add-object! document table)
-
-                (qof-query-destroy query)))))
+                (gnc:html-document-add-object! document table)))))
 
     (gnc:report-finished)
 
