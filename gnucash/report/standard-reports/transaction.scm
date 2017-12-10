@@ -321,6 +321,11 @@ options specified in the Options panels."))
 
 (define sign-reverse-list
   (list
+   (cons 'global
+         (list
+          (cons 'text (_ "Use Global Preference"))
+          (cons 'tip (_ "Use reversing option specified in global preference."))
+          (cons 'acct-types #f)))
    (cons 'none
          (list
           (cons 'text (N_ "None"))
@@ -762,7 +767,7 @@ tags within description, notes or memo. ")
      (gnc:make-multichoice-option
       gnc:pagename-display (N_ "Sign Reverses")
       "m1" (N_ "Reverse amount display for certain account types.")
-      'credit-accounts
+      'global
       (keylist->vectorlist sign-reverse-list))))
 
   (gnc:options-set-default-section options gnc:pagename-general)
@@ -1136,8 +1141,20 @@ tags within description, notes or memo. ")
                  (let* ((calculator (vector-ref cell 1))
                         (reverse? (vector-ref cell 2))
                         (subtotal? (vector-ref cell 3))
-                        (calculated (calculator split)))
-                   (vector calculated reverse? subtotal?)))
+                        (calculated (calculator split))
+                        (reverse-amount (lambda (mon)
+                                            (let ((currency (gnc:gnc-monetary-commodity mon))
+                                                  (amount (gnc:gnc-monetary-amount mon)))
+                                              (gnc:make-gnc-monetary
+                                               currency
+                                               (gnc-numeric-neg amount))))))
+                   (vector (if (and reverse?
+                                    (if account-types-to-reverse
+                                        (member (xaccAccountGetType account) account-types-to-reverse)
+                                        (gnc-reverse-balance account)))
+                               (reverse-amount calculated)
+                               calculated)
+                           subtotal?)))
                cell-calculators))
 
         (if (column-uses? 'date)
