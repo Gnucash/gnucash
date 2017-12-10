@@ -259,145 +259,6 @@ options specified in the Options panels."))
   (cdr (assq info (cdr (assq sortkey date-subtotal-list)))))
 
 
-(define (add-split-row table split column-vector options
-                       row-style account-types-to-reverse transaction-row?)
-
-  (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
-
-  (let* ((row-contents '())
-         (parent (xaccSplitGetParent split))
-         (account (xaccSplitGetAccount split))
-         (account-type (xaccAccountGetType account))
-         (currency (if (null? account)
-                       (gnc-default-currency)
-                       (xaccAccountGetCommodity account)))
-         (report-currency (if (opt-val gnc:pagename-general optname-common-currency)
-                              (opt-val gnc:pagename-general optname-currency)
-                              currency))
-         (damount (if (gnc:split-voided? split)
-                      (xaccSplitVoidFormerAmount split)
-                      (xaccSplitGetAmount split)))
-         (trans-date (gnc-transaction-get-date-posted parent))
-         (split-value (gnc:exchange-by-pricedb-nearest
-                       (gnc:make-gnc-monetary
-                        currency
-                        (if (member account-type account-types-to-reverse)
-                            (gnc-numeric-neg damount)
-                            damount))
-                       report-currency
-                       ;; Use midday as the transaction time so it matches a price
-                       ;; on the same day.  Otherwise it uses midnight which will
-                       ;; likely match a price on the previous day
-                       (timespecCanonicalDayTime trans-date))))
-
-    (if (column-uses? 'date column-vector)
-        (addto! row-contents
-                (if transaction-row?
-                    (gnc:make-html-table-cell/markup
-                     "date-cell"
-                     (gnc-print-date trans-date))
-                    "")))
-    
-    (if (column-uses? 'reconciled-date column-vector)
-        (addto! row-contents
-                (gnc:make-html-table-cell/markup
-                 "date-cell"
-                 (let ((date (gnc-split-get-date-reconciled split)))
-                   (if (equal? date (cons 0 0))
-                       ""
-                       (gnc-print-date date))))))
-
-    (if (column-uses? 'num column-vector)
-        (addto! row-contents
-                (if transaction-row?
-                    (if (qof-book-use-split-action-for-num-field (gnc-get-current-book))
-                        (let* ((num (gnc-get-num-action parent split))
-                               (t-num (if (if (gnc:lookup-option options gnc:pagename-display
-                                                                 (N_ "Trans Number"))
-                                              (opt-val gnc:pagename-display (N_ "Trans Number"))
-                                              "")
-                                          (gnc-get-num-action parent #f)
-                                          ""))
-                               (num-string (if (string-null? t-num)
-                                               num
-                                               (string-append num "/" t-num))))
-                          (gnc:make-html-table-cell/markup "text-cell" num-string))
-                        (gnc:make-html-table-cell/markup "text-cell"
-                                                         (gnc-get-num-action parent split)))
-                    "")))
-
-    (if (column-uses? 'description column-vector)
-        (addto! row-contents
-                (if transaction-row?
-                    (gnc:make-html-table-cell/markup
-                     "text-cell"
-                     (xaccTransGetDescription parent))
-                    "")))
-
-    (if (column-uses? 'memo column-vector)
-        (let ((memo (xaccSplitGetMemo split)))
-          (if (and (string-null? memo) (column-uses? 'notes column-vector))
-              (addto! row-contents (xaccTransGetNotes parent))
-              (addto! row-contents memo))))
-
-    (if (or (column-uses? 'account-name column-vector) (column-uses? 'account-code column-vector))
-        (addto! row-contents (account-namestring account
-                                                 (column-uses? 'account-code      column-vector)
-                                                 (column-uses? 'account-name      column-vector)
-                                                 (column-uses? 'account-full-name column-vector))))
-
-    (if (or (column-uses? 'other-account-name column-vector) (column-uses? 'other-account-code column-vector))
-        (addto! row-contents (account-namestring (xaccSplitGetAccount (xaccSplitGetOtherSplit split))
-                                                 (column-uses? 'other-account-code      column-vector)
-                                                 (column-uses? 'other-account-name      column-vector)
-                                                 (column-uses? 'other-account-full-name column-vector))))
-
-    (if (column-uses? 'shares column-vector)
-        (addto! row-contents (xaccSplitGetAmount split)))
-
-    (if (column-uses? 'price column-vector)
-        (addto! row-contents  (gnc:make-gnc-monetary (xaccTransGetCurrency parent)
-                                                     (xaccSplitGetSharePrice split))))
-    
-    (if (column-uses? 'amount-single column-vector)
-        (addto! row-contents
-                (gnc:make-html-table-cell/markup
-                 "number-cell" (gnc:html-transaction-anchor parent split-value))))
-    
-    (if (column-uses? 'amount-double column-vector)        
-
-        (if (gnc-numeric-positive-p (gnc:gnc-monetary-amount split-value))
-
-            (begin
-              (addto! row-contents
-                      (gnc:make-html-table-cell/markup
-                       "number-cell" (gnc:html-transaction-anchor
-                                      parent split-value)))
-              (addto! row-contents ""))
-        
-            (begin
-              (addto! row-contents "")
-              (addto! row-contents
-                      (gnc:make-html-table-cell/markup
-                       "number-cell" (gnc:html-transaction-anchor
-                                      parent (gnc:monetary-neg split-value)))))))
-    
-    (if (column-uses? 'running-balance column-vector)
-        (begin
-          ;(gnc:debug "split is " split)
-          ;(gnc:debug "split get balance:" (xaccSplitGetBalance split))
-          (addto! row-contents
-                  (gnc:make-html-table-cell/markup
-                   "number-cell"
-                   (gnc:make-gnc-monetary currency
-                                          (xaccSplitGetBalance split))))))
-    
-    (gnc:html-table-append-row/markup! table row-style (reverse row-contents))
-
-    split-value))
-
-
-
 (define (trep-options-generator)
 
   (define options (gnc:new-options))
@@ -1075,6 +936,144 @@ Credit Card, and Income accounts."))))))
          ((account)   render-account-subtotal)
          ((other-acc) render-corresponding-account-subtotal))
        split))
+
+
+    (define (add-split-row split row-style transaction-row?)
+
+      (let* ((row-contents '())
+             (parent (xaccSplitGetParent split))
+             (account (xaccSplitGetAccount split))
+             (account-type (xaccAccountGetType account))
+             (currency (if (null? account)
+                           (gnc-default-currency)
+                           (xaccAccountGetCommodity account)))
+             (report-currency (if (opt-val gnc:pagename-general optname-common-currency)
+                                  (opt-val gnc:pagename-general optname-currency)
+                                  currency))
+             (damount (if (gnc:split-voided? split)
+                          (xaccSplitVoidFormerAmount split)
+                          (xaccSplitGetAmount split)))
+             (trans-date (gnc-transaction-get-date-posted parent))
+             (split-value (gnc:exchange-by-pricedb-nearest
+                           (gnc:make-gnc-monetary
+                            currency
+                            (if (member account-type account-types-to-reverse)
+                                (gnc-numeric-neg damount)
+                                damount))
+                           report-currency
+                           ;; Use midday as the transaction time so it matches a price
+                           ;; on the same day.  Otherwise it uses midnight which will
+                           ;; likely match a price on the previous day
+                           (timespecCanonicalDayTime trans-date))))
+
+        (if (column-uses? 'date used-columns)
+            (addto! row-contents
+                    (if transaction-row?
+                        (gnc:make-html-table-cell/markup
+                         "date-cell"
+                         (gnc-print-date trans-date))
+                        "")))
+
+        (if (column-uses? 'reconciled-date used-columns)
+            (addto! row-contents
+                    (gnc:make-html-table-cell/markup
+                     "date-cell"
+                     (let ((date (gnc-split-get-date-reconciled split)))
+                       (if (equal? date (cons 0 0))
+                           ""
+                           (gnc-print-date date))))))
+
+        (if (column-uses? 'num used-columns)
+            (addto! row-contents
+                    (if transaction-row?
+                        (if BOOK-SPLIT-ACTION
+                            (let* ((num (gnc-get-num-action parent split))
+                                   (t-num (if (if (gnc:lookup-option options gnc:pagename-display
+                                                                     (N_ "Trans Number"))
+                                                  (opt-val gnc:pagename-display (N_ "Trans Number"))
+                                                  "")
+                                              (gnc-get-num-action parent #f)
+                                              ""))
+                                   (num-string (if (string-null? t-num)
+                                                   num
+                                                   (string-append num "/" t-num))))
+                              (gnc:make-html-table-cell/markup "text-cell" num-string))
+                            (gnc:make-html-table-cell/markup "text-cell"
+                                                             (gnc-get-num-action parent split)))
+                        "")))
+
+        (if (column-uses? 'description used-columns)
+            (addto! row-contents
+                    (if transaction-row?
+                        (gnc:make-html-table-cell/markup
+                         "text-cell"
+                         (xaccTransGetDescription parent))
+                        "")))
+
+        (if (column-uses? 'memo used-columns)
+            (let ((memo (xaccSplitGetMemo split)))
+              (if (and (string-null? memo) (column-uses? 'notes used-columns))
+                  (addto! row-contents (xaccTransGetNotes parent))
+                  (addto! row-contents memo))))
+
+        (if (or (column-uses? 'account-name used-columns) (column-uses? 'account-code used-columns))
+            (addto! row-contents (account-namestring account
+                                                     (column-uses? 'account-code      used-columns)
+                                                     (column-uses? 'account-name      used-columns)
+                                                     (column-uses? 'account-full-name used-columns))))
+
+        (if (or (column-uses? 'other-account-name used-columns) (column-uses? 'other-account-code used-columns))
+            (addto! row-contents (account-namestring (xaccSplitGetAccount (xaccSplitGetOtherSplit split))
+                                                     (column-uses? 'other-account-code      used-columns)
+                                                     (column-uses? 'other-account-name      used-columns)
+                                                     (column-uses? 'other-account-full-name used-columns))))
+
+        (if (column-uses? 'shares used-columns)
+            (addto! row-contents (xaccSplitGetAmount split)))
+
+        (if (column-uses? 'price used-columns)
+            (addto! row-contents  (gnc:make-gnc-monetary (xaccTransGetCurrency parent)
+                                                         (xaccSplitGetSharePrice split))))
+
+        (if (column-uses? 'amount-single used-columns)
+            (addto! row-contents
+                    (gnc:make-html-table-cell/markup
+                     "number-cell" (gnc:html-transaction-anchor parent split-value))))
+
+        (if (column-uses? 'amount-double used-columns)
+
+            (if (gnc-numeric-positive-p (gnc:gnc-monetary-amount split-value))
+
+                (begin
+                  (addto! row-contents
+                          (gnc:make-html-table-cell/markup
+                           "number-cell" (gnc:html-transaction-anchor
+                                          parent split-value)))
+                  (addto! row-contents ""))
+
+                (begin
+                  (addto! row-contents "")
+                  (addto! row-contents
+                          (gnc:make-html-table-cell/markup
+                           "number-cell" (gnc:html-transaction-anchor
+                                          parent (gnc:monetary-neg split-value)))))))
+
+        (if (column-uses? 'running-balance used-columns)
+            (begin
+              ;(gnc:debug "split is " split)
+              ;(gnc:debug "split get balance:" (xaccSplitGetBalance split))
+              (addto! row-contents
+                      (gnc:make-html-table-cell/markup
+                       "number-cell"
+                       (gnc:make-gnc-monetary currency
+                                              (xaccSplitGetBalance split))))))
+
+        (gnc:html-table-append-row/markup! table row-style (reverse row-contents))
+
+        split-value))
+
+
+
 
     (define (do-rows-with-subtotals splits
                                     table
