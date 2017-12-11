@@ -164,7 +164,6 @@ private:
      */
     void update_price_props (uint32_t row, uint32_t col, GncPricePropType prop_type);
 
-    struct CsvTranSettings;
     CsvImportSettings m_settings;
     bool m_skip_errors;
     bool m_over_write;
