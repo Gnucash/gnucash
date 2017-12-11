@@ -595,10 +595,14 @@ void gnc_gsettings_reset_schema (const gchar *schema);
  */
 void gnc_gsettings_load_backend (void);
 
-
-/* Attempt to migrate preferences from gconf files
-    to gsettings if not already done so */
-void gnc_gsettings_migrate_from_gconf (void);
+/** Check whether we need to adjust the user settings
+ * to a newer version.
+ *
+ * New version of GnuCash may come with changes in the
+ * settings schema. This function will take the necessary
+ * steps to convert old settings to new (when possible).
+ */
+void gnc_gsettings_version_upgrade (void);
 
 #endif /* GNC_GSETTINGS_H */
 /** @} */

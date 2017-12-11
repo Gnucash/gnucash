@@ -2245,14 +2245,14 @@ many months before the current month:</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="pref/general.register/use-theme-colors">
-                    <property name="label" translatable="yes">Don't _use GnuCash built-in colors</property>
+                  <object class="GtkCheckButton" id="pref/general.register/use-gnucash-color-theme">
+                    <property name="label" translatable="yes">_Use GnuCash built-in color theme</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">GnuCash uses a yellow/green theme by default for register windows. Check this if you want to use the system color theme instead.</property>
-                    <property name="tooltip_text" translatable="yes">GnuCash uses a yellow/green theme by default for register windows. Check this if you want to use the system color theme instead.</property>
+                    <property name="tooltip_markup">GnuCash uses a yellow/green theme by default for register windows. Uncheck this if you want to use the system color theme instead.</property>
+                    <property name="tooltip_text" translatable="yes">GnuCash uses a yellow/green theme by default for register windows. Uncheck this if you want to use the system color theme instead.</property>
                     <property name="halign">start</property>
                     <property name="margin_left">12</property>
                     <property name="use_underline">True</property>

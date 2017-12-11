@@ -568,8 +568,8 @@ gnc_tree_view_split_reg_refresh_from_prefs (GncTreeViewSplitReg *view)
 
     model = gnc_tree_view_split_reg_get_model_from_view (view);
 
-    model->use_theme_colors = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER,
-                                                 GNC_PREF_USE_THEME_COLORS);
+    model->use_gnc_color_theme = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                                     GNC_PREF_USE_GNUCASH_COLOR_THEME);
     model->use_accounting_labels = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL,
                                                        GNC_PREF_ACCOUNTING_LABELS);
 

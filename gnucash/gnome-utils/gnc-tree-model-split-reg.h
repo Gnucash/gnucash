@@ -152,7 +152,7 @@ typedef struct
     gboolean                     use_accounting_labels; /**< whether to use accounting Labels */
     gboolean                     separator_changed;     /**< whether the separator has changed */
     gboolean                     alt_colors_by_txn;     /**< whether to use alternative colors by transaction */
-    gboolean                     use_theme_colors;      /**< whether to use theme colors */
+    gboolean                     use_gnc_color_theme;   /**< whether to use the gnucash built-in color theme */
 
     gboolean                     read_only;             /**< register is read only */
 

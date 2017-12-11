@@ -1540,8 +1540,8 @@ gnucash_sheet_refresh_from_prefs (GnucashSheet *sheet)
     g_return_if_fail(sheet != NULL);
     g_return_if_fail(GNUCASH_IS_SHEET(sheet));
 
-    sheet->use_theme_colors = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER,
-                                                 GNC_PREF_USE_THEME_COLORS);
+    sheet->use_gnc_color_theme = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                                     GNC_PREF_USE_GNUCASH_COLOR_THEME);
     sheet->use_horizontal_lines = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER,
                                                      GNC_PREF_DRAW_HOR_LINES);
     sheet->use_vertical_lines = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER,
@@ -2472,13 +2472,13 @@ gnucash_get_style_classes (GnucashSheet *sheet, GtkStyleContext *stylectxt,
         break;
     }
 
-    if (sheet->use_theme_colors)
+    if (sheet->use_gnc_color_theme)
+        full_class = g_strconcat ("register-", style_class, NULL);
+    else
     {
         gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_VIEW);
         full_class = g_strconcat (style_class, "-color", NULL);
     }
-    else
-        full_class = g_strconcat ("register-", style_class, NULL);
 
     gtk_style_context_add_class (stylectxt, full_class);
 

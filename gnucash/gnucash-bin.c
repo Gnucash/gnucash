@@ -613,9 +613,8 @@ inner_main (void *closure, int argc, char **argv)
     main_mod = scm_c_resolve_module("gnucash main");
     scm_set_current_module(main_mod);
 
-    /* GnuCash switched to gsettings to store its preferences in version 2.5.6
-     * Migrate the user's preferences from gconf if needed */
-    gnc_gsettings_migrate_from_gconf();
+    /* Check whether the settings need a version update */
+    gnc_gsettings_version_upgrade ();
 
     load_gnucash_modules();
 

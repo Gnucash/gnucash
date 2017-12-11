@@ -5,6 +5,11 @@
   </schema>
 
   <schema id="org.gnucash.general" path="/org/gnucash/general/">
+    <key name="prefs-version" type="i">
+      <default>0</default>
+      <summary>The version of these settings</summary>
+      <description>This is used internally to determine whether some preferences may need conversion when switching to a newer version of GnuCash.</description>
+    </key>
     <key name="save-window-geometry" type="b">
       <default>true</default>
       <summary>Save window sizes and locations</summary>
@@ -225,10 +230,15 @@
   </schema>
 
   <schema id="org.gnucash.general.register" path="/org/gnucash/general/register/">
+    <key name="use-gnucash-color-theme" type="b">
+      <default>true</default>
+      <summary>Color the register using a gnucash specific color theme</summary>
+      <description>When enabled the register will use a GnuCash specific color theme (green/yellow). Otherwise it will use the system color theme. Regardless of this setting the user can always override the color theme via a gnucash specific css file to be stored in the gnucash used config directory. More information can be found in the gnucash FAQ.</description>
+    </key>
     <key name="use-theme-colors" type="b">
       <default>false</default>
-      <summary>Color the register as specified by the system theme</summary>
-      <description>If active, the register will be colored as specified by the system theme. This can be overridden to provide custom colors by editing the gtkrc file in the users home directory. Otherwise the standard register colors will be used that GnuCash has always used.</description>
+      <summary>Superseded by "use-gnucash-color-theme"</summary>
+      <description>This option is temporarily kept around for backwards compatibility. It will be removed in a future version.</description>
     </key>
     <key name="enter-moves-to-end" type="b">
       <default>false</default>

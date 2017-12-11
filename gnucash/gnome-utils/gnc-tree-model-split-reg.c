@@ -486,7 +486,7 @@ gnc_tree_model_split_reg_new (SplitRegisterType2 reg_type, SplitRegisterStyle2 s
 
     /* Setup some config entries */
     model->use_accounting_labels = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_ACCOUNTING_LABELS);
-    model->use_theme_colors = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_USE_THEME_COLORS);
+    model->use_gnc_color_theme = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_USE_GNUCASH_COLOR_THEME);
     model->alt_colors_by_txn = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_ALT_COLOR_BY_TRANS);
     model->read_only = FALSE;
 
@@ -1450,7 +1450,7 @@ gnc_tree_model_split_reg_get_row_color (GncTreeModelSplitReg *model, gboolean is
 
     gchar *cell_color = NULL;
 
-    if (!model->use_theme_colors)
+    if (model->use_gnc_color_theme)
     {
         if (model->use_double_line)
         {

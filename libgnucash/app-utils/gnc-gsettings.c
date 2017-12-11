@@ -694,7 +694,7 @@ xsltprocExternalEntityLoader(const char *URL, const char *ID,
  *   from running again. So in normal circumstances the migration will
  *   be executed only once.
  */
-void gnc_gsettings_migrate_from_gconf (void)
+static void gnc_gsettings_migrate_from_gconf (void)
 {
     gchar *pkgdatadir, *stylesheet, *input, *output, *command;
     gchar *gconf_root, *gconf_apps, *gconf_gnucash;
@@ -706,13 +706,6 @@ void gnc_gsettings_migrate_from_gconf (void)
     gboolean migration_ok = FALSE;
 
     ENTER ();
-
-    /* Only attempt to migrate if no successful migration has been done before */
-    if (gnc_gsettings_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_MIGRATE_PREFS_DONE))
-    {
-        LEAVE ("Preferences migration ran successfully before. Skipping.");
-        return;
-    }
 
     base_dir = g_strdup (g_get_home_dir ());
     for (iter = base_dir; *iter != 0; iter++)
@@ -830,4 +823,30 @@ void gnc_gsettings_migrate_from_gconf (void)
     LEAVE ("");
     g_free (base_dir);
 
+}
+
+
+void gnc_gsettings_version_upgrade (void)
+{
+    /* Use versioning to ensure this routine will only sync once for each
+     * superseded setting */
+    int old_maj_min = gnc_gsettings_get_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION);
+    int cur_maj_min = GNUCASH_MAJOR_VERSION * 100 + GNUCASH_MINOR_VERSION;
+
+    /* Migrate preferences from gconf to gsettings */
+    if (!gnc_gsettings_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_MIGRATE_PREFS_DONE))
+        gnc_gsettings_migrate_from_gconf ();
+
+    /* Convert settings to 2.8 compatibility level */
+    if (old_maj_min < 208)
+    {
+        /* 'use-theme-colors' has been replaced with 'use-gnucash-color-theme'
+         * which inverts the meaning of the setting */
+        gboolean old_color_theme = gnc_gsettings_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_USE_THEME_COLORS);
+        gnc_gsettings_set_bool (GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_USE_GNUCASH_COLOR_THEME, !old_color_theme);
+    }
+
+    /* Only write current version if it's more recent than what was set */
+    if (cur_maj_min > old_maj_min)
+        gnc_gsettings_set_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION, cur_maj_min);
 }

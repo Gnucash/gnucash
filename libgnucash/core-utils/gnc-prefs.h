@@ -57,6 +57,7 @@
 #define GNC_PREFS_GROUP_ACCT_SUMMARY      "window.pages.account-tree.summary"
 
 /* Preference names used across multiple modules */
+#define GNC_PREF_VERSION             "prefs-version"
 #define GNC_PREF_SAVE_GEOMETRY       "save-window-geometry"
 #define GNC_PREF_LAST_PATH           "last-path"
 #define GNC_PREF_USE_NEW             "use-new-window"
@@ -74,7 +75,8 @@
 #define GNC_PREF_DRAW_HOR_LINES      "draw-horizontal-lines"
 #define GNC_PREF_DRAW_VERT_LINES     "draw-vertical-lines"
 #define GNC_PREF_ALT_COLOR_BY_TRANS  "alternate-color-by-transaction"
-#define GNC_PREF_USE_THEME_COLORS    "use-theme-colors"
+#define GNC_PREF_USE_THEME_COLORS    "use-theme-colors"  // Obsolete, to remove in a future major version (> 2.8)
+#define GNC_PREF_USE_GNUCASH_COLOR_THEME "use-gnucash-color-theme"
 #define GNC_PREF_TAB_TRANS_MEMORISED "tab-to-transfer-on-memorised"
 #define GNC_PREF_FUTURE_AFTER_BLANK  "future-after-blank-transaction"
 /* Date preferences */

@@ -63,7 +63,7 @@ struct _GnucashSheet
     GtkWidget *item_editor;
     GtkWidget *entry;
 
-    gboolean   use_theme_colors;
+    gboolean   use_gnc_color_theme;
     gboolean   use_horizontal_lines;
     gboolean   use_vertical_lines;
 
